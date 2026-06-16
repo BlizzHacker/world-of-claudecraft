@@ -21,7 +21,11 @@ services:
   # then open http://localhost:8787 — or put a TLS reverse proxy in front
   # for remote hosting (see README).
   game:
-    build: .
+    build:
+      context: .
+      args:
+        # Build-time: inlined into the client bundle (see Dockerfile / .env.example).
+        VITE_TURNSTILE_SITEKEY: ${VITE_TURNSTILE_SITEKEY:-}
     container_name: eastbrook-game
     restart: unless-stopped
     depends_on:
@@ -34,11 +38,56 @@ services:
       USERNAME_BANLIST_FILE: ${USERNAME_BANLIST_FILE:-}
       CHAT_CENSOR_LIST: ${CHAT_CENSOR_LIST:-}
       CHAT_CENSOR_FILE: ${CHAT_CENSOR_FILE:-}
+      # Runtime: server-side Turnstile verification (see .env.example). Empty → gate off.
+      TURNSTILE_SECRET: ${TURNSTILE_SECRET:-}
     # loopback-only: the TLS reverse proxy (Caddy) is the public entrance
     ports:
       - "127.0.0.1:8787:8787"
     volumes:
       - ${EASTBROOK_MEDIA_DIR:-./media-cache}:/app/dist/media
 
+  mediawiki-db:
+    image: mariadb:11
+    container_name: eastbrook-wiki-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${MEDIAWIKI_DB_NAME:-mediawiki}
+      MYSQL_USER: ${MEDIAWIKI_DB_USER:-mediawiki}
+      MYSQL_PASSWORD: ${MEDIAWIKI_DB_PASSWORD:-mediawiki-change-me}
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+    volumes:
+      - eastbrook_wikidb:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb-admin ping -h 127.0.0.1 -u${MEDIAWIKI_DB_USER:-mediawiki} -p${MEDIAWIKI_DB_PASSWORD:-mediawiki-change-me} --silent"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  mediawiki:
+    build:
+      context: .
+      dockerfile: mediawiki/Dockerfile
+    container_name: eastbrook-wiki
+    restart: unless-stopped
+    depends_on:
+      mediawiki-db:
+        condition: service_healthy
+    environment:
+      MEDIAWIKI_DB_HOST: mediawiki-db
+      MEDIAWIKI_DB_NAME: ${MEDIAWIKI_DB_NAME:-mediawiki}
+      MEDIAWIKI_DB_USER: ${MEDIAWIKI_DB_USER:-mediawiki}
+      MEDIAWIKI_DB_PASSWORD: ${MEDIAWIKI_DB_PASSWORD:-mediawiki-change-me}
+      MEDIAWIKI_ADMIN_USER: ${MEDIAWIKI_ADMIN_USER:-WikiAdmin}
+      MEDIAWIKI_ADMIN_PASS: ${MEDIAWIKI_ADMIN_PASS:-change-me-admin-password}
+      MEDIAWIKI_SECRET_KEY: ${MEDIAWIKI_SECRET_KEY:-local-dev-change-me-world-of-claudecraft}
+      MEDIAWIKI_UPGRADE_KEY: ${MEDIAWIKI_UPGRADE_KEY:-local-dev-upgrade-key}
+      MEDIAWIKI_SERVER: ${MEDIAWIKI_SERVER:-http://localhost:8080}
+    ports:
+      - "127.0.0.1:8080:80"
+    volumes:
+      - eastbrook_wiki_images:/var/www/html/images
+
 volumes:
   eastbrook_pgdata:
+  eastbrook_wikidb:
+  eastbrook_wiki_images:

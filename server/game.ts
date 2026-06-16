@@ -1,17 +1,21 @@
-import { readFileSync } from 'node:fs';
 import type { WebSocket } from 'ws';
 import { Sim } from '../src/sim/sim';
 import type { PlayerMeta } from '../src/sim/sim';
-import { DT, Entity, SimEvent, dist2d } from '../src/sim/types';
+import { DT, Entity, SimEvent, dist2d, emptyMoveInput } from '../src/sim/types';
 import { parseMoveInputFrame } from '../src/sim/move_input';
 import { stealthDetectionRadius, threatEntries } from '../src/sim/threat';
 import { zoneAt, DUNGEONS } from '../src/sim/data';
 import { saveCharacterState, openPlaySession, closePlaySession, insertChatLogs, pool, loadMarketState, saveMarketState } from './db';
+import type { AccountChatMuteStatus, RequestMetadata } from './db';
+import { ChatFilter } from './chat_filter';
+import { loadChatFilterState, applyChatStrike, recordChatViolation } from './chat_filter_db';
+import { offensiveName } from './auth';
 import { ChatLogger } from './chat_log';
 import { SocialService } from './social';
 import type { Presence, PresenceStatus, SocialActor, SocialEvent, SocialTransport } from './social';
 import { PgSocialDb } from './social_db';
 import { REALM } from './realm';
+import { isOverheadEmoteId } from '../src/world_api';
 
 const WORLD_SEED = 20061;
 // Interest management: the client renders entities out to 80yd, so new
@@ -44,6 +48,10 @@ const CHAT_RATE_ERROR_COOLDOWN_SECONDS = 4;
 const CHAT_COOLDOWN_SECONDS = 20;
 const CHAT_RATE_VIOLATIONS_FOR_COOLDOWN = 3;
 const WHO_RESULT_LIMIT = 50;
+// Clients stream movement intent every 50ms. If that stream goes silent while
+// the last packet held a key down, stop applying it instead of turning/running
+// forever. 750ms leaves room for normal jitter and short browser stalls.
+const STALE_INPUT_SECONDS = 0.75;
 // Exponential moving average weight for the per-tick duration stat.
 const TICK_EMA_ALPHA = 0.05;
 
@@ -57,19 +65,29 @@ export interface ClientSession {
   alive: boolean;
   joinedAt: number;
   dbSessionId: number | null; // play_sessions row, set once the insert lands
+  left: boolean; // set in leave(); guards against the open-session insert landing after disconnect
   chatTokens: number;
   chatLastRefill: number;
   chatLastRateError: number;
   chatRateViolations: number;
   chatCooldownUntil: number;
+  chatMutedUntil: number | null;
+  chatMuteReason: string;
+  // Hard-word enforcement strike count driving the mute ladder. Account-scoped:
+  // seeded from the DB at join, kept live by enforcement/admin actions.
+  chatStrikes: number;
   // character ids this player has ignored; chat from them is dropped before
   // delivery. Loaded from the DB on join, kept in sync by social commands.
   blockedIds: Set<number>;
   blockListLoaded: boolean;
-  // name of the last player to whisper this session, for WoW's /r reply
+  // name of the last player to whisper this session, for the /r reply
   lastWhisperFrom: string | null;
   // last explicit channel this player sent to; plain text follows it.
   rememberedChat: RememberedChat;
+  // last client input sequence processed; echoed in snapshots for latency telemetry
+  lastInputSeq: number;
+  // sim time of the last movement input frame, used to clear stale held input
+  lastInputAt: number;
   // serialized form of each delta self field as last sent to this client;
   // a field is omitted from a snapshot while its serialization is unchanged
   lastSent: Record<string, string>;
@@ -137,7 +155,7 @@ interface WhoRosterRow {
 }
 
 type RememberedChat =
-  | { channel: 'say' | 'yell' | 'general' | 'party' | 'guild' | 'officer' }
+  | { channel: 'say' | 'yell' | 'general' | 'party' | 'guild' | 'officer' | 'world' | 'lfg' }
   | { channel: 'whisper'; target: string };
 
 // Identity fields rarely change, so they ride only in "full" records: on an
@@ -145,6 +163,7 @@ type RememberedChat =
 // changes. The client treats their absence in a record as "unchanged".
 function identityFields(e: Entity): Record<string, unknown> {
   const out: Record<string, unknown> = { k: e.kind, tid: e.templateId, nm: e.name, lv: e.level };
+  if (e.skin) out.sk = e.skin;
   if (e.dungeonId) out.dgn = e.dungeonId;
   if (e.scale !== 1) out.sc = e.scale;
   if (e.color !== 0xffffff) out.c = e.color;
@@ -171,6 +190,14 @@ function dynamicFields(e: Entity): Record<string, unknown> {
   if (e.aggroTargetId !== null) out.aggro = e.aggroTargetId;
   if (e.tappedById !== null) out.tap = e.tappedById;
   if (e.ownerId !== null) out.own = e.ownerId;
+  if (e.overheadEmoteId) {
+    out.emo = e.overheadEmoteId;
+    out.emoSeq = e.overheadEmoteSeq;
+  }
+  if (e.ownerId !== null) {
+    out.pm = e.petMode;
+    out.pt = round2(e.petTauntTimer);
+  }
   // top hate-table entries so the party threat meter shows real numbers
   if (e.kind === 'mob' && !e.dead && e.threat.size > 0) out.thr = threatEntries(e, 8);
   if (e.auras.length > 0) {
@@ -233,67 +260,30 @@ function logSocialErr(err: unknown): void {
   console.error('social command failed:', err);
 }
 
-const CONFUSABLE_CHARS: Record<string, string> = {
-  '0': 'o',
-  '1': 'i',
-  '!': 'i',
-  '|': 'i',
-  '3': 'e',
-  '4': 'a',
-  '@': 'a',
-  '5': 's',
-  '$': 's',
-  '7': 't',
-  '+': 't',
-  '8': 'b',
-};
-
-function normalizedCensorTerm(term: string): string {
-  return term
-    .toLowerCase()
-    .replace(/[0134578!|@$+]/g, (ch) => CONFUSABLE_CHARS[ch] ?? ch)
-    .replace(/[^a-z]/g, '');
+// Human-readable mute duration for player-facing notices ("10 minutes").
+function formatDuration(seconds: number): string {
+  const s = Math.max(1, Math.round(seconds));
+  if (s < 60) return `${s} second${s === 1 ? '' : 's'}`;
+  const m = Math.round(s / 60);
+  if (m < 60) return `${m} minute${m === 1 ? '' : 's'}`;
+  const h = Math.round(m / 60);
+  if (h < 24) return `${h} hour${h === 1 ? '' : 's'}`;
+  const d = Math.round(h / 24);
+  return `${d} day${d === 1 ? '' : 's'}`;
 }
 
-function parseCensorList(raw: string | undefined): string[] {
-  return (raw ?? '')
-    .split(/[\s,]+/)
-    .map((term) => normalizedCensorTerm(term))
-    .filter((term) => term.length > 0);
-}
-
-let censorCacheKey: string | null = null;
-let censorCacheTerms: string[] = [];
-
-function configuredChatCensorTerms(): string[] {
-  const rawList = process.env.CHAT_CENSOR_LIST ?? '';
-  const file = process.env.CHAT_CENSOR_FILE ?? '';
-  const cacheKey = `${rawList}\0${file}`;
-  if (cacheKey === censorCacheKey) return censorCacheTerms;
-
-  const terms = parseCensorList(rawList);
-  if (!file) {
-    censorCacheTerms = terms;
-    censorCacheKey = cacheKey;
-    return censorCacheTerms;
-  }
-  try {
-    censorCacheTerms = terms.concat(parseCensorList(readFileSync(file, 'utf8')));
-  } catch (err) {
-    console.warn(`could not read CHAT_CENSOR_FILE (${file}):`, err);
-    return terms;
-  }
-  censorCacheKey = cacheKey;
-  return censorCacheTerms;
-}
-
-export function censorChatText(text: string): string {
-  const terms = configuredChatCensorTerms();
-  if (terms.length === 0) return text;
-  return text.replace(/[A-Za-z0-9_@$!|+]+/g, (token) => {
-    const normalized = normalizedCensorTerm(token);
-    return terms.some((term) => normalized.includes(term)) ? '*'.repeat(token.length) : token;
-  });
+// Best-effort channel label for the violation log: the hard-word gate runs
+// before the message is routed, so infer the channel from its command prefix
+// (falling back to the player's last-used channel).
+function chatChannelHint(session: ClientSession, text: string): string {
+  if (/^\/(?:g|gu|guild)\s/i.test(text)) return 'guild';
+  if (/^\/(?:o|officer)\s/i.test(text)) return 'officer';
+  if (/^\/(?:w|whisper|t|tell|r|reply)\s/i.test(text)) return 'whisper';
+  if (/^\/(?:y|yell)\s/i.test(text)) return 'yell';
+  if (/^\/(?:p|party)\s/i.test(text)) return 'party';
+  if (/^\/(?:general|world)\s/i.test(text)) return 'general';
+  if (/^\/(?:s|say)\s/i.test(text)) return 'say';
+  return session.rememberedChat.channel;
 }
 
 export class GameServer {
@@ -301,6 +291,9 @@ export class GameServer {
   clients = new Map<number, ClientSession>(); // by pid
   private readonly sessionsByCharacterId = new Map<number, ClientSession>();
   readonly chatLog = new ChatLogger(insertChatLogs);
+  // Admin-managed soft/hard word lists + escalation config. Loaded from the DB
+  // at boot (loadChatFilter) and refreshed whenever an admin edits the lists.
+  readonly chatFilter = new ChatFilter();
   private readonly socialDb = new PgSocialDb(pool);
   readonly social: SocialService;
   private wireCache = new Map<number, EntityWireCache>();
@@ -423,6 +416,7 @@ export class GameServer {
       if (dt > 0.5) dt = 0.5;
       acc += dt;
       while (acc >= DT) {
+        this.clearStaleInputs();
         const events = this.sim.tick();
         this.routeEvents(events);
         acc -= DT;
@@ -450,7 +444,29 @@ export class GameServer {
 
   // -------------------------------------------------------------------------
 
-  join(ws: WebSocket, accountId: number, characterId: number, name: string, cls: import('../src/sim/types').PlayerClass, state: import('../src/sim/sim').CharacterState | null, isGm = false): ClientSession | { error: string } {
+  private clearStaleInputs(): void {
+    for (const session of this.clients.values()) {
+      if (this.sim.time - session.lastInputAt <= STALE_INPUT_SECONDS) continue;
+      const meta = this.sim.meta(session.pid);
+      if (!meta) continue;
+      const mi = meta.moveInput;
+      if (!(mi.forward || mi.back || mi.turnLeft || mi.turnRight || mi.strafeLeft || mi.strafeRight || mi.jump)) continue;
+      Object.assign(meta.moveInput, emptyMoveInput());
+    }
+  }
+
+  // -------------------------------------------------------------------------
+
+  join(
+    ws: WebSocket,
+    accountId: number,
+    characterId: number,
+    name: string,
+    cls: import('../src/sim/types').PlayerClass,
+    state: import('../src/sim/sim').CharacterState | null,
+    isGm = false,
+    meta: RequestMetadata & Partial<AccountChatMuteStatus> & { chatStrikes?: number } = {},
+  ): ClientSession | { error: string } {
     if (this.sessionsByCharacterId.has(characterId)) return { error: 'character already in world' };
     const pid = this.sim.addPlayer(cls, name, { state: state ?? undefined });
     if (isGm) {
@@ -462,21 +478,33 @@ export class GameServer {
     }
     const session: ClientSession = {
       ws, accountId, characterId, pid, name,
-      lastSave: Date.now(), alive: true, joinedAt: Date.now(), dbSessionId: null,
+      lastSave: Date.now(), alive: true, joinedAt: Date.now(), dbSessionId: null, left: false,
       chatTokens: CHAT_RATE_BURST, chatLastRefill: Date.now() / 1000, chatLastRateError: 0,
       chatRateViolations: 0, chatCooldownUntil: 0,
+      chatMutedUntil: meta.mutedUntil ? new Date(meta.mutedUntil).getTime() : null,
+      chatMuteReason: meta.reason ?? '',
+      chatStrikes: meta.chatStrikes ?? 0,
       blockedIds: new Set(),
       blockListLoaded: false,
       lastWhisperFrom: null,
       rememberedChat: { channel: 'say' },
+      lastInputSeq: 0,
+      lastInputAt: this.sim.time,
       lastSent: {},
       sentEnts: new Map(),
     };
     this.clients.set(pid, session);
     this.sessionsByCharacterId.set(characterId, session);
     this.peakOnline = Math.max(this.peakOnline, this.clients.size);
-    openPlaySession(accountId, characterId, name)
-      .then((id) => { session.dbSessionId = id; })
+    openPlaySession(accountId, characterId, name, meta)
+      .then((id) => {
+        session.dbSessionId = id;
+        // If the player disconnected before this insert landed, leave() saw a
+        // null id and skipped the close. Close it now so the row isn't orphaned.
+        if (session.left) {
+          void closePlaySession(id).catch((err) => console.error('failed to close play session:', err));
+        }
+      })
       .catch((err) => console.error('failed to open play session:', err));
 
     this.send(session, {
@@ -486,6 +514,12 @@ export class GameServer {
       name,
       cls,
       realm: REALM,
+      // Soft (cosmetic) words the client masks locally when its profanity
+      // filter is on. Hard words are never sent — they're enforced server-side.
+      softWords: this.chatFilter.softWords(),
+      // Epoch ms of an active chat mute, or null. Lets the client show status
+      // at login; sending is still gated server-side regardless.
+      chatMutedUntil: session.chatMutedUntil ?? null,
     });
     this.broadcastSystem(`${name} has entered Cryptic Realm.`);
     void this.initSocial(session);
@@ -508,6 +542,7 @@ export class GameServer {
 
   async leave(session: ClientSession, reason: string): Promise<void> {
     if (!this.clients.has(session.pid)) return;
+    session.left = true;
     this.clients.delete(session.pid);
     this.sessionsByCharacterId.delete(session.characterId);
     this.social.forget(session.characterId);
@@ -651,6 +686,56 @@ export class GameServer {
     }
   }
 
+  muteAccountChat(accountId: number, mutedUntil: string, reason: string): void {
+    const until = new Date(mutedUntil);
+    if (!Number.isFinite(until.getTime())) return;
+    for (const session of this.clients.values()) {
+      if (session.accountId !== accountId) continue;
+      session.chatMutedUntil = until.getTime();
+      session.chatMuteReason = reason.trim();
+      this.send(session, { t: 'events', list: [{ type: 'error', text: this.chatMuteMessage(session) }] });
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // Chat filter: load at boot, refresh + push to clients on admin edits, and
+  // sync admin mute/strike actions to any live sessions of the target account.
+  // -------------------------------------------------------------------------
+
+  async loadChatFilter(): Promise<void> {
+    try {
+      this.chatFilter.load(await loadChatFilterState());
+    } catch (err) {
+      console.error('failed to load chat filter:', err);
+    }
+  }
+
+  /** Reload word lists/config from the DB and push the new soft list to clients. */
+  async reloadChatFilter(): Promise<void> {
+    await this.loadChatFilter();
+    const words = this.chatFilter.softWords();
+    for (const session of this.clients.values()) {
+      this.send(session, { t: 'censor', words });
+    }
+  }
+
+  /** Reflect an admin "lift mute" on any live sessions so chat unlocks at once. */
+  liftChatMuteLive(accountId: number): void {
+    for (const session of this.clients.values()) {
+      if (session.accountId === accountId) {
+        session.chatMutedUntil = null;
+        session.chatMuteReason = '';
+      }
+    }
+  }
+
+  /** Reflect an admin "reset strikes" on any live sessions. */
+  resetChatStrikesLive(accountId: number): void {
+    for (const session of this.clients.values()) {
+      if (session.accountId === accountId) session.chatStrikes = 0;
+    }
+  }
+
   // -------------------------------------------------------------------------
   // Input & commands
   // -------------------------------------------------------------------------
@@ -683,6 +768,10 @@ export class GameServer {
       if (!meta || !e) return;
       const { moveInput, facing } = parseMoveInputFrame(msg);
       Object.assign(meta.moveInput, moveInput);
+      session.lastInputAt = sim.time;
+      if (typeof msg.seq === 'number' && Number.isFinite(msg.seq) && msg.seq > 0) {
+        session.lastInputSeq = Math.max(session.lastInputSeq, Math.floor(msg.seq));
+      }
       if (facing !== null && !e.dead) {
         e.facing = facing;
       }
@@ -695,6 +784,8 @@ export class GameServer {
       case 'target': sim.targetEntity(typeof msg.id === 'number' ? msg.id : null, pid); break;
       case 'tab': sim.tabTarget(pid); break;
       case 'targetNearest': sim.targetNearestEnemy(pid); break;
+      case 'tabFriendly': sim.friendlyTabTarget(pid); break;
+      case 'targetNearestFriendly': sim.targetNearestFriendly(pid); break;
       case 'attack': sim.startAutoAttack(pid); break;
       case 'stopattack': sim.stopAutoAttack(pid); break;
       case 'interact': sim.interact(pid); break;
@@ -717,15 +808,21 @@ export class GameServer {
         }
         break;
       case 'buyback': if (typeof msg.item === 'string') sim.buyBackItem(msg.item, pid); break;
+      case 'change_skin': if (typeof msg.skin === 'number') sim.setPlayerSkin(pid, msg.skin); break;
       case 'release': sim.releaseSpirit(pid); break;
       case 'chat': {
         if (typeof msg.text !== 'string') break;
+        if (this.isChatMuted(session)) break;
         if (!this.consumeChatToken(session)) break;
         const text = msg.text.trim();
         if (/^\/who(?:\s|$)/i.test(text)) {
           this.sendWhoRoster(session);
           break;
         }
+        // Hard-word + mute enforcement gate, applied to every channel before the
+        // message is routed anywhere. Soft (cosmetic) words are NOT touched here
+        // — clients mask those locally when their profanity filter is on.
+        if (this.enforceChatPolicy(session, text)) break;
         // guild and officer chat are persistent + cross-zone, so they live in
         // the server's SocialService rather than the sim (no guild concept).
         // MMO convention: /g is guild; /general remains world chat.
@@ -733,7 +830,7 @@ export class GameServer {
         const om = gm ? null : /^\/(?:o|officer)\s+([\s\S]+)$/i.exec(text);
         if (gm || om) {
           const channel = gm ? 'guild' : 'officer';
-          const body = censorChatText((gm ?? om!)[1]);
+          const body = (gm ?? om!)[1];
           session.rememberedChat = { channel };
           const route = gm ? this.social.guildChat(this.actorFor(session), body)
             : this.social.officerChat(this.actorFor(session), body);
@@ -747,7 +844,7 @@ export class GameServer {
           }).catch((err) => console.error(`${channel} chat failed:`, err));
           break;
         }
-        // WoW /r: reply to whoever last whispered you
+        // /r: reply to whoever last whispered you
         const rm = /^\/(?:r|reply)\s+([\s\S]+)$/i.exec(text);
         if (rm) {
           if (!session.lastWhisperFrom) {
@@ -755,12 +852,15 @@ export class GameServer {
             break;
           }
           session.rememberedChat = { channel: 'whisper', target: session.lastWhisperFrom };
-          this.logChat(session, sim.chat(`/w ${session.lastWhisperFrom} ${censorChatText(rm[1])}`, pid));
+          this.logChat(session, sim.chat(`/w ${session.lastWhisperFrom} ${rm[1]}`, pid));
           break;
         }
         this.logChat(session, this.routeRememberedChat(session, text, pid));
         break;
       }
+      case 'emote':
+        if (isOverheadEmoteId(msg.emote)) sim.playEmote(msg.emote, pid);
+        break;
       // party
       case 'pinvite': if (typeof msg.id === 'number') sim.partyInvite(msg.id, pid); break;
       case 'paccept': sim.partyAccept(pid); break;
@@ -770,6 +870,22 @@ export class GameServer {
       // raid/target markers
       case 'setMarker': if (typeof msg.id === 'number' && typeof msg.marker === 'number') sim.setMarker(msg.id, msg.marker, pid); break;
       case 'clearMarker': if (typeof msg.id === 'number') sim.clearMarker(msg.id, pid); break;
+      // hunter pets
+      case 'pet_abandon': sim.abandonPet(pid); break;
+      case 'pet_rename':
+        if (typeof msg.name === 'string') {
+          if (offensiveName(msg.name)) this.send(session, { t: 'events', list: [{ type: 'error', text: 'Pet name is not allowed.' }] });
+          else sim.renamePet(msg.name, pid);
+        }
+        break;
+      case 'pet_revive': sim.revivePet(pid); break;
+      case 'pet_attack': sim.petAttack(pid); break;
+      case 'pet_taunt': sim.petTaunt(pid); break;
+      case 'pet_feed': if (typeof msg.item === 'string') sim.feedPet(msg.item, pid); break;
+      case 'pet_heal': sim.healPet(pid); break;
+      case 'pet_mode':
+        if (msg.mode === 'passive' || msg.mode === 'defensive' || msg.mode === 'aggressive') sim.setPetMode(msg.mode, pid);
+        break;
       // trade
       case 'trade_req': if (typeof msg.id === 'number') sim.tradeRequest(msg.id, pid); break;
       case 'trade_accept': sim.tradeAccept(pid); break;
@@ -959,6 +1075,7 @@ export class GameServer {
 
   private canObserveEntity(viewer: Entity, e: Entity, d2: number): boolean {
     if (e.kind !== 'player' || !isStealthed(e)) return true;
+    if (this.sim.isHostileTo(viewer, e)) return false;
     const party = this.sim.partyOf(viewer.id);
     const sameParty = party?.members.includes(e.id) ?? false;
     const duel = this.sim.duelFor(viewer.id);
@@ -1026,6 +1143,7 @@ export class GameServer {
       eat: p.eating ? { remaining: round2(p.eating.remaining) } : null,
       drk: p.drinking ? { remaining: round2(p.drinking.remaining) } : null,
       opUntil: p.overpowerUntil > this.sim.time ? 1 : 0,
+      ack: session.lastInputSeq,
     });
     const json = JSON.stringify(self);
     // heavy, rarely-changing fields ride along only when their serialized
@@ -1161,7 +1279,7 @@ export class GameServer {
     const text = rawText.trim();
     if (!text) return null;
     if (!text.startsWith('/')) {
-      const body = censorChatText(text);
+      const body = text;
       if (!body.trim()) return null;
       switch (session.rememberedChat.channel) {
         case 'guild':
@@ -1186,6 +1304,10 @@ export class GameServer {
           return this.sim.chat(`/p ${body}`, pid);
         case 'general':
           return this.sim.chat(`/general ${body}`, pid);
+        case 'world':
+          return this.sim.chat(`/world ${body}`, pid);
+        case 'lfg':
+          return this.sim.chat(`/lfg ${body}`, pid);
         case 'yell':
           return this.sim.chat(`/y ${body}`, pid);
         case 'say':
@@ -1193,11 +1315,10 @@ export class GameServer {
       }
     }
 
-    const sent = this.sim.chat(censorChatText(text), pid);
+    const sent = this.sim.chat(text, pid);
     if (sent) {
       if (sent.channel === 'whisper') {
-        const wm = /^\/(?:w|whisper|t|tell)\s+(\S+)\s+[\s\S]+$/i.exec(text);
-        if (wm) session.rememberedChat = { channel: 'whisper', target: wm[1] };
+        if (sent.target) session.rememberedChat = { channel: 'whisper', target: sent.target };
       } else {
         session.rememberedChat = { channel: sent.channel };
       }
@@ -1214,6 +1335,72 @@ export class GameServer {
       channel: sent.channel,
       message: sent.message,
     });
+  }
+
+  // One-off, player-facing chat notice (reuses the generic error event path the
+  // client already renders for rate-limit / cooldown messages).
+  private sendChatNotice(session: ClientSession, text: string): void {
+    this.send(session, { t: 'events', list: [{ type: 'error', text }] });
+  }
+
+  /**
+   * Enforce the hard-word + mute policy on an outgoing chat message. Returns
+   * true when the message must be dropped (sender is muted, or it contained a
+   * slur). Soft/cosmetic words are deliberately untouched here — those are a
+   * client-side display choice. Applies to every channel because it runs before
+   * the message is routed.
+   */
+  private enforceChatPolicy(session: ClientSession, text: string): boolean {
+    const now = Date.now();
+    if ((session.chatMutedUntil ?? 0) > now) {
+      this.sendChatNotice(
+        session,
+        `You are muted and can't chat for another ${formatDuration(((session.chatMutedUntil ?? now) - now) / 1000)}.`,
+      );
+      return true;
+    }
+    const hit = this.chatFilter.findHardHit(text);
+    if (!hit) return false;
+
+    const outcome = this.chatFilter.escalate(session.chatStrikes);
+    const channel = chatChannelHint(session, text);
+    // Optimistically advance the session so a rapid follow-up is already gated;
+    // the DB write below returns the authoritative values and corrects any drift
+    // (e.g. a second character on the same account raising strikes concurrently).
+    session.chatStrikes = outcome.strikes;
+    if (outcome.kind === 'mute') {
+      session.chatMutedUntil = now + outcome.muteSeconds * 1000;
+      session.chatMuteReason = 'Chat filter enforcement';
+      this.sendChatNotice(
+        session,
+        `That language isn't allowed here. You're muted for ${formatDuration(outcome.muteSeconds)}.`,
+      );
+    } else {
+      this.sendChatNotice(
+        session,
+        `Warning: that language isn't allowed here. Continued use will mute you.`,
+      );
+    }
+
+    void applyChatStrike(session.accountId, outcome.muteSeconds)
+      .then((applied) => {
+        session.chatStrikes = applied.strikes;
+        session.chatMutedUntil = applied.chatMutedUntil
+          ? new Date(applied.chatMutedUntil).getTime()
+          : session.chatMutedUntil;
+      })
+      .catch((err) => console.error('applyChatStrike failed:', err));
+    void recordChatViolation({
+      accountId: session.accountId,
+      characterId: session.characterId,
+      characterName: session.name,
+      term: hit,
+      channel,
+      message: text,
+      action: outcome.kind,
+      muteSeconds: outcome.muteSeconds,
+    }).catch((err) => console.error('recordChatViolation failed:', err));
+    return true;
   }
 
   private consumeChatToken(session: ClientSession): boolean {
@@ -1252,6 +1439,24 @@ export class GameServer {
       this.send(session, { t: 'events', list: [{ type: 'error', text: 'You are sending messages too quickly. Slow down.' }] });
     }
     return false;
+  }
+
+  private isChatMuted(session: ClientSession): boolean {
+    if (session.chatMutedUntil === null) return false;
+    if (session.chatMutedUntil <= Date.now()) {
+      session.chatMutedUntil = null;
+      session.chatMuteReason = '';
+      return false;
+    }
+    this.send(session, { t: 'events', list: [{ type: 'error', text: this.chatMuteMessage(session) }] });
+    return true;
+  }
+
+  private chatMuteMessage(session: ClientSession): string {
+    const remainingMs = Math.max(0, (session.chatMutedUntil ?? Date.now()) - Date.now());
+    const minutes = Math.max(1, Math.ceil(remainingMs / 60_000));
+    const reason = session.chatMuteReason ? ` Reason: ${session.chatMuteReason}` : '';
+    return `You are muted from chat for ${minutes} more minute${minutes === 1 ? '' : 's'}.${reason}`;
   }
 
   private sendWhoRoster(session: ClientSession): void {

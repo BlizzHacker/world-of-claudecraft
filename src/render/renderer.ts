@@ -1,21 +1,24 @@
 import * as THREE from 'three';
 import { Entity, SimEvent } from '../sim/types';
-import type { IWorld } from '../world_api';
+import { OVERHEAD_EMOTES, type IWorld } from '../world_api';
 import { groundHeight, WATER_LEVEL, zoneBiomeAt } from '../sim/world';
 import {
   MOBS, ABILITIES, DUNGEON_X_THRESHOLD, DUNGEON_LIST, QUESTS,
-  instanceOrigin, INSTANCE_SLOT_COUNT, ARENA_SLOT_COUNT, arenaOrigin, arenaOriginAt, isArenaPos,
+  instanceOrigin, INSTANCE_SLOT_COUNT, ARENA_SLOT_COUNT, arenaOrigin, arenaOriginAt, isArenaPos, dungeonAt,
 } from '../sim/data';
 import { ARENA_LAYOUT, DUNGEON_WALL_X } from '../sim/dungeon_layout';
+import { cameraOcclusion } from '../sim/colliders';
 import type { BiomeId } from '../sim/types';
 import { AnimState, CharacterVisual, createCharacterVisual } from './characters';
+import { isVisuallyDead } from './anim_state';
 import { LocoTrack, newLocoTrack, updateLocomotion } from './locomotion';
 import { buildProps } from './props';
 import { plankTexture, sparkleTexture } from './textures';
-import { DungeonInteriors } from './dungeon';
+import { DungeonInteriors, ensureDungeonAssets } from './dungeon';
+import { buildGroundQuestObject } from './quest_objects';
 import { Vfx } from './vfx';
 import {
-  GFX, initGfxTier, sharedUniforms, SUN_ANCHOR, SUN_DIR, surfaceMat,
+  GFX, initGfxTier, sharedUniforms, SUN_ANCHOR, SUN_DIR, surfaceMat, urlForcedTier,
 } from './gfx';
 import { buildComposer, PostPipeline } from './post';
 import { buildTerrain, TerrainView } from './terrain';
@@ -23,13 +26,22 @@ import { buildWater, WaterView } from './water';
 import { buildClouds, buildSky, SkyView } from './sky';
 import { buildFoliage, FoliageView } from './foliage';
 import { shouldRenderStealthGhost } from './stealth';
+import { t } from '../ui/i18n';
+import { tEntity } from '../ui/entity_i18n';
 import { raidMarkerDataUrl } from '../ui/icons';
-import { isProjectedNameplateAnchorVisible } from './nameplate_projection';
+import { isProjectedNameplateAnchorVisible, nameplateScreenTransform } from './nameplate_projection';
+import { stepCameraOcclusion, type CameraOcclusionState } from './camera_collision';
 
 const NAMEPLATE_RANGE = 55;
+const NAMEPLATE_RANGE_SQ = NAMEPLATE_RANGE * NAMEPLATE_RANGE;
+const emoteIconUrl = (id: string): string => `/ui/emotes/emote-${id}.png`;
 // Entities further than this from the player are hidden entirely: their rigs
 // are several draw calls each and read as sub-pixel specks long before this.
 const ENTITY_DRAW_RANGE = 80;
+const ENTITY_VIEW_CREATE_RANGE_SQ = ENTITY_DRAW_RANGE * ENTITY_DRAW_RANGE;
+const ENTITY_VIEW_DESTROY_RANGE_SQ = 96 * 96;
+const VIEW_CREATE_BUDGET_LOW = 4;
+const VIEW_CREATE_BUDGET_HIGH = 16;
 // rigs further than this stop casting articulated shadows (~7 draws each) and
 // hand off to a single-draw static-pose shadow proxy (the merged far-LOD mesh
 // with a colorWrite-off material) so mid-ground NPCs keep their grounding for
@@ -41,6 +53,11 @@ const SPARKLE_DRAW_RANGE_SQ = 40 * 40;
 // beyond this, the articulated rig swaps for its single-draw merged far LOD
 // (just inside the nameplate range; rigs out there are ~30px tall)
 const ENTITY_LOD_RANGE_SQ = 50 * 50;
+// Feet-above-terrain margin that counts as "airborne" for the jump pose. Mirrors
+// the sim's own 0.4u grounded tolerance (sim.ts), so walking slopes doesn't trip
+// it but a jump (apex ~1.1u) does. Needed because online snapshots don't carry
+// `onGround`, so the flag alone never fires the jump clip for the mirrored world.
+const AIRBORNE_EPS = 0.4;
 // fire/torch point lights beyond this never shine (their falloff range is
 // shorter anyway); the nearest GFX.maxPointLights within it win the budget
 const LIGHT_BUDGET_RANGE_SQ = 55 * 55;
@@ -48,6 +65,19 @@ const LIGHT_BUDGET_RANGE_SQ = 55 * 55;
 const SELECTION_RING_BOOST = 1.5;
 const SPARKLE_BOOST = 1.5;
 const PORTAL_BOOST = 2;
+// Third-person camera collision (see updateCamera). HARD_PAD keeps the camera
+// just off the surface; SOFT_PAD starts easing before the hard ray hits;
+// MIN_DIST never slams it onto the player. When the hard limit still appears
+// suddenly, lens/FOV compensation smooths the perceived zoom while the physical
+// camera remains clamped outside geometry.
+const CAMERA_COLLIDER_PAD = 0.35;
+const CAMERA_SOFT_COLLIDER_PAD = 1.65;
+const CAMERA_MIN_DIST = 1.2;
+const CAMERA_PULL_IN_RATE = 10;
+const CAMERA_PULL_OUT_RATE = 6;
+const CAMERA_SOFT_PULL_WEIGHT = 0.45;
+const CAMERA_BASE_FOV = 60;
+const CAMERA_MAX_COMP_FOV = 98;
 const SUN_HALO_OPACITY = 0.35; // bloom now supplies most of the halo
 // lighting rig (high/ultra) — IBL supplies ambient, sun carries the key
 const HEMI_INTENSITY = 0.45;
@@ -63,6 +93,10 @@ const IBL_RAW_SCALE = 0.55;
 const DUNGEON_HEMI_INTENSITY = 0.22; // floor of readability — bosses crushed to black at 0.14
 // character rim glow scales up underground so silhouettes split from the murk
 const DUNGEON_RIM_BOOST = 2.4;
+const RENDERER_PHASE_SAMPLE_LIMIT = 720;
+
+type RendererPhase = 'setup' | 'entities' | 'world' | 'nameplates' | 'submit' | 'total';
+type RendererPhaseStats = Record<RendererPhase, { count: number; avg: number; p95: number; max: number }>;
 
 interface EntityView {
   group: THREE.Group;
@@ -70,6 +104,8 @@ interface EntityView {
   visual: CharacterVisual | null;
   sheepVisual: CharacterVisual | null; // polymorph form, built lazily
   bearVisual: CharacterVisual | null; // druid bear form, built lazily
+  catVisual: CharacterVisual | null; // druid cat form, built lazily
+  skin: number; // last-rendered appearance skin — diffed each frame for live swaps
   /** unscaled height — nameplate/vfx anchor reads height * e.scale */
   height: number;
   /** what removeView pulls back out of clickTargets */
@@ -78,14 +114,22 @@ interface EntityView {
   nameEl: HTMLDivElement;
   hpBar: HTMLDivElement;
   hpFill: HTMLDivElement;
+  emoteEl: HTMLDivElement;
+  emoteIconEl: HTMLImageElement;
+  emoteLabelEl: HTMLSpanElement;
   markerEl: HTMLDivElement;
   raidMarkEl: HTMLDivElement; // party raid/target marker, above the name
+  nameplateDisplay: string;
+  nameplateTransform: string;
+  nameplateSig: string;
+  nameplateHpWidth: string;
   sparkle?: THREE.Sprite; // ground objects
   objectMesh?: THREE.Object3D;
   portal?: THREE.Mesh; // dungeon door swirl
   objectCasters: THREE.Object3D[]; // object-view shadow meshes, distance-gated
   shadowOn: boolean;
   isFar: boolean;
+  lastOverheadEmoteKey: string | null;
   // render-space position last frame, for true u/s locomotion speed
   lastX: number;
   lastZ: number;
@@ -100,6 +144,54 @@ function collectCasters(root: THREE.Object3D, into: THREE.Object3D[]): void {
   });
 }
 
+function roundMs(v: number): number {
+  return Math.round(v * 100) / 100;
+}
+
+function distSqXZ(a: Entity, b: Entity): number {
+  const dx = a.pos.x - b.pos.x;
+  const dz = a.pos.z - b.pos.z;
+  return dx * dx + dz * dz;
+}
+
+function summarizeMs(values: number[]): { count: number; avg: number; p95: number; max: number } {
+  if (values.length === 0) return { count: 0, avg: 0, p95: 0, max: 0 };
+  const sorted = [...values].sort((a, b) => a - b);
+  const total = values.reduce((a, b) => a + b, 0);
+  const p95Idx = Math.min(sorted.length - 1, Math.max(0, Math.ceil(sorted.length * 0.95) - 1));
+  return {
+    count: values.length,
+    avg: roundMs(total / values.length),
+    p95: roundMs(sorted[p95Idx]),
+    max: roundMs(sorted[sorted.length - 1]),
+  };
+}
+
+function mobDisplayName(mobId: string): string {
+  return tEntity({ kind: 'mob', id: mobId, field: 'name' });
+}
+
+function npcDisplayName(npcId: string): string {
+  return tEntity({ kind: 'npc', id: npcId, field: 'name' });
+}
+
+function dungeonDisplayName(dungeonId: string): string {
+  return tEntity({ kind: 'dungeon', id: dungeonId, field: 'name' });
+}
+
+function objectDisplayName(entity: Entity): string {
+  if ((entity.templateId === 'dungeon_door' || entity.templateId === 'dungeon_exit') && entity.dungeonId) {
+    const dungeonName = dungeonDisplayName(entity.dungeonId);
+    return entity.templateId === 'dungeon_exit'
+      ? t('worldContent.dungeonExitName', { name: dungeonName })
+      : dungeonName;
+  }
+  // Collectible/quest ground objects carry the item id they grant; localize the
+  // nameplate through the item dictionary instead of the raw English name.
+  if (entity.objectItemId) return tEntity({ kind: 'item', id: entity.objectItemId, field: 'name' });
+  return entity.name;
+}
+
 export class Renderer {
   scene = new THREE.Scene();
   camera: THREE.PerspectiveCamera;
@@ -112,11 +204,19 @@ export class Renderer {
   camYaw = Math.PI;
   camPitch = 0.32;
   camDist = 12;
+  // Smoothed chase-cam occlusion (1 = no pull-in); see updateCamera.
+  private camOcclusion: CameraOcclusionState = { pullT: 1, lensT: 1, fov: CAMERA_BASE_FOV };
   showNameplates = true;
   // settings-menu graphics knobs (applied live)
-  private renderScale = 1; // resolution multiplier on top of the device pixel ratio
+  private renderScale = 1; // user-requested resolution ceiling on top of the device pixel ratio
+  private effectiveRenderScale = 1; // runtime value after adaptive backoff
+  private frameMsEma = 16.7;
+  private adaptiveGrace = 2.0;
+  private adaptiveCooldown = 0;
+  private stableFrameTime = 0;
   private baseExposure = 1.12; // tone-mapping exposure at brightness 1.0
   private tmpV = new THREE.Vector3();
+  private viewCandidates: { e: Entity; d2: number }[] = [];
   private tmpV2 = new THREE.Vector3();
   // floating /say-/yell bubbles, keyed by speaker entity id
   private chatBubbles = new Map<number, { el: HTMLDivElement; until: number }>();
@@ -134,7 +234,7 @@ export class Renderer {
   private fogScratch = new THREE.Color();
   private flames: THREE.Mesh[];
   private fireLights: THREE.PointLight[];
-  private propsView!: { update(camX: number, camZ: number, fogFar: number): void };
+  private propsView!: { update(camX: number, camY: number, camZ: number, fogFar: number): void };
   private lightRank: { light: THREE.PointLight; d2: number; worldPos: THREE.Vector3 }[] = [];
   private doomedIds: number[] = [];
   private dungeons: DungeonInteriors | null = null;
@@ -149,6 +249,20 @@ export class Renderer {
   private post: PostPipeline | null = null;
   private godRays: THREE.Sprite[] = [];
   private viewport = { width: 1, height: 1 };
+  private viewportPollTimer = 0;
+  private nameplateTimer = 0;
+  private glVendor = '';
+  private glRenderer = '';
+  private contextLostCount = 0;
+  private contextRestoredCount = 0;
+  private phaseSamples: Record<RendererPhase, number[]> = {
+    setup: [],
+    entities: [],
+    world: [],
+    nameplates: [],
+    submit: [],
+    total: [],
+  };
 
   constructor(private sim: IWorld, canvas: HTMLCanvasElement, nameplateLayer: HTMLDivElement) {
     this.nameplateLayer = nameplateLayer;
@@ -157,8 +271,16 @@ export class Renderer {
     // requesting it here would hit software GL (the autodetect can only run
     // after the context exists) with the most expensive setting there is.
     this.webgl = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: 'high-performance' });
+    this.captureGlIdentity();
+    canvas.addEventListener('webglcontextlost', () => { this.contextLostCount++; });
+    canvas.addEventListener('webglcontextrestored', () => {
+      this.contextRestoredCount++;
+      this.captureGlIdentity();
+    });
     initGfxTier(this.webgl); // software-GL autodetect needs the live context
-    this.lowGfx = GFX.tier === 'low';
+    // The lightweight material path does not preload HDR sky/water assets.
+    // Keep the renderer's HDR/IBL branch aligned with that preload decision.
+    this.lowGfx = !GFX.standardMaterials;
     const LOW_GFX = this.lowGfx;
     this.viewport = this.measureViewport();
     this.webgl.setPixelRatio(Math.min(window.devicePixelRatio, GFX.pixelRatioCap));
@@ -167,9 +289,9 @@ export class Renderer {
     this.webgl.shadowMap.type = THREE.PCFSoftShadowMap;
     this.webgl.toneMapping = THREE.ACESFilmicToneMapping; // OutputPass reads this on the composer path
     this.webgl.toneMappingExposure = this.baseExposure;
-    this.camera = new THREE.PerspectiveCamera(60, this.viewport.width / this.viewport.height, 0.1, 950);
+    this.camera = new THREE.PerspectiveCamera(CAMERA_BASE_FOV, this.viewport.width / this.viewport.height, 0.1, 950);
 
-    this.scene.fog = new THREE.Fog(0xa6c6e0, 130, 470);
+    this.scene.fog = new THREE.Fog(LOW_GFX ? 0xb6cddd : 0xa6c6e0, LOW_GFX ? 150 : 130, LOW_GFX ? 520 : 470);
 
     // sky dome — follows the camera so the world strip never outruns it.
     // High tier: shader gradient + sun glow with biome-aware horizon tints;
@@ -204,10 +326,10 @@ export class Renderer {
       pmrem.dispose(); // prefiltered envRTs stay alive for the session
     }
 
-    const hemi = new THREE.HemisphereLight(0xcfe8ff, 0x46603a, LOW_GFX ? 1.0 : HEMI_INTENSITY);
+    const hemi = new THREE.HemisphereLight(0xd8ecff, 0x405a35, LOW_GFX ? 0.9 : HEMI_INTENSITY);
     this.scene.add(hemi);
     this.hemi = hemi;
-    const sun = new THREE.DirectionalLight(LOW_GFX ? 0xfff0cd : 0xffedd0, LOW_GFX ? 2.2 : SUN_INTENSITY);
+    const sun = new THREE.DirectionalLight(LOW_GFX ? 0xfff2d6 : 0xffedd0, LOW_GFX ? 2.45 : SUN_INTENSITY);
     sun.position.copy(SUN_ANCHOR);
     sun.castShadow = !LOW_GFX;
     sun.shadow.mapSize.set(GFX.shadowMap, GFX.shadowMap);
@@ -335,8 +457,6 @@ export class Renderer {
     });
     this.vfx.setViewportScale(this.webgl.domElement.clientHeight * this.webgl.getPixelRatio(), 60);
 
-    for (const e of sim.entities.values()) this.createView(e);
-
     // post chain (bloom + grade, GTAO on ultra); low renders direct
     if (GFX.composer) this.post = buildComposer(this.webgl, this.scene, this.camera, this.viewport.width, this.viewport.height);
 
@@ -361,8 +481,20 @@ export class Renderer {
     return { width: Math.max(1, width), height: Math.max(1, height) };
   }
 
-  private resizeViewport(): void {
-    this.viewport = this.measureViewport();
+  private captureGlIdentity(): void {
+    try {
+      const gl = this.webgl.getContext();
+      const dbg = gl.getExtension('WEBGL_debug_renderer_info');
+      this.glVendor = String(dbg ? gl.getParameter(dbg.UNMASKED_VENDOR_WEBGL) : gl.getParameter(gl.VENDOR));
+      this.glRenderer = String(dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER));
+    } catch {
+      this.glVendor = '';
+      this.glRenderer = '';
+    }
+  }
+
+  private resizeViewport(measured = this.measureViewport()): void {
+    this.viewport = measured;
     this.camera.aspect = this.viewport.width / this.viewport.height;
     this.camera.updateProjectionMatrix();
     this.applyResolution();
@@ -372,8 +504,7 @@ export class Renderer {
   // tier) to the renderer, composer, and vfx. Shared by resize and the
   // render-scale setting so a window resize never drops the chosen scale.
   private applyResolution(): void {
-    this.viewport = this.measureViewport();
-    const ratio = Math.min(window.devicePixelRatio, GFX.pixelRatioCap) * this.renderScale;
+    const ratio = Math.min(window.devicePixelRatio, GFX.pixelRatioCap) * this.effectiveRenderScale;
     this.webgl.setPixelRatio(ratio);
     this.webgl.setSize(this.viewport.width, this.viewport.height, false);
     if (this.post) {
@@ -391,7 +522,120 @@ export class Renderer {
   /** Resolution multiplier on top of the device pixel ratio (0.5..1). */
   setRenderScale(scale: number): void {
     this.renderScale = Math.min(1, Math.max(0.5, scale));
+    this.effectiveRenderScale = this.initialEffectiveRenderScale(this.renderScale);
+    this.frameMsEma = 16.7;
+    this.adaptiveGrace = 1.0;
+    this.adaptiveCooldown = 0.5;
+    this.stableFrameTime = 0;
     this.applyResolution();
+  }
+
+  private isMobileRuntime(): boolean {
+    return document.body.classList.contains('mobile-touch');
+  }
+
+  private initialEffectiveRenderScale(scale: number): number {
+    const forcedTier = urlForcedTier();
+    if (this.isMobileRuntime() && forcedTier !== 'high' && forcedTier !== 'ultra') return Math.min(scale, 0.85);
+    return scale;
+  }
+
+  perfStats(): {
+    tier: string;
+    renderScale: number;
+    effectiveRenderScale: number;
+    pixelRatio: number;
+    width: number;
+    height: number;
+    calls: number;
+    triangles: number;
+    textures: number;
+    programs: number;
+    views: number;
+    glVendor: string;
+    glRenderer: string;
+    contextLost: number;
+    contextRestored: number;
+    phaseMs: RendererPhaseStats;
+  } {
+    const info = this.webgl.info;
+    return {
+      tier: GFX.tier,
+      renderScale: this.renderScale,
+      effectiveRenderScale: this.effectiveRenderScale,
+      pixelRatio: this.webgl.getPixelRatio(),
+      width: this.viewport.width,
+      height: this.viewport.height,
+      calls: info.render.calls,
+      triangles: info.render.triangles,
+      textures: info.memory.textures,
+      programs: info.programs?.length ?? 0,
+      views: this.views.size,
+      glVendor: this.glVendor,
+      glRenderer: this.glRenderer,
+      contextLost: this.contextLostCount,
+      contextRestored: this.contextRestoredCount,
+      phaseMs: this.rendererPhaseStats(),
+    };
+  }
+
+  private recordRendererPhase(phase: RendererPhase, ms: number): void {
+    if (!Number.isFinite(ms) || ms < 0) return;
+    const samples = this.phaseSamples[phase];
+    samples.push(Math.min(250, ms));
+    if (samples.length > RENDERER_PHASE_SAMPLE_LIMIT) samples.splice(0, samples.length - RENDERER_PHASE_SAMPLE_LIMIT);
+  }
+
+  private rendererPhaseStats(): RendererPhaseStats {
+    return {
+      setup: summarizeMs(this.phaseSamples.setup),
+      entities: summarizeMs(this.phaseSamples.entities),
+      world: summarizeMs(this.phaseSamples.world),
+      nameplates: summarizeMs(this.phaseSamples.nameplates),
+      submit: summarizeMs(this.phaseSamples.submit),
+      total: summarizeMs(this.phaseSamples.total),
+    };
+  }
+
+  private updateAdaptiveResolution(dt: number): void {
+    if (!Number.isFinite(dt) || dt <= 0) return;
+    const frameMs = Math.min(250, dt * 1000);
+    this.frameMsEma += (frameMs - this.frameMsEma) * 0.08;
+    if (this.adaptiveGrace > 0) {
+      this.adaptiveGrace -= dt;
+      return;
+    }
+    if (this.adaptiveCooldown > 0) {
+      this.adaptiveCooldown -= dt;
+      return;
+    }
+
+    const mobile = this.isMobileRuntime();
+    const minScale = mobile ? 0.55 : (GFX.tier === 'low' ? 0.9 : 0.7);
+    const dropThreshold = mobile ? 20 : 24; // ~50fps mobile, ~42fps desktop
+    const urgentThreshold = mobile ? 28 : 34;
+    const recoverThreshold = mobile ? 15.5 : 14.5;
+
+    if (this.frameMsEma >= dropThreshold && this.effectiveRenderScale > minScale) {
+      const step = this.frameMsEma >= urgentThreshold ? 0.15 : 0.1;
+      this.effectiveRenderScale = Math.max(minScale, Math.round((this.effectiveRenderScale - step) * 100) / 100);
+      this.stableFrameTime = 0;
+      this.adaptiveCooldown = 1.25;
+      this.applyResolution();
+      return;
+    }
+
+    if (this.frameMsEma <= recoverThreshold && this.effectiveRenderScale < this.renderScale) {
+      this.stableFrameTime += dt;
+      if (this.stableFrameTime >= 6) {
+        this.effectiveRenderScale = Math.min(this.renderScale, Math.round((this.effectiveRenderScale + 0.05) * 100) / 100);
+        this.stableFrameTime = 0;
+        this.adaptiveCooldown = 2.0;
+        this.applyResolution();
+      }
+    } else {
+      this.stableFrameTime = 0;
+    }
   }
 
   // Visual reactions to sim events (called by the HUD for every event,
@@ -433,8 +677,6 @@ export class Renderer {
   // Shared object-view resources: views must not own materials/textures, or
   // interest churn leaks them (removeView only disposes per-view geometry).
   private doorStoneMat: THREE.Material | null = null;
-  private crateMat: THREE.Material | null = null;
-  private crateLidMat: THREE.Material | null = null;
   private sparkleMat: THREE.SpriteMaterial | null = null;
 
   private createView(e: Entity): void {
@@ -502,32 +744,9 @@ export class Renderer {
       body!.add(glow);
       objectMesh = body!;
     } else if (e.kind === 'object') {
-      body = new THREE.Group();
-      height = 1.2;
-      // braced plank crate matching the props.ts crates — never a bare cube
-      this.crateMat ??= new THREE.MeshLambertMaterial({ map: plankTexture() });
-      this.crateLidMat ??= new THREE.MeshLambertMaterial({ color: 0x4a3320 });
-      const crate = new THREE.Mesh(new THREE.BoxGeometry(0.78, 0.78, 0.78), this.crateMat);
-      crate.position.y = 0.42;
-      crate.castShadow = true;
-      body!.add(crate);
-      for (const sx of [1, -1]) {
-        for (const sz of [1, -1]) {
-          const brace = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.86, 0.1), this.crateLidMat);
-          brace.position.set(sx * 0.37, 0.42, sz * 0.37);
-          body!.add(brace);
-        }
-      }
-      for (const sy of [0.06, 0.78]) {
-        for (const s of [1, -1]) {
-          const stripA = new THREE.Mesh(new THREE.BoxGeometry(0.82, 0.08, 0.08), this.crateLidMat);
-          stripA.position.set(0, sy, s * 0.38);
-          const stripB = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.08, 0.82), this.crateLidMat);
-          stripB.position.set(s * 0.38, sy, 0);
-          body!.add(stripA, stripB);
-        }
-      }
-      body!.rotation.y = (e.id % 7) * 0.45; // break identical alignment
+      const built = buildGroundQuestObject(e.objectItemId ?? '', e.id);
+      body = built.group;
+      height = built.height;
       objectMesh = body!;
       if (!this.sparkleMat) {
         this.sparkleMat = new THREE.SpriteMaterial({ map: sparkleTexture(), transparent: true, depthWrite: false });
@@ -564,6 +783,16 @@ export class Renderer {
     // nameplate
     const np = document.createElement('div');
     np.className = 'nameplate';
+    np.style.display = 'none';
+    const emoteEl = document.createElement('div');
+    emoteEl.className = 'np-emote';
+    emoteEl.style.display = 'none';
+    const emoteIconEl = document.createElement('img');
+    emoteIconEl.className = 'np-emote-icon';
+    emoteIconEl.alt = '';
+    const emoteLabelEl = document.createElement('span');
+    emoteLabelEl.className = 'np-emote-label';
+    emoteEl.append(emoteIconEl, emoteLabelEl);
     const raidMark = document.createElement('div');
     raidMark.className = 'np-raidmark';
     raidMark.style.display = 'none';
@@ -577,17 +806,18 @@ export class Renderer {
     const hpFill = document.createElement('div');
     hpFill.className = 'np-hpfill';
     hpBar.appendChild(hpFill);
-    np.append(raidMark, marker, nameEl, hpBar);
+    np.append(emoteEl, raidMark, marker, nameEl, hpBar);
     this.nameplateLayer.appendChild(np);
 
     // object views gate their own casters; character shadows live in visual
     const objectCasters: THREE.Object3D[] = [];
     if (!visual) collectCasters(group, objectCasters);
     this.views.set(e.id, {
-      group, visual, sheepVisual: null, bearVisual: null, height, clickTarget,
-      nameplate: np, nameEl, hpBar, hpFill, markerEl: marker, raidMarkEl: raidMark, sparkle, objectMesh, portal,
-      objectCasters, shadowOn: true, isFar: false,
-      lastX: e.pos.x, lastZ: e.pos.z,
+      group, visual, sheepVisual: null, bearVisual: null, catVisual: null, height, clickTarget,
+      nameplate: np, nameEl, hpBar, hpFill, emoteEl, emoteIconEl, emoteLabelEl, markerEl: marker, raidMarkEl: raidMark, sparkle, objectMesh, portal,
+      nameplateDisplay: 'none', nameplateTransform: '', nameplateSig: '', nameplateHpWidth: '',
+      objectCasters, shadowOn: true, isFar: false, lastOverheadEmoteKey: null,
+      lastX: e.pos.x, lastZ: e.pos.z, skin: e.skin,
       loco: newLocoTrack(),
     });
   }
@@ -596,6 +826,7 @@ export class Renderer {
   private activeVisual(v: EntityView): CharacterVisual | null {
     if (v.sheepVisual?.root.visible) return v.sheepVisual;
     if (v.bearVisual?.root.visible) return v.bearVisual;
+    if (v.catVisual?.root.visible) return v.catVisual;
     return v.visual;
   }
 
@@ -618,11 +849,13 @@ export class Renderer {
   // ---------------------------------------------------------------------
 
   private builtInteriors = new Set<string>();
-  private fogState: 'outdoor' | 'dungeon' | 'underwater' = 'outdoor';
+  private fogState: 'outdoor' | 'dungeon' | 'temple' | 'underwater' = 'outdoor';
 
   private buildInterior(interior: string, ox: number, oz: number): void {
     this.dungeons ??= new DungeonInteriors(this.scene, this.lowGfx, this.flames, this.fireLights);
-    this.dungeons.buildInterior(interior, ox, oz);
+    void this.dungeons.buildInterior(interior, ox, oz).catch((err) => {
+      console.error('Failed to build dungeon interior:', err);
+    });
   }
 
   // Outdoor fog presets per biome (high tier eases between them as the
@@ -632,15 +865,17 @@ export class Renderer {
     marsh: { color: 0xa3b294, near: 80, far: 330 },
     peaks: { color: 0xbdd3ec, near: 160, far: 560 },
   };
+  private static LOW_FOG = { color: 0xa6c6e0, near: 70, far: 260 };
 
   private outdoorFogPreset(): { color: number; near: number; far: number } {
-    if (this.lowGfx) return Renderer.BIOME_FOG.vale;
+    if (this.lowGfx) return Renderer.LOW_FOG;
     return Renderer.BIOME_FOG[zoneBiomeAt(this.sim.player.pos.z)];
   }
 
   private updateAmbience(px: number, camY: number, dt: number): void {
     const inside = px > DUNGEON_X_THRESHOLD;
     if (inside && isArenaPos(px)) {
+      void ensureDungeonAssets().catch(() => undefined);
       // build the Ashen Coliseum copy the player was matched into
       const pz = this.sim.player.pos.z;
       for (let i = 0; i < ARENA_SLOT_COUNT; i++) {
@@ -653,6 +888,7 @@ export class Renderer {
         }
       }
     } else if (inside) {
+      void ensureDungeonAssets().catch(() => undefined);
       // build the interior copy the player is standing in
       for (const dungeon of DUNGEON_LIST) {
         for (let i = 0; i < INSTANCE_SLOT_COUNT; i++) {
@@ -666,7 +902,12 @@ export class Renderer {
         }
       }
     }
-    const desired = inside ? 'dungeon' : camY < WATER_LEVEL - 0.05 ? 'underwater' : 'outdoor';
+    // the Drowned Temple reads as submerged: a teal murk instead of the
+    // crypt's near-black, so its flooded halls feel underwater, not just dark
+    const inTemple = inside && !isArenaPos(px) && dungeonAt(px)?.interior === 'temple';
+    const desired = inTemple ? 'temple'
+      : inside ? 'dungeon'
+        : camY < WATER_LEVEL - 0.05 ? 'underwater' : 'outdoor';
     const fog = this.scene.fog as THREE.Fog;
     if (desired !== this.fogState) {
       this.fogState = desired;
@@ -674,6 +915,10 @@ export class Renderer {
         fog.color.setHex(0x05060a);
         fog.near = 18;
         fog.far = 90;
+      } else if (desired === 'temple') {
+        fog.color.setHex(0x0a3a44);
+        fog.near = 12;
+        fog.far = 78;
       } else if (desired === 'underwater') {
         fog.color.setHex(0x17506e);
         fog.near = 2;
@@ -688,7 +933,7 @@ export class Renderer {
       // underground so the torch point lights own the scene; restore outside.
       // The rim glow cranks up instead — silhouettes must split from the murk.
       if (!this.lowGfx) {
-        const underground = desired === 'dungeon';
+        const underground = desired === 'dungeon' || desired === 'temple';
         this.sun.intensity = underground ? DUNGEON_SUN_INTENSITY : SUN_INTENSITY;
         this.hemi.intensity = underground ? DUNGEON_HEMI_INTENSITY : HEMI_INTENSITY;
         this.scene.environmentIntensity = underground ? DUNGEON_ENV_INTENSITY : this.envOutdoorIntensity;
@@ -737,6 +982,7 @@ export class Renderer {
       v.visual.dispose();
       v.sheepVisual?.dispose();
       v.bearVisual?.dispose();
+      v.catVisual?.dispose();
     } else {
       // Object views (door arch, loot crates) own their geometries; their
       // materials are shared caches (door stone / crate planks / sparkle) and
@@ -751,42 +997,75 @@ export class Renderer {
   }
 
   sync(alpha: number, dt: number, renderFacingOverride: number | null): void {
-    const measured = this.measureViewport();
-    if (measured.width !== this.viewport.width || measured.height !== this.viewport.height) {
-      this.resizeViewport();
+    const totalStart = performance.now();
+    let phaseStart = totalStart;
+    const markPhase = (phase: RendererPhase): void => {
+      const t = performance.now();
+      this.recordRendererPhase(phase, t - phaseStart);
+      phaseStart = t;
+    };
+
+    this.updateAdaptiveResolution(dt);
+    this.viewportPollTimer += dt;
+    if (this.viewportPollTimer >= 0.25) {
+      this.viewportPollTimer = 0;
+      const measured = this.measureViewport();
+      if (measured.width !== this.viewport.width || measured.height !== this.viewport.height) {
+        this.resizeViewport(measured);
+      }
     }
     this.time += dt;
     sharedUniforms.uTime.value = this.time;
     const sim = this.sim;
     const p = sim.player;
     const now = performance.now();
+    markPhase('setup');
 
-    // dynamic worlds: create views for newcomers, drop views for leavers
-    // (doomed ids collected into a reused scratch array — no per-frame alloc)
+    // dynamic worlds: create nearby views lazily and drop views for leavers or
+    // entities that moved well outside the draw band. This avoids building
+    // rig/nameplate DOM for the whole sim on the first rendered frame.
+    let createBudget = this.lowGfx ? VIEW_CREATE_BUDGET_LOW : VIEW_CREATE_BUDGET_HIGH;
+    this.viewCandidates.length = 0;
     for (const e of sim.entities.values()) {
-      if (!this.views.has(e.id)) this.createView(e);
+      if (this.views.has(e.id)) continue;
+      const required = e.id === p.id || e.id === p.targetId;
+      if (required) {
+        this.createView(e);
+      } else {
+        const d2 = distSqXZ(e, p);
+        if (d2 <= ENTITY_VIEW_CREATE_RANGE_SQ) this.viewCandidates.push({ e, d2 });
+      }
+    }
+    if (this.viewCandidates.length > 1) this.viewCandidates.sort((a, b) => a.d2 - b.d2);
+    for (let i = 0; i < this.viewCandidates.length && createBudget > 0; i++, createBudget--) {
+      this.createView(this.viewCandidates[i].e);
     }
     this.doomedIds.length = 0;
     for (const id of this.views.keys()) {
-      if (!sim.entities.has(id)) this.doomedIds.push(id);
+      const e = sim.entities.get(id);
+      if (!e || (id !== p.id && id !== p.targetId && distSqXZ(e, p) > ENTITY_VIEW_DESTROY_RANGE_SQ)) {
+        this.doomedIds.push(id);
+      }
     }
     for (const id of this.doomedIds) this.removeView(id);
 
     // frame parity for distance-tiered mixer throttling
     this.frameIdx = (this.frameIdx + 1) & 0xffff;
 
-    for (const e of sim.entities.values()) {
-      const v = this.views.get(e.id);
-      if (!v) continue;
-      // form swaps (polymorph sheep, druid bear) — computed up front because
+    for (const [id, v] of this.views) {
+      const e = sim.entities.get(id);
+      if (!e) continue;
+      // form swaps (polymorph sheep, druid forms) — computed up front because
       // the shadow gates below must not run the base rig's proxy under a form
       const polyed = e.auras.some((a) => a.kind === 'polymorph');
       const bear = !polyed && e.auras.some((a) => a.kind === 'form_bear');
+      const ghostWolf = !polyed && !bear && e.auras.some((a) => a.id === 'ghost_wolf');
+      const cat = !polyed && !bear && (ghostWolf || e.auras.some((a) => a.kind === 'form_cat'));
       const stealthed = e.auras.some((a) => a.kind === 'stealth');
       // distance cull: far rigs are invisible specks but cost real draw calls
       const cdx = e.pos.x - p.pos.x, cdz = e.pos.z - p.pos.z;
       const d2 = cdx * cdx + cdz * cdz;
-      if (e.id !== p.id) {
+      if (id !== p.id) {
         if (d2 > ENTITY_DRAW_RANGE * ENTITY_DRAW_RANGE) {
           v.group.visible = false;
           continue;
@@ -800,12 +1079,13 @@ export class Renderer {
           v.isFar = d2 > ENTITY_LOD_RANGE_SQ;
           // past the articulated gate the static-pose proxy carries the
           // shadow; an active form's own rig keeps casting instead
-          v.visual.setProxyShadow(!wantShadow && inProxyBand && !polyed && !bear);
-          // sheep/bear keep articulated shadows through the whole proxy band —
+          v.visual.setProxyShadow(!wantShadow && inProxyBand && !polyed && !bear && !cat);
+          // sheep/forms keep articulated shadows through the whole proxy band —
           // a frozen humanoid proxy silhouette would be wrong under a form
           const wantFormShadow = wantShadow || inProxyBand;
           v.sheepVisual?.setShadow(wantFormShadow);
           v.bearVisual?.setShadow(wantFormShadow);
+          v.catVisual?.setShadow(wantFormShadow);
         } else if (wantShadow !== v.shadowOn) {
           v.shadowOn = wantShadow;
           for (const caster of v.objectCasters) (caster as THREE.Mesh).castShadow = wantShadow;
@@ -823,7 +1103,7 @@ export class Renderer {
       const z = e.prevPos.z + (e.pos.z - e.prevPos.z) * ea;
       v.group.position.set(x, y, z);
       let facing = e.prevFacing + shortestAngle(e.prevFacing, e.facing) * ea;
-      if (e.id === p.id && renderFacingOverride !== null) facing = renderFacingOverride;
+      if (id === p.id && renderFacingOverride !== null) facing = renderFacingOverride;
       v.group.rotation.y = facing;
 
       if (e.kind === 'object') {
@@ -845,6 +1125,9 @@ export class Renderer {
       }
       if (!v.visual) continue;
 
+      // live skin swap — appearance changed (in-game changer or a multiplayer peer)
+      if (e.skin !== v.skin) { v.skin = e.skin; v.visual.setSkin(e.skin); }
+
       // swimming pose: prone at the surface (derived here — the sim is unaware)
       const swimming = !e.dead
         && groundHeight(e.pos.x, e.pos.z, this.sim.cfg.seed) < WATER_LEVEL - 0.8
@@ -861,11 +1144,18 @@ export class Renderer {
         v.bearVisual.root.scale.multiplyScalar(e.scale);
         v.group.add(v.bearVisual.root);
       }
+      if (cat && !v.catVisual) {
+        v.catVisual = createCharacterVisual(e, 'form_cat');
+        v.catVisual.root.scale.multiplyScalar(e.scale);
+        v.group.add(v.catVisual.root);
+      }
       if (v.sheepVisual) v.sheepVisual.root.visible = polyed;
       if (v.bearVisual) v.bearVisual.root.visible = bear;
+      if (v.catVisual) v.catVisual.root.visible = cat;
       const active = polyed && v.sheepVisual ? v.sheepVisual
-        : bear && v.bearVisual ? v.bearVisual : v.visual;
-      const ghost = shouldRenderStealthGhost(this.sim.playerId, e);
+        : bear && v.bearVisual ? v.bearVisual
+          : cat && v.catVisual ? v.catVisual : v.visual;
+      const ghost = ghostWolf || shouldRenderStealthGhost(this.sim.playerId, e);
       active.setGhost(ghost);
       v.visual.root.visible = active === v.visual;
       // distant rigs swap to the single-draw baked idle-pose mesh
@@ -878,26 +1168,49 @@ export class Renderer {
       v.lastZ = z;
       const loco = updateLocomotion(v.loco, vx, vz, facing, dt);
       const moving = loco.moving;
+      const visuallyDead = isVisuallyDead(e);
+      // `onGround` is authoritative offline but is never sent in online snapshots
+      // (ClientWorld defaults it to true), so for players fall back to deriving the
+      // airborne state from foot height vs terrain — keeps the jump pose working in
+      // both worlds without a wire change. Gated to players (only they jump) to keep
+      // the extra groundHeight sample off the hot path for mobs/NPCs.
+      const airborne = !visuallyDead && !swimming && (
+        !e.onGround
+        || (e.kind === 'player'
+          && y - groundHeight(x, z, this.sim.cfg.seed) > AIRBORNE_EPS));
       const st: AnimState = {
         speed: loco.speed,
         moving,
+        airborne,
         backwards: loco.backwards,
-        dead: e.dead,
-        casting: e.castingAbility !== null && !e.dead,
+        dead: visuallyDead,
+        casting: e.castingAbility !== null && !visuallyDead,
         swimming,
         sitting: e.kind === 'player' && (e.sitting || e.eating !== null || e.drinking !== null),
       };
       // distance-tiered mixer updates: near = every frame, mid = every 2nd,
       // far (static LOD mesh visible) = every 6th; edges latch regardless
       let animate = true;
-      if (e.id !== p.id) {
+      if (id !== p.id) {
         if (v.isFar) animate = ((this.frameIdx + e.id) % 6) === 0;
         else if (d2 > ENTITY_SHADOW_RANGE_SQ) animate = ((this.frameIdx + e.id) & 1) === 0;
       }
       active.update(dt, st, animate);
 
+      const emoteId = e.kind === 'player' && e.overheadEmoteId && !e.dead ? e.overheadEmoteId : null;
+      const emoteKey = emoteId ? `${emoteId}:${e.overheadEmoteSeq}` : null;
+      if (emoteKey !== v.lastOverheadEmoteKey) {
+        const canPlayEmote = emoteId && !moving && !st.airborne && !st.swimming && !st.casting && !st.sitting;
+        if (canPlayEmote) {
+          active.playEmote(emoteId);
+          v.lastOverheadEmoteKey = emoteKey;
+        } else if (!emoteId) {
+          v.lastOverheadEmoteKey = null;
+        }
+      }
+
       if (st.casting) {
-        this.vfx.castSparkle(e.id, ABILITIES[e.castingAbility!]?.school ?? 'arcane', dt);
+        this.vfx.castSparkle(e.id, e.castingAbility === 'demon_heal' ? 'shadow' : ABILITIES[e.castingAbility!]?.school ?? 'arcane', dt);
       }
       if (swimming) this.vfx.swimRipple(v.group.position, moving ? dt * 3 : dt);
     }
@@ -905,17 +1218,22 @@ export class Renderer {
     // selection ring
     const target = p.targetId !== null ? sim.entities.get(p.targetId) : null;
     if (target) {
-      const tv = this.views.get(target.id)!;
-      this.selectionRing.position.copy(tv.group.position);
-      this.selectionRing.position.y += 0.08;
-      this.selectionRing.scale.setScalar(target.scale);
-      const ringMat = this.selectionRing.material as THREE.MeshBasicMaterial;
-      ringMat.color.setHex(target.hostile ? 0xcc2222 : 0xd4af37);
-      if (!this.lowGfx) ringMat.color.multiplyScalar(SELECTION_RING_BOOST); // subtle bloom edge
-      this.selectionRing.visible = true;
+      const tv = this.views.get(target.id);
+      if (tv) {
+        this.selectionRing.position.copy(tv.group.position);
+        this.selectionRing.position.y += 0.08;
+        this.selectionRing.scale.setScalar(target.scale);
+        const ringMat = this.selectionRing.material as THREE.MeshBasicMaterial;
+        ringMat.color.setHex(target.hostile ? 0xcc2222 : 0xd4af37);
+        if (!this.lowGfx) ringMat.color.multiplyScalar(SELECTION_RING_BOOST); // subtle bloom edge
+        this.selectionRing.visible = true;
+      } else {
+        this.selectionRing.visible = false;
+      }
     } else {
       this.selectionRing.visible = false;
     }
+    markPhase('entities');
 
     // fire flicker + rising embers
     for (let i = 0; i < this.flames.length; i++) {
@@ -956,12 +1274,12 @@ export class Renderer {
     // frustum; the grass ring follows the player
     const fogFar = (this.scene.fog as THREE.Fog).far;
     this.terrainView.update(this.camera.position.x, this.camera.position.z, fogFar);
-    this.propsView.update(this.camera.position.x, this.camera.position.z, fogFar);
+    this.propsView.update(this.camera.position.x, this.camera.position.y, this.camera.position.z, fogFar);
     this.foliage.update(p.pos.x, p.pos.z, this.camera.position.x, this.camera.position.z, fogFar);
 
     this.vfx.update(dt);
 
-    this.updateCamera(alpha);
+    this.updateCamera(alpha, dt);
     this.updateAmbience(p.pos.x, this.camera.position.y, dt);
     // shadow frustum follows the player
     const pv = this.views.get(p.id);
@@ -982,11 +1300,19 @@ export class Renderer {
       sp.visible = this.fogState === 'outdoor';
     }
     this.updateGodRays();
+    markPhase('world');
 
-    this.updateNameplates();
+    this.nameplateTimer += dt;
+    const nameplateInterval = this.isMobileRuntime() ? 1 / 15 : 1 / 24;
+    const fullNameplatePass = this.nameplateTimer >= nameplateInterval;
+    if (fullNameplatePass) this.nameplateTimer = 0;
+    this.updateNameplates(fullNameplatePass);
     this.updateChatBubbles();
+    markPhase('nameplates');
     if (this.post) this.post.render();
     else this.webgl.render(this.scene, this.camera);
+    markPhase('submit');
+    this.recordRendererPhase('total', performance.now() - totalStart);
   }
 
   // Forward-renderer point-light budget: every campfire/torch light exists,
@@ -1037,14 +1363,15 @@ export class Renderer {
     }
   }
 
-  private updateCamera(alpha: number): void {
+  private updateCamera(alpha: number, dt: number): void {
     const p = this.sim.player;
+    const seed = this.sim.cfg.seed;
     const px = p.prevPos.x + (p.pos.x - p.prevPos.x) * alpha;
     const py = p.prevPos.y + (p.pos.y - p.prevPos.y) * alpha;
     const pz = p.prevPos.z + (p.pos.z - p.prevPos.z) * alpha;
     const eyeY = py + 2.0;
     let cx = px - Math.sin(this.camYaw) * Math.cos(this.camPitch) * this.camDist;
-    const cy = eyeY + Math.sin(this.camPitch) * this.camDist;
+    let cy = eyeY + Math.sin(this.camPitch) * this.camDist;
     let cz = pz - Math.cos(this.camYaw) * Math.cos(this.camPitch) * this.camDist;
     // The Ashen Coliseum is a small enclosed pit and the combatants spawn only
     // ~6yd from the end walls, so the 12yd chase cam would otherwise sit outside
@@ -1055,45 +1382,112 @@ export class Renderer {
       cx = Math.min(Math.max(cx, o.x - DUNGEON_WALL_X + m), o.x + DUNGEON_WALL_X - m);
       cz = Math.min(Math.max(cz, o.z + ARENA_LAYOUT.zMin + m), o.z + ARENA_LAYOUT.zMax - m);
     }
-    const groundY = groundHeight(cx, cz, this.sim.cfg.seed) + 0.6;
+    // Camera collision: pull the cam in to the surface of any building/object
+    // between the player's head and the desired position so it never sits
+    // inside geometry. A soft sweep starts the pull slightly before the hard
+    // collider hits; if the hard limit appears suddenly, the physical camera is
+    // clamped safe and the lens eases the perceived zoom instead of clipping.
+    let hardT = cameraOcclusion(seed, px, eyeY, pz, cx, cy, cz, CAMERA_COLLIDER_PAD);
+    let softT = cameraOcclusion(seed, px, eyeY, pz, cx, cy, cz, CAMERA_SOFT_COLLIDER_PAD);
+    const segLen = Math.hypot(cx - px, cy - eyeY, cz - pz);
+    if (segLen > 1e-3) {
+      const minT = CAMERA_MIN_DIST / segLen;
+      hardT = Math.min(1, Math.max(hardT, minT));
+      softT = Math.min(1, Math.max(softT, minT));
+    }
+    stepCameraOcclusion(
+      this.camOcclusion,
+      hardT,
+      softT,
+      dt,
+      CAMERA_PULL_IN_RATE,
+      CAMERA_PULL_OUT_RATE,
+      CAMERA_SOFT_PULL_WEIGHT,
+      CAMERA_BASE_FOV,
+      CAMERA_MAX_COMP_FOV,
+    );
+    const ct = this.camOcclusion.pullT;
+    cx = px + (cx - px) * ct;
+    cy = eyeY + (cy - eyeY) * ct;
+    cz = pz + (cz - pz) * ct;
+    const groundY = groundHeight(cx, cz, seed) + 0.6;
     this.camera.position.set(cx, Math.max(cy, groundY), cz);
+    if (Math.abs(this.camera.fov - this.camOcclusion.fov) > 0.01) {
+      this.camera.fov = this.camOcclusion.fov;
+      this.camera.updateProjectionMatrix();
+    }
     this.camera.lookAt(px, eyeY, pz);
     this.camera.updateMatrixWorld();
   }
 
-  private updateNameplates(): void {
+  private updateNameplates(fullPass: boolean): void {
     const sim = this.sim;
     const p = sim.player;
     const { width: w, height: h } = this.viewport;
-    for (const e of sim.entities.values()) {
-      const v = this.views.get(e.id);
-      if (!v) continue;
+    for (const [id, v] of this.views) {
+      const e = sim.entities.get(id);
+      if (!e) continue;
       const dx = e.pos.x - p.pos.x, dz = e.pos.z - p.pos.z;
-      const dist = Math.sqrt(dx * dx + dz * dz);
-      const isSelf = e.id === p.id;
+      const d2 = dx * dx + dz * dz;
+      const urgent = id === p.targetId || d2 < 14 * 14 || e.castingAbility !== null;
+      const isSelf = id === p.id;
+      const hasOverheadEmote = !!(e.kind === 'player' && e.overheadEmoteId && !e.dead);
       const isDoor = e.templateId === 'dungeon_door' || e.templateId === 'dungeon_exit';
-      const hidden = isSelf || dist > NAMEPLATE_RANGE
+      const hidden = (isSelf && !hasOverheadEmote) || d2 > NAMEPLATE_RANGE_SQ
         || (e.dead && !e.lootable && e.kind === 'mob')
         || (e.kind === 'object' && !isDoor)
         || (!this.showNameplates && e.kind === 'mob' && !e.dead);
       if (hidden) {
-        v.nameplate.style.display = 'none';
+        if (v.nameplateDisplay !== 'none') {
+          v.nameplate.style.display = 'none';
+          v.nameplateDisplay = 'none';
+        }
         continue;
       }
       this.tmpV.copy(v.group.position);
-      this.tmpV.y += v.height * e.scale + 0.5;
+      this.tmpV.y += v.height * e.scale + (isSelf && hasOverheadEmote ? 0.2 : 0.8);
       if (!isProjectedNameplateAnchorVisible(this.camera, this.tmpV, this.tmpV2)) {
-        v.nameplate.style.display = 'none';
+        if (v.nameplateDisplay !== 'none') {
+          v.nameplate.style.display = 'none';
+          v.nameplateDisplay = 'none';
+        }
         continue;
       }
       this.tmpV.project(this.camera);
-      if (this.tmpV.z < -1 || this.tmpV.z > 1) { v.nameplate.style.display = 'none'; continue; }
+      if (this.tmpV.z < -1 || this.tmpV.z > 1) {
+        if (v.nameplateDisplay !== 'none') {
+          v.nameplate.style.display = 'none';
+          v.nameplateDisplay = 'none';
+        }
+        continue;
+      }
       const sx = (this.tmpV.x * 0.5 + 0.5) * w;
       const sy = (-this.tmpV.y * 0.5 + 0.5) * h;
-      v.nameplate.style.display = '';
-      v.nameplate.style.transform = `translate(${sx.toFixed(0)}px, ${sy.toFixed(0)}px) translate(-50%, -100%)`;
+      if (v.nameplateDisplay !== '') {
+        v.nameplate.style.display = '';
+        v.nameplateDisplay = '';
+      }
+      const transform = nameplateScreenTransform(sx, sy);
+      if (transform !== v.nameplateTransform) {
+        v.nameplate.style.transform = transform;
+        v.nameplateTransform = transform;
+      }
+
+      if (!fullPass && !urgent) continue;
+      v.nameplate.classList.toggle('has-emote', hasOverheadEmote);
 
       // party raid/target marker (only mobs are markable, so this is null elsewhere)
+      const emote = e.overheadEmoteId ? OVERHEAD_EMOTES.find((x) => x.id === e.overheadEmoteId) : null;
+      if (emote && e.kind === 'player' && !e.dead) {
+        v.emoteIconEl.src = emoteIconUrl(emote.id);
+        v.emoteLabelEl.textContent = emote.label;
+        v.emoteEl.title = emote.label;
+        v.emoteEl.style.display = '';
+      } else {
+        v.emoteEl.style.display = 'none';
+      }
+      v.nameEl.style.display = '';
+
       const raidMark = this.sim.markerFor(e.id);
       if (raidMark !== null) {
         v.raidMarkEl.style.backgroundImage = `url(${raidMarkerDataUrl(raidMark)})`;
@@ -1104,22 +1498,18 @@ export class Renderer {
 
       if (e.kind === 'object') {
         // dungeon doorways announce themselves
-        v.nameEl.style.color = '#c084ff';
-        v.nameEl.textContent = e.name;
-        v.hpBar.style.display = 'none';
-        v.markerEl.textContent = '';
+        const objName = objectDisplayName(e);
+        this.setNameplateStatic(v, `object|${objName}`, objName, '#c084ff', 'none', '', 'np-marker', '1');
       } else if (e.kind === 'player') {
         // other players: friendly blue with an hp bar
-        v.nameEl.style.color = '#7fb8ff';
-        v.nameEl.textContent = `${e.name}`;
-        v.nameplate.style.opacity = e.auras.some((a) => a.kind === 'stealth') ? '0.55' : '1';
-        v.hpBar.style.display = e.dead ? 'none' : '';
-        v.hpFill.style.width = `${(100 * e.hp / Math.max(1, e.maxHp)).toFixed(1)}%`;
-        v.markerEl.textContent = '';
+        const opacity = e.auras.some((a) => a.kind === 'stealth') ? '0.55' : '1';
+        const nameDisplay = isSelf ? 'none' : '';
+        const hpDisplay = e.dead || isSelf ? 'none' : '';
+        this.setNameplateStatic(v, `player|${e.name}|${nameDisplay}|${hpDisplay}|${opacity}`, e.name, '#7fb8ff', hpDisplay, '', 'np-marker', opacity);
+        v.nameEl.style.display = nameDisplay;
+        this.setNameplateHp(v, e);
       } else if (e.kind === 'npc') {
-        v.nameEl.style.color = '#9fdc7f';
-        v.nameEl.textContent = e.name;
-        v.hpBar.style.display = 'none';
+        const npcName = npcDisplayName(e.templateId);
         let marker = '';
         let cls = '';
         // role-aware: '!' only at the quest's giver, '?' only at its turn-in
@@ -1132,20 +1522,48 @@ export class Renderer {
           if (st === 'available' && quest.giverNpcId === e.templateId) { marker = '!'; cls = 'avail'; }
           else if (st === 'active' && quest.turnInNpcId === e.templateId && !marker) { marker = '?'; cls = 'active'; }
         }
-        v.markerEl.textContent = marker;
-        v.markerEl.className = 'np-marker ' + cls;
+        const markerClass = cls ? `np-marker ${cls}` : 'np-marker';
+        this.setNameplateStatic(v, `npc|${npcName}|${marker}|${markerClass}`, npcName, '#9fdc7f', 'none', marker, markerClass, '1');
       } else {
         const diff = e.level - p.level;
         const template = MOBS[e.templateId];
         const elite = !!template?.elite;
-        v.nameEl.style.color = e.dead ? '#999' : diff >= 3 ? '#ff4444' : diff >= 1 ? '#ffaa33' : diff >= -2 ? '#ffe97a' : diff >= -5 ? '#7fdc4f' : '#9d9d9d';
-        v.nameEl.textContent = e.dead ? `${e.name} (corpse)` : `[${e.level}${elite ? '+' : ''}] ${e.name}`;
-        v.hpBar.style.display = e.dead ? 'none' : '';
-        v.hpFill.style.width = `${(100 * e.hp / Math.max(1, e.maxHp)).toFixed(1)}%`;
-        v.markerEl.textContent = e.lootable ? '$' : elite && !e.dead ? '◆' : '';
-        v.markerEl.className = 'np-marker loot';
+        const color = e.dead ? '#999' : diff >= 3 ? '#ff4444' : diff >= 1 ? '#ffaa33' : diff >= -2 ? '#ffe97a' : diff >= -5 ? '#7fdc4f' : '#9d9d9d';
+        const mobName = e.ownerId !== null ? e.name : mobDisplayName(e.templateId);
+        const name = e.dead ? t('worldContent.corpseName', { name: mobName }) : `[${e.level}${elite ? '+' : ''}] ${mobName}`;
+        const hpDisplay = e.dead ? 'none' : '';
+        const marker = e.lootable ? '$' : elite && !e.dead ? '◆' : '';
+        this.setNameplateStatic(v, `mob|${name}|${color}|${hpDisplay}|${marker}`, name, color, hpDisplay, marker, 'np-marker loot', '1');
+        this.setNameplateHp(v, e);
       }
     }
+  }
+
+  private setNameplateStatic(
+    v: EntityView,
+    sig: string,
+    name: string,
+    color: string,
+    hpDisplay: string,
+    marker: string,
+    markerClass: string,
+    opacity: string,
+  ): void {
+    if (sig === v.nameplateSig) return;
+    v.nameplateSig = sig;
+    v.nameEl.textContent = name;
+    v.nameEl.style.color = color;
+    v.hpBar.style.display = hpDisplay;
+    v.markerEl.textContent = marker;
+    v.markerEl.className = markerClass;
+    v.nameplate.style.opacity = opacity;
+  }
+
+  private setNameplateHp(v: EntityView, e: Entity): void {
+    const width = `${(100 * e.hp / Math.max(1, e.maxHp)).toFixed(1)}%`;
+    if (width === v.nameplateHpWidth) return;
+    v.nameplateHpWidth = width;
+    v.hpFill.style.width = width;
   }
 
   // Hang a speech bubble over an entity's head; it follows the entity and
@@ -1193,7 +1611,7 @@ export class Renderer {
       b.el.style.display = '';
       const sx = (this.tmpV.x * 0.5 + 0.5) * w;
       const sy = (-this.tmpV.y * 0.5 + 0.5) * h;
-      b.el.style.transform = `translate(${sx.toFixed(0)}px, ${sy.toFixed(0)}px) translate(-50%, -100%)`;
+      b.el.style.transform = nameplateScreenTransform(sx, sy);
     }
   }
 

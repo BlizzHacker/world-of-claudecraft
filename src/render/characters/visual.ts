@@ -4,10 +4,11 @@
 // mid-distance band. All geometry/materials are shared caches — dispose()
 // only releases mixer bindings.
 import * as THREE from 'three';
+import type { OverheadEmoteId } from '../../world_api';
 import { GFX } from '../gfx';
-import { VisualDef } from './manifest';
+import type { EmoteClipSpec, VisualDef } from './manifest';
 import {
-  applyMaterials, assembleModel, prepareVisual, tintedFarMaterials,
+  applyMaterials, assembleModel, prepareVisual, skinTexture, tintedFarMaterials,
 } from './assets';
 
 /** Renderer-derived animation inputs (same facts the old pose machine used). */
@@ -15,6 +16,7 @@ export interface AnimState {
   /** horizontal speed, world units/sec */
   speed: number;
   moving: boolean;
+  airborne: boolean;
   /** moving against facing (players backpedaling) */
   backwards: boolean;
   dead: boolean;
@@ -23,7 +25,7 @@ export interface AnimState {
   sitting: boolean;
 }
 
-type BaseState = 'idle' | 'walk' | 'walkBack' | 'run' | 'cast' | 'swim' | 'sit';
+type BaseState = 'idle' | 'walk' | 'walkBack' | 'run' | 'cast' | 'swim' | 'sit' | 'jump';
 
 const FADE = 0.22;
 const ONESHOT_FADE = 0.1;
@@ -71,6 +73,10 @@ export class CharacterVisual {
   readonly clickProxy: THREE.Mesh;
 
   private def: VisualDef;
+  private key: string;
+  private entityColor: number;
+  private skinIndex: number;
+  private ghosted = false;
   private mixer: THREE.AnimationMixer;
   private actions = new Map<string, THREE.AnimationAction>();
   private model: THREE.Object3D;
@@ -86,6 +92,7 @@ export class CharacterVisual {
   private baseState: BaseState = 'idle';
   private current: THREE.AnimationAction | null = null;
   private currentIsOneShot = false;
+  private currentOneShotIsEmote = false;
   private deadLock = false;
   private wasDead = false;
   private initialized = false;
@@ -98,14 +105,17 @@ export class CharacterVisual {
   private far = false;
   private bobPhase = Math.random() * Math.PI * 2;
 
-  constructor(key: string, entityColor: number) {
+  constructor(key: string, entityColor: number, skinIndex = 0) {
     const prep = prepareVisual(key);
     this.def = prep.def;
+    this.key = key;
+    this.entityColor = entityColor;
+    this.skinIndex = skinIndex;
     this.height = prep.def.height;
 
     // model: yaw/scale/feet normalization wrapper around the skinned clone
     this.model = assembleModel(prep.def);
-    applyMaterials(this.model, prep.def, entityColor);
+    applyMaterials(this.model, prep.def, entityColor, skinTexture(key, skinIndex));
     this.model.traverse((o) => {
       const mesh = o as THREE.Mesh;
       if (mesh.isMesh) this.originalMaterials.set(mesh, mesh.material);
@@ -181,9 +191,14 @@ export class CharacterVisual {
 
     if (!this.deadLock) {
       const desired = this.desiredBase(s);
-      if (desired !== this.baseState) {
-        this.baseState = desired;
-        if (!this.currentIsOneShot) this.fadeTo(this.baseAction(), FADE, false);
+      const baseChanged = desired !== this.baseState;
+      if (baseChanged) this.baseState = desired;
+      if (this.currentOneShotIsEmote && this.shouldInterruptEmote(s)) {
+        this.currentIsOneShot = false;
+        this.currentOneShotIsEmote = false;
+        this.fadeTo(this.baseAction(), FADE, false);
+      } else if (baseChanged && !this.currentIsOneShot) {
+        this.fadeTo(this.baseAction(), FADE, false);
       }
       // foot-speed matching on locomotion cycles
       if (!this.currentIsOneShot && this.current) {
@@ -200,6 +215,7 @@ export class CharacterVisual {
     const wantPitch = s.swimming && !s.dead ? proneAngle : 0;
     this.swimPitch += (wantPitch - this.swimPitch) * Math.min(1, dt * 8);
     this.poseWrap.rotation.x = this.swimPitch;
+    this.poseWrap.rotation.z = 0;
     this.poseWrap.position.y = s.swimming && !s.dead
       ? SWIM_RISE + Math.sin(performance.now() / 500 + this.bobPhase) * 0.08
       : 0;
@@ -242,6 +258,14 @@ export class CharacterVisual {
     this.playOneShot(clips[Math.floor(Math.random() * clips.length)], 1.2);
   }
 
+  playEmote(id: OverheadEmoteId): void {
+    if (this.deadLock) return;
+    const spec = this.def.clips.emote?.[id];
+    const clip = firstLoadedEmoteClip(spec, (name) => this.action(name));
+    if (!clip) return;
+    this.playOneShot(clip, spec?.timeScale ?? 1, spec?.repeats ?? 1, id);
+  }
+
   // -------------------------------------------------------------------------
   // LOD / shadow plumbing (memoized — called every frame by the renderer)
   // -------------------------------------------------------------------------
@@ -268,12 +292,28 @@ export class CharacterVisual {
   }
 
   setGhost(on: boolean): void {
+    this.ghosted = on;
     for (const [mesh, original] of this.originalMaterials) {
       mesh.material = on ? this.toGhostMaterial(original) : original;
     }
     if (this.farMesh && this.farMaterials) {
       this.farMesh.material = on ? this.toGhostMaterial(this.farMaterials) : this.farMaterials;
     }
+  }
+
+  /** Swap the body skin (alternate texture atlas) at runtime; no-op if unchanged.
+   *  Reuses the shared skin-keyed material cache, so this is a cheap reassign. */
+  setSkin(skinIndex: number): void {
+    if (skinIndex === this.skinIndex) return;
+    this.skinIndex = skinIndex;
+    applyMaterials(this.model, this.def, this.entityColor, skinTexture(this.key, skinIndex));
+    // re-snapshot the material map ghost/restore relies on, then re-ghost if stealthed
+    this.originalMaterials.clear();
+    this.model.traverse((o) => {
+      const mesh = o as THREE.Mesh;
+      if (mesh.isMesh) this.originalMaterials.set(mesh, mesh.material);
+    });
+    if (this.ghosted) this.setGhost(true);
   }
 
   dispose(): void {
@@ -298,6 +338,7 @@ export class CharacterVisual {
 
   private desiredBase(s: AnimState): BaseState {
     if (s.swimming) return 'swim';
+    if (s.airborne) return 'jump';
     if (s.casting) return 'cast';
     if (s.sitting) return 'sit';
     if (s.moving) {
@@ -336,8 +377,13 @@ export class CharacterVisual {
       case 'cast': return this.action(c.cast) ?? this.action(c.idle);
       case 'swim': return this.action(c.swim) ?? this.action(c.idle);
       case 'sit': return this.action(c.sitDown) ?? this.action(c.sitIdle) ?? this.action(c.idle);
+      case 'jump': return this.action(c.jump) ?? this.action(c.idle);
       default: return this.action(c.idle);
     }
+  }
+
+  private shouldInterruptEmote(s: AnimState): boolean {
+    return s.moving || s.airborne || s.swimming || s.casting || s.sitting || s.dead;
   }
 
   private fadeTo(next: THREE.AnimationAction | null, fade: number, oneShot: boolean): void {
@@ -352,6 +398,7 @@ export class CharacterVisual {
     next.fadeIn(fade).play();
     this.current = next;
     this.currentIsOneShot = oneShot;
+    this.currentOneShotIsEmote = false;
   }
 
   /** sit-down transitions play once, then hand off to the sit-idle loop */
@@ -359,12 +406,14 @@ export class CharacterVisual {
     return this.baseState === 'sit' && a === this.action(this.def.clips.sitDown);
   }
 
-  private playOneShot(name: string, timeScale: number): void {
+  private playOneShot(name: string, timeScale: number, repeats = 1, emoteId: OverheadEmoteId | null = null): void {
     const a = this.action(name);
     if (!a) return;
     const prev = this.current;
+    if (prev === a) a.stop();
     a.reset();
-    a.setLoop(THREE.LoopOnce, 1);
+    const repeatCount = Math.max(1, Math.floor(repeats));
+    a.setLoop(repeatCount === 1 ? THREE.LoopOnce : THREE.LoopRepeat, repeatCount);
     // clamp on the last frame: an unclamped LoopOnce action zeroes its weight
     // the instant it finishes, which blends the rig toward bind pose for the
     // whole 0.18s hand-off fade (a visible T-pose pop after every swing)
@@ -374,6 +423,7 @@ export class CharacterVisual {
     a.fadeIn(ONESHOT_FADE).play();
     this.current = a;
     this.currentIsOneShot = true;
+    this.currentOneShotIsEmote = emoteId !== null;
   }
 
   private onFinished(a: THREE.AnimationAction): void {
@@ -384,6 +434,7 @@ export class CharacterVisual {
     }
     if (a === this.current) {
       this.currentIsOneShot = false;
+      this.currentOneShotIsEmote = false;
       this.fadeTo(this.baseAction(), 0.18, false);
     }
   }
@@ -391,13 +442,14 @@ export class CharacterVisual {
   private enterDeath(): void {
     this.deadLock = true;
     this.currentIsOneShot = false;
+    this.currentOneShotIsEmote = false;
     const death = this.action(this.def.clips.death);
     if (!death) return;
     const prev = this.current;
     death.reset();
     death.setLoop(THREE.LoopOnce, 1);
     death.clampWhenFinished = true;
-    death.timeScale = 1.15;
+    death.timeScale = this.def.deathTimeScale ?? 1.15;
     if (!this.initialized) {
       // created already-dead (corpse entering interest): snap to the end pose
       if (prev && prev !== death) prev.stop();
@@ -415,6 +467,7 @@ export class CharacterVisual {
   private revive(): void {
     this.deadLock = false;
     this.baseState = 'idle';
+    this.currentOneShotIsEmote = false;
     const death = this.action(this.def.clips.death);
     if (death) death.stop();
     const flourish = this.action(this.def.clips.flourish);
@@ -433,8 +486,17 @@ function clipNamesOf(def: VisualDef): string[] {
   return [
     c.idle, c.walk, c.run, c.death,
     ...(c.attack ?? []), ...(c.hit ?? []),
-    c.cast, c.sitDown, c.sitIdle, c.swim, c.walkBack, c.flourish,
+    c.cast, c.sitDown, c.sitIdle, c.swim, c.jump, c.walkBack, c.flourish,
+    ...Object.values(c.emote ?? {}).flatMap((spec) => spec.clips),
   ].filter((n): n is string => !!n);
+}
+
+function firstLoadedEmoteClip(
+  spec: EmoteClipSpec | undefined,
+  action: (name: string) => THREE.AnimationAction | null,
+): string | null {
+  if (!spec) return null;
+  return spec.clips.find((name) => action(name)) ?? null;
 }
 
 function clamp(v: number, lo: number, hi: number): number {

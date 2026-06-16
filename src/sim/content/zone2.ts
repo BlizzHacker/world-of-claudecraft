@@ -72,6 +72,8 @@ export const ZONE2_MOBS: Record<string, MobTemplate> = {
       { itemId: 'mudfin_scale', chance: 0.4 },
     ],
     scale: 0.85, color: 0x45b39d,
+    // Acid Spit: a snapper's bite corrodes armor, stacking so a swarm shreds you fast.
+    corrode: { chance: 0.35, armor: 20, maxStacks: 5, duration: 15, name: 'Acid Spit', school: 'nature' },
   },
   mirejaw_the_ravenous: {
     id: 'mirejaw_the_ravenous', name: 'Mirejaw the Ravenous', minLevel: 10, maxLevel: 10, family: 'murloc', rare: true,

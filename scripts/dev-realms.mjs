@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Run several realms locally so you can exercise the WoW-style realm picker.
+// Run several realms locally so you can exercise the classic-MMO-style realm picker.
 //
 //   npm run realms            # build the server, then launch the realms below
 //

@@ -3,6 +3,13 @@
 // Pure data + dispatch — no three.js imports, no loading.
 import type { Entity } from '../../sim/types';
 import { MOBS } from '../../sim/data';
+import type { OverheadEmoteId } from '../../world_api';
+
+export interface EmoteClipSpec {
+  clips: readonly string[];
+  timeScale?: number;
+  repeats?: number;
+}
 
 export interface ClipMap {
   idle: string;
@@ -19,9 +26,13 @@ export interface ClipMap {
   sitIdle?: string;
   /** swim base (prone pitch is procedural on top) */
   swim?: string;
+  /** airborne base pose while jumping/falling */
+  jump?: string;
   walkBack?: string;
   /** one-shot played on respawn (skeleton awaken / boss taunt) */
   flourish?: string;
+  /** player-facing overhead emote one-shots; clips are sourced from the GLB. */
+  emote?: Partial<Record<OverheadEmoteId, EmoteClipSpec>>;
 }
 
 export interface AttachDef {
@@ -29,6 +40,8 @@ export interface AttachDef {
   bone: string;
   position?: [number, number, number];
   rotationY?: number;
+  /** Copy grip from a built-in accessory node on the character rig (e.g. Spellbook_open). */
+  gripRef?: string;
 }
 
 export interface VisualDef {
@@ -52,11 +65,28 @@ export interface VisualDef {
   walkRef?: number;
   runRef?: number;
   attackTimeScale?: number;
+  deathTimeScale?: number;
 }
 
 // ---------------------------------------------------------------------------
 // Clip sets per source rig family
 // ---------------------------------------------------------------------------
+
+const KAYKIT_EMOTES: Partial<Record<OverheadEmoteId, EmoteClipSpec>> = {
+  wave: { clips: ['Spellcast_Raise', 'Cheer'], timeScale: 0.9 },
+  laugh: { clips: ['Hit_A', 'Cheer'], timeScale: 1.45, repeats: 2 },
+  question: { clips: ['Block', 'Spellcast_Raise'], timeScale: 1.15 },
+  cheer: { clips: ['Cheer'], timeScale: 1.05, repeats: 2 },
+  dance: { clips: ['Running_Strafe_Left', 'Running_Strafe_Right', 'Cheer'], timeScale: 1.05, repeats: 2 },
+  point: { clips: ['Spellcast_Shoot', '2H_Ranged_Shoot'], timeScale: 0.95 },
+  flex: { clips: ['Block', 'Cheer'], timeScale: 0.8 },
+  salute: { clips: ['Spellcast_Raise', 'Block'], timeScale: 1.18 },
+  cry: { clips: ['Hit_A', 'Sit_Floor_Down'], timeScale: 0.65 },
+  bow: { clips: ['Sit_Floor_Down', 'Spellcast_Raise'], timeScale: 1.35 },
+  clap: { clips: ['1H_Melee_Attack_Slice_Diagonal', 'Cheer'], timeScale: 1.55, repeats: 2 },
+  roar: { clips: ['2H_Melee_Attack_Chop', '1H_Melee_Attack_Chop', 'Cheer'], timeScale: 0.9 },
+  kneel: { clips: ['Sit_Floor_Down'], timeScale: 0.85 },
+};
 
 const kaykit = (attack: string[], idle = 'Idle'): ClipMap => ({
   idle,
@@ -70,6 +100,8 @@ const kaykit = (attack: string[], idle = 'Idle'): ClipMap => ({
   sitDown: 'Sit_Floor_Down',
   sitIdle: 'Sit_Floor_Idle',
   swim: 'Lie_Idle',
+  jump: 'Jump_Idle',
+  emote: KAYKIT_EMOTES,
 });
 
 const skeletonClips = (attack: string[], flourish = 'Skeletons_Awaken_Standing'): ClipMap => ({
@@ -82,6 +114,16 @@ const animal = (attack: string[]): ClipMap => ({
   idle: 'Idle', walk: 'Walk', run: 'Gallop', attack,
   hit: ['Idle_HitReact_Left', 'Idle_HitReact_Right'], death: 'Death',
 });
+
+// Custom wild boar rig (wild_boar.glb)
+const WILD_BOAR: ClipMap = {
+  idle: 'Idle1',
+  walk: 'Move2 (shuffle)',
+  run: 'Move1 (jump)',
+  attack: ['Attack1 (marracca)', 'Attack2 (tusks)'],
+  hit: ['Hurt'],
+  death: 'Dying',
+};
 
 // 14-clip biped rig (orc/frog/demonalt/yetialt)
 const BIPED14: ClipMap = {
@@ -110,11 +152,44 @@ const SPIDER: ClipMap = {
 // Asset urls
 // ---------------------------------------------------------------------------
 
-const CHARS = 'models/chars';
+const PLAYERS = 'models/chars/players';
+const ENEMIES = 'models/chars/enemies';
 const CREATURES = 'models/creatures';
 const WEAPONS = 'models/weapons';
 
 const HUMANOID_H = 2.6;
+
+const SKINS_DIR = 'textures/skins';
+
+// Per-class alternate body textures ("skins"). Index 0 = null = the model's
+// embedded default texture (no swap). Index >0 = a full-atlas alternate applied
+// to the body material's .map (same UVs). Classes sharing a model share its skin
+// set. Players only — mobs/npcs keep their default look. See public/textures/skins/.
+export const SKINS: Record<string, (string | null)[]> = {
+  player_warrior: [null, `${SKINS_DIR}/knight/alt_a.png`, `${SKINS_DIR}/knight/alt_b.png`, `${SKINS_DIR}/knight/alt_c.png`],
+  player_paladin: [null, `${SKINS_DIR}/paladin/alt_a.png`],
+  player_hunter: [null, `${SKINS_DIR}/ranger/alt_a.png`, `${SKINS_DIR}/ranger/alt_b.png`, `${SKINS_DIR}/ranger/alt_c.png`],
+  player_rogue: [null, `${SKINS_DIR}/rogue/alt_a.png`, `${SKINS_DIR}/rogue/alt_b.png`, `${SKINS_DIR}/rogue/alt_c.png`],
+  player_priest: [null, `${SKINS_DIR}/mage/alt_a.png`, `${SKINS_DIR}/mage/alt_b.png`, `${SKINS_DIR}/mage/alt_c.png`],
+  player_mage: [null, `${SKINS_DIR}/mage/alt_a.png`, `${SKINS_DIR}/mage/alt_b.png`, `${SKINS_DIR}/mage/alt_c.png`],
+  player_warlock: [null, `${SKINS_DIR}/mage/alt_a.png`, `${SKINS_DIR}/mage/alt_b.png`, `${SKINS_DIR}/mage/alt_c.png`],
+  player_shaman: [null, `${SKINS_DIR}/barbarian/alt_a.png`, `${SKINS_DIR}/barbarian/alt_b.png`, `${SKINS_DIR}/barbarian/alt_c.png`],
+  player_druid: [null, `${SKINS_DIR}/druid/alt_a.png`, `${SKINS_DIR}/druid/alt_b.png`, `${SKINS_DIR}/druid/alt_c.png`],
+};
+
+/** Number of skins (including the default) available for a visual key — min 1. */
+export function skinCount(key: string): number {
+  return SKINS[key]?.length ?? 1;
+}
+
+/** Texture url to preview a skin option (default index 0 → the model's base.png). */
+export function skinThumbUrl(key: string, index: number): string | null {
+  const arr = SKINS[key];
+  if (!arr || index < 0 || index >= arr.length) return null;
+  if (arr[index]) return arr[index];
+  const firstAlt = arr.find((u): u is string => !!u); // derive dir from an alt
+  return firstAlt ? firstAlt.replace(/\/[^/]+$/, '/base.png') : null;
+}
 
 // ---------------------------------------------------------------------------
 // The manifest
@@ -123,61 +198,72 @@ const HUMANOID_H = 2.6;
 export const VISUALS: Record<string, VisualDef> = {
   // -- player classes ------------------------------------------------------
   player_warrior: {
-    url: `${CHARS}/knight.glb`, height: HUMANOID_H,
+    url: `${PLAYERS}/knight.glb`, height: HUMANOID_H,
     clips: kaykit(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
-    show: ['1H_Sword', 'Badge_Shield', 'Knight_Helmet', 'Knight_Cape'],
+    show: ['Knight_Helmet', 'Knight_Cape'], // v2 knight dropped the built-in Badge_Shield mesh
+    attach: [{ url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' }],
   },
   player_paladin: {
-    url: `${CHARS}/knight.glb`, height: HUMANOID_H,
+    url: `${PLAYERS}/paladin.glb`, height: HUMANOID_H,
     clips: kaykit(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
-    show: ['Round_Shield', 'Knight_Helmet', 'Knight_Cape'],
+    // dedicated paladin model (helmeted variant) — ships its own Cape + Helmet
+    // meshes and texture, so no show-list/tint. Shield + paladin hammer arrive
+    // in the weapons pass; the gripped axe holds the slot until then.
     attach: [{ url: `${WEAPONS}/axe_1handed.glb`, bone: 'handslot.r' }],
-    tint: 0xe3c06a, tintStrength: 0.5,
   },
   player_hunter: {
-    url: `${CHARS}/barbarian.glb`, height: HUMANOID_H,
+    url: `${PLAYERS}/ranger.glb`, height: HUMANOID_H,
     clips: kaykit(['2H_Ranged_Shoot']),
-    show: ['Barbarian_Cape'],
-    attach: [
-      { url: `${WEAPONS}/crossbow_2handed.glb`, bone: 'handslot.r' },
-      { url: `${WEAPONS}/quiver.glb`, bone: 'chest', position: [0, 0.05, -0.28], rotationY: Math.PI },
-    ],
+    // dedicated ranger model — the quiver is a built-in mesh, so it's no longer
+    // a separate chest attachment
+    attach: [{ url: `${WEAPONS}/crossbow_1handed.glb`, bone: 'handslot.r' }],
   },
   player_rogue: {
-    url: `${CHARS}/rogue.glb`, height: HUMANOID_H,
+    url: `${PLAYERS}/rogue.glb`, height: HUMANOID_H,
     clips: kaykit(['Dualwield_Melee_Attack_Chop']),
-    show: ['Knife', 'Knife_Offhand', 'Rogue_Cape'],
+    show: ['Rogue_Cape'],
+    attach: [
+      { url: `${WEAPONS}/dagger.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/dagger.glb`, bone: 'handslot.l' },
+    ],
   },
   player_priest: {
-    url: `${CHARS}/mage.glb`, height: HUMANOID_H,
+    url: `${PLAYERS}/mage.glb`, height: HUMANOID_H,
     clips: kaykit(['2H_Melee_Attack_Chop']),
-    show: ['2H_Staff'],
+    show: [],
+    attach: [{ url: `${WEAPONS}/staff.glb`, bone: 'handslot.r' }],
     tint: 0xf0e9d6, tintStrength: 0.5,
   },
   player_shaman: {
-    url: `${CHARS}/barbarian.glb`, height: HUMANOID_H,
+    url: `${PLAYERS}/barbarian.glb`, height: HUMANOID_H,
     clips: kaykit(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
-    show: ['1H_Axe', 'Barbarian_Round_Shield', 'Barbarian_Hat'],
+    show: ['Barbarian_BearHat'], // v2 barbarian renamed Hat→BearHat and dropped the round shield mesh
+    attach: [{ url: `${WEAPONS}/axe_1handed.glb`, bone: 'handslot.r' }],
     tint: 0x6f8fc9, tintStrength: 0.4,
   },
   player_mage: {
-    url: `${CHARS}/mage.glb`, height: HUMANOID_H,
+    url: `${PLAYERS}/mage.glb`, height: HUMANOID_H,
     clips: kaykit(['2H_Melee_Attack_Chop']),
     // no Mage_Hat on players: the brim hides the whole body from the default
     // chase-camera pitch (NPC mages keep theirs — they're seen from the side)
-    show: ['2H_Staff', 'Mage_Cape'],
+    show: ['Mage_Cape'],
+    attach: [{ url: `${WEAPONS}/staff.glb`, bone: 'handslot.r' }],
   },
   player_warlock: {
-    url: `${CHARS}/mage.glb`, height: HUMANOID_H,
+    url: `${PLAYERS}/mage.glb`, height: HUMANOID_H,
     clips: kaykit(['Spellcast_Shoot']), // wand zap reads better than a staff bonk
-    show: ['1H_Wand', 'Spellbook_open'],
+    show: [],
+    attach: [
+      { url: `${WEAPONS}/wand.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/spellbook_open.glb`, bone: 'handslot.l', gripRef: 'Spellbook_open' },
+    ],
     tint: 0x8d5fd3, tintStrength: 0.45,
   },
   player_druid: {
-    url: `${CHARS}/mage.glb`, height: HUMANOID_H,
+    url: `${PLAYERS}/druid.glb`, height: HUMANOID_H,
     clips: kaykit(['2H_Melee_Attack_Chop']),
-    show: ['2H_Staff'],
-    tint: 0x7da05c, tintStrength: 0.45,
+    // dedicated druid model (own texture, ships a Backpack mesh)
+    attach: [{ url: `${WEAPONS}/staff.glb`, bone: 'handslot.r' }],
   },
 
   // -- forms ---------------------------------------------------------------
@@ -186,8 +272,12 @@ export const VISUALS: Record<string, VisualDef> = {
     clips: animal(['Attack_Headbutt']),
   },
   form_bear: {
-    url: `${CREATURES}/yetialt.glb`, height: 1.9,
+    url: `${CREATURES}/yetialt.glb`, height: 2.4,
     clips: BIPED14, tint: 0x5a4030, tintStrength: 0.55,
+  },
+  form_cat: {
+    url: `${CREATURES}/wolf.glb`, height: 1.6,
+    clips: animal(['Attack']), tint: 0xd08b45, tintStrength: 0.35,
   },
 
   // -- mob families --------------------------------------------------------
@@ -196,8 +286,8 @@ export const VISUALS: Record<string, VisualDef> = {
     clips: animal(['Attack']), tint: 'entity', tintStrength: 0.35,
   },
   mob_boar: {
-    url: `${CREATURES}/bull.glb`, height: 1.45,
-    clips: animal(['Attack_Headbutt']), tint: 'entity', tintStrength: 0.4,
+    url: `${CREATURES}/wild_boar.glb`, height: 1.45,
+    clips: WILD_BOAR, tint: 'entity', tintStrength: 0.4,
   },
   mob_spider: {
     url: `${CREATURES}/spider.glb`, height: 1.4,
@@ -230,15 +320,29 @@ export const VISUALS: Record<string, VisualDef> = {
     // sanctum torchlight
     clips: FLOATING, tint: 'entity', tintStrength: 0.2,
   },
+  // warlock demon pets (imp/voidwalker) — one biped rig, the entity colour and
+  // the mob template's scale tell the little orange imp from the bulky voidwalker
+  mob_demon: {
+    url: `${CREATURES}/demonalt.glb`, height: 1.8,
+    clips: BIPED14, tint: 'entity', tintStrength: 0.5,
+  },
+  mob_demon_flying: {
+    url: `${CREATURES}/demon.glb`, height: 1.7, hover: 0.35,
+    clips: FLOATING, tint: 'entity', tintStrength: 0.25,
+  },
+  mob_demonalt: {
+    url: `${CREATURES}/demonalt.glb`, height: 2.1,
+    clips: BIPED14, tint: 'entity', tintStrength: 0.35,
+  },
 
   // -- undead (KayKit skeletons, shared 41-joint rig) ------------------------
   skel_minion: {
-    url: `${CHARS}/skeleton_minion.glb`, height: 2.5,
+    url: `${ENEMIES}/skeleton_minion.glb`, height: 2.5,
     clips: skeletonClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     tint: 'entity', tintStrength: 0.25,
   },
   skel_warrior: {
-    url: `${CHARS}/skeleton_warrior.glb`, height: 2.5,
+    url: `${ENEMIES}/skeleton_warrior.glb`, height: 2.5,
     clips: skeletonClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     attach: [
       { url: `${WEAPONS}/skeleton_blade.glb`, bone: 'handslot.r' },
@@ -247,19 +351,19 @@ export const VISUALS: Record<string, VisualDef> = {
     tint: 'entity', tintStrength: 0.25,
   },
   skel_rogue: {
-    url: `${CHARS}/skeleton_rogue.glb`, height: 2.5,
+    url: `${ENEMIES}/skeleton_rogue.glb`, height: 2.5,
     clips: skeletonClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     attach: [{ url: `${WEAPONS}/skeleton_axe.glb`, bone: 'handslot.r' }],
     tint: 'entity', tintStrength: 0.25,
   },
   skel_mage: {
-    url: `${CHARS}/skeleton_mage.glb`, height: 2.5,
+    url: `${ENEMIES}/skeleton_mage.glb`, height: 2.5,
     clips: skeletonClips(['2H_Melee_Attack_Chop']),
     attach: [{ url: `${WEAPONS}/skeleton_staff.glb`, bone: 'handslot.r' }],
     tint: 'entity', tintStrength: 0.25,
   },
   skel_boss: {
-    url: `${CHARS}/skeleton_mage.glb`, height: 2.5,
+    url: `${ENEMIES}/skeleton_mage.glb`, height: 2.5,
     clips: skeletonClips(['2H_Melee_Attack_Chop'], 'Taunt'),
     attach: [{ url: `${WEAPONS}/skeleton_staff.glb`, bone: 'handslot.r' }],
     tint: 'entity', tintStrength: 0.25,
@@ -267,56 +371,67 @@ export const VISUALS: Record<string, VisualDef> = {
 
   // -- humanoid mobs (KayKit adventurers) ------------------------------------
   mob_bandit: {
-    url: `${CHARS}/rogue_hooded.glb`, height: HUMANOID_H,
+    url: `${PLAYERS}/rogue_hooded.glb`, height: HUMANOID_H,
     clips: kaykit(['1H_Melee_Attack_Chop', 'Dualwield_Melee_Attack_Chop']),
-    show: ['Knife', 'Knife_Offhand'],
+    // v2 rogue_hooded ships the hood/mask/cape as its default look (no show
+    // filter needed); the knives are attached dual-wield from the weapon files
+    attach: [
+      { url: `${WEAPONS}/dagger.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/dagger.glb`, bone: 'handslot.l' },
+    ],
     // fixed outlaw leather — entity tints (faction greens) read as friendly
     // villagers; the dark red-brown keeps the hooded silhouette hostile
     tint: 0x6b3a32, tintStrength: 0.3,
   },
   mob_dark_caster: {
-    url: `${CHARS}/mage.glb`, height: HUMANOID_H,
+    url: `${PLAYERS}/mage.glb`, height: HUMANOID_H,
     clips: kaykit(['2H_Melee_Attack_Chop']),
-    show: ['2H_Staff', 'Mage_Hat'],
+    show: ['Mage_Hat'],
+    attach: [{ url: `${WEAPONS}/staff.glb`, bone: 'handslot.r' }],
     tint: 'entity', tintStrength: 0.5,
   },
   mob_bruiser: {
-    url: `${CHARS}/barbarian.glb`, height: HUMANOID_H,
+    url: `${PLAYERS}/barbarian.glb`, height: HUMANOID_H,
     clips: kaykit(['2H_Melee_Attack_Chop']),
-    show: ['2H_Axe', 'Barbarian_Hat', 'Barbarian_Cape'],
+    show: ['Barbarian_BearHat'], // v2 barbarian: Hat→BearHat, no Cape, weapon now attached
+    attach: [{ url: `${WEAPONS}/axe_2handed.glb`, bone: 'handslot.r' }],
     tint: 'entity', tintStrength: 0.3,
   },
 
   // -- NPCs ------------------------------------------------------------------
   npc_knight: {
-    url: `${CHARS}/knight.glb`, height: HUMANOID_H,
+    url: `${PLAYERS}/knight.glb`, height: HUMANOID_H,
     clips: kaykit(['1H_Melee_Attack_Chop']),
-    show: ['1H_Sword', 'Knight_Helmet', 'Knight_Cape'],
+    show: ['Knight_Helmet', 'Knight_Cape'],
+    attach: [{ url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' }],
   },
   npc_mage: {
-    url: `${CHARS}/mage.glb`, height: HUMANOID_H,
+    url: `${PLAYERS}/mage.glb`, height: HUMANOID_H,
     clips: kaykit(['2H_Melee_Attack_Chop']),
-    show: ['2H_Staff'],
+    show: [],
+    attach: [{ url: `${WEAPONS}/staff.glb`, bone: 'handslot.r' }],
     tint: 0xc9b98a, tintStrength: 0.3, // brown-robed brothers of the chapel
   },
   npc_smith: {
-    url: `${CHARS}/barbarian.glb`, height: HUMANOID_H,
+    url: `${PLAYERS}/barbarian.glb`, height: HUMANOID_H,
     clips: kaykit(['1H_Melee_Attack_Chop']),
-    show: ['1H_Axe'],
+    show: [],
+    attach: [{ url: `${WEAPONS}/axe_1handed.glb`, bone: 'handslot.r' }],
   },
   npc_scout: {
-    url: `${CHARS}/rogue.glb`, height: HUMANOID_H,
+    url: `${PLAYERS}/rogue.glb`, height: HUMANOID_H,
     clips: kaykit(['2H_Ranged_Shoot']),
-    show: ['1H_Crossbow', 'Rogue_Cape'],
+    show: ['Rogue_Cape'],
+    attach: [{ url: `${WEAPONS}/crossbow_1handed.glb`, bone: 'handslot.r' }],
   },
   npc_villager: {
-    url: `${CHARS}/rogue.glb`, height: HUMANOID_H,
+    url: `${PLAYERS}/rogue.glb`, height: HUMANOID_H,
     clips: kaykit(['1H_Melee_Attack_Chop']),
     show: [],
     tint: 'entity', tintStrength: 0.35,
   },
   npc_villager_robed: {
-    url: `${CHARS}/mage.glb`, height: HUMANOID_H,
+    url: `${PLAYERS}/mage.glb`, height: HUMANOID_H,
     clips: kaykit(['2H_Melee_Attack_Chop']),
     show: [],
     tint: 'entity', tintStrength: 0.35,
@@ -329,6 +444,10 @@ export const VISUALS: Record<string, VisualDef> = {
 // ---------------------------------------------------------------------------
 
 const MOB_KEYS: Record<string, string> = {
+  imp: 'mob_demon',
+  voidwalker: 'mob_demon',
+  warlock_imp: 'mob_demon_flying',
+  warlock_voidwalker: 'mob_demonalt',
   wild_boar: 'mob_boar',
   elder_bristleback: 'mob_boar',
   // gravecaller cult + necromancers: dark-robed casters
@@ -364,6 +483,7 @@ const FAMILY_KEYS: Record<string, string> = {
   ogre: 'mob_ogre',
   elemental: 'mob_elemental',
   dragonkin: 'mob_dragonkin',
+  demon: 'mob_demonalt',
 };
 
 const NPC_KEYS: Record<string, string> = {

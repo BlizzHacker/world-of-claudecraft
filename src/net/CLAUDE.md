@@ -12,7 +12,7 @@ client even runs `abilitiesKnownAt` / `computeQuestState` locally, but purely to
 *display* what the server already decided; the server re-validates everything.
 
 ## Wire protocol — MUST stay in lockstep with `server/game.ts`
-There is no `server/CLAUDE.md`; read `server/game.ts` directly when touching this.
+See `server/CLAUDE.md` for server conventions; read `server/game.ts` directly for the exact wire encoding.
 - **Server → client** (handled in `onMessage`): `hello` (pid, seed, realm) ·
   `snap` · `events` (pushed to `eventQueue`, drained by `drainEvents`) · `social`
   (sets `socialInfo`, flips `socialDirty`) · `error` (disconnect).

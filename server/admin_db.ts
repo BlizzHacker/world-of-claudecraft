@@ -234,6 +234,8 @@ export interface AccountDetail {
   bannedAt: string | null;
   suspendedUntil: string | null;
   moderationReason: string;
+  chatMutedUntil: string | null;
+  chatMuteReason: string;
   playtimeSeconds: number;
   characters: {
     id: number;
@@ -260,6 +262,8 @@ export async function accountDetail(accountId: number): Promise<AccountDetail | 
     pool.query(
       `SELECT id, username, created_at, last_login, is_admin, banned_at, suspended_until,
               COALESCE(moderation_reason, '') AS moderation_reason,
+              chat_muted_until,
+              COALESCE(chat_mute_reason, '') AS chat_mute_reason,
               COALESCE((SELECT sum(EXTRACT(EPOCH FROM (COALESCE(s.ended_at, now()) - s.started_at)))
                         FROM play_sessions s WHERE s.account_id = accounts.id), 0)::bigint AS playtime_seconds
        FROM accounts WHERE id = $1`,
@@ -291,6 +295,8 @@ export async function accountDetail(accountId: number): Promise<AccountDetail | 
     bannedAt: a.banned_at,
     suspendedUntil: a.suspended_until,
     moderationReason: a.moderation_reason,
+    chatMutedUntil: a.chat_muted_until,
+    chatMuteReason: a.chat_mute_reason,
     playtimeSeconds: Number(a.playtime_seconds),
     characters: characters.rows.map((c) => ({
       id: c.id,

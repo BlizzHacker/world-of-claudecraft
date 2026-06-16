@@ -1,4 +1,5 @@
 import { escapeHtml } from './format';
+import { t } from './i18n';
 
 // Hand-rolled SVG bar charts — no chart library needed for bars and labels.
 
@@ -15,7 +16,7 @@ const BAR_GAP = 2;
 const MAX_X_LABELS = 10;
 
 export function barChart(points: BarPoint[], opts: { valueSuffix?: string } = {}): string {
-  if (points.length === 0) return '<div class="empty">no data yet</div>';
+  if (points.length === 0) return `<div class="empty">${t('charts.noData')}</div>`;
   const max = Math.max(...points.map((p) => p.value), 1);
   const plotHeight = CHART_HEIGHT - AXIS_HEIGHT;
   const barWidth = Math.max(1, CHART_WIDTH / points.length - BAR_GAP);

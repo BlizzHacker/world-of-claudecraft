@@ -20,7 +20,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { NodeIO } from '@gltf-transform/core';
 import { ALL_EXTENSIONS } from '@gltf-transform/extensions';
-import { dedup, meshopt, prune, resample, textureCompress } from '@gltf-transform/functions';
+import { dedup, mergeDocuments, meshopt, prune, resample, textureCompress } from '@gltf-transform/functions';
 import { MeshoptDecoder, MeshoptEncoder } from 'meshoptimizer';
 import sharp from 'sharp';
 
@@ -43,6 +43,41 @@ async function processModel(io, item) {
   const outPath = path.join(PUBLIC_DIR, item.out);
   const doc = await io.read(srcPath);
   const root = doc.getRoot();
+
+  // Merge animation clips from separate library glbs. KayKit's v2 packs ship
+  // animations in standalone Rig_Medium_*.glb files, each carrying a mannequin
+  // mesh + its own copy of the skeleton. Merge a lib in, repoint every newly
+  // added animation channel onto the character's own bone of the same name,
+  // then drop the lib's scenes + nodes so only its clips survive (the mannequin
+  // meshes / duplicate bones fall out, and prune() sweeps the orphaned data).
+  if (item.addClipsFrom) {
+    const origNodeByName = new Map();
+    for (const n of root.listNodes()) origNodeByName.set(n.getName(), n);
+    const origNodes = new Set(origNodeByName.values());
+    const origScenes = new Set(root.listScenes());
+    const origAnims = new Set(root.listAnimations());
+    for (const libRel of item.addClipsFrom) {
+      mergeDocuments(doc, await io.read(resolveSrc(libRel)));
+    }
+    let orphan = 0;
+    for (const anim of root.listAnimations()) {
+      if (origAnims.has(anim)) continue;
+      for (const ch of anim.listChannels()) {
+        const tgt = ch.getTargetNode();
+        if (!tgt) continue;
+        const orig = origNodeByName.get(tgt.getName());
+        if (orig) ch.setTargetNode(orig);
+        else orphan++;
+      }
+    }
+    for (const scene of root.listScenes()) if (!origScenes.has(scene)) scene.dispose();
+    for (const node of root.listNodes()) if (!origNodes.has(node)) node.dispose();
+    // mergeDocuments imports each lib's own buffer; a GLB must have a single one
+    const mainBuffer = root.listBuffers()[0];
+    for (const acc of root.listAccessors()) acc.setBuffer(mainBuffer);
+    for (const buf of root.listBuffers()) if (buf !== mainBuffer) buf.dispose();
+    if (orphan) console.warn(`  WARN ${item.out}: ${orphan} merged channel(s) had no matching bone`);
+  }
 
   // normalize + filter animation clips
   const seen = new Set();
@@ -97,8 +132,12 @@ async function main() {
   let failures = 0;
   for (const specFile of specs) {
     const spec = JSON.parse(fs.readFileSync(specFile, 'utf8'));
+    // optional top-level `defaults` merged into every item (item keys win) —
+    // lets a spec share addClipsFrom/renameClips/keepClips across many chars
+    const defaults = spec.defaults ?? {};
     console.log(`spec: ${specFile} (${spec.items.length} items)`);
-    for (const item of spec.items) {
+    for (const raw of spec.items) {
+      const item = { ...defaults, ...raw };
       try {
         if (item.type === 'copy') processCopy(item);
         else await processModel(io, item);

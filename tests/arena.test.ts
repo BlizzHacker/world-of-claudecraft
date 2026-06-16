@@ -323,3 +323,40 @@ describe('arena: crowd control diminishing returns', () => {
     expect(warrior.auras.find((aura) => aura.kind === 'root')?.duration).toBe(4);
   });
 });
+
+describe('arena: class ability target filters', () => {
+  const aoeCases: Array<{ cls: PlayerClass; ability: string; level: number; setup?: (sim: Sim, pid: number) => void }> = [
+    { cls: 'warrior', ability: 'thunder_clap', level: 20 },
+    { cls: 'mage', ability: 'arcane_explosion', level: 20 },
+    { cls: 'paladin', ability: 'consecration', level: 20 },
+    {
+      cls: 'druid',
+      ability: 'swipe',
+      level: 20,
+      setup: (sim, pid) => {
+        const druid = sim.entities.get(pid)!;
+        sim.castAbility('bear_form', pid);
+        druid.gcdRemaining = 0;
+        druid.resource = druid.maxResource;
+      },
+    },
+  ];
+
+  it.each(aoeCases)('lets $cls $ability hit active arena opponents', ({ cls, ability, level, setup }) => {
+    const { sim, a, b } = queueDuo(cls, 'warrior');
+    startBout(sim);
+    const caster = sim.entities.get(a)!;
+    const target = sim.entities.get(b)!;
+    sim.setPlayerLevel(level, a);
+    sim.setPlayerLevel(level, b);
+    teleport(sim, b, caster.pos.x, caster.pos.z + 3);
+    caster.resource = caster.maxResource;
+    caster.gcdRemaining = 0;
+    setup?.(sim, a);
+
+    const startHp = target.hp;
+    sim.castAbility(ability, a);
+
+    expect(target.hp).toBeLessThan(startHp);
+  });
+});

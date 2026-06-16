@@ -1,12 +1,43 @@
-// Procedural orchestral soundtrack — no audio files, pure WebAudio synthesis.
-// Inspired by vanilla-WoW zone scoring: a pastoral town theme, a wilderness
-// theme per biome (vale, marsh, peaks), a dread-laden dungeon theme, and a
-// percussion layer that fades in during combat. Each theme is a composed
-// multi-track loop scheduled with a lookahead timer; zone changes crossfade.
+// Procedural adventure soundtrack — no audio files, pure WebAudio synthesis.
+// Eastbrook keeps the original town theme intact. Every other zone pushes
+// harder toward original old-school medieval MMO colors: lute/dulcimer loops,
+// pipe/reed/square leads, wood-block ticks, frame drums, and faster dungeons.
+// Each theme is a composed multi-track loop scheduled with a lookahead
+// timer; zone changes crossfade.
 
-export type MusicZone = 'town' | 'vale' | 'marsh' | 'peaks' | 'dungeon';
+export type MusicZone =
+  | 'town_eastbrook' | 'town_fenbridge' | 'town_highwatch'
+  | 'vale' | 'marsh' | 'peaks'
+  | 'dungeon_hollow_crypt' | 'dungeon_sunken_bastion' | 'dungeon_gravewyrm_sanctum';
 
-type Inst = 'strings' | 'flute' | 'harp' | 'horn' | 'choir' | 'bell' | 'timpani' | 'bass' | 'stacc';
+const TOWN_MUSIC: Record<string, MusicZone> = {
+  eastbrook_vale: 'town_eastbrook',
+  mirefen_marsh: 'town_fenbridge',
+  thornpeak_heights: 'town_highwatch',
+};
+
+const DUNGEON_MUSIC: Record<string, MusicZone> = {
+  hollow_crypt: 'dungeon_hollow_crypt',
+  sunken_bastion: 'dungeon_sunken_bastion',
+  gravewyrm_sanctum: 'dungeon_gravewyrm_sanctum',
+};
+
+/** Pick the soundtrack layer from world position context. */
+export function musicZoneForLocation(
+  zoneId: string,
+  biome: 'vale' | 'marsh' | 'peaks',
+  inHub: boolean,
+  inDungeon: boolean,
+  dungeonId: string | null = null,
+): MusicZone {
+  if (inDungeon) return (dungeonId && DUNGEON_MUSIC[dungeonId]) || 'dungeon_hollow_crypt';
+  if (inHub) return TOWN_MUSIC[zoneId] ?? biome;
+  return biome;
+}
+
+type Inst = 'strings' | 'flute' | 'harp' | 'horn' | 'choir' | 'bell' | 'timpani' | 'bass' | 'stacc' | 'pad'
+  | 'lute' | 'dulcimer' | 'frameDrum' | 'warDrum' | 'reed' | 'pipe'
+  | 'squareLead' | 'woodBlock' | 'tinyBell';
 
 interface NoteEvent {
   beat: number; // quarter-note position in the loop
@@ -62,7 +93,7 @@ function pushPhrase(out: NoteEvent[], startBeat: number, phrase: Phrase, vel: nu
 // Themes
 // ---------------------------------------------------------------------------
 
-function composeTown(): Theme {
+function composeTownEastbrook(): Theme {
   const ev: NoteEvent[] = [];
   // D major, warm and pastoral
   const D = { root: 62 }, A = { root: 57 }, Bm = { root: 59, minor: true };
@@ -113,154 +144,324 @@ function composeTown(): Theme {
   return { bpm: 80, bars: 16, events: ev };
 }
 
-function composeVale(): Theme {
+function pushRepeated(out: NoteEvent[], startBeat: number, notes: number[], step: number, dur: number, vel: number, inst: Inst): void {
+  notes.forEach((m, i) => pushNote(out, startBeat + i * step, m, dur, vel, inst));
+}
+
+function pushDrumHits(out: NoteEvent[], startBeat: number, offsets: number[], inst: Inst, vel: number, midi = 42): void {
+  offsets.forEach((b, i) => pushNote(out, startBeat + b, midi, 0.22, vel * (i % 2 === 0 ? 1 : 0.78), inst));
+}
+
+function pushPedal(out: NoteEvent[], beat: number, root: number, inst: Inst, vel: number): void {
+  pushNote(out, beat, root - 24, 4.1, vel, inst);
+  pushNote(out, beat, root - 17, 4.1, vel * 0.62, inst);
+}
+
+function composeTownFenbridge(): Theme {
   const ev: NoteEvent[] = [];
-  // A dorian, spacious and mysterious
-  const Am = { root: 57, minor: true }, C = { root: 60 }, G = { root: 55 };
-  const Em = { root: 52, minor: true }, Dmaj = { root: 62 }, F = { root: 53 };
-  const chords: ChordDef[] = [Am, Am, C, G, Am, Em, G, Am, Am, C, Dmaj, Am, F, C, Em, Am];
+  // F mixolydian market-town: deliberate old-school medieval MIDI flavor.
+  // The lead is original, short, and hooky; the accompaniment leans lute,
+  // dulcimer, frame drum, and square/reed color rather than orchestral wash.
+  const F = { root: 65 }, Eb = { root: 63 }, Bb = { root: 58 }, C = { root: 60 }, Dm = { root: 62, minor: true };
+  const chords: ChordDef[] = [F, Eb, Bb, F, Dm, Bb, C, F, F, Bb, Eb, F, Dm, C, Bb, F];
 
   chords.forEach((c, bar) => {
     const b0 = bar * 4;
     const t = triad(c);
-    // deep drone every other bar (overlapping sustains)
-    if (bar % 2 === 0) {
-      pushNote(ev, b0, c.root - 24, 8.4, 0.4, 'strings');
-      pushNote(ev, b0, c.root - 17, 8.4, 0.26, 'strings');
-    }
-    // soft choir on chord tones
-    for (const n of t) pushNote(ev, b0, n - 12, 4.05, 0.16, 'choir');
-    // wandering cello
-    pushNote(ev, b0, c.root - 12, 1.5, 0.3, 'bass');
-    if (bar % 4 === 1) pushNote(ev, b0 + 2, c.root - 5, 1.8, 0.24, 'bass');
-    if (bar % 4 === 3) pushNote(ev, b0 + 2.5, c.root - 10, 1.4, 0.22, 'bass');
-    // harp glints, sparse
-    if (bar % 4 === 2) {
-      [t[2], t[0] + 12, t[1] + 12].forEach((n, i) => pushNote(ev, b0 + 1 + i * 0.5, n, 0.5, 0.2, 'harp'));
-    }
+    // Less cinematic pad, more clear looping MIDI harmony.
+    pushNote(ev, b0, c.root - 12, 4.05, 0.08, 'pad');
+    pushNote(ev, b0, c.root - 5, 4.05, 0.06, 'pad');
+    pushNote(ev, b0, c.root - 24, 1.6, 0.32, 'bass');
+    pushNote(ev, b0 + 2, c.root - 19, 1.2, 0.23, 'bass');
+
+    // Alternating lute/dulcimer motor, intentionally square and memorable.
+    const low = [t[0] - 12, t[2] - 12, t[1] - 12, t[2] - 12, t[0], t[2] - 12, t[1] - 12, t[2] - 12];
+    pushRepeated(ev, b0, low, 0.5, 0.28, 0.22, 'lute');
+    const high = [t[2] + 12, t[1] + 12, t[0] + 12, t[1] + 12];
+    pushRepeated(ev, b0 + 0.25, high, 1, 0.2, 0.12, 'dulcimer');
+
+    // Tavern pulse: bouncy but not modern.
+    pushDrumHits(ev, b0, [0, 1.5, 2.5, 3.5], 'frameDrum', bar % 4 === 3 ? 0.16 : 0.12, 43);
+    if (bar % 4 === 3) pushNote(ev, b0 + 3.75, 72, 0.15, 0.11, 'woodBlock');
   });
 
-  // distant flute motifs with long silences
-  const motifs: [number, Phrase][] = [
-    [4, [[0, 69, 1], [1, 71, 1], [2, 72, 1.5], [3.5, 71, 0.5], [4, 67, 2], [6, 64, 2]]],
-    [20, [[0, 76, 1.5], [1.5, 74, 0.5], [2, 72, 1], [3, 71, 1], [4, 69, 3]]],
-    [36, [[0, 72, 1], [1, 74, 1], [2, 76, 1.5], [3.5, 74, 0.5], [4, 72, 1], [5, 69, 1], [6, 71, 3]]],
-    [52, [[0, 69, 1], [1, 72, 1], [2, 71, 1], [3, 67, 1], [4, 69, 4]]],
+  const hookA: Phrase = [
+    [0, 77, 0.5], [0.5, 75, 0.5], [1, 72, 1], [2, 70, 0.5], [2.5, 72, 0.5], [3, 75, 1],
+    [4, 77, 0.5], [4.5, 80, 0.5], [5, 79, 1], [6, 75, 0.5], [6.5, 72, 0.5], [7, 70, 1],
+    [8, 72, 0.5], [8.5, 75, 0.5], [9, 77, 1], [10, 80, 0.5], [10.5, 79, 0.5], [11, 77, 1],
+    [12, 75, 0.5], [12.5, 72, 0.5], [13, 70, 1], [14, 72, 0.5], [14.5, 75, 0.5], [15, 77, 1],
   ];
-  for (const [start, ph] of motifs) pushPhrase(ev, start, ph, 0.26, 'flute');
+  const hookB: Phrase = [
+    [0, 84, 0.5], [0.5, 82, 0.5], [1, 80, 0.5], [1.5, 77, 0.5], [2, 75, 1], [3, 77, 1],
+    [4, 80, 0.5], [4.5, 79, 0.5], [5, 77, 1], [6, 75, 0.5], [6.5, 72, 0.5], [7, 75, 1],
+    [8, 77, 0.5], [8.5, 80, 0.5], [9, 82, 0.5], [9.5, 84, 0.5], [10, 82, 1], [11, 79, 1],
+    [12, 80, 0.5], [12.5, 77, 0.5], [13, 75, 1], [14, 72, 0.5], [14.5, 75, 0.5], [15, 77, 1],
+  ];
+  pushPhrase(ev, 0, hookA, 0.18, 'pipe');
+  pushPhrase(ev, 16, hookA.map(([b, m, d]) => [b, m - 12, d] as Phrase[number]), 0.12, 'reed');
+  pushPhrase(ev, 32, hookB, 0.18, 'squareLead');
+  pushPhrase(ev, 48, hookA, 0.14, 'pipe');
 
   ev.sort((a, b) => a.beat - b.beat);
-  return { bpm: 66, bars: 16, events: ev };
+  return { bpm: 96, bars: 16, events: ev };
+}
+
+function composeTownHighwatch(): Theme {
+  const ev: NoteEvent[] = [];
+  // B minor highland watch post: faster medieval march with pipe/reed hooks,
+  // blocky harmony, and field percussion instead of a slow cinematic cue.
+  const Bm = { root: 59, minor: true }, G = { root: 55 }, A = { root: 57 }, D = { root: 62 };
+  const Em = { root: 52, minor: true }, Fsm = { root: 54, minor: true };
+  const chords: ChordDef[] = [Bm, G, A, Bm, D, A, Em, Fsm, Bm, G, D, A, Em, G, Fsm, Bm];
+
+  chords.forEach((c, bar) => {
+    const b0 = bar * 4;
+    const t = triad(c);
+    pushPedal(ev, b0, c.root, 'strings', 0.15);
+    if (bar % 2 === 0) {
+      pushNote(ev, b0, c.root - 12, 2.8, 0.14, 'horn');
+      pushNote(ev, b0 + 0.03, c.root - 5, 2.8, 0.10, 'horn');
+    }
+    pushNote(ev, b0, c.root - 24, 1.2, 0.42, 'bass');
+    pushNote(ev, b0 + 1.5, c.root - 17, 0.9, 0.28, 'bass');
+    pushNote(ev, b0 + 2.5, c.root - 12, 0.8, 0.24, 'bass');
+
+    const chop = [t[0], t[2], t[0] + 12, t[1] + 12, t[2] + 12, t[1] + 12, t[0] + 12, t[2]];
+    pushRepeated(ev, b0, chop, 0.5, 0.16, 0.18, bar % 4 < 2 ? 'dulcimer' : 'lute');
+    pushDrumHits(ev, b0, [0, 0.75, 1.5, 2, 2.75, 3.5], 'frameDrum', 0.14, 45);
+    if (bar % 4 === 3) pushNote(ev, b0 + 3.5, 38, 0.45, 0.22, 'timpani');
+  });
+
+  const pipes: Phrase = [
+    [0, 74, 0.5], [0.5, 76, 0.5], [1, 78, 1], [2, 76, 0.5], [2.5, 74, 0.5], [3, 71, 1],
+    [4, 74, 0.5], [4.5, 78, 0.5], [5, 81, 1], [6, 79, 0.5], [6.5, 78, 0.5], [7, 76, 1],
+    [8, 78, 0.5], [8.5, 81, 0.5], [9, 83, 1], [10, 81, 0.5], [10.5, 78, 0.5], [11, 76, 1],
+    [12, 74, 0.5], [12.5, 76, 0.5], [13, 78, 1], [14, 76, 0.5], [14.5, 74, 0.5], [15, 71, 1],
+  ];
+  const answer: Phrase = [
+    [0, 71, 1], [1, 74, 0.5], [1.5, 76, 0.5], [2, 78, 1], [3, 76, 1],
+    [4, 74, 0.5], [4.5, 71, 0.5], [5, 69, 1], [6, 71, 0.5], [6.5, 74, 0.5], [7, 76, 1],
+    [8, 78, 0.5], [8.5, 76, 0.5], [9, 74, 1], [10, 71, 0.5], [10.5, 69, 0.5], [11, 71, 1],
+    [12, 74, 0.5], [12.5, 76, 0.5], [13, 78, 1], [14, 76, 0.5], [14.5, 74, 0.5], [15, 71, 1],
+  ];
+  pushPhrase(ev, 0, pipes, 0.17, 'pipe');
+  pushPhrase(ev, 16, answer, 0.15, 'reed');
+  pushPhrase(ev, 32, pipes, 0.14, 'squareLead');
+  pushPhrase(ev, 48, answer, 0.16, 'horn');
+
+  ev.sort((a, b) => a.beat - b.beat);
+  return { bpm: 104, bars: 16, events: ev };
+}
+
+function composeVale(): Theme {
+  const ev: NoteEvent[] = [];
+  // A dorian overworld: playful and looping, with sparse orchestral depth.
+  const Am = { root: 57, minor: true }, G = { root: 55 }, D = { root: 62 }, C = { root: 60 }, Em = { root: 52, minor: true };
+  const chords: ChordDef[] = [Am, G, D, Am, C, G, Em, Am, Am, C, D, G, Am, Em, G, Am];
+
+  chords.forEach((c, bar) => {
+    const b0 = bar * 4;
+    const t = triad(c);
+    if (bar % 2 === 0) pushPedal(ev, b0, c.root, 'pad', 0.17);
+    pushNote(ev, b0, c.root - 24, 1.5, 0.28, 'bass');
+    pushNote(ev, b0 + 2, c.root - 19, 1.2, 0.20, 'bass');
+    const lilt = [t[0], t[2], t[1] + 12, t[2], t[0] + 12, t[2], t[1] + 12, t[2]];
+    pushRepeated(ev, b0, lilt, 0.5, 0.24, 0.18, 'lute');
+    if (bar % 2 === 1) pushRepeated(ev, b0 + 0.25, [t[2] + 12, t[0] + 24, t[1] + 12], 1, 0.18, 0.12, 'dulcimer');
+    if (bar % 4 === 0 || bar % 4 === 2) pushDrumHits(ev, b0, [0, 1.5, 2.5], 'frameDrum', 0.09, 44);
+  });
+
+  const motifA: Phrase = [
+    [0, 69, 0.5], [0.5, 72, 0.5], [1, 74, 1], [2, 76, 0.5], [2.5, 74, 0.5], [3, 72, 1],
+    [4, 69, 0.5], [4.5, 67, 0.5], [5, 69, 1], [6, 72, 0.5], [6.5, 74, 0.5], [7, 76, 1],
+    [8, 79, 0.5], [8.5, 76, 0.5], [9, 74, 1], [10, 72, 0.5], [10.5, 69, 0.5], [11, 67, 1],
+    [12, 69, 0.5], [12.5, 72, 0.5], [13, 74, 1], [14, 72, 0.5], [14.5, 69, 0.5], [15, 69, 1],
+  ];
+  const motifB: Phrase = [
+    [0, 76, 0.5], [0.5, 79, 0.5], [1, 81, 1], [2, 79, 0.5], [2.5, 76, 0.5], [3, 74, 1],
+    [4, 72, 0.5], [4.5, 74, 0.5], [5, 76, 1], [6, 79, 0.5], [6.5, 81, 0.5], [7, 84, 1],
+    [8, 81, 0.5], [8.5, 79, 0.5], [9, 76, 1], [10, 74, 0.5], [10.5, 72, 0.5], [11, 69, 1],
+    [12, 67, 0.5], [12.5, 69, 0.5], [13, 72, 1], [14, 74, 0.5], [14.5, 72, 0.5], [15, 69, 1],
+  ];
+  pushPhrase(ev, 4, motifA, 0.16, 'pipe');
+  pushPhrase(ev, 20, motifA.map(([b, m, d]) => [b, m - 12, d] as Phrase[number]), 0.11, 'reed');
+  pushPhrase(ev, 36, motifB, 0.15, 'squareLead');
+  pushPhrase(ev, 52, motifA, 0.14, 'pipe');
+
+  ev.sort((a, b) => a.beat - b.beat);
+  return { bpm: 92, bars: 16, events: ev };
 }
 
 function composeMarsh(): Theme {
   const ev: NoteEvent[] = [];
-  // E aeolian, low and waterlogged — the fen at dusk
-  const Em = { root: 52, minor: true }, Am = { root: 57, minor: true };
-  const Bm = { root: 59, minor: true }, C = { root: 60 }, G = { root: 55 }, Dmaj = { root: 62 };
-  const chords: ChordDef[] = [Em, Em, Am, Em, C, G, Bm, Em, Em, Am, C, Em, Dmaj, Bm, Am, Em];
+  // E aeolian swamp: darker but still old-school, with croaky reed and wood clicks.
+  const Em = { root: 52, minor: true }, C = { root: 60 }, D = { root: 62 }, Am = { root: 57, minor: true }, Bm = { root: 59, minor: true };
+  const chords: ChordDef[] = [Em, Em, C, D, Em, Am, Bm, Em, C, Em, D, C, Am, Bm, D, Em];
 
   chords.forEach((c, bar) => {
     const b0 = bar * 4;
     const t = triad(c);
-    // long overlapping low drones every other bar — the marsh breathing
     if (bar % 2 === 0) {
-      pushNote(ev, b0, c.root - 24, 8.6, 0.42, 'strings');
-      pushNote(ev, b0, c.root - 17, 8.6, 0.22, 'strings');
+      pushPedal(ev, b0, c.root, 'pad', 0.20);
+      pushNote(ev, b0, c.root - 12, 4.1, 0.08, 'choir');
     }
-    // hollow half-light choir: root + fifth only, no third — damp and open
-    if (bar % 2 === 0) {
-      pushNote(ev, b0, c.root - 12, 4.1, 0.14, 'choir');
-      pushNote(ev, b0, c.root - 5, 4.1, 0.1, 'choir');
-    }
-    // slow cello: root on the downbeat, a sagging step late in some bars
-    pushNote(ev, b0, c.root - 12, 2.2, 0.28, 'bass');
-    if (bar % 4 === 2) pushNote(ev, b0 + 2.5, c.root - 14, 1.6, 0.2, 'bass');
-    // drip-plucks: lone high harp notes at uneven offsets, like water falling
-    if (bar % 4 === 1) pushNote(ev, b0 + 1.5, t[2] + 12, 0.5, 0.16, 'harp');
-    if (bar % 4 === 3) {
-      pushNote(ev, b0 + 0.5, t[0] + 24, 0.5, 0.14, 'harp');
-      pushNote(ev, b0 + 2.75, t[1] + 12, 0.5, 0.12, 'harp');
-    }
+    pushNote(ev, b0, c.root - 24, 1.8, 0.34, 'bass');
+    pushNote(ev, b0 + 2.5, c.root - 22, 1, 0.18, 'bass');
+    const crawl = [t[0] - 12, t[1] - 12, t[2] - 12, t[1] - 12, t[0], t[1] - 12, t[2] - 12, t[1] - 12];
+    pushRepeated(ev, b0, crawl, 0.5, 0.22, 0.14, 'lute');
+    if (bar % 2 === 1) pushRepeated(ev, b0 + 0.75, [t[0] + 12, t[1] + 12, t[2] + 12], 1, 0.15, 0.10, 'tinyBell');
+    pushDrumHits(ev, b0, [0.5, 1.75, 3.25], 'woodBlock', 0.10, 70);
+    if (bar % 4 === 3) pushNote(ev, b0 + 3, 43, 0.25, 0.11, 'frameDrum');
   });
 
-  // a half-heard flute, low in its register, only twice a loop
-  const motifs: [number, Phrase][] = [
-    [12, [[0, 64, 1.5], [1.5, 67, 0.5], [2, 66, 2], [4, 64, 3]]],
-    [44, [[0, 67, 1], [1, 64, 1], [2, 62, 1.5], [3.5, 64, 3]]],
+  const reedA: Phrase = [
+    [0, 64, 0.5], [0.5, 67, 0.5], [1, 66, 1], [2, 64, 0.5], [2.5, 62, 0.5], [3, 64, 1],
+    [4, 67, 0.5], [4.5, 69, 0.5], [5, 67, 1], [6, 64, 0.5], [6.5, 62, 0.5], [7, 59, 1],
+    [8, 62, 0.5], [8.5, 64, 0.5], [9, 67, 1], [10, 66, 0.5], [10.5, 64, 0.5], [11, 62, 1],
+    [12, 59, 0.5], [12.5, 62, 0.5], [13, 64, 1], [14, 62, 0.5], [14.5, 59, 0.5], [15, 64, 1],
   ];
-  for (const [start, ph] of motifs) pushPhrase(ev, start, ph, 0.2, 'flute');
+  const pipeB: Phrase = [
+    [0, 76, 0.5], [0.5, 74, 0.5], [1, 71, 1], [2, 72, 0.5], [2.5, 74, 0.5], [3, 76, 1],
+    [4, 79, 0.5], [4.5, 76, 0.5], [5, 74, 1], [6, 72, 0.5], [6.5, 71, 0.5], [7, 69, 1],
+    [8, 71, 0.5], [8.5, 72, 0.5], [9, 74, 1], [10, 76, 0.5], [10.5, 74, 0.5], [11, 72, 1],
+    [12, 71, 0.5], [12.5, 69, 0.5], [13, 67, 1], [14, 66, 0.5], [14.5, 64, 0.5], [15, 64, 1],
+  ];
+  pushPhrase(ev, 8, reedA, 0.14, 'reed');
+  pushPhrase(ev, 24, reedA, 0.11, 'squareLead');
+  pushPhrase(ev, 40, pipeB, 0.13, 'pipe');
+  pushPhrase(ev, 56, reedA.slice(0, 18), 0.12, 'reed');
 
   ev.sort((a, b) => a.beat - b.beat);
-  return { bpm: 56, bars: 16, events: ev };
+  return { bpm: 84, bars: 16, events: ev };
 }
 
 function composePeaks(): Theme {
   const ev: NoteEvent[] = [];
-  // G with a flat seventh, harmonized in bare fifths (no thirds) —
-  // vast, cold, heroic. Roots: G, C, D, F.
-  const roots = [55, 55, 60, 55, 62, 60, 55, 53, 55, 60, 62, 55, 53, 60, 62, 55];
-
-  roots.forEach((r, bar) => {
-    const b0 = bar * 4;
-    // wind pad: open fifth in the choir, swelling across each bar
-    pushNote(ev, b0, r, 4.2, 0.15, 'choir');
-    pushNote(ev, b0, r + 7, 4.2, 0.12, 'choir');
-    if (bar % 2 === 0) pushNote(ev, b0, r + 12, 4.2, 0.08, 'choir');
-    // thin high string shimmer on the off bars, an octave above the pad
-    if (bar % 2 === 1) pushNote(ev, b0, r + 12, 4.3, 0.14, 'strings');
-    // granite bass: root, then the fifth below on the off bars
-    pushNote(ev, b0, r - 24, 2.4, 0.4, 'bass');
-    if (bar % 2 === 1) pushNote(ev, b0 + 2, r - 17, 1.8, 0.3, 'bass');
-    // far-off horn calls in open fifths every fourth bar
-    if (bar % 4 === 0) {
-      pushNote(ev, b0, r - 12, 3, 0.18, 'horn');
-      pushNote(ev, b0 + 0.02, r - 5, 3, 0.14, 'horn');
-    }
-  });
-
-  // high flute over the wind — thirdless (G A C D F) so the harmony stays cold
-  const motifs: [number, Phrase][] = [
-    [8, [[0, 79, 2], [2, 81, 2], [4, 86, 3], [7, 84, 1], [8, 86, 4]]],
-    [40, [[0, 86, 2], [2, 84, 1], [3, 81, 1], [4, 79, 2], [6, 77, 1], [7, 79, 4]]],
-  ];
-  for (const [start, ph] of motifs) pushPhrase(ev, start, ph, 0.22, 'flute');
-
-  // two glassy bell glints per loop, on the G bars
-  pushNote(ev, 0, 79, 4, 0.12, 'bell');
-  pushNote(ev, 32, 79, 4, 0.1, 'bell');
-
-  ev.sort((a, b) => a.beat - b.beat);
-  return { bpm: 60, bars: 16, events: ev };
-}
-
-function composeDungeon(): Theme {
-  const ev: NoteEvent[] = [];
-  // D phrygian, dread and stone
-  const Dm = { root: 62, minor: true }, Eb = { root: 63 }, Gm = { root: 55, minor: true };
-  const Bb = { root: 58 }, Amaj = { root: 57 };
-  const chords: ChordDef[] = [Dm, Dm, Eb, Dm, Gm, Bb, Amaj, Dm];
+  // G mixolydian mountain route: quick heroic folk, bright pipe, square counterline.
+  const G = { root: 55 }, F = { root: 53 }, C = { root: 60 }, D = { root: 62 }, Em = { root: 52, minor: true };
+  const chords: ChordDef[] = [G, F, C, G, D, C, G, F, G, C, D, G, Em, C, D, G];
 
   chords.forEach((c, bar) => {
     const b0 = bar * 4;
-    // cavern choir
-    pushNote(ev, b0, c.root - 24, 4.3, 0.46, 'choir');
-    pushNote(ev, b0, c.root - 17, 4.3, 0.3, 'choir');
-    if (bar % 2 === 1) pushNote(ev, b0, c.root - 12, 4.3, 0.18, 'choir');
-    // heartbeat timpani
-    pushNote(ev, b0, 38, 1, 0.5, 'timpani');
-    if (bar % 2 === 1) pushNote(ev, b0 + 2.5, 38, 1, 0.3, 'timpani');
+    const t = triad(c);
+    pushPedal(ev, b0, c.root, 'choir', 0.09);
+    if (bar % 2 === 0) {
+      pushNote(ev, b0, c.root - 12, 2, 0.18, 'horn');
+      pushNote(ev, b0 + 0.02, c.root - 5, 2, 0.13, 'horn');
+    }
+    pushNote(ev, b0, c.root - 24, 1.2, 0.36, 'bass');
+    pushNote(ev, b0 + 2, c.root - 17, 1, 0.24, 'bass');
+    const climb = [t[0], t[1], t[2], t[0] + 12, t[2], t[1], t[0], t[2]];
+    pushRepeated(ev, b0, climb, 0.5, 0.16, 0.20, 'dulcimer');
+    if (bar % 4 >= 2) pushRepeated(ev, b0 + 0.25, climb.map(n => n - 12), 0.5, 0.16, 0.13, 'lute');
+    pushDrumHits(ev, b0, [0, 1, 2, 3], 'frameDrum', 0.10, 46);
   });
-  // tolling bells
-  const tolls: [number, number][] = [[0, 74], [8, 69], [16, 77], [24, 69], [28, 74]];
-  for (const [b, m] of tolls) pushNote(ev, b, m, 6, 0.2, 'bell');
-  // unsettling string figure
-  const figure: Phrase = [[0, 62, 0.5], [0.5, 63, 0.5], [1, 62, 1.5]];
-  pushPhrase(ev, 10, figure, 0.3, 'stacc');
-  pushPhrase(ev, 26, figure, 0.3, 'stacc');
+
+  const peakHook: Phrase = [
+    [0, 79, 0.5], [0.5, 81, 0.5], [1, 84, 1], [2, 86, 0.5], [2.5, 84, 0.5], [3, 81, 1],
+    [4, 79, 0.5], [4.5, 77, 0.5], [5, 79, 1], [6, 81, 0.5], [6.5, 84, 0.5], [7, 86, 1],
+    [8, 88, 0.5], [8.5, 86, 0.5], [9, 84, 1], [10, 81, 0.5], [10.5, 79, 0.5], [11, 77, 1],
+    [12, 79, 0.5], [12.5, 81, 0.5], [13, 84, 1], [14, 81, 0.5], [14.5, 79, 0.5], [15, 79, 1],
+  ];
+  const counter: Phrase = [
+    [0, 67, 0.5], [0.5, 71, 0.5], [1, 74, 0.5], [1.5, 71, 0.5], [2, 67, 1], [3, 69, 1],
+    [4, 71, 0.5], [4.5, 74, 0.5], [5, 76, 0.5], [5.5, 74, 0.5], [6, 71, 1], [7, 67, 1],
+    [8, 69, 0.5], [8.5, 71, 0.5], [9, 74, 1], [10, 76, 0.5], [10.5, 74, 0.5], [11, 71, 1],
+    [12, 67, 0.5], [12.5, 69, 0.5], [13, 71, 1], [14, 74, 0.5], [14.5, 71, 0.5], [15, 67, 1],
+  ];
+  pushPhrase(ev, 0, peakHook, 0.16, 'pipe');
+  pushPhrase(ev, 16, counter, 0.13, 'squareLead');
+  pushPhrase(ev, 32, peakHook, 0.15, 'flute');
+  pushPhrase(ev, 48, counter, 0.15, 'horn');
+  pushNote(ev, 0, 91, 2.2, 0.09, 'tinyBell');
+  pushNote(ev, 32, 91, 2.2, 0.08, 'tinyBell');
 
   ev.sort((a, b) => a.beat - b.beat);
-  return { bpm: 54, bars: 8, events: ev };
+  return { bpm: 112, bars: 16, events: ev };
+}
+
+function composeDungeonFight(
+  chords: ChordDef[],
+  bpm: number,
+  hook: Phrase,
+  figureRoot: number,
+  opts: {
+    mode: 'crypt' | 'sunken' | 'wyrm';
+    lead: Inst;
+    doubleTime?: boolean;
+  },
+): Theme {
+  const ev: NoteEvent[] = [];
+  const bars = chords.length;
+
+  chords.forEach((c, bar) => {
+    const b0 = bar * 4;
+    const t = triad(c);
+    // Keep dungeon writing much more active: ostinato + drums + eerie modal color.
+    pushNote(ev, b0, c.root - 24, 4.05, opts.mode === 'wyrm' ? 0.34 : 0.28, 'choir');
+    pushNote(ev, b0, c.root - 17, 4.05, 0.20, 'choir');
+    pushNote(ev, b0, c.root - 12, 2.1, 0.18, 'strings');
+    pushNote(ev, b0 + 2, c.root - 10, 2.1, 0.14, 'strings');
+    pushNote(ev, b0, c.root - 24, 0.9, 0.46, 'bass');
+    pushNote(ev, b0 + 1.5, c.root - 19, 0.7, 0.28, 'bass');
+    pushNote(ev, b0 + 2.5, c.root - 17, 0.7, 0.26, 'bass');
+
+    const ost = opts.doubleTime
+      ? [0, 1, 0, 3, 0, 6, 5, 3, 0, 1, 0, 3, 7, 6, 5, 3]
+      : [0, 1, 0, 3, 0, 6, 5, 3];
+    ost.forEach((s, i) => pushNote(ev, b0 + i * (opts.doubleTime ? 0.25 : 0.5), figureRoot + s, opts.doubleTime ? 0.18 : 0.28, 0.20, i % 2 === 0 ? 'stacc' : opts.lead));
+
+    pushDrumHits(ev, b0, opts.mode === 'crypt' ? [0, 1.5, 2.5, 3.5] : [0, 0.75, 1.5, 2, 2.75, 3.5], 'warDrum', opts.mode === 'wyrm' ? 0.34 : 0.26, 38);
+    pushDrumHits(ev, b0, [0.5, 1.25, 2.25, 3.25], 'woodBlock', 0.11, 70);
+    if (bar % 2 === 0) {
+      pushNote(ev, b0, c.root - 12, 1.1, 0.20, 'horn');
+      pushNote(ev, b0 + 0.02, c.root - 5, 1.1, 0.16, 'horn');
+    }
+    if (bar % 2 === 1) pushRepeated(ev, b0 + 0.25, [t[2] + 12, t[1] + 12, t[0] + 12, t[1] + 12], 0.75, 0.13, 0.12, 'dulcimer');
+  });
+
+  // Lead appears twice per loop with a lower response; phrases are original modal fragments.
+  pushPhrase(ev, 0, hook, 0.18, opts.lead);
+  pushPhrase(ev, bars * 2, hook.map(([b, m, d]) => [b, m - 12, d] as Phrase[number]), 0.12, 'reed');
+  for (let b = 0; b < bars * 4; b += 4) {
+    if (b % 8 === 0) pushNote(ev, b, figureRoot + 12, 1.6, 0.08, 'tinyBell');
+  }
+
+  ev.sort((a, b) => a.beat - b.beat);
+  return { bpm, bars, events: ev };
+}
+
+/** Hollow Crypt — D phrygian, now a faster skeletal dance rather than ambience. */
+function composeDungeonHollowCrypt(): Theme {
+  const Dm = { root: 62, minor: true }, Eb = { root: 63 }, Gm = { root: 55, minor: true };
+  const Bb = { root: 58 }, A = { root: 57 };
+  const hook: Phrase = [
+    [0, 74, 0.5], [0.5, 75, 0.5], [1, 74, 0.5], [1.5, 70, 0.5], [2, 69, 1], [3, 74, 1],
+    [4, 77, 0.5], [4.5, 75, 0.5], [5, 74, 0.5], [5.5, 70, 0.5], [6, 69, 1], [7, 62, 1],
+  ];
+  return composeDungeonFight([Dm, Eb, Dm, Gm, Bb, A, Eb, Dm], 128, hook, 62, { mode: 'crypt', lead: 'squareLead' });
+}
+
+/** Sunken Bastion — E phrygian, high-BPM flooded fortress chase. */
+function composeDungeonSunkenBastion(): Theme {
+  const Em = { root: 64, minor: true }, F = { root: 65 }, Am = { root: 57, minor: true };
+  const C = { root: 60 }, B = { root: 59 };
+  const hook: Phrase = [
+    [0, 76, 0.25], [0.25, 77, 0.25], [0.5, 76, 0.5], [1, 72, 0.5], [1.5, 71, 0.5], [2, 76, 0.5], [2.5, 79, 0.5], [3, 77, 1],
+    [4, 76, 0.5], [4.5, 72, 0.5], [5, 71, 0.5], [5.5, 67, 0.5], [6, 71, 0.5], [6.5, 72, 0.5], [7, 76, 1],
+  ];
+  return composeDungeonFight([Em, F, Em, Am, C, B, F, Em], 136, hook, 64, { mode: 'sunken', lead: 'reed', doubleTime: true });
+}
+
+/** Gravewyrm Sanctum — B phrygian boss route, fastest and most percussive. */
+function composeDungeonGravewyrmSanctum(): Theme {
+  const Bm = { root: 59, minor: true }, C = { root: 60 }, Em = { root: 52, minor: true };
+  const G = { root: 55 }, Fsm = { root: 54, minor: true };
+  const hook: Phrase = [
+    [0, 71, 0.25], [0.25, 72, 0.25], [0.5, 71, 0.25], [0.75, 67, 0.25], [1, 66, 0.5], [1.5, 67, 0.5], [2, 71, 0.5], [2.5, 74, 0.5], [3, 72, 1],
+    [4, 71, 0.25], [4.25, 72, 0.25], [4.5, 74, 0.5], [5, 78, 0.5], [5.5, 74, 0.5], [6, 72, 0.5], [6.5, 71, 0.5], [7, 66, 1],
+  ];
+  return composeDungeonFight([Bm, C, Bm, Em, G, Fsm, C, Bm], 152, hook, 59, { mode: 'wyrm', lead: 'squareLead', doubleTime: true });
 }
 
 function composeCombat(): Theme {
@@ -284,6 +485,7 @@ function composeCombat(): Theme {
 }
 
 // ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 // Director
 // ---------------------------------------------------------------------------
 
@@ -293,28 +495,522 @@ const STORAGE_KEY = 'ev_music_on';
 
 // The combat ostinato is written from D3; transpose it onto each zone's tonal
 // center so it never fights the theme underneath:
-//   town  0 → D (town is D major)
-//   vale  7 → A (vale is A dorian; same value the old wilds layer used)
-//   marsh 2 → E (marsh is E aeolian; the ostinato becomes E minor pentatonic)
-//   peaks 5 → G (peaks is rooted on G in bare fifths — no third to clash with)
-//   dungeon 0 → D (dungeon is D phrygian)
+//   town_eastbrook  0 → D (Eastbrook is D major)
+//   town_fenbridge  3 → F
+//   town_highwatch  9 → B (B minor)
+//   vale  7 → A (vale is A dorian)
+//   marsh 2 → E (marsh is E aeolian)
+//   peaks 5 → G (peaks is rooted on G in bare fifths)
+//   dungeon_hollow_crypt      0 → D phrygian
+//   dungeon_sunken_bastion    2 → E phrygian
+//   dungeon_gravewyrm_sanctum 9 → B phrygian
 const COMBAT_TRANSPOSE: Record<MusicZone, number> = {
-  town: 0,
+  town_eastbrook: 0,
+  town_fenbridge: 3,
+  town_highwatch: 9,
   vale: 7,
   marsh: 2,
   peaks: 5,
-  dungeon: 0,
+  dungeon_hollow_crypt: 0,
+  dungeon_sunken_bastion: 2,
+  dungeon_gravewyrm_sanctum: 9,
 };
+
+function buildMusicThemes(): Record<string, Theme> {
+  return {
+    town_eastbrook: composeTownEastbrook(),
+    town_fenbridge: composeTownFenbridge(),
+    town_highwatch: composeTownHighwatch(),
+    vale: composeVale(),
+    marsh: composeMarsh(),
+    peaks: composePeaks(),
+    dungeon_hollow_crypt: composeDungeonHollowCrypt(),
+    dungeon_sunken_bastion: composeDungeonSunkenBastion(),
+    dungeon_gravewyrm_sanctum: composeDungeonGravewyrmSanctum(),
+    combat: composeCombat(),
+  };
+}
+
+class MusicSynth {
+  constructor(private ctx: BaseAudioContext) {}
+
+  playNote(
+    evt: NoteEvent,
+    when: number,
+    spb: number,
+    layer: Pick<Layer, 'gain' | 'transpose'>,
+  ): void {
+    const freq = mtof(evt.midi + layer.transpose);
+    const dur = Math.max(0.1, evt.dur * spb);
+    const out = layer.gain;
+    switch (evt.inst) {
+      case 'strings': this.strings(when, freq, dur, evt.vel, out); break;
+      case 'flute': this.flute(when, freq, dur, evt.vel, out); break;
+      case 'harp': this.pluck(when, freq, evt.vel, out, 1.4); break;
+      case 'bass': this.pluck(when, freq, evt.vel, out, 0.9, true); break;
+      case 'horn': this.horn(when, freq, dur, evt.vel, out); break;
+      case 'choir': this.choir(when, freq, dur, evt.vel, out); break;
+      case 'bell': this.bell(when, freq, evt.vel, out); break;
+      case 'timpani': this.timpani(when, freq, evt.vel, out); break;
+      case 'stacc': this.strings(when, freq, Math.min(dur, 0.22), evt.vel, out, 0.02); break;
+      case 'pad': this.pad(when, freq, dur, evt.vel, out); break;
+      case 'lute': this.lute(when, freq, evt.vel, out); break;
+      case 'dulcimer': this.dulcimer(when, freq, evt.vel, out); break;
+      case 'frameDrum': this.frameDrum(when, evt.vel, out); break;
+      case 'warDrum': this.warDrum(when, evt.vel, out); break;
+      case 'reed': this.reed(when, freq, dur, evt.vel, out); break;
+      case 'pipe': this.pipe(when, freq, dur, evt.vel, out); break;
+      case 'squareLead': this.squareLead(when, freq, dur, evt.vel, out); break;
+      case 'woodBlock': this.woodBlock(when, evt.vel, out); break;
+      case 'tinyBell': this.tinyBell(when, freq, evt.vel, out); break;
+    }
+  }
+
+  private adsr(when: number, dur: number, peak: number, attack: number, release: number): GainNode {
+    const ctx = this.ctx;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, when);
+    g.gain.linearRampToValueAtTime(peak, when + attack);
+    g.gain.setValueAtTime(peak, Math.max(when + attack, when + dur - release));
+    g.gain.exponentialRampToValueAtTime(0.0001, when + dur + release);
+    return g;
+  }
+
+  private strings(when: number, freq: number, dur: number, vel: number, out: GainNode, attack = 0.3): void {
+    const ctx = this.ctx;
+    const g = this.adsr(when, dur, vel * 0.16, attack, 0.7);
+    const lp = ctx.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.value = 750 + freq * 2;
+    lp.connect(g).connect(out);
+    for (const det of [-6, 5]) {
+      const o = ctx.createOscillator();
+      o.type = 'sawtooth';
+      o.frequency.value = freq;
+      o.detune.value = det;
+      o.connect(lp);
+      o.start(when);
+      o.stop(when + dur + 0.9);
+    }
+  }
+
+  private flute(when: number, freq: number, dur: number, vel: number, out: GainNode): void {
+    const ctx = this.ctx;
+    const g = this.adsr(when, dur, vel * 0.3, 0.07, 0.22);
+    g.connect(out);
+    const o = ctx.createOscillator();
+    o.type = 'sine';
+    o.frequency.value = freq;
+    const o2 = ctx.createOscillator();
+    o2.type = 'triangle';
+    o2.frequency.value = freq;
+    const g2 = ctx.createGain();
+    g2.gain.value = 0.25;
+    const lfo = ctx.createOscillator();
+    lfo.frequency.value = 5.2;
+    const lfoGain = ctx.createGain();
+    lfoGain.gain.setValueAtTime(0, when);
+    lfoGain.gain.linearRampToValueAtTime(freq * 0.006, when + 0.35);
+    lfo.connect(lfoGain);
+    lfoGain.connect(o.frequency);
+    lfoGain.connect(o2.frequency);
+    o.connect(g);
+    o2.connect(g2).connect(g);
+    for (const osc of [o, o2, lfo]) {
+      osc.start(when);
+      osc.stop(when + dur + 0.4);
+    }
+  }
+
+  private pluck(when: number, freq: number, vel: number, out: GainNode, decay: number, dark = false): void {
+    const ctx = this.ctx;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(vel * (dark ? 0.3 : 0.22), when);
+    g.gain.exponentialRampToValueAtTime(0.0001, when + decay);
+    const lp = ctx.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.value = dark ? 600 : 2600;
+    lp.connect(g).connect(out);
+    const o = ctx.createOscillator();
+    o.type = 'triangle';
+    o.frequency.value = freq;
+    o.connect(lp);
+    const o2 = ctx.createOscillator();
+    o2.type = 'sine';
+    o2.frequency.value = freq * 2;
+    const g2 = ctx.createGain();
+    g2.gain.setValueAtTime(vel * 0.05, when);
+    g2.gain.exponentialRampToValueAtTime(0.0001, when + decay * 0.5);
+    o2.connect(g2).connect(out);
+    o.start(when);
+    o.stop(when + decay + 0.1);
+    o2.start(when);
+    o2.stop(when + decay + 0.1);
+  }
+
+  private horn(when: number, freq: number, dur: number, vel: number, out: GainNode): void {
+    const ctx = this.ctx;
+    const g = this.adsr(when, dur, vel * 0.2, 0.09, 0.3);
+    const lp = ctx.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.value = 640;
+    lp.connect(g).connect(out);
+    const o = ctx.createOscillator();
+    o.type = 'sawtooth';
+    o.frequency.value = freq;
+    const o2 = ctx.createOscillator();
+    o2.type = 'triangle';
+    o2.frequency.value = freq;
+    o.connect(lp);
+    o2.connect(lp);
+    o.start(when); o.stop(when + dur + 0.5);
+    o2.start(when); o2.stop(when + dur + 0.5);
+  }
+
+  private choir(when: number, freq: number, dur: number, vel: number, out: GainNode): void {
+    const ctx = this.ctx;
+    const g = this.adsr(when, dur, vel * 0.13, 0.7, 1.1);
+    const bp = ctx.createBiquadFilter();
+    bp.type = 'bandpass';
+    bp.frequency.value = 580;
+    bp.Q.value = 0.6;
+    bp.connect(g).connect(out);
+    for (const det of [-9, 0, 8]) {
+      const o = ctx.createOscillator();
+      o.type = 'sawtooth';
+      o.frequency.value = freq;
+      o.detune.value = det;
+      o.connect(bp);
+      o.start(when);
+      o.stop(when + dur + 1.3);
+    }
+  }
+
+  private pad(when: number, freq: number, dur: number, vel: number, out: GainNode): void {
+    const ctx = this.ctx;
+    const g = this.adsr(when, dur, vel * 0.24, 0.75, 1.15);
+    const lp = ctx.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.value = Math.min(1400, 380 + freq * 1.1);
+    lp.Q.value = 0.35;
+    lp.connect(g).connect(out);
+    const o = ctx.createOscillator();
+    o.type = 'sine';
+    o.frequency.value = freq;
+    const o2 = ctx.createOscillator();
+    o2.type = 'triangle';
+    o2.frequency.value = freq;
+    const g2 = ctx.createGain();
+    g2.gain.value = 0.28;
+    o.connect(lp);
+    o2.connect(g2).connect(lp);
+    const lfo = ctx.createOscillator();
+    lfo.frequency.value = 0.12;
+    const lfoGain = ctx.createGain();
+    lfoGain.gain.value = freq * 0.0025;
+    lfo.connect(lfoGain);
+    lfoGain.connect(o.frequency);
+    lfoGain.connect(o2.frequency);
+    for (const osc of [o, o2, lfo]) {
+      osc.start(when);
+      osc.stop(when + dur + 1.3);
+    }
+  }
+
+  private lute(when: number, freq: number, vel: number, out: GainNode): void {
+    const ctx = this.ctx;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(vel * 0.2, when);
+    g.gain.exponentialRampToValueAtTime(0.0001, when + 1.05);
+    const hp = ctx.createBiquadFilter();
+    hp.type = 'highpass';
+    hp.frequency.value = 120;
+    const lp = ctx.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.value = 2100;
+    hp.connect(lp).connect(g).connect(out);
+
+    const o = ctx.createOscillator();
+    o.type = 'triangle';
+    o.frequency.value = freq;
+    const o2 = ctx.createOscillator();
+    o2.type = 'sine';
+    o2.frequency.value = freq * 2.01;
+    const g2 = ctx.createGain();
+    g2.gain.value = 0.16;
+    o.connect(hp);
+    o2.connect(g2).connect(hp);
+
+    // tiny pitch bend gives plucked-string life without needing samples.
+    o.frequency.setValueAtTime(freq * 1.01, when);
+    o.frequency.exponentialRampToValueAtTime(freq, when + 0.08);
+    o.start(when);
+    o.stop(when + 1.15);
+    o2.start(when);
+    o2.stop(when + 0.8);
+  }
+
+  private dulcimer(when: number, freq: number, vel: number, out: GainNode): void {
+    const ctx = this.ctx;
+    const body = ctx.createBiquadFilter();
+    body.type = 'bandpass';
+    body.frequency.value = Math.min(4200, freq * 3.2);
+    body.Q.value = 1.2;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(vel * 0.18, when);
+    g.gain.exponentialRampToValueAtTime(0.0001, when + 1.8);
+    body.connect(g).connect(out);
+
+    for (const [ratio, amp, decay] of [[1, 1, 1.8], [2.01, 0.35, 1.1], [3.02, 0.12, 0.7]] as const) {
+      const og = ctx.createGain();
+      og.gain.setValueAtTime(amp, when);
+      og.gain.exponentialRampToValueAtTime(0.0001, when + decay);
+      const o = ctx.createOscillator();
+      o.type = ratio === 1 ? 'triangle' : 'sine';
+      o.frequency.value = freq * ratio;
+      o.connect(og).connect(body);
+      o.start(when);
+      o.stop(when + decay + 0.1);
+    }
+  }
+
+  private reed(when: number, freq: number, dur: number, vel: number, out: GainNode): void {
+    const ctx = this.ctx;
+    const g = this.adsr(when, dur, vel * 0.16, 0.04, 0.18);
+    const bp = ctx.createBiquadFilter();
+    bp.type = 'bandpass';
+    bp.frequency.value = Math.min(1800, 420 + freq * 1.8);
+    bp.Q.value = 1.1;
+    bp.connect(g).connect(out);
+    const o = ctx.createOscillator();
+    o.type = 'square';
+    o.frequency.value = freq;
+    const o2 = ctx.createOscillator();
+    o2.type = 'triangle';
+    o2.frequency.value = freq * 0.5;
+    const g2 = ctx.createGain();
+    g2.gain.value = 0.2;
+    o.connect(bp);
+    o2.connect(g2).connect(bp);
+    o.start(when);
+    o.stop(when + dur + 0.25);
+    o2.start(when);
+    o2.stop(when + dur + 0.25);
+  }
+
+  private pipe(when: number, freq: number, dur: number, vel: number, out: GainNode): void {
+    const ctx = this.ctx;
+    const g = this.adsr(when, dur, vel * 0.22, 0.035, 0.28);
+    const lp = ctx.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.value = 1800;
+    lp.connect(g).connect(out);
+    const o = ctx.createOscillator();
+    o.type = 'sine';
+    o.frequency.value = freq;
+    const airy = ctx.createOscillator();
+    airy.type = 'triangle';
+    airy.frequency.value = freq * 2;
+    const airyGain = ctx.createGain();
+    airyGain.gain.value = 0.08;
+    o.connect(lp);
+    airy.connect(airyGain).connect(lp);
+    o.start(when);
+    o.stop(when + dur + 0.35);
+    airy.start(when);
+    airy.stop(when + dur + 0.35);
+  }
+
+  private squareLead(when: number, freq: number, dur: number, vel: number, out: GainNode): void {
+    const ctx = this.ctx;
+    const g = this.adsr(when, Math.min(dur, 0.7), vel * 0.14, 0.012, 0.08);
+    const lp = ctx.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.value = Math.min(3600, 900 + freq * 2.4);
+    lp.Q.value = 0.45;
+    lp.connect(g).connect(out);
+
+    const o = ctx.createOscillator();
+    o.type = 'square';
+    o.frequency.value = freq;
+    const o2 = ctx.createOscillator();
+    o2.type = 'triangle';
+    o2.frequency.value = freq * 0.5;
+    const g2 = ctx.createGain();
+    g2.gain.value = 0.18;
+
+    const lfo = ctx.createOscillator();
+    lfo.frequency.value = 6.4;
+    const lfoGain = ctx.createGain();
+    lfoGain.gain.setValueAtTime(0, when);
+    lfoGain.gain.linearRampToValueAtTime(freq * 0.0035, when + 0.05);
+    lfo.connect(lfoGain);
+    lfoGain.connect(o.frequency);
+    o.connect(lp);
+    o2.connect(g2).connect(lp);
+    for (const osc of [o, o2, lfo]) {
+      osc.start(when);
+      osc.stop(when + dur + 0.12);
+    }
+  }
+
+  private tinyBell(when: number, freq: number, vel: number, out: GainNode): void {
+    const ctx = this.ctx;
+    for (const [ratio, amp, dec] of [[1, 0.16, 1.1], [2.01, 0.06, 0.7], [3.01, 0.025, 0.42]] as const) {
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(vel * amp, when);
+      g.gain.exponentialRampToValueAtTime(0.0001, when + dec);
+      const o = ctx.createOscillator();
+      o.type = 'sine';
+      o.frequency.value = freq * ratio;
+      o.connect(g).connect(out);
+      o.start(when);
+      o.stop(when + dec + 0.1);
+    }
+  }
+
+  private woodBlock(when: number, vel: number, out: GainNode): void {
+    const ctx = this.ctx;
+    const body = ctx.createBiquadFilter();
+    body.type = 'bandpass';
+    body.frequency.value = 960;
+    body.Q.value = 5.5;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(vel * 0.35, when);
+    g.gain.exponentialRampToValueAtTime(0.0001, when + 0.08);
+    body.connect(g).connect(out);
+
+    const noiseLen = Math.floor(ctx.sampleRate * 0.035);
+    const buf = ctx.createBuffer(1, noiseLen, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < noiseLen; i++) data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / noiseLen, 2.2);
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    src.connect(body);
+    src.start(when);
+
+    const tick = ctx.createOscillator();
+    tick.type = 'triangle';
+    tick.frequency.value = 1180;
+    tick.connect(body);
+    tick.start(when);
+    tick.stop(when + 0.06);
+  }
+
+  private frameDrum(when: number, vel: number, out: GainNode): void {
+    const ctx = this.ctx;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(vel * 0.45, when);
+    g.gain.exponentialRampToValueAtTime(0.0001, when + 0.28);
+    const bp = ctx.createBiquadFilter();
+    bp.type = 'bandpass';
+    bp.frequency.value = 420;
+    bp.Q.value = 0.7;
+    bp.connect(g).connect(out);
+
+    const noiseLen = Math.floor(ctx.sampleRate * 0.09);
+    const buf = ctx.createBuffer(1, noiseLen, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < noiseLen; i++) data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / noiseLen, 1.6);
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    src.connect(bp);
+    src.start(when);
+
+    const tone = ctx.createOscillator();
+    const tg = ctx.createGain();
+    tg.gain.setValueAtTime(vel * 0.08, when);
+    tg.gain.exponentialRampToValueAtTime(0.0001, when + 0.22);
+    tone.type = 'sine';
+    tone.frequency.value = 140;
+    tone.connect(tg).connect(out);
+    tone.start(when);
+    tone.stop(when + 0.24);
+  }
+
+  private warDrum(when: number, vel: number, out: GainNode): void {
+    const ctx = this.ctx;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(vel * 0.48, when);
+    g.gain.exponentialRampToValueAtTime(0.0001, when + 1.4);
+    g.connect(out);
+    const o = ctx.createOscillator();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(82, when);
+    o.frequency.exponentialRampToValueAtTime(43, when + 0.42);
+    o.connect(g);
+    o.start(when);
+    o.stop(when + 1.45);
+
+    const clickLen = Math.floor(ctx.sampleRate * 0.045);
+    const buf = ctx.createBuffer(1, clickLen, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < clickLen; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / clickLen);
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    const lp = ctx.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.value = 180;
+    const ng = ctx.createGain();
+    ng.gain.value = vel * 0.3;
+    src.connect(lp).connect(ng).connect(out);
+    src.start(when);
+  }
+
+  private bell(when: number, freq: number, vel: number, out: GainNode): void {
+    const ctx = this.ctx;
+    for (const [ratio, amp, dec] of [[1, 0.22, 3.4], [2.0, 0.08, 2.2], [2.76, 0.06, 1.4]] as const) {
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(vel * amp, when);
+      g.gain.exponentialRampToValueAtTime(0.0001, when + dec);
+      g.connect(out);
+      const o = ctx.createOscillator();
+      o.type = 'sine';
+      o.frequency.value = freq * ratio * 0.5;
+      o.connect(g);
+      o.start(when);
+      o.stop(when + dec + 0.1);
+    }
+  }
+
+  private timpani(when: number, _freq: number, vel: number, out: GainNode): void {
+    const ctx = this.ctx;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(vel * 0.5, when);
+    g.gain.exponentialRampToValueAtTime(0.0001, when + 1.0);
+    g.connect(out);
+    const o = ctx.createOscillator();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(mtof(38), when);
+    o.frequency.exponentialRampToValueAtTime(mtof(38) * 0.55, when + 0.32);
+    o.connect(g);
+    o.start(when);
+    o.stop(when + 1.1);
+    const noiseLen = Math.floor(ctx.sampleRate * 0.08);
+    const buf = ctx.createBuffer(1, noiseLen, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < noiseLen; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / noiseLen);
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    const lp = ctx.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.value = 240;
+    const ng = ctx.createGain();
+    ng.gain.value = vel * 0.5;
+    src.connect(lp).connect(ng).connect(out);
+    src.start(when);
+  }
+}
 
 export class MusicDirector {
   private ctx: AudioContext | null = null;
+  private synth: MusicSynth | null = null;
   private master: GainNode | null = null;
   private reverb: ConvolverNode | null = null;
   private reverbSend: GainNode | null = null;
   private layers: Record<string, Layer> = {};
   private timer: number | undefined;
-  // null until the first update() so the initial state always applies — a
-  // 'town' sentinel matched the real starting zone and left spawn silent
+  // null until the first update() so the initial state always applies
   private zone: MusicZone | null = null;
   private combat = false;
   private _enabled = (typeof localStorage === 'undefined') ? true : localStorage.getItem(STORAGE_KEY) !== '0';
@@ -351,9 +1047,17 @@ export class MusicDirector {
       return;
     }
     const ctx = this.ctx;
+    this.synth = new MusicSynth(ctx);
     this.master = ctx.createGain();
     this.master.gain.value = this.masterTarget();
-    this.master.connect(ctx.destination);
+    const compressor = ctx.createDynamicsCompressor();
+    compressor.threshold.value = -18;
+    compressor.knee.value = 18;
+    compressor.ratio.value = 2.2;
+    compressor.attack.value = 0.015;
+    compressor.release.value = 0.25;
+    this.master.connect(compressor);
+    compressor.connect(ctx.destination);
 
     // generated hall impulse response
     const seconds = 2.6;
@@ -372,14 +1076,7 @@ export class MusicDirector {
     this.reverbSend.connect(this.reverb);
     this.reverb.connect(this.master);
 
-    const themes: Record<string, Theme> = {
-      town: composeTown(),
-      vale: composeVale(),
-      marsh: composeMarsh(),
-      peaks: composePeaks(),
-      dungeon: composeDungeon(),
-      combat: composeCombat(),
-    };
+    const themes = buildMusicThemes();
     for (const [name, theme] of Object.entries(themes)) {
       const gain = ctx.createGain();
       gain.gain.value = 0;
@@ -435,7 +1132,10 @@ export class MusicDirector {
       const target = name === zone ? (inCombat ? 0.45 : 1) : 0;
       if (layer.target !== target) {
         layer.target = target;
-        layer.gain.gain.setTargetAtTime(target, now, FADE_SECONDS / 3);
+        // fade out faster than fade in so instance music doesn't bleed into the world
+        const fade = target > 0 ? FADE_SECONDS / 3 : 0.35;
+        layer.gain.gain.setTargetAtTime(target, now, fade);
+        if (target === 0) layer.nextIdx = -1;
       }
     }
     const combatLayer = this.layers.combat;
@@ -455,8 +1155,9 @@ export class MusicDirector {
     if (!ctx || !this._enabled) return;
     const horizon = ctx.currentTime + LOOKAHEAD;
     for (const layer of Object.values(this.layers)) {
-      const audible = layer.target > 0.001 || layer.gain.gain.value > 0.004;
-      if (!audible) {
+      // schedule only active layers — don't keep pumping long dungeon notes
+      // while a fading-out gain node is still above zero
+      if (layer.target <= 0.001) {
         layer.nextIdx = -1;
         continue;
       }
@@ -472,7 +1173,7 @@ export class MusicDirector {
         const when = layer.anchor + (layer.loopCount * loopBeats + evt.beat) * spb;
         if (when > horizon) break;
         if (when >= ctx.currentTime - 0.03) {
-          this.playNote(evt, when, spb, layer);
+          this.synth!.playNote(evt, when, spb, layer);
         }
         layer.nextIdx++;
         if (layer.nextIdx >= layer.theme.events.length) {
@@ -481,186 +1182,6 @@ export class MusicDirector {
         }
       }
     }
-  }
-
-  // -------------------------------------------------------------------------
-  // Instruments
-  // -------------------------------------------------------------------------
-
-  private playNote(evt: NoteEvent, when: number, spb: number, layer: Layer): void {
-    const ctx = this.ctx!;
-    const freq = mtof(evt.midi + layer.transpose);
-    const dur = Math.max(0.1, evt.dur * spb);
-    const out = layer.gain;
-    switch (evt.inst) {
-      case 'strings': this.strings(ctx, when, freq, dur, evt.vel, out); break;
-      case 'flute': this.flute(ctx, when, freq, dur, evt.vel, out); break;
-      case 'harp': this.pluck(ctx, when, freq, evt.vel, out, 1.4); break;
-      case 'bass': this.pluck(ctx, when, freq, evt.vel, out, 0.9, true); break;
-      case 'horn': this.horn(ctx, when, freq, dur, evt.vel, out); break;
-      case 'choir': this.choir(ctx, when, freq, dur, evt.vel, out); break;
-      case 'bell': this.bell(ctx, when, freq, evt.vel, out); break;
-      case 'timpani': this.timpani(ctx, when, freq, evt.vel, out); break;
-      case 'stacc': this.strings(ctx, when, freq, Math.min(dur, 0.22), evt.vel, out, 0.02); break;
-    }
-  }
-
-  private adsr(ctx: AudioContext, when: number, dur: number, peak: number, attack: number, release: number): GainNode {
-    const g = ctx.createGain();
-    g.gain.setValueAtTime(0.0001, when);
-    g.gain.linearRampToValueAtTime(peak, when + attack);
-    g.gain.setValueAtTime(peak, Math.max(when + attack, when + dur - release));
-    g.gain.exponentialRampToValueAtTime(0.0001, when + dur + release);
-    return g;
-  }
-
-  private strings(ctx: AudioContext, when: number, freq: number, dur: number, vel: number, out: GainNode, attack = 0.3): void {
-    const g = this.adsr(ctx, when, dur, vel * 0.16, attack, 0.7);
-    const lp = ctx.createBiquadFilter();
-    lp.type = 'lowpass';
-    lp.frequency.value = 750 + freq * 2;
-    lp.connect(g).connect(out);
-    for (const det of [-6, 5]) {
-      const o = ctx.createOscillator();
-      o.type = 'sawtooth';
-      o.frequency.value = freq;
-      o.detune.value = det;
-      o.connect(lp);
-      o.start(when);
-      o.stop(when + dur + 0.9);
-    }
-  }
-
-  private flute(ctx: AudioContext, when: number, freq: number, dur: number, vel: number, out: GainNode): void {
-    const g = this.adsr(ctx, when, dur, vel * 0.3, 0.07, 0.22);
-    g.connect(out);
-    const o = ctx.createOscillator();
-    o.type = 'sine';
-    o.frequency.value = freq;
-    const o2 = ctx.createOscillator();
-    o2.type = 'triangle';
-    o2.frequency.value = freq;
-    const g2 = ctx.createGain();
-    g2.gain.value = 0.25;
-    // gentle vibrato that blooms after the attack
-    const lfo = ctx.createOscillator();
-    lfo.frequency.value = 5.2;
-    const lfoGain = ctx.createGain();
-    lfoGain.gain.setValueAtTime(0, when);
-    lfoGain.gain.linearRampToValueAtTime(freq * 0.006, when + 0.35);
-    lfo.connect(lfoGain);
-    lfoGain.connect(o.frequency);
-    lfoGain.connect(o2.frequency);
-    o.connect(g);
-    o2.connect(g2).connect(g);
-    for (const osc of [o, o2, lfo]) {
-      osc.start(when);
-      osc.stop(when + dur + 0.4);
-    }
-  }
-
-  private pluck(ctx: AudioContext, when: number, freq: number, vel: number, out: GainNode, decay: number, dark = false): void {
-    const g = ctx.createGain();
-    g.gain.setValueAtTime(vel * (dark ? 0.3 : 0.22), when);
-    g.gain.exponentialRampToValueAtTime(0.0001, when + decay);
-    const lp = ctx.createBiquadFilter();
-    lp.type = 'lowpass';
-    lp.frequency.value = dark ? 600 : 2600;
-    lp.connect(g).connect(out);
-    const o = ctx.createOscillator();
-    o.type = 'triangle';
-    o.frequency.value = freq;
-    o.connect(lp);
-    const o2 = ctx.createOscillator();
-    o2.type = 'sine';
-    o2.frequency.value = freq * 2;
-    const g2 = ctx.createGain();
-    g2.gain.setValueAtTime(vel * 0.05, when);
-    g2.gain.exponentialRampToValueAtTime(0.0001, when + decay * 0.5);
-    o2.connect(g2).connect(out);
-    o.start(when);
-    o.stop(when + decay + 0.1);
-    o2.start(when);
-    o2.stop(when + decay + 0.1);
-  }
-
-  private horn(ctx: AudioContext, when: number, freq: number, dur: number, vel: number, out: GainNode): void {
-    const g = this.adsr(ctx, when, dur, vel * 0.2, 0.09, 0.3);
-    const lp = ctx.createBiquadFilter();
-    lp.type = 'lowpass';
-    lp.frequency.value = 640;
-    lp.connect(g).connect(out);
-    const o = ctx.createOscillator();
-    o.type = 'sawtooth';
-    o.frequency.value = freq;
-    const o2 = ctx.createOscillator();
-    o2.type = 'triangle';
-    o2.frequency.value = freq;
-    o.connect(lp);
-    o2.connect(lp);
-    o.start(when); o.stop(when + dur + 0.5);
-    o2.start(when); o2.stop(when + dur + 0.5);
-  }
-
-  private choir(ctx: AudioContext, when: number, freq: number, dur: number, vel: number, out: GainNode): void {
-    const g = this.adsr(ctx, when, dur, vel * 0.13, 0.7, 1.1);
-    const bp = ctx.createBiquadFilter();
-    bp.type = 'bandpass';
-    bp.frequency.value = 580;
-    bp.Q.value = 0.6;
-    bp.connect(g).connect(out);
-    for (const det of [-9, 0, 8]) {
-      const o = ctx.createOscillator();
-      o.type = 'sawtooth';
-      o.frequency.value = freq;
-      o.detune.value = det;
-      o.connect(bp);
-      o.start(when);
-      o.stop(when + dur + 1.3);
-    }
-  }
-
-  private bell(ctx: AudioContext, when: number, freq: number, vel: number, out: GainNode): void {
-    for (const [ratio, amp, dec] of [[1, 0.22, 3.4], [2.0, 0.08, 2.2], [2.76, 0.06, 1.4]] as const) {
-      const g = ctx.createGain();
-      g.gain.setValueAtTime(vel * amp, when);
-      g.gain.exponentialRampToValueAtTime(0.0001, when + dec);
-      g.connect(out);
-      const o = ctx.createOscillator();
-      o.type = 'sine';
-      o.frequency.value = freq * ratio * 0.5;
-      o.connect(g);
-      o.start(when);
-      o.stop(when + dec + 0.1);
-    }
-  }
-
-  private timpani(ctx: AudioContext, when: number, freq: number, vel: number, out: GainNode): void {
-    const g = ctx.createGain();
-    g.gain.setValueAtTime(vel * 0.5, when);
-    g.gain.exponentialRampToValueAtTime(0.0001, when + 1.0);
-    g.connect(out);
-    const o = ctx.createOscillator();
-    o.type = 'sine';
-    o.frequency.setValueAtTime(mtof(38), when);
-    o.frequency.exponentialRampToValueAtTime(mtof(38) * 0.55, when + 0.32);
-    o.connect(g);
-    o.start(when);
-    o.stop(when + 1.1);
-    // mallet thump
-    const noiseLen = Math.floor(ctx.sampleRate * 0.08);
-    const buf = ctx.createBuffer(1, noiseLen, ctx.sampleRate);
-    const data = buf.getChannelData(0);
-    for (let i = 0; i < noiseLen; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / noiseLen);
-    const src = ctx.createBufferSource();
-    src.buffer = buf;
-    const lp = ctx.createBiquadFilter();
-    lp.type = 'lowpass';
-    lp.frequency.value = 240;
-    const ng = ctx.createGain();
-    ng.gain.value = vel * 0.5;
-    src.connect(lp).connect(ng).connect(out);
-    src.start(when);
   }
 }
 

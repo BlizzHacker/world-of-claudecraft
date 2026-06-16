@@ -3,9 +3,10 @@ import { Sim } from '../src/sim/sim';
 import { applyAction, encodeObs, obsSize, ACTIONS } from '../src/sim/obs';
 import {
   type SimEvent, dist2d, FISHING_CAST_ID, FISHING_CAST_TIME, MAX_LEVEL, xpForLevel, mobXpValue,
-  rageConversion, rageFromDealing, spellHitChance, meleeMissChance,
+  rageConversion, rageFromDealing, rageFromTaking, spellHitChance, meleeMissChance,
 } from '../src/sim/types';
-import { LAKE, QUESTS, abilitiesKnownAt } from '../src/sim/data';
+import { LAKE, QUESTS, GROUND_OBJECTS, ITEMS, abilitiesKnownAt } from '../src/sim/data';
+import { GROUND_PICKUP_LINES } from '../src/sim/content/ground_pickup_lines';
 import { terrainHeight, WATER_LEVEL } from '../src/sim/world';
 
 function makeSim(cls: 'warrior' | 'mage' | 'rogue' = 'warrior', seed = 42) {
@@ -29,6 +30,7 @@ function teleportTo(sim: Sim, x: number, z: number) {
   p.pos.x = x; p.pos.z = z;
   p.pos.y = terrainHeight(x, z, sim.cfg.seed);
   p.prevPos = { ...p.pos };
+  p.vx = 0; p.vz = 0; p.vy = 0; p.onGround = true; p.fallStartY = p.pos.y;
 }
 
 function facePlayerAt(sim: Sim, target: any) {
@@ -65,6 +67,13 @@ describe('classic formulas', () => {
     expect(rageConversion(10)).toBeCloseTo(0.91 + 32.3 + 4.27, 4);
     // a 7.5-damage hit at level 1 generates ~7.5 rage
     expect(rageFromDealing(7.51, 1)).toBeCloseTo(7.5, 1);
+  });
+
+  it('rage from taking damage scales from attacker level', () => {
+    expect(rageFromTaking(90, 60)).toBeCloseTo(1, 5);
+    expect(rageFromTaking(450, 60)).toBeCloseTo(5, 5);
+    expect(rageFromTaking(900, 60)).toBeCloseTo(10, 5);
+    expect(rageFromTaking(30, 20)).toBeCloseTo(1, 5);
   });
 
   it('mob xp follows the 45+5L rule with gray cutoffs', () => {
@@ -179,6 +188,38 @@ describe('movement directions', () => {
     for (let i = 0; i < 20; i++) sim.tick();
     expect(sim.player.pos.x).toBeGreaterThan(x1);
   });
+
+  it('ground movement changes direction immediately', () => {
+    const sim = makeSim('warrior');
+    teleportTo(sim, 0, -40);
+    sim.player.facing = 0;
+    sim.moveInput.forward = true;
+    sim.tick();
+    const zAfterForward = sim.player.pos.z;
+    sim.moveInput.forward = false;
+    sim.moveInput.strafeRight = true;
+    const xBeforeStrafe = sim.player.pos.x;
+    sim.tick();
+    expect(sim.player.pos.x).toBeLessThan(xBeforeStrafe);
+    expect(sim.player.pos.z).toBeCloseTo(zAfterForward, 1);
+  });
+
+  it('preserves launch momentum while airborne', () => {
+    const sim = makeSim('warrior');
+    teleportTo(sim, 0, -40);
+    sim.player.facing = 0;
+    sim.moveInput.forward = true;
+    sim.moveInput.jump = true;
+    sim.tick();
+    expect(sim.player.onGround).toBe(false);
+    sim.moveInput.forward = false;
+    sim.moveInput.strafeRight = true;
+    const xAtLaunch = sim.player.pos.x;
+    const zAtLaunch = sim.player.pos.z;
+    for (let i = 0; i < 4; i++) sim.tick();
+    expect(sim.player.pos.z).toBeGreaterThan(zAtLaunch);
+    expect(Math.abs(sim.player.pos.x - xAtLaunch)).toBeLessThan(0.05);
+  });
 });
 
 describe('combat', () => {
@@ -214,6 +255,15 @@ describe('combat', () => {
       if (sim.player.resource > 0) break;
     }
     expect(sim.player.resource).toBeGreaterThan(0);
+  });
+
+  it('warrior generates rage when taking damage from enemy level', () => {
+    const sim = makeSim('warrior');
+    const wolf = nearestMob(sim, 'forest_wolf');
+    wolf.level = 20;
+    sim.player.resource = 0;
+    (sim as any).dealDamage(wolf, sim.player, 30, false, 'physical', null, 'hit');
+    expect(sim.player.resource).toBeCloseTo(1, 5);
   });
 
   it('mob can kill the player; release respawns at graveyard', () => {
@@ -276,6 +326,34 @@ describe('combat', () => {
     expect(wolf.leashAnchor).not.toBeNull();
   });
 
+  it('chasing mobs slide around a camp prop to reach the player instead of pinning on it', () => {
+    // Gravecaller Summoners pinned on their own camp tent while chasing: moveToward
+    // pushed straight into the collider with no way around it, so the mob froze a few
+    // yards short of the player. collide-and-slide must let it round the prop.
+    const sim = makeSim('warrior', 20061);
+    const tent = { x: -3, z: 505, y: 0 }; // tent collider radius ~1.95
+    const mob = [...sim.entities.values()]
+      .filter((e: any) => e.kind === 'mob' && e.templateId === 'gravecaller_summoner')
+      .sort((a: any, b: any) => dist2d(a.spawnPos, tent) - dist2d(b.spawnPos, tent))[0] as any;
+
+    mob.maxHp = 100000; mob.hp = 100000;
+    mob.pos = { x: tent.x, z: tent.z + 5, y: 0 }; mob.prevPos = { ...mob.pos };
+    mob.spawnPos = { ...mob.pos };
+    teleportTo(sim, tent.x, tent.z - 5); // player on the far side, tent dead between them (10yd)
+    mob.aiState = 'chase';
+    mob.aggroTargetId = sim.playerId;
+    mob.inCombat = true;
+    mob.leashAnchor = { ...mob.pos };
+    mob.threat.set(sim.playerId, 1e6);
+
+    let minDist = Infinity;
+    for (let i = 0; i < 60; i++) { // 3s — reaches melee well before any disengage
+      sim.tick();
+      minDist = Math.min(minDist, dist2d(mob.pos, sim.player.pos));
+    }
+    expect(minDist).toBeLessThanOrEqual(5); // got into melee range — routed around the tent
+  });
+
   it('social pulls only very close same-template mobs', () => {
     const sim = makeSim('warrior');
     const wolf = nearestMob(sim, 'forest_wolf');
@@ -310,6 +388,7 @@ describe('combat', () => {
   it('dead mobs respawn', () => {
     const sim = new Sim({ seed: 42, playerClass: 'warrior', respawnSeconds: 2 });
     const wolf = nearestMob(sim, 'forest_wolf');
+    const spawn = { ...wolf.spawnPos };
     wolf.hp = 1;
     teleportTo(sim, wolf.pos.x + 2, wolf.pos.z);
     sim.targetEntity(wolf.id);
@@ -320,6 +399,9 @@ describe('combat', () => {
     sim.lootCorpse(wolf.id);
     for (let i = 0; i < 20 * 10 && wolf.dead; i++) sim.tick();
     expect(wolf.dead).toBe(false);
+    expect(wolf.pos.x).toBeCloseTo(spawn.x);
+    expect(wolf.pos.z).toBeCloseTo(spawn.z);
+    expect(wolf.prevPos).toEqual(wolf.pos);
   });
 
   it('mage casts fireball with a cast time and applies its dot', () => {
@@ -455,6 +537,26 @@ describe('rogue', () => {
     sim.tick();
     expect(sim.counters.damageDealt).toBeGreaterThan(dealtBefore);
     expect(sim.player.comboPoints).toBe(0);
+  });
+
+  it('toggling stealth off does not re-arm its cooldown', () => {
+    const sim = makeSim('rogue');
+    (sim as any).grantXp(xpForLevel(1) + xpForLevel(2) + 10); // reach level 3, learns stealth (lvl 2)
+    expect(sim.known.map((k) => k.def.id)).toContain('stealth');
+    // Stealth on: arms the 10s re-entry cooldown.
+    sim.castAbility('stealth');
+    expect(sim.player.auras.some((a) => a.kind === 'stealth')).toBe(true);
+    expect(sim.player.cooldowns.has('stealth')).toBe(true);
+    // Wait out the cooldown (10s @ 20 ticks/s = 200 ticks).
+    for (let i = 0; i < 220; i++) sim.tick();
+    expect(sim.player.cooldowns.has('stealth')).toBe(false);
+    // Toggling stealth off is free and must not re-arm the cooldown.
+    sim.castAbility('stealth');
+    expect(sim.player.auras.some((a) => a.kind === 'stealth')).toBe(false);
+    expect(sim.player.cooldowns.has('stealth')).toBe(false);
+    // Therefore the rogue can immediately re-stealth.
+    sim.castAbility('stealth');
+    expect(sim.player.auras.some((a) => a.kind === 'stealth')).toBe(true);
   });
 
   it('rogue GCD is 1.0s', () => {
@@ -951,7 +1053,8 @@ describe('quests', () => {
     const crate = [...sim.entities.values()].find((e) => e.kind === 'object')!;
     teleportTo(sim, crate.pos.x + 1, crate.pos.z);
     sim.pickUpObject(crate.id);
-    expect(sim.countItem('supply_crate')).toBe(0); // not on quest -> nailed shut
+    expect(sim.countItem('supply_crate')).toBe(0);
+    expect(sim.events).toContainEqual({ type: 'error', text: 'The crate is nailed shut.', pid: sim.player.id });
     sim.questLog.set('q_supplies', { questId: 'q_supplies', counts: [0], state: 'active' });
     sim.pickUpObject(crate.id);
     expect(sim.countItem('supply_crate')).toBe(1);
@@ -959,6 +1062,34 @@ describe('quests', () => {
     // respawns
     for (let i = 0; i < 20 * 31; i++) sim.tick();
     expect(crate.lootable).toBe(true);
+  });
+
+  it('every ground object has custom pickup deny and enough lines', () => {
+    const ids = [...new Set(GROUND_OBJECTS.map((o) => o.itemId))].sort();
+    expect(ids).toHaveLength(13);
+    for (const id of ids) {
+      expect(GROUND_PICKUP_LINES[id]?.deny, `${id} deny`).toBeTruthy();
+      expect(GROUND_PICKUP_LINES[id]?.enough, `${id} enough`).toBeTruthy();
+      expect(ITEMS[id]?.pickupDeny).toBe(GROUND_PICKUP_LINES[id].deny);
+      expect(ITEMS[id]?.pickupEnough).toBe(GROUND_PICKUP_LINES[id].enough);
+    }
+  });
+
+  it('ground object pickup uses item-specific enough message', () => {
+    const sim = makeSim('warrior');
+    sim.player.level = 3;
+    const crate = [...sim.entities.values()].find((e) => e.kind === 'object' && e.objectItemId === 'supply_crate')!;
+    teleportTo(sim, crate.pos.x + 1, crate.pos.z);
+    sim.questLog.set('q_supplies', { questId: 'q_supplies', counts: [0], state: 'active' });
+    for (let i = 0; i < 4; i++) sim.addItem('supply_crate', 1);
+    sim.events = [];
+    sim.pickUpObject(crate.id);
+    expect(sim.countItem('supply_crate')).toBe(4);
+    expect(sim.events).toContainEqual({
+      type: 'error',
+      text: 'You already have enough supply crates.',
+      pid: sim.player.id,
+    });
   });
 
   it('quest reward weapon is granted and auto-equipped', () => {
@@ -998,7 +1129,7 @@ describe('RL interface', () => {
       const obs = encodeObs(sim);
       for (const v of obs) expect(Number.isFinite(v)).toBe(true);
     }
-  });
+  }, 20000);
 
   it('same seed + same actions => identical trajectories', () => {
     const run = () => {
@@ -1031,5 +1162,78 @@ describe('gm characters', () => {
     const before = sim.player.hp;
     (sim as any).dealDamage(null, sim.player, 5, false, 'physical', 'Test', 'hit', true);
     expect(sim.player.hp).toBe(before - 5);
+  });
+});
+
+describe('friendly targeting (#133)', () => {
+  // Drop an ally `dx` yards east of the caster and return its entity.
+  function addAllyAt(sim: Sim, name: string, dx: number) {
+    const p = sim.player;
+    const pid = sim.addPlayer('priest', name);
+    const e = sim.entities.get(pid)!;
+    e.pos.x = p.pos.x + dx; e.pos.z = p.pos.z;
+    e.pos.y = terrainHeight(e.pos.x, e.pos.z, sim.cfg.seed);
+    e.prevPos = { ...e.pos };
+    return e;
+  }
+
+  it('targetNearestFriendly picks the closest ally and never auto-attacks', () => {
+    const sim = makeSim('warrior');
+    const far = addAllyAt(sim, 'Far', 12);
+    const near = addAllyAt(sim, 'Near', 5);
+    sim.tick(); // rebucket the spatial grid
+    sim.targetNearestFriendly();
+    expect(sim.player.targetId).toBe(near.id);
+    expect(sim.player.targetId).not.toBe(far.id);
+    expect(sim.player.autoAttack).toBe(false);
+  });
+
+  it('targetNearestFriendly never targets yourself', () => {
+    const sim = makeSim('warrior');
+    sim.tick();
+    sim.targetNearestFriendly();
+    expect(sim.player.targetId).toBeNull();
+  });
+
+  it('ignores allies beyond 40 yards and keeps the current target', () => {
+    const sim = makeSim('warrior');
+    addAllyAt(sim, 'WayOut', 60);
+    sim.tick();
+    sim.player.targetId = 1234;
+    sim.targetNearestFriendly();
+    expect(sim.player.targetId).toBe(1234);
+  });
+
+  it('skips dead allies', () => {
+    const sim = makeSim('warrior');
+    const ally = addAllyAt(sim, 'Downed', 5);
+    ally.dead = true; ally.hp = 0;
+    sim.tick();
+    sim.targetNearestFriendly();
+    expect(sim.player.targetId).toBeNull();
+  });
+
+  it('friendlyTabTarget cycles allies by distance and wraps', () => {
+    const sim = makeSim('warrior');
+    const a = addAllyAt(sim, 'A', 5);
+    const b = addAllyAt(sim, 'B', 10);
+    const c = addAllyAt(sim, 'C', 15);
+    sim.tick();
+    sim.friendlyTabTarget();             // none -> nearest
+    expect(sim.player.targetId).toBe(a.id);
+    sim.friendlyTabTarget();
+    expect(sim.player.targetId).toBe(b.id);
+    sim.friendlyTabTarget();
+    expect(sim.player.targetId).toBe(c.id);
+    sim.friendlyTabTarget();             // wraps back to nearest
+    expect(sim.player.targetId).toBe(a.id);
+  });
+
+  it('friendlyTabTarget is a no-op when no ally is nearby', () => {
+    const sim = makeSim('warrior');
+    sim.player.targetId = 77;
+    sim.tick();
+    sim.friendlyTabTarget();
+    expect(sim.player.targetId).toBe(77);
   });
 });

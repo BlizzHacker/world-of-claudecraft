@@ -30,12 +30,27 @@ vi.mock('../server/moderation_db', () => ({
   moderationReportsForAccount: vi.fn(),
   ignoreReport: vi.fn(),
   moderateAccount: vi.fn(),
+  muteAccountChat: vi.fn(),
+}));
+vi.mock('../server/chat_filter_db', () => ({
+  addFilterWord: vi.fn(),
+  chatModerationForAccount: vi.fn(),
+  getFilterConfig: vi.fn(),
+  liftChatMute: vi.fn(),
+  listFilterWords: vi.fn(),
+  removeFilterWord: vi.fn(),
+  resetChatStrikes: vi.fn(),
+  updateFilterConfig: vi.fn(),
 }));
 
 import { handleAdminApi, parsePageParams } from '../server/admin';
 import { accountForToken, isAdminAccount, findAccount } from '../server/db';
 import { overviewCounts, listAccounts, accountDetail, escapeLike } from '../server/admin_db';
-import { forceCharacterRename, ignoreReport, moderateAccount, moderationQueue, moderationReportsForAccount } from '../server/moderation_db';
+import { forceCharacterRename, ignoreReport, moderateAccount, moderationQueue, moderationReportsForAccount, muteAccountChat } from '../server/moderation_db';
+import {
+  addFilterWord, chatModerationForAccount, getFilterConfig, liftChatMute, listFilterWords,
+  removeFilterWord, resetChatStrikes, updateFilterConfig,
+} from '../server/chat_filter_db';
 
 const VALID_TOKEN = 'a'.repeat(64);
 
@@ -72,10 +87,17 @@ const fakeGame: any = {
   liveSessions: () => [],
   liveAccountIds: () => new Set([9]),
   disconnectAccount: vi.fn(),
+  muteAccountChat: vi.fn(),
+  reloadChatFilter: vi.fn(async () => {}),
+  liftChatMuteLive: vi.fn(),
+  resetChatStrikesLive: vi.fn(),
 };
 
 beforeEach(() => {
   vi.clearAllMocks();
+  // Default so the moderation-detail route (which now also loads chat state)
+  // resolves; individual chat-filter tests override as needed.
+  vi.mocked(chatModerationForAccount).mockResolvedValue({ chatMutedUntil: null, chatStrikes: 0, violations: [] });
 });
 
 describe('admin api auth', () => {
@@ -197,6 +219,7 @@ describe('admin api auth', () => {
     vi.mocked(accountDetail).mockResolvedValue({
       id: 9, username: 'badactor', createdAt: '', lastLogin: null, isAdmin: false,
       bannedAt: null, suspendedUntil: null, moderationReason: '',
+      chatMutedUntil: null, chatMuteReason: '',
       playtimeSeconds: 0, characters: [], recentSessions: [],
     });
     vi.mocked(moderationReportsForAccount).mockResolvedValue([]);
@@ -259,6 +282,25 @@ describe('admin api auth', () => {
     expect(fakeGame.disconnectAccount).toHaveBeenCalledWith(9, 'This account has been banned.');
   });
 
+  it('mutes account chat and sends a live warning without disconnecting', async () => {
+    vi.mocked(accountForToken).mockResolvedValue(7);
+    vi.mocked(isAdminAccount).mockResolvedValueOnce(true).mockResolvedValueOnce(false);
+    vi.mocked(muteAccountChat).mockResolvedValue();
+    const res = fakeRes();
+    const expiresAt = new Date(Date.now() + 3600_000).toISOString();
+
+    await handleAdminApi(
+      fakeReq({ method: 'POST', token: VALID_TOKEN, url: '/admin/api/moderation/accounts/9/chat-mute', body: { reason: 'keep chat civil', expiresAt } }),
+      res,
+      fakeGame,
+    );
+
+    expect(res.statusCode).toBe(200);
+    expect(muteAccountChat).toHaveBeenCalledWith({ accountId: 9, adminAccountId: 7, reason: 'keep chat civil', expiresAt });
+    expect(fakeGame.muteAccountChat).toHaveBeenCalledWith(9, expiresAt, 'keep chat civil');
+    expect(fakeGame.disconnectAccount).not.toHaveBeenCalled();
+  });
+
   it('unbans without disconnecting the account', async () => {
     vi.mocked(accountForToken).mockResolvedValue(7);
     vi.mocked(isAdminAccount).mockResolvedValue(true);
@@ -308,6 +350,149 @@ describe('admin api auth', () => {
     expect(res.statusCode).toBe(200);
     expect(forceCharacterRename).toHaveBeenCalledWith({ characterId: 42, adminAccountId: 7, reason: 'bad name' });
     expect(fakeGame.disconnectAccount).toHaveBeenCalledWith(9, 'A moderator requires one of your characters to be renamed.');
+  });
+});
+
+describe('admin api chat filter', () => {
+  beforeEach(() => {
+    vi.mocked(accountForToken).mockResolvedValue(7);
+    vi.mocked(isAdminAccount).mockResolvedValue(true);
+  });
+
+  it('serves both word tiers and the escalation config', async () => {
+    vi.mocked(listFilterWords).mockImplementation(async (tier) => (
+      tier === 'hard'
+        ? [{ id: 2, word: 'slur', tier: 'hard', createdAt: '' }]
+        : [{ id: 1, word: 'darn', tier: 'soft', createdAt: '' }]
+    ));
+    vi.mocked(getFilterConfig).mockResolvedValue({ warningsBeforeMute: 1, muteLadderSeconds: [600] });
+    const res = fakeRes();
+
+    await handleAdminApi(fakeReq({ token: VALID_TOKEN, url: '/admin/api/chat-filter' }), res, fakeGame);
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.data.soft[0].word).toBe('darn');
+    expect(res.body.data.hard[0].word).toBe('slur');
+    expect(res.body.data.config.muteLadderSeconds).toEqual([600]);
+  });
+
+  it('adds a word and reloads the live filter', async () => {
+    vi.mocked(addFilterWord).mockResolvedValue(true);
+    const res = fakeRes();
+
+    await handleAdminApi(
+      fakeReq({ method: 'POST', token: VALID_TOKEN, url: '/admin/api/chat-filter/words', body: { word: 'Heck', tier: 'soft' } }),
+      res, fakeGame,
+    );
+
+    expect(res.statusCode).toBe(200);
+    expect(addFilterWord).toHaveBeenCalledWith('Heck', 'soft');
+    expect(fakeGame.reloadChatFilter).toHaveBeenCalled();
+  });
+
+  it('rejects an invalid tier', async () => {
+    const res = fakeRes();
+
+    await handleAdminApi(
+      fakeReq({ method: 'POST', token: VALID_TOKEN, url: '/admin/api/chat-filter/words', body: { word: 'x', tier: 'medium' } }),
+      res, fakeGame,
+    );
+
+    expect(res.statusCode).toBe(400);
+    expect(addFilterWord).not.toHaveBeenCalled();
+  });
+
+  it('rejects a word that normalizes to nothing', async () => {
+    vi.mocked(addFilterWord).mockResolvedValue(false);
+    const res = fakeRes();
+
+    await handleAdminApi(
+      fakeReq({ method: 'POST', token: VALID_TOKEN, url: '/admin/api/chat-filter/words', body: { word: '!!!', tier: 'hard' } }),
+      res, fakeGame,
+    );
+
+    expect(res.statusCode).toBe(400);
+    expect(fakeGame.reloadChatFilter).not.toHaveBeenCalled();
+  });
+
+  it('deletes a word by id', async () => {
+    vi.mocked(removeFilterWord).mockResolvedValue(true);
+    const res = fakeRes();
+
+    await handleAdminApi(
+      fakeReq({ method: 'POST', token: VALID_TOKEN, url: '/admin/api/chat-filter/words/5/delete' }),
+      res, fakeGame,
+    );
+
+    expect(res.statusCode).toBe(200);
+    expect(removeFilterWord).toHaveBeenCalledWith(5);
+    expect(fakeGame.reloadChatFilter).toHaveBeenCalled();
+  });
+
+  it('updates the escalation config', async () => {
+    vi.mocked(updateFilterConfig).mockResolvedValue({ warningsBeforeMute: 2, muteLadderSeconds: [60, 120] });
+    const res = fakeRes();
+
+    await handleAdminApi(
+      fakeReq({
+        method: 'POST', token: VALID_TOKEN, url: '/admin/api/chat-filter/config',
+        body: { warningsBeforeMute: 2, muteLadderSeconds: [60, 120] },
+      }),
+      res, fakeGame,
+    );
+
+    expect(res.statusCode).toBe(200);
+    expect(updateFilterConfig).toHaveBeenCalledWith({ warningsBeforeMute: 2, muteLadderSeconds: [60, 120] });
+    expect(fakeGame.reloadChatFilter).toHaveBeenCalled();
+  });
+
+  it('lifts a mute and syncs the live session', async () => {
+    vi.mocked(liftChatMute).mockResolvedValue(true);
+    const res = fakeRes();
+
+    await handleAdminApi(
+      fakeReq({ method: 'POST', token: VALID_TOKEN, url: '/admin/api/moderation/accounts/9/lift-mute' }),
+      res, fakeGame,
+    );
+
+    expect(res.statusCode).toBe(200);
+    expect(liftChatMute).toHaveBeenCalledWith(9);
+    expect(fakeGame.liftChatMuteLive).toHaveBeenCalledWith(9);
+  });
+
+  it('resets strikes and syncs the live session', async () => {
+    vi.mocked(resetChatStrikes).mockResolvedValue(true);
+    const res = fakeRes();
+
+    await handleAdminApi(
+      fakeReq({ method: 'POST', token: VALID_TOKEN, url: '/admin/api/moderation/accounts/9/reset-strikes' }),
+      res, fakeGame,
+    );
+
+    expect(res.statusCode).toBe(200);
+    expect(resetChatStrikes).toHaveBeenCalledWith(9);
+    expect(fakeGame.resetChatStrikesLive).toHaveBeenCalledWith(9);
+  });
+
+  it('includes chat moderation state in the moderation account detail', async () => {
+    vi.mocked(accountDetail).mockResolvedValue({
+      id: 9, username: 'badactor', createdAt: '', lastLogin: null, isAdmin: false,
+      bannedAt: null, suspendedUntil: null, moderationReason: '',
+      chatMutedUntil: null, chatMuteReason: '',
+      playtimeSeconds: 0, characters: [], recentSessions: [],
+    });
+    vi.mocked(moderationReportsForAccount).mockResolvedValue([]);
+    vi.mocked(chatModerationForAccount).mockResolvedValue({
+      chatMutedUntil: null, chatStrikes: 3,
+      violations: [{ id: 1, characterName: 'badactor', term: 'slur', channel: 'say', message: 'a slur', action: 'mute', muteSeconds: 600, createdAt: '' }],
+    });
+    const res = fakeRes();
+
+    await handleAdminApi(fakeReq({ token: VALID_TOKEN, url: '/admin/api/moderation/accounts/9' }), res, fakeGame);
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.data.chat.chatStrikes).toBe(3);
+    expect(res.body.data.chat.violations).toHaveLength(1);
   });
 });
 

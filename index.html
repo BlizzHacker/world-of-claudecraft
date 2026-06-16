@@ -6,48 +6,65 @@
 <meta name="theme-color" content="#050509" />
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-title" content="Cryptic Realm" />
+<meta name="apple-mobile-web-app-title" content="ClaudeCraft" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="screen-orientation" content="landscape" />
 <meta name="orientation" content="landscape" />
-<title>Cryptic Realm: Classic-Style Web MMO</title>
-<meta name="description" content="Embark on an epic adventure in Cryptic Realm, a WoW-Classic-style micro-MMO playable directly in your browser. Join a persistent shared realm, level up classes, and defeat enemies!" />
+<title data-i18n="seo.title">World of ClaudeCraft: Classic-Style Web MMO</title>
+<meta name="description" data-i18n-content="seo.description" content="Embark on an epic adventure in World of ClaudeCraft, a classic-style micro-MMO playable directly in your browser. Join a persistent shared realm, level up classes, and defeat enemies!" />
 <link rel="manifest" href="/manifest.webmanifest" />
 
+<!-- Cloudflare Turnstile (bot gate on login/registration). Rendered explicitly
+     by src/main.ts only when VITE_TURNSTILE_SITEKEY is configured. -->
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
 <!-- Canonical URL -->
-<link rel="canonical" href="https://crypticrealm.com/" />
+<link rel="canonical" href="https://worldofclaudecraft.com/" />
 
 <!-- GEO / Multilingual Alternates -->
-<link rel="alternate" hreflang="en" href="https://crypticrealm.com/" />
-<link rel="alternate" hreflang="es" href="https://crypticrealm.com/?lang=es" />
-<link rel="alternate" hreflang="x-default" href="https://crypticrealm.com/" />
+<link rel="alternate" hreflang="en" href="https://worldofclaudecraft.com/" />
+<link rel="alternate" hreflang="es" href="https://worldofclaudecraft.com/?lang=es" />
+<link rel="alternate" hreflang="es-ES" href="https://worldofclaudecraft.com/?lang=es_ES" />
+<link rel="alternate" hreflang="fr-FR" href="https://worldofclaudecraft.com/?lang=fr_FR" />
+<link rel="alternate" hreflang="fr-CA" href="https://worldofclaudecraft.com/?lang=fr_CA" />
+<link rel="alternate" hreflang="en-CA" href="https://worldofclaudecraft.com/?lang=en_CA" />
+<link rel="alternate" hreflang="it-IT" href="https://worldofclaudecraft.com/?lang=it_IT" />
+<link rel="alternate" hreflang="de-DE" href="https://worldofclaudecraft.com/?lang=de_DE" />
+<link rel="alternate" hreflang="zh-CN" href="https://worldofclaudecraft.com/?lang=zh_CN" />
+<link rel="alternate" hreflang="zh-TW" href="https://worldofclaudecraft.com/?lang=zh_TW" />
+<link rel="alternate" hreflang="ko-KR" href="https://worldofclaudecraft.com/?lang=ko_KR" />
+<link rel="alternate" hreflang="ja-JP" href="https://worldofclaudecraft.com/?lang=ja_JP" />
+<link rel="alternate" hreflang="pt-BR" href="https://worldofclaudecraft.com/?lang=pt_BR" />
+<link rel="alternate" hreflang="ru-RU" href="https://worldofclaudecraft.com/?lang=ru_RU" />
+<link rel="alternate" hreflang="x-default" href="https://worldofclaudecraft.com/" />
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website" />
-<meta property="og:title" content="Cryptic Realm: Classic-Style Web MMO" />
-<meta property="og:description" content="Embark on an epic adventure in Cryptic Realm, a WoW-Classic-style micro-MMO playable directly in your browser. Join a persistent shared realm, level up classes, and defeat enemies!" />
-<meta property="og:image" content="https://crypticrealm.com/cr_logo_square.webp" />
-<meta property="og:url" content="https://crypticrealm.com/" />
+<meta property="og:title" data-i18n-content="seo.title" content="World of ClaudeCraft: Classic-Style Web MMO" />
+<meta property="og:description" data-i18n-content="seo.description" content="Embark on an epic adventure in World of ClaudeCraft, a classic-style micro-MMO playable directly in your browser. Join a persistent shared realm, level up classes, and defeat enemies!" />
+<meta property="og:image" content="https://worldofclaudecraft.com/woc_logo_square.webp" />
+<meta property="og:url" content="https://worldofclaudecraft.com/" />
 
 <!-- Twitter / X -->
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Cryptic Realm: Classic-Style Web MMO" />
-<meta name="twitter:description" content="Embark on an epic adventure in Cryptic Realm, a WoW-Classic-style micro-MMO playable directly in your browser. Join a persistent shared realm, level up classes, and defeat enemies!" />
-<meta name="twitter:image" content="https://crypticrealm.com/cr_logo_square.webp" />
+<meta name="twitter:title" data-i18n-content="seo.title" content="World of ClaudeCraft: Classic-Style Web MMO" />
+<meta name="twitter:description" data-i18n-content="seo.description" content="Embark on an epic adventure in World of ClaudeCraft, a classic-style micro-MMO playable directly in your browser. Join a persistent shared realm, level up classes, and defeat enemies!" />
+<meta name="twitter:image" content="https://worldofclaudecraft.com/woc_logo_square.webp" />
 
 <!-- Structured Data (Schema.org JSON-LD VideoGame) -->
-<script type="application/ld+json">
+<script id="structured-data" type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "VideoGame",
-  "name": "Cryptic Realm",
+  "name": "World of ClaudeCraft",
   "genre": "MMORPG",
   "playMode": "MultiPlayer",
   "applicationCategory": "Game",
   "operatingSystem": "Web Browser",
-  "url": "https://crypticrealm.com/",
-  "image": "https://crypticrealm.com/cr_logo_square.webp",
-  "description": "Embark on an epic adventure in Cryptic Realm, a WoW-Classic-style micro-MMO playable directly in your browser. Join a persistent shared realm, level up classes, and defeat enemies!"
+  "url": "https://worldofclaudecraft.com/",
+  "image": "https://worldofclaudecraft.com/woc_logo_square.webp",
+  "description": "Embark on an epic adventure in World of ClaudeCraft, a classic-style micro-MMO playable directly in your browser. Join a persistent shared realm, level up classes, and defeat enemies!",
+  "inLanguage": "en"
 }
 </script>
 
@@ -62,7 +79,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400..700&family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Alegreya+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-<!-- Google tag (gtag.js) — skipped on localhost so dev sessions don't pollute analytics -->
+<!-- Google tag (gtag.js) - skipped on localhost so dev sessions don't pollute analytics -->
 <script>
   if (!['localhost', '127.0.0.1', '[::1]'].includes(location.hostname)) {
     const s = document.createElement('script');
@@ -76,76 +93,11 @@
   }
 </script>
 <style>
-  /* ===== THEME: Classic Realm (default gold) ===== */
-  :root, [data-theme="classic"] {
-    --theme-accent: #ffd100;
-    --theme-accent-dim: #c8a838;
-    --theme-accent-glow: rgba(255, 209, 0, 0.2);
-    --theme-accent-glow-heavy: rgba(255, 209, 0, 0.4);
-    --theme-border: #4e3d1d;
-    --theme-border-focus: #c8a838;
-    --theme-border-base: #6f5a2a;
-    --theme-panel-bg: linear-gradient(170deg, #15151fF2 0%, #0b0b12F2 60%, #08080dF2 100%);
-    --theme-header-bg: linear-gradient(180deg, rgba(28, 24, 16, 0.98) 0%, rgba(11, 11, 18, 0.95) 100%);
-    --theme-scrollbar-thumb: #5c4722;
-    --theme-scrollbar-hover: #7c6233;
-    --theme-bg-tint: #08080d;
-  }
-
-  /* ===== THEME: Infernal (crimson/fire) ===== */
-  [data-theme="infernal"] {
-    --theme-accent: #ff4422;
-    --theme-accent-dim: #c83818;
-    --theme-accent-glow: rgba(255, 68, 34, 0.2);
-    --theme-accent-glow-heavy: rgba(255, 68, 34, 0.45);
-    --theme-border: #4e1d1d;
-    --theme-border-focus: #c84838;
-    --theme-border-base: #6f2a2a;
-    --theme-panel-bg: linear-gradient(170deg, #1f1212F2 0%, #120808F2 60%, #0d0505F2 100%);
-    --theme-header-bg: linear-gradient(180deg, rgba(38, 16, 16, 0.98) 0%, rgba(18, 8, 8, 0.95) 100%);
-    --theme-scrollbar-thumb: #5c2222;
-    --theme-scrollbar-hover: #7c3333;
-    --theme-bg-tint: #0d0505;
-  }
-
-  /* ===== THEME: Dominion Frontier (steel blue/ice) ===== */
-  [data-theme="dominion"] {
-    --theme-accent: #4aa8ff;
-    --theme-accent-dim: #3878c8;
-    --theme-accent-glow: rgba(74, 168, 255, 0.2);
-    --theme-accent-glow-heavy: rgba(74, 168, 255, 0.4);
-    --theme-border: #1d3a4e;
-    --theme-border-focus: #3888c8;
-    --theme-border-base: #2a4a6f;
-    --theme-panel-bg: linear-gradient(170deg, #0f1820F2 0%, #080e18F2 60%, #05080dF2 100%);
-    --theme-header-bg: linear-gradient(180deg, rgba(16, 24, 38, 0.98) 0%, rgba(8, 11, 18, 0.95) 100%);
-    --theme-scrollbar-thumb: #22485c;
-    --theme-scrollbar-hover: #33607c;
-    --theme-bg-tint: #05080d;
-  }
-
-  /* ===== THEME: Arcane Void (cosmic purple) ===== */
-  [data-theme="arcane"] {
-    --theme-accent: #c84fff;
-    --theme-accent-dim: #9838c8;
-    --theme-accent-glow: rgba(200, 79, 255, 0.2);
-    --theme-accent-glow-heavy: rgba(200, 79, 255, 0.45);
-    --theme-border: #3a1d4e;
-    --theme-border-focus: #9838c8;
-    --theme-border-base: #5a2a6f;
-    --theme-panel-bg: linear-gradient(170deg, #18101fF2 0%, #0e0812F2 60%, #0a050dF2 100%);
-    --theme-header-bg: linear-gradient(180deg, rgba(28, 16, 38, 0.98) 0%, rgba(14, 8, 18, 0.95) 100%);
-    --theme-scrollbar-thumb: #48225c;
-    --theme-scrollbar-hover: #60337c;
-    --theme-bg-tint: #0a050d;
-  }
-
-  /* Wire theme variables into the design-token layer */
   :root {
-    --gold: var(--theme-accent, #ffd100);
-    --gold-dim: var(--theme-accent-dim, #c8a838);
-    --border: var(--theme-border-base, #6f5a2a);
-    --panel-bg: var(--theme-panel-bg, linear-gradient(170deg, #15151fF2 0%, #0b0b12F2 60%, #08080dF2 100%));
+    --gold: #ffd100;
+    --gold-dim: #c8a838;
+    --border: #6f5a2a;
+    --panel-bg: linear-gradient(170deg, #15151fF2 0%, #0b0b12F2 60%, #08080dF2 100%);
     /* Typography — Cinzel (heraldic display/headings), Alegreya Sans (UI + body),
        Alegreya (serif flavour prose). Legacy token names alias the canonical set
        so every existing usage resolves to the new system. */
@@ -161,8 +113,8 @@
     /* --gold is the single source of truth for the primary accent */
     --color-primary: var(--gold);
     --color-primary-dim: var(--gold-dim);
-    --color-primary-glow: var(--theme-accent-glow, rgba(255, 209, 0, 0.2));
-    --color-primary-glow-heavy: var(--theme-accent-glow-heavy, rgba(255, 209, 0, 0.4));
+    --color-primary-glow: rgba(255, 209, 0, 0.2);
+    --color-primary-glow-heavy: rgba(255, 209, 0, 0.4);
 
     /* resource bars / unit-frame states / auras (previously hardcoded across CSS + JS) */
     --color-hp: #1eb838;
@@ -174,10 +126,10 @@
     --color-buff: #3a6ea8;
     --color-debuff: #c0392b;
     
-    --color-bg-dark: var(--theme-bg-tint, #08080d);
+    --color-bg-dark: #08080d;
     --color-bg-input: #0a0a0f;
-    --color-border-default: var(--theme-border, #4e3d1d);
-    --color-border-focus: var(--theme-border-focus, #c8a838);
+    --color-border-default: #4e3d1d;
+    --color-border-focus: #c8a838;
     --color-border-invalid: #ff8f85;
     --color-border-valid: #48e060;
     
@@ -198,10 +150,10 @@
     --transition-ease: cubic-bezier(0.4, 0, 0.2, 1);
 
     /* Custom scrollbar tokens */
-    --scrollbar-thumb: var(--theme-scrollbar-thumb, #5c4722);
+    --scrollbar-thumb: #5c4722;
     --scrollbar-track: rgba(10, 10, 15, 0.7);
-    --scrollbar-thumb-hover: var(--theme-scrollbar-hover, #7c6233);
-    --scrollbar-border: var(--theme-scrollbar-hover, #7c6233);
+    --scrollbar-thumb-hover: #7c6233;
+    --scrollbar-border: #7c6233;
     --app-vw: 100vw;
     --app-vh: 100vh;
     /* Shared with src/game/cursors.ts — keep hotspots in sync. */
@@ -231,7 +183,7 @@
     }
   }
   
-  /* Global WoW-style scrollbar styling */
+  /* Global custom scrollbar styling */
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -259,10 +211,108 @@
   [hidden] { display: none !important; }
   html, body {
     width: var(--app-vw); height: var(--app-vh); min-width: 100%; min-height: 100%;
-    overflow: hidden; background: #000; font-family: var(--ui-font); touch-action: none; overscroll-behavior: none;
+    overflow-x: hidden; overflow-y: hidden; background: #000; font-family: var(--ui-font);
+    touch-action: pan-y; overscroll-behavior-y: auto;
     -webkit-text-size-adjust: 100%;
   }
-  #game-canvas { position: fixed; left: 0; top: 0; width: var(--app-vw); height: var(--app-vh); display: block; }
+  body.game-active {
+    overflow: hidden;
+    touch-action: none;
+    overscroll-behavior: none;
+  }
+  #game-canvas { position: fixed; left: 0; top: 0; width: var(--app-vw); height: var(--app-vh); display: block; z-index: 0; }
+  .click-move-marker {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 56px;
+    height: 56px;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 2;
+    transform: translate(-999px, -999px);
+    transition: opacity 45ms ease-out;
+    filter: drop-shadow(0 2px 5px #000d);
+    --ctm-color: #7ef06b;
+    --ctm-core: #d9ffd1;
+    --ctm-edge: #245f1f;
+  }
+  .click-move-marker.active { opacity: 0.98; }
+  .click-move-marker.entity {
+    --ctm-color: #ffd35a;
+    --ctm-core: #fff0a8;
+    --ctm-edge: #6b4a10;
+  }
+  .click-move-marker::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 5px;
+    height: 5px;
+    background: var(--ctm-core);
+    border: 1px solid var(--ctm-edge);
+    border-radius: 50%;
+    box-shadow: 0 0 8px color-mix(in srgb, var(--ctm-color) 85%, transparent);
+    transform: translate(-50%, -50%);
+  }
+  .click-move-marker::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 14px;
+    height: 14px;
+    border: 1px solid color-mix(in srgb, var(--ctm-color) 72%, transparent);
+    border-radius: 50%;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+  }
+  .click-move-marker.pulse::after {
+    animation: click-move-core 220ms ease-out both;
+  }
+  .ctm-arrow {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 11px;
+    height: 11px;
+    opacity: 0;
+    transform-origin: center;
+    will-change: transform, opacity;
+  }
+  .click-move-marker.pulse .ctm-arrow { animation: click-move-collapse 260ms cubic-bezier(.16,1,.3,1) both; }
+  .ctm-arrow::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-style: solid;
+    border-color: var(--ctm-core);
+    border-width: 2px 2px 0 0;
+    box-shadow: 1.5px -1.5px 0 color-mix(in srgb, var(--ctm-edge) 58%, transparent);
+  }
+  .ctm-n { --ctm-x0: -5.5px; --ctm-y0: -36px; --ctm-x1: -5.5px; --ctm-y1: -23px; --ctm-r: 135deg; transform: translate(-5.5px, -36px) rotate(135deg); }
+  .ctm-e { --ctm-x0: 25px; --ctm-y0: -5.5px; --ctm-x1: 12px; --ctm-y1: -5.5px; --ctm-r: -135deg; transform: translate(25px, -5.5px) rotate(-135deg); }
+  .ctm-s { --ctm-x0: -5.5px; --ctm-y0: 25px; --ctm-x1: -5.5px; --ctm-y1: 12px; --ctm-r: -45deg; transform: translate(-5.5px, 25px) rotate(-45deg); }
+  .ctm-w { --ctm-x0: -36px; --ctm-y0: -5.5px; --ctm-x1: -23px; --ctm-y1: -5.5px; --ctm-r: 45deg; transform: translate(-36px, -5.5px) rotate(45deg); }
+  @keyframes click-move-collapse {
+    0% { opacity: 0.95; transform: translate(var(--ctm-x0), var(--ctm-y0)) rotate(var(--ctm-r, 0deg)) scale(1.05); }
+    16% { opacity: 1; }
+    72% { opacity: 0.95; transform: translate(var(--ctm-x1), var(--ctm-y1)) rotate(var(--ctm-r, 0deg)) scale(0.78); }
+    100% { opacity: 0; transform: translate(var(--ctm-x1), var(--ctm-y1)) rotate(var(--ctm-r, 0deg)) scale(0.62); }
+  }
+  @keyframes click-move-core {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.35); }
+    50% { opacity: 0.9; }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(1.7); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ctm-arrow,
+    .click-move-marker.pulse::after {
+      animation-duration: 0.01ms;
+      animation-iteration-count: 1;
+    }
+  }
 
   /* Pre-game screens use the same hand / sword cursors as in-world (cursors.ts). */
   #start-screen,
@@ -279,9 +329,11 @@
     cursor: text;
   }
 
-  #nameplates { position: fixed; left: 0; top: 0; width: var(--app-vw); height: var(--app-vh); overflow: hidden; pointer-events: none; }
-  #ui { position: fixed; left: 0; top: 0; width: var(--app-vw); height: var(--app-vh); pointer-events: none; }
+  #nameplates { position: fixed; left: 0; top: 0; width: var(--app-vw); height: var(--app-vh); overflow: hidden; pointer-events: none; z-index: 1; }
+  #ui { position: fixed; left: 0; top: 0; width: var(--app-vw); max-width: 100vw; height: var(--app-vh); overflow: hidden; pointer-events: none; z-index: 10; }
   #ui > * { pointer-events: auto; }
+  #ui > .click-move-marker,
+  #ui > .click-move-marker * { pointer-events: none; }
 
   .panel {
     background: var(--panel-bg);
@@ -304,8 +356,25 @@
     justify-content: space-between;
     align-items: center;
   }
-  .x-btn { color: #c9b27a; cursor: pointer; font-size: 14px; padding: 0 4px; border: 1px solid #463a1c; border-radius: 3px; background: #1a1410; }
+  .window .panel-title { cursor: move; touch-action: none; }
+  .window .panel-title .x-btn { cursor: pointer; }
+  .window.window-dragging { cursor: move; }
+  .x-btn { color: #c9b27a; cursor: pointer; font-size: 14px; padding: 0 4px; border: 1px solid #463a1c; border-radius: 3px; background: #1a1410; font-family: var(--ui-font); }
   .x-btn:hover { color: #fff; border-color: var(--gold-dim); }
+  .x-btn:focus-visible,
+  .action-btn:focus-visible,
+  .chat-tab:focus-visible,
+  .micro-btn:focus-visible,
+  .mobile-btn:focus-visible,
+  .vendor-item:focus-visible,
+  .bag-item:focus-visible,
+  .mkt-tab:focus-visible,
+  .mkt-btn:focus-visible,
+  .mkt-list-btn:focus-visible {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 2px;
+  }
+  .panel-subtitle { color: var(--color-text-muted); font-size: 11px; font-weight: 400; }
   .gold { color: var(--gold); }
 
   /* ---------- UI chrome icons (inline SVG from ui_icons.ts, tinted via currentColor) ---------- */
@@ -317,6 +386,7 @@
   /* ---------- nameplates ---------- */
   .nameplate { position: absolute; left: 0; top: 0; text-align: center; pointer-events: none;
     text-shadow: 1px 1px 2px #000; white-space: nowrap; will-change: transform; }
+  .nameplate.has-emote { z-index: 30; }
   .np-name { font-size: 12px; font-weight: bold; font-family: var(--title-font); letter-spacing: 0.3px; }
   .np-hpbar { width: 78px; height: 6px; background: #2a0000; border: 1px solid #000; margin: 1px auto 0; border-radius: 2px; }
   .np-hpfill { height: 100%; background: linear-gradient(#48e060, #1d7a32); border-radius: 2px; }
@@ -331,6 +401,15 @@
   .np-raidmark { width: 30px; height: 30px; margin: 0 auto 1px; background-size: contain;
     background-repeat: no-repeat; background-position: center;
     filter: drop-shadow(0 0 2px #000) drop-shadow(0 1px 1px #000); }
+  .np-emote { display: inline-flex; align-items: center; justify-content: center; gap: 5px; min-width: 62px; height: 42px;
+    padding: 3px 9px 3px 4px; margin: 0 auto 5px; border-radius: 999px; border: 2px solid #f2d27a;
+    background: linear-gradient(#3a2a16, #16100a); color: #ffe9a3; font: 800 11px/1 var(--title-font);
+    letter-spacing: 0; box-shadow: 0 2px 0 #050301, 0 0 16px #ffd65a66, inset 0 1px 0 #fff4;
+    position: relative; z-index: 3; text-shadow: 0 1px 1px #000; will-change: transform, opacity; animation: emote-pop 260ms cubic-bezier(0.22, 1, 0.36, 1); }
+  .np-emote-icon { width: 34px; height: 34px; flex: 0 0 auto; image-rendering: auto;
+    filter: drop-shadow(0 2px 1px #0009); }
+  .np-emote-label { display: block; max-width: 56px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  @keyframes emote-pop { from { transform: translateY(8px) scale(0.86); opacity: 0; } to { transform: none; opacity: 1; } }
 
   /* ---------- chat bubbles (/say, /yell) ---------- */
   .chat-bubble { position: absolute; left: 0; top: 0; max-width: 220px; pointer-events: none;
@@ -427,7 +506,20 @@
   #actionbar-row { display: flex; align-items: flex-end; gap: 8px; }
   /* xp bar stacks directly on the action bar; the taller side-button
      column must not push it up (it used to float ~150px above the bar) */
-  #actionbar-stack { display: flex; flex-direction: column; }
+  #actionbar-stack { display: flex; flex-direction: column; position: relative; }
+  #petbar { display: none; position: absolute; left: 0; top: -52px; gap: 6px; padding: 0; margin: 0;
+    background: transparent; border: 0; outline: 0; box-shadow: none; }
+  .petbar-group { display: flex; gap: 4px; padding: 4px; border: 2px solid #000; outline: 1px solid #5b4618;
+    border-radius: 6px; background: linear-gradient(170deg, #15131fdd, #09080edd); box-shadow: 0 2px 8px #000c; }
+  .pet-btn { width: 38px; height: 38px; padding: 0; border: 2px solid #4a3d1d; border-radius: 6px;
+    background: radial-gradient(circle at 35% 30%, #2c2c3a, #15151f); color: #f3df9a; cursor: pointer;
+    position: relative; box-shadow: inset 0 1px 0 #ffffff18, 0 2px 4px #0009; }
+  .pet-btn .icon-label { position: absolute; inset: 1px; border-radius: 4px; background-size: cover; background-position: center; background-repeat: no-repeat; pointer-events: none; }
+  .pet-btn:hover { border-color: var(--gold); }
+  .pet-btn.active { border-color: var(--gold); box-shadow: inset 0 0 0 1px #ffd10066, 0 0 6px #ffd10033; }
+  .pet-btn.cooldown { filter: grayscale(.8) brightness(.65); cursor: default; }
+  .pet-btn .cdtext { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    font-size: 13px; color: var(--gold); text-shadow: 1px 1px 2px #000; font-weight: bold; pointer-events: none; }
   #actionbar { display: flex; gap: 4px; padding: 6px; }
   .action-btn { width: 46px; height: 46px; position: relative; border: 2px solid #4a3d1d; border-radius: 6px;
     background: radial-gradient(circle at 35% 30%, #2c2c3a, #15151f); color: #fff; cursor: pointer;
@@ -499,6 +591,7 @@
   .chat-pane div { text-shadow: 1px 1px 1px #000; overflow-wrap: break-word; user-select: text; }
   .chat-player-name { cursor: context-menu; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; }
   .chat-player-name:hover { filter: brightness(1.25); }
+  .chat-player-name:focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 2px; }
   .chat-pane::-webkit-scrollbar { width: 8px; }
   .chat-pane::-webkit-scrollbar-track { background: #0b0b10; }
   .chat-pane::-webkit-scrollbar-thumb { background: #4a3d1d; border-radius: 4px; }
@@ -519,7 +612,9 @@
   #quest-tracker .qt-header { font-family: var(--title-font); font-size: 14px; border-bottom: 1px solid #ffd10044; margin-bottom: 4px; padding-bottom: 2px; }
   #quest-tracker .qt-title { font-weight: bold; margin-top: 8px; font-family: var(--title-font); }
   #quest-tracker .qt-obj { color: #e8e0c8; font-size: 11px; margin-left: 8px; }
-  #quest-tracker .qt-obj.done { color: #7fdc4f; }
+  #quest-tracker .qt-obj.done,
+  .qd-obj.done,
+  .quest-complete { color: var(--color-text-success); }
 
   /* ---------- combat meters ---------- */
   #meters-window { width: 240px; padding: 8px 10px; display: none; align-self: flex-end; margin-bottom: 6px; text-align: left; }
@@ -585,9 +680,20 @@
   .qd-text { font-size: 12.5px; line-height: 1.55; color: #e8e0c8; margin-bottom: 10px; font-family: var(--font-serif); }
   .qd-sub { font-family: var(--title-font); color: var(--gold); font-size: 13px; margin: 8px 0 4px; }
   .qd-obj { font-size: 12px; color: #cfc6a8; margin: 2px 0; }
+  .quest-muted { color: var(--color-text-muted); font-size: 11px; }
+  .quest-suggested { color: var(--color-text-error); font-size: 11px; }
+  .quest-return { margin-top: var(--spacing-sm); color: var(--color-text-muted); }
   .qd-reward-row { display: flex; gap: 6px; align-items: center; margin-top: 4px; }
-  .qd-list-item { padding: 5px 8px; cursor: pointer; border-radius: 4px; font-size: 13px; color: var(--gold); font-family: var(--title-font); }
+  .qd-reward-label { color: var(--color-text-muted); font-size: 11px; }
+  .qd-reward-name { font-size: 12px; }
+  .qd-list-item { display: block; width: 100%; padding: 5px 8px; cursor: pointer; border: 0; border-radius: 4px; background: transparent; text-align: left; font-size: 13px; color: var(--gold); font-family: var(--title-font); }
+  .qd-text, .qd-sub, .qd-obj, .qd-reward-label, .qd-reward-name, .qd-list-item,
+  .quest-muted, .quest-suggested, .ql-item, .ql-empty { overflow-wrap: anywhere; }
+  .qd-reward-row { flex-wrap: wrap; }
+  .qd-reward-name { min-width: 0; }
   .qd-list-item:hover { background: #ffffff14; }
+  .qd-list-item:focus-visible,
+  .ql-item:focus-visible { outline: 3px solid var(--color-border-focus); outline-offset: 2px; }
   .btn { background: linear-gradient(#8a3326, #5a1d12 55%, #471409); color: #ffd9a0; border: 1px solid #a86;
     outline: 1px solid #000; border-radius: 4px; padding: 6px 16px; font-size: 12.5px; cursor: pointer;
     margin-top: 10px; margin-right: 8px; font-family: var(--title-font); letter-spacing: 0.4px;
@@ -618,23 +724,34 @@
   .q-epic { border-color: #a335ee !important; box-shadow: 0 0 6px #a335ee66; }
 
   /* character window */
-  #char-window { width: 320px; }
+  #char-window { width: 430px; }
   .paperdoll { display: flex; gap: 10px; }
   .equip-col { display: flex; flex-direction: column; gap: 5px; }
   .equip-slot { display: flex; gap: 7px; align-items: center; width: 142px; }
   .equip-slot .slot-name { font-size: 10px; color: #998d6a; }
   .equip-slot .slot-item { font-size: 11px; }
+  .char-model-panel { flex: 1; min-width: 0; height: 172px; border: 1px solid #463a1c; border-radius: 5px; background: rgba(0, 0, 0, 0.28); overflow: hidden; display: flex; flex-direction: column; }
+  .char-model-preview { width: 100%; flex: 1; min-height: 0; }
+  .char-model-preview canvas { display: block; width: 100% !important; height: 100% !important; }
+  .char-skin-row { justify-content: center; align-items: center; margin: 0; padding: 6px 0 8px; flex-shrink: 0; }
   .char-stats { font-size: 12px; line-height: 1.65; color: #cfc6a8; margin-top: 10px; border-top: 1px solid #463a1c; padding-top: 8px;
     display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; }
   .char-stats b { color: #fff; font-weight: normal; }
 
   /* spellbook */
   #spellbook { width: 430px; }
-  .spell-row { display: flex; gap: 10px; padding: 6px; border-radius: 4px; align-items: center; }
+  .spellbook-class, .spell-rank { color: var(--color-text-muted); font-size: 11px; }
+  .spell-list { display: flex; flex-direction: column; gap: 2px; }
+  .spell-row { display: flex; gap: 10px; min-height: 46px; padding: 6px; border-radius: 4px; align-items: center; }
   .spell-row:hover { background: #ffffff0e; }
+  .spell-row:focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 2px; background: var(--color-primary-glow); }
+  .spell-row.locked .spell-icon { filter: grayscale(1) brightness(0.5); }
+  .spell-row.locked .spell-name { color: var(--color-text-muted); }
+  .spell-row .spell-text { min-width: 0; flex: 1; }
   .spell-row[draggable="true"] { cursor: grab; }
   .spell-row .spell-name { font-size: 13px; color: #fff; font-family: var(--title-font); }
-  .spell-row .spell-sub { font-size: 11px; color: #998d6a; }
+  .spell-row .spell-sub { font-size: 11px; color: var(--color-text-muted); }
+  .spell-row .spell-name, .spell-row .spell-sub { overflow-wrap: anywhere; }
   .spell-icon { width: 34px; height: 34px; border-radius: 5px; flex: none;
     background-color: #15151f; background-size: cover; background-position: center; background-repeat: no-repeat;
     border: 2px solid #4a3d1d; }
@@ -643,9 +760,12 @@
   #quest-log-window { width: 520px; }
   #quest-log-window .ql-cols { display: flex; gap: 12px; }
   .ql-list { width: 180px; border-right: 1px solid #463a1c; padding-right: 8px; }
-  .ql-item { padding: 4px 6px; font-size: 12px; color: #d8c89a; cursor: pointer; border-radius: 3px; font-family: var(--title-font); }
+  .ql-item { display: block; width: 100%; padding: 4px 6px; border: 0; background: transparent; text-align: left; font-size: 12px; color: #d8c89a; cursor: pointer; border-radius: 3px; font-family: var(--title-font); }
   .ql-item:hover, .ql-item.sel { background: #ffffff14; color: var(--gold); }
   .ql-detail { flex: 1; font-size: 12px; max-height: 380px; overflow-y: auto; }
+  .ql-empty { color: var(--color-text-muted); font-size: 12px; padding: var(--spacing-xs); }
+  .ql-detail-title { font-size: 15px; }
+  .ql-detail-text { margin-top: var(--spacing-sm); }
 
   /* post-cap progression: character-sheet block + milestone badges */
   .char-progression { margin-top: 10px; border-top: 1px solid #463a1c; padding-top: 8px; }
@@ -689,7 +809,7 @@
   .tal-tree { position: relative; margin: 6px auto; }
   .tal-arrows { position: absolute; left: 0; top: 0; pointer-events: none; z-index: 0; }
   .tal-node { position: absolute; width: 46px; height: 46px; display: flex; align-items: center; justify-content: center; cursor: pointer; background: #15110a; border: 2px solid #5a4a22; color: #e8dcb0; user-select: none; box-sizing: border-box; z-index: 1; }
-  .tal-node .tal-icon { position: absolute; inset: 2px; display: block; background-size: 140%; background-position: center; background-repeat: no-repeat; background-color: #15110a; z-index: 1; }
+  .tal-node .tal-icon { position: absolute; inset: 2px; display: block; background-color: #15110a; background-size: cover; background-position: center; background-repeat: no-repeat; z-index: 1; }
   .tal-node.circle { border-radius: 50%; }
   .tal-node.circle .tal-icon { border-radius: 50%; }
   .tal-node.square { border-radius: 7px; }
@@ -710,7 +830,7 @@
   .tal-spec { position: relative; flex: 1; padding: 8px 6px; border: 1px solid #463a1c; border-radius: 6px; background: #1a1409; cursor: pointer; text-align: center; }
   .tal-spec.sel { border-color: #ffd100; background: #2c2410; box-shadow: inset 0 0 0 1px #ffd10055, 0 0 10px #b8902a66; }
   .tal-spec.sel::after { content: "✓"; position: absolute; right: 6px; top: 6px; width: 17px; height: 17px; display: flex; align-items: center; justify-content: center; color: #120d04; background: #ffd100; border: 1px solid #332403; border-radius: 50%; font: 700 11px/1 var(--body-font); }
-  .tal-spec .ts-icon { width: 42px; height: 42px; margin: 0 auto; border-radius: 6px; background-size: cover; background-position: center; border: 1px solid #5a4a22; }
+  .tal-spec .ts-icon { width: 42px; height: 42px; margin: 0 auto; border-radius: 6px; display: flex; align-items: center; justify-content: center; background: #15110a; color: #fff; border: 1px solid #5a4a22; font: 26px/1 "Apple Color Emoji", "Segoe UI Emoji", var(--body-font); text-shadow: 0 1px 2px #000; }
   .tal-spec.sel .ts-icon { border-color: #ffd100; box-shadow: 0 0 8px #ffd10066; }
   .tal-spec .ts-name { font-size: 12px; color: #fff; font-family: var(--title-font); margin-top: 2px; }
   .tal-spec .ts-role { font-size: 10px; color: var(--gold); text-transform: uppercase; letter-spacing: .4px; }
@@ -761,14 +881,14 @@
   /* report dialog: dropdown drops downward (dialog sits high), full width */
   #report-window .ui-dd { display: block; }
   #report-window .ui-dd-menu { bottom: auto; top: calc(100% + 4px); }
-  /* WoW-style choice-node option flyout */
+  /* Choice-node option flyout */
   .tal-choice-pop { position: fixed; z-index: 90; width: 252px; background: #1a140a; border: 1px solid var(--gold); border-radius: 6px; box-shadow: 0 10px 24px #000c, inset 0 0 0 1px #ffd10022; padding: 5px; }
   .tal-choice-pop::before { content: ""; position: absolute; left: var(--tal-choice-caret-left, 50%); top: -6px; width: 10px; height: 10px; background: #1a140a; border-left: 1px solid var(--gold); border-top: 1px solid var(--gold); transform: translateX(-50%) rotate(45deg); }
   .tal-choice-opt { position: relative; display: flex; gap: 8px; align-items: flex-start; padding: 8px 28px 8px 8px; border: 1px solid transparent; border-radius: 4px; cursor: pointer; }
   .tal-choice-opt:hover, .tal-choice-opt:focus-visible { background: #ffffff10; border-color: #6f5a2a; outline: none; }
   .tal-choice-opt.sel { background: #2c2410; border-color: var(--gold); box-shadow: inset 0 0 0 1px #ffd10033; }
   .tal-choice-opt.sel::after { content: "✓"; position: absolute; right: 8px; top: 8px; width: 15px; height: 15px; display: flex; align-items: center; justify-content: center; color: #120d04; background: #ffd100; border-radius: 50%; font: 700 10px/1 var(--body-font); }
-  .tco-icon { width: 28px; height: 28px; flex: none; border-radius: 4px; background-size: 140%; background-position: center; border: 1px solid #5a4a22; }
+  .tco-icon { width: 28px; height: 28px; flex: none; border-radius: 4px; display: block; background-color: #15110a; background-size: cover; background-position: center; background-repeat: no-repeat; border: 1px solid #5a4a22; }
   .tco-text { display: flex; flex-direction: column; gap: 2px; font-size: 11px; color: #c8b888; }
   .tco-text b { color: #fff; font-size: 12px; }
 
@@ -780,7 +900,7 @@
 
   /* vendor */
   #vendor-window { width: 400px; }
-  .vendor-item { display: flex; gap: 8px; align-items: center; padding: 5px; border-radius: 4px; cursor: pointer; }
+  .vendor-item { display: flex; gap: 8px; align-items: center; width: 100%; padding: 5px; border: 0; border-radius: 4px; cursor: pointer; background: transparent; color: inherit; font-family: var(--ui-font); text-align: left; }
   .vendor-item:hover { background: #ffffff10; }
   .vendor-item .vi-name { font-size: 12px; flex: 1; }
   .vendor-item .vi-price { font-size: 11px; color: #ddd; }
@@ -788,33 +908,58 @@
   .vendor-empty { padding: 5px; font-size: 11px; color: #887c5c; }
   .vendor-hint { font-size: 11px; color: #c8b888; margin-top: 8px; border-top: 1px solid #463a1c; padding-top: 6px; }
 
-  /* bags */
-  #bags { width: 310px; }
-  /* the vendor opens bags alongside it — lay the pair out side-by-side, centred
-     together (overrides the single-window centring while body.vendor-open). */
-  body.vendor-open #vendor-window { left: calc(50% - 163px); }
-  body.vendor-open #bags { left: calc(50% + 208px); }
+  /* bags — centred in the bottom gap between the action cluster and micro-menu */
+  #bags {
+    --bags-bar-half: 306px;
+    --bags-gap: 12px;
+    --bags-micro-r: calc(16px + 34px + var(--bags-gap));
+    --bags-slot-w: max(180px, calc(100vw - 50% - var(--bags-bar-half) - var(--bags-gap) - var(--bags-micro-r)));
+    left: calc((100% + 50% + var(--bags-bar-half) + var(--bags-gap) - var(--bags-micro-r)) / 2);
+    right: auto;
+    bottom: 6px;
+    top: auto;
+    width: min(310px, var(--bags-slot-w));
+    transform: translateX(-50%);
+    max-height: calc(100vh - 18px);
+    overflow: hidden;
+    flex-direction: column;
+  }
+  #bags .panel-title { flex: none; }
+  #bags .bag-grid { flex: 1 1 auto; min-height: 0; overflow-y: auto; }
+  #bags .money { flex: none; }
   .bag-grid { display: flex; flex-direction: column; gap: 2px; }
-  .bag-item { display: flex; gap: 8px; align-items: center; font-size: 12px; padding: 3px 4px; border-radius: 3px; cursor: pointer; }
+  .bag-item { display: flex; gap: 8px; align-items: center; width: 100%; font-size: 12px; padding: 3px 4px; border: 0; border-radius: 3px; cursor: pointer; background: transparent; color: inherit; font-family: var(--ui-font); text-align: left; }
   .bag-item:hover { background: #ffffff12; }
   .bag-item .bi-count { margin-left: auto; color: #ccc; }
+  .bag-empty { font-size: 12px; color: var(--color-text-muted); padding: 6px; }
   .money { margin-top: 8px; font-size: 12px; color: var(--gold); text-align: right; }
+  .money-inline, .coin-part { display: inline-flex; align-items: center; }
   .coin { display: inline-block; width: 11px; height: 11px; border-radius: 50%; vertical-align: -1px; margin-left: 6px; margin-right: 2px; }
   .coin.g { background: radial-gradient(circle at 35% 30%, #ffe98a, #b8860b); }
   .coin.s { background: radial-gradient(circle at 35% 30%, #e8e8e8, #888); }
   .coin.c { background: radial-gradient(circle at 35% 30%, #e8a87a, #8b4513); }
 
   /* social: friends / guild / ignore */
-  #social-window { width: 348px; height: 560px; flex-direction: column; }
+  #social-window { width: 348px; height: 560px; max-height: calc(100vh - 24px);
+    flex-direction: column; overflow-x: hidden; box-sizing: border-box; }
   #social-window.open { display: flex; }
   .soc-realm-tag { color: #7fd4ff; font-size: 11px; font-weight: 400; }
   .soc-tabs { display: flex; gap: 4px; margin: 6px 0 8px; flex: none; }
   .soc-tab { flex: 1; padding: 7px 0; font-size: 13px; font-family: var(--title-font); color: #d8c89a; cursor: pointer;
     background: #1a1410; border: 1px solid #463a1c; border-radius: 4px; text-align: center; }
   .soc-tab:hover { color: var(--gold); }
+  .soc-tab:focus-visible,
+  .soc-x:focus-visible,
+  .soc-name.soc-link:focus-visible,
+  .soc-sugg-item:focus-visible,
+  .trade-item.mine:focus-visible {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 2px;
+  }
   .soc-tab.on { color: var(--gold); border-color: #6f5a2a; background: linear-gradient(#2a2436, #161220); }
-  .soc-body { overflow-y: auto; flex: 1; min-height: 80px; }
-  .soc-row { display: flex; align-items: center; gap: 8px; font-size: 13px; padding: 6px 6px; border-radius: 4px; }
+  .soc-body { overflow-y: auto; overflow-x: hidden; flex: 1; min-height: 80px; }
+  .soc-row { display: flex; align-items: center; gap: 8px; min-width: 0; font-size: 13px; padding: 6px 6px; border-radius: 4px; }
+  .soc-row > span:not(.soc-dot):not(.soc-meta):not(.soc-actions) { min-width: 0; flex: 1 1 auto; }
   .soc-row:hover { background: #ffffff10; }
   .soc-dot { width: 10px; height: 10px; border-radius: 50%; flex: none; background: #555; box-shadow: 0 0 4px #0008; }
   .soc-dot.online { background: #46d246; box-shadow: 0 0 5px #46d246aa; }
@@ -824,6 +969,7 @@
   /* name column flexes and ellipsis-truncates so it never pushes the other columns */
   .soc-id { display: flex; flex-direction: column; min-width: 0; flex: 1 1 auto; }
   .soc-name { color: #f0ead8; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  button.soc-name { border: 0; background: transparent; padding: 0; font-family: var(--ui-font); font-size: inherit; text-align: left; }
   .soc-name.soc-link { cursor: pointer; }
   .soc-name.soc-link:hover { color: #ff80ff; text-decoration: underline; }
   .soc-name .rank { color: #c9b27a; font-weight: 400; font-size: 10px; margin-left: 4px; display: inline-block; text-decoration: none; }
@@ -834,7 +980,7 @@
   .soc-actions { display: flex; gap: 5px; margin-left: 4px; flex: none; }
   .soc-x { color: #e0c89a; cursor: pointer; font-size: 15px; line-height: 1; min-width: 26px; height: 26px;
     display: inline-flex; align-items: center; justify-content: center; padding: 0 5px;
-    border: 1px solid #5a4a26; border-radius: 4px; background: #221a10; }
+    border: 1px solid #5a4a26; border-radius: 4px; background: #221a10; font-family: var(--ui-font); }
   .soc-x:hover { color: #fff0b0; border-color: #8a6f34; background: #2e2416; }
   .soc-notice { flex: none; display: none; font-size: 11px; padding: 5px 7px; margin-top: 6px; border-radius: 4px; }
   .soc-notice.err { color: #ffb0a0; background: #3a1512; border: 1px solid #6e2a1e; }
@@ -846,7 +992,8 @@
   .soc-suggest { position: absolute; left: 0; right: 0; bottom: calc(100% + 3px); display: none; z-index: 30;
     background: #14110d; border: 1px solid #6f5a2a; border-radius: 5px; max-height: 210px; overflow-y: auto;
     box-shadow: 0 -6px 18px #000a; }
-  .soc-sugg-item { display: flex; align-items: center; gap: 8px; padding: 7px 9px; cursor: pointer; font-size: 13px; }
+  .soc-sugg-item { display: flex; width: 100%; align-items: center; gap: 8px; padding: 7px 9px; cursor: pointer; font-size: 13px;
+    border: 0; background: transparent; color: inherit; font-family: var(--ui-font); text-align: left; }
   .soc-sugg-item:hover, .soc-sugg-item.active { background: #2f2740; }
   .soc-sugg-item.active { box-shadow: inset 2px 0 0 var(--gold); }
   .soc-empty { color: #887c5c; font-size: 12px; padding: 10px 6px; text-align: center; }
@@ -902,7 +1049,7 @@
   #market-window { width: 470px; display: none; flex-direction: column; }
   .mkt-tabs { display: flex; gap: 4px; margin: 2px 0 8px; }
   .mkt-tab { flex: 1; text-align: center; font-family: var(--title-font); font-size: 12px; color: #cabb8c;
-    padding: 5px 4px; border-radius: 4px 4px 0 0; cursor: pointer; background: #ffffff08; border-bottom: 2px solid transparent; }
+    padding: 5px 4px; border: 0; border-radius: 4px 4px 0 0; cursor: pointer; background: #ffffff08; border-bottom: 2px solid transparent; }
   .mkt-tab:hover { background: #ffffff14; color: #ffe6a8; }
   .mkt-tab.sel { color: var(--gold); background: #ffffff16; border-bottom-color: #cc9a3c; }
   .mkt-tab .pip { color: #9fdc7f; font-size: 10.5px; }
@@ -913,6 +1060,7 @@
   .mkt-row:hover { background: #ffffff0d; }
   .mkt-row .mkt-name { overflow: hidden; }
   .mkt-row .mkt-name .nm { display: block; }
+  .mkt-row .mkt-name .stack { color: var(--color-text-light); }
   .mkt-row .mkt-name .seller { font-size: 10.5px; color: #8c8468; }
   .mkt-row .mkt-name .seller.house { color: #d4af37; }
   .mkt-row .mkt-price { font-size: 11.5px; color: #ffe6a8; white-space: nowrap; text-align: right; }
@@ -926,7 +1074,7 @@
   .mkt-sell-pick .ps-name { font-size: 13px; }
   .mkt-price-form { display: flex; flex-direction: column; gap: 9px; }
   .mkt-price-row { display: flex; gap: 8px; align-items: center; font-size: 12px; color: #cabb8c; }
-  .mkt-price-row label { width: 64px; }
+  .mkt-price-row label { min-width: 76px; }
   .mkt-price-row .coininput { width: 56px; background: #120d07; border: 1px solid #5a4a2a; color: #ffe6a8;
     border-radius: 4px; padding: 4px 6px; font-family: var(--ui-font, inherit); font-size: 12px; }
   .mkt-coin-tag { color: #998d6a; font-size: 11px; margin-right: 6px; }
@@ -948,7 +1096,9 @@
   .kb-row { display: grid; grid-template-columns: 1fr 78px 78px; align-items: center;
     gap: 6px; padding: 2px 6px; border-radius: 4px; }
   .kb-row:nth-of-type(odd) { background: #ffffff0a; }
-  .kb-name { font-size: 12.5px; color: #e8e0c8; }
+  .kb-name { font-size: 12.5px; color: #e8e0c8; display: flex; align-items: center; justify-content: space-between; gap: 8px; min-width: 0; }
+  .kb-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .kb-inline-key { flex: 0 0 auto; color: #ffd100; font-family: var(--title-font); font-size: 11px; opacity: 0.9; }
   .kb-key { margin: 0; text-align: center; padding: 3px 6px; font-size: 12px;
     background: linear-gradient(#2c2c3a, #15151f); color: #ffd9a0; border-color: #4a3d1d; }
   .kb-key.capturing { border-color: var(--gold); color: #fff; box-shadow: 0 0 8px #ffd100aa; }
@@ -968,6 +1118,11 @@
     justify-self: start;
     box-sizing: border-box;
   }
+  .kb-toggle-row .kb-mouse-toggle {
+    width: 98px;
+    min-width: 98px;
+    max-width: 98px;
+  }
   .kb-toggle.off { filter: grayscale(0.6) brightness(0.8); color: #b9ac82; }
   .set-rows { display: flex; flex-direction: column; gap: 6px; margin-bottom: 6px; }
   .set-row { display: grid; grid-template-columns: 120px 1fr 48px; align-items: center; gap: 10px; padding: 3px 6px; }
@@ -976,14 +1131,52 @@
   .set-val { font-size: 12px; color: #ffd9a0; text-align: right; font-variant-numeric: tabular-nums; }
   .set-toggle { margin: 0; padding: 3px 14px; }
   .set-toggle.off { filter: grayscale(0.6) brightness(0.8); }
+  .set-choice { display: flex; flex-wrap: wrap; gap: 4px; grid-column: 2 / 4; }
+  .set-choice-btn { margin: 0; min-height: 40px; padding: 3px 9px; font-size: 12px; }
+  .set-choice-btn.sel { outline: 1px solid var(--gold); box-shadow: inset 0 0 8px #ffd10033; color: #fff4c7; }
   .set-note { font-size: 11px; color: #b9ac82; margin: 6px 0 2px; line-height: 1.4; }
+
+  /* ---------- emote wheel ---------- */
+  #emote-wheel { position: absolute; left: 50%; top: 50%; width: 330px; height: 330px;
+    transform: translate(-50%, -50%); z-index: 80; display: none; pointer-events: auto;
+    animation: emote-wheel-in 180ms cubic-bezier(0.22, 1, 0.36, 1); }
+  .emote-wheel-ring { position: absolute; inset: 24px; border-radius: 50%;
+    background: radial-gradient(circle, #24190dcc 0 24%, #3a2a17e6 25% 55%, #080706e0 56% 100%);
+    border: 2px solid #8a682c; box-shadow: 0 0 0 1px #000, 0 12px 34px #000b, inset 0 0 34px #000b; }
+  .emote-wheel-item, .emote-wheel-edit { position: absolute; transform: translate(-50%, -50%);
+    display: flex; align-items: center; justify-content: center; text-align: center; font-family: var(--title-font);
+    letter-spacing: 0; border: 2px solid #3f3118; color: #f0dfaf; background: linear-gradient(#2b2418, #16110b);
+    box-shadow: 0 2px 0 #000, inset 0 1px 0 #ffffff12; transition: transform 130ms cubic-bezier(0.25, 1, 0.5, 1), filter 130ms; }
+  .emote-wheel-item { width: 82px; height: 78px; border-radius: 50%; padding: 4px; flex-direction: column; gap: 1px; font-size: 10px; line-height: 1.05; }
+  .emote-wheel-edit { left: 50%; top: 50%; width: 62px; height: 62px; border-radius: 50%; font-size: 12px; }
+  .emote-wheel-item.selected, .emote-wheel-edit.selected { color: #231506; border-color: #ffe27a;
+    background: linear-gradient(#fff0a8, #c9821e); box-shadow: 0 0 18px #ffd65aaa, 0 3px 0 #4a2108;
+    transform: translate(-50%, -50%) scale(1.08); filter: brightness(1.08); }
+  .emote-wheel-icon { width: 42px; height: 42px; display: block; filter: drop-shadow(0 2px 1px #0009); }
+  .emote-wheel-label { max-width: 70px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #emote-editor { width: 390px; }
+  .emote-editor-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 8px 2px 10px; }
+  .emote-editor-item { min-height: 58px; border: 1px solid #463a1c; border-radius: 6px; background: #15110a;
+    color: #d8c89a; cursor: pointer; font-family: var(--title-font); font-size: 11px; display: flex;
+    align-items: center; gap: 6px; padding: 6px; text-align: left; transition: transform 130ms cubic-bezier(0.25, 1, 0.5, 1), filter 130ms; }
+  .emote-editor-icon { width: 34px; height: 34px; flex: 0 0 auto; filter: drop-shadow(0 2px 1px #0009); }
+  .emote-editor-item.selected { color: #211507; border-color: #ffe27a; background: linear-gradient(#fff0a8, #c9821e); }
+  .emote-editor-item:not(:disabled):hover { transform: translateY(-1px); filter: brightness(1.08); }
+  .emote-editor-item:disabled { opacity: 0.45; cursor: not-allowed; filter: grayscale(0.6); }
+  .emote-editor-footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .emote-editor-count { color: #ffd100; font-family: var(--title-font); font-size: 12px; }
+  @keyframes emote-wheel-in { from { transform: translate(-50%, -50%) scale(0.94); opacity: 0; } to { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) {
+    .np-emote, #emote-wheel { animation: none; }
+    .emote-wheel-item, .emote-wheel-edit, .emote-editor-item { transition: none; }
+  }
 
   /* tooltip */
   #tooltip { position: absolute; display: none; z-index: 100; pointer-events: none; max-width: 280px;
     padding: 8px 10px; font-size: 12px; line-height: 1.5; }
   #tooltip .tt-title { font-family: var(--title-font); font-size: 13.5px; color: #fff; }
   #tooltip .tt-sub { color: #998d6a; font-size: 11px; }
-  .tt-opt-icon { width: 14px; height: 14px; vertical-align: -2px; border-radius: 3px; margin-right: 2px; }
+  .tt-opt-icon { width: 16px; height: 16px; display: inline-block; vertical-align: -3px; border-radius: 3px; margin-right: 2px; background-size: cover; background-position: center; background-repeat: no-repeat; }
   #tooltip .tt-desc { color: #ffd100; margin-top: 4px; font-size: 11.5px; }
   #tooltip .tt-stat { color: #fff; font-size: 11.5px; }
   #tooltip .tt-green { color: #1eff00; font-size: 11.5px; }
@@ -1024,16 +1217,19 @@
     flex-direction: column;
     z-index: 100;
     padding: 0;
+    overflow-x: hidden;
     overflow-y: auto;
+    touch-action: pan-y;
+    overscroll-behavior-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   /* Global Header Styling */
   .homepage-header {
     width: 100%;
-    background: var(--theme-header-bg, linear-gradient(180deg, rgba(28, 24, 16, 0.98) 0%, rgba(11, 11, 18, 0.95) 100%));
+    background: linear-gradient(180deg, rgba(28, 24, 16, 0.98) 0%, rgba(11, 11, 18, 0.95) 100%);
     border-bottom: 2px solid transparent;
     border-image: linear-gradient(to right, rgba(78, 61, 29, 0.2), var(--color-primary-dim), rgba(78, 61, 29, 0.2)) 1;
-    transition: background 0.4s ease, border-color 0.4s ease;
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
@@ -1102,12 +1298,12 @@
     display: none;
     flex-direction: column;
     justify-content: space-between;
-    width: 24px;
-    height: 18px;
+    width: 40px;
+    height: 40px;
     background: none;
     border: none;
     cursor: pointer;
-    padding: 0;
+    padding: 11px 8px;
     z-index: 20;
     border-radius: var(--radius-sm);
     transition: box-shadow var(--transition-speed);
@@ -1118,7 +1314,8 @@
     box-shadow: 0 0 8px var(--color-primary-glow);
   }
   .hamburger-bar {
-    width: 100%;
+    width: 24px;
+    align-self: center;
     height: 2px;
     background-color: var(--color-primary-dim);
     border-radius: 1px;
@@ -1184,6 +1381,13 @@
     box-shadow: inset 0 0 5px rgba(255, 209, 0, 0.15), 0 0 8px var(--color-primary-glow);
   }
 
+  body.mobile-touch .nav-link {
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   /* Language Selector */
   .language-selector {
     position: relative;
@@ -1216,6 +1420,12 @@
     box-shadow: 0 0 8px var(--color-primary-glow);
   }
 
+  body.mobile-touch .lang-select-dropdown {
+    min-height: 40px;
+    font-size: 16px;
+    padding: 10px 36px 10px 16px;
+  }
+
   /* Donate: the header's primary call-to-action (filled gold so it reads as the
      main action, unlike the ghost nav links). Mirrored as a footer social link
      and an in-game community button. */
@@ -1223,15 +1433,17 @@
     display: inline-flex;
     align-items: center;
     gap: 7px;
+    min-height: 40px;
+    box-sizing: border-box;
     padding: 7px 16px;
     border-radius: var(--radius-sm);
     border: 1px solid var(--gold-dim);
-    background: linear-gradient(180deg, #ffd86b 0%, #e0a92a 100%);
+    background: #f0c34d;
     color: #2a1c05;
     font-family: var(--font-heading);
     font-size: 13.5px;
     font-weight: 700;
-    letter-spacing: 0.5px;
+    letter-spacing: 0;
     text-decoration: none;
     white-space: nowrap;
     box-shadow: 0 2px 10px rgba(255, 209, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.35);
@@ -1242,102 +1454,12 @@
   .donate-cta:hover,
   .donate-cta:focus-visible {
     filter: brightness(1.08);
+    background: #ffd86b;
     box-shadow: 0 0 14px rgba(255, 209, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.45);
     transform: translateY(-1px);
     outline: none;
   }
   .donate-cta svg { width: 16px; height: 16px; display: block; }
-
-  /* ===== Theme Picker ===== */
-  .theme-picker {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-  }
-  .theme-picker-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--color-border-default);
-    background: rgba(255,255,255,0.04);
-    color: var(--color-text-muted);
-    font-family: var(--font-ui);
-    font-size: 12px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    white-space: nowrap;
-  }
-  .theme-picker-btn:hover {
-    border-color: var(--color-primary-dim);
-    color: var(--color-text-light);
-    background: rgba(255,255,255,0.07);
-  }
-  .theme-picker-btn svg {
-    width: 14px; height: 14px;
-    fill: currentColor;
-  }
-  .theme-swatch {
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    background: var(--color-primary);
-    box-shadow: 0 0 6px var(--color-primary-glow);
-    flex-shrink: 0;
-  }
-  .theme-picker-dropdown {
-    position: absolute;
-    top: calc(100% + 8px);
-    right: 0;
-    min-width: 180px;
-    background: var(--panel-bg);
-    border: 1px solid var(--color-border-default);
-    border-radius: var(--radius-md);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.7);
-    padding: 6px;
-    z-index: 999;
-    display: none;
-    backdrop-filter: blur(12px);
-  }
-  .theme-picker-dropdown.open { display: block; }
-  .theme-option {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
-    padding: 8px 12px;
-    border: none;
-    border-radius: var(--radius-sm);
-    background: transparent;
-    color: var(--color-text-muted);
-    font-family: var(--font-ui);
-    font-size: 13px;
-    cursor: pointer;
-    transition: all 0.15s ease;
-    text-align: left;
-  }
-  .theme-option:hover {
-    background: rgba(255,255,255,0.06);
-    color: var(--color-text-light);
-  }
-  .theme-option.active {
-    color: var(--color-primary);
-    font-weight: 600;
-  }
-  .theme-option .theme-dot {
-    width: 14px; height: 14px;
-    border-radius: 50%;
-    border: 2px solid rgba(255,255,255,0.15);
-    flex-shrink: 0;
-  }
-  .theme-option.active .theme-dot {
-    border-color: currentColor;
-    box-shadow: 0 0 8px currentColor;
-  }
-  .theme-dot-classic { background: #ffd100; }
-  .theme-dot-infernal { background: #ff4422; }
-  .theme-dot-dominion { background: #4aa8ff; }
-  .theme-dot-arcane { background: #c84fff; }
 
   /* Footer donate link keeps the social-link shape but warms up on hover. */
   .footer-lang-row { display: flex; justify-content: center; }
@@ -1697,6 +1819,10 @@
 
   .social-link svg { display: block; }
 
+  body.mobile-touch .social-link {
+    min-height: 40px;
+  }
+
   /* ---------- loading screen (entering the world) ---------- */
   #loading-screen {
     position: absolute;
@@ -1795,7 +1921,7 @@
     outline: none;
     border-radius: var(--radius-sm);
     padding: 8px 12px;
-    font-size: 14px;
+    font-size: 16px;
     font-family: var(--font-sans);
     user-select: text;
     transition: border-color var(--transition-speed);
@@ -1917,6 +2043,41 @@
     box-shadow: 0 0 10px var(--class-color);
   }
 
+  /* ---------- Skin picker (alternate body textures) ---------- */
+  .skin-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 10px 0 2px;
+    min-height: 0;
+  }
+  .skin-row:empty { display: none; }
+  .skin-swatch {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    border: 2px solid rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--color-text-secondary, #b9b9c7);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.12s, box-shadow 0.12s, color 0.12s;
+  }
+  .skin-swatch:hover,
+  .skin-swatch:focus-visible {
+    border-color: rgba(255, 255, 255, 0.5);
+    color: #fff;
+  }
+  .skin-swatch.sel {
+    border-color: var(--class-color, #69ccf0);
+    color: #fff;
+    box-shadow: 0 0 9px var(--class-color, #69ccf0);
+  }
+
   /* ---------- Premium Accessible Login Form styling ---------- */
   .auth-panel-premium {
     width: 100%;
@@ -2012,6 +2173,10 @@
     outline: none;
   }
 
+  body.mobile-touch .auth-panel-premium input {
+    font-size: 16px;
+  }
+
   .password-wrapper {
     width: 100%;
     position: relative;
@@ -2079,6 +2244,15 @@
     font-weight: 500;
   }
 
+  .auth-turnstile {
+    display: flex;
+    justify-content: center;
+    margin: 4px 0;
+  }
+  .auth-turnstile:empty {
+    display: none;
+  }
+
   .auth-error {
     color: #ffc2c2;
     font-family: var(--font-sans);
@@ -2106,6 +2280,12 @@
     display: inline-block;
     margin-right: 8px;
     font-size: 14px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 1px solid var(--color-border-invalid);
+    text-align: center;
+    line-height: 14px;
     vertical-align: middle;
     filter: drop-shadow(0 0 2px rgba(255, 143, 133, 0.6));
   }
@@ -2119,6 +2299,14 @@
     grid-template-columns: 1fr 1fr;
     gap: var(--spacing-sm);
     margin-top: var(--spacing-md);
+  }
+  .auth-panel .btn,
+  .confirm-modal .btn,
+  #mobile-preflight-continue {
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
   .auth-actions-split {
     max-width: 400px;
@@ -2398,6 +2586,7 @@
   #ctx-menu .ctx-title { font-family: var(--title-font); color: var(--gold); font-size: 13px; padding: 3px 8px; border-bottom: 1px solid #463a1c; margin-bottom: 4px; }
   #ctx-menu .ctx-item { padding: 5px 10px; font-size: 12.5px; color: #e8d8a8; cursor: pointer; border-radius: 4px; }
   #ctx-menu .ctx-item:hover { background: #ffffff18; color: #fff; }
+  #ctx-menu .ctx-item:focus-visible { background: #ffffff18; color: #fff; outline: 2px solid var(--color-border-focus); outline-offset: 2px; }
   #ctx-menu .ctx-mark { display: inline-block; width: 18px; height: 18px; vertical-align: middle;
     margin-right: 8px; background-size: contain; background-repeat: no-repeat; background-position: center; }
 
@@ -2414,15 +2603,17 @@
   .prompt .prompt-number:focus { outline: 1px solid var(--gold-dim); }
 
   /* ---------- trade window ---------- */
-  #trade-window { width: 460px; }
+  #trade-window { width: 460px; box-sizing: border-box; overflow-x: hidden; }
   .trade-cols { display: flex; gap: 12px; }
   .trade-col { flex: 1; }
   .trade-col h4 { font-family: var(--title-font); font-size: 12.5px; color: var(--gold); margin-bottom: 6px; }
   .trade-col.accepted h4::after { content: ' ✓'; color: #1eff00; }
   .trade-items { min-height: 120px; border: 1px solid #463a1c; border-radius: 4px; padding: 4px; background: #0c0c12; }
-  .trade-item { display: flex; gap: 6px; align-items: center; font-size: 11.5px; padding: 3px; border-radius: 3px; }
+  .trade-item { display: flex; gap: 6px; align-items: center; width: 100%; font-size: 11.5px; padding: 3px; border: 0;
+    border-radius: 3px; background: transparent; color: inherit; font-family: var(--ui-font); text-align: left; }
   .trade-item.mine { cursor: pointer; }
   .trade-item.mine:hover { background: #ffffff14; }
+  .trade-empty { color: var(--color-text-muted); font-size: 11px; padding: 4px; }
   .trade-money { margin-top: 6px; font-size: 12px; }
   .trade-money input { width: 80px; background: #0d0d14; color: #ffd100; border: 1px solid var(--border); border-radius: 3px; padding: 3px 6px; user-select: text; }
   .trade-hint { font-size: 10.5px; color: #887c5c; margin-top: 8px; }
@@ -2933,21 +3124,65 @@
     text-shadow: 0 0 8px var(--class-color);
   }
 
-  /* ---------- mobile touch controls (runtime-gated with body.mobile-touch) ---------- */
+  /* ---------- mobile touch controls (runtime-gated with body.mobile-touch + game-active) ---------- */
   #mobile-controls { display: none; }
   #mobile-preflight { display: none; }
   #rotate-device { display: none; }
   body.mobile-touch #game-canvas { touch-action: none; }
   body.mobile-touch #ui { touch-action: none; }
-  body.mobile-touch #mobile-controls { position: absolute; inset: 0; display: block; pointer-events: none; z-index: 60; }
+  body.mobile-touch.game-active #mobile-controls { position: absolute; inset: 0; display: block; pointer-events: none; z-index: 60; opacity: var(--touch-opacity, 1); }
+  body.mobile-touch.game-active #ui,
+  body.mobile-touch.game-active #nameplates,
+  body.mobile-touch.game-active #mobile-controls {
+    overflow: hidden;
+    scrollbar-width: none;
+  }
+  body.mobile-touch.game-active #ui::-webkit-scrollbar,
+  body.mobile-touch.game-active #nameplates::-webkit-scrollbar,
+  body.mobile-touch.game-active #mobile-controls::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+  }
+  body.mobile-touch.game-active::-webkit-scrollbar {
+    height: 0;
+  }
+  body.mobile-touch.game-active *::-webkit-scrollbar {
+    height: 0;
+  }
+  body.mobile-touch.game-active *::-webkit-scrollbar:horizontal {
+    height: 0;
+    display: none;
+  }
   body.mobile-touch .mobile-joystick {
     position: absolute; left: max(18px, env(safe-area-inset-left)); bottom: calc(26px + env(safe-area-inset-bottom));
     width: 122px; height: 122px; border-radius: 50%; pointer-events: auto; touch-action: none;
     border: 2px solid #b7a35a80; background: radial-gradient(circle at 50% 50%, #1b1b2960 0%, #0b0b1280 62%, #0505089a 100%);
     box-shadow: 0 3px 18px #0008, inset 0 1px 0 #ffffff12, inset 0 0 26px #0008;
+    opacity: 0.4; transition: opacity .18s ease;
+  }
+  body.mobile-touch .mobile-joystick.active { opacity: 1; }
+  @media (prefers-reduced-motion: reduce) {
+    body.mobile-touch .mobile-joystick { transition: none; }
   }
   body.mobile-touch .mobile-joystick::before {
     content: ''; position: absolute; inset: 28px; border-radius: 50%; border: 1px solid #ffffff18;
+  }
+  /* Floating move joystick: a lower-left capture zone lets the thumb land
+     anywhere; the joystick rests dimmed at home until touched, then springs to
+     the touch point with a gold "engaged" glow. */
+  body.mobile-touch #mobile-move-zone {
+    position: absolute; left: 0; bottom: 0; width: min(34vw, calc(50vw - 126px)); min-width: 142px; max-width: 300px; height: 58%;
+    pointer-events: auto; touch-action: none; z-index: 1;
+  }
+  body.mobile-touch.mobile-chat-open #mobile-move-zone { pointer-events: none; }
+  body.mobile-touch #mobile-move-joystick { opacity: .5; transition: opacity .12s linear; }
+  body.mobile-touch #mobile-move-joystick.floating {
+    opacity: 1; bottom: auto; left: 0; transition: none;
+  }
+  body.mobile-touch #mobile-move-joystick.active {
+    border-color: var(--gold);
+    box-shadow: 0 3px 18px #0008, inset 0 1px 0 #ffffff12, inset 0 0 26px #0008, 0 0 16px 3px #e3c66a55;
   }
   body.mobile-touch #mobile-camera-joystick {
     left: auto; right: max(18px, env(safe-area-inset-right));
@@ -2962,7 +3197,7 @@
   }
   body.mobile-touch #mobile-combat-controls {
     position: absolute; left: 50%; bottom: calc(4px + env(safe-area-inset-bottom)); transform: translateX(-50%);
-    display: grid; grid-template-columns: 124px 58px 58px; gap: 8px; pointer-events: auto; align-items: end;
+    display: grid; grid-template-columns: 124px repeat(5, 58px); gap: 8px; pointer-events: auto; align-items: end; z-index: 30;
   }
   body.mobile-touch .mobile-btn {
     width: 58px; height: 54px; border: 2px solid #4a3d1d; border-radius: 8px;
@@ -2973,29 +3208,50 @@
   body.mobile-touch .mobile-btn .ui-icon { width: 22px; height: 22px; }
   body.mobile-touch #mobile-attack-nearest { width: 124px; color: #ffdf9c; border-color: #8b4e2c; }
   body.mobile-touch #mobile-more {
-    position: fixed;
-    left: calc(50% + 190px);
-    bottom: calc(4px + env(safe-area-inset-bottom));
+    position: static;
     z-index: 19;
   }
   body.mobile-touch .mobile-btn:active { transform: translateY(1px); border-color: var(--gold); color: #fff; }
+  body.mobile-touch #mobile-autorun {
+    position: fixed; pointer-events: auto;
+    left: max(calc(18px + env(safe-area-inset-left)), calc(50% - 208px));
+    bottom: calc(72px + env(safe-area-inset-bottom));
+    z-index: 19;
+  }
+  body.mobile-touch #mobile-autorun.active {
+    border-color: var(--gold); color: #fff;
+    background: radial-gradient(circle at 35% 30%, #5a4a1ed8, #2a230fd8 72%);
+    box-shadow: inset 0 1px 0 #ffffff20, 0 0 12px #e3c46a80;
+  }
+  body.mobile-touch.mobile-window-open #mobile-autorun { display: none; }
+  body.mobile-touch .mobile-btn.is-on { border-color: var(--gold); color: #fff; }
+  body.mobile-touch .mobile-btn:not(.is-on)#mobile-haptics { opacity: 0.55; }
   body.mobile-touch .mobile-btn .mobile-label { display: block; margin-top: 1px; font-size: 8px; font-family: var(--ui-font); color: #bfb28a; }
   body.mobile-touch #mobile-extra-controls {
     position: fixed;
-    left: calc(50% + 190px);
+    left: min(calc(50% + 136px), calc(100vw - 222px - max(12px, env(safe-area-inset-right, 0px))));
     bottom: calc(66px + env(safe-area-inset-bottom));
     display: none;
-    grid-template-columns: repeat(2, 112px);
+    grid-template-columns: repeat(2, 104px);
     grid-auto-rows: 42px;
     gap: 7px;
     pointer-events: auto;
     z-index: 70;
+    /* The tray grows upward from a fixed bottom. As it has gained buttons it can
+       now run off the TOP of a short landscape phone, leaving the upper rows
+       unreachable, so cap it to the space above the bottom controls and let the
+       overflow scroll. 100dvh accounts for mobile browser chrome (unlike 100vh). */
+    max-height: calc(100dvh - 84px - env(safe-area-inset-bottom));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
   }
   body.mobile-touch.mobile-more-open #mobile-extra-controls { display: grid; }
   body.mobile-touch #mobile-extra-controls .mobile-btn {
-    width: 112px;
+    width: 104px;
     height: 42px;
     display: flex;
+    flex-direction: row;
     align-items: center;
     justify-content: flex-start;
     gap: 8px;
@@ -3008,8 +3264,24 @@
     font-size: 10px;
     color: #e6d8ae;
   }
+  body.mobile-touch #mobile-extra-controls .mobile-btn .ui-icon {
+    flex: 0 0 22px;
+  }
+  /* A toggle tray button (e.g. Nameplates) glows gold while its feature is on. */
+  body.mobile-touch #mobile-extra-controls .mobile-btn.active {
+    border-color: var(--gold);
+    box-shadow: 0 0 8px #ffd10066, inset 0 0 6px #ffd10033;
+  }
+  body.mobile-touch #mobile-extra-controls .mobile-btn.active .mobile-label { color: var(--gold); }
+  /* music toggle: a diagonal slash over the note signals "off" (mirrors #mm-music) */
+  body.mobile-touch #mobile-music { position: relative; }
+  body.mobile-touch #mobile-music.mm-muted::after {
+    content: ''; position: absolute; left: 21px; top: 50%; width: 24px; height: 2px; border-radius: 2px;
+    background: #f0e8d2; box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.7);
+    transform: translate(-50%, -50%) rotate(-45deg); pointer-events: none;
+  }
   body.mobile-touch #bottom-bar {
-    left: 0; right: 0; bottom: calc(62px + env(safe-area-inset-bottom));
+    left: 0; right: 0; bottom: calc(72px + env(safe-area-inset-bottom));
     width: 100%;
     transform: none;
     z-index: 18;
@@ -3020,10 +3292,12 @@
   body.mobile-touch #actionbar-row { pointer-events: auto; }
   body.mobile-touch #xpbar {
     position: fixed;
-    left: calc(max(18px, env(safe-area-inset-left)) + 132px);
-    bottom: calc(7px + env(safe-area-inset-bottom));
-    width: min(170px, calc(50vw - 164px));
-    min-width: 112px;
+    left: max(8px, env(safe-area-inset-left));
+    right: auto;
+    top: calc(max(8px, env(safe-area-inset-top)) + 70px);
+    bottom: auto;
+    width: 246px;
+    min-width: 0;
     height: 6px;
     display: block;
     margin: 0;
@@ -3046,6 +3320,16 @@
   }
   body.mobile-touch #castbar .label { display: none; }
   body.mobile-touch #actionbar-row { display: block; }
+  body.mobile-touch #petbar {
+    position: fixed;
+    left: 50%;
+    top: max(8px, env(safe-area-inset-top));
+    transform: translateX(-50%);
+    align-self: auto;
+    margin: 0;
+    z-index: 28;
+    pointer-events: auto;
+  }
   body.mobile-touch #side-buttons { display: none; }
   body.mobile-touch #actionbar {
     display: grid;
@@ -3064,7 +3348,7 @@
   body.mobile-touch .action-btn:first-child { display: none; }
   body.mobile-touch .action-btn.empty { display: none; }
   body.mobile-touch #community-hud {
-    right: 8px;
+    right: max(8px, env(safe-area-inset-right));
     top: 130px;
     bottom: auto;
     width: 70px;
@@ -3076,15 +3360,29 @@
     height: 46px;
     padding: 0;
   }
+  body.mobile-touch .community-link.donate {
+    display: none;
+  }
   body.mobile-touch .community-link svg {
     width: 22px;
     height: 22px;
   }
-  body.mobile-touch #chatlog-wrap { left: 10px; bottom: calc(160px + env(safe-area-inset-bottom)); width: min(340px, calc(100vw - 20px)); display: none; z-index: 24; }
+  body.mobile-touch .community-link.donate svg {
+    width: 16px;
+    height: 16px;
+  }
+  body.mobile-touch #chatlog-wrap { left: max(10px, env(safe-area-inset-left)); bottom: calc(160px + env(safe-area-inset-bottom)); width: min(340px, calc(100vw - 20px)); display: none; z-index: 24; }
   body.mobile-touch.mobile-chat-open #chatlog-wrap { display: block; }
   body.mobile-touch #chatlog-frame { height: 126px; }
   body.mobile-touch #chatlog-tabs { transform: scale(0.92); transform-origin: left bottom; }
-  body.mobile-touch #chat-input { left: 10px; bottom: calc(296px + env(safe-area-inset-bottom)); width: min(360px, calc(100vw - 20px)); }
+  body.mobile-touch #chat-input {
+    left: max(10px, env(safe-area-inset-left));
+    bottom: calc(296px + env(safe-area-inset-bottom));
+    width: min(360px, calc(100vw - 20px));
+    min-height: 40px;
+    box-sizing: border-box;
+    font-size: 16px;
+  }
   body.mobile-touch #player-frame {
     position: fixed;
     left: max(8px, env(safe-area-inset-left));
@@ -3107,9 +3405,9 @@
     transform: scale(0.82);
     transform-origin: left top;
   }
-  body.mobile-touch #buff-bar { right: 10px; top: 140px; max-width: 180px; }
-  body.mobile-touch #minimap-wrap { right: 8px; top: 8px; transform: scale(0.72); transform-origin: right top; }
-  body.mobile-touch #quest-tracker { right: 10px; top: 150px; width: 190px; font-size: 11px; }
+  body.mobile-touch #buff-bar { right: max(10px, env(safe-area-inset-right)); top: max(140px, env(safe-area-inset-top)); max-width: 180px; }
+  body.mobile-touch #minimap-wrap { right: max(8px, env(safe-area-inset-right)); top: max(8px, env(safe-area-inset-top)); transform: scale(0.72); transform-origin: right top; }
+  body.mobile-touch #quest-tracker { right: max(10px, env(safe-area-inset-right)); top: max(150px, env(safe-area-inset-top)); width: 190px; font-size: 11px; }
   body.mobile-touch #meters-window {
     position: fixed;
     left: calc(max(18px, env(safe-area-inset-left)) + 132px);
@@ -3122,13 +3420,152 @@
     overflow: hidden;
     z-index: 25;
   }
+  /* Left-handed mirror: swap the two thumb joysticks (and the bottom HUD that
+     hugs them) so the movement stick sits under the right thumb. Opt-in via the
+     "Left-handed Touch" toggle in Key Bindings; centred combat buttons stay put. */
+  body.mobile-touch.mobile-left-handed .mobile-joystick {
+    left: auto; right: max(18px, env(safe-area-inset-right));
+  }
+  body.mobile-touch.mobile-left-handed #mobile-camera-joystick {
+    right: auto; left: max(18px, env(safe-area-inset-left));
+  }
+  body.mobile-touch.mobile-left-handed #mobile-more {
+    left: auto; right: auto;
+  }
+  body.mobile-touch.mobile-left-handed #mobile-extra-controls {
+    left: auto;
+    right: min(calc(50% + 136px), calc(100vw - 222px - max(12px, env(safe-area-inset-right, 0px))));
+  }
+  body.mobile-touch.mobile-left-handed #castbar {
+    left: auto; right: calc(max(18px, env(safe-area-inset-right)) + 132px);
+  }
+  body.mobile-touch.mobile-left-handed #meters-window {
+    left: auto; right: calc(max(18px, env(safe-area-inset-right)) + 132px);
+  }
+  body.mobile-touch #banner {
+    top: 18%;
+    max-width: calc(100vw - 24px);
+    font-size: 26px;
+    line-height: 1.12;
+    text-align: center;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
   body.mobile-touch .window { max-width: calc(100vw - 20px); max-height: calc(100vh - 40px); }
+  body.mobile-touch.mobile-window-open #ui {
+    z-index: 90;
+  }
   body.mobile-touch #options-menu,
   body.mobile-touch #quest-log-window,
   body.mobile-touch #spellbook,
   body.mobile-touch #vendor-window,
+  body.mobile-touch #market-window,
   body.mobile-touch #quest-dialog {
     left: 10px; right: 10px; top: 10px; width: auto; transform: none;
+    box-sizing: border-box; overflow-y: auto;
+  }
+  body.mobile-touch #vendor-window,
+  body.mobile-touch #market-window {
+    max-height: calc(58vh - 20px);
+  }
+  body.mobile-touch #social-window,
+  body.mobile-touch #trade-window {
+    position: fixed;
+    left: 10px;
+    right: 10px;
+    width: auto;
+    max-width: calc(100vw - 20px);
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+  body.mobile-touch #social-window {
+    bottom: 10px;
+    height: min(560px, calc(100vh - 20px));
+  }
+  body.mobile-touch #trade-window {
+    top: 10px;
+    transform: none;
+    max-height: calc(100vh - 20px);
+    overflow-y: auto;
+  }
+  body.mobile-touch #trade-window .trade-cols {
+    flex-direction: column;
+  }
+  body.mobile-touch #bags {
+    position: fixed;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    width: auto;
+    max-height: calc(38vh - 20px);
+    box-sizing: border-box;
+    overflow-y: auto;
+  }
+  body.mobile-touch .vendor-item,
+  body.mobile-touch .bag-item,
+  body.mobile-touch .mkt-tab,
+  body.mobile-touch .mkt-btn,
+  body.mobile-touch .mkt-list-btn,
+  body.mobile-touch #loot-window .btn,
+  body.mobile-touch .soc-tab,
+  body.mobile-touch .soc-x,
+  body.mobile-touch .soc-sugg-item,
+  body.mobile-touch .trade-item.mine,
+  body.mobile-touch #social-window .btn,
+  body.mobile-touch #trade-window .btn {
+    min-height: 40px;
+    font-size: 16px;
+  }
+  body.mobile-touch .soc-add input,
+  body.mobile-touch .trade-money input {
+    min-height: 40px;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+  body.mobile-touch .soc-x,
+  body.mobile-touch .soc-name.soc-link {
+    min-width: 40px;
+  }
+  body.mobile-touch .soc-name.soc-link {
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    max-width: 100%;
+    white-space: normal;
+    overflow: visible;
+    overflow-wrap: anywhere;
+    text-overflow: clip;
+  }
+  body.mobile-touch .x-btn {
+    min-width: 40px;
+    min-height: 40px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    font-size: 16px;
+  }
+  body.mobile-touch #char-window {
+    left: 10px;
+    top: 10px;
+    width: min(360px, calc(100vw - 20px));
+    max-height: calc(100vh - 20px);
+    box-sizing: border-box;
+    overflow-y: auto;
+  }
+  body.mobile-touch .mkt-price-row {
+    flex-wrap: wrap;
+  }
+  body.mobile-touch .mkt-price-row .coininput {
+    min-height: 40px;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+  body.mobile-touch #quest-log-window,
+  body.mobile-touch #quest-dialog {
+    max-width: calc(100vw - 20px);
+    max-height: calc(100vh - 20px);
   }
   body.mobile-touch #quest-log-window,
   body.mobile-touch #vendor-window,
@@ -3149,6 +3586,83 @@
     width: min(560px, calc(100vw - 170px));
     max-height: calc(100vh - 92px);
     transform: translateX(-50%);
+  }
+  body.mobile-touch #talents-window {
+    position: fixed;
+    left: 50%;
+    right: auto;
+    top: 50%;
+    width: min(600px, calc(100vw - 20px));
+    max-width: calc(100vw - 20px);
+    max-height: calc(100vh - 24px);
+    transform: translate(-50%, -50%);
+    z-index: 95 !important;
+  }
+  body.mobile-touch #spellbook [data-close] {
+    min-width: 40px;
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    box-sizing: border-box;
+    font-size: 16px;
+  }
+  body.mobile-touch #quest-dialog .qd-list-item,
+  body.mobile-touch #quest-log-window .ql-item,
+  body.mobile-touch #quest-dialog .btn,
+  body.mobile-touch #quest-log-window .btn,
+  body.mobile-touch #quest-dialog [data-close],
+  body.mobile-touch #quest-log-window [data-close] {
+    min-width: 40px;
+    min-height: 40px;
+    font-size: 16px;
+  }
+  body.mobile-touch #quest-dialog .qd-text,
+  body.mobile-touch #quest-log-window .qd-text,
+  body.mobile-touch #quest-dialog .qd-obj,
+  body.mobile-touch #quest-log-window .qd-obj,
+  body.mobile-touch #quest-log-window .ql-empty {
+    font-size: 16px;
+  }
+  body.mobile-touch #quest-log-window .ql-cols {
+    gap: var(--spacing-sm);
+    min-width: 0;
+  }
+  body.mobile-touch #quest-log-window .ql-list {
+    width: min(42%, 220px);
+    min-width: 0;
+  }
+  body.mobile-touch #quest-log-window .ql-detail {
+    min-width: 0;
+  }
+  body.mobile-touch #options-menu .btn {
+    min-height: 40px;
+    padding-top: 9px;
+    padding-bottom: 9px;
+    font-size: 16px;
+  }
+  body.mobile-touch #report-window {
+    left: 10px !important;
+    right: 10px !important;
+    width: auto !important;
+    box-sizing: border-box;
+  }
+  body.mobile-touch #report-window select,
+  body.mobile-touch #report-window textarea {
+    min-height: 40px;
+    font-size: 16px;
+  }
+  body.mobile-touch #report-window [data-close],
+  body.mobile-touch #report-window .btn {
+    min-width: 40px;
+    min-height: 40px;
+  }
+  body.mobile-touch #ctx-menu .ctx-item {
+    display: flex;
+    align-items: center;
+    min-height: 40px;
+    font-size: 16px;
   }
   body.mobile-touch #social-window {
     left: 50%;
@@ -3247,6 +3761,12 @@
 
   @media (orientation: portrait) {
     body.mobile-touch.game-active #rotate-device { display: flex; }
+    body.mobile-touch #mobile-combat-controls {
+      grid-template-columns: 96px repeat(5, 42px);
+      gap: 4px;
+    }
+    body.mobile-touch .mobile-btn { width: 42px; height: 44px; font-size: 16px; }
+    body.mobile-touch #mobile-attack-nearest { width: 96px; }
   }
 
   @media (orientation: landscape) {
@@ -3262,37 +3782,43 @@
     }
     body.mobile-touch .mobile-joy-label { bottom: -15px; font-size: 8px; color: #d7c987aa; }
     body.mobile-touch #mobile-combat-controls {
-      bottom: calc(2px + env(safe-area-inset-bottom)); grid-template-columns: 115px 54px 54px; gap: 7px;
+      bottom: calc(2px + env(safe-area-inset-bottom)); grid-template-columns: 115px repeat(5, 54px); gap: 7px;
     }
     body.mobile-touch .mobile-btn { width: 54px; height: 48px; font-size: 20px; background: radial-gradient(circle at 35% 30%, #2d3048bf, #11121ec2 72%); }
     body.mobile-touch #mobile-attack-nearest { width: 115px; }
-    body.mobile-touch #mobile-more {
-      left: calc(50% + 176px);
-      bottom: calc(2px + env(safe-area-inset-bottom));
-    }
     body.mobile-touch #mobile-extra-controls {
-      left: calc(50% + 176px);
+      left: min(calc(50% + 126px), calc(100vw - 208px - max(12px, env(safe-area-inset-right, 0px))));
       bottom: calc(58px + env(safe-area-inset-bottom));
-      grid-template-columns: repeat(2, 104px);
-      grid-auto-rows: 38px;
+      grid-template-columns: repeat(2, 98px);
+      grid-auto-rows: 40px;
       gap: 6px;
+      max-height: calc(100dvh - 74px - env(safe-area-inset-bottom));
+    }
+    body.mobile-touch.mobile-left-handed #mobile-extra-controls {
+      left: auto;
+      right: min(calc(50% + 126px), calc(100vw - 208px - max(12px, env(safe-area-inset-right, 0px))));
     }
     body.mobile-touch #mobile-extra-controls .mobile-btn {
-      width: 104px;
-      height: 38px;
+      width: 98px;
+      height: 40px;
       font-size: 16px;
       padding: 0 9px;
     }
     body.mobile-touch #mobile-extra-controls .mobile-label { font-size: 9px; }
-    body.mobile-touch #bottom-bar { bottom: calc(50px + env(safe-area-inset-bottom)); }
-    body.mobile-touch #actionbar { grid-template-columns: repeat(5, 38px); grid-auto-rows: 38px; gap: 4px; padding: 4px; width: max-content; background: linear-gradient(170deg, #15151fa8, #08080db8); }
-    body.mobile-touch #actionbar.many-spells { grid-template-columns: repeat(6, 38px); }
-    body.mobile-touch .action-btn { width: 38px; height: 38px; }
+    body.mobile-touch #bottom-bar { bottom: calc(58px + env(safe-area-inset-bottom)); }
+    body.mobile-touch #mobile-autorun {
+      left: max(calc(20px + env(safe-area-inset-left)), calc(50% - 194px));
+      bottom: calc(58px + env(safe-area-inset-bottom));
+    }
+    body.mobile-touch #actionbar { grid-template-columns: repeat(5, 40px); grid-auto-rows: 40px; gap: 4px; padding: 4px; width: max-content; background: linear-gradient(170deg, #15151fa8, #08080db8); }
+    body.mobile-touch #actionbar.many-spells { grid-template-columns: repeat(6, 40px); }
+    body.mobile-touch .action-btn { width: 40px; height: 40px; }
     body.mobile-touch #xpbar {
-      left: calc(max(20px, env(safe-area-inset-left)) + 112px);
-      bottom: calc(6px + env(safe-area-inset-bottom));
-      width: min(160px, calc(50vw - 166px));
-      min-width: 100px;
+      left: max(6px, env(safe-area-inset-left));
+      top: calc(max(6px, env(safe-area-inset-top)) + 48px);
+      bottom: auto;
+      width: 180px;
+      min-width: 0;
       height: 5px;
     }
     body.mobile-touch #castbar {
@@ -3302,12 +3828,17 @@
       min-width: 100px;
       height: 5px;
     }
-    body.mobile-touch #community-hud { top: 108px; right: 8px; width: 62px; padding: 4px; gap: 4px; }
+    body.mobile-touch #petbar {
+      top: max(6px, env(safe-area-inset-top));
+      transform: translateX(-50%) scale(0.88);
+      transform-origin: center top;
+    }
+    body.mobile-touch #community-hud { top: 108px; right: max(8px, env(safe-area-inset-right)); width: 62px; padding: 4px; gap: 4px; }
     body.mobile-touch .community-link { height: 40px; }
     body.mobile-touch .community-link svg { width: 20px; height: 20px; }
-    body.mobile-touch #chatlog-wrap { left: 10px; bottom: calc(112px + env(safe-area-inset-bottom)); width: min(330px, 44vw); }
+    body.mobile-touch #chatlog-wrap { left: max(10px, env(safe-area-inset-left)); bottom: calc(112px + env(safe-area-inset-bottom)); width: min(330px, 44vw); }
     body.mobile-touch #chatlog-frame { height: 92px; }
-    body.mobile-touch #chat-input { left: 10px; bottom: calc(213px + env(safe-area-inset-bottom)); width: min(330px, 44vw); }
+    body.mobile-touch #chat-input { left: max(10px, env(safe-area-inset-left)); bottom: calc(213px + env(safe-area-inset-bottom)); width: min(330px, 44vw); }
     body.mobile-touch #player-frame {
       left: max(6px, env(safe-area-inset-left));
       top: max(6px, env(safe-area-inset-top));
@@ -3323,8 +3854,8 @@
       top: calc(max(6px, env(safe-area-inset-top)) + 50px);
       transform: scale(0.6);
     }
-    body.mobile-touch #buff-bar { right: 98px; top: 8px; max-width: 160px; transform: scale(0.85); transform-origin: right top; }
-    body.mobile-touch #minimap-wrap { right: 6px; top: 6px; transform: scale(0.46); }
+    body.mobile-touch #buff-bar { right: calc(98px + env(safe-area-inset-right)); top: max(8px, env(safe-area-inset-top)); max-width: 160px; transform: scale(0.85); transform-origin: right top; }
+    body.mobile-touch #minimap-wrap { right: max(6px, env(safe-area-inset-right)); top: max(6px, env(safe-area-inset-top)); transform: scale(0.46); }
     body.mobile-touch #quest-tracker { display: none; }
     body.mobile-touch #meters-window {
       position: fixed;
@@ -3337,7 +3868,15 @@
       max-height: min(135px, calc(100vh - 112px));
       transform: none;
     }
-    body.mobile-touch #banner { top: 18%; font-size: 30px; }
+    body.mobile-touch #banner {
+      top: 18%;
+      max-width: calc(100vw - 24px);
+      font-size: 26px;
+      line-height: 1.12;
+      text-align: center;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
     body.mobile-touch #error-msg { top: 16%; font-size: 16px; }
     body.mobile-touch #mobile-preflight .preflight-panel { width: min(520px, 84vw); padding: 18px 22px; }
     body.mobile-touch #mobile-preflight h2 { font-size: 22px; }
@@ -3536,7 +4075,7 @@
     margin: 12px 0;
   }
   body.mobile-touch .mobile-char-tab {
-    height: 34px;
+    min-height: 40px;
     border: 1px solid #4a3d1d;
     border-radius: 5px;
     background: linear-gradient(#201b28, #100e16);
@@ -3602,10 +4141,75 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 7px;
   }
-  body.mobile-touch #charselect-panel .mini-class {
+  body.mobile-touch #charselect-panel .mini-class,
+  body.mobile-touch #offline-select .mini-class {
     min-width: 0;
+    min-height: 40px;
     padding: 9px 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
+  }
+
+  body.mobile-touch .mobile-menu-toggle {
+    display: flex;
+  }
+  body.mobile-touch .homepage-header {
+    display: flex;
+    position: sticky;
+    top: 0;
+    z-index: 120;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+  body.mobile-touch .header-menu-container {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(11, 11, 18, 0.98);
+    border-bottom: 2px solid var(--color-border-default);
+    flex-direction: column;
+    align-items: center;
+    padding: var(--spacing-md);
+    gap: var(--spacing-md);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+    z-index: 99;
+  }
+  body.mobile-touch .homepage-header.menu-open .header-menu-container {
+    display: flex;
+  }
+  body.mobile-touch .homepage-nav {
+    width: 100%;
+    justify-content: center;
+  }
+  body.mobile-touch .nav-list {
+    flex-direction: column;
+    width: 100%;
+    gap: 4px;
+  }
+  body.mobile-touch .nav-link {
+    width: 100%;
+    text-align: center;
+    padding: var(--spacing-sm);
+    font-size: 14px;
+  }
+  body.mobile-touch .header-actions {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 0;
+  }
+  body.mobile-touch .language-selector {
+    width: 100%;
+    max-width: 240px;
+  }
+  body.mobile-touch .lang-select-dropdown {
+    width: 100%;
   }
 
   @media (max-width: 760px) {
@@ -3655,6 +4259,10 @@
     .nav-link {
       width: 100%;
       text-align: center;
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       padding: var(--spacing-sm);
       font-size: 14px;
     }
@@ -3666,7 +4274,7 @@
     }
     .language-selector {
       width: 100%;
-      max-width: 160px;
+      max-width: 240px;
     }
     .lang-select-dropdown {
       width: 100%;
@@ -3684,9 +4292,12 @@
     }
     .social-link {
       width: 42px;
-      height: 36px;
+      min-height: 40px;
       padding: 0;
       justify-content: center;
+    }
+    .community-link.donate {
+      display: none;
     }
     .social-link span { display: none; }
     .social-link svg { width: 18px; height: 18px; }
@@ -3699,11 +4310,17 @@
 
   <template id="game-ui-template">
   <div id="ui">
+    <div id="click-move-marker" class="click-move-marker" aria-hidden="true">
+      <span class="ctm-arrow ctm-n"></span>
+      <span class="ctm-arrow ctm-e"></span>
+      <span class="ctm-arrow ctm-s"></span>
+      <span class="ctm-arrow ctm-w"></span>
+    </div>
     <div id="target-frame" class="unitframe">
       <div class="portrait-wrap">
         <div class="portrait"><canvas id="tf-portrait" width="54" height="54"></canvas></div>
         <div class="level-chip" id="tf-level"></div>
-        <div id="tf-elite-tag">ELITE</div>
+        <div id="tf-elite-tag" data-i18n="hud.core.elite">ELITE</div>
       </div>
       <div class="uf-bars">
         <div class="uf-name" id="tf-name"></div>
@@ -3724,22 +4341,22 @@
     <div id="castbar"><div class="fill"></div><div class="label"></div></div>
 
     <div id="minimap-wrap">
-      <div id="zone-label">Eastbrook Vale</div>
+      <div id="zone-label" data-i18n="entities.zones.eastbrook_vale.name">Eastbrook Vale</div>
       <canvas id="minimap" width="162" height="162"></canvas>
     </div>
 
-    <div id="community-hud" aria-label="Community links">
-      <a class="community-link discord" href="https://discord.gg/GjhnUsBtw" target="_blank" rel="noopener noreferrer" title="Join the Discord" aria-label="Join the Discord community">
+    <div id="community-hud" data-i18n-aria="hud.core.communityLinks" aria-label="Community links">
+      <a class="community-link discord" href="https://discord.gg/GjhnUsBtw" target="_blank" rel="noopener noreferrer" data-i18n-title="a11y.discordCommunity" data-i18n-aria="a11y.discordCommunity" title="Join the World of ClaudeCraft Discord community" aria-label="Join the World of ClaudeCraft Discord community">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.32 4.37A19.8 19.8 0 0 0 15.36 2.8a13.66 13.66 0 0 0-.64 1.32 18.47 18.47 0 0 0-5.45 0 13.02 13.02 0 0 0-.65-1.32 19.73 19.73 0 0 0-4.96 1.58C.53 9.03-.32 13.56.1 18.02a19.9 19.9 0 0 0 6.08 3.08c.49-.67.93-1.38 1.3-2.13-.72-.27-1.41-.6-2.06-.98.17-.13.34-.26.5-.4a14.16 14.16 0 0 0 12.16 0c.16.14.33.27.5.4-.65.39-1.34.72-2.07.99.38.74.81 1.45 1.31 2.12a19.86 19.86 0 0 0 6.08-3.08c.5-5.17-.85-9.66-3.58-13.65ZM8.02 15.28c-1.18 0-2.15-1.08-2.15-2.41 0-1.33.95-2.42 2.15-2.42 1.2 0 2.17 1.1 2.15 2.42 0 1.33-.95 2.41-2.15 2.41Zm7.96 0c-1.18 0-2.15-1.08-2.15-2.41 0-1.33.95-2.42 2.15-2.42 1.2 0 2.17 1.1 2.15 2.42 0 1.33-.95 2.41-2.15 2.41Z"/></svg>
         <span>Discord</span>
       </a>
-      <a class="community-link github" href="https://github.com/BlizzHacker/cryptic-realm" target="_blank" rel="noopener noreferrer" title="View GitHub" aria-label="View Cryptic Realm on GitHub">
+      <a class="community-link github" href="https://github.com/levy-street/world-of-claudecraft" target="_blank" rel="noopener noreferrer" data-i18n-title="a11y.githubProject" data-i18n-aria="a11y.githubProject" title="Open the World of ClaudeCraft GitHub project" aria-label="Open the World of ClaudeCraft GitHub project">
         <svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
         <span>GitHub</span>
       </a>
-      <a class="community-link donate" href="https://github.com/sponsors/BlizzHacker" target="_blank" rel="noopener noreferrer" title="Support the project" aria-label="Donate to support Cryptic Realm">
+      <a class="community-link donate" href="https://github.com/sponsors/levy-street" target="_blank" rel="noopener noreferrer" data-i18n-title="a11y.donateProject" data-i18n-aria="a11y.donateProject" title="Support the project" aria-label="Donate to support World of ClaudeCraft">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-        <span>Donate</span>
+        <span data-i18n="nav.donate">Donate</span>
       </a>
     </div>
 
@@ -3754,25 +4371,26 @@
               <div class="level-chip" id="pf-level">1</div>
             </div>
             <div class="uf-bars">
-              <div class="uf-name" id="pf-name">Adventurer</div>
+              <div class="uf-name" id="pf-name"></div>
               <div class="bar hp"><div class="bar-fill" id="pf-hp"></div><div class="bar-text" id="pf-hp-text"></div></div>
               <div class="bar mana" id="pf-resource"><div class="bar-fill" id="pf-res"></div><div class="bar-text" id="pf-res-text"></div></div>
             </div>
           </div>
+          <div id="petbar" class="panel"></div>
           <div id="xpbar"><div class="fill"></div><div class="ticks"></div><div class="label"></div></div>
           <div id="actionbar" class="panel"></div>
         </div>
         <div id="meters-window" class="panel">
           <div class="panel-title">
             <span class="mt-tabs">
-              <button class="mt-tab on" data-tab="dmg">Dmg</button>
-              <button class="mt-tab" data-tab="heal">Heal</button>
-              <button class="mt-tab" data-tab="threat">Threat</button>
+              <button class="mt-tab on" data-tab="dmg" data-i18n="hud.meters.damageShort">Dmg</button>
+              <button class="mt-tab" data-tab="heal" data-i18n="hud.meters.healingShort">Heal</button>
+              <button class="mt-tab" data-tab="threat" data-i18n="hud.meters.threat">Threat</button>
             </span>
             <span>
-              <button class="x-btn mt-prev" title="older segment" data-icon="prev"></button>
-              <button class="x-btn mt-next" title="newer segment" data-icon="next"></button>
-              <button class="x-btn mt-close" title="Close" data-icon="close"></button>
+              <button class="x-btn mt-prev" data-i18n-title="hud.meters.olderSegment" title="Older segment" data-icon="prev"></button>
+              <button class="x-btn mt-next" data-i18n-title="hud.meters.newerSegment" title="Newer segment" data-icon="next"></button>
+              <button class="x-btn mt-close" data-i18n-title="hud.meters.close" data-i18n-aria="hud.meters.close" title="Close meters" aria-label="Close meters" data-icon="close"></button>
             </span>
           </div>
           <div class="mt-view"></div>
@@ -3784,8 +4402,8 @@
 
     <div id="chatlog-wrap">
       <div id="chatlog-tabs">
-        <button class="chat-tab active" data-log-tab="chat">Chat</button>
-        <button class="chat-tab" data-log-tab="combat">Combat Log</button>
+        <button class="chat-tab active" data-log-tab="chat" data-i18n="hud.core.chatTab">Chat</button>
+        <button class="chat-tab" data-log-tab="combat" data-i18n="hud.core.combatLogTab">Combat Log</button>
       </div>
       <div id="chatlog-frame" class="panel">
         <div id="chatlog" class="chat-pane active"></div>
@@ -3802,10 +4420,10 @@
     <div id="quest-log-window" class="window panel"></div>
     <div id="vendor-window" class="window panel"></div>
     <div id="map-window" class="window panel">
-      <button class="x-btn" id="map-close" title="Close map" aria-label="Close map" data-icon="close"></button>
+      <button class="x-btn" id="map-close" data-i18n-title="hud.core.closeMap" data-i18n-aria="hud.core.closeMap" title="Close map" aria-label="Close map" data-icon="close"></button>
       <div id="map-zoom">
-        <button class="map-zoom-btn" id="map-zoom-in" title="Zoom in" aria-label="Zoom in">+</button>
-        <button class="map-zoom-btn" id="map-zoom-out" title="Zoom out" aria-label="Zoom out">&minus;</button>
+        <button class="map-zoom-btn" id="map-zoom-in" data-i18n-title="hud.core.zoomIn" data-i18n-aria="hud.core.zoomIn" title="Zoom in" aria-label="Zoom in">+</button>
+        <button class="map-zoom-btn" id="map-zoom-out" data-i18n-title="hud.core.zoomOut" data-i18n-aria="hud.core.zoomOut" title="Zoom out" aria-label="Zoom out">&minus;</button>
       </div>
       <canvas id="map-canvas" width="560" height="560"></canvas>
     </div>
@@ -3814,20 +4432,22 @@
     <div id="market-window" class="window panel"></div>
     <div id="arena-status"></div>
     <div id="options-menu" class="window panel"></div>
+    <div id="emote-editor" class="window panel"></div>
     <div id="social-window" class="window panel"></div>
     <div id="report-window" class="window panel"></div>
     <div id="side-buttons">
-      <button class="micro-btn" id="mm-char" aria-label="Character" data-icon="character"><span class="keybind">c</span></button>
-      <button class="micro-btn" id="mm-spell" aria-label="Spellbook" data-icon="spellbook"><span class="keybind">p</span></button>
-      <button class="micro-btn" id="mm-talents" aria-label="Talents" data-icon="talents"><span class="keybind">n</span></button>
-      <button class="micro-btn" id="mm-quest" aria-label="Quest Log" data-icon="questlog"><span class="keybind">l</span></button>
-      <button class="micro-btn" id="mm-map" aria-label="Map" data-icon="map"><span class="keybind">m</span></button>
-      <button class="micro-btn" id="mm-bag" aria-label="Bags" data-icon="bags"><span class="keybind">b</span></button>
-      <button class="micro-btn" id="mm-arena" aria-label="Arena" data-icon="arena"><span class="keybind">g</span></button>
-      <button class="micro-btn" id="mm-leaderboard" aria-label="Leaderboard" data-icon="leaderboard"><span class="keybind">k</span></button>
-      <button class="micro-btn" id="mm-music" aria-label="Music" data-icon="music"></button>
-      <button class="micro-btn" id="mm-social" aria-label="Friends" data-icon="social"><span class="keybind">o</span></button>
-      <button class="micro-btn" id="mm-options" aria-label="Settings" data-icon="menu"><span class="keybind">esc</span></button>
+      <button class="micro-btn" id="mm-char" data-i18n-title="hud.keybinds.actions.char" data-i18n-aria="hud.keybinds.actions.char" title="Character" aria-label="Character" data-icon="character"><span class="keybind">c</span></button>
+      <button class="micro-btn" id="mm-spell" data-i18n-title="abilityUi.spellbook.title" data-i18n-aria="abilityUi.spellbook.title" title="Spellbook" aria-label="Spellbook" data-icon="spellbook"><span class="keybind">p</span></button>
+      <button class="micro-btn" id="mm-talents" data-i18n-title="game.talents.title" data-i18n-aria="game.talents.title" title="Talents" aria-label="Talents" data-icon="talents"><span class="keybind">n</span></button>
+      <button class="micro-btn" id="mm-quest" data-i18n-title="questUi.log.title" data-i18n-aria="questUi.log.title" title="Quest Log" aria-label="Quest Log" data-icon="questlog"><span class="keybind">l</span></button>
+      <button class="micro-btn" id="mm-map" data-i18n-title="hud.keybinds.actions.map" data-i18n-aria="hud.keybinds.actions.map" title="World Map" aria-label="World Map" data-icon="map"><span class="keybind">m</span></button>
+      <button class="micro-btn" id="mm-bag" data-i18n-title="itemUi.bags.title" data-i18n-aria="itemUi.bags.title" title="Bags" aria-label="Bags" data-icon="bags"><span class="keybind">b</span></button>
+      <button class="micro-btn" id="mm-arena" data-i18n-title="hud.keybinds.actions.arena" data-i18n-aria="hud.keybinds.actions.arena" title="Arena (Ashen Coliseum)" aria-label="Arena (Ashen Coliseum)" data-icon="arena"><span class="keybind">g</span></button>
+      <button class="micro-btn" id="mm-leaderboard" data-i18n-title="game.leaderboard.title" data-i18n-aria="game.leaderboard.title" title="Leaderboard" aria-label="Leaderboard" data-icon="leaderboard"><span class="keybind">k</span></button>
+      <button class="micro-btn" id="mm-emote" aria-label="Emotes" data-icon="emote"><span class="keybind">x</span></button>
+      <button class="micro-btn" id="mm-music" data-i18n-title="hud.options.music" data-i18n-aria="hud.options.music" title="Music" aria-label="Music" data-icon="music"></button>
+      <button class="micro-btn" id="mm-social" data-i18n-title="hud.keybinds.actions.social" data-i18n-aria="hud.keybinds.actions.social" title="Friends &amp; Guild" aria-label="Friends &amp; Guild" data-icon="social"><span class="keybind">o</span></button>
+      <button class="micro-btn" id="mm-options" data-i18n-title="hud.options.gameMenu" data-i18n-aria="hud.options.gameMenu" title="Game Menu" aria-label="Game Menu" data-icon="menu"><span class="keybind">esc</span></button>
     </div>
     <div id="tooltip" class="panel"></div>
 
@@ -3835,12 +4455,12 @@
     <div id="banner"></div>
 
     <div id="death-overlay">
-      <h2>You have died.</h2>
-      <button class="btn" id="release-btn">Release Spirit</button>
+      <h2 data-i18n="hud.core.deathTitle">You have died.</h2>
+      <button class="btn" id="release-btn" data-i18n="hud.core.releaseSpirit">Release Spirit</button>
     </div>
   </div>
 
-  <input id="chat-input" maxlength="200" placeholder="Say something… (/w name whisper, /r reply, /p party, /gu guild, /o officer, /g general)" autocomplete="off" />
+  <input id="chat-input" maxlength="200" data-i18n-placeholder="hud.core.chatPlaceholder" placeholder="Say something... (/w name, /r, /p, /gu, /o, /general, /join world|lfg, /afk, /dnd)" autocomplete="off" />
   </template>
 
   <main id="start-screen">
@@ -3853,19 +4473,19 @@
 
     <header class="homepage-header">
       <div class="header-logo-container">
-        <button type="button" class="header-logo-btn" id="header-logo-btn" aria-label="Go to Homepage" title="Go to Homepage">
-          <img class="header-logo" src="/icon-192.png" alt="Cryptic Realm" />
+        <button type="button" class="header-logo-btn" id="header-logo-btn" data-i18n-aria="a11y.goHome" data-i18n-title="a11y.goHome" aria-label="Go to homepage" title="Go to homepage">
+          <img class="header-logo" src="/icon-192.png" data-i18n-alt="serverUnavailable.logoAlt" alt="World of ClaudeCraft" />
         </button>
       </div>
       
-      <button type="button" class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle Menu" aria-expanded="false">
+      <button type="button" class="mobile-menu-toggle" id="mobile-menu-toggle" data-i18n-aria="a11y.toggleMenu" aria-label="Toggle menu" aria-expanded="false">
         <span class="hamburger-bar"></span>
         <span class="hamburger-bar"></span>
         <span class="hamburger-bar"></span>
       </button>
       
       <div class="header-menu-container" id="header-menu-container">
-        <nav aria-label="Main Navigation" class="homepage-nav">
+        <nav data-i18n-aria="a11y.mainNavigation" aria-label="Main navigation" class="homepage-nav">
           <ul class="nav-list" role="list">
             <li class="nav-item">
               <button type="button" class="nav-link active" id="nav-btn-play" aria-selected="true" aria-pressed="true" data-i18n="nav.play">Play</button>
@@ -3889,30 +4509,9 @@
         </nav>
 
         <div class="header-actions">
-          <div class="theme-picker" id="theme-picker">
-            <button class="theme-picker-btn" id="theme-picker-btn" aria-label="Change theme" aria-expanded="false" title="Change Theme">
-              <span class="theme-swatch"></span>
-              <span>Theme</span>
-              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
-            </button>
-            <div class="theme-picker-dropdown" id="theme-dropdown" role="listbox" aria-label="Select theme">
-              <button class="theme-option active" data-theme="classic" role="option" aria-selected="true">
-                <span class="theme-dot theme-dot-classic"></span> Classic Realm
-              </button>
-              <button class="theme-option" data-theme="infernal" role="option" aria-selected="false">
-                <span class="theme-dot theme-dot-infernal"></span> Infernal
-              </button>
-              <button class="theme-option" data-theme="dominion" role="option" aria-selected="false">
-                <span class="theme-dot theme-dot-dominion"></span> Dominion Frontier
-              </button>
-              <button class="theme-option" data-theme="arcane" role="option" aria-selected="false">
-                <span class="theme-dot theme-dot-arcane"></span> Arcane Void
-              </button>
-            </div>
-          </div>
-          <a class="donate-cta" href="https://github.com/sponsors/BlizzHacker" target="_blank" rel="noopener noreferrer" title="Support the project" aria-label="Donate to support Cryptic Realm">
+          <a class="donate-cta" href="https://github.com/sponsors/levy-street" target="_blank" rel="noopener noreferrer" data-i18n-title="a11y.donateProject" data-i18n-aria="a11y.donateProject" title="Support the project" aria-label="Donate to support World of ClaudeCraft">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-            <span>Donate</span>
+            <span data-i18n="nav.donate">Donate</span>
           </a>
         </div>
       </div>
@@ -3920,10 +4519,10 @@
 
     <div id="homepage-views-container">
       <section id="hero-view" class="view-section" aria-hidden="false">
-        <h1 class="visually-hidden">Cryptic Realm</h1>
+        <h1 class="visually-hidden">World of ClaudeCraft</h1>
         
         <!-- Main Logo -->
-        <img class="main-logo" id="title-logo" src="/crypticrealm-logo.png" alt="Cryptic Realm" />
+        <img class="main-logo" id="title-logo" src="/worldofclaudecraft-logo.png" data-i18n-alt="serverUnavailable.logoAlt" alt="World of ClaudeCraft" />
 
         <!-- Project Stats Panel (Realm Status, accounts, players, realm name) -->
         <div id="project-stats-panel" class="panel stats-panel-premium">
@@ -4002,8 +4601,11 @@
             </div>
           </div>
 
+          <!-- Cloudflare Turnstile widget mounts here when configured (src/main.ts). -->
+          <div id="cf-turnstile-container" class="auth-turnstile"></div>
+
           <div id="login-error" class="auth-error" aria-live="polite"></div>
-          
+
           <div class="auth-actions">
             <button type="submit" class="btn btn-primary" id="btn-login" data-i18n="auth.logIn">Log In</button>
             <button type="button" class="btn btn-secondary" id="btn-register" data-i18n="auth.createAccount">Create Account</button>
@@ -4023,9 +4625,9 @@
           <h2 class="auth-title"><span data-i18n="auth.characters">Characters:</span> <span id="charselect-user" class="gold"></span></h2>
           <div class="cs-realm" id="charselect-realm"></div>
           <button type="button" class="btn btn-secondary btn-small" id="btn-change-realm" data-i18n="auth.changeRealm">Change Realm</button>
-          <div class="mobile-char-tabs" role="tablist" aria-label="Character actions">
-            <button type="button" class="mobile-char-tab active" data-char-tab="characters" role="tab" aria-selected="true">Characters</button>
-            <button type="button" class="mobile-char-tab" data-char-tab="create" role="tab" aria-selected="false">Create</button>
+          <div class="mobile-char-tabs" role="tablist" data-i18n-aria="a11y.characterActions" aria-label="Character actions">
+            <button type="button" class="mobile-char-tab active" data-char-tab="characters" role="tab" aria-selected="true" data-i18n="character.tabCharacters">Characters</button>
+            <button type="button" class="mobile-char-tab" data-char-tab="create" role="tab" aria-selected="false" data-i18n="character.tabCreate">Create</button>
           </div>
           <div class="charselect-layout">
             <!-- Left Column: Character List & Creation Controls -->
@@ -4048,6 +4650,7 @@
                   <li class="mini-class" data-class="warlock" role="button" tabindex="0" data-i18n-aria="classes.warlockAria" data-i18n="classes.warlock" aria-label="Warlock class" aria-pressed="false">Warlock</li>
                   <li class="mini-class" data-class="druid" role="button" tabindex="0" data-i18n-aria="classes.druidAria" data-i18n="classes.druid" aria-label="Druid class" aria-pressed="false">Druid</li>
                 </ul>
+                <div id="online-skin-row" class="skin-row" role="list" aria-label="Chroma"></div>
                 <div class="auth-actions">
                   <button class="btn btn-primary" id="btn-create-char" data-i18n="auth.create">Create</button>
                   <button class="btn btn-secondary" id="btn-charselect-back" data-i18n="auth.back">Back</button>
@@ -4086,6 +4689,7 @@
                   <li class="mini-class" data-class="warlock" role="button" tabindex="0" data-i18n-aria="classes.warlockAria" data-i18n="classes.warlock" aria-label="Warlock class" aria-pressed="false">Warlock</li>
                   <li class="mini-class" data-class="druid" role="button" tabindex="0" data-i18n-aria="classes.druidAria" data-i18n="classes.druid" aria-label="Druid class" aria-pressed="false">Druid</li>
                 </ul>
+                <div id="offline-skin-row" class="skin-row" role="list" aria-label="Skin"></div>
                 <div class="auth-actions">
                   <button type="button" class="btn btn-primary" id="btn-start-offline" data-i18n="auth.enterWorld">Enter World</button>
                   <button type="button" class="btn btn-secondary" id="btn-offline-back" data-i18n="auth.back">Back</button>
@@ -4160,6 +4764,7 @@
                 <div class="control-row"><kbd class="keycap">L</kbd> <span data-i18n="controls.questLog">Quest Log</span></div>
                 <div class="control-row"><kbd class="keycap">M</kbd> <span data-i18n="controls.worldMap">World Map</span></div>
                 <div class="control-row"><kbd class="keycap">B</kbd> <span data-i18n="controls.bags">Bags Inventory</span></div>
+                <div class="control-row"><kbd class="keycap">X</kbd> <span data-i18n="controls.emoteWheel">Hold Emote Wheel</span></div>
                 <div class="control-row"><kbd class="keycap">O</kbd> <span data-i18n="controls.friends">Friends & Guild</span></div>
                 <div class="control-row"><kbd class="keycap">Enter</kbd> <span data-i18n="controls.chat">Open Chat</span></div>
               </div>
@@ -4197,36 +4802,37 @@
 
     <div id="delete-character-modal" class="modal-backdrop" hidden>
       <div class="confirm-modal panel auth-panel-premium" role="dialog" aria-modal="true" aria-labelledby="delete-character-title">
-        <h2 id="delete-character-title">Delete Character</h2>
-        <p>This permanently deletes <strong id="delete-character-name"></strong>. This cannot be undone.</p>
-        <label for="delete-character-confirm" class="auth-label">Type the character name to confirm</label>
+        <h2 id="delete-character-title" data-i18n="deleteCharacter.title">Delete Character</h2>
+        <p id="delete-character-body"></p>
+        <span id="delete-character-name" hidden></span>
+        <label for="delete-character-confirm" class="auth-label" data-i18n="deleteCharacter.confirmLabel">Type the character name to confirm</label>
         <input id="delete-character-confirm" maxlength="16" autocomplete="off" />
         <div id="delete-character-error" class="auth-error" aria-live="polite"></div>
         <div class="confirm-actions">
-          <button type="button" class="btn btn-secondary" id="btn-cancel-delete-character">Cancel</button>
-          <button type="button" class="btn btn-danger" id="btn-confirm-delete-character" disabled>Delete Permanently</button>
+          <button type="button" class="btn btn-secondary" id="btn-cancel-delete-character" data-i18n="deleteCharacter.cancel">Cancel</button>
+          <button type="button" class="btn btn-danger" id="btn-confirm-delete-character" disabled data-i18n="deleteCharacter.confirm">Delete Permanently</button>
         </div>
       </div>
     </div>
 
     <footer class="homepage-footer">
       <div class="footer-social-row">
-        <a class="social-link" href="https://github.com/BlizzHacker/cryptic-realm" target="_blank" rel="noopener noreferrer">
+        <a class="social-link" href="https://github.com/levy-street/world-of-claudecraft" target="_blank" rel="noopener noreferrer" data-i18n-aria="a11y.githubProject" aria-label="Open the World of ClaudeCraft GitHub project">
           <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
           <span data-i18n="footer.githubLabel">Open Source Project</span>
         </a>
-        <a class="social-link" href="https://discord.gg/GjhnUsBtw" target="_blank" rel="noopener noreferrer">
+        <a class="social-link" href="https://discord.gg/GjhnUsBtw" target="_blank" rel="noopener noreferrer" data-i18n-aria="a11y.discordCommunity" aria-label="Join the World of ClaudeCraft Discord community">
           <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M20.32 4.37A19.8 19.8 0 0 0 15.36 2.8a13.66 13.66 0 0 0-.64 1.32 18.47 18.47 0 0 0-5.45 0 13.02 13.02 0 0 0-.65-1.32 19.73 19.73 0 0 0-4.96 1.58C.53 9.03-.32 13.56.1 18.02a19.9 19.9 0 0 0 6.08 3.08c.49-.67.93-1.38 1.3-2.13-.72-.27-1.41-.6-2.06-.98.17-.13.34-.26.5-.4a14.16 14.16 0 0 0 12.16 0c.16.14.33.27.5.4-.65.39-1.34.72-2.07.99.38.74.81 1.45 1.31 2.12a19.86 19.86 0 0 0 6.08-3.08c.5-5.17-.85-9.66-3.58-13.65ZM8.02 15.28c-1.18 0-2.15-1.08-2.15-2.41 0-1.33.95-2.42 2.15-2.42 1.2 0 2.17 1.1 2.15 2.42 0 1.33-.95 2.41-2.15 2.41Zm7.96 0c-1.18 0-2.15-1.08-2.15-2.41 0-1.33.95-2.42 2.15-2.42 1.2 0 2.17 1.1 2.15 2.42 0 1.33-.95 2.41-2.15 2.41Z"/></svg>
           <span data-i18n="footer.discordLabel">Join the Discord</span>
         </a>
-        <a class="social-link donate" href="https://github.com/sponsors/BlizzHacker" target="_blank" rel="noopener noreferrer" title="Support the project" aria-label="Donate to support Cryptic Realm">
+        <a class="social-link donate" href="https://github.com/sponsors/levy-street" target="_blank" rel="noopener noreferrer" data-i18n-title="a11y.donateProject" data-i18n-aria="a11y.donateProject" title="Support the project" aria-label="Donate to support World of ClaudeCraft">
           <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-          <span>Donate</span>
+          <span data-i18n="nav.donate">Donate</span>
         </a>
       </div>
       <div class="footer-lang-row">
         <div class="language-selector">
-          <label for="lang-select" class="visually-hidden">Language Selection</label>
+          <label for="lang-select" class="visually-hidden" data-i18n="a11y.languageSelection">Language selection</label>
           <select id="lang-select" class="lang-select-dropdown">
             <option value="en">English (US)</option>
             <option value="es">Español (LatAm)</option>
@@ -4246,122 +4852,72 @@
         </div>
       </div>
       <div class="footer-text-row">
-        <span data-i18n="footer.copyright">2026 Cryptic Realm</span>
+        <span data-i18n="footer.copyright">2026 World of ClaudeCraft</span>
       </div>
       <div id="game-version">v0.6.0</div>
     </footer>
   </main>
 
-  <div id="mobile-controls" aria-label="Mobile controls">
-    <div id="mobile-move-joystick" class="mobile-joystick" aria-label="Move">
+  <div id="mobile-controls" data-i18n-aria="hud.core.mobileControls" aria-label="Mobile controls">
+    <div id="mobile-move-zone" aria-hidden="true"></div>
+    <div id="mobile-move-joystick" class="mobile-joystick" data-i18n-aria="hud.core.mobileMove" aria-label="Move">
       <div id="mobile-move-stick" class="mobile-stick"></div>
-      <div class="mobile-joy-label">Move</div>
+      <div class="mobile-joy-label" data-i18n="hud.core.mobileMove">Move</div>
     </div>
-    <div id="mobile-camera-joystick" class="mobile-joystick" aria-label="Camera">
+    <div id="mobile-camera-joystick" class="mobile-joystick" data-i18n-aria="hud.core.mobileCamera" aria-label="Camera">
       <div id="mobile-camera-stick" class="mobile-stick"></div>
-      <div class="mobile-joy-label">Camera</div>
+      <div class="mobile-joy-label" data-i18n="hud.core.mobileCamera">Camera</div>
     </div>
+    <button class="mobile-btn" id="mobile-autorun" title="Toggle autorun" aria-label="Toggle autorun" data-icon="autorun"><span class="mobile-label">Autorun</span></button>
     <div id="mobile-combat-controls">
-      <button class="mobile-btn" id="mobile-attack-nearest" title="Attack nearest enemy" aria-label="Attack nearest enemy" data-icon="attack"><span class="mobile-label">Attack</span></button>
-      <button class="mobile-btn" id="mobile-target" title="Target nearest enemy" aria-label="Target nearest enemy" data-icon="target"><span class="mobile-label">Target</span></button>
-      <button class="mobile-btn" id="mobile-chat" title="Chat" aria-label="Open chat" data-icon="chat"><span class="mobile-label">Chat</span></button>
-      <button class="mobile-btn" id="mobile-more" title="More menus" aria-label="Show more menus" data-icon="more"><span class="mobile-label">More</span></button>
+      <button class="mobile-btn" id="mobile-attack-nearest" data-i18n-title="hud.keybinds.actions.attack" data-i18n-aria="hud.keybinds.actions.attack" title="Attack" aria-label="Attack" data-icon="attack"><span class="mobile-label" data-i18n="hud.core.mobileAttack">Attack</span></button>
+      <button class="mobile-btn" id="mobile-jump" data-i18n-title="hud.keybinds.actions.jump" data-i18n-aria="hud.keybinds.actions.jump" title="Jump" aria-label="Jump" data-icon="jump"><span class="mobile-label">Jump</span></button>
+      <button class="mobile-btn" id="mobile-target" data-i18n-title="hud.keybinds.actions.target" data-i18n-aria="hud.keybinds.actions.target" title="Target Nearest Enemy" aria-label="Target Nearest Enemy" data-icon="target"><span class="mobile-label" data-i18n="hud.core.mobileTarget">Target</span></button>
+      <button class="mobile-btn" id="mobile-interact" data-i18n-title="hud.keybinds.actions.interact" data-i18n-aria="hud.keybinds.actions.interact" title="Interact / Loot" aria-label="Interact / Loot" data-icon="interact"><span class="mobile-label" data-i18n="hud.core.mobileUse">Use</span></button>
+      <button class="mobile-btn" id="mobile-chat" data-i18n-title="hud.keybinds.actions.chat" data-i18n-aria="hud.keybinds.actions.chat" title="Open Chat" aria-label="Open Chat" data-icon="chat"><span class="mobile-label" data-i18n="hud.core.mobileChat">Chat</span></button>
+      <button class="mobile-btn" id="mobile-more" data-i18n-title="hud.core.mobileMoreAria" data-i18n-aria="hud.core.mobileMoreAria" title="Show more menus" aria-label="Show more menus" data-icon="more"><span class="mobile-label" data-i18n="hud.core.mobileMore">More</span></button>
       <div id="mobile-extra-controls">
-        <button class="mobile-btn" id="mobile-social" title="Social" aria-label="Social" data-icon="social"><span class="mobile-label">Social</span></button>
-        <button class="mobile-btn" id="mobile-arena" title="Arena" aria-label="Arena" data-icon="arena"><span class="mobile-label">Arena</span></button>
-        <button class="mobile-btn" id="mobile-menu" title="Game menu" aria-label="Game menu" data-icon="menu"><span class="mobile-label">Menu</span></button>
-        <button class="mobile-btn" id="mobile-interact" title="Interact or loot" aria-label="Interact or loot" data-icon="interact"><span class="mobile-label">Use</span></button>
-        <button class="mobile-btn" id="mobile-quest" title="Quest Log" aria-label="Quest Log" data-icon="questlog"><span class="mobile-label">Quests</span></button>
-        <button class="mobile-btn" id="mobile-spellbook" title="Spellbook" aria-label="Spellbook" data-icon="spellbook"><span class="mobile-label">Spellbook</span></button>
-        <button class="mobile-btn" id="mobile-talents" title="Talents" aria-label="Talents" data-icon="talents"><span class="mobile-label">Talents</span></button>
-        <button class="mobile-btn" id="mobile-meters" title="Meters" aria-label="Meters" data-icon="meters"><span class="mobile-label">Meters</span></button>
-        <button class="mobile-btn" id="mobile-map" title="Map" aria-label="Map" data-icon="map"><span class="mobile-label">Map</span></button>
+        <button class="mobile-btn" id="mobile-social" data-i18n-title="hud.keybinds.actions.social" data-i18n-aria="hud.keybinds.actions.social" title="Friends &amp; Guild" aria-label="Friends &amp; Guild" data-icon="social"><span class="mobile-label" data-i18n="hud.core.mobileSocial">Social</span></button>
+        <button class="mobile-btn" id="mobile-emote" title="Emotes" aria-label="Emotes" data-icon="emote"><span class="mobile-label">Emotes</span></button>
+        <button class="mobile-btn" id="mobile-arena" data-i18n-title="hud.keybinds.actions.arena" data-i18n-aria="hud.keybinds.actions.arena" title="Arena (Ashen Coliseum)" aria-label="Arena (Ashen Coliseum)" data-icon="arena"><span class="mobile-label" data-i18n="hud.core.mobileArena">Arena</span></button>
+        <button class="mobile-btn" id="mobile-menu" data-i18n-title="hud.options.gameMenu" data-i18n-aria="hud.options.gameMenu" title="Game Menu" aria-label="Game Menu" data-icon="menu"><span class="mobile-label" data-i18n="hud.core.mobileMenu">Menu</span></button>
+        <button class="mobile-btn" id="mobile-quest" data-i18n-title="questUi.log.title" data-i18n-aria="questUi.log.title" title="Quest Log" aria-label="Quest Log" data-icon="questlog"><span class="mobile-label" data-i18n="questUi.log.title">Quests</span></button>
+        <button class="mobile-btn" id="mobile-char" data-i18n-title="hud.keybinds.actions.char" data-i18n-aria="hud.keybinds.actions.char" title="Character" aria-label="Character" data-icon="character"><span class="mobile-label">Character</span></button>
+        <button class="mobile-btn" id="mobile-bags" data-i18n-title="hud.keybinds.actions.bags" data-i18n-aria="hud.keybinds.actions.bags" title="Bags" aria-label="Bags" data-icon="bags"><span class="mobile-label">Bags</span></button>
+        <button class="mobile-btn" id="mobile-spellbook" data-i18n-title="abilityUi.spellbook.title" data-i18n-aria="abilityUi.spellbook.title" title="Spellbook" aria-label="Spellbook" data-icon="spellbook"><span class="mobile-label" data-i18n="abilityUi.spellbook.title">Spellbook</span></button>
+        <button class="mobile-btn" id="mobile-talents" data-i18n-title="game.talents.title" data-i18n-aria="game.talents.title" title="Talents" aria-label="Talents" data-icon="talents"><span class="mobile-label" data-i18n="game.talents.title">Talents</span></button>
+        <button class="mobile-btn" id="mobile-map" data-i18n-title="hud.keybinds.actions.map" data-i18n-aria="hud.keybinds.actions.map" title="World Map" aria-label="World Map" data-icon="map"><span class="mobile-label" data-i18n="hud.core.mobileMap">Map</span></button>
+        <button class="mobile-btn" id="mobile-leaderboard" data-i18n-title="game.leaderboard.title" data-i18n-aria="game.leaderboard.title" title="Leaderboard" aria-label="Leaderboard" data-icon="leaderboard"><span class="mobile-label">Ranks</span></button>
+        <button class="mobile-btn active" id="mobile-nameplates" data-i18n-title="hud.keybinds.actions.nameplates" data-i18n-aria="hud.keybinds.actions.nameplates" title="Toggle nameplates" aria-label="Toggle nameplates" data-icon="nameplates"><span class="mobile-label">Names</span></button>
+        <button class="mobile-btn" id="mobile-music" title="Music" aria-label="Toggle music" data-icon="music"><span class="mobile-label">Music</span></button>
+        <button class="mobile-btn" id="mobile-haptics" title="Toggle haptic feedback" aria-label="Toggle haptic feedback" aria-pressed="true" data-icon="vibrate"><span class="mobile-label">Haptics</span></button>
       </div>
     </div>
   </div>
   <div id="mobile-preflight" role="dialog" aria-modal="true" aria-labelledby="mobile-preflight-title">
     <div class="preflight-panel">
-      <h2 id="mobile-preflight-title">Play in Landscape Fullscreen</h2>
+      <h2 id="mobile-preflight-title" data-i18n="mobilePreflight.title">Play in Landscape Fullscreen</h2>
       <p id="mobile-preflight-detail"></p>
       <ol id="mobile-preflight-steps"></ol>
-      <button class="btn" id="mobile-preflight-continue">Continue to Game</button>
+      <button class="btn" id="mobile-preflight-continue" data-i18n="mobilePreflight.continue">Continue to Game</button>
     </div>
   </div>
   <div id="rotate-device">
     <div>
       <div class="rotate-icon">↻</div>
-      <div class="rotate-title">Rotate to Landscape</div>
-      <div class="rotate-sub">Play in landscape fullscreen for the best mobile experience.</div>
+      <div class="rotate-title" data-i18n="mobilePreflight.rotateTitle">Rotate to Landscape</div>
+      <div class="rotate-sub" data-i18n="mobilePreflight.rotateSub">Play in landscape fullscreen for the best mobile experience.</div>
     </div>
   </div>
 
   <div id="loading-screen">
-    <img class="ls-logo" src="/crypticrealm-logo.png" alt="Cryptic Realm" />
+    <img class="ls-logo" src="/worldofclaudecraft-logo.png" data-i18n-alt="serverUnavailable.logoAlt" alt="World of ClaudeCraft" />
     <div class="ls-progress">
       <div class="ls-bar"><div id="ls-fill"></div></div>
-      <div id="ls-status">Entering the world&hellip;</div>
+      <div id="ls-status" data-i18n="loading.enteringWorld">Entering the world...</div>
     </div>
   </div>
 
-  <script>
-    /* ===== Theme Picker — runs before module load to prevent FOUC ===== */
-    (function() {
-      var STORAGE_KEY = 'cryptic-realm-theme';
-      var valid = ['classic', 'infernal', 'dominion', 'arcane'];
-      var saved = 'classic';
-      try { saved = localStorage.getItem(STORAGE_KEY) || 'classic'; } catch(e) {}
-      if (valid.indexOf(saved) === -1) saved = 'classic';
-      if (saved !== 'classic') document.documentElement.setAttribute('data-theme', saved);
-
-      document.addEventListener('DOMContentLoaded', function() {
-        var btn = document.getElementById('theme-picker-btn');
-        var dropdown = document.getElementById('theme-dropdown');
-        if (!btn || !dropdown) return;
-
-        // Mark active option
-        dropdown.querySelectorAll('.theme-option').forEach(function(opt) {
-          var isActive = opt.getAttribute('data-theme') === saved;
-          opt.classList.toggle('active', isActive);
-          opt.setAttribute('aria-selected', isActive ? 'true' : 'false');
-        });
-
-        // Toggle dropdown
-        btn.addEventListener('click', function(e) {
-          e.stopPropagation();
-          var isOpen = dropdown.classList.toggle('open');
-          btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-        });
-
-        // Close on outside click
-        document.addEventListener('click', function() {
-          dropdown.classList.remove('open');
-          btn.setAttribute('aria-expanded', 'false');
-        });
-        dropdown.addEventListener('click', function(e) { e.stopPropagation(); });
-
-        // Theme selection
-        dropdown.querySelectorAll('.theme-option').forEach(function(opt) {
-          opt.addEventListener('click', function() {
-            var theme = this.getAttribute('data-theme');
-            if (theme === 'classic') {
-              document.documentElement.removeAttribute('data-theme');
-            } else {
-              document.documentElement.setAttribute('data-theme', theme);
-            }
-            try { localStorage.setItem(STORAGE_KEY, theme); } catch(e) {}
-            // Update active states
-            dropdown.querySelectorAll('.theme-option').forEach(function(o) {
-              var isActive = o.getAttribute('data-theme') === theme;
-              o.classList.toggle('active', isActive);
-              o.setAttribute('aria-selected', isActive ? 'true' : 'false');
-            });
-            dropdown.classList.remove('open');
-            btn.setAttribute('aria-expanded', 'false');
-          });
-        });
-      });
-    })();
-  </script>
   <script type="module" src="/src/main.ts"></script>
 </body>
 </html>

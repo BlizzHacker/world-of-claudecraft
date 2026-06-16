@@ -1,4 +1,5 @@
 // Small display formatters shared across the admin dashboard.
+import { t } from './i18n';
 
 export function escapeHtml(value: unknown): string {
   return String(value ?? '')
@@ -29,17 +30,22 @@ export function fmtDate(iso: string | null): string {
 }
 
 export function fmtRelative(iso: string | null): string {
-  if (!iso) return 'never';
+  if (!iso) return t('common.never');
   const ms = Date.now() - new Date(iso).getTime();
-  if (!Number.isFinite(ms)) return 'never';
-  if (ms < 0) return 'just now';
+  if (!Number.isFinite(ms)) return t('common.never');
+  if (ms < 0) return t('common.justNow');
   const sec = Math.floor(ms / 1000);
-  if (sec < 60) return `${sec}s ago`;
-  const min = Math.floor(sec / 60);
-  if (min < 60) return `${min}m ago`;
-  const hr = Math.floor(min / 60);
-  if (hr < 24) return `${hr}h ago`;
-  return `${Math.floor(hr / 24)}d ago`;
+  let value: string;
+  if (sec < 60) value = `${sec}s`;
+  else {
+    const min = Math.floor(sec / 60);
+    if (min < 60) value = `${min}m`;
+    else {
+      const hr = Math.floor(min / 60);
+      value = hr < 24 ? `${hr}h` : `${Math.floor(hr / 24)}d`;
+    }
+  }
+  return t('common.ago', { value });
 }
 
 // 12345 copper -> "1g 23s 45c"
@@ -48,9 +54,10 @@ export function fmtCopper(copper: number): string {
   const gold = Math.floor(c / 10_000);
   const silver = Math.floor((c % 10_000) / 100);
   const rest = c % 100;
-  if (gold > 0) return `${gold}g ${silver}s ${rest}c`;
-  if (silver > 0) return `${silver}s ${rest}c`;
-  return `${rest}c`;
+  const g = t('money.gold'), s = t('money.silver'), cu = t('money.copper');
+  if (gold > 0) return `${gold}${g} ${silver}${s} ${rest}${cu}`;
+  if (silver > 0) return `${silver}${s} ${rest}${cu}`;
+  return `${rest}${cu}`;
 }
 
 export function fmtBytes(bytes: number): string {

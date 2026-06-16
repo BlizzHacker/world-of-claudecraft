@@ -11,7 +11,11 @@ COPY server ./server
 COPY headless ./headless
 COPY scripts ./scripts
 COPY public ./public
-RUN npm run build && cp -a dist/media ./media-build && rm -rf dist/media && npm run build:server
+# Cloudflare Turnstile site key is inlined into the client bundle at build time
+# (Vite reads VITE_* from the environment). Empty default → widget disabled, which
+# matches a build without the var configured. Passed through from compose build args.
+ARG VITE_TURNSTILE_SITEKEY=""
+RUN VITE_TURNSTILE_SITEKEY="$VITE_TURNSTILE_SITEKEY" npm run build && cp -a dist/media ./media-build && rm -rf dist/media && npm run build:server
 
 FROM node:22-alpine
 WORKDIR /app

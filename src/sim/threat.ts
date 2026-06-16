@@ -1,4 +1,4 @@
-// Classic-WoW-style threat. Values follow the community-verified vanilla
+// Classic-MMO-style threat. Values follow the community-verified classic-era
 // research (Kenco's threat research / the classic warrior threat tables):
 //  - threat = (damage * abilityMult + flat bonus) * stance/form modifiers
 //  - Defensive Stance and Bear Form multiply threat by 1.3, Cat Form by 0.71,

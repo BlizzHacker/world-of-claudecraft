@@ -1,14 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import { Sim } from '../src/sim/sim';
+import { ACTIONS, encodeObs } from '../src/sim/obs';
 import { Entity, dist2d } from '../src/sim/types';
-import { CRYPT_DOOR_POS, DUNGEON_LIST, DUNGEON_X_THRESHOLD, ITEMS, LAKE, MOBS, NPCS, QUESTS, zoneAt, zoneWelcomeText } from '../src/sim/data';
+import { CRYPT_DOOR_POS, DUNGEON_LIST, DUNGEON_X_THRESHOLD, ITEMS, LAKE, MOBS, NPCS, QUESTS, instanceOrigin, zoneAt, zoneWelcomeText } from '../src/sim/data';
 import { createMob } from '../src/sim/entity';
 import { groundHeight, WATER_LEVEL } from '../src/sim/world';
-import { isBlocked, resolvePosition } from '../src/sim/colliders';
+import { cameraOcclusion, isBlocked, lineOfSightClear, resolvePosition } from '../src/sim/colliders';
 
 const SEED = 20061;
 
-function makeSim(cls: 'warrior' | 'mage' = 'warrior') {
+function makeSim(cls: 'warrior' | 'mage' | 'hunter' = 'warrior') {
   return new Sim({ seed: SEED, playerClass: cls });
 }
 
@@ -18,6 +19,18 @@ function teleportTo(sim: Sim, x: number, z: number, pid?: number) {
   p.pos.z = z;
   p.pos.y = groundHeight(x, z, sim.cfg.seed);
   p.prevPos = { ...p.pos };
+}
+
+function placeEntity(sim: Sim, e: Entity, x: number, z: number) {
+  e.pos.x = x;
+  e.pos.z = z;
+  e.pos.y = groundHeight(x, z, sim.cfg.seed);
+  e.prevPos = { ...e.pos };
+  e.spawnPos = { ...e.pos };
+}
+
+function faceTarget(actor: Entity, target: Entity) {
+  actor.facing = Math.atan2(target.pos.x - actor.pos.x, target.pos.z - actor.pos.z);
 }
 
 describe('quest lifecycle', () => {
@@ -131,6 +144,36 @@ describe('collision & terrain', () => {
     expect(open.x).toBe(0);
     expect(open.z).toBe(-40);
   });
+
+  it('camera ghosts through village buildings (hidden instead of pulling in)', () => {
+    const groundY = groundHeight(10, 4, SEED);
+    const eyeY = groundY + 2;
+
+    // ray sweeps straight through the house at (10,12): buildings are camGhost,
+    // so the chase cam no longer pulls in for them — the renderer hides them.
+    const through = cameraOcclusion(SEED, 10, eyeY, 4, 10, eyeY + 1.5, 20, 0.35);
+    expect(through).toBe(1);
+    // but movement still collides with that same house (camGhost is camera-only)
+    const blocked = resolvePosition(SEED, 10, 12, 0.5);
+    expect(Math.abs(blocked.x - 10) + Math.abs(blocked.z - 12)).toBeGreaterThan(0.5);
+
+    const clear = cameraOcclusion(SEED, 0, eyeY, -40, 0, eyeY + 1.5, -48, 0.35);
+    expect(clear).toBe(1);
+
+    const overhead = cameraOcclusion(SEED, 10, eyeY, 4, 10, eyeY + 24, 20, 0.35);
+    expect(overhead).toBe(1);
+  });
+
+  it('camera occlusion ignores campfires when the ray is above their visual height', () => {
+    const groundY = groundHeight(3, -4, SEED);
+
+    const eyeHeightRay = cameraOcclusion(SEED, 3, groundY + 2.0, -12, 3, groundY + 2.2, 4, 0.35);
+    expect(eyeHeightRay).toBe(1);
+
+    const lowRay = cameraOcclusion(SEED, 3, groundY + 0.8, -12, 3, groundY + 0.9, 4, 0.35);
+    expect(lowRay).toBeGreaterThan(0);
+    expect(lowRay).toBeLessThan(1);
+  });
 });
 
 describe('swimming', () => {
@@ -145,7 +188,7 @@ describe('swimming', () => {
     expect(sim.isSwimming(p)).toBe(true);
   });
 
-  it('landlocked mobs refuse to chase into deep water', () => {
+  it('ordinary mobs chase into deep water and keep dealing melee damage', () => {
     const sim = makeSim();
     const wolf = [...sim.entities.values()].find((e) => e.templateId === 'forest_wolf')!;
     // park a chase target in the middle of the lake
@@ -155,8 +198,12 @@ describe('swimming', () => {
     wolf.aggroTargetId = p.id;
     wolf.pos = { ...sim.groundPos(LAKE.x + 24, LAKE.z + 24) };
     wolf.spawnPos = { ...wolf.pos };
-    for (let i = 0; i < 100; i++) sim.tick();
-    expect(groundHeight(wolf.pos.x, wolf.pos.z, SEED)).toBeGreaterThan(WATER_LEVEL - 0.8);
+    wolf.prevPos = { ...wolf.pos };
+    const hpBefore = p.hp;
+    for (let i = 0; i < 160; i++) sim.tick();
+    expect(groundHeight(wolf.pos.x, wolf.pos.z, SEED)).toBeLessThan(WATER_LEVEL - 0.8);
+    expect(wolf.pos.y).toBeGreaterThan(WATER_LEVEL - 1.0);
+    expect(p.hp).toBeLessThan(hpBefore);
   });
 
   it('rare swimmers can chase into deep water', () => {
@@ -268,7 +315,7 @@ describe('rare spawn rules', () => {
     }
 
     expect(MOBS.mogger.summonAdds).toEqual({ mobId: 'mogger_lackey', count: 2, atHpPct: [0.70] });
-    expect(MOBS.mogger.enrage).toEqual({ belowHpPct: 0.30, dmgMult: 1.6 });
+    expect(MOBS.mogger.enrage).toEqual({ belowHpPct: 0.30, dmgMult: 1.6, hasteMult: 1.3 });
   });
 });
 
@@ -486,10 +533,39 @@ describe('boss loot and encounter resets', () => {
     expect(mob.lootable).toBe(true);
     expect(mob.loot?.items).toContainEqual({ itemId: 'boar_hide', count: 1, personalFor: [b] });
 
+    sim.partyLeave(b);
     sim.lootCorpse(mob.id, b);
     expect(sim.countItem('boar_hide', b)).toBe(1);
     expect(mob.loot).toBeNull();
     expect(mob.lootable).toBe(false);
+  });
+
+  it('personal loot remains claimable after party rights are gone without granting shared loot', () => {
+    const sim = makeSim();
+    const a = sim.playerId;
+    const b = sim.addPlayer('mage', 'Bert');
+    const mob = createMob(990103, MOBS.forest_wolf, 2, { x: 20, y: 0, z: 22 });
+    mob.dead = true;
+    mob.lootable = true;
+    mob.tappedById = a;
+    mob.loot = {
+      copper: 88,
+      items: [
+        { itemId: 'boar_hide', count: 1, personalFor: [b] },
+        { itemId: 'wolf_fang', count: 1 },
+      ],
+    };
+    sim.entities.set(mob.id, mob);
+    teleportTo(sim, 20, 20, b);
+
+    const beforeCopper = sim.meta(b)!.copper;
+    sim.lootCorpse(mob.id, b);
+
+    expect(sim.countItem('boar_hide', b)).toBe(1);
+    expect(sim.countItem('wolf_fang', b)).toBe(0);
+    expect(sim.meta(b)!.copper).toBe(beforeCopper);
+    expect(mob.loot?.copper).toBe(88);
+    expect(mob.loot?.items).toContainEqual({ itemId: 'wolf_fang', count: 1 });
   });
 
   it('does not drop a quest-gated item whose quest has no matching collect objective', () => {
@@ -605,6 +681,13 @@ describe('warrior charge', () => {
     (sim as any).grantXp(99999); // learn charge (level 4)
     const p = sim.player;
     const wolf = [...sim.entities.values()].find((e) => e.kind === 'mob' && e.templateId === 'forest_wolf' && !e.dead)!;
+    // A level-20 warrior one-shots a ~28hp wolf, and the swing that lands the
+    // instant the charge arrives would clear autoAttack (target died). Whether
+    // that kill connects rides the shared RNG stream — which shifts as world
+    // content grows — so beef the wolf up to survive the engaging swing and
+    // keep this test about charge -> melee -> auto-attack, not the kill roll.
+    wolf.maxHp = 10000;
+    wolf.hp = 10000;
     teleportTo(sim, wolf.pos.x - 18, wolf.pos.z);
     p.facing = Math.atan2(wolf.pos.x - p.pos.x, wolf.pos.z - p.pos.z);
     sim.targetEntity(wolf.id);
@@ -732,6 +815,89 @@ describe('aoe damage vs armor', () => {
   });
 });
 
+describe('RL observation encoding', () => {
+  // The target block, the nearby-mob block, and the interactable block all
+  // encode entity distance as clamp(d / 40, ...). The target field used to clamp
+  // to [0, 1] while the others use [0, 1.5] (the 60-unit observation radius), so
+  // a target between 40 and 60 units saturated and lost distance granularity.
+  // Target distance index: 16 self + 2 fields per ability slot + presence/hp/level.
+  const ABILITY_SLOTS = ACTIONS.length - 13;
+  const TARGET_DIST_INDEX = 16 + ABILITY_SLOTS * 2 + 3;
+
+  it('encodes target distance on the same 1.5 scale as nearby mobs', () => {
+    const sim = makeSim();
+    const p = sim.player;
+    teleportTo(sim, 0, -40); // open road
+    const mob = [...sim.entities.values()].find((e) => e.kind === 'mob' && !e.dead)!;
+    // park the mob 50 units away (inside the 60-unit obs radius, beyond the
+    // old 40-unit saturation point)
+    mob.pos = { ...sim.groundPos(p.pos.x + 50, p.pos.z) };
+    expect(dist2d(p.pos, mob.pos)).toBeCloseTo(50, 0);
+
+    sim.targetEntity(mob.id);
+    const obs = encodeObs(sim);
+    expect(obs[TARGET_DIST_INDEX]).toBeGreaterThan(1); // would be clamped to 1 before the fix
+    expect(obs[TARGET_DIST_INDEX]).toBeCloseTo(50 / 40, 5);
+  });
+});
+
+describe('pet heel warp', () => {
+  it('keeps the spatial grid exact when a pet warps to its owner', () => {
+    const sim = makeSim();
+    const p = sim.player;
+    // park the owner in open space away from the spawn camp
+    teleportTo(sim, p.pos.x + 400, p.pos.z + 400);
+
+    // adopt a wild beast as a heeling pet and strand it far from the owner
+    const pet = [...sim.entities.values()].find((e) => e.kind === 'mob' && !e.dead)!;
+    pet.ownerId = p.id;
+    pet.hostile = false;
+    pet.aggroTargetId = null;
+    pet.inCombat = false;
+    pet.pos = { x: p.pos.x + 200, z: p.pos.z, y: p.pos.y };
+    pet.prevPos = { ...pet.pos };
+    (sim as any).grid.update(pet); // grid now buckets the pet at its far cell
+
+    // 200 yds away with nothing to fight: the pet warps back to heel
+    (sim as any).updatePet(pet);
+    expect(dist2d(pet.pos, p.pos)).toBeLessThan(1);
+
+    // a same-tick radius query at the warp destination must see the pet — it
+    // would miss it if the grid still held the pet in its stale far-away cell
+    const found: number[] = [];
+    (sim as any).grid.forEachInRadius(p.pos.x, p.pos.z, 5, (e: Entity) => found.push(e.id));
+    expect(found).toContain(pet.id);
+  });
+});
+
+describe('mob tap rights', () => {
+  function wolf(sim: Sim): Entity {
+    return [...sim.entities.values()].find((e) => e.kind === 'mob' && e.templateId === 'forest_wolf')!;
+  }
+
+  it('a hit that deals real damage claims the mob', () => {
+    const sim = makeSim('mage');
+    const m = wolf(sim);
+    expect(m.tappedById).toBeNull();
+    (sim as any).dealDamage(sim.player, m, 7, false, 'fire', 'test', 'hit');
+    expect(m.tappedById).toBe(sim.player.id);
+  });
+
+  it('a fully absorbed (zero-damage) hit does not claim the mob', () => {
+    const sim = makeSim('mage');
+    const m = wolf(sim);
+    // a shield that soaks the whole hit — the mob takes no real damage
+    m.auras.push({
+      id: 'test_absorb', name: 'Test Shield', kind: 'absorb',
+      remaining: 30, duration: 30, value: 1000, sourceId: m.id, school: 'arcane',
+    } as any);
+    const hpBefore = m.hp;
+    (sim as any).dealDamage(sim.player, m, 50, false, 'fire', 'test', 'hit');
+    expect(m.hp).toBe(hpBefore); // nothing got through
+    expect(m.tappedById).toBeNull(); // so nobody owns the tap yet
+  });
+});
+
 describe('spell visuals', () => {
   it('hostile casts emit projectile spellfx events', () => {
     const sim = makeSim('mage');
@@ -745,5 +911,110 @@ describe('spell visuals', () => {
     for (let i = 0; i < 60; i++) events.push(...sim.tick());
     const fx = events.filter((e) => e.type === 'spellfx');
     expect(fx.some((e) => e.type === 'spellfx' && e.fx === 'projectile' && e.school === 'fire')).toBe(true);
+  });
+
+  it('hostile targeted spells cannot start through dungeon walls', () => {
+    const sim = makeSim('mage');
+    const origin = instanceOrigin(2, 0);
+    const p = sim.player;
+    const mob = createMob(990200, MOBS.sanctum_boneguard, 19, { x: origin.x - 14, y: 0, z: origin.z + 74 });
+    sim.entities.set(mob.id, mob);
+    teleportTo(sim, origin.x - 14, origin.z + 60);
+    faceTarget(p, mob);
+    sim.targetEntity(mob.id);
+
+    expect(lineOfSightClear(sim.cfg.seed, p.pos, mob.pos)).toBe(false);
+    sim.castAbility('fireball');
+    const events = sim.tick();
+
+    expect(p.castingAbility).toBeNull();
+    expect(events.some((e) => e.type === 'castStart' && e.ability === 'fireball')).toBe(false);
+    expect(events.some((e) => e.type === 'error' && /line of sight/i.test(e.text))).toBe(true);
+  });
+
+  it('hostile targeted spells can start through the open dungeon passage', () => {
+    const sim = makeSim('mage');
+    const origin = instanceOrigin(2, 0);
+    const p = sim.player;
+    const mob = createMob(990201, MOBS.sanctum_boneguard, 19, { x: origin.x, y: 0, z: origin.z + 74 });
+    sim.entities.set(mob.id, mob);
+    teleportTo(sim, origin.x, origin.z + 60);
+    faceTarget(p, mob);
+    sim.targetEntity(mob.id);
+
+    expect(lineOfSightClear(sim.cfg.seed, p.pos, mob.pos)).toBe(true);
+    sim.castAbility('fireball');
+    const events = sim.tick();
+
+    expect(p.castingAbility).toBe('fireball');
+    expect(events.some((e) => e.type === 'castStart' && e.ability === 'fireball')).toBe(true);
+  });
+
+  it('ranged auto shot does not fire through dungeon walls', () => {
+    const sim = makeSim('hunter');
+    const origin = instanceOrigin(2, 0);
+    const p = sim.player;
+    const mob = createMob(990202, MOBS.sanctum_boneguard, 19, { x: origin.x - 14, y: 0, z: origin.z + 74 });
+    sim.entities.set(mob.id, mob);
+    teleportTo(sim, origin.x - 14, origin.z + 60);
+    placeEntity(sim, mob, origin.x - 14, origin.z + 74);
+    faceTarget(p, mob);
+    sim.targetEntity(mob.id);
+    sim.startAutoAttack();
+    p.swingTimer = 0;
+
+    const events = sim.tick();
+
+    expect(events.some((e) => e.type === 'spellfx' && e.targetId === mob.id)).toBe(false);
+    expect(events.some((e) => e.type === 'damage' && e.ability === 'Auto Shot')).toBe(false);
+  });
+});
+
+describe('trade and duel invites validate availability at accept time', () => {
+  it('a second invitee cannot hijack the inviter who is already trading', () => {
+    const sim = new Sim({ seed: SEED, playerClass: 'warrior', noPlayer: true });
+    const a = sim.addPlayer('warrior', 'Anna');
+    const b = sim.addPlayer('mage', 'Bert');
+    const c = sim.addPlayer('warrior', 'Cara');
+
+    // Anna fires off trade requests to both Bert and Cara while still free.
+    sim.tradeRequest(b, a);
+    sim.tradeRequest(c, a);
+
+    // Bert accepts first — Anna and Bert are now trading together.
+    sim.tradeAccept(b);
+    const annaSession = sim.tradeFor(a);
+    const bertSession = sim.tradeFor(b);
+    expect(annaSession).not.toBeNull();
+    expect(annaSession).toBe(bertSession);
+
+    // Cara accepts the stale request. This must NOT silently replace Anna's
+    // live session with Bert (which would desync Bert's trade window).
+    sim.tradeAccept(c);
+
+    expect(sim.tradeFor(c)).toBeNull();
+    // Anna is still trading with the same partner she actually opened with.
+    expect(sim.tradeFor(a)).toBe(bertSession);
+    expect(sim.tradeFor(b)).toBe(bertSession);
+  });
+
+  it('a second challenger acceptance cannot hijack a duelist mid-duel', () => {
+    const sim = new Sim({ seed: SEED, playerClass: 'warrior', noPlayer: true });
+    const a = sim.addPlayer('warrior', 'Anna');
+    const b = sim.addPlayer('mage', 'Bert');
+    const c = sim.addPlayer('warrior', 'Cara');
+
+    sim.duelRequest(b, a);
+    sim.duelRequest(c, a);
+
+    sim.duelAccept(b);
+    const annaDuel = sim.duelFor(a);
+    expect(annaDuel).not.toBeNull();
+    expect(sim.duelFor(b)).toBe(annaDuel);
+
+    sim.duelAccept(c);
+    expect(sim.duelFor(c)).toBeNull();
+    expect(sim.duelFor(a)).toBe(annaDuel);
+    expect(sim.duelFor(b)).toBe(annaDuel);
   });
 });

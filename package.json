@@ -1,6 +1,6 @@
 {
   "name": "cryptic-realm",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "private": true,
   "license": "MIT",
   "type": "module",
@@ -10,6 +10,9 @@
     "build": "node scripts/build_media_manifest.mjs generate && vite build && node scripts/build_media_manifest.mjs emit",
     "preview": "vite preview",
     "test": "vitest run",
+    "perf:tour": "node scripts/perf_tour.mjs",
+    "feel:smoke": "node scripts/feel_smoke.mjs",
+    "asset:budget": "node scripts/asset_budget.mjs",
     "build:env": "esbuild headless/env_server.ts --bundle --platform=node --format=cjs --outfile=dist-env/env_server.cjs",
     "env": "npm run build:env && node dist-env/env_server.cjs",
     "bench": "npm run build:env && node dist-env/env_server.cjs --bench",
@@ -18,7 +21,8 @@
     "build:server": "esbuild server/main.ts --bundle --platform=node --format=cjs --external:pg-native --external:bufferutil --external:utf-8-validate --outfile=dist-server/server.cjs",
     "server": "npm run build:server && node dist-server/server.cjs",
     "realms": "npm run build:server && node scripts/dev-realms.mjs",
-    "admin:grant": "node scripts/grant_admin.mjs"
+    "admin:grant": "node scripts/grant_admin.mjs",
+    "wiki:seed": "node scripts/mediawiki/build_seed.mjs"
   },
   "dependencies": {
     "n8ao": "^1.10.1",

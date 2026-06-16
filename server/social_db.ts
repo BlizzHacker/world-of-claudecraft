@@ -13,7 +13,7 @@ export const DEFAULT_REALM = REALM;
 export const SOCIAL_SCHEMA = `
 ALTER TABLE characters ADD COLUMN IF NOT EXISTS realm TEXT NOT NULL DEFAULT '${DEFAULT_REALM.replace(/'/g, "''")}';
 CREATE INDEX IF NOT EXISTS characters_realm ON characters(realm);
--- WoW: character names are unique per realm, not globally. Relax the original
+-- Classic MMOs make character names unique per realm, not globally. Relax the original
 -- global unique on characters.name to a (realm, name) composite. This is a
 -- constraint relaxation, so existing globally-unique rows always satisfy it.
 ALTER TABLE characters DROP CONSTRAINT IF EXISTS characters_name_key;

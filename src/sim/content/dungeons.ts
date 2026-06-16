@@ -56,12 +56,14 @@ export const DUNGEON_MOBS: Record<string, MobTemplate> = {
     armorPerLevel: 18, moveSpeed: 6.5, aggroRadius: 12,
     loot: [{ copper: 150, chance: 1 }, { itemId: 'bone_fragments', chance: 0.7 }],
     scale: 1.1, color: 0x7fa8a0,
+    mortalStrike: { chance: 0.3, healReduction: 0.5, duration: 6, name: 'Mortal Strike' },
   },
   tidebound_acolyte: {
     id: 'tidebound_acolyte', name: 'Tidebound Acolyte', minLevel: 12, maxLevel: 13, family: 'humanoid', elite: true,
     hpBase: 50, hpPerLevel: 20, dmgBase: 10, dmgPerLevel: 2.5, attackSpeed: 2.0,
     armorPerLevel: 14, moveSpeed: 7, aggroRadius: 12,
     loot: [{ copper: 170, chance: 1 }, { itemId: 'linen_scrap', chance: 0.5 }],
+    desperateHeal: { belowHpPct: 0.3, healPct: 0.25 },
     scale: 1.0, color: 0x1f618d,
   },
   drowned_thrall: {
@@ -85,6 +87,7 @@ export const DUNGEON_MOBS: Record<string, MobTemplate> = {
       { itemId: 'eelscale_leggings', chance: 0.10, rollGroup: 'olen_bonus' },
     ], // his greaves are Maren's quest reward, not a drop
     scale: 1.2, color: 0x95a5a6,
+    cleave: { radius: 8, mult: 0.6, name: 'Cleave' },
   },
   vael_the_mistcaller: {
     id: 'vael_the_mistcaller', name: 'Vael the Mistcaller', minLevel: 13, maxLevel: 13, family: 'humanoid',
@@ -134,7 +137,8 @@ export const DUNGEON_MOBS: Record<string, MobTemplate> = {
     id: 'korgath_the_bound', name: 'Korgath the Bound', minLevel: 20, maxLevel: 20, family: 'ogre', elite: true,
     hpBase: 260, hpPerLevel: 36, dmgBase: 14, dmgPerLevel: 2.9, attackSpeed: 2.8,
     armorPerLevel: 30, moveSpeed: 7, aggroRadius: 15,
-    enrage: { belowHpPct: 0.30, dmgMult: 1.5 },
+    enrage: { belowHpPct: 0.30, dmgMult: 1.5, hasteMult: 1.3 },
+    stomp: { radius: 10, every: 12, duration: 1.5, min: 20, max: 30, name: 'War Stomp' },
     loot: [
       { copper: 5000, chance: 1 },
       { itemId: 'boneplate_vest', chance: 0.34, rollGroup: 'korgath_guaranteed_uncommon' },
@@ -178,7 +182,7 @@ export const DUNGEON_MOBS: Record<string, MobTemplate> = {
     hpBase: 420, hpPerLevel: 48, dmgBase: 15, dmgPerLevel: 3.0, attackSpeed: 2.6,
     armorPerLevel: 34, moveSpeed: 7, aggroRadius: 18,
     aoePulse: { min: 30, max: 42, radius: 14, every: 8, name: 'Necrotic Shockwave' },
-    enrage: { belowHpPct: 0.30, dmgMult: 1.5 },
+    enrage: { belowHpPct: 0.30, dmgMult: 1.5, hasteMult: 1.3 },
     loot: [
       { copper: 50000, chance: 1 },
       { itemId: 'boneplate_vest', chance: 0.34, rollGroup: 'korzul_guaranteed_uncommon' },

@@ -8,8 +8,12 @@ import {
   listAccounts, listCharacters, accountDetail,
 } from './admin_db';
 import {
-  forceCharacterRename, ignoreReport, moderateAccount, moderationQueue, moderationReportsForAccount,
+  forceCharacterRename, ignoreReport, moderateAccount, muteAccountChat, moderationQueue, moderationReportsForAccount,
 } from './moderation_db';
+import {
+  addFilterWord, chatModerationForAccount, getFilterConfig, liftChatMute, listFilterWords,
+  removeFilterWord, resetChatStrikes, updateFilterConfig, type WordTier,
+} from './chat_filter_db';
 import type { GameServer } from './game';
 
 // Admin API: everything under /admin/api/*. Auth is a bearer token whose
@@ -41,6 +45,10 @@ export function parsePageParams(params: URLSearchParams): PageParams {
     ? Math.min(MAX_PAGE_LIMIT, Math.max(1, Math.floor(rawLimit)))
     : DEFAULT_PAGE_LIMIT;
   return { page, limit };
+}
+
+function cleanTier(value: unknown): WordTier | null {
+  return value === 'soft' || value === 'hard' ? value : null;
 }
 
 async function adminAccountId(req: http.IncomingMessage): Promise<number | null> {
@@ -109,6 +117,26 @@ export async function handleAdminApi(
         return fail(res, 400, err instanceof Error ? err.message : 'moderation action failed');
       }
     }
+    const chatMuteMatch = /^\/admin\/api\/moderation\/accounts\/(\d+)\/chat-mute$/.exec(path);
+    if (req.method === 'POST' && chatMuteMatch) {
+      const targetAccountId = Number(chatMuteMatch[1]);
+      if (await isAdminAccount(targetAccountId)) {
+        return fail(res, 400, 'admin accounts cannot be chat muted');
+      }
+      const body = await readBody(req);
+      try {
+        await muteAccountChat({
+          accountId: targetAccountId,
+          adminAccountId: accountId,
+          reason: body.reason,
+          expiresAt: body.expiresAt,
+        });
+        game.muteAccountChat(targetAccountId, String(body.expiresAt ?? ''), String(body.reason ?? ''));
+        return ok(res, { ok: true });
+      } catch (err) {
+        return fail(res, 400, err instanceof Error ? err.message : 'chat mute failed');
+      }
+    }
     const ignoreMatch = /^\/admin\/api\/moderation\/reports\/(\d+)\/ignore$/.exec(path);
     if (req.method === 'POST' && ignoreMatch) {
       const body = await readBody(req);
@@ -131,7 +159,59 @@ export async function handleAdminApi(
       }
     }
 
+    // Chat filter: lift mute / reset strikes for an account.
+    const liftMuteMatch = /^\/admin\/api\/moderation\/accounts\/(\d+)\/lift-mute$/.exec(path);
+    if (req.method === 'POST' && liftMuteMatch) {
+      const id = Number(liftMuteMatch[1]);
+      const lifted = await liftChatMute(id);
+      if (lifted) game.liftChatMuteLive(id);
+      return lifted ? ok(res, { ok: true }) : fail(res, 404, 'account not found');
+    }
+    const resetStrikesMatch = /^\/admin\/api\/moderation\/accounts\/(\d+)\/reset-strikes$/.exec(path);
+    if (req.method === 'POST' && resetStrikesMatch) {
+      const id = Number(resetStrikesMatch[1]);
+      const reset = await resetChatStrikes(id);
+      if (reset) game.resetChatStrikesLive(id);
+      return reset ? ok(res, { ok: true }) : fail(res, 404, 'account not found');
+    }
+
+    // Chat filter: word list + escalation config management. Every edit reloads
+    // the live filter and pushes the new soft list to connected clients.
+    if (req.method === 'POST' && path === '/admin/api/chat-filter/words') {
+      const body = await readBody(req);
+      const tier = cleanTier(body.tier);
+      if (!tier) return fail(res, 400, 'tier must be "soft" or "hard"');
+      const added = await addFilterWord(body.word, tier);
+      if (!added) return fail(res, 400, 'word is empty after normalization');
+      await game.reloadChatFilter();
+      return ok(res, { ok: true });
+    }
+    const wordDeleteMatch = /^\/admin\/api\/chat-filter\/words\/(\d+)\/delete$/.exec(path);
+    if (req.method === 'POST' && wordDeleteMatch) {
+      const removed = await removeFilterWord(Number(wordDeleteMatch[1]));
+      if (removed) await game.reloadChatFilter();
+      return removed ? ok(res, { ok: true }) : fail(res, 404, 'word not found');
+    }
+    if (req.method === 'POST' && path === '/admin/api/chat-filter/config') {
+      const body = await readBody(req);
+      const config = await updateFilterConfig({
+        warningsBeforeMute: body.warningsBeforeMute,
+        muteLadderSeconds: body.muteLadderSeconds,
+      });
+      await game.reloadChatFilter();
+      return ok(res, config);
+    }
+
     if (req.method !== 'GET') return fail(res, 405, 'method not allowed');
+
+    if (path === '/admin/api/chat-filter') {
+      const [soft, hard, config] = await Promise.all([
+        listFilterWords('soft'),
+        listFilterWords('hard'),
+        getFilterConfig(),
+      ]);
+      return ok(res, { soft, hard, config });
+    }
 
     if (path === '/admin/api/overview') {
       const counts = await overviewCounts();
@@ -160,12 +240,13 @@ export async function handleAdminApi(
     const moderationAccountMatch = /^\/admin\/api\/moderation\/accounts\/(\d+)$/.exec(path);
     if (moderationAccountMatch) {
       const id = Number(moderationAccountMatch[1]);
-      const [detail, reports] = await Promise.all([
+      const [detail, reports, chat] = await Promise.all([
         accountDetail(id),
         moderationReportsForAccount(id),
+        chatModerationForAccount(id),
       ]);
       if (!detail) return fail(res, 404, 'account not found');
-      return ok(res, { account: detail, reports });
+      return ok(res, { account: detail, reports, chat });
     }
     const detailMatch = /^\/admin\/api\/accounts\/(\d+)$/.exec(path);
     if (detailMatch) {

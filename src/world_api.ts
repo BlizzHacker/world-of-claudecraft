@@ -1,4 +1,4 @@
-import type { Entity, EquipSlot, InvSlot, MoveInput, PlayerClass, QuestProgress, QuestState, ResourceType } from './sim/types';
+import { OVERHEAD_EMOTE_IDS, type Entity, type EquipSlot, type InvSlot, type MoveInput, type OverheadEmoteId, type PetMode, type PlayerClass, type QuestProgress, type QuestState, type ResourceType } from './sim/types';
 import type { ResolvedAbility } from './sim/sim';
 import type { TalentAllocation, SavedLoadout, Role } from './sim/content/talents';
 
@@ -41,6 +41,28 @@ export interface DuelInfo {
   otherPid: number;
   otherName: string;
   state: 'countdown' | 'active';
+}
+
+export const OVERHEAD_EMOTES = [
+  { id: 'wave', label: 'Wave' },
+  { id: 'laugh', label: 'LOL' },
+  { id: 'question', label: 'Bro?' },
+  { id: 'cheer', label: 'Cheer' },
+  { id: 'dance', label: 'Dance' },
+  { id: 'point', label: 'Point' },
+  { id: 'flex', label: 'Flex' },
+  { id: 'salute', label: 'Salute' },
+  { id: 'cry', label: 'Cry' },
+  { id: 'bow', label: 'Bow' },
+  { id: 'clap', label: 'Clap' },
+  { id: 'roar', label: 'Roar' },
+  { id: 'kneel', label: 'Kneel' },
+] as const satisfies readonly { id: OverheadEmoteId; label: string }[];
+
+export type { OverheadEmoteId };
+
+export function isOverheadEmoteId(value: unknown): value is OverheadEmoteId {
+  return typeof value === 'string' && (OVERHEAD_EMOTE_IDS as readonly string[]).includes(value);
 }
 
 // Persistent social state, mirrored from the server's SocialService. Mirrors
@@ -178,6 +200,8 @@ export interface IWorld {
   castAbilityBySlot(slot: number): void;
   targetEntity(id: number | null): void;
   tabTarget(): void;
+  targetNearestFriendly(): void;
+  friendlyTabTarget(): void;
   startAutoAttack(): void;
   stopAutoAttack(): void;
   interact(): void;
@@ -192,8 +216,18 @@ export interface IWorld {
   buyItem(npcId: number, itemId: string): void;
   sellItem(itemId: string, count?: number): void;
   buyBackItem(itemId: string): void;
+  changeSkin(skin: number): void;
   releaseSpirit(): void;
   chat(text: string): void;
+  playEmote(emoteId: OverheadEmoteId): void;
+  abandonPet(): void;
+  renamePet(name: string): void;
+  revivePet(): void;
+  petAttack(): void;
+  petTaunt(): void;
+  feedPet(itemId: string): void;
+  healPet(): void;
+  setPetMode(mode: PetMode): void;
   // social systems
   partyInfo: PartyInfo | null;
   tradeInfo: TradeInfo | null;

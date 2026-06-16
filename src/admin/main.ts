@@ -1,13 +1,14 @@
 import { apiGet, apiLogin, apiPost, clearSession, getAdminName, getToken, ApiError } from './api';
 import { barChart, chartPanel } from './charts';
 import { escapeHtml, fmtBytes, fmtDuration } from './format';
+import { classLabel, t, localizeAdminError } from './i18n';
 import {
-  renderAccountDetail, renderAccountsTable, renderCharactersTable, renderModerationDetail,
-  renderModerationQueue, renderOnlineTable, renderPager,
+  renderAccountDetail, renderAccountsTable, renderCharactersTable, renderChatFilter,
+  renderModerationDetail, renderModerationQueue, renderOnlineTable, renderPager,
 } from './tables';
 import type {
-  AccountDetail, AccountRow, Activity, CharacterRow, LivePlayer, ModerationAccountDetail,
-  ModerationQueueRow, Overview, Paginated,
+  AccountDetail, AccountRow, Activity, CharacterRow, ChatFilterData, LivePlayer,
+  ModerationAccountDetail, ModerationQueueRow, Overview, Paginated,
 } from './types';
 
 const LIVE_REFRESH_MS = 5_000;
@@ -31,7 +32,8 @@ const accountsState: TableState = { page: 1, search: '', sort: 'id', dir: 'desc'
 const charactersState: TableState = { page: 1, search: '', sort: 'level', dir: 'desc' };
 let liveTimer: number | null = null;
 let activityTimer: number | null = null;
-let activePage: 'overview' | 'moderation' = 'overview';
+type AdminPage = 'overview' | 'moderation' | 'chat-filter';
+let activePage: AdminPage = 'overview';
 let pendingModerationAction: { endpoint: string; body: unknown; accountId: number; source: 'account' | 'moderation' } | null = null;
 
 // ---------------------------------------------------------------------------
@@ -49,7 +51,7 @@ function showLogin(message = ''): void {
 
 function handleAuthFailure(err: unknown): boolean {
   if (err instanceof ApiError && (err.status === 401 || err.status === 403)) {
-    showLogin('session expired — sign in again');
+    showLogin(t('auth.sessionExpired'));
     return true;
   }
   return false;
@@ -70,11 +72,11 @@ async function refreshModeration(): Promise<void> {
     const data = await apiGet<{ rows: ModerationQueueRow[] }>('/admin/api/moderation/queue');
     $('moderation').innerHTML = renderModerationQueue(data.rows);
   } catch (err) {
-    if (!handleAuthFailure(err)) $('moderation').innerHTML = '<div class="empty">failed to load moderation queue</div>';
+    if (!handleAuthFailure(err)) $('moderation').innerHTML = `<div class="empty">${t('moderation.loadFailed')}</div>`;
   }
 }
 
-function showPage(page: 'overview' | 'moderation'): void {
+function showPage(page: AdminPage): void {
   activePage = page;
   document.querySelectorAll<HTMLButtonElement>('.admin-tab').forEach((tab) => {
     tab.classList.toggle('active', tab.dataset.adminPage === page);
@@ -83,6 +85,16 @@ function showPage(page: 'overview' | 'moderation'): void {
     el.classList.toggle('active', el.id === `page-${page}`);
   });
   if (page === 'moderation') void refreshModeration();
+  if (page === 'chat-filter') void refreshChatFilter();
+}
+
+async function refreshChatFilter(): Promise<void> {
+  try {
+    const data = await apiGet<ChatFilterData>('/admin/api/chat-filter');
+    $('chat-filter').innerHTML = renderChatFilter(data);
+  } catch (err) {
+    if (!handleAuthFailure(err)) $('chat-filter').innerHTML = '<div class="empty">failed to load chat filter</div>';
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -101,16 +113,16 @@ async function refreshLive(): Promise<void> {
     ]);
     const s = overview.server;
     $('stats').innerHTML = [
-      statCard(String(s.online), 'online now'),
-      statCard(String(s.peakOnline), 'peak online'),
-      statCard(String(overview.accounts), 'accounts'),
-      statCard(String(overview.characters), 'characters'),
-      statCard(String(overview.accountsToday), 'new accounts 24h'),
-      statCard(String(overview.activeAccountsToday), 'active accounts 24h'),
-      statCard(String(overview.sessionsToday), 'sessions 24h'),
-      statCard(fmtDuration(s.uptimeSeconds), 'uptime'),
-      statCard(`${s.tickMsAvg} ms`, 'avg tick'),
-      statCard(fmtBytes(s.rssBytes), 'server rss'),
+      statCard(String(s.online), t('stats.onlineNow')),
+      statCard(String(s.peakOnline), t('stats.peakOnline')),
+      statCard(String(overview.accounts), t('stats.accounts')),
+      statCard(String(overview.characters), t('stats.characters')),
+      statCard(String(overview.accountsToday), t('stats.newAccounts24h')),
+      statCard(String(overview.activeAccountsToday), t('stats.activeAccounts24h')),
+      statCard(String(overview.sessionsToday), t('stats.sessions24h')),
+      statCard(fmtDuration(s.uptimeSeconds), t('stats.uptime')),
+      statCard(`${s.tickMsAvg} ms`, t('stats.avgTick')),
+      statCard(fmtBytes(s.rssBytes), t('stats.serverRss')),
     ].join('');
     $('online').innerHTML = renderOnlineTable(online.players);
   } catch (err) {
@@ -123,20 +135,20 @@ async function refreshActivity(): Promise<void> {
     const a = await apiGet<Activity>('/admin/api/activity');
     const dayLabel = (day: string) => day.slice(5); // YYYY-MM-DD -> MM-DD
     $('charts').innerHTML = [
-      chartPanel(`Registrations — last ${a.days} days`, barChart(
+      chartPanel(t('charts.registrations', { days: a.days }), barChart(
         a.registrations.map((p) => ({ label: dayLabel(p.day), value: p.count })),
       )),
-      chartPanel(`Play sessions — last ${a.days} days`, barChart(
+      chartPanel(t('charts.sessions', { days: a.days }), barChart(
         a.sessions.map((p) => ({
           label: dayLabel(p.day),
           value: p.sessions,
-          title: `${p.day}: ${p.sessions} sessions, ${p.uniqueAccounts} accounts, ${fmtDuration(p.playtimeSeconds)} played`,
+          title: t('charts.sessionsTooltip', { day: p.day, sessions: p.sessions, accounts: p.uniqueAccounts, played: fmtDuration(p.playtimeSeconds) }),
         })),
       )),
-      chartPanel('Class distribution', barChart(
-        a.classes.map((p) => ({ label: p.key, value: p.count })),
+      chartPanel(t('charts.classDistribution'), barChart(
+        a.classes.map((p) => ({ label: classLabel(p.key), value: p.count })),
       )),
-      chartPanel('Level distribution', barChart(
+      chartPanel(t('charts.levelDistribution'), barChart(
         a.levels.map((p) => ({ label: p.key, value: p.count })),
       )),
     ].join('');
@@ -152,7 +164,7 @@ async function refreshAccounts(): Promise<void> {
     $('accounts').innerHTML = renderAccountsTable(data.rows);
     $('accounts-pager').innerHTML = renderPager(data.total, data.page, data.limit);
   } catch (err) {
-    if (!handleAuthFailure(err)) $('accounts').innerHTML = `<div class="empty">failed to load accounts</div>`;
+    if (!handleAuthFailure(err)) $('accounts').innerHTML = `<div class="empty">${t('accounts.loadFailed')}</div>`;
   }
 }
 
@@ -165,7 +177,7 @@ async function refreshCharacters(): Promise<void> {
     $('characters').innerHTML = renderCharactersTable(data.rows, charactersState.sort, charactersState.dir);
     $('characters-pager').innerHTML = renderPager(data.total, data.page, data.limit);
   } catch (err) {
-    if (!handleAuthFailure(err)) $('characters').innerHTML = `<div class="empty">failed to load characters</div>`;
+    if (!handleAuthFailure(err)) $('characters').innerHTML = `<div class="empty">${t('characters.loadFailed')}</div>`;
   }
 }
 
@@ -200,12 +212,12 @@ async function refreshOpenAccountDetail(accountId: number): Promise<void> {
 }
 
 async function openModerationAccount(accountId: number): Promise<void> {
-  $('moderation-detail').innerHTML = '<div class="empty">loading report context…</div>';
+  $('moderation-detail').innerHTML = `<div class="empty">${t('report.loading')}</div>`;
   try {
     const detail = await apiGet<ModerationAccountDetail>(`/admin/api/moderation/accounts/${accountId}`);
     $('moderation-detail').innerHTML = renderModerationDetail(detail);
   } catch (err) {
-    if (!handleAuthFailure(err)) $('moderation-detail').innerHTML = '<div class="empty">failed to load report context</div>';
+    if (!handleAuthFailure(err)) $('moderation-detail').innerHTML = `<div class="empty">${t('report.loadFailed')}</div>`;
   }
 }
 
@@ -226,8 +238,8 @@ function showModerationConfirm(opts: {
     <h4>${escapeHtml(opts.title)}</h4>
     <dl>${opts.rows.map((r) => `<dt>${escapeHtml(r.label)}</dt><dd>${escapeHtml(r.value)}</dd>`).join('')}</dl>
     <div class="confirm-actions">
-      <button data-confirm-moderation ${opts.danger ? 'class="danger"' : ''}>Confirm</button>
-      <button data-cancel-moderation>Cancel</button>
+      <button data-confirm-moderation ${opts.danger ? 'class="danger"' : ''}>${t('dialog.confirm')}</button>
+      <button data-cancel-moderation>${t('dialog.cancel')}</button>
     </div>`;
   el.scrollIntoView({ block: 'nearest' });
 }
@@ -274,7 +286,7 @@ function handleModerationActionClick(e: Event, source: 'account' | 'moderation')
   }
   if (target.closest('[data-confirm-moderation]')) {
     void finishModerationAction()
-      .catch((err: unknown) => { if (!handleAuthFailure(err)) window.alert(err instanceof Error ? err.message : 'moderation action failed'); });
+      .catch((err: unknown) => { if (!handleAuthFailure(err)) window.alert(err instanceof Error ? localizeAdminError(err.message) : t('alert.actionFailed')); });
     return true;
   }
   const actionWrap = target.closest('[data-action-account-id]') as HTMLElement | null;
@@ -283,7 +295,7 @@ function handleModerationActionClick(e: Event, source: 'account' | 'moderation')
   const note = (moderationReasonInput(target)?.value ?? '').trim();
   const requireNote = (): boolean => {
     if (note) return true;
-    window.alert('Enter a moderator note / reason first.');
+    window.alert(t('alert.noteRequired'));
     return false;
   };
   const forceRenameBtn = target.closest('button[data-force-rename-character]') as HTMLButtonElement | null;
@@ -292,11 +304,11 @@ function handleModerationActionClick(e: Event, source: 'account' | 'moderation')
     const characterId = Number(forceRenameBtn.dataset.forceRenameCharacter);
     const characterName = forceRenameBtn.dataset.characterName ?? `#${characterId}`;
     showModerationConfirm({
-      title: 'Confirm forced name change',
+      title: t('dialog.confirmForceName'),
       rows: [
-        { label: 'Character', value: characterName },
-        { label: 'Action', value: 'Require player to choose a new character name before entering the world.' },
-        { label: 'Reason', value: note },
+        { label: t('dialog.character'), value: characterName },
+        { label: t('dialog.action'), value: t('dialog.actionForceName') },
+        { label: t('dialog.reason'), value: note },
       ],
       endpoint: `/admin/api/moderation/characters/${characterId}/force-rename`,
       body: { reason: note },
@@ -313,13 +325,13 @@ function handleModerationActionClick(e: Event, source: 'account' | 'moderation')
     const hours = Number(suspendBtn.dataset.suspendHours);
     const expiresAt = new Date(Date.now() + hours * 3600 * 1000).toISOString();
     showModerationConfirm({
-      title: 'Confirm suspension',
+      title: t('dialog.confirmSuspension'),
       rows: [
-        { label: 'Account', value: `#${accountId}` },
-        { label: 'Action', value: 'Temporary account lockout' },
-        { label: 'Length', value: `${hours} hour${hours === 1 ? '' : 's'}` },
-        { label: 'Until', value: new Date(expiresAt).toLocaleString() },
-        { label: 'Reason', value: note },
+        { label: t('dialog.account'), value: `#${accountId}` },
+        { label: t('dialog.action'), value: t('dialog.actionSuspend') },
+        { label: t('dialog.length'), value: t('detail.lengthHours', { count: hours }) },
+        { label: t('dialog.until'), value: new Date(expiresAt).toLocaleString() },
+        { label: t('dialog.reason'), value: note },
       ],
       endpoint: `/admin/api/moderation/accounts/${accountId}/suspend`,
       body: { reason: note, expiresAt },
@@ -335,18 +347,69 @@ function handleModerationActionClick(e: Event, source: 'account' | 'moderation')
     const raw = moderationCustomExpiryInput(target)?.value ?? '';
     const expiry = raw ? new Date(raw) : null;
     if (!expiry || !Number.isFinite(expiry.getTime())) {
-      window.alert('Choose a custom suspension expiry.');
+      window.alert(t('alert.customExpiryRequired'));
+      return true;
+    }
+    if (expiry.getTime() <= Date.now()) {
+      window.alert(t('alert.customExpiryFuture'));
       return true;
     }
     showModerationConfirm({
-      title: 'Confirm custom suspension',
+      title: t('dialog.confirmCustomSuspension'),
+      rows: [
+        { label: t('dialog.account'), value: `#${accountId}` },
+        { label: t('dialog.action'), value: t('dialog.actionSuspend') },
+        { label: t('dialog.until'), value: expiry.toLocaleString() },
+        { label: t('dialog.reason'), value: note },
+      ],
+      endpoint: `/admin/api/moderation/accounts/${accountId}/suspend`,
+      body: { reason: note, expiresAt: expiry.toISOString() },
+      accountId,
+      source,
+      confirmEl,
+    });
+    return true;
+  }
+  const chatMuteBtn = target.closest('button[data-chat-mute-hours]') as HTMLButtonElement | null;
+  if (chatMuteBtn) {
+    if (!requireNote()) return true;
+    const hours = Number(chatMuteBtn.dataset.chatMuteHours);
+    const expiresAt = new Date(Date.now() + hours * 3600 * 1000).toISOString();
+    showModerationConfirm({
+      title: 'Confirm chat mute',
       rows: [
         { label: 'Account', value: `#${accountId}` },
-        { label: 'Action', value: 'Temporary account lockout' },
+        { label: 'Action', value: 'Mute chat and send warning' },
+        { label: 'Length', value: `${hours} hour${hours === 1 ? '' : 's'}` },
+        { label: 'Until', value: new Date(expiresAt).toLocaleString() },
+        { label: 'Reason', value: note },
+      ],
+      endpoint: `/admin/api/moderation/accounts/${accountId}/chat-mute`,
+      body: { reason: note, expiresAt },
+      accountId,
+      source,
+      confirmEl,
+    });
+    return true;
+  }
+  const customChatMute = target.closest('button[data-chat-mute-custom]') as HTMLButtonElement | null;
+  if (customChatMute) {
+    if (!requireNote()) return true;
+    const raw = moderationCustomExpiryInput(target)?.value ?? '';
+    const expiry = raw ? new Date(raw) : null;
+    if (!expiry || !Number.isFinite(expiry.getTime())) {
+      window.alert('Choose a custom chat mute expiry.');
+      return true;
+    }
+    showModerationConfirm({
+      title: 'Confirm custom chat mute',
+      rows: [
+        { label: 'Account', value: `#${accountId}` },
+        { label: 'Action', value: 'Mute chat and send warning' },
         { label: 'Until', value: expiry.toLocaleString() },
         { label: 'Reason', value: note },
       ],
-      endpoint: `/admin/api/moderation/accounts/${accountId}/suspend`,
+      endpoint: `/admin/api/moderation/accounts/${accountId}/chat-mute`,
       body: { reason: note, expiresAt: expiry.toISOString() },
       accountId,
       source,
@@ -358,11 +421,11 @@ function handleModerationActionClick(e: Event, source: 'account' | 'moderation')
   if (banBtn) {
     if (!requireNote()) return true;
     showModerationConfirm({
-      title: 'Confirm ban',
+      title: t('dialog.confirmBan'),
       rows: [
-        { label: 'Account', value: `#${accountId}` },
-        { label: 'Action', value: 'Permanent account lockout' },
-        { label: 'Reason', value: note },
+        { label: t('dialog.account'), value: `#${accountId}` },
+        { label: t('dialog.action'), value: t('dialog.actionBan') },
+        { label: t('dialog.reason'), value: note },
       ],
       endpoint: `/admin/api/moderation/accounts/${accountId}/ban`,
       body: { reason: note },
@@ -377,11 +440,11 @@ function handleModerationActionClick(e: Event, source: 'account' | 'moderation')
   if (unbanBtn) {
     if (!requireNote()) return true;
     showModerationConfirm({
-      title: 'Confirm unban',
+      title: t('dialog.confirmUnban'),
       rows: [
-        { label: 'Account', value: `#${accountId}` },
-        { label: 'Action', value: 'Restore account login access' },
-        { label: 'Reason', value: note },
+        { label: t('dialog.account'), value: `#${accountId}` },
+        { label: t('dialog.action'), value: t('dialog.actionUnban') },
+        { label: t('dialog.reason'), value: note },
       ],
       endpoint: `/admin/api/moderation/accounts/${accountId}/unban`,
       body: { reason: note },
@@ -407,7 +470,7 @@ function wireEvents(): void {
     apiLogin(username, password)
       .then(() => showApp())
       .catch((err: unknown) => {
-        $('login-error').textContent = err instanceof ApiError ? err.message : 'login failed — is the server up?';
+        $('login-error').textContent = err instanceof ApiError ? localizeAdminError(err.message) : t('auth.loginFailed');
       });
   });
 
@@ -416,8 +479,10 @@ function wireEvents(): void {
   $('admin-tabs').addEventListener('click', (e) => {
     const tab = (e.target as HTMLElement).closest<HTMLButtonElement>('.admin-tab');
     const page = tab?.dataset.adminPage;
-    if (page === 'overview' || page === 'moderation') showPage(page);
+    if (page === 'overview' || page === 'moderation' || page === 'chat-filter') showPage(page);
   });
+
+  wireChatFilterEvents();
 
   let searchTimer: number | null = null;
   $('account-search').addEventListener('input', (e) => {
@@ -457,6 +522,15 @@ function wireEvents(): void {
 
   $('moderation-detail').addEventListener('click', (e) => {
     const target = e.target as HTMLElement;
+    const chatModBtn = target.closest('button[data-lift-mute], button[data-reset-strikes]') as HTMLButtonElement | null;
+    if (chatModBtn) {
+      const accountId = Number((target.closest('.mod-detail')?.querySelector('[data-action-account-id]') as HTMLElement | null)?.dataset.actionAccountId);
+      const endpoint = chatModBtn.dataset.liftMute !== undefined ? 'lift-mute' : 'reset-strikes';
+      void apiPost(`/admin/api/moderation/accounts/${accountId}/${endpoint}`, {})
+        .then(() => { if (Number.isFinite(accountId)) void openModerationAccount(accountId); })
+        .catch((err: unknown) => { if (!handleAuthFailure(err)) window.alert(err instanceof Error ? err.message : 'action failed'); });
+      return;
+    }
     const ignoreBtn = target.closest('button[data-ignore-report]') as HTMLButtonElement | null;
     if (ignoreBtn) {
       const reportId = Number(ignoreBtn.dataset.ignoreReport);
@@ -467,7 +541,7 @@ function wireEvents(): void {
           void refreshModeration();
           if (Number.isFinite(accountId)) void openModerationAccount(accountId);
         })
-        .catch((err: unknown) => { if (!handleAuthFailure(err)) window.alert(err instanceof Error ? err.message : 'ignore failed'); });
+        .catch((err: unknown) => { if (!handleAuthFailure(err)) window.alert(err instanceof Error ? localizeAdminError(err.message) : t('alert.actionFailed')); });
       return;
     }
     handleModerationActionClick(e, 'moderation');
@@ -484,6 +558,48 @@ function wireEvents(): void {
   });
 }
 
+function chatFilterError(err: unknown, action: string): void {
+  if (!handleAuthFailure(err)) window.alert(err instanceof Error ? err.message : `${action} failed`);
+}
+
+function wireChatFilterEvents(): void {
+  // Add a word: the per-tier form submits (Enter or the Add button).
+  $('chat-filter').addEventListener('submit', (e) => {
+    const form = (e.target as HTMLElement).closest('form.word-add') as HTMLFormElement | null;
+    if (!form) return;
+    e.preventDefault();
+    const tier = form.dataset.addTier;
+    const input = form.querySelector('input') as HTMLInputElement | null;
+    const word = (input?.value ?? '').trim();
+    if (!word || (tier !== 'soft' && tier !== 'hard')) return;
+    void apiPost('/admin/api/chat-filter/words', { word, tier })
+      .then(() => refreshChatFilter())
+      .catch((err: unknown) => chatFilterError(err, 'add word'));
+  });
+
+  // Remove a word, or save the escalation config.
+  $('chat-filter').addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    const del = target.closest('button[data-del-word]') as HTMLButtonElement | null;
+    if (del) {
+      void apiPost(`/admin/api/chat-filter/words/${Number(del.dataset.delWord)}/delete`, {})
+        .then(() => refreshChatFilter())
+        .catch((err: unknown) => chatFilterError(err, 'remove word'));
+      return;
+    }
+    if (target.closest('button[data-save-config]')) {
+      const warningsBeforeMute = Number(($('cf-warnings') as HTMLInputElement).value);
+      const muteLadderSeconds = ($('cf-ladder') as HTMLInputElement).value
+        .split(',')
+        .map((s) => Number(s.trim()))
+        .filter((n) => Number.isFinite(n) && n > 0);
+      void apiPost('/admin/api/chat-filter/config', { warningsBeforeMute, muteLadderSeconds })
+        .then(() => refreshChatFilter())
+        .catch((err: unknown) => chatFilterError(err, 'save config'));
+    }
+  });
+}
+
 function pagerTarget(e: Event): number | null {
   const btn = (e.target as HTMLElement).closest('button[data-page]') as HTMLButtonElement | null;
   if (!btn || btn.disabled) return null;
@@ -491,6 +607,19 @@ function pagerTarget(e: Event): number | null {
   return Number.isFinite(page) && page >= 1 ? page : null;
 }
 
+function localizeStatic(): void {
+  document.title = t('app.title');
+  document.querySelectorAll('[data-i18n]').forEach((el) => {
+    const key = el.getAttribute('data-i18n');
+    if (key) el.textContent = t(key);
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach((el) => {
+    const key = el.getAttribute('data-i18n-ph');
+    if (key) (el as HTMLInputElement).placeholder = t(key);
+  });
+}
+
+localizeStatic();
 wireEvents();
 if (getToken()) {
   void showApp();

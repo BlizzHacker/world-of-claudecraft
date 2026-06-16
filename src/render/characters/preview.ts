@@ -5,6 +5,7 @@ import { PlayerClass } from '../../sim/types';
 const PREVIEW_ANIM_STATE = {
   speed: 0,
   moving: false,
+  airborne: false,
   backwards: false,
   dead: false,
   casting: false,
@@ -20,6 +21,7 @@ export class CharacterPreview {
   private camera: THREE.PerspectiveCamera;
   private characterGroup: THREE.Group;
   private currentVisual: CharacterVisual | null = null;
+  private currentSkin = 0;
   private clock = new THREE.Clock();
   private animationFrameId: number | null = null;
   private resizeObserver: ResizeObserver | null = null;
@@ -97,7 +99,7 @@ export class CharacterPreview {
     try {
       // Load the CharacterVisual from preloaded assets (e.g. player_warrior)
       const visualKey = `player_${cls}`;
-      this.currentVisual = new CharacterVisual(visualKey, 0xffffff);
+      this.currentVisual = new CharacterVisual(visualKey, 0xffffff, this.currentSkin);
       this.characterGroup.add(this.currentVisual.root);
 
       // Reset rotation of group so new character faces forward but holds any user offset if preferred.
@@ -106,6 +108,12 @@ export class CharacterPreview {
     } catch (err) {
       console.error(`Failed to load preview character visual for ${cls}:`, err);
     }
+  }
+
+  /** Swap the previewed skin (alternate body texture); persists across setClass. */
+  setSkin(skinIndex: number): void {
+    this.currentSkin = skinIndex;
+    this.currentVisual?.setSkin(skinIndex);
   }
 
   /** Dynamically shift the canvas to a new container */

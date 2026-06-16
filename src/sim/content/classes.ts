@@ -101,7 +101,7 @@ export const CLASSES: Record<PlayerClass, ClassDef> = {
     startWeapon: 'rusty_hatchet',
     startChest: 'footpad_jerkin',
     ranged: { min: 5, max: 9, speed: 2.3, maxRange: 35, minRange: 8 },
-    abilities: ['raptor_strike', 'aspect_of_the_hawk', 'serpent_sting', 'arcane_shot', 'concussive_shot', 'mongoose_bite', 'wing_clip', 'aspect_of_the_cheetah', 'aimed_shot', 'rapid_fire', 'tame_beast', 'dismiss_pet'],
+    abilities: ['raptor_strike', 'aspect_of_the_hawk', 'serpent_sting', 'arcane_shot', 'concussive_shot', 'mongoose_bite', 'wing_clip', 'tame_beast', 'dismiss_pet', 'revive_pet', 'aspect_of_the_cheetah', 'aimed_shot', 'rapid_fire'],
     color: 0xabd473,
   },
   priest: {
@@ -148,7 +148,7 @@ export const CLASSES: Record<PlayerClass, ClassDef> = {
     startWeapon: 'gnarled_staff',
     startChest: 'apprentice_robe',
     ranged: { min: 3, max: 6, speed: 1.8, maxRange: 30, minRange: 0, wand: true, school: 'shadow' },
-    abilities: ['shadow_bolt', 'demon_skin', 'immolate', 'corruption', 'life_tap', 'curse_of_agony', 'drain_life', 'fear', 'searing_pain', 'shadowburn'],
+    abilities: ['shadow_bolt', 'summon_imp', 'demon_skin', 'immolate', 'corruption', 'life_tap', 'summon_voidwalker', 'curse_of_agony', 'drain_life', 'fear', 'searing_pain', 'shadowburn'],
     color: 0x9482c9,
   },
   druid: {
@@ -163,7 +163,7 @@ export const CLASSES: Record<PlayerClass, ClassDef> = {
     resourceType: 'mana',
     startWeapon: 'gnarled_staff',
     startChest: 'footpad_jerkin',
-    abilities: ['wrath', 'healing_touch', 'mark_of_the_wild', 'moonfire', 'rejuvenation', 'thorns', 'entangling_roots', 'bear_form', 'regrowth', 'barkskin', 'starfire', 'maul', 'growl', 'cat_form', 'claw', 'ferocious_bite', 'swipe'],
+    abilities: ['wrath', 'healing_touch', 'mark_of_the_wild', 'moonfire', 'rejuvenation', 'thorns', 'entangling_roots', 'bear_form', 'bear_charge', 'maul', 'growl', 'demoralizing_roar', 'cat_form', 'prowl', 'rake', 'claw', 'regrowth', 'ferocious_bite', 'barkskin', 'swipe', 'starfire'],
     color: 0xff7d0a,
   },
 };
@@ -659,6 +659,13 @@ export const ABILITIES: Record<string, AbilityDef> = {
     effects: [{ type: 'dismissPet' }],
     description: 'Releases your pet back to the wild.',
   },
+  revive_pet: {
+    id: 'revive_pet', name: 'Revive Pet', class: 'hunter', learnLevel: 10,
+    cost: 45, castTime: 3, cooldown: 0, range: 0, school: 'nature',
+    requiresTarget: false,
+    effects: [],
+    description: 'Revives your dead pet and returns it to your side.',
+  },
   raptor_strike: {
     id: 'raptor_strike', name: 'Raptor Strike', class: 'hunter', learnLevel: 1,
     cost: 15, castTime: 0, cooldown: 6, range: 0, school: 'physical',
@@ -930,8 +937,8 @@ export const ABILITIES: Record<string, AbilityDef> = {
     id: 'ghost_wolf', name: 'Ghost Wolf', class: 'shaman', learnLevel: 16,
     cost: 35, castTime: 2.0, cooldown: 0, range: 0, school: 'nature',
     requiresTarget: false,
-    effects: [{ type: 'selfBuff', kind: 'buff_speed', value: 1.4, duration: 600 }],
-    description: 'Turns you into a Ghost Wolf, increasing movement speed by 40% for 10 min.',
+    effects: [{ type: 'selfBuff', kind: 'buff_speed', value: 1.4, duration: 3600 }],
+    description: 'Turns you into a Ghost Wolf, increasing movement speed by 40%. Cast again to return to normal form.',
   },
   stormstrike: {
     id: 'stormstrike', name: 'Stormstrike', class: 'shaman', learnLevel: 20,
@@ -1044,6 +1051,20 @@ export const ABILITIES: Record<string, AbilityDef> = {
     effects: [{ type: 'directDamage', min: 56, max: 66 }],
     description: 'Instantly blasts the target with Shadow Flame for $d Shadow damage.',
   },
+  summon_imp: {
+    id: 'summon_imp', name: 'Summon Imp', class: 'warlock', learnLevel: 1,
+    cost: 50, castTime: 5, cooldown: 0, range: 0, school: 'shadow',
+    requiresTarget: false,
+    effects: [{ type: 'summonDemon', mobId: 'imp' }],
+    description: 'Summons an Imp under the command of the Warlock. The Imp hurls Firebolts at your enemies from afar. Summoning a new demon dismisses your current one. You may have one demon at a time.',
+  },
+  summon_voidwalker: {
+    id: 'summon_voidwalker', name: 'Summon Voidwalker', class: 'warlock', learnLevel: 8,
+    cost: 80, castTime: 5, cooldown: 0, range: 0, school: 'shadow',
+    requiresTarget: false,
+    effects: [{ type: 'summonDemon', mobId: 'voidwalker' }],
+    description: 'Summons a Voidwalker under the command of the Warlock. The Voidwalker is a sturdy demon that taunts your enemies and soaks up punishment. Summoning a new demon dismisses your current one. You may have one demon at a time.',
+  },
 
   // ====================== DRUID ======================
   wrath: {
@@ -1136,6 +1157,13 @@ export const ABILITIES: Record<string, AbilityDef> = {
     effects: [{ type: 'selfBuff', kind: 'form_bear', value: 0.65, duration: 3600 }],
     description: 'Shapeshift into a bear: armor +65%, attack power +15, your attacks build rage and generate 30% more threat. Cast again to return to caster form.',
   },
+  bear_charge: {
+    id: 'bear_charge', name: 'Bear Charge', class: 'druid', learnLevel: 10,
+    cost: 0, castTime: 0, cooldown: 15, range: 25, minRange: 8, school: 'physical',
+    requiresTarget: true, offGcd: true, requiresForm: 'bear',
+    effects: [{ type: 'charge' }, { type: 'stun', duration: 1 }],
+    description: 'Charge an enemy, generating 9 rage and stunning it for 1 sec. 8-25 yd range. Bear Form only.',
+  },
   maul: {
     id: 'maul', name: 'Maul', class: 'druid', learnLevel: 10,
     cost: 15, castTime: 0, cooldown: 0, range: 0, school: 'physical',
@@ -1154,12 +1182,39 @@ export const ABILITIES: Record<string, AbilityDef> = {
     effects: [{ type: 'taunt' }],
     description: 'Growls at the target: your threat rises to match its most hated enemy and it is compelled to attack you for 3 sec. Bear Form only.',
   },
+  demoralizing_roar: {
+    id: 'demoralizing_roar', name: 'Demoralizing Roar', class: 'druid', learnLevel: 10,
+    cost: 10, castTime: 0, cooldown: 0, range: 0, school: 'physical',
+    requiresTarget: false, requiresForm: 'bear',
+    effects: [{ type: 'aoeAttackPower', amount: 20, duration: 20, radius: 8 }],
+    ranks: [
+      { rank: 2, level: 16, cost: 10, effects: [{ type: 'aoeAttackPower', amount: 35, duration: 20, radius: 8 }] },
+    ],
+    description: 'Demoralizes nearby enemies, reducing their attack power by 20 for 20 sec. Bear Form only.',
+  },
   cat_form: {
-    id: 'cat_form', name: 'Cat Form', class: 'druid', learnLevel: 12,
+    id: 'cat_form', name: 'Wolf Form', class: 'druid', learnLevel: 12,
     cost: 30, castTime: 0, cooldown: 0, range: 0, school: 'physical',
     requiresTarget: false,
     effects: [{ type: 'selfBuff', kind: 'form_cat', value: 0.71, duration: 3600 }],
-    description: 'Shapeshift into a cat: attack power rises with your level, your attacks use energy and combo points, and you generate 29% less threat. Cast again to return to caster form.',
+    description: 'Shapeshift into a wolf: agility rises with your level, attack power +8 plus 2 per level, your attacks use energy and combo points, and you generate 29% less threat. Cast again to return to caster form.',
+  },
+  prowl: {
+    id: 'prowl', name: 'Prowl', class: 'druid', learnLevel: 12,
+    cost: 0, castTime: 0, cooldown: 0, range: 0, school: 'physical',
+    requiresTarget: false, requiresForm: 'cat', requiresOutOfCombat: true,
+    effects: [{ type: 'selfBuff', kind: 'stealth', value: 0.7, duration: 3600 }],
+    description: 'Enter stealth while in Wolf Form. Cannot be used in combat.',
+  },
+  rake: {
+    id: 'rake', name: 'Rake', class: 'druid', learnLevel: 12,
+    cost: 35, castTime: 0, cooldown: 0, range: 0, school: 'physical',
+    requiresTarget: true, awardsCombo: 1, requiresForm: 'cat', requiresStealth: true,
+    effects: [{ type: 'weaponStrike', bonus: 8 }, { type: 'dot', total: 30, duration: 9, interval: 3 }],
+    ranks: [
+      { rank: 2, level: 18, cost: 35, effects: [{ type: 'weaponStrike', bonus: 12 }, { type: 'dot', total: 48, duration: 9, interval: 3 }] },
+    ],
+    description: 'A stealth opener that rakes the enemy for weapon damage plus $d and causes bleeding damage over 9 sec. Awards 1 combo point. Wolf Form only.',
   },
   claw: {
     id: 'claw', name: 'Claw', class: 'druid', learnLevel: 12,
@@ -1169,14 +1224,14 @@ export const ABILITIES: Record<string, AbilityDef> = {
     ranks: [
       { rank: 2, level: 18, cost: 45, effects: [{ type: 'weaponStrike', bonus: 20 }] },
     ],
-    description: 'Claw the enemy for weapon damage plus $d. Awards 1 combo point. Cat Form only.',
+    description: 'Claw the enemy for weapon damage plus $d. Awards 1 combo point. Wolf Form only.',
   },
   ferocious_bite: {
     id: 'ferocious_bite', name: 'Ferocious Bite', class: 'druid', learnLevel: 14,
     cost: 35, castTime: 0, cooldown: 0, range: 0, school: 'physical',
     requiresTarget: true, spendsCombo: true, requiresForm: 'cat',
     effects: [{ type: 'finisherDamage', base: 10, perCombo: 14, variance: 6 }],
-    description: 'Finishing move that causes damage per combo point. Cat Form only.',
+    description: 'Finishing move that causes damage per combo point. Wolf Form only.',
   },
   swipe: {
     id: 'swipe', name: 'Swipe', class: 'druid', learnLevel: 16,

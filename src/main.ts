@@ -2,30 +2,173 @@ import { Sim } from './sim/sim';
 import { Renderer } from './render/renderer';
 import { Input } from './game/input';
 import { Keybinds } from './game/keybinds';
-import { Settings, GameSettings, SETTING_RANGES } from './game/settings';
+import { Settings, GameSettings, SETTING_RANGES, normalizeClickMoveButton } from './game/settings';
 import { MobileControls, PHONE_TOUCH_QUERY, isPhoneTouchDevice } from './game/mobile_controls';
 import { Hud } from './ui/hud';
 import { audio } from './game/audio';
 import { music } from './game/music';
 import { handlePickedEntity, hoverCursorKind } from './game/interactions';
-import { clickMoveStep, manualMovementOverrides } from './game/click_move';
+import { clickMoveShouldCancel, clickMoveStep, stepAngleToward } from './game/click_move';
 import { Api, ClientWorld, CharacterSummary } from './net/online';
 import type { IWorld, LeaderboardEntry } from './world_api';
 import { formatXp } from './ui/xp_bar';
 import { assetsReady } from './render/assets/preload';
 import { CharacterPreview } from './render/characters';
+import { skinCount } from './render/characters/manifest';
 import { DT, INTERACT_RANGE, PlayerClass, dist2d } from './sim/types';
 import { togglePasswordVisibility, syncInputAriaState, validateForm, handleKeyboardActivation, validateCharacterName } from './ui/auth_utils';
 import { CLASSES, ABILITIES } from './sim/content/classes';
 import { iconDataUrl } from './ui/icons';
+import { formatNumber, getLanguage, isSupportedLanguage, languageTag, setLanguage, t, type SupportedLanguage, type TranslationKey } from './ui/i18n';
+import { tServer } from './ui/server_i18n';
+import { tEntity } from './ui/entity_i18n';
 import { hydrateIcons } from './ui/ui_icons';
-import { getLanguage, setLanguage, t, SupportedLanguage } from './ui/i18n';
+import { createPerfMonitor } from './game/perf';
+import { updateFollowCameraYaw, wrapAngle } from './game/camera_follow';
 
 
 const WORLD_SEED = 20061; // fixed: Cryptic Realm is a persistent place
+const CLICK_MOVE_TURN_RATE = 4.2; // rad/sec; responsive turning while the camera stays decoupled from click spam
 
 const $ = <T extends HTMLElement = HTMLElement>(sel: string): T => document.querySelector(sel) as T;
 let pendingDeleteCharacter: CharacterSummary | null = null;
+
+const SITE_URL = 'https://worldofclaudecraft.com/';
+
+const RESOURCE_KEYS = {
+  mana: 'classDetails.resources.mana',
+  energy: 'classDetails.resources.energy',
+  rage: 'classDetails.resources.rage',
+} satisfies Record<string, TranslationKey>;
+
+function classDisplayName(className: PlayerClass): string {
+  return tEntity({ kind: 'class', id: className, field: 'name' });
+}
+
+function classDisplayDescription(className: PlayerClass): string {
+  return tEntity({ kind: 'class', id: className, field: 'description' });
+}
+
+function formatClassDetailNumber(value: number): string {
+  return formatNumber(value, { maximumFractionDigits: 1 });
+}
+
+function classDetailAmountRange(min: number, max: number): string {
+  if (min === max) return formatClassDetailNumber(min);
+  return t('abilityUi.tooltip.damageRange', {
+    min: formatClassDetailNumber(min),
+    max: formatClassDetailNumber(max),
+  });
+}
+
+function escapeHtml(text: string): string {
+  return text.replace(/[&<>"']/g, (char) => {
+    switch (char) {
+      case '&': return '&amp;';
+      case '<': return '&lt;';
+      case '>': return '&gt;';
+      case '"': return '&quot;';
+      case "'": return '&#39;';
+      default: return char;
+    }
+  });
+}
+
+function technicalErrorMessage(err: unknown): string {
+  return err instanceof Error ? err.message : String(err);
+}
+
+function userFacingApiError(err: unknown): string {
+  const text = technicalErrorMessage(err);
+  const suspended = text.match(/^This account is suspended until (.+)\.$/);
+  if (suspended) return t('errors.api.accountSuspended', { date: suspended[1] });
+
+  const normalized = text.toLowerCase();
+  if (normalized.startsWith('too many attempts')) return t('errors.api.tooManyAttempts');
+  if (normalized === 'username must be 3-24 chars (letters, digits, _)') return t('errors.api.usernameShape');
+  if (normalized === 'username is not allowed') return t('errors.api.usernameNotAllowed');
+  if (normalized === 'password must be at least 6 chars') return t('errors.api.passwordMin');
+  if (normalized === 'username already taken') return t('errors.api.usernameTaken');
+  if (normalized === 'invalid username or password') return t('errors.api.invalidCredentials');
+  if (normalized === 'invalid character name (2-16 letters)') return t('errors.api.invalidCharacterName');
+  if (normalized === 'character name is not allowed') return t('errors.api.characterNameNotAllowed');
+  if (normalized === 'invalid class') return t('errors.api.invalidClass');
+  if (normalized === 'character limit reached') return t('errors.api.characterLimit');
+  if (normalized === 'that name is taken') return t('errors.api.nameTaken');
+  if (normalized === 'character not found' || normalized === 'no such character' || normalized === 'not found') return t('errors.api.characterNotFound');
+  if (normalized === 'character is currently online') return t('errors.api.characterOnline');
+  if (normalized === 'type the character name to confirm deletion') return t('errors.api.deleteConfirm');
+  if (normalized === 'not authenticated' || normalized === 'authentication required') return t('errors.api.notAuthenticated');
+  if (normalized === 'this account has been banned.') return t('errors.api.accountBanned');
+  if (normalized === 'character already in world') return t('errors.api.alreadyInWorld');
+  if (normalized === 'this character must be renamed before entering the world.') return t('errors.api.renameBeforeEntering');
+  // Cloudflare Turnstile rejection on login/register (server/main.ts passesTurnstile).
+  if (normalized === 'verification failed, please try again') return t('errors.api.verificationFailed');
+  // WebSocket disconnect reasons surfaced through the fatal overlay (net/online.ts).
+  if (normalized === 'connection to the server was lost.') return t('loading.connectionLost');
+  if (normalized === 'rejected by server') return t('loading.connectionRejected');
+  // NOTE: protocol/transport diagnostics ('bad auth message', 'authentication timed out',
+  // etc.) are intentionally NOT translated — they are developer/diagnostic errors and must
+  // stay English so browser logs and support reports match the server source.
+  // Moderation kicks and the login brute-force throttle (server/admin.ts, server/main.ts).
+  if (normalized === 'this account is suspended.') return tServer('moderation.suspended');
+  if (normalized === 'a moderator requires one of your characters to be renamed.') return tServer('moderation.forceRename');
+  if (normalized.startsWith('too many failed attempts')) return tServer('moderation.tooManyFailed');
+  // Transport/runtime failures are diagnostic code errors. Preserve their
+  // English source text so browser logs and support reports match exactly.
+  return text;
+}
+
+// --- Cloudflare Turnstile (bot gate on the login/register form) ---------------
+// The site key is injected at build time; when it is empty (local/offline dev or
+// a build without the env var) the widget never renders and the token is '', so
+// the server — which also skips verification without its secret — lets requests
+// through unchanged. The api.js <script> is in index.html.
+const TURNSTILE_SITEKEY = String(import.meta.env.VITE_TURNSTILE_SITEKEY ?? '');
+
+interface TurnstileApi {
+  render: (el: string | HTMLElement, opts: { sitekey: string }) => string;
+  getResponse: (widgetId?: string) => string | undefined;
+  reset: (widgetId?: string) => void;
+}
+let turnstileWidgetId: string | undefined;
+
+function turnstileApi(): TurnstileApi | undefined {
+  return (window as unknown as { turnstile?: TurnstileApi }).turnstile;
+}
+
+// Render the widget once, retrying until the async api.js script is ready. Safe to
+// call repeatedly (idempotent) and a no-op when no site key is configured.
+function ensureTurnstile(): void {
+  if (!TURNSTILE_SITEKEY || turnstileWidgetId !== undefined) return;
+  const ts = turnstileApi();
+  const el = document.getElementById('cf-turnstile-container');
+  if (!ts || !el) {
+    window.setTimeout(ensureTurnstile, 200);
+    return;
+  }
+  turnstileWidgetId = ts.render(el, { sitekey: TURNSTILE_SITEKEY });
+}
+
+// The current single-use token, or '' when verification is not configured / not
+// yet solved. Tokens are consumed server-side, so reset after each attempt.
+function turnstileToken(): string {
+  const ts = turnstileApi();
+  if (!TURNSTILE_SITEKEY || !ts || turnstileWidgetId === undefined) return '';
+  return ts.getResponse(turnstileWidgetId) ?? '';
+}
+
+function resetTurnstile(): void {
+  const ts = turnstileApi();
+  if (ts && turnstileWidgetId !== undefined) ts.reset(turnstileWidgetId);
+}
+
+function localizedSiteUrl(lang: SupportedLanguage): string {
+  if (lang === 'en') return SITE_URL;
+  const url = new URL(SITE_URL);
+  url.searchParams.set('lang', lang);
+  return url.toString();
+}
 
 declare const __APP_VERSION__: string;
 declare const __APP_BUILD_ID__: string;
@@ -35,7 +178,7 @@ function syncBuildInfo(): void {
   const el = document.getElementById('game-version');
   if (!el) return;
   el.textContent = `v${__APP_VERSION__} · build ${__APP_BUILD_ID__}`;
-  el.title = `Built ${__APP_BUILD_DATE__}`;
+  el.title = t('meta.builtOn', { date: __APP_BUILD_DATE__ });
 }
 
 function syncAppViewport(): void {
@@ -78,7 +221,6 @@ window.addEventListener('orientationchange', () => {
   window.setTimeout(syncAppViewport, 800);
 });
 window.visualViewport?.addEventListener('resize', syncAppViewport);
-window.visualViewport?.addEventListener('scroll', syncAppViewport);
 document.addEventListener('fullscreenchange', syncAppViewport);
 
 function requestMobileFullscreenLandscape(): void {
@@ -110,19 +252,19 @@ function isStandaloneDisplay(): boolean {
 function mobilePreflightCopy(): { detail: string; steps: string[] } {
   const standalone = isStandaloneDisplay();
   const base = [
-    'Rotate your device to landscape before entering the world.',
-    'Mobile performance may be degraded. Close extra tabs and lower Render Quality if the game feels slow.',
+    t('mobilePreflight.baseLandscape'),
+    t('mobilePreflight.basePerformance'),
   ];
   if (mobilePlatform() === 'ios') {
     return {
       detail: standalone
-        ? 'You are in home-screen fullscreen mode. Keep the device in landscape.'
-        : 'For true fullscreen on iPhone or iPad, install this page to your Home Screen first.',
+        ? t('mobilePreflight.iosStandaloneDetail')
+        : t('mobilePreflight.iosInstallDetail'),
       steps: standalone
         ? base
         : [
-          'In Safari, tap Share, then Add to Home Screen.',
-          'Open Cryptic Realm from the new Home Screen icon.',
+          t('mobilePreflight.iosShareStep'),
+          t('mobilePreflight.iosOpenStep'),
           ...base,
         ],
     };
@@ -130,32 +272,35 @@ function mobilePreflightCopy(): { detail: string; steps: string[] } {
   if (mobilePlatform() === 'android') {
     return {
       detail: standalone
-        ? 'You are in fullscreen app mode. Keep the device in landscape.'
-        : 'For fullscreen on Android, install this page or add it to your Home screen first.',
+        ? t('mobilePreflight.androidStandaloneDetail')
+        : t('mobilePreflight.androidInstallDetail'),
       steps: standalone
         ? base
         : [
-          'In Chrome, tap the menu, then Install app or Add to Home screen.',
-          'Open Cryptic Realm from the new icon.',
+          t('mobilePreflight.androidInstallStep'),
+          t('mobilePreflight.androidOpenStep'),
           ...base,
         ],
     };
   }
   return {
     detail: standalone
-      ? 'Keep your device in landscape fullscreen.'
-      : 'Install or add this page to your Home screen for the best fullscreen mobile experience.',
+      ? t('mobilePreflight.otherStandaloneDetail')
+      : t('mobilePreflight.otherInstallDetail'),
     steps: base,
   };
 }
 
-function showMobilePreflightPrompt(): void {
-  if (!isPhoneTouchDevice()) return;
+let mobilePreflightPromptPromise: Promise<void> | null = null;
+
+function showMobilePreflightPrompt(): Promise<void> {
+  if (!isPhoneTouchDevice()) return Promise.resolve();
+  if (mobilePreflightPromptPromise) return mobilePreflightPromptPromise;
   const prompt = document.getElementById('mobile-preflight') as HTMLElement | null;
   const detail = document.getElementById('mobile-preflight-detail') as HTMLElement | null;
   const steps = document.getElementById('mobile-preflight-steps') as HTMLOListElement | null;
   const continueBtn = document.getElementById('mobile-preflight-continue') as HTMLButtonElement | null;
-  if (!prompt || !detail || !steps || !continueBtn) return;
+  if (!prompt || !detail || !steps || !continueBtn) return Promise.resolve();
 
   const copy = mobilePreflightCopy();
   detail.textContent = copy.detail;
@@ -168,7 +313,18 @@ function showMobilePreflightPrompt(): void {
   document.body.classList.add('mobile-preflight-open', 'mobile-touch');
   prompt.style.display = 'flex';
   prompt.classList.add('visible');
-  continueBtn.onclick = () => hideMobilePreflightPrompt();
+  mobilePreflightPromptPromise = new Promise((resolve) => {
+    continueBtn.onclick = () => {
+      requestMobileFullscreenLandscape();
+      syncAppViewport();
+      window.setTimeout(syncAppViewport, 250);
+      window.setTimeout(syncAppViewport, 800);
+      hideMobilePreflightPrompt();
+      mobilePreflightPromptPromise = null;
+      resolve();
+    };
+  });
+  return mobilePreflightPromptPromise;
 }
 
 function hideMobilePreflightPrompt(): void {
@@ -249,7 +405,7 @@ function setLoadingStatus(text: string): void {
 
 function setLoadingProgress(done: number, total: number): void {
   $('#ls-fill').style.width = total > 0 ? `${Math.round((done / total) * 100)}%` : '0%';
-  setLoadingStatus(`Loading world… ${done}/${total}`);
+  setLoadingStatus(t('loading.worldProgress', { done, total }));
 }
 
 function hideLoadingScreen(): void {
@@ -293,7 +449,11 @@ function enterLoadingState(statusText: string): void {
 
 async function prepareWorldEntry(): Promise<boolean> {
   if (hasBegunWorldEntry) return false;
-  requestPreferredFullscreen();
+  if (isPhoneTouchDevice()) {
+    await showMobilePreflightPrompt();
+  } else {
+    requestPreferredFullscreen();
+  }
   syncAppViewport();
   window.setTimeout(syncAppViewport, 250);
   window.setTimeout(syncAppViewport, 800);
@@ -306,6 +466,7 @@ function mountGameUi(): void {
   const startScreen = document.getElementById('start-screen');
   if (!template || !startScreen) throw new Error('Game UI shell is missing.');
   document.body.insertBefore(template.content.cloneNode(true), startScreen);
+  translatePage();
 }
 
 // ---------------------------------------------------------------------------
@@ -315,8 +476,8 @@ function mountGameUi(): void {
 async function startGame(world: IWorld, offlineSim: Sim | null, online: ClientWorld | null): Promise<void> {
   // Model/texture/HDRI fetches were kicked off at module import; the renderer
   // builds its scene synchronously, so everything must be resolved first.
-  // The loading screen covers the gap — not a silent black screen.
-  enterLoadingState('Loading world…');
+  // The loading screen covers the gap - not a silent black screen.
+  enterLoadingState(t('loading.world'));
   document.body.classList.add('game-active');
   if (document.activeElement instanceof HTMLElement) {
     document.activeElement.blur();
@@ -327,10 +488,10 @@ async function startGame(world: IWorld, offlineSim: Sim | null, online: ClientWo
   try {
     await assetsReady((done, total) => setLoadingProgress(done, total));
   } catch (err) {
-    fatalOverlay(`Asset loading failed: try reloading. ${err instanceof Error ? err.message : err}`);
+    fatalOverlay(t('loading.assetsFailed', { error: technicalErrorMessage(err) }));
     return;
   }
-  setLoadingStatus('Entering the world…');
+  setLoadingStatus(t('loading.enteringWorld'));
   // Let the final status + full progress bar paint before the synchronous
   // Renderer/Hud build freezes the main thread for a beat.
   await nextPaint();
@@ -343,19 +504,22 @@ async function startGame(world: IWorld, offlineSim: Sim | null, online: ClientWo
   const settings = new Settings();
   let renderer!: Renderer;
   let hud!: Hud;
+  const perf = createPerfMonitor(null);
   try {
     renderer = new Renderer(world, canvas, nameplates);
+    perf.setRenderer(renderer);
     hud = new Hud(world, renderer, keybinds);
+    perf.setHud(hud);
     hydrateIcons(); // swap [data-icon] placeholders (micro-menu, mobile bar, meters) for inline SVG
-
   } catch (err) {
     // e.g. WebGL context creation failure: surface it instead of leaving the
     // loading screen up forever
-    fatalOverlay(`Could not start the renderer: try reloading. ${err instanceof Error ? err.message : err}`);
+    fatalOverlay(t('loading.rendererFailed', { error: technicalErrorMessage(err) }));
     return;
   }
 
   const chatInput = $('#chat-input') as unknown as HTMLInputElement;
+  const clickMoveMarker = $('#click-move-marker') as HTMLDivElement;
   const recoverFromMobileKeyboard = (): void => {
     document.body.classList.remove('mobile-chat-open');
     syncAppViewport();
@@ -389,9 +553,12 @@ async function startGame(world: IWorld, offlineSim: Sim | null, online: ClientWo
 
   const input = new Input(canvas, {
     onTab: () => world.tabTarget(),
+    onTargetFriendly: () => world.targetNearestFriendly(),
+    onCycleFriendly: () => world.friendlyTabTarget(),
     // slot 0 (key 1) is Attack for every class — auto-attack without needing
     // right-click; keys and clicks share the Hud's remappable slot layout
     onAbility: (slot) => hud.castSlot(slot),
+    onInputIntent: (kind) => perf.markInputIntent(kind),
     onUiKey: (key) => {
       switch (key) {
         case 'interact': interactKey(); break;
@@ -413,6 +580,7 @@ async function startGame(world: IWorld, offlineSim: Sim | null, online: ClientWo
           break;
       }
     },
+    onEmoteWheel: (open) => hud.setEmoteWheelOpen(open),
     onClickPick: (x, y, button) => handlePick(x, y, button),
     canUseGameKeys: () => !hud.isModalOpen() && chatInput.style.display !== 'block',
   }, keybinds);
@@ -420,37 +588,69 @@ async function startGame(world: IWorld, offlineSim: Sim | null, online: ClientWo
 
   const mobileControls = new MobileControls(input, {
     onAttackNearest: () => attackNearest(),
+    onJump: () => input.triggerTouchJump(),
     onTarget: () => world.tabTarget(),
     onInteract: () => interactKey(),
+    onAutorun: () => input.toggleAutorun(),
     onChat: () => openChat(),
     onMenu: () => {
       if (!hud.closeAll()) hud.toggleOptionsMenu();
     },
     onSocial: () => hud.toggleSocial(),
+    onEmotes: () => hud.toggleEmoteWheel(),
     onArena: () => hud.toggleArena(),
     onQuestLog: () => hud.toggleQuestLog(),
+    onCharacter: () => hud.toggleChar(),
+    onBags: () => hud.toggleBags(),
     onSpellbook: () => hud.toggleSpellbook(),
     onTalents: () => hud.toggleTalents(),
-    onMeters: () => hud.toggleMeters(),
     onMap: () => hud.toggleMap(),
+    onLeaderboard: () => hud.toggleLeaderboard(),
+    onNameplates: () => (renderer.showNameplates = !renderer.showNameplates),
+    onMusic: () => {
+      music.setEnabled(!music.enabled);
+      return music.enabled;
+    },
   });
   mobileControls.start();
+  // reflect the current music state on the touch toggle (it may already be off
+  // from a prior session, persisted in localStorage)
+  document.getElementById('mobile-music')?.classList.toggle('mm-muted', !music.enabled);
 
   // apply a setting to its live subsystem (also used to apply all on startup)
+  function syncClickMoveInput(): void {
+    input.setClickMoveMouseButton(settings.get('clickToMove') > 0
+      ? normalizeClickMoveButton(settings.get('clickToMoveButton'))
+      : null);
+  }
+
   function applySetting(key: keyof GameSettings, value: number | boolean): void {
     if (key === 'mouseCamera') {
       const v = settings.set('mouseCamera', !!value);
       input.setMouseCameraEnabled(v);
       return;
     }
+    if (key === 'leftHandedTouch') {
+      const v = settings.set('leftHandedTouch', !!value);
+      document.body.classList.toggle('mobile-left-handed', v);
+      return;
+    }
+    if (key === 'filterProfanity') {
+      settings.set('filterProfanity', !!value);
+      return;
+    }
     const v = settings.set(key as keyof typeof SETTING_RANGES, value as number);
     switch (key) {
       case 'cameraSpeed': input.setCameraSpeed(v); break;
+      case 'touchLookSpeed': input.setTouchLookSpeed(v); break;
       case 'sfxVolume': audio.setVolume(v); break;
       case 'musicVolume': music.setVolume(v); break;
       case 'brightness': renderer.setBrightness(v); break;
       case 'renderScale': renderer.setRenderScale(v); break;
       case 'fullscreen': v >= 0.5 ? requestPreferredFullscreen() : exitBrowserFullscreen(); break;
+      case 'clickToMove': if (v < 0.5) input.clearClickMove(); syncClickMoveInput(); break;
+      case 'clickToMoveButton': syncClickMoveInput(); break;
+      case 'touchOpacity': document.documentElement.style.setProperty('--touch-opacity', String(v)); break;
     }
   }
   // apply persisted settings to the freshly-built subsystems
@@ -492,7 +692,7 @@ async function startGame(world: IWorld, offlineSim: Sim | null, online: ClientWo
       return;
     }
     if (bestNpc !== null) { hud.openQuestDialog(bestNpc); return; }
-    hud.showError('Nothing to interact with.');
+    hud.showError(t('errors.nothingInteract'));
   }
 
   function attackNearest(): void {
@@ -504,7 +704,7 @@ async function startGame(world: IWorld, offlineSim: Sim | null, online: ClientWo
       const d = dist2d(p.pos, e.pos);
       if (d < bestD) { best = e.id; bestD = d; }
     }
-    if (best === null) { hud.showError('No enemy nearby.'); return; }
+    if (best === null) { hud.showError(t('errors.noEnemyNearby')); return; }
     world.targetEntity(best);
     world.startAutoAttack();
   }
@@ -512,24 +712,59 @@ async function startGame(world: IWorld, offlineSim: Sim | null, online: ClientWo
   function handlePick(x: number, y: number, button: number): void {
     const id = renderer.pick(x, y);
     const clickToMove = settings.get('clickToMove') > 0 && !world.player.dead;
+    const clickToMoveButton = normalizeClickMoveButton(settings.get('clickToMoveButton'));
+    const isClickMoveButton = clickToMove && button === clickToMoveButton;
     if (id === null) {
       if (button === 0) {
         world.targetEntity(null);
-        // left-click on open ground walks there, if the option is enabled (#95)
-        if (clickToMove) {
-          const g = renderer.groundPoint(x, y, world.player.pos.y);
-          if (g) { input.clickMoveTarget = g; input.clickMoveStop = 0.5; }
-        }
+      }
+      if (isClickMoveButton) {
+        const g = renderer.groundPoint(x, y, world.player.pos.y);
+        if (g) input.setClickMoveTarget(g, 0.5);
       }
       return;
     }
-    // left-click on an entity: approach it (walk into melee range) when
-    // click-to-move is on, in addition to the normal target/interact handling
-    if (clickToMove && button === 0) {
+    // The configured click-to-move mouse button approaches entities while the
+    // regular click handler still performs target/interact behavior.
+    if (isClickMoveButton) {
       const e = world.entities.get(id);
-      if (e && e.id !== world.player.id) { input.clickMoveTarget = { x: e.pos.x, z: e.pos.z }; input.clickMoveStop = 3.5; }
+      if (e && e.id !== world.player.id) input.setClickMoveTarget({ x: e.pos.x, z: e.pos.z }, 3.5, e.id);
     }
     handlePickedEntity(world, hud, id, button, x, y);
+  }
+
+  let lastClickMoveMarkerPulse = -1;
+  let clickMoveMarkerHideAt = 0;
+  function updateClickMoveMarker(nowMs = performance.now()): void {
+    const pulseChanged = lastClickMoveMarkerPulse !== input.clickMovePulse;
+    if (pulseChanged) {
+      lastClickMoveMarkerPulse = input.clickMovePulse;
+      clickMoveMarkerHideAt = nowMs + 300;
+    }
+    const target = input.clickMoveTarget ?? input.clickMovePulseTarget;
+    const show = !!target && settings.get('clickToMove') > 0 && !world.player.dead
+      && (!!input.clickMoveTarget || nowMs < clickMoveMarkerHideAt);
+    if (!show) {
+      clickMoveMarker.classList.remove('active', 'entity', 'pulse');
+      return;
+    }
+    const screen = renderer.worldToScreen(target.x, world.player.pos.y + 0.05, target.z);
+    const offscreen = screen.behind
+      || screen.x < -80 || screen.x > window.innerWidth + 80
+      || screen.y < -80 || screen.y > window.innerHeight + 80;
+    if (offscreen) {
+      clickMoveMarker.classList.remove('active', 'pulse');
+      return;
+    }
+    clickMoveMarker.style.transform = `translate(${screen.x.toFixed(0)}px, ${screen.y.toFixed(0)}px) translate(-50%, -50%)`;
+    clickMoveMarker.classList.toggle('entity', input.clickMoveEntityId !== null);
+    clickMoveMarker.classList.add('active');
+    if (pulseChanged || clickMoveMarker.dataset.pulse !== String(input.clickMovePulse)) {
+      clickMoveMarker.dataset.pulse = String(input.clickMovePulse);
+      clickMoveMarker.classList.remove('pulse');
+      void clickMoveMarker.offsetWidth;
+      clickMoveMarker.classList.add('pulse');
+    }
   }
 
   let last = performance.now();
@@ -537,51 +772,61 @@ async function startGame(world: IWorld, offlineSim: Sim | null, online: ClientWo
 
   // Camera follow state: keyboard turning advances facing in 20Hz sim steps,
   // so the camera tracks the player's render-interpolated facing per frame
-  // (same curve the character model follows) instead of the raw tick deltas —
+  // (same curve the character model follows) instead of the raw tick deltas -
   // that's what killed the turn stutter. While running, the orbit offset
   // eases back to zero so the camera settles in behind the character.
   let lastInterpFacing: number | null = null;
-  const CAM_SETTLE_RATE = 3; // 1/s exponential ease
-
-  function wrapAngle(d: number): number {
-    while (d > Math.PI) d -= 2 * Math.PI;
-    while (d < -Math.PI) d += 2 * Math.PI;
-    return d;
-  }
-
   function updateCamera(frameDt: number, interpFacing: number): void {
-    if (input.isMouseCameraMode()) return;
-    if (!input.isMouselookActive()) {
-      // follow turns 1:1 (keeps any manual orbit offset constant)
-      if (lastInterpFacing !== null) input.camYaw += wrapAngle(interpFacing - lastInterpFacing);
-      // settle behind the character while moving, unless the player is
-      // actively holding an orbit drag
-      const mi = input.readMoveInput();
-      if ((mi.forward || mi.strafeLeft || mi.strafeRight) && !input.leftDown) {
-        input.camYaw += wrapAngle(interpFacing - input.camYaw) * (1 - Math.exp(-frameDt * CAM_SETTLE_RATE));
-      }
-    }
-    lastInterpFacing = interpFacing; // track through mouselook too — no snap on release
+    const mi = input.readMoveInput();
+    const clickMoving = !!input.clickMoveTarget && !input.suspendMovement && !world.player.dead;
+    const next = updateFollowCameraYaw({
+      camYaw: input.camYaw,
+      interpFacing,
+      frameDt,
+      lastInterpFacing,
+      mouselook: input.isMouselookActive(),
+      moving: mi.forward || mi.strafeLeft || mi.strafeRight || clickMoving,
+      clickMoving,
+      orbiting: input.leftDown && input.isCameraDragActive(),
+    });
+    input.camYaw = next.camYaw;
+    lastInterpFacing = next.lastInterpFacing; // track through mouselook too — no snap on release
   }
 
   // Resolve this step's movement input, folding in click-to-move (#95). Returns
   // the move flags plus an optional forced facing (mouselook angle, or the
   // bearing toward a click-to-move destination). Any manual movement, an open
-  // modal, mouselook, or the option being switched off cancels click-to-move.
-  function resolveMove(mouselook: boolean, playerPos: { x: number; z: number }):
+  // modal, mouselook, death, or the option being switched off cancels click-to-move.
+  function resolveMove(mouselook: boolean, playerPos: { x: number; z: number }, playerFacing: number):
     { mi: ReturnType<typeof input.readMoveInput>; facing: number | null } {
     const mi = input.readMoveInput();
     let facing: number | null = mouselook ? input.camYaw : null;
     if (input.clickMoveTarget) {
-      if (mouselook || input.suspendMovement || settings.get('clickToMove') <= 0 || manualMovementOverrides(mi)) {
-        input.clickMoveTarget = null;
+      if (clickMoveShouldCancel(mi, {
+        mouselook,
+        movementSuspended: input.suspendMovement,
+        playerDead: world.player.dead,
+        enabled: settings.get('clickToMove') > 0,
+      })) {
+        input.clearClickMove();
       } else {
+        if (input.clickMoveEntityId !== null) {
+          const e = world.entities.get(input.clickMoveEntityId);
+          if (!e || e.dead || e.id === world.player.id) {
+            input.clearClickMove();
+            return { mi, facing };
+          }
+          input.clickMoveTarget = { x: e.pos.x, z: e.pos.z };
+        }
         const step = clickMoveStep(playerPos, input.clickMoveTarget, input.clickMoveStop);
         if (step.arrived) {
-          input.clickMoveTarget = null;
+          input.clearClickMove();
         } else {
           mi.forward = true;
-          facing = step.facing;
+          const fromFacing = input.clickMoveFacing ?? playerFacing;
+          const smoothFacing = stepAngleToward(fromFacing, step.facing, CLICK_MOVE_TURN_RATE * DT);
+          input.clickMoveFacing = smoothFacing;
+          facing = smoothFacing;
         }
       }
     }
@@ -624,12 +869,14 @@ async function startGame(world: IWorld, offlineSim: Sim | null, online: ClientWo
     let frameDt = (now - last) / 1000;
     last = now;
     if (frameDt > 0.25) frameDt = 0.25;
+    perf.frame(frameDt);
 
     // freeze movement while the game menu is up so WASD doesn't walk the
     // character behind it (other windows stay non-modal, as before)
     input.suspendMovement = hud.isModalOpen();
     input.updateTouchLook(frameDt);
     updateHoverCursor();
+    perf.markInputFrame(performance.now());
 
     const mouselook = input.isMouselookActive() && !world.player.dead;
     const controllerFacing = input.controllerFacingOverride();
@@ -639,12 +886,13 @@ async function startGame(world: IWorld, offlineSim: Sim | null, online: ClientWo
     if (offlineSim) {
       acc += frameDt;
       while (acc >= DT) {
-        const { mi, facing } = resolveMove(mouselook, offlineSim.player.pos);
+        const { mi, facing } = resolveMove(mouselook, offlineSim.player.pos, offlineSim.player.facing);
         Object.assign(offlineSim.moveInput, mi);
         const stepFacing = movementFacing ?? facing;
         if (stepFacing !== null) offlineSim.player.facing = stepFacing;
-        const events = offlineSim.tick();
-        hud.handleEvents(events);
+        perf.markInputSent(performance.now());
+        const events = perf.time('sim', () => offlineSim.tick());
+        perf.time('events', () => hud.handleEvents(events));
         acc -= DT;
       }
       const pp = offlineSim.player;
@@ -652,31 +900,47 @@ async function startGame(world: IWorld, offlineSim: Sim | null, online: ClientWo
       renderer.camYaw = input.camYaw;
       renderer.camPitch = input.camPitch;
       renderer.camDist = input.camDist;
-      renderer.sync(acc / DT, frameDt, movementFacing);
-      hud.update();
+      perf.setNetwork(null);
+      perf.time('renderer', () => renderer.sync(acc / DT, frameDt, movementFacing));
+      updateClickMoveMarker();
+      perf.markInputVisible(performance.now());
+      perf.time('hud', () => hud.update());
+      perf.tick(now);
       return;
     }
 
     // online: inputs stream on a timer inside ClientWorld; here we mirror state
     const net = online!;
-    const resolved = resolveMove(mouselook, world.player.pos);
+    const resolved = resolveMove(mouselook, world.player.pos, world.player.facing);
     const netFacing = movementFacing ?? resolved.facing;
     Object.assign(net.moveInput, resolved.mi);
     net.setMouselookFacing(netFacing);
+    if (net.flushInput()) perf.markInputSent(performance.now());
+    for (const sample of net.consumeInputEchoSamples()) perf.markInputEcho(sample);
     net.pendingFacingDelta = 0; // superseded by the interpolated follow below
-    hud.handleEvents(net.drainEvents());
+    perf.time('events', () => hud.handleEvents(net.drainEvents()));
+    if (net.consumeProfanityChanged()) hud.setProfanityWords(net.profanityWords);
     if (net.consumeInventoryChanged()) hud.onInventoryChanged();
     const alpha = net.lastSnapAt > 0
       ? Math.min(1.25, (performance.now() - net.lastSnapAt) / Math.max(20, net.snapInterval))
       : 1;
+    perf.setNetwork({
+      connected: net.connected,
+      snapInterval: Math.round(net.snapInterval),
+      lastSnapAge: net.lastSnapAt > 0 ? Math.round(performance.now() - net.lastSnapAt) : -1,
+      alpha: Math.round(alpha * 100) / 100,
+    });
     const pe = world.player;
-    // facing interp capped at 1 — extrapolating angles past the snapshot oscillates
+    // facing interp capped at 1 - extrapolating angles past the snapshot oscillates
     updateCamera(frameDt, pe.prevFacing + wrapAngle(pe.facing - pe.prevFacing) * Math.min(1, alpha));
     renderer.camYaw = input.camYaw;
     renderer.camPitch = input.camPitch;
     renderer.camDist = input.camDist;
-    renderer.sync(alpha, frameDt, movementFacing);
-    hud.update();
+    perf.time('renderer', () => renderer.sync(alpha, frameDt, movementFacing));
+    updateClickMoveMarker();
+    perf.markInputVisible(performance.now());
+    perf.time('hud', () => hud.update());
+    perf.tick(now);
   }
   requestAnimationFrame(frame);
   // cut to the game only once the first frame is actually on screen
@@ -690,7 +954,7 @@ async function startGame(world: IWorld, offlineSim: Sim | null, online: ClientWo
     face(facing: unknown) { input.setControllerFacing(facing); },
     stop() { input.clearControllerMoveInput(); },
   };
-  (window as any).__game = { sim: world, world, renderer, input, hud, online, controller };
+  (window as any).__game = { sim: world, world, renderer, input, hud, online, controller, perf };
 }
 
 // ---------------------------------------------------------------------------
@@ -705,10 +969,11 @@ function sanitizeOfflineName(raw: string): string {
   return /^[A-Za-z][A-Za-z' -]{1,15}$/.test(stripped) ? stripped : 'Adventurer';
 }
 
-async function startOffline(playerClass: PlayerClass, name: string): Promise<void> {
+async function startOffline(playerClass: PlayerClass, name: string, skin = 0): Promise<void> {
   if (!(await prepareWorldEntry())) return;
-  enterLoadingState('Loading world…');
+  enterLoadingState(t('loading.world'));
   const sim = new Sim({ seed: WORLD_SEED, playerClass, playerName: name });
+  sim.setPlayerSkin(sim.playerId, skin);
   void startGame(sim, sim, null);
 }
 
@@ -721,6 +986,59 @@ const api = new Api();
 let activeTransitionTimeout: number | null = null;
 let activeTransitionCleanup: (() => void) | null = null;
 let characterPreview: CharacterPreview | null = null;
+let offlineSkin = 0; // chosen appearance skin for the offline quick-start character
+let onlineSkin = 0; // chosen appearance skin for new online characters
+
+/** Fill a skin-picker row with one swatch per available skin for the class. */
+function renderSkinPicker(rowId: string, cls: PlayerClass, current: number, onPick: (i: number) => void): void {
+  const row = $(rowId) as HTMLElement | null;
+  if (!row) return;
+  row.innerHTML = '';
+  const count = skinCount(`player_${cls}`);
+  if (count <= 1) return; // only the default exists — nothing to pick
+  for (let i = 0; i < count; i++) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'skin-swatch' + (i === current ? ' sel' : '');
+    b.dataset.skin = String(i);
+    b.textContent = String(i + 1);
+    b.setAttribute('role', 'listitem');
+    b.setAttribute('aria-label', `Skin ${i + 1}`);
+    b.addEventListener('click', () => {
+      row.querySelectorAll('.skin-swatch').forEach((x) => x.classList.remove('sel'));
+      b.classList.add('sel');
+      onPick(i);
+    });
+    row.appendChild(b);
+  }
+}
+
+function selectedSkin(rowId: string, fallback: number): number {
+  const selected = document.querySelector(`${rowId} .skin-swatch.sel`) as HTMLElement | null;
+  const raw = selected?.dataset.skin;
+  const parsed = raw === undefined ? Number.NaN : Number(raw);
+  return Number.isFinite(parsed) ? parsed : fallback;
+}
+
+/** Reset to the default skin and (re)render the offline picker for a class. */
+function refreshOfflineSkins(cls: PlayerClass): void {
+  offlineSkin = 0;
+  characterPreview?.setSkin(0);
+  renderSkinPicker('#offline-skin-row', cls, 0, (i) => {
+    offlineSkin = i;
+    characterPreview?.setSkin(i);
+  });
+}
+
+/** Reset to the default skin and (re)render the online creation picker for a class. */
+function refreshOnlineSkins(cls: PlayerClass): void {
+  onlineSkin = 0;
+  characterPreview?.setSkin(0);
+  renderSkinPicker('#online-skin-row', cls, 0, (i) => {
+    onlineSkin = i;
+    characterPreview?.setSkin(i);
+  });
+}
 
 function updatePreviewContainer(panelId: string): void {
   if (!characterPreview) return;
@@ -736,6 +1054,8 @@ function updatePreviewContainer(panelId: string): void {
     if (selEl) {
       const cls = selEl.dataset.class as PlayerClass;
       characterPreview.setClass(cls);
+      if (panelId === '#charselect-panel') refreshOnlineSkins(cls);
+      else refreshOfflineSkins(cls);
     }
   }
 }
@@ -833,6 +1153,9 @@ function switchMainView(targetId: string): void {
 function show(el: string): void {
   // Ensure the main view is switched to hero-view so play sub-panels are visible
   switchMainView('#hero-view');
+
+  // Mount the Turnstile widget the first time the login/register form appears.
+  if (el === '#login-panel') ensureTurnstile();
 
   const statsPanel = $('#project-stats-panel');
   if (statsPanel) {
@@ -961,17 +1284,18 @@ function loginError(text: string): void {
 
 const LAST_REALM_KEY = 'woc_last_realm';
 
-// WoW population bands, derived from the realm's current online count (WoW's
-// own labels are relative to peak; current count is a fair local stand-in).
-function realmPopulation(online: boolean, players: number): { label: string; cls: string } {
-  if (!online) return { label: 'Offline', cls: 'offline' };
-  if (players >= 80) return { label: 'Full', cls: 'full' };
-  if (players >= 40) return { label: 'High', cls: 'high' };
-  if (players >= 15) return { label: 'Medium', cls: 'med' };
-  return { label: 'Low', cls: 'low' };
+// Classic-MMO population bands, derived from the realm's current online count
+// (the classic MMO's own labels are relative to peak; current count is a fair
+// local stand-in).
+function realmPopulation(online: boolean, players: number): { labelKey: TranslationKey; cls: string } {
+  if (!online) return { labelKey: 'realm.offline', cls: 'offline' };
+  if (players >= 80) return { labelKey: 'realm.full', cls: 'full' };
+  if (players >= 40) return { labelKey: 'realm.high', cls: 'high' };
+  if (players >= 15) return { labelKey: 'realm.medium', cls: 'med' };
+  return { labelKey: 'realm.low', cls: 'low' };
 }
 
-// After login WoW drops you onto a Realm List screen (then character select for
+// After login the classic MMO drops you onto a Realm List screen (then character select for
 // the chosen realm). We remember the last realm and jump straight to its
 // characters, with a "Change Realm" button back to this list.
 async function enterRealmFlow(): Promise<void> {
@@ -987,15 +1311,23 @@ function showRealmList(dir?: import('./net/online').RealmDirectory): void {
   show('#realm-panel');
   const listEl = $('#realm-list');
   const render = (d: import('./net/online').RealmDirectory) => {
-    if (d.realms.length === 0) { listEl.innerHTML = '<div class="realm-loading">No realms available.</div>'; return; }
-    // recommend the lowest-population online realm (WoW nudges new players there)
+    if (d.realms.length === 0) {
+      listEl.innerHTML = `<div class="realm-loading">${escapeHtml(t('realm.noRealms'))}</div>`;
+      return;
+    }
+    // recommend the lowest-population online realm (classic MMOs nudge new players there)
+    const realmTypeKeys = { 'Normal': 'realmTypes.normal', 'PvP': 'realmTypes.pvp', 'RP': 'realmTypes.rp', 'RP-PvP': 'realmTypes.rpPvp' } as const;
     listEl.innerHTML = d.realms.map((r) => {
       const chars = d.characters[r.name] ?? 0;
-      const charTag = chars > 0 ? `<span class="rn-chars">${chars} character${chars === 1 ? '' : 's'}</span>` : '';
-      return `<div class="realm-row" data-name="${r.name}" data-url="${r.url}">
-        <div><div class="realm-name">${r.name}${charTag}<span class="rn-rec" data-rec hidden>Recommended</span></div>
-          <div class="realm-sub" data-sub>Checking status…</div></div>
-        <div class="realm-type">${r.type}</div>
+      const charTag = chars > 0
+        ? `<span class="rn-chars">${escapeHtml(t(chars === 1 ? 'realm.characterCountOne' : 'realm.characterCountOther', { count: chars }))}</span>`
+        : '';
+      const typeKey = realmTypeKeys[r.type as keyof typeof realmTypeKeys];
+      const typeLabel = typeKey ? t(typeKey) : r.type;
+      return `<div class="realm-row" data-name="${escapeHtml(r.name)}" data-url="${escapeHtml(r.url)}">
+        <div><div class="realm-name">${escapeHtml(r.name)}${charTag}<span class="rn-rec" data-rec hidden>${escapeHtml(t('realm.recommended'))}</span></div>
+          <div class="realm-sub" data-sub>${escapeHtml(t('realm.checkingStatus'))}</div></div>
+        <div class="realm-type">${escapeHtml(typeLabel)}</div>
         <div class="realm-pop offline" data-pop>-</div>
       </div>`;
     }).join('');
@@ -1012,9 +1344,11 @@ function showRealmList(dir?: import('./net/online').RealmDirectory): void {
       if (!row) return;
       const pop = realmPopulation(st.online, st.players);
       const popEl = row.querySelector('[data-pop]') as HTMLElement;
-      popEl.textContent = pop.label;
+      popEl.textContent = t(pop.labelKey);
       popEl.className = `realm-pop ${pop.cls}`;
-      (row.querySelector('[data-sub]') as HTMLElement).textContent = st.online ? `${st.players} online now` : 'Realm is down';
+      (row.querySelector('[data-sub]') as HTMLElement).textContent = st.online
+        ? t('realm.onlineNow', { count: st.players })
+        : t('realm.down');
       row.classList.toggle('offline', !st.online);
       if (st.online && st.players < bestPlayers) { bestPlayers = st.players; bestName = r.name; }
     })).then(() => {
@@ -1023,7 +1357,10 @@ function showRealmList(dir?: import('./net/online').RealmDirectory): void {
     });
   };
   if (dir) render(dir);
-  else { listEl.innerHTML = '<div class="realm-loading">Loading realms…</div>'; void api.realms().then(render); }
+  else {
+    listEl.innerHTML = `<div class="realm-loading">${escapeHtml(t('realm.loading'))}</div>`;
+    void api.realms().then(render);
+  }
 }
 
 function selectRealm(entry: import('./net/online').RealmEntry): void {
@@ -1057,9 +1394,11 @@ function openDeleteCharacterDialog(character: CharacterSummary): void {
   pendingDeleteCharacter = character;
   const modal = $('#delete-character-modal');
   const nameEl = $('#delete-character-name');
+  const bodyEl = $('#delete-character-body');
   const input = $('#delete-character-confirm') as HTMLInputElement;
   const confirmBtn = $('#btn-confirm-delete-character') as HTMLButtonElement;
   nameEl.textContent = character.name;
+  bodyEl.textContent = t('deleteCharacter.body', { name: character.name });
   input.value = '';
   confirmBtn.disabled = true;
   setDeleteCharacterError('');
@@ -1076,13 +1415,13 @@ async function refreshCharacters(): Promise<void> {
     btn.setAttribute('aria-selected', String(on));
   });
   const listEl = $('#char-list');
-  listEl.innerHTML = '<li class="char-list-message">Loading…</li>';
+  listEl.innerHTML = `<li class="char-list-message">${escapeHtml(t('character.loading'))}</li>`;
   try {
     const chars = await api.characters();
-    if (api.realm) $('#charselect-realm').textContent = `Realm: ${api.realm}`;
+    if (api.realm) $('#charselect-realm').textContent = t('realm.selectedRealm', { name: api.realm });
     listEl.innerHTML = '';
     if (chars.length === 0) {
-      listEl.innerHTML = '<li class="char-list-message">No characters yet (create one below).</li>';
+      listEl.innerHTML = `<li class="char-list-message">${escapeHtml(t('character.noneYet'))}</li>`;
     }
     for (const c of chars) {
       const row = document.createElement('li');
@@ -1091,11 +1430,13 @@ async function refreshCharacters(): Promise<void> {
       row.setAttribute('role', 'option');
       row.setAttribute('aria-selected', 'false');
       row.dataset.class = c.class;
-      row.innerHTML = `<span class="char-name">${c.name}</span>
-        <span class="char-sub">Level ${c.level} ${c.class[0].toUpperCase()}${c.class.slice(1)}${c.online ? ' (in world)' : c.forceRename ? ' (rename required)' : ''}</span>
+      const className = classDisplayName(c.class);
+      const statusText = c.online ? ` (${t('character.inWorld')})` : c.forceRename ? ` (${t('character.renameRequired')})` : '';
+      row.innerHTML = `<span class="char-name">${escapeHtml(c.name)}</span>
+        <span class="char-sub">${escapeHtml(t('character.levelClass', { level: c.level, className }))}${escapeHtml(statusText)}</span>
         ${c.forceRename
-          ? `<input class="rename-input" placeholder="New character name" maxlength="16" /><span class="char-actions"><button class="btn btn-danger delete-char-btn" ${c.online ? 'disabled' : ''}>Delete</button><button class="btn rename-btn">Rename</button></span>`
-          : `<span class="char-actions"><button class="btn btn-danger delete-char-btn" ${c.online ? 'disabled' : ''}>Delete</button><button class="btn enter-world-btn" ${c.online ? 'disabled' : ''}>Enter World</button></span>`}`;
+          ? `<input class="rename-input" placeholder="${escapeHtml(t('character.newNamePlaceholder'))}" maxlength="16" /><span class="char-actions"><button class="btn btn-danger delete-char-btn" ${c.online ? 'disabled' : ''}>${escapeHtml(t('character.delete'))}</button><button class="btn rename-btn">${escapeHtml(t('character.rename'))}</button></span>`
+          : `<span class="char-actions"><button class="btn btn-danger delete-char-btn" ${c.online ? 'disabled' : ''}>${escapeHtml(t('character.delete'))}</button><button class="btn enter-world-btn" ${c.online ? 'disabled' : ''}>${escapeHtml(t('auth.enterWorld'))}</button></span>`}`;
 
       row.querySelector('.delete-char-btn')!.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -1110,8 +1451,8 @@ async function refreshCharacters(): Promise<void> {
           try {
             await api.renameCharacter(c.id, input.value.trim());
             await refreshCharacters();
-          } catch (err: any) {
-            $('#charselect-error').textContent = err.message;
+          } catch (err) {
+            $('#charselect-error').textContent = userFacingApiError(err);
           }
         });
       } else {
@@ -1137,6 +1478,9 @@ async function refreshCharacters(): Promise<void> {
         row.classList.add('sel');
         row.setAttribute('aria-selected', 'true');
         renderClassDetails('online-class-details', c.class);
+        characterPreview?.setSkin(c.skin ?? 0);
+        const skinRow = $('#online-skin-row') as HTMLElement | null;
+        if (skinRow) skinRow.innerHTML = '';
       };
 
       row.addEventListener('click', selectRow);
@@ -1155,8 +1499,8 @@ async function refreshCharacters(): Promise<void> {
     if (firstRow) {
       firstRow.click();
     }
-  } catch (err: any) {
-    listEl.innerHTML = `<li class="char-list-message char-list-error">${err.message}</li>`;
+  } catch (err) {
+    listEl.innerHTML = `<li class="char-list-message char-list-error">${escapeHtml(userFacingApiError(err))}</li>`;
   }
 }
 
@@ -1166,10 +1510,12 @@ function fatalOverlay(message: string): void {
   const el = document.createElement('div');
   el.id = 'disconnect-overlay';
   el.className = 'fatal-overlay';
-  el.innerHTML = `<div>${message}</div>`;
+  const messageEl = document.createElement('div');
+  messageEl.textContent = message;
+  el.appendChild(messageEl);
   const btn = document.createElement('button');
   btn.className = 'btn';
-  btn.textContent = 'Return to Login';
+  btn.textContent = t('errors.returnToLogin');
   btn.addEventListener('click', () => location.reload());
   el.appendChild(btn);
   document.body.appendChild(el);
@@ -1179,16 +1525,16 @@ async function enterWorld(c: CharacterSummary, button?: HTMLButtonElement): Prom
   try {
     if (button) {
       button.disabled = true;
-      button.textContent = 'Entering...';
+      button.textContent = t('loading.enteringWorld');
     }
     if (!(await prepareWorldEntry())) return;
     audio.init();
     music.init();
-    enterLoadingState('Connecting to realm…');
+    enterLoadingState(t('loading.connectingRealm'));
   } finally {
     if (!hasBegunWorldEntry && button) {
       button.disabled = false;
-      button.textContent = 'Enter World';
+      button.textContent = t('auth.enterWorld');
     }
   }
   const world = new ClientWorld(api.token!, c.id, c.class, api.base);
@@ -1201,88 +1547,88 @@ async function enterWorld(c: CharacterSummary, button?: HTMLButtonElement): Prom
     } else if (Date.now() - waitStart > 10000) {
       clearInterval(poll);
       world.close();
-      fatalOverlay('Could not enter world (timeout). Is the game server running?');
+      fatalOverlay(t('loading.enterTimeout'));
     }
   }, 50);
   // a rejected join must stop the poll too, or its timeout overlay would
   // mask the real reason (e.g. "character already in world")
   world.onDisconnect = (reason) => {
     clearInterval(poll);
-    fatalOverlay(reason);
+    fatalOverlay(userFacingApiError(reason));
   };
 }
 
 interface ClassDetails {
-  role: string;
+  roleKey: TranslationKey;
   roleType: 'tank' | 'dps' | 'ranged' | 'healer' | 'hybrid';
-  armor: string;
-  weapons: string;
-  lore: string;
+  armorKey: TranslationKey;
+  weaponsKey: TranslationKey;
+  loreKey: TranslationKey;
 }
 
 const CLASS_DETAILS: Record<PlayerClass, ClassDetails> = {
   warrior: {
-    role: 'Tank / Melee DPS',
+    roleKey: 'classDetails.roles.warrior',
     roleType: 'hybrid',
-    armor: 'Chainmail, Leather, Cloth',
-    weapons: 'Swords, Maces, Axes',
-    lore: 'Warriors are battle-hardened melee fighters who generate Rage as they deal or take damage. They excel at absorbing hits as tanks or crushing foes with heavy weapons.'
+    armorKey: 'classDetails.armor.chainLeatherCloth',
+    weaponsKey: 'classDetails.weapons.swordsMacesAxes',
+    loreKey: 'classDetails.lore.warrior',
   },
   paladin: {
-    role: 'Healer / Tank / Melee DPS',
+    roleKey: 'classDetails.roles.paladin',
     roleType: 'hybrid',
-    armor: 'Chainmail, Leather, Cloth',
-    weapons: 'Swords, Maces',
-    lore: 'Paladins are holy crusaders who support allies with blessings, heal wounds with Holy Light, and protect the weak, wearing heavy armor to withstand physical attacks.'
+    armorKey: 'classDetails.armor.chainLeatherCloth',
+    weaponsKey: 'classDetails.weapons.swordsMaces',
+    loreKey: 'classDetails.lore.paladin',
   },
   hunter: {
-    role: 'Ranged DPS',
+    roleKey: 'classDetails.roles.hunter',
     roleType: 'ranged',
-    armor: 'Leather, Cloth',
-    weapons: 'Axes, Swords',
-    lore: 'Masters of the wilderness, Hunters track and defeat enemies from afar using bows or guns. They use traps to control the battlefield.'
+    armorKey: 'classDetails.armor.leatherCloth',
+    weaponsKey: 'classDetails.weapons.axesSwords',
+    loreKey: 'classDetails.lore.hunter',
   },
   rogue: {
-    role: 'Melee DPS',
+    roleKey: 'classDetails.roles.rogue',
     roleType: 'dps',
-    armor: 'Leather, Cloth',
-    weapons: 'Daggers, Swords',
-    lore: 'Rogues are stealthy assassins who rely on Energy and Combo Points to execute devastating backstabs and finishing moves. They strike from the shadows.'
+    armorKey: 'classDetails.armor.leatherCloth',
+    weaponsKey: 'classDetails.weapons.daggersSwords',
+    loreKey: 'classDetails.lore.rogue',
   },
   priest: {
-    role: 'Healer / Ranged DPS',
+    roleKey: 'classDetails.roles.priest',
     roleType: 'healer',
-    armor: 'Cloth',
-    weapons: 'Staves',
-    lore: 'Devoted healers who call upon the Holy Light to mend their allies and shield them from harm, while also using Shadow magic to drain the life of enemies.'
+    armorKey: 'classDetails.armor.cloth',
+    weaponsKey: 'classDetails.weapons.staves',
+    loreKey: 'classDetails.lore.priest',
   },
   shaman: {
-    role: 'Healer / Melee or Ranged DPS',
+    roleKey: 'classDetails.roles.shaman',
     roleType: 'hybrid',
-    armor: 'Chainmail, Leather, Cloth',
-    weapons: 'Maces, Axes',
-    lore: 'Spiritual guides who command the elements, Shaman imbue their weapons with elemental power, shock enemies with lightning, and heal allies.'
+    armorKey: 'classDetails.armor.chainLeatherCloth',
+    weaponsKey: 'classDetails.weapons.macesAxes',
+    loreKey: 'classDetails.lore.shaman',
   },
   mage: {
-    role: 'Ranged DPS',
+    roleKey: 'classDetails.roles.mage',
     roleType: 'ranged',
-    armor: 'Cloth',
-    weapons: 'Staves',
-    lore: 'Arcane spellcasters who manipulate Fire, Frost, and Arcane energy to destroy their enemies. They can conjure water to restore mana and freeze foes.'
+    armorKey: 'classDetails.armor.cloth',
+    weaponsKey: 'classDetails.weapons.staves',
+    loreKey: 'classDetails.lore.mage',
   },
   warlock: {
-    role: 'Ranged DPS',
+    roleKey: 'classDetails.roles.warlock',
     roleType: 'ranged',
-    armor: 'Cloth',
-    weapons: 'Staves',
-    lore: 'Dark spellcasters who summon demons, inflict curses and damage-over-time spells, and drain the life force from their enemies to sustain themselves.'
+    armorKey: 'classDetails.armor.cloth',
+    weaponsKey: 'classDetails.weapons.staves',
+    loreKey: 'classDetails.lore.warlock',
   },
   druid: {
-    role: 'Tank / Healer / Melee or Ranged DPS',
+    roleKey: 'classDetails.roles.druid',
     roleType: 'hybrid',
-    armor: 'Leather, Cloth',
-    weapons: 'Staves',
-    lore: 'Shapeshifters who harness the power of nature. Druids can heal wounds, entangle foes, and transform into a mighty Bear to tank or other forms.'
+    armorKey: 'classDetails.armor.leatherCloth',
+    weaponsKey: 'classDetails.weapons.staves',
+    loreKey: 'classDetails.lore.druid',
   }
 };
 
@@ -1324,8 +1670,14 @@ function renderClassDetails(panelId: string, className: PlayerClass): void {
 
   const existingContent = panel.querySelector('.class-details-content');
   const existingName = panel.querySelector('.class-details-name')?.textContent;
+  const classLabel = classDisplayName(className);
+  const roleLabel = t(details.roleKey);
+  const armorLabel = t(details.armorKey);
+  const weaponsLabel = t(details.weaponsKey);
+  const resourceKey = RESOURCE_KEYS[classDef.resourceType] ?? 'classDetails.resources.mana';
+  const resourceLabel = t(resourceKey);
 
-  if (existingContent && existingName === classDef.name) {
+  if (existingContent && existingName === classLabel) {
     if (activeClassDetailsTimeouts[panelId] !== undefined && activeClassDetailsTimeouts[panelId] !== null) {
       window.clearTimeout(activeClassDetailsTimeouts[panelId]);
       activeClassDetailsTimeouts[panelId] = null;
@@ -1354,21 +1706,22 @@ function renderClassDetails(panelId: string, className: PlayerClass): void {
   // Bind class color as a custom property for clean styling
   panel.style.setProperty('--class-color', classColorHex);
 
-  const statsList = [
-    { name: 'Strength', key: 'str' },
-    { name: 'Agility', key: 'agi' },
-    { name: 'Stamina', key: 'sta' },
-    { name: 'Intellect', key: 'int' },
-    { name: 'Spirit', key: 'spi' }
+  const statsList: { nameKey: TranslationKey; key: keyof typeof classDef.baseStats }[] = [
+    { nameKey: 'classDetails.labels.strength', key: 'str' },
+    { nameKey: 'classDetails.labels.agility', key: 'agi' },
+    { nameKey: 'classDetails.labels.stamina', key: 'sta' },
+    { nameKey: 'classDetails.labels.intellect', key: 'int' },
+    { nameKey: 'classDetails.labels.spirit', key: 'spi' },
   ];
 
   const statBarsHtml = statsList.map(s => {
-    const val = classDef.baseStats[s.key as keyof typeof classDef.baseStats];
+    const statLabel = t(s.nameKey);
+    const val = classDef.baseStats[s.key];
     const pct = Math.min(100, Math.round((val / 25) * 100));
     return `
       <div class="details-stat-bar-row">
-        <span class="details-stat-label">${s.name}</span>
-        <div class="details-stat-bar-track" aria-label="${s.name}: ${val} out of 25">
+        <span class="details-stat-label">${escapeHtml(statLabel)}</span>
+        <div class="details-stat-bar-track" aria-label="${escapeHtml(t('classDetails.statBarAria', { stat: statLabel, value: val }))}">
           <div class="details-stat-bar-fill" style="width: 0%;" data-target-width="${pct}%"></div>
         </div>
         <span class="details-stat-val">${val}</span>
@@ -1396,11 +1749,14 @@ function renderClassDetails(panelId: string, className: PlayerClass): void {
     );
     if (primaryEffect) {
       if (primaryEffect.type === 'directDamage' || primaryEffect.type === 'heal' || primaryEffect.type === 'aoeDamage' || primaryEffect.type === 'aoeRoot' || primaryEffect.type === 'drainTick') {
-        dmgText = primaryEffect.min === primaryEffect.max ? `${primaryEffect.min}` : `${primaryEffect.min} to ${primaryEffect.max}`;
+        dmgText = classDetailAmountRange(primaryEffect.min, primaryEffect.max);
       } else if (primaryEffect.type === 'weaponDamage' || primaryEffect.type === 'weaponStrike') {
-        dmgText = `${primaryEffect.bonus}`;
+        dmgText = formatClassDetailNumber(primaryEffect.bonus);
       } else if (primaryEffect.type === 'finisherDamage') {
-        dmgText = `${primaryEffect.base} plus ${primaryEffect.perCombo} per combo point`;
+        dmgText = t('abilityUi.tooltip.finisherDamage', {
+          base: formatClassDetailNumber(primaryEffect.base),
+          perCombo: formatClassDetailNumber(primaryEffect.perCombo),
+        });
       }
     } else {
       const secondaryEffect = a.effects.find(eff => 
@@ -1411,22 +1767,23 @@ function renderClassDetails(panelId: string, className: PlayerClass): void {
       );
       if (secondaryEffect) {
         if (secondaryEffect.type === 'dot' || secondaryEffect.type === 'hot') {
-          dmgText = `${secondaryEffect.total}`;
+          dmgText = formatClassDetailNumber(secondaryEffect.total);
         } else if (secondaryEffect.type === 'absorb') {
-          dmgText = `${secondaryEffect.amount}`;
+          dmgText = formatClassDetailNumber(secondaryEffect.amount);
         } else if (secondaryEffect.type === 'imbue') {
-          dmgText = `${secondaryEffect.bonus}`;
+          dmgText = formatClassDetailNumber(secondaryEffect.bonus);
         }
       }
     }
-    const resolvedDesc = a.description.replace('$d', dmgText);
+    const abilityName = tEntity({ kind: 'ability', id: a.id, field: 'name' });
+    const resolvedDesc = tEntity({ kind: 'ability', id: a.id, field: 'description', values: { damage: dmgText } });
 
     return `
       <li class="details-spell-item">
-        <img class="details-spell-icon-img" src="${iconUrl}" alt="${a.name}" width="32" height="32" />
+        <img class="details-spell-icon-img" src="${escapeHtml(iconUrl)}" alt="${escapeHtml(abilityName)}" width="32" height="32" />
         <div class="details-spell-text">
-          <strong>${a.name}</strong>
-          ${resolvedDesc}
+          <strong>${escapeHtml(abilityName)}</strong>
+          ${escapeHtml(resolvedDesc)}
         </div>
       </li>
     `;
@@ -1440,24 +1797,24 @@ function renderClassDetails(panelId: string, className: PlayerClass): void {
       <div class="class-details-content fade-out">
         <div class="class-details-header">
           <div class="class-details-header-text">
-            <h3 class="class-details-name">${classDef.name}</h3>
-            <span class="class-details-role role-${details.roleType}">${details.role}</span>
+            <h3 class="class-details-name">${escapeHtml(classLabel)}</h3>
+            <span class="class-details-role role-${details.roleType}">${escapeHtml(roleLabel)}</span>
           </div>
         </div>
-        <p class="class-details-lore">${details.lore}</p>
+        <p class="class-details-lore">${escapeHtml(classDisplayDescription(className))}</p>
         <div class="class-details-grid">
           <div class="class-details-stats-col">
-            <h4 class="details-section-title">Starting Stats</h4>
+            <h4 class="details-section-title">${escapeHtml(t('classDetails.sections.startingStats'))}</h4>
             ${statBarsHtml}
           </div>
           <div class="class-details-gear-col">
-            <h4 class="details-section-title">Equipment</h4>
-            <div class="details-gear-row"><strong>Resource:</strong> <span class="badge badge-resource resource-${classDef.resourceType}">${classDef.resourceType}</span></div>
-            <div class="details-gear-row"><strong>Armor:</strong> <span class="badge">${details.armor}</span></div>
-            <div class="details-gear-row"><strong>Weapons:</strong> <span class="badge">${details.weapons}</span></div>
+            <h4 class="details-section-title">${escapeHtml(t('classDetails.sections.equipment'))}</h4>
+            <div class="details-gear-row"><strong>${escapeHtml(t('classDetails.labels.resource'))}:</strong> <span class="badge badge-resource resource-${classDef.resourceType}">${escapeHtml(resourceLabel)}</span></div>
+            <div class="details-gear-row"><strong>${escapeHtml(t('classDetails.labels.armor'))}:</strong> <span class="badge">${escapeHtml(armorLabel)}</span></div>
+            <div class="details-gear-row"><strong>${escapeHtml(t('classDetails.labels.weapons'))}:</strong> <span class="badge">${escapeHtml(weaponsLabel)}</span></div>
           </div>
           <div class="details-spells-section">
-            <h4 class="details-section-title">Signature Abilities</h4>
+            <h4 class="details-section-title">${escapeHtml(t('classDetails.sections.signatureAbilities'))}</h4>
             <ul class="details-spells-list">
               ${spellsHtml}
             </ul>
@@ -1467,7 +1824,15 @@ function renderClassDetails(panelId: string, className: PlayerClass): void {
     `;
     
     // Announce update to screen readers
-    panel.setAttribute('aria-label', `${classDef.name} Class Details: Role is ${details.role}. starting stats are Strength ${classDef.baseStats.str}, Agility ${classDef.baseStats.agi}, Stamina ${classDef.baseStats.sta}, Intellect ${classDef.baseStats.int}, Spirit ${classDef.baseStats.spi}.`);
+    panel.setAttribute('aria-label', t('classDetails.aria', {
+      className: classLabel,
+      role: roleLabel,
+      str: classDef.baseStats.str,
+      agi: classDef.baseStats.agi,
+      sta: classDef.baseStats.sta,
+      int: classDef.baseStats.int,
+      spi: classDef.baseStats.spi,
+    }));
 
     const contentWrapper = panel.querySelector('.class-details-content') as HTMLElement | null;
     if (contentWrapper) {
@@ -1512,30 +1877,105 @@ function renderClassDetails(panelId: string, className: PlayerClass): void {
 const STATS_CACHE_KEY = 'woc_cached_stats';
 const STATS_CACHE_TTL_MS = 30000; // 30 seconds
 
+function readTranslationKey(value: string | null): TranslationKey | null {
+  return value ? value as TranslationKey : null;
+}
+
+function updateSeoMetadata(lang: SupportedLanguage): void {
+  const canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+  const canonicalHref = localizedSiteUrl(lang);
+  if (canonical) canonical.href = canonicalHref;
+
+  const ogUrl = document.querySelector<HTMLMetaElement>('meta[property="og:url"]');
+  if (ogUrl) ogUrl.content = canonicalHref;
+
+  const jsonLd = document.getElementById('structured-data') as HTMLScriptElement | null;
+  if (jsonLd) {
+    jsonLd.textContent = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'VideoGame',
+      name: 'World of ClaudeCraft',
+      genre: t('seo.genre'),
+      playMode: t('seo.playMode'),
+      applicationCategory: t('seo.applicationCategory'),
+      operatingSystem: t('seo.operatingSystem'),
+      url: canonicalHref,
+      image: 'https://worldofclaudecraft.com/woc_logo_square.webp',
+      description: t('seo.description'),
+      inLanguage: languageTag(lang),
+    }, null, 2);
+  }
+}
+
 function translatePage(): void {
   const lang = getLanguage();
-  document.documentElement.lang = lang;
+  document.documentElement.lang = languageTag(lang);
 
-  document.querySelectorAll('[data-i18n]').forEach((el) => {
-    const key = el.getAttribute('data-i18n');
+  document.querySelectorAll<HTMLElement>('[data-i18n]').forEach((el) => {
+    const key = readTranslationKey(el.getAttribute('data-i18n'));
     if (key) {
-      el.textContent = t(key as any);
+      el.textContent = t(key);
     }
   });
 
-  document.querySelectorAll('[data-i18n-aria]').forEach((el) => {
-    const key = el.getAttribute('data-i18n-aria');
+  document.querySelectorAll<HTMLElement>('[data-i18n-aria]').forEach((el) => {
+    const key = readTranslationKey(el.getAttribute('data-i18n-aria'));
     if (key) {
-      el.setAttribute('aria-label', t(key as any));
+      el.setAttribute('aria-label', t(key));
     }
   });
 
-  document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
-    const key = el.getAttribute('data-i18n-placeholder');
+  document.querySelectorAll<HTMLElement>('[data-i18n-placeholder]').forEach((el) => {
+    const key = readTranslationKey(el.getAttribute('data-i18n-placeholder'));
     if (key) {
-      el.setAttribute('placeholder', t(key as any));
+      el.setAttribute('placeholder', t(key));
     }
   });
+
+  document.querySelectorAll<HTMLElement>('[data-i18n-title]').forEach((el) => {
+    const key = readTranslationKey(el.getAttribute('data-i18n-title'));
+    if (key) {
+      el.setAttribute('title', t(key));
+    }
+  });
+
+  document.querySelectorAll<HTMLImageElement>('[data-i18n-alt]').forEach((el) => {
+    const key = readTranslationKey(el.getAttribute('data-i18n-alt'));
+    if (key) {
+      el.alt = t(key);
+    }
+  });
+
+  document.querySelectorAll<HTMLMetaElement>('[data-i18n-content]').forEach((el) => {
+    const key = readTranslationKey(el.getAttribute('data-i18n-content'));
+    if (key) {
+      el.content = t(key);
+    }
+  });
+
+  updateSeoMetadata(lang);
+}
+
+function refreshLocalizedDynamicShell(): void {
+  const activePanel = document.body.dataset.startPanel;
+  if (activePanel === 'realm-panel') {
+    showRealmList();
+    return;
+  }
+  if (activePanel === 'charselect-panel') {
+    void refreshCharacters();
+    return;
+  }
+  const offlineSelected = document.querySelector('#offline-select .mini-class.sel') as HTMLElement | null;
+  if (activePanel === 'offline-select' && offlineSelected) {
+    currentlyRenderedClass['offline-class-details'] = null;
+    renderClassDetails('offline-class-details', offlineSelected.dataset.class as PlayerClass);
+  }
+  const onlineSelected = document.querySelector('#charselect-panel .mini-class.sel, #char-list .char-row.sel') as HTMLElement | null;
+  if (onlineSelected) {
+    currentlyRenderedClass['online-class-details'] = null;
+    renderClassDetails('online-class-details', onlineSelected.dataset.class as PlayerClass);
+  }
 }
 
 async function loadProjectStats(): Promise<void> {
@@ -1583,11 +2023,11 @@ async function loadProjectStats(): Promise<void> {
     console.error('Failed to fetch project stats:', err);
     // If API fails, fall back to cached data (even if expired)
     if (cached) {
-      realmEl.textContent = `${cached.realm} (Offline)`;
+      realmEl.textContent = t('realm.statsRealmOffline', { realm: cached.realm });
       accountsEl.textContent = String(cached.accounts_created);
       playersEl.textContent = String(cached.players_online);
     } else {
-      realmEl.textContent = 'Offline';
+      realmEl.textContent = t('realm.statsOffline');
       accountsEl.textContent = '-';
       playersEl.textContent = '-';
     }
@@ -1629,7 +2069,7 @@ async function loadHighscores(): Promise<void> {
     const star = r.prestigeRank > 0 ? `<span class="hs-prestige" title="${t('game.prestige.rank')} ${r.prestigeRank}">★${r.prestigeRank}</span>` : '';
     return `<div class="hs-row${r.rank <= 3 ? ' hs-top' : ''}">`
       + `<span class="hs-rank">${r.rank}</span>`
-      + `<span class="hs-name"${cls ? ` title="${esc(cls.name)}"` : ''}>${star}${esc(r.name)}</span>`
+      + `<span class="hs-name"${cls ? ` title="${esc(classDisplayName(r.cls))}"` : ''}>${star}${esc(r.name)}</span>`
       + `<span class="hs-realm">${esc(r.realm ?? '')}</span>`
       + `<span class="hs-lvl">${r.level}</span>`
       + `<span class="hs-vlvl">${r.virtualLevel}</span>`
@@ -1655,14 +2095,14 @@ function wireStartScreens(): void {
   const handleOfflineStart = (cls: PlayerClass) => {
     const rawName = offlineNameInput.value.trim();
     if (!rawName) {
-      offlineError.textContent = 'Please enter a character name.';
+      offlineError.textContent = t('errors.characterNameRequired');
       offlineNameInput.classList.add('user-invalid-fallback');
       offlineNameInput.setAttribute('aria-invalid', 'true');
       offlineNameInput.focus();
       return;
     }
     if (!validateCharacterName(rawName)) {
-      offlineError.textContent = 'Name must be 2-16 characters, start with a letter, and contain only letters, spaces, hyphens, or apostrophes.';
+      offlineError.textContent = t('errors.characterNameInvalid');
       offlineNameInput.classList.add('user-invalid-fallback');
       offlineNameInput.setAttribute('aria-invalid', 'true');
       offlineNameInput.focus();
@@ -1676,7 +2116,7 @@ function wireStartScreens(): void {
     audio.init();
     music.init();
     const name = sanitizeOfflineName(rawName);
-    void startOffline(cls, name);
+    void startOffline(cls, name, selectedSkin('#offline-skin-row', offlineSkin));
   };
 
   const handleOfflineSelect = () => {
@@ -1693,6 +2133,7 @@ function wireStartScreens(): void {
       warriorCard.setAttribute('aria-pressed', 'true');
       renderClassDetails('offline-class-details', 'warrior');
       btnStartOffline.removeAttribute('disabled');
+      refreshOfflineSkins('warrior');
     }
   };
 
@@ -1707,7 +2148,7 @@ function wireStartScreens(): void {
     if (selCard) {
       handleOfflineStart(selCard.dataset.class as PlayerClass);
     } else {
-      offlineError.textContent = 'Please select a class.';
+      offlineError.textContent = t('errors.selectClass');
     }
   });
 
@@ -1732,6 +2173,7 @@ function wireStartScreens(): void {
       const cls = (card as HTMLElement).dataset.class as PlayerClass;
       renderClassDetails('offline-class-details', cls);
       btnStartOffline.removeAttribute('disabled');
+      refreshOfflineSkins(cls);
     };
     card.addEventListener('click', handleClassSelect);
     card.addEventListener('keydown', (e) => handleKeyboardActivation(e as KeyboardEvent, handleClassSelect));
@@ -1820,13 +2262,28 @@ function wireStartScreens(): void {
     const username = ($('#login-user') as unknown as HTMLInputElement).value.trim();
     const password = ($('#login-pass') as unknown as HTMLInputElement).value;
     loginError('');
+    const token = turnstileToken();
+    if (TURNSTILE_SITEKEY && !token) {
+      loginError(t('errors.api.verificationFailed'));
+      return;
+    }
     try {
-      if (mode === 'login') await api.login(username, password);
-      else await api.register(username, password);
+      if (mode === 'login') await api.login(username, password, token);
+      else await api.register(username, password, token);
+    } catch (err) {
+      // Auth itself failed (bad credentials, taken username, Turnstile reject…).
+      // The token is single-use, so refresh the widget for the next attempt.
+      loginError(userFacingApiError(err));
+      resetTurnstile();
+      return;
+    }
+    // Auth succeeded — a later realm-entry error is NOT a verification failure,
+    // so don't reset the widget or let the user re-submit the (now duplicate) auth.
+    try {
       $('#charselect-user').textContent = api.username ?? '';
       await enterRealmFlow();
-    } catch (err: any) {
-      loginError(err.message);
+    } catch (err) {
+      loginError(userFacingApiError(err));
     }
   };
 
@@ -1941,6 +2398,7 @@ function wireStartScreens(): void {
       
       const cls = (el as HTMLElement).dataset.class as PlayerClass;
       renderClassDetails('online-class-details', cls);
+      refreshOnlineSkins(cls);
     };
     el.addEventListener('click', handleMiniClassSelect);
     el.addEventListener('keydown', (e) => handleKeyboardActivation(e as KeyboardEvent, handleMiniClassSelect));
@@ -2036,6 +2494,7 @@ function wireStartScreens(): void {
     defaultOnlineClass.classList.add('sel');
     defaultOnlineClass.setAttribute('aria-pressed', 'true');
     renderClassDetails('online-class-details', 'warrior');
+    refreshOnlineSkins('warrior');
   }
   const newCharNameInput = $('#new-char-name') as HTMLInputElement;
   const charselectError = $('#charselect-error');
@@ -2070,31 +2529,31 @@ function wireStartScreens(): void {
     charselectError.textContent = '';
     
     if (!name) {
-      charselectError.textContent = 'Please enter a character name.';
+      charselectError.textContent = t('errors.characterNameRequired');
       newCharNameInput.classList.add('user-invalid-fallback');
       newCharNameInput.setAttribute('aria-invalid', 'true');
       newCharNameInput.focus();
       return;
     }
     if (!validateCharacterName(name)) {
-      charselectError.textContent = 'Name must be 2-16 characters, start with a letter, and contain only letters, spaces, hyphens, or apostrophes.';
+      charselectError.textContent = t('errors.characterNameInvalid');
       newCharNameInput.classList.add('user-invalid-fallback');
       newCharNameInput.setAttribute('aria-invalid', 'true');
       newCharNameInput.focus();
       return;
     }
-    if (!clsEl) { charselectError.textContent = 'Pick a class.'; return; }
+    if (!clsEl) { charselectError.textContent = t('errors.pickClass'); return; }
 
     newCharNameInput.classList.remove('user-invalid-fallback');
     newCharNameInput.removeAttribute('aria-invalid');
 
     try {
-      await api.createCharacter(name, clsEl.dataset.class as PlayerClass);
+      await api.createCharacter(name, clsEl.dataset.class as PlayerClass, selectedSkin('#online-skin-row', onlineSkin));
       newCharNameInput.value = '';
       charselectError.textContent = '';
       await refreshCharacters();
-    } catch (err: any) {
-      charselectError.textContent = err.message;
+    } catch (err) {
+      charselectError.textContent = userFacingApiError(err);
     }
   });
   $('#btn-charselect-back').addEventListener('click', () => show('#login-panel'));
@@ -2139,8 +2598,8 @@ function wireStartScreens(): void {
       await api.deleteCharacter(target.id, deleteConfirmInput.value);
       closeDeleteCharacterDialog();
       await refreshCharacters();
-    } catch (err: any) {
-      setDeleteCharacterError(err.message);
+    } catch (err) {
+      setDeleteCharacterError(userFacingApiError(err));
       deleteConfirmBtn.disabled = normalizeDeleteConfirmation(deleteConfirmInput.value) !== normalizeDeleteConfirmation(target.name);
     }
   });
@@ -2199,7 +2658,8 @@ function wireStartScreens(): void {
   if (langSelect) {
     langSelect.value = getLanguage();
     langSelect.addEventListener('change', () => {
-      const selected = langSelect.value as SupportedLanguage;
+      const selected = langSelect.value;
+      if (!isSupportedLanguage(selected)) return;
       setLanguage(selected);
       
       // Dynamically update the browser URL query parameter without page reload
@@ -2210,6 +2670,8 @@ function wireStartScreens(): void {
       }
       
       translatePage();
+      refreshLocalizedDynamicShell();
+      document.dispatchEvent(new CustomEvent('woc:languagechange', { detail: { language: selected } }));
     });
   }
 

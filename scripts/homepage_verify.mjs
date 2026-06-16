@@ -45,7 +45,7 @@ async function main() {
   page.on('console', (msg) => {
     if (msg.type() === 'error') {
       const text = msg.text();
-      if (text.includes('502') || text.includes('Bad Gateway') || text.includes('Failed to load resource')) {
+      if (text.includes('502') || text.includes('Bad Gateway') || text.includes('project-stats')) {
         console.log(`Ignoring transient browser startup network error: ${text}`);
         return;
       }
@@ -259,8 +259,9 @@ async function main() {
       await page.goto(langUrl, { waitUntil: 'networkidle0', timeout: 15000 });
       
       const currentHtmlLang = await page.evaluate(() => document.documentElement.lang);
-      if (currentHtmlLang !== langCheck.code) {
-        throw new Error(`Expected html lang to be "${langCheck.code}", got "${currentHtmlLang}"`);
+      const expectedHtmlLang = langCheck.code.replace('_', '-');
+      if (currentHtmlLang !== expectedHtmlLang) {
+        throw new Error(`Expected html lang to be "${expectedHtmlLang}", got "${currentHtmlLang}"`);
       }
 
       const playText = await page.evaluate(() => {

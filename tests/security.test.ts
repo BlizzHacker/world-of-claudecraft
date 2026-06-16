@@ -2,11 +2,11 @@ import { EventEmitter } from 'node:events';
 import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { buildWebSocketAuthMessage, buildWebSocketUrl } from '../src/net/online';
 import { Sim } from '../src/sim/sim';
 import { normalizeCharName, offensiveName, offensiveUsername, validCharName, validUsername } from '../server/auth';
-import { rateLimited, requestIp, authThrottled, recordAuthFailure, clearAuthFailures } from '../server/ratelimit';
+import { rateLimited, requestIp, authThrottled, recordAuthFailure, clearAuthFailures, authFailureCount, resetAuthFailures, trackedIpCount, resetRateLimits } from '../server/ratelimit';
 
 function fakeReq(headers: Record<string, string>, remoteAddress: string) {
   const req: any = new EventEmitter();
@@ -50,6 +50,10 @@ describe('websocket authentication', () => {
 });
 
 describe('rate-limit client IP selection', () => {
+  // The attempts map is module-level shared state; reset it so the flood tests
+  // below (and any future ordering changes) can't leak entries between cases.
+  beforeEach(() => resetRateLimits());
+
   it('ignores spoofed x-forwarded-for from untrusted direct clients', () => {
     const req = fakeReq({ 'x-forwarded-for': '203.0.113.55' }, '198.51.100.10');
 
@@ -133,9 +137,80 @@ describe('rate-limit client IP selection', () => {
     // The attacker's counter must survive eviction and stay limited.
     expect(rateLimited(fakeReq({ 'x-forwarded-for': attacker }, '172.18.0.1'))).toBe(true);
   });
+
+  it('keeps a burst-then-idle limited IP limited after a flood of newer IPs', () => {
+    // An IP bursts past the limit (so it is rate-limited for the rest of the
+    // 60s window), then goes idle. An attacker floods the map with >10k NEWER
+    // distinct one-off IPs. A naive least-recently-active eviction would pick
+    // the idle-but-still-in-window limited IP as "oldest" and evict it,
+    // resetting its limit before the window expires — the eviction-path version
+    // of the flood-reset bypass. The backstop must skip currently-limited IPs.
+    const victim = '203.0.113.240';
+    let limited = false;
+    for (let i = 0; i < 21; i++) {
+      limited = rateLimited(fakeReq({ 'x-forwarded-for': victim }, '172.18.0.1'));
+    }
+    expect(limited).toBe(true);
+
+    // Flood past MAX_TRACKED_IPS (10_000) with NEWER one-off IPs; victim idle.
+    for (let i = 0; i < 10_050; i++) {
+      const a = (i >> 8) & 0xff;
+      const b = i & 0xff;
+      rateLimited(fakeReq({ 'x-forwarded-for': `100.64.${a}.${b}` }, '172.18.0.1'));
+    }
+
+    // The idle victim must stay limited — its counter must survive eviction.
+    expect(rateLimited(fakeReq({ 'x-forwarded-for': victim }, '172.18.0.1'))).toBe(true);
+  });
+
+  it('does not let a lenient-route flood evict an IP limited by a stricter route', () => {
+    // The attempts map is SHARED across routes with different limits: game
+    // login/register use the default 20, admin login uses 10. An IP that has
+    // tripped the stricter admin limit (11 attempts > 10) is currently limited,
+    // but has only 11 entries. A flood of default-limit (20) requests from newer
+    // IPs must NOT evict that bucket — eviction must judge "limited" by the
+    // strictest policy sharing the map, not the flooding call's lenient limit.
+    const adminLimit = 10;
+    const victim = '203.0.113.230';
+    let adminLimited = false;
+    for (let i = 0; i < 11; i++) {
+      adminLimited = rateLimited(fakeReq({ 'x-forwarded-for': victim }, '172.18.0.1'), adminLimit);
+    }
+    expect(adminLimited).toBe(true);
+
+    // Flood the map via the LENIENT default-limit (20) route with newer IPs.
+    for (let i = 0; i < 10_050; i++) {
+      const a = (i >> 8) & 0xff;
+      const b = i & 0xff;
+      rateLimited(fakeReq({ 'x-forwarded-for': `100.66.${a}.${b}` }, '172.18.0.1'));
+    }
+
+    // The admin-limited victim must still be limited under the admin policy.
+    expect(rateLimited(fakeReq({ 'x-forwarded-for': victim }, '172.18.0.1'), adminLimit)).toBe(true);
+  });
+
+  it('keeps the IP map bounded under a flood of distinct in-window clients', () => {
+    // A pure flood is all in-window, so expired-only eviction would delete
+    // nothing and the map would grow unbounded — and every subsequent call
+    // would re-scan a growing map (O(n^2)). The backstop must fall back to
+    // evicting the least-recently-active IPs so the map stays near the cap.
+    for (let i = 0; i < 12_000; i++) {
+      // Two octets give 256*256 = 65_536 distinct IPs, plenty for 12_000.
+      const a = (i >> 8) & 0xff;
+      const b = i & 0xff;
+      rateLimited(fakeReq({ 'x-forwarded-for': `100.65.${a}.${b}` }, '172.18.0.1'));
+    }
+
+    // MAX_TRACKED_IPS is 10_000; allow a small margin for the just-recorded entry.
+    expect(trackedIpCount()).toBeLessThanOrEqual(10_001);
+  });
 });
 
 describe('per-account failed-login throttle (#93)', () => {
+  // The failure map is module-level shared state; reset it so the flood tests
+  // below (and any future ordering changes) can't leak entries between cases.
+  beforeEach(() => resetAuthFailures());
+
   it('throttles an account after repeated failed logins, regardless of source IP', () => {
     const user = 'victim_account';
     expect(authThrottled(user)).toBe(false);
@@ -183,6 +258,36 @@ describe('per-account failed-login throttle (#93)', () => {
 
     // The victim's lockout must survive eviction.
     expect(authThrottled(victim)).toBe(true);
+  });
+
+  it('keeps a throttled-then-idle victim throttled after a flood of newer accounts', () => {
+    // Models the REAL flow (#251): once an account is throttled, the login
+    // handler rejects it BEFORE recordAuthFailure runs (server/main.ts), so the
+    // victim's timestamps go stale and it is never re-touched. An attacker then
+    // floods the map with >10k NEWER distinct one-off failures. A naive
+    // least-recently-active eviction that ignored throttle state would pick the
+    // idle victim as "oldest" and evict it — resetting its throttle, the exact
+    // bypass the backstop must prevent. The eviction must skip throttled accounts.
+    const victim = 'idle_victim';
+    for (let i = 0; i < 10; i++) recordAuthFailure(victim);
+    expect(authThrottled(victim)).toBe(true);
+
+    // Flood past MAX_TRACKED_IPS (10_000) with newer accounts; victim untouched.
+    for (let i = 0; i < 10_050; i++) recordAuthFailure(`floodacct_${i}`);
+
+    // The idle victim must stay throttled — its counter must survive eviction.
+    expect(authThrottled(victim)).toBe(true);
+  });
+
+  it('keeps the failure map bounded under a flood of distinct in-window accounts', () => {
+    // A pure flood is all in-window (#251), so expired-only eviction would
+    // delete nothing and the map would grow unbounded — and every subsequent
+    // call would re-scan a growing map (O(n^2)). The backstop must fall back to
+    // evicting the least-recently-active accounts so the map stays near the cap.
+    for (let i = 0; i < 12_000; i++) recordAuthFailure(`floodbound_${i}`);
+
+    // MAX_TRACKED_IPS is 10_000; allow a small margin for the just-recorded entry.
+    expect(authFailureCount()).toBeLessThanOrEqual(10_001);
   });
 });
 

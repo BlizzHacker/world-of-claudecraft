@@ -2,10 +2,10 @@ import {
   ABILITIES, ARENA_SLOT_COUNT, CAMPS, CLASSES, DUNGEONS, DUNGEON_LIST, DungeonDef, arenaOrigin, dungeonAt,
   DUNGEON_X_THRESHOLD, GROUND_OBJECTS, GROUP_XP_BONUS, INSTANCE_SLOT_COUNT, isArenaPos,
   ITEMS, MOBS, NPCS, PLAYER_START, QUESTS, questRewardItemId, abilitiesKnownAt, instanceOrigin,
-  zoneAt,
+  zoneAt, ZONES,
 } from './data';
 import { ARENA_SPAWN_A, ARENA_SPAWN_B } from './dungeon_layout';
-import { resolvePosition } from './colliders';
+import { lineOfSightClear, resolvePosition } from './colliders';
 import { findPath } from './pathfind';
 import { createGroundObject, createMob, createNpc, createPlayer, recalcPlayerStats, PlayerEquipment } from './entity';
 import {
@@ -17,15 +17,15 @@ import { Rng } from './rng';
 import { SpatialGrid } from './spatial';
 import {
   HEAL_THREAT_FACTOR, MELEE_SWITCH_MULT, RANGED_SWITCH_MULT,
-  TAUNT_FORCE_SECONDS, addThreat, clearThreat, stealthDetectionRadius, threatModifier, topThreatValue,
+  TAUNT_FORCE_SECONDS, addThreat, clearThreat, stealthDetectionRadius, threatEntries, threatModifier, topThreatValue,
 } from './threat';
 import { groundHeight, WATER_LEVEL } from './world';
 import type { LeaderboardEntry } from '../world_api';
 import {
   AbilityDef, AbilityEffect, Aura, AuraKind, CAST_PUSHBACK_SEC, CHANNEL_PUSHBACK_FRACTION, CONSUME_DURATION,
   CONSUME_TICKS, CrowdControlDrCategory, DT, Entity, EquipSlot, FISHING_CAST_ID, FISHING_CAST_TIME, GCD,
-  INTERACT_RANGE, InvSlot, LootEntry, LootSlot, MELEE_RANGE, MAX_LEVEL, MobFamily,
-  MoveInput, PlayerClass, QuestProgress, QuestState, RUN_SPEED, SimConfig, SimEvent, TURN_SPEED, Vec3,
+  INTERACT_RANGE, InvSlot, LootEntry, LootSlot, MELEE_RANGE, MAX_LEVEL, MobFamily, MobTemplate,
+  MoveInput, OverheadEmoteId, PetMode, PlayerClass, QuestProgress, QuestState, RUN_SPEED, SimConfig, SimEvent, TURN_SPEED, Vec3,
   angleTo, armorReduction, dist2d, emptyMoveInput, isConsuming, meleeMissChance, mobXpValue, normAngle,
   rageFromDealing, rageFromTaking, spellHitChance, xpForLevel,
   MILESTONES, virtualLevel, xpToReachLevel, canPrestige,
@@ -33,6 +33,10 @@ import {
 
 const LEASH_DISTANCE = 45;
 const DUNGEON_LEASH_DISTANCE = 70;
+// Classic "trivial con": a wild mob this many levels below the player goes
+// passive and will not auto-aggro from proximity (it still fights back if
+// attacked). Elites, rares, and bosses are never trivial.
+const TRIVIAL_LEVEL_GAP = 10;
 const CORPSE_DURATION = 60;
 const EVADE_SPEED_MULT = 1.6;
 // An evading mob walks a straight line home (no pathfinding) and stalls if deep
@@ -40,7 +44,22 @@ const EVADE_SPEED_MULT = 1.6;
 // immune while resetting, a permanent stall = a permanently unkillable mob. If it
 // can't get closer to home for this long, it starts phasing through the blocker.
 const EVADE_STALL_TIMEOUT = 3;
+// Heading offsets (radians) a mob tries when its straight path is blocked, so it
+// can slide around a prop instead of pinning on it. Desired heading (0) first;
+// only evaluated past the first entry when that straight step is obstructed.
+const MOVE_SLIDE_FAN = [0, 0.5, -0.5, 1.0, -1.0, 1.6, -1.6];
 const BACKPEDAL_MULT = 0.65;
+// Low-HP flee ("fear"): a cowardly mob at or below this HP fraction panics, turns
+// and runs from its attacker for FLEE_DURATION seconds at FLEE_SPEED_MULT speed,
+// calling same-family allies within FLEE_HELP_RADIUS to assist. It flees only once
+// per pull, then recovers its nerve and re-engages if it survived.
+const FLEE_HP_THRESHOLD = 0.2;
+const FLEE_DURATION = 5;
+const FLEE_SPEED_MULT = 1.4;
+const FLEE_HELP_RADIUS = 8;
+// Only sentient, cowardly families flee; beasts/undead/elementals/dragonkin fight
+// to the death. Elites, rares, and bosses never flee regardless of family.
+const FLEEING_FAMILIES: ReadonlySet<MobFamily> = new Set(['humanoid', 'kobold', 'murloc', 'troll']);
 const GRAVITY = 16;
 const JUMP_VELOCITY = 6;
 const MELEE_ARC = 2.2; // radians half-arc within which melee swings connect
@@ -57,10 +76,18 @@ const ARENA_BASE_RATING = 1500; // every character starts here, unranked
 const ARENA_MIN_RATING = 100; // a rating floor so a losing streak can't go absurd
 const ARENA_K_FACTOR = 32; // Elo sensitivity per match
 const ARENA_LADDER_SIZE = 10; // live online standings shipped to clients
-const PVP_CC_DR_RESET = 18; // seconds before a repeated PvP CC category is fresh again
+const PVP_ROOT_DR_RESET = 18; // seconds before a repeated PvP root is fresh again
+const PVP_POLYMORPH_DR_RESET = 60;
+const PVP_FEAR_DR_RESET = 60;
 const PVP_CC_DR_MULTIPLIERS = [1, 0.5, 0.25] as const;
+const PVP_POLYMORPH_DR_DURATIONS = [10, 5, 1] as const;
+const PVP_FEAR_DR_DURATIONS = [8, 4, 2, 1] as const;
+const SHAMAN_SHOCK_COOLDOWN_IDS = ['earth_shock', 'flame_shock', 'frost_shock'] as const;
+const DEMON_HEAL_CAST_ID = 'demon_heal';
 const SAY_RANGE = 25; // /say carries a short distance; /yell across a camp
 const YELL_RANGE = 100;
+const OVERHEAD_EMOTE_DURATION = 3.2;
+const CAST_COMPLETE_EPS = 1e-9;
 
 // Predefined social emotes. Each entry maps a command (and its aliases) to the
 // third-person action text shown to everyone in /say range. `solo` is used with
@@ -91,6 +118,18 @@ const EMOTES: Record<string, EmoteDef> = {
 const EMOTE_ALIASES: Record<string, string> = {
   hi: 'greet', hello: 'greet', thanks: 'thank', applaud: 'clap',
 };
+// The auras a target carries that are working against it. Everything else
+// (buff_*, hot, absorb, imbue, stances, forms, stealth, thorns, attackspeed
+// haste) is treated as helpful/neutral. Used by /targetbuffs to tag each aura.
+const HARMFUL_AURA_KINDS: ReadonlySet<AuraKind> = new Set<AuraKind>([
+  'dot', 'slow', 'stun', 'root', 'incapacitate', 'polymorph', 'sunder',
+]);
+
+function isHarmfulAura(kind: AuraKind): boolean {
+  return HARMFUL_AURA_KINDS.has(kind);
+}
+const NEARBY_RANGE = 40; // /nearby scan radius — wider than say, tighter than yell
+const NEARBY_MAX = 10; // cap the /nearby list so a crowded camp can't spam chat
 const CHAT_BURST = 8; // messages a player may send back-to-back...
 const CHAT_REFILL = 2; // ...then this many more per second (caps spam amplifiers)
 const DUEL_FORFEIT_DISTANCE = 60;
@@ -116,6 +155,7 @@ const DEFAULT_SOCIAL_PULL_RADIUS = 5;
 const SOCIAL_PULL_RADIUS: Partial<Record<MobFamily, number>> = {
   murloc: 8,
 };
+const PACK_FRENZY_AURA_ID = 'pack_frenzy'; // attack-speed buff granted to surviving packmates
 const SWIM_SURFACE_Y = WATER_LEVEL - 0.75; // body bobs just below the water line
 const SWIM_DEPTH = 0.8; // ground this far under the water line = deep water
 const SWIM_SPEED_MULT = 0.65;
@@ -125,11 +165,21 @@ const BODY_RADIUS = 0.5;
 const CHARGE_SPEED_MULT = 3; // warrior charge runs at 3x normal speed
 const CHARGE_MAX_DURATION = 3; // seconds before a blocked charge gives up
 const CHARGE_ARRIVE_RANGE = MELEE_RANGE - 1; // stop inside melee range
+const FOLLOW_STOP_DIST = 3; // /follow trails this close behind the leader (yards)
+const FOLLOW_MAX_RANGE = 60; // give up follow once the leader is this far away
 const PET_LEASH = 40; // yards from the owner before a pet gives up its target
 const PET_FOLLOW_DISTANCE = 3.5;
 const PET_TELEPORT_DISTANCE = 60; // owner this far away: pet warps to heel
 const PET_ASSIST_RANGE = 50; // how far the pet scans for enemies engaging the pair
-const PET_GROWL_INTERVAL = 8; // controlled pets can tank by forcing attention
+const PET_AGGRESSIVE_RANGE = 18; // aggressive pets look for idle enemies this close
+const PET_TAUNT_RANGE = 5;
+const PET_GROWL_INTERVAL = 10; // controlled pets can tank by forcing attention
+const PET_FEED_DURATION = 5;
+const PET_FEED_TICK = 1;
+const DEMON_HEAL_MANA_COST = 55;
+const DEMON_HEAL_DURATION = 5;
+const DEMON_HEAL_TICK = 1;
+const TAMED_TARGET_RESPAWN_SECONDS = 60;
 const FRIENDLY_NPC_REJECTED_AURA_KINDS: ReadonlySet<AuraKind> = new Set([
   'dot', 'slow', 'stun', 'root', 'incapacitate', 'polymorph', 'attackspeed', 'sunder',
 ]);
@@ -217,9 +267,15 @@ export interface RewardCounters {
 }
 
 export interface SentChat {
-  channel: 'say' | 'yell' | 'whisper' | 'general' | 'party';
+  channel: 'say' | 'yell' | 'whisper' | 'general' | 'party' | 'world' | 'lfg';
   message: string;
+  target?: string;
 }
+
+// Opt-in global chat channels a player can /join and /leave. `general` is
+// always-on (everyone hears /general), so it is intentionally not joinable here.
+export const JOINABLE_CHANNELS = ['world', 'lfg'] as const;
+export type JoinableChannel = (typeof JOINABLE_CHANNELS)[number];
 
 // Per-player progression and bags. The entity holds combat state; this holds
 // everything that belongs to the character sheet.
@@ -227,6 +283,7 @@ export interface PlayerMeta {
   entityId: number;
   cls: PlayerClass;
   name: string;
+  skin: number; // appearance index into the render SKINS[player_<cls>]; persisted, synced
   moveInput: MoveInput;
   inventory: InvSlot[];
   vendorBuyback: InvSlot[];
@@ -245,6 +302,9 @@ export interface PlayerMeta {
   questsDone: Set<string>;
   counters: RewardCounters;
   autoEquip: boolean;
+  // sim.time when this character entered the world; powers /played. Session-only
+  // (sim.time resets to 0 each server boot), so it reports time this session.
+  joinedAt: number;
   // Ashen Coliseum standing — persisted in CharacterState
   arenaRating: number;
   arenaWins: number;
@@ -256,6 +316,19 @@ export interface PlayerMeta {
   talentMods: TalentModifiers;
   loadouts: SavedLoadout[];
   activeLoadout: number; // index into loadouts, or -1 for none
+  // Transient presence status. Set by /afk and /dnd, cleared when the player
+  // chats again. Session-only — never persisted, so it resets on login.
+  away: AwayStatus | null;
+  // Session-only: name of the last player who whispered us, for "/r" replies.
+  // Never persisted — a fresh login starts with no reply target.
+  lastWhisperFrom?: string;
+}
+
+// Away-from-keyboard / do-not-disturb presence. `afk` still delivers whispers
+// (the sender just gets a heads-up); `dnd` withholds them.
+export interface AwayStatus {
+  mode: 'afk' | 'dnd';
+  message: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -322,6 +395,28 @@ export interface CharacterState {
   talents?: TalentAllocation;
   loadouts?: SavedLoadout[];
   activeLoadout?: number;
+  pet?: PetState | null;
+  skin?: number; // appearance index (JSONB; optional so pre-skin saves load as 0)
+}
+
+export interface PetState {
+  templateId: string;
+  name: string;
+  level: number;
+  hp: number;
+  dead: boolean;
+  mode?: PetMode;
+}
+
+const PET_NAME_RE = /^[A-Za-z][A-Za-z '-]{1,15}$/;
+
+interface PendingMobRespawn {
+  templateId: string;
+  level: number;
+  pos: Vec3;
+  facing: number;
+  dungeonId: string | null;
+  timer: number;
 }
 
 // Pure quest-state computation, shared by the sim and the network client.
@@ -362,8 +457,25 @@ function isFormToggle(ability: AbilityDef): boolean {
 // Forms, stances and stealth are toggles: re-casting cancels the aura, and
 // cancelling is never gated by cost or cooldown (the cooldown gates re-entry).
 function isToggleBuff(ability: AbilityDef): boolean {
+  if (ability.id === 'ghost_wolf') return true;
   return ability.effects.some((e) => e.type === 'selfBuff'
     && (e.kind === 'form_bear' || e.kind === 'form_cat' || e.kind === 'defensive_stance' || e.kind === 'stealth'));
+}
+
+function isStealthToggle(ability: AbilityDef): boolean {
+  return ability.effects.some((e) => e.type === 'selfBuff' && e.kind === 'stealth');
+}
+
+function preservesStealth(ability: AbilityDef): boolean {
+  return isStealthToggle(ability) || ability.id === 'sprint';
+}
+
+function isShamanShock(abilityId: string): boolean {
+  return (SHAMAN_SHOCK_COOLDOWN_IDS as readonly string[]).includes(abilityId) || abilityId === 'lightning_shock';
+}
+
+function isPetClass(cls: PlayerClass): boolean {
+  return cls === 'hunter' || cls === 'warlock';
 }
 
 export class Sim {
@@ -401,6 +513,8 @@ export class Sim {
   private nextArenaMatchId = 1;
   // per-player chat token bucket (anti-spam); refilled lazily by sim time
   private chatTokens = new Map<number, { tokens: number; at: number }>();
+  // per-player set of opt-in global channels (world, lfg) joined via /join
+  private channelSubs = new Map<number, Set<JoinableChannel>>();
   // dungeon instances
   instances: InstanceSlot[] = [];
   // the World Market: one shared listing book, per-seller collections keyed by
@@ -409,14 +523,19 @@ export class Sim {
   private marketCollections = new Map<string, MarketCollection>();
   private nextListingId = 1;
   private merchantId = -1;
+  /** When true, /dev level|tp|give chat commands are accepted (local dev only). */
+  readonly devCommands: boolean;
+  private pendingMobRespawns: PendingMobRespawn[] = [];
 
   constructor(cfg: SimConfig) {
+    this.devCommands = cfg.devCommands ?? false;
     this.cfg = {
       seed: cfg.seed,
       playerClass: cfg.playerClass,
       respawnSeconds: cfg.respawnSeconds ?? 25,
       autoEquip: cfg.autoEquip ?? false,
       playerName: cfg.playerName ?? 'Adventurer',
+      devCommands: this.devCommands,
     };
     this.rng = new Rng(cfg.seed);
 
@@ -432,8 +551,9 @@ export class Sim {
     // Mobs from camps
     for (const camp of CAMPS) {
       const template = MOBS[camp.mobId];
-      // Swimmers may wade in the shallows; everyone else spawns on dry land.
-      const minHeight = this.mobCanSwim(template) ? WATER_LEVEL - 0.5 : WATER_LEVEL + 0.4;
+      // Aquatic/flagged swimmers may wade in the shallows; everyone else
+      // still spawns on dry land even though combat movement can enter water.
+      const minHeight = this.mobCanSpawnInWater(template) ? WATER_LEVEL - 0.5 : WATER_LEVEL + 0.4;
       for (let i = 0; i < camp.count; i++) {
         const ang = this.rng.range(0, Math.PI * 2);
         const r = Math.sqrt(this.rng.next()) * camp.radius;
@@ -499,6 +619,24 @@ export class Sim {
     if (e.kind === 'player') this.playerGrid.update(e);
   }
 
+  private updatePendingMobRespawns(): void {
+    if (this.pendingMobRespawns.length === 0) return;
+    for (let i = this.pendingMobRespawns.length - 1; i >= 0; i--) {
+      const pending = this.pendingMobRespawns[i];
+      pending.timer -= DT;
+      if (pending.timer > 0) continue;
+      const template = MOBS[pending.templateId];
+      if (template) {
+        const mob = createMob(this.nextId++, template, pending.level, { ...pending.pos });
+        mob.facing = pending.facing;
+        mob.prevFacing = pending.facing;
+        mob.dungeonId = pending.dungeonId;
+        this.addEntity(mob);
+      }
+      this.pendingMobRespawns.splice(i, 1);
+    }
+  }
+
   // -------------------------------------------------------------------------
   // Players: join / leave / persistence
   // -------------------------------------------------------------------------
@@ -521,6 +659,7 @@ export class Sim {
       entityId: player.id,
       cls,
       name,
+      skin: opts?.state?.skin ?? 0,
       moveInput: emptyMoveInput(),
       inventory: [],
       vendorBuyback: [],
@@ -535,6 +674,7 @@ export class Sim {
       questsDone: new Set(),
       counters: freshCounters(),
       autoEquip: opts?.autoEquip ?? false,
+      joinedAt: this.time,
       arenaRating: opts?.state?.arenaRating ?? ARENA_BASE_RATING,
       arenaWins: opts?.state?.arenaWins ?? 0,
       arenaLosses: opts?.state?.arenaLosses ?? 0,
@@ -542,8 +682,10 @@ export class Sim {
       talentMods: emptyModifiers(),
       loadouts: [],
       activeLoadout: -1,
+      away: null,
     };
     this.players.set(player.id, meta);
+    player.skin = meta.skin; // mirror onto the entity so the renderer + wire can read it
     if (this.primaryId === -1) this.primaryId = player.id;
 
     if (opts?.state) {
@@ -587,6 +729,7 @@ export class Sim {
         : classDef.resourceType === 'energy' ? 100 : 0;
     }
     player.swingTimer = 0;
+    if (opts?.state?.pet) this.restorePet(player, opts.state.pet);
     return player.id;
   }
 
@@ -606,9 +749,10 @@ export class Sim {
     this.partyInvites.delete(pid);
     this.tradeInvites.delete(pid);
     this.duelInvites.delete(pid);
-    // a leaving player's pet goes wild, and mobs forget the player entirely
-    const pet = this.petOf(pid);
-    if (pet) this.releasePetToWild(pet);
+    // mobs forget the leaving player; persistent hunter pets are serialized
+    // with the character and removed from the live world instead of released
+    const pet = this.petOf(pid, true);
+    if (pet) this.despawnPersistentPet(pet);
     for (const m of this.entities.values()) {
       if (m.kind !== 'mob') continue;
       m.threat.delete(pid);
@@ -629,6 +773,7 @@ export class Sim {
     this.dropEntity(pid);
     this.players.delete(pid);
     this.chatTokens.delete(pid);
+    this.channelSubs.delete(pid);
     if (this.primaryId === pid) this.primaryId = this.players.size > 0 ? [...this.players.keys()][0] : -1;
   }
 
@@ -658,7 +803,26 @@ export class Sim {
       talents: cloneAllocation(meta.talents),
       loadouts: meta.loadouts.map((l) => ({ name: l.name, alloc: cloneAllocation(l.alloc), bar: [...l.bar] })),
       activeLoadout: meta.activeLoadout,
+      pet: this.serializePet(pid),
+      skin: meta.skin,
     };
+  }
+
+  /** Set a player's appearance skin (meta + entity). Bounded; the renderer
+   *  falls back to the default for an unknown index. Used by creation, the
+   *  in-game changer, and the server's changeSkin command. */
+  setPlayerSkin(pid: number, skin: number): boolean {
+    const meta = this.players.get(pid);
+    const e = this.entities.get(pid);
+    if (!meta || !e) return false;
+    const idx = Math.max(0, Math.min(7, Math.floor(skin)));
+    meta.skin = idx;
+    e.skin = idx;
+    return true;
+  }
+
+  changeSkin(skin: number): void {
+    this.setPlayerSkin(this.primaryId, skin);
   }
 
   // -------------------------------------------------------------------------
@@ -848,6 +1012,7 @@ export class Sim {
     r.e.hp = r.e.maxHp;
     if (r.e.resourceType === 'mana') r.e.resource = r.e.maxResource;
     this.refreshKnownAbilities(r.meta, false);
+    this.syncPetLevel(r.e);
   }
 
   // -------------------------------------------------------------------------
@@ -1037,10 +1202,15 @@ export class Sim {
   tick(): SimEvent[] {
     this.time += DT;
     this.tickCount++;
+    this.updatePendingMobRespawns();
 
     for (const e of this.entities.values()) {
       copyPos(e.prevPos, e.pos);
       e.prevFacing = e.facing;
+      if (e.overheadEmoteId && this.time >= e.overheadEmoteUntil) {
+        e.overheadEmoteId = null;
+        e.overheadEmoteUntil = 0;
+      }
     }
 
     for (const meta of this.players.values()) {
@@ -1080,7 +1250,7 @@ export class Sim {
       // target is someone's pet, the pet's owner stays in combat too, so a
       // hunter/warlock can't regen, eat/drink, or use out-of-combat abilities
       // while their pet tanks
-      if (e.ownerId === null && (e.aiState === 'chase' || e.aiState === 'attack') && e.aggroTargetId !== null) {
+      if (e.ownerId === null && (e.aiState === 'chase' || e.aiState === 'attack' || e.aiState === 'flee') && e.aggroTargetId !== null) {
         this.engagedPids.add(e.aggroTargetId);
         const tgt = this.entities.get(e.aggroTargetId);
         if (tgt && tgt.ownerId !== null) this.engagedPids.add(tgt.ownerId);
@@ -1126,7 +1296,21 @@ export class Sim {
   private isRooted(e: Entity): boolean {
     return this.isStunned(e) || e.auras.some((a) => a.kind === 'root');
   }
+  private fearAura(e: Entity): Aura | undefined {
+    return e.auras.find((a) => a.id === 'fear_incap' && a.kind === 'incapacitate');
+  }
+  private updateFearMovement(e: Entity): boolean {
+    const aura = this.fearAura(e);
+    if (!aura || e.auras.some((a) => a.kind === 'root')) return false;
+    const angle = Number.isFinite(aura.value) ? aura.value : e.facing;
+    const dest = this.groundPos(e.pos.x + Math.sin(angle) * 10, e.pos.z + Math.cos(angle) * 10);
+    this.moveToward(e, dest, e.moveSpeed * FLEE_SPEED_MULT * this.moveSpeedMult(e));
+    return true;
+  }
   private mobCanSwim(template: { family?: string; canSwim?: boolean } | undefined): boolean {
+    return !!template;
+  }
+  private mobCanSpawnInWater(template: { family?: string; canSwim?: boolean } | undefined): boolean {
     return !!template && (template.canSwim === true || template.family === 'murloc');
   }
   private isControlAura(kind: AuraKind): boolean {
@@ -1160,9 +1344,10 @@ export class Sim {
     if (e.kind !== 'player') {
       for (const a of e.auras) {
         if (a.kind === 'buff_ap') attackPower += a.value;
+        else if (a.kind === 'debuff_ap') attackPower -= a.value;
       }
     }
-    return attackPower;
+    return Math.max(0, attackPower);
   }
 
   private nonPlayerAuraHp(aura: Aura): number {
@@ -1185,12 +1370,41 @@ export class Sim {
     for (const aura of target.auras) this.applyNonPlayerStatAura(target, aura, -1);
   }
 
+  private syncPetAspect(pet: Entity, owner: Entity): void {
+    const ownerAspect = owner.auras.find((a) => a.id === 'aspect_of_the_hawk' || a.id === 'aspect_of_the_cheetah') ?? null;
+    const aspectId = ownerAspect ? `pet_${ownerAspect.id}` : null;
+    for (let i = pet.auras.length - 1; i >= 0; i--) {
+      const aura = pet.auras[i];
+      if (!aura.id.startsWith('pet_aspect_')) continue;
+      if (aspectId !== aura.id) pet.auras.splice(i, 1);
+    }
+    if (!ownerAspect || !aspectId) return;
+    const existing = pet.auras.find((a) => a.id === aspectId);
+    if (existing) {
+      existing.remaining = ownerAspect.remaining;
+      existing.duration = ownerAspect.duration;
+      existing.value = ownerAspect.value;
+      return;
+    }
+    pet.auras.push({
+      ...ownerAspect,
+      id: aspectId,
+      sourceId: owner.id,
+    });
+  }
+
   // swing interval multiplier: >1 = slower (thunder clap), haste divides
   private swingIntervalMult(e: Entity): number {
     let m = 1;
     for (const a of e.auras) {
       if (a.kind === 'attackspeed') m *= a.value;
       if (a.kind === 'buff_haste') m /= a.value;
+    }
+    // Enrage frenzy: an enraged mob swings faster (mirrors the inline dmgMult
+    // applied in mobSwing). Composes with any slow/haste auras above.
+    if (e.enraged) {
+      const h = MOBS[e.templateId]?.enrage?.hasteMult;
+      if (h && h > 0) m /= h;
     }
     return m;
   }
@@ -1250,8 +1464,59 @@ export class Sim {
     return true;
   }
 
+  // /follow: a second forced-movement mode (like charge) that trails another
+  // player. Returns true when it has taken over locomotion for this tick so the
+  // normal input-driven movement below is skipped. Any manual movement, combat,
+  // or the leader slipping out of range ends the follow.
+  stopFollow(p: Entity, msg?: string): void {
+    if (p.followTargetId === null) return;
+    p.followTargetId = null;
+    if (msg) this.error(p.id, msg);
+  }
+
+  private updateFollowMovement(p: Entity, meta: PlayerMeta): boolean {
+    if (p.followTargetId === null) return false;
+    const inp = meta.moveInput;
+    // any manual locomotion (incl. camera turns) breaks follow, classic-style
+    if (inp.forward || inp.back || inp.strafeLeft || inp.strafeRight || inp.jump
+      || inp.turnLeft || inp.turnRight) {
+      this.stopFollow(p, 'You stop following.');
+      return false;
+    }
+    const t = this.entities.get(p.followTargetId);
+    if (!t || t.dead || t.kind !== 'player' || !this.players.has(t.id)) {
+      this.stopFollow(p, 'There is no one to follow.');
+      return false;
+    }
+    if (p.inCombat) { this.stopFollow(p, 'You stop following — you are in combat.'); return false; }
+    const d = dist2d(p.pos, t.pos);
+    if (d > FOLLOW_MAX_RANGE) { this.stopFollow(p, `${t.name} is too far away to follow.`); return false; }
+    // always turn to face the leader, even while held in place
+    p.facing = angleTo(p.pos, t.pos);
+    if (this.isStunned(p) || this.isRooted(p) || d <= FOLLOW_STOP_DIST) return true;
+    let speed = RUN_SPEED * this.moveSpeedMult(p);
+    if (this.isSwimming(p)) speed *= SWIM_SPEED_MULT;
+    const step = Math.min(speed * DT, d - FOLLOW_STOP_DIST);
+    const nx = p.pos.x + Math.sin(p.facing) * step;
+    const nz = p.pos.z + Math.cos(p.facing) * step;
+    const h0 = groundHeight(p.pos.x, p.pos.z, this.cfg.seed);
+    const h1 = groundHeight(nx, nz, this.cfg.seed);
+    if (h1 < WATER_LEVEL - SWIM_DEPTH) return true; // don't trail into deep water
+    if (h1 > h0 && step > 1e-5 && (h1 - h0) / step > MAX_CLIMB_SLOPE) return true; // wall/cliff
+    const resolved = resolvePosition(this.cfg.seed, nx, nz, BODY_RADIUS);
+    p.pos.x = resolved.x;
+    p.pos.z = resolved.z;
+    p.pos.y = groundHeight(resolved.x, resolved.z, this.cfg.seed);
+    p.vy = 0;
+    p.onGround = true;
+    p.fallStartY = p.pos.y;
+    return true;
+  }
+
   private updatePlayerMovement(p: Entity, meta: PlayerMeta): void {
     if (this.updateChargeMovement(p)) return;
+    if (this.updateFollowMovement(p, meta)) return;
+    if (this.updateFearMovement(p)) return;
     const inp = meta.moveInput;
     // Convention: facing f points along (sin f, cos f); the camera sits behind
     // the player, so screen-right is the world vector (-cos f, sin f).
@@ -1270,8 +1535,10 @@ export class Sim {
     const wantsMove = mx !== 0 || mz !== 0 || inp.jump;
     if (wantsMove && p.sitting) this.standUp(p);
 
-    const moving = (mx !== 0 || mz !== 0) && !this.isRooted(p);
+    const hasMoveInput = mx !== 0 || mz !== 0;
+    const moving = hasMoveInput && !this.isRooted(p);
     const swimming = this.isSwimming(p);
+    let wishX = 0, wishZ = 0, wishSpeed = 0;
     if (moving) {
       if (p.castingAbility) this.cancelCast(p);
       const len = Math.hypot(mx, mz);
@@ -1283,8 +1550,17 @@ export class Sim {
       const sin = Math.sin(p.facing), cos = Math.cos(p.facing);
       const wx = mz * sin - mx * cos;
       const wz = mz * cos + mx * sin;
-      let nx = p.pos.x + wx * speed * DT;
-      let nz = p.pos.z + wz * speed * DT;
+      wishX = wx;
+      wishZ = wz;
+      wishSpeed = speed;
+    }
+
+    const movingOnGround = moving && (p.onGround || swimming);
+    if (movingOnGround || (!p.onGround && (p.vx !== 0 || p.vz !== 0))) {
+      const stepX = movingOnGround ? wishX * wishSpeed : p.vx;
+      const stepZ = movingOnGround ? wishZ * wishSpeed : p.vz;
+      let nx = p.pos.x + stepX * DT;
+      let nz = p.pos.z + stepZ * DT;
       // cliffs and the world rim are walls, not ramps
       if (p.onGround && !swimming) {
         const h0 = groundHeight(p.pos.x, p.pos.z, this.cfg.seed);
@@ -1293,12 +1569,17 @@ export class Sim {
         if (h1 > h0 && run > 1e-5 && (h1 - h0) / run > MAX_CLIMB_SLOPE) {
           nx = p.pos.x;
           nz = p.pos.z;
+          if (!p.onGround) { p.vx = 0; p.vz = 0; }
         }
       }
       // slide along buildings, trees, crypt walls
       const resolved = resolvePosition(this.cfg.seed, nx, nz, BODY_RADIUS);
       p.pos.x = resolved.x;
       p.pos.z = resolved.z;
+      if (!p.onGround && (resolved.x !== nx || resolved.z !== nz)) {
+        p.vx = (resolved.x - p.prevPos.x) / DT;
+        p.vz = (resolved.z - p.prevPos.z) / DT;
+      }
     }
 
     // Vertical: jumping, gravity, swimming, fall damage
@@ -1308,17 +1589,23 @@ export class Sim {
       // treading water at the surface
       p.pos.y = SWIM_SURFACE_Y;
       p.vy = 0;
+      p.vx = 0;
+      p.vz = 0;
       p.onGround = true;
       p.fallStartY = p.pos.y;
       if (inp.jump && !this.isRooted(p)) {
         // small hop to climb onto shores and docks
         p.vy = JUMP_VELOCITY * 0.7;
+        p.vx = wishX * wishSpeed;
+        p.vz = wishZ * wishSpeed;
         p.onGround = false;
       }
       return;
     }
     if (inp.jump && p.onGround && !this.isRooted(p)) {
       p.vy = JUMP_VELOCITY;
+      p.vx = wishX * wishSpeed;
+      p.vz = wishZ * wishSpeed;
       p.onGround = false;
       p.fallStartY = p.pos.y;
     }
@@ -1330,6 +1617,8 @@ export class Sim {
         // splashing into deep water breaks the fall
         p.pos.y = SWIM_SURFACE_Y;
         p.vy = 0;
+        p.vx = 0;
+        p.vz = 0;
         p.onGround = true;
         p.fallStartY = p.pos.y;
         return;
@@ -1337,6 +1626,8 @@ export class Sim {
       if (p.pos.y <= ground) {
         p.pos.y = ground;
         p.vy = 0;
+        p.vx = 0;
+        p.vz = 0;
         p.onGround = true;
         const drop = p.fallStartY - ground;
         if (drop > FALL_SAFE_DISTANCE) {
@@ -1348,6 +1639,8 @@ export class Sim {
     } else {
       if (ground < p.pos.y - 0.4) {
         p.onGround = false;
+        p.vx = 0;
+        p.vz = 0;
         p.vy = 0;
         p.fallStartY = p.pos.y;
       } else {
@@ -1394,7 +1687,7 @@ export class Sim {
       const c = p[slot];
       if (!c) continue;
       if (c.hpPer2s > 0 && p.hp < p.maxHp) {
-        const heal = Math.min(c.hpPer2s, p.maxHp - p.hp);
+        const heal = Math.min(Math.round(c.hpPer2s * this.healingTakenMult(p)), p.maxHp - p.hp);
         p.hp += heal;
         this.emit({ type: 'heal', targetId: p.id, amount: heal });
       }
@@ -1441,7 +1734,7 @@ export class Sim {
             this.dealDamage(this.entities.get(a.sourceId) ?? null, e, a.value, false, a.school, a.name, 'hit', true);
             if (e.dead) return;
           } else if (a.kind === 'hot') {
-            const healed = Math.min(a.value, e.maxHp - e.hp);
+            const healed = Math.min(Math.round(a.value * this.healingTakenMult(e)), e.maxHp - e.hp);
             if (healed > 0) {
               e.hp += healed;
               this.emit({ type: 'heal2', sourceId: a.sourceId, targetId: e.id, amount: healed, crit: false, ability: a.name });
@@ -1480,10 +1773,14 @@ export class Sim {
       p.channelTickTimer -= DT;
       if (p.channelTickTimer <= 0) {
         p.channelTickTimer += p.channelTickEvery;
-        const res = this.resolvedAbility(p.castingAbility, p.id);
-        if (res) this.applyChannelTick(p, res);
+        if (p.castingAbility === DEMON_HEAL_CAST_ID) {
+          this.applyDemonHealTick(p);
+        } else {
+          const res = this.resolvedAbility(p.castingAbility, p.id);
+          if (res) this.applyChannelTick(p, res);
+        }
       }
-      if (p.castRemaining <= 0) {
+      if (p.castRemaining <= CAST_COMPLETE_EPS) {
         p.castingAbility = null;
         p.channeling = false;
         this.emit({ type: 'castStop', entityId: p.id, success: true });
@@ -1491,7 +1788,7 @@ export class Sim {
       return;
     }
 
-    if (p.castRemaining <= 0) {
+    if (p.castRemaining <= CAST_COMPLETE_EPS) {
       const castId = p.castingAbility;
       p.castingAbility = null;
       p.castRemaining = 0;
@@ -1510,6 +1807,19 @@ export class Sim {
     p.castRemaining = 0;
     p.channeling = false;
     this.emit({ type: 'castStop', entityId: p.id, success: false });
+  }
+
+  private abilityNeedsLineOfSight(ability: AbilityDef): boolean {
+    if (!ability.requiresTarget) return false;
+    return ability.school !== 'physical' || ability.range > MELEE_RANGE;
+  }
+
+  private hasLineOfSight(source: Entity, target: Entity): boolean {
+    return lineOfSightClear(this.cfg.seed, source.pos, target.pos);
+  }
+
+  private lineOfSightBlocked(source: Entity, target: Entity, ability: AbilityDef): boolean {
+    return this.abilityNeedsLineOfSight(ability) && !this.hasLineOfSight(source, target);
   }
 
   private pushbackCast(p: Entity): void {
@@ -1539,13 +1849,18 @@ export class Sim {
     if (p.castingAbility) { this.error(p.id, 'You are busy.'); return; }
     if (!ability.offGcd && p.gcdRemaining > 0) return; // silent, classic spams this
     const togglingOff = isToggleBuff(ability) && p.auras.some((a) => a.id === ability.id);
-    if (p.cooldowns.has(ability.id) && !togglingOff) { this.error(p.id, 'That ability is not ready yet.'); return; }
+    const sharedCooldown = isShamanShock(ability.id)
+      ? SHAMAN_SHOCK_COOLDOWN_IDS.find((id) => p.cooldowns.has(id))
+      : undefined;
+    if ((p.cooldowns.has(ability.id) || sharedCooldown) && !togglingOff) { this.error(p.id, 'That ability is not ready yet.'); return; }
     // shifting out of a form is free; shifting across forms bills the parked
     // mana (the live bar is rage/energy in a form) — see spendAbilityCost
     if (p.resource < res.cost && !togglingOff && !this.formShiftKind(p, ability)) {
       this.error(p.id, p.resourceType === 'rage' ? 'Not enough rage!' : p.resourceType === 'energy' ? 'Not enough energy!' : 'Not enough mana!');
       return;
     }
+    // casting is deliberate action — drop any active follow so you don't drift
+    this.stopFollow(p);
     if (ability.requiresDodgeProc && this.time > p.overpowerUntil) {
       this.error(p.id, 'Your target must dodge first.');
       return;
@@ -1560,7 +1875,7 @@ export class Sim {
     if (ability.requiresForm) {
       const need = ability.requiresForm === 'bear' ? 'form_bear' : 'form_cat';
       if (!form || form.kind !== need) {
-        this.error(p.id, `You must be in ${ability.requiresForm === 'bear' ? 'Bear' : 'Cat'} Form.`);
+        this.error(p.id, `You must be in ${ability.requiresForm === 'bear' ? 'Bear' : 'Wolf'} Form.`);
         return;
       }
     } else if (form && !isFormToggle(ability)) {
@@ -1583,6 +1898,7 @@ export class Sim {
       target = cur && !cur.dead && this.isFriendlyTo(p, cur) ? cur : p;
       const d = dist2d(p.pos, target.pos);
       if (d > Math.max(ability.range, 5)) { this.error(p.id, 'Out of range.'); return; }
+      if (this.lineOfSightBlocked(p, target, ability)) { this.error(p.id, 'Line of sight.'); return; }
     } else if (ability.requiresTarget) {
       target = p.targetId !== null ? this.entities.get(p.targetId) ?? null : null;
       if (!target || target.dead || !this.isHostileTo(p, target)) { this.error(p.id, 'You have no target.'); return; }
@@ -1590,6 +1906,7 @@ export class Sim {
       const maxRange = ability.range > 0 ? ability.range : MELEE_RANGE;
       if (d > maxRange) { this.error(p.id, 'Out of range.'); return; }
       if (ability.minRange && d < ability.minRange) { this.error(p.id, 'Too close!'); return; }
+      if (this.lineOfSightBlocked(p, target, ability)) { this.error(p.id, 'Line of sight.'); return; }
       const facingDiff = Math.abs(normAngle(angleTo(p.pos, target.pos) - p.facing));
       if (facingDiff > MELEE_ARC) { this.error(p.id, 'You must be facing your target.'); return; }
       // execute-style gate: only usable while the target is nearly dead
@@ -1605,9 +1922,13 @@ export class Sim {
           if (behindDiff < Math.PI / 2) { this.error(p.id, 'You must be behind your target.'); return; }
         }
         if (eff.type === 'polymorph') {
-          if (target.kind !== 'mob') { this.error(p.id, 'This creature cannot be polymorphed.'); return; }
-          const fam = MOBS[target.templateId]?.family;
-          if (fam === 'undead' || target.templateId === 'gorrak') { this.error(p.id, 'This creature cannot be polymorphed.'); return; }
+          if (target.kind === 'mob') {
+            const fam = MOBS[target.templateId]?.family;
+            if (fam === 'undead' || target.templateId === 'gorrak') { this.error(p.id, 'This creature cannot be polymorphed.'); return; }
+          } else if (target.kind !== 'player') {
+            this.error(p.id, 'This creature cannot be polymorphed.');
+            return;
+          }
         }
         if (eff.type === 'judgement' && !p.auras.some((a) => a.kind === 'imbue' && a.value2 !== undefined)) {
           this.error(p.id, 'You have no active Seal.');
@@ -1624,6 +1945,9 @@ export class Sim {
       }
     }
     if (p.sitting) this.standUp(p);
+    if (ability.id !== 'ghost_wolf' && p.auras.some((a) => a.id === 'ghost_wolf')) {
+      this.breakGhostWolf(p);
+    }
 
     // Heroic-strike style: queue on next swing, pay cost on the swing itself.
     if (ability.onNextSwing) {
@@ -1636,7 +1960,7 @@ export class Sim {
 
     if (ability.channel) {
       this.spendResource(p, res.cost);
-      if (res.cooldown > 0) p.cooldowns.set(ability.id, res.cooldown);
+      this.armAbilityCooldown(p, ability.id, res.cooldown);
       p.castingAbility = ability.id;
       p.castTotal = ability.channel.duration;
       p.castRemaining = ability.channel.duration;
@@ -1648,7 +1972,7 @@ export class Sim {
       return;
     }
 
-    if (res.castTime > 0) {
+    if (res.castTime > 0 && !togglingOff) {
       p.castingAbility = ability.id;
       p.castTotal = res.castTime;
       p.castRemaining = res.castTime;
@@ -1676,6 +2000,7 @@ export class Sim {
   }
 
   private spendAbilityCost(p: Entity, res: ResolvedAbility): void {
+    if (isToggleBuff(res.def) && p.auras.some((a) => a.id === res.def.id)) return;
     const shift = this.formShiftKind(p, res.def);
     if (shift === 'off') return;
     if (shift === 'cross') {
@@ -1685,9 +2010,29 @@ export class Sim {
     this.spendResource(p, res.cost);
   }
 
+  private armAbilityCooldown(p: Entity, abilityId: string, cooldown: number, togglingOff = false): void {
+    if (cooldown <= 0 || togglingOff) return;
+    if (isShamanShock(abilityId)) {
+      for (const id of SHAMAN_SHOCK_COOLDOWN_IDS) p.cooldowns.set(id, cooldown);
+      return;
+    }
+    p.cooldowns.set(abilityId, cooldown);
+  }
+
   private applyChannelTick(p: Entity, res: ResolvedAbility): void {
     const target = p.targetId !== null ? this.entities.get(p.targetId) : null;
-    if (!target || target.dead) { this.cancelCast(p); return; }
+    if (!target || target.dead || !this.isHostileTo(p, target)) { this.cancelCast(p); return; }
+    const maxRange = res.def.range > 0 ? res.def.range : MELEE_RANGE;
+    if (dist2d(p.pos, target.pos) > maxRange) {
+      this.error(p.id, 'Out of range.');
+      this.cancelCast(p);
+      return;
+    }
+    if (this.lineOfSightBlocked(p, target, res.def)) {
+      this.error(p.id, 'Line of sight.');
+      this.cancelCast(p);
+      return;
+    }
     this.emit({ type: 'spellfx', sourceId: p.id, targetId: target.id, school: res.def.school, fx: 'projectile' });
     for (const eff of res.effects) {
       if (eff.type === 'directDamage') {
@@ -1714,10 +2059,21 @@ export class Sim {
     return 0.05 + p.stats.int * 0.0008;
   }
 
+  // Combined incoming-healing multiplier from Mortal Wound debuffs (classic
+  // Mortal Strike): each reduces healing the target receives; multiple stack
+  // multiplicatively. 1 = unaffected, 0 = fully suppressed.
+  private healingTakenMult(target: Entity): number {
+    let mult = 1;
+    for (const a of target.auras) {
+      if (a.kind === 'mortal_wound') mult *= 1 - a.value;
+    }
+    return mult < 0 ? 0 : mult;
+  }
+
   private applyHeal(source: Entity, target: Entity, amount: number, ability: string): void {
     if (target.dead) return;
     const crit = this.rng.chance(this.spellCrit(source));
-    let healed = Math.round(amount * (crit ? 1.5 : 1));
+    let healed = Math.round(amount * (crit ? 1.5 : 1) * this.healingTakenMult(target));
     healed = Math.min(healed, target.maxHp - target.hp);
     target.hp += healed;
     this.emit({ type: 'heal2', sourceId: source.id, targetId: target.id, amount: healed, crit, ability });
@@ -1753,11 +2109,21 @@ export class Sim {
 
   private applyAbility(p: Entity, meta: PlayerMeta, res: ResolvedAbility): void {
     const ability = res.def;
+    const togglingOff = isToggleBuff(ability) && p.auras.some((a) => a.id === ability.id);
     if (ability.id === 'conjure_water') {
       this.spendResource(p, res.cost);
       // higher ranks conjure better water (falls back if the item isn't defined)
       const tiered = `conjured_water${res.rank}`;
       this.addItem(res.rank > 1 && ITEMS[tiered] ? tiered : 'conjured_water', 2, p.id);
+      return;
+    }
+    if (ability.id === 'revive_pet') {
+      const pet = this.petOf(p.id, true);
+      if (!pet) { this.error(p.id, 'You have no pet.'); return; }
+      if (!pet.dead) { this.error(p.id, 'Your pet is already alive.'); return; }
+      this.spendResource(p, res.cost);
+      this.armAbilityCooldown(p, ability.id, res.cooldown);
+      this.revivePet(p.id);
       return;
     }
 
@@ -1766,26 +2132,28 @@ export class Sim {
       const cur = p.targetId !== null ? this.entities.get(p.targetId) ?? null : null;
       target = cur && !cur.dead && this.isFriendlyTo(p, cur) ? cur : p;
       if (dist2d(p.pos, target.pos) > Math.max(ability.range, 5) + 2) { this.error(p.id, 'Out of range.'); return; }
+      if (this.lineOfSightBlocked(p, target, ability)) { this.error(p.id, 'Line of sight.'); return; }
     } else if (ability.requiresTarget) {
       target = p.targetId !== null ? this.entities.get(p.targetId) ?? null : null;
       if (!target || target.dead) { this.error(p.id, 'You have no target.'); return; }
       const d = dist2d(p.pos, target.pos);
       const maxRange = ability.range > 0 ? ability.range : MELEE_RANGE;
       if (d > maxRange + 2) { this.error(p.id, 'Out of range.'); return; }
+      if (this.lineOfSightBlocked(p, target, ability)) { this.error(p.id, 'Line of sight.'); return; }
     }
-    if (p.resource < res.cost && !this.formShiftKind(p, ability)) { this.error(p.id, 'Not enough ' + (p.resourceType ?? 'resource') + '!'); return; }
+    if (p.resource < res.cost && !togglingOff && !this.formShiftKind(p, ability)) { this.error(p.id, 'Not enough ' + (p.resourceType ?? 'resource') + '!'); return; }
 
     // helpful spells never miss
     if (ability.targetType === 'friendly') {
-      this.spendResource(p, res.cost);
-      if (res.cooldown > 0) p.cooldowns.set(ability.id, res.cooldown);
+      this.spendAbilityCost(p, res);
+      this.armAbilityCooldown(p, ability.id, res.cooldown, togglingOff);
       this.runEffects(p, meta, target, res);
       return;
     }
 
     if (target && ability.school !== 'physical') {
-      this.spendResource(p, res.cost);
-      if (res.cooldown > 0) p.cooldowns.set(ability.id, res.cooldown);
+      this.spendAbilityCost(p, res);
+      this.armAbilityCooldown(p, ability.id, res.cooldown, togglingOff);
       this.emit({ type: 'spellfx', sourceId: p.id, targetId: target.id, school: ability.school, fx: 'projectile' });
       if (!this.rng.chance(spellHitChance(p.level, target.level))) {
         this.emit({ type: 'damage', sourceId: p.id, targetId: target.id, amount: 0, crit: false, school: ability.school, ability: ability.name, kind: 'miss' });
@@ -1797,7 +2165,7 @@ export class Sim {
     }
 
     this.spendAbilityCost(p, res);
-    if (res.cooldown > 0) p.cooldowns.set(ability.id, res.cooldown);
+    this.armAbilityCooldown(p, ability.id, res.cooldown, togglingOff);
     this.runEffects(p, meta, target, res);
   }
 
@@ -1806,8 +2174,9 @@ export class Sim {
     const isSpell = ability.school !== 'physical';
     const spentCombo = ability.spendsCombo ? p.comboPoints : 0;
     let comboAwarded = false;
-    // acting breaks stealth (the ambush itself still lands first inside the swing)
-    if (ability.id !== 'stealth') this.breakStealth(p);
+    // acting breaks stealth (the opener itself still lands first inside the swing).
+    // Stealth toggles and Rogue Sprint are allowed while remaining hidden.
+    if (!preservesStealth(ability)) this.breakStealth(p);
     const threatOpts = { flat: res.threatFlat, mult: res.threatMult };
 
     for (const eff of res.effects) {
@@ -1975,9 +2344,14 @@ export class Sim {
         }
         case 'incapacitate': {
           if (!target || target.dead) break;
+          const remaining = ability.id === 'fear'
+            ? this.diminishedCrowdControlDuration(p, target, 'fear', eff.duration)
+            : eff.duration;
+          if (remaining === null) break;
           this.applyAura(target, {
             id: ability.id + '_incap', name: ability.name, kind: 'incapacitate',
-            remaining: eff.duration, duration: eff.duration, value: 0,
+            remaining, duration: remaining,
+            value: ability.id === 'fear' ? this.rng.range(-Math.PI, Math.PI) : 0,
             sourceId: p.id, school: ability.school, breaksOnDamage: true,
           });
           if (ability.awardsCombo && !comboAwarded) { this.awardCombo(p, target, ability.awardsCombo); comboAwarded = true; }
@@ -1986,9 +2360,12 @@ export class Sim {
         }
         case 'polymorph': {
           if (!target || target.dead) break;
+          const remaining = this.diminishedCrowdControlDuration(p, target, 'polymorph', eff.duration);
+          if (remaining === null) break;
+          target.hp = target.maxHp;
           this.applyAura(target, {
             id: ability.id, name: ability.name, kind: 'polymorph',
-            remaining: eff.duration, duration: eff.duration, value: 0,
+            remaining, duration: remaining, value: 0,
             tickInterval: 1, tickTimer: 1,
             sourceId: p.id, school: ability.school, breaksOnDamage: true,
           });
@@ -1998,7 +2375,8 @@ export class Sim {
         }
         case 'aoeDamage': {
           this.emit({ type: 'spellfx', sourceId: p.id, targetId: p.id, school: ability.school, fx: 'nova' });
-          for (const m of this.mobsInRadius(p.pos, eff.radius)) {
+          for (const m of this.hostilesInRadius(p, p.pos, eff.radius)) {
+            if (!this.hasLineOfSight(p, m)) continue;
             let dmg = this.rng.range(eff.min, eff.max);
             // Armor only mitigates physical damage, mirroring the single-target
             // path above — spell-school AoE (Arcane Explosion, Consecration) is
@@ -2009,8 +2387,9 @@ export class Sim {
           break;
         }
         case 'aoeAttackSpeed': {
-          for (const m of this.mobsInRadius(p.pos, eff.radius)) {
+          for (const m of this.hostilesInRadius(p, p.pos, eff.radius)) {
             if (m.dead) continue;
+            if (!this.hasLineOfSight(p, m)) continue;
             this.applyAura(m, {
               id: ability.id + '_as', name: ability.name, kind: 'attackspeed',
               remaining: eff.duration, duration: eff.duration, value: eff.mult,
@@ -2019,9 +2398,23 @@ export class Sim {
           }
           break;
         }
+        case 'aoeAttackPower': {
+          for (const m of this.hostilesInRadius(p, p.pos, eff.radius)) {
+            if (m.dead) continue;
+            this.applyAura(m, {
+              id: ability.id + '_ap', name: ability.name, kind: 'debuff_ap',
+              remaining: eff.duration, duration: eff.duration, value: eff.amount,
+              sourceId: p.id, school: ability.school,
+            });
+            this.enterCombat(p, m);
+            if (m.kind === 'mob' && m.hostile) addThreat(m, p.id, 10 * this.threatMod(p, ability.school));
+          }
+          break;
+        }
         case 'aoeRoot': {
           this.emit({ type: 'spellfx', sourceId: p.id, targetId: p.id, school: ability.school, fx: 'nova' });
           for (const m of this.hostilesInRadius(p, p.pos, eff.radius)) {
+            if (!this.hasLineOfSight(p, m)) continue;
             const dmg = this.rng.range(eff.min, eff.max);
             this.dealDamage(p, m, Math.round(dmg), false, ability.school, ability.name, 'hit');
             if (!m.dead && this.isHostileTo(p, m)) {
@@ -2033,7 +2426,8 @@ export class Sim {
         case 'selfBuff': {
           // forms, stances and stealth are toggles: casting again cancels
           const isToggle = eff.kind === 'form_bear' || eff.kind === 'form_cat'
-            || eff.kind === 'defensive_stance' || eff.kind === 'stealth';
+            || eff.kind === 'defensive_stance' || eff.kind === 'stealth'
+            || ability.id === 'ghost_wolf';
           if (isToggle) {
             const existing = p.auras.findIndex((a) => a.id === ability.id);
             if (existing >= 0) {
@@ -2117,11 +2511,18 @@ export class Sim {
           if (target) this.completeTame(p, target);
           break;
         }
+        case 'summonPet': {
+          this.summonPet(p, eff.templateId);
+          break;
+        }
         case 'dismissPet': {
           const pet = this.petOf(p.id);
           if (!pet) { this.error(p.id, 'You have no pet.'); break; }
-          this.emit({ type: 'log', text: `You dismiss ${pet.name}.`, color: '#999', pid: p.id });
-          this.releasePetToWild(pet);
+          this.error(p.id, 'Permanent pets can only be abandoned from the pet frame.');
+          break;
+        }
+        case 'summonDemon': {
+          this.summonPet(p, eff.mobId);
           break;
         }
       }
@@ -2183,8 +2584,21 @@ export class Sim {
     }
     const existing = target.ccDr.get(category);
     const stage = existing && existing.resetAt > this.time ? existing.stage : 0;
+    const reset = category === 'polymorph'
+      ? PVP_POLYMORPH_DR_RESET
+      : category === 'fear'
+        ? PVP_FEAR_DR_RESET
+        : PVP_ROOT_DR_RESET;
+    if (category === 'polymorph') {
+      target.ccDr.set(category, { stage: stage + 1, resetAt: this.time + reset });
+      return PVP_POLYMORPH_DR_DURATIONS[Math.min(stage, PVP_POLYMORPH_DR_DURATIONS.length - 1)];
+    }
+    if (category === 'fear') {
+      target.ccDr.set(category, { stage: stage + 1, resetAt: this.time + reset });
+      return PVP_FEAR_DR_DURATIONS[Math.min(stage, PVP_FEAR_DR_DURATIONS.length - 1)];
+    }
     if (stage >= PVP_CC_DR_MULTIPLIERS.length) return null;
-    target.ccDr.set(category, { stage: stage + 1, resetAt: this.time + PVP_CC_DR_RESET });
+    target.ccDr.set(category, { stage: stage + 1, resetAt: this.time + reset });
     return duration * PVP_CC_DR_MULTIPLIERS[stage];
   }
 
@@ -2212,6 +2626,14 @@ export class Sim {
     this.emit({ type: 'aura', targetId: e.id, name, gained: false });
   }
 
+  private breakGhostWolf(e: Entity): void {
+    const idx = e.auras.findIndex((a) => a.id === 'ghost_wolf');
+    if (idx < 0) return;
+    const name = e.auras[idx].name;
+    e.auras.splice(idx, 1);
+    this.emit({ type: 'aura', targetId: e.id, name, gained: false });
+  }
+
   // Taunt/Growl, classic semantics: never misses, lifts the caster's threat to
   // the top of the table, and forces the mob onto the caster for 3 seconds.
   private applyTaunt(p: Entity, mob: Entity): void {
@@ -2222,6 +2644,7 @@ export class Sim {
     mob.forcedTargetTimer = TAUNT_FORCE_SECONDS;
     if (mob.aiState === 'idle') this.aggroMob(mob, p, false);
     else if (mob.aiState === 'chase' || mob.aiState === 'attack') mob.aggroTargetId = p.id;
+    else if (mob.aiState === 'flee') { mob.aggroTargetId = p.id; mob.aiState = 'attack'; mob.fleeTimer = 0; }
     this.enterCombat(p, mob);
   }
 
@@ -2229,11 +2652,76 @@ export class Sim {
   // Hunter pets
   // -------------------------------------------------------------------------
 
-  petOf(ownerPid: number): Entity | null {
+  petOf(ownerPid: number, includeDead = false): Entity | null {
     for (const e of this.entities.values()) {
-      if (e.kind === 'mob' && e.ownerId === ownerPid && !e.dead) return e;
+      if (e.kind === 'mob' && e.ownerId === ownerPid && (includeDead || !e.dead)) return e;
     }
     return null;
+  }
+
+  private serializePet(ownerPid: number): PetState | null {
+    const pet = this.petOf(ownerPid, true);
+    if (!pet) return null;
+    return {
+      templateId: pet.templateId,
+      name: pet.name,
+      level: pet.level,
+      hp: pet.dead ? 0 : Math.max(1, Math.min(pet.maxHp, pet.hp)),
+      dead: pet.dead,
+      mode: pet.petMode,
+    };
+  }
+
+  private restorePet(owner: Entity, state: PetState): void {
+    const template = MOBS[state.templateId];
+    if (!template) return;
+    const level = owner.level;
+    const pos = this.groundPos(owner.pos.x + 2, owner.pos.z + 1);
+    const pet = createMob(this.nextId++, template, level, pos);
+    pet.name = this.cleanPetName(state.name) ?? template.name;
+    pet.ownerId = owner.id;
+    pet.petMode = state.mode ?? 'defensive';
+    pet.petTauntTimer = 0;
+    pet.hostile = false;
+    pet.aiState = state.dead ? 'dead' : 'idle';
+    pet.aggroTargetId = null;
+    pet.inCombat = false;
+    pet.tappedById = null;
+    pet.loot = null;
+    pet.lootable = false;
+    pet.wanderTarget = null;
+    clearThreat(pet);
+    if (state.dead) {
+      pet.dead = true;
+      pet.hp = 0;
+      pet.corpseTimer = Infinity;
+      pet.respawnTimer = Infinity;
+    } else {
+      pet.hp = Math.max(1, Math.min(pet.maxHp, Math.round(state.hp) || pet.maxHp));
+    }
+    this.addEntity(pet);
+  }
+
+  private syncPetLevel(owner: Entity): void {
+    const pet = this.petOf(owner.id, true);
+    if (!pet || pet.level === owner.level) return;
+    const template = MOBS[pet.templateId];
+    if (!template) return;
+    const hpFrac = pet.maxHp > 0 ? pet.hp / pet.maxHp : 1;
+    const scaled = createMob(-1, template, owner.level, pet.pos);
+    pet.level = scaled.level;
+    pet.maxHp = scaled.maxHp;
+    pet.weapon = scaled.weapon;
+    pet.stats.armor = scaled.stats.armor;
+    pet.moveSpeed = scaled.moveSpeed;
+    pet.scale = scaled.scale;
+    pet.color = scaled.color;
+    pet.hp = pet.dead ? 0 : Math.max(1, Math.min(pet.maxHp, Math.round(pet.maxHp * hpFrac)));
+  }
+
+  private cleanPetName(raw: string): string | null {
+    const name = raw.trim().replace(/\s+/g, ' ');
+    return PET_NAME_RE.test(name) ? name : null;
   }
 
   private tameError(p: Entity, target: Entity): string | null {
@@ -2243,43 +2731,271 @@ export class Sim {
     if (template.elite || template.boss || template.rare) return 'That beast is too strong to tame.';
     if (target.level > p.level) return 'That beast is too high level for you to tame.';
     if (target.spawnPos.x > DUNGEON_X_THRESHOLD) return 'You cannot tame dungeon creatures.';
-    if (this.petOf(p.id)) return 'You already have a pet.';
+    if (this.petOf(p.id, true)) return 'You already have a pet.';
     return null;
   }
 
   private completeTame(p: Entity, target: Entity): void {
     const err = this.tameError(p, target);
     if (err) { this.error(p.id, err); return; }
-    target.ownerId = p.id;
-    target.petTauntTimer = 0;
-    target.hostile = false;
-    target.aiState = 'idle';
-    target.aggroTargetId = null;
-    target.inCombat = false;
-    target.tappedById = null;
-    target.auras = [];
-    target.hp = target.maxHp;
-    target.loot = null;
-    target.lootable = false;
-    target.wanderTarget = null;
-    clearThreat(target);
-    this.clearEntityMarker(target.id); // a tamed pet is no longer a markable enemy
-    // it's friendly now: nobody keeps swinging at it, other mobs forget it
+    const template = MOBS[target.templateId];
+    const pet = createMob(this.nextId++, template, target.level, this.groundPos(p.pos.x + 2, p.pos.z + 1));
+    pet.name = target.name;
+    pet.ownerId = p.id;
+    pet.petMode = 'defensive';
+    pet.petTauntTimer = 0;
+    pet.hostile = false;
+    pet.aiState = 'idle';
+    pet.aggroTargetId = null;
+    pet.inCombat = false;
+    pet.tappedById = null;
+    pet.auras = [];
+    pet.hp = pet.maxHp;
+    pet.loot = null;
+    pet.lootable = false;
+    pet.wanderTarget = null;
+    clearThreat(pet);
+
+    this.pendingMobRespawns.push({
+      templateId: target.templateId,
+      level: target.level,
+      pos: { ...target.spawnPos },
+      facing: target.facing,
+      dungeonId: target.dungeonId,
+      timer: TAMED_TARGET_RESPAWN_SECONDS,
+    });
+    this.clearEntityMarker(target.id);
+    this.dropEntity(target.id);
+
+    // The owned copy is friendly now: nobody keeps swinging at the old target,
+    // other mobs forget both the old entity and the new pet starts clean.
     for (const other of this.players.values()) {
       const e = this.entities.get(other.entityId);
       if (e && e.targetId === target.id) e.autoAttack = false;
     }
     for (const m of this.entities.values()) {
-      if (m.kind !== 'mob' || m.id === target.id) continue;
+      if (m.kind !== 'mob') continue;
       m.threat.delete(target.id);
       if (m.aggroTargetId === target.id && !m.dead && m.aiState !== 'dead') this.retargetMob(m);
     }
-    this.emit({ type: 'log', text: `${target.name} is now your loyal companion.`, color: '#8f8', pid: p.id });
-    this.emit({ type: 'aura', targetId: target.id, name: 'Tamed', gained: true });
+    this.addEntity(pet);
+    this.syncPetLevel(p);
+    this.emit({ type: 'log', text: `${pet.name} is now your loyal companion.`, color: '#8f8', pid: p.id });
+    this.emit({ type: 'aura', targetId: pet.id, name: 'Tamed', gained: true });
   }
 
-  /** Dismissal, owner logout, or pet respawn: the beast goes back to the wild
-   *  and walks home. Mobs that were fighting it forget it. */
+  private summonPet(owner: Entity, templateId: string): void {
+    const template = MOBS[templateId];
+    if (!template) { this.error(owner.id, 'That summon is unavailable.'); return; }
+    const existing = this.petOf(owner.id, true);
+    if (existing) {
+      this.despawnPersistentPet(existing);
+      if (existing.templateId === templateId && !existing.dead) {
+        this.emit({ type: 'log', text: `${existing.name} fades back into the void.`, color: '#b894ff', pid: owner.id });
+        return;
+      }
+    }
+
+    const pet = createMob(this.nextId++, template, owner.level, this.groundPos(owner.pos.x + 2, owner.pos.z + 1));
+    pet.name = template.name;
+    pet.ownerId = owner.id;
+    pet.petMode = 'defensive';
+    pet.petTauntTimer = 0;
+    pet.hostile = false;
+    pet.aiState = 'idle';
+    pet.aggroTargetId = null;
+    pet.inCombat = false;
+    pet.tappedById = null;
+    pet.auras = [];
+    pet.hp = pet.maxHp;
+    pet.loot = null;
+    pet.lootable = false;
+    pet.wanderTarget = null;
+    clearThreat(pet);
+    this.addEntity(pet);
+    this.emit({ type: 'log', text: `${pet.name} answers your summons.`, color: '#b894ff', pid: owner.id });
+    this.emit({ type: 'aura', targetId: pet.id, name: 'Summoned', gained: true });
+  }
+
+  private despawnPersistentPet(pet: Entity): void {
+    this.clearNonPlayerStatAuras(pet);
+    pet.auras = [];
+    clearThreat(pet);
+    for (const m of this.entities.values()) {
+      if (m.kind !== 'mob' || m.id === pet.id) continue;
+      m.threat.delete(pet.id);
+      if (m.aggroTargetId === pet.id && !m.dead && m.aiState !== 'dead') this.retargetMob(m);
+    }
+    this.dropEntity(pet.id);
+  }
+
+  abandonPet(pid?: number): void {
+    const r = this.resolve(pid);
+    if (!r) return;
+    if (r.meta.cls !== 'hunter') { this.error(r.e.id, 'Only hunters can abandon pets.'); return; }
+    const pet = this.petOf(r.e.id, true);
+    if (!pet) { this.error(r.e.id, 'You have no pet.'); return; }
+    this.emit({ type: 'log', text: `You abandon ${pet.name}.`, color: '#f66', pid: r.e.id });
+    this.despawnPersistentPet(pet);
+  }
+
+  renamePet(name: string, pid?: number): void {
+    const r = this.resolve(pid);
+    if (!r) return;
+    if (!isPetClass(r.meta.cls)) { this.error(r.e.id, 'Only pet classes can rename pets.'); return; }
+    const pet = this.petOf(r.e.id, true);
+    if (!pet) { this.error(r.e.id, 'You have no pet.'); return; }
+    const clean = this.cleanPetName(name);
+    if (!clean) { this.error(r.e.id, 'Pet name must be 2-16 letters/spaces/hyphen/apostrophe and start with a letter.'); return; }
+    pet.name = clean;
+    this.emit({ type: 'log', text: `Your pet is now named ${clean}.`, color: '#8f8', pid: r.e.id });
+  }
+
+  revivePet(pid?: number): void {
+    const r = this.resolve(pid);
+    if (!r) return;
+    if (!isPetClass(r.meta.cls)) { this.error(r.e.id, 'Only pet classes can revive pets.'); return; }
+    const pet = this.petOf(r.e.id, true);
+    if (!pet) { this.error(r.e.id, 'You have no pet.'); return; }
+    if (!pet.dead) { this.error(r.e.id, 'Your pet is already alive.'); return; }
+    pet.dead = false;
+    pet.hostile = false;
+    pet.ownerId = r.e.id;
+    pet.aiState = 'idle';
+    pet.aggroTargetId = null;
+    pet.inCombat = false;
+    pet.corpseTimer = 0;
+    pet.respawnTimer = 0;
+    pet.loot = null;
+    pet.lootable = false;
+    pet.tappedById = null;
+    clearThreat(pet);
+    pet.pos = this.groundPos(r.e.pos.x + 2, r.e.pos.z + 1);
+    pet.prevPos = { ...pet.pos };
+    this.rebucket(pet);
+    pet.hp = Math.max(1, Math.round(pet.maxHp * 0.35));
+    this.emit({ type: 'log', text: `${pet.name} returns to your side.`, color: '#8f8', pid: r.e.id });
+  }
+
+  petAttack(pid?: number): void {
+    const r = this.resolve(pid);
+    if (!r) return;
+    if (!isPetClass(r.meta.cls)) { this.error(r.e.id, 'Only pet classes can command pets.'); return; }
+    const pet = this.petOf(r.e.id);
+    if (!pet) { this.error(r.e.id, 'You have no living pet.'); return; }
+    const target = r.e.targetId !== null ? this.entities.get(r.e.targetId) : null;
+    if (!target || target.dead || !this.isHostileTo(pet, target)) {
+      this.error(r.e.id, 'Your pet needs a hostile target.');
+      return;
+    }
+    pet.aggroTargetId = target.id;
+    pet.inCombat = true;
+    if (target.kind === 'mob' && target.hostile) addThreat(target, pet.id, 1);
+  }
+
+  petTaunt(pid?: number): void {
+    const r = this.resolve(pid);
+    if (!r) return;
+    if (!isPetClass(r.meta.cls)) { this.error(r.e.id, 'Only pet classes can command pets.'); return; }
+    const pet = this.petOf(r.e.id);
+    if (!pet) { this.error(r.e.id, 'You have no living pet.'); return; }
+    if (pet.petTauntTimer > 0) { this.error(r.e.id, 'Pet taunt is not ready.'); return; }
+    const target = pet.aggroTargetId !== null
+      ? this.entities.get(pet.aggroTargetId) ?? null
+      : r.e.targetId !== null ? this.entities.get(r.e.targetId) ?? null : null;
+    if (!target || target.kind !== 'mob' || target.dead || !target.hostile || target.ownerId !== null) {
+      this.error(r.e.id, 'Your pet needs a hostile target.');
+      return;
+    }
+    pet.aggroTargetId = target.id;
+    pet.inCombat = true;
+    addThreat(target, pet.id, 1);
+    if (dist2d(pet.pos, target.pos) > PET_TAUNT_RANGE) return;
+    this.applyTaunt(pet, target);
+    pet.petTauntTimer = PET_GROWL_INTERVAL;
+  }
+
+  feedPet(itemId: string, pid?: number): void {
+    const r = this.resolve(pid);
+    if (!r) return;
+    if (r.meta.cls !== 'hunter') { this.error(r.e.id, 'Only hunters can feed pets.'); return; }
+    const pet = this.petOf(r.e.id);
+    if (!pet) { this.error(r.e.id, 'You have no living pet.'); return; }
+    const item = ITEMS[itemId];
+    if (!item || item.kind !== 'food' || !item.foodHp) { this.error(r.e.id, 'Your pet can only eat food.'); return; }
+    if (this.countItem(itemId, r.e.id) <= 0) { this.error(r.e.id, "You don't have that item."); return; }
+    if (pet.hp >= pet.maxHp) { this.error(r.e.id, 'Your pet is already at full health.'); return; }
+    this.removeItem(itemId, 1, r.e.id);
+    pet.auras = pet.auras.filter((a) => a.id !== 'feed_pet');
+    this.applyAura(pet, {
+      id: 'feed_pet',
+      name: 'Fed',
+      kind: 'hot',
+      value: Math.max(1, Math.ceil(item.foodHp / PET_FEED_DURATION)),
+      duration: PET_FEED_DURATION,
+      remaining: PET_FEED_DURATION,
+      sourceId: r.e.id,
+      school: 'nature',
+      tickInterval: PET_FEED_TICK,
+      tickTimer: PET_FEED_TICK,
+    });
+    this.emit({ type: 'log', text: `You feed ${pet.name}.`, color: '#8f8', pid: r.e.id });
+  }
+
+  healPet(pid?: number): void {
+    const r = this.resolve(pid);
+    if (!r) return;
+    if (r.meta.cls !== 'warlock') { this.error(r.e.id, 'Only warlocks can channel demon healing.'); return; }
+    if (r.e.dead) { this.error(r.e.id, 'You are dead.'); return; }
+    if (this.isStunned(r.e)) { this.error(r.e.id, 'You are stunned.'); return; }
+    if (r.e.castingAbility) { this.error(r.e.id, 'You are busy.'); return; }
+    const pet = this.petOf(r.e.id);
+    if (!pet) { this.error(r.e.id, 'You have no living demon.'); return; }
+    if (pet.hp >= pet.maxHp) { this.error(r.e.id, 'Your demon is already at full health.'); return; }
+    if (r.e.resource < DEMON_HEAL_MANA_COST) { this.error(r.e.id, 'Not enough mana!'); return; }
+    this.spendResource(r.e, DEMON_HEAL_MANA_COST);
+    r.e.castingAbility = DEMON_HEAL_CAST_ID;
+    r.e.castTotal = DEMON_HEAL_DURATION;
+    r.e.castRemaining = DEMON_HEAL_DURATION;
+    r.e.channeling = true;
+    r.e.channelTickEvery = DEMON_HEAL_TICK;
+    r.e.channelTickTimer = DEMON_HEAL_TICK;
+    r.e.gcdRemaining = Math.max(r.e.gcdRemaining, this.playerGcdFor(r.meta.cls));
+    this.emit({ type: 'log', text: `You channel healing into ${pet.name}.`, color: '#b894ff', pid: r.e.id });
+    this.emit({ type: 'castStart', entityId: r.e.id, ability: DEMON_HEAL_CAST_ID, time: DEMON_HEAL_DURATION });
+  }
+
+  private applyDemonHealTick(owner: Entity): void {
+    const pet = this.petOf(owner.id);
+    if (!pet) {
+      this.cancelCast(owner);
+      return;
+    }
+    const amount = Math.max(1, Math.ceil(pet.maxHp * 0.08));
+    const healed = Math.min(amount, pet.maxHp - pet.hp);
+    if (healed <= 0) return;
+    pet.hp += healed;
+    this.emit({ type: 'heal2', sourceId: owner.id, targetId: pet.id, amount: healed, crit: false, ability: 'Demon Heal' });
+    this.healingThreat(owner, pet, healed);
+  }
+
+  setPetMode(mode: PetMode, pid?: number): void {
+    const r = this.resolve(pid);
+    if (!r) return;
+    if (!isPetClass(r.meta.cls)) { this.error(r.e.id, 'Only pet classes can command pets.'); return; }
+    const pet = this.petOf(r.e.id, true);
+    if (!pet) { this.error(r.e.id, 'You have no pet.'); return; }
+    pet.petMode = mode;
+    if (mode === 'passive') {
+      pet.aggroTargetId = null;
+      pet.inCombat = false;
+      pet.autoAttack = false;
+    }
+    this.emit({ type: 'log', text: `${pet.name} is now ${mode}.`, color: '#ffd100', pid: r.e.id });
+  }
+
+  /** Release a tamed beast back to the wild: it drops its owner, sheds pet
+   *  auras, turns hostile/neutral again and evades home (or stays dead). */
   private releasePetToWild(pet: Entity): void {
     this.clearNonPlayerStatAuras(pet);
     pet.auras = [];
@@ -2295,6 +3011,60 @@ export class Sim {
       m.threat.delete(pet.id);
       if (m.aggroTargetId === pet.id && !m.dead && m.aiState !== 'dead') this.retargetMob(m);
     }
+  }
+
+  // -------------------------------------------------------------------------
+  // Warlock demon pets — summoned (never tamed) demons that fight like hunter
+  // pets but unravel (despawn) on dismiss/death/logout instead of going feral.
+  // -------------------------------------------------------------------------
+
+  /** Summon a demon pet (imp/voidwalker) just behind the warlock, replacing any
+   *  existing pet. Created fresh at the owner's level — never a world mob. */
+  private summonDemon(owner: Entity, mobId: string): void {
+    const template = MOBS[mobId];
+    if (!template) return;
+    const existing = this.petOf(owner.id);
+    if (existing) this.removePet(existing);
+    // appear just behind the caster so the demon doesn't spawn inside the target
+    const ang = owner.facing + Math.PI;
+    const pos = this.groundPos(owner.pos.x + Math.sin(ang) * 2, owner.pos.z + Math.cos(ang) * 2);
+    const pet = createMob(this.nextId++, template, owner.level, pos);
+    pet.spawnPos = { ...pos };
+    pet.ownerId = owner.id;
+    pet.petTauntTimer = 0;
+    pet.hostile = false;
+    pet.aiState = 'idle';
+    pet.aggroTargetId = null;
+    pet.inCombat = false;
+    pet.tappedById = null;
+    pet.loot = null;
+    pet.lootable = false;
+    this.addEntity(pet);
+    this.emit({ type: 'log', text: `You summon ${template.name}.`, color: '#a78bfa', pid: owner.id });
+  }
+
+  /** Tear-down for any pet: summoned demons vanish from the world; tamed beasts
+   *  return to the wild and walk home. */
+  private removePet(pet: Entity): void {
+    if (MOBS[pet.templateId]?.family === 'demon') this.despawnPet(pet);
+    else this.releasePetToWild(pet);
+  }
+
+  /** Remove a summoned demon from the world entirely, scrubbing any references
+   *  (player targets/combo, other mobs' hate) the way boss adds are despawned. */
+  private despawnPet(pet: Entity): void {
+    for (const meta of this.players.values()) {
+      const e = this.entities.get(meta.entityId);
+      if (!e) continue;
+      if (e.targetId === pet.id) e.targetId = null;
+      if (e.comboTargetId === pet.id) { e.comboTargetId = null; e.comboPoints = 0; }
+    }
+    for (const m of this.entities.values()) {
+      if (m.kind !== 'mob' || m.id === pet.id) continue;
+      m.threat.delete(pet.id);
+      if (m.aggroTargetId === pet.id && !m.dead && m.aiState !== 'dead') this.retargetMob(m);
+    }
+    this.dropEntity(pet.id);
   }
 
   // -------------------------------------------------------------------------
@@ -2332,6 +3102,7 @@ export class Sim {
     // casters (wand-style, no dead zone so they don't run into melee — #94)
     const ranged = CLASSES[meta.cls].ranged;
     if (ranged && d <= ranged.maxRange && d >= (ranged.wand ? 0 : ranged.minRange)) {
+      if (!this.hasLineOfSight(p, t)) return;
       this.rangedSwing(p, t, ranged);
       p.swingTimer = ranged.speed * this.swingIntervalMult(p);
       return;
@@ -2463,26 +3234,28 @@ export class Sim {
       }
     }
 
+    const sourcePlayer = this.pvpController(source);
+
     // duels end at 1 hp — nobody dies
     const duel = target.kind === 'player' ? this.duels.get(target.id) : undefined;
-    if (duel && duel.state === 'active' && source && (source.id === duel.a || source.id === duel.b)) {
+    if (duel && duel.state === 'active' && sourcePlayer && (sourcePlayer.id === duel.a || sourcePlayer.id === duel.b)) {
       if (target.hp - amount < 1) {
         amount = Math.max(0, target.hp - 1);
         target.hp = 1;
-        this.emit({ type: 'damage', sourceId: source.id, targetId: target.id, amount, crit, school, ability, kind });
-        this.endDuel(duel, source.id);
+        this.emit({ type: 'damage', sourceId: source?.id ?? -1, targetId: target.id, amount, crit, school, ability, kind });
+        this.endDuel(duel, sourcePlayer.id);
         return;
       }
     }
 
     // arena bouts also end at 1 hp — the loser yields, nobody actually dies
     const match = target.kind === 'player' ? this.arenaMatches.get(target.id) : undefined;
-    if (match && match.state === 'active' && source && (source.id === match.a || source.id === match.b)) {
+    if (match && match.state === 'active' && sourcePlayer && (sourcePlayer.id === match.a || sourcePlayer.id === match.b)) {
       if (target.hp - amount < 1) {
         amount = Math.max(0, target.hp - 1);
         target.hp = 1;
-        this.emit({ type: 'damage', sourceId: source.id, targetId: target.id, amount, crit, school, ability, kind });
-        this.endArenaMatch(match, source.id, 'defeat');
+        this.emit({ type: 'damage', sourceId: source?.id ?? -1, targetId: target.id, amount, crit, school, ability, kind });
+        this.endArenaMatch(match, sourcePlayer.id, 'defeat');
         return;
       }
     }
@@ -2502,7 +3275,11 @@ export class Sim {
     // taking or dealing real damage breaks stealth
     if (amount > 0) {
       this.breakStealth(target);
-      if (source && source.id !== target.id) this.breakStealth(source);
+      this.breakGhostWolf(target);
+      if (source && source.id !== target.id) {
+        this.breakStealth(source);
+        this.breakGhostWolf(source);
+      }
     }
 
     if (source && source.id !== target.id) this.enterCombat(source, target);
@@ -2533,7 +3310,7 @@ export class Sim {
       const meta = this.players.get(target.id);
       if (meta) meta.counters.damageTaken += amount;
       if (target.resourceType === 'rage' && source && source.id !== target.id) {
-        target.resource = Math.min(target.maxResource, target.resource + rageFromTaking(amount, target.level));
+        target.resource = Math.min(target.maxResource, target.resource + rageFromTaking(amount, source.level));
       }
       if (isConsuming(target)) { target.eating = null; target.drinking = null; }
       if (target.sitting) target.sitting = false;
@@ -2600,6 +3377,7 @@ export class Sim {
       e.sitting = false;
       e.chargeTargetId = null;
       e.chargePath = [];
+      e.followTargetId = null;
       this.emit({ type: 'playerDeath', pid: e.id });
       for (const m of this.entities.values()) {
         if (m.kind === 'mob' && !m.dead && m.aggroTargetId === e.id && m.aiState !== 'dead') {
@@ -2618,9 +3396,16 @@ export class Sim {
       e.aggroTargetId = null;
       clearThreat(e);
       if (e.ownerId !== null) {
+        e.corpseTimer = Infinity;
+        e.respawnTimer = Infinity;
+        e.hostile = false;
+        e.inCombat = false;
         this.emit({ type: 'log', text: `${e.name} dies.`, color: '#f66', pid: e.ownerId });
-        return; // pets drop no loot and grant no credit; they respawn wild
+        // a slain summoned demon lingers only briefly, then unravels (updateMob)
+        if (MOBS[e.templateId]?.family === 'demon') e.corpseTimer = 3;
+        return; // owned pets drop no loot/credit; demons unravel, hunters revive or abandon
       }
+      this.frenzyPackmates(e); // wild packmates fly into a frenzy when one falls
 
       // credit goes to the tapping player (fall back to the killer)
       const creditId = e.tappedById ?? (killer?.kind === 'player' ? killer.id : null);
@@ -2688,6 +3473,7 @@ export class Sim {
       if (p.resourceType === 'mana') p.resource = p.maxResource;
       this.emit({ type: 'levelup', level: p.level, pid: p.id });
       this.refreshKnownAbilities(meta, true);
+      this.syncPetLevel(p);
     }
     // Dinged to cap mid-grant: clear the leftover from the BAR. It is not lost —
     // the full award was already added to lifetimeXp above (FR-1.4).
@@ -2912,7 +3698,7 @@ export class Sim {
   }
 
   private aggroMob(mob: Entity, target: Entity, social: boolean): void {
-    if (mob.dead || mob.aiState === 'evade' || mob.aiState === 'chase' || mob.aiState === 'attack') return;
+    if (mob.dead || mob.aiState === 'evade' || mob.aiState === 'chase' || mob.aiState === 'attack' || mob.aiState === 'flee') return;
     mob.aiState = 'chase';
     mob.aggroTargetId = target.id;
     mob.inCombat = true;
@@ -2943,10 +3729,24 @@ export class Sim {
     return best ? { e: best, d: Math.sqrt(bestD2) } : null;
   }
 
+  // Classic "trivial con": a wild mob far below the player's level stops
+  // auto-aggroing from proximity. Elites, rares, and bosses are never trivial.
+  private isTrivialTo(mob: Entity, player: Entity): boolean {
+    const template = MOBS[mob.templateId];
+    if (template.elite || template.rare || template.boss) return false;
+    return player.level - mob.level >= TRIVIAL_LEVEL_GAP;
+  }
+
   private updateMob(mob: Entity): void {
     if (mob.dead) {
+      if (mob.ownerId !== null && MOBS[mob.templateId]?.family !== 'demon') return;
       mob.corpseTimer -= DT;
       mob.respawnTimer -= DT;
+      // a slain summoned demon unravels rather than respawning into the wild
+      if (mob.ownerId !== null && MOBS[mob.templateId]?.family === 'demon') {
+        if (mob.corpseTimer <= 0) this.despawnPet(mob);
+        return;
+      }
       // dungeon mobs stay dead until the instance resets
       const isInstanceMob = mob.spawnPos.x > DUNGEON_X_THRESHOLD;
       if (!isInstanceMob && mob.respawnTimer <= 0 && (mob.corpseTimer <= 0 || !mob.lootable)) {
@@ -2972,6 +3772,7 @@ export class Sim {
     if (mob.inCombat) this.updateBossMechanics(mob);
 
     if (this.isStunned(mob)) {
+      if (this.updateFearMovement(mob)) return;
       if (mob.auras.some((a) => a.kind === 'polymorph')) {
         mob.wanderTimer -= DT;
         if (mob.wanderTimer <= 0) {
@@ -2989,15 +3790,20 @@ export class Sim {
     switch (mob.aiState) {
       case 'idle': {
         const template = MOBS[mob.templateId];
-        const nearest = this.nearestLivingPlayer(mob.pos, 25);
-        if (nearest) {
-          let radius = Math.max(4, Math.min(20, template.aggroRadius + (mob.level - nearest.e.level) * 1.5));
+        let detected: Entity | null = null;
+        let detectedD = Infinity;
+        this.playerGrid.forEachInRadius(mob.pos.x, mob.pos.z, 25, (e, d2) => {
+          if (e.dead) return;
+          if (this.isTrivialTo(mob, e)) return;
+          let radius = Math.max(4, Math.min(20, template.aggroRadius + (mob.level - e.level) * 1.5));
           // stealthed rogues are harder to detect, relative to observer level
-          if (nearest.e.auras.some((a) => a.kind === 'stealth')) radius = stealthDetectionRadius(mob, nearest.e, radius);
-          if (nearest.d < radius) {
-            this.aggroMob(mob, nearest.e, true);
-            break;
-          }
+          if (e.auras.some((a) => a.kind === 'stealth')) radius = stealthDetectionRadius(mob, e, radius);
+          const d = Math.sqrt(d2);
+          if (d < radius && d < detectedD) { detected = e; detectedD = d; }
+        });
+        if (detected) {
+          this.aggroMob(mob, detected, true);
+          break;
         }
         mob.wanderTimer -= DT;
         if (mob.wanderTimer <= 0) {
@@ -3027,6 +3833,7 @@ export class Sim {
           this.retargetMob(mob);
           break;
         }
+        if (this.maybeFlee(mob, target)) break;
         const leash = mob.spawnPos.x > DUNGEON_X_THRESHOLD ? DUNGEON_LEASH_DISTANCE : LEASH_DISTANCE;
         const leashAnchor = mob.leashAnchor ?? mob.spawnPos;
         if (dist2d(mob.pos, leashAnchor) > leash) {
@@ -3050,6 +3857,7 @@ export class Sim {
         this.updateMobTarget(mob);
         const target = mob.aggroTargetId !== null ? this.entities.get(mob.aggroTargetId) : null;
         if (!target || target.dead) { this.retargetMob(mob); break; }
+        if (this.maybeFlee(mob, target)) break;
         const d = dist2d(mob.pos, target.pos);
         if (d > MELEE_RANGE) { mob.aiState = 'chase'; break; }
         mob.facing = angleTo(mob.pos, target.pos);
@@ -3074,6 +3882,64 @@ export class Sim {
               }
             }
           }
+        }
+        // Boss/miniboss War Stomp: a periodic ground slam that stuns (and
+        // optionally damages) nearby players. Telegraphed via createMob, which
+        // seeds stompTimer to one full interval so the first slam never lands
+        // the instant combat opens.
+        const stomp = MOBS[mob.templateId]?.stomp;
+        if (stomp) {
+          mob.stompTimer -= DT;
+          if (mob.stompTimer <= 0) {
+            mob.stompTimer = stomp.every;
+            const school = stomp.school ?? 'physical';
+            this.emit({ type: 'spellfx', sourceId: mob.id, targetId: mob.id, school, fx: 'nova' });
+            this.emit({ type: 'log', text: `${mob.name} unleashes ${stomp.name}!`, color: '#ff9933', entityId: mob.id });
+            for (const meta of this.players.values()) {
+              const pe = this.entities.get(meta.entityId);
+              if (!pe || pe.dead || dist2d(pe.pos, mob.pos) > stomp.radius) continue;
+              if (stomp.min !== undefined && stomp.max !== undefined) {
+                const dmg = Math.round(this.rng.range(stomp.min, stomp.max));
+                this.dealDamage(mob, pe, dmg, false, school, stomp.name, 'hit', true);
+              }
+              if (pe.dead) continue; // a fatal slam shouldn't also stun the corpse
+              this.applyAura(pe, {
+                id: 'stomp_stun', name: stomp.name, kind: 'stun',
+                remaining: stomp.duration, duration: stomp.duration, value: 0,
+                sourceId: mob.id, school: school as Aura['school'],
+              });
+            }
+          }
+        }
+        break;
+      }
+      case 'flee': {
+        const target = mob.aggroTargetId !== null ? this.entities.get(mob.aggroTargetId) : null;
+        if (!target || target.dead) { this.retargetMob(mob); break; }
+        // Outran the leash while panicking: drop the pull and reset home.
+        const leash = mob.spawnPos.x > DUNGEON_X_THRESHOLD ? DUNGEON_LEASH_DISTANCE : LEASH_DISTANCE;
+        const leashAnchor = mob.leashAnchor ?? mob.spawnPos;
+        if (dist2d(mob.pos, leashAnchor) > leash) {
+          mob.aiState = 'evade';
+          mob.aggroTargetId = null;
+          clearThreat(mob);
+          mob.leashAnchor = null;
+          break;
+        }
+        mob.fleeTimer -= DT;
+        if (mob.fleeTimer <= 0) {
+          // Recover nerve and turn to fight again; hasFled keeps it from re-fleeing.
+          mob.aiState = 'attack';
+          mob.swingTimer = Math.min(mob.swingTimer, 0.4);
+          break;
+        }
+        // Run directly away from the attacker. A root pins it in place (it just
+        // cowers facing away); a stun is already handled by the early return above.
+        const away = angleTo(target.pos, mob.pos);
+        mob.facing = away;
+        if (!this.isRooted(mob)) {
+          const fleePos = this.groundPos(mob.pos.x + Math.sin(away) * 10, mob.pos.z + Math.cos(away) * 10);
+          this.moveToward(mob, fleePos, mob.moveSpeed * FLEE_SPEED_MULT * this.moveSpeedMult(mob));
         }
         break;
       }
@@ -3111,11 +3977,53 @@ export class Sim {
     mob.tappedById = null;
     mob.leashAnchor = null;
     mob.evadeStall = 0;
+    mob.fleeTimer = 0;
+    mob.hasFled = false;
     clearThreat(mob);
     this.despawnSummonedAdds(mob);
     mob.firedSummons = 0;
     mob.enraged = false;
+    mob.healedThisPull = false;
+    mob.stompTimer = MOBS[mob.templateId]?.stomp?.every ?? 0;
     mob.wanderTimer = this.rng.range(2, 8);
+  }
+
+  // Cowardly mobs panic once per pull at low HP: turn and run from the attacker
+  // for a few seconds, rallying nearby same-family allies. Returns true if the mob
+  // entered (or is already in) the flee state so the caller can stop its turn.
+  private canFlee(mob: Entity): boolean {
+    if (mob.hasFled || mob.enraged) return false;
+    const tmpl = MOBS[mob.templateId];
+    if (!tmpl || tmpl.boss || tmpl.elite || tmpl.rare) return false;
+    return FLEEING_FAMILIES.has(tmpl.family);
+  }
+
+  private maybeFlee(mob: Entity, target: Entity): boolean {
+    if (mob.maxHp <= 0 || mob.hp / mob.maxHp > FLEE_HP_THRESHOLD) return false;
+    if (!this.canFlee(mob)) return false;
+    mob.aiState = 'flee';
+    mob.hasFled = true;
+    mob.fleeTimer = FLEE_DURATION;
+    this.emit({ type: 'log', text: `${mob.name} attempts to flee!`, color: '#ffd966', entityId: mob.id });
+    this.callForHelp(mob, target);
+    return true;
+  }
+
+  // A fleeing mob shouts for aid: nearby idle same-family mobs join the fight,
+  // mirroring the social-pull seeding in aggroMob.
+  private callForHelp(mob: Entity, target: Entity): void {
+    const family = MOBS[mob.templateId]?.family;
+    if (!family) return;
+    this.grid.forEachInRadius(mob.pos.x, mob.pos.z, FLEE_HELP_RADIUS, (m, d2) => {
+      if (m.kind === 'mob' && m.id !== mob.id && !m.dead && m.hostile && m.aiState === 'idle' && m.ownerId === null
+        && MOBS[m.templateId]?.family === family && d2 < FLEE_HELP_RADIUS * FLEE_HELP_RADIUS) {
+        m.aiState = 'chase';
+        m.aggroTargetId = target.id;
+        m.inCombat = true;
+        m.leashAnchor = { ...m.pos };
+        addThreat(m, target.id, 1);
+      }
+    });
   }
 
   private mobSwing(mob: Entity, target: Entity): void {
@@ -3135,8 +4043,41 @@ export class Sim {
     if (crit) dmg *= 2;
     const enrage = MOBS[mob.templateId]?.enrage;
     if (mob.enraged && enrage) dmg *= enrage.dmgMult;
+    const rawDmg = dmg; // pre-armor, post-crit/enrage — basis for cleave splash
     dmg *= 1 - armorReduction(this.effectiveArmor(target), mob.level);
     this.dealDamage(mob, target, Math.max(1, Math.round(dmg)), crit, 'physical', null, 'hit');
+    // Cleave: the swing splashes onto other players standing near the primary
+    // target, each taking the hit reduced by their own armor. Hostile mobs only,
+    // so a friendly pet swinging through mobSwing never cleaves its owner's party.
+    const cleave = MOBS[mob.templateId]?.cleave;
+    if (cleave && mob.hostile && !mob.dead) {
+      for (const meta of this.players.values()) {
+        const pe = this.entities.get(meta.entityId);
+        if (!pe || pe.dead || pe.id === target.id) continue;
+        if (dist2d(pe.pos, target.pos) > cleave.radius) continue;
+        let sd = rawDmg * cleave.mult;
+        sd *= 1 - armorReduction(this.effectiveArmor(pe), mob.level);
+        this.dealDamage(mob, pe, Math.max(1, Math.round(sd)), crit, 'physical', cleave.name ?? 'Cleave', 'hit', true);
+      }
+    }
+    // venom: a landed swing may inflict a refreshing poison DoT (hostile mobs only,
+    // never a friendly pet — mobSwing is also the pet attack path).
+    const venom = MOBS[mob.templateId]?.venom;
+    if (venom && mob.hostile && !target.dead && this.rng.chance(venom.chance)) {
+      this.applyAura(target, {
+        id: 'venom_' + mob.templateId, name: venom.name, kind: 'dot',
+        remaining: venom.duration, duration: venom.duration,
+        value: Math.max(1, Math.round(venom.perTick)),
+        tickInterval: venom.interval, tickTimer: venom.interval,
+        sourceId: mob.id, school: (venom.school as Aura['school']) ?? 'nature',
+      });
+    }
+    // corrosive bite: a landed hit may shred the victim's armor (stacking sunder).
+    // Guarded on hostile so a friendly pet (the other mobSwing caller) never debuffs an ally.
+    const corrode = MOBS[mob.templateId]?.corrode;
+    if (corrode && mob.hostile && !target.dead && this.rng.chance(corrode.chance)) {
+      this.applyCorrosion(mob, target, corrode);
+    }
     // thorns / lightning shield on the defender
     if (!mob.dead) {
       for (const a of target.auras) {
@@ -3144,6 +4085,43 @@ export class Sim {
           this.dealDamage(target, mob, a.value, false, a.school, a.name, 'hit', true);
         }
       }
+    }
+    // Mortal Strike: a landed hit can leave a healing-reduction debuff. Guarded on
+    // `hostile` so a friendly pet (mobSwing's other caller) never debuffs the party.
+    const ms = MOBS[mob.templateId]?.mortalStrike;
+    if (ms && mob.hostile && !target.dead && this.rng.chance(ms.chance)) {
+      this.applyAura(target, {
+        id: `mortal_wound_${mob.templateId}`,
+        name: ms.name,
+        kind: 'mortal_wound',
+        remaining: ms.duration,
+        duration: ms.duration,
+        value: ms.healReduction,
+        sourceId: mob.id,
+        school: (ms.school as Aura['school']) ?? 'physical',
+      });
+    }
+  }
+
+  // Apply (or refresh + stack) a corrosive armor-shred debuff on the victim.
+  // Mirrors the warrior Sunder Armor stacking: one shared `sunder` slot found by
+  // kind, bumped up to `maxStacks`, with its timer fully refreshed each application.
+  // effectiveArmor() already subtracts value*stacks, so the victim takes more
+  // physical damage from every attacker until it expires.
+  private applyCorrosion(mob: Entity, target: Entity, corrode: NonNullable<MobTemplate['corrode']>): void {
+    const existing = target.auras.find((a) => a.kind === 'sunder');
+    if (existing) {
+      existing.stacks = Math.min(corrode.maxStacks, (existing.stacks ?? 1) + 1);
+      existing.value = corrode.armor;
+      existing.remaining = existing.duration;
+      this.emit({ type: 'aura', targetId: target.id, name: corrode.name, gained: true });
+    } else {
+      this.applyAura(target, {
+        id: `corrode_${mob.templateId}`, name: corrode.name, kind: 'sunder',
+        remaining: corrode.duration, duration: corrode.duration,
+        value: corrode.armor, stacks: 1,
+        sourceId: mob.id, school: corrode.school ?? 'nature',
+      });
     }
   }
 
@@ -3153,33 +4131,47 @@ export class Sim {
   private updatePet(pet: Entity): void {
     const owner = pet.ownerId !== null ? this.entities.get(pet.ownerId) : null;
     if (!owner || owner.kind !== 'player' || !this.players.has(owner.id)) {
-      this.releasePetToWild(pet);
+      this.despawnPersistentPet(pet);
       return;
     }
     if (this.isStunned(pet)) return;
+    this.syncPetAspect(pet, owner);
     pet.petTauntTimer = Math.max(0, pet.petTauntTimer - DT);
+    if (!pet.inCombat && this.tickCount % 40 === 0 && pet.hp < pet.maxHp) {
+      pet.hp = Math.min(pet.maxHp, pet.hp + Math.max(1, Math.round(pet.maxHp * 0.02)));
+    }
 
     let target = pet.aggroTargetId !== null ? this.entities.get(pet.aggroTargetId) ?? null : null;
-    if (target && (target.dead || target.kind !== 'mob' || !target.hostile)) target = null;
+    if (target && (target.dead || !this.isHostileTo(pet, target))) target = null;
     if (target && dist2d(owner.pos, pet.pos) > PET_LEASH) target = null;
     if (!target && !owner.dead) target = this.petPickTarget(pet, owner);
     pet.aggroTargetId = target?.id ?? null;
     pet.inCombat = target !== null;
 
     if (target) {
+      // ranged demon (imp) holds its distance and hurls bolts; melee pets close
+      // in, taunt to hold threat (voidwalker tank), and swing
+      const ranged = MOBS[pet.templateId]?.petRanged;
+      const template = MOBS[pet.templateId];
+      if (!ranged && template?.petRole === 'ranged_dps' && template.petSpell) {
+        this.updateRangedPetAttack(pet, target, template.petSpell);
+        return;
+      }
+      const reach = ranged ? ranged.range : MELEE_RANGE * 0.8;
       const d = dist2d(pet.pos, target.pos);
-      if (d > MELEE_RANGE * 0.8) {
+      if (d > reach) {
         if (!this.isRooted(pet)) this.moveToward(pet, target.pos, pet.moveSpeed * this.moveSpeedMult(pet));
         pet.swingTimer = Math.max(0, pet.swingTimer - DT);
       } else {
         pet.facing = angleTo(pet.pos, target.pos);
-        if (pet.petTauntTimer <= 0) {
+        if (target.kind === 'mob' && !ranged && pet.petTauntTimer <= 0) {
           this.applyTaunt(pet, target);
           pet.petTauntTimer = PET_GROWL_INTERVAL;
         }
         pet.swingTimer -= DT;
         if (pet.swingTimer <= 0) {
-          this.mobSwing(pet, target);
+          if (ranged) this.petRangedAttack(pet, target, ranged);
+          else this.mobSwing(pet, target);
           pet.swingTimer = pet.weapon.speed * this.swingIntervalMult(pet);
         }
       }
@@ -3201,14 +4193,52 @@ export class Sim {
     }
   }
 
+  /** A ranged demon pet (imp) hurls a spell-school bolt: a telegraphed
+   *  projectile that bypasses armor, mirroring the player caster path. Damage
+   *  comes from the mob's weapon range + AP, exactly like its melee siblings. */
+  private petRangedAttack(pet: Entity, target: Entity, ranged: { range: number; school: Aura['school'] }): void {
+    this.emit({ type: 'spellfx', sourceId: pet.id, targetId: target.id, school: ranged.school, fx: 'projectile' });
+    const crit = this.rng.chance(0.05);
+    let dmg = this.rng.range(pet.weapon.min, pet.weapon.max) + (this.effectiveAttackPower(pet) / 14) * pet.weapon.speed;
+    if (crit) dmg *= 2;
+    this.dealDamage(pet, target, Math.max(1, Math.round(dmg)), crit, ranged.school, null, 'hit');
+  }
+
+  private updateRangedPetAttack(
+    pet: Entity,
+    target: Entity,
+    spell: { name: string; school: 'physical' | 'fire' | 'frost' | 'arcane' | 'shadow' | 'holy' | 'nature'; min: number; max: number; range: number; every: number },
+  ): void {
+    const d = dist2d(pet.pos, target.pos);
+    if (d > spell.range) {
+      if (!this.isRooted(pet)) this.moveToward(pet, target.pos, pet.moveSpeed * this.moveSpeedMult(pet));
+      pet.swingTimer = Math.max(0, pet.swingTimer - DT);
+      return;
+    }
+    pet.facing = angleTo(pet.pos, target.pos);
+    pet.swingTimer -= DT;
+    if (pet.swingTimer > 0) return;
+    this.emit({ type: 'spellfx', sourceId: pet.id, targetId: target.id, school: spell.school, fx: 'projectile' });
+    if (!this.rng.chance(spellHitChance(pet.level, target.level))) {
+      this.emit({ type: 'damage', sourceId: pet.id, targetId: target.id, amount: 0, crit: false, school: spell.school, ability: spell.name, kind: 'miss' });
+      this.enterCombat(pet, target);
+    } else {
+      const dmg = Math.round(this.rng.range(spell.min + pet.level * 0.8, spell.max + pet.level * 1.1));
+      this.dealDamage(pet, target, Math.max(1, dmg), false, spell.school, spell.name, 'hit');
+    }
+    pet.swingTimer = spell.every;
+  }
+
   private petPickTarget(pet: Entity, owner: Entity): Entity | null {
+    if (pet.petMode === 'passive') return null;
     let best: Entity | null = null;
-    let bestD = PET_ASSIST_RANGE;
+    let bestD = pet.petMode === 'aggressive' ? PET_AGGRESSIVE_RANGE : PET_ASSIST_RANGE;
     for (const m of this.entities.values()) {
-      if (m.kind !== 'mob' || m.dead || !m.hostile || m.ownerId !== null) continue;
-      const engagingUs = m.aggroTargetId === owner.id || m.aggroTargetId === pet.id;
-      const ownerOffense = owner.targetId === m.id && (owner.autoAttack || m.threat.has(owner.id));
-      if (!engagingUs && !ownerOffense) continue;
+      if (m.id === pet.id || m.dead || !this.isHostileTo(pet, m)) continue;
+      const engagingUs = m.kind === 'mob' && (m.aggroTargetId === owner.id || m.aggroTargetId === pet.id);
+      const ownerOffense = owner.targetId === m.id && (owner.autoAttack || (m.kind === 'mob' && m.threat.has(owner.id)));
+      const aggressive = pet.petMode === 'aggressive' && dist2d(pet.pos, m.pos) <= PET_AGGRESSIVE_RANGE;
+      if (!engagingUs && !ownerOffense && !aggressive) continue;
       const d = dist2d(pet.pos, m.pos);
       if (d < bestD) { best = m; bestD = d; }
     }
@@ -3216,32 +4246,46 @@ export class Sim {
   }
 
   // Step `e` one tick toward `dest`. With `ignoreObstacles`, the mover phases
-  // straight through props and water — used to free a stuck evader, never for
-  // normal locomotion. Returns true on arrival.
+  // straight through props — used to free a stuck evader, never for normal
+  // locomotion. Returns true on arrival.
   private moveToward(e: Entity, dest: Vec3, speed: number, ignoreObstacles = false): boolean {
     const d = dist2d(e.pos, dest);
     if (d < 0.3) return true;
-    e.facing = angleTo(e.pos, dest);
+    const desired = angleTo(e.pos, dest);
+    e.facing = desired;
     const step = Math.min(speed * DT, d);
-    const nx = e.pos.x + Math.sin(e.facing) * step;
-    const nz = e.pos.z + Math.cos(e.facing) * step;
     const canSwim = this.mobCanSwim(MOBS[e.templateId]);
+
     if (ignoreObstacles) {
+      const nx = e.pos.x + Math.sin(desired) * step;
+      const nz = e.pos.z + Math.cos(desired) * step;
       e.pos.x = nx;
       e.pos.z = nz;
       const g = groundHeight(nx, nz, this.cfg.seed);
       e.pos.y = Math.max(g, SWIM_SURFACE_Y); // ride the surface while phasing, don't sink under terrain/water
       return d - step < 0.3;
     }
-    const ground = groundHeight(nx, nz, this.cfg.seed);
-    // landlocked creatures stop at the waterline instead of walking under it
-    if (!canSwim && ground < WATER_LEVEL - SWIM_DEPTH) return false;
-    const resolved = resolvePosition(this.cfg.seed, nx, nz, BODY_RADIUS);
-    e.pos.x = resolved.x;
-    e.pos.z = resolved.z;
-    const g = groundHeight(e.pos.x, e.pos.z, this.cfg.seed);
+    // Mobs have no nav mesh. Try the straight path first; only if a prop or the
+    // waterline eats it do we fan the heading out and take the best slide AROUND
+    // the obstacle. That lets a mob round the camp props to reach its target
+    // instead of pinning on them. Open-ground movers take the first branch.
+    let bestX = e.pos.x, bestZ = e.pos.z, bestProgress = 1e-3;
+    for (const off of MOVE_SLIDE_FAN) {
+      const a = desired + off;
+      const nx = e.pos.x + Math.sin(a) * step;
+      const nz = e.pos.z + Math.cos(a) * step;
+      // landlocked creatures stop at the waterline instead of walking under it
+      if (!canSwim && groundHeight(nx, nz, this.cfg.seed) < WATER_LEVEL - SWIM_DEPTH) continue;
+      const r = resolvePosition(this.cfg.seed, nx, nz, BODY_RADIUS);
+      const progress = d - Math.hypot(r.x - dest.x, r.z - dest.z);
+      if (progress > bestProgress) { bestProgress = progress; bestX = r.x; bestZ = r.z; }
+      if (off === 0 && progress >= step - 1e-3) break; // straight path is clear
+    }
+    e.pos.x = bestX;
+    e.pos.z = bestZ;
+    const g = groundHeight(bestX, bestZ, this.cfg.seed);
     e.pos.y = canSwim && g < WATER_LEVEL - SWIM_DEPTH ? SWIM_SURFACE_Y : g;
-    return d - step < 0.3;
+    return dist2d(e.pos, dest) < 0.3;
   }
 
   // Would a normal (collision- and water-aware) step toward `dest` be blocked —
@@ -3261,13 +4305,17 @@ export class Sim {
   }
 
   private respawnMob(mob: Entity): void {
+    if (mob.ownerId !== null) {
+      this.despawnPersistentPet(mob);
+      return;
+    }
     this.clearNonPlayerStatAuras(mob);
     mob.dead = false;
     mob.lootable = false;
     mob.loot = null;
     mob.tappedById = null;
-    mob.ownerId = null; // a dead pet returns to the wild at its old camp
-    mob.hostile = true; // ...and is wild again: a tamed beast must not respawn neutral
+    mob.ownerId = null;
+    mob.hostile = true;
     mob.pos = { ...mob.spawnPos };
     mob.pos.y = groundHeight(mob.pos.x, mob.pos.z, this.cfg.seed);
     mob.prevPos = { ...mob.pos };
@@ -3283,6 +4331,8 @@ export class Sim {
     this.despawnSummonedAdds(mob);
     mob.firedSummons = 0;
     mob.enraged = false;
+    mob.healedThisPull = false;
+    mob.stompTimer = MOBS[mob.templateId]?.stomp?.every ?? 0;
     mob.wanderTimer = this.rng.range(2, 8);
     for (const meta of this.players.values()) {
       const e = this.entities.get(meta.entityId);
@@ -3307,12 +4357,46 @@ export class Sim {
     boss.summonedIds = [];
   }
 
+  // Classic beast "Frenzy": when a mob carrying the packFrenzy trait dies, the
+  // surviving same-family hostile mobs nearby briefly attack faster. Modelled as
+  // a refreshable buff_haste aura, so it rides the normal aura tick (expires on
+  // its own) and the existing snapshot wire — no new Entity field is needed.
+  private frenzyPackmates(dead: Entity): void {
+    const fr = MOBS[dead.templateId]?.packFrenzy;
+    if (!fr) return;
+    const r2 = fr.radius * fr.radius;
+    this.grid.forEachInRadius(dead.pos.x, dead.pos.z, fr.radius, (m, d2) => {
+      if (m.id === dead.id || m.kind !== 'mob' || m.dead || m.aiState === 'dead') return;
+      if (!m.hostile || m.ownerId !== null || d2 > r2) return;
+      // packmates = same creature type (a wolf pack), matching the social-aggro convention
+      if (m.templateId !== dead.templateId) return;
+      const existing = m.auras.find((a) => a.id === PACK_FRENZY_AURA_ID);
+      if (existing) {
+        existing.remaining = fr.duration; // refresh on each further loss; don't stack
+        return;
+      }
+      m.auras.push({
+        id: PACK_FRENZY_AURA_ID,
+        name: 'Pack Frenzy',
+        kind: 'buff_haste',
+        remaining: fr.duration,
+        duration: fr.duration,
+        value: fr.hasteMult,
+        sourceId: m.id,
+        school: 'physical',
+      });
+      this.emit({ type: 'aura', targetId: m.id, name: 'Pack Frenzy', gained: true });
+      this.emit({ type: 'log', text: `${m.name} flies into a frenzy!`, color: '#ff8c00', entityId: m.id });
+      this.emit({ type: 'spellfx', sourceId: m.id, targetId: m.id, school: 'physical', fx: 'nova' });
+    });
+  }
+
   // Boss threshold mechanics: add waves (summonAdds) and enrage. Checked
   // every tick while the boss is in combat; thresholds fire once per pull
   // and reset on evade/respawn.
   private updateBossMechanics(mob: Entity): void {
     const tmpl = MOBS[mob.templateId];
-    if (!tmpl || (!tmpl.summonAdds && !tmpl.enrage)) return;
+    if (!tmpl || (!tmpl.summonAdds && !tmpl.enrage && !tmpl.desperateHeal)) return;
     const hpFrac = mob.hp / Math.max(1, mob.maxHp);
     if (tmpl.summonAdds) {
       const thresholds = tmpl.summonAdds.atHpPct;
@@ -3326,6 +4410,16 @@ export class Sim {
       this.emit({ type: 'aura', targetId: mob.id, name: 'Enrage', gained: true });
       this.emit({ type: 'log', text: `${mob.name} becomes enraged!`, color: '#ff6666', entityId: mob.id });
       this.emit({ type: 'spellfx', sourceId: mob.id, targetId: mob.id, school: 'fire', fx: 'nova' });
+    }
+    if (tmpl.desperateHeal && !mob.healedThisPull && hpFrac <= tmpl.desperateHeal.belowHpPct) {
+      mob.healedThisPull = true;
+      const heal = Math.min(mob.maxHp - mob.hp, Math.round(mob.maxHp * tmpl.desperateHeal.healPct));
+      if (heal > 0) {
+        mob.hp += heal;
+        this.emit({ type: 'heal', targetId: mob.id, amount: heal });
+        this.emit({ type: 'log', text: `${mob.name} draws on a desperate second wind!`, color: '#66ff99', entityId: mob.id });
+        this.emit({ type: 'spellfx', sourceId: mob.id, targetId: mob.id, school: 'nature', fx: 'nova' });
+      }
     }
   }
 
@@ -3363,6 +4457,8 @@ export class Sim {
     const r = this.resolve(pid);
     if (!r) return;
     const p = r.e;
+    // switching to a different target ends a follow (re-targeting is manual intent)
+    if (p.followTargetId !== null && id !== p.followTargetId) this.stopFollow(p, 'You stop following.');
     if (id === null) { p.targetId = null; p.autoAttack = false; return; }
     const e = this.entities.get(id);
     if (!e || (e.dead && !e.lootable)) return;
@@ -3397,6 +4493,43 @@ export class Sim {
       if (d2 < bestD2) { bestD2 = d2; best = e; }
     });
     if (best) p.targetId = (best as Entity).id;
+  }
+
+  // Nearby allies a beneficial spell can land on: other players (and friendly
+  // pets) within range, never yourself, never dead/hostile. Mirrors the enemy
+  // targeting helpers so heals/buffs are reachable by keyboard, not just by
+  // clicking party frames or world models (#133).
+  private friendlyCandidates(p: Entity): { e: Entity; d: number }[] {
+    const out: { e: Entity; d: number }[] = [];
+    this.grid.forEachInRadius(p.pos.x, p.pos.z, 40, (e, d2) => {
+      if (e.id === p.id || e.dead || !this.isFriendlyTo(p, e)) return;
+      out.push({ e, d: Math.sqrt(d2) });
+    });
+    return out;
+  }
+
+  targetNearestFriendly(pid?: number): void {
+    const r = this.resolve(pid);
+    if (!r) return;
+    const p = r.e;
+    let best: Entity | null = null;
+    let bestD = Infinity;
+    for (const c of this.friendlyCandidates(p)) {
+      if (c.d < bestD) { bestD = c.d; best = c.e; }
+    }
+    if (best) p.targetId = best.id;
+  }
+
+  friendlyTabTarget(pid?: number): void {
+    const r = this.resolve(pid);
+    if (!r) return;
+    const p = r.e;
+    const candidates = this.friendlyCandidates(p);
+    if (candidates.length === 0) return;
+    candidates.sort((a, b) => a.d - b.d);
+    const curIdx = candidates.findIndex((c) => c.e.id === p.targetId);
+    const next = candidates[(curIdx + 1) % candidates.length];
+    p.targetId = next.e.id;
   }
 
   // -------------------------------------------------------------------------
@@ -3554,7 +4687,7 @@ export class Sim {
       this.removeItem(itemId, 1, meta.entityId);
       p.potionCooldownUntil = this.time + POTION_COOLDOWN;
       if (restoresHp) {
-        const heal = Math.min(def.potionHp!, p.maxHp - p.hp);
+        const heal = Math.min(Math.round(def.potionHp! * this.healingTakenMult(p)), p.maxHp - p.hp);
         p.hp += heal;
         this.emit({ type: 'heal', targetId: p.id, amount: heal });
       }
@@ -3672,16 +4805,17 @@ export class Sim {
     const { meta, e: p } = r;
     const mob = this.entities.get(mobId);
     if (!mob || !mob.lootable || !mob.loot) return;
-    if (mob.tappedById !== null && mob.tappedById !== meta.entityId) {
-      // party members of the tapper share loot rights
-      const tapperParty = this.partyOf(mob.tappedById);
-      if (!tapperParty || !tapperParty.members.includes(meta.entityId)) {
-        this.error(meta.entityId, "You don't have permission to loot that.");
-        return;
-      }
+    const tapperParty = mob.tappedById !== null ? this.partyOf(mob.tappedById) : null;
+    const hasSharedLootRights = mob.tappedById === null
+      || mob.tappedById === meta.entityId
+      || !!tapperParty?.members.includes(meta.entityId);
+    const hasPersonalLoot = mob.loot.items.some((s) => s.personalFor?.includes(meta.entityId));
+    if (!hasSharedLootRights && !hasPersonalLoot) {
+      this.error(meta.entityId, "You don't have permission to loot that.");
+      return;
     }
     if (dist2d(p.pos, mob.pos) > INTERACT_RANGE) { this.error(meta.entityId, 'Too far away.'); return; }
-    if (mob.loot.copper > 0) {
+    if (hasSharedLootRights && mob.loot.copper > 0) {
       meta.copper += mob.loot.copper;
       meta.counters.lootCopper += mob.loot.copper;
       this.emit({ type: 'loot', text: `You loot ${formatMoney(mob.loot.copper)}.`, pid: meta.entityId });
@@ -3694,6 +4828,7 @@ export class Sim {
         s.personalFor = s.personalFor.filter((id) => id !== meta.entityId);
         continue;
       }
+      if (!hasSharedLootRights) continue;
       for (let i = 0; i < s.count; i++) {
         if (!this.rollGroupLoot(s.itemId, mob, meta)) this.addItem(s.itemId, 1, meta.entityId);
       }
@@ -3713,11 +4848,14 @@ export class Sim {
     const def = ITEMS[obj.objectItemId];
     if (def?.questId) {
       const qp = meta.questLog.get(def.questId);
-      if (!qp || qp.state !== 'active') { this.error(meta.entityId, 'It is nailed shut.'); return; }
+      if (!qp || (qp.state !== 'active' && qp.state !== 'ready')) {
+        this.error(meta.entityId, def.pickupDeny ?? `You cannot take the ${def.name} yet.`);
+        return;
+      }
       const quest = QUESTS[def.questId];
       const objIdx = quest.objectives.findIndex((o) => o.type === 'collect' && o.itemId === obj.objectItemId);
       if (objIdx >= 0 && this.countItem(obj.objectItemId, meta.entityId) >= quest.objectives[objIdx].count) {
-        this.error(meta.entityId, 'You have enough of those.');
+        this.error(meta.entityId, def.pickupEnough ?? 'You have enough of those.');
         return;
       }
     }
@@ -3946,6 +5084,82 @@ export class Sim {
     return true;
   }
 
+  // Dev chat cheats — only when Sim.devCommands is enabled (offline local play
+  // or online server with ALLOW_DEV_COMMANDS=1). Returns null when handled
+  // (no channel message), or undefined when not a dev command.
+  private handleDevChat(raw: string, pid: number): SentChat | null | undefined {
+    const levelM = /^\/(?:dev\s+level|devlevel)\s+(\d+)\s*$/i.exec(raw);
+    if (levelM) {
+      const level = Number(levelM[1]);
+      this.setPlayerLevel(level, pid);
+      this.emit({ type: 'log', text: `[dev] Level set to ${Math.max(1, Math.min(MAX_LEVEL, level))}.`, pid });
+      return null;
+    }
+    const tpM = /^\/(?:dev\s+tp|devtp)\s+(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s*$/i.exec(raw);
+    if (tpM) {
+      const e = this.entities.get(pid);
+      if (e) {
+        const p = this.groundPos(Number(tpM[1]), Number(tpM[2]));
+        e.pos = p;
+        e.prevPos = { ...p };
+        this.grid.update(e);
+        this.playerGrid.update(e);
+        this.emit({ type: 'log', text: `[dev] Teleported to ${p.x.toFixed(1)}, ${p.z.toFixed(1)}.`, pid });
+      }
+      return null;
+    }
+    const giveM = /^\/(?:dev\s+give|devgive)\s+(\S+)(?:\s+(\d+))?\s*$/i.exec(raw);
+    if (giveM) {
+      const itemId = giveM[1];
+      const count = Math.max(1, Math.min(20, Number(giveM[2] ?? 1)));
+      if (!ITEMS[itemId]) {
+        this.error(pid, `[dev] Unknown item '${itemId}'.`);
+        return null;
+      }
+      this.addItem(itemId, count, pid);
+      return null;
+    }
+    if (/^\/dev(?:\s|$)/i.test(raw)) {
+      this.error(pid, 'Dev commands: /dev level N, /dev tp X Z, /dev give itemId [count]');
+      return null;
+    }
+    return undefined;
+  }
+
+  private whisperMessageForName(rest: string, name: string, exactCase: boolean): string | null {
+    const input = exactCase ? rest : rest.toLowerCase();
+    const prefix = exactCase ? name : name.toLowerCase();
+    if (!input.startsWith(prefix)) return null;
+    const next = rest.charAt(name.length);
+    if (!next || !/\s/.test(next)) return null;
+    const message = rest.slice(name.length).trim();
+    return message ? message : null;
+  }
+
+  private resolveWhisperTarget(rest: string): { target: PlayerMeta; message: string } | { error: string } | null {
+    const trimmed = rest.trim();
+    if (!trimmed) return null;
+    const matches: { target: PlayerMeta; message: string; exactCase: boolean }[] = [];
+    for (const target of this.players.values()) {
+      const exactMessage = this.whisperMessageForName(trimmed, target.name, true);
+      if (exactMessage !== null) {
+        matches.push({ target, message: exactMessage, exactCase: true });
+        continue;
+      }
+      const insensitiveMessage = this.whisperMessageForName(trimmed, target.name, false);
+      if (insensitiveMessage !== null) matches.push({ target, message: insensitiveMessage, exactCase: false });
+    }
+    matches.sort((a, b) => b.target.name.length - a.target.name.length);
+    const longestLength = matches[0]?.target.name.length ?? 0;
+    const longest = matches.filter((m) => m.target.name.length === longestLength);
+    const exact = longest.filter((m) => m.exactCase);
+    if (exact.length > 0) return exact[0];
+    if (longest.length === 1) return longest[0];
+    const typedName = trimmed.split(/\s+/, 1)[0] ?? trimmed;
+    if (longest.length > 1) return { error: `Several players match '${typedName}'. Use exact capitalization.` };
+    return { error: `There is no player named '${typedName}' online.` };
+  }
+
   chat(text: string, pid?: number): SentChat | null {
     const r = this.resolve(pid);
     if (!r) return null;
@@ -3956,20 +5170,106 @@ export class Sim {
       return null;
     }
 
+    // "/afk [message]" / "/dnd [message]" — set a presence status. Repeating
+    // the same command with no message toggles it off. While away, anyone who
+    // whispers you gets an auto-reply; /dnd also withholds the whisper itself.
+    const awaym = /^\/(afk|dnd)(?:\s+([\s\S]+))?$/i.exec(raw);
+    if (awaym) {
+      const mode = awaym[1].toLowerCase() as AwayStatus['mode'];
+      const custom = awaym[2]?.trim();
+      if (r.meta.away?.mode === mode && !custom) {
+        r.meta.away = null;
+        this.emit({ type: 'log', text: mode === 'afk' ? 'You are no longer Away From Keyboard.' : 'You have left Do Not Disturb mode.', color: '#ffd100', pid: r.meta.entityId });
+      } else {
+        const message = custom || (mode === 'afk' ? 'Away From Keyboard' : 'Do Not Disturb');
+        r.meta.away = { mode, message };
+        this.emit({ type: 'log', text: mode === 'afk' ? `You are now Away From Keyboard: ${message}` : `You are now in Do Not Disturb mode: ${message}`, color: '#ffd100', pid: r.meta.entityId });
+      }
+      return null;
+    }
+
+    // Any other chat means you're back — clear a lingering away status.
+    if (r.meta.away) {
+      r.meta.away = null;
+      this.emit({ type: 'log', text: 'You are no longer marked as away.', color: '#ffd100', pid: r.meta.entityId });
+    }
+
+    // "/party" (no message) is a self-only roster readout; "/party <msg>"
+    // and "/p <msg>" stay party chat (the trailing \s in that branch below).
+    if (/^\/(party|group|grp)\s*$/i.test(raw)) {
+      this.error(r.meta.entityId, this.partyReadout(r.meta.entityId));
+      return null;
+    }
+
+    if (this.devCommands) {
+      const devHandled = this.handleDevChat(raw, r.meta.entityId);
+      if (devHandled !== undefined && devHandled !== null) return devHandled;
+    }
+
     if (/^\/who(?:\s|$)/i.test(raw)) {
       this.error(r.meta.entityId, 'The /who roster is available in online play.');
       return null;
     }
 
-    // "/w name message" — private whisper to an online player
-    const wm = /^\/(?:w|whisper|t|tell)\s+(\S+)\s+([\s\S]+)$/i.exec(raw);
-    if (wm) {
-      const targetName = wm[1];
-      const msg = wm[2].trim();
-      if (!msg) return null;
-      // exact case wins outright; otherwise a case-insensitive match is used
-      // only when unambiguous, so 'Bet' and 'bet' can't silently intercept
-      // each other's whispers
+    // "/help" (or "/?" / "/commands") lists the available chat commands as a
+    // system notice to the asker only. Like /who, it produces no chat message,
+    // so it works identically offline and online without server wiring.
+    if (/^\/(?:help|commands|\?)(?:\s|$)/i.test(raw)) {
+      for (const line of this.helpLines()) this.error(r.meta.entityId, line);
+      return null;
+    }
+
+    // "/roll", "/roll N", "/roll M-N" — a classic random roll for loot disputes
+    // and social play. Rolled through the deterministic sim RNG so it is
+    // server-authoritative (clients can't fake a result) and identical offline.
+    const rollm = /^\/roll(?:\s+(\d+)(?:\s*-\s*(\d+))?)?\s*$/i.exec(raw);
+    if (rollm) {
+      let lo = 1, hi = 100;
+      if (rollm[1] !== undefined) {
+        const n = parseInt(rollm[1], 10);
+        if (rollm[2] !== undefined) { lo = n; hi = parseInt(rollm[2], 10); }
+        else { hi = n; }
+      }
+      const MAX_ROLL = 1_000_000;
+      if (lo < 1 || hi > MAX_ROLL || lo > hi) {
+        this.error(r.meta.entityId, `Invalid roll range. Use /roll, /roll N, or /roll M-N (1-${MAX_ROLL}).`);
+        return null;
+      }
+      const result = this.rng.int(lo, hi);
+      const text = `${result} (${lo}-${hi})`;
+      const party = this.partyOf(r.meta.entityId);
+      if (party) {
+        for (const mPid of party.members) {
+          this.emit({ type: 'chat', fromPid: r.meta.entityId, from: r.meta.name, text, channel: 'roll', pid: mPid });
+        }
+      } else {
+        for (const meta of this.players.values()) {
+          const e = this.entities.get(meta.entityId);
+          if (!e || dist2d(r.e.pos, e.pos) > SAY_RANGE) continue;
+          this.emit({ type: 'chat', fromPid: r.meta.entityId, from: r.meta.name, text, channel: 'roll', pid: meta.entityId });
+        }
+      }
+      return null;
+    }
+
+    // "/r message" — reply to the last player who whispered us. Rewrite it to
+    // the "/w <name> message" form so delivery, the echo, and case-matching
+    // all stay in the single whisper handler below.
+    const rm = /^\/r(?:eply)?\s+([\s\S]+)$/i.exec(raw);
+    let line = raw;
+    if (rm) {
+      const replyTo = r.meta.lastWhisperFrom;
+      if (!replyTo) { this.error(r.meta.entityId, 'You have no one to reply to.'); return null; }
+      line = `/w ${replyTo} ${rm[1]}`;
+    }
+
+    // "/inspect name" — self-only readout of another online player's level,
+    // class, and health. The first cross-player readout; mirrors WoW's Inspect.
+    const im = /^\/(?:inspect|ins|examine)(?:\s+([\s\S]+))?$/i.exec(raw);
+    if (im) {
+      const targetName = (im[1] ?? '').trim();
+      if (!targetName) { this.error(r.meta.entityId, 'Inspect whom? Usage: /inspect <name>.'); return null; }
+      // resolve by name with the same exact-then-unambiguous-CI rule as /w
       let target: PlayerMeta | null = null;
       const ciMatches: PlayerMeta[] = [];
       const wanted = targetName.toLowerCase();
@@ -3981,12 +5281,146 @@ export class Sim {
         if (ciMatches.length === 1) target = ciMatches[0];
         else if (ciMatches.length > 1) { this.error(r.meta.entityId, `Several players match '${targetName}'. Use exact capitalization.`); return null; }
       }
-      if (!target) { this.error(r.meta.entityId, `There is no player named '${targetName}' online.`); return null; }
+      const te = target ? this.entities.get(target.entityId) : null;
+      if (!target || !te) { this.error(r.meta.entityId, `There is no player named '${targetName}' online.`); return null; }
+      this.error(r.meta.entityId, this.inspectReadout(target, te));
+      return null;
+    }
+
+    // "/unfollow" stops an active follow
+    if (/^\/unfollow(?:\s|$)/i.test(raw)) {
+      if (r.e.followTargetId === null) this.error(r.meta.entityId, 'You are not following anyone.');
+      else this.stopFollow(r.e, 'You stop following.');
+      return null;
+    }
+
+    // "/follow [name]" trails another player; with no name it follows the
+    // current target. Movement, combat, casting, re-targeting, or the leader
+    // moving out of range all end it (see updateFollowMovement).
+    const fm = /^\/follow(?:\s+([\s\S]+))?$/i.exec(raw);
+    if (fm) {
+      if (r.e.inCombat) { this.error(r.meta.entityId, "You can't start following while in combat."); return null; }
+      let target: PlayerMeta | null = null;
+      const nameArg = (fm[1] ?? '').trim();
+      if (nameArg) {
+        const wanted = nameArg.toLowerCase();
+        const ci: PlayerMeta[] = [];
+        for (const meta of this.players.values()) {
+          if (meta.name === nameArg) { target = meta; break; }
+          if (meta.name.toLowerCase() === wanted) ci.push(meta);
+        }
+        if (!target) {
+          if (ci.length === 1) target = ci[0];
+          else if (ci.length > 1) { this.error(r.meta.entityId, `Several players match '${nameArg}'. Use exact capitalization.`); return null; }
+        }
+        if (!target) { this.error(r.meta.entityId, `There is no player named '${nameArg}' online.`); return null; }
+      } else {
+        const cur = r.e.targetId !== null ? this.players.get(r.e.targetId) : undefined;
+        if (!cur) { this.error(r.meta.entityId, 'Target a player to follow, or use /follow <name>.'); return null; }
+        target = cur;
+      }
+      if (target.entityId === r.meta.entityId) { this.error(r.meta.entityId, "You can't follow yourself."); return null; }
+      r.e.followTargetId = target.entityId;
+      this.error(r.meta.entityId, `Now following ${target.name}.`);
+      return null;
+    }
+
+    // "/played" — report how long this character has been in the world this
+    // session. Self-only informational line, like /who's reply.
+    if (/^\/played(?:\s|$)/i.test(raw)) {
+      const secs = Math.max(0, Math.floor(this.time - r.meta.joinedAt));
+      const h = Math.floor(secs / 3600);
+      const m = Math.floor((secs % 3600) / 60);
+      const s = secs % 60;
+      const parts: string[] = [];
+      if (h) parts.push(`${h}h`);
+      if (h || m) parts.push(`${m}m`);
+      parts.push(`${s}s`);
+      this.error(r.meta.entityId, `Time played this session: ${parts.join(' ')}.`);
+      return null;
+    }
+
+    // Self-only readouts: emit a private system line and never become chat.
+    if (/^\/(?:where|loc|zone)(?:\s|$)/i.test(raw)) {
+      const zone = zoneAt(r.e.pos.z);
+      const [lo, hi] = zone.levelRange;
+      this.error(r.meta.entityId, `You are in ${zone.name} (levels ${lo}–${hi}) at (${Math.floor(r.e.pos.x)}, ${Math.floor(r.e.pos.z)}).`);
+      return null;
+    }
+    if (/^\/(?:target|tar)(?:\s|$)/i.test(raw)) {
+      const tid = r.e.targetId;
+      const t = tid !== null ? this.entities.get(tid) ?? null : null;
+      if (!t) this.error(r.meta.entityId, 'You have no target.');
+      else this.error(r.meta.entityId, this.targetReadout(t));
+      return null;
+    }
+    if (/^\/(?:xp|exp|experience)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.xpReadout(r.meta, r.e.level)); return null; }
+    if (/^\/(?:gold|money|coins)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.goldReadout(r.meta.copper)); return null; }
+    if (/^\/(?:stats|st|sheet)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.statsReadout(r.meta, r.e)); return null; }
+    if (/^\/(?:buffs?|auras)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.buffsReadout(r.e)); return null; }
+    if (/^\/(?:cooldowns?|cds?)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.cooldownsReadout(r.e)); return null; }
+    if (/^\/(?:bags|inv|inventory)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.bagsReadout(r.meta)); return null; }
+    if (/^\/(?:quests?|ql)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.questReadout(r.meta)); return null; }
+    if (/^\/(?:gear|equip|equipment)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.gearReadout(r.meta)); return null; }
+    if (/^\/(?:abilities|spells|spellbook)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.abilitiesReadout(r.meta, r.e)); return null; }
+    if (/^\/(?:pet|pets|companion)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.petReadout(r.e)); return null; }
+    if (/^\/(?:session|sess|sessionstats)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.sessionReadout(r.meta)); return null; }
+    if (/^\/(?:threat|aggro)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.threatReadout(r.e)); return null; }
+    if (/^\/(?:zones|zonelist|worldmap)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.zonesReadout(r.e.pos.z)); return null; }
+    if (/^\/(?:nearby|near|around)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.nearbyReadout(r.e)); return null; }
+    if (/^\/(?:arena|pvp|rating)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.arenaReadout(r.meta)); return null; }
+    if (/^\/(?:range|dist|distance)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.rangeReadout(r.e)); return null; }
+    if (/^\/(?:buyback|bb|repurchase)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.buybackReadout(r.meta)); return null; }
+    if (/^\/(?:combo|cp|combopoints)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.comboReadout(r.e)); return null; }
+    if (/^\/(?:combat|cb|incombat)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.combatReadout(r.e)); return null; }
+    if (/^\/(?:graveyard|gy|spirithealer)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.graveyardReadout(r.e)); return null; }
+    if (/^\/(?:dungeons|dungeon|instances)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.dungeonsReadout()); return null; }
+    if (/^\/(?:consider|con|difficulty)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.considerReadout(r.e)); return null; }
+    if (/^\/(?:pois|poi|landmarks)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.poisReadout(r.e)); return null; }
+    if (/^\/(?:completed|questsdone|qdone)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.completedReadout(r.meta)); return null; }
+    if (/^\/(?:listings|mylistings|auctions)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.listingsReadout(r.meta)); return null; }
+    if (/^\/(?:targetbuffs|debuffs|tb)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.targetBuffsReadout(r.e)); return null; }
+    if (/^\/(?:casting|cast|castbar)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.castingReadout(r.e)); return null; }
+    if (/^\/(?:speed|movespeed|ms)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.speedReadout(r.e)); return null; }
+    if (/^\/(?:attack|autoattack|aa)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.attackReadout(r.e, r.meta)); return null; }
+    if (/^\/(consumable|consumables|eat|drink)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.consumableReadout(r.e)); return null; }
+    if (/^\/(?:potion|potioncd|pot)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.potionReadout(r.e)); return null; }
+    if (/^\/(?:overpower|op|overpowered)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.overpowerReadout(r.e, r.meta)); return null; }
+    if (/^\/(form|stance|shapeshift)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.formReadout(r.e)); return null; }
+    if (/^\/(?:manaregen|regen|5sr)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.manaRegenReadout(r.e)); return null; }
+    if (/^\/(?:falling|jump|airborne)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.fallingReadout(r.e)); return null; }
+    if (/^\/(?:pettaunt|petgrowl|growl)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.petTauntReadout(r.e)); return null; }
+    if (/^\/(queued|onswing|swingqueue)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.queuedReadout(r.e)); return null; }
+    if (/^\/(?:savedmana|parkedmana|sm)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.savedManaReadout(r.meta, r.e)); return null; }
+
+    // "/w name message" — private whisper to an online player. Match against
+    // `line` so a "/r" reply (rewritten to the /w form above) flows through the
+    // same longest-online-name resolver.
+    const wm = /^\/(?:w|whisper|t|tell)\s+([\s\S]+)$/i.exec(line);
+    if (wm) {
+      const resolved = this.resolveWhisperTarget(wm[1]);
+      if (!resolved) return null;
+      if ('error' in resolved) { this.error(r.meta.entityId, resolved.error); return null; }
+      const { target, message: msg } = resolved;
       if (target.entityId === r.meta.entityId) { this.error(r.meta.entityId, 'You mutter to yourself. Nobody hears it.'); return null; }
+      if (target.away) {
+        const label = target.away.mode === 'afk' ? 'Away From Keyboard' : 'Do Not Disturb';
+        this.emit({ type: 'log', text: `${target.name} is ${label}: ${target.away.message}`, color: '#ffd100', pid: r.meta.entityId });
+        if (target.away.mode === 'dnd') {
+          // Withhold the whisper, but still echo the sender's own line so they
+          // see what they tried to send.
+          this.emit({ type: 'chat', fromPid: r.meta.entityId, from: r.meta.name, to: target.name, text: msg, channel: 'whisper', pid: r.meta.entityId });
+          return { channel: 'whisper', message: msg };
+        }
+      }
+      // classic-WoW "/r": the recipient's reply target is whoever last
+      // whispered them, so record it on the target (not the sender).
+      target.lastWhisperFrom = r.meta.name;
       this.emit({ type: 'chat', fromPid: r.meta.entityId, from: r.meta.name, text: msg, channel: 'whisper', pid: target.entityId });
       this.emit({ type: 'chat', fromPid: r.meta.entityId, from: r.meta.name, to: target.name, text: msg, channel: 'whisper', pid: r.meta.entityId });
-      return { channel: 'whisper', message: msg };
+      return { channel: 'whisper', message: msg, target: target.name };
     }
+
 
     // "/p message" goes to the party channel
     if (/^\/p(arty)?\s/i.test(raw)) {
@@ -4008,6 +5442,33 @@ export class Sim {
       return { channel: 'general', message: clean };
     }
 
+    // "/join <channel>" / "/leave <channel>" — opt-in global channels
+    const jm = /^\/(join|leave)\b\s*(\S*)\s*$/i.exec(raw);
+    if (jm) {
+      this.handleChannelMembership(r.meta, jm[1].toLowerCase() as 'join' | 'leave', jm[2].toLowerCase());
+      return null;
+    }
+
+    // "/world message" / "/lfg message" — talk in an opt-in channel; only
+    // players who have /join-ed it hear the message (the sender included)
+    const cm = /^\/(world|lfg)\s+([\s\S]+)$/i.exec(raw);
+    if (cm) {
+      const channel = cm[1].toLowerCase() as JoinableChannel;
+      const clean = cm[2].trim();
+      if (!clean) return null;
+      const mine = this.channelSubs.get(r.meta.entityId);
+      if (!mine || !mine.has(channel)) {
+        this.error(r.meta.entityId, `You are not in the ${channel} channel. Type /join ${channel} first.`);
+        return null;
+      }
+      for (const [subPid, set] of this.channelSubs) {
+        if (set.has(channel) && this.players.has(subPid)) {
+          this.emit({ type: 'chat', fromPid: r.meta.entityId, from: r.meta.name, text: clean, channel, pid: subPid });
+        }
+      }
+      return { channel, message: clean };
+    }
+
     // "/me <action>" — freeform third-person action text, e.g.
     // "/me ponders the void" → "Aleph ponders the void". Emotes never become
     // the player's sticky chat channel, so this returns null on success.
@@ -4020,7 +5481,7 @@ export class Sim {
 
     // "/wave", "/dance [name]" — predefined social emotes. An optional name
     // targets an online player (in range or not); unknown names fall back to
-    // the untargeted form, matching WoW.
+    // the untargeted form, matching the classic-MMO convention.
     const emMatch = /^\/([a-z]+)(?:\s+(\S+))?\s*$/i.exec(raw);
     if (emMatch) {
       const key = EMOTE_ALIASES[emMatch[1].toLowerCase()] ?? emMatch[1].toLowerCase();
@@ -4043,7 +5504,7 @@ export class Sim {
     let clean = raw;
     if (/^\/y(ell)?\s/i.test(raw)) { channel = 'yell'; clean = raw.replace(/^\/y(ell)?\s+/i, '').trim(); }
     else if (/^\/s(ay)?\s/i.test(raw)) { clean = raw.replace(/^\/s(ay)?\s+/i, '').trim(); }
-    else if (raw.startsWith('/')) { this.error(r.meta.entityId, `Unknown command: ${raw.split(' ')[0]}. Try /s /y /w /p /g, /me, or an emote like /wave.`); return null; }
+    else if (raw.startsWith('/')) { this.error(r.meta.entityId, `Unknown command: ${raw.split(' ')[0]}. Type /help for a list.`); return null; }
     if (!clean) return null;
     const range = channel === 'yell' ? YELL_RANGE : SAY_RANGE;
     for (const meta of this.players.values()) {
@@ -4052,6 +5513,14 @@ export class Sim {
       this.emit({ type: 'chat', fromPid: r.meta.entityId, from: r.meta.name, text: clean, channel, entityId: r.e.id, pid: meta.entityId });
     }
     return { channel, message: clean };
+  }
+
+  playEmote(emoteId: OverheadEmoteId, pid?: number): void {
+    const r = this.resolve(pid);
+    if (!r) return;
+    r.e.overheadEmoteId = emoteId;
+    r.e.overheadEmoteUntil = this.time + OVERHEAD_EMOTE_DURATION;
+    r.e.overheadEmoteSeq += 1;
   }
 
   // Resolve a player by name the same way whispers do: an exact-case match
@@ -4080,17 +5549,40 @@ export class Sim {
   }
 
   // -------------------------------------------------------------------------
-  // Hostility: mobs are hostile to players; players are hostile to each other
-  // only while dueling.
+  // Hostility: mobs are hostile to players; controlled pets inherit their
+  // owner's PvP hostility during active duels and arena matches.
   // -------------------------------------------------------------------------
 
+  private pvpController(e: Entity | null): Entity | null {
+    if (!e) return null;
+    if (e.kind === 'player') return e;
+    if (e.kind === 'mob' && e.ownerId !== null) {
+      const owner = this.entities.get(e.ownerId);
+      return owner?.kind === 'player' ? owner : null;
+    }
+    return null;
+  }
+
   isHostileTo(attacker: Entity, target: Entity): boolean {
-    if (target.kind === 'mob') return target.hostile;
-    if (target.kind === 'player' && attacker.kind === 'player') {
-      const duel = this.duels.get(attacker.id);
-      if (duel && duel.state === 'active' && (duel.a === target.id || duel.b === target.id)) return true;
-      const match = this.arenaMatches.get(attacker.id);
-      return !!match && match.state === 'active' && (match.a === target.id || match.b === target.id);
+    if (target.kind === 'mob') {
+      if (target.ownerId !== null) {
+        const owner = this.entities.get(target.ownerId);
+        return !!owner && owner.kind === 'player' && this.isHostileTo(attacker, owner);
+      }
+      return target.hostile;
+    }
+    if (target.kind === 'player') {
+      const attackerPlayer = this.pvpController(attacker);
+      if (!attackerPlayer) return false;
+      if (attackerPlayer.id === target.id) return false;
+      const duel = this.duels.get(attackerPlayer.id);
+      if (duel && duel.state === 'active'
+        && ((duel.a === attackerPlayer.id && duel.b === target.id)
+          || (duel.b === attackerPlayer.id && duel.a === target.id))) return true;
+      const match = this.arenaMatches.get(attackerPlayer.id);
+      return !!match && match.state === 'active'
+        && ((match.a === attackerPlayer.id && match.b === target.id)
+          || (match.b === attackerPlayer.id && match.a === target.id));
     }
     return false;
   }
@@ -4303,6 +5795,10 @@ export class Sim {
     this.duelInvites.delete(r.meta.entityId);
     const other = this.players.get(invite.fromPid);
     if (!other) return;
+    if (this.duels.has(invite.fromPid) || this.duels.has(r.meta.entityId)) {
+      this.error(r.meta.entityId, 'A duel is already in progress.');
+      return;
+    }
     const duel: DuelState = { a: invite.fromPid, b: r.meta.entityId, state: 'countdown', timer: DUEL_COUNTDOWN };
     this.duels.set(duel.a, duel);
     this.duels.set(duel.b, duel);
@@ -4377,6 +5873,21 @@ export class Sim {
     }
   }
 
+  private clearAurasFromSource(target: Entity, sourceId: number): void {
+    let statsDirty = false;
+    for (let i = target.auras.length - 1; i >= 0; i--) {
+      const a = target.auras[i];
+      if (a.sourceId !== sourceId) continue;
+      target.auras.splice(i, 1);
+      this.emit({ type: 'aura', targetId: target.id, name: a.name, gained: false });
+      if (a.kind.startsWith('buff') || a.kind.startsWith('form')) statsDirty = true;
+    }
+    if (statsDirty && target.kind === 'player') {
+      const meta = this.players.get(target.id);
+      if (meta) recalcPlayerStats(target, meta.cls, meta.equipment, meta.talentMods);
+    }
+  }
+
   // winnerPid null = draw/cancelled
   private endDuel(duel: DuelState, winnerPid: number | null): void {
     this.duels.delete(duel.a);
@@ -4392,6 +5903,8 @@ export class Sim {
         e.autoAttack = false;
       }
     }
+    if (ea) this.clearAurasFromSource(ea, duel.b);
+    if (eb) this.clearAurasFromSource(eb, duel.a);
     if (winnerPid !== null && aMeta && bMeta) {
       const winner = winnerPid === duel.a ? aMeta : bMeta;
       const loser = winnerPid === duel.a ? bMeta : aMeta;
@@ -4599,6 +6112,7 @@ export class Sim {
     e.swingTimer = 0;
     e.chargeTargetId = null;
     e.chargePath = [];
+    e.followTargetId = null;
     e.combatTimer = 99;
     e.inCombat = false;
     e.sitting = false;
@@ -4745,6 +6259,10 @@ export class Sim {
     if (!invite || invite.expires < this.time) { this.error(r.meta.entityId, 'The trade request has expired.'); return; }
     this.tradeInvites.delete(r.meta.entityId);
     if (!this.players.get(invite.fromPid)) return;
+    if (this.trades.has(invite.fromPid) || this.trades.has(r.meta.entityId)) {
+      this.error(r.meta.entityId, 'That player is already trading.');
+      return;
+    }
     const session: TradeSession = {
       a: invite.fromPid, b: r.meta.entityId,
       offerA: { items: [], copper: 0 }, offerB: { items: [], copper: 0 },
@@ -5314,8 +6832,624 @@ export class Sim {
     return null;
   }
 
+  // Builds the self-only "/stats" readout line from live entity state. The
+  // resource clause is dropped for classes whose resourceType is null.
+  private statsReadout(meta: PlayerMeta, e: Entity): string {
+    const className = CLASSES[meta.cls].name;
+    const crit = (e.critChance * 100).toFixed(1);
+    let line = `Level ${e.level} ${className} — HP ${Math.round(e.hp)}/${Math.round(e.maxHp)}`;
+    if (e.resourceType) {
+      const res = e.resourceType.charAt(0).toUpperCase() + e.resourceType.slice(1);
+      line += `, ${res} ${Math.round(e.resource)}/${Math.round(e.maxResource)}`;
+    }
+    line += `. AP ${Math.round(e.attackPower)}, Crit ${crit}%, Armor ${Math.round(e.stats.armor)}.`;
+    return line;
+  }
+  // Self-only readout of carried items for "/bags": items sorted by quality
+  // (epic first), ties keeping inventory order, with the purse appended via
+  // formatMoney. Reads only PlayerMeta state, so it works online for free.
+  private bagsReadout(meta: PlayerMeta): string {
+    const purse = `Purse: ${formatMoney(meta.copper)}.`;
+    if (meta.inventory.length === 0) return `Your bags are empty. ${purse}`;
+    const rank: Record<string, number> = { epic: 0, rare: 1, uncommon: 2, common: 3, poor: 4 };
+    const sorted = meta.inventory
+      .map((s, i) => ({ s, i }))
+      .sort((a, b) => {
+        const qa = rank[ITEMS[a.s.itemId]?.quality ?? 'common'] ?? 3;
+        const qb = rank[ITEMS[b.s.itemId]?.quality ?? 'common'] ?? 3;
+        return qa - qb || a.i - b.i;
+      });
+    const parts = sorted.map(({ s }) => {
+      const name = ITEMS[s.itemId]?.name ?? s.itemId;
+      return s.count > 1 ? `${name} x${s.count}` : name;
+    });
+    return `Bags (${parts.length}): ${parts.join(', ')}. ${purse}`;
+  }
+  // Self-only readout of the player's party: each member in join order with
+  // level, class, and HP% (or (dead)/(offline)), the leader tagged [leader].
+  private partyReadout(pid: number): string {
+    const party = this.partyOf(pid);
+    if (!party) return 'You are not in a party.';
+    const parts = party.members.map((mPid) => {
+      const meta = this.players.get(mPid);
+      const e = this.entities.get(mPid);
+      if (!meta || !e) return meta ? `${meta.name} (offline)` : `Player ${mPid} (offline)`;
+      const cls = CLASSES[meta.cls].name;
+      const state = e.hp <= 0 ? '(dead)' : `${Math.round((e.hp / e.maxHp) * 100)}%`;
+      const tag = mPid === party.leader ? ' [leader]' : '';
+      return `${meta.name} (Lvl ${e.level} ${cls}, ${state})${tag}`;
+    });
+    return `Party (${party.members.length}/${PARTY_MAX}): ${parts.join(', ')}.`;
+  }
+  // Self-only readout for "/zones": lists every overworld zone in travel order
+  // (south -> north) with its level range, tagging the zone the player is in.
+  // `currentZ` is the player's world Z (use zoneAt(currentZ) to find their zone).
+  // ZONES is the ordered ZoneDef[] from ./data; each has .name and
+  // .levelRange = [min, max].
+  private zonesReadout(currentZ: number): string {
+    if (ZONES.length === 0) return 'No zones are defined.';
+    const here = zoneAt(currentZ);
+    const parts = ZONES.map((z) => {
+      const line = `${z.name} (Lvl ${z.levelRange[0]}-${z.levelRange[1]})`;
+      return z.id === here.id ? `${line} [you are here]` : line;
+    });
+    return `Zones (${ZONES.length}): ${parts.join(', ')}.`;
+  }
+  // Self-only readout of a character's Ashen Coliseum standing. Reads only the
+  // persisted PlayerMeta arena fields (no new state). Draws count as neither a
+  // win nor a loss (see resolveArena), so "matches played" is wins + losses.
+  private arenaReadout(meta: PlayerMeta): string {
+    const { arenaRating: rating, arenaWins: wins, arenaLosses: losses } = meta;
+    const played = wins + losses;
+    if (played <= 0) return `Arena: Rating ${rating} — no matches played yet.`;
+    const pct = Math.round((wins / played) * 100);
+    return `Arena: Rating ${rating} — ${wins} wins, ${losses} losses (${pct}% win rate).`;
+  }
+  private buybackReadout(meta: PlayerMeta): string {
+    const slots = meta.vendorBuyback.filter((s) => ITEMS[s.itemId] && s.count > 0);
+    if (slots.length === 0) return 'Your vendor buyback list is empty.';
+    const parts = slots.map((s) => {
+      const def = ITEMS[s.itemId];
+      const qty = s.count > 1 ? ` x${s.count}` : '';
+      return `${def.name}${qty} (${formatMoney(def.sellValue)} each)`;
+    });
+    return `Vendor buyback (${slots.length}): ${parts.join(', ')}. Repurchase at any merchant.`;
+  }
+  private comboReadout(e: Entity): string {
+    if (e.comboPoints <= 0) return 'You have no combo points built up.';
+    const target = e.comboTargetId !== null ? this.entities.get(e.comboTargetId) : undefined;
+    const on = target ? ` on ${target.name}` : '';
+    return `Combo points: ${e.comboPoints}/5${on}.`;
+  }
+  // Readout for "/combat": reads only the live Entity.inCombat / combatTimer
+  // (no new fields). combatTimer is "time since last combat event"; a player
+  // lingers in combat until it reaches COMBAT_LINGER (the literal 5s drop-out
+  // window applied in updatePlayers, sim.ts where inCombat is recomputed). If
+  // inCombat is still set past that window, an enemy is actively engaged, so no
+  // countdown can be promised.
+  private combatReadout(e: Entity): string {
+    if (!e.inCombat) return 'You are not in combat.';
+    const COMBAT_LINGER = 5;
+    const remaining = COMBAT_LINGER - e.combatTimer;
+    if (remaining > 0) {
+      return `You are in combat — leaving in ${Math.ceil(remaining)}s if no further action.`;
+    }
+    return 'You are in combat (enemies still engaged).';
+  }
+  // Readout for "/graveyard": names the zone graveyard your spirit returns to
+  // if you die here, and its coordinates. Reads only existing zone/dungeon
+  // lookups (no new fields) and resolves the same target as releaseSpirit —
+  // dying inside a dungeon resurrects you at the graveyard of the zone its door
+  // sits in, dying outdoors at your current zone's graveyard.
+  private graveyardReadout(p: Entity): string {
+    const dungeon = dungeonAt(p.pos.x);
+    const zone = zoneAt(dungeon ? dungeon.doorPos.z : p.pos.z);
+    const gy = zone.graveyard;
+    return `If you fall here, your spirit returns to the ${zone.name} graveyard at (${Math.floor(gy.x)}, ${Math.floor(gy.z)}).`;
+  }
+  // Readout for "/dungeons": lists every group instance in entrance order with
+  // the overworld zone its door sits in and its suggested party size. Reads
+  // only the static DUNGEON_LIST (already entrance-sorted by index) and the
+  // door zone via zoneAt — no new fields.
+  private dungeonsReadout(): string {
+    const parts = DUNGEON_LIST.map((d) => `${d.name} (${zoneAt(d.doorPos.z).name}, ${d.suggestedPlayers} players)`);
+    return `Dungeons (${parts.length}): ${parts.join(', ')}.`;
+  }
+  // Readout for "/consider": sizes up the current target's level versus yours.
+  // The verdict bands track the real combat model — meleeMissChance (types.ts)
+  // applies a sharp miss penalty once the target is 3+ levels above you (its
+  // `diff > 2` cliff), and dodge/crit also scale with the level gap — so a
+  // target 3+ levels up is flagged as a steep step beyond a merely tough one.
+  // Reads only the live target Entity.level versus your own (no new fields).
+  private considerReadout(self: Entity): string {
+    const t = self.targetId !== null ? this.entities.get(self.targetId) : undefined;
+    if (!t) return 'You have no target to consider.';
+    const diff = t.level - self.level;
+    let verdict: string;
+    if (diff >= 5) verdict = 'an overwhelming fight';
+    else if (diff >= 3) verdict = 'a daunting fight';
+    else if (diff >= 1) verdict = 'a tough fight';
+    else if (diff === 0) verdict = 'an even fight';
+    else if (diff >= -2) verdict = 'a manageable fight';
+    else verdict = 'an easy fight';
+    return `${t.name} is level ${t.level} — ${verdict} for you (level ${self.level}).`;
+  }
+  // Readout for "/pois": the named landmarks of your current zone, nearest
+  // first, each with its distance in yards. Reads only the static ZoneDef.pois
+  // (the same labels the HUD pins on the map) and your live position — no new
+  // fields.
+  private poisReadout(self: Entity): string {
+    const zone = zoneAt(self.pos.z);
+    if (zone.pois.length === 0) return `${zone.name} has no notable landmarks.`;
+    const parts = zone.pois
+      .map((p) => ({ label: p.label, d: dist2d(self.pos, { x: p.x, y: 0, z: p.z }) }))
+      .sort((a, b) => a.d - b.d)
+      .map((p) => `${p.label} (${Math.round(p.d)}yd)`);
+    return `Landmarks in ${zone.name} (${parts.length}): ${parts.join(', ')}.`;
+  }
+  // Readout for "/completed": the quests you have turned in, in completion
+  // order (questsDone is a Set whose insertion order is preserved on save/load).
+  // Reads only PlayerMeta.questsDone + the QUESTS registry for names (no new
+  // fields); distinct from /quest, which lists the active log.
+  private completedReadout(meta: PlayerMeta): string {
+    const names = [...meta.questsDone].map((id) => QUESTS[id]?.name ?? id);
+    if (names.length === 0) return 'You have not completed any quests yet.';
+    return `Completed quests (${names.length}): ${names.join(', ')}.`;
+  }
+  // Readout for "/listings": your own active World Market listings (house stock
+  // and other sellers excluded), each with item, asking price, and time left
+  // before it returns unsold. Reads only the live marketListings, ITEMS names,
+  // and this.time (no new fields); the count is shown against MARKET_MAX_LISTINGS
+  // so you know how much room you have left, mirroring the cap in marketList.
+  private listingsReadout(meta: PlayerMeta): string {
+    const mine = this.marketListings.filter((l) => !l.house && l.sellerKey === meta.name);
+    if (mine.length === 0) return 'You have no goods on the World Market.';
+    const parts = mine.map((l) => {
+      const name = ITEMS[l.itemId]?.name ?? l.itemId;
+      const qty = l.count > 1 ? ` x${l.count}` : '';
+      const secs = Math.max(0, Math.ceil(l.expiresAt - this.time));
+      const h = Math.floor(secs / 3600), m = Math.floor((secs % 3600) / 60);
+      const left = h > 0 ? `${h}h ${m}m` : m > 0 ? `${m}m` : `${secs}s`;
+      return `${name}${qty} — ${formatMoney(l.price)} (${left} left)`;
+    });
+    return `Your market listings (${parts.length}/${MARKET_MAX_LISTINGS}): ${parts.join(', ')}.`;
+  }
+  // Self-only readout of the auras on the player's current target, each tagged
+  // [buff] or [debuff]. Mirrors the self-aura readout but reaches across to the
+  // target's live Entity.auras, so it works for mobs, pets, and other players.
+  private targetBuffsReadout(self: Entity): string {
+    const target = self.targetId !== null ? this.entities.get(self.targetId) : undefined;
+    if (!target || target.hp <= 0) return 'You have no target.';
+    const auras = target.auras;
+    if (auras.length === 0) return `${target.name} has no active effects.`;
+    const parts = auras.map((a) => {
+      const stack = (a.stacks ?? 1) > 1 ? ` x${a.stacks}` : '';
+      const tag = isHarmfulAura(a.kind) ? 'debuff' : 'buff';
+      return `${a.name}${stack} [${tag}] (${Math.ceil(a.remaining)}s)`;
+    });
+    return `Effects on ${target.name} (${auras.length}): ${parts.join(', ')}.`;
+  }
+  // Self-only readout of current movement speed as a percent of normal run
+  // speed. Effective speed is RUN_SPEED * moveSpeedMult(p), where the
+  // multiplier folds slow/stealth auras against speed buffs; a root pins the
+  // player regardless of the multiplier, so it is reported first.
+  private speedReadout(e: Entity): string {
+    if (this.isRooted(e)) return 'You are rooted in place and cannot move.';
+    const mult = this.moveSpeedMult(e);
+    const pct = Math.round(mult * 100);
+    if (pct > 100) return `Movement speed: ${pct}% of normal (hastened).`;
+    if (pct < 100) return `Movement speed: ${pct}% of normal (slowed).`;
+    return 'Movement speed: 100% of normal.';
+  }
+  // Self-only readout for /attack: reads only live Entity auto-attack state
+  // (autoAttack/swingTimer/targetId). The displayed swing interval reuses the
+  // exact expression the engine resets the timer with (weapon.speed *
+  // swingIntervalMult), so it reflects any active haste/slow auras.
+  private attackReadout(p: Entity, meta: PlayerMeta): string {
+    if (!p.autoAttack) return 'Auto-attack is off.';
+    const t = p.targetId !== null ? this.entities.get(p.targetId) : null;
+    if (!t || t.dead) return 'Auto-attack is on, but you have no valid target.';
+    // ranged classes (hunter auto shot, caster wands) swing at their ranged
+    // speed; everyone else uses the equipped weapon's speed
+    const base = CLASSES[meta.cls].ranged?.speed ?? p.weapon.speed;
+    const interval = base * this.swingIntervalMult(p);
+    const next = p.swingTimer <= 0 ? 'now' : `in ${p.swingTimer.toFixed(1)}s`;
+    return `Auto-attack is on against ${t.name} — next swing ${next} (${interval.toFixed(1)}s swing).`;
+  }
+  // Overpower is a warrior reactive: an enemy dodging the player's attack opens
+  // a 5s window (overpowerUntil = time + 5) in which the ability becomes usable.
+  // It is neither an aura nor a normal cooldown, so no other readout exposes it.
+  private overpowerReadout(e: Entity, meta: PlayerMeta): string {
+    if (meta.cls !== 'warrior') return 'Overpower is a warrior ability; your class cannot use it.';
+    const remaining = Math.ceil(e.overpowerUntil - this.time);
+    if (remaining > 0) {
+      return `Overpower is ready — strike within ${remaining}s (an enemy dodged your attack).`;
+    }
+    return 'Overpower is not available. It opens for 5s after an enemy dodges your attack.';
+  }
+  // Reports the active shapeshift form or combat stance. Anchored to the
+  // same toggle set the cast path treats as mutually-exclusive persistent
+  // states (form_bear / form_cat / defensive_stance / stealth); realistically
+  // only one is ever active, so the first match is the answer.
+  private formReadout(e: Entity): string {
+    const form = e.auras.find((a) =>
+      a.kind === 'form_bear' || a.kind === 'form_cat'
+      || a.kind === 'defensive_stance' || a.kind === 'stealth');
+    if (!form) return 'You are not in any form or stance.';
+    if (form.kind === 'stealth') return 'You are stealthed.';
+    return `You are in ${form.name}.`;
+  }
+  // Self-only readout of the five-second-rule mana state (#103 out-of-combat
+  // regen). `fiveSecondRule` is the seconds elapsed since the player last spent
+  // mana on an ability (reset to 0 at sim.ts cast path, bumped by DT each tick);
+  // out-of-combat mana regen only ticks once it reaches FSR_THRESHOLD. Only
+  // mana users have meaningful state here — rage/energy classes never spend mana.
+  private manaRegenReadout(e: Entity): string {
+    const FSR_THRESHOLD = 5; // matches the `fiveSecondRule >= 5` gate in updateRegen
+    if (e.resourceType !== 'mana') {
+      return 'Mana regeneration does not apply to your class.';
+    }
+    if (e.fiveSecondRule >= FSR_THRESHOLD) {
+      return 'Your mana is regenerating (out of combat for 5s+).';
+    }
+    const resumesIn = Math.ceil(FSR_THRESHOLD - e.fiveSecondRule);
+    return `Mana regen is paused — resumes in ${resumesIn}s (you spent mana recently).`;
+  }
+  // Self-only readout of vertical/fall state — surfaces the otherwise-invisible
+  // jump physics (sim.ts updatePlayerMovement). Reads only live Entity fields and
+  // the same groundHeight()/FALL_SAFE_DISTANCE the landing-damage model uses, so
+  // the "this will hurt" preview matches what an actual landing would deal.
+  private fallingReadout(e: Entity): string {
+    const ground = groundHeight(e.pos.x, e.pos.z, this.cfg.seed);
+    if (e.onGround) return 'You are on solid ground.';
+    const height = Math.max(0, Math.round(e.pos.y - ground));
+    if (e.vy > 0) return `You are airborne and rising — ${height}yd above the ground.`;
+    const drop = e.fallStartY - ground;
+    const danger =
+      drop > FALL_SAFE_DISTANCE
+        ? ' Brace for impact — this fall is going to hurt.'
+        : ' It should be a safe landing.';
+    return `You are falling — ${height}yd above the ground.${danger}`;
+  }
+  // Self-only readout of the controlled pet's Growl (taunt) cooldown. Reads
+  // only the live pet Entity's petTauntTimer (the same field updatePet counts
+  // down at sim.ts ~2770 and resets to PET_GROWL_INTERVAL after each growl), so
+  // it stays truthful without any new state. Distinct from /pet (vitals) and
+  // /cooldowns (the player's own ability map, which never holds this timer).
+  private petTauntReadout(owner: Entity): string {
+    const pet = this.petOf(owner.id);
+    if (!pet) return 'You do not have a pet.';
+    if (pet.petTauntTimer <= 0) {
+      return `Your pet's Growl is ready — it will taunt its target on the next melee swing.`;
+    }
+    return `Your pet's Growl is on cooldown — ready in ${Math.ceil(pet.petTauntTimer)}s.`;
+  }
+  // Druid forms park the mana bar in savedMana and run on rage/energy instead
+  // (entity.ts:126-130). That parked pool has no in-game UI — the bar shows the
+  // form's resource — so this readout is the only way to see what returns on
+  // shift-out. Gates on the class's natural resource so non-casters get a clean
+  // "never applies" rather than a misleading zero.
+  private savedManaReadout(meta: PlayerMeta, e: Entity): string {
+    if (CLASSES[meta.cls].resourceType !== 'mana') {
+      return 'Only mana-using classes park mana; your class never does.';
+    }
+    if (e.resourceType === 'mana') {
+      return 'Your mana is not parked — you are not shapeshifted.';
+    }
+    if (e.savedMana <= 0) {
+      return 'You have no mana parked while shifted.';
+    }
+    return `You have ${Math.round(e.savedMana)} mana parked while shifted; it returns when you leave your form.`;
+  }
+
   private error(pid: number, text: string): void {
     this.emit({ type: 'error', text, pid });
+  }
+
+  // Lines shown by the "/help" command, one system notice per entry. Keep this
+  // in sync with the commands handled in chat() above.
+  private helpLines(): string[] {
+    return [
+      'Chat channels: /s say, /y yell, /general, /p party, /world, /lfg.',
+      'Whisper a player with /w <name> <message>, reply with /r.',
+      'Other commands: /join <world|lfg>, /roll, /inspect <name>, /follow <name>, /unfollow, /afk, /dnd, /who.',
+      'Character readouts: /played, /xp, /gold, /stats, /bags, /gear, /abilities, /buffs, /cooldowns, /quest, /completed.',
+      'World readouts: /where, /zones, /nearby, /pois, /graveyard, /dungeons, /arena, /session, /listings, /buyback.',
+      'Combat readouts: /target, /targetbuffs, /range, /attack, /casting, /combat, /threat, /consider, /combo, /overpower.',
+      'State readouts: /pet, /pettaunt, /speed, /consumable, /potion, /form, /manaregen, /falling, /queued, /savedmana.',
+    ];
+  }
+
+  // One-line readout for /inspect: another player's level, class, and health.
+  private inspectReadout(target: PlayerMeta, e: Entity): string {
+    const cls = CLASSES[target.cls]?.name ?? target.cls;
+    const hp = e.hp <= 0
+      ? 'dead'
+      : `${Math.round(Math.max(0, Math.min(1, e.hp / e.maxHp)) * 100)}%`;
+    return `${target.name}: Level ${e.level} ${cls} — HP ${hp}.`;
+  }
+
+  // A positive, personal chat-log notice (e.g. confirming a /join). Unlike
+  // error(), this lands in the chat log rather than flashing the error toast.
+  private notice(pid: number, text: string, color = '#ffd100'): void {
+    this.emit({ type: 'log', text, color, pid });
+  }
+
+  // Handles /join and /leave for the opt-in global channels.
+  private handleChannelMembership(meta: PlayerMeta, action: 'join' | 'leave', arg: string): void {
+    const pid = meta.entityId;
+    if (!arg) {
+      this.error(pid, `Usage: /${action} <channel>. Channels: ${JOINABLE_CHANNELS.join(', ')}.`);
+      return;
+    }
+    if (arg === 'general') {
+      this.error(pid, 'The General channel is always on - just use /general.');
+      return;
+    }
+    if (!JOINABLE_CHANNELS.includes(arg as JoinableChannel)) {
+      this.error(pid, `There is no channel named '${arg}'. Channels: ${JOINABLE_CHANNELS.join(', ')}.`);
+      return;
+    }
+    const channel = arg as JoinableChannel;
+    let set = this.channelSubs.get(pid);
+    if (action === 'join') {
+      if (!set) { set = new Set(); this.channelSubs.set(pid, set); }
+      if (set.has(channel)) { this.error(pid, `You are already in the ${channel} channel.`); return; }
+      set.add(channel);
+      this.notice(pid, `Joined the ${channel} channel. Type /${channel} <message> to talk.`);
+    } else {
+      if (!set || !set.has(channel)) { this.error(pid, `You are not in the ${channel} channel.`); return; }
+      set.delete(channel);
+      if (set.size === 0) this.channelSubs.delete(pid);
+      this.notice(pid, `Left the ${channel} channel.`);
+    }
+  }
+  // One-line description of an entity for the self-only "/target" readout:
+  // name, level, what it is (player / pet / mob), and current health. A dead
+  // body reports "dead" instead of a percentage so a lootable corpse reads
+  // sensibly.
+  private targetReadout(t: Entity): string {
+    const kind = t.kind === 'player' ? 'player' : t.ownerId !== null ? 'pet' : 'mob';
+    const health = t.dead ? 'dead' : `${Math.round((t.hp / t.maxHp) * 100)}% HP`;
+    return `Target: ${t.name} (level ${t.level} ${kind}) — ${health}.`;
+  }
+  // One-line leveling summary for the /xp readout. At MAX_LEVEL there is no
+  // "next level" so we avoid the percent/remaining math (xpForLevel is 0 there).
+  private xpReadout(meta: PlayerMeta, level: number): string {
+    if (level >= MAX_LEVEL) return `Level ${MAX_LEVEL} — maximum level reached.`;
+    const need = xpForLevel(level);
+    const have = Math.max(0, Math.min(meta.xp, need));
+    const pct = Math.floor((have / need) * 100);
+    const fmt = (n: number) => n.toLocaleString('en-US');
+    return `Level ${level} — ${fmt(have)}/${fmt(need)} XP (${pct}%), ${fmt(need - have)} to go.`;
+  }
+  // Render the /gold readout. An empty purse gets flavor text rather than the
+  // bare "You have 0c." that formatMoney would otherwise produce.
+  private goldReadout(copper: number): string {
+    if (copper <= 0) return 'Your purse is empty.';
+    return `You have ${formatMoney(copper)}.`;
+  }
+  // Self-only readout for "/buffs": summarise the auras currently on the
+  // entity. Auras carry no buff/debuff flag, only an AuraKind and a `remaining`
+  // time in seconds; toggles (stances, forms, stealth) use a 3600s sentinel
+  // duration rather than Infinity, so a raw "(3600s)" reads poorly.
+  private buffsReadout(e: Entity): string {
+    if (e.auras.length === 0) return 'You have no active effects.';
+    const parts = e.auras.map((a) => this.auraLabel(a));
+    return `Active effects (${e.auras.length}): ${parts.join(', ')}.`;
+  }
+
+  // Render one aura for the /buffs list, e.g. "Rend (4s)". `remaining` is a
+  // float, so Math.ceil keeps a still-active 0.3s remainder showing as "(1s)".
+  private auraLabel(a: Aura): string {
+    return `${a.name} (${Math.ceil(a.remaining)}s)`;
+  }
+  // Self-only readout for "/cooldowns": summarise the abilities currently on
+  // cooldown for this entity, soonest-ready first.
+  //
+  // `e.cooldowns` is a Map<abilityId, remainingSeconds> — entries exist ONLY
+  // while an ability is cooling down (updateTimers deletes them at <= 0), so an
+  // empty map means everything is ready. Resolve the display name via
+  // ABILITIES[id]?.name (fall back to the raw id if an ability is ever missing
+  // from the table). `remaining` is a float, so Math.ceil keeps a 0.3s
+  // remainder showing as "(1s)", matching how /buffs renders aura timers.
+  //
+  private cooldownsReadout(e: Entity): string {
+    if (e.cooldowns.size === 0) return 'No abilities are on cooldown.';
+    const parts = [...e.cooldowns]
+      .sort((a, b) => a[1] - b[1])
+      .map(([id, remaining]) => `${ABILITIES[id]?.name ?? id} (${Math.ceil(remaining)}s)`);
+    return `Abilities on cooldown (${parts.length}): ${parts.join(', ')}.`;
+  }
+  // Self-only readout of the active quest log: one entry per tracked quest with
+  // per-objective progress. questLog only ever holds 'active'/'ready' quests
+  // (turn-in deletes the entry), so iterating it gives exactly what to show.
+  private questReadout(meta: PlayerMeta): string {
+    const lines: string[] = [];
+    for (const [qid, qp] of meta.questLog) {
+      const quest = QUESTS[qid];
+      if (!quest) continue;
+      const objs = quest.objectives
+        .map((o, i) => `${o.label} ${Math.min(qp.counts[i] ?? 0, o.count)}/${o.count}`)
+        .join(', ');
+      const tag = qp.state === 'ready' ? ' (ready)' : '';
+      lines.push(`${quest.name}${tag} — ${objs}`);
+    }
+    if (lines.length === 0) return 'Your quest log is empty.';
+    return `Quest log (${lines.length}): ${lines.join(' | ')}.`;
+  }
+  // Self-only readout of equipped items, walked in a fixed slot order so the
+  // line is stable and empty slots are visible (the point of a gear check).
+  private gearReadout(meta: PlayerMeta): string {
+    const slots: [EquipSlot, string][] = [
+      ['mainhand', 'Main Hand'],
+      ['chest', 'Chest'],
+      ['legs', 'Legs'],
+      ['feet', 'Feet'],
+    ];
+    let worn = 0;
+    const parts = slots.map(([slot, label]) => {
+      const itemId = meta.equipment[slot];
+      if (!itemId) return `${label}: (empty)`;
+      worn++;
+      return `${label}: ${ITEMS[itemId]?.name ?? itemId}`;
+    });
+    if (worn === 0) return 'You have nothing equipped.';
+    return `Equipped (${worn}/${slots.length}): ${parts.join(', ')}.`;
+  }
+  private abilitiesReadout(meta: PlayerMeta, e: Entity): string {
+    const known = abilitiesKnownAt(meta.cls, e.level);
+    if (known.length === 0) return 'You have not learned any abilities yet.';
+    const list = known.map((k) => `${k.def.name} (Rank ${k.rank})`).join(', ');
+    return `Spellbook (${known.length}): ${list}.`;
+  }
+  // Self-only readout of the player's active pet: name, level, beast family,
+  // and current health. Reads live pet state via petOf() so it stays accurate
+  // regardless of how the pet was acquired (tame, summon).
+  private petReadout(owner: Entity): string {
+    const pet = this.petOf(owner.id);
+    if (!pet) return 'You do not have a pet.';
+    const family = MOBS[pet.templateId]?.family;
+    const kind = family ? ` ${family}` : '';
+    const pct = pet.maxHp > 0 ? Math.round((pet.hp / pet.maxHp) * 100) : 0;
+    return `Your pet: ${pet.name} (level ${pet.level}${kind}) — HP ${pet.hp}/${pet.maxHp} (${pct}%).`;
+  }
+  // Build the self-only "/session" line from this session's RewardCounters.
+  // Counters are reset each boot (freshCounters), so this is always per-session.
+  // Format kills/deaths first, then a damage clause, then XP — using
+  // toLocaleString('en-US') for thousands separators on the large numbers.
+  private sessionReadout(meta: PlayerMeta): string {
+    const c = meta.counters;
+    const n = (v: number) => v.toLocaleString('en-US');
+    const plural = (v: number, word: string) => `${n(v)} ${word}${v === 1 ? '' : 's'}`;
+    return `Session: ${plural(c.kills, 'kill')}, ${plural(c.deaths, 'death')}. ` +
+      `Damage dealt ${n(c.damageDealt)}, taken ${n(c.damageTaken)}. ` +
+      `XP gained ${n(c.xpGained)}.`;
+  }
+  /** Self-only readout of the threat table on the player's current target,
+   *  highest first, as a percentage of the current threat leader. */
+  private threatReadout(self: Entity): string {
+    const t = self.targetId !== null ? this.entities.get(self.targetId) : undefined;
+    if (!t || t.hp <= 0) return 'You have no target.';
+    if (t.kind !== 'mob') return `Threat is only tracked on enemies; ${t.name} is not one.`;
+    const entries = threatEntries(t, 10);
+    if (entries.length === 0) return `Nobody has any threat on ${t.name}.`;
+    const top = entries[0][1] || 1;
+    const parts = entries.map(([id, v], i) => {
+      const pct = Math.round((v / top) * 100);
+      const you = id === self.id ? ' (you)' : '';
+      const lead = i === 0 ? ' [leader]' : '';
+      return `${this.threatName(id)}${you} ${pct}%${lead}`;
+    });
+    return `Threat on ${t.name} (${entries.length}): ${parts.join(', ')}.`;
+  }
+
+  /** Display name for a threat-table source: a player by pid, else the entity
+   *  (pet/mob) name, else a placeholder for sources that have despawned. */
+  private threatName(id: number): string {
+    const meta = this.players.get(id);
+    if (meta) return meta.name;
+    return this.entities.get(id)?.name || 'Unknown';
+  }
+  // One scannable entry per nearby entity: name, what it is, and how far.
+  // Pets are mobs with a non-null ownerId; players have no level prefix.
+  private nearbyLabel(e: Entity, d: number): string {
+    const yd = `${Math.round(d)}yd`;
+    if (e.kind === 'player') return `${e.name} (player, ${yd})`;
+    const kind = e.kind === 'mob' && e.ownerId !== null ? 'pet' : e.kind;
+    return `${e.name} (Lvl ${e.level} ${kind}, ${yd})`;
+  }
+
+  // Self-only readout of living entities within NEARBY_RANGE of `self`,
+  // nearest first. Reads only live Entity state (pos/kind/level/hp), so it
+  // never desyncs and adds no persisted fields.
+  private nearbyReadout(self: Entity): string {
+    const found: { e: Entity; d: number }[] = [];
+    for (const e of this.entities.values()) {
+      if (e.id === self.id || e.kind === 'object' || e.hp <= 0) continue;
+      const d = dist2d(self.pos, e.pos);
+      if (d <= NEARBY_RANGE) found.push({ e, d });
+    }
+    if (found.length === 0) return 'Nothing is nearby.';
+    found.sort((a, b) => a.d - b.d);
+    const shown = found.slice(0, NEARBY_MAX);
+    const labels = shown.map(({ e, d }) => this.nearbyLabel(e, d));
+    const more = found.length - shown.length;
+    if (more > 0) labels.push(`(+${more} more)`);
+    return `Nearby (${found.length}): ${labels.join(', ')}.`;
+  }
+  // Distance from the player to their current target. Reads only live Entity
+  // state (targetId + positions), so it needs no new fields and works online
+  // for free. The in-melee hint compares the RAW distance to MELEE_RANGE — the
+  // same threshold the swing-resolution code uses — while the displayed yards
+  // are rounded, so the hint stays truthful even when rounding lands on 5yd.
+  private rangeReadout(self: Entity): string {
+    if (self.targetId === null) return 'You have no target.';
+    const t = this.entities.get(self.targetId);
+    if (!t) return 'You have no target.';
+    const d = dist2d(self.pos, t.pos);
+    const reach = d <= MELEE_RANGE ? 'in melee range' : 'out of melee range';
+    return `Your target ${t.name} is ${Math.round(d)}yd away (${reach}).`;
+  }
+  // Reads the live cast-bar state (no stored fields): castingAbility holds an
+  // ability id or the FISHING_CAST_ID sentinel, channeling distinguishes a
+  // channel from a normal cast. Times are fractional seconds, so toFixed(1)
+  // stays truthful rather than rounding a 2.5s cast to "3s".
+  private castingReadout(e: Entity): string {
+    if (!e.castingAbility) return 'You are not casting anything.';
+    const remaining = e.castRemaining.toFixed(1);
+    const total = e.castTotal.toFixed(1);
+    if (e.castingAbility === FISHING_CAST_ID) {
+      return `You are fishing — ${remaining}s of ${total}s remaining.`;
+    }
+    const name = ABILITIES[e.castingAbility]?.name ?? e.castingAbility;
+    const verb = e.channeling ? 'Channeling' : 'Casting';
+    return `${verb} ${name} — ${remaining}s of ${total}s remaining.`;
+  }
+  // Self-only readout of what the player is currently eating/drinking. Food and
+  // drink occupy separate slots and tick concurrently, each on its own remaining
+  // timer, so both are reported with their own restore rate and time left.
+  private consumableReadout(e: Entity): string {
+    const parts: string[] = [];
+    for (const c of [e.eating, e.drinking]) {
+      if (!c) continue;
+      const name = ITEMS[c.itemId]?.name ?? c.itemId;
+      const restores: string[] = [];
+      if (c.hpPer2s > 0) restores.push(`+${c.hpPer2s} HP/2s`);
+      if (c.manaPer2s > 0) restores.push(`+${c.manaPer2s} mana/2s`);
+      restores.push(`${Math.ceil(c.remaining)}s left`);
+      const verb = c.kind === 'food' ? 'eating' : 'drinking';
+      parts.push(`${verb} ${name} (${restores.join(', ')})`);
+    }
+    if (parts.length === 0) return 'You are not eating or drinking.';
+    return `You are ${parts.join(' and ')}.`;
+  }
+  // Self-only readout of the shared combat-potion cooldown (#103). Distinct from
+  // /cooldowns, which reads the per-ability Entity.cooldowns map and never shows
+  // this separate 60s potion timer. potionCooldownUntil is an absolute sim-time
+  // deadline, so the remaining time is computed against this.time.
+  private potionReadout(e: Entity): string {
+    const remaining = e.potionCooldownUntil - this.time;
+    if (remaining <= 0) return 'Combat potion is ready to use.';
+    return `Combat potion on cooldown — ready in ${Math.ceil(remaining)}s.`;
+  }
+  // Self-only readout of the ability armed to fire on the next melee swing
+  // (Heroic Strike / Raptor Strike / Maul). Distinct from /casting (active
+  // cast bar) and /cooldowns (recharge timers): an on-swing ability is neither
+  // casting nor on cooldown, just waiting for the swing — and it silently
+  // fizzles if the resource can't be paid when the swing lands (see swing
+  // resolution), so the readout flags that case up front.
+  private queuedReadout(e: Entity): string {
+    if (!e.queuedOnSwing) return 'You have no ability queued for your next swing.';
+    const queued = this.resolvedAbility(e.queuedOnSwing, e.id);
+    const name = queued?.def.name ?? e.queuedOnSwing;
+    if (!queued) return `${name} is queued for your next melee swing.`;
+    const res = e.resourceType ?? 'resource';
+    const have = Math.floor(e.resource);
+    if (e.resource >= queued.cost) {
+      return `${name} is queued for your next melee swing (costs ${queued.cost} ${res}; you have ${have}).`;
+    }
+    return `${name} is queued for your next melee swing, but you cannot afford it (costs ${queued.cost} ${res}; you have ${have}) — it will fizzle.`;
   }
 }
 

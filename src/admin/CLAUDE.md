@@ -18,12 +18,13 @@ framework — it builds HTML strings and assigns `innerHTML`.
 - `tables.ts` — pure `render*Table`/detail HTML-string functions.
 - `charts.ts` — hand-rolled SVG `barChart` + `chartPanel` (no chart lib).
 - `format.ts` — `escapeHtml`, `fmtDuration/Date/Relative/Copper/Bytes`.
+- `i18n.ts` — the dashboard's own `t()` layer (`classLabel`, `zoneLabel`, `reasonLabel`, `localizeAdminError`). Operators are users, so **all rendered admin text routes through it** (the root i18n invariant applies here too).
 
 ## Talks to server/admin.ts over `/admin/api`
 All responses use the `{ success, data, error }` envelope (unwrapped in `api.ts`).
 GET: `/overview`, `/online`, `/activity`, `/accounts?search&page`, `/accounts/:id`,
 `/characters?sort&dir&page`, `/moderation/queue`, `/moderation/accounts/:id`.
-POST: `/login`, `/moderation/accounts/:id/{suspend,ban}`,
+POST: `/login`, `/moderation/accounts/:id/{suspend,ban,unban}`,
 `/moderation/reports/:id/ignore`, `/moderation/characters/:id/force-rename`.
 In dev, Vite proxies `/admin/api` → `:8787` (see `vite.config.ts`).
 

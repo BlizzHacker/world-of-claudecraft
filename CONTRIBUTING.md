@@ -1,0 +1,199 @@
+<div align="center">
+
+**English** · [Español](docs/i18n/CONTRIBUTING.es.md) · [Español (España)](docs/i18n/CONTRIBUTING.es_ES.md) · [Français](docs/i18n/CONTRIBUTING.fr_FR.md) · [Français (Canada)](docs/i18n/CONTRIBUTING.fr_CA.md) · [Italiano](docs/i18n/CONTRIBUTING.it_IT.md) · [Deutsch](docs/i18n/CONTRIBUTING.de_DE.md) · [简体中文](docs/i18n/CONTRIBUTING.zh_CN.md) · [繁體中文](docs/i18n/CONTRIBUTING.zh_TW.md) · [한국어](docs/i18n/CONTRIBUTING.ko_KR.md) · [日本語](docs/i18n/CONTRIBUTING.ja_JP.md) · [Português (Brasil)](docs/i18n/CONTRIBUTING.pt_BR.md) · [Русский](docs/i18n/CONTRIBUTING.ru_RU.md)
+
+</div>
+
+# Contributing to World of ClaudeCraft
+
+First off, thank you for being here. World of ClaudeCraft is built by a community
+of people who love classic MMOs, and every contribution, big or small, makes it
+better. Fixing a typo, translating the game, reporting a bug, building a whole new
+dungeon: it all counts, and you're welcome here.
+
+This guide will help you get set up and make your first contribution a smooth one.
+You don't need to be an expert. If anything is unclear, ask on
+[Discord](https://discord.gg/GjhnUsBtw) and someone will be happy to help.
+
+By participating, you agree to follow our [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## Ways to contribute
+
+There's a place for everyone here:
+
+- **Code.** Fix a bug, add a feature, or improve performance. Issues labeled
+  [`good first issue`](https://github.com/levy-street/world-of-claudecraft/labels/good%20first%20issue)
+  and [`help wanted`](https://github.com/levy-street/world-of-claudecraft/labels/help%20wanted)
+  are good places to start.
+- **Translations.** Help players around the world by improving or completing a
+  language. See [Translating the game](#translating-the-game) below. This is one
+  of the easiest and most impactful ways to start.
+- **Bug reports and feature ideas.** Open an [issue](https://github.com/levy-street/world-of-claudecraft/issues/new/choose).
+  A clear bug report is a real contribution.
+- **Documentation.** Guides like this one, the README, and the design docs in
+  `docs/` can always be improved.
+- **Playtesting and feedback.** Play the game, tell us what feels off, and share
+  ideas on Discord.
+
+## Getting started
+
+You'll need [Node.js 22+](https://nodejs.org/) and npm. For the multiplayer server
+you'll also want [Docker](https://www.docker.com/) to run Postgres.
+
+```bash
+# 1. Fork the repo on GitHub, then clone your fork
+git clone https://github.com/<your-username>/world-of-claudecraft.git
+cd world-of-claudecraft
+
+# 2. Install dependencies
+npm ci
+
+# 3. Run the offline client (no server or database needed)
+npm run dev          # open the URL it prints (usually http://localhost:5173)
+```
+
+That's enough to play the offline world and work on most things. To run the full
+online stack:
+
+```bash
+npm run db:up        # start Postgres 16 in Docker (dev DB on port 5433)
+npm run server       # build and run the authoritative game server on :8787
+npm run dev          # in another terminal; the client proxies to the server
+```
+
+The [README](README.md) has the full host, develop, and play guide, and the
+`CLAUDE.md` files throughout the repo document the conventions for each area.
+
+## Making your change
+
+1. **Create a branch** off `main`: `feature/<short-slug>` or `fix/<short-slug>`.
+2. **Make focused commits.** Smaller, self-contained changes are easier to review
+   and merge than large ones.
+3. **Add or update tests** for any behavior you change in `src/sim/` or `server/`.
+4. **Keep player-visible text translatable.** See [Localization](#localization)
+   and [Translating the game](#translating-the-game).
+
+### Things to keep in mind
+
+These are the load-bearing rules of the codebase. The full detail lives in the
+root [`CLAUDE.md`](CLAUDE.md), but the short version:
+
+- **The simulation core (`src/sim/`) is the source of truth**, and it stays pure,
+  with no DOM, browser, or Three.js imports, so the exact same code runs offline,
+  on the server, and in the headless RL environment.
+- **The simulation is deterministic.** It runs at a fixed 20 Hz tick, and all
+  randomness goes through `Rng`, never `Math.random`, `Date.now`, or
+  `performance.now` in sim logic. The same seed always produces the same world.
+- **Gameplay math follows classic-era MMO formulas** (rage, hit tables, armor, XP
+  curves). Please don't invent balance numbers. Cite the formula instead.
+- **Don't hand-edit generated files** such as `*.generated.ts`. Regenerate them
+  through the build.
+- **Never commit secrets** or a `.env` file, and never enable `ALLOW_DEV_COMMANDS`
+  in a production path, since it unlocks cheats.
+
+## Before you open a pull request
+
+Please run these locally. They're the same checks CI runs:
+
+```bash
+npm test                    # Vitest suite
+npx tsc --noEmit            # TypeScript typecheck (the project is strict)
+npm run build               # production client build
+```
+
+If you changed server or headless code, also run `npm run build:server` and
+`npm run build:env`.
+
+Then test your change on both desktop and mobile, including a phone-sized viewport
+in portrait and landscape, if it touches anything players see. Touch targets
+should stay at least 40x40px and form inputs at least 16px font. The UI standards
+are documented in [`src/ui/CLAUDE.md`](src/ui/CLAUDE.md).
+
+## Opening the pull request
+
+Push your branch and open a PR against `main`. The
+[pull request template](.github/PULL_REQUEST_TEMPLATE.md) will guide you through a
+short checklist. Please fill it in:
+
+- Describe **what** changed and **why**.
+- Link any related issue (for example, "Closes #123").
+- Add **screenshots or a clip for UI changes**, on desktop and mobile.
+- Confirm tests, typecheck, and the build pass, and that new strings are
+  translated.
+
+A green CI run and a complete checklist are what we look for before merging. A
+maintainer may suggest changes. That's a normal, collaborative part of the
+process, not a rejection. We aim to be kind and constructive in review, and we ask
+the same of you.
+
+> Commit messages and PR titles follow [Conventional Commits](https://www.conventionalcommits.org/)
+> with a scope where it fits (`feat(talents): ...`, `fix(net): ...`). It's a
+> convention we like rather than a strict requirement. Clear, descriptive messages
+> matter more than perfect formatting.
+
+<a id="localization"></a>
+
+## Localization
+
+World of ClaudeCraft ships in many languages, and we keep it that way as the game
+grows. Every player-visible string is translated into every supported locale.
+
+- All user-facing text is a `t()` key defined in [`src/ui/i18n.ts`](src/ui/i18n.ts).
+  Add a new string to the `en` locale first, then provide a real translation in
+  every other locale in `supportedLanguages`. No English placeholders, and no
+  `// TODO`.
+- Numbers, money, dates, units, and percentages go through the formatters
+  (`formatNumber`, `formatMoney`, `formatDateTime`, `Intl`) rather than manual
+  string building.
+- Player-facing text emitted from `src/sim/` or `server/`, which stay
+  language-agnostic, must be re-localized at the client boundary in the same
+  change. The guard test `npx vitest run tests/localization_fixes.test.ts`
+  enforces this.
+
+If your change adds a string and you can only write it in some languages, that's
+okay. Open the PR and ask for help with the rest in the description. We'd much
+rather help you finish than have you hold back.
+
+<a id="translating-the-game"></a>
+
+## Translating the game
+
+Want to improve a language, or help bring the game to a new one? You don't need to
+write any game code to do it:
+
+1. Open [`src/ui/i18n.ts`](src/ui/i18n.ts) and find the locale you want to work
+   on. Each locale object lists the same keys as `en`.
+2. Improve existing translations, or fill in any that read awkwardly.
+3. Run `npx tsc --noEmit` to confirm nothing is missing, then open a PR.
+
+To propose a brand-new locale, or to discuss tone and terminology, start a thread
+on [Discord](https://discord.gg/GjhnUsBtw) and we'll help you wire it up. Native
+and fluent speakers are especially welcome. Good translations make the game feel
+like home for players everywhere.
+
+## Reporting bugs and requesting features
+
+Please use the [issue templates](https://github.com/levy-street/world-of-claudecraft/issues/new/choose):
+
+- **Bug report.** Search [existing issues](https://github.com/levy-street/world-of-claudecraft/issues)
+  first to avoid duplicates, then include steps to reproduce, what you expected,
+  what happened, and your environment (offline or online, browser, desktop or
+  mobile).
+- **Feature request.** Describe the problem you're trying to solve, not just the
+  solution. Context helps us design the right thing.
+
+## Getting help
+
+Stuck, or just want to say hi? Join the
+[community Discord](https://discord.gg/GjhnUsBtw). No question is too small, and
+new contributors are always welcome.
+
+## License
+
+By contributing, you agree that your contributions will be licensed under the
+project's [MIT License](LICENSE), the same license that covers the project.
+
+---
+
+Thank you for contributing to World of ClaudeCraft. We can't wait to see what you
+build with us.

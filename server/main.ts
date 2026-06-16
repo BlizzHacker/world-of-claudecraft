@@ -4,19 +4,23 @@ import * as path from 'node:path';
 import { WebSocketServer, WebSocket } from 'ws';
 import {
   ensureSchema, pool, createAccount, findAccount, getAccountsCount, touchLogin, saveToken, accountForToken,
-  listCharacters, getCharacter, createCharacter, deleteCharacter, closeOrphanSessions,
+  listCharacters, getCharacter, createCharacterCapped, deleteCharacter, closeOrphanSessions,
   pruneChatLogs, searchCharacters, characterCountsByRealm, moderationStatusForAccount, renameCharacter,
-  findCharacterReportTargetByName, topArenaRatings, topLifetimeXp,
+  findCharacterReportTargetByName, topArenaRatings, topLifetimeXp, chatMuteStatusForAccount,
 } from './db';
 import { virtualLevel } from '../src/sim/types';
+import { Sim } from '../src/sim/sim';
+import type { PlayerClass } from '../src/sim/types';
 import type { LeaderboardEntry } from '../src/world_api';
-import { cleanReportReason, createPlayerReport } from './moderation_db';
+import { cleanReportReason, createPlayerReport, createSuspiciousRegistrationReport } from './moderation_db';
 import { resolveReportTarget } from './report_target';
+import { bufferHandshakeMessages } from './ws_buffer';
 import {
   hashPassword, verifyPassword, newToken, validUsernameShape, offensiveName, validPassword, normalizeCharName,
 } from './auth';
 import { json, readBody, isUniqueViolation } from './http_util';
-import { rateLimited, authThrottled, recordAuthFailure, clearAuthFailures } from './ratelimit';
+import { requestIp, rateLimited, authThrottled, recordAuthFailure, clearAuthFailures } from './ratelimit';
+import { verifyTurnstile } from './turnstile';
 import { handleAdminApi } from './admin';
 import { GameServer } from './game';
 import { REALM, REALM_DIRECTORY, REALM_ORIGINS } from './realm';
@@ -24,10 +28,20 @@ import { cacheControlFor, etagFor, isNotModified } from './static_cache';
 
 const PORT = Number(process.env.PORT ?? 8787);
 const STATIC_DIR = path.join(__dirname, '..', 'dist');
+const WIKI_URL = process.env.WIKI_URL ?? 'http://localhost:8080/wiki/index.php/Main_Page';
 // How long chat logs are kept (0 = forever); pruned at boot and daily.
 const CHAT_LOG_RETENTION_DAYS = Number(process.env.CHAT_LOG_RETENTION_DAYS ?? 90);
+// Cloudflare Turnstile secret. When unset (local dev / tests) registration and
+// login skip human verification entirely — see requireTurnstile below.
+const TURNSTILE_SECRET = process.env.TURNSTILE_SECRET ?? '';
 
 const game = new GameServer();
+
+function initialCharacterState(cls: PlayerClass, name: string, skin: number): import('../src/sim/sim').CharacterState {
+  const sim = new Sim({ seed: 20061, playerClass: cls, playerName: name });
+  sim.setPlayerSkin(sim.playerId, skin);
+  return sim.serializeCharacter(sim.playerId)!;
+}
 
 // ---------------------------------------------------------------------------
 // Lifetime-XP leaderboard cache (Max-Level XP Overflow, FR-4.2 / PR-3).
@@ -96,6 +110,22 @@ async function bearerActiveAccount(req: http.IncomingMessage, res: http.ServerRe
   return accountId;
 }
 
+function requestMetadata(req: http.IncomingMessage): { ip: string; userAgent: string } {
+  return {
+    ip: requestIp(req),
+    userAgent: String(req.headers['user-agent'] ?? ''),
+  };
+}
+
+// Gate account creation / login behind Cloudflare Turnstile. Returns true when
+// the request may proceed: trivially true when no secret is configured, else the
+// client-supplied token must verify. The English error is matched to a t() key
+// by userFacingApiError() in src/main.ts — keep the two strings in sync.
+async function passesTurnstile(req: http.IncomingMessage, body: Record<string, unknown>): Promise<boolean> {
+  if (!TURNSTILE_SECRET) return true;
+  return verifyTurnstile(String(body.turnstileToken ?? ''), TURNSTILE_SECRET, requestIp(req));
+}
+
 const MIME: Record<string, string> = {
   '.html': 'text/html', '.js': 'application/javascript', '.css': 'text/css',
   '.png': 'image/png', '.svg': 'image/svg+xml', '.json': 'application/json',
@@ -116,6 +146,11 @@ function isAdminRequest(req: http.IncomingMessage): boolean {
 function serveStatic(req: http.IncomingMessage, res: http.ServerResponse): void {
   const shell = isAdminRequest(req) ? 'admin.html' : 'index.html';
   let urlPath = (req.url ?? '/').split('?')[0];
+  if (urlPath === '/wiki' || urlPath === '/wiki/' || urlPath.startsWith('/wiki/')) {
+    res.writeHead(302, { Location: WIKI_URL });
+    res.end();
+    return;
+  }
   if (urlPath === '/' || urlPath === '/admin' || urlPath === '/admin/') urlPath = `/${shell}`;
   // normalize once and reuse for BOTH file resolution and cache policy —
   // otherwise /assets/../x would serve a mutable file with immutable caching
@@ -193,6 +228,7 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
     }
     if (req.method === 'POST' && url === '/api/register') {
       const body = await readBody(req);
+      if (!(await passesTurnstile(req, body))) return json(res, 403, { error: 'verification failed, please try again' });
       if (!validUsernameShape(body.username)) return json(res, 400, { error: 'username must be 3-24 chars (letters, digits, _)' });
       if (offensiveName(body.username)) return json(res, 400, { error: 'username is not allowed' });
       if (!validPassword(body.password)) return json(res, 400, { error: 'password must be at least 6 chars' });
@@ -200,7 +236,7 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       if (existing) return json(res, 409, { error: 'username already taken' });
       let account;
       try {
-        account = await createAccount(body.username, await hashPassword(body.password));
+        account = await createAccount(body.username, await hashPassword(body.password), requestMetadata(req));
       } catch (err: any) {
         // a concurrent registration can win the insert after our findAccount
         // check; the username UNIQUE index is the real guard. Surface it as a
@@ -210,10 +246,16 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       }
       const token = newToken();
       await saveToken(token, account.id);
+      void createSuspiciousRegistrationReport({
+        accountId: account.id,
+        username: account.username,
+        ...requestMetadata(req),
+      }).catch((err) => console.error('suspicious registration report failed:', err));
       return json(res, 200, { token, username: account.username });
     }
     if (req.method === 'POST' && url === '/api/login') {
       const body = await readBody(req);
+      if (!(await passesTurnstile(req, body))) return json(res, 403, { error: 'verification failed, please try again' });
       const username = typeof body.username === 'string' ? body.username : '';
       // Per-account brute-force throttle (#93). The message is identical to a
       // bad-password response so it never reveals whether the account exists.
@@ -228,7 +270,7 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       const status = await moderationStatusForAccount(account.id);
       if (status.locked) return json(res, 403, { error: status.message });
       clearAuthFailures(username); // correct password: forgive earlier typos
-      await touchLogin(account.id);
+      await touchLogin(account.id, requestMetadata(req));
       const token = newToken();
       await saveToken(token, account.id);
       return json(res, 200, { token, username: account.username });
@@ -242,6 +284,7 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
           realm: REALM,
           characters: chars.map((c) => ({
             id: c.id, name: c.name, class: c.class, level: c.level,
+            skin: c.state?.skin ?? 0,
             online: [...game.clients.values()].some((s) => s.characterId === c.id),
             forceRename: c.force_rename,
           })),
@@ -254,11 +297,11 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
         if (offensiveName(name)) return json(res, 400, { error: 'character name is not allowed' });
         const validClasses = ['warrior', 'paladin', 'hunter', 'rogue', 'priest', 'shaman', 'mage', 'warlock', 'druid'];
         if (!validClasses.includes(body.class)) return json(res, 400, { error: 'invalid class' });
-        const chars = await listCharacters(accountId);
-        if (chars.length >= 10) return json(res, 400, { error: 'character limit reached' });
+        const skin = Math.max(0, Math.min(7, Math.floor(typeof body.skin === 'number' ? body.skin : 0)));
         try {
-          const c = await createCharacter(accountId, name, body.class);
-          return json(res, 200, { id: c.id, name: c.name, class: c.class, level: c.level, forceRename: c.force_rename });
+          const c = await createCharacterCapped(accountId, name, body.class, 10, initialCharacterState(body.class, name, skin));
+          if (!c) return json(res, 400, { error: 'character limit reached' });
+          return json(res, 200, { id: c.id, name: c.name, class: c.class, level: c.level, skin: c.state?.skin ?? skin, forceRename: c.force_rename });
         } catch (err: any) {
           if (isUniqueViolation(err)) return json(res, 409, { error: 'that name is taken' });
           throw err;
@@ -414,6 +457,7 @@ async function main(): Promise<void> {
   const pruned = await pruneChatLogs(CHAT_LOG_RETENTION_DAYS);
   if (pruned > 0) console.log(`pruned ${pruned} chat log row(s) older than ${CHAT_LOG_RETENTION_DAYS} days`);
   await game.loadMarket();
+  await game.loadChatFilter();
   setInterval(() => {
     void pruneChatLogs(CHAT_LOG_RETENTION_DAYS).catch((err) => console.error('chat log prune failed:', err));
   }, 24 * 3600 * 1000).unref();
@@ -448,11 +492,11 @@ async function main(): Promise<void> {
       return;
     }
     wss.handleUpgrade(req, socket, head, (ws) => {
-      void onConnection(ws);
+      void onConnection(ws, req);
     });
   });
 
-  async function authenticateWebSocket(ws: WebSocket, raw: string): Promise<void> {
+  async function authenticateWebSocket(ws: WebSocket, raw: string, req: http.IncomingMessage): Promise<void> {
     let msg: any;
     try {
       msg = JSON.parse(raw);
@@ -492,7 +536,22 @@ async function main(): Promise<void> {
       ws.close();
       return;
     }
-    const result = game.join(ws, accountId, character.id, character.name, character.class, character.state, character.is_gm);
+    const chatMute = await chatMuteStatusForAccount(accountId);
+    const result = game.join(
+      ws,
+      accountId,
+      character.id,
+      character.name,
+      character.class,
+      character.state,
+      character.is_gm,
+      {
+        ...requestMetadata(req),
+        mutedUntil: status.chatMutedUntil ?? chatMute.mutedUntil,
+        reason: chatMute.reason,
+        chatStrikes: status.chatStrikes,
+      },
+    );
     if ('error' in result) {
       ws.send(JSON.stringify({ t: 'error', error: result.error }));
       ws.close();
@@ -512,7 +571,7 @@ async function main(): Promise<void> {
     });
   }
 
-  async function onConnection(ws: WebSocket): Promise<void> {
+  async function onConnection(ws: WebSocket, req: http.IncomingMessage): Promise<void> {
     const authTimer = setTimeout(() => {
       ws.send(JSON.stringify({ t: 'error', error: 'authentication timed out' }));
       ws.close();
@@ -529,7 +588,12 @@ async function main(): Promise<void> {
 
     ws.once('message', (data) => {
       clearTimeout(authTimer);
-      void authenticateWebSocket(ws, String(data));
+      // Buffer any frames the client sends while the async auth/join handshake
+      // is still in flight, then replay them once authenticateWebSocket has
+      // attached the permanent message handler. Without this the frames are
+      // silently dropped (see ws_buffer.ts).
+      const flush = bufferHandshakeMessages(ws);
+      void authenticateWebSocket(ws, String(data), req).finally(flush);
     });
   }
 

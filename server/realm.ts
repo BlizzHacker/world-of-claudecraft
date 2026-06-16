@@ -18,7 +18,7 @@ export function resolveRealm(rawName: string | undefined): string {
 
 export const REALM = resolveRealm(process.env.REALM_NAME);
 
-// WoW realm types. Normal == PvE.
+// Classic-MMO realm types. Normal == PvE.
 export type RealmType = 'Normal' | 'PvP' | 'RP' | 'RP-PvP';
 const REALM_TYPES: readonly RealmType[] = ['Normal', 'PvP', 'RP', 'RP-PvP'];
 
@@ -39,7 +39,7 @@ export interface RealmEntry {
   type: RealmType;
 }
 
-// The realm directory drives the client's WoW-style realm-list screen.
+// The realm directory drives the client's classic-MMO-style realm-list screen.
 // Configure it with REALMS as a comma-separated list of `Name=https://host=Type`
 // entries (Type optional, defaults Normal), e.g.
 //   REALMS="Claudemoon=https://claudemoon.example.com=Normal,Ironforge=https://ironforge.example.com=PvP"

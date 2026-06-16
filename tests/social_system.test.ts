@@ -461,7 +461,7 @@ describe('guilds', () => {
     expect(h.tx.errorsFor(1).join()).toMatch(/not in a guild/i);
   });
 
-  it('forbids the Guild Master from leaving while members remain (WoW rule)', async () => {
+  it('forbids the Guild Master from leaving while members remain (classic-MMO rule)', async () => {
     await h.svc.guildCreate(h.actor(1), 'Knights');
     await h.svc.guildInvite(h.actor(1), 'Bet');
     await h.svc.guildAccept(h.actor(2));

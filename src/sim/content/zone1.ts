@@ -39,6 +39,23 @@ export const ZONE1_ZONE: ZoneDef = {
 // ---------------------------------------------------------------------------
 
 export const ZONE1_MOBS: Record<string, MobTemplate> = {
+  warlock_imp: {
+    id: 'warlock_imp', name: 'Fire Demon', minLevel: 1, maxLevel: 20, family: 'demon',
+    hpBase: 24, hpPerLevel: 11, dmgBase: 2, dmgPerLevel: 0.7, attackSpeed: 2.0,
+    armorPerLevel: 5, moveSpeed: 8, aggroRadius: 0,
+    loot: [],
+    scale: 0.65, color: 0xff5a2e,
+    petRole: 'ranged_dps',
+    petSpell: { name: 'Firebolt', school: 'fire', min: 8, max: 11, range: 24, every: 2.0 },
+  },
+  warlock_voidwalker: {
+    id: 'warlock_voidwalker', name: 'Void Demon', minLevel: 10, maxLevel: 20, family: 'demon',
+    hpBase: 95, hpPerLevel: 24, dmgBase: 3, dmgPerLevel: 1.0, attackSpeed: 2.4,
+    armorPerLevel: 28, moveSpeed: 7.2, aggroRadius: 0,
+    loot: [],
+    scale: 0.9, color: 0x6b4bb5,
+    petRole: 'melee_tank',
+  },
   forest_wolf: {
     id: 'forest_wolf', name: 'Forest Wolf', minLevel: 1, maxLevel: 2, family: 'beast',
     hpBase: 28, hpPerLevel: 14, dmgBase: 3, dmgPerLevel: 1.6, attackSpeed: 2.0,
@@ -48,6 +65,7 @@ export const ZONE1_MOBS: Record<string, MobTemplate> = {
       { itemId: 'wolf_fang', chance: 0.45 },
     ],
     scale: 0.9, color: 0x7f8c8d,
+    packFrenzy: { radius: 12, hasteMult: 1.3, duration: 8 },
   },
   old_greyjaw: {
     id: 'old_greyjaw', name: 'Old Greyjaw', minLevel: 4, maxLevel: 4, family: 'beast', rare: true,
@@ -77,7 +95,7 @@ export const ZONE1_MOBS: Record<string, MobTemplate> = {
     hpBase: 260, hpPerLevel: 52, dmgBase: 11, dmgPerLevel: 3.3, attackSpeed: 2.4,
     armorPerLevel: 30, moveSpeed: 7.2, aggroRadius: 12,
     aoePulse: { min: 12, max: 18, radius: 8, every: 9, name: 'Bristleback Stomp', school: 'physical' },
-    enrage: { belowHpPct: 0.35, dmgMult: 1.4 },
+    enrage: { belowHpPct: 0.35, dmgMult: 1.4, hasteMult: 1.3 },
     loot: [
       { copper: 120, chance: 1 },
       { itemId: 'tough_jerky', chance: 1 },
@@ -92,6 +110,7 @@ export const ZONE1_MOBS: Record<string, MobTemplate> = {
     id: 'webwood_spider', name: 'Webwood Lurker', minLevel: 2, maxLevel: 4, family: 'spider',
     hpBase: 30, hpPerLevel: 15, dmgBase: 4, dmgPerLevel: 1.7, attackSpeed: 1.8,
     armorPerLevel: 8, moveSpeed: 8, aggroRadius: 10,
+    venom: { chance: 0.35, perTick: 2, interval: 2, duration: 10, name: 'Spider Venom', school: 'nature' },
     loot: [
       { copper: 14, chance: 1 },
       { itemId: 'webwood_silk', chance: 0.55, questId: 'q_spiders' },
@@ -130,7 +149,7 @@ export const ZONE1_MOBS: Record<string, MobTemplate> = {
     armorPerLevel: 34, moveSpeed: 7.4, aggroRadius: 14,
     aoePulse: { min: 14, max: 20, radius: 8, every: 10, name: 'Ground Pound', school: 'physical' },
     summonAdds: { mobId: 'mogger_lackey', count: 2, atHpPct: [0.70] },
-    enrage: { belowHpPct: 0.30, dmgMult: 1.6 },
+    enrage: { belowHpPct: 0.30, dmgMult: 1.6, hasteMult: 1.3 },
     loot: [
       { copper: 180, chance: 1 },
       { itemId: 'linen_scrap', chance: 1 },

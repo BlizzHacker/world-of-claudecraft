@@ -46,6 +46,12 @@ export default defineConfig({
     __APP_BUILD_ID__: JSON.stringify(appBuildId.slice(0, 12)),
     __APP_BUILD_DATE__: JSON.stringify(appBuildDate),
   },
+  // Parent dir has a postcss.config.js with Tailwind — ignore it; this project has no CSS pipeline.
+  css: {
+    postcss: {
+      plugins: [],
+    },
+  },
   server: {
     port: 5173,
     proxy: {

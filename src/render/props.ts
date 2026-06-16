@@ -29,11 +29,15 @@ export interface PropsResult {
   group: THREE.Group;
   flames: THREE.Mesh[]; // animated campfire flames
   fireLights: THREE.PointLight[];
-  /** hides merged/instanced prop bands that sit entirely past the fog far plane */
-  update(camX: number, camZ: number, fogFar: number): void;
+  /**
+   * Hides merged/instanced prop bands that sit entirely past the fog far plane,
+   * and hides any village structure the camera is currently standing inside
+   * (below its roof) so the chase cam can sit indoors without a wall in view.
+   */
+  update(camX: number, camY: number, camZ: number, fogFar: number): void;
 }
 
-const MERGE_BAND_DEPTH = 180;
+const MERGE_BAND_DEPTH = GFX.standardMaterials ? 180 : 90;
 
 // ---------------------------------------------------------------------------
 // Asset registry — loads kick off at module import; main.ts awaits
@@ -95,10 +99,19 @@ const PROP_ASSET_DEFS: Record<string, PropAssetDef> = {
 type PropKey = keyof typeof PROP_ASSET_DEFS;
 
 const loadedProps = new Map<string, GLTF>();
+const ACTIVE_PROP_KEYS = new Set<PropKey>(GFX.standardMaterials
+  ? Object.keys(PROP_ASSET_DEFS) as PropKey[]
+  : [
+    'house1', 'house2', 'house3', 'blacksmith', 'inn', 'bellTower', 'well',
+    'stand1', 'stand2', 'cart', 'fence', 'bonfire', 'oreRocks',
+    'tentOpen', 'tentSmall', 'rockLargeD', 'mushroomRed', 'column', 'columnBroken',
+    'dockPlatform', 'rowboat', 'graveRound', 'timberPillar', 'crateWooden', 'barrel',
+  ]);
 
 // Headless sim/test imports never fetch; the browser kicks loads immediately.
 if (typeof window !== 'undefined') {
   for (const [key, def] of Object.entries(PROP_ASSET_DEFS)) {
+    if (!ACTIVE_PROP_KEYS.has(key as PropKey)) continue;
     registerPreload(loadGltf(def.url).then((gltf) => { loadedProps.set(key, gltf); }));
   }
 }
@@ -265,8 +278,38 @@ export function buildProps(seed: number): PropsResult {
 
   const ground = (x: number, z: number) => terrainHeight(x, z, seed);
 
+  // Village structures the camera ghosts through (see colliders.ts `camGhost`):
+  // each stays an individual, un-merged group so it can be hidden while the
+  // camera sits inside its footprint. Footprints mirror the colliders so what
+  // hides is exactly what the camera passes through.
+  const hideables: Hideable[] = [];
+  const keepFromMerge = new Set<THREE.Object3D>();
+  /**
+   * Mark `g` un-mergeable and register it as hide-when-camera-inside. Each
+   * mesh's material is cloned so flipping colour/depth writes hides only this
+   * structure (and leaves the shadow pass untouched).
+   */
+  function registerHideable(g: THREE.Group, fp: Footprint): void {
+    const matMap = new Map<THREE.Material, ToggleMat>();
+    g.traverse((o) => {
+      const mesh = o as THREE.Mesh;
+      if (!mesh.isMesh) return;
+      keepFromMerge.add(mesh);
+      const src = mesh.material as THREE.Material;
+      let tm = matMap.get(src);
+      if (!tm) {
+        const mat = src.clone();
+        tm = { mat, depthWrite: mat.depthWrite };
+        matMap.set(src, tm);
+      }
+      mesh.material = tm.mat;
+    });
+    hideables.push({ group: g, mats: [...matMap.values()], hidden: false, ...fp });
+  }
+
   // live small materials (decals / glow) — shared, never per-instance
   const usePbr = GFX.standardMaterials;
+  const lowProps = !usePbr;
   const recessMat = surfaceMat({ color: 0x14100b, roughness: 1 });
   const holeMat = new THREE.MeshBasicMaterial({ color: 0x050505 });
   const lanternMat = surfaceMat({ color: 0xffcc66, emissive: 0xff9933, emissiveIntensity: usePbr ? 2 : 1.2, roughness: 0.4 });
@@ -327,6 +370,8 @@ export function buildProps(seed: number): PropsResult {
   for (const b of PROPS.buildings) {
     const key = b.x * 13.7 + b.z * 3.1;
     const y = ground(b.x, b.z);
+    // roof Y mirrors the camera collider height in colliders.ts
+    const roofY = y + (b.kind === 'chapel' ? 10.8 : b.kind === 'inn' ? 7.8 : 8.0);
     if (b.kind === 'chapel') {
       // composed chapel: tall bell tower at the rear + squat stone entry hall
       // in front; the hall door lands on the footprint's +z edge.
@@ -344,6 +389,7 @@ export function buildProps(seed: number): PropsResult {
       g.position.set(b.x, y - 0.12, b.z);
       g.rotation.y = b.rot;
       group.add(shadowed(g));
+      registerHideable(g, obbFootprint(b.x, b.z, b.w / 2, b.d / 2, b.rot, roofY));
       continue;
     }
     const asset: PropKey = b.kind === 'inn' ? 'inn' : housePool[Math.floor(keyRand(key, 3) * 0.999 * housePool.length)];
@@ -353,6 +399,7 @@ export function buildProps(seed: number): PropsResult {
     g.position.set(b.x, y - 0.12, b.z);
     g.rotation.y = b.rot;
     group.add(shadowed(g));
+    registerHideable(g, obbFootprint(b.x, b.z, b.w / 2, b.d / 2, b.rot, roofY));
   }
 
   // ---- market stalls (smith/armorer stalls get anvil + weapon stand) ------
@@ -365,17 +412,18 @@ export function buildProps(seed: number): PropsResult {
       scale: [3.1 / stand.size.x, 2.6 / stand.size.y, 2.5 / stand.size.z],
       rot: (keyRand(key, 1) - 0.5) * 0.1,
     });
-    if (i === 1 || i === 4) {
+    if (!lowProps && (i === 1 || i === 4)) {
       // Smith Haldren (z1) / Armorer Hode (z3): forge-front dressing
       addParts(g, 'anvil', { x: 1.35, z: 1.15, rot: 0.9, scale: 1.35 });
       addParts(g, 'weaponStand', { x: -1.45, z: 0.6, rot: 0.5 + Math.PI, scale: 1.25 });
-    } else {
+    } else if (!lowProps) {
       addParts(g, 'farmCrate', { x: 1.3, z: 1.05, rot: keyRand(key, 2) * Math.PI, scale: 1.5 });
       addParts(g, 'barrel', { x: -1.35, z: 0.85, rot: keyRand(key, 3) * Math.PI, scale: 1.15 });
     }
     g.position.set(s.x, ground(s.x, s.z) - 0.06, s.z);
     g.rotation.y = s.rot;
     group.add(shadowed(g));
+    registerHideable(g, circleFootprint(s.x, s.z, s.r, ground(s.x, s.z) + 3.1));
   });
 
   // ---- wells ---------------------------------------------------------------
@@ -386,15 +434,16 @@ export function buildProps(seed: number): PropsResult {
     g.position.set(w.x, ground(w.x, w.z) - 0.1, w.z);
     g.rotation.y = propRand(w.x, w.z, 1) * Math.PI;
     group.add(shadowed(g));
+    registerHideable(g, circleFootprint(w.x, w.z, w.r, ground(w.x, w.z) + 3.7));
   }
 
   // ---- graveyards: 4 headstone shapes, leaning, instanced ------------------
-  const graveKinds: PropKey[] = ['graveRound', 'graveCross', 'graveBevel', 'graveDecor'];
+  const graveKinds: PropKey[] = lowProps ? ['graveRound'] : ['graveRound', 'graveCross', 'graveBevel', 'graveDecor'];
   for (const gy of PROPS.graveyards) {
     for (let i = 0; i < 6; i++) {
       const gx = gy.x + (i % 3) * 2.2, gz = gy.z + Math.floor(i / 3) * 2.6;
       const s = 2.0 + keyRand(gx * 3 + gz, 4) * 0.5;
-      addInstance(graveKinds[i % 4], gx, ground(gx, gz) - 0.06, gz, new THREE.Euler(
+      addInstance(graveKinds[i % graveKinds.length], gx, ground(gx, gz) - 0.06, gz, new THREE.Euler(
         (propRand(gx, gz, 1) - 0.5) * 0.2,
         i * 0.4 + (propRand(gx, gz, 2) - 0.5) * 0.5,
         (propRand(gx, gz, 3) - 0.5) * 0.22,
@@ -484,10 +533,12 @@ export function buildProps(seed: number): PropsResult {
     doorway.rotation.x = -0.14;
     noShadow.add(doorway);
     group.add(doorway);
-    // toadstool cluster at the foot
-    const a2 = face + 0.9 + propRand(x, z, 18);
-    addInstance('mushroomTan', x + Math.sin(a2) * 1.7, y - 0.05, z + Math.cos(a2) * 1.7,
-      propRand(x, z, 19) * Math.PI * 2, 2.6 + propRand(x, z, 20) * 1.4);
+    if (!lowProps) {
+      // toadstool cluster at the foot
+      const a2 = face + 0.9 + propRand(x, z, 18);
+      addInstance('mushroomTan', x + Math.sin(a2) * 1.7, y - 0.05, z + Math.cos(a2) * 1.7,
+        propRand(x, z, 19) * Math.PI * 2, 2.6 + propRand(x, z, 20) * 1.4);
+    }
   }
 
   // ---- ruin rings: weathered monolith columns at the exact collider angles -
@@ -503,6 +554,7 @@ export function buildProps(seed: number): PropsResult {
         (i % 3 === 0 ? 0.13 : 0.03) * (i % 2 ? 1 : -1),
       ), [3.8, sy, 3.8]);
     }
+    if (lowProps) continue;
     // toppled relics at the ring's heart: half-buried head + fallen column
     const fy = ground(r.x - 2, r.z - 3);
     const g = new THREE.Group();
@@ -542,7 +594,7 @@ export function buildProps(seed: number): PropsResult {
       [-1.6, 0.1, -1.0, 1.2], [1.8, 0.1, -0.9, 1.1], [0.3, 3.0, -4.2, 2.3],
       [-1.4, 1.6, -3.4, 1.8], [1.5, 1.7, -3.2, 1.7], [0, 0.2, -1.6, 1.4],
     ];
-    const rockKinds: PropKey[] = ['rockTallA', 'rockLargeD', 'rockTallH', 'rockLargeF'];
+    const rockKinds: PropKey[] = lowProps ? ['rockLargeD'] : ['rockTallA', 'rockLargeD', 'rockTallH', 'rockLargeF'];
     for (let i = 0; i < mound.length; i++) {
       const [rx, ry, rz, rr] = mound[i];
       const kind = rockKinds[(i * 2 + 1) % rockKinds.length];
@@ -560,15 +612,20 @@ export function buildProps(seed: number): PropsResult {
     addParts(g, 'cart', { x: 2.8, z: 1.6, rot: 0.5, scale: 1.9 });
     addParts(g, 'oreRocks', { x: 2.75, y: 0.78, z: 1.55, rot: 0.9, scale: 2.6 });
     addParts(g, 'oreRocks', { x: 3.4, z: 0.4, rot: 2.2, scale: 1.8 });
-    // hanging lantern on the right post
-    addParts(g, 'lanternWall', { x: 1.45, y: 2.0, z: 0.28, scale: 1.25 });
-    const glass = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.11, 0.26, 6), lanternMat);
-    glass.position.set(1.45, 2.52, 1.32);
-    noShadow.add(glass);
-    g.add(glass);
+    if (!lowProps) {
+      // hanging lantern on the right post
+      addParts(g, 'lanternWall', { x: 1.45, y: 2.0, z: 0.28, scale: 1.25 });
+      const glass = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.11, 0.26, 6), lanternMat);
+      glass.position.set(1.45, 2.52, 1.32);
+      noShadow.add(glass);
+      g.add(glass);
+    }
     g.position.set(m.x, ground(m.x, m.z), m.z);
     g.rotation.y = m.rot;
     group.add(shadowed(g));
+    // mound circle behind the portal — same offset/radius as the collider
+    const mx = m.x - 3.4 * Math.sin(m.rot), mz = m.z - 3.4 * Math.cos(m.rot);
+    registerHideable(g, circleFootprint(mx, mz, 5, ground(mx, mz) + 5.2));
   }
 
   // ---- fishing docks: pirate-kit platforms, moored rowboat, stone hut ------
@@ -593,9 +650,11 @@ export function buildProps(seed: number): PropsResult {
       x: d.hutLocal.x, z: d.hutLocal.z,
       scale: [(d.hutLocal.hw * 2) / hut.size.x, 2.6 / hut.size.y, (d.hutLocal.hd * 2) / hut.size.z],
     });
-    addParts(g, 'barrel', { x: 0.55, y: 0.52, z: -0.55, rot: keyRand(key, 5) * Math.PI, scale: 0.95 });
-    addParts(g, 'barrel', { x: 1.45, z: 0.9, rot: keyRand(key, 6) * Math.PI, scale: 1.15 });
-    addParts(g, 'crateWooden', { x: -0.6, y: 0.52, z: -2.2, rot: keyRand(key, 7), scale: 0.9 });
+    if (!lowProps) {
+      addParts(g, 'barrel', { x: 0.55, y: 0.52, z: -0.55, rot: keyRand(key, 5) * Math.PI, scale: 0.95 });
+      addParts(g, 'barrel', { x: 1.45, z: 0.9, rot: keyRand(key, 6) * Math.PI, scale: 1.15 });
+      addParts(g, 'crateWooden', { x: -0.6, y: 0.52, z: -2.2, rot: keyRand(key, 7), scale: 0.9 });
+    }
     // rowboat beside the deck's far end: floats at water level when the
     // shore dips below it, otherwise sits hauled up on the bank
     const boatLx = 2.4, boatLz = -5.0;
@@ -612,10 +671,15 @@ export function buildProps(seed: number): PropsResult {
     g.position.set(d.x, y, d.z);
     g.rotation.y = d.rot;
     group.add(shadowed(g));
+    // stone hut OBB — same offset/extents/rotation as the collider
+    const hc = Math.cos(d.rot), hs = Math.sin(d.rot);
+    const hx = d.x + d.hutLocal.x * hc + d.hutLocal.z * hs;
+    const hz = d.z - d.hutLocal.x * hs + d.hutLocal.z * hc;
+    registerHideable(g, obbFootprint(hx, hz, d.hutLocal.hw, d.hutLocal.hd, d.rot, ground(hx, hz) + 2.9));
   }
 
   // ---- flush instanced batches ---------------------------------------------
-  const cullables: { obj: THREE.Object3D; cx: number; cz: number; r: number }[] = [];
+  const cullables: PropCullable[] = [];
   for (const batch of instanceBatches.values()) {
     const a = propAsset(batch.key);
     for (const part of a.parts) {
@@ -625,28 +689,145 @@ export function buildProps(seed: number): PropsResult {
       im.castShadow = true;
       im.receiveShadow = true;
       im.computeBoundingSphere();
+      im.computeBoundingBox();
       group.add(im);
-      const sphere = im.boundingSphere;
-      if (sphere) cullables.push({ obj: im, cx: sphere.center.x, cz: sphere.center.z, r: sphere.radius });
+      const bounds = cullableBounds(im, im.boundingBox, im.boundingSphere);
+      if (bounds) cullables.push(bounds);
     }
   }
 
-  const staticMeshes = mergeStaticMeshes(group, new Set(flames));
+  // animated flames + village structures (hidden individually) stay un-merged
+  const keep = new Set<THREE.Object3D>(flames);
+  for (const m of keepFromMerge) keep.add(m);
+  const staticMeshes = mergeStaticMeshes(group, keep);
   for (const sm of staticMeshes) {
-    const sphere = sm.geometry.boundingSphere;
-    if (sphere) cullables.push({ obj: sm, cx: sphere.center.x, cz: sphere.center.z, r: sphere.radius });
+    const bounds = cullableBounds(sm, sm.geometry.boundingBox, sm.geometry.boundingSphere);
+    if (bounds) cullables.push(bounds);
   }
 
   return {
     group,
     flames,
     fireLights,
-    update(camX: number, camZ: number, fogFar: number): void {
+    update(camX: number, camY: number, camZ: number, fogFar: number): void {
       for (const c of cullables) {
-        c.obj.visible = Math.hypot(c.cx - camX, c.cz - camZ) - c.r < fogFar;
+        c.obj.visible = cullableVisible(c, camX, camZ, fogFar);
+      }
+      for (const h of hideables) {
+        const dx = camX - h.x, dz = camZ - h.z;
+        if (Math.hypot(dx, dz) - h.cull >= fogFar) {
+          h.group.visible = false; // fully fogged: drop it (shadow is out of range too)
+          continue;
+        }
+        h.group.visible = true;
+        // hide from the camera (camera standing inside, below the roof) while
+        // still casting a shadow: disable colour + depth writes, not the object
+        const hide = camY < h.topY && cameraInsideFootprint(h, camX, camZ);
+        if (hide !== h.hidden) {
+          h.hidden = hide;
+          for (const m of h.mats) {
+            m.mat.colorWrite = !hide;
+            m.mat.depthWrite = hide ? false : m.depthWrite;
+          }
+        }
       }
     },
   };
+}
+
+/** One material we flip on/off, remembering its original depth-write state. */
+interface ToggleMat { mat: THREE.Material; depthWrite: boolean }
+
+// A village structure that the camera ghosts through and the renderer hides
+// whenever the camera stands inside its footprint (below `topY`). Either a
+// circle (`r`) or an OBB (`hw`/`hd`/`rot`), matching the collider it mirrors.
+// "Hidden" disables colour/depth writes rather than `visible = false`, so the
+// structure stays in the shadow pass and keeps casting its shadow.
+interface Hideable {
+  group: THREE.Group;
+  mats: ToggleMat[]; // cloned per-structure so the toggle is local
+  hidden: boolean;
+  x: number; // footprint centre (world XZ)
+  z: number;
+  topY: number; // roof height; a camera above this never hides the structure
+  cull: number; // bounding radius for the fog-far cull
+  r?: number; // circle footprint
+  hw?: number; // OBB half-extents + yaw
+  hd?: number;
+  rot?: number;
+}
+
+type Footprint = Omit<Hideable, 'group' | 'mats' | 'hidden'>;
+
+function circleFootprint(x: number, z: number, r: number, topY: number): Footprint {
+  return { x, z, r, topY, cull: r };
+}
+
+function obbFootprint(x: number, z: number, hw: number, hd: number, rot: number, topY: number): Footprint {
+  return { x, z, hw, hd, rot, topY, cull: Math.hypot(hw, hd) };
+}
+
+function cameraInsideFootprint(h: Hideable, camX: number, camZ: number): boolean {
+  const dx = camX - h.x, dz = camZ - h.z;
+  if (h.r !== undefined) return dx * dx + dz * dz < h.r * h.r;
+  // world -> OBB local (three.js rotation.y convention), mirrors colliders.rotY
+  const c = Math.cos(h.rot!), s = Math.sin(h.rot!);
+  const lx = dx * c - dz * s;
+  const lz = dx * s + dz * c;
+  return Math.abs(lx) < h.hw! && Math.abs(lz) < h.hd!;
+}
+
+interface PropCullable {
+  obj: THREE.Object3D;
+  hasBox: boolean;
+  minX: number;
+  maxX: number;
+  minZ: number;
+  maxZ: number;
+  cx: number;
+  cz: number;
+  r: number;
+}
+
+function cullableBounds(
+  obj: THREE.Object3D,
+  box: THREE.Box3 | null,
+  sphere: THREE.Sphere | null,
+): PropCullable | undefined {
+  if (box) {
+    const fallback = sphere ?? box.getBoundingSphere(new THREE.Sphere());
+    return {
+      obj,
+      hasBox: true,
+      minX: box.min.x,
+      maxX: box.max.x,
+      minZ: box.min.z,
+      maxZ: box.max.z,
+      cx: fallback.center.x,
+      cz: fallback.center.z,
+      r: fallback.radius,
+    };
+  }
+  if (!sphere) return undefined;
+  return {
+    obj,
+    hasBox: false,
+    minX: sphere.center.x - sphere.radius,
+    maxX: sphere.center.x + sphere.radius,
+    minZ: sphere.center.z - sphere.radius,
+    maxZ: sphere.center.z + sphere.radius,
+    cx: sphere.center.x,
+    cz: sphere.center.z,
+    r: sphere.radius,
+  };
+}
+
+function cullableVisible(c: PropCullable, camX: number, camZ: number, fogFar: number): boolean {
+  const dx = camX < c.minX ? c.minX - camX : camX > c.maxX ? camX - c.maxX : 0;
+  const dz = camZ < c.minZ ? c.minZ - camZ : camZ > c.maxZ ? camZ - c.maxZ : 0;
+  if (Math.hypot(dx, dz) < fogFar) return true;
+  if (c.hasBox) return false;
+  return Math.hypot(c.cx - camX, c.cz - camZ) - c.r < fogFar;
 }
 
 // Bake every static prop mesh into world space and merge per

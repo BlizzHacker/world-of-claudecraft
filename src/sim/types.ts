@@ -20,6 +20,10 @@ export const ALL_CLASSES: PlayerClass[] = [
   'warrior', 'paladin', 'hunter', 'rogue', 'priest', 'shaman', 'mage', 'warlock', 'druid',
 ];
 export type ResourceType = 'rage' | 'mana' | 'energy';
+export const OVERHEAD_EMOTE_IDS = [
+  'wave', 'laugh', 'question', 'cheer', 'dance', 'point', 'flex', 'salute', 'cry', 'bow', 'clap', 'roar', 'kneel',
+] as const;
+export type OverheadEmoteId = typeof OVERHEAD_EMOTE_IDS[number];
 
 export interface Vec3 {
   x: number;
@@ -29,13 +33,13 @@ export interface Vec3 {
 
 export type EntityKind = 'player' | 'mob' | 'npc' | 'object';
 
-export type AiState = 'idle' | 'chase' | 'attack' | 'evade' | 'dead';
+export type AiState = 'idle' | 'chase' | 'attack' | 'flee' | 'evade' | 'dead';
 
 export type AuraKind =
   | 'dot' | 'slow' | 'stun' | 'root' | 'incapacitate' | 'polymorph'
-  | 'attackspeed' | 'buff_ap' | 'buff_armor' | 'buff_int' | 'buff_dodge' | 'buff_speed' | 'buff_haste'
+  | 'attackspeed' | 'debuff_ap' | 'buff_ap' | 'buff_armor' | 'buff_int' | 'buff_dodge' | 'buff_speed' | 'buff_haste'
   | 'hot' | 'absorb' | 'imbue' | 'buff_sta' | 'buff_allstats' | 'thorns' | 'form_bear'
-  | 'form_cat' | 'stealth' | 'defensive_stance' | 'righteous_fury' | 'sunder';
+  | 'form_cat' | 'stealth' | 'defensive_stance' | 'righteous_fury' | 'sunder' | 'mortal_wound';
 
 export interface Aura {
   id: string; // ability id that applied it
@@ -54,7 +58,7 @@ export interface Aura {
   stacks?: number; // sunder armor: applications stack up to the effect's cap
 }
 
-export type CrowdControlDrCategory = 'root';
+export type CrowdControlDrCategory = 'root' | 'polymorph' | 'fear';
 
 export interface CrowdControlDrState {
   stage: number;
@@ -93,6 +97,10 @@ export interface ItemDef {
   sellValue: number; // copper (vendor buys at this)
   buyValue?: number; // copper (vendor sells at this)
   questId?: string;
+  /** Shown when interacting with a ground quest object before the quest is active. */
+  pickupDeny?: string;
+  /** Shown when the quest is active but the collect count is already met. */
+  pickupEnough?: string;
   // consumables: total restored over 18 seconds while sitting
   foodHp?: number;
   drinkMana?: number;
@@ -130,7 +138,9 @@ export interface LootEntry {
 
 export type MobFamily =
   | 'beast' | 'humanoid' | 'murloc' | 'spider' | 'kobold' | 'undead'
-  | 'troll' | 'ogre' | 'elemental' | 'dragonkin';
+  | 'troll' | 'ogre' | 'elemental' | 'dragonkin' | 'demon';
+export type PetMode = 'passive' | 'defensive' | 'aggressive';
+export type PetRole = 'melee_tank' | 'ranged_dps';
 
 export interface MobTemplate {
   id: string;
@@ -161,8 +171,40 @@ export interface MobTemplate {
   aoePulse?: { min: number; max: number; radius: number; every: number; name: string; school?: string; fx?: 'nova' | 'projectile' };
   // Boss mechanic: spawn adds when hp first drops below each threshold (descending fractions).
   summonAdds?: { mobId: string; count: number; atHpPct: number[] };
-  // Boss mechanic: damage multiplier once hp drops below the threshold.
-  enrage?: { belowHpPct: number; dmgMult: number };
+  // Boss mechanic: damage multiplier (and optional swing-speed haste) once hp
+  // drops below the threshold. hasteMult > 1 makes the enraged mob swing faster.
+  enrage?: { belowHpPct: number; dmgMult: number; hasteMult?: number };
+  // Mob mechanic: a one-time desperation self-heal the first time hp drops
+  // below the threshold (healPct is a fraction of maxHp). Resets on evade/respawn.
+  desperateHeal?: { belowHpPct: number; healPct: number };
+  // Boss mechanic ("War Stomp"): periodic ground slam that stuns nearby players
+  // for `duration`s (and optionally deals min..max damage). Telegraphed: the
+  // first slam only lands one full `every` interval after combat starts.
+  stomp?: { radius: number; every: number; duration: number; min?: number; max?: number; name: string; school?: string };
+  // Melee mechanic: each landed swing also splashes onto other players near the
+  // primary target for `mult` of the (pre-armor) hit. Classic-WoW Cleave.
+  cleave?: { radius: number; mult: number; name?: string };
+  // On-hit debuff: a chance per landed melee swing to inflict a stacking-refresh
+  // damage-over-time poison on the struck target (spiders, serpents, scorpions).
+  venom?: { chance: number; perTick: number; interval: number; duration: number; name: string; school?: string };
+  // Classic beast "Frenzy": when a mob with this trait dies, nearby living
+  // same-family hostile mobs briefly attack faster (hasteMult, e.g. 1.3 = +30%
+  // swing speed) for `duration` seconds. Applied as a buff_haste aura.
+  packFrenzy?: { radius: number; hasteMult: number; duration: number };
+  // Melee mechanic: a landed swing has `chance` to inflict a Mortal Wound debuff
+  // that reduces all healing the victim receives by `healReduction` for `duration`.
+  mortalStrike?: { chance: number; healReduction: number; duration: number; name: string; school?: string };
+  // Combat mechanic: a landed melee hit has `chance` to corrode the victim's
+  // armor: a stacking `sunder` debuff (up to `maxStacks`) so the victim takes
+  // more physical damage from everyone until it expires. Rides the existing
+  // sunder aura; no new aura kind.
+  corrode?: { chance: number; armor: number; maxStacks: number; duration: number; name: string; school?: Aura['school'] };
+  // Pet mechanic: this creature is a ranged caster (warlock Imp) — instead of
+  // closing to melee, it stays at `range` and hurls bolts of `school` damage.
+  // updatePet reads this; the bolt damage comes from the mob's weapon range.
+  petRanged?: { range: number; school: Aura['school'] };
+  petRole?: PetRole;
+  petSpell?: { name: string; school: 'physical' | 'fire' | 'frost' | 'arcane' | 'shadow' | 'holy' | 'nature'; min: number; max: number; range: number; every: number };
 }
 
 export type AbilityEffect =
@@ -186,6 +228,7 @@ export type AbilityEffect =
   | { type: 'polymorph'; duration: number } // sheep: breaks on damage, target heals
   | { type: 'aoeDamage'; min: number; max: number; radius: number }
   | { type: 'aoeAttackSpeed'; mult: number; duration: number; radius: number } // thunder clap rider
+  | { type: 'aoeAttackPower'; amount: number; duration: number; radius: number } // demoralizing roar/shout
   | { type: 'aoeRoot'; duration: number; radius: number; min: number; max: number }
   | { type: 'selfBuff'; kind: AuraKind; value: number; duration: number }
   | { type: 'finisherHaste'; mult: number; basedur: number; perCombo: number } // slice and dice
@@ -196,7 +239,9 @@ export type AbilityEffect =
   | { type: 'sunder'; armor: number; maxStacks: number } // sunder armor: stacking armor debuff + flat threat
   | { type: 'taunt' } // taunt/growl: match top threat and force-attack the caster
   | { type: 'tamePet' } // hunter tame beast: the targeted mob becomes the caster's pet
-  | { type: 'dismissPet' }; // release the caster's pet back to the wild
+  | { type: 'dismissPet' } // release the caster's pet back to the wild
+  | { type: 'summonPet'; templateId: string } // warlock demon summon: creates/replaces a controlled pet
+  | { type: 'summonDemon'; mobId: string }; // warlock: summon a demon pet (imp/voidwalker)
 
 export interface AbilityRank {
   rank: number;
@@ -286,7 +331,7 @@ export interface DungeonDef {
   entry: { x: number; z: number }; // player arrival point (instance-local)
   exitOffset: { x: number; z: number }; // exit portal (instance-local)
   spawns: DungeonSpawn[];
-  interior: 'crypt' | 'sanctum'; // renderer + collider interior builder key
+  interior: 'crypt' | 'sanctum' | 'temple'; // renderer + collider interior builder key
   suggestedPlayers: number;
   enterText: string;
   leaveText: string;
@@ -406,6 +451,8 @@ export interface Entity {
   // so each interpolates on its own clock (see ClientWorld.applySnapshot)
   netUpdatedAt?: number;
   netInterval?: number;
+  vx: number; // horizontal air velocity (x, yards/sec)
+  vz: number; // horizontal air velocity (z, yards/sec)
   vy: number; // vertical velocity (jumping/falling)
   onGround: boolean;
   fallStartY: number;
@@ -414,6 +461,9 @@ export interface Entity {
   resource: number;
   maxResource: number;
   resourceType: ResourceType | null;
+  overheadEmoteId: OverheadEmoteId | null;
+  overheadEmoteUntil: number;
+  overheadEmoteSeq: number;
   stats: Stats;
   weapon: WeaponInfo;
   attackPower: number;
@@ -448,6 +498,7 @@ export interface Entity {
   chargeTargetId: number | null;
   chargeTimeLeft: number; // seconds; failsafe so a blocked charge can't run forever
   chargePath: Vec3[]; // waypoints consumed front-to-back; last leg homes on the live target
+  followTargetId: number | null; // /follow: auto-walk after another player until interrupted
   savedMana: number; // druid forms: mana put aside while running on rage/energy
   sitting: boolean;
   eating: Consuming | null;
@@ -462,14 +513,19 @@ export interface Entity {
   forcedTargetId: number | null; // taunt/growl: attack this target while the timer runs
   forcedTargetTimer: number; // seconds left on the forced-attack window
   ownerId: number | null; // controlled pets: owning player's entity id (null = wild)
+  petMode: PetMode; // hunter pet behavior stance
   petTauntTimer: number; // controlled pet Growl cooldown
   pulseTimer: number; // boss aoe pulse countdown
+  stompTimer: number; // boss War Stomp stun-pulse countdown
   firedSummons: number; // summonAdds thresholds already triggered
   summonedIds: number[]; // live adds this boss summoned; despawned on reset
   enraged: boolean; // enrage mechanic active
+  healedThisPull: boolean; // desperation self-heal already used this pull
   spawnPos: Vec3;
   leashAnchor: Vec3 | null; // refreshed by hostile player/pet actions; spawnPos remains the true home
   evadeStall: number; // seconds an evading mob has failed to get closer to home; snaps it home if it can't path back (e.g. across water)
+  fleeTimer: number; // seconds left in a low-HP panic flee; counts down in the 'flee' state
+  hasFled: boolean; // a cowardly mob flees only once per pull; cleared when it resets at spawn
   wanderTarget: Vec3 | null;
   wanderTimer: number;
   aggroTargetId: number | null;
@@ -491,6 +547,7 @@ export interface Entity {
   dead: boolean;
   scale: number;
   color: number;
+  skin: number; // player appearance: index into SKINS[visualKey]; 0 = default. synced in identity fields.
 }
 
 // `pid` (when present) marks a personal event that should only be delivered to
@@ -523,7 +580,7 @@ export type SimEvent = { pid?: number } & (
   // entity id so the client can hang a chat bubble over their head; whisper
   // goes to the target (and echoes to the sender with `to` set); general is
   // a world-wide broadcast
-  | { type: 'chat'; fromPid: number; from: string; text: string; channel?: 'say' | 'yell' | 'whisper' | 'general' | 'party' | 'guild' | 'officer' | 'emote'; entityId?: number; to?: string }
+  | { type: 'chat'; fromPid: number; from: string; text: string; channel?: 'say' | 'yell' | 'whisper' | 'general' | 'party' | 'guild' | 'officer' | 'world' | 'lfg' | 'emote' | 'roll'; entityId?: number; to?: string }
   | { type: 'partyInvite'; fromPid: number; fromName: string }
   // a guild invitation from an online guild officer/leader; resolved by name
   // server-side so it carries no pid
@@ -566,6 +623,7 @@ export interface SimConfig {
   autoEquip?: boolean; // auto-equip better gear on loot (headless convenience)
   playerName?: string;
   noPlayer?: boolean; // multiplayer server: start with an empty world and addPlayer() later
+  devCommands?: boolean; // local dev: /dev level|tp|give chat cheats
 }
 
 export function emptyMoveInput(): MoveInput {
@@ -735,12 +793,15 @@ export function rageConversion(level: number): number {
   return 0.0091 * level * level + 3.23 * level + 4.27;
 }
 
-// Rage from dealing damage: 7.5 * d / c ; from taking damage: 2.5 * d / c
+// Rage from dealing damage uses the classic outgoing-damage scale.
 export function rageFromDealing(damage: number, level: number): number {
   return (7.5 * damage) / rageConversion(level);
 }
-export function rageFromTaking(damage: number, level: number): number {
-  return (2.5 * damage) / rageConversion(level);
+
+// Rage from taking damage scales with the attacker's level so dungeon tanks get
+// useful rage from being hit without hard-coding the current level cap.
+export function rageFromTaking(damage: number, attackerLevel: number): number {
+  return damage / (Math.max(1, attackerLevel) * 1.5);
 }
 
 // Vanilla spell hit table by level difference (target - caster):

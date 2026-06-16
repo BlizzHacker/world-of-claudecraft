@@ -920,6 +920,7 @@ function r(bg: BgName, pal: PaletteName, prims: (PrimitiveName | Placement)[], f
 }
 
 const ABILITY_RECIPES: Record<string, IconRecipe> = {
+  attack: r('steel', 'steel', ['sword'], ['motion']),
   // warrior
   heroic_strike: r('fury', 'steel', ['sword'], ['glow']),
   battle_shout: r('fury', 'gold', ['fist'], ['arcs']),
@@ -1038,6 +1039,16 @@ const ITEM_RECIPES: Record<string, IconRecipe> = {
   gravecaller_staff: r('shadow', 'shadowPurple', ['staff', { p: 'skull', ...BR }], ['glow']),
   boar_hide: r('leather', 'earthBrown', ['pelt']),
   gravecaller_sigil: r('shadow', 'shadowPurple', ['sigil_rune'], ['glow']),
+  weathered_ledger_page: r('parchment', 'leather', ['scroll']),
+  morthen_grimoire: r('shadow', 'shadowPurple', ['scroll', { p: 'skull', x: 10, y: 8, s: 0.55 }], ['glow']),
+  fen_muster_order: r('parchment', 'gold', ['scroll'], ['glow']),
+  lost_caravan_goods: r('leather', 'earthBrown', ['pelt']),
+  rusted_censer: r('shadow', 'bone', ['candle'], ['drips']),
+  bastion_ward_stone: r('arcane', 'arcanePink', ['sigil_rune', { p: 'gem', x: 0, y: -6, s: 0.55 }], ['glow']),
+  highwatch_summons: r('parchment', 'steel', ['scroll'], ['glow']),
+  ogre_war_totem: r('earth', 'earthBrown', ['bone', { p: 'sigil_rune', x: 0, y: 10, s: 0.7 }]),
+  gravewyrm_sigil: r('shadow', 'ice', ['sigil_rune', { p: 'gem', x: 0, y: -4, s: 0.5 }], ['glow', 'sparkle']),
+  sanctum_key_shard: r('arcane', 'sky', ['gem'], ['sparkle', 'glow']),
   blessed_wax: r('holy', 'holyGold', [{ p: 'droplet', pal: 'holyGold' }], ['sparkle']),
   ghostly_essence: r('shadow', 'silverWhite', [{ p: 'flame', pal: 'silverWhite' }], ['sparkle']),
   webwood_silk: r('shadow', 'silverWhite', ['web']),
@@ -1339,7 +1350,7 @@ function compose(recipe: IconRecipe, seedKey: string, size: number): HTMLCanvasE
 // Public API
 // ---------------------------------------------------------------------------
 
-// classic WoW item-name quality colors (shared by tooltips, bags, rewards)
+// classic-MMO item-name quality colors (shared by tooltips, bags, rewards)
 export const QUALITY_COLOR: Record<string, string> = {
   poor: '#9d9d9d',
   common: '#ffffff',

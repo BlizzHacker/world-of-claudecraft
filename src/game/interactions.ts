@@ -4,7 +4,10 @@ import type { IWorld } from '../world_api';
 
 export interface PickInteractionWorld {
   player: IWorld['player'];
+  playerId?: IWorld['playerId'];
   entities: IWorld['entities'];
+  duelInfo?: IWorld['duelInfo'];
+  arenaInfo?: IWorld['arenaInfo'];
   targetEntity(id: number | null): void;
   enterDungeon(dungeonId: string): void;
   leaveDungeon(): void;
@@ -36,6 +39,13 @@ export function hoverCursorKind(
   return 'default';
 }
 
+function isActivePvpOpponent(world: PickInteractionWorld, e: Entity): boolean {
+  if (e.kind !== 'player' || e.dead) return false;
+  if (e.id === (world.playerId ?? world.player.id)) return false;
+  if (world.duelInfo?.state === 'active' && world.duelInfo.otherPid === e.id) return true;
+  return world.arenaInfo?.match?.state === 'active' && world.arenaInfo.match.oppPid === e.id;
+}
+
 export function handlePickedEntity(
   world: PickInteractionWorld,
   hud: PickInteractionHud,
@@ -52,7 +62,7 @@ export function handlePickedEntity(
   if (button === 2) {
     const d = dist2d(world.player.pos, e.pos);
     // players: right-click only targets — the interaction menu lives on the
-    // target portrait (right-click it), like classic WoW unit frames
+    // target portrait (right-click it), like classic-MMO unit frames
     if (e.kind === 'object') {
       if (d > INTERACT_RANGE + 1) { hud.showError('Too far away.'); return; }
       if (e.templateId === 'dungeon_door' && e.dungeonId) world.enterDungeon(e.dungeonId);
@@ -64,7 +74,7 @@ export function handlePickedEntity(
     } else if (e.kind === 'npc') {
       if (d <= INTERACT_RANGE + 2) hud.openQuestDialog(id);
       else hud.showError('Too far away.');
-    } else if (e.kind === 'mob' && !e.dead && e.hostile) {
+    } else if ((e.kind === 'mob' && !e.dead && e.hostile) || isActivePvpOpponent(world, e)) {
       world.startAutoAttack();
     }
   } else if (button === 0) {

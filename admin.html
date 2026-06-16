@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Cryptic Realm — Admin</title>
+<title>World of ClaudeCraft - Admin</title>
 <link rel="icon" href="/favicon.ico" sizes="any" />
 <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
@@ -72,6 +72,17 @@
   .admin-page { display: none; }
   .admin-page.active { display: block; }
   section { margin-bottom: 18px; }
+
+  /* ---------- chat filter ---------- */
+  .word-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .word-chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 6px 3px 9px; background: #1b1610; border: 1px solid #463a1c; border-radius: 12px; font-size: 13px; }
+  .word-del { background: none; border: none; color: #c98; cursor: pointer; font-size: 15px; line-height: 1; padding: 0 2px; }
+  .word-del:hover { color: #f55; }
+  .word-add { display: flex; gap: 6px; margin-top: 8px; }
+  .word-add input { flex: 1; }
+  .cf-config { display: flex; flex-direction: column; gap: 8px; max-width: 460px; }
+  .cf-config label { display: flex; flex-direction: column; gap: 3px; font-size: 13px; color: #c9b27a; }
+  .chat-mod-status { margin: 6px 0; }
 
   /* ---------- stat cards ---------- */
   #stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
@@ -190,48 +201,49 @@
 <body>
   <div id="login">
     <form class="panel" id="login-form">
-      <div class="panel-title">Cryptic Realm — Admin</div>
-      <label for="login-username">Username</label>
+      <div class="panel-title" data-i18n="app.title">World of ClaudeCraft - Admin</div>
+      <label for="login-username" data-i18n="auth.username">Username</label>
       <input id="login-username" autocomplete="username" required />
-      <label for="login-password">Password</label>
+      <label for="login-password" data-i18n="auth.password">Password</label>
       <input id="login-password" type="password" autocomplete="current-password" required />
-      <button type="submit">Sign in</button>
+      <button type="submit" data-i18n="auth.signIn">Sign in</button>
       <div id="login-error"></div>
     </form>
   </div>
 
   <div id="app">
     <header>
-      <h1>Cryptic Realm — Admin</h1>
-      <div class="who">signed in as <span id="who-name"></span><button id="logout">Sign out</button></div>
+      <h1 data-i18n="app.title">World of ClaudeCraft - Admin</h1>
+      <div class="who"><span data-i18n="auth.signedInAs">signed in as</span> <span id="who-name"></span><button id="logout" data-i18n="auth.signOut">Sign out</button></div>
     </header>
 
     <nav id="admin-tabs">
-      <button class="admin-tab active" data-admin-page="overview">Overview</button>
-      <button class="admin-tab" data-admin-page="moderation">Moderation</button>
+      <button class="admin-tab active" data-admin-page="overview" data-i18n="nav.overview">Overview</button>
+      <button class="admin-tab" data-admin-page="moderation" data-i18n="nav.moderation">Moderation</button>
+      <button class="admin-tab" data-admin-page="chat-filter">Chat Filter</button>
     </nav>
 
     <main id="page-overview" class="admin-page active">
       <section id="stats"></section>
 
       <section class="panel">
-        <div class="panel-title">Players online <span class="hint">refreshes every 5s</span></div>
+        <div class="panel-title"><span data-i18n="online.title">Players online</span> <span class="hint" data-i18n="online.refreshHint">refreshes every 5s</span></div>
         <div id="online"></div>
       </section>
 
       <section id="charts"></section>
 
       <section class="panel">
-        <div class="panel-title">Accounts</div>
+        <div class="panel-title" data-i18n="accounts.title">Accounts</div>
         <div class="controls">
-          <input id="account-search" placeholder="Search username…" />
+          <input id="account-search" placeholder="Search username…" data-i18n-ph="accounts.searchPlaceholder" />
           <div class="pager" id="accounts-pager"></div>
         </div>
         <div id="accounts"></div>
       </section>
 
       <section class="panel">
-        <div class="panel-title">Characters <span class="hint">click a column to sort</span></div>
+        <div class="panel-title"><span data-i18n="characters.title">Characters</span> <span class="hint" data-i18n="characters.sortHint">click a column to sort</span></div>
         <div class="controls"><div class="pager" id="characters-pager"></div></div>
         <div id="characters"></div>
       </section>
@@ -239,9 +251,15 @@
 
     <main id="page-moderation" class="admin-page">
       <section class="panel">
-        <div class="panel-title">Moderation <span class="hint">highest open report counts first</span></div>
+        <div class="panel-title"><span data-i18n="moderation.title">Moderation</span> <span class="hint" data-i18n="moderation.queueHint">highest open report counts first</span></div>
         <div id="moderation"></div>
         <div id="moderation-detail"></div>
+      </section>
+    </main>
+
+    <main id="page-chat-filter" class="admin-page">
+      <section>
+        <div id="chat-filter"></div>
       </section>
     </main>
   </div>

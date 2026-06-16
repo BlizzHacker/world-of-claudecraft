@@ -7,6 +7,12 @@ export type ModerationAction = 'ignore' | 'suspend' | 'ban' | 'unban';
 const REPORT_DETAILS_MAX = 1000;
 const ACTION_REASON_MAX = 500;
 const DUPLICATE_REPORT_WINDOW_HOURS = 12;
+const REGISTRATION_BURST_WINDOW_MINUTES = 10;
+const REGISTRATION_PREFIX_THRESHOLD = 25;
+const REGISTRATION_IP_THRESHOLD = 8;
+const REGISTRATION_SUBNET_THRESHOLD = 20;
+const REGISTRATION_USER_AGENT_THRESHOLD = 60;
+const SYSTEM_REPORT_PREFIX = 'Automated registration pattern:';
 
 export function cleanReportReason(value: unknown): ReportReason | null {
   return typeof value === 'string' && REPORT_REASONS.includes(value as ReportReason)
@@ -65,6 +71,101 @@ export async function createPlayerReport(input: {
     ],
   );
   return { id: Number(res.rows[0].id) };
+}
+
+function numericPrefix(username: string): string | null {
+  const m = /^([a-z][a-z_]*?)[0-9]{2,}$/i.exec(username.trim());
+  return m ? m[1].toLowerCase() : null;
+}
+
+function ipv4Subnet24(ip: string | null | undefined): string | null {
+  const text = String(ip ?? '').trim();
+  const m = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.\d{1,3}$/.exec(text);
+  if (!m) return null;
+  const octets = m.slice(1).map(Number);
+  if (octets.some((n) => n < 0 || n > 255)) return null;
+  return `${octets[0]}.${octets[1]}.${octets[2]}.`;
+}
+
+async function countRecentRegistrations(whereSql: string, params: unknown[]): Promise<number> {
+  const res = await pool.query(
+    `SELECT count(*)::int AS n
+     FROM accounts
+     WHERE created_at > now() - ($1 || ' minutes')::interval
+       AND banned_at IS NULL
+       AND ${whereSql}`,
+    [String(REGISTRATION_BURST_WINDOW_MINUTES), ...params],
+  );
+  return Number(res.rows[0]?.n ?? 0);
+}
+
+export async function createSuspiciousRegistrationReport(input: {
+  accountId: number;
+  username: string;
+  ip?: string | null;
+  userAgent?: string | null;
+}): Promise<{ created: boolean; signals: string[] }> {
+  const signals: string[] = [];
+  const prefix = numericPrefix(input.username);
+  const ip = cleanText(input.ip, 128);
+  const userAgent = cleanText(input.userAgent, 512);
+  const subnet24 = ipv4Subnet24(ip);
+
+  const prefixCount = prefix
+    ? await countRecentRegistrations(
+        `lower(username) LIKE $2 || '%' AND lower(username) ~ ('^' || $2 || '[0-9]+$')`,
+        [prefix],
+      )
+    : 0;
+  if (prefix && prefixCount >= REGISTRATION_PREFIX_THRESHOLD) {
+    signals.push(`${prefixCount} accounts with username prefix "${prefix}" in ${REGISTRATION_BURST_WINDOW_MINUTES} minutes`);
+  }
+
+  const ipCount = ip ? await countRecentRegistrations('created_ip = $2', [ip]) : 0;
+  if (ip && ipCount >= REGISTRATION_IP_THRESHOLD) {
+    signals.push(`${ipCount} accounts from IP ${ip} in ${REGISTRATION_BURST_WINDOW_MINUTES} minutes`);
+  }
+
+  const subnetCount = subnet24 ? await countRecentRegistrations('created_ip LIKE $2', [`${subnet24}%`]) : 0;
+  if (subnet24 && subnetCount >= REGISTRATION_SUBNET_THRESHOLD) {
+    signals.push(`${subnetCount} accounts from subnet ${subnet24}0/24 in ${REGISTRATION_BURST_WINDOW_MINUTES} minutes`);
+  }
+
+  const userAgentCount = userAgent ? await countRecentRegistrations('created_user_agent = $2', [userAgent]) : 0;
+  if (userAgent && userAgentCount >= REGISTRATION_USER_AGENT_THRESHOLD) {
+    signals.push(`${userAgentCount} accounts with the same user agent in ${REGISTRATION_BURST_WINDOW_MINUTES} minutes`);
+  }
+
+  if (signals.length === 0) return { created: false, signals };
+
+  const duplicate = await pool.query(
+    `SELECT id FROM player_reports
+     WHERE reporter_account_id IS NULL
+       AND reported_account_id = $1
+       AND status = 'open'
+       AND details LIKE $2
+     LIMIT 1`,
+    [input.accountId, `${SYSTEM_REPORT_PREFIX}%`],
+  );
+  if (duplicate.rows[0]) return { created: false, signals };
+
+  const details = cleanText([
+    `${SYSTEM_REPORT_PREFIX} ${signals.join('; ')}.`,
+    `Username: ${input.username}`,
+    ip ? `IP: ${ip}` : '',
+    subnet24 ? `Subnet: ${subnet24}0/24` : '',
+    userAgent ? `User-Agent: ${userAgent}` : '',
+  ].filter(Boolean).join('\n'), REPORT_DETAILS_MAX);
+
+  await pool.query(
+    `INSERT INTO player_reports (
+       reporter_account_id, reporter_character_id, reporter_character_name,
+       reported_account_id, reported_character_id, reported_character_name,
+       reason, details
+     ) VALUES (NULL, NULL, '', $1, NULL, '', $2, $3)`,
+    [input.accountId, 'spam', details],
+  );
+  return { created: true, signals };
 }
 
 export interface ModerationQueueRow {
@@ -251,6 +352,41 @@ export async function moderateAccount(input: {
        SET status = 'actioned', reviewed_at = now(), reviewed_by_account_id = $2, review_note = $3
        WHERE reported_account_id = $1 AND status = 'open'`,
       [input.accountId, input.adminAccountId, reason],
+    );
+    await client.query('COMMIT');
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => {});
+    throw err;
+  } finally {
+    client.release();
+  }
+}
+
+export async function muteAccountChat(input: {
+  accountId: number;
+  adminAccountId: number;
+  reason: unknown;
+  expiresAt: unknown;
+}): Promise<void> {
+  const reason = cleanText(input.reason, ACTION_REASON_MAX);
+  if (!reason) throw new Error('moderation reason is required');
+  const expiresAt = new Date(String(input.expiresAt ?? ''));
+  if (!Number.isFinite(expiresAt.getTime()) || expiresAt.getTime() <= Date.now()) {
+    throw new Error('chat mute expiry must be in the future');
+  }
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    await client.query(
+      `UPDATE accounts
+       SET chat_muted_until = $2, chat_mute_reason = $3
+       WHERE id = $1`,
+      [input.accountId, expiresAt, reason],
+    );
+    await client.query(
+      `INSERT INTO account_moderation_actions (account_id, admin_account_id, action, reason, expires_at)
+       VALUES ($1, $2, $3, $4, $5)`,
+      [input.accountId, input.adminAccountId, 'chat_mute', reason, expiresAt],
     );
     await client.query('COMMIT');
   } catch (err) {

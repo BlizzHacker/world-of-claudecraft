@@ -37,6 +37,8 @@ export const BIND_ACTIONS: BindAction[] = [
   { id: 'autorun', label: 'Toggle Autorun', category: 'Movement', kind: 'edge', defaults: ['KeyR'] },
   // Targeting / interaction
   { id: 'target', label: 'Target Nearest Enemy', category: 'Targeting', kind: 'edge', defaults: ['Tab'] },
+  { id: 'targetFriendly', label: 'Target Nearest Friendly', category: 'Targeting', kind: 'edge', defaults: ['KeyH'] },
+  { id: 'targetFriendlyNext', label: 'Cycle Friendly Target', category: 'Targeting', kind: 'edge', defaults: ['KeyJ'] },
   { id: 'interact', label: 'Interact / Loot', category: 'Targeting', kind: 'edge', defaults: ['KeyF'] },
   // Interface windows
   { id: 'char', label: 'Character', category: 'Interface', kind: 'edge', defaults: ['KeyC'] },
@@ -51,6 +53,7 @@ export const BIND_ACTIONS: BindAction[] = [
   { id: 'arena', label: 'Arena (Ashen Coliseum)', category: 'Interface', kind: 'edge', defaults: ['KeyG'] },
   { id: 'leaderboard', label: 'Leaderboard', category: 'Interface', kind: 'edge', defaults: ['KeyK'] },
   { id: 'chat', label: 'Open Chat', category: 'Interface', kind: 'edge', defaults: ['Enter', 'NumpadEnter'] },
+  { id: 'emoteWheel', label: 'Emote Wheel', category: 'Interface', kind: 'held', defaults: ['KeyX'] },
   // Action bar (slot 0 = Attack)
   ...SLOT_DEFAULTS.map((code, i): BindAction => ({
     id: `slot${i}`,
@@ -115,22 +118,38 @@ export class Keybinds {
     let stored: unknown = null;
     try { stored = JSON.parse(localStorage.getItem(STORE_KEY) ?? 'null'); } catch { /* corrupt */ }
     if (!stored || typeof stored !== 'object') return;
+    const obj = stored as Record<string, unknown>;
     // Apply stored codes over the defaults, but only for known actions and
     // never letting one code land on two actions (first writer keeps it).
+    // Actions absent from the stored blob (e.g. ones added in a later release
+    // than the player's last save) KEEP their defaults rather than loading
+    // unbound — explicit stored bindings still win, so this only fills gaps.
     const claimed = new Set<string>();
     for (const a of BIND_ACTIONS) {
-      const entry = (stored as Record<string, unknown>)[a.id];
+      const entry = obj[a.id];
+      if (!Array.isArray(entry)) continue; // missing action: keep its default
       const slots: (string | null)[] = [null, null];
       for (let i = 0; i < SLOTS_PER_ACTION; i++) {
-        const v = Array.isArray(entry) ? entry[i] : undefined;
+        const v = entry[i];
         if (typeof v === 'string' && !claimed.has(v) && !isReservedCode(v)) {
           slots[i] = v;
           claimed.add(v);
-        } else {
-          slots[i] = null;
         }
       }
       this.map.set(a.id, slots);
+    }
+    // Second pass: for actions that kept their defaults, drop any code an
+    // explicit stored binding already claimed so the same key can't drive two
+    // actions (preserving the WoW-style uniqueness invariant).
+    for (const a of BIND_ACTIONS) {
+      if (Array.isArray(obj[a.id])) continue;
+      const slots = this.map.get(a.id)!;
+      for (let i = 0; i < slots.length; i++) {
+        const c = slots[i];
+        if (c === null) continue;
+        if (claimed.has(c)) slots[i] = null;
+        else claimed.add(c);
+      }
     }
   }
 
@@ -170,7 +189,7 @@ export class Keybinds {
   /**
    * Bind a code to (action, index). Reserved keys are refused (returns false).
    * The code is first removed from wherever else it lives so it is never on
-   * two actions at once (WoW-style).
+   * two actions at once (classic-MMO-style).
    */
   bind(id: string, index: number, code: string): boolean {
     const codes = this.map.get(id);

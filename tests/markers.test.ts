@@ -14,7 +14,7 @@ import { Sim } from '../src/sim/sim';
 import { GameServer } from '../server/game';
 import type { Entity } from '../src/sim/types';
 
-// Raid marker ids (0..7), WoW order: Star, Circle, Diamond, Triangle, Moon,
+// Raid marker ids (0..7), the classic raid-marker order: Star, Circle, Diamond, Triangle, Moon,
 // Square, Cross, Skull.
 const STAR = 0;
 const SKULL = 7;
@@ -221,7 +221,10 @@ describe('target markers — sim layer', () => {
 
       (sim as unknown as { completeTame(p: Entity, target: Entity): void }).completeTame(hunterE, wolf);
 
-      expect(wolf.ownerId).toBe(hunter); // it really became a pet
+      const pet = sim.petOf(hunter);
+      expect(pet?.ownerId).toBe(hunter); // it created an owned pet copy
+      expect(pet?.id).not.toBe(wolf.id);
+      expect(sim.entities.has(wolf.id)).toBe(false);
       expect(sim.markersFor(hunter)).toEqual({}); // and the stale mark is gone
     });
   });

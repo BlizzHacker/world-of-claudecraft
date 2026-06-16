@@ -15,6 +15,7 @@ import * as readline from 'node:readline';
 import { Sim, RewardCounters } from '../src/sim/sim';
 import { ACTIONS, NUM_ACTIONS, applyAction, encodeObs, obsSize } from '../src/sim/obs';
 import { MAX_LEVEL } from '../src/sim/types';
+import { MAX_INPUT_LINE_LENGTH, validateAction } from './protocol';
 
 interface EnvConfig {
   frameSkip: number; // sim ticks per env step (20 ticks = 1 second)
@@ -152,6 +153,10 @@ function serve(): void {
   const send = (obj: object) => process.stdout.write(JSON.stringify(obj) + '\n');
 
   rl.on('line', (line: string) => {
+    if (line.length > MAX_INPUT_LINE_LENGTH) {
+      send({ error: 'input line too large' });
+      return;
+    }
     line = line.trim();
     if (!line) return;
     let msg: any;
@@ -170,7 +175,14 @@ function serve(): void {
           send(env.reset(msg.seed ?? 0, msg.player_class ?? 'warrior', msg.config ?? {}));
           break;
         case 'step':
-          send(env.step(msg.action ?? 0));
+          {
+            const action = validateAction(msg.action ?? 0);
+            if (action === null) {
+              send({ error: `invalid action: expected integer 0-${NUM_ACTIONS - 1}` });
+              break;
+            }
+            send(env.step(action));
+          }
           break;
         case 'close':
           send({ ok: true });

@@ -69,7 +69,7 @@ export interface SocialSnapshot {
 export interface SocialDb {
   findCharacterByName(name: string): Promise<CharInfo | null>;
   getCharacter(id: number): Promise<CharInfo | null>;
-  // friends (one-directional, WoW-classic style: no acceptance needed)
+  // friends (one-directional, classic style: no acceptance needed)
   addFriend(charId: number, friendId: number): Promise<void>;
   removeFriend(charId: number, friendId: number): Promise<void>;
   listFriends(charId: number): Promise<CharInfo[]>;
@@ -365,7 +365,7 @@ export class SocialService {
     if (!membership) { this.err(actor.characterId, 'You are not in a guild.'); return; }
     const members = await this.db.guildMembers(membership.guildId);
     const others = members.filter((m) => m.id !== actor.characterId);
-    // WoW rule: the Guild Master cannot quit while others remain — they must
+    // classic-MMO rule: the Guild Master cannot quit while others remain — they must
     // hand leadership over (Promote to Guild Master) or disband the guild.
     if (membership.rank === 'leader' && others.length > 0) {
       this.err(actor.characterId, 'As Guild Master you must promote a new leader or disband the guild before leaving.');
@@ -384,7 +384,7 @@ export class SocialService {
     this.push(actor.characterId);
   }
 
-  // WoW /gleader: hand the Guild Master title to another member. The former
+  // /gleader: hand the Guild Master title to another member. The former
   // leader steps down to Officer.
   async guildTransferLeader(actor: SocialActor, name: string): Promise<void> {
     const membership = await this.db.guildMembership(actor.characterId);
@@ -404,7 +404,7 @@ export class SocialService {
     await this.pushGuild(membership.guildId);
   }
 
-  // WoW /gdisband: the Guild Master dissolves the entire guild.
+  // /gdisband: the Guild Master dissolves the entire guild.
   async guildDisband(actor: SocialActor): Promise<void> {
     const membership = await this.db.guildMembership(actor.characterId);
     if (!membership) { this.err(actor.characterId, 'You are not in a guild.'); return; }
@@ -477,7 +477,7 @@ export class SocialService {
     return true;
   }
 
-  // WoW officer chat (/o): officers + Guild Master only, delivered to the same.
+  // Officer chat (/o): officers + Guild Master only, delivered to the same.
   async officerChat(actor: SocialActor, rawText: string): Promise<boolean> {
     const text = String(rawText ?? '').trim().slice(0, GUILD_MESSAGE_MAX);
     if (!text) return false;

@@ -15,7 +15,7 @@
 
 Today, when a character hits the level cap (20) all further XP is discarded. This PRD adds **post-cap progression**: XP keeps counting forever into a 64-bit lifetime counter, drives a cosmetic **virtual level** (so the bar keeps "leveling up"), and feeds a **leaderboard + milestone cosmetic rewards**. The intent is **retention and bragging rights, not power** — at a level-20 cap, post-cap power gain would break balance, so this system is deliberately horizontal/cosmetic.
 
-This is the **RuneScape model** (level cap stays, XP continues to a counter, virtual levels are cosmetic, the grind is leaderboard- and prestige-driven), with **WoW's post-cap reward cadence** (Paragon-style milestone rewards, Honor-style uncapped prestige levels) layered on top.
+This is the **RuneScape model** (level cap stays, XP continues to a counter, virtual levels are cosmetic, the grind is leaderboard- and prestige-driven), with **the classic MMO's post-cap reward cadence** (Paragon-style milestone rewards, Honor-style uncapped prestige levels) layered on top.
 
 ---
 
@@ -33,13 +33,13 @@ The request appeared organically in `#feature-requests` and drew reactions. The 
 
 ## 3. How it works in the reference games (full breakdown)
 
-### 3.1 WoW XP & leveling (baseline)
+### 3.1 Classic-MMO XP & leveling (baseline)
 - **XP earned from:** kills (scaled by mob level vs player level), quests (dominant source), exploration/discovery (one-time chunks), gathering.
 - **Rested XP:** accumulates while logged out (faster in inns/cities), grants ×2 kill XP until drained, max ≈ 1.5 levels of stored bonus. Quests/exploration advance the rested marker but do not consume it.
-- **XP-to-next curve:** a tuned (non-cleanly-exponential, modern WoW even non-monotonic) curve, rounded to the nearest 100.
-- **At cap:** XP gain **stops** and quest XP converts to gold. **WoW has no native XP overflow** — this is the key research finding. The "keep earning" feeling comes entirely from the post-cap systems below.
+- **XP-to-next curve:** a tuned (non-cleanly-exponential, modern classic MMOs even non-monotonic) curve, rounded to the nearest 100.
+- **At cap:** XP gain **stops** and quest XP converts to gold. **Classic MMOs have no native XP overflow** — this is the key research finding. The "keep earning" feeling comes entirely from the post-cap systems below.
 
-### 3.2 WoW post-cap systems (the reward-cadence reference)
+### 3.2 Classic-MMO post-cap systems (the reward-cadence reference)
 - **Paragon levels:** after maxing a reputation, a bar refills every fixed chunk (+10,000) and dumps a reward cache (gold, currency, RNG cosmetics). Clean "infinite repeatable bar with milestone rewards" pattern.
 - **Artifact Power (Legion) / Azerite (BfA):** literally a *second XP bar that never ends*, unlocking traits/levels, paced by a throttle knob (Artifact Knowledge multiplier / weekly auto-reduction) so the curve never balloons for returners.
 - **Honor levels (PvP):** **uncapped, account-wide "prestige" levels** with cosmetic milestone rewards (e.g. a mount at Honor Level 500). The closest analog to uncapped prestige + cosmetics.
@@ -211,7 +211,7 @@ interface CharacterState {
 - **Cosmetic-only** at a level-20 cap. No stats, no power. This is the core balance guarantee.
 - **Reward cadence:** prefer fixed-interval milestones (Paragon-style) over an asymptotic curve so rewards never fully dry up. Decide the interval vs. RuneScape-style ever-increasing curve during design (tradeoff: grind feel vs. long-tail).
 - **Retention drivers (ranked):** leaderboard > cosmetic milestones/titles > prestige badges. Power gains intentionally excluded.
-- **Account-wide framing (stretch):** an account-level lifetime XP total makes alt play feel permanent (WoW Warband pattern).
+- **Account-wide framing (stretch):** an account-level lifetime XP total makes alt play feel permanent (classic-MMO Warband pattern).
 
 ---
 

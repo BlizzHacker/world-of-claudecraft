@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { hoverCursorKind, isAttackHoverTarget } from '../src/game/interactions';
+import { handlePickedEntity, hoverCursorKind, isAttackHoverTarget } from '../src/game/interactions';
 import type { Entity } from '../src/sim/types';
 
 function stubEntity(partial: Partial<Entity> & Pick<Entity, 'id' | 'kind'>): Entity {
@@ -59,6 +59,7 @@ function stubEntity(partial: Partial<Entity> & Pick<Entity, 'id' | 'kind'>): Ent
     forcedTargetId: null,
     forcedTargetTimer: 0,
     ownerId: null,
+    petMode: 'defensive',
     petTauntTimer: 0,
     pulseTimer: 0,
     firedSummons: 0,
@@ -94,5 +95,37 @@ describe('hoverCursorKind', () => {
 
   it('returns default for empty pick', () => {
     expect(hoverCursorKind(undefined, 1, new Set())).toBe('default');
+  });
+});
+
+describe('handlePickedEntity', () => {
+  it('starts auto-attack when right-clicking an active duel opponent', () => {
+    const player = stubEntity({ id: 1, kind: 'player' });
+    const opponent = stubEntity({ id: 2, kind: 'player', pos: { x: 3, y: 0, z: 0 } });
+    let targetId: number | null = null;
+    let attacks = 0;
+    const world: any = {
+      playerId: 1,
+      player,
+      entities: new Map([[1, player], [2, opponent]]),
+      duelInfo: { otherPid: 2, otherName: 'Bet', state: 'active' },
+      arenaInfo: null,
+      targetEntity: (id: number | null) => { targetId = id; },
+      enterDungeon: () => {},
+      leaveDungeon: () => {},
+      pickUpObject: () => {},
+      startAutoAttack: () => { attacks++; },
+    };
+    const hud = {
+      openLoot: () => {},
+      openQuestDialog: () => {},
+      showError: () => {},
+      closeContextMenu: () => {},
+    };
+
+    handlePickedEntity(world, hud, 2, 2, 10, 20);
+
+    expect(targetId).toBe(2);
+    expect(attacks).toBe(1);
   });
 });

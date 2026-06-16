@@ -22,6 +22,22 @@ import {
   ZONE3_QUESTS, ZONE3_QUEST_ORDER, ZONE3_ROADS, ZONE3_ZONE,
 } from './content/zone3';
 import { DUNGEON_DEFS, DUNGEON_MOBS } from './content/dungeons';
+import { WARLOCK_PET_MOBS } from './content/warlock_pets';
+import { GROUND_PICKUP_LINES } from './content/ground_pickup_lines';
+import {
+  TEMPLE_CAMPS, TEMPLE_DUNGEON_DEFS, TEMPLE_DUNGEON_MOBS, TEMPLE_ITEMS, TEMPLE_MOBS,
+  TEMPLE_NPCS, TEMPLE_OBJECTS, TEMPLE_PROPS, TEMPLE_QUEST_ORDER, TEMPLE_QUESTS,
+} from './content/temple';
+
+function mergeItems(...parts: Record<string, ItemDef>[]): Record<string, ItemDef> {
+  const merged = Object.assign({}, ...parts);
+  for (const [id, lines] of Object.entries(GROUND_PICKUP_LINES)) {
+    if (merged[id]) {
+      merged[id] = { ...merged[id], pickupDeny: lines.deny, pickupEnough: lines.enough };
+    }
+  }
+  return merged;
+}
 
 export { CLASSES, ABILITIES, abilitiesKnownAt } from './content/classes';
 export type { ClassDef } from './content/classes';
@@ -34,33 +50,32 @@ export type {
 // Merged content tables
 // ---------------------------------------------------------------------------
 
-export const ITEMS: Record<string, ItemDef> = {
-  ...BASE_ITEMS, ...ZONE2_ITEMS, ...ZONE3_ITEMS,
-};
+export const ITEMS: Record<string, ItemDef> = mergeItems(BASE_ITEMS, ZONE2_ITEMS, ZONE3_ITEMS, TEMPLE_ITEMS);
 
 export const MOBS: Record<string, MobTemplate> = {
   ...ZONE1_MOBS, ...ZONE2_MOBS, ...ZONE3_MOBS, ...DUNGEON_MOBS,
+  ...WARLOCK_PET_MOBS, ...TEMPLE_MOBS, ...TEMPLE_DUNGEON_MOBS,
 };
 
 export const NPCS: Record<string, NpcDef> = {
-  ...ZONE1_NPCS, ...ZONE2_NPCS, ...ZONE3_NPCS,
+  ...ZONE1_NPCS, ...ZONE2_NPCS, ...ZONE3_NPCS, ...TEMPLE_NPCS,
 };
 
 export const QUESTS: Record<string, QuestDef> = {
-  ...ZONE1_QUESTS, ...ZONE2_QUESTS, ...ZONE3_QUESTS,
+  ...ZONE1_QUESTS, ...ZONE2_QUESTS, ...ZONE3_QUESTS, ...TEMPLE_QUESTS,
 };
 
 export const QUEST_ORDER: string[] = [
-  ...ZONE1_QUEST_ORDER, ...ZONE2_QUEST_ORDER, ...ZONE3_QUEST_ORDER,
+  ...ZONE1_QUEST_ORDER, ...ZONE2_QUEST_ORDER, ...ZONE3_QUEST_ORDER, ...TEMPLE_QUEST_ORDER,
 ];
 
-export const CAMPS: CampDef[] = [...ZONE1_CAMPS, ...ZONE2_CAMPS, ...ZONE3_CAMPS];
+export const CAMPS: CampDef[] = [...ZONE1_CAMPS, ...ZONE2_CAMPS, ...ZONE3_CAMPS, ...TEMPLE_CAMPS];
 
-export const GROUND_OBJECTS: GroundObjectDef[] = [...ZONE1_OBJECTS, ...ZONE2_OBJECTS, ...ZONE3_OBJECTS];
+export const GROUND_OBJECTS: GroundObjectDef[] = [...ZONE1_OBJECTS, ...ZONE2_OBJECTS, ...ZONE3_OBJECTS, ...TEMPLE_OBJECTS];
 
 export const ROADS: { x: number; z: number }[][] = [...ZONE1_ROADS, ...ZONE2_ROADS, ...ZONE3_ROADS];
 
-export const PROPS: ZonePropsDef = mergeProps([ZONE1_PROPS, ZONE2_PROPS, ZONE3_PROPS]);
+export const PROPS: ZonePropsDef = mergeProps([ZONE1_PROPS, ZONE2_PROPS, ZONE3_PROPS, TEMPLE_PROPS]);
 
 function mergeProps(sets: ZonePropsDef[]): ZonePropsDef {
   return {
@@ -150,7 +165,7 @@ export function instanceOrigin(dungeonIndex: number, slot: number): { x: number;
   return { x: 900 + dungeonIndex * 600, z: -1250 + slot * 500 };
 }
 
-export const DUNGEONS: Record<string, DungeonDef> = DUNGEON_DEFS;
+export const DUNGEONS: Record<string, DungeonDef> = { ...DUNGEON_DEFS, ...TEMPLE_DUNGEON_DEFS };
 
 export const DUNGEON_LIST: DungeonDef[] = Object.values(DUNGEONS).sort((a, b) => a.index - b.index);
 

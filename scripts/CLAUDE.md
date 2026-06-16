@@ -31,7 +31,8 @@ into npm: `build` (manifest), `realms` (`dev-realms.mjs`), `admin:grant` (`grant
 | MP integration (ws) | `mp_integration.mjs`, `chat_e2e.mjs`, `chat_log_persistence.mjs`, `social_e2e.mjs`, `crypt_raid.mjs` | server (+`ALLOW_DEV_COMMANDS=1` for raid) |
 | Security | `ws_security_e2e.mjs` | server |
 | Screenshot tours | `visual_tour.mjs`, `arena_visual.mjs`, `market_visual.mjs`, `social_visual.mjs`, `tour_expansion.mjs` | dev (some + server) |
-| SEO / homepage | `homepage_verify.mjs`, `seo_audit.mjs` | dev (+ server) |
+| SEO / homepage / i18n | `homepage_verify.mjs`, `seo_audit.mjs`, `localization_e2e.mjs` (locale-matrix homepage E2E) | dev (+ server) |
+| Data export | `export_loot_spreadsheet.mjs` (esbuild-bundles `src/sim` → loot sheet in `docs/`) | — |
 | Admin / dev utils | `grant_admin.mjs`, `create_gm.mjs`, `dev-realms.mjs` | `DATABASE_URL` |
 | Helper | `browser_path.mjs` (resolves Chrome/Edge/Chromium; override `BROWSER_PATH=`) | — |
 
@@ -51,7 +52,9 @@ into npm: `build` (manifest), `realms` (`dev-realms.mjs`), `admin:grant` (`grant
 - **MP integration:** copy `mp_integration.mjs`; reuse its `Client` class + merge helpers.
 
 ## Never
-- Don't import from `src/` or assume a TS toolchain here — these are raw `.mjs`; keep
-  Node-only deps (`ws`, `pg`, `puppeteer-core`).
+- These are raw `.mjs` run directly by Node, not part of the vite/esbuild build; keep
+  deps Node-only (`ws`, `pg`, `puppeteer-core`). Most never touch `src/` — the one
+  exception is `export_loot_spreadsheet.mjs`, which runs `esbuild` itself to bundle the
+  `src/sim` data, so do that (don't `import` the TS sources raw) if a script truly needs them.
 - Don't hand-edit `src/render/assets/manifest.generated.ts` — regenerate via
   `build_media_manifest.mjs generate` (`npm run build` does this).

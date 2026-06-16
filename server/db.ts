@@ -3,6 +3,7 @@ import type { CharacterState, MarketSave } from '../src/sim/sim';
 import type { PlayerClass } from '../src/sim/types';
 import type { ChatLogRow } from './chat_log';
 import { SOCIAL_SCHEMA } from './social_db';
+import { seedChatFilterDefaults } from './chat_filter_db';
 import { REALM } from './realm';
 
 try {
@@ -18,7 +19,9 @@ export const DATABASE_URL =
 
 export const pool = new Pool({ connectionString: DATABASE_URL, max: 10 });
 
-const SCHEMA = `
+const REALM_SQL_DEFAULT = REALM.replace(/'/g, "''");
+
+export const SCHEMA = `
 CREATE TABLE IF NOT EXISTS accounts (
   id SERIAL PRIMARY KEY,
   username TEXT UNIQUE NOT NULL,
@@ -38,13 +41,14 @@ CREATE TABLE IF NOT EXISTS characters (
   account_id INT NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
   name TEXT UNIQUE NOT NULL,
   class TEXT NOT NULL,
-  realm TEXT NOT NULL DEFAULT 'default',
+  realm TEXT NOT NULL DEFAULT '${REALM_SQL_DEFAULT}',
   level INT NOT NULL DEFAULT 1,
   state JSONB,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS characters_account ON characters(account_id);
+ALTER TABLE characters ADD COLUMN IF NOT EXISTS realm TEXT NOT NULL DEFAULT '${REALM_SQL_DEFAULT}';
 -- Max-Level XP Overflow leaderboard: indexed lifetime-XP sort key. The first
 -- index serves the realm-scoped in-game panel; the second serves the global
 -- (cross-realm) home-page board.
@@ -56,6 +60,15 @@ ALTER TABLE accounts ADD COLUMN IF NOT EXISTS is_admin BOOLEAN NOT NULL DEFAULT 
 ALTER TABLE accounts ADD COLUMN IF NOT EXISTS suspended_until TIMESTAMPTZ;
 ALTER TABLE accounts ADD COLUMN IF NOT EXISTS banned_at TIMESTAMPTZ;
 ALTER TABLE accounts ADD COLUMN IF NOT EXISTS moderation_reason TEXT;
+ALTER TABLE accounts ADD COLUMN IF NOT EXISTS chat_muted_until TIMESTAMPTZ;
+ALTER TABLE accounts ADD COLUMN IF NOT EXISTS chat_mute_reason TEXT;
+ALTER TABLE accounts ADD COLUMN IF NOT EXISTS created_ip TEXT;
+ALTER TABLE accounts ADD COLUMN IF NOT EXISTS created_user_agent TEXT;
+ALTER TABLE accounts ADD COLUMN IF NOT EXISTS last_login_ip TEXT;
+ALTER TABLE accounts ADD COLUMN IF NOT EXISTS last_login_user_agent TEXT;
+CREATE INDEX IF NOT EXISTS accounts_created_at ON accounts(created_at DESC);
+CREATE INDEX IF NOT EXISTS accounts_created_ip_created ON accounts(created_ip, created_at DESC);
+CREATE INDEX IF NOT EXISTS accounts_created_user_agent_created ON accounts(created_user_agent, created_at DESC);
 ALTER TABLE characters ADD COLUMN IF NOT EXISTS is_gm BOOLEAN NOT NULL DEFAULT FALSE;
 ALTER TABLE characters ADD COLUMN IF NOT EXISTS force_rename BOOLEAN NOT NULL DEFAULT FALSE;
 ALTER TABLE characters ADD COLUMN IF NOT EXISTS realm TEXT NOT NULL DEFAULT 'default';
@@ -67,6 +80,8 @@ CREATE TABLE IF NOT EXISTS play_sessions (
   started_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   ended_at TIMESTAMPTZ
 );
+ALTER TABLE play_sessions ADD COLUMN IF NOT EXISTS ip_address TEXT;
+ALTER TABLE play_sessions ADD COLUMN IF NOT EXISTS user_agent TEXT;
 CREATE INDEX IF NOT EXISTS play_sessions_account ON play_sessions(account_id);
 CREATE INDEX IF NOT EXISTS play_sessions_started ON play_sessions(started_at);
 CREATE TABLE IF NOT EXISTS chat_logs (
@@ -113,6 +128,41 @@ CREATE TABLE IF NOT EXISTS world_state (
   data JSONB NOT NULL,
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+-- Chat moderation: per-account timed mute + running strike count for the
+-- hard-word (slur) enforcement ladder. A mute blocks chat only, never login.
+ALTER TABLE accounts ADD COLUMN IF NOT EXISTS chat_muted_until TIMESTAMPTZ;
+ALTER TABLE accounts ADD COLUMN IF NOT EXISTS chat_strikes INT NOT NULL DEFAULT 0;
+-- Admin-managed filter word lists. tier 'soft' = cosmetic (masked client-side
+-- when the player's filter is on); tier 'hard' = enforced (blocked + escalated).
+CREATE TABLE IF NOT EXISTS chat_filter_words (
+  id SERIAL PRIMARY KEY,
+  word TEXT NOT NULL,
+  tier TEXT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  UNIQUE (tier, word)
+);
+-- Single-row escalation config (warnings then a mute ladder, in seconds).
+CREATE TABLE IF NOT EXISTS chat_filter_config (
+  id INT PRIMARY KEY DEFAULT 1,
+  warnings_before_mute INT NOT NULL DEFAULT 1,
+  mute_ladder_seconds INT[] NOT NULL DEFAULT '{600,3600,86400}',
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  CONSTRAINT chat_filter_config_singleton CHECK (id = 1)
+);
+-- Hard-word incident log, surfaced per-account in the moderation dashboard.
+CREATE TABLE IF NOT EXISTS chat_violations (
+  id BIGSERIAL PRIMARY KEY,
+  account_id INT REFERENCES accounts(id) ON DELETE CASCADE,
+  character_id INT REFERENCES characters(id) ON DELETE SET NULL,
+  character_name TEXT NOT NULL DEFAULT '',
+  term TEXT NOT NULL DEFAULT '',
+  channel TEXT NOT NULL DEFAULT '',
+  message TEXT NOT NULL DEFAULT '',
+  action TEXT NOT NULL DEFAULT '',
+  mute_seconds INT NOT NULL DEFAULT 0,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS chat_violations_account ON chat_violations(account_id, created_at DESC);
 `;
 
 export async function ensureSchema(): Promise<void> {
@@ -127,6 +177,9 @@ export async function ensureSchema(): Promise<void> {
     await client.query('SELECT pg_advisory_xact_lock($1)', [0x57_4f_43_01]); // "WOC\x01"
     await client.query(SCHEMA);
     await client.query(SOCIAL_SCHEMA);
+    // Seed the chat-filter word lists + config on first boot only (idempotent).
+    // Runs under the same advisory lock so concurrent realm boots don't race.
+    await seedChatFilterDefaults(client);
     await client.query('COMMIT');
   } catch (err) {
     await client.query('ROLLBACK').catch(() => {});
@@ -148,12 +201,34 @@ export interface AccountModerationStatus {
   suspendedUntil: string | null;
   reason: string;
   message: string;
+  // Chat mute is independent of `locked`: a muted account can still log in and
+  // play, it just can't send chat until `chatMutedUntil` passes. Surfaced here
+  // so the WS auth handshake can seed the live session without a second query.
+  chatMutedUntil: string | null;
+  chatStrikes: number;
 }
 
-export async function createAccount(username: string, passwordHash: string): Promise<AccountRow> {
+export interface AccountChatMuteStatus {
+  mutedUntil: string | null;
+  reason: string;
+}
+
+export interface RequestMetadata {
+  ip?: string | null;
+  userAgent?: string | null;
+}
+
+function cleanMetadataText(value: string | null | undefined, max: number): string | null {
+  const text = typeof value === 'string' ? value.trim() : '';
+  return text ? text.slice(0, max) : null;
+}
+
+export async function createAccount(username: string, passwordHash: string, meta: RequestMetadata = {}): Promise<AccountRow> {
   const res = await pool.query(
-    'INSERT INTO accounts (username, password_hash) VALUES ($1, $2) RETURNING id, username, password_hash',
-    [username, passwordHash],
+    `INSERT INTO accounts (username, password_hash, created_ip, created_user_agent)
+     VALUES ($1, $2, $3, $4)
+     RETURNING id, username, password_hash`,
+    [username, passwordHash, cleanMetadataText(meta.ip, 128), cleanMetadataText(meta.userAgent, 512)],
   );
   return res.rows[0];
 }
@@ -169,8 +244,13 @@ export async function getAccountsCount(): Promise<number> {
 }
 
 
-export async function touchLogin(accountId: number): Promise<void> {
-  await pool.query('UPDATE accounts SET last_login = now() WHERE id = $1', [accountId]);
+export async function touchLogin(accountId: number, meta: RequestMetadata = {}): Promise<void> {
+  await pool.query(
+    `UPDATE accounts
+     SET last_login = now(), last_login_ip = $2, last_login_user_agent = $3
+     WHERE id = $1`,
+    [accountId, cleanMetadataText(meta.ip, 128), cleanMetadataText(meta.userAgent, 512)],
+  );
 }
 
 export async function saveToken(token: string, accountId: number, ttlHours = 24 * 7): Promise<void> {
@@ -190,14 +270,19 @@ export async function accountForToken(token: string): Promise<number | null> {
 
 export async function moderationStatusForAccount(accountId: number): Promise<AccountModerationStatus> {
   const res = await pool.query(
-    `SELECT banned_at, suspended_until, moderation_reason
+    `SELECT banned_at, suspended_until, moderation_reason, chat_muted_until, chat_strikes
      FROM accounts WHERE id = $1`,
     [accountId],
   );
   const row = res.rows[0];
   if (!row) {
-    return { locked: false, banned: false, suspendedUntil: null, reason: '', message: '' };
+    return { locked: false, banned: false, suspendedUntil: null, reason: '', message: '', chatMutedUntil: null, chatStrikes: 0 };
   }
+  const mutedUntilDate = row.chat_muted_until ? new Date(row.chat_muted_until) : null;
+  const chatMutedUntil = mutedUntilDate && mutedUntilDate.getTime() > Date.now()
+    ? mutedUntilDate.toISOString()
+    : null;
+  const chatStrikes = Number(row.chat_strikes ?? 0);
   if (row.banned_at) {
     return {
       locked: true,
@@ -205,6 +290,8 @@ export async function moderationStatusForAccount(accountId: number): Promise<Acc
       suspendedUntil: null,
       reason: row.moderation_reason ?? '',
       message: 'This account has been banned.',
+      chatMutedUntil,
+      chatStrikes,
     };
   }
   const suspendedUntil = row.suspended_until ? new Date(row.suspended_until) : null;
@@ -215,9 +302,26 @@ export async function moderationStatusForAccount(accountId: number): Promise<Acc
       suspendedUntil: suspendedUntil.toISOString(),
       reason: row.moderation_reason ?? '',
       message: `This account is suspended until ${suspendedUntil.toUTCString()}.`,
+      chatMutedUntil,
+      chatStrikes,
     };
   }
-  return { locked: false, banned: false, suspendedUntil: null, reason: '', message: '' };
+  return { locked: false, banned: false, suspendedUntil: null, reason: '', message: '', chatMutedUntil, chatStrikes };
+}
+
+export async function chatMuteStatusForAccount(accountId: number): Promise<AccountChatMuteStatus> {
+  const res = await pool.query(
+    `SELECT chat_muted_until, chat_mute_reason
+     FROM accounts WHERE id = $1`,
+    [accountId],
+  );
+  const row = res.rows[0];
+  const mutedUntil = row?.chat_muted_until ? new Date(row.chat_muted_until) : null;
+  if (!mutedUntil || mutedUntil.getTime() <= Date.now()) return { mutedUntil: null, reason: '' };
+  return {
+    mutedUntil: mutedUntil.toISOString(),
+    reason: row.chat_mute_reason ?? '',
+  };
 }
 
 export interface CharacterRow {
@@ -264,12 +368,43 @@ export async function findCharacterReportTargetByName(name: string): Promise<{ a
   return row ? { accountId: Number(row.account_id), characterId: Number(row.id), characterName: row.name } : null;
 }
 
-export async function createCharacter(accountId: number, name: string, cls: PlayerClass): Promise<CharacterRow> {
+export async function createCharacter(accountId: number, name: string, cls: PlayerClass, state: CharacterState | null = null): Promise<CharacterRow> {
   const res = await pool.query(
-    'INSERT INTO characters (account_id, name, class, realm) VALUES ($1, $2, $3, $4) RETURNING id, account_id, name, class, level, state, is_gm, force_rename',
-    [accountId, name, cls, REALM],
+    'INSERT INTO characters (account_id, name, class, realm, state) VALUES ($1, $2, $3, $4, $5) RETURNING id, account_id, name, class, level, state, is_gm, force_rename',
+    [accountId, name, cls, REALM, state ? JSON.stringify(state) : null],
   );
   return res.rows[0];
+}
+
+export async function createCharacterCapped(
+  accountId: number,
+  name: string,
+  cls: PlayerClass,
+  limit = 10,
+  state: CharacterState | null = null,
+): Promise<CharacterRow | null> {
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    const account = await client.query('SELECT id FROM accounts WHERE id = $1 FOR UPDATE', [accountId]);
+    if ((account.rowCount ?? 0) === 0) { await client.query('ROLLBACK'); return null; }
+    const count = await client.query(
+      'SELECT count(*)::int AS n FROM characters WHERE account_id = $1 AND realm = $2',
+      [accountId, REALM],
+    );
+    if (Number(count.rows[0]?.n ?? 0) >= limit) { await client.query('ROLLBACK'); return null; }
+    const res = await client.query(
+      'INSERT INTO characters (account_id, name, class, realm, state) VALUES ($1, $2, $3, $4, $5) RETURNING id, account_id, name, class, level, state, is_gm, force_rename',
+      [accountId, name, cls, REALM, state ? JSON.stringify(state) : null],
+    );
+    await client.query('COMMIT');
+    return res.rows[0];
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => {});
+    throw err;
+  } finally {
+    client.release();
+  }
 }
 
 export async function deleteCharacter(accountId: number, characterId: number): Promise<boolean> {
@@ -279,7 +414,7 @@ export async function deleteCharacter(accountId: number, characterId: number): P
 
 // How many characters this account has on each realm — deliberately NOT
 // realm-scoped, so the realm-list screen can show "N characters" per realm
-// like WoW. Keyed by realm name.
+// like classic MMOs. Keyed by realm name.
 export async function characterCountsByRealm(accountId: number): Promise<Record<string, number>> {
   const res = await pool.query(
     'SELECT realm, count(*)::int AS n FROM characters WHERE account_id = $1 GROUP BY realm',
@@ -454,10 +589,13 @@ export async function openPlaySession(
   accountId: number,
   characterId: number,
   characterName: string,
+  meta: RequestMetadata = {},
 ): Promise<number> {
   const res = await pool.query(
-    'INSERT INTO play_sessions (account_id, character_id, character_name) VALUES ($1, $2, $3) RETURNING id',
-    [accountId, characterId, characterName],
+    `INSERT INTO play_sessions (account_id, character_id, character_name, ip_address, user_agent)
+     VALUES ($1, $2, $3, $4, $5)
+     RETURNING id`,
+    [accountId, characterId, characterName, cleanMetadataText(meta.ip, 128), cleanMetadataText(meta.userAgent, 512)],
   );
   return res.rows[0].id;
 }
@@ -467,9 +605,19 @@ export async function closePlaySession(sessionId: number): Promise<void> {
 }
 
 // Sessions left open by a crash have an unknown duration; close them at their
-// start time so they don't inflate playtime stats forever.
+// start time so they don't inflate playtime stats forever. Scope this to the
+// current realm: in the process-per-realm model peers share one database, and
+// an unscoped UPDATE would force-close sessions still live on other realms.
 export async function closeOrphanSessions(): Promise<number> {
-  const res = await pool.query('UPDATE play_sessions SET ended_at = started_at WHERE ended_at IS NULL');
+  const res = await pool.query(
+    `UPDATE play_sessions ps
+        SET ended_at = ps.started_at
+       FROM characters c
+      WHERE ps.character_id = c.id
+        AND c.realm = $1
+        AND ps.ended_at IS NULL`,
+    [REALM],
+  );
   return res.rowCount ?? 0;
 }
 

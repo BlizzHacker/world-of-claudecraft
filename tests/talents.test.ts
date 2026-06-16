@@ -9,6 +9,7 @@ import { Sim } from '../src/sim/sim';
 import { ABILITIES, abilitiesKnownAt } from '../src/sim/content/classes';
 import { terrainHeight } from '../src/sim/world';
 import { ClientWorld } from '../src/net/online';
+import { talentChoiceIconRef, talentNodeIconRef } from '../src/ui/talent_icons';
 
 const alloc = (over: Partial<TalentAllocation> = {}): TalentAllocation => ({ ...emptyAllocation(), ...over });
 
@@ -62,6 +63,23 @@ describe('talent tree validation (load-time)', () => {
         for (const eff of effects) {
           if (eff!.grant) expect(ABILITIES[eff!.grant.ability], `${node.id}:${eff!.grant.ability}`).toBeTruthy();
           for (const mod of eff!.ability ?? []) expect(ABILITIES[mod.ability], `${node.id}:${mod.ability}`).toBeTruthy();
+        }
+      }
+    }
+  });
+
+  it('derives painted icons for the release v0.7 class talent trees', () => {
+    const affected = ['shaman', 'hunter', 'druid', 'paladin', 'rogue', 'mage', 'warlock'] as const;
+    for (const cls of affected) {
+      const ct = talentsFor(cls)!;
+      for (const node of ct.nodes) {
+        const nodeIcon = talentNodeIconRef(node);
+        expect(nodeIcon.kind, `${cls}:${node.id}`).toMatch(/^(ability|crest)$/);
+        expect(nodeIcon.id, `${cls}:${node.id}`).toMatch(/^talent_|^[a-z0-9_]+$/);
+        for (const choice of node.choices ?? []) {
+          const choiceIcon = talentChoiceIconRef(choice);
+          expect(choiceIcon.kind, `${cls}:${node.id}:${choice.id}`).toMatch(/^(ability|crest)$/);
+          expect(choiceIcon.id, `${cls}:${node.id}:${choice.id}`).toMatch(/^talent_|^[a-z0-9_]+$/);
         }
       }
     }

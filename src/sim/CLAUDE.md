@@ -10,7 +10,7 @@ aggro/leash, parties, duels, arena, trade, market, dungeon instances, terrain,
 and the RL observation surface. Same code runs offline / on the server / headless.
 
 ## Key files
-- **`sim.ts`** (~4.7k lines) — the whole simulation. `class Sim`; one `tick()` does everything. See the nav map below.
+- **`sim.ts`** (~5k+ lines) — the whole simulation. `class Sim`; one `tick()` does everything. See the nav map below.
 - **`types.ts`** (~740) — ALL shared types AND the global tuning constants + vanilla formulas (`TICK_RATE`, `DT`, `GCD`, ranges, `XP_TABLE`, hit/armor/rage math, post-cap `virtualLevel`/prestige). Plus the `SimEvent` union and the `Entity` shape.
 - `data.ts` — merges `content/*` into the flat tables (`ABILITIES`, `MOBS`, `NPCS`, `QUESTS`, `ITEMS`, `CAMPS`, `DUNGEONS`) and owns world-layout consts (`WORLD_SIZE`, `instanceOrigin`, `arenaOrigin`, `zoneAt`, `dungeonAt`).
 - `entity.ts` — `createPlayer/createMob/createNpc/createGroundObject` + `recalcPlayerStats` (the ONE place derived stats are computed from class/level/gear/auras/talent `mods`).
@@ -29,11 +29,11 @@ and the RL observation surface. Same code runs offline / on the server / headles
 - Order matters: changing the entity-iteration order in `tick()` changes RNG draw order ⇒ different worlds. Don't reorder loops casually.
 
 ## sim.ts navigation map (banner-comment regions, in order)
-Entity roster (add/remove/teleport) · Players join/leave/persistence · **Back-compat accessors** (`player`/`inventory`/`xp`/… delegate to the primary player; per-player state lives in `PlayerMeta`, not the `Entity`) · Talents · **Main tick** (`tick()` ~944) · Player movement · Regen/timers/auras · Casting/channeling/abilities · Hunter pets · Auto-attack/melee · Damage/death (`dealDamage`) · Mob AI · Targeting · Inventory/items/vendor · Interaction (loot/quest NPCs/objects) · Quests · Player death/respawn · Hostility · Parties · Duels · Arena (Elo) · Trading · World Market (auction house) · Dungeons/instances.
+Entity roster (add/remove/teleport) · Players join/leave/persistence · **Back-compat accessors** (`player`/`inventory`/`xp`/… delegate to the primary player; per-player state lives in `PlayerMeta`, not the `Entity`) · Talents · **Main tick** (`tick()`, under the `// Main tick` banner) · Player movement · Regen/timers/auras · Casting/channeling/abilities · Hunter pets · Auto-attack/melee · Damage/death (`dealDamage`) · Mob AI · Targeting · Inventory/items/vendor · Interaction (loot/quest NPCs/objects) · Quests · Player death/respawn · Hostility · Parties · Duels · Arena (Elo) · Trading · World Market (auction house) · Dungeons/instances.
 
 ## Tuning constants — change numbers THERE, not inline
 - Global gameplay/formulas: top of **`types.ts`** (`MELEE_RANGE`, `GCD`, `XP_TABLE`, rage/hit/armor fns, …).
-- Sim-internal knobs: the `const` block atop **`sim.ts`** (lines ~34–83: `LEASH_DISTANCE`, `MELEE_ARC`, `GRAVITY`, `PARTY_*`, `ARENA_*`, `MARKET_*`, `CHARGE_*`, `PET_*`, swim/climb, …). Edit the named const; don't hardcode magic numbers in methods.
+- Sim-internal knobs: the `const` block atop **`sim.ts`** (starts ~L34: `LEASH_DISTANCE`, `MELEE_ARC`, `GRAVITY`, `PARTY_*`, `ARENA_*`, `MARKET_*`, `CHARGE_*`, `PET_*`, swim/climb, …). Edit the named const; don't hardcode magic numbers in methods.
 
 ## Talking to the outside
 - Output is the **`SimEvent`** union (`types.ts`). Code calls `this.emit(ev)`; `tick()` returns the drained `SimEvent[]`. An event with `pid` is personal (delivered only to that player's owner); without `pid` it's world-visible.

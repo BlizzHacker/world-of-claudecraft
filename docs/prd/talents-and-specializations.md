@@ -14,9 +14,9 @@
 
 ## 1. Summary
 
-Add a WoW-style **talent and specialization system**: as characters level they earn **talent points** to spend in a **talent tree**, customizing their class through passive modifiers, granted abilities, and choice nodes. A higher-level **specialization** sets the character's **role** (tank/healer/dps), grants signature abilities and a defining passive (Mastery analog), and selects which spec tree is available. The system supports **free respec, multiple saved loadouts, and import/export build strings** for community theorycrafting.
+Add a classic-MMO-style **talent and specialization system**: as characters level they earn **talent points** to spend in a **talent tree**, customizing their class through passive modifiers, granted abilities, and choice nodes. A higher-level **specialization** sets the character's **role** (tank/healer/dps), grants signature abilities and a defining passive (Mastery analog), and selects which spec tree is available. The system supports **free respec, multiple saved loadouts, and import/export build strings** for community theorycrafting.
 
-This PRD covers the full WoW feature set end to end. The engine already has clean hook points (one central stat function, data-driven abilities, a learned-abilities resolver). The dominant cost is **(a) authoring balanced trees for 9 classes** and **(b) combat-correctness/balance risk** when talents modify abilities. A staged rollout mitigates both.
+This PRD covers the full classic-MMO feature set end to end. The engine already has clean hook points (one central stat function, data-driven abilities, a learned-abilities resolver). The dominant cost is **(a) authoring balanced trees for 9 classes** and **(b) combat-correctness/balance risk** when talents modify abilities. A staged rollout mitigates both.
 
 ---
 
@@ -26,13 +26,13 @@ This PRD covers the full WoW feature set end to end. The engine already has clea
 Talents drew **8 upvotes** — more than 4× any other unaddressed request — plus explicit endorsement. It is the community's #1 most-wanted remaining feature.
 
 ### 2.2 Why it matters
-- **Depth & identity.** Talents are the primary character-customization vector in the WoW formula. The game currently has fixed, class-locked progression with no build choices.
+- **Depth & identity.** Talents are the primary character-customization vector in the classic-MMO formula. The game currently has fixed, class-locked progression with no build choices.
 - **Replayability & theorycrafting.** Build diversity + shareable build strings drive the kind of community engagement already happening in Discord.
 - **Foundation for endgame.** Pairs naturally with arenas (PRs #117/#44), wagering, and the XP-overflow leaderboard to give max-level play meaning.
 
 ---
 
-## 3. How it works in WoW (full breakdown across all eras)
+## 3. How it works in classic MMOs (full breakdown across all eras)
 
 We cherry-pick from 20 years of iteration. The throughline: **make choices meaningful, make changing your mind cheap, make builds shareable.**
 
@@ -151,7 +151,7 @@ Point economy → nodes in 3 flavors (passive modifier / granted active / choice
 - **FR-2.3** Trees are pure data, validated at load (no cycles, valid prereqs, reachable nodes).
 
 ### 6.3 Specialization & roles
-- **FR-3.1** Each class defines its specs (most 3; Druid 4; counts mirror WoW or be simplified — decide in design). Add a `specs` field to `ClassDef`.
+- **FR-3.1** Each class defines its specs (most 3; Druid 4; counts mirror the classic-MMO convention or be simplified — decide in design). Add a `specs` field to `ClassDef`.
 - **FR-3.2** Choosing a spec (at a configured level, e.g. 10) sets **role** (tank/healer/melee-dps/ranged-dps), grants a **signature ability**, a **Mastery-style passive**, and selects the spec tree.
 - **FR-3.3** Role affects nothing the engine can't already express (threat via the threat system from PR #36, healing targeting, etc.) — map roles onto existing mechanics.
 - **FR-3.4** Switching spec is free, out of combat; each spec retains its own talents + action bars (via loadouts, 6.7).
@@ -307,7 +307,7 @@ Allocation (server-authoritative Sim)
 ## 14. Open questions
 
 1. Tree topology: single class tree, or DF-style Class + Spec split? How many points and at what level cadence (given a level-20 cap)?
-2. Spec counts per class — mirror WoW (3/4/2) or simplify to a uniform number?
+2. Spec counts per class — mirror the classic-MMO convention (3/4/2) or simplify to a uniform number?
 3. Apply rule: require all points spent (DF-strict) or allow partial (lower friction)?
 4. Mastery analog: per-spec scaling mechanic, or skip in v1?
 5. Do roles need new engine support (e.g. healer threat, taunt) beyond the existing threat system?

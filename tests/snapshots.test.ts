@@ -1,6 +1,3 @@
-import { mkdtempSync, rmSync, writeFileSync } from 'fs';
-import { tmpdir } from 'os';
-import { join } from 'path';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Mock the db layer so no Postgres is needed; snapshot logic is under test.
@@ -12,10 +9,10 @@ vi.mock('../server/db', () => ({
   insertChatLogs: vi.fn(async () => {}),
 }));
 
-import { censorChatText, GameServer, ClientSession } from '../server/game';
+import { GameServer, ClientSession } from '../server/game';
 import { saveCharacterState } from '../server/db';
 import { ClientWorld } from '../src/net/online';
-import type { PlayerClass } from '../src/sim/types';
+import { DT, type PlayerClass } from '../src/sim/types';
 
 const DELTA_KEYS = ['inv', 'buyback', 'equip', 'qlog', 'qdone', 'cds', 'stats', 'weapon', 'party', 'trade', 'duel'];
 
@@ -79,28 +76,13 @@ function bareClient(pid: number): ClientWorld {
   c.connected = true;
   c.eventQueue = [];
   c.mouselookFacing = null;
+  c.lastInputSentAt = 0;
+  c.lastInputSig = '';
+  c.inputSeq = 0;
+  c.pendingInputSeqSentAt = new Map();
+  c.ackedInputSeq = 0;
+  c.inputEchoSamples = [];
   return c;
-}
-
-function withChatCensorConfig(list: string | undefined, file: string | undefined, test: () => void): void {
-  const prev = process.env.CHAT_CENSOR_LIST;
-  const prevFile = process.env.CHAT_CENSOR_FILE;
-  if (list === undefined) delete process.env.CHAT_CENSOR_LIST;
-  else process.env.CHAT_CENSOR_LIST = list;
-  if (file === undefined) delete process.env.CHAT_CENSOR_FILE;
-  else process.env.CHAT_CENSOR_FILE = file;
-  try {
-    test();
-  } finally {
-    if (prev === undefined) delete process.env.CHAT_CENSOR_LIST;
-    else process.env.CHAT_CENSOR_LIST = prev;
-    if (prevFile === undefined) delete process.env.CHAT_CENSOR_FILE;
-    else process.env.CHAT_CENSOR_FILE = prevFile;
-  }
-}
-
-function withChatCensorList(list: string | undefined, test: () => void): void {
-  withChatCensorConfig(list, undefined, test);
 }
 
 describe('delta snapshots', () => {
@@ -175,6 +157,63 @@ describe('delta snapshots', () => {
     const snap = lastSnap(fc.sent);
     expect(snap.self.inv).toEqual([{ itemId: 'widow_venom_sac', count: 4 }]);
     expect(snap.self.qlog).toEqual([{ questId: 'q_widows', counts: [10, 4], state: 'active' }]);
+  });
+
+  it('echoes the last processed input sequence in self snapshots', () => {
+    server.handleMessage(session, JSON.stringify({ t: 'input', seq: 7, mi: { f: 1 } }));
+    broadcast(server);
+    const snap = lastSnap(fc.sent);
+    expect(snap.self.ack).toBe(7);
+
+    server.handleMessage(session, JSON.stringify({ t: 'input', seq: 6, mi: { f: 0 } }));
+    fc.sent.length = 0;
+    broadcast(server);
+    expect(lastSnap(fc.sent).self.ack).toBe(7);
+  });
+
+  it('turns echoed input acks into client latency samples', () => {
+    const client = bareClient(1);
+    const first = { id: 1, k: 'player', tid: 'player', nm: 'Testa', lv: 1, x: 0, y: 0, z: 0, f: 0, hp: 100, mhp: 100 };
+    (client as any).pendingInputSeqSentAt.set(1, 100);
+    (client as any).pendingInputSeqSentAt.set(2, 140);
+
+    const oldPerf = (globalThis as any).performance;
+    (globalThis as any).performance = { now: () => 200 };
+    try {
+      (client as any).applySnapshot({ t: 'snap', ents: [], self: { ...first, ack: 2 } });
+    } finally {
+      (globalThis as any).performance = oldPerf;
+    }
+
+    expect(client.consumeInputEchoSamples()).toEqual([100, 60]);
+    expect(client.consumeInputEchoSamples()).toEqual([]);
+  });
+
+  it('snaps a dead mob to its respawn pose instead of interpolating from the corpse', () => {
+    const client = bareClient(1);
+    const corpse = {
+      id: 99, k: 'mob', tid: 'forest_wolf', nm: 'Forest Wolf', lv: 1,
+      x: 0, y: 0, z: 0, f: 0, hp: 0, mhp: 45, dead: true, h: true,
+    };
+    const respawned = {
+      id: 99, tid: 'forest_wolf', nm: 'Forest Wolf', lv: 1,
+      x: 10, y: 0, z: 0, f: 0, hp: 45, mhp: 45, dead: false, h: true,
+    };
+
+    const oldPerf = (globalThis as any).performance;
+    (globalThis as any).performance = { now: () => 100 };
+    try {
+      (client as any).applySnapshot({ t: 'snap', ents: [corpse] });
+      (globalThis as any).performance = { now: () => 125 };
+      (client as any).applySnapshot({ t: 'snap', ents: [respawned] });
+    } finally {
+      (globalThis as any).performance = oldPerf;
+    }
+
+    const mob = client.entities.get(99)!;
+    expect(mob.dead).toBe(false);
+    expect(mob.pos.x).toBe(10);
+    expect(mob.prevPos).toEqual(mob.pos);
   });
 
   it('resends a heavy field once it changes', () => {
@@ -261,6 +300,30 @@ describe('delta snapshots', () => {
   });
 });
 
+describe('online movement input lifetime', () => {
+  it('clears stale held movement when the websocket input stream goes quiet', () => {
+    const server = new GameServer();
+    const fc = fakeWs();
+    const session = joinServer(server, fc, 1, 'Spinner');
+
+    server.handleMessage(session, JSON.stringify({
+      t: 'input',
+      seq: 1,
+      mi: { f: 0, b: 0, tl: 1, tr: 0, sl: 0, sr: 0, j: 0 },
+    }));
+    const meta = server.sim.meta(session.pid)!;
+    expect(meta.moveInput.turnLeft).toBe(true);
+
+    for (let i = 0; i < Math.floor(0.5 / DT); i++) server.sim.tick();
+    (server as any).clearStaleInputs();
+    expect(meta.moveInput.turnLeft).toBe(true);
+
+    for (let i = 0; i < Math.ceil(0.35 / DT); i++) server.sim.tick();
+    (server as any).clearStaleInputs();
+    expect(meta.moveInput.turnLeft).toBe(false);
+  });
+});
+
 describe('chat moderation', () => {
   it('rate-limits chat bursts per connected client before cooldown', () => {
     const server = new GameServer();
@@ -300,67 +363,58 @@ describe('chat moderation', () => {
     }));
   });
 
-  it('censors configured terrible words while still sending chat', () => {
-    withChatCensorList('blockedterm', () => {
-      expect(censorChatText('hello blockedterm and bl0ckedt3rm')).toBe('hello *********** and ***********');
+  it('blocks hard-word (slur) messages and escalates warning -> mute', () => {
+    const server = new GameServer();
+    server.chatFilter.load({ soft: [], hard: ['slurword'], config: { warningsBeforeMute: 1, muteLadderSeconds: [600] } });
+    const fc = fakeWs();
+    const session = joinServer(server, fc, 1, 'Testa');
 
-      const server = new GameServer();
-      const fc = fakeWs();
-      const session = joinServer(server, fc, 1, 'Testa');
-      fc.sent.length = 0;
-      server.handleMessage(session, JSON.stringify({ t: 'cmd', cmd: 'chat', text: 'hello blockedterm' }));
-      (server as any).routeEvents(server.sim.tick());
+    // First offense: blocked entirely + warning; it never becomes a chat event.
+    fc.sent.length = 0;
+    server.handleMessage(session, JSON.stringify({ t: 'cmd', cmd: 'chat', text: 'you are a slurword' }));
+    (server as any).routeEvents(server.sim.tick());
+    let events = fc.sent.flatMap((msg) => msg.t === 'events' ? msg.list : []);
+    expect(events.some((ev) => ev.type === 'chat')).toBe(false);
+    expect(events).toContainEqual(expect.objectContaining({ type: 'error', text: expect.stringContaining('Warning') }));
 
-      const events = fc.sent.flatMap((msg) => msg.t === 'events' ? msg.list : []);
-      expect(events).toContainEqual(expect.objectContaining({
-        type: 'chat',
-        text: 'hello ***********',
-      }));
-    });
+    // Second offense: escalates to a timed mute.
+    fc.sent.length = 0;
+    server.handleMessage(session, JSON.stringify({ t: 'cmd', cmd: 'chat', text: 'slurword strikes again' }));
+    events = fc.sent.flatMap((msg) => msg.t === 'events' ? msg.list : []);
+    expect(events).toContainEqual(expect.objectContaining({ type: 'error', text: expect.stringContaining('muted') }));
+
+    // Now muted: even a clean message is dropped until the mute expires.
+    fc.sent.length = 0;
+    server.handleMessage(session, JSON.stringify({ t: 'cmd', cmd: 'chat', text: 'hello everyone' }));
+    (server as any).routeEvents(server.sim.tick());
+    events = fc.sent.flatMap((msg) => msg.t === 'events' ? msg.list : []);
+    expect(events.some((ev) => ev.type === 'chat')).toBe(false);
+    expect(events).toContainEqual(expect.objectContaining({ type: 'error', text: expect.stringContaining('muted') }));
   });
 
-  it('caches file-backed censor terms until censor env changes', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'cryptic-realm-censor-'));
-    const firstFile = join(dir, 'first.txt');
-    const secondFile = join(dir, 'second.txt');
-    writeFileSync(firstFile, 'fileterm\n');
-    writeFileSync(secondFile, 'otherterm\n');
-
-    try {
-      withChatCensorConfig(undefined, firstFile, () => {
-        expect(censorChatText('fileterm again')).toBe('******** again');
-        writeFileSync(firstFile, 'changedterm\n');
-        expect(censorChatText('fileterm changedterm')).toBe('******** changedterm');
-
-        process.env.CHAT_CENSOR_FILE = secondFile;
-        expect(censorChatText('fileterm otherterm')).toBe('fileterm *********');
-
-        delete process.env.CHAT_CENSOR_FILE;
-        expect(censorChatText('otherterm')).toBe('otherterm');
-      });
-    } finally {
-      rmSync(dir, { force: true, recursive: true });
-    }
+  it('leaves soft (cosmetic) words untouched server-side — clients mask them', () => {
+    const server = new GameServer();
+    server.chatFilter.load({ soft: ['darn'], hard: [], config: { warningsBeforeMute: 1, muteLadderSeconds: [600] } });
+    const fc = fakeWs();
+    const session = joinServer(server, fc, 1, 'Testa');
+    fc.sent.length = 0;
+    server.handleMessage(session, JSON.stringify({ t: 'cmd', cmd: 'chat', text: 'oh darn it' }));
+    (server as any).routeEvents(server.sim.tick());
+    const events = fc.sent.flatMap((msg) => msg.t === 'events' ? msg.list : []);
+    expect(events).toContainEqual(expect.objectContaining({ type: 'chat', text: 'oh darn it' }));
   });
 
-  it('retries file-backed censor terms after a failed read', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'cryptic-realm-censor-missing-'));
-    const missingFile = join(dir, 'missing.txt');
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
-
-    try {
-      withChatCensorConfig(undefined, missingFile, () => {
-        expect(censorChatText('laterterm')).toBe('laterterm');
-        expect(warn).toHaveBeenCalledOnce();
-
-        writeFileSync(missingFile, 'laterterm\n');
-        expect(censorChatText('laterterm')).toBe('*********');
-      });
-    } finally {
-      warn.mockRestore();
-      rmSync(dir, { force: true, recursive: true });
-    }
+  it('ships the soft word list to clients in the hello payload', () => {
+    const server = new GameServer();
+    server.chatFilter.load({ soft: ['darn', 'heck'], hard: ['slurword'], config: { warningsBeforeMute: 1, muteLadderSeconds: [600] } });
+    const fc = fakeWs();
+    joinServer(server, fc, 1, 'Testa');
+    const hello = fc.sent.find((msg) => msg.t === 'hello');
+    expect(hello.softWords).toEqual(['darn', 'heck']);
+    // Hard words are enforcement-only and must never be shipped to the client.
+    expect(JSON.stringify(hello)).not.toContain('slurword');
   });
+
 });
 
 describe('autosaves', () => {
@@ -514,6 +568,31 @@ describe('client-side delta merge', () => {
       expect(client.questsDone.has('q_wolves')).toBe(false);
       expect(client.questState('q_wolves')).toBe('active');
       expect(sent).toContainEqual({ t: 'cmd', cmd: 'turnin', quest: 'q_wolves' });
+    } finally {
+      (globalThis as any).WebSocket = oldWebSocket;
+    }
+  });
+
+  it('flushes changed movement immediately without resending unchanged frames', () => {
+    const client = bareClient(1);
+    const sent: any[] = [];
+    (client as any).ws = { readyState: 1, send: (payload: string) => sent.push(JSON.parse(payload)) };
+    const oldWebSocket = (globalThis as any).WebSocket;
+    (globalThis as any).WebSocket = { OPEN: 1 };
+    try {
+      Object.assign(client.moveInput, { forward: true, back: false, turnLeft: false, turnRight: false, strafeLeft: false, strafeRight: false, jump: false });
+      expect(client.flushInput(100)).toBe(true);
+      expect(sent).toEqual([{ t: 'input', seq: 1, mi: { f: 1, b: 0, tl: 0, tr: 0, sl: 0, sr: 0, j: 0 } }]);
+
+      expect(client.flushInput(105)).toBe(false);
+      expect(sent).toHaveLength(1);
+
+      Object.assign(client.moveInput, { forward: false, strafeRight: true });
+      expect(client.flushInput(115)).toBe(false);
+      expect(sent).toHaveLength(1);
+
+      expect(client.flushInput(120)).toBe(true);
+      expect(sent.at(-1)).toEqual({ t: 'input', seq: 2, mi: { f: 0, b: 0, tl: 0, tr: 0, sl: 0, sr: 1, j: 0 } });
     } finally {
       (globalThis as any).WebSocket = oldWebSocket;
     }

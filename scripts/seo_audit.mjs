@@ -6,6 +6,23 @@ import path from 'node:path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const indexPath = path.resolve(__dirname, '../index.html');
+const expectedAlternates = [
+  { hreflang: 'en', href: 'https://crypticrealm.com/' },
+  { hreflang: 'es', href: 'https://crypticrealm.com/?lang=es' },
+  { hreflang: 'es-ES', href: 'https://crypticrealm.com/?lang=es_ES' },
+  { hreflang: 'fr-FR', href: 'https://crypticrealm.com/?lang=fr_FR' },
+  { hreflang: 'fr-CA', href: 'https://crypticrealm.com/?lang=fr_CA' },
+  { hreflang: 'en-CA', href: 'https://crypticrealm.com/?lang=en_CA' },
+  { hreflang: 'it-IT', href: 'https://crypticrealm.com/?lang=it_IT' },
+  { hreflang: 'de-DE', href: 'https://crypticrealm.com/?lang=de_DE' },
+  { hreflang: 'zh-CN', href: 'https://crypticrealm.com/?lang=zh_CN' },
+  { hreflang: 'zh-TW', href: 'https://crypticrealm.com/?lang=zh_TW' },
+  { hreflang: 'ko-KR', href: 'https://crypticrealm.com/?lang=ko_KR' },
+  { hreflang: 'ja-JP', href: 'https://crypticrealm.com/?lang=ja_JP' },
+  { hreflang: 'pt-BR', href: 'https://crypticrealm.com/?lang=pt_BR' },
+  { hreflang: 'ru-RU', href: 'https://crypticrealm.com/?lang=ru_RU' },
+  { hreflang: 'x-default', href: 'https://crypticrealm.com/' },
+];
 
 function audit() {
   console.log('--- Cryptic Realm: Local SEO & A11y Audit ---');
@@ -51,7 +68,7 @@ function audit() {
   const titleText = titles.length > 0 ? titles[0].content : '';
   const hasTitle = titles.length === 1 && titleText.length > 0;
   const isTitleGoodLength = titleText.length >= 10 && titleText.length <= 70;
-  const hasTitleEmDash = titleText.includes('—');
+  const hasTitleEmDash = titleText.includes('\u2014');
   
   checks.push({
     category: 'SEO',
@@ -191,17 +208,24 @@ function audit() {
   });
 
   // 9. GEO / hreflang alternates Check
-  const hasEnAlt = html.includes('hreflang="en"') && html.includes('href="https://worldofcryptic-realm.com/"');
-  const hasEsAlt = html.includes('hreflang="es"') && html.includes('href="https://worldofcryptic-realm.com/?lang=es"');
-  const hasDefaultAlt = html.includes('hreflang="x-default"') && html.includes('href="https://worldofcryptic-realm.com/"');
-  const hasAllAlternates = hasEnAlt && hasEsAlt && hasDefaultAlt;
+  const linkTags = getTags('link');
+  const missingAlternates = expectedAlternates.filter((expected) => {
+    return !linkTags.some((tag) => {
+      return getAttribute(tag, 'rel') === 'alternate'
+        && getAttribute(tag, 'hreflang') === expected.hreflang
+        && getAttribute(tag, 'href') === expected.href;
+    });
+  });
+  const hasAllAlternates = missingAlternates.length === 0;
   checks.push({
     category: 'SEO/GEO',
     name: 'Multilingual hreflang alternates are present',
     passed: hasAllAlternates,
     score: hasAllAlternates ? 10 : 0,
     maxScore: 10,
-    details: `Alternates found - en: ${hasEnAlt}, es: ${hasEsAlt}, x-default: ${hasDefaultAlt}.`
+    details: hasAllAlternates
+      ? `Found all ${expectedAlternates.length} hreflang alternates.`
+      : `Missing alternates: ${missingAlternates.map((alt) => alt.hreflang).join(', ')}.`
   });
 
   // 10. Open Graph Check
@@ -258,7 +282,7 @@ function audit() {
 
   console.log('\n=== AUDIT RESULTS ===');
   checks.forEach((c) => {
-    const status = c.passed ? '✅ PASSED' : '❌ FAILED';
+    const status = c.passed ? 'PASSED' : 'FAILED';
     console.log(`[${c.category}] ${status} - ${c.name}`);
     console.log(`     Score: ${c.score}/${c.maxScore} | ${c.details}`);
   });
@@ -273,7 +297,7 @@ function audit() {
   console.log(`Overall Score:     ${overallPct}% (${totalScore}/${totalMax})`);
   
   if (overallPct === 100) {
-    console.log('\n🏆 PERFECT SCORE! 100% compliant with local SEO & Accessibility rules.');
+    console.log('\nPerfect score: 100% compliant with local SEO & Accessibility rules.');
   } else {
     console.log(`\nScore: ${overallPct}%. Some elements can be optimized further.`);
   }

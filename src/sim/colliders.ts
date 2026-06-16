@@ -1,8 +1,8 @@
-import { generateDecorations } from './world';
+import { generateDecorations, groundHeight } from './world';
 import {
   DUNGEON_X_THRESHOLD, INSTANCE_SLOT_COUNT, PROPS, arenaOriginAt, dungeonAt, instanceOrigin, isArenaPos,
 } from './data';
-import { ARENA_LAYOUT, CRYPT_LAYOUT, SANCTUM_LAYOUT, layoutColliders } from './dungeon_layout';
+import { ARENA_LAYOUT, CRYPT_LAYOUT, SANCTUM_LAYOUT, TEMPLE_LAYOUT, layoutColliders } from './dungeon_layout';
 
 // Static world collision. Prop placement comes from the per-zone content
 // modules (merged into PROPS by sim/data.ts): the renderer builds its meshes
@@ -14,6 +14,14 @@ export interface CircleCollider {
   x: number;
   z: number;
   r: number;
+  /** Absolute world-space top used by camera occlusion; movement ignores it. */
+  cameraTopY?: number;
+  /**
+   * When true the chase cam ray passes straight through this collider (no
+   * pull-in). Movement still collides. Used for village structures, which the
+   * renderer hides while the camera sits inside them instead of zooming in.
+   */
+  camGhost?: boolean;
 }
 
 export interface ObbCollider {
@@ -23,9 +31,17 @@ export interface ObbCollider {
   hw: number; // half width (local x)
   hd: number; // half depth (local z)
   rot: number; // yaw, three.js rotation.y convention
+  /** Absolute world-space top used by camera occlusion; movement ignores it. */
+  cameraTopY?: number;
+  /** See {@link CircleCollider.camGhost}. */
+  camGhost?: boolean;
 }
 
 export type Collider = CircleCollider | ObbCollider;
+
+function topY(seed: number, x: number, z: number, height: number): number {
+  return groundHeight(x, z, seed) + height;
+}
 
 // rotate a local offset by a three.js rotation.y angle
 function rotY(lx: number, lz: number, rot: number): { x: number; z: number } {
@@ -40,42 +56,50 @@ function rotY(lx: number, lz: number, rot: number): { x: number; z: number } {
 function staticWorldColliders(seed: number): Collider[] {
   const out: Collider[] = [];
 
+  // Village structures (buildings, wells, stalls, mine mounds, dock huts,
+  // tents) are `camGhost`: they keep blocking movement but the chase cam no
+  // longer pulls in for them — the renderer hides whichever one the camera is
+  // standing inside instead.
   for (const b of PROPS.buildings) {
-    out.push({ type: 'obb', x: b.x, z: b.z, hw: b.w / 2, hd: b.d / 2, rot: b.rot });
+    const height = b.kind === 'chapel' ? 10.8 : b.kind === 'inn' ? 7.8 : 8.0;
+    out.push({ type: 'obb', x: b.x, z: b.z, hw: b.w / 2, hd: b.d / 2, rot: b.rot, cameraTopY: topY(seed, b.x, b.z, height), camGhost: true });
   }
-  for (const w of PROPS.wells) out.push({ type: 'circle', x: w.x, z: w.z, r: w.r });
-  for (const s of PROPS.stalls) out.push({ type: 'circle', x: s.x, z: s.z, r: s.r });
+  for (const w of PROPS.wells) out.push({ type: 'circle', x: w.x, z: w.z, r: w.r, cameraTopY: topY(seed, w.x, w.z, 3.7), camGhost: true });
+  for (const s of PROPS.stalls) out.push({ type: 'circle', x: s.x, z: s.z, r: s.r, cameraTopY: topY(seed, s.x, s.z, 3.1), camGhost: true });
 
   // mines: mound behind the timber portal
   for (const m of PROPS.mines) {
     const mound = rotY(0, -3.4, m.rot);
-    out.push({ type: 'circle', x: m.x + mound.x, z: m.z + mound.z, r: 5 });
+    const x = m.x + mound.x, z = m.z + mound.z;
+    out.push({ type: 'circle', x, z, r: 5, cameraTopY: topY(seed, x, z, 5.2), camGhost: true });
   }
 
   // dock huts
   for (const d of PROPS.docks) {
     const hut = rotY(d.hutLocal.x, d.hutLocal.z, d.rot);
-    out.push({ type: 'obb', x: d.x + hut.x, z: d.z + hut.z, hw: d.hutLocal.hw, hd: d.hutLocal.hd, rot: d.rot });
+    const x = d.x + hut.x, z = d.z + hut.z;
+    out.push({ type: 'obb', x, z, hw: d.hutLocal.hw, hd: d.hutLocal.hd, rot: d.rot, cameraTopY: topY(seed, x, z, 2.9), camGhost: true });
   }
 
-  for (const t of PROPS.tents) out.push({ type: 'circle', x: t.x, z: t.z, r: 1.5 * t.scale });
-  for (const [x, z] of PROPS.crates) out.push({ type: 'circle', x, z, r: 0.65 });
-  for (const [x, z] of PROPS.campfires) out.push({ type: 'circle', x, z, r: 0.85 });
-  for (const [x, z] of PROPS.mudHuts) out.push({ type: 'circle', x, z, r: 1.1 });
+  for (const t of PROPS.tents) out.push({ type: 'circle', x: t.x, z: t.z, r: 1.5 * t.scale, cameraTopY: topY(seed, t.x, t.z, 3.4 * t.scale), camGhost: true });
+  for (const [x, z] of PROPS.crates) out.push({ type: 'circle', x, z, r: 0.65, cameraTopY: topY(seed, x, z, 1.35) });
+  for (const [x, z] of PROPS.campfires) out.push({ type: 'circle', x, z, r: 0.85, cameraTopY: topY(seed, x, z, 1.45) });
+  for (const [x, z] of PROPS.mudHuts) out.push({ type: 'circle', x, z, r: 1.1, cameraTopY: topY(seed, x, z, 12.5) });
   for (const ruin of PROPS.ruinRings) {
     for (let i = 0; i < ruin.columns; i++) {
       const ang = (i / ruin.columns) * Math.PI * 2;
-      out.push({ type: 'circle', x: ruin.x + Math.sin(ang) * ruin.ringR, z: ruin.z + Math.cos(ang) * ruin.ringR, r: 0.6 });
+      const x = ruin.x + Math.sin(ang) * ruin.ringR, z = ruin.z + Math.cos(ang) * ruin.ringR;
+      out.push({ type: 'circle', x, z, r: 0.6, cameraTopY: topY(seed, x, z, 4.3) });
     }
   }
 
   // trees & large rocks from the deterministic decoration field
   for (const d of generateDecorations(seed)) {
     if (d.kind === 'rock') {
-      if (d.scale >= 0.8) out.push({ type: 'circle', x: d.x, z: d.z, r: 0.7 * d.scale });
+      if (d.scale >= 0.8) out.push({ type: 'circle', x: d.x, z: d.z, r: 0.7 * d.scale, cameraTopY: topY(seed, d.x, d.z, 1.25 * d.scale) });
     } else {
       // tree trunks only — canopies don't block
-      out.push({ type: 'circle', x: d.x, z: d.z, r: 0.55 * d.scale });
+      out.push({ type: 'circle', x: d.x, z: d.z, r: 0.55 * d.scale, cameraTopY: topY(seed, d.x, d.z, 7.5 * d.scale) });
     }
   }
   return out;
@@ -87,12 +111,14 @@ function staticWorldColliders(seed: number): Collider[] {
 // drift apart. The boss dais is walkable and deliberately has no collider.
 const CRYPT_COLLIDERS: Collider[] = layoutColliders(CRYPT_LAYOUT);
 const SANCTUM_COLLIDERS: Collider[] = layoutColliders(SANCTUM_LAYOUT);
+const TEMPLE_COLLIDERS: Collider[] = layoutColliders(TEMPLE_LAYOUT);
 const ARENA_COLLIDERS: Collider[] = layoutColliders(ARENA_LAYOUT);
 
 // Interior collider sets keyed by DungeonDef.interior.
 const INTERIOR_COLLIDERS: Record<string, Collider[]> = {
   crypt: CRYPT_COLLIDERS,
   sanctum: SANCTUM_COLLIDERS,
+  temple: TEMPLE_COLLIDERS,
 };
 
 // ---------------------------------------------------------------------------
@@ -218,4 +244,133 @@ export function resolvePosition(seed: number, x: number, z: number, r = 0.5): { 
 export function isBlocked(seed: number, x: number, z: number, r = 0.5): boolean {
   const res = resolvePosition(seed, x, z, r);
   return Math.abs(res.x - x) > 1e-4 || Math.abs(res.z - z) > 1e-4;
+}
+
+// ---------------------------------------------------------------------------
+// Camera occlusion — third-person chase-cam pull-in
+// ---------------------------------------------------------------------------
+// The renderer sweeps a ray from the player's head (`a`) toward the desired
+// camera position (`b`) and pulls the camera in to the surface of the first
+// static obstacle in between, so the chase cam never sits inside a wall/trunk.
+// Pure XZ math against the SAME colliders movement uses (what you see is what
+// you collide with). Returns the fraction of the a->b segment the camera may
+// travel before the first occluder (1 = unobstructed). Open-world colliders
+// carry precomputed `cameraTopY` values, so low props like campfires only block
+// low rays while trees and trunks still pull the camera in. Village structures
+// are flagged `camGhost` and skipped entirely (the renderer hides them instead).
+
+// First entry param t along a->b for a circle (radius already padded).
+// Infinity = no hit; we also bail when `a` is already inside (never slam the
+// camera onto the player).
+function rayCircleEntry(
+  ax: number, az: number, bx: number, bz: number, cx: number, cz: number, r: number,
+): number {
+  const dx = bx - ax, dz = bz - az;
+  const a = dx * dx + dz * dz;
+  if (a < 1e-12) return Infinity;
+  const fx = ax - cx, fz = az - cz;
+  const c = fx * fx + fz * fz - r * r;
+  if (c < 0) return Infinity; // origin inside the circle
+  const b = 2 * (fx * dx + fz * dz);
+  const disc = b * b - 4 * a * c;
+  if (disc < 0) return Infinity;
+  return (-b - Math.sqrt(disc)) / (2 * a);
+}
+
+// First entry param t along a->b for an OBB (extents already padded).
+function rayObbEntry(c: ObbCollider, ax: number, az: number, bx: number, bz: number, pad: number): number {
+  const la = rotY(ax - c.x, az - c.z, -c.rot);
+  const lb = rotY(bx - c.x, bz - c.z, -c.rot);
+  const ex = c.hw + pad, ez = c.hd + pad;
+  if (Math.abs(la.x) < ex && Math.abs(la.z) < ez) return Infinity; // origin inside the box
+  const dx = lb.x - la.x, dz = lb.z - la.z;
+  let tmin = -Infinity, tmax = Infinity;
+  if (Math.abs(dx) < 1e-9) {
+    if (la.x < -ex || la.x > ex) return Infinity;
+  } else {
+    let t1 = (-ex - la.x) / dx, t2 = (ex - la.x) / dx;
+    if (t1 > t2) { const tmp = t1; t1 = t2; t2 = tmp; }
+    tmin = Math.max(tmin, t1); tmax = Math.min(tmax, t2);
+  }
+  if (Math.abs(dz) < 1e-9) {
+    if (la.z < -ez || la.z > ez) return Infinity;
+  } else {
+    let t1 = (-ez - la.z) / dz, t2 = (ez - la.z) / dz;
+    if (t1 > t2) { const tmp = t1; t1 = t2; t2 = tmp; }
+    tmin = Math.max(tmin, t1); tmax = Math.min(tmax, t2);
+  }
+  if (tmax < tmin || tmax < 0) return Infinity;
+  return tmin;
+}
+
+// Minimum entry fraction over one collider list (1 = clear). `infinite` skips
+// the height gate (interior walls are full-height; the open world is not).
+function sweepColliders(
+  list: Collider[],
+  ax: number, ay: number, az: number,
+  bx: number, by: number, bz: number,
+  pad: number, infinite: boolean,
+): number {
+  let best = 1;
+  for (const c of list) {
+    if (c.camGhost) continue; // chase cam passes through; renderer hides it instead
+    const t = c.type === 'circle'
+      ? rayCircleEntry(ax, az, bx, bz, c.x, c.z, c.r + pad)
+      : rayObbEntry(c, ax, az, bx, bz, pad);
+    if (!(t > 1e-4) || t >= best) continue;
+    if (!infinite && c.cameraTopY !== undefined && ay + (by - ay) * t > c.cameraTopY) continue;
+    best = t;
+  }
+  return best;
+}
+
+// Fraction of the head->camera segment the chase cam may travel before the
+// first static occluder. `a` is the look-at pivot (player head), `b` the
+// desired camera position. Mirrors resolvePosition's region split.
+export function cameraOcclusion(
+  seed: number,
+  ax: number, ay: number, az: number,
+  bx: number, by: number, bz: number,
+  pad = 0.35,
+): number {
+  if (isArenaPos(ax)) {
+    const o = arenaOriginAt(az);
+    return sweepColliders(ARENA_COLLIDERS, ax - o.x, ay, az - o.z, bx - o.x, by, bz - o.z, pad, true);
+  }
+  if (ax > DUNGEON_X_THRESHOLD) {
+    const { ox, oz, interior } = instanceLocal(ax, az);
+    const colliders = INTERIOR_COLLIDERS[interior] ?? CRYPT_COLLIDERS;
+    return sweepColliders(colliders, ax - ox, ay, az - oz, bx - ox, by, bz - oz, pad, true);
+  }
+  const grid = gridFor(seed);
+  const gx0 = Math.floor(Math.min(ax, bx) / GRID_CELL), gx1 = Math.floor(Math.max(ax, bx) / GRID_CELL);
+  const gz0 = Math.floor(Math.min(az, bz) / GRID_CELL), gz1 = Math.floor(Math.max(az, bz) / GRID_CELL);
+  let best = 1;
+  for (let gx = gx0; gx <= gx1; gx++) {
+    for (let gz = gz0; gz <= gz1; gz++) {
+      const list = grid.cells.get(gx + ',' + gz);
+      if (list) best = Math.min(best, sweepColliders(list, ax, ay, az, bx, by, bz, pad, false));
+    }
+  }
+  return best;
+}
+
+export function lineOfSightClear(
+  seed: number,
+  from: { x: number; z: number },
+  to: { x: number; z: number },
+  r = 0.05,
+): boolean {
+  const dx = to.x - from.x;
+  const dz = to.z - from.z;
+  const d = Math.hypot(dx, dz);
+  if (d < 1e-6) return true;
+  const steps = Math.max(2, Math.ceil(d / 0.5));
+  for (let i = 1; i < steps; i++) {
+    const t = i / steps;
+    const x = from.x + dx * t;
+    const z = from.z + dz * t;
+    if (isBlocked(seed, x, z, r)) return false;
+  }
+  return true;
 }
