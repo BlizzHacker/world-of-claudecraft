@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS characters (
   account_id INT NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
   name TEXT UNIQUE NOT NULL,
   class TEXT NOT NULL,
+  realm TEXT NOT NULL DEFAULT 'default',
   level INT NOT NULL DEFAULT 1,
   state JSONB,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
