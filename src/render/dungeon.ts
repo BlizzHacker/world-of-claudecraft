@@ -1,0 +1,642 @@
+// Dungeon interiors rebuilt from the KayKit Dungeon Remastered modular kit
+// (+ Halloween Bits for crypt dressing). Structure comes from the plain-data
+// layouts in src/sim/dungeon_layout.ts — the SAME data colliders.ts derives
+// CRYPT_COLLIDERS/SANCTUM_COLLIDERS from, so visuals and collision cannot
+// drift. Repeated modules render as one InstancedMesh per kind (~30 draws
+// per interior instance).
+//
+// Three looks from two layouts:
+//   Hollow Crypt   (interior 'crypt',  origin x 900 band)  - blue flame, coffins/graves/bones
+//   Sunken Bastion (interior 'crypt',  origin x 1500 band) - teal flame, cargo/banners fortress
+//   Gravewyrm Sanctum (interior 'sanctum')                 - green ritual fire, necromantic
+import * as THREE from 'three';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+import type { GLTF } from 'three/addons/loaders/GLTFLoader.js';
+import { loadGltf, releaseGltf } from './assets/loader';
+import { registerPreload } from './assets/preload';
+import { radialGlowTexture } from './textures';
+import { instanceOrigin } from '../sim/data';
+import {
+  ARENA_LAYOUT, CRYPT_LAYOUT, SANCTUM_LAYOUT, DUNGEON_WALL_X, TOMB_HD,
+  DungeonLayout, GridPoint, WallStub,
+} from '../sim/dungeon_layout';
+
+const FLAME_EMISSIVE_HIGH = 2.2;
+// dungeon torch point lights: pumped + hung low so warm pools break up the
+// floor (the daylight rig is dropped underground; torches carry the scene)
+const DUNGEON_LIGHT_Y = 6.4;
+const DUNGEON_LIGHT_INTENSITY = 46;
+const DUNGEON_LIGHT_DISTANCE = 34;
+
+const MODULE_SCALE = 2; // KayKit walls are 4u tall/long -> 8u at our room scale
+const FLOOR_CELL = 4; // kit floor tiles are 4x4 at MODULE_SCALE 1
+const FLOOR_Y = -0.05; // tile tops sit 0.05 above origin; sink so tops land at y=0
+const PILLAR_XZ_SCALE = 1.3; // 1.5u kit pillar -> ~1.95u footprint (collider r=1)
+
+type Variant = 'crypt' | 'bastion' | 'sanctum' | 'arena';
+
+interface TorchColors {
+  flame: number;
+  emissive: number;
+  light: number;
+}
+
+const TORCH_COLORS: Record<Variant, TorchColors> = {
+  crypt: { flame: 0x7fd4ff, emissive: 0x2288cc, light: 0x66bbff },
+  bastion: { flame: 0x7ffbe0, emissive: 0x18b89a, light: 0x4fe3c0 },
+  sanctum: { flame: 0xa6ffb8, emissive: 0x22cc55, light: 0x55e08a },
+  // the Ashen Coliseum burns warm — amber braziers ringing the fighting sands
+  arena: { flame: 0xffb24a, emissive: 0xcc5a14, light: 0xff9a3c },
+};
+
+// ---------------------------------------------------------------------------
+// Module assets: loaded once at import, geometry merged per model, one shared
+// atlas material per source pack ('kit' = Dungeon Remastered, 'bits' =
+// Halloween Bits). main.ts awaits assetsReady() before the Renderer builds,
+// so buildInterior can assume everything below is resolved.
+// ---------------------------------------------------------------------------
+
+const KIT_MODELS = [
+  'floor_tile_large', 'floor_tile_large_rocks', 'floor_dirt_large', 'floor_dirt_large_rocky',
+  'floor_tile_small', 'floor_tile_small_broken_A', 'floor_tile_small_broken_B',
+  'floor_tile_small_weeds_A', 'floor_tile_small_weeds_B', 'floor_tile_small_decorated',
+  'floor_tile_grate', 'floor_foundation_allsides',
+  'wall', 'wall_cracked', 'wall_pillar', 'wall_arched', 'wall_archedwindow_gated', 'wall_gated',
+  'pillar', 'pillar_decorated', 'torch_mounted',
+  'banner_white', 'banner_thin_white', 'banner_blue', 'banner_shield_blue', 'banner_triple_blue',
+  'banner_green', 'banner_patternC_green', 'banner_triple_green',
+  'chest', 'chest_gold', 'coin_stack_medium', 'barrel_large', 'barrel_small_stack', 'keg',
+  'crates_stacked', 'box_stacked', 'box_small', 'table_long_broken',
+  'sword_shield', 'sword_shield_broken', 'rubble_half', 'candle_lit', 'candle_triple', 'trunk_large_A',
+] as const;
+
+const BITS_MODELS = [
+  'coffin', 'coffin_decorated', 'grave_B', 'gravestone', 'gravemarker_A', 'ribcage',
+  'bone_A', 'bone_B', 'skull', 'skull_candle', 'shrine', 'shrine_candles', 'plaque_candles', 'arch',
+] as const;
+
+type Pack = 'kit' | 'bits';
+
+interface ModuleAsset {
+  geo: THREE.BufferGeometry;
+  pack: Pack;
+}
+
+const moduleAssets = new Map<string, ModuleAsset>();
+const packSourceMaterial = new Map<Pack, THREE.MeshStandardMaterial>();
+
+// Meshopt-quantized attributes are normalized ints; bake them to plain floats
+// so applyMatrix4/merge cannot clamp world-space values into the [-1,1] range.
+function attributeToFloat(geo: THREE.BufferGeometry, name: string): void {
+  const attr = geo.getAttribute(name);
+  if (!attr || (attr.array instanceof Float32Array && !attr.normalized)) return;
+  const out = new Float32Array(attr.count * attr.itemSize);
+  for (let i = 0; i < attr.count; i++) {
+    for (let c = 0; c < attr.itemSize; c++) out[i * attr.itemSize + c] = attr.getComponent(i, c);
+  }
+  geo.setAttribute(name, new THREE.BufferAttribute(out, attr.itemSize));
+}
+
+function extractModule(name: string, pack: Pack, gltf: GLTF): void {
+  const geos: THREE.BufferGeometry[] = [];
+  gltf.scene.updateMatrixWorld(true);
+  gltf.scene.traverse((obj) => {
+    const mesh = obj as THREE.Mesh;
+    if (!mesh.isMesh) return;
+    const geo = (mesh.geometry as THREE.BufferGeometry).clone();
+    for (const attr of Object.keys(geo.attributes)) {
+      if (attr !== 'position' && attr !== 'normal' && attr !== 'uv') geo.deleteAttribute(attr);
+    }
+    attributeToFloat(geo, 'position');
+    attributeToFloat(geo, 'normal');
+    attributeToFloat(geo, 'uv');
+    geo.applyMatrix4(mesh.matrixWorld);
+    geos.push(geo);
+    if (!packSourceMaterial.has(pack)) {
+      const mat = Array.isArray(mesh.material) ? mesh.material[0] : mesh.material;
+      if ((mat as THREE.MeshStandardMaterial).isMeshStandardMaterial) {
+        packSourceMaterial.set(pack, mat as THREE.MeshStandardMaterial);
+      }
+    }
+  });
+  if (!geos.length) throw new Error(`dungeon module has no meshes: ${name}`);
+  const merged = geos.length === 1 ? geos[0] : mergeGeometries(geos, false);
+  if (!merged) throw new Error(`dungeon module merge failed: ${name}`);
+  moduleAssets.set(name, { geo: merged, pack });
+}
+
+for (const name of KIT_MODELS) {
+  // release after extraction: 59 parsed GLTFs each embed a copy of the atlas
+  // (~59MB CPU retained for nothing — only merged clones + 2 materials live on)
+  registerPreload(loadGltf(`models/dungeon/${name}.glb`).then((g) => {
+    extractModule(name, 'kit', g);
+    releaseGltf(`models/dungeon/${name}.glb`);
+  }));
+}
+for (const name of BITS_MODELS) {
+  registerPreload(loadGltf(`models/dungeon/${name}.glb`).then((g) => {
+    extractModule(name, 'bits', g);
+    releaseGltf(`models/dungeon/${name}.glb`);
+  }));
+}
+
+// ---------------------------------------------------------------------------
+// Deterministic placement helpers
+// ---------------------------------------------------------------------------
+
+// stable per-position hash (same trick as the prop jitter elsewhere)
+function hash2(a: number, b: number): number {
+  const s = Math.sin(a * 127.1 + b * 311.7) * 43758.5453;
+  return s - Math.floor(s);
+}
+
+type WeightedKinds = [name: string, weight: number][];
+
+function pickKind(kinds: WeightedKinds, t: number): string {
+  let total = 0;
+  for (const [, w] of kinds) total += w;
+  let acc = 0;
+  for (const [name, w] of kinds) {
+    acc += w;
+    if (t * total < acc) return name;
+  }
+  return kinds[kinds.length - 1][0];
+}
+
+/** Accumulates instance transforms per module kind, then emits InstancedMeshes. */
+class Placements {
+  readonly byKind = new Map<string, THREE.Matrix4[]>();
+  private readonly pos = new THREE.Vector3();
+  private readonly quat = new THREE.Quaternion();
+  private readonly scl = new THREE.Vector3();
+  private readonly euler = new THREE.Euler();
+
+  add(kind: string, x: number, y: number, z: number, rotY = 0, scale: number | [number, number, number] = 1): void {
+    const m = new THREE.Matrix4();
+    this.pos.set(x, y, z);
+    this.quat.setFromEuler(this.euler.set(0, rotY, 0));
+    if (typeof scale === 'number') this.scl.set(scale, scale, scale);
+    else this.scl.set(scale[0], scale[1], scale[2]);
+    m.compose(this.pos, this.quat, this.scl);
+    const list = this.byKind.get(kind);
+    if (list) list.push(m);
+    else this.byKind.set(kind, [m]);
+  }
+}
+
+// kinds that throw shadows from the outdoor sun shaft (point lights don't
+// cast); floors + dais receive
+const CASTER_KINDS = new Set([
+  'pillar', 'pillar_decorated', 'coffin', 'coffin_decorated', 'crates_stacked', 'box_stacked',
+  'barrel_large', 'keg', 'chest', 'chest_gold', 'shrine', 'shrine_candles', 'grave_B',
+  'gravestone', 'table_long_broken', 'trunk_large_A', 'arch', 'barrel_small_stack',
+]);
+const RECEIVER_KINDS = new Set([
+  'floor_tile_large', 'floor_tile_large_rocks', 'floor_dirt_large', 'floor_dirt_large_rocky',
+  'floor_tile_small', 'floor_tile_small_broken_A', 'floor_tile_small_broken_B',
+  'floor_tile_small_weeds_A', 'floor_tile_small_weeds_B', 'floor_tile_small_decorated',
+  'floor_tile_grate', 'floor_foundation_allsides',
+]);
+
+// ---------------------------------------------------------------------------
+
+// kept for legacy callers: tile a geometry's 0..1 UVs for shared textures
+export function scaleUv(geo: THREE.BufferGeometry, su: number, sv: number): THREE.BufferGeometry {
+  const uv = geo.attributes.uv as THREE.BufferAttribute;
+  for (let i = 0; i < uv.count; i++) uv.setXY(i, uv.getX(i) * su, uv.getY(i) * sv);
+  return geo;
+}
+
+export class DungeonInteriors {
+  private glowDecalGeo: THREE.BufferGeometry | null = null;
+  private glowDecalTex: THREE.Texture | null = null;
+  private glowDecalMats = new Map<number, THREE.MeshBasicMaterial>();
+  private flameGeo: THREE.BufferGeometry | null = null;
+  private packMats = new Map<Pack, THREE.Material>();
+
+  constructor(
+    private scene: THREE.Scene,
+    private lowGfx: boolean,
+    private flames: THREE.Mesh[],
+    private fireLights: THREE.PointLight[],
+  ) {}
+
+  buildInterior(interior: string, ox: number, oz: number): void {
+    const layout = interior === 'sanctum' ? SANCTUM_LAYOUT : interior === 'arena' ? ARENA_LAYOUT : CRYPT_LAYOUT;
+    const variant = this.variantFor(interior, ox);
+    const group = new THREE.Group();
+    const p = new Placements();
+
+    this.placeFloor(p, layout, variant);
+    this.placeWalls(p, layout, variant);
+    this.placePillarsAndTorches(group, p, layout, variant);
+    this.placeTombs(p, layout, variant);
+    this.placeStubs(p, layout.stubs, variant);
+    this.placeDais(group, p, layout, variant);
+    this.placeAisleClutter(p, layout, variant);
+    this.placeWallDressing(p, layout, variant);
+
+    this.emit(group, p);
+    group.position.set(ox, 0, oz);
+    this.scene.add(group);
+  }
+
+  // Hollow Crypt and Sunken Bastion share interior 'crypt'; the origin x-band
+  // (instanceOrigin in sim/data.ts: 900 + index*600) says which dungeon.
+  private variantFor(interior: string, ox: number): Variant {
+    if (interior === 'arena') return 'arena';
+    if (interior === 'sanctum') return 'sanctum';
+    const bastionX = instanceOrigin(1, 0).x;
+    return ox >= (instanceOrigin(0, 0).x + bastionX) / 2 ? 'bastion' : 'crypt';
+  }
+
+  private material(pack: Pack): THREE.Material {
+    let mat = this.packMats.get(pack);
+    if (mat) return mat;
+    const src = packSourceMaterial.get(pack);
+    if (this.lowGfx) {
+      mat = new THREE.MeshLambertMaterial({ map: src?.map ?? null });
+    } else if (src) {
+      const std = src.clone();
+      std.vertexColors = false;
+      std.metalness = 0;
+      std.roughness = Math.max(0.85, std.roughness);
+      mat = std;
+    } else {
+      mat = new THREE.MeshStandardMaterial({ color: 0x777788, roughness: 0.95 });
+    }
+    this.packMats.set(pack, mat);
+    return mat;
+  }
+
+  private emit(group: THREE.Group, p: Placements): void {
+    for (const [kind, mats] of p.byKind) {
+      const asset = moduleAssets.get(kind);
+      if (!asset) {
+        // assetsReady() guarantees loads completed; guard against a bad kind name
+        console.warn(`dungeon: unknown module kind '${kind}'`);
+        continue;
+      }
+      const mesh = new THREE.InstancedMesh(asset.geo, this.material(asset.pack), mats.length);
+      for (let i = 0; i < mats.length; i++) mesh.setMatrixAt(i, mats[i]);
+      mesh.instanceMatrix.needsUpdate = true;
+      mesh.computeBoundingSphere();
+      mesh.castShadow = !this.lowGfx && CASTER_KINDS.has(kind);
+      mesh.receiveShadow = RECEIVER_KINDS.has(kind);
+      group.add(mesh);
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // Structure
+  // -------------------------------------------------------------------------
+
+  private floorKind(variant: Variant, t: number): string {
+    if (variant === 'bastion') {
+      return pickKind([
+        ['floor_tile_large', 56], ['floor_tile_large_rocks', 5], ['floor_dirt_large', 4],
+        ['floor_dirt_large_rocky', 4], ['grate', 8], ['quad', 23],
+      ], t);
+    }
+    if (variant === 'sanctum') {
+      return pickKind([
+        ['floor_tile_large', 68], ['floor_tile_large_rocks', 7], ['floor_dirt_large', 4],
+        ['floor_dirt_large_rocky', 4], ['quad', 17],
+      ], t);
+    }
+    return pickKind([
+      ['floor_tile_large', 70], ['floor_tile_large_rocks', 6], ['floor_dirt_large', 6],
+      ['floor_dirt_large_rocky', 5], ['quad', 13],
+    ], t);
+  }
+
+  private floorQuadKind(variant: Variant, t: number): string {
+    if (variant === 'bastion') {
+      return pickKind([
+        ['floor_tile_small', 30], ['floor_tile_small_broken_A', 15], ['floor_tile_small_broken_B', 15],
+        ['floor_tile_small_weeds_A', 18], ['floor_tile_small_weeds_B', 18], ['floor_tile_small_decorated', 4],
+      ], t);
+    }
+    if (variant === 'sanctum') {
+      return pickKind([
+        ['floor_tile_small', 35], ['floor_tile_small_broken_A', 12], ['floor_tile_small_broken_B', 12],
+        ['floor_tile_small_weeds_A', 8], ['floor_tile_small_weeds_B', 8], ['floor_tile_small_decorated', 25],
+      ], t);
+    }
+    return pickKind([
+      ['floor_tile_small', 40], ['floor_tile_small_broken_A', 18], ['floor_tile_small_broken_B', 18],
+      ['floor_tile_small_weeds_A', 7], ['floor_tile_small_weeds_B', 7], ['floor_tile_small_decorated', 10],
+    ], t);
+  }
+
+  // 4u tile grid covering the room (x -24..24, z just past both end walls)
+  private placeFloor(p: Placements, layout: DungeonLayout, variant: Variant): void {
+    const quarter = Math.PI / 2;
+    for (let z = layout.zMin - 2; z <= layout.zMax + 2; z += FLOOR_CELL) {
+      for (let x = -22; x <= 22; x += FLOOR_CELL) {
+        let kind = this.floorKind(variant, hash2(x * 1.31, z));
+        if (kind === 'grate' && Math.abs(x) < 4) kind = 'floor_tile_large'; // keep pits off the walk aisle
+        if (kind === 'grate') {
+          // floor_tile_grate is 4x2: a pair fills the cell
+          p.add('floor_tile_grate', x, FLOOR_Y, z - 1);
+          p.add('floor_tile_grate', x, FLOOR_Y, z + 1);
+          continue;
+        }
+        if (kind === 'quad') {
+          for (const dx of [-1, 1]) {
+            for (const dz of [-1, 1]) {
+              const sub = this.floorQuadKind(variant, hash2(x + dx, z + dz));
+              const rot = Math.floor(hash2(z + dz, x + dx) * 4) * quarter;
+              p.add(sub, x + dx, FLOOR_Y, z + dz, rot);
+            }
+          }
+          continue;
+        }
+        const rot = Math.floor(hash2(z, x) * 4) * quarter;
+        p.add(kind, x, FLOOR_Y, z, rot);
+      }
+    }
+  }
+
+  private wallKind(variant: Variant, t: number): string {
+    if (variant === 'bastion') {
+      return pickKind([
+        ['wall', 44], ['wall_pillar', 22], ['wall_cracked', 18], ['wall_arched', 8], ['wall_archedwindow_gated', 8],
+      ], t);
+    }
+    if (variant === 'sanctum') {
+      return pickKind([
+        ['wall', 46], ['wall_pillar', 22], ['wall_cracked', 12], ['wall_arched', 14], ['wall_archedwindow_gated', 6],
+      ], t);
+    }
+    return pickKind([
+      ['wall', 50], ['wall_pillar', 22], ['wall_cracked', 14], ['wall_arched', 9], ['wall_archedwindow_gated', 5],
+    ], t);
+  }
+
+  private bannerKind(variant: Variant, t: number): string {
+    if (variant === 'bastion') {
+      return pickKind([['banner_shield_blue', 4], ['banner_blue', 3], ['banner_triple_blue', 3]], t);
+    }
+    if (variant === 'sanctum') {
+      return pickKind([['banner_green', 4], ['banner_patternC_green', 3], ['banner_triple_green', 3]], t);
+    }
+    return pickKind([['banner_thin_white', 6], ['banner_white', 4]], t);
+  }
+
+  // Side walls run along z at |x| = DUNGEON_WALL_X (8u modules at scale 2,
+  // 2u thick: matches the hw=1 collider slabs); end walls run along x.
+  private placeWalls(p: Placements, layout: DungeonLayout, variant: Variant): void {
+    const bannerEvery = variant === 'crypt' ? 4 : 3;
+    for (const side of [-1, 1]) {
+      const ry = side < 0 ? Math.PI / 2 : -Math.PI / 2; // detail + banners face the room
+      let i = 0;
+      for (let z = layout.zMin; z <= layout.zMax + 2; z += 8, i++) {
+        const kind = this.wallKind(variant, hash2(side * 13.7, z));
+        p.add(kind, side * DUNGEON_WALL_X, 0, z, ry, MODULE_SCALE);
+        if (i % bannerEvery === 2 && kind !== 'wall_archedwindow_gated') {
+          p.add(this.bannerKind(variant, hash2(z, side * 7.3)), side * DUNGEON_WALL_X, 0, z, ry, MODULE_SCALE);
+        }
+      }
+    }
+    for (const end of [{ z: layout.zMin, ry: 0 }, { z: layout.zMax, ry: Math.PI }]) {
+      for (let x = -20; x <= 20; x += 8) {
+        const kind = this.wallKind(variant, hash2(x, end.z * 3.1));
+        p.add(kind, x, 0, end.z, end.ry, MODULE_SCALE);
+      }
+    }
+    // back wall banners flank the boss dais
+    for (const bx of [-12, -4, 4, 12]) {
+      p.add(this.bannerKind(variant, hash2(bx, layout.zMax)), bx, 0, layout.zMax, Math.PI, MODULE_SCALE);
+    }
+  }
+
+  private placePillarsAndTorches(group: THREE.Group, p: Placements, layout: DungeonLayout, variant: Variant): void {
+    const kind = variant === 'sanctum' ? 'pillar_decorated' : 'pillar';
+    const colors = TORCH_COLORS[variant];
+    for (const pt of layout.pillars) {
+      const faceAisle = pt.x < 0 ? Math.PI / 2 : -Math.PI / 2;
+      p.add(kind, pt.x, 0, pt.z, faceAisle, [PILLAR_XZ_SCALE, MODULE_SCALE, PILLAR_XZ_SCALE]);
+      this.addPillarTorch(group, p, pt, colors);
+    }
+  }
+
+  // Torch on the aisle face of a pillar. KEEPS the renderer contract:
+  // animated flame cone -> this.flames, PointLight with userData.baseIntensity
+  // -> this.fireLights (budgetFireLights keeps the nearest GFX.maxPointLights).
+  private addPillarTorch(group: THREE.Group, p: Placements, pt: GridPoint, colors: TorchColors): void {
+    const dir = pt.x < 0 ? 1 : -1; // toward the centre aisle
+    p.add('torch_mounted', pt.x + dir * 0.98, 5.5, pt.z, dir > 0 ? Math.PI / 2 : -Math.PI / 2, 1.6);
+
+    this.flameGeo ??= new THREE.ConeGeometry(0.22, 0.6, 6);
+    const flame = new THREE.Mesh(this.flameGeo, new THREE.MeshLambertMaterial({
+      color: colors.flame, emissive: colors.emissive,
+      emissiveIntensity: this.lowGfx ? 1.6 : FLAME_EMISSIVE_HIGH,
+      transparent: true, opacity: 0.92,
+    }));
+    flame.position.set(pt.x + dir * 1.7, 6.6, pt.z);
+    group.add(flame);
+    this.flames.push(flame);
+
+    const light = new THREE.PointLight(colors.light, 10, this.lowGfx ? 22 : DUNGEON_LIGHT_DISTANCE, 2);
+    if (!this.lowGfx) light.userData.baseIntensity = DUNGEON_LIGHT_INTENSITY;
+    light.position.set(pt.x + dir * 1.2, this.lowGfx ? 8.2 : DUNGEON_LIGHT_Y, pt.z);
+    group.add(light);
+    this.fireLights.push(light);
+
+    this.addTorchGlow(group, pt.x + dir * 1.7, pt.z, colors.light);
+  }
+
+  // Additive light-pool decal under a torch: the point-light budget only keeps
+  // the nearest few lights live, so the floor pools are baked in.
+  private addTorchGlow(group: THREE.Group, x: number, z: number, colorHex: number, y = 0.07, scale = 1): void {
+    if (this.lowGfx) return;
+    this.glowDecalGeo ??= new THREE.CircleGeometry(6.6, 20).rotateX(-Math.PI / 2);
+    this.glowDecalTex ??= radialGlowTexture();
+    let mat = this.glowDecalMats.get(colorHex);
+    if (!mat) {
+      mat = new THREE.MeshBasicMaterial({
+        map: this.glowDecalTex, color: colorHex, transparent: true, opacity: 0.46,
+        blending: THREE.AdditiveBlending, depthWrite: false,
+      });
+      this.glowDecalMats.set(colorHex, mat);
+    }
+    const glow = new THREE.Mesh(this.glowDecalGeo, mat);
+    glow.position.set(x, y, z);
+    glow.scale.setScalar(scale);
+    glow.renderOrder = 1; // after the floor it floats over
+    group.add(glow);
+  }
+
+  // Wall-side obstacles at +-19 (OBB 2.2 x 4.2): sarcophagi in the crypt and
+  // sanctum-free; the drowned bastion stacks cargo in the same footprints.
+  private placeTombs(p: Placements, layout: DungeonLayout, variant: Variant): void {
+    for (const t of layout.tombs) {
+      const r = hash2(t.x * 3.7, t.z);
+      if (variant === 'bastion') {
+        if (r < 0.5) {
+          p.add('crates_stacked', t.x, 0, t.z - 1.0, hash2(t.z, t.x) * 0.4 - 0.2, 1.0);
+          p.add('barrel_large', t.x + 0.1, 0, t.z + 1.3, hash2(t.x, t.z * 2.1) * Math.PI, 0.85);
+        } else {
+          p.add('box_stacked', t.x, 0, t.z - 1.0, hash2(t.z, t.x) * 0.4 - 0.2, 0.6);
+          p.add('keg', t.x - 0.1, 0, t.z + 1.3, hash2(t.x, t.z * 1.7) * Math.PI, 0.9);
+        }
+        continue;
+      }
+      const kind = r < 0.55 ? 'coffin' : 'coffin_decorated';
+      p.add(kind, t.x, 0, t.z, 0, [1.1, 1.3, 1.4]);
+      if (hash2(t.z * 1.9, t.x) > 0.55) {
+        const sx = t.x < 0 ? 1 : -1;
+        p.add('skull', t.x + sx * 1.6, 0, t.z + TOMB_HD + 0.5, hash2(t.x, t.z) * Math.PI * 2, 1.3);
+      }
+    }
+  }
+
+  // Sanctum chamber waists: solid wall blocks built from stretched kit walls
+  // (cap flush at |x|=6 so the visual never intrudes into the 10u passage),
+  // plus a ritual arch spanning the centre passage.
+  private placeStubs(p: Placements, stubs: WallStub[], variant: Variant): void {
+    const archZ = new Set<number>();
+    for (const s of stubs) {
+      const sign = s.x < 0 ? -1 : 1;
+      // passage-facing cap (length 2*hd along z)
+      p.add('wall', sign * 6, 0, s.z, Math.PI / 2, [s.hd / 2, MODULE_SCALE, MODULE_SCALE]);
+      // front/back faces, two 9u modules from |x| 5..23, flush inside the OBB
+      for (const fz of [s.z - s.hd + 1, s.z + s.hd - 1]) {
+        const ry = fz < s.z ? 0 : Math.PI;
+        p.add('wall_pillar', sign * 9.5, 0, fz, ry, [2.25, MODULE_SCALE, MODULE_SCALE]);
+        p.add('wall', sign * 18.5, 0, fz, ry, [2.25, MODULE_SCALE, MODULE_SCALE]);
+      }
+      archZ.add(s.z);
+    }
+    if (variant === 'sanctum') {
+      for (const z of archZ) p.add('arch', 0, 0, z, 0, [2.6, 1.9, 2.0]);
+    }
+  }
+
+  // Boss dais: chunky circular platform of foundation blocks (0.6u high,
+  // walkable — deliberately NO collider, matching the layout contract).
+  private placeDais(group: THREE.Group, p: Placements, layout: DungeonLayout, variant: Variant): void {
+    const d = layout.dais;
+    // the arena keeps a flat fighting floor: no raised platform or rim clutter,
+    // just a warm light pool burned into the centre of the sands
+    if (variant === 'arena') {
+      this.addTorchGlow(group, d.x, d.z, TORCH_COLORS.arena.light, 0.07, 2.4);
+      return;
+    }
+    const quarter = Math.PI / 2;
+    for (let x = -16; x <= 16; x += 4) {
+      for (let z = -16; z <= 16; z += 4) {
+        if (Math.hypot(x, z) > d.r) continue;
+        const rot = Math.floor(hash2(x, z) * 4) * quarter;
+        p.add('floor_foundation_allsides', d.x + x, 0, d.z + z, rot, [1.85, 0.3, 1.85]);
+      }
+    }
+    // ritual glow pooled on the dais top so the boss stage never reads as a
+    // black slab (torch pillars stop short of the back chamber)
+    this.addTorchGlow(group, d.x, d.z, TORCH_COLORS[variant].light, 0.68, 1.6);
+    // rim decor (small, walk-through by design)
+    const rim = d.r - 1.6;
+    for (let i = 0; i < 6; i++) {
+      const ang = (i / 6) * Math.PI * 2 + 0.35;
+      const x = d.x + Math.sin(ang) * rim;
+      const z = d.z + Math.cos(ang) * rim;
+      if (variant === 'bastion') p.add('candle_triple', x, 0.6, z, hash2(x, z) * Math.PI, 1.3);
+      else if (variant === 'sanctum') p.add(i % 2 ? 'skull_candle' : 'candle_triple', x, 0.6, z, hash2(x, z) * Math.PI, 1.4);
+      else p.add(i % 2 ? 'skull' : 'candle_lit', x, 0.6, z, hash2(x, z) * Math.PI, 1.3);
+    }
+    if (variant === 'bastion') {
+      // the drowned keep's plunder, heaped behind the dais
+      p.add('chest_gold', d.x - 2.2, 0.6, d.z + d.r - 3.4, Math.PI + 0.3, 1.4);
+      p.add('coin_stack_medium', d.x + 1.8, 0.6, d.z + d.r - 3.2, 0.8, 1.5);
+      p.add('trunk_large_A', d.x + 4.6, 0, d.z + d.r + 1.2, Math.PI - 0.4, 1.5);
+    }
+  }
+
+  // Bone piles / debris strewn along the aisle (legacy deterministic spots)
+  private placeAisleClutter(p: Placements, layout: DungeonLayout, variant: Variant): void {
+    if (variant === 'arena') return; // the fighting sands stay clear of obstacles
+    const isSanctum = variant === 'sanctum';
+    const count = isSanctum ? 14 : 10;
+    for (let i = 0; i < count; i++) {
+      const x = Math.sin(i * (isSanctum ? 2.1 : 2.4)) * 14;
+      const z = 12 + i * (isSanctum ? 10 : 9.5);
+      if (isSanctum && ((z > 60 && z < 74) || (z > 110 && z < 120))) continue; // waist walls
+      if (z > layout.zMax - 4) continue;
+      const r = hash2(x, z);
+      if (variant === 'bastion') {
+        p.add('box_small', x, 0, z, r * Math.PI * 2, 1.2);
+        if (r > 0.35) p.add('bone_A', x + 1.3, 0.06, z + 0.7, r * 9, 1.8);
+        if (r > 0.65) p.add('skull', x - 0.9, 0, z + 1.1, r * 5, 1.2);
+        continue;
+      }
+      p.add('ribcage', x, 0.5, z, r * Math.PI * 2, 1.7);
+      p.add('bone_A', x + 1.2, 0.08, z + 0.9, r * 7, 1.9);
+      if (r > 0.4) p.add('bone_B', x - 1.1, 0.06, z - 0.8, r * 11, 1.8);
+      if (r > 0.55) p.add(isSanctum && r > 0.8 ? 'skull_candle' : 'skull', x + 0.4, 0, z - 1.4, r * 3, 1.35);
+    }
+  }
+
+  // Variant-specific dressing hugging the walls (outside the walkable aisle)
+  private placeWallDressing(p: Placements, layout: DungeonLayout, variant: Variant): void {
+    if (variant === 'arena') {
+      // gladiatorial weapon trophies mounted high on the pit's side walls
+      for (const z of [layout.zMin + 9, (layout.zMin + layout.zMax) / 2, layout.zMax - 9]) {
+        for (const side of [-1, 1]) {
+          const kind = hash2(side * 4.2, z) < 0.5 ? 'sword_shield' : 'sword_shield_broken';
+          p.add(kind, side * (DUNGEON_WALL_X - 1.1), 4.4, z, side < 0 ? Math.PI / 2 : -Math.PI / 2, 1.7);
+        }
+      }
+      return;
+    }
+    // collapsed masonry in the legacy rubble corners
+    const rubble: [number, number][] = variant === 'sanctum'
+      ? [[-19, 4], [19, 48], [-19, 95], [18, 150]]
+      : [[-19, -13], [19, 6], [-18, 70], [19, 108]];
+    for (const [x, z] of rubble) {
+      p.add('rubble_half', x < 0 ? -22 : 22, 0, z, x < 0 ? 0 : Math.PI, 1.1);
+    }
+
+    const wallEdge = DUNGEON_WALL_X - 1.6; // just proud of the wall face
+    if (variant === 'crypt') {
+      for (let z = layout.zMin + 26; z < layout.zMax - 8; z += 19) {
+        for (const side of [-1, 1]) {
+          const r = hash2(side * 5.1, z);
+          const kind = r < 0.4 ? 'grave_B' : r < 0.7 ? 'gravestone' : 'gravemarker_A';
+          p.add(kind, side * wallEdge, 0, z + 9.5, side < 0 ? Math.PI / 2 : -Math.PI / 2, 1.5);
+        }
+      }
+      p.add('shrine_candles', -20, 0, layout.zMin + 3.2, Math.PI / 4, 1.5);
+      p.add('shrine', 20, 0, layout.zMax - 3.2, -Math.PI * 0.75, 1.5);
+      return;
+    }
+    if (variant === 'bastion') {
+      // armoury wall trophies between the banners
+      for (let z = layout.zMin + 21; z < layout.zMax - 8; z += 24) {
+        for (const side of [-1, 1]) {
+          const kind = hash2(side * 9.2, z) < 0.5 ? 'sword_shield' : 'sword_shield_broken';
+          p.add(kind, side * (DUNGEON_WALL_X - 1.1), 4.4, z + 5, side < 0 ? Math.PI / 2 : -Math.PI / 2, 1.7);
+        }
+      }
+      p.add('table_long_broken', -19.5, 0, 36, 0.4, 1.4);
+      p.add('barrel_small_stack', 19.8, 0, 55, -0.3, 1.3);
+      p.add('chest', -19.6, 0, layout.zMax - 6, 0.9, 1.3);
+      p.add('keg', 20, 0, layout.zMin + 4, 0.2, 1.0);
+      return;
+    }
+    // sanctum: necromantic ritual furniture per chamber
+    for (const [x, z, ry] of [
+      [-20, 16, Math.PI / 2], [20, 34, -Math.PI / 2], [-20, 96, Math.PI / 2], [20, 132, -Math.PI / 2],
+    ] as [number, number, number][]) {
+      p.add('shrine_candles', x, 0, z, ry, 1.6);
+      p.add('plaque_candles', x, 0, z + 4.2, ry, 1.5);
+    }
+    for (const pt of layout.pillars) {
+      if (hash2(pt.x, pt.z * 1.3) < 0.45) continue;
+      const dir = pt.x < 0 ? 1 : -1;
+      p.add('candle_triple', pt.x + dir * 1.9, 0, pt.z + 1.7, hash2(pt.z, pt.x) * Math.PI, 1.45);
+    }
+    p.add('gravestone', -3.4, 0.6, layout.dais.z + 4, Math.PI, 1.8);
+    p.add('gravestone', 3.4, 0.6, layout.dais.z + 4, Math.PI, 1.8);
+  }
+}

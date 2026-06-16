@@ -1,0 +1,14 @@
+node_modules
+tmp
+dist
+dist-env
+dist-server
+.git
+python
+docs
+tests
+scripts/*
+!scripts/build_media_manifest.mjs
+deploy
+*.md
+.venv

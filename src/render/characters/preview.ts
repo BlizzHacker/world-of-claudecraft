@@ -1,0 +1,230 @@
+import * as THREE from 'three';
+import { CharacterVisual } from './visual';
+import { PlayerClass } from '../../sim/types';
+
+const PREVIEW_ANIM_STATE = {
+  speed: 0,
+  moving: false,
+  backwards: false,
+  dead: false,
+  casting: false,
+  swimming: false,
+  sitting: false,
+};
+
+export class CharacterPreview {
+  private container: HTMLElement;
+  private canvas: HTMLCanvasElement;
+  private renderer: THREE.WebGLRenderer;
+  private scene: THREE.Scene;
+  private camera: THREE.PerspectiveCamera;
+  private characterGroup: THREE.Group;
+  private currentVisual: CharacterVisual | null = null;
+  private clock = new THREE.Clock();
+  private animationFrameId: number | null = null;
+  private resizeObserver: ResizeObserver | null = null;
+
+  // Drag controls
+  private isDragging = false;
+  private previousMouseX = 0;
+
+  constructor(container: HTMLElement, canvas: HTMLCanvasElement) {
+    this.container = container;
+    this.canvas = canvas;
+
+    // 1. Initialize WebGLRenderer
+    this.renderer = new THREE.WebGLRenderer({
+      canvas: this.canvas,
+      alpha: true,
+      antialias: true,
+      preserveDrawingBuffer: true,
+    });
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    this.renderer.setSize(this.container.clientWidth, this.container.clientHeight, false);
+    this.renderer.shadowMap.enabled = false; // Preview doesn't need heavy shadows
+
+    // 2. Initialize Scene
+    this.scene = new THREE.Scene();
+
+    // 3. Initialize Camera
+    const aspect = this.container.clientHeight > 0
+      ? this.container.clientWidth / this.container.clientHeight
+      : 1;
+    this.camera = new THREE.PerspectiveCamera(
+      45,
+      aspect,
+      0.1,
+      100
+    );
+    this.camera.position.set(-0.15, 1.45, 5.1);
+    this.camera.lookAt(new THREE.Vector3(-0.15, 1.3, 0));
+
+    // 4. Initialize Character Group
+    this.characterGroup = new THREE.Group();
+    this.scene.add(this.characterGroup);
+
+    // 5. Add Lights
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 1.4);
+    this.scene.add(hemiLight);
+
+    const dirLight1 = new THREE.DirectionalLight(0xffffff, 1.6);
+    dirLight1.position.set(3, 5, 4);
+    this.scene.add(dirLight1);
+
+    const dirLight2 = new THREE.DirectionalLight(0xffffff, 0.8);
+    dirLight2.position.set(-3, 3, -4);
+    this.scene.add(dirLight2);
+
+    // 6. Setup Drag Controls
+    this.setupDragControls();
+
+    // 7. Setup Resize Observer
+    this.setupResizeObserver();
+
+    // 8. Start loop
+    this.animate();
+  }
+
+  /** Set the active character model by player class. */
+  setClass(cls: PlayerClass): void {
+    // Clean up current visual if it exists
+    if (this.currentVisual) {
+      this.characterGroup.remove(this.currentVisual.root);
+      // CharacterVisual dispose only releases mixer listeners
+      this.currentVisual = null;
+    }
+
+    try {
+      // Load the CharacterVisual from preloaded assets (e.g. player_warrior)
+      const visualKey = `player_${cls}`;
+      this.currentVisual = new CharacterVisual(visualKey, 0xffffff);
+      this.characterGroup.add(this.currentVisual.root);
+
+      // Reset rotation of group so new character faces forward but holds any user offset if preferred.
+      // Resetting Y rotation is cleanest for transitions.
+      this.characterGroup.rotation.y = 0;
+    } catch (err) {
+      console.error(`Failed to load preview character visual for ${cls}:`, err);
+    }
+  }
+
+  /** Dynamically shift the canvas to a new container */
+  setContainer(container: HTMLElement): void {
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+      this.resizeObserver = null;
+    }
+    this.container = container;
+    this.container.appendChild(this.canvas);
+
+    // Initial resize sync
+    const width = this.container.clientWidth;
+    const height = this.container.clientHeight;
+    if (width > 0 && height > 0) {
+      this.renderer.setSize(width, height, false);
+      this.camera.aspect = width / height;
+      this.camera.updateProjectionMatrix();
+    }
+
+    // Re-observe the new container
+    this.setupResizeObserver();
+  }
+
+  private setupDragControls(): void {
+    const onMouseDown = (e: MouseEvent) => {
+      this.isDragging = true;
+      this.previousMouseX = e.clientX;
+    };
+
+    const onMouseMove = (e: MouseEvent) => {
+      if (!this.isDragging) return;
+      const deltaX = e.clientX - this.previousMouseX;
+      this.characterGroup.rotation.y += deltaX * 0.01;
+      this.previousMouseX = e.clientX;
+    };
+
+    const onMouseUp = () => {
+      this.isDragging = false;
+    };
+
+    // Touch support
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 1) {
+        this.isDragging = true;
+        this.previousMouseX = e.touches[0].clientX;
+      }
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (!this.isDragging || e.touches.length !== 1) return;
+      const deltaX = e.touches[0].clientX - this.previousMouseX;
+      this.characterGroup.rotation.y += deltaX * 0.01;
+      this.previousMouseX = e.touches[0].clientX;
+    };
+
+    const onTouchEnd = () => {
+      this.isDragging = false;
+    };
+
+    this.canvas.addEventListener('mousedown', onMouseDown);
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+
+    this.canvas.addEventListener('touchstart', onTouchStart, { passive: true });
+    window.addEventListener('touchmove', onTouchMove, { passive: true });
+    window.addEventListener('touchend', onTouchEnd);
+  }
+
+  private setupResizeObserver(): void {
+    this.resizeObserver = new ResizeObserver(() => {
+      const width = this.container.clientWidth;
+      const height = this.container.clientHeight;
+      if (width > 0 && height > 0) {
+        this.renderer.setSize(width, height, false);
+        this.camera.aspect = width / height;
+        this.camera.updateProjectionMatrix();
+      }
+    });
+    this.resizeObserver.observe(this.container);
+  }
+
+  private animate = (): void => {
+    this.animationFrameId = requestAnimationFrame(this.animate);
+
+    const dt = Math.min(this.clock.getDelta(), 0.1); // cap dt to prevent huge jumps
+
+    // Auto-rotation if prefers-reduced-motion is false and not dragging
+    const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!isReducedMotion && !this.isDragging) {
+      this.characterGroup.rotation.y += 0.35 * dt; // Slow rotation: ~0.35 rad per sec
+    }
+
+    // Update animations inside visual
+    if (this.currentVisual) {
+      this.currentVisual.update(dt, PREVIEW_ANIM_STATE, true);
+    }
+
+    this.renderer.render(this.scene, this.camera);
+  };
+
+  /** Cleanup resources */
+  destroy(): void {
+    if (this.animationFrameId !== null) {
+      cancelAnimationFrame(this.animationFrameId);
+      this.animationFrameId = null;
+    }
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+      this.resizeObserver = null;
+    }
+    if (this.currentVisual) {
+      this.characterGroup.remove(this.currentVisual.root);
+      this.currentVisual = null;
+    }
+
+    // Clean up event listeners is handled by window/document GC or manual tracking if necessary,
+    // but canvas event listeners are garbage collected when canvas is removed.
+    // Window listeners need explicit removal to avoid memory leaks:
+    // However, since we keep a single canvas alive and move it, we don't destroy often.
+  }
+}

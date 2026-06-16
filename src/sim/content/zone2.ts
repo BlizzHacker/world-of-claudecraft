@@ -1,0 +1,766 @@
+// Zone 2 — Mirefen Marsh (levels 6-13). Brother Aldric follows the
+// Gravecaller trail north of the causeway: drowned dead rise from the fen,
+// trolls dig into barrow-mounds, and Vael the Mistcaller waits in the
+// Sunken Bastion.
+
+import type {
+  CampDef, GroundObjectDef, ItemDef, MobTemplate, NpcDef, PlayerClass, QuestDef, ZoneDef, ZonePropsDef,
+} from '../types';
+
+export const ZONE2_ZONE: ZoneDef = {
+  id: 'mirefen_marsh',
+  name: 'Mirefen Marsh',
+  zMin: 180,
+  zMax: 540,
+  levelRange: [6, 13],
+  biome: 'marsh',
+  hub: { x: 0, z: 300, radius: 20, name: 'Fenbridge' },
+  graveyard: { x: -18, z: 286 },
+  lakes: [
+    { x: -110, z: 310, radius: 35 },
+    { x: 60, z: 380, radius: 25 },
+    { x: -40, z: 450, radius: 20 },
+  ],
+  pois: [
+    { x: 0, z: 300, label: 'Fenbridge' },
+    { x: -40, z: 230, label: 'Prowler Reeds' },
+    { x: -105, z: 300, label: 'Deepfen Shallows' },
+    { x: 80, z: 315, label: 'Widow Thicket' },
+    { x: 100, z: 435, label: 'Drowned Chapel' },
+    { x: -95, z: 440, label: 'Troll Mounds' },
+    { x: 0, z: 485, label: 'Gravecaller Encampment' },
+    { x: 45, z: 515, label: 'The Sunken Bastion' },
+  ],
+  welcome: 'Report to Warden Fenwick at the Fenbridge gate.',
+};
+
+// Causeway north from Eastbrook to Fenbridge, then spokes to each hub.
+// The Drowned Chapel spoke rounds the lake at (60,380) along its western
+// shore via Widow Thicket — the whole polyline stays clear of the lake carve
+// so the road never dips under the waterline (tests/progression.test.ts
+// samples every road against the heightfield to lock this in).
+export const ZONE2_ROADS: { x: number; z: number }[][] = [
+  [{ x: 0, z: 80 }, { x: 0, z: 180 }, { x: -8, z: 240 }, { x: 0, z: 300 }],         // Eastbrook -> Fenbridge
+  [{ x: 4, z: 308 }, { x: 45, z: 336 }, { x: 92, z: 350 }, { x: 102, z: 392 }, { x: 90, z: 420 }], // -> Drowned Chapel
+  [{ x: -6, z: 308 }, { x: -40, z: 370 }, { x: -80, z: 420 }],                      // -> Troll Mounds
+  [{ x: 2, z: 312 }, { x: 10, z: 400 }, { x: 20, z: 470 }, { x: 45, z: 515 }],      // -> cult camp -> Bastion
+];
+
+// ---------------------------------------------------------------------------
+// Mobs (overworld only — the Sunken Bastion's mobs live in content/dungeons)
+// ---------------------------------------------------------------------------
+
+export const ZONE2_MOBS: Record<string, MobTemplate> = {
+  mire_prowler: {
+    id: 'mire_prowler', name: 'Mire Prowler', minLevel: 7, maxLevel: 8, family: 'beast',
+    hpBase: 46, hpPerLevel: 19, dmgBase: 7, dmgPerLevel: 2.1, attackSpeed: 2.0,
+    armorPerLevel: 12, moveSpeed: 8.5, aggroRadius: 11,
+    loot: [
+      { copper: 30, chance: 1 },
+      { itemId: 'mire_prowler_pelt', chance: 0.6, questId: 'q_prowler_pelts' },
+      { itemId: 'soggy_moccasin', chance: 0.3 },
+    ],
+    scale: 0.95, color: 0x4d5656,
+  },
+  deepfen_murloc: {
+    id: 'deepfen_murloc', name: 'Deepfen Snapper', minLevel: 8, maxLevel: 9, family: 'murloc',
+    hpBase: 48, hpPerLevel: 19, dmgBase: 7, dmgPerLevel: 2.2, attackSpeed: 1.9,
+    armorPerLevel: 12, moveSpeed: 8, aggroRadius: 14, // deepfen packs swarm from far out
+    loot: [
+      { copper: 35, chance: 1 },
+      { itemId: 'waterlogged_idol', chance: 0.5, questId: 'q_idols' },
+      { itemId: 'mudfin_scale', chance: 0.4 },
+    ],
+    scale: 0.85, color: 0x45b39d,
+  },
+  mirejaw_the_ravenous: {
+    id: 'mirejaw_the_ravenous', name: 'Mirejaw the Ravenous', minLevel: 10, maxLevel: 10, family: 'murloc', rare: true,
+    elite: true, canSwim: true, ccImmune: true, respawnMult: 648,
+    hpBase: 320, hpPerLevel: 58, dmgBase: 15, dmgPerLevel: 3.7, attackSpeed: 1.8,
+    armorPerLevel: 26, moveSpeed: 8.2, aggroRadius: 14,
+    aoePulse: { min: 18, max: 26, radius: 10, every: 9, name: 'Ravenous Frenzy', school: 'nature' },
+    summonAdds: { mobId: 'mirejaw_frenzy', count: 2, atHpPct: [0.55] },
+    loot: [
+      { copper: 260, chance: 1 },
+      { itemId: 'mudfin_scale', chance: 1 },
+      { itemId: 'mirejaw_biteblade', chance: 0.25 },
+      { itemId: 'mirejaw_scale_vest', chance: 0.25 },
+      { itemId: 'fen_reaver_glaive', chance: 0.25, rollGroup: 'mirejaw_chase' },
+      { itemId: 'mirejaw_oracle_staff', chance: 0.25, rollGroup: 'mirejaw_chase' },
+    ],
+    scale: 1.05, color: 0x1abc9c,
+  },
+  mirejaw_frenzy: {
+    id: 'mirejaw_frenzy', name: 'Mirejaw Frenzy', minLevel: 9, maxLevel: 10, family: 'murloc',
+    hpBase: 48, hpPerLevel: 18, dmgBase: 8, dmgPerLevel: 2.2, attackSpeed: 1.7,
+    armorPerLevel: 12, moveSpeed: 8.5, aggroRadius: 14,
+    loot: [],
+    scale: 0.75, color: 0x1abc9c,
+  },
+  mire_widow: {
+    id: 'mire_widow', name: 'Mirefen Widow', minLevel: 8, maxLevel: 10, family: 'spider',
+    hpBase: 48, hpPerLevel: 19, dmgBase: 8, dmgPerLevel: 2.2, attackSpeed: 1.8,
+    armorPerLevel: 10, moveSpeed: 8, aggroRadius: 10,
+    loot: [
+      { copper: 38, chance: 1 },
+      { itemId: 'widow_venom_sac', chance: 0.65, questId: 'q_widows' },
+      { itemId: 'spider_leg', chance: 0.4 },
+    ],
+    scale: 1.0, color: 0x283747,
+  },
+  mirefen_broodmother: {
+    id: 'mirefen_broodmother', name: 'The Broodmother', minLevel: 10, maxLevel: 10, family: 'spider',
+    hpBase: 150, hpPerLevel: 26, dmgBase: 9, dmgPerLevel: 2.4, attackSpeed: 1.8,
+    armorPerLevel: 16, moveSpeed: 8, aggroRadius: 14, boss: true,
+    loot: [
+      { copper: 300, chance: 1 },
+      { itemId: 'marshstrider_boots', chance: 0.4 },
+      { itemId: 'broodmother_silk_robe', chance: 0.25 },
+      { itemId: 'spider_leg', chance: 1 },
+    ],
+    scale: 1.4, color: 0x641e16,
+  },
+  drowned_dead: {
+    id: 'drowned_dead', name: 'Drowned Dead', minLevel: 9, maxLevel: 11, family: 'undead',
+    hpBase: 52, hpPerLevel: 20, dmgBase: 8, dmgPerLevel: 2.3, attackSpeed: 2.3,
+    armorPerLevel: 14, moveSpeed: 6.5, aggroRadius: 11,
+    loot: [
+      { copper: 42, chance: 1 },
+      { itemId: 'bone_fragments', chance: 0.5 },
+      { itemId: 'cracked_fetish', chance: 0.3 },
+    ],
+    scale: 1.0, color: 0x7fb3d5,
+  },
+  fen_troll: {
+    id: 'fen_troll', name: 'Mirefen Troll', minLevel: 10, maxLevel: 12, family: 'troll',
+    hpBase: 56, hpPerLevel: 21, dmgBase: 9, dmgPerLevel: 2.4, attackSpeed: 2.2,
+    armorPerLevel: 18, moveSpeed: 7.5, aggroRadius: 11,
+    loot: [
+      { copper: 50, chance: 1 },
+      { itemId: 'troll_fetish', chance: 0.6, questId: 'q_troll_fetishes' },
+      { itemId: 'chipped_tusk', chance: 0.4 },
+      { itemId: 'bogiron_nugget', chance: 0.3 },
+    ],
+    scale: 1.15, color: 0x229954,
+  },
+  grubjaw: {
+    id: 'grubjaw', name: 'Grubjaw the Glutton', minLevel: 12, maxLevel: 12, family: 'troll', rare: true,
+    hpBase: 130, hpPerLevel: 26, dmgBase: 10, dmgPerLevel: 2.5, attackSpeed: 2.2,
+    armorPerLevel: 20, moveSpeed: 7.5, aggroRadius: 13,
+    loot: [
+      { copper: 200, chance: 1 },
+      { itemId: 'grubjaw_tusk', chance: 1, questId: 'q_grubjaw' },
+      { itemId: 'chipped_tusk', chance: 1 },
+    ],
+    scale: 1.3, color: 0x145a32,
+  },
+  gravecaller_cultist: {
+    id: 'gravecaller_cultist', name: 'Gravecaller Cultist', minLevel: 10, maxLevel: 12, family: 'humanoid',
+    hpBase: 50, hpPerLevel: 20, dmgBase: 9, dmgPerLevel: 2.4, attackSpeed: 2.0,
+    armorPerLevel: 20, moveSpeed: 7, aggroRadius: 11,
+    loot: [
+      { copper: 55, chance: 1 },
+      { itemId: 'linen_scrap', chance: 0.3 },
+      { itemId: 'tallow_candle', chance: 0.3 },
+    ],
+    scale: 1.0, color: 0x6c3483,
+  },
+  gravecaller_summoner: {
+    id: 'gravecaller_summoner', name: 'Gravecaller Summoner', minLevel: 11, maxLevel: 12, family: 'humanoid',
+    hpBase: 46, hpPerLevel: 19, dmgBase: 10, dmgPerLevel: 2.5, attackSpeed: 2.0,
+    armorPerLevel: 16, moveSpeed: 7, aggroRadius: 12,
+    loot: [
+      { copper: 60, chance: 1 },
+      { itemId: 'cult_cipher', chance: 0.6, questId: 'q_summoners' },
+    ],
+    scale: 1.0, color: 0x884ea0,
+  },
+  sister_nhalia: {
+    id: 'sister_nhalia', name: 'Sister Nhalia', minLevel: 12, maxLevel: 12, family: 'humanoid', rare: true,
+    elite: true, canSwim: true, ccImmune: true, respawnMult: 648,
+    hpBase: 330, hpPerLevel: 60, dmgBase: 16, dmgPerLevel: 3.8, attackSpeed: 2.0,
+    armorPerLevel: 30, moveSpeed: 7, aggroRadius: 13,
+    aoePulse: { min: 18, max: 26, radius: 11, every: 9, name: 'Dirge of Nhalia', school: 'shadow' },
+    summonAdds: { mobId: 'nhalia_mourner', count: 2, atHpPct: [0.65, 0.35] },
+    loot: [
+      { copper: 350, chance: 1 },
+      { itemId: 'tallow_candle', chance: 1 },
+      { itemId: 'nhalias_funeral_wraps', chance: 0.25 },
+      { itemId: 'nhalias_dirgeblade', chance: 0.25, rollGroup: 'sister_nhalia_chase' },
+    ],
+    scale: 1.08, color: 0x3b1f4a,
+  },
+  nhalia_mourner: {
+    id: 'nhalia_mourner', name: 'Nhalia Mourner', minLevel: 11, maxLevel: 12, family: 'humanoid',
+    hpBase: 46, hpPerLevel: 17, dmgBase: 8, dmgPerLevel: 2.3, attackSpeed: 2.0,
+    armorPerLevel: 14, moveSpeed: 7, aggroRadius: 12,
+    loot: [],
+    scale: 0.95, color: 0x332044,
+  },
+  deacon_voss: {
+    id: 'deacon_voss', name: 'Deacon Voss', minLevel: 12, maxLevel: 12, family: 'humanoid',
+    hpBase: 200, hpPerLevel: 30, dmgBase: 11, dmgPerLevel: 2.5, attackSpeed: 2.4,
+    armorPerLevel: 26, moveSpeed: 7, aggroRadius: 14, boss: true,
+    aoePulse: { min: 10, max: 14, radius: 10, every: 12, name: 'Drowning Hymn' },
+    loot: [
+      { copper: 600, chance: 1 },
+      { itemId: 'tallow_candle', chance: 1 },
+      { itemId: 'voss_sanctified_mace', chance: 0.25 },
+    ],
+    scale: 1.3, color: 0x512e5f,
+  },
+};
+
+// ---------------------------------------------------------------------------
+// NPCs (Fenbridge hub)
+// ---------------------------------------------------------------------------
+
+export const ZONE2_NPCS: Record<string, NpcDef> = {
+  warden_fenwick: {
+    id: 'warden_fenwick', name: 'Warden Fenwick', title: 'Warden of Fenbridge',
+    pos: { x: 3, z: 304 }, facing: Math.PI, color: 0x7e5109,
+    questIds: ['q_fenbridge_muster', 'q_prowlers', 'q_deepfen', 'q_deepfen_purge', 'q_trolls', 'q_deacon'],
+    greeting: 'Hold at the gate, $C. Past those reeds, the fen does the killing for us.',
+  },
+  brother_aldric_fen: {
+    id: 'brother_aldric_fen', name: 'Brother Aldric', title: 'Priest of the Vale',
+    pos: { x: -8, z: 296 }, facing: 0.8, color: 0xf7f9f9,
+    questIds: [
+      'q_idols', 'q_drowned', 'q_drowned_censers', 'q_no_rest', 'q_summoners',
+      'q_bastion_door', 'q_mistcaller', 'q_highwatch_summons',
+    ],
+    greeting: 'The Light keep you above the water, $N. The dead in this fen do not sleep — they wade.',
+  },
+  provisioner_hale: {
+    id: 'provisioner_hale', name: 'Provisioner Hale', title: 'Provisioner',
+    pos: { x: -4, z: 308 }, facing: Math.PI / 2, color: 0x1e8449,
+    questIds: ['q_prowler_pelts', 'q_fen_supplies', 'q_grubjaw'],
+    vendorItems: [
+      'fenbridge_rye', 'marsh_mint_tea', 'smoked_eel', 'silvermist_cordial',
+      'bogiron_mace', 'fenreed_staff', 'mirefen_skinner', 'bogiron_hauberk',
+      'marshcloth_robe', 'reedwoven_jerkin', 'fenwalker_boots', 'reedwoven_trousers',
+    ],
+    greeting: 'Dry boots, dry bread, dry powder — at Fenbridge you get two of the three on a good day.',
+  },
+  herbalist_yara: {
+    id: 'herbalist_yara', name: 'Herbalist Yara', title: 'Herbalist',
+    pos: { x: 10, z: 295 }, facing: -Math.PI / 2, color: 0x7d3c98,
+    questIds: ['q_widows', 'q_broodmother'],
+    greeting: 'Mind the thicket west of the road. The webs are thick as sailcloth this season.',
+  },
+  scout_maren: {
+    id: 'scout_maren', name: 'Scout Maren', title: "Marshal's Scout",
+    pos: { x: 6, z: 312 }, facing: -0.6, color: 0x7d6608,
+    questIds: ['q_troll_fetishes', 'q_cult_camp', 'q_olen'],
+    greeting: 'Quiet feet and a short blade keep you breathing out here. Speak quick — I am due back in the reeds.',
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Quests
+// ---------------------------------------------------------------------------
+
+export const ZONE2_QUESTS: Record<string, QuestDef> = {
+  q_fenbridge_muster: {
+    id: 'q_fenbridge_muster', name: 'Muster at Fenbridge',
+    giverNpcId: 'brother_aldric', turnInNpcId: 'warden_fenwick',
+    text: "Morthen's writings named a master in the northern marsh — a 'Mistcaller.' Now Warden Fenwick has sounded the muster horn at Fenbridge, and I do not believe in coincidence, $N. Take the causeway north, pull the muster order from the gatepost, and present it to the Warden.",
+    completionText: "Aldric's seal, is it? Then you'll do. The fen has been swallowing my patrols whole, and I need every blade that floats.",
+    objectives: [{ type: 'collect', itemId: 'fen_muster_order', count: 1, label: 'Fenbridge Muster Order' }],
+    xpReward: 300, copperReward: 200, itemRewards: {},
+    minLevel: 6,
+  },
+  q_prowlers: {
+    id: 'q_prowlers', name: 'Teeth of the Fen',
+    giverNpcId: 'warden_fenwick', turnInNpcId: 'warden_fenwick',
+    text: 'The mire prowlers have learned what a supply mule sounds like, and now they hunt the causeway itself. Last week they dragged a courier into the reeds not fifty paces from this gate. Thin them out, $N — twelve dead prowlers ought to teach the rest fear.',
+    completionText: 'Twelve, and not a bite on you? The causeway breathes easier tonight.',
+    objectives: [{ type: 'kill', targetMobId: 'mire_prowler', count: 12, label: 'Mire Prowler slain' }],
+    xpReward: 800, copperReward: 300, itemRewards: {},
+  },
+  q_prowler_pelts: {
+    id: 'q_prowler_pelts', name: 'Pelts for the Causeway',
+    giverNpcId: 'provisioner_hale', turnInNpcId: 'provisioner_hale',
+    text: 'Every plank of that causeway rests on pilings wrapped in oiled prowler hide — the only thing the rot will not chew through. My stock is gone and the south spans are already sinking. Bring me 8 unspoiled pelts, $N, before we are all wading to Eastbrook.',
+    completionText: 'Good thick pelts, these. The causeway will outlast the both of us now.',
+    objectives: [{ type: 'collect', itemId: 'mire_prowler_pelt', count: 8, label: 'Mire Prowler Pelt' }],
+    xpReward: 850, copperReward: 350, itemRewards: {},
+  },
+  q_fen_supplies: {
+    id: 'q_fen_supplies', name: 'The Lost Caravan',
+    giverNpcId: 'provisioner_hale', turnInNpcId: 'provisioner_hale',
+    text: 'A caravan out of Eastbrook went into the mist three days back and never rang the gate bell. The wreck is strewn the whole length of the causeway — crates, casks, the lot, sinking slow. Salvage 5 loads of goods before the marsh finishes the job.',
+    completionText: 'Waterlogged, but whole. Poor drivers... the fen keeps what it catches, $N. Remember that.',
+    objectives: [{ type: 'collect', itemId: 'lost_caravan_goods', count: 5, label: 'Lost Caravan Goods' }],
+    xpReward: 900, copperReward: 350, itemRewards: {},
+    minLevel: 7,
+  },
+  q_deepfen: {
+    id: 'q_deepfen', name: 'The Deepfen Stirs',
+    giverNpcId: 'warden_fenwick', turnInNpcId: 'warden_fenwick',
+    text: 'The Deepfen murlocs kept to their shallows for twenty years. Now they swarm the east bank like flies on a carcass — and my wardens say they are dragging things up from the lake bed. Whatever has them stirred, I want it stopped. Cull 12 of the snappers.',
+    completionText: "That will push them back to the mud for a while. But something set them digging, and I mean to learn what.",
+    objectives: [{ type: 'kill', targetMobId: 'deepfen_murloc', count: 12, label: 'Deepfen Snapper slain' }],
+    xpReward: 1000, copperReward: 400, itemRewards: {},
+    minLevel: 7,
+  },
+  q_idols: {
+    id: 'q_idols', name: 'Idols of the Deep',
+    giverNpcId: 'brother_aldric_fen', turnInNpcId: 'brother_aldric_fen',
+    text: "Fenwick's wardens say the fish-men dredge idols from the lake bottom and clutch them like holy relics. If those idols are what I fear, I must see them with my own eyes. Take 5 from the Deepfen snappers — they will not part with them kindly.",
+    completionText: 'Gravecaller work — older than Morthen, older than me. The sect did not begin in Eastbrook, $N. It began here, and the lake has been keeping its secrets.',
+    objectives: [{ type: 'collect', itemId: 'waterlogged_idol', count: 5, label: 'Waterlogged Idol' }],
+    xpReward: 1050, copperReward: 400, itemRewards: {},
+    requiresQuest: 'q_deepfen',
+  },
+  q_deepfen_purge: {
+    id: 'q_deepfen_purge', name: 'Back to the Shallows',
+    giverNpcId: 'warden_fenwick', turnInNpcId: 'warden_fenwick',
+    text: "Aldric says those idols are cult-make — which means the murlocs are hauling the marsh's old evil up one armful at a time. I will not have it washing onto my causeway. Go back to the shallows and break the dredging for good: 14 more snappers.",
+    completionText: "Ruthless and thorough. If this marsh ever dries out, there's warden's work waiting for you.",
+    objectives: [{ type: 'kill', targetMobId: 'deepfen_murloc', count: 14, label: 'Deepfen Snapper slain' }],
+    xpReward: 1100, copperReward: 450, itemRewards: {},
+    requiresQuest: 'q_idols',
+  },
+  q_widows: {
+    id: 'q_widows', name: 'Silk and Venom',
+    giverNpcId: 'herbalist_yara', turnInNpcId: 'herbalist_yara',
+    text: "Widow venom is the only thing that draws fen-rot from a wound — I bled a man of it just this morning. But the thicket west of the road has gone from nuisance to horror; the webs are taking deer whole now. Kill 10 widows and cut me 6 venom sacs, whole and unburst.",
+    completionText: 'Whole sacs, every one. You have steadier hands than half the surgeons in the south, $N.',
+    objectives: [
+      { type: 'kill', targetMobId: 'mire_widow', count: 10, label: 'Mirefen Widow slain' },
+      { type: 'collect', itemId: 'widow_venom_sac', count: 6, label: 'Widow Venom Sac' },
+    ],
+    xpReward: 1200, copperReward: 450, itemRewards: {},
+    minLevel: 8,
+  },
+  q_broodmother: {
+    id: 'q_broodmother', name: 'The Broodmother',
+    giverNpcId: 'herbalist_yara', turnInNpcId: 'herbalist_yara',
+    text: "You have seen the webs — now ask yourself what spins cables thick as a man's wrist. The wardens call her the Broodmother, and her clutch hangs over Widow Thicket like a second canopy. Burn through 8 more widows and put the old mother down before that clutch opens.",
+    completionText: 'Dead? Truly dead? Then the thicket is just trees again. The Light bless your blade, $N.',
+    objectives: [
+      { type: 'kill', targetMobId: 'mire_widow', count: 8, label: 'Mirefen Widow slain' },
+      { type: 'kill', targetMobId: 'mirefen_broodmother', count: 1, label: 'The Broodmother slain' },
+    ],
+    xpReward: 1250, copperReward: 500, itemRewards: {},
+    requiresQuest: 'q_widows',
+  },
+  q_drowned: {
+    id: 'q_drowned', name: 'The Drowned Dead',
+    giverNpcId: 'brother_aldric_fen', turnInNpcId: 'brother_aldric_fen',
+    text: 'Travelers drowned on the causeway are walking out of the lakes, $N — still hung with the weeds they died in. This is no restless haunting. Drowning leaves no marks; it makes obedient corpses. Someone is filling this fen like a tithing box. Return 12 of the Drowned Dead to their rest.',
+    completionText: 'Each one you fell is a stolen soul set free. But the one who drowned them is still pouring water.',
+    objectives: [{ type: 'kill', targetMobId: 'drowned_dead', count: 12, label: 'Drowned Dead laid to rest' }],
+    xpReward: 1400, copperReward: 500, itemRewards: {},
+    minLevel: 9,
+  },
+  q_drowned_censers: {
+    id: 'q_drowned_censers', name: 'Censers from the Deep',
+    giverNpcId: 'brother_aldric_fen', turnInNpcId: 'brother_aldric_fen',
+    text: 'North of the widow lake stands a chapel that drowned with its congregation when the marsh rose. The dead there carry rusted censers — funerary ones, the kind swung at a Gravecaller rite. Gather 4 from the chapel yard and I will read what rite was sung over that water.',
+    completionText: "As I feared. These censers burned grave-ash, not incense. Someone consecrated that chapel to the drowning — and the rite is signed 'Voss.'",
+    objectives: [{ type: 'collect', itemId: 'rusted_censer', count: 4, label: 'Rusted Censer' }],
+    xpReward: 1300, copperReward: 500, itemRewards: {},
+    requiresQuest: 'q_drowned',
+  },
+  q_no_rest: {
+    id: 'q_no_rest', name: 'No Rest in the Reeds',
+    giverNpcId: 'brother_aldric_fen', turnInNpcId: 'brother_aldric_fen',
+    text: 'The rite on those censers binds the drowned to rise wherever the marsh touches them — and the marsh touches everything. There will be no rest in these reeds until the dead outnumber the living. We cannot unmake the rite yet, but we can empty it of soldiers. Lay 14 more of the Drowned Dead to rest.',
+    completionText: 'You give the dead more mercy than their masters ever did. Take this — you have more than earned it.',
+    objectives: [{ type: 'kill', targetMobId: 'drowned_dead', count: 14, label: 'Drowned Dead laid to rest' }],
+    xpReward: 1500, copperReward: 550,
+    itemRewards: { warrior: 'drownedguard_breastplate', mage: 'fenmist_robe', rogue: 'eelskin_tunic' },
+    requiresQuest: 'q_drowned_censers',
+  },
+  q_trolls: {
+    id: 'q_trolls', name: 'Mounds of the Mirefen',
+    giverNpcId: 'warden_fenwick', turnInNpcId: 'warden_fenwick',
+    text: 'The Mirefen trolls have torn open the old barrow-mounds east of the far lake — burial mounds, $N, older than any kingdom of men. Whatever gold they think is down there, what they are letting OUT is worse. Drive them off the mounds: 12 trolls dead ought to do it.',
+    completionText: "Trolls don't dig without a reason. Someone told them where to dig — and I'd wager my gate it wears a grey robe.",
+    objectives: [{ type: 'kill', targetMobId: 'fen_troll', count: 12, label: 'Mirefen Troll slain' }],
+    xpReward: 1600, copperReward: 600, itemRewards: {},
+    minLevel: 10,
+  },
+  q_troll_fetishes: {
+    id: 'q_troll_fetishes', name: 'Fetish and Bone',
+    giverNpcId: 'scout_maren', turnInNpcId: 'scout_maren',
+    text: "I crawled the troll mounds two nights past. Those fetishes they plant are not troll-craft — the knots are wrong, the bones are man-bones, and every one points at the open barrows like a signpost. Bring me 8 of them and I will prove to Fenwick who is really paying for this dig.",
+    completionText: 'Same maker as the banners in the cult camp. The trolls are hired shovels, nothing more. Good work, $N.',
+    objectives: [{ type: 'collect', itemId: 'troll_fetish', count: 8, label: 'Mirefen Troll Fetish' }],
+    xpReward: 1650, copperReward: 600,
+    itemRewards: { warrior: 'trollhide_leggings', mage: 'trollhide_leggings', rogue: 'trollhide_leggings' },
+    requiresQuest: 'q_trolls',
+  },
+  q_grubjaw: {
+    id: 'q_grubjaw', name: 'The Glutton',
+    giverNpcId: 'provisioner_hale', turnInNpcId: 'provisioner_hale',
+    text: "There's one troll the others won't dig beside — Grubjaw, the Glutton. He ate my last two pack-mules, harness and all, and my insurance man drowned years ago. He prowls the far eastern mounds, $N. Bring me his tusk and I will outfit you proper.",
+    completionText: "That tusk is long as my forearm! The mules are avenged, and Fenbridge owes you a round.",
+    objectives: [{ type: 'collect', itemId: 'grubjaw_tusk', count: 1, label: "Grubjaw's Tusk" }],
+    xpReward: 1700, copperReward: 700,
+    itemRewards: { warrior: 'marshstrider_boots', mage: 'marshstrider_boots', rogue: 'marshstrider_boots' },
+    minLevel: 11,
+  },
+  q_cult_camp: {
+    id: 'q_cult_camp', name: 'Robes in the Reeds',
+    giverNpcId: 'scout_maren', turnInNpcId: 'scout_maren',
+    text: "There — north past the third lake, where the mist never lifts. Grey robes, grey banners: Gravecallers, camped in the open like they already own the fen. They have stopped hiding, $N, which means they think they have already won. Prove them wrong. Cut down 12 of their cultists.",
+    completionText: 'Twelve robes face-down in the mud. Now they know the fen watches back.',
+    objectives: [{ type: 'kill', targetMobId: 'gravecaller_cultist', count: 12, label: 'Gravecaller Cultist slain' }],
+    xpReward: 1800, copperReward: 700, itemRewards: {},
+    minLevel: 11,
+  },
+  q_summoners: {
+    id: 'q_summoners', name: 'Stopping the Summoning',
+    giverNpcId: 'brother_aldric_fen', turnInNpcId: 'brother_aldric_fen',
+    text: "Maren's reports name summoners among the cultists — voices that call the drowned up out of the water like hounds to a whistle. Their ciphers will spell out the chain of command. Silence 8 summoners and bring me 4 of their ciphers.",
+    completionText: "Every cipher is countersigned 'Deacon Voss' — and addressed onward to a 'Mistcaller' in the Bastion. Morthen's master, $N. We have found him.",
+    objectives: [
+      { type: 'kill', targetMobId: 'gravecaller_summoner', count: 8, label: 'Gravecaller Summoner slain' },
+      { type: 'collect', itemId: 'cult_cipher', count: 4, label: 'Gravecaller Cipher' },
+    ],
+    xpReward: 1900, copperReward: 750, itemRewards: {},
+    requiresQuest: 'q_cult_camp',
+  },
+  q_deacon: {
+    id: 'q_deacon', name: 'The Deacon of the Mire',
+    giverNpcId: 'warden_fenwick', turnInNpcId: 'warden_fenwick',
+    text: 'So a deacon of the Gravecallers stands at the heart of that camp, singing my drowned wardens up out of the lakes to serve him. His hymn ends today. Take the camp road north, $N, and put Deacon Voss in the ground — deep enough that nobody sings HIM back up.',
+    completionText: "Voss is dead and the mist over the camp is already thinning. You have broken their voice in the fen — now only the Bastion remains.",
+    objectives: [{ type: 'kill', targetMobId: 'deacon_voss', count: 1, label: 'Deacon Voss slain' }],
+    xpReward: 2200, copperReward: 1000,
+    itemRewards: { warrior: 'deacons_cleaver', mage: 'staff_of_drowned_prayers', rogue: 'mistbinder_kris' },
+    requiresQuest: 'q_summoners',
+  },
+  q_bastion_door: {
+    id: 'q_bastion_door', name: 'The Sunken Bastion',
+    giverNpcId: 'brother_aldric_fen', turnInNpcId: 'brother_aldric_fen',
+    text: "The Sunken Bastion — a knight's hold that drowned in the fen a century ago — is where Voss's letters point, and where this Mistcaller sings his drowning hymns. The cult has warded its door with grave-stones. Bring me one of the ward stones, $N, and I will unweave the seal.",
+    completionText: 'The ward parts like rotten rope. The door stands open... and the dark below it is listening.',
+    objectives: [{ type: 'collect', itemId: 'bastion_ward_stone', count: 1, label: 'Bastion Ward Stone' }],
+    xpReward: 1200, copperReward: 500, itemRewards: {},
+    requiresQuest: 'q_deacon',
+    minLevel: 12,
+  },
+  q_olen: {
+    id: 'q_olen', name: "The Knight-Commander's Shame",
+    giverNpcId: 'scout_maren', turnInNpcId: 'scout_maren',
+    text: 'Knight-Commander Olen held the Bastion when it sank — drowned at his post rather than abandon it. Every warden learns his name with pride. Now the Mistcaller has raised him as a puppet to guard the very door he died defending. That shame ends, $N. Take four companions below and grant Olen the rest he earned.',
+    completionText: "Then his watch is finally over. I'll see his name cut into the gate myself. Thank you, $N.",
+    objectives: [{ type: 'kill', targetMobId: 'knight_commander_olen', count: 1, label: 'Knight-Commander Olen laid to rest' }],
+    xpReward: 1800, copperReward: 800,
+    itemRewards: { warrior: 'knight_commanders_greaves', mage: 'knight_commanders_greaves', rogue: 'knight_commanders_greaves' },
+    requiresQuest: 'q_bastion_door',
+    minLevel: 12,
+    suggestedPlayers: 5,
+  },
+  q_mistcaller: {
+    id: 'q_mistcaller', name: 'The Mistcaller',
+    giverNpcId: 'brother_aldric_fen', turnInNpcId: 'brother_aldric_fen',
+    text: "At the bottom of the Bastion waits Vael the Mistcaller — Morthen's master, Voss's master, the voice that has drowned a hundred travelers to raise itself an army. He is far beyond any one hero: take four companions, no fewer. End him, $N, and the fen's dead may finally lie still.",
+    completionText: "Vael is dead, and the mist is lifting for the first time in years. But Maren heard his last words, and they freeze my blood: 'The Wyrm stirs beneath the peaks.' The sect serves something older than we ever guessed, $N. Rest while you can — the mountains are next.",
+    objectives: [{ type: 'kill', targetMobId: 'vael_the_mistcaller', count: 1, label: 'Vael the Mistcaller slain' }],
+    xpReward: 2800, copperReward: 2500,
+    itemRewards: { warrior: 'mistcallers_edge', mage: 'vaels_mist_staff', rogue: 'riptide_dirk' },
+    requiresQuest: 'q_bastion_door',
+    minLevel: 12,
+    suggestedPlayers: 5,
+  },
+};
+
+export const ZONE2_QUEST_ORDER = [
+  'q_fenbridge_muster', 'q_prowlers', 'q_prowler_pelts', 'q_fen_supplies',
+  'q_deepfen', 'q_idols', 'q_deepfen_purge', 'q_widows', 'q_broodmother',
+  'q_drowned', 'q_drowned_censers', 'q_no_rest', 'q_trolls', 'q_troll_fetishes',
+  'q_grubjaw', 'q_cult_camp', 'q_summoners', 'q_deacon', 'q_bastion_door',
+  'q_olen', 'q_mistcaller',
+];
+
+// ---------------------------------------------------------------------------
+// World layout. Fenbridge sits at (0,300); +z north (deeper fen), +x west
+// (east is -x — see the zone1 layout note).
+// ---------------------------------------------------------------------------
+
+export const ZONE2_CAMPS: CampDef[] = [
+  // Prowlers: reed beds flanking the causeway south of town
+  { mobId: 'mire_prowler', center: { x: -40, z: 230 }, radius: 22, count: 7 },
+  { mobId: 'mire_prowler', center: { x: 35, z: 225 }, radius: 20, count: 6 },
+  // Murlocs: shores of the big east lake — camps straddle the waterline
+  { mobId: 'deepfen_murloc', center: { x: -82, z: 273 }, radius: 15, count: 8 },
+  { mobId: 'deepfen_murloc', center: { x: -120, z: 350 }, radius: 13, count: 6 },
+  { mobId: 'mirejaw_the_ravenous', center: { x: -132, z: 333 }, radius: 5, count: 1 },
+  // Widows: thicket west of Fenbridge
+  { mobId: 'mire_widow', center: { x: 70, z: 300 }, radius: 20, count: 7 },
+  { mobId: 'mire_widow', center: { x: 95, z: 340 }, radius: 16, count: 6 },
+  { mobId: 'mirefen_broodmother', center: { x: 98, z: 348 }, radius: 3, count: 1 },
+  // Drowned dead: the Drowned Chapel and the shallows beyond
+  { mobId: 'drowned_dead', center: { x: 90, z: 420 }, radius: 20, count: 8 },
+  { mobId: 'drowned_dead', center: { x: 115, z: 450 }, radius: 16, count: 6 },
+  // Trolls: barrow-mounds in the southeast
+  { mobId: 'fen_troll', center: { x: -80, z: 420 }, radius: 22, count: 7 },
+  { mobId: 'fen_troll', center: { x: -105, z: 455 }, radius: 18, count: 6 },
+  { mobId: 'grubjaw', center: { x: -120, z: 480 }, radius: 8, count: 1 },
+  // Gravecaller encampment: deep fen, before the Bastion
+  { mobId: 'gravecaller_cultist', center: { x: 15, z: 470 }, radius: 20, count: 7 },
+  { mobId: 'gravecaller_cultist', center: { x: -25, z: 490 }, radius: 16, count: 6 },
+  { mobId: 'gravecaller_summoner', center: { x: -5, z: 500 }, radius: 12, count: 4 },
+  { mobId: 'sister_nhalia', center: { x: 24, z: 492 }, radius: 5, count: 1 },
+  { mobId: 'deacon_voss', center: { x: 0, z: 510 }, radius: 2, count: 1 },
+];
+
+export const ZONE2_OBJECTS: GroundObjectDef[] = [
+  {
+    itemId: 'fen_muster_order',
+    name: 'Fenbridge Muster Order',
+    positions: [{ x: 1, z: 294 }, { x: -2, z: 297 }],
+  },
+  {
+    itemId: 'lost_caravan_goods',
+    name: 'Lost Caravan Goods',
+    positions: [
+      { x: 1, z: 192 }, { x: -3, z: 206 }, { x: -6, z: 221 }, { x: -8, z: 237 },
+      { x: -7, z: 252 }, { x: -3, z: 268 }, { x: 2, z: 283 },
+    ],
+  },
+  {
+    itemId: 'rusted_censer',
+    name: 'Rusted Censer',
+    positions: [
+      { x: 96, z: 429 }, { x: 103, z: 430 }, { x: 99, z: 434 },
+      { x: 106, z: 437 }, { x: 97, z: 440 }, { x: 104, z: 441 },
+    ],
+  },
+  {
+    itemId: 'bastion_ward_stone',
+    name: 'Bastion Ward Stone',
+    positions: [{ x: 43, z: 512 }, { x: 48, z: 517 }],
+  },
+];
+
+// ---------------------------------------------------------------------------
+// Items
+// ---------------------------------------------------------------------------
+
+// Archetype groups for class-locked rewards (REWARD_ARCHETYPE hands warrior
+// rewards to paladins/shamans etc., so the lock must admit the whole group).
+const WAR: PlayerClass[] = ['warrior', 'paladin', 'shaman'];
+const MAG: PlayerClass[] = ['mage', 'priest', 'warlock', 'druid'];
+const ROG: PlayerClass[] = ['rogue', 'hunter'];
+
+export const ZONE2_ITEMS: Record<string, ItemDef> = {
+  // --- quest items ---
+  fen_muster_order: { id: 'fen_muster_order', name: 'Fenbridge Muster Order', kind: 'quest', sellValue: 0, questId: 'q_fenbridge_muster' },
+  mire_prowler_pelt: { id: 'mire_prowler_pelt', name: 'Mire Prowler Pelt', kind: 'quest', sellValue: 0, questId: 'q_prowler_pelts' },
+  lost_caravan_goods: { id: 'lost_caravan_goods', name: 'Lost Caravan Goods', kind: 'quest', sellValue: 0, questId: 'q_fen_supplies' },
+  waterlogged_idol: { id: 'waterlogged_idol', name: 'Waterlogged Idol', kind: 'quest', sellValue: 0, questId: 'q_idols' },
+  widow_venom_sac: { id: 'widow_venom_sac', name: 'Widow Venom Sac', kind: 'quest', sellValue: 0, questId: 'q_widows' },
+  rusted_censer: { id: 'rusted_censer', name: 'Rusted Censer', kind: 'quest', sellValue: 0, questId: 'q_drowned_censers' },
+  troll_fetish: { id: 'troll_fetish', name: 'Mirefen Troll Fetish', kind: 'quest', sellValue: 0, questId: 'q_troll_fetishes' },
+  grubjaw_tusk: { id: 'grubjaw_tusk', name: "Grubjaw's Tusk", kind: 'quest', sellValue: 0, questId: 'q_grubjaw' },
+  cult_cipher: { id: 'cult_cipher', name: 'Gravecaller Cipher', kind: 'quest', sellValue: 0, questId: 'q_summoners' },
+  bastion_ward_stone: { id: 'bastion_ward_stone', name: 'Bastion Ward Stone', kind: 'quest', sellValue: 0, questId: 'q_bastion_door' },
+  // --- quest reward gear (uncommon) ---
+  deacons_cleaver: {
+    id: 'deacons_cleaver', name: "Deacon's Cleaver", kind: 'weapon', slot: 'mainhand', quality: 'uncommon',
+    weapon: { min: 11, max: 18, speed: 2.4 }, stats: { str: 4 }, sellValue: 300, requiredClass: WAR,
+  },
+  staff_of_drowned_prayers: {
+    id: 'staff_of_drowned_prayers', name: 'Staff of Drowned Prayers', kind: 'weapon', slot: 'mainhand', quality: 'uncommon',
+    weapon: { min: 12, max: 20, speed: 3.0 }, stats: { int: 5, spi: 2 }, sellValue: 300, requiredClass: MAG,
+  },
+  mistbinder_kris: {
+    id: 'mistbinder_kris', name: 'Mistbinder Kris', kind: 'weapon', slot: 'mainhand', quality: 'uncommon',
+    weapon: { min: 7, max: 12, speed: 1.7, dagger: true }, stats: { agi: 4 }, sellValue: 300, requiredClass: ROG,
+  },
+  drownedguard_breastplate: {
+    id: 'drownedguard_breastplate', name: 'Drownedguard Breastplate', kind: 'armor', slot: 'chest', quality: 'uncommon',
+    stats: { armor: 130, sta: 4 }, sellValue: 350, requiredClass: WAR,
+  },
+  fenmist_robe: {
+    id: 'fenmist_robe', name: 'Fenmist Robe', kind: 'armor', slot: 'chest', quality: 'uncommon',
+    stats: { armor: 45, int: 5, spi: 3 }, sellValue: 350, requiredClass: MAG,
+  },
+  eelskin_tunic: {
+    id: 'eelskin_tunic', name: 'Eelskin Tunic', kind: 'armor', slot: 'chest', quality: 'uncommon',
+    stats: { armor: 80, agi: 5 }, sellValue: 350, requiredClass: ROG,
+  },
+  trollhide_leggings: {
+    id: 'trollhide_leggings', name: 'Trollhide Leggings', kind: 'armor', slot: 'legs', quality: 'uncommon',
+    stats: { armor: 55, sta: 3, str: 2 }, sellValue: 280,
+  },
+  marshstrider_boots: {
+    id: 'marshstrider_boots', name: 'Marshstrider Boots', kind: 'armor', slot: 'feet', quality: 'uncommon',
+    stats: { armor: 40, agi: 2, sta: 2 }, sellValue: 250,
+  },
+  broodmother_silk_robe: {
+    id: 'broodmother_silk_robe', name: "Broodmother's Silk Robe", kind: 'armor', slot: 'chest', quality: 'uncommon',
+    stats: { armor: 42, int: 4, spi: 2 }, sellValue: 300, requiredClass: MAG,
+  },
+  voss_sanctified_mace: {
+    id: 'voss_sanctified_mace', name: "Voss's Sanctified Mace", kind: 'weapon', slot: 'mainhand', quality: 'uncommon',
+    weapon: { min: 12, max: 20, speed: 2.6 }, stats: { int: 3, spi: 2 }, sellValue: 420, requiredClass: MAG,
+  },
+  mirejaw_biteblade: {
+    id: 'mirejaw_biteblade', name: 'Mirejaw Biteblade', kind: 'weapon', slot: 'mainhand', quality: 'uncommon',
+    weapon: { min: 8, max: 14, speed: 1.7, dagger: true }, stats: { agi: 5, sta: 2 }, sellValue: 480, requiredClass: ROG,
+  },
+  mirejaw_scale_vest: {
+    id: 'mirejaw_scale_vest', name: 'Mirejaw Scale Vest', kind: 'armor', slot: 'chest', quality: 'uncommon',
+    stats: { armor: 115, str: 2, sta: 3 }, sellValue: 480, requiredClass: WAR,
+  },
+  nhalias_funeral_wraps: {
+    id: 'nhalias_funeral_wraps', name: "Nhalia's Funeral Wraps", kind: 'armor', slot: 'legs', quality: 'uncommon',
+    stats: { armor: 48, int: 5, spi: 2 }, sellValue: 480, requiredClass: MAG,
+  },
+  fen_reaver_glaive: {
+    id: 'fen_reaver_glaive', name: 'Fen Reaver Glaive', kind: 'weapon', slot: 'mainhand', quality: 'rare',
+    weapon: { min: 16, max: 26, speed: 2.4 }, stats: { str: 5, sta: 3 }, sellValue: 1400, requiredClass: WAR,
+  },
+  nhalias_dirgeblade: {
+    id: 'nhalias_dirgeblade', name: "Nhalia's Dirgeblade", kind: 'weapon', slot: 'mainhand', quality: 'rare',
+    weapon: { min: 10, max: 16, speed: 1.7, dagger: true }, stats: { agi: 6, sta: 3 }, sellValue: 1400, requiredClass: ROG,
+  },
+  mirejaw_oracle_staff: {
+    id: 'mirejaw_oracle_staff', name: 'Mirejaw Oracle Staff', kind: 'weapon', slot: 'mainhand', quality: 'rare',
+    weapon: { min: 16, max: 27, speed: 3.0 }, stats: { int: 6, spi: 3 }, sellValue: 1400, requiredClass: MAG,
+  },
+  // --- Sunken Bastion blues (rare) ---
+  mistcallers_edge: {
+    id: 'mistcallers_edge', name: "Mistcaller's Edge", kind: 'weapon', slot: 'mainhand', quality: 'rare',
+    weapon: { min: 14, max: 23, speed: 2.3 }, stats: { str: 4, sta: 3 }, sellValue: 1200, requiredClass: WAR,
+  },
+  vaels_mist_staff: {
+    id: 'vaels_mist_staff', name: "Vael's Mist-Staff", kind: 'weapon', slot: 'mainhand', quality: 'rare',
+    weapon: { min: 15, max: 26, speed: 3.0 }, stats: { int: 6, spi: 3 }, sellValue: 1200, requiredClass: MAG,
+  },
+  riptide_dirk: {
+    id: 'riptide_dirk', name: 'Riptide Dirk', kind: 'weapon', slot: 'mainhand', quality: 'rare',
+    weapon: { min: 9, max: 15, speed: 1.7, dagger: true }, stats: { agi: 5, sta: 2 }, sellValue: 1200, requiredClass: ROG,
+  },
+  knight_commanders_greaves: {
+    id: 'knight_commanders_greaves', name: "Knight-Commander's Greaves", kind: 'armor', slot: 'legs', quality: 'rare',
+    stats: { armor: 95, sta: 4 }, sellValue: 1000,
+  },
+  tidescale_vest: {
+    id: 'tidescale_vest', name: 'Tidescale Vest', kind: 'armor', slot: 'chest', quality: 'rare',
+    stats: { armor: 90, sta: 3, agi: 2 }, sellValue: 1100,
+  },
+  tideguard_greaves: {
+    id: 'tideguard_greaves', name: 'Tideguard Greaves', kind: 'armor', slot: 'legs', quality: 'rare',
+    stats: { armor: 125, str: 3, sta: 5 }, sellValue: 1100, requiredClass: WAR,
+  },
+  tideguard_sabatons: {
+    id: 'tideguard_sabatons', name: 'Tideguard Sabatons', kind: 'armor', slot: 'feet', quality: 'rare',
+    stats: { armor: 105, str: 2, sta: 4 }, sellValue: 1100, requiredClass: WAR,
+  },
+  drowned_prayer_leggings: {
+    id: 'drowned_prayer_leggings', name: 'Drowned Prayer Leggings', kind: 'armor', slot: 'legs', quality: 'rare',
+    stats: { armor: 48, int: 6, spi: 4 }, sellValue: 1100, requiredClass: MAG,
+  },
+  drowned_prayer_sandals: {
+    id: 'drowned_prayer_sandals', name: 'Drowned Prayer Sandals', kind: 'armor', slot: 'feet', quality: 'rare',
+    stats: { armor: 42, int: 5, spi: 3 }, sellValue: 1100, requiredClass: MAG,
+  },
+  eelscale_leggings: {
+    id: 'eelscale_leggings', name: 'Eelscale Leggings', kind: 'armor', slot: 'legs', quality: 'rare',
+    stats: { armor: 86, agi: 6, sta: 3 }, sellValue: 1100, requiredClass: ROG,
+  },
+  eelscale_treads: {
+    id: 'eelscale_treads', name: 'Eelscale Treads', kind: 'armor', slot: 'feet', quality: 'rare',
+    stats: { armor: 72, agi: 5, sta: 3 }, sellValue: 1100, requiredClass: ROG,
+  },
+  // --- vendor food & drink (Provisioner Hale) ---
+  fenbridge_rye: {
+    id: 'fenbridge_rye', name: 'Fenbridge Rye Loaf', kind: 'food', quality: 'common',
+    foodHp: 243, sellValue: 25, buyValue: 400,
+  },
+  marsh_mint_tea: {
+    id: 'marsh_mint_tea', name: 'Marsh Mint Tea', kind: 'drink', quality: 'common',
+    drinkMana: 288, sellValue: 25, buyValue: 400,
+  },
+  smoked_eel: {
+    id: 'smoked_eel', name: 'Smoked Mirefen Eel', kind: 'food', quality: 'common',
+    foodHp: 432, sellValue: 60, buyValue: 1000,
+  },
+  silvermist_cordial: {
+    id: 'silvermist_cordial', name: 'Silvermist Cordial', kind: 'drink', quality: 'common',
+    drinkMana: 436, sellValue: 60, buyValue: 1000,
+  },
+  // --- vendor white gear (Provisioner Hale) ---
+  bogiron_mace: {
+    id: 'bogiron_mace', name: 'Bogiron Mace', kind: 'weapon', slot: 'mainhand', quality: 'common',
+    weapon: { min: 8, max: 14, speed: 2.6 }, sellValue: 250, buyValue: 2500,
+  },
+  fenreed_staff: {
+    id: 'fenreed_staff', name: 'Fenreed Staff', kind: 'weapon', slot: 'mainhand', quality: 'common',
+    weapon: { min: 9, max: 16, speed: 3.0 }, stats: { int: 1 }, sellValue: 250, buyValue: 2500,
+  },
+  mirefen_skinner: {
+    id: 'mirefen_skinner', name: 'Mirefen Skinner', kind: 'weapon', slot: 'mainhand', quality: 'common',
+    weapon: { min: 6, max: 10, speed: 1.8, dagger: true }, sellValue: 250, buyValue: 2500,
+  },
+  bogiron_hauberk: {
+    id: 'bogiron_hauberk', name: 'Bogiron Hauberk', kind: 'armor', slot: 'chest', quality: 'common',
+    stats: { armor: 100 }, sellValue: 300, buyValue: 3000,
+  },
+  marshcloth_robe: {
+    id: 'marshcloth_robe', name: 'Marshcloth Robe', kind: 'armor', slot: 'chest', quality: 'common',
+    stats: { armor: 32 }, sellValue: 200, buyValue: 2000,
+  },
+  reedwoven_jerkin: {
+    id: 'reedwoven_jerkin', name: 'Reedwoven Jerkin', kind: 'armor', slot: 'chest', quality: 'common',
+    stats: { armor: 62 }, sellValue: 250, buyValue: 2500,
+  },
+  fenwalker_boots: {
+    id: 'fenwalker_boots', name: 'Fenwalker Boots', kind: 'armor', slot: 'feet', quality: 'common',
+    stats: { armor: 30 }, sellValue: 150, buyValue: 1500,
+  },
+  reedwoven_trousers: {
+    id: 'reedwoven_trousers', name: 'Reedwoven Trousers', kind: 'armor', slot: 'legs', quality: 'common',
+    stats: { armor: 40 }, sellValue: 180, buyValue: 1800,
+  },
+  // --- junk (gray) ---
+  bogiron_nugget: { id: 'bogiron_nugget', name: 'Bogiron Nugget', kind: 'junk', quality: 'poor', sellValue: 12 },
+  soggy_moccasin: { id: 'soggy_moccasin', name: 'Soggy Moccasin', kind: 'junk', quality: 'poor', sellValue: 9 },
+  cracked_fetish: { id: 'cracked_fetish', name: 'Cracked Fetish', kind: 'junk', quality: 'poor', sellValue: 14 },
+  chipped_tusk: { id: 'chipped_tusk', name: 'Chipped Tusk', kind: 'junk', quality: 'poor', sellValue: 15 },
+  deepfen_pearl: { id: 'deepfen_pearl', name: 'Deepfen Pearl', kind: 'junk', quality: 'poor', sellValue: 600 },
+};
+
+// ---------------------------------------------------------------------------
+// Static props (rendering + collision share this placement data)
+// ---------------------------------------------------------------------------
+
+export const ZONE2_PROPS: ZonePropsDef = {
+  buildings: [
+    { kind: 'inn', x: 13, z: 306, w: 6, d: 7, rot: -1.0 },
+    { kind: 'house', x: -13, z: 308, w: 7, d: 6, rot: 0.5 },
+    { kind: 'house', x: -12, z: 291, w: 6, d: 5, rot: 2.6 },
+    { kind: 'house', x: 11, z: 316, w: 6, d: 5, rot: 0.3 },
+  ],
+  wells: [{ x: 0, z: 302, r: 1.5 }],
+  stalls: [{ x: -5, z: 310.5, rot: Math.PI / 2, r: 1.7 }],
+  mines: [],
+  // fishing dock on the east shore of the big west lake
+  docks: [{ x: -66, z: 305, rot: 1.68, hutLocal: { x: 2.8, z: 2.4, hw: 1.7, hd: 1.5 } }],
+  tents: [
+    // Gravecaller encampment
+    { x: 12, z: 474, rot: 0.5, scale: 1 },
+    { x: 20, z: 466, rot: 2.1, scale: 1 },
+    { x: -22, z: 486, rot: 1.2, scale: 1 },
+    { x: -28, z: 494, rot: -0.7, scale: 1 },
+    { x: -3, z: 505, rot: 2.9, scale: 1.3 },
+  ],
+  crates: [[14, 468], [18, 471], [-23, 491], [2, 504]],
+  campfires: [[4, 299], [-2, 293], [16, 470], [-25, 489], [0, 506]],
+  // mud-hut clusters at the murloc shallows
+  mudHuts: [[-78, 269], [-83, 266], [-74, 275], [-117, 346], [-123, 354]],
+  ruinRings: [{ x: 100, z: 435, ringR: 7, columns: 7 }],
+  fences: [
+    { x1: 16, z1: 311, x2: 21, z2: 299 },
+    { x1: -18, z1: 313, x2: -22, z2: 300 },
+  ],
+  graveyards: [{ x: -18, z: 286 }],
+};

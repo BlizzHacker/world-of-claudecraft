@@ -1,0 +1,442 @@
+// Per-entity character visual: a SkeletonUtils clone of a manifest asset with
+// its own AnimationMixer, a clip-driven state machine fed by renderer-derived
+// state, a baked static idle-pose far LOD, and a shadow-only proxy for the
+// mid-distance band. All geometry/materials are shared caches — dispose()
+// only releases mixer bindings.
+import * as THREE from 'three';
+import { GFX } from '../gfx';
+import { VisualDef } from './manifest';
+import {
+  applyMaterials, assembleModel, prepareVisual, tintedFarMaterials,
+} from './assets';
+
+/** Renderer-derived animation inputs (same facts the old pose machine used). */
+export interface AnimState {
+  /** horizontal speed, world units/sec */
+  speed: number;
+  moving: boolean;
+  /** moving against facing (players backpedaling) */
+  backwards: boolean;
+  dead: boolean;
+  casting: boolean;
+  swimming: boolean;
+  sitting: boolean;
+}
+
+type BaseState = 'idle' | 'walk' | 'walkBack' | 'run' | 'cast' | 'swim' | 'sit';
+
+const FADE = 0.22;
+const ONESHOT_FADE = 0.1;
+const RUN_SPEED_THRESHOLD = 4.5; // u/s — sim walk/wander sits well below
+const HIT_REACT_COOLDOWN = 0.9;
+const DEFAULT_WALK_REF = 2.2;
+const DEFAULT_RUN_REF = 7;
+// Lie_Idle already lays the rig flat — a touch of extra pitch reads as a
+// surface glide; clip-less rigs (creatures) get the full procedural prone
+const SWIM_PITCH_CLIP = 0.35;
+const SWIM_PITCH_PROCEDURAL = 1.18;
+const SWIM_RISE = 0.95; // body must break the surface or only the hat floats
+const MIXER_DT_CAP = 0.3; // throttled entities never integrate a huge step
+const GHOST_OPACITY = 0.34;
+
+// shared invisible click capsule — raycaster ignores `visible`, render doesn't
+let clickGeoSingleton: THREE.CylinderGeometry | null = null;
+function clickGeo(): THREE.CylinderGeometry {
+  if (!clickGeoSingleton) {
+    clickGeoSingleton = new THREE.CylinderGeometry(0.5, 0.5, 1, 8);
+    clickGeoSingleton.translate(0, 0.5, 0);
+  }
+  return clickGeoSingleton;
+}
+let clickMatSingleton: THREE.Material | null = null;
+function clickMat(): THREE.Material {
+  clickMatSingleton ??= new THREE.MeshBasicMaterial();
+  return clickMatSingleton;
+}
+
+// shadow-only material: writes neither color nor depth so the main pass
+// rasterizes nothing while the shadow pass still renders the proxy
+let shadowOnlySingleton: THREE.Material | null = null;
+function shadowOnlyMat(): THREE.Material {
+  shadowOnlySingleton ??= new THREE.MeshBasicMaterial({ colorWrite: false, depthWrite: false });
+  return shadowOnlySingleton;
+}
+
+export class CharacterVisual {
+  /** add to the entity group; pivot at feet, faces +Z; renderer applies e.scale */
+  readonly root = new THREE.Group();
+  /** unscaled world-unit height — nameplate anchor = height * e.scale + 0.5 */
+  readonly height: number;
+  /** invisible capsule for picking (userData.entityId set by the renderer) */
+  readonly clickProxy: THREE.Mesh;
+
+  private def: VisualDef;
+  private mixer: THREE.AnimationMixer;
+  private actions = new Map<string, THREE.AnimationAction>();
+  private model: THREE.Object3D;
+  private modelWrap = new THREE.Group();
+  private poseWrap = new THREE.Group();
+  private farMesh: THREE.Mesh | null = null;
+  private farMaterials: THREE.Material | THREE.Material[] | null = null;
+  private shadowProxy: THREE.Mesh | null = null;
+  private casters: THREE.Mesh[] = [];
+  private originalMaterials = new Map<THREE.Mesh, THREE.Material | THREE.Material[]>();
+  private ghostMaterials = new Map<THREE.Material, THREE.Material>();
+
+  private baseState: BaseState = 'idle';
+  private current: THREE.AnimationAction | null = null;
+  private currentIsOneShot = false;
+  private deadLock = false;
+  private wasDead = false;
+  private initialized = false;
+  private attackIdx = 0;
+  private hitCooldown = 0;
+  private pendingDt = 0;
+  private swimPitch = 0;
+
+  private shadowOn = true;
+  private far = false;
+  private bobPhase = Math.random() * Math.PI * 2;
+
+  constructor(key: string, entityColor: number) {
+    const prep = prepareVisual(key);
+    this.def = prep.def;
+    this.height = prep.def.height;
+
+    // model: yaw/scale/feet normalization wrapper around the skinned clone
+    this.model = assembleModel(prep.def);
+    applyMaterials(this.model, prep.def, entityColor);
+    this.model.traverse((o) => {
+      const mesh = o as THREE.Mesh;
+      if (mesh.isMesh) this.originalMaterials.set(mesh, mesh.material);
+    });
+    this.modelWrap.rotation.y = prep.def.yaw ?? 0;
+    this.modelWrap.scale.setScalar(prep.normScale);
+    this.modelWrap.position.y = prep.yOffset;
+    this.modelWrap.add(this.model);
+    this.poseWrap.add(this.modelWrap);
+    this.root.add(this.poseWrap);
+
+    this.model.traverse((o) => {
+      const mesh = o as THREE.Mesh;
+      if (!mesh.isMesh) return;
+      mesh.castShadow = true;
+      mesh.receiveShadow = false;
+      // skinned bounds drift outside bind-pose spheres; entity-level culling
+      // (80u draw range) already bounds the cost
+      if ((mesh as unknown as THREE.SkinnedMesh).isSkinnedMesh) mesh.frustumCulled = false;
+      this.casters.push(mesh);
+    });
+
+    // far LOD + shadow proxy share the baked idle-pose geometry per key
+    if (prep.idleGeo) {
+      this.farMesh = new THREE.Mesh(prep.idleGeo, tintedFarMaterials(prep.def, entityColor, prep.idleSrcMats));
+      this.farMaterials = this.farMesh.material;
+      this.farMesh.visible = false;
+      this.poseWrap.add(this.farMesh);
+      if (GFX.tier !== 'low') {
+        this.shadowProxy = new THREE.Mesh(prep.idleGeo, shadowOnlyMat());
+        this.shadowProxy.castShadow = true;
+        this.shadowProxy.visible = false;
+        this.poseWrap.add(this.shadowProxy);
+      }
+    }
+
+    // capsule from measured body extents — long/wide creatures (wolves,
+    // dragons) were nearly unclickable with a height-derived sliver
+    const r = prep.clickRadius;
+    this.clickProxy = new THREE.Mesh(clickGeo(), clickMat());
+    this.clickProxy.scale.set(r * 2, this.height, r * 2);
+    this.clickProxy.visible = false;
+    this.root.add(this.clickProxy);
+
+    this.mixer = new THREE.AnimationMixer(this.model);
+    for (const name of clipNamesOf(prep.def)) {
+      const clip = prep.clips.get(name);
+      if (clip) this.actions.set(name, this.mixer.clipAction(clip));
+    }
+    this.mixer.addEventListener('finished', (ev) => this.onFinished(ev.action));
+
+    const idle = this.action(this.def.clips.idle);
+    if (idle) {
+      idle.play();
+      this.current = idle;
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // Per-frame update
+  // -------------------------------------------------------------------------
+
+  /** `animate=false` skips mixer integration (distance throttling); state
+   *  edges still latch so the pose catches up when the entity nears. */
+  update(dt: number, s: AnimState, animate: boolean): void {
+    this.hitCooldown = Math.max(0, this.hitCooldown - dt);
+
+    // death is a level sim-side — edge-trigger the clip locally
+    if (s.dead && !this.wasDead) this.enterDeath();
+    else if (!s.dead && this.wasDead) this.revive();
+    this.wasDead = s.dead;
+    this.initialized = true;
+
+    if (!this.deadLock) {
+      const desired = this.desiredBase(s);
+      if (desired !== this.baseState) {
+        this.baseState = desired;
+        if (!this.currentIsOneShot) this.fadeTo(this.baseAction(), FADE, false);
+      }
+      // foot-speed matching on locomotion cycles
+      if (!this.currentIsOneShot && this.current) {
+        if (this.baseState === 'walk' || this.baseState === 'walkBack') {
+          this.current.timeScale = clamp(s.speed / (this.def.walkRef ?? DEFAULT_WALK_REF), 0.6, 1.8);
+        } else if (this.baseState === 'run') {
+          this.current.timeScale = clamp(s.speed / (this.def.runRef ?? DEFAULT_RUN_REF), 0.6, 1.6);
+        }
+      }
+    }
+
+    // swim pose: Lie_Idle (when the rig has it) + pitch and surface bob
+    const proneAngle = this.action(this.def.clips.swim) ? SWIM_PITCH_CLIP : SWIM_PITCH_PROCEDURAL;
+    const wantPitch = s.swimming && !s.dead ? proneAngle : 0;
+    this.swimPitch += (wantPitch - this.swimPitch) * Math.min(1, dt * 8);
+    this.poseWrap.rotation.x = this.swimPitch;
+    this.poseWrap.position.y = s.swimming && !s.dead
+      ? SWIM_RISE + Math.sin(performance.now() / 500 + this.bobPhase) * 0.08
+      : 0;
+
+    // distant corpses show the static idle far mesh — tip it over
+    if (this.farMesh && this.farMesh.visible) {
+      if (s.dead) {
+        this.farMesh.rotation.z = Math.PI / 2;
+        this.farMesh.position.y = this.height * 0.16;
+      } else {
+        this.farMesh.rotation.z = 0;
+        this.farMesh.position.y = 0;
+      }
+    }
+
+    this.pendingDt = Math.min(MIXER_DT_CAP, this.pendingDt + dt);
+    if (animate) {
+      this.mixer.update(this.pendingDt);
+      this.pendingDt = 0;
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // One-shot triggers (sim events)
+  // -------------------------------------------------------------------------
+
+  playAttack(): void {
+    if (this.deadLock) return;
+    const clips = this.def.clips.attack;
+    if (clips.length === 0) return;
+    const name = clips[this.attackIdx++ % clips.length];
+    this.playOneShot(name, this.def.attackTimeScale ?? 1.3);
+  }
+
+  playHit(): void {
+    if (this.deadLock || this.currentIsOneShot || this.hitCooldown > 0) return;
+    const clips = this.def.clips.hit;
+    if (!clips || clips.length === 0) return;
+    this.hitCooldown = HIT_REACT_COOLDOWN;
+    this.playOneShot(clips[Math.floor(Math.random() * clips.length)], 1.2);
+  }
+
+  // -------------------------------------------------------------------------
+  // LOD / shadow plumbing (memoized — called every frame by the renderer)
+  // -------------------------------------------------------------------------
+
+  setShadow(on: boolean): void {
+    if (on === this.shadowOn) return;
+    this.shadowOn = on;
+    for (const m of this.casters) m.castShadow = on;
+  }
+
+  setProxyShadow(on: boolean): void {
+    if (this.shadowProxy) this.shadowProxy.visible = on;
+  }
+
+  setFar(far: boolean): void {
+    if (far === this.far) return;
+    this.far = far;
+    this.modelWrap.visible = !far || !this.farMesh;
+    if (this.farMesh) this.farMesh.visible = far;
+  }
+
+  get isFar(): boolean {
+    return this.far;
+  }
+
+  setGhost(on: boolean): void {
+    for (const [mesh, original] of this.originalMaterials) {
+      mesh.material = on ? this.toGhostMaterial(original) : original;
+    }
+    if (this.farMesh && this.farMaterials) {
+      this.farMesh.material = on ? this.toGhostMaterial(this.farMaterials) : this.farMaterials;
+    }
+  }
+
+  dispose(): void {
+    this.mixer.stopAllAction();
+    this.mixer.uncacheRoot(this.model);
+    this.root.removeFromParent();
+    // SkeletonUtils.clone gives each instance exclusive Skeletons whose GPU
+    // bone textures the renderer allocates lazily — release them here or
+    // online interest churn strands one per despawned entity. Geometries and
+    // materials remain shared per-asset caches and are never disposed.
+    const skeletons = new Set<THREE.Skeleton>();
+    this.model.traverse((o) => {
+      const sm = o as THREE.SkinnedMesh;
+      if (sm.isSkinnedMesh && sm.skeleton) skeletons.add(sm.skeleton);
+    });
+    for (const skeleton of skeletons) skeleton.dispose();
+  }
+
+  // -------------------------------------------------------------------------
+  // State machine internals
+  // -------------------------------------------------------------------------
+
+  private desiredBase(s: AnimState): BaseState {
+    if (s.swimming) return 'swim';
+    if (s.casting) return 'cast';
+    if (s.sitting) return 'sit';
+    if (s.moving) {
+      if (s.backwards && this.def.clips.walkBack) return 'walkBack';
+      return s.speed >= RUN_SPEED_THRESHOLD ? 'run' : 'walk';
+    }
+    return 'idle';
+  }
+
+  private toGhostMaterial<T extends THREE.Material | THREE.Material[]>(material: T): T {
+    if (Array.isArray(material)) return material.map((m) => this.ghostMaterial(m)) as T;
+    return this.ghostMaterial(material) as T;
+  }
+
+  private ghostMaterial(material: THREE.Material): THREE.Material {
+    const cached = this.ghostMaterials.get(material);
+    if (cached) return cached;
+    const ghost = material.clone();
+    ghost.transparent = true;
+    ghost.opacity = GHOST_OPACITY;
+    ghost.depthWrite = false;
+    this.ghostMaterials.set(material, ghost);
+    return ghost;
+  }
+
+  private action(name: string | undefined): THREE.AnimationAction | null {
+    return name ? this.actions.get(name) ?? null : null;
+  }
+
+  private baseAction(): THREE.AnimationAction | null {
+    const c = this.def.clips;
+    switch (this.baseState) {
+      case 'walk': return this.action(c.walk) ?? this.action(c.idle);
+      case 'walkBack': return this.action(c.walkBack) ?? this.action(c.walk);
+      case 'run': return this.action(c.run) ?? this.action(c.walk);
+      case 'cast': return this.action(c.cast) ?? this.action(c.idle);
+      case 'swim': return this.action(c.swim) ?? this.action(c.idle);
+      case 'sit': return this.action(c.sitDown) ?? this.action(c.sitIdle) ?? this.action(c.idle);
+      default: return this.action(c.idle);
+    }
+  }
+
+  private fadeTo(next: THREE.AnimationAction | null, fade: number, oneShot: boolean): void {
+    if (!next) return;
+    if (next === this.current && !oneShot) return;
+    const prev = this.current;
+    next.reset();
+    next.setLoop(oneShot || this.isOnce(next) ? THREE.LoopOnce : THREE.LoopRepeat, Infinity);
+    next.clampWhenFinished = true;
+    next.timeScale = 1;
+    if (prev && prev !== next) prev.fadeOut(fade);
+    next.fadeIn(fade).play();
+    this.current = next;
+    this.currentIsOneShot = oneShot;
+  }
+
+  /** sit-down transitions play once, then hand off to the sit-idle loop */
+  private isOnce(a: THREE.AnimationAction): boolean {
+    return this.baseState === 'sit' && a === this.action(this.def.clips.sitDown);
+  }
+
+  private playOneShot(name: string, timeScale: number): void {
+    const a = this.action(name);
+    if (!a) return;
+    const prev = this.current;
+    a.reset();
+    a.setLoop(THREE.LoopOnce, 1);
+    // clamp on the last frame: an unclamped LoopOnce action zeroes its weight
+    // the instant it finishes, which blends the rig toward bind pose for the
+    // whole 0.18s hand-off fade (a visible T-pose pop after every swing)
+    a.clampWhenFinished = true;
+    a.timeScale = timeScale;
+    if (prev && prev !== a) prev.fadeOut(ONESHOT_FADE);
+    a.fadeIn(ONESHOT_FADE).play();
+    this.current = a;
+    this.currentIsOneShot = true;
+  }
+
+  private onFinished(a: THREE.AnimationAction): void {
+    if (this.deadLock) return; // death clip clamps on its last frame
+    if (this.baseState === 'sit' && a === this.action(this.def.clips.sitDown)) {
+      this.fadeTo(this.action(this.def.clips.sitIdle) ?? a, 0.25, false);
+      return;
+    }
+    if (a === this.current) {
+      this.currentIsOneShot = false;
+      this.fadeTo(this.baseAction(), 0.18, false);
+    }
+  }
+
+  private enterDeath(): void {
+    this.deadLock = true;
+    this.currentIsOneShot = false;
+    const death = this.action(this.def.clips.death);
+    if (!death) return;
+    const prev = this.current;
+    death.reset();
+    death.setLoop(THREE.LoopOnce, 1);
+    death.clampWhenFinished = true;
+    death.timeScale = 1.15;
+    if (!this.initialized) {
+      // created already-dead (corpse entering interest): snap to the end pose
+      if (prev && prev !== death) prev.stop();
+      death.play();
+      death.time = Math.max(0, death.getClip().duration - 1e-3);
+      this.current = death;
+      this.mixer.update(0);
+      return;
+    }
+    if (prev && prev !== death) prev.fadeOut(ONESHOT_FADE);
+    death.fadeIn(ONESHOT_FADE).play();
+    this.current = death;
+  }
+
+  private revive(): void {
+    this.deadLock = false;
+    this.baseState = 'idle';
+    const death = this.action(this.def.clips.death);
+    if (death) death.stop();
+    const flourish = this.action(this.def.clips.flourish);
+    if (flourish) {
+      // skeletons claw back out of the ground; bosses taunt
+      this.current = null;
+      this.playOneShot(this.def.clips.flourish!, 1);
+    } else {
+      this.fadeTo(this.action(this.def.clips.idle), 0.2, false);
+    }
+  }
+}
+
+function clipNamesOf(def: VisualDef): string[] {
+  const c = def.clips;
+  return [
+    c.idle, c.walk, c.run, c.death,
+    ...(c.attack ?? []), ...(c.hit ?? []),
+    c.cast, c.sitDown, c.sitIdle, c.swim, c.walkBack, c.flourish,
+  ].filter((n): n is string => !!n);
+}
+
+function clamp(v: number, lo: number, hi: number): number {
+  return Math.min(hi, Math.max(lo, v));
+}
