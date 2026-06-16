@@ -61,7 +61,7 @@ async function main() {
     // Verify Title and Meta Description
     const pageTitle = await page.title();
     console.log(`Page Title: "${pageTitle}"`);
-    if (pageTitle !== 'World of ClaudeCraft: Classic-Style Web MMO') {
+    if (pageTitle !== 'Cryptic Realm: Classic-Style Web MMO') {
       throw new Error(`Unexpected page title: "${pageTitle}"`);
     }
 
@@ -70,7 +70,7 @@ async function main() {
       return meta ? meta.getAttribute('content') : null;
     });
     console.log(`Meta Description: "${metaDescription}"`);
-    if (!metaDescription || !metaDescription.includes('World of ClaudeCraft')) {
+    if (!metaDescription || !metaDescription.includes('Cryptic Realm')) {
       throw new Error(`Unexpected or missing meta description: "${metaDescription}"`);
     }
 

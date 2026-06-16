@@ -487,7 +487,7 @@ export class GameServer {
       cls,
       realm: REALM,
     });
-    this.broadcastSystem(`${name} has entered World of Claudecraft.`);
+    this.broadcastSystem(`${name} has entered Cryptic Realm.`);
     void this.initSocial(session);
     return session;
   }

@@ -1,8 +1,8 @@
-# World of Claudecraft — a WoW-Classic-style MMO
+# Cryptic Realm — a WoW-Classic-style MMO
 
 [Join the community Discord](https://discord.gg/GjhnUsBtw)
 
-![World of Claudecraft title screen](docs/screenshots/title-screen.jpg)
+![Cryptic Realm title screen](docs/screenshots/title-screen.jpg)
 
 A vanilla-WoW-flavored micro-MMO you can host and play:
 
@@ -26,7 +26,7 @@ runs for everyone online.
 
 ![World of Claude](worldofclaude.png)
 
-![World of Claudecraft community](woc_community.png)
+![Cryptic Realm community](woc_community.png)
 
 ---
 

@@ -1,5 +1,5 @@
 #!/bin/bash
-# World of Claudecraft — EC2 first-boot setup (cloud-init user data).
+# Cryptic Realm — EC2 first-boot setup (cloud-init user data).
 #
 # Target: Ubuntu 24.04 LTS arm64 (t4g.small or similar).
 # Fill in the two variables below, then paste this whole file into the
@@ -17,20 +17,20 @@
 # by IP first, set the domain later — see DEPLOY.md).
 DOMAIN=""
 
-# Admin dashboard domain (e.g. "admin.worldofclaudecraft.com"), also with an
+# Admin dashboard domain (e.g. "admin.worldofcryptic-realm.com"), also with an
 # A record at this instance. Leave empty to skip; the dashboard then stays
 # reachable only at /admin on the game site. Access still requires an
 # is_admin account regardless of hostname (see DEPLOY.md).
 ADMIN_DOMAIN=""
 
 # ---------------------------------------------------------------------------
-REPO="https://github.com/levy-street/world-of-claudecraft.git"
+REPO="https://github.com/levy-street/world-of-cryptic-realm.git"
 APP_DIR="/opt/eastbrook"
 BACKUP_DIR="/var/backups/eastbrook"
 
 set -euo pipefail
 exec > >(tee -a /var/log/eastbrook-setup.log) 2>&1
-echo "=== World of Claudecraft setup started: $(date -u) ==="
+echo "=== Cryptic Realm setup started: $(date -u) ==="
 
 # --- swap: builds on a 2 GB instance want the headroom --------------------
 if [ ! -f /swapfile ]; then
@@ -107,6 +107,6 @@ BACKUP
 chmod +x /usr/local/bin/eastbrook-backup
 echo "15 3 * * * root /usr/local/bin/eastbrook-backup" > /etc/cron.d/eastbrook-backup
 
-echo "=== World of Claudecraft setup finished: $(date -u) ==="
+echo "=== Cryptic Realm setup finished: $(date -u) ==="
 echo "Game:   http://localhost:8787 (behind Caddy on ${SITE})"
 echo "Status: $(curl -s --max-time 5 http://localhost:8787/api/status || echo 'not up yet — check: docker compose logs game')"

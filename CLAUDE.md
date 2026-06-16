@@ -1,10 +1,10 @@
-<!-- World of Claudecraft — project-root CLAUDE.md.
+<!-- Cryptic Realm — project-root CLAUDE.md.
      Keep this under ~150 lines and strictly repo-wide. Area-specific guidance
      lives in each subdirectory's own CLAUDE.md (src/sim/, src/render/, server/,
      ...), which load on demand when you open files there — do NOT duplicate
      them here. HTML comments like this are stripped before load (zero tokens). -->
 
-# World of Claudecraft
+# Cryptic Realm
 
 A WoW-Classic-style micro-MMO **and** a headless reinforcement-learning
 environment, both driven by one deterministic TypeScript simulation core.

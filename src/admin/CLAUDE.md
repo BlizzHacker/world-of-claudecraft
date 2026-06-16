@@ -13,7 +13,7 @@ framework — it builds HTML strings and assigns `innerHTML`.
 
 ## Files
 - `main.ts` — entry: auth flow, `refresh*()` fetchers, `wireEvents()` (delegated `data-*` handlers), live (5s) + activity (60s) timers.
-- `api.ts` — fetch wrapper over `/admin/api/*`. `apiLogin/apiGet/apiPost`, `ApiError`, token in `localStorage` (`claudecraft_admin_token`/`_name`).
+- `api.ts` — fetch wrapper over `/admin/api/*`. `apiLogin/apiGet/apiPost`, `ApiError`, token in `localStorage` (`cryptic-realm_admin_token`/`_name`).
 - `types.ts` — TS shapes of every endpoint response (mirrors `server/admin_db.ts` + `server/moderation_db.ts`).
 - `tables.ts` — pure `render*Table`/detail HTML-string functions.
 - `charts.ts` — hand-rolled SVG `barChart` + `chartPanel` (no chart lib).

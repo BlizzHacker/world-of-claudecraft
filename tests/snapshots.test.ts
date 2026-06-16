@@ -320,7 +320,7 @@ describe('chat moderation', () => {
   });
 
   it('caches file-backed censor terms until censor env changes', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'claudecraft-censor-'));
+    const dir = mkdtempSync(join(tmpdir(), 'cryptic-realm-censor-'));
     const firstFile = join(dir, 'first.txt');
     const secondFile = join(dir, 'second.txt');
     writeFileSync(firstFile, 'fileterm\n');
@@ -344,7 +344,7 @@ describe('chat moderation', () => {
   });
 
   it('retries file-backed censor terms after a failed read', () => {
-    const dir = mkdtempSync(join(tmpdir(), 'claudecraft-censor-missing-'));
+    const dir = mkdtempSync(join(tmpdir(), 'cryptic-realm-censor-missing-'));
     const missingFile = join(dir, 'missing.txt');
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
 

@@ -1,4 +1,4 @@
-# AGENTS.md — World of Claudecraft
+# AGENTS.md — Cryptic Realm
 
 Codex reads this file each turn. The repo also has per-area `CLAUDE.md` files
 (`src/`, `src/sim/`, `src/sim/content/`, `src/ui/`, `server/`, `scripts/`, …) with
@@ -25,7 +25,7 @@ fixes applied) and write the verification artifact `tmp/qa-loop/REPORT.md`.
 
 ### Environments
 - PROD — use ONCE for the baseline, then never again (the prod deploy is a human step):
-  https://dev.worldofclaudecraft.com (host idyllic-games-prod; runs the ref at
+  https://dev.worldofcryptic-realm.com (host idyllic-games-prod; runs the ref at
   /opt/eastbrook; dev cheats OFF).
 - LOCAL — the fix loop (assume already running; (re)start as needed):
   - Client http://localhost:5173 (vite; HMR; proxies /api,/admin/api,/ws → :8787).
@@ -67,7 +67,7 @@ the one baseline; records per-scenario PASS/FAIL + evidence into tmp/qa-loop/REP
   - class ∈ warrior|paladin|hunter|rogue|priest|shaman|mage|warlock|druid; ≤10/account.
 - WS: open <ws-base>/ws; first frame {t:'auth',token,character:<id>} → {t:'hello',pid};
   then {t:'snap',self,ents}/{t:'events',list}; send {t:'input',mi,facing} ~20Hz and {t:'cmd',...}.
-  LOCAL <base>=http://localhost:8787 (ws://…); PROD <base>=https://dev.worldofclaudecraft.com (wss://…).
+  LOCAL <base>=http://localhost:8787 (ws://…); PROD <base>=https://dev.worldofcryptic-realm.com (wss://…).
 - Rate limit 20/min/IP on register+login — stagger ~1 per 1–2s; locally prefer dev
   commands / DB seeding over mass registration. Namespace users `qa_<rununix>_<n>`, chars
   `Qa<Role><N>` (letters only). Clean all `qa_*` data up at the end (DELETE /api/characters/{id} or DB).

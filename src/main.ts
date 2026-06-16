@@ -22,7 +22,7 @@ import { hydrateIcons } from './ui/ui_icons';
 import { getLanguage, setLanguage, t, SupportedLanguage } from './ui/i18n';
 
 
-const WORLD_SEED = 20061; // fixed: World of Claudecraft is a persistent place
+const WORLD_SEED = 20061; // fixed: Cryptic Realm is a persistent place
 
 const $ = <T extends HTMLElement = HTMLElement>(sel: string): T => document.querySelector(sel) as T;
 let pendingDeleteCharacter: CharacterSummary | null = null;
@@ -122,7 +122,7 @@ function mobilePreflightCopy(): { detail: string; steps: string[] } {
         ? base
         : [
           'In Safari, tap Share, then Add to Home Screen.',
-          'Open World of Claudecraft from the new Home Screen icon.',
+          'Open Cryptic Realm from the new Home Screen icon.',
           ...base,
         ],
     };
@@ -136,7 +136,7 @@ function mobilePreflightCopy(): { detail: string; steps: string[] } {
         ? base
         : [
           'In Chrome, tap the menu, then Install app or Add to Home screen.',
-          'Open World of Claudecraft from the new icon.',
+          'Open Cryptic Realm from the new icon.',
           ...base,
         ],
     };

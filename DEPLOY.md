@@ -1,157 +1,146 @@
-# Deploying World of Claudecraft on AWS
+# Cryptic Realm — Deploy Plan for crypticrealm.com (LXC 150)
 
-> **Levy Street production** is deployed via Ansible, not this document:
-> the `eastbrook_game` role in the internal `ansible-scripts` repo runs
-> the stack on `idyllic-games-prod` behind nginx + certbot at
-> https://worldofclaudecraft.com. Re-running
-> `ansible-playbook playbooks/setup_server.yml -e target_host=idyllic-games-prod`
-> pulls and redeploys. The guide below is the generic, standalone path.
+## Architecture
 
-One EC2 instance runs everything: the game server, Postgres, and Caddy
-(TLS reverse proxy). Sized for a small population — a `t4g.small`
-(~$14/month all-in) is comfortable for a handful of concurrent players.
+- **Frontend**: Vite static build → `dist/` (181MB)
+- **Backend**: Node.js (esbuild bundled) → `dist-server/server.cjs` on port 8787
+- **Database**: PostgreSQL (required, `DATABASE_URL` env var)
+- **Reverse Proxy**: Traefik on LXC 107 → LXC 150:8787
 
-## 1. Confirm the repo is public
+The server serves BOTH the static files AND the WebSocket/REST API on a single port.
 
-The standalone first-boot script clones
-`https://github.com/levy-street/world-of-claudecraft.git` anonymously. If you
-are deploying a private fork instead, use a deploy key or another secret
-manager-specific flow; do not paste long-lived personal access tokens into EC2
-user data.
+## Prerequisites
 
-## 2. Launch the instance
+1. PostgreSQL running somewhere (LXC 150 or separate DB host)
+2. Traefik config for `crypticrealm.com` → `192.168.0.150:8787`
+3. Node.js 20+ on LXC 150
 
-In the EC2 console:
-
-| Setting | Value |
-|---|---|
-| AMI | Ubuntu Server 24.04 LTS (**arm64**) |
-| Instance type | `t4g.small` (2 vCPU Graviton, 2 GB) |
-| Storage | 20 GB gp3 |
-| Security group | Inbound: **22** (your IP only), **80**, **443** — nothing else |
-| User data | Paste `deploy/user-data.sh` with `DOMAIN` filled in |
-
-Leave `DOMAIN=""` if you want to test by IP first over plain HTTP —
-you can set the domain later (step 4).
-
-Allocate an **Elastic IP** and associate it with the instance so the
-address survives restarts.
-
-The game server and Postgres bind to loopback only (`127.0.0.1:8787` /
-`127.0.0.1:5433`); Caddy is the sole public entrance, so the security
-group above is the whole exposure story.
-
-First boot takes a few minutes (Docker image build). Watch it with:
+## Step 1: Push to GitHub
 
 ```bash
-ssh ubuntu@<elastic-ip> sudo tail -f /var/log/eastbrook-setup.log
+cd /c/MoveWeight/cryptic-realm
+git add -A
+git commit -m "feat: rebrand to Cryptic Realm, add 4-theme system, fix URLs/logos"
+git push origin main
 ```
 
-## 3. Point DNS at it
-
-Create an **A record** for your domain (e.g. `play.example.com`) pointing
-at the Elastic IP. In Route 53: Hosted zone → Create record → A →
-the Elastic IP.
-
-## 4. Turn on TLS (if you started without a domain)
+## Step 2: Server Setup (LXC 150)
 
 ```bash
-ssh ubuntu@<elastic-ip>
-echo 'play.example.com {
-	reverse_proxy localhost:8787
-	encode gzip
-}' | sudo tee /etc/caddy/Caddyfile
-sudo systemctl reload caddy
+ssh root@192.168.0.150
+
+# Create app directory
+mkdir -p /opt/cryptic-realm
+cd /opt/cryptic-realm
+
+# Clone the repo
+git clone https://github.com/BlizzHacker/cryptic-realm.git .
+
+# Install dependencies
+npm install --production=false
+
+# Set environment
+cat > .env <<'EOF'
+DATABASE_URL=postgresql://crypticrealm:PASSWORD_HERE@localhost:5432/crypticrealm
+PORT=8787
+CHAT_LOG_RETENTION_DAYS=90
+NODE_OPTIONS=--max-old-space-size=2048
+EOF
+
+# Build frontend + server
+npm run build
+npm run build:server
 ```
 
-Caddy fetches and renews the Let's Encrypt certificate automatically;
-WebSockets are proxied with no extra config, and the client auto-selects
-`wss://` on https pages. Open `https://play.example.com` and you're live.
-
-## Updating the game
+## Step 3: PostgreSQL
 
 ```bash
-ssh ubuntu@<elastic-ip>
-cd /opt/eastbrook
-sudo git pull
-sudo docker compose up -d --build
+# If PostgreSQL is on LXC 150:
+apt install postgresql postgresql-contrib -y
+sudo -u postgres createuser -P crypticrealm    # set password
+sudo -u postgres createdb -O crypticrealm crypticrealm
 ```
 
-Players online during the restart are disconnected for a few seconds and
-can log straight back in; the server saves all characters on shutdown.
-
-## Backups
-
-A nightly `pg_dump` runs at 03:15 UTC via `/etc/cron.d/eastbrook-backup`,
-writing gzipped dumps to `/var/backups/eastbrook/` and keeping 14 days.
-
-Restore (stack must be up):
+## Step 4: Systemd Service
 
 ```bash
-gunzip -c /var/backups/eastbrook/eastbrook-2026-06-10.sql.gz \
-  | sudo docker exec -i eastbrook-db psql -U eastbrook eastbrook
+cat > /etc/systemd/system/cryptic-realm.service <<'EOF'
+[Unit]
+Description=Cryptic Realm Game Server
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/cryptic-realm
+EnvironmentFile=/opt/cryptic-realm/.env
+ExecStart=/usr/bin/node dist-server/server.cjs
+Restart=always
+RestartSec=5
+User=root
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl enable cryptic-realm
+systemctl start cryptic-realm
+systemctl status cryptic-realm
 ```
 
-For off-box safety, sync the directory to S3 occasionally:
-`aws s3 sync /var/backups/eastbrook s3://your-bucket/eastbrook/`.
-
-## Operational notes
-
-- **Secrets**: the Postgres password is generated at first boot into
-  `/opt/eastbrook/.env` (mode 600, gitignored). Nothing else to manage.
-- **Username bans**: set `USERNAME_BANLIST_FILE=/opt/eastbrook/username-banlist.txt`
-  to load blocked username terms from a private newline- or comma-separated
-  file. `USERNAME_BANLIST` can also provide a comma-separated inline list.
-- **Chat censorship**: set `CHAT_CENSOR_FILE=/opt/eastbrook/chat-censor.txt`
-  to mask configured terms from a private newline- or comma-separated file.
-  `CHAT_CENSOR_LIST` can also provide a comma-separated inline list.
-- **Realms (horizontal scaling)**: each server process serves one realm,
-  set by `REALM_NAME` (default `Claudemoon`). To add a realm, run another
-  process against the **same** `DATABASE_URL` with a different `REALM_NAME`
-  and `PORT` (e.g. behind its own vhost or compose service). Characters,
-  friends, guilds, and presence are realm-scoped, so the worlds are fully
-  isolated — players on different realms can't see, whisper, friend, or
-  guild each other. Concurrent boots serialize their schema setup behind a
-  Postgres advisory lock, so starting several at once is safe. Character and
-  guild names remain globally unique across realms.
-- **Never** set `ALLOW_DEV_COMMANDS=1` in production — it enables the
-  level/teleport cheats used by the test bots.
-- Health check: `curl -s localhost:8787/api/status` on the box returns
-  `{"ok":true,"players_online":N,...}`.
-- Logs: `sudo docker compose -f /opt/eastbrook/docker-compose.yml logs -f game`.
-- If the instance ever feels tight, stop → change instance type →
-  start. Everything lives in Docker plus one EBS volume, so nothing
-  else changes.
-
-## Admin dashboard
-
-The admin dashboard (account/character/session metrics, live players,
-server health) is served by the same game server process:
-
-- **Production**: point `admin.worldofclaudecraft.com` at the instance
-  (A record) and add a server block for it in the nginx config in the
-  internal `ansible-scripts` repo, proxying to the same game port as the
-  main site. The Node server serves the dashboard for any hostname
-  starting with `admin.`.
-- **Standalone/Caddy**: set `ADMIN_DOMAIN` in `deploy/user-data.sh`
-  (or add the extra site block to `/etc/caddy/Caddyfile` by hand).
-- **Local dev**: open `http://localhost:8787/admin` (or `/admin` under
-  `npm run dev`).
-
-Access requires signing in with a game account that has the `is_admin`
-flag. The hostname only selects which HTML shell is served — every
-`/admin/api/*` call is checked against the account flag.
-
-Grant the first admin:
+## Step 5: Traefik Routing (LXC 107)
 
 ```bash
-# locally
-npm run admin:grant -- <username>
+ssh root@192.168.0.107
 
-# on the box (the runtime image only ships bundled code, so use psql)
-sudo docker exec eastbrook-db psql -U eastbrook eastbrook \
-  -c "UPDATE accounts SET is_admin = TRUE WHERE username = '<username>';"
+cat > /etc/traefik/conf.d/crypticrealm.yaml <<'EOF'
+http:
+  routers:
+    crypticrealm:
+      rule: "Host(`crypticrealm.com`) || Host(`www.crypticrealm.com`)"
+      service: crypticrealm
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: cloudflare
+
+  services:
+    crypticrealm:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.150:8787"
+EOF
+
+# Reload Traefik
+systemctl reload traefik
 ```
 
-Revoke with `npm run admin:grant -- <username> --revoke` (or set the
-flag to `FALSE` in SQL).
+## Step 6: Verify
+
+```bash
+# From LXC 150:
+curl -s http://localhost:8787/ | head -5    # should return HTML
+curl -s http://localhost:8787/api/status     # should return JSON
+
+# From outside:
+curl -sI https://crypticrealm.com/           # should return 200
+```
+
+## Step 7: Update Flow
+
+```bash
+# On LXC 150:
+cd /opt/cryptic-realm
+git pull origin main
+npm install
+npm run build
+npm run build:server
+systemctl restart cryptic-realm
+```
+
+## Notes
+
+- The server handles static file serving + WebSocket + REST on ONE port (8787)
+- `NODE_OPTIONS=--max-old-space-size=2048` prevents OOM on the 8GB LXC
+- Static assets are cache-friendly (hashed filenames in dist/assets/)
+- WebSocket upgrades are handled automatically by Traefik's default config

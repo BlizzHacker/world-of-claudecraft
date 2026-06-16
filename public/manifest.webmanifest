@@ -1,7 +1,7 @@
 {
-  "name": "World of Claudecraft",
-  "short_name": "Claudecraft",
-  "description": "World of Claudecraft mobile realm",
+  "name": "Cryptic Realm",
+  "short_name": "Cryptic Realm",
+  "description": "Cryptic Realm mobile realm",
   "start_url": "/",
   "scope": "/",
   "display": "fullscreen",

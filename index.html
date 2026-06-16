@@ -6,48 +6,48 @@
 <meta name="theme-color" content="#050509" />
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-title" content="Claudecraft" />
+<meta name="apple-mobile-web-app-title" content="Cryptic Realm" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="screen-orientation" content="landscape" />
 <meta name="orientation" content="landscape" />
-<title>World of ClaudeCraft: Classic-Style Web MMO</title>
-<meta name="description" content="Embark on an epic adventure in World of ClaudeCraft, a WoW-Classic-style micro-MMO playable directly in your browser. Join a persistent shared realm, level up classes, and defeat enemies!" />
+<title>Cryptic Realm: Classic-Style Web MMO</title>
+<meta name="description" content="Embark on an epic adventure in Cryptic Realm, a WoW-Classic-style micro-MMO playable directly in your browser. Join a persistent shared realm, level up classes, and defeat enemies!" />
 <link rel="manifest" href="/manifest.webmanifest" />
 
 <!-- Canonical URL -->
-<link rel="canonical" href="https://worldofclaudecraft.com/" />
+<link rel="canonical" href="https://crypticrealm.com/" />
 
 <!-- GEO / Multilingual Alternates -->
-<link rel="alternate" hreflang="en" href="https://worldofclaudecraft.com/" />
-<link rel="alternate" hreflang="es" href="https://worldofclaudecraft.com/?lang=es" />
-<link rel="alternate" hreflang="x-default" href="https://worldofclaudecraft.com/" />
+<link rel="alternate" hreflang="en" href="https://crypticrealm.com/" />
+<link rel="alternate" hreflang="es" href="https://crypticrealm.com/?lang=es" />
+<link rel="alternate" hreflang="x-default" href="https://crypticrealm.com/" />
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website" />
-<meta property="og:title" content="World of ClaudeCraft: Classic-Style Web MMO" />
-<meta property="og:description" content="Embark on an epic adventure in World of ClaudeCraft, a WoW-Classic-style micro-MMO playable directly in your browser. Join a persistent shared realm, level up classes, and defeat enemies!" />
-<meta property="og:image" content="https://worldofclaudecraft.com/woc_logo_square.webp" />
-<meta property="og:url" content="https://worldofclaudecraft.com/" />
+<meta property="og:title" content="Cryptic Realm: Classic-Style Web MMO" />
+<meta property="og:description" content="Embark on an epic adventure in Cryptic Realm, a WoW-Classic-style micro-MMO playable directly in your browser. Join a persistent shared realm, level up classes, and defeat enemies!" />
+<meta property="og:image" content="https://crypticrealm.com/cr_logo_square.webp" />
+<meta property="og:url" content="https://crypticrealm.com/" />
 
 <!-- Twitter / X -->
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="World of ClaudeCraft: Classic-Style Web MMO" />
-<meta name="twitter:description" content="Embark on an epic adventure in World of ClaudeCraft, a WoW-Classic-style micro-MMO playable directly in your browser. Join a persistent shared realm, level up classes, and defeat enemies!" />
-<meta name="twitter:image" content="https://worldofclaudecraft.com/woc_logo_square.webp" />
+<meta name="twitter:title" content="Cryptic Realm: Classic-Style Web MMO" />
+<meta name="twitter:description" content="Embark on an epic adventure in Cryptic Realm, a WoW-Classic-style micro-MMO playable directly in your browser. Join a persistent shared realm, level up classes, and defeat enemies!" />
+<meta name="twitter:image" content="https://crypticrealm.com/cr_logo_square.webp" />
 
 <!-- Structured Data (Schema.org JSON-LD VideoGame) -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "VideoGame",
-  "name": "World of ClaudeCraft",
+  "name": "Cryptic Realm",
   "genre": "MMORPG",
   "playMode": "MultiPlayer",
   "applicationCategory": "Game",
   "operatingSystem": "Web Browser",
-  "url": "https://worldofclaudecraft.com/",
-  "image": "https://worldofclaudecraft.com/woc_logo_square.webp",
-  "description": "Embark on an epic adventure in World of ClaudeCraft, a WoW-Classic-style micro-MMO playable directly in your browser. Join a persistent shared realm, level up classes, and defeat enemies!"
+  "url": "https://crypticrealm.com/",
+  "image": "https://crypticrealm.com/cr_logo_square.webp",
+  "description": "Embark on an epic adventure in Cryptic Realm, a WoW-Classic-style micro-MMO playable directly in your browser. Join a persistent shared realm, level up classes, and defeat enemies!"
 }
 </script>
 
@@ -76,11 +76,76 @@
   }
 </script>
 <style>
+  /* ===== THEME: Classic Realm (default gold) ===== */
+  :root, [data-theme="classic"] {
+    --theme-accent: #ffd100;
+    --theme-accent-dim: #c8a838;
+    --theme-accent-glow: rgba(255, 209, 0, 0.2);
+    --theme-accent-glow-heavy: rgba(255, 209, 0, 0.4);
+    --theme-border: #4e3d1d;
+    --theme-border-focus: #c8a838;
+    --theme-border-base: #6f5a2a;
+    --theme-panel-bg: linear-gradient(170deg, #15151fF2 0%, #0b0b12F2 60%, #08080dF2 100%);
+    --theme-header-bg: linear-gradient(180deg, rgba(28, 24, 16, 0.98) 0%, rgba(11, 11, 18, 0.95) 100%);
+    --theme-scrollbar-thumb: #5c4722;
+    --theme-scrollbar-hover: #7c6233;
+    --theme-bg-tint: #08080d;
+  }
+
+  /* ===== THEME: Infernal (crimson/fire) ===== */
+  [data-theme="infernal"] {
+    --theme-accent: #ff4422;
+    --theme-accent-dim: #c83818;
+    --theme-accent-glow: rgba(255, 68, 34, 0.2);
+    --theme-accent-glow-heavy: rgba(255, 68, 34, 0.45);
+    --theme-border: #4e1d1d;
+    --theme-border-focus: #c84838;
+    --theme-border-base: #6f2a2a;
+    --theme-panel-bg: linear-gradient(170deg, #1f1212F2 0%, #120808F2 60%, #0d0505F2 100%);
+    --theme-header-bg: linear-gradient(180deg, rgba(38, 16, 16, 0.98) 0%, rgba(18, 8, 8, 0.95) 100%);
+    --theme-scrollbar-thumb: #5c2222;
+    --theme-scrollbar-hover: #7c3333;
+    --theme-bg-tint: #0d0505;
+  }
+
+  /* ===== THEME: Dominion Frontier (steel blue/ice) ===== */
+  [data-theme="dominion"] {
+    --theme-accent: #4aa8ff;
+    --theme-accent-dim: #3878c8;
+    --theme-accent-glow: rgba(74, 168, 255, 0.2);
+    --theme-accent-glow-heavy: rgba(74, 168, 255, 0.4);
+    --theme-border: #1d3a4e;
+    --theme-border-focus: #3888c8;
+    --theme-border-base: #2a4a6f;
+    --theme-panel-bg: linear-gradient(170deg, #0f1820F2 0%, #080e18F2 60%, #05080dF2 100%);
+    --theme-header-bg: linear-gradient(180deg, rgba(16, 24, 38, 0.98) 0%, rgba(8, 11, 18, 0.95) 100%);
+    --theme-scrollbar-thumb: #22485c;
+    --theme-scrollbar-hover: #33607c;
+    --theme-bg-tint: #05080d;
+  }
+
+  /* ===== THEME: Arcane Void (cosmic purple) ===== */
+  [data-theme="arcane"] {
+    --theme-accent: #c84fff;
+    --theme-accent-dim: #9838c8;
+    --theme-accent-glow: rgba(200, 79, 255, 0.2);
+    --theme-accent-glow-heavy: rgba(200, 79, 255, 0.45);
+    --theme-border: #3a1d4e;
+    --theme-border-focus: #9838c8;
+    --theme-border-base: #5a2a6f;
+    --theme-panel-bg: linear-gradient(170deg, #18101fF2 0%, #0e0812F2 60%, #0a050dF2 100%);
+    --theme-header-bg: linear-gradient(180deg, rgba(28, 16, 38, 0.98) 0%, rgba(14, 8, 18, 0.95) 100%);
+    --theme-scrollbar-thumb: #48225c;
+    --theme-scrollbar-hover: #60337c;
+    --theme-bg-tint: #0a050d;
+  }
+
+  /* Wire theme variables into the design-token layer */
   :root {
-    --gold: #ffd100;
-    --gold-dim: #c8a838;
-    --border: #6f5a2a;
-    --panel-bg: linear-gradient(170deg, #15151fF2 0%, #0b0b12F2 60%, #08080dF2 100%);
+    --gold: var(--theme-accent, #ffd100);
+    --gold-dim: var(--theme-accent-dim, #c8a838);
+    --border: var(--theme-border-base, #6f5a2a);
+    --panel-bg: var(--theme-panel-bg, linear-gradient(170deg, #15151fF2 0%, #0b0b12F2 60%, #08080dF2 100%));
     /* Typography — Cinzel (heraldic display/headings), Alegreya Sans (UI + body),
        Alegreya (serif flavour prose). Legacy token names alias the canonical set
        so every existing usage resolves to the new system. */
@@ -96,8 +161,8 @@
     /* --gold is the single source of truth for the primary accent */
     --color-primary: var(--gold);
     --color-primary-dim: var(--gold-dim);
-    --color-primary-glow: rgba(255, 209, 0, 0.2);
-    --color-primary-glow-heavy: rgba(255, 209, 0, 0.4);
+    --color-primary-glow: var(--theme-accent-glow, rgba(255, 209, 0, 0.2));
+    --color-primary-glow-heavy: var(--theme-accent-glow-heavy, rgba(255, 209, 0, 0.4));
 
     /* resource bars / unit-frame states / auras (previously hardcoded across CSS + JS) */
     --color-hp: #1eb838;
@@ -109,10 +174,10 @@
     --color-buff: #3a6ea8;
     --color-debuff: #c0392b;
     
-    --color-bg-dark: #08080d;
+    --color-bg-dark: var(--theme-bg-tint, #08080d);
     --color-bg-input: #0a0a0f;
-    --color-border-default: #4e3d1d;
-    --color-border-focus: #c8a838;
+    --color-border-default: var(--theme-border, #4e3d1d);
+    --color-border-focus: var(--theme-border-focus, #c8a838);
     --color-border-invalid: #ff8f85;
     --color-border-valid: #48e060;
     
@@ -133,10 +198,10 @@
     --transition-ease: cubic-bezier(0.4, 0, 0.2, 1);
 
     /* Custom scrollbar tokens */
-    --scrollbar-thumb: #5c4722;
+    --scrollbar-thumb: var(--theme-scrollbar-thumb, #5c4722);
     --scrollbar-track: rgba(10, 10, 15, 0.7);
-    --scrollbar-thumb-hover: #7c6233;
-    --scrollbar-border: #7c6233;
+    --scrollbar-thumb-hover: var(--theme-scrollbar-hover, #7c6233);
+    --scrollbar-border: var(--theme-scrollbar-hover, #7c6233);
     --app-vw: 100vw;
     --app-vh: 100vh;
     /* Shared with src/game/cursors.ts — keep hotspots in sync. */
@@ -965,9 +1030,10 @@
   /* Global Header Styling */
   .homepage-header {
     width: 100%;
-    background: linear-gradient(180deg, rgba(28, 24, 16, 0.98) 0%, rgba(11, 11, 18, 0.95) 100%);
+    background: var(--theme-header-bg, linear-gradient(180deg, rgba(28, 24, 16, 0.98) 0%, rgba(11, 11, 18, 0.95) 100%));
     border-bottom: 2px solid transparent;
     border-image: linear-gradient(to right, rgba(78, 61, 29, 0.2), var(--color-primary-dim), rgba(78, 61, 29, 0.2)) 1;
+    transition: background 0.4s ease, border-color 0.4s ease;
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
@@ -1181,6 +1247,97 @@
     outline: none;
   }
   .donate-cta svg { width: 16px; height: 16px; display: block; }
+
+  /* ===== Theme Picker ===== */
+  .theme-picker {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+  .theme-picker-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border-default);
+    background: rgba(255,255,255,0.04);
+    color: var(--color-text-muted);
+    font-family: var(--font-ui);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+  .theme-picker-btn:hover {
+    border-color: var(--color-primary-dim);
+    color: var(--color-text-light);
+    background: rgba(255,255,255,0.07);
+  }
+  .theme-picker-btn svg {
+    width: 14px; height: 14px;
+    fill: currentColor;
+  }
+  .theme-swatch {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    box-shadow: 0 0 6px var(--color-primary-glow);
+    flex-shrink: 0;
+  }
+  .theme-picker-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 180px;
+    background: var(--panel-bg);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-md);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.7);
+    padding: 6px;
+    z-index: 999;
+    display: none;
+    backdrop-filter: blur(12px);
+  }
+  .theme-picker-dropdown.open { display: block; }
+  .theme-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 8px 12px;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--color-text-muted);
+    font-family: var(--font-ui);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-align: left;
+  }
+  .theme-option:hover {
+    background: rgba(255,255,255,0.06);
+    color: var(--color-text-light);
+  }
+  .theme-option.active {
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+  .theme-option .theme-dot {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.15);
+    flex-shrink: 0;
+  }
+  .theme-option.active .theme-dot {
+    border-color: currentColor;
+    box-shadow: 0 0 8px currentColor;
+  }
+  .theme-dot-classic { background: #ffd100; }
+  .theme-dot-infernal { background: #ff4422; }
+  .theme-dot-dominion { background: #4aa8ff; }
+  .theme-dot-arcane { background: #c84fff; }
 
   /* Footer donate link keeps the social-link shape but warms up on hover. */
   .footer-lang-row { display: flex; justify-content: center; }
@@ -3576,11 +3733,11 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.32 4.37A19.8 19.8 0 0 0 15.36 2.8a13.66 13.66 0 0 0-.64 1.32 18.47 18.47 0 0 0-5.45 0 13.02 13.02 0 0 0-.65-1.32 19.73 19.73 0 0 0-4.96 1.58C.53 9.03-.32 13.56.1 18.02a19.9 19.9 0 0 0 6.08 3.08c.49-.67.93-1.38 1.3-2.13-.72-.27-1.41-.6-2.06-.98.17-.13.34-.26.5-.4a14.16 14.16 0 0 0 12.16 0c.16.14.33.27.5.4-.65.39-1.34.72-2.07.99.38.74.81 1.45 1.31 2.12a19.86 19.86 0 0 0 6.08-3.08c.5-5.17-.85-9.66-3.58-13.65ZM8.02 15.28c-1.18 0-2.15-1.08-2.15-2.41 0-1.33.95-2.42 2.15-2.42 1.2 0 2.17 1.1 2.15 2.42 0 1.33-.95 2.41-2.15 2.41Zm7.96 0c-1.18 0-2.15-1.08-2.15-2.41 0-1.33.95-2.42 2.15-2.42 1.2 0 2.17 1.1 2.15 2.42 0 1.33-.95 2.41-2.15 2.41Z"/></svg>
         <span>Discord</span>
       </a>
-      <a class="community-link github" href="https://github.com/levy-street/world-of-claudecraft" target="_blank" rel="noopener noreferrer" title="View GitHub" aria-label="View World of ClaudeCraft on GitHub">
+      <a class="community-link github" href="https://github.com/BlizzHacker/cryptic-realm" target="_blank" rel="noopener noreferrer" title="View GitHub" aria-label="View Cryptic Realm on GitHub">
         <svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
         <span>GitHub</span>
       </a>
-      <a class="community-link donate" href="https://github.com/sponsors/levy-street" target="_blank" rel="noopener noreferrer" title="Support the project" aria-label="Donate to support World of ClaudeCraft">
+      <a class="community-link donate" href="https://github.com/sponsors/BlizzHacker" target="_blank" rel="noopener noreferrer" title="Support the project" aria-label="Donate to support Cryptic Realm">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
         <span>Donate</span>
       </a>
@@ -3697,7 +3854,7 @@
     <header class="homepage-header">
       <div class="header-logo-container">
         <button type="button" class="header-logo-btn" id="header-logo-btn" aria-label="Go to Homepage" title="Go to Homepage">
-          <img class="header-logo" src="/icon-192.png" alt="World of ClaudeCraft" />
+          <img class="header-logo" src="/icon-192.png" alt="Cryptic Realm" />
         </button>
       </div>
       
@@ -3732,7 +3889,28 @@
         </nav>
 
         <div class="header-actions">
-          <a class="donate-cta" href="https://github.com/sponsors/levy-street" target="_blank" rel="noopener noreferrer" title="Support the project" aria-label="Donate to support World of ClaudeCraft">
+          <div class="theme-picker" id="theme-picker">
+            <button class="theme-picker-btn" id="theme-picker-btn" aria-label="Change theme" aria-expanded="false" title="Change Theme">
+              <span class="theme-swatch"></span>
+              <span>Theme</span>
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+            </button>
+            <div class="theme-picker-dropdown" id="theme-dropdown" role="listbox" aria-label="Select theme">
+              <button class="theme-option active" data-theme="classic" role="option" aria-selected="true">
+                <span class="theme-dot theme-dot-classic"></span> Classic Realm
+              </button>
+              <button class="theme-option" data-theme="infernal" role="option" aria-selected="false">
+                <span class="theme-dot theme-dot-infernal"></span> Infernal
+              </button>
+              <button class="theme-option" data-theme="dominion" role="option" aria-selected="false">
+                <span class="theme-dot theme-dot-dominion"></span> Dominion Frontier
+              </button>
+              <button class="theme-option" data-theme="arcane" role="option" aria-selected="false">
+                <span class="theme-dot theme-dot-arcane"></span> Arcane Void
+              </button>
+            </div>
+          </div>
+          <a class="donate-cta" href="https://github.com/sponsors/BlizzHacker" target="_blank" rel="noopener noreferrer" title="Support the project" aria-label="Donate to support Cryptic Realm">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
             <span>Donate</span>
           </a>
@@ -3742,10 +3920,10 @@
 
     <div id="homepage-views-container">
       <section id="hero-view" class="view-section" aria-hidden="false">
-        <h1 class="visually-hidden">World of ClaudeCraft</h1>
+        <h1 class="visually-hidden">Cryptic Realm</h1>
         
         <!-- Main Logo -->
-        <img class="main-logo" id="title-logo" src="/worldofclaudecraft-logo.png" alt="World of ClaudeCraft" />
+        <img class="main-logo" id="title-logo" src="/crypticrealm-logo.png" alt="Cryptic Realm" />
 
         <!-- Project Stats Panel (Realm Status, accounts, players, realm name) -->
         <div id="project-stats-panel" class="panel stats-panel-premium">
@@ -4033,7 +4211,7 @@
 
     <footer class="homepage-footer">
       <div class="footer-social-row">
-        <a class="social-link" href="https://github.com/levy-street/world-of-claudecraft" target="_blank" rel="noopener noreferrer">
+        <a class="social-link" href="https://github.com/BlizzHacker/cryptic-realm" target="_blank" rel="noopener noreferrer">
           <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
           <span data-i18n="footer.githubLabel">Open Source Project</span>
         </a>
@@ -4041,7 +4219,7 @@
           <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M20.32 4.37A19.8 19.8 0 0 0 15.36 2.8a13.66 13.66 0 0 0-.64 1.32 18.47 18.47 0 0 0-5.45 0 13.02 13.02 0 0 0-.65-1.32 19.73 19.73 0 0 0-4.96 1.58C.53 9.03-.32 13.56.1 18.02a19.9 19.9 0 0 0 6.08 3.08c.49-.67.93-1.38 1.3-2.13-.72-.27-1.41-.6-2.06-.98.17-.13.34-.26.5-.4a14.16 14.16 0 0 0 12.16 0c.16.14.33.27.5.4-.65.39-1.34.72-2.07.99.38.74.81 1.45 1.31 2.12a19.86 19.86 0 0 0 6.08-3.08c.5-5.17-.85-9.66-3.58-13.65ZM8.02 15.28c-1.18 0-2.15-1.08-2.15-2.41 0-1.33.95-2.42 2.15-2.42 1.2 0 2.17 1.1 2.15 2.42 0 1.33-.95 2.41-2.15 2.41Zm7.96 0c-1.18 0-2.15-1.08-2.15-2.41 0-1.33.95-2.42 2.15-2.42 1.2 0 2.17 1.1 2.15 2.42 0 1.33-.95 2.41-2.15 2.41Z"/></svg>
           <span data-i18n="footer.discordLabel">Join the Discord</span>
         </a>
-        <a class="social-link donate" href="https://github.com/sponsors/levy-street" target="_blank" rel="noopener noreferrer" title="Support the project" aria-label="Donate to support World of ClaudeCraft">
+        <a class="social-link donate" href="https://github.com/sponsors/BlizzHacker" target="_blank" rel="noopener noreferrer" title="Support the project" aria-label="Donate to support Cryptic Realm">
           <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
           <span>Donate</span>
         </a>
@@ -4068,7 +4246,7 @@
         </div>
       </div>
       <div class="footer-text-row">
-        <span data-i18n="footer.copyright">2026 World of ClaudeCraft</span>
+        <span data-i18n="footer.copyright">2026 Cryptic Realm</span>
       </div>
       <div id="game-version">v0.6.0</div>
     </footer>
@@ -4118,13 +4296,72 @@
   </div>
 
   <div id="loading-screen">
-    <img class="ls-logo" src="/worldofclaudecraft-logo.png" alt="World of ClaudeCraft" />
+    <img class="ls-logo" src="/crypticrealm-logo.png" alt="Cryptic Realm" />
     <div class="ls-progress">
       <div class="ls-bar"><div id="ls-fill"></div></div>
       <div id="ls-status">Entering the world&hellip;</div>
     </div>
   </div>
 
+  <script>
+    /* ===== Theme Picker — runs before module load to prevent FOUC ===== */
+    (function() {
+      var STORAGE_KEY = 'cryptic-realm-theme';
+      var valid = ['classic', 'infernal', 'dominion', 'arcane'];
+      var saved = 'classic';
+      try { saved = localStorage.getItem(STORAGE_KEY) || 'classic'; } catch(e) {}
+      if (valid.indexOf(saved) === -1) saved = 'classic';
+      if (saved !== 'classic') document.documentElement.setAttribute('data-theme', saved);
+
+      document.addEventListener('DOMContentLoaded', function() {
+        var btn = document.getElementById('theme-picker-btn');
+        var dropdown = document.getElementById('theme-dropdown');
+        if (!btn || !dropdown) return;
+
+        // Mark active option
+        dropdown.querySelectorAll('.theme-option').forEach(function(opt) {
+          var isActive = opt.getAttribute('data-theme') === saved;
+          opt.classList.toggle('active', isActive);
+          opt.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
+
+        // Toggle dropdown
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var isOpen = dropdown.classList.toggle('open');
+          btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        });
+
+        // Close on outside click
+        document.addEventListener('click', function() {
+          dropdown.classList.remove('open');
+          btn.setAttribute('aria-expanded', 'false');
+        });
+        dropdown.addEventListener('click', function(e) { e.stopPropagation(); });
+
+        // Theme selection
+        dropdown.querySelectorAll('.theme-option').forEach(function(opt) {
+          opt.addEventListener('click', function() {
+            var theme = this.getAttribute('data-theme');
+            if (theme === 'classic') {
+              document.documentElement.removeAttribute('data-theme');
+            } else {
+              document.documentElement.setAttribute('data-theme', theme);
+            }
+            try { localStorage.setItem(STORAGE_KEY, theme); } catch(e) {}
+            // Update active states
+            dropdown.querySelectorAll('.theme-option').forEach(function(o) {
+              var isActive = o.getAttribute('data-theme') === theme;
+              o.classList.toggle('active', isActive);
+              o.setAttribute('aria-selected', isActive ? 'true' : 'false');
+            });
+            dropdown.classList.remove('open');
+            btn.setAttribute('aria-expanded', 'false');
+          });
+        });
+      });
+    })();
+  </script>
   <script type="module" src="/src/main.ts"></script>
 </body>
 </html>

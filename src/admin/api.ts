@@ -1,8 +1,8 @@
 // Thin fetch wrapper around the /admin/api endpoints. All responses use the
 // { success, data, error } envelope.
 
-const TOKEN_KEY = 'claudecraft_admin_token';
-const NAME_KEY = 'claudecraft_admin_name';
+const TOKEN_KEY = 'cryptic-realm_admin_token';
+const NAME_KEY = 'cryptic-realm_admin_name';
 
 export class ApiError extends Error {
   constructor(public status: number, message: string) {

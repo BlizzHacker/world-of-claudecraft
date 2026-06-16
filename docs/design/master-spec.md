@@ -1,4 +1,4 @@
-# FINAL MASTER DESIGN SPEC — World of Claudecraft Expansion (Levels 6–20)
+# FINAL MASTER DESIGN SPEC — Cryptic Realm Expansion (Levels 6–20)
 
 Synthesized directly from the WORLD_BRIEF and the three judge verdicts (no designer text survived; this document IS the design). All XP math recomputed against `src/sim/types.ts` (`XP_TABLE`, `mobXpValue`, `zeroDiff`, `GROUP_XP_BONUS`): XP 6→13 = 46,500; 13→20 = 113,100; kill XP = 45+5×mobLevel at level; elite ×2; dungeon per-member XP = mobXp × 2 × 1.43 / 5 = 0.572× solo (dungeons are loot/story events, NOT XP soaks); 1.6× overshoot applied to quest-required kills only. All ids snake_case, collision-checked against `src/sim/data.ts` @ 2d05cc2. Companion specs (ability ranks 1–20, procedural icons, graphics tiers) already exist in `wf_0c329a02-def/journal.jsonl` — referenced in §7, not regenerated.
 

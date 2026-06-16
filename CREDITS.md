@@ -1,4 +1,12 @@
-# Third-Party Asset Credits
+# Cryptic Realm — Credits
+
+## Foundation
+Forked from [World of Claudecraft](https://github.com/levy-street/world-of-claudecraft) (MIT)
+by levy-street. Their excellent WoW-Classic micro-MMO architecture, Three.js renderer,
+game systems, and asset pipeline form the backbone of this project.
+Upstream contributions are credited and periodically merged where applicable.
+
+## Third-Party Asset Credits
 
 All bundled art assets are CC0 (public domain dedication) except the three.js
 water normal maps (MIT). Attribution is provided as a courtesy — thank you to

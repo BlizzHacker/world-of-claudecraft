@@ -1,4 +1,4 @@
-"""Gymnasium environment wrapping the headless World of Claudecraft sim.
+"""Gymnasium environment wrapping the headless Cryptic Realm sim.
 
 The heavy lifting happens in a Node subprocess running the deterministic
 TypeScript simulation (the same code the playable browser build uses).
@@ -36,7 +36,7 @@ _DEFAULT_SERVER = os.path.join(_HERE, "..", "dist-env", "env_server.cjs")
 
 
 class WoWClassicEnv(gym.Env):
-    """Single-agent World of Claudecraft environment.
+    """Single-agent Cryptic Realm environment.
 
     Observation: float32 vector (self, abilities, target, nearby mobs,
     nearest interactable, quest states). Action: Discrete(23) —

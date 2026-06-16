@@ -1,4 +1,4 @@
-# World of Claudecraft — Graphics Overhaul Implementation Plan ("Minecraft → UE5 showcase")
+# Cryptic Realm — Graphics Overhaul Implementation Plan ("Minecraft → UE5 showcase")
 
 Target: three@0.165 (confirmed; GTAOPass/SSAOPass/SMAAPass/UnrealBloomPass/OutputPass/FXAAShader/VignetteShader all present in `node_modules/three/examples/jsm/`), fully procedural, 60fps on a decent laptop, `?lowgfx` stays playable. Current renderer is a single forward pass, Lambert everywhere, vertex-colored 440-seg terrain, Phong water, canvas sky dome.
 

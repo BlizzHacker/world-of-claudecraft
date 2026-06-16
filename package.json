@@ -1,10 +1,10 @@
 {
-  "name": "world-of-claudecraft",
+  "name": "cryptic-realm",
   "version": "0.6.0",
   "private": true,
   "license": "MIT",
   "type": "module",
-  "description": "World of Claudecraft — a WoW-Classic-style micro-MMO + headless RL training environment",
+  "description": "Cryptic Realm — a WoW-Classic-style micro-MMO + headless RL training environment",
   "scripts": {
     "dev": "vite",
     "build": "node scripts/build_media_manifest.mjs generate && vite build && node scripts/build_media_manifest.mjs emit",

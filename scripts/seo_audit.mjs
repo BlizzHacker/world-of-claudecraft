@@ -8,7 +8,7 @@ const __dirname = path.dirname(__filename);
 const indexPath = path.resolve(__dirname, '../index.html');
 
 function audit() {
-  console.log('--- World of ClaudeCraft: Local SEO & A11y Audit ---');
+  console.log('--- Cryptic Realm: Local SEO & A11y Audit ---');
   if (!fs.existsSync(indexPath)) {
     console.error(`Error: index.html not found at ${indexPath}`);
     process.exit(1);
@@ -180,20 +180,20 @@ function audit() {
   });
 
   // 8. Canonical Link Check
-  const hasCanonical = html.includes('rel="canonical"') && html.includes('href="https://worldofclaudecraft.com/"');
+  const hasCanonical = html.includes('rel="canonical"') && html.includes('href="https://worldofcryptic-realm.com/"');
   checks.push({
     category: 'SEO',
     name: 'Canonical link tag is present and correct',
     passed: hasCanonical,
     score: hasCanonical ? 10 : 0,
     maxScore: 10,
-    details: hasCanonical ? 'Found rel="canonical" pointing to worldofclaudecraft.com.' : 'Missing rel="canonical" link tag.'
+    details: hasCanonical ? 'Found rel="canonical" pointing to worldofcryptic-realm.com.' : 'Missing rel="canonical" link tag.'
   });
 
   // 9. GEO / hreflang alternates Check
-  const hasEnAlt = html.includes('hreflang="en"') && html.includes('href="https://worldofclaudecraft.com/"');
-  const hasEsAlt = html.includes('hreflang="es"') && html.includes('href="https://worldofclaudecraft.com/?lang=es"');
-  const hasDefaultAlt = html.includes('hreflang="x-default"') && html.includes('href="https://worldofclaudecraft.com/"');
+  const hasEnAlt = html.includes('hreflang="en"') && html.includes('href="https://worldofcryptic-realm.com/"');
+  const hasEsAlt = html.includes('hreflang="es"') && html.includes('href="https://worldofcryptic-realm.com/?lang=es"');
+  const hasDefaultAlt = html.includes('hreflang="x-default"') && html.includes('href="https://worldofcryptic-realm.com/"');
   const hasAllAlternates = hasEnAlt && hasEsAlt && hasDefaultAlt;
   checks.push({
     category: 'SEO/GEO',
