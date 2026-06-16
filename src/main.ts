@@ -30,6 +30,7 @@ import { updateFollowCameraYaw, wrapAngle } from './game/camera_follow';
 // `<div id="theme-picker">` block.
 import { mountThemeSelect } from './ui/cryptic/theme_select';
 import { mountHudGlobes, setHudSkin, resolveHudSkin } from './ui/cryptic/globes';
+import { mountFpsMode, resolveFpsMode, setFpsMode } from './ui/cryptic/fps_mode';
 
 
 const WORLD_SEED = 20061; // fixed: Cryptic Realm is a persistent place
@@ -185,6 +186,7 @@ if (typeof document !== 'undefined') {
     mountThemeSelect();
     mountHudGlobes();
     mountHudSkinToggle();
+    mountFpsToggle();
   };
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', boot);
@@ -209,6 +211,36 @@ function mountHudSkinToggle(): void {
     const next = resolveHudSkin() === 'globes' ? 'classic' : 'globes';
     setHudSkin(next);
     render();
+  });
+}
+
+// FPS toggle button can render at boot — before the Input instance exists.
+// On click it dispatches `cr-fps-toggle` on window. If mountFpsMode() has
+// already run, its listener flips camera fields; otherwise the click just
+// persists to localStorage and mountFpsMode() applies it when the world boots.
+function mountFpsToggle(): void {
+  const host = document.getElementById('fps-toggle');
+  if (!host) return;
+  const render = () => {
+    const mode = resolveFpsMode();
+    host.innerHTML = `<button type="button" class="cr-fps-btn" aria-pressed="${mode === 'on'}" title="Toggle first-person view (V)">
+      <span aria-hidden="true">${mode === 'on' ? '◎' : '◇'}</span>
+      <span>${mode === 'on' ? 'FPS' : '3rd'}</span>
+    </button>`;
+  };
+  render();
+  host.addEventListener('click', (ev) => {
+    if (!(ev.target as HTMLElement).closest('.cr-fps-btn')) return;
+    const next = resolveFpsMode() === 'on' ? 'off' : 'on';
+    // Persist eagerly so a pre-boot click survives into mountFpsMode().
+    try { window.localStorage?.setItem('cr_fps_mode', next); } catch { /* noop */ }
+    window.dispatchEvent(new CustomEvent('cr-fps-toggle'));
+    render();
+  });
+  // Keep the button label in sync when toggled via V keybind.
+  window.addEventListener('cr-fps-toggle', render);
+  window.addEventListener('storage', (ev) => {
+    if (ev.key === 'cr_fps_mode') render();
   });
 }
 
@@ -623,6 +655,9 @@ async function startGame(world: IWorld, offlineSim: Sim | null, online: ClientWo
     canUseGameKeys: () => !hud.isModalOpen() && chatInput.style.display !== 'block',
   }, keybinds);
   input.camYaw = world.player.facing;
+  // CR overlay: wire optional first-person camera & reticle to the input
+  // instance. Mutates only input.camDist / camPitch when toggled (V key).
+  mountFpsMode(input);
 
   const mobileControls = new MobileControls(input, {
     onAttackNearest: () => attackNearest(),

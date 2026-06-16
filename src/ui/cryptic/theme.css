@@ -518,3 +518,48 @@ body.cr-hud-skin-globes #player-frame .uf-bars .uf-name {
   border-color: var(--cr-border-focus, #d4442a);
   box-shadow: 0 0 8px var(--cr-border-glow, rgba(212, 68, 42, 0.5));
 }
+
+/* ---------- fps_mode.ts: first-person reticle + crosshair cursor ---------- */
+#cr-fps-reticle {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 32px;
+  height: 32px;
+  pointer-events: none;
+  z-index: 9000;
+  color: var(--cr-accent, #d4442a);
+  filter: drop-shadow(0 0 4px var(--cr-accent-glow, rgba(212, 68, 42, 0.55)));
+  opacity: 0;
+  transition: opacity 0.18s ease-out;
+}
+body.cr-fps-active #cr-fps-reticle { opacity: 0.95; }
+body.cr-fps-active #app-canvas,
+body.cr-fps-active canvas[id^="renderer"],
+body.cr-fps-active .game-canvas {
+  cursor: crosshair;
+}
+body.cr-fps-active body, body.cr-fps-active { cursor: crosshair; }
+
+/* FPS toggle button (sits in the .header-actions row beside theme/skin) */
+.cr-fps-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid var(--cr-border, #4a4a4a);
+  background: var(--cr-bg-panel, rgba(20, 20, 20, 0.9));
+  color: var(--cr-text, #e8d5c4);
+  border-radius: 6px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  font-family: var(--cr-font-ui, system-ui, sans-serif);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.cr-fps-btn:hover, .cr-fps-btn[aria-pressed="true"] {
+  border-color: var(--cr-border-focus, #d4442a);
+  box-shadow: 0 0 8px var(--cr-border-glow, rgba(212, 68, 42, 0.5));
+}
