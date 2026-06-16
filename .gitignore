@@ -25,3 +25,5 @@ __pycache__/
 Thumbs.db
 *.log
 .claude/
+.lxc-recovery-20260616/
+index.html.lxc-overlay
