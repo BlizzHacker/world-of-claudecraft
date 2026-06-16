@@ -25,6 +25,10 @@ import { tEntity } from './ui/entity_i18n';
 import { hydrateIcons } from './ui/ui_icons';
 import { createPerfMonitor } from './game/perf';
 import { updateFollowCameraYaw, wrapAngle } from './game/camera_follow';
+// CR overlay: realm/theme picker. The mount call early-applies the saved
+// `data-theme` to <html>, then the trigger button lives in the index.html
+// `<div id="theme-picker">` block.
+import { mountThemeSelect } from './ui/cryptic/theme_select';
 
 
 const WORLD_SEED = 20061; // fixed: Cryptic Realm is a persistent place
@@ -173,6 +177,15 @@ function localizedSiteUrl(lang: SupportedLanguage): string {
 declare const __APP_VERSION__: string;
 declare const __APP_BUILD_ID__: string;
 declare const __APP_BUILD_DATE__: string;
+
+// CR overlay: mount the realm picker as soon as the DOM is ready.
+if (typeof document !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => mountThemeSelect());
+  } else {
+    mountThemeSelect();
+  }
+}
 
 function syncBuildInfo(): void {
   const el = document.getElementById('game-version');
