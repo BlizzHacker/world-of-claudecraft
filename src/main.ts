@@ -29,6 +29,7 @@ import { updateFollowCameraYaw, wrapAngle } from './game/camera_follow';
 // `data-theme` to <html>, then the trigger button lives in the index.html
 // `<div id="theme-picker">` block.
 import { mountThemeSelect } from './ui/cryptic/theme_select';
+import { mountHudGlobes, setHudSkin, resolveHudSkin } from './ui/cryptic/globes';
 
 
 const WORLD_SEED = 20061; // fixed: Cryptic Realm is a persistent place
@@ -178,13 +179,37 @@ declare const __APP_VERSION__: string;
 declare const __APP_BUILD_ID__: string;
 declare const __APP_BUILD_DATE__: string;
 
-// CR overlay: mount the realm picker as soon as the DOM is ready.
+// CR overlay: mount the realm picker + HUD globes as soon as the DOM is ready.
 if (typeof document !== 'undefined') {
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => mountThemeSelect());
-  } else {
+  const boot = () => {
     mountThemeSelect();
+    mountHudGlobes();
+    mountHudSkinToggle();
+  };
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
   }
+}
+
+function mountHudSkinToggle(): void {
+  const host = document.getElementById('hud-skin-toggle');
+  if (!host) return;
+  const render = () => {
+    const skin = resolveHudSkin();
+    host.innerHTML = `<button type="button" class="cr-hud-skin-btn" aria-pressed="${skin === 'globes'}" title="Switch HUD style">
+      <span aria-hidden="true">${skin === 'globes' ? '◉' : '▭'}</span>
+      <span>${skin === 'globes' ? 'Globes' : 'Bars'}</span>
+    </button>`;
+  };
+  render();
+  host.addEventListener('click', (ev) => {
+    if (!(ev.target as HTMLElement).closest('.cr-hud-skin-btn')) return;
+    const next = resolveHudSkin() === 'globes' ? 'classic' : 'globes';
+    setHudSkin(next);
+    render();
+  });
 }
 
 function syncBuildInfo(): void {
