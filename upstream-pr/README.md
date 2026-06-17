@@ -28,11 +28,18 @@ upstream-pr/
 
 The Claude Code auto-mode classifier blocked the direct `mcp__plugin_github_github__push_files` call ("external repo exfiltration") even though you authorized it. So we staged the files here and provided a script.
 
-```bash
+**On Windows (PowerShell, no WSL):**
+```powershell
 # Prereq: gh CLI logged in as BlizzHacker
 gh auth status
 
 # Run from the repo root
+powershell -ExecutionPolicy Bypass -File upstream-pr/push.ps1
+```
+
+**On Linux/macOS/WSL bash:**
+```bash
+gh auth status
 bash upstream-pr/push.sh
 ```
 
