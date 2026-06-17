@@ -33,6 +33,7 @@ import { mountHudGlobes, setHudSkin, resolveHudSkin } from './ui/cryptic/globes'
 import { mountFpsMode, resolveFpsMode, setFpsMode } from './ui/cryptic/fps_mode';
 import { mountRealmBranding } from './ui/cryptic/branding';
 import { mountIngameOptions } from './ui/cryptic/ingame_options';
+import { mountUserDropdown } from './ui/cryptic/user_dropdown';
 
 
 const WORLD_SEED = 20061; // fixed: Cryptic Realm is a persistent place
@@ -189,6 +190,7 @@ if (typeof document !== 'undefined') {
     mountThemeSelect();
     mountHudGlobes();
     mountIngameOptions();
+    void mountUserDropdown();
   };
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', boot);
@@ -2312,6 +2314,15 @@ function wireStartScreens(): void {
     }
     // Auth succeeded — a later realm-entry error is NOT a verification failure,
     // so don't reset the widget or let the user re-submit the (now duplicate) auth.
+    // CR overlay: persist to dashboard localStorage so the header user
+    // dropdown picks up the new session without a reload.
+    try {
+      if (api.token && api.username) {
+        localStorage.setItem('cryptic-realm_user_token', api.token);
+        localStorage.setItem('cryptic-realm_user_name', api.username);
+        void mountUserDropdown();
+      }
+    } catch { /* storage unavailable */ }
     try {
       $('#charselect-user').textContent = api.username ?? '';
       await enterRealmFlow();
@@ -2332,7 +2343,16 @@ function wireStartScreens(): void {
     if (ssoToken && /^[a-f0-9]{64}$/.test(ssoToken) && ssoUser) {
       api.token = ssoToken;
       api.username = ssoUser;
+      // CR overlay: also persist to the dashboard's localStorage so the
+      // logged-in header dropdown (src/ui/cryptic/user_dropdown.ts) shows
+      // immediately. The dashboards (/me/, /mod/, /admin/) read the same keys.
+      try {
+        localStorage.setItem('cryptic-realm_user_token', ssoToken);
+        localStorage.setItem('cryptic-realm_user_name', ssoUser);
+      } catch { /* storage unavailable */ }
       try { history.replaceState(null, '', window.location.pathname + window.location.search); } catch { /* noop */ }
+      // Re-mount the header dropdown with the new identity.
+      void mountUserDropdown();
       void (async () => {
         try {
           $('#charselect-user').textContent = api.username ?? '';

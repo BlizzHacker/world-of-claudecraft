@@ -24,9 +24,9 @@ export const CLAUDECRAFT_REALM: RealmContent = {
   // Pristine upstream branding stays — World of ClaudeCraft logo, GitHub link,
   // Donate button. This is the only realm that keeps the upstream identity.
   branding: {
-    // No /worldofclaudecraft-logo.png asset is shipped in this fork yet —
-    // drop one into /public when restoring the pristine upstream identity.
-    logoSrc: '/crypticrealm-logo.png',
+    // Per user: keep the small square `C` emblem (cr_logo_square.webp, the
+    // upstream WoC asset just renamed) for the claudecraft realm only.
+    logoSrc: '/cr_logo_square.webp',
     brandText: 'World of ClaudeCraft',
     loadingScreenSrc: '/loading-screen.jpg',
     discordUrl: 'https://discord.gg/GjhnUsBtw',

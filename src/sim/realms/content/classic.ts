@@ -15,9 +15,9 @@ export const CLASSIC_REALM: RealmContent = {
   bgGradient: 'linear-gradient(135deg, #0f1a2a 0%, #080f1a 100%)',
   previewColors: { primary: '#4a9eff', secondary: '#ffd700', bg: '#0f1a2a' },
   branding: {
-    logoSrc: '/cr_logo_square.webp',
+    logoSrc: '/cryptic-realm-logo.png',
     brandText: 'Cryptic Realm — Classic',
-    loadingScreenSrc: '/LOADINGSCREEN.png',
+    loadingScreenSrc: '/cryptic-realm-loading.png',
     discordUrl: 'https://discord.gg/GjhnUsBtw',
     githubUrl: 'https://github.com/BlizzHacker/cryptic-realm',
     showDonate: false,

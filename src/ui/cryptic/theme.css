@@ -809,3 +809,100 @@ body.cr-fps-active body, body.cr-fps-active { cursor: crosshair; }
   font-family: ui-monospace, monospace;
   font-size: 10px;
 }
+
+/* Hide upstream homepage chrome whenever the player is in the world. The
+   upstream sets body.game-active on entering a realm; without this the
+   footer GitHub/Discord/Donate icons + homepage hero sit visible behind
+   the canvas. */
+body.game-active .homepage-footer,
+body.game-active .homepage-header,
+body.game-active #homepage-views-container,
+body.game-active footer.homepage-footer { display: none !important; }
+
+/* ---------- logged-in user dropdown in the homepage header ---------- */
+#cr-user-dropdown {
+  position: relative;
+  display: inline-block;
+  font-family: var(--cr-font-ui, system-ui, sans-serif);
+}
+.cr-user-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px 6px 8px;
+  border: 1px solid var(--cr-border, var(--border, #4a4a4a));
+  background: var(--cr-bg-panel, rgba(20, 20, 20, 0.92));
+  color: var(--cr-text, var(--text, #e8d5c4));
+  border-radius: 8px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  letter-spacing: 0.3px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.cr-user-trigger:hover,
+.cr-user-trigger[aria-expanded="true"] {
+  border-color: var(--cr-border-focus, var(--gold, #d4442a));
+  box-shadow: 0 0 10px var(--cr-border-glow, rgba(212, 68, 42, 0.45));
+}
+.cr-user-trigger-avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--cr-accent, var(--gold, #d4442a)) 0%, var(--cr-gold, #c9a14a) 100%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 11px;
+  color: #0a0505;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+.cr-user-name { font-weight: 600; }
+.cr-user-caret { font-size: 10px; opacity: 0.7; }
+.cr-user-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 220px;
+  background: var(--cr-bg-panel, rgba(15, 15, 15, 0.97));
+  border: 1px solid var(--cr-border, var(--border, #4a4a4a));
+  border-radius: 10px;
+  padding: 6px;
+  z-index: 9999;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.cr-user-menu[hidden] { display: none; }
+.cr-user-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: 6px;
+  color: var(--cr-text, var(--text, #e8d5c4));
+  text-decoration: none;
+  font-size: 13px;
+  cursor: pointer;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  font-family: inherit;
+}
+.cr-user-menu-item:hover { background: rgba(255, 255, 255, 0.05); }
+.cr-user-menu-item .cr-menu-icon { width: 16px; opacity: 0.8; }
+.cr-user-menu-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 4px 6px;
+}
+.cr-user-menu-role {
+  font-size: 10px;
+  letter-spacing: 1.6px;
+  color: var(--cr-text-dim, #9a8a7a);
+  text-transform: uppercase;
+  padding: 8px 12px 4px;
+}

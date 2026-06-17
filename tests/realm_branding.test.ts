@@ -19,14 +19,18 @@ describe('realm branding overrides', () => {
     }
   });
 
-  it('only the claudecraft realm advertises the upstream GitHub repo + Discord', () => {
+  it('claudecraft points at the upstream WoC GitHub; themed realms point at BlizzHacker', () => {
     const claudecraft = REALMS.claudecraft.branding ?? {};
     expect(claudecraft.githubUrl).toContain('levy-street/world-of-claudecraft');
-    expect(claudecraft.discordUrl).toContain('worldofclaudecraft');
+    // All five realms share the same Discord invite (the one from the
+    // BlizzHacker README) — there's no separate WoC server. Discord is the
+    // community, not the realm.
+    for (const realm of REALM_LIST) {
+      expect(realm.branding?.discordUrl).toBe('https://discord.gg/GjhnUsBtw');
+    }
     for (const id of ['infernal', 'classic', 'dominion', 'arcane'] as const) {
       const b = REALMS[id].branding ?? {};
       expect(b.githubUrl).toContain('BlizzHacker/cryptic-realm');
-      expect(b.discordUrl).toContain('crypticrealm');
     }
   });
 
