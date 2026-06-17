@@ -95,6 +95,8 @@ export function mountThemeSelect(opts: ThemeSelectOptions = {}): void {
         persistActiveRealm(id);
         applyThemeToDocument(id);
         render();
+        // Notify branding + asset-manifest layers so they re-apply.
+        window.dispatchEvent(new CustomEvent('cr-realm-change'));
         const realm = REALM_LIST.find((r) => r.id === id);
         if (realm && opts.onPick) opts.onPick(realm);
       }

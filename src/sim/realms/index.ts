@@ -21,3 +21,6 @@ export type {
 } from './rarity';
 export { parsePickitFilter, evaluateItem } from './pickit';
 export type { PickitOp, PickitCondition, PickitRule, PickitResult } from './pickit';
+export { getRealmAssetManifest, realmHasAssets } from './assets';
+export type { RealmAssetEntry, RealmAssetManifest } from './assets';
+export type { RealmBranding } from './types';

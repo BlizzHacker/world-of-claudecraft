@@ -14,6 +14,14 @@ export const CLASSIC_REALM: RealmContent = {
   accentHex: '#4a9eff',
   bgGradient: 'linear-gradient(135deg, #0f1a2a 0%, #080f1a 100%)',
   previewColors: { primary: '#4a9eff', secondary: '#ffd700', bg: '#0f1a2a' },
+  branding: {
+    logoSrc: '/crypticrealm-logo.png',
+    brandText: 'Cryptic Realm — Classic',
+    discordUrl: 'https://discord.gg/crypticrealm',
+    githubUrl: 'https://github.com/BlizzHacker/cryptic-realm',
+    showDonate: false,
+    showAuthentikSso: true,
+  },
   classes: [
     {
       id: 'steelcrusader', name: 'Steel Crusader', role: 'Tank', icon: '⚔', color: '#f58cba',

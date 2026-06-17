@@ -15,6 +15,14 @@ export const INFERNAL_REALM: RealmContent = {
   bgGradient: 'linear-gradient(135deg, #1a0505 0%, #0a0202 100%)',
   previewColors: { primary: '#d4442a', secondary: '#c9a14a', bg: '#0a0505' },
   isDefault: true,
+  branding: {
+    logoSrc: '/crypticrealm-logo.png',
+    brandText: 'Cryptic Realm — Infernal',
+    discordUrl: 'https://discord.gg/crypticrealm',
+    githubUrl: 'https://github.com/BlizzHacker/cryptic-realm',
+    showDonate: false,
+    showAuthentikSso: true,
+  },
   classes: [
     {
       id: 'boneherald', name: 'Bone Herald', role: 'Summoner', icon: '\u{1F480}', color: '#8e7cc3',

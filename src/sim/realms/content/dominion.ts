@@ -14,6 +14,14 @@ export const DOMINION_REALM: RealmContent = {
   accentHex: '#3ad6c8',
   bgGradient: 'linear-gradient(135deg, #02161a 0%, #020a0d 100%)',
   previewColors: { primary: '#3ad6c8', secondary: '#c9a14a', bg: '#050a0f' },
+  branding: {
+    logoSrc: '/crypticrealm-logo.png',
+    brandText: 'Cryptic Realm — Dominion',
+    discordUrl: 'https://discord.gg/crypticrealm',
+    githubUrl: 'https://github.com/BlizzHacker/cryptic-realm',
+    showDonate: false,
+    showAuthentikSso: true,
+  },
   classes: [
     {
       id: 'vanguard', name: 'Vanguard', role: 'Tank', icon: '\u{1F6E1}', color: '#3ad6c8',

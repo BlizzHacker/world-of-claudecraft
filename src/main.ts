@@ -31,6 +31,8 @@ import { updateFollowCameraYaw, wrapAngle } from './game/camera_follow';
 import { mountThemeSelect } from './ui/cryptic/theme_select';
 import { mountHudGlobes, setHudSkin, resolveHudSkin } from './ui/cryptic/globes';
 import { mountFpsMode, resolveFpsMode, setFpsMode } from './ui/cryptic/fps_mode';
+import { mountRealmBranding } from './ui/cryptic/branding';
+import { mountIngameOptions } from './ui/cryptic/ingame_options';
 
 
 const WORLD_SEED = 20061; // fixed: Cryptic Realm is a persistent place
@@ -183,10 +185,10 @@ declare const __APP_BUILD_DATE__: string;
 // CR overlay: mount the realm picker + HUD globes as soon as the DOM is ready.
 if (typeof document !== 'undefined') {
   const boot = () => {
+    mountRealmBranding();
     mountThemeSelect();
     mountHudGlobes();
-    mountHudSkinToggle();
-    mountFpsToggle();
+    mountIngameOptions();
   };
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', boot);
@@ -195,54 +197,12 @@ if (typeof document !== 'undefined') {
   }
 }
 
-function mountHudSkinToggle(): void {
-  const host = document.getElementById('hud-skin-toggle');
-  if (!host) return;
-  const render = () => {
-    const skin = resolveHudSkin();
-    host.innerHTML = `<button type="button" class="cr-hud-skin-btn" aria-pressed="${skin === 'globes'}" title="Switch HUD style">
-      <span aria-hidden="true">${skin === 'globes' ? '◉' : '▭'}</span>
-      <span>${skin === 'globes' ? 'Globes' : 'Bars'}</span>
-    </button>`;
-  };
-  render();
-  host.addEventListener('click', (ev) => {
-    if (!(ev.target as HTMLElement).closest('.cr-hud-skin-btn')) return;
-    const next = resolveHudSkin() === 'globes' ? 'classic' : 'globes';
-    setHudSkin(next);
-    render();
-  });
-}
-
-// FPS toggle button can render at boot — before the Input instance exists.
-// On click it dispatches `cr-fps-toggle` on window. If mountFpsMode() has
-// already run, its listener flips camera fields; otherwise the click just
-// persists to localStorage and mountFpsMode() applies it when the world boots.
-function mountFpsToggle(): void {
-  const host = document.getElementById('fps-toggle');
-  if (!host) return;
-  const render = () => {
-    const mode = resolveFpsMode();
-    host.innerHTML = `<button type="button" class="cr-fps-btn" aria-pressed="${mode === 'on'}" title="Toggle first-person view (V)">
-      <span aria-hidden="true">${mode === 'on' ? '◎' : '◇'}</span>
-      <span>${mode === 'on' ? 'FPS' : '3rd'}</span>
-    </button>`;
-  };
-  render();
-  host.addEventListener('click', (ev) => {
-    if (!(ev.target as HTMLElement).closest('.cr-fps-btn')) return;
-    const next = resolveFpsMode() === 'on' ? 'off' : 'on';
-    // Persist eagerly so a pre-boot click survives into mountFpsMode().
-    try { window.localStorage?.setItem('cr_fps_mode', next); } catch { /* noop */ }
-    window.dispatchEvent(new CustomEvent('cr-fps-toggle'));
-    render();
-  });
-  // Keep the button label in sync when toggled via V keybind.
-  window.addEventListener('cr-fps-toggle', render);
-  window.addEventListener('storage', (ev) => {
-    if (ev.key === 'cr_fps_mode') render();
-  });
-}
+// HUD-skin and FPS toggles previously rendered in the homepage header have
+// moved into the in-game options menu (`src/ui/cryptic/ingame_options.ts`).
+// The legacy mountHudSkinToggle / mountFpsToggle helpers were deleted with
+// their host divs. resolveFpsMode / setFpsMode remain imported so the
+// SSO + in-game options module can re-use them.
+void resolveFpsMode; void setFpsMode; void resolveHudSkin; void setHudSkin;
 
 function syncBuildInfo(): void {
   const el = document.getElementById('game-version');

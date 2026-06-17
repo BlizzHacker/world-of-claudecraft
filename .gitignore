@@ -29,3 +29,5 @@ Thumbs.db
 .claude/
 .lxc-recovery-20260616/
 index.html.lxc-overlay
+# CR overlay: generated realm assets (run npm run assets:realms to regenerate)
+public/cr-realms/

@@ -14,6 +14,14 @@ export const ARCANE_REALM: RealmContent = {
   accentHex: '#a855f7',
   bgGradient: 'linear-gradient(135deg, #0a0510 0%, #05020a 100%)',
   previewColors: { primary: '#a855f7', secondary: '#3ad6c8', bg: '#0a0510' },
+  branding: {
+    logoSrc: '/crypticrealm-logo.png',
+    brandText: 'Cryptic Realm — Arcane',
+    discordUrl: 'https://discord.gg/crypticrealm',
+    githubUrl: 'https://github.com/BlizzHacker/cryptic-realm',
+    showDonate: false,
+    showAuthentikSso: true,
+  },
   classes: [
     {
       id: 'voidwalker', name: 'Voidwalker', role: 'DPS', icon: '\u{1F300}', color: '#a855f7',

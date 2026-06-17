@@ -682,3 +682,57 @@ body.cr-fps-active body, body.cr-fps-active { cursor: crosshair; }
   font-size: 16px;
   color: #fd4b2d;
 }
+
+/* ---------- in-game options menu CR section ---------- */
+.cr-options-section {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 215, 0, 0.18);
+}
+.cr-options-section-title {
+  font-family: var(--cr-font-display, serif);
+  font-size: 13px;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--cr-gold, #c9a14a);
+  margin: 0 0 10px;
+}
+.cr-options-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 0;
+}
+.cr-options-row-label {
+  font-size: 12px;
+  letter-spacing: 0.6px;
+  color: var(--cr-text, #e8d5c4);
+}
+.cr-options-row-control {
+  display: inline-flex;
+  border: 1px solid var(--cr-border, #4a4a4a);
+  border-radius: 6px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.35);
+}
+.cr-options-pill {
+  background: transparent;
+  border: 0;
+  padding: 6px 12px;
+  color: var(--cr-text-dim, #9a8a7a);
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  letter-spacing: 0.4px;
+  transition: background 0.15s, color 0.15s;
+}
+.cr-options-pill + .cr-options-pill {
+  border-left: 1px solid var(--cr-border, #4a4a4a);
+}
+.cr-options-pill:hover { color: var(--cr-text, #e8d5c4); }
+.cr-options-pill.active {
+  background: var(--cr-accent-glow, rgba(212, 68, 42, 0.22));
+  color: var(--cr-accent, #d4442a);
+  font-weight: 700;
+}

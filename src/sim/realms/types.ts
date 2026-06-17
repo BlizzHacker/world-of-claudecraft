@@ -42,6 +42,32 @@ export interface RealmClassSkill {
   desc: string; color: string;
 }
 
+/** Per-realm branding & UX overrides. Every field is optional — when a realm
+ *  doesn't set one, the renderer keeps the upstream base value. This is the
+ *  seam that lets each realm have its own logo, loading screen, and Discord
+ *  link without forking the base index.html. */
+export interface RealmBranding {
+  /** Path to a square logo (e.g. '/cr-realms/infernal/logo.png'). Falls back
+   *  to the upstream `/crypticrealm-logo.png` when undefined. */
+  logoSrc?: string;
+  /** Visible brand text shown in the header / SEO `<title>`. */
+  brandText?: string;
+  /** Loading-screen background image. Defaults to `/loading-screen.jpg`. */
+  loadingScreenSrc?: string;
+  /** Discord invite URL shown in community footer. */
+  discordUrl?: string;
+  /** GitHub repo URL shown in community footer. */
+  githubUrl?: string;
+  /** Whether to show the upstream Donate button. Defaults to false (only
+   *  the claudecraft realm sets this true — Cryptic Realm proper does not
+   *  ask players to fund upstream). */
+  showDonate?: boolean;
+  /** Whether to show the "Sign in with Authentik" SSO button on the login
+   *  panel. Defaults to true. The claudecraft realm sets it false to keep
+   *  the pristine base login flow. */
+  showAuthentikSso?: boolean;
+}
+
 export interface RealmContent {
   id: RealmId;
   /** Visible name in the picker. */
@@ -60,6 +86,9 @@ export interface RealmContent {
   previewColors: { primary: string; secondary: string; bg: string };
   /** Class skins; the renderer maps these onto underlying upstream PlayerClasses. */
   classes: RealmClassSkin[];
+  /** Per-realm overrides for logo / brand text / loading screen / Discord /
+   *  donate visibility. All optional — see RealmBranding. */
+  branding?: RealmBranding;
   /** True for the realm that should auto-load when no preference exists. */
   isDefault?: boolean;
 }

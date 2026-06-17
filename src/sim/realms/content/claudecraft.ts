@@ -21,4 +21,16 @@ export const CLAUDECRAFT_REALM: RealmContent = {
   bgGradient: 'linear-gradient(135deg, #0a1428 0%, #050a14 100%)',
   previewColors: { primary: '#4a9eff', secondary: '#ffd700', bg: '#0a1428' },
   classes: [],
+  // Pristine upstream branding stays — World of ClaudeCraft logo, GitHub link,
+  // Donate button. This is the only realm that keeps the upstream identity.
+  branding: {
+    // No /worldofclaudecraft-logo.png asset is shipped in this fork yet —
+    // drop one into /public when restoring the pristine upstream identity.
+    logoSrc: '/crypticrealm-logo.png',
+    brandText: 'World of ClaudeCraft',
+    discordUrl: 'https://discord.gg/worldofclaudecraft',
+    githubUrl: 'https://github.com/levy-street/world-of-claudecraft',
+    showDonate: true,
+    showAuthentikSso: false,
+  },
 };

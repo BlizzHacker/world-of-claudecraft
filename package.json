@@ -22,7 +22,8 @@
     "server": "npm run build:server && node dist-server/server.cjs",
     "realms": "npm run build:server && node scripts/dev-realms.mjs",
     "admin:grant": "node scripts/grant_admin.mjs",
-    "wiki:seed": "node scripts/mediawiki/build_seed.mjs"
+    "wiki:seed": "node scripts/mediawiki/build_seed.mjs",
+    "assets:realms": "node scripts/build_realm_assets.mjs"
   },
   "dependencies": {
     "n8ao": "^1.10.1",
