@@ -57,6 +57,7 @@ CREATE INDEX IF NOT EXISTS characters_lifetime_xp
 CREATE INDEX IF NOT EXISTS characters_lifetime_xp_global
   ON characters (((state->>'lifetimeXp')::bigint) DESC);
 ALTER TABLE accounts ADD COLUMN IF NOT EXISTS is_admin BOOLEAN NOT NULL DEFAULT FALSE;
+ALTER TABLE accounts ADD COLUMN IF NOT EXISTS is_moderator BOOLEAN NOT NULL DEFAULT FALSE;
 ALTER TABLE accounts ADD COLUMN IF NOT EXISTS suspended_until TIMESTAMPTZ;
 ALTER TABLE accounts ADD COLUMN IF NOT EXISTS banned_at TIMESTAMPTZ;
 ALTER TABLE accounts ADD COLUMN IF NOT EXISTS moderation_reason TEXT;
@@ -466,6 +467,34 @@ export async function saveCharacterState(characterId: number, level: number, sta
 export async function isAdminAccount(accountId: number): Promise<boolean> {
   const res = await pool.query('SELECT is_admin FROM accounts WHERE id = $1', [accountId]);
   return res.rows[0]?.is_admin === true;
+}
+
+export async function isModeratorAccount(accountId: number): Promise<boolean> {
+  // Admins are implicitly moderators — moderator routes accept either flag so
+  // we don't have to dual-grant rows.
+  const res = await pool.query(
+    'SELECT is_admin, is_moderator FROM accounts WHERE id = $1',
+    [accountId],
+  );
+  const row = res.rows[0];
+  return row?.is_admin === true || row?.is_moderator === true;
+}
+
+export interface AccountRoleFlags {
+  isAdmin: boolean;
+  isModerator: boolean;
+}
+
+export async function accountRoleFlags(accountId: number): Promise<AccountRoleFlags> {
+  const res = await pool.query(
+    'SELECT is_admin, is_moderator FROM accounts WHERE id = $1',
+    [accountId],
+  );
+  const row = res.rows[0];
+  return {
+    isAdmin: row?.is_admin === true,
+    isModerator: row?.is_moderator === true || row?.is_admin === true,
+  };
 }
 
 // ---------------------------------------------------------------------------

@@ -67,6 +67,9 @@ export default defineConfig({
       input: {
         main: fileURLToPath(new URL('index.html', import.meta.url)),
         admin: fileURLToPath(new URL('admin.html', import.meta.url)),
+        // CR overlay: user-facing /me/ and moderator-facing /mod/ dashboards
+        user: fileURLToPath(new URL('user.html', import.meta.url)),
+        moderator: fileURLToPath(new URL('mod.html', import.meta.url)),
       },
     },
   },

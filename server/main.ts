@@ -22,6 +22,7 @@ import { json, readBody, isUniqueViolation } from './http_util';
 import { requestIp, rateLimited, authThrottled, recordAuthFailure, clearAuthFailures } from './ratelimit';
 import { verifyTurnstile } from './turnstile';
 import { handleAdminApi } from './admin';
+import { handleModeratorApi, handleUserApi } from './dashboard';
 import { GameServer } from './game';
 import { REALM, REALM_DIRECTORY, REALM_ORIGINS } from './realm';
 import { cacheControlFor, etagFor, isNotModified } from './static_cache';
@@ -143,15 +144,28 @@ function isAdminRequest(req: http.IncomingMessage): boolean {
   return host.startsWith('admin.') || urlPath === '/admin' || urlPath === '/admin/';
 }
 
+// CR overlay: each dashboard prefix serves its own Vite-emitted HTML shell.
+function dashboardShellFor(urlPath: string): string | null {
+  if (urlPath === '/mod' || urlPath === '/mod/') return 'mod.html';
+  if (urlPath === '/me' || urlPath === '/me/') return 'user.html';
+  return null;
+}
+
 function serveStatic(req: http.IncomingMessage, res: http.ServerResponse): void {
-  const shell = isAdminRequest(req) ? 'admin.html' : 'index.html';
   let urlPath = (req.url ?? '/').split('?')[0];
+  const dashShell = dashboardShellFor(urlPath);
+  const shell = dashShell ?? (isAdminRequest(req) ? 'admin.html' : 'index.html');
   if (urlPath === '/wiki' || urlPath === '/wiki/' || urlPath.startsWith('/wiki/')) {
     res.writeHead(302, { Location: WIKI_URL });
     res.end();
     return;
   }
-  if (urlPath === '/' || urlPath === '/admin' || urlPath === '/admin/') urlPath = `/${shell}`;
+  if (
+    urlPath === '/' ||
+    urlPath === '/admin' || urlPath === '/admin/' ||
+    urlPath === '/mod'   || urlPath === '/mod/'   ||
+    urlPath === '/me'    || urlPath === '/me/'
+  ) urlPath = `/${shell}`;
   // normalize once and reuse for BOTH file resolution and cache policy —
   // otherwise /assets/../x would serve a mutable file with immutable caching
   urlPath = path.posix.normalize(urlPath).replace(/^([.][.][/\\])+/, '');
@@ -473,10 +487,16 @@ async function main(): Promise<void> {
 
   const server = http.createServer((req, res) => {
     const url = req.url ?? '';
-    const isApi = url.startsWith('/api/') || url.startsWith('/admin/api/');
+    const isApi =
+      url.startsWith('/api/') ||
+      url.startsWith('/admin/api/') ||
+      url.startsWith('/mod/api/') ||
+      url.startsWith('/me/api/');
     if (isApi) maybeCors(req, res);
     if (req.method === 'OPTIONS' && isApi) { res.writeHead(204); res.end(); return; }
     if (url.startsWith('/admin/api/')) void handleAdminApi(req, res, game);
+    else if (url.startsWith('/mod/api/')) void handleModeratorApi(req, res);
+    else if (url.startsWith('/me/api/')) void handleUserApi(req, res);
     else if (url.startsWith('/api/')) void handleApi(req, res);
     else serveStatic(req, res);
   });
