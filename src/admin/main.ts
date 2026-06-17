@@ -93,7 +93,7 @@ async function refreshChatFilter(): Promise<void> {
     const data = await apiGet<ChatFilterData>('/admin/api/chat-filter');
     $('chat-filter').innerHTML = renderChatFilter(data);
   } catch (err) {
-    if (!handleAuthFailure(err)) $('chat-filter').innerHTML = '<div class="empty">failed to load chat filter</div>';
+    if (!handleAuthFailure(err)) $('chat-filter').innerHTML = `<div class="empty">${t('chatFilter.loadFailed')}</div>`;
   }
 }
 
@@ -298,6 +298,16 @@ function handleModerationActionClick(e: Event, source: 'account' | 'moderation')
     window.alert(t('alert.noteRequired'));
     return false;
   };
+  // Lift mute / reset strikes: non-destructive, no note/confirm. Available for
+  // any account (incl. admins) so an auto-muted operator can clear it themselves.
+  const chatModBtn = target.closest('button[data-lift-mute], button[data-reset-strikes]') as HTMLButtonElement | null;
+  if (chatModBtn && Number.isFinite(accountId)) {
+    const endpoint = chatModBtn.dataset.liftMute !== undefined ? 'lift-mute' : 'reset-strikes';
+    void apiPost(`/admin/api/moderation/accounts/${accountId}/${endpoint}`, {})
+      .then(() => { if (source === 'account') void refreshOpenAccountDetail(accountId); else void openModerationAccount(accountId); })
+      .catch((err: unknown) => { if (!handleAuthFailure(err)) window.alert(err instanceof Error ? localizeAdminError(err.message) : t('alert.actionFailed')); });
+    return true;
+  }
   const forceRenameBtn = target.closest('button[data-force-rename-character]') as HTMLButtonElement | null;
   if (forceRenameBtn) {
     if (!requireNote()) return true;
@@ -376,13 +386,13 @@ function handleModerationActionClick(e: Event, source: 'account' | 'moderation')
     const hours = Number(chatMuteBtn.dataset.chatMuteHours);
     const expiresAt = new Date(Date.now() + hours * 3600 * 1000).toISOString();
     showModerationConfirm({
-      title: 'Confirm chat mute',
+      title: t('dialog.confirmChatMute'),
       rows: [
-        { label: 'Account', value: `#${accountId}` },
-        { label: 'Action', value: 'Mute chat and send warning' },
-        { label: 'Length', value: `${hours} hour${hours === 1 ? '' : 's'}` },
-        { label: 'Until', value: new Date(expiresAt).toLocaleString() },
-        { label: 'Reason', value: note },
+        { label: t('dialog.account'), value: `#${accountId}` },
+        { label: t('dialog.action'), value: t('dialog.actionChatMute') },
+        { label: t('dialog.length'), value: t('detail.lengthHours', { count: hours }) },
+        { label: t('dialog.until'), value: new Date(expiresAt).toLocaleString() },
+        { label: t('dialog.reason'), value: note },
       ],
       endpoint: `/admin/api/moderation/accounts/${accountId}/chat-mute`,
       body: { reason: note, expiresAt },
@@ -398,16 +408,16 @@ function handleModerationActionClick(e: Event, source: 'account' | 'moderation')
     const raw = moderationCustomExpiryInput(target)?.value ?? '';
     const expiry = raw ? new Date(raw) : null;
     if (!expiry || !Number.isFinite(expiry.getTime())) {
-      window.alert('Choose a custom chat mute expiry.');
+      window.alert(t('alert.customChatMuteRequired'));
       return true;
     }
     showModerationConfirm({
-      title: 'Confirm custom chat mute',
+      title: t('dialog.confirmCustomChatMute'),
       rows: [
-        { label: 'Account', value: `#${accountId}` },
-        { label: 'Action', value: 'Mute chat and send warning' },
-        { label: 'Until', value: expiry.toLocaleString() },
-        { label: 'Reason', value: note },
+        { label: t('dialog.account'), value: `#${accountId}` },
+        { label: t('dialog.action'), value: t('dialog.actionChatMute') },
+        { label: t('dialog.until'), value: expiry.toLocaleString() },
+        { label: t('dialog.reason'), value: note },
       ],
       endpoint: `/admin/api/moderation/accounts/${accountId}/chat-mute`,
       body: { reason: note, expiresAt: expiry.toISOString() },
@@ -528,7 +538,7 @@ function wireEvents(): void {
       const endpoint = chatModBtn.dataset.liftMute !== undefined ? 'lift-mute' : 'reset-strikes';
       void apiPost(`/admin/api/moderation/accounts/${accountId}/${endpoint}`, {})
         .then(() => { if (Number.isFinite(accountId)) void openModerationAccount(accountId); })
-        .catch((err: unknown) => { if (!handleAuthFailure(err)) window.alert(err instanceof Error ? err.message : 'action failed'); });
+        .catch((err: unknown) => { if (!handleAuthFailure(err)) window.alert(err instanceof Error ? localizeAdminError(err.message) : t('alert.actionFailed')); });
       return;
     }
     const ignoreBtn = target.closest('button[data-ignore-report]') as HTMLButtonElement | null;
@@ -558,8 +568,8 @@ function wireEvents(): void {
   });
 }
 
-function chatFilterError(err: unknown, action: string): void {
-  if (!handleAuthFailure(err)) window.alert(err instanceof Error ? err.message : `${action} failed`);
+function chatFilterError(err: unknown, fallbackKey: string): void {
+  if (!handleAuthFailure(err)) window.alert(err instanceof Error ? localizeAdminError(err.message) : t(fallbackKey));
 }
 
 function wireChatFilterEvents(): void {
@@ -574,17 +584,27 @@ function wireChatFilterEvents(): void {
     if (!word || (tier !== 'soft' && tier !== 'hard')) return;
     void apiPost('/admin/api/chat-filter/words', { word, tier })
       .then(() => refreshChatFilter())
-      .catch((err: unknown) => chatFilterError(err, 'add word'));
+      .catch((err: unknown) => chatFilterError(err, 'alert.addWordFailed'));
   });
 
-  // Remove a word, or save the escalation config.
+  // Remove a word, save the escalation config, or lift/reset an account's chat mute.
   $('chat-filter').addEventListener('click', (e) => {
     const target = e.target as HTMLElement;
+    const chatModBtn = target.closest('button[data-lift-mute], button[data-reset-strikes]') as HTMLButtonElement | null;
+    if (chatModBtn) {
+      const accountId = Number((chatModBtn.closest('[data-action-account-id]') as HTMLElement | null)?.dataset.actionAccountId);
+      if (!Number.isFinite(accountId)) return;
+      const endpoint = chatModBtn.dataset.liftMute !== undefined ? 'lift-mute' : 'reset-strikes';
+      void apiPost(`/admin/api/moderation/accounts/${accountId}/${endpoint}`, {})
+        .then(() => refreshChatFilter())
+        .catch((err: unknown) => chatFilterError(err, 'chat moderation'));
+      return;
+    }
     const del = target.closest('button[data-del-word]') as HTMLButtonElement | null;
     if (del) {
       void apiPost(`/admin/api/chat-filter/words/${Number(del.dataset.delWord)}/delete`, {})
         .then(() => refreshChatFilter())
-        .catch((err: unknown) => chatFilterError(err, 'remove word'));
+        .catch((err: unknown) => chatFilterError(err, 'alert.removeWordFailed'));
       return;
     }
     if (target.closest('button[data-save-config]')) {
@@ -595,7 +615,7 @@ function wireChatFilterEvents(): void {
         .filter((n) => Number.isFinite(n) && n > 0);
       void apiPost('/admin/api/chat-filter/config', { warningsBeforeMute, muteLadderSeconds })
         .then(() => refreshChatFilter())
-        .catch((err: unknown) => chatFilterError(err, 'save config'));
+        .catch((err: unknown) => chatFilterError(err, 'alert.saveConfigFailed'));
     }
   });
 }

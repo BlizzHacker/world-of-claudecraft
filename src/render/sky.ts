@@ -89,6 +89,10 @@ if (GFX.standardMaterials) {
   }
 }
 
+export function hasSkyHdriAssets(): boolean {
+  return Boolean(hdriStore.vale && hdriStore.marsh && hdriStore.peaks);
+}
+
 export interface SkyView {
   dome: THREE.Mesh;
   /** cross-fades the HDRI pair toward the biome band the camera is over */
@@ -176,7 +180,7 @@ function sunOffsetU(biome: BiomeId, sunDir: THREE.Vector3): number {
 }
 
 export function buildSky(lowGfx: boolean, sunDir: THREE.Vector3): SkyView {
-  if (lowGfx) {
+  if (lowGfx || !hasSkyHdriAssets()) {
     const dome = new THREE.Mesh(
       new THREE.SphereGeometry(DOME_RADIUS, 24, 16),
       new THREE.MeshBasicMaterial({ map: skyTexture(), side: THREE.BackSide, fog: false, depthWrite: false }),
@@ -192,9 +196,6 @@ export function buildSky(lowGfx: boolean, sunDir: THREE.Vector3): SkyView {
   }
 
   const sun = sunDir.clone().normalize();
-  if (!hdriStore.vale || !hdriStore.marsh || !hdriStore.peaks) {
-    throw new Error('sky HDRIs not preloaded (assetsReady must resolve before buildSky)');
-  }
   const tuneVec = (b: BiomeId): THREE.Vector2 =>
     new THREE.Vector2(HDRI_TUNE[b].gain, HDRI_TUNE[b].clamp);
   const start = biomeBlendAt(0);

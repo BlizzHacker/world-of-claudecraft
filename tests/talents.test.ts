@@ -273,7 +273,7 @@ describe('build strings (import/export)', () => {
   });
 });
 
-describe('Sim integration — passive talents (Phase 1)', () => {
+describe('Sim integration — passive talents', () => {
   it('applies a passive stat talent through recalcPlayerStats and reverts on respec', () => {
     const sim = warriorAtCap();
     const critBefore = sim.player.critChance;
@@ -335,7 +335,7 @@ describe('Sim integration — passive talents (Phase 1)', () => {
   });
 });
 
-describe('Sim integration — active talents & ability modifiers (Phase 3)', () => {
+describe('Sim integration — active talents & ability modifiers', () => {
   it('grants spec signature + active-node abilities into the known set', () => {
     const sim = warriorAtCap();
     expect(sim.known.some((k) => k.def.id === 'mortal_strike')).toBe(false);
@@ -424,7 +424,7 @@ describe('Sim integration — active talents & ability modifiers (Phase 3)', () 
   });
 });
 
-describe('Sim integration — loadouts & build strings (Phase 4)', () => {
+describe('Sim integration — loadouts & build strings', () => {
   it('saves and switches loadouts, restoring talents + spec + bar', () => {
     const sim = warriorAtCap();
     expect(sim.saveLoadout('Arms PvE', ['mortal_strike', 'overpower', null], alloc({ spec: 'arms', ranks: { arms_imp_overpower: 2 } }))).toBe(0);

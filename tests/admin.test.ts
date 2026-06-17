@@ -34,6 +34,7 @@ vi.mock('../server/moderation_db', () => ({
 }));
 vi.mock('../server/chat_filter_db', () => ({
   addFilterWord: vi.fn(),
+  chatModeratedAccounts: vi.fn(async () => []),
   chatModerationForAccount: vi.fn(),
   getFilterConfig: vi.fn(),
   liftChatMute: vi.fn(),
@@ -219,7 +220,7 @@ describe('admin api auth', () => {
     vi.mocked(accountDetail).mockResolvedValue({
       id: 9, username: 'badactor', createdAt: '', lastLogin: null, isAdmin: false,
       bannedAt: null, suspendedUntil: null, moderationReason: '',
-      chatMutedUntil: null, chatMuteReason: '',
+      chatMutedUntil: null, chatMuteReason: '', chatStrikes: 0,
       playtimeSeconds: 0, characters: [], recentSessions: [],
     });
     vi.mocked(moderationReportsForAccount).mockResolvedValue([]);
@@ -478,7 +479,7 @@ describe('admin api chat filter', () => {
     vi.mocked(accountDetail).mockResolvedValue({
       id: 9, username: 'badactor', createdAt: '', lastLogin: null, isAdmin: false,
       bannedAt: null, suspendedUntil: null, moderationReason: '',
-      chatMutedUntil: null, chatMuteReason: '',
+      chatMutedUntil: null, chatMuteReason: '', chatStrikes: 0,
       playtimeSeconds: 0, characters: [], recentSessions: [],
     });
     vi.mocked(moderationReportsForAccount).mockResolvedValue([]);

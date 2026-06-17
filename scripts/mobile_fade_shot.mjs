@@ -22,7 +22,7 @@ page.on('console', (m) => { if (m.type() === 'error') console.log('PAGE ERR', m.
 
 await page.goto(URL, { waitUntil: 'networkidle2', timeout: 30000 });
 await sleep(500);
-await page.click('#btn-offline');
+await page.evaluate(() => document.querySelector('#btn-offline').click());
 await sleep(400);
 await page.click('#offline-select .mini-class[data-class="warrior"]');
 await sleep(200);

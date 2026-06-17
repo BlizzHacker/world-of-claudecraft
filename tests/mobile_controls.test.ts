@@ -217,6 +217,7 @@ afterEach(() => {
 });
 
 function installMobileControlDom(): {
+  canvas: FakeElement;
   moveZone: FakeElement;
   moveJoystick: FakeElement;
   cameraJoystick: FakeElement;
@@ -224,6 +225,7 @@ function installMobileControlDom(): {
   windowTarget: EventTarget;
 } {
   const elements = new Map<string, FakeElement>([
+    ['game-canvas', new FakeElement({ left: 0, top: 0, right: 390, bottom: 844, width: 390, height: 844 })],
     ['mobile-controls', new FakeElement()],
     ['mobile-move-zone', new FakeElement({ left: 0, top: 0, right: 240, bottom: 240, width: 240, height: 240 })],
     ['mobile-move-joystick', new FakeElement()],
@@ -250,6 +252,7 @@ function installMobileControlDom(): {
   Object.defineProperty(globalThis, 'window', { value: windowTarget, configurable: true });
 
   return {
+    canvas: elements.get('game-canvas')!,
     moveZone: elements.get('mobile-move-zone')!,
     moveJoystick: elements.get('mobile-move-joystick')!,
     cameraJoystick: elements.get('mobile-camera-joystick')!,
@@ -258,12 +261,13 @@ function installMobileControlDom(): {
   };
 }
 
-function pointerEvent(type: string, init: { pointerId: number; clientX?: number; clientY?: number }): Event {
+function pointerEvent(type: string, init: { pointerId: number; clientX?: number; clientY?: number; pointerType?: string }): Event {
   const event = new Event(type, { bubbles: true, cancelable: true });
   Object.defineProperties(event, {
     pointerId: { value: init.pointerId },
     clientX: { value: init.clientX ?? 0 },
     clientY: { value: init.clientY ?? 0 },
+    pointerType: { value: init.pointerType ?? '' },
   });
   return event;
 }
@@ -359,5 +363,62 @@ describe('MobileControls pointer lifecycle', () => {
     emoteButton.dispatchEvent(new Event('click', { bubbles: true, cancelable: true }));
 
     expect(emotes).toBe(1);
+  });
+
+  it('rotates the camera from a single-finger swipe on the game canvas', () => {
+    const { canvas } = installMobileControlDom();
+    const deltas: Array<{ dx: number; dy: number }> = [];
+    const lookActive: boolean[] = [];
+    const lookVectors: Array<{ x: number; y: number }> = [];
+    const input = {
+      setTouchMove: () => {},
+      clearTouchMove: () => {},
+      setTouchLook: (active: boolean) => { lookActive.push(active); },
+      setTouchLookVector: (look: { x: number; y: number }) => { lookVectors.push(look); },
+      applyTouchLookDelta: (dx: number, dy: number) => { deltas.push({ dx, dy }); },
+      zoomBy: () => {},
+    } as unknown as Input;
+
+    new MobileControls(input, mobileCallbacks()).start();
+
+    canvas.dispatchEvent(pointerEvent('pointerdown', { pointerId: 12, pointerType: 'touch', clientX: 100, clientY: 100 }));
+    canvas.dispatchEvent(pointerEvent('pointermove', { pointerId: 12, pointerType: 'touch', clientX: 103, clientY: 102 }));
+    canvas.dispatchEvent(pointerEvent('pointermove', { pointerId: 12, pointerType: 'touch', clientX: 122, clientY: 109 }));
+    canvas.dispatchEvent(pointerEvent('pointermove', { pointerId: 12, pointerType: 'touch', clientX: 140, clientY: 120 }));
+    canvas.dispatchEvent(pointerEvent('pointerup', { pointerId: 12, pointerType: 'touch', clientX: 140, clientY: 120 }));
+
+    expect(deltas).toEqual([
+      { dx: 22, dy: 9 },
+      { dx: 18, dy: 11 },
+    ]);
+    expect(lookActive).toEqual([true, false]);
+    expect(lookVectors).toEqual([{ x: 0, y: 0 }, { x: 0, y: 0 }]);
+  });
+
+  it('cancels canvas swipe rotation when a second finger starts pinch zoom', () => {
+    const { canvas } = installMobileControlDom();
+    const deltas: Array<{ dx: number; dy: number }> = [];
+    const zooms: number[] = [];
+    const lookActive: boolean[] = [];
+    const input = {
+      setTouchMove: () => {},
+      clearTouchMove: () => {},
+      setTouchLook: (active: boolean) => { lookActive.push(active); },
+      setTouchLookVector: () => {},
+      applyTouchLookDelta: (dx: number, dy: number) => { deltas.push({ dx, dy }); },
+      zoomBy: (delta: number) => { zooms.push(delta); },
+    } as unknown as Input;
+
+    new MobileControls(input, mobileCallbacks()).start();
+
+    canvas.dispatchEvent(pointerEvent('pointerdown', { pointerId: 21, pointerType: 'touch', clientX: 100, clientY: 100 }));
+    canvas.dispatchEvent(pointerEvent('pointermove', { pointerId: 21, pointerType: 'touch', clientX: 116, clientY: 100 }));
+    canvas.dispatchEvent(pointerEvent('pointerdown', { pointerId: 22, pointerType: 'touch', clientX: 200, clientY: 100 }));
+    canvas.dispatchEvent(pointerEvent('pointermove', { pointerId: 21, pointerType: 'touch', clientX: 130, clientY: 100 }));
+    canvas.dispatchEvent(pointerEvent('pointermove', { pointerId: 22, pointerType: 'touch', clientX: 220, clientY: 100 }));
+
+    expect(deltas).toEqual([{ dx: 16, dy: 0 }]);
+    expect(lookActive).toEqual([true, false]);
+    expect(zooms.length).toBeGreaterThan(0);
   });
 });

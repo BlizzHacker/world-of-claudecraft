@@ -31,7 +31,7 @@ import {
   assertEntityTranslationsReady,
   entityTranslationFallbackLog,
   entityTranslationManifest,
-  missingEntityTranslationsForPhases,
+  missingEntityTranslationsForGroups,
   resetEntityTranslationFallbackLog,
   tEntity,
 } from "../src/ui/entity_i18n";
@@ -58,9 +58,18 @@ const locales: Record<string, typeof en> = {
   ru_RU,
 };
 
+// Two-tier gate (see .github/workflows/ci.yml). The release tier runs with
+// I18N_RELEASE_TIER=1. Structural coverage (every key resolves non-empty,
+// placeholders preserved, source scrapes) runs at the PR tier; copied-English /
+// real-translation content checks run RELEASE-only, because an English-only PR or a
+// sparse locale legitimately renders the English fill for an untranslated key (the
+// dense resolved table fills it) - that is a `pending` row blocked at the release
+// gate, not a PR failure.
+const RELEASE_TIER = process.env.I18N_RELEASE_TIER === "1";
+
 describe("i18n Localization Key Coverage", () => {
   const placeholderPattern = /\b(TODO|TBD|FIXME|PLACEHOLDER|TRANSLATE|LOREM)\b/i;
-  const phaseOneShellKeys: TranslationKey[] = [
+  const shellKeys: TranslationKey[] = [
     "seo.title",
     "seo.description",
     "a11y.goHome",
@@ -73,7 +82,7 @@ describe("i18n Localization Key Coverage", () => {
     "mobilePreflight.title",
     "serverUnavailable.heading",
   ];
-  const phaseTwoHudKeys: TranslationKey[] = [
+  const hudKeys: TranslationKey[] = [
     "hud.core.chatPlaceholder",
     "hud.core.xpGain",
     "hud.core.communityLinks",
@@ -107,7 +116,7 @@ describe("i18n Localization Key Coverage", () => {
     "hud.errors.chatCooldown",
     "hud.logs.lootReceiveItem",
   ];
-  const phaseThreeAbilityKeys: TranslationKey[] = [
+  const abilityKeys: TranslationKey[] = [
     "abilityUi.actionBar.attackName",
     "abilityUi.actionBar.attackTooltip",
     "abilityUi.actionBar.emptySlot",
@@ -129,7 +138,7 @@ describe("i18n Localization Key Coverage", () => {
     "abilityUi.tooltip.finisherDamage",
     "abilityUi.resources.mana",
   ];
-  const phaseFourQuestKeys: TranslationKey[] = [
+  const questKeys: TranslationKey[] = [
     "questUi.tracker.title",
     "questUi.tracker.complete",
     "questUi.log.title",
@@ -149,7 +158,7 @@ describe("i18n Localization Key Coverage", () => {
     "questUi.logs.accepted",
     "questUi.errors.unavailable",
   ];
-  const phaseFiveItemKeys: TranslationKey[] = [
+  const itemKeys: TranslationKey[] = [
     "itemUi.money.goldShort",
     "itemUi.money.copper",
     "itemUi.slots.mainhand",
@@ -187,7 +196,7 @@ describe("i18n Localization Key Coverage", () => {
     "itemUi.errors.tooManyListings",
     "itemUi.loot.takeAll",
   ];
-  const phaseElevenMergeKeys: TranslationKey[] = [
+  const mergeKeys: TranslationKey[] = [
     "hud.options.mouseCamera",
     "hud.options.keybindHelpMouseCamera",
     "hud.markers.names.star",
@@ -398,21 +407,21 @@ describe("i18n Localization Key Coverage", () => {
   type EntityManifestEntry = ReturnType<typeof entityTranslationManifest>[number];
   type EntityRequest = Parameters<typeof tEntity>[0];
 
-  function phaseSevenRequest(entry: EntityManifestEntry): EntityRequest {
+  function classAbilityRequest(entry: EntityManifestEntry): EntityRequest {
     if (entry.kind === "class") {
       return { kind: "class", id: entry.id as PlayerClass, field: entry.field as "name" | "description" };
     }
     if (entry.kind === "ability") {
       return { kind: "ability", id: entry.id, field: entry.field as "name" | "description", values: { damage: "11-14" } };
     }
-    throw new Error(`Unexpected Phase 7 entity kind: ${entry.kind}`);
+    throw new Error(`Unexpected entity kind: ${entry.kind}`);
   }
 
-  function phaseEightRequest(entry: EntityManifestEntry): EntityRequest {
+  function itemRequest(entry: EntityManifestEntry): EntityRequest {
     if (entry.kind === "item") {
       return { kind: "item", id: entry.id, field: "name" };
     }
-    throw new Error(`Unexpected Phase 8 entity kind: ${entry.kind}`);
+    throw new Error(`Unexpected entity kind: ${entry.kind}`);
   }
 
   function parseIndexedEntry(id: string, segment: string): { ownerId: string; index: number } {
@@ -425,7 +434,7 @@ describe("i18n Localization Key Coverage", () => {
     return { ownerId, index };
   }
 
-  function phaseNineRequest(entry: EntityManifestEntry): EntityRequest {
+  function worldRequest(entry: EntityManifestEntry): EntityRequest {
     if (entry.kind === "mob") return { kind: "mob", id: entry.id, field: "name" };
     if (entry.kind === "npc") {
       return {
@@ -452,7 +461,7 @@ describe("i18n Localization Key Coverage", () => {
     if (entry.kind === "dungeon") {
       return { kind: "dungeon", id: entry.id, field: entry.field as "name" | "enterText" | "leaveText" };
     }
-    throw new Error(`Unexpected Phase 9 entity kind: ${entry.kind}`);
+    throw new Error(`Unexpected entity kind: ${entry.kind}`);
   }
 
   function sourceFilesUnder(relativeDir: string): string[] {
@@ -544,8 +553,8 @@ describe("i18n Localization Key Coverage", () => {
     }
   });
 
-  it("should include current phase public shell keys in every locale", () => {
-    for (const key of phaseOneShellKeys) {
+  it("should include public shell keys in every locale", () => {
+    for (const key of shellKeys) {
       for (const lang of supportedLanguages) {
         setLanguage(lang);
         expect(t(key), `${lang}.${key}`).not.toBe(key);
@@ -555,8 +564,8 @@ describe("i18n Localization Key Coverage", () => {
     setLanguage("en");
   });
 
-  it("should include current phase HUD, chat, and combat keys in every locale", () => {
-    for (const key of phaseTwoHudKeys) {
+  it("should include HUD, chat, and combat keys in every locale", () => {
+    for (const key of hudKeys) {
       for (const lang of supportedLanguages) {
         setLanguage(lang);
         expect(t(key), `${lang}.${key}`).not.toBe(key);
@@ -566,8 +575,8 @@ describe("i18n Localization Key Coverage", () => {
     setLanguage("en");
   });
 
-  it("should include current phase action bar, spellbook, and ability tooltip keys in every locale", () => {
-    for (const key of phaseThreeAbilityKeys) {
+  it("should include action bar, spellbook, and ability tooltip keys in every locale", () => {
+    for (const key of abilityKeys) {
       for (const lang of supportedLanguages) {
         setLanguage(lang);
         expect(t(key), `${lang}.${key}`).not.toBe(key);
@@ -577,8 +586,8 @@ describe("i18n Localization Key Coverage", () => {
     setLanguage("en");
   });
 
-  it("should include current phase quest log and dialogue keys in every locale", () => {
-    for (const key of phaseFourQuestKeys) {
+  it("should include quest log and dialogue keys in every locale", () => {
+    for (const key of questKeys) {
       for (const lang of supportedLanguages) {
         setLanguage(lang);
         expect(t(key), `${lang}.${key}`).not.toBe(key);
@@ -588,8 +597,8 @@ describe("i18n Localization Key Coverage", () => {
     setLanguage("en");
   });
 
-  it("should include current phase item, vendor, market, and currency keys in every locale", () => {
-    for (const key of phaseFiveItemKeys) {
+  it("should include item, vendor, market, and currency keys in every locale", () => {
+    for (const key of itemKeys) {
       for (const lang of supportedLanguages) {
         setLanguage(lang);
         expect(t(key), `${lang}.${key}`).not.toBe(key);
@@ -599,8 +608,8 @@ describe("i18n Localization Key Coverage", () => {
     setLanguage("en");
   });
 
-  it("should include Phase 11 merge UI keys in every locale", () => {
-    for (const key of phaseElevenMergeKeys) {
+  it("should include merge UI keys in every locale", () => {
+    for (const key of mergeKeys) {
       for (const lang of supportedLanguages) {
         setLanguage(lang);
         const text = t(key, interpolationValues);
@@ -611,7 +620,7 @@ describe("i18n Localization Key Coverage", () => {
     setLanguage("en");
   });
 
-  it("should enumerate Phase 6 entity source coverage for later translation phases", () => {
+  it("should enumerate entity source coverage for later translation work", () => {
     const manifest = entityTranslationManifest();
     expect(new Set(manifest.map((entry) => entry.key)).size).toBe(manifest.length);
     for (const entry of manifest) {
@@ -639,7 +648,7 @@ describe("i18n Localization Key Coverage", () => {
     expect(entityCount("dungeon", "leaveText")).toBe(Object.keys(DUNGEONS).length);
   });
 
-  it("should resolve Phase 7 class and ability text without canonical fallbacks", () => {
+  it("should resolve class and ability text without canonical fallbacks", () => {
     resetEntityTranslationFallbackLog();
     setLanguage("de_DE");
     expect(tEntity({ kind: "class", id: "mage", field: "name" })).toBe(t("classes.mage"));
@@ -664,16 +673,16 @@ describe("i18n Localization Key Coverage", () => {
     resetEntityTranslationFallbackLog();
   });
 
-  it("should provide every Phase 7 class and ability translation in every locale", () => {
-    const phaseSevenEntries = entityTranslationManifest().filter((entry) => entry.phase === "phase7");
-    expect(phaseSevenEntries).toHaveLength((Object.keys(CLASSES).length * 2) + (Object.keys(ABILITIES).length * 2));
-    expect(missingEntityTranslationsForPhases(["phase7"])).toHaveLength(0);
+  it("should provide every class and ability translation in every locale", () => {
+    const classAbilityEntries = entityTranslationManifest().filter((entry) => entry.group === "classAbility");
+    expect(classAbilityEntries).toHaveLength((Object.keys(CLASSES).length * 2) + (Object.keys(ABILITIES).length * 2));
+    expect(missingEntityTranslationsForGroups(["classAbility"])).toHaveLength(0);
 
     for (const lang of supportedLanguages) {
       setLanguage(lang);
       resetEntityTranslationFallbackLog();
-      for (const entry of phaseSevenEntries) {
-        const rendered = tEntity(phaseSevenRequest(entry));
+      for (const entry of classAbilityEntries) {
+        const rendered = tEntity(classAbilityRequest(entry));
         expect(rendered.trim().length, `${lang}.${entry.key}`).toBeGreaterThan(0);
         expect(rendered, `${lang}.${entry.key}`).not.toBe(entry.key);
         expect(rendered, `${lang}.${entry.key}`).not.toContain("$d");
@@ -685,29 +694,29 @@ describe("i18n Localization Key Coverage", () => {
           expect(rendered, `${lang}.${entry.key}`).toContain("11-14");
         }
       }
-      expect(entityTranslationFallbackLog(), `${lang} Phase 7 fallback log`).toHaveLength(0);
+      expect(entityTranslationFallbackLog(), `${lang} fallback log`).toHaveLength(0);
     }
 
     setLanguage("en");
   });
 
-  it("should provide every Phase 8 item translation in every locale without canonical fallbacks", () => {
-    const phaseEightEntries = entityTranslationManifest().filter((entry) => entry.phase === "phase8");
-    expect(phaseEightEntries).toHaveLength(Object.keys(ITEMS).length);
-    expect(missingEntityTranslationsForPhases(["phase7", "phase8"])).toHaveLength(0);
+  it("should provide every item translation in every locale without canonical fallbacks", () => {
+    const itemEntries = entityTranslationManifest().filter((entry) => entry.group === "item");
+    expect(itemEntries).toHaveLength(Object.keys(ITEMS).length);
+    expect(missingEntityTranslationsForGroups(["classAbility", "item"])).toHaveLength(0);
 
     for (const lang of supportedLanguages) {
       setLanguage(lang);
       resetEntityTranslationFallbackLog();
-      for (const entry of phaseEightEntries) {
-        const rendered = tEntity(phaseEightRequest(entry));
+      for (const entry of itemEntries) {
+        const rendered = tEntity(itemRequest(entry));
         expect(rendered.trim().length, `${lang}.${entry.key}`).toBeGreaterThan(0);
         expect(rendered, `${lang}.${entry.key}`).not.toBe(entry.key);
         if (lang !== "en" && lang !== "en_CA") {
           expect(rendered, `${lang}.${entry.key} should not copy canonical English item text`).not.toBe(entry.source);
         }
       }
-      expect(entityTranslationFallbackLog(), `${lang} Phase 8 fallback log`).toHaveLength(0);
+      expect(entityTranslationFallbackLog(), `${lang} fallback log`).toHaveLength(0);
     }
 
     setLanguage("de_DE");
@@ -719,7 +728,7 @@ describe("i18n Localization Key Coverage", () => {
     setLanguage("en");
   });
 
-  it("should route Phase 7 class-detail damage ranges through localized templates", () => {
+  it("should route class-detail damage ranges through localized templates", () => {
     const source = fs.readFileSync(path.resolve(process.cwd(), "src/main.ts"), "utf8");
     expect(source).toContain("abilityUi.tooltip.damageRange");
     expect(source).toContain("abilityUi.tooltip.finisherDamage");
@@ -733,22 +742,22 @@ describe("i18n Localization Key Coverage", () => {
     setLanguage("en");
   });
 
-  it("should expose no phase-gated missing entity translations through Phase 9", () => {
-    const phaseSevenMissing = missingEntityTranslationsForPhases(["phase7"]);
-    expect(phaseSevenMissing).toHaveLength(0);
+  it("should expose no missing entity translations across all entity groups", () => {
+    const classAbilityMissing = missingEntityTranslationsForGroups(["classAbility"]);
+    expect(classAbilityMissing).toHaveLength(0);
 
-    expect(missingEntityTranslationsForPhases(["phase7", "phase8"])).toHaveLength(0);
-    expect(missingEntityTranslationsForPhases(["phase9"])).toHaveLength(0);
-    expect(missingEntityTranslationsForPhases(["phase7", "phase8", "phase9"])).toHaveLength(0);
+    expect(missingEntityTranslationsForGroups(["classAbility", "item"])).toHaveLength(0);
+    expect(missingEntityTranslationsForGroups(["world"])).toHaveLength(0);
+    expect(missingEntityTranslationsForGroups(["classAbility", "item", "world"])).toHaveLength(0);
     expect(() => assertEntityTranslationsReady([])).not.toThrow();
-    expect(() => assertEntityTranslationsReady(["phase7"])).not.toThrow();
-    expect(() => assertEntityTranslationsReady(["phase7", "phase8"])).not.toThrow();
-    expect(() => assertEntityTranslationsReady(["phase7", "phase8", "phase9"])).not.toThrow();
+    expect(() => assertEntityTranslationsReady(["classAbility"])).not.toThrow();
+    expect(() => assertEntityTranslationsReady(["classAbility", "item"])).not.toThrow();
+    expect(() => assertEntityTranslationsReady(["classAbility", "item", "world"])).not.toThrow();
   });
 
-  it("should provide every Phase 9 world-content translation in every locale without canonical fallbacks", () => {
-    const phaseNineEntries = entityTranslationManifest().filter((entry) => entry.phase === "phase9");
-    const expectedPhaseNineCount =
+  it("should provide every world-content translation in every locale without canonical fallbacks", () => {
+    const worldEntries = entityTranslationManifest().filter((entry) => entry.group === "world");
+    const expectedWorldCount =
       Object.keys(MOBS).length
       + (Object.keys(NPCS).length * 3)
       + (Object.keys(QUESTS).length * 3)
@@ -756,22 +765,25 @@ describe("i18n Localization Key Coverage", () => {
       + (ZONES.length * 2)
       + ZONES.reduce((sum, zone) => sum + zone.pois.length, 0)
       + (Object.keys(DUNGEONS).length * 3);
-    expect(phaseNineEntries).toHaveLength(expectedPhaseNineCount);
+    expect(worldEntries).toHaveLength(expectedWorldCount);
 
     for (const lang of supportedLanguages) {
       setLanguage(lang);
       resetEntityTranslationFallbackLog();
-      for (const entry of phaseNineEntries) {
-        const rendered = tEntity(phaseNineRequest(entry));
+      for (const entry of worldEntries) {
+        const rendered = tEntity(worldRequest(entry));
         expect(rendered.trim().length, `${lang}.${entry.key}`).toBeGreaterThan(0);
         expect(rendered, `${lang}.${entry.key}`).not.toBe(entry.key);
         expect(rendered, `${lang}.${entry.key}`).not.toMatch(/\$N|\$C|\{playerName\}|\{className\}|\{classNameLower\}/);
-        if (lang !== "en" && lang !== "en_CA" && entry.kind === "quest" && (entry.field === "text" || entry.field === "completion")) {
+        // RELEASE-TIER ONLY: a sparse/English-only overlay renders the English fill
+        // for an untranslated quest narrative, which is legal on a PR (a `pending`
+        // row) and blocked only at the release gate.
+        if (RELEASE_TIER && lang !== "en" && lang !== "en_CA" && entry.kind === "quest" && (entry.field === "text" || entry.field === "completion")) {
           expect(copiedEnglishComparable(rendered), `${lang}.${entry.key} should not copy canonical English quest narrative`)
             .not.toBe(copiedEnglishComparable(entry.source));
         }
       }
-      expect(entityTranslationFallbackLog(), `${lang} Phase 9 fallback log`).toHaveLength(0);
+      expect(entityTranslationFallbackLog(), `${lang} fallback log`).toHaveLength(0);
     }
 
     setLanguage("de_DE");
@@ -801,7 +813,7 @@ describe("i18n Localization Key Coverage", () => {
     setLanguage("en");
   });
 
-  it("should provide Phase 12 talent content translations for every supported locale", () => {
+  it("should provide talent content translations for every supported locale", () => {
     const talentEntries = talentTranslationManifest();
     expect(talentEntries.length).toBeGreaterThan(250);
     expect(new Set(talentEntries.map((entry) => `${entry.kind}:${entry.classId}:${entry.specId ?? "class"}:${entry.id}:${entry.field}`)).size).toBe(talentEntries.length);
@@ -812,7 +824,9 @@ describe("i18n Localization Key Coverage", () => {
         const rendered = renderTalentManifestEntry(entry);
         expect(rendered.trim().length, `${lang}.${entry.id}.${entry.field}`).toBeGreaterThan(0);
         expect(rendered, `${lang}.${entry.id}.${entry.field}`).not.toMatch(placeholderPattern);
-        if (lang !== "en" && lang !== "en_CA" && entry.field === "description") {
+        // RELEASE-TIER ONLY (copied-English talent content): an untranslated talent
+        // renders the English fill on a PR (a `pending` row), blocked at release.
+        if (RELEASE_TIER && lang !== "en" && lang !== "en_CA" && entry.field === "description") {
           expect(copiedEnglishComparable(rendered), `${lang}.${entry.id}.${entry.field} should not copy canonical English talent prose`)
             .not.toBe(copiedEnglishComparable(entry.source));
         }
@@ -821,32 +835,40 @@ describe("i18n Localization Key Coverage", () => {
         // explicit titleOverride (e.g. French "Riposte", Spanish "Vigor"); a name that
         // matches English WITHOUT such an override is an accidental leak (e.g. a new
         // talent whose vocabulary the translation tables do not yet cover).
-        if (lang !== "en" && lang !== "en_CA" && entry.field === "name" && !hasTalentTitleOverride(lang, entry.source)) {
+        if (RELEASE_TIER && lang !== "en" && lang !== "en_CA" && entry.field === "name" && !hasTalentTitleOverride(lang, entry.source)) {
           expect(copiedEnglishComparable(rendered), `${lang}.${entry.id}.name leaks English with no explicit titleOverride`)
             .not.toBe(copiedEnglishComparable(entry.source));
         }
       }
     }
 
-    setLanguage("es");
-    expect(renderTalentManifestEntry(talentEntries.find((entry) => entry.id === "war_toughness" && entry.field === "name")!)).toContain("Dureza");
-    expect(renderTalentManifestEntry(talentEntries.find((entry) => entry.id === "arms.mastery" && entry.field === "description")!)).toContain("daño");
+    // RELEASE-TIER ONLY: specific real-translation spot-checks (would render the
+    // English fill, not these strings, for an untranslated key on a PR).
+    if (RELEASE_TIER) {
+      setLanguage("es");
+      expect(renderTalentManifestEntry(talentEntries.find((entry) => entry.id === "war_toughness" && entry.field === "name")!)).toContain("Dureza");
+      expect(renderTalentManifestEntry(talentEntries.find((entry) => entry.id === "arms.mastery" && entry.field === "description")!)).toContain("daño");
 
-    setLanguage("zh_CN");
-    expect(renderTalentManifestEntry(talentEntries.find((entry) => entry.id === "war_cruelty" && entry.field === "name")!)).toContain("残忍");
+      setLanguage("zh_CN");
+      expect(renderTalentManifestEntry(talentEntries.find((entry) => entry.id === "war_cruelty" && entry.field === "name")!)).toContain("残忍");
 
-    setLanguage("ko_KR");
-    expect(renderTalentManifestEntry(talentEntries.find((entry) => entry.id === "prot_choice.pc_last_stand" && entry.field === "description")!)).toContain("생명력");
+      setLanguage("ko_KR");
+      expect(renderTalentManifestEntry(talentEntries.find((entry) => entry.id === "prot_choice.pc_last_stand" && entry.field === "description")!)).toContain("생명력");
+    }
 
     setLanguage("en");
   });
 
-  it("should use explicit Phase 9 quest narrative translations instead of generated templates", () => {
-    const phaseNineSource = fs.readFileSync(path.resolve(process.cwd(), "src/ui/phase9_i18n.ts"), "utf8");
-    expect(phaseNineSource).not.toContain("questText:");
-    expect(phaseNineSource).not.toContain("questCompletion:");
-    expect(phaseNineSource).not.toContain("...zhCnData");
-    expect(phaseNineSource).not.toMatch(/const zhTwData[\s\S]*\.\.\.zhCnData[\s\S]*const koData/);
+  // RELEASE-TIER ONLY: real quest-narrative content checks. A sparse /
+  // English-only overlay renders the English fill for an untranslated quest (legal
+  // on a PR as a `pending` row, blocked at the release gate), so the generic-template
+  // and per-locale-diversity assertions are release-only.
+  it.runIf(RELEASE_TIER)("should use explicit quest narrative translations instead of generated templates", () => {
+    const worldEntitySource = fs.readFileSync(path.resolve(process.cwd(), "src/ui/world_entity_i18n.ts"), "utf8");
+    expect(worldEntitySource).not.toContain("questText:");
+    expect(worldEntitySource).not.toContain("questCompletion:");
+    expect(worldEntitySource).not.toContain("...zhCnData");
+    expect(worldEntitySource).not.toMatch(/const zhTwData[\s\S]*\.\.\.zhCnData[\s\S]*const koData/);
 
     const genericPatterns = [
       /^Para ".+", completa estos objetivos:/,
@@ -897,7 +919,9 @@ describe("i18n Localization Key Coverage", () => {
     setLanguage("en");
   });
 
-  it("should keep representative Phase 9 quest narratives translated with quest-specific content", () => {
+  // RELEASE-TIER ONLY: pins specific non-English quest narratives, which
+  // an untranslated (English-filled) overlay would not satisfy on a PR.
+  it.runIf(RELEASE_TIER)("should keep representative quest narratives translated with quest-specific content", () => {
     const expectations: Array<readonly [typeof supportedLanguages[number], string, "text" | "completion", string]> = [
       ["es", "q_hollow", "completion", "Eastbrook te debe"],
       ["fr_FR", "q_idols", "completion", "La secte a commencé ici"],
@@ -919,13 +943,13 @@ describe("i18n Localization Key Coverage", () => {
     setLanguage("en");
   });
 
-  it("should keep Traditional Chinese Phase 9 world content out of Simplified-only shortcuts", () => {
+  it("should keep Traditional Chinese world content out of Simplified-only shortcuts", () => {
     const simplifiedOnlyCharacters = /[颚猪网潜强盗宁无钳鱼妇贪鲁唤师执荆军风领热灵蹒垒缚仆骑挥雾维圣卫复这门进队战击个补桥吗块环声钥]/;
-    const phaseNineEntries = entityTranslationManifest().filter((entry) => entry.phase === "phase9");
+    const worldEntries = entityTranslationManifest().filter((entry) => entry.group === "world");
 
     setLanguage("zh_TW");
-    for (const entry of phaseNineEntries) {
-      const rendered = tEntity(phaseNineRequest(entry));
+    for (const entry of worldEntries) {
+      const rendered = tEntity(worldRequest(entry));
       expect(rendered, `zh_TW.${entry.key}`).not.toMatch(simplifiedOnlyCharacters);
     }
 
@@ -955,13 +979,13 @@ describe("i18n Localization Key Coverage", () => {
     expect(rendererSource).not.toContain("`${e.name} (corpse)`");
   });
 
-  it("should preserve and render every Phase 2 HUD interpolation placeholder in every locale", () => {
-    const phaseTwoDynamicKeys = flattenStrings(en.hud, "hud")
+  it("should preserve and render every HUD interpolation placeholder in every locale", () => {
+    const hudDynamicKeys = flattenStrings(en.hud, "hud")
       .map(({ key, value }) => ({ key, expected: placeholders(value) }))
       .filter(({ expected }) => expected.length > 0);
     const allLocales: Record<string, typeof en> = { en, ...locales };
 
-    for (const { key, expected } of phaseTwoDynamicKeys) {
+    for (const { key, expected } of hudDynamicKeys) {
       for (const [lang, locale] of Object.entries(allLocales)) {
         const template = nestedString(locale, key);
         expect(placeholders(template), `${lang}.${key} placeholders`).toEqual(expected);
@@ -979,13 +1003,13 @@ describe("i18n Localization Key Coverage", () => {
     setLanguage("en");
   });
 
-  it("should preserve and render every Phase 3 ability UI interpolation placeholder in every locale", () => {
-    const phaseThreeDynamicKeys = flattenStrings(en.abilityUi, "abilityUi")
+  it("should preserve and render every ability UI interpolation placeholder in every locale", () => {
+    const abilityDynamicKeys = flattenStrings(en.abilityUi, "abilityUi")
       .map(({ key, value }) => ({ key, expected: placeholders(value) }))
       .filter(({ expected }) => expected.length > 0);
     const allLocales: Record<string, typeof en> = { en, ...locales };
 
-    for (const { key, expected } of phaseThreeDynamicKeys) {
+    for (const { key, expected } of abilityDynamicKeys) {
       for (const [lang, locale] of Object.entries(allLocales)) {
         const template = nestedString(locale, key);
         expect(placeholders(template), `${lang}.${key} placeholders`).toEqual(expected);
@@ -1003,13 +1027,13 @@ describe("i18n Localization Key Coverage", () => {
     setLanguage("en");
   });
 
-  it("should preserve and render every Phase 4 quest UI interpolation placeholder in every locale", () => {
-    const phaseFourDynamicKeys = flattenStrings(en.questUi, "questUi")
+  it("should preserve and render every quest UI interpolation placeholder in every locale", () => {
+    const questDynamicKeys = flattenStrings(en.questUi, "questUi")
       .map(({ key, value }) => ({ key, expected: placeholders(value) }))
       .filter(({ expected }) => expected.length > 0);
     const allLocales: Record<string, typeof en> = { en, ...locales };
 
-    for (const { key, expected } of phaseFourDynamicKeys) {
+    for (const { key, expected } of questDynamicKeys) {
       for (const [lang, locale] of Object.entries(allLocales)) {
         const template = nestedString(locale, key);
         expect(placeholders(template), `${lang}.${key} placeholders`).toEqual(expected);
@@ -1027,13 +1051,13 @@ describe("i18n Localization Key Coverage", () => {
     setLanguage("en");
   });
 
-  it("should preserve and render every Phase 5 item UI interpolation placeholder in every locale", () => {
-    const phaseFiveDynamicKeys = flattenStrings(en.itemUi, "itemUi")
+  it("should preserve and render every item UI interpolation placeholder in every locale", () => {
+    const itemDynamicKeys = flattenStrings(en.itemUi, "itemUi")
       .map(({ key, value }) => ({ key, expected: placeholders(value) }))
       .filter(({ expected }) => expected.length > 0);
     const allLocales: Record<string, typeof en> = { en, ...locales };
 
-    for (const { key, expected } of phaseFiveDynamicKeys) {
+    for (const { key, expected } of itemDynamicKeys) {
       for (const [lang, locale] of Object.entries(allLocales)) {
         const template = nestedString(locale, key);
         expect(placeholders(template), `${lang}.${key} placeholders`).toEqual(expected);
@@ -1051,7 +1075,7 @@ describe("i18n Localization Key Coverage", () => {
     setLanguage("en");
   });
 
-  it("should interpolate Phase 2 combat, chat, and log templates without dropping values", () => {
+  it("should interpolate combat, chat, and log templates without dropping values", () => {
     setLanguage("de_DE");
     expect(t("hud.combat.damageDoneCrit", { ability: "Feuerball", target: "Wolf", amount: 42 })).toContain("42");
     expect(t("hud.errors.chatCooldown", { seconds: 7 })).toContain("7");
@@ -1067,7 +1091,7 @@ describe("i18n Localization Key Coverage", () => {
     setLanguage("en");
   });
 
-  it("should format Phase 3 ability tooltip templates without dropping dynamic values", () => {
+  it("should format ability tooltip templates without dropping dynamic values", () => {
     setLanguage("de_DE");
     expect(t("abilityUi.tooltip.cooldownSeconds", { seconds: 8 })).toContain("8");
     expect(t("abilityUi.spellbook.trainableAtLevel", { level: 10 })).toContain("10");
@@ -1089,7 +1113,7 @@ describe("i18n Localization Key Coverage", () => {
     setLanguage("en");
   });
 
-  it("should format Phase 4 quest UI templates without dropping dynamic values", () => {
+  it("should format quest UI templates without dropping dynamic values", () => {
     setLanguage("de_DE");
     expect(t("questUi.log.summary", { active: 3, completed: 8 })).toContain("3");
     expect(t("questUi.log.summary", { active: 3, completed: 8 })).toContain("8");
@@ -1106,7 +1130,7 @@ describe("i18n Localization Key Coverage", () => {
     setLanguage("en");
   });
 
-  it("should format Phase 5 item UI and money helpers without dropping dynamic values", () => {
+  it("should format item UI and money helpers without dropping dynamic values", () => {
     setLanguage("de_DE");
     expect(t("itemUi.vendor.goodsTitle", { name: "Haldren" })).toContain("Haldren");
     expect(t("itemUi.market.sellNote", { cut: 5, used: 2, max: 12 })).toContain("5");

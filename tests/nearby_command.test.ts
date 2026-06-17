@@ -71,7 +71,12 @@ describe('/nearby command', () => {
     const sim = makeWorld();
     const a = sim.addPlayer('warrior', 'Aleph');
     teleport(sim, a, HX, HZ);
-    spawnMob(sim, 900003, 'forest_wolf', 5, HX + 5, HZ);
+    const wolf = spawnMob(sim, 900003, 'forest_wolf', 5, HX + 5, HZ);
+    // Pin the wolf: the two readouts tick the world sequentially, so a wandering
+    // mob would drift a fraction of a yard between them and flip the rounded
+    // distance. This test compares alias output, not mob movement.
+    wolf.hostile = false;
+    wolf.wanderTimer = 999;
 
     expect(readout(sim, a, '/near')).toBe(readout(sim, a, '/around'));
     expect(readout(sim, a, '/near').startsWith('Nearby (1): ')).toBe(true);

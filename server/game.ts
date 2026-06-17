@@ -16,6 +16,8 @@ import type { Presence, PresenceStatus, SocialActor, SocialEvent, SocialTranspor
 import { PgSocialDb } from './social_db';
 import { REALM } from './realm';
 import { isOverheadEmoteId } from '../src/world_api';
+import * as antibot from './antibot';
+import type { BotTracker } from './antibot';
 
 const WORLD_SEED = 20061;
 // Interest management: the client renders entities out to 80yd, so new
@@ -48,6 +50,18 @@ const CHAT_RATE_ERROR_COOLDOWN_SECONDS = 4;
 const CHAT_COOLDOWN_SECONDS = 20;
 const CHAT_RATE_VIOLATIONS_FOR_COOLDOWN = 3;
 const WHO_RESULT_LIMIT = 50;
+const MAX_ACTIVE_SESSIONS_PER_ACCOUNT = 2;
+const RESTART_COUNTDOWN_TOTAL_SECONDS = 600;
+const RESTART_COUNTDOWN_STEPS = [
+  { atSeconds: 0, text: 'Server restart in 10 minutes.' },
+  { atSeconds: 300, text: 'Server restart in 5 minutes.' },
+  { atSeconds: 480, text: 'Server restart in 2 minutes.' },
+  { atSeconds: 540, text: 'Server restart in 1 minute.' },
+  { atSeconds: 570, text: 'Server restart in 30 seconds.' },
+  { atSeconds: 590, text: 'Server restart in 10 seconds.' },
+  { atSeconds: 600, text: 'Server restarting now.' },
+] as const;
+const MAX_WS_PER_IP_SOFT = Number(process.env.MAX_WS_PER_IP_SOFT ?? '5');
 // Clients stream movement intent every 50ms. If that stream goes silent while
 // the last packet held a key down, stop applying it instead of turning/running
 // forever. 750ms leaves room for normal jitter and short browser stalls.
@@ -98,6 +112,10 @@ export interface ClientSession {
   // last social snapshot. Drives the cheap periodic position push (no DB) that
   // keeps allies live on the world map.
   socialTrackedIds?: number[];
+  // IP address at join time (from requestMetadata); used for per-IP session counting.
+  ip: string;
+  // Behavioral bot-detection state. Ephemeral — reset on every join.
+  bot: BotTracker;
 }
 
 interface SentEntityVersions {
@@ -136,6 +154,13 @@ export interface AdminLivePlayer {
   zone: string;
   sessionSeconds: number;
   lastSaveSecondsAgo: number;
+}
+
+export interface RestartCountdownStatus {
+  started: boolean;
+  active: boolean;
+  totalSeconds: number;
+  remainingSeconds: number;
 }
 
 interface WireAura {
@@ -302,13 +327,27 @@ export class GameServer {
   private saveTimer = 0;
   private socialPosTimer = 0;
   private saveAllInFlight: Promise<void> | null = null;
+  private restartCountdownStartedAt: number | null = null;
+  private readonly restartCountdownTimers: NodeJS.Timeout[] = [];
   private readonly startedAt = Date.now();
   private peakOnline = 0;
   private tickMsAvg = 0;
+  private readonly ipSessionCounts = new Map<string, number>();
 
   constructor() {
-    this.sim = new Sim({ seed: WORLD_SEED, playerClass: 'warrior', noPlayer: true });
+    this.sim = new Sim({
+      seed: WORLD_SEED,
+      playerClass: 'warrior',
+      noPlayer: true,
+      devCommands: process.env.ALLOW_DEV_COMMANDS === '1',
+    });
     this.social = new SocialService(this.socialDb, this.socialTransport());
+  }
+
+  // Returns the number of currently active WS sessions from the given IP.
+  // Called by main.ts before join() for the hard-reject check.
+  countIpSessions(ip: string): number {
+    return this.ipSessionCounts.get(ip) ?? 0;
   }
 
   // -------------------------------------------------------------------------
@@ -419,6 +458,7 @@ export class GameServer {
         this.clearStaleInputs();
         const events = this.sim.tick();
         this.routeEvents(events);
+        this.runAntibotTick();
         acc -= DT;
       }
       this.broadcastSnapshots();
@@ -444,6 +484,19 @@ export class GameServer {
 
   // -------------------------------------------------------------------------
 
+  private runAntibotTick(): void {
+    const now = Date.now();
+    for (const session of this.clients.values()) {
+      // Skip sessions with no evidence and no active escalation timers (CPU budget).
+      const t = session.bot;
+      if (t.evidence.length === 0 && t.aboveLogSince === null && t.aboveThrottleSince === null && t.aboveKickSince === null) continue;
+      const action = antibot.onSimTick(t, session, now);
+      if (action === 'kick') {
+        void this.leave(session, 'disconnected');
+      }
+    }
+  }
+
   private clearStaleInputs(): void {
     for (const session of this.clients.values()) {
       if (this.sim.time - session.lastInputAt <= STALE_INPUT_SECONDS) continue;
@@ -468,6 +521,18 @@ export class GameServer {
     meta: RequestMetadata & Partial<AccountChatMuteStatus> & { chatStrikes?: number } = {},
   ): ClientSession | { error: string } {
     if (this.sessionsByCharacterId.has(characterId)) return { error: 'character already in world' };
+    // Anti-bot: cap simultaneous online characters per account. Accounts can
+    // still own up to 10 characters; this only limits live sessions. GMs are
+    // exempt for supervision.
+    if (!isGm) {
+      let activeForAccount = 0;
+      for (const s of this.clients.values()) {
+        if (s.accountId === accountId) activeForAccount++;
+      }
+      if (activeForAccount >= MAX_ACTIVE_SESSIONS_PER_ACCOUNT) {
+        return { error: 'too many characters on this account are already in the world' };
+      }
+    }
     const pid = this.sim.addPlayer(cls, name, { state: state ?? undefined });
     if (isGm) {
       // GM characters: invulnerable, and always at the level cap (the row is
@@ -476,6 +541,7 @@ export class GameServer {
       const e = this.sim.entities.get(pid);
       if (e && e.level < 20) this.sim.setPlayerLevel(20, pid);
     }
+    const sessionIp = meta.ip ?? '';
     const session: ClientSession = {
       ws, accountId, characterId, pid, name,
       lastSave: Date.now(), alive: true, joinedAt: Date.now(), dbSessionId: null, left: false,
@@ -492,7 +558,18 @@ export class GameServer {
       lastInputAt: this.sim.time,
       lastSent: {},
       sentEnts: new Map(),
+      ip: sessionIp,
+      bot: antibot.createTracker(),
     };
+    // Per-IP session counting: update the map and seed multi_ip evidence if over soft threshold.
+    const ipCount = (this.ipSessionCounts.get(sessionIp) ?? 0) + 1;
+    this.ipSessionCounts.set(sessionIp, ipCount);
+    if (sessionIp && ipCount > MAX_WS_PER_IP_SOFT) {
+      antibot.addEvidence(session.bot, {
+        kind: 'multi_ip', weight: 0.4, expiresAt: Infinity,
+        detail: `${ipCount} sessions from ${sessionIp}`,
+      });
+    }
     this.clients.set(pid, session);
     this.sessionsByCharacterId.set(characterId, session);
     this.peakOnline = Math.max(this.peakOnline, this.clients.size);
@@ -521,7 +598,9 @@ export class GameServer {
       // at login; sending is still gated server-side regardless.
       chatMutedUntil: session.chatMutedUntil ?? null,
     });
-    this.broadcastSystem(`${name} has entered Cryptic Realm.`);
+    // Only the entering player sees their own world-entry notice; we don't
+    // broadcast it to everyone (and likewise don't broadcast departures below).
+    this.send(session, { t: 'events', list: [{ type: 'log', text: `${name} has entered Cryptic Realm.`, color: '#ffd100' }] });
     void this.initSocial(session);
     return session;
   }
@@ -545,6 +624,11 @@ export class GameServer {
     session.left = true;
     this.clients.delete(session.pid);
     this.sessionsByCharacterId.delete(session.characterId);
+    if (session.ip) {
+      const prev = this.ipSessionCounts.get(session.ip) ?? 1;
+      if (prev <= 1) this.ipSessionCounts.delete(session.ip);
+      else this.ipSessionCounts.set(session.ip, prev - 1);
+    }
     this.social.forget(session.characterId);
     // delete from clients first so friends see them as offline in the notice
     void this.social.announcePresence({ characterId: session.characterId, name: session.name }, false)
@@ -554,7 +638,8 @@ export class GameServer {
     }
     await this.saveCharacter(session).catch((err) => console.error('save on leave failed:', err));
     this.sim.removePlayer(session.pid);
-    this.broadcastSystem(`${session.name} has left the world. (${reason})`);
+    // Departures are no longer broadcast to the realm — the leaving player has
+    // already disconnected, so there is no one to show their own notice to.
   }
 
   async saveCharacter(session: ClientSession): Promise<void> {
@@ -686,6 +771,47 @@ export class GameServer {
     }
   }
 
+  startRestartCountdown(): RestartCountdownStatus {
+    if (this.restartCountdownStartedAt !== null) {
+      return {
+        started: false,
+        active: true,
+        totalSeconds: RESTART_COUNTDOWN_TOTAL_SECONDS,
+        remainingSeconds: this.restartCountdownRemainingSeconds(),
+      };
+    }
+    this.restartCountdownStartedAt = Date.now();
+    for (const step of RESTART_COUNTDOWN_STEPS) {
+      if (step.atSeconds === 0) {
+        this.broadcastSystem(step.text);
+        continue;
+      }
+      const timer = setTimeout(() => {
+        this.broadcastSystem(step.text);
+        if (step.atSeconds === RESTART_COUNTDOWN_TOTAL_SECONDS) this.clearRestartCountdown();
+      }, step.atSeconds * 1000);
+      timer.unref?.();
+      this.restartCountdownTimers.push(timer);
+    }
+    return {
+      started: true,
+      active: true,
+      totalSeconds: RESTART_COUNTDOWN_TOTAL_SECONDS,
+      remainingSeconds: RESTART_COUNTDOWN_TOTAL_SECONDS,
+    };
+  }
+
+  private restartCountdownRemainingSeconds(): number {
+    if (this.restartCountdownStartedAt === null) return 0;
+    const elapsedSeconds = Math.floor((Date.now() - this.restartCountdownStartedAt) / 1000);
+    return Math.max(0, RESTART_COUNTDOWN_TOTAL_SECONDS - elapsedSeconds);
+  }
+
+  private clearRestartCountdown(): void {
+    this.restartCountdownStartedAt = null;
+    this.restartCountdownTimers.length = 0;
+  }
+
   muteAccountChat(accountId: number, mutedUntil: string, reason: string): void {
     const until = new Date(mutedUntil);
     if (!Number.isFinite(until.getTime())) return;
@@ -778,6 +904,7 @@ export class GameServer {
       return;
     }
     if (msg.t !== 'cmd') return;
+    antibot.observeAction(session.bot, String(msg.cmd ?? ''), Date.now());
     switch (msg.cmd) {
       case 'castSlot': sim.castAbilityBySlot(msg.slot | 0, pid); break;
       case 'cast': if (typeof msg.ability === 'string') sim.castAbility(msg.ability, pid); break;
@@ -914,11 +1041,15 @@ export class GameServer {
       case 'guild_demote': if (typeof msg.name === 'string') void this.social.guildSetRank(this.actorFor(session), msg.name, 'member').catch(logSocialErr); break;
       case 'guild_transfer': if (typeof msg.name === 'string') void this.social.guildTransferLeader(this.actorFor(session), msg.name).catch(logSocialErr); break;
       case 'guild_disband': void this.social.guildDisband(this.actorFor(session)).catch(logSocialErr); break;
-      // arena (Ashen Coliseum 1v1 queue)
-      case 'arena_queue': sim.arenaQueueJoin(pid); break;
+      // arena (Ashen Coliseum queue)
+      case 'arena_queue': {
+        const fmt = msg.format === '2v2' ? '2v2' : '1v1';
+        sim.arenaQueueJoin(pid, fmt);
+        break;
+      }
       case 'arena_leave': sim.arenaQueueLeave(pid); break;
 
-      // post-cap cosmetic prestige (Max-Level XP Overflow, Phase 4)
+      // post-cap cosmetic prestige (Max-Level XP Overflow)
       case 'prestige': sim.prestige(pid); break;
 
       // Talents & Specializations — every allocation re-validated in the Sim.
@@ -1247,12 +1378,22 @@ export class GameServer {
             if (ev.type === 'chat' && ev.channel === 'whisper' && ev.to === undefined && ev.fromPid !== session.pid) {
               session.lastWhisperFrom = ev.from;
             }
+            // Reaction time: record stimulus when a triggering event lands.
+            if (ev.type === 'death' || ev.type === 'castStop') {
+              antibot.observeEvent(session.bot, ev.type, Date.now());
+            }
           }
           continue;
         }
         // world events: only those near this player
         const anchor = this.eventAnchor(ev);
-        if (anchor === null || dist2d(p.pos, anchor) <= EVENT_RADIUS) mine.push(ev);
+        if (anchor === null || dist2d(p.pos, anchor) <= EVENT_RADIUS) {
+          mine.push(ev);
+          // Reaction time: castStop/death are world events (no pid) — match by entityId.
+          if ((ev.type === 'castStop' || ev.type === 'death') && ev.entityId === session.pid) {
+            antibot.observeEvent(session.bot, ev.type, Date.now());
+          }
+        }
       }
       if (mine.length > 0) this.send(session, { t: 'events', list: mine });
     }

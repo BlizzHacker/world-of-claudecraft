@@ -46,9 +46,10 @@ function envSeedSoftWords(): string[] {
 }
 
 function envSeedHardWords(): string[] {
-  // The hard (slur) tier ships no plaintext list in this open-source repo; the
-  // `obscenity` baseline enforces slurs, and operators seed the few it omits
-  // privately here. See DEFAULT_HARD_WORDS in chat_filter.ts.
+  // The hard (slur) tier ships no plaintext list in this open-source repo and is
+  // the SOLE punitive trigger, so the operator MUST seed the slur list here at
+  // first boot — with nothing seeded, nothing is enforced. Managed from the admin
+  // dashboard thereafter. See DEFAULT_HARD_WORDS in chat_filter.ts.
   return envSeedWords('CHAT_FILTER_HARD_LIST', 'CHAT_FILTER_HARD_FILE');
 }
 
@@ -263,6 +264,33 @@ export async function chatModerationForAccount(accountId: number, limit = 25): P
       createdAt: new Date(r.created_at).toISOString(),
     })),
   };
+}
+
+export interface ChatModeratedAccount {
+  id: number;
+  username: string;
+  isAdmin: boolean;
+  chatStrikes: number;
+  chatMutedUntil: string | null;
+}
+
+/** Accounts that are currently chat-muted or carry strikes — the chat-filter dash list. */
+export async function chatModeratedAccounts(limit = 200): Promise<ChatModeratedAccount[]> {
+  const res = await pool.query(
+    `SELECT id, username, is_admin, COALESCE(chat_strikes, 0) AS chat_strikes, chat_muted_until
+       FROM accounts
+      WHERE (chat_muted_until IS NOT NULL AND chat_muted_until > now()) OR COALESCE(chat_strikes, 0) > 0
+      ORDER BY chat_muted_until DESC NULLS LAST, chat_strikes DESC, id
+      LIMIT $1`,
+    [Math.min(500, Math.max(1, limit))],
+  );
+  return res.rows.map((r) => ({
+    id: Number(r.id),
+    username: r.username,
+    isAdmin: r.is_admin,
+    chatStrikes: Number(r.chat_strikes ?? 0),
+    chatMutedUntil: r.chat_muted_until ? new Date(r.chat_muted_until).toISOString() : null,
+  }));
 }
 
 /** Clear an active mute. Returns the account id touched (for live disconnect/notice). */

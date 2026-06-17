@@ -15,6 +15,39 @@ import { ABILITIES } from "../src/sim/data";
 const locales: Record<string, any> = { en, es, es_ES, fr_FR, fr_CA, en_CA, it_IT, de_DE, zh_CN, zh_TW, ko_KR, ja_JP, pt_BR, ru_RU };
 const ph = (s: string) => [...String(s).matchAll(/\{([A-Za-z0-9_]+)\}/g)].map((m) => m[1]).sort().join(",");
 
+// --- The copied-English and v0.7-slash allow-lists are VIEWS over the
+// generated status registry (src/ui/i18n.status.json, written by
+// scripts/i18n_scan.mjs and regenerated in pretest), not hand-maintained Sets.
+// COPIED_ALLOW = blocked server/admin cognate rows; ALLOW_V07_SLASH = the
+// blockedSource sim entries (v0.7 slash-command strings that ship English). The
+// registry is the single source of truth seeded from the former literal Sets. ---
+const statusRegistry = JSON.parse(
+  fs.readFileSync(path.resolve(process.cwd(), "src/ui/i18n.status.json"), "utf8"),
+) as { keys: Record<string, any>; blockedSource: { channel: string; text: string }[] };
+const COPIED_ALLOW: ReadonlySet<string> = (() => {
+  const out = new Set<string>();
+  for (const [ck, entry] of Object.entries(statusRegistry.keys)) {
+    const ci = ck.indexOf(":");
+    const scope = ck.slice(0, ci);
+    const key = ck.slice(ci + 1);
+    if (scope !== "server" && scope !== "admin") continue;
+    for (const [loc, row] of Object.entries(entry.locales as Record<string, { state: string }>)) {
+      if (row.state === "blocked") out.add(`${scope}::${loc}::${key}`);
+    }
+  }
+  return out;
+})();
+const ALLOW_V07_SLASH: ReadonlySet<string> = new Set<string>(
+  statusRegistry.blockedSource.filter((b) => b.channel === "sim").map((b) => b.text),
+);
+
+// Two-tier gate (see .github/workflows/ci.yml). The release tier runs with
+// I18N_RELEASE_TIER=1. PR-tier checks (registration / key existence) run always;
+// full-localization checks (s3_localized, the copied-English content guards) run
+// release-only - an English-only PR is legal, so it must not have to localize every
+// locale to pass the PR gate.
+const RELEASE_TIER = process.env.I18N_RELEASE_TIER === "1";
+
 // --- B1: the log-event path must localize server-sent friends/guild/who/world messages ---
 describe("B1: server log-type messages localize through the log path", () => {
   it("all three hud matchers call AND return the localizeServerText fallback", () => {
@@ -183,28 +216,8 @@ describe("H3: DICT key parity, non-empty values, placeholder integrity", () => {
   // H3b: copied-English guard — checkDict above never compares a value to English,
   // so untranslated/copied English would pass. This catches NEW copied-English while
   // allowing a fixed set of legitimate cognates / brand / borrowed terms / format strings.
-  const COPIED_ALLOW = new Set<string>([
-    // server: French "combat" is a real word; "online" is the borrowed term in it/de/pt.
-    "server::fr_FR::who.statusCombat", "server::fr_CA::who.statusCombat",
-    "server::it_IT::who.statusOnline", "server::de_DE::who.statusOnline", "server::pt_BR::who.statusOnline",
-    // admin: brand title, "{count} h" format, and accepted cognates/borrowings.
-    "admin::es::detail.lengthHours", "admin::es_ES::detail.lengthHours",
-    "admin::fr_FR::app.title", "admin::fr_FR::online.colSession", "admin::fr_FR::detail.colActions",
-    "admin::fr_FR::report.colMessage", "admin::fr_FR::dialog.action", "admin::fr_FR::detail.lengthHours",
-    "admin::fr_CA::online.colSession", "admin::fr_CA::detail.colActions", "admin::fr_CA::report.colMessage",
-    "admin::fr_CA::dialog.action", "admin::fr_CA::detail.lengthHours",
-    "admin::it_IT::app.title", "admin::it_IT::auth.password", "admin::it_IT::stats.uptime",
-    "admin::it_IT::characters.colAccount", "admin::it_IT::moderation.colAccount", "admin::it_IT::moderation.badgeOnline",
-    "admin::it_IT::reason.cheating", "admin::it_IT::dialog.account", "admin::it_IT::detail.accountNum",
-    "admin::it_IT::detail.lengthHours",
-    "admin::de_DE::app.title", "admin::de_DE::nav.moderation", "admin::de_DE::detail.status",
-    "admin::de_DE::moderation.title", "admin::de_DE::moderation.colStatus", "admin::de_DE::moderation.badgeOnline",
-    "admin::de_DE::detail.lengthHours",
-    "admin::pt_BR::app.title", "admin::pt_BR::detail.status", "admin::pt_BR::moderation.colStatus",
-    "admin::pt_BR::moderation.badgeOnline", "admin::pt_BR::detail.lengthHours",
-    // Class names: "Paladin" is the canonical German/French class name (cognate).
-    "admin::de_DE::class.paladin", "admin::fr_FR::class.paladin", "admin::fr_CA::class.paladin",
-  ]);
+  // COPIED_ALLOW is a VIEW over the status registry (declared at module scope
+  // near the top of this file): the blocked server/admin cognate rows.
   function checkNoCopiedEnglish(dict: Record<string, Record<string, string>>, label: string) {
     const en = dict.en;
     for (const lang of Object.keys(dict)) {
@@ -220,8 +233,12 @@ describe("H3: DICT key parity, non-empty values, placeholder integrity", () => {
       }
     }
   }
-  it("H3b: server DICT has no un-allowlisted copied-English", () => checkNoCopiedEnglish(serverDICT as any, "server"));
-  it("H3b: admin DICT has no un-allowlisted copied-English", () => checkNoCopiedEnglish(adminDICT as any, "admin"));
+  // RELEASE-TIER ONLY: copied-English is a release-quality bar, not a PR
+  // one. An English-only PR (or a sparse locale) legitimately ships English for an
+  // untranslated key; that becomes a `pending` row and is blocked at the release
+  // gate, not flagged on every PR.
+  it.runIf(RELEASE_TIER)("H3b: server DICT has no un-allowlisted copied-English", () => checkNoCopiedEnglish(serverDICT as any, "server"));
+  it.runIf(RELEASE_TIER)("H3b: admin DICT has no un-allowlisted copied-English", () => checkNoCopiedEnglish(adminDICT as any, "admin"));
 });
 
 // --- H1b: no two talents in the same class tree may render with the same name ---
@@ -518,113 +535,9 @@ describe("S3: every sim.ts emit is recognized (drift guard)", () => {
   // every combat/quest/loot/party/system string that PR #380 actually localized — so a
   // regression in the localized surface still fails here. Strings below are the guard's
   // concrete (placeholder-substituted) forms.
-  const ALLOW_V07_SLASH = new Set<string>([
-    "Abilities on cooldown (5): Aki.",
-    "Active effects (5): Aki.",
-    "Aki attempts to flee!",
-    "Aki draws on a desperate second wind!",
-    "Aki flies into a frenzy!",
-    "Aki is Aki: Aki",
-    "Aki unleashes Aki!",
-    "Arena: Rating Aki — Aki wins, Aki losses (Aki% win rate).",
-    "Arena: Rating Aki — no matches played yet.",
-    "Auto-attack is off.",
-    "Auto-attack is on against Aki — next swing Aki (Akis swing).",
-    "Auto-attack is on, but you have no valid target.",
-    "Bags (5): Aki. Aki",
-    "Combat potion is ready to use.",
-    "Combat potion on cooldown — ready in 5s.",
-    "Combo points: Aki/5Aki.",
-    "Completed quests (5): Aki.",
-    "Dev commands: /dev level N, /dev tp X Z, /dev give itemId [count]",
-    "Dungeons (5): Aki.",
-    "Effects on Aki (5): Aki.",
-    "If you fall here, your spirit returns to the Aki graveyard at (5, 5).",
-    "Inspect whom? Usage: /inspect <name>.",
-    "Invalid roll range. Use /roll, /roll N, or /roll M-N (1-5).",
-    "Landmarks in Aki (5): Aki.",
-    "Level 5 — Aki/Aki XP (Aki%), Aki to go.",
-    "Level 5 — maximum level reached.",
-    "Mana regen is paused — resumes in Akis (you spent mana recently).",
-    "Mana regeneration does not apply to your class.",
-    "Movement speed: 100% of normal.",
-    "Movement speed: Aki% of normal (hastened).",
-    "Movement speed: Aki% of normal (slowed).",
-    "Nearby (5): Aki.",
-    "No abilities are on cooldown.",
-    "No zones are defined.",
-    "Nobody has any threat on Aki.",
-    "Nothing is nearby.",
-    "Now following Aki.",
-    "Only mana-using classes park mana; your class never does.",
-    "Overpower is a warrior ability; your class cannot use it.",
-    "Overpower is not available. It opens for 5s after an enemy dodges your attack.",
-    "Overpower is ready — strike within Akis (an enemy dodged your attack).",
-    "Party (5/Aki): Aki.",
-    "Quest log (5): Aki.",
-    "Spellbook (5): Aki.",
-    "Target a player to follow, or use /follow <name>.",
-    "Target: Aki (level 5 Aki) — Aki.",
-    "That player is already trading.",
-    "The General channel is always on - just use /general.",
-    "There is no channel named 'Aki'. Channels: Aki.",
-    "Threat is only tracked on enemies; Aki is not one.",
-    "Threat on Aki (5): Aki.",
-    "Time played this session: Aki.",
-    "Unknown command: Aki. Type /help for a list.",
-    "Usage: /Aki <channel>. Channels: Aki.",
-    "Vendor buyback (5): Aki. Repurchase at any merchant.",
-    "You are Aki.",
-    "You are airborne and rising — Akiyd above the ground.",
-    "You are already in the Aki channel.",
-    "You are falling — Akiyd above the ground.Aki",
-    "You are fishing — Akis of Akis remaining.",
-    "You are in Aki (levels Aki–Aki) at (5, 5).",
-    "You are in Aki.",
-    "You are in combat (enemies still engaged).",
-    "You are in combat — leaving in 5s if no further action.",
-    "You are no longer marked as away.",
-    "You are not casting anything.",
-    "You are not eating or drinking.",
-    "You are not following anyone.",
-    "You are not in any form or stance.",
-    "You are not in combat.",
-    "You are not in the Aki channel.",
-    "You are not in the Aki channel. Type /join Aki first.",
-    "You are on solid ground.",
-    "You are rooted in place and cannot move.",
-    "You are stealthed.",
-    "You can't follow yourself.",
-    "You can't start following while in combat.",
-    "You do not have a pet.",
-    "You have 5 mana parked while shifted; it returns when you leave your form.",
-    "You have 5s.",
-    "You have no ability queued for your next swing.",
-    "You have no active effects.",
-    "You have no combo points built up.",
-    "You have no goods on the World Market.",
-    "You have no mana parked while shifted.",
-    "You have no one to reply to.",
-    "You have no target to consider.",
-    "You have not completed any quests yet.",
-    "You have not learned any abilities yet.",
-    "You have nothing equipped.",
-    "Your bags are empty. Aki",
-    "Your mana is not parked — you are not shapeshifted.",
-    "Your mana is regenerating (out of combat for 5s+).",
-    "Your market listings (5/5): Aki.",
-    "Your pet's Growl is on cooldown — ready in 5s.",
-    "Your pet's Growl is ready — it will taunt its target on the next melee swing.",
-    "Your pet: Aki (level 5Aki) — HP Aki/Aki (Aki%).",
-    "Your purse is empty.",
-    "Your quest log is empty.",
-    "Your target Aki is 5yd away (Aki).",
-    "Your vendor buyback list is empty.",
-    "Zones (5): Aki.",
-    "[dev] Level set to 5.",
-    "[dev] Teleported to Aki, Aki.",
-    "[dev] Unknown item 'Aki'.",
-  ]);
+  // ALLOW_V07_SLASH is a VIEW over the status registry (declared at module scope
+  // near the top of this file): the blockedSource sim entries. The big comment
+  // above documents why these v0.7 slash-command strings ship English for now.
 
   type Cand = { type: "log" | "error" | "loot"; tmpl: string };
   const extract = (): Cand[] => {
@@ -649,20 +562,63 @@ describe("S3: every sim.ts emit is recognized (drift guard)", () => {
     for (const r of arm.regs) { r.lastIndex = 0; if (r.test(s)) return true; }
     return localizeServerText(s) !== null || localizeSimText(s) !== null;
   };
+  // The localized form IF a real server/sim matcher resolves it (locale-sensitive
+  // output). Strings handled only by a hud-local arm map localize via the hud's own
+  // t() keys and have no reachable output here, so they return null and s3_localized
+  // checks recognition for them rather than the rendered text.
+  const localizedOut = (s: string): string | null => {
+    const srv = localizeServerText(s);
+    if (srv !== null) return srv;
+    return localizeSimText(s);
+  };
 
-  it("enumerates sim.ts emit sites and finds no unlocalized player-facing string", () => {
-    setLanguage("de_DE");
-    const cands = extract();
-    expect(cands.length, "sanity: should enumerate many emit sites").toBeGreaterThan(80);
-    const leaks: string[] = [];
-    for (const c of cands) {
+  // The non-skipped candidate emit strings, deduped (shared by both tiers).
+  const candidateStrings = (): { type: Cand["type"]; s: string }[] => {
+    const out: { type: Cand["type"]; s: string }[] = [];
+    for (const c of extract()) {
       if (TMPL_SKIP.some((re) => re.test(c.tmpl))) continue;
       const s = concrete(c.tmpl);
       if (ALLOW.some((re) => re.test(s))) continue;
       if (ALLOW_V07_SLASH.has(s)) continue;
-      if (!recognized(c.type, s)) leaks.push(`(${c.type}) ${JSON.stringify(s)}`);
+      out.push({ type: c.type, s });
+    }
+    return out;
+  };
+
+  // PR TIER: every emit maps to a registered key OR RULE (recognition is
+  // locale-independent, so registration is proven once, in en).
+  it("s3_registered: every sim.ts emit maps to a registered key/RULE (PR tier)", () => {
+    setLanguage("en");
+    const cands = candidateStrings();
+    expect(cands.length, "sanity: should enumerate many emit sites").toBeGreaterThan(80);
+    const leaks: string[] = [];
+    for (const { type, s } of cands) {
+      if (!recognized(type, s)) leaks.push(`(${type}) ${JSON.stringify(s)}`);
     }
     setLanguage("en");
-    expect(leaks, "unlocalized sim emit strings (add a key/RULE to sim_i18n.ts)").toEqual([]);
+    expect(leaks, "unregistered sim emit strings (add a key/RULE to sim_i18n.ts)").toEqual([]);
+  });
+
+  // RELEASE TIER: the same coverage across all 14 locales, and where a real matcher
+  // resolves the string, its localized form is not raw English in any translated
+  // locale (no silently-shipped English).
+  it.runIf(RELEASE_TIER)("s3_localized: every emit is recognized in all 14 locales and not left English where a matcher resolves it", () => {
+    const cands = candidateStrings();
+    expect(cands.length, "sanity: should enumerate many emit sites").toBeGreaterThan(80);
+    const leaks: string[] = [];
+    for (const lang of supportedLanguages) {
+      setLanguage(lang);
+      for (const { type, s } of cands) {
+        if (!recognized(type, s)) {
+          leaks.push(`${lang} (${type}) ${JSON.stringify(s)} not recognized`);
+          continue;
+        }
+        if (lang === "en" || lang === "en_CA") continue;
+        const out = localizedOut(s);
+        if (out !== null && out === s) leaks.push(`${lang} (${type}) ${JSON.stringify(s)} stayed English`);
+      }
+    }
+    setLanguage("en");
+    expect(leaks, "sim emit strings unlocalized in some locale").toEqual([]);
   });
 });

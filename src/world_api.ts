@@ -1,4 +1,4 @@
-import { OVERHEAD_EMOTE_IDS, type Entity, type EquipSlot, type InvSlot, type MoveInput, type OverheadEmoteId, type PetMode, type PlayerClass, type QuestProgress, type QuestState, type ResourceType } from './sim/types';
+import { OVERHEAD_EMOTE_IDS, type ArenaCombatant, type ArenaFormat, type Entity, type EquipSlot, type InvSlot, type MoveInput, type OverheadEmoteId, type PetMode, type PlayerClass, type QuestProgress, type QuestState, type ResourceType } from './sim/types';
 import type { ResolvedAbility } from './sim/sim';
 import type { TalentAllocation, SavedLoadout, Role } from './sim/content/talents';
 
@@ -120,6 +120,8 @@ export interface LeaderboardEntry {
   realm?: string; // present on the global (cross-realm) home-page board
 }
 
+export type { ArenaFormat, ArenaCombatant };
+
 export interface ArenaLadderEntry {
   pid: number;
   name: string;
@@ -133,15 +135,19 @@ export interface ArenaInfo {
   rating: number;
   wins: number;
   losses: number;
+  format: ArenaFormat | null;
   queued: boolean;
   queueSize: number;
   // present only while in a match
   match: {
+    format: ArenaFormat;
     state: 'countdown' | 'active' | 'over';
     oppName: string;
     oppClass: PlayerClass;
     oppLevel: number;
     oppPid: number;
+    allies: ArenaCombatant[];
+    enemies: ArenaCombatant[];
     returnIn?: number; // whole seconds left in the post-bout aftermath ('over')
   } | null;
   // live standings of rated players currently online, best first
@@ -271,7 +277,7 @@ export interface IWorld {
   guildDisband(): void;
   // realm-scoped username typeahead for friend/ignore/guild search
   searchCharacters(query: string): Promise<CharacterSearchResult[]>;
-  arenaQueueJoin(): void;
+  arenaQueueJoin(format?: ArenaFormat): void;
   arenaQueueLeave(): void;
   // World Market
   marketList(itemId: string, count: number, price: number): void;
@@ -281,7 +287,7 @@ export interface IWorld {
   enterDungeon(dungeonId: string): void;
   leaveDungeon(): void;
   // Post-cap progression: the realm-scoped lifetime-XP leaderboard, and the
-  // opt-in cosmetic prestige action (Phase 4).
+  // opt-in cosmetic prestige action.
   leaderboard(): Promise<LeaderboardEntry[]>;
   prestige(): void;
   // Talents & Specializations. State is server-authoritative; the client stages

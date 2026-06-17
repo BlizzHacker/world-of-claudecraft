@@ -50,6 +50,18 @@ export interface RealmDirectory {
   characters: Record<string, number>; // realm name -> how many characters you have
 }
 
+// A published GitHub release, as surfaced by the server's /api/releases proxy
+// for the home-page "News & Updates" view. Body is raw release-note markdown.
+export interface ReleaseEntry {
+  id: number;
+  tag: string;
+  name: string;
+  body: string;
+  url: string;
+  prerelease: boolean;
+  publishedAt: string; // ISO 8601
+}
+
 export class Api {
   token: string | null = null;
   username: string | null = null;
@@ -175,6 +187,19 @@ export class Api {
       return [];
     }
   }
+
+  // News & Updates feed for the home page, mirrored from GitHub Releases by the
+  // server. Not realm-scoped — always read from the page's own origin.
+  async releases(limit = 20): Promise<ReleaseEntry[]> {
+    try {
+      const res = await fetch(`/api/releases?limit=${limit}`);
+      if (!res.ok) return [];
+      const data = await res.json();
+      return data.releases ?? [];
+    } catch {
+      return [];
+    }
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -200,7 +225,7 @@ const TELEPORT_SNAP_DIST_SQ = 40 * 40;
 
 function blankEntity(id: number): Entity {
   return {
-    id, kind: 'mob', templateId: '', name: '', level: 1,
+    id, kind: 'mob', templateId: '', name: '', level: 1, mendTimer: 0,
     pos: { x: 0, y: 0, z: 0 }, prevPos: { x: 0, y: 0, z: 0 }, facing: 0, prevFacing: 0,
     vx: 0, vz: 0, vy: 0, onGround: true, fallStartY: 0,
     hp: 1, maxHp: 1, resource: 0, maxResource: 0, resourceType: null,
@@ -216,7 +241,7 @@ function blankEntity(id: number): Entity {
     comboPoints: 0, comboTargetId: null, overpowerUntil: -1, potionCooldownUntil: -1, savedMana: 0,
     chargeTargetId: null, chargeTimeLeft: 0, chargePath: [], followTargetId: null,
     sitting: false, eating: null, drinking: null,
-    aiState: 'idle', tappedById: null, pulseTimer: 0, stompTimer: 0, firedSummons: 0, summonedIds: [], enraged: false, healedThisPull: false,
+    aiState: 'idle', tappedById: null, pulseTimer: 0, stompTimer: 0, detonateTimer: Infinity, firedSummons: 0, summonedIds: [], enraged: false, healedThisPull: false,
     threat: new Map(), forcedTargetId: null, forcedTargetTimer: 0, ownerId: null, petMode: 'defensive', petTauntTimer: 0,
     spawnPos: { x: 0, y: 0, z: 0 }, leashAnchor: null, evadeStall: 0, fleeTimer: 0, hasFled: false, wanderTarget: null, wanderTimer: 0,
     aggroTargetId: null, respawnTimer: 0, corpseTimer: 0, lootable: false, loot: null,
@@ -402,6 +427,11 @@ export class ClientWorld implements IWorld {
   private cmd(payload: Record<string, unknown>): void {
     if (!this.canSendCommand()) return;
     this.ws.send(JSON.stringify({ t: 'cmd', ...payload }));
+  }
+
+  /** Raw WS command — used by dev scripts and browser console when online. */
+  devCmd(payload: Record<string, unknown>): void {
+    this.cmd(payload);
   }
 
   private onMessage(raw: string): void {
@@ -903,8 +933,8 @@ export class ClientWorld implements IWorld {
       return [];
     }
   }
-  arenaQueueJoin(): void {
-    this.cmd({ cmd: 'arena_queue' });
+  arenaQueueJoin(format?: import('../world_api').ArenaFormat): void {
+    this.cmd({ cmd: 'arena_queue', format: format ?? '1v1' });
   }
   arenaQueueLeave(): void {
     this.cmd({ cmd: 'arena_leave' });

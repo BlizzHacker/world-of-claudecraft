@@ -14,7 +14,7 @@ import {
   ZONE1_PROPS, ZONE1_QUESTS, ZONE1_QUEST_ORDER, ZONE1_ROADS, ZONE1_ZONE,
 } from './content/zone1';
 import {
-  ZONE2_CAMPS, ZONE2_ITEMS, ZONE2_MOBS, ZONE2_NPCS, ZONE2_OBJECTS, ZONE2_PROPS,
+  DEEPFEN_SHALLOWS_LAKE, ZONE2_CAMPS, ZONE2_ITEMS, ZONE2_MOBS, ZONE2_NPCS, ZONE2_OBJECTS, ZONE2_PROPS,
   ZONE2_QUESTS, ZONE2_QUEST_ORDER, ZONE2_ROADS, ZONE2_ZONE,
 } from './content/zone2';
 import {
@@ -149,6 +149,7 @@ export function zoneWelcomeText(zone: ZoneDef, questState: (questId: string) => 
 // Legacy single-zone exports (zone 1) — still referenced by tests and the
 // starter-town logic.
 export { GRAVEYARD_POS, LAKE, TOWN_RADIUS };
+export { DEEPFEN_SHALLOWS_LAKE };
 export const ZONE_NAME = ZONE1_ZONE.name;
 
 // ---------------------------------------------------------------------------

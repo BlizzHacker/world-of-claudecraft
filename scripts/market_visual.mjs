@@ -25,7 +25,7 @@ page.on('pageerror', (e) => fails.push('PAGEERROR: ' + e.message));
 page.on('console', (m) => { if (m.type() === 'error') console.log('CONSOLE-ERR:', m.text()); });
 
 await page.goto(URL, { waitUntil: 'networkidle0', timeout: 30000 });
-await page.click('#btn-offline');
+await page.evaluate(() => document.querySelector('#btn-offline').click());
 await sleep(200);
 await page.click('.class-card[data-class="warrior"]');
 await page.waitForFunction(() => window.__game?.sim?.entities?.size > 5, { timeout: 20000, polling: 200 });

@@ -320,7 +320,8 @@
     cursor: var(--cursor-hand);
   }
   #start-screen :is(
-    .btn, .mode-card, .social-link, .realm-row, .char-row, .class-card,
+    .btn, .btn-play, .server-select-trigger, .server-select-option,
+    .social-link, .realm-row, .char-row, .class-card,
     .password-toggle, #btn-toggle-controls, .btn-close-drawer
   ) {
     cursor: var(--cursor-sword);
@@ -401,6 +402,13 @@
   .np-raidmark { width: 30px; height: 30px; margin: 0 auto 1px; background-size: contain;
     background-repeat: no-repeat; background-position: center;
     filter: drop-shadow(0 0 2px #000) drop-shadow(0 1px 1px #000); }
+  /* rogue/druid combo points — a centered row of pips over the nameplate,
+     display toggled in JS so it reserves no space when the player has none. */
+  .np-combo { display: flex; justify-content: center; gap: 3px; margin: 0 auto 2px; height: 7px; }
+  .np-combo-pip { width: 7px; height: 7px; border-radius: 50%; background: #3a1010;
+    border: 1px solid #000; box-sizing: border-box; }
+  .np-combo-pip.lit { background: radial-gradient(circle at 35% 30%, #ffe07a, #e8453a 70%);
+    box-shadow: 0 0 4px #ff6a3caa; border-color: #5a0c08; }
   .np-emote { display: inline-flex; align-items: center; justify-content: center; gap: 5px; min-width: 62px; height: 42px;
     padding: 3px 9px 3px 4px; margin: 0 auto 5px; border-radius: 999px; border: 2px solid #f2d27a;
     background: linear-gradient(#3a2a16, #16100a); color: #ffe9a3; font: 800 11px/1 var(--title-font);
@@ -490,6 +498,8 @@
   #castbar.channel .fill { background: linear-gradient(#8ad4ff, #1a74c9 60%, #125a9a); }
   #castbar .label { position: absolute; inset: 0; text-align: center; font-size: 12px; line-height: 21px;
     color: #fff; text-shadow: 1px 1px 2px #000; font-family: var(--title-font); }
+  #castbar .timer { position: absolute; top: 0; right: 6px; line-height: 21px; font-size: 11px;
+    color: #fff; text-shadow: 1px 1px 2px #000; font-family: var(--title-font); font-variant-numeric: tabular-nums; }
 
   /* ---------- bottom cluster ---------- */
   #bottom-bar { position: absolute; left: 50%; transform: translateX(-50%); bottom: 6px; text-align: center; }
@@ -529,6 +539,7 @@
     background-size: cover; background-position: center; background-repeat: no-repeat; pointer-events: none; }
   .action-btn:hover { border-color: var(--gold); }
   .action-btn:active { transform: translateY(1px); }
+  .action-btn.used { border-color: var(--color-border-focus); box-shadow: 0 0 10px #ffd100aa, inset 0 0 0 1px #ffd10077, inset 0 1px 0 #ffffff28; }
   .action-btn.empty { background: #0d0d13; cursor: default; box-shadow: inset 0 0 10px #000; }
   .action-btn .keybind { position: absolute; top: 1px; right: 3px; font-size: 9px; color: #ddd; font-family: var(--ui-font); }
   .action-btn .item-count { position: absolute; right: 3px; bottom: 1px; min-width: 10px; text-align: right;
@@ -655,6 +666,9 @@
   /* Discord/GitHub: standalone square buttons matching the micro-menu (no panel
      container) — only the hover border keeps each service's brand colour. */
   #community-hud { position: absolute; right: 16px; bottom: 14px; display: flex; align-items: center; gap: 4px; z-index: 19; }
+  #community-menu { display: contents; }
+  .community-toggle { display: none; }
+  .community-tray { display: flex; align-items: center; gap: 4px; }
   .community-link { width: 34px; height: 30px; display: inline-flex; align-items: center; justify-content: center;
     color: #d8c89a; text-decoration: none; border: 2px solid #4a3d1d; border-radius: 5px;
     background: radial-gradient(circle at 35% 30%, #2c2c3a, #15151f);
@@ -1026,6 +1040,22 @@
   #arena-window .btn { width: 100%; margin: 4px 0 0; box-sizing: border-box; text-align: center; }
   #arena-window .btn.leave { background: linear-gradient(#5a4a18, #3a2f0d 55%, #2a2208); color: #ffe6a8; }
   .arena-note { font-size: 11.5px; color: #b6ad8c; line-height: 1.45; margin: 4px 0 2px; font-family: Georgia, serif; }
+  .arena-brackets { display: flex; gap: 6px; margin: 6px 0 4px; }
+  .arena-bracket { flex: 1; padding: 5px 0; font-family: var(--title-font); font-size: 12px; color: #cfc6a8;
+    background: linear-gradient(#3a3018, #2a2208); border: 1px solid #5a4a20; cursor: pointer; border-radius: 4px; }
+  .arena-bracket.active { color: #ffb24a; border-color: #8a6a28; background: linear-gradient(#5a4a18, #3a2f0d 55%, #2a2208); }
+  .arena-bracket.locked { opacity: 0.45; cursor: not-allowed; }
+  .arena-bracket-tag { color: #998d6a; font-size: 11px; margin-left: 4px; }
+  .arena-party { margin: 6px 0 4px; padding: 8px 10px; border: 1px solid #5a4a20; border-radius: 6px;
+    background: linear-gradient(#1a1408aa, #0d0a04aa); }
+  .arena-party-title { font-family: var(--title-font); font-size: 11px; color: var(--gold); margin-bottom: 5px; letter-spacing: 0.3px; }
+  .arena-party-row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; padding: 3px 0; font-size: 12px; }
+  .arena-party-row.me .apr-name { color: #ffd100; }
+  .arena-party-row .apr-name { color: #cfe0ff; font-weight: bold; }
+  .arena-party-row .apr-meta { color: #8c8468; font-size: 10.5px; white-space: nowrap; }
+  .arena-party-invite { border-left: 2px solid #6a5a28; padding-left: 8px; margin-top: 4px; }
+  .arena-warn { color: #ff9a7a; border-left: 2px solid #aa4a28; padding-left: 8px; }
+  #arena-window .btn.disabled { opacity: 0.55; cursor: not-allowed; filter: grayscale(0.25); }
   .arena-queue-status { font-size: 12px; color: #ffd100; margin-top: 6px; text-align: center; }
   .ladder-row { display: grid; grid-template-columns: 24px 1fr auto auto; gap: 8px; align-items: center;
     font-size: 12px; padding: 3px 6px; border-radius: 4px; color: #e0d6b4; }
@@ -1040,10 +1070,19 @@
   #arena-status { position: absolute; top: 70px; left: 50%; transform: translateX(-50%);
     display: none; text-align: center; pointer-events: none; z-index: 18;
     background: linear-gradient(#1a120bdd, #0d0805dd); border: 1px solid #cc5a14;
-    border-radius: 8px; padding: 5px 16px; box-shadow: 0 2px 14px #000a, inset 0 0 16px #cc5a1422; }
+    border-radius: 8px; padding: 6px 16px 5px; box-shadow: 0 2px 14px #000a, inset 0 0 16px #cc5a1422; min-width: 220px; }
   #arena-status .as-vs { font-family: var(--title-font); font-size: 13px; color: #ffb24a; text-shadow: 1px 1px 2px #000; letter-spacing: 0.5px; }
   #arena-status .as-vs .opp { color: #ff8d7a; }
-  #arena-status .as-timer { font-size: 11px; color: #d8cba0; margin-top: 1px; }
+  #arena-status .as-lvl { color: #b6ad8c; font-size: 11px; font-family: Georgia, serif; }
+  #arena-status .as-teams { display: flex; align-items: center; gap: 10px; justify-content: center; }
+  #arena-status .as-team { text-align: center; min-width: 80px; }
+  #arena-status .as-team .as-label { display: block; font-family: var(--title-font); font-size: 9px; letter-spacing: 0.6px; text-transform: uppercase; margin-bottom: 2px; }
+  #arena-status .as-team.allies .as-label { color: #7fdc4f; }
+  #arena-status .as-team.allies .as-names { color: #b8e8a0; font-size: 12px; }
+  #arena-status .as-team.enemies .as-label { color: #ff8d7a; }
+  #arena-status .as-team.enemies .as-names { color: #ffb0a0; font-size: 12px; }
+  #arena-status .as-mid { font-family: var(--title-font); font-size: 11px; color: #ffb24a; opacity: 0.85; }
+  #arena-status .as-timer { font-size: 11px; color: #d8cba0; margin-top: 4px; }
 
   /* ---------- The World Market (the Merchant's auction house) ---------- */
   #market-window { width: 470px; display: none; flex-direction: column; }
@@ -1254,6 +1293,7 @@
   .header-actions {
     display: flex;
     align-items: center;
+    gap: var(--spacing-sm);
     justify-self: end;
   }
 
@@ -1287,7 +1327,7 @@
   }
 
   #title-logo {
-    width: min(280px, 80vw);
+    width: min(360px, 84vw);
     height: auto;
     filter: drop-shadow(0 0 20px rgba(199, 148, 26, 0.25)) drop-shadow(2px 2px 4px #000);
     animation: logo-pulse 2.5s ease-in-out infinite alternate;
@@ -1426,6 +1466,57 @@
     padding: 10px 36px 10px 16px;
   }
 
+  .homepage-music-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-sm);
+    background: linear-gradient(180deg, rgba(31, 27, 18, 0.95), rgba(9, 9, 14, 0.95));
+    color: var(--color-primary);
+    cursor: pointer;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 2px 8px rgba(0, 0, 0, 0.45);
+    transition: color var(--transition-speed) var(--transition-ease),
+                border-color var(--transition-speed) var(--transition-ease),
+                box-shadow var(--transition-speed) var(--transition-ease),
+                background-color var(--transition-speed) var(--transition-ease);
+  }
+
+  .homepage-music-btn .ui-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .homepage-music-btn:hover,
+  .homepage-music-btn:focus-visible {
+    color: #fff3bd;
+    border-color: var(--color-border-focus);
+    box-shadow: 0 0 10px var(--color-primary-glow), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    outline: none;
+  }
+
+  .homepage-music-btn.is-muted {
+    color: #cdbd8e;
+  }
+
+  .homepage-music-btn.is-muted::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 22px;
+    height: 2px;
+    border-radius: 2px;
+    background: #f0e8d2;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.75);
+    transform: translate(-50%, -50%) rotate(-45deg);
+    pointer-events: none;
+  }
+
   /* Donate: the header's primary call-to-action (filled gold so it reads as the
      main action, unlike the ghost nav links). Mirrored as a footer social link
      and an in-game community button. */
@@ -1506,6 +1597,14 @@
     min-height: min-content;
   }
 
+  /* Larger screens: pull the whole hero (logo + console) toward the top. */
+  @media (min-width: 1024px) {
+    #hero-view {
+      justify-content: flex-start;
+      padding-top: clamp(16px, 4vh, 64px);
+    }
+  }
+
   /* Keep positioning for subpanels inside hero-view play flow */
   #hero-view #mode-select,
   #hero-view #login-panel,
@@ -1540,9 +1639,84 @@
 
   .stats-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-md);
   }
+
+  /* Realm Status now lives under the Play CTA — match the console width and
+     give it breathing room beneath the button. */
+  /* Frosted-glass console card around the play landing — gives the central UI
+     its own surface so the cinematic backdrop can stay vivid behind it. */
+  #mode-select {
+    width: 100%;
+    max-width: 472px;
+    margin-inline: auto;
+    padding: 26px 26px 22px;
+    background: linear-gradient(180deg, rgba(15, 15, 23, 0.56) 0%, rgba(8, 8, 14, 0.66) 100%);
+    border: 1px solid rgba(255, 209, 0, 0.16);
+    border-radius: 18px;
+    box-shadow: 0 26px 64px rgba(0, 0, 0, 0.62), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(16px) saturate(1.1);
+    -webkit-backdrop-filter: blur(16px) saturate(1.1);
+  }
+
+  /* Realm stats — live counts shown in the realm dropdown (trigger sub-line +
+     the opened Online option). */
+  .realm-status-sep {
+    display: inline-block;
+    width: 1px;
+    height: 11px;
+    margin: 0 4px;
+    vertical-align: middle;
+    background: rgba(255, 209, 0, 0.3);
+  }
+  .server-realm-line .stats-value,
+  .server-opt-stats .stats-value {
+    font-family: var(--font-ui);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-text-light);
+    margin-right: 2px;
+  }
+  .server-opt-stats {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+    color: var(--color-text-muted);
+  }
+  .server-realm-line[hidden],
+  .server-sub-offline[hidden] { display: none; }
+
+  /* Tip — its own slim overlay card under the console. */
+  #play-aside {
+    width: 100%;
+    max-width: 472px;
+    margin-inline: auto;
+    padding: 12px 20px;
+    background: linear-gradient(180deg, rgba(15, 15, 23, 0.5) 0%, rgba(8, 8, 14, 0.6) 100%);
+    border: 1px solid rgba(255, 209, 0, 0.12);
+    border-radius: 14px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(14px) saturate(1.1);
+    -webkit-backdrop-filter: blur(14px) saturate(1.1);
+  }
+  #play-aside #performance-tip {
+    margin: 0;
+    padding: 0;
+    max-width: none;
+    background: none;
+    border: none;
+    font-size: 12.5px;
+    text-align: center;
+  }
+  /* Hide the tip card whenever the play landing isn't the active panel. */
+  body[data-start-panel="login-panel"] #play-aside,
+  body[data-start-panel="realm-panel"] #play-aside,
+  body[data-start-panel="charselect-panel"] #play-aside,
+  body[data-start-panel="offline-select"] #play-aside {
+    display: none;
+  }
+
 
   .stats-item {
     display: flex;
@@ -1644,6 +1818,13 @@
     margin-top: var(--spacing-xs);
   }
 
+  /* "Browse the Wiki" launcher: reuses the .btn skin but renders as an anchor. */
+  .wiki-cta {
+    display: inline-block;
+    text-decoration: none;
+    margin-top: var(--spacing-sm);
+  }
+
   /* Home-page global leaderboard (Max-Level XP Overflow) */
   .hs-panel {
     display: flex;
@@ -1695,6 +1876,123 @@
   .hs-xp { text-align: right; color: #ffe27a; font-variant-numeric: tabular-nums; }
   .hs-prestige { color: #ffd100; font-size: 11px; margin-right: 4px; }
 
+  /* News & Updates view (mirrored from GitHub Releases) */
+  .news-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-lg);
+    max-width: 860px;
+  }
+  .news-feed {
+    width: 100%;
+    margin-top: var(--spacing-sm);
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+  .news-loading, .news-empty, .news-error {
+    width: 100%;
+    color: var(--color-text-light);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    text-align: center;
+    padding: 28px 0;
+  }
+  .news-error { color: #e08a7a; }
+  .news-item {
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.025);
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+  .news-item-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: var(--spacing-sm);
+    border-bottom: 1px solid rgba(78, 61, 29, 0.3);
+    padding-bottom: var(--spacing-sm);
+  }
+  .news-item-title {
+    font-family: var(--font-heading);
+    color: var(--color-primary);
+    font-size: 16px;
+    margin: 0;
+    text-shadow: 1px 1px 2px #000;
+  }
+  .news-tag {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    color: var(--color-text-muted, #b9ac82);
+    font-variant-numeric: tabular-nums;
+  }
+  .news-badge {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #ffd86b;
+    border: 1px solid #ffd86b66;
+    border-radius: var(--radius-sm);
+    padding: 1px 6px;
+  }
+  .news-date {
+    margin-left: auto;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    color: var(--color-text-muted, #b9ac82);
+  }
+  .news-body {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--color-text-light);
+    word-wrap: break-word;
+    overflow-wrap: anywhere;
+    max-height: 460px;
+    overflow-y: auto;
+    padding-right: 8px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border-default) transparent;
+  }
+  .news-body::-webkit-scrollbar { width: 8px; }
+  .news-body::-webkit-scrollbar-track { background: transparent; }
+  .news-body::-webkit-scrollbar-thumb {
+    background: var(--color-border-default);
+    border-radius: 4px;
+  }
+  .news-body > :first-child { margin-top: 0; }
+  .news-body > :last-child { margin-bottom: 0; }
+  .news-body h1, .news-body h2, .news-body h3 {
+    font-family: var(--font-heading);
+    color: var(--color-primary-dim, #d9c896);
+    font-size: 14px;
+    margin: var(--spacing-md) 0 var(--spacing-xs);
+  }
+  .news-body p { margin: var(--spacing-xs) 0; }
+  .news-body ul { margin: var(--spacing-xs) 0; padding-left: 20px; }
+  .news-body li { margin: 2px 0; }
+  .news-body code {
+    font-family: var(--font-mono, monospace);
+    background: rgba(0, 0, 0, 0.35);
+    border-radius: 3px;
+    padding: 1px 4px;
+    font-size: 12px;
+  }
+  .news-body a { color: #ffd86b; text-decoration: underline; }
+  .news-item-foot { margin-top: var(--spacing-sm); }
+  .news-link {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    color: #ffd86b;
+    text-decoration: none;
+  }
+  .news-link:hover, .news-link:focus-visible { text-decoration: underline; }
+
   /* Wiki view with integrated Controls Guide */
   .wiki-container-layout {
     max-width: 800px;
@@ -1744,6 +2042,7 @@
 
   /* Global Footer Styling */
   .homepage-footer {
+    position: relative;
     width: 100%;
     background: rgba(11, 11, 18, 0.95);
     border-top: 2px solid var(--color-border-default);
@@ -1757,10 +2056,28 @@
     margin-top: auto;
   }
 
+  .footer-bar {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .footer-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
   .footer-social-row {
     display: flex;
     gap: var(--spacing-sm);
     justify-content: center;
+  }
+  @media (max-width: 640px) {
+    .footer-bar,
+    .footer-left { justify-content: center; }
   }
 
   .footer-text-row {
@@ -1858,35 +2175,240 @@
   #ls-fill { height: 100%; width: 0%; background: linear-gradient(180deg, var(--color-primary), var(--color-primary-dim)); transition: width .2s ease; }
   #ls-status { color: var(--color-text-light); font-family: var(--font-heading); font-size: 13px; text-shadow: 1px 1px 2px #000; }
 
-  /* ---------- online auth / character select ---------- */
-  .mode-row { display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; }
-  .mode-card {
+  /* ---------- play console (realm selector + Play CTA) ---------- */
+  .play-console {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
     width: 100%;
-    max-width: 280px;
-    padding: 26px 22px;
-    text-align: center;
-    cursor: pointer;
-    background: rgba(21, 21, 31, 0.94);
-    border: 2px solid var(--color-border-default);
-    border-radius: var(--radius-md);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05);
-    transition: box-shadow var(--transition-speed) var(--transition-ease),
-                border-color var(--transition-speed) var(--transition-ease);
+    max-width: 420px;
+    margin-inline: auto;
   }
-  .mode-card:hover,
-  .mode-card:focus-visible {
+
+  /* Realm selector — themed dropdown, defaults to Online */
+  .server-select { position: relative; width: 100%; }
+  .server-select-caption {
+    display: block;
+    text-align: center;
+    margin-bottom: 8px;
+    font-family: var(--font-heading);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    text-shadow: 1px 1px 2px #000;
+  }
+  .server-select-trigger {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 58px;
+    padding: 10px 16px;
+    cursor: pointer;
+    text-align: left;
+    color: var(--color-text-light);
+    background: linear-gradient(180deg, rgba(24, 24, 34, 0.92) 0%, rgba(12, 12, 19, 0.94) 100%);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-md);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition: border-color var(--transition-speed) var(--transition-ease),
+                box-shadow var(--transition-speed) var(--transition-ease);
+  }
+  .server-select-trigger:hover,
+  .server-select-trigger:focus-visible,
+  .server-select-trigger[aria-expanded="true"] {
     border-color: var(--color-border-focus);
-    box-shadow: 0 0 22px var(--color-primary-glow), 0 4px 15px #000c;
+    box-shadow: 0 0 18px var(--color-primary-glow), 0 6px 18px rgba(0, 0, 0, 0.6);
     outline: none;
   }
-  .mode-card h2 {
-    font-family: var(--font-heading);
-    color: var(--color-primary);
-    font-size: 22px;
-    margin-bottom: 10px;
-    text-shadow: 0 0 8px rgba(255,209,0,0.2), 1px 1px 2px #000;
+  .server-dot {
+    flex: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--color-text-muted);
+    box-shadow: 0 0 8px currentColor;
   }
-  .mode-card p { font-size: 12px; color: #a0aabf; line-height: 1.55; }
+  .server-dot[data-mode="online"] { background: var(--color-hp); color: var(--color-hp); }
+  .server-dot[data-mode="offline"] { background: var(--color-primary-dim); color: var(--color-primary-dim); }
+  .server-select-text { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+  .server-select-value {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--color-text-light);
+    line-height: 1.2;
+  }
+  .server-select-sub {
+    font-size: 12px;
+    color: var(--color-text-muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .server-select-chevron {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    color: var(--color-primary-dim);
+    transition: transform var(--transition-speed) var(--transition-ease), color var(--transition-speed) var(--transition-ease);
+  }
+  .server-select-trigger[aria-expanded="true"] .server-select-chevron { transform: rotate(180deg); color: var(--color-primary); }
+
+  .server-select-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    z-index: 40;
+    margin: 0;
+    padding: 6px;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: linear-gradient(180deg, rgba(24, 24, 34, 0.98) 0%, rgba(11, 11, 18, 0.99) 100%);
+    border: 1px solid var(--color-border-focus);
+    border-radius: var(--radius-md);
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(0, 0, 0, 0.5);
+  }
+  .server-select-menu:not([hidden]) {
+    animation: server-menu-in 140ms var(--transition-ease) both;
+    transform-origin: top center;
+  }
+  @keyframes server-menu-in {
+    from { opacity: 0; transform: translateY(-6px) scale(0.985); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .server-select-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    padding: 11px 12px;
+    min-height: 44px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background var(--transition-speed) var(--transition-ease);
+  }
+  .server-select-option .server-dot { margin-top: 5px; }
+  .server-select-option:hover,
+  .server-select-option:focus-visible,
+  .server-select-option.is-active {
+    background: rgba(255, 209, 0, 0.08);
+    outline: none;
+  }
+  .server-select-option.is-selected { background: rgba(255, 209, 0, 0.06); }
+  .server-opt-text { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .server-opt-name {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 14.5px;
+    color: var(--color-text-light);
+  }
+  .server-opt-desc {
+    font-size: 12px;
+    line-height: 1.45;
+    color: var(--color-text-muted);
+  }
+  .server-opt-check {
+    flex: none;
+    width: 17px;
+    height: 17px;
+    margin-top: 4px;
+    color: var(--color-primary);
+    opacity: 0;
+    transition: opacity var(--transition-speed) var(--transition-ease);
+  }
+  .server-select-option.is-selected .server-opt-check { opacity: 1; }
+
+  /* Primary CTA — forged-gold Play button */
+  .btn-play {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 66px;
+    padding: 16px 48px;
+    cursor: pointer;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 24px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #2a1c05;
+    background: linear-gradient(180deg, #f8da78 0%, #e2b03a 44%, #b7820f 100%);
+    border: 1px solid #ffe6a0;
+    border-radius: var(--radius-md);
+    box-shadow:
+      0 0 0 1px rgba(0, 0, 0, 0.45),
+      0 14px 30px rgba(0, 0, 0, 0.55),
+      0 0 26px rgba(255, 209, 0, 0.28),
+      inset 0 1px 0 rgba(255, 255, 255, 0.6),
+      inset 0 -3px 8px rgba(120, 74, 6, 0.55);
+    transition: transform 0.12s var(--transition-ease),
+                box-shadow var(--transition-speed) var(--transition-ease),
+                filter var(--transition-speed) var(--transition-ease);
+  }
+  .btn-play:hover,
+  .btn-play:focus-visible {
+    transform: translateY(-2px);
+    filter: brightness(1.06);
+    box-shadow:
+      0 0 0 1px rgba(0, 0, 0, 0.45),
+      0 18px 38px rgba(0, 0, 0, 0.6),
+      0 0 40px rgba(255, 209, 0, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.7),
+      inset 0 -3px 8px rgba(120, 74, 6, 0.55);
+    outline: none;
+  }
+  .btn-play:active { transform: translateY(1px) scale(0.99); }
+  .btn-play-glyph { flex: none; width: 22px; height: 22px; filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.35)); }
+  .btn-play-label { line-height: 1; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3); }
+  /* Diagonal sheen sweep on hover */
+  .btn-play-sheen {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.55) 50%, transparent 62%);
+    transform: translateX(-130%);
+    pointer-events: none;
+  }
+  .btn-play:hover .btn-play-sheen,
+  .btn-play:focus-visible .btn-play-sheen { animation: btn-play-sheen 0.9s var(--transition-ease); }
+  @keyframes btn-play-sheen {
+    from { transform: translateX(-130%); }
+    to   { transform: translateX(130%); }
+  }
+
+  .play-hint {
+    margin: 0;
+    min-height: 1.4em;
+    text-align: center;
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--color-text-muted);
+    text-shadow: 1px 1px 2px #000;
+  }
+
+  /* Hidden automation hooks — present in the DOM, never seen or tabbed to. */
+  .play-compat-trigger {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    border: 0;
+    opacity: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
   #performance-tip {
     margin-top: var(--spacing-lg);
     font-size: 14px;
@@ -1909,6 +2431,101 @@
     font-family: var(--font-heading);
     letter-spacing: 0.8px;
     margin-right: var(--spacing-xs);
+  }
+  /* $WOC contract address — click-to-copy pill, sits under the performance tip. */
+  #token-ca {
+    margin: var(--spacing-lg) auto 0;
+    padding-top: var(--spacing-md);
+    border-top: 1px solid rgba(255, 209, 0, 0.14);
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm);
+  }
+  .token-ca-label {
+    font-family: var(--font-heading);
+    color: var(--color-primary);
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    font-size: 12px;
+    text-shadow: 0 0 8px var(--color-primary-glow), 1px 1px 2px #000;
+  }
+  .token-ca-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    max-width: 100%;
+    margin: 0;
+    padding: 9px var(--spacing-md);
+    background: rgba(11, 11, 18, 0.6);
+    border: 1px solid rgba(199, 148, 26, 0.45);
+    border-radius: var(--radius-md);
+    color: var(--color-text-light);
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+    transition: border-color var(--transition-speed) var(--transition-ease),
+                box-shadow var(--transition-speed) var(--transition-ease),
+                background var(--transition-speed) var(--transition-ease);
+  }
+  .token-ca-pill:hover,
+  .token-ca-pill:focus-visible {
+    border-color: var(--color-primary);
+    background: rgba(11, 11, 18, 0.85);
+    box-shadow: 0 0 12px var(--color-primary-glow);
+    outline: none;
+  }
+  .token-ca-addr {
+    font-family: 'SFMono-Regular', ui-monospace, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 13px;
+    letter-spacing: 0.4px;
+    color: var(--color-text-light);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-shadow: 1px 1px 2px #000;
+  }
+  .token-ca-copy {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    color: var(--color-primary-dim);
+    transition: color var(--transition-speed) var(--transition-ease);
+  }
+  .token-ca-pill:hover .token-ca-copy { color: var(--color-primary); }
+  .token-ca-copy svg { width: 16px; height: 16px; display: block; }
+  .token-ca-copy .icon-check { display: none; }
+  .token-ca-feedback {
+    display: none;
+    font-family: var(--font-sans);
+    font-size: 12px;
+    color: var(--color-text-success);
+  }
+  /* Small print under the pill: token disclaimer + community call-to-action. */
+  .token-ca-note {
+    margin: 0;
+    max-width: 520px;
+    font-family: var(--font-sans);
+    font-size: 12px;
+    line-height: 1.55;
+    color: var(--color-text-muted);
+    text-align: center;
+    text-shadow: 1px 1px 2px #000;
+  }
+  /* Copied state — swap clipboard glyph for a check, reveal the confirmation. */
+  #token-ca.is-copied .token-ca-pill { border-color: var(--color-text-success); }
+  #token-ca.is-copied .token-ca-copy { color: var(--color-text-success); }
+  #token-ca.is-copied .token-ca-copy .icon-clipboard { display: none; }
+  #token-ca.is-copied .token-ca-copy .icon-check { display: block; }
+  #token-ca.is-copied .token-ca-feedback { display: block; }
+  @media (max-width: 520px) {
+    .token-ca-addr { font-size: 11px; letter-spacing: 0.2px; }
+    .token-ca-pill { padding: 8px var(--spacing-sm); }
   }
   .auth-panel { width: 100%; max-width: 360px; padding: 16px; }
   .auth-panel input {
@@ -2388,7 +3005,11 @@
 
   /* ---------- Animated Backdrop ---------- */
   #start-screen-backdrop {
-    position: absolute;
+    /* fixed (not absolute) so the atmospheric backdrop stays pinned to the
+       viewport and keeps covering as the homepage scrolls — an absolute
+       inset:0 child of the scrolling #start-screen only spans the first
+       viewport height, leaving bare #040408 below the fold. */
+    position: fixed;
     inset: 0;
     z-index: -1;
     overflow: hidden;
@@ -2413,7 +3034,7 @@
     );
     filter: blur(80px);
     animation: rotate-portal 45s linear infinite;
-    opacity: 0.85;
+    opacity: 0.5;
   }
 
   .portal-ring-reverse {
@@ -2433,15 +3054,82 @@
     );
     filter: blur(100px);
     animation: rotate-portal-reverse 60s linear infinite;
-    opacity: 0.75;
+    opacity: 0.38;
   }
 
   .nebula-overlay {
     position: absolute;
     inset: 0;
     background: radial-gradient(circle at 50% 30%, rgba(42, 58, 85, 0.4) 0%, rgba(10, 13, 20, 0.95) 70%);
-    mix-blend-mode: color-dodge;
+    /* soft-light (not color-dodge) so the radial vignette darkens edges for legibility
+       without blowing the trailer's highlights into a glare. */
+    mix-blend-mode: soft-light;
     animation: breathe-nebula 12s ease-in-out infinite alternate;
+  }
+
+  /* ---------- looping cinematic backdrop ---------- */
+  .bg-trailer {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 42%;
+    /* held dark + slightly desaturated so the gold UI and white type stay dominant;
+       JS fades opacity in once the first frame is actually playing. */
+    opacity: 0;
+    filter: saturate(1.08) contrast(1.02) brightness(1);
+    transform: scale(1.04); /* hide cover-fit edge crawl + give a faint Ken-Burns drift */
+    transition: opacity 1.1s ease;
+    will-change: opacity;
+    pointer-events: none;
+  }
+  /* The trailer only shows on the Play page; switchMainView toggles this when
+     navigating to High Scores / Wiki / News / Download. */
+  #start-screen-backdrop.trailer-off .bg-trailer,
+  #start-screen-backdrop.trailer-off .bg-trailer-fade { display: none; }
+
+  /* trailer-ready: reveal the layer (also used for the static poster on
+     reduced-motion / save-data). trailer-playing: add drift only when truly playing. */
+  #start-screen-backdrop.trailer-ready .bg-trailer { opacity: 0.85; }
+  #start-screen-backdrop.trailer-playing .bg-trailer {
+    animation: trailer-drift 38s ease-in-out infinite alternate;
+  }
+  .bg-trailer-scrim {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    /* three stacked layers: top + bottom darkening for header/CTA legibility,
+       an edge vignette, and a brand-tinted wash to keep the palette cohesive. */
+    background:
+      linear-gradient(180deg, rgba(4, 4, 8, 0.46) 0%, rgba(4, 4, 8, 0.06) 30%, rgba(4, 4, 8, 0.08) 60%, rgba(4, 4, 8, 0.58) 100%),
+      radial-gradient(130% 100% at 50% 42%, transparent 52%, rgba(4, 4, 8, 0.34) 100%),
+      linear-gradient(180deg, rgba(20, 17, 8, 0.08), rgba(8, 10, 18, 0.12));
+  }
+  @keyframes trailer-drift {
+    0%   { transform: scale(1.04) translate3d(0, 0, 0); }
+    100% { transform: scale(1.12) translate3d(-1.4%, -1.4%, 0); }
+  }
+
+  /* Black wipe that fades the backdrop in on first play and on every loop. */
+  .bg-trailer-fade {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    background: #040408;
+    opacity: 1;
+    pointer-events: none;
+  }
+  .bg-trailer-fade.revealed { opacity: 0; }
+  .bg-trailer-fade.is-fading { animation: trailer-fade-in 1.1s ease-out forwards; }
+  .bg-trailer-fade.is-fading-out { animation: trailer-fade-out 0.35s ease-in forwards; }
+  @keyframes trailer-fade-in {
+    0%   { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  @keyframes trailer-fade-out {
+    0%   { opacity: 0; }
+    100% { opacity: 1; }
   }
 
   .embers-container {
@@ -2476,7 +3164,10 @@
     .ember,
     #title-logo,
     .class-card,
-    .mode-card {
+    .bg-trailer,
+    .btn-play-sheen,
+    .server-select-menu:not([hidden]),
+    .btn-play {
       animation: none !important;
       transition: none !important;
       transform: none !important;
@@ -2491,6 +3182,11 @@
     }
     #title-logo {
       filter: drop-shadow(0 0 20px rgba(255, 209, 0, 0.35)) drop-shadow(2px 2px 5px #000) !important;
+    }
+    /* No black wipe with reduced motion — reveal the static poster immediately. */
+    .bg-trailer-fade {
+      opacity: 0 !important;
+      animation: none !important;
     }
   }
 
@@ -2553,6 +3249,7 @@
   .realm-pop.high { color: #ff9030; }
   .realm-pop.full { color: #ff5040; }
   .realm-pop.offline { color: #888; }
+  .realm-meta { display: contents; }
 
   /* ---------- chat ---------- */
   #chat-input { position: absolute; left: 12px; bottom: 204px; width: 370px; display: none; z-index: 25;
@@ -3130,7 +3827,31 @@
   #rotate-device { display: none; }
   body.mobile-touch #game-canvas { touch-action: none; }
   body.mobile-touch #ui { touch-action: none; }
+  body.mobile-touch.game-active,
+  body.mobile-touch.game-active #ui,
+  body.mobile-touch.game-active #nameplates,
+  body.mobile-touch.game-active #mobile-controls,
+  body.mobile-touch.game-active #mobile-controls *,
+  body.mobile-touch.game-active #bottom-bar,
+  body.mobile-touch.game-active #bottom-bar *,
+  body.mobile-touch.game-active .action-btn,
+  body.mobile-touch.game-active .mobile-btn {
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+  }
+  body.mobile-touch.game-active input,
+  body.mobile-touch.game-active textarea,
+  body.mobile-touch.game-active select,
+  body.mobile-touch.game-active [contenteditable=""],
+  body.mobile-touch.game-active [contenteditable="true"] {
+    user-select: text;
+    -webkit-user-select: text;
+    -webkit-touch-callout: default;
+  }
   body.mobile-touch.game-active #mobile-controls { position: absolute; inset: 0; display: block; pointer-events: none; z-index: 60; opacity: var(--touch-opacity, 1); }
+  body.mobile-touch.game-active #ui { z-index: 80; }
+  body.mobile-touch.mobile-more-open #mobile-controls { z-index: 140; }
   body.mobile-touch.game-active #ui,
   body.mobile-touch.game-active #nameplates,
   body.mobile-touch.game-active #mobile-controls {
@@ -3172,7 +3893,7 @@
      anywhere; the joystick rests dimmed at home until touched, then springs to
      the touch point with a gold "engaged" glow. */
   body.mobile-touch #mobile-move-zone {
-    position: absolute; left: 0; bottom: 0; width: min(34vw, calc(50vw - 126px)); min-width: 142px; max-width: 300px; height: 58%;
+    position: absolute; left: 0; bottom: 0; width: min(30vw, 132px); min-width: 112px; max-width: 132px; height: min(36vh, 172px);
     pointer-events: auto; touch-action: none; z-index: 1;
   }
   body.mobile-touch.mobile-chat-open #mobile-move-zone { pointer-events: none; }
@@ -3196,8 +3917,8 @@
     position: absolute; left: 0; right: 0; bottom: -18px; text-align: center; font-size: 9px; color: #c8b888; text-shadow: 1px 1px 2px #000;
   }
   body.mobile-touch #mobile-combat-controls {
-    position: absolute; left: 50%; bottom: calc(4px + env(safe-area-inset-bottom)); transform: translateX(-50%);
-    display: grid; grid-template-columns: 124px repeat(5, 58px); gap: 8px; pointer-events: auto; align-items: end; z-index: 30;
+    position: absolute; left: 50%; bottom: calc(3px + env(safe-area-inset-bottom)); transform: translateX(-50%);
+    display: grid; grid-template-columns: 124px repeat(6, 58px); gap: 8px; pointer-events: auto; align-items: end; z-index: 30;
   }
   body.mobile-touch .mobile-btn {
     width: 58px; height: 54px; border: 2px solid #4a3d1d; border-radius: 8px;
@@ -3213,9 +3934,8 @@
   }
   body.mobile-touch .mobile-btn:active { transform: translateY(1px); border-color: var(--gold); color: #fff; }
   body.mobile-touch #mobile-autorun {
-    position: fixed; pointer-events: auto;
-    left: max(calc(18px + env(safe-area-inset-left)), calc(50% - 208px));
-    bottom: calc(72px + env(safe-area-inset-bottom));
+    position: static;
+    pointer-events: auto;
     z-index: 19;
   }
   body.mobile-touch #mobile-autorun.active {
@@ -3229,26 +3949,50 @@
   body.mobile-touch .mobile-btn .mobile-label { display: block; margin-top: 1px; font-size: 8px; font-family: var(--ui-font); color: #bfb28a; }
   body.mobile-touch #mobile-extra-controls {
     position: fixed;
-    left: min(calc(50% + 136px), calc(100vw - 222px - max(12px, env(safe-area-inset-right, 0px))));
-    bottom: calc(66px + env(safe-area-inset-bottom));
+    left: 50%;
+    top: max(14px, env(safe-area-inset-top));
+    bottom: auto;
+    transform: translateX(-50%);
     display: none;
-    grid-template-columns: repeat(2, 104px);
-    grid-auto-rows: 42px;
-    gap: 7px;
+    width: min(560px, calc(100vw - 32px - env(safe-area-inset-left) - env(safe-area-inset-right)));
+    padding: 10px;
     pointer-events: auto;
-    z-index: 70;
-    /* The tray grows upward from a fixed bottom. As it has gained buttons it can
-       now run off the TOP of a short landscape phone, leaving the upper rows
-       unreachable, so cap it to the space above the bottom controls and let the
-       overflow scroll. 100dvh accounts for mobile browser chrome (unlike 100vh). */
-    max-height: calc(100dvh - 84px - env(safe-area-inset-bottom));
+    z-index: 100;
+    border: 2px solid #5b4618;
+    border-radius: 10px;
+    background: linear-gradient(170deg, #15151ff2, #08080df8);
+    box-shadow: 0 8px 28px #000d, inset 0 1px 0 #ffffff12;
+    /* Top-centred modal: cap to the safe viewport so short landscape phones can
+       scroll the full menu without hiding rows behind controls or browser chrome. */
+    max-width: calc(100vw - 32px - env(safe-area-inset-left) - env(safe-area-inset-right));
+    max-height: calc(100dvh - 32px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
     overflow-y: auto;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
   }
-  body.mobile-touch.mobile-more-open #mobile-extra-controls { display: grid; }
+  body.mobile-touch.mobile-more-open #mobile-extra-controls { display: flex; flex-direction: column; }
+  body.mobile-touch #mobile-extra-controls .panel-title {
+    min-height: 32px;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    cursor: move;
+    touch-action: none;
+  }
+  body.mobile-touch #mobile-extra-controls .panel-title .x-btn {
+    min-width: 32px;
+    min-height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  body.mobile-touch #mobile-extra-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-auto-rows: 42px;
+    gap: 7px;
+  }
   body.mobile-touch #mobile-extra-controls .mobile-btn {
-    width: 104px;
+    width: 100%;
     height: 42px;
     display: flex;
     flex-direction: row;
@@ -3281,29 +4025,58 @@
     transform: translate(-50%, -50%) rotate(-45deg); pointer-events: none;
   }
   body.mobile-touch #bottom-bar {
-    left: 0; right: 0; bottom: calc(72px + env(safe-area-inset-bottom));
-    width: 100%;
+    left: calc(max(18px, env(safe-area-inset-left)) + 154px);
+    right: calc(max(18px, env(safe-area-inset-right)) + 154px);
+    bottom: calc(64px + env(safe-area-inset-bottom));
+    width: auto;
     transform: none;
     z-index: 18;
     display: flex;
     justify-content: center;
     pointer-events: none;
   }
-  body.mobile-touch #actionbar-row { pointer-events: auto; }
-  body.mobile-touch #xpbar {
-    position: fixed;
-    left: max(8px, env(safe-area-inset-left));
-    right: auto;
-    top: calc(max(8px, env(safe-area-inset-top)) + 70px);
-    bottom: auto;
-    width: 246px;
+  body.mobile-touch #actionbar-row {
+    pointer-events: auto;
+    width: 100%;
     min-width: 0;
-    height: 6px;
-    display: block;
-    margin: 0;
-    z-index: 19;
-    opacity: 0.86;
   }
+  body.mobile-touch #xpbar {
+    display: none;
+  }
+  body.mobile-touch #player-frame {
+    --xp-ring-start: 210deg;
+    --xp-ring-arc: 360deg;
+  }
+  body.mobile-touch #player-frame::before {
+    content: "";
+    position: absolute;
+    left: -5px;
+    top: -5px;
+    width: 73px;
+    height: 73px;
+    z-index: 2;
+    opacity: 0.96;
+    pointer-events: none;
+    border-radius: 50%;
+    background:
+      conic-gradient(from var(--xp-ring-start),
+        #b85eff 0deg calc(var(--xp-fill, 0) * 360deg),
+        rgba(125, 88, 158, 0.34) calc(var(--xp-fill, 0) * 360deg) var(--xp-ring-arc),
+        transparent var(--xp-ring-arc) 360deg);
+    box-shadow: 0 0 8px rgba(184, 94, 255, 0.28);
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 7px), #000 calc(100% - 6px));
+    mask: radial-gradient(farthest-side, transparent calc(100% - 7px), #000 calc(100% - 6px));
+  }
+  body.mobile-touch #player-frame:has(#xpbar.overflow)::before {
+    background:
+      conic-gradient(from var(--xp-ring-start),
+        #ffe27a 0deg calc(var(--xp-fill, 0) * 360deg),
+        rgba(184, 144, 42, 0.34) calc(var(--xp-fill, 0) * 360deg) var(--xp-ring-arc),
+        transparent var(--xp-ring-arc) 360deg);
+    box-shadow: 0 0 9px rgba(245, 200, 67, 0.34);
+  }
+  body.mobile-touch #xpbar .fill,
+  body.mobile-touch #xpbar .ticks { display: none; }
   body.mobile-touch #xpbar .label { display: none; }
   body.mobile-touch #castbar {
     position: fixed;
@@ -3320,6 +4093,10 @@
   }
   body.mobile-touch #castbar .label { display: none; }
   body.mobile-touch #actionbar-row { display: block; }
+  body.mobile-touch #actionbar-stack {
+    width: 100%;
+    min-width: 0;
+  }
   body.mobile-touch #petbar {
     position: fixed;
     left: 50%;
@@ -3332,16 +4109,23 @@
   }
   body.mobile-touch #side-buttons { display: none; }
   body.mobile-touch #actionbar {
-    display: grid;
-    grid-template-columns: repeat(5, 42px);
-    grid-auto-rows: 42px;
+    display: flex;
+    flex-wrap: nowrap;
     gap: 4px;
     padding: 4px;
-    width: max-content;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
     background: linear-gradient(170deg, #15151fc8, #08080dd8);
   }
-  body.mobile-touch #actionbar.many-spells { grid-template-columns: repeat(6, 42px); }
-  body.mobile-touch .action-btn { width: 42px; height: 42px; border-radius: 7px; }
+  body.mobile-touch #actionbar.many-spells { grid-template-columns: none; }
+  body.mobile-touch .action-btn { width: 42px; height: 42px; flex: 0 0 42px; border-radius: 7px; }
+  body.mobile-touch .action-btn:not(.used):not(.queued):not(.drop-target):hover { border-color: #4a3d1d; }
   body.mobile-touch .action-btn .icon-label { border-radius: 6px; }
   body.mobile-touch .action-btn .cd-text { font-size: 13px; }
   body.mobile-touch .action-btn .keybind { display: none; }
@@ -3352,25 +4136,71 @@
     top: 130px;
     bottom: auto;
     width: 70px;
-    padding: 5px;
-    flex-direction: column;
-    gap: 5px;
-  }
-  body.mobile-touch .community-link {
-    height: 46px;
     padding: 0;
+    display: block;
   }
-  body.mobile-touch .community-link.donate {
+  body.mobile-touch #community-menu {
+    display: block;
+    position: relative;
+    width: 100%;
+  }
+  body.mobile-touch #community-menu > summary { list-style: none; }
+  body.mobile-touch #community-menu > summary::-webkit-details-marker { display: none; }
+  body.mobile-touch .community-toggle {
+    width: 44px;
+    height: 44px;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #d8c89a;
+    border: 2px solid #4a3d1d;
+    border-radius: 8px;
+    background: radial-gradient(circle at 35% 30%, #2c2c3a, #15151f);
+    box-shadow: inset 0 1px 0 #ffffff18, 0 2px 4px #0009;
+    cursor: pointer;
+  }
+  body.mobile-touch .community-toggle svg {
+    width: 20px;
+    height: 20px;
+    display: block;
+  }
+  body.mobile-touch #community-menu[open] .community-toggle {
+    color: #fff;
+    border-color: var(--gold-dim);
+  }
+  body.mobile-touch .community-tray {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
     display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 5px;
+    width: 118px;
+    padding: 5px;
+    border: 2px solid #3d3218;
+    border-radius: 8px;
+    background: linear-gradient(170deg, #15151fe8, #08080df0);
+    box-shadow: 0 4px 14px #000b, inset 0 1px 0 #ffffff12;
+    z-index: 90;
+  }
+  body.mobile-touch #community-menu[open] .community-tray { display: flex; }
+  body.mobile-touch .community-link {
+    width: 100%;
+    height: 40px;
+    gap: 7px;
+    padding: 0 9px;
+    justify-content: flex-start;
+    font-size: 12px;
+    font-weight: 700;
   }
   body.mobile-touch .community-link svg {
-    width: 22px;
-    height: 22px;
+    width: 20px;
+    height: 20px;
   }
-  body.mobile-touch .community-link.donate svg {
-    width: 16px;
-    height: 16px;
-  }
+  body.mobile-touch .community-link span { display: inline; line-height: 1; }
+  body.mobile-touch .community-link.donate { display: inline-flex; width: 100%; padding: 0 9px; font-size: 12px; }
   body.mobile-touch #chatlog-wrap { left: max(10px, env(safe-area-inset-left)); bottom: calc(160px + env(safe-area-inset-bottom)); width: min(340px, calc(100vw - 20px)); display: none; z-index: 24; }
   body.mobile-touch.mobile-chat-open #chatlog-wrap { display: block; }
   body.mobile-touch #chatlog-frame { height: 126px; }
@@ -3387,6 +4217,7 @@
     position: fixed;
     left: max(8px, env(safe-area-inset-left));
     top: max(8px, env(safe-area-inset-top));
+    z-index: 21;
     width: 300px;
     margin: 0;
     display: flex;
@@ -3394,16 +4225,28 @@
     transform: scale(0.82);
     transform-origin: left top;
   }
+  body.mobile-touch #player-frame .portrait-wrap { z-index: 3; }
   body.mobile-touch #player-frame .uf-bars {
+    position: relative;
+    z-index: 1;
     width: 224px;
     max-width: 224px;
     flex: none;
   }
   body.mobile-touch #target-frame {
     left: max(8px, env(safe-area-inset-left));
-    top: calc(max(8px, env(safe-area-inset-top)) + 64px);
+    top: calc(max(8px, env(safe-area-inset-top)) + 90px);
     transform: scale(0.82);
     transform-origin: left top;
+  }
+  body.mobile-touch #party-frames {
+    position: fixed;
+    left: max(8px, env(safe-area-inset-left));
+    top: calc(max(8px, env(safe-area-inset-top)) + 92px);
+    z-index: 5;
+  }
+  body.mobile-touch #party-frames.below-target {
+    top: calc(max(8px, env(safe-area-inset-top)) + 148px);
   }
   body.mobile-touch #buff-bar { right: max(10px, env(safe-area-inset-right)); top: max(140px, env(safe-area-inset-top)); max-width: 180px; }
   body.mobile-touch #minimap-wrap { right: max(8px, env(safe-area-inset-right)); top: max(8px, env(safe-area-inset-top)); transform: scale(0.72); transform-origin: right top; }
@@ -3433,8 +4276,8 @@
     left: auto; right: auto;
   }
   body.mobile-touch.mobile-left-handed #mobile-extra-controls {
-    left: auto;
-    right: min(calc(50% + 136px), calc(100vw - 222px - max(12px, env(safe-area-inset-right, 0px))));
+    left: 50%;
+    right: auto;
   }
   body.mobile-touch.mobile-left-handed #castbar {
     left: auto; right: calc(max(18px, env(safe-area-inset-right)) + 132px);
@@ -3695,17 +4538,19 @@
   body.mobile-touch #controls-hint {
     max-width: min(360px, 92vw); margin-top: 18px; line-height: 1.45; font-size: 10px;
   }
-  body.mobile-touch .mode-row {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    width: 100%;
+  body.mobile-touch #mode-select {
+    max-width: min(440px, calc(100vw - 24px));
+    padding: 20px 18px 18px;
   }
-  body.mobile-touch .mode-card {
-    width: min(280px, calc(100vw - 96px));
-    margin-inline: auto;
-    padding: 18px 16px;
+  body.mobile-touch .play-console {
+    width: 100%;
+    gap: 16px;
+  }
+  body.mobile-touch .btn-play {
+    font-size: 21px;
+    letter-spacing: 2px;
+    min-height: 60px;
+    padding: 14px 32px;
   }
   body.mobile-touch[data-start-panel="realm-panel"] #homepage-views-container,
   body.mobile-touch[data-start-panel="charselect-panel"] #homepage-views-container,
@@ -3723,9 +4568,64 @@
     margin-top: 0;
     width: min(360px, calc(100vw - 48px));
   }
+  body.mobile-touch .realm-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+    padding: 10px;
+  }
+  body.mobile-touch .realm-row > div:first-child {
+    min-width: 0;
+  }
+  body.mobile-touch .realm-name,
+  body.mobile-touch .realm-sub {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  body.mobile-touch .realm-name .rn-chars,
+  body.mobile-touch .realm-name .rn-rec {
+    display: inline-block;
+    max-width: 100%;
+    vertical-align: middle;
+  }
+  body.mobile-touch .realm-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 2px;
+    min-width: 48px;
+  }
+  body.mobile-touch .realm-type,
+  body.mobile-touch .realm-pop {
+    min-width: 0;
+    line-height: 1.1;
+    text-align: right;
+    white-space: nowrap;
+  }
+  body.mobile-touch .realm-pop {
+    font-size: 11px;
+  }
+  body.mobile-touch .portal-ring,
+  body.mobile-touch .portal-ring-reverse,
+  body.mobile-touch .nebula-overlay {
+    animation: none;
+  }
+  body.mobile-touch .portal-ring,
+  body.mobile-touch .portal-ring-reverse {
+    filter: none;
+    opacity: 0.18;
+  }
+  body.mobile-touch .nebula-overlay {
+    mix-blend-mode: normal;
+    opacity: 0.78;
+  }
+  body.mobile-touch .embers-container {
+    display: none;
+  }
   body.mobile-touch .class-row { grid-template-columns: repeat(2, minmax(138px, 1fr)); gap: 8px; width: min(340px, 92vw); }
   body.mobile-touch .class-card { padding: 9px 8px 8px; }
-  body.mobile-touch #title-logo { width: min(360px, 82vw); margin-bottom: 18px; }
+  body.mobile-touch #title-logo { width: min(420px, 86vw); margin-bottom: 18px; }
   body.mobile-preflight-open #mobile-preflight.visible {
     position: fixed; inset: 0; z-index: 250; display: flex; align-items: center; justify-content: center;
     padding: max(18px, env(safe-area-inset-top)) max(18px, env(safe-area-inset-right)) max(18px, env(safe-area-inset-bottom)) max(18px, env(safe-area-inset-left));
@@ -3762,7 +4662,7 @@
   @media (orientation: portrait) {
     body.mobile-touch.game-active #rotate-device { display: flex; }
     body.mobile-touch #mobile-combat-controls {
-      grid-template-columns: 96px repeat(5, 42px);
+      grid-template-columns: 96px repeat(6, 42px);
       gap: 4px;
     }
     body.mobile-touch .mobile-btn { width: 42px; height: 44px; font-size: 16px; }
@@ -3770,6 +4670,15 @@
   }
 
   @media (orientation: landscape) {
+    body.mobile-touch .play-console {
+      width: min(460px, calc(100vw - 80px));
+      gap: 12px;
+    }
+    body.mobile-touch .server-select-caption { margin-bottom: 5px; }
+    body.mobile-touch .btn-play {
+      min-height: 54px;
+      font-size: 20px;
+    }
     body.mobile-touch .mobile-joystick {
       width: 100px; height: 100px; bottom: calc(15px + env(safe-area-inset-bottom));
       opacity: 0.72; border-color: #d2bd6a66;
@@ -3782,44 +4691,51 @@
     }
     body.mobile-touch .mobile-joy-label { bottom: -15px; font-size: 8px; color: #d7c987aa; }
     body.mobile-touch #mobile-combat-controls {
-      bottom: calc(2px + env(safe-area-inset-bottom)); grid-template-columns: 115px repeat(5, 54px); gap: 7px;
+      bottom: calc(2px + env(safe-area-inset-bottom)); grid-template-columns: 115px repeat(6, 54px); gap: 7px;
     }
     body.mobile-touch .mobile-btn { width: 54px; height: 48px; font-size: 20px; background: radial-gradient(circle at 35% 30%, #2d3048bf, #11121ec2 72%); }
     body.mobile-touch #mobile-attack-nearest { width: 115px; }
     body.mobile-touch #mobile-extra-controls {
-      left: min(calc(50% + 126px), calc(100vw - 208px - max(12px, env(safe-area-inset-right, 0px))));
-      bottom: calc(58px + env(safe-area-inset-bottom));
-      grid-template-columns: repeat(2, 98px);
+      left: 50%;
+      top: max(10px, env(safe-area-inset-top));
+      bottom: auto;
+      padding: 8px;
+      max-height: calc(100dvh - 28px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    }
+    body.mobile-touch #mobile-extra-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       grid-auto-rows: 40px;
       gap: 6px;
-      max-height: calc(100dvh - 74px - env(safe-area-inset-bottom));
     }
     body.mobile-touch.mobile-left-handed #mobile-extra-controls {
-      left: auto;
-      right: min(calc(50% + 126px), calc(100vw - 208px - max(12px, env(safe-area-inset-right, 0px))));
+      left: 50%;
+      right: auto;
     }
     body.mobile-touch #mobile-extra-controls .mobile-btn {
-      width: 98px;
+      width: 100%;
       height: 40px;
       font-size: 16px;
       padding: 0 9px;
     }
     body.mobile-touch #mobile-extra-controls .mobile-label { font-size: 9px; }
-    body.mobile-touch #bottom-bar { bottom: calc(58px + env(safe-area-inset-bottom)); }
-    body.mobile-touch #mobile-autorun {
-      left: max(calc(20px + env(safe-area-inset-left)), calc(50% - 194px));
-      bottom: calc(58px + env(safe-area-inset-bottom));
+    body.mobile-touch #bottom-bar {
+      left: calc(max(20px, env(safe-area-inset-left)) + 136px);
+      right: calc(max(20px, env(safe-area-inset-right)) + 136px);
+      bottom: calc(57px + env(safe-area-inset-bottom));
     }
-    body.mobile-touch #actionbar { grid-template-columns: repeat(5, 40px); grid-auto-rows: 40px; gap: 4px; padding: 4px; width: max-content; background: linear-gradient(170deg, #15151fa8, #08080db8); }
-    body.mobile-touch #actionbar.many-spells { grid-template-columns: repeat(6, 40px); }
-    body.mobile-touch .action-btn { width: 40px; height: 40px; }
+    body.mobile-touch #actionbar { gap: 4px; padding: 4px; background: linear-gradient(170deg, #15151fa8, #08080db8); }
+    body.mobile-touch #actionbar.many-spells { grid-template-columns: none; }
+    body.mobile-touch .action-btn { width: 40px; height: 40px; flex-basis: 40px; }
     body.mobile-touch #xpbar {
-      left: max(6px, env(safe-area-inset-left));
-      top: calc(max(6px, env(safe-area-inset-top)) + 48px);
-      bottom: auto;
-      width: 180px;
-      min-width: 0;
-      height: 5px;
+      display: none;
+    }
+    body.mobile-touch #player-frame::before {
+      left: -5px;
+      top: -5px;
+      width: 73px;
+      height: 73px;
+      -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 7px), #000 calc(100% - 6px));
+      mask: radial-gradient(farthest-side, transparent calc(100% - 7px), #000 calc(100% - 6px));
     }
     body.mobile-touch #castbar {
       left: calc(max(20px, env(safe-area-inset-left)) + 112px);
@@ -3834,6 +4750,7 @@
       transform-origin: center top;
     }
     body.mobile-touch #community-hud { top: 108px; right: max(8px, env(safe-area-inset-right)); width: 62px; padding: 4px; gap: 4px; }
+    body.mobile-touch .community-toggle { width: 40px; height: 40px; }
     body.mobile-touch .community-link { height: 40px; }
     body.mobile-touch .community-link svg { width: 20px; height: 20px; }
     body.mobile-touch #chatlog-wrap { left: max(10px, env(safe-area-inset-left)); bottom: calc(112px + env(safe-area-inset-bottom)); width: min(330px, 44vw); }
@@ -3851,8 +4768,15 @@
     }
     body.mobile-touch #target-frame {
       left: max(6px, env(safe-area-inset-left));
-      top: calc(max(6px, env(safe-area-inset-top)) + 50px);
+      top: calc(max(6px, env(safe-area-inset-top)) + 68px);
       transform: scale(0.6);
+    }
+    body.mobile-touch #party-frames {
+      left: max(6px, env(safe-area-inset-left));
+      top: calc(max(6px, env(safe-area-inset-top)) + 70px);
+    }
+    body.mobile-touch #party-frames.below-target {
+      top: calc(max(6px, env(safe-area-inset-top)) + 112px);
     }
     body.mobile-touch #buff-bar { right: calc(98px + env(safe-area-inset-right)); top: max(8px, env(safe-area-inset-top)); max-width: 160px; transform: scale(0.85); transform-origin: right top; }
     body.mobile-touch #minimap-wrap { right: max(6px, env(safe-area-inset-right)); top: max(6px, env(safe-area-inset-top)); transform: scale(0.46); }
@@ -4048,16 +4972,19 @@
       gap: var(--spacing-md);
     }
 
-    /* Keep the logo size completely stable on desktop */
+    /* Logo scales up with the viewport on desktop — bigger screen, bigger wordmark. */
     #title-logo {
-      width: 320px !important;
+      width: clamp(340px, 20vw, 440px) !important;
     }
   }
 
   body.mobile-touch #charselect-panel {
     width: min(380px, calc(100vw - 48px));
-    max-height: calc(100vh - 112px);
-    overflow-y: auto;
+    min-height: calc(var(--app-vh) - 178px);
+    max-height: none;
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
   }
   body.mobile-touch #charselect-panel .auth-title {
     font-size: 21px;
@@ -4099,14 +5026,54 @@
     border-top: 0;
     margin-top: 0;
     padding-top: 0;
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+  body.mobile-touch #charselect-panel .charselect-layout {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    gap: 12px;
+    min-height: 0;
+  }
+  body.mobile-touch #charselect-panel .charselect-col-left {
+    flex-direction: column;
+    display: flex;
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+  body.mobile-touch #charselect-panel .charselect-col-right {
+    display: flex;
+    flex: 1 1 auto;
+    width: 100%;
+    min-height: 0;
   }
   body.mobile-touch #charselect-panel #char-list {
+    flex: 1 1 auto;
     max-height: none;
     border: 0;
     background: transparent;
     padding: 0;
     margin: 0;
     overflow: visible;
+  }
+  body.mobile-touch #charselect-panel #online-class-details {
+    flex: 1 1 auto;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    margin-bottom: 0;
+    overflow: visible;
+  }
+  body.mobile-touch #charselect-panel #online-class-details .class-details-content {
+    min-height: 100%;
+    height: auto;
+  }
+  body.mobile-touch #charselect-panel #online-class-details .class-details-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
   }
   body.mobile-touch .char-row {
     display: grid;
@@ -4212,7 +5179,7 @@
     width: 100%;
   }
 
-  @media (max-width: 760px) {
+  @media (max-width: 860px) {
     #community-hud { top: auto; }
     #quest-tracker { top: 260px; right: 12px; width: 190px; }
 
@@ -4296,9 +5263,6 @@
       padding: 0;
       justify-content: center;
     }
-    .community-link.donate {
-      display: none;
-    }
     .social-link span { display: none; }
     .social-link svg { width: 18px; height: 18px; }
   }
@@ -4338,7 +5302,7 @@
     <div id="prompt-stack"></div>
     <div id="trade-window" class="window panel"></div>
 
-    <div id="castbar"><div class="fill"></div><div class="label"></div></div>
+    <div id="castbar"><div class="fill"></div><div class="label"></div><div class="timer"></div></div>
 
     <div id="minimap-wrap">
       <div id="zone-label" data-i18n="entities.zones.eastbrook_vale.name">Eastbrook Vale</div>
@@ -4346,18 +5310,25 @@
     </div>
 
     <div id="community-hud" data-i18n-aria="hud.core.communityLinks" aria-label="Community links">
-      <a class="community-link discord" href="https://discord.gg/GjhnUsBtw" target="_blank" rel="noopener noreferrer" data-i18n-title="a11y.discordCommunity" data-i18n-aria="a11y.discordCommunity" title="Join the World of ClaudeCraft Discord community" aria-label="Join the World of ClaudeCraft Discord community">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.32 4.37A19.8 19.8 0 0 0 15.36 2.8a13.66 13.66 0 0 0-.64 1.32 18.47 18.47 0 0 0-5.45 0 13.02 13.02 0 0 0-.65-1.32 19.73 19.73 0 0 0-4.96 1.58C.53 9.03-.32 13.56.1 18.02a19.9 19.9 0 0 0 6.08 3.08c.49-.67.93-1.38 1.3-2.13-.72-.27-1.41-.6-2.06-.98.17-.13.34-.26.5-.4a14.16 14.16 0 0 0 12.16 0c.16.14.33.27.5.4-.65.39-1.34.72-2.07.99.38.74.81 1.45 1.31 2.12a19.86 19.86 0 0 0 6.08-3.08c.5-5.17-.85-9.66-3.58-13.65ZM8.02 15.28c-1.18 0-2.15-1.08-2.15-2.41 0-1.33.95-2.42 2.15-2.42 1.2 0 2.17 1.1 2.15 2.42 0 1.33-.95 2.41-2.15 2.41Zm7.96 0c-1.18 0-2.15-1.08-2.15-2.41 0-1.33.95-2.42 2.15-2.42 1.2 0 2.17 1.1 2.15 2.42 0 1.33-.95 2.41-2.15 2.41Z"/></svg>
-        <span>Discord</span>
-      </a>
-      <a class="community-link github" href="https://github.com/levy-street/world-of-claudecraft" target="_blank" rel="noopener noreferrer" data-i18n-title="a11y.githubProject" data-i18n-aria="a11y.githubProject" title="Open the World of ClaudeCraft GitHub project" aria-label="Open the World of ClaudeCraft GitHub project">
-        <svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
-        <span>GitHub</span>
-      </a>
-      <a class="community-link donate" href="https://github.com/sponsors/levy-street" target="_blank" rel="noopener noreferrer" data-i18n-title="a11y.donateProject" data-i18n-aria="a11y.donateProject" title="Support the project" aria-label="Donate to support World of ClaudeCraft">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-        <span data-i18n="nav.donate">Donate</span>
-      </a>
+      <details id="community-menu">
+        <summary class="community-toggle" data-i18n-title="hud.core.communityLinks" data-i18n-aria="hud.core.communityLinks" title="Community links" aria-label="Community links">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M7.5 11.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Zm9 0a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7ZM1.7 19.6c.5-3.6 2.6-5.5 5.8-5.5s5.3 1.9 5.8 5.5c.1.6-.4 1.1-1 1.1H2.7c-.6 0-1.1-.5-1-1.1Zm9.7-4.6c1.1-.7 2.8-.9 5.1-.9 3.2 0 5.3 1.9 5.8 5.5.1.6-.4 1.1-1 1.1h-6.6c-.3-2.3-1.4-4.2-3.3-5.7Z"/></svg>
+        </summary>
+        <div class="community-tray">
+          <a class="community-link discord" href="https://discord.gg/GjhnUsBtw" target="_blank" rel="noopener noreferrer" data-i18n-title="a11y.discordCommunity" data-i18n-aria="a11y.discordCommunity" title="Join the World of ClaudeCraft Discord community" aria-label="Join the World of ClaudeCraft Discord community">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.32 4.37A19.8 19.8 0 0 0 15.36 2.8a13.66 13.66 0 0 0-.64 1.32 18.47 18.47 0 0 0-5.45 0 13.02 13.02 0 0 0-.65-1.32 19.73 19.73 0 0 0-4.96 1.58C.53 9.03-.32 13.56.1 18.02a19.9 19.9 0 0 0 6.08 3.08c.49-.67.93-1.38 1.3-2.13-.72-.27-1.41-.6-2.06-.98.17-.13.34-.26.5-.4a14.16 14.16 0 0 0 12.16 0c.16.14.33.27.5.4-.65.39-1.34.72-2.07.99.38.74.81 1.45 1.31 2.12a19.86 19.86 0 0 0 6.08-3.08c.5-5.17-.85-9.66-3.58-13.65ZM8.02 15.28c-1.18 0-2.15-1.08-2.15-2.41 0-1.33.95-2.42 2.15-2.42 1.2 0 2.17 1.1 2.15 2.42 0 1.33-.95 2.41-2.15 2.41Zm7.96 0c-1.18 0-2.15-1.08-2.15-2.41 0-1.33.95-2.42 2.15-2.42 1.2 0 2.17 1.1 2.15 2.42 0 1.33-.95 2.41-2.15 2.41Z"/></svg>
+            <span>Discord</span>
+          </a>
+          <a class="community-link github" href="https://github.com/levy-street/world-of-claudecraft" target="_blank" rel="noopener noreferrer" data-i18n-title="a11y.githubProject" data-i18n-aria="a11y.githubProject" title="Open the World of ClaudeCraft GitHub project" aria-label="Open the World of ClaudeCraft GitHub project">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+            <span>GitHub</span>
+          </a>
+          <a class="community-link donate" href="https://github.com/sponsors/levy-street" target="_blank" rel="noopener noreferrer" data-i18n-title="a11y.donateProject" data-i18n-aria="a11y.donateProject" title="Support the project" aria-label="Donate to support World of ClaudeCraft">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            <span data-i18n="nav.donate">Donate</span>
+          </a>
+        </div>
+      </details>
     </div>
 
     <div id="quest-tracker"></div>
@@ -4466,9 +5437,28 @@
   <main id="start-screen">
     <!-- Keep the backdrop here at the top level so it spans the entire screen behind content -->
     <div id="start-screen-backdrop" aria-hidden="true">
+      <!-- Looping in-game cinematic. Muted + playsinline so it auto-plays on mobile;
+           playback is started from main.ts so it can respect reduced-motion / save-data.
+           The poster paints instantly while the MP4 streams (faststart). -->
+      <video
+        id="bg-trailer"
+        class="bg-trailer"
+        muted
+        loop
+        playsinline
+        preload="auto"
+        poster="/video/trailer-poster.jpg"
+        tabindex="-1"
+        disablepictureinpicture
+      >
+        <source src="/video/trailer.mp4" type="video/mp4" />
+      </video>
+      <div class="bg-trailer-scrim"></div>
       <div class="portal-ring"></div>
       <div class="portal-ring-reverse"></div>
       <div class="nebula-overlay"></div>
+      <!-- Fades the backdrop in from black on first play and on every loop. -->
+      <div class="bg-trailer-fade"></div>
     </div>
 
     <header class="homepage-header">
@@ -4513,6 +5503,7 @@
                moved into the in-game options menu — see #cr-ingame-toggles). -->
           <div id="theme-picker" aria-label="Realm selector"></div>
           <!-- CR overlay END -->
+          <button type="button" class="homepage-music-btn" id="homepage-music-toggle" data-i18n-title="hud.options.music" data-i18n-aria="hud.options.music" title="Music" aria-label="Music" aria-pressed="true" data-icon="music"></button>
           <a class="donate-cta" href="https://github.com/sponsors/levy-street" target="_blank" rel="noopener noreferrer" data-i18n-title="a11y.donateProject" data-i18n-aria="a11y.donateProject" title="Support the project" aria-label="Donate to support World of ClaudeCraft">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
             <span data-i18n="nav.donate">Donate</span>
@@ -4528,37 +5519,81 @@
         <!-- Main Logo -->
         <img class="main-logo" id="title-logo" src="/cryptic-realm-logo.png" alt="Cryptic Realm" />
 
-        <!-- Project Stats Panel (Realm Status, accounts, players, realm name) -->
-        <div id="project-stats-panel" class="panel stats-panel-premium">
-          <h2 class="stats-panel-title" data-i18n="stats.title">Realm Status</h2>
-          <div class="stats-grid">
-            <div class="stats-item">
-              <span class="stats-label" data-i18n="stats.realmName">Realm Name</span>
-              <span id="stat-realm-name" class="stats-value">...</span>
+        <div id="mode-select">
+          <div class="play-console">
+            <!-- Realm selector: a themed dropdown that defaults to Online and can switch to Offline.
+                 It only chooses the destination; the Play button below commits. -->
+            <div class="server-select" id="server-select" data-mode="online">
+              <span class="server-select-caption" id="server-select-caption" data-i18n="mode.serverLabel">Choose your realm</span>
+              <button type="button" class="server-select-trigger" id="server-select-trigger"
+                aria-haspopup="listbox" aria-expanded="false" aria-controls="server-select-menu"
+                data-i18n-aria="mode.serverAria" aria-label="Select realm: Online or Offline">
+                <span class="server-dot" data-mode="online" aria-hidden="true"></span>
+                <span class="server-select-text">
+                  <span class="server-select-value" id="server-select-value" data-i18n="mode.serverOnline">Online</span>
+                  <span class="server-select-sub" id="server-select-sub">
+                    <span class="server-realm-line" data-mode="online">
+                      <b class="stats-value js-stat-players">…</b> <span data-i18n="stats.playersOnline">Players Online</span>
+                      <span class="realm-status-sep" aria-hidden="true"></span>
+                      <b class="stats-value js-stat-accounts">…</b> <span data-i18n="stats.accountsCreated">Accounts Created</span>
+                    </span>
+                    <span class="server-sub-offline" data-mode="offline" data-i18n="mode.serverOfflineSub" hidden>Instant local world</span>
+                  </span>
+                </span>
+                <svg class="server-select-chevron" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </button>
+              <ul class="server-select-menu" id="server-select-menu" role="listbox" data-i18n-aria="mode.serverAria" aria-label="Select realm: Online or Offline" hidden>
+                <li class="server-select-option is-selected" id="server-opt-online" role="option" data-mode="online" tabindex="-1" aria-selected="true">
+                  <span class="server-dot" data-mode="online" aria-hidden="true"></span>
+                  <span class="server-opt-text">
+                    <span class="server-opt-name" data-i18n="mode.serverOnline">Online</span>
+                    <span class="server-opt-desc" data-i18n="mode.onlineDesc">Log in to the realm. Your characters live on the server and you share the world with everyone else who's on.</span>
+                    <span class="server-opt-stats">
+                      <b class="stats-value js-stat-players">…</b> <span data-i18n="stats.playersOnline">Players Online</span>
+                      <span class="realm-status-sep" aria-hidden="true"></span>
+                      <b class="stats-value js-stat-accounts">…</b> <span data-i18n="stats.accountsCreated">Accounts Created</span>
+                    </span>
+                  </span>
+                  <svg class="server-opt-check" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </li>
+                <li class="server-select-option" id="server-opt-offline" role="option" data-mode="offline" tabindex="-1" aria-selected="false">
+                  <span class="server-dot" data-mode="offline" aria-hidden="true"></span>
+                  <span class="server-opt-text">
+                    <span class="server-opt-name" data-i18n="mode.serverOffline">Offline</span>
+                    <span class="server-opt-desc" data-i18n="mode.offlineDesc">Instant single-player world in your browser. Nothing is saved: perfect for a quick brawl or testing.</span>
+                  </span>
+                  <svg class="server-opt-check" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </li>
+              </ul>
             </div>
-            <div class="stats-item">
-              <span class="stats-label" data-i18n="stats.accountsCreated">Accounts Created</span>
-              <span id="stat-accounts-count" class="stats-value">...</span>
-            </div>
-            <div class="stats-item">
-              <span class="stats-label" data-i18n="stats.playersOnline">Players Online</span>
-              <span id="stat-players-online" class="stats-value">...</span>
-            </div>
+
+            <button type="button" class="btn-play" id="btn-play" data-i18n-aria="mode.playAria" aria-label="Play World of ClaudeCraft">
+              <span class="btn-play-sheen" aria-hidden="true"></span>
+              <span class="btn-play-label" data-i18n="mode.play">Play</span>
+            </button>
+          </div>
+
+          <!-- Hidden, non-focusable compatibility triggers. Stable hooks the automated
+               tours / E2E scripts use to drive the online & offline flows directly. -->
+          <button type="button" id="btn-online" class="play-compat-trigger" tabindex="-1" aria-hidden="true"></button>
+          <button type="button" id="btn-offline" class="play-compat-trigger" tabindex="-1" aria-hidden="true"></button>
+
+          <div id="token-ca">
+            <span class="token-ca-label" data-i18n="mode.caLabel">$WOC Contract Address</span>
+            <button type="button" id="btn-copy-ca" class="token-ca-pill" data-ca="3WjLscH2JsXLEFJZRA9z8ti8yRGxWGKbqymPd7UicRth" data-i18n-aria="mode.caCopyAria" aria-label="Copy contract address">
+              <code class="token-ca-addr">3WjLscH2JsXLEFJZRA9z8ti8yRGxWGKbqymPd7UicRth</code>
+              <span class="token-ca-copy" aria-hidden="true">
+                <svg class="icon-clipboard" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                <svg class="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </span>
+            </button>
+            <p class="token-ca-note" data-i18n="mode.caNote">WOC is our community token. It is not needed to play. Join Discord to discuss the WOC utility and flywheel.</p>
           </div>
         </div>
 
-        <div id="mode-select">
-          <div class="mode-row">
-            <div class="mode-card panel" id="btn-online" role="button" tabindex="0" data-i18n-aria="mode.onlineAria" aria-label="Play Online: log in to the persistent shared realm">
-              <h2 data-i18n="mode.onlineTitle">Play Online</h2>
-              <p data-i18n="mode.onlineDesc">Log in to the realm. Your characters live on the server and you share the world with everyone else who's on.</p>
-            </div>
-            <div class="mode-card panel" id="btn-offline" role="button" tabindex="0" data-i18n-aria="mode.offlineAria" aria-label="Play Offline: start an instant local single-player session">
-              <h2 data-i18n="mode.offlineTitle">Play Offline</h2>
-              <p data-i18n="mode.offlineDesc">Instant single-player world in your browser. Nothing is saved: perfect for a quick brawl or testing.</p>
-            </div>
-          </div>
-          <div id="performance-tip"><b data-i18n="mode.tipTitle">TIP:</b> <span data-i18n="mode.tipText">For the smoothest experience, turn off ad blocker extensions on this site. Community reports found some blockers can cause lag.</span></div>
+        <!-- Tip — a separate overlay card directly below the main console. -->
+        <div id="play-aside">
+          <p id="performance-tip"><b data-i18n="mode.tipTitle">TIP:</b> <span data-i18n="mode.tipText">For the smoothest experience, turn off ad blocker extensions on this site. Community reports found some blockers can cause lag.</span></p>
         </div>
 
         <form id="login-panel" class="panel auth-panel auth-panel-premium" hidden novalidate>
@@ -4744,7 +5779,7 @@
             </div>
             <h2 class="skeleton-title" data-i18n="wiki.title">Game Wiki & Guide</h2>
             <p class="skeleton-desc" data-i18n="wiki.desc">Discover the secrets of the realm, class guides, and strategies.</p>
-            <div class="coming-soon-badge" data-i18n="comingSoon.placeholder">Coming Soon...</div>
+            <a class="btn wiki-cta" href="/wiki" target="_blank" rel="noopener noreferrer" data-i18n="wiki.cta">Browse the Wiki</a>
           </div>
           
           <div class="wiki-controls-guide">
@@ -4788,7 +5823,7 @@
       </section>
 
       <section id="news-view" class="view-section" hidden aria-hidden="true">
-        <div class="parchment-panel skeleton-panel">
+        <div class="parchment-panel news-panel">
           <div class="skeleton-icon-wrapper">
             <svg viewBox="0 0 24 24" class="skeleton-svg-icon" aria-hidden="true">
               <path fill="currentColor" d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6m-2 0l-8 5l-8-5h16m0 12H4V8l8 5l8-5v10z"/>
@@ -4796,7 +5831,9 @@
           </div>
           <h2 class="skeleton-title" data-i18n="news.title">News & Updates</h2>
           <p class="skeleton-desc" data-i18n="news.desc">Read the latest patch notes, events, and community updates.</p>
-          <div class="coming-soon-badge" data-i18n="comingSoon.placeholder">Coming Soon...</div>
+          <div id="news-feed" class="news-feed" aria-live="polite">
+            <div class="news-loading" data-i18n="news.loading">Loading the latest updates…</div>
+          </div>
         </div>
       </section>
 
@@ -4830,6 +5867,8 @@
     </div>
 
     <footer class="homepage-footer">
+      <div class="footer-bar">
+      <div class="footer-left">
       <div class="footer-social-row">
         <a class="social-link" href="https://github.com/levy-street/world-of-claudecraft" target="_blank" rel="noopener noreferrer" data-i18n-aria="a11y.githubProject" aria-label="Open the World of ClaudeCraft GitHub project">
           <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
@@ -4843,6 +5882,8 @@
           <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
           <span data-i18n="nav.donate">Donate</span>
         </a>
+      </div>
+      <div id="game-version">v0.8</div>
       </div>
       <div class="footer-lang-row">
         <div class="language-selector">
@@ -4865,10 +5906,7 @@
           </select>
         </div>
       </div>
-      <div class="footer-text-row">
-        <span data-i18n="footer.copyright">2026 World of ClaudeCraft</span>
       </div>
-      <div id="game-version">v0.6.0</div>
     </footer>
   </main>
 
@@ -4882,31 +5920,37 @@
       <div id="mobile-camera-stick" class="mobile-stick"></div>
       <div class="mobile-joy-label" data-i18n="hud.core.mobileCamera">Camera</div>
     </div>
-    <button class="mobile-btn" id="mobile-autorun" title="Toggle autorun" aria-label="Toggle autorun" data-icon="autorun"><span class="mobile-label">Autorun</span></button>
     <div id="mobile-combat-controls">
       <button class="mobile-btn" id="mobile-attack-nearest" data-i18n-title="hud.keybinds.actions.attack" data-i18n-aria="hud.keybinds.actions.attack" title="Attack" aria-label="Attack" data-icon="attack"><span class="mobile-label" data-i18n="hud.core.mobileAttack">Attack</span></button>
+      <button class="mobile-btn" id="mobile-autorun" title="Toggle autorun" aria-label="Toggle autorun" data-icon="autorun"><span class="mobile-label">Autorun</span></button>
       <button class="mobile-btn" id="mobile-jump" data-i18n-title="hud.keybinds.actions.jump" data-i18n-aria="hud.keybinds.actions.jump" title="Jump" aria-label="Jump" data-icon="jump"><span class="mobile-label">Jump</span></button>
       <button class="mobile-btn" id="mobile-target" data-i18n-title="hud.keybinds.actions.target" data-i18n-aria="hud.keybinds.actions.target" title="Target Nearest Enemy" aria-label="Target Nearest Enemy" data-icon="target"><span class="mobile-label" data-i18n="hud.core.mobileTarget">Target</span></button>
       <button class="mobile-btn" id="mobile-interact" data-i18n-title="hud.keybinds.actions.interact" data-i18n-aria="hud.keybinds.actions.interact" title="Interact / Loot" aria-label="Interact / Loot" data-icon="interact"><span class="mobile-label" data-i18n="hud.core.mobileUse">Use</span></button>
       <button class="mobile-btn" id="mobile-chat" data-i18n-title="hud.keybinds.actions.chat" data-i18n-aria="hud.keybinds.actions.chat" title="Open Chat" aria-label="Open Chat" data-icon="chat"><span class="mobile-label" data-i18n="hud.core.mobileChat">Chat</span></button>
       <button class="mobile-btn" id="mobile-more" data-i18n-title="hud.core.mobileMoreAria" data-i18n-aria="hud.core.mobileMoreAria" title="Show more menus" aria-label="Show more menus" data-icon="more"><span class="mobile-label" data-i18n="hud.core.mobileMore">More</span></button>
-      <div id="mobile-extra-controls">
-        <button class="mobile-btn" id="mobile-social" data-i18n-title="hud.keybinds.actions.social" data-i18n-aria="hud.keybinds.actions.social" title="Friends &amp; Guild" aria-label="Friends &amp; Guild" data-icon="social"><span class="mobile-label" data-i18n="hud.core.mobileSocial">Social</span></button>
-        <button class="mobile-btn" id="mobile-emote" title="Emotes" aria-label="Emotes" data-icon="emote"><span class="mobile-label">Emotes</span></button>
-        <button class="mobile-btn" id="mobile-arena" data-i18n-title="hud.keybinds.actions.arena" data-i18n-aria="hud.keybinds.actions.arena" title="Arena (Ashen Coliseum)" aria-label="Arena (Ashen Coliseum)" data-icon="arena"><span class="mobile-label" data-i18n="hud.core.mobileArena">Arena</span></button>
-        <button class="mobile-btn" id="mobile-menu" data-i18n-title="hud.options.gameMenu" data-i18n-aria="hud.options.gameMenu" title="Game Menu" aria-label="Game Menu" data-icon="menu"><span class="mobile-label" data-i18n="hud.core.mobileMenu">Menu</span></button>
-        <button class="mobile-btn" id="mobile-quest" data-i18n-title="questUi.log.title" data-i18n-aria="questUi.log.title" title="Quest Log" aria-label="Quest Log" data-icon="questlog"><span class="mobile-label" data-i18n="questUi.log.title">Quests</span></button>
-        <button class="mobile-btn" id="mobile-char" data-i18n-title="hud.keybinds.actions.char" data-i18n-aria="hud.keybinds.actions.char" title="Character" aria-label="Character" data-icon="character"><span class="mobile-label">Character</span></button>
-        <button class="mobile-btn" id="mobile-bags" data-i18n-title="hud.keybinds.actions.bags" data-i18n-aria="hud.keybinds.actions.bags" title="Bags" aria-label="Bags" data-icon="bags"><span class="mobile-label">Bags</span></button>
-        <button class="mobile-btn" id="mobile-spellbook" data-i18n-title="abilityUi.spellbook.title" data-i18n-aria="abilityUi.spellbook.title" title="Spellbook" aria-label="Spellbook" data-icon="spellbook"><span class="mobile-label" data-i18n="abilityUi.spellbook.title">Spellbook</span></button>
-        <button class="mobile-btn" id="mobile-talents" data-i18n-title="game.talents.title" data-i18n-aria="game.talents.title" title="Talents" aria-label="Talents" data-icon="talents"><span class="mobile-label" data-i18n="game.talents.title">Talents</span></button>
-        <button class="mobile-btn" id="mobile-map" data-i18n-title="hud.keybinds.actions.map" data-i18n-aria="hud.keybinds.actions.map" title="World Map" aria-label="World Map" data-icon="map"><span class="mobile-label" data-i18n="hud.core.mobileMap">Map</span></button>
-        <button class="mobile-btn" id="mobile-leaderboard" data-i18n-title="game.leaderboard.title" data-i18n-aria="game.leaderboard.title" title="Leaderboard" aria-label="Leaderboard" data-icon="leaderboard"><span class="mobile-label">Ranks</span></button>
-        <button class="mobile-btn active" id="mobile-nameplates" data-i18n-title="hud.keybinds.actions.nameplates" data-i18n-aria="hud.keybinds.actions.nameplates" title="Toggle nameplates" aria-label="Toggle nameplates" data-icon="nameplates"><span class="mobile-label">Names</span></button>
-        <button class="mobile-btn" id="mobile-music" title="Music" aria-label="Toggle music" data-icon="music"><span class="mobile-label">Music</span></button>
-        <button class="mobile-btn" id="mobile-haptics" title="Toggle haptic feedback" aria-label="Toggle haptic feedback" aria-pressed="true" data-icon="vibrate"><span class="mobile-label">Haptics</span></button>
-      </div>
     </div>
+      <div id="mobile-extra-controls" class="window panel" role="dialog" aria-modal="true" aria-labelledby="mobile-more-title">
+        <div class="panel-title">
+          <span id="mobile-more-title" data-i18n="hud.core.mobileMore">More</span>
+          <button type="button" class="x-btn" id="mobile-more-close" data-i18n-title="hud.options.returnToGame" data-i18n-aria="hud.options.returnToGame" title="Return to Game" aria-label="Return to Game" data-icon="close"></button>
+        </div>
+        <div id="mobile-extra-grid">
+          <button class="mobile-btn" id="mobile-social" data-i18n-title="hud.keybinds.actions.social" data-i18n-aria="hud.keybinds.actions.social" title="Friends &amp; Guild" aria-label="Friends &amp; Guild" data-icon="social"><span class="mobile-label" data-i18n="hud.core.mobileSocial">Social</span></button>
+          <button class="mobile-btn" id="mobile-emote" title="Emotes" aria-label="Emotes" data-icon="emote"><span class="mobile-label">Emotes</span></button>
+          <button class="mobile-btn" id="mobile-arena" data-i18n-title="hud.keybinds.actions.arena" data-i18n-aria="hud.keybinds.actions.arena" title="Arena (Ashen Coliseum)" aria-label="Arena (Ashen Coliseum)" data-icon="arena"><span class="mobile-label" data-i18n="hud.core.mobileArena">Arena</span></button>
+          <button class="mobile-btn" id="mobile-menu" data-i18n-title="hud.options.gameMenu" data-i18n-aria="hud.options.gameMenu" title="Game Menu" aria-label="Game Menu" data-icon="menu"><span class="mobile-label" data-i18n="hud.core.mobileMenu">Menu</span></button>
+          <button class="mobile-btn" id="mobile-quest" data-i18n-title="questUi.log.title" data-i18n-aria="questUi.log.title" title="Quest Log" aria-label="Quest Log" data-icon="questlog"><span class="mobile-label" data-i18n="questUi.log.title">Quests</span></button>
+          <button class="mobile-btn" id="mobile-char" data-i18n-title="hud.keybinds.actions.char" data-i18n-aria="hud.keybinds.actions.char" title="Character" aria-label="Character" data-icon="character"><span class="mobile-label">Character</span></button>
+          <button class="mobile-btn" id="mobile-bags" data-i18n-title="hud.keybinds.actions.bags" data-i18n-aria="hud.keybinds.actions.bags" title="Bags" aria-label="Bags" data-icon="bags"><span class="mobile-label">Bags</span></button>
+          <button class="mobile-btn" id="mobile-spellbook" data-i18n-title="abilityUi.spellbook.title" data-i18n-aria="abilityUi.spellbook.title" title="Spellbook" aria-label="Spellbook" data-icon="spellbook"><span class="mobile-label" data-i18n="abilityUi.spellbook.title">Spellbook</span></button>
+          <button class="mobile-btn" id="mobile-talents" data-i18n-title="game.talents.title" data-i18n-aria="game.talents.title" title="Talents" aria-label="Talents" data-icon="talents"><span class="mobile-label" data-i18n="game.talents.title">Talents</span></button>
+          <button class="mobile-btn" id="mobile-map" data-i18n-title="hud.keybinds.actions.map" data-i18n-aria="hud.keybinds.actions.map" title="World Map" aria-label="World Map" data-icon="map"><span class="mobile-label" data-i18n="hud.core.mobileMap">Map</span></button>
+          <button class="mobile-btn" id="mobile-leaderboard" data-i18n-title="game.leaderboard.title" data-i18n-aria="game.leaderboard.title" title="Leaderboard" aria-label="Leaderboard" data-icon="leaderboard"><span class="mobile-label">Ranks</span></button>
+          <button class="mobile-btn active" id="mobile-nameplates" data-i18n-title="hud.keybinds.actions.nameplates" data-i18n-aria="hud.keybinds.actions.nameplates" title="Toggle nameplates" aria-label="Toggle nameplates" data-icon="nameplates"><span class="mobile-label">Names</span></button>
+          <button class="mobile-btn" id="mobile-music" title="Music" aria-label="Toggle music" data-icon="music"><span class="mobile-label">Music</span></button>
+          <button class="mobile-btn" id="mobile-haptics" title="Toggle haptic feedback" aria-label="Toggle haptic feedback" aria-pressed="true" data-icon="vibrate"><span class="mobile-label">Haptics</span></button>
+        </div>
+      </div>
   </div>
   <div id="mobile-preflight" role="dialog" aria-modal="true" aria-labelledby="mobile-preflight-title">
     <div class="preflight-panel">

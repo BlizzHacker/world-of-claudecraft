@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { Sim } from '../src/sim/sim';
 import { ACTIONS, encodeObs } from '../src/sim/obs';
 import { Entity, dist2d } from '../src/sim/types';
-import { CRYPT_DOOR_POS, DUNGEON_LIST, DUNGEON_X_THRESHOLD, ITEMS, LAKE, MOBS, NPCS, QUESTS, instanceOrigin, zoneAt, zoneWelcomeText } from '../src/sim/data';
+import { CLASSES, CRYPT_DOOR_POS, DUNGEON_LIST, DUNGEON_X_THRESHOLD, ITEMS, LAKE, MOBS, NPCS, QUESTS, instanceOrigin, zoneAt, zoneWelcomeText } from '../src/sim/data';
 import { createMob } from '../src/sim/entity';
 import { groundHeight, WATER_LEVEL } from '../src/sim/world';
 import { cameraOcclusion, isBlocked, lineOfSightClear, resolvePosition } from '../src/sim/colliders';
@@ -393,6 +393,18 @@ describe('dungeon instance placement and targetability', () => {
         expect(isBlocked(SEED, mob.pos.x, mob.pos.z, 0.5), `${dungeon.id} ${mob.name} spawned in geometry`).toBe(false);
       }
     }
+  });
+});
+
+describe('mob stat scaling', () => {
+  it('scales armor from level 1 like hp and damage, not one level ahead', () => {
+    const template = MOBS['gray_wolf'] ?? Object.values(MOBS)[0];
+    const lvl1 = createMob(910001, template, 1, { x: 0, y: 0, z: 0 });
+    const lvl10 = createMob(910010, template, 10, { x: 0, y: 0, z: 0 });
+    // A level-1 mob has no level-scaled armor (no armorBase in the template).
+    expect(lvl1.stats.armor).toBe(0);
+    // Each level adds exactly armorPerLevel, matching the (level - 1) convention.
+    expect(lvl10.stats.armor).toBe(Math.round(template.armorPerLevel * 9));
   });
 });
 
@@ -895,6 +907,42 @@ describe('mob tap rights', () => {
     (sim as any).dealDamage(sim.player, m, 50, false, 'fire', 'test', 'hit');
     expect(m.hp).toBe(hpBefore); // nothing got through
     expect(m.tappedById).toBeNull(); // so nobody owns the tap yet
+  });
+});
+
+describe('ranged auto-attack crit suppression', () => {
+  // The crit chance a swing rolls against is the second rng.chance() call in
+  // both meleeSwing and rangedSwing (the first is the miss roll). Capture the
+  // args and return false so no miss/crit branches fire and perturb state.
+  function critChanceRolled(sim: Sim, swing: () => void): number {
+    const calls: number[] = [];
+    (sim as any).rng.chance = (p: number) => { calls.push(p); return false; };
+    swing();
+    return calls[1];
+  }
+
+  function setup(level: number, targetLevel: number) {
+    const sim = new Sim({ seed: SEED, playerClass: 'hunter' });
+    const hunter = sim.player;
+    if (level > 1) sim.setPlayerLevel(level);
+    hunter.critChance = 0.5;
+    const wolf = [...sim.entities.values()].find((e) => e.kind === 'mob')!;
+    wolf.level = targetLevel;
+    const ranged = CLASSES.hunter.ranged!;
+    return { sim, hunter, wolf, ranged };
+  }
+
+  it('suppresses crit against a higher-level target, matching melee', () => {
+    const { sim, hunter, wolf, ranged } = setup(10, 13); // +3 levels
+    const rolled = critChanceRolled(sim, () => (sim as any).rangedSwing(hunter, wolf, ranged));
+    // 0.5 base - 3 * 0.002 suppression = 0.494 (was a flat 0.5 before the fix)
+    expect(rolled).toBeCloseTo(0.5 - 3 * 0.002, 5);
+  });
+
+  it('does not suppress crit against an equal-or-lower-level target', () => {
+    const { sim, hunter, wolf, ranged } = setup(10, 8); // lower level
+    const rolled = critChanceRolled(sim, () => (sim as any).rangedSwing(hunter, wolf, ranged));
+    expect(rolled).toBeCloseTo(0.5, 5);
   });
 });
 

@@ -28,7 +28,7 @@ page.on('console', (msg) => { if (msg.type() === 'error') errors.push('CONSOLE: 
 
 await page.goto(URL, { waitUntil: 'domcontentloaded', timeout: 30000 });
 await page.waitForSelector('#btn-offline', { timeout: 30000 });
-await page.click('#btn-offline');
+await page.evaluate(() => document.querySelector('#btn-offline').click());
 await new Promise((r) => setTimeout(r, 200));
 await page.type('#char-name', 'Touchscreen');
 await page.click('#offline-select .mini-class[data-class="warrior"]');

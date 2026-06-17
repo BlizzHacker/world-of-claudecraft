@@ -20,6 +20,13 @@ describe("server-sent message localization", () => {
     "Who: 3 players online on Stormforge.",
     "Who: 1 player online on Stormforge.",
     "...and 5 more.",
+    "Server restart in 10 minutes.",
+    "Server restart in 5 minutes.",
+    "Server restart in 2 minutes.",
+    "Server restart in 1 minute.",
+    "Server restart in 30 seconds.",
+    "Server restart in 10 seconds.",
+    "Server restarting now.",
   ];
 
   it("recognizes and localizes every sample in every non-English locale", () => {

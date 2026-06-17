@@ -100,6 +100,13 @@ describe('binding', () => {
     expect(kb.actionForCode('Space')).toBe(null);
   });
 
+  it('lets Space move from Jump to an action slot without driving both', () => {
+    const kb = new Keybinds();
+    expect(kb.bind('slot1', 0, 'Space')).toBe(true);
+    expect(kb.actionForCode('Space')).toBe('slot1');
+    expect(kb.codeAt('jump', 0)).toBe(null);
+  });
+
   it('binds a secondary key without disturbing the primary', () => {
     const kb = new Keybinds();
     expect(kb.bind('slot1', 1, 'KeyZ')).toBe(true);
@@ -192,5 +199,14 @@ describe('persistence', () => {
     const kb = new Keybinds();
     expect(kb.actionForCode('KeyR')).toBe('slot0');
     expect(kb.codeAt('slot1', 0)).toBe(null);
+  });
+
+  it('does not let stored Space action-bar bindings also keep default Jump', () => {
+    localStorage.setItem('woc_keybinds', JSON.stringify({
+      slot1: ['Space', null],
+    }));
+    const kb = new Keybinds();
+    expect(kb.actionForCode('Space')).toBe('slot1');
+    expect(kb.codeAt('jump', 0)).toBe(null);
   });
 });

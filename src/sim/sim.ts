@@ -2,9 +2,10 @@ import {
   ABILITIES, ARENA_SLOT_COUNT, CAMPS, CLASSES, DUNGEONS, DUNGEON_LIST, DungeonDef, arenaOrigin, dungeonAt,
   DUNGEON_X_THRESHOLD, GROUND_OBJECTS, GROUP_XP_BONUS, INSTANCE_SLOT_COUNT, isArenaPos,
   ITEMS, MOBS, NPCS, PLAYER_START, QUESTS, questRewardItemId, abilitiesKnownAt, instanceOrigin,
+  DEEPFEN_SHALLOWS_LAKE,
   zoneAt, ZONES,
 } from './data';
-import { ARENA_SPAWN_A, ARENA_SPAWN_B } from './dungeon_layout';
+import { ARENA_SPAWN_A, ARENA_SPAWN_B, ARENA_SPAWNS_A_2v2, ARENA_SPAWNS_B_2v2 } from './dungeon_layout';
 import { lineOfSightClear, resolvePosition } from './colliders';
 import { findPath } from './pathfind';
 import { createGroundObject, createMob, createNpc, createPlayer, recalcPlayerStats, PlayerEquipment } from './entity';
@@ -29,6 +30,7 @@ import {
   angleTo, armorReduction, dist2d, emptyMoveInput, isConsuming, meleeMissChance, mobXpValue, normAngle,
   rageFromDealing, rageFromTaking, spellHitChance, xpForLevel,
   MILESTONES, virtualLevel, xpToReachLevel, canPrestige,
+  ArenaFormat, ArenaCombatant,
 } from './types';
 
 const LEASH_DISTANCE = 45;
@@ -160,6 +162,9 @@ const SWIM_SURFACE_Y = WATER_LEVEL - 0.75; // body bobs just below the water lin
 const SWIM_DEPTH = 0.8; // ground this far under the water line = deep water
 const SWIM_SPEED_MULT = 0.65;
 const FISHING_SAMPLE_DISTANCES = [4, 8, 12, 16, 20, 24];
+const DEEPFEN_FISHING_SHORE_MARGIN = 10;
+const THE_CODFATHER_ITEM_ID = 'the_codfather';
+const THE_CODFATHER_QUEST_ID = 'q_the_codfather';
 const DOOR_TRIGGER_RADIUS = 2.0; // walking this close to a dungeon door teleports you
 const BODY_RADIUS = 0.5;
 const CHARGE_SPEED_MULT = 3; // warrior charge runs at 3x normal speed
@@ -210,21 +215,29 @@ export interface DuelState {
   timer: number; // countdown remaining / elapsed
 }
 
-// A live 1v1 arena bout. Both combatants are teleported into a private arena
-// instance slot; `return*` remembers where each was standing so the match can
-// put them back when it ends. Ratings are snapshotted at the start purely for
-// the result message — the authoritative values live on each PlayerMeta.
+export type { ArenaFormat } from './types';
+
+export interface ArenaQueueUnit {
+  pids: number[]; // length 1 (solo) or 2 (premade)
+  rating: number; // avg member arenaRating
+}
+
+// A live arena bout. Combatants are teleported into a private arena instance
+// slot; `returns` remembers where each was standing so the match can put them
+// back when it ends. Ratings are snapshotted at the start purely for the
+// result message — the authoritative values live on each PlayerMeta.
 export interface ArenaMatch {
   id: number;
-  a: number; // pid
-  b: number; // pid
+  format: ArenaFormat;
+  teamA: number[];
+  teamB: number[];
   slot: number; // arena instance slot
   state: 'countdown' | 'active' | 'over';
   timer: number; // countdown remaining, then elapsed once active, then return countdown
-  returnA: { x: number; z: number; facing: number };
-  returnB: { x: number; z: number; facing: number };
-  ratingA: number;
+  returns: Map<number, { x: number; z: number; facing: number }>;
+  ratingA: number; // team avg at start
   ratingB: number;
+  defeated: Set<number>;
 }
 
 // Standard Elo. Returns the points the winner gains (and the loser loses) for
@@ -474,6 +487,10 @@ function isShamanShock(abilityId: string): boolean {
   return (SHAMAN_SHOCK_COOLDOWN_IDS as readonly string[]).includes(abilityId) || abilityId === 'lightning_shock';
 }
 
+function ignoresDamagePushback(abilityId: string): boolean {
+  return abilityId === 'ghost_wolf';
+}
+
 function isPetClass(cls: PlayerClass): boolean {
   return cls === 'hunter' || cls === 'warlock';
 }
@@ -505,9 +522,10 @@ export class Sim {
   tradeInvites = new Map<number, { fromPid: number; expires: number }>();
   duels = new Map<number, DuelState>(); // pid -> shared duel (both pids)
   duelInvites = new Map<number, { fromPid: number; expires: number }>();
-  // arena: a matchmaking queue (pids, oldest first), live bouts keyed by both
-  // pids, and the set of busy instance slots
-  arenaQueue: number[] = [];
+  // arena: format-specific queues, live bouts keyed by every participant pid,
+  // and the set of busy instance slots
+  arenaQueue1v1: number[] = [];
+  arenaQueue2v2: ArenaQueueUnit[] = [];
   arenaMatches = new Map<number, ArenaMatch>(); // pid -> shared match (both pids)
   private arenaBusySlots = new Set<number>();
   private nextArenaMatchId = 1;
@@ -745,7 +763,10 @@ export class Sim {
     // arena: leaving the queue is free; disconnecting mid-bout forfeits it
     this.arenaDequeue(pid);
     const match = this.arenaMatches.get(pid);
-    if (match) this.endArenaMatch(match, match.a === pid ? match.b : match.a, 'forfeit');
+    if (match) {
+      const team = this.arenaTeamOf(match, pid);
+      this.endArenaMatch(match, team === 'A' ? 'B' : team === 'B' ? 'A' : null, 'forfeit');
+    }
     this.partyInvites.delete(pid);
     this.tradeInvites.delete(pid);
     this.duelInvites.delete(pid);
@@ -1307,6 +1328,11 @@ export class Sim {
     this.moveToward(e, dest, e.moveSpeed * FLEE_SPEED_MULT * this.moveSpeedMult(e));
     return true;
   }
+  // Silence locks out spell (non-physical) casts but leaves physical abilities,
+  // movement and melee untouched — unlike a stun, which freezes everything.
+  private isSilenced(e: Entity): boolean {
+    return e.auras.some((a) => a.kind === 'silence');
+  }
   private mobCanSwim(template: { family?: string; canSwim?: boolean } | undefined): boolean {
     return !!template;
   }
@@ -1767,6 +1793,12 @@ export class Sim {
   private updateCasting(p: Entity, meta: PlayerMeta): void {
     if (!p.castingAbility) return;
     if (this.isStunned(p)) { this.cancelCast(p); return; }
+    // a silence breaks an in-progress spell, but never the fishing cast or a
+    // physical channel (e.g. an aimed-shot kind) — those aren't spells.
+    if (this.isSilenced(p) && p.castingAbility !== FISHING_CAST_ID) {
+      const cast = this.resolvedAbility(p.castingAbility, p.id);
+      if (cast && cast.def.school !== 'physical') { this.cancelCast(p); return; }
+    }
     p.castRemaining -= DT;
 
     if (p.channeling) {
@@ -1846,6 +1878,7 @@ export class Sim {
     if (!res || p.dead) return;
     const ability = res.def;
     if (this.isStunned(p)) { this.error(p.id, 'You are stunned!'); return; }
+    if (ability.school !== 'physical' && this.isSilenced(p)) { this.error(p.id, 'You are silenced!'); return; }
     if (p.castingAbility) { this.error(p.id, 'You are busy.'); return; }
     if (!ability.offGcd && p.gcdRemaining > 0) return; // silent, classic spams this
     const togglingOff = isToggleBuff(ability) && p.auras.some((a) => a.id === ability.id);
@@ -3103,11 +3136,13 @@ export class Sim {
     const ranged = CLASSES[meta.cls].ranged;
     if (ranged && d <= ranged.maxRange && d >= (ranged.wand ? 0 : ranged.minRange)) {
       if (!this.hasLineOfSight(p, t)) return;
+      this.breakGhostWolf(p);
       this.rangedSwing(p, t, ranged);
       p.swingTimer = ranged.speed * this.swingIntervalMult(p);
       return;
     }
     if (d > MELEE_RANGE) return;
+    this.breakGhostWolf(p);
 
     let bonus = 0;
     let abilityName: string | null = null;
@@ -3148,7 +3183,9 @@ export class Sim {
       return;
     }
     let dmg = this.rng.range(ranged.min, ranged.max) + (attacker.rangedPower / 14) * ranged.speed;
-    const crit = this.rng.chance(attacker.critChance);
+    // ranged white hits suffer the same higher-level crit suppression as melee
+    const critChance = Math.max(0.005, attacker.critChance - Math.max(0, target.level - attacker.level) * 0.002);
+    const crit = this.rng.chance(critChance);
     if (crit) dmg *= 2;
     // wand bolts are magic — armor doesn't apply; physical auto shot is mitigated
     if (!ranged.wand) dmg *= 1 - armorReduction(this.effectiveArmor(target), attacker.level);
@@ -3193,6 +3230,11 @@ export class Sim {
           this.dealDamage(target, attacker, a.value, false, a.school, a.name, 'hit', true);
         }
       }
+      // innate "spiked hide" mobs (e.g. bristleback boars) reflect on every hit
+      const spikes = MOBS[target.templateId]?.thorns;
+      if (spikes && !attacker.dead) {
+        this.dealDamage(target, attacker, spikes.value, false, spikes.school ?? 'physical', spikes.name ?? 'Spiked Hide', 'hit', true);
+      }
     }
     return true;
   }
@@ -3201,7 +3243,17 @@ export class Sim {
   // Damage / death
   // -------------------------------------------------------------------------
 
-  private dealDamage(source: Entity | null, target: Entity, amount: number, crit: boolean, school: string, ability: string | null, kind: 'hit' | 'miss' | 'dodge', noRage = false, threatOpts?: { flat?: number; mult?: number }): void {
+  private dealDamage(
+    source: Entity | null,
+    target: Entity,
+    amount: number,
+    crit: boolean,
+    school: string,
+    ability: string | null,
+    kind: 'hit' | 'miss' | 'dodge',
+    noRage = false,
+    threatOpts?: { flat?: number; mult?: number },
+  ): void {
     if (target.dead) return;
     if (target.gm) return; // GM characters are invulnerable — every damage path funnels here
     // A mob that broke leash (or a pet freed to the wild) is in 'evade': it has
@@ -3248,14 +3300,21 @@ export class Sim {
       }
     }
 
-    // arena bouts also end at 1 hp — the loser yields, nobody actually dies
+    // Arena eliminations use normal death state so clients and combat logic see
+    // a real 0 HP defeat. The return timer revives everyone after the bout.
     const match = target.kind === 'player' ? this.arenaMatches.get(target.id) : undefined;
-    if (match && match.state === 'active' && sourcePlayer && (sourcePlayer.id === match.a || sourcePlayer.id === match.b)) {
-      if (target.hp - amount < 1) {
-        amount = Math.max(0, target.hp - 1);
-        target.hp = 1;
+    if (match && match.state === 'active' && sourcePlayer && this.isArenaCrossTeam(match, sourcePlayer.id, target.id)) {
+      if (match.defeated.has(target.id)) return;
+      if (target.hp - amount <= 0) {
+        amount = Math.max(0, target.hp);
+        target.hp = 0;
+        match.defeated.add(target.id);
         this.emit({ type: 'damage', sourceId: source?.id ?? -1, targetId: target.id, amount, crit, school, ability, kind });
-        this.endArenaMatch(match, sourcePlayer.id, 'defeat');
+        this.handleDeath(target, source);
+        const loserTeam = this.arenaTeamOf(match, target.id);
+        if (loserTeam && this.isArenaTeamWiped(match, loserTeam)) {
+          this.endArenaMatch(match, loserTeam === 'A' ? 'B' : 'A', 'defeat');
+        }
         return;
       }
     }
@@ -3275,10 +3334,8 @@ export class Sim {
     // taking or dealing real damage breaks stealth
     if (amount > 0) {
       this.breakStealth(target);
-      this.breakGhostWolf(target);
       if (source && source.id !== target.id) {
         this.breakStealth(source);
-        this.breakGhostWolf(source);
       }
     }
 
@@ -3318,7 +3375,7 @@ export class Sim {
       // cancelling it (misses and fully absorbed hits don't push back)
       if (target.castingAbility && source && source.id !== target.id && amount > 0 && kind === 'hit') {
         if (target.castingAbility === FISHING_CAST_ID) this.cancelCast(target);
-        else this.pushbackCast(target);
+        else if (!ignoresDamagePushback(target.castingAbility)) this.pushbackCast(target);
       }
     }
 
@@ -3406,6 +3463,7 @@ export class Sim {
         return; // owned pets drop no loot/credit; demons unravel, hunters revive or abandon
       }
       this.frenzyPackmates(e); // wild packmates fly into a frenzy when one falls
+      this.armDeathThroes(e); // volatile corpses begin to destabilize, then burst
 
       // credit goes to the tapping player (fall back to the killer)
       const creditId = e.tappedById ?? (killer?.kind === 'player' ? killer.id : null);
@@ -3512,7 +3570,7 @@ export class Sim {
     }
   }
 
-  // Opt-in cosmetic prestige (Phase 4): only at the cap. Resets the level XP
+  // Opt-in cosmetic prestige: only at the cap. Resets the level XP
   // bar, bumps the prestige rank for a badge by the name + on the leaderboard,
   // and deliberately leaves lifetimeXp, level, gear, talents, and learned
   // abilities untouched — strictly cosmetic, zero power change (FR-6.1/6.3).
@@ -3742,6 +3800,14 @@ export class Sim {
       if (mob.ownerId !== null && MOBS[mob.templateId]?.family !== 'demon') return;
       mob.corpseTimer -= DT;
       mob.respawnTimer -= DT;
+      // Death Throes: a volatile corpse counts down its fuse, then detonates once.
+      if (mob.detonateTimer !== Infinity) {
+        mob.detonateTimer -= DT;
+        if (mob.detonateTimer <= 0) {
+          mob.detonateTimer = Infinity;
+          this.detonateCorpse(mob);
+        }
+      }
       // a slain summoned demon unravels rather than respawning into the wild
       if (mob.ownerId !== null && MOBS[mob.templateId]?.family === 'demon') {
         if (mob.corpseTimer <= 0) this.despawnPet(mob);
@@ -3985,6 +4051,7 @@ export class Sim {
     mob.enraged = false;
     mob.healedThisPull = false;
     mob.stompTimer = MOBS[mob.templateId]?.stomp?.every ?? 0;
+    mob.mendTimer = MOBS[mob.templateId]?.mendAlly?.every ?? 0;
     mob.wanderTimer = this.rng.range(2, 8);
   }
 
@@ -4045,7 +4112,20 @@ export class Sim {
     if (mob.enraged && enrage) dmg *= enrage.dmgMult;
     const rawDmg = dmg; // pre-armor, post-crit/enrage — basis for cleave splash
     dmg *= 1 - armorReduction(this.effectiveArmor(target), mob.level);
-    this.dealDamage(mob, target, Math.max(1, Math.round(dmg)), crit, 'physical', null, 'hit');
+    const dealt = Math.max(1, Math.round(dmg));
+    this.dealDamage(mob, target, dealt, crit, 'physical', null, 'hit');
+    // Lifesteal: a landed swing heals the mob for a fraction of the damage it
+    // just dealt. Hostile mobs only, so a friendly pet (mobSwing's other caller)
+    // never drains for its owner; skip if the mob is already topped off or died
+    // to the defender's thorns/reflect earlier this swing.
+    const leech = MOBS[mob.templateId]?.lifeleech;
+    if (leech && mob.hostile && !mob.dead && mob.hp < mob.maxHp && this.rng.chance(leech.chance ?? 1)) {
+      const heal = Math.min(mob.maxHp - mob.hp, Math.max(1, Math.round(dealt * leech.healFrac)));
+      if (heal > 0) {
+        mob.hp += heal;
+        this.emit({ type: 'heal', targetId: mob.id, amount: heal });
+      }
+    }
     // Cleave: the swing splashes onto other players standing near the primary
     // target, each taking the hit reduced by their own armor. Hostile mobs only,
     // so a friendly pet swinging through mobSwing never cleaves its owner's party.
@@ -4078,6 +4158,17 @@ export class Sim {
     if (corrode && mob.hostile && !target.dead && this.rng.chance(corrode.chance)) {
       this.applyCorrosion(mob, target, corrode);
     }
+    // silencing shriek: anti-caster mobs can lock the victim's spells on a hit.
+    // Guard on hostile + alive so a friendly pet (the other mobSwing caller)
+    // never silences the party. updateCasting interrupts any live spell next tick.
+    const silence = MOBS[mob.templateId]?.silence;
+    if (silence && mob.hostile && !target.dead && this.rng.chance(silence.chance)) {
+      this.applyAura(target, {
+        id: `silence_${mob.templateId}`, name: silence.name, kind: 'silence',
+        remaining: silence.duration, duration: silence.duration, value: 0,
+        sourceId: mob.id, school: (silence.school ?? 'shadow') as Aura['school'],
+      });
+    }
     // thorns / lightning shield on the defender
     if (!mob.dead) {
       for (const a of target.auras) {
@@ -4100,6 +4191,100 @@ export class Sim {
         sourceId: mob.id,
         school: (ms.school as Aura['school']) ?? 'physical',
       });
+    }
+    // Ensnare: a landed hit may web the victim in place (root). Hostile mobs only
+    // (a friendly pet shares this swing path) and only roots players — `applyRootAura`
+    // applies crowd-control DR so repeated webs from the same mob shrink and break.
+    const ensnare = MOBS[mob.templateId]?.ensnare;
+    if (ensnare && mob.hostile && target.kind === 'player' && !target.dead && this.rng.chance(ensnare.chance)) {
+      this.applyRootAura(mob, target, ensnare.name, `ensnare_${mob.templateId}`, ensnare.duration, ensnare.school ?? 'nature');
+    }
+    // slowStrike: a landed hit may mire the victim, slowing their attack speed.
+    // Rides the existing `attackspeed` aura (swingIntervalMult: value > 1 = slower);
+    // refreshes by id and never stacks. Guarded on `hostile` so a friendly pet
+    // (mobSwing's other caller) never debuffs the party.
+    const slowStrike = MOBS[mob.templateId]?.slowStrike;
+    if (slowStrike && mob.hostile && !target.dead && this.rng.chance(slowStrike.chance)) {
+      this.applyAura(target, {
+        id: `slowstrike_${mob.templateId}`,
+        name: slowStrike.name,
+        kind: 'attackspeed',
+        remaining: slowStrike.duration,
+        duration: slowStrike.duration,
+        value: slowStrike.mult,
+        sourceId: mob.id,
+        school: (slowStrike.school as Aura['school']) ?? 'physical',
+      });
+    }
+    // Mana Burn: a landed hit may sap a flat amount of mana from a mana-using
+    // victim (casters). No effect on rage/energy users. Guarded on `hostile` so
+    // a friendly pet (mobSwing's other caller) never drains an ally's mana. The
+    // mana bar visibly drops and the affix is surfaced via an `aura` log line.
+    const burn = MOBS[mob.templateId]?.manaBurn;
+    if (burn && mob.hostile && !target.dead && target.resourceType === 'mana' && target.resource > 0 && this.rng.chance(burn.chance)) {
+      target.resource = Math.max(0, target.resource - burn.amount);
+      this.emit({ type: 'aura', targetId: target.id, name: burn.name, gained: true });
+    }
+    // Maddening curse: a landed hit can fog a caster's mind, draining Intellect
+    // and thus shrinking their mana pool. Mana users only (it does nothing to
+    // rage/energy users); hostile mobs only, so a friendly pet (mobSwing's other
+    // caller) never debuffs the party. Rides buff_int with a negative value, so
+    // recalcPlayerStats folds it through to maxResource with no new math.
+    const enfeeble = MOBS[mob.templateId]?.enfeeble;
+    if (enfeeble && mob.hostile && !target.dead && target.resourceType === 'mana' && this.rng.chance(enfeeble.chance)) {
+      this.applyAura(target, {
+        id: `enfeeble_${mob.templateId}`,
+        name: enfeeble.name,
+        kind: 'buff_int',
+        remaining: enfeeble.duration,
+        duration: enfeeble.duration,
+        value: -Math.abs(enfeeble.int),
+        sourceId: mob.id,
+        school: enfeeble.school ?? 'shadow',
+      });
+    }
+    // On-hit chill: frost-touched mobs numb the victim, slowing their movement.
+    const chill = MOBS[mob.templateId]?.chillOnHit;
+    if (chill && !mob.dead && !target.dead && this.rng.chance(chill.chance)) {
+      this.applyAura(target, {
+        id: mob.templateId + '_chill', name: chill.name, kind: 'slow',
+        remaining: chill.duration, duration: chill.duration, value: chill.mult,
+        sourceId: mob.id, school: 'frost',
+      });
+    }
+    // Demoralizing affix: a successful hit saps the player victim's attack
+    // power for a few seconds, weakening the damage they deal back.
+    const demo = MOBS[mob.templateId]?.demoralize;
+    if (demo && !mob.dead && target.kind === 'player' && this.rng.chance(demo.chance ?? 1)) {
+      this.applyAura(target, {
+        id: 'mob_demoralize',
+        name: demo.name ?? 'Demoralized',
+        kind: 'buff_ap',
+        remaining: demo.duration,
+        duration: demo.duration,
+        value: -Math.abs(demo.ap),
+        sourceId: mob.id,
+        school: 'physical',
+      });
+    }
+    // Dread: a landed hit can terrify the victim into fleeing. Reuses the exact
+    // `fear_incap` incapacitate aura the player-cast Fear applies, so
+    // `updateFearMovement` drives the panicked run — no new aura kind or hook.
+    // Guarded on `hostile` (a friendly pet never fears the party) and on a player
+    // target (mobs can't flee via this path). `diminishedCrowdControlDuration`
+    // returns the full duration for a mob source (DR is PvP-only), so the victim
+    // gets the authored fear length.
+    const dread = MOBS[mob.templateId]?.dread;
+    if (dread && mob.hostile && target.kind === 'player' && !target.dead && this.rng.chance(dread.chance)) {
+      const remaining = this.diminishedCrowdControlDuration(mob, target, 'fear', dread.duration);
+      if (remaining !== null) {
+        this.applyAura(target, {
+          id: 'fear_incap', name: dread.name, kind: 'incapacitate',
+          remaining, duration: remaining,
+          value: this.rng.range(-Math.PI, Math.PI),
+          sourceId: mob.id, school: dread.school ?? 'shadow', breaksOnDamage: true,
+        });
+      }
     }
   }
 
@@ -4333,6 +4518,7 @@ export class Sim {
     mob.enraged = false;
     mob.healedThisPull = false;
     mob.stompTimer = MOBS[mob.templateId]?.stomp?.every ?? 0;
+    mob.mendTimer = MOBS[mob.templateId]?.mendAlly?.every ?? 0;
     mob.wanderTimer = this.rng.range(2, 8);
     for (const meta of this.players.values()) {
       const e = this.entities.get(meta.entityId);
@@ -4391,12 +4577,42 @@ export class Sim {
     });
   }
 
+  // Death Throes (arm): a volatile creature does not explode the instant it
+  // dies. Its corpse destabilizes for `delay` seconds — a telegraph players can
+  // run from — by arming a fuse that the corpse tick (updateMob) counts down.
+  private armDeathThroes(dead: Entity): void {
+    const dt = MOBS[dead.templateId]?.deathThroes;
+    if (!dt) return;
+    dead.detonateTimer = dt.delay;
+    const school = dt.school ?? 'nature';
+    this.emit({ type: 'spellfx', sourceId: dead.id, targetId: dead.id, school, fx: 'nova' });
+    this.emit({ type: 'log', text: `${dead.name} begins to swell — get clear!`, color: '#9acd32', entityId: dead.id });
+  }
+
+  // Death Throes (detonate): the corpse bursts for min..max `school` damage to
+  // every living player within `radius`. Mirrors the aoePulse damage loop; the
+  // dead mob is the damage source so credit/threat resolve as a normal hit.
+  private detonateCorpse(dead: Entity): void {
+    const dt = MOBS[dead.templateId]?.deathThroes;
+    if (!dt) return;
+    const school = dt.school ?? 'nature';
+    this.emit({ type: 'spellfx', sourceId: dead.id, targetId: dead.id, school, fx: 'nova' });
+    this.emit({ type: 'log', text: `${dead.name} bursts in a cloud of ${dt.name}!`, color: '#9acd32', entityId: dead.id });
+    for (const meta of this.players.values()) {
+      const pe = this.entities.get(meta.entityId);
+      if (pe && !pe.dead && dist2d(pe.pos, dead.pos) <= dt.radius) {
+        const dmg = Math.round(this.rng.range(dt.min, dt.max));
+        this.dealDamage(dead, pe, dmg, false, school, dt.name, 'hit', true);
+      }
+    }
+  }
+
   // Boss threshold mechanics: add waves (summonAdds) and enrage. Checked
   // every tick while the boss is in combat; thresholds fire once per pull
   // and reset on evade/respawn.
   private updateBossMechanics(mob: Entity): void {
     const tmpl = MOBS[mob.templateId];
-    if (!tmpl || (!tmpl.summonAdds && !tmpl.enrage && !tmpl.desperateHeal)) return;
+    if (!tmpl || (!tmpl.summonAdds && !tmpl.enrage && !tmpl.desperateHeal && !tmpl.mendAlly)) return;
     const hpFrac = mob.hp / Math.max(1, mob.maxHp);
     if (tmpl.summonAdds) {
       const thresholds = tmpl.summonAdds.atHpPct;
@@ -4419,6 +4635,31 @@ export class Sim {
         this.emit({ type: 'heal', targetId: mob.id, amount: heal });
         this.emit({ type: 'log', text: `${mob.name} draws on a desperate second wind!`, color: '#66ff99', entityId: mob.id });
         this.emit({ type: 'spellfx', sourceId: mob.id, targetId: mob.id, school: 'nature', fx: 'nova' });
+      }
+    }
+    // Support "Mend": periodically heal every wounded friendly mob in range
+    // (including the caster). Telegraphed via createMob seeding mendTimer to a
+    // full interval, so the first cast never lands the instant combat opens.
+    if (tmpl.mendAlly) {
+      mob.mendTimer -= DT;
+      if (mob.mendTimer <= 0) {
+        mob.mendTimer = tmpl.mendAlly.every;
+        const wounded: Entity[] = [];
+        for (const ally of this.entities.values()) {
+          if (ally.kind !== 'mob' || ally.dead || ally.ownerId !== null) continue; // skip players, pets, corpses
+          if (ally.hostile !== mob.hostile || ally.hp >= ally.maxHp) continue; // only wounded same-faction mobs
+          if (dist2d(ally.pos, mob.pos) > tmpl.mendAlly.radius) continue;
+          wounded.push(ally);
+        }
+        if (wounded.length > 0) {
+          const school = tmpl.mendAlly.school ?? 'nature';
+          this.emit({ type: 'spellfx', sourceId: mob.id, targetId: mob.id, school, fx: 'nova' });
+          this.emit({ type: 'log', text: `${mob.name} channels ${tmpl.mendAlly.name}.`, color: '#66ff99', entityId: mob.id });
+          for (const ally of wounded) {
+            const amount = Math.round(this.rng.range(tmpl.mendAlly.healMin, tmpl.mendAlly.healMax));
+            this.applyHeal(mob, ally, amount, tmpl.mendAlly.name);
+          }
+        }
       }
     }
   }
@@ -4470,11 +4711,7 @@ export class Sim {
     const r = this.resolve(pid);
     if (!r) return;
     const p = r.e;
-    const candidates: { e: Entity; d: number }[] = [];
-    this.grid.forEachInRadius(p.pos.x, p.pos.z, 40, (e, d2) => {
-      if (e.kind !== 'mob' || e.dead || !e.hostile) return;
-      candidates.push({ e, d: Math.sqrt(d2) });
-    });
+    const candidates = this.enemyCandidates(p);
     if (candidates.length === 0) return;
     candidates.sort((a, b) => a.d - b.d);
     const curIdx = candidates.findIndex((c) => c.e.id === p.targetId);
@@ -4489,10 +4726,36 @@ export class Sim {
     let best: Entity | null = null;
     let bestD2 = 40 * 40;
     this.grid.forEachInRadius(p.pos.x, p.pos.z, 40, (e, d2) => {
-      if (e.kind !== 'mob' || e.dead || !e.hostile) return;
+      if (!this.isEnemyTargetCandidate(p, e)) return;
       if (d2 < bestD2) { bestD2 = d2; best = e; }
     });
     if (best) p.targetId = (best as Entity).id;
+  }
+
+  private enemyCandidates(p: Entity): { e: Entity; d: number }[] {
+    const out: { e: Entity; d: number }[] = [];
+    if (p.dead) return out;
+    this.grid.forEachInRadius(p.pos.x, p.pos.z, 40, (e, d2) => {
+      if (!this.isEnemyTargetCandidate(p, e)) return;
+      out.push({ e, d: Math.sqrt(d2) });
+    });
+    return out;
+  }
+
+  private isEnemyTargetCandidate(attacker: Entity, target: Entity): boolean {
+    if (attacker.dead) return false;
+    if (target.id === attacker.id || target.dead) return false;
+    if (this.isHostileTo(attacker, target)) return true;
+    if (target.kind === 'mob' && target.ownerId !== null) {
+      const owner = this.entities.get(target.ownerId);
+      return !!owner && owner.kind === 'player' && this.isEnemyTargetCandidate(attacker, owner);
+    }
+    if (target.kind !== 'player') return false;
+    const attackerPlayer = this.pvpController(attacker);
+    if (!attackerPlayer || attackerPlayer.dead) return false;
+    const match = this.arenaMatches.get(attackerPlayer.id);
+    return !!match && match.state === 'countdown'
+      && this.isArenaCrossTeam(match, attackerPlayer.id, target.id);
   }
 
   // Nearby allies a beneficial spell can land on: other players (and friendly
@@ -4619,6 +4882,18 @@ export class Sim {
       groundHeight(p.pos.x + sin * d, p.pos.z + cos * d, this.cfg.seed) < WATER_LEVEL - SWIM_DEPTH);
   }
 
+  private isAtDeepfenShallowsFishingSpot(p: Entity): boolean {
+    const d = Math.hypot(p.pos.x - DEEPFEN_SHALLOWS_LAKE.x, p.pos.z - DEEPFEN_SHALLOWS_LAKE.z);
+    return d <= DEEPFEN_SHALLOWS_LAKE.radius + DEEPFEN_FISHING_SHORE_MARGIN;
+  }
+
+  private shouldCatchCodfather(p: Entity, meta: PlayerMeta): boolean {
+    const qp = meta.questLog.get(THE_CODFATHER_QUEST_ID);
+    return qp?.state === 'active'
+      && this.countItem(THE_CODFATHER_ITEM_ID, meta.entityId) === 0
+      && this.isAtDeepfenShallowsFishingSpot(p);
+  }
+
   private startFishing(p: Entity, meta: PlayerMeta): void {
     if (p.dead) { this.error(meta.entityId, "You can't do that while dead."); return; }
     if (p.inCombat) { this.error(meta.entityId, "You can't do that while in combat."); return; }
@@ -4634,6 +4909,10 @@ export class Sim {
   }
 
   private completeFishing(p: Entity, meta: PlayerMeta): void {
+    if (this.shouldCatchCodfather(p, meta)) {
+      this.addItem(THE_CODFATHER_ITEM_ID, 1, meta.entityId);
+      return;
+    }
     const roll = this.rng.next();
     if (roll < 0.7) {
       this.addItem('raw_mirror_trout', 1, meta.entityId);
@@ -5052,6 +5331,7 @@ export class Sim {
     if (!r) return;
     const { meta, e: p } = r;
     if (!p.dead) return;
+    if (this.arenaMatches.has(p.id)) return;
     p.dead = false;
     // dying in a dungeon sends you to the graveyard of the zone its door is
     // in; dying outdoors, to your current zone's graveyard
@@ -5067,6 +5347,8 @@ export class Sim {
     p.hp = p.maxHp;
     p.resource = p.resourceType === 'mana' ? p.maxResource : p.resourceType === 'energy' ? 100 : 0;
     p.targetId = null;
+    p.autoAttack = false;
+    p.queuedOnSwing = null;
     p.combatTimer = 99;
     p.inCombat = false;
     this.emit({ type: 'respawn', pid: meta.entityId });
@@ -5574,15 +5856,15 @@ export class Sim {
     if (target.kind === 'player') {
       const attackerPlayer = this.pvpController(attacker);
       if (!attackerPlayer) return false;
+      if (attackerPlayer.dead) return false;
       if (attackerPlayer.id === target.id) return false;
       const duel = this.duels.get(attackerPlayer.id);
       if (duel && duel.state === 'active'
         && ((duel.a === attackerPlayer.id && duel.b === target.id)
           || (duel.b === attackerPlayer.id && duel.a === target.id))) return true;
       const match = this.arenaMatches.get(attackerPlayer.id);
-      return !!match && match.state === 'active'
-        && ((match.a === attackerPlayer.id && match.b === target.id)
-          || (match.b === attackerPlayer.id && match.a === target.id));
+      return !!match && match.state === 'active' && !match.defeated.has(attackerPlayer.id)
+        && this.isArenaCrossTeam(match, attackerPlayer.id, target.id);
     }
     return false;
   }
@@ -5921,16 +6203,25 @@ export class Sim {
   }
 
   // -------------------------------------------------------------------------
-  // The Ashen Coliseum — 1v1 ranked arena (queue, matchmaking, Elo)
+  // The Ashen Coliseum — ranked arena (1v1 + 2v2 queue, matchmaking, Elo)
   // -------------------------------------------------------------------------
 
-  arenaQueueJoin(pid?: number): void {
+  arenaQueueJoin(pidOrFormat?: number | ArenaFormat, format: ArenaFormat = '1v1'): void {
+    let pid: number | undefined;
+    let fmt: ArenaFormat = format;
+    if (typeof pidOrFormat === 'string') { fmt = pidOrFormat; pid = undefined; }
+    else { pid = pidOrFormat; }
     const r = this.resolve(pid);
     if (!r) return;
     const id = r.meta.entityId;
-    if (this.arenaQueue.includes(id)) {
-      // already waiting — just re-affirm their place in line
-      this.emit({ type: 'arenaQueued', position: this.arenaQueue.indexOf(id) + 1, pid: id });
+    if (this.isArenaQueued(id)) {
+      const currentFmt = this.arenaQueuedFormat(id);
+      if (currentFmt !== fmt) {
+        this.error(id, `You are already in the ${currentFmt} queue. Leave it before queueing for ${fmt}.`);
+        return;
+      }
+      const position = this.arenaQueuePosition(id, fmt);
+      this.emit({ type: 'arenaQueued', position, format: fmt, pid: id });
       return;
     }
     if (this.arenaMatches.has(id)) { this.error(id, 'You are already in an arena match.'); return; }
@@ -5938,25 +6229,104 @@ export class Sim {
     if (this.duels.has(id)) { this.error(id, 'You cannot queue while dueling.'); return; }
     if (this.trades.has(id)) { this.error(id, 'Finish your trade before queueing.'); return; }
     if (r.e.pos.x > DUNGEON_X_THRESHOLD) { this.error(id, 'You cannot queue from inside an instance.'); return; }
-    this.arenaQueue.push(id);
-    this.emit({ type: 'arenaQueued', position: this.arenaQueue.length, pid: id });
-    this.emit({ type: 'log', text: 'You join the Ashen Coliseum queue. Stand by for a worthy opponent…', color: '#ffa040', pid: id });
+
+    if (fmt === '1v1') {
+      const party = this.partyOf(id);
+      if (party && party.members.length > 1) {
+        this.error(id, 'Leave your party before queueing for 1v1.');
+        return;
+      }
+      this.arenaQueue1v1.push(id);
+      this.emit({ type: 'arenaQueued', position: this.arenaQueue1v1.length, format: '1v1', pid: id });
+      this.emit({ type: 'log', text: 'You join the Ashen Coliseum queue. Stand by for a worthy opponent…', color: '#ffa040', pid: id });
+      return;
+    }
+
+    // 2v2
+    const party = this.partyOf(id);
+    let unitPids: number[];
+    if (!party || party.members.length === 1) {
+      unitPids = [id];
+    } else if (party.members.length === 2) {
+      if (party.leader !== id) {
+        this.error(id, 'Only the party leader may queue your team for 2v2.');
+        return;
+      }
+      unitPids = [...party.members];
+    } else {
+      this.error(id, '2v2 premade requires a party of exactly two.');
+      return;
+    }
+    for (const mPid of unitPids) {
+      if (mPid === id) continue;
+      const e = this.entities.get(mPid);
+      const mMeta = this.players.get(mPid);
+      if (!e || !mMeta) { this.error(id, 'A party member is unavailable.'); return; }
+      if (e.dead) { this.error(id, `${mMeta.name} cannot queue while dead.`); return; }
+      if (this.arenaMatches.has(mPid)) { this.error(id, `${mMeta.name} is already in an arena match.`); return; }
+      if (this.isArenaQueued(mPid)) { this.error(id, `${mMeta.name} is already in the arena queue.`); return; }
+      if (this.duels.has(mPid)) { this.error(id, `${mMeta.name} cannot queue while dueling.`); return; }
+      if (this.trades.has(mPid)) { this.error(id, `${mMeta.name} must finish trading before queueing.`); return; }
+      if (e.pos.x > DUNGEON_X_THRESHOLD) { this.error(id, `${mMeta.name} cannot queue from inside an instance.`); return; }
+    }
+    const unit: ArenaQueueUnit = { pids: unitPids, rating: this.arenaTeamRating(unitPids) };
+    this.arenaQueue2v2.push(unit);
+    const position = this.arenaQueue2v2PlayerCount();
+    for (const mPid of unitPids) {
+      this.emit({ type: 'arenaQueued', position, format: '2v2', pid: mPid });
+      this.emit({ type: 'log', text: 'You join the Ashen Coliseum 2v2 queue. Stand by for opponents…', color: '#ffa040', pid: mPid });
+    }
   }
 
   arenaQueueLeave(pid?: number): void {
     const r = this.resolve(pid);
     if (!r) return;
-    if (this.arenaDequeue(r.meta.entityId)) {
-      this.emit({ type: 'arenaUnqueued', pid: r.meta.entityId });
-      this.emit({ type: 'log', text: 'You leave the Ashen Coliseum queue.', color: '#ffa040', pid: r.meta.entityId });
+    const id = r.meta.entityId;
+    const fmt = this.arenaQueuedFormat(id);
+    const unit = fmt === '2v2' ? this.arenaQueue2v2.find((u) => u.pids.includes(id)) : null;
+    if (this.arenaDequeue(id)) {
+      this.emit({ type: 'arenaUnqueued', pid: id });
+      this.emit({ type: 'log', text: fmt === '2v2' ? 'You leave the Ashen Coliseum 2v2 queue.' : 'You leave the Ashen Coliseum queue.', color: '#ffa040', pid: id });
+      if (unit) {
+        for (const mPid of unit.pids) {
+          if (mPid === id) continue;
+          this.emit({ type: 'arenaUnqueued', pid: mPid });
+          this.emit({ type: 'log', text: 'Your team leaves the Ashen Coliseum 2v2 queue.', color: '#ffa040', pid: mPid });
+        }
+      }
     }
   }
 
+  private isArenaQueued(pid: number): boolean {
+    return this.arenaQueue1v1.includes(pid) || this.arenaQueue2v2.some((u) => u.pids.includes(pid));
+  }
+
+  private arenaQueuedFormat(pid: number): ArenaFormat | null {
+    if (this.arenaQueue1v1.includes(pid)) return '1v1';
+    if (this.arenaQueue2v2.some((u) => u.pids.includes(pid))) return '2v2';
+    return null;
+  }
+
+  private arenaQueuePosition(pid: number, format: ArenaFormat): number {
+    if (format === '1v1') return this.arenaQueue1v1.indexOf(pid) + 1;
+    let pos = 0;
+    for (const unit of this.arenaQueue2v2) {
+      if (unit.pids.includes(pid)) return pos + 1;
+      pos += unit.pids.length;
+    }
+    return pos + 1;
+  }
+
+  private arenaQueue2v2PlayerCount(): number {
+    return this.arenaQueue2v2.reduce((n, u) => n + u.pids.length, 0);
+  }
+
   private arenaDequeue(pid: number): boolean {
-    const i = this.arenaQueue.indexOf(pid);
-    if (i < 0) return false;
-    this.arenaQueue.splice(i, 1);
-    return true;
+    const i1 = this.arenaQueue1v1.indexOf(pid);
+    if (i1 >= 0) { this.arenaQueue1v1.splice(i1, 1); return true; }
+    const ui = this.arenaQueue2v2.findIndex((u) => u.pids.includes(pid));
+    if (ui >= 0) { this.arenaQueue2v2.splice(ui, 1); return true; }
+    return false;
   }
 
   private freeArenaSlot(): number | null {
@@ -5966,113 +6336,267 @@ export class Sim {
     return null;
   }
 
+  private arenaTeamOf(match: ArenaMatch, pid: number): 'A' | 'B' | null {
+    if (match.teamA.includes(pid)) return 'A';
+    if (match.teamB.includes(pid)) return 'B';
+    return null;
+  }
+
+  arenaAllPids(match: ArenaMatch): number[] {
+    return [...match.teamA, ...match.teamB];
+  }
+
+  private arenaTeamRating(pids: number[]): number {
+    if (pids.length === 0) return ARENA_BASE_RATING;
+    let sum = 0;
+    for (const pid of pids) sum += this.players.get(pid)?.arenaRating ?? ARENA_BASE_RATING;
+    return sum / pids.length;
+  }
+
+  private isArenaCrossTeam(match: ArenaMatch, attackerPid: number, targetPid: number): boolean {
+    const atkTeam = this.arenaTeamOf(match, attackerPid);
+    const tgtTeam = this.arenaTeamOf(match, targetPid);
+    if (!atkTeam || !tgtTeam || atkTeam === tgtTeam) return false;
+    if (match.defeated.has(attackerPid)) return false;
+    return !match.defeated.has(targetPid);
+  }
+
+  private isArenaTeamWiped(match: ArenaMatch, team: 'A' | 'B'): boolean {
+    const pids = team === 'A' ? match.teamA : match.teamB;
+    return pids.every((pid) => match.defeated.has(pid));
+  }
+
+  private arenaTeamHpFrac(match: ArenaMatch, team: 'A' | 'B'): number {
+    const pids = team === 'A' ? match.teamA : match.teamB;
+    let sum = 0, count = 0;
+    for (const pid of pids) {
+      if (match.defeated.has(pid)) continue;
+      const e = this.entities.get(pid);
+      if (!e) continue;
+      sum += e.hp / Math.max(1, e.maxHp);
+      count++;
+    }
+    return count > 0 ? sum / count : 0;
+  }
+
+  private arenaCombatants(pids: number[]): ArenaCombatant[] {
+    const out: ArenaCombatant[] = [];
+    for (const pid of pids) {
+      const meta = this.players.get(pid);
+      const e = this.entities.get(pid);
+      if (meta && e) out.push({ pid, name: meta.name, cls: meta.cls, level: e.level });
+    }
+    return out;
+  }
+
   private updateArena(): void {
-    this.matchmakeArena();
+    this.matchmakeArena1v1();
+    this.matchmakeArena2v2();
     const seen = new Set<ArenaMatch>();
     for (const match of this.arenaMatches.values()) {
       if (seen.has(match)) continue;
       seen.add(match);
-      const ea = this.entities.get(match.a);
-      const eb = this.entities.get(match.b);
-      if (!ea || !eb) {
-        // someone logged out: an already-decided bout just sends the survivor
-        // home; an in-progress one is forfeited to the remaining fighter
+      const missingA = match.teamA.some((pid) => !this.entities.get(pid));
+      const missingB = match.teamB.some((pid) => !this.entities.get(pid));
+      if (missingA || missingB) {
         if (match.state === 'over') this.returnFromArena(match);
-        else this.endArenaMatch(match, ea ? match.a : eb ? match.b : null, 'forfeit');
+        else {
+          let winner: 'A' | 'B' | null = null;
+          if (missingA && !missingB) winner = 'B';
+          else if (missingB && !missingA) winner = 'A';
+          this.endArenaMatch(match, winner, 'forfeit');
+        }
         continue;
       }
       if (match.state === 'over') {
-        // aftermath: both already cleansed and scored — count down, then go home
         match.timer -= DT;
         if (match.timer <= 0) this.returnFromArena(match);
         continue;
       }
+      const fighters = this.arenaAllPids(match).map((pid) => this.entities.get(pid)!).filter(Boolean);
       if (match.state === 'countdown') {
         const before = Math.ceil(match.timer);
         match.timer -= DT;
         const after = Math.ceil(match.timer);
         if (after < before && after > 0) {
-          for (const mPid of [match.a, match.b]) this.emit({ type: 'arenaCountdown', seconds: after, pid: mPid });
+          for (const mPid of this.arenaAllPids(match)) this.emit({ type: 'arenaCountdown', seconds: after, pid: mPid });
         }
         if (match.timer <= 0) {
           match.state = 'active';
           match.timer = 0;
-          for (const e of [ea, eb]) this.readyArenaFighter(e, { clearPrep: false });
-          for (const mPid of [match.a, match.b]) {
+          for (const e of fighters) this.readyArenaFighter(e, { clearPrep: false });
+          for (const mPid of this.arenaAllPids(match)) {
             this.emit({ type: 'log', text: 'Fight!', color: '#ff5a3c', pid: mPid });
             this.emit({ type: 'arenaStart', pid: mPid });
           }
         }
         continue;
       }
-      // active: a stalling bout resolves on remaining-health fraction
       match.timer += DT;
       if (match.timer >= ARENA_MAX_DURATION) {
-        const fa = ea.hp / Math.max(1, ea.maxHp);
-        const fb = eb.hp / Math.max(1, eb.maxHp);
-        const winner = Math.abs(fa - fb) < 0.02 ? null : fa > fb ? match.a : match.b;
+        const fa = this.arenaTeamHpFrac(match, 'A');
+        const fb = this.arenaTeamHpFrac(match, 'B');
+        const winner = Math.abs(fa - fb) < 0.02 ? null : fa > fb ? 'A' : 'B';
         this.endArenaMatch(match, winner, 'timeout');
       }
     }
   }
 
-  // Pair the longest-waiting contender with the nearest-rated opponent still in
-  // line, one bout per free slot. Skips (and drops) anyone who went offline or
-  // died while waiting.
-  private matchmakeArena(): void {
+  private matchmakeArena1v1(): void {
     let guard = ARENA_SLOT_COUNT + 1;
     while (guard-- > 0) {
-      this.arenaQueue = this.arenaQueue.filter((id) => {
+      this.arenaQueue1v1 = this.arenaQueue1v1.filter((id) => {
         const e = this.entities.get(id);
         return !!e && !e.dead && !this.arenaMatches.has(id);
       });
-      if (this.arenaQueue.length < 2 || this.freeArenaSlot() === null) return;
-      const aPid = this.arenaQueue[0];
+      if (this.arenaQueue1v1.length < 2 || this.freeArenaSlot() === null) return;
+      const aPid = this.arenaQueue1v1[0];
       const aRating = this.players.get(aPid)?.arenaRating ?? ARENA_BASE_RATING;
       let bPid = -1, bestGap = Infinity;
-      for (let i = 1; i < this.arenaQueue.length; i++) {
-        const id = this.arenaQueue[i];
+      for (let i = 1; i < this.arenaQueue1v1.length; i++) {
+        const id = this.arenaQueue1v1[i];
         const gap = Math.abs((this.players.get(id)?.arenaRating ?? ARENA_BASE_RATING) - aRating);
         if (gap < bestGap) { bestGap = gap; bPid = id; }
       }
       if (bPid < 0) return;
       this.arenaDequeue(aPid);
       this.arenaDequeue(bPid);
-      this.startArenaMatch(aPid, bPid);
+      this.startArenaMatch('1v1', [aPid], [bPid]);
     }
   }
 
-  private startArenaMatch(aPid: number, bPid: number): void {
+  private pruneArenaQueue2v2(): void {
+    this.arenaQueue2v2 = this.arenaQueue2v2.filter((unit) =>
+      unit.pids.every((id) => {
+        const e = this.entities.get(id);
+        return !!e && !e.dead && !this.arenaMatches.has(id);
+      }),
+    );
+  }
+
+  private removeArenaQueueUnits(units: ArenaQueueUnit[]): void {
+    for (const unit of units) {
+      const i = this.arenaQueue2v2.indexOf(unit);
+      if (i >= 0) this.arenaQueue2v2.splice(i, 1);
+    }
+  }
+
+  private matchmakeArena2v2(): void {
+    let guard = ARENA_SLOT_COUNT + 1;
+    while (guard-- > 0) {
+      this.pruneArenaQueue2v2();
+      if (this.freeArenaSlot() === null) return;
+
+      const premades = this.arenaQueue2v2.filter((u) => u.pids.length === 2);
+      if (premades.length >= 2) {
+        const anchor = premades[0];
+        let best = premades[1], bestGap = Math.abs(premades[1].rating - anchor.rating);
+        for (let i = 2; i < premades.length; i++) {
+          const gap = Math.abs(premades[i].rating - anchor.rating);
+          if (gap < bestGap) { bestGap = gap; best = premades[i]; }
+        }
+        this.removeArenaQueueUnits([anchor, best]);
+        this.startArenaMatch('2v2', anchor.pids, best.pids);
+        continue;
+      }
+
+      if (premades.length >= 1) {
+        const solos = this.arenaQueue2v2.filter((u) => u.pids.length === 1);
+        if (solos.length >= 2) {
+          const premade = premades[0];
+          const anchorSolo = solos[0];
+          let partner = solos[1], bestGap = Math.abs(solos[1].rating - anchorSolo.rating);
+          for (let i = 2; i < solos.length; i++) {
+            const gap = Math.abs(solos[i].rating - anchorSolo.rating);
+            if (gap < bestGap) { bestGap = gap; partner = solos[i]; }
+          }
+          this.removeArenaQueueUnits([premade, anchorSolo, partner]);
+          this.startArenaMatch('2v2', premade.pids, [anchorSolo.pids[0], partner.pids[0]]);
+          continue;
+        }
+      }
+
+      const solos = this.arenaQueue2v2.filter((u) => u.pids.length === 1);
+      if (solos.length >= 4) {
+        const anchor = solos[0];
+        let partner = solos[1], bestGap = Math.abs(solos[1].rating - anchor.rating);
+        for (let i = 2; i < solos.length; i++) {
+          const gap = Math.abs(solos[i].rating - anchor.rating);
+          if (gap < bestGap) { bestGap = gap; partner = solos[i]; }
+        }
+        const teamASet = new Set([anchor.pids[0], partner.pids[0]]);
+        const rest = solos.filter((u) => !teamASet.has(u.pids[0]));
+        if (rest.length >= 2) {
+          this.removeArenaQueueUnits([anchor, partner, rest[0], rest[1]]);
+          this.startArenaMatch('2v2', [anchor.pids[0], partner.pids[0]], [rest[0].pids[0], rest[1].pids[0]]);
+          continue;
+        }
+      }
+      return;
+    }
+  }
+
+  private startArenaMatch(format: ArenaFormat, teamA: number[], teamB: number[]): void {
     const slot = this.freeArenaSlot();
-    const aMeta = this.players.get(aPid);
-    const bMeta = this.players.get(bPid);
-    const ea = this.entities.get(aPid);
-    const eb = this.entities.get(bPid);
-    if (slot === null || !aMeta || !bMeta || !ea || !eb) {
-      // couldn't seat them — put them back so the next tick retries
-      if (this.entities.get(aPid)) this.arenaQueue.unshift(aPid);
-      if (this.entities.get(bPid)) this.arenaQueue.unshift(bPid);
+    const allPids = [...teamA, ...teamB];
+    const entities = allPids.map((pid) => this.entities.get(pid));
+    const metas = allPids.map((pid) => this.players.get(pid));
+    if (slot === null || entities.some((e) => !e) || metas.some((m) => !m)) {
+      if (format === '1v1') {
+        for (const pid of allPids) {
+          if (this.entities.get(pid) && !this.arenaMatches.has(pid)) this.arenaQueue1v1.unshift(pid);
+        }
+      } else {
+        const okA = teamA.every((pid) => this.entities.get(pid) && !this.arenaMatches.has(pid));
+        const okB = teamB.every((pid) => this.entities.get(pid) && !this.arenaMatches.has(pid));
+        if (okB) this.arenaQueue2v2.unshift({ pids: teamB, rating: this.arenaTeamRating(teamB) });
+        if (okA) this.arenaQueue2v2.unshift({ pids: teamA, rating: this.arenaTeamRating(teamA) });
+      }
       return;
     }
     this.arenaBusySlots.add(slot);
+    const returns = new Map<number, { x: number; z: number; facing: number }>();
+    for (let i = 0; i < allPids.length; i++) {
+      const e = entities[i]!;
+      returns.set(allPids[i], { x: e.pos.x, z: e.pos.z, facing: e.facing });
+    }
     const match: ArenaMatch = {
-      id: this.nextArenaMatchId++, a: aPid, b: bPid, slot, state: 'countdown', timer: ARENA_COUNTDOWN,
-      returnA: { x: ea.pos.x, z: ea.pos.z, facing: ea.facing },
-      returnB: { x: eb.pos.x, z: eb.pos.z, facing: eb.facing },
-      ratingA: aMeta.arenaRating, ratingB: bMeta.arenaRating,
+      id: this.nextArenaMatchId++, format, teamA, teamB, slot, state: 'countdown', timer: ARENA_COUNTDOWN,
+      returns, ratingA: this.arenaTeamRating(teamA), ratingB: this.arenaTeamRating(teamB),
+      defeated: new Set(),
     };
-    this.arenaMatches.set(aPid, match);
-    this.arenaMatches.set(bPid, match);
+    for (const pid of allPids) this.arenaMatches.set(pid, match);
     const origin = arenaOrigin(slot);
-    this.placeInArena(ea, origin, ARENA_SPAWN_A);
-    this.placeInArena(eb, origin, ARENA_SPAWN_B);
-    this.resetForArena(ea);
-    this.resetForArena(eb);
-    this.emit({ type: 'arenaFound', oppName: bMeta.name, oppClass: bMeta.cls, oppLevel: eb.level, pid: aPid });
-    this.emit({ type: 'arenaFound', oppName: aMeta.name, oppClass: aMeta.cls, oppLevel: ea.level, pid: bPid });
-    for (const mPid of [aPid, bPid]) {
+    if (format === '1v1') {
+      this.placeInArena(entities[0]!, origin, ARENA_SPAWN_A);
+      this.placeInArena(entities[1]!, origin, ARENA_SPAWN_B);
+    } else {
+      this.placeTeamInArena(teamA, origin, ARENA_SPAWNS_A_2v2);
+      this.placeTeamInArena(teamB, origin, ARENA_SPAWNS_B_2v2);
+    }
+    for (const e of entities) this.resetForArena(e!);
+    this.emitArenaFound(match);
+    for (const mPid of allPids) {
       this.emit({ type: 'arenaCountdown', seconds: ARENA_COUNTDOWN, pid: mPid });
       this.emit({ type: 'log', text: 'You step onto the sands of the Ashen Coliseum.', color: '#ffa040', pid: mPid });
+    }
+  }
+
+  private emitArenaFound(match: ArenaMatch): void {
+    for (const pid of this.arenaAllPids(match)) {
+      const myTeam = this.arenaTeamOf(match, pid)!;
+      const allyPids = (myTeam === 'A' ? match.teamA : match.teamB).filter((p) => p !== pid);
+      const enemyPids = myTeam === 'A' ? match.teamB : match.teamA;
+      const allies = this.arenaCombatants(allyPids);
+      const enemies = this.arenaCombatants(enemyPids);
+      const primary = enemies[0];
+      if (!primary) continue;
+      this.emit({
+        type: 'arenaFound', format: match.format,
+        oppName: enemies.map((e) => e.name).join(' & '),
+        oppClass: primary.cls, oppLevel: primary.level,
+        allies, enemies, pid,
+      });
     }
   }
 
@@ -6084,6 +6608,13 @@ export class Sim {
     this.rebucket(e);
   }
 
+  private placeTeamInArena(pids: number[], origin: { x: number; z: number }, spawns: { x: number; z: number; facing: number }[]): void {
+    for (let i = 0; i < pids.length; i++) {
+      const e = this.entities.get(pids[i]);
+      if (e) this.placeInArena(e, origin, spawns[i] ?? spawns[spawns.length - 1]);
+    }
+  }
+
   // A clean slate so the bout is decided by play, not by what each fighter
   // walked in carrying: full health/resource, cooldowns and combat reset.
   private resetForArena(e: Entity): void {
@@ -6091,6 +6622,7 @@ export class Sim {
   }
 
   private readyArenaFighter(e: Entity, opts: { clearPrep: boolean }): void {
+    e.dead = false;
     if (opts.clearPrep) {
       e.auras = [];
       e.cooldowns.clear();
@@ -6120,68 +6652,74 @@ export class Sim {
     e.drinking = null;
   }
 
-  // Decide a bout: score it (once), then either send a survivor home now (a
-  // forfeit, where the other fighter is gone) or hold both on the sands for a
-  // brief aftermath before returning them. winnerPid null = draw; reason is
-  // informational (defeat/timeout/forfeit).
-  private endArenaMatch(match: ArenaMatch, winnerPid: number | null, reason: 'defeat' | 'timeout' | 'forfeit'): void {
-    const aMeta = this.players.get(match.a);
-    const bMeta = this.players.get(match.b);
-    const ea = this.entities.get(match.a);
-    const eb = this.entities.get(match.b);
-
-    // rating: zero-sum Elo. A draw nudges each toward its expected score.
-    if (aMeta && bMeta) {
-      const ratingA0 = aMeta.arenaRating;
-      const ratingB0 = bMeta.arenaRating;
-      let deltaA: number;
-      if (winnerPid === null) {
-        deltaA = eloDelta(ratingA0, ratingB0, 0.5);
-        aMeta.arenaWins += 0; bMeta.arenaWins += 0; // draws count as neither
-      } else if (winnerPid === match.a) {
-        deltaA = eloDelta(ratingA0, ratingB0, 1);
-        aMeta.arenaWins++; bMeta.arenaLosses++;
-      } else {
-        deltaA = -eloDelta(ratingB0, ratingA0, 1);
-        bMeta.arenaWins++; aMeta.arenaLosses++;
-      }
-      aMeta.arenaRating = Math.max(ARENA_MIN_RATING, ratingA0 + deltaA);
-      bMeta.arenaRating = Math.max(ARENA_MIN_RATING, ratingB0 - deltaA);
-      this.emit({
-        type: 'arenaEnd', pid: match.a, draw: winnerPid === null, won: winnerPid === match.a,
-        oppName: bMeta.name, ratingBefore: ratingA0, ratingAfter: aMeta.arenaRating,
-      });
-      this.emit({
-        type: 'arenaEnd', pid: match.b, draw: winnerPid === null, won: winnerPid === match.b,
-        oppName: aMeta.name, ratingBefore: ratingB0, ratingAfter: bMeta.arenaRating,
-      });
+  // Decide a bout: score it (once), then either send survivors home now (a
+  // forfeit) or hold everyone on the sands for a brief aftermath before
+  // returning them. winnerTeam null = draw.
+  private endArenaMatch(match: ArenaMatch, winnerTeam: 'A' | 'B' | null, reason: 'defeat' | 'timeout' | 'forfeit'): void {
+    const ratingA0 = match.ratingA;
+    const ratingB0 = match.ratingB;
+    let deltaA: number;
+    if (winnerTeam === null) {
+      deltaA = eloDelta(ratingA0, ratingB0, 0.5);
+    } else if (winnerTeam === 'A') {
+      deltaA = eloDelta(ratingA0, ratingB0, 1);
+    } else {
+      deltaA = -eloDelta(ratingB0, ratingA0, 1);
     }
 
-    // a forfeit (rage-quit / disconnect) has no aftermath — send the survivor
-    // home immediately rather than leaving them on empty sands
-    if (reason === 'forfeit' || !ea || !eb) { this.returnFromArena(match); return; }
+    const scoreTeam = (team: 'A' | 'B', delta: number, won: boolean | null) => {
+      const pids = team === 'A' ? match.teamA : match.teamB;
+      const enemies = team === 'A' ? match.teamB : match.teamA;
+      const enemyNames = enemies.map((pid) => this.players.get(pid)?.name ?? '?').join(' & ');
+      for (const pid of pids) {
+        const meta = this.players.get(pid);
+        if (!meta) continue;
+        const ratingBefore = meta.arenaRating;
+        meta.arenaRating = Math.max(ARENA_MIN_RATING, ratingBefore + delta);
+        if (won === true) meta.arenaWins++;
+        else if (won === false) meta.arenaLosses++;
+        this.emit({
+          type: 'arenaEnd', pid, format: match.format,
+          draw: winnerTeam === null, won: won === true,
+          oppName: enemyNames, ratingBefore, ratingAfter: meta.arenaRating,
+          allies: this.arenaCombatants(pids.filter((p) => p !== pid)),
+          enemies: this.arenaCombatants(enemies),
+        });
+      }
+    };
 
-    // decided bout: cleanse both right now so no arena auras/DoTs tick during
-    // the wait, then hold them on the sands for the aftermath countdown
-    this.resetForArena(ea);
-    this.resetForArena(eb);
+    const wonA = winnerTeam === null ? null : winnerTeam === 'A';
+    const wonB = winnerTeam === null ? null : winnerTeam === 'B';
+    scoreTeam('A', deltaA, wonA);
+    scoreTeam('B', -deltaA, wonB);
+
+    if (reason === 'forfeit') { this.returnFromArena(match); return; }
+
+    const allPresent = this.arenaAllPids(match).every((pid) => this.entities.get(pid));
+    if (!allPresent) { this.returnFromArena(match); return; }
+
+    for (const pid of this.arenaAllPids(match)) {
+      if (match.defeated.has(pid)) continue;
+      const e = this.entities.get(pid);
+      if (e) this.resetForArena(e);
+    }
     match.state = 'over';
     match.timer = ARENA_RETURN_DELAY;
-    for (const mPid of [match.a, match.b]) {
+    for (const mPid of this.arenaAllPids(match)) {
       this.emit({ type: 'log', text: 'The bout is decided. Returning to the world…', color: '#ffa040', pid: mPid });
     }
   }
 
-  // Teleport both fighters back to where they queued, fully cleansed (no arena
-  // auras, DoTs, debuffs, cooldowns or combat state follow them out), and
+  // Teleport all fighters back to where they queued, fully cleansed, and
   // release the instance slot.
   private returnFromArena(match: ArenaMatch): void {
-    this.arenaMatches.delete(match.a);
-    this.arenaMatches.delete(match.b);
+    for (const pid of this.arenaAllPids(match)) this.arenaMatches.delete(pid);
     this.arenaBusySlots.delete(match.slot);
-    for (const [e, ret] of [[this.entities.get(match.a), match.returnA], [this.entities.get(match.b), match.returnB]] as const) {
-      if (!e) continue;
-      this.resetForArena(e); // strips every aura/effect/cooldown and heals to full
+    for (const pid of this.arenaAllPids(match)) {
+      const e = this.entities.get(pid);
+      const ret = match.returns.get(pid);
+      if (!e || !ret) continue;
+      this.resetForArena(e);
       e.pos = this.groundPos(ret.x, ret.z);
       e.prevPos = { ...e.pos };
       e.facing = ret.facing;
@@ -6211,24 +6749,38 @@ export class Sim {
     const meta = this.players.get(pid);
     if (!meta) return null;
     const match = this.arenaMatches.get(pid);
+    const queuedFmt = this.arenaQueuedFormat(pid);
     let matchInfo: import('../world_api').ArenaInfo['match'] = null;
     if (match) {
-      const oppPid = match.a === pid ? match.b : match.a;
-      const oppMeta = this.players.get(oppPid);
-      const oppE = this.entities.get(oppPid);
-      if (oppMeta && oppE) {
-        matchInfo = {
-          state: match.state, oppName: oppMeta.name, oppClass: oppMeta.cls, oppLevel: oppE.level, oppPid,
-          returnIn: match.state === 'over' ? Math.max(0, Math.ceil(match.timer)) : undefined,
-        };
+      const myTeam = this.arenaTeamOf(match, pid);
+      if (myTeam) {
+        const allyPids = (myTeam === 'A' ? match.teamA : match.teamB).filter((p) => p !== pid);
+        const enemyPids = myTeam === 'A' ? match.teamB : match.teamA;
+        const allies = this.arenaCombatants(allyPids);
+        const enemies = this.arenaCombatants(enemyPids);
+        const primary = enemies[0];
+        if (primary) {
+          matchInfo = {
+            format: match.format, state: match.state,
+            oppName: enemies.map((e) => e.name).join(' & '),
+            oppClass: primary.cls, oppLevel: primary.level, oppPid: primary.pid,
+            allies, enemies,
+            returnIn: match.state === 'over' ? Math.max(0, Math.ceil(match.timer)) : undefined,
+          };
+        }
       }
     }
+    const format = match?.format ?? queuedFmt;
+    const queueSize = format === '2v2' ? this.arenaQueue2v2PlayerCount()
+      : format === '1v1' ? this.arenaQueue1v1.length
+      : 0;
     return {
       rating: meta.arenaRating,
       wins: meta.arenaWins,
       losses: meta.arenaLosses,
-      queued: this.arenaQueue.includes(pid),
-      queueSize: this.arenaQueue.length,
+      format,
+      queued: queuedFmt !== null,
+      queueSize,
       match: matchInfo,
       ladder: this.arenaLadder(),
     };

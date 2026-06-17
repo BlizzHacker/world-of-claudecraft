@@ -250,7 +250,7 @@ describe('cosmetic milestones', () => {
 });
 
 // -------------------------------------------------------------------------
-// Prestige (Phase 4): resets the bar, not lifetimeXp; cap-gated; cosmetic
+// Prestige: resets the bar, not lifetimeXp; cap-gated; cosmetic
 // -------------------------------------------------------------------------
 
 describe('prestige', () => {

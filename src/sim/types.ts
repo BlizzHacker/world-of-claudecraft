@@ -16,6 +16,14 @@ export const FISHING_CAST_TIME = 5;
 export type PlayerClass =
   | 'warrior' | 'paladin' | 'hunter' | 'rogue' | 'priest'
   | 'shaman' | 'mage' | 'warlock' | 'druid';
+export type ArenaFormat = '1v1' | '2v2';
+
+export interface ArenaCombatant {
+  pid: number;
+  name: string;
+  cls: PlayerClass;
+  level: number;
+}
 export const ALL_CLASSES: PlayerClass[] = [
   'warrior', 'paladin', 'hunter', 'rogue', 'priest', 'shaman', 'mage', 'warlock', 'druid',
 ];
@@ -39,7 +47,7 @@ export type AuraKind =
   | 'dot' | 'slow' | 'stun' | 'root' | 'incapacitate' | 'polymorph'
   | 'attackspeed' | 'debuff_ap' | 'buff_ap' | 'buff_armor' | 'buff_int' | 'buff_dodge' | 'buff_speed' | 'buff_haste'
   | 'hot' | 'absorb' | 'imbue' | 'buff_sta' | 'buff_allstats' | 'thorns' | 'form_bear'
-  | 'form_cat' | 'stealth' | 'defensive_stance' | 'righteous_fury' | 'sunder' | 'mortal_wound';
+  | 'form_cat' | 'stealth' | 'defensive_stance' | 'righteous_fury' | 'sunder' | 'mortal_wound' | 'silence';
 
 export interface Aura {
   id: string; // ability id that applied it
@@ -177,6 +185,12 @@ export interface MobTemplate {
   // Mob mechanic: a one-time desperation self-heal the first time hp drops
   // below the threshold (healPct is a fraction of maxHp). Resets on evade/respawn.
   desperateHeal?: { belowHpPct: number; healPct: number };
+  // Support mechanic ("Mend"): while in combat, periodically heal every wounded
+  // living friendly mob within `radius` (incl. itself) for `healMin..healMax`.
+  // Telegraphed: the first cast lands one full `every` interval after combat
+  // opens. Resets on evade/respawn. Routes through the normal heal path, so it
+  // shows green floating text and grants no threat to the menders themselves.
+  mendAlly?: { healMin: number; healMax: number; radius: number; every: number; name: string; school?: Aura['school'] };
   // Boss mechanic ("War Stomp"): periodic ground slam that stuns nearby players
   // for `duration`s (and optionally deals min..max damage). Telegraphed: the
   // first slam only lands one full `every` interval after combat starts.
@@ -187,6 +201,11 @@ export interface MobTemplate {
   // On-hit debuff: a chance per landed melee swing to inflict a stacking-refresh
   // damage-over-time poison on the struck target (spiders, serpents, scorpions).
   venom?: { chance: number; perTick: number; interval: number; duration: number; name: string; school?: string };
+  // On-death mechanic ("Death Throes"): a volatile creature does not detonate
+  // the instant it dies. Its corpse destabilizes for `delay` seconds (a
+  // telegraph players can run from), then bursts for min..max `school` damage
+  // to everyone within `radius`. Deterministic: the fuse rides the corpse tick.
+  deathThroes?: { min: number; max: number; radius: number; delay: number; name: string; school?: Aura['school'] };
   // Classic beast "Frenzy": when a mob with this trait dies, nearby living
   // same-family hostile mobs briefly attack faster (hasteMult, e.g. 1.3 = +30%
   // swing speed) for `duration` seconds. Applied as a buff_haste aura.
@@ -194,17 +213,61 @@ export interface MobTemplate {
   // Melee mechanic: a landed swing has `chance` to inflict a Mortal Wound debuff
   // that reduces all healing the victim receives by `healReduction` for `duration`.
   mortalStrike?: { chance: number; healReduction: number; duration: number; name: string; school?: string };
+  // On-hit lifesteal: a landed melee swing heals the mob for `healFrac` of the
+  // damage it just dealt (drowned undead, leeches, vampiric beasts). Unlike the
+  // other on-hit affixes it sustains the attacker instead of debuffing the
+  // victim. Optional `chance` gates the proc (defaults to every landed hit).
+  lifeleech?: { healFrac: number; chance?: number; name?: string };
   // Combat mechanic: a landed melee hit has `chance` to corrode the victim's
   // armor: a stacking `sunder` debuff (up to `maxStacks`) so the victim takes
   // more physical damage from everyone until it expires. Rides the existing
   // sunder aura; no new aura kind.
   corrode?: { chance: number; armor: number; maxStacks: number; duration: number; name: string; school?: Aura['school'] };
+  // On-hit web mechanic: a landed melee swing has `chance` to ensnare the struck
+  // player in place — a `root` aura for `duration`s (naga/spider snares). Rides the
+  // existing root aura + crowd-control DR; no new aura kind. Players only; rooting a
+  // fellow mob is meaningless and would let a friendly pet trivially lock enemies.
+  ensnare?: { chance: number; duration: number; name: string; school?: Aura['school'] };
+  // On-hit debuff: a chance per landed melee swing to mire the victim, slowing
+  // their ATTACK SPEED (an `attackspeed` aura, `mult` > 1 lengthens the swing
+  // interval) for `duration`s. Rides the existing swingIntervalMult hook — no new
+  // combat math. Distinct from a movement snare (`slow`) or an AP cut (`debuff_ap`).
+  slowStrike?: { chance: number; mult: number; duration: number; name: string; school?: Aura['school'] };
+  // On-hit mechanic ("Mana Burn"): a landed melee swing has `chance` to drain a
+  // flat `amount` of mana from a mana-using victim (casters). Rage/energy users
+  // are unaffected. Drains only what mana the victim still has; no overkill.
+  manaBurn?: { chance: number; amount: number; name: string; school?: Aura['school'] };
+  // On-hit curse: a landed melee swing has `chance` to fog the victim's mind,
+  // draining `int` Intellect for `duration` and thus shrinking a caster's mana
+  // pool (recalcPlayerStats clamps current mana down with the smaller ceiling).
+  // Rides the existing buff_int aura with a NEGATIVE value, so there is no new
+  // resource math. Only meaningful on mana users — applied to them alone.
+  enfeeble?: { chance: number; int: number; duration: number; name: string; school?: Aura['school'] };
+  // Combat mechanic: a landed melee hit has `chance` to terrify the victim — a
+  // fear that sends the struck player fleeing for `duration`s. Rides the existing
+  // `fear_incap` incapacitate aura the player-cast Fear uses, so `updateFearMovement`
+  // drives the panicked run with no new aura kind or movement hook.
+  dread?: { chance: number; duration: number; name: string; school?: Aura['school'] };
   // Pet mechanic: this creature is a ranged caster (warlock Imp) — instead of
   // closing to melee, it stays at `range` and hurls bolts of `school` damage.
   // updatePet reads this; the bolt damage comes from the mob's weapon range.
   petRanged?: { range: number; school: Aura['school'] };
   petRole?: PetRole;
   petSpell?: { name: string; school: 'physical' | 'fire' | 'frost' | 'arcane' | 'shadow' | 'holy' | 'nature'; min: number; max: number; range: number; every: number };
+  // On-hit mechanic: chance to silence the victim, locking out spell (non-physical) casts for a duration.
+  silence?: { chance: number; duration: number; name: string; school?: string };
+  // On-hit chill: a landed melee swing has `chance` to slow the victim's
+  // movement to `mult` of normal for `duration` seconds (frost school). Reuses
+  // the standard `slow` aura, so it rides the same movement path as Frostbolt.
+  chillOnHit?: { chance: number; mult: number; duration: number; name: string };
+  // On-hit affix: a successful melee hit saps the player victim's attack power
+  // for a few seconds (classic Demoralizing Shout / Curse of Weakness), making
+  // the damage *they* deal weaker. `ap` is the attack-power reduction (applied
+  // as a negative buff_ap aura); `chance` defaults to 1 (every hit, refreshing).
+  demoralize?: { ap: number; duration: number; chance?: number; name?: string };
+  // Innate "spiked hide" trait: melee attackers take flat damage back on every
+  // connecting swing — the mob-side equivalent of the druid Thorns aura.
+  thorns?: { value: number; school?: Aura['school']; name?: string };
 }
 
 export type AbilityEffect =
@@ -517,6 +580,8 @@ export interface Entity {
   petTauntTimer: number; // controlled pet Growl cooldown
   pulseTimer: number; // boss aoe pulse countdown
   stompTimer: number; // boss War Stomp stun-pulse countdown
+  detonateTimer: number; // Death Throes fuse on a volatile corpse; Infinity = no pending detonation
+  mendTimer: number; // mendAlly support-heal cast countdown
   firedSummons: number; // summonAdds thresholds already triggered
   summonedIds: number[]; // live adds this boss summoned; despawned on reset
   enraged: boolean; // enrage mechanic active
@@ -591,13 +656,13 @@ export type SimEvent = { pid?: number } & (
   | { type: 'duelCountdown'; seconds: number }
   | { type: 'duelStart' }
   | { type: 'duelEnd'; winnerName: string; loserName: string }
-  // Ashen Coliseum 1v1 arena: queue state, match lifecycle, and rating result
-  | { type: 'arenaQueued'; position: number }
+  // Ashen Coliseum arena: queue state, match lifecycle, and rating result
+  | { type: 'arenaQueued'; position: number; format: ArenaFormat }
   | { type: 'arenaUnqueued' }
-  | { type: 'arenaFound'; oppName: string; oppClass: PlayerClass; oppLevel: number }
+  | { type: 'arenaFound'; format: ArenaFormat; oppName: string; oppClass: PlayerClass; oppLevel: number; allies: ArenaCombatant[]; enemies: ArenaCombatant[] }
   | { type: 'arenaCountdown'; seconds: number }
   | { type: 'arenaStart' }
-  | { type: 'arenaEnd'; won: boolean; draw: boolean; oppName: string; ratingBefore: number; ratingAfter: number }
+  | { type: 'arenaEnd'; format: ArenaFormat; won: boolean; draw: boolean; oppName: string; ratingBefore: number; ratingAfter: number; allies: ArenaCombatant[]; enemies: ArenaCombatant[] }
   | { type: 'heal2'; sourceId: number; targetId: number; amount: number; crit: boolean; ability: string }
   // visual-only cue for the renderer: spell projectiles, dot ticks, aoe novas
   | { type: 'spellfx'; sourceId: number; targetId: number; school: string; fx: 'projectile' | 'tick' | 'nova' }
@@ -804,24 +869,32 @@ export function rageFromTaking(damage: number, attackerLevel: number): number {
   return damage / (Math.max(1, attackerLevel) * 1.5);
 }
 
-// Vanilla spell hit table by level difference (target - caster):
-// equal: 96%, +1: 95%, +2: 94%, +3: 83%, beyond: -11%/level; lower: +1%/lvl, cap 99%.
-export function spellHitChance(casterLevel: number, targetLevel: number): number {
-  const diff = targetLevel - casterLevel;
-  let hit: number;
-  if (diff <= 0) hit = 96 + -diff * 1;
-  else if (diff === 1) hit = 95;
-  else if (diff === 2) hit = 94;
-  else hit = 83 - (diff - 3) * 11;
-  return Math.min(0.99, Math.max(0.01, hit / 100));
+// Attacking a target ABOVE your level adds a steep miss penalty (extra miss %),
+// tuned so +2 is ~19% and +4 is ~85% miss: fighting way-above-level enemies is meant
+// to be near-futile. The curve approximates 2.5 * diff^2.5, but is stored as an integer
+// table (level diffs are always integers) so it stays bit-for-bit deterministic across
+// engines — Math.pow with a fractional exponent is not guaranteed identical browser vs node.
+//   +1 -> 2.5   +2 -> 14   +3 -> 39   +4 -> 80   (+5 and beyond saturate past the clamp)
+const ABOVE_LEVEL_MISS_PCT = [0, 2.5, 14, 39, 80];
+function aboveLevelMissPct(diff: number): number {
+  if (diff <= 0) return 0;
+  return diff < ABOVE_LEVEL_MISS_PCT.length ? ABOVE_LEVEL_MISS_PCT[diff] : 100;
 }
 
-// Melee miss vs target by level difference (weapon skill = 5 * level):
-// 5% base, +1%/level above (cliff at +3 handled via extra penalty), -0.2%/level below.
+// Spell hit by level difference (target - caster): 96% at equal level, a gentle
+// +1%/level bonus below you, and the steep above-level penalty above. cap 99%, floor 5%.
+export function spellHitChance(casterLevel: number, targetLevel: number): number {
+  const diff = targetLevel - casterLevel;
+  const hit = diff <= 0 ? 96 + -diff * 1 : 96 - aboveLevelMissPct(diff);
+  return Math.min(0.99, Math.max(0.05, hit / 100));
+}
+
+// Melee miss vs target by level difference: 5% base, a gentle -0.2%/level below you,
+// and the steep above-level penalty above. cap 95%, floor 0.5%.
 export function meleeMissChance(attackerLevel: number, targetLevel: number): number {
   const diff = targetLevel - attackerLevel;
-  let miss = 5 + (diff > 0 ? diff * (diff > 2 ? 2 : 1) : diff * 0.2);
-  return Math.min(0.6, Math.max(0.005, miss / 100));
+  const miss = diff > 0 ? 5 + aboveLevelMissPct(diff) : 5 + diff * 0.2;
+  return Math.min(0.95, Math.max(0.005, miss / 100));
 }
 
 export function armorReduction(armor: number, attackerLevel: number): number {

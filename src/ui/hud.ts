@@ -261,10 +261,12 @@ export class Hud {
   private castbarEl = $('#castbar');
   private castbarFillEl = this.castbarEl.querySelector('.fill') as HTMLElement;
   private castbarLabelEl = this.castbarEl.querySelector('.label') as HTMLElement;
+  private castbarTimerEl = this.castbarEl.querySelector('.timer') as HTMLElement;
   private actionbarEl = $('#actionbar');
   private xpFillEl = $('#xpbar .fill');
   private xpLabelEl = $('#xpbar .label');
   private deathOverlayEl = $('#death-overlay');
+  private releaseSpiritBtnEl = $('#release-btn');
   private hotWriteCache = new Map<HTMLElement, string>();
   private hotDomWrites = 0;
   private hotDomSkippedWrites = 0;
@@ -287,6 +289,7 @@ export class Hud {
   private lastArenaSig = '';
   private lastArenaStatusSig = '';
   private arenaMatchSeen = false; // closes the queue panel once a bout starts
+  private arenaBracket: import('../world_api').ArenaFormat = '1v1';
   // World Market (the Merchant's auction house)
   private marketOpen = false;
   private marketTab: 'browse' | 'sell' | 'collect' = 'browse';
@@ -363,7 +366,32 @@ export class Hud {
       if (target && (this.emoteWheelEl?.contains(target) || document.getElementById('mm-emote')?.contains(target) || document.getElementById('mobile-emote')?.contains(target))) return;
       this.hideEmoteWheel();
     });
-    $('#release-btn').addEventListener('click', () => { this.sim.releaseSpirit(); });
+    this.releaseSpiritBtnEl.addEventListener('click', () => {
+      if (this.sim.arenaInfo?.match) return;
+      this.sim.releaseSpirit();
+    });
+    document.addEventListener('pointerdown', (ev) => {
+      const target = ev.target as Node | null;
+      if (!target) return;
+      const communityMenu = document.getElementById('community-menu') as HTMLDetailsElement | null;
+      if (communityMenu?.open && !communityMenu.contains(target)) {
+        communityMenu.open = false;
+      }
+      if (document.body.classList.contains('mobile-more-open')) {
+        const more = document.getElementById('mobile-more');
+        const extra = document.getElementById('mobile-extra-controls');
+        if (!more?.contains(target) && !extra?.contains(target)) {
+          document.body.classList.remove('mobile-more-open');
+          document.getElementById('mobile-controls')?.classList.remove('expanded');
+          more?.classList.remove('active');
+        }
+      }
+    });
+    document.getElementById('mobile-more-close')?.addEventListener('click', () => {
+      document.body.classList.remove('mobile-more-open');
+      document.getElementById('mobile-controls')?.classList.remove('expanded');
+      document.getElementById('mobile-more')?.classList.remove('active');
+    });
     // classic MMOs: the player interaction menu opens from the target portrait
     $('#target-frame').addEventListener('contextmenu', (ev) => {
       ev.preventDefault();
@@ -575,6 +603,7 @@ export class Hud {
 
   private syncAnyWindowOpenState(): void {
     const anyOpen = [...document.querySelectorAll<HTMLElement>('.window.panel')]
+      .filter((win) => win.id !== 'mobile-extra-controls')
       .some((win) => this.isWindowVisible(win));
     document.body.classList.toggle('mobile-window-open', anyOpen);
   }
@@ -646,6 +675,7 @@ export class Hud {
       case 'vendor-window': this.closeVendor(); break;
       case 'loot-window': this.closeLoot(); break;
       case 'quest-dialog': this.closeQuestDialog(); break;
+      case 'bags': el.style.display = 'none'; this.hideTooltip(); this.cancelPetFeed(); break;
       case 'talents-window': el.style.display = 'none'; this.talentStage = null; this.hideTooltip(); break;
       case 'emote-editor': this.closeEmoteEditor(); break;
       default: el.style.display = 'none'; this.hideTooltip(); break;
@@ -1055,8 +1085,7 @@ export class Hud {
   private focusFirstInteractive(root: HTMLElement, preferredSelector?: string): void {
     window.setTimeout(() => {
       const target = (preferredSelector ? root.querySelector<HTMLElement>(preferredSelector) : null)
-        ?? root.querySelector<HTMLElement>('button:not([disabled]):not([data-close]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])')
-        ?? root.querySelector<HTMLElement>('button:not([disabled])');
+        ?? root.querySelector<HTMLElement>('button:not([disabled]):not([data-close]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])');
       (target ?? root).focus();
     }, 0);
   }
@@ -1216,18 +1245,36 @@ export class Hud {
     if (barSlot === 0) {
       if (this.sim.player.autoAttack) this.sim.stopAutoAttack();
       else this.sim.startAutoAttack();
+      this.flashActionSlot(barSlot);
       return;
     }
     const action = this.actionForSlot(barSlot);
     if (action?.type === 'ability') {
       // cast by ability id: the server validates against its own known list,
       // so the client-side slot remap never desyncs slot semantics
-      if (this.abilityForSlot(barSlot)) this.sim.castAbility(action.id);
+      if (this.abilityForSlot(barSlot)) {
+        this.sim.castAbility(action.id);
+        this.flashActionSlot(barSlot);
+      }
     } else if (action?.type === 'item' && this.isHotbarItemId(action.id)) {
       if (this.tradeOpen) return;
       this.sim.useItem(action.id);
       if ($('#bags').style.display !== 'none') this.renderBags();
+      this.flashActionSlot(barSlot);
     }
+  }
+
+  private flashActionSlot(barSlot: number): void {
+    const btn = this.abilityButtons[barSlot]?.btn;
+    if (!btn) return;
+    this.flashActionButton(btn);
+  }
+
+  private flashActionButton(btn: HTMLButtonElement): void {
+    btn.classList.remove('used');
+    void btn.offsetWidth;
+    btn.classList.add('used');
+    window.setTimeout(() => btn.classList.remove('used'), 180);
   }
 
   private writeDraggedAction(dt: DataTransfer | null, action: Exclude<HotbarAction, null>): void {
@@ -1268,9 +1315,15 @@ export class Hud {
       btn.addEventListener('click', () => {
         // On touch, the click that ends a long-press peek inspects the slot
         // (tooltip already shown) instead of casting — release dismisses it.
-        if (this.peekGuard.consume()) { this.hideTooltip(); return; }
+        if (this.peekGuard.consume()) { this.hideTooltip(); btn.blur(); return; }
         audio.click();
         this.castSlot(slot);
+        btn.blur();
+      });
+      btn.addEventListener('keydown', (e) => {
+        if (e.key !== ' ' && e.key !== 'Spacebar') return;
+        e.preventDefault();
+        e.stopPropagation();
       });
       this.attachTooltip(btn, () => {
         if (slot === 0) {
@@ -1464,6 +1517,12 @@ export class Hud {
       });
     } else {
       addButton(commands, 'rejuvenation', t('hud.pet.healPet'), petTooltip(t('hud.pet.healPet'), t('hud.pet.healPetDesc')), () => {
+        // Toggle: a second click cancels the pending feed instead of trapping
+        // the player in food-selection mode.
+        if (this.pendingPetFeed) { this.cancelPetFeed(); return; }
+        // With no edible food there is nothing to select, so entering feed mode
+        // would strand the player on the bag screen — surface an error instead.
+        if (!this.hasPetFood()) { this.showError(t('hud.pet.noPetFood')); return; }
         this.pendingPetFeed = true;
         this.lastPetBarSig = '';
         $('#bags').style.display = 'block';
@@ -1578,6 +1637,7 @@ export class Hud {
         : 1 - p.castRemaining / Math.max(0.01, p.castTotal);
       this.setWidth(this.castbarFillEl, `${(frac * 100).toFixed(1)}%`);
       this.setText(this.castbarLabelEl, castDisplayName(p.castingAbility));
+      this.setText(this.castbarTimerEl, formatNumber(Math.max(0, p.castRemaining), { minimumFractionDigits: 1, maximumFractionDigits: 1 }));
     } else if (p.eating || p.drinking) {
       this.setDisplay(this.castbarEl, 'block');
       this.castbarEl.classList.add('channel');
@@ -1586,11 +1646,13 @@ export class Hud {
         : (p.eating ?? p.drinking)!;
       this.setWidth(this.castbarFillEl, `${((c.remaining / CONSUME_DURATION) * 100).toFixed(1)}%`);
       this.setText(this.castbarLabelEl, p.eating && p.drinking ? t('hud.core.eatingDrinking') : p.eating ? t('hud.core.eating') : t('hud.core.drinking'));
+      this.setText(this.castbarTimerEl, formatNumber(Math.max(0, c.remaining), { minimumFractionDigits: 1, maximumFractionDigits: 1 }));
     } else {
       this.setDisplay(this.castbarEl, 'none');
       this.castbarEl.classList.remove('channel');
       this.setWidth(this.castbarFillEl, '0%');
       this.setText(this.castbarLabelEl, '');
+      this.setText(this.castbarTimerEl, '');
     }
 
     // action bar
@@ -1683,10 +1745,14 @@ export class Hud {
     const showOverflow = (this.optionsHooks?.settings.get('showOverflowXp') ?? 1) >= 0.5;
     const bar = xpBarView({ level: p.level, xp: sim.xp, lifetimeXp: sim.lifetimeXp, showOverflow });
     this.setWidth(this.xpFillEl, `${(bar.fillFrac * 100).toFixed(1)}%`);
+    $('#xpbar').style.setProperty('--xp-fill', bar.fillFrac.toFixed(4));
+    $('#player-frame').style.setProperty('--xp-fill', bar.fillFrac.toFixed(4));
     this.setText(this.xpLabelEl, bar.label);
     $('#xpbar').classList.toggle('overflow', bar.postCap);
 
+    const deadInArena = p.dead && !!this.sim.arenaInfo?.match;
     this.setDisplay(this.deathOverlayEl, p.dead ? 'flex' : 'none');
+    this.setDisplay(this.releaseSpiritBtnEl, deadInArena ? 'none' : '');
 
     const inDungeon = p.pos.x > DUNGEON_X_THRESHOLD;
     const currentZone = zoneAt(p.pos.z);
@@ -1774,7 +1840,10 @@ export class Hud {
     (el as any).__sig = sig;
     el.innerHTML = '';
     for (const a of e.auras) {
-      const isDebuff = ['dot', 'slow', 'root', 'stun', 'incapacitate', 'polymorph', 'attackspeed', 'debuff_ap'].includes(a.kind);
+      // A negative-value stat aura (e.g. a mob's Withering Wail sapping attack
+      // power, or an Intellect-draining curse) is a debuff even though it reuses a buff_* kind.
+      const isDebuff = ['dot', 'slow', 'root', 'stun', 'incapacitate', 'polymorph', 'attackspeed', 'debuff_ap'].includes(a.kind)
+        || (a.kind.startsWith('buff_') && a.value < 0);
       if (mode === 'debuffs' && !isDebuff) continue;
       const d = document.createElement('div');
       d.className = 'buff' + (isDebuff ? ' debuff' : '');
@@ -2027,7 +2096,15 @@ export class Hud {
       return;
     }
     const inMatch = a.match !== null;
+    const queuedFmt = a.queued ? a.format : null;
+    const bracket = a.match?.format ?? queuedFmt ?? this.arenaBracket;
+    if (queuedFmt || a.match) this.arenaBracket = bracket;
+    const canSwitchBracket = !a.queued && !inMatch;
     const myPid = this.sim.playerId;
+    const party = this.sim.partyInfo;
+    const partySize = party?.members.length ?? 1;
+    const isLeader = !party || party.leader === myPid;
+
     const ladder = a.ladder.map((r, i) => {
       const me = r.pid === myPid;
       const classId = r.cls as PlayerClass;
@@ -2038,6 +2115,31 @@ export class Hud {
         + `<span class="lr-wl">${esc(formatNumber(r.wins, { maximumFractionDigits: 0 }))}-${esc(formatNumber(r.losses, { maximumFractionDigits: 0 }))}</span></div>`;
     }).join('') || `<div class="ladder-empty">${esc(t('hud.arena.noChallengers'))}</div>`;
 
+    const bracketBtn = (fmt: import('../world_api').ArenaFormat) => {
+      const active = bracket === fmt;
+      const locked = !canSwitchBracket && !active;
+      return `<button class="arena-bracket${active ? ' active' : ''}${locked ? ' locked' : ''}" data-bracket="${fmt}" aria-pressed="${active ? 'true' : 'false'}"${locked ? ' disabled' : ''}>${esc(fmt)}</button>`;
+    };
+    const bracketTabs = `<div class="arena-brackets">${bracketBtn('1v1')}${bracketBtn('2v2')}</div>`;
+
+    let partySection = '';
+    if (bracket === '2v2' && !inMatch && !a.queued) {
+      if (party && partySize === 2) {
+        const rows = party.members.map((m) => {
+          const cls = CLASSES[m.cls] ? classDisplayName(m.cls) : m.cls;
+          const me = m.pid === myPid ? ' me' : '';
+          return `<div class="arena-party-row${me}"><span class="apr-name">${esc(m.name)}</span>`
+            + `<span class="apr-meta">${esc(t('hud.arena.levelClass', {
+              level: formatNumber(m.level, { maximumFractionDigits: 0 }),
+              className: cls,
+            }))}</span></div>`;
+        }).join('');
+        partySection = `<div class="arena-party">${rows}</div>`;
+      } else if (party && partySize > 2) {
+        partySection = `<div class="arena-note arena-warn">${esc(t('hud.arena.queueNote'))}</div>`;
+      }
+    }
+
     let action: string;
     if (inMatch) {
       action = `<div class="arena-queue-status">${svgIcon('arena')} ${esc(t('hud.arena.matchInProgress', { name: a.match!.oppName }))}</div>`;
@@ -2045,7 +2147,17 @@ export class Hud {
       action = `<button class="btn leave" data-act="leave">${esc(t('hud.arena.leaveQueue'))}</button>`
         + `<div class="arena-queue-status">${esc(t('hud.arena.searching', { count: formatNumber(a.queueSize, { maximumFractionDigits: 0 }) }))}</div>`;
     } else {
-      action = `<button class="btn" data-act="queue">${esc(t('hud.arena.enterQueue'))}</button>`
+      let queueDisabled = false;
+      if (bracket === '2v2' && party && partySize === 2 && !isLeader) {
+        queueDisabled = true;
+      } else if (bracket === '2v2' && party && partySize > 2) {
+        queueDisabled = true;
+      } else if (bracket === '1v1' && party && partySize > 1) {
+        queueDisabled = true;
+      }
+      const btnCls = queueDisabled ? 'btn disabled' : 'btn';
+      const queueLabel = t('hud.arena.enterQueue');
+      action = `<button class="${btnCls}" data-act="queue"${queueDisabled ? ' disabled' : ''}>${esc(queueLabel)}</button>`
         + `<div class="arena-note">${esc(t('hud.arena.queueNote'))}</div>`;
     }
 
@@ -2067,23 +2179,36 @@ export class Hud {
       ? `<div class="arena-sub">${esc(t('hud.arena.ladderAllTime'))}</div>${allTime}`
       : '';
 
-    const sig = JSON.stringify([a.rating, a.wins, a.losses, a.queued, a.queueSize, inMatch, a.ladder, this.arenaAllTime]);
-    if (sig === this.lastArenaSig) return; // nothing changed; skip the DOM churn (and re-bind)
+    const sig = JSON.stringify([a.rating, a.wins, a.losses, a.queued, a.queueSize, inMatch, a.ladder, this.arenaAllTime, bracket, party, canSwitchBracket]);
+    if (sig === this.lastArenaSig) return;
     this.lastArenaSig = sig;
 
-    el.innerHTML = `<div class="panel-title"><span>${esc(t('hud.arena.title'))} <span style="color:#998d6a;font-size:11px">${esc(t('hud.arena.subtitle'))}</span></span><button type="button" class="x-btn" data-close aria-label="${esc(t('hud.arena.close'))}">${svgIcon('close')}</button></div>`
+    el.innerHTML = `<div class="panel-title"><span>${esc(t('hud.arena.title'))} <span class="arena-bracket-tag">${esc(bracket)}</span></span><button type="button" class="x-btn" data-close aria-label="${esc(t('hud.arena.close'))}">${svgIcon('close')}</button></div>`
+      + bracketTabs
       + `<div class="arena-rank"><span class="rating">${esc(formatNumber(a.rating, { maximumFractionDigits: 0 }))}</span>`
       + `<span class="wl">${esc(t('hud.arena.ratingSummary', {
         wins: formatNumber(a.wins, { maximumFractionDigits: 0 }),
         losses: formatNumber(a.losses, { maximumFractionDigits: 0 }),
       }))}</span></div>`
+      + partySection
       + action
       + `<div class="arena-sub">${esc(t('hud.arena.ladderOnline'))}</div>`
       + ladder
       + allTimeSection;
 
     el.querySelector('[data-close]')?.addEventListener('click', () => { el.style.display = 'none'; });
-    el.querySelector('[data-act="queue"]')?.addEventListener('click', () => { this.sim.arenaQueueJoin(); audio.click(); });
+    el.querySelectorAll('[data-bracket]:not([disabled])').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        this.arenaBracket = (btn as HTMLElement).dataset.bracket as import('../world_api').ArenaFormat;
+        this.lastArenaSig = '';
+        this.renderArenaWindow();
+        audio.click();
+      });
+    });
+    el.querySelector('[data-act="queue"]:not([disabled])')?.addEventListener('click', () => {
+      this.sim.arenaQueueJoin(bracket);
+      audio.click();
+    });
     el.querySelector('[data-act="leave"]')?.addEventListener('click', () => { this.sim.arenaQueueLeave(); audio.click(); });
   }
 
@@ -2100,15 +2225,27 @@ export class Hud {
     const label = m.state === 'countdown' ? t('hud.arena.statusCountdown')
       : m.state === 'over' ? t('hud.arena.statusReturning', { seconds: formatNumber(m.returnIn ?? 0, { maximumFractionDigits: 0 }) })
       : t('hud.arena.statusFight');
-    const sig = `${m.oppName}|${m.state}|${m.state === 'over' ? (m.returnIn ?? 0) : ''}`;
-    if (sig !== this.lastArenaStatusSig) {
-      this.lastArenaStatusSig = sig;
+    let vsBlock: string;
+    if (m.format === '2v2') {
+      const allyNames = [esc(t('hud.core.you')), ...m.allies.map((c) => esc(c.name))].join(' - ');
+      const enemyNames = m.enemies.map((c) => esc(c.name)).join(' - ');
+      const vs = esc(t('hud.arena.vsLine', { name: '' }).trim());
+      vsBlock = `<div class="as-teams">`
+        + `<div class="as-team allies"><span class="as-names">${allyNames}</span></div>`
+        + `<div class="as-mid">${vs}</div>`
+        + `<div class="as-team enemies"><span class="as-names">${enemyNames}</span></div>`
+        + `</div>`;
+    } else {
       const cls = CLASSES[m.oppClass] ? classDisplayName(m.oppClass) : m.oppClass;
-      el.innerHTML = `<div class="as-vs">${svgIcon('arena')} ${esc(t('hud.arena.vsLine', { name: m.oppName }))} <span style="color:#b6ad8c;font-size:11px">${esc(t('hud.arena.levelClass', {
+      vsBlock = `<div class="as-vs">${svgIcon('arena')} ${esc(t('hud.arena.vsLine', { name: m.oppName }))} <span style="color:#b6ad8c;font-size:11px">${esc(t('hud.arena.levelClass', {
         level: formatNumber(m.oppLevel, { maximumFractionDigits: 0 }),
         className: cls,
-      }))}</span></div>`
-        + `<div class="as-timer">${esc(label)}</div>`;
+      }))}</span></div>`;
+    }
+    const sig = `${m.format}|${vsBlock}|${m.state}|${m.state === 'over' ? (m.returnIn ?? 0) : ''}`;
+    if (sig !== this.lastArenaStatusSig) {
+      this.lastArenaStatusSig = sig;
+      el.innerHTML = `${vsBlock}<div class="as-timer">${esc(label)}</div>`;
       el.style.display = 'block';
     }
   }
@@ -2388,8 +2525,9 @@ export class Hud {
           break;
         }
         case 'heal': {
-          if (ev.targetId === sim.playerId && ev.amount > 0) {
-            this.fct(sim.player, `+${ev.amount}`, '#3ce63c', false);
+          if (ev.amount > 0) {
+            const healed = ev.targetId === sim.playerId ? sim.player : sim.entities.get(ev.targetId);
+            if (healed) this.fct(healed, `+${ev.amount}`, '#3ce63c', false);
           }
           break;
         }
@@ -2536,20 +2674,25 @@ export class Hud {
           audio.duelEnd();
           break;
         case 'arenaQueued':
-          this.log(t('hud.system.arenaQueued', { position: ev.position }), '#ffa040');
+          this.log(t('hud.system.arenaQueued', { position: formatNumber(ev.position, { maximumFractionDigits: 0 }) }), '#ffa040');
           break;
         case 'arenaUnqueued':
           this.log(t('hud.system.arenaUnqueued'), '#ffa040');
           break;
         case 'arenaFound': {
+          const name = ev.enemies.length > 1 ? ev.enemies.map((e) => e.name).join(' & ') : ev.oppName;
           const cls = CLASSES[ev.oppClass] ? classDisplayName(ev.oppClass) : ev.oppClass;
-          this.showBanner(t('hud.system.arenaFoundBanner', { name: ev.oppName }));
-          this.log(t('hud.system.arenaFoundLog', { name: ev.oppName, level: ev.oppLevel, className: cls }), '#ffa040');
+          this.showBanner(t('hud.system.arenaFoundBanner', { name }));
+          this.log(t('hud.system.arenaFoundLog', {
+            name,
+            level: formatNumber(ev.oppLevel, { maximumFractionDigits: 0 }),
+            className: cls,
+          }), '#ffa040');
           audio.duelChallenge();
           break;
         }
         case 'arenaCountdown':
-          this.showBanner(t('hud.system.arenaCountdown', { seconds: ev.seconds }));
+          this.showBanner(t('hud.system.arenaCountdown', { seconds: formatNumber(ev.seconds, { maximumFractionDigits: 0 }) }));
           audio.duelCountdownTick();
           break;
         case 'arenaStart':
@@ -2559,17 +2702,18 @@ export class Hud {
         case 'arenaEnd': {
           const delta = ev.ratingAfter - ev.ratingBefore;
           const sign = delta >= 0 ? '+' : '';
-          const ratingDelta = `${sign}${delta}`;
+          const ratingDelta = `${sign}${formatNumber(delta, { maximumFractionDigits: 0 })}`;
+          const ratingAfter = formatNumber(ev.ratingAfter, { maximumFractionDigits: 0 });
           if (ev.draw) {
             this.showBanner(t('hud.system.arenaDrawBanner', { name: ev.oppName, delta: ratingDelta }));
-            this.combatLog(t('hud.system.arenaDrawLog', { name: ev.oppName, rating: ev.ratingAfter, delta: ratingDelta }), '#fa6');
+            this.combatLog(t('hud.system.arenaDrawLog', { name: ev.oppName, rating: ratingAfter, delta: ratingDelta }), '#fa6');
           } else if (ev.won) {
-            this.showBanner(t('hud.system.arenaVictoryBanner', { name: ev.oppName, rating: ev.ratingAfter, delta: ratingDelta }));
-            this.combatLog(t('hud.system.arenaVictoryLog', { name: ev.oppName, rating: ev.ratingAfter, delta: ratingDelta }), '#7fdc4f');
+            this.showBanner(t('hud.system.arenaVictoryBanner', { name: ev.oppName, rating: ratingAfter, delta: ratingDelta }));
+            this.combatLog(t('hud.system.arenaVictoryLog', { name: ev.oppName, rating: ratingAfter, delta: ratingDelta }), '#7fdc4f');
             audio.duelEnd();
           } else {
-            this.showBanner(t('hud.system.arenaDefeatBanner', { name: ev.oppName, rating: ev.ratingAfter, delta: ratingDelta }));
-            this.combatLog(t('hud.system.arenaDefeatLog', { name: ev.oppName, rating: ev.ratingAfter, delta: ratingDelta }), '#ff7a6a');
+            this.showBanner(t('hud.system.arenaDefeatBanner', { name: ev.oppName, rating: ratingAfter, delta: ratingDelta }));
+            this.combatLog(t('hud.system.arenaDefeatLog', { name: ev.oppName, rating: ratingAfter, delta: ratingDelta }), '#ff7a6a');
             audio.death();
           }
           break;
@@ -2677,6 +2821,7 @@ export class Hud {
   private localizeErrorText(text: string): string {
     const exact: Record<string, TranslationKey> = {
       'You are stunned!': 'hud.errors.stunned',
+      'You are silenced!': 'hud.errors.silenced',
       'You are busy.': 'hud.errors.busy',
       'That ability is not ready yet.': 'hud.errors.abilityNotReady',
       'Not enough rage!': 'hud.errors.notEnoughRage',
@@ -3459,9 +3604,27 @@ export class Hud {
   // Bags
   // -------------------------------------------------------------------------
 
+  // True when the player has at least one edible food stack — mirrors the
+  // food check in Sim.feedPet so the pet-feed flow never starts when it can't
+  // possibly complete.
+  private hasPetFood(): boolean {
+    return this.sim.inventory.some((s) => {
+      const item = ITEMS[s.itemId];
+      return !!item && item.kind === 'food' && !!item.foodHp && s.count > 0;
+    });
+  }
+
+  // Leave pet food-selection mode. Safe to call unconditionally; it only
+  // redraws the pet bar when something actually changed.
+  private cancelPetFeed(): void {
+    if (!this.pendingPetFeed) return;
+    this.pendingPetFeed = false;
+    this.lastPetBarSig = '';
+  }
+
   toggleBags(): void {
     const el = $('#bags');
-    if (el.style.display !== 'none') { el.style.display = 'none'; this.hideTooltip(); audio.bagClose(); return; }
+    if (el.style.display !== 'none') { el.style.display = 'none'; this.hideTooltip(); audio.bagClose(); this.cancelPetFeed(); return; }
     this.closeOtherWindows('#bags');
     this.renderBags();
     el.style.display = 'flex';
@@ -3512,7 +3675,7 @@ export class Hud {
         } else if (this.vendorOpen) {
           this.sellBagItem(s, ev);
         } else if (this.pendingPetFeed) {
-          if (item.kind !== 'food') { this.showError('Your pet can only eat food.'); return; }
+          if (item.kind !== 'food') { this.showError(t('hud.pet.petEatsFoodOnly')); return; }
           this.sim.feedPet(s.itemId);
           this.pendingPetFeed = false;
           this.lastPetBarSig = '';
@@ -3563,7 +3726,7 @@ export class Hud {
     money.className = 'money';
     money.innerHTML = this.moneyHtml(sim.copper);
     el.appendChild(money);
-    el.querySelector('[data-close]')?.addEventListener('click', () => { el.style.display = 'none'; this.hideTooltip(); });
+    el.querySelector('[data-close]')?.addEventListener('click', () => { el.style.display = 'none'; this.hideTooltip(); this.cancelPetFeed(); });
   }
 
   private sellBagItem(slot: InvSlot, ev: MouseEvent): void {
@@ -4478,7 +4641,7 @@ export class Hud {
   toggleQuestLog(): void {
     const el = $('#quest-log-window');
     if (el.style.display === 'block') { this.closeQuestLog(); return; }
-    this.questLogReturnFocus = this.currentFocusableElement() ?? $('#mm-quest');
+    this.questLogReturnFocus = this.currentFocusableElement();
     this.closeOtherWindows('#quest-log-window');
     this.renderQuestLog();
     el.style.display = 'block';
@@ -4487,9 +4650,9 @@ export class Hud {
   private closeQuestLog(restoreFocus = true): void {
     $('#quest-log-window').style.display = 'none';
     this.hideTooltip();
-    const target = this.questLogReturnFocus ?? $('#mm-quest');
+    const target = this.questLogReturnFocus;
     this.questLogReturnFocus = null;
-    if (restoreFocus) this.restoreFocus(target, $('#mm-quest'));
+    if (restoreFocus) this.restoreFocus(target);
   }
 
   renderQuestLog(): void {
@@ -5780,11 +5943,11 @@ export class Hud {
       this.capturingKey = null;
       if (code === null) {
         this.keybindNote = t('hud.options.keybindCancelled');
-      } else if (isReservedCode(code)) {
-        this.keybindNote = t('hud.options.keybindReserved', { key: keyLabel(code) });
       } else if (this.keybinds.bind(actionId, index, code)) {
         this.keybindNote = t('hud.options.keybindBound', { action: name, key: keyLabel(code) });
         this.refreshKeybindLabels();
+      } else if (isReservedCode(code)) {
+        this.keybindNote = t('hud.options.keybindReserved', { key: keyLabel(code) });
       }
       // re-render only if the menu is still open (player may have closed it)
       if (this.optionsOpen) this.renderKeybinds();

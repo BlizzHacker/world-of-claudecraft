@@ -24,18 +24,26 @@ import { verifyTurnstile } from './turnstile';
 import { handleAdminApi } from './admin';
 import { handleModeratorApi, handleUserApi } from './dashboard';
 import { handleAuthentikRoute, isAuthentikConfigured } from './oauth';
+import { handleInternalApi } from './internal';
 import { GameServer } from './game';
 import { REALM, REALM_DIRECTORY, REALM_ORIGINS } from './realm';
+import { webLoginEnforced, isWebClientRequest } from './web_login_guard';
 import { cacheControlFor, etagFor, isNotModified } from './static_cache';
 
 const PORT = Number(process.env.PORT ?? 8787);
 const STATIC_DIR = path.join(__dirname, '..', 'dist');
 const WIKI_URL = process.env.WIKI_URL ?? 'http://localhost:8080/wiki/index.php/Main_Page';
+// Pretty URLs that all serve the standalone "official channels" / link-tree page.
+const LINKS_ALIASES = new Set([
+  '/links', '/links/', '/social', '/social/', '/social-media-links', '/social-media-links/',
+]);
 // How long chat logs are kept (0 = forever); pruned at boot and daily.
 const CHAT_LOG_RETENTION_DAYS = Number(process.env.CHAT_LOG_RETENTION_DAYS ?? 90);
 // Cloudflare Turnstile secret. When unset (local dev / tests) registration and
 // login skip human verification entirely — see requireTurnstile below.
 const TURNSTILE_SECRET = process.env.TURNSTILE_SECRET ?? '';
+// Hard WS connection limit per IP. Soft threshold (adds bot evidence) is in game.ts.
+const MAX_WS_PER_IP_HARD = Number(process.env.MAX_WS_PER_IP_HARD ?? '20');
 
 const game = new GameServer();
 
@@ -84,6 +92,74 @@ async function getLeaderboard(scope: 'realm' | 'global'): Promise<LeaderboardEnt
   } catch (err) {
     console.error(`leaderboard refresh failed (${scope}):`, err);
     return cached?.entries ?? [];
+  }
+}
+
+// ---------------------------------------------------------------------------
+// News & Updates: GitHub Releases proxy (read-only, public).
+// The home-page "News & Updates" view pulls published releases from the public
+// GitHub repo. We proxy + cache server-side rather than letting the browser hit
+// api.github.com directly so that: (1) the unauthenticated GitHub rate limit (60
+// req/IP/hr) is shared across all players as one server IP, not burned per
+// visitor; (2) an optional GITHUB_TOKEN raises that ceiling without shipping a
+// secret to the client; (3) we return only the small, sanitised subset the UI
+// needs. Same compute-once/serve-from-memory pattern as the leaderboard cache.
+// ---------------------------------------------------------------------------
+const GITHUB_REPO = process.env.GITHUB_REPO ?? 'levy-street/world-of-claudecraft';
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN ?? '';
+const RELEASES_TTL_MS = 15 * 60_000; // 15 min — releases change rarely
+const RELEASES_SIZE = 20;
+const RELEASE_BODY_MAX = 8_000; // guard against a pathologically long body
+
+export interface ReleaseEntry {
+  id: number;
+  tag: string;
+  name: string;
+  body: string;
+  url: string;
+  prerelease: boolean;
+  publishedAt: string; // ISO 8601
+}
+
+let releasesCache: { at: number; entries: ReleaseEntry[] } | null = null;
+
+async function refreshReleases(): Promise<ReleaseEntry[]> {
+  const res = await fetch(
+    `https://api.github.com/repos/${GITHUB_REPO}/releases?per_page=${RELEASES_SIZE}`,
+    {
+      headers: {
+        Accept: 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28',
+        'User-Agent': 'world-of-claudecraft-server',
+        ...(GITHUB_TOKEN ? { Authorization: `Bearer ${GITHUB_TOKEN}` } : {}),
+      },
+      signal: AbortSignal.timeout(8000),
+    },
+  );
+  if (!res.ok) throw new Error(`github releases ${res.status}`);
+  const raw = (await res.json()) as any[];
+  const entries: ReleaseEntry[] = (Array.isArray(raw) ? raw : [])
+    .filter((r) => r && !r.draft) // skip unpublished drafts
+    .map((r) => ({
+      id: Number(r.id),
+      tag: String(r.tag_name ?? ''),
+      name: String(r.name || r.tag_name || ''),
+      body: String(r.body ?? '').slice(0, RELEASE_BODY_MAX),
+      url: String(r.html_url ?? ''),
+      prerelease: Boolean(r.prerelease),
+      publishedAt: String(r.published_at ?? r.created_at ?? ''),
+    }));
+  releasesCache = { at: Date.now(), entries };
+  return entries;
+}
+
+async function getReleases(): Promise<ReleaseEntry[]> {
+  if (releasesCache && Date.now() - releasesCache.at < RELEASES_TTL_MS) return releasesCache.entries;
+  try {
+    return await refreshReleases();
+  } catch (err) {
+    console.error('github releases refresh failed:', err);
+    return releasesCache?.entries ?? [];
   }
 }
 
@@ -161,6 +237,8 @@ function serveStatic(req: http.IncomingMessage, res: http.ServerResponse): void 
     res.end();
     return;
   }
+  // Pretty-URL aliases for the standalone official-channels page (public/ -> dist/links.html).
+  if (LINKS_ALIASES.has(urlPath)) urlPath = '/links.html';
   if (
     urlPath === '/' ||
     urlPath === '/admin' || urlPath === '/admin/' ||
@@ -235,9 +313,16 @@ function maybeCors(req: http.IncomingMessage, res: http.ServerResponse): void {
   }
 }
 
+// Anti-bot: when enabled, /api/login + /api/register require a same-origin browser
+// request (a recognised Origin header), so only the web client can obtain a token.
+const REQUIRE_WEB_LOGIN = webLoginEnforced();
+
 async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): Promise<void> {
   const url = (req.url ?? '').split('?')[0];
   try {
+    if (REQUIRE_WEB_LOGIN && req.method === 'POST' && (url === '/api/register' || url === '/api/login') && !isWebClientRequest(req)) {
+      return json(res, 403, { error: 'logins are only allowed from the game client' });
+    }
     if (req.method === 'POST' && (url === '/api/register' || url === '/api/login') && rateLimited(req)) {
       return json(res, 429, { error: 'too many attempts — wait a minute and try again' });
     }
@@ -443,6 +528,15 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       const entries = await getLeaderboard(scope);
       return json(res, 200, { realm: REALM, scope, metric: 'lifetimeXp', leaders: entries.slice(0, limit) });
     }
+    if (req.method === 'GET' && url === '/api/releases') {
+      // public News & Updates feed, mirrored from GitHub Releases and served
+      // from the in-memory cache (refreshed at most every RELEASES_TTL_MS).
+      // Optional ?limit=N (1..RELEASES_SIZE).
+      const params = new URLSearchParams((req.url ?? '').split('?')[1] ?? '');
+      const limit = Math.max(1, Math.min(RELEASES_SIZE, Number(params.get('limit')) || RELEASES_SIZE));
+      const entries = await getReleases();
+      return json(res, 200, { repo: GITHUB_REPO, releases: entries.slice(0, limit) });
+    }
     json(res, 404, { error: 'unknown endpoint' });
   } catch (err: any) {
     console.error('api error:', err);
@@ -495,7 +589,8 @@ async function main(): Promise<void> {
       url.startsWith('/me/api/');
     if (isApi) maybeCors(req, res);
     if (req.method === 'OPTIONS' && isApi) { res.writeHead(204); res.end(); return; }
-    if (url.startsWith('/admin/api/')) void handleAdminApi(req, res, game);
+    if (url.startsWith('/internal/')) void handleInternalApi(req, res, game);
+    else if (url.startsWith('/admin/api/')) void handleAdminApi(req, res, game);
     else if (url.startsWith('/mod/api/')) void handleModeratorApi(req, res);
     else if (url.startsWith('/me/api/')) void handleUserApi(req, res);
     // CR overlay: Authentik SSO sits alongside /api/login. The handler
@@ -561,6 +656,14 @@ async function main(): Promise<void> {
       return;
     }
     const chatMute = await chatMuteStatusForAccount(accountId);
+    // Hard per-IP WS connection limit. The soft threshold (composite score evidence)
+    // is handled inside game.join(); this guard blocks egregious bot farms before
+    // they consume a session slot.
+    const ip = requestMetadata(req).ip;
+    if (game.countIpSessions(ip) >= MAX_WS_PER_IP_HARD) {
+      ws.close(1008, 'Too many connections from your network');
+      return;
+    }
     const result = game.join(
       ws,
       accountId,

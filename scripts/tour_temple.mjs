@@ -25,7 +25,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const shot = (name) => page.screenshot({ path: `tmp/temple_${name}.png` });
 
 await page.goto(URL, { waitUntil: 'networkidle0', timeout: 30000 });
-await page.click('#btn-offline');
+await page.evaluate(() => document.querySelector('#btn-offline').click());
 await sleep(200);
 await page.click('.class-card[data-class="warrior"]');
 await page.waitForFunction(() => window.__game?.sim?.player, { timeout: 60000 });

@@ -12,6 +12,9 @@ tmp/
 .codex-research/
 .playwright-mcp/
 
+# i18n release-fill worklist (generated; regenerate via `npm run i18n:worklist`)
+docs/i18n-scaling/worklist/
+
 # python
 __pycache__/
 *.pyc
@@ -26,7 +29,11 @@ __pycache__/
 .DS_Store
 Thumbs.db
 *.log
-.claude/
+# .claude/: keep personal/local config out of git, but track the shared skills & agents
+.claude/*
+!.claude/skills/
+!.claude/agents/
+# CR overlay: lxc rescue artifacts + generated realm assets
 .lxc-recovery-20260616/
 index.html.lxc-overlay
 # CR overlay: generated realm assets (run npm run assets:realms to regenerate)

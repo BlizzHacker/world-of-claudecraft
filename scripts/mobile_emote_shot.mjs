@@ -30,7 +30,7 @@ await page.goto(URL, { waitUntil: 'networkidle0', timeout: 30000 });
 // Menu buttons fail puppeteer's clickable-point check on mobile menus → click in-page.
 const tap = (sel) => page.evaluate((s) => document.querySelector(s)?.click(), sel);
 
-await tap('#btn-offline');
+await page.evaluate(() => document.querySelector('#btn-offline').click());
 await wait(200);
 await page.evaluate(() => {
   const n = document.querySelector('#char-name');

@@ -142,6 +142,16 @@ export const ARENA_LAYOUT: DungeonLayout = {
 export const ARENA_SPAWN_A = { x: 0, z: -14, facing: 0 }; // faces +z toward B
 export const ARENA_SPAWN_B = { x: 0, z: 18, facing: Math.PI }; // faces -z toward A
 
+// 2v2: two fighters per side, spread along x.
+export const ARENA_SPAWNS_A_2v2 = [
+  { x: -7, z: -14, facing: 0 },
+  { x: 7, z: -14, facing: 0 },
+];
+export const ARENA_SPAWNS_B_2v2 = [
+  { x: -7, z: 18, facing: Math.PI },
+  { x: 7, z: 18, facing: Math.PI },
+];
+
 /** Interior collision set for a layout, in instance-local coordinates. */
 export function layoutColliders(layout: DungeonLayout): Collider[] {
   const out: Collider[] = [];

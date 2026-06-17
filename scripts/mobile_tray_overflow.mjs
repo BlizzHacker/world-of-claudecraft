@@ -26,7 +26,7 @@ await page.emulate({
 });
 await page.goto(URL, { waitUntil: 'domcontentloaded', timeout: 30000 });
 await page.waitForSelector('#btn-offline', { timeout: 30000 });
-await page.click('#btn-offline');
+await page.evaluate(() => document.querySelector('#btn-offline').click());
 await sleep(250);
 await page.type('#char-name', 'Mobile');
 await page.click('#offline-select .mini-class[data-class="warrior"]');

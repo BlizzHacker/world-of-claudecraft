@@ -20,7 +20,7 @@ function baseEntity(id: number, pos: Vec3): Entity {
     comboPoints: 0, comboTargetId: null, overpowerUntil: -1, potionCooldownUntil: -1, savedMana: 0,
     chargeTargetId: null, chargeTimeLeft: 0, chargePath: [], followTargetId: null,
     sitting: false, eating: null, drinking: null,
-    aiState: 'idle', tappedById: null, pulseTimer: 0, stompTimer: 0, firedSummons: 0, summonedIds: [], enraged: false, healedThisPull: false,
+    aiState: 'idle', tappedById: null, pulseTimer: 0, stompTimer: 0, detonateTimer: Infinity, mendTimer: 0, firedSummons: 0, summonedIds: [], enraged: false, healedThisPull: false,
     threat: new Map(), forcedTargetId: null, forcedTargetTimer: 0, ownerId: null, petMode: 'defensive', petTauntTimer: 0,
     spawnPos: { ...pos }, leashAnchor: null, evadeStall: 0, fleeTimer: 0, hasFled: false, wanderTarget: null, wanderTimer: 0,
     aggroTargetId: null, respawnTimer: 0, corpseTimer: 0, lootable: false, loot: null,
@@ -49,7 +49,10 @@ function hpFromStamina(sta: number): number {
   return Math.min(sta, 20) + Math.max(0, sta - 20) * 10;
 }
 function manaFromIntellect(int: number): number {
-  return Math.min(int, 20) + Math.max(0, int - 20) * 15;
+  // Floor at 0 so an Intellect-draining debuff (negative buff_int) can never push
+  // the mana pool below its level-based base into negative territory.
+  const i = Math.max(0, int);
+  return Math.min(i, 20) + Math.max(0, i - 20) * 15;
 }
 
 // Recompute all derived stats for the player from class, level, gear, buffs, and
@@ -175,13 +178,17 @@ export function createMob(id: number, template: MobTemplate, level: number, pos:
   e.hp = e.maxHp;
   const dmg = (template.dmgBase + template.dmgPerLevel * (level - 1)) * dmgMult;
   e.weapon = { min: Math.round(dmg * 0.8), max: Math.round(dmg * 1.25), speed: template.attackSpeed };
-  e.stats.armor = Math.round(template.armorPerLevel * level);
+  // Armor scales from level 1 like hp/dmg above: a template has no armorBase,
+  // so a level-1 mob gets 0 and each level adds armorPerLevel.
+  e.stats.armor = Math.round(template.armorPerLevel * (level - 1));
   e.moveSpeed = template.moveSpeed;
   e.scale = template.scale;
   e.color = template.color;
   e.swingTimer = 0;
   // Telegraph the first War Stomp: delay it one full interval after engage.
   if (template.stomp) e.stompTimer = template.stomp.every;
+  // Telegraph the first Mend the same way: one full interval after engage.
+  if (template.mendAlly) e.mendTimer = template.mendAlly.every;
   return e;
 }
 

@@ -92,7 +92,7 @@ describe('mouse click-pick gesture resolution', () => {
     })).toEqual({ x: 210, y: 96, button: 2 });
   });
 
-  it('ignores pointer-locked movement deltas for short clicks', () => {
+  it('rejects pointer-locked right-button drags', () => {
     expect(clickPickFromMouseGesture({
       button: 2,
       downButton: 2,
@@ -101,6 +101,21 @@ describe('mouse click-pick gesture resolution', () => {
       upX: 0,
       upY: 0,
       movementDrag: 28,
+      releaseOnCanvas: false,
+      pointerLocked: true,
+      pressDurationMs: 80,
+    })).toBeNull();
+  });
+
+  it('allows small right-button movement noise for short clicks', () => {
+    expect(clickPickFromMouseGesture({
+      button: 2,
+      downButton: 2,
+      downX: 210,
+      downY: 96,
+      upX: 0,
+      upY: 0,
+      movementDrag: 8,
       releaseOnCanvas: false,
       pointerLocked: true,
       pressDurationMs: 80,

@@ -28,7 +28,7 @@ try {
   await page.goto(URL, { waitUntil: 'networkidle2' });
 
   // Enter the offline world: open the panel, pick a class, start.
-  await page.click('#btn-offline').catch(() => {});
+  await page.evaluate(() => document.querySelector('#btn-offline').click()).catch(() => {});
   await sleep(300);
   await page.type('#char-name', 'Adventurer').catch(() => {});
   await page.click('#offline-select .mini-class[data-class="warrior"]').catch(() => {});

@@ -59,6 +59,16 @@ if (GFX.terrainSplat) {
   kickTerrainTex('snowC', 'Snow010A_Color.jpg', true);
 }
 
+export function hasTerrainSplatAssets(): boolean {
+  return Boolean(
+    TERRAIN_TEX.grassC && TERRAIN_TEX.grassN
+      && TERRAIN_TEX.dirtC && TERRAIN_TEX.dirtN
+      && TERRAIN_TEX.rockC && TERRAIN_TEX.rockN
+      && TERRAIN_TEX.sandC && TERRAIN_TEX.sandN
+      && TERRAIN_TEX.mudC && TERRAIN_TEX.snowC,
+  );
+}
+
 // Per-layer constant roughness, eyeballed from the packs' roughness-map means
 // (saves four samplers vs. real roughness maps; terrain is never glossy
 // enough for the difference to read at gameplay camera distance).
@@ -400,7 +410,6 @@ function buildSplatMaterial(seed: number): THREE.MeshStandardMaterial {
   groundSplatMaps();
   const macro = macroNoiseTexture();
   const t = TERRAIN_TEX;
-  if (!t.grassC) throw new Error('terrain splat textures not preloaded (assetsReady must resolve before buildTerrain)');
   const mat = new THREE.MeshStandardMaterial({
     vertexColors: true,
     roughness: 1.0,
@@ -527,7 +536,7 @@ export interface TerrainView {
 }
 
 export function buildTerrain(seed: number): TerrainView {
-  const lowGfx = !GFX.terrainSplat;
+  const lowGfx = !GFX.terrainSplat || !hasTerrainSplatAssets();
   const mat = lowGfx ? buildLambertMaterial() : buildSplatMaterial(seed);
   const bands = lowGfx ? LOD_BANDS.low : LOD_BANDS.high;
   const group = new THREE.Group();

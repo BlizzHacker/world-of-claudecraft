@@ -89,6 +89,7 @@ export interface AccountDetail {
   moderationReason: string;
   chatMutedUntil: string | null;
   chatMuteReason: string;
+  chatStrikes: number;
   playtimeSeconds: number;
   characters: {
     id: number;
@@ -180,8 +181,17 @@ export interface EscalationConfig {
   muteLadderSeconds: number[];
 }
 
+export interface ChatModeratedAccount {
+  id: number;
+  username: string;
+  isAdmin: boolean;
+  chatStrikes: number;
+  chatMutedUntil: string | null;
+}
+
 export interface ChatFilterData {
   soft: FilterWord[];
   hard: FilterWord[];
   config: EscalationConfig;
+  accounts: ChatModeratedAccount[];
 }

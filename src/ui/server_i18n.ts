@@ -65,6 +65,72 @@ function localizeStatus(s: string): string {
   return s;
 }
 
+const RESTART_MESSAGES: Record<string, Record<string, string>> = {
+  'Server restart in 10 minutes.': {
+    en: 'Server restart in 10 minutes.', en_CA: 'Server restart in 10 minutes.',
+    es: 'Reinicio del servidor en 10 minutos.', es_ES: 'Reinicio del servidor en 10 minutos.',
+    fr_FR: 'Redemarrage du serveur dans 10 minutes.', fr_CA: 'Redemarrage du serveur dans 10 minutes.',
+    it_IT: 'Riavvio del server tra 10 minuti.', de_DE: 'Serverneustart in 10 Minuten.',
+    zh_CN: '服务器将在 10 分钟后重启。', zh_TW: '伺服器將在 10 分鐘後重新啟動。',
+    ko_KR: '서버가 10분 후 재시작됩니다.', ja_JP: 'サーバーは10分後に再起動します。',
+    pt_BR: 'Reinicio do servidor em 10 minutos.', ru_RU: 'Перезапуск сервера через 10 минут.',
+  },
+  'Server restart in 5 minutes.': {
+    en: 'Server restart in 5 minutes.', en_CA: 'Server restart in 5 minutes.',
+    es: 'Reinicio del servidor en 5 minutos.', es_ES: 'Reinicio del servidor en 5 minutos.',
+    fr_FR: 'Redemarrage du serveur dans 5 minutes.', fr_CA: 'Redemarrage du serveur dans 5 minutes.',
+    it_IT: 'Riavvio del server tra 5 minuti.', de_DE: 'Serverneustart in 5 Minuten.',
+    zh_CN: '服务器将在 5 分钟后重启。', zh_TW: '伺服器將在 5 分鐘後重新啟動。',
+    ko_KR: '서버가 5분 후 재시작됩니다.', ja_JP: 'サーバーは5分後に再起動します。',
+    pt_BR: 'Reinicio do servidor em 5 minutos.', ru_RU: 'Перезапуск сервера через 5 минут.',
+  },
+  'Server restart in 2 minutes.': {
+    en: 'Server restart in 2 minutes.', en_CA: 'Server restart in 2 minutes.',
+    es: 'Reinicio del servidor en 2 minutos.', es_ES: 'Reinicio del servidor en 2 minutos.',
+    fr_FR: 'Redemarrage du serveur dans 2 minutes.', fr_CA: 'Redemarrage du serveur dans 2 minutes.',
+    it_IT: 'Riavvio del server tra 2 minuti.', de_DE: 'Serverneustart in 2 Minuten.',
+    zh_CN: '服务器将在 2 分钟后重启。', zh_TW: '伺服器將在 2 分鐘後重新啟動。',
+    ko_KR: '서버가 2분 후 재시작됩니다.', ja_JP: 'サーバーは2分後に再起動します。',
+    pt_BR: 'Reinicio do servidor em 2 minutos.', ru_RU: 'Перезапуск сервера через 2 минуты.',
+  },
+  'Server restart in 1 minute.': {
+    en: 'Server restart in 1 minute.', en_CA: 'Server restart in 1 minute.',
+    es: 'Reinicio del servidor en 1 minuto.', es_ES: 'Reinicio del servidor en 1 minuto.',
+    fr_FR: 'Redemarrage du serveur dans 1 minute.', fr_CA: 'Redemarrage du serveur dans 1 minute.',
+    it_IT: 'Riavvio del server tra 1 minuto.', de_DE: 'Serverneustart in 1 Minute.',
+    zh_CN: '服务器将在 1 分钟后重启。', zh_TW: '伺服器將在 1 分鐘後重新啟動。',
+    ko_KR: '서버가 1분 후 재시작됩니다.', ja_JP: 'サーバーは1分後に再起動します。',
+    pt_BR: 'Reinicio do servidor em 1 minuto.', ru_RU: 'Перезапуск сервера через 1 минуту.',
+  },
+  'Server restart in 30 seconds.': {
+    en: 'Server restart in 30 seconds.', en_CA: 'Server restart in 30 seconds.',
+    es: 'Reinicio del servidor en 30 segundos.', es_ES: 'Reinicio del servidor en 30 segundos.',
+    fr_FR: 'Redemarrage du serveur dans 30 secondes.', fr_CA: 'Redemarrage du serveur dans 30 secondes.',
+    it_IT: 'Riavvio del server tra 30 secondi.', de_DE: 'Serverneustart in 30 Sekunden.',
+    zh_CN: '服务器将在 30 秒后重启。', zh_TW: '伺服器將在 30 秒後重新啟動。',
+    ko_KR: '서버가 30초 후 재시작됩니다.', ja_JP: 'サーバーは30秒後に再起動します。',
+    pt_BR: 'Reinicio do servidor em 30 segundos.', ru_RU: 'Перезапуск сервера через 30 секунд.',
+  },
+  'Server restart in 10 seconds.': {
+    en: 'Server restart in 10 seconds.', en_CA: 'Server restart in 10 seconds.',
+    es: 'Reinicio del servidor en 10 segundos.', es_ES: 'Reinicio del servidor en 10 segundos.',
+    fr_FR: 'Redemarrage du serveur dans 10 secondes.', fr_CA: 'Redemarrage du serveur dans 10 secondes.',
+    it_IT: 'Riavvio del server tra 10 secondi.', de_DE: 'Serverneustart in 10 Sekunden.',
+    zh_CN: '服务器将在 10 秒后重启。', zh_TW: '伺服器將在 10 秒後重新啟動。',
+    ko_KR: '서버가 10초 후 재시작됩니다.', ja_JP: 'サーバーは10秒後に再起動します。',
+    pt_BR: 'Reinicio do servidor em 10 segundos.', ru_RU: 'Перезапуск сервера через 10 секунд.',
+  },
+  'Server restarting now.': {
+    en: 'Server restarting now.', en_CA: 'Server restarting now.',
+    es: 'El servidor se esta reiniciando ahora.', es_ES: 'El servidor se esta reiniciando ahora.',
+    fr_FR: 'Le serveur redemarre maintenant.', fr_CA: 'Le serveur redemarre maintenant.',
+    it_IT: 'Il server si sta riavviando ora.', de_DE: 'Server wird jetzt neu gestartet.',
+    zh_CN: '服务器正在重启。', zh_TW: '伺服器正在重新啟動。',
+    ko_KR: '서버가 지금 재시작됩니다.', ja_JP: 'サーバーを今すぐ再起動します。',
+    pt_BR: 'O servidor esta reiniciando agora.', ru_RU: 'Сервер перезапускается сейчас.',
+  },
+};
+
 // Exact (no-placeholder) messages: server English -> dictionary key. who.* values
 // are either placeholdered or sub-fragments spliced into who.row, never standalone.
 const FRAGMENT = /^(guild\.rank|world\.leave|who\.)/;
@@ -119,6 +185,8 @@ const RULES: Rule[] = [
 
 // Returns the localized form of a server message, or null if it is not one of ours.
 export function localizeServerText(text: string): string | null {
+  const restart = RESTART_MESSAGES[text]?.[getLanguage()];
+  if (restart) return restart;
   const exactKey = EXACT[text];
   if (exactKey) return tServer(exactKey);
   for (const rule of RULES) {

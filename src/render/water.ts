@@ -35,6 +35,11 @@ if (GFX.standardMaterials) {
   kickWaterTex('n2', 'water_2_normal.jpg');
   kickWaterTex('broad', 'waternormals.jpg');
 }
+
+export function hasWaterShaderAssets(): boolean {
+  return Boolean(WATER_TEX.n1 && WATER_TEX.n2 && WATER_TEX.broad);
+}
+
 const DEEP_COLOR = new THREE.Color(0x0d3a52);
 const SHALLOW_COLOR = new THREE.Color(0x2d8077);
 const SKY_TINT = new THREE.Color(0x7fb2e0); // matches the sky horizon band
@@ -124,9 +129,6 @@ function buildShaderWater(seed: number): WaterView {
   // legacy procedural maps still get generated (unused) to preserve the
   // shared-LCG call order in textures.ts for everything generated after
   waterNormalMaps();
-  if (!WATER_TEX.n1 || !WATER_TEX.n2 || !WATER_TEX.broad) {
-    throw new Error('water normal textures not preloaded (assetsReady must resolve before buildWater)');
-  }
   const material = new THREE.ShaderMaterial({
     uniforms: {
       ...THREE.UniformsUtils.clone(THREE.UniformsLib.fog),
@@ -196,5 +198,5 @@ function buildPhongWater(): WaterView {
 }
 
 export function buildWater(seed: number): WaterView {
-  return GFX.standardMaterials ? buildShaderWater(seed) : buildPhongWater();
+  return GFX.standardMaterials && hasWaterShaderAssets() ? buildShaderWater(seed) : buildPhongWater();
 }

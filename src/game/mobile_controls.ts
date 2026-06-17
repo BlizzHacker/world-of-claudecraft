@@ -3,6 +3,7 @@ import type { Input, TouchMoveInput } from './input';
 export const PHONE_TOUCH_QUERY = '(pointer: coarse) and (max-width: 940px), (pointer: coarse) and (max-height: 760px)';
 const DEADZONE = 0.22;
 const CAMERA_SENSITIVITY = 0.8;
+const SWIPE_LOOK_DEADZONE_PX = 6;
 // Pinch: each pixel the two fingers spread/close maps to this many yards of
 // camera distance. Tuned so a comfortable thumb-to-finger pinch sweeps roughly
 // the full 3..22yd zoom range in one gesture.
@@ -118,6 +119,12 @@ export class MobileControls {
   // two-finger pinch-to-zoom on the game view (phones have no scroll wheel)
   private pinchPointers = new Map<number, { x: number; y: number }>();
   private pinchPrevDist: number | null = null;
+  private swipeLookPointer: number | null = null;
+  private swipeLookStartX = 0;
+  private swipeLookStartY = 0;
+  private swipeLookLastX = 0;
+  private swipeLookLastY = 0;
+  private swipeLookActive = false;
 
   private canvas = document.getElementById('game-canvas') as HTMLElement | null;
   private root = document.getElementById('mobile-controls') as HTMLElement | null;
@@ -184,10 +191,22 @@ export class MobileControls {
       this.autorunButton?.classList.toggle('active', on);
     });
 
-    this.canvas?.addEventListener('pointerdown', (e) => this.onPinchDown(e));
-    this.canvas?.addEventListener('pointermove', (e) => this.onPinchMove(e));
-    this.canvas?.addEventListener('pointerup', (e) => this.onPinchEnd(e));
-    this.canvas?.addEventListener('pointercancel', (e) => this.onPinchEnd(e));
+    this.canvas?.addEventListener('pointerdown', (e) => {
+      this.onPinchDown(e);
+      this.onSwipeLookDown(e);
+    });
+    this.canvas?.addEventListener('pointermove', (e) => {
+      this.onPinchMove(e);
+      this.onSwipeLookMove(e);
+    });
+    this.canvas?.addEventListener('pointerup', (e) => {
+      this.onPinchEnd(e);
+      this.onSwipeLookEnd(e);
+    });
+    this.canvas?.addEventListener('pointercancel', (e) => {
+      this.onPinchEnd(e);
+      this.onSwipeLookEnd(e);
+    });
 
     this.bindButton('mobile-attack-nearest', () => this.callbacks.onAttackNearest());
     this.bindButton('mobile-jump', () => this.callbacks.onJump());
@@ -219,8 +238,20 @@ export class MobileControls {
     });
     this.bindHapticsToggle('mobile-haptics');
     this.bindButton('mobile-more', () => {
-      this.root?.classList.toggle('expanded');
-      document.body.classList.toggle('mobile-more-open', this.root?.classList.contains('expanded') ?? false);
+      const open = !document.body.classList.contains('mobile-more-open');
+      this.root?.classList.toggle('expanded', open);
+      document.body.classList.toggle('mobile-more-open', open);
+      if (open) {
+        const modal = document.getElementById('mobile-extra-controls');
+        if (modal) {
+          modal.style.left = '50%';
+          modal.style.top = 'max(14px, env(safe-area-inset-top))';
+          modal.style.right = 'auto';
+          modal.style.bottom = 'auto';
+          modal.style.transform = 'translateX(-50%)';
+          delete modal.dataset.windowMoved;
+        }
+      }
     });
   }
 
@@ -247,10 +278,14 @@ export class MobileControls {
       triggerHaptic(HAPTIC_TAP, this.hapticsOn);
       cb();
       if (button.closest('#mobile-extra-controls')) {
-        this.root?.classList.remove('expanded');
-        document.body.classList.remove('mobile-more-open');
+        this.closeMoreModal();
       }
     });
+  }
+
+  private closeMoreModal(): void {
+    document.getElementById('mobile-controls')?.classList.remove('expanded');
+    document.body.classList.remove('mobile-more-open');
   }
 
   /** The haptics button is a stateful toggle, so it bypasses bindButton (no tray
@@ -402,7 +437,10 @@ export class MobileControls {
   private onPinchDown(e: PointerEvent): void {
     if (!this.active || e.pointerType !== 'touch') return;
     this.pinchPointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
-    if (this.pinchPointers.size === 2) this.pinchPrevDist = this.currentPinchDist();
+    if (this.pinchPointers.size === 2) {
+      this.releaseSwipeLook();
+      this.pinchPrevDist = this.currentPinchDist();
+    }
   }
 
   private onPinchMove(e: PointerEvent): void {
@@ -424,11 +462,63 @@ export class MobileControls {
   private releasePinch(): void {
     this.pinchPointers.clear();
     this.pinchPrevDist = null;
+    this.releaseSwipeLook();
   }
 
   private currentPinchDist(): number {
     const pts = [...this.pinchPointers.values()];
     return Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
+  }
+
+  private onSwipeLookDown(e: PointerEvent): void {
+    if (!this.active || e.pointerType !== 'touch' || this.swipeLookPointer !== null || this.lookPointer !== null || this.pinchPointers.size > 1) return;
+    this.swipeLookPointer = e.pointerId;
+    this.swipeLookStartX = e.clientX;
+    this.swipeLookStartY = e.clientY;
+    this.swipeLookLastX = e.clientX;
+    this.swipeLookLastY = e.clientY;
+    this.swipeLookActive = false;
+    try { this.canvas?.setPointerCapture(e.pointerId); } catch { /* synthetic test event */ }
+  }
+
+  private onSwipeLookMove(e: PointerEvent): void {
+    if (!this.active || e.pointerId !== this.swipeLookPointer || this.pinchPointers.size > 1) return;
+    const totalDx = e.clientX - this.swipeLookStartX;
+    const totalDy = e.clientY - this.swipeLookStartY;
+    if (!this.swipeLookActive) {
+      if (Math.hypot(totalDx, totalDy) < SWIPE_LOOK_DEADZONE_PX) return;
+      this.swipeLookActive = true;
+      this.input.setTouchLook(true);
+      this.input.setTouchLookVector({ x: 0, y: 0 });
+    }
+    e.preventDefault();
+    const dx = e.clientX - this.swipeLookLastX;
+    const dy = e.clientY - this.swipeLookLastY;
+    this.swipeLookLastX = e.clientX;
+    this.swipeLookLastY = e.clientY;
+    this.input.applyTouchLookDelta(dx, dy);
+  }
+
+  private onSwipeLookEnd(e: PointerEvent): void {
+    if (e.pointerId !== this.swipeLookPointer) return;
+    if (this.swipeLookActive) e.preventDefault();
+    this.releaseSwipeLook();
+  }
+
+  private releaseSwipeLook(): void {
+    if (this.swipeLookPointer !== null) {
+      try {
+        if (this.canvas?.hasPointerCapture?.(this.swipeLookPointer)) {
+          this.canvas.releasePointerCapture(this.swipeLookPointer);
+        }
+      } catch { /* capture may already be gone on mobile browser gesture changes */ }
+    }
+    this.swipeLookPointer = null;
+    if (this.swipeLookActive) {
+      this.input.setTouchLook(false);
+      this.input.setTouchLookVector({ x: 0, y: 0 });
+    }
+    this.swipeLookActive = false;
   }
 }
 

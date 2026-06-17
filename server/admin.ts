@@ -11,8 +11,8 @@ import {
   forceCharacterRename, ignoreReport, moderateAccount, muteAccountChat, moderationQueue, moderationReportsForAccount,
 } from './moderation_db';
 import {
-  addFilterWord, chatModerationForAccount, getFilterConfig, liftChatMute, listFilterWords,
-  removeFilterWord, resetChatStrikes, updateFilterConfig, type WordTier,
+  addFilterWord, chatModeratedAccounts, chatModerationForAccount, getFilterConfig, liftChatMute,
+  listFilterWords, removeFilterWord, resetChatStrikes, updateFilterConfig, type WordTier,
 } from './chat_filter_db';
 import type { GameServer } from './game';
 
@@ -205,12 +205,13 @@ export async function handleAdminApi(
     if (req.method !== 'GET') return fail(res, 405, 'method not allowed');
 
     if (path === '/admin/api/chat-filter') {
-      const [soft, hard, config] = await Promise.all([
+      const [soft, hard, config, accounts] = await Promise.all([
         listFilterWords('soft'),
         listFilterWords('hard'),
         getFilterConfig(),
+        chatModeratedAccounts(),
       ]);
-      return ok(res, { soft, hard, config });
+      return ok(res, { soft, hard, config, accounts });
     }
 
     if (path === '/admin/api/overview') {

@@ -2,8 +2,19 @@ import { describe, expect, it } from 'vitest';
 import {
   MOVE_HOLD_TIME, newLocoTrack, updateLocomotion,
 } from '../src/render/locomotion';
+import { desiredBaseState, locomotionTimeScale, type AnimState } from '../src/render/characters/anim_state';
 
 const FPS = 1 / 60;
+const BASE_ANIM_STATE: AnimState = {
+  speed: 0,
+  moving: false,
+  airborne: false,
+  backwards: false,
+  dead: false,
+  casting: false,
+  swimming: false,
+  sitting: false,
+};
 
 // steady forward walk: ~2.2 u/s gives ~0.0367u of travel per 60fps frame
 function walkStep(t: ReturnType<typeof newLocoTrack>, dt = FPS, speed = 2.2) {
@@ -76,5 +87,19 @@ describe('locomotion hysteresis', () => {
       if (!s.moving) everStopped = true;
     }
     expect(everStopped).toBe(false);
+  });
+});
+
+describe('locomotion animation state', () => {
+  it('uses authored walkBack for normal humanoid backpedal', () => {
+    const state = { ...BASE_ANIM_STATE, moving: true, backwards: true, speed: 3 };
+    expect(desiredBaseState(state, true)).toBe('walkBack');
+    expect(locomotionTimeScale('walkBack', state)).toBeGreaterThan(0);
+  });
+
+  it('reverses forward locomotion for Ghost Wolf-style backpedal', () => {
+    const state = { ...BASE_ANIM_STATE, moving: true, backwards: true, reverseBackpedal: true, speed: 7 };
+    expect(desiredBaseState(state, true)).toBe('run');
+    expect(locomotionTimeScale('run', state)).toBeLessThan(0);
   });
 });

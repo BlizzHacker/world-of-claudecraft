@@ -1,8 +1,8 @@
 import { escapeHtml, fmtCopper, fmtDate, fmtDuration, fmtRelative } from './format';
 import { classLabel, zoneLabel, t } from './i18n';
 import type {
-  AccountDetail, AccountRow, CharacterRow, ChatFilterData, ChatModerationDetail, FilterWord,
-  LivePlayer, ModerationAccountDetail, ModerationQueueRow,
+  AccountDetail, AccountRow, CharacterRow, ChatFilterData, ChatModeratedAccount,
+  ChatModerationDetail, FilterWord, LivePlayer, ModerationAccountDetail, ModerationQueueRow,
 } from './types';
 
 // Pure HTML-string renderers for the dashboard tables. All dynamic values go
@@ -65,7 +65,7 @@ function accountStatusDetail(d: AccountDetail): string {
   const activeChatMute = d.chatMutedUntil !== null && new Date(d.chatMutedUntil).getTime() > Date.now();
   if (d.bannedAt) return `<span class="badge bad">${t('accounts.badgeBanned')}</span> <span class="hint">${t('detail.since', { value: fmtDate(d.bannedAt) })}</span>`;
   if (activeSuspension) return `<span class="badge warn">${t('detail.suspendedUntil', { value: fmtDate(d.suspendedUntil) })}</span>`;
-  return `<span class="badge">${t('detail.statusActive')}</span>${activeChatMute ? ` <span class="badge warn">chat muted until ${fmtDate(d.chatMutedUntil)}</span>` : ''}`;
+  return `<span class="badge">${t('detail.statusActive')}</span>${activeChatMute ? ` <span class="badge warn">${t('detail.chatMutedUntil', { value: fmtDate(d.chatMutedUntil) })}</span>` : ''}`;
 }
 
 export function renderAccountDetail(d: AccountDetail, includeAdminControls = false): string {
@@ -105,13 +105,13 @@ export function renderAccountDetail(d: AccountDetail, includeAdminControls = fal
       <button data-suspend-hours="720">${t('detail.suspend30d')}</button>
       <input class="account-custom-expiry" type="datetime-local" />
       <button data-suspend-custom="1">${t('detail.suspendCustom')}</button>
-      <button data-chat-mute-hours="1">Mute Chat 1h</button>
-      <button data-chat-mute-custom="1">Mute Chat Custom</button>
+      <button data-chat-mute-hours="1">${t('detail.chatMute1h')}</button>
+      <button data-chat-mute-custom="1">${t('detail.chatMuteCustom')}</button>
       <button data-ban-account="1" class="danger">${t('detail.ban')}</button>`;
   const adminControls = canModerateAccount ? `
     <div class="account-admin-controls mod-account-actions" data-action-account-id="${d.id}">
       <div class="account-status"><b>${t('detail.status')}</b> ${accountStatus}${d.moderationReason ? ` <span class="hint">${t('detail.reason', { value: escapeHtml(d.moderationReason) })}</span>` : ''}</div>
-      ${d.chatMutedUntil && new Date(d.chatMutedUntil).getTime() > Date.now() && d.chatMuteReason ? `<div class="account-status"><b>Chat mute:</b> <span class="hint">reason: ${escapeHtml(d.chatMuteReason)}</span></div>` : ''}
+      ${d.chatMutedUntil && new Date(d.chatMutedUntil).getTime() > Date.now() && d.chatMuteReason ? `<div class="account-status"><b>${t('detail.chatMuteLabel')}</b> <span class="hint">${t('detail.reason', { value: escapeHtml(d.chatMuteReason) })}</span></div>` : ''}
       <input class="account-mod-reason" placeholder="${t('detail.notePlaceholder')}" maxlength="500" />
       ${accountActionButtons}
     </div>
@@ -119,7 +119,16 @@ export function renderAccountDetail(d: AccountDetail, includeAdminControls = fal
     <div class="account-admin-controls">
       <div class="account-status"><b>${t('detail.status')}</b> <span class="badge">${t('accounts.badgeAdmin')}</span> ${accountStatus}</div>
     </div>` : '';
-  return `<div class="account-detail" data-action-account-id="${d.id}">${adminControls}<div class="detail-grid">
+  // Chat-mute controls are shown for EVERY account (admins included): the chat
+  // filter auto-mutes admins too, and ban/suspend gating must not strand them.
+  const activeChatMute = d.chatMutedUntil !== null && new Date(d.chatMutedUntil).getTime() > Date.now();
+  const chatModControls = includeAdminControls ? `
+    <div class="account-admin-controls chat-mod-controls" data-action-account-id="${d.id}">
+      <div class="account-status"><b>Chat:</b> ${activeChatMute ? `<span class="badge warn">muted until ${fmtDate(d.chatMutedUntil)}</span>` : '<span class="badge">not muted</span>'} &middot; strikes: <b>${d.chatStrikes}</b></div>
+      ${activeChatMute ? '<button data-lift-mute="1">Lift chat mute</button>' : ''}
+      ${d.chatStrikes > 0 ? '<button data-reset-strikes="1">Reset chat strikes</button>' : ''}
+    </div>` : '';
+  return `<div class="account-detail" data-action-account-id="${d.id}">${adminControls}${chatModControls}<div class="detail-grid">
     <div><h4>${t('detail.charactersHeader')}</h4>${chars}</div>
     <div><h4>${t('detail.sessionsHeader', { value: fmtDuration(d.playtimeSeconds) })}</h4>${sessions}</div>
   </div></div>`;
@@ -220,8 +229,8 @@ export function renderModerationDetail(d: ModerationAccountDetail): string {
       <button data-suspend-hours="720">${t('detail.suspend30d')}</button>
       <input id="mod-custom-expiry" type="datetime-local" />
       <button data-suspend-custom="1">${t('detail.suspendCustom')}</button>
-      <button data-chat-mute-hours="1">Mute Chat 1h</button>
-      <button data-chat-mute-custom="1">Mute Chat Custom</button>
+      <button data-chat-mute-hours="1">${t('detail.chatMute1h')}</button>
+      <button data-chat-mute-custom="1">${t('detail.chatMuteCustom')}</button>
       <button data-ban-account="1">${t('detail.ban')}</button>`;
   return `<div class="mod-detail">
     <div class="panel-title">
@@ -244,11 +253,11 @@ export function renderModerationDetail(d: ModerationAccountDetail): string {
 // warn/mute incident log, and manual lift/reset actions (slurs the player typed).
 function renderChatModeration(chat: ChatModerationDetail): string {
   const muteStatus = chat.chatMutedUntil
-    ? `<span class="badge bad">muted until ${fmtDate(chat.chatMutedUntil)}</span>`
-    : '<span class="badge">not muted</span>';
+    ? `<span class="badge bad">${t('chatMod.mutedUntil', { value: fmtDate(chat.chatMutedUntil) })}</span>`
+    : `<span class="badge">${t('chatMod.notMuted')}</span>`;
   const incidents = chat.violations.length === 0
-    ? '<div class="empty">no chat filter incidents</div>'
-    : `<table><thead><tr><th>Time</th><th>Channel</th><th>Word</th><th>Action</th><th>Message</th></tr></thead><tbody>${
+    ? `<div class="empty">${t('chatMod.noIncidents')}</div>`
+    : `<table><thead><tr><th>${t('report.colTime')}</th><th>${t('report.colChannel')}</th><th>${t('chatMod.colWord')}</th><th>${t('dialog.action')}</th><th>${t('report.colMessage')}</th></tr></thead><tbody>${
         chat.violations.map((v) => `
           <tr>
             <td>${fmtDate(v.createdAt)}</td>
@@ -259,21 +268,21 @@ function renderChatModeration(chat: ChatModerationDetail): string {
           </tr>`).join('')
       }</tbody></table>`;
   return `<div class="panel chat-mod">
-    <div class="panel-title">Chat moderation</div>
-    <div class="chat-mod-status">Status: ${muteStatus} &middot; Strikes: <b>${chat.chatStrikes}</b></div>
+    <div class="panel-title">${t('chatMod.title')}</div>
+    <div class="chat-mod-status">${t('chatMod.status')} ${muteStatus} &middot; ${t('chatMod.strikes')} <b>${chat.chatStrikes}</b></div>
     <div class="mod-actions">
-      ${chat.chatMutedUntil ? '<button data-lift-mute="1">Lift mute</button>' : ''}
-      ${chat.chatStrikes > 0 ? '<button data-reset-strikes="1">Reset strikes</button>' : ''}
+      ${chat.chatMutedUntil ? `<button data-lift-mute="1">${t('chatMod.liftMute')}</button>` : ''}
+      ${chat.chatStrikes > 0 ? `<button data-reset-strikes="1">${t('chatMod.resetStrikes')}</button>` : ''}
     </div>
-    <h4>Recent chat filter incidents</h4>
+    <h4>${t('chatMod.recentIncidents')}</h4>
     ${incidents}
   </div>`;
 }
 
 function renderWordChips(words: FilterWord[]): string {
-  if (words.length === 0) return '<div class="empty">no words yet</div>';
+  if (words.length === 0) return `<div class="empty">${t('chatFilter.noWords')}</div>`;
   return `<div class="word-chips">${
-    words.map((w) => `<span class="word-chip">${escapeHtml(w.word)}<button class="word-del" data-del-word="${w.id}" title="Remove">&times;</button></span>`).join('')
+    words.map((w) => `<span class="word-chip">${escapeHtml(w.word)}<button class="word-del" data-del-word="${w.id}" title="${t('chatFilter.removeWord')}">&times;</button></span>`).join('')
   }</div>`;
 }
 
@@ -281,29 +290,51 @@ export function renderChatFilter(data: ChatFilterData): string {
   const ladderHuman = data.config.muteLadderSeconds.map((s) => fmtDuration(s)).join(' → ');
   return `
     <div class="panel">
-      <div class="panel-title">Escalation</div>
-      <p class="hint">Typing a hard word blocks the message and warns the player, then applies escalating account-wide mutes (survives relog / character swap).</p>
+      <div class="panel-title">${t('chatFilter.escalationTitle')}</div>
+      <p class="hint">${t('chatFilter.escalationHint')}</p>
       <div class="cf-config">
-        <label>Warnings before first mute
+        <label>${t('chatFilter.warningsLabel')}
           <input id="cf-warnings" type="number" min="0" max="50" value="${data.config.warningsBeforeMute}" />
         </label>
-        <label>Mute ladder (seconds, comma-separated)
+        <label>${t('chatFilter.ladderLabel')}
           <input id="cf-ladder" type="text" value="${escapeHtml(data.config.muteLadderSeconds.join(', '))}" />
         </label>
-        <div class="hint">Current ladder: ${escapeHtml(ladderHuman || '—')}</div>
-        <button data-save-config="1">Save escalation settings</button>
+        <div class="hint">${t('chatFilter.currentLadder')} ${escapeHtml(ladderHuman || '—')}</div>
+        <button data-save-config="1">${t('chatFilter.saveConfig')}</button>
       </div>
     </div>
     <div class="panel">
-      <div class="panel-title">Soft words <span class="hint">masked with **** in players' chat; players can toggle the filter off</span></div>
-      <form class="word-add" data-add-tier="soft"><input placeholder="add a soft word" maxlength="64" /><button>Add</button></form>
+      <div class="panel-title">${t('chatFilter.softTitle')} <span class="hint">${t('chatFilter.softHint')}</span></div>
+      <form class="word-add" data-add-tier="soft"><input placeholder="${t('chatFilter.softPlaceholder')}" maxlength="64" /><button>${t('chatFilter.add')}</button></form>
       ${renderWordChips(data.soft)}
     </div>
     <div class="panel">
-      <div class="panel-title">Hard words <span class="hint">slurs — message blocked + escalating mutes; never shown to anyone, not toggleable</span></div>
-      <form class="word-add" data-add-tier="hard"><input placeholder="add a hard word" maxlength="64" /><button>Add</button></form>
+      <div class="panel-title">${t('chatFilter.hardTitle')} <span class="hint">${t('chatFilter.hardHint')}</span></div>
+      <form class="word-add" data-add-tier="hard"><input placeholder="${t('chatFilter.hardPlaceholder')}" maxlength="64" /><button>${t('chatFilter.add')}</button></form>
       ${renderWordChips(data.hard)}
+    </div>
+    <div class="panel">
+      <div class="panel-title">Chat-moderated accounts <span class="hint">currently muted or carrying strikes — lift or reset here</span></div>
+      ${renderChatModeratedAccounts(data.accounts)}
     </div>`;
+}
+
+function renderChatModeratedAccounts(accounts: ChatModeratedAccount[]): string {
+  if (accounts.length === 0) return '<div class="empty">no muted or striked accounts</div>';
+  const rows = accounts.map((a) => {
+    const muted = a.chatMutedUntil !== null && new Date(a.chatMutedUntil).getTime() > Date.now();
+    const muteCell = muted
+      ? `<span class="badge warn">muted until ${fmtDate(a.chatMutedUntil)}</span>`
+      : '<span class="badge">not muted</span>';
+    const actions = `${muted ? '<button data-lift-mute="1">Lift mute</button>' : ''}${a.chatStrikes > 0 ? ' <button data-reset-strikes="1">Reset strikes</button>' : ''}`;
+    return `<tr data-action-account-id="${a.id}">
+      <td>${escapeHtml(a.username)}${a.isAdmin ? ' <span class="badge">admin</span>' : ''}</td>
+      <td class="num">${a.chatStrikes}</td>
+      <td>${muteCell}</td>
+      <td>${actions}</td>
+    </tr>`;
+  }).join('');
+  return `<table><thead><tr><th>Account</th><th class="num">Strikes</th><th>Mute</th><th>Actions</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
 
 function reasonLabel(reason: string): string {

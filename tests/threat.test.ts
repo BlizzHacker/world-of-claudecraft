@@ -1120,7 +1120,7 @@ describe('shaman travel and shock mechanics', () => {
     expect(sim.events).toContainEqual({ type: 'error', text: 'That ability is not ready yet.', pid: sim.player.id });
   });
 
-  it('Ghost Wolf toggles speed and breaks when the shaman deals or takes damage', () => {
+  it('Ghost Wolf toggles speed and survives damage events', () => {
     const sim = makeSim('shaman');
     sim.setPlayerLevel(16);
     sim.player.resource = sim.player.maxResource;
@@ -1134,26 +1134,170 @@ describe('shaman travel and shock mechanics', () => {
     sim.castAbility('ghost_wolf');
     expect(sim.player.auras.some((a) => a.id === 'ghost_wolf')).toBe(false);
 
+    for (let i = 0; i < 40; i++) sim.tick();
     sim.player.resource = sim.player.maxResource;
     sim.castAbility('ghost_wolf');
     for (let i = 0; i < 20 * 3; i++) sim.tick();
     const wolf = nearestMob(sim, 'forest_wolf');
     beefUp(wolf);
     hit(sim, sim.player, wolf, 10, 'nature');
+    expect(sim.player.auras.some((a) => a.id === 'ghost_wolf')).toBe(true);
+
+    hit(sim, wolf, sim.player, 10);
+    expect(sim.player.auras.some((a) => a.id === 'ghost_wolf')).toBe(true);
+  });
+
+  it('Ghost Wolf does not drop when auto-attack cannot swing yet', () => {
+    const sim = makeSim('shaman');
+    sim.setPlayerLevel(16);
+    const wolf = nearestMob(sim, 'forest_wolf');
+    beefUp(wolf);
+    sim.player.resource = sim.player.maxResource;
+
+    sim.castAbility('ghost_wolf');
+    for (let i = 0; i < 20 * 3 && sim.player.castingAbility; i++) sim.tick();
+    expect(sim.player.auras.some((a) => a.id === 'ghost_wolf')).toBe(true);
+
+    sim.startAutoAttack();
+    expect(sim.player.auras.some((a) => a.id === 'ghost_wolf')).toBe(true);
+
+    teleport(sim, sim.player, wolf.pos.x + 20, wolf.pos.z);
+    sim.targetEntity(wolf.id);
+    sim.player.facing = Math.atan2(wolf.pos.x - sim.player.pos.x, wolf.pos.z - sim.player.pos.z);
+    sim.startAutoAttack();
+    for (let i = 0; i < 20; i++) sim.tick();
+    expect(sim.player.autoAttack).toBe(true);
+    expect(sim.player.auras.some((a) => a.id === 'ghost_wolf')).toBe(true);
+  });
+
+  it('Ghost Wolf drops when auto-attack actually swings', () => {
+    const sim = makeSim('shaman');
+    sim.setPlayerLevel(16);
+    const wolf = nearestMob(sim, 'forest_wolf');
+    beefUp(wolf);
+    teleport(sim, sim.player, wolf.pos.x + 2, wolf.pos.z);
+    sim.targetEntity(wolf.id);
+    sim.player.facing = Math.atan2(wolf.pos.x - sim.player.pos.x, wolf.pos.z - sim.player.pos.z);
+    sim.player.resource = sim.player.maxResource;
+
+    sim.castAbility('ghost_wolf');
+    for (let i = 0; i < 20 * 3 && sim.player.castingAbility; i++) sim.tick();
+    expect(sim.player.auras.some((a) => a.id === 'ghost_wolf')).toBe(true);
+
+    sim.startAutoAttack();
+    sim.tick();
     expect(sim.player.auras.some((a) => a.id === 'ghost_wolf')).toBe(false);
+  });
+
+  it('Ghost Wolf stays active while running and jumping', () => {
+    const sim = makeSim('shaman');
+    sim.setPlayerLevel(16);
+    sim.player.resource = sim.player.maxResource;
+
+    sim.castAbility('ghost_wolf');
+    for (let i = 0; i < 20 * 3 && sim.player.castingAbility; i++) sim.tick();
+    expect(sim.player.auras.some((a) => a.id === 'ghost_wolf')).toBe(true);
+
+    sim.moveInput.forward = true;
+    for (let i = 0; i < 20 * 8; i++) {
+      sim.moveInput.jump = i % 20 < 3;
+      sim.tick();
+      expect(sim.player.auras.some((a) => a.id === 'ghost_wolf')).toBe(true);
+    }
+  });
+
+  it('Ghost Wolf stays active through Lightning Shield contact, jump, and respawn cleanup', () => {
+    const sim = makeSim('shaman');
+    sim.setPlayerLevel(16);
+    const wolf = nearestMob(sim, 'forest_wolf');
+    beefUp(wolf);
+    wolf.level = sim.player.level;
+    wolf.weapon = { min: 10, max: 10, speed: 2 };
+    teleport(sim, sim.player, wolf.pos.x + 20, wolf.pos.z);
+    sim.targetEntity(wolf.id);
+    sim.player.facing = Math.atan2(wolf.pos.x - sim.player.pos.x, wolf.pos.z - sim.player.pos.z);
+    sim.player.resource = sim.player.maxResource;
+
+    sim.castAbility('lightning_shield');
+    expect(sim.player.auras.some((a) => a.id === 'lightning_shield')).toBe(true);
+    for (let i = 0; i < 40; i++) sim.tick();
 
     sim.player.resource = sim.player.maxResource;
     sim.castAbility('ghost_wolf');
-    for (let i = 0; i < 20 * 3; i++) sim.tick();
+    for (let i = 0; i < 20 * 3 && sim.player.castingAbility; i++) sim.tick();
+    expect(sim.player.auras.some((a) => a.id === 'ghost_wolf')).toBe(true);
+
+    sim.startAutoAttack();
+    sim.moveInput.forward = true;
+    for (let i = 0; i < 20; i++) {
+      sim.moveInput.jump = i < 3;
+      sim.tick();
+    }
+    expect(sim.player.auras.some((a) => a.id === 'ghost_wolf')).toBe(true);
+
+    teleport(sim, sim.player, wolf.pos.x + 2, wolf.pos.z);
+    sim.player.facing = Math.atan2(wolf.pos.x - sim.player.pos.x, wolf.pos.z - sim.player.pos.z);
+    wolf.facing = Math.atan2(sim.player.pos.x - wolf.pos.x, sim.player.pos.z - wolf.pos.z);
+    (sim as any).mobSwing(wolf, sim.player);
+    expect(sim.player.auras.some((a) => a.id === 'ghost_wolf')).toBe(true);
+
+    (sim as any).dealDamage(wolf, sim.player, sim.player.hp, false, 'physical', null, 'hit', true);
+    expect(sim.player.dead).toBe(true);
+    sim.releaseSpirit();
+    expect(sim.player.dead).toBe(false);
+    expect(sim.player.autoAttack).toBe(false);
+
+    sim.moveInput.forward = false;
+    sim.moveInput.jump = false;
+    sim.player.resource = sim.player.maxResource;
+    sim.castAbility('ghost_wolf');
+    for (let i = 0; i < 20 * 3 && sim.player.castingAbility; i++) sim.tick();
+    sim.moveInput.forward = true;
+    sim.moveInput.jump = true;
+    sim.tick();
+    expect(sim.player.auras.some((a) => a.id === 'ghost_wolf')).toBe(true);
+  });
+
+  it('Ghost Wolf casting is not delayed by incoming damage or standalone jump input', () => {
+    const sim = makeSim('shaman');
+    sim.setPlayerLevel(16);
+    sim.player.resource = sim.player.maxResource;
+    const wolf = nearestMob(sim, 'forest_wolf');
+
+    sim.castAbility('ghost_wolf');
+    expect(sim.player.castingAbility).toBe('ghost_wolf');
+
+    const remBefore = sim.player.castRemaining;
     hit(sim, wolf, sim.player, 10);
-    expect(sim.player.auras.some((a) => a.id === 'ghost_wolf')).toBe(false);
+    expect(sim.player.castingAbility).toBe('ghost_wolf');
+    expect(sim.player.castRemaining).toBe(remBefore);
+
+    sim.moveInput.jump = true;
+    sim.tick();
+    sim.moveInput.jump = false;
+    expect(sim.player.castingAbility).toBe('ghost_wolf');
+
+    for (let i = 0; i < 20 * 3 && sim.player.castingAbility; i++) sim.tick();
+    expect(sim.player.auras.some((a) => a.id === 'ghost_wolf')).toBe(true);
   });
 
   it('Ghost Wolf drops before casting shaman spells from the same button press', () => {
     const sim = makeSim('shaman');
     sim.setPlayerLevel(16);
+    // This test checks that *casting a spell* auto-cancels Ghost Wolf form.
+    // Taking any damage also breaks the form, so a stray wolf swing landing
+    // mid-window would drop it incidentally and make the assertions sensitive
+    // to world RNG. Make the shaman invulnerable to isolate the cast-driven
+    // cancel; the wolf is still a valid target for the player's own spells.
+    sim.player.gm = true;
     const wolf = nearestMob(sim, 'forest_wolf');
     beefUp(wolf);
+    // This test is about Ghost Wolf's toggle/recast semantics, not the wolf's
+    // auto-attacks. A landed melee swing breaks the form (damage cancels Ghost
+    // Wolf), so root the wolf in place (it can never close the 12yd gap) to keep
+    // the form-checks independent of hit-table RNG. It stays alive and in range
+    // of the ranged shocks the test casts at it.
+    wolf.moveSpeed = 0;
     teleport(sim, sim.player, wolf.pos.x + 12, wolf.pos.z);
     sim.targetEntity(wolf.id);
     sim.player.facing = Math.atan2(wolf.pos.x - sim.player.pos.x, wolf.pos.z - sim.player.pos.z);

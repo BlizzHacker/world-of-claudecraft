@@ -5,59 +5,26 @@
 //     normalized soft list to each client in `hello`; the client masks matches
 //     locally *iff* the player's profanity filter is on. The server itself
 //     never alters soft words, so toggling the filter off shows raw text.
-//   - "hard" words (slurs): enforced server-side and non-bypassable. A message
-//     containing one is blocked entirely and the sender is warned, then
-//     escalated to timed, account-wide chat mutes (see `escalate`).
+//   - "hard" words (slurs): enforced server-side. A message containing one is
+//     blocked and the sender is warned, then escalated to timed, account-wide
+//     chat mutes (see `escalate`). The two tiers never interact: a soft word is
+//     never punitive, and a hard word is never merely masked.
 //
-// Matching folds common leet/confusable substitutions so "n1gg3r"-style evasion
-// still resolves to the underlying word.
+// The hard tier is driven SOLELY by the admin-managed hard list (see
+// `tokenMatchesHard`): a message is punished only when one of its tokens, after
+// normalization, equals a configured hard word (or its trailing-"s" plural).
+// Normalization folds leet/confusable/diacritic/Unicode obfuscation, so
+// "n1gg3r"/"nî99er"-style spellings of a LISTED word still resolve to it.
+// Whole-token (not substring) matching keeps innocent words safe with NO
+// whitelist needed — "snigger", "assassin", "classy pass" can never match.
+// Affixed forms the list does not contain (e.g. <slur> + a suffix) are NOT
+// caught unless an operator adds them.
 //
-// The hard tier has TWO layers, OR'd together:
-//   1. An always-on baseline built on `obscenity` — the same library `auth.ts`
-//      uses to screen names. Its English dataset (which lives in the dependency,
-//      NOT in this repo) folds leet/confusables/spacing AND affixes, so leetspeak,
-//      diacritics, and suffixed forms all resolve to the underlying slur, while
-//      still passing the Scunthorpe trap ("despicable", "classy pass"). This
-//      layer is non-disableable.
-//   2. The admin-editable hard list, matched per-token (see `tokenMatchesHard`).
-//      It covers slurs the baseline dataset misses and any custom terms an
-//      operator adds. Whole-token matching keeps it from snagging innocent words.
-// This OR layering mirrors `offensiveName` in auth.ts.
-//
-// NOTE: this is open-source. The repo intentionally ships NO plaintext slur
-// list — the actual offensive wordlist is the `obscenity` dependency's dataset.
-// Operators seed extra hard words (the few the dataset omits) privately via the
+// NOTE: this is open-source and intentionally ships NO plaintext slur list
+// (DEFAULT_HARD_WORDS is empty). Operators seed the hard list privately via the
 // CHAT_FILTER_HARD_LIST / CHAT_FILTER_HARD_FILE env vars (see chat_filter_db.ts)
-// and manage them thereafter from the admin dashboard.
-
-import { RegExpMatcher, englishDataset, englishRecommendedTransformers } from 'obscenity';
-
-// Built once at module load (the constructor compiles the dataset to a regex).
-const builtinSlurMatcher = new RegExpMatcher({
-  ...englishDataset.build(),
-  ...englishRecommendedTransformers,
-});
-
-/**
- * The canonical built-in slur `text` hits via the always-on `obscenity`
- * baseline, or null. Returns the dataset's canonical spelling for the matched
- * term (so an affixed/obfuscated input still logs as a stable term).
- */
-export function findBuiltinSlur(text: string): string | null {
-  // Scan the raw text and a de-obfuscated copy: obscenity does its own folding,
-  // but it misses diacritics and a few leet glyphs that `foldConfusables` flattens.
-  return matchBuiltinSlur(text) ?? matchBuiltinSlur(foldConfusables(text));
-}
-
-function matchBuiltinSlur(text: string): string | null {
-  const matches = builtinSlurMatcher.getAllMatches(text, true);
-  if (matches.length === 0) return null;
-  const meta = englishDataset.getPayloadWithPhraseMetadata(matches[0]);
-  return (
-    meta.phraseMetadata?.originalWord ??
-    text.slice(matches[0].startIndex, matches[0].endIndex + 1).toLowerCase()
-  );
-}
+// at first boot, then manage it from the admin dashboard. With an empty hard
+// list NOTHING is enforced, so seeding is required for slur enforcement.
 
 const CONFUSABLE_CHARS: Record<string, string> = {
   '0': 'o',
@@ -142,23 +109,23 @@ function tokenMatchesHard(normalizedToken: string, terms: readonly string[]): bo
 }
 
 /**
- * First hard term a message hits, or null. The match drives enforcement.
- * Checks the admin-editable list first, then falls through to the always-on
- * `obscenity` baseline — so an empty or incomplete hard list never opens a hole.
+ * First hard term a message hits, or null. This is the SOLE punitive trigger:
+ * only a token that — after normalization — equals a configured hard word (or
+ * its trailing-"s" plural) counts. An empty list enforces nothing.
  */
 export function findHardWord(text: string, terms: readonly string[]): string | null {
+  if (terms.length === 0) return null;
   const tokens = text.match(TOKEN_RE);
-  if (tokens) {
-    for (const tok of tokens) {
-      const normalized = normalizeWord(tok);
-      if (tokenMatchesHard(normalized, terms)) {
-        // Return the configured term that fired, for the incident log.
-        const singular = normalized.endsWith('s') ? normalized.slice(0, -1) : normalized;
-        return terms.find((term) => normalized === term || singular === term) ?? normalized;
-      }
+  if (!tokens) return null;
+  for (const tok of tokens) {
+    const normalized = normalizeWord(tok);
+    if (tokenMatchesHard(normalized, terms)) {
+      // Return the configured term that fired, for the incident log.
+      const singular = normalized.endsWith('s') ? normalized.slice(0, -1) : normalized;
+      return terms.find((term) => normalized === term || singular === term) ?? normalized;
     }
   }
-  return findBuiltinSlur(text);
+  return null;
 }
 
 // -------------------------------------------------------------------------
@@ -241,12 +208,11 @@ export const DEFAULT_SOFT_WORDS: string[] = [
   'whore',
 ];
 
-// Slur seed list — intentionally EMPTY in this open-source repo. The always-on
-// `obscenity` baseline (its dataset ships in the dependency) enforces slurs out
-// of the box. The handful of slurs that dataset omits are seeded privately by
-// the operator via CHAT_FILTER_HARD_LIST / CHAT_FILTER_HARD_FILE (see
-// chat_filter_db.ts), then managed from the admin dashboard. Do NOT commit
-// slurs here.
+// Slur seed list — intentionally EMPTY in this open-source repo. The hard tier
+// is the SOLE punitive trigger, so an operator MUST seed the slur list privately
+// via CHAT_FILTER_HARD_LIST / CHAT_FILTER_HARD_FILE (see chat_filter_db.ts) at
+// first boot — otherwise nothing is enforced — then manage it from the admin
+// dashboard. Do NOT commit slurs here.
 export const DEFAULT_HARD_WORDS: string[] = [];
 
 /** A live snapshot of the filter state, loaded from the DB and cached. */

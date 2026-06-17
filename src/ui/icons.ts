@@ -1031,6 +1031,10 @@ const ITEM_RECIPES: Record<string, IconRecipe> = {
     { p: 'droplet', pal: 'sky', x: -4, y: 0, s: 1.1, rot: 1.55 },
     { p: 'fang', pal: 'silverWhite', x: 18, y: -1, s: 0.45, rot: 1.55 },
   ]),
+  the_codfather: r('treasure', 'gold', [
+    { p: 'droplet', pal: 'sky', x: -5, y: 0, s: 1.2, rot: 1.55 },
+    { p: 'fang', pal: 'gold', x: 18, y: -1, s: 0.5, rot: 1.55 },
+  ], ['sparkle']),
   tangled_weed: r('junk', 'venom', [{ p: 'tendrils', pal: 'venom' }]),
   roasted_boar: r('food', 'ember', ['meat']),
   conjured_water: r('arcane', 'sky', [{ p: 'potion', pal: 'sky' }], ['sparkle']),

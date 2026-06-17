@@ -10,29 +10,13 @@ import type { EmoteClipSpec, VisualDef } from './manifest';
 import {
   applyMaterials, assembleModel, prepareVisual, skinTexture, tintedFarMaterials,
 } from './assets';
+import { desiredBaseState, locomotionTimeScale, type AnimState, type BaseState } from './anim_state';
 
-/** Renderer-derived animation inputs (same facts the old pose machine used). */
-export interface AnimState {
-  /** horizontal speed, world units/sec */
-  speed: number;
-  moving: boolean;
-  airborne: boolean;
-  /** moving against facing (players backpedaling) */
-  backwards: boolean;
-  dead: boolean;
-  casting: boolean;
-  swimming: boolean;
-  sitting: boolean;
-}
-
-type BaseState = 'idle' | 'walk' | 'walkBack' | 'run' | 'cast' | 'swim' | 'sit' | 'jump';
+export type { AnimState, BaseState } from './anim_state';
 
 const FADE = 0.22;
 const ONESHOT_FADE = 0.1;
-const RUN_SPEED_THRESHOLD = 4.5; // u/s — sim walk/wander sits well below
 const HIT_REACT_COOLDOWN = 0.9;
-const DEFAULT_WALK_REF = 2.2;
-const DEFAULT_RUN_REF = 7;
 // Lie_Idle already lays the rig flat — a touch of extra pitch reads as a
 // surface glide; clip-less rigs (creatures) get the full procedural prone
 const SWIM_PITCH_CLIP = 0.35;
@@ -202,10 +186,10 @@ export class CharacterVisual {
       }
       // foot-speed matching on locomotion cycles
       if (!this.currentIsOneShot && this.current) {
-        if (this.baseState === 'walk' || this.baseState === 'walkBack') {
-          this.current.timeScale = clamp(s.speed / (this.def.walkRef ?? DEFAULT_WALK_REF), 0.6, 1.8);
-        } else if (this.baseState === 'run') {
-          this.current.timeScale = clamp(s.speed / (this.def.runRef ?? DEFAULT_RUN_REF), 0.6, 1.6);
+        const timeScale = locomotionTimeScale(this.baseState, s, this.def.walkRef, this.def.runRef);
+        if (timeScale !== null) {
+          if (timeScale < 0 && this.current.time <= 1e-3) this.current.time = Math.max(0, this.current.getClip().duration - 1e-3);
+          this.current.timeScale = timeScale;
         }
       }
     }
@@ -337,15 +321,7 @@ export class CharacterVisual {
   // -------------------------------------------------------------------------
 
   private desiredBase(s: AnimState): BaseState {
-    if (s.swimming) return 'swim';
-    if (s.airborne) return 'jump';
-    if (s.casting) return 'cast';
-    if (s.sitting) return 'sit';
-    if (s.moving) {
-      if (s.backwards && this.def.clips.walkBack) return 'walkBack';
-      return s.speed >= RUN_SPEED_THRESHOLD ? 'run' : 'walk';
-    }
-    return 'idle';
+    return desiredBaseState(s, !!this.def.clips.walkBack);
   }
 
   private toGhostMaterial<T extends THREE.Material | THREE.Material[]>(material: T): T {
@@ -497,8 +473,4 @@ function firstLoadedEmoteClip(
 ): string | null {
   if (!spec) return null;
   return spec.clips.find((name) => action(name)) ?? null;
-}
-
-function clamp(v: number, lo: number, hi: number): number {
-  return Math.min(hi, Math.max(lo, v));
 }

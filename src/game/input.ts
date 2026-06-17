@@ -108,6 +108,7 @@ export class Input {
       if (document.hidden) this.releaseCapture('hidden');
     });
     document.addEventListener('contextmenu', (e) => this.onContextMenu(e));
+    document.addEventListener('selectstart', (e) => this.onSelectStart(e));
     canvas.addEventListener('mousedown', (e) => this.onMouseDown(e));
     window.addEventListener('mouseup', (e) => this.onMouseUp(e));
     window.addEventListener('mousemove', (e) => this.onMouseMove(e));
@@ -127,6 +128,13 @@ export class Input {
 
   private onContextMenu(e: MouseEvent): void {
     if (this.shouldSuppressContextMenu(e.target)) e.preventDefault();
+  }
+
+  private onSelectStart(e: Event): void {
+    const body = document.body;
+    if (!body?.classList.contains('game-active') || !body.classList.contains('mobile-touch')) return;
+    if (this.isEditableContextTarget(e.target)) return;
+    e.preventDefault();
   }
 
   private shouldSuppressContextMenu(target: EventTarget | null): boolean {
@@ -350,6 +358,7 @@ export class Input {
     if (e.code === 'Escape') { this.cb.onUiKey('escape'); return; }
     if (this.cb.canUseGameKeys && !this.cb.canUseGameKeys()) return;
     if (e.code === 'Tab') e.preventDefault();
+    if (e.code === 'Space') e.preventDefault?.();
     const action = this.keybinds.actionForCode(e.code);
     if (action === null) return;
     if (actionKind(action) === 'held') {

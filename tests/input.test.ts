@@ -19,6 +19,7 @@ function makeInput() {
   const requestPointerLock = vi.fn();
   const exitPointerLock = vi.fn();
   let gameActive = true;
+  let mobileTouch = false;
   const canvas = {
     style: { cursor: '' },
     addEventListener: vi.fn((type: string, cb: (event: any) => void) => {
@@ -33,7 +34,11 @@ function makeInput() {
   };
   (globalThis as any).document = {
     activeElement: null,
-    body: { classList: { contains: (cls: string) => cls === 'game-active' && gameActive } },
+    body: {
+      classList: {
+        contains: (cls: string) => (cls === 'game-active' && gameActive) || (cls === 'mobile-touch' && mobileTouch),
+      },
+    },
     fullscreenElement: null,
     webkitFullscreenElement: null,
     pointerLockElement: null,
@@ -53,7 +58,16 @@ function makeInput() {
     onClickPick: vi.fn(),
   };
   const input = new Input(canvas as any, cb, new Keybinds());
-  return { canvas, canvasListeners, windowListeners, documentListeners, cb, input, setGameActive: (active: boolean) => { gameActive = active; } };
+  return {
+    canvas,
+    canvasListeners,
+    windowListeners,
+    documentListeners,
+    cb,
+    input,
+    setGameActive: (active: boolean) => { gameActive = active; },
+    setMobileTouch: (active: boolean) => { mobileTouch = active; },
+  };
 }
 
 beforeEach(() => {
@@ -281,6 +295,60 @@ describe('Input context menu guard', () => {
   });
 });
 
+describe('Input mobile selection guard', () => {
+  it('suppresses text selection during active mobile gameplay', () => {
+    const { documentListeners, setMobileTouch } = makeInput();
+    const preventDefault = vi.fn();
+    setMobileTouch(true);
+
+    documentListeners.get('selectstart')!({
+      target: { tagName: 'DIV', closest: () => null },
+      preventDefault,
+    });
+
+    expect(preventDefault).toHaveBeenCalled();
+  });
+
+  it('does not suppress selection before entering the game', () => {
+    const { documentListeners, setGameActive, setMobileTouch } = makeInput();
+    const preventDefault = vi.fn();
+    setGameActive(false);
+    setMobileTouch(true);
+
+    documentListeners.get('selectstart')!({
+      target: { tagName: 'DIV', closest: () => null },
+      preventDefault,
+    });
+
+    expect(preventDefault).not.toHaveBeenCalled();
+  });
+
+  it('does not suppress selection on desktop', () => {
+    const { documentListeners } = makeInput();
+    const preventDefault = vi.fn();
+
+    documentListeners.get('selectstart')!({
+      target: { tagName: 'DIV', closest: () => null },
+      preventDefault,
+    });
+
+    expect(preventDefault).not.toHaveBeenCalled();
+  });
+
+  it('keeps selection available in editable mobile controls', () => {
+    const { documentListeners, setMobileTouch } = makeInput();
+    const preventDefault = vi.fn();
+    setMobileTouch(true);
+
+    documentListeners.get('selectstart')!({
+      target: { tagName: 'TEXTAREA', closest: () => null },
+      preventDefault,
+    });
+
+    expect(preventDefault).not.toHaveBeenCalled();
+  });
+});
+
 describe('Input Escape handling', () => {
   it('dispatches Escape even when modal UI blocks game keys', () => {
     const { cb, windowListeners } = makeInput();
@@ -291,6 +359,19 @@ describe('Input Escape handling', () => {
 
     expect(cb.onUiKey).toHaveBeenCalledTimes(1);
     expect(cb.onUiKey).toHaveBeenCalledWith('escape');
+  });
+});
+
+describe('Input Space handling', () => {
+  it('prevents native Space button activation while preserving jump input', () => {
+    const { input, windowListeners } = makeInput();
+    (globalThis as any).document.activeElement = { tagName: 'BUTTON' };
+    const preventDefault = vi.fn();
+
+    windowListeners.get('keydown')!({ code: 'Space', repeat: false, preventDefault });
+
+    expect(preventDefault).toHaveBeenCalledTimes(1);
+    expect(input.readMoveInput().jump).toBe(true);
   });
 });
 

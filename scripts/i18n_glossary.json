@@ -1,0 +1,43 @@
+{
+  "_doc": "Locked-terms glossary for the i18n release fill. HAND-MAINTAINED, like scripts/i18n_blocked_seed.mjs - edit this file to change which terms are shipped to translators, NOT the tool logic. scripts/i18n_fill_worklist.mjs (npm run i18n:worklist) ships this glossary verbatim with EVERY per-language worklist batch so per-locale terminology does not drift. 'verbatim' terms are brand/proper nouns that are never translated (kept byte-identical in every locale). Each 'categories' entry names en key patterns; the worklist tool expands them against src/ui/i18n.en.ts and resolves each term's established localized form per language (from the committed overlays) so the bot/translator reuses the canonical wording instead of re-coining it. A '*' in a key pattern matches exactly one dotted segment. These terms are themselves prose: human-required (the worklist never auto-fills them); the glossary is the REFERENCE for the mechanical chrome that mentions them.",
+  "verbatim": [
+    {
+      "term": "World of ClaudeCraft",
+      "note": "Project / brand name. Never translate; keep byte-identical in every locale (including CJK)."
+    }
+  ],
+  "categories": {
+    "classNames": {
+      "note": "The 9 canonical class names. Use the established localized form already in the resolved table; never re-coin. Many locales keep the cognate (e.g. Paladin, Druid).",
+      "keyPatterns": [
+        "classes.warrior",
+        "classes.paladin",
+        "classes.hunter",
+        "classes.rogue",
+        "classes.priest",
+        "classes.shaman",
+        "classes.mage",
+        "classes.warlock",
+        "classes.druid"
+      ]
+    },
+    "abilityNames": {
+      "note": "Ability proper names. Keep the established localized form; do not invent a new rendering for an ability already named elsewhere.",
+      "keyPatterns": [
+        "entities.abilities.*.name"
+      ]
+    },
+    "zoneNames": {
+      "note": "Zone proper nouns. Use the established localized name; the Latin root (e.g. Eastbrook, Mirefen, Thornpeak) is usually retained.",
+      "keyPatterns": [
+        "entities.zones.*.name"
+      ]
+    },
+    "dungeonNames": {
+      "note": "Dungeon proper nouns. Use the established localized name; keep it identical wherever the dungeon is referenced.",
+      "keyPatterns": [
+        "entities.dungeons.*.name"
+      ]
+    }
+  }
+}

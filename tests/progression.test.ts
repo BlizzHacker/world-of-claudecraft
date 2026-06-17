@@ -12,6 +12,7 @@ import { ALL_CLASSES, XP_TABLE, MAX_LEVEL, ZoneDef } from '../src/sim/types';
 import { terrainHeight, WATER_LEVEL } from '../src/sim/world';
 
 const WORLD_SEED = 20061; // production seed (main.ts / server/game.ts)
+const SCRIPTED_COLLECT_ITEMS = new Set(['the_codfather']);
 
 describe('content referential integrity', () => {
   it('every quest reference resolves (NPCs, mobs, items, chains)', () => {
@@ -46,14 +47,15 @@ describe('content referential integrity', () => {
     expect(problems).toEqual([]);
   });
 
-  it('every collect objective is obtainable from loot or ground objects', () => {
+  it('every collect objective is obtainable', () => {
     const problems: string[] = [];
     for (const q of Object.values(QUESTS)) {
       for (const obj of q.objectives) {
         if (obj.type !== 'collect' || !obj.itemId) continue;
         const fromLoot = Object.values(MOBS).some((m) => m.loot.some((l) => l.itemId === obj.itemId));
         const fromGround = GROUND_OBJECTS.some((g) => g.itemId === obj.itemId);
-        if (!fromLoot && !fromGround) problems.push(`${q.id}: ${obj.itemId} drops nowhere`);
+        const fromScript = SCRIPTED_COLLECT_ITEMS.has(obj.itemId);
+        if (!fromLoot && !fromGround && !fromScript) problems.push(`${q.id}: ${obj.itemId} has no acquisition source`);
       }
     }
     expect(problems).toEqual([]);

@@ -236,6 +236,7 @@ export interface AccountDetail {
   moderationReason: string;
   chatMutedUntil: string | null;
   chatMuteReason: string;
+  chatStrikes: number;
   playtimeSeconds: number;
   characters: {
     id: number;
@@ -264,6 +265,7 @@ export async function accountDetail(accountId: number): Promise<AccountDetail | 
               COALESCE(moderation_reason, '') AS moderation_reason,
               chat_muted_until,
               COALESCE(chat_mute_reason, '') AS chat_mute_reason,
+              COALESCE(chat_strikes, 0) AS chat_strikes,
               COALESCE((SELECT sum(EXTRACT(EPOCH FROM (COALESCE(s.ended_at, now()) - s.started_at)))
                         FROM play_sessions s WHERE s.account_id = accounts.id), 0)::bigint AS playtime_seconds
        FROM accounts WHERE id = $1`,
@@ -297,6 +299,7 @@ export async function accountDetail(accountId: number): Promise<AccountDetail | 
     moderationReason: a.moderation_reason,
     chatMutedUntil: a.chat_muted_until,
     chatMuteReason: a.chat_mute_reason,
+    chatStrikes: Number(a.chat_strikes ?? 0),
     playtimeSeconds: Number(a.playtime_seconds),
     characters: characters.rows.map((c) => ({
       id: c.id,

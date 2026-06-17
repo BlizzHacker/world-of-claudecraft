@@ -135,6 +135,9 @@ export const ZONE3_MOBS: Record<string, MobTemplate> = {
       { itemId: 'inert_storm_shard', chance: 0.4 },
     ],
     scale: 1.1, color: 0x5dade2,
+    // A touch of the storm's cold numbs the limbs: each landed swing has a
+    // chance to slow the victim to half speed for a few seconds.
+    chillOnHit: { chance: 0.35, mult: 0.5, duration: 6, name: 'Numbing Chill' },
   },
   shardlord_kazzix: {
     id: 'shardlord_kazzix', name: 'Shardlord Kazzix', minLevel: 18, maxLevel: 18, family: 'elemental', rare: true,
@@ -156,6 +159,9 @@ export const ZONE3_MOBS: Record<string, MobTemplate> = {
       { itemId: 'wyrmcult_orders', chance: 0.5, questId: 'q_cult_orders' },
       { itemId: 'frayed_prayer_beads', chance: 0.35 },
     ],
+    // The zealot's fevered chanting claws at a caster's mind, draining Intellect
+    // and shrinking their mana pool for a while.
+    enfeeble: { chance: 0.3, int: 12, duration: 12, name: 'Maddening Whisper', school: 'shadow' },
     scale: 1.0, color: 0x76448a,
   },
   wyrmcult_necromancer: {
@@ -167,6 +173,7 @@ export const ZONE3_MOBS: Record<string, MobTemplate> = {
       { itemId: 'ritual_phylactery', chance: 0.55, questId: 'q_necromancers' },
       { itemId: 'linen_scrap', chance: 0.3 },
     ],
+    manaBurn: { chance: 0.3, amount: 80, name: 'Mana Sear', school: 'shadow' },
     scale: 1.0, color: 0x533566,
   },
   boneclad_revenant: {

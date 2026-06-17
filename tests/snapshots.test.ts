@@ -300,6 +300,78 @@ describe('delta snapshots', () => {
   });
 });
 
+describe('restart countdown', () => {
+  const restartMessages = [
+    'Server restart in 10 minutes.',
+    'Server restart in 5 minutes.',
+    'Server restart in 2 minutes.',
+    'Server restart in 1 minute.',
+    'Server restart in 30 seconds.',
+    'Server restart in 10 seconds.',
+    'Server restarting now.',
+  ];
+
+  it('broadcasts the restart countdown to every connected player', () => {
+    vi.useFakeTimers();
+    try {
+      const server = new GameServer();
+      const alice = fakeWs();
+      const bob = fakeWs();
+      joinServer(server, alice, 1, 'Alice');
+      joinServer(server, bob, 2, 'Bob', 'mage');
+      alice.sent.length = 0;
+      bob.sent.length = 0;
+
+      const result = server.startRestartCountdown();
+
+      expect(result.started).toBe(true);
+      expect(eventTexts(alice.sent)).toEqual(['Server restart in 10 minutes.']);
+      expect(eventTexts(bob.sent)).toEqual(['Server restart in 10 minutes.']);
+
+      vi.advanceTimersByTime(5 * 60_000);
+      expect(eventTexts(alice.sent)).toEqual(restartMessages.slice(0, 2));
+
+      vi.advanceTimersByTime(3 * 60_000);
+      expect(eventTexts(alice.sent)).toEqual(restartMessages.slice(0, 3));
+
+      vi.advanceTimersByTime(60_000);
+      expect(eventTexts(alice.sent)).toEqual(restartMessages.slice(0, 4));
+
+      vi.advanceTimersByTime(30_000);
+      expect(eventTexts(alice.sent)).toEqual(restartMessages.slice(0, 5));
+
+      vi.advanceTimersByTime(20_000);
+      expect(eventTexts(alice.sent)).toEqual(restartMessages.slice(0, 6));
+
+      vi.advanceTimersByTime(10_000);
+      expect(eventTexts(alice.sent)).toEqual(restartMessages);
+      expect(eventTexts(bob.sent)).toEqual(restartMessages);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('rejects a duplicate countdown until the active one completes', () => {
+    vi.useFakeTimers();
+    try {
+      const server = new GameServer();
+      const fc = fakeWs();
+      joinServer(server, fc, 1, 'Alice');
+      fc.sent.length = 0;
+
+      expect(server.startRestartCountdown().started).toBe(true);
+      const duplicate = server.startRestartCountdown();
+      expect(duplicate.started).toBe(false);
+      expect(duplicate.active).toBe(true);
+
+      vi.advanceTimersByTime(10 * 60_000);
+      expect(server.startRestartCountdown().started).toBe(true);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+});
+
 describe('online movement input lifetime', () => {
   it('clears stale held movement when the websocket input stream goes quiet', () => {
     const server = new GameServer();
@@ -596,6 +668,35 @@ describe('client-side delta merge', () => {
     } finally {
       (globalThis as any).WebSocket = oldWebSocket;
     }
+  });
+
+  it('snaps the interpolation anchor on a teleport but tweens normal moves', () => {
+    const client = bareClient(1);
+    const ent = (x: number, z: number) => ({
+      id: 2, k: 'mob', tid: 'wolf', nm: 'Wolf', lv: 3,
+      x, y: 0, z, f: 0, hp: 40, mhp: 40,
+    });
+    const apply = (x: number, z: number) => (client as any).applySnapshot({ ents: [ent(x, z)] });
+
+    // first sight: anchor initialised to the spawn pose
+    apply(10, 20);
+    let e = client.entities.get(2)!;
+    expect(e.prevPos).toMatchObject({ x: 10, z: 20 });
+
+    // a normal step keeps the anchor behind the new pose so the renderer can
+    // interpolate across the gap (anchor stays at the previous server pose)
+    apply(12, 21);
+    e = client.entities.get(2)!;
+    expect(e.pos).toMatchObject({ x: 12, z: 21 });
+    expect(e.prevPos.x).not.toBe(12);
+    expect(e.prevPos.z).not.toBe(21);
+
+    // a teleport is a discontinuity: the anchor snaps to the destination so
+    // the entity does not streak across the map over the next interval
+    apply(220, 240);
+    e = client.entities.get(2)!;
+    expect(e.pos).toMatchObject({ x: 220, z: 240 });
+    expect(e.prevPos).toMatchObject({ x: 220, z: 240 });
   });
 
   it('keeps previous structures when delta fields are omitted', () => {

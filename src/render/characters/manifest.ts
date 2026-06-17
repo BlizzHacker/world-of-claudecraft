@@ -412,6 +412,15 @@ export const VISUALS: Record<string, VisualDef> = {
     attach: [{ url: `${WEAPONS}/staff.glb`, bone: 'handslot.r' }],
     tint: 0xc9b98a, tintStrength: 0.3, // brown-robed brothers of the chapel
   },
+  // Brother Aldric keeps his pre-v0.7 model (the old chars/mage.glb, restored as
+  // mage_classic.glb with the staff built into the mesh). Aldric-only — every
+  // other npc_mage uses the new KayKit full-pack model from #396.
+  npc_aldric: {
+    url: `${PLAYERS}/mage_classic.glb`, height: HUMANOID_H,
+    clips: kaykit(['2H_Melee_Attack_Chop']),
+    show: ['2H_Staff'],
+    tint: 0xc9b98a, tintStrength: 0.3,
+  },
   npc_smith: {
     url: `${PLAYERS}/barbarian.glb`, height: HUMANOID_H,
     clips: kaykit(['1H_Melee_Attack_Chop']),
@@ -515,7 +524,7 @@ export function visualKeyFor(e: Entity): string {
     return (family && FAMILY_KEYS[family]) || 'mob_bandit';
   }
   // npcs — Brother Aldric recurs in every hub under suffixed ids
-  if (e.templateId.startsWith('brother_aldric')) return 'npc_mage';
+  if (e.templateId.startsWith('brother_aldric')) return 'npc_aldric';
   return NPC_KEYS[e.templateId] ?? 'npc_villager';
 }
 

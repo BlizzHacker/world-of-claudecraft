@@ -181,6 +181,9 @@ describe('nine classes', () => {
     sim.castAbility('lightning_shield');
     sim.tick();
     const wolf = nearestMob(sim, 'forest_wolf');
+    // The level-based miss curve means a L1-2 wolf almost never lands a hit on an L8
+    // player, so match its level to the player to actually exercise the reflect.
+    wolf.level = p.level;
     teleport(sim, p.id, wolf.pos.x + 2, wolf.pos.z);
     const wolfHpBefore = wolf.hp;
     let zapped = false;

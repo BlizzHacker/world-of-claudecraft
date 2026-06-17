@@ -10,7 +10,7 @@ import {
   type SupportedLanguage,
 } from './i18n';
 
-export type EntityTranslationPhase = 'phase7' | 'phase8' | 'phase9';
+export type EntityTranslationGroup = 'classAbility' | 'item' | 'world';
 export type EntityTranslationKind = 'class' | 'ability' | 'item' | 'mob' | 'npc' | 'quest' | 'questObjective' | 'zone' | 'zonePoi' | 'dungeon';
 export type EntityTranslationField = 'name' | 'description' | 'title' | 'text' | 'completion' | 'greeting' | 'label' | 'welcome' | 'enterText' | 'leaveText';
 
@@ -32,7 +32,7 @@ export interface EntityTranslationManifestEntry {
   field: EntityTranslationField;
   key: string;
   source: string;
-  phase: EntityTranslationPhase;
+  group: EntityTranslationGroup;
 }
 
 export interface MissingEntityTranslation extends EntityTranslationManifestEntry {
@@ -79,10 +79,10 @@ function entry(
   id: string,
   field: EntityTranslationField,
   source: string,
-  phase: EntityTranslationPhase,
+  group: EntityTranslationGroup,
   key: string,
 ): EntityTranslationManifestEntry {
-  return { kind, id, field, source, phase, key };
+  return { kind, id, field, source, group, key };
 }
 
 function compareById<T extends { id: string }>(a: T, b: T): number {
@@ -187,11 +187,11 @@ function requestManifestEntry(request: EntityTranslationRequest): EntityTranslat
     : request.kind === 'zonePoi'
       ? `${request.zoneId}.pois.${request.poiIndex}`
       : request.id;
-  const phase: EntityTranslationPhase =
-    request.kind === 'class' || request.kind === 'ability' ? 'phase7'
-      : request.kind === 'item' ? 'phase8'
-        : 'phase9';
-  return entry(request.kind, id, request.field, canonicalEntityText(request), phase, entityTranslationKey(request));
+  const group: EntityTranslationGroup =
+    request.kind === 'class' || request.kind === 'ability' ? 'classAbility'
+      : request.kind === 'item' ? 'item'
+        : 'world';
+  return entry(request.kind, id, request.field, canonicalEntityText(request), group, entityTranslationKey(request));
 }
 
 function recordFallback(request: EntityTranslationRequest, value: string): void {
@@ -221,67 +221,67 @@ export function entityTranslationManifest(): EntityTranslationManifestEntry[] {
   const entries: EntityTranslationManifestEntry[] = [];
   const classIds = Object.keys(CLASSES).sort() as PlayerClass[];
   for (const id of classIds) {
-    entries.push(entry('class', id, 'name', CLASSES[id].name, 'phase7', CLASS_NAME_KEYS[id]));
-    entries.push(entry('class', id, 'description', classDescriptionSource(id), 'phase7', CLASS_DESCRIPTION_KEYS[id]));
+    entries.push(entry('class', id, 'name', CLASSES[id].name, 'classAbility', CLASS_NAME_KEYS[id]));
+    entries.push(entry('class', id, 'description', classDescriptionSource(id), 'classAbility', CLASS_DESCRIPTION_KEYS[id]));
   }
   for (const ability of Object.values(ABILITIES).sort(compareById)) {
-    entries.push(entry('ability', ability.id, 'name', ability.name, 'phase7', entityTranslationKey({ kind: 'ability', id: ability.id, field: 'name' })));
-    entries.push(entry('ability', ability.id, 'description', ability.description, 'phase7', entityTranslationKey({ kind: 'ability', id: ability.id, field: 'description' })));
+    entries.push(entry('ability', ability.id, 'name', ability.name, 'classAbility', entityTranslationKey({ kind: 'ability', id: ability.id, field: 'name' })));
+    entries.push(entry('ability', ability.id, 'description', ability.description, 'classAbility', entityTranslationKey({ kind: 'ability', id: ability.id, field: 'description' })));
   }
   for (const item of Object.values(ITEMS).sort(compareById)) {
-    entries.push(entry('item', item.id, 'name', item.name, 'phase8', entityTranslationKey({ kind: 'item', id: item.id, field: 'name' })));
+    entries.push(entry('item', item.id, 'name', item.name, 'item', entityTranslationKey({ kind: 'item', id: item.id, field: 'name' })));
   }
   for (const mob of Object.values(MOBS).sort(compareById)) {
-    entries.push(entry('mob', mob.id, 'name', mob.name, 'phase9', entityTranslationKey({ kind: 'mob', id: mob.id, field: 'name' })));
+    entries.push(entry('mob', mob.id, 'name', mob.name, 'world', entityTranslationKey({ kind: 'mob', id: mob.id, field: 'name' })));
   }
   for (const npc of Object.values(NPCS).sort(compareById)) {
-    entries.push(entry('npc', npc.id, 'name', npc.name, 'phase9', entityTranslationKey({ kind: 'npc', id: npc.id, field: 'name' })));
-    entries.push(entry('npc', npc.id, 'title', npc.title, 'phase9', entityTranslationKey({ kind: 'npc', id: npc.id, field: 'title' })));
-    entries.push(entry('npc', npc.id, 'greeting', npc.greeting, 'phase9', entityTranslationKey({ kind: 'npc', id: npc.id, field: 'greeting' })));
+    entries.push(entry('npc', npc.id, 'name', npc.name, 'world', entityTranslationKey({ kind: 'npc', id: npc.id, field: 'name' })));
+    entries.push(entry('npc', npc.id, 'title', npc.title, 'world', entityTranslationKey({ kind: 'npc', id: npc.id, field: 'title' })));
+    entries.push(entry('npc', npc.id, 'greeting', npc.greeting, 'world', entityTranslationKey({ kind: 'npc', id: npc.id, field: 'greeting' })));
   }
   for (const quest of Object.values(QUESTS).sort(compareById)) {
-    entries.push(entry('quest', quest.id, 'title', quest.name, 'phase9', entityTranslationKey({ kind: 'quest', id: quest.id, field: 'title' })));
-    entries.push(entry('quest', quest.id, 'text', quest.text, 'phase9', entityTranslationKey({ kind: 'quest', id: quest.id, field: 'text' })));
-    entries.push(entry('quest', quest.id, 'completion', quest.completionText, 'phase9', entityTranslationKey({ kind: 'quest', id: quest.id, field: 'completion' })));
+    entries.push(entry('quest', quest.id, 'title', quest.name, 'world', entityTranslationKey({ kind: 'quest', id: quest.id, field: 'title' })));
+    entries.push(entry('quest', quest.id, 'text', quest.text, 'world', entityTranslationKey({ kind: 'quest', id: quest.id, field: 'text' })));
+    entries.push(entry('quest', quest.id, 'completion', quest.completionText, 'world', entityTranslationKey({ kind: 'quest', id: quest.id, field: 'completion' })));
     quest.objectives.forEach((objective, objectiveIndex) => {
       entries.push(entry(
         'questObjective',
         `${quest.id}.objectives.${objectiveIndex}`,
         'label',
         objective.label,
-        'phase9',
+        'world',
         entityTranslationKey({ kind: 'questObjective', questId: quest.id, objectiveIndex, field: 'label' }),
       ));
     });
   }
   for (const zone of [...ZONES].sort(compareById)) {
-    entries.push(entry('zone', zone.id, 'name', zone.name, 'phase9', entityTranslationKey({ kind: 'zone', id: zone.id, field: 'name' })));
-    entries.push(entry('zone', zone.id, 'welcome', zone.welcome, 'phase9', entityTranslationKey({ kind: 'zone', id: zone.id, field: 'welcome' })));
+    entries.push(entry('zone', zone.id, 'name', zone.name, 'world', entityTranslationKey({ kind: 'zone', id: zone.id, field: 'name' })));
+    entries.push(entry('zone', zone.id, 'welcome', zone.welcome, 'world', entityTranslationKey({ kind: 'zone', id: zone.id, field: 'welcome' })));
     zone.pois.forEach((poi, poiIndex) => {
       entries.push(entry(
         'zonePoi',
         `${zone.id}.pois.${poiIndex}`,
         'label',
         poi.label,
-        'phase9',
+        'world',
         entityTranslationKey({ kind: 'zonePoi', zoneId: zone.id, poiIndex, field: 'label' }),
       ));
     });
   }
   for (const dungeon of Object.values(DUNGEONS).sort(compareById)) {
-    entries.push(entry('dungeon', dungeon.id, 'name', dungeon.name, 'phase9', entityTranslationKey({ kind: 'dungeon', id: dungeon.id, field: 'name' })));
-    entries.push(entry('dungeon', dungeon.id, 'enterText', dungeon.enterText, 'phase9', entityTranslationKey({ kind: 'dungeon', id: dungeon.id, field: 'enterText' })));
-    entries.push(entry('dungeon', dungeon.id, 'leaveText', dungeon.leaveText, 'phase9', entityTranslationKey({ kind: 'dungeon', id: dungeon.id, field: 'leaveText' })));
+    entries.push(entry('dungeon', dungeon.id, 'name', dungeon.name, 'world', entityTranslationKey({ kind: 'dungeon', id: dungeon.id, field: 'name' })));
+    entries.push(entry('dungeon', dungeon.id, 'enterText', dungeon.enterText, 'world', entityTranslationKey({ kind: 'dungeon', id: dungeon.id, field: 'enterText' })));
+    entries.push(entry('dungeon', dungeon.id, 'leaveText', dungeon.leaveText, 'world', entityTranslationKey({ kind: 'dungeon', id: dungeon.id, field: 'leaveText' })));
   }
   return entries;
 }
 
-export function missingEntityTranslationsForPhases(
-  completedPhases: readonly EntityTranslationPhase[],
+export function missingEntityTranslationsForGroups(
+  completedGroups: readonly EntityTranslationGroup[],
 ): MissingEntityTranslation[] {
-  const phaseSet = new Set(completedPhases);
+  const groupSet = new Set(completedGroups);
   return entityTranslationManifest()
-    .filter((manifestEntry) => phaseSet.has(manifestEntry.phase))
+    .filter((manifestEntry) => groupSet.has(manifestEntry.group))
     .map((manifestEntry) => ({
       ...manifestEntry,
       missingLocales: supportedLanguages.filter((lang) => !hasTranslation(manifestEntry.key, lang)),
@@ -289,8 +289,8 @@ export function missingEntityTranslationsForPhases(
     .filter((manifestEntry) => manifestEntry.missingLocales.length > 0);
 }
 
-export function assertEntityTranslationsReady(completedPhases: readonly EntityTranslationPhase[]): void {
-  const missing = missingEntityTranslationsForPhases(completedPhases);
+export function assertEntityTranslationsReady(completedGroups: readonly EntityTranslationGroup[]): void {
+  const missing = missingEntityTranslationsForGroups(completedGroups);
   if (missing.length === 0) return;
   const preview = missing.slice(0, 5).map((entry) => entry.key).join(', ');
   throw new Error(`Missing entity translations: ${missing.length} keys. First missing keys: ${preview}`);

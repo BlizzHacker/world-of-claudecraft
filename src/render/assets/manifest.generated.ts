@@ -17,6 +17,7 @@ export const MEDIA_ASSETS: Record<string, string> =
   "models/chars/players/druid.glb": "/media/models/chars/players/druid.44d44747b0b1.glb",
   "models/chars/players/knight.glb": "/media/models/chars/players/knight.ce0d0a5ec1d6.glb",
   "models/chars/players/mage.glb": "/media/models/chars/players/mage.473bcf6ad4d1.glb",
+  "models/chars/players/mage_classic.glb": "/media/models/chars/players/mage_classic.503ebffb0cf6.glb",
   "models/chars/players/paladin.glb": "/media/models/chars/players/paladin.d58b07df5a5a.glb",
   "models/chars/players/ranger.glb": "/media/models/chars/players/ranger.bd35fdb403f2.glb",
   "models/chars/players/rogue.glb": "/media/models/chars/players/rogue.11c7e99ea73b.glb",

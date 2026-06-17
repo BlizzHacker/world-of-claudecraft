@@ -10,9 +10,9 @@ import {
 } from '../server/chat_filter';
 
 // This repository is open source and intentionally contains NO plaintext slurs.
-// The hard tier's real wordlist lives in the `obscenity` dependency; these
-// fixtures are base64-encoded and decoded only at runtime so the filter can be
-// exercised against genuine offensive input without the repo carrying it.
+// The hard tier's wordlist is operator-seeded at runtime (never in the repo);
+// these fixtures are base64-encoded and decoded only at runtime so the filter
+// can be exercised against genuine offensive input without the repo carrying it.
 const dec = (b64: string) => Buffer.from(b64, 'base64').toString('utf8');
 const F = {
   slur: dec('bmlnZ2Vy'),
@@ -29,7 +29,7 @@ const F = {
   math: dec('8J2Tt/Cdk7LwnZOw8J2TsPCdk67wnZO7'),
   fullwidth: dec('bmnvvYfvvYdlcg=='),
   variant2: dec('bmVncm9pZA=='),
-  gap1: dec('Z29vaw=='), // a slur the obscenity dataset omits (operator-seeded)
+  gap1: dec('Z29vaw=='), // an operator-seeded slur
   gap2: dec('d2V0YmFjaw=='),
   benign: dec('c25pZ2dlcg=='), // a real, non-slur word that embeds the slur
 };
@@ -65,69 +65,44 @@ describe('maskText (soft, cosmetic)', () => {
   });
 });
 
-describe('findHardWord (hard, punitive)', () => {
-  it('matches whole tokens, including leet and plurals', () => {
+describe('findHardWord (hard, punitive — the admin hard list is the SOLE trigger)', () => {
+  it('matches a LISTED word through leet, case, plurals, diacritics, and Unicode', () => {
     expect(findHardWord(`you are a ${F.slur}`, [F.slur])).toBe(F.slur);
-    expect(findHardWord(F.leet, [F.slur])).toBe(F.slur);
-    expect(findHardWord(`two ${F.slurPlural} here`, [F.slur])).toBe(F.slur); // plural strip
+    expect(findHardWord(F.leet, [F.slur])).toBe(F.slur); // n1gg3r → nigger
     expect(findHardWord(F.upper, [F.slur])).toBe(F.slur); // case-insensitive
+    expect(findHardWord(`two ${F.slurPlural} here`, [F.slur])).toBe(F.slur); // trailing-s plural
+    expect(findHardWord(F.diacritic9, [F.slur])).toBe(F.slur); // accent + 9-as-g
+    expect(findHardWord(F.math, [F.slur])).toBe(F.slur); // mathematical-script glyphs
+    expect(findHardWord(F.fullwidth, [F.slur])).toBe(F.slur); // fullwidth glyphs
   });
 
-  it('does NOT substring-match innocent words (no false mutes)', () => {
-    // The classic Scunthorpe trap: substring matching would wrongly fire here.
-    expect(findHardWord('gobbledygook', [F.gap1])).toBeNull(); // gap1 is a substring of it
+  it('enforces NOTHING with an empty hard list (the list is the only trigger)', () => {
+    expect(findHardWord(F.slur, [])).toBeNull();
+    expect(findHardWord(F.affixMan, [])).toBeNull();
+    expect(findHardWord('anything goes', [])).toBeNull();
+  });
+
+  it('does NOT substring-match innocent words (whole-token; no whitelist needed)', () => {
+    expect(findHardWord(F.benign, [F.slur])).toBeNull(); // "snigger" embeds the slur
     expect(findHardWord('what a classy pass', ['ass'])).toBeNull();
     expect(findHardWord('assassin guild', ['ass'])).toBeNull();
-  });
-
-  it('returns null with no terms or no hit', () => {
-    expect(findHardWord('anything', [])).toBeNull();
+    expect(findHardWord('that is despicable', ['spic'])).toBeNull();
     expect(findHardWord('perfectly fine message', [F.slur])).toBeNull();
   });
 
-  describe('always-on obscenity baseline (closes the affix/empty-list hole)', () => {
-    it('catches slurs with appended/prepended affixes the whole-token list misses', () => {
-      // The reported bypass: an affixed slur did not equal the bare token.
-      expect(findHardWord(`you stupid ${F.affixMan}`, [])).toBe(F.slur);
-      expect(findHardWord(F.affix2, [])).toBe(F.slur);
-    });
+  it('does NOT catch affixed/variant forms unless the operator lists them', () => {
+    // Accepted trade-off: <slur>+suffix and unrelated variants are distinct
+    // tokens, so a bare listing does not reach them...
+    expect(findHardWord(`you stupid ${F.affixMan}`, [F.slur])).toBeNull();
+    expect(findHardWord(`what a ${F.variant2}`, [F.slur])).toBeNull();
+    // ...but an operator can add the exact variant, and then it matches.
+    expect(findHardWord(F.affixMan, [F.affixMan])).toBe(F.affixMan);
+    expect(findHardWord(`what a ${F.variant2}`, [F.variant2])).toBe(F.variant2);
+  });
 
-    it('catches slur variants not in the admin list at all', () => {
-      expect(findHardWord(`what a ${F.variant2}`, [])).toBeTruthy();
-    });
-
-    it('catches leet/confusable evasions even with an empty admin list', () => {
-      expect(findHardWord(F.leet, [])).toBe(F.slur);
-      expect(findHardWord(F.atSign, [])).toBeTruthy();
-    });
-
-    it('catches diacritics, extended leet (6/9→g), and styled Unicode glyphs', () => {
-      expect(findHardWord(F.diacritic2, [])).toBeTruthy(); // combining diacritic
-      expect(findHardWord(F.diacritic9, [])).toBeTruthy(); // accent + 9-as-g
-      expect(findHardWord(F.sixes, [])).toBeTruthy(); // 6-as-g + @
-      expect(findHardWord(F.circled, [])).toBeTruthy(); // circled letters
-      expect(findHardWord(F.math, [])).toBeTruthy(); // mathematical script
-      expect(findHardWord(F.fullwidth, [])).toBeTruthy(); // fullwidth letters
-    });
-
-    it('does not false-mute innocents that survive folding', () => {
-      // 9/6→g must not turn scores or laughter into a slur.
-      expect(findHardWord('i scored 99 gg', [])).toBeNull();
-      expect(findHardWord('biggie smalls', [])).toBeNull();
-      expect(findHardWord(`${F.benign} is a real word, no`, [])).toBeNull();
-    });
-
-    it('still passes the Scunthorpe trap (no false mutes on innocent words)', () => {
-      expect(findHardWord('that is despicable', [])).toBeNull();
-      expect(findHardWord('what a classy pass', [])).toBeNull();
-      expect(findHardWord('assassin guild', [])).toBeNull();
-      expect(findHardWord('perfectly fine message', [])).toBeNull();
-    });
-
-    it('the admin/operator list still covers slurs the baseline omits', () => {
-      expect(findHardWord(`go away ${F.gap1}`, [F.gap1])).toBe(F.gap1);
-      expect(findHardWord(`${F.gap2}s`, [F.gap2])).toBe(F.gap2); // plural strip
-    });
+  it('matches operator-seeded words and their plurals', () => {
+    expect(findHardWord(`go away ${F.gap1}`, [F.gap1])).toBe(F.gap1);
+    expect(findHardWord(`${F.gap2}s`, [F.gap2])).toBe(F.gap2); // plural strip
   });
 });
 
