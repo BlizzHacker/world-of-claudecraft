@@ -86,7 +86,10 @@ http:
     cr-claudecraft-svc:
       loadBalancer:
         servers:
-          - url: "http://192.168.0.171:8787"
+          # Port 8793 — claudecraft realm runs alongside the legacy
+          # cryptic-realm.service which still owns :8787 for the apex
+          # crypticrealm.com landing/picker.
+          - url: "http://192.168.0.171:8793"
     cr-exchange-svc:
       loadBalancer:
         servers:
