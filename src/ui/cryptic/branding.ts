@@ -111,14 +111,23 @@ function applyTo(realm: RealmContent): void {
     setHrefAll('.community-link.github', b.githubUrl);
   }
 
-  // Donate button + community footer links: only the claudecraft realm
-  // surfaces them. Other realms hide the entire community link cluster so
-  // the upstream's GitHub / Discord / Donate icons disappear from the footer.
+  // Donate button + community + footer-social-row links: only the claudecraft
+  // realm surfaces them. Other realms hide every donate / github / discord
+  // entry across .community-link, .donate-cta, and .footer-social-row .social-link.
+  // (Earlier passes missed .social-link — that's why the footer Donate kept
+  //  showing on themed realms.)
   setHiddenAll('.donate-cta', b.showDonate !== true);
   const wantsCommunity = realm.id === 'claudecraft' && b.showDonate === true;
   setHiddenAll('.community-link.donate', !wantsCommunity);
   setHiddenAll('.community-link.github', !wantsCommunity);
   setHiddenAll('.community-link.discord', !wantsCommunity);
+  // Footer social row (the homepage-footer block).
+  setHiddenAll('.footer-social-row .social-link.donate', !wantsCommunity);
+  setHiddenAll('.footer-social-row .social-link[href*="github"]', !wantsCommunity);
+  setHiddenAll('.footer-social-row .social-link[href*="discord"]', !wantsCommunity);
+  // If everything in the row is hidden, hide the row itself so the empty
+  // border doesn't sit at the bottom of the page.
+  setHiddenAll('.footer-social-row', !wantsCommunity);
 
   // Authentik SSO button: visible by default, hidden when the realm opts out.
   setHiddenAll('#btn-sso-authentik', b.showAuthentikSso === false);

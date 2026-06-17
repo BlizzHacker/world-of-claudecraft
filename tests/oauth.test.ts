@@ -14,7 +14,7 @@ vi.mock('../server/auth', () => ({ newToken: vi.fn(() => 'c'.repeat(64)) }));
 function fakeReq(opts: { method?: string; url?: string; cookie?: string } = {}) {
   const req: any = new EventEmitter();
   req.method = opts.method ?? 'GET';
-  req.url = opts.url ?? '/api/auth/authentik';
+  req.url = opts.url ?? '/api/oauth/authentik';
   req.headers = opts.cookie ? { cookie: opts.cookie } : {};
   req.socket = { remoteAddress: '10.0.0.1' };
   return req;
@@ -44,7 +44,7 @@ describe('Authentik OIDC handler', () => {
     process.env.AUTHENTIK_ISSUER = 'https://auth.test.local/application/o/cryptic';
     process.env.AUTHENTIK_CLIENT_ID = 'client-id';
     process.env.AUTHENTIK_CLIENT_SECRET = 'client-secret';
-    process.env.AUTHENTIK_REDIRECT_URI = 'https://cryptic.test/api/auth/authentik/callback';
+    process.env.AUTHENTIK_REDIRECT_URI = 'https://cryptic.test/api/oauth/authentik/callback';
     vi.resetModules();
   });
   afterEach(() => {
@@ -55,13 +55,19 @@ describe('Authentik OIDC handler', () => {
   });
 
   it('redirects to Authentik authorize URL with a state cookie', async () => {
+    const fetchMock = vi.fn(async () => new Response(JSON.stringify({
+      authorization_endpoint: 'https://auth.test.local/application/o/authorize/',
+      token_endpoint: 'https://auth.test.local/application/o/token/',
+      userinfo_endpoint: 'https://auth.test.local/application/o/userinfo/',
+    }), { status: 200, headers: { 'Content-Type': 'application/json' } }));
+    vi.stubGlobal('fetch', fetchMock);
     const { handleAuthentikRoute } = await import('../server/oauth');
-    const req = fakeReq({ method: 'GET', url: '/api/auth/authentik' });
+    const req = fakeReq({ method: 'GET', url: '/api/oauth/authentik' });
     const res = fakeRes();
     await handleAuthentikRoute(req, res);
     expect(res.statusCode).toBe(302);
     const loc = res._headers.location as string;
-    expect(loc).toMatch(/^https:\/\/auth\.test\.local\/application\/o\/cryptic\/authorize\/\?/);
+    expect(loc).toMatch(/^https:\/\/auth\.test\.local\/application\/o\/authorize\/\?/);
     expect(loc).toContain('client_id=client-id');
     expect(loc).toContain('response_type=code');
     expect(loc).toContain('scope=openid+profile+email');
@@ -69,13 +75,14 @@ describe('Authentik OIDC handler', () => {
     expect(setCookie).toMatch(/^cr_oauth_state=[a-f0-9]{48};/);
     expect(setCookie).toContain('HttpOnly');
     expect(setCookie).toContain('SameSite=Lax');
+    vi.unstubAllGlobals();
   });
 
   it('returns 501 when no env config is set', async () => {
     delete process.env.AUTHENTIK_ISSUER;
     vi.resetModules();
     const { handleAuthentikRoute } = await import('../server/oauth');
-    const req = fakeReq({ method: 'GET', url: '/api/auth/authentik' });
+    const req = fakeReq({ method: 'GET', url: '/api/oauth/authentik' });
     const res = fakeRes();
     await handleAuthentikRoute(req, res);
     expect(res.statusCode).toBe(501);
@@ -86,7 +93,7 @@ describe('Authentik OIDC handler', () => {
     const { handleAuthentikRoute } = await import('../server/oauth');
     const req = fakeReq({
       method: 'GET',
-      url: '/api/auth/authentik/callback?code=abc&state=does-not-match',
+      url: '/api/oauth/authentik/callback?code=abc&state=does-not-match',
       cookie: 'cr_oauth_state=different-state',
     });
     const res = fakeRes();
@@ -102,6 +109,13 @@ describe('Authentik OIDC handler', () => {
     vi.mocked(dbMod.saveToken).mockResolvedValue(undefined);
 
     const fetchMock = vi.fn(async (url: string) => {
+      if (url.includes('/.well-known/openid-configuration')) {
+        return new Response(JSON.stringify({
+          authorization_endpoint: 'https://auth.test.local/application/o/authorize/',
+          token_endpoint: 'https://auth.test.local/application/o/token/',
+          userinfo_endpoint: 'https://auth.test.local/application/o/userinfo/',
+        }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      }
       if (url.endsWith('/token/')) {
         return new Response(JSON.stringify({ access_token: 'access-token-xyz' }), {
           status: 200, headers: { 'Content-Type': 'application/json' },
@@ -119,7 +133,7 @@ describe('Authentik OIDC handler', () => {
     const { handleAuthentikRoute } = await import('../server/oauth');
     const req = fakeReq({
       method: 'GET',
-      url: '/api/auth/authentik/callback?code=auth-code&state=cookie-state',
+      url: '/api/oauth/authentik/callback?code=auth-code&state=cookie-state',
       cookie: 'cr_oauth_state=cookie-state',
     });
     const res = fakeRes();
@@ -135,12 +149,21 @@ describe('Authentik OIDC handler', () => {
   });
 
   it('callback returns 502 when token exchange fails', async () => {
-    const fetchMock = vi.fn(async () => new Response('boom', { status: 500 }));
+    const fetchMock = vi.fn(async (url: string) => {
+      if (url.includes('/.well-known/openid-configuration')) {
+        return new Response(JSON.stringify({
+          authorization_endpoint: 'https://auth.test.local/application/o/authorize/',
+          token_endpoint: 'https://auth.test.local/application/o/token/',
+          userinfo_endpoint: 'https://auth.test.local/application/o/userinfo/',
+        }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      }
+      return new Response('boom', { status: 500 });
+    });
     vi.stubGlobal('fetch', fetchMock);
     const { handleAuthentikRoute } = await import('../server/oauth');
     const req = fakeReq({
       method: 'GET',
-      url: '/api/auth/authentik/callback?code=auth-code&state=cookie-state',
+      url: '/api/oauth/authentik/callback?code=auth-code&state=cookie-state',
       cookie: 'cr_oauth_state=cookie-state',
     });
     const res = fakeRes();

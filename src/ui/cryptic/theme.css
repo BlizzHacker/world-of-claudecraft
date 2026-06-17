@@ -736,3 +736,76 @@ body.cr-fps-active body, body.cr-fps-active { cursor: crosshair; }
   color: var(--cr-accent, #d4442a);
   font-weight: 700;
 }
+
+/* ---------- Customization modal ---------- */
+#cr-customization-modal[hidden] { display: none; }
+#cr-customization-modal .cr-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 11000;
+  backdrop-filter: blur(4px);
+}
+#cr-customization-modal .cr-modal-panel {
+  width: min(440px, 92vw);
+  max-height: 88vh;
+  overflow: auto;
+  background: var(--panel-bg, linear-gradient(170deg, #15151fF2 0%, #0b0b12F2 60%, #08080dF2 100%));
+  border: 2px solid var(--gold, var(--cr-gold, #c9a14a));
+  border-radius: 10px;
+  padding: 18px 20px;
+  color: var(--cr-text, #e8d5c4);
+  font-family: var(--cr-font-ui, system-ui, sans-serif);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.75);
+}
+.cr-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 215, 0, 0.18);
+  padding-bottom: 10px;
+  margin-bottom: 14px;
+}
+.cr-modal-header h2 {
+  margin: 0;
+  font-family: var(--cr-font-display, var(--title-font, serif));
+  font-size: 18px;
+  letter-spacing: 0.8px;
+  color: var(--gold, var(--cr-gold, #ffd100));
+}
+.cr-modal-close {
+  background: transparent;
+  border: 0;
+  color: var(--cr-text, #e8d5c4);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+}
+.cr-modal-close:hover { color: var(--gold, var(--cr-accent, #d4442a)); }
+.cr-modal-section { margin-bottom: 16px; }
+.cr-modal-section-title {
+  font-size: 11px;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--gold, var(--cr-gold, #c9a14a));
+  margin-bottom: 10px;
+}
+.cr-modal-hint { font-size: 12px; color: var(--cr-text-dim, #9a8a7a); margin: 0; line-height: 1.5; }
+.cr-modal-footer-hint {
+  font-size: 11px;
+  color: var(--cr-text-dim, #9a8a7a);
+  margin: 8px 0 0;
+  text-align: center;
+}
+.cr-modal-footer-hint kbd {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-family: ui-monospace, monospace;
+  font-size: 10px;
+}

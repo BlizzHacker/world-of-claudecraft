@@ -29,7 +29,7 @@ export const CLAUDECRAFT_REALM: RealmContent = {
     logoSrc: '/crypticrealm-logo.png',
     brandText: 'World of ClaudeCraft',
     loadingScreenSrc: '/loading-screen.jpg',
-    discordUrl: 'https://discord.gg/worldofclaudecraft',
+    discordUrl: 'https://discord.gg/GjhnUsBtw',
     githubUrl: 'https://github.com/levy-street/world-of-claudecraft',
     showDonate: true,
     showAuthentikSso: false,

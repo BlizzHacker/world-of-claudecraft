@@ -18,7 +18,7 @@ export const CLASSIC_REALM: RealmContent = {
     logoSrc: '/cr_logo_square.webp',
     brandText: 'Cryptic Realm — Classic',
     loadingScreenSrc: '/LOADINGSCREEN.png',
-    discordUrl: 'https://discord.gg/crypticrealm',
+    discordUrl: 'https://discord.gg/GjhnUsBtw',
     githubUrl: 'https://github.com/BlizzHacker/cryptic-realm',
     showDonate: false,
     showAuthentikSso: true,
