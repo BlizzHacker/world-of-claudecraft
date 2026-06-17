@@ -17,6 +17,7 @@ export const DOMINION_REALM: RealmContent = {
   branding: {
     logoSrc: '/crypticrealm-logo.png',
     brandText: 'Cryptic Realm — Dominion',
+    loadingScreenSrc: '/LOADINGSCREEN.png',
     discordUrl: 'https://discord.gg/crypticrealm',
     githubUrl: 'https://github.com/BlizzHacker/cryptic-realm',
     showDonate: false,

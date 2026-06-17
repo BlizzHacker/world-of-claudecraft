@@ -21,6 +21,7 @@
 //     that ignores form inputs.
 
 import type { Input } from '../../game/input';
+import { isAutoFpsEnabled } from './ingame_options';
 
 const STORE_KEY = 'cr_fps_mode';
 const RETICLE_ID = 'cr-fps-reticle';
@@ -128,6 +129,23 @@ export function mountFpsMode(input: Input, opts: MountFpsOptions = {}): void {
 
   const initial = resolveFpsMode();
   if (initial === 'on') enterFps(input, runtime);
+
+  // Auto-FPS on full zoom-in: when the user scrolls the camera all the way
+  // in (camDist hits the minimum clamp of 3), flip to FPS automatically.
+  // Scrolling back out exits FPS the same way. Tick-driven rather than
+  // wheel-driven so we catch every path that mutates camDist (touch pinch,
+  // settings slider, scripted zooms).
+  const tick = () => {
+    if (!runtime) return;
+    if (isAutoFpsEnabled()) {
+      if (input.camDist <= 3.05 && !runtime.active) enterFps(input, runtime);
+      else if (input.camDist > 3.5 && runtime.active && resolveFpsMode() === 'off') {
+        exitFps(input, runtime);
+      }
+    }
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
 
   const toggleKey = (opts.toggleKey ?? 'v').toLowerCase();
   window.addEventListener('keydown', (ev) => {

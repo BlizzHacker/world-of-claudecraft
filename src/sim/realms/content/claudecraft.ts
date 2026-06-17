@@ -28,6 +28,7 @@ export const CLAUDECRAFT_REALM: RealmContent = {
     // drop one into /public when restoring the pristine upstream identity.
     logoSrc: '/crypticrealm-logo.png',
     brandText: 'World of ClaudeCraft',
+    loadingScreenSrc: '/loading-screen.jpg',
     discordUrl: 'https://discord.gg/worldofclaudecraft',
     githubUrl: 'https://github.com/levy-street/world-of-claudecraft',
     showDonate: true,
