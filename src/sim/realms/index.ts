@@ -4,12 +4,14 @@ export type { RealmId, RealmContent, RealmClassSkin, RealmClassSkill, RealmClass
 export {
   REALMS,
   REALM_LIST,
+  HOME_REALM_LIST,
   DEFAULT_REALM,
   getRealm,
   getActiveRealm,
   resolveActiveRealmId,
   persistActiveRealm,
   isRealmId,
+  isCrossRealm,
 } from './registry';
 export {
   RARITY, RARITY_ORDER, ITEM_SLOTS, AFFIX_POOL,

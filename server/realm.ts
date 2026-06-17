@@ -18,6 +18,14 @@ export function resolveRealm(rawName: string | undefined): string {
 
 export const REALM = resolveRealm(process.env.REALM_NAME);
 
+// CR overlay: cross-realm marker. The Exchange realm sets CR_CROSS_REALM=1
+// in its env file; the server uses this to (a) accept characters whose
+// home realm column doesn't match REALM, (b) disable combat / quest credit,
+// and (c) expose auction routes. Standard realm processes leave this unset
+// and stay strictly isolated.
+export const IS_CROSS_REALM: boolean =
+  (process.env.CR_CROSS_REALM ?? '').trim() === '1';
+
 // Classic-MMO realm types. Normal == PvE.
 export type RealmType = 'Normal' | 'PvP' | 'RP' | 'RP-PvP';
 const REALM_TYPES: readonly RealmType[] = ['Normal', 'PvP', 'RP', 'RP-PvP'];

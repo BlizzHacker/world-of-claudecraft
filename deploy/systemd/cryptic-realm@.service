@@ -1,0 +1,43 @@
+## Systemd template unit: one process per Cryptic Realm world.
+##
+## Usage on LXC 171:
+##   sudo cp deploy/systemd/cryptic-realm@.service /etc/systemd/system/
+##   sudo cp deploy/env/<realm>.env /opt/cryptic-realm/env.d/<realm>.env
+##   sudo systemctl daemon-reload
+##   sudo systemctl enable --now cryptic-realm@infernal.service
+##   sudo systemctl enable --now cryptic-realm@classic.service
+##   sudo systemctl enable --now cryptic-realm@dominion.service
+##   sudo systemctl enable --now cryptic-realm@arcane.service
+##   sudo systemctl enable --now cryptic-realm@claudecraft.service
+##   sudo systemctl enable --now cryptic-realm@exchange.service
+##
+## Each instance reads /opt/cryptic-realm/.env (shared secrets — postgres
+## url, authentik credentials, turnstile keys) then layers
+## /opt/cryptic-realm/env.d/%i.env on top (realm-specific REALM_NAME + PORT).
+## The %i is the instance name passed after the @ — `cryptic-realm@infernal`
+## resolves /opt/cryptic-realm/env.d/infernal.env.
+##
+## The legacy cryptic-realm.service can stay disabled — it's superseded by
+## the template instances. To roll back to a single-realm deploy, disable
+## the template instances and re-enable cryptic-realm.service.
+
+[Unit]
+Description=Cryptic Realm Game Server (%i)
+After=network.target postgresql.service
+PartOf=cryptic-realm-realms.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/cryptic-realm
+EnvironmentFile=/opt/cryptic-realm/.env
+EnvironmentFile=/opt/cryptic-realm/env.d/%i.env
+ExecStart=/usr/bin/node dist-server/server.cjs
+Restart=always
+RestartSec=5
+# Per-realm log tagging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=cryptic-realm-%i
+
+[Install]
+WantedBy=multi-user.target

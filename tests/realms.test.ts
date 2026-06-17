@@ -17,11 +17,11 @@ import { parsePickitFilter, evaluateItem } from '../src/sim/realms/pickit';
 import { Rng } from '../src/sim/rng';
 
 describe('realm registry', () => {
-  it('ships five realms', () => {
+  it('ships six realms (five home + The Exchange)', () => {
     expect(Object.keys(REALMS).sort()).toEqual(
-      ['arcane', 'classic', 'claudecraft', 'dominion', 'infernal'],
+      ['arcane', 'classic', 'claudecraft', 'dominion', 'exchange', 'infernal'],
     );
-    expect(REALM_LIST.length).toBe(5);
+    expect(REALM_LIST.length).toBe(6);
   });
 
   it('default realm is registered and matches DEFAULT_REALM', () => {
@@ -58,6 +58,12 @@ describe('realm registry', () => {
 
   it('claudecraft is the pristine fallback (zero re-skins)', () => {
     expect(getRealm('claudecraft').classes).toEqual([]);
+  });
+
+  it('The Exchange is a cross-realm hub with no classes of its own', () => {
+    const ex = getRealm('exchange');
+    expect(ex.crossRealm).toBe(true);
+    expect(ex.classes).toEqual([]);
   });
 
   it('isRealmId narrows correctly', () => {

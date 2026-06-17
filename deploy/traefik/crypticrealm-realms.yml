@@ -1,0 +1,93 @@
+## Per-realm Traefik routes — drop into LXC 107 at
+## /etc/traefik/conf.d/crypticrealm-realms.yml then `systemctl reload traefik`.
+##
+## Pairs with the per-realm systemd template (deploy/systemd/cryptic-realm@.service)
+## and per-realm env files (deploy/env/<realm>.env). Each subdomain proxies
+## to the realm-specific node port on LXC 171 (192.168.0.171).
+##
+## Apex crypticrealm.com keeps the existing crypticrealm-rtr route pointing at
+## one realm process (claudecraft, the original 8787) so the homepage realm
+## picker still loads. Picking a realm in the UI navigates to the per-realm
+## subdomain below.
+
+http:
+  routers:
+    cr-infernal-rtr:
+      rule: "Host(`infernal.crypticrealm.com`)"
+      entryPoints: [websecure]
+      middlewares: [crypticrealm-headers, chain-no-auth]
+      service: cr-infernal-svc
+      priority: 100
+      tls:
+        certResolver: myresolver
+
+    cr-classic-rtr:
+      rule: "Host(`classic.crypticrealm.com`)"
+      entryPoints: [websecure]
+      middlewares: [crypticrealm-headers, chain-no-auth]
+      service: cr-classic-svc
+      priority: 100
+      tls:
+        certResolver: myresolver
+
+    cr-dominion-rtr:
+      rule: "Host(`dominion.crypticrealm.com`)"
+      entryPoints: [websecure]
+      middlewares: [crypticrealm-headers, chain-no-auth]
+      service: cr-dominion-svc
+      priority: 100
+      tls:
+        certResolver: myresolver
+
+    cr-arcane-rtr:
+      rule: "Host(`arcane.crypticrealm.com`)"
+      entryPoints: [websecure]
+      middlewares: [crypticrealm-headers, chain-no-auth]
+      service: cr-arcane-svc
+      priority: 100
+      tls:
+        certResolver: myresolver
+
+    cr-claudecraft-rtr:
+      rule: "Host(`claudecraft.crypticrealm.com`)"
+      entryPoints: [websecure]
+      middlewares: [crypticrealm-headers, chain-no-auth]
+      service: cr-claudecraft-svc
+      priority: 100
+      tls:
+        certResolver: myresolver
+
+    cr-exchange-rtr:
+      rule: "Host(`exchange.crypticrealm.com`)"
+      entryPoints: [websecure]
+      middlewares: [crypticrealm-headers, chain-no-auth]
+      service: cr-exchange-svc
+      priority: 100
+      tls:
+        certResolver: myresolver
+
+  services:
+    cr-infernal-svc:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.171:8788"
+    cr-classic-svc:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.171:8789"
+    cr-dominion-svc:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.171:8790"
+    cr-arcane-svc:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.171:8791"
+    cr-claudecraft-svc:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.171:8787"
+    cr-exchange-svc:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.171:8792"

@@ -8,7 +8,7 @@ describe('realm branding overrides', () => {
     }
   });
 
-  it('only the claudecraft realm shows the upstream Donate button', () => {
+  it('only the claudecraft realm shows the upstream Donate button (Exchange opts out)', () => {
     for (const realm of REALM_LIST) {
       const showDonate = realm.branding?.showDonate === true;
       if (realm.id === 'claudecraft') {

@@ -4,7 +4,17 @@
 // It never mutates Sim state directly; it just supplies the strings, colors,
 // model glob patterns, and bestiary entries the UI / renderer use.
 
-export type RealmId = 'infernal' | 'classic' | 'dominion' | 'arcane' | 'claudecraft';
+export type RealmId =
+  | 'infernal'
+  | 'classic'
+  | 'dominion'
+  | 'arcane'
+  | 'claudecraft'
+  // The Exchange is a neutral 6th realm — the only place where characters
+  // from any home realm can meet. Auctions + cross-realm item trades happen
+  // exclusively here. Players keep their home-realm progression; visiting
+  // the Exchange copies their character into a read/trade-only context.
+  | 'exchange';
 
 export type RealmRole = 'Tank' | 'DPS' | 'Healer' | 'Support' | 'Assassin' | 'Summoner';
 
@@ -91,4 +101,9 @@ export interface RealmContent {
   branding?: RealmBranding;
   /** True for the realm that should auto-load when no preference exists. */
   isDefault?: boolean;
+  /** Marks a realm as a cross-realm hub — characters from any other realm
+   *  are admitted, but combat / questing are disabled. Today only The
+   *  Exchange uses this flag. Standard realms are isolated worlds with their
+   *  own process + state per the systemd-template deploy. */
+  crossRealm?: boolean;
 }

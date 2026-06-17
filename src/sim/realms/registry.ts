@@ -21,6 +21,7 @@ import { INFERNAL_REALM } from './content/infernal';
 import { CLASSIC_REALM } from './content/classic';
 import { DOMINION_REALM } from './content/dominion';
 import { ARCANE_REALM } from './content/arcane';
+import { EXCHANGE_REALM } from './content/exchange';
 import type { RealmContent, RealmId } from './types';
 
 export const REALMS: Record<RealmId, RealmContent> = {
@@ -29,6 +30,7 @@ export const REALMS: Record<RealmId, RealmContent> = {
   dominion: DOMINION_REALM,
   arcane: ARCANE_REALM,
   claudecraft: CLAUDECRAFT_REALM,
+  exchange: EXCHANGE_REALM,
 };
 
 export const REALM_LIST: readonly RealmContent[] = [
@@ -37,7 +39,19 @@ export const REALM_LIST: readonly RealmContent[] = [
   DOMINION_REALM,
   ARCANE_REALM,
   CLAUDECRAFT_REALM,
+  EXCHANGE_REALM,
 ];
+
+/** Realms a player calls home. The Exchange is intentionally excluded —
+ *  characters don't live there, they visit. */
+export const HOME_REALM_LIST: readonly RealmContent[] = REALM_LIST.filter(
+  (r) => !r.crossRealm,
+);
+
+/** True when the given realm is a cross-realm hub (today: only Exchange). */
+export function isCrossRealm(id: RealmId): boolean {
+  return REALMS[id]?.crossRealm === true;
+}
 
 export const DEFAULT_REALM: RealmId = 'infernal';
 

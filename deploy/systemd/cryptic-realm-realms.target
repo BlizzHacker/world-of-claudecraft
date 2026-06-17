@@ -1,0 +1,15 @@
+## Group target — convenience to start/stop every realm instance at once.
+##   systemctl start cryptic-realm-realms.target
+##   systemctl stop  cryptic-realm-realms.target
+[Unit]
+Description=All Cryptic Realm world instances
+Requires=cryptic-realm@infernal.service \
+         cryptic-realm@classic.service \
+         cryptic-realm@dominion.service \
+         cryptic-realm@arcane.service \
+         cryptic-realm@claudecraft.service \
+         cryptic-realm@exchange.service
+After=postgresql.service
+
+[Install]
+WantedBy=multi-user.target
