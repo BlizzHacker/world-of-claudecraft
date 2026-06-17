@@ -2360,6 +2360,28 @@ function wireStartScreens(): void {
     }
   };
 
+  // CR overlay: SSO callback pickup. When Authentik redirects back with
+  // `/#auth_token=...&auth_user=...` we adopt the token, clean the hash so
+  // it doesn't show up in shared screenshots, and jump straight to the
+  // realm select panel — same path doAuth() takes after /api/login succeeds.
+  const ssoHash = (typeof window !== 'undefined' ? window.location.hash : '') ?? '';
+  if (ssoHash.startsWith('#') && ssoHash.includes('auth_token=')) {
+    const ssoParams = new URLSearchParams(ssoHash.slice(1));
+    const ssoToken = ssoParams.get('auth_token');
+    const ssoUser = ssoParams.get('auth_user');
+    if (ssoToken && /^[a-f0-9]{64}$/.test(ssoToken) && ssoUser) {
+      api.token = ssoToken;
+      api.username = ssoUser;
+      try { history.replaceState(null, '', window.location.pathname + window.location.search); } catch { /* noop */ }
+      void (async () => {
+        try {
+          $('#charselect-user').textContent = api.username ?? '';
+          await enterRealmFlow();
+        } catch (err) { loginError(userFacingApiError(err)); }
+      })();
+    }
+  }
+
   const loginForm = $('#login-panel') as HTMLFormElement;
   const userInput = $('#login-user') as HTMLInputElement;
   const passInput = $('#login-pass') as HTMLInputElement;

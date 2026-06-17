@@ -23,6 +23,7 @@ import { requestIp, rateLimited, authThrottled, recordAuthFailure, clearAuthFail
 import { verifyTurnstile } from './turnstile';
 import { handleAdminApi } from './admin';
 import { handleModeratorApi, handleUserApi } from './dashboard';
+import { handleAuthentikRoute, isAuthentikConfigured } from './oauth';
 import { GameServer } from './game';
 import { REALM, REALM_DIRECTORY, REALM_ORIGINS } from './realm';
 import { cacheControlFor, etagFor, isNotModified } from './static_cache';
@@ -497,6 +498,9 @@ async function main(): Promise<void> {
     if (url.startsWith('/admin/api/')) void handleAdminApi(req, res, game);
     else if (url.startsWith('/mod/api/')) void handleModeratorApi(req, res);
     else if (url.startsWith('/me/api/')) void handleUserApi(req, res);
+    // CR overlay: Authentik SSO sits alongside /api/login. The handler
+    // 501s when env vars aren't set so non-SSO deploys still work.
+    else if (url.startsWith('/api/auth/authentik')) void handleAuthentikRoute(req, res);
     else if (url.startsWith('/api/')) void handleApi(req, res);
     else serveStatic(req, res);
   });
@@ -621,6 +625,9 @@ async function main(): Promise<void> {
   server.listen(PORT, () => {
     console.log(`Cryptic Realm server listening on http://localhost:${PORT}`);
     console.log(`  REST: /api/register /api/login /api/characters /api/status`);
+    if (isAuthentikConfigured()) {
+      console.log('  SSO:  Authentik OIDC enabled at /api/auth/authentik');
+    }
     console.log(`  WS:   /ws, then first message {t:"auth",token,character}`);
   });
 

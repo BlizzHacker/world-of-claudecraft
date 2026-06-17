@@ -4616,6 +4616,16 @@
             <button type="button" class="btn btn-secondary" id="btn-register" data-i18n="auth.createAccount">Create Account</button>
             <button type="button" class="btn btn-back" id="btn-login-back" data-i18n="auth.back">Back</button>
           </div>
+          <!-- CR overlay BEGIN: Authentik SSO entry point. The server returns
+               501 from /api/auth/authentik when SSO env vars aren't set, so
+               clicks just bounce the user back with a clear error in that case. -->
+          <div class="cr-sso-row">
+            <a class="cr-sso-btn cr-sso-authentik" href="/api/auth/authentik" id="btn-sso-authentik">
+              <span class="cr-sso-icon" aria-hidden="true">⛨</span>
+              <span>Sign in with Authentik</span>
+            </a>
+          </div>
+          <!-- CR overlay END -->
         </form>
 
         <div id="realm-panel" class="panel auth-panel auth-panel-premium" hidden>

@@ -640,3 +640,45 @@ body.cr-fps-active body, body.cr-fps-active { cursor: crosshair; }
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--cr-border, #4a4a4a);
 }
+
+/* ---------- Authentik SSO button ---------- */
+.cr-sso-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--cr-border, #4a4a4a);
+}
+.cr-sso-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border: 1px solid var(--cr-border, #4a4a4a);
+  border-radius: 8px;
+  background: var(--cr-bg-panel, rgba(20, 20, 20, 0.92));
+  color: var(--cr-text, #e8d5c4);
+  text-decoration: none;
+  font-family: var(--cr-font-ui, system-ui, sans-serif);
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.cr-sso-btn:hover {
+  border-color: var(--cr-border-focus, #d4442a);
+  box-shadow: 0 0 10px var(--cr-border-glow, rgba(212, 68, 42, 0.4));
+}
+.cr-sso-authentik:hover { border-color: #fd4b2d; box-shadow: 0 0 10px rgba(253, 75, 45, 0.5); }
+.cr-sso-icon {
+  display: inline-flex;
+  width: 18px;
+  height: 18px;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: #fd4b2d;
+}

@@ -58,6 +58,13 @@ CREATE INDEX IF NOT EXISTS characters_lifetime_xp_global
   ON characters (((state->>'lifetimeXp')::bigint) DESC);
 ALTER TABLE accounts ADD COLUMN IF NOT EXISTS is_admin BOOLEAN NOT NULL DEFAULT FALSE;
 ALTER TABLE accounts ADD COLUMN IF NOT EXISTS is_moderator BOOLEAN NOT NULL DEFAULT FALSE;
+-- CR overlay: Authentik / external SSO. oauth_provider is the issuer slug
+-- (e.g. authentik), oauth_sub is the provider stable subject id. The
+-- partial unique index lets us upsert reliably across concurrent callbacks.
+ALTER TABLE accounts ADD COLUMN IF NOT EXISTS oauth_provider TEXT;
+ALTER TABLE accounts ADD COLUMN IF NOT EXISTS oauth_sub TEXT;
+CREATE UNIQUE INDEX IF NOT EXISTS accounts_oauth_identity
+  ON accounts(oauth_provider, oauth_sub) WHERE oauth_provider IS NOT NULL;
 ALTER TABLE accounts ADD COLUMN IF NOT EXISTS suspended_until TIMESTAMPTZ;
 ALTER TABLE accounts ADD COLUMN IF NOT EXISTS banned_at TIMESTAMPTZ;
 ALTER TABLE accounts ADD COLUMN IF NOT EXISTS moderation_reason TEXT;
@@ -462,6 +469,59 @@ export async function saveCharacterState(characterId: number, level: number, sta
     'UPDATE characters SET level = $2, state = $3, updated_at = now() WHERE id = $1',
     [characterId, level, JSON.stringify(state)],
   );
+}
+
+/** OAuth account upsert: idempotently link a remote (provider, sub) identity
+ *  to a local account row. Returns `{ id, username, created }`. When no row
+ *  matches, we generate a unique username derived from the OIDC display name
+ *  (preferred_username / name / sub) by appending a numeric suffix on conflict.
+ */
+export interface OAuthUpsertResult {
+  id: number;
+  username: string;
+  created: boolean;
+}
+
+function sanitizeUsernameCandidate(raw: string): string {
+  const stripped = raw
+    .toLowerCase()
+    .replace(/[^a-z0-9_]+/g, '_')
+    .replace(/^_+|_+$/g, '')
+    .slice(0, 20);
+  // Hard floor at 3 chars; pad with 'usr' if the candidate vanished entirely.
+  return stripped.length >= 3 ? stripped : (stripped ? `${stripped}_usr` : 'usr');
+}
+
+export async function upsertOAuthAccount(input: {
+  provider: string;
+  sub: string;
+  displayName: string;
+}): Promise<OAuthUpsertResult> {
+  // 1. Existing link wins — no username conflicts to worry about.
+  const existing = await pool.query(
+    'SELECT id, username FROM accounts WHERE oauth_provider = $1 AND oauth_sub = $2 LIMIT 1',
+    [input.provider, input.sub],
+  );
+  if (existing.rows.length) {
+    return { id: existing.rows[0].id, username: existing.rows[0].username, created: false };
+  }
+  // 2. Brand new identity: derive a free username and create the row.
+  const base = sanitizeUsernameCandidate(input.displayName || input.sub);
+  let candidate = base;
+  for (let n = 1; n < 9999; n++) {
+    const dupe = await pool.query('SELECT id FROM accounts WHERE username = $1 LIMIT 1', [candidate]);
+    if (!dupe.rows.length) break;
+    candidate = `${base.slice(0, 18)}_${n}`;
+  }
+  // OAuth accounts have no password — store a sentinel that won't pass scrypt
+  // verification, so the username can never be logged into with /api/login.
+  const res = await pool.query(
+    `INSERT INTO accounts (username, password_hash, oauth_provider, oauth_sub)
+     VALUES ($1, $2, $3, $4)
+     RETURNING id, username`,
+    [candidate, 'oauth:' + input.provider, input.provider, input.sub],
+  );
+  return { id: res.rows[0].id, username: res.rows[0].username, created: true };
 }
 
 export async function isAdminAccount(accountId: number): Promise<boolean> {
