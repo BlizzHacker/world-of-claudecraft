@@ -1,0 +1,55 @@
+# Wiki-only compose — runs the MediaWiki backend (and its MariaDB) on the
+# Cryptic Realm host without pulling in the dev `game`/`postgres` services
+# from docker-compose.yml (the live realms run via systemd, not compose).
+#
+# Usage on the host:
+#   docker compose -f docker-compose.wiki.yml --env-file .env.wiki up -d --build
+#
+# .env.wiki holds the generated secrets (gitignored). The game server's
+# /wiki route 302s to MEDIAWIKI_SERVER when WIKI_URL is set.
+
+services:
+  mediawiki-db:
+    image: mariadb:11
+    container_name: eastbrook-wiki-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${MEDIAWIKI_DB_NAME:-mediawiki}
+      MYSQL_USER: ${MEDIAWIKI_DB_USER:-mediawiki}
+      MYSQL_PASSWORD: ${MEDIAWIKI_DB_PASSWORD:?set MEDIAWIKI_DB_PASSWORD in .env.wiki}
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+    volumes:
+      - eastbrook_wikidb:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb-admin ping -h 127.0.0.1 -u${MEDIAWIKI_DB_USER:-mediawiki} -p${MEDIAWIKI_DB_PASSWORD} --silent"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  mediawiki:
+    build:
+      context: .
+      dockerfile: mediawiki/Dockerfile
+    container_name: eastbrook-wiki
+    restart: unless-stopped
+    depends_on:
+      mediawiki-db:
+        condition: service_healthy
+    environment:
+      MEDIAWIKI_DB_HOST: mediawiki-db
+      MEDIAWIKI_DB_NAME: ${MEDIAWIKI_DB_NAME:-mediawiki}
+      MEDIAWIKI_DB_USER: ${MEDIAWIKI_DB_USER:-mediawiki}
+      MEDIAWIKI_DB_PASSWORD: ${MEDIAWIKI_DB_PASSWORD:?set MEDIAWIKI_DB_PASSWORD in .env.wiki}
+      MEDIAWIKI_ADMIN_USER: ${MEDIAWIKI_ADMIN_USER:-WikiAdmin}
+      MEDIAWIKI_ADMIN_PASS: ${MEDIAWIKI_ADMIN_PASS:?set MEDIAWIKI_ADMIN_PASS in .env.wiki}
+      MEDIAWIKI_SECRET_KEY: ${MEDIAWIKI_SECRET_KEY:?set MEDIAWIKI_SECRET_KEY in .env.wiki}
+      MEDIAWIKI_UPGRADE_KEY: ${MEDIAWIKI_UPGRADE_KEY:?set MEDIAWIKI_UPGRADE_KEY in .env.wiki}
+      MEDIAWIKI_SERVER: ${MEDIAWIKI_SERVER:-https://wiki.crypticrealm.com}
+    ports:
+      - "127.0.0.1:8080:80"
+    volumes:
+      - eastbrook_wiki_images:/var/www/html/images
+
+volumes:
+  eastbrook_wikidb:
+  eastbrook_wiki_images:
