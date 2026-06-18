@@ -1,7 +1,8 @@
 // Online play: REST auth client + WebSocket world mirror.
 
 import { NPCS, abilitiesKnownAt } from '../sim/data';
-import { computeQuestState, ResolvedAbility } from '../sim/sim';
+import { computeQuestState } from '../sim/quest_state';
+import type { ResolvedAbility } from '../sim/sim';
 import {
   cloneAllocation, computeTalentModifiers, emptyAllocation, talentPointsAtLevel, pointsSpent,
   type TalentAllocation, type SavedLoadout, type Role,

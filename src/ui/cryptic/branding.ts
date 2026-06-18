@@ -95,6 +95,9 @@ function applyTokenCard(realm: RealmContent): void {
   if (!container || !btn || !label || !addr || !note) return;
 
   const socials = socialsForRealm(realm.id);
+  label.removeAttribute('data-i18n');
+  note.removeAttribute('data-i18n');
+  btn.removeAttribute('data-i18n-aria');
   if (socials.tipWalletSolana && socials.tokenMintSolana) {
     label.textContent = '$CR Contract Address';
     btn.dataset.ca = socials.tokenMintSolana;

@@ -15,11 +15,11 @@ function setupBrandingDom(): void {
       <a class="social-link" href="https://discord.gg/GjhnUsBtw"><span>Discord</span></a>
     </div>
     <div id="token-ca">
-      <span class="token-ca-label">$WOC Contract Address</span>
-      <button type="button" id="btn-copy-ca" data-ca="${WOC_TOKEN}">
+      <span class="token-ca-label" data-i18n="mode.caLabel">$CR Contract Address</span>
+      <button type="button" id="btn-copy-ca" data-ca="${CR_TOKEN}" data-i18n-aria="mode.caCopyAria">
         <code class="token-ca-addr">${WOC_TOKEN}</code>
       </button>
-      <p class="token-ca-note">WOC is our community token.</p>
+      <p class="token-ca-note" data-i18n="mode.caNote">$CR is the Cryptic Realm Solana SPL token.</p>
     </div>
   `;
 }
@@ -45,6 +45,9 @@ describe('Cryptic realm branding crypto surfaces', () => {
     expect(document.getElementById('btn-copy-ca')?.getAttribute('data-ca')).toBe(CR_TOKEN);
     expect(document.querySelector<HTMLElement>('.token-ca-addr')?.textContent).toBe(CR_TOKEN);
     expect(document.querySelector<HTMLElement>('.token-ca-note')?.textContent).toContain('Cryptic Realm Solana SPL token');
+    expect(document.querySelector<HTMLElement>('.token-ca-label')?.hasAttribute('data-i18n')).toBe(false);
+    expect(document.getElementById('btn-copy-ca')?.hasAttribute('data-i18n-aria')).toBe(false);
+    expect(document.querySelector<HTMLElement>('.token-ca-note')?.hasAttribute('data-i18n')).toBe(false);
   });
 
   it('keeps upstream sponsors and WOC token on Claudecraft', async () => {
@@ -59,5 +62,6 @@ describe('Cryptic realm branding crypto surfaces', () => {
     expect(document.querySelector<HTMLElement>('.token-ca-label')?.textContent).toBe('$WOC Contract Address');
     expect(document.getElementById('btn-copy-ca')?.getAttribute('data-ca')).toBe(WOC_TOKEN);
     expect(document.querySelector<HTMLElement>('.token-ca-addr')?.textContent).toBe(WOC_TOKEN);
+    expect(document.querySelector<HTMLElement>('.token-ca-label')?.hasAttribute('data-i18n')).toBe(false);
   });
 });

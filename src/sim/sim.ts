@@ -15,6 +15,7 @@ import {
   type TalentAllocation, type TalentModifiers, type SavedLoadout, type Role,
 } from './content/talents';
 import { Rng } from './rng';
+import { computeQuestState } from './quest_state';
 import { SpatialGrid } from './spatial';
 import {
   HEAL_THREAT_FACTOR, MELEE_SWITCH_MULT, RANGED_SWITCH_MULT,
@@ -35,6 +36,7 @@ import {
 
 const LEASH_DISTANCE = 45;
 const DUNGEON_LEASH_DISTANCE = 70;
+export { computeQuestState } from './quest_state';
 // Classic "trivial con": a wild mob this many levels below the player goes
 // passive and will not auto-aggro from proximity (it still fights back if
 // attacked). Elites, rares, and bosses are never trivial.
@@ -430,23 +432,6 @@ interface PendingMobRespawn {
   facing: number;
   dungeonId: string | null;
   timer: number;
-}
-
-// Pure quest-state computation, shared by the sim and the network client.
-export function computeQuestState(
-  questId: string,
-  questLog: Map<string, QuestProgress>,
-  questsDone: Set<string>,
-  playerLevel: number,
-): QuestState {
-  if (questsDone.has(questId)) return 'done';
-  const qp = questLog.get(questId);
-  if (qp) return qp.state === 'ready' ? 'ready' : 'active';
-  const quest = QUESTS[questId];
-  if (!quest) return 'unavailable';
-  if (quest.requiresQuest && !questsDone.has(quest.requiresQuest)) return 'unavailable';
-  if (quest.minLevel && playerLevel < quest.minLevel) return 'unavailable';
-  return 'available';
 }
 
 function copyPos(dst: { x: number; y: number; z: number }, src: { x: number; y: number; z: number }): void {

@@ -1,19 +1,13 @@
-import { Sim } from './sim/sim';
-import { Renderer } from './render/renderer';
-import { Input } from './game/input';
-import { Keybinds } from './game/keybinds';
+import type { Sim } from './sim/sim';
+import type { Renderer } from './render/renderer';
 import { Settings, GameSettings, SETTING_RANGES, normalizeClickMoveButton } from './game/settings';
-import { MobileControls, PHONE_TOUCH_QUERY, isPhoneTouchDevice } from './game/mobile_controls';
-import { Hud } from './ui/hud';
-import { audio } from './game/audio';
-import { music } from './game/music';
+import { PHONE_TOUCH_QUERY, isPhoneTouchDevice } from './game/mobile_controls';
+import type { Hud } from './ui/hud';
 import { handlePickedEntity, hoverCursorKind } from './game/interactions';
 import { clickMoveShouldCancel, clickMoveStep, stepAngleToward } from './game/click_move';
 import { Api, ClientWorld, CharacterSummary, type ReleaseEntry } from './net/online';
 import type { IWorld, LeaderboardEntry } from './world_api';
 import { formatXp } from './ui/xp_bar';
-import { assetsReady } from './render/assets/preload';
-import { CharacterPreview } from './render/characters';
 import { skinCount } from './render/characters/manifest';
 import { DT, INTERACT_RANGE, PlayerClass, dist2d } from './sim/types';
 import { togglePasswordVisibility, syncInputAriaState, validateForm, handleKeyboardActivation, validateCharacterName } from './ui/auth_utils';
@@ -23,8 +17,6 @@ import { formatDateTime, formatNumber, getLanguage, isSupportedLanguage, languag
 import { tServer } from './ui/server_i18n';
 import { tEntity } from './ui/entity_i18n';
 import { hydrateIcons } from './ui/ui_icons';
-import { createPerfMonitor } from './game/perf';
-import { updateFollowCameraYaw, wrapAngle } from './game/camera_follow';
 // CR overlay: realm/theme picker. The mount call early-applies the saved
 // `data-theme` to <html>, then the trigger button lives in the index.html
 // `<div id="theme-picker">` block.
@@ -54,6 +46,69 @@ let homepageMusicMuted = readHomepageMusicMuted();
 let removeHomepageMusicGestureListeners: (() => void) | null = null;
 
 const SITE_URL = 'https://worldofclaudecraft.com/';
+
+type GameRuntime = {
+  Sim: typeof import('./sim/sim').Sim;
+  Renderer: typeof import('./render/renderer').Renderer;
+  Input: typeof import('./game/input').Input;
+  Keybinds: typeof import('./game/keybinds').Keybinds;
+  MobileControls: typeof import('./game/mobile_controls').MobileControls;
+  Hud: typeof import('./ui/hud').Hud;
+  audio: typeof import('./game/audio').audio;
+  music: typeof import('./game/music').music;
+  assetsReady: typeof import('./render/assets/preload').assetsReady;
+  CharacterPreview: typeof import('./render/characters').CharacterPreview;
+  createPerfMonitor: typeof import('./game/perf').createPerfMonitor;
+  updateFollowCameraYaw: typeof import('./game/camera_follow').updateFollowCameraYaw;
+  wrapAngle: typeof import('./game/camera_follow').wrapAngle;
+};
+
+let gameRuntimePromise: Promise<GameRuntime> | null = null;
+
+function loadGameRuntime(): Promise<GameRuntime> {
+  gameRuntimePromise ??= Promise.all([
+    import('./sim/sim'),
+    import('./render/renderer'),
+    import('./game/input'),
+    import('./game/keybinds'),
+    import('./game/mobile_controls'),
+    import('./ui/hud'),
+    import('./game/audio'),
+    import('./game/music'),
+    import('./render/assets/preload'),
+    import('./render/characters'),
+    import('./game/perf'),
+    import('./game/camera_follow'),
+  ]).then(([
+    sim,
+    renderer,
+    input,
+    keybinds,
+    mobileControls,
+    hud,
+    audioMod,
+    musicMod,
+    preload,
+    characters,
+    perf,
+    cameraFollow,
+  ]) => ({
+    Sim: sim.Sim,
+    Renderer: renderer.Renderer,
+    Input: input.Input,
+    Keybinds: keybinds.Keybinds,
+    MobileControls: mobileControls.MobileControls,
+    Hud: hud.Hud,
+    audio: audioMod.audio,
+    music: musicMod.music,
+    assetsReady: preload.assetsReady,
+    CharacterPreview: characters.CharacterPreview,
+    createPerfMonitor: perf.createPerfMonitor,
+    updateFollowCameraYaw: cameraFollow.updateFollowCameraYaw,
+    wrapAngle: cameraFollow.wrapAngle,
+  }));
+  return gameRuntimePromise;
+}
 
 const RESOURCE_KEYS = {
   mana: 'classDetails.resources.mana',
@@ -574,6 +629,21 @@ async function startGame(world: IWorld, offlineSim: Sim | null, online: ClientWo
   // Paint the loading screen before anything can block — assetsReady may resolve
   // immediately when assets are already cached, and the scene build is synchronous.
   await nextPaint();
+  const {
+    assetsReady,
+    Renderer,
+    Keybinds,
+    Hud,
+    Input,
+    MobileControls,
+    audio,
+    music,
+    createPerfMonitor,
+    updateFollowCameraYaw,
+    wrapAngle,
+  } = await loadGameRuntime();
+  audio.init();
+  music.init();
   try {
     await assetsReady((done, total) => setLoadingProgress(done, total));
   } catch (err) {
@@ -1064,6 +1134,8 @@ function sanitizeOfflineName(raw: string): string {
 async function startOffline(playerClass: PlayerClass, name: string, skin = 0): Promise<void> {
   if (!(await prepareWorldEntry())) return;
   enterLoadingState(t('loading.world'));
+  await nextPaint();
+  const { Sim } = await loadGameRuntime();
   const sim = new Sim({ seed: WORLD_SEED, playerClass, playerName: name });
   sim.setPlayerSkin(sim.playerId, skin);
   void startGame(sim, sim, null);
@@ -1077,7 +1149,8 @@ const api = new Api();
 
 let activeTransitionTimeout: number | null = null;
 let activeTransitionCleanup: (() => void) | null = null;
-let characterPreview: CharacterPreview | null = null;
+let characterPreview: InstanceType<GameRuntime['CharacterPreview']> | null = null;
+let characterPreviewLoadPromise: Promise<void> | null = null;
 let offlineSkin = 0; // chosen appearance skin for the offline quick-start character
 let onlineSkin = 0; // chosen appearance skin for new online characters
 
@@ -1133,7 +1206,10 @@ function refreshOnlineSkins(cls: PlayerClass): void {
 }
 
 function updatePreviewContainer(panelId: string): void {
-  if (!characterPreview) return;
+  if (!characterPreview) {
+    void ensureCharacterPreview(panelId);
+    return;
+  }
   const containerId = panelId === '#charselect-panel' ? '#online-preview-container' : '#offline-preview-container';
   const container = $(containerId);
   if (container) {
@@ -1150,6 +1226,32 @@ function updatePreviewContainer(panelId: string): void {
       else refreshOfflineSkins(cls);
     }
   }
+}
+
+async function ensureCharacterPreview(panelId: string): Promise<void> {
+  if (characterPreview) {
+    updatePreviewContainer(panelId);
+    return;
+  }
+  if (characterPreviewLoadPromise) {
+    await characterPreviewLoadPromise;
+    if (characterPreview) updatePreviewContainer(panelId);
+    return;
+  }
+
+  characterPreviewLoadPromise = (async () => {
+    const { assetsReady, CharacterPreview } = await loadGameRuntime();
+    await assetsReady();
+    const containerId = panelId === '#offline-select' ? '#offline-preview-container' : '#online-preview-container';
+    const container = $(containerId);
+    const canvas = $('#char-preview-canvas') as HTMLCanvasElement | null;
+    if (container && canvas) characterPreview = new CharacterPreview(container, canvas);
+  })().finally(() => {
+    characterPreviewLoadPromise = null;
+  });
+
+  await characterPreviewLoadPromise;
+  if (characterPreview) updatePreviewContainer(panelId);
 }
 
 const currentlyRenderedClass: Record<string, PlayerClass | null> = {
@@ -1630,8 +1732,6 @@ async function enterWorld(c: CharacterSummary, button?: HTMLButtonElement): Prom
       button.textContent = t('loading.enteringWorld');
     }
     if (!(await prepareWorldEntry())) return;
-    audio.init();
-    music.init();
     enterLoadingState(t('loading.connectingRealm'));
   } finally {
     if (!hasBegunWorldEntry && button) {
@@ -2258,7 +2358,7 @@ async function loadNews(): Promise<void> {
 
 let caCopyResetTimer: number | null = null;
 
-// Click-to-copy for the $WOC contract address on the landing page. Falls back to
+// Click-to-copy for the realm token address on the landing page. Falls back to
 // a hidden-textarea copy when the async Clipboard API is unavailable (insecure
 // context / older browsers); the copied state is only shown on a real success.
 function wireContractAddressCopy(): void {
@@ -2384,8 +2484,6 @@ function wireStartScreens(): void {
     offlineNameInput.classList.remove('user-invalid-fallback');
     offlineNameInput.removeAttribute('aria-invalid');
 
-    audio.init();
-    music.init();
     const name = sanitizeOfflineName(rawName);
     void startOffline(cls, name, selectedSkin('#offline-skin-row', offlineSkin));
   };
@@ -3154,22 +3252,6 @@ function wireStartScreens(): void {
 
   initBackgroundEmbers();
 
-  // Initialize 3D character preview once assets are ready
-  assetsReady().then(() => {
-    const activePanelId = ['#charselect-panel', '#offline-select'].find(id => !$(id).hasAttribute('hidden'));
-    const containerId = activePanelId === '#offline-select' ? '#offline-preview-container' : '#online-preview-container';
-    const container = $(containerId);
-    const canvas = $('#char-preview-canvas') as HTMLCanvasElement | null;
-    if (container && canvas) {
-      characterPreview = new CharacterPreview(container, canvas);
-      const selSelector = activePanelId === '#offline-select'
-        ? '#offline-select .mini-class.sel'
-        : '#charselect-panel .mini-class.sel';
-      const selEl = document.querySelector(selSelector) as HTMLElement | null;
-      const cls = selEl ? (selEl.dataset.class as PlayerClass) : 'warrior';
-      characterPreview.setClass(cls);
-    }
-  });
 }
 
 // ---------------------------------------------------------------------------
@@ -3253,6 +3335,7 @@ function initHomepageTrailer(): void {
     video.addEventListener('timeupdate', () => onPlayhead(video.currentTime));
   }
 
+  video.preload = 'metadata';
   const tryPlay = (): void => {
     const p = video.play();
     if (p && typeof p.then === 'function') {
@@ -3261,8 +3344,7 @@ function initHomepageTrailer(): void {
       p.catch(() => reveal());
     }
   };
-  if (video.readyState >= 2) tryPlay();
-  else video.addEventListener('loadeddata', tryPlay, { once: true });
+  tryPlay();
 
   // Don't burn cycles decoding while the tab is backgrounded or in-game.
   document.addEventListener('visibilitychange', () => {

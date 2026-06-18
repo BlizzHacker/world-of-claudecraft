@@ -132323,144 +132323,144 @@
     },
     "main:mode.caLabel": {
       "scope": "main",
-      "enHash": "41fbebe1d1f2e6ef",
+      "enHash": "1172da30f6e3274b",
       "placeholders": [],
       "locales": {
         "es": {
           "state": "translated",
-          "srcHash": "41fbebe1d1f2e6ef",
+          "srcHash": "1172da30f6e3274b",
           "by": "human"
         },
         "es_ES": {
           "state": "translated",
-          "srcHash": "41fbebe1d1f2e6ef",
+          "srcHash": "1172da30f6e3274b",
           "by": "human"
         },
         "fr_FR": {
           "state": "translated",
-          "srcHash": "41fbebe1d1f2e6ef",
+          "srcHash": "1172da30f6e3274b",
           "by": "human"
         },
         "fr_CA": {
           "state": "translated",
-          "srcHash": "41fbebe1d1f2e6ef",
+          "srcHash": "1172da30f6e3274b",
           "by": "human"
         },
         "en_CA": {
           "state": "translated",
-          "srcHash": "41fbebe1d1f2e6ef",
+          "srcHash": "1172da30f6e3274b",
           "by": "human"
         },
         "it_IT": {
           "state": "translated",
-          "srcHash": "41fbebe1d1f2e6ef",
+          "srcHash": "1172da30f6e3274b",
           "by": "human"
         },
         "de_DE": {
           "state": "translated",
-          "srcHash": "41fbebe1d1f2e6ef",
+          "srcHash": "1172da30f6e3274b",
           "by": "human"
         },
         "zh_CN": {
           "state": "translated",
-          "srcHash": "41fbebe1d1f2e6ef",
+          "srcHash": "1172da30f6e3274b",
           "by": "human"
         },
         "zh_TW": {
           "state": "translated",
-          "srcHash": "41fbebe1d1f2e6ef",
+          "srcHash": "1172da30f6e3274b",
           "by": "human"
         },
         "ko_KR": {
           "state": "translated",
-          "srcHash": "41fbebe1d1f2e6ef",
+          "srcHash": "1172da30f6e3274b",
           "by": "human"
         },
         "ja_JP": {
           "state": "translated",
-          "srcHash": "41fbebe1d1f2e6ef",
+          "srcHash": "1172da30f6e3274b",
           "by": "human"
         },
         "pt_BR": {
           "state": "translated",
-          "srcHash": "41fbebe1d1f2e6ef",
+          "srcHash": "1172da30f6e3274b",
           "by": "human"
         },
         "ru_RU": {
           "state": "translated",
-          "srcHash": "41fbebe1d1f2e6ef",
+          "srcHash": "1172da30f6e3274b",
           "by": "human"
         }
       }
     },
     "main:mode.caNote": {
       "scope": "main",
-      "enHash": "0bc8a1ad8ee25f98",
+      "enHash": "a9a2478582bdf929",
       "placeholders": [],
       "locales": {
         "es": {
           "state": "translated",
-          "srcHash": "0bc8a1ad8ee25f98",
+          "srcHash": "a9a2478582bdf929",
           "by": "human"
         },
         "es_ES": {
           "state": "translated",
-          "srcHash": "0bc8a1ad8ee25f98",
+          "srcHash": "a9a2478582bdf929",
           "by": "human"
         },
         "fr_FR": {
           "state": "translated",
-          "srcHash": "0bc8a1ad8ee25f98",
+          "srcHash": "a9a2478582bdf929",
           "by": "human"
         },
         "fr_CA": {
           "state": "translated",
-          "srcHash": "0bc8a1ad8ee25f98",
+          "srcHash": "a9a2478582bdf929",
           "by": "human"
         },
         "en_CA": {
           "state": "translated",
-          "srcHash": "0bc8a1ad8ee25f98",
+          "srcHash": "a9a2478582bdf929",
           "by": "human"
         },
         "it_IT": {
           "state": "translated",
-          "srcHash": "0bc8a1ad8ee25f98",
+          "srcHash": "a9a2478582bdf929",
           "by": "human"
         },
         "de_DE": {
           "state": "translated",
-          "srcHash": "0bc8a1ad8ee25f98",
+          "srcHash": "a9a2478582bdf929",
           "by": "human"
         },
         "zh_CN": {
           "state": "translated",
-          "srcHash": "0bc8a1ad8ee25f98",
+          "srcHash": "a9a2478582bdf929",
           "by": "human"
         },
         "zh_TW": {
           "state": "translated",
-          "srcHash": "0bc8a1ad8ee25f98",
+          "srcHash": "a9a2478582bdf929",
           "by": "human"
         },
         "ko_KR": {
           "state": "translated",
-          "srcHash": "0bc8a1ad8ee25f98",
+          "srcHash": "a9a2478582bdf929",
           "by": "human"
         },
         "ja_JP": {
           "state": "translated",
-          "srcHash": "0bc8a1ad8ee25f98",
+          "srcHash": "a9a2478582bdf929",
           "by": "human"
         },
         "pt_BR": {
           "state": "translated",
-          "srcHash": "0bc8a1ad8ee25f98",
+          "srcHash": "a9a2478582bdf929",
           "by": "human"
         },
         "ru_RU": {
           "state": "translated",
-          "srcHash": "0bc8a1ad8ee25f98",
+          "srcHash": "a9a2478582bdf929",
           "by": "human"
         }
       }

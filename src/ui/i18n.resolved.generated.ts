@@ -203,9 +203,9 @@ export const en: EnTranslations = {
     "serverLabel": "Choose your realm",
     "serverAria": "Select realm: Online or Offline",
     "serverOfflineSub": "Instant local world",
-    "caLabel": "$WOC Contract Address",
+    "caLabel": "$CR Contract Address",
     "caCopyAria": "Copy contract address",
-    "caNote": "WOC is our community token. It is not needed to play. Join Discord to discuss the WOC utility and flywheel."
+    "caNote": "$CR is the Cryptic Realm Solana SPL token for gameplay utility, cosmetics, achievements, and account records. It is not needed to play."
   },
   "auth": {
     "enterRealm": "Enter the Realm",
@@ -3738,9 +3738,9 @@ export const es: EnTranslations = {
     "serverLabel": "Elige tu reino",
     "serverAria": "Selecciona el reino: En Línea o Desconectado",
     "serverOfflineSub": "Mundo local instantáneo",
-    "caLabel": "Dirección del contrato de $WOC",
+    "caLabel": "Dirección del contrato de $CR",
     "caCopyAria": "Copiar dirección del contrato",
-    "caNote": "WOC es nuestro token comunitario. No es necesario para jugar. Únete a Discord para hablar sobre la utilidad y el flywheel de WOC."
+    "caNote": "$CR es el token SPL de Solana de Cryptic Realm para utilidad de juego, cosméticos, logros y registros de cuenta. No es necesario para jugar."
   },
   "auth": {
     "enterRealm": "Entrar al Reino",
@@ -7273,9 +7273,9 @@ export const es_ES: EnTranslations = {
     "serverLabel": "Elige tu reino",
     "serverAria": "Selecciona el reino: En Línea o Desconectado",
     "serverOfflineSub": "Mundo local instantáneo",
-    "caLabel": "Dirección del contrato de $WOC",
+    "caLabel": "Dirección del contrato de $CR",
     "caCopyAria": "Copiar dirección del contrato",
-    "caNote": "WOC es nuestro token comunitario. No es necesario para jugar. Únete a Discord para hablar sobre la utilidad y el flywheel de WOC."
+    "caNote": "$CR es el token SPL de Solana de Cryptic Realm para utilidad de juego, cosméticos, logros y registros de cuenta. No es necesario para jugar."
   },
   "auth": {
     "enterRealm": "Entrar al reino",
@@ -10808,9 +10808,9 @@ export const fr_FR: EnTranslations = {
     "serverLabel": "Choisissez votre royaume",
     "serverAria": "Choisir le royaume : En ligne ou Hors ligne",
     "serverOfflineSub": "Monde local instantané",
-    "caLabel": "Adresse du contrat $WOC",
+    "caLabel": "Adresse du contrat $CR",
     "caCopyAria": "Copier l'adresse du contrat",
-    "caNote": "WOC est notre jeton communautaire. Il n'est pas nécessaire pour jouer. Rejoignez le Discord pour discuter de l'utilité et de la dynamique du WOC."
+    "caNote": "$CR est le jeton SPL Solana de Cryptic Realm pour l'utilité de jeu, les cosmétiques, les hauts faits et les enregistrements de compte. Il n'est pas nécessaire pour jouer."
   },
   "auth": {
     "enterRealm": "Entrer dans le royaume",
@@ -14343,9 +14343,9 @@ export const fr_CA: EnTranslations = {
     "serverLabel": "Choisissez votre royaume",
     "serverAria": "Choisir le royaume : En ligne ou Hors ligne",
     "serverOfflineSub": "Monde local instantané",
-    "caLabel": "Adresse du contrat $WOC",
+    "caLabel": "Adresse du contrat $CR",
     "caCopyAria": "Copier l'adresse du contrat",
-    "caNote": "WOC est notre jeton communautaire. Il n'est pas nécessaire pour jouer. Rejoignez le Discord pour discuter de l'utilité et de la dynamique du WOC."
+    "caNote": "$CR est le jeton SPL Solana de Cryptic Realm pour l'utilité de jeu, les cosmétiques, les hauts faits et les enregistrements de compte. Il n'est pas nécessaire pour jouer."
   },
   "auth": {
     "enterRealm": "Entrer dans le royaume",
@@ -17878,9 +17878,9 @@ export const en_CA: EnTranslations = {
     "serverLabel": "Choose your realm",
     "serverAria": "Select realm: Online or Offline",
     "serverOfflineSub": "Instant local world",
-    "caLabel": "$WOC Contract Address",
+    "caLabel": "$CR Contract Address",
     "caCopyAria": "Copy contract address",
-    "caNote": "WOC is our community token. It is not needed to play. Join Discord to discuss the WOC utility and flywheel."
+    "caNote": "$CR is the Cryptic Realm Solana SPL token for gameplay utility, cosmetics, achievements, and account records. It is not needed to play."
   },
   "auth": {
     "enterRealm": "Enter the Realm",
@@ -21413,9 +21413,9 @@ export const it_IT: EnTranslations = {
     "serverLabel": "Scegli il tuo reame",
     "serverAria": "Seleziona il reame: Online o Offline",
     "serverOfflineSub": "Mondo locale istantaneo",
-    "caLabel": "Indirizzo del contratto $WOC",
+    "caLabel": "Indirizzo del contratto $CR",
     "caCopyAria": "Copia l'indirizzo del contratto",
-    "caNote": "WOC è il token della nostra community. Non serve per giocare. Entra nel Discord per discutere dell'utilità e del flywheel di WOC."
+    "caNote": "$CR è il token SPL Solana di Cryptic Realm per utilità di gioco, cosmetici, obiettivi e registri dell'account. Non serve per giocare."
   },
   "auth": {
     "enterRealm": "Entra nel reame",
@@ -24948,9 +24948,9 @@ export const de_DE: EnTranslations = {
     "serverLabel": "Wähle deinen Realm",
     "serverAria": "Realm wählen: Online oder Offline",
     "serverOfflineSub": "Sofortige lokale Welt",
-    "caLabel": "$WOC-Vertragsadresse",
+    "caLabel": "$CR-Vertragsadresse",
     "caCopyAria": "Vertragsadresse kopieren",
-    "caNote": "WOC ist unser Community-Token. Es wird zum Spielen nicht benötigt. Tritt dem Discord bei, um über den Nutzen und das Schwungrad von WOC zu sprechen."
+    "caNote": "$CR ist das Solana-SPL-Token von Cryptic Realm für Gameplay-Nutzen, Kosmetik, Erfolge und Kontodatensätze. Es wird zum Spielen nicht benötigt."
   },
   "auth": {
     "enterRealm": "Realm betreten",
@@ -28483,9 +28483,9 @@ export const zh_CN: EnTranslations = {
     "serverLabel": "选择你的服务器",
     "serverAria": "选择服务器：在线或离线",
     "serverOfflineSub": "即时本地世界",
-    "caLabel": "$WOC 合约地址",
+    "caLabel": "$CR 合约地址",
     "caCopyAria": "复制合约地址",
-    "caNote": "WOC 是我们的社区代币。游玩游戏并不需要它。加入 Discord 一起讨论 WOC 的用途与飞轮效应。"
+    "caNote": "$CR 是 Cryptic Realm 的 Solana SPL 代币，用于游戏功能、外观、成就和账号记录。游玩游戏并不需要它。"
   },
   "auth": {
     "enterRealm": "进入服务器",
@@ -32018,9 +32018,9 @@ export const zh_TW: EnTranslations = {
     "serverLabel": "選擇你的伺服器",
     "serverAria": "選擇伺服器：線上或離線",
     "serverOfflineSub": "即時本地世界",
-    "caLabel": "$WOC 合約地址",
+    "caLabel": "$CR 合約地址",
     "caCopyAria": "複製合約地址",
-    "caNote": "WOC 是我們的社群代幣，並非遊玩所需。加入 Discord 一起討論 WOC 的用途與飛輪效應。"
+    "caNote": "$CR 是 Cryptic Realm 的 Solana SPL 代幣，用於遊戲功能、外觀、成就和帳號記錄，並非遊玩所需。"
   },
   "auth": {
     "enterRealm": "進入伺服器",
@@ -35553,9 +35553,9 @@ export const ko_KR: EnTranslations = {
     "serverLabel": "렐름을 선택하세요",
     "serverAria": "렐름 선택: 온라인 또는 오프라인",
     "serverOfflineSub": "즉시 시작하는 로컬 세상",
-    "caLabel": "$WOC 계약 주소",
+    "caLabel": "$CR 계약 주소",
     "caCopyAria": "계약 주소 복사",
-    "caNote": "WOC는 커뮤니티 토큰입니다. 플레이에는 필요하지 않습니다. WOC의 활용과 선순환 구조에 관해 이야기하려면 Discord에 참여하세요."
+    "caNote": "$CR은 게임플레이 유틸리티, 꾸미기 아이템, 업적, 계정 기록을 위한 Cryptic Realm Solana SPL 토큰입니다. 플레이에는 필요하지 않습니다."
   },
   "auth": {
     "enterRealm": "렐름 입장",
@@ -39088,9 +39088,9 @@ export const ja_JP: EnTranslations = {
     "serverLabel": "レルムを選択",
     "serverAria": "レルムを選択：オンラインまたはオフライン",
     "serverOfflineSub": "即座にローカルの世界へ",
-    "caLabel": "$WOC コントラクトアドレス",
+    "caLabel": "$CR コントラクトアドレス",
     "caCopyAria": "コントラクトアドレスをコピー",
-    "caNote": "WOCはコミュニティトークンです。プレイには必要ありません。Discordに参加して、WOCのユーティリティとフライホイールについて語り合いましょう。"
+    "caNote": "$CRはCryptic RealmのSolana SPLトークンで、ゲーム内ユーティリティ、コスメ、実績、アカウント記録に使われます。プレイには必要ありません。"
   },
   "auth": {
     "enterRealm": "レルムに入る",
@@ -42623,9 +42623,9 @@ export const pt_BR: EnTranslations = {
     "serverLabel": "Escolha seu reino",
     "serverAria": "Escolher reino: Online ou Offline",
     "serverOfflineSub": "Mundo local instantâneo",
-    "caLabel": "Endereço do contrato $WOC",
+    "caLabel": "Endereço do contrato $CR",
     "caCopyAria": "Copiar endereço do contrato",
-    "caNote": "WOC é o token da nossa comunidade. Não é necessário para jogar. Entre no Discord para discutir a utilidade e o flywheel do WOC."
+    "caNote": "$CR é o token SPL da Solana de Cryptic Realm para utilidade de jogo, cosméticos, conquistas e registros de conta. Não é necessário para jogar."
   },
   "auth": {
     "enterRealm": "Entrar no reino",
@@ -46158,9 +46158,9 @@ export const ru_RU: EnTranslations = {
     "serverLabel": "Выберите свой мир",
     "serverAria": "Выберите мир: В сети или Не в сети",
     "serverOfflineSub": "Мгновенный локальный мир",
-    "caLabel": "Адрес контракта $WOC",
+    "caLabel": "Адрес контракта $CR",
     "caCopyAria": "Скопировать адрес контракта",
-    "caNote": "WOC - токен нашего сообщества. Он не нужен для игры. Присоединяйтесь к Discord, чтобы обсудить применение и экосистему WOC."
+    "caNote": "$CR - Solana SPL-токен Cryptic Realm для игровых функций, косметики, достижений и записей аккаунта. Он не нужен для игры."
   },
   "auth": {
     "enterRealm": "Войти в игровой мир",
@@ -49726,9 +49726,9 @@ export const en_XA: EnTranslations = {
     "serverLabel": "[Çĥóóšé ýóúŕ ŕéáļɱ]",
     "serverAria": "[Šéļéçţ ŕéáļɱ: Óñļíñé óŕ Óƒƒļíñé]",
     "serverOfflineSub": "[Íñšţáñţ ļóçáļ ŵóŕļð]",
-    "caLabel": "[$ŴÓÇ Çóñţŕáçţ Áððŕéšš]",
+    "caLabel": "[$ÇŔ Çóñţŕáçţ Áððŕéšš]",
     "caCopyAria": "[Çóþý çóñţŕáçţ áððŕéšš]",
-    "caNote": "[ŴÓÇ íš óúŕ çóɱɱúñíţý ţóķéñ. Íţ íš ñóţ ñééðéð ţó þļáý. Ĵóíñ Ðíšçóŕð ţó ðíšçúšš ţĥé ŴÓÇ úţíļíţý áñð ƒļýŵĥééļ.]"
+    "caNote": "[$ÇŔ íš ţĥé Çŕýþţíç Ŕéáļɱ Šóļáñá ŠÞĻ ţóķéñ ƒóŕ ĝáɱéþļáý úţíļíţý, çóšɱéţíçš, áçĥíéʋéɱéñţš, áñð áççóúñţ ŕéçóŕðš. Íţ íš ñóţ ñééðéð ţó þļáý.]"
   },
   "auth": {
     "enterRealm": "[Éñţéŕ ţĥé Ŕéáļɱ]",

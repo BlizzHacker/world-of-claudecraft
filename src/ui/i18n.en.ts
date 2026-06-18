@@ -11007,9 +11007,9 @@ export const en = {
     serverLabel: "Choose your realm",
     serverAria: "Select realm: Online or Offline",
     serverOfflineSub: "Instant local world",
-    caLabel: "$WOC Contract Address",
+    caLabel: "$CR Contract Address",
     caCopyAria: "Copy contract address",
-    caNote: "WOC is our community token. It is not needed to play. Join Discord to discuss the WOC utility and flywheel.",
+    caNote: "$CR is the Cryptic Realm Solana SPL token for gameplay utility, cosmetics, achievements, and account records. It is not needed to play.",
   },
   auth: {
     enterRealm: "Enter the Realm",
