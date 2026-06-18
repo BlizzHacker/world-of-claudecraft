@@ -143,6 +143,7 @@ export const en: EnTranslations = {
     "wiki": "Wiki",
     "news": "News",
     "download": "Download",
+    "whitepaper": "White Paper",
     "loginRegister": "Login/Register",
     "donate": "Donate"
   },
@@ -3677,6 +3678,7 @@ export const es: EnTranslations = {
     "wiki": "Wiki",
     "news": "Noticias",
     "download": "Descargar",
+    "whitepaper": "White Paper",
     "loginRegister": "Iniciar Sesión/Registrarse",
     "donate": "Donar"
   },
@@ -7211,6 +7213,7 @@ export const es_ES: EnTranslations = {
     "wiki": "Wiki",
     "news": "Noticias",
     "download": "Descargar",
+    "whitepaper": "White Paper",
     "loginRegister": "Iniciar sesión/Registrarse",
     "donate": "Donar"
   },
@@ -10745,6 +10748,7 @@ export const fr_FR: EnTranslations = {
     "wiki": "Wiki",
     "news": "Actualités",
     "download": "Télécharger",
+    "whitepaper": "White Paper",
     "loginRegister": "Se connecter/S'inscrire",
     "donate": "Faire un don"
   },
@@ -14279,6 +14283,7 @@ export const fr_CA: EnTranslations = {
     "wiki": "Wiki",
     "news": "Actualités",
     "download": "Télécharger",
+    "whitepaper": "White Paper",
     "loginRegister": "Se connecter/S'enregistrer",
     "donate": "Faire un don"
   },
@@ -17813,6 +17818,7 @@ export const en_CA: EnTranslations = {
     "wiki": "Wiki",
     "news": "News",
     "download": "Download",
+    "whitepaper": "White Paper",
     "loginRegister": "Login/Register",
     "donate": "Donate"
   },
@@ -21347,6 +21353,7 @@ export const it_IT: EnTranslations = {
     "wiki": "Wiki",
     "news": "Novità",
     "download": "Scarica",
+    "whitepaper": "White Paper",
     "loginRegister": "Accedi/Registrati",
     "donate": "Dona"
   },
@@ -24881,6 +24888,7 @@ export const de_DE: EnTranslations = {
     "wiki": "Wiki",
     "news": "Neuigkeiten",
     "download": "Herunterladen",
+    "whitepaper": "White Paper",
     "loginRegister": "Einloggen/Registrieren",
     "donate": "Spenden"
   },
@@ -28415,6 +28423,7 @@ export const zh_CN: EnTranslations = {
     "wiki": "百科指南",
     "news": "新闻资讯",
     "download": "下载客户端",
+    "whitepaper": "White Paper",
     "loginRegister": "登录/注册",
     "donate": "捐赠"
   },
@@ -31949,6 +31958,7 @@ export const zh_TW: EnTranslations = {
     "wiki": "百科指南",
     "news": "最新消息",
     "download": "下載客戶端",
+    "whitepaper": "White Paper",
     "loginRegister": "登入/註冊",
     "donate": "捐贈"
   },
@@ -35483,6 +35493,7 @@ export const ko_KR: EnTranslations = {
     "wiki": "위키",
     "news": "새소식",
     "download": "다운로드",
+    "whitepaper": "White Paper",
     "loginRegister": "로그인/회원가입",
     "donate": "후원"
   },
@@ -39017,6 +39028,7 @@ export const ja_JP: EnTranslations = {
     "wiki": "Wiki",
     "news": "ニュース",
     "download": "ダウンロード",
+    "whitepaper": "White Paper",
     "loginRegister": "ログイン/登録",
     "donate": "寄付"
   },
@@ -42551,6 +42563,7 @@ export const pt_BR: EnTranslations = {
     "wiki": "Wiki",
     "news": "Notícias",
     "download": "Baixar",
+    "whitepaper": "White Paper",
     "loginRegister": "Entrar/Registrar",
     "donate": "Doar"
   },
@@ -46085,6 +46098,7 @@ export const ru_RU: EnTranslations = {
     "wiki": "Вики",
     "news": "Новости",
     "download": "Скачать",
+    "whitepaper": "White Paper",
     "loginRegister": "Войти / Зарегистрироваться",
     "donate": "Пожертвовать"
   },
@@ -49652,6 +49666,7 @@ export const en_XA: EnTranslations = {
     "wiki": "[Ŵíķí]",
     "news": "[Ñéŵš]",
     "download": "[Ðóŵñļóáð]",
+    "whitepaper": "[Ŵĥíţé Þáþéŕ]",
     "loginRegister": "[Ļóĝíñ/Ŕéĝíšţéŕ]",
     "donate": "[Ðóñáţé]"
   },

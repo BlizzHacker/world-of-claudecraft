@@ -126,6 +126,7 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   "nav.wiki": "Wiki",
   "nav.news": "Novità",
   "nav.download": "Scarica",
+  "nav.whitepaper": "White Paper",
   "nav.loginRegister": "Accedi/Registrati",
   "nav.donate": "Dona",
   "stats.title": "Stato del Reame",

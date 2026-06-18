@@ -10947,6 +10947,7 @@ export const en = {
     wiki: "Wiki",
     news: "News",
     download: "Download",
+    whitepaper: "White Paper",
     loginRegister: "Login/Register",
     donate: "Donate",
   },

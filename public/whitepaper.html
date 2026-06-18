@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#08080d" />
+  <title>Cryptic Realm White Paper</title>
+  <meta name="description" content="Cryptic Realm white paper: game vision, realm customization, Solana token utility, custody, and roadmap." />
+  <link rel="canonical" href="https://crypticrealm.com/whitepaper.html" />
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #08080d;
+      --panel: rgba(14, 13, 18, 0.94);
+      --line: #6f5a2a;
+      --gold: #ffd166;
+      --gold-2: #c8a838;
+      --ink: #f0ebd8;
+      --muted: #b9ad86;
+      --red: #c45142;
+      --blue: #7fc7ff;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--ink); }
+    body {
+      background:
+        linear-gradient(90deg, rgba(5, 7, 12, 0.92), rgba(5, 7, 12, 0.62), rgba(5, 7, 12, 0.94)),
+        radial-gradient(circle at 18% 10%, rgba(196, 81, 66, 0.22), transparent 34%),
+        radial-gradient(circle at 82% 18%, rgba(127, 199, 255, 0.14), transparent 30%),
+        url("/loading-screen.jpg") center / cover fixed;
+    }
+    a { color: var(--gold); }
+    .wrap { width: min(1060px, calc(100% - 32px)); margin: 0 auto; padding: 32px 0 56px; }
+    header { min-height: 42vh; display: grid; align-content: end; padding: 28px 0; }
+    .eyebrow { color: var(--gold-2); text-transform: uppercase; letter-spacing: 0.14em; font-size: 12px; font-weight: 700; }
+    h1 { margin: 10px 0 12px; font: 800 clamp(38px, 8vw, 92px)/0.95 Georgia, "Times New Roman", serif; letter-spacing: 0; }
+    .lead { max-width: 760px; color: #f5e9c9; font-size: clamp(17px, 2vw, 22px); line-height: 1.45; }
+    .meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+    .pill { border: 1px solid rgba(255, 209, 102, 0.45); background: rgba(0,0,0,0.32); border-radius: 4px; padding: 8px 10px; color: var(--muted); font-size: 13px; }
+    main { display: grid; gap: 18px; }
+    section { background: var(--panel); border: 1px solid rgba(111, 90, 42, 0.75); border-radius: 8px; padding: clamp(18px, 3vw, 30px); box-shadow: 0 18px 50px rgba(0,0,0,0.35); }
+    h2 { margin: 0 0 12px; color: var(--gold); font: 700 25px/1.1 Georgia, "Times New Roman", serif; letter-spacing: 0; }
+    p, li { color: var(--ink); line-height: 1.58; }
+    p { margin: 0 0 12px; }
+    ul, ol { margin: 0; padding-left: 22px; }
+    code { overflow-wrap: anywhere; color: #d8f0ff; background: rgba(127, 199, 255, 0.08); border: 1px solid rgba(127, 199, 255, 0.18); border-radius: 4px; padding: 2px 5px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
+    .fact { border: 1px solid rgba(255, 209, 102, 0.18); border-radius: 6px; padding: 12px; background: rgba(255, 209, 102, 0.05); }
+    .fact strong { display: block; color: var(--gold-2); margin-bottom: 4px; }
+    .notice { border-color: rgba(196, 81, 66, 0.42); background: rgba(196, 81, 66, 0.12); }
+    footer { color: var(--muted); padding: 24px 0 0; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="eyebrow">Cryptic Realm</div>
+      <h1>White Paper</h1>
+      <p class="lead">An independent dark-fantasy browser MMO with realm-specific customization, restored mini-games, operational transparency, and an optional Solana utility token layer.</p>
+      <div class="meta">
+        <span class="pill">Version 0.1</span>
+        <span class="pill">Published June 18, 2026</span>
+        <span class="pill">Mint <code>3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv</code></span>
+      </div>
+    </header>
+
+    <main>
+      <section>
+        <h2>Summary</h2>
+        <p>Cryptic Realm expands the World of ClaudeCraft engine with realm identity, custom visuals, player options, mini-games, moderation tools, recoverable operations, and a private roadmap for Wade's independent game.</p>
+        <p>The token layer is optional. The game must remain playable without a wallet.</p>
+      </section>
+
+      <section>
+        <h2>Product Pillars</h2>
+        <ul>
+          <li>Play first: wallet features must not block ordinary gameplay.</li>
+          <li>Realm identity: shared engine improvements can coexist with Cryptic Realm-specific lore, visuals, rules, and economy policy.</li>
+          <li>Customization: camera modes, HUD skins, realm skins, mini-games, and future mod toggles belong in the in-game Customization menu.</li>
+          <li>Operations transparency: admin, moderation, auto-update, and backup systems should be boring, auditable, and recoverable.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Token Utility</h2>
+        <p>The Cryptic Realm SPL token is intended for gameplay achievement claims, cosmetic and collectible ownership records, account-linked event rewards, and future item receipts where an on-chain record is useful.</p>
+        <div class="grid">
+          <div class="fact"><strong>Network</strong>Solana mainnet</div>
+          <div class="fact"><strong>Decimals</strong>9</div>
+          <div class="fact"><strong>Initial Supply</strong>0</div>
+          <div class="fact"><strong>Treasury</strong><code>GncAXx6j38osJns395XZtf6rSA9MU3K1gwafTrHpBJpi</code></div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Custody And Recovery</h2>
+        <p>Cryptic Realm has two critical custody layers: the Phantom wallet recovery phrase/private keys, and the mint authority keypair used to control token minting.</p>
+        <p>Both must be backed up offline. Server copies are hot keys and should not be the only source of truth. Long-term hardening should move authority to a hardware wallet or multisig, then optionally revoke authority after tokenomics are fixed.</p>
+      </section>
+
+      <section>
+        <h2>Roadmap</h2>
+        <ol>
+          <li>Stabilize live realm deployment, mobile performance, and realm routing.</li>
+          <li>Complete the Customization menu for camera, HUD, realm skin, mini-games, wallet, and future mod toggles.</li>
+          <li>Restore original Cryptic Realm mini-games and assets through an optimized asset pipeline.</li>
+          <li>Harden backups across Slimmm, Thiccc, and Wade's Windows workstation.</li>
+          <li>Split upstream-safe improvements into separate Claudcraft pull requests.</li>
+          <li>Publish clearer economy rules before any meaningful token supply is minted.</li>
+        </ol>
+      </section>
+
+      <section class="notice">
+        <h2>Disclaimers</h2>
+        <p>Cryptic Realm tokens and items are utility records for game systems and community features. They are not securities, shares, investment contracts, revenue claims, staking products, or promises of price appreciation.</p>
+      </section>
+    </main>
+
+    <footer>
+      <a href="/">Return to Cryptic Realm</a>
+      <span> | </span>
+      <a href="/links.html">Official links</a>
+    </footer>
+  </div>
+</body>
+</html>

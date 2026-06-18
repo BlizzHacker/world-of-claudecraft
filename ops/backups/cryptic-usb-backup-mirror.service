@@ -1,0 +1,8 @@
+[Unit]
+Description=Cryptic Realm USB backup mirror
+After=network-online.target
+
+[Service]
+Type=oneshot
+EnvironmentFile=-/etc/cryptic-backup-mirror.conf
+ExecStart=/usr/local/sbin/cryptic-usb-backup-mirror

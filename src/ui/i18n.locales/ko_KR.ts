@@ -126,6 +126,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   "nav.wiki": "위키",
   "nav.news": "새소식",
   "nav.download": "다운로드",
+  "nav.whitepaper": "White Paper",
   "nav.loginRegister": "로그인/회원가입",
   "nav.donate": "후원",
   "stats.title": "렐름 상태",

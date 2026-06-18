@@ -25,9 +25,9 @@
     "ru_RU"
   ],
   "counts": {
-    "keys": 2345,
-    "rows": 30485,
-    "translated": 30442,
+    "keys": 2346,
+    "rows": 30498,
+    "translated": 30455,
     "pending": 0,
     "blocked": 43,
     "blockedSource": 106
@@ -134189,6 +134189,78 @@
         "ru_RU": {
           "state": "translated",
           "srcHash": "d8d6f263f14d62df",
+          "by": "human"
+        }
+      }
+    },
+    "main:nav.whitepaper": {
+      "scope": "main",
+      "enHash": "9749362256a96e1a",
+      "placeholders": [],
+      "locales": {
+        "es": {
+          "state": "translated",
+          "srcHash": "9749362256a96e1a",
+          "by": "human"
+        },
+        "es_ES": {
+          "state": "translated",
+          "srcHash": "9749362256a96e1a",
+          "by": "human"
+        },
+        "fr_FR": {
+          "state": "translated",
+          "srcHash": "9749362256a96e1a",
+          "by": "human"
+        },
+        "fr_CA": {
+          "state": "translated",
+          "srcHash": "9749362256a96e1a",
+          "by": "human"
+        },
+        "en_CA": {
+          "state": "translated",
+          "srcHash": "9749362256a96e1a",
+          "by": "human"
+        },
+        "it_IT": {
+          "state": "translated",
+          "srcHash": "9749362256a96e1a",
+          "by": "human"
+        },
+        "de_DE": {
+          "state": "translated",
+          "srcHash": "9749362256a96e1a",
+          "by": "human"
+        },
+        "zh_CN": {
+          "state": "translated",
+          "srcHash": "9749362256a96e1a",
+          "by": "human"
+        },
+        "zh_TW": {
+          "state": "translated",
+          "srcHash": "9749362256a96e1a",
+          "by": "human"
+        },
+        "ko_KR": {
+          "state": "translated",
+          "srcHash": "9749362256a96e1a",
+          "by": "human"
+        },
+        "ja_JP": {
+          "state": "translated",
+          "srcHash": "9749362256a96e1a",
+          "by": "human"
+        },
+        "pt_BR": {
+          "state": "translated",
+          "srcHash": "9749362256a96e1a",
+          "by": "human"
+        },
+        "ru_RU": {
+          "state": "translated",
+          "srcHash": "9749362256a96e1a",
           "by": "human"
         }
       }

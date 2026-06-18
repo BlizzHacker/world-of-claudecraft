@@ -126,6 +126,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   "nav.wiki": "Wiki",
   "nav.news": "ニュース",
   "nav.download": "ダウンロード",
+  "nav.whitepaper": "White Paper",
   "nav.loginRegister": "ログイン/登録",
   "nav.donate": "寄付",
   "stats.title": "レルムステータス",

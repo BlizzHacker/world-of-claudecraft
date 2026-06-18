@@ -126,6 +126,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   "nav.wiki": "百科指南",
   "nav.news": "新闻资讯",
   "nav.download": "下载客户端",
+  "nav.whitepaper": "White Paper",
   "nav.loginRegister": "登录/注册",
   "nav.donate": "捐赠",
   "stats.title": "服务器状态",
