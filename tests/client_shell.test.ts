@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
 const mainTs = readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
+const landingTs = readFileSync(new URL('../src/landing.ts', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
 const hudTs = readFileSync(new URL('../src/ui/hud.ts', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
 const mobileControlsTs = readFileSync(new URL('../src/game/mobile_controls.ts', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
 
@@ -167,6 +168,21 @@ describe('client HTML shell', () => {
     expect(html).not.toContain('.mode-row {');
     // Landscape compacts the single play console instead of splitting two cards.
     expect(html).toContain('@media (orientation: landscape) {\n    body.mobile-touch .play-console {');
+  });
+
+  it('keeps public homepage nav reachable from the deferred landing shell', () => {
+    expect(html).toContain('id="nav-btn-highscores"');
+    expect(html).toContain('id="nav-btn-wiki"');
+    expect(html).toContain('id="nav-btn-news"');
+    expect(html).toContain('id="nav-btn-download"');
+    expect(html).toContain('href="/links.html"');
+    expect(html).toContain('href="/whitepaper.html"');
+    expect(landingTs).toContain("document.getElementById('nav-btn-highscores')");
+    expect(landingTs).toContain("document.getElementById('nav-btn-wiki')");
+    expect(landingTs).toContain("document.getElementById('nav-btn-news')");
+    expect(landingTs).toContain("document.getElementById('nav-btn-download')");
+    expect(landingTs).toContain('loadLandingHighscores');
+    expect(landingTs).toContain('loadLandingNews');
   });
 
   it('ships a looping cinematic backdrop with a poster fallback', () => {
