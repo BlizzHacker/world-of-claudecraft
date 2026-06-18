@@ -14,10 +14,27 @@ function loadApp(): Promise<typeof import('./main')> {
   return appPromise;
 }
 
+// Fill the "… Players Online / … Accounts Created" placeholders on the landing
+// page. main.ts does this once the game loads, but the landing shell loads
+// first and would otherwise leave the "…" placeholders. Lightweight fetch.
+async function loadLandingStats(): Promise<void> {
+  const playerEls = document.querySelectorAll<HTMLElement>('.js-stat-players');
+  const accountEls = document.querySelectorAll<HTMLElement>('.js-stat-accounts');
+  if (!playerEls.length && !accountEls.length) return;
+  try {
+    const res = await fetch('/api/project-stats', { signal: AbortSignal.timeout(4000) });
+    if (!res.ok) return;
+    const data = await res.json();
+    playerEls.forEach((el) => { el.textContent = String(data.players_online ?? 0); });
+    accountEls.forEach((el) => { el.textContent = String(data.accounts_created ?? 0); });
+  } catch { /* leave placeholders on failure */ }
+}
+
 function bootLandingBranding(): void {
   mountRealmBranding();
   mountThemeSelect();
   mountNewsRealmFilter();
+  void loadLandingStats();
   mountBestiary();
   mountSkillTree();
   mountLootVault();
