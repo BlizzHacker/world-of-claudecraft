@@ -396,11 +396,24 @@ function targetClosest(el: Element, selector: string): HTMLElement | null {
   return match instanceof HTMLElement ? match : null;
 }
 
+// SSO return path: Authentik redirects back to `/#auth_token=...&auth_user=...`.
+// The landing shell defers importing ./main until a UI trigger, but the SSO
+// pickup lives in main.ts (wireStartScreens), so on this path we must eagerly
+// load the app — otherwise the token sits unread in the hash and the user
+// stays logged out. main.ts consumes + cleans the hash on boot.
+function ssoCallbackPending(): boolean {
+  const hash = typeof window !== 'undefined' ? window.location.hash : '';
+  return hash.startsWith('#') && hash.includes('auth_token=');
+}
+
 function boot(): void {
   bootLandingBranding();
   wireContractAddressCopy();
   wireLandingPanels();
   wireDeferredAppLoad();
+  if (ssoCallbackPending()) {
+    void loadApp();
+  }
   applyHashRoute();
   window.addEventListener('hashchange', applyHashRoute);
 }
