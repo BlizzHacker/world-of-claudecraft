@@ -314,7 +314,12 @@
         <p class="lead">This is the official link hub for Cryptic Realm: social channels, realm portals, $CR token proof, and the public economy direction.</p>
         <div class="actions">
           <a class="button primary" href="/">Play Now</a>
-          <a class="button" href="solana:GncAXx6j38osJns395XZtf6rSA9MU3K1gwafTrHpBJpi">Tip $CR</a>
+          <!-- Tip: a bare solana: URI only resolves if a wallet app is registered
+               for that scheme (it isn't, for most visitors), so it silently did
+               nothing. Copy the address to clipboard and link to the account on
+               Solscan as a universal fallback. -->
+          <button type="button" class="button" id="btn-tip" data-tip-addr="GncAXx6j38osJns395XZtf6rSA9MU3K1gwafTrHpBJpi" data-tip-default="Tip $CR (copy address)">Tip $CR (copy address)</button>
+          <a class="button" href="https://solscan.io/account/GncAXx6j38osJns395XZtf6rSA9MU3K1gwafTrHpBJpi" target="_blank" rel="noopener noreferrer">View Tip Wallet</a>
           <a class="button" href="https://solscan.io/token/3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv" target="_blank" rel="noopener noreferrer">Verify Mint</a>
         </div>
       </div>
@@ -404,5 +409,38 @@
       If a channel is not linked here, treat it as unofficial. Never share seed phrases, private keys, wallet recovery phrases, or keypair JSON with anyone claiming to represent Cryptic Realm.
     </footer>
   </div>
+  <script>
+    // Tip button: copy the Solana tip address to the clipboard (the old
+    // solana: link did nothing without a wallet app registered for the scheme).
+    (function () {
+      var btn = document.getElementById('btn-tip');
+      if (!btn) return;
+      var addr = btn.getAttribute('data-tip-addr') || '';
+      var dflt = btn.getAttribute('data-tip-default') || btn.textContent;
+      var t = null;
+      function flash(msg) {
+        btn.textContent = msg;
+        if (t) clearTimeout(t);
+        t = setTimeout(function () { btn.textContent = dflt; }, 1800);
+      }
+      function fallbackCopy(text) {
+        var ta = document.createElement('textarea');
+        ta.value = text; ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select();
+        var ok = false; try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+        document.body.removeChild(ta); return ok;
+      }
+      btn.addEventListener('click', function () {
+        if (!addr) return;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(addr).then(function () { flash('Address copied ✓'); })
+            .catch(function () { flash(fallbackCopy(addr) ? 'Address copied ✓' : 'Copy failed — long-press to select'); });
+        } else {
+          flash(fallbackCopy(addr) ? 'Address copied ✓' : 'Copy failed — long-press to select');
+        }
+      });
+    })();
+  </script>
 </body>
 </html>

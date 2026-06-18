@@ -406,7 +406,22 @@ function ssoCallbackPending(): boolean {
   return hash.startsWith('#') && hash.includes('auth_token=');
 }
 
+// Keep --app-vw / --app-vh in exact pixels on the landing page too. main.ts
+// runs the same sync once the game loads, but the landing shell loads first
+// and would otherwise leave the CSS fallback in place — on mobile a 100vw
+// fallback overflows right (excludes scrollbar / safe-area). Mirror the
+// game's behaviour so the landing matches the visual viewport.
+function syncLandingViewport(): void {
+  const w = Math.max(1, Math.round(window.visualViewport?.width ?? window.innerWidth));
+  const h = Math.max(1, Math.round(window.visualViewport?.height ?? window.innerHeight));
+  document.documentElement.style.setProperty('--app-vw', `${w}px`);
+  document.documentElement.style.setProperty('--app-vh', `${h}px`);
+}
+
 function boot(): void {
+  syncLandingViewport();
+  window.addEventListener('resize', syncLandingViewport);
+  window.visualViewport?.addEventListener('resize', syncLandingViewport);
   bootLandingBranding();
   wireContractAddressCopy();
   wireLandingPanels();
