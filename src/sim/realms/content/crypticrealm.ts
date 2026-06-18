@@ -4,9 +4,11 @@
 // and the Gravecaller Saga converge.
 
 import type { RealmContent } from '../types';
+import { CRYPTICREALM_BESTIARY } from './crypticrealm.bestiary';
 
 export const CRYPTICREALM_REALM: RealmContent = {
   id: 'crypticrealm',
+  bestiary: CRYPTICREALM_BESTIARY,
   name: 'Cryptic Realm',
   tagline: 'The signature world — arcane mysteries, riddle-locked ruins, forgotten power',
   description:

@@ -84,6 +84,53 @@ export interface RealmBranding {
   showAuthentikSso?: boolean;
 }
 
+/** A standard (non-boss) monster entry in a realm's bestiary. */
+export interface RealmMonster {
+  id: string;
+  name: string;
+  level: number;
+  hp: number;
+  dmg: number;
+  /** Creature family, e.g. 'Undead', 'Demon', 'Construct'. */
+  type: string;
+  xp: number;
+  gold: number;
+  /** Drop-table keys (resolved against the item system). */
+  drops: string[];
+}
+
+/** A boss encounter: phased, with abilities, loot, and lore. */
+export interface RealmBoss {
+  id: string;
+  name: string;
+  level: number;
+  hp: number;
+  dmg: number;
+  type: string;
+  xp: number;
+  gold: number;
+  abilities: string[];
+  /** Phase transitions keyed by remaining-HP threshold (%). */
+  phases: { threshold: number; ability: string }[];
+  loot: string[];
+  lore: string;
+}
+
+/** An act / chapter grouping zones, monsters, and bosses by level band. */
+export interface RealmAct {
+  id: string;
+  name: string;
+  /** Inclusive level range [min, max]. */
+  level: [number, number];
+  desc: string;
+  zones: string[];
+  monsters: RealmMonster[];
+  bosses: RealmBoss[];
+}
+
+/** A realm's bestiary / monster chronicle — acts of themed content. */
+export type RealmBestiary = RealmAct[];
+
 export interface RealmContent {
   id: RealmId;
   /** Visible name in the picker. */
@@ -117,4 +164,7 @@ export interface RealmContent {
    *  (fps.moveweight.com) sets this; everywhere else first-person stays an
    *  optional toggle. */
   fpsOnly?: boolean;
+  /** Optional themed bestiary (acts → zones / monsters / bosses) surfaced in
+   *  the Monster Chronicle. Display content only; never drives Sim state. */
+  bestiary?: RealmBestiary;
 }

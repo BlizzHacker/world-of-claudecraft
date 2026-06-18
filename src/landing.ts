@@ -1,6 +1,7 @@
 import { mountRealmBranding } from './ui/cryptic/branding';
 import { mountThemeSelect } from './ui/cryptic/theme_select';
 import { mountNewsRealmFilter } from './ui/cryptic/news_realm_filter';
+import { mountBestiary } from './ui/cryptic/bestiary';
 
 let appPromise: Promise<typeof import('./main')> | null = null;
 let caCopyResetTimer: number | null = null;
@@ -14,6 +15,7 @@ function bootLandingBranding(): void {
   mountRealmBranding();
   mountThemeSelect();
   mountNewsRealmFilter();
+  mountBestiary();
 }
 
 function wireContractAddressCopy(): void {
