@@ -25,6 +25,11 @@ import { handleAdminApi } from './admin';
 import { handleModeratorApi, handleUserApi } from './dashboard';
 import { handleAuthentikRoute, isAuthentikConfigured } from './oauth';
 import { handleInternalApi } from './internal';
+// CR overlay: economy layer (off-chain platinum + optional Solana SPL token).
+import { maybeHandleEconomyApi } from './economy/api';
+import { applyEconomySchema } from './economy/db';
+import { maybeBuildSolanaFromEnv } from '../src/economy/solanaAdapter';
+import { setChainAdapter } from '../src/economy/chainAdapter';
 import { GameServer } from './game';
 import { REALM, REALM_DIRECTORY, REALM_ORIGINS } from './realm';
 import { webLoginEnforced, isWebClientRequest } from './web_login_guard';
@@ -32,6 +37,14 @@ import { cacheControlFor, etagFor, isNotModified } from './static_cache';
 
 const PORT = Number(process.env.PORT ?? 8787);
 const STATIC_DIR = path.join(__dirname, '..', 'dist');
+// CR overlay: when scripts/admin/update.sh is in flight, it touches this
+// file. Web requests get served maintenance.html for the duration so users
+// see a friendly "we're updating" page instead of a half-rebuilt homepage.
+const MAINTENANCE_FLAG = path.join(__dirname, '..', '.maintenance');
+const MAINTENANCE_SHELL = path.join(STATIC_DIR, 'maintenance.html');
+function inMaintenanceMode(): boolean {
+  try { return fs.existsSync(MAINTENANCE_FLAG); } catch { return false; }
+}
 const WIKI_URL = process.env.WIKI_URL ?? 'http://localhost:8080/wiki/index.php/Main_Page';
 // Pretty URLs that all serve the standalone "official channels" / link-tree page.
 const LINKS_ALIASES = new Set([
@@ -230,6 +243,26 @@ function dashboardShellFor(urlPath: string): string | null {
 
 function serveStatic(req: http.IncomingMessage, res: http.ServerResponse): void {
   let urlPath = (req.url ?? '/').split('?')[0];
+  // CR overlay: if scripts/admin/update.sh is in flight, serve a friendly
+  // maintenance page for any homepage / admin-shell request. Asset URLs
+  // (so the maintenance page itself can pull its CSS/icons) pass through.
+  if (
+    inMaintenanceMode() &&
+    !urlPath.startsWith('/assets/') &&
+    !urlPath.startsWith('/media/') &&
+    urlPath !== '/maintenance.html'
+  ) {
+    try {
+      const body = fs.readFileSync(MAINTENANCE_SHELL);
+      res.writeHead(503, {
+        'Content-Type': 'text/html; charset=utf-8',
+        'Cache-Control': 'no-store',
+        'Retry-After': '60',
+      });
+      res.end(body);
+      return;
+    } catch { /* fall through to normal flow if maintenance.html missing */ }
+  }
   const dashShell = dashboardShellFor(urlPath);
   const shell = dashShell ?? (isAdminRequest(req) ? 'admin.html' : 'index.html');
   if (urlPath === '/wiki' || urlPath === '/wiki/' || urlPath.startsWith('/wiki/')) {
@@ -561,6 +594,22 @@ async function main(): Promise<void> {
     }
   }
   await ensureSchema();
+  // CR overlay: economy schema (off-chain platinum + wallet links + purchases).
+  await applyEconomySchema(pool);
+  // CR overlay: if CR_SOLANA_* env is set, load the Solana mint authority.
+  // Otherwise the chain adapter stays at LocalMockChainAdapter and the
+  // /api/economy/claim endpoint returns 503.
+  try {
+    const solana = await maybeBuildSolanaFromEnv();
+    if (solana) {
+      setChainAdapter(solana);
+      console.log(`  ECONOMY: Solana chain enabled (${solana.name})`);
+    } else {
+      console.log('  ECONOMY: off-chain only (set CR_SOLANA_RPC + CR_SOLANA_MINT + CR_SOLANA_MINT_AUTHORITY to enable chain)');
+    }
+  } catch (err) {
+    console.error('  ECONOMY: chain init failed, staying off-chain:', err);
+  }
   const orphans = await closeOrphanSessions();
   if (orphans > 0) console.log(`closed ${orphans} orphaned play session(s) from a previous run`);
   const pruned = await pruneChatLogs(CHAT_LOG_RETENTION_DAYS);
@@ -596,6 +645,10 @@ async function main(): Promise<void> {
     // CR overlay: Authentik SSO sits alongside /api/login. The handler
     // 501s when env vars aren't set so non-SSO deploys still work.
     else if (url.startsWith('/api/oauth/authentik')) void handleAuthentikRoute(req, res);
+    // CR overlay: economy endpoints.
+    else if (url.startsWith('/api/economy/')) void maybeHandleEconomyApi(req, res, url.split('?')[0]).then((handled) => {
+      if (!handled) { res.writeHead(404); res.end(); }
+    });
     else if (url.startsWith('/api/')) void handleApi(req, res);
     else serveStatic(req, res);
   });

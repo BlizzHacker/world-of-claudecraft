@@ -39,7 +39,9 @@ try {
     Copy-Item (Join-Path $StageDir 'docs/sso-and-dashboards.md')  'docs/sso-and-dashboards.md' -Force
 
     git add -A
-    if ((git diff --cached --quiet; $LASTEXITCODE) -eq 0) {
+    git diff --cached --quiet
+    $hasChanges = $LASTEXITCODE -ne 0
+    if (-not $hasChanges) {
         Write-Host 'No changes to commit (already up to date).'
     } else {
         $commitMsg = @'

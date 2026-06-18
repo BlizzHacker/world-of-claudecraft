@@ -65,18 +65,15 @@ function buildTriggerHtml(username: string): string {
 }
 
 function buildMenuHtml(roles: MeRoles, realm: string): string {
-  const adminItem = roles.isAdmin
-    ? `<a class="cr-user-menu-item" href="/admin/">
-         <span class="cr-menu-icon">⚙</span>
-         <span>Admin Console</span>
-       </a>`
-    : '';
-  const modItem = roles.isModerator
+  // Admin link lives in the homepage nav bar already (see ensureNavAdminLink),
+  // so omit it from the dropdown to avoid the redundant double-Admin chip.
+  const modItem = roles.isModerator && !roles.isAdmin
     ? `<a class="cr-user-menu-item" href="/mod/">
          <span class="cr-menu-icon">⛨</span>
          <span>Moderator Tools</span>
        </a>`
     : '';
+  const adminItem = '';
   return `<div class="cr-user-menu" role="menu" hidden>
     <div class="cr-user-menu-role">Signed in · ${escapeHtml(realm)}</div>
     <a class="cr-user-menu-item" href="/me/">
@@ -148,27 +145,86 @@ function findHostContainer(): HTMLElement | null {
 /** Mount the dropdown when (a) a local token exists, (b) it validates against
  *  /me/api/me. Re-runs on storage events so picking up the SSO callback also
  *  triggers a refresh. */
+// Mount lock — prevents the race where boot() and the SSO callback pickup
+// both call mountUserDropdown() concurrently and each insert a chip. The
+// async fetchMe() gap is wide enough that both passed the !host check.
+let mountInFlight: Promise<void> | null = null;
+
 export async function mountUserDropdown(): Promise<void> {
   if (typeof document === 'undefined') return;
-  const container = findHostContainer();
-  if (!container) return;
+  if (mountInFlight) return mountInFlight;
 
-  // Remove any prior instance — happens after sign-out reload.
-  document.getElementById('cr-user-dropdown')?.remove();
+  mountInFlight = (async () => {
+    const container = findHostContainer();
+    if (!container) return;
 
-  const token = readToken();
-  if (!token) return;
+    const token = readToken();
+    if (!token) {
+      // Logged out: tear down any chip left over from a previous session.
+      document.getElementById('cr-user-dropdown')?.remove();
+      removeNavAdminLink();
+      return;
+    }
 
-  // Validate the token. If it's stale/wrong, drop it silently.
-  const me = await fetchMe(token);
-  if (!me) { clearSession(); return; }
+    // Validate the token. If it's stale/wrong, drop it silently.
+    const me = await fetchMe(token);
+    if (!me) {
+      clearSession();
+      document.getElementById('cr-user-dropdown')?.remove();
+      removeNavAdminLink();
+      return;
+    }
 
-  // Build host, insert at the start of the header actions row so it sits
-  // before the donate / theme picker buttons.
-  const host = document.createElement('div');
-  host.id = 'cr-user-dropdown';
-  container.insertBefore(host, container.firstChild);
+    // Replace any prior instance — happens after sign-out reload or after
+    // a second call. Doing the remove AFTER the await so concurrent calls
+    // collapse to one chip.
+    document.getElementById('cr-user-dropdown')?.remove();
 
-  const username = readName() || `acct-${me.accountId}`;
-  mountAt(host, username, me.roles, me.realm);
+    const host = document.createElement('div');
+    host.id = 'cr-user-dropdown';
+    container.insertBefore(host, container.firstChild);
+
+    const username = readName() || `acct-${me.accountId}`;
+    mountAt(host, username, me.roles, me.realm);
+
+    // Add an "Admin" nav link in the homepage nav bar when the user is an
+    // admin — quick jump to /admin/ without going through the dropdown menu.
+    if (me.roles.isAdmin) ensureNavAdminLink();
+    else removeNavAdminLink();
+  })();
+
+  try { await mountInFlight; }
+  finally { mountInFlight = null; }
+}
+
+// Inject / remove a stand-alone "Admin" link in the homepage nav bar (the
+// <ul> that holds High Scores / Wiki / News / Download / Login). Only
+// rendered when roles.isAdmin.
+const NAV_ADMIN_ID = 'nav-btn-admin';
+
+function ensureNavAdminLink(): void {
+  if (document.getElementById(NAV_ADMIN_ID)) return;
+  // Sit just before the Login/Register tab if present, else at end.
+  const loginBtn = document.getElementById('nav-btn-login');
+  const navList = loginBtn?.closest('ul') ?? document.querySelector('nav ul');
+  if (!navList) return;
+  const li = document.createElement('li');
+  li.className = 'nav-item';
+  li.id = `${NAV_ADMIN_ID}-li`;
+  const a = document.createElement('a');
+  a.className = 'nav-link';
+  a.id = NAV_ADMIN_ID;
+  a.href = '/admin/';
+  a.textContent = 'Admin';
+  a.title = 'Open Admin dashboard';
+  li.appendChild(a);
+  if (loginBtn?.parentElement) {
+    navList.insertBefore(li, loginBtn.parentElement);
+  } else {
+    navList.appendChild(li);
+  }
+}
+
+function removeNavAdminLink(): void {
+  document.getElementById(`${NAV_ADMIN_ID}-li`)?.remove();
 }

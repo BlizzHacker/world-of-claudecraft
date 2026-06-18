@@ -29,6 +29,7 @@ function setupDom(hpText: string, resText: string, barClass: string) {
 describe('hud globes (CR overlay)', () => {
   beforeEach(() => {
     vi.useFakeTimers();
+    vi.resetModules();
     document.body.innerHTML = '';
     document.body.className = '';
     window.localStorage.clear();
@@ -53,19 +54,19 @@ describe('hud globes (CR overlay)', () => {
 
   it('resolveHudSkin falls back to classic bars on the claudecraft realm', async () => {
     window.localStorage.setItem('cr_active_realm', 'claudecraft');
-    const { resolveHudSkin } = await import('../src/ui/cryptic/globes?reset=1');
+    const { resolveHudSkin } = await import('../src/ui/cryptic/globes');
     expect(resolveHudSkin()).toBe('classic');
   });
 
   it('persisted user choice wins over the realm default', async () => {
     window.localStorage.setItem('cr_active_realm', 'infernal');
     window.localStorage.setItem('cr_hud_skin', 'classic');
-    const { resolveHudSkin } = await import('../src/ui/cryptic/globes?reset=2');
+    const { resolveHudSkin } = await import('../src/ui/cryptic/globes');
     expect(resolveHudSkin()).toBe('classic');
   });
 
   it('setHudSkin persists and toggles the body class', async () => {
-    const { setHudSkin } = await import('../src/ui/cryptic/globes?reset=3');
+    const { setHudSkin } = await import('../src/ui/cryptic/globes');
     setHudSkin('globes');
     expect(window.localStorage.getItem('cr_hud_skin')).toBe('globes');
     expect(document.body.classList.contains('cr-hud-skin-globes')).toBe(true);
@@ -78,7 +79,7 @@ describe('hud globes (CR overlay)', () => {
   it('mountHudGlobes injects a sibling and mirrors hp/resource text', async () => {
     setupDom('850 / 1000', '40 / 60', 'mana');
     window.localStorage.setItem('cr_hud_skin', 'globes');
-    const { mountHudGlobes } = await import('../src/ui/cryptic/globes?reset=4');
+    const { mountHudGlobes } = await import('../src/ui/cryptic/globes');
     mountHudGlobes();
     // Advance one rAF tick to let the loop run.
     await vi.advanceTimersByTimeAsync(20);
@@ -96,7 +97,7 @@ describe('hud globes (CR overlay)', () => {
   it('idempotent: mounting twice does not duplicate the host', async () => {
     setupDom('500 / 500', '30 / 100', 'rage');
     window.localStorage.setItem('cr_hud_skin', 'globes');
-    const { mountHudGlobes } = await import('../src/ui/cryptic/globes?reset=5');
+    const { mountHudGlobes } = await import('../src/ui/cryptic/globes');
     mountHudGlobes();
     mountHudGlobes();
     await vi.advanceTimersByTimeAsync(20);

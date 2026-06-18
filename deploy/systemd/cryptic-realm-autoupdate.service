@@ -1,0 +1,25 @@
+## Daily auto-update unit. Runs scripts/admin/update.sh which broadcasts a
+## maintenance warning, flips the maintenance flag, pulls, builds, restarts
+## all realm processes, and clears the flag.
+##
+## Triggered by cryptic-realm-autoupdate.timer (sibling file).
+
+[Unit]
+Description=Cryptic Realm — daily auto-update
+After=network-online.target postgresql.service cryptic-realm.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/cryptic-realm
+# 5-minute warning before downtime so anyone online sees the chat broadcast.
+Environment=CR_WARN_SECONDS=300
+Environment=CR_BRANCH=feat/v07-and-realms
+Environment=CR_LOG_FILE=/var/log/cr-update.log
+ExecStart=/usr/bin/env bash /opt/cryptic-realm/scripts/admin/update.sh
+StandardOutput=journal
+StandardError=journal
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

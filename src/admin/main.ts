@@ -1,4 +1,8 @@
 import { apiGet, apiLogin, apiPost, clearSession, getAdminName, getToken, ApiError } from './api';
+// CR overlay: code-update panel self-mounts when admin shell loads.
+import { mountAdminUpdatePanel } from './update_panel';
+// CR overlay: dashboard chrome with Back + cross-dashboard nav.
+import '../ui/cryptic/dashboard_chrome';
 import { barChart, chartPanel } from './charts';
 import { escapeHtml, fmtBytes, fmtDuration } from './format';
 import { classLabel, t, localizeAdminError } from './i18n';
@@ -642,7 +646,7 @@ function localizeStatic(): void {
 localizeStatic();
 wireEvents();
 if (getToken()) {
-  void showApp();
+  void showApp().then(() => mountAdminUpdatePanel());
 } else {
   showLogin();
 }

@@ -1220,5 +1220,81 @@
       });
     })();
   </script>
+  <!-- CR overlay: rebrands the upstream WoC links page for non-claudecraft
+       realms. Inline (not a module) so it works as a static file. -->
+  <script>
+  (function () {
+    var realmId = 'infernal';
+    try { realmId = localStorage.getItem('cr_active_realm') || 'infernal'; } catch (e) {}
+    if (realmId === 'claudecraft') return;
+    var s = {
+      x: 'https://x.com/CrypticMMO',
+      facebook: 'https://facebook.com/crypticmmo',
+      instagram: 'https://instagram.com/crypticmmo',
+      tiktok: 'https://www.tiktok.com/@crypticmmo',
+      youtube: 'https://www.youtube.com/@CrypticMMO',
+      reddit: 'https://www.reddit.com/r/CrypticMMO',
+      discord: 'https://discord.gg/GjhnUsBtw',
+      github: 'https://github.com/BlizzHacker/cryptic-realm',
+      links: 'https://crypticrealm.com/links/',
+      homepage: 'https://crypticrealm.com/',
+      logo: 'https://crypticrealm.com/cryptic-realm-logo.png',
+      tip: 'GncAXx6j38osJns395XZtf6rSA9MU3K1gwafTrHpBJpi'
+    };
+    document.title = 'Cryptic Realm - Official Links';
+    var setC = function (sel, v) { document.querySelectorAll(sel).forEach(function (el) { el.setAttribute('content', v); }); };
+    setC('meta[name="description"]', 'The only official channels for Cryptic Realm. Play the game and follow us on X, Facebook, Instagram, TikTok, YouTube, Reddit, and GitHub. If a channel is not listed here, it is not us.');
+    setC('meta[property="og:site_name"]', 'Cryptic Realm');
+    setC('meta[property="og:title"]', 'Cryptic Realm - Official Links');
+    setC('meta[property="og:description"]', 'The only official channels for Cryptic Realm.');
+    setC('meta[property="og:url"]', s.links);
+    setC('meta[property="og:image"]', s.logo);
+    setC('meta[name="twitter:title"]', 'Cryptic Realm - Official Links');
+    setC('meta[name="twitter:description"]', 'The only official channels for Cryptic Realm.');
+    setC('meta[name="twitter:image"]', s.logo);
+    document.querySelectorAll('link[rel="canonical"]').forEach(function (el) { el.setAttribute('href', s.links); });
+    var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+    var nodes = []; var n;
+    while ((n = walker.nextNode())) nodes.push(n);
+    for (var i = 0; i < nodes.length; i++) {
+      var t = nodes[i]; var v = t.nodeValue || '';
+      var v2 = v.replace(/World of ClaudeCraft/g, 'Cryptic Realm').replace(/WoClaudecraft/g, 'CrypticMMO');
+      if (v2 !== v) t.nodeValue = v2;
+    }
+    var pairs = [
+      ['x.com/WoClaudecraft', s.x],
+      ['instagram.com/worldofclaudecraft', s.instagram],
+      ['tiktok.com/@worldofclaudecraft', s.tiktok],
+      ['youtube.com/@WoClaudeCraft', s.youtube],
+      ['reddit.com/r/WorldofClaudecraft', s.reddit],
+      ['discord.gg/GjhnUsBtw', s.discord],
+      ['github.com/levy-street/world-of-claudecraft', s.github],
+      ['worldofclaudecraft.com/links', s.links],
+      ['worldofclaudecraft.com', s.homepage]
+    ];
+    document.querySelectorAll('a[href]').forEach(function (a) {
+      for (var j = 0; j < pairs.length; j++) {
+        if (a.href.indexOf(pairs[j][0]) !== -1) a.href = pairs[j][1];
+      }
+    });
+    var grid = document.querySelector('.links-grid, [class*="grid"], main');
+    if (grid && !document.querySelector('a[href*="facebook.com"]')) {
+      var fb = document.createElement('a');
+      fb.href = s.facebook; fb.target = '_blank'; fb.rel = 'noopener noreferrer';
+      fb.textContent = 'Facebook · /crypticmmo';
+      fb.style.cssText = 'display:block;padding:14px 18px;margin:8px 0;border:1px solid #c8a838;border-radius:10px;color:#ffd100;text-decoration:none;font-family:Cinzel,serif;';
+      grid.appendChild(fb);
+    }
+    if (grid && !document.querySelector('[data-cr-tip]')) {
+      var tip = document.createElement('a');
+      tip.href = 'solana:' + s.tip;
+      tip.setAttribute('data-cr-tip', '1');
+      tip.textContent = 'Tip SOL → ' + s.tip.slice(0, 8) + '…' + s.tip.slice(-8);
+      tip.title = 'Send SOL to support Cryptic Realm — not an investment';
+      tip.style.cssText = 'display:block;padding:14px 18px;margin:8px 0;border:1px solid #00ffa3;border-radius:10px;color:#00ffa3;text-decoration:none;font-family:ui-monospace,monospace;font-size:12px;word-break:break-all;';
+      grid.appendChild(tip);
+    }
+  })();
+  </script>
 </body>
 </html>

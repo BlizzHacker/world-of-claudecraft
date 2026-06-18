@@ -179,9 +179,17 @@ describe('/mod/api/queue', () => {
     vi.mocked(accountForToken).mockResolvedValue(42);
     vi.mocked(isModeratorAccount).mockResolvedValue(true);
     vi.mocked(moderationQueue).mockResolvedValue([
-      { accountId: 7, username: 'baduser', characterName: null, characterClass: null, characterLevel: null,
-        online: false, openReports: 3, lastReportAt: '2026-06-15', banned: false,
-        suspendedUntil: null, moderationReason: null, chatMutedUntil: null, chatStrikes: 0 },
+      {
+        accountId: 7,
+        username: 'baduser',
+        status: 'active',
+        suspendedUntil: null,
+        openReports: 3,
+        latestReportAt: '2026-06-15',
+        latestReason: 'spam',
+        characterNames: [],
+        online: false,
+      },
     ]);
     const req = fakeReq({ method: 'GET', url: '/mod/api/queue', token: TOKEN });
     const res = fakeRes();

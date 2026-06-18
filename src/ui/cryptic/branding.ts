@@ -1,25 +1,12 @@
-// Per-realm branding overrides. Reads the active realm's `branding` block
-// from the registry and swaps the DOM elements affected by it:
-//
-//   - <img class="header-logo">    ← .branding.logoSrc
-//   - <img class="main-logo">      ← .branding.logoSrc
-//   - <title>                       ← .branding.brandText
-//   - meta[property=og:title]       ← .branding.brandText
-//   - <img class="header-logo-btn"> alt + title attrs
-//   - .donate-cta                   ← hidden unless .branding.showDonate
-//   - #btn-sso-authentik            ← hidden unless .branding.showAuthentikSso
-//   - .community-link.discord href  ← .branding.discordUrl
-//   - .community-link.github href   ← .branding.githubUrl
-//
-// Lives in src/ui/cryptic/ so the upstream index.html / src/main.ts stay
-// pull-safe. Re-runs whenever the realm picker fires `cr-realm-change` so
-// switching mid-session takes effect immediately.
+// Per-realm branding overrides. Reads the active realm's branding block and
+// swaps the DOM elements affected by Cryptic Realm customization.
 
 import { getActiveRealm, REALM_LIST, type RealmContent } from '../../sim/realms';
+import { socialsForRealm } from '../../sim/realms/social_links';
 
-/** Per-realm overrides for the upstream :root tokens. Keeps the site's
- *  primary colour, panel gradient, and border tied to the active realm's
- *  identity. Claudecraft skips this — the upstream :root defaults apply. */
+const WOC_TOKEN_MINT = '3WjLscH2JsXLEFJZRA9z8ti8yRGxWGKbqymPd7UicRth';
+const WOC_SPONSORS_URL = 'https://github.com/sponsors/levy-street';
+
 const REALM_COLOR_TOKENS: Record<string, Record<string, string>> = {
   infernal: {
     '--gold': '#d4442a',
@@ -55,7 +42,6 @@ const REALM_COLOR_TOKENS: Record<string, Record<string, string>> = {
   },
 };
 
-/** Reset to base (claudecraft / upstream) tokens by clearing inline overrides. */
 const RESET_TOKENS = [
   '--gold', '--gold-dim', '--border', '--panel-bg',
   '--color-primary-glow', '--color-primary-glow-heavy',
@@ -79,8 +65,56 @@ function setHiddenAll(selector: string, hidden: boolean): void {
   });
 }
 
+function applyDonateLinks(realm: RealmContent): void {
+  const socials = socialsForRealm(realm.id);
+  const tipWallet = socials.tipWalletSolana;
+  const href = tipWallet ? `solana:${tipWallet}` : WOC_SPONSORS_URL;
+  const label = tipWallet ? 'Tip SOL' : 'Donate';
+  const title = tipWallet
+    ? `Tip SOL to ${tipWallet.slice(0, 4)}...${tipWallet.slice(-4)}`
+    : 'Support the project';
+  const aria = tipWallet
+    ? `Tip SOL to support Cryptic Realm at ${tipWallet}`
+    : 'Donate to support World of ClaudeCraft';
+
+  document.querySelectorAll<HTMLAnchorElement>('.donate-cta, .social-link.donate, .community-link.donate').forEach((a) => {
+    a.href = href;
+    a.title = title;
+    a.setAttribute('aria-label', aria);
+    const span = a.querySelector('span');
+    if (span) span.textContent = label;
+  });
+}
+
+function applyTokenCard(realm: RealmContent): void {
+  const container = document.getElementById('token-ca');
+  const btn = document.getElementById('btn-copy-ca') as HTMLButtonElement | null;
+  const label = container?.querySelector<HTMLElement>('.token-ca-label') ?? null;
+  const addr = container?.querySelector<HTMLElement>('.token-ca-addr') ?? null;
+  const note = container?.querySelector<HTMLElement>('.token-ca-note') ?? null;
+  if (!container || !btn || !label || !addr || !note) return;
+
+  const socials = socialsForRealm(realm.id);
+  if (socials.tipWalletSolana && socials.tokenMintSolana) {
+    label.textContent = '$CR Contract Address';
+    btn.dataset.ca = socials.tokenMintSolana;
+    btn.setAttribute('aria-label', 'Copy Cryptic Realm token mint');
+    addr.textContent = socials.tokenMintSolana;
+    note.textContent = '$CR is the Cryptic Realm Solana SPL token for gameplay utility, cosmetics, achievements, and account records. It is not needed to play.';
+    return;
+  }
+
+  label.textContent = '$WOC Contract Address';
+  btn.dataset.ca = WOC_TOKEN_MINT;
+  btn.setAttribute('aria-label', 'Copy contract address');
+  addr.textContent = WOC_TOKEN_MINT;
+  note.textContent = 'WOC is our community token. It is not needed to play. Join Discord to discuss the WOC utility and flywheel.';
+}
+
 function applyTo(realm: RealmContent): void {
   const b = realm.branding ?? {};
+  const socials = socialsForRealm(realm.id);
+  const hasTipWallet = Boolean(socials.tipWalletSolana);
 
   if (b.logoSrc) {
     setAttrAll('.header-logo', 'src', b.logoSrc);
@@ -94,7 +128,6 @@ function applyTo(realm: RealmContent): void {
     if (ogTitle) ogTitle.setAttribute('content', b.brandText);
     const twitterTitle = document.querySelector('meta[name="twitter:title"]');
     if (twitterTitle) twitterTitle.setAttribute('content', b.brandText);
-    // Visible header text on the homepage hero / SR-only h1
     document.querySelectorAll('.visually-hidden').forEach((el) => {
       if ((el.textContent ?? '').trim().toLowerCase().includes('claudecraft')) {
         el.textContent = b.brandText!;
@@ -104,42 +137,45 @@ function applyTo(realm: RealmContent): void {
     setAttrAll('.main-logo', 'alt', b.brandText);
   }
 
-  if (b.discordUrl !== undefined) {
-    setHrefAll('.community-link.discord', b.discordUrl);
-  }
-  if (b.githubUrl !== undefined) {
-    setHrefAll('.community-link.github', b.githubUrl);
-  }
+  if (b.discordUrl !== undefined) setHrefAll('.community-link.discord', b.discordUrl);
+  if (b.githubUrl !== undefined) setHrefAll('.community-link.github', b.githubUrl);
 
-  // Donate button + community + footer-social-row links: only the claudecraft
-  // realm surfaces them. Other realms hide every donate / github / discord
-  // entry across .community-link, .donate-cta, and .footer-social-row .social-link.
-  // (Earlier passes missed .social-link — that's why the footer Donate kept
-  //  showing on themed realms.)
-  setHiddenAll('.donate-cta', b.showDonate !== true);
   const wantsCommunity = realm.id === 'claudecraft' && b.showDonate === true;
-  setHiddenAll('.community-link.donate', !wantsCommunity);
+  setHiddenAll('.donate-cta', !(b.showDonate === true || hasTipWallet));
+  setHiddenAll('.community-link.donate', !(wantsCommunity || hasTipWallet));
   setHiddenAll('.community-link.github', !wantsCommunity);
   setHiddenAll('.community-link.discord', !wantsCommunity);
-  // Footer social row (the homepage-footer block).
-  setHiddenAll('.footer-social-row .social-link.donate', !wantsCommunity);
+  setHiddenAll('.footer-social-row .social-link.donate', !(wantsCommunity || hasTipWallet));
   setHiddenAll('.footer-social-row .social-link[href*="github"]', !wantsCommunity);
   setHiddenAll('.footer-social-row .social-link[href*="discord"]', !wantsCommunity);
-  // If everything in the row is hidden, hide the row itself so the empty
-  // border doesn't sit at the bottom of the page.
-  setHiddenAll('.footer-social-row', !wantsCommunity);
+  setHiddenAll('.footer-social-row', !(wantsCommunity || hasTipWallet));
 
-  // Authentik SSO button: visible by default, hidden when the realm opts out.
   setHiddenAll('#btn-sso-authentik', b.showAuthentikSso === false);
 
-  // Tag <body> so realm-specific CSS rules can hang off it if needed.
   for (const r of REALM_LIST) {
     document.body.classList.remove(`cr-realm-${r.id}`);
   }
   document.body.classList.add(`cr-realm-${realm.id}`);
 
-  // Apply per-realm overrides for the upstream :root color tokens.
-  // Clearing first lets us return to claudecraft defaults cleanly.
+  applyDonateLinks(realm);
+  applyTokenCard(realm);
+
+  const socialPairs: [string, string | undefined][] = [
+    ['x.com/WoClaudecraft', socials.x],
+    ['discord.gg/GjhnUsBtw', socials.discord],
+    ['github.com/levy-street/world-of-claudecraft', socials.github],
+    ['instagram.com/worldofclaudecraft', socials.instagram],
+    ['tiktok.com/@worldofclaudecraft', socials.tiktok],
+    ['youtube.com/@WoClaudeCraft', socials.youtube],
+    ['reddit.com/r/WorldofClaudecraft', socials.reddit],
+  ];
+  for (const [upstreamPattern, newUrl] of socialPairs) {
+    if (!newUrl) continue;
+    document.querySelectorAll<HTMLAnchorElement>('a[href]').forEach((a) => {
+      if (a.href.includes(upstreamPattern)) a.href = newUrl;
+    });
+  }
+
   for (const tok of RESET_TOKENS) document.documentElement.style.removeProperty(tok);
   const overrides = REALM_COLOR_TOKENS[realm.id];
   if (overrides) {
@@ -148,8 +184,6 @@ function applyTo(realm: RealmContent): void {
     }
   }
 
-  // Loading screen: when the realm ships one, swap any element whose src
-  // currently points at the upstream loading-screen.jpg.
   if (b.loadingScreenSrc) {
     document.querySelectorAll('img').forEach((img) => {
       const src = img.getAttribute('src') ?? '';
@@ -157,7 +191,6 @@ function applyTo(realm: RealmContent): void {
         img.setAttribute('src', b.loadingScreenSrc!);
       }
     });
-    // Stash for any boot-path consumer that reads it from CSS.
     document.documentElement.style.setProperty(
       '--cr-loading-screen', `url(${JSON.stringify(b.loadingScreenSrc)})`,
     );
@@ -172,13 +205,9 @@ export function mountRealmBranding(): void {
   } else {
     apply();
   }
-  // Theme picker fires this on pick. Re-apply branding immediately.
   window.addEventListener('cr-realm-change', apply);
 }
 
-/** Fire from the theme picker so other modules (branding, manifest loader)
- *  can react in lock-step. Re-exported here so consumers only import from one
- *  place. */
 export function emitRealmChange(): void {
   window.dispatchEvent(new CustomEvent('cr-realm-change'));
 }

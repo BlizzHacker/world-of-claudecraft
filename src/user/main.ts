@@ -8,6 +8,7 @@ import {
 } from './api';
 import { getActiveRealm } from '../sim/realms';
 import '../ui/cryptic/theme.css';
+import '../ui/cryptic/dashboard_chrome';
 
 const $ = <T extends HTMLElement = HTMLElement>(sel: string): T =>
   document.querySelector(sel) as T;

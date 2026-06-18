@@ -34,6 +34,10 @@ import { mountFpsMode, resolveFpsMode, setFpsMode } from './ui/cryptic/fps_mode'
 import { mountRealmBranding } from './ui/cryptic/branding';
 import { mountIngameOptions } from './ui/cryptic/ingame_options';
 import { mountUserDropdown } from './ui/cryptic/user_dropdown';
+import { mountWalletPanel } from './ui/cryptic/wallet_panel';
+import { mountPwaInstall } from './ui/cryptic/pwa_install';
+import { mountNewsRealmFilter } from './ui/cryptic/news_realm_filter';
+import { mountDownloadLaunchers } from './ui/cryptic/download_launchers';
 
 
 const WORLD_SEED = 20061; // fixed: Cryptic Realm is a persistent place
@@ -216,6 +220,10 @@ if (typeof document !== 'undefined') {
     mountHudGlobes();
     mountIngameOptions();
     void mountUserDropdown();
+    mountWalletPanel();
+    mountPwaInstall();
+    mountNewsRealmFilter();
+    mountDownloadLaunchers();
   };
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', boot);

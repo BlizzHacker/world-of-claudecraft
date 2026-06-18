@@ -92,6 +92,12 @@ export async function handleAdminApi(
     const accountId = await adminAccountId(req);
     if (accountId === null) return fail(res, 401, 'admin authentication required');
 
+    // CR overlay: code-update endpoints (POST /admin/api/update + GET .../status).
+    // Triggers scripts/admin/update.sh which broadcasts a maintenance warning,
+    // flips .maintenance, pulls + rebuilds + restarts all realm processes.
+    const { maybeHandleAdminUpdate } = await import('./admin_update');
+    if (await maybeHandleAdminUpdate(req, res, path, readBody)) return;
+
     const actionMatch = /^\/admin\/api\/moderation\/accounts\/(\d+)\/(suspend|ban|unban)$/.exec(path);
     if (req.method === 'POST' && actionMatch) {
       const targetAccountId = Number(actionMatch[1]);

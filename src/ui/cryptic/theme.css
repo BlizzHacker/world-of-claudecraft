@@ -795,6 +795,54 @@ body.cr-fps-active body, body.cr-fps-active { cursor: crosshair; }
   margin-bottom: 10px;
 }
 .cr-modal-hint { font-size: 12px; color: var(--cr-text-dim, #9a8a7a); margin: 0; line-height: 1.5; }
+.cr-options-row-stack {
+  align-items: flex-start;
+  gap: 10px;
+}
+.cr-realm-pill-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+  max-width: 280px;
+}
+.cr-realm-pill-grid .cr-options-pill {
+  border: 1px solid var(--cr-border, rgba(255, 255, 255, 0.12));
+  border-radius: 4px;
+}
+.cr-realm-summary {
+  display: grid;
+  gap: 3px;
+  padding: 9px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.18);
+  font-size: 12px;
+}
+.cr-realm-summary strong {
+  color: var(--gold, var(--cr-gold, #ffd100));
+  font-size: 13px;
+}
+.cr-realm-summary span {
+  color: var(--cr-text-dim, #9a8a7a);
+}
+.cr-token-row {
+  display: grid;
+  grid-template-columns: minmax(72px, 1fr) auto auto;
+  align-items: center;
+  gap: 8px;
+  min-height: 34px;
+}
+.cr-code-pill,
+.cr-code-link {
+  color: var(--cr-text, #e8d5c4);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  padding: 5px 7px;
+  font-size: 11px;
+  text-decoration: none;
+}
 .cr-modal-footer-hint {
   font-size: 11px;
   color: var(--cr-text-dim, #9a8a7a);
@@ -906,3 +954,294 @@ body.game-active footer.homepage-footer { display: none !important; }
   text-transform: uppercase;
   padding: 8px 12px 4px;
 }
+
+/* ---------- Admin code-update panel ---------- */
+#cr-admin-update .cr-admin-panel {
+  background: var(--panel-bg, linear-gradient(170deg, #15151f 0%, #0b0b12 60%, #08080d 100%));
+  border: 2px solid var(--border, #6f5a2a);
+  border-radius: 6px;
+  padding: 14px 18px;
+  margin: 16px 0;
+  color: var(--text, #e8d8a8);
+  font-family: var(--ui-font, system-ui, sans-serif);
+}
+#cr-admin-update h3 {
+  margin: 0 0 8px;
+  font-family: var(--title-font, serif);
+  color: var(--gold, #ffd100);
+  font-size: 16px;
+  letter-spacing: 0.6px;
+}
+#cr-admin-update h4 {
+  margin: 12px 0 6px;
+  color: var(--gold-dim, #c8a838);
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+#cr-admin-update .cr-admin-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 10px 0;
+}
+#cr-admin-update label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-dim, #9a8c66);
+}
+#cr-admin-update input {
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid var(--border, #6f5a2a);
+  color: inherit;
+  padding: 4px 8px;
+  border-radius: 4px;
+  width: 90px;
+}
+#cr-admin-update #cr-update-btn {
+  background: linear-gradient(180deg, #c8a838, #8a721d);
+  border: 1px solid #ffd100;
+  color: #15151f;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+#cr-admin-update #cr-update-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+#cr-admin-update .cr-dim { color: var(--text-dim, #9a8c66); font-size: 12px; margin: 6px 0; }
+#cr-admin-update .cr-warn { color: #ffb169; font-size: 12px; margin: 6px 0; }
+#cr-admin-update .cr-error { color: #ff6b5e; font-size: 12px; margin: 6px 0; }
+#cr-admin-update .cr-admin-log {
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid var(--border, #6f5a2a);
+  border-radius: 4px;
+  color: #cfe6cf;
+  padding: 10px 12px;
+  font: 11px/1.5 ui-monospace, Menlo, Consolas, monospace;
+  max-height: 260px;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ---------- wallet + platinum panel ---------- */
+.cr-wallet-card {
+  background: var(--panel-bg, linear-gradient(170deg, #15151f 0%, #0b0b12 60%, #08080d 100%));
+  border: 2px solid var(--gold, #c8a838);
+  border-radius: 10px;
+  padding: 18px 22px;
+  margin: 16px 0;
+  color: var(--cr-text, #e8d8a8);
+  font-family: var(--cr-font-ui, system-ui, sans-serif);
+}
+.cr-wallet-card h3 {
+  margin: 0 0 12px;
+  font-family: var(--cr-font-display, serif);
+  color: var(--gold, #ffd100);
+  font-size: 17px;
+  letter-spacing: 0.6px;
+}
+.cr-balance-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px dashed rgba(255, 215, 0, 0.12);
+  font-size: 13px;
+}
+.cr-balance-label { color: var(--cr-text-dim, #9a8a7a); }
+.cr-balance-value {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-weight: 700;
+  color: var(--gold-dim, #c8a838);
+}
+.cr-wallet-linked { padding: 8px 0; font-size: 12px; word-break: break-all; }
+.cr-wallet-linked code {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+#cr-wallet-connect, #cr-claim-btn {
+  background: linear-gradient(180deg, #c8a838, #8a721d);
+  border: 1px solid #ffd100;
+  color: #15151f;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-top: 8px;
+}
+.cr-claim-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 10px;
+}
+.cr-claim-row input {
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid var(--gold-dim, #c8a838);
+  color: inherit;
+  padding: 6px 10px;
+  border-radius: 4px;
+  width: 110px;
+  font: inherit;
+}
+.cr-disclaimer {
+  margin-top: 14px;
+  padding: 10px 12px;
+  background: rgba(255, 0, 0, 0.04);
+  border-left: 3px solid #d4442a;
+  border-radius: 0 4px 4px 0;
+  color: var(--cr-text-dim, #9a8a7a);
+}
+.cr-tiny { font-size: 10px; line-height: 1.55; }
+
+/* ---------- dashboard top chrome (/admin /mod /me) ---------- */
+.cr-dash-chrome {
+  background: linear-gradient(180deg, rgba(20, 14, 8, 0.95), rgba(10, 5, 5, 0.95));
+  border-bottom: 1px solid var(--gold-dim, #c8a838);
+  padding: 8px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--cr-font-ui, system-ui, sans-serif);
+  font-size: 13px;
+}
+.cr-dash-back {
+  color: var(--gold, #ffd100);
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+}
+.cr-dash-back:hover { color: #fff; }
+.cr-dash-nav { display: flex; gap: 4px; }
+.cr-dash-nav-item {
+  color: var(--cr-text-dim, #9a8a7a);
+  text-decoration: none;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  font-size: 12px;
+}
+.cr-dash-nav-item:hover { color: var(--cr-text, #e8d5c4); }
+.cr-dash-nav-item.current {
+  color: var(--gold, #ffd100);
+  border-color: var(--gold-dim, #c8a838);
+  background: rgba(255, 215, 0, 0.05);
+  font-weight: 700;
+}
+
+/* Realm picker + Login flow priming on homepage */
+body:not(.game-active) .cr-realm-first-prompt {
+  margin: 16px auto 0;
+  text-align: center;
+  font-family: var(--cr-font-display, serif);
+  color: var(--gold, #ffd100);
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  font-size: 13px;
+}
+
+/* ---------- PWA install banner ---------- */
+.cr-pwa-banner {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(170deg, rgba(20,14,8,0.97), rgba(8,5,3,0.97));
+  border: 1px solid var(--gold, #ffd100);
+  border-radius: 12px;
+  padding: 14px 18px;
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  z-index: 12000;
+  font-family: var(--cr-font-ui, system-ui, sans-serif);
+  color: var(--cr-text, #e8d5c4);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.6);
+  max-width: min(560px, 90vw);
+}
+.cr-pwa-text { display: flex; flex-direction: column; font-size: 13px; }
+.cr-pwa-text strong { color: var(--gold, #ffd100); margin-bottom: 2px; }
+.cr-pwa-actions { display: flex; gap: 8px; }
+.cr-pwa-actions #cr-pwa-install {
+  background: linear-gradient(180deg, #c8a838, #8a721d);
+  border: 1px solid #ffd100;
+  color: #0a0505;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.cr-pwa-link {
+  background: transparent;
+  border: 0;
+  color: var(--cr-text-dim, #9a8a7a);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* ---------- News realm filter ---------- */
+.cr-news-picker {
+  display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+  padding: 10px 14px; margin-bottom: 12px;
+  background: rgba(10,5,5,0.4); border-radius: 8px;
+  border: 1px solid var(--gold-dim, #c8a838);
+}
+.cr-news-picker-label {
+  font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase;
+  color: var(--gold-dim, #c8a838); margin-right: 6px;
+}
+.cr-news-chip {
+  background: rgba(0,0,0,0.4); border: 1px solid var(--gold-dim, #6f5a2a);
+  color: var(--cr-text-dim, #9a8a7a);
+  padding: 4px 10px; border-radius: 12px;
+  font-size: 11px; cursor: pointer; font-family: inherit;
+}
+.cr-news-chip:hover { color: var(--cr-text, #e8d5c4); }
+.cr-news-chip.active {
+  background: rgba(255, 215, 0, 0.08);
+  color: var(--gold, #ffd100);
+  border-color: var(--gold, #ffd100);
+  font-weight: 700;
+}
+
+/* ---------- Download launchers ---------- */
+.cr-dl-grid {
+  display: grid; gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  margin: 14px 0;
+}
+.cr-dl-card {
+  background: linear-gradient(170deg, rgba(20,14,8,0.85), rgba(10,5,5,0.85));
+  border: 1px solid var(--gold-dim, #6f5a2a);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+.cr-dl-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.cr-dl-icon { font-size: 22px; }
+.cr-dl-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.cr-dl-btn {
+  flex: 1; min-width: 110px;
+  background: rgba(0,0,0,0.45); border: 1px solid var(--gold, #c8a838);
+  color: var(--gold, #ffd100); text-decoration: none;
+  padding: 10px 12px; border-radius: 6px;
+  display: flex; flex-direction: column; gap: 2px;
+  text-align: center; font-size: 13px; font-weight: 700;
+}
+.cr-dl-btn small { color: var(--cr-text-dim, #9a8a7a); font-weight: 400; font-size: 10px; }
+.cr-dl-btn:hover { background: rgba(255,215,0,0.06); }
+.cr-dl-soon { opacity: 0.55; cursor: not-allowed; pointer-events: none; }
+.cr-dl-pending { margin-top: 8px; font-size: 11px; color: var(--cr-text-dim, #9a8a7a); font-style: italic; }
+.cr-dl-foot { font-size: 12px; color: var(--cr-text-dim, #9a8a7a); margin: 6px 0 0; line-height: 1.5; }

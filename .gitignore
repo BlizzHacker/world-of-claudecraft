@@ -24,6 +24,7 @@ __pycache__/
 .env
 .env.*
 !.env.example
+cr-solana.env
 
 # editor & OS noise
 .DS_Store
@@ -36,5 +37,12 @@ Thumbs.db
 # CR overlay: lxc rescue artifacts + generated realm assets
 .lxc-recovery-20260616/
 index.html.lxc-overlay
+# CR overlay: raw asset intake is audited/processed locally, then exported into
+# public/cr-realms or an external asset store. Do not commit these as Git blobs.
+classic realm assets/
+claudcraft realm assets/
+claudcraft realm assets.zip
+cryptic realm assets/
+infernal realm assets/
 # CR overlay: generated realm assets (run npm run assets:realms to regenerate)
 public/cr-realms/

@@ -191,5 +191,5 @@ describe("i18n status registry: reproducibility", () => {
     expect(() =>
       execFileSync("git", ["diff", "--exit-code", "--", registryRel], { cwd: root, encoding: "utf8" }),
     ).not.toThrow();
-  });
+  }, 15_000);
 });

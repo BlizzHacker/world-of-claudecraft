@@ -1,0 +1,23 @@
+## Triggers the daily auto-update at 04:00 UTC. Persistent so a missed
+## window (server was off / asleep) runs at boot when next available.
+##
+## Install:
+##   sudo cp deploy/systemd/cryptic-realm-autoupdate.{service,timer} /etc/systemd/system/
+##   sudo systemctl daemon-reload
+##   sudo systemctl enable --now cryptic-realm-autoupdate.timer
+##
+## Inspect:
+##   systemctl list-timers cryptic-realm-autoupdate
+##   journalctl -u cryptic-realm-autoupdate.service -n 200 --no-pager
+
+[Unit]
+Description=Cryptic Realm — daily auto-update timer (04:00 UTC)
+Requires=cryptic-realm-autoupdate.service
+
+[Timer]
+OnCalendar=*-*-* 04:00:00 UTC
+Persistent=true
+Unit=cryptic-realm-autoupdate.service
+
+[Install]
+WantedBy=timers.target
