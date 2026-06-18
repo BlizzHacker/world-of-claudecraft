@@ -27,7 +27,8 @@ database.
 - Operations transparency: admin, moderation, auto-update, and backup systems
   should be boring, auditable, and recoverable.
 - Open collaboration: general engine improvements can be proposed upstream to
-  Claudcraft, while Cryptic Realm-specific content stays in Wade's private repo.
+  Claudcraft, while Cryptic Realm-specific content stays in the private Cryptic
+  Realm repository.
 
 ## Token Utility
 
@@ -36,11 +37,15 @@ The Cryptic Realm SPL token is intended for:
 - gameplay achievement claims,
 - cosmetic and collectible ownership records,
 - account-linked event rewards,
-- future realm passes or item receipts where an on-chain record is useful.
+- future realm passes or item receipts where an on-chain record is useful,
+- community donations and tips,
+- future buy/sell/trade flows for approved game items, cosmetics, auctions, and
+  creator marketplace features.
 
-The token is not required for ordinary play. It is not a security, share,
-investment contract, revenue claim, staking product, or promise of price
-appreciation.
+The token is not required for ordinary play. Players should be able to donate,
+buy, sell, trade, and play through explicit game systems, not through vague
+financial promises. The token is not a security, share, investment contract,
+revenue claim, staking product, or promise of price appreciation.
 
 ## Current Deployment
 
@@ -66,6 +71,8 @@ as operational convenience, not as the only source of truth. Long-term hardening
 should move authority to a hardware wallet or multisig, then optionally revoke
 mint/freeze authority after tokenomics are fixed.
 
+See `docs/CRYPTO_CUSTODY_RUNBOOK.md` for the USB backup and control checklist.
+
 ## Roadmap
 
 1. Stabilize the live realm deployment, mobile performance, and realm routing.
@@ -73,7 +80,7 @@ mint/freeze authority after tokenomics are fixed.
    mini-games, wallet, and future mod toggles.
 3. Restore original Cryptic Realm mini-games and assets through an optimized
    asset pipeline rather than committing raw multi-GB source packs.
-4. Harden backups across Slimmm, Thiccc, and Wade's Windows workstation.
+4. Harden backups across Slimmm, Thiccc, and the Windows workstation.
 5. Split upstream-safe improvements into separate Claudcraft pull requests.
 6. Publish clearer economy rules before any meaningful token supply is minted.
 

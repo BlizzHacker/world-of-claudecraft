@@ -1,6 +1,7 @@
 # Cryptic Realm USB Backup System
 
-This folder contains the private ops backup runners for Wade's local machines.
+This folder contains the private ops backup runners for the Cryptic Realm
+machines.
 They are intentionally boring: no cloud dependency, no committed secrets, and
 each run writes a timestamped backup set to every configured USB target.
 
@@ -20,6 +21,9 @@ before running a backup that should include wallet/mint authority material:
 
 Do not put that passphrase in Git. Store it offline with the Phantom recovery
 phrase and the Solana mint authority backup.
+
+For the full crypto custody checklist, see
+`docs/CRYPTO_CUSTODY_RUNBOOK.md`.
 
 ## Manual Runs
 
