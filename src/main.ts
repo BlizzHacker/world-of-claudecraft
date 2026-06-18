@@ -2864,11 +2864,32 @@ function wireStartScreens(): void {
   // it doesn't show up in shared screenshots, and jump straight to the
   // realm select panel — same path doAuth() takes after /api/login succeeds.
   const ssoHash = (typeof window !== 'undefined' ? window.location.hash : '') ?? '';
+  // TEMP DIAGNOSTIC: surface the SSO-return state so we can see why login
+  // doesn't complete. Remove once fixed.
+  const ssoDiag = (msg: string) => {
+    try {
+      console.info('[cr-sso]', msg);
+      let bar = document.getElementById('cr-sso-diag');
+      if (!bar) {
+        bar = document.createElement('div');
+        bar.id = 'cr-sso-diag';
+        bar.style.cssText = 'position:fixed;left:0;right:0;top:0;z-index:99999;background:#0a2a3a;color:#aef;font:12px/1.5 ui-monospace,monospace;padding:8px 12px;border-bottom:2px solid #7bdff2;max-height:40vh;overflow:auto;white-space:pre-wrap;';
+        document.body.appendChild(bar);
+        bar.onclick = () => bar?.remove();
+      }
+      bar.textContent += msg + '\n';
+    } catch { /* ignore */ }
+  };
+  if (ssoHash.includes('auth_token=')) {
+    ssoDiag(`SSO hash present (len=${ssoHash.length}). startsWith#=${ssoHash.startsWith('#')}`);
+  }
   if (ssoHash.startsWith('#') && ssoHash.includes('auth_token=')) {
     const ssoParams = new URLSearchParams(ssoHash.slice(1));
     const ssoToken = ssoParams.get('auth_token');
     const ssoUser = ssoParams.get('auth_user');
+    ssoDiag(`token: ${ssoToken ? ssoToken.slice(0, 8) + '… len=' + ssoToken.length : 'MISSING'}, user: ${ssoUser ?? 'MISSING'}, regexOK=${ssoToken ? /^[a-f0-9]{64}$/.test(ssoToken) : false}`);
     if (ssoToken && /^[a-f0-9]{64}$/.test(ssoToken) && ssoUser) {
+      ssoDiag('condition matched → adopting token, loading realms…');
       api.token = ssoToken;
       api.username = ssoUser;
       // CR overlay: also persist to the dashboard's localStorage so the
@@ -2885,14 +2906,17 @@ function wireStartScreens(): void {
         try {
           const userEl = document.querySelector('#charselect-user');
           if (userEl) userEl.textContent = api.username ?? '';
-          // On SSO return, always go to the realm list rather than
-          // auto-selecting a remembered realm: an auto-select can connect to a
-          // realm whose status check hangs, freezing the post-login screen.
+          ssoDiag('calling api.realms()…');
           const dir = await api.realms();
+          ssoDiag(`realms() OK: ${dir.realms.length} realms. showing list.`);
           const listUserEl = document.querySelector('#realm-list-user');
           if (listUserEl) listUserEl.textContent = api.username ?? '';
           showRealmList(dir);
-        } catch (err) { loginError(userFacingApiError(err)); }
+          ssoDiag('realm list shown — login complete.');
+        } catch (err) {
+          ssoDiag('ERROR in realm flow: ' + (err instanceof Error ? err.message : String(err)));
+          loginError(userFacingApiError(err));
+        }
       })();
     }
   }
