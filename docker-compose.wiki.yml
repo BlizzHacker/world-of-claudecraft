@@ -45,8 +45,10 @@ services:
       MEDIAWIKI_SECRET_KEY: ${MEDIAWIKI_SECRET_KEY:?set MEDIAWIKI_SECRET_KEY in .env.wiki}
       MEDIAWIKI_UPGRADE_KEY: ${MEDIAWIKI_UPGRADE_KEY:?set MEDIAWIKI_UPGRADE_KEY in .env.wiki}
       MEDIAWIKI_SERVER: ${MEDIAWIKI_SERVER:-https://wiki.crypticrealm.com}
+    # Bind on all interfaces so Traefik (on a separate LXC) can reach the wiki
+    # at 192.168.0.171:8080. The realm LXC is on the trusted internal network.
     ports:
-      - "127.0.0.1:8080:80"
+      - "8080:80"
     volumes:
       - eastbrook_wiki_images:/var/www/html/images
 
