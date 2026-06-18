@@ -42,6 +42,7 @@ describe('Cryptic Realm in-game customization menu', () => {
     expect(modal.innerHTML).toContain(CR_TOKEN);
     expect(modal.innerHTML).toContain(CR_WALLET);
     expect(modal.querySelectorAll('[data-cr-realm]')).toHaveLength(6);
+    expect(modal.querySelector<HTMLButtonElement>('[data-cr-fps="diablo"]')?.textContent).toContain('Diablo angle');
   });
 
   it('switches presentation realm and preserves Claudecraft WOC token', async () => {

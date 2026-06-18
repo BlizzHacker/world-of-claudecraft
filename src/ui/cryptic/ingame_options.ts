@@ -81,7 +81,7 @@ function tokenRows(realm: RealmContent): string {
     ${tipRow}`;
 }
 
-function buildModalHtml(skin: HudSkin, fps: 'on' | 'off'): string {
+function buildModalHtml(skin: HudSkin, fps: 'on' | 'off' | 'diablo'): string {
   const autoFps = resolveAutoFps();
   const activeId = resolveActiveRealmId();
   const realm = getActiveRealm();
@@ -107,6 +107,7 @@ function buildModalHtml(skin: HudSkin, fps: 'on' | 'off'): string {
             <div class="cr-options-row-control" role="group" aria-label="Camera mode">
               <button type="button" class="cr-options-pill ${fps === 'off' ? 'active' : ''}" data-cr-fps="off">3rd person</button>
               <button type="button" class="cr-options-pill ${fps === 'on' ? 'active' : ''}" data-cr-fps="on">First person</button>
+              <button type="button" class="cr-options-pill ${fps === 'diablo' ? 'active' : ''}" data-cr-fps="diablo">Diablo angle</button>
             </div>
           </div>
           <div class="cr-options-row">
@@ -137,7 +138,7 @@ function buildModalHtml(skin: HudSkin, fps: 'on' | 'off'): string {
           ${tokenRows(realm)}
         </div>
 
-        <p class="cr-modal-footer-hint">Press <kbd>V</kbd> to toggle first-person view.</p>
+        <p class="cr-modal-footer-hint">Press <kbd>V</kbd> to toggle first-person view. Diablo angle uses a high ARPG camera.</p>
       </div>
     </div>
   `;
@@ -197,7 +198,7 @@ function openCustomization(): void {
 
     const fpsBtn = target.closest('[data-cr-fps]') as HTMLElement | null;
     if (fpsBtn) {
-      const next = fpsBtn.dataset.crFps as 'on' | 'off';
+      const next = fpsBtn.dataset.crFps as 'on' | 'off' | 'diablo';
       persistFpsMode(next);
       window.dispatchEvent(new CustomEvent('cr-fps-toggle'));
       refresh();

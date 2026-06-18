@@ -27,11 +27,13 @@ const STORE_KEY = 'cr_fps_mode';
 const RETICLE_ID = 'cr-fps-reticle';
 const FPS_CAM_DIST = 0.55;
 const FPS_CAM_PITCH = 0.04;
+const DIABLO_CAM_DIST = 18;
+const DIABLO_CAM_PITCH = 0.92;
 
-type FpsMode = 'on' | 'off';
+type FpsMode = 'on' | 'off' | 'diablo';
 
 function isFpsMode(v: string | null | undefined): v is FpsMode {
-  return v === 'on' || v === 'off';
+  return v === 'on' || v === 'off' || v === 'diablo';
 }
 
 export function resolveFpsMode(): FpsMode {
@@ -49,8 +51,8 @@ export function persistFpsMode(mode: FpsMode): void {
 }
 
 interface FpsRuntime {
-  active: boolean;
-  /** Camera values captured before we entered FPS mode. */
+  mode: FpsMode;
+  /** Camera values captured before we entered an authored camera preset. */
   savedDist: number;
   savedPitch: number;
 }
@@ -75,26 +77,34 @@ function injectReticle(): HTMLElement {
   return el;
 }
 
-function applyBodyClass(active: boolean): void {
-  document.body.classList.toggle('cr-fps-active', active);
+function applyBodyClasses(mode: FpsMode): void {
+  document.body.classList.toggle('cr-fps-active', mode === 'on');
+  document.body.classList.toggle('cr-diablo-camera-active', mode === 'diablo');
 }
 
-function enterFps(input: Input, rt: FpsRuntime): void {
-  if (rt.active) return;
-  rt.savedDist = input.camDist;
-  rt.savedPitch = input.camPitch;
-  input.camDist = FPS_CAM_DIST;
-  input.camPitch = FPS_CAM_PITCH;
-  rt.active = true;
-  applyBodyClass(true);
-}
+function applyCameraMode(input: Input, rt: FpsRuntime, mode: FpsMode): void {
+  if (mode === 'off') {
+    input.camDist = rt.savedDist;
+    input.camPitch = rt.savedPitch;
+    rt.mode = 'off';
+    applyBodyClasses('off');
+    return;
+  }
 
-function exitFps(input: Input, rt: FpsRuntime): void {
-  if (!rt.active) return;
-  input.camDist = rt.savedDist;
-  input.camPitch = rt.savedPitch;
-  rt.active = false;
-  applyBodyClass(false);
+  if (rt.mode === 'off') {
+    rt.savedDist = input.camDist;
+    rt.savedPitch = input.camPitch;
+  }
+
+  if (mode === 'on') {
+    input.camDist = FPS_CAM_DIST;
+    input.camPitch = FPS_CAM_PITCH;
+  } else {
+    input.camDist = DIABLO_CAM_DIST;
+    input.camPitch = DIABLO_CAM_PITCH;
+  }
+  rt.mode = mode;
+  applyBodyClasses(mode);
 }
 
 function shouldIgnoreKey(ev: KeyboardEvent): boolean {
@@ -116,7 +126,7 @@ let runtime: FpsRuntime | null = null;
 /** Programmatically set FPS mode. Used by the header toggle button. */
 export function setFpsMode(input: Input, mode: FpsMode): void {
   if (!runtime) return;
-  if (mode === 'on') enterFps(input, runtime); else exitFps(input, runtime);
+  applyCameraMode(input, runtime, mode);
   persistFpsMode(mode);
 }
 
@@ -124,11 +134,11 @@ export function mountFpsMode(input: Input, opts: MountFpsOptions = {}): void {
   if (typeof document === 'undefined') return;
   if (runtime) return; // already mounted
 
-  runtime = { active: false, savedDist: input.camDist, savedPitch: input.camPitch };
+  runtime = { mode: 'off', savedDist: input.camDist, savedPitch: input.camPitch };
   injectReticle();
 
   const initial = resolveFpsMode();
-  if (initial === 'on') enterFps(input, runtime);
+  if (initial !== 'off') applyCameraMode(input, runtime, initial);
 
   // Auto-FPS on full zoom-in: when the user scrolls the camera all the way
   // in (camDist hits the minimum clamp of 3), flip to FPS automatically.
@@ -138,9 +148,9 @@ export function mountFpsMode(input: Input, opts: MountFpsOptions = {}): void {
   const tick = () => {
     if (!runtime) return;
     if (isAutoFpsEnabled()) {
-      if (input.camDist <= 3.05 && !runtime.active) enterFps(input, runtime);
-      else if (input.camDist > 3.5 && runtime.active && resolveFpsMode() === 'off') {
-        exitFps(input, runtime);
+      if (input.camDist <= 3.05 && runtime.mode === 'off') applyCameraMode(input, runtime, 'on');
+      else if (input.camDist > 3.5 && runtime.mode === 'on' && resolveFpsMode() === 'off') {
+        applyCameraMode(input, runtime, 'off');
       }
     }
     requestAnimationFrame(tick);
@@ -153,7 +163,7 @@ export function mountFpsMode(input: Input, opts: MountFpsOptions = {}): void {
     if (ev.key.toLowerCase() !== toggleKey) return;
     // Ignore when modifier keys are held — keep V free for browser shortcuts.
     if (ev.ctrlKey || ev.metaKey || ev.altKey) return;
-    const next: FpsMode = runtime!.active ? 'off' : 'on';
+    const next: FpsMode = runtime!.mode === 'on' ? 'off' : 'on';
     setFpsMode(input, next);
     ev.preventDefault();
   });
@@ -164,11 +174,10 @@ export function mountFpsMode(input: Input, opts: MountFpsOptions = {}): void {
   window.addEventListener('cr-fps-toggle', () => {
     if (!runtime) return;
     const desired = resolveFpsMode();
-    if (desired === 'on' && !runtime.active) enterFps(input, runtime);
-    else if (desired === 'off' && runtime.active) exitFps(input, runtime);
+    applyCameraMode(input, runtime, desired);
   });
 }
 
 export function isFpsActive(): boolean {
-  return runtime?.active === true;
+  return runtime?.mode === 'on';
 }

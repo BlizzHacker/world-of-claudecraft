@@ -28,6 +28,8 @@ describe('fps mode (CR overlay)', () => {
     const { resolveFpsMode, persistFpsMode } = await import('../src/ui/cryptic/fps_mode');
     persistFpsMode('on');
     expect(resolveFpsMode()).toBe('on');
+    persistFpsMode('diablo');
+    expect(resolveFpsMode()).toBe('diablo');
     persistFpsMode('off');
     expect(resolveFpsMode()).toBe('off');
   });
@@ -60,6 +62,21 @@ describe('fps mode (CR overlay)', () => {
     expect(inp.camDist).toBe(origDist);
     expect(inp.camPitch).toBe(origPitch);
     expect(document.body.classList.contains('cr-fps-active')).toBe(false);
+  });
+
+  it('setFpsMode("diablo") applies a high ARPG camera without the FPS reticle state', async () => {
+    const { mountFpsMode, setFpsMode, isFpsActive } = await import('../src/ui/cryptic/fps_mode');
+    const inp = makeInput();
+    mountFpsMode(inp as never);
+    setFpsMode(inp as never, 'diablo');
+    expect(isFpsActive()).toBe(false);
+    expect(inp.camDist).toBeGreaterThan(16);
+    expect(inp.camPitch).toBeGreaterThan(0.8);
+    expect(document.body.classList.contains('cr-fps-active')).toBe(false);
+    expect(document.body.classList.contains('cr-diablo-camera-active')).toBe(true);
+    setFpsMode(inp as never, 'off');
+    expect(inp.camDist).toBe(12);
+    expect(inp.camPitch).toBe(0.32);
   });
 
   it('V keypress toggles FPS mode (when no form input is focused)', async () => {
