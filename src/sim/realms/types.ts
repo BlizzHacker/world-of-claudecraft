@@ -5,12 +5,18 @@
 // model glob patterns, and bestiary entries the UI / renderer use.
 
 export type RealmId =
+  // The signature realm. 'crypticrealm' is the flagship — the namesake world
+  // with its own identity, not a re-skin of another theme.
+  | 'crypticrealm'
   | 'infernal'
   | 'classic'
   | 'dominion'
   | 'arcane'
   | 'claudecraft'
-  // The Exchange is a neutral 6th realm — the only place where characters
+  // First-person-only realm (fps.moveweight.com). Camera is locked to the
+  // first-person view; the third-person / Diablo presets are disabled here.
+  | 'fps'
+  // The Exchange is a neutral hub realm — the only place where characters
   // from any home realm can meet. Auctions + cross-realm item trades happen
   // exclusively here. Players keep their home-realm progression; visiting
   // the Exchange copies their character into a read/trade-only context.
@@ -106,4 +112,9 @@ export interface RealmContent {
    *  Exchange uses this flag. Standard realms are isolated worlds with their
    *  own process + state per the systemd-template deploy. */
   crossRealm?: boolean;
+  /** First-person-only realm: the camera is locked to the first-person view
+   *  and the third-person / Diablo presets are hidden. The FPS realm
+   *  (fps.moveweight.com) sets this; everywhere else first-person stays an
+   *  optional toggle. */
+  fpsOnly?: boolean;
 }

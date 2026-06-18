@@ -25,7 +25,7 @@ CR_BRANCH="${CR_BRANCH:-feat/v07-and-realms}"
 CR_LOG_FILE="${CR_LOG_FILE:-/var/log/cr-update.log}"
 CR_REMOTE="${CR_REMOTE:-origin}"
 CR_MAINT_FLAG="${CR_HOME}/.maintenance"
-CR_INSTANCES=(infernal classic dominion arcane claudecraft exchange alpha beta)
+CR_INSTANCES=(crypticrealm infernal classic dominion arcane claudecraft fps exchange alpha beta)
 
 LOG() {
   local ts msg
@@ -123,16 +123,27 @@ for inst in "${CR_INSTANCES[@]}"; do
     || LOG "WARN: cryptic-realm@${inst} failed to restart (continuing)"
 done
 
-# 6. Sanity check: every instance reports active.
-sleep 3
+# 6. Sanity check: every instance reports active. Restarting all realms at
+#    once means some are still booting (db connect + listen) when we first
+#    look, so re-check with backoff before declaring a failure — avoids
+#    false FAILs on a healthy deploy.
+check_active() {
+  local svc="$1" tries=0
+  while [ "$tries" -lt 5 ]; do
+    [ "$(systemctl is-active "$svc")" = "active" ] && return 0
+    sleep 2
+    tries=$((tries + 1))
+  done
+  return 1
+}
 SVC_FAIL=0
 for inst in "${CR_INSTANCES[@]}"; do
-  if [ "$(systemctl is-active "cryptic-realm@${inst}.service")" != "active" ]; then
+  if ! check_active "cryptic-realm@${inst}.service"; then
     LOG "FAIL: cryptic-realm@${inst} is not active after restart"
     SVC_FAIL=$((SVC_FAIL + 1))
   fi
 done
-if [ "$(systemctl is-active cryptic-realm.service)" != "active" ]; then
+if ! check_active cryptic-realm.service; then
   LOG "FAIL: cryptic-realm.service (legacy) is not active after restart"
   SVC_FAIL=$((SVC_FAIL + 1))
 fi

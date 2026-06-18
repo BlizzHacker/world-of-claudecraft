@@ -16,29 +16,37 @@
 //   2. localStorage 'cr_active_realm' (last-picked).
 //   3. DEFAULT_REALM ('infernal') — matches the LXC overlay's default.
 
+import { CRYPTICREALM_REALM } from './content/crypticrealm';
 import { CLAUDECRAFT_REALM } from './content/claudecraft';
 import { INFERNAL_REALM } from './content/infernal';
 import { CLASSIC_REALM } from './content/classic';
 import { DOMINION_REALM } from './content/dominion';
 import { ARCANE_REALM } from './content/arcane';
+import { FPS_REALM } from './content/fps';
 import { EXCHANGE_REALM } from './content/exchange';
 import type { RealmContent, RealmId } from './types';
 
 export const REALMS: Record<RealmId, RealmContent> = {
+  crypticrealm: CRYPTICREALM_REALM,
   infernal: INFERNAL_REALM,
   classic: CLASSIC_REALM,
   dominion: DOMINION_REALM,
   arcane: ARCANE_REALM,
   claudecraft: CLAUDECRAFT_REALM,
+  fps: FPS_REALM,
   exchange: EXCHANGE_REALM,
 };
 
+// Picker order: the namesake realm leads, then the themed universes, the FPS
+// realm, and finally the Exchange hub.
 export const REALM_LIST: readonly RealmContent[] = [
+  CRYPTICREALM_REALM,
   INFERNAL_REALM,
   CLASSIC_REALM,
   DOMINION_REALM,
   ARCANE_REALM,
   CLAUDECRAFT_REALM,
+  FPS_REALM,
   EXCHANGE_REALM,
 ];
 
@@ -53,7 +61,7 @@ export function isCrossRealm(id: RealmId): boolean {
   return REALMS[id]?.crossRealm === true;
 }
 
-export const DEFAULT_REALM: RealmId = 'infernal';
+export const DEFAULT_REALM: RealmId = 'crypticrealm';
 
 const STORE_KEY = 'cr_active_realm';
 

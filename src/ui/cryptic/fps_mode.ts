@@ -22,6 +22,12 @@
 
 import type { Input } from '../../game/input';
 import { resolveAutoFps } from './auto_fps';
+import { getActiveRealm } from '../../sim/realms';
+
+/** True when the active realm locks the camera to first-person (FPS realm). */
+function isFpsLockedRealm(): boolean {
+  try { return getActiveRealm().fpsOnly === true; } catch { return false; }
+}
 
 const STORE_KEY = 'cr_fps_mode';
 const RETICLE_ID = 'cr-fps-reticle';
@@ -123,9 +129,11 @@ export interface MountFpsOptions {
 
 let runtime: FpsRuntime | null = null;
 
-/** Programmatically set FPS mode. Used by the header toggle button. */
+/** Programmatically set FPS mode. Used by the header toggle button.
+ *  No-op on FPS-locked realms — the camera stays first-person. */
 export function setFpsMode(input: Input, mode: FpsMode): void {
   if (!runtime) return;
+  if (isFpsLockedRealm()) return;
   applyCameraMode(input, runtime, mode);
   persistFpsMode(mode);
 }
@@ -137,8 +145,14 @@ export function mountFpsMode(input: Input, opts: MountFpsOptions = {}): void {
   runtime = { mode: 'off', savedDist: input.camDist, savedPitch: input.camPitch };
   injectReticle();
 
-  const initial = resolveFpsMode();
-  if (initial !== 'off') applyCameraMode(input, runtime, initial);
+  // FPS-only realm: lock to first-person on mount and ignore toggles below.
+  const locked = isFpsLockedRealm();
+  if (locked) {
+    applyCameraMode(input, runtime, 'on');
+  } else {
+    const initial = resolveFpsMode();
+    if (initial !== 'off') applyCameraMode(input, runtime, initial);
+  }
 
   // Auto-FPS on full zoom-in: when the user scrolls the camera all the way
   // in (camDist hits the minimum clamp of 3), flip to FPS automatically.
@@ -147,6 +161,7 @@ export function mountFpsMode(input: Input, opts: MountFpsOptions = {}): void {
   // settings slider, scripted zooms).
   const tick = () => {
     if (!runtime) return;
+    if (locked) { requestAnimationFrame(tick); return; }
     if (resolveAutoFps()) {
       if (input.camDist <= 3.05 && runtime.mode === 'off') applyCameraMode(input, runtime, 'on');
       else if (input.camDist > 3.5 && runtime.mode === 'on' && resolveFpsMode() === 'off') {
@@ -173,6 +188,7 @@ export function mountFpsMode(input: Input, opts: MountFpsOptions = {}): void {
   // listener can't disagree about which side toggled first.
   window.addEventListener('cr-fps-toggle', () => {
     if (!runtime) return;
+    if (isFpsLockedRealm()) return;
     const desired = resolveFpsMode();
     applyCameraMode(input, runtime, desired);
   });
