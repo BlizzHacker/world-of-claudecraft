@@ -205,16 +205,29 @@ export async function handleAuthentikRoute(
       const localToken = newToken();
       await saveToken(localToken, account.id);
       clearStateCookie(res);
-      // Redirect to the homepage with the token + username in the hash so it
-      // never lands in server access logs. Client picks it up on boot and
-      // stores it the same way /api/login would.
+      // Deliver the token to the client. A 302 to `/#auth_token=...` does NOT
+      // work reliably: URL fragments are dropped across HTTP redirects (and
+      // Cloudflare strips them), so the SPA never saw the token and login
+      // silently failed. Instead return a tiny HTML page that sets the hash
+      // CLIENT-SIDE and then navigates to the app — the fragment is created in
+      // the browser and never crosses a redirect. The token still stays out of
+      // server access logs because it's only ever in the document body + hash.
       const hash = new URLSearchParams({
         auth_token: localToken,
         auth_user: account.username,
         auth_via: PROVIDER,
-      });
-      res.writeHead(302, { Location: `/#${hash.toString()}` });
-      res.end();
+      }).toString();
+      const hashJson = JSON.stringify('#' + hash);
+      const html = `<!doctype html><html><head><meta charset="utf-8">`
+        + `<meta name="viewport" content="width=device-width,initial-scale=1">`
+        + `<title>Signing in…</title>`
+        + `<style>body{margin:0;background:#07080c;color:#ffd166;font:16px/1.5 system-ui,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh}</style>`
+        + `</head><body>Signing you in…`
+        + `<script>(function(){try{var h=${hashJson};`
+        + `window.location.replace('/'+h);}catch(e){window.location.href='/';}})();</script>`
+        + `</body></html>`;
+      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' });
+      res.end(html);
       return;
     } catch (err) {
       clearStateCookie(res);
