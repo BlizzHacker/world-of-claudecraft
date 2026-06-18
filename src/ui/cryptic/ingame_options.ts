@@ -14,10 +14,10 @@ import {
 } from '../../sim/realms';
 import { socialsForRealm } from '../../sim/realms/social_links';
 import { handleMiniGameClick, miniGameSectionHtml } from './minigames';
+import { persistAutoFps, resolveAutoFps } from './auto_fps';
 
 const MODAL_ID = 'cr-customization-modal';
 const BUTTON_CLASS = 'cr-customization-launcher';
-const AUTO_FPS_KEY = 'cr_auto_fps_on_zoom';
 const WOC_TOKEN_MINT = '3WjLscH2JsXLEFJZRA9z8ti8yRGxWGKbqymPd7UicRth';
 
 function escapeHtml(s: string): string {
@@ -28,14 +28,6 @@ function escapeHtml(s: string): string {
 
 function shortAddress(s: string): string {
   return s.length > 12 ? `${s.slice(0, 4)}...${s.slice(-4)}` : s;
-}
-
-function resolveAutoFps(): boolean {
-  try { return window.localStorage?.getItem(AUTO_FPS_KEY) === 'on'; } catch { return false; }
-}
-
-function persistAutoFps(on: boolean): void {
-  try { window.localStorage?.setItem(AUTO_FPS_KEY, on ? 'on' : 'off'); } catch { /* noop */ }
 }
 
 function applyThemeToDocument(id: RealmId): void {

@@ -170,9 +170,21 @@ interface TurnstileApi {
   reset: (widgetId?: string) => void;
 }
 let turnstileWidgetId: string | undefined;
+const TURNSTILE_SCRIPT_ID = 'cf-turnstile-api';
 
 function turnstileApi(): TurnstileApi | undefined {
   return (window as unknown as { turnstile?: TurnstileApi }).turnstile;
+}
+
+function loadTurnstileScript(): void {
+  if (!TURNSTILE_SITEKEY || document.getElementById(TURNSTILE_SCRIPT_ID)) return;
+  const script = document.createElement('script');
+  script.id = TURNSTILE_SCRIPT_ID;
+  script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+  script.async = true;
+  script.defer = true;
+  script.onload = () => ensureTurnstile();
+  document.head.appendChild(script);
 }
 
 // Render the widget once, retrying until the async api.js script is ready. Safe to
@@ -182,6 +194,7 @@ function ensureTurnstile(): void {
   const ts = turnstileApi();
   const el = document.getElementById('cf-turnstile-container');
   if (!ts || !el) {
+    if (el) loadTurnstileScript();
     window.setTimeout(ensureTurnstile, 200);
     return;
   }

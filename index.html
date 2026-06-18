@@ -14,9 +14,8 @@
 <meta name="description" data-i18n-content="seo.description" content="Embark on an epic adventure in World of ClaudeCraft, a classic-style micro-MMO playable directly in your browser. Join a persistent shared realm, level up classes, and defeat enemies!" />
 <link rel="manifest" href="/manifest.webmanifest" />
 
-<!-- Cloudflare Turnstile (bot gate on login/registration). Rendered explicitly
-     by src/main.ts only when VITE_TURNSTILE_SITEKEY is configured. -->
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<!-- Cloudflare Turnstile is lazy-loaded by src/main.ts only when
+     VITE_TURNSTILE_SITEKEY is configured and the auth form is opened. -->
 
 <!-- Canonical URL -->
 <link rel="canonical" href="https://worldofclaudecraft.com/" />

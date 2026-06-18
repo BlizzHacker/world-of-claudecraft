@@ -21,7 +21,7 @@
 //     that ignores form inputs.
 
 import type { Input } from '../../game/input';
-import { isAutoFpsEnabled } from './ingame_options';
+import { resolveAutoFps } from './auto_fps';
 
 const STORE_KEY = 'cr_fps_mode';
 const RETICLE_ID = 'cr-fps-reticle';
@@ -147,7 +147,7 @@ export function mountFpsMode(input: Input, opts: MountFpsOptions = {}): void {
   // settings slider, scripted zooms).
   const tick = () => {
     if (!runtime) return;
-    if (isAutoFpsEnabled()) {
+    if (resolveAutoFps()) {
       if (input.camDist <= 3.05 && runtime.mode === 'off') applyCameraMode(input, runtime, 'on');
       else if (input.camDist > 3.5 && runtime.mode === 'on' && resolveFpsMode() === 'off') {
         applyCameraMode(input, runtime, 'off');
