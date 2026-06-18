@@ -29,6 +29,7 @@ function renderLoginShell(): void {
             <div style="display:flex;flex-direction:column;gap:12px;margin-top:16px;">
               <input class="cr-input" id="login-username" type="text" placeholder="Username" autocomplete="username" required />
               <input class="cr-input" id="login-password" type="password" placeholder="Password" autocomplete="current-password" required />
+              <input class="cr-input" id="login-totp" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" placeholder="2FA code (optional unless enabled)" />
               <div id="login-error" class="cr-text-error" hidden></div>
               <button type="submit" class="cr-button">Sign in</button>
             </div>
@@ -45,6 +46,7 @@ function renderLoginShell(): void {
       await modLogin(
         ($('#login-username') as HTMLInputElement).value.trim(),
         ($('#login-password') as HTMLInputElement).value,
+        ($('#login-totp') as HTMLInputElement).value.trim(),
       );
       void boot();
     } catch (e) {

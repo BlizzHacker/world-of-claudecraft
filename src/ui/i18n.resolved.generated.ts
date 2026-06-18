@@ -142,6 +142,7 @@ export const en: EnTranslations = {
     "highscores": "High Scores",
     "wiki": "Wiki",
     "news": "News",
+    "contributions": "Contributions",
     "download": "Download",
     "whitepaper": "White Paper",
     "loginRegister": "Login/Register",
@@ -3687,6 +3688,7 @@ export const es: EnTranslations = {
     "highscores": "Clasificaciones",
     "wiki": "Wiki",
     "news": "Noticias",
+    "contributions": "Contributions",
     "download": "Descargar",
     "whitepaper": "White Paper",
     "loginRegister": "Iniciar Sesión/Registrarse",
@@ -7232,6 +7234,7 @@ export const es_ES: EnTranslations = {
     "highscores": "Clasificaciones",
     "wiki": "Wiki",
     "news": "Noticias",
+    "contributions": "Contributions",
     "download": "Descargar",
     "whitepaper": "White Paper",
     "loginRegister": "Iniciar sesión/Registrarse",
@@ -10777,6 +10780,7 @@ export const fr_FR: EnTranslations = {
     "highscores": "Classements",
     "wiki": "Wiki",
     "news": "Actualités",
+    "contributions": "Contributions",
     "download": "Télécharger",
     "whitepaper": "White Paper",
     "loginRegister": "Se connecter/S'inscrire",
@@ -14322,6 +14326,7 @@ export const fr_CA: EnTranslations = {
     "highscores": "Classements",
     "wiki": "Wiki",
     "news": "Actualités",
+    "contributions": "Contributions",
     "download": "Télécharger",
     "whitepaper": "White Paper",
     "loginRegister": "Se connecter/S'enregistrer",
@@ -17867,6 +17872,7 @@ export const en_CA: EnTranslations = {
     "highscores": "High Scores",
     "wiki": "Wiki",
     "news": "News",
+    "contributions": "Contributions",
     "download": "Download",
     "whitepaper": "White Paper",
     "loginRegister": "Login/Register",
@@ -21412,6 +21418,7 @@ export const it_IT: EnTranslations = {
     "highscores": "Classifiche",
     "wiki": "Wiki",
     "news": "Novità",
+    "contributions": "Contributions",
     "download": "Scarica",
     "whitepaper": "White Paper",
     "loginRegister": "Accedi/Registrati",
@@ -24957,6 +24964,7 @@ export const de_DE: EnTranslations = {
     "highscores": "Bestenlisten",
     "wiki": "Wiki",
     "news": "Neuigkeiten",
+    "contributions": "Contributions",
     "download": "Herunterladen",
     "whitepaper": "White Paper",
     "loginRegister": "Einloggen/Registrieren",
@@ -28502,6 +28510,7 @@ export const zh_CN: EnTranslations = {
     "highscores": "排行榜",
     "wiki": "百科指南",
     "news": "新闻资讯",
+    "contributions": "Contributions",
     "download": "下载客户端",
     "whitepaper": "White Paper",
     "loginRegister": "登录/注册",
@@ -32047,6 +32056,7 @@ export const zh_TW: EnTranslations = {
     "highscores": "排行榜",
     "wiki": "百科指南",
     "news": "最新消息",
+    "contributions": "Contributions",
     "download": "下載客戶端",
     "whitepaper": "White Paper",
     "loginRegister": "登入/註冊",
@@ -35592,6 +35602,7 @@ export const ko_KR: EnTranslations = {
     "highscores": "순위표",
     "wiki": "위키",
     "news": "새소식",
+    "contributions": "Contributions",
     "download": "다운로드",
     "whitepaper": "White Paper",
     "loginRegister": "로그인/회원가입",
@@ -39137,6 +39148,7 @@ export const ja_JP: EnTranslations = {
     "highscores": "ハイスコア",
     "wiki": "Wiki",
     "news": "ニュース",
+    "contributions": "Contributions",
     "download": "ダウンロード",
     "whitepaper": "White Paper",
     "loginRegister": "ログイン/登録",
@@ -42682,6 +42694,7 @@ export const pt_BR: EnTranslations = {
     "highscores": "Recordes",
     "wiki": "Wiki",
     "news": "Notícias",
+    "contributions": "Contributions",
     "download": "Baixar",
     "whitepaper": "White Paper",
     "loginRegister": "Entrar/Registrar",
@@ -46227,6 +46240,7 @@ export const ru_RU: EnTranslations = {
     "highscores": "Таблицы рекордов",
     "wiki": "Вики",
     "news": "Новости",
+    "contributions": "Contributions",
     "download": "Скачать",
     "whitepaper": "White Paper",
     "loginRegister": "Войти / Зарегистрироваться",
@@ -49658,6 +49672,7 @@ export const translations = {
 
 export const pending: Record<string, readonly string[]> = {
   "es": [
+    "nav.contributions",
     "news.alphaBetaBody",
     "news.alphaBetaTitle",
     "news.officialLog",
@@ -49670,6 +49685,7 @@ export const pending: Record<string, readonly string[]> = {
     "news.tokenTitle"
   ],
   "es_ES": [
+    "nav.contributions",
     "news.alphaBetaBody",
     "news.alphaBetaTitle",
     "news.officialLog",
@@ -49682,6 +49698,7 @@ export const pending: Record<string, readonly string[]> = {
     "news.tokenTitle"
   ],
   "fr_FR": [
+    "nav.contributions",
     "news.alphaBetaBody",
     "news.alphaBetaTitle",
     "news.officialLog",
@@ -49694,6 +49711,7 @@ export const pending: Record<string, readonly string[]> = {
     "news.tokenTitle"
   ],
   "fr_CA": [
+    "nav.contributions",
     "news.alphaBetaBody",
     "news.alphaBetaTitle",
     "news.officialLog",
@@ -49707,6 +49725,7 @@ export const pending: Record<string, readonly string[]> = {
   ],
   "en_CA": [],
   "it_IT": [
+    "nav.contributions",
     "news.alphaBetaBody",
     "news.alphaBetaTitle",
     "news.officialLog",
@@ -49719,6 +49738,7 @@ export const pending: Record<string, readonly string[]> = {
     "news.tokenTitle"
   ],
   "de_DE": [
+    "nav.contributions",
     "news.alphaBetaBody",
     "news.alphaBetaTitle",
     "news.officialLog",
@@ -49731,6 +49751,7 @@ export const pending: Record<string, readonly string[]> = {
     "news.tokenTitle"
   ],
   "zh_CN": [
+    "nav.contributions",
     "news.alphaBetaBody",
     "news.alphaBetaTitle",
     "news.officialLog",
@@ -49743,6 +49764,7 @@ export const pending: Record<string, readonly string[]> = {
     "news.tokenTitle"
   ],
   "zh_TW": [
+    "nav.contributions",
     "news.alphaBetaBody",
     "news.alphaBetaTitle",
     "news.officialLog",
@@ -49755,6 +49777,7 @@ export const pending: Record<string, readonly string[]> = {
     "news.tokenTitle"
   ],
   "ko_KR": [
+    "nav.contributions",
     "news.alphaBetaBody",
     "news.alphaBetaTitle",
     "news.officialLog",
@@ -49767,6 +49790,7 @@ export const pending: Record<string, readonly string[]> = {
     "news.tokenTitle"
   ],
   "ja_JP": [
+    "nav.contributions",
     "news.alphaBetaBody",
     "news.alphaBetaTitle",
     "news.officialLog",
@@ -49779,6 +49803,7 @@ export const pending: Record<string, readonly string[]> = {
     "news.tokenTitle"
   ],
   "pt_BR": [
+    "nav.contributions",
     "news.alphaBetaBody",
     "news.alphaBetaTitle",
     "news.officialLog",
@@ -49791,6 +49816,7 @@ export const pending: Record<string, readonly string[]> = {
     "news.tokenTitle"
   ],
   "ru_RU": [
+    "nav.contributions",
     "news.alphaBetaBody",
     "news.alphaBetaTitle",
     "news.officialLog",
@@ -49937,6 +49963,7 @@ export const en_XA: EnTranslations = {
     "highscores": "[Ĥíĝĥ Šçóŕéš]",
     "wiki": "[Ŵíķí]",
     "news": "[Ñéŵš]",
+    "contributions": "[Çóñţŕíƀúţíóñš]",
     "download": "[Ðóŵñļóáð]",
     "whitepaper": "[Ŵĥíţé Þáþéŕ]",
     "loginRegister": "[Ļóĝíñ/Ŕéĝíšţéŕ]",

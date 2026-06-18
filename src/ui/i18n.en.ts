@@ -10946,6 +10946,7 @@ export const en = {
     highscores: "High Scores",
     wiki: "Wiki",
     news: "News",
+    contributions: "Contributions",
     download: "Download",
     whitepaper: "White Paper",
     loginRegister: "Login/Register",

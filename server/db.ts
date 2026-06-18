@@ -74,6 +74,8 @@ ALTER TABLE accounts ADD COLUMN IF NOT EXISTS created_ip TEXT;
 ALTER TABLE accounts ADD COLUMN IF NOT EXISTS created_user_agent TEXT;
 ALTER TABLE accounts ADD COLUMN IF NOT EXISTS last_login_ip TEXT;
 ALTER TABLE accounts ADD COLUMN IF NOT EXISTS last_login_user_agent TEXT;
+ALTER TABLE accounts ADD COLUMN IF NOT EXISTS totp_secret TEXT;
+ALTER TABLE accounts ADD COLUMN IF NOT EXISTS totp_enabled_at TIMESTAMPTZ;
 CREATE INDEX IF NOT EXISTS accounts_created_at ON accounts(created_at DESC);
 CREATE INDEX IF NOT EXISTS accounts_created_ip_created ON accounts(created_ip, created_at DESC);
 CREATE INDEX IF NOT EXISTS accounts_created_user_agent_created ON accounts(created_user_agent, created_at DESC);
@@ -201,6 +203,8 @@ export interface AccountRow {
   id: number;
   username: string;
   password_hash: string;
+  totp_secret?: string | null;
+  totp_enabled_at?: string | null;
 }
 
 export interface AccountModerationStatus {
@@ -242,8 +246,55 @@ export async function createAccount(username: string, passwordHash: string, meta
 }
 
 export async function findAccount(username: string): Promise<AccountRow | null> {
-  const res = await pool.query('SELECT id, username, password_hash FROM accounts WHERE username = $1', [username]);
+  const res = await pool.query(
+    'SELECT id, username, password_hash, totp_secret, totp_enabled_at FROM accounts WHERE username = $1',
+    [username],
+  );
   return res.rows[0] ?? null;
+}
+
+export interface AccountTotpState {
+  enabled: boolean;
+  configured: boolean;
+  secret: string | null;
+}
+
+function rowToTotpState(row: any): AccountTotpState {
+  const secret = typeof row?.totp_secret === 'string' && row.totp_secret ? row.totp_secret : null;
+  return {
+    configured: secret !== null,
+    enabled: secret !== null && row?.totp_enabled_at !== null && row?.totp_enabled_at !== undefined,
+    secret,
+  };
+}
+
+export async function accountTotpState(accountId: number): Promise<AccountTotpState> {
+  const res = await pool.query(
+    'SELECT totp_secret, totp_enabled_at FROM accounts WHERE id = $1',
+    [accountId],
+  );
+  return rowToTotpState(res.rows[0]);
+}
+
+export async function setAccountTotpSecret(accountId: number, secret: string): Promise<void> {
+  await pool.query(
+    'UPDATE accounts SET totp_secret = $2, totp_enabled_at = NULL WHERE id = $1',
+    [accountId, secret],
+  );
+}
+
+export async function enableAccountTotp(accountId: number): Promise<void> {
+  await pool.query(
+    'UPDATE accounts SET totp_enabled_at = now() WHERE id = $1 AND totp_secret IS NOT NULL',
+    [accountId],
+  );
+}
+
+export async function disableAccountTotp(accountId: number): Promise<void> {
+  await pool.query(
+    'UPDATE accounts SET totp_secret = NULL, totp_enabled_at = NULL WHERE id = $1',
+    [accountId],
+  );
 }
 
 export async function getAccountsCount(): Promise<number> {

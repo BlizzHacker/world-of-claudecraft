@@ -42,11 +42,11 @@ async function parseEnvelope<T>(res: Response): Promise<T> {
   return body.data;
 }
 
-export async function apiLogin(username: string, password: string): Promise<string> {
+export async function apiLogin(username: string, password: string, totpCode = ''): Promise<string> {
   const res = await fetch('/admin/api/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, password }),
+    body: JSON.stringify({ username, password, totpCode }),
   });
   const data = await parseEnvelope<{ token: string; username: string }>(res);
   localStorage.setItem(TOKEN_KEY, data.token);

@@ -252,6 +252,8 @@
       <input id="login-username" autocomplete="username" required />
       <label for="login-password" data-i18n="auth.password">Password</label>
       <input id="login-password" type="password" autocomplete="current-password" required />
+      <label for="login-totp" data-i18n="auth.totp">2FA code</label>
+      <input id="login-totp" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" placeholder="Optional unless enabled" data-i18n-ph="auth.totpPlaceholder" />
       <button type="submit" data-i18n="auth.signIn">Sign in</button>
       <div id="login-error"></div>
     </form>

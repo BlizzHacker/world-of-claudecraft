@@ -480,8 +480,9 @@ function wireEvents(): void {
     e.preventDefault();
     const username = ($('login-username') as HTMLInputElement).value.trim();
     const password = ($('login-password') as HTMLInputElement).value;
+    const totpCode = (($('login-totp') as HTMLInputElement | null)?.value ?? '').trim();
     $('login-error').textContent = '';
-    apiLogin(username, password)
+    apiLogin(username, password, totpCode)
       .then(() => showApp())
       .catch((err: unknown) => {
         $('login-error').textContent = err instanceof ApiError ? localizeAdminError(err.message) : t('auth.loginFailed');

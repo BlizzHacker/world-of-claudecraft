@@ -1,8 +1,9 @@
 import * as http from 'node:http';
 import { json, readBody } from './http_util';
 import { rateLimited } from './ratelimit';
-import { findAccount, touchLogin, saveToken, accountForToken, isAdminAccount } from './db';
+import { findAccount, touchLogin, saveToken, accountForToken, isAdminAccount, accountTotpState } from './db';
 import { verifyPassword, newToken } from './auth';
+import { verifyTotpCode } from './totp';
 import {
   overviewCounts, registrationsByDay, sessionsByDay, classDistribution, levelDistribution,
   listAccounts, listCharacters, accountDetail,
@@ -70,6 +71,12 @@ async function handleLogin(req: http.IncomingMessage, res: http.ServerResponse):
   }
   if (!(await isAdminAccount(account.id))) {
     return fail(res, 403, 'this account does not have admin access');
+  }
+  const totp = await accountTotpState(account.id);
+  if (totp.enabled && !verifyTotpCode(totp.secret ?? '', body.totpCode)) {
+    return fail(res, 403, typeof body.totpCode === 'string' && body.totpCode.trim()
+      ? 'invalid two-factor code'
+      : 'two-factor code required');
   }
   await touchLogin(account.id);
   const token = newToken();

@@ -14,8 +14,10 @@ import {
   isModeratorAccount, accountRoleFlags,
   listCharacters, type CharacterRow,
   moderationStatusForAccount, chatMuteStatusForAccount,
+  accountTotpState, setAccountTotpSecret, enableAccountTotp, disableAccountTotp,
 } from './db';
 import { verifyPassword, newToken } from './auth';
+import { generateTotpSecret, otpauthUrl, verifyTotpCode } from './totp';
 import { moderationQueue } from './moderation_db';
 import { REALM } from './realm';
 
@@ -37,6 +39,7 @@ async function bearerAccountId(req: http.IncomingMessage): Promise<number | null
 interface LoginBody {
   username?: unknown;
   password?: unknown;
+  totpCode?: unknown;
 }
 
 async function handleLogin(
@@ -59,6 +62,12 @@ async function handleLogin(
   }
   if (requireModerator && !(await isModeratorAccount(account.id))) {
     return fail(res, 403, 'this account does not have moderator access');
+  }
+  const totp = await accountTotpState(account.id);
+  if (totp.enabled && !verifyTotpCode(totp.secret ?? '', body.totpCode)) {
+    return fail(res, 403, typeof body.totpCode === 'string' && body.totpCode.trim()
+      ? 'invalid two-factor code'
+      : 'two-factor code required');
   }
   await touchLogin(account.id);
   const token = newToken();
@@ -116,6 +125,57 @@ async function handleMe(
   });
 }
 
+async function requireUser(req: http.IncomingMessage, res: http.ServerResponse): Promise<number | null> {
+  const accountId = await bearerAccountId(req);
+  if (accountId === null) {
+    fail(res, 401, 'not authenticated');
+    return null;
+  }
+  return accountId;
+}
+
+async function handleSecurity(req: http.IncomingMessage, res: http.ServerResponse): Promise<void> {
+  const accountId = await requireUser(req, res);
+  if (accountId === null) return;
+  const state = await accountTotpState(accountId);
+  ok(res, { totp: { enabled: state.enabled, configured: state.configured } });
+}
+
+async function handleTotpSetup(req: http.IncomingMessage, res: http.ServerResponse): Promise<void> {
+  const accountId = await requireUser(req, res);
+  if (accountId === null) return;
+  const secret = generateTotpSecret();
+  await setAccountTotpSecret(accountId, secret);
+  const roles = await accountRoleFlags(accountId);
+  const accountLabel = roles.isAdmin ? `admin-${accountId}` : `account-${accountId}`;
+  ok(res, {
+    secret,
+    otpauthUrl: otpauthUrl({ issuer: 'Cryptic Realm', account: accountLabel, secret }),
+  });
+}
+
+async function handleTotpEnable(req: http.IncomingMessage, res: http.ServerResponse): Promise<void> {
+  const accountId = await requireUser(req, res);
+  if (accountId === null) return;
+  const body = await readBody(req);
+  const state = await accountTotpState(accountId);
+  if (!state.secret) return fail(res, 400, 'two-factor setup has not been started');
+  if (!verifyTotpCode(state.secret, body.code)) return fail(res, 400, 'invalid two-factor code');
+  await enableAccountTotp(accountId);
+  ok(res, { totp: { enabled: true, configured: true } });
+}
+
+async function handleTotpDisable(req: http.IncomingMessage, res: http.ServerResponse): Promise<void> {
+  const accountId = await requireUser(req, res);
+  if (accountId === null) return;
+  const body = await readBody(req);
+  const state = await accountTotpState(accountId);
+  if (!state.enabled || !state.secret) return fail(res, 400, 'two-factor is not enabled');
+  if (!verifyTotpCode(state.secret, body.code)) return fail(res, 400, 'invalid two-factor code');
+  await disableAccountTotp(accountId);
+  ok(res, { totp: { enabled: false, configured: false } });
+}
+
 async function handleModQueue(
   req: http.IncomingMessage,
   res: http.ServerResponse,
@@ -143,6 +203,18 @@ export async function handleUserApi(
     }
     if (req.method === 'GET' && path === '/me/api/me') {
       return await handleMe(req, res);
+    }
+    if (req.method === 'GET' && path === '/me/api/security') {
+      return await handleSecurity(req, res);
+    }
+    if (req.method === 'POST' && path === '/me/api/security/totp/setup') {
+      return await handleTotpSetup(req, res);
+    }
+    if (req.method === 'POST' && path === '/me/api/security/totp/enable') {
+      return await handleTotpEnable(req, res);
+    }
+    if (req.method === 'POST' && path === '/me/api/security/totp/disable') {
+      return await handleTotpDisable(req, res);
     }
     return fail(res, 404, 'route not found');
   } catch (err) {

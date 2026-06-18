@@ -124,6 +124,8 @@ export function t(key: string, params?: Record<string, string | number>): string
 const ADMIN_ERROR_KEYS: Record<string, string> = {
   "too many attempts — wait a minute and try again": "error.tooManyAttempts",
   "invalid username or password": "error.invalidCredentials",
+  "two-factor code required": "error.totpRequired",
+  "invalid two-factor code": "error.totpInvalid",
   "this account does not have admin access": "error.noAdminAccess",
   "admin accounts cannot be suspended or banned": "error.cannotModerateAdmin",
   "open report not found": "error.reportNotFound",

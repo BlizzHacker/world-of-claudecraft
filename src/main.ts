@@ -183,6 +183,8 @@ function userFacingApiError(err: unknown): string {
   if (normalized === 'password must be at least 6 chars') return t('errors.api.passwordMin');
   if (normalized === 'username already taken') return t('errors.api.usernameTaken');
   if (normalized === 'invalid username or password') return t('errors.api.invalidCredentials');
+  if (normalized === 'two-factor code required') return 'Enter your six-digit authenticator code to continue.';
+  if (normalized === 'invalid two-factor code') return 'That authenticator code was not accepted.';
   if (normalized === 'invalid character name (2-16 letters)') return t('errors.api.invalidCharacterName');
   if (normalized === 'character name is not allowed') return t('errors.api.characterNameNotAllowed');
   if (normalized === 'invalid class') return t('errors.api.invalidClass');
@@ -1151,6 +1153,7 @@ let activeTransitionTimeout: number | null = null;
 let activeTransitionCleanup: (() => void) | null = null;
 let characterPreview: InstanceType<GameRuntime['CharacterPreview']> | null = null;
 let characterPreviewLoadPromise: Promise<void> | null = null;
+let characterPreviewTimer: number | null = null;
 let offlineSkin = 0; // chosen appearance skin for the offline quick-start character
 let onlineSkin = 0; // chosen appearance skin for new online characters
 
@@ -1185,6 +1188,19 @@ function selectedSkin(rowId: string, fallback: number): number {
   return Number.isFinite(parsed) ? parsed : fallback;
 }
 
+function scheduleCharacterPreview(panelId: string): void {
+  if (characterPreview || characterPreviewLoadPromise) return;
+  if (characterPreviewTimer !== null) window.clearTimeout(characterPreviewTimer);
+  characterPreviewTimer = window.setTimeout(() => {
+    characterPreviewTimer = null;
+    const panel = $(panelId);
+    if (!panel || panel.hasAttribute('hidden') || document.body.classList.contains('game-active')) return;
+    void ensureCharacterPreview(panelId).catch((err) => {
+      console.warn('character preview unavailable:', err);
+    });
+  }, 5000);
+}
+
 /** Reset to the default skin and (re)render the offline picker for a class. */
 function refreshOfflineSkins(cls: PlayerClass): void {
   offlineSkin = 0;
@@ -1207,7 +1223,7 @@ function refreshOnlineSkins(cls: PlayerClass): void {
 
 function updatePreviewContainer(panelId: string): void {
   if (!characterPreview) {
-    void ensureCharacterPreview(panelId);
+    scheduleCharacterPreview(panelId);
     return;
   }
   const containerId = panelId === '#charselect-panel' ? '#online-preview-container' : '#offline-preview-container';
@@ -2559,6 +2575,7 @@ function wireStartScreens(): void {
   const serverSub = $('#server-select-sub');
   const serverTriggerDot = serverTrigger.querySelector('.server-dot') as HTMLElement | null;
   const btnPlay = $('#btn-play') as HTMLButtonElement;
+  const btnPlayLabel = btnPlay?.querySelector<HTMLElement>('.btn-play-label') ?? null;
 
   if (serverSelect && serverTrigger && serverMenu && btnPlay) {
     type ServerMode = 'online' | 'offline';
@@ -2584,6 +2601,10 @@ function wireStartScreens(): void {
       // switch (translatePage) re-renders the *selected* mode correctly.
       serverValue.setAttribute('data-i18n', VALUE_KEY[mode]);
       serverValue.textContent = t(VALUE_KEY[mode]);
+      if (btnPlayLabel) {
+        btnPlayLabel.removeAttribute('data-i18n');
+        btnPlayLabel.textContent = mode === 'offline' ? 'Start Offline' : 'Log In To Play';
+      }
       subParts.forEach((part) => part.toggleAttribute('hidden', part.dataset.mode !== mode));
       if (serverTriggerDot) serverTriggerDot.dataset.mode = mode;
       serverOptions.forEach((opt) => {
@@ -2671,6 +2692,11 @@ function wireStartScreens(): void {
     applyServerMode('online');
   }
 
+  if (document.body.dataset.pendingStartPanel === 'offline-select') {
+    delete document.body.dataset.pendingStartPanel;
+    handleOfflineSelect();
+  }
+
   btnStartOffline.addEventListener('click', () => {
     const selCard = document.querySelector('#offline-select .mini-class.sel') as HTMLElement | null;
     if (selCard) {
@@ -2679,6 +2705,14 @@ function wireStartScreens(): void {
       offlineError.textContent = t('errors.selectClass');
     }
   });
+
+  if (document.body.dataset.pendingOfflineStart === '1') {
+    delete document.body.dataset.pendingOfflineStart;
+    const selCard = document.querySelector('#offline-select .mini-class.sel') as HTMLElement | null;
+    if (selCard) {
+      handleOfflineStart(selCard.dataset.class as PlayerClass);
+    }
+  }
 
   // offline class chips
   document.querySelectorAll('#offline-select .mini-class').forEach((card) => {
@@ -2789,6 +2823,7 @@ function wireStartScreens(): void {
   const doAuth = async (mode: 'login' | 'register') => {
     const username = ($('#login-user') as unknown as HTMLInputElement).value.trim();
     const password = ($('#login-pass') as unknown as HTMLInputElement).value;
+    const totpCode = (($('#login-totp') as HTMLInputElement | null)?.value ?? '').trim();
     loginError('');
     const token = turnstileToken();
     if (TURNSTILE_SITEKEY && !token) {
@@ -2796,7 +2831,7 @@ function wireStartScreens(): void {
       return;
     }
     try {
-      if (mode === 'login') await api.login(username, password, token);
+      if (mode === 'login') await api.login(username, password, token, totpCode);
       else await api.register(username, password, token);
     } catch (err) {
       // Auth itself failed (bad credentials, taken username, Turnstile reject…).
@@ -2858,6 +2893,7 @@ function wireStartScreens(): void {
   const loginForm = $('#login-panel') as HTMLFormElement;
   const userInput = $('#login-user') as HTMLInputElement;
   const passInput = $('#login-pass') as HTMLInputElement;
+  const totpInput = $('#login-totp') as HTMLInputElement | null;
   const togglePassBtn = $('#btn-toggle-password') as HTMLButtonElement;
 
   // Wire password visibility toggle
@@ -2866,7 +2902,7 @@ function wireStartScreens(): void {
   });
 
   // Sync aria-invalid and error elements dynamically on interaction
-  [userInput, passInput].forEach((input) => {
+  [userInput, passInput, totpInput].filter((input): input is HTMLInputElement => !!input).forEach((input) => {
     input.addEventListener('blur', () => {
       const isValid = syncInputAriaState(input);
       input.classList.toggle('user-invalid-fallback', !isValid);
@@ -2918,7 +2954,7 @@ function wireStartScreens(): void {
   $('#btn-login-back').addEventListener('click', (e) => {
     e.preventDefault();
     // Clear validation state on back
-    [userInput, passInput].forEach((input) => {
+    [userInput, passInput, totpInput].filter((input): input is HTMLInputElement => !!input).forEach((input) => {
       input.classList.remove('user-invalid-fallback');
       input.removeAttribute('aria-invalid');
       const errEl = $('#' + input.id + '-error');

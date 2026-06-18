@@ -67,7 +67,6 @@ const APP_TRIGGER_SELECTOR = [
   '#btn-login',
   '#btn-register',
   '#btn-change-realm',
-  '.mini-class',
   '.auth-tab',
 ].join(',');
 
@@ -218,10 +217,10 @@ async function loadLandingNews(): Promise<void> {
       realm: 'all',
     },
     {
-      title: 'Upstream Kindness Track',
-      body: 'Generic engine, auth, dashboard, auto-update, moderator, and wiki improvements are tracked as shareable work for the ClaudeCraft team while Cryptic Realm-specific realms and $CR features stay here.',
+      title: 'ClaudeCraft / ClaudeCode Contributions',
+      body: 'Shared engine, auth, dashboard, auto-update, moderator, wiki, and launcher improvements are tracked separately from Cryptic Realm-only realms, $CR, platinum, and custom content.',
       tag: 'ClaudeCraft PRs',
-      url: 'https://github.com/BlizzHacker/cryptic-realm/pulls',
+      url: '/contributions.html',
       realm: 'claudecraft',
     },
     {
@@ -315,7 +314,8 @@ function wireLandingPanels(): void {
   document.getElementById('btn-play')?.addEventListener('click', () => {
     const mode = document.getElementById('server-select')?.dataset.mode ?? 'online';
     if (mode === 'offline') {
-      void loadApp().then(() => window.setTimeout(() => document.getElementById('btn-offline')?.click()));
+      showPanel('#offline-select');
+      selectLandingOfflineClass('warrior');
       return;
     }
     showPanel('#login-panel');
@@ -323,6 +323,8 @@ function wireLandingPanels(): void {
 
   const trigger = document.getElementById('server-select-trigger');
   const menu = document.getElementById('server-select-menu');
+  const playLabel = document.querySelector<HTMLElement>('#btn-play .btn-play-label');
+  if (playLabel) playLabel.textContent = 'Log In To Play';
   trigger?.addEventListener('click', () => {
     if (!menu) return;
     const open = menu.hasAttribute('hidden');
@@ -337,6 +339,7 @@ function wireLandingPanels(): void {
       const value = document.getElementById('server-select-value');
       root?.setAttribute('data-mode', mode);
       if (value) value.textContent = mode === 'offline' ? 'Offline' : 'Online';
+      if (playLabel) playLabel.textContent = mode === 'offline' ? 'Start Offline' : 'Log In To Play';
       document.querySelectorAll<HTMLElement>('.server-select-option').forEach((el) => {
         const selected = el === opt;
         el.classList.toggle('is-selected', selected);
@@ -350,6 +353,45 @@ function wireLandingPanels(): void {
   document.getElementById('btn-login-back')?.addEventListener('click', (event) => {
     event.preventDefault();
     showPanel('#mode-select');
+  });
+}
+
+function selectLandingOfflineClass(cls: string): void {
+  const cards = document.querySelectorAll<HTMLElement>('#offline-select .mini-class');
+  let selected: HTMLElement | null = null;
+  cards.forEach((card) => {
+    const on = card.dataset.class === cls;
+    card.classList.toggle('sel', on);
+    card.setAttribute('aria-pressed', on ? 'true' : 'false');
+    if (on) selected = card;
+  });
+  if (!selected && cards[0]) {
+    cards[0].classList.add('sel');
+    cards[0].setAttribute('aria-pressed', 'true');
+  }
+  document.getElementById('btn-start-offline')?.removeAttribute('disabled');
+}
+
+function wireLandingOfflinePanel(): void {
+  document.querySelectorAll<HTMLElement>('#offline-select .mini-class').forEach((card) => {
+    card.addEventListener('click', () => selectLandingOfflineClass(card.dataset.class ?? 'warrior'));
+    card.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        selectLandingOfflineClass(card.dataset.class ?? 'warrior');
+      }
+    });
+  });
+  document.getElementById('btn-offline-back')?.addEventListener('click', (event) => {
+    event.preventDefault();
+    showPanel('#mode-select');
+  });
+  document.getElementById('btn-start-offline')?.addEventListener('click', (event) => {
+    if (appPromise) return;
+    event.preventDefault();
+    event.stopPropagation();
+    document.body.dataset.pendingOfflineStart = '1';
+    void loadApp();
   });
 }
 
@@ -429,6 +471,7 @@ function boot(): void {
   bootLandingBranding();
   wireContractAddressCopy();
   wireLandingPanels();
+  wireLandingOfflinePanel();
   wireDeferredAppLoad();
   if (ssoCallbackPending()) {
     void loadApp();

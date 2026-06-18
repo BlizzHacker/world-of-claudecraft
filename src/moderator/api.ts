@@ -64,11 +64,11 @@ export interface ModQueueRow {
   chatStrikes: number;
 }
 
-export async function modLogin(username: string, password: string): Promise<ModLoginData> {
+export async function modLogin(username: string, password: string, totpCode = ''): Promise<ModLoginData> {
   const res = await fetch('/mod/api/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, password }),
+    body: JSON.stringify({ username, password, totpCode }),
   });
   const data = await parseEnvelope<ModLoginData>(res);
   localStorage.setItem(TOKEN_KEY, data.token);

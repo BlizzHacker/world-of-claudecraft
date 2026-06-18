@@ -5530,6 +5530,9 @@
               <button type="button" class="nav-link" id="nav-btn-news" aria-selected="false" aria-pressed="false" data-i18n="nav.news">News</button>
             </li>
             <li class="nav-item">
+              <a class="nav-link" href="/contributions.html" data-i18n="nav.contributions">Contributions</a>
+            </li>
+            <li class="nav-item">
               <button type="button" class="nav-link" id="nav-btn-download" aria-selected="false" aria-pressed="false" data-i18n="nav.download">Download</button>
             </li>
             <li class="nav-item">
@@ -5689,6 +5692,22 @@
             </div>
           </div>
 
+          <div class="auth-field">
+            <label for="login-totp" class="auth-label">2FA Code</label>
+            <div id="login-totp-error" class="auth-field-error" aria-live="polite">Enter the six-digit code from your authenticator app.</div>
+            <input
+              id="login-totp"
+              name="totpCode"
+              type="text"
+              inputmode="numeric"
+              autocomplete="one-time-code"
+              maxlength="6"
+              pattern="[0-9]{6}"
+              placeholder="Optional unless enabled"
+              aria-describedby="login-totp-error"
+            />
+          </div>
+
           <!-- Cloudflare Turnstile widget mounts here when configured (src/main.ts). -->
           <div id="cf-turnstile-container" class="auth-turnstile"></div>
 
@@ -5837,7 +5856,7 @@
             </div>
             <h2 class="skeleton-title" data-i18n="wiki.title">Game Wiki & Guide</h2>
             <p class="skeleton-desc" data-i18n="wiki.desc">Discover the secrets of the realm, class guides, and strategies.</p>
-            <a class="btn wiki-cta" href="/wiki" target="_blank" rel="noopener noreferrer" data-i18n="wiki.cta">Browse the Wiki</a>
+            <a class="btn wiki-cta" href="/wiki.html" data-i18n="wiki.cta">Browse the Wiki</a>
           </div>
           
           <div class="wiki-controls-guide">

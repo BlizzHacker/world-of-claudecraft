@@ -50,6 +50,18 @@ export interface LoginData {
   roles: RoleFlags;
 }
 
+export interface SecurityData {
+  totp: {
+    enabled: boolean;
+    configured: boolean;
+  };
+}
+
+export interface TotpSetupData {
+  secret: string;
+  otpauthUrl: string;
+}
+
 export interface MyCharacter {
   id: number;
   name: string;
@@ -71,11 +83,11 @@ export interface MeData {
   characters: MyCharacter[];
 }
 
-export async function userLogin(username: string, password: string): Promise<LoginData> {
+export async function userLogin(username: string, password: string, totpCode = ''): Promise<LoginData> {
   const res = await fetch('/me/api/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, password }),
+    body: JSON.stringify({ username, password, totpCode }),
   });
   const data = await parseEnvelope<LoginData>(res);
   localStorage.setItem(TOKEN_KEY, data.token);
@@ -88,4 +100,36 @@ export async function getMe(): Promise<MeData> {
   if (!token) throw new ApiError(401, 'not signed in');
   const res = await fetch('/me/api/me', { headers: { Authorization: `Bearer ${token}` } });
   return parseEnvelope<MeData>(res);
+}
+
+async function authFetch<T>(path: string, init: RequestInit = {}): Promise<T> {
+  const token = getToken();
+  if (!token) throw new ApiError(401, 'not signed in');
+  const headers = new Headers(init.headers);
+  headers.set('Authorization', `Bearer ${token}`);
+  if (init.body && !headers.has('Content-Type')) headers.set('Content-Type', 'application/json');
+  const res = await fetch(path, { ...init, headers });
+  return parseEnvelope<T>(res);
+}
+
+export async function getSecurity(): Promise<SecurityData> {
+  return authFetch<SecurityData>('/me/api/security');
+}
+
+export async function setupTotp(): Promise<TotpSetupData> {
+  return authFetch<TotpSetupData>('/me/api/security/totp/setup', { method: 'POST', body: '{}' });
+}
+
+export async function enableTotp(code: string): Promise<SecurityData> {
+  return authFetch<SecurityData>('/me/api/security/totp/enable', {
+    method: 'POST',
+    body: JSON.stringify({ code }),
+  });
+}
+
+export async function disableTotp(code: string): Promise<SecurityData> {
+  return authFetch<SecurityData>('/me/api/security/totp/disable', {
+    method: 'POST',
+    body: JSON.stringify({ code }),
+  });
 }

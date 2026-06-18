@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#08080d" />
+  <title>Cryptic Realm Contributions</title>
+  <meta name="description" content="Cryptic Realm contribution ledger: shared ClaudeCraft improvements, private realm features, and upstream-friendly work." />
+  <link rel="canonical" href="https://crypticrealm.com/contributions.html" />
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #07070b;
+      --panel: rgba(13, 12, 18, 0.9);
+      --line: rgba(255, 209, 102, 0.28);
+      --line-strong: #8f6f2a;
+      --gold: #ffd166;
+      --gold-2: #c8a838;
+      --ink: #f2ead5;
+      --muted: #b8aa82;
+      --blue: #8bd3ff;
+      --green: #74d99f;
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--ink); }
+    body {
+      background:
+        linear-gradient(90deg, rgba(4, 5, 9, 0.96), rgba(5, 7, 12, 0.72), rgba(4, 5, 9, 0.96)),
+        radial-gradient(circle at 18% 14%, rgba(196, 81, 66, 0.2), transparent 32%),
+        radial-gradient(circle at 82% 18%, rgba(139, 211, 255, 0.14), transparent 30%),
+        url("/cryptic-realm-loading.png") center / cover fixed;
+    }
+    a { color: var(--gold); }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      min-height: 58px;
+      padding: 8px clamp(14px, 3vw, 34px);
+      background: rgba(6, 6, 9, 0.88);
+      border-bottom: 1px solid rgba(200, 168, 56, 0.35);
+      backdrop-filter: blur(14px);
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-width: max-content;
+      color: var(--gold);
+      text-decoration: none;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+    }
+    .brand img { width: 38px; height: 38px; border-radius: 6px; object-fit: cover; }
+    .nav { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 6px; }
+    .nav a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 34px;
+      padding: 7px 12px;
+      border: 1px solid transparent;
+      border-radius: 5px;
+      color: var(--muted);
+      text-decoration: none;
+      font: 700 12px/1 "Segoe UI", system-ui, sans-serif;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+    }
+    .nav a:hover, .nav a:focus-visible {
+      color: var(--gold);
+      border-color: var(--line-strong);
+      background: rgba(255, 209, 102, 0.06);
+      outline: none;
+    }
+    .wrap { width: min(1060px, calc(100% - 32px)); margin: 0 auto; padding: 34px 0 58px; }
+    .hero { display: grid; align-content: end; min-height: 38vh; padding: 20px 0 30px; }
+    .hero-logo { width: min(300px, 74vw); filter: drop-shadow(0 24px 38px rgba(0, 0, 0, 0.8)); margin-bottom: 14px; }
+    .eyebrow { color: var(--gold-2); text-transform: uppercase; letter-spacing: 0.14em; font-size: 12px; font-weight: 800; }
+    h1 { margin: 10px 0 12px; font: 900 clamp(38px, 8vw, 88px)/0.95 Georgia, "Times New Roman", serif; letter-spacing: 0; }
+    .lead { max-width: 830px; color: #f5e9c9; font-size: clamp(17px, 2vw, 22px); line-height: 1.46; margin: 0; }
+    main { display: grid; gap: 16px; }
+    section {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: clamp(18px, 3vw, 30px);
+      box-shadow: 0 18px 50px rgba(0,0,0,0.35);
+      backdrop-filter: blur(14px);
+    }
+    h2 { margin: 0 0 12px; color: var(--gold); font: 800 25px/1.1 Georgia, "Times New Roman", serif; letter-spacing: 0; }
+    p, li { color: var(--ink); line-height: 1.6; }
+    p { margin: 0 0 12px; }
+    ul { margin: 0; padding-left: 22px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+    .card {
+      border: 1px solid rgba(255, 209, 102, 0.18);
+      border-radius: 7px;
+      padding: 14px;
+      background: rgba(0, 0, 0, 0.28);
+      min-height: 132px;
+    }
+    .card strong { display: block; color: var(--gold); margin-bottom: 6px; }
+    .card span { display: block; color: var(--muted); font-size: 13px; line-height: 1.45; }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 4px 8px;
+      margin: 4px 6px 4px 0;
+      border: 1px solid rgba(116, 217, 159, 0.32);
+      border-radius: 4px;
+      color: var(--green);
+      background: rgba(7, 20, 15, 0.44);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    .tag.private { color: var(--blue); border-color: rgba(139, 211, 255, 0.3); background: rgba(8, 17, 25, 0.5); }
+    footer { padding: 24px 0 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+    @media (max-width: 820px) {
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .nav { justify-content: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="topbar" aria-label="Main navigation">
+    <a class="brand" href="/" aria-label="Cryptic Realm home">
+      <img src="/icon-192.png" alt="Cryptic Realm" />
+      <span>Cryptic Realm</span>
+    </a>
+    <div class="nav">
+      <a href="/">Play</a>
+      <a href="/links.html">Links</a>
+      <a href="/wiki.html">Wiki</a>
+      <a href="/#news">News</a>
+      <a href="/#download">Download</a>
+      <a href="/whitepaper.html">White Paper</a>
+      <a href="/admin/">Admin</a>
+    </div>
+  </nav>
+
+  <div class="wrap">
+    <header class="hero">
+      <img class="hero-logo" src="/cryptic-realm-logo.png" alt="Cryptic Realm" />
+      <div class="eyebrow">Public Work Ledger</div>
+      <h1>Contributions</h1>
+      <p class="lead">Cryptic Realm is its own game, but it can still send practical engine improvements back upstream. This page separates shared ClaudeCraft-friendly work from private Cryptic Realm features.</p>
+    </header>
+
+    <main>
+      <section>
+        <h2>Shared Upstream Candidates</h2>
+        <p>These are the kinds of changes that should be offered as clean pull requests because they help the base project without giving away Cryptic Realm-only economy, realm, or lore systems.</p>
+        <div class="grid">
+          <div class="card"><strong>Auth & Account Safety</strong><span>OIDC wiring, optional TOTP login hardening, safer login throttles, clearer dashboard sessions.</span></div>
+          <div class="card"><strong>Admin & Moderator Tools</strong><span>Account review, chat moderation, report queues, role-gated dashboards, and better status panels.</span></div>
+          <div class="card"><strong>Updates & Operations</strong><span>Auto-update maintenance mode, static cache policy, API health checks, and safer server restarts.</span></div>
+          <div class="card"><strong>Wiki & Public Hubs</strong><span>Public wiki hub fallback, release/news feed, launcher status page, and improved nav consistency.</span></div>
+          <div class="card"><strong>Game UI Quality</strong><span>Camera options, mobile layout fixes, clearer landing flows, and performance guidance.</span></div>
+          <div class="card"><strong>Test Coverage</strong><span>Security tests, OAuth tests, realm tests, launcher tests, and visual smoke scripts.</span></div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Cryptic Realm-Only Work</h2>
+        <p>These stay in the private/independent track because they define this game and should not be handed over as generic upstream value.</p>
+        <span class="tag private">$CR</span>
+        <span class="tag private">Platinum economy</span>
+        <span class="tag private">Exchange realm</span>
+        <span class="tag private">Cryptic Realm lore</span>
+        <span class="tag private">Infernal / Classic / Dominion / Arcane realms</span>
+        <span class="tag private">Original mini-games</span>
+        <span class="tag private">Private custody runbooks</span>
+      </section>
+
+      <section>
+        <h2>Current Proof Trail</h2>
+        <ul>
+          <li>Public code and pull requests: <a href="https://github.com/BlizzHacker/cryptic-realm/pulls" target="_blank" rel="noopener noreferrer">github.com/BlizzHacker/cryptic-realm/pulls</a></li>
+          <li>Upstream project reference: <a href="https://github.com/levy-street/world-of-claudecraft" target="_blank" rel="noopener noreferrer">github.com/levy-street/world-of-claudecraft</a></li>
+          <li>Public news cards on <a href="/#news">Cryptic Realm News</a> show $CR, platinum, alpha/beta cadence, and shared-work updates.</li>
+          <li>Public token proof stays on <a href="/links.html">Official Links</a>; admin custody details stay out of public pages.</li>
+        </ul>
+      </section>
+    </main>
+
+    <footer>
+      Shared work should be submitted in small, reviewable PRs. Cryptic Realm-only features remain here unless they become generic engine improvements.
+    </footer>
+  </div>
+</body>
+</html>

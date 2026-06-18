@@ -13,6 +13,10 @@ vi.mock('../server/db', () => ({
   listCharacters: vi.fn(),
   moderationStatusForAccount: vi.fn(),
   chatMuteStatusForAccount: vi.fn(),
+  accountTotpState: vi.fn(),
+  setAccountTotpSecret: vi.fn(),
+  enableAccountTotp: vi.fn(),
+  disableAccountTotp: vi.fn(),
 }));
 vi.mock('../server/moderation_db', () => ({
   moderationQueue: vi.fn(),
@@ -27,9 +31,11 @@ import { handleUserApi, handleModeratorApi } from '../server/dashboard';
 import {
   findAccount, accountForToken, isModeratorAccount, accountRoleFlags,
   listCharacters, moderationStatusForAccount, chatMuteStatusForAccount,
+  accountTotpState, setAccountTotpSecret, enableAccountTotp, disableAccountTotp,
 } from '../server/db';
 import { moderationQueue } from '../server/moderation_db';
 import { verifyPassword } from '../server/auth';
+import { totpCode } from '../server/totp';
 
 const TOKEN = 'a'.repeat(64);
 
@@ -71,6 +77,7 @@ beforeEach(() => {
   vi.mocked(listCharacters).mockResolvedValue([]);
   vi.mocked(accountRoleFlags).mockResolvedValue({ isAdmin: false, isModerator: false });
   vi.mocked(isModeratorAccount).mockResolvedValue(false);
+  vi.mocked(accountTotpState).mockResolvedValue({ enabled: false, configured: false, secret: null });
 });
 
 describe('/me/api/login', () => {
@@ -110,6 +117,29 @@ describe('/me/api/login', () => {
     expect(res.statusCode).toBe(403);
     expect(res.body.error).toMatch(/Banned/);
   });
+
+  it('requires a valid TOTP code when enabled', async () => {
+    const secret = 'JBSWY3DPEHPK3PXP';
+    vi.mocked(findAccount).mockResolvedValue({ id: 7, username: 'wade', password_hash: 'hash' } as any);
+    vi.mocked(verifyPassword).mockResolvedValue(true);
+    vi.mocked(accountTotpState).mockResolvedValue({ enabled: true, configured: true, secret });
+
+    const missingReq = fakeReq({ method: 'POST', url: '/me/api/login', body: { username: 'wade', password: 'secret' } });
+    const missingRes = fakeRes();
+    await handleUserApi(missingReq, missingRes);
+    expect(missingRes.statusCode).toBe(403);
+    expect(missingRes.body.error).toMatch(/two-factor/);
+
+    const okReq = fakeReq({
+      method: 'POST',
+      url: '/me/api/login',
+      body: { username: 'wade', password: 'secret', totpCode: totpCode(secret) },
+    });
+    const okRes = fakeRes();
+    await handleUserApi(okReq, okRes);
+    expect(okRes.statusCode).toBe(200);
+    expect(okRes.body.data.token).toMatch(/^b+$/);
+  });
 });
 
 describe('/me/api/me', () => {
@@ -140,6 +170,61 @@ describe('/me/api/me', () => {
   });
 });
 
+describe('/me/api/security', () => {
+  it('returns TOTP security state', async () => {
+    vi.mocked(accountForToken).mockResolvedValue(42);
+    vi.mocked(accountTotpState).mockResolvedValue({ enabled: true, configured: true, secret: 'secret' });
+    const req = fakeReq({ method: 'GET', url: '/me/api/security', token: TOKEN });
+    const res = fakeRes();
+    await handleUserApi(req, res);
+    expect(res.statusCode).toBe(200);
+    expect(res.body.data.totp).toEqual({ enabled: true, configured: true });
+  });
+
+  it('enables TOTP after setup code verification', async () => {
+    const secret = 'JBSWY3DPEHPK3PXP';
+    vi.mocked(accountForToken).mockResolvedValue(42);
+    vi.mocked(accountTotpState).mockResolvedValue({ enabled: false, configured: true, secret });
+    const req = fakeReq({
+      method: 'POST',
+      url: '/me/api/security/totp/enable',
+      token: TOKEN,
+      body: { code: totpCode(secret) },
+    });
+    const res = fakeRes();
+    await handleUserApi(req, res);
+    expect(res.statusCode).toBe(200);
+    expect(enableAccountTotp).toHaveBeenCalledWith(42);
+  });
+
+  it('generates a pending TOTP setup secret', async () => {
+    vi.mocked(accountForToken).mockResolvedValue(42);
+    const req = fakeReq({ method: 'POST', url: '/me/api/security/totp/setup', token: TOKEN, body: {} });
+    const res = fakeRes();
+    await handleUserApi(req, res);
+    expect(res.statusCode).toBe(200);
+    expect(res.body.data.secret).toMatch(/^[A-Z2-7]+$/);
+    expect(res.body.data.otpauthUrl).toContain('otpauth://totp/');
+    expect(setAccountTotpSecret).toHaveBeenCalledWith(42, res.body.data.secret);
+  });
+
+  it('disables TOTP after current code verification', async () => {
+    const secret = 'JBSWY3DPEHPK3PXP';
+    vi.mocked(accountForToken).mockResolvedValue(42);
+    vi.mocked(accountTotpState).mockResolvedValue({ enabled: true, configured: true, secret });
+    const req = fakeReq({
+      method: 'POST',
+      url: '/me/api/security/totp/disable',
+      token: TOKEN,
+      body: { code: totpCode(secret) },
+    });
+    const res = fakeRes();
+    await handleUserApi(req, res);
+    expect(res.statusCode).toBe(200);
+    expect(disableAccountTotp).toHaveBeenCalledWith(42);
+  });
+});
+
 describe('/mod/api/login', () => {
   it('returns 403 when account is not moderator', async () => {
     vi.mocked(findAccount).mockResolvedValue({ id: 7, username: 'rando', password_hash: 'hash' } as any);
@@ -162,6 +247,31 @@ describe('/mod/api/login', () => {
     await handleModeratorApi(req, res);
     expect(res.statusCode).toBe(200);
     expect(res.body.data.roles.isModerator).toBe(true);
+  });
+
+  it('requires a valid TOTP code for moderator login when enabled', async () => {
+    const secret = 'JBSWY3DPEHPK3PXP';
+    vi.mocked(findAccount).mockResolvedValue({ id: 8, username: 'modgirl', password_hash: 'hash' } as any);
+    vi.mocked(verifyPassword).mockResolvedValue(true);
+    vi.mocked(isModeratorAccount).mockResolvedValue(true);
+    vi.mocked(accountRoleFlags).mockResolvedValue({ isAdmin: false, isModerator: true });
+    vi.mocked(accountTotpState).mockResolvedValue({ enabled: true, configured: true, secret });
+
+    const missingReq = fakeReq({ method: 'POST', url: '/mod/api/login', body: { username: 'modgirl', password: 'secret' } });
+    const missingRes = fakeRes();
+    await handleModeratorApi(missingReq, missingRes);
+    expect(missingRes.statusCode).toBe(403);
+    expect(missingRes.body.error).toMatch(/two-factor/);
+
+    const okReq = fakeReq({
+      method: 'POST',
+      url: '/mod/api/login',
+      body: { username: 'modgirl', password: 'secret', totpCode: totpCode(secret) },
+    });
+    const okRes = fakeRes();
+    await handleModeratorApi(okReq, okRes);
+    expect(okRes.statusCode).toBe(200);
+    expect(okRes.body.data.roles.isModerator).toBe(true);
   });
 });
 

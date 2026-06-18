@@ -7,6 +7,7 @@ import {
   listCharacters, getCharacter, createCharacterCapped, deleteCharacter, closeOrphanSessions,
   pruneChatLogs, searchCharacters, characterCountsByRealm, moderationStatusForAccount, renameCharacter,
   findCharacterReportTargetByName, topArenaRatings, topLifetimeXp, chatMuteStatusForAccount,
+  accountTotpState,
 } from './db';
 import { virtualLevel } from '../src/sim/types';
 import { Sim } from '../src/sim/sim';
@@ -21,6 +22,7 @@ import {
 import { json, readBody, isUniqueViolation } from './http_util';
 import { requestIp, rateLimited, authThrottled, recordAuthFailure, clearAuthFailures } from './ratelimit';
 import { verifyTurnstile } from './turnstile';
+import { verifyTotpCode } from './totp';
 import { handleAdminApi } from './admin';
 import { handleModeratorApi, handleUserApi } from './dashboard';
 import { handleAuthentikRoute, isAuthentikConfigured } from './oauth';
@@ -410,6 +412,16 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       if (!account || !(await verifyPassword(String(body.password ?? ''), account.password_hash))) {
         if (username) recordAuthFailure(username);
         return json(res, 401, { error: 'invalid username or password' });
+      }
+      const totp = await accountTotpState(account.id);
+      if (totp.enabled && !verifyTotpCode(totp.secret ?? '', body.totpCode)) {
+        if (username) recordAuthFailure(username);
+        return json(res, 403, {
+          error: typeof body.totpCode === 'string' && body.totpCode.trim()
+            ? 'invalid two-factor code'
+            : 'two-factor code required',
+          code: 'totp_required',
+        });
       }
       const status = await moderationStatusForAccount(account.id);
       if (status.locked) return json(res, 403, { error: status.message });

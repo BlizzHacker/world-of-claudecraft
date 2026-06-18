@@ -1295,11 +1295,13 @@ body:not(.game-active) .cr-realm-first-prompt {
 .cr-dl-card {
   background: linear-gradient(170deg, rgba(20,14,8,0.85), rgba(10,5,5,0.85));
   border: 1px solid var(--gold-dim, #6f5a2a);
-  border-radius: 10px;
+  border-radius: 8px;
   padding: 14px 16px;
+  color: var(--cr-text, #e8d5c4);
 }
 .cr-dl-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-.cr-dl-icon { font-size: 22px; }
+.cr-dl-header strong { color: var(--cr-text, #e8d5c4); }
+.cr-dl-icon { font-size: 22px; color: var(--gold-dim, #c8a838); }
 .cr-dl-row { display: flex; gap: 8px; flex-wrap: wrap; }
 .cr-dl-btn {
   flex: 1; min-width: 110px;

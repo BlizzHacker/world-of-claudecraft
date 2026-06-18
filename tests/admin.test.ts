@@ -9,6 +9,7 @@ vi.mock('../server/db', () => ({
   saveToken: vi.fn(),
   accountForToken: vi.fn(),
   isAdminAccount: vi.fn(),
+  accountTotpState: vi.fn(),
 }));
 vi.mock('../server/admin_db', async () => {
   const actual = await vi.importActual<typeof import('../server/admin_db')>('../server/admin_db');
@@ -43,15 +44,21 @@ vi.mock('../server/chat_filter_db', () => ({
   resetChatStrikes: vi.fn(),
   updateFilterConfig: vi.fn(),
 }));
+vi.mock('../server/auth', () => ({
+  verifyPassword: vi.fn(),
+  newToken: vi.fn(() => 'c'.repeat(64)),
+}));
 
 import { handleAdminApi, parsePageParams } from '../server/admin';
-import { accountForToken, isAdminAccount, findAccount } from '../server/db';
+import { accountForToken, isAdminAccount, findAccount, accountTotpState } from '../server/db';
 import { overviewCounts, listAccounts, accountDetail, escapeLike } from '../server/admin_db';
 import { forceCharacterRename, ignoreReport, moderateAccount, moderationQueue, moderationReportsForAccount, muteAccountChat } from '../server/moderation_db';
 import {
   addFilterWord, chatModerationForAccount, getFilterConfig, liftChatMute, listFilterWords,
   removeFilterWord, resetChatStrikes, updateFilterConfig,
 } from '../server/chat_filter_db';
+import { verifyPassword } from '../server/auth';
+import { totpCode } from '../server/totp';
 
 const VALID_TOKEN = 'a'.repeat(64);
 
@@ -99,6 +106,8 @@ beforeEach(() => {
   // Default so the moderation-detail route (which now also loads chat state)
   // resolves; individual chat-filter tests override as needed.
   vi.mocked(chatModerationForAccount).mockResolvedValue({ chatMutedUntil: null, chatStrikes: 0, violations: [] });
+  vi.mocked(accountTotpState).mockResolvedValue({ enabled: false, configured: false, secret: null });
+  vi.mocked(verifyPassword).mockResolvedValue(false);
 });
 
 describe('admin api auth', () => {
@@ -141,9 +150,9 @@ describe('admin api auth', () => {
   });
 
   it('rejects admin login for a non-admin account even with the right password', async () => {
-    // scrypt hash of "hunter22" is irrelevant — verifyPassword fails on a junk
-    // hash, so this asserts the credential failure path returns 401.
     vi.mocked(findAccount).mockResolvedValue({ id: 3, username: 'bob', password_hash: 'junk' });
+    vi.mocked(verifyPassword).mockResolvedValue(true);
+    vi.mocked(isAdminAccount).mockResolvedValue(false);
     const res = fakeRes();
 
     await handleAdminApi(
@@ -152,8 +161,38 @@ describe('admin api auth', () => {
       fakeGame,
     );
 
-    expect(res.statusCode).toBe(401);
-    expect(res.body.error).toMatch(/invalid username or password/);
+    expect(res.statusCode).toBe(403);
+    expect(res.body.error).toMatch(/admin access/);
+  });
+
+  it('requires a valid TOTP code for admin login when enabled', async () => {
+    const secret = 'JBSWY3DPEHPK3PXP';
+    vi.mocked(findAccount).mockResolvedValue({ id: 3, username: 'wade', password_hash: 'hash' });
+    vi.mocked(verifyPassword).mockResolvedValue(true);
+    vi.mocked(isAdminAccount).mockResolvedValue(true);
+    vi.mocked(accountTotpState).mockResolvedValue({ enabled: true, configured: true, secret });
+
+    const missingRes = fakeRes();
+    await handleAdminApi(
+      fakeReq({ method: 'POST', url: '/admin/api/login', body: { username: 'wade', password: 'hunter22' } }),
+      missingRes,
+      fakeGame,
+    );
+    expect(missingRes.statusCode).toBe(403);
+    expect(missingRes.body.error).toMatch(/two-factor/);
+
+    const okRes = fakeRes();
+    await handleAdminApi(
+      fakeReq({
+        method: 'POST',
+        url: '/admin/api/login',
+        body: { username: 'wade', password: 'hunter22', totpCode: totpCode(secret) },
+      }),
+      okRes,
+      fakeGame,
+    );
+    expect(okRes.statusCode).toBe(200);
+    expect(okRes.body.data.token).toMatch(/^c+$/);
   });
 
   it('rejects non-GET methods on data endpoints', async () => {

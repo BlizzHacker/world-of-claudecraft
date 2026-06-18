@@ -143,8 +143,8 @@ export class Api {
     this.username = data.username;
   }
 
-  async login(username: string, password: string, turnstileToken = ''): Promise<void> {
-    const data = await this.post('/api/login', { username, password, turnstileToken });
+  async login(username: string, password: string, turnstileToken = '', totpCode = ''): Promise<void> {
+    const data = await this.post('/api/login', { username, password, turnstileToken, totpCode });
     this.token = data.token;
     this.username = data.username;
   }

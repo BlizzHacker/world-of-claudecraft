@@ -4,7 +4,8 @@
 
 import {
   userLogin, getMe, getToken, getUserName, clearSession,
-  ApiError, type MeData,
+  getSecurity, setupTotp, enableTotp, disableTotp,
+  ApiError, type MeData, type SecurityData, type TotpSetupData,
 } from './api';
 import { getActiveRealm } from '../sim/realms';
 import '../ui/cryptic/theme.css';
@@ -12,6 +13,8 @@ import '../ui/cryptic/dashboard_chrome';
 
 const $ = <T extends HTMLElement = HTMLElement>(sel: string): T =>
   document.querySelector(sel) as T;
+
+let pendingTotpSetup: TotpSetupData | null = null;
 
 function escapeHtml(s: string): string {
   return s.replace(/[&<>"']/g, (c) =>
@@ -30,6 +33,7 @@ function renderLoginShell(): void {
             <div style="display:flex;flex-direction:column;gap:12px;margin-top:16px;">
               <input class="cr-input" id="login-username" type="text" placeholder="Username" autocomplete="username" required />
               <input class="cr-input" id="login-password" type="password" placeholder="Password" autocomplete="current-password" required />
+              <input class="cr-input" id="login-totp" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" placeholder="2FA code (optional unless enabled)" />
               <div id="login-error" class="cr-text-error" hidden></div>
               <button type="submit" class="cr-button">Sign in</button>
             </div>
@@ -47,6 +51,7 @@ function renderLoginShell(): void {
       await userLogin(
         ($('#login-username') as HTMLInputElement).value.trim(),
         ($('#login-password') as HTMLInputElement).value,
+        ($('#login-totp') as HTMLInputElement).value.trim(),
       );
       void boot();
     } catch (e) {
@@ -60,7 +65,37 @@ function classBadge(cls: string): string {
   return `<span class="cr-class-badge" data-class="${escapeHtml(cls)}">${escapeHtml(cls)}</span>`;
 }
 
-function renderDashboard(me: MeData): void {
+function securityHtml(security: SecurityData): string {
+  if (security.totp.enabled) {
+    return `
+      <div class="cr-text-success">Authenticator 2FA is enabled for this local password account.</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
+        <input class="cr-input" id="totp-disable-code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" placeholder="Current 2FA code" style="max-width:220px;" />
+        <button class="cr-button-ghost" id="totp-disable" type="button">Disable 2FA</button>
+      </div>
+      <div id="totp-status" class="cr-text-dim" style="margin-top:10px;"></div>
+    `;
+  }
+  const setup = pendingTotpSetup ? `
+    <div style="margin-top:12px;display:grid;gap:10px;">
+      <div class="cr-text-dim">Add this secret to an authenticator app, then enter the six-digit code it shows.</div>
+      <code style="overflow-wrap:anywhere;">${escapeHtml(pendingTotpSetup.secret)}</code>
+      <a class="cr-button-ghost" href="${escapeHtml(pendingTotpSetup.otpauthUrl)}">Open Authenticator Link</a>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <input class="cr-input" id="totp-enable-code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" placeholder="Six-digit code" style="max-width:220px;" />
+        <button class="cr-button" id="totp-enable" type="button">Enable 2FA</button>
+      </div>
+    </div>
+  ` : '';
+  return `
+    <div class="cr-text-dim">Optional authenticator-app 2FA protects local username/password logins. Authentik/OIDC accounts can use Authentik's own MFA policy.</div>
+    <button class="cr-button" id="totp-setup" type="button" style="margin-top:12px;">Set Up Authenticator 2FA</button>
+    ${setup}
+    <div id="totp-status" class="cr-text-dim" style="margin-top:10px;"></div>
+  `;
+}
+
+function renderDashboard(me: MeData, security: SecurityData): void {
   const roleChips: string[] = [];
   if (me.roles.isAdmin) roleChips.push('<span class="cr-role-chip cr-role-admin">Admin</span>');
   if (me.roles.isModerator && !me.roles.isAdmin) roleChips.push('<span class="cr-role-chip cr-role-mod">Moderator</span>');
@@ -101,6 +136,10 @@ function renderDashboard(me: MeData): void {
           ${moderationHtml}
         </section>
         <section class="cr-panel">
+          <h2 class="cr-section-title">Security</h2>
+          ${securityHtml(security)}
+        </section>
+        <section class="cr-panel">
           <h2 class="cr-section-title">Characters on ${escapeHtml(me.realm)}</h2>
           ${charsHtml}
         </section>
@@ -109,15 +148,50 @@ function renderDashboard(me: MeData): void {
   `;
   $('#signout').addEventListener('click', () => {
     clearSession();
+    pendingTotpSetup = null;
     renderLoginShell();
+  });
+  document.getElementById('totp-setup')?.addEventListener('click', async () => {
+    const status = $('#totp-status');
+    status.textContent = 'Generating setup secret...';
+    try {
+      pendingTotpSetup = await setupTotp();
+      renderDashboard(me, { totp: { enabled: false, configured: true } });
+    } catch (err) {
+      status.textContent = err instanceof ApiError ? err.message : 'could not start 2FA setup';
+    }
+  });
+  document.getElementById('totp-enable')?.addEventListener('click', async () => {
+    const status = $('#totp-status');
+    const code = ($('#totp-enable-code') as HTMLInputElement | null)?.value.trim() ?? '';
+    status.textContent = 'Verifying code...';
+    try {
+      await enableTotp(code);
+      pendingTotpSetup = null;
+      void boot();
+    } catch (err) {
+      status.textContent = err instanceof ApiError ? err.message : 'could not enable 2FA';
+    }
+  });
+  document.getElementById('totp-disable')?.addEventListener('click', async () => {
+    const status = $('#totp-status');
+    const code = ($('#totp-disable-code') as HTMLInputElement | null)?.value.trim() ?? '';
+    status.textContent = 'Verifying code...';
+    try {
+      await disableTotp(code);
+      pendingTotpSetup = null;
+      void boot();
+    } catch (err) {
+      status.textContent = err instanceof ApiError ? err.message : 'could not disable 2FA';
+    }
   });
 }
 
 async function boot(): Promise<void> {
   if (!getToken()) { renderLoginShell(); return; }
   try {
-    const me = await getMe();
-    renderDashboard(me);
+    const [me, security] = await Promise.all([getMe(), getSecurity()]);
+    renderDashboard(me, security);
   } catch (err) {
     clearSession();
     renderLoginShell();
