@@ -4,6 +4,7 @@ import { mountNewsRealmFilter } from './ui/cryptic/news_realm_filter';
 import { mountBestiary } from './ui/cryptic/bestiary';
 import { mountSkillTree } from './ui/cryptic/skilltree';
 import { mountLootVault } from './ui/cryptic/loot_vault';
+import { mountPickitPanel } from './ui/cryptic/pickit_panel';
 
 let appPromise: Promise<typeof import('./main')> | null = null;
 let caCopyResetTimer: number | null = null;
@@ -20,6 +21,7 @@ function bootLandingBranding(): void {
   mountBestiary();
   mountSkillTree();
   mountLootVault();
+  mountPickitPanel();
 }
 
 function wireContractAddressCopy(): void {
