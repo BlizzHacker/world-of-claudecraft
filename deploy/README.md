@@ -19,16 +19,18 @@ characters for auctions / item trade.
 
 | Realm | Subdomain | Port |
 |---|---|---|
-| claudecraft (legacy) | `claudecraft.crypticrealm.com` | 8787 |
+| apex / infernal entry | `crypticrealm.com` | 8787 |
 | infernal | `infernal.crypticrealm.com` | 8788 |
 | classic | `classic.crypticrealm.com` | 8789 |
 | dominion | `dominion.crypticrealm.com` | 8790 |
 | arcane | `arcane.crypticrealm.com` | 8791 |
 | exchange | `exchange.crypticrealm.com` | 8792 |
+| claudecraft (upstream identity) | `claudecraft.crypticrealm.com` | 8793 |
 
-Apex `crypticrealm.com` continues to serve the homepage + realm picker via the
-existing legacy `cryptic-realm.service`. Picking a realm navigates the client
-to the per-realm subdomain.
+Apex `crypticrealm.com` serves the homepage + Infernal entry via the existing
+legacy `cryptic-realm.service`. Picking another realm navigates the client to
+that realm's subdomain. Claudcraft is kept on its own instance and explicitly
+does not inherit the Cryptic Realm SPL token env vars.
 
 ## Deploy steps
 
@@ -48,8 +50,8 @@ pct exec 171 -- systemctl enable --now cryptic-realm-realms.target
 # 3. Disable the legacy single-realm service (or leave it for the homepage)
 #    pct exec 171 -- systemctl disable --now cryptic-realm.service
 #    — but the apex crypticrealm.com still needs ONE process serving the
-#    homepage. Keep cryptic-realm.service active OR pick one of the realm
-#    instances (recommended: claudecraft on :8787, which is the legacy port).
+#    homepage. Current live config keeps cryptic-realm.service active on :8787
+#    as the Infernal entry and runs Claudcraft separately on :8793.
 
 # 4. Traefik (LXC 107)
 pct push 107 deploy/traefik/crypticrealm-realms.yml /etc/traefik/conf.d/crypticrealm-realms.yml
