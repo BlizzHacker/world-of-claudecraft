@@ -2883,8 +2883,15 @@ function wireStartScreens(): void {
       void mountUserDropdown();
       void (async () => {
         try {
-          $('#charselect-user').textContent = api.username ?? '';
-          await enterRealmFlow();
+          const userEl = document.querySelector('#charselect-user');
+          if (userEl) userEl.textContent = api.username ?? '';
+          // On SSO return, always go to the realm list rather than
+          // auto-selecting a remembered realm: an auto-select can connect to a
+          // realm whose status check hangs, freezing the post-login screen.
+          const dir = await api.realms();
+          const listUserEl = document.querySelector('#realm-list-user');
+          if (listUserEl) listUserEl.textContent = api.username ?? '';
+          showRealmList(dir);
         } catch (err) { loginError(userFacingApiError(err)); }
       })();
     }

@@ -481,7 +481,34 @@ function syncLandingViewport(): void {
   document.documentElement.style.setProperty('--app-vh', `${h}px`);
 }
 
+// Surface any error/rejection during the SSO-return boot instead of letting
+// the page silently freeze. Shows a dismissible banner with the message so we
+// can diagnose; also logs the full error to the console.
+function installBootErrorTrap(): void {
+  const show = (label: string, detail: string) => {
+    try {
+      // eslint-disable-next-line no-console
+      console.error(`[cr-boot] ${label}:`, detail);
+      let bar = document.getElementById('cr-boot-error');
+      if (!bar) {
+        bar = document.createElement('div');
+        bar.id = 'cr-boot-error';
+        bar.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#3a0a0a;color:#ffd7d7;font:12px/1.5 ui-monospace,monospace;padding:8px 12px;border-top:2px solid #ff5a5f;max-height:40vh;overflow:auto;white-space:pre-wrap;';
+        document.body.appendChild(bar);
+      }
+      bar.textContent = `Boot error (${label}): ${detail}\n(tap to dismiss)`;
+      bar.onclick = () => bar?.remove();
+    } catch { /* ignore */ }
+  };
+  window.addEventListener('error', (e) => show('error', `${e.message} @ ${e.filename}:${e.lineno}`));
+  window.addEventListener('unhandledrejection', (e) => {
+    const r = e.reason;
+    show('promise', r instanceof Error ? `${r.message}\n${r.stack ?? ''}` : String(r));
+  });
+}
+
 function boot(): void {
+  installBootErrorTrap();
   syncLandingViewport();
   window.addEventListener('resize', syncLandingViewport);
   window.visualViewport?.addEventListener('resize', syncLandingViewport);
@@ -491,7 +518,9 @@ function boot(): void {
   wireLandingOfflinePanel();
   wireDeferredAppLoad();
   if (ssoCallbackPending()) {
-    void loadApp();
+    void loadApp().catch((err) => {
+      console.error('[cr-boot] loadApp failed', err);
+    });
   }
   applyHashRoute();
   window.addEventListener('hashchange', applyHashRoute);
