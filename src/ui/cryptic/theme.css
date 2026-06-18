@@ -738,8 +738,10 @@ body.cr-fps-active body, body.cr-fps-active { cursor: crosshair; }
 }
 
 /* ---------- Customization modal ---------- */
-#cr-customization-modal[hidden] { display: none; }
-#cr-customization-modal .cr-modal-overlay {
+#cr-customization-modal[hidden],
+#cr-minigame-modal[hidden] { display: none; }
+#cr-customization-modal .cr-modal-overlay,
+#cr-minigame-modal .cr-modal-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.55);
@@ -749,7 +751,8 @@ body.cr-fps-active body, body.cr-fps-active { cursor: crosshair; }
   z-index: 11000;
   backdrop-filter: blur(4px);
 }
-#cr-customization-modal .cr-modal-panel {
+#cr-customization-modal .cr-modal-panel,
+#cr-minigame-modal .cr-modal-panel {
   width: min(440px, 92vw);
   max-height: 88vh;
   overflow: auto;
@@ -760,6 +763,9 @@ body.cr-fps-active body, body.cr-fps-active { cursor: crosshair; }
   color: var(--cr-text, #e8d5c4);
   font-family: var(--cr-font-ui, system-ui, sans-serif);
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.75);
+}
+#cr-minigame-modal .cr-modal-panel {
+  width: min(760px, 94vw);
 }
 .cr-modal-header {
   display: flex;
@@ -843,6 +849,56 @@ body.cr-fps-active body, body.cr-fps-active { cursor: crosshair; }
   font-size: 11px;
   text-decoration: none;
 }
+.cr-minigame-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.cr-minigame-card {
+  display: grid;
+  gap: 4px;
+  min-height: 82px;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--cr-text, #e8d5c4);
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+.cr-minigame-card:hover,
+.cr-minigame-card:focus-visible {
+  border-color: var(--cr-accent, #d4442a);
+  box-shadow: 0 0 0 2px rgba(212, 68, 42, 0.18);
+  outline: 0;
+}
+.cr-minigame-card strong {
+  color: var(--gold, var(--cr-gold, #ffd100));
+  font-size: 13px;
+}
+.cr-minigame-card span,
+.cr-minigame-card small {
+  color: var(--cr-text-dim, #9a8a7a);
+  font-size: 11px;
+}
+.cr-minigame-hud {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+  color: var(--cr-text-dim, #9a8a7a);
+  font-size: 12px;
+}
+.cr-minigame-canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: 62vh;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  background: #080b13;
+}
 .cr-modal-footer-hint {
   font-size: 11px;
   color: var(--cr-text-dim, #9a8a7a);
@@ -856,6 +912,11 @@ body.cr-fps-active body, body.cr-fps-active { cursor: crosshair; }
   padding: 1px 6px;
   font-family: ui-monospace, monospace;
   font-size: 10px;
+}
+
+@media (max-width: 560px) {
+  .cr-minigame-grid { grid-template-columns: 1fr; }
+  .cr-minigame-hud { flex-direction: column; gap: 4px; }
 }
 
 /* Hide upstream homepage chrome whenever the player is in the world. The
