@@ -96,6 +96,22 @@ npm run build >> "$CR_LOG_FILE" 2>&1 || ERR "build failed"
 LOG "npm run build:server…"
 npm run build:server >> "$CR_LOG_FILE" 2>&1 || ERR "server build failed"
 
+# 4b. Reconcile per-realm env files. The template unit reads env.d/%i.env;
+#     deploy/env/ is the tracked source. Copy any new/updated realm env into
+#     env.d/ and enable its unit so a freshly-added realm (e.g. alpha/beta)
+#     starts on this deploy and persists across reboots. Idempotent.
+LOG "syncing per-realm env (deploy/env → env.d)…"
+mkdir -p env.d
+for inst in "${CR_INSTANCES[@]}"; do
+  src="deploy/env/${inst}.env"
+  if [ -f "$src" ]; then
+    cp -f "$src" "env.d/${inst}.env"
+    systemctl enable "cryptic-realm@${inst}.service" >/dev/null 2>&1 || true
+  else
+    LOG "WARN: no env file for instance '${inst}' (deploy/env/${inst}.env missing)"
+  fi
+done
+
 # 5. Restart every realm process. The legacy single-realm service first so
 #    the apex is restored quickly, then the template instances.
 LOG "restarting cryptic-realm.service (apex)…"
