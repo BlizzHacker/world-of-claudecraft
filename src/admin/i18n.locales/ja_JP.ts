@@ -7,7 +7,7 @@
 // (tests/i18n_admin_catalog.test.ts).
 
 export const ja_JP: Record<string, string> = {
-  "app.title": "World of ClaudeCraft - 管理",
+  "app.title": "Cryptic Realm - Admin",
   "auth.username": "ユーザー名",
   "auth.password": "パスワード",
   "auth.signIn": "サインイン",

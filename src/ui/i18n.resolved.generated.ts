@@ -172,19 +172,29 @@ export const en: EnTranslations = {
   },
   "news": {
     "title": "News & Updates",
-    "desc": "Read the latest patch notes, events, and community updates.",
+    "desc": "Read Cryptic Realm work logs, realm rollout notes, upstream kindness PRs, and release updates.",
     "loading": "Loading the latest updates…",
     "error": "Couldn't load updates. Please try again later.",
     "empty": "No updates yet — check back soon.",
     "prerelease": "Pre-release",
-    "viewOnGithub": "View on GitHub"
+    "viewOnGithub": "View on GitHub",
+    "openLink": "Open",
+    "officialLog": "Official Work Log",
+    "alphaBetaTitle": "Alpha, Beta, And Public Realm Cadence",
+    "alphaBetaBody": "Alpha testers can earn platinum at a higher rate because alpha characters reset every two weeks. Beta promotion happens monthly into public Cryptic Realm and MoveWeight realms after review.",
+    "tokenTitle": "$CR + Platinum Utility Live In The Roadmap",
+    "tokenBody": "$CR is the Cryptic Realm Solana SPL token. Platinum is the in-game premium bridge for cosmetics, houses, mounts, marketplace listings, and Exchange realm trades. The base game stays free to play.",
+    "prTitle": "Upstream Kindness Track",
+    "prBody": "Generic engine, auth, dashboard, auto-update, moderator, and wiki improvements are tracked as shareable work for the ClaudeCraft team while Cryptic Realm-specific realms and $CR features stay here.",
+    "proofTitle": "$CR Proof",
+    "proofBody": "Mint 3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv is published on the public proof page with treasury and Solscan links."
   },
   "download": {
-    "title": "Download Desktop Launcher",
-    "desc": "Get the standalone launcher for optimized performance and full-screen play."
+    "title": "Launchers & Installs",
+    "desc": "Play the live web client now and track signed installer releases for desktop and mobile."
   },
   "comingSoon": {
-    "placeholder": "Coming Soon...",
+    "placeholder": "Track Releases",
     "featureComingSoon": "This feature is coming soon to the realm."
   },
   "mode": {
@@ -281,8 +291,8 @@ export const en: EnTranslations = {
     "chat": "Open Chat"
   },
   "seo": {
-    "title": "World of ClaudeCraft: Classic-Style Web MMO",
-    "description": "Embark on an epic adventure in World of ClaudeCraft, a classic-style micro-MMO playable directly in your browser. Join a persistent shared realm, level up classes, and defeat enemies!",
+    "title": "Cryptic Realm: Classic-Style Web MMO",
+    "description": "Enter Cryptic Realm, a classic-style browser MMO with shared realms, optional $CR utility, platinum rewards, cosmetics, and persistent character progression.",
     "genre": "MMORPG",
     "playMode": "Multiplayer",
     "applicationCategory": "Game",
@@ -294,9 +304,9 @@ export const en: EnTranslations = {
     "mainNavigation": "Main navigation",
     "languageSelection": "Language selection",
     "characterActions": "Character actions",
-    "githubProject": "Open the World of ClaudeCraft GitHub project",
-    "discordCommunity": "Join the World of ClaudeCraft Discord community",
-    "donateProject": "Donate to support World of ClaudeCraft"
+    "githubProject": "Open the Cryptic Realm GitHub project",
+    "discordCommunity": "Join the Cryptic Realm Discord community",
+    "donateProject": "Tip $CR or SOL to support Cryptic Realm"
   },
   "loading": {
     "world": "Loading world...",
@@ -446,17 +456,17 @@ export const en: EnTranslations = {
     "iosStandaloneDetail": "You are in home-screen fullscreen mode. Keep the device in landscape.",
     "iosInstallDetail": "For true fullscreen on iPhone or iPad, install this page to your Home Screen first.",
     "iosShareStep": "In Safari, tap Share, then Add to Home Screen.",
-    "iosOpenStep": "Open World of ClaudeCraft from the new Home Screen icon.",
+    "iosOpenStep": "Open Cryptic Realm from the new Home Screen icon.",
     "androidStandaloneDetail": "You are in fullscreen app mode. Keep the device in landscape.",
     "androidInstallDetail": "For fullscreen on Android, install this page or add it to your Home screen first.",
     "androidInstallStep": "In Chrome, tap the menu, then Install app or Add to Home screen.",
-    "androidOpenStep": "Open World of ClaudeCraft from the new icon.",
+    "androidOpenStep": "Open Cryptic Realm from the new icon.",
     "otherStandaloneDetail": "Keep your device in landscape fullscreen.",
     "otherInstallDetail": "Install or add this page to your Home screen for the best fullscreen mobile experience."
   },
   "serverUnavailable": {
-    "title": "World of ClaudeCraft - Realm Unavailable",
-    "logoAlt": "World of ClaudeCraft",
+    "title": "Cryptic Realm - Realm Unavailable",
+    "logoAlt": "Cryptic Realm",
     "eyebrow": "Realm maintenance",
     "heading": "The realm is temporarily unavailable.",
     "body": "We are restarting the game service and expect Claudemoon to return shortly. This page will keep checking automatically.",
@@ -3712,11 +3722,21 @@ export const es: EnTranslations = {
     "error": "No se pudieron cargar las novedades. Inténtalo de nuevo más tarde.",
     "empty": "Aún no hay novedades; vuelve pronto.",
     "prerelease": "Versión preliminar",
-    "viewOnGithub": "Ver en GitHub"
+    "viewOnGithub": "Ver en GitHub",
+    "openLink": "Open",
+    "officialLog": "Official Work Log",
+    "alphaBetaTitle": "Alpha, Beta, And Public Realm Cadence",
+    "alphaBetaBody": "Alpha testers can earn platinum at a higher rate because alpha characters reset every two weeks. Beta promotion happens monthly into public Cryptic Realm and MoveWeight realms after review.",
+    "tokenTitle": "$CR + Platinum Utility Live In The Roadmap",
+    "tokenBody": "$CR is the Cryptic Realm Solana SPL token. Platinum is the in-game premium bridge for cosmetics, houses, mounts, marketplace listings, and Exchange realm trades. The base game stays free to play.",
+    "prTitle": "Upstream Kindness Track",
+    "prBody": "Generic engine, auth, dashboard, auto-update, moderator, and wiki improvements are tracked as shareable work for the ClaudeCraft team while Cryptic Realm-specific realms and $CR features stay here.",
+    "proofTitle": "$CR Proof",
+    "proofBody": "Mint 3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv is published on the public proof page with treasury and Solscan links."
   },
   "download": {
-    "title": "Descargar Lanzador de Escritorio",
-    "desc": "Consigue el lanzador independiente para un rendimiento optimizado y juego a pantalla completa."
+    "title": "Launchers & Installs",
+    "desc": "Play the live web client now and track signed installer releases for desktop and mobile."
   },
   "comingSoon": {
     "placeholder": "Próximamente...",
@@ -7247,11 +7267,21 @@ export const es_ES: EnTranslations = {
     "error": "No se pudieron cargar las novedades. Inténtalo de nuevo más tarde.",
     "empty": "Aún no hay novedades; vuelve pronto.",
     "prerelease": "Versión preliminar",
-    "viewOnGithub": "Ver en GitHub"
+    "viewOnGithub": "Ver en GitHub",
+    "openLink": "Open",
+    "officialLog": "Official Work Log",
+    "alphaBetaTitle": "Alpha, Beta, And Public Realm Cadence",
+    "alphaBetaBody": "Alpha testers can earn platinum at a higher rate because alpha characters reset every two weeks. Beta promotion happens monthly into public Cryptic Realm and MoveWeight realms after review.",
+    "tokenTitle": "$CR + Platinum Utility Live In The Roadmap",
+    "tokenBody": "$CR is the Cryptic Realm Solana SPL token. Platinum is the in-game premium bridge for cosmetics, houses, mounts, marketplace listings, and Exchange realm trades. The base game stays free to play.",
+    "prTitle": "Upstream Kindness Track",
+    "prBody": "Generic engine, auth, dashboard, auto-update, moderator, and wiki improvements are tracked as shareable work for the ClaudeCraft team while Cryptic Realm-specific realms and $CR features stay here.",
+    "proofTitle": "$CR Proof",
+    "proofBody": "Mint 3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv is published on the public proof page with treasury and Solscan links."
   },
   "download": {
-    "title": "Descargar lanzador de escritorio",
-    "desc": "Consigue el lanzador independiente para un rendimiento optimizado y juego a pantalla completa."
+    "title": "Launchers & Installs",
+    "desc": "Play the live web client now and track signed installer releases for desktop and mobile."
   },
   "comingSoon": {
     "placeholder": "Próximamente...",
@@ -10782,11 +10812,21 @@ export const fr_FR: EnTranslations = {
     "error": "Impossible de charger les mises à jour. Réessayez plus tard.",
     "empty": "Aucune mise à jour pour l'instant ; revenez bientôt.",
     "prerelease": "Préversion",
-    "viewOnGithub": "Voir sur GitHub"
+    "viewOnGithub": "Voir sur GitHub",
+    "openLink": "Open",
+    "officialLog": "Official Work Log",
+    "alphaBetaTitle": "Alpha, Beta, And Public Realm Cadence",
+    "alphaBetaBody": "Alpha testers can earn platinum at a higher rate because alpha characters reset every two weeks. Beta promotion happens monthly into public Cryptic Realm and MoveWeight realms after review.",
+    "tokenTitle": "$CR + Platinum Utility Live In The Roadmap",
+    "tokenBody": "$CR is the Cryptic Realm Solana SPL token. Platinum is the in-game premium bridge for cosmetics, houses, mounts, marketplace listings, and Exchange realm trades. The base game stays free to play.",
+    "prTitle": "Upstream Kindness Track",
+    "prBody": "Generic engine, auth, dashboard, auto-update, moderator, and wiki improvements are tracked as shareable work for the ClaudeCraft team while Cryptic Realm-specific realms and $CR features stay here.",
+    "proofTitle": "$CR Proof",
+    "proofBody": "Mint 3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv is published on the public proof page with treasury and Solscan links."
   },
   "download": {
-    "title": "Télécharger le lanceur de bureau",
-    "desc": "Obtenez le lanceur autonome pour des performances optimisées et un jeu en plein écran."
+    "title": "Launchers & Installs",
+    "desc": "Play the live web client now and track signed installer releases for desktop and mobile."
   },
   "comingSoon": {
     "placeholder": "Bientôt disponible...",
@@ -14317,11 +14357,21 @@ export const fr_CA: EnTranslations = {
     "error": "Impossible de charger les mises à jour. Réessayez plus tard.",
     "empty": "Aucune mise à jour pour l'instant ; revenez bientôt.",
     "prerelease": "Préversion",
-    "viewOnGithub": "Voir sur GitHub"
+    "viewOnGithub": "Voir sur GitHub",
+    "openLink": "Open",
+    "officialLog": "Official Work Log",
+    "alphaBetaTitle": "Alpha, Beta, And Public Realm Cadence",
+    "alphaBetaBody": "Alpha testers can earn platinum at a higher rate because alpha characters reset every two weeks. Beta promotion happens monthly into public Cryptic Realm and MoveWeight realms after review.",
+    "tokenTitle": "$CR + Platinum Utility Live In The Roadmap",
+    "tokenBody": "$CR is the Cryptic Realm Solana SPL token. Platinum is the in-game premium bridge for cosmetics, houses, mounts, marketplace listings, and Exchange realm trades. The base game stays free to play.",
+    "prTitle": "Upstream Kindness Track",
+    "prBody": "Generic engine, auth, dashboard, auto-update, moderator, and wiki improvements are tracked as shareable work for the ClaudeCraft team while Cryptic Realm-specific realms and $CR features stay here.",
+    "proofTitle": "$CR Proof",
+    "proofBody": "Mint 3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv is published on the public proof page with treasury and Solscan links."
   },
   "download": {
-    "title": "Télécharger le lanceur de bureau",
-    "desc": "Obtenez le lanceur autonome pour des performances optimisées et un jeu en plein écran."
+    "title": "Launchers & Installs",
+    "desc": "Play the live web client now and track signed installer releases for desktop and mobile."
   },
   "comingSoon": {
     "placeholder": "Bientôt disponible...",
@@ -17847,19 +17897,29 @@ export const en_CA: EnTranslations = {
   },
   "news": {
     "title": "News & Updates",
-    "desc": "Read the latest patch notes, events, and community updates.",
+    "desc": "Read Cryptic Realm work logs, realm rollout notes, upstream kindness PRs, and release updates.",
     "loading": "Loading the latest updates…",
     "error": "Couldn't load updates. Please try again later.",
     "empty": "No updates yet — check back soon.",
     "prerelease": "Pre-release",
-    "viewOnGithub": "View on GitHub"
+    "viewOnGithub": "View on GitHub",
+    "openLink": "Open",
+    "officialLog": "Official Work Log",
+    "alphaBetaTitle": "Alpha, Beta, And Public Realm Cadence",
+    "alphaBetaBody": "Alpha testers can earn platinum at a higher rate because alpha characters reset every two weeks. Beta promotion happens monthly into public Cryptic Realm and MoveWeight realms after review.",
+    "tokenTitle": "$CR + Platinum Utility Live In The Roadmap",
+    "tokenBody": "$CR is the Cryptic Realm Solana SPL token. Platinum is the in-game premium bridge for cosmetics, houses, mounts, marketplace listings, and Exchange realm trades. The base game stays free to play.",
+    "prTitle": "Upstream Kindness Track",
+    "prBody": "Generic engine, auth, dashboard, auto-update, moderator, and wiki improvements are tracked as shareable work for the ClaudeCraft team while Cryptic Realm-specific realms and $CR features stay here.",
+    "proofTitle": "$CR Proof",
+    "proofBody": "Mint 3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv is published on the public proof page with treasury and Solscan links."
   },
   "download": {
-    "title": "Download Desktop Launcher",
-    "desc": "Get the standalone launcher for optimized performance and full-screen play."
+    "title": "Launchers & Installs",
+    "desc": "Play the live web client now and track signed installer releases for desktop and mobile."
   },
   "comingSoon": {
-    "placeholder": "Coming Soon...",
+    "placeholder": "Track Releases",
     "featureComingSoon": "This feature is coming soon to the realm."
   },
   "mode": {
@@ -17956,8 +18016,8 @@ export const en_CA: EnTranslations = {
     "chat": "Open Chat"
   },
   "seo": {
-    "title": "World of ClaudeCraft: Classic-Style Web MMO",
-    "description": "Embark on an epic adventure in World of ClaudeCraft, a classic-style micro-MMO playable directly in your browser. Join a persistent shared realm, level up classes, and defeat enemies!",
+    "title": "Cryptic Realm: Classic-Style Web MMO",
+    "description": "Enter Cryptic Realm, a classic-style browser MMO with shared realms, optional $CR utility, platinum rewards, cosmetics, and persistent character progression.",
     "genre": "MMORPG",
     "playMode": "Multiplayer",
     "applicationCategory": "Game",
@@ -17969,9 +18029,9 @@ export const en_CA: EnTranslations = {
     "mainNavigation": "Main navigation",
     "languageSelection": "Language selection",
     "characterActions": "Character actions",
-    "githubProject": "Open the World of ClaudeCraft GitHub project",
-    "discordCommunity": "Join the World of ClaudeCraft Discord community",
-    "donateProject": "Donate to support World of ClaudeCraft"
+    "githubProject": "Open the Cryptic Realm GitHub project",
+    "discordCommunity": "Join the Cryptic Realm Discord community",
+    "donateProject": "Tip $CR or SOL to support Cryptic Realm"
   },
   "loading": {
     "world": "Loading world...",
@@ -18121,17 +18181,17 @@ export const en_CA: EnTranslations = {
     "iosStandaloneDetail": "You are in home-screen fullscreen mode. Keep the device in landscape.",
     "iosInstallDetail": "For true fullscreen on iPhone or iPad, install this page to your Home Screen first.",
     "iosShareStep": "In Safari, tap Share, then Add to Home Screen.",
-    "iosOpenStep": "Open World of ClaudeCraft from the new Home Screen icon.",
+    "iosOpenStep": "Open Cryptic Realm from the new Home Screen icon.",
     "androidStandaloneDetail": "You are in fullscreen app mode. Keep the device in landscape.",
     "androidInstallDetail": "For fullscreen on Android, install this page or add it to your Home screen first.",
     "androidInstallStep": "In Chrome, tap the menu, then Install app or Add to Home screen.",
-    "androidOpenStep": "Open World of ClaudeCraft from the new icon.",
+    "androidOpenStep": "Open Cryptic Realm from the new icon.",
     "otherStandaloneDetail": "Keep your device in landscape fullscreen.",
     "otherInstallDetail": "Install or add this page to your Home screen for the best fullscreen mobile experience."
   },
   "serverUnavailable": {
-    "title": "World of ClaudeCraft - Realm Unavailable",
-    "logoAlt": "World of ClaudeCraft",
+    "title": "Cryptic Realm - Realm Unavailable",
+    "logoAlt": "Cryptic Realm",
     "eyebrow": "Realm maintenance",
     "heading": "The realm is temporarily unavailable.",
     "body": "We are restarting the game service and expect Claudemoon to return shortly. This page will keep checking automatically.",
@@ -21387,11 +21447,21 @@ export const it_IT: EnTranslations = {
     "error": "Impossibile caricare gli aggiornamenti. Riprova più tardi.",
     "empty": "Ancora nessun aggiornamento: torna presto a controllare.",
     "prerelease": "Anteprima",
-    "viewOnGithub": "Vedi su GitHub"
+    "viewOnGithub": "Vedi su GitHub",
+    "openLink": "Open",
+    "officialLog": "Official Work Log",
+    "alphaBetaTitle": "Alpha, Beta, And Public Realm Cadence",
+    "alphaBetaBody": "Alpha testers can earn platinum at a higher rate because alpha characters reset every two weeks. Beta promotion happens monthly into public Cryptic Realm and MoveWeight realms after review.",
+    "tokenTitle": "$CR + Platinum Utility Live In The Roadmap",
+    "tokenBody": "$CR is the Cryptic Realm Solana SPL token. Platinum is the in-game premium bridge for cosmetics, houses, mounts, marketplace listings, and Exchange realm trades. The base game stays free to play.",
+    "prTitle": "Upstream Kindness Track",
+    "prBody": "Generic engine, auth, dashboard, auto-update, moderator, and wiki improvements are tracked as shareable work for the ClaudeCraft team while Cryptic Realm-specific realms and $CR features stay here.",
+    "proofTitle": "$CR Proof",
+    "proofBody": "Mint 3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv is published on the public proof page with treasury and Solscan links."
   },
   "download": {
-    "title": "Scarica il launcher per desktop",
-    "desc": "Ottieni il launcher autonomo per prestazioni ottimizzate e gioco a schermo intero."
+    "title": "Launchers & Installs",
+    "desc": "Play the live web client now and track signed installer releases for desktop and mobile."
   },
   "comingSoon": {
     "placeholder": "Prossimamente...",
@@ -24922,11 +24992,21 @@ export const de_DE: EnTranslations = {
     "error": "Neuigkeiten konnten nicht geladen werden. Bitte versuche es später erneut.",
     "empty": "Noch keine Neuigkeiten - schau bald wieder vorbei.",
     "prerelease": "Vorabversion",
-    "viewOnGithub": "Auf GitHub ansehen"
+    "viewOnGithub": "Auf GitHub ansehen",
+    "openLink": "Open",
+    "officialLog": "Official Work Log",
+    "alphaBetaTitle": "Alpha, Beta, And Public Realm Cadence",
+    "alphaBetaBody": "Alpha testers can earn platinum at a higher rate because alpha characters reset every two weeks. Beta promotion happens monthly into public Cryptic Realm and MoveWeight realms after review.",
+    "tokenTitle": "$CR + Platinum Utility Live In The Roadmap",
+    "tokenBody": "$CR is the Cryptic Realm Solana SPL token. Platinum is the in-game premium bridge for cosmetics, houses, mounts, marketplace listings, and Exchange realm trades. The base game stays free to play.",
+    "prTitle": "Upstream Kindness Track",
+    "prBody": "Generic engine, auth, dashboard, auto-update, moderator, and wiki improvements are tracked as shareable work for the ClaudeCraft team while Cryptic Realm-specific realms and $CR features stay here.",
+    "proofTitle": "$CR Proof",
+    "proofBody": "Mint 3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv is published on the public proof page with treasury and Solscan links."
   },
   "download": {
-    "title": "Desktop-Launcher herunterladen",
-    "desc": "Hol dir den eigenständigen Launcher für optimierte Leistung und Vollbildspiel."
+    "title": "Launchers & Installs",
+    "desc": "Play the live web client now and track signed installer releases for desktop and mobile."
   },
   "comingSoon": {
     "placeholder": "Demnächst...",
@@ -28457,11 +28537,21 @@ export const zh_CN: EnTranslations = {
     "error": "无法加载更新，请稍后重试。",
     "empty": "暂无更新，敬请期待。",
     "prerelease": "预发布",
-    "viewOnGithub": "在 GitHub 上查看"
+    "viewOnGithub": "在 GitHub 上查看",
+    "openLink": "Open",
+    "officialLog": "Official Work Log",
+    "alphaBetaTitle": "Alpha, Beta, And Public Realm Cadence",
+    "alphaBetaBody": "Alpha testers can earn platinum at a higher rate because alpha characters reset every two weeks. Beta promotion happens monthly into public Cryptic Realm and MoveWeight realms after review.",
+    "tokenTitle": "$CR + Platinum Utility Live In The Roadmap",
+    "tokenBody": "$CR is the Cryptic Realm Solana SPL token. Platinum is the in-game premium bridge for cosmetics, houses, mounts, marketplace listings, and Exchange realm trades. The base game stays free to play.",
+    "prTitle": "Upstream Kindness Track",
+    "prBody": "Generic engine, auth, dashboard, auto-update, moderator, and wiki improvements are tracked as shareable work for the ClaudeCraft team while Cryptic Realm-specific realms and $CR features stay here.",
+    "proofTitle": "$CR Proof",
+    "proofBody": "Mint 3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv is published on the public proof page with treasury and Solscan links."
   },
   "download": {
-    "title": "下载电脑版启动器",
-    "desc": "获取独立启动器，以获得更优化的性能和全屏游戏体验。"
+    "title": "Launchers & Installs",
+    "desc": "Play the live web client now and track signed installer releases for desktop and mobile."
   },
   "comingSoon": {
     "placeholder": "敬请期待...",
@@ -31992,11 +32082,21 @@ export const zh_TW: EnTranslations = {
     "error": "無法載入更新。請稍後再試。",
     "empty": "目前尚無更新，敬請期待。",
     "prerelease": "搶先版",
-    "viewOnGithub": "在 GitHub 上檢視"
+    "viewOnGithub": "在 GitHub 上檢視",
+    "openLink": "Open",
+    "officialLog": "Official Work Log",
+    "alphaBetaTitle": "Alpha, Beta, And Public Realm Cadence",
+    "alphaBetaBody": "Alpha testers can earn platinum at a higher rate because alpha characters reset every two weeks. Beta promotion happens monthly into public Cryptic Realm and MoveWeight realms after review.",
+    "tokenTitle": "$CR + Platinum Utility Live In The Roadmap",
+    "tokenBody": "$CR is the Cryptic Realm Solana SPL token. Platinum is the in-game premium bridge for cosmetics, houses, mounts, marketplace listings, and Exchange realm trades. The base game stays free to play.",
+    "prTitle": "Upstream Kindness Track",
+    "prBody": "Generic engine, auth, dashboard, auto-update, moderator, and wiki improvements are tracked as shareable work for the ClaudeCraft team while Cryptic Realm-specific realms and $CR features stay here.",
+    "proofTitle": "$CR Proof",
+    "proofBody": "Mint 3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv is published on the public proof page with treasury and Solscan links."
   },
   "download": {
-    "title": "下載電腦版啟動器",
-    "desc": "獲取獨立啟動器，以獲得更優化的效能和全螢幕遊戲體驗。"
+    "title": "Launchers & Installs",
+    "desc": "Play the live web client now and track signed installer releases for desktop and mobile."
   },
   "comingSoon": {
     "placeholder": "敬請期待...",
@@ -35527,11 +35627,21 @@ export const ko_KR: EnTranslations = {
     "error": "소식을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.",
     "empty": "아직 새 소식이 없습니다. 곧 다시 확인해 주세요.",
     "prerelease": "사전 출시",
-    "viewOnGithub": "GitHub에서 보기"
+    "viewOnGithub": "GitHub에서 보기",
+    "openLink": "Open",
+    "officialLog": "Official Work Log",
+    "alphaBetaTitle": "Alpha, Beta, And Public Realm Cadence",
+    "alphaBetaBody": "Alpha testers can earn platinum at a higher rate because alpha characters reset every two weeks. Beta promotion happens monthly into public Cryptic Realm and MoveWeight realms after review.",
+    "tokenTitle": "$CR + Platinum Utility Live In The Roadmap",
+    "tokenBody": "$CR is the Cryptic Realm Solana SPL token. Platinum is the in-game premium bridge for cosmetics, houses, mounts, marketplace listings, and Exchange realm trades. The base game stays free to play.",
+    "prTitle": "Upstream Kindness Track",
+    "prBody": "Generic engine, auth, dashboard, auto-update, moderator, and wiki improvements are tracked as shareable work for the ClaudeCraft team while Cryptic Realm-specific realms and $CR features stay here.",
+    "proofTitle": "$CR Proof",
+    "proofBody": "Mint 3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv is published on the public proof page with treasury and Solscan links."
   },
   "download": {
-    "title": "데스크톱 런처 다운로드",
-    "desc": "최적화된 성능과 전체 화면 플레이를 위해 독립형 런처를 다운로드하세요."
+    "title": "Launchers & Installs",
+    "desc": "Play the live web client now and track signed installer releases for desktop and mobile."
   },
   "comingSoon": {
     "placeholder": "준비 중...",
@@ -39062,11 +39172,21 @@ export const ja_JP: EnTranslations = {
     "error": "更新情報を読み込めませんでした。しばらくしてからお試しください。",
     "empty": "まだ更新はありません。またのぞいてみてください。",
     "prerelease": "プレリリース",
-    "viewOnGithub": "GitHubで見る"
+    "viewOnGithub": "GitHubで見る",
+    "openLink": "Open",
+    "officialLog": "Official Work Log",
+    "alphaBetaTitle": "Alpha, Beta, And Public Realm Cadence",
+    "alphaBetaBody": "Alpha testers can earn platinum at a higher rate because alpha characters reset every two weeks. Beta promotion happens monthly into public Cryptic Realm and MoveWeight realms after review.",
+    "tokenTitle": "$CR + Platinum Utility Live In The Roadmap",
+    "tokenBody": "$CR is the Cryptic Realm Solana SPL token. Platinum is the in-game premium bridge for cosmetics, houses, mounts, marketplace listings, and Exchange realm trades. The base game stays free to play.",
+    "prTitle": "Upstream Kindness Track",
+    "prBody": "Generic engine, auth, dashboard, auto-update, moderator, and wiki improvements are tracked as shareable work for the ClaudeCraft team while Cryptic Realm-specific realms and $CR features stay here.",
+    "proofTitle": "$CR Proof",
+    "proofBody": "Mint 3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv is published on the public proof page with treasury and Solscan links."
   },
   "download": {
-    "title": "デスクトップランチャーのダウンロード",
-    "desc": "最適化されたパフォーマンスと全画面表示でのプレイのために、スタンドアロン版ランチャーを入手してください。"
+    "title": "Launchers & Installs",
+    "desc": "Play the live web client now and track signed installer releases for desktop and mobile."
   },
   "comingSoon": {
     "placeholder": "近日公開...",
@@ -42597,11 +42717,21 @@ export const pt_BR: EnTranslations = {
     "error": "Não foi possível carregar as novidades. Tente novamente mais tarde.",
     "empty": "Ainda não há novidades; volte em breve.",
     "prerelease": "Pré-lançamento",
-    "viewOnGithub": "Ver no GitHub"
+    "viewOnGithub": "Ver no GitHub",
+    "openLink": "Open",
+    "officialLog": "Official Work Log",
+    "alphaBetaTitle": "Alpha, Beta, And Public Realm Cadence",
+    "alphaBetaBody": "Alpha testers can earn platinum at a higher rate because alpha characters reset every two weeks. Beta promotion happens monthly into public Cryptic Realm and MoveWeight realms after review.",
+    "tokenTitle": "$CR + Platinum Utility Live In The Roadmap",
+    "tokenBody": "$CR is the Cryptic Realm Solana SPL token. Platinum is the in-game premium bridge for cosmetics, houses, mounts, marketplace listings, and Exchange realm trades. The base game stays free to play.",
+    "prTitle": "Upstream Kindness Track",
+    "prBody": "Generic engine, auth, dashboard, auto-update, moderator, and wiki improvements are tracked as shareable work for the ClaudeCraft team while Cryptic Realm-specific realms and $CR features stay here.",
+    "proofTitle": "$CR Proof",
+    "proofBody": "Mint 3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv is published on the public proof page with treasury and Solscan links."
   },
   "download": {
-    "title": "Baixar launcher para desktop",
-    "desc": "Obtenha o launcher independente para desempenho otimizado e jogo em tela cheia."
+    "title": "Launchers & Installs",
+    "desc": "Play the live web client now and track signed installer releases for desktop and mobile."
   },
   "comingSoon": {
     "placeholder": "Em breve...",
@@ -46132,11 +46262,21 @@ export const ru_RU: EnTranslations = {
     "error": "Не удалось загрузить обновления. Попробуйте позже.",
     "empty": "Обновлений пока нет: загляните позже.",
     "prerelease": "Предварительная версия",
-    "viewOnGithub": "Открыть на GitHub"
+    "viewOnGithub": "Открыть на GitHub",
+    "openLink": "Open",
+    "officialLog": "Official Work Log",
+    "alphaBetaTitle": "Alpha, Beta, And Public Realm Cadence",
+    "alphaBetaBody": "Alpha testers can earn platinum at a higher rate because alpha characters reset every two weeks. Beta promotion happens monthly into public Cryptic Realm and MoveWeight realms after review.",
+    "tokenTitle": "$CR + Platinum Utility Live In The Roadmap",
+    "tokenBody": "$CR is the Cryptic Realm Solana SPL token. Platinum is the in-game premium bridge for cosmetics, houses, mounts, marketplace listings, and Exchange realm trades. The base game stays free to play.",
+    "prTitle": "Upstream Kindness Track",
+    "prBody": "Generic engine, auth, dashboard, auto-update, moderator, and wiki improvements are tracked as shareable work for the ClaudeCraft team while Cryptic Realm-specific realms and $CR features stay here.",
+    "proofTitle": "$CR Proof",
+    "proofBody": "Mint 3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv is published on the public proof page with treasury and Solscan links."
   },
   "download": {
-    "title": "Скачать загрузчик для ПК",
-    "desc": "Загрузите отдельный клиент для оптимальной производительности и игры на весь экран."
+    "title": "Launchers & Installs",
+    "desc": "Play the live web client now and track signed installer releases for desktop and mobile."
   },
   "comingSoon": {
     "placeholder": "Скоро...",
@@ -49517,19 +49657,151 @@ export const translations = {
 };
 
 export const pending: Record<string, readonly string[]> = {
-  "es": [],
-  "es_ES": [],
-  "fr_FR": [],
-  "fr_CA": [],
+  "es": [
+    "news.alphaBetaBody",
+    "news.alphaBetaTitle",
+    "news.officialLog",
+    "news.openLink",
+    "news.prBody",
+    "news.prTitle",
+    "news.proofBody",
+    "news.proofTitle",
+    "news.tokenBody",
+    "news.tokenTitle"
+  ],
+  "es_ES": [
+    "news.alphaBetaBody",
+    "news.alphaBetaTitle",
+    "news.officialLog",
+    "news.openLink",
+    "news.prBody",
+    "news.prTitle",
+    "news.proofBody",
+    "news.proofTitle",
+    "news.tokenBody",
+    "news.tokenTitle"
+  ],
+  "fr_FR": [
+    "news.alphaBetaBody",
+    "news.alphaBetaTitle",
+    "news.officialLog",
+    "news.openLink",
+    "news.prBody",
+    "news.prTitle",
+    "news.proofBody",
+    "news.proofTitle",
+    "news.tokenBody",
+    "news.tokenTitle"
+  ],
+  "fr_CA": [
+    "news.alphaBetaBody",
+    "news.alphaBetaTitle",
+    "news.officialLog",
+    "news.openLink",
+    "news.prBody",
+    "news.prTitle",
+    "news.proofBody",
+    "news.proofTitle",
+    "news.tokenBody",
+    "news.tokenTitle"
+  ],
   "en_CA": [],
-  "it_IT": [],
-  "de_DE": [],
-  "zh_CN": [],
-  "zh_TW": [],
-  "ko_KR": [],
-  "ja_JP": [],
-  "pt_BR": [],
-  "ru_RU": []
+  "it_IT": [
+    "news.alphaBetaBody",
+    "news.alphaBetaTitle",
+    "news.officialLog",
+    "news.openLink",
+    "news.prBody",
+    "news.prTitle",
+    "news.proofBody",
+    "news.proofTitle",
+    "news.tokenBody",
+    "news.tokenTitle"
+  ],
+  "de_DE": [
+    "news.alphaBetaBody",
+    "news.alphaBetaTitle",
+    "news.officialLog",
+    "news.openLink",
+    "news.prBody",
+    "news.prTitle",
+    "news.proofBody",
+    "news.proofTitle",
+    "news.tokenBody",
+    "news.tokenTitle"
+  ],
+  "zh_CN": [
+    "news.alphaBetaBody",
+    "news.alphaBetaTitle",
+    "news.officialLog",
+    "news.openLink",
+    "news.prBody",
+    "news.prTitle",
+    "news.proofBody",
+    "news.proofTitle",
+    "news.tokenBody",
+    "news.tokenTitle"
+  ],
+  "zh_TW": [
+    "news.alphaBetaBody",
+    "news.alphaBetaTitle",
+    "news.officialLog",
+    "news.openLink",
+    "news.prBody",
+    "news.prTitle",
+    "news.proofBody",
+    "news.proofTitle",
+    "news.tokenBody",
+    "news.tokenTitle"
+  ],
+  "ko_KR": [
+    "news.alphaBetaBody",
+    "news.alphaBetaTitle",
+    "news.officialLog",
+    "news.openLink",
+    "news.prBody",
+    "news.prTitle",
+    "news.proofBody",
+    "news.proofTitle",
+    "news.tokenBody",
+    "news.tokenTitle"
+  ],
+  "ja_JP": [
+    "news.alphaBetaBody",
+    "news.alphaBetaTitle",
+    "news.officialLog",
+    "news.openLink",
+    "news.prBody",
+    "news.prTitle",
+    "news.proofBody",
+    "news.proofTitle",
+    "news.tokenBody",
+    "news.tokenTitle"
+  ],
+  "pt_BR": [
+    "news.alphaBetaBody",
+    "news.alphaBetaTitle",
+    "news.officialLog",
+    "news.openLink",
+    "news.prBody",
+    "news.prTitle",
+    "news.proofBody",
+    "news.proofTitle",
+    "news.tokenBody",
+    "news.tokenTitle"
+  ],
+  "ru_RU": [
+    "news.alphaBetaBody",
+    "news.alphaBetaTitle",
+    "news.officialLog",
+    "news.openLink",
+    "news.prBody",
+    "news.prTitle",
+    "news.proofBody",
+    "news.proofTitle",
+    "news.tokenBody",
+    "news.tokenTitle"
+  ]
 };
 
 export const en_XA: EnTranslations = {
@@ -49695,19 +49967,29 @@ export const en_XA: EnTranslations = {
   },
   "news": {
     "title": "[Ñéŵš & Úþðáţéš]",
-    "desc": "[Ŕéáð ţĥé ļáţéšţ þáţçĥ ñóţéš, éʋéñţš, áñð çóɱɱúñíţý úþðáţéš.]",
+    "desc": "[Ŕéáð Çŕýþţíç Ŕéáļɱ ŵóŕķ ļóĝš, ŕéáļɱ ŕóļļóúţ ñóţéš, úþšţŕéáɱ ķíñðñéšš ÞŔš, áñð ŕéļéášé úþðáţéš.]",
     "loading": "[Ļóáðíñĝ ţĥé ļáţéšţ úþðáţéš…]",
     "error": "[Çóúļðñ'ţ ļóáð úþðáţéš. Þļéášé ţŕý áĝáíñ ļáţéŕ.]",
     "empty": "[Ñó úþðáţéš ýéţ — çĥéçķ ƀáçķ šóóñ.]",
     "prerelease": "[Þŕé-ŕéļéášé]",
-    "viewOnGithub": "[Ʋíéŵ óñ ĜíţĤúƀ]"
+    "viewOnGithub": "[Ʋíéŵ óñ ĜíţĤúƀ]",
+    "openLink": "[Óþéñ]",
+    "officialLog": "[Óƒƒíçíáļ Ŵóŕķ Ļóĝ]",
+    "alphaBetaTitle": "[Áļþĥá, Ɓéţá, Áñð Þúƀļíç Ŕéáļɱ Çáðéñçé]",
+    "alphaBetaBody": "[Áļþĥá ţéšţéŕš çáñ éáŕñ þļáţíñúɱ áţ á ĥíĝĥéŕ ŕáţé ƀéçáúšé áļþĥá çĥáŕáçţéŕš ŕéšéţ éʋéŕý ţŵó ŵééķš. Ɓéţá þŕóɱóţíóñ ĥáþþéñš ɱóñţĥļý íñţó þúƀļíç Çŕýþţíç Ŕéáļɱ áñð ⱮóʋéŴéíĝĥţ ŕéáļɱš áƒţéŕ ŕéʋíéŵ.]",
+    "tokenTitle": "[$ÇŔ + Þļáţíñúɱ Úţíļíţý Ļíʋé Íñ Ţĥé Ŕóáðɱáþ]",
+    "tokenBody": "[$ÇŔ íš ţĥé Çŕýþţíç Ŕéáļɱ Šóļáñá ŠÞĻ ţóķéñ. Þļáţíñúɱ íš ţĥé íñ-ĝáɱé þŕéɱíúɱ ƀŕíðĝé ƒóŕ çóšɱéţíçš, ĥóúšéš, ɱóúñţš, ɱáŕķéţþļáçé ļíšţíñĝš, áñð Éẋçĥáñĝé ŕéáļɱ ţŕáðéš. Ţĥé ƀášé ĝáɱé šţáýš ƒŕéé ţó þļáý.]",
+    "prTitle": "[Úþšţŕéáɱ Ķíñðñéšš Ţŕáçķ]",
+    "prBody": "[Ĝéñéŕíç éñĝíñé, áúţĥ, ðášĥƀóáŕð, áúţó-úþðáţé, ɱóðéŕáţóŕ, áñð ŵíķí íɱþŕóʋéɱéñţš áŕé ţŕáçķéð áš šĥáŕéáƀļé ŵóŕķ ƒóŕ ţĥé ÇļáúðéÇŕáƒţ ţéáɱ ŵĥíļé Çŕýþţíç Ŕéáļɱ-šþéçíƒíç ŕéáļɱš áñð $ÇŔ ƒéáţúŕéš šţáý ĥéŕé.]",
+    "proofTitle": "[$ÇŔ Þŕóóƒ]",
+    "proofBody": "[Ɱíñţ 3ɊŽʋÐ68ŵúþĤƒŔŵÚŽĜñúĥóðƁ9Ʋ8ó1þÞÁĥĶĶĴĝĴÇ2ÝɱⱮⱮʋ íš þúƀļíšĥéð óñ ţĥé þúƀļíç þŕóóƒ þáĝé ŵíţĥ ţŕéášúŕý áñð Šóļšçáñ ļíñķš.]"
   },
   "download": {
-    "title": "[Ðóŵñļóáð Ðéšķţóþ Ļáúñçĥéŕ]",
-    "desc": "[Ĝéţ ţĥé šţáñðáļóñé ļáúñçĥéŕ ƒóŕ óþţíɱížéð þéŕƒóŕɱáñçé áñð ƒúļļ-šçŕééñ þļáý.]"
+    "title": "[Ļáúñçĥéŕš & Íñšţáļļš]",
+    "desc": "[Þļáý ţĥé ļíʋé ŵéƀ çļíéñţ ñóŵ áñð ţŕáçķ šíĝñéð íñšţáļļéŕ ŕéļéášéš ƒóŕ ðéšķţóþ áñð ɱóƀíļé.]"
   },
   "comingSoon": {
-    "placeholder": "[Çóɱíñĝ Šóóñ...]",
+    "placeholder": "[Ţŕáçķ Ŕéļéášéš]",
     "featureComingSoon": "[Ţĥíš ƒéáţúŕé íš çóɱíñĝ šóóñ ţó ţĥé ŕéáļɱ.]"
   },
   "mode": {
@@ -49804,8 +50086,8 @@ export const en_XA: EnTranslations = {
     "chat": "[Óþéñ Çĥáţ]"
   },
   "seo": {
-    "title": "[Ŵóŕļð óƒ ÇļáúðéÇŕáƒţ: Çļáššíç-Šţýļé Ŵéƀ ⱮⱮÓ]",
-    "description": "[Éɱƀáŕķ óñ áñ éþíç áðʋéñţúŕé íñ Ŵóŕļð óƒ ÇļáúðéÇŕáƒţ, á çļáššíç-šţýļé ɱíçŕó-ⱮⱮÓ þļáýáƀļé ðíŕéçţļý íñ ýóúŕ ƀŕóŵšéŕ. Ĵóíñ á þéŕšíšţéñţ šĥáŕéð ŕéáļɱ, ļéʋéļ úþ çļáššéš, áñð ðéƒéáţ éñéɱíéš!]",
+    "title": "[Çŕýþţíç Ŕéáļɱ: Çļáššíç-Šţýļé Ŵéƀ ⱮⱮÓ]",
+    "description": "[Éñţéŕ Çŕýþţíç Ŕéáļɱ, á çļáššíç-šţýļé ƀŕóŵšéŕ ⱮⱮÓ ŵíţĥ šĥáŕéð ŕéáļɱš, óþţíóñáļ $ÇŔ úţíļíţý, þļáţíñúɱ ŕéŵáŕðš, çóšɱéţíçš, áñð þéŕšíšţéñţ çĥáŕáçţéŕ þŕóĝŕéššíóñ.]",
     "genre": "[ⱮⱮÓŔÞĜ]",
     "playMode": "[Ɱúļţíþļáýéŕ]",
     "applicationCategory": "[Ĝáɱé]",
@@ -49817,9 +50099,9 @@ export const en_XA: EnTranslations = {
     "mainNavigation": "[Ɱáíñ ñáʋíĝáţíóñ]",
     "languageSelection": "[Ļáñĝúáĝé šéļéçţíóñ]",
     "characterActions": "[Çĥáŕáçţéŕ áçţíóñš]",
-    "githubProject": "[Óþéñ ţĥé Ŵóŕļð óƒ ÇļáúðéÇŕáƒţ ĜíţĤúƀ þŕóĵéçţ]",
-    "discordCommunity": "[Ĵóíñ ţĥé Ŵóŕļð óƒ ÇļáúðéÇŕáƒţ Ðíšçóŕð çóɱɱúñíţý]",
-    "donateProject": "[Ðóñáţé ţó šúþþóŕţ Ŵóŕļð óƒ ÇļáúðéÇŕáƒţ]"
+    "githubProject": "[Óþéñ ţĥé Çŕýþţíç Ŕéáļɱ ĜíţĤúƀ þŕóĵéçţ]",
+    "discordCommunity": "[Ĵóíñ ţĥé Çŕýþţíç Ŕéáļɱ Ðíšçóŕð çóɱɱúñíţý]",
+    "donateProject": "[Ţíþ $ÇŔ óŕ ŠÓĻ ţó šúþþóŕţ Çŕýþţíç Ŕéáļɱ]"
   },
   "loading": {
     "world": "[Ļóáðíñĝ ŵóŕļð...]",
@@ -49969,17 +50251,17 @@ export const en_XA: EnTranslations = {
     "iosStandaloneDetail": "[Ýóú áŕé íñ ĥóɱé-šçŕééñ ƒúļļšçŕééñ ɱóðé. Ķééþ ţĥé ðéʋíçé íñ ļáñðšçáþé.]",
     "iosInstallDetail": "[Ƒóŕ ţŕúé ƒúļļšçŕééñ óñ íÞĥóñé óŕ íÞáð, íñšţáļļ ţĥíš þáĝé ţó ýóúŕ Ĥóɱé Šçŕééñ ƒíŕšţ.]",
     "iosShareStep": "[Íñ Šáƒáŕí, ţáþ Šĥáŕé, ţĥéñ Áðð ţó Ĥóɱé Šçŕééñ.]",
-    "iosOpenStep": "[Óþéñ Ŵóŕļð óƒ ÇļáúðéÇŕáƒţ ƒŕóɱ ţĥé ñéŵ Ĥóɱé Šçŕééñ íçóñ.]",
+    "iosOpenStep": "[Óþéñ Çŕýþţíç Ŕéáļɱ ƒŕóɱ ţĥé ñéŵ Ĥóɱé Šçŕééñ íçóñ.]",
     "androidStandaloneDetail": "[Ýóú áŕé íñ ƒúļļšçŕééñ áþþ ɱóðé. Ķééþ ţĥé ðéʋíçé íñ ļáñðšçáþé.]",
     "androidInstallDetail": "[Ƒóŕ ƒúļļšçŕééñ óñ Áñðŕóíð, íñšţáļļ ţĥíš þáĝé óŕ áðð íţ ţó ýóúŕ Ĥóɱé šçŕééñ ƒíŕšţ.]",
     "androidInstallStep": "[Íñ Çĥŕóɱé, ţáþ ţĥé ɱéñú, ţĥéñ Íñšţáļļ áþþ óŕ Áðð ţó Ĥóɱé šçŕééñ.]",
-    "androidOpenStep": "[Óþéñ Ŵóŕļð óƒ ÇļáúðéÇŕáƒţ ƒŕóɱ ţĥé ñéŵ íçóñ.]",
+    "androidOpenStep": "[Óþéñ Çŕýþţíç Ŕéáļɱ ƒŕóɱ ţĥé ñéŵ íçóñ.]",
     "otherStandaloneDetail": "[Ķééþ ýóúŕ ðéʋíçé íñ ļáñðšçáþé ƒúļļšçŕééñ.]",
     "otherInstallDetail": "[Íñšţáļļ óŕ áðð ţĥíš þáĝé ţó ýóúŕ Ĥóɱé šçŕééñ ƒóŕ ţĥé ƀéšţ ƒúļļšçŕééñ ɱóƀíļé éẋþéŕíéñçé.]"
   },
   "serverUnavailable": {
-    "title": "[Ŵóŕļð óƒ ÇļáúðéÇŕáƒţ - Ŕéáļɱ Úñáʋáíļáƀļé]",
-    "logoAlt": "[Ŵóŕļð óƒ ÇļáúðéÇŕáƒţ]",
+    "title": "[Çŕýþţíç Ŕéáļɱ - Ŕéáļɱ Úñáʋáíļáƀļé]",
+    "logoAlt": "[Çŕýþţíç Ŕéáļɱ]",
     "eyebrow": "[Ŕéáļɱ ɱáíñţéñáñçé]",
     "heading": "[Ţĥé ŕéáļɱ íš ţéɱþóŕáŕíļý úñáʋáíļáƀļé.]",
     "body": "[Ŵé áŕé ŕéšţáŕţíñĝ ţĥé ĝáɱé šéŕʋíçé áñð éẋþéçţ Çļáúðéɱóóñ ţó ŕéţúŕñ šĥóŕţļý. Ţĥíš þáĝé ŵíļļ ķééþ çĥéçķíñĝ áúţóɱáţíçáļļý.]",

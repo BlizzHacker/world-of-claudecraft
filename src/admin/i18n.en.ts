@@ -10,7 +10,7 @@
 // renamed key - the same completeness safety net the game client has.
 
 export const en = {
-  "app.title": "World of ClaudeCraft - Admin",
+  "app.title": "Cryptic Realm - Admin",
   "auth.username": "Username",
   "auth.password": "Password",
   "auth.signIn": "Sign in",
@@ -195,6 +195,18 @@ export const en = {
   // the 13 overlays omit them, so the build English-fills them and the registry
   // marks them `pending` until a release fill provides translations.
   "nav.chatFilter": "Chat Filter",
+  "nav.custody": "Crypto Custody",
+  "custody.title": "Crypto Custody",
+  "custody.intro": "Admin-only custody notes for the Cryptic Realm token, treasury wallet, mint authority, and offline recovery plan.",
+  "custody.mint": "Token mint",
+  "custody.treasury": "Treasury wallet",
+  "custody.authority": "Mint authority keypair",
+  "custody.network": "Network",
+  "custody.warning": "Never paste seed phrases, private keys, or keypair JSON into chat, Git, Discord, browser forms, or public issue trackers. Backups belong on encrypted offline USB media and paper/metal recovery records.",
+  "custody.whitepaper": "White Paper",
+  "custody.links": "Public Proof Page",
+  "custody.solscanMint": "Solscan Mint",
+  "custody.solscanWallet": "Solscan Treasury",
   "dialog.confirmChatMute": "Confirm chat mute",
   "dialog.confirmCustomChatMute": "Confirm custom chat mute",
   "dialog.actionChatMute": "Mute chat and send warning",

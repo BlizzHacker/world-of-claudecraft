@@ -89,8 +89,8 @@ function rebrand(): void {
     const tip = document.createElement('a');
     tip.href = `solana:${socials.tipWalletSolana}`;
     tip.setAttribute('data-cr-tip', '1');
-    tip.textContent = `Tip SOL → ${socials.tipWalletSolana.slice(0, 8)}…${socials.tipWalletSolana.slice(-8)}`;
-    tip.title = 'Send SOL to support Cryptic Realm — not an investment';
+    tip.textContent = `Tip $CR -> ${socials.tipWalletSolana.slice(0, 8)}...${socials.tipWalletSolana.slice(-8)}`;
+    tip.title = 'Send $CR or SOL to support Cryptic Realm - not an investment';
     tip.style.cssText = 'display:block;padding:14px 18px;margin:8px 0;border:1px solid #00ffa3;border-radius:10px;color:#00ffa3;text-decoration:none;font-family:ui-monospace,monospace;font-size:12px;word-break:break-all;';
     grid.appendChild(tip);
   }

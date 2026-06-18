@@ -35,13 +35,16 @@ const server = http.createServer((req, res) => {
 });
 
 const EXPECTED_LINKS = [
-  'https://worldofclaudecraft.com/',
-  'https://x.com/WoClaudecraft',
-  'https://www.instagram.com/worldofclaudecraft/',
-  'https://www.tiktok.com/@worldofclaudecraft',
-  'https://www.youtube.com/@WoClaudeCraft',
-  'https://www.reddit.com/r/WorldofClaudecraft/',
-  'https://github.com/levy-street/world-of-claudecraft',
+  'https://crypticrealm.com/',
+  'https://x.com/CrypticMMO',
+  'https://facebook.com/crypticmmo',
+  'https://instagram.com/crypticmmo',
+  'https://www.tiktok.com/@crypticmmo',
+  'https://www.youtube.com/@CrypticMMO',
+  'https://www.reddit.com/r/CrypticMMO',
+  'https://discord.gg/GjhnUsBtw',
+  'https://github.com/BlizzHacker/cryptic-realm',
+  'https://solscan.io/token/3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv',
 ];
 
 const problems = [];
@@ -77,39 +80,34 @@ async function main() {
     ok(errs.length === 0, `[${t.name}] no console/page errors`);
 
     // Core structural assertions (run on every device).
-    ok((await page.title()) === 'World of ClaudeCraft - Official Links', `[${t.name}] localized title`);
+    ok((await page.title()) === 'Cryptic Realm - Official Links', `[${t.name}] localized title`);
     ok((await page.locator('h1').count()) === 1, `[${t.name}] exactly one h1`);
-    ok((await page.locator('h2').count()) === 1, `[${t.name}] exactly one h2`);
-    ok((await page.locator('a.btn').count()) === 7, `[${t.name}] 7 link buttons`);
+    ok((await page.locator('h2').count()) >= 4, `[${t.name}] section headings present`);
 
-    const hrefs = await page.locator('a.btn').evaluateAll((els) => els.map((e) => e.getAttribute('href')));
+    const hrefs = await page.locator('a[href]').evaluateAll((els) => els.map((e) => e.getAttribute('href')));
     ok(EXPECTED_LINKS.every((u) => hrefs.includes(u)), `[${t.name}] all official URLs present`);
 
-    const allBlankSafe = await page.locator('a.btn').evaluateAll((els) =>
-      els.every((e) => e.getAttribute('target') === '_blank' && /noopener/.test(e.getAttribute('rel') || '') && /noreferrer/.test(e.getAttribute('rel') || '')));
-    ok(allBlankSafe, `[${t.name}] every link target=_blank rel=noopener noreferrer`);
-
-    // Wax seal renders red (CSS token, not unresolved var()).
-    const seal = await page.locator('.btn__seal .seal-disc').first().evaluate((c) => getComputedStyle(c).fill);
-    ok(seal === 'rgb(124, 31, 26)', `[${t.name}] verified seal fills red (${seal})`);
+    const allBlankSafe = await page.locator('a[target="_blank"]').evaluateAll((els) =>
+      els.every((e) => /noopener/.test(e.getAttribute('rel') || '') && /noreferrer/.test(e.getAttribute('rel') || '')));
+    ok(allBlankSafe, `[${t.name}] external new-tab links use noopener noreferrer`);
 
     // No horizontal overflow at any size.
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
     ok(overflow <= 1, `[${t.name}] no horizontal overflow (delta ${overflow}px)`);
 
     // Hero label must wrap, never truncate (scrollWidth > clientWidth ⇒ ellipsis clip).
-    const heroClip = await page.locator('.btn--hero .btn__label').evaluate((el) => el.scrollWidth - el.clientWidth);
-    ok(heroClip <= 1, `[${t.name}] hero label not clipped (overflow ${heroClip}px)`);
+    const heroClip = await page.locator('h1').evaluate((el) => el.scrollWidth - el.clientWidth);
+    ok(heroClip <= 1, `[${t.name}] hero heading not clipped (overflow ${heroClip}px)`);
 
     // Tap targets large enough on touch devices.
     if (t.kind === 'mobile') {
-      const minH = await page.locator('a.btn').evaluateAll((els) => Math.min(...els.map((e) => e.getBoundingClientRect().height)));
+      const minH = await page.locator('a.card, a.button, nav a').evaluateAll((els) => Math.min(...els.map((e) => e.getBoundingClientRect().height)));
       ok(minH >= 44, `[${t.name}] min tap target >= 44px (${Math.round(minH)}px)`);
     }
 
     // Keyboard focus ring visible on the first link.
-    await page.locator('a.btn').first().focus();
-    const outline = await page.locator('a.btn').first().evaluate((a) => {
+    await page.locator('a.card, a.button, nav a').first().focus();
+    const outline = await page.locator('a.card, a.button, nav a').first().evaluate((a) => {
       const s = getComputedStyle(a);
       return parseFloat(s.outlineWidth) > 0 && s.outlineStyle !== 'none';
     });
@@ -119,7 +117,7 @@ async function main() {
 
     // Capture a focused-hero state for the primary desktop profile.
     if (t.name === 'desktop-1440') {
-      await page.locator('a.btn--hero').focus();
+      await page.locator('a.button').first().focus();
       await page.screenshot({ path: path.join(OUT, 'desktop-hero-focus.png') });
     }
 

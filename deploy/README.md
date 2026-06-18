@@ -1,6 +1,6 @@
 # Multi-realm deploy — Cryptic Realm
 
-Scaffolding to run **six isolated realm processes** on LXC 171 (Proxmox 192.168.0.6),
+Scaffolding to run isolated realm processes on LXC 171 (Proxmox 192.168.0.6),
 each behind its own subdomain. Each process is its own world with its own DB
 scope on the `realm` column — characters from one realm cannot enter another.
 The Exchange is the only realm flagged cross-realm and accepts visiting
@@ -26,6 +26,8 @@ characters for auctions / item trade.
 | arcane | `arcane.crypticrealm.com` | 8791 |
 | exchange | `exchange.crypticrealm.com` | 8792 |
 | claudecraft (upstream identity) | `claudecraft.crypticrealm.com` | 8793 |
+| alpha tester realm | `alpha.crypticrealm.com` | 8794 |
+| beta tester realm | `beta.crypticrealm.com` | 8795 |
 
 Apex `crypticrealm.com` serves the homepage + Infernal entry via the existing
 legacy `cryptic-realm.service`. Picking another realm navigates the client to
@@ -39,7 +41,7 @@ does not inherit the Cryptic Realm SPL token env vars.
 pct push 171 deploy/systemd/cryptic-realm@.service /etc/systemd/system/cryptic-realm@.service
 pct push 171 deploy/systemd/cryptic-realm-realms.target /etc/systemd/system/cryptic-realm-realms.target
 pct exec 171 -- mkdir -p /opt/cryptic-realm/env.d
-for r in infernal classic dominion arcane claudecraft exchange; do
+for r in infernal classic dominion arcane claudecraft exchange alpha beta; do
   pct push 171 deploy/env/$r.env /opt/cryptic-realm/env.d/$r.env
 done
 
@@ -97,3 +99,16 @@ pct exec 107 -- systemctl reload traefik
 - Auctions live in a shared `auctions` table the Exchange writes and all
   realm processes read. Item ownership transfers from seller (any realm)
   to buyer (any realm) atomically when an auction closes.
+
+## Alpha / beta release channels
+
+- `deploy/env/alpha.env` sets `CR_RELEASE_CHANNEL=alpha`,
+  `CR_PLATINUM_REWARD_MULTIPLIER=3`, and `CR_CHARACTER_RESET_DAYS=14`.
+  Alpha testers earn platinum faster because alpha characters are disposable.
+- `deploy/env/beta.env` sets `CR_RELEASE_CHANNEL=beta`,
+  `CR_PLATINUM_REWARD_MULTIPLIER=1.5`, and `CR_CHARACTER_RESET_DAYS=30`.
+  Beta is the monthly promotion candidate for public Cryptic Realm and
+  MoveWeight realms.
+- Character deletion/promotion is intentionally human-gated. Do not add a
+  background reset job until backups, notices, and promotion reports are in
+  place.

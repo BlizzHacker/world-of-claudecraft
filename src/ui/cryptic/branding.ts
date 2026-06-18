@@ -69,12 +69,12 @@ function applyDonateLinks(realm: RealmContent): void {
   const socials = socialsForRealm(realm.id);
   const tipWallet = socials.tipWalletSolana;
   const href = tipWallet ? `solana:${tipWallet}` : WOC_SPONSORS_URL;
-  const label = tipWallet ? 'Tip SOL' : 'Donate';
+  const label = tipWallet ? 'Tip $CR' : 'Donate';
   const title = tipWallet
-    ? `Tip SOL to ${tipWallet.slice(0, 4)}...${tipWallet.slice(-4)}`
+    ? `Tip $CR or SOL to ${tipWallet.slice(0, 4)}...${tipWallet.slice(-4)}`
     : 'Support the project';
   const aria = tipWallet
-    ? `Tip SOL to support Cryptic Realm at ${tipWallet}`
+    ? `Tip $CR or SOL to support Cryptic Realm at ${tipWallet}`
     : 'Donate to support World of ClaudeCraft';
 
   document.querySelectorAll<HTMLAnchorElement>('.donate-cta, .social-link.donate, .community-link.donate').forEach((a) => {

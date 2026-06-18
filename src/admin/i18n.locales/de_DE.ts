@@ -7,7 +7,7 @@
 // (tests/i18n_admin_catalog.test.ts).
 
 export const de_DE: Record<string, string> = {
-  "app.title": "World of ClaudeCraft - Admin",
+  "app.title": "Cryptic Realm - Admin",
   "auth.username": "Benutzername",
   "auth.password": "Passwort",
   "auth.signIn": "Anmelden",

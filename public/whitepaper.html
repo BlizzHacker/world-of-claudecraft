@@ -6,42 +6,92 @@
   <meta name="color-scheme" content="dark" />
   <meta name="theme-color" content="#08080d" />
   <title>Cryptic Realm White Paper</title>
-  <meta name="description" content="Cryptic Realm white paper: game vision, realm customization, Solana token utility, custody, and roadmap." />
+  <meta name="description" content="Cryptic Realm white paper: game vision, realm customization, Solana $CR utility, platinum economy, and roadmap." />
   <link rel="canonical" href="https://crypticrealm.com/whitepaper.html" />
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
   <style>
     :root {
       color-scheme: dark;
       --bg: #08080d;
-      --panel: rgba(14, 13, 18, 0.94);
-      --line: #6f5a2a;
+      --panel: rgba(14, 13, 18, 0.92);
+      --line: rgba(255, 209, 102, 0.28);
+      --line-strong: #8f6f2a;
       --gold: #ffd166;
       --gold-2: #c8a838;
       --ink: #f0ebd8;
       --muted: #b9ad86;
       --red: #c45142;
       --blue: #7fc7ff;
-      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     }
     * { box-sizing: border-box; }
     html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--ink); }
     body {
       background:
-        linear-gradient(90deg, rgba(5, 7, 12, 0.92), rgba(5, 7, 12, 0.62), rgba(5, 7, 12, 0.94)),
+        linear-gradient(90deg, rgba(5, 7, 12, 0.94), rgba(5, 7, 12, 0.64), rgba(5, 7, 12, 0.94)),
         radial-gradient(circle at 18% 10%, rgba(196, 81, 66, 0.22), transparent 34%),
         radial-gradient(circle at 82% 18%, rgba(127, 199, 255, 0.14), transparent 30%),
-        url("/loading-screen.jpg") center / cover fixed;
+        url("/cryptic-realm-loading.png") center / cover fixed;
     }
     a { color: var(--gold); }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      min-height: 58px;
+      padding: 8px clamp(14px, 3vw, 34px);
+      background: rgba(6, 6, 9, 0.88);
+      border-bottom: 1px solid rgba(200, 168, 56, 0.35);
+      backdrop-filter: blur(14px);
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-width: max-content;
+      color: var(--gold);
+      text-decoration: none;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+    }
+    .brand img { width: 38px; height: 38px; border-radius: 6px; object-fit: cover; }
+    .nav { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 6px; }
+    .nav a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 34px;
+      padding: 7px 12px;
+      border: 1px solid transparent;
+      border-radius: 5px;
+      color: var(--muted);
+      text-decoration: none;
+      font: 700 12px/1 "Segoe UI", system-ui, sans-serif;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+    }
+    .nav a:hover, .nav a:focus-visible {
+      color: var(--gold);
+      border-color: var(--line-strong);
+      background: rgba(255, 209, 102, 0.06);
+      outline: none;
+    }
     .wrap { width: min(1060px, calc(100% - 32px)); margin: 0 auto; padding: 32px 0 56px; }
-    header { min-height: 42vh; display: grid; align-content: end; padding: 28px 0; }
-    .eyebrow { color: var(--gold-2); text-transform: uppercase; letter-spacing: 0.14em; font-size: 12px; font-weight: 700; }
-    h1 { margin: 10px 0 12px; font: 800 clamp(38px, 8vw, 92px)/0.95 Georgia, "Times New Roman", serif; letter-spacing: 0; }
-    .lead { max-width: 760px; color: #f5e9c9; font-size: clamp(17px, 2vw, 22px); line-height: 1.45; }
+    header.hero { min-height: 42vh; display: grid; align-content: end; padding: 28px 0; }
+    .hero-logo { width: min(320px, 78vw); filter: drop-shadow(0 24px 38px rgba(0, 0, 0, 0.8)); margin-bottom: 14px; }
+    .eyebrow { color: var(--gold-2); text-transform: uppercase; letter-spacing: 0.14em; font-size: 12px; font-weight: 800; }
+    h1 { margin: 10px 0 12px; font: 900 clamp(38px, 8vw, 92px)/0.95 Georgia, "Times New Roman", serif; letter-spacing: 0; }
+    .lead { max-width: 780px; color: #f5e9c9; font-size: clamp(17px, 2vw, 22px); line-height: 1.45; }
     .meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
     .pill { border: 1px solid rgba(255, 209, 102, 0.45); background: rgba(0,0,0,0.32); border-radius: 4px; padding: 8px 10px; color: var(--muted); font-size: 13px; }
     main { display: grid; gap: 18px; }
-    section { background: var(--panel); border: 1px solid rgba(111, 90, 42, 0.75); border-radius: 8px; padding: clamp(18px, 3vw, 30px); box-shadow: 0 18px 50px rgba(0,0,0,0.35); }
-    h2 { margin: 0 0 12px; color: var(--gold); font: 700 25px/1.1 Georgia, "Times New Roman", serif; letter-spacing: 0; }
+    section { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: clamp(18px, 3vw, 30px); box-shadow: 0 18px 50px rgba(0,0,0,0.35); }
+    h2 { margin: 0 0 12px; color: var(--gold); font: 800 25px/1.1 Georgia, "Times New Roman", serif; letter-spacing: 0; }
     p, li { color: var(--ink); line-height: 1.58; }
     p { margin: 0 0 12px; }
     ul, ol { margin: 0; padding-left: 22px; }
@@ -51,16 +101,36 @@
     .fact strong { display: block; color: var(--gold-2); margin-bottom: 4px; }
     .notice { border-color: rgba(196, 81, 66, 0.42); background: rgba(196, 81, 66, 0.12); }
     footer { color: var(--muted); padding: 24px 0 0; font-size: 13px; }
+    @media (max-width: 820px) {
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .nav { justify-content: flex-start; }
+    }
   </style>
 </head>
 <body>
+  <nav class="topbar" aria-label="Main navigation">
+    <a class="brand" href="/" aria-label="Cryptic Realm home">
+      <img src="/crypticrealm-logo.png" alt="Cryptic Realm" />
+      <span>Cryptic Realm</span>
+    </a>
+    <div class="nav">
+      <a href="/">Play</a>
+      <a href="/links.html">Links</a>
+      <a href="/wiki">Wiki</a>
+      <a href="/#news">News</a>
+      <a href="/#download">Download</a>
+      <a href="/admin/">Admin</a>
+    </div>
+  </nav>
+
   <div class="wrap">
-    <header>
+    <header class="hero">
+      <img class="hero-logo" src="/cryptic-realm-logo.png" alt="Cryptic Realm" />
       <div class="eyebrow">Cryptic Realm</div>
       <h1>White Paper</h1>
-      <p class="lead">An independent dark-fantasy browser MMO with realm-specific customization, restored mini-games, operational transparency, and an optional Solana utility token layer.</p>
+      <p class="lead">An independent dark-fantasy browser MMO with realm-specific customization, restored mini-games, operational transparency, and an optional Solana $CR utility layer built around platinum.</p>
       <div class="meta">
-        <span class="pill">Version 0.1</span>
+        <span class="pill">Version 0.2</span>
         <span class="pill">Published June 18, 2026</span>
         <span class="pill">Mint <code>3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv</code></span>
       </div>
@@ -70,23 +140,24 @@
       <section>
         <h2>Summary</h2>
         <p>Cryptic Realm expands the World of ClaudeCraft engine with realm identity, custom visuals, player options, mini-games, moderation tools, recoverable operations, and a private roadmap for the independent game.</p>
-        <p>The token layer is optional. The game must remain playable without a wallet.</p>
+        <p>The token layer is optional. The game must remain playable without a wallet, seed phrase, token balance, or purchase.</p>
       </section>
 
       <section>
         <h2>Product Pillars</h2>
         <ul>
-          <li>Play first: wallet features must not block ordinary gameplay.</li>
+          <li>Free play first: ordinary gameplay, account creation, and realm entry stay available without $CR.</li>
           <li>Realm identity: shared engine improvements can coexist with Cryptic Realm-specific lore, visuals, rules, and economy policy.</li>
-          <li>Customization: camera modes, HUD skins, realm skins, mini-games, and future mod toggles belong in the in-game Customization menu.</li>
-          <li>Operations transparency: admin, moderation, auto-update, and backup systems should be boring, auditable, and recoverable.</li>
+          <li>Customization: camera modes, HUD skins, realm skins, mini-games, wallet status, and future mod toggles belong in the in-game Customization menu.</li>
+          <li>Operational trust: admin, moderation, auto-update, proof links, and backups should be visible, auditable, and recoverable.</li>
         </ul>
       </section>
 
       <section>
-        <h2>Token Utility</h2>
-        <p>The Cryptic Realm SPL token is intended for gameplay achievement claims, cosmetic and collectible ownership records, account-linked event rewards, community donations and tips, and future buy/sell/trade flows for approved game items, cosmetics, auctions, and creator marketplace features.</p>
-        <p>The token is not required for ordinary play. Players should be able to donate, buy, sell, trade, and play through explicit game systems, not through vague financial promises.</p>
+        <h2>$CR And Platinum Utility</h2>
+        <p>$CR is intended as an optional game utility token for supporting the realm, proving ownership, accessing premium utility, and powering future marketplace settlement. Platinum is the in-game premium bridge currency.</p>
+        <p>Players who hold or later stake an approved amount of $CR may receive privileges such as platinum earning eligibility, premium event access, cosmetic claim windows, housing or mount claim access, and marketplace listing tools. Players without $CR can still play the game normally.</p>
+        <p>Platinum can be used for limited cosmetics, houses, mounts, creator marketplace items, and Exchange realm trades. Future marketplace work may allow approved platinum-denominated listings to clear in $CR once the fraud controls, tax/accounting posture, and legal review are ready.</p>
         <div class="grid">
           <div class="fact"><strong>Network</strong>Solana mainnet</div>
           <div class="fact"><strong>Decimals</strong>9</div>
@@ -96,10 +167,19 @@
       </section>
 
       <section>
+        <h2>Game Economy Guardrails</h2>
+        <ul>
+          <li>No wallet or token balance should be required to play the base game.</li>
+          <li>Premium utility should be explicit: cosmetic access, optional platinum earning, account-linked achievements, and approved marketplace features.</li>
+          <li>Wager, casino, or gambling-style systems are not live and should not ship without legal, payment, age-gating, and platform review.</li>
+          <li>The Exchange realm is the natural home for cross-realm auctions, local trades, and $CR-priced listings.</li>
+        </ul>
+      </section>
+
+      <section>
         <h2>Custody And Recovery</h2>
         <p>Cryptic Realm has two critical custody layers: the Phantom wallet recovery phrase/private keys, and the mint authority keypair used to control token minting.</p>
-        <p>Both must be backed up offline. Server copies are hot keys and should not be the only source of truth. Long-term hardening should move authority to a hardware wallet or multisig, then optionally revoke authority after tokenomics are fixed.</p>
-        <p><a href="/crypto-custody.html">Read the crypto custody and USB backup runbook.</a></p>
+        <p>The detailed custody runbook is admin-only. Public pages should prove the token exists, but they should not publish operational backup procedures or invite players to send private material anywhere.</p>
       </section>
 
       <section>
@@ -108,15 +188,15 @@
           <li>Stabilize live realm deployment, mobile performance, and realm routing.</li>
           <li>Complete the Customization menu for camera, HUD, realm skin, mini-games, wallet, and future mod toggles.</li>
           <li>Restore original Cryptic Realm mini-games and assets through an optimized asset pipeline.</li>
-          <li>Harden backups across Slimmm, Thiccc, and the Windows workstation.</li>
-          <li>Split upstream-safe improvements into separate Claudcraft pull requests.</li>
-          <li>Publish clearer economy rules before any meaningful token supply is minted.</li>
+          <li>Harden admin-only custody backups across offline USB media and trusted hosts.</li>
+          <li>Split upstream-safe improvements into separate ClaudeCraft pull requests.</li>
+          <li>Publish clear economy rules before any meaningful $CR supply is minted or distributed.</li>
         </ol>
       </section>
 
       <section class="notice">
         <h2>Disclaimers</h2>
-        <p>Cryptic Realm tokens and items are utility records for game systems and community features. They are not securities, shares, investment contracts, revenue claims, staking products, or promises of price appreciation.</p>
+        <p>Cryptic Realm tokens and items are utility records for game systems and community features. $CR is not an investment promise; it is not a security, share, investment contract, revenue claim, staking product with promised returns, or promise of price appreciation.</p>
       </section>
     </main>
 
@@ -125,7 +205,7 @@
       <span> | </span>
       <a href="/links.html">Official links</a>
       <span> | </span>
-      <a href="/crypto-custody.html">Custody runbook</a>
+      <a href="/wiki">Wiki hub</a>
     </footer>
   </div>
 </body>

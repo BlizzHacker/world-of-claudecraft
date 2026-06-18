@@ -1,4 +1,6 @@
 import { mountRealmBranding } from './ui/cryptic/branding';
+import { mountThemeSelect } from './ui/cryptic/theme_select';
+import { mountNewsRealmFilter } from './ui/cryptic/news_realm_filter';
 
 let appPromise: Promise<typeof import('./main')> | null = null;
 let caCopyResetTimer: number | null = null;
@@ -10,6 +12,8 @@ function loadApp(): Promise<typeof import('./main')> {
 
 function bootLandingBranding(): void {
   mountRealmBranding();
+  mountThemeSelect();
+  mountNewsRealmFilter();
 }
 
 function wireContractAddressCopy(): void {
@@ -194,16 +198,54 @@ async function loadLandingNews(): Promise<void> {
   if (!host || newsLoading) return;
   newsLoading = true;
   host.innerHTML = '<div class="news-loading">Loading the latest updates...</div>';
+  const pinned = [
+    {
+      title: '$CR + Platinum Utility',
+      body: '$CR is the Cryptic Realm Solana SPL token. Platinum is the in-game premium bridge for cosmetics, houses, mounts, marketplace listings, and Exchange realm trades. The base game stays free to play.',
+      tag: '$CR',
+      url: '/links.html',
+      realm: 'all',
+    },
+    {
+      title: 'Alpha, Beta, And Public Realm Cadence',
+      body: 'Alpha testers can earn platinum at a higher rate because alpha characters reset every two weeks. Beta promotion happens monthly into public Cryptic Realm and MoveWeight realms after review.',
+      tag: 'Official Work Log',
+      url: '/whitepaper.html',
+      realm: 'all',
+    },
+    {
+      title: 'Upstream Kindness Track',
+      body: 'Generic engine, auth, dashboard, auto-update, moderator, and wiki improvements are tracked as shareable work for the ClaudeCraft team while Cryptic Realm-specific realms and $CR features stay here.',
+      tag: 'ClaudeCraft PRs',
+      url: 'https://github.com/BlizzHacker/cryptic-realm/pulls',
+      realm: 'claudecraft',
+    },
+    {
+      title: '$CR Proof',
+      body: 'Mint 3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv is published on the public proof page with treasury and Solscan links.',
+      tag: 'Solana',
+      url: 'https://solscan.io/token/3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv',
+      realm: 'all',
+    },
+  ];
+  const pinnedHtml = pinned.map((r) => {
+    const external = /^https?:\/\//.test(r.url);
+    return `<article class="news-item cr-news-pinned" data-news-item data-realm="${escapeHtml(r.realm)}">`
+      + `<div class="news-item-head"><h3 class="news-item-title">${escapeHtml(r.title)}</h3><span class="news-tag">${escapeHtml(r.tag)}</span></div>`
+      + `<div class="news-body"><p>${escapeHtml(r.body)}</p></div>`
+      + `<div class="news-item-foot"><a class="news-link" href="${escapeHtml(r.url)}"${external ? ' target="_blank" rel="noopener noreferrer"' : ''}>Open</a></div>`
+      + `</article>`;
+  }).join('');
   try {
     const res = await fetch('/api/releases?limit=20');
     if (!res.ok) throw new Error(`request failed (${res.status})`);
     const data = await res.json();
     const releases: LandingReleaseEntry[] = Array.isArray(data.releases) ? data.releases : [];
     if (releases.length === 0) {
-      host.innerHTML = '<div class="news-empty">No updates yet.</div>';
+      host.innerHTML = `${pinnedHtml}<div class="news-empty">No release notes yet.</div>`;
       return;
     }
-    host.innerHTML = releases.map((r) => {
+    const releaseHtml = releases.map((r) => {
       const title = escapeHtml(r.name || r.tag || 'Update');
       const tag = r.tag ? `<span class="news-tag">${escapeHtml(r.tag)}</span>` : '';
       const badge = r.prerelease ? '<span class="news-badge">Prerelease</span>' : '';
@@ -213,11 +255,12 @@ async function loadLandingNews(): Promise<void> {
       const link = r.url
         ? `<div class="news-item-foot"><a class="news-link" href="${escapeHtml(r.url)}" target="_blank" rel="noopener noreferrer">View on GitHub</a></div>`
         : '';
-      return `<article class="news-item"><div class="news-item-head"><h3 class="news-item-title">${title}</h3>${tag}${badge}${when}</div>`
+      return `<article class="news-item" data-news-item data-realm="all"><div class="news-item-head"><h3 class="news-item-title">${title}</h3>${tag}${badge}${when}</div>`
         + `<div class="news-body">${renderReleaseBody(r.body ?? '')}</div>${link}</article>`;
     }).join('');
+    host.innerHTML = `${pinnedHtml}${releaseHtml}`;
   } catch {
-    host.innerHTML = '<div class="news-error">Could not load updates. Try again soon.</div>';
+    host.innerHTML = `${pinnedHtml}<div class="news-error">Could not load release notes. Try again soon.</div>`;
   } finally {
     newsLoading = false;
   }
@@ -241,7 +284,12 @@ function showPanel(selector: string): void {
   }
   document.body.dataset.startPanel = selector.slice(1);
   const logoImg = document.getElementById('title-logo');
-  if (logoImg) logoImg.toggleAttribute('hidden', selector === '#charselect-panel' || selector === '#offline-select');
+  if (logoImg) {
+    logoImg.toggleAttribute(
+      'hidden',
+      selector === '#login-panel' || selector === '#charselect-panel' || selector === '#offline-select',
+    );
+  }
 }
 
 function wireLandingPanels(): void {
@@ -301,6 +349,28 @@ function wireLandingPanels(): void {
   });
 }
 
+function applyHashRoute(): void {
+  const hash = window.location.hash.replace(/^#/, '').toLowerCase();
+  if (hash === 'highscores' || hash === 'leaderboard') {
+    switchLandingView('#highscores-view');
+    void loadLandingHighscores();
+    return;
+  }
+  if (hash === 'wiki') {
+    switchLandingView('#wiki-view');
+    return;
+  }
+  if (hash === 'news' || hash === 'updates') {
+    switchLandingView('#news-view');
+    void loadLandingNews();
+    return;
+  }
+  if (hash === 'download' || hash === 'downloads' || hash === 'install') {
+    switchLandingView('#download-view');
+    void mountLandingDownloads();
+  }
+}
+
 function wireDeferredAppLoad(): void {
   document.addEventListener('click', (event) => {
     if (appPromise) return;
@@ -331,6 +401,8 @@ function boot(): void {
   wireContractAddressCopy();
   wireLandingPanels();
   wireDeferredAppLoad();
+  applyHashRoute();
+  window.addEventListener('hashchange', applyHashRoute);
 }
 
 if (document.readyState === 'loading') {

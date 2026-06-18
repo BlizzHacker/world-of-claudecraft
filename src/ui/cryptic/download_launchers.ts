@@ -1,47 +1,123 @@
-// Download Desktop Launcher — injects Lite + Full download cards for every
-// platform into the Download view. Files don't exist yet; cards point at
-// /downloads/<file> which 404 until you drop the binaries in
-// public/downloads/. The cards work as a stub so the UI is ready.
+// Download surface for launcher status. The shipped client is the web client;
+// desktop/mobile installers link to the release pipeline until signed binaries
+// exist, so the UI does not promise unavailable downloads.
 
 const HOST_ID = 'cr-download-launchers';
+const RELEASES_URL = 'https://github.com/BlizzHacker/cryptic-realm/releases';
 
 interface Launcher {
-  os: 'windows' | 'macos' | 'linux' | 'android' | 'ios';
+  os: 'web' | 'windows' | 'macos' | 'linux' | 'android' | 'ios' | 'steam';
   label: string;
-  liteHref: string;
-  fullHref: string;
-  liteSizeMb: number;
-  fullSizeMb: number;
-  available: boolean;
+  badge: string;
+  primaryLabel: string;
+  primaryHref: string;
+  primaryMeta: string;
+  secondaryLabel?: string;
+  secondaryHref?: string;
+  secondaryMeta?: string;
+  status: string;
 }
 
 const LAUNCHERS: Launcher[] = [
-  { os: 'windows', label: 'Windows 10/11', liteHref: '/downloads/cr-launcher-lite-windows.exe', fullHref: '/downloads/cr-launcher-full-windows.exe', liteSizeMb: 12, fullSizeMb: 480, available: false },
-  { os: 'macos',   label: 'macOS 12+',     liteHref: '/downloads/cr-launcher-lite-macos.dmg',   fullHref: '/downloads/cr-launcher-full-macos.dmg',   liteSizeMb: 14, fullSizeMb: 510, available: false },
-  { os: 'linux',   label: 'Linux x86_64',  liteHref: '/downloads/cr-launcher-lite-linux.AppImage', fullHref: '/downloads/cr-launcher-full-linux.AppImage', liteSizeMb: 13, fullSizeMb: 500, available: false },
-  { os: 'android', label: 'Android',       liteHref: '/downloads/cr-launcher-lite-android.apk', fullHref: '/downloads/cr-launcher-full-android.apk', liteSizeMb: 22, fullSizeMb: 0,   available: false },
-  { os: 'ios',     label: 'iOS / iPadOS',  liteHref: 'https://apps.apple.com/app/crypticrealm', fullHref: 'https://apps.apple.com/app/crypticrealm', liteSizeMb: 22, fullSizeMb: 0,   available: false },
+  {
+    os: 'web',
+    label: 'Web Client',
+    badge: 'WEB',
+    primaryLabel: 'Play Now',
+    primaryHref: '/',
+    primaryMeta: 'browser client',
+    status: 'Live now. This is the canonical client until signed installers are published.',
+  },
+  {
+    os: 'steam',
+    label: 'Steam',
+    badge: 'STM',
+    primaryLabel: 'Track Steam',
+    primaryHref: RELEASES_URL,
+    primaryMeta: 'Windows / macOS / Linux',
+    secondaryLabel: 'Play Web',
+    secondaryHref: '/',
+    secondaryMeta: 'works today',
+    status: 'Steam build packaging is tracked here until the store page is approved.',
+  },
+  {
+    os: 'windows',
+    label: 'Windows 10/11',
+    badge: 'WIN',
+    primaryLabel: 'Track Release',
+    primaryHref: RELEASES_URL,
+    primaryMeta: 'installer pipeline',
+    secondaryLabel: 'Play Web',
+    secondaryHref: '/',
+    secondaryMeta: 'works today',
+    status: 'Installer signing/build pipeline is not published yet.',
+  },
+  {
+    os: 'macos',
+    label: 'macOS 12+',
+    badge: 'MAC',
+    primaryLabel: 'Track Release',
+    primaryHref: RELEASES_URL,
+    primaryMeta: 'dmg pipeline',
+    secondaryLabel: 'Play Web',
+    secondaryHref: '/',
+    secondaryMeta: 'works today',
+    status: 'Signed DMG is not published yet.',
+  },
+  {
+    os: 'linux',
+    label: 'Linux x86_64',
+    badge: 'LIN',
+    primaryLabel: 'Track Release',
+    primaryHref: RELEASES_URL,
+    primaryMeta: 'AppImage pipeline',
+    secondaryLabel: 'Play Web',
+    secondaryHref: '/',
+    secondaryMeta: 'works today',
+    status: 'AppImage is not published yet.',
+  },
+  {
+    os: 'android',
+    label: 'Android',
+    badge: 'AND',
+    primaryLabel: 'Track Google Play',
+    primaryHref: RELEASES_URL,
+    primaryMeta: 'Google Play build',
+    secondaryLabel: 'Use Mobile Web',
+    secondaryHref: '/',
+    secondaryMeta: 'works today',
+    status: 'Google Play release artifacts are not published yet.',
+  },
+  {
+    os: 'ios',
+    label: 'iOS / iPadOS',
+    badge: 'IOS',
+    primaryLabel: 'Track App Store',
+    primaryHref: RELEASES_URL,
+    primaryMeta: 'iOS build',
+    secondaryLabel: 'Use Mobile Web',
+    secondaryHref: '/',
+    secondaryMeta: 'Safari / PWA',
+    status: 'App Store release artifacts are not published yet.',
+  },
 ];
 
-function icon(os: Launcher['os']): string {
-  return ({ windows: '🪟', macos: '🍎', linux: '🐧', android: '🤖', ios: '📱' })[os];
+function action(label: string, href: string, meta: string, extraClass = ''): string {
+  return `
+    <a class="cr-dl-btn${extraClass}" href="${href}" target="${href.startsWith('http') ? '_blank' : '_self'}" rel="${href.startsWith('http') ? 'noopener noreferrer' : ''}">
+      <span>${label}</span><small>${meta}</small>
+    </a>`;
 }
 
 function card(l: Launcher): string {
-  const liteBtn = `
-    <a class="cr-dl-btn${l.available ? '' : ' cr-dl-soon'}" href="${l.liteHref}" ${l.available ? 'download' : 'aria-disabled="true"'}>
-      <span>Lite</span><small>${l.liteSizeMb} MB · web-based</small>
-    </a>`;
-  const fullBtn = l.fullSizeMb > 0
-    ? `<a class="cr-dl-btn${l.available ? '' : ' cr-dl-soon'}" href="${l.fullHref}" ${l.available ? 'download' : 'aria-disabled="true"'}>
-         <span>Full</span><small>${l.fullSizeMb} MB · offline + assets</small>
-       </a>`
+  const secondary = l.secondaryLabel && l.secondaryHref && l.secondaryMeta
+    ? action(l.secondaryLabel, l.secondaryHref, l.secondaryMeta, ' cr-dl-track')
     : '';
   return `
-    <div class="cr-dl-card">
-      <div class="cr-dl-header"><span class="cr-dl-icon">${icon(l.os)}</span><strong>${l.label}</strong></div>
-      <div class="cr-dl-row">${liteBtn}${fullBtn}</div>
-      ${l.available ? '' : '<div class="cr-dl-pending">Coming soon — launchers in active build</div>'}
+    <div class="cr-dl-card" data-launcher="${l.os}">
+      <div class="cr-dl-header"><span class="cr-dl-icon">${l.badge}</span><strong>${l.label}</strong></div>
+      <div class="cr-dl-row">${action(l.primaryLabel, l.primaryHref, l.primaryMeta)}${secondary}</div>
+      <div class="cr-dl-pending">${l.status}</div>
     </div>`;
 }
 
@@ -51,8 +127,7 @@ function render(host: HTMLElement): void {
       ${LAUNCHERS.map(card).join('')}
     </div>
     <p class="cr-dl-foot">
-      <strong>Lite</strong> launchers stream the realm — small download, fast start.
-      <strong>Full</strong> launchers ship every realm's assets so you can play offline.
+      Desktop launcher work is tracked through GitHub releases. The browser client is live and remains the source of truth while installers are built, signed, and tested.
     </p>`;
 }
 

@@ -1,4 +1,4 @@
-// Adds a top-of-dashboard chrome bar with Back, Home, switch-dashboard links
+// Adds a top-of-dashboard chrome bar with public links and dashboard links
 // to /admin, /mod, /me when running inside any of those SPAs. Self-mounts on
 // DOMContentLoaded; lookup target by URL pathname.
 
@@ -14,13 +14,16 @@ function pageKind(): 'admin' | 'mod' | 'me' | null {
 
 function buildHtml(kind: 'admin' | 'mod' | 'me'): string {
   const links: { href: string; label: string; current: boolean }[] = [
-    { href: '/me/', label: '👤 My Account', current: kind === 'me' },
-    { href: '/mod/', label: '⛨ Moderator', current: kind === 'mod' },
-    { href: '/admin/', label: '⚙ Admin', current: kind === 'admin' },
+    { href: '/links.html', label: 'Links', current: false },
+    { href: '/whitepaper.html', label: 'White Paper', current: false },
+    { href: '/wiki', label: 'Wiki', current: false },
+    { href: '/me/', label: 'My Account', current: kind === 'me' },
+    { href: '/mod/', label: 'Moderator', current: kind === 'mod' },
+    { href: '/admin/', label: 'Admin', current: kind === 'admin' },
   ];
   return `
     <div id="${CHROME_ID}" class="cr-dash-chrome">
-      <a class="cr-dash-back" href="/" title="Back to homepage">← Back to Cryptic Realm</a>
+      <a class="cr-dash-back" href="/" title="Back to homepage">Back to Cryptic Realm</a>
       <nav class="cr-dash-nav">
         ${links.map((l) => `
           <a class="cr-dash-nav-item${l.current ? ' current' : ''}" href="${l.href}">${l.label}</a>

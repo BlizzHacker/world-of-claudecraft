@@ -25,7 +25,7 @@ CR_BRANCH="${CR_BRANCH:-feat/v07-and-realms}"
 CR_LOG_FILE="${CR_LOG_FILE:-/var/log/cr-update.log}"
 CR_REMOTE="${CR_REMOTE:-origin}"
 CR_MAINT_FLAG="${CR_HOME}/.maintenance"
-CR_INSTANCES=(infernal classic dominion arcane claudecraft exchange)
+CR_INSTANCES=(infernal classic dominion arcane claudecraft exchange alpha beta)
 
 LOG() {
   local ts msg
@@ -58,6 +58,8 @@ for inst in "${CR_INSTANCES[@]}"; do
     dominion)    port=8790 ;;
     arcane)      port=8791 ;;
     claudecraft) port=8793 ;;
+    alpha) port=8794 ;;
+    beta) port=8795 ;;
     exchange)    port=8792 ;;
   esac
   if curl -fsS -m 3 -X POST \

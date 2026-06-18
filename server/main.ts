@@ -45,7 +45,7 @@ const MAINTENANCE_SHELL = path.join(STATIC_DIR, 'maintenance.html');
 function inMaintenanceMode(): boolean {
   try { return fs.existsSync(MAINTENANCE_FLAG); } catch { return false; }
 }
-const WIKI_URL = process.env.WIKI_URL ?? 'http://localhost:8080/wiki/index.php/Main_Page';
+const WIKI_URL = process.env.WIKI_URL?.trim() ?? '';
 // Pretty URLs that all serve the standalone "official channels" / link-tree page.
 const LINKS_ALIASES = new Set([
   '/links', '/links/', '/social', '/social/', '/social-media-links', '/social-media-links/',
@@ -118,7 +118,7 @@ async function getLeaderboard(scope: 'realm' | 'global'): Promise<LeaderboardEnt
 // secret to the client; (3) we return only the small, sanitised subset the UI
 // needs. Same compute-once/serve-from-memory pattern as the leaderboard cache.
 // ---------------------------------------------------------------------------
-const GITHUB_REPO = process.env.GITHUB_REPO ?? 'levy-street/world-of-claudecraft';
+const GITHUB_REPO = process.env.GITHUB_REPO ?? 'BlizzHacker/cryptic-realm';
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN ?? '';
 const RELEASES_TTL_MS = 15 * 60_000; // 15 min — releases change rarely
 const RELEASES_SIZE = 20;
@@ -265,13 +265,24 @@ function serveStatic(req: http.IncomingMessage, res: http.ServerResponse): void 
   }
   const dashShell = dashboardShellFor(urlPath);
   const shell = dashShell ?? (isAdminRequest(req) ? 'admin.html' : 'index.html');
-  if (urlPath === '/wiki' || urlPath === '/wiki/' || urlPath.startsWith('/wiki/')) {
-    res.writeHead(302, { Location: WIKI_URL });
+  if (urlPath === '/crypto-custody' || urlPath === '/crypto-custody/' || urlPath === '/crypto-custody.html') {
+    res.writeHead(302, { Location: '/admin/' });
     res.end();
     return;
   }
+  if (urlPath === '/wiki' || urlPath === '/wiki/' || urlPath.startsWith('/wiki/')) {
+    if (WIKI_URL) {
+      res.writeHead(302, { Location: WIKI_URL });
+      res.end();
+      return;
+    }
+    urlPath = '/wiki.html';
+  }
   // Pretty-URL aliases for the standalone official-channels page (public/ -> dist/links.html).
   if (LINKS_ALIASES.has(urlPath)) urlPath = '/links.html';
+  if (urlPath === '/worldofclaudecraft-logo.png' && process.env.CR_UPSTREAM_BRANDING !== '1') {
+    urlPath = '/cryptic-realm-logo.png';
+  }
   if (
     urlPath === '/' ||
     urlPath === '/admin' || urlPath === '/admin/' ||

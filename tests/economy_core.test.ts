@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { generateKeyPairSync, sign } from 'node:crypto';
 import { CURRENCIES, PLATINUM_LIFETIME_CAP_PER_ACCOUNT, formatCopperAsGSC, decomposeCopper } from '../src/economy/currencies';
 import { PLATINUM_REWARDS, PLATINUM_DAILY_MAX_FROM_REWARDS } from '../src/economy/platinum_rules';
@@ -7,6 +7,11 @@ import { LocalMockChainAdapter } from '../src/economy/chainAdapter';
 import { ECONOMY_ITEMS, itemsForRealmContext, itemsByScope } from '../src/economy/itemCatalog';
 import { ECONOMY_DISCLOSURE } from '../src/economy/types';
 import { verifySolanaSignature } from '../server/economy/solana_verify';
+import {
+  platinumDailyCap,
+  platinumRewardAmount,
+  releaseChannelInfo,
+} from '../server/economy/release_channel';
 
 const BASE58_ALPHABET = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
 
@@ -55,6 +60,10 @@ describe('economy currencies', () => {
 });
 
 describe('platinum rules', () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
   it('every reward has positive amount and either oncePerLifetime or a cooldown', () => {
     for (const r of Object.values(PLATINUM_REWARDS)) {
       expect(r.amount).toBeGreaterThan(0);
@@ -63,6 +72,34 @@ describe('platinum rules', () => {
   });
   it('daily-cap math from recurring rewards fits inside dailyCapPerAccount', () => {
     expect(PLATINUM_DAILY_MAX_FROM_REWARDS).toBeLessThanOrEqual(CURRENCIES.platinum.dailyCapPerAccount);
+  });
+  it('alpha and beta release channels scale platinum rewards and caps', () => {
+    vi.stubEnv('CR_RELEASE_CHANNEL', '');
+    vi.stubEnv('CR_PLATINUM_REWARD_MULTIPLIER', '');
+    vi.stubEnv('CR_PLATINUM_DAILY_CAP_MULTIPLIER', '');
+    vi.stubEnv('CR_CHARACTER_RESET_DAYS', '');
+    expect(releaseChannelInfo().channel).toBe('public');
+    expect(platinumRewardAmount(10)).toBe(10);
+
+    vi.stubEnv('CR_RELEASE_CHANNEL', 'alpha');
+    expect(releaseChannelInfo()).toMatchObject({
+      channel: 'alpha',
+      rewardMultiplier: 3,
+      dailyCapMultiplier: 3,
+      characterResetDays: 14,
+    });
+    expect(platinumRewardAmount(10)).toBe(30);
+    expect(platinumDailyCap(100)).toBe(300);
+
+    vi.stubEnv('CR_RELEASE_CHANNEL', 'beta');
+    expect(releaseChannelInfo()).toMatchObject({
+      channel: 'beta',
+      rewardMultiplier: 1.5,
+      dailyCapMultiplier: 1.5,
+      characterResetDays: 30,
+    });
+    expect(platinumRewardAmount(10)).toBe(15);
+    expect(platinumDailyCap(100)).toBe(150);
   });
 });
 

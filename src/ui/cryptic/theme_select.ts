@@ -57,6 +57,7 @@ function renderTrigger(active: RealmContent): string {
   const swatch = `background: ${escapeHtml(active.accentHex)};`;
   return `<button type="button" class="${BUTTON_CLASS}" aria-haspopup="menu" aria-expanded="false" title="Switch realm">
     <span class="cr-theme-trigger-swatch" style="${swatch}"></span>
+    <span class="cr-theme-trigger-kicker">Realm</span>
     <span class="cr-theme-trigger-label">${escapeHtml(active.name)}</span>
     <span class="cr-theme-trigger-caret" aria-hidden="true">▾</span>
   </button>`;

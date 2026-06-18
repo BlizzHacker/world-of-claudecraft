@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>World of ClaudeCraft - Admin</title>
+<title>Cryptic Realm - Admin</title>
 <link rel="icon" href="/favicon.ico" sizes="any" />
 <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
@@ -165,6 +165,52 @@
   .account-custom-expiry { width: 190px; }
   #mod-reason { min-width: 300px; flex: 1 1 300px; }
   #mod-custom-expiry { width: 190px; }
+  .custody-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 10px;
+  }
+  .custody-fact {
+    border: 1px solid #463a1c;
+    border-radius: 4px;
+    background: #0d0d14;
+    padding: 10px;
+  }
+  .custody-fact strong {
+    display: block;
+    color: var(--gold-dim);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 5px;
+  }
+  .custody-fact code {
+    display: block;
+    white-space: normal;
+    word-break: break-all;
+    color: #bde2ff;
+    font-size: 12px;
+  }
+  .custody-copy {
+    color: var(--text);
+    line-height: 1.55;
+    margin: 8px 0 12px;
+  }
+  .custody-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .custody-links a {
+    padding: 6px 10px;
+    border: 1px solid #6f5a2a;
+    border-radius: 4px;
+    color: var(--gold);
+    text-decoration: none;
+    background: #100d0b;
+  }
+  .custody-links a:hover { color: #fff; border-color: var(--gold-dim); }
   .mod-confirm { display: none; margin: 10px 0; padding: 10px; border: 1px solid #8a6f2d; border-radius: 4px; background: #171207; }
   .mod-confirm.show { display: block; }
   .mod-confirm h4 { font-family: var(--title-font); color: var(--gold); margin-bottom: 6px; }
@@ -201,7 +247,7 @@
 <body>
   <div id="login">
     <form class="panel" id="login-form">
-      <div class="panel-title" data-i18n="app.title">World of ClaudeCraft - Admin</div>
+      <div class="panel-title" data-i18n="app.title">Cryptic Realm - Admin</div>
       <label for="login-username" data-i18n="auth.username">Username</label>
       <input id="login-username" autocomplete="username" required />
       <label for="login-password" data-i18n="auth.password">Password</label>
@@ -213,7 +259,7 @@
 
   <div id="app">
     <header>
-      <h1 data-i18n="app.title">World of ClaudeCraft - Admin</h1>
+      <h1 data-i18n="app.title">Cryptic Realm - Admin</h1>
       <div class="who"><span data-i18n="auth.signedInAs">signed in as</span> <span id="who-name"></span><button id="logout" data-i18n="auth.signOut">Sign out</button></div>
     </header>
 
@@ -224,6 +270,7 @@
       <button class="admin-tab active" data-admin-page="overview" data-i18n="nav.overview">Overview</button>
       <button class="admin-tab" data-admin-page="moderation" data-i18n="nav.moderation">Moderation</button>
       <button class="admin-tab" data-admin-page="chat-filter" data-i18n="nav.chatFilter">Chat Filter</button>
+      <button class="admin-tab" data-admin-page="custody" data-i18n="nav.custody">Crypto Custody</button>
     </nav>
 
     <main id="page-overview" class="admin-page active">
@@ -263,6 +310,26 @@
     <main id="page-chat-filter" class="admin-page">
       <section>
         <div id="chat-filter"></div>
+      </section>
+    </main>
+
+    <main id="page-custody" class="admin-page">
+      <section class="panel">
+        <div class="panel-title" data-i18n="custody.title">Crypto Custody</div>
+        <p class="custody-copy" data-i18n="custody.intro">Admin-only custody notes for the Cryptic Realm token, treasury wallet, mint authority, and offline recovery plan.</p>
+        <div class="custody-grid">
+          <div class="custody-fact"><strong data-i18n="custody.mint">Token mint</strong><code>3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv</code></div>
+          <div class="custody-fact"><strong data-i18n="custody.treasury">Treasury wallet</strong><code>GncAXx6j38osJns395XZtf6rSA9MU3K1gwafTrHpBJpi</code></div>
+          <div class="custody-fact"><strong data-i18n="custody.authority">Mint authority keypair</strong><code>5ADZF7Go4pbS5GY3hBAVKHFydhE3fGWZnJaQ6WcMKsoA</code></div>
+          <div class="custody-fact"><strong data-i18n="custody.network">Network</strong><code>Solana mainnet</code></div>
+        </div>
+        <p class="custody-copy" data-i18n="custody.warning">Never paste seed phrases, private keys, or keypair JSON into chat, Git, Discord, browser forms, or public issue trackers. Backups belong on encrypted offline USB media and paper/metal recovery records.</p>
+        <div class="custody-links">
+          <a href="/whitepaper.html" data-i18n="custody.whitepaper">White Paper</a>
+          <a href="/links.html" data-i18n="custody.links">Public Proof Page</a>
+          <a href="https://solscan.io/token/3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv" target="_blank" rel="noopener noreferrer" data-i18n="custody.solscanMint">Solscan Mint</a>
+          <a href="https://solscan.io/account/GncAXx6j38osJns395XZtf6rSA9MU3K1gwafTrHpBJpi" target="_blank" rel="noopener noreferrer" data-i18n="custody.solscanWallet">Solscan Treasury</a>
+        </div>
       </section>
     </main>
   </div>

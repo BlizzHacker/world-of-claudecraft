@@ -66,6 +66,24 @@ http:
       tls:
         certResolver: myresolver
 
+    cr-alpha-rtr:
+      rule: "Host(`alpha.crypticrealm.com`)"
+      entryPoints: [websecure]
+      middlewares: [crypticrealm-headers, chain-no-auth]
+      service: cr-alpha-svc
+      priority: 100
+      tls:
+        certResolver: myresolver
+
+    cr-beta-rtr:
+      rule: "Host(`beta.crypticrealm.com`)"
+      entryPoints: [websecure]
+      middlewares: [crypticrealm-headers, chain-no-auth]
+      service: cr-beta-svc
+      priority: 100
+      tls:
+        certResolver: myresolver
+
   services:
     cr-infernal-svc:
       loadBalancer:
@@ -94,3 +112,11 @@ http:
       loadBalancer:
         servers:
           - url: "http://192.168.0.171:8792"
+    cr-alpha-svc:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.171:8794"
+    cr-beta-svc:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.0.171:8795"

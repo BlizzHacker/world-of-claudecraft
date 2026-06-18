@@ -45,7 +45,7 @@ let homepageMusicStarted = false;
 let homepageMusicMuted = readHomepageMusicMuted();
 let removeHomepageMusicGestureListeners: (() => void) | null = null;
 
-const SITE_URL = 'https://worldofclaudecraft.com/';
+const SITE_URL = 'https://crypticrealm.com/';
 
 type GameRuntime = {
   Sim: typeof import('./sim/sim').Sim;
@@ -1367,7 +1367,7 @@ function show(el: string): void {
 
   const logoImg = $('#title-logo');
   if (logoImg) {
-    const shouldHideLogo = el === '#charselect-panel' || el === '#offline-select';
+    const shouldHideLogo = el === '#login-panel' || el === '#charselect-panel' || el === '#offline-select';
     logoImg.toggleAttribute('hidden', shouldHideLogo);
   }
 
@@ -2096,13 +2096,13 @@ function updateSeoMetadata(lang: SupportedLanguage): void {
     jsonLd.textContent = JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'VideoGame',
-      name: 'World of ClaudeCraft',
+      name: 'Cryptic Realm',
       genre: t('seo.genre'),
       playMode: t('seo.playMode'),
       applicationCategory: t('seo.applicationCategory'),
       operatingSystem: t('seo.operatingSystem'),
       url: canonicalHref,
-      image: 'https://worldofclaudecraft.com/woc_logo_square.webp',
+      image: 'https://crypticrealm.com/cryptic-realm-logo.png',
       description: t('seo.description'),
       inLanguage: languageTag(lang),
     }, null, 2);
@@ -2326,20 +2326,53 @@ async function loadNews(): Promise<void> {
   newsLoading = true;
   host.innerHTML = `<div class="news-loading">${t('news.loading')}</div>`;
   let releases: ReleaseEntry[] = [];
+  let releaseError = false;
   try {
     releases = await api.releases(20);
   } catch {
-    host.innerHTML = `<div class="news-error">${t('news.error')}</div>`;
-    newsLoading = false;
-    return;
+    releaseError = true;
   }
   newsLoading = false;
-  if (releases.length === 0) {
-    host.innerHTML = `<div class="news-empty">${t('news.empty')}</div>`;
-    return;
-  }
   const esc = (s: string): string => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
-  host.innerHTML = releases.map((r) => {
+  const pinned: Array<{ title: string; body: string; tag: string; url: string; realm: string }> = [
+    {
+      title: t('news.tokenTitle'),
+      body: t('news.tokenBody'),
+      tag: '$CR',
+      url: '/links.html',
+      realm: 'all',
+    },
+    {
+      title: t('news.alphaBetaTitle'),
+      body: t('news.alphaBetaBody'),
+      tag: t('news.officialLog'),
+      url: '/whitepaper.html',
+      realm: 'all',
+    },
+    {
+      title: t('news.prTitle'),
+      body: t('news.prBody'),
+      tag: 'ClaudeCraft PRs',
+      url: 'https://github.com/BlizzHacker/cryptic-realm/pulls',
+      realm: 'claudecraft',
+    },
+    {
+      title: t('news.proofTitle'),
+      body: t('news.proofBody'),
+      tag: 'Solana',
+      url: 'https://solscan.io/token/3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv',
+      realm: 'all',
+    },
+  ];
+  const pinnedHtml = pinned.map((r) => {
+    const external = /^https?:\/\//.test(r.url);
+    return `<article class="news-item cr-news-pinned" data-news-item data-realm="${esc(r.realm)}">`
+      + `<div class="news-item-head"><h3 class="news-item-title">${esc(r.title)}</h3><span class="news-tag">${esc(r.tag)}</span></div>`
+      + `<div class="news-body"><p>${esc(r.body)}</p></div>`
+      + `<div class="news-item-foot"><a class="news-link" href="${esc(r.url)}"${external ? ' target="_blank" rel="noopener noreferrer"' : ''}>${t('news.openLink')}</a></div>`
+      + `</article>`;
+  }).join('');
+  const releasesHtml = releases.map((r) => {
     const when = r.publishedAt
       ? `<span class="news-date">${formatDateTime(new Date(r.publishedAt), { dateStyle: 'medium' })}</span>`
       : '';
@@ -2349,11 +2382,15 @@ async function loadNews(): Promise<void> {
     const link = r.url
       ? `<div class="news-item-foot"><a class="news-link" href="${esc(r.url)}" target="_blank" rel="noopener noreferrer">${t('news.viewOnGithub')}</a></div>`
       : '';
-    return `<article class="news-item">`
+    return `<article class="news-item" data-news-item data-realm="all">`
       + `<div class="news-item-head">`
       + `<h3 class="news-item-title">${title}</h3>${tag}${badge}${when}</div>`
       + `<div class="news-body">${renderReleaseBody(r.body)}</div>${link}</article>`;
   }).join('');
+  const fallback = releaseError
+    ? `<div class="news-error">${t('news.error')}</div>`
+    : (releases.length === 0 ? `<div class="news-empty">${t('news.empty')}</div>` : '');
+  host.innerHTML = `${pinnedHtml}${releasesHtml}${fallback}`;
 }
 
 let caCopyResetTimer: number | null = null;
@@ -3186,6 +3223,30 @@ function wireStartScreens(): void {
     switchMainView('#hero-view');
     show('#mode-select');
   });
+
+  const applyHashRoute = () => {
+    const hash = window.location.hash.replace(/^#/, '').toLowerCase();
+    if (!hash || hash.includes('auth_token=')) return;
+    if (hash === 'highscores' || hash === 'leaderboard') {
+      switchMainView('#highscores-view');
+      void loadHighscores();
+      return;
+    }
+    if (hash === 'wiki') {
+      switchMainView('#wiki-view');
+      return;
+    }
+    if (hash === 'news' || hash === 'updates') {
+      switchMainView('#news-view');
+      void loadNews();
+      return;
+    }
+    if (hash === 'download' || hash === 'downloads' || hash === 'install') {
+      switchMainView('#download-view');
+    }
+  };
+  applyHashRoute();
+  window.addEventListener('hashchange', applyHashRoute);
 
   // Language selection dropdown setup
   const langSelect = $('#lang-select') as HTMLSelectElement | null;

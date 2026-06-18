@@ -57,6 +57,24 @@ const LOCALES = [
 ];
 const NON_EN = LOCALES.filter((l) => l !== 'en');
 
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+async function writeFileWithTransientRetry(file, text) {
+  const retryCodes = new Set(['UNKNOWN', 'EPERM', 'EBUSY', 'EACCES']);
+  let lastError = null;
+  for (let attempt = 0; attempt < 6; attempt++) {
+    try {
+      writeFileSync(file, text);
+      return;
+    } catch (err) {
+      lastError = err;
+      if (!retryCodes.has(err?.code) || attempt === 5) break;
+      await sleep(80 * (attempt + 1));
+    }
+  }
+  throw lastError;
+}
+
 // Dialect locales resolve through a base locale: a key the dialect
 // overlay omits falls through to the base overlay, then to English. So a dialect
 // "provides" a key if its own overlay OR its base chain provides it. en_CA's base
@@ -301,7 +319,7 @@ async function main() {
   }
 
   const text = JSON.stringify(registry, null, 2) + '\n';
-  writeFileSync(OUT_PATH, text);
+  await writeFileWithTransientRetry(OUT_PATH, text);
   console.log(
     `generated ${path.relative(root, OUT_PATH)} ` +
       `(${keyEntries.length} keys x ${NON_EN.length} locales; ` +

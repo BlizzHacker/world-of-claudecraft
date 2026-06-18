@@ -39,7 +39,7 @@ describe('Cryptic realm branding crypto surfaces', () => {
 
     const donate = document.querySelector<HTMLAnchorElement>('.donate-cta')!;
     expect(donate.href).toBe(`solana:${CR_WALLET}`);
-    expect(donate.textContent).toContain('Tip SOL');
+    expect(donate.textContent).toContain('Tip $CR');
     expect(donate.style.display).toBe('');
     expect(document.querySelector<HTMLElement>('.token-ca-label')?.textContent).toBe('$CR Contract Address');
     expect(document.getElementById('btn-copy-ca')?.getAttribute('data-ca')).toBe(CR_TOKEN);

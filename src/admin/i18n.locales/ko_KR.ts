@@ -7,7 +7,7 @@
 // (tests/i18n_admin_catalog.test.ts).
 
 export const ko_KR: Record<string, string> = {
-  "app.title": "World of ClaudeCraft - 관리자",
+  "app.title": "Cryptic Realm - Admin",
   "auth.username": "사용자명",
   "auth.password": "비밀번호",
   "auth.signIn": "로그인",

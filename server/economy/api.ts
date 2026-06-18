@@ -27,6 +27,7 @@ import {
 import { verifySolanaSignature } from './solana_verify';
 import { getChain } from '../../src/economy/chainAdapter';
 import { isRealmId } from '../../src/sim/realms';
+import { releaseChannelInfo } from './release_channel';
 
 function ok(res: http.ServerResponse, data: unknown): void {
   json(res, 200, { success: true, data, error: null, disclosure: ECONOMY_DISCLOSURE });
@@ -66,6 +67,7 @@ export async function maybeHandleEconomyApi(
         items,
         currencies: CURRENCIES,
         platinumLifetimeCap: PLATINUM_LIFETIME_CAP_PER_ACCOUNT,
+        releaseChannel: releaseChannelInfo(),
         chain: { name: getChain().name, available: getChain().isAvailable() },
       });
       return true;

@@ -10,6 +10,7 @@ import type {
 } from '../../src/economy/types';
 import { PLATINUM_REWARDS } from '../../src/economy/platinum_rules';
 import { CURRENCIES, PLATINUM_LIFETIME_CAP_PER_ACCOUNT } from '../../src/economy/currencies';
+import { platinumDailyCap, platinumLifetimeCap, platinumRewardAmount } from './release_channel';
 
 export const ECONOMY_SCHEMA = `
 -- Per-account platinum balance. Off-chain; the canonical record. On-chain
@@ -117,6 +118,7 @@ export async function awardPlatinum(
 ): Promise<{ awarded: number; newBalance: number; reasonBlocked?: string } | null> {
   const rewardDef = PLATINUM_REWARDS[reason];
   if (!rewardDef) return { awarded: 0, newBalance: 0, reasonBlocked: 'unknown-reason' };
+  const awardAmount = platinumRewardAmount(rewardDef.amount);
 
   const client = await pool.connect();
   try {
@@ -145,7 +147,7 @@ export async function awardPlatinum(
     }
 
     // 2. Daily cap.
-    const dailyCap = CURRENCIES.platinum.dailyCapPerAccount;
+    const dailyCap = platinumDailyCap(CURRENCIES.platinum.dailyCapPerAccount);
     if (dailyCap > 0) {
       const since = new Date(Date.now() - 24 * 3600 * 1000).toISOString();
       const dayTotalRes = await client.query<{ sum: string }>(
@@ -153,7 +155,7 @@ export async function awardPlatinum(
         [accountId, since],
       );
       const dayTotal = Number(dayTotalRes.rows[0]?.sum ?? '0');
-      if (dayTotal + rewardDef.amount > dailyCap) {
+      if (dayTotal + awardAmount > dailyCap) {
         await client.query('ROLLBACK');
         return { awarded: 0, newBalance: 0, reasonBlocked: 'daily-cap' };
       }
@@ -171,7 +173,8 @@ export async function awardPlatinum(
       [accountId],
     );
     const lifetime = lifeRes.rows[0]?.lifetime_earned ?? 0;
-    if (lifetime + rewardDef.amount > PLATINUM_LIFETIME_CAP_PER_ACCOUNT) {
+    const lifetimeCap = platinumLifetimeCap(PLATINUM_LIFETIME_CAP_PER_ACCOUNT);
+    if (lifetime + awardAmount > lifetimeCap) {
       await client.query('ROLLBACK');
       return { awarded: 0, newBalance: 0, reasonBlocked: 'lifetime-cap' };
     }
@@ -179,7 +182,7 @@ export async function awardPlatinum(
     // 4. Write award log + bump balances.
     await client.query(
       'INSERT INTO economy_platinum_awards (account_id, reason, amount, realm) VALUES ($1, $2, $3, $4)',
-      [accountId, reason, rewardDef.amount, realm],
+      [accountId, reason, awardAmount, realm],
     );
     const updated = await client.query<{ balance: number }>(
       `UPDATE economy_platinum
@@ -188,11 +191,11 @@ export async function awardPlatinum(
              updated_at = now()
        WHERE account_id = $1
        RETURNING balance`,
-      [accountId, rewardDef.amount],
+      [accountId, awardAmount],
     );
 
     await client.query('COMMIT');
-    return { awarded: rewardDef.amount, newBalance: updated.rows[0]?.balance ?? rewardDef.amount };
+    return { awarded: awardAmount, newBalance: updated.rows[0]?.balance ?? awardAmount };
   } catch (err) {
     await client.query('ROLLBACK');
     throw err;

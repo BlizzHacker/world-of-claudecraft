@@ -7,7 +7,7 @@
 // (tests/i18n_admin_catalog.test.ts).
 
 export const zh_TW: Record<string, string> = {
-  "app.title": "World of ClaudeCraft - 管理後台",
+  "app.title": "Cryptic Realm - Admin",
   "auth.username": "使用者名稱",
   "auth.password": "密碼",
   "auth.signIn": "登入",

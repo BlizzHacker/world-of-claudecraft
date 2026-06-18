@@ -36,7 +36,7 @@ const accountsState: TableState = { page: 1, search: '', sort: 'id', dir: 'desc'
 const charactersState: TableState = { page: 1, search: '', sort: 'level', dir: 'desc' };
 let liveTimer: number | null = null;
 let activityTimer: number | null = null;
-type AdminPage = 'overview' | 'moderation' | 'chat-filter';
+type AdminPage = 'overview' | 'moderation' | 'chat-filter' | 'custody';
 let activePage: AdminPage = 'overview';
 let pendingModerationAction: { endpoint: string; body: unknown; accountId: number; source: 'account' | 'moderation' } | null = null;
 
@@ -493,7 +493,7 @@ function wireEvents(): void {
   $('admin-tabs').addEventListener('click', (e) => {
     const tab = (e.target as HTMLElement).closest<HTMLButtonElement>('.admin-tab');
     const page = tab?.dataset.adminPage;
-    if (page === 'overview' || page === 'moderation' || page === 'chat-filter') showPage(page);
+    if (page === 'overview' || page === 'moderation' || page === 'chat-filter' || page === 'custody') showPage(page);
   });
 
   wireChatFilterEvents();
