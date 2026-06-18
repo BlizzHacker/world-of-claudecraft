@@ -6,8 +6,10 @@ COPY mediawiki/LocalSettings.php /opt/woc/LocalSettings.php
 COPY mediawiki/seed/pages.xml /opt/woc/seed/pages.xml
 COPY mediawiki/theme/Common.css /var/www/html/resources/assets/woc-mediawiki.css
 COPY public/loading-screen.jpg /var/www/html/resources/assets/woc-loading-screen.jpg
-COPY public/woc_logo_square.webp /var/www/html/resources/assets/woc-logo-square.webp
-COPY public/worldofclaudecraft-logo.png /var/www/html/resources/assets/worldofclaudecraft-logo.png
+# Cryptic Realm branding (the upstream woc_* logos don't exist in this fork).
+# Destination filenames kept stable so LocalSettings.php / Common.css refs hold.
+COPY public/cr_logo_square.webp /var/www/html/resources/assets/woc-logo-square.webp
+COPY public/cryptic-realm-logo-512.png /var/www/html/resources/assets/worldofclaudecraft-logo.png
 
 RUN chmod +x /usr/local/bin/woc-mediawiki-entrypoint
 
