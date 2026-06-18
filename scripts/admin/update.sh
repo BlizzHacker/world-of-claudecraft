@@ -52,16 +52,21 @@ LOG "==== update start (branch=$CR_BRANCH warn=${CR_WARN_SECONDS}s) ===="
 WARN_MSG="Server maintenance in $((CR_WARN_SECONDS / 60)) minute(s). Logs preserved."
 for inst in "${CR_INSTANCES[@]}"; do
   # legacy single-realm service answers on 8787; template instances offset:
+  port=""
   case "$inst" in
     infernal)    port=8788 ;;
     classic)     port=8789 ;;
     dominion)    port=8790 ;;
     arcane)      port=8791 ;;
     claudecraft) port=8793 ;;
-    alpha) port=8794 ;;
-    beta) port=8795 ;;
     exchange)    port=8792 ;;
+    alpha)       port=8794 ;;
+    beta)        port=8795 ;;
+    crypticrealm) port=8796 ;;
+    fps)         port=8797 ;;
   esac
+  # Skip the broadcast for any instance without a known port mapping.
+  [ -n "$port" ] || { LOG "broadcast skipped (no port mapping) → $inst"; continue; }
   if curl -fsS -m 3 -X POST \
        -H 'Content-Type: application/json' \
        -d "{\"text\":\"$WARN_MSG\"}" \
