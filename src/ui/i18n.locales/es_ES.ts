@@ -21,7 +21,6 @@ export const es_ES: Partial<Record<TranslationKey, string>> = {
   "highscores.title": "Tabla de clasificaciones",
   "wiki.title": "Wiki y guía del juego",
   "news.title": "Noticias y actualizaciones",
-  "download.title": "Launchers & Installs",
   "mode.onlineTitle": "Jugar en línea",
   "mode.onlineAria": "Jugar en línea: inicia sesión en el reino compartido persistente",
   "mode.offlineTitle": "Jugar en solitario",
