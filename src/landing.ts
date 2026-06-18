@@ -431,12 +431,25 @@ function wireDeferredAppLoad(): void {
     event.preventDefault();
     event.stopPropagation();
     event.stopImmediatePropagation();
+    // If the trigger is a submit button inside a form (login / register), the
+    // app wires the form's `submit` event — NOT the button's click. A synthetic
+    // click does not trigger native form submission, so re-dispatching a click
+    // would silently do nothing (this is what broke login-to-play). Re-submit
+    // the form via requestSubmit() so the app's submit handler actually runs.
+    const submitBtn = target instanceof HTMLButtonElement && target.type === 'submit' ? target : null;
+    const form = submitBtn?.form ?? target.closest('form');
     void loadApp().then(() => {
-      window.setTimeout(() => target.dispatchEvent(new MouseEvent('click', {
-        bubbles: true,
-        cancelable: true,
-        view: window,
-      })));
+      window.setTimeout(() => {
+        if (form instanceof HTMLFormElement) {
+          if (typeof form.requestSubmit === 'function') {
+            form.requestSubmit(submitBtn ?? undefined);
+          } else {
+            form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+          }
+        } else {
+          target.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+        }
+      });
     });
   }, true);
 }
