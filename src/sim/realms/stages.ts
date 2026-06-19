@@ -79,12 +79,14 @@ export function stageInstance(realmId: RealmId, stage: RealmStage): string {
   return `${realmId}-${stage}`;
 }
 
-/** Public host for a realm stage. Live keeps the bare realm host; other stages
- *  prefix it (alpha.crypticrealm.com, dev.infernal.crypticrealm.com, ...). The
- *  flagship's live host is the apex crypticrealm.com. */
+/** Public host for a realm stage. SINGLE-LABEL under crypticrealm.com so the
+ *  existing *.crypticrealm.com wildcard covers every stage (Cloudflare wildcards
+ *  don't nest). Live keeps the bare realm host (flagship = apex); non-live uses
+ *  <stage>-<realm>.crypticrealm.com (flagship: <stage>.crypticrealm.com). */
 export function stageHost(realmId: RealmId, stage: RealmStage): string {
-  const liveHost = realmId === 'crypticrealm' ? 'crypticrealm.com' : `${realmId}.crypticrealm.com`;
-  return stage === 'live' ? liveHost : `${stage}.${liveHost}`;
+  const isApex = realmId === 'crypticrealm';
+  if (stage === 'live') return isApex ? 'crypticrealm.com' : `${realmId}.crypticrealm.com`;
+  return isApex ? `${stage}.crypticrealm.com` : `${stage}-${realmId}.crypticrealm.com`;
 }
 
 export function stageUrl(realmId: RealmId, stage: RealmStage): string {

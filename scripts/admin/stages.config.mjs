@@ -37,9 +37,18 @@ export function stageInstance(realmId, stage) {
   return `${realmId}-${stage}`;
 }
 
+// Stage hosts are SINGLE-LABEL under crypticrealm.com so the existing
+// *.crypticrealm.com wildcard covers every one (Cloudflare wildcards do NOT
+// nest — beta.infernal.crypticrealm.com would need its own per-realm wildcard).
+//   live  flagship -> crypticrealm.com          others -> <realm>.crypticrealm.com
+//   non-live       -> <stage>-<realm>.crypticrealm.com   (flagship: <stage>.crypticrealm.com)
 export function stageHost(realmId, stage) {
-  const liveHost = REALMS[realmId]?.apex ? 'crypticrealm.com' : `${realmId}.crypticrealm.com`;
-  return stage === 'live' ? liveHost : `${stage}.${liveHost}`;
+  if (stage === 'live') {
+    return REALMS[realmId]?.apex ? 'crypticrealm.com' : `${realmId}.crypticrealm.com`;
+  }
+  return REALMS[realmId]?.apex
+    ? `${stage}.crypticrealm.com`
+    : `${stage}-${realmId}.crypticrealm.com`;
 }
 
 // Display label for the realm directory / UI (brackets OK here — client only).
