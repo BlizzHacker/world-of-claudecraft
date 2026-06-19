@@ -133,24 +133,34 @@ function render(host: HTMLElement): void {
 
 export function mountDownloadLaunchers(): void {
   if (typeof document === 'undefined') return;
+  let obs: MutationObserver | null = null;
+
   const arm = () => {
     const target = document.getElementById('download-view') ||
                    document.querySelector('[data-view="download"]') ||
                    document.querySelector('.download-section');
     if (!target) return;
-    let host = document.getElementById(HOST_ID);
+    let host = document.getElementById(HOST_ID) as HTMLElement | null;
     if (!host) {
       host = document.createElement('div');
       host.id = HOST_ID;
       target.appendChild(host);
     }
-    render(host as HTMLElement);
+    if (host.dataset.crRendered !== '1') {
+      render(host);
+      host.dataset.crRendered = '1';
+    }
+    obs?.disconnect();
+    obs = null;
   };
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', arm);
+    document.addEventListener('DOMContentLoaded', arm, { once: true });
   } else {
     arm();
   }
-  const obs = new MutationObserver(() => arm());
-  obs.observe(document.body, { childList: true, subtree: true });
+  if (!document.getElementById(HOST_ID) && document.body) {
+    obs = new MutationObserver(() => arm());
+    obs.observe(document.body, { childList: true, subtree: true });
+  }
 }

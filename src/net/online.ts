@@ -37,6 +37,14 @@ export function buildWebSocketAuthMessage(token: string, characterId: number): {
   return { t: 'auth', token, character: characterId };
 }
 
+export async function webSocketPayloadToText(data: unknown): Promise<string> {
+  if (typeof data === 'string') return data;
+  if (typeof Blob !== 'undefined' && data instanceof Blob) return data.text();
+  if (data instanceof ArrayBuffer) return new TextDecoder().decode(data);
+  if (ArrayBuffer.isView(data)) return new TextDecoder().decode(data);
+  return String(data);
+}
+
 export type RealmType = 'Normal' | 'PvP' | 'RP' | 'RP-PvP';
 
 export interface RealmEntry {
@@ -314,6 +322,7 @@ export class ClientWorld implements IWorld {
   private pendingInputSeqSentAt = new Map<number, number>();
   private ackedInputSeq = 0;
   private inputEchoSamples: number[] = [];
+  private messageQueue = Promise.resolve();
 
   constructor(token: string, characterId: number, cls: PlayerClass, base = '') {
     this.characterId = characterId;
@@ -326,10 +335,16 @@ export class ClientWorld implements IWorld {
       ? base.replace(/^http/, 'ws') + '/ws'
       : buildWebSocketUrl(location.protocol, location.host);
     this.ws = new WebSocket(wsUrl);
+    this.ws.binaryType = 'arraybuffer';
     this.ws.onopen = () => {
       this.ws.send(JSON.stringify(buildWebSocketAuthMessage(token, characterId)));
     };
-    this.ws.onmessage = (ev) => this.onMessage(String(ev.data));
+    this.ws.onmessage = (ev) => {
+      this.messageQueue = this.messageQueue
+        .then(() => webSocketPayloadToText(ev.data))
+        .then((raw) => this.onMessage(raw))
+        .catch(() => {});
+    };
     this.ws.onclose = () => {
       this.connected = false;
       clearInterval(this.sendTimer);

@@ -9,16 +9,7 @@
 // to localStorage. If no token is stored, the dropdown stays hidden. If a
 // token exists but /me/api/me 401s, we clear the session and hide it.
 
-const USER_TOKEN_KEYS = [
-  'cryptic-realm_user_token',
-  'cryptic-realm_mod_token',
-  'cryptic-realm_admin_token',
-];
-const USER_NAME_KEYS = [
-  'cryptic-realm_user_name',
-  'cryptic-realm_mod_name',
-  'cryptic-realm_admin_name',
-];
+import { clearCrypticSession, readCrypticSession } from './session';
 
 interface MeRoles { isAdmin: boolean; isModerator: boolean; }
 interface MeResponse {
@@ -29,24 +20,11 @@ interface MeResponse {
 }
 
 function readToken(): string | null {
-  for (const key of USER_TOKEN_KEYS) {
-    const v = localStorage.getItem(key);
-    if (v) return v;
-  }
-  return null;
+  return readCrypticSession()?.token ?? null;
 }
 
 function readName(): string {
-  for (const key of USER_NAME_KEYS) {
-    const v = localStorage.getItem(key);
-    if (v) return v;
-  }
-  return '';
-}
-
-function clearSession(): void {
-  for (const k of USER_TOKEN_KEYS) localStorage.removeItem(k);
-  for (const k of USER_NAME_KEYS) localStorage.removeItem(k);
+  return readCrypticSession()?.username ?? '';
 }
 
 function escapeHtml(s: string): string {
@@ -117,7 +95,7 @@ function mountAt(host: HTMLElement, username: string, roles: MeRoles, realm: str
     if (!target) return;
 
     if (target.closest('[data-cr-signout]')) {
-      clearSession();
+      clearCrypticSession();
       // Force a re-mount so the dropdown disappears.
       window.location.reload();
       return;
@@ -169,7 +147,7 @@ export async function mountUserDropdown(): Promise<void> {
     // Validate the token. If it's stale/wrong, drop it silently.
     const me = await fetchMe(token);
     if (!me) {
-      clearSession();
+      clearCrypticSession();
       document.getElementById('cr-user-dropdown')?.remove();
       removeNavAdminLink();
       return;

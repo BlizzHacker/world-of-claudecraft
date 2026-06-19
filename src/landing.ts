@@ -5,6 +5,8 @@ import { mountBestiary } from './ui/cryptic/bestiary';
 import { mountSkillTree } from './ui/cryptic/skilltree';
 import { mountLootVault } from './ui/cryptic/loot_vault';
 import { mountPickitPanel } from './ui/cryptic/pickit_panel';
+import { mountUserDropdown } from './ui/cryptic/user_dropdown';
+import { readCrypticSession } from './ui/cryptic/session';
 
 let appPromise: Promise<typeof import('./main')> | null = null;
 let caCopyResetTimer: number | null = null;
@@ -34,6 +36,7 @@ function bootLandingBranding(): void {
   mountRealmBranding();
   mountThemeSelect();
   mountNewsRealmFilter();
+  void mountUserDropdown();
   void loadLandingStats();
   mountBestiary();
   mountSkillTree();
@@ -311,8 +314,14 @@ function showPanel(selector: string): void {
   if (logoImg) {
     logoImg.toggleAttribute(
       'hidden',
-      selector === '#login-panel' || selector === '#charselect-panel' || selector === '#offline-select',
+      selector === '#login-panel' || selector === '#realm-panel' || selector === '#charselect-panel' || selector === '#offline-select',
     );
+  }
+  const panel = document.querySelector<HTMLElement>(selector);
+  if (panel) {
+    window.requestAnimationFrame(() => {
+      if (!panel.hasAttribute('hidden')) panel.scrollIntoView({ block: 'center', inline: 'nearest' });
+    });
   }
 }
 
@@ -339,13 +348,19 @@ function wireLandingPanels(): void {
       selectLandingOfflineClass('warrior');
       return;
     }
+    if (readCrypticSession()) {
+      document.body.dataset.pendingOnlineResume = '1';
+      showPanel('#realm-panel');
+      void loadApp();
+      return;
+    }
     showPanel('#login-panel');
   });
 
   const trigger = document.getElementById('server-select-trigger');
   const menu = document.getElementById('server-select-menu');
   const playLabel = document.querySelector<HTMLElement>('#btn-play .btn-play-label');
-  if (playLabel) playLabel.textContent = 'Log In To Play';
+  if (playLabel) playLabel.textContent = readCrypticSession() ? 'Continue' : 'Log In To Play';
   trigger?.addEventListener('click', () => {
     if (!menu) return;
     const open = menu.hasAttribute('hidden');
@@ -360,7 +375,9 @@ function wireLandingPanels(): void {
       const value = document.getElementById('server-select-value');
       root?.setAttribute('data-mode', mode);
       if (value) value.textContent = mode === 'offline' ? 'Offline' : 'Online';
-      if (playLabel) playLabel.textContent = mode === 'offline' ? 'Start Offline' : 'Log In To Play';
+      if (playLabel) playLabel.textContent = mode === 'offline'
+        ? 'Start Offline'
+        : (readCrypticSession() ? 'Continue' : 'Log In To Play');
       document.querySelectorAll<HTMLElement>('.server-select-option').forEach((el) => {
         const selected = el === opt;
         el.classList.toggle('is-selected', selected);
@@ -455,6 +472,9 @@ function wireDeferredAppLoad(): void {
     // the form via requestSubmit() so the app's submit handler actually runs.
     const submitBtn = target instanceof HTMLButtonElement && target.type === 'submit' ? target : null;
     const form = submitBtn?.form ?? target.closest('form');
+    if (target.id === 'btn-online' && readCrypticSession()) {
+      document.body.dataset.pendingOnlineResume = '1';
+    }
     void loadApp().then(() => {
       window.setTimeout(() => {
         if (form instanceof HTMLFormElement) {

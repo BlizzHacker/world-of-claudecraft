@@ -30,6 +30,7 @@ import { mountWalletPanel } from './ui/cryptic/wallet_panel';
 import { mountPwaInstall } from './ui/cryptic/pwa_install';
 import { mountNewsRealmFilter } from './ui/cryptic/news_realm_filter';
 import { mountDownloadLaunchers } from './ui/cryptic/download_launchers';
+import { clearCrypticSession, readCrypticSession, writeCrypticSession } from './ui/cryptic/session';
 
 
 const WORLD_SEED = 20061; // fixed: Cryptic Realm is a persistent place
@@ -1149,6 +1150,15 @@ async function startOffline(playerClass: PlayerClass, name: string, skin = 0): P
 
 const api = new Api();
 
+function hydrateApiFromSavedSession(): boolean {
+  if (api.token) return true;
+  const session = readCrypticSession();
+  if (!session) return false;
+  api.token = session.token;
+  api.username = session.username;
+  return true;
+}
+
 let activeTransitionTimeout: number | null = null;
 let activeTransitionCleanup: (() => void) | null = null;
 let characterPreview: InstanceType<GameRuntime['CharacterPreview']> | null = null;
@@ -1374,6 +1384,14 @@ function switchMainView(targetId: string): void {
   window.setTimeout(handleTransitionEnd, 150);
 }
 
+function scrollStartPanelIntoView(el: string): void {
+  const panel = document.querySelector<HTMLElement>(el);
+  if (!panel) return;
+  window.requestAnimationFrame(() => {
+    if (!panel.hasAttribute('hidden')) panel.scrollIntoView({ block: 'center', inline: 'nearest' });
+  });
+}
+
 function show(el: string): void {
   // Ensure the main view is switched to hero-view so play sub-panels are visible
   switchMainView('#hero-view');
@@ -1383,7 +1401,7 @@ function show(el: string): void {
 
   const logoImg = $('#title-logo');
   if (logoImg) {
-    const shouldHideLogo = el === '#login-panel' || el === '#charselect-panel' || el === '#offline-select';
+    const shouldHideLogo = el === '#login-panel' || el === '#realm-panel' || el === '#charselect-panel' || el === '#offline-select';
     logoImg.toggleAttribute('hidden', shouldHideLogo);
   }
 
@@ -1425,6 +1443,7 @@ function show(el: string): void {
     if (el === '#charselect-panel' || el === '#offline-select') {
       updatePreviewContainer(el);
     }
+    scrollStartPanelIntoView(el);
     return;
   }
 
@@ -1448,6 +1467,7 @@ function show(el: string): void {
     if (el === '#charselect-panel' || el === '#offline-select') {
       updatePreviewContainer(el);
     }
+    scrollStartPanelIntoView(el);
     return;
   }
 
@@ -1472,6 +1492,7 @@ function show(el: string): void {
     if (el === '#charselect-panel' || el === '#offline-select') {
       updatePreviewContainer(el);
     }
+    scrollStartPanelIntoView(el);
 
     // Force layout reflow
     void toPanel.offsetHeight;
@@ -2514,7 +2535,25 @@ function wireStartScreens(): void {
   const offlineNameInput = $('#char-name') as HTMLInputElement;
   const offlineError = $('#offline-error');
   
-  const handleOnlineSelect = () => show('#login-panel');
+  const resumeOnlineSession = async (): Promise<void> => {
+    if (!hydrateApiFromSavedSession()) {
+      show('#login-panel');
+      return;
+    }
+    loginError('');
+    try {
+      $('#realm-list-user').textContent = api.username ? `${api.username}` : '';
+      await enterRealmFlow();
+    } catch (err) {
+      clearCrypticSession();
+      api.token = null;
+      api.username = null;
+      show('#login-panel');
+      loginError(userFacingApiError(err));
+    }
+  };
+
+  const handleOnlineSelect = () => { void resumeOnlineSession(); };
 
   const handleOfflineStart = (cls: PlayerClass) => {
     const rawName = offlineNameInput.value.trim();
@@ -2603,7 +2642,9 @@ function wireStartScreens(): void {
       serverValue.textContent = t(VALUE_KEY[mode]);
       if (btnPlayLabel) {
         btnPlayLabel.removeAttribute('data-i18n');
-        btnPlayLabel.textContent = mode === 'offline' ? 'Start Offline' : 'Log In To Play';
+        btnPlayLabel.textContent = mode === 'offline'
+          ? 'Start Offline'
+          : (readCrypticSession() ? 'Continue' : 'Log In To Play');
       }
       subParts.forEach((part) => part.toggleAttribute('hidden', part.dataset.mode !== mode));
       if (serverTriggerDot) serverTriggerDot.dataset.mode = mode;
@@ -2712,6 +2753,11 @@ function wireStartScreens(): void {
     if (selCard) {
       handleOfflineStart(selCard.dataset.class as PlayerClass);
     }
+  }
+
+  if (document.body.dataset.pendingOnlineResume === '1') {
+    delete document.body.dataset.pendingOnlineResume;
+    void resumeOnlineSession();
   }
 
   // offline class chips
@@ -2846,8 +2892,7 @@ function wireStartScreens(): void {
     // dropdown picks up the new session without a reload.
     try {
       if (api.token && api.username) {
-        localStorage.setItem('cryptic-realm_user_token', api.token);
-        localStorage.setItem('cryptic-realm_user_name', api.username);
+        writeCrypticSession({ token: api.token, username: api.username });
         void mountUserDropdown();
       }
     } catch { /* storage unavailable */ }
@@ -2864,40 +2909,18 @@ function wireStartScreens(): void {
   // it doesn't show up in shared screenshots, and jump straight to the
   // realm select panel — same path doAuth() takes after /api/login succeeds.
   const ssoHash = (typeof window !== 'undefined' ? window.location.hash : '') ?? '';
-  // TEMP DIAGNOSTIC: surface the SSO-return state so we can see why login
-  // doesn't complete. Remove once fixed.
-  const ssoDiag = (msg: string) => {
-    try {
-      console.info('[cr-sso]', msg);
-      let bar = document.getElementById('cr-sso-diag');
-      if (!bar) {
-        bar = document.createElement('div');
-        bar.id = 'cr-sso-diag';
-        bar.style.cssText = 'position:fixed;left:0;right:0;top:0;z-index:99999;background:#0a2a3a;color:#aef;font:12px/1.5 ui-monospace,monospace;padding:8px 12px;border-bottom:2px solid #7bdff2;max-height:40vh;overflow:auto;white-space:pre-wrap;';
-        document.body.appendChild(bar);
-        bar.onclick = () => bar?.remove();
-      }
-      bar.textContent += msg + '\n';
-    } catch { /* ignore */ }
-  };
-  if (ssoHash.includes('auth_token=')) {
-    ssoDiag(`SSO hash present (len=${ssoHash.length}). startsWith#=${ssoHash.startsWith('#')}`);
-  }
   if (ssoHash.startsWith('#') && ssoHash.includes('auth_token=')) {
     const ssoParams = new URLSearchParams(ssoHash.slice(1));
     const ssoToken = ssoParams.get('auth_token');
     const ssoUser = ssoParams.get('auth_user');
-    ssoDiag(`token: ${ssoToken ? ssoToken.slice(0, 8) + '… len=' + ssoToken.length : 'MISSING'}, user: ${ssoUser ?? 'MISSING'}, regexOK=${ssoToken ? /^[a-f0-9]{64}$/.test(ssoToken) : false}`);
     if (ssoToken && /^[a-f0-9]{64}$/.test(ssoToken) && ssoUser) {
-      ssoDiag('condition matched → adopting token, loading realms…');
       api.token = ssoToken;
       api.username = ssoUser;
       // CR overlay: also persist to the dashboard's localStorage so the
       // logged-in header dropdown (src/ui/cryptic/user_dropdown.ts) shows
       // immediately. The dashboards (/me/, /mod/, /admin/) read the same keys.
       try {
-        localStorage.setItem('cryptic-realm_user_token', ssoToken);
-        localStorage.setItem('cryptic-realm_user_name', ssoUser);
+        writeCrypticSession({ token: ssoToken, username: ssoUser });
       } catch { /* storage unavailable */ }
       try { history.replaceState(null, '', window.location.pathname + window.location.search); } catch { /* noop */ }
       // Re-mount the header dropdown with the new identity.
@@ -2906,15 +2929,11 @@ function wireStartScreens(): void {
         try {
           const userEl = document.querySelector('#charselect-user');
           if (userEl) userEl.textContent = api.username ?? '';
-          ssoDiag('calling api.realms()…');
           const dir = await api.realms();
-          ssoDiag(`realms() OK: ${dir.realms.length} realms. showing list.`);
           const listUserEl = document.querySelector('#realm-list-user');
           if (listUserEl) listUserEl.textContent = api.username ?? '';
           showRealmList(dir);
-          ssoDiag('realm list shown — login complete.');
         } catch (err) {
-          ssoDiag('ERROR in realm flow: ' + (err instanceof Error ? err.message : String(err)));
           loginError(userFacingApiError(err));
         }
       })();
@@ -3415,9 +3434,14 @@ function initHomepageTrailer(): void {
   const reducedData = window.matchMedia('(prefers-reduced-data: reduce)').matches;
   const conn = (navigator as unknown as { connection?: { saveData?: boolean } }).connection;
   const saveData = Boolean(conn && conn.saveData);
+  const params = new URLSearchParams(window.location.search);
+  const lowGraphics = params.get('gfx') === 'low' || params.has('lowgfx');
+  const realmEntryActive = Boolean(api.token) ||
+    window.location.hash.includes('auth_token=') ||
+    document.body.dataset.pendingOfflineStart === '1';
 
-  if (reducedMotion || reducedData || saveData) {
-    // Honour the user's preference: keep the static poster, don't fetch/play video.
+  if (reducedMotion || reducedData || saveData || lowGraphics || realmEntryActive || isPhoneTouchDevice()) {
+    // Keep the static poster during login/game entry and on constrained devices.
     video.preload = 'none';
     if (fade) fade.classList.add('revealed'); // lift the black wipe without animating
     reveal();

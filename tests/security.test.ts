@@ -3,7 +3,7 @@ import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { buildWebSocketAuthMessage, buildWebSocketUrl } from '../src/net/online';
+import { buildWebSocketAuthMessage, buildWebSocketUrl, webSocketPayloadToText } from '../src/net/online';
 import { Sim } from '../src/sim/sim';
 import { normalizeCharName, offensiveName, offensiveUsername, validCharName, validUsername } from '../server/auth';
 import { rateLimited, requestIp, authThrottled, recordAuthFailure, clearAuthFailures, authFailureCount, resetAuthFailures, trackedIpCount, resetRateLimits } from '../server/ratelimit';
@@ -46,6 +46,16 @@ describe('websocket authentication', () => {
       token: 'a'.repeat(64),
       character: 42,
     });
+  });
+
+  it('decodes text and binary websocket payloads before parsing', async () => {
+    const raw = JSON.stringify({ t: 'hello', pid: 1 });
+    const encoded = new TextEncoder().encode(raw);
+
+    await expect(webSocketPayloadToText(raw)).resolves.toBe(raw);
+    await expect(webSocketPayloadToText(new Blob([raw]))).resolves.toBe(raw);
+    await expect(webSocketPayloadToText(encoded.buffer)).resolves.toBe(raw);
+    await expect(webSocketPayloadToText(encoded)).resolves.toBe(raw);
   });
 });
 
