@@ -14,6 +14,7 @@ import {
 } from '../../sim/realms';
 import { socialsForRealm } from '../../sim/realms/social_links';
 import { handleMiniGameClick, miniGameSectionHtml } from './minigames';
+import { charBuilderSectionHtml, handleCharBuilderClick } from './char_builder';
 import { persistAutoFps, resolveAutoFps } from './auto_fps';
 
 const MODAL_ID = 'cr-customization-modal';
@@ -133,6 +134,8 @@ function buildModalHtml(skin: HudSkin, fps: 'on' | 'off' | 'diablo'): string {
 
         ${miniGameSectionHtml()}
 
+        ${charBuilderSectionHtml()}
+
         <p class="cr-modal-footer-hint">Press <kbd>V</kbd> to toggle first-person view. Diablo angle uses a high ARPG camera.</p>
       </div>
     </div>
@@ -208,6 +211,8 @@ function openCustomization(): void {
     }
 
     if (handleMiniGameClick(target)) return;
+
+    if (handleCharBuilderClick(target)) return;
 
     const copyBtn = target.closest('[data-cr-copy]') as HTMLElement | null;
     if (copyBtn?.dataset.crCopy) {
