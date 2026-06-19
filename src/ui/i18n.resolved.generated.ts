@@ -520,6 +520,8 @@ export const en: EnTranslations = {
       "keyBindings": "Key Bindings",
       "graphics": "Graphics",
       "audio": "Audio",
+      "customization": "Customization",
+      "arcforge": "ArcForge",
       "logout": "Logout",
       "returnToGame": "Return to Game",
       "resetToDefaults": "Reset to Defaults",
@@ -4066,6 +4068,8 @@ export const es: EnTranslations = {
       "keyBindings": "Atajos de teclado",
       "graphics": "Gráficos",
       "audio": "Audio",
+      "customization": "Customization",
+      "arcforge": "ArcForge",
       "logout": "Cerrar sesión",
       "returnToGame": "Volver al juego",
       "resetToDefaults": "Restablecer valores",
@@ -7612,6 +7616,8 @@ export const es_ES: EnTranslations = {
       "keyBindings": "Atajos de teclado",
       "graphics": "Gráficos",
       "audio": "Audio",
+      "customization": "Customization",
+      "arcforge": "ArcForge",
       "logout": "Cerrar sesión",
       "returnToGame": "Volver al juego",
       "resetToDefaults": "Restablecer valores",
@@ -11158,6 +11164,8 @@ export const fr_FR: EnTranslations = {
       "keyBindings": "Raccourcis clavier",
       "graphics": "Graphismes",
       "audio": "Audio",
+      "customization": "Customization",
+      "arcforge": "ArcForge",
       "logout": "Déconnexion",
       "returnToGame": "Retour au jeu",
       "resetToDefaults": "Réinitialiser",
@@ -14704,6 +14712,8 @@ export const fr_CA: EnTranslations = {
       "keyBindings": "Raccourcis clavier",
       "graphics": "Graphismes",
       "audio": "Audio",
+      "customization": "Customization",
+      "arcforge": "ArcForge",
       "logout": "Déconnexion",
       "returnToGame": "Retour au jeu",
       "resetToDefaults": "Réinitialiser",
@@ -18250,6 +18260,8 @@ export const en_CA: EnTranslations = {
       "keyBindings": "Key Bindings",
       "graphics": "Graphics",
       "audio": "Audio",
+      "customization": "Customization",
+      "arcforge": "ArcForge",
       "logout": "Logout",
       "returnToGame": "Return to Game",
       "resetToDefaults": "Reset to Defaults",
@@ -21796,6 +21808,8 @@ export const it_IT: EnTranslations = {
       "keyBindings": "Comandi da tastiera",
       "graphics": "Grafica",
       "audio": "Audio",
+      "customization": "Customization",
+      "arcforge": "ArcForge",
       "logout": "Esci",
       "returnToGame": "Torna al gioco",
       "resetToDefaults": "Ripristina predefiniti",
@@ -25342,6 +25356,8 @@ export const de_DE: EnTranslations = {
       "keyBindings": "Tastenbelegung",
       "graphics": "Grafik",
       "audio": "Audio",
+      "customization": "Customization",
+      "arcforge": "ArcForge",
       "logout": "Ausloggen",
       "returnToGame": "Zurück zum Spiel",
       "resetToDefaults": "Standardwerte",
@@ -28888,6 +28904,8 @@ export const zh_CN: EnTranslations = {
       "keyBindings": "按键绑定",
       "graphics": "图形",
       "audio": "音频",
+      "customization": "Customization",
+      "arcforge": "ArcForge",
       "logout": "退出登录",
       "returnToGame": "返回游戏",
       "resetToDefaults": "恢复默认",
@@ -32434,6 +32452,8 @@ export const zh_TW: EnTranslations = {
       "keyBindings": "按鍵設定",
       "graphics": "圖形",
       "audio": "音訊",
+      "customization": "Customization",
+      "arcforge": "ArcForge",
       "logout": "登出",
       "returnToGame": "返回遊戲",
       "resetToDefaults": "恢復預設",
@@ -35980,6 +36000,8 @@ export const ko_KR: EnTranslations = {
       "keyBindings": "키 설정",
       "graphics": "그래픽",
       "audio": "오디오",
+      "customization": "Customization",
+      "arcforge": "ArcForge",
       "logout": "로그아웃",
       "returnToGame": "게임으로 돌아가기",
       "resetToDefaults": "기본값 복원",
@@ -39526,6 +39548,8 @@ export const ja_JP: EnTranslations = {
       "keyBindings": "キー設定",
       "graphics": "グラフィック",
       "audio": "オーディオ",
+      "customization": "Customization",
+      "arcforge": "ArcForge",
       "logout": "ログアウト",
       "returnToGame": "ゲームに戻る",
       "resetToDefaults": "初期設定に戻す",
@@ -43072,6 +43096,8 @@ export const pt_BR: EnTranslations = {
       "keyBindings": "Atalhos de teclado",
       "graphics": "Gráficos",
       "audio": "Áudio",
+      "customization": "Customization",
+      "arcforge": "ArcForge",
       "logout": "Sair",
       "returnToGame": "Voltar ao jogo",
       "resetToDefaults": "Restaurar padrões",
@@ -46618,6 +46644,8 @@ export const ru_RU: EnTranslations = {
       "keyBindings": "Назначение клавиш",
       "graphics": "Графика",
       "audio": "Звук",
+      "customization": "Customization",
+      "arcforge": "ArcForge",
       "logout": "Выйти",
       "returnToGame": "Вернуться в игру",
       "resetToDefaults": "Сбросить настройки",
@@ -49672,6 +49700,8 @@ export const translations = {
 
 export const pending: Record<string, readonly string[]> = {
   "es": [
+    "hud.options.arcforge",
+    "hud.options.customization",
     "nav.contributions",
     "news.alphaBetaBody",
     "news.alphaBetaTitle",
@@ -49685,6 +49715,8 @@ export const pending: Record<string, readonly string[]> = {
     "news.tokenTitle"
   ],
   "es_ES": [
+    "hud.options.arcforge",
+    "hud.options.customization",
     "nav.contributions",
     "news.alphaBetaBody",
     "news.alphaBetaTitle",
@@ -49698,6 +49730,8 @@ export const pending: Record<string, readonly string[]> = {
     "news.tokenTitle"
   ],
   "fr_FR": [
+    "hud.options.arcforge",
+    "hud.options.customization",
     "nav.contributions",
     "news.alphaBetaBody",
     "news.alphaBetaTitle",
@@ -49711,6 +49745,8 @@ export const pending: Record<string, readonly string[]> = {
     "news.tokenTitle"
   ],
   "fr_CA": [
+    "hud.options.arcforge",
+    "hud.options.customization",
     "nav.contributions",
     "news.alphaBetaBody",
     "news.alphaBetaTitle",
@@ -49725,6 +49761,8 @@ export const pending: Record<string, readonly string[]> = {
   ],
   "en_CA": [],
   "it_IT": [
+    "hud.options.arcforge",
+    "hud.options.customization",
     "nav.contributions",
     "news.alphaBetaBody",
     "news.alphaBetaTitle",
@@ -49738,6 +49776,8 @@ export const pending: Record<string, readonly string[]> = {
     "news.tokenTitle"
   ],
   "de_DE": [
+    "hud.options.arcforge",
+    "hud.options.customization",
     "nav.contributions",
     "news.alphaBetaBody",
     "news.alphaBetaTitle",
@@ -49751,6 +49791,8 @@ export const pending: Record<string, readonly string[]> = {
     "news.tokenTitle"
   ],
   "zh_CN": [
+    "hud.options.arcforge",
+    "hud.options.customization",
     "nav.contributions",
     "news.alphaBetaBody",
     "news.alphaBetaTitle",
@@ -49764,6 +49806,8 @@ export const pending: Record<string, readonly string[]> = {
     "news.tokenTitle"
   ],
   "zh_TW": [
+    "hud.options.arcforge",
+    "hud.options.customization",
     "nav.contributions",
     "news.alphaBetaBody",
     "news.alphaBetaTitle",
@@ -49777,6 +49821,8 @@ export const pending: Record<string, readonly string[]> = {
     "news.tokenTitle"
   ],
   "ko_KR": [
+    "hud.options.arcforge",
+    "hud.options.customization",
     "nav.contributions",
     "news.alphaBetaBody",
     "news.alphaBetaTitle",
@@ -49790,6 +49836,8 @@ export const pending: Record<string, readonly string[]> = {
     "news.tokenTitle"
   ],
   "ja_JP": [
+    "hud.options.arcforge",
+    "hud.options.customization",
     "nav.contributions",
     "news.alphaBetaBody",
     "news.alphaBetaTitle",
@@ -49803,6 +49851,8 @@ export const pending: Record<string, readonly string[]> = {
     "news.tokenTitle"
   ],
   "pt_BR": [
+    "hud.options.arcforge",
+    "hud.options.customization",
     "nav.contributions",
     "news.alphaBetaBody",
     "news.alphaBetaTitle",
@@ -49816,6 +49866,8 @@ export const pending: Record<string, readonly string[]> = {
     "news.tokenTitle"
   ],
   "ru_RU": [
+    "hud.options.arcforge",
+    "hud.options.customization",
     "nav.contributions",
     "news.alphaBetaBody",
     "news.alphaBetaTitle",
@@ -50341,6 +50393,8 @@ export const en_XA: EnTranslations = {
       "keyBindings": "[Ķéý Ɓíñðíñĝš]",
       "graphics": "[Ĝŕáþĥíçš]",
       "audio": "[Áúðíó]",
+      "customization": "[Çúšţóɱížáţíóñ]",
+      "arcforge": "[ÁŕçƑóŕĝé]",
       "logout": "[Ļóĝóúţ]",
       "returnToGame": "[Ŕéţúŕñ ţó Ĝáɱé]",
       "resetToDefaults": "[Ŕéšéţ ţó Ðéƒáúļţš]",

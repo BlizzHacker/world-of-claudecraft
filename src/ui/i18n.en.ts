@@ -2641,6 +2641,8 @@ const hudStringsEn = {
       keyBindings: "Key Bindings",
       graphics: "Graphics",
       audio: "Audio",
+      customization: "Customization",
+      arcforge: "ArcForge",
       logout: "Logout",
       returnToGame: "Return to Game",
       resetToDefaults: "Reset to Defaults",

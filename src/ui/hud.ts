@@ -23,6 +23,7 @@ import { audio } from '../game/audio';
 import { music, musicZoneForLocation } from '../game/music';
 import { iconDataUrl, iconCanvas, QUALITY_COLOR, raidMarkerDataUrl, RAID_MARKER_NAMES } from './icons';
 import { svgIcon } from './ui_icons';
+import { openCustomization, openArcForge } from './cryptic/ingame_options';
 import { Keybinds, BIND_ACTIONS, BIND_CATEGORIES, isReservedCode, keyLabel } from '../game/keybinds';
 import { Settings, GameSettings, BoolSettingKey, NumericSettingKey, SETTING_RANGES, clickMoveButtonLabel, normalizeClickMoveButton } from '../game/settings';
 import { isPhoneTouchDevice } from '../game/mobile_controls';
@@ -5584,6 +5585,20 @@ export class Hud {
     add(t('hud.options.keyBindings'), () => goto('keybinds'));
     add(t('hud.options.graphics'), () => goto('graphics'));
     add(t('hud.options.audio'), () => goto('audio'));
+    // Quick music on/off straight from the Game Menu (volume lives under Audio).
+    const musicBtn = document.createElement('button');
+    musicBtn.className = 'btn opt-btn';
+    const syncMusicLabel = () => {
+      const state = music.enabled ? t('hud.options.on') : t('hud.options.off');
+      musicBtn.textContent = `${t('hud.options.music')}: ${state}`;
+    };
+    syncMusicLabel();
+    musicBtn.addEventListener('click', () => { audio.click(); music.setEnabled(!music.enabled); syncMusicLabel(); });
+    list.appendChild(musicBtn);
+    // Cryptic Realm additions: in-game Customization (HUD/camera/realm/mini-games/
+    // Character Builder) and ArcForge Studio (opens in a new tab).
+    add(t('hud.options.customization'), () => openCustomization());
+    add(t('hud.options.arcforge'), () => openArcForge());
     add(t('hud.options.logout'), () => this.optionsHooks?.logout());
     add(t('hud.options.returnToGame'), () => this.closeOptions());
     el.appendChild(list);
