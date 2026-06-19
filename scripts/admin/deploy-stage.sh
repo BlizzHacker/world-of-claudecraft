@@ -39,13 +39,16 @@ if [ ! -d "$WORKTREE/.git" ] && [ ! -f "$WORKTREE/.git" ]; then
     || git -C "$CR_TOOLING" worktree add --force -B "$REF" "$WORKTREE" "$REMOTE/$REF"
 fi
 
-log "fetch + ff $REF"
+log "fetch + hard-sync $REF"
 git -C "$WORKTREE" fetch "$REMOTE" --tags >>"$LOGFILE" 2>&1
-# dev tracks a moving branch; live/beta/alpha are advanced only by promote.sh,
-# but we still ff to their current ref so a fresh promotion is picked up.
+# dev tracks a moving branch; live/beta/alpha are advanced only by promote.sh.
+# Hard-reset + clean so no stray local state (CRLF renormalization, leftovers
+# from a failed deploy, deleted files) can mask the committed tree — that bug
+# silently shipped a build missing new files. node_modules/dist are preserved
+# (clean -d excludes them via -e) so we don't blow away the install each time.
 git -C "$WORKTREE" checkout -q "$REF" 2>>"$LOGFILE" || true
-git -C "$WORKTREE" merge --ff-only "$REMOTE/$REF" >>"$LOGFILE" 2>&1 \
-  || git -C "$WORKTREE" reset --hard "$REMOTE/$REF" >>"$LOGFILE" 2>&1
+git -C "$WORKTREE" reset --hard "$REMOTE/$REF" >>"$LOGFILE" 2>&1
+git -C "$WORKTREE" clean -fd -e node_modules -e dist -e dist-server >>"$LOGFILE" 2>&1 || true
 
 log "npm install + build client + build:server (this worktree only)"
 ( cd "$WORKTREE" \
