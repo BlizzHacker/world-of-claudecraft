@@ -20,6 +20,10 @@ const services = [];
 
 for (const realmId of Object.keys(REALMS)) {
   for (const stage of STAGES) {
+    // The live ring keeps its existing apex/subdomain route (already in
+    // crypticrealm.yml / crypticrealm-realms.yml). Only emit the NEW stage
+    // subdomains (beta./alpha./dev.) so we never collide with live routes.
+    if (stage === 'live') continue;
     const host = stageHost(realmId, stage);
     const port = stagePort(realmId, stage);
     const name = `cr-${realmId}-${stage}`;
@@ -64,4 +68,10 @@ if (dnsMode) {
   console.log('');
   console.log('  services:');
   console.log(services.join('\n\n'));
+  console.log('');
+  console.log('  middlewares:');
+  console.log('    cr-noindex:');
+  console.log('      headers:');
+  console.log('        customResponseHeaders:');
+  console.log('          X-Robots-Tag: "noindex, nofollow"');
 }
