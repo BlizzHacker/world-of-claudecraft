@@ -37,7 +37,7 @@ for stage in "${STAGES[@]}"; do
   # deploy-stage.sh creates the worktree, builds it, and restarts the unit.
   # On first run the unit isn't enabled yet, so enable it before deploy builds.
   systemctl enable "cryptic-realm-stage@${inst}.service" >>"$LOGFILE" 2>&1 || true
-  "$CR_TOOLING/scripts/admin/deploy-stage.sh" "$REALM" "$stage"
+  bash "$CR_TOOLING/scripts/admin/deploy-stage.sh" "$REALM" "$stage"
 done
 
 log "done — stages: ${STAGES[*]}"

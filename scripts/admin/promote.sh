@@ -39,5 +39,5 @@ git -C "$CR_TOOLING" branch -f "$TO" "$FROM_SHA"
 git -C "$CR_TOOLING" push "$REMOTE" "$TO" >>"$LOGFILE" 2>&1
 
 log "redeploy ${REALM}-${TARGET}"
-"$CR_TOOLING/scripts/admin/deploy-stage.sh" "$REALM" "$TARGET"
+bash "$CR_TOOLING/scripts/admin/deploy-stage.sh" "$REALM" "$TARGET"
 log "done"
