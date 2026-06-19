@@ -19,6 +19,10 @@ import { persistAutoFps, resolveAutoFps } from './auto_fps';
 
 const MODAL_ID = 'cr-customization-modal';
 const BUTTON_CLASS = 'cr-customization-launcher';
+const ARCFORGE_BUTTON_CLASS = 'cr-arcforge-launcher';
+// ArcForge Studio is a separate app on the MoveWeight infra (not this realm),
+// so the menu entry opens it in a new tab rather than an in-game modal.
+const ARCFORGE_URL = 'https://arcforge.moveweight.com';
 const WOC_TOKEN_MINT = '3WjLscH2JsXLEFJZRA9z8ti8yRGxWGKbqymPd7UicRth';
 
 function escapeHtml(s: string): string {
@@ -223,16 +227,30 @@ function openCustomization(): void {
 }
 
 function injectIfMissing(menuEl: HTMLElement): void {
-  if (menuEl.querySelector(`.${BUTTON_CLASS}`)) return;
   const list = menuEl.querySelector('.opt-list');
   if (!list) return;
 
-  const btn = document.createElement('button');
-  btn.className = `btn opt-btn ${BUTTON_CLASS}`;
-  btn.type = 'button';
-  btn.textContent = 'Customization';
-  btn.addEventListener('click', () => openCustomization());
-  list.insertBefore(btn, list.firstChild);
+  // ArcForge first so that, after both insertBefore(firstChild) calls,
+  // Customization ends up on top, then ArcForge, above the stock entries.
+  if (!menuEl.querySelector(`.${ARCFORGE_BUTTON_CLASS}`)) {
+    const arc = document.createElement('button');
+    arc.className = `btn opt-btn ${ARCFORGE_BUTTON_CLASS}`;
+    arc.type = 'button';
+    arc.textContent = 'ArcForge';
+    arc.addEventListener('click', () => {
+      window.open(ARCFORGE_URL, '_blank', 'noopener,noreferrer');
+    });
+    list.insertBefore(arc, list.firstChild);
+  }
+
+  if (!menuEl.querySelector(`.${BUTTON_CLASS}`)) {
+    const btn = document.createElement('button');
+    btn.className = `btn opt-btn ${BUTTON_CLASS}`;
+    btn.type = 'button';
+    btn.textContent = 'Customization';
+    btn.addEventListener('click', () => openCustomization());
+    list.insertBefore(btn, list.firstChild);
+  }
 }
 
 export function mountIngameOptions(): void {
