@@ -47,9 +47,14 @@ git -C "$WORKTREE" checkout -q "$REF" 2>>"$LOGFILE" || true
 git -C "$WORKTREE" merge --ff-only "$REMOTE/$REF" >>"$LOGFILE" 2>&1 \
   || git -C "$WORKTREE" reset --hard "$REMOTE/$REF" >>"$LOGFILE" 2>&1
 
-log "npm install + build (this worktree only)"
-( cd "$WORKTREE" && npm install --no-audit --no-fund >>"$LOGFILE" 2>&1 && npm run build >>"$LOGFILE" 2>&1 ) \
+log "npm install + build client + build:server (this worktree only)"
+( cd "$WORKTREE" \
+    && npm install --no-audit --no-fund >>"$LOGFILE" 2>&1 \
+    && npm run build >>"$LOGFILE" 2>&1 \
+    && npm run build:server >>"$LOGFILE" 2>&1 ) \
   || { log "build failed — stage NOT restarted, previous build still serving"; exit 1; }
+[ -f "$WORKTREE/dist-server/server.cjs" ] \
+  || { log "build:server produced no dist-server/server.cjs — aborting"; exit 1; }
 
 log "restart cryptic-realm-stage@${INST}"
 systemctl restart "cryptic-realm-stage@${INST}.service"
