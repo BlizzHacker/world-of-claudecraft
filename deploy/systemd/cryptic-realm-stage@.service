@@ -1,0 +1,35 @@
+## Per-stage realm process. Instance name = "<realm>-<stage>", e.g.
+## cryptic-realm-stage@crypticrealm-dev. Unlike the flat cryptic-realm@.service
+## (one shared /opt/cryptic-realm checkout), each stage runs from its OWN git
+## worktree under /opt/cr-stages/<realm>/<stage>, so dev/alpha/beta/live serve
+## independent code.
+##
+## Install (per stage, done by scripts/admin/setup-realm-stages.sh):
+##   cp deploy/systemd/cryptic-realm-stage@.service /etc/systemd/system/
+##   cp env.d/<realm>-<stage>.env /opt/cryptic-realm/env.d/
+##   systemctl enable --now cryptic-realm-stage@<realm>-<stage>.service
+##
+## Layers shared secrets (/opt/cryptic-realm/.env) then the generated stage env
+## (env.d/%i.env) which provides REALM_NAME, PORT, CR_STAGE, CR_WORKDIR, etc.
+## CR_WORKDIR points node at the stage's worktree dist-server build.
+
+[Unit]
+Description=Cryptic Realm Stage Server (%i)
+After=network.target postgresql.service
+PartOf=cryptic-realm-realms.target
+
+[Service]
+Type=simple
+EnvironmentFile=/opt/cryptic-realm/.env
+EnvironmentFile=/opt/cryptic-realm/env.d/%i.env
+# CR_WORKDIR is set in the generated env file to /opt/cr-stages/<realm>/<stage>.
+# Run node from that worktree so each stage serves its own build.
+ExecStart=/usr/bin/env bash -lc 'cd "$CR_WORKDIR" && exec /usr/bin/node dist-server/server.cjs'
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=cryptic-realm-%i
+
+[Install]
+WantedBy=multi-user.target

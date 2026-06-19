@@ -26,3 +26,9 @@ export type { PickitOp, PickitCondition, PickitRule, PickitResult } from './pick
 export { getRealmAssetManifest, realmHasAssets } from './assets';
 export type { RealmAssetEntry, RealmAssetManifest } from './assets';
 export type { RealmBranding } from './types';
+export {
+  STAGE_ORDER, STAGE_META, STAGE_GIT_REF, REALM_PORT_BASE,
+  stagedRealmIds, stagePort, stageInstance, stageHost, stageUrl,
+  resolveRealmStage, persistRealmStage, isRealmStage,
+} from './stages';
+export type { RealmStage, StageMeta } from './stages';
