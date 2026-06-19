@@ -1,9 +1,9 @@
-// Phantom wallet panel — connects to the Solana wallet extension, asks the
+// Phantom wallet panel: connects to the Solana wallet extension, asks the
 // server for a sign challenge, signs it with the wallet, links the wallet,
-// then renders balance + claim button.
+// then renders balance + claim controls.
 //
-// No npm imports — talks to window.solana (Phantom injects this) directly.
-// Browsers without Phantom get a "Install Phantom" link instead.
+// No npm imports: talks to window.solana (Phantom injects this) directly.
+// Browsers without Phantom get an install link inside the wallet flyout.
 
 import { getActiveRealm } from '../../sim/realms';
 
@@ -81,10 +81,9 @@ async function submitClaim(amount: number): Promise<{ ok: boolean; msg: string }
   });
   const body = await r.json().catch(() => null);
   if (!r.ok) return { ok: false, msg: body?.error ?? `claim failed (${r.status})` };
-  return { ok: true, msg: `claimed → ${body?.data?.txSig ?? 'ok'}` };
+  return { ok: true, msg: `claimed to wallet: ${body?.data?.txSig ?? 'ok'}` };
 }
 
-// Minimal base58 encoder — Phantom returns signature bytes; we send base58.
 const ALPHA = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
 function bs58Encode(bytes: Uint8Array): string {
   let s = '';
@@ -100,71 +99,109 @@ function escapeHtml(s: string): string {
   );
 }
 
+function shortAddress(address: string): string {
+  return `${address.slice(0, 4)}...${address.slice(-4)}`;
+}
+
+function closePanel(host: HTMLElement): void {
+  const trigger = host.querySelector('.cr-wallet-trigger') as HTMLButtonElement | null;
+  const popover = host.querySelector('.cr-wallet-popover') as HTMLElement | null;
+  trigger?.setAttribute('aria-expanded', 'false');
+  popover?.setAttribute('hidden', '');
+}
+
+function togglePanel(host: HTMLElement): void {
+  const trigger = host.querySelector('.cr-wallet-trigger') as HTMLButtonElement | null;
+  const popover = host.querySelector('.cr-wallet-popover') as HTMLElement | null;
+  if (!trigger || !popover) return;
+  const willOpen = popover.hasAttribute('hidden');
+  trigger.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+  if (willOpen) popover.removeAttribute('hidden');
+  else popover.setAttribute('hidden', '');
+}
+
 async function render(host: HTMLElement): Promise<void> {
   const provider = getProvider();
   const me = await fetchPlatinum();
 
   if (!me) {
-    host.innerHTML = `
-      <div class="cr-wallet-card">
-        <h3>Wallet & Platinum</h3>
-        <p class="cr-dim">Sign in first to manage your platinum / wallet.</p>
-      </div>`;
+    host.innerHTML = '';
+    host.hidden = true;
     return;
   }
+  host.hidden = false;
 
   const phantomNotInstalled = !provider;
   const installPrompt = `
     <p class="cr-dim">
-      Phantom wallet isn't detected.
+      Phantom wallet is not detected.
       <a href="https://phantom.app/" target="_blank" rel="noopener noreferrer">Install Phantom</a>
       (or any Solana wallet that injects <code>window.solana</code>) and refresh.
     </p>`;
-  const linkButton = `<button id="cr-wallet-connect" type="button">Connect Phantom wallet</button>`;
+  const linkButton = '<button id="cr-wallet-connect" type="button">Connect Phantom wallet</button>';
+  const walletLabel = me.walletAddress ? shortAddress(me.walletAddress) : 'Wallet';
   const linked = me.walletAddress
     ? `<div class="cr-wallet-linked">
-         <span class="cr-dim">Wallet:</span> <code>${escapeHtml(me.walletAddress)}</code>
+         <span class="cr-dim">Linked wallet</span>
+         <code title="${escapeHtml(me.walletAddress)}">${escapeHtml(shortAddress(me.walletAddress))}</code>
        </div>`
     : '';
 
   const claim = me.walletAddress
     ? `<div class="cr-claim-row">
          <input id="cr-claim-amount" type="number" min="1" max="${me.offChainBalance}" value="${Math.min(1, me.offChainBalance)}" />
-         <button id="cr-claim-btn" type="button" ${me.offChainBalance > 0 ? '' : 'disabled'}>Claim → Wallet</button>
+         <button id="cr-claim-btn" type="button" ${me.offChainBalance > 0 ? '' : 'disabled'}>Claim to wallet</button>
        </div>
        <p class="cr-dim cr-tiny">
          Mints SPL tokens to your linked wallet. Off-chain platinum is debited
-         on success; refunded if the mint fails.
+         on success and refunded if the mint fails.
        </p>`
     : '';
 
   host.innerHTML = `
-    <div class="cr-wallet-card">
-      <h3>Wallet & Platinum</h3>
-      <div class="cr-balance-row">
-        <span class="cr-balance-label">Platinum (off-chain)</span>
-        <span class="cr-balance-value">${me.offChainBalance}</span>
+    <div class="cr-wallet-widget">
+      <button type="button" class="cr-wallet-trigger" aria-haspopup="dialog" aria-expanded="false" aria-controls="cr-wallet-popover">
+        <span class="cr-wallet-mark" aria-hidden="true">$CR</span>
+        <span class="cr-wallet-trigger-copy">
+          <span class="cr-wallet-trigger-kicker">Wallet</span>
+          <span class="cr-wallet-trigger-label">${escapeHtml(walletLabel)}</span>
+        </span>
+        <span class="cr-wallet-trigger-balance" title="Off-chain platinum">${me.offChainBalance} PT</span>
+        <span class="cr-wallet-caret" aria-hidden="true">v</span>
+      </button>
+      <div class="cr-wallet-popover" id="cr-wallet-popover" role="dialog" aria-label="Wallet and Platinum" hidden>
+        <div class="cr-wallet-card">
+          <h3>Wallet & Platinum</h3>
+          <div class="cr-balance-row">
+            <span class="cr-balance-label">Platinum</span>
+            <span class="cr-balance-value">${me.offChainBalance}</span>
+          </div>
+          <div class="cr-balance-row">
+            <span class="cr-balance-label">Lifetime earned</span>
+            <span class="cr-balance-value cr-dim">${me.lifetimeEarned}</span>
+          </div>
+          <div class="cr-balance-row">
+            <span class="cr-balance-label">On-chain balance</span>
+            <span class="cr-balance-value">${me.onChainBalance == null ? '-' : me.onChainBalance}</span>
+          </div>
+          ${linked}
+          ${phantomNotInstalled ? installPrompt : (me.walletAddress ? '' : linkButton)}
+          ${claim}
+          <p class="cr-disclaimer cr-tiny">
+            Items and on-chain tokens granted in Cryptic Realm are gameplay
+            utility for cosmetics, achievements, and account ownership records.
+            They are not investments, securities, or financial instruments.
+          </p>
+        </div>
       </div>
-      <div class="cr-balance-row">
-        <span class="cr-balance-label">Lifetime earned</span>
-        <span class="cr-balance-value cr-dim">${me.lifetimeEarned}</span>
-      </div>
-      <div class="cr-balance-row">
-        <span class="cr-balance-label">On-chain balance</span>
-        <span class="cr-balance-value">${me.onChainBalance == null ? '—' : me.onChainBalance}</span>
-      </div>
-      ${linked}
-      ${phantomNotInstalled ? installPrompt : (me.walletAddress ? '' : linkButton)}
-      ${claim}
-      <p class="cr-disclaimer cr-tiny">
-        Items and on-chain tokens granted in Cryptic Realm are utility for
-        gameplay, cosmetics, achievements, and account ownership records.
-        They are not investments, securities, or financial instruments. No
-        price appreciation, revenue share, staking yield, or guaranteed
-        value is implied or promised.
-      </p>
     </div>
   `;
+
+  host.querySelector('.cr-wallet-trigger')?.addEventListener('click', (ev) => {
+    ev.preventDefault();
+    ev.stopPropagation();
+    togglePanel(host);
+  });
 
   host.querySelector('#cr-wallet-connect')?.addEventListener('click', async () => {
     const p = getProvider();
@@ -197,13 +234,27 @@ export function mountWalletPanel(): void {
   if (typeof document === 'undefined') return;
   const host = document.getElementById('cr-wallet-panel');
   if (!host) return;
+
   const refresh = () => {
     if (getActiveRealm().id === 'claudecraft') {
       host.innerHTML = '';
+      host.hidden = true;
       return;
     }
     void render(host);
   };
+
+  if (host.dataset.crWalletMounted !== '1') {
+    host.dataset.crWalletMounted = '1';
+    document.addEventListener('click', (ev) => {
+      if (!host.contains(ev.target as Node)) closePanel(host);
+    });
+    document.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Escape') closePanel(host);
+    });
+    window.addEventListener('cr-realm-change', refresh);
+    window.addEventListener('storage', refresh);
+  }
+
   refresh();
-  window.addEventListener('cr-realm-change', refresh);
 }

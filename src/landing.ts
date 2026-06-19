@@ -6,6 +6,7 @@ import { mountSkillTree } from './ui/cryptic/skilltree';
 import { mountLootVault } from './ui/cryptic/loot_vault';
 import { mountPickitPanel } from './ui/cryptic/pickit_panel';
 import { mountUserDropdown } from './ui/cryptic/user_dropdown';
+import { mountWalletPanel } from './ui/cryptic/wallet_panel';
 import { readCrypticSession } from './ui/cryptic/session';
 
 let appPromise: Promise<typeof import('./main')> | null = null;
@@ -42,6 +43,7 @@ function bootLandingBranding(): void {
   mountSkillTree();
   mountLootVault();
   mountPickitPanel();
+  mountWalletPanel();
 }
 
 function wireContractAddressCopy(): void {
@@ -137,6 +139,17 @@ function closeMobileMenu(): void {
   const toggleBtn = document.getElementById('mobile-menu-toggle');
   header?.classList.remove('menu-open');
   toggleBtn?.setAttribute('aria-expanded', 'false');
+}
+
+function wireMobileMenu(): void {
+  const header = document.querySelector<HTMLElement>('.homepage-header');
+  const toggleBtn = document.getElementById('mobile-menu-toggle') as HTMLButtonElement | null;
+  if (!header || !toggleBtn || toggleBtn.dataset.crMobileMenuMounted === '1') return;
+  toggleBtn.dataset.crMobileMenuMounted = '1';
+  toggleBtn.addEventListener('click', () => {
+    const isOpen = header.classList.toggle('menu-open');
+    toggleBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
 }
 
 function switchLandingView(targetId: string): void {
@@ -550,6 +563,7 @@ function boot(): void {
   window.addEventListener('resize', syncLandingViewport);
   window.visualViewport?.addEventListener('resize', syncLandingViewport);
   bootLandingBranding();
+  wireMobileMenu();
   wireContractAddressCopy();
   wireLandingPanels();
   wireLandingOfflinePanel();

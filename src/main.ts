@@ -2894,6 +2894,7 @@ function wireStartScreens(): void {
       if (api.token && api.username) {
         writeCrypticSession({ token: api.token, username: api.username });
         void mountUserDropdown();
+        mountWalletPanel();
       }
     } catch { /* storage unavailable */ }
     try {
@@ -2925,6 +2926,7 @@ function wireStartScreens(): void {
       try { history.replaceState(null, '', window.location.pathname + window.location.search); } catch { /* noop */ }
       // Re-mount the header dropdown with the new identity.
       void mountUserDropdown();
+      mountWalletPanel();
       void (async () => {
         try {
           const userEl = document.querySelector('#charselect-user');
@@ -3359,7 +3361,8 @@ function wireStartScreens(): void {
   // Mobile menu toggle setup
   const mobileMenuToggle = $('#mobile-menu-toggle');
   const homepageHeader = $('.homepage-header');
-  if (mobileMenuToggle && homepageHeader) {
+  if (mobileMenuToggle && homepageHeader && mobileMenuToggle.dataset.crMobileMenuMounted !== '1') {
+    mobileMenuToggle.dataset.crMobileMenuMounted = '1';
     mobileMenuToggle.addEventListener('click', () => {
       const isOpen = homepageHeader.classList.toggle('menu-open');
       mobileMenuToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');

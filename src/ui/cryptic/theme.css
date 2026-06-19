@@ -1102,14 +1102,116 @@ body.game-active footer.homepage-footer { display: none !important; }
 }
 
 /* ---------- wallet + platinum panel ---------- */
+#cr-wallet-panel {
+  position: relative;
+  display: inline-block;
+  flex: 0 0 auto;
+  align-self: center;
+  font-family: var(--cr-font-ui, system-ui, sans-serif);
+}
+#cr-wallet-panel[hidden] { display: none !important; }
+.cr-wallet-widget {
+  position: relative;
+  display: inline-block;
+}
+.cr-wallet-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  max-width: 190px;
+  padding: 6px 10px;
+  border: 1px solid var(--cr-border, var(--border, #4a4a4a));
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(24, 20, 17, 0.96), rgba(11, 9, 12, 0.96));
+  color: var(--cr-text, #e8d5c4);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 2px 8px rgba(0, 0, 0, 0.42);
+  cursor: pointer;
+  font: inherit;
+  line-height: 1;
+  white-space: nowrap;
+  transition: border-color 0.15s, box-shadow 0.15s, color 0.15s;
+}
+.cr-wallet-trigger:hover,
+.cr-wallet-trigger:focus-visible,
+.cr-wallet-trigger[aria-expanded="true"] {
+  color: #fff3bd;
+  border-color: var(--cr-border-focus, var(--gold, #d4442a));
+  box-shadow: 0 0 10px var(--cr-border-glow, rgba(212, 68, 42, 0.45)), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  outline: none;
+}
+.cr-wallet-mark {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  background: radial-gradient(circle at 30% 25%, #ffe8a4, var(--cr-gold, #c9a14a) 58%, #67390f 100%);
+  color: #160b02;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0;
+}
+.cr-wallet-trigger-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  text-align: left;
+}
+.cr-wallet-trigger-kicker {
+  color: var(--cr-text-dim, #9a8a7a);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.cr-wallet-trigger-label {
+  max-width: 72px;
+  overflow: hidden;
+  color: var(--cr-gold, #c9a14a);
+  font-size: 12px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+}
+.cr-wallet-trigger-balance {
+  flex: 0 0 auto;
+  padding: 5px 7px;
+  border: 1px solid rgba(255, 209, 0, 0.16);
+  border-radius: 999px;
+  background: rgba(255, 209, 0, 0.08);
+  color: #ffdf7a;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 11px;
+  font-weight: 800;
+}
+.cr-wallet-caret { color: var(--cr-text-dim, #9a8a7a); font-size: 10px; }
+.cr-wallet-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: min(340px, calc(100vw - 24px));
+  max-height: calc(100vh - 96px);
+  overflow-y: auto;
+  z-index: 10000;
+  border-radius: 10px;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.72);
+}
+.cr-wallet-popover[hidden] { display: none; }
 .cr-wallet-card {
   background: var(--panel-bg, linear-gradient(170deg, #15151f 0%, #0b0b12 60%, #08080d 100%));
-  border: 2px solid var(--gold, #c8a838);
+  border: 1px solid var(--gold, #c8a838);
   border-radius: 10px;
-  padding: 18px 22px;
-  margin: 16px 0;
+  padding: 14px 16px;
+  margin: 0;
   color: var(--cr-text, #e8d8a8);
   font-family: var(--cr-font-ui, system-ui, sans-serif);
+}
+.cr-wallet-popover .cr-wallet-card {
+  background: linear-gradient(170deg, rgba(18, 18, 28, 0.99) 0%, rgba(10, 10, 17, 0.99) 62%, rgba(6, 6, 10, 0.99) 100%);
+  backdrop-filter: blur(8px);
 }
 .cr-wallet-card h3 {
   margin: 0 0 12px;
@@ -1121,6 +1223,7 @@ body.game-active footer.homepage-footer { display: none !important; }
 .cr-balance-row {
   display: flex;
   justify-content: space-between;
+  gap: 14px;
   padding: 6px 0;
   border-bottom: 1px dashed rgba(255, 215, 0, 0.12);
   font-size: 13px;
@@ -1131,7 +1234,13 @@ body.game-active footer.homepage-footer { display: none !important; }
   font-weight: 700;
   color: var(--gold-dim, #c8a838);
 }
-.cr-wallet-linked { padding: 8px 0; font-size: 12px; word-break: break-all; }
+.cr-wallet-linked {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 0;
+  font-size: 12px;
+}
 .cr-wallet-linked code {
   font-family: ui-monospace, Menlo, Consolas, monospace;
   background: rgba(0, 0, 0, 0.4);
@@ -1145,7 +1254,7 @@ body.game-active footer.homepage-footer { display: none !important; }
   padding: 8px 14px;
   border-radius: 6px;
   font-weight: 800;
-  letter-spacing: 1px;
+  letter-spacing: 0.8px;
   text-transform: uppercase;
   cursor: pointer;
   margin-top: 8px;
@@ -1162,7 +1271,7 @@ body.game-active footer.homepage-footer { display: none !important; }
   color: inherit;
   padding: 6px 10px;
   border-radius: 4px;
-  width: 110px;
+  width: 86px;
   font: inherit;
 }
 .cr-disclaimer {
@@ -1174,6 +1283,37 @@ body.game-active footer.homepage-footer { display: none !important; }
   color: var(--cr-text-dim, #9a8a7a);
 }
 .cr-tiny { font-size: 10px; line-height: 1.55; }
+
+@media (max-width: 860px), (pointer: coarse) {
+  .header-actions {
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+  #cr-wallet-panel {
+    order: 3;
+    width: min(100%, 320px);
+  }
+  .cr-wallet-widget,
+  .cr-wallet-trigger {
+    width: 100%;
+  }
+  .cr-wallet-trigger {
+    justify-content: center;
+    max-width: none;
+  }
+  .cr-wallet-trigger-label {
+    max-width: 96px;
+  }
+  .cr-wallet-popover {
+    position: fixed;
+    top: 72px;
+    left: 12px;
+    right: 12px;
+    width: auto;
+    max-height: calc(100vh - 92px);
+  }
+}
 
 /* ---------- dashboard top chrome (/admin /mod /me) ---------- */
 .cr-dash-chrome {
