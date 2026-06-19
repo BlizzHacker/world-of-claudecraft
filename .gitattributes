@@ -1,0 +1,9 @@
+# Deploy-critical files MUST stay LF — CRLF breaks shebangs and systemd units on
+# the Linux host (`#!/usr/bin/env bash^M: no such file or directory`).
+*.sh        text eol=lf
+*.mjs       text eol=lf
+*.service   text eol=lf
+*.timer     text eol=lf
+*.target    text eol=lf
+scripts/**  text eol=lf
+deploy/**   text eol=lf
