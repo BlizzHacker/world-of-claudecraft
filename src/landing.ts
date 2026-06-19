@@ -448,6 +448,10 @@ function wireLandingOfflinePanel(): void {
 
 function applyHashRoute(): void {
   const hash = window.location.hash.replace(/^#/, '').toLowerCase();
+  if (hash === 'play' || hash === 'game') {
+    showPanel('#mode-select');
+    return;
+  }
   if (hash === 'highscores' || hash === 'leaderboard') {
     switchLandingView('#highscores-view');
     void loadLandingHighscores();
@@ -465,6 +469,10 @@ function applyHashRoute(): void {
   if (hash === 'download' || hash === 'downloads' || hash === 'install') {
     switchLandingView('#download-view');
     void mountLandingDownloads();
+    return;
+  }
+  if (hash === 'login' || hash === 'register' || hash === 'account') {
+    showPanel('#login-panel');
   }
 }
 

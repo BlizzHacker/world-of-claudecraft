@@ -9,8 +9,10 @@ import { GFX } from '../gfx';
 import type { EmoteClipSpec, VisualDef } from './manifest';
 import {
   applyMaterials, assembleModel, prepareVisual, skinTexture, tintedFarMaterials,
+  type AssembleModelOptions,
 } from './assets';
 import { desiredBaseState, locomotionTimeScale, type AnimState, type BaseState } from './anim_state';
+import { firstPersonMeshRole } from './first_person_parts';
 
 export type { AnimState, BaseState } from './anim_state';
 
@@ -24,6 +26,9 @@ const SWIM_PITCH_PROCEDURAL = 1.18;
 const SWIM_RISE = 0.95; // body must break the surface or only the hat floats
 const MIXER_DT_CAP = 0.3; // throttled entities never integrate a huge step
 const GHOST_OPACITY = 0.34;
+const FIRST_PERSON_FALLBACK_OPACITY = 0.08;
+
+export interface CharacterVisualOptions extends AssembleModelOptions {}
 
 // shared invisible click capsule — raycaster ignores `visible`, render doesn't
 let clickGeoSingleton: THREE.CylinderGeometry | null = null;
@@ -72,6 +77,10 @@ export class CharacterVisual {
   private casters: THREE.Mesh[] = [];
   private originalMaterials = new Map<THREE.Mesh, THREE.Material | THREE.Material[]>();
   private ghostMaterials = new Map<THREE.Material, THREE.Material>();
+  private firstPersonGhostMaterials = new Map<THREE.Material, THREE.Material>();
+  private originalVisibility = new Map<THREE.Mesh, boolean>();
+  private firstPersonSelf = false;
+  private preserveFirstPersonParts = false;
 
   private baseState: BaseState = 'idle';
   private current: THREE.AnimationAction | null = null;
@@ -89,20 +98,24 @@ export class CharacterVisual {
   private far = false;
   private bobPhase = Math.random() * Math.PI * 2;
 
-  constructor(key: string, entityColor: number, skinIndex = 0) {
+  constructor(key: string, entityColor: number, skinIndex = 0, opts: CharacterVisualOptions = {}) {
     const prep = prepareVisual(key);
     this.def = prep.def;
     this.key = key;
     this.entityColor = entityColor;
     this.skinIndex = skinIndex;
+    this.preserveFirstPersonParts = opts.preserveFirstPersonParts === true;
     this.height = prep.def.height;
 
     // model: yaw/scale/feet normalization wrapper around the skinned clone
-    this.model = assembleModel(prep.def);
+    this.model = assembleModel(prep.def, opts);
     applyMaterials(this.model, prep.def, entityColor, skinTexture(key, skinIndex));
     this.model.traverse((o) => {
       const mesh = o as THREE.Mesh;
-      if (mesh.isMesh) this.originalMaterials.set(mesh, mesh.material);
+      if (mesh.isMesh) {
+        this.originalMaterials.set(mesh, mesh.material);
+        this.originalVisibility.set(mesh, mesh.visible);
+      }
     });
     this.modelWrap.rotation.y = prep.def.yaw ?? 0;
     this.modelWrap.scale.setScalar(prep.normScale);
@@ -283,6 +296,20 @@ export class CharacterVisual {
     if (this.farMesh && this.farMaterials) {
       this.farMesh.material = on ? this.toGhostMaterial(this.farMaterials) : this.farMaterials;
     }
+    if (this.firstPersonSelf) this.applyFirstPersonSelfOverrides();
+  }
+
+  setFirstPersonSelf(on: boolean): void {
+    if (on === this.firstPersonSelf) {
+      if (on) this.applyFirstPersonSelfOverrides();
+      return;
+    }
+    this.firstPersonSelf = on;
+    if (on) {
+      this.applyFirstPersonSelfOverrides();
+      return;
+    }
+    this.restoreFirstPersonSelfOverrides();
   }
 
   /** Swap the body skin (alternate texture atlas) at runtime; no-op if unchanged.
@@ -295,9 +322,13 @@ export class CharacterVisual {
     this.originalMaterials.clear();
     this.model.traverse((o) => {
       const mesh = o as THREE.Mesh;
-      if (mesh.isMesh) this.originalMaterials.set(mesh, mesh.material);
+      if (mesh.isMesh) {
+        this.originalMaterials.set(mesh, mesh.material);
+        if (!this.originalVisibility.has(mesh)) this.originalVisibility.set(mesh, mesh.visible);
+      }
     });
     if (this.ghosted) this.setGhost(true);
+    if (this.firstPersonSelf) this.applyFirstPersonSelfOverrides();
   }
 
   dispose(): void {
@@ -329,6 +360,47 @@ export class CharacterVisual {
     return this.ghostMaterial(material) as T;
   }
 
+  private toFirstPersonFallbackMaterial<T extends THREE.Material | THREE.Material[]>(material: T): T {
+    if (Array.isArray(material)) return material.map((m) => this.firstPersonFallbackMaterial(m)) as T;
+    return this.firstPersonFallbackMaterial(material) as T;
+  }
+
+  private applyFirstPersonSelfOverrides(): void {
+    for (const [mesh, original] of this.originalMaterials) {
+      const wasVisible = this.originalVisibility.get(mesh) ?? true;
+      if (!wasVisible) {
+        mesh.visible = false;
+        continue;
+      }
+      const role = firstPersonMeshRole(mesh.name);
+      const isBodyMesh = mesh.userData.bodyMesh === true;
+      if (this.preserveFirstPersonParts && isBodyMesh) {
+        if (role === 'hide' || role === 'other') {
+          mesh.visible = false;
+          continue;
+        }
+        mesh.visible = true;
+        mesh.material = original;
+        continue;
+      }
+      mesh.visible = true;
+      if (isBodyMesh) mesh.material = this.toFirstPersonFallbackMaterial(original);
+      else mesh.material = original;
+    }
+    if (this.farMesh) this.farMesh.visible = false;
+    if (this.shadowProxy) this.shadowProxy.visible = false;
+  }
+
+  private restoreFirstPersonSelfOverrides(): void {
+    for (const [mesh, original] of this.originalMaterials) {
+      mesh.visible = this.originalVisibility.get(mesh) ?? true;
+      mesh.material = this.ghosted ? this.toGhostMaterial(original) : original;
+    }
+    if (this.farMesh && this.farMaterials) {
+      this.farMesh.material = this.ghosted ? this.toGhostMaterial(this.farMaterials) : this.farMaterials;
+    }
+  }
+
   private ghostMaterial(material: THREE.Material): THREE.Material {
     const cached = this.ghostMaterials.get(material);
     if (cached) return cached;
@@ -338,6 +410,17 @@ export class CharacterVisual {
     ghost.depthWrite = false;
     this.ghostMaterials.set(material, ghost);
     return ghost;
+  }
+
+  private firstPersonFallbackMaterial(material: THREE.Material): THREE.Material {
+    const cached = this.firstPersonGhostMaterials.get(material);
+    if (cached) return cached;
+    const fp = material.clone();
+    fp.transparent = true;
+    fp.opacity = FIRST_PERSON_FALLBACK_OPACITY;
+    fp.depthWrite = false;
+    this.firstPersonGhostMaterials.set(material, fp);
+    return fp;
   }
 
   private action(name: string | undefined): THREE.AnimationAction | null {

@@ -14,6 +14,7 @@ import { loadGltf, loadTexture } from '../assets/loader';
 import { registerPreload } from '../assets/preload';
 import { GFX, addRimGlow } from '../gfx';
 import { manifestUrls, SKINS, VISUALS, VisualDef, type AttachDef } from './manifest';
+import { shouldPreserveFirstPersonMeshPart } from './first_person_parts';
 
 const DEFAULT_TINT_STRENGTH = 0.4;
 
@@ -26,6 +27,10 @@ type HandGrip = {
   quaternion: [number, number, number, number];
   scale: number;
 };
+
+export interface AssembleModelOptions {
+  preserveFirstPersonParts?: boolean;
+}
 
 // KayKit adventurer standalone weapon glbs ship a left-hand mesh offset on a
 // lone child node. handslot.r/l children in the character glbs carry the
@@ -207,12 +212,13 @@ function resolvedGltf(url: string): GLTF {
 
 const optimizedSceneCache = new Map<string, THREE.Object3D>();
 
-function optimizedScene(url: string): THREE.Object3D {
-  const hit = optimizedSceneCache.get(url);
+function optimizedScene(url: string, opts: AssembleModelOptions = {}): THREE.Object3D {
+  const cacheKey = `${url}|${opts.preserveFirstPersonParts ? 'fps-parts' : 'merged'}`;
+  const hit = optimizedSceneCache.get(cacheKey);
   if (hit) return hit;
   const root = cloneSkinned(resolvedGltf(url).scene);
-  mergeSkinnedParts(root);
-  optimizedSceneCache.set(url, root);
+  mergeSkinnedParts(root, opts);
+  optimizedSceneCache.set(cacheKey, root);
   return root;
 }
 
@@ -230,7 +236,7 @@ function sameBindData(a: THREE.SkinnedMesh, b: THREE.SkinnedMesh): boolean {
   return true;
 }
 
-function mergeSkinnedParts(root: THREE.Object3D): void {
+function mergeSkinnedParts(root: THREE.Object3D, opts: AssembleModelOptions = {}): void {
   // bucket by bone set / material / parent / local transform, then split
   // buckets by approximate bind-data equality (float noise must not block a
   // merge, while genuinely different bind poses must never share vertices —
@@ -239,6 +245,7 @@ function mergeSkinnedParts(root: THREE.Object3D): void {
   root.traverse((o) => {
     const sm = o as THREE.SkinnedMesh;
     if (!sm.isSkinnedMesh || !sm.visible) return;
+    if (opts.preserveFirstPersonParts && shouldPreserveFirstPersonMeshPart(sm.name)) return;
     const mat = sm.material as THREE.Material;
     if (Array.isArray(sm.material)) return; // never happens via GLTFLoader
     const bones = sm.skeleton.bones.map((b) => b.uuid).join(',');
@@ -276,8 +283,8 @@ function mergeSkinnedParts(root: THREE.Object3D): void {
 
 /** Fresh SkeletonUtils clone of a manifest entry with its kit applied.
  *  Pure model space — normalization (scale/yaw/feet offset) happens upstream. */
-export function assembleModel(def: VisualDef): THREE.Object3D {
-  const root = cloneSkinned(optimizedScene(def.url));
+export function assembleModel(def: VisualDef, opts: AssembleModelOptions = {}): THREE.Object3D {
+  const root = cloneSkinned(optimizedScene(def.url, opts));
   // tag the character's own meshes (body + accessories share one texture atlas)
   // so a skin override hits them but not the separate weapons attached below
   root.traverse((o) => { if ((o as THREE.Mesh).isMesh) o.userData.bodyMesh = true; });

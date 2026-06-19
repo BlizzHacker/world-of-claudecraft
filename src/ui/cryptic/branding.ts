@@ -81,8 +81,19 @@ function applyDonateLinks(realm: RealmContent): void {
     a.href = href;
     a.title = title;
     a.setAttribute('aria-label', aria);
+    if (tipWallet) {
+      a.removeAttribute('data-i18n-title');
+      a.removeAttribute('data-i18n-aria');
+    } else {
+      a.setAttribute('data-i18n-title', 'a11y.donateProject');
+      a.setAttribute('data-i18n-aria', 'a11y.donateProject');
+    }
     const span = a.querySelector('span');
-    if (span) span.textContent = label;
+    if (span) {
+      if (tipWallet) span.removeAttribute('data-i18n');
+      else span.setAttribute('data-i18n', 'nav.donate');
+      span.textContent = label;
+    }
   });
 }
 

@@ -3,15 +3,19 @@
 // with the preload gate, so createCharacterVisual is synchronous by the time
 // the Renderer constructs views.
 import type { Entity } from '../../sim/types';
-import { CharacterVisual } from './visual';
+import { CharacterVisual, type CharacterVisualOptions } from './visual';
 import { visualKeyFor } from './manifest';
 
 export { CharacterVisual } from './visual';
-export type { AnimState } from './visual';
+export type { AnimState, CharacterVisualOptions } from './visual';
 export { CharacterPreview } from './preview';
 
 /** Build the visual for an entity (or an explicit shapeshift/polymorph form key). */
-export function createCharacterVisual(e: Entity, formKey?: 'form_sheep' | 'form_bear' | 'form_cat'): CharacterVisual {
+export function createCharacterVisual(
+  e: Entity,
+  formKey?: 'form_sheep' | 'form_bear' | 'form_cat',
+  opts: CharacterVisualOptions = {},
+): CharacterVisual {
   // forms (sheep/bear/cat) are their own models — skins only apply to the base body
-  return new CharacterVisual(formKey ?? visualKeyFor(e), e.color, formKey ? 0 : (e.skin ?? 0));
+  return new CharacterVisual(formKey ?? visualKeyFor(e), e.color, formKey ? 0 : (e.skin ?? 0), opts);
 }

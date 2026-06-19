@@ -215,6 +215,7 @@ export class Renderer {
   // settings-menu graphics knobs (applied live)
   private renderScale = 1; // user-requested resolution ceiling on top of the device pixel ratio
   private effectiveRenderScale = 1; // runtime value after adaptive backoff
+  private firstPersonSelfView = false;
   private frameMsEma = 16.7;
   private adaptiveGrace = 2.0;
   private adaptiveCooldown = 0;
@@ -538,6 +539,10 @@ export class Renderer {
     this.applyResolution();
   }
 
+  setFirstPersonSelfView(on: boolean): void {
+    this.firstPersonSelfView = on;
+  }
+
   private isMobileRuntime(): boolean {
     return document.body.classList.contains('mobile-touch');
   }
@@ -765,7 +770,7 @@ export class Renderer {
       sparkle.position.y = 1.35;
       group.add(sparkle);
     } else {
-      visual = createCharacterVisual(e);
+      visual = createCharacterVisual(e, undefined, { preserveFirstPersonParts: e.id === this.sim.playerId });
       visual.root.scale.multiplyScalar(e.scale);
       group.add(visual.root);
       height = visual.height;
@@ -1177,6 +1182,11 @@ export class Renderer {
           : cat && v.catVisual ? v.catVisual : v.visual;
       const ghost = ghostWolf || shouldRenderStealthGhost(this.sim.playerId, e);
       active.setGhost(ghost);
+      const selfFirstPerson = id === p.id && this.firstPersonSelfView;
+      v.visual.setFirstPersonSelf(selfFirstPerson && active === v.visual);
+      v.sheepVisual?.setFirstPersonSelf(selfFirstPerson && active === v.sheepVisual);
+      v.bearVisual?.setFirstPersonSelf(selfFirstPerson && active === v.bearVisual);
+      v.catVisual?.setFirstPersonSelf(selfFirstPerson && active === v.catVisual);
       v.visual.root.visible = active === v.visual;
       // distant rigs swap to the single-draw baked idle-pose mesh
       v.visual.setFar(v.isFar && active === v.visual);

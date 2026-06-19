@@ -41,6 +41,9 @@ describe('Cryptic realm branding crypto surfaces', () => {
     expect(donate.href).toBe(`solana:${CR_WALLET}`);
     expect(donate.textContent).toContain('Tip $CR');
     expect(donate.style.display).toBe('');
+    expect(donate.hasAttribute('data-i18n-title')).toBe(false);
+    expect(donate.hasAttribute('data-i18n-aria')).toBe(false);
+    expect(donate.querySelector('span')?.hasAttribute('data-i18n')).toBe(false);
     expect(document.querySelector<HTMLElement>('.token-ca-label')?.textContent).toBe('$CR Contract Address');
     expect(document.getElementById('btn-copy-ca')?.getAttribute('data-ca')).toBe(CR_TOKEN);
     expect(document.querySelector<HTMLElement>('.token-ca-addr')?.textContent).toBe(CR_TOKEN);
@@ -59,6 +62,8 @@ describe('Cryptic realm branding crypto surfaces', () => {
     const donate = document.querySelector<HTMLAnchorElement>('.donate-cta')!;
     expect(donate.href).toBe('https://github.com/sponsors/levy-street');
     expect(donate.textContent).toContain('Donate');
+    expect(donate.getAttribute('data-i18n-title')).toBe('a11y.donateProject');
+    expect(donate.querySelector('span')?.getAttribute('data-i18n')).toBe('nav.donate');
     expect(document.querySelector<HTMLElement>('.token-ca-label')?.textContent).toBe('$WOC Contract Address');
     expect(document.getElementById('btn-copy-ca')?.getAttribute('data-ca')).toBe(WOC_TOKEN);
     expect(document.querySelector<HTMLElement>('.token-ca-addr')?.textContent).toBe(WOC_TOKEN);

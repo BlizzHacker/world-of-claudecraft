@@ -22,7 +22,7 @@ import { hydrateIcons } from './ui/ui_icons';
 // `<div id="theme-picker">` block.
 import { mountThemeSelect } from './ui/cryptic/theme_select';
 import { mountHudGlobes, setHudSkin, resolveHudSkin } from './ui/cryptic/globes';
-import { mountFpsMode, resolveFpsMode, setFpsMode } from './ui/cryptic/fps_mode';
+import { isFpsActive, mountFpsMode, resolveFpsMode, setFpsMode } from './ui/cryptic/fps_mode';
 import { mountRealmBranding } from './ui/cryptic/branding';
 import { mountIngameOptions } from './ui/cryptic/ingame_options';
 import { mountUserDropdown } from './ui/cryptic/user_dropdown';
@@ -1063,6 +1063,7 @@ async function startGame(world: IWorld, offlineSim: Sim | null, online: ClientWo
       renderer.camYaw = input.camYaw;
       renderer.camPitch = input.camPitch;
       renderer.camDist = input.camDist;
+      renderer.setFirstPersonSelfView(isFpsActive());
       perf.setNetwork(null);
       perf.time('renderer', () => renderer.sync(acc / DT, frameDt, movementFacing));
       updateClickMoveMarker();
@@ -1099,6 +1100,7 @@ async function startGame(world: IWorld, offlineSim: Sim | null, online: ClientWo
     renderer.camYaw = input.camYaw;
     renderer.camPitch = input.camPitch;
     renderer.camDist = input.camDist;
+    renderer.setFirstPersonSelfView(isFpsActive());
     perf.time('renderer', () => renderer.sync(alpha, frameDt, movementFacing));
     updateClickMoveMarker();
     perf.markInputVisible(performance.now());
@@ -3315,6 +3317,11 @@ function wireStartScreens(): void {
   const applyHashRoute = () => {
     const hash = window.location.hash.replace(/^#/, '').toLowerCase();
     if (!hash || hash.includes('auth_token=')) return;
+    if (hash === 'play' || hash === 'game') {
+      switchMainView('#hero-view');
+      show('#mode-select');
+      return;
+    }
     if (hash === 'highscores' || hash === 'leaderboard') {
       switchMainView('#highscores-view');
       void loadHighscores();
@@ -3331,6 +3338,11 @@ function wireStartScreens(): void {
     }
     if (hash === 'download' || hash === 'downloads' || hash === 'install') {
       switchMainView('#download-view');
+      return;
+    }
+    if (hash === 'login' || hash === 'register' || hash === 'account') {
+      switchMainView('#hero-view');
+      show('#login-panel');
     }
   };
   applyHashRoute();

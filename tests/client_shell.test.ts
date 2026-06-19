@@ -177,6 +177,7 @@ describe('client HTML shell', () => {
     expect(html).toContain('id="nav-btn-download"');
     expect(html).toContain('href="/links.html"');
     expect(html).toContain('href="/whitepaper.html"');
+    expect(html).not.toContain('href="/whitepaper.html" target="_blank"');
     expect(landingTs).toContain("document.getElementById('nav-btn-highscores')");
     expect(landingTs).toContain("document.getElementById('nav-btn-wiki')");
     expect(landingTs).toContain("document.getElementById('nav-btn-news')");
