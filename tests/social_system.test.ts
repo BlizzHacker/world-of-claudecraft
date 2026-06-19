@@ -4,7 +4,7 @@ import {
   type CharInfo, type CharRef, type GuildRank, type Presence,
   type SocialDb, type SocialEvent, type SocialTransport,
 } from '../server/social';
-import { resolveRealm } from '../server/realm';
+import { parseWebOrigins, resolveRealm } from '../server/realm';
 
 // ---------------------------------------------------------------------------
 // In-memory fakes — let us exercise the full SocialService logic (friends,
@@ -153,6 +153,15 @@ describe('resolveRealm', () => {
     expect(resolveRealm('')).toBe('Claudemoon');
     expect(resolveRealm('x'.repeat(25))).toBe('Claudemoon');
     expect(resolveRealm('drop;table')).toBe('Claudemoon');
+  });
+});
+
+describe('parseWebOrigins', () => {
+  it('normalizes bare origins and ignores invalid entries', () => {
+    expect(parseWebOrigins('https://crypticrealm.com/, https://fps.moveweight.com, ftp://bad.example, https://ok.example/path, https://crypticrealm.com')).toEqual([
+      'https://crypticrealm.com',
+      'https://fps.moveweight.com',
+    ]);
   });
 });
 

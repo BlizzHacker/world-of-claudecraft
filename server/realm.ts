@@ -71,11 +71,30 @@ function parseRealms(raw: string | undefined): RealmEntry[] {
   return out;
 }
 
+function normalizeBareOrigin(raw: string): string | null {
+  const origin = raw.trim().replace(/\/+$/, '');
+  return /^https?:\/\/[^/]+$/.test(origin) ? origin : null;
+}
+
+export function parseWebOrigins(raw: string | undefined): string[] {
+  const out: string[] = [];
+  for (const part of (raw ?? '').split(',')) {
+    const origin = normalizeBareOrigin(part);
+    if (origin && !out.includes(origin)) out.push(origin);
+  }
+  return out;
+}
+
 export const REALM_DIRECTORY: RealmEntry[] = (() => {
   const parsed = parseRealms(process.env.REALMS);
   return parsed.length > 0 ? parsed : [{ name: REALM, url: '', type: REALM_TYPE }];
 })();
 
 // Cross-origin requests from these realm origins are allowed (CORS), so a
-// client served by one realm can call another realm's API after switching.
-export const REALM_ORIGINS: ReadonlySet<string> = new Set(REALM_DIRECTORY.map((r) => r.url).filter(Boolean));
+// client served by one realm can call another realm's API after switching. The
+// explicit web origins cover apex launchers that list subrealm hosts without
+// being one of those subrealms themselves.
+export const REALM_ORIGINS: ReadonlySet<string> = new Set([
+  ...REALM_DIRECTORY.map((r) => r.url).filter(Boolean),
+  ...parseWebOrigins(process.env.WEB_ORIGINS),
+]);
