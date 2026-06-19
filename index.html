@@ -72,7 +72,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-<link rel="preload" as="image" href="/loading-screen.jpg" />
+<link rel="prefetch" as="image" href="/loading-screen.jpg" />
 <link rel="preload" as="image" href="./ui/cursors/hand-default.png" />
 <link rel="preload" as="image" href="./ui/cursors/attack-sword.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -593,6 +593,45 @@
   /* width shrinks on narrower screens so the chat never overlaps the centred
      bottom bar (≈612px wide); caps at 370px when there's room. */
   #chatlog-wrap { position: absolute; left: 12px; bottom: 8px; width: min(370px, calc(50vw - 330px)); }
+  #chatlog-wrap[data-cr-chat-frame="mounted"] { min-width: 260px; max-width: calc(100vw - 16px); }
+  .chat-frame-grip,
+  .chat-frame-resize {
+    position: absolute;
+    z-index: 4;
+    width: 22px;
+    height: 22px;
+    border: 1px solid #4a3d1d;
+    border-radius: 4px;
+    background: linear-gradient(#1c1824, #0d0b13);
+    color: #d8c89a;
+    cursor: grab;
+    opacity: 0.72;
+  }
+  .chat-frame-grip { right: 4px; top: 1px; }
+  .chat-frame-grip::before,
+  .chat-frame-grip::after,
+  .chat-frame-resize::before,
+  .chat-frame-resize::after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    right: 6px;
+    height: 1px;
+    background: currentColor;
+  }
+  .chat-frame-grip::before { top: 7px; }
+  .chat-frame-grip::after { top: 13px; }
+  .chat-frame-resize { right: 4px; bottom: 4px; cursor: nwse-resize; }
+  .chat-frame-resize::before { bottom: 7px; transform: rotate(-45deg); transform-origin: right center; }
+  .chat-frame-resize::after { bottom: 11px; transform: rotate(-45deg); transform-origin: right center; }
+  .chat-frame-grip:hover,
+  .chat-frame-resize:hover,
+  .chat-frame-grip:focus-visible,
+  .chat-frame-resize:focus-visible {
+    opacity: 1;
+    border-color: var(--gold);
+    outline: none;
+  }
   #chatlog-tabs { display: flex; gap: 2px; margin-left: 6px; margin-bottom: -1px; position: relative; z-index: 2; }
   .chat-tab { height: 22px; padding: 0 12px; border: 1px solid #3a321d; border-bottom: none;
     border-radius: 6px 6px 0 0; background: linear-gradient(#1c1824, #0d0b13); color: #95886a;
@@ -1132,6 +1171,23 @@
   #options-menu { width: 420px; z-index: 40; }
   .opt-list { display: flex; flex-direction: column; gap: 8px; align-items: stretch; padding: 4px 0; }
   .opt-btn { margin: 0; text-align: center; }
+  .opt-status {
+    min-height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 8px;
+    border: 1px solid #3a321d;
+    border-radius: 5px;
+    color: #9f9270;
+    background: #08070bcc;
+    font-size: 11px;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .opt-status.ok { color: #cfe6a3; border-color: #526c2b; }
   .kb-rows { display: flex; flex-direction: column; gap: 2px; margin-bottom: 8px; }
   .kb-cat { font-family: var(--title-font); color: var(--gold); font-size: 12px; letter-spacing: 0.5px;
     text-transform: uppercase; margin: 8px 0 2px; border-bottom: 1px solid #463a1c; padding-bottom: 2px; }
@@ -4242,6 +4298,8 @@
   body.mobile-touch .community-link span { display: inline; line-height: 1; }
   body.mobile-touch .community-link.donate { display: inline-flex; width: 100%; padding: 0 9px; font-size: 12px; }
   body.mobile-touch #chatlog-wrap { left: max(10px, env(safe-area-inset-left)); bottom: calc(160px + env(safe-area-inset-bottom)); width: min(340px, calc(100vw - 20px)); display: none; z-index: 24; }
+  body.mobile-touch .chat-frame-grip,
+  body.mobile-touch .chat-frame-resize { display: none; }
   body.mobile-touch.mobile-chat-open #chatlog-wrap { display: block; }
   body.mobile-touch #chatlog-frame { height: 126px; }
   body.mobile-touch #chatlog-tabs { transform: scale(0.92); transform-origin: left bottom; }

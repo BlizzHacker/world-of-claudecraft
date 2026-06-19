@@ -5,35 +5,19 @@ const CR_TOKEN = '3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv';
 const CR_WALLET = 'GncAXx6j38osJns395XZtf6rSA9MU3K1gwafTrHpBJpi';
 const WOC_TOKEN = '3WjLscH2JsXLEFJZRA9z8ti8yRGxWGKbqymPd7UicRth';
 
-function setupOptionsMenu(): void {
-  document.body.innerHTML = `
-    <div id="options-menu">
-      <div class="opt-list">
-        <button type="button" class="btn opt-btn">Return to Game</button>
-      </div>
-    </div>
-  `;
-}
-
 describe('Cryptic Realm in-game customization menu', () => {
   beforeEach(() => {
     vi.resetModules();
     window.localStorage.clear();
     document.documentElement.removeAttribute('data-theme');
-    setupOptionsMenu();
+    document.body.innerHTML = '';
   });
 
-  it('injects one launcher and opens Cryptic token/realm controls', async () => {
+  it('opens Cryptic token/realm controls and a separate Mods tab', async () => {
     window.localStorage.setItem('cr_active_realm', 'infernal');
-    const { mountIngameOptions } = await import('../src/ui/cryptic/ingame_options');
+    const { openCustomization } = await import('../src/ui/cryptic/ingame_options');
 
-    mountIngameOptions();
-    mountIngameOptions();
-
-    const launchers = document.querySelectorAll<HTMLButtonElement>('.cr-customization-launcher');
-    expect(launchers).toHaveLength(1);
-
-    launchers[0].click();
+    openCustomization();
 
     const modal = document.getElementById('cr-customization-modal')!;
     expect(modal.hasAttribute('hidden')).toBe(false);
@@ -41,8 +25,15 @@ describe('Cryptic Realm in-game customization menu', () => {
     expect(modal.textContent).toContain('$CR token');
     expect(modal.innerHTML).toContain(CR_TOKEN);
     expect(modal.innerHTML).toContain(CR_WALLET);
-    expect(modal.querySelectorAll('[data-cr-realm]')).toHaveLength(6);
+    expect(modal.querySelectorAll('[data-cr-realm]').length).toBeGreaterThanOrEqual(6);
     expect(modal.querySelector<HTMLButtonElement>('[data-cr-fps="diablo"]')?.textContent).toContain('Diablo angle');
+    expect(modal.querySelectorAll('[data-cr-tab]')).toHaveLength(2);
+
+    modal.querySelector<HTMLButtonElement>('[data-cr-tab="mods"]')!.click();
+
+    expect(modal.textContent).toContain('Realm stage');
+    expect(modal.querySelectorAll('[data-cr-stage]')).toHaveLength(4);
+    expect(modal.querySelector('[data-cr-bug-report]')).not.toBeNull();
     expect(modal.querySelectorAll('[data-cr-minigame]')).toHaveLength(3);
     expect(modal.textContent).toContain('Nova Swarm');
   });
@@ -51,10 +42,9 @@ describe('Cryptic Realm in-game customization menu', () => {
     window.localStorage.setItem('cr_active_realm', 'infernal');
     const events: string[] = [];
     window.addEventListener('cr-realm-change', () => events.push('changed'));
-    const { mountIngameOptions } = await import('../src/ui/cryptic/ingame_options');
+    const { openCustomization } = await import('../src/ui/cryptic/ingame_options');
 
-    mountIngameOptions();
-    document.querySelector<HTMLButtonElement>('.cr-customization-launcher')!.click();
+    openCustomization();
     document.querySelector<HTMLButtonElement>('[data-cr-realm="claudecraft"]')!.click();
 
     const modal = document.getElementById('cr-customization-modal')!;

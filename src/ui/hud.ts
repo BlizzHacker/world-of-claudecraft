@@ -21,9 +21,11 @@ import type { Decoration } from '../sim/world';
 import { Meters } from './meters';
 import { audio } from '../game/audio';
 import { music, musicZoneForLocation } from '../game/music';
+import { getGamepadStatus } from '../game/gamepad';
 import { iconDataUrl, iconCanvas, QUALITY_COLOR, raidMarkerDataUrl, RAID_MARKER_NAMES } from './icons';
 import { svgIcon } from './ui_icons';
-import { openCustomization, openArcForge } from './cryptic/ingame_options';
+import { openCustomization, openMods, openArcForge } from './cryptic/ingame_options';
+import { openBugReport } from './cryptic/bug_report';
 import { Keybinds, BIND_ACTIONS, BIND_CATEGORIES, isReservedCode, keyLabel } from '../game/keybinds';
 import { Settings, GameSettings, BoolSettingKey, NumericSettingKey, SETTING_RANGES, clickMoveButtonLabel, normalizeClickMoveButton } from '../game/settings';
 import { isPhoneTouchDevice } from '../game/mobile_controls';
@@ -5595,9 +5597,16 @@ export class Hud {
     syncMusicLabel();
     musicBtn.addEventListener('click', () => { audio.click(); music.setEnabled(!music.enabled); syncMusicLabel(); });
     list.appendChild(musicBtn);
-    // Cryptic Realm additions: in-game Customization (HUD/camera/realm/mini-games/
-    // Character Builder) and ArcForge Studio (opens in a new tab).
+    const pad = getGamepadStatus();
+    const padRow = document.createElement('div');
+    padRow.className = `opt-status ${pad.connected ? 'ok' : ''}`;
+    padRow.textContent = `${t('hud.options.controller')}: ${pad.connected ? pad.label : t('hud.options.controllerDisconnected')}`;
+    list.appendChild(padRow);
+    // Cryptic Realm additions: customization and mods are separate entries so
+    // realm-specific features don't get buried with generic graphics/audio.
     add(t('hud.options.customization'), () => openCustomization());
+    add(t('hud.options.mods'), () => openMods());
+    add(t('hud.options.reportBug'), () => openBugReport());
     add(t('hud.options.arcforge'), () => openArcForge());
     add(t('hud.options.logout'), () => this.optionsHooks?.logout());
     add(t('hud.options.returnToGame'), () => this.closeOptions());

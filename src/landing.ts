@@ -141,6 +141,17 @@ function closeMobileMenu(): void {
   toggleBtn?.setAttribute('aria-expanded', 'false');
 }
 
+function blurFocusedDescendant(el: HTMLElement): void {
+  const active = document.activeElement;
+  if (active instanceof HTMLElement && el.contains(active)) active.blur();
+}
+
+function setPanelVisibility(el: HTMLElement, visible: boolean): void {
+  if (!visible) blurFocusedDescendant(el);
+  el.toggleAttribute('hidden', !visible);
+  el.setAttribute('aria-hidden', visible ? 'false' : 'true');
+}
+
 function wireMobileMenu(): void {
   const header = document.querySelector<HTMLElement>('.homepage-header');
   const toggleBtn = document.getElementById('mobile-menu-toggle') as HTMLButtonElement | null;
@@ -159,8 +170,7 @@ function switchLandingView(targetId: string): void {
     const el = document.querySelector<HTMLElement>(id);
     if (!el) continue;
     const isTarget = id === targetId;
-    el.toggleAttribute('hidden', !isTarget);
-    el.setAttribute('aria-hidden', isTarget ? 'false' : 'true');
+    setPanelVisibility(el, isTarget);
   }
 
   const activeNavId = NAV_BY_VIEW[targetId];
@@ -319,8 +329,7 @@ function showPanel(selector: string): void {
     const el = document.querySelector<HTMLElement>(id);
     if (!el) continue;
     const isTarget = id === selector;
-    el.toggleAttribute('hidden', !isTarget);
-    el.setAttribute('aria-hidden', isTarget ? 'false' : 'true');
+    setPanelVisibility(el, isTarget);
   }
   document.body.dataset.startPanel = selector.slice(1);
   const logoImg = document.getElementById('title-logo');

@@ -102,7 +102,7 @@ describe('Authentik OIDC handler', () => {
     expect(res.body.error).toMatch(/state/);
   });
 
-  it('callback redirects with auth token in URL fragment on success', async () => {
+  it('callback returns a browser hash bridge with auth token on success', async () => {
     const dbMod = await import('../server/db');
     vi.mocked(dbMod.upsertOAuthAccount).mockResolvedValue({ id: 9, username: 'authetiker', created: true });
     vi.mocked(dbMod.touchLogin).mockResolvedValue(undefined);
@@ -139,9 +139,12 @@ describe('Authentik OIDC handler', () => {
     const res = fakeRes();
     await handleAuthentikRoute(req, res);
 
-    expect(res.statusCode).toBe(302);
-    const loc = res._headers.location as string;
-    expect(loc).toMatch(/^\/#auth_token=c{64}&auth_user=authetiker&auth_via=authentik$/);
+    expect(res.statusCode).toBe(200);
+    expect(res._headers['content-type']).toMatch(/text\/html/);
+    expect(String(res.body)).toContain('window.location.replace');
+    expect(String(res.body)).toContain('auth_token=c'.padEnd('auth_token='.length + 64, 'c'));
+    expect(String(res.body)).toContain('auth_user=authetiker');
+    expect(String(res.body)).toContain('auth_via=authentik');
     expect(dbMod.saveToken).toHaveBeenCalledWith('c'.repeat(64), 9);
     expect(dbMod.touchLogin).toHaveBeenCalledWith(9);
 

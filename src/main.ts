@@ -5,6 +5,7 @@ import { PHONE_TOUCH_QUERY, isPhoneTouchDevice } from './game/mobile_controls';
 import type { Hud } from './ui/hud';
 import { handlePickedEntity, hoverCursorKind } from './game/interactions';
 import { clickMoveShouldCancel, clickMoveStep, stepAngleToward } from './game/click_move';
+import { mountGamepadControls } from './game/gamepad';
 import { Api, ClientWorld, CharacterSummary, type ReleaseEntry } from './net/online';
 import type { IWorld, LeaderboardEntry } from './world_api';
 import { formatXp } from './ui/xp_bar';
@@ -30,6 +31,7 @@ import { mountWalletPanel } from './ui/cryptic/wallet_panel';
 import { mountPwaInstall } from './ui/cryptic/pwa_install';
 import { mountNewsRealmFilter } from './ui/cryptic/news_realm_filter';
 import { mountDownloadLaunchers } from './ui/cryptic/download_launchers';
+import { mountChatFrame } from './ui/cryptic/chat_frame';
 import { clearCrypticSession, readCrypticSession, writeCrypticSession } from './ui/cryptic/session';
 
 
@@ -681,6 +683,7 @@ async function startGame(world: IWorld, offlineSim: Sim | null, online: ClientWo
   }
 
   const chatInput = $('#chat-input') as unknown as HTMLInputElement;
+  mountChatFrame();
   const clickMoveMarker = $('#click-move-marker') as HTMLDivElement;
   const recoverFromMobileKeyboard = (): void => {
     document.body.classList.remove('mobile-chat-open');
@@ -713,6 +716,11 @@ async function startGame(world: IWorld, offlineSim: Sim | null, online: ClientWo
     if (chatInput.style.display === 'none') recoverFromMobileKeyboard();
   });
 
+  const canUseGameKeys = () => !hud.isModalOpen() && chatInput.style.display !== 'block';
+  const toggleGameMenu = () => {
+    if (!hud.closeAll()) hud.toggleOptionsMenu();
+  };
+
   const input = new Input(canvas, {
     onTab: () => world.tabTarget(),
     onTargetFriendly: () => world.targetNearestFriendly(),
@@ -738,13 +746,13 @@ async function startGame(world: IWorld, offlineSim: Sim | null, online: ClientWo
         case 'chat': openChat(); break;
         case 'escape':
           // close the topmost panel; if nothing was open, open the game menu
-          if (!hud.closeAll()) hud.toggleOptionsMenu();
+          toggleGameMenu();
           break;
       }
     },
     onEmoteWheel: (open) => hud.setEmoteWheelOpen(open),
     onClickPick: (x, y, button) => handlePick(x, y, button),
-    canUseGameKeys: () => !hud.isModalOpen() && chatInput.style.display !== 'block',
+    canUseGameKeys,
   }, keybinds);
   input.camYaw = world.player.facing;
   // CR overlay: wire optional first-person camera & reticle to the input
@@ -1121,7 +1129,17 @@ async function startGame(world: IWorld, offlineSim: Sim | null, online: ClientWo
     face(facing: unknown) { input.setControllerFacing(facing); },
     stop() { input.clearControllerMoveInput(); },
   };
-  (window as any).__game = { sim: world, world, renderer, input, hud, online, controller, perf };
+  const gamepad = mountGamepadControls(input, {
+    controller,
+    canUseGameKeys,
+    onAbility: (slot) => hud.castSlot(slot),
+    onAttackNearest: () => attackNearest(),
+    onTarget: () => world.tabTarget(),
+    onInteract: () => interactKey(),
+    onMenu: () => toggleGameMenu(),
+    onChat: () => openChat(),
+  });
+  (window as any).__game = { sim: world, world, renderer, input, hud, online, controller, gamepad, perf };
 }
 
 // ---------------------------------------------------------------------------
@@ -1295,6 +1313,17 @@ const hoverTimeouts: Record<string, number | null> = {
   'online-class-details': null
 };
 
+function blurFocusedDescendant(el: HTMLElement): void {
+  const active = document.activeElement;
+  if (active instanceof HTMLElement && el.contains(active)) active.blur();
+}
+
+function setPanelVisibility(el: HTMLElement, visible: boolean): void {
+  if (!visible) blurFocusedDescendant(el);
+  el.toggleAttribute('hidden', !visible);
+  el.setAttribute('aria-hidden', visible ? 'false' : 'true');
+}
+
 function switchMainView(targetId: string): void {
   const views = ['#hero-view', '#highscores-view', '#wiki-view', '#news-view', '#download-view'];
   const currentViewId = views.find(id => {
@@ -1332,8 +1361,7 @@ function switchMainView(targetId: string): void {
       const el = $(id);
       if (el) {
         const isTarget = id === targetId;
-        el.toggleAttribute('hidden', !isTarget);
-        el.setAttribute('aria-hidden', isTarget ? 'false' : 'true');
+        setPanelVisibility(el, isTarget);
       }
     });
 
@@ -1440,7 +1468,7 @@ function show(el: string): void {
   if (!currentActiveId || currentActiveId === el) {
     // Show instantly on initial load or same panel
     for (const id of panels) {
-      $(id).toggleAttribute('hidden', id !== el);
+      setPanelVisibility($(id), id === el);
     }
     if (el === '#charselect-panel' || el === '#offline-select') {
       updatePreviewContainer(el);
@@ -1464,8 +1492,8 @@ function show(el: string): void {
 
   const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (isReducedMotion) {
-    fromPanel.toggleAttribute('hidden', true);
-    toPanel.toggleAttribute('hidden', false);
+    setPanelVisibility(fromPanel, false);
+    setPanelVisibility(toPanel, true);
     if (el === '#charselect-panel' || el === '#offline-select') {
       updatePreviewContainer(el);
     }
@@ -1477,7 +1505,7 @@ function show(el: string): void {
   fromPanel.classList.add('panel-transition', 'panel-fade-out');
 
   const cleanupFrom = () => {
-    fromPanel.toggleAttribute('hidden', true);
+    setPanelVisibility(fromPanel, false);
     fromPanel.classList.remove('panel-transition', 'panel-fade-out');
   };
 
@@ -1490,7 +1518,7 @@ function show(el: string): void {
 
     // Set initial state for fade-in
     toPanel.classList.add('panel-transition', 'panel-fade-in-start');
-    toPanel.toggleAttribute('hidden', false);
+    setPanelVisibility(toPanel, true);
     if (el === '#charselect-panel' || el === '#offline-select') {
       updatePreviewContainer(el);
     }

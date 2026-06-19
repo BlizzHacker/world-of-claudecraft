@@ -17,11 +17,11 @@ import { parsePickitFilter, evaluateItem } from '../src/sim/realms/pickit';
 import { Rng } from '../src/sim/rng';
 
 describe('realm registry', () => {
-  it('ships six realms (five home + The Exchange)', () => {
+  it('ships eight realms (seven home + The Exchange)', () => {
     expect(Object.keys(REALMS).sort()).toEqual(
-      ['arcane', 'classic', 'claudecraft', 'dominion', 'exchange', 'infernal'],
+      ['arcane', 'classic', 'claudecraft', 'crypticrealm', 'dominion', 'exchange', 'fps', 'infernal'],
     );
-    expect(REALM_LIST.length).toBe(6);
+    expect(REALM_LIST.length).toBe(8);
   });
 
   it('default realm is registered and matches DEFAULT_REALM', () => {
