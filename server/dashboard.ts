@@ -20,6 +20,7 @@ import { verifyPassword, newToken } from './auth';
 import { generateTotpSecret, otpauthUrl, verifyTotpCode } from './totp';
 import { moderationQueue } from './moderation_db';
 import { REALM } from './realm';
+import { handleArcForgeProxy } from './arcforge_proxy';
 
 const DASH_LOGIN_MAX_PER_MINUTE = 10;
 
@@ -198,6 +199,10 @@ export async function handleUserApi(
   const url = new URL(req.url ?? '/', 'http://localhost');
   const path = url.pathname;
   try {
+    // In-game ArcForge admin live-editor proxy (admin/mod gated inside).
+    if (path.startsWith('/me/api/arcforge/')) {
+      if (await handleArcForgeProxy(req, res)) return;
+    }
     if (req.method === 'POST' && path === '/me/api/login') {
       return await handleLogin(req, res, false);
     }

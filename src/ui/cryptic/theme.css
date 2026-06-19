@@ -749,10 +749,12 @@ body.cr-fps-active body, body.cr-fps-active { cursor: crosshair; }
 #cr-customization-modal[hidden],
 #cr-minigame-modal[hidden],
 #cr-charbuilder-modal[hidden],
+#cr-arcforge-editor-modal[hidden],
 #cr-bug-report-modal[hidden] { display: none; }
 #cr-customization-modal .cr-modal-overlay,
 #cr-minigame-modal .cr-modal-overlay,
 #cr-charbuilder-modal .cr-modal-overlay,
+#cr-arcforge-editor-modal .cr-modal-overlay,
 #cr-bug-report-modal .cr-modal-overlay {
   position: fixed;
   inset: 0;
@@ -784,6 +786,46 @@ body.cr-fps-active body, body.cr-fps-active { cursor: crosshair; }
 #cr-charbuilder-modal .cr-modal-panel {
   width: min(860px, 95vw);
 }
+#cr-arcforge-editor-modal .cr-modal-panel {
+  width: min(900px, 95vw);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.cr-afe-blurb { font-size: 12px; color: var(--cr-text-dim, #9a8a7a); margin: 0 0 14px; line-height: 1.5; }
+.cr-afe-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+@media (max-width: 680px) { .cr-afe-grid { grid-template-columns: 1fr; } }
+.cr-afe-col { display: flex; flex-direction: column; gap: 8px; }
+.cr-afe-field { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--cr-text-dim, #9a8a7a); }
+.cr-afe-field input, .cr-afe-field select, .cr-afe-field textarea {
+  background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 5px; color: var(--cr-text, #e8d5c4); padding: 6px 8px; font-family: inherit; font-size: 13px;
+}
+.cr-afe-imgname { font-size: 11px; color: var(--gold, var(--cr-gold, #c9a14a)); min-height: 14px; }
+.cr-afe-stages { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+.cr-afe-stage {
+  font-size: 11px; padding: 5px 9px; border-radius: 5px; cursor: pointer;
+  background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.14); color: var(--cr-text-dim, #9a8a7a);
+}
+.cr-afe-stage.active { border-color: var(--gold, var(--cr-gold, #c9a14a)); color: var(--gold, var(--cr-gold, #ffd100)); }
+.cr-afe-add, .cr-afe-open { margin-top: 4px; }
+.cr-afe-queue { display: flex; flex-direction: column; gap: 6px; max-height: 320px; overflow-y: auto; margin-bottom: 10px; }
+.cr-afe-empty { font-size: 12px; color: var(--cr-text-dim, #7a6a5a); padding: 8px; }
+.cr-afe-job {
+  position: relative; background: rgba(0,0,0,0.28); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px; padding: 8px 26px 8px 10px;
+}
+.cr-afe-job-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.cr-afe-job small { color: var(--cr-text-dim, #8a7a6a); font-size: 11px; }
+.cr-afe-badge { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--cr-text-dim, #9a8a7a); }
+.cr-afe-running .cr-afe-badge { color: #f0c040; }
+.cr-afe-done .cr-afe-badge { color: #7bcf7b; }
+.cr-afe-failed .cr-afe-badge { color: #e06b5e; }
+.cr-afe-remove {
+  position: absolute; top: 6px; right: 6px; background: transparent; border: 0;
+  color: var(--cr-text-dim, #9a8a7a); cursor: pointer; font-size: 14px; line-height: 1;
+}
+.cr-afe-actions { display: flex; gap: 8px; }
+.cr-afe-status { margin-top: 10px; font-size: 12px; color: var(--cr-text-dim, #9a8a7a); min-height: 16px; }
 #cr-bug-report-modal .cr-modal-panel {
   width: min(720px, 94vw);
 }

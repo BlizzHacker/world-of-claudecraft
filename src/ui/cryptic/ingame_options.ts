@@ -14,9 +14,9 @@ import {
 } from '../../sim/realms';
 import { socialsForRealm } from '../../sim/realms/social_links';
 import { handleMiniGameClick, miniGameSectionHtml } from './minigames';
-import { charBuilderSectionHtml, handleCharBuilderClick } from './char_builder';
 import { persistAutoFps, resolveAutoFps } from './auto_fps';
 import { openBugReport } from './bug_report';
+import { openArcForgeEditor, canUseArcForgeEditor, arcForgeEditorAllowedCached } from './arcforge_editor';
 
 const MODAL_ID = 'cr-customization-modal';
 // ArcForge Studio is a separate app on the MoveWeight infra (not this realm),
@@ -182,8 +182,26 @@ function modsTabHtml(realm: RealmContent): string {
 
     ${miniGameSectionHtml()}
 
-    ${charBuilderSectionHtml()}
+    ${arcForgeSectionHtml()}
   `;
+}
+
+// Role-aware ArcForge entry. Admins/mods get the in-game live asset editor;
+// everyone else gets the public studio link. The admin check is async, so we
+// render from the cached result and refresh the modal once it resolves.
+function arcForgeSectionHtml(): string {
+  const allowed = arcForgeEditorAllowedCached();
+  const adminCta = `<button type="button" class="cr-options-pill cr-afe-open" data-cr-arcforge-editor>Open Live Asset Editor</button>`;
+  const publicCta = `<a class="cr-code-link" href="${ARCFORGE_URL}" target="_blank" rel="noopener noreferrer">Open ArcForge Studio ↗</a>`;
+  const body = allowed === true
+    ? `<p class="cr-modal-blurb">Flag a monster, item, or character and regenerate its art through the ArcForge pipeline — live, without leaving the game.</p>${adminCta}`
+    : allowed === false
+      ? `<p class="cr-modal-blurb">Generate and manage game assets in ArcForge Studio.</p>${publicCta}`
+      : `<p class="cr-modal-blurb">Checking access…</p>${publicCta}`;
+  return `<div class="cr-modal-section" data-cr-arcforge-section>
+      <div class="cr-modal-section-title">ArcForge</div>
+      ${body}
+    </div>`;
 }
 
 function buildModalHtml(skin: HudSkin, fps: 'on' | 'off' | 'diablo'): string {
@@ -244,6 +262,15 @@ function openCustomizationHost(): void {
 
   refresh();
   host.removeAttribute('hidden');
+  // Resolve admin/mod status, then re-render so the ArcForge section shows the
+  // live-editor CTA (admins) or the studio link (everyone else) instead of the
+  // "Checking access…" placeholder.
+  const wasResolved = arcForgeEditorAllowedCached() !== null;
+  void canUseArcForgeEditor().then(() => {
+    // Only re-render if the result was still pending when we opened (avoids a
+    // needless rebuild when the cache was already warm).
+    if (!wasResolved && !host.hasAttribute('hidden')) refresh();
+  });
   host.onclick = (ev) => {
     const target = ev.target as HTMLElement | null;
     if (!target) return;
@@ -312,7 +339,10 @@ function openCustomizationHost(): void {
 
     if (handleMiniGameClick(target)) return;
 
-    if (handleCharBuilderClick(target)) return;
+    if (target.closest('[data-cr-arcforge-editor]')) {
+      openArcForgeEditor();
+      return;
+    }
 
     const copyBtn = target.closest('[data-cr-copy]') as HTMLElement | null;
     if (copyBtn?.dataset.crCopy) {
