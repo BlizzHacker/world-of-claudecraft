@@ -42,7 +42,23 @@ export function stageHost(realmId, stage) {
   return stage === 'live' ? liveHost : `${stage}.${liveHost}`;
 }
 
+// Display label for the realm directory / UI (brackets OK here — client only).
 export function stageName(realmId, stage) {
   const base = REALMS[realmId]?.name ?? realmId;
   return stage === 'live' ? base : `${base} [${stage.toUpperCase()}]`;
+}
+
+// Server REALM_NAME = DB partition key. Each stage is its OWN world (separate
+// characters; alpha is reset-prone; promotion MIGRATES chars between rings).
+// Must satisfy server/realm.ts resolveRealm(): <=24 chars, no brackets,
+// charset [A-Za-z0-9 '_-]. So we suffix with a bare word, not "[BETA]".
+//   crypticrealm live  -> "Cryptic Realm"        (13)
+//   crypticrealm beta  -> "Cryptic Realm Beta"   (18)
+//   crypticrealm alpha -> "Cryptic Realm Alpha"  (19)
+//   crypticrealm dev   -> "Cryptic Realm Dev"    (17)
+export function stageRealmName(realmId, stage) {
+  const base = REALMS[realmId]?.name ?? realmId;
+  const name = stage === 'live' ? base : `${base} ${stage.charAt(0).toUpperCase()}${stage.slice(1)}`;
+  if (name.length > 24) throw new Error(`stage realm name too long (>24): "${name}" — shorten REALMS.${realmId}.name`);
+  return name;
 }
