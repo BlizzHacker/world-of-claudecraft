@@ -7,3 +7,4 @@
 *.target    text eol=lf
 scripts/**  text eol=lf
 deploy/**   text eol=lf
+*.mp3 binary
