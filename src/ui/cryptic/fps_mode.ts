@@ -33,8 +33,13 @@ const STORE_KEY = 'cr_fps_mode';
 const RETICLE_ID = 'cr-fps-reticle';
 const FPS_CAM_DIST = 0.55;
 const FPS_CAM_PITCH = 0.04;
-const DIABLO_CAM_DIST = 18;
-const DIABLO_CAM_PITCH = 0.92;
+// Diablo II camera: a fixed high-three-quarter ARPG angle. D2's classic view is
+// ~35° above the horizon (not the near-top-down 0.92 rad ≈ 53° we had, which
+// felt flat/overhead). 0.62 rad ≈ 35.5°. Distance pulled in a touch so the
+// playfield reads at the original Cryptic Realm zoom. Locked each frame so
+// scroll-wheel zoom and auto-FPS can't drift it off the D2 angle.
+const DIABLO_CAM_DIST = 15;
+const DIABLO_CAM_PITCH = 0.62;
 
 type FpsMode = 'on' | 'off' | 'diablo';
 
@@ -162,6 +167,15 @@ export function mountFpsMode(input: Input, opts: MountFpsOptions = {}): void {
   const tick = () => {
     if (!runtime) return;
     if (locked) { requestAnimationFrame(tick); return; }
+    // Diablo mode is a LOCKED camera: re-assert the fixed D2 angle/zoom every
+    // frame so scroll-wheel zoom, pinch, or scripted moves can't drift it. This
+    // is what "save diablo mode and lock it" needs — the angle stays put.
+    if (runtime.mode === 'diablo') {
+      input.camDist = DIABLO_CAM_DIST;
+      input.camPitch = DIABLO_CAM_PITCH;
+      requestAnimationFrame(tick);
+      return; // auto-FPS never applies in Diablo mode
+    }
     if (resolveAutoFps()) {
       if (input.camDist <= 3.05 && runtime.mode === 'off') applyCameraMode(input, runtime, 'on');
       else if (input.camDist > 3.5 && runtime.mode === 'on' && resolveFpsMode() === 'off') {
