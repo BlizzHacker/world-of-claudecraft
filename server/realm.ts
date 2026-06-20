@@ -61,7 +61,13 @@ function parseRealms(raw: string | undefined): RealmEntry[] {
     if (!seg) continue;
     const fields = seg.split('=').map((s) => s.trim());
     if (fields.length < 2) continue;
-    const name = resolveRealm(fields[0]);
+    // The directory DISPLAY name is free-form (it can contain spaces and stage
+    // brackets like "Cryptic Realm [BETA]"). It is NOT the server's own realm
+    // identity, so it must NOT go through resolveRealm() — that rejects brackets
+    // and >24 chars, which collapsed every staged entry to "Claudemoon" and then
+    // dedup dropped all but one. Just sanity-check it's non-empty.
+    const name = fields[0];
+    if (!name) continue;
     let url = fields[1];
     if (url && !/^https?:\/\/[^/]+$/.test(url.replace(/\/+$/, ''))) continue; // must be a bare origin
     url = url.replace(/\/+$/, '');

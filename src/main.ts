@@ -34,6 +34,10 @@ import { mountDownloadLaunchers } from './ui/cryptic/download_launchers';
 import { mountChatFrame } from './ui/cryptic/chat_frame';
 import { mountMusicWidget } from './ui/cryptic/music_widget';
 import { crypticMusic } from './game/cryptic_music';
+import { mountBestiary } from './ui/cryptic/bestiary';
+import { mountSkillTree } from './ui/cryptic/skilltree';
+import { mountLootVault } from './ui/cryptic/loot_vault';
+import { mountPickitPanel } from './ui/cryptic/pickit_panel';
 import { clearCrypticSession, readCrypticSession, writeCrypticSession } from './ui/cryptic/session';
 
 
@@ -684,6 +688,12 @@ async function startGame(world: IWorld, offlineSim: Sim | null, online: ClientWo
     hud = new Hud(world, renderer, keybinds);
     perf.setHud(hud);
     hydrateIcons(); // swap [data-icon] placeholders (micro-menu, mobile bar, meters) for inline SVG
+    // In-game reference tools — moved here from the landing so they live in the
+    // game, not on the realm selector. They self-mount floating buttons + modals.
+    mountBestiary();
+    mountSkillTree();
+    mountLootVault();
+    mountPickitPanel();
   } catch (err) {
     // e.g. WebGL context creation failure: surface it instead of leaving the
     // loading screen up forever

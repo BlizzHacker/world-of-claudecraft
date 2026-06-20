@@ -1,10 +1,6 @@
 import { mountRealmBranding } from './ui/cryptic/branding';
 import { mountThemeSelect } from './ui/cryptic/theme_select';
 import { mountNewsRealmFilter } from './ui/cryptic/news_realm_filter';
-import { mountBestiary } from './ui/cryptic/bestiary';
-import { mountSkillTree } from './ui/cryptic/skilltree';
-import { mountLootVault } from './ui/cryptic/loot_vault';
-import { mountPickitPanel } from './ui/cryptic/pickit_panel';
 import { mountUserDropdown } from './ui/cryptic/user_dropdown';
 import { mountWalletPanel } from './ui/cryptic/wallet_panel';
 import { readCrypticSession } from './ui/cryptic/session';
@@ -41,10 +37,10 @@ function bootLandingBranding(): void {
   mountNewsRealmFilter();
   void mountUserDropdown();
   void loadLandingStats();
-  mountBestiary();
-  mountSkillTree();
-  mountLootVault();
-  mountPickitPanel();
+  // Monster Chronicle / Skill Trees / Loot Vault / Pickit are in-game reference
+  // tools — they belong in the game, not cluttering the realm selector. Mounted
+  // from main.ts startGame() instead of here (the #cr-bestiary-host div was also
+  // removed from #realm-panel in index.html).
   mountWalletPanel();
 }
 
