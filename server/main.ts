@@ -351,9 +351,22 @@ function serveStatic(req: http.IncomingMessage, res: http.ServerResponse): void 
 // after switching realms in the picker. Only the configured realm origins are
 // allowed; auth is via bearer token (no cookies), so reflecting these specific
 // origins is safe.
+// Any crypticrealm.com host (apex or any realm/stage subdomain) is one of our
+// own realms — the realm picker fetches every realm's /api/status cross-origin
+// to show live player counts, and the stage subdomains (dev/beta/alpha-*) aren't
+// all in each realm's WEB_ORIGINS. Bearer auth (no cookies) makes reflecting
+// these safe.
+function isOwnRealmOrigin(origin: string): boolean {
+  if (REALM_ORIGINS.has(origin)) return true;
+  try {
+    const h = new URL(origin).hostname;
+    return h === 'crypticrealm.com' || h.endsWith('.crypticrealm.com');
+  } catch { return false; }
+}
+
 function maybeCors(req: http.IncomingMessage, res: http.ServerResponse): void {
   const origin = req.headers.origin;
-  if (typeof origin === 'string' && REALM_ORIGINS.has(origin)) {
+  if (typeof origin === 'string' && isOwnRealmOrigin(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
     res.setHeader('Vary', 'Origin');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
