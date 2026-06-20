@@ -3257,7 +3257,8 @@ function wireStartScreens(): void {
 
     try {
       const ladder = (document.getElementById('new-char-ladder') as HTMLInputElement | null)?.checked ?? false;
-      await api.createCharacter(name, clsEl.dataset.class as PlayerClass, selectedSkin('#online-skin-row', onlineSkin), ladder);
+      const hardcore = (document.getElementById('new-char-hardcore') as HTMLInputElement | null)?.checked ?? false;
+      await api.createCharacter(name, clsEl.dataset.class as PlayerClass, selectedSkin('#online-skin-row', onlineSkin), ladder, hardcore);
       newCharNameInput.value = '';
       charselectError.textContent = '';
       await refreshCharacters();

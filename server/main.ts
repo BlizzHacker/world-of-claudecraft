@@ -459,6 +459,8 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
             skin: c.state?.skin ?? 0,
             online: [...game.clients.values()].some((s) => s.characterId === c.id),
             forceRename: c.force_rename,
+            hardcore: !!c.hardcore,
+            dead: !!c.died_at,
           })),
         });
       }
@@ -471,10 +473,11 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
         if (!validClasses.includes(body.class)) return json(res, 400, { error: 'invalid class' });
         const skin = Math.max(0, Math.min(7, Math.floor(typeof body.skin === 'number' ? body.skin : 0)));
         const ladder = body.ladder === true || body.ladder === 'true';
+        const hardcore = body.hardcore === true || body.hardcore === 'true';
         try {
-          const c = await createCharacterCapped(accountId, name, body.class, 10, initialCharacterState(body.class, name, skin), ladder);
+          const c = await createCharacterCapped(accountId, name, body.class, 10, initialCharacterState(body.class, name, skin), ladder, hardcore);
           if (!c) return json(res, 400, { error: 'character limit reached' });
-          return json(res, 200, { id: c.id, name: c.name, class: c.class, level: c.level, skin: c.state?.skin ?? skin, forceRename: c.force_rename });
+          return json(res, 200, { id: c.id, name: c.name, class: c.class, level: c.level, skin: c.state?.skin ?? skin, forceRename: c.force_rename, hardcore: !!c.hardcore });
         } catch (err: any) {
           if (isUniqueViolation(err)) return json(res, 409, { error: 'that name is taken' });
           throw err;
@@ -754,6 +757,11 @@ async function main(): Promise<void> {
       ws.close();
       return;
     }
+    if (character.hardcore && character.died_at) {
+      ws.send(JSON.stringify({ t: 'error', error: 'This hardcore character has died and can no longer be played.' }));
+      ws.close();
+      return;
+    }
     if (character.force_rename) {
       ws.send(JSON.stringify({ t: 'error', error: 'This character must be renamed before entering the world.' }));
       ws.close();
@@ -781,6 +789,7 @@ async function main(): Promise<void> {
         mutedUntil: status.chatMutedUntil ?? chatMute.mutedUntil,
         reason: chatMute.reason,
         chatStrikes: status.chatStrikes,
+        hardcore: !!character.hardcore,
       },
     );
     if ('error' in result) {

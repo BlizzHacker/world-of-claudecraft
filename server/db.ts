@@ -60,6 +60,11 @@ CREATE INDEX IF NOT EXISTS characters_lifetime_xp_global
 -- so old saves load unchanged and saveCharacterState never clobbers them.
 ALTER TABLE characters ADD COLUMN IF NOT EXISTS ladder BOOLEAN NOT NULL DEFAULT FALSE;
 ALTER TABLE characters ADD COLUMN IF NOT EXISTS season INT NOT NULL DEFAULT 0;
+-- Hardcore: relational flag (like ladder). On death a hardcore character is
+-- marked dead (died_at set) and can no longer be played, D2-style. Purely
+-- relational so old saves load unchanged.
+ALTER TABLE characters ADD COLUMN IF NOT EXISTS hardcore BOOLEAN NOT NULL DEFAULT FALSE;
+ALTER TABLE characters ADD COLUMN IF NOT EXISTS died_at TIMESTAMPTZ;
 -- Ladder board query is "this realm, this season, ladder=true, by XP". Partial
 -- index on the ladder=true side only (halves it; ladder boards never read false).
 -- The non-ladder/global boards keep using characters_lifetime_xp(_global) above.
@@ -412,6 +417,8 @@ export interface CharacterRow {
   state: CharacterState | null;
   is_gm: boolean;
   force_rename: boolean;
+  hardcore?: boolean;
+  died_at?: string | null;
 }
 
 // Character reads/writes are scoped to this process's realm: an account may
@@ -419,7 +426,7 @@ export interface CharacterRow {
 // process only ever lists, loads, or creates characters on its own realm.
 export async function listCharacters(accountId: number): Promise<CharacterRow[]> {
   const res = await pool.query(
-    'SELECT id, account_id, name, class, level, state, is_gm, force_rename FROM characters WHERE account_id = $1 AND realm = $2 ORDER BY id',
+    'SELECT id, account_id, name, class, level, state, is_gm, force_rename, hardcore, died_at FROM characters WHERE account_id = $1 AND realm = $2 ORDER BY id',
     [accountId, REALM],
   );
   return res.rows;
@@ -427,7 +434,7 @@ export async function listCharacters(accountId: number): Promise<CharacterRow[]>
 
 export async function getCharacter(accountId: number, characterId: number): Promise<CharacterRow | null> {
   const res = await pool.query(
-    'SELECT id, account_id, name, class, level, state, is_gm, force_rename FROM characters WHERE id = $1 AND account_id = $2 AND realm = $3',
+    'SELECT id, account_id, name, class, level, state, is_gm, force_rename, hardcore, died_at FROM characters WHERE id = $1 AND account_id = $2 AND realm = $3',
     [characterId, accountId, REALM],
   );
   return res.rows[0] ?? null;
@@ -461,13 +468,23 @@ export async function currentSeason(): Promise<number> {
   return Number(res.rows[0]?.season ?? 0);
 }
 
-export async function createCharacter(accountId: number, name: string, cls: PlayerClass, state: CharacterState | null = null, ladder = false): Promise<CharacterRow> {
+export async function createCharacter(accountId: number, name: string, cls: PlayerClass, state: CharacterState | null = null, ladder = false, hardcore = false): Promise<CharacterRow> {
   const season = ladder ? await currentSeason() : 0;
   const res = await pool.query(
-    'INSERT INTO characters (account_id, name, class, realm, state, ladder, season) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id, account_id, name, class, level, state, is_gm, force_rename',
-    [accountId, name, cls, REALM, state ? JSON.stringify(state) : null, ladder, season],
+    'INSERT INTO characters (account_id, name, class, realm, state, ladder, season, hardcore) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id, account_id, name, class, level, state, is_gm, force_rename, hardcore, died_at',
+    [accountId, name, cls, REALM, state ? JSON.stringify(state) : null, ladder, season, hardcore],
   );
   return res.rows[0];
+}
+
+/** Mark a hardcore character permanently dead (D2-style). Realm-guarded.
+ *  Idempotent: only sets died_at once. Returns true if it just died. */
+export async function markCharacterDead(accountId: number, characterId: number): Promise<boolean> {
+  const res = await pool.query(
+    'UPDATE characters SET died_at = now() WHERE id = $1 AND account_id = $2 AND realm = $3 AND hardcore = TRUE AND died_at IS NULL',
+    [characterId, accountId, REALM],
+  );
+  return (res.rowCount ?? 0) > 0;
 }
 
 export async function createCharacterCapped(
@@ -477,6 +494,7 @@ export async function createCharacterCapped(
   limit = 10,
   state: CharacterState | null = null,
   ladder = false,
+  hardcore = false,
 ): Promise<CharacterRow | null> {
   const client = await pool.connect();
   try {
@@ -497,8 +515,8 @@ export async function createCharacterCapped(
         )).rows[0]?.season ?? 0)
       : 0;
     const res = await client.query(
-      'INSERT INTO characters (account_id, name, class, realm, state, ladder, season) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id, account_id, name, class, level, state, is_gm, force_rename',
-      [accountId, name, cls, REALM, state ? JSON.stringify(state) : null, ladder, season],
+      'INSERT INTO characters (account_id, name, class, realm, state, ladder, season, hardcore) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id, account_id, name, class, level, state, is_gm, force_rename, hardcore, died_at',
+      [accountId, name, cls, REALM, state ? JSON.stringify(state) : null, ladder, season, hardcore],
     );
     await client.query('COMMIT');
     return res.rows[0];

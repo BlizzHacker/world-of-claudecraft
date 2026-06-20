@@ -5,7 +5,7 @@ import { DT, Entity, SimEvent, dist2d, emptyMoveInput } from '../src/sim/types';
 import { parseMoveInputFrame } from '../src/sim/move_input';
 import { stealthDetectionRadius, threatEntries } from '../src/sim/threat';
 import { zoneAt, DUNGEONS } from '../src/sim/data';
-import { saveCharacterState, openPlaySession, closePlaySession, insertChatLogs, pool, loadMarketState, saveMarketState } from './db';
+import { saveCharacterState, openPlaySession, closePlaySession, insertChatLogs, pool, loadMarketState, saveMarketState, markCharacterDead } from './db';
 import type { AccountChatMuteStatus, RequestMetadata } from './db';
 import { ChatFilter } from './chat_filter';
 import { loadChatFilterState, applyChatStrike, recordChatViolation } from './chat_filter_db';
@@ -75,6 +75,7 @@ export interface ClientSession {
   characterId: number;
   pid: number; // player entity id in the sim
   name: string;
+  hardcore: boolean; // hardcore character — permadeath on death
   lastSave: number;
   alive: boolean;
   joinedAt: number;
@@ -518,7 +519,7 @@ export class GameServer {
     cls: import('../src/sim/types').PlayerClass,
     state: import('../src/sim/sim').CharacterState | null,
     isGm = false,
-    meta: RequestMetadata & Partial<AccountChatMuteStatus> & { chatStrikes?: number } = {},
+    meta: RequestMetadata & Partial<AccountChatMuteStatus> & { chatStrikes?: number; hardcore?: boolean } = {},
   ): ClientSession | { error: string } {
     if (this.sessionsByCharacterId.has(characterId)) return { error: 'character already in world' };
     // Anti-bot: cap simultaneous online characters per account. Accounts can
@@ -543,7 +544,7 @@ export class GameServer {
     }
     const sessionIp = meta.ip ?? '';
     const session: ClientSession = {
-      ws, accountId, characterId, pid, name,
+      ws, accountId, characterId, pid, name, hardcore: meta.hardcore ?? false,
       lastSave: Date.now(), alive: true, joinedAt: Date.now(), dbSessionId: null, left: false,
       chatTokens: CHAT_RATE_BURST, chatLastRefill: Date.now() / 1000, chatLastRateError: 0,
       chatRateViolations: 0, chatCooldownUntil: 0,
@@ -1392,6 +1393,12 @@ export class GameServer {
           // Reaction time: castStop/death are world events (no pid) — match by entityId.
           if ((ev.type === 'castStop' || ev.type === 'death') && ev.entityId === session.pid) {
             antibot.observeEvent(session.bot, ev.type, Date.now());
+            // Hardcore permadeath: mark the character dead in the DB and kick.
+            if (ev.type === 'death' && session.hardcore) {
+              void markCharacterDead(session.accountId, session.characterId).catch(() => {});
+              try { this.send(session, { t: 'error', error: 'Your hardcore character has died. This character is now permanently retired.' }); } catch { /* noop */ }
+              try { session.ws.close(); } catch { /* noop */ }
+            }
           }
         }
       }
