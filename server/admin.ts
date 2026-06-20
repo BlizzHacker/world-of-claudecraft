@@ -1,7 +1,7 @@
 import * as http from 'node:http';
 import { json, readBody } from './http_util';
 import { rateLimited } from './ratelimit';
-import { findAccount, touchLogin, saveToken, accountForToken, isAdminAccount, accountTotpState } from './db';
+import { findAccount, touchLogin, saveToken, accountForToken, isAdminAccount, accountTotpState, setCharacterGmByName } from './db';
 import { verifyPassword, newToken } from './auth';
 import { verifyTotpCode } from './totp';
 import {
@@ -273,6 +273,18 @@ export async function handleAdminApi(
       const sort = url.searchParams.get('sort') ?? 'level';
       const dir = url.searchParams.get('dir') === 'asc' ? 'asc' : 'desc';
       return ok(res, await listCharacters(sort, dir, page, limit));
+    }
+
+    // Grant/revoke GM (in-game admin "godmode") on a character by name, on this
+    // realm. Admin-only. GM unlocks level/teleport/give + invuln for that char.
+    if (`${req.method}` === 'POST' && path === '/admin/api/grant-gm') {
+      const body = await readBody(req);
+      const name = typeof body.character === 'string' ? body.character.trim() : '';
+      const grant = body.revoke !== true;
+      if (!name) return fail(res, 400, 'character name required');
+      const updated = await setCharacterGmByName(name, grant);
+      if (updated === 0) return fail(res, 404, 'no such character on this realm');
+      return ok(res, { character: name, is_gm: grant, updated });
     }
 
     fail(res, 404, 'unknown admin endpoint');

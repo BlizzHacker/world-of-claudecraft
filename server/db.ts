@@ -440,6 +440,17 @@ export async function getCharacter(accountId: number, characterId: number): Prom
   return res.rows[0] ?? null;
 }
 
+/** Admin: grant/revoke GM on a character by name (this realm). GM unlocks
+ *  in-game admin commands (level/teleport/give + invuln) for that character.
+ *  Returns the number of rows updated (0 if no such character on this realm). */
+export async function setCharacterGmByName(name: string, isGm: boolean): Promise<number> {
+  const res = await pool.query(
+    'UPDATE characters SET is_gm = $1 WHERE name = $2 AND realm = $3',
+    [isGm, name, REALM],
+  );
+  return res.rowCount ?? 0;
+}
+
 export async function findCharacterReportTargetByName(name: string): Promise<{ accountId: number; characterId: number; characterName: string } | null> {
   const term = name.trim();
   if (!term) return null;

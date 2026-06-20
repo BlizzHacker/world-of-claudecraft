@@ -76,6 +76,7 @@ export interface ClientSession {
   pid: number; // player entity id in the sim
   name: string;
   hardcore: boolean; // hardcore character — permadeath on death
+  isGm: boolean; // GM/admin — unlocks in-game dev/admin commands for this session
   lastSave: number;
   alive: boolean;
   joinedAt: number;
@@ -544,7 +545,7 @@ export class GameServer {
     }
     const sessionIp = meta.ip ?? '';
     const session: ClientSession = {
-      ws, accountId, characterId, pid, name, hardcore: meta.hardcore ?? false,
+      ws, accountId, characterId, pid, name, hardcore: meta.hardcore ?? false, isGm,
       lastSave: Date.now(), alive: true, joinedAt: Date.now(), dbSessionId: null, left: false,
       chatTokens: CHAT_RATE_BURST, chatLastRefill: Date.now() / 1000, chatLastRateError: 0,
       chatRateViolations: 0, chatCooldownUntil: 0,
@@ -1090,15 +1091,20 @@ export class GameServer {
       case 'market_buy': if (typeof msg.id === 'number') sim.marketBuy(msg.id, pid); break;
       case 'market_cancel': if (typeof msg.id === 'number') sim.marketCancel(msg.id, pid); break;
       case 'market_collect': sim.marketCollect(pid); break;
-      // dev/ops commands, only when ALLOW_DEV_COMMANDS=1 (never in production)
+      // dev/admin commands: allowed when ALLOW_DEV_COMMANDS=1 (dev realms) OR the
+      // session is a GM/admin account. This is in-game admin "godmode" — set
+      // level, teleport, spawn items for YOUR character. Server-authoritative;
+      // never touches other accounts' data or any financial state.
       case 'dev_level': {
-        if (process.env.ALLOW_DEV_COMMANDS === '1' && typeof msg.level === 'number') {
-          sim.setPlayerLevel(msg.level, pid);
+        const canDev = session.isGm || process.env.ALLOW_DEV_COMMANDS === '1';
+        if (canDev && typeof msg.level === 'number') {
+          sim.setPlayerLevel(Math.max(1, Math.min(60, msg.level | 0)), pid);
         }
         break;
       }
       case 'dev_teleport': {
-        if (process.env.ALLOW_DEV_COMMANDS === '1' && typeof msg.x === 'number' && typeof msg.z === 'number') {
+        const canDev = session.isGm || process.env.ALLOW_DEV_COMMANDS === '1';
+        if (canDev && typeof msg.x === 'number' && typeof msg.z === 'number') {
           const e = sim.entities.get(pid);
           if (e) {
             const p = sim.groundPos(msg.x, msg.z);
@@ -1111,7 +1117,8 @@ export class GameServer {
         break;
       }
       case 'dev_give': {
-        if (process.env.ALLOW_DEV_COMMANDS === '1' && typeof msg.item === 'string') {
+        const canDev = session.isGm || process.env.ALLOW_DEV_COMMANDS === '1';
+        if (canDev && typeof msg.item === 'string') {
           sim.addItem(msg.item, Math.max(1, Math.min(20, msg.count | 0)), pid);
         }
         break;
