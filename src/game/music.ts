@@ -10,6 +10,20 @@ export type MusicZone =
   | 'vale' | 'marsh' | 'peaks'
   | 'dungeon_hollow_crypt' | 'dungeon_sunken_bastion' | 'dungeon_gravewyrm_sanctum';
 
+// Friendly track names for the now-playing UI. Procedural themes, so these
+// name the composed mood/zone rather than a file.
+const MUSIC_ZONE_LABELS: Record<MusicZone, string> = {
+  town_eastbrook: 'Eastbrook Vale (Town)',
+  town_fenbridge: 'Fenbridge (Town)',
+  town_highwatch: 'Highwatch (Town)',
+  vale: 'The Verdant Vale',
+  marsh: 'The Mirefen Marsh',
+  peaks: 'Thornpeak Heights',
+  dungeon_hollow_crypt: 'Hollow Crypt',
+  dungeon_sunken_bastion: 'Sunken Bastion',
+  dungeon_gravewyrm_sanctum: 'Gravewyrm Sanctum',
+};
+
 const TOWN_MUSIC: Record<string, MusicZone> = {
   eastbrook_vale: 'town_eastbrook',
   mirefen_marsh: 'town_fenbridge',
@@ -1019,6 +1033,14 @@ export class MusicDirector {
 
   get enabled(): boolean {
     return this._enabled;
+  }
+
+  /** Human-readable now-playing label for the current zone (and combat layer),
+   *  for the music UI. Null before the first update(). */
+  nowPlaying(): string | null {
+    if (!this.zone) return null;
+    const name = MUSIC_ZONE_LABELS[this.zone] ?? this.zone;
+    return this.combat ? `${name} — Combat` : name;
   }
 
   // master gain target given the enabled flag and volume (base level 0.15)

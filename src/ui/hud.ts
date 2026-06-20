@@ -5592,7 +5592,11 @@ export class Hud {
     musicBtn.className = 'btn opt-btn';
     const syncMusicLabel = () => {
       const state = music.enabled ? t('hud.options.on') : t('hud.options.off');
-      musicBtn.textContent = `${t('hud.options.music')}: ${state}`;
+      const track = music.enabled ? music.nowPlaying() : null;
+      // Show the now-playing zone theme when music is on and a zone is active.
+      musicBtn.textContent = track
+        ? `${t('hud.options.music')}: ${state} — ${track}`
+        : `${t('hud.options.music')}: ${state}`;
     };
     syncMusicLabel();
     musicBtn.addEventListener('click', () => { audio.click(); music.setEnabled(!music.enabled); syncMusicLabel(); });
