@@ -41,6 +41,21 @@ const TRACK_TITLE: Record<string, string> = {
 
 const STORE_KEY = 'cr_cryptic_music_on';
 
+// The full soundtrack, in a stable order — used to populate the song picker and
+// to drive shuffle. Derived from the zone map + combat cue so there's one source
+// of track filenames.
+export interface CrypticTrack { src: string; title: string; }
+export const CRYPTIC_TRACKS: CrypticTrack[] = (() => {
+  const seen = new Set<string>();
+  const list: CrypticTrack[] = [];
+  for (const src of [...Object.values(ZONE_TRACK), COMBAT_TRACK]) {
+    if (seen.has(src)) continue;
+    seen.add(src);
+    list.push({ src, title: TRACK_TITLE[src] ?? src.replace(/-cryptic-realm\.mp3$/, '').replace(/-/g, ' ') });
+  }
+  return list;
+})();
+
 export class CrypticMusicPlayer {
   private a: HTMLAudioElement | null = null;
   private b: HTMLAudioElement | null = null;
@@ -49,6 +64,11 @@ export class CrypticMusicPlayer {
   private _vol = 1;
   private _enabled = true;
   private fadeTimer: number | undefined;
+  // Manual mode: when the user picks a song or turns on shuffle, zone-driven
+  // update() stops stomping playback until they switch back to Auto.
+  private _manual = false;
+  private _shuffle = false;
+  private onTrackChange: (() => void) | undefined;
 
   constructor() {
     try { this._enabled = localStorage.getItem(STORE_KEY) !== '0'; } catch { /* default on */ }
@@ -85,9 +105,63 @@ export class CrypticMusicPlayer {
   /** Switch to the track for a zone (or the boss cue in combat), crossfading. */
   update(zone: MusicZone | null, combat: boolean): void {
     if (!this._enabled || typeof document === 'undefined') return;
+    if (this._manual) return; // user picked a song / shuffle — don't stomp it
     const want = combat ? COMBAT_TRACK : (zone ? ZONE_TRACK[zone] : '');
     if (!want || want === this.currentTrack) return;
     this.crossfadeTo(want);
+  }
+
+  // --- Manual player controls (Spotify/Pandora-style) ------------------------
+
+  get manual(): boolean { return this._manual; }
+  get shuffle(): boolean { return this._shuffle; }
+  /** Currently playing track filename, or '' when idle. */
+  get track(): string { return this.currentTrack; }
+
+  /** Register a callback fired whenever the active track changes (UI refresh). */
+  setOnTrackChange(cb: (() => void) | undefined): void { this.onTrackChange = cb; }
+
+  /** Play a specific track now; enters manual mode (zone music won't override). */
+  playTrack(src: string): void {
+    if (!this._enabled) this.setEnabled(true);
+    this._manual = true;
+    if (src !== this.currentTrack) this.crossfadeTo(src);
+    else void this.active?.play().catch(() => undefined);
+  }
+
+  /** Return to zone-driven (Auto) playback. */
+  setAuto(): void {
+    this._manual = false;
+    this._shuffle = false;
+    this.currentTrack = ''; // force the next update() to (re)pick the zone track
+  }
+
+  toggleShuffle(): boolean {
+    this._shuffle = !this._shuffle;
+    if (this._shuffle) { this._manual = true; this.playRandom(); }
+    return this._shuffle;
+  }
+
+  /** Skip to the next track (random in shuffle, else next in list order). */
+  next(): void {
+    this._manual = true;
+    if (this._shuffle) { this.playRandom(); return; }
+    const i = CRYPTIC_TRACKS.findIndex((t) => t.src === this.currentTrack);
+    const nx = CRYPTIC_TRACKS[(i + 1 + CRYPTIC_TRACKS.length) % CRYPTIC_TRACKS.length];
+    if (nx) this.crossfadeTo(nx.src);
+  }
+
+  prev(): void {
+    this._manual = true;
+    const i = CRYPTIC_TRACKS.findIndex((t) => t.src === this.currentTrack);
+    const pv = CRYPTIC_TRACKS[(i - 1 + CRYPTIC_TRACKS.length) % CRYPTIC_TRACKS.length];
+    if (pv) this.crossfadeTo(pv.src);
+  }
+
+  private playRandom(): void {
+    const pool = CRYPTIC_TRACKS.filter((t) => t.src !== this.currentTrack);
+    const pick = (pool.length ? pool : CRYPTIC_TRACKS)[Math.floor(Math.random() * (pool.length || CRYPTIC_TRACKS.length))];
+    if (pick) this.crossfadeTo(pick.src);
   }
 
   private crossfadeTo(src: string): void {
@@ -95,6 +169,12 @@ export class CrypticMusicPlayer {
     const prev = this.active;
     this.currentTrack = src;
     this.active = next;
+    // In shuffle, tracks should advance rather than loop forever on one song.
+    if (this._shuffle) {
+      next.loop = false;
+      next.addEventListener('ended', () => { if (this._shuffle && this.active === next) this.playRandom(); }, { once: true });
+    }
+    try { this.onTrackChange?.(); } catch { /* UI callback must not break playback */ }
     // Autoplay may be blocked until a user gesture; play() rejection is fine.
     void next.play().catch(() => { /* will start after first interaction */ });
     const start = performance.now();

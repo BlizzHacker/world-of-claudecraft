@@ -139,10 +139,11 @@
   bottom: 14px;
   z-index: 2147483640;
   display: flex;
-  align-items: center;
-  gap: 6px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
   padding: 5px 9px 5px 5px;
-  border-radius: 22px;
+  border-radius: 18px;
   background: linear-gradient(180deg, rgba(20,16,26,0.95), rgba(10,8,14,0.95));
   border: 1px solid var(--cr-gold, #c9a14a);
   color: var(--cr-text, #e8d5c4);
@@ -150,8 +151,23 @@
   font-family: var(--cr-font-ui, system-ui, sans-serif);
   font-size: 12px;
   user-select: none;
-  max-width: 260px;
+  max-width: 280px;
 }
+#cr-music-widget .cr-mw-bar { display: flex; align-items: center; gap: 4px; }
+#cr-music-widget .cr-mw-shuffle.cr-mw-active { color: var(--cr-gold, #ffd100); background: rgba(255,209,0,0.16); }
+#cr-music-widget .cr-mw-list {
+  display: flex; flex-direction: column; gap: 1px;
+  max-height: 230px; overflow-y: auto;
+  margin: 2px 2px 0; padding-top: 4px;
+  border-top: 1px solid rgba(201,161,74,0.3);
+}
+#cr-music-widget .cr-mw-track {
+  text-align: left; font-size: 11.5px; padding: 5px 8px; border-radius: 6px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+#cr-music-widget .cr-mw-track:hover { background: rgba(255,209,0,0.12); }
+#cr-music-widget .cr-mw-track-active { background: rgba(255,209,0,0.2); color: var(--cr-gold, #ffd100); }
+#cr-music-widget .cr-mw-auto { color: var(--cr-text-dim, #b8aa82); border-bottom: 1px solid rgba(201,161,74,0.2); border-radius: 0; margin-bottom: 2px; }
 #cr-music-widget button {
   background: transparent;
   border: 0;
