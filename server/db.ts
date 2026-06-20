@@ -56,6 +56,26 @@ CREATE INDEX IF NOT EXISTS characters_lifetime_xp
   ON characters (realm, ((state->>'lifetimeXp')::bigint) DESC);
 CREATE INDEX IF NOT EXISTS characters_lifetime_xp_global
   ON characters (((state->>'lifetimeXp')::bigint) DESC);
+-- Ladder / seasons. ladder + season are purely relational (NOT in state JSONB),
+-- so old saves load unchanged and saveCharacterState never clobbers them.
+ALTER TABLE characters ADD COLUMN IF NOT EXISTS ladder BOOLEAN NOT NULL DEFAULT FALSE;
+ALTER TABLE characters ADD COLUMN IF NOT EXISTS season INT NOT NULL DEFAULT 0;
+-- Ladder board query is "this realm, this season, ladder=true, by XP". Partial
+-- index on the ladder=true side only (halves it; ladder boards never read false).
+-- The non-ladder/global boards keep using characters_lifetime_xp(_global) above.
+CREATE INDEX IF NOT EXISTS characters_ladder_xp
+  ON characters (realm, season, ((state->>'lifetimeXp')::bigint) DESC)
+  WHERE ladder = TRUE;
+-- One season counter per realm FAMILY (realm_base spans the family's 4 stages,
+-- e.g. 'crypticrealm'). UNIQUE(realm_base, season) makes rollover idempotent.
+CREATE TABLE IF NOT EXISTS ladder_seasons (
+  id SERIAL PRIMARY KEY,
+  realm_base TEXT NOT NULL,
+  season INT NOT NULL,
+  started_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  ended_at TIMESTAMPTZ,
+  UNIQUE (realm_base, season)
+);
 ALTER TABLE accounts ADD COLUMN IF NOT EXISTS is_admin BOOLEAN NOT NULL DEFAULT FALSE;
 ALTER TABLE accounts ADD COLUMN IF NOT EXISTS is_moderator BOOLEAN NOT NULL DEFAULT FALSE;
 -- CR overlay: Authentik / external SSO. oauth_provider is the issuer slug
@@ -427,10 +447,25 @@ export async function findCharacterReportTargetByName(name: string): Promise<{ a
   return row ? { accountId: Number(row.account_id), characterId: Number(row.id), characterName: row.name } : null;
 }
 
-export async function createCharacter(accountId: number, name: string, cls: PlayerClass, state: CharacterState | null = null): Promise<CharacterRow> {
+// Realm family base for this process (e.g. "Cryptic Realm Alpha" -> the family
+// shares a season counter). CR_REALM_ID is set per stage env (crypticrealm,
+// infernal, ...); fall back to REALM if unset.
+const REALM_FAMILY = (process.env.CR_REALM_ID ?? REALM).trim();
+
+/** Current (open) ladder season number for this realm family. 0 if none yet. */
+export async function currentSeason(): Promise<number> {
   const res = await pool.query(
-    'INSERT INTO characters (account_id, name, class, realm, state) VALUES ($1, $2, $3, $4, $5) RETURNING id, account_id, name, class, level, state, is_gm, force_rename',
-    [accountId, name, cls, REALM, state ? JSON.stringify(state) : null],
+    'SELECT season FROM ladder_seasons WHERE realm_base = $1 AND ended_at IS NULL ORDER BY season DESC LIMIT 1',
+    [REALM_FAMILY],
+  );
+  return Number(res.rows[0]?.season ?? 0);
+}
+
+export async function createCharacter(accountId: number, name: string, cls: PlayerClass, state: CharacterState | null = null, ladder = false): Promise<CharacterRow> {
+  const season = ladder ? await currentSeason() : 0;
+  const res = await pool.query(
+    'INSERT INTO characters (account_id, name, class, realm, state, ladder, season) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id, account_id, name, class, level, state, is_gm, force_rename',
+    [accountId, name, cls, REALM, state ? JSON.stringify(state) : null, ladder, season],
   );
   return res.rows[0];
 }
@@ -441,6 +476,7 @@ export async function createCharacterCapped(
   cls: PlayerClass,
   limit = 10,
   state: CharacterState | null = null,
+  ladder = false,
 ): Promise<CharacterRow | null> {
   const client = await pool.connect();
   try {
@@ -452,9 +488,17 @@ export async function createCharacterCapped(
       [accountId, REALM],
     );
     if (Number(count.rows[0]?.n ?? 0) >= limit) { await client.query('ROLLBACK'); return null; }
+    // Ladder season is read inside the txn so a concurrent rollover can't slot a
+    // new char into a just-closed season.
+    const season = ladder
+      ? Number((await client.query(
+          'SELECT season FROM ladder_seasons WHERE realm_base = $1 AND ended_at IS NULL ORDER BY season DESC LIMIT 1',
+          [REALM_FAMILY],
+        )).rows[0]?.season ?? 0)
+      : 0;
     const res = await client.query(
-      'INSERT INTO characters (account_id, name, class, realm, state) VALUES ($1, $2, $3, $4, $5) RETURNING id, account_id, name, class, level, state, is_gm, force_rename',
-      [accountId, name, cls, REALM, state ? JSON.stringify(state) : null],
+      'INSERT INTO characters (account_id, name, class, realm, state, ladder, season) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id, account_id, name, class, level, state, is_gm, force_rename',
+      [accountId, name, cls, REALM, state ? JSON.stringify(state) : null, ladder, season],
     );
     await client.query('COMMIT');
     return res.rows[0];
@@ -516,10 +560,76 @@ export async function renameCharacter(accountId: number, characterId: number, na
 }
 
 export async function saveCharacterState(characterId: number, level: number, state: CharacterState): Promise<void> {
+  // Realm-guarded so a stale process can't write a character that has been
+  // MOVED to another realm stage underneath it (promotion re-points the realm
+  // column). Without this guard, an upstream stage's autosave would silently
+  // clobber the row on the downstream realm. If the realm no longer matches,
+  // this safely no-ops (0 rows) — the character moved on and this process no
+  // longer owns it.
   await pool.query(
-    'UPDATE characters SET level = $2, state = $3, updated_at = now() WHERE id = $1',
-    [characterId, level, JSON.stringify(state)],
+    'UPDATE characters SET level = $2, state = $3, updated_at = now() WHERE id = $1 AND realm = $4',
+    [characterId, level, JSON.stringify(state), REALM],
   );
+}
+
+// ─── Ladder seasons + stage promotion ────────────────────────────────────────
+// These run from the admin promotion flow (scripts/admin/promote.sh) via the
+// server CLI, NOT from live gameplay. They MUST run only when the affected stage
+// process is drained/stopped (the realm guard on saveCharacterState is the
+// belt-and-suspenders fallback if a stale process lingers).
+
+/** Start a new ladder season for a realm family: close any open season, then
+ *  open the next one. Existing ladder characters in the OLD season are converted
+ *  to non-ladder in place (they keep all progress — ladder rollover, D2/PoE
+ *  style). Idempotent via UNIQUE(realm_base, season) + ON CONFLICT. */
+export async function rolloverSeason(realmBase: string, realmStages: string[]): Promise<number> {
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    const cur = await client.query(
+      'SELECT season FROM ladder_seasons WHERE realm_base = $1 AND ended_at IS NULL ORDER BY season DESC LIMIT 1',
+      [realmBase],
+    );
+    const oldSeason = Number(cur.rows[0]?.season ?? 0);
+    const nextSeason = oldSeason + 1;
+    // Convert the closing season's ladder chars to non-ladder across all stages
+    // of the family (they retain level/state; only leave the competitive pool).
+    if (oldSeason > 0 && realmStages.length) {
+      await client.query(
+        `UPDATE characters SET ladder = FALSE, updated_at = now()
+         WHERE realm = ANY($1) AND ladder = TRUE AND season = $2`,
+        [realmStages, oldSeason],
+      );
+    }
+    await client.query(
+      'UPDATE ladder_seasons SET ended_at = now() WHERE realm_base = $1 AND ended_at IS NULL',
+      [realmBase],
+    );
+    await client.query(
+      `INSERT INTO ladder_seasons (realm_base, season, started_at) VALUES ($1, $2, now())
+       ON CONFLICT (realm_base, season) DO NOTHING`,
+      [realmBase, nextSeason],
+    );
+    await client.query('COMMIT');
+    return nextSeason;
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => {});
+    throw err;
+  } finally {
+    client.release();
+  }
+}
+
+/** Move every character on one realm stage to another (promotion). Re-points the
+ *  realm column — same rows, no name collisions. MUST be called only when the
+ *  FROM stage's process is stopped (see saveCharacterState guard). Returns the
+ *  number of characters moved. */
+export async function migrateRealmCharacters(fromRealm: string, toRealm: string): Promise<number> {
+  const res = await pool.query(
+    'UPDATE characters SET realm = $2, updated_at = now() WHERE realm = $1',
+    [fromRealm, toRealm],
+  );
+  return res.rowCount ?? 0;
 }
 
 /** OAuth account upsert: idempotently link a remote (provider, sub) identity

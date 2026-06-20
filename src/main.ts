@@ -3237,7 +3237,8 @@ function wireStartScreens(): void {
     newCharNameInput.removeAttribute('aria-invalid');
 
     try {
-      await api.createCharacter(name, clsEl.dataset.class as PlayerClass, selectedSkin('#online-skin-row', onlineSkin));
+      const ladder = (document.getElementById('new-char-ladder') as HTMLInputElement | null)?.checked ?? false;
+      await api.createCharacter(name, clsEl.dataset.class as PlayerClass, selectedSkin('#online-skin-row', onlineSkin), ladder);
       newCharNameInput.value = '';
       charselectError.textContent = '';
       await refreshCharacters();

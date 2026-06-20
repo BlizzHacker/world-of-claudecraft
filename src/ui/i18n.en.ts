@@ -11072,6 +11072,8 @@ export const en = {
     enterWorld: "Enter World",
     offlineCharacter: "Offline Character",
     create: "Create",
+    ladderChar: "Ladder character",
+    ladderHint: "Competes on the seasonal ladder. At season end it converts to a standard character (keeps all progress).",
   },
   classes: {
     warrior: "Warrior",

@@ -4974,6 +4974,18 @@
     margin: 0 auto var(--spacing-md) auto;
   }
 
+  .ladder-toggle {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 4px 8px;
+    align-items: center;
+    margin: 10px 0 6px;
+    cursor: pointer;
+    text-align: left;
+  }
+  .ladder-toggle input { width: 16px; height: 16px; cursor: pointer; }
+  .ladder-toggle-label { font-weight: 600; color: var(--cr-gold, #d8c89a); }
+  .ladder-toggle-hint { grid-column: 2; font-size: 11px; line-height: 1.4; color: var(--cr-text-dim, #9a8a7a); }
   #new-char-name,
   #char-name {
     width: 100% !important;
@@ -5856,6 +5868,11 @@
                   <li class="mini-class" data-class="druid" role="button" tabindex="0" data-i18n-aria="classes.druidAria" data-i18n="classes.druid" aria-label="Druid class" aria-pressed="false">Druid</li>
                 </ul>
                 <div id="online-skin-row" class="skin-row" role="list" aria-label="Chroma"></div>
+                <label id="ladder-toggle-row" class="ladder-toggle">
+                  <input type="checkbox" id="new-char-ladder" />
+                  <span class="ladder-toggle-label" data-i18n="auth.ladderChar">Ladder character</span>
+                  <span class="ladder-toggle-hint" data-i18n="auth.ladderHint">Competes on the seasonal ladder. At season end it converts to a standard character (keeps all progress).</span>
+                </label>
                 <div class="auth-actions">
                   <button class="btn btn-primary" id="btn-create-char" data-i18n="auth.create">Create</button>
                   <button class="btn btn-secondary" id="btn-charselect-back" data-i18n="auth.back">Back</button>

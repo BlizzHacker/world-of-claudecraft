@@ -454,8 +454,9 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
         const validClasses = ['warrior', 'paladin', 'hunter', 'rogue', 'priest', 'shaman', 'mage', 'warlock', 'druid'];
         if (!validClasses.includes(body.class)) return json(res, 400, { error: 'invalid class' });
         const skin = Math.max(0, Math.min(7, Math.floor(typeof body.skin === 'number' ? body.skin : 0)));
+        const ladder = body.ladder === true || body.ladder === 'true';
         try {
-          const c = await createCharacterCapped(accountId, name, body.class, 10, initialCharacterState(body.class, name, skin));
+          const c = await createCharacterCapped(accountId, name, body.class, 10, initialCharacterState(body.class, name, skin), ladder);
           if (!c) return json(res, 400, { error: 'character limit reached' });
           return json(res, 200, { id: c.id, name: c.name, class: c.class, level: c.level, skin: c.state?.skin ?? skin, forceRename: c.force_rename });
         } catch (err: any) {

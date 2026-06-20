@@ -163,8 +163,8 @@ export class Api {
     return data.characters;
   }
 
-  async createCharacter(name: string, cls: PlayerClass, skin = 0): Promise<void> {
-    await this.post('/api/characters', { name, class: cls, skin });
+  async createCharacter(name: string, cls: PlayerClass, skin = 0, ladder = false): Promise<void> {
+    await this.post('/api/characters', { name, class: cls, skin, ladder });
   }
 
   async renameCharacter(characterId: number, name: string): Promise<void> {

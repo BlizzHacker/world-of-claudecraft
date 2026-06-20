@@ -240,7 +240,9 @@ export const en: EnTranslations = {
     "characterNamePlaceholder": "Character name",
     "enterWorld": "Enter World",
     "offlineCharacter": "Offline Character",
-    "create": "Create"
+    "create": "Create",
+    "ladderChar": "Ladder character",
+    "ladderHint": "Competes on the seasonal ladder. At season end it converts to a standard character (keeps all progress)."
   },
   "classes": {
     "warrior": "Warrior",
@@ -3813,7 +3815,9 @@ export const es: EnTranslations = {
     "characterNamePlaceholder": "Nombre del personaje",
     "enterWorld": "Entrar al Mundo",
     "offlineCharacter": "Personaje en Solitario",
-    "create": "Crear"
+    "create": "Crear",
+    "ladderChar": "Ladder character",
+    "ladderHint": "Competes on the seasonal ladder. At season end it converts to a standard character (keeps all progress)."
   },
   "classes": {
     "warrior": "Guerrero",
@@ -7386,7 +7390,9 @@ export const es_ES: EnTranslations = {
     "characterNamePlaceholder": "Nombre del personaje",
     "enterWorld": "Entrar al mundo",
     "offlineCharacter": "Personaje en solitario",
-    "create": "Crear"
+    "create": "Crear",
+    "ladderChar": "Ladder character",
+    "ladderHint": "Competes on the seasonal ladder. At season end it converts to a standard character (keeps all progress)."
   },
   "classes": {
     "warrior": "Guerrero",
@@ -10959,7 +10965,9 @@ export const fr_FR: EnTranslations = {
     "characterNamePlaceholder": "Nom du personnage",
     "enterWorld": "Entrer dans le monde",
     "offlineCharacter": "Personnage hors ligne",
-    "create": "Créer"
+    "create": "Créer",
+    "ladderChar": "Ladder character",
+    "ladderHint": "Competes on the seasonal ladder. At season end it converts to a standard character (keeps all progress)."
   },
   "classes": {
     "warrior": "Guerrier",
@@ -14532,7 +14540,9 @@ export const fr_CA: EnTranslations = {
     "characterNamePlaceholder": "Nom du personnage",
     "enterWorld": "Entrer dans le monde",
     "offlineCharacter": "Personnage hors ligne",
-    "create": "Créer"
+    "create": "Créer",
+    "ladderChar": "Ladder character",
+    "ladderHint": "Competes on the seasonal ladder. At season end it converts to a standard character (keeps all progress)."
   },
   "classes": {
     "warrior": "Guerrier",
@@ -18105,7 +18115,9 @@ export const en_CA: EnTranslations = {
     "characterNamePlaceholder": "Character name",
     "enterWorld": "Enter World",
     "offlineCharacter": "Offline Character",
-    "create": "Create"
+    "create": "Create",
+    "ladderChar": "Ladder character",
+    "ladderHint": "Competes on the seasonal ladder. At season end it converts to a standard character (keeps all progress)."
   },
   "classes": {
     "warrior": "Warrior",
@@ -21678,7 +21690,9 @@ export const it_IT: EnTranslations = {
     "characterNamePlaceholder": "Nome del personaggio",
     "enterWorld": "Entra nel mondo",
     "offlineCharacter": "Personaggio offline",
-    "create": "Crea"
+    "create": "Crea",
+    "ladderChar": "Ladder character",
+    "ladderHint": "Competes on the seasonal ladder. At season end it converts to a standard character (keeps all progress)."
   },
   "classes": {
     "warrior": "Guerriero",
@@ -25251,7 +25265,9 @@ export const de_DE: EnTranslations = {
     "characterNamePlaceholder": "Charaktername",
     "enterWorld": "Welt betreten",
     "offlineCharacter": "Offline-Charakter",
-    "create": "Erstellen"
+    "create": "Erstellen",
+    "ladderChar": "Ladder character",
+    "ladderHint": "Competes on the seasonal ladder. At season end it converts to a standard character (keeps all progress)."
   },
   "classes": {
     "warrior": "Krieger",
@@ -28824,7 +28840,9 @@ export const zh_CN: EnTranslations = {
     "characterNamePlaceholder": "输入角色名称",
     "enterWorld": "进入世界",
     "offlineCharacter": "单机角色",
-    "create": "创建"
+    "create": "创建",
+    "ladderChar": "Ladder character",
+    "ladderHint": "Competes on the seasonal ladder. At season end it converts to a standard character (keeps all progress)."
   },
   "classes": {
     "warrior": "战士",
@@ -32397,7 +32415,9 @@ export const zh_TW: EnTranslations = {
     "characterNamePlaceholder": "輸入角色名稱",
     "enterWorld": "進入世界",
     "offlineCharacter": "單機角色",
-    "create": "建立"
+    "create": "建立",
+    "ladderChar": "Ladder character",
+    "ladderHint": "Competes on the seasonal ladder. At season end it converts to a standard character (keeps all progress)."
   },
   "classes": {
     "warrior": "戰士",
@@ -35970,7 +35990,9 @@ export const ko_KR: EnTranslations = {
     "characterNamePlaceholder": "캐릭터 이름",
     "enterWorld": "세계 입장",
     "offlineCharacter": "오프라인 캐릭터",
-    "create": "생성"
+    "create": "생성",
+    "ladderChar": "Ladder character",
+    "ladderHint": "Competes on the seasonal ladder. At season end it converts to a standard character (keeps all progress)."
   },
   "classes": {
     "warrior": "전사",
@@ -39543,7 +39565,9 @@ export const ja_JP: EnTranslations = {
     "characterNamePlaceholder": "キャラクター名",
     "enterWorld": "世界に入る",
     "offlineCharacter": "オフラインキャラクター",
-    "create": "作成"
+    "create": "作成",
+    "ladderChar": "Ladder character",
+    "ladderHint": "Competes on the seasonal ladder. At season end it converts to a standard character (keeps all progress)."
   },
   "classes": {
     "warrior": "戦士",
@@ -43116,7 +43140,9 @@ export const pt_BR: EnTranslations = {
     "characterNamePlaceholder": "Nome do personagem",
     "enterWorld": "Entrar no mundo",
     "offlineCharacter": "Personagem offline",
-    "create": "Criar"
+    "create": "Criar",
+    "ladderChar": "Ladder character",
+    "ladderHint": "Competes on the seasonal ladder. At season end it converts to a standard character (keeps all progress)."
   },
   "classes": {
     "warrior": "Guerreiro",
@@ -46689,7 +46715,9 @@ export const ru_RU: EnTranslations = {
     "characterNamePlaceholder": "Имя персонажа",
     "enterWorld": "Войти в мир",
     "offlineCharacter": "Персонаж вне сети",
-    "create": "Создать"
+    "create": "Создать",
+    "ladderChar": "Ladder character",
+    "ladderHint": "Competes on the seasonal ladder. At season end it converts to a standard character (keeps all progress)."
   },
   "classes": {
     "warrior": "Воин",
@@ -50050,6 +50078,8 @@ export const translations = {
 
 export const pending: Record<string, readonly string[]> = {
   "es": [
+    "auth.ladderChar",
+    "auth.ladderHint",
     "hud.options.arcforge",
     "hud.options.controller",
     "hud.options.controllerDisconnected",
@@ -50090,6 +50120,8 @@ export const pending: Record<string, readonly string[]> = {
     "news.tokenTitle"
   ],
   "es_ES": [
+    "auth.ladderChar",
+    "auth.ladderHint",
     "hud.options.arcforge",
     "hud.options.controller",
     "hud.options.controllerDisconnected",
@@ -50130,6 +50162,8 @@ export const pending: Record<string, readonly string[]> = {
     "news.tokenTitle"
   ],
   "fr_FR": [
+    "auth.ladderChar",
+    "auth.ladderHint",
     "hud.options.arcforge",
     "hud.options.controller",
     "hud.options.controllerDisconnected",
@@ -50170,6 +50204,8 @@ export const pending: Record<string, readonly string[]> = {
     "news.tokenTitle"
   ],
   "fr_CA": [
+    "auth.ladderChar",
+    "auth.ladderHint",
     "hud.options.arcforge",
     "hud.options.controller",
     "hud.options.controllerDisconnected",
@@ -50211,6 +50247,8 @@ export const pending: Record<string, readonly string[]> = {
   ],
   "en_CA": [],
   "it_IT": [
+    "auth.ladderChar",
+    "auth.ladderHint",
     "hud.options.arcforge",
     "hud.options.controller",
     "hud.options.controllerDisconnected",
@@ -50251,6 +50289,8 @@ export const pending: Record<string, readonly string[]> = {
     "news.tokenTitle"
   ],
   "de_DE": [
+    "auth.ladderChar",
+    "auth.ladderHint",
     "hud.options.arcforge",
     "hud.options.controller",
     "hud.options.controllerDisconnected",
@@ -50291,6 +50331,8 @@ export const pending: Record<string, readonly string[]> = {
     "news.tokenTitle"
   ],
   "zh_CN": [
+    "auth.ladderChar",
+    "auth.ladderHint",
     "hud.options.arcforge",
     "hud.options.controller",
     "hud.options.controllerDisconnected",
@@ -50331,6 +50373,8 @@ export const pending: Record<string, readonly string[]> = {
     "news.tokenTitle"
   ],
   "zh_TW": [
+    "auth.ladderChar",
+    "auth.ladderHint",
     "hud.options.arcforge",
     "hud.options.controller",
     "hud.options.controllerDisconnected",
@@ -50371,6 +50415,8 @@ export const pending: Record<string, readonly string[]> = {
     "news.tokenTitle"
   ],
   "ko_KR": [
+    "auth.ladderChar",
+    "auth.ladderHint",
     "hud.options.arcforge",
     "hud.options.controller",
     "hud.options.controllerDisconnected",
@@ -50411,6 +50457,8 @@ export const pending: Record<string, readonly string[]> = {
     "news.tokenTitle"
   ],
   "ja_JP": [
+    "auth.ladderChar",
+    "auth.ladderHint",
     "hud.options.arcforge",
     "hud.options.controller",
     "hud.options.controllerDisconnected",
@@ -50451,6 +50499,8 @@ export const pending: Record<string, readonly string[]> = {
     "news.tokenTitle"
   ],
   "pt_BR": [
+    "auth.ladderChar",
+    "auth.ladderHint",
     "hud.options.arcforge",
     "hud.options.controller",
     "hud.options.controllerDisconnected",
@@ -50491,6 +50541,8 @@ export const pending: Record<string, readonly string[]> = {
     "news.tokenTitle"
   ],
   "ru_RU": [
+    "auth.ladderChar",
+    "auth.ladderHint",
     "hud.options.arcforge",
     "hud.options.controller",
     "hud.options.controllerDisconnected",
@@ -50763,7 +50815,9 @@ export const en_XA: EnTranslations = {
     "characterNamePlaceholder": "[Çĥáŕáçţéŕ ñáɱé]",
     "enterWorld": "[Éñţéŕ Ŵóŕļð]",
     "offlineCharacter": "[Óƒƒļíñé Çĥáŕáçţéŕ]",
-    "create": "[Çŕéáţé]"
+    "create": "[Çŕéáţé]",
+    "ladderChar": "[Ļáððéŕ çĥáŕáçţéŕ]",
+    "ladderHint": "[Çóɱþéţéš óñ ţĥé šéášóñáļ ļáððéŕ. Áţ šéášóñ éñð íţ çóñʋéŕţš ţó á šţáñðáŕð çĥáŕáçţéŕ (ķééþš áļļ þŕóĝŕéšš).]"
   },
   "classes": {
     "warrior": "[Ŵáŕŕíóŕ]",
