@@ -772,8 +772,28 @@ export interface LifetimeXpLeaderRow {
 // `global: true` ranks across every realm (for the home-page board); otherwise
 // it is scoped to this process's realm (the in-game panel). Both paths sort on
 // the indexed lifetime-XP expression and are read through the main.ts cache.
-export async function topLifetimeXp(limit = 100, opts: { global?: boolean } = {}): Promise<LifetimeXpLeaderRow[]> {
+export async function topLifetimeXp(limit = 100, opts: { global?: boolean; ladder?: boolean } = {}): Promise<LifetimeXpLeaderRow[]> {
   const cap = Math.max(1, Math.min(100, limit));
+  // Ladder board: this realm's current-season ladder characters only (uses the
+  // partial characters_ladder_xp index). Ladder is realm-scoped by nature.
+  if (opts.ladder) {
+    const season = await currentSeason();
+    const res = await pool.query(
+      `SELECT name, class, level, realm,
+              COALESCE((state->>'lifetimeXp')::bigint, 0) AS lifetime_xp,
+              COALESCE((state->>'prestigeRank')::int, 0)  AS prestige_rank
+         FROM characters
+        WHERE realm = $1 AND ladder = TRUE AND season = $2 AND state IS NOT NULL
+          AND COALESCE((state->>'lifetimeXp')::bigint, 0) > 0
+        ORDER BY lifetime_xp DESC, level DESC, name ASC
+        LIMIT $3`,
+      [REALM, season, cap],
+    );
+    return res.rows.map((r) => ({
+      name: r.name, class: r.class, level: r.level, realm: r.realm,
+      lifetimeXp: Number(r.lifetime_xp), prestigeRank: Number(r.prestige_rank),
+    }));
+  }
   const res = opts.global
     ? await pool.query(
         `SELECT name, class, level, realm,

@@ -79,13 +79,15 @@ const LEADERBOARD_TTL_MS = 30_000;
 const LEADERBOARD_SIZE = 100;
 // One cache per scope: 'realm' for the in-game panel, 'global' for the
 // cross-realm home-page board.
-const leaderboardCache: Record<'realm' | 'global', { at: number; entries: LeaderboardEntry[] } | null> = {
+type LeaderboardScope = 'realm' | 'global' | 'ladder';
+const leaderboardCache: Record<LeaderboardScope, { at: number; entries: LeaderboardEntry[] } | null> = {
   realm: null,
   global: null,
+  ladder: null,
 };
 
-async function refreshLeaderboard(scope: 'realm' | 'global'): Promise<LeaderboardEntry[]> {
-  const rows = await topLifetimeXp(LEADERBOARD_SIZE, { global: scope === 'global' });
+async function refreshLeaderboard(scope: LeaderboardScope): Promise<LeaderboardEntry[]> {
+  const rows = await topLifetimeXp(LEADERBOARD_SIZE, { global: scope === 'global', ladder: scope === 'ladder' });
   const entries: LeaderboardEntry[] = rows.map((r, i) => ({
     rank: i + 1,
     name: r.name,
@@ -100,7 +102,7 @@ async function refreshLeaderboard(scope: 'realm' | 'global'): Promise<Leaderboar
   return entries;
 }
 
-async function getLeaderboard(scope: 'realm' | 'global'): Promise<LeaderboardEntry[]> {
+async function getLeaderboard(scope: LeaderboardScope): Promise<LeaderboardEntry[]> {
   const cached = leaderboardCache[scope];
   if (cached && Date.now() - cached.at < LEADERBOARD_TTL_MS) return cached.entries;
   try {
@@ -590,7 +592,8 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       // in-game panel). Optional ?limit=N (1..100). `url` is the path only, so
       // the query string is parsed from req.url.
       const params = new URLSearchParams((req.url ?? '').split('?')[1] ?? '');
-      const scope: 'realm' | 'global' = params.get('scope') === 'global' ? 'global' : 'realm';
+      const rawScope = params.get('scope');
+      const scope: LeaderboardScope = rawScope === 'global' ? 'global' : rawScope === 'ladder' ? 'ladder' : 'realm';
       const limit = Math.max(1, Math.min(LEADERBOARD_SIZE, Number(params.get('limit')) || LEADERBOARD_SIZE));
       const entries = await getLeaderboard(scope);
       return json(res, 200, { realm: REALM, scope, metric: 'lifetimeXp', leaders: entries.slice(0, limit) });
@@ -658,6 +661,7 @@ async function main(): Promise<void> {
   const warmLeaderboards = () => {
     void refreshLeaderboard('realm').catch((err) => console.error('leaderboard refresh failed (realm):', err));
     void refreshLeaderboard('global').catch((err) => console.error('leaderboard refresh failed (global):', err));
+    void refreshLeaderboard('ladder').catch((err) => console.error('leaderboard refresh failed (ladder):', err));
   };
   warmLeaderboards();
   setInterval(warmLeaderboards, LEADERBOARD_TTL_MS).unref();
