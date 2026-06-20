@@ -383,6 +383,20 @@ function wireLandingPanels(): void {
   const menu = document.getElementById('server-select-menu');
   const playLabel = document.querySelector<HTMLElement>('#btn-play .btn-play-label');
   if (playLabel) playLabel.textContent = readCrypticSession() ? 'Continue' : 'Log In To Play';
+
+  // Hide Login / Register entries once the player has a session (SSO or local).
+  // A logged-in user has no use for them and they clutter the nav. Re-evaluated
+  // on focus so it reflects a login/logout that happened in another tab.
+  const syncAuthVisibility = () => {
+    const loggedIn = !!readCrypticSession();
+    for (const sel of ['#btn-login', '#btn-register', '#nav-btn-login']) {
+      const el = document.querySelector<HTMLElement>(sel);
+      if (el) el.style.display = loggedIn ? 'none' : '';
+    }
+  };
+  syncAuthVisibility();
+  window.addEventListener('focus', syncAuthVisibility);
+  window.addEventListener('cr-session-change', syncAuthVisibility);
   trigger?.addEventListener('click', () => {
     if (!menu) return;
     const open = menu.hasAttribute('hidden');
