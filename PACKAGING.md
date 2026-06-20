@@ -11,10 +11,19 @@ build and the same Authentik SSO + realm picker.
 The scaffolding is committed; the actual store builds run on a machine with the
 platform SDKs (Android Studio, Xcode, Rust toolchain). These are documented below.
 
+## Status
+- Capacitor CLI + core + android installed; **`android/` native project already
+  scaffolded** (`cap add android` run) with appId `com.crypticrealm.game`,
+  INTERNET permission, web assets copied. Open it in Android Studio and build the
+  `.aab` — no further scaffolding needed. (`android/` is gitignored; it lives on
+  the build machine.)
+- iOS + Tauri native projects still need their first `add`/build on a machine
+  with Xcode / the Rust toolchain.
+
 ## One-time install (on the build machine)
 ```bash
 npm install                      # picks up the @capacitor/* + @tauri-apps/cli devDeps
-npx cap add android              # creates android/ (needs Android Studio + SDK)
+# npx cap add android            # ALREADY DONE (android/ exists)
 npx cap add ios                  # creates ios/ (needs Xcode, macOS only)
 cargo install create-tauri-app   # or: npm i -g @tauri-apps/cli ; Rust via rustup
 npx tauri icon public/cryptic-realm-logo-512.png   # generates src-tauri/icons/*
