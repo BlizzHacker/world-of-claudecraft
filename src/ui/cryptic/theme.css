@@ -187,6 +187,14 @@
 #cr-music-widget .cr-mw-track-active { background: rgba(255,209,0,0.22); color: var(--cr-gold, #ffd100); }
 #cr-music-widget .cr-mw-auto { color: var(--cr-text-dim, #b8aa82); border-bottom: 1px solid rgba(201,161,74,0.2); border-radius: 0; margin-bottom: 3px; }
 #cr-music-widget .cr-mw-list-btn { font-size: 12px; padding: 5px 10px; }
+#cr-music-widget .cr-mw-lock.cr-mw-active, #cr-music-widget.cr-mw-locked .cr-mw-lock { color: var(--cr-gold, #ffd100); }
+#cr-music-widget.cr-mw-locked .cr-mw-grip { opacity: 0.35; cursor: default; }
+#cr-music-widget .cr-mw-ext { margin-top: 6px; display: flex; flex-direction: column; gap: 6px; }
+#cr-music-widget .cr-mw-ext-row { display: flex; gap: 4px; }
+#cr-music-widget .cr-mw-ext-input { flex: 1; min-width: 0; background: #0c0a07; color: #f4ead0; border: 1px solid #5f4b1a; border-radius: 4px; padding: 4px 6px; font-size: 11px; }
+#cr-music-widget .cr-mw-ext-frame iframe { display: block; border-radius: 6px; }
+#cr-music-widget .cr-mw-ext-hint, #cr-music-widget .cr-mw-ext-err { font-size: 10px; color: var(--cr-text-dim, #9a8a7a); line-height: 1.4; }
+#cr-music-widget .cr-mw-ext-err { color: #ff8c8c; }
 #cr-music-widget button {
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(201,161,74,0.25);

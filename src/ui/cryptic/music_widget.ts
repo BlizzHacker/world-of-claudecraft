@@ -9,6 +9,37 @@ import { music } from '../../game/music';
 
 const ID = 'cr-music-widget';
 const POS_KEY = 'cr_music_widget_pos';
+const LOCK_KEY = 'cr_music_widget_locked';
+const EXT_KEY = 'cr_music_ext_url';
+
+// Turn a Spotify / Pandora / YouTube / Apple Music share link into an embeddable
+// iframe URL. Returns null if it isn't a recognised embeddable provider.
+function toEmbedUrl(raw: string): string | null {
+  const url = raw.trim();
+  if (!url) return null;
+  try {
+    const u = new URL(url);
+    const host = u.hostname.replace(/^www\./, '');
+    // Spotify: open.spotify.com/<type>/<id> -> open.spotify.com/embed/<type>/<id>
+    if (host === 'open.spotify.com') {
+      return `https://open.spotify.com/embed${u.pathname}`;
+    }
+    // YouTube: watch?v=ID or youtu.be/ID -> youtube.com/embed/ID
+    if (host === 'youtube.com' || host === 'm.youtube.com') {
+      const v = u.searchParams.get('v');
+      if (v) return `https://www.youtube.com/embed/${v}`;
+      if (u.pathname.startsWith('/playlist')) return `https://www.youtube.com/embed/videoseries?list=${u.searchParams.get('list')}`;
+    }
+    if (host === 'youtu.be') return `https://www.youtube.com/embed${u.pathname}`;
+    // Pandora: embeddable via its own embed host for stations.
+    if (host === 'pandora.com') return url; // Pandora embeds open in-page; keep as-is.
+    // Apple Music: music.apple.com/... -> embed.music.apple.com/...
+    if (host === 'music.apple.com') return `https://embed.${host}${u.pathname}${u.search}`;
+    // SoundCloud handled via its player widget.
+    if (host === 'soundcloud.com') return `https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}`;
+  } catch { /* not a URL */ }
+  return null;
+}
 
 interface Pos { left: number; top: number }
 
@@ -41,10 +72,21 @@ export function mountMusicWidget(): void {
         <button type="button" class="cr-mw-next" title="Next track" aria-label="Next track">⏭</button>
         <button type="button" class="cr-mw-shuffle" title="Shuffle" aria-label="Shuffle" aria-pressed="false">🔀</button>
         <button type="button" class="cr-mw-list-btn" title="Pick a song" aria-label="Pick a song" aria-expanded="false">☰ Songs</button>
+        <button type="button" class="cr-mw-ext-btn" title="Spotify / Pandora / YouTube" aria-label="External music" aria-expanded="false">🎧</button>
+        <button type="button" class="cr-mw-lock" title="Lock position" aria-label="Lock widget position" aria-pressed="false">🔓</button>
       </div>
       <div class="cr-mw-list" hidden>
         <button type="button" class="cr-mw-track cr-mw-auto" data-src="">↺ Auto (zone music)</button>
         ${CRYPTIC_TRACKS.map((t) => `<button type="button" class="cr-mw-track" data-src="${t.src}">${t.title}</button>`).join('')}
+      </div>
+      <div class="cr-mw-ext" hidden>
+        <div class="cr-mw-ext-row">
+          <input type="url" class="cr-mw-ext-input" placeholder="Paste Spotify / YouTube / Apple Music / SoundCloud link" />
+          <button type="button" class="cr-mw-ext-load">Load</button>
+          <button type="button" class="cr-mw-ext-clear" title="Clear">✕</button>
+        </div>
+        <div class="cr-mw-ext-frame" hidden></div>
+        <div class="cr-mw-ext-hint">Plays your own playlist alongside the game. Spotify needs a logged-in spotify.com tab.</div>
       </div>
     </div>
   `;
@@ -78,6 +120,61 @@ export function mountMusicWidget(): void {
   const shuffleBtn = el.querySelector<HTMLButtonElement>('.cr-mw-shuffle')!;
   const listBtn = el.querySelector<HTMLButtonElement>('.cr-mw-list-btn')!;
   const listEl = el.querySelector<HTMLElement>('.cr-mw-list')!;
+  const lockBtn = el.querySelector<HTMLButtonElement>('.cr-mw-lock')!;
+  const extBtn = el.querySelector<HTMLButtonElement>('.cr-mw-ext-btn')!;
+  const extEl = el.querySelector<HTMLElement>('.cr-mw-ext')!;
+  const extInput = el.querySelector<HTMLInputElement>('.cr-mw-ext-input')!;
+  const extLoad = el.querySelector<HTMLButtonElement>('.cr-mw-ext-load')!;
+  const extClear = el.querySelector<HTMLButtonElement>('.cr-mw-ext-clear')!;
+  const extFrame = el.querySelector<HTMLElement>('.cr-mw-ext-frame')!;
+
+  // Lock state — when locked, the widget can't be dragged (handles ignore drag).
+  let locked = false;
+  try { locked = localStorage.getItem(LOCK_KEY) === '1'; } catch { /* default */ }
+  const applyLock = () => {
+    el.classList.toggle('cr-mw-locked', locked);
+    lockBtn.textContent = locked ? '🔒' : '🔓';
+    lockBtn.setAttribute('aria-pressed', locked ? 'true' : 'false');
+    lockBtn.title = locked ? 'Unlock position' : 'Lock position';
+  };
+  applyLock();
+  lockBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    locked = !locked;
+    try { localStorage.setItem(LOCK_KEY, locked ? '1' : '0'); } catch { /* ignore */ }
+    applyLock();
+  });
+
+  // External music: embed a Spotify/YouTube/Apple/SoundCloud player. Persisted.
+  const loadExternal = (raw: string) => {
+    const embed = toEmbedUrl(raw);
+    if (!embed) {
+      extFrame.setAttribute('hidden', '');
+      extFrame.innerHTML = '<div class="cr-mw-ext-err">Unrecognized link. Use a Spotify, YouTube, Apple Music, or SoundCloud share URL.</div>';
+      extFrame.removeAttribute('hidden');
+      return;
+    }
+    extFrame.innerHTML = `<iframe src="${embed}" width="100%" height="152" frameborder="0" loading="lazy"
+      allow="autoplay; encrypted-media; clipboard-write; fullscreen; picture-in-picture"
+      referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
+    extFrame.removeAttribute('hidden');
+    try { localStorage.setItem(EXT_KEY, raw); } catch { /* ignore */ }
+  };
+  try { const saved = localStorage.getItem(EXT_KEY); if (saved) { extInput.value = saved; loadExternal(saved); } } catch { /* ignore */ }
+  extBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const open = extEl.hasAttribute('hidden');
+    if (open) extEl.removeAttribute('hidden'); else extEl.setAttribute('hidden', '');
+    extBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  extLoad.addEventListener('click', (e) => { e.stopPropagation(); loadExternal(extInput.value); });
+  extInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); loadExternal(extInput.value); } });
+  extClear.addEventListener('click', (e) => {
+    e.stopPropagation();
+    extInput.value = '';
+    extFrame.setAttribute('hidden', ''); extFrame.innerHTML = '';
+    try { localStorage.removeItem(EXT_KEY); } catch { /* ignore */ }
+  });
 
   const refresh = () => {
     const on = crypticMusic.enabled;
@@ -133,6 +230,7 @@ export function mountMusicWidget(): void {
   // tap still counts as a click (expand) rather than a drag.
   const makeDraggable = (handle: HTMLElement) => {
     handle.addEventListener('pointerdown', (ev) => {
+      if (locked && handle === grip) return; // locked: grip won't drag (launcher still expands)
       ev.preventDefault();
       handle.setPointerCapture?.(ev.pointerId);
       const rect = el.getBoundingClientRect();
