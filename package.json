@@ -29,7 +29,13 @@
     "realms": "npm run build:server && node scripts/dev-realms.mjs",
     "admin:grant": "node scripts/grant_admin.mjs",
     "wiki:seed": "node scripts/mediawiki/build_seed.mjs",
-    "assets:realms": "node scripts/build_realm_assets.mjs"
+    "assets:realms": "node scripts/build_realm_assets.mjs",
+    "cap:sync": "npm run build && npx cap sync",
+    "cap:android": "npm run cap:sync && npx cap open android",
+    "cap:ios": "npm run cap:sync && npx cap open ios",
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build"
   },
   "dependencies": {
     "n8ao": "^1.10.1",
@@ -50,6 +56,11 @@
     "puppeteer-core": "^25.1.0",
     "typescript": "^5.5.0",
     "vite": "^8.0.16",
-    "vitest": "^4.1.8"
+    "vitest": "^4.1.8",
+    "@capacitor/cli": "^6.1.2",
+    "@capacitor/core": "^6.1.2",
+    "@capacitor/android": "^6.1.2",
+    "@capacitor/ios": "^6.1.2",
+    "@tauri-apps/cli": "^2.1.0"
   }
 }

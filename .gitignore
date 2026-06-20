@@ -46,3 +46,10 @@ cryptic realm assets/
 infernal realm assets/
 # CR overlay: generated realm assets (run npm run assets:realms to regenerate)
 public/cr-realms/
+
+# App packaging build artifacts (Capacitor native projects + Tauri Rust target)
+/android
+/ios
+/src-tauri/target
+/src-tauri/gen
+
