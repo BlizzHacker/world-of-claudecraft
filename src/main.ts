@@ -33,6 +33,7 @@ import { mountNewsRealmFilter } from './ui/cryptic/news_realm_filter';
 import { mountDownloadLaunchers } from './ui/cryptic/download_launchers';
 import { mountChatFrame } from './ui/cryptic/chat_frame';
 import { mountMusicWidget } from './ui/cryptic/music_widget';
+import { mountHudLayout } from './ui/cryptic/hud_layout';
 import { crypticMusic } from './game/cryptic_music';
 import { mountBestiary } from './ui/cryptic/bestiary';
 import { mountSkillTree } from './ui/cryptic/skilltree';
@@ -641,6 +642,10 @@ async function startGame(world: IWorld, offlineSim: Sim | null, online: ClientWo
   // The loading screen covers the gap - not a silent black screen.
   enterLoadingState(t('loading.world'));
   document.body.classList.add('game-active');
+  // Relocatable/lockable HUD: mount the "Move HUD" toggle once the in-game HUD
+  // elements (minimap, globes, action bar) exist. Retry briefly since the HUD
+  // DOM builds shortly after the game becomes active. Self-guards if absent.
+  for (const delay of [600, 1500, 3000]) window.setTimeout(() => mountHudLayout(), delay);
   if (document.activeElement instanceof HTMLElement) {
     document.activeElement.blur();
   }
