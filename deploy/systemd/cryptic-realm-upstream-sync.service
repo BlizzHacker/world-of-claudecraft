@@ -1,0 +1,11 @@
+# Auto-merge upstream world-of-claudecraft into the dev branch. Pairs with
+# cryptic-realm-upstream-sync.timer. Conflicts abort safely (dev untouched).
+[Unit]
+Description=Cryptic Realm — auto-sync upstream ClaudeCraft into dev
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/cryptic-realm
+ExecStart=/usr/bin/env bash /opt/cryptic-realm/scripts/admin/sync-upstream.sh

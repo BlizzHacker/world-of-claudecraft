@@ -1,0 +1,12 @@
+# Pull upstream ClaudeCraft into dev daily at 03:30 UTC — 30 min before the
+# autoupdate deploy (04:00) so a clean merge is live on dev the same night.
+# Promotion dev->alpha->beta->live stays on the separate promote timers.
+[Unit]
+Description=Daily upstream ClaudeCraft -> dev sync
+
+[Timer]
+OnCalendar=*-*-* 03:30:00 UTC
+Persistent=true
+
+[Install]
+WantedBy=timers.target
