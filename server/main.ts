@@ -36,7 +36,7 @@ import { GameServer } from './game';
 import { REALM, REALM_DIRECTORY, REALM_ORIGINS } from './realm';
 import { saveBugReport } from './bug_reports';
 import { webLoginEnforced, isWebClientRequest } from './web_login_guard';
-import { cacheControlFor, etagFor, isNotModified } from './static_cache';
+import { cacheControlFor, cacheHeadersFor, etagFor, isNotModified } from './static_cache';
 
 const PORT = Number(process.env.PORT ?? 8787);
 const STATIC_DIR = path.join(__dirname, '..', 'dist');
@@ -310,7 +310,7 @@ function serveStatic(req: http.IncomingMessage, res: http.ServerResponse): void 
     // SPA fallback
     const index = path.join(STATIC_DIR, shell);
     if (fs.existsSync(index)) {
-      res.writeHead(200, { 'Content-Type': 'text/html', 'Cache-Control': 'no-cache' });
+      res.writeHead(200, { 'Content-Type': 'text/html', 'Cache-Control': 'no-cache, must-revalidate', 'CDN-Cache-Control': 'no-store' });
       fs.createReadStream(index).pipe(res);
     } else {
       res.writeHead(404);
@@ -321,7 +321,7 @@ function serveStatic(req: http.IncomingMessage, res: http.ServerResponse): void 
   const isReadMethod = req.method === 'GET' || req.method === 'HEAD';
   const etag = etagFor(stats);
   const validators = {
-    'Cache-Control': cacheControlFor(urlPath),
+    ...cacheHeadersFor(urlPath),
     'ETag': etag,
     'Last-Modified': stats.mtime.toUTCString(),
   };

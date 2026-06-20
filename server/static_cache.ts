@@ -8,10 +8,29 @@ import type { Stats } from 'node:fs';
 
 const IMMUTABLE_PREFIXES = ['/assets/', '/media/'];
 
+function isImmutable(urlPath: string): boolean {
+  return IMMUTABLE_PREFIXES.some((prefix) => urlPath.startsWith(prefix));
+}
+
 export function cacheControlFor(urlPath: string): string {
-  return IMMUTABLE_PREFIXES.some((prefix) => urlPath.startsWith(prefix))
+  return isImmutable(urlPath)
     ? 'public, max-age=31536000, immutable'
     : 'no-cache';
+}
+
+// Full cache header set. Hashed assets cache forever at the edge; everything
+// else (HTML shells, nav.js, loading art that keeps its URL) must NOT be cached
+// by Cloudflare — it ignores plain `no-cache` and serves stale HTML (we saw
+// whitepaper.html keep an old nav). `CDN-Cache-Control: no-store` is honored by
+// Cloudflare's cache specifically, so the edge revalidates on every request.
+export function cacheHeadersFor(urlPath: string): Record<string, string> {
+  if (isImmutable(urlPath)) {
+    return { 'Cache-Control': 'public, max-age=31536000, immutable' };
+  }
+  return {
+    'Cache-Control': 'no-cache, must-revalidate',
+    'CDN-Cache-Control': 'no-store',
+  };
 }
 
 export function etagFor(st: Stats): string {
