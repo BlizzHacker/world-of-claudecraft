@@ -8,6 +8,8 @@ import { mountPickitPanel } from './ui/cryptic/pickit_panel';
 import { mountUserDropdown } from './ui/cryptic/user_dropdown';
 import { mountWalletPanel } from './ui/cryptic/wallet_panel';
 import { readCrypticSession } from './ui/cryptic/session';
+import { mountMusicWidget } from './ui/cryptic/music_widget';
+import { crypticMusic } from './game/cryptic_music';
 
 let appPromise: Promise<typeof import('./main')> | null = null;
 let caCopyResetTimer: number | null = null;
@@ -347,6 +349,48 @@ function showPanel(selector: string): void {
   }
 }
 
+// Lightweight realm-list loader for the HOME PAGE (landing.ts entry). The full
+// picker lives in main.ts but only loads after login; this lets logged-out
+// visitors browse the available realms/servers immediately. Clicking a realm
+// routes to login (the connect itself needs a session).
+let landingRealmsLoaded = false;
+async function loadLandingRealms(): Promise<void> {
+  const listEl = document.getElementById('realm-list');
+  if (!listEl) return;
+  if (landingRealmsLoaded && listEl.querySelector('.realm-row')) return;
+  try {
+    const res = await fetch('/api/realms');
+    if (!res.ok) throw new Error(`realms ${res.status}`);
+    const dir = await res.json() as { realms?: { name: string; url: string; type: string }[] };
+    const realms = Array.isArray(dir.realms) ? dir.realms : [];
+    if (!realms.length) { listEl.innerHTML = '<div class="realm-loading">No realms available right now.</div>'; return; }
+    listEl.innerHTML = realms.map((r) => `
+      <div class="realm-row" data-name="${escapeHtml(r.name)}" data-url="${escapeHtml(r.url)}">
+        <div><div class="realm-name">${escapeHtml(r.name)}</div>
+          <div class="realm-sub">${escapeHtml(r.type)} realm</div></div>
+        <div class="realm-meta"><div class="realm-type">${escapeHtml(r.type)}</div></div>
+      </div>`).join('');
+    listEl.querySelectorAll<HTMLElement>('.realm-row').forEach((row) => {
+      row.addEventListener('click', () => {
+        const url = row.dataset.url;
+        if (readCrypticSession()) {
+          // logged in: hand off to the full app picker
+          document.body.dataset.pendingOnlineResume = '1';
+          showPanel('#realm-panel');
+          void loadApp();
+        } else if (url) {
+          // not logged in: remember the choice, then prompt login
+          try { localStorage.setItem('cr_pending_realm_url', url); } catch { /* ignore */ }
+          showPanel('#login-panel');
+        }
+      });
+    });
+    landingRealmsLoaded = true;
+  } catch {
+    listEl.innerHTML = '<div class="realm-loading">Could not load realms — try again shortly.</div>';
+  }
+}
+
 function wireLandingPanels(): void {
   document.getElementById('nav-btn-play')?.addEventListener('click', () => showPanel('#mode-select'));
   document.getElementById('nav-btn-login')?.addEventListener('click', () => showPanel('#login-panel'));
@@ -370,13 +414,18 @@ function wireLandingPanels(): void {
       selectLandingOfflineClass('warrior');
       return;
     }
+    // Online: show the realm list to EVERYONE (logged in or not) so players can
+    // browse/choose a server before committing. loadApp() drives the full picker
+    // when logged in; otherwise we render the browsable list and gate the actual
+    // connect on login.
     if (readCrypticSession()) {
       document.body.dataset.pendingOnlineResume = '1';
       showPanel('#realm-panel');
       void loadApp();
       return;
     }
-    showPanel('#login-panel');
+    showPanel('#realm-panel');
+    void loadLandingRealms();
   });
 
   const trigger = document.getElementById('server-select-trigger');
@@ -599,6 +648,12 @@ function boot(): void {
   wireLandingPanels();
   wireLandingOfflinePanel();
   wireDeferredAppLoad();
+  // The home page runs landing.ts (NOT main.ts), so mount the moveable music
+  // widget here too. First gesture unlocks autoplay.
+  mountMusicWidget();
+  const kickMusic = () => { crypticMusic.kick(); window.removeEventListener('pointerdown', kickMusic); window.removeEventListener('keydown', kickMusic); };
+  window.addEventListener('pointerdown', kickMusic);
+  window.addEventListener('keydown', kickMusic);
   if (ssoCallbackPending()) {
     void loadApp().catch((err) => {
       console.error('[cr-boot] loadApp failed', err);
