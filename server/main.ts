@@ -34,6 +34,7 @@ import { maybeBuildSolanaFromEnv } from '../src/economy/solanaAdapter';
 import { setChainAdapter } from '../src/economy/chainAdapter';
 import { GameServer } from './game';
 import { REALM, REALM_DIRECTORY, REALM_ORIGINS } from './realm';
+import { saveBugReport } from './bug_reports';
 import { webLoginEnforced, isWebClientRequest } from './web_login_guard';
 import { cacheControlFor, etagFor, isNotModified } from './static_cache';
 
@@ -521,6 +522,15 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       const q = new URL(req.url ?? '/', 'http://localhost').searchParams.get('q') ?? '';
       const results = q.trim().length >= 1 ? await searchCharacters(q, 8) : [];
       return json(res, 200, { results });
+    }
+    if (req.method === 'POST' && url === '/api/bug-report') {
+      // In-game Report Bug sink. Best-effort, available to any session (testers
+      // may not have a character yet). accountId captured when present.
+      const accountId = await bearerAccount(req);
+      const body = await readBody(req);
+      const id = saveBugReport(body, { accountId, realm: REALM });
+      if (!id) return json(res, 400, { error: 'could not save report (too large or sink unavailable)' });
+      return json(res, 200, { ok: true, id });
     }
     if (req.method === 'POST' && url === '/api/reports') {
       const accountId = await bearerActiveAccount(req, res);

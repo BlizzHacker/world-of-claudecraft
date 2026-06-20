@@ -846,6 +846,15 @@ body.cr-fps-active body, body.cr-fps-active { cursor: crosshair; }
 }
 .cr-afe-actions { display: flex; gap: 8px; }
 .cr-afe-status { margin-top: 10px; font-size: 12px; color: var(--cr-text-dim, #9a8a7a); min-height: 16px; }
+.cr-bug-note-label { display: block; font-size: 12px; color: var(--cr-text-dim, #9a8a7a); margin: 10px 0 4px; }
+.cr-bug-note {
+  width: 100%; box-sizing: border-box; resize: vertical;
+  background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 5px; color: var(--cr-text, #e8d5c4); padding: 7px 9px;
+  font-family: inherit; font-size: 13px; margin-bottom: 10px;
+}
+.cr-bug-submit { background: linear-gradient(180deg, var(--cr-accent, #d4442a), var(--cr-accent-dim, #8b2e1c)); color: #fff; }
+.cr-bug-submit:disabled { opacity: 0.7; cursor: default; }
 #cr-bug-report-modal .cr-modal-panel {
   width: min(720px, 94vw);
 }

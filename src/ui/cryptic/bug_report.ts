@@ -1,5 +1,6 @@
 import { getActiveRealm, resolveActiveRealmId } from '../../sim/realms';
 import { getGamepadStatus } from '../../game/gamepad';
+import { readCrypticSession } from './session';
 
 const MODAL_ID = 'cr-bug-report-modal';
 const STORE_KEY = 'cr_bug_reports';
@@ -149,11 +150,14 @@ function render(host: HTMLElement, report: BugReport): void {
           <div><strong>Screenshot</strong><span>${report.screenshot ? 'Included' : 'Unavailable'}</span></div>
         </div>
         ${report.screenshot ? `<img class="cr-bug-shot" alt="Bug report screenshot" src="${report.screenshot}">` : ''}
+        <label class="cr-bug-note-label" for="cr-bug-note">What went wrong? (optional)</label>
+        <textarea id="cr-bug-note" class="cr-bug-note" rows="3" placeholder="Describe the bug — what you did, what you expected, what happened."></textarea>
         <div class="cr-bug-actions">
+          <button type="button" class="cr-options-pill cr-bug-submit" data-cr-bug-submit>Send to dev team</button>
           <button type="button" class="cr-options-pill" data-cr-bug-copy>Copy JSON</button>
           <button type="button" class="cr-options-pill" data-cr-bug-download>Download JSON</button>
         </div>
-        <p class="cr-modal-footer-hint">Saved locally under <code>${STORE_KEY}</code>. The JSON shape is ready for server-side issue ingestion.</p>
+        <p class="cr-modal-footer-hint" data-cr-bug-status>Sending goes straight to the dev log (timestamped + screenshot) to help evolve Cryptic Realm. Also saved locally.</p>
       </div>
     </div>
   `;
@@ -173,8 +177,46 @@ function render(host: HTMLElement, report: BugReport): void {
     }
     if (target.closest('[data-cr-bug-download]')) {
       downloadReport(report);
+      return;
+    }
+    if (target.closest('[data-cr-bug-submit]')) {
+      void submitReport(host, report, target as HTMLButtonElement);
     }
   };
+}
+
+// POST the report (plus the tester's note) to the server bug-report sink. Best
+// effort — testers may be offline; we still keep the local copy either way.
+async function submitReport(host: HTMLElement, report: BugReport, btn: HTMLButtonElement): Promise<void> {
+  const status = host.querySelector('[data-cr-bug-status]') as HTMLElement | null;
+  const noteEl = host.querySelector('#cr-bug-note') as HTMLTextAreaElement | null;
+  const note = noteEl?.value.trim() ?? '';
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+  try {
+    const token = readCrypticSession()?.token ?? null;
+    const res = await fetch('/api/bug-report', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify({ ...report, note }),
+    });
+    if (res.ok) {
+      const data = await res.json().catch(() => ({}));
+      btn.textContent = 'Sent ✓';
+      if (status) status.textContent = `Report sent to the dev log${data?.id ? ` (${data.id})` : ''}. Thank you!`;
+    } else {
+      btn.disabled = false;
+      btn.textContent = 'Retry send';
+      if (status) status.textContent = `Could not send (server ${res.status}). Your local copy is still saved.`;
+    }
+  } catch {
+    btn.disabled = false;
+    btn.textContent = 'Retry send';
+    if (status) status.textContent = 'Could not reach the server. Your local copy is still saved.';
+  }
 }
 
 export function openBugReport(): void {
