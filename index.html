@@ -3368,6 +3368,18 @@
   .realm-pop.full { color: #ff5040; }
   .realm-pop.offline { color: #888; }
   .realm-meta { display: contents; }
+  /* Stage pills (Alpha/Beta/Dev) grouped under each realm so the list stays compact. */
+  .realm-stages { display: flex; gap: 4px; margin-top: 4px; justify-content: flex-end; }
+  .realm-stage-pill {
+    font-size: 9.5px; font-weight: 700; letter-spacing: 0.4px;
+    padding: 2px 7px; border-radius: 9px; cursor: pointer;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(201,161,74,0.4);
+    color: #c9b27a; font-family: var(--title-font); text-transform: uppercase;
+  }
+  .realm-stage-pill:hover { background: rgba(255,209,0,0.16); color: #ffd100; border-color: #c9a14a; }
+  .realm-stage-beta { border-color: rgba(120,170,255,0.5); color: #9bbcff; }
+  .realm-stage-alpha { border-color: rgba(255,170,80,0.5); color: #ffb86b; }
+  .realm-stage-dev { border-color: rgba(180,120,255,0.5); color: #c79bff; }
 
   /* ---------- chat ---------- */
   #chat-input { position: absolute; left: 12px; bottom: 204px; width: 370px; display: none; z-index: 25;

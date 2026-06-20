@@ -180,10 +180,13 @@ export class CrypticMusicPlayer {
     const start = performance.now();
     const DUR = 1400;
     if (this.fadeTimer) cancelAnimationFrame(this.fadeTimer);
+    const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
     const step = (now: number) => {
-      const t = Math.min(1, (now - start) / DUR);
-      next.volume = this._vol * t;
-      if (prev) prev.volume = this._vol * (1 - t);
+      const t = Math.min(1, Math.max(0, (now - start) / DUR));
+      // clamp: float drift on (1 - t) * vol can go a hair below 0, and the
+      // HTMLMediaElement.volume setter throws IndexSizeError outside [0,1].
+      next.volume = clamp01(this._vol * t);
+      if (prev) prev.volume = clamp01(this._vol * (1 - t));
       if (t < 1) { this.fadeTimer = requestAnimationFrame(step); }
       else if (prev) { prev.pause(); prev.src = ''; }
     };

@@ -135,58 +135,76 @@
 /* Moveable music widget — draggable now-playing + toggle (music_widget.ts). */
 #cr-music-widget {
   position: fixed;
-  right: 14px;
-  bottom: 14px;
+  right: 16px;
+  bottom: 16px;
   z-index: 2147483640;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 4px;
-  padding: 5px 9px 5px 5px;
-  border-radius: 18px;
-  background: linear-gradient(180deg, rgba(20,16,26,0.95), rgba(10,8,14,0.95));
+  font-family: var(--cr-font-ui, system-ui, sans-serif);
+  user-select: none;
+}
+/* Collapsed: a single round launcher button (original CR behaviour). */
+#cr-music-widget .cr-mw-launcher {
+  width: 52px; height: 52px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: radial-gradient(circle at 35% 30%, rgba(40,32,52,0.98), rgba(12,9,16,0.98));
+  border: 2px solid var(--cr-gold, #c9a14a);
+  color: var(--cr-gold, #ffd100);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.6), 0 0 14px rgba(201,161,74,0.25);
+  cursor: pointer; font-size: 24px; line-height: 1; padding: 0;
+}
+#cr-music-widget .cr-mw-launcher:hover { transform: scale(1.06); box-shadow: 0 6px 26px rgba(0,0,0,0.7), 0 0 22px rgba(255,209,0,0.4); }
+#cr-music-widget.cr-mw-playing .cr-mw-launcher .cr-mw-launcher-note { animation: cr-mw-pulse 1.6s ease-in-out infinite; }
+/* Expanded: the full player panel. */
+#cr-music-widget .cr-mw-panel {
+  display: flex; flex-direction: column; gap: 8px;
+  width: 268px; padding: 10px 12px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(22,17,28,0.97), rgba(11,8,15,0.97));
   border: 1px solid var(--cr-gold, #c9a14a);
   color: var(--cr-text, #e8d5c4);
-  box-shadow: 0 4px 18px rgba(0,0,0,0.55);
-  font-family: var(--cr-font-ui, system-ui, sans-serif);
-  font-size: 12px;
-  user-select: none;
-  max-width: 280px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.6);
+  font-size: 13px;
 }
-#cr-music-widget .cr-mw-bar { display: flex; align-items: center; gap: 4px; }
-#cr-music-widget .cr-mw-shuffle.cr-mw-active { color: var(--cr-gold, #ffd100); background: rgba(255,209,0,0.16); }
+#cr-music-widget.cr-mw-collapsed .cr-mw-panel { display: none; }
+#cr-music-widget:not(.cr-mw-collapsed) .cr-mw-launcher { display: none; }
+#cr-music-widget .cr-mw-bar { display: flex; align-items: center; gap: 6px; }
+#cr-music-widget .cr-mw-title {
+  flex: 1; font-weight: 600; color: var(--cr-gold, #ffd100);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+#cr-music-widget .cr-mw-controls { display: flex; align-items: center; justify-content: center; gap: 4px; }
+#cr-music-widget .cr-mw-shuffle.cr-mw-active { color: var(--cr-gold, #ffd100); background: rgba(255,209,0,0.18); }
 #cr-music-widget .cr-mw-list {
   display: flex; flex-direction: column; gap: 1px;
-  max-height: 230px; overflow-y: auto;
-  margin: 2px 2px 0; padding-top: 4px;
+  max-height: 240px; overflow-y: auto;
+  padding-top: 6px;
   border-top: 1px solid rgba(201,161,74,0.3);
 }
 #cr-music-widget .cr-mw-track {
-  text-align: left; font-size: 11.5px; padding: 5px 8px; border-radius: 6px;
+  text-align: left; font-size: 12px; padding: 6px 9px; border-radius: 6px;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 #cr-music-widget .cr-mw-track:hover { background: rgba(255,209,0,0.12); }
-#cr-music-widget .cr-mw-track-active { background: rgba(255,209,0,0.2); color: var(--cr-gold, #ffd100); }
-#cr-music-widget .cr-mw-auto { color: var(--cr-text-dim, #b8aa82); border-bottom: 1px solid rgba(201,161,74,0.2); border-radius: 0; margin-bottom: 2px; }
+#cr-music-widget .cr-mw-track-active { background: rgba(255,209,0,0.22); color: var(--cr-gold, #ffd100); }
+#cr-music-widget .cr-mw-auto { color: var(--cr-text-dim, #b8aa82); border-bottom: 1px solid rgba(201,161,74,0.2); border-radius: 0; margin-bottom: 3px; }
+#cr-music-widget .cr-mw-list-btn { font-size: 12px; padding: 5px 10px; }
 #cr-music-widget button {
-  background: transparent;
-  border: 0;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(201,161,74,0.25);
   color: var(--cr-text, #e8d5c4);
   cursor: pointer;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1;
-  padding: 3px 4px;
-  border-radius: 6px;
+  padding: 7px 9px;
+  border-radius: 8px;
 }
-#cr-music-widget .cr-mw-grip { cursor: grab; color: var(--cr-text-dim, #8a7a6a); }
-#cr-music-widget .cr-mw-toggle { color: var(--cr-gold, #ffd100); font-size: 15px; }
+#cr-music-widget .cr-mw-controls button:hover, #cr-music-widget .cr-mw-list-btn:hover { background: rgba(255,209,0,0.14); border-color: var(--cr-gold, #c9a14a); }
+#cr-music-widget .cr-mw-grip { cursor: grab; color: var(--cr-text-dim, #8a7a6a); border: 0; background: transparent; padding: 2px 4px; }
+#cr-music-widget .cr-mw-collapse { border: 0; background: transparent; color: var(--cr-text-dim, #b8aa82); font-size: 14px; padding: 2px 6px; }
+#cr-music-widget .cr-mw-toggle { color: var(--cr-gold, #ffd100); }
 #cr-music-widget .cr-mw-toggle.cr-mw-off { color: var(--cr-text-dim, #7a6a5a); }
-#cr-music-widget .cr-mw-title {
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 170px;
-}
 #cr-music-widget.cr-mw-playing .cr-mw-toggle { animation: cr-mw-pulse 1.8s ease-in-out infinite; }
 @keyframes cr-mw-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.55; } }
-body.mobile-touch #cr-music-widget { font-size: 11px; max-width: 200px; }
+body.mobile-touch #cr-music-widget .cr-mw-panel { width: 232px; font-size: 12px; }
 
 /* Controller virtual-mouse cursor — driven by gamepad_cursor.ts. Sits above
    all UI so it can click any surface; pointer-events:none so it never blocks

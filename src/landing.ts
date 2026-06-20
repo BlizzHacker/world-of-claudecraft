@@ -360,26 +360,63 @@ async function loadLandingRealms(): Promise<void> {
     const dir = await res.json() as { realms?: { name: string; url: string; type: string }[] };
     const realms = Array.isArray(dir.realms) ? dir.realms : [];
     if (!realms.length) { listEl.innerHTML = '<div class="realm-loading">No realms available right now.</div>'; return; }
-    listEl.innerHTML = realms.map((r) => `
-      <div class="realm-row" data-name="${escapeHtml(r.name)}" data-url="${escapeHtml(r.url)}">
-        <div><div class="realm-name">${escapeHtml(r.name)}</div>
-          <div class="realm-sub">${escapeHtml(r.type)} realm</div></div>
-        <div class="realm-meta"><div class="realm-type">${escapeHtml(r.type)}</div></div>
-      </div>`).join('');
+
+    // Group by base realm so each realm is ONE row with its stages (Live default
+    // + Alpha/Beta/Dev pills) instead of 4 flat rows each. Keeps the list compact
+    // and shows every server, not just the live ones.
+    interface Stage { stage: string; url: string; }
+    interface Group { base: string; type: string; stages: Stage[]; }
+    const groups = new Map<string, Group>();
+    const order: string[] = [];
+    for (const r of realms) {
+      const m = /^(.*?)\s*\[(BETA|ALPHA|DEV)\]\s*$/i.exec(r.name);
+      const base = (m ? m[1] : r.name).trim();
+      const stage = m ? m[2].toUpperCase() : 'LIVE';
+      if (!groups.has(base)) { groups.set(base, { base, type: r.type, stages: [] }); order.push(base); }
+      const g = groups.get(base)!;
+      if (stage === 'LIVE') g.type = r.type; // live row defines the realm type
+      g.stages.push({ stage, url: r.url });
+    }
+    const STAGE_ORDER = ['LIVE', 'BETA', 'ALPHA', 'DEV'];
+    const sortStages = (s: Stage[]) => s.sort((a, b) => STAGE_ORDER.indexOf(a.stage) - STAGE_ORDER.indexOf(b.stage));
+
+    listEl.innerHTML = order.map((base) => {
+      const g = groups.get(base)!;
+      sortStages(g.stages);
+      const live = g.stages.find((s) => s.stage === 'LIVE') ?? g.stages[0];
+      const extra = g.stages.filter((s) => s.stage !== 'LIVE');
+      const pills = extra.map((s) =>
+        `<button type="button" class="realm-stage-pill realm-stage-${s.stage.toLowerCase()}" data-url="${escapeHtml(s.url)}" data-name="${escapeHtml(base + ' [' + s.stage + ']')}">${s.stage}</button>`,
+      ).join('');
+      return `
+      <div class="realm-row" data-name="${escapeHtml(base)}" data-url="${escapeHtml(live.url)}">
+        <div class="realm-row-main">
+          <div class="realm-name">${escapeHtml(base)}</div>
+          <div class="realm-sub">${escapeHtml(g.type)} realm${extra.length ? ' · ' + extra.length + ' test ' + (extra.length === 1 ? 'stage' : 'stages') : ''}</div>
+        </div>
+        <div class="realm-meta">
+          <div class="realm-type">${escapeHtml(g.type)}</div>
+          ${pills ? `<div class="realm-stages">${pills}</div>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+
+    const connect = (url: string | undefined) => {
+      if (readCrypticSession()) {
+        document.body.dataset.pendingOnlineResume = '1';
+        showPanel('#realm-panel');
+        void loadApp();
+      } else if (url) {
+        try { localStorage.setItem('cr_pending_realm_url', url); } catch { /* ignore */ }
+        showPanel('#login-panel');
+      }
+    };
+    // Stage pills route to their stage URL without triggering the row's live click.
+    listEl.querySelectorAll<HTMLElement>('.realm-stage-pill').forEach((pill) => {
+      pill.addEventListener('click', (e) => { e.stopPropagation(); connect(pill.dataset.url); });
+    });
     listEl.querySelectorAll<HTMLElement>('.realm-row').forEach((row) => {
-      row.addEventListener('click', () => {
-        const url = row.dataset.url;
-        if (readCrypticSession()) {
-          // logged in: hand off to the full app picker
-          document.body.dataset.pendingOnlineResume = '1';
-          showPanel('#realm-panel');
-          void loadApp();
-        } else if (url) {
-          // not logged in: remember the choice, then prompt login
-          try { localStorage.setItem('cr_pending_realm_url', url); } catch { /* ignore */ }
-          showPanel('#login-panel');
-        }
-      });
+      row.addEventListener('click', () => connect(row.dataset.url));
     });
     landingRealmsLoaded = true;
   } catch {

@@ -26,21 +26,46 @@ export function mountMusicWidget(): void {
   const el = document.createElement('div');
   el.id = ID;
   el.innerHTML = `
-    <div class="cr-mw-bar">
-      <button type="button" class="cr-mw-grip" title="Drag to move" aria-label="Move music widget">⠿</button>
-      <button type="button" class="cr-mw-toggle" title="Toggle music" aria-label="Toggle music">♪</button>
-      <button type="button" class="cr-mw-prev" title="Previous track" aria-label="Previous track">⏮</button>
-      <button type="button" class="cr-mw-next" title="Next track" aria-label="Next track">⏭</button>
-      <button type="button" class="cr-mw-shuffle" title="Shuffle" aria-label="Shuffle" aria-pressed="false">🔀</button>
-      <span class="cr-mw-title" data-cr-mw-title>—</span>
-      <button type="button" class="cr-mw-list-btn" title="Pick a song" aria-label="Pick a song" aria-expanded="false">☰</button>
-    </div>
-    <div class="cr-mw-list" hidden>
-      <button type="button" class="cr-mw-track cr-mw-auto" data-src="">↺ Auto (zone music)</button>
-      ${CRYPTIC_TRACKS.map((t) => `<button type="button" class="cr-mw-track" data-src="${t.src}">${t.title}</button>`).join('')}
+    <button type="button" class="cr-mw-launcher" title="Cryptic Realm Music" aria-label="Open music player">
+      <span class="cr-mw-launcher-note">♪</span>
+    </button>
+    <div class="cr-mw-panel">
+      <div class="cr-mw-bar">
+        <button type="button" class="cr-mw-grip" title="Drag to move" aria-label="Move music widget">⠿</button>
+        <span class="cr-mw-title" data-cr-mw-title>Cryptic Realm Music</span>
+        <button type="button" class="cr-mw-collapse" title="Minimize" aria-label="Minimize player">▾</button>
+      </div>
+      <div class="cr-mw-controls">
+        <button type="button" class="cr-mw-prev" title="Previous track" aria-label="Previous track">⏮</button>
+        <button type="button" class="cr-mw-toggle" title="Play / pause" aria-label="Play or pause">♪</button>
+        <button type="button" class="cr-mw-next" title="Next track" aria-label="Next track">⏭</button>
+        <button type="button" class="cr-mw-shuffle" title="Shuffle" aria-label="Shuffle" aria-pressed="false">🔀</button>
+        <button type="button" class="cr-mw-list-btn" title="Pick a song" aria-label="Pick a song" aria-expanded="false">☰ Songs</button>
+      </div>
+      <div class="cr-mw-list" hidden>
+        <button type="button" class="cr-mw-track cr-mw-auto" data-src="">↺ Auto (zone music)</button>
+        ${CRYPTIC_TRACKS.map((t) => `<button type="button" class="cr-mw-track" data-src="${t.src}">${t.title}</button>`).join('')}
+      </div>
     </div>
   `;
   document.body.appendChild(el);
+
+  // Collapsed (launcher button) vs expanded (full panel). Original CR behaviour:
+  // a small button that expands to the player and tucks back to a button.
+  const COLLAPSE_KEY = 'cr_music_widget_collapsed';
+  const launcher = el.querySelector<HTMLButtonElement>('.cr-mw-launcher')!;
+  const panel = el.querySelector<HTMLElement>('.cr-mw-panel')!;
+  const collapseBtn = el.querySelector<HTMLButtonElement>('.cr-mw-collapse')!;
+  const setCollapsed = (c: boolean) => {
+    el.classList.toggle('cr-mw-collapsed', c);
+    try { localStorage.setItem(COLLAPSE_KEY, c ? '1' : '0'); } catch { /* ignore */ }
+  };
+  // Default collapsed so it's unobtrusive until opened.
+  let startCollapsed = true;
+  try { startCollapsed = localStorage.getItem(COLLAPSE_KEY) !== '0'; } catch { /* default */ }
+  setCollapsed(startCollapsed);
+  launcher.addEventListener('click', (e) => { e.stopPropagation(); setCollapsed(false); });
+  collapseBtn.addEventListener('click', (e) => { e.stopPropagation(); setCollapsed(true); });
 
   const pos = readPos();
   if (pos) { el.style.left = `${pos.left}px`; el.style.top = `${pos.top}px`; el.style.right = 'auto'; el.style.bottom = 'auto'; }
@@ -63,6 +88,7 @@ export function mountMusicWidget(): void {
       ? (track ? `CR · ${track}` : 'Cryptic Realm Music')
       : (track ? `Synth · ${track}` : 'Music off');
     el.classList.toggle('cr-mw-playing', !!track && on);
+    launcher.title = on ? (track ? `♪ ${track}` : 'Cryptic Realm Music') : 'Music off';
     shuffleBtn.classList.toggle('cr-mw-active', crypticMusic.shuffle);
     shuffleBtn.setAttribute('aria-pressed', crypticMusic.shuffle ? 'true' : 'false');
     // Highlight the active track in the list (Auto row when not manual).
@@ -102,25 +128,34 @@ export function mountMusicWidget(): void {
     refresh();
   });
 
-  // Drag via the grip (pointer capture; position persisted).
-  grip.addEventListener('pointerdown', (ev) => {
-    ev.preventDefault();
-    grip.setPointerCapture?.(ev.pointerId);
-    const rect = el.getBoundingClientRect();
-    const ox = ev.clientX - rect.left;
-    const oy = ev.clientY - rect.top;
-    const move = (m: PointerEvent) => {
-      const left = Math.max(0, Math.min(window.innerWidth - el.offsetWidth, m.clientX - ox));
-      const top = Math.max(0, Math.min(window.innerHeight - el.offsetHeight, m.clientY - oy));
-      el.style.left = `${left}px`; el.style.top = `${top}px`;
-      el.style.right = 'auto'; el.style.bottom = 'auto';
-    };
-    const up = () => {
-      window.removeEventListener('pointermove', move);
-      const r = el.getBoundingClientRect();
-      savePos({ left: r.left, top: r.top });
-    };
-    window.addEventListener('pointermove', move);
-    window.addEventListener('pointerup', up, { once: true });
-  });
+  // Drag (pointer capture; position persisted). Bound to the grip when expanded
+  // and the launcher when collapsed. A small movement threshold means a launcher
+  // tap still counts as a click (expand) rather than a drag.
+  const makeDraggable = (handle: HTMLElement) => {
+    handle.addEventListener('pointerdown', (ev) => {
+      ev.preventDefault();
+      handle.setPointerCapture?.(ev.pointerId);
+      const rect = el.getBoundingClientRect();
+      const ox = ev.clientX - rect.left;
+      const oy = ev.clientY - rect.top;
+      const startX = ev.clientX, startY = ev.clientY;
+      let moved = false;
+      const move = (m: PointerEvent) => {
+        if (!moved && Math.hypot(m.clientX - startX, m.clientY - startY) < 4) return;
+        moved = true;
+        const left = Math.max(0, Math.min(window.innerWidth - el.offsetWidth, m.clientX - ox));
+        const top = Math.max(0, Math.min(window.innerHeight - el.offsetHeight, m.clientY - oy));
+        el.style.left = `${left}px`; el.style.top = `${top}px`;
+        el.style.right = 'auto'; el.style.bottom = 'auto';
+      };
+      const up = () => {
+        window.removeEventListener('pointermove', move);
+        if (moved) { const r = el.getBoundingClientRect(); savePos({ left: r.left, top: r.top }); }
+      };
+      window.addEventListener('pointermove', move);
+      window.addEventListener('pointerup', up, { once: true });
+    });
+  };
+  makeDraggable(grip);
+  makeDraggable(launcher);
 }
