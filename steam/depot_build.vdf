@@ -1,0 +1,17 @@
+// Depot build script — what files go into the Steam depot. Ships everything
+// staged under steam/content/ (the Tauri desktop build). Replace DEPOTID.
+"DepotBuildConfig"
+{
+	"DepotID"	"481"            // PLACEHOLDER — your real Depot ID
+
+	"ContentRoot"	"./content/"
+
+	"FileMapping"
+	{
+		"LocalPath"	"*"          // everything in content/
+		"DepotPath"	"."
+		"Recursive"	"1"
+	}
+
+	"FileExclusion"	"*.pdb"
+}

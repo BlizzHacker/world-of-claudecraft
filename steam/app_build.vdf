@@ -1,0 +1,24 @@
+// Steamworks app build script for Cryptic Realm (desktop shell).
+//
+// Replace APP_ID / DEPOT_ID with the real IDs from your Steamworks app once it
+// exists (Steam Direct: https://partner.steamgames.com — $100, identity-verified).
+// Then upload with:
+//   steamcmd +login <builder_account> +run_app_build /path/to/steam/app_build.vdf +quit
+//
+// The depot content is the Tauri-built desktop binary (see steam/build-steam.sh,
+// which runs `npm run tauri:build` first and stages the artifacts into
+// steam/content/). The app is a thin shell that loads the live MMO at
+// crypticrealm.com — same as the mobile shells.
+"appbuild"
+{
+	"appid"	"480"            // PLACEHOLDER — set to your real Steam App ID
+	"desc"	"Cryptic Realm desktop"
+	"buildoutput"	"./output/"  // build logs + depot manifests land here
+	"contentroot"	"./content/" // staged binaries (filled by build-steam.sh)
+	"setlive"	""               // leave empty; set a beta branch name to auto-publish
+
+	"depots"
+	{
+		"481"	"depot_build.vdf"   // PLACEHOLDER — your real Depot ID
+	}
+}

@@ -47,10 +47,20 @@ infernal realm assets/
 # CR overlay: generated realm assets (run npm run assets:realms to regenerate)
 public/cr-realms/
 
-# App packaging build artifacts (Capacitor native projects + Tauri Rust target)
-/android
-/ios
+# App packaging — track the native PROJECT source so builds are reproducible,
+# but ignore build artifacts + secrets. (Capacitor's own android/.gitignore and
+# ios/.gitignore already exclude build/, Pods/, DerivedData, generated configs.)
+/android/app/build
+/android/build
+/android/.gradle
+/android/local.properties
+/android/keystore.properties
+/android/**/*.keystore
+/android/**/*.jks
 /src-tauri/target
+# Steam staged content (rebuilt by build-steam.sh)
+/steam/content
+/steam/output
 /src-tauri/gen
 
 
