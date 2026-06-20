@@ -28,10 +28,15 @@ interface NavLink {
   current?: boolean;
 }
 
-// Primary nav — mirrors the homepage .nav-list (Play / High Scores / Wiki /
-// News / Download / Links / White Paper). Links go to the homepage + hash so
-// the destination view opens on arrival (landing.ts applyHashRoute).
+// Primary nav — SINGLE SOURCE OF TRUTH is public/nav.js (window.CR_NAV_ITEMS),
+// loaded by every page. Read it when present so the dashboard nav can never
+// drift from the rest of the site; fall back to a copy only if nav.js hasn't
+// loaded. To change the nav, edit public/nav.js — not here.
 function primaryLinks(): NavLink[] {
+  const shared = (window as unknown as { CR_NAV_ITEMS?: { href: string; label: string }[] }).CR_NAV_ITEMS;
+  if (Array.isArray(shared) && shared.length) {
+    return shared.map((i) => ({ href: i.href, label: i.label }));
+  }
   return [
     { href: '/#play', label: 'Play' },
     { href: '/#highscores', label: 'High Scores' },
@@ -39,9 +44,8 @@ function primaryLinks(): NavLink[] {
     { href: '/#news', label: 'News' },
     { href: '/contributions.html', label: 'Contributions' },
     { href: '/#download', label: 'Download' },
-    { href: '/links.html', label: 'Community Links' },
+    { href: '/links.html', label: 'Links' },
     { href: '/whitepaper.html', label: 'White Paper' },
-    { href: '/admin/', label: 'Admin' },
     { href: '/#login', label: 'Login/Register' },
   ];
 }
