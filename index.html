@@ -3345,6 +3345,11 @@
   .btn.btn-small { padding: 4px 10px; font-size: 11px; margin: 0 0 10px; }
   #realm-panel { width: 100%; max-width: 440px; }
   #realm-list { margin: 8px 0 12px; max-height: 50vh; overflow-y: auto; border: 1px solid #463a1c; border-radius: 5px; }
+  .rl-filters { position: sticky; top: 0; z-index: 2; display: flex; flex-direction: column; gap: 5px; padding: 7px 8px; background: rgba(10,9,6,0.96); border-bottom: 1px solid #463a1c; }
+  .rl-filter-group { display: flex; flex-wrap: wrap; gap: 5px; }
+  .rl-chip { padding: 4px 10px; border-radius: 999px; border: 1px solid #5f4b1a; background: rgba(0,0,0,0.25); color: #c9bfa8; font-size: 11px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: color .12s, background .12s, border-color .12s; }
+  .rl-chip:hover { border-color: var(--color-primary, #ffd100); color: var(--color-primary, #ffd100); }
+  .rl-chip.active { background: rgba(255,209,0,0.16); border-color: var(--color-primary, #ffd100); color: var(--color-primary, #ffd100); }
   .realm-loading { padding: 16px; text-align: center; color: #887c5c; font-size: 13px; }
   .realm-host-cta {
     display: flex; align-items: center; gap: 12px;

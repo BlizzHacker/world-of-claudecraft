@@ -1598,6 +1598,17 @@ async function enterRealmFlow(): Promise<void> {
   showRealmList(dir);
 }
 
+// Parse a realm entry name like "Cryptic Realm [BETA]" into its family + stage.
+// Live entries have no bracket suffix → stage 'live'.
+function parseRealmMeta(name: string): { family: string; stage: string } {
+  const m = name.match(/^(.*?)\s*\[(DEV|ALPHA|BETA|LIVE)\]\s*$/i);
+  if (m) return { family: m[1].trim(), stage: m[2].toLowerCase() };
+  return { family: name.trim(), stage: 'live' };
+}
+
+// Active realm-list filters (null = show all).
+const realmFilter: { family: string | null; stage: string | null } = { family: null, stage: 'live' };
+
 function showRealmList(dir?: import('./net/online').RealmDirectory): void {
   show('#realm-panel');
   const listEl = $('#realm-list');
@@ -1606,9 +1617,25 @@ function showRealmList(dir?: import('./net/online').RealmDirectory): void {
       listEl.innerHTML = `<div class="realm-loading">${escapeHtml(t('realm.noRealms'))}</div>`;
       return;
     }
+    // Build filter chips from the distinct families + stages present.
+    const families = Array.from(new Set(d.realms.map((r) => parseRealmMeta(r.name).family)));
+    const stages = ['live', 'beta', 'alpha', 'dev'].filter((s) => d.realms.some((r) => parseRealmMeta(r.name).stage === s));
+    const chip = (kind: 'family' | 'stage', val: string | null, label: string): string => {
+      const active = realmFilter[kind] === val;
+      return `<button type="button" class="rl-chip${active ? ' active' : ''}" data-filter="${kind}" data-val="${val ?? ''}">${escapeHtml(label)}</button>`;
+    };
+    const familyChips = [chip('family', null, 'All Realms'), ...families.map((f) => chip('family', f, f))].join('');
+    const stageChips = [chip('stage', null, 'Any Stage'), ...stages.map((s) => chip('stage', s, s[0].toUpperCase() + s.slice(1)))].join('');
+    const filtered = d.realms.filter((r) => {
+      const meta = parseRealmMeta(r.name);
+      if (realmFilter.family && meta.family !== realmFilter.family) return false;
+      if (realmFilter.stage && meta.stage !== realmFilter.stage) return false;
+      return true;
+    });
+
     // recommend the lowest-population online realm (classic MMOs nudge new players there)
     const realmTypeKeys = { 'Normal': 'realmTypes.normal', 'PvP': 'realmTypes.pvp', 'RP': 'realmTypes.rp', 'RP-PvP': 'realmTypes.rpPvp' } as const;
-    listEl.innerHTML = d.realms.map((r) => {
+    const rowsHtml = filtered.map((r) => {
       const chars = d.characters[r.name] ?? 0;
       const charTag = chars > 0
         ? `<span class="rn-chars">${escapeHtml(t(chars === 1 ? 'realm.characterCountOne' : 'realm.characterCountOther', { count: chars }))}</span>`
@@ -1624,14 +1651,26 @@ function showRealmList(dir?: import('./net/online').RealmDirectory): void {
         </div>
       </div>`;
     }).join('');
+    listEl.innerHTML = `
+      <div class="rl-filters">
+        <div class="rl-filter-group" data-cr-realm-families>${familyChips}</div>
+        <div class="rl-filter-group" data-cr-realm-stages>${stageChips}</div>
+      </div>
+      <div class="rl-rows">${rowsHtml || `<div class="realm-loading">${escapeHtml(t('realm.noRealms'))}</div>`}</div>`;
+    // Chip clicks → set filter + re-render.
+    listEl.querySelectorAll<HTMLElement>('.rl-chip').forEach((c) => c.addEventListener('click', () => {
+      const kind = c.dataset.filter as 'family' | 'stage';
+      realmFilter[kind] = c.dataset.val || null;
+      render(d);
+    }));
     listEl.querySelectorAll('.realm-row').forEach((row) => row.addEventListener('click', () => {
       const name = (row as HTMLElement).dataset.name!;
       const entry = d.realms.find((r) => r.name === name);
       if (entry) selectRealm(entry);
     }));
-    // live status per realm
+    // live status per realm (only the filtered/visible rows)
     let bestPlayers = Infinity, bestName = '';
-    void Promise.all(d.realms.map(async (r) => {
+    void Promise.all(filtered.map(async (r) => {
       const st = await api.realmStatus(r.url || '');
       const row = listEl.querySelector(`.realm-row[data-name="${CSS.escape(r.name)}"]`) as HTMLElement | null;
       if (!row) return;
