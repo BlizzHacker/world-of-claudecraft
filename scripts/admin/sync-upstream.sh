@@ -31,7 +31,15 @@ if [ -n "$(git status --porcelain --untracked-files=no)" ]; then
   log "ABORT: working tree dirty; resolve before syncing"; exit 1
 fi
 
+# Full (non-shallow) fetch: a shallow clone can't find the common ancestor and
+# git then refuses with "unrelated histories" even though our repo descends from
+# upstream. Unshallow if needed so the merge sees shared history.
 git fetch "$UPSTREAM_REMOTE" "$UPSTREAM_BRANCH" >>"$LOG" 2>&1 || { log "ABORT: upstream fetch failed"; exit 1; }
+if [ -f "$(git rev-parse --git-dir)/shallow" ]; then
+  log "repo is shallow — unshallowing for a valid merge base…"
+  git fetch --unshallow "$ORIGIN" >>"$LOG" 2>&1 || git fetch --unshallow "$UPSTREAM_REMOTE" "$UPSTREAM_BRANCH" >>"$LOG" 2>&1 || true
+  git fetch "$UPSTREAM_REMOTE" "$UPSTREAM_BRANCH" >>"$LOG" 2>&1 || true
+fi
 git fetch "$ORIGIN" "$DEV_BRANCH" >>"$LOG" 2>&1 || true
 
 UP_SHA="$(git rev-parse "${UPSTREAM_REMOTE}/${UPSTREAM_BRANCH}")"
