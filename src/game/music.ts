@@ -24,6 +24,13 @@ const MUSIC_ZONE_LABELS: Record<MusicZone, string> = {
   dungeon_gravewyrm_sanctum: 'Gravewyrm Sanctum',
 };
 
+// Set by cryptic_music.ts when the MP3 soundtrack is on/off. Kept as a plain
+// module flag (not an import) to avoid a circular dependency — cryptic_music
+// already imports the MusicZone type from here.
+let _crypticMusicOn = false;
+export function setCrypticMusicActive(on: boolean): void { _crypticMusicOn = on; }
+function crypticMusicEnabled(): boolean { return _crypticMusicOn; }
+
 const TOWN_MUSIC: Record<string, MusicZone> = {
   eastbrook_vale: 'town_eastbrook',
   mirefen_marsh: 'town_fenbridge',
@@ -1043,9 +1050,12 @@ export class MusicDirector {
     return this.combat ? `${name} — Combat` : name;
   }
 
-  // master gain target given the enabled flag and volume (base level 0.15)
+  // master gain target given the enabled flag and volume (base level 0.15).
+  // When the original Cryptic Realm MP3 soundtrack is enabled, the procedural
+  // synth stays silent so the two don't stack.
   private masterTarget(): number {
     if (!this._enabled || this._menuPaused) return 0;
+    if (crypticMusicEnabled()) return 0;
     return 0.15 * this._vol;
   }
 

@@ -32,6 +32,8 @@ import { mountPwaInstall } from './ui/cryptic/pwa_install';
 import { mountNewsRealmFilter } from './ui/cryptic/news_realm_filter';
 import { mountDownloadLaunchers } from './ui/cryptic/download_launchers';
 import { mountChatFrame } from './ui/cryptic/chat_frame';
+import { mountMusicWidget } from './ui/cryptic/music_widget';
+import { crypticMusic } from './game/cryptic_music';
 import { clearCrypticSession, readCrypticSession, writeCrypticSession } from './ui/cryptic/session';
 
 
@@ -297,6 +299,13 @@ if (typeof document !== 'undefined') {
     mountPwaInstall();
     mountNewsRealmFilter();
     mountDownloadLaunchers();
+    mountMusicWidget();
+    // Browsers block audio autoplay until a user gesture; kick the Cryptic Realm
+    // soundtrack on the first interaction so the music starts without a manual
+    // play. One-shot.
+    const kickOnce = () => { crypticMusic.kick(); window.removeEventListener('pointerdown', kickOnce); window.removeEventListener('keydown', kickOnce); };
+    window.addEventListener('pointerdown', kickOnce);
+    window.addEventListener('keydown', kickOnce);
   };
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', boot);

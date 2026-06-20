@@ -21,6 +21,7 @@ import type { Decoration } from '../sim/world';
 import { Meters } from './meters';
 import { audio } from '../game/audio';
 import { music, musicZoneForLocation } from '../game/music';
+import { crypticMusic } from '../game/cryptic_music';
 import { getGamepadStatus } from '../game/gamepad';
 import { iconDataUrl, iconCanvas, QUALITY_COLOR, raidMarkerDataUrl, RAID_MARKER_NAMES } from './icons';
 import { svgIcon } from './ui_icons';
@@ -1794,6 +1795,10 @@ export class Hud {
       const zone = musicZoneForLocation(
         currentZone.id, currentZone.biome, inHub, inDungeon, dungeon?.id ?? null,
       );
+      // Original Cryptic Realm soundtrack (real MP3s) takes the lead when on;
+      // the procedural synth director stays muted in that case (driven inside
+      // music.update via crypticMusic.enabled).
+      crypticMusic.update(zone, inCombat);
       music.update(zone, inCombat);
 
       this.updateQuestTracker();

@@ -132,6 +132,46 @@
   --cr-shadow-glow: 0 0 32px rgba(168, 85, 247, 0.35);
 }
 
+/* Moveable music widget — draggable now-playing + toggle (music_widget.ts). */
+#cr-music-widget {
+  position: fixed;
+  right: 14px;
+  bottom: 14px;
+  z-index: 2147483640;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 9px 5px 5px;
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(20,16,26,0.95), rgba(10,8,14,0.95));
+  border: 1px solid var(--cr-gold, #c9a14a);
+  color: var(--cr-text, #e8d5c4);
+  box-shadow: 0 4px 18px rgba(0,0,0,0.55);
+  font-family: var(--cr-font-ui, system-ui, sans-serif);
+  font-size: 12px;
+  user-select: none;
+  max-width: 260px;
+}
+#cr-music-widget button {
+  background: transparent;
+  border: 0;
+  color: var(--cr-text, #e8d5c4);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  padding: 3px 4px;
+  border-radius: 6px;
+}
+#cr-music-widget .cr-mw-grip { cursor: grab; color: var(--cr-text-dim, #8a7a6a); }
+#cr-music-widget .cr-mw-toggle { color: var(--cr-gold, #ffd100); font-size: 15px; }
+#cr-music-widget .cr-mw-toggle.cr-mw-off { color: var(--cr-text-dim, #7a6a5a); }
+#cr-music-widget .cr-mw-title {
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 170px;
+}
+#cr-music-widget.cr-mw-playing .cr-mw-toggle { animation: cr-mw-pulse 1.8s ease-in-out infinite; }
+@keyframes cr-mw-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.55; } }
+body.mobile-touch #cr-music-widget { font-size: 11px; max-width: 200px; }
+
 /* Controller virtual-mouse cursor — driven by gamepad_cursor.ts. Sits above
    all UI so it can click any surface; pointer-events:none so it never blocks
    the clicks it synthesizes underneath itself. */
