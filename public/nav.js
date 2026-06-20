@@ -43,8 +43,27 @@
   }
 
   function run() {
+    // Standalone pages: fill the [data-cr-nav] placeholder with link-nav.
     var navs = document.querySelectorAll('[data-cr-nav]');
     for (var i = 0; i < navs.length; i++) render(navs[i]);
+
+    // Homepage SPA: the nav buttons are interactive (in-page view switches), so
+    // we DON'T replace them — we keep their labels in sync with this single
+    // source instead, so the homepage can never drift from the standalone pages.
+    // Match the existing .homepage-nav .nav-list items to ITEMS by order.
+    var spaList = document.querySelector('.homepage-nav .nav-list');
+    if (spaList) {
+      var spaLinks = spaList.querySelectorAll('.nav-link');
+      // Only resync if the count matches (same item set) — otherwise leave the
+      // hand-authored markup alone rather than mangle it.
+      if (spaLinks.length === ITEMS.length) {
+        for (var j = 0; j < spaLinks.length; j++) {
+          // Preserve i18n: if the element has data-i18n, the translator owns the
+          // text; only set text when there's no translation key.
+          if (!spaLinks[j].hasAttribute('data-i18n')) spaLinks[j].textContent = ITEMS[j].label;
+        }
+      }
+    }
   }
 
   // Expose the canonical list so the in-app SPA / dashboard chrome can reuse it
