@@ -1138,6 +1138,9 @@ async function startGame(world: IWorld, offlineSim: Sim | null, online: ClientWo
     onInteract: () => interactKey(),
     onMenu: () => toggleGameMenu(),
     onChat: () => openChat(),
+    // Cursor mode auto-arms whenever a clickable HTML surface is up so the pad
+    // can operate menus — quest accept/turn-in, chat, inventory, the game menu.
+    isPointerSurfaceOpen: () => hud.isModalOpen() || chatInput.style.display === 'block',
   });
   (window as any).__game = { sim: world, world, renderer, input, hud, online, controller, gamepad, perf };
 }

@@ -1,4 +1,5 @@
 import type { MoveInput } from '../sim/types';
+import { createGamepadCursor, type GamepadCursor } from './gamepad_cursor';
 
 const DEADZONE = 0.22;
 const LOOK_DEADZONE = 0.18;
@@ -66,10 +67,15 @@ export type GamepadHooks = {
   onInteract?: () => void;
   onMenu?: () => void;
   onChat?: () => void;
+  /** True when a clickable HTML surface is up (quest dialog, chat, menu,
+   *  inventory) — cursor mode auto-arms so the pad can operate it. */
+  isPointerSurfaceOpen?: () => boolean;
   getGamepads?: () => readonly (GamepadLike | null | undefined)[];
   requestAnimationFrame?: (cb: FrameRequestCallback) => number;
   cancelAnimationFrame?: (id: number) => void;
   autoStart?: boolean;
+  /** Inject a cursor (tests); defaults to the real DOM virtual mouse. */
+  cursor?: GamepadCursor;
 };
 
 export type MountedGamepadControls = {
@@ -188,12 +194,14 @@ export function mountGamepadControls(input: GamepadInputSurface, hooks: GamepadH
   const caf = hooks.cancelAnimationFrame
     ?? (typeof window !== 'undefined' && window.cancelAnimationFrame ? window.cancelAnimationFrame.bind(window) : null);
 
+  const cursor = hooks.cursor ?? createGamepadCursor();
   let stopped = false;
   let frameId: number | null = null;
   let lastNow = typeof performance !== 'undefined' ? performance.now() : 0;
   let lastButtons = new Set<number>();
   let controllerActive = false;
   let lastInputAt = 0;
+  let cursorMode = false; // manual toggle; auto-armed when a pointer surface opens
 
   const stopController = () => {
     if (!controllerActive) return;
@@ -221,6 +229,31 @@ export function mountGamepadControls(input: GamepadInputSurface, hooks: GamepadH
     const pressed = pressedButtons(gamepad);
     if (edge(pressed, BUTTON.start)) hooks.onMenu?.();
 
+    // ── Cursor (virtual-mouse) mode ──────────────────────────────────────────
+    // Auto-arm whenever a clickable HTML surface is open (quest dialog, chat,
+    // menu, inventory) so you can immediately point + click. Back toggles it
+    // manually otherwise. This is what makes quest accept / chat reachable.
+    const surfaceOpen = hooks.isPointerSurfaceOpen?.() ?? false;
+    if (edge(pressed, BUTTON.back)) cursorMode = !cursorMode;
+    const inCursorMode = cursorMode || surfaceOpen;
+
+    if (inCursorMode) {
+      stopController();
+      // Either stick drives the cursor (left for walk-less menus, right always).
+      const cx = axis(gamepad, 2, LOOK_DEADZONE) || axis(gamepad, 0);
+      const cy = axis(gamepad, 3, LOOK_DEADZONE) || axis(gamepad, 1);
+      const moved = cursor.move(cx, cy, dt);
+      if (!cursor.visible()) cursor.show();
+      if (edge(pressed, BUTTON.a)) cursor.click();        // A = left click
+      if (edge(pressed, BUTTON.x)) cursor.rightClick();   // X = right click
+      if (edge(pressed, BUTTON.b) && !surfaceOpen) { cursorMode = false; cursor.hide(); } // B closes cursor when self-toggled
+      if (moved || pressed.size > 0) lastInputAt = now;
+      lastButtons = pressed;
+      setStatus(statusFor(gamepad, supported, false, lastInputAt));
+      return;
+    }
+    if (cursor.visible()) cursor.hide();
+
     const canUse = hooks.canUseGameKeys?.() ?? true;
     if (!canUse) {
       stopController();
@@ -241,14 +274,28 @@ export function mountGamepadControls(input: GamepadInputSurface, hooks: GamepadH
       stopController();
     }
 
-    if (edge(pressed, BUTTON.x)) hooks.onAttackNearest?.();
-    if (edge(pressed, BUTTON.y)) hooks.onTarget?.();
-    if (edge(pressed, BUTTON.b)) hooks.onInteract?.();
-    if (edge(pressed, BUTTON.back)) hooks.onChat?.();
-    if (edge(pressed, BUTTON.lb)) cast(0);
-    if (edge(pressed, BUTTON.rb)) cast(1);
-    if (edge(pressed, BUTTON.lt)) cast(2);
-    if (edge(pressed, BUTTON.rt)) cast(3);
+    // ── Skill chords ─────────────────────────────────────────────────────────
+    // LT/RT act as shift layers so the 4 face buttons + d-pad cover 8 base
+    // slots PLUS 8 chorded slots (e.g. LT+A, RT+Y) = up to 16 abilities, the way
+    // the original Cryptic Realm bound a full skill bar to a controller.
+    const lt = buttonDown(gamepad, BUTTON.lt);
+    const rt = buttonDown(gamepad, BUTTON.rt);
+    const layer = lt ? 8 : rt ? 12 : 0; // base / LT layer / RT layer
+    // Face buttons are attack/target/interact at base, skills when a trigger is held.
+    if (layer === 0) {
+      if (edge(pressed, BUTTON.x)) hooks.onAttackNearest?.();
+      if (edge(pressed, BUTTON.y)) hooks.onTarget?.();
+      if (edge(pressed, BUTTON.b)) hooks.onInteract?.();
+      if (edge(pressed, BUTTON.lb)) cast(0);
+      if (edge(pressed, BUTTON.rb)) cast(1);
+    } else {
+      // Trigger held: A/B/X/Y → 4 skills on that layer.
+      if (edge(pressed, BUTTON.a)) cast(layer + 0);
+      if (edge(pressed, BUTTON.b)) cast(layer + 1);
+      if (edge(pressed, BUTTON.x)) cast(layer + 2);
+      if (edge(pressed, BUTTON.y)) cast(layer + 3);
+    }
+    // D-pad is the standard 4-slot quickbar at every layer.
     if (edge(pressed, BUTTON.dpadLeft)) cast(4);
     if (edge(pressed, BUTTON.dpadRight)) cast(5);
     if (edge(pressed, BUTTON.dpadUp)) cast(6);
@@ -274,6 +321,7 @@ export function mountGamepadControls(input: GamepadInputSurface, hooks: GamepadH
       stopped = true;
       if (frameId !== null) caf?.(frameId);
       stopController();
+      cursor.hide();
       setStatus(statusFor(null, typeof getGamepads === 'function', false, lastInputAt));
     },
   };

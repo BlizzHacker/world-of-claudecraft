@@ -132,6 +132,26 @@
   --cr-shadow-glow: 0 0 32px rgba(168, 85, 247, 0.35);
 }
 
+/* Controller virtual-mouse cursor — driven by gamepad_cursor.ts. Sits above
+   all UI so it can click any surface; pointer-events:none so it never blocks
+   the clicks it synthesizes underneath itself. */
+#cr-gamepad-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 22px;
+  height: 22px;
+  margin: -2px 0 0 -2px;
+  z-index: 2147483646;
+  pointer-events: none;
+  display: none;
+  background: radial-gradient(circle at 35% 35%, #fff 0 28%, var(--cr-gold, #ffd100) 30% 60%, rgba(0,0,0,0.6) 62% 100%);
+  border: 2px solid rgba(0, 0, 0, 0.7);
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(255, 209, 0, 0.7), 0 2px 6px rgba(0, 0, 0, 0.6);
+  will-change: transform;
+}
+
 /* Base shell styles */
 .cr-shell {
   position: fixed;

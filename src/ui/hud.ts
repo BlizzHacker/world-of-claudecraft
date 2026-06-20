@@ -5938,6 +5938,7 @@ export class Hud {
       }
     }
     el.appendChild(rows);
+    this.appendControllerReference(el);
     const reset = document.createElement('button');
     reset.className = 'btn';
     reset.textContent = t('hud.options.resetToDefaults');
@@ -5955,6 +5956,47 @@ export class Hud {
     back.addEventListener('click', () => { audio.click(); this.optionsView = 'main'; this.capturingKey = null; this.renderOptions(); });
     el.append(reset, back);
     el.querySelector('[data-close]')?.addEventListener('click', () => this.closeOptions());
+  }
+
+  // Read-only Xbox/gamepad reference. The mapping is fixed in game/gamepad.ts;
+  // this just documents it (movement, look, skill chords via LT/RT, and the
+  // virtual-mouse cursor that lets the pad operate menus / accept quests).
+  private appendControllerReference(el: HTMLElement): void {
+    const wrap = document.createElement('div');
+    wrap.className = 'kb-rows cr-pad-ref';
+    const header = document.createElement('div');
+    header.className = 'kb-cat';
+    header.textContent = t('hud.options.controller');
+    wrap.appendChild(header);
+    const rows: [string, string][] = [
+      [t('hud.options.padLeftStick'), t('hud.options.padMove')],
+      [t('hud.options.padRightStick'), t('hud.options.padLookCursor')],
+      [t('hud.options.padA'), t('hud.options.padJumpClick')],
+      [t('hud.options.padXY'), t('hud.options.padAttackTarget')],
+      [t('hud.options.padB'), t('hud.options.padInteract')],
+      [t('hud.options.padLbRb'), t('hud.options.padSkills12')],
+      [t('hud.options.padDpad'), t('hud.options.padSkills47')],
+      [t('hud.options.padLtRt'), t('hud.options.padSkillChords')],
+      [t('hud.options.padBack'), t('hud.options.padCursorToggle')],
+      [t('hud.options.padStart'), t('hud.options.padMenu')],
+    ];
+    for (const [control, action] of rows) {
+      const row = document.createElement('div');
+      row.className = 'kb-row';
+      const name = document.createElement('span');
+      name.className = 'kb-name';
+      name.textContent = action;
+      const key = document.createElement('span');
+      key.className = 'kb-inline-key cr-pad-control';
+      key.textContent = control;
+      row.append(name, key);
+      wrap.appendChild(row);
+    }
+    const note = document.createElement('div');
+    note.className = 'kb-note';
+    note.textContent = t('hud.options.padCursorNote');
+    wrap.appendChild(note);
+    el.appendChild(wrap);
   }
 
   private beginCapture(actionId: string, index: number, fallbackLabel: string): void {
