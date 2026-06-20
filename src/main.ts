@@ -1657,9 +1657,30 @@ function showRealmList(dir?: import('./net/online').RealmDirectory): void {
 }
 
 function selectRealm(entry: import('./net/online').RealmEntry): void {
+  localStorage.setItem(LAST_REALM_KEY, entry.name);
+  // If the realm lives on a DIFFERENT origin (e.g. dev.crypticrealm.com,
+  // fps.moveweight.com), we must NAVIGATE the browser there rather than fetch
+  // cross-origin: Cloudflare hijacks cross-origin OPTIONS preflights and answers
+  // them without our Access-Control-Allow-Origin, so the cross-origin character
+  // API calls fail CORS. Loading the page from the realm's own origin makes every
+  // /api call same-origin. Carry the auth token in the hash (same pickup path as
+  // SSO) so the player stays logged in on the target origin.
+  let targetOrigin = '';
+  try { targetOrigin = entry.url ? new URL(entry.url).origin : ''; } catch { targetOrigin = ''; }
+  const here = window.location.origin;
+  if (targetOrigin && targetOrigin !== here) {
+    const hash = new URLSearchParams({
+      auth_token: api.token ?? '',
+      auth_user: api.username ?? '',
+      auth_via: 'realm',
+      realm: entry.name,
+    });
+    window.location.href = `${targetOrigin}/#${hash.toString()}`;
+    return;
+  }
+  // Same-origin realm: no navigation needed.
   api.setRealm(entry.url);
   api.realm = entry.name;
-  localStorage.setItem(LAST_REALM_KEY, entry.name);
   show('#charselect-panel');
   void refreshCharacters();
 }
