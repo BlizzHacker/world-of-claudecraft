@@ -5,9 +5,11 @@ import type { CapacitorConfig } from '@capacitor/cli';
 // than a bundled static build — players always get the current server build, and
 // the same Authentik SSO / realm picker works inside the app.
 //
-// webDir points at the Vite build for the splash/offline fallback; server.url
-// makes the running app load the live site. For an offline/dev build, comment
-// out `server` and `npx cap copy` the local dist instead.
+// webDir points at a TINY shell (mobile-shell/, ~4KB: a splash that the live
+// site loads over via server.url). The full Vite build (dist/, ~425MB of media/
+// audio/models) must NOT be bundled — it's loaded from the live server at runtime,
+// and a 294MB .aab is both wasteful and over Google Play's 200MB base-APK limit.
+// For a genuine offline/dev build, point webDir at 'dist' and comment out `server`.
 //
 // Build (where Android SDK / Xcode are installed):
 //   npm run build
@@ -17,7 +19,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 const config: CapacitorConfig = {
   appId: 'com.crypticrealm.game',
   appName: 'Cryptic Realm',
-  webDir: 'dist',
+  webDir: 'mobile-shell',
   backgroundColor: '#050509',
   server: {
     // Live MMO: load the production realm. Switch to a stage host (e.g.

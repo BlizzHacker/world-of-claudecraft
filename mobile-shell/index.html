@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Cryptic Realm</title>
+  <style>
+    html,body{margin:0;height:100%;background:#050509;color:#e8d5c4;font-family:system-ui,sans-serif;overflow:hidden}
+    .wrap{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px}
+    .logo{width:160px;height:160px;border-radius:24px;object-fit:cover;box-shadow:0 8px 40px rgba(201,161,74,.3)}
+    .spin{width:34px;height:34px;border:3px solid rgba(201,161,74,.25);border-top-color:#ffd100;border-radius:50%;animation:s 1s linear infinite}
+    @keyframes s{to{transform:rotate(360deg)}}
+    .t{font-size:13px;color:#b8aa82;letter-spacing:.5px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <img class="logo" src="https://crypticrealm.com/cryptic-realm-logo-512.webp" alt="Cryptic Realm" onerror="this.style.display='none'"/>
+    <div class="spin"></div>
+    <div class="t">Connecting to Cryptic Realm…</div>
+  </div>
+  <script>
+    // The Capacitor server.url loads the live site over this shell. If that
+    // hasn't happened in a few seconds (e.g. server.url stripped from a build),
+    // navigate there directly so the app is never stuck on the splash.
+    setTimeout(function(){
+      if (!/crypticrealm\.com/.test(location.host)) location.href = 'https://crypticrealm.com/';
+    }, 4000);
+  </script>
+</body>
+</html>
