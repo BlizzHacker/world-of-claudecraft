@@ -1,0 +1,14 @@
+## Beta promotion monthly: beta ← alpha (the ring that has soaked for ~2 weeks).
+## 1st of the month, 02:30 UTC — after the alpha run so the chain can cascade
+## in one window if desired.
+[Unit]
+Description=Cryptic Realm — monthly beta promotion (1st)
+Requires=cryptic-realm-promote@beta.service
+
+[Timer]
+OnCalendar=*-*-01 02:30:00 UTC
+Persistent=true
+Unit=cryptic-realm-promote@beta.service
+
+[Install]
+WantedBy=timers.target

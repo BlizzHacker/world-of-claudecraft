@@ -1,0 +1,14 @@
+## Live promotion monthly: live ← beta (public release of the soaked beta code).
+## 1st of the month, 03:00 UTC — after the beta run so beta→live cascades the
+## same night. Persistent so a missed window runs at next boot.
+[Unit]
+Description=Cryptic Realm — monthly live promotion (1st)
+Requires=cryptic-realm-promote@live.service
+
+[Timer]
+OnCalendar=*-*-01 03:00:00 UTC
+Persistent=true
+Unit=cryptic-realm-promote@live.service
+
+[Install]
+WantedBy=timers.target

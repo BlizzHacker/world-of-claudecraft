@@ -1,0 +1,14 @@
+## Alpha promotion ~every 2 weeks: alpha ← dev (latest tested dev code).
+## systemd has no native "every 14 days", so we fire on the 1st and 15th —
+## a clean, predictable biweekly cadence. 02:00 UTC, before the beta/live runs.
+[Unit]
+Description=Cryptic Realm — biweekly alpha promotion (1st & 15th)
+Requires=cryptic-realm-promote@alpha.service
+
+[Timer]
+OnCalendar=*-*-01,15 02:00:00 UTC
+Persistent=true
+Unit=cryptic-realm-promote@alpha.service
+
+[Install]
+WantedBy=timers.target
