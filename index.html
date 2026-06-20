@@ -608,6 +608,27 @@
     opacity: 0.72;
   }
   .chat-frame-grip { right: 4px; top: 1px; }
+  /* Lock toggle pins the chat so it can't be dragged/resized during play. */
+  .chat-frame-lock {
+    position: absolute;
+    z-index: 4;
+    right: 30px;
+    top: 1px;
+    width: 22px;
+    height: 22px;
+    border: 1px solid #4a3d1d;
+    border-radius: 4px;
+    background: linear-gradient(#1c1824, #0d0b13);
+    color: #d8c89a;
+    cursor: pointer;
+    opacity: 0.72;
+    font-size: 12px;
+    line-height: 20px;
+    text-align: center;
+    padding: 0;
+  }
+  .chat-frame-lock:hover { opacity: 1; }
+  #chatlog-wrap.chat-locked .chat-frame-lock { opacity: 0.5; }
   .chat-frame-grip::before,
   .chat-frame-grip::after,
   .chat-frame-resize::before,

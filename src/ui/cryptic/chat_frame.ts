@@ -1,4 +1,5 @@
 const STORE_KEY = 'cr_chat_frame_layout';
+const LOCK_KEY = 'cr_chat_frame_locked';
 
 type ChatLayout = {
   left: number;
@@ -6,6 +7,13 @@ type ChatLayout = {
   width: number;
   height: number;
 };
+
+function readLocked(): boolean {
+  try { return localStorage.getItem(LOCK_KEY) === '1'; } catch { return false; }
+}
+function saveLocked(locked: boolean): void {
+  try { localStorage.setItem(LOCK_KEY, locked ? '1' : '0'); } catch { /* storage unavailable */ }
+}
 
 function readLayout(): Partial<ChatLayout> {
   try {
@@ -45,8 +53,23 @@ export function mountChatFrame(): void {
   resize.className = 'chat-frame-resize';
   resize.setAttribute('aria-label', 'Resize chat');
   resize.title = 'Resize chat';
+  const lock = document.createElement('button');
+  lock.type = 'button';
+  lock.className = 'chat-frame-lock';
   wrap.prepend(grip);
   wrap.appendChild(resize);
+  wrap.appendChild(lock);
+
+  let locked = readLocked();
+  const applyLock = () => {
+    wrap.classList.toggle('chat-locked', locked);
+    grip.style.display = locked ? 'none' : '';
+    resize.style.display = locked ? 'none' : '';
+    lock.textContent = locked ? '🔒' : '🔓';
+    lock.title = locked ? 'Chat locked — click to move/resize' : 'Lock chat position';
+    lock.setAttribute('aria-label', lock.title);
+  };
+  lock.addEventListener('click', () => { locked = !locked; saveLocked(locked); applyLock(); });
 
   const defaultLayout = (): ChatLayout => {
     const rect = wrap.getBoundingClientRect();
@@ -85,7 +108,7 @@ export function mountChatFrame(): void {
   apply(current, false);
 
   const drag = (ev: PointerEvent) => {
-    if (!isDesktopLayout()) return;
+    if (!isDesktopLayout() || locked) return;
     ev.preventDefault();
     grip.setPointerCapture?.(ev.pointerId);
     const start = { ...current, x: ev.clientX, y: ev.clientY };
@@ -106,7 +129,7 @@ export function mountChatFrame(): void {
   };
 
   const resizeFrame = (ev: PointerEvent) => {
-    if (!isDesktopLayout()) return;
+    if (!isDesktopLayout() || locked) return;
     ev.preventDefault();
     resize.setPointerCapture?.(ev.pointerId);
     const start = { ...current, x: ev.clientX, y: ev.clientY };
@@ -128,6 +151,7 @@ export function mountChatFrame(): void {
 
   grip.addEventListener('pointerdown', drag);
   resize.addEventListener('pointerdown', resizeFrame);
+  applyLock();
   grip.addEventListener('dblclick', () => {
     try { localStorage.removeItem(STORE_KEY); } catch { /* storage unavailable */ }
     apply(defaultLayout());
