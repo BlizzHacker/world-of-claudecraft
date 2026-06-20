@@ -36,14 +36,25 @@ fi
 # upstream. Unshallow if needed so the merge sees shared history.
 git fetch "$UPSTREAM_REMOTE" "$UPSTREAM_BRANCH" >>"$LOG" 2>&1 || { log "ABORT: upstream fetch failed"; exit 1; }
 if [ -f "$(git rev-parse --git-dir)/shallow" ]; then
-  log "repo is shallow — unshallowing for a valid merge base…"
-  git fetch --unshallow "$ORIGIN" >>"$LOG" 2>&1 || git fetch --unshallow "$UPSTREAM_REMOTE" "$UPSTREAM_BRANCH" >>"$LOG" 2>&1 || true
-  git fetch "$UPSTREAM_REMOTE" "$UPSTREAM_BRANCH" >>"$LOG" 2>&1 || true
+  log "repo is shallow — fetching full history for a valid merge base…"
+  # Deepen both remotes to full depth so the shared ancestor (our prior upstream
+  # merges) is present. --unshallow can no-op on partially-deepened repos, so
+  # also force a very large depth as a fallback.
+  git fetch --unshallow "$ORIGIN" >>"$LOG" 2>&1 || true
+  git fetch "$ORIGIN" --depth=2147483647 '+refs/heads/*:refs/remotes/origin/*' >>"$LOG" 2>&1 || true
+  git fetch "$UPSTREAM_REMOTE" "$UPSTREAM_BRANCH" --depth=2147483647 >>"$LOG" 2>&1 || true
 fi
 git fetch "$ORIGIN" "$DEV_BRANCH" >>"$LOG" 2>&1 || true
 
 UP_SHA="$(git rev-parse "${UPSTREAM_REMOTE}/${UPSTREAM_BRANCH}")"
 git checkout "$DEV_BRANCH" >>"$LOG" 2>&1 || { log "ABORT: cannot checkout $DEV_BRANCH"; exit 1; }
+
+# If there's still no common ancestor, this is a genuinely unrelated tree — do
+# NOT force it (would mangle dev). Bail for a human.
+if ! git merge-base HEAD "$UP_SHA" >/dev/null 2>&1; then
+  log "ABORT: no common ancestor between dev and upstream — manual review needed"
+  exit 3
+fi
 
 # Already up to date?
 if git merge-base --is-ancestor "$UP_SHA" HEAD; then
