@@ -1925,6 +1925,18 @@
     padding: var(--spacing-lg);
     max-width: 720px;
   }
+  .hs-scope-toggle {
+    display: inline-flex; gap: 0; margin: 10px auto 4px; border-radius: 9px;
+    border: 1px solid rgba(201,161,74,0.4); overflow: hidden; background: rgba(0,0,0,0.25);
+  }
+  .hs-scope-btn {
+    padding: 6px 18px; font-size: 12px; font-weight: 700; letter-spacing: 0.4px;
+    background: transparent; border: 0; color: #b8aa82; cursor: pointer;
+    font-family: var(--title-font); text-transform: uppercase;
+  }
+  .hs-scope-btn + .hs-scope-btn { border-left: 1px solid rgba(201,161,74,0.3); }
+  .hs-scope-btn.active { background: rgba(255,209,0,0.16); color: #ffd100; }
+  .hs-scope-btn:hover:not(.active) { color: #e8d5c4; }
   .hs-leaderboard {
     width: 100%;
     margin-top: var(--spacing-sm);
@@ -5948,6 +5960,10 @@
           </div>
           <h2 class="skeleton-title" data-i18n="highscores.title">High Scores Leaderboard</h2>
           <p class="skeleton-desc" data-i18n="game.leaderboard.globalSubtitle">Top champions across all realms</p>
+          <div class="hs-scope-toggle" role="tablist" aria-label="Leaderboard scope">
+            <button type="button" class="hs-scope-btn active" data-hs-scope="global" role="tab" aria-selected="true">All Realms</button>
+            <button type="button" class="hs-scope-btn" data-hs-scope="ladder" role="tab" aria-selected="false">Ladder</button>
+          </div>
           <div id="hs-leaderboard" class="hs-leaderboard" aria-live="polite">
             <div class="hs-loading" data-i18n="game.leaderboard.loading">Loading rankings…</div>
           </div>

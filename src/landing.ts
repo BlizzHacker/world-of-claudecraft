@@ -208,21 +208,43 @@ function renderHighscores(rows: LandingLeaderboardEntry[]): string {
   return head + body;
 }
 
-async function loadLandingHighscores(): Promise<void> {
+let highscoresScope: 'global' | 'ladder' = 'global';
+async function loadLandingHighscores(scope: 'global' | 'ladder' = highscoresScope): Promise<void> {
   const host = document.getElementById('hs-leaderboard');
   if (!host || highscoresLoading) return;
+  highscoresScope = scope;
   highscoresLoading = true;
   host.innerHTML = '<div class="hs-loading">Loading rankings...</div>';
   try {
-    const res = await fetch('/api/leaderboard?scope=global&metric=lifetimeXp&limit=100');
+    const res = await fetch(`/api/leaderboard?scope=${scope}&metric=lifetimeXp&limit=100`);
     if (!res.ok) throw new Error(`request failed (${res.status})`);
     const data = await res.json();
-    host.innerHTML = renderHighscores(Array.isArray(data.leaders) ? data.leaders : []);
+    const leaders = Array.isArray(data.leaders) ? data.leaders : [];
+    if (!leaders.length && scope === 'ladder') {
+      host.innerHTML = '<div class="hs-empty">No ladder champions yet — be the first to climb a ladder realm.</div>';
+    } else {
+      host.innerHTML = renderHighscores(leaders);
+    }
   } catch {
     host.innerHTML = '<div class="hs-error">Could not load rankings. Try again soon.</div>';
   } finally {
     highscoresLoading = false;
   }
+}
+
+function wireHighscoresScope(): void {
+  document.querySelectorAll<HTMLElement>('.hs-scope-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const scope = (btn.dataset.hsScope === 'ladder' ? 'ladder' : 'global');
+      if (scope === highscoresScope) return;
+      document.querySelectorAll<HTMLElement>('.hs-scope-btn').forEach((b) => {
+        const on = b === btn;
+        b.classList.toggle('active', on);
+        b.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+      void loadLandingHighscores(scope);
+    });
+  });
 }
 
 function renderReleaseBody(body: string): string {
@@ -679,6 +701,7 @@ function boot(): void {
   wireMobileMenu();
   wireContractAddressCopy();
   wireLandingPanels();
+  wireHighscoresScope();
   wireLandingOfflinePanel();
   wireDeferredAppLoad();
   // The home page runs landing.ts (NOT main.ts), so mount the moveable music
