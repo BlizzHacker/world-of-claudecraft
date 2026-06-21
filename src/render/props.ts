@@ -18,12 +18,12 @@ import { registerPreload } from './assets/preload';
 // analytic collider footprint (building w×d with the door on local +z, tent
 // r=1.5*scale, crate 0.65, campfire 0.85, mud hut 1.1, ruin column 0.6, ...).
 //
-// Batching: repeated kinds (tents, crates, campfires, headstones, ruin
-// columns, fence modules, mushroom huts) become InstancedMesh per
-// (asset part × z-band); one-off compositions (buildings, mines, docks) are
-// baked into world space and merged per (material, z-band). Converted
-// materials are deduped per (kit, name) so the merge collapses to a handful
-// of draws. Animated campfire flames + fire PointLights stay live objects.
+// Batching: repeated non-hideable kinds (headstones, fence modules, small
+// dressing) become InstancedMesh per (asset part × z-band); one-off compositions
+// and camera-ghost props stay as groups or are baked into world space and merged
+// per (material, z-band). Converted materials are deduped per (kit, name) so
+// the merge collapses to a handful of draws. Animated campfire flames + fire
+// PointLights stay live objects.
 
 export interface PropsResult {
   group: THREE.Group;
@@ -31,10 +31,14 @@ export interface PropsResult {
   fireLights: THREE.PointLight[];
   /**
    * Hides merged/instanced prop bands that sit entirely past the fog far plane,
-   * and hides any village structure the camera is currently standing inside
-   * (below its roof) so the chase cam can sit indoors without a wall in view.
+   * and hides any camera-ghost prop crossing the current eye-to-camera segment
+   * so the chase cam can pass through props without a wall in view.
    */
-  update(camX: number, camY: number, camZ: number, fogFar: number): void;
+  update(
+    camX: number, camY: number, camZ: number,
+    eyeX: number, eyeY: number, eyeZ: number,
+    fogFar: number,
+  ): void;
 }
 
 const MERGE_BAND_DEPTH = GFX.standardMaterials ? 180 : 90;
@@ -251,6 +255,45 @@ function propAsset(key: PropKey): PropAsset {
   return asset;
 }
 
+export function buildPropMaterialPrewarmGroup(): THREE.Group {
+  const group = new THREE.Group();
+  group.name = 'prop-material-prewarm';
+  group.visible = true;
+  group.userData.renderCategory = 'prewarm';
+  const seen = new Set<string>();
+  let idx = 0;
+  const instanceMatrix = new THREE.Matrix4();
+  const place = (obj: THREE.Object3D): void => {
+    const col = idx % 10;
+    const row = Math.floor(idx / 10) % 8;
+    const layer = Math.floor(idx / 80);
+    obj.position.set((col - 4.5) * 1.2, row * 0.85, -8 - layer * 1.5);
+    obj.scale.setScalar(0.08);
+    obj.frustumCulled = false;
+    group.add(obj);
+    idx++;
+  };
+  for (const key of ACTIVE_PROP_KEYS) {
+    const asset = propAsset(key);
+    for (const part of asset.parts) {
+      const matKey = `${part.mat.uuid}:${part.geo.getAttribute('color') ? 'color' : 'plain'}`;
+      if (seen.has(matKey)) continue;
+      seen.add(matKey);
+      const mesh = new THREE.Mesh(part.geo, part.mat);
+      mesh.castShadow = false;
+      mesh.receiveShadow = false;
+      place(mesh);
+      const instanced = new THREE.InstancedMesh(part.geo, part.mat, 1);
+      instanced.setMatrixAt(0, instanceMatrix.identity());
+      instanced.instanceMatrix.needsUpdate = true;
+      instanced.castShadow = false;
+      instanced.receiveShadow = false;
+      place(instanced);
+    }
+  }
+  return group;
+}
+
 // ---------------------------------------------------------------------------
 // deterministic per-prop rand streams (no native random — placement is shared
 // with colliders/tests via the world seed)
@@ -278,14 +321,14 @@ export function buildProps(seed: number): PropsResult {
 
   const ground = (x: number, z: number) => terrainHeight(x, z, seed);
 
-  // Village structures the camera ghosts through (see colliders.ts `camGhost`):
-  // each stays an individual, un-merged group so it can be hidden while the
-  // camera sits inside its footprint. Footprints mirror the colliders so what
-  // hides is exactly what the camera passes through.
+  // Camera-ghost props (see colliders.ts `camGhost`) stay individual and
+  // un-merged so they can be hidden while the camera ray passes through their
+  // footprint. Footprints mirror the colliders so what hides is exactly what
+  // the camera passes through.
   const hideables: Hideable[] = [];
   const keepFromMerge = new Set<THREE.Object3D>();
   /**
-   * Mark `g` un-mergeable and register it as hide-when-camera-inside. Each
+   * Mark `g` un-mergeable and register it as hide-when-camera-crossed. Each
    * mesh's material is cloned so flipping colour/depth writes hides only this
    * structure (and leaves the shadow pass untouched).
    */
@@ -295,6 +338,7 @@ export function buildProps(seed: number): PropsResult {
       const mesh = o as THREE.Mesh;
       if (!mesh.isMesh) return;
       keepFromMerge.add(mesh);
+      if (lowProps) return;
       const src = mesh.material as THREE.Material;
       let tm = matMap.get(src);
       if (!tm) {
@@ -469,14 +513,14 @@ export function buildProps(seed: number): PropsResult {
     }
   }
 
-  // ---- campfires: instanced bonfire base + live animated flame + light -----
+  // ---- campfires: hideable bonfire base + live animated flame + light ------
   const flamePts = [[0, 0], [0.16, 0.1], [0.27, 0.28], [0.3, 0.45], [0.22, 0.66], [0.1, 0.84], [0.001, 0.95]]
     .map(([r, y]) => new THREE.Vector2(r, y));
   const flameGeo = new THREE.LatheGeometry(flamePts, 7);
   for (const [x, z] of PROPS.campfires) {
     const y = ground(x, z);
-    addInstance('bonfire', x, y - 0.05, z, propRand(x, z, 1) * Math.PI * 2, 4.3);
     const g = new THREE.Group();
+    addParts(g, 'bonfire', { y: -0.05, rot: propRand(x, z, 1) * Math.PI * 2, scale: 4.3 });
     const flame = new THREE.Mesh(flameGeo, new THREE.MeshLambertMaterial({
       color: 0xffaa33, emissive: 0xff6600, emissiveIntensity: usePbr ? 2.2 : 1.4,
       transparent: true, opacity: 0.92,
@@ -491,26 +535,41 @@ export function buildProps(seed: number): PropsResult {
     g.add(light);
     fireLights.push(light);
     g.position.set(x, y, z);
-    group.add(g);
+    group.add(shadowed(g));
+    registerHideable(g, circleFootprint(x, z, 0.85, y + 1.45, 2.4));
   }
 
-  // ---- bandit/war tents: Kenney ridge tents, opening on +z, instanced ------
+  // ---- bandit/war tents: Kenney ridge tents, opening on +z, hideable -------
   for (const t of PROPS.tents) {
     const kind: PropKey = propRand(t.x, t.z, 2) < 0.55 ? 'tentOpen' : 'tentSmall';
     const a = propAsset(kind);
     const s = (3.0 * t.scale) / Math.max(a.size.x, a.size.z);
-    addInstance(kind, t.x, ground(t.x, t.z) - 0.06, t.z, new THREE.Euler(
+    const y = ground(t.x, t.z);
+    const g = new THREE.Group();
+    addParts(g, kind, { scale: [s, s * 1.32, s] });
+    g.position.set(t.x, y - 0.06, t.z);
+    g.rotation.set(
       (propRand(t.x, t.z, 3) - 0.5) * 0.06, t.rot, (propRand(t.x, t.z, 4) - 0.5) * 0.06,
-    ), [s, s * 1.32, s]);
+    );
+    group.add(shadowed(g));
+    registerHideable(g, circleFootprint(t.x, t.z, 1.5 * t.scale, y + 3.4 * t.scale, 3.0 * t.scale));
   }
 
-  // ---- crates: camp clutter (wooden crate / barrel mix), instanced ---------
+  // ---- crates: camp clutter (wooden crate / barrel mix), hideable ----------
   PROPS.crates.forEach(([x, z], i) => {
     const kind: PropKey = i % 3 === 2 ? 'barrel' : 'crateWooden';
     const s = kind === 'barrel' ? 1.25 : 1.3 + propRand(x, z, 5) * 0.15;
-    addInstance(kind, x, ground(x, z) - 0.04, z, new THREE.Euler(
-      (propRand(x, z, 7) - 0.5) * 0.05, ((x * 13 + z * 7) % 1) * Math.PI, 0,
-    ), s);
+    const y = ground(x, z);
+    const g = new THREE.Group();
+    addParts(g, kind, {
+      scale: s,
+      euler: new THREE.Euler(
+        (propRand(x, z, 7) - 0.5) * 0.05, ((x * 13 + z * 7) % 1) * Math.PI, 0,
+      ),
+    });
+    g.position.set(x, y - 0.04, z);
+    group.add(shadowed(g));
+    registerHideable(g, circleFootprint(x, z, 0.65, y + 1.35));
   });
 
   // ---- murloc mud huts: giant swamp mushrooms, doorway facing camp center --
@@ -520,25 +579,36 @@ export function buildProps(seed: number): PropsResult {
   );
   for (const [x, z] of PROPS.mudHuts) {
     const y = ground(x, z);
+    const g = new THREE.Group();
     const sxz = 13 + propRand(x, z, 15) * 3;
     const sy = 10.5 + propRand(x, z, 16) * 3;
-    addInstance('mushroomRed', x, y - 0.15, z, new THREE.Euler(
-      (propRand(x, z, 13) - 0.5) * 0.1, propRand(x, z, 12) * Math.PI * 2, (propRand(x, z, 14) - 0.5) * 0.1,
-    ), [sxz, sy, sxz]);
+    addParts(g, 'mushroomRed', {
+      y: -0.15,
+      scale: [sxz, sy, sxz],
+      euler: new THREE.Euler(
+        (propRand(x, z, 13) - 0.5) * 0.1, propRand(x, z, 12) * Math.PI * 2, (propRand(x, z, 14) - 0.5) * 0.1,
+      ),
+    });
     // doorway decal aimed at the camp heart
     const face = Math.atan2(hutCenter.x - x, hutCenter.z - z);
     const doorway = new THREE.Mesh(new THREE.CircleGeometry(0.62, 8, 0, Math.PI), recessMat);
-    doorway.position.set(x + Math.sin(face) * 1.0, y + 0.04, z + Math.cos(face) * 1.0);
+    doorway.position.set(Math.sin(face) * 1.0, 0.04, Math.cos(face) * 1.0);
     doorway.rotation.y = face;
     doorway.rotation.x = -0.14;
     noShadow.add(doorway);
-    group.add(doorway);
+    g.add(doorway);
     if (!lowProps) {
       // toadstool cluster at the foot
       const a2 = face + 0.9 + propRand(x, z, 18);
-      addInstance('mushroomTan', x + Math.sin(a2) * 1.7, y - 0.05, z + Math.cos(a2) * 1.7,
-        propRand(x, z, 19) * Math.PI * 2, 2.6 + propRand(x, z, 20) * 1.4);
+      addParts(g, 'mushroomTan', {
+        x: Math.sin(a2) * 1.7, y: -0.05, z: Math.cos(a2) * 1.7,
+        rot: propRand(x, z, 19) * Math.PI * 2,
+        scale: 2.6 + propRand(x, z, 20) * 1.4,
+      });
     }
+    g.position.set(x, y, z);
+    group.add(shadowed(g));
+    registerHideable(g, circleFootprint(x, z, 1.1, y + 12.5, sxz));
   }
 
   // ---- ruin rings: weathered monolith columns at the exact collider angles -
@@ -549,10 +619,18 @@ export function buildProps(seed: number): PropsResult {
       const intact = i % 4 === 1;
       const kind: PropKey = intact ? 'column' : 'columnBroken';
       const sy = intact ? 3.5 + (i % 2) * 0.5 : 1.7 + (i % 3) * 0.85;
-      addInstance(kind, x, ground(x, z) - 0.1, z, new THREE.Euler(
-        0, propRand(x, z, 8) * Math.PI,
-        (i % 3 === 0 ? 0.13 : 0.03) * (i % 2 ? 1 : -1),
-      ), [3.8, sy, 3.8]);
+      const y = ground(x, z);
+      const g = new THREE.Group();
+      addParts(g, kind, {
+        scale: [3.8, sy, 3.8],
+        euler: new THREE.Euler(
+          0, propRand(x, z, 8) * Math.PI,
+          (i % 3 === 0 ? 0.13 : 0.03) * (i % 2 ? 1 : -1),
+        ),
+      });
+      g.position.set(x, y - 0.1, z);
+      group.add(shadowed(g));
+      registerHideable(g, circleFootprint(x, z, 0.6, y + 4.3, 2.2));
     }
     if (lowProps) continue;
     // toppled relics at the ring's heart: half-buried head + fallen column
@@ -576,6 +654,7 @@ export function buildProps(seed: number): PropsResult {
   // ---- mine entrances: timber portal, rock mound, ore cart, lantern --------
   for (const m of PROPS.mines) {
     const g = new THREE.Group();
+    const abandonedCrypt = m.x < -140 && m.z > 590 && m.z < 630;
     for (const sx of [-1.45, 1.45]) {
       addParts(g, 'timberPillar', { x: sx, scale: [3.4, 3.5, 3.4] });
     }
@@ -589,11 +668,18 @@ export function buildProps(seed: number): PropsResult {
     // boulder mound swallowing the portal (same mound the collider blocks):
     // pairs of mid-sized granite rocks per anchor read as a rubble pile where
     // one giant scaled rock would read as a box
-    const mound: [number, number, number, number][] = [
-      [0, 1.4, -3.0, 2.6], [-2.7, 0.3, -2.0, 1.9], [2.7, 0.35, -2.2, 2.0],
-      [-1.6, 0.1, -1.0, 1.2], [1.8, 0.1, -0.9, 1.1], [0.3, 3.0, -4.2, 2.3],
-      [-1.4, 1.6, -3.4, 1.8], [1.5, 1.7, -3.2, 1.7], [0, 0.2, -1.6, 1.4],
-    ];
+    const mound: [number, number, number, number][] = abandonedCrypt
+      ? [
+        [0.2, 1.35, -3.2, 2.35], [-2.8, 0.25, -2.35, 1.75], [2.65, 0.3, -2.3, 1.75],
+        [-1.7, 0.1, -1.25, 1.15], [1.75, 0.1, -1.2, 1.1], [0.2, 2.8, -4.15, 2.0],
+        [-1.35, 1.45, -3.45, 1.55], [1.45, 1.5, -3.35, 1.5], [0, 0.15, -1.85, 1.2],
+        [-3.45, 0.6, -3.5, 1.15], [3.35, 0.65, -3.45, 1.1], [0.1, 3.35, -2.85, 1.25],
+      ]
+      : [
+        [0, 1.4, -3.0, 2.6], [-2.7, 0.3, -2.0, 1.9], [2.7, 0.35, -2.2, 2.0],
+        [-1.6, 0.1, -1.0, 1.2], [1.8, 0.1, -0.9, 1.1], [0.3, 3.0, -4.2, 2.3],
+        [-1.4, 1.6, -3.4, 1.8], [1.5, 1.7, -3.2, 1.7], [0, 0.2, -1.6, 1.4],
+      ];
     const rockKinds: PropKey[] = lowProps ? ['rockLargeD'] : ['rockTallA', 'rockLargeD', 'rockTallH', 'rockLargeF'];
     for (let i = 0; i < mound.length; i++) {
       const [rx, ry, rz, rr] = mound[i];
@@ -609,9 +695,11 @@ export function buildProps(seed: number): PropsResult {
       });
     }
     // ore cart (market awning stripped) + raw copper ore in the bed
-    addParts(g, 'cart', { x: 2.8, z: 1.6, rot: 0.5, scale: 1.9 });
-    addParts(g, 'oreRocks', { x: 2.75, y: 0.78, z: 1.55, rot: 0.9, scale: 2.6 });
-    addParts(g, 'oreRocks', { x: 3.4, z: 0.4, rot: 2.2, scale: 1.8 });
+    if (!abandonedCrypt) {
+      addParts(g, 'cart', { x: 2.8, z: 1.6, rot: 0.5, scale: 1.9 });
+      addParts(g, 'oreRocks', { x: 2.75, y: 0.78, z: 1.55, rot: 0.9, scale: 2.6 });
+      addParts(g, 'oreRocks', { x: 3.4, z: 0.4, rot: 2.2, scale: 1.8 });
+    }
     if (!lowProps) {
       // hanging lantern on the right post
       addParts(g, 'lanternWall', { x: 1.45, y: 2.0, z: 0.28, scale: 1.25 });
@@ -696,7 +784,7 @@ export function buildProps(seed: number): PropsResult {
     }
   }
 
-  // animated flames + village structures (hidden individually) stay un-merged
+  // animated flames + camera-ghost props (hidden individually) stay un-merged
   const keep = new Set<THREE.Object3D>(flames);
   for (const m of keepFromMerge) keep.add(m);
   const staticMeshes = mergeStaticMeshes(group, keep);
@@ -709,7 +797,11 @@ export function buildProps(seed: number): PropsResult {
     group,
     flames,
     fireLights,
-    update(camX: number, camY: number, camZ: number, fogFar: number): void {
+    update(
+      camX: number, camY: number, camZ: number,
+      eyeX: number, eyeY: number, eyeZ: number,
+      fogFar: number,
+    ): void {
       for (const c of cullables) {
         c.obj.visible = cullableVisible(c, camX, camZ, fogFar);
       }
@@ -719,10 +811,15 @@ export function buildProps(seed: number): PropsResult {
           h.group.visible = false; // fully fogged: drop it (shadow is out of range too)
           continue;
         }
+        // Hide from the camera while still casting a shadow: disable colour +
+        // depth writes, not the object.
+        const hide = cameraSegmentHitsFootprint(h, eyeX, eyeY, eyeZ, camX, camY, camZ);
+        if (h.mats.length === 0) {
+          h.hidden = hide;
+          h.group.visible = !hide;
+          continue;
+        }
         h.group.visible = true;
-        // hide from the camera (camera standing inside, below the roof) while
-        // still casting a shadow: disable colour + depth writes, not the object
-        const hide = camY < h.topY && cameraInsideFootprint(h, camX, camZ);
         if (hide !== h.hidden) {
           h.hidden = hide;
           for (const m of h.mats) {
@@ -738,11 +835,11 @@ export function buildProps(seed: number): PropsResult {
 /** One material we flip on/off, remembering its original depth-write state. */
 interface ToggleMat { mat: THREE.Material; depthWrite: boolean }
 
-// A village structure that the camera ghosts through and the renderer hides
-// whenever the camera stands inside its footprint (below `topY`). Either a
-// circle (`r`) or an OBB (`hw`/`hd`/`rot`), matching the collider it mirrors.
-// "Hidden" disables colour/depth writes rather than `visible = false`, so the
-// structure stays in the shadow pass and keeps casting its shadow.
+// A prop that the camera ghosts through and the renderer hides whenever the
+// eye-to-camera segment crosses its footprint (below `topY`). Either a circle
+// (`r`) or an OBB (`hw`/`hd`/`rot`), matching the collider it mirrors. "Hidden"
+// disables colour/depth writes rather than `visible = false`, so the structure
+// stays in the shadow pass and keeps casting its shadow.
 interface Hideable {
   group: THREE.Group;
   mats: ToggleMat[]; // cloned per-structure so the toggle is local
@@ -759,22 +856,87 @@ interface Hideable {
 
 type Footprint = Omit<Hideable, 'group' | 'mats' | 'hidden'>;
 
-function circleFootprint(x: number, z: number, r: number, topY: number): Footprint {
-  return { x, z, r, topY, cull: r };
+function circleFootprint(x: number, z: number, r: number, topY: number, cull = r): Footprint {
+  return { x, z, r, topY, cull };
 }
 
 function obbFootprint(x: number, z: number, hw: number, hd: number, rot: number, topY: number): Footprint {
   return { x, z, hw, hd, rot, topY, cull: Math.hypot(hw, hd) };
 }
 
-function cameraInsideFootprint(h: Hideable, camX: number, camZ: number): boolean {
-  const dx = camX - h.x, dz = camZ - h.z;
+function pointInsideFootprint(h: Hideable, x: number, z: number): boolean {
+  const dx = x - h.x, dz = z - h.z;
   if (h.r !== undefined) return dx * dx + dz * dz < h.r * h.r;
   // world -> OBB local (three.js rotation.y convention), mirrors colliders.rotY
   const c = Math.cos(h.rot!), s = Math.sin(h.rot!);
   const lx = dx * c - dz * s;
   const lz = dx * s + dz * c;
   return Math.abs(lx) < h.hw! && Math.abs(lz) < h.hd!;
+}
+
+function segmentCircleEntry(
+  ax: number, az: number, bx: number, bz: number,
+  cx: number, cz: number, r: number,
+): number {
+  const dx = bx - ax, dz = bz - az;
+  const a = dx * dx + dz * dz;
+  if (a < 1e-12) return Infinity;
+  const fx = ax - cx, fz = az - cz;
+  const c = fx * fx + fz * fz - r * r;
+  if (c < 0) return 0;
+  const b = 2 * (fx * dx + fz * dz);
+  const disc = b * b - 4 * a * c;
+  if (disc < 0) return Infinity;
+  return (-b - Math.sqrt(disc)) / (2 * a);
+}
+
+function segmentObbEntry(
+  h: Hideable,
+  ax: number, az: number, bx: number, bz: number,
+): number {
+  const c = Math.cos(h.rot!), s = Math.sin(h.rot!);
+  const adx = ax - h.x, adz = az - h.z;
+  const bdx = bx - h.x, bdz = bz - h.z;
+  const lax = adx * c - adz * s;
+  const laz = adx * s + adz * c;
+  const lbx = bdx * c - bdz * s;
+  const lbz = bdx * s + bdz * c;
+  if (Math.abs(lax) < h.hw! && Math.abs(laz) < h.hd!) return 0;
+
+  const dx = lbx - lax, dz = lbz - laz;
+  let tmin = -Infinity, tmax = Infinity;
+  if (Math.abs(dx) < 1e-9) {
+    if (lax < -h.hw! || lax > h.hw!) return Infinity;
+  } else {
+    let t1 = (-h.hw! - lax) / dx, t2 = (h.hw! - lax) / dx;
+    if (t1 > t2) { const tmp = t1; t1 = t2; t2 = tmp; }
+    tmin = Math.max(tmin, t1); tmax = Math.min(tmax, t2);
+  }
+  if (Math.abs(dz) < 1e-9) {
+    if (laz < -h.hd! || laz > h.hd!) return Infinity;
+  } else {
+    let t1 = (-h.hd! - laz) / dz, t2 = (h.hd! - laz) / dz;
+    if (t1 > t2) { const tmp = t1; t1 = t2; t2 = tmp; }
+    tmin = Math.max(tmin, t1); tmax = Math.min(tmax, t2);
+  }
+  if (tmax < tmin || tmax < 0) return Infinity;
+  return tmin;
+}
+
+function cameraSegmentHitsFootprint(
+  h: Hideable,
+  eyeX: number, eyeY: number, eyeZ: number,
+  camX: number, camY: number, camZ: number,
+): boolean {
+  if ((eyeY < h.topY && pointInsideFootprint(h, eyeX, eyeZ))
+    || (camY < h.topY && pointInsideFootprint(h, camX, camZ))) {
+    return true;
+  }
+  const t = h.r !== undefined
+    ? segmentCircleEntry(eyeX, eyeZ, camX, camZ, h.x, h.z, h.r)
+    : segmentObbEntry(h, eyeX, eyeZ, camX, camZ);
+  if (t < 0 || t > 1) return false;
+  return eyeY + (camY - eyeY) * t < h.topY;
 }
 
 interface PropCullable {

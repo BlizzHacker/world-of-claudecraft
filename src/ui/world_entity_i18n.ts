@@ -3,7 +3,7 @@ import { DUNGEONS, MOBS, NPCS, QUESTS, ZONES } from '../sim/data';
 // English world-entity names + narratives (mobs, NPCs, quests, zones, dungeons).
 //
 // This module is the SINGLE English source for those entities: makeEnglishWorldEntities()
-// reads the canonical sim data and shapes it into the `en` slice that src/ui/i18n.en.ts
+// reads the canonical sim data and shapes it into the `en` slice that src/ui/i18n.catalog
 // spreads into the authoritative nested `en` (imported there as `worldNames.en`). The
 // build then overlays each per-locale flat overlay (src/ui/i18n.locales/<lang>.ts) onto
 // that `en` to produce the dense resolved table.
@@ -27,6 +27,13 @@ const MOB_IDS = [
   'tidebound_acolyte', 'drowned_thrall', 'knight_commander_olen', 'vael_the_mistcaller',
   'sanctum_boneguard', 'sanctum_drakonid', 'raised_bonewalker', 'korgath_the_bound',
   'grand_necromancer_velkhar', 'korzul_the_gravewyrm', 'bog_bloat',
+  'fallen_captain_aldren', 'corrupted_priest_malric', 'deathstalker_voss',
+  'vision_aldren_warrior', 'vision_malric_mage', 'vision_deathstalker_voss',
+  'bound_guardian',
+  // Brightwood Glade wildlife pack
+  'brightwood_hare', 'glade_fox', 'spotted_fawn', 'meadow_crane', 'thornpelt_badger',
+  'dawnmane_doe', 'bramble_lynx', 'brightwood_stag', 'grovetusk_boar', 'sunhide_bear',
+  'brightwood_monarch',
 ] as const;
 
 const NPC_IDS = [
@@ -34,7 +41,7 @@ const NPC_IDS = [
   'smith_haldren', 'fisherman_brandt', 'foreman_odell', 'warden_fenwick', 'brother_aldric_fen',
   'provisioner_hale', 'herbalist_yara', 'scout_maren', 'captain_thessaly',
   'brother_aldric_highwatch', 'scout_maren_highwatch', 'quartermaster_bree', 'armorer_hode',
-  'loremaster_caddis',
+  'loremaster_caddis', 'ranger_elwyn',
 ] as const;
 
 const QUEST_IDS = [
@@ -42,19 +49,24 @@ const QUEST_IDS = [
   'q_supplies', 'q_whispers', 'q_names_of_the_dead', 'q_silence_the_call', 'q_rite',
   'q_hollow', 'q_sexton', 'q_gravecallers_trail', 'q_bandits', 'q_ringleader',
   'q_fenbridge_muster', 'q_prowlers', 'q_prowler_pelts', 'q_fen_supplies', 'q_deepfen',
-  'q_idols', 'q_deepfen_purge', 'q_widows', 'q_broodmother', 'q_drowned',
-  'q_drowned_censers', 'q_no_rest', 'q_trolls', 'q_troll_fetishes', 'q_grubjaw',
-  'q_cult_camp', 'q_summoners', 'q_deacon', 'q_bastion_door', 'q_olen', 'q_mistcaller',
+    'q_idols', 'q_aldrics_fallen_star', 'q_deepfen_purge', 'q_widows', 'q_broodmother',
+    'q_drowned', 'q_drowned_censers', 'q_no_rest', 'q_trolls', 'q_troll_fetishes', 'q_grubjaw',
+    'q_cult_camp', 'q_summoners', 'q_deacon', 'q_bastion_door', 'q_olen', 'q_mistcaller',
   'q_highwatch_summons', 'q_stalkers', 'q_stalker_pelts', 'q_kobold_tunnels',
   'q_glowing_wax', 'q_ogre_edges', 'q_ogre_totems', 'q_ogre_bounty', 'q_crushers',
   'q_drogmar', 'q_elementals', 'q_shard_cores', 'q_kazzix', 'q_zealots', 'q_cult_orders',
   'q_necromancers', 'q_revenants', 'q_revenant_vanguard', 'q_wyrm_sigils',
   'q_breaking_the_seal', 'q_voice_below', 'q_sanctum_gate', 'q_korgath', 'q_velkhar',
-  'q_gravewyrm', 'q_the_codfather',
+  'q_gravewyrm', 'q_the_codfather', 'q_nythraxis_restless_dead', 'q_nythraxis_graves',
+  'q_nythraxis_sealed_crypt', 'q_nythraxis_bound_guardian',
+  'q_brightwood_thinning', 'q_brightwood_monarch',
+  'q_ledger_first_duty', 'q_ledger_teeth', 'q_ledger_reedwater', 'q_ledger_silk',
+  'q_ledger_brood', 'q_ledger_deepvermin', 'q_ledger_toll', 'q_ledger_vigil',
+  'q_ledger_great_boar', 'q_ledger_outlaw_captain',
 ] as const;
 
 const ZONE_IDS = ['eastbrook_vale', 'mirefen_marsh', 'thornpeak_heights'] as const;
-const DUNGEON_IDS = ['hollow_crypt', 'sunken_bastion', 'gravewyrm_sanctum'] as const;
+const DUNGEON_IDS = ['hollow_crypt', 'sunken_bastion', 'gravewyrm_sanctum', 'nythraxis_crypt'] as const;
 
 type MobId = typeof MOB_IDS[number];
 type NpcId = typeof NPC_IDS[number];
@@ -155,7 +167,7 @@ function makeEnglishWorldEntities(): WorldEntityTranslations {
   };
 }
 
-// Only `.en` is consumed (by src/ui/i18n.en.ts); non-English entity names live in the
+// Only `.en` is consumed (by src/ui/i18n.catalog); non-English entity names live in the
 // flat per-locale overlays, and dialect inheritance is a declared-base merge in the
 // build resolver. So this object intentionally carries English only.
 export const worldEntityText = {

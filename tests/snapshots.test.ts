@@ -7,6 +7,8 @@ vi.mock('../server/db', () => ({
   openPlaySession: vi.fn(async () => 1),
   closePlaySession: vi.fn(async () => {}),
   insertChatLogs: vi.fn(async () => {}),
+  markAccountQuestComplete: vi.fn(async () => ({ completedQuestIds: [], mechChromaIds: [] })),
+  grantAccountMechChroma: vi.fn(async () => ({ completedQuestIds: [], mechChromaIds: [] })),
 }));
 
 import { GameServer, ClientSession } from '../server/game';
@@ -61,6 +63,7 @@ function bareClient(pid: number): ClientWorld {
   c.inventory = [];
   c.vendorBuyback = [];
   c.equipment = {};
+  c.accountCosmetics = { completedQuestIds: [], mechChromaIds: [] };
   c.copper = 0;
   c.xp = 0;
   c.known = [];
@@ -109,6 +112,48 @@ describe('delta snapshots', () => {
     expect(Array.isArray(snap.ents)).toBe(true);
   });
 
+  it('mirrors account-wide cosmetic unlocks from self snapshots', () => {
+    const server = new GameServer();
+    const fc = fakeWs();
+    const joined = server.join(fc.ws, 1, 1, 'Cosmetic', 'warrior', null, false, {
+      accountCosmetics: { completedQuestIds: ['q_aldrics_fallen_star'], mechChromaIds: ['amber_crimson'] },
+    });
+    if ('error' in joined) throw new Error(joined.error);
+    const session = joined;
+    session.blockListLoaded = true;
+    broadcast(server);
+    const snap = lastSnap(fc.sent);
+    expect(snap.self.cosmetics).toEqual({
+      completedQuestIds: ['q_aldrics_fallen_star'],
+      mechChromaIds: ['amber_crimson'],
+    });
+
+    const client = bareClient(session.pid);
+    (client as any).applySnapshot(snap);
+    expect(client.accountCosmetics).toEqual({
+      completedQuestIds: ['q_aldrics_fallen_star'],
+      mechChromaIds: ['amber_crimson'],
+    });
+  });
+
+  it('mirrors live cosmetic appearance catalog through snapshots', () => {
+    const server = new GameServer();
+    const fc = fakeWs();
+    const joined = server.join(fc.ws, 1, 1, 'Mechlive', 'shaman', null);
+    if ('error' in joined) throw new Error(joined.error);
+    const session = joined;
+    session.blockListLoaded = true;
+    server.sim.setPlayerSkin(session.pid, 0, 'mech');
+
+    broadcast(server);
+    const snap = lastSnap(fc.sent);
+    expect(snap.self.cat).toBe('mech');
+
+    const client = bareClient(session.pid);
+    (client as any).applySnapshot(snap);
+    expect(client.player.skinCatalog).toBe('mech');
+  });
+
   it('omits unchanged heavy fields from subsequent snapshots', () => {
     broadcast(server);
     fc.sent.length = 0;
@@ -119,9 +164,20 @@ describe('delta snapshots', () => {
       expect(snap.self, `self.${key} resent although unchanged`).not.toHaveProperty(key);
     }
     // the always-on fields are still present every snapshot
-    for (const key of ['x', 'z', 'hp', 'mhp', 'res', 'gcd', 'xp', 'copper', 'target']) {
+    for (const key of ['x', 'z', 'hp', 'mhp', 'res', 'gcd', 'swing', 'xp', 'copper', 'target']) {
       expect(snap.self).toHaveProperty(key);
     }
+  });
+
+  it('mirrors the swing timer to the online client for the swing-timer HUD bar', () => {
+    const player = server.sim.entities.get(session.pid)!;
+    player.swingTimer = 1.7;
+    broadcast(server);
+    const snap = lastSnap(fc.sent);
+    expect(snap.self.swing).toBeCloseTo(1.7, 1);
+    const client = bareClient(session.pid);
+    (client as any).applySnapshot(snap);
+    expect(client.player.swingTimer).toBeCloseTo(1.7, 1);
   });
 
   it('sell command forwards bounded stack quantities', () => {

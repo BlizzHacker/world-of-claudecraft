@@ -24,7 +24,7 @@ services:
     build:
       context: .
       args:
-        # Build-time: inlined into the client bundle (see Dockerfile / .env.example).
+        # Build-time public client config inlined into the bundle (see .env.example).
         VITE_TURNSTILE_SITEKEY: ${VITE_TURNSTILE_SITEKEY:-}
     container_name: eastbrook-game
     restart: unless-stopped
@@ -37,6 +37,9 @@ services:
       # Target the game server 302-redirects /wiki to when hit directly (not via the
       # reverse proxy). Public origin in prod; localhost fallback for local dev.
       WIKI_URL: ${WIKI_URL:-http://localhost:8080/wiki/index.php/Main_Page}
+      # Runtime public origin for server-generated absolute URLs such as player-card
+      # Open Graph images. Set per environment, for example dev vs production.
+      PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:-}
       USERNAME_BANLIST: ${USERNAME_BANLIST:-}
       USERNAME_BANLIST_FILE: ${USERNAME_BANLIST_FILE:-}
       CHAT_CENSOR_LIST: ${CHAT_CENSOR_LIST:-}

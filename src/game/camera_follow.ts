@@ -7,6 +7,12 @@ export interface CameraFollowInput {
   moving: boolean;
   clickMoving?: boolean;
   orbiting: boolean;
+  // True when the player's facing is being set *from* the camera yaw this frame
+  // (mouselook, or mouse-camera-mode while a movement key is held). In that case
+  // the camera owns the heading and must NOT auto-follow it — doing so chases a
+  // value the camera itself just produced, which feeds back into a wobble. We
+  // still advance lastInterpFacing so re-coupling later doesn't snap.
+  cameraDriven?: boolean;
 }
 
 export interface CameraFollowResult {
@@ -21,6 +27,17 @@ const CLICK_MOVE_MAX_SETTLE_STEP = 0.022;
 const CLICK_MOVE_BIG_TURN_FLOOR = 0.18;
 const CLICK_MOVE_SMALL_TURN = 0.35;
 const MAX_AUTO_YAW_SPEED = 3.6; // rad/sec; caps all non-manual camera follow motion
+
+// The follow/settle system below must be bypassed whenever the camera is under
+// the player's direct manual control: classic right-mouse mouselook OR the
+// always-on Mouse Camera mode. Both lock the character's facing to camYaw, so
+// letting auto-follow run makes it chase a facing that IS the camera yaw and it
+// fights the drag (~45° of drift). Mouse Camera mode reports mouselook=false on
+// desktop (no touch-look, no pointer-lock), so it must be folded in here
+// explicitly — otherwise it never takes the same smooth path right-mouse uses.
+export function cameraIsManual(mouselookActive: boolean, mouseCameraMode: boolean): boolean {
+  return mouselookActive || mouseCameraMode;
+}
 
 export function wrapAngle(d: number): number {
   while (d > Math.PI) d -= 2 * Math.PI;
@@ -53,7 +70,7 @@ function clickMoveSettleScale(absDelta: number): number {
 
 export function updateFollowCameraYaw(input: CameraFollowInput): CameraFollowResult {
   let camYaw = input.camYaw;
-  if (!input.mouselook) {
+  if (!input.mouselook && !input.cameraDriven) {
     if (input.orbiting) return { camYaw, lastInterpFacing: input.interpFacing };
     let targetYaw = camYaw;
     if (input.lastInterpFacing !== null && !input.clickMoving) targetYaw += wrapAngle(input.interpFacing - input.lastInterpFacing);

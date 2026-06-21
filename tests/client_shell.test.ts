@@ -6,6 +6,8 @@ const mainTs = readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8').
 const landingTs = readFileSync(new URL('../src/landing.ts', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
 const hudTs = readFileSync(new URL('../src/ui/hud.ts', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
 const mobileControlsTs = readFileSync(new URL('../src/game/mobile_controls.ts', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
+const robotsTxt = readFileSync(new URL('../public/robots.txt', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
+const sitemapXml = readFileSync(new URL('../public/sitemap.xml', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
 
 function splitGameUiTemplate(): { templateHtml: string; liveHtml: string } {
   const marker = '<template id="game-ui-template">';
@@ -26,19 +28,59 @@ describe('client HTML shell', () => {
 
     expect(templateHtml).toContain('id="ui"');
     expect(templateHtml).toContain('Release Spirit');
-    expect(templateHtml).toContain('Combat Log');
+    // chat tabs (Chat / Combat Log / channels) are rendered into #chatlog-tabs
+    // by the HUD, so we assert on the container rather than a static label
+    expect(templateHtml).toContain('id="chatlog-tabs"');
     expect(templateHtml).toContain('id="chat-input"');
 
     expect(liveHtml).not.toContain('id="ui"');
     expect(liveHtml).not.toContain('Release Spirit');
-    expect(liveHtml).not.toContain('Combat Log');
+    expect(liveHtml).not.toContain('id="chatlog-tabs"');
     expect(liveHtml).not.toContain('id="chat-input"');
+  });
+
+  it('ships crawlable SEO metadata and sitemap hints', () => {
+    expect(html).toContain('<meta name="robots" content="index, follow, max-image-preview:large" />');
+    expect(html).toContain('<link rel="canonical" href="https://worldofclaudecraft.com/" />');
+    expect(html).toContain('<meta property="og:site_name" content="World of ClaudeCraft" />');
+    expect(html).toContain('"alternateName": "World of Claudecraft"');
+    expect(html).toContain('"https://github.com/levy-street/world-of-claudecraft"');
+    expect(mainTs).toContain("alternateName: 'World of Claudecraft'");
+    expect(mainTs).toContain("'https://github.com/levy-street/world-of-claudecraft'");
+    expect(robotsTxt.trim()).toBe('User-agent: *\nAllow: /\n\nSitemap: https://worldofclaudecraft.com/sitemap.xml');
+    expect(robotsTxt).toContain('Sitemap: https://worldofclaudecraft.com/sitemap.xml');
+    expect(sitemapXml).toContain('<loc>https://worldofclaudecraft.com/</loc>');
+    expect(sitemapXml).toContain('<loc>https://worldofclaudecraft.com/links</loc>');
   });
 
   it('offers the quest log in the mobile controls drawer', () => {
     expect(html).toContain('id="mobile-extra-controls"');
     expect(html).toContain('id="mobile-quest"');
     expect(html).toContain('aria-label="Quest Log"');
+  });
+
+  it('keeps the game menu free of duplicate and dev-only entries', () => {
+    const interfaceEntries = hudTs.match(/add\(t\('hud\.options\.interface'\), \(\) => goto\('interface'\)\);/g) ?? [];
+    expect(interfaceEntries).toHaveLength(1);
+    expect(hudTs).not.toContain('Skin Select (dev)');
+  });
+
+  it('wires player card pose clicks before loading card metadata', () => {
+    const methodStart = hudTs.indexOf('private async openPlayerCard');
+    const listener = hudTs.indexOf("poseButtons.forEach((b, i) => b.addEventListener('click'", methodStart);
+    const metadataAwait = hudTs.indexOf('[referral, standing] = await Promise.all([fetchReferralInfo(), fetchStanding()]);', methodStart);
+    const actionWiring = hudTs.indexOf('this.wireCardActions(back, state, setStatus);', methodStart);
+
+    expect(methodStart).toBeGreaterThanOrEqual(0);
+    expect(listener).toBeGreaterThan(methodStart);
+    expect(metadataAwait).toBeGreaterThan(listener);
+    expect(actionWiring).toBeGreaterThan(metadataAwait);
+
+    const listenerBlock = hudTs.slice(listener, metadataAwait);
+    expect(listenerBlock).toContain('if (!metadataReady) {');
+    expect(listenerBlock).toContain('selectPose(i);');
+    expect(listenerBlock).toContain('return;');
+    expect(hudTs.slice(metadataAwait, actionWiring)).toContain('await compose(requestedPoseIndex);');
   });
 
   it('only displays mobile touch controls after the game is active', () => {
@@ -85,12 +127,18 @@ describe('client HTML shell', () => {
 
   it('closes mobile community and More trays when tapping outside', () => {
     expect(hudTs).toContain("const communityMenu = document.getElementById('community-menu') as HTMLDetailsElement | null;");
-    expect(hudTs).toContain('if (communityMenu?.open && !communityMenu.contains(target)) {\n        communityMenu.open = false;\n      }');
+    expect(hudTs).toContain("if (document.body.classList.contains('mobile-touch') && communityMenu?.open && !communityMenu.contains(target)) {\n        communityMenu.open = false;\n      }");
+    expect(hudTs).not.toContain('if (communityMenu?.open && !communityMenu.contains(target)) {\n        communityMenu.open = false;\n      }');
     expect(hudTs).toContain("if (document.body.classList.contains('mobile-more-open')) {");
     expect(hudTs).toContain("document.body.classList.remove('mobile-more-open');");
     expect(hudTs).toContain("document.getElementById('mobile-controls')?.classList.remove('expanded');");
     expect(hudTs).toContain("more?.classList.remove('active');");
     expect(hudTs).toContain("document.getElementById('mobile-more-close')?.addEventListener('click', () => {");
+  });
+
+  it('keeps desktop community links open after HUD clicks', () => {
+    expect(mainTs).toContain('communityMenu.open = !isPhoneTouchDevice();');
+    expect(hudTs).toContain("document.body.classList.contains('mobile-touch') && communityMenu?.open");
   });
 
   it('renders the mobile XP bar as a ring around the top-left class circle', () => {
@@ -108,9 +156,15 @@ describe('client HTML shell', () => {
     expect(html).toContain('-webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 7px), #000 calc(100% - 6px));');
     expect(html).toContain('body.mobile-touch #xpbar .fill,\n  body.mobile-touch #xpbar .ticks { display: none; }');
     expect(html).toContain('body.mobile-touch #player-frame::before {\n      left: -5px;\n      top: -5px;\n      width: 73px;\n      height: 73px;');
-    expect(html).toContain('body.mobile-touch #target-frame {\n    left: max(8px, env(safe-area-inset-left));\n    top: calc(max(8px, env(safe-area-inset-top)) + 90px);');
-    expect(html).toContain('body.mobile-touch #party-frames {\n    position: fixed;\n    left: max(8px, env(safe-area-inset-left));\n    top: calc(max(8px, env(safe-area-inset-top)) + 92px);');
-    expect(html).toContain('body.mobile-touch #party-frames.below-target {\n    top: calc(max(8px, env(safe-area-inset-top)) + 148px);');
+    expect(html).toContain('body.mobile-touch #target-frame {\n    left: max(8px, env(safe-area-inset-left));\n    top: calc(max(8px, env(safe-area-inset-top)) + 72px);');
+    expect(html).toContain('body.mobile-touch #party-frames {\n    position: fixed;\n    left: max(8px, env(safe-area-inset-left));\n    top: calc(max(8px, env(safe-area-inset-top)) + 74px);');
+    expect(html).toContain('body.mobile-touch #party-frames.below-target {\n    top: calc(max(8px, env(safe-area-inset-top)) + 130px);');
+    expect(html).toContain('body.mobile-touch #party-frames .party-frame {\n    width: 132px;\n    min-height: 30px;');
+    expect(html).toContain('body.mobile-touch #party-frames .party-frame:not(:first-child) {\n    margin-top: -1px;');
+    expect(html).toContain('body.mobile-touch #party-frames #party-leave {\n    width: 132px;\n    min-height: 32px;');
+    expect(html).toContain('body.mobile-touch #party-frames .party-frame {\n      width: 118px;\n      min-height: 25px;');
+    expect(html).toContain('body.mobile-touch #target-frame {\n      left: max(6px, env(safe-area-inset-left));\n      top: calc(max(6px, env(safe-area-inset-top)) + 56px);');
+    expect(html).toContain('body.mobile-touch #party-frames.below-target {\n      top: calc(max(6px, env(safe-area-inset-top)) + 100px);');
     expect(html).not.toContain('body.mobile-touch.mobile-left-handed #xpbar,');
     expect(hudTs).toContain("$('#xpbar').style.setProperty('--xp-fill', bar.fillFrac.toFixed(4));");
     expect(hudTs).toContain("$('#player-frame').style.setProperty('--xp-fill', bar.fillFrac.toFixed(4));");
@@ -121,8 +175,36 @@ describe('client HTML shell', () => {
     expect(html).toContain('body.game-active {\n    overflow: hidden;\n    touch-action: none;');
     expect(html).toContain('-webkit-overflow-scrolling: touch;');
     expect(html).toContain('body.mobile-touch .homepage-header {\n    display: flex;\n    position: sticky;\n    top: 0;\n    z-index: 120;');
+    expect(html).toContain('padding-top: calc(var(--spacing-sm) + env(safe-area-inset-top));');
+    expect(html).toContain('padding-right: max(var(--spacing-md), env(safe-area-inset-right));');
+    expect(html).toContain('body.mobile-touch #homepage-views-container {\n    padding-top: var(--spacing-lg);\n    padding-right: max(var(--spacing-md), env(safe-area-inset-right));');
+    expect(html).toContain('body.mobile-touch .header-actions {\n    width: 100%;\n    display: flex;\n    flex-direction: column;\n    align-items: center;');
+    expect(html).toContain('body.mobile-touch .footer-lang-row {\n    width: 100%;\n    flex-direction: column;\n    align-items: center;');
     expect(html).not.toContain('body.mobile-touch .homepage-header {\n    display: flex;\n    position: relative;');
     expect(mainTs).not.toContain("visualViewport?.addEventListener('scroll', syncAppViewport)");
+  });
+
+  it('places news release metadata below the heading on mobile', () => {
+    expect(mainTs).toContain('<h3 class="news-item-title">${title}</h3><div class="news-item-meta">${tag}${badge}${when}</div></div>');
+    expect(html).toContain('body.mobile-touch .news-item-head {\n    flex-direction: column;\n    align-items: flex-start;');
+    expect(html).toContain('body.mobile-touch .news-item-meta {\n    width: 100%;\n    margin-left: 0;');
+    expect(html).toContain('overflow-wrap: break-word;\n    word-break: normal;');
+    expect(html).toContain('body.mobile-touch .news-body {\n    text-align: left;');
+    expect(html).toContain('body.mobile-touch .news-body ul {\n    list-style: none;\n    padding-left: 0;');
+  });
+
+  it('renders the high scores leaderboard responsively on mobile', () => {
+    expect(mainTs).toContain('<span class="hs-realm" data-label="${esc(realmLabel)}">${esc(r.realm ?? \'\')}</span>');
+    expect(mainTs).toContain('<span class="hs-xp" data-label="${esc(lifetimeXpLabel)}">${formatXp(r.lifetimeXp)}</span>');
+    expect(html).toContain('body.mobile-touch .hs-head {\n    display: none;');
+    expect(html).toContain('body.mobile-touch .hs-row {\n    grid-template-columns: 38px minmax(0, 1fr);');
+    expect(html).toContain('grid-template-areas:\n      "rank name"\n      "rank realm"\n      "rank lvl"\n      "rank vlvl"\n      "rank xp";');
+    expect(html).toContain('body.mobile-touch .hs-realm::before,\n  body.mobile-touch .hs-lvl::before,\n  body.mobile-touch .hs-vlvl::before,\n  body.mobile-touch .hs-xp::before {\n    content: attr(data-label);');
+  });
+
+  it('stacks selected character details on mobile', () => {
+    expect(html).toContain('id="charselect-class-details"');
+    expect(html).toContain('body.mobile-touch #charselect-panel #charselect-class-details .class-details-grid,\n  body.mobile-touch #charselect-panel #online-class-details .class-details-grid {\n    display: flex;\n    flex-direction: column;');
   });
 
   it('lays out mobile More tray buttons horizontally', () => {
@@ -153,6 +235,12 @@ describe('client HTML shell', () => {
     expect(mobileControlsTs).toContain('delete modal.dataset.windowMoved;');
     expect(mobileControlsTs).toContain('private closeMoreModal(): void {');
     expect(mobileControlsTs).toContain("document.getElementById('mobile-controls')?.classList.remove('expanded');");
+    const bindButton = mobileControlsTs.slice(
+      mobileControlsTs.indexOf('private bindButton'),
+      mobileControlsTs.indexOf('private closeMoreModal'),
+    );
+    expect(bindButton.indexOf("button.closest('#mobile-extra-controls')")).toBeGreaterThan(-1);
+    expect(bindButton.indexOf('this.closeMoreModal();')).toBeLessThan(bindButton.indexOf('cb();'));
     expect(hudTs).toContain(".filter((win) => win.id !== 'mobile-extra-controls')");
   });
 
@@ -166,8 +254,10 @@ describe('client HTML shell', () => {
     expect(html).toContain('id="btn-offline"');
     expect(html).not.toContain('class="mode-card');
     expect(html).not.toContain('.mode-row {');
+    expect(html).toContain('body.mobile-touch #mode-select {\n    width: 100%;\n    max-width: min(440px, calc(100vw - 32px - env(safe-area-inset-left) - env(safe-area-inset-right)));\n    margin-inline: auto;');
     // Landscape compacts the single play console instead of splitting two cards.
     expect(html).toContain('@media (orientation: landscape) {\n    body.mobile-touch .play-console {');
+    expect(html).toContain('@media (orientation: landscape) {\n    body.mobile-touch .play-console {\n      width: 100%;\n      max-width: 460px;');
   });
 
   it('keeps public homepage nav reachable from the deferred landing shell', () => {
@@ -187,17 +277,35 @@ describe('client HTML shell', () => {
   });
 
   it('ships a looping cinematic backdrop with a poster fallback', () => {
-    expect(html).toContain('id="bg-trailer"');
-    expect(html).toContain('poster="/video/trailer-poster.jpg"');
-    expect(html).toContain('<source src="/video/trailer.mp4" type="video/mp4"');
-    // Playback is started from main.ts so it can honour reduced-motion / save-data.
-    expect(mainTs).toContain('initHomepageTrailer');
+    expect(html).toContain('id="bg-home"');
+    expect(html).toContain('poster="/home-bg.png"');
+    expect(html).toContain('<source src="/home-bg.mp4" type="video/mp4"');
+    expect(html).toContain('autoplay loop muted playsinline');
+    // View transitions still honour reduced-motion.
     expect(mainTs).toContain("prefers-reduced-motion: reduce");
   });
 
   it('omits Meters from the mobile More tray while keeping the desktop window', () => {
     expect(html).toContain('id="meters-window"');
     expect(html).not.toContain('id="mobile-meters"');
+  });
+
+  it('keeps the World Market to one scroll container with browse filters below the tabs', () => {
+    expect(html).toContain('#market-window { width: 470px; height: min(640px, calc(85vh - 24px)); display: none; flex-direction: column; overflow: hidden;');
+    expect(html).toContain('#market-body { overflow-y: auto; flex: 1; min-height: 0;');
+    expect(html).toContain('.mkt-page { display: flex; align-items: center; justify-content: space-between;');
+    expect(html).toContain('body.mobile-touch #market-window {\n    max-height: calc(58vh - 20px);\n    overflow: hidden;');
+    expect(hudTs).toContain('MARKET_PAGE_SIZE');
+    expect(hudTs).toContain('this.marketBrowsePage');
+    expect(hudTs).toContain('data-market-page="prev"');
+    expect(hudTs).toContain('data-market-page="next"');
+    expect(hudTs).toContain('itemUi.market.pageRange');
+    expect(hudTs).toContain('class="mkt-filters${hasSubtype ? \' has-subtype\' : \'\'}"');
+    expect(hudTs).toContain('data-market-filter-menu="${menu}"');
+    expect(hudTs).toContain("this.renderMarketFilterMenu('itemType'");
+    expect(hudTs).toContain("this.renderMarketFilterMenu('subtype'");
+    expect(hudTs).toContain("this.renderMarketFilterMenu('rarity'");
+    expect(hudTs).not.toContain('<select data-market-filter=');
   });
 
   it('keeps the mobile More and Autorun buttons in the combat row', () => {
@@ -234,7 +342,48 @@ describe('client HTML shell', () => {
     expect(html).toContain('body.mobile-touch #actionbar {\n    display: flex;\n    flex-wrap: nowrap;');
     expect(html).toContain('overflow-x: auto;\n    overflow-y: hidden;');
     expect(html).toContain('touch-action: pan-x;');
+    expect(html).toContain('min-height: 50px;');
     expect(html).toContain('body.mobile-touch .action-btn { width: 42px; height: 42px; flex: 0 0 42px;');
+    expect(html).toContain('body.mobile-touch.mobile-hotbar-dragging #actionbar { touch-action: none; }');
+    expect(html).toContain('body.mobile-touch .action-btn.mobile-drag-source');
+  });
+
+  it('falls back to the normal hotbar when a form hotbar has no saved spells', () => {
+    expect(hudTs).toContain('const emptyFormMap = this.activeHotbarForm !== \'normal\' && parsed.every((action) => action === null);');
+    expect(hudTs).toContain("localStorage.getItem(this.slotMapKey('normal'))");
+    expect(hudTs).not.toContain('this.loadedSlotMapFromStorage = stored || this.activeHotbarForm !== \'normal\';');
+  });
+
+  it('keeps the active druid form toggle on its form action bar', () => {
+    expect(hudTs).toContain("if (this.activeHotbarForm === 'bear') return 'bear_form';");
+    expect(hudTs).toContain("if (this.activeHotbarForm === 'cat') return 'cat_form';");
+    expect(hudTs).toContain('if (formToggle && knownAbilityIds.includes(formToggle)) autoPlaceAbilityIds.add(formToggle);');
+  });
+
+  it('shows mobile spellbook add and remove controls for the spell bar', () => {
+    expect(html).toContain('.spell-hotbar-toggle { display: none; }');
+    expect(html).toContain('body.mobile-touch #spellbook .spell-hotbar-toggle {\n    min-width: 40px;\n    min-height: 40px;');
+    expect(html).toContain('body.mobile-touch #spellbook .spell-hotbar-toggle.remove');
+    expect(hudTs).toContain("toggle.className = 'spell-hotbar-toggle' + (onBar ? ' remove' : '');");
+    expect(hudTs).toContain('this.removeAbilityFromHotbar(known.def.id)');
+    expect(hudTs).toContain('this.addAbilityToHotbar(known.def.id)');
+  });
+
+  it('sizes the mobile Bags window as a usable modal', () => {
+    expect(html).toContain('body.mobile-touch #bags {\n    position: fixed;\n    left: max(10px, env(safe-area-inset-left));\n    right: max(10px, env(safe-area-inset-right));\n    top: max(10px, env(safe-area-inset-top));\n    bottom: calc(72px + env(safe-area-inset-bottom));\n    width: auto;\n    transform: none;');
+    expect(html).toContain('body.mobile-touch #bags .bag-grid {\n    min-height: 150px;');
+    expect(html).not.toContain('body.mobile-touch #bags {\n    position: fixed;\n    left: 10px;\n    right: 10px;\n    bottom: 10px;');
+    expect(html).not.toContain('max-height: calc(38vh - 20px);');
+  });
+
+  it('combines Trader and Bags into a mobile split-pane modal', () => {
+    expect(html).toContain('body.mobile-touch.vendor-open #vendor-window,\n  body.mobile-touch.vendor-open #bags {\n    position: fixed;\n    top: max(10px, env(safe-area-inset-top));\n    bottom: calc(72px + env(safe-area-inset-bottom));');
+    expect(html).toContain('body.mobile-touch.vendor-open #vendor-window {\n    left: max(10px, env(safe-area-inset-left));\n    right: 50vw;');
+    expect(html).toContain('body.mobile-touch.vendor-open #bags {\n    left: 50vw;\n    right: max(10px, env(safe-area-inset-right));');
+    expect(html).toContain('body.mobile-touch.vendor-open #vendor-window .panel-title,\n  body.mobile-touch.vendor-open #bags .panel-title {\n    height: 47px;\n    min-height: 47px;');
+    expect(html).toContain('body.mobile-touch.vendor-open #vendor-window .panel-title .x-btn {\n    display: none;');
+    expect(hudTs).toContain("if (this.vendorOpen && document.body.classList.contains('mobile-touch')) this.closeVendor();");
+    expect(hudTs).toContain("const closeMobileBags = document.body.classList.contains('mobile-touch') && $('#bags').style.display !== 'none';");
   });
 
   it('keeps the expanded mobile More tray inside the viewport', () => {

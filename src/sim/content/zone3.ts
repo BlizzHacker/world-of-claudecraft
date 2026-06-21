@@ -49,11 +49,33 @@ export const ZONE3_MOBS: Record<string, MobTemplate> = {
     id: 'ridge_stalker', name: 'Ridge Stalker', minLevel: 13, maxLevel: 14, family: 'beast',
     hpBase: 58, hpPerLevel: 21, dmgBase: 10, dmgPerLevel: 2.5, attackSpeed: 1.9,
     armorPerLevel: 14, moveSpeed: 8, aggroRadius: 11,
+    // Rending Claws: the stalker's raking swipes can open a bleeding wound — a
+    // refreshing physical DoT (~5 every 3s for 9s). Distinct from poison: it is
+    // physical-school, so it bypasses poison cleanses and ignores nature resist.
+    bleed: { chance: 0.25, perTick: 5, interval: 3, duration: 9, name: 'Rending Claws', school: 'physical' },
     loot: [
       { copper: 60, chance: 1 },
       { itemId: 'ridge_stalker_pelt', chance: 0.6, questId: 'q_stalker_pelts' },
     ],
     scale: 0.95, color: 0x8c8270,
+  },
+  // The apex of the southern ridge: a grizzled, scar-pelted old cat that has
+  // outlived three generations of its pack. A rare elite counterpart to the
+  // Ridge Stalkers, met first when climbing into Thornpeak. Reuses existing
+  // mechanics only — a rending pounce (aoePulse) and a wounded-beast enrage.
+  old_cragmaw: {
+    id: 'old_cragmaw', name: 'Old Cragmaw', minLevel: 14, maxLevel: 14, family: 'beast', rare: true,
+    elite: true, canSwim: true, ccImmune: true, respawnMult: 7.2,
+    hpBase: 320, hpPerLevel: 56, dmgBase: 16, dmgPerLevel: 4.0, attackSpeed: 1.7,
+    armorPerLevel: 24, moveSpeed: 8.6, aggroRadius: 13,
+    aoePulse: { min: 22, max: 30, radius: 8, every: 9, name: 'Savage Pounce', school: 'physical' },
+    enrage: { belowHpPct: 0.35, dmgMult: 1.4, hasteMult: 1.3 },
+    loot: [
+      { copper: 220, chance: 1 },
+      { itemId: 'ridge_stalker_pelt', chance: 1 },
+      { itemId: 'cragmaw_prowlboots', chance: 0.3 },
+    ],
+    scale: 1.3, color: 0x6e6453,
   },
   deeprock_kobold: {
     id: 'deeprock_kobold', name: 'Deeprock Tunneler', minLevel: 14, maxLevel: 15, family: 'kobold',
@@ -63,8 +85,12 @@ export const ZONE3_MOBS: Record<string, MobTemplate> = {
       { copper: 65, chance: 1 },
       { itemId: 'glowing_wax', chance: 0.5, questId: 'q_glowing_wax' },
       { itemId: 'tallow_candle', chance: 0.4 },
+      { itemId: 'healing_potion', chance: 0.08 },
     ],
     scale: 0.85, color: 0x9c7a3c,
+    // Jarring Swing: a heavy mining-pick blow knocks the victim off-balance,
+    // cutting their dodge for 8s so the tunneler's strikes land more reliably.
+    staggerHit: { chance: 0.3, dodgeReduction: 0.05, duration: 8, name: 'Off-Balance' },
   },
   ironvein_foreman: {
     id: 'ironvein_foreman', name: 'Ironvein Foreman', minLevel: 16, maxLevel: 16, family: 'kobold', rare: true,
@@ -73,6 +99,7 @@ export const ZONE3_MOBS: Record<string, MobTemplate> = {
     armorPerLevel: 38, moveSpeed: 7, aggroRadius: 12,
     aoePulse: { min: 28, max: 38, radius: 8, every: 10, name: 'Powder Keg', school: 'fire' },
     summonAdds: { mobId: 'ironvein_sapper', count: 2, atHpPct: [0.50] },
+    rally: { radius: 14, every: 12, ap: 40, duration: 10, name: 'Rallying Banner' },
     enrage: { belowHpPct: 0.30, dmgMult: 1.45, hasteMult: 1.3 },
     loot: [
       { copper: 420, chance: 1 },
@@ -88,6 +115,9 @@ export const ZONE3_MOBS: Record<string, MobTemplate> = {
     id: 'ironvein_sapper', name: 'Ironvein Sapper', minLevel: 15, maxLevel: 16, family: 'kobold',
     hpBase: 58, hpPerLevel: 20, dmgBase: 11, dmgPerLevel: 2.6, attackSpeed: 2.0,
     armorPerLevel: 18, moveSpeed: 7.5, aggroRadius: 12,
+    smolder: { chance: 0.25, perTick: 5, interval: 3, duration: 12, name: 'Smoldering Fuse' },
+    // The sapper's blasting powder clings and smolders: a struck foe catches fire.
+    cinder: { chance: 0.3, perTick: 5, interval: 3, duration: 12, name: 'Cinderburn', school: 'fire' },
     loot: [],
     scale: 0.85, color: 0x8f6b34,
   },
@@ -95,6 +125,7 @@ export const ZONE3_MOBS: Record<string, MobTemplate> = {
     id: 'thornpeak_ogre', name: 'Thornpeak Ogre', minLevel: 15, maxLevel: 16, family: 'ogre',
     hpBase: 66, hpPerLevel: 23, dmgBase: 11, dmgPerLevel: 2.6, attackSpeed: 2.6,
     armorPerLevel: 22, moveSpeed: 7, aggroRadius: 11,
+    concuss: { chance: 0.2, duration: 2, name: 'Concussive Blow' },
     loot: [
       { copper: 75, chance: 1 },
       { itemId: 'ogre_toe_ring', chance: 0.35 },
@@ -105,6 +136,10 @@ export const ZONE3_MOBS: Record<string, MobTemplate> = {
     id: 'ogre_crusher', name: 'Thornpeak Crusher', minLevel: 16, maxLevel: 17, family: 'ogre', elite: true,
     hpBase: 64, hpPerLevel: 23, dmgBase: 11, dmgPerLevel: 2.6, attackSpeed: 2.6,
     armorPerLevel: 24, moveSpeed: 7, aggroRadius: 12,
+    // Disarming Smash: a war-camp crusher's two-handed blow can batter the weapon
+    // from your grip, cutting off auto-attack for a few seconds — a real threat to
+    // a tank holding the pack. The inverse of the Summoner's Silencing Shriek.
+    disarm: { chance: 0.25, duration: 6, name: 'Disarming Smash', school: 'physical' },
     loot: [
       { copper: 200, chance: 1 },
       { itemId: 'ogre_toe_ring', chance: 0.5 },
@@ -117,12 +152,39 @@ export const ZONE3_MOBS: Record<string, MobTemplate> = {
     hpBase: 200, hpPerLevel: 30, dmgBase: 12, dmgPerLevel: 2.7, attackSpeed: 2.6,
     armorPerLevel: 28, moveSpeed: 7, aggroRadius: 14,
     aoePulse: { min: 22, max: 30, radius: 10, every: 12, name: 'Ground Slam' },
+    // The longer the warlord is left to swing, the harder he hits: every landed
+    // blow stokes his Battle Fury, stacking attack power up to a hard cap. A
+    // drawn-out fight snowballs, so burn him down or kite him off you to bleed
+    // the stacks back off.
+    rampage: { ap: 20, maxStacks: 5, duration: 10, name: 'Battle Fury', school: 'physical' },
     loot: [
       { copper: 2000, chance: 1 },
       { itemId: 'drogmar_warboots', chance: 0.3 },
       { itemId: 'drogmars_skullcleaver', chance: 0.25 },
     ],
     scale: 1.5, color: 0x8c3b2e,
+  },
+  brutok_skullsmasher: {
+    // The ogre family's rare elite — a hulking two-fisted mauler that prowls
+    // the crags above the Crusher warbands. Slow, heavily armored and brutal:
+    // it slams the ground in a physical shockwave and goes berserk when low.
+    // Fills the ogre rare gap beside Ironvein Foreman (kobold), Shardlord
+    // Kazzix (elemental) and Marrowlord Varkas (undead).
+    id: 'brutok_skullsmasher', name: 'Brutok Skullsmasher', minLevel: 17, maxLevel: 17, family: 'ogre', rare: true,
+    elite: true, ccImmune: true, respawnMult: 432,
+    hpBase: 360, hpPerLevel: 60, dmgBase: 16, dmgPerLevel: 3.6, attackSpeed: 2.7,
+    armorPerLevel: 30, moveSpeed: 7, aggroRadius: 13,
+    aoePulse: { min: 22, max: 30, radius: 10, every: 10, name: 'Skull Smash', school: 'physical', fx: 'nova' },
+    enrage: { belowHpPct: 0.30, dmgMult: 1.5, hasteMult: 1.3 },
+    loot: [
+      { copper: 320, chance: 1 },
+      { itemId: 'cracked_ogre_tusk', chance: 1 },
+      { itemId: 'skullsmasher_warbelt', chance: 0.3 },
+      { itemId: 'brutoks_maul', chance: 0.25, rollGroup: 'brutok_chase' },
+      { itemId: 'crag_warden_cudgel', chance: 0.25, rollGroup: 'brutok_chase' },
+      { itemId: 'skullsplitter_dirk', chance: 0.25, rollGroup: 'brutok_chase' },
+    ],
+    scale: 1.45, color: 0x6e5235,
   },
   stormcrag_elemental: {
     id: 'stormcrag_elemental', name: 'Stormcrag Elemental', minLevel: 17, maxLevel: 18, family: 'elemental',
@@ -138,6 +200,10 @@ export const ZONE3_MOBS: Record<string, MobTemplate> = {
     // A touch of the storm's cold numbs the limbs: each landed swing has a
     // chance to slow the victim to half speed for a few seconds.
     chillOnHit: { chance: 0.35, mult: 0.5, duration: 6, name: 'Numbing Chill' },
+    // Static Charge: the elemental's storm clings to whatever it strikes, leaving
+    // the victim conductive so every spell that lands on them bites deeper —
+    // +18% magic damage taken from all attackers for a while.
+    spellVuln: { chance: 0.3, amp: 0.18, duration: 10, name: 'Static Charge', school: 'nature' },
   },
   shardlord_kazzix: {
     id: 'shardlord_kazzix', name: 'Shardlord Kazzix', minLevel: 18, maxLevel: 18, family: 'elemental', rare: true,
@@ -148,6 +214,9 @@ export const ZONE3_MOBS: Record<string, MobTemplate> = {
       { itemId: 'kazzix_heartshard', chance: 1, questId: 'q_kazzix' },
       { itemId: 'inert_storm_shard', chance: 1 },
     ],
+    // The Shardlord's rimebound core sheathes its blows in killing cold, leaving
+    // a frost burn that gnaws at the victim long after the strike lands.
+    frostbite: { chance: 0.3, perTick: 6, interval: 3, duration: 12, name: 'Frostbite', school: 'frost' },
     scale: 1.3, color: 0xaed6f1,
   },
   wyrmcult_zealot: {
@@ -162,6 +231,10 @@ export const ZONE3_MOBS: Record<string, MobTemplate> = {
     // The zealot's fevered chanting claws at a caster's mind, draining Intellect
     // and shrinking their mana pool for a while.
     enfeeble: { chance: 0.3, int: 12, duration: 12, name: 'Maddening Whisper', school: 'shadow' },
+    // The Wyrmcult hoards their master's flame: a branding strike seals away the
+    // victim's fire magic so it can never rival the wyrm's, while leaving every
+    // other school free (a single-school counterspell, distinct from a full silence).
+    lockout: { chance: 0.25, duration: 6, name: 'Wyrmward Sigil', school: 'fire' },
     scale: 1.0, color: 0x76448a,
   },
   wyrmcult_necromancer: {
@@ -174,17 +247,97 @@ export const ZONE3_MOBS: Record<string, MobTemplate> = {
       { itemId: 'linen_scrap', chance: 0.3 },
     ],
     manaBurn: { chance: 0.3, amount: 80, name: 'Mana Sear', school: 'shadow' },
+    // Spectral Ward: a shroud of dark wards that lashes back at any caster whose
+    // spell strikes the necromancer — the magic-school twin of melee thorns.
+    spellReflect: { value: 9, name: 'Spectral Ward', school: 'shadow' },
     scale: 1.0, color: 0x533566,
   },
   boneclad_revenant: {
     id: 'boneclad_revenant', name: 'Boneclad Revenant', minLevel: 18, maxLevel: 19, family: 'undead',
     hpBase: 66, hpPerLevel: 23, dmgBase: 12, dmgPerLevel: 2.7, attackSpeed: 2.3,
     armorPerLevel: 18, moveSpeed: 6.5, aggroRadius: 11,
+    enervate: { chance: 0.3, sta: 14, duration: 12, name: 'Soul Siphon', school: 'shadow' },
     loot: [
       { copper: 100, chance: 1 },
       { itemId: 'bone_fragments', chance: 0.6 },
+      { itemId: 'runed_bone_shard', chance: 0.7, questId: 'q_nythraxis_restless_dead' },
     ],
     scale: 1.05, color: 0xcacfd2,
+  },
+  fallen_captain_aldren: {
+    id: 'fallen_captain_aldren', name: 'Fallen Captain Aldren', minLevel: 20, maxLevel: 20, family: 'undead',
+    elite: true, rare: true, canSwim: true, ccImmune: true, respawnMult: 4,
+    hpBase: 390, hpPerLevel: 72, dmgBase: 22, dmgPerLevel: 4.2, attackSpeed: 2.2,
+    armorPerLevel: 42, moveSpeed: 7.2, aggroRadius: 18,
+    cleave: { radius: 7, mult: 0.75, name: 'Grave-Cleaver' },
+    loot: [
+      { copper: 450, chance: 1 },
+      { itemId: 'captains_crest', chance: 1, questId: 'q_nythraxis_sealed_crypt' },
+      { itemId: 'bone_fragments', chance: 1 },
+    ],
+    scale: 1.15, color: 0xbfc7ca,
+  },
+  corrupted_priest_malric: {
+    id: 'corrupted_priest_malric', name: 'Corrupted Priest Malric', minLevel: 20, maxLevel: 20, family: 'undead',
+    elite: true, rare: true, canSwim: true, ccImmune: true, respawnMult: 4,
+    hpBase: 360, hpPerLevel: 68, dmgBase: 23, dmgPerLevel: 4.3, attackSpeed: 2.3,
+    armorPerLevel: 26, moveSpeed: 6.9, aggroRadius: 18,
+    manaBurn: { chance: 0.4, amount: 130, name: 'Withered Benediction', school: 'shadow' },
+    mendAlly: { healMin: 48, healMax: 70, radius: 14, every: 7, name: 'Profane Mending', school: 'shadow' },
+    petSpell: { name: 'Mind Blast', school: 'shadow', min: 38, max: 56, range: 28, every: 2.8 },
+    aoePulse: { min: 28, max: 42, radius: 16, every: 8, name: 'Shadow Nova', school: 'shadow', fx: 'nova' },
+    loot: [
+      { copper: 450, chance: 1 },
+      { itemId: 'priests_sigil', chance: 1, questId: 'q_nythraxis_sealed_crypt' },
+      { itemId: 'frayed_prayer_beads', chance: 0.5 },
+    ],
+    scale: 1.05, color: 0xd5d0e8,
+  },
+  deathstalker_voss: {
+    id: 'deathstalker_voss', name: 'Deathstalker Voss', minLevel: 20, maxLevel: 20, family: 'undead',
+    elite: true, rare: true, canSwim: true, ccImmune: true, respawnMult: 4,
+    hpBase: 410, hpPerLevel: 74, dmgBase: 24, dmgPerLevel: 4.5, attackSpeed: 2.1,
+    armorPerLevel: 44, moveSpeed: 7.4, aggroRadius: 18,
+    cleave: { radius: 7, mult: 0.7, name: 'Deathstalker Cleave' },
+    mortalStrike: { chance: 0.45, healReduction: 0.5, duration: 10, name: 'Forgotten Wound', school: 'physical' },
+    loot: [
+      { copper: 450, chance: 1 },
+      { itemId: 'royal_seal', chance: 1, questId: 'q_nythraxis_sealed_crypt' },
+      { itemId: 'bone_fragments', chance: 1 },
+    ],
+    scale: 1.18, color: 0xc7c0b2,
+  },
+  vision_aldren_warrior: {
+    id: 'vision_aldren_warrior', name: 'Vision of Captain Aldren', minLevel: 20, maxLevel: 20, family: 'humanoid',
+    hpBase: 1, hpPerLevel: 0, dmgBase: 0, dmgPerLevel: 0, attackSpeed: 2,
+    armorPerLevel: 0, moveSpeed: 0, aggroRadius: 0,
+    loot: [], scale: 1.0, color: 0xb8d7ff,
+  },
+  vision_malric_mage: {
+    id: 'vision_malric_mage', name: 'Vision of High Priest Malric', minLevel: 20, maxLevel: 20, family: 'humanoid',
+    hpBase: 1, hpPerLevel: 0, dmgBase: 0, dmgPerLevel: 0, attackSpeed: 2,
+    armorPerLevel: 0, moveSpeed: 0, aggroRadius: 0,
+    loot: [], scale: 1.0, color: 0xc9b6ff,
+  },
+  vision_deathstalker_voss: {
+    id: 'vision_deathstalker_voss', name: 'Vision of Royal Assassin Voss', minLevel: 20, maxLevel: 20, family: 'humanoid',
+    hpBase: 1, hpPerLevel: 0, dmgBase: 0, dmgPerLevel: 0, attackSpeed: 2,
+    armorPerLevel: 0, moveSpeed: 0, aggroRadius: 0,
+    loot: [], scale: 1.0, color: 0xb8d7ff,
+  },
+  bound_guardian: {
+    id: 'bound_guardian', name: 'The Bound Guardian', minLevel: 20, maxLevel: 20, family: 'undead',
+    elite: true, boss: true, canSwim: true, ccImmune: true, respawnMult: 1000,
+    hpBase: 310, hpPerLevel: 48, dmgBase: 16, dmgPerLevel: 3.4, attackSpeed: 2.4,
+    armorPerLevel: 42, moveSpeed: 6.8, aggroRadius: 16,
+    aoePulse: { min: 30, max: 44, radius: 10, every: 10, name: 'Sealbreak Shockwave', school: 'shadow' },
+    summonAdds: { mobId: 'varkas_boneguard', count: 2, atHpPct: [0.50] },
+    enrage: { belowHpPct: 0.25, dmgMult: 1.45, hasteMult: 1.25 },
+    loot: [
+      { copper: 1200, chance: 1 },
+      { itemId: 'kings_signet', chance: 1, questId: 'q_nythraxis_bound_guardian' },
+    ],
+    scale: 1.35, color: 0xa8b0b8,
   },
   marrowlord_varkas: {
     id: 'marrowlord_varkas', name: 'Marrowlord Varkas', minLevel: 19, maxLevel: 19, family: 'undead', rare: true,
@@ -193,6 +346,8 @@ export const ZONE3_MOBS: Record<string, MobTemplate> = {
     armorPerLevel: 44, moveSpeed: 6.5, aggroRadius: 13,
     aoePulse: { min: 30, max: 42, radius: 11, every: 9, name: 'Marrow Rot', school: 'shadow' },
     summonAdds: { mobId: 'varkas_boneguard', count: 2, atHpPct: [0.66, 0.33] },
+    knockback: { chance: 0.25, distance: 6, name: 'Crushing Sweep' },
+    stoneskin: { amount: 260, every: 14, duration: 8, name: 'Bone Carapace', school: 'shadow' },
     loot: [
       { copper: 650, chance: 1 },
       { itemId: 'bone_fragments', chance: 1 },
@@ -205,8 +360,31 @@ export const ZONE3_MOBS: Record<string, MobTemplate> = {
     id: 'varkas_boneguard', name: 'Varkas Boneguard', minLevel: 18, maxLevel: 19, family: 'undead',
     hpBase: 64, hpPerLevel: 22, dmgBase: 12, dmgPerLevel: 2.8, attackSpeed: 2.3,
     armorPerLevel: 20, moveSpeed: 6.5, aggroRadius: 12,
+    // Shattering Maul: a landed hit can crack the victim's guard, leaving them
+    // taking +18% physical damage from every attacker for 8s.
+    expose: { chance: 0.25, dmgIncrease: 0.18, duration: 8, name: 'Cracked Guard' },
     loot: [],
     scale: 1.0, color: 0xc9c2b5,
+  },
+  // Voskar the Emberwing — a young drake the Wyrmcult chained above the Sanctum
+  // and starved into a weapon. The only dragonkin rare on the peaks: it breathes
+  // fire in a wide cone, and its searing bite leaves wounds that refuse to close.
+  voskar_emberwing: {
+    id: 'voskar_emberwing', name: 'Voskar the Emberwing', minLevel: 19, maxLevel: 19, family: 'dragonkin', rare: true,
+    elite: true, canSwim: true, ccImmune: true, respawnMult: 864,
+    hpBase: 470, hpPerLevel: 78, dmgBase: 22, dmgPerLevel: 4.9, attackSpeed: 2.5,
+    armorPerLevel: 42, moveSpeed: 7, aggroRadius: 13,
+    aoePulse: { min: 30, max: 44, radius: 10, every: 9, name: 'Ember Breath', school: 'fire', fx: 'nova' },
+    // Searing Maw: the drake's molten bite cauterizes flesh shut, blunting healing.
+    mortalStrike: { chance: 0.35, healReduction: 0.5, duration: 8, name: 'Searing Maw', school: 'fire' },
+    enrage: { belowHpPct: 0.3, dmgMult: 1.5, hasteMult: 1.3 },
+    loot: [
+      { copper: 700, chance: 1 },
+      { itemId: 'emberwing_cinderscale', chance: 1 },
+      { itemId: 'emberwing_legguards', chance: 0.25, rollGroup: 'voskar_emberwing_chase' },
+      { itemId: 'emberfang_warblade', chance: 0.25, rollGroup: 'voskar_emberwing_chase' },
+    ],
+    scale: 1.3, color: 0xe8702a,
   },
 };
 
@@ -227,6 +405,8 @@ export const ZONE3_NPCS: Record<string, NpcDef> = {
     questIds: [
       'q_zealots', 'q_cult_orders', 'q_necromancers', 'q_wyrm_sigils', 'q_breaking_the_seal',
       'q_voice_below', 'q_sanctum_gate', 'q_velkhar', 'q_gravewyrm',
+      'q_nythraxis_restless_dead', 'q_nythraxis_graves', 'q_nythraxis_sealed_crypt',
+      'q_nythraxis_bound_guardian',
     ],
     greeting: 'From a chapel yard in the Vale to the roof of the world... the trail we have followed ends here. I can feel the mountain listening.',
   },
@@ -242,6 +422,7 @@ export const ZONE3_NPCS: Record<string, NpcDef> = {
     questIds: ['q_stalker_pelts', 'q_glowing_wax'],
     vendorItems: [
       'trail_hardtack', 'meltwater_flask', 'roast_mountain_goat', 'glacier_melt',
+      'healing_potion', 'mana_potion',
       'highwatch_breastplate', 'peakwool_robe', 'stalkerhide_jerkin', 'cragwalker_boots', 'windguard_leggings',
     ],
     greeting: 'Wool, hardtack, and steel-shod boots — Highwatch runs on all three, and I am short of everything.',
@@ -506,6 +687,56 @@ export const ZONE3_QUESTS: Record<string, QuestDef> = {
     itemRewards: { warrior: 'gravewyrm_scale_hauberk', mage: 'wyrmcult_grand_robe', rogue: 'wyrmscale_jerkin' },
     requiresQuest: 'q_velkhar', minLevel: 18, suggestedPlayers: 5,
   },
+  q_nythraxis_restless_dead: {
+    id: 'q_nythraxis_restless_dead', name: 'Unrest in the Bonefields',
+    giverNpcId: 'brother_aldric_highwatch', turnInNpcId: 'brother_aldric_highwatch',
+    text: 'Something has changed in Thornpeak Heights, $N. The dead no longer wander aimlessly. They gather and march through the northern bonefields beyond Highwatch, where the old battlefield meets the cliff road. Go there, investigate the unrest among the Boneclad Revenants, and bring back any proof of what is driving them.',
+    completionText: 'The same mark appears on every shard... a crown. I have seen this before, cut into old graves no Eastbrook record remembers.',
+    objectives: [{ type: 'collect', itemId: 'runed_bone_shard', count: 10, label: 'Runed Bone Shard' }],
+    xpReward: 4200, copperReward: 2000, itemRewards: {},
+    minLevel: 20,
+  },
+  q_nythraxis_graves: {
+    id: 'q_nythraxis_graves', name: 'Graves of the Forgotten',
+    giverNpcId: 'brother_aldric_highwatch', turnInNpcId: 'brother_aldric_highwatch',
+    text: 'I have seen these marks before, on three old graves around the northern battlefield. Captain Aldren lies on the eastern rise, High Priest Malric near the central broken road, and Royal Assassin Voss by the western cliff. Touch each grave and listen, $N. The dead may remember what the living forgot.',
+    completionText: 'Aldren remained loyal, Malric refused to accept death, and Voss saw the danger before anyone else. All three served the same forgotten king.',
+    objectives: [
+      { type: 'interact', targetObjectItemId: 'grave_sir_aldren', count: 1, label: 'Vision at the Grave of Captain Aldren' },
+      { type: 'interact', targetObjectItemId: 'grave_high_priest_malric', count: 1, label: 'Vision at the Grave of High Priest Malric' },
+      { type: 'interact', targetObjectItemId: 'grave_captain_voss', count: 1, label: 'Vision at the Grave of Royal Assassin Voss' },
+    ],
+    xpReward: 4300, copperReward: 2200, itemRewards: {},
+    requiresQuest: 'q_nythraxis_restless_dead', minLevel: 20,
+  },
+  q_nythraxis_sealed_crypt: {
+    id: 'q_nythraxis_sealed_crypt', name: 'The Abandoned Crypt',
+    giverNpcId: 'brother_aldric_highwatch', turnInNpcId: 'brother_aldric_highwatch',
+    text: 'The visions point to the abandoned crypt in the western cliff. There is an old legend that the crypt housed a king. Perhaps Thornpeak sealed him below after Malric\'s ritual twisted him into something deathless. Enter the crypt and see what remains inside.',
+    completionText: 'The keystone halves fit together, and Voss\'s diary names what they sealed: the signet of King Nythraxis. If the diary is true, that signet is the key to his tomb.',
+    objectives: [
+      { type: 'collect', itemId: 'captains_crest', count: 1, label: 'Crypt Keystone Upper' },
+      { type: 'collect', itemId: 'priests_sigil', count: 1, label: 'Crypt Keystone Lower' },
+      { type: 'collect', itemId: 'royal_seal', count: 1, label: 'Ancient Diary' },
+    ],
+    xpReward: 4600, copperReward: 2500,
+    itemRewards: { warrior: 'crypt_keystone', mage: 'crypt_keystone', rogue: 'crypt_keystone' },
+    requiresQuest: 'q_nythraxis_graves', minLevel: 20,
+  },
+  q_nythraxis_bound_guardian: {
+    id: 'q_nythraxis_bound_guardian', name: 'The Bound Guardian',
+    giverNpcId: 'brother_aldric_highwatch', turnInNpcId: 'brother_aldric_highwatch',
+    text: 'Voss wrote that the survivors sealed the King\'s Signet behind an ancient guardian, so no one could reach the tomb of Nythraxis by accident or ambition. Take the Crypt Keystone to the ritual circle on the flat ground east of the abandoned crypt and south-east of the western grave. Use it there, break the guardian, and bring back the signet.',
+    completionText: 'The three relics tell the same story: Aldren fought to defend his king, Malric broke the boundary of death, and Voss tried to stop what followed. The seal is weakening, and this signet is the key to Nythraxis\'s tomb. You are now attuned to enter The Crypt of Nythraxis.',
+    objectives: [
+      { type: 'interact', targetObjectItemId: 'crypt_ritual_circle', count: 1, label: 'Crypt Keystone used at the ritual circle' },
+      { type: 'kill', targetMobId: 'bound_guardian', count: 1, label: 'The Bound Guardian defeated' },
+      { type: 'collect', itemId: 'kings_signet', count: 1, label: "King's Signet" },
+    ],
+    xpReward: 5200, copperReward: 3500,
+    itemRewards: { warrior: 'kings_signet', mage: 'kings_signet', rogue: 'kings_signet' },
+    requiresQuest: 'q_nythraxis_sealed_crypt', minLevel: 20, suggestedPlayers: 5,
+  },
 };
 
 export const ZONE3_QUEST_ORDER = [
@@ -514,6 +745,8 @@ export const ZONE3_QUEST_ORDER = [
   'q_elementals', 'q_shard_cores', 'q_kazzix', 'q_zealots', 'q_cult_orders',
   'q_necromancers', 'q_revenants', 'q_revenant_vanguard', 'q_wyrm_sigils', 'q_breaking_the_seal',
   'q_voice_below', 'q_sanctum_gate', 'q_korgath', 'q_velkhar', 'q_gravewyrm',
+  'q_nythraxis_restless_dead', 'q_nythraxis_graves', 'q_nythraxis_sealed_crypt',
+  'q_nythraxis_bound_guardian',
 ];
 
 // ---------------------------------------------------------------------------
@@ -524,6 +757,7 @@ export const ZONE3_CAMPS: CampDef[] = [
   // Ridge stalkers: the ridge flanking the road from the pass
   { mobId: 'ridge_stalker', center: { x: -50, z: 590 }, radius: 22, count: 7 },
   { mobId: 'ridge_stalker', center: { x: 45, z: 600 }, radius: 20, count: 6 },
+  { mobId: 'old_cragmaw', center: { x: -82, z: 575 }, radius: 5, count: 1 },
   // Kobolds: Deeprock Burrows, west
   { mobId: 'deeprock_kobold', center: { x: 75, z: 625 }, radius: 18, count: 8 },
   { mobId: 'deeprock_kobold', center: { x: 105, z: 600 }, radius: 14, count: 6 },
@@ -533,6 +767,8 @@ export const ZONE3_CAMPS: CampDef[] = [
   { mobId: 'thornpeak_ogre', center: { x: -60, z: 730 }, radius: 18, count: 6 },
   { mobId: 'ogre_crusher', center: { x: -125, z: 740 }, radius: 18, count: 8 },
   { mobId: 'warlord_drogmar', center: { x: -132, z: 748 }, radius: 2, count: 1 },
+  // A lone rare ogre prowls the ridge north of the warband
+  { mobId: 'brutok_skullsmasher', center: { x: -45, z: 768 }, radius: 4, count: 1 },
   // Elementals: Stormcrag, far west
   { mobId: 'stormcrag_elemental', center: { x: 110, z: 760 }, radius: 20, count: 8 },
   { mobId: 'stormcrag_elemental', center: { x: 135, z: 795 }, radius: 16, count: 6 },
@@ -545,6 +781,10 @@ export const ZONE3_CAMPS: CampDef[] = [
   { mobId: 'boneclad_revenant', center: { x: -40, z: 830 }, radius: 20, count: 8 },
   { mobId: 'boneclad_revenant', center: { x: -15, z: 860 }, radius: 16, count: 6 },
   { mobId: 'marrowlord_varkas', center: { x: -34, z: 842 }, radius: 5, count: 1 },
+  // Voskar the Emberwing: perched on a scorched crag east of the Sanctum tents,
+  // with two zealot drakebinders posted to keep their captive on its chain.
+  { mobId: 'voskar_emberwing', center: { x: 80, z: 845 }, radius: 4, count: 1 },
+  { mobId: 'wyrmcult_zealot', center: { x: 80, z: 845 }, radius: 7, count: 2 },
 ];
 
 export const ZONE3_OBJECTS: GroundObjectDef[] = [
@@ -571,6 +811,26 @@ export const ZONE3_OBJECTS: GroundObjectDef[] = [
     name: 'Sanctum Key Shard',
     positions: [{ x: -6, z: 872 }, { x: -2, z: 876 }, { x: 2, z: 873 }, { x: 6, z: 878 }],
   },
+  {
+    itemId: 'grave_sir_aldren',
+    name: 'Grave of Captain Aldren',
+    positions: [{ x: 138, z: 838 }],
+  },
+  {
+    itemId: 'grave_high_priest_malric',
+    name: 'Grave of High Priest Malric',
+    positions: [{ x: 141, z: 712 }],
+  },
+  {
+    itemId: 'grave_captain_voss',
+    name: 'Grave of Royal Assassin Voss',
+    positions: [{ x: -139, z: 787 }],
+  },
+  {
+    itemId: 'crypt_ritual_circle',
+    name: 'Ritual Circle',
+    positions: [{ x: 68, z: 800 }],
+  },
 ];
 
 // ---------------------------------------------------------------------------
@@ -590,10 +850,27 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
   gravewyrm_sigil: { id: 'gravewyrm_sigil', name: 'Gravewyrm Sigil', kind: 'quest', sellValue: 0, questId: 'q_wyrm_sigils' },
   blessed_embers: { id: 'blessed_embers', name: 'Blessed Embers', kind: 'quest', sellValue: 0, questId: 'q_breaking_the_seal' },
   sanctum_key_shard: { id: 'sanctum_key_shard', name: 'Sanctum Key Shard', kind: 'quest', sellValue: 0, questId: 'q_sanctum_gate' },
+  runed_bone_shard: { id: 'runed_bone_shard', name: 'Runed Bone Shard', kind: 'quest', sellValue: 0, questId: 'q_nythraxis_restless_dead' },
+  grave_sir_aldren: { id: 'grave_sir_aldren', name: 'Grave of Captain Aldren', kind: 'quest', sellValue: 0, questId: 'q_nythraxis_graves' },
+  grave_high_priest_malric: { id: 'grave_high_priest_malric', name: 'Grave of High Priest Malric', kind: 'quest', sellValue: 0, questId: 'q_nythraxis_graves' },
+  grave_captain_voss: { id: 'grave_captain_voss', name: 'Grave of Royal Assassin Voss', kind: 'quest', sellValue: 0, questId: 'q_nythraxis_graves' },
+  ancient_crypt_door: { id: 'ancient_crypt_door', name: 'Ancient Crypt Door', kind: 'quest', sellValue: 0, questId: 'q_nythraxis_sealed_crypt' },
+  captains_crest: { id: 'captains_crest', name: 'Crypt Keystone Upper', kind: 'quest', sellValue: 0, questId: 'q_nythraxis_sealed_crypt' },
+  priests_sigil: { id: 'priests_sigil', name: 'Crypt Keystone Lower', kind: 'quest', sellValue: 0, questId: 'q_nythraxis_sealed_crypt' },
+  royal_seal: { id: 'royal_seal', name: 'Ancient Diary', kind: 'quest', sellValue: 0, questId: 'q_nythraxis_sealed_crypt' },
+  crypt_keystone: { id: 'crypt_keystone', name: 'Crypt Keystone', kind: 'quest', quality: 'uncommon', sellValue: 0, questId: 'q_nythraxis_bound_guardian' },
+  crypt_ritual_circle: { id: 'crypt_ritual_circle', name: 'Ritual Circle', kind: 'quest', sellValue: 0, questId: 'q_nythraxis_bound_guardian' },
+  kings_signet: { id: 'kings_signet', name: "King's Signet", kind: 'quest', quality: 'rare', sellValue: 0, questId: 'q_nythraxis_bound_guardian' },
   // --- quest greens (uncommon) ---
   ridgestalker_treads: {
     id: 'ridgestalker_treads', name: 'Ridgestalker Treads', kind: 'armor', slot: 'feet', quality: 'uncommon',
     stats: { armor: 50, agi: 3, sta: 2 }, sellValue: 600,
+  },
+  // Old Cragmaw's rare drop — a notch above the Ridgestalker Treads. Leather,
+  // so it stays unrestricted by class.
+  cragmaw_prowlboots: {
+    id: 'cragmaw_prowlboots', name: 'Cragmaw Prowlboots', kind: 'armor', slot: 'feet', quality: 'rare',
+    stats: { armor: 58, agi: 5, sta: 3 }, sellValue: 750,
   },
   boneplate_vest: {
     id: 'boneplate_vest', name: 'Boneplate Vest', kind: 'armor', slot: 'chest', quality: 'uncommon',
@@ -635,7 +912,38 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     id: 'marrowlord_boneboots', name: 'Marrowlord Boneboots', kind: 'armor', slot: 'feet', quality: 'uncommon',
     stats: { armor: 90, sta: 5, str: 2 }, sellValue: 1050, requiredClass: ['warrior', 'paladin', 'shaman'],
   },
+  // Brutok Skullsmasher (rare ogre) — guaranteed trophy + warbelt
+  skullsmasher_warbelt: {
+    id: 'skullsmasher_warbelt', name: "Skullsmasher's Warbelt", kind: 'armor', slot: 'chest', quality: 'uncommon',
+    stats: { armor: 96, sta: 5, str: 3 }, sellValue: 1050,
+  },
+  // Voskar the Emberwing drops (rare elite dragonkin)
+  emberwing_cinderscale: {
+    id: 'emberwing_cinderscale', name: 'Emberwing Cinderscale', kind: 'junk', quality: 'common',
+    sellValue: 320,
+  },
+  emberwing_legguards: {
+    id: 'emberwing_legguards', name: 'Emberwing Legguards', kind: 'armor', slot: 'legs', quality: 'rare',
+    stats: { armor: 120, sta: 6, str: 4 }, sellValue: 2200, requiredClass: ['warrior', 'paladin', 'shaman'],
+  },
+  emberfang_warblade: {
+    id: 'emberfang_warblade', name: 'Emberfang Warblade', kind: 'weapon', slot: 'mainhand', quality: 'rare',
+    weapon: { min: 26, max: 41, speed: 2.5 }, stats: { str: 8, sta: 3 }, sellValue: 2400, requiredClass: ['warrior', 'paladin', 'shaman'],
+  },
   // --- quest & dungeon blues (rare) ---
+  // Brutok Skullsmasher chase weapons (mutually exclusive: brutok_chase)
+  brutoks_maul: {
+    id: 'brutoks_maul', name: "Brutok's Maul", kind: 'weapon', slot: 'mainhand', quality: 'rare',
+    weapon: { min: 24, max: 37, speed: 2.7 }, stats: { str: 8, sta: 3 }, sellValue: 2000, requiredClass: ['warrior', 'paladin', 'shaman'],
+  },
+  crag_warden_cudgel: {
+    id: 'crag_warden_cudgel', name: 'Crag Warden Cudgel', kind: 'weapon', slot: 'mainhand', quality: 'rare',
+    weapon: { min: 23, max: 36, speed: 3.0 }, stats: { int: 8, spi: 4 }, sellValue: 2000, requiredClass: ['mage', 'priest', 'warlock', 'druid'],
+  },
+  skullsplitter_dirk: {
+    id: 'skullsplitter_dirk', name: 'Skullsplitter Dirk', kind: 'weapon', slot: 'mainhand', quality: 'rare',
+    weapon: { min: 15, max: 23, speed: 1.7, dagger: true }, stats: { agi: 8, sta: 3 }, sellValue: 2000, requiredClass: ['rogue', 'hunter'],
+  },
   drogmars_skullcleaver: {
     id: 'drogmars_skullcleaver', name: "Drogmar's Skullcleaver", kind: 'weapon', slot: 'mainhand', quality: 'rare',
     weapon: { min: 22, max: 35, speed: 2.6 }, stats: { str: 7, sta: 4 }, sellValue: 2000, requiredClass: ['warrior', 'paladin', 'shaman'],
@@ -741,6 +1049,22 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     id: 'fang_of_korzul', name: 'Fang of Korzul', kind: 'weapon', slot: 'mainhand', quality: 'epic',
     weapon: { min: 19, max: 30, speed: 1.7, dagger: true }, stats: { agi: 11, sta: 5 }, sellValue: 8000, requiredClass: ['rogue', 'hunter'],
   },
+  // --- Inventory 2.0 epics: one per armor archetype, filling the new slots and
+  // named into the existing Deathlord/Necromancer's/Wyrmshadow Korzul epic families.
+  // Budgeted just under the matching chest epic and slot-weighted (head≈1.0,
+  // shoulder≈0.75, gloves≈0.65) so they slot cleanly into each set. ---
+  deathlords_dread_visage: {
+    id: 'deathlords_dread_visage', name: "Deathlord's Dread Visage", kind: 'armor', slot: 'helmet', quality: 'epic',
+    stats: { armor: 245, str: 7, sta: 9 }, sellValue: 9000, requiredClass: ['warrior', 'paladin', 'shaman'],
+  },
+  necromancers_soulspire_mantle: {
+    id: 'necromancers_soulspire_mantle', name: "Necromancer's Soulspire Mantle", kind: 'armor', slot: 'shoulder', quality: 'epic',
+    stats: { armor: 70, int: 11, spi: 6 }, sellValue: 9000, requiredClass: ['mage', 'priest', 'warlock', 'druid'],
+  },
+  wyrmshadow_talongrips: {
+    id: 'wyrmshadow_talongrips', name: 'Wyrmshadow Talongrips', kind: 'armor', slot: 'gloves', quality: 'epic',
+    stats: { armor: 110, agi: 10, sta: 5 }, sellValue: 9000, requiredClass: ['rogue', 'hunter'],
+  },
   // --- vendor food & drink (Quartermaster Bree) ---
   trail_hardtack: {
     id: 'trail_hardtack', name: 'Highwatch Trail Hardtack', kind: 'food', quality: 'common',
@@ -793,6 +1117,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
   },
   // --- junk (gray) ---
   ogre_toe_ring: { id: 'ogre_toe_ring', name: 'Ogre Toe Ring', kind: 'junk', quality: 'poor', sellValue: 25 },
+  cracked_ogre_tusk: { id: 'cracked_ogre_tusk', name: 'Cracked Ogre Tusk', kind: 'junk', quality: 'poor', sellValue: 42 },
   inert_storm_shard: { id: 'inert_storm_shard', name: 'Inert Storm Shard', kind: 'junk', quality: 'poor', sellValue: 28 },
   frayed_prayer_beads: { id: 'frayed_prayer_beads', name: 'Frayed Prayer Beads', kind: 'junk', quality: 'poor', sellValue: 30 },
   cracked_wyrm_scale: { id: 'cracked_wyrm_scale', name: 'Cracked Wyrm Scale', kind: 'junk', quality: 'poor', sellValue: 35 },
@@ -816,7 +1141,10 @@ export const ZONE3_PROPS: ZonePropsDef = {
     { x: -7.5, z: 667, rot: Math.PI / 2, r: 1.7 },   // Quartermaster Bree
     { x: -4.5, z: 673.5, rot: -0.6, r: 1.7 },        // Armorer Hode
   ],
-  mines: [{ x: 88, z: 612, rot: -2.0 }],             // Deeprock Burrows
+  mines: [
+    { x: 88, z: 612, rot: -2.0 },                    // Deeprock Burrows
+    { x: -152, z: 610, rot: Math.PI / 2 },           // Abandoned crypt entrance
+  ],
   docks: [],
   tents: [
     // Drogmar's war-camp
@@ -834,6 +1162,9 @@ export const ZONE3_PROPS: ZonePropsDef = {
   mudHuts: [],
   ruinRings: [
     { x: -40, z: 830, ringR: 7, columns: 6 },        // Revenant Fields battlefield
+    { x: 141, z: 712, ringR: 7, columns: 6 },        // Malric grave ruins
+    { x: 138, z: 838, ringR: 7, columns: 6 },        // Aldren grave ruins
+    { x: -139, z: 787, ringR: 7, columns: 6 },       // Royal Assassin Voss grave ruins
     { x: -12, z: 862, ringR: 6, columns: 5 },        // Sanctum Approach ruins
     { x: 12, z: 858, ringR: 6, columns: 5 },
   ],
@@ -841,5 +1172,10 @@ export const ZONE3_PROPS: ZonePropsDef = {
     { x1: -14, z1: 649, x2: -4, z2: 647 },           // south gate, east run
     { x1: 4, z1: 647, x2: 14, z2: 649 },             // south gate, west run
   ],
-  graveyards: [{ x: 15, z: 645 }],
+  graveyards: [
+    { x: 15, z: 645 },
+    { x: 141, z: 712 },
+    { x: 138, z: 838 },
+    { x: -139, z: 787 },
+  ],
 };

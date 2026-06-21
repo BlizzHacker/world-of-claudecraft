@@ -4208,7 +4208,11 @@ function formatNumber(value: number, lang: SupportedLanguage): string {
 }
 
 function formatPercent(value: number, lang: SupportedLanguage): string {
-  return `${formatNumber(Math.abs(value) * 100, lang)}%`;
+  // Intl percent style applies the locale's percent spacing/placement (e.g. fr/de/es/ru
+  // render "5 %" with a no-break space, en/it/CJK render "5%"). `value` is a fraction, so
+  // pass it directly rather than pre-multiplying and appending a raw "%". Mirrors the HUD
+  // settings percent renderer in hud.ts.
+  return new Intl.NumberFormat(languageTag(lang), { style: 'percent', maximumFractionDigits: 1 }).format(Math.abs(value));
 }
 
 function statAmount(stat: StatKey, value: number, lang: SupportedLanguage): string {

@@ -1,0 +1,153 @@
+// i18n source catalog - in-game HUD chrome strings that were previously hard-coded
+// at their call sites (emote wheel/editor, swing timer, rest indicator, mobile
+// controls, minimap/compass/clock widgets, DPS/HPS meters formatting). English
+// values only; the 13 locale translations live in src/ui/i18n.locales/<lang>.ts
+// (the runtime-authoritative overlays), filled by the maintainer at release.
+//
+// Assembled into `en` by ./index.ts under the `hudChrome` namespace. Kept as its
+// own module (no per-locale blocks) so new chrome keys are an English-only add.
+
+export const hudChromeStrings = {
+  // Overhead emote display names (wheel tooltips/labels, editor items, overhead
+  // bubble text). Source ids/order mirror OVERHEAD_EMOTES in world_api.ts.
+  emotes: {
+    wave: "Wave",
+    laugh: "LOL",
+    question: "Bro?",
+    cheer: "Cheer",
+    dance: "Dance",
+    point: "Point",
+    flex: "Flex",
+    salute: "Salute",
+    cry: "Cry",
+    bow: "Bow",
+    clap: "Clap",
+    roar: "Roar",
+    kneel: "Kneel",
+  },
+  emoteWheel: {
+    edit: "Edit",
+    label: "Emotes",
+  },
+  emoteEditor: {
+    title: "Emotes",
+    done: "Done",
+  },
+  chatTimestamps: {
+    show: "Show Chat Timestamps",
+    format: "Timestamp Format",
+    clock12h: "12-hour",
+    clock24h: "24-hour",
+    note: "Prefixes each new chat line with the time it arrived, e.g. [14:32]. Only affects messages received while the option is on.",
+  },
+  swing: {
+    ready: "Swing",
+    seconds: "{seconds}s",
+  },
+  rest: {
+    resting: "Resting",
+  },
+  // On-screen / mobile control labels and their accessible names. char/bags/music
+  // reuse existing keys (hud.keybinds.actions.*, hud.options.music) at the call site.
+  mobile: {
+    autorun: "Autorun",
+    jump: "Jump",
+    leaderboard: "Ranks",
+    nameplates: "Names",
+    haptics: "Haptics",
+    hapticsOff: "Haptics Off",
+    toggleHaptics: "Toggle haptics",
+  },
+  // Minimap / compass / clock / coordinate widget tooltips and accessible names.
+  widgets: {
+    clockTitle: "Local time - click to toggle 12/24-hour",
+    worldCoordinates: "World coordinates",
+    coordinates: "Coordinates",
+    heading: "Heading",
+    minimapZoom: "Minimap zoom",
+  },
+  // Eight-point compass abbreviations as drawn on the heading strip. Each locale
+  // overrides with its own established compass abbreviations (e.g. West = "O" in
+  // Spanish, "O" in French/Italian/Portuguese, "З" in Russian).
+  compass: {
+    N: "N",
+    NE: "NE",
+    E: "E",
+    SE: "SE",
+    S: "S",
+    SW: "SW",
+    W: "W",
+    NW: "NW",
+  },
+  // DPS/HPS/threat meter number + unit formatting (the digits themselves go
+  // through formatNumber; these carry the localizable unit/parenthesization).
+  meters: {
+    perSecond: "{value}/s",
+    perSecondRow: "{total} ({rate})",
+    minutesSeconds: "{m}m {s}s",
+    seconds: "{s}s",
+  },
+  // Key Bindings panel action labels that the in-file BIND_ACTION_LABEL_KEYS map
+  // (hud.ts) routes through t(). Kept here (not the constrained `hud` catalog
+  // domain) so they are an English-only add.
+  keybinds: {
+    emoteWheel: "Emote Wheel",
+    targetFriendly: "Target Nearest Friendly",
+    targetFriendlyNext: "Cycle Friendly Target",
+  },
+  // Click-to-move mouse-button toggle labels (Key Bindings panel). The button id
+  // 0/2 maps to these at the HUD render boundary.
+  options: {
+    clickMoveLeft: "Left Click",
+    clickMoveRight: "Right Click",
+    // Audio panel toggle for the per-footfall step clips (off by default).
+    footstepSounds: "Footstep Sounds",
+    showWalletOnCharacterScreen: "Show Wallet on Character Screen",
+    showWalletOnPlayerCard: "Show Wallet on Player Card",
+  },
+  playerCard: {
+    showWalletBadge: "Show wallet badge",
+  },
+  // Default name pre-filled into the Save-Build-As dialog, e.g. "Build 3".
+  talents: {
+    defaultBuildName: "Build {n}",
+  },
+  // One-off chat-log tips shown at HUD bootstrap. The /join command tokens stay
+  // literal (they are commands); the surrounding prose localizes.
+  tips: {
+    joinChannels: "Tip: type /join world or /join lfg to chat with players across the realm.",
+  },
+  // CLDR-categorized count strings resolved through tPlural(base, count) in
+  // src/ui/i18n.ts: it selects the active locale's cardinal category (one / few /
+  // many / other) via Intl.PluralRules and looks up the matching leaf, so e.g.
+  // Russian renders the correct 1 / 2-4 / 5+ form instead of a binary one/other.
+  // English only ever selects `one`/`other`; `few`/`many` mirror `other` here and
+  // carry the real distinct forms only in the locales that need them (ru_RU). The
+  // count is auto-supplied as {count}. Keep all four categories present per base.
+  plurals: {
+    guildMembers: {
+      one: "you are {rank}, {count} member",
+      few: "you are {rank}, {count} members",
+      many: "you are {rank}, {count} members",
+      other: "you are {rank}, {count} members",
+    },
+    characterCount: {
+      one: "{count} character",
+      few: "{count} characters",
+      many: "{count} characters",
+      other: "{count} characters",
+    },
+    secondsRemaining: {
+      one: "{count} second remaining",
+      few: "{count} seconds remaining",
+      many: "{count} seconds remaining",
+      other: "{count} seconds remaining",
+    },
+    playersOnline: {
+      one: "Who: {count} player online on {realm}.",
+      few: "Who: {count} players online on {realm}.",
+      many: "Who: {count} players online on {realm}.",
+      other: "Who: {count} players online on {realm}.",
+    },
+  },
+};

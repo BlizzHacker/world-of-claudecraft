@@ -16,6 +16,7 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
+import { assertDeterministic } from "./helpers/i18n_determinism";
 import { en as adminEn } from "../src/admin/i18n.en";
 import { es } from "../src/admin/i18n.locales/es";
 import { es_ES } from "../src/admin/i18n.locales/es_ES";
@@ -114,11 +115,20 @@ describe("admin bundle stays separate from the game client", () => {
     expect(files.some((f) => f.startsWith("i18n.locales/")), "overlays must be scanned").toBe(true);
     const offenders: string[] = [];
     for (const f of files) {
+      const fileDir = path.dirname(path.join(adminDir, f));
       const src = fs.readFileSync(path.join(adminDir, f), "utf8");
       for (const m of src.matchAll(/\bfrom\s+["']([^"']+)["']/g)) {
         const spec = m[1];
-        // Bare specifiers (node/npm) are fine; a relative escape out of src/admin/ is not.
-        if (spec.startsWith("..")) offenders.push(`${f}: ${spec}`);
+        // Bare specifiers (node/npm) are fine. A relative import is an offender only
+        // if it RESOLVES outside src/admin/ - resolve against the importing file's
+        // own directory so a within-tree `../i18n.en` from the per-locale split dir
+        // (i18n.resolved.generated/, the per-locale emit split) is allowed, but a
+        // `../ui/...` escape into the game locale table is still caught.
+        if (!spec.startsWith(".")) continue;
+        const resolved = path.resolve(fileDir, spec);
+        if (resolved !== adminDir && !resolved.startsWith(adminDir + path.sep)) {
+          offenders.push(`${f}: ${spec}`);
+        }
       }
     }
     expect(offenders, "admin must import only its own modules (src/ CLAUDE.md)").toEqual([]);
@@ -157,7 +167,10 @@ describe("admin.html data-i18n keys are all real admin en keys", () => {
 
 // --- The generated dense admin table is committed + reproducible -----------------
 describe("admin resolved table reproducibility", () => {
-  const generatedRel = "src/admin/i18n.resolved.generated.ts";
+  // The admin resolved table is a generated DIRECTORY of per-locale modules + a
+  // barrel (the per-locale emit split), not a single file. A directory pathspec makes
+  // both git checks cover every slice.
+  const generatedRel = "src/admin/i18n.resolved.generated";
 
   it("is committed (tracked by git) so the diff check below is meaningful", () => {
     expect(() =>
@@ -165,10 +178,22 @@ describe("admin resolved table reproducibility", () => {
     ).not.toThrow();
   });
 
-  it("regenerating src/admin/i18n.resolved.generated.ts leaves the committed file byte-identical", () => {
-    execFileSync("node", [path.join(root, "scripts/i18n_admin_build.mjs")], { cwd: root, encoding: "utf8" });
+  it("regenerating src/admin/i18n.resolved.generated/ leaves the committed directory byte-identical", () => {
+    execFileSync(process.execPath, [path.join(root, "scripts/i18n_admin_build.mjs")], { cwd: root, encoding: "utf8" });
     expect(() =>
       execFileSync("git", ["diff", "--exit-code", "--", generatedRel], { cwd: root, encoding: "utf8" }),
+    ).not.toThrow();
+  });
+
+  it("regenerates byte-identically across two perturbed-env runs (determinism)", () => {
+    // Parity with the game generator's determinism gate (tests/i18n_resolved_equivalence.test.ts).
+    // The committed-dir `git diff` above only surfaces a hidden TZ / locale / output-path dependency
+    // if it happens to manifest on the CI host's own env; this double-generates the whole emitted
+    // tree into two throwaway temp dirs under PERTURBED TZ / LC_ALL / temp-path and asserts byte
+    // identity, so an intrinsic non-determinism in the admin generator surfaces regardless of CI env.
+    // outFiles omitted => the whole emitted tree (every per-locale slice + barrel) is compared.
+    expect(() =>
+      assertDeterministic({ script: path.join(root, "scripts/i18n_admin_build.mjs") }),
     ).not.toThrow();
   });
 });

@@ -18,6 +18,12 @@ export interface BindAction {
   category: string;
   kind: BindKind;
   defaults: string[]; // 1 or 2 codes; index 0 = primary, 1 = secondary
+  // When true this action is exempt from the WoW-style "one code per action"
+  // uniqueness sweep: its code may deliberately overlap another action's. Used
+  // by Attack Move, whose default (A) intentionally shadows Turn Left while the
+  // setting is on, so they can share a key without either stealing it from the
+  // other on save/load.
+  allowShared?: boolean;
 }
 
 export const ACTION_BAR_SLOTS = 12; // slot 0 is Attack, 1..11 the ability bar
@@ -40,6 +46,9 @@ export const BIND_ACTIONS: BindAction[] = [
   { id: 'targetFriendly', label: 'Target Nearest Friendly', category: 'Targeting', kind: 'edge', defaults: ['KeyH'] },
   { id: 'targetFriendlyNext', label: 'Cycle Friendly Target', category: 'Targeting', kind: 'edge', defaults: ['KeyJ'] },
   { id: 'interact', label: 'Interact / Loot', category: 'Targeting', kind: 'edge', defaults: ['KeyF'] },
+  // Only acts while the Attack Move setting is on; shares its default key with
+  // Turn Left intentionally, and only that key is reserved while active.
+  { id: 'attackMove', label: 'Attack Move', category: 'Targeting', kind: 'edge', defaults: ['KeyA'], allowShared: true },
   // Interface windows
   { id: 'char', label: 'Character', category: 'Interface', kind: 'edge', defaults: ['KeyC'] },
   { id: 'spellbook', label: 'Spellbook', category: 'Interface', kind: 'edge', defaults: ['KeyP'] },
@@ -71,6 +80,11 @@ const SLOTS_PER_ACTION = 2; // primary + secondary
 
 export function actionKind(id: string): BindKind | null {
   return ACTION_BY_ID.get(id)?.kind ?? null;
+}
+
+// Actions exempt from the one-code-per-action uniqueness sweep (see BindAction).
+export function actionAllowsShared(id: string): boolean {
+  return ACTION_BY_ID.get(id)?.allowShared === true;
 }
 
 export function isReservedCode(code: string): boolean {
@@ -129,11 +143,14 @@ export class Keybinds {
       const entry = obj[a.id];
       if (!Array.isArray(entry)) continue; // missing action: keep its default
       const slots: (string | null)[] = [null, null];
+      const shared = actionAllowsShared(a.id);
       for (let i = 0; i < SLOTS_PER_ACTION; i++) {
         const v = entry[i];
-        if (typeof v === 'string' && !claimed.has(v) && !isReservedCode(v)) {
+        // Shared actions keep their code even if another action already claimed
+        // it, and never claim it themselves, so the overlap survives a round-trip.
+        if (typeof v === 'string' && !isReservedCode(v) && (shared || !claimed.has(v))) {
           slots[i] = v;
-          claimed.add(v);
+          if (!shared) claimed.add(v);
         }
       }
       this.map.set(a.id, slots);
@@ -143,6 +160,7 @@ export class Keybinds {
     // actions (preserving the WoW-style uniqueness invariant).
     for (const a of BIND_ACTIONS) {
       if (Array.isArray(obj[a.id])) continue;
+      if (actionAllowsShared(a.id)) continue; // keep its (intentionally shared) default
       const slots = this.map.get(a.id)!;
       for (let i = 0; i < slots.length; i++) {
         const c = slots[i];
@@ -195,9 +213,14 @@ export class Keybinds {
     const codes = this.map.get(id);
     if (!codes || index < 0 || index >= SLOTS_PER_ACTION) return false;
     if (isReservedCode(code)) return false;
-    for (const [otherId, otherCodes] of this.map) {
-      for (let i = 0; i < otherCodes.length; i++) {
-        if (otherCodes[i] === code && !(otherId === id && i === index)) otherCodes[i] = null;
+    // A shared action (or rebinding one) is allowed to overlap, so skip the
+    // mutual-eviction sweep whenever either side opts into sharing.
+    if (!actionAllowsShared(id)) {
+      for (const [otherId, otherCodes] of this.map) {
+        if (actionAllowsShared(otherId)) continue;
+        for (let i = 0; i < otherCodes.length; i++) {
+          if (otherCodes[i] === code && !(otherId === id && i === index)) otherCodes[i] = null;
+        }
       }
     }
     codes[index] = code;

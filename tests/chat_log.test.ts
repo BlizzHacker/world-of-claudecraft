@@ -6,6 +6,8 @@ vi.mock('../server/db', () => ({
   saveCharacterState: vi.fn(async () => {}),
   openPlaySession: vi.fn(async () => 1),
   closePlaySession: vi.fn(async () => {}),
+  markAccountQuestComplete: vi.fn(async () => ({ completedQuestIds: [], mechChromaIds: [] })),
+  grantAccountMechChroma: vi.fn(async () => ({ completedQuestIds: [], mechChromaIds: [] })),
 }));
 
 import { ChatLogger, type ChatLogRow } from '../server/chat_log';

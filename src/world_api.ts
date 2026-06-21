@@ -1,4 +1,4 @@
-import { OVERHEAD_EMOTE_IDS, type ArenaCombatant, type ArenaFormat, type Entity, type EquipSlot, type InvSlot, type MoveInput, type OverheadEmoteId, type PetMode, type PlayerClass, type QuestProgress, type QuestState, type ResourceType } from './sim/types';
+import { OVERHEAD_EMOTE_IDS, type ArenaCombatant, type ArenaFormat, type ArenaStanding, type Entity, type EquipSlot, type InvSlot, type MoveInput, type OverheadEmoteId, type PetMode, type PlayerClass, type QuestProgress, type QuestState, type ResourceType } from './sim/types';
 import type { ResolvedAbility } from './sim/sim';
 import type { TalentAllocation, SavedLoadout, Role } from './sim/content/talents';
 
@@ -120,7 +120,7 @@ export interface LeaderboardEntry {
   realm?: string; // present on the global (cross-realm) home-page board
 }
 
-export type { ArenaFormat, ArenaCombatant };
+export type { ArenaFormat, ArenaCombatant, ArenaStanding };
 
 export interface ArenaLadderEntry {
   pid: number;
@@ -131,10 +131,60 @@ export interface ArenaLadderEntry {
   losses: number;
 }
 
+// Live 2v2 Fiesta state for the local player, polled by the HUD each frame.
+export interface FiestaAugmentOffer {
+  tier: 'silver' | 'gold' | 'prismatic';
+  wave: number;
+  choices: string[]; // augment ids; localized + described client-side
+}
+// One combatant's line on the scoreboard.
+export interface FiestaScoreboardPlayer {
+  pid: number;
+  name: string;
+  cls: PlayerClass;
+  kills: number;
+  down: boolean; // currently benched, awaiting respawn
+  me: boolean;
+}
+
+// A ring power-up as the renderer/HUD sees it.
+export interface FiestaPowerupView {
+  id: number;
+  defId: string; // POWERUPS id (localized client-side)
+  x: number;
+  z: number;
+  state: 'spawning' | 'ready';
+  frac: number; // spawning: telegraph progress 0..1; ready: lifetime remaining 0..1
+  color: number; // orb/telegraph colour (hex)
+}
+
+export interface FiestaMatchInfo {
+  team: 'A' | 'B';
+  scoreA: number;
+  scoreB: number;
+  myScore: number; // my team's tally
+  theirScore: number;
+  scoreLimit: number;
+  wave: number;
+  totalWaves: number;
+  // hazard ring, in WORLD coordinates so the renderer can draw it directly
+  ring: { cx: number; cz: number; radius: number };
+  down: boolean; // am I currently benched, awaiting respawn
+  respawnIn: number; // whole seconds until I revive (0 if alive)
+  augments: string[]; // augment ids I have locked in this bout
+  offer: FiestaAugmentOffer | null; // a pending pick, if any
+  augmentPending: number; // queued offers awaiting my next death (indicator)
+  teamA: FiestaScoreboardPlayer[];
+  teamB: FiestaScoreboardPlayer[];
+  powerups: FiestaPowerupView[];
+}
+
 export interface ArenaInfo {
+  // Backwards-compatible view of the currently selected/queued/matched bracket.
   rating: number;
   wins: number;
   losses: number;
+  standings: Record<ArenaFormat, ArenaStanding>;
   format: ArenaFormat | null;
   queued: boolean;
   queueSize: number;
@@ -149,9 +199,13 @@ export interface ArenaInfo {
     allies: ArenaCombatant[];
     enemies: ArenaCombatant[];
     returnIn?: number; // whole seconds left in the post-bout aftermath ('over')
+    // present only for the 2v2 Fiesta party mode
+    fiesta?: FiestaMatchInfo;
   } | null;
-  // live standings of rated players currently online, best first
+  // Backwards-compatible live ladder for the currently selected bracket.
   ladder: ArenaLadderEntry[];
+  // live standings of rated players currently online, best first, by bracket
+  ladders: Record<ArenaFormat, ArenaLadderEntry[]>;
 }
 
 // ---------------------------------------------------------------------------
@@ -172,11 +226,18 @@ export interface MarketListingView {
 
 export interface MarketInfo {
   listings: MarketListingView[];
+  totalCount: number; // listings matching the active filter, before the wire cap
+  filter: string; // the active browse filter (echoed back from the server)
   collectionCopper: number; // proceeds waiting to be collected
   collectionItems: InvSlot[]; // returned/expired items waiting to be collected
   cutPct: number; // the Merchant's cut on a sale, as a percentage
   maxListings: number; // per-seller active-listing cap
   myListingCount: number; // how many active listings the viewer already has
+}
+
+export interface AccountCosmetics {
+  completedQuestIds: string[];
+  mechChromaIds: string[];
 }
 
 // The surface the renderer + HUD need from a game world. The offline `Sim`
@@ -191,6 +252,7 @@ export interface IWorld {
   inventory: InvSlot[];
   vendorBuyback: InvSlot[];
   equipment: Partial<Record<EquipSlot, string>>;
+  accountCosmetics: AccountCosmetics;
   copper: number;
   xp: number;
   // Post-cap progression (Max-Level XP Overflow). All server-authoritative;
@@ -198,6 +260,8 @@ export interface IWorld {
   lifetimeXp: number;
   prestigeRank: number;
   unlockedMilestones: string[];
+  // Classic Rested XP pool (inn-rested kill-XP bonus); 0 when not rested.
+  restedXp: number;
   known: ResolvedAbility[];
   questLog: Map<string, QuestProgress>;
   questsDone: Set<string>;
@@ -222,7 +286,12 @@ export interface IWorld {
   buyItem(npcId: number, itemId: string): void;
   sellItem(itemId: string, count?: number): void;
   buyBackItem(itemId: string): void;
-  changeSkin(skin: number): void;
+  changeSkin(skin: number, catalog?: 'class' | 'mech'): void;
+  // Lock in a skin from the cosmetic skin-select event overlay. The server
+  // re-validates the choice against the rank it rolled (skinEvent) and consumes
+  // the event token; the offline Sim resolves it directly.
+  claimEventSkin(skin: number): void;
+  unequipMechChroma(chromaId: string): void;
   releaseSpirit(): void;
   chat(text: string): void;
   playEmote(emoteId: OverheadEmoteId): void;
@@ -279,7 +348,10 @@ export interface IWorld {
   searchCharacters(query: string): Promise<CharacterSearchResult[]>;
   arenaQueueJoin(format?: ArenaFormat): void;
   arenaQueueLeave(): void;
+  // 2v2 Fiesta: lock in one of the augments currently on offer
+  arenaAugmentPick(augmentId: string): void;
   // World Market
+  marketSearch(query: string): void;
   marketList(itemId: string, count: number, price: number): void;
   marketBuy(listingId: number): void;
   marketCancel(listingId: number): void;

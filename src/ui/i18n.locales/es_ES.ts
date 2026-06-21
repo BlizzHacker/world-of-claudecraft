@@ -8,11 +8,11 @@
 // path (tests/i18n_overlay_key_membership.test.ts + the byte gate). Keys are in `en`'s
 // leaf order.
 
-import type { TranslationKey } from '../i18n.en';
+import type { TranslationKey } from '../i18n.catalog';
 
 export const es_ES: Partial<Record<TranslationKey, string>> = {
+  "hudChrome.emotes.question": "¿Tío?",
   "nav.loginRegister": "Iniciar sesión/Registrarse",
-  "stats.accountsCreated": "Cuentas creadas",
   "stats.playersOnline": "Jugadores en línea",
   "stats.realmName": "Nombre del reino",
   "footer.githubLabel": "Proyecto de código abierto",

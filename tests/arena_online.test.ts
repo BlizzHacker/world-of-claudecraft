@@ -8,6 +8,8 @@ vi.mock('../server/db', () => ({
   insertChatLogs: vi.fn(async () => {}),
   loadMarketState: vi.fn(async () => ({ listings: [], collections: new Map() })),
   saveMarketState: vi.fn(async () => {}),
+  markAccountQuestComplete: vi.fn(async () => ({ completedQuestIds: [], mechChromaIds: [] })),
+  grantAccountMechChroma: vi.fn(async () => ({ completedQuestIds: [], mechChromaIds: [] })),
 }));
 
 import { GameServer, ClientSession } from '../server/game';
@@ -105,6 +107,9 @@ describe('arena: online integration (GameServer)', () => {
       expect(snap.self.arena.match.format).toBe('2v2');
       expect(snap.self.arena.match.enemies).toHaveLength(2);
       expect(snap.self.arena.match.allies).toHaveLength(1);
+      expect(snap.self.arena.standings['1v1'].rating).toBe(1500);
+      expect(snap.self.arena.standings['2v2'].rating).toBe(1500);
+      expect(snap.self.arena.ladder).toEqual(snap.self.arena.ladders['2v2']);
       // wire payload must be JSON-clean (no Map/Set leaks)
       expect(() => JSON.stringify(snap.self.arena)).not.toThrow();
       const found = eventsOf(clients[i], 'arenaFound');
@@ -163,5 +168,6 @@ describe('arena: online integration (GameServer)', () => {
     expect(snapA.self.arena.match.format).toBe('1v1');
     expect(snapA.self.arena.match.enemies).toHaveLength(1);
     expect(snapA.self.arena.match.allies).toHaveLength(0);
+    expect(snapA.self.arena.ladder).toEqual(snapA.self.arena.ladders['1v1']);
   });
 });

@@ -38,6 +38,19 @@ function resolveRealmType(raw: string | undefined): RealmType {
 // This process's own realm type (used for the single-realm default directory).
 export const REALM_TYPE: RealmType = resolveRealmType(process.env.REALM_TYPE);
 
+export function resolvePublicOrigin(rawOrigin: string | undefined): string {
+  const trimmed = (rawOrigin ?? '').trim().replace(/\/+$/, '');
+  if (!trimmed) return '';
+  try {
+    const url = new URL(trimmed);
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') return '';
+    if (url.username || url.password || url.pathname !== '/' || url.search || url.hash) return '';
+    return url.origin;
+  } catch {
+    return '';
+  }
+}
+
 export interface RealmEntry {
   name: string;
   // origin a client should connect to for this realm (e.g.
@@ -68,9 +81,9 @@ function parseRealms(raw: string | undefined): RealmEntry[] {
     // dedup dropped all but one. Just sanity-check it's non-empty.
     const name = fields[0];
     if (!name) continue;
-    let url = fields[1];
-    if (url && !/^https?:\/\/[^/]+$/.test(url.replace(/\/+$/, ''))) continue; // must be a bare origin
-    url = url.replace(/\/+$/, '');
+    const rawUrl = fields[1];
+    const url = resolvePublicOrigin(rawUrl);
+    if (rawUrl && !url) continue; // must be a bare origin
     if (out.some((e) => e.name === name)) continue;
     out.push({ name, url, type: resolveRealmType(fields[2]) });
   }
@@ -104,3 +117,10 @@ export const REALM_ORIGINS: ReadonlySet<string> = new Set([
   ...REALM_DIRECTORY.map((r) => r.url).filter(Boolean),
   ...parseWebOrigins(process.env.WEB_ORIGINS),
 ]);
+
+export function publicOriginForRealm(realm: string, directory: readonly RealmEntry[]): string {
+  return directory.find((entry) => entry.name === realm && entry.url)?.url ?? '';
+}
+
+export const CONFIGURED_PUBLIC_ORIGIN = resolvePublicOrigin(process.env.PUBLIC_ORIGIN);
+export const REALM_PUBLIC_ORIGIN = CONFIGURED_PUBLIC_ORIGIN || publicOriginForRealm(REALM, REALM_DIRECTORY);

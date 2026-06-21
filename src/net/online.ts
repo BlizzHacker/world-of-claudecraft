@@ -7,12 +7,18 @@ import {
   cloneAllocation, computeTalentModifiers, emptyAllocation, talentPointsAtLevel, pointsSpent,
   type TalentAllocation, type SavedLoadout, type Role,
 } from '../sim/content/talents';
+import { mechChromaItemId, mechChromaSkinIndex } from '../sim/content/skins';
 import {
   Entity, EquipSlot, InvSlot, MoveInput, PlayerClass, QuestProgress, QuestState, SimEvent,
   emptyMoveInput,
 } from '../sim/types';
 import { normalizeMoveFacing, sanitizeMoveInput } from '../sim/move_input';
-import { isOverheadEmoteId, type ArenaInfo, type CharacterSearchResult, type DuelInfo, type FriendInfo, type IWorld, type LeaderboardEntry, type MarketInfo, type OverheadEmoteId, type PartyInfo, type PresenceStatus, type SocialInfo, type TradeInfo } from '../world_api';
+import {
+  isOverheadEmoteId,
+  type AccountCosmetics, type ArenaInfo, type CharacterSearchResult, type DuelInfo, type FriendInfo,
+  type IWorld, type LeaderboardEntry, type MarketInfo, type OverheadEmoteId, type PartyInfo,
+  type PresenceStatus, type SocialInfo, type TradeInfo,
+} from '../world_api';
 
 // ---------------------------------------------------------------------------
 // REST
@@ -26,6 +32,18 @@ export interface CharacterSummary {
   skin: number;
   online: boolean;
   forceRename: boolean;
+}
+
+function stringList(value: unknown): string[] {
+  return Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : [];
+}
+
+function normalizeAccountCosmetics(value: unknown): AccountCosmetics {
+  const src = value && typeof value === 'object' ? value as Record<string, unknown> : {};
+  return {
+    completedQuestIds: stringList(src.completedQuestIds),
+    mechChromaIds: stringList(src.mechChromaIds),
+  };
 }
 
 export function buildWebSocketUrl(protocol: string, host: string): string {
@@ -145,8 +163,8 @@ export class Api {
     return data;
   }
 
-  async register(username: string, password: string, turnstileToken = ''): Promise<void> {
-    const data = await this.post('/api/register', { username, password, turnstileToken });
+  async register(username: string, password: string, turnstileToken = '', ref = ''): Promise<void> {
+    const data = await this.post('/api/register', { username, password, turnstileToken, ref });
     this.token = data.token;
     this.username = data.username;
   }
@@ -209,6 +227,70 @@ export class Api {
       return [];
     }
   }
+
+  // ── Non-custodial Solana wallet linking ───────────────────────────────────
+  // Step 1: ask the server for the exact message to sign for this address.
+  async walletLinkChallenge(address: string): Promise<{ nonce: string; message: string }> {
+    return this.post('/api/wallet/link/challenge', { address });
+  }
+
+  // Step 2: submit the wallet's signature; server verifies + persists the link.
+  async linkWallet(address: string, signature: string, nonce: string): Promise<{ pubkey: string }> {
+    return this.post('/api/wallet/link', { address, signature, nonce });
+  }
+
+  // Current account's linked wallet (null when none).
+  async linkedWallet(): Promise<{ pubkey: string; linkedAt: string } | null> {
+    const data = await this.get('/api/wallet');
+    return data.wallet ?? null;
+  }
+
+  async unlinkWallet(): Promise<void> {
+    await this.delete('/api/wallet/link', {});
+  }
+
+  // ── Shareable player card + referrals ──────────────────────────────────────
+  // Publish (or replace) this character's card PNG. The server may return a
+  // realm-relative public page path; main.ts normalizes it to an absolute URL
+  // before injecting it into the share UI.
+  // The body is the raw PNG, so this bypasses the JSON `post` helper.
+  async uploadCard(characterId: number, png: Blob, lang = 'en'): Promise<{ url: string }> {
+    const params = new URLSearchParams({ character: String(characterId), lang });
+    const res = await fetch(`${this.base}/api/card?${params.toString()}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'image/png',
+        ...(this.token ? { Authorization: `Bearer ${this.token}` } : {}),
+      },
+      body: png,
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error ?? `card upload failed (${res.status})`);
+    return { url: data.url };
+  }
+
+  // The account's referral count + published-card slug (null before first
+  // publish). Best-effort: returns zeros rather than throwing on error.
+  async referralStats(): Promise<{ count: number; slug: string | null }> {
+    try {
+      const data = await this.get('/api/referrals');
+      return { count: data.count ?? 0, slug: data.slug ?? null };
+    } catch {
+      return { count: 0, slug: null };
+    }
+  }
+
+  // A character's realm standing by lifetime XP (rank 1 = highest), for the
+  // card's "Top N%" flex. Best-effort: null on error so the card still renders.
+  async characterStanding(characterId: number): Promise<{ rank: number; total: number } | null> {
+    try {
+      const data = await this.get(`/api/characters/${characterId}/standing`);
+      if (typeof data.rank === 'number' && typeof data.total === 'number') return { rank: data.rank, total: data.total };
+      return null;
+    } catch {
+      return null;
+    }
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -234,9 +316,9 @@ const TELEPORT_SNAP_DIST_SQ = 40 * 40;
 
 function blankEntity(id: number): Entity {
   return {
-    id, kind: 'mob', templateId: '', name: '', level: 1, mendTimer: 0,
+    id, kind: 'mob', templateId: '', name: '', level: 1, mendTimer: 0, wardTimer: 0, rallyTimer: 0, warcryTimer: 0,
     pos: { x: 0, y: 0, z: 0 }, prevPos: { x: 0, y: 0, z: 0 }, facing: 0, prevFacing: 0,
-    vx: 0, vz: 0, vy: 0, onGround: true, fallStartY: 0,
+    vx: 0, vz: 0, vy: 0, onGround: true, jumping: false, fallStartY: 0,
     hp: 1, maxHp: 1, resource: 0, maxResource: 0, resourceType: null,
     overheadEmoteId: null, overheadEmoteUntil: 0, overheadEmoteSeq: 0,
     stats: { str: 0, agi: 0, sta: 0, int: 0, spi: 0, armor: 0 },
@@ -250,12 +332,12 @@ function blankEntity(id: number): Entity {
     comboPoints: 0, comboTargetId: null, overpowerUntil: -1, potionCooldownUntil: -1, savedMana: 0,
     chargeTargetId: null, chargeTimeLeft: 0, chargePath: [], followTargetId: null,
     sitting: false, eating: null, drinking: null,
-    aiState: 'idle', tappedById: null, pulseTimer: 0, stompTimer: 0, detonateTimer: Infinity, firedSummons: 0, summonedIds: [], enraged: false, healedThisPull: false,
+    aiState: 'idle', tappedById: null, pulseTimer: 0, stompTimer: 0, stoneskinTimer: 0, terrifyTimer: 0, detonateTimer: Infinity, firedSummons: 0, summonedIds: [], enraged: false, healedThisPull: false,
     threat: new Map(), forcedTargetId: null, forcedTargetTimer: 0, ownerId: null, petMode: 'defensive', petTauntTimer: 0,
-    spawnPos: { x: 0, y: 0, z: 0 }, leashAnchor: null, evadeStall: 0, fleeTimer: 0, hasFled: false, wanderTarget: null, wanderTimer: 0,
+    spawnPos: { x: 0, y: 0, z: 0 }, leashAnchor: null, evadeStall: 0, fleeTimer: 0, fleeReturnTimer: 0, hasFled: false, wanderTarget: null, wanderTimer: 0,
     aggroTargetId: null, respawnTimer: 0, corpseTimer: 0, lootable: false, loot: null,
     xpValue: 0, questIds: [], vendorItems: [], objectItemId: null, dungeonId: null,
-    dead: false, scale: 1, color: 0xffffff, skin: 0,
+    dead: false, scale: 1, color: 0xffffff, skinCatalog: 'class', skin: 0,
   };
 }
 
@@ -267,11 +349,14 @@ export class ClientWorld implements IWorld {
   inventory: InvSlot[] = [];
   vendorBuyback: InvSlot[] = [];
   equipment: Partial<Record<EquipSlot, string>> = {};
+  accountCosmetics: AccountCosmetics = { completedQuestIds: [], mechChromaIds: [] };
   copper = 0;
   xp = 0;
   // Post-cap progression (Max-Level XP Overflow), mirrored from snapshot self.
   lifetimeXp = 0;
   prestigeRank = 0;
+  // Rested XP pool, mirrored from snapshot self.
+  restedXp = 0;
   unlockedMilestones: string[] = [];
   known: ResolvedAbility[] = [];
   // Talents & Specializations, mirrored from snapshot self (display + staging).
@@ -308,6 +393,7 @@ export class ClientWorld implements IWorld {
   // inventory deltas arrive in snapshots, separate from the event frames the
   // HUD redraws on — the frame loop polls this so open panels re-render
   private invChanged = false;
+  private cosmeticsChanged = false;
   // Soft (cosmetic) profanity terms the server sends in `hello` and pushes via
   // `censor` frames when an admin edits the list. The HUD drains these to mask
   // chat locally when the player's filter is on. Hard words never arrive here.
@@ -563,9 +649,13 @@ export class ClientWorld implements IWorld {
         e.name = w.nm;
         e.level = w.lv;
         e.skin = w.sk ?? 0;
+        e.skinCatalog = w.cat === 'mech' ? 'mech' : 'class';
+        e.holderTier = w.ht ?? 0; // $WOC holder-tier flair (cosmetic, server-set)
+        e.holderBalance = typeof w.hb === 'number' ? w.hb : undefined; // exact $WOC, for inspect
         e.scale = w.sc ?? 1;
         e.color = w.c ?? 0xffffff;
         e.dungeonId = w.dgn ?? null;
+        e.objectItemId = w.obj ?? null;
         if (e.kind === 'npc') {
           const def = NPCS[e.templateId];
           e.questIds = def ? [...def.questIds] : [];
@@ -682,6 +772,7 @@ export class ClientWorld implements IWorld {
       e.comboTargetId = s.comboTgt ?? null;
       e.targetId = s.target ?? null;
       e.autoAttack = !!s.auto;
+      e.swingTimer = s.swing ?? e.swingTimer;
       e.queuedOnSwing = s.queued ?? null;
       e.stats = s.stats ?? e.stats;
       e.attackPower = s.ap ?? 0;
@@ -696,12 +787,17 @@ export class ClientWorld implements IWorld {
         : null;
       this.xp = s.xp ?? 0;
       this.lifetimeXp = s.lxp ?? 0;
+      this.restedXp = s.rxp ?? 0;
       this.prestigeRank = s.prk ?? 0;
       if (s.milestones !== undefined) this.unlockedMilestones = s.milestones;
       this.copper = s.copper ?? 0;
       if (s.inv !== undefined) { this.inventory = s.inv; this.invChanged = true; }
       if (s.buyback !== undefined) { this.vendorBuyback = s.buyback; this.invChanged = true; }
       if (s.equip !== undefined) this.equipment = s.equip;
+      if (s.cosmetics !== undefined) {
+        this.accountCosmetics = normalizeAccountCosmetics(s.cosmetics);
+        this.cosmeticsChanged = true;
+      }
       if (s.qlog !== undefined) this.questLog = new Map((s.qlog as QuestProgress[]).map((q) => [q.questId, q]));
       if (s.qdone !== undefined) this.questsDone = new Set(s.qdone);
       if (s.qlog !== undefined || s.qdone !== undefined) this.pendingQuestCommands?.clear();
@@ -753,6 +849,12 @@ export class ClientWorld implements IWorld {
   consumeInventoryChanged(): boolean {
     const v = this.invChanged;
     this.invChanged = false;
+    return v;
+  }
+
+  consumeCosmeticsChanged(): boolean {
+    const v = this.cosmeticsChanged;
+    this.cosmeticsChanged = false;
     return v;
   }
 
@@ -829,11 +931,44 @@ export class ClientWorld implements IWorld {
   buyBackItem(itemId: string): void {
     this.cmd({ cmd: 'buyback', item: itemId });
   }
-  changeSkin(skin: number): void {
-    const idx = Math.max(0, Math.min(7, Math.floor(skin)));
+  changeSkin(skin: number, catalog: 'class' | 'mech' = 'class'): void {
+    const idx = catalog === 'mech'
+      ? Math.max(0, Math.floor(skin))
+      : Math.max(0, Math.min(7, Math.floor(skin)));
     const p = this.entities.get(this.playerId);
-    if (p) p.skin = idx;
-    this.cmd({ cmd: 'change_skin', skin: idx });
+    if (p) {
+      p.skin = idx;
+      p.skinCatalog = catalog;
+    }
+    this.cmd({ cmd: 'change_skin', skin: idx, catalog });
+  }
+  claimEventSkin(skin: number): void {
+    const idx = Math.max(0, Math.floor(skin));
+    this.cmd({ cmd: 'claim_event_skin', skin: idx });
+  }
+  unequipMechChroma(chromaId: string): void {
+    const itemId = mechChromaItemId(chromaId);
+    const skin = mechChromaSkinIndex(chromaId);
+    if (itemId && skin >= 0 && this.accountCosmetics.mechChromaIds.includes(chromaId)) {
+      this.accountCosmetics = {
+        ...this.accountCosmetics,
+        mechChromaIds: this.accountCosmetics.mechChromaIds.filter((id) => id !== chromaId),
+      };
+      const current = this.entities.get(this.playerId);
+      if (current?.skinCatalog === 'mech' && current.skin === skin) {
+        current.skin = 0;
+        current.skinCatalog = 'class';
+      }
+      const existing = this.inventory.find((slot) => slot.itemId === itemId);
+      this.inventory = existing
+        ? this.inventory.map((slot) => (
+          slot.itemId === itemId ? { ...slot, count: slot.count + 1 } : slot
+        ))
+        : [...this.inventory, { itemId, count: 1 }];
+      this.invChanged = true;
+      this.cosmeticsChanged = true;
+    }
+    this.cmd({ cmd: 'unequip_mech_chroma', chroma: chromaId });
   }
   releaseSpirit(): void {
     this.cmd({ cmd: 'release' });
@@ -954,6 +1089,12 @@ export class ClientWorld implements IWorld {
   }
   arenaQueueLeave(): void {
     this.cmd({ cmd: 'arena_leave' });
+  }
+  arenaAugmentPick(augmentId: string): void {
+    this.cmd({ cmd: 'arena_augment', augment: augmentId });
+  }
+  marketSearch(query: string): void {
+    this.cmd({ cmd: 'market_search', q: query });
   }
   marketList(itemId: string, count: number, price: number): void {
     this.cmd({ cmd: 'market_list', item: itemId, count, price });

@@ -19,6 +19,7 @@ import { sharedUniforms } from './gfx';
 import { instanceOrigin } from '../sim/data';
 import {
   ARENA_LAYOUT, CRYPT_LAYOUT, SANCTUM_LAYOUT, TEMPLE_LAYOUT, DUNGEON_WALL_X, TOMB_HD,
+  DUNGEON_END_WALL_HW, DUNGEON_WALL_HEIGHT, DUNGEON_WALL_HW,
   DungeonLayout, GridPoint, WallStub,
 } from '../sim/dungeon_layout';
 
@@ -236,12 +237,48 @@ class Placements {
   }
 }
 
+interface ToggleMat {
+  mat: THREE.Material;
+  depthWrite: boolean;
+}
+
+interface ArenaWallFootprint {
+  x: number;
+  z: number;
+  hw: number;
+  hd: number;
+  topY: number;
+}
+
+interface PendingArenaWall {
+  placements: Placements;
+  footprint: ArenaWallFootprint;
+}
+
+interface PendingArenaWalls {
+  left: PendingArenaWall;
+  right: PendingArenaWall;
+  front: PendingArenaWall;
+  back: PendingArenaWall;
+  all: PendingArenaWall[];
+}
+
+interface ArenaHideable {
+  group: THREE.Group;
+  mats: ToggleMat[];
+  hidden: boolean;
+  footprint: ArenaWallFootprint;
+}
+
 // kinds that throw shadows from the outdoor sun shaft (point lights don't
 // cast); floors + dais receive
 const CASTER_KINDS = new Set([
   'pillar', 'pillar_decorated', 'coffin', 'coffin_decorated', 'crates_stacked', 'box_stacked',
   'barrel_large', 'keg', 'chest', 'chest_gold', 'shrine', 'shrine_candles', 'grave_B',
   'gravestone', 'table_long_broken', 'trunk_large_A', 'arch', 'barrel_small_stack',
+]);
+const ARENA_WALL_CASTER_KINDS = new Set([
+  'wall', 'wall_cracked', 'wall_pillar', 'wall_arched', 'wall_archedwindow_gated', 'wall_gated',
 ]);
 const RECEIVER_KINDS = new Set([
   'floor_tile_large', 'floor_tile_large_rocks', 'floor_dirt_large', 'floor_dirt_large_rocky',
@@ -259,6 +296,68 @@ export function scaleUv(geo: THREE.BufferGeometry, su: number, sv: number): THRE
   return geo;
 }
 
+function pointInsideArenaWall(f: ArenaWallFootprint, x: number, z: number): boolean {
+  return Math.abs(x - f.x) < f.hw && Math.abs(z - f.z) < f.hd;
+}
+
+function segmentArenaWallEntry(
+  f: ArenaWallFootprint,
+  ax: number, az: number,
+  bx: number, bz: number,
+): number {
+  if (pointInsideArenaWall(f, ax, az)) return 0;
+  const lax = ax - f.x;
+  const laz = az - f.z;
+  const lbx = bx - f.x;
+  const lbz = bz - f.z;
+  const dx = lbx - lax;
+  const dz = lbz - laz;
+  let tmin = -Infinity;
+  let tmax = Infinity;
+  if (Math.abs(dx) < 1e-9) {
+    if (lax < -f.hw || lax > f.hw) return Infinity;
+  } else {
+    let t1 = (-f.hw - lax) / dx;
+    let t2 = (f.hw - lax) / dx;
+    if (t1 > t2) {
+      const tmp = t1;
+      t1 = t2;
+      t2 = tmp;
+    }
+    tmin = Math.max(tmin, t1);
+    tmax = Math.min(tmax, t2);
+  }
+  if (Math.abs(dz) < 1e-9) {
+    if (laz < -f.hd || laz > f.hd) return Infinity;
+  } else {
+    let t1 = (-f.hd - laz) / dz;
+    let t2 = (f.hd - laz) / dz;
+    if (t1 > t2) {
+      const tmp = t1;
+      t1 = t2;
+      t2 = tmp;
+    }
+    tmin = Math.max(tmin, t1);
+    tmax = Math.min(tmax, t2);
+  }
+  if (tmax < tmin || tmax < 0) return Infinity;
+  return tmin;
+}
+
+function arenaWallSegmentHits(
+  f: ArenaWallFootprint,
+  eyeX: number, eyeY: number, eyeZ: number,
+  camX: number, camY: number, camZ: number,
+): boolean {
+  if ((eyeY < f.topY && pointInsideArenaWall(f, eyeX, eyeZ))
+    || (camY < f.topY && pointInsideArenaWall(f, camX, camZ))) {
+    return true;
+  }
+  const t = segmentArenaWallEntry(f, eyeX, eyeZ, camX, camZ);
+  if (t < 0 || t > 1) return false;
+  return eyeY + (camY - eyeY) * t < f.topY;
+}
+
 export class DungeonInteriors {
   private glowDecalGeo: THREE.BufferGeometry | null = null;
   private glowDecalTex: THREE.Texture | null = null;
@@ -266,6 +365,7 @@ export class DungeonInteriors {
   private flameGeo: THREE.BufferGeometry | null = null;
   private packMats = new Map<Pack, THREE.Material>();
   private waterMat: THREE.ShaderMaterial | null = null;
+  private arenaHideables: ArenaHideable[] = [];
 
   constructor(
     private scene: THREE.Scene,
@@ -282,23 +382,42 @@ export class DungeonInteriors {
     const variant = this.variantFor(interior, ox);
     const group = new THREE.Group();
     const p = new Placements();
+    const arenaWalls = variant === 'arena' ? this.pendingArenaWalls(layout, ox, oz) : undefined;
 
     this.placeFloor(p, layout, variant);
-    this.placeWalls(p, layout, variant);
+    this.placeWalls(p, layout, variant, arenaWalls);
     this.placePillarsAndTorches(group, p, layout, variant);
     this.placeTombs(p, layout, variant);
     this.placeStubs(p, layout.stubs, variant);
     this.placeDais(group, p, layout, variant);
     this.placeAisleClutter(p, layout, variant);
-    this.placeWallDressing(p, layout, variant);
+    this.placeWallDressing(p, layout, variant, arenaWalls);
     if (variant === 'temple') {
       this.placeFloodwater(group, layout);
       this.placeAquaticDressing(group, layout);
     }
 
     this.emit(group, p);
+    if (arenaWalls) {
+      for (const wall of arenaWalls.all) this.emitArenaHideable(group, wall);
+    }
     group.position.set(ox, 0, oz);
     this.scene.add(group);
+  }
+
+  update(
+    camX: number, camY: number, camZ: number,
+    eyeX: number, eyeY: number, eyeZ: number,
+  ): void {
+    for (const h of this.arenaHideables) {
+      const hide = arenaWallSegmentHits(h.footprint, eyeX, eyeY, eyeZ, camX, camY, camZ);
+      if (hide === h.hidden) continue;
+      h.hidden = hide;
+      for (const m of h.mats) {
+        m.mat.colorWrite = !hide;
+        m.mat.depthWrite = hide ? false : m.depthWrite;
+      }
+    }
   }
 
   // -------------------------------------------------------------------------
@@ -411,7 +530,8 @@ export class DungeonInteriors {
     if (interior === 'sanctum') return 'sanctum';
     if (interior === 'temple') return 'temple';
     const bastionX = instanceOrigin(1, 0).x;
-    return ox >= (instanceOrigin(0, 0).x + bastionX) / 2 ? 'bastion' : 'crypt';
+    if (Math.abs(ox - bastionX) < 250) return 'bastion';
+    return 'crypt';
   }
 
   private material(pack: Pack): THREE.Material {
@@ -449,6 +569,54 @@ export class DungeonInteriors {
       mesh.receiveShadow = RECEIVER_KINDS.has(kind);
       group.add(mesh);
     }
+  }
+
+  private pendingArenaWalls(layout: DungeonLayout, ox: number, oz: number): PendingArenaWalls {
+    const topY = DUNGEON_WALL_HEIGHT;
+    const wall = (footprint: ArenaWallFootprint): PendingArenaWall => ({
+      placements: new Placements(),
+      footprint,
+    });
+    const left = wall({ x: ox - DUNGEON_WALL_X, z: oz + layout.sideWallZ, hw: DUNGEON_WALL_HW, hd: layout.sideWallHd, topY });
+    const right = wall({ x: ox + DUNGEON_WALL_X, z: oz + layout.sideWallZ, hw: DUNGEON_WALL_HW, hd: layout.sideWallHd, topY });
+    const front = wall({ x: ox, z: oz + layout.zMin, hw: DUNGEON_END_WALL_HW, hd: DUNGEON_WALL_HW, topY });
+    const back = wall({ x: ox, z: oz + layout.zMax, hw: DUNGEON_END_WALL_HW, hd: DUNGEON_WALL_HW, topY });
+    return {
+      left,
+      right,
+      front,
+      back,
+      all: [left, right, front, back],
+    };
+  }
+
+  private emitArenaHideable(group: THREE.Group, pending: PendingArenaWall): void {
+    const wallGroup = new THREE.Group();
+    const mats: ToggleMat[] = [];
+    for (const [kind, matrices] of pending.placements.byKind) {
+      const asset = moduleAssets.get(kind);
+      if (!asset) {
+        console.warn(`dungeon: unknown arena wall module kind '${kind}'`);
+        continue;
+      }
+      const material = this.material(asset.pack).clone();
+      mats.push({ mat: material, depthWrite: material.depthWrite });
+      const mesh = new THREE.InstancedMesh(asset.geo, material, matrices.length);
+      for (let i = 0; i < matrices.length; i++) mesh.setMatrixAt(i, matrices[i]);
+      mesh.instanceMatrix.needsUpdate = true;
+      mesh.computeBoundingSphere();
+      mesh.castShadow = !this.lowGfx && (CASTER_KINDS.has(kind) || ARENA_WALL_CASTER_KINDS.has(kind));
+      mesh.receiveShadow = RECEIVER_KINDS.has(kind);
+      wallGroup.add(mesh);
+    }
+    if (!mats.length) return;
+    group.add(wallGroup);
+    this.arenaHideables.push({
+      group: wallGroup,
+      mats,
+      hidden: false,
+      footprint: pending.footprint,
+    });
   }
 
   // -------------------------------------------------------------------------
@@ -574,28 +742,36 @@ export class DungeonInteriors {
 
   // Side walls run along z at |x| = DUNGEON_WALL_X (8u modules at scale 2,
   // 2u thick: matches the hw=1 collider slabs); end walls run along x.
-  private placeWalls(p: Placements, layout: DungeonLayout, variant: Variant): void {
+  private placeWalls(
+    p: Placements,
+    layout: DungeonLayout,
+    variant: Variant,
+    arenaWalls?: PendingArenaWalls,
+  ): void {
     const bannerEvery = variant === 'crypt' ? 4 : 3;
     for (const side of [-1, 1]) {
+      const target = arenaWalls ? (side < 0 ? arenaWalls.left.placements : arenaWalls.right.placements) : p;
       const ry = side < 0 ? Math.PI / 2 : -Math.PI / 2; // detail + banners face the room
       let i = 0;
       for (let z = layout.zMin; z <= layout.zMax + 2; z += 8, i++) {
         const kind = this.wallKind(variant, hash2(side * 13.7, z));
-        p.add(kind, side * DUNGEON_WALL_X, 0, z, ry, MODULE_SCALE);
+        target.add(kind, side * DUNGEON_WALL_X, 0, z, ry, MODULE_SCALE);
         if (i % bannerEvery === 2 && kind !== 'wall_archedwindow_gated') {
-          p.add(this.bannerKind(variant, hash2(z, side * 7.3)), side * DUNGEON_WALL_X, 0, z, ry, MODULE_SCALE);
+          target.add(this.bannerKind(variant, hash2(z, side * 7.3)), side * DUNGEON_WALL_X, 0, z, ry, MODULE_SCALE);
         }
       }
     }
     for (const end of [{ z: layout.zMin, ry: 0 }, { z: layout.zMax, ry: Math.PI }]) {
+      const target = arenaWalls ? (end.z === layout.zMin ? arenaWalls.front.placements : arenaWalls.back.placements) : p;
       for (let x = -20; x <= 20; x += 8) {
         const kind = this.wallKind(variant, hash2(x, end.z * 3.1));
-        p.add(kind, x, 0, end.z, end.ry, MODULE_SCALE);
+        target.add(kind, x, 0, end.z, end.ry, MODULE_SCALE);
       }
     }
     // back wall banners flank the boss dais
+    const backTarget = arenaWalls?.back.placements ?? p;
     for (const bx of [-12, -4, 4, 12]) {
-      p.add(this.bannerKind(variant, hash2(bx, layout.zMax)), bx, 0, layout.zMax, Math.PI, MODULE_SCALE);
+      backTarget.add(this.bannerKind(variant, hash2(bx, layout.zMax)), bx, 0, layout.zMax, Math.PI, MODULE_SCALE);
     }
   }
 
@@ -783,13 +959,19 @@ export class DungeonInteriors {
   }
 
   // Variant-specific dressing hugging the walls (outside the walkable aisle)
-  private placeWallDressing(p: Placements, layout: DungeonLayout, variant: Variant): void {
+  private placeWallDressing(
+    p: Placements,
+    layout: DungeonLayout,
+    variant: Variant,
+    arenaWalls?: PendingArenaWalls,
+  ): void {
     if (variant === 'arena') {
       // gladiatorial weapon trophies mounted high on the pit's side walls
       for (const z of [layout.zMin + 9, (layout.zMin + layout.zMax) / 2, layout.zMax - 9]) {
         for (const side of [-1, 1]) {
+          const target = arenaWalls ? (side < 0 ? arenaWalls.left.placements : arenaWalls.right.placements) : p;
           const kind = hash2(side * 4.2, z) < 0.5 ? 'sword_shield' : 'sword_shield_broken';
-          p.add(kind, side * (DUNGEON_WALL_X - 1.1), 4.4, z, side < 0 ? Math.PI / 2 : -Math.PI / 2, 1.7);
+          target.add(kind, side * (DUNGEON_WALL_X - 1.1), 4.4, z, side < 0 ? Math.PI / 2 : -Math.PI / 2, 1.7);
         }
       }
       return;

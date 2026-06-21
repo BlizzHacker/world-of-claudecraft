@@ -41,6 +41,10 @@ export const GROUND_PICKUP_LINES: Record<string, GroundPickupLines> = {
     deny: 'The ward stone will not budge.',
     enough: 'You already have the Bastion ward stone.',
   },
+  unknown_alien_weaponry: {
+    deny: 'The meteor debris is too hot to handle without Aldric expecting it.',
+    enough: 'You already recovered enough alien wreckage.',
+  },
   highwatch_summons: {
     deny: 'The summons are sealed with Highwatch wax.',
     enough: 'You already have the Highwatch summons.',
@@ -60,6 +64,22 @@ export const GROUND_PICKUP_LINES: Record<string, GroundPickupLines> = {
   moongate_rubbing: {
     deny: 'The warding is not yours to copy until the watcher asks for it.',
     enough: 'You already have the warding rubbing.',
+  },
+  grave_sir_aldren: {
+    deny: 'The grave is sealed against the living until the dead call you to it.',
+    enough: "You have already taken what Captain Aldren's grave will give.",
+  },
+  grave_high_priest_malric: {
+    deny: 'The grave is sealed against the living until the dead call you to it.',
+    enough: "You have already taken what High Priest Malric's grave will give.",
+  },
+  grave_captain_voss: {
+    deny: 'The grave is sealed against the living until the dead call you to it.',
+    enough: "You have already taken what Royal Assassin Voss's grave will give.",
+  },
+  crypt_ritual_circle: {
+    deny: 'The ritual circle lies cold and dormant.',
+    enough: 'The circle has nothing more to give you.',
   },
 };
 

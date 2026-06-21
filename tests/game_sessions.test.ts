@@ -1,7 +1,11 @@
 import { describe, expect, it, vi } from 'vitest';
+import { MECH_CHROMAS } from '../src/sim/content/skins';
 
 const openPlaySession = vi.fn(async () => 1);
 const closePlaySession = vi.fn(async () => {});
+const markAccountQuestComplete = vi.fn(async (_accountId: number, questId: string) => ({ completedQuestIds: [questId], mechChromaIds: [] }));
+const grantAccountMechChroma = vi.fn(async (_accountId: number, chromaId: string) => ({ completedQuestIds: [], mechChromaIds: [chromaId] }));
+const revokeAccountMechChroma = vi.fn(async (_accountId: number, _chromaId: string) => ({ completedQuestIds: [], mechChromaIds: [] }));
 
 vi.mock('../server/db', () => ({
   pool: { query: vi.fn(async () => ({ rows: [] })) },
@@ -9,9 +13,13 @@ vi.mock('../server/db', () => ({
   openPlaySession: (...args: unknown[]) => openPlaySession(...(args as [])),
   closePlaySession: (...args: unknown[]) => closePlaySession(...(args as [])),
   insertChatLogs: vi.fn(async () => {}),
+  markAccountQuestComplete: (...args: unknown[]) => markAccountQuestComplete(...(args as [number, string])),
+  grantAccountMechChroma: (...args: unknown[]) => grantAccountMechChroma(...(args as [number, string])),
+  revokeAccountMechChroma: (...args: unknown[]) => revokeAccountMechChroma(...(args as [number, string])),
 }));
 
 import { GameServer, type ClientSession } from '../server/game';
+import { saveCharacterState } from '../server/db';
 
 function fakeWs() {
   return {
@@ -26,7 +34,104 @@ function expectJoined(result: ClientSession | { error: string }): ClientSession 
   return result;
 }
 
+const SOFT = 5; // MAX_WS_PER_IP_SOFT default
+const hasMultiIp = (s: ClientSession) => s.bot.evidence.some(e => e.kind === 'multi_ip');
+
 describe('GameServer sessions', () => {
+  it('applies account-wide quest lockouts when a character joins', () => {
+    const server = new GameServer();
+    const session = expectJoined(server.join(
+      fakeWs(),
+      11,
+      101,
+      'Lockedout',
+      'warrior',
+      null,
+      false,
+      { accountCosmetics: { completedQuestIds: ['q_aldrics_fallen_star'], mechChromaIds: [] } },
+    ));
+
+    expect(server.sim.questState('q_aldrics_fallen_star', session.pid)).toBe('done');
+    expect(server.sim.meta(session.pid)?.questsDone.has('q_aldrics_fallen_star')).toBe(true);
+  });
+
+  it('marks Aldric quest completion account-wide when a character turns it in', () => {
+    markAccountQuestComplete.mockClear();
+    const server = new GameServer();
+    const session = expectJoined(server.join(fakeWs(), 11, 101, 'Aldricdone', 'warrior', null));
+    const meta = server.sim.meta(session.pid)!;
+    const player = server.sim.entities.get(session.pid)!;
+    const aldric = [...server.sim.entities.values()].find((e) => e.kind === 'npc' && e.templateId === 'brother_aldric_fen')!;
+    const pos = server.sim.groundPos(aldric.pos.x + 1, aldric.pos.z);
+    player.pos = { ...pos };
+    player.prevPos = { ...pos };
+    meta.questLog.set('q_aldrics_fallen_star', { questId: 'q_aldrics_fallen_star', counts: [1], state: 'ready' });
+    server.sim.addItem('unknown_alien_weaponry', 1, session.pid);
+
+    server.handleMessage(session, JSON.stringify({ t: 'cmd', cmd: 'turnin', quest: 'q_aldrics_fallen_star' }));
+
+    expect(markAccountQuestComplete).toHaveBeenCalledWith(11, 'q_aldrics_fallen_star');
+    expect(session.accountCosmetics.completedQuestIds).toContain('q_aldrics_fallen_star');
+    expect(server.sim.meta(session.pid)?.questsDone.has('q_aldrics_fallen_star')).toBe(true);
+  });
+
+  it('stores the mech chroma on the account after claiming from the Aldric spinner item', () => {
+    grantAccountMechChroma.mockClear();
+    const server = new GameServer();
+    const session = expectJoined(server.join(fakeWs(), 11, 101, 'Mechclaim', 'mage', null));
+    const choice = MECH_CHROMAS.findIndex((chroma) => chroma.id === 'amber_crimson');
+    expect(choice).toBeGreaterThanOrEqual(0);
+    server.sim.addItem('alien_armor_plate', 1, session.pid);
+
+    server.handleMessage(session, JSON.stringify({ t: 'cmd', cmd: 'use', item: 'alien_armor_plate' }));
+
+    expect(grantAccountMechChroma).not.toHaveBeenCalled();
+    expect(session.accountCosmetics.mechChromaIds).not.toContain(MECH_CHROMAS[choice].id);
+    expect(server.sim.countItem('alien_armor_plate', session.pid)).toBe(1);
+    expect(server.sim.entities.get(session.pid)?.skinCatalog).not.toBe('mech');
+
+    server.handleMessage(session, JSON.stringify({ t: 'cmd', cmd: 'claim_event_skin', skin: choice }));
+
+    expect(grantAccountMechChroma).toHaveBeenCalledWith(11, MECH_CHROMAS[choice].id);
+    expect(session.accountCosmetics.mechChromaIds).toContain(MECH_CHROMAS[choice].id);
+    expect(server.sim.countItem('alien_armor_plate', session.pid)).toBe(0);
+    expect(server.sim.entities.get(session.pid)?.skinCatalog).toBe('mech');
+  });
+
+  it('equips a live mech appearance only when the account owns the chroma', () => {
+    const server = new GameServer();
+    const allowed = expectJoined(server.join(fakeWs(), 11, 101, 'Mechwearer', 'shaman', null, false, {
+      accountCosmetics: { completedQuestIds: [], mechChromaIds: ['amber_crimson'] },
+    }));
+    const blocked = expectJoined(server.join(fakeWs(), 12, 102, 'Blockedmech', 'shaman', null));
+
+    server.handleMessage(allowed, JSON.stringify({ t: 'cmd', cmd: 'change_skin', skin: 0, catalog: 'mech' }));
+    server.handleMessage(blocked, JSON.stringify({ t: 'cmd', cmd: 'change_skin', skin: 0, catalog: 'mech' }));
+
+    expect(server.sim.entities.get(allowed.pid)?.skinCatalog).toBe('mech');
+    expect(server.sim.entities.get(blocked.pid)?.skinCatalog).not.toBe('mech');
+  });
+
+  it('unequips a mech chroma from every live character on the account and returns its item', () => {
+    revokeAccountMechChroma.mockClear();
+    const server = new GameServer();
+    const cosmetics = { completedQuestIds: [], mechChromaIds: ['amber_crimson'] };
+    const first = expectJoined(server.join(fakeWs(), 11, 101, 'Mechone', 'shaman', null, false, { accountCosmetics: cosmetics }));
+    const second = expectJoined(server.join(fakeWs(), 11, 102, 'Mechtwo', 'mage', null, false, { accountCosmetics: cosmetics }));
+
+    server.handleMessage(first, JSON.stringify({ t: 'cmd', cmd: 'change_skin', skin: 0, catalog: 'mech' }));
+    server.handleMessage(second, JSON.stringify({ t: 'cmd', cmd: 'change_skin', skin: 0, catalog: 'mech' }));
+    server.handleMessage(first, JSON.stringify({ t: 'cmd', cmd: 'unequip_mech_chroma', chroma: 'amber_crimson' }));
+
+    expect(revokeAccountMechChroma).toHaveBeenCalledWith(11, 'amber_crimson');
+    expect(first.accountCosmetics.mechChromaIds).not.toContain('amber_crimson');
+    expect(second.accountCosmetics.mechChromaIds).not.toContain('amber_crimson');
+    expect(server.sim.entities.get(first.pid)?.skinCatalog).toBe('class');
+    expect(server.sim.entities.get(second.pid)?.skinCatalog).toBe('class');
+    expect(server.sim.countItem('amber_crimson_armor_plate', first.pid)).toBe(1);
+    expect(server.sim.countItem('amber_crimson_armor_plate', second.pid)).toBe(0);
+  });
+
   it('keeps the character-id session index coherent across join, duplicate join, leave, and rejoin', async () => {
     const server = new GameServer();
     const first = expectJoined(server.join(fakeWs(), 11, 101, 'Indexa', 'warrior', null));
@@ -45,6 +150,97 @@ describe('GameServer sessions', () => {
 
     const rejoined = expectJoined(server.join(fakeWs(), 13, 101, 'Indexa', 'warrior', null));
     expect((server as any).sessionByCharacterId(101)).toBe(rejoined);
+  });
+
+  it('blocks a fast relog until the disconnect save releases the character id', async () => {
+    const server = new GameServer();
+    const first = expectJoined(server.join(fakeWs(), 11, 101, 'Indexa', 'warrior', null));
+
+    let resolveSave!: () => void;
+    const slowSave = new Promise<void>((resolve) => { resolveSave = resolve; });
+    vi.mocked(saveCharacterState).mockImplementationOnce(() => slowSave);
+
+    const leaving = server.leave(first, 'test');
+    await vi.waitFor(() => {
+      expect(saveCharacterState).toHaveBeenCalled();
+    });
+
+    expect((server as any).sessionByCharacterId(101)).toBe(first);
+    expect(server.join(fakeWs(), 13, 101, 'Indexa', 'warrior', null)).toEqual({
+      error: 'character already in world',
+    });
+
+    resolveSave();
+    await leaving;
+
+    expect((server as any).sessionByCharacterId(101)).toBeNull();
+    const rejoined = expectJoined(server.join(fakeWs(), 13, 101, 'Indexa', 'warrior', null));
+    expect((server as any).sessionByCharacterId(101)).toBe(rejoined);
+  });
+
+  it('retries failed disconnect saves before releasing the character for rejoin', async () => {
+    vi.useFakeTimers();
+    vi.mocked(saveCharacterState).mockReset();
+    vi.mocked(saveCharacterState)
+      .mockRejectedValueOnce(new Error('temporary database outage'))
+      .mockRejectedValueOnce(new Error('temporary database outage'))
+      .mockResolvedValueOnce(undefined);
+
+    try {
+      const server = new GameServer();
+      const session = expectJoined(server.join(fakeWs(), 11, 101, 'Indexa', 'warrior', null));
+      const leaving = server.leave(session, 'test');
+
+      await vi.waitFor(() => {
+        expect(saveCharacterState).toHaveBeenCalledTimes(1);
+      });
+      expect(server.join(fakeWs(), 12, 101, 'Indexa', 'warrior', null)).toEqual({
+        error: 'character already in world',
+      });
+
+      await vi.runOnlyPendingTimersAsync();
+      await vi.waitFor(() => {
+        expect(saveCharacterState).toHaveBeenCalledTimes(2);
+      });
+
+      await vi.runOnlyPendingTimersAsync();
+      await leaving;
+
+      expect(saveCharacterState).toHaveBeenCalledTimes(3);
+      expect((server as any).sessionByCharacterId(101)).toBeNull();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('serializes overlapping saves for one character so an older write cannot land last', async () => {
+    vi.mocked(saveCharacterState).mockReset();
+    vi.mocked(saveCharacterState).mockResolvedValue(undefined);
+
+    const server = new GameServer();
+    const session = expectJoined(server.join(fakeWs(), 11, 101, 'Saverace', 'warrior', null));
+
+    let resolveFirstSave!: () => void;
+    const firstSave = new Promise<void>((resolve) => { resolveFirstSave = resolve; });
+    vi.mocked(saveCharacterState).mockImplementationOnce(() => firstSave);
+
+    const first = server.saveCharacter(session);
+    await vi.waitFor(() => {
+      expect(saveCharacterState).toHaveBeenCalledTimes(1);
+    });
+    expect(vi.mocked(saveCharacterState).mock.calls[0][2].questsDone).not.toContain('q_wolves');
+
+    server.sim.meta(session.pid)!.questsDone.add('q_wolves');
+    const second = server.saveCharacter(session);
+    await Promise.resolve();
+    expect(saveCharacterState).toHaveBeenCalledTimes(1);
+
+    resolveFirstSave();
+    await first;
+    await second;
+
+    expect(saveCharacterState).toHaveBeenCalledTimes(2);
+    expect(vi.mocked(saveCharacterState).mock.calls[1][2].questsDone).toContain('q_wolves');
   });
 
   it('closes the play session even when the open insert lands after the player has left', async () => {
@@ -102,5 +298,42 @@ describe('GameServer sessions', () => {
     // a third character on the same account joins because it is flagged GM
     expectJoined(server.join(fakeWs(), 30, 303, 'Gmcc', 'warrior', null, true));
     expect((server as any).sessionByCharacterId(303)).not.toBeNull();
+  });
+});
+
+describe('multi_ip evidence lifecycle', () => {
+  // Distinct account/character ids per session so the per-account cap never rejects.
+  const joinIp = (server: GameServer, id: number, ip: string): ClientSession =>
+    expectJoined(server.join(fakeWs(), id, id, `Bot${id}`, 'warrior', null, false, { ip }));
+
+  it('flags every session on the IP once the soft threshold is exceeded — not just the last joiner', () => {
+    const server = new GameServer();
+    const ip = '203.0.113.7';
+    const sessions: ClientSession[] = [];
+    for (let i = 1; i <= SOFT; i++) sessions.push(joinIp(server, i, ip));
+    expect(sessions.some(hasMultiIp)).toBe(false);   // at the threshold: none yet
+
+    sessions.push(joinIp(server, SOFT + 1, ip));      // crosses it
+    expect(sessions.every(hasMultiIp)).toBe(true);    // ALL flagged, including the first joiner
+  });
+
+  it('clears multi_ip from the remaining sessions once the IP drops back to the threshold', async () => {
+    const server = new GameServer();
+    const ip = '203.0.113.8';
+    const sessions: ClientSession[] = [];
+    for (let i = 1; i <= SOFT + 1; i++) sessions.push(joinIp(server, i, ip));
+    expect(sessions.every(hasMultiIp)).toBe(true);
+
+    await server.leave(sessions[0], 'test');          // back down to the threshold
+    expect(sessions.slice(1).some(hasMultiIp)).toBe(false);
+  });
+
+  it('does not flag a session on a different IP', () => {
+    const server = new GameServer();
+    const crowded: ClientSession[] = [];
+    for (let i = 1; i <= SOFT + 1; i++) crowded.push(joinIp(server, i, '203.0.113.9'));
+    const lonely = joinIp(server, 99, '198.51.100.1');
+    expect(crowded.every(hasMultiIp)).toBe(true);
+    expect(hasMultiIp(lonely)).toBe(false);
   });
 });

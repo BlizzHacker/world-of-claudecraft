@@ -56,6 +56,7 @@ function makeInput() {
     onUiKey: vi.fn(),
     onEmoteWheel: vi.fn(),
     onClickPick: vi.fn(),
+    onAttackMove: vi.fn(),
   };
   const input = new Input(canvas as any, cb, new Keybinds());
   return {
@@ -112,6 +113,45 @@ describe('Input click-to-move marker pulses', () => {
     input.setClickMoveTarget({ x: 2, z: 3 }, 0.5);
     expect(input.clickMovePulse).toBe(2);
     expect(input.clickMovePulseTarget).toEqual({ x: 2, z: 3 });
+  });
+
+  it('stores and advances pathfound click-move waypoints', () => {
+    const { input } = makeInput();
+    input.setClickMoveTarget({ x: 3, z: 0 }, 0.5, null, [
+      { x: 1, z: 0 },
+      { x: 2, z: 0 },
+      { x: 3, z: 0 },
+    ]);
+    expect(input.clickMoveGoal).toEqual({ x: 3, z: 0 });
+    expect(input.clickMoveTarget).toEqual({ x: 1, z: 0 });
+    expect(input.isClickMoveFinalWaypoint()).toBe(false);
+    expect(input.advanceClickMoveWaypoint()).toBe(true);
+    expect(input.clickMoveTarget).toEqual({ x: 2, z: 0 });
+    expect(input.advanceClickMoveWaypoint()).toBe(true);
+    expect(input.clickMoveTarget).toEqual({ x: 3, z: 0 });
+    expect(input.isClickMoveFinalWaypoint()).toBe(true);
+    expect(input.advanceClickMoveWaypoint()).toBe(false);
+  });
+
+  it('reroutes an active click-move path without pulsing the marker', () => {
+    const { input } = makeInput();
+    input.setClickMoveTarget({ x: 3, z: 0 }, 0.5, 42, [{ x: 1, z: 0 }, { x: 3, z: 0 }]);
+    input.advanceClickMoveWaypoint();
+    input.rerouteClickMoveTarget({ x: 8, z: 0 }, [{ x: 5, z: 0 }, { x: 8, z: 0 }]);
+    expect(input.clickMovePulse).toBe(1);
+    expect(input.clickMoveGoal).toEqual({ x: 8, z: 0 });
+    expect(input.clickMoveTarget).toEqual({ x: 5, z: 0 });
+    expect(input.clickMovePathIndex).toBe(0);
+  });
+
+  it('clears path state when click-to-move stops', () => {
+    const { input } = makeInput();
+    input.setClickMoveTarget({ x: 3, z: 0 }, 0.5, null, [{ x: 1, z: 0 }, { x: 3, z: 0 }]);
+    input.clearClickMove();
+    expect(input.clickMoveTarget).toBeNull();
+    expect(input.clickMoveGoal).toBeNull();
+    expect(input.clickMovePath).toEqual([]);
+    expect(input.clickMovePathIndex).toBe(0);
   });
 });
 
@@ -375,6 +415,26 @@ describe('Input Space handling', () => {
   });
 });
 
+describe('Input attack move', () => {
+  it('reserves only the attack-move key and keeps other movement keys working', () => {
+    const { input, cb, windowListeners, canvasListeners } = makeInput();
+    input.setAttackMoveEnabled(true);
+    canvasListeners.get('mouseenter')!({});
+
+    windowListeners.get('keydown')!({ code: 'KeyW', repeat: false });
+    windowListeners.get('keydown')!({ code: 'KeyD', repeat: false });
+    expect(input.readMoveInput().forward).toBe(true);
+    expect(input.readMoveInput().turnRight).toBe(true);
+
+    const preventDefault = vi.fn();
+    windowListeners.get('keydown')!({ code: 'KeyA', repeat: false, preventDefault });
+
+    expect(cb.onAttackMove).toHaveBeenCalledTimes(1);
+    expect(input.readMoveInput().turnLeft).toBe(false);
+    expect(input.readMoveInput().forward).toBe(true);
+  });
+});
+
 describe('Input movement is not cancelled by a camera drag', () => {
   // Discord regression: walking with W (or any held key) then right/left-drag to
   // look around and releasing the button stopped movement, because exiting
@@ -415,12 +475,18 @@ describe('touch jump', () => {
     expect(input.readMoveInput().jump).toBe(false);
   });
 
-  it('triggerTouchJump yields exactly one frame of jump', () => {
+  it('triggerTouchJump latches briefly so non-sim movement reads cannot consume it', () => {
     const { input } = makeInput();
+    const now = vi.spyOn(performance, 'now');
+    now.mockReturnValue(1000);
     input.triggerTouchJump();
     expect(input.readMoveInput().jump).toBe(true);
-    // momentary: a single poll consumes it so it cannot stick on like a held key
+    expect(input.readMoveInput().jump).toBe(true);
+    now.mockReturnValue(1219);
+    expect(input.readMoveInput().jump).toBe(true);
+    now.mockReturnValue(1221);
     expect(input.readMoveInput().jump).toBe(false);
+    now.mockRestore();
   });
 });
 
@@ -444,5 +510,40 @@ describe('Input emote wheel hold', () => {
     windowListeners.get('blur')!({});
 
     expect(cb.onEmoteWheel).toHaveBeenLastCalledWith(false);
+  });
+});
+
+describe('Input touch invert-look', () => {
+  it('reverses the touch joystick pitch when inverted, leaving yaw alone', () => {
+    const { input } = makeInput();
+    input.setTouchLook(true);
+    input.setTouchLookVector({ x: 1, y: 1 });
+
+    const startPitch = input.camPitch;
+    const startYaw = input.camYaw;
+    input.updateTouchLook(1 / 60);
+    const upDelta = input.camPitch - startPitch;
+    const yawDelta = input.camYaw - startYaw;
+    expect(upDelta).toBeGreaterThan(0); // default: stick up raises pitch
+
+    input.setTouchInvertLook(true);
+    input.camPitch = startPitch;
+    input.camYaw = startYaw;
+    input.updateTouchLook(1 / 60);
+    expect(input.camPitch - startPitch).toBeCloseTo(-upDelta);
+    // yaw is unaffected by the invert toggle
+    expect(input.camYaw - startYaw).toBeCloseTo(yawDelta);
+  });
+
+  it('also inverts the swipe-look delta path', () => {
+    const { input } = makeInput();
+    const base = input.camPitch;
+    input.applyTouchLookDelta(0, 100);
+    const normal = input.camPitch - base;
+
+    input.setTouchInvertLook(true);
+    input.camPitch = base;
+    input.applyTouchLookDelta(0, 100);
+    expect(input.camPitch - base).toBeCloseTo(-normal);
   });
 });

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import {
-  createTracker, addEvidence, recomputeScore, observeAction, observeEvent, onSimTick,
+  createTracker, addEvidence, removeEvidence, recomputeScore, observeAction, observeEvent, onSimTick,
   type BotEvidence, type BotTracker, type BotSessionRef,
 } from '../server/antibot';
 
@@ -75,6 +75,33 @@ describe('addEvidence', () => {
 });
 
 // ---------------------------------------------------------------------------
+// removeEvidence
+// ---------------------------------------------------------------------------
+describe('removeEvidence', () => {
+  it('removes evidence of the given kind', () => {
+    const t = createTracker();
+    addEvidence(t, evidence('timing', 0.7));
+    removeEvidence(t, 'timing');
+    expect(t.evidence).toHaveLength(0);
+  });
+
+  it('is a no-op when the kind is absent', () => {
+    const t = createTracker();
+    addEvidence(t, evidence('timing', 0.7));
+    removeEvidence(t, 'multi_ip');
+    expect(t.evidence).toHaveLength(1);
+  });
+
+  it('leaves other kinds intact', () => {
+    const t = createTracker();
+    addEvidence(t, evidence('timing', 0.7));
+    addEvidence(t, evidence('multi_ip', 0.4));
+    removeEvidence(t, 'multi_ip');
+    expect(t.evidence.map(e => e.kind)).toEqual(['timing']);
+  });
+});
+
+// ---------------------------------------------------------------------------
 // recomputeScore
 // ---------------------------------------------------------------------------
 describe('recomputeScore', () => {
@@ -115,9 +142,9 @@ describe('recomputeScore', () => {
 });
 
 // ---------------------------------------------------------------------------
-// Signal 1 — timing variance
+// Action timing variance
 // ---------------------------------------------------------------------------
-describe('Signal 1 — timing variance', () => {
+describe('Action timing variance', () => {
   function simulateActions(t: BotTracker, count: number, delta: number, jitter = 0): void {
     let now = Date.now();
     for (let i = 0; i < count; i++) {
@@ -134,13 +161,15 @@ describe('Signal 1 — timing variance', () => {
     expect(ev!.weight).toBe(0.7);
   });
 
-  it('produces weight 0.3 evidence when stdDev in [15,50)ms (macro/auto-clicker)', () => {
+  it('produces no evidence for stdDev in [15,50)ms (moderate band dropped — flagged rhythmic humans)', () => {
     const t = createTracker();
-    simulateActions(t, 15, 500, 50);  // ~25ms jitter → stdDev ~15-30ms
-    const ev = t.evidence.find(e => e.kind === 'timing');
-    // May or may not fire depending on exact random values; just verify no crash.
-    // More deterministically: force a specific jitter that lands in the range.
-    expect(t).toBeTruthy();
+    // Deterministic ~20ms stdDev (alternating 480/520ms), inside the old 0.3 band.
+    let now = Date.now();
+    for (let i = 0; i < 15; i++) {
+      now += i % 2 === 0 ? 480 : 520;
+      observeAction(t, 'attack', now);
+    }
+    expect(t.evidence.find(e => e.kind === 'timing')).toBeUndefined();
   });
 
   it('produces no evidence when stdDev >= 50ms (human-like)', () => {
@@ -179,78 +208,58 @@ describe('Signal 1 — timing variance', () => {
 });
 
 // ---------------------------------------------------------------------------
-// Signal 8 — reaction times
+// Reaction times (disabled — self-generated stimulus removed)
 // ---------------------------------------------------------------------------
-describe('Signal 8 — reaction times', () => {
-  function simulateReactions(t: BotTracker, count: number, reactionMs: number, jitter = 0): void {
-    let now = Date.now();
-    for (let i = 0; i < count; i++) {
-      now += 1000;
-      observeEvent(t, 'death', now);
-      now += reactionMs + (Math.random() - 0.5) * jitter;
-      observeAction(t, 'attack', now);
-    }
-  }
-
-  it('observeEvent sets reactionPending', () => {
+describe('Reaction times (disabled: self-generated stimulus removed)', () => {
+  // REACTION_EVENTS is empty: the player's own death/castStop no longer arm a
+  // measurement window. The signal produces no evidence until re-introduced with
+  // an external stimulus.
+  it('does not arm a window on the player\'s own death', () => {
     const t = createTracker();
-    const now = Date.now();
-    observeEvent(t, 'death', now);
-    expect(t.reactionPending).not.toBeNull();
-    expect(t.reactionPending!.eventType).toBe('death');
-    expect(t.reactionPending!.eventAt).toBe(now);
-  });
-
-  it('observeAction clears reactionPending and records delta', () => {
-    const t = createTracker();
-    const now = Date.now();
-    observeEvent(t, 'death', now);
-    observeAction(t, 'attack', now + 200);
-    expect(t.reactionPending).toBeNull();
-    expect(t.reactionDeltas).toHaveLength(1);
-    expect(t.reactionDeltas[0]).toBe(200);
-  });
-
-  it('produces evidence when median < 150ms (bot-like reactions)', () => {
-    const t = createTracker();
-    simulateReactions(t, 12, 30, 5);  // 30ms median, very low jitter
-    const ev = t.evidence.find(e => e.kind === 'reaction');
-    expect(ev).toBeDefined();
-    expect(ev!.weight).toBeGreaterThanOrEqual(0.3);
-  });
-
-  it('produces no evidence for human-like reactions (median ~295ms, stdDev ~44ms)', () => {
-    const t = createTracker();
-    // Deterministic: median ≈ 295ms (> 150ms threshold), stdDev ≈ 44ms (> 30ms threshold).
-    const humanReactions = [200, 280, 320, 350, 280, 290, 380, 260, 310, 340, 290, 300];
-    let now = Date.now();
-    for (const r of humanReactions) {
-      now += 1000;
-      observeEvent(t, 'death', now);
-      now += r;
-      observeAction(t, 'attack', now);
-    }
-    expect(t.evidence.find(e => e.kind === 'reaction')).toBeUndefined();
-  });
-
-  it('ignores irrelevant event types', () => {
-    const t = createTracker();
-    observeEvent(t, 'xp', Date.now());
-    expect(t.reactionPending).toBeNull();
-    observeEvent(t, 'levelup', Date.now());
+    observeEvent(t, 'death', Date.now());
     expect(t.reactionPending).toBeNull();
   });
 
-  it('castStop also triggers reactionPending', () => {
+  it('does not arm a window on the player\'s own castStop', () => {
     const t = createTracker();
     observeEvent(t, 'castStop', Date.now());
-    expect(t.reactionPending).not.toBeNull();
+    expect(t.reactionPending).toBeNull();
   });
 
-  it('ring buffer caps at 20 entries', () => {
+  it('never produces reaction evidence, even for fast regular responses', () => {
     const t = createTracker();
-    simulateReactions(t, 25, 30, 0);
-    expect(t.reactionDeltas.length).toBeLessThanOrEqual(20);
+    let now = Date.now();
+    for (let i = 0; i < 15; i++) {
+      now += 1000;
+      observeEvent(t, 'castStop', now);  // disabled → no-op
+      now += 30;                          // would have been a 30ms "reaction"
+      observeAction(t, 'cast', now);
+    }
+    expect(t.evidence.find(e => e.kind === 'reaction')).toBeUndefined();
+    expect(t.reactionDeltas).toHaveLength(0);
+  });
+
+  // The measurement/closing logic is retained for a future re-introduction with an
+  // external stimulus. Exercised here directly (reactionPending armed by hand) to
+  // pin the corrected behaviour: ONLY a COMBAT_CMD closes the window.
+  describe('closing logic (dormant; retained for external-stimulus re-introduction)', () => {
+    it('a non-combat command does not close the window', () => {
+      const t = createTracker();
+      const now = Date.now();
+      t.reactionPending = { eventType: 'external', eventAt: now };
+      observeAction(t, 'tab', now + 40);
+      expect(t.reactionPending).not.toBeNull();
+      expect(t.reactionDeltas).toHaveLength(0);
+    });
+
+    it('a combat command closes the window and records the delta', () => {
+      const t = createTracker();
+      const now = Date.now();
+      t.reactionPending = { eventType: 'external', eventAt: now };
+      observeAction(t, 'attack', now + 120);
+      expect(t.reactionPending).toBeNull();
+      expect(t.reactionDeltas).toEqual([120]);
+    });
   });
 });
 
@@ -262,37 +271,44 @@ describe('Escalation state machine', () => {
     vi.mocked(createAutomatedBotReport).mockClear();
   });
 
+  // Escalation now gates on behavioral FAMILIES (behavioralFamilyCount), not raw
+  // distinctKinds: cadence (timing+reaction) is one family, multi_ip never gates.
+  // Tests that exercise log/throttle/kick therefore pair `timing` with an
+  // independent behavioral kind (`impossible`). Active responses also require
+  // `enforce = true` (the ANTIBOT_ENFORCE flag); report-only is the default.
+
   it('stays at none when score < 0.5', () => {
     const t = createTracker();
     addEvidence(t, { kind: 'timing', weight: 0.3, expiresAt: Infinity, detail: 'x' });
-    const action = onSimTick(t, mockSession, Date.now());
+    addEvidence(t, { kind: 'impossible', weight: 0.1, expiresAt: Infinity, detail: 'y' });
+    const action = onSimTick(t, mockSession, Date.now(), true);
     expect(action).toBe('none');
     expect(t.aboveLogSince).toBeNull();
   });
 
-  it('stays at none when score >= 0.5 but distinctKinds < 2', () => {
+  it('stays at none when score >= 0.5 but < 2 behavioral families', () => {
     const t = createTracker();
     addEvidence(t, { kind: 'timing', weight: 0.7, expiresAt: Infinity, detail: 'x' });
-    const action = onSimTick(t, mockSession, Date.now());
+    const action = onSimTick(t, mockSession, Date.now(), true);
     expect(action).toBe('none');
     expect(t.aboveLogSince).toBeNull();
   });
 
-  it('sets aboveLogSince when score >= 0.5 with >= 2 kinds', () => {
+  it('sets aboveLogSince when score >= 0.5 with >= 2 behavioral families', () => {
     const t = createTracker();
     addEvidence(t, { kind: 'timing', weight: 0.4, expiresAt: Infinity, detail: 'x' });
-    addEvidence(t, { kind: 'reaction', weight: 0.3, expiresAt: Infinity, detail: 'y' });
+    addEvidence(t, { kind: 'impossible', weight: 0.3, expiresAt: Infinity, detail: 'y' });
     const now = Date.now();
     onSimTick(t, mockSession, now);
     expect(t.aboveLogSince).toBe(now);
   });
 
-  it('fires auto-report after 30s above log threshold', () => {
+  it('fires auto-report after 30s above log threshold (even in report-only)', () => {
     const t = createTracker();
     addEvidence(t, { kind: 'timing', weight: 0.4, expiresAt: Infinity, detail: 'x' });
-    addEvidence(t, { kind: 'reaction', weight: 0.3, expiresAt: Infinity, detail: 'y' });
+    addEvidence(t, { kind: 'impossible', weight: 0.3, expiresAt: Infinity, detail: 'y' });
     const start = Date.now();
-    onSimTick(t, mockSession, start);           // sets aboveLogSince = start
+    onSimTick(t, mockSession, start);           // sets aboveLogSince = start (enforce=false)
     onSimTick(t, mockSession, start + 29_999);  // not yet
     expect(createAutomatedBotReport).not.toHaveBeenCalled();
     onSimTick(t, mockSession, start + 30_000);  // fires
@@ -303,7 +319,7 @@ describe('Escalation state machine', () => {
   it('does not fire second auto-report once autoReportSent is true', () => {
     const t = createTracker();
     addEvidence(t, { kind: 'timing', weight: 0.4, expiresAt: Infinity, detail: 'x' });
-    addEvidence(t, { kind: 'reaction', weight: 0.3, expiresAt: Infinity, detail: 'y' });
+    addEvidence(t, { kind: 'impossible', weight: 0.3, expiresAt: Infinity, detail: 'y' });
     const start = Date.now();
     onSimTick(t, mockSession, start);
     onSimTick(t, mockSession, start + 30_000);
@@ -311,67 +327,186 @@ describe('Escalation state machine', () => {
     expect(createAutomatedBotReport).toHaveBeenCalledOnce();
   });
 
-  it('activates shadow-throttle after 60s above 0.8 with >= 2 kinds', () => {
+  it('activates shadow-throttle after 60s above 0.8 (enforce on, >= 2 families)', () => {
     const t = createTracker();
     addEvidence(t, { kind: 'timing', weight: 0.5, expiresAt: Infinity, detail: 'x' });
-    addEvidence(t, { kind: 'reaction', weight: 0.4, expiresAt: Infinity, detail: 'y' });
+    addEvidence(t, { kind: 'impossible', weight: 0.4, expiresAt: Infinity, detail: 'y' });
     const start = Date.now();
-    onSimTick(t, mockSession, start);
+    onSimTick(t, mockSession, start, true);
     expect(t.throttleMultiplier).toBe(1.0);
-    onSimTick(t, mockSession, start + 59_999);
+    onSimTick(t, mockSession, start + 59_999, true);
     expect(t.throttleMultiplier).toBe(1.0);
-    onSimTick(t, mockSession, start + 60_000);
+    onSimTick(t, mockSession, start + 60_000, true);
     expect(t.throttleMultiplier).toBe(2.0);
     expect(t.throttleActiveSince).toBe(start + 60_000);
   });
 
-  it('returns kick after 2min above score 1.0 with >= 2 kinds', () => {
+  it('returns kick after 2min above score 1.0 (enforce on, >= 2 families)', () => {
     const t = createTracker();
     addEvidence(t, { kind: 'timing', weight: 0.7, expiresAt: Infinity, detail: 'x' });
-    addEvidence(t, { kind: 'reaction', weight: 0.6, expiresAt: Infinity, detail: 'y' });
+    addEvidence(t, { kind: 'impossible', weight: 0.6, expiresAt: Infinity, detail: 'y' });
     const start = Date.now();
-    onSimTick(t, mockSession, start);
-    expect(onSimTick(t, mockSession, start + 119_999)).toBe('none');
-    expect(onSimTick(t, mockSession, start + 120_000)).toBe('kick');
+    onSimTick(t, mockSession, start, true);
+    expect(onSimTick(t, mockSession, start + 119_999, true)).toBe('none');
+    expect(onSimTick(t, mockSession, start + 120_000, true)).toBe('kick');
   });
 
-  it('does NOT kick when score >= 1.0 but distinctKinds < 2 (honeypot-only)', () => {
+  it('does NOT kick when score >= 1.0 but < 2 behavioral families (single-signal)', () => {
     const t = createTracker();
-    // Simulate honeypot: 1.0 weight, single kind
-    addEvidence(t, { kind: 'timing', weight: 1.0, expiresAt: Infinity, detail: 'honeypot' });
+    // One strong signal alone (e.g. a honeypot hit) is one family → never kicks.
+    addEvidence(t, { kind: 'honeypot', weight: 1.0, expiresAt: Infinity, detail: 'honeypot' });
     const start = Date.now();
-    onSimTick(t, mockSession, start);
-    expect(onSimTick(t, mockSession, start + 120_000)).toBe('none');
+    onSimTick(t, mockSession, start, true);
+    expect(onSimTick(t, mockSession, start + 120_000, true)).toBe('none');
     expect(t.aboveKickSince).toBeNull();
   });
 
   it('resets escalation timers when score drops', () => {
     const t = createTracker();
     addEvidence(t, { kind: 'timing', weight: 0.4, expiresAt: Infinity, detail: 'x' });
-    addEvidence(t, { kind: 'reaction', weight: 0.3, expiresAt: Infinity, detail: 'y' });
+    addEvidence(t, { kind: 'impossible', weight: 0.3, expiresAt: Infinity, detail: 'y' });
     const start = Date.now();
-    onSimTick(t, mockSession, start);
+    onSimTick(t, mockSession, start, true);
     expect(t.aboveLogSince).not.toBeNull();
     // Score drops (evidence expires)
     t.evidence = [];
-    onSimTick(t, mockSession, start + 1_000);
+    onSimTick(t, mockSession, start + 1_000, true);
     expect(t.aboveLogSince).toBeNull();
     expect(t.aboveThrottleSince).toBeNull();
   });
 
-  it('forces kick path after 30min of sustained throttle (safety valve)', () => {
+  it('forces kick path after 30min of sustained throttle (safety valve, enforce on)', () => {
     const t = createTracker();
     addEvidence(t, { kind: 'timing', weight: 0.5, expiresAt: Infinity, detail: 'x' });
-    addEvidence(t, { kind: 'reaction', weight: 0.4, expiresAt: Infinity, detail: 'y' });
+    addEvidence(t, { kind: 'impossible', weight: 0.4, expiresAt: Infinity, detail: 'y' });
     // Fast-forward to throttle state
     const start = Date.now();
-    onSimTick(t, mockSession, start);
-    onSimTick(t, mockSession, start + 60_000);  // throttle activates
+    onSimTick(t, mockSession, start, true);
+    onSimTick(t, mockSession, start + 60_000, true);  // throttle activates
     expect(t.throttleActiveSince).not.toBeNull();
 
-    // 30 min later without score reaching 1.0+2kinds — safety valve kicks in
+    // 30 min later without score reaching 1.0+2families — safety valve kicks in
     const MAX_THROTTLE_MS = 30 * 60_000;
-    onSimTick(t, mockSession, start + 60_000 + MAX_THROTTLE_MS);
+    onSimTick(t, mockSession, start + 60_000 + MAX_THROTTLE_MS, true);
     expect(t.aboveKickSince).not.toBeNull();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Report-only mode (ANTIBOT_ENFORCE off — the production default)
+// ---------------------------------------------------------------------------
+describe('Report-only mode (enforce = false)', () => {
+  beforeEach(() => {
+    vi.mocked(createAutomatedBotReport).mockClear();
+  });
+
+  it('files a moderation report but never throttles or kicks, even at score >= 1.0', () => {
+    const t = createTracker();
+    addEvidence(t, { kind: 'timing', weight: 0.7, expiresAt: Infinity, detail: 'x' });
+    addEvidence(t, { kind: 'impossible', weight: 0.6, expiresAt: Infinity, detail: 'y' });
+    const start = Date.now();
+    onSimTick(t, mockSession, start);                       // enforce defaults to false
+    onSimTick(t, mockSession, start + 30_000);              // report fires
+    expect(createAutomatedBotReport).toHaveBeenCalledOnce();
+    // Well past the throttle (60s) and kick (120s) thresholds:
+    expect(onSimTick(t, mockSession, start + 200_000)).toBe('none');
+    expect(t.throttleMultiplier).toBe(1.0);
+    expect(t.throttleActiveSince).toBeNull();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// False-positive regression guards
+//
+// One active test per legitimate-player scenario the report-only corrections fixed:
+// the named human must NOT be flagged. Plus anti-regression (real bots are still
+// caught) and one skipped test for the future external-stimulus reaction work.
+// ---------------------------------------------------------------------------
+describe('False-positive regression guards', () => {
+  beforeEach(() => {
+    vi.mocked(createAutomatedBotReport).mockClear();
+  });
+
+  it('ability-queueing (own cast finishing → pre-pressed next ability) produces no reaction evidence', () => {
+    // A caster chaining a planned rotation reacts to nothing: their own cast
+    // finishing is no longer a stimulus, so no reaction evidence accrues.
+    const t = createTracker();
+    let now = Date.now();
+    for (let i = 0; i < 12; i++) {
+      observeEvent(t, 'castStop', now);   // own cast finishing — no longer a stimulus
+      now += 65;
+      observeAction(t, 'castSlot', now);  // pre-queued next ability
+      now += 935;
+    }
+    expect(t.evidence.find(e => e.kind === 'reaction')).toBeUndefined();
+  });
+
+  it('a fast rhythmic rotation (cadence only) never escalates, even under enforcement', () => {
+    // timing + reaction are one cadence family → one behavioral kind → gate unmet.
+    const t = createTracker();
+    addEvidence(t, { kind: 'timing', weight: 0.7, expiresAt: Infinity, detail: 'low-variance intervals' });
+    addEvidence(t, { kind: 'reaction', weight: 0.6, expiresAt: Infinity, detail: 'fast chaining' });
+    const start = Date.now();
+    onSimTick(t, mockSession, start, true);
+    expect(onSimTick(t, mockSession, start + 120_000, true)).toBe('none');
+    expect(t.aboveLogSince).toBeNull();
+  });
+
+  it('a shared connection plus one cadence flag never escalates', () => {
+    // multi_ip is network context, not a behavioral family → it cannot be the
+    // second gating kind. The score may exceed 1.0 but the gate stays unmet.
+    const t = createTracker();
+    addEvidence(t, { kind: 'multi_ip', weight: 0.4, expiresAt: Infinity, detail: 'shared household' });
+    addEvidence(t, { kind: 'timing', weight: 0.7, expiresAt: Infinity, detail: 'low-variance intervals' });
+    const start = Date.now();
+    onSimTick(t, mockSession, start, true);
+    expect(onSimTick(t, mockSession, start + 120_000, true)).toBe('none');
+  });
+
+  it('multi_ip still contributes to the composite score (context, not gating)', () => {
+    const t = createTracker();
+    addEvidence(t, { kind: 'multi_ip', weight: 0.4, expiresAt: Infinity, detail: 'shared household' });
+    addEvidence(t, { kind: 'timing', weight: 0.3, expiresAt: Infinity, detail: 'low-variance intervals' });
+    recomputeScore(t, Date.now());
+    expect(t.score).toBeCloseTo(0.7);  // multi_ip is summed into the score
+  });
+
+  // --- anti-regression: real bots must STILL be caught ---
+
+  it('a fixed-interval bot still earns strong timing evidence', () => {
+    const t = createTracker();
+    let now = Date.now();
+    for (let i = 0; i < 15; i++) {
+      now += 500;                       // perfectly regular — naive script
+      observeAction(t, 'cast', now);
+    }
+    expect(t.evidence.find(e => e.kind === 'timing')?.weight).toBe(0.7);
+  });
+
+  it('cadence plus an independent behavioral signal still escalates under enforcement', () => {
+    // Proves the corrections did not over-block: a genuinely independent second
+    // family (here, repeated impossible actions) restores the kick path.
+    const t = createTracker();
+    addEvidence(t, { kind: 'timing', weight: 0.7, expiresAt: Infinity, detail: 'low-variance intervals' });
+    addEvidence(t, { kind: 'impossible', weight: 0.6, expiresAt: Infinity, detail: 'out-of-range spam' });
+    const start = Date.now();
+    onSimTick(t, mockSession, start, true);
+    expect(onSimTick(t, mockSession, start + 120_000, true)).toBe('kick');
+  });
+
+  // --- future: reaction signal re-introduction with an external stimulus ---
+
+  it.skip('a genuine external stimulus answered quickly still earns reaction evidence', () => {
+    // When the reaction signal is re-introduced with an external, target-bearing
+    // stimulus, a sub-threshold response repeated many times is still bot-like.
+    const t = createTracker();
+    let now = Date.now();
+    for (let i = 0; i < 12; i++) {
+      observeEvent(t, 'incomingHostileCast', now);  // external stimulus (to be added)
+      now += 30;
+      observeAction(t, 'cast', now);
+      now += 970;
+    }
+    expect(t.evidence.find(e => e.kind === 'reaction')).toBeDefined();
   });
 });

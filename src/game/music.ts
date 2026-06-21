@@ -1160,8 +1160,9 @@ export class MusicDirector {
     const now = this.ctx.currentTime;
     for (const [name, layer] of Object.entries(this.layers)) {
       if (name === 'combat') continue;
-      // the zone theme keeps playing (quieter) under the combat layer
-      const target = name === zone ? (inCombat ? 0.45 : 1) : 0;
+      // combat music replaces the zone theme rather than layering over it: the
+      // zone is silenced for the duration of combat and fades back in when it ends
+      const target = name === zone ? (inCombat ? 0 : 1) : 0;
       if (layer.target !== target) {
         layer.target = target;
         // fade out faster than fade in so instance music doesn't bleed into the world

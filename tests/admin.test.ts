@@ -23,6 +23,8 @@ vi.mock('../server/admin_db', async () => {
     listAccounts: vi.fn(),
     listCharacters: vi.fn(),
     accountDetail: vi.fn(),
+    clientPerfSummary: vi.fn(),
+    clientPerfRaw: vi.fn(),
   };
 });
 vi.mock('../server/moderation_db', () => ({
@@ -51,7 +53,7 @@ vi.mock('../server/auth', () => ({
 
 import { handleAdminApi, parsePageParams } from '../server/admin';
 import { accountForToken, isAdminAccount, findAccount, accountTotpState } from '../server/db';
-import { overviewCounts, listAccounts, accountDetail, escapeLike } from '../server/admin_db';
+import { overviewCounts, listAccounts, accountDetail, escapeLike, clientPerfSummary, clientPerfRaw } from '../server/admin_db';
 import { forceCharacterRename, ignoreReport, moderateAccount, moderationQueue, moderationReportsForAccount, muteAccountChat } from '../server/moderation_db';
 import {
   addFilterWord, chatModerationForAccount, getFilterConfig, liftChatMute, listFilterWords,
@@ -145,7 +147,14 @@ describe('admin api auth', () => {
     expect(res.body).toEqual({
       success: true,
       error: null,
-      data: expect.objectContaining({ accounts: 10, server: expect.objectContaining({ online: 2 }) }),
+      data: expect.objectContaining({
+        accounts: 10,
+        server: expect.objectContaining({ online: 2 }),
+        usage: expect.objectContaining({
+          metrics: expect.arrayContaining([expect.objectContaining({ key: 'woc.balance.rpc' })]),
+          caches: expect.arrayContaining([expect.objectContaining({ key: 'woc.balance' })]),
+        }),
+      }),
     });
   });
 
@@ -251,6 +260,37 @@ describe('admin api auth', () => {
     expect(res.statusCode).toBe(200);
     expect(moderationQueue).toHaveBeenCalledWith(new Set([9]));
     expect(res.body.data.rows[0].openReports).toBe(4);
+  });
+
+  it('serves perf summaries and raw rows through existing admin auth', async () => {
+    vi.mocked(accountForToken).mockResolvedValue(7);
+    vi.mocked(isAdminAccount).mockResolvedValue(true);
+    vi.mocked(clientPerfSummary).mockResolvedValue({
+      hours: 24,
+      generatedAt: 'now',
+      totals: { sampleCount: 1, medianFps: 60, p95FrameMs: 18, p99FrameMs: 22, contextLossCount: 0, avgRenderScale: 1, avgEffectiveRenderScale: 0.9 },
+      byPreset: [],
+      byGpu: [],
+      byBrowser: [],
+      byOs: [],
+      byScenario: [],
+      worstGpuBuckets: [],
+    });
+    vi.mocked(clientPerfRaw).mockResolvedValue([{ id: 123 } as any, { id: 100 } as any]);
+
+    const summaryRes = fakeRes();
+    await handleAdminApi(fakeReq({ token: VALID_TOKEN, url: '/admin/api/perf/summary?hours=24' }), summaryRes, fakeGame);
+    expect(summaryRes.statusCode).toBe(200);
+    expect(clientPerfSummary).toHaveBeenCalledWith(24);
+    expect(summaryRes.body.data.totals.sampleCount).toBe(1);
+
+    const rawRes = fakeRes();
+    await handleAdminApi(fakeReq({ token: VALID_TOKEN, url: '/admin/api/perf/raw?hours=24&limit=10&beforeId=500' }), rawRes, fakeGame);
+    expect(rawRes.statusCode).toBe(200);
+    expect(clientPerfRaw).toHaveBeenCalledWith(24, 10, 500);
+    expect(rawRes.body.data.rows).toHaveLength(2);
+    expect(rawRes.body.data.nextBeforeId).toBe(100);
+    expect(rawRes.body.data.hasMore).toBe(false);
   });
 
   it('loads moderation account detail with open reports', async () => {

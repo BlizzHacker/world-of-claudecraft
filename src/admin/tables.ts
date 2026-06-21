@@ -1,8 +1,9 @@
-import { escapeHtml, fmtCopper, fmtDate, fmtDuration, fmtRelative } from './format';
+import { escapeHtml, fmtCopper, fmtDate, fmtDuration, fmtNumber, fmtPercent, fmtRelative } from './format';
 import { classLabel, zoneLabel, t } from './i18n';
 import type {
   AccountDetail, AccountRow, CharacterRow, ChatFilterData, ChatModeratedAccount,
   ChatModerationDetail, FilterWord, LivePlayer, ModerationAccountDetail, ModerationQueueRow,
+  ProviderUsageCache, ProviderUsageSnapshot,
 } from './types';
 
 // Pure HTML-string renderers for the dashboard tables. All dynamic values go
@@ -30,6 +31,77 @@ export function renderOnlineTable(players: LivePlayer[]): string {
     </tr></thead>
     <tbody>${rows.join('')}</tbody>
   </table>`;
+}
+
+function renderMetricCount(value: number): string {
+  return escapeHtml(fmtNumber(value));
+}
+
+function renderCacheEntries(cache: ProviderUsageCache): string {
+  if (cache.maxEntries === null) return escapeHtml(fmtNumber(cache.entries));
+  return escapeHtml(t('usage.cacheEntriesOfMax', {
+    entries: fmtNumber(cache.entries),
+    max: fmtNumber(cache.maxEntries),
+  }));
+}
+
+function renderCacheHitRate(cache: ProviderUsageCache): string {
+  const totalReads = cache.hits + cache.misses;
+  if (totalReads <= 0) return escapeHtml(t('usage.notAvailable'));
+  return escapeHtml(fmtPercent(cache.hits / totalReads));
+}
+
+export function renderProviderUsage(usage: ProviderUsageSnapshot): string {
+  const metricRows = usage.metrics.map((metric) => `
+    <tr>
+      <td>${escapeHtml(t(metric.labelKey))}</td>
+      ${usage.windows.map((window) => `<td class="num">${renderMetricCount(metric.counts[window.key] ?? 0)}</td>`).join('')}
+    </tr>`).join('');
+  const cacheRows = usage.caches.map((cache) => `
+    <tr>
+      <td>${escapeHtml(t(cache.labelKey))}</td>
+      <td class="num">${renderCacheEntries(cache)}</td>
+      <td class="num">${renderCacheHitRate(cache)}</td>
+      <td class="num">${renderMetricCount(cache.hits)}</td>
+      <td class="num">${renderMetricCount(cache.misses)}</td>
+      <td class="num">${renderMetricCount(cache.staleRefreshes)}</td>
+      <td class="num">${renderMetricCount(cache.stores)}</td>
+      <td class="num">${renderMetricCount(cache.failures)}</td>
+      <td class="num">${renderMetricCount(cache.evictions)}</td>
+    </tr>`).join('');
+
+  return `
+    <div class="usage-section">
+      <h4>${t('usage.requestsTitle')}</h4>
+      <div class="table-scroll">
+        <table class="usage-table">
+          <thead><tr>
+            <th>${t('usage.colMetric')}</th>
+            ${usage.windows.map((window) => `<th class="num">${escapeHtml(t(window.labelKey))}</th>`).join('')}
+          </tr></thead>
+          <tbody>${metricRows}</tbody>
+        </table>
+      </div>
+    </div>
+    <div class="usage-section">
+      <h4>${t('usage.cacheTitle')}</h4>
+      <div class="table-scroll">
+        <table class="usage-table">
+          <thead><tr>
+            <th>${t('usage.cacheColCache')}</th>
+            <th class="num">${t('usage.cacheColEntries')}</th>
+            <th class="num">${t('usage.cacheColHitRate')}</th>
+            <th class="num">${t('usage.cacheColHits')}</th>
+            <th class="num">${t('usage.cacheColMisses')}</th>
+            <th class="num">${t('usage.cacheColStale')}</th>
+            <th class="num">${t('usage.cacheColStores')}</th>
+            <th class="num">${t('usage.cacheColFailures')}</th>
+            <th class="num">${t('usage.cacheColEvictions')}</th>
+          </tr></thead>
+          <tbody>${cacheRows}</tbody>
+        </table>
+      </div>
+    </div>`;
 }
 
 export function renderAccountsTable(rows: AccountRow[]): string {
@@ -124,9 +196,9 @@ export function renderAccountDetail(d: AccountDetail, includeAdminControls = fal
   const activeChatMute = d.chatMutedUntil !== null && new Date(d.chatMutedUntil).getTime() > Date.now();
   const chatModControls = includeAdminControls ? `
     <div class="account-admin-controls chat-mod-controls" data-action-account-id="${d.id}">
-      <div class="account-status"><b>Chat:</b> ${activeChatMute ? `<span class="badge warn">muted until ${fmtDate(d.chatMutedUntil)}</span>` : '<span class="badge">not muted</span>'} &middot; strikes: <b>${d.chatStrikes}</b></div>
-      ${activeChatMute ? '<button data-lift-mute="1">Lift chat mute</button>' : ''}
-      ${d.chatStrikes > 0 ? '<button data-reset-strikes="1">Reset chat strikes</button>' : ''}
+      <div class="account-status"><b>${t('chatMod.chatLabel')}</b> ${activeChatMute ? `<span class="badge warn">${t('chatMod.mutedUntil', { value: fmtDate(d.chatMutedUntil) })}</span>` : `<span class="badge">${t('chatMod.notMuted')}</span>`} &middot; ${t('chatMod.strikesInline')} <b>${d.chatStrikes}</b></div>
+      ${activeChatMute ? `<button data-lift-mute="1">${t('chatMod.liftChatMute')}</button>` : ''}
+      ${d.chatStrikes > 0 ? `<button data-reset-strikes="1">${t('chatMod.resetChatStrikes')}</button>` : ''}
     </div>` : '';
   return `<div class="account-detail" data-action-account-id="${d.id}">${adminControls}${chatModControls}<div class="detail-grid">
     <div><h4>${t('detail.charactersHeader')}</h4>${chars}</div>
@@ -314,27 +386,27 @@ export function renderChatFilter(data: ChatFilterData): string {
       ${renderWordChips(data.hard)}
     </div>
     <div class="panel">
-      <div class="panel-title">Chat-moderated accounts <span class="hint">currently muted or carrying strikes — lift or reset here</span></div>
+      <div class="panel-title">${t('chatFilter.accountsTitle')} <span class="hint">${t('chatFilter.accountsHint')}</span></div>
       ${renderChatModeratedAccounts(data.accounts)}
     </div>`;
 }
 
 function renderChatModeratedAccounts(accounts: ChatModeratedAccount[]): string {
-  if (accounts.length === 0) return '<div class="empty">no muted or striked accounts</div>';
+  if (accounts.length === 0) return `<div class="empty">${t('chatFilter.noModeratedAccounts')}</div>`;
   const rows = accounts.map((a) => {
     const muted = a.chatMutedUntil !== null && new Date(a.chatMutedUntil).getTime() > Date.now();
     const muteCell = muted
-      ? `<span class="badge warn">muted until ${fmtDate(a.chatMutedUntil)}</span>`
-      : '<span class="badge">not muted</span>';
-    const actions = `${muted ? '<button data-lift-mute="1">Lift mute</button>' : ''}${a.chatStrikes > 0 ? ' <button data-reset-strikes="1">Reset strikes</button>' : ''}`;
+      ? `<span class="badge warn">${t('chatMod.mutedUntil', { value: fmtDate(a.chatMutedUntil) })}</span>`
+      : `<span class="badge">${t('chatMod.notMuted')}</span>`;
+    const actions = `${muted ? `<button data-lift-mute="1">${t('chatMod.liftMute')}</button>` : ''}${a.chatStrikes > 0 ? ` <button data-reset-strikes="1">${t('chatMod.resetStrikes')}</button>` : ''}`;
     return `<tr data-action-account-id="${a.id}">
-      <td>${escapeHtml(a.username)}${a.isAdmin ? ' <span class="badge">admin</span>' : ''}</td>
+      <td>${escapeHtml(a.username)}${a.isAdmin ? ` <span class="badge">${t('accounts.badgeAdmin')}</span>` : ''}</td>
       <td class="num">${a.chatStrikes}</td>
       <td>${muteCell}</td>
       <td>${actions}</td>
     </tr>`;
   }).join('');
-  return `<table><thead><tr><th>Account</th><th class="num">Strikes</th><th>Mute</th><th>Actions</th></tr></thead><tbody>${rows}</tbody></table>`;
+  return `<table><thead><tr><th>${t('moderation.colAccount')}</th><th class="num">${t('chatMod.colStrikes')}</th><th>${t('chatMod.colMute')}</th><th>${t('detail.colActions')}</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
 
 function reasonLabel(reason: string): string {

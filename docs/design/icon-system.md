@@ -228,6 +228,7 @@ Signature: `(ctx: CanvasRenderingContext2D, pal: IconPalette) => void`, ctx pre-
 |---|---|---|---|---|
 | heroic_strike | fury | sword | steel | glow |
 | battle_shout | fury | fist | gold | arcs |
+| demoralizing_shout | shadow | fist | steel | arcs |
 | charge | fury | boot, sword@br | steel | motion |
 | rend | blood | claw_slash | blood | drips |
 | thunder_clap | storm | lightning | sky | arcs |

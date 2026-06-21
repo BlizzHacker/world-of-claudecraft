@@ -168,13 +168,21 @@ describe('PvP control abilities in active duels', () => {
     const { sim, aPid, b } = startDuel('warlock', 'warrior', 20);
 
     const castFear = () => {
-      b.auras = b.auras.filter((aura) => aura.id !== 'fear_incap');
-      const warlock = sim.entities.get(aPid)!;
-      warlock.gcdRemaining = 0;
-      warlock.resource = warlock.maxResource;
-      sim.castAbility('fear', aPid);
-      finishCast(sim, aPid);
-      return b.auras.find((aura) => aura.id === 'fear_incap')?.duration ?? 0;
+      // A resisted Fear applies nothing and does NOT advance diminishing returns
+      // (the spell-hit roll precedes the DR bookkeeping in applyAbility), so retry
+      // until it lands. This keeps the 8/4/2/1 sequence stable regardless of where
+      // the shared world RNG stream happens to sit (new content shifts it).
+      let dur = 0;
+      for (let attempt = 0; attempt < 50 && dur === 0; attempt++) {
+        b.auras = b.auras.filter((aura) => aura.id !== 'fear_incap');
+        const warlock = sim.entities.get(aPid)!;
+        warlock.gcdRemaining = 0;
+        warlock.resource = warlock.maxResource;
+        sim.castAbility('fear', aPid);
+        finishCast(sim, aPid);
+        dur = b.auras.find((aura) => aura.id === 'fear_incap')?.duration ?? 0;
+      }
+      return dur;
     };
 
     expect(castFear()).toBe(8);

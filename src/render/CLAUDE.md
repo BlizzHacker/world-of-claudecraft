@@ -29,10 +29,10 @@ renderer:
 | `gfx.ts`, `textures.ts`, `locomotion.ts`, `stealth.ts` | shared helpers (below) |
 
 ## gfx.ts — the shared core (read this before touching any subsystem)
-- **`GFX` quality tiers** (`low`/`high`/`ultra`). Every tier-dependent knob lives
+- **`GFX` quality tiers** (`low`/`medium`/`high`/`ultra`). Every tier-dependent knob lives
   here, not in scattered ternaries. The renderer MUST call `initGfxTier(webgl)`
   right after creating the `WebGLRenderer` and before building scene content
-  (software GL → `low`; `?gfx=low|high|ultra` / `?lowgfx` force a tier).
+  (software GL → `low`; `?gfx=low|medium|high|ultra` / `?lowgfx` force a tier).
 - **`surfaceMat(opts)`** is the material factory — it dedupes by
   `(color|maps|flags)` so hundreds of boxes share a few programs. Use it instead
   of `new MeshStandardMaterial`; `MeshLambertMaterial` is auto-substituted on low.
@@ -49,6 +49,27 @@ renderer:
   cells are append-only (`SPRITE_FILES`/`SPR` must stay in sync).
 - **Props/foliage/dungeon** are the exception: real CC0 **GLB** assets, loaded via
   `assets/loader.ts`, then their geometry is baked/merged/instanced at build time.
+
+## i18n — in-world floating labels are the only string surface here
+The renderer is geometry/shaders; the one player-text surface is the overhead
+**nameplate/label** path in `renderer.ts` (only `renderer.ts` imports i18n: `t`
+from `../ui/i18n`, `tEntity` from `../ui/entity_i18n`). Keep it keyed:
+- **Entity names** (mob/npc/dungeon/ground-object/ability) → `tEntity({ kind, id,
+  field:'name' })` (see `mobDisplayName`/`npcDisplayName`/`dungeonDisplayName`/
+  `objectDisplayName`), never the raw English `e.name`/`e.templateId`.
+- **Templated labels** → `t()` keys: corpse → `worldContent.corpseName`,
+  dungeon-exit → `worldContent.dungeonExitName`, emote → `hudChrome.emotes.<id>`,
+  fishing cast → `abilityUi.cast.fishing`. The renderer only CONSUMES these — the
+  keys themselves live in `src/ui/` (`worldContent.*` in `world_entity_i18n.ts`;
+  `hudChrome.*` in `i18n.catalog/hud_chrome.ts`; `abilityUi.cast.*` in
+  `i18n.catalog/merge.ts`), so add a new key there, not inline here.
+- **Verbatim by design:** player names and owned-pet names (`e.name` when
+  `e.ownerId !== null`) are proper nouns — splice them as-is, do not localize.
+  Nameplate **markers** (`$`, `◆`, raid icons) are symbols — no `t()` entry needed.
+- `cast_bar.ts` stays i18n-free on purpose: it returns a stable discriminator
+  (`label`/`fishing`) and the renderer resolves the visible text. Don't add `t()`
+  there. Entity *names* originate in `src/sim/content/` and are localized via the
+  `world_entity_i18n`/`entity_i18n` chain — `src/render/` only consumes that.
 
 ## Terrain height = sim height (hard invariant)
 Render samples `terrainHeight` / `groundHeight` from `src/sim/world.ts` (DOM-free,

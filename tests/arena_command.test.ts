@@ -25,7 +25,7 @@ describe('/arena command', () => {
 
     sim.chat('/arena', a);
     expect(errorText(sim.tick(), a)).toBe(
-      'Arena: Rating 1530 — 12 wins, 8 losses (60% win rate).',
+      'Arena: 1v1 Rating 1530 - 12 wins, 8 losses (60% win rate). 2v2 Rating 1500 - no matches played yet.',
     );
   });
 
@@ -35,7 +35,7 @@ describe('/arena command', () => {
     sim.tick();
 
     sim.chat('/arena', a);
-    expect(errorText(sim.tick(), a)).toBe('Arena: Rating 1500 — no matches played yet.');
+    expect(errorText(sim.tick(), a)).toBe('Arena: 1v1 Rating 1500 - no matches played yet. 2v2 Rating 1500 - no matches played yet.');
   });
 
   it('does not divide by zero when all games were draws (no wins or losses)', () => {
@@ -48,7 +48,7 @@ describe('/arena command', () => {
     sim.tick();
 
     sim.chat('/arena', a);
-    expect(errorText(sim.tick(), a)).toBe('Arena: Rating 1490 — no matches played yet.');
+    expect(errorText(sim.tick(), a)).toBe('Arena: 1v1 Rating 1490 - no matches played yet. 2v2 Rating 1500 - no matches played yet.');
   });
 
   it('rounds the win rate and works through the /pvp and /rating aliases', () => {
@@ -62,12 +62,12 @@ describe('/arena command', () => {
 
     sim.chat('/pvp', a);
     expect(errorText(sim.tick(), a)).toBe(
-      'Arena: Rating 1602 — 1 wins, 2 losses (33% win rate).',
+      'Arena: 1v1 Rating 1602 - 1 wins, 2 losses (33% win rate). 2v2 Rating 1500 - no matches played yet.',
     );
 
     sim.chat('/rating', a);
     expect(errorText(sim.tick(), a)).toBe(
-      'Arena: Rating 1602 — 1 wins, 2 losses (33% win rate).',
+      'Arena: 1v1 Rating 1602 - 1 wins, 2 losses (33% win rate). 2v2 Rating 1500 - no matches played yet.',
     );
   });
 

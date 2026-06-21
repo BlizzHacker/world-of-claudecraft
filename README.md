@@ -280,3 +280,6 @@ The code is [MIT licensed](LICENSE) — fork it, remix it, host your own world.
 The bundled third-party art assets (models, textures, HDRIs) remain under
 their own licenses — all CC0 public domain except the MIT water normal maps,
 as documented per pack in [CREDITS.md](CREDITS.md).
+
+Runtime dependency notices for the wallet-linking feature are documented in
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

@@ -180,6 +180,30 @@ describe('arena: a full bout', () => {
     expect(sim.entities.get(a)!.targetId).toBe(b);
   });
 
+  it('does not cancel auto-attack when retargeting an active arena opponent', () => {
+    const { sim, a, b } = queueDuo();
+    startBout(sim);
+    const attacker = sim.entities.get(a)!;
+
+    sim.targetEntity(b, a);
+    sim.startAutoAttack(a);
+    expect(attacker.autoAttack).toBe(true);
+
+    sim.targetEntity(b, a);
+    expect(attacker.autoAttack).toBe(true);
+  });
+
+  it('still rejects auto-attack against arena opponents during the countdown', () => {
+    const { sim, a, b } = queueDuo();
+    const attacker = sim.entities.get(a)!;
+
+    sim.targetEntity(b, a);
+    sim.startAutoAttack(a);
+
+    expect(sim.arenaMatchFor(a)!.state).toBe('countdown');
+    expect(attacker.autoAttack).toBe(false);
+  });
+
   it('kills the loser at 0 health, scores at once, then a 5s aftermath returns both', () => {
     const { sim, a, b } = queueDuo();
     startBout(sim);
@@ -256,26 +280,41 @@ describe('arena: forfeit + persistence', () => {
     sim.meta(a)!.arenaRating = 1742;
     sim.meta(a)!.arenaWins = 9;
     sim.meta(a)!.arenaLosses = 4;
+    sim.meta(a)!.arena2v2Rating = 1611;
+    sim.meta(a)!.arena2v2Wins = 2;
+    sim.meta(a)!.arena2v2Losses = 5;
     const state = sim.serializeCharacter(a)!;
     expect(state.arenaRating).toBe(1742);
     expect(state.arenaWins).toBe(9);
     expect(state.arenaLosses).toBe(4);
+    expect(state.arena1v1Rating).toBe(1742);
+    expect(state.arena1v1Wins).toBe(9);
+    expect(state.arena1v1Losses).toBe(4);
+    expect(state.arena2v2Rating).toBe(1611);
+    expect(state.arena2v2Wins).toBe(2);
+    expect(state.arena2v2Losses).toBe(5);
 
     const sim2 = makeWorld();
     const a2 = sim2.addPlayer('paladin', 'Tyr', { state });
     expect(sim2.meta(a2)!.arenaRating).toBe(1742);
     expect(sim2.meta(a2)!.arenaWins).toBe(9);
     expect(sim2.meta(a2)!.arenaLosses).toBe(4);
+    expect(sim2.meta(a2)!.arena2v2Rating).toBe(1611);
+    expect(sim2.meta(a2)!.arena2v2Wins).toBe(2);
+    expect(sim2.meta(a2)!.arena2v2Losses).toBe(5);
   });
 
   it('unranked characters default to 1500', () => {
     const sim = makeWorld();
     const a = sim.addPlayer('druid', 'Cenarius');
     expect(sim.meta(a)!.arenaRating).toBe(1500);
+    expect(sim.meta(a)!.arena2v2Rating).toBe(1500);
     expect(sim.arenaInfoFor(a)!.rating).toBe(1500);
+    expect(sim.arenaInfoFor(a)!.standings['1v1'].rating).toBe(1500);
+    expect(sim.arenaInfoFor(a)!.standings['2v2'].rating).toBe(1500);
   });
 
-  it('the online ladder sorts rated players best first', () => {
+  it('the online ladders sort rated players best first by bracket', () => {
     const sim = makeWorld();
     const a = sim.addPlayer('warrior', 'Low');
     const b = sim.addPlayer('mage', 'High');
@@ -283,8 +322,13 @@ describe('arena: forfeit + persistence', () => {
     sim.meta(a)!.arenaRating = 1400;
     sim.meta(b)!.arenaRating = 1900;
     sim.meta(c)!.arenaRating = 1600;
-    const ladder = sim.arenaLadder();
-    expect(ladder.map((r) => r.name)).toEqual(['High', 'Mid', 'Low']);
+    sim.meta(a)!.arena2v2Rating = 2100;
+    sim.meta(b)!.arena2v2Rating = 1200;
+    sim.meta(c)!.arena2v2Rating = 1700;
+    const ladder1v1 = sim.arenaLadder();
+    const ladder2v2 = sim.arenaLadder('2v2');
+    expect(ladder1v1.map((r) => r.name)).toEqual(['High', 'Mid', 'Low']);
+    expect(ladder2v2.map((r) => r.name)).toEqual(['Low', 'Mid', 'High']);
   });
 });
 
@@ -323,10 +367,10 @@ describe('arena: 2v2 queue + matchmaking', () => {
     const b1 = sim.addPlayer('mage', 'Gimel');
     const b2 = sim.addPlayer('rogue', 'Dalet');
     for (const pid of [a1, a2, b1, b2]) teleport(sim, pid, 0, -40);
-    sim.meta(a1)!.arenaRating = 1500;
-    sim.meta(a2)!.arenaRating = 1500;
-    sim.meta(b1)!.arenaRating = 1800;
-    sim.meta(b2)!.arenaRating = 1800;
+    sim.meta(a1)!.arena2v2Rating = 1500;
+    sim.meta(a2)!.arena2v2Rating = 1500;
+    sim.meta(b1)!.arena2v2Rating = 1800;
+    sim.meta(b2)!.arena2v2Rating = 1800;
     sim.partyInvite(a2, a1);
     sim.partyAccept(a2);
     sim.partyInvite(b2, b1);
@@ -409,9 +453,9 @@ describe('arena: 2v2 combat', () => {
     expect(sim.arenaMatchFor(a1)!.state).toBe('over');
     expect(eb2.hp).toBe(0);
     expect(eb2.dead).toBe(true);
-    expect(sim.meta(a1)!.arenaWins).toBe(1);
-    expect(sim.meta(b1)!.arenaLosses).toBe(1);
-    expect(sim.meta(b2)!.arenaLosses).toBe(1);
+    expect(sim.meta(a1)!.arena2v2Wins).toBe(1);
+    expect(sim.meta(b1)!.arena2v2Losses).toBe(1);
+    expect(sim.meta(b2)!.arena2v2Losses).toBe(1);
   });
 
   it('teammates are not hostile to each other', () => {
@@ -427,29 +471,69 @@ describe('arena: 2v2 combat', () => {
     const { sim, pids } = queue2v2();
     startBout2v2(sim);
     const [a1, a2, b1, b2] = pids;
-    const rA1 = sim.meta(a1)!.arenaRating;
-    const rA2 = sim.meta(a2)!.arenaRating;
+    const rA1 = sim.meta(a1)!.arena2v2Rating;
+    const rA2 = sim.meta(a2)!.arena2v2Rating;
     for (const pid of [b1, b2]) {
       const attacker = sim.entities.get(a1)!;
       const target = sim.entities.get(pid)!;
       (sim as any).dealDamage(attacker, target, 99999, false, 'physical', null, 'hit');
       sim.tick();
     }
-    const delta = sim.meta(a1)!.arenaRating - rA1;
-    expect(sim.meta(a2)!.arenaRating - rA2).toBe(delta);
+    const delta = sim.meta(a1)!.arena2v2Rating - rA1;
+    expect(sim.meta(a2)!.arena2v2Rating - rA2).toBe(delta);
     expect(delta).toBe(16);
+  });
+
+  it('keeps 1v1 and 2v2 records fully separate', () => {
+    const one = queueDuo();
+    startBout(one.sim);
+    one.sim.meta(one.a)!.arena2v2Rating = 1666;
+    one.sim.meta(one.a)!.arena2v2Wins = 4;
+    one.sim.meta(one.a)!.arena2v2Losses = 3;
+    (one.sim as any).dealDamage(one.sim.entities.get(one.a)!, one.sim.entities.get(one.b)!, 99999, false, 'physical', null, 'hit');
+    one.sim.tick();
+    expect(one.sim.meta(one.a)!.arenaWins).toBe(1);
+    expect(one.sim.meta(one.a)!.arena2v2Rating).toBe(1666);
+    expect(one.sim.meta(one.a)!.arena2v2Wins).toBe(4);
+    expect(one.sim.meta(one.a)!.arena2v2Losses).toBe(3);
+
+    const two = queue2v2();
+    startBout2v2(two.sim);
+    const [a1, a2, b1, b2] = two.pids;
+    for (const pid of two.pids) {
+      two.sim.meta(pid)!.arenaRating = 1725 + pid;
+      two.sim.meta(pid)!.arenaWins = 7;
+      two.sim.meta(pid)!.arenaLosses = 6;
+    }
+    const before1v1 = two.pids.map((pid) => ({
+      pid,
+      rating: two.sim.meta(pid)!.arenaRating,
+      wins: two.sim.meta(pid)!.arenaWins,
+      losses: two.sim.meta(pid)!.arenaLosses,
+    }));
+    for (const pid of [b1, b2]) {
+      (two.sim as any).dealDamage(two.sim.entities.get(a1)!, two.sim.entities.get(pid)!, 99999, false, 'physical', null, 'hit');
+      two.sim.tick();
+    }
+    expect(two.sim.meta(a1)!.arena2v2Wins).toBe(1);
+    expect(two.sim.meta(a2)!.arena2v2Wins).toBe(1);
+    for (const row of before1v1) {
+      expect(two.sim.meta(row.pid)!.arenaRating).toBe(row.rating);
+      expect(two.sim.meta(row.pid)!.arenaWins).toBe(row.wins);
+      expect(two.sim.meta(row.pid)!.arenaLosses).toBe(row.losses);
+    }
   });
 
   it('disconnecting mid-bout forfeits the whole team', () => {
     const { sim, pids } = queue2v2();
     startBout2v2(sim);
     const [a1, a2, b1, b2] = pids;
-    const rA1 = sim.meta(a1)!.arenaRating;
+    const rA1 = sim.meta(a1)!.arena2v2Rating;
     sim.removePlayer(b1);
     expect(sim.arenaMatchFor(a1)).toBe(null);
-    expect(sim.meta(a1)!.arenaRating).toBe(rA1 + 16);
-    expect(sim.meta(a2)!.arenaWins).toBe(1);
-    expect(sim.meta(b2)!.arenaLosses).toBe(1);
+    expect(sim.meta(a1)!.arena2v2Rating).toBe(rA1 + 16);
+    expect(sim.meta(a2)!.arena2v2Wins).toBe(1);
+    expect(sim.meta(b2)!.arena2v2Losses).toBe(1);
   });
 });
 

@@ -5,8 +5,9 @@ import { WebSocketServer, WebSocket } from 'ws';
 import {
   ensureSchema, pool, createAccount, findAccount, getAccountsCount, touchLogin, saveToken, accountForToken,
   listCharacters, getCharacter, createCharacterCapped, deleteCharacter, closeOrphanSessions,
-  pruneChatLogs, searchCharacters, characterCountsByRealm, moderationStatusForAccount, renameCharacter,
-  findCharacterReportTargetByName, topArenaRatings, topLifetimeXp, chatMuteStatusForAccount,
+  pruneChatLogs, pruneClientPerfReports, searchCharacters, characterCountsByRealm, moderationStatusForAccount, renameCharacter,
+  findCharacterReportTargetByName, topArenaRatings, topLifetimeXp, chatMuteStatusForAccount, loadAccountCosmetics,
+  referralCountForAccount, primarySlugForAccount, lifetimeXpStanding,
   accountTotpState,
 } from './db';
 import { virtualLevel } from '../src/sim/types';
@@ -20,9 +21,12 @@ import {
   hashPassword, verifyPassword, newToken, validUsernameShape, offensiveName, validPassword, normalizeCharName,
 } from './auth';
 import { json, readBody, isUniqueViolation } from './http_util';
-import { requestIp, rateLimited, authThrottled, recordAuthFailure, clearAuthFailures } from './ratelimit';
+import { requestIp, rateLimited, authThrottled, recordAuthFailure, clearAuthFailures, cardUploadRateLimited, wocBalanceRateLimited } from './ratelimit';
 import { verifyTurnstile } from './turnstile';
 import { verifyTotpCode } from './totp';
+import { handleWalletChallenge, handleWalletLink, handleWalletGet, handleWalletUnlink } from './wallet';
+import { handleWocBalance, parseWocBalanceQuery } from './woc_balance';
+import { handleCardUpload, handleCardRoutes, captureReferral, cardUploadContentLengthTooLarge } from './player_card';
 import { handleAdminApi } from './admin';
 import { handleModeratorApi, handleUserApi } from './dashboard';
 import { handleAuthentikRoute, isAuthentikConfigured } from './oauth';
@@ -32,11 +36,13 @@ import { maybeHandleEconomyApi } from './economy/api';
 import { applyEconomySchema } from './economy/db';
 import { maybeBuildSolanaFromEnv } from '../src/economy/solanaAdapter';
 import { setChainAdapter } from '../src/economy/chainAdapter';
+import { handlePerfReport } from './perf_report';
 import { GameServer } from './game';
 import { REALM, REALM_DIRECTORY, REALM_ORIGINS } from './realm';
 import { saveBugReport } from './bug_reports';
 import { webLoginEnforced, isWebClientRequest } from './web_login_guard';
 import { cacheControlFor, cacheHeadersFor, etagFor, isNotModified } from './static_cache';
+import { recordUsageCacheEvent, recordUsageMetric, setUsageCacheSize } from './provider_usage';
 
 const PORT = Number(process.env.PORT ?? 8787);
 const STATIC_DIR = path.join(__dirname, '..', 'dist');
@@ -55,6 +61,9 @@ const LINKS_ALIASES = new Set([
 ]);
 // How long chat logs are kept (0 = forever); pruned at boot and daily.
 const CHAT_LOG_RETENTION_DAYS = Number(process.env.CHAT_LOG_RETENTION_DAYS ?? 90);
+// Client performance reports are operational telemetry, not permanent records.
+// Keep enough history for tuning runs while bounding table growth.
+const PERF_REPORT_RETENTION_DAYS = Number(process.env.PERF_REPORT_RETENTION_DAYS ?? 14);
 // Cloudflare Turnstile secret. When unset (local dev / tests) registration and
 // login skip human verification entirely — see requireTurnstile below.
 const TURNSTILE_SECRET = process.env.TURNSTILE_SECRET ?? '';
@@ -140,42 +149,56 @@ export interface ReleaseEntry {
 }
 
 let releasesCache: { at: number; entries: ReleaseEntry[] } | null = null;
+setUsageCacheSize('github.releases', 0, RELEASES_SIZE);
 
 async function refreshReleases(): Promise<ReleaseEntry[]> {
-  const res = await fetch(
-    `https://api.github.com/repos/${GITHUB_REPO}/releases?per_page=${RELEASES_SIZE}`,
-    {
-      headers: {
-        Accept: 'application/vnd.github+json',
-        'X-GitHub-Api-Version': '2022-11-28',
-        'User-Agent': 'world-of-claudecraft-server',
-        ...(GITHUB_TOKEN ? { Authorization: `Bearer ${GITHUB_TOKEN}` } : {}),
+  recordUsageMetric('github.releases.fetch');
+  try {
+    const res = await fetch(
+      `https://api.github.com/repos/${GITHUB_REPO}/releases?per_page=${RELEASES_SIZE}`,
+      {
+        headers: {
+          Accept: 'application/vnd.github+json',
+          'X-GitHub-Api-Version': '2022-11-28',
+          'User-Agent': 'world-of-claudecraft-server',
+          ...(GITHUB_TOKEN ? { Authorization: `Bearer ${GITHUB_TOKEN}` } : {}),
+        },
+        signal: AbortSignal.timeout(8000),
       },
-      signal: AbortSignal.timeout(8000),
-    },
-  );
-  if (!res.ok) throw new Error(`github releases ${res.status}`);
-  const raw = (await res.json()) as any[];
-  const entries: ReleaseEntry[] = (Array.isArray(raw) ? raw : [])
-    .filter((r) => r && !r.draft) // skip unpublished drafts
-    .map((r) => ({
-      id: Number(r.id),
-      tag: String(r.tag_name ?? ''),
-      name: String(r.name || r.tag_name || ''),
-      body: String(r.body ?? '').slice(0, RELEASE_BODY_MAX),
-      url: String(r.html_url ?? ''),
-      prerelease: Boolean(r.prerelease),
-      publishedAt: String(r.published_at ?? r.created_at ?? ''),
-    }));
-  releasesCache = { at: Date.now(), entries };
-  return entries;
+    );
+    if (!res.ok) throw new Error(`github releases ${res.status}`);
+    const raw = (await res.json()) as any[];
+    const entries: ReleaseEntry[] = (Array.isArray(raw) ? raw : [])
+      .filter((r) => r && !r.draft) // skip unpublished drafts
+      .map((r) => ({
+        id: Number(r.id),
+        tag: String(r.tag_name ?? ''),
+        name: String(r.name || r.tag_name || ''),
+        body: String(r.body ?? '').slice(0, RELEASE_BODY_MAX),
+        url: String(r.html_url ?? ''),
+        prerelease: Boolean(r.prerelease),
+        publishedAt: String(r.published_at ?? r.created_at ?? ''),
+      }));
+    releasesCache = { at: Date.now(), entries };
+    recordUsageCacheEvent('github.releases', 'store');
+    setUsageCacheSize('github.releases', entries.length, RELEASES_SIZE);
+    return entries;
+  } catch (err) {
+    recordUsageMetric('github.releases.fetch.failure');
+    throw err;
+  }
 }
 
 async function getReleases(): Promise<ReleaseEntry[]> {
-  if (releasesCache && Date.now() - releasesCache.at < RELEASES_TTL_MS) return releasesCache.entries;
+  if (releasesCache && Date.now() - releasesCache.at < RELEASES_TTL_MS) {
+    recordUsageCacheEvent('github.releases', 'hit');
+    return releasesCache.entries;
+  }
+  recordUsageCacheEvent('github.releases', releasesCache ? 'stale' : 'miss');
   try {
     return await refreshReleases();
   } catch (err) {
+    recordUsageCacheEvent('github.releases', 'failure');
     console.error('github releases refresh failed:', err);
     return releasesCache?.entries ?? [];
   }
@@ -413,6 +436,9 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
         username: account.username,
         ...requestMetadata(req),
       }).catch((err) => console.error('suspicious registration report failed:', err));
+      // Capture the referral when this account signed up via a card link
+      // (?ref=<slug>). Best-effort: never block or fail registration on it.
+      void captureReferral(account.id, body.ref).catch((err) => console.error('referral capture failed:', err));
       return json(res, 200, { token, username: account.username });
     }
     if (req.method === 'POST' && url === '/api/login') {
@@ -486,6 +512,14 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
     }
     const delMatch = /^\/api\/characters\/(\d+)$/.exec(url);
     const renameMatch = /^\/api\/characters\/(\d+)\/rename$/.exec(url);
+    const standingMatch = /^\/api\/characters\/(\d+)\/standing$/.exec(url);
+    if (req.method === 'GET' && standingMatch) {
+      const accountId = await bearerActiveAccount(req, res);
+      if (accountId === null) return;
+      const standing = await lifetimeXpStanding(accountId, Number(standingMatch[1]));
+      if (!standing) return json(res, 404, { error: 'character not found' });
+      return json(res, 200, standing);
+    }
     if (req.method === 'POST' && renameMatch) {
       const accountId = await bearerActiveAccount(req, res);
       if (accountId === null) return;
@@ -581,6 +615,9 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
         return json(res, 400, { error: err instanceof Error ? err.message : 'could not submit report' });
       }
     }
+    if (req.method === 'POST' && url === '/api/perf-report') {
+      return await handlePerfReport(req, res);
+    }
     if (req.method === 'GET' && url === '/api/project-stats') {
       const accountsCount = await getAccountsCount();
       return json(res, 200, {
@@ -599,7 +636,9 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
     }
     if (req.method === 'GET' && url === '/api/arena/leaderboard') {
       // public all-time Ashen Coliseum ladder (top rated characters)
-      return json(res, 200, { leaders: await topArenaRatings(20) });
+      const params = new URLSearchParams((req.url ?? '').split('?')[1] ?? '');
+      const format = params.get('format') === '2v2' ? '2v2' : '1v1';
+      return json(res, 200, { format, leaders: await topArenaRatings(20, format) });
     }
     if (req.method === 'GET' && url === '/api/leaderboard') {
       // lifetime-XP leaderboard (Max-Level XP Overflow), served from the
@@ -615,6 +654,7 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       return json(res, 200, { realm: REALM, scope, metric: 'lifetimeXp', leaders: entries.slice(0, limit) });
     }
     if (req.method === 'GET' && url === '/api/releases') {
+      recordUsageMetric('github.releases.api');
       // public News & Updates feed, mirrored from GitHub Releases and served
       // from the in-memory cache (refreshed at most every RELEASES_TTL_MS).
       // Optional ?limit=N (1..RELEASES_SIZE).
@@ -622,6 +662,65 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       const limit = Math.max(1, Math.min(RELEASES_SIZE, Number(params.get('limit')) || RELEASES_SIZE));
       const entries = await getReleases();
       return json(res, 200, { repo: GITHUB_REPO, releases: entries.slice(0, limit) });
+    }
+    // Non-custodial Solana wallet linking — all account-scoped.
+    if (req.method === 'POST' && url === '/api/wallet/link/challenge') {
+      const accountId = await bearerActiveAccount(req, res);
+      if (accountId === null) return;
+      return handleWalletChallenge(req, res, accountId);
+    }
+    if (req.method === 'POST' && url === '/api/wallet/link') {
+      const accountId = await bearerActiveAccount(req, res);
+      if (accountId === null) return;
+      return handleWalletLink(req, res, accountId);
+    }
+    if (req.method === 'DELETE' && url === '/api/wallet/link') {
+      const accountId = await bearerActiveAccount(req, res);
+      if (accountId === null) return;
+      return handleWalletUnlink(req, res, accountId);
+    }
+    if (req.method === 'GET' && url === '/api/wallet') {
+      const accountId = await bearerActiveAccount(req, res);
+      if (accountId === null) return;
+      return handleWalletGet(req, res, accountId);
+    }
+    // $WOC balance proxy — keeps the Solana RPC endpoint (and any key in it)
+    // server-side so it never ships in the client bundle. Public (on-chain
+    // balances are public) but narrow + IP rate-limited + per-wallet cached.
+    if (req.method === 'GET' && url === '/api/woc/balance') {
+      if (wocBalanceRateLimited(req)) {
+        recordUsageMetric('woc.balance.rate_limited');
+        return json(res, 429, { error: 'rate limited' });
+      }
+      // `fresh=1` is parsed AFTER the IP rate-limit above, so it can't be used to hammer the RPC.
+      const { owner, fresh } = parseWocBalanceQuery(req.url ?? '');
+      return handleWocBalance(res, owner, fresh);
+    }
+    // Shareable player card: publish (PNG body) + referral stats for the card.
+    if (req.method === 'POST' && url === '/api/card') {
+      recordUsageMetric('card.publish.request');
+      if (cardUploadContentLengthTooLarge(req)) {
+        recordUsageMetric('card.publish.rejected');
+        res.shouldKeepAlive = false;
+        res.setHeader('Connection', 'close');
+        return json(res, 413, { error: 'image too large' });
+      }
+      const accountId = await bearerActiveAccount(req, res);
+      if (accountId === null) return;
+      if (cardUploadRateLimited(req, accountId)) {
+        recordUsageMetric('card.publish.rate_limited');
+        return json(res, 429, { error: 'rate limited' });
+      }
+      return handleCardUpload(req, res, accountId);
+    }
+    if (req.method === 'GET' && url === '/api/referrals') {
+      const accountId = await bearerActiveAccount(req, res);
+      if (accountId === null) return;
+      const [count, slug] = await Promise.all([
+        referralCountForAccount(accountId),
+        primarySlugForAccount(accountId),
+      ]);
+      return json(res, 200, { count, slug });
     }
     json(res, 404, { error: 'unknown endpoint' });
   } catch (err: any) {
@@ -667,10 +766,13 @@ async function main(): Promise<void> {
   if (orphans > 0) console.log(`closed ${orphans} orphaned play session(s) from a previous run`);
   const pruned = await pruneChatLogs(CHAT_LOG_RETENTION_DAYS);
   if (pruned > 0) console.log(`pruned ${pruned} chat log row(s) older than ${CHAT_LOG_RETENTION_DAYS} days`);
+  const prunedPerfReports = await pruneClientPerfReports(PERF_REPORT_RETENTION_DAYS);
+  if (prunedPerfReports > 0) console.log(`pruned ${prunedPerfReports} client perf report row(s) older than ${PERF_REPORT_RETENTION_DAYS} days`);
   await game.loadMarket();
   await game.loadChatFilter();
   setInterval(() => {
     void pruneChatLogs(CHAT_LOG_RETENTION_DAYS).catch((err) => console.error('chat log prune failed:', err));
+    void pruneClientPerfReports(PERF_REPORT_RETENTION_DAYS).catch((err) => console.error('perf report prune failed:', err));
   }, 24 * 3600 * 1000).unref();
   // keep both leaderboard caches warm so the first viewer never waits on the
   // query and it never recomputes per request (PR-3)
@@ -704,6 +806,7 @@ async function main(): Promise<void> {
       if (!handled) { res.writeHead(404); res.end(); }
     });
     else if (url.startsWith('/api/')) void handleApi(req, res);
+    else if (req.method === 'GET' && url.startsWith('/p/')) void handleCardRoutes(req, res);
     else serveStatic(req, res);
   });
 
@@ -776,6 +879,7 @@ async function main(): Promise<void> {
       ws.close(1008, 'Too many connections from your network');
       return;
     }
+    const accountCosmetics = await loadAccountCosmetics(accountId);
     const result = game.join(
       ws,
       accountId,
@@ -790,6 +894,7 @@ async function main(): Promise<void> {
         reason: chatMute.reason,
         chatStrikes: status.chatStrikes,
         hardcore: !!character.hardcore,
+        accountCosmetics,
       },
     );
     if ('error' in result) {

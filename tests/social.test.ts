@@ -117,11 +117,23 @@ describe('nine classes', () => {
     p.resource = p.maxResource;
     // wait out gcd then judge
     for (let i = 0; i < 35; i++) sim.tick();
-    face(sim, p.id, wolf.id);
-    const dealtBefore = sim.counters.damageDealt;
-    sim.castAbility('judgement');
-    sim.tick();
-    expect(sim.counters.damageDealt).toBeGreaterThan(dealtBefore);
+    // Judgement's spell hit is an RNG roll (capped at 99%), so a single cast can
+    // miss on some world seeds and deal no damage. Re-seal and retry until it
+    // lands, so this checks the mechanic (judgement hits and consumes the seal)
+    // rather than a lucky roll — robust to RNG-stream shifts from new content.
+    let landed = false;
+    for (let attempt = 0; attempt < 25 && !landed; attempt++) {
+      if (!p.auras.some((a) => a.kind === 'imbue')) { sim.castAbility('seal_of_righteousness'); sim.tick(); }
+      p.gcdRemaining = 0;
+      p.cooldowns.delete('judgement');
+      p.resource = p.maxResource;
+      face(sim, p.id, wolf.id);
+      const dealtBefore = sim.counters.damageDealt;
+      sim.castAbility('judgement');
+      sim.tick();
+      landed = sim.counters.damageDealt > dealtBefore;
+    }
+    expect(landed).toBe(true); // judgement connected and dealt damage
     expect(p.auras.some((a) => a.kind === 'imbue')).toBe(false); // consumed
   });
 
@@ -355,7 +367,7 @@ describe('parties', () => {
     expect(metaB.questLog.get('q_wolves')!.counts[0]).toBe(1);
   });
 
-  it('party members may loot each other\'s tapped kills', () => {
+  it('party members may loot each other\'s tapped kills and split copper', () => {
     const { sim, a, b } = makeDuo();
     const wolf = nearestMob(sim, 'forest_wolf');
     wolf.hp = 1;
@@ -366,9 +378,14 @@ describe('parties', () => {
     sim.startAutoAttack(a);
     for (let i = 0; i < 20 * 20 && !wolf.dead; i++) { face(sim, a, wolf.id); sim.tick(); }
     expect(wolf.lootable).toBe(true);
-    const copperBefore = sim.meta(b)!.copper;
+    const copper = wolf.loot!.copper;
+    const aBefore = sim.meta(a)!.copper;
+    const bBefore = sim.meta(b)!.copper;
     sim.lootCorpse(wolf.id, b);
-    expect(sim.meta(b)!.copper).toBeGreaterThan(copperBefore);
+    const aGain = sim.meta(a)!.copper - aBefore;
+    const bGain = sim.meta(b)!.copper - bBefore;
+    expect(aGain + bGain).toBe(copper);
+    expect(Math.abs(aGain - bGain)).toBeLessThanOrEqual(1);
   });
 
   it('non-party members cannot loot tapped kills', () => {
@@ -611,6 +628,25 @@ describe('trading', () => {
     sim.tradeAccept(b);
     sim.tradeSetOffer([{ itemId: 'boar_hide', count: 2 }], 0, a);
     expect(sim.tradeFor(a)!.offerA.items.length).toBe(0);
+  });
+
+  it('mech chroma plates can be traded directly', () => {
+    const sim = makeWorld();
+    const a = sim.addPlayer('warrior', 'Aleph');
+    const b = sim.addPlayer('mage', 'Bet');
+    teleport(sim, a, 0, -40);
+    teleport(sim, b, 3, -40);
+    sim.addItem('vanguard_chrome_armor_plate', 1, a);
+
+    sim.tradeRequest(b, a);
+    sim.tradeAccept(b);
+    sim.tradeSetOffer([{ itemId: 'vanguard_chrome_armor_plate', count: 1 }], 0, a);
+    sim.tradeConfirm(a);
+    sim.tradeConfirm(b);
+
+    expect(sim.tradeFor(a)).toBe(null);
+    expect(sim.countItem('vanguard_chrome_armor_plate', a)).toBe(0);
+    expect(sim.countItem('vanguard_chrome_armor_plate', b)).toBe(1);
   });
 });
 

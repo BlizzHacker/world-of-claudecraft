@@ -4,7 +4,7 @@
 // only ONCE per pull, and elites/bosses/beasts never flee.
 import { describe, expect, it } from 'vitest';
 import { Sim } from '../src/sim/sim';
-import { dist2d } from '../src/sim/types';
+import { DT, RUN_SPEED, dist2d } from '../src/sim/types';
 import type { Entity } from '../src/sim/types';
 
 function makeSim() {
@@ -25,6 +25,7 @@ function engageLowHp(sim: Sim, mob: Entity, templateId: string, hpFrac: number) 
   mob.enraged = false;
   mob.hasFled = false;
   mob.fleeTimer = 0;
+  mob.fleeReturnTimer = 0;
   mob.pos = { x: sim.player.pos.x + 3, z: sim.player.pos.z, y: sim.player.pos.y };
   mob.prevPos = { ...mob.pos };
   mob.spawnPos = { ...mob.pos };
@@ -32,6 +33,17 @@ function engageLowHp(sim: Sim, mob: Entity, templateId: string, hpFrac: number) 
   mob.aiState = 'attack';
   mob.aggroTargetId = sim.playerId;
   mob.inCombat = true;
+}
+
+function moveEntityToward(e: Entity, target: Entity, step: number) {
+  const dx = target.pos.x - e.pos.x;
+  const dz = target.pos.z - e.pos.z;
+  const d = Math.hypot(dx, dz);
+  if (d <= 0) return;
+  const s = Math.min(step, d);
+  e.pos.x += (dx / d) * s;
+  e.pos.z += (dz / d) * s;
+  e.prevPos = { ...e.pos };
 }
 
 describe('cowardly mobs flee at low HP', () => {
@@ -66,6 +78,63 @@ describe('cowardly mobs flee at low HP', () => {
 
     expect(mob.aiState === 'flee' || mob.hasFled).toBe(true);
     expect(dist2d(mob.pos, sim.player.pos)).toBeGreaterThan(before);
+  });
+
+  it('does not flee faster than a player can run', () => {
+    const sim = makeSim();
+    const mob = wildMobs(sim)[0];
+    engageLowHp(sim, mob, 'gravecaller_cultist', 0.1);
+    mob.moveSpeed = RUN_SPEED * 2;
+
+    sim.tick();
+    expect(mob.aiState).toBe('flee');
+    const before = { ...mob.pos };
+
+    sim.tick();
+
+    expect(dist2d(before, mob.pos)).toBeLessThanOrEqual(RUN_SPEED * DT + 1e-6);
+  });
+
+  it('stays in the pull instead of evade-resetting when the player chases a fleeing mob', () => {
+    const sim = makeSim();
+    const mob = wildMobs(sim)[0];
+    engageLowHp(sim, mob, 'gravecaller_cultist', 0.1);
+    mob.moveSpeed = RUN_SPEED * 2;
+
+    sim.tick();
+    expect(mob.aiState).toBe('flee');
+
+    for (let i = 0; i < 20 * 6; i++) {
+      moveEntityToward(sim.player, mob, RUN_SPEED * DT);
+      sim.tick();
+      if (mob.aiState === 'attack') break;
+    }
+
+    expect(mob.aiState).toBe('attack');
+    expect(mob.hp).toBeLessThan(mob.maxHp);
+    expect(mob.hasFled).toBe(true);
+  });
+
+  it('re-engages instead of evade-resetting when fleeing reaches the leash edge', () => {
+    const sim = makeSim();
+    const mob = wildMobs(sim)[0];
+    engageLowHp(sim, mob, 'gravecaller_cultist', 0.1);
+    mob.leashAnchor = { x: mob.pos.x - 44.9, z: mob.pos.z, y: mob.pos.y };
+    sim.player.pos = { x: mob.pos.x - 20, z: mob.pos.z, y: mob.pos.y };
+
+    sim.tick();
+    expect(mob.aiState).toBe('flee');
+
+    sim.tick();
+
+    expect(mob.aiState).toBe('chase');
+    expect(mob.hp).toBeLessThan(mob.maxHp);
+    expect(mob.hasFled).toBe(true);
+
+    sim.tick();
+
+    expect(mob.aiState).not.toBe('evade');
+    expect(mob.hp).toBeLessThan(mob.maxHp);
   });
 
   it('calls a nearby same-family ally into the fight when it flees', () => {

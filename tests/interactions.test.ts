@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { handlePickedEntity, hoverCursorKind, isAttackHoverTarget } from '../src/game/interactions';
+import { activePvpOpponentIds, handlePickedEntity, hoverCursorKind, isAttackableEntity, isAttackHoverTarget } from '../src/game/interactions';
 import type { Entity } from '../src/sim/types';
 
 function stubEntity(partial: Partial<Entity> & Pick<Entity, 'id' | 'kind'>): Entity {
@@ -84,17 +84,105 @@ describe('hoverCursorKind', () => {
     expect(hoverCursorKind(npc, 1, new Set())).toBe('friendly');
   });
 
-  it('returns friendly for party members only', () => {
+  it('returns friendly for other players', () => {
     const ally = stubEntity({ id: 4, kind: 'player' });
     const stranger = stubEntity({ id: 5, kind: 'player' });
     const party = new Set([4]);
     expect(hoverCursorKind(ally, 1, party)).toBe('friendly');
-    expect(hoverCursorKind(stranger, 1, party)).toBe('default');
+    expect(hoverCursorKind(stranger, 1, party)).toBe('friendly');
     expect(hoverCursorKind(ally, 4, party)).toBe('default');
+  });
+
+  it('returns attack for active pvp opponents', () => {
+    const opponent = stubEntity({ id: 5, kind: 'player' });
+    expect(hoverCursorKind(opponent, 1, new Set(), new Set([5]))).toBe('attack');
+    expect(isAttackableEntity(opponent, 1, new Set([5]))).toBe(true);
+  });
+
+  it('keeps dead pvp opponents non-attackable for hover', () => {
+    const opponent = stubEntity({ id: 5, kind: 'player', dead: true });
+    expect(hoverCursorKind(opponent, 1, new Set(), new Set([5]))).toBe('friendly');
   });
 
   it('returns default for empty pick', () => {
     expect(hoverCursorKind(undefined, 1, new Set())).toBe('default');
+  });
+});
+
+describe('activePvpOpponentIds', () => {
+  it('includes active duel and every arena enemy', () => {
+    const player = stubEntity({ id: 1, kind: 'player' });
+    const ids = activePvpOpponentIds({
+      playerId: 1,
+      player,
+      duelInfo: { otherPid: 2, otherName: 'Duelist', state: 'active' },
+      arenaInfo: {
+        queued: false,
+        queueSize: 0,
+        rating: 1500,
+        wins: 0,
+        losses: 0,
+        format: '1v1',
+        standings: {
+          '1v1': { rating: 1500, wins: 0, losses: 0 },
+          '2v2': { rating: 1500, wins: 0, losses: 0 },
+          'fiesta': { rating: 1500, wins: 0, losses: 0 },
+        },
+        ladder: [],
+        ladders: { '1v1': [], '2v2': [], 'fiesta': [] },
+        match: {
+          oppPid: 3,
+          oppName: 'Arena Rival',
+          oppClass: 'warrior',
+          oppLevel: 1,
+          state: 'active',
+          format: '1v1',
+          allies: [],
+          enemies: [
+            { pid: 3, name: 'Arena Rival', cls: 'warrior', level: 1 },
+            { pid: 4, name: 'Arena Partner', cls: 'mage', level: 1 },
+          ],
+        },
+      },
+    });
+
+    expect([...ids].sort()).toEqual([2, 3, 4]);
+  });
+
+  it('ignores inactive pvp states', () => {
+    const player = stubEntity({ id: 1, kind: 'player' });
+    const ids = activePvpOpponentIds({
+      playerId: 1,
+      player,
+      duelInfo: { otherPid: 2, otherName: 'Duelist', state: 'countdown' },
+      arenaInfo: {
+        queued: false,
+        queueSize: 0,
+        rating: 1500,
+        wins: 0,
+        losses: 0,
+        format: '1v1',
+        standings: {
+          '1v1': { rating: 1500, wins: 0, losses: 0 },
+          '2v2': { rating: 1500, wins: 0, losses: 0 },
+          'fiesta': { rating: 1500, wins: 0, losses: 0 },
+        },
+        ladder: [],
+        ladders: { '1v1': [], '2v2': [], 'fiesta': [] },
+        match: {
+          oppPid: 3,
+          oppName: 'Arena Rival',
+          oppClass: 'warrior',
+          oppLevel: 1,
+          state: 'countdown',
+          format: '1v1',
+          allies: [],
+          enemies: [],
+        },
+      },
+    });
+
+    expect(ids.size).toBe(0);
   });
 });
 

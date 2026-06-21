@@ -89,6 +89,12 @@ export class CharacterPreview {
 
   /** Set the active character model by player class. */
   setClass(cls: PlayerClass): void {
+    this.setVisualKey(`player_${cls}`);
+  }
+
+  /** Set the active model by raw visual key (e.g. `player_mech` for the cosmetic
+   *  turntable). The asset must already be loaded — callers preload first. */
+  setVisualKey(visualKey: string): void {
     // Clean up current visual if it exists
     if (this.currentVisual) {
       this.characterGroup.remove(this.currentVisual.root);
@@ -97,8 +103,6 @@ export class CharacterPreview {
     }
 
     try {
-      // Load the CharacterVisual from preloaded assets (e.g. player_warrior)
-      const visualKey = `player_${cls}`;
       this.currentVisual = new CharacterVisual(visualKey, 0xffffff, this.currentSkin);
       this.characterGroup.add(this.currentVisual.root);
 
@@ -106,7 +110,7 @@ export class CharacterPreview {
       // Resetting Y rotation is cleanest for transitions.
       this.characterGroup.rotation.y = 0;
     } catch (err) {
-      console.error(`Failed to load preview character visual for ${cls}:`, err);
+      console.error(`Failed to load preview character visual for ${visualKey}:`, err);
     }
   }
 
@@ -214,6 +218,67 @@ export class CharacterPreview {
 
     this.renderer.render(this.scene, this.camera);
   };
+
+  /**
+   * Render a single crisp, deterministic close-up of the current character and
+   * return it as a PNG data URL. Used to stamp the player's avatar onto the
+   * shareable player card.
+   *
+   * The live preview canvas is borrowed for one synchronous render: we save the
+   * renderer size, camera, and group rotation; frame a tighter portrait at the
+   * requested pixel size; read the pixels (preserveDrawingBuffer makes this
+   * reliable); then restore everything and re-render so the visible preview is
+   * untouched. Because nothing awaits between the off-pose render and the
+   * restore, the browser never paints the intermediate frame.
+   */
+  captureCloseup(
+    opts: { width?: number; height?: number; angle?: number; poseClips?: readonly string[]; poseFraction?: number } = {},
+  ): string {
+    const width = Math.max(1, Math.round(opts.width ?? 540));
+    const height = Math.max(1, Math.round(opts.height ?? 720));
+    const angle = opts.angle ?? -0.42; // gentle 3/4 turn for a heroic stance
+
+    const prevSize = new THREE.Vector2();
+    this.renderer.getSize(prevSize);
+    const prevPixelRatio = this.renderer.getPixelRatio();
+    const prevAspect = this.camera.aspect;
+    const prevPos = this.camera.position.clone();
+    const prevRotY = this.characterGroup.rotation.y;
+
+    // Optionally lock a deliberate pose for the shot (e.g. a hero/cast/cheer
+    // stance) instead of whatever idle frame is up. Restored via clearPose below.
+    const posed = opts.poseClips && opts.poseClips.length > 0
+      ? this.currentVisual?.poseFreeze(opts.poseClips, opts.poseFraction ?? 0.5) ?? null
+      : null;
+
+    // Pixel-exact buffer (ratio 1 → drawingBuffer is exactly width×height).
+    this.renderer.setPixelRatio(1);
+    this.renderer.setSize(width, height, false);
+    this.camera.aspect = width / height;
+    // Pulled back to z=4.6, aimed at y=1.55 (eye 1.62) so the 45°/0.75-aspect
+    // frustum spans roughly y in [-0.3, 3.5] at the figure plane: enough headroom
+    // above the 2.6 head-top to clear the raised weapon/arms of the hero & victory
+    // poses (~3.3u) while the feet stay inside (BUG: card character was out of
+    // bounds). The card's drawCharacter() fit math then frames the whole capture.
+    this.camera.position.set(-0.1, 1.62, 4.6);
+    this.camera.lookAt(new THREE.Vector3(-0.1, 1.55, 0));
+    this.camera.updateProjectionMatrix();
+    this.characterGroup.rotation.y = angle;
+    this.renderer.render(this.scene, this.camera);
+    const url = this.canvas.toDataURL('image/png');
+
+    // Restore the live preview exactly as it was (camera + idle animation).
+    if (posed) this.currentVisual?.clearPose();
+    this.renderer.setPixelRatio(prevPixelRatio);
+    this.renderer.setSize(prevSize.x, prevSize.y, false);
+    this.camera.aspect = prevAspect;
+    this.camera.position.copy(prevPos);
+    this.camera.lookAt(new THREE.Vector3(-0.15, 1.3, 0));
+    this.camera.updateProjectionMatrix();
+    this.characterGroup.rotation.y = prevRotY;
+    this.renderer.render(this.scene, this.camera);
+    return url;
+  }
 
   /** Cleanup resources */
   destroy(): void {

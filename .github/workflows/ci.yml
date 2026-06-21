@@ -50,6 +50,16 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Generate i18n artifacts
+        run: npm run i18n:gen
+
+      # Fast, legible fail BEFORE the long test/build run if a committed generated
+      # artifact drifted from source (someone changed an overlay but forgot to
+      # regenerate). status.json is gitignored, so only the committed artifacts are
+      # diffed; the test suite also enforces this, this just surfaces it sooner.
+      - name: Verify committed i18n artifacts are fresh
+        run: git diff --exit-code -- src/ui/i18n.resolved.generated src/admin/i18n.resolved.generated src/ui/i18n.status.summary.json
+
       - name: Run tests (PR tier)
         run: npm test
 
@@ -86,6 +96,16 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Generate i18n artifacts
+        run: npm run i18n:gen
+
+      # Fast, legible fail BEFORE the long test/build run if a committed generated
+      # artifact drifted from source (someone changed an overlay but forgot to
+      # regenerate). status.json is gitignored, so only the committed artifacts are
+      # diffed; the test suite also enforces this, this just surfaces it sooner.
+      - name: Verify committed i18n artifacts are fresh
+        run: git diff --exit-code -- src/ui/i18n.resolved.generated src/admin/i18n.resolved.generated src/ui/i18n.status.summary.json
 
       - name: Run tests (release tier - 14-locale + empty-pending)
         run: npm test

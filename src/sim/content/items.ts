@@ -97,6 +97,10 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'gorraks_cruel_chopper', name: "Gorrak's Cruel Chopper", kind: 'weapon', slot: 'mainhand', quality: 'uncommon',
     weapon: { min: 8, max: 13, speed: 2.4 }, stats: { str: 2, sta: 1 }, sellValue: 180, requiredClass: WAR,
   },
+  tunnelkings_spade: {
+    id: 'tunnelkings_spade', name: "Tunnelking's Spade", kind: 'weapon', slot: 'mainhand', quality: 'uncommon',
+    weapon: { min: 9, max: 15, speed: 2.7 }, stats: { str: 3, sta: 2 }, sellValue: 190, requiredClass: WAR,
+  },
   moggers_stomper_boots: {
     id: 'moggers_stomper_boots', name: "Mogger's Stomper Boots", kind: 'armor', slot: 'feet', quality: 'uncommon',
     stats: { armor: 32, agi: 2, sta: 1 }, sellValue: 180, requiredClass: ROG,
@@ -117,6 +121,45 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'cryptbone_greaves', name: 'Cryptbone Greaves', kind: 'armor', slot: 'legs', quality: 'uncommon',
     stats: { armor: 48, sta: 2 }, sellValue: 180,
   },
+  // --- Inventory 2.0: helmet/shoulder/waist/gloves. ---
+  // No documented armor/stat budget exists, so these are balanced to the
+  // *empirical* convention of the existing class-neutral mid-tier pieces:
+  // armor is slot-weighted off the legs/chest baseline (head≈1.0, shoulder≈0.75,
+  // gloves≈0.65, waist≈0.55) and stat points track peers (uncommon ~L10-13 ≈ 2-4
+  // pts; class-neutral rare ~L20 ≈ 5-7 pts, cf. cryptbone_greaves / trollhide_leggings
+  // / korgaths_chainwraps / stormshard_leggings). Class-neutral on purpose.
+  cryptbone_helm: {
+    id: 'cryptbone_helm', name: 'Cryptbone Helm', kind: 'armor', slot: 'helmet', quality: 'uncommon',
+    stats: { armor: 48, sta: 3 }, sellValue: 185,
+  },
+  cryptbone_pauldrons: {
+    id: 'cryptbone_pauldrons', name: 'Cryptbone Pauldrons', kind: 'armor', slot: 'shoulder', quality: 'uncommon',
+    stats: { armor: 36, sta: 2 }, sellValue: 140,
+  },
+  mistveil_cord: {
+    id: 'mistveil_cord', name: 'Mistveil Cord', kind: 'armor', slot: 'waist', quality: 'uncommon',
+    stats: { armor: 30, sta: 2, agi: 1 }, sellValue: 150,
+  },
+  mistveil_grips: {
+    id: 'mistveil_grips', name: 'Mistveil Grips', kind: 'armor', slot: 'gloves', quality: 'uncommon',
+    stats: { armor: 36, agi: 2, sta: 1 }, sellValue: 165,
+  },
+  boundstone_helm: {
+    id: 'boundstone_helm', name: 'Boundstone Helm', kind: 'armor', slot: 'helmet', quality: 'rare',
+    stats: { armor: 105, sta: 4, str: 3 }, sellValue: 460,
+  },
+  boundstone_girdle: {
+    id: 'boundstone_girdle', name: 'Boundstone Girdle', kind: 'armor', slot: 'waist', quality: 'rare',
+    stats: { armor: 60, sta: 4, str: 2 }, sellValue: 340,
+  },
+  gravewyrm_mantle: {
+    id: 'gravewyrm_mantle', name: 'Gravewyrm Mantle', kind: 'armor', slot: 'shoulder', quality: 'rare',
+    stats: { armor: 82, agi: 4, sta: 2 }, sellValue: 410,
+  },
+  gravewyrm_gauntlets: {
+    id: 'gravewyrm_gauntlets', name: 'Gravewyrm Gauntlets', kind: 'armor', slot: 'gloves', quality: 'rare',
+    stats: { armor: 72, str: 3, sta: 2 }, sellValue: 390,
+  },
   // --- food & drink (vendor) ---
   baked_bread: {
     id: 'baked_bread', name: 'Freshly Baked Bread', kind: 'food', quality: 'common',
@@ -130,6 +173,12 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'simple_fishing_pole', name: 'Simple Fishing Pole', kind: 'tool', quality: 'common',
     use: { type: 'fishing' }, sellValue: 4, buyValue: 20,
   },
+  // Cosmetic event reward: using it rolls a rarity rank (server-side) and opens
+  // the skin-select overlay. See src/sim/content/skins.ts. Dev-grant for now.
+  event_skin_token: {
+    id: 'event_skin_token', name: 'Mysterious Cosmetic Cache', kind: 'tool', quality: 'epic',
+    use: { type: 'skinSelect', catalog: 'class' }, sellValue: 0,
+  },
   raw_mirror_trout: {
     id: 'raw_mirror_trout', name: 'Raw Mirror Trout', kind: 'food', quality: 'common',
     foodHp: 61, sellValue: 3,
@@ -137,6 +186,37 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   tangled_weed: {
     id: 'tangled_weed', name: 'Tangled Weed', kind: 'junk', quality: 'poor',
     sellValue: 1,
+  },
+  // --- fishing catches (see FISHING_TABLES below). Food heals scale with the
+  // depth/level of the zone you fish in; junk just vendors for coppers. ---
+  raw_river_perch: {
+    id: 'raw_river_perch', name: 'Raw River Perch', kind: 'food', quality: 'common',
+    foodHp: 45, sellValue: 2,
+  },
+  raw_marsh_pike: {
+    id: 'raw_marsh_pike', name: 'Raw Marsh Pike', kind: 'food', quality: 'common',
+    foodHp: 90, sellValue: 6,
+  },
+  raw_bog_eel: {
+    id: 'raw_bog_eel', name: 'Raw Bog Eel', kind: 'food', quality: 'common',
+    foodHp: 90, sellValue: 6,
+  },
+  raw_frostgill_trout: {
+    id: 'raw_frostgill_trout', name: 'Raw Frostgill Trout', kind: 'food', quality: 'common',
+    foodHp: 117, sellValue: 10,
+  },
+  raw_stonescale_carp: {
+    id: 'raw_stonescale_carp', name: 'Raw Stonescale Carp', kind: 'food', quality: 'common',
+    foodHp: 117, sellValue: 10,
+  },
+  soggy_boot: {
+    id: 'soggy_boot', name: 'Soggy Boot', kind: 'junk', quality: 'poor',
+    sellValue: 1,
+  },
+  // The prized rare catch, reelable from any water — a lucky hook.
+  glimmerfin_koi: {
+    id: 'glimmerfin_koi', name: 'Glimmerfin Koi', kind: 'food', quality: 'uncommon',
+    foodHp: 117, sellValue: 75,
   },
   roasted_boar: {
     id: 'roasted_boar', name: 'Roasted Boar Meat', kind: 'food', quality: 'common',
@@ -152,6 +232,32 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'minor_mana_potion', name: 'Minor Mana Potion', kind: 'potion', quality: 'common',
     potionMana: 120, sellValue: 8, buyValue: 40,
   },
+  // --- battle elixir: a temporary stat buff on use (classic flask/elixir staple).
+  // Drops from the Mirefen brutes; +Stamina helps anyone push deeper into the marsh.
+  elixir_of_the_bear: {
+    id: 'elixir_of_the_bear', name: 'Elixir of the Bear', kind: 'elixir', quality: 'uncommon',
+    elixir: { aura: 'Might of the Bear', kind: 'buff_sta', value: 12, duration: 900 },
+    sellValue: 20, buyValue: 100,
+  },
+  // Higher tiers of the combat-potion ladder, keeping pace with the zone-2/3
+  // level bands (classic Minor -> Lesser -> standard progression). Same instant,
+  // in-combat, 60s-shared-cooldown rules as the Minor tier above.
+  lesser_healing_potion: {
+    id: 'lesser_healing_potion', name: 'Lesser Healing Potion', kind: 'potion', quality: 'common',
+    potionHp: 150, sellValue: 16, buyValue: 85,
+  },
+  lesser_mana_potion: {
+    id: 'lesser_mana_potion', name: 'Lesser Mana Potion', kind: 'potion', quality: 'common',
+    potionMana: 200, sellValue: 16, buyValue: 85,
+  },
+  healing_potion: {
+    id: 'healing_potion', name: 'Healing Potion', kind: 'potion', quality: 'common',
+    potionHp: 280, sellValue: 32, buyValue: 170,
+  },
+  mana_potion: {
+    id: 'mana_potion', name: 'Mana Potion', kind: 'potion', quality: 'common',
+    potionMana: 360, sellValue: 32, buyValue: 170,
+  },
   conjured_water: {
     id: 'conjured_water', name: 'Conjured Spring Water', kind: 'drink', quality: 'common',
     drinkMana: 76, sellValue: 0,
@@ -163,6 +269,20 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   conjured_water3: {
     id: 'conjured_water3', name: 'Conjured Sparkling Water', kind: 'drink', quality: 'common',
     drinkMana: 672, sellValue: 0,
+  },
+  // --- conjured food (mage Conjure Food ranks; foodHp tiers pair with the
+  // conjured-water mana tiers above) ---
+  conjured_bread: {
+    id: 'conjured_bread', name: 'Conjured Bread', kind: 'food', quality: 'common',
+    foodHp: 61, sellValue: 0,
+  },
+  conjured_bread2: {
+    id: 'conjured_bread2', name: 'Conjured Pumpernickel', kind: 'food', quality: 'common',
+    foodHp: 243, sellValue: 0,
+  },
+  conjured_bread3: {
+    id: 'conjured_bread3', name: 'Conjured Sweet Roll', kind: 'food', quality: 'common',
+    foodHp: 552, sellValue: 0,
   },
   // --- Smith Haldren's stock (common/white, levels 3-7) ---
   eastbrook_arming_sword: {
@@ -246,6 +366,29 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'gravepath_treads', name: 'Gravepath Treads', kind: 'armor', slot: 'feet', quality: 'rare',
     stats: { armor: 42, sta: 2 }, sellValue: 600,
   },
+  // --- Captain Verlan (ruins rare) drops ---
+  // A shared uncommon trophy (any class) plus a mutually-exclusive rare chase
+  // group, one item per archetype, mirroring the other zone-1 rare elites.
+  oathbound_greaves: {
+    id: 'oathbound_greaves', name: 'Oathbound Greaves', kind: 'armor', slot: 'legs', quality: 'uncommon',
+    stats: { armor: 52, sta: 2, str: 1 }, sellValue: 200,
+  },
+  verlans_oathblade: {
+    id: 'verlans_oathblade', name: "Verlan's Oathblade", kind: 'weapon', slot: 'mainhand', quality: 'rare',
+    weapon: { min: 10, max: 16, speed: 2.5 }, stats: { str: 4, sta: 2 }, sellValue: 880, requiredClass: WAR,
+  },
+  hollow_vigil_staff: {
+    id: 'hollow_vigil_staff', name: 'Staff of the Hollow Vigil', kind: 'weapon', slot: 'mainhand', quality: 'rare',
+    weapon: { min: 11, max: 18, speed: 3.0 }, stats: { int: 5, spi: 2 }, sellValue: 880, requiredClass: MAG,
+  },
+  gravewardens_shiv: {
+    id: 'gravewardens_shiv', name: "Gravewarden's Shiv", kind: 'weapon', slot: 'mainhand', quality: 'rare',
+    weapon: { min: 7, max: 11, speed: 1.7, dagger: true }, stats: { agi: 4, sta: 2 }, sellValue: 880, requiredClass: ROG,
+  },
+  maldrecs_soulbinder: {
+    id: 'maldrecs_soulbinder', name: "Maldrec's Soulbinder", kind: 'weapon', slot: 'mainhand', quality: 'rare',
+    weapon: { min: 11, max: 18, speed: 3.0 }, stats: { int: 4, spi: 3 }, sellValue: 850,
+  },
   // --- quest items ---
   boar_hide: { id: 'boar_hide', name: 'Bristly Boar Hide', kind: 'quest', sellValue: 0, questId: 'q_boars' },
   gravecaller_sigil: { id: 'gravecaller_sigil', name: "Gravecaller's Sigil", kind: 'quest', sellValue: 0, questId: 'q_whispers' },
@@ -256,6 +399,21 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   greyjaw_fang: { id: 'greyjaw_fang', name: "Old Greyjaw's Fang", kind: 'quest', sellValue: 0, questId: 'q_greyjaw' },
   weathered_ledger_page: { id: 'weathered_ledger_page', name: 'Weathered Ledger Page', kind: 'quest', sellValue: 0, questId: 'q_names_of_the_dead' },
   morthen_grimoire: { id: 'morthen_grimoire', name: "Morthen's Grimoire", kind: 'quest', sellValue: 0, questId: 'q_gravecallers_trail' },
+  monarch_heart: { id: 'monarch_heart', name: "The Monarch's Heart", kind: 'quest', sellValue: 0, questId: 'q_brightwood_monarch' },
+  // --- Brightwood Glade wildlife pack ---
+  glade_pelt: { id: 'glade_pelt', name: 'Glade Pelt', kind: 'junk', quality: 'poor', sellValue: 6 },
+  soft_down: { id: 'soft_down', name: 'Soft Down Tuft', kind: 'junk', quality: 'poor', sellValue: 4 },
+  amber_hide: { id: 'amber_hide', name: 'Amber Hide', kind: 'junk', quality: 'poor', sellValue: 9 },
+  stag_antler: { id: 'stag_antler', name: 'Branching Antler', kind: 'junk', quality: 'poor', sellValue: 8 },
+  brightwood_venison: { id: 'brightwood_venison', name: 'Brightwood Venison', kind: 'food', quality: 'common', foodHp: 92, sellValue: 4, buyValue: 35 },
+  bramblehide_jerkin: {
+    id: 'bramblehide_jerkin', name: 'Bramblehide Jerkin', kind: 'armor', slot: 'chest', quality: 'uncommon',
+    stats: { armor: 40, sta: 2, agi: 1 }, sellValue: 120,
+  },
+  monarch_crown_helm: {
+    id: 'monarch_crown_helm', name: "Monarch's Crown", kind: 'armor', slot: 'helmet', quality: 'rare',
+    stats: { armor: 46, sta: 3, agi: 2, str: 1 }, sellValue: 320,
+  },
   // --- junk (gray) ---
   wolf_fang: { id: 'wolf_fang', name: 'Cracked Wolf Fang', kind: 'junk', quality: 'poor', sellValue: 4 },
   bandit_bandana: { id: 'bandit_bandana', name: 'Red Bandana', kind: 'junk', quality: 'poor', sellValue: 6 },
@@ -265,4 +423,148 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   spider_leg: { id: 'spider_leg', name: 'Twitching Spider Leg', kind: 'junk', quality: 'poor', sellValue: 4 },
   bone_fragments: { id: 'bone_fragments', name: 'Bone Fragments', kind: 'junk', quality: 'poor', sellValue: 7 },
   linen_scrap: { id: 'linen_scrap', name: 'Linen Scrap', kind: 'junk', quality: 'poor', sellValue: 3 },
+
+  // --- Quartermaster's Consignment ---------------------------------------
+  // A standing line of practical adventuring gear. The Merchant keeps eight
+  // pieces stocked on the World Market (see seedHouseListings); four more are
+  // looted from threats around the Vale. All uncommon, Eastbrook-tier (~L5-9),
+  // filling the helmet/shoulder/waist/gloves slots the early game leaves thin.
+  roadwardens_helm: {
+    id: 'roadwardens_helm', name: "Roadwarden's Helm", kind: 'armor', slot: 'helmet', quality: 'uncommon',
+    stats: { armor: 45, sta: 2 }, sellValue: 130, requiredClass: WAR,
+  },
+  wayfarers_hood: {
+    id: 'wayfarers_hood', name: "Wayfarer's Hood", kind: 'armor', slot: 'helmet', quality: 'uncommon',
+    stats: { armor: 30, agi: 2 }, sellValue: 120, requiredClass: ROG,
+  },
+  acolytes_circlet: {
+    id: 'acolytes_circlet', name: "Acolyte's Circlet", kind: 'armor', slot: 'helmet', quality: 'uncommon',
+    stats: { armor: 16, int: 2, spi: 1 }, sellValue: 120, requiredClass: MAG,
+  },
+  reinforced_pauldrons: {
+    id: 'reinforced_pauldrons', name: 'Reinforced Pauldrons', kind: 'armor', slot: 'shoulder', quality: 'uncommon',
+    stats: { armor: 50, str: 1, sta: 1 }, sellValue: 140, requiredClass: WAR,
+  },
+  embroidered_mantle: {
+    id: 'embroidered_mantle', name: 'Embroidered Mantle', kind: 'armor', slot: 'shoulder', quality: 'uncommon',
+    stats: { armor: 14, int: 2 }, sellValue: 110, requiredClass: MAG,
+  },
+  sturdy_belt: {
+    id: 'sturdy_belt', name: "Sturdy Traveler's Belt", kind: 'armor', slot: 'waist', quality: 'uncommon',
+    stats: { armor: 35, sta: 2 }, sellValue: 100,
+  },
+  silk_sash: {
+    id: 'silk_sash', name: 'Woven Silk Sash', kind: 'armor', slot: 'waist', quality: 'uncommon',
+    stats: { armor: 10, int: 2, spi: 1 }, sellValue: 100, requiredClass: MAG,
+  },
+  roughspun_gloves: {
+    id: 'roughspun_gloves', name: 'Roughspun Gloves', kind: 'armor', slot: 'gloves', quality: 'uncommon',
+    stats: { armor: 28, agi: 1, sta: 1 }, sellValue: 95,
+  },
+  // looted pieces
+  bristlehide_spaulders: {
+    id: 'bristlehide_spaulders', name: 'Bristlehide Spaulders', kind: 'armor', slot: 'shoulder', quality: 'uncommon',
+    stats: { armor: 40, agi: 1, sta: 2 }, sellValue: 150, requiredClass: ROG,
+  },
+  sableweb_cord: {
+    id: 'sableweb_cord', name: 'Sableweb Cord', kind: 'armor', slot: 'waist', quality: 'uncommon',
+    stats: { armor: 11, agi: 1, int: 2 }, sellValue: 150,
+  },
+  gorraks_cleaver: {
+    id: 'gorraks_cleaver', name: "Gorrak's Cleaver", kind: 'weapon', slot: 'mainhand', quality: 'uncommon',
+    weapon: { min: 8, max: 14, speed: 2.5 }, stats: { str: 3 }, sellValue: 180, requiredClass: WAR,
+  },
+  mossy_handwraps: {
+    id: 'mossy_handwraps', name: 'Mossgrown Handwraps', kind: 'armor', slot: 'gloves', quality: 'uncommon',
+    stats: { armor: 12, int: 1, spi: 2 }, sellValue: 140, requiredClass: MAG,
+  },
+  // --- Crossroads Outfitters ----------------------------------------------
+  // A travelling caravan quartermaster's standing stock, filling the slots the
+  // Quartermaster's Consignment left thin: mainhand weapons plus chest, legs and
+  // feet. All uncommon, Eastbrook-tier (~L8-12); most are unrestricted so any
+  // melee adventurer can outfit a full set. The Merchant keeps eight on the
+  // World Market (see seedHouseListings); four more drop around the Vale.
+  crossroads_saber: {
+    id: 'crossroads_saber', name: 'Crossroads Saber', kind: 'weapon', slot: 'mainhand', quality: 'uncommon',
+    weapon: { min: 8, max: 14, speed: 2.5 }, stats: { str: 2 }, sellValue: 170,
+  },
+  tradesman_hatchet: {
+    id: 'tradesman_hatchet', name: "Tradesman's Hatchet", kind: 'weapon', slot: 'mainhand', quality: 'uncommon',
+    weapon: { min: 7, max: 13, speed: 2.3 }, stats: { str: 1, sta: 1 }, sellValue: 160,
+  },
+  drovers_staff: {
+    id: 'drovers_staff', name: "Drover's Staff", kind: 'weapon', slot: 'mainhand', quality: 'uncommon',
+    weapon: { min: 9, max: 15, speed: 3.0 }, stats: { int: 3, spi: 2 }, sellValue: 175, requiredClass: MAG,
+  },
+  caravan_warden_dirk: {
+    id: 'caravan_warden_dirk', name: 'Caravan Warden Dirk', kind: 'weapon', slot: 'mainhand', quality: 'uncommon',
+    weapon: { min: 5, max: 9, speed: 1.7, dagger: true }, stats: { agi: 3 }, sellValue: 170, requiredClass: ROG,
+  },
+  outrider_brigandine: {
+    id: 'outrider_brigandine', name: 'Outrider Brigandine', kind: 'armor', slot: 'chest', quality: 'uncommon',
+    stats: { armor: 95, str: 1, sta: 2 }, sellValue: 165,
+  },
+  caravan_quilted_vest: {
+    id: 'caravan_quilted_vest', name: 'Caravan Quilted Vest', kind: 'armor', slot: 'chest', quality: 'uncommon',
+    stats: { armor: 40, sta: 2 }, sellValue: 130,
+  },
+  wanderers_chestguard: {
+    id: 'wanderers_chestguard', name: "Wanderer's Chestguard", kind: 'armor', slot: 'chest', quality: 'uncommon',
+    stats: { armor: 60, agi: 2, sta: 1 }, sellValue: 150,
+  },
+  outrider_legguards: {
+    id: 'outrider_legguards', name: 'Outrider Legguards', kind: 'armor', slot: 'legs', quality: 'uncommon',
+    stats: { armor: 70, sta: 2 }, sellValue: 150,
+  },
+  trail_leggings: {
+    id: 'trail_leggings', name: 'Trailworn Leggings', kind: 'armor', slot: 'legs', quality: 'uncommon',
+    stats: { armor: 45, agi: 2 }, sellValue: 120,
+  },
+  pilgrims_leggings: {
+    id: 'pilgrims_leggings', name: "Pilgrim's Leggings", kind: 'armor', slot: 'legs', quality: 'uncommon',
+    stats: { armor: 24, int: 2, spi: 1 }, sellValue: 120,
+  },
+  outrider_sabatons: {
+    id: 'outrider_sabatons', name: 'Outrider Sabatons', kind: 'armor', slot: 'feet', quality: 'uncommon',
+    stats: { armor: 55, sta: 2 }, sellValue: 130,
+  },
+  milepost_boots: {
+    id: 'milepost_boots', name: 'Milepost Boots', kind: 'armor', slot: 'feet', quality: 'uncommon',
+    stats: { armor: 30, agi: 1, sta: 1 }, sellValue: 110,
+  },
 };
+
+// --- Zone-aware fishing loot ----------------------------------------------
+// A cast resolves to one weighted draw from the table for the zone the angler
+// is standing in. `itemId: null` means "no fish are biting" (an empty hook).
+// The engine (Sim.completeFishing) rolls a single this.rng draw against the
+// running weight total, so catches stay replay-deterministic.
+export interface FishingEntry { itemId: string | null; weight: number }
+
+export const FISHING_TABLES: Record<string, FishingEntry[]> = {
+  eastbrook_vale: [
+    { itemId: 'raw_mirror_trout', weight: 45 },
+    { itemId: 'raw_river_perch', weight: 30 },
+    { itemId: 'tangled_weed', weight: 12 },
+    { itemId: 'glimmerfin_koi', weight: 3 },
+    { itemId: null, weight: 10 },
+  ],
+  mirefen_marsh: [
+    { itemId: 'raw_marsh_pike', weight: 40 },
+    { itemId: 'raw_bog_eel', weight: 30 },
+    { itemId: 'soggy_boot', weight: 8 },
+    { itemId: 'tangled_weed', weight: 9 },
+    { itemId: 'glimmerfin_koi', weight: 3 },
+    { itemId: null, weight: 10 },
+  ],
+  thornpeak_heights: [
+    { itemId: 'raw_frostgill_trout', weight: 40 },
+    { itemId: 'raw_stonescale_carp', weight: 30 },
+    { itemId: 'tangled_weed', weight: 14 },
+    { itemId: 'glimmerfin_koi', weight: 4 },
+    { itemId: null, weight: 12 },
+  ],
+};
+
+// The rare catch worth a celebratory shout in the combat log.
+export const FISHING_RARE_ID = 'glimmerfin_koi';

@@ -13,9 +13,11 @@ client even runs `abilitiesKnownAt` / `computeQuestState` locally, but purely to
 
 ## Wire protocol — MUST stay in lockstep with `server/game.ts`
 See `server/CLAUDE.md` for server conventions; read `server/game.ts` directly for the exact wire encoding.
-- **Server → client** (handled in `onMessage`): `hello` (pid, seed, realm) ·
-  `snap` · `events` (pushed to `eventQueue`, drained by `drainEvents`) · `social`
-  (sets `socialInfo`, flips `socialDirty`) · `error` (disconnect).
+- **Server → client** (handled in `onMessage`): `hello` (pid, seed, realm,
+  `softWords`) · `snap` · `events` (pushed to `eventQueue`, drained by
+  `drainEvents`) · `social` (sets `socialInfo`, flips `socialDirty`) · `socialpos`
+  (in-place friend/guildmate position refresh) · `censor` (live soft-profanity
+  word-list update) · `error` (disconnect).
 - **Client → server**: `auth` (`buildWebSocketAuthMessage`) · `input` (20 Hz move
   intent via `sendInput`, `setInterval` 50 ms) · `cmd` (every IWorld action via the
   private `cmd()` helper).
@@ -48,6 +50,25 @@ clears the send timer and fires `onDisconnect`; the app re-creates the world.
 field. 4. If it returns state, mirror that field in `applySnapshot` (delta-guarded)
 and add it to the snapshot test's expected-field lists. Also implement it in the
 offline `Sim` so both worlds satisfy `IWorld`.
+
+## i18n — this layer carries text but does NOT translate it
+`online.ts` itself imports no `t()` / matcher and renders no UI. Its only
+player-facing text is connection failure, and it stays a stable English source
+that the UI boundary re-localizes:
+- The two literal disconnect reasons it emits — `'Connection to the server was
+  lost.'` (`onclose`) and `'rejected by server'` (the `error`-frame fallback) —
+  flow through `onDisconnect(reason)`; `main.ts` maps them in `userFacingApiError`
+  to `t('loading.connectionLost')` / `t('loading.connectionRejected')`. Keep those
+  English literals byte-identical here AND in that matcher's match arms in the SAME
+  change (the comparison is on the lowercased raw literal, not the rendered `t()`
+  value).
+- Server-sent `error`-frame text (`msg.error`) and REST `data.error` are passed
+  through verbatim; the server is the source of truth and `main.ts` localizes them
+  (`userFacingApiError`, plus `tServer` for moderation/throttle reasons). Surface
+  the server key/text — never hard-code your own user-facing copy here.
+- The `` `request failed (${res.status})` `` thrown fallback is a transport
+  diagnostic and stays English by design (matches the "diagnostic errors stay
+  English" rule in `main.ts`).
 
 ## Never
 - Never mutate game state authoritatively here or "predict" an outcome. The only

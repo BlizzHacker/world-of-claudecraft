@@ -1,4 +1,5 @@
 import type { Input, TouchMoveInput } from './input';
+import { t } from '../ui/i18n';
 
 export const PHONE_TOUCH_QUERY = '(pointer: coarse) and (max-width: 940px), (pointer: coarse) and (max-height: 760px)';
 const DEADZONE = 0.22;
@@ -50,6 +51,20 @@ function safeLocalStorage(): Pick<Storage, 'getItem' | 'setItem'> | null {
   try { return typeof localStorage !== 'undefined' ? localStorage : null; } catch { return null; }
 }
 
+/** Hold the Chat button at least this long (ms) to toggle the read-only log peek
+ * instead of opening the keyboard composer. */
+export const CHAT_LONG_PRESS_MS = 420;
+
+/** A press is a "long press" (log-peek toggle) once it has been held for at least
+ * {@link CHAT_LONG_PRESS_MS}; shorter presses are taps that open the composer. */
+export function isChatLongPress(heldMs: number, threshold = CHAT_LONG_PRESS_MS): boolean {
+  return heldMs >= threshold;
+}
+// A quick second tap on the camera joystick (within this window, without
+// dragging it into a look) snaps the camera back behind the character.
+export const RECENTER_DOUBLE_TAP_MS = 300;
+const RECENTER_TAP_MOVE_PX = 12;
+
 export interface MobileControlCallbacks {
   onAttackNearest(): void;
   onJump(): void;
@@ -72,6 +87,22 @@ export interface MobileControlCallbacks {
   onNameplates(): boolean;
   /** Toggle background music; returns whether music is now enabled. */
   onMusic(): boolean;
+  /** Double-tap the camera joystick: snap the camera back behind the character. */
+  onRecenterCamera(): void;
+}
+
+/**
+ * True when a camera-joystick tap should count as the second half of a
+ * recenter double-tap: the press was a quick, near-stationary tap (not a
+ * look-drag) and it landed within the double-tap window of the previous tap.
+ */
+export function isRecenterDoubleTap(
+  prevTapAt: number,
+  now: number,
+  moved: boolean,
+  threshold = RECENTER_DOUBLE_TAP_MS,
+): boolean {
+  return !moved && prevTapAt > 0 && now - prevTapAt <= threshold;
 }
 
 export function isPhoneTouchDevice(win: Pick<Window, 'matchMedia'> = window): boolean {
@@ -111,6 +142,13 @@ export class MobileControls {
   private joyPointer: number | null = null;
   private lookPointer: number | null = null;
   private mq: MediaQueryList | null = null;
+  private moveDeadzone = DEADZONE;
+  // recenter double-tap bookkeeping for the camera joystick
+  private lastCameraTapAt = 0;
+  private cameraDownAt = 0;
+  private cameraDownX = 0;
+  private cameraDownY = 0;
+  private cameraMoved = false;
 
   private moveOriginX = 0;
   private moveOriginY = 0;
@@ -126,6 +164,9 @@ export class MobileControls {
   private swipeLookLastY = 0;
   private swipeLookActive = false;
 
+  private chatPressTimer: ReturnType<typeof setTimeout> | null = null;
+  private chatLongFired = false;
+
   private canvas = document.getElementById('game-canvas') as HTMLElement | null;
   private root = document.getElementById('mobile-controls') as HTMLElement | null;
   private moveZone = document.getElementById('mobile-move-zone') as HTMLElement | null;
@@ -136,6 +177,11 @@ export class MobileControls {
   private autorunButton = document.getElementById('mobile-autorun') as HTMLElement | null;
 
   constructor(private input: Input, private callbacks: MobileControlCallbacks) {}
+
+  /** Tune how far the move thumbstick must travel before movement registers. */
+  setMoveDeadzone(deadzone: number): void {
+    this.moveDeadzone = deadzone;
+  }
 
   start(): void {
     if (!this.root || !this.moveJoystick || !this.moveStick || !this.cameraJoystick || !this.cameraStick) return;
@@ -208,11 +254,22 @@ export class MobileControls {
       this.onSwipeLookEnd(e);
     });
 
+    // Tap-outside-to-dismiss: while the More modal is open, a press anywhere
+    // outside the modal closes it. The toggle button manages its own state, so
+    // a press on it is ignored here (otherwise the open tap would re-close it).
+    document.addEventListener('pointerdown', (e) => {
+      if (!this.active || !document.body.classList.contains('mobile-more-open')) return;
+      const target = e.target as Element | null;
+      if (target && typeof target.closest === 'function'
+        && (target.closest('#mobile-extra-controls') || target.closest('#mobile-more'))) return;
+      this.closeMoreModal();
+    });
+
     this.bindButton('mobile-attack-nearest', () => this.callbacks.onAttackNearest());
-    this.bindButton('mobile-jump', () => this.callbacks.onJump());
+    this.bindButton('mobile-jump', () => this.callbacks.onJump(), { pressFirst: true });
     this.bindButton('mobile-target', () => this.callbacks.onTarget());
     this.bindButton('mobile-interact', () => this.callbacks.onInteract());
-    this.bindButton('mobile-chat', () => this.toggleChat());
+    this.bindChatButton('mobile-chat');
     this.bindButton('mobile-menu', () => this.callbacks.onMenu());
     this.bindButton('mobile-social', () => this.callbacks.onSocial());
     this.bindButton('mobile-emote', () => this.callbacks.onEmotes());
@@ -261,7 +318,7 @@ export class MobileControls {
     if (!active) {
       this.root?.classList.remove('expanded');
       this.autorunButton?.classList.remove('active');
-      document.body.classList.remove('mobile-more-open', 'mobile-chat-open');
+      document.body.classList.remove('mobile-more-open', 'mobile-chat-open', 'mobile-chatlog-peek');
       this.releaseMove();
       this.releaseCamera();
       this.releasePinch();
@@ -270,17 +327,36 @@ export class MobileControls {
     }
   }
 
-  private bindButton(id: string, cb: () => void): void {
+  private bindButton(id: string, cb: () => void, opts: { pressFirst?: boolean } = {}): void {
     const button = document.getElementById(id);
-    button?.addEventListener('click', (e) => {
+    if (!button) return;
+    const run = (e: Event) => {
       if (!this.active) return;
       e.preventDefault();
       triggerHaptic(HAPTIC_TAP, this.hapticsOn);
-      cb();
       if (button.closest('#mobile-extra-controls')) {
         this.closeMoreModal();
       }
-    });
+      cb();
+    };
+    if (opts.pressFirst) {
+      let suppressNextClick = false;
+      button.addEventListener('pointerdown', (e) => {
+        suppressNextClick = true;
+        globalThis.setTimeout(() => { suppressNextClick = false; }, 700);
+        run(e);
+      });
+      button.addEventListener('click', (e) => {
+        if (suppressNextClick) {
+          suppressNextClick = false;
+          e.preventDefault();
+          return;
+        }
+        run(e);
+      });
+      return;
+    }
+    button.addEventListener('click', run);
   }
 
   private closeMoreModal(): void {
@@ -310,10 +386,51 @@ export class MobileControls {
     button.classList.toggle('is-on', this.hapticsOn);
     button.setAttribute('aria-pressed', this.hapticsOn ? 'true' : 'false');
     const label = button.querySelector('.mobile-label');
-    if (label) label.textContent = this.hapticsOn ? 'Haptics' : 'Haptics Off';
+    if (label) label.textContent = this.hapticsOn ? t('hudChrome.mobile.haptics') : t('hudChrome.mobile.hapticsOff');
+  }
+
+  /** The Chat button taps to open the keyboard composer, but a long press toggles
+   * a read-only "peek" at the chat/combat log without raising the keyboard — so
+   * touch players can follow whispers, party chat, loot and combat text while the
+   * composer (and its keyboard) stays out of the way. */
+  private bindChatButton(id: string): void {
+    const button = document.getElementById(id);
+    if (!button) return;
+    const cancel = () => {
+      if (this.chatPressTimer !== null) { clearTimeout(this.chatPressTimer); this.chatPressTimer = null; }
+    };
+    button.addEventListener('pointerdown', (e) => {
+      if (!this.active) return;
+      e.preventDefault();
+      this.chatLongFired = false;
+      cancel();
+      this.chatPressTimer = setTimeout(() => {
+        this.chatLongFired = true;
+        this.chatPressTimer = null;
+        this.toggleLogPeek();
+      }, CHAT_LONG_PRESS_MS);
+    });
+    button.addEventListener('pointerup', (e) => {
+      if (!this.active) return;
+      e.preventDefault();
+      cancel();
+      if (!this.chatLongFired) this.toggleChat();
+    });
+    button.addEventListener('pointercancel', cancel);
+    button.addEventListener('pointerleave', cancel);
+  }
+
+  /** Toggle the read-only chat-log peek. Opening it makes sure the composer (and
+   * keyboard) is dismissed; opening the composer elsewhere clears the peek. */
+  private toggleLogPeek(): void {
+    const peeking = document.body.classList.toggle('mobile-chatlog-peek');
+    if (peeking && document.body.classList.contains('mobile-chat-open')) {
+      this.toggleChat();
+    }
   }
 
   private toggleChat(): void {
+    document.body.classList.remove('mobile-chatlog-peek');
     document.body.classList.toggle('mobile-chat-open');
     if (document.body.classList.contains('mobile-chat-open')) {
       this.callbacks.onChat();
@@ -357,7 +474,7 @@ export class MobileControls {
     const x = rawX / mag;
     const y = rawY / mag;
     this.moveStick.style.transform = `translate(${(x * radius * 0.46).toFixed(1)}px, ${(y * radius * 0.46).toFixed(1)}px)`;
-    const move = mapJoystickVector(x, y);
+    const move = mapJoystickVector(x, y, this.moveDeadzone);
     this.input.setTouchMove(move);
     // setTouchMove cancels autorun on forward/back input — keep the button glow honest.
     if (move.forward || move.back) this.autorunButton?.classList.remove('active');
@@ -393,6 +510,10 @@ export class MobileControls {
     e.preventDefault();
     this.lookPointer = e.pointerId;
     this.cameraJoystick?.classList.add('active');
+    this.cameraDownAt = this.now();
+    this.cameraDownX = e.clientX;
+    this.cameraDownY = e.clientY;
+    this.cameraMoved = false;
     this.input.setTouchLook(true);
     triggerHaptic(HAPTIC_JOYSTICK, this.hapticsOn);
     try { this.cameraJoystick?.setPointerCapture(e.pointerId); } catch { /* synthetic test event */ }
@@ -402,6 +523,9 @@ export class MobileControls {
   private onCameraMove(e: PointerEvent): void {
     if (!this.active || e.pointerId !== this.lookPointer || !this.cameraJoystick || !this.cameraStick) return;
     e.preventDefault();
+    if (Math.hypot(e.clientX - this.cameraDownX, e.clientY - this.cameraDownY) > RECENTER_TAP_MOVE_PX) {
+      this.cameraMoved = true;
+    }
     const r = this.cameraJoystick.getBoundingClientRect();
     const radius = Math.max(1, r.width / 2);
     const rawX = (e.clientX - (r.left + radius)) / radius;
@@ -416,7 +540,21 @@ export class MobileControls {
   private onCameraEnd(e: PointerEvent): void {
     if (e.pointerId !== this.lookPointer) return;
     e.preventDefault();
+    const now = this.now();
+    const quickTap = !this.cameraMoved && now - this.cameraDownAt <= RECENTER_DOUBLE_TAP_MS;
+    if (quickTap && isRecenterDoubleTap(this.lastCameraTapAt, now, this.cameraMoved)) {
+      this.callbacks.onRecenterCamera();
+      this.cameraJoystick?.classList.add('recentering');
+      window.setTimeout(() => this.cameraJoystick?.classList.remove('recentering'), 220);
+      this.lastCameraTapAt = 0;
+    } else {
+      this.lastCameraTapAt = quickTap ? now : 0;
+    }
     this.releaseCamera();
+  }
+
+  private now(): number {
+    return typeof performance !== 'undefined' ? performance.now() : Date.now();
   }
 
   private releaseCamera(): void {

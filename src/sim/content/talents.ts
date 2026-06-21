@@ -381,6 +381,48 @@ function accumulate(mods: TalentModifiers, eff: TalentEffect | undefined, mult: 
   if (eff.grant) mods.grants.push({ ability: eff.grant.ability, rank: eff.grant.rank ?? 1 });
 }
 
+// A deterministic, always-valid "balanced" allocation for a class — used by 2v2
+// Fiesta to standardize everyone to the same level-20 build. Picks the class's
+// first spec and greedily fills the budget node-by-node (class tree first, then
+// the chosen spec, in row/col order), validating after every point so the result
+// always satisfies prereqs, gates, and the point cap. Pure + deterministic.
+export function defaultBuild(cls: PlayerClass, points: number): TalentAllocation {
+  const ct = talentsFor(cls);
+  if (!ct) return emptyAllocation();
+  const spec = ct.specs[0] ?? null;
+  const alloc: TalentAllocation = { spec: spec?.id ?? null, ranks: {}, choices: {} };
+  const order = [...ct.nodes].sort((a, b) => {
+    if (a.tree !== b.tree) return a.tree === 'class' ? -1 : 1;
+    return a.row - b.row || a.col - b.col;
+  });
+  let spent = 0;
+  for (const node of order) {
+    if (spent >= points) break;
+    if (node.tree === 'spec' && node.specId !== alloc.spec) continue;
+    while (spent < points) {
+      const cur = alloc.ranks[node.id] ?? 0;
+      if (node.kind === 'choice') {
+        if (cur >= 1) break;
+        const opt = node.choices?.[0];
+        if (!opt) break;
+        alloc.choices[node.id] = opt.id;
+        alloc.ranks[node.id] = 1;
+        if (validateAllocation(cls, alloc, points).ok) { spent++; break; }
+        delete alloc.ranks[node.id];
+        delete alloc.choices[node.id];
+        break;
+      }
+      if (cur >= node.maxRank) break;
+      alloc.ranks[node.id] = cur + 1;
+      if (validateAllocation(cls, alloc, points).ok) { spent++; continue; }
+      if (cur === 0) delete alloc.ranks[node.id];
+      else alloc.ranks[node.id] = cur;
+      break;
+    }
+  }
+  return alloc;
+}
+
 export function computeTalentModifiers(cls: PlayerClass, alloc: TalentAllocation): TalentModifiers {
   const mods = emptyModifiers();
   const ct = talentsFor(cls);

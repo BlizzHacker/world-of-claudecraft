@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import {
-  Keybinds, BIND_ACTIONS, BIND_CATEGORIES, actionKind, isReservedCode, keyLabel,
+  Keybinds, BIND_ACTIONS, BIND_CATEGORIES, actionKind, actionAllowsShared, isReservedCode, keyLabel,
 } from '../src/game/keybinds';
 
 // minimal localStorage stub (the test env is plain node, no DOM)
@@ -144,6 +144,38 @@ describe('binding', () => {
     kb.reset();
     expect(kb.actionForCode('Digit1')).toBe('slot0');
     expect(kb.actionForCode('Space')).toBe('jump');
+  });
+});
+
+describe('Attack Move (shared key)', () => {
+  it('defaults to A, sharing the code with Turn Left', () => {
+    const kb = new Keybinds();
+    expect(actionAllowsShared('attackMove')).toBe(true);
+    expect(actionAllowsShared('turnLeft')).toBe(false);
+    expect(kb.codeAt('attackMove', 0)).toBe('KeyA');
+    expect(kb.codeAt('turnLeft', 0)).toBe('KeyA');
+    // actionForCode prefers Turn Left (earlier in the registry); Attack Move is
+    // dispatched ahead of it by Input only while its mode is on.
+    expect(kb.actionForCode('KeyA')).toBe('turnLeft');
+  });
+
+  it('keeps its shared A across a save/reload that rebinds another action', () => {
+    const first = new Keybinds();
+    first.bind('jump', 0, 'KeyT'); // any rebind persists the whole map
+    const reloaded = new Keybinds();
+    expect(reloaded.codeAt('attackMove', 0)).toBe('KeyA');
+    expect(reloaded.codeAt('turnLeft', 0)).toBe('KeyA');
+  });
+
+  it('does not steal A from Turn Left when (re)bound, nor get stolen', () => {
+    const kb = new Keybinds();
+    // rebinding Attack Move onto A must leave Turn Left's A intact
+    expect(kb.bind('attackMove', 0, 'KeyA')).toBe(true);
+    expect(kb.codeAt('turnLeft', 0)).toBe('KeyA');
+    // and binding another action to A must not strip Attack Move's shared A
+    expect(kb.bind('bags', 0, 'KeyA')).toBe(true);
+    expect(kb.codeAt('attackMove', 0)).toBe('KeyA');
+    expect(kb.codeAt('turnLeft', 0)).toBe(null); // non-shared loses it as usual
   });
 });
 

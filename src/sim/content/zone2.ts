@@ -61,6 +61,7 @@ export const ZONE2_MOBS: Record<string, MobTemplate> = {
       { copper: 30, chance: 1 },
       { itemId: 'mire_prowler_pelt', chance: 0.6, questId: 'q_prowler_pelts' },
       { itemId: 'soggy_moccasin', chance: 0.3 },
+      { itemId: 'lesser_healing_potion', chance: 0.08 },
     ],
     scale: 0.95, color: 0x4d5656,
     // Miring Pounce: the prowler drags its prey into the sucking mire, slowing
@@ -79,6 +80,9 @@ export const ZONE2_MOBS: Record<string, MobTemplate> = {
     scale: 0.85, color: 0x45b39d,
     // Acid Spit: a snapper's bite corrodes armor, stacking so a swarm shreds you fast.
     corrode: { chance: 0.35, armor: 20, maxStacks: 5, duration: 15, name: 'Acid Spit', school: 'nature' },
+    // Tide Cadence: a snapper drums up the school, quickening the whole pack's
+    // bites — the swarm's signature pressure when you pull more than one.
+    warcry: { radius: 12, every: 10, hasteMult: 1.25, duration: 6, name: 'Tide Cadence', school: 'frost' },
   },
   mirejaw_the_ravenous: {
     id: 'mirejaw_the_ravenous', name: 'Mirejaw the Ravenous', minLevel: 10, maxLevel: 10, family: 'murloc', rare: true,
@@ -86,6 +90,7 @@ export const ZONE2_MOBS: Record<string, MobTemplate> = {
     hpBase: 320, hpPerLevel: 58, dmgBase: 15, dmgPerLevel: 3.7, attackSpeed: 1.8,
     armorPerLevel: 26, moveSpeed: 8.2, aggroRadius: 14,
     aoePulse: { min: 18, max: 26, radius: 10, every: 9, name: 'Ravenous Frenzy', school: 'nature' },
+    sapVigor: { chance: 0.3, amount: 25, name: 'Sapping Bite' },
     summonAdds: { mobId: 'mirejaw_frenzy', count: 2, atHpPct: [0.55] },
     loot: [
       { copper: 260, chance: 1 },
@@ -104,10 +109,32 @@ export const ZONE2_MOBS: Record<string, MobTemplate> = {
     loot: [],
     scale: 0.75, color: 0x1abc9c,
   },
+  sloomtooth_the_drowned: {
+    id: 'sloomtooth_the_drowned', name: 'Sloomtooth the Drowned', minLevel: 11, maxLevel: 11, family: 'murloc', rare: true,
+    elite: true, canSwim: true, ccImmune: true, respawnMult: 648,
+    hpBase: 340, hpPerLevel: 60, dmgBase: 16, dmgPerLevel: 3.8, attackSpeed: 1.9,
+    armorPerLevel: 28, moveSpeed: 8.4, aggroRadius: 14,
+    // Tidal Sweep: a wide gaff-swing that splashes onto allies near the target.
+    cleave: { radius: 8, mult: 0.5, name: 'Tidal Sweep' },
+    // Drowning Resurgence: the drowned do not stay dead — one desperate surge of brine
+    // heals the tyrant the first time it is brought low.
+    desperateHeal: { belowHpPct: 0.3, healPct: 0.25 },
+    loot: [
+      { copper: 280, chance: 1 },
+      { itemId: 'mudfin_scale', chance: 1 },
+      { itemId: 'tidereaver_gaff', chance: 0.25, rollGroup: 'sloomtooth_chase' },
+      { itemId: 'sloomtooth_tidefang', chance: 0.25, rollGroup: 'sloomtooth_chase' },
+      { itemId: 'drowned_tide_scepter', chance: 0.25, rollGroup: 'sloomtooth_chase' },
+    ],
+    scale: 1.1, color: 0x2e86c1,
+  },
   mire_widow: {
     id: 'mire_widow', name: 'Mirefen Widow', minLevel: 8, maxLevel: 10, family: 'spider',
     hpBase: 48, hpPerLevel: 19, dmgBase: 8, dmgPerLevel: 2.2, attackSpeed: 1.8,
     armorPerLevel: 10, moveSpeed: 8, aggroRadius: 10,
+    // Find Weakness: the widow's bite leaves the flesh raw, so critical blows
+    // against the victim bite 50% deeper for a few seconds.
+    critVuln: { chance: 0.3, critDamage: 0.5, duration: 8, name: 'Exposed Wound' },
     loot: [
       { copper: 38, chance: 1 },
       { itemId: 'widow_venom_sac', chance: 0.65, questId: 'q_widows' },
@@ -119,6 +146,7 @@ export const ZONE2_MOBS: Record<string, MobTemplate> = {
     id: 'mirefen_broodmother', name: 'The Broodmother', minLevel: 10, maxLevel: 10, family: 'spider',
     hpBase: 150, hpPerLevel: 26, dmgBase: 9, dmgPerLevel: 2.4, attackSpeed: 1.8,
     armorPerLevel: 16, moveSpeed: 8, aggroRadius: 14, boss: true,
+    stackPoison: { chance: 0.35, perTick: 3, interval: 2, duration: 12, maxStacks: 5, name: 'Brood Venom', school: 'nature' },
     loot: [
       { copper: 300, chance: 1 },
       { itemId: 'marshstrider_boots', chance: 0.4 },
@@ -132,6 +160,9 @@ export const ZONE2_MOBS: Record<string, MobTemplate> = {
     hpBase: 52, hpPerLevel: 20, dmgBase: 8, dmgPerLevel: 2.3, attackSpeed: 2.3,
     armorPerLevel: 14, moveSpeed: 6.5, aggroRadius: 11,
     lifeleech: { healFrac: 0.5, chance: 0.35, name: 'Drowning Grasp' },
+    // A clammy, fevered touch that rots the living from within, wasting away
+    // their constitution (Stamina) and shrinking their health pool.
+    plague: { chance: 0.3, sta: 12, duration: 12, name: 'Bog Rot' },
     loot: [
       { copper: 42, chance: 1 },
       { itemId: 'bone_fragments', chance: 0.5 },
@@ -143,11 +174,15 @@ export const ZONE2_MOBS: Record<string, MobTemplate> = {
     id: 'fen_troll', name: 'Mirefen Troll', minLevel: 10, maxLevel: 12, family: 'troll',
     hpBase: 56, hpPerLevel: 21, dmgBase: 9, dmgPerLevel: 2.4, attackSpeed: 2.2,
     armorPerLevel: 18, moveSpeed: 7.5, aggroRadius: 11,
+    // Withering Rot: the troll's fetid claws rot a struck victim's sinews, draining
+    // Agility (thinning their armor and dodge) for a few seconds.
+    wither: { chance: 0.3, agi: 18, duration: 8, name: 'Withering Rot', school: 'nature' },
     loot: [
       { copper: 50, chance: 1 },
       { itemId: 'troll_fetish', chance: 0.6, questId: 'q_troll_fetishes' },
       { itemId: 'chipped_tusk', chance: 0.4 },
       { itemId: 'bogiron_nugget', chance: 0.3 },
+      { itemId: 'elixir_of_the_bear', chance: 0.07 },
     ],
     scale: 1.15, color: 0x229954,
   },
@@ -160,17 +195,24 @@ export const ZONE2_MOBS: Record<string, MobTemplate> = {
       { itemId: 'grubjaw_tusk', chance: 1, questId: 'q_grubjaw' },
       { itemId: 'chipped_tusk', chance: 1 },
     ],
+    purgeOnHit: { chance: 0.3, name: 'Devour Magic' },
     scale: 1.3, color: 0x145a32,
   },
   gravecaller_cultist: {
     id: 'gravecaller_cultist', name: 'Gravecaller Cultist', minLevel: 10, maxLevel: 12, family: 'humanoid',
     hpBase: 50, hpPerLevel: 20, dmgBase: 9, dmgPerLevel: 2.4, attackSpeed: 2.0,
     armorPerLevel: 20, moveSpeed: 7, aggroRadius: 11,
+    // The cultist's hex leaves the victim taking more damage from everyone —
+    // a soft-up that rewards a group focusing the cursed player's target down.
+    vulnerability: { chance: 0.2, amp: 0.15, duration: 10, name: 'Curse of Frailty', school: 'shadow' },
     loot: [
       { copper: 55, chance: 1 },
       { itemId: 'linen_scrap', chance: 0.3 },
       { itemId: 'tallow_candle', chance: 0.3 },
     ],
+    // The cultist's muttered curse weakens its prey: a hexed victim deals less
+    // damage and heals for less until the hex fades.
+    hex: { chance: 0.3, reductionPct: 0.2, duration: 10, name: 'Weakening Hex', school: 'shadow' },
     scale: 1.0, color: 0x6c3483,
   },
   gravecaller_summoner: {
@@ -181,6 +223,11 @@ export const ZONE2_MOBS: Record<string, MobTemplate> = {
     // Low dread proc so this mob doesn't routinely stack two panic effects
     // (silence + fear) on one victim — keeps the encounter from feeling like a lockout.
     dread: { chance: 0.12, duration: 4, name: 'Wail of the Grave', school: 'shadow' },
+    // Grave Blight: a landed hit can sear undeath into the wound, devouring the
+    // next 120 healing the victim receives before it fades. A sustain-denial axis
+    // that complements (not compounds) the summoner's silence/fear lockout —
+    // healers must out-pace the blight or top off after it lapses.
+    healAbsorb: { chance: 0.25, amount: 120, duration: 10, name: 'Grave Blight', school: 'shadow' },
     loot: [
       { copper: 60, chance: 1 },
       { itemId: 'cult_cipher', chance: 0.6, questId: 'q_summoners' },
@@ -195,6 +242,9 @@ export const ZONE2_MOBS: Record<string, MobTemplate> = {
     // wounds shut on a slow cadence. Pull it away from the camp — or drop it
     // first — or the fight never ends.
     mendAlly: { healMin: 26, healMax: 38, radius: 14, every: 6, name: 'Grave Mending', school: 'shadow' },
+    // Draining Litany: the mender siphons the victim's vigour to fuel its grave
+    // prayers, inflating every ability the victim uses by 40% for 8s on a hit.
+    costTax: { chance: 0.3, pct: 0.4, duration: 8, name: 'Draining Litany', school: 'shadow' },
     loot: [
       { copper: 58, chance: 1 },
       { itemId: 'cult_cipher', chance: 0.4, questId: 'q_summoners' },
@@ -208,6 +258,12 @@ export const ZONE2_MOBS: Record<string, MobTemplate> = {
     hpBase: 330, hpPerLevel: 60, dmgBase: 16, dmgPerLevel: 3.8, attackSpeed: 2.0,
     armorPerLevel: 30, moveSpeed: 7, aggroRadius: 13,
     aoePulse: { min: 18, max: 26, radius: 11, every: 9, name: 'Dirge of Nhalia', school: 'shadow' },
+    // Spirit Siphon: the priestess's touch drains a caster's Spirit, choking
+    // their out-of-combat mana regen for the duration (see siphonSpirit affix).
+    siphonSpirit: { chance: 0.3, spi: 14, duration: 10, name: 'Spirit Siphon', school: 'shadow' },
+    // A bone-chilling shriek that sends the living fleeing in terror — her dirge
+    // is grief, her wail is dread. Telegraphed: first scream after one interval.
+    terrify: { radius: 12, every: 16, duration: 3, name: "Banshee's Wail", school: 'shadow' },
     summonAdds: { mobId: 'nhalia_mourner', count: 2, atHpPct: [0.65, 0.35] },
     loot: [
       { copper: 350, chance: 1 },
@@ -221,6 +277,9 @@ export const ZONE2_MOBS: Record<string, MobTemplate> = {
     id: 'nhalia_mourner', name: 'Nhalia Mourner', minLevel: 11, maxLevel: 12, family: 'humanoid',
     hpBase: 46, hpPerLevel: 17, dmgBase: 8, dmgPerLevel: 2.3, attackSpeed: 2.0,
     armorPerLevel: 14, moveSpeed: 7, aggroRadius: 12,
+    // Curse of Tongues: the mourners' dirge garbles a caster's incantations, slowing
+    // their spell cast times by 30% for 10s on a landed hit (30% chance).
+    tongues: { chance: 0.3, mult: 1.3, duration: 10, name: 'Dirge of Tongues', school: 'shadow' },
     loot: [],
     scale: 0.95, color: 0x332044,
   },
@@ -229,6 +288,8 @@ export const ZONE2_MOBS: Record<string, MobTemplate> = {
     hpBase: 200, hpPerLevel: 30, dmgBase: 11, dmgPerLevel: 2.5, attackSpeed: 2.4,
     armorPerLevel: 26, moveSpeed: 7, aggroRadius: 14, boss: true,
     aoePulse: { min: 10, max: 14, radius: 10, every: 12, name: 'Drowning Hymn' },
+    // The deacon brands the faithless with a searing arcane rune that festers.
+    arcaneRot: { chance: 0.3, perTick: 7, interval: 3, duration: 12, name: 'Profane Rune', school: 'arcane' },
     loot: [
       { copper: 600, chance: 1 },
       { itemId: 'tallow_candle', chance: 1 },
@@ -266,8 +327,9 @@ export const ZONE2_NPCS: Record<string, NpcDef> = {
     id: 'brother_aldric_fen', name: 'Brother Aldric', title: 'Priest of the Vale',
     pos: { x: -8, z: 296 }, facing: 0.8, color: 0xf7f9f9,
     questIds: [
-      'q_idols', 'q_drowned', 'q_drowned_censers', 'q_no_rest', 'q_summoners',
-      'q_bastion_door', 'q_mistcaller', 'q_highwatch_summons',
+      'q_aldrics_fallen_star', 'q_idols', 'q_drowned', 'q_drowned_censers',
+      'q_no_rest', 'q_summoners', 'q_bastion_door', 'q_mistcaller',
+      'q_highwatch_summons',
     ],
     greeting: 'The Light keep you above the water, $N. The dead in this fen do not sleep — they wade.',
   },
@@ -277,6 +339,7 @@ export const ZONE2_NPCS: Record<string, NpcDef> = {
     questIds: ['q_prowler_pelts', 'q_fen_supplies', 'q_the_codfather', 'q_grubjaw'],
     vendorItems: [
       'fenbridge_rye', 'marsh_mint_tea', 'smoked_eel', 'silvermist_cordial',
+      'lesser_healing_potion', 'lesser_mana_potion',
       'bogiron_mace', 'fenreed_staff', 'mirefen_skinner', 'bogiron_hauberk',
       'marshcloth_robe', 'reedwoven_jerkin', 'fenwalker_boots', 'reedwoven_trousers',
     ],
@@ -361,6 +424,17 @@ export const ZONE2_QUESTS: Record<string, QuestDef> = {
     objectives: [{ type: 'collect', itemId: 'waterlogged_idol', count: 5, label: 'Waterlogged Idol' }],
     xpReward: 1050, copperReward: 400, itemRewards: {},
     requiresQuest: 'q_deepfen',
+  },
+  q_aldrics_fallen_star: {
+    id: 'q_aldrics_fallen_star', name: "Aldric's Fallen Star",
+    giverNpcId: 'brother_aldric_fen', turnInNpcId: 'brother_aldric_fen',
+    text: 'I saw a rock fall out of the western sky, $N. It struck the marsh wall and burst like a forge, far beyond the widow thicket. Go west, find what survived the explosion, and bring me anything that does not belong to this world.',
+    completionText: 'This is no weapon I know. Look at how the plates fold. It may be a rare piece of armor, if it can be worn at all. Take it and try it on, $N, but be careful.',
+    objectives: [{ type: 'collect', itemId: 'unknown_alien_weaponry', count: 1, label: 'Unknown Alien Weaponry' }],
+    xpReward: 900, copperReward: 300,
+    itemRewards: { warrior: 'alien_armor_plate', mage: 'alien_armor_plate', rogue: 'alien_armor_plate' },
+    minLevel: 5,
+    retired: true,
   },
   q_deepfen_purge: {
     id: 'q_deepfen_purge', name: 'Back to the Shallows',
@@ -521,7 +595,7 @@ export const ZONE2_QUESTS: Record<string, QuestDef> = {
 
 export const ZONE2_QUEST_ORDER = [
   'q_fenbridge_muster', 'q_prowlers', 'q_prowler_pelts', 'q_fen_supplies',
-  'q_the_codfather', 'q_deepfen', 'q_idols', 'q_deepfen_purge', 'q_widows', 'q_broodmother',
+  'q_the_codfather', 'q_deepfen', 'q_idols', 'q_aldrics_fallen_star', 'q_deepfen_purge', 'q_widows', 'q_broodmother',
   'q_drowned', 'q_drowned_censers', 'q_no_rest', 'q_trolls', 'q_troll_fetishes',
   'q_grubjaw', 'q_cult_camp', 'q_summoners', 'q_deacon', 'q_bastion_door',
   'q_olen', 'q_mistcaller',
@@ -547,6 +621,7 @@ export const ZONE2_CAMPS: CampDef[] = [
   // Drowned dead: the Drowned Chapel and the shallows beyond
   { mobId: 'drowned_dead', center: { x: 90, z: 420 }, radius: 20, count: 8 },
   { mobId: 'drowned_dead', center: { x: 115, z: 450 }, radius: 16, count: 6 },
+  { mobId: 'sloomtooth_the_drowned', center: { x: 118, z: 455 }, radius: 5, count: 1 },
   // Trolls: barrow-mounds in the southeast
   { mobId: 'fen_troll', center: { x: -80, z: 420 }, radius: 22, count: 7 },
   { mobId: 'fen_troll', center: { x: -105, z: 455 }, radius: 18, count: 6 },
@@ -591,6 +666,11 @@ export const ZONE2_OBJECTS: GroundObjectDef[] = [
     name: 'Bastion Ward Stone',
     positions: [{ x: 43, z: 512 }, { x: 48, z: 517 }],
   },
+  {
+    itemId: 'unknown_alien_weaponry',
+    name: 'Smoldering Meteor Debris',
+    positions: [{ x: 151.8, z: 294.2 }],
+  },
 ];
 
 // ---------------------------------------------------------------------------
@@ -616,7 +696,88 @@ export const ZONE2_ITEMS: Record<string, ItemDef> = {
   grubjaw_tusk: { id: 'grubjaw_tusk', name: "Grubjaw's Tusk", kind: 'quest', sellValue: 0, questId: 'q_grubjaw' },
   cult_cipher: { id: 'cult_cipher', name: 'Gravecaller Cipher', kind: 'quest', sellValue: 0, questId: 'q_summoners' },
   bastion_ward_stone: { id: 'bastion_ward_stone', name: 'Bastion Ward Stone', kind: 'quest', sellValue: 0, questId: 'q_bastion_door' },
+  unknown_alien_weaponry: { id: 'unknown_alien_weaponry', name: 'Unknown Alien Weaponry', kind: 'quest', quality: 'rare', sellValue: 0, questId: 'q_aldrics_fallen_star' },
   // --- quest reward gear (uncommon) ---
+  alien_armor_plate: {
+    id: 'alien_armor_plate', name: 'Alien Armor Plate', kind: 'tool', quality: 'rare',
+    use: { type: 'skinSelect', catalog: 'mech' },
+    sellValue: 0, noVendorSell: true, noDiscard: true, noMarketList: true,
+  },
+  amber_crimson_armor_plate: {
+    id: 'amber_crimson_armor_plate', name: 'Amber Crimson', kind: 'tool', quality: 'uncommon',
+    use: { type: 'mechChroma', chromaId: 'amber_crimson' },
+    sellValue: 0, noVendorSell: true, noDiscard: true, noMarketList: true,
+  },
+  crimson_amber_armor_plate: {
+    id: 'crimson_amber_armor_plate', name: 'Crimson Amber', kind: 'tool', quality: 'uncommon',
+    use: { type: 'mechChroma', chromaId: 'crimson_amber' },
+    sellValue: 0, noVendorSell: true, noDiscard: true, noMarketList: true,
+  },
+  cyan_magenta_armor_plate: {
+    id: 'cyan_magenta_armor_plate', name: 'Cyan Magenta', kind: 'tool', quality: 'uncommon',
+    use: { type: 'mechChroma', chromaId: 'cyan_magenta' },
+    sellValue: 0, noVendorSell: true, noDiscard: true, noMarketList: true,
+  },
+  magenta_cyan_armor_plate: {
+    id: 'magenta_cyan_armor_plate', name: 'Magenta Cyan', kind: 'tool', quality: 'uncommon',
+    use: { type: 'mechChroma', chromaId: 'magenta_cyan' },
+    sellValue: 0, noVendorSell: true, noDiscard: true, noMarketList: true,
+  },
+  orange_steel_armor_plate: {
+    id: 'orange_steel_armor_plate', name: 'Orange Steel', kind: 'tool', quality: 'uncommon',
+    use: { type: 'mechChroma', chromaId: 'orange_steel' },
+    sellValue: 0, noVendorSell: true, noDiscard: true, noMarketList: true,
+  },
+  steel_orange_armor_plate: {
+    id: 'steel_orange_armor_plate', name: 'Steel Orange', kind: 'tool', quality: 'uncommon',
+    use: { type: 'mechChroma', chromaId: 'steel_orange' },
+    sellValue: 0, noVendorSell: true, noDiscard: true, noMarketList: true,
+  },
+  forest_pink_armor_plate: {
+    id: 'forest_pink_armor_plate', name: 'Forest Pink', kind: 'tool', quality: 'uncommon',
+    use: { type: 'mechChroma', chromaId: 'forest_pink' },
+    sellValue: 0, noVendorSell: true, noDiscard: true, noMarketList: true,
+  },
+  pink_forest_armor_plate: {
+    id: 'pink_forest_armor_plate', name: 'Pink Forest', kind: 'tool', quality: 'uncommon',
+    use: { type: 'mechChroma', chromaId: 'pink_forest' },
+    sellValue: 0, noVendorSell: true, noDiscard: true, noMarketList: true,
+  },
+  amethyst_silver_armor_plate: {
+    id: 'amethyst_silver_armor_plate', name: 'Amethyst Silver', kind: 'tool', quality: 'rare',
+    use: { type: 'mechChroma', chromaId: 'amethyst_silver' },
+    sellValue: 0, noVendorSell: true, noDiscard: true, noMarketList: true,
+  },
+  ivory_copper_armor_plate: {
+    id: 'ivory_copper_armor_plate', name: 'Ivory Copper', kind: 'tool', quality: 'rare',
+    use: { type: 'mechChroma', chromaId: 'ivory_copper' },
+    sellValue: 0, noVendorSell: true, noDiscard: true, noMarketList: true,
+  },
+  onyx_gold_armor_plate: {
+    id: 'onyx_gold_armor_plate', name: 'Onyx Gold', kind: 'tool', quality: 'rare',
+    use: { type: 'mechChroma', chromaId: 'onyx_gold' },
+    sellValue: 0, noVendorSell: true, noDiscard: true, noMarketList: true,
+  },
+  imperial_crimson_armor_plate: {
+    id: 'imperial_crimson_armor_plate', name: 'Imperial Crimson', kind: 'tool', quality: 'epic',
+    use: { type: 'mechChroma', chromaId: 'imperial_crimson' },
+    sellValue: 0, noVendorSell: true, noDiscard: true, noMarketList: true,
+  },
+  imperial_gold_armor_plate: {
+    id: 'imperial_gold_armor_plate', name: 'Imperial Gold', kind: 'tool', quality: 'epic',
+    use: { type: 'mechChroma', chromaId: 'imperial_gold' },
+    sellValue: 0, noVendorSell: true, noDiscard: true, noMarketList: true,
+  },
+  vanguard_azure_armor_plate: {
+    id: 'vanguard_azure_armor_plate', name: 'Vanguard Azure', kind: 'tool', quality: 'epic',
+    use: { type: 'mechChroma', chromaId: 'vanguard_azure' },
+    sellValue: 0, noVendorSell: true, noDiscard: true, noMarketList: true,
+  },
+  vanguard_chrome_armor_plate: {
+    id: 'vanguard_chrome_armor_plate', name: 'Vanguard Chrome', kind: 'tool', quality: 'epic',
+    use: { type: 'mechChroma', chromaId: 'vanguard_chrome' },
+    sellValue: 0, noVendorSell: true, noDiscard: true, noMarketList: true,
+  },
   deacons_cleaver: {
     id: 'deacons_cleaver', name: "Deacon's Cleaver", kind: 'weapon', slot: 'mainhand', quality: 'uncommon',
     weapon: { min: 11, max: 18, speed: 2.4 }, stats: { str: 4 }, sellValue: 300, requiredClass: WAR,
@@ -664,6 +825,19 @@ export const ZONE2_ITEMS: Record<string, ItemDef> = {
   mirejaw_scale_vest: {
     id: 'mirejaw_scale_vest', name: 'Mirejaw Scale Vest', kind: 'armor', slot: 'chest', quality: 'uncommon',
     stats: { armor: 115, str: 2, sta: 3 }, sellValue: 480, requiredClass: WAR,
+  },
+  // --- Sloomtooth the Drowned chase drops (rare) ---
+  tidereaver_gaff: {
+    id: 'tidereaver_gaff', name: 'Tidereaver Gaff', kind: 'weapon', slot: 'mainhand', quality: 'rare',
+    weapon: { min: 17, max: 28, speed: 2.5 }, stats: { str: 5, sta: 4 }, sellValue: 1400, requiredClass: WAR,
+  },
+  sloomtooth_tidefang: {
+    id: 'sloomtooth_tidefang', name: "Sloomtooth's Tidefang", kind: 'weapon', slot: 'mainhand', quality: 'rare',
+    weapon: { min: 10, max: 17, speed: 1.7, dagger: true }, stats: { agi: 6, sta: 3 }, sellValue: 1400, requiredClass: ROG,
+  },
+  drowned_tide_scepter: {
+    id: 'drowned_tide_scepter', name: 'Drowned Tide Scepter', kind: 'weapon', slot: 'mainhand', quality: 'rare',
+    weapon: { min: 16, max: 28, speed: 3.0 }, stats: { int: 6, spi: 3 }, sellValue: 1400, requiredClass: MAG,
   },
   nhalias_funeral_wraps: {
     id: 'nhalias_funeral_wraps', name: "Nhalia's Funeral Wraps", kind: 'armor', slot: 'legs', quality: 'uncommon',

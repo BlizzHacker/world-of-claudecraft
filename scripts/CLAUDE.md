@@ -32,6 +32,7 @@ into npm: `build` (manifest), `realms` (`dev-realms.mjs`), `admin:grant` (`grant
 | Security | `ws_security_e2e.mjs` | server |
 | Screenshot tours | `visual_tour.mjs`, `arena_visual.mjs`, `market_visual.mjs`, `social_visual.mjs`, `tour_expansion.mjs` | dev (some + server) |
 | SEO / homepage / i18n | `homepage_verify.mjs`, `seo_audit.mjs`, `localization_e2e.mjs` (locale-matrix homepage E2E) | dev (+ server) |
+| i18n pipeline | `i18n_build.mjs`+`i18n_admin_build.mjs` (resolved tables), `i18n_scan.mjs` (status registry), `i18n_resolved_hash.mjs` (game-table SHA gate); seed `i18n_blocked_seed.mjs` owns `V07_SLASH`/`COPIED_ALLOW_IDS`; `i18n_pseudo.mjs` (en_XA dev pseudo-locale), `i18n_modulepreload.mjs` (lazy-locale boot modulepreload) | `i18n:gen`; SHA via `i18n:hash` |
 | Data export | `export_loot_spreadsheet.mjs` (esbuild-bundles `src/sim` → loot sheet in `docs/`) | — |
 | Admin / dev utils | `grant_admin.mjs`, `create_gm.mjs`, `dev-realms.mjs` | `DATABASE_URL` |
 | Helper | `browser_path.mjs` (resolves Chrome/Edge/Chromium; override `BROWSER_PATH=`) | — |
@@ -58,3 +59,8 @@ into npm: `build` (manifest), `realms` (`dev-realms.mjs`), `admin:grant` (`grant
   `src/sim` data, so do that (don't `import` the TS sources raw) if a script truly needs them.
 - Don't hand-edit `src/render/assets/manifest.generated.ts` — regenerate via
   `build_media_manifest.mjs generate` (`npm run build` does this).
+- Don't hand-edit the generated i18n artifacts: `src/ui/i18n.resolved.generated/` +
+  `src/admin/i18n.resolved.generated/` (resolved tables), `src/ui/i18n.status.json` /
+  `i18n.status.summary.json` (registry), and `src/ui/i18n.resolved.sha256` (byte gate).
+  Regenerate with `npm run i18n:gen`; after a real translation-content change re-baseline
+  the SHA with `npm run i18n:hash -- --write`.

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { updateFollowCameraYaw, wrapAngle } from '../src/game/camera_follow';
+import { cameraIsManual, updateFollowCameraYaw, wrapAngle } from '../src/game/camera_follow';
 
 describe('camera follow', () => {
   it('wraps angles to the shortest signed turn', () => {
@@ -80,6 +80,23 @@ describe('camera follow', () => {
     expect(next.camYaw).toBeGreaterThan(1.0);
   });
 
+  it('does not auto-follow while the camera drives the facing (mouse-camera move)', () => {
+    // facing is slaved to camYaw this frame, so the follower must leave camYaw
+    // untouched — chasing its own output is what produced the wobble.
+    const next = updateFollowCameraYaw({
+      camYaw: 1.0,
+      interpFacing: 0.2,
+      lastInterpFacing: 0.9,
+      frameDt: 1 / 60,
+      mouselook: false,
+      moving: true,
+      cameraDriven: true,
+      orbiting: false,
+    });
+    expect(next.camYaw).toBe(1.0);
+    expect(next.lastInterpFacing).toBe(0.2); // still tracked so re-coupling won't snap
+  });
+
   it('does not follow or auto-settle while the player is actively orbit-dragging', () => {
     const next = updateFollowCameraYaw({
       camYaw: 1,
@@ -106,6 +123,43 @@ describe('camera follow', () => {
     });
     expect(next.camYaw).toBeLessThan(Math.PI);
     expect(next.camYaw).toBeGreaterThan(Math.PI - 0.04);
+  });
+
+  it('treats mouse-camera mode as manual control even though mouselook reports false', () => {
+    // Right-mouse mouselook already counts as manual; Mouse Camera mode reports
+    // mouselook=false on desktop but must be folded in so it takes the same path.
+    expect(cameraIsManual(true, false)).toBe(true);   // classic right-mouse mouselook
+    expect(cameraIsManual(false, true)).toBe(true);   // Mouse Camera mode (always on)
+    expect(cameraIsManual(true, true)).toBe(true);
+    expect(cameraIsManual(false, false)).toBe(false); // classic, hands off — follow runs
+  });
+
+  it('keeps the camera locked to the drag in mouse-camera mode (no follow drift)', () => {
+    // Reproduces the bug: in Mouse Camera mode the player walks forward while
+    // dragging the camera, and the sim locks facing to camYaw every frame. Routed
+    // through the manual flag (cameraIsManual=true) the follow system is bypassed,
+    // so the camera tracks the drag exactly. With the old wiring (mouselook=false)
+    // the follow code fights the drag and the view drifts tens of degrees.
+    const simulate = (manual: boolean): number => {
+      const dt = 1 / 60;
+      const dragPerFrame = 0.03;
+      let camYaw = Math.PI;
+      let intended = Math.PI;
+      let lastInterpFacing: number | null = camYaw;
+      for (let f = 0; f < 90; f++) {
+        camYaw += dragPerFrame;        // the player's drag this frame
+        intended += dragPerFrame;      // where the drag actually asked the camera to point
+        const next = updateFollowCameraYaw({
+          camYaw, interpFacing: camYaw, frameDt: dt, lastInterpFacing,
+          mouselook: manual, moving: true, orbiting: false,
+        });
+        camYaw = next.camYaw;
+        lastInterpFacing = next.lastInterpFacing;
+      }
+      return Math.abs(wrapAngle(camYaw - intended));
+    };
+    expect(simulate(true)).toBeCloseTo(0, 6);   // fixed: camera goes exactly where dragged
+    expect(simulate(false)).toBeGreaterThan(0.5); // old wiring: drifts >0.5 rad (~30°+)
   });
 
   it('settles click-to-move turns more softly when the facing jump is large', () => {

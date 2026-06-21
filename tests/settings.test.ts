@@ -28,7 +28,23 @@ describe('Settings', () => {
     expect(s.get('fullscreen')).toBe(1);
     expect(s.get('clickToMove')).toBe(0);
     expect(s.get('clickToMoveButton')).toBe(0);
+    expect(s.get('cameraFov')).toBe(SETTING_RANGES.cameraFov.def);
+    expect(s.get('cameraFov')).toBe(60); // unchanged from the shipped look by default
     expect(s.get('mouseCamera')).toBe(false);
+    expect(s.get('joystickDeadzone')).toBe(SETTING_RANGES.joystickDeadzone.def);
+  });
+
+  it('clamps the touch joystick deadzone to its bounds', () => {
+    const s = new Settings();
+    expect(s.set('joystickDeadzone', 99)).toBe(SETTING_RANGES.joystickDeadzone.max);
+    expect(s.set('joystickDeadzone', 0)).toBe(SETTING_RANGES.joystickDeadzone.min);
+  });
+
+  it('clamps the camera FOV to its comfort range', () => {
+    const s = new Settings();
+    expect(s.set('cameraFov', 999)).toBe(SETTING_RANGES.cameraFov.max);
+    expect(s.set('cameraFov', 0)).toBe(SETTING_RANGES.cameraFov.min);
+    expect(s.set('cameraFov', 75)).toBe(75);
   });
 
   it('clamps out-of-range values to the slider bounds', () => {
@@ -50,6 +66,16 @@ describe('Settings', () => {
     expect(s.set('touchOpacity', 5)).toBe(SETTING_RANGES.touchOpacity.max);
     expect(s.set('touchOpacity', 0)).toBe(SETTING_RANGES.touchOpacity.min);
     expect(s.set('touchOpacity', 0.6)).toBe(0.6);
+  });
+
+  it('defaults the joystick size to stock and clamps to its 0.7–1.3 range', () => {
+    const s = new Settings();
+    expect(s.get('joystickScale')).toBe(1);
+    expect(s.set('joystickScale', 5)).toBe(SETTING_RANGES.joystickScale.max);
+    expect(s.set('joystickScale', 0)).toBe(SETTING_RANGES.joystickScale.min);
+    expect(s.set('joystickScale', 1.15)).toBe(1.15);
+    const reloaded = new Settings();
+    expect(reloaded.get('joystickScale')).toBe(1.15); // persisted
   });
 
   it('ignores non-finite input, keeping a valid value', () => {
@@ -82,6 +108,14 @@ describe('Settings', () => {
     a.set('leftHandedTouch', true);
     const b = new Settings();
     expect(b.get('leftHandedTouch')).toBe(true);
+  });
+
+  it('defaults footstep sounds off and persists re-enabling across instances', () => {
+    const a = new Settings();
+    expect(a.get('footstepSfx')).toBe(false);
+    a.set('footstepSfx', true);
+    const b = new Settings();
+    expect(b.get('footstepSfx')).toBe(true);
   });
 
   it('defaults touch look speed to 1x, clamps, and persists', () => {
@@ -126,11 +160,70 @@ describe('Settings', () => {
     expect(s.get('mouseCamera')).toBe(false);
   });
 
+  it('action button scale defaults to 1.0 and clamps to its slider bounds', () => {
+    const s = new Settings();
+    expect(s.get('actionButtonScale')).toBe(1);
+    expect(s.set('actionButtonScale', 5)).toBe(SETTING_RANGES.actionButtonScale.max);
+    expect(s.set('actionButtonScale', 0)).toBe(SETTING_RANGES.actionButtonScale.min);
+    expect(s.set('actionButtonScale', 1.1)).toBe(1.1);
+  });
+
   it('all() returns an independent snapshot', () => {
     const s = new Settings();
     const snap = s.all();
     snap.cameraSpeed = 99;
     expect(s.get('cameraSpeed')).not.toBe(99);
+  });
+});
+
+describe('Interface & Comfort settings pack', () => {
+  it('defaults to the unchanged classic look (all scales 1.0, toggles off)', () => {
+    const s = new Settings();
+    expect(s.get('hudOpacity')).toBe(1);
+    expect(s.get('tooltipScale')).toBe(1);
+    expect(s.get('fctScale')).toBe(1);
+    expect(s.get('chatFontScale')).toBe(1);
+    expect(s.get('chatOpacity')).toBe(1);
+    expect(s.get('reduceMotion')).toBe(false);
+    expect(s.get('highContrastText')).toBe(false);
+    expect(s.get('frostedPanels')).toBe(false);
+    expect(s.get('compactChat')).toBe(false);
+    expect(s.get('showFps')).toBe(false);
+    expect(s.get('showWalletOnCharacterScreen')).toBe(true);
+    expect(s.get('showWalletOnPlayerCard')).toBe(true);
+    expect(s.get('invertLookY')).toBe(false);
+  });
+
+  it('clamps the comfort sliders to their documented bounds', () => {
+    const s = new Settings();
+    expect(s.set('hudOpacity', 0)).toBe(SETTING_RANGES.hudOpacity.min);
+    expect(s.set('hudOpacity', 9)).toBe(SETTING_RANGES.hudOpacity.max);
+    expect(s.set('tooltipScale', 9)).toBe(SETTING_RANGES.tooltipScale.max);
+    expect(s.set('fctScale', 0)).toBe(SETTING_RANGES.fctScale.min);
+    expect(s.set('chatFontScale', 1.2)).toBe(1.2);
+    expect(s.set('chatOpacity', 0)).toBe(SETTING_RANGES.chatOpacity.min);
+  });
+
+  it('persists the comfort toggles across reloads and restores them on reset', () => {
+    const s = new Settings();
+    s.set('reduceMotion', true);
+    s.set('showFps', true);
+    s.set('invertLookY', true);
+    s.set('frostedPanels', true);
+    s.set('showWalletOnCharacterScreen', false);
+    s.set('showWalletOnPlayerCard', false);
+    // a fresh instance reads the same backing store
+    expect(new Settings().get('reduceMotion')).toBe(true);
+    expect(new Settings().get('showFps')).toBe(true);
+    expect(new Settings().get('showWalletOnCharacterScreen')).toBe(false);
+    expect(new Settings().get('showWalletOnPlayerCard')).toBe(false);
+    s.reset();
+    expect(s.get('reduceMotion')).toBe(false);
+    expect(s.get('showFps')).toBe(false);
+    expect(s.get('showWalletOnCharacterScreen')).toBe(true);
+    expect(s.get('showWalletOnPlayerCard')).toBe(true);
+    expect(s.get('invertLookY')).toBe(false);
+    expect(s.get('frostedPanels')).toBe(false);
   });
 });
 

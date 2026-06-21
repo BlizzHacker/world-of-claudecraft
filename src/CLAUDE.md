@@ -26,3 +26,17 @@ lets the same `sim/` run offline, on the server, and headless.
 Add it to **`IWorld` (`world_api.ts`) first**, then implement it in *both* the
 offline `Sim` (`sim/sim.ts`) and the online `ClientWorld` (`net/online.ts`).
 Never reach around `IWorld` into a concrete world from `render/` or `ui/`.
+
+## i18n across the client tree
+Every player-visible string in this tree resolves through `t()` (and the format
+helpers `formatNumber`/`formatDateTime`/`formatMoney`/`tPlural`) from `ui/i18n.ts`,
+or — for `sim/`/`server`-emitted English — through the client matchers
+`ui/sim_i18n.ts` / `ui/server_i18n.ts`. `ui/` is the i18n home; the per-subdir
+CLAUDE.md carries the detail.
+
+- `world_api.ts` is a **string-free seam** (a pure interface — no `t()`, no literals).
+- `main.ts` renders auth/error text via `t()`, disconnect/moderation reasons via
+  `tServer()`, and numbers via `formatNumber`. It also owns the **lazy-locale
+  bootstrap**: `await ensureLocaleLoaded(getLanguage())` before any localized paint
+  and `await ensureLocaleLoaded(selected)` before `setLanguage(selected)` — only `en`
+  is resident synchronously; the other 13 overlays load on demand.

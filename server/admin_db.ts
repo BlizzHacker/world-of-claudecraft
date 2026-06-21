@@ -95,6 +95,226 @@ export async function levelDistribution(): Promise<BucketCount[]> {
   return res.rows;
 }
 
+export interface PerfAggregate {
+  sampleCount: number;
+  medianFps: number;
+  p95FrameMs: number;
+  p99FrameMs: number;
+  contextLossCount: number;
+  avgRenderScale: number;
+  avgEffectiveRenderScale: number;
+}
+
+export interface PerfBucket extends PerfAggregate {
+  key: string;
+}
+
+export interface PerfSummary {
+  hours: number;
+  generatedAt: string;
+  totals: PerfAggregate;
+  byPreset: PerfBucket[];
+  byGpu: PerfBucket[];
+  byBrowser: PerfBucket[];
+  byOs: PerfBucket[];
+  byScenario: PerfBucket[];
+  worstGpuBuckets: PerfBucket[];
+}
+
+export interface PerfRawRow {
+  id: number;
+  createdAt: string;
+  releaseVersion: string;
+  buildId: string;
+  sessionId: string;
+  accountId: number | null;
+  characterId: number | null;
+  realm: string;
+  graphicsPreset: string;
+  gfxTier: string;
+  autoGovernor: boolean;
+  targetFps: number;
+  renderScale: number;
+  effectiveRenderScale: number;
+  fpsAvg: number;
+  frameP95Ms: number;
+  frameP99Ms: number;
+  longFrameCount: number;
+  rendererCalls: number;
+  rendererTriangles: number;
+  rendererTextures: number;
+  rendererPrograms: number;
+  contextLostCount: number;
+  longTaskCount: number;
+  longTaskP95Ms: number;
+  memoryUsedMb: number | null;
+  memoryLimitMb: number | null;
+  dpr: number;
+  viewportBucket: string;
+  deviceMemory: number | null;
+  hardwareConcurrency: number;
+  mobileTouch: boolean;
+  browserFamily: string;
+  osFamily: string;
+  glVendor: string;
+  glRendererBucket: string;
+  zoneOrScenario: string;
+  source: string;
+  rawSummary: unknown;
+}
+
+function cleanHours(hours: number): number {
+  return Number.isFinite(hours) ? Math.min(168, Math.max(1, Math.floor(hours))) : 24;
+}
+
+function cleanPerfLimit(limit: number): number {
+  return Number.isFinite(limit) ? Math.min(1000, Math.max(1, Math.floor(limit))) : 100;
+}
+
+function cleanBeforeId(id: number | undefined): number | null {
+  if (id === undefined || !Number.isFinite(id)) return null;
+  const n = Math.floor(id);
+  return n > 0 ? n : null;
+}
+
+function perfAggregateFromRow(r: Record<string, unknown>): PerfAggregate {
+  return {
+    sampleCount: Number(r.sample_count ?? 0),
+    medianFps: Number(r.median_fps ?? 0),
+    p95FrameMs: Number(r.p95_frame_ms ?? 0),
+    p99FrameMs: Number(r.p99_frame_ms ?? 0),
+    contextLossCount: Number(r.context_loss_count ?? 0),
+    avgRenderScale: Number(r.avg_render_scale ?? 0),
+    avgEffectiveRenderScale: Number(r.avg_effective_render_scale ?? 0),
+  };
+}
+
+async function perfAggregate(hours: number): Promise<PerfAggregate> {
+  const res = await pool.query(
+    `SELECT
+       count(*)::int AS sample_count,
+       COALESCE(percentile_cont(0.5) WITHIN GROUP (ORDER BY fps_avg), 0)::real AS median_fps,
+       COALESCE(percentile_cont(0.95) WITHIN GROUP (ORDER BY frame_p95_ms), 0)::real AS p95_frame_ms,
+       COALESCE(percentile_cont(0.99) WITHIN GROUP (ORDER BY frame_p95_ms), 0)::real AS p99_frame_ms,
+       COALESCE(sum(context_lost_count), 0)::int AS context_loss_count,
+       COALESCE(avg(render_scale), 0)::real AS avg_render_scale,
+       COALESCE(avg(effective_render_scale), 0)::real AS avg_effective_render_scale
+     FROM client_perf_reports
+     WHERE created_at > now() - ($1 || ' hours')::interval`,
+    [String(hours)],
+  );
+  return perfAggregateFromRow(res.rows[0] ?? {});
+}
+
+async function perfBuckets(column: string, hours: number, limit: number, worstFirst = false): Promise<PerfBucket[]> {
+  const order = worstFirst ? 'p95_frame_ms DESC, sample_count DESC' : 'sample_count DESC, key ASC';
+  const res = await pool.query(
+    `SELECT
+       ${column} AS key,
+       count(*)::int AS sample_count,
+       COALESCE(percentile_cont(0.5) WITHIN GROUP (ORDER BY fps_avg), 0)::real AS median_fps,
+       COALESCE(percentile_cont(0.95) WITHIN GROUP (ORDER BY frame_p95_ms), 0)::real AS p95_frame_ms,
+       COALESCE(percentile_cont(0.99) WITHIN GROUP (ORDER BY frame_p95_ms), 0)::real AS p99_frame_ms,
+       COALESCE(sum(context_lost_count), 0)::int AS context_loss_count,
+       COALESCE(avg(render_scale), 0)::real AS avg_render_scale,
+       COALESCE(avg(effective_render_scale), 0)::real AS avg_effective_render_scale
+     FROM client_perf_reports
+     WHERE created_at > now() - ($1 || ' hours')::interval
+     GROUP BY ${column}
+     ORDER BY ${order}
+     LIMIT $2`,
+    [String(hours), limit],
+  );
+  return res.rows.map((r) => ({ key: String(r.key ?? ''), ...perfAggregateFromRow(r) }));
+}
+
+export async function clientPerfSummary(hoursInput = 24): Promise<PerfSummary> {
+  const hours = cleanHours(hoursInput);
+  const [totals, byPreset, byGpu, byBrowser, byOs, byScenario, worstGpuBuckets] = await Promise.all([
+    perfAggregate(hours),
+    perfBuckets('graphics_preset', hours, 20),
+    perfBuckets('gl_renderer_bucket', hours, 50),
+    perfBuckets('browser_family', hours, 20),
+    perfBuckets('os_family', hours, 20),
+    perfBuckets('zone_or_scenario', hours, 30),
+    perfBuckets('gl_renderer_bucket', hours, 20, true),
+  ]);
+  return {
+    hours,
+    generatedAt: new Date().toISOString(),
+    totals,
+    byPreset,
+    byGpu,
+    byBrowser,
+    byOs,
+    byScenario,
+    worstGpuBuckets,
+  };
+}
+
+export async function clientPerfRaw(hoursInput = 24, limitInput = 100, beforeIdInput?: number): Promise<PerfRawRow[]> {
+  const hours = cleanHours(hoursInput);
+  const limit = cleanPerfLimit(limitInput);
+  const beforeId = cleanBeforeId(beforeIdInput);
+  const res = await pool.query(
+    `SELECT
+       id, created_at, release_version, build_id, session_id, account_id, character_id, realm,
+       graphics_preset, gfx_tier, auto_governor, target_fps, render_scale, effective_render_scale,
+       fps_avg, frame_p95_ms, frame_p99_ms, long_frame_count,
+       renderer_calls, renderer_triangles, renderer_textures, renderer_programs, context_lost_count,
+       long_task_count, long_task_p95_ms, memory_used_mb, memory_limit_mb,
+       dpr, viewport_bucket, device_memory, hardware_concurrency, mobile_touch,
+       browser_family, os_family, gl_vendor, gl_renderer_bucket, zone_or_scenario, source, raw_summary
+     FROM client_perf_reports
+     WHERE created_at > now() - ($1 || ' hours')::interval
+       AND ($3::bigint IS NULL OR id < $3)
+     ORDER BY id DESC
+     LIMIT $2`,
+    [String(hours), limit, beforeId],
+  );
+  return res.rows.map((r) => ({
+    id: r.id,
+    createdAt: r.created_at,
+    releaseVersion: r.release_version,
+    buildId: r.build_id,
+    sessionId: r.session_id,
+    accountId: r.account_id,
+    characterId: r.character_id,
+    realm: r.realm,
+    graphicsPreset: r.graphics_preset,
+    gfxTier: r.gfx_tier,
+    autoGovernor: r.auto_governor,
+    targetFps: r.target_fps,
+    renderScale: r.render_scale,
+    effectiveRenderScale: r.effective_render_scale,
+    fpsAvg: r.fps_avg,
+    frameP95Ms: r.frame_p95_ms,
+    frameP99Ms: r.frame_p99_ms,
+    longFrameCount: r.long_frame_count,
+    rendererCalls: r.renderer_calls,
+    rendererTriangles: r.renderer_triangles,
+    rendererTextures: r.renderer_textures,
+    rendererPrograms: r.renderer_programs,
+    contextLostCount: r.context_lost_count,
+    longTaskCount: r.long_task_count,
+    longTaskP95Ms: r.long_task_p95_ms,
+    memoryUsedMb: r.memory_used_mb,
+    memoryLimitMb: r.memory_limit_mb,
+    dpr: r.dpr,
+    viewportBucket: r.viewport_bucket,
+    deviceMemory: r.device_memory,
+    hardwareConcurrency: r.hardware_concurrency,
+    mobileTouch: r.mobile_touch,
+    browserFamily: r.browser_family,
+    osFamily: r.os_family,
+    glVendor: r.gl_vendor,
+    glRendererBucket: r.gl_renderer_bucket,
+    zoneOrScenario: r.zone_or_scenario,
+    source: r.source,
+    rawSummary: r.raw_summary,
+  }));
+}
+
 // Escape LIKE wildcards in user-supplied search text so "%" matches a literal
 // percent sign instead of everything.
 export function escapeLike(input: string): string {

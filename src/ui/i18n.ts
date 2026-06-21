@@ -1,32 +1,48 @@
-import {
-  translations,
-  pending,
-  en_XA,
-  en, es, es_ES, fr_FR, fr_CA, en_CA, it_IT, de_DE, zh_CN, zh_TW, ko_KR, ja_JP, pt_BR, ru_RU,
-} from './i18n.resolved.generated';
-import type { Leaves, TranslationKey, InterpolationValue, InterpolationValues, DeepPartial } from './i18n.en';
+// THE LAZY LOCALE FLIP. The runtime statically imports ONLY English eagerly:
+//   - `en`     the eager default + universal synchronous fallback (always resident),
+//   - `en_XA`  the dev-only pseudo-locale (referenced solely inside the
+//              !import.meta.env.PROD branch in tableFor, so a prod build tree-shakes it),
+//   - `pending` feeds the release-gate hard-fail in t(),
+//   - `LOCALE_LOADERS` + `SUPPORTED_LANGUAGES` drive lazy per-locale loading.
+// The 13 non-en dense slices are NO LONGER static-imported for use - each loads lazily via
+// LOCALE_LOADERS[lang]()'s dynamic import() as its own content-hashed chunk, so a
+// default-English visitor downloads zero non-en locale bytes. These are imported from the
+// SPECIFIC generated modules (en / en_XA / pending / loaders), never the index.ts barrel,
+// so the only reference to the barrel below is the dead re-export line - which Rollup
+// tree-shakes out of the app chunk.
+import { en } from './i18n.resolved.generated/en';
+import { en_XA } from './i18n.resolved.generated/en_XA';
+import { pending } from './i18n.resolved.generated/pending';
+import { LOCALE_LOADERS, SUPPORTED_LANGUAGES } from './i18n.resolved.generated/loaders';
+import type { Leaves, TranslationKey, InterpolationValue, InterpolationValues, DeepPartial, EnTranslations } from './i18n.catalog';
 
-// The translation table is the generated dense artifact
-// (src/ui/i18n.resolved.generated.ts), where every locale is overlaid onto `en`
-// and filled from English. Every read-path below (t, translationValue,
-// hasTranslation, tOptional) reads that dense table, never the raw per-locale
-// objects - those can go sparse, so a direct read of them would
-// return undefined or the wrong value.
-//
-// Re-export the dense per-locale objects, gameStrings, and the type machinery so
-// importers of './i18n' keep an unchanged public surface.
-export { en, es, es_ES, fr_FR, fr_CA, en_CA, it_IT, de_DE, zh_CN, zh_TW, ko_KR, ja_JP, pt_BR, ru_RU };
-// gameStrings is the post-cap/XP/leaderboard layer, which the table carries under
-// the `game` key. Source it from the generated dense `en` rather than re-exporting
-// from i18n.en, so importing './i18n' does not pull the full i18n.en base (en +
-// shared content layers, ~1 MB) into the client bundle - that module now exists
-// only to feed the generator. Same content, same export name.
+// Re-export the dense per-locale objects so const-importers of './i18n' keep an unchanged
+// surface: the S3 guard (tests/localization_fixes.test.ts) and the SHA harness
+// (scripts/i18n_resolved_hash.mjs) read every locale const by name. This is a PURE
+// re-export (export-from, NO local binding): the app runtime references none of these names
+// through './i18n' - every read-path below (t, translationValue, hasTranslation, tOptional)
+// reads the lazy `resident` table instead - so Rollup drops the unused re-export and
+// tree-shakes the 13 non-en slices (and the barrel that assembles them) out of the app
+// chunk. THAT drop is the payload win of the lazy locale flip. `en` stays in the chunk via the eager
+// local import above (the universal English default), not via this line.
+export { en, es, es_ES, fr_FR, fr_CA, en_CA, it_IT, de_DE, zh_CN, zh_TW, ko_KR, ja_JP, pt_BR, ru_RU } from './i18n.resolved.generated';
+// gameStrings is the post-cap/XP/leaderboard layer, which the table carries under the
+// `game` key. Source it from the eager generated dense `en` rather than re-exporting from
+// i18n.catalog, so importing './i18n' does not pull the full i18n.catalog base (en + shared content
+// layers, ~1 MB) into the client bundle - that module now exists only to feed the
+// generator. Same content, same export name.
 export const gameStrings = en.game;
 export type { Leaves, TranslationKey, InterpolationValue, InterpolationValues, DeepPartial };
 
-export type SupportedLanguage = keyof typeof translations;
-
-export const supportedLanguages = Object.keys(translations) as SupportedLanguage[];
+// The 14-locale set + its type derive from the generated SUPPORTED_LANGUAGES (the loaders
+// surface), NOT `keyof typeof translations`: after the lazy flip the full `translations`
+// map is no longer eagerly imported. The two are pinned equal (same 14 codes, same order)
+// by tests/i18n_emit_shape.test.ts.
+export type SupportedLanguage = typeof SUPPORTED_LANGUAGES[number];
+export const supportedLanguages = [...SUPPORTED_LANGUAGES] as SupportedLanguage[];
+// Membership set for isSupportedLanguage / getStoredLanguage now that the `translations`
+// map (whose keys were the old membership test) is no longer imported.
+const SUPPORTED_SET: ReadonlySet<string> = new Set(SUPPORTED_LANGUAGES);
 
 let currentLanguage: SupportedLanguage = "en";
 
@@ -46,7 +62,7 @@ const DEV_PSEUDO_LOCALE = "en_XA";
 let pseudoActive = false;
 
 export function isSupportedLanguage(value: string): value is SupportedLanguage {
-  return Object.prototype.hasOwnProperty.call(translations, value);
+  return SUPPORTED_SET.has(value);
 }
 
 export function languageTag(lang: SupportedLanguage): string {
@@ -66,8 +82,8 @@ function getStoredLanguage(): SupportedLanguage | null {
   const storage = browserStorage();
   if (!storage || typeof storage.getItem !== "function") return null;
   try {
-    const saved = storage.getItem("locale") as SupportedLanguage | null;
-    return saved && translations[saved] ? saved : null;
+    const saved = storage.getItem("locale");
+    return saved && isSupportedLanguage(saved) ? saved : null;
   } catch {
     return null;
   }
@@ -110,6 +126,96 @@ export function setLanguage(lang: SupportedLanguage): void {
   pseudoActive = false; // selecting a real locale leaves the dev pseudo-locale
   currentLanguage = lang;
   setStoredLanguage(lang);
+}
+
+// --- lazy-locale async loader surface (the async locale loader) ----------------------------------
+//
+// ensureLocaleLoaded is the ONLY async surface in this module. t() and setLanguage stay
+// synchronous forever (locked decision: making t() async would force `await` through 600+
+// call sites and is a determinism/timing hazard). Callers await ensureLocaleLoaded BEFORE
+// setLanguage so the locale's dense table is resident before the next synchronous render.
+//
+// `resident` holds the dense table for every loaded locale. English is the ONLY locale
+// resident at boot (eager static default + universal sync fallback in tableFor); every
+// non-en locale is absent until ensureLocaleLoaded(lang) resolves its chunk. There is no
+// longer a static boot pre-seed - after the lazy flip the boot language's table is not
+// statically available (only `en` is), so the bootstrap await (src/main.ts startGame,
+// behind the loading screen) is a REAL per-locale fetch that populates resident before the
+// HUD's first localized paint.
+const resident: Partial<Record<SupportedLanguage, EnTranslations>> = { en };
+// One in-flight load promise per locale so concurrent callers coalesce onto a single
+// import instead of racing N of them.
+const inflight = new Map<SupportedLanguage, Promise<void>>();
+
+export function isLocaleResident(lang: SupportedLanguage): boolean {
+  return lang === "en" || resident[lang] !== undefined;
+}
+
+// Soft failure hook for a locale chunk that failed to load (a real risk once the lazy locale flip
+// makes this a network fetch). Dev-channel only - an English console.warn, never player
+// text (the caller renders settings.languageLoadFailed via t()). A production telemetry
+// sink can be wired here later; it is intentionally silent on a release build today.
+function reportLocaleLoadFailure(lang: SupportedLanguage, err: unknown): void {
+  if (!isReleaseBuild()) {
+    console.warn(`i18n: failed to load locale "${lang}"`, err);
+  }
+}
+
+export async function ensureLocaleLoaded(lang: SupportedLanguage): Promise<void> {
+  if (lang === "en" || isLocaleResident(lang)) return; // English-instant / already loaded
+  const existing = inflight.get(lang);
+  if (existing) return existing; // coalesce onto the in-flight import
+  const loader = LOCALE_LOADERS[lang as keyof typeof LOCALE_LOADERS];
+  if (!loader) return; // no chunk for this code (en / unknown): treat as a resident no-op
+  const task = loader()
+    .then((mod) => {
+      // Shape-tolerant read: a Vite production chunk exposes the locale as the module
+      // default OR the named export, but under raw vitest (node, no DOM) import('./es')
+      // resolves the SOURCE .ts with NAMED exports only, so mod.default is undefined -
+      // fall back to the export keyed by the locale code.
+      resident[lang] = (mod as { default?: EnTranslations }).default
+        ?? (mod as Record<string, EnTranslations>)[lang];
+      inflight.delete(lang);
+    })
+    .catch((err) => {
+      inflight.delete(lang); // clear so a retry can start a fresh import
+      reportLocaleLoadFailure(lang, err);
+      throw err; // the caller decides the UI (the picker shows settings.languageLoadFailed)
+    });
+  inflight.set(lang, task);
+  return task;
+}
+
+// --- runtime prefetch (the stored-locale modulepreload, mechanism 1) -------------------------------------
+//
+// Start the current (stored / ?lang) locale's chunk fetch as EARLY as possible - the
+// moment this module evaluates - so the network request is already in flight before the
+// bootstrap await (src/main.ts startGame) reaches it. This complements the
+// parser-discoverable <link rel="modulepreload"> injected from index.html (mechanism 2):
+// the link makes the request high-priority and discoverable before main.ts parses; this
+// prefetch guarantees the dynamic import() is issued as soon as the i18n module runs. Both
+// target the SAME content-hashed chunk and dedupe to a single network fetch (the inflight
+// map coalesces app-side; the browser module map coalesces the request). Fire-and-forget:
+// the real await at startGame / the picker still gates first paint and owns the failure UI
+// (settings.languageLoadFailed) - the swallowed rejection here only prevents an early
+// failed fetch from surfacing as an unhandled rejection (the awaited caller re-runs
+// ensureLocaleLoaded, which cleared inflight on reject, so a retry restarts a fresh
+// import). English and an already-resident locale are no-ops; never speculative (only the
+// one active locale, never the other 12).
+export function prefetchLocale(lang: SupportedLanguage = currentLanguage): void {
+  if (lang === "en" || isLocaleResident(lang)) return;
+  void ensureLocaleLoaded(lang).catch(() => {
+    // Swallowed: the awaited bootstrap/picker call re-runs the load and surfaces the error.
+  });
+}
+
+// Auto-fire on module evaluation in a browser so a stored / ?lang non-en visitor's chunk
+// is in flight immediately (i18n.ts is among the earliest modules the main chunk pulls in).
+// No-op for English (the default - preserves the zero-non-en-bytes guarantee for an English
+// visitor), for an unresolved locale, and outside a browser (vitest/node has no window); it
+// never throws.
+if (typeof window !== "undefined") {
+  prefetchLocale();
 }
 
 function interpolate(template: string, values?: InterpolationValues): string {
@@ -171,18 +277,19 @@ function onUntrackedKey(key: string): string {
   return key;
 }
 
-type ResolvedTable = (typeof translations)[SupportedLanguage];
-
-// The dense table the current-language read paths resolve against. Normally
-// translations[lang]; the en_XA pseudo table only when the dev pseudo-locale is
-// active AND the requested locale is the current one (so an explicit read of some
-// other locale is unaffected). en_XA is referenced solely inside the
-// !import.meta.env.PROD branch, so a production build tree-shakes it away.
-function tableFor(lang: SupportedLanguage): ResolvedTable {
+// The dense table the current-language read paths resolve against. The en_XA pseudo table
+// only when the dev pseudo-locale is active AND the requested locale is the current one (so
+// an explicit read of some other locale is unaffected); en_XA is referenced solely inside
+// the !import.meta.env.PROD branch, so a production build tree-shakes it away.
+function tableFor(lang: SupportedLanguage): EnTranslations {
   if (!import.meta.env.PROD && pseudoActive && lang === currentLanguage) {
     return en_XA;
   }
-  return translations[lang];
+  // resident holds English (always) + every locale ensureLocaleLoaded has resolved.
+  // resident.en is the universal English fallback for a locale not yet loaded (or one whose
+  // chunk failed to fetch): the synchronous read never blocks and never throws. Callers that
+  // need the localized table await ensureLocaleLoaded(lang) first (bootstrap / picker).
+  return resident[lang] ?? resident.en!;
 }
 
 export function t(key: TranslationKey, values?: InterpolationValues): string {
@@ -224,6 +331,36 @@ export function hasTranslation(key: string, lang: SupportedLanguage = currentLan
 export function tOptional(key: string, values?: InterpolationValues, lang: SupportedLanguage = currentLanguage): string | null {
   const value = translationValue(key, lang);
   return value === null ? null : interpolate(value, values);
+}
+
+// --- CLDR cardinal pluralization -------------------------------------------
+//
+// Plural-aware lookup for count-bearing strings. Keys follow the convention
+// `<base>.one | .few | .many | .other`; tPlural selects the active locale's
+// cardinal category for `count` via Intl.PluralRules and resolves the matching
+// leaf, falling back to `<base>.other` when the locale never produces that
+// category (English/German/Romance only select one/other; CJK only other) or the
+// specific leaf is absent. `count` is auto-supplied as {count}. This is what lets
+// a 3-form Slavic locale like Russian render the correct 1 / 2-4 / 5+ wording
+// instead of a wrong binary one/other split. One Intl.PluralRules is cached per
+// language tag; selection happens off the hot path (only at count-string renders).
+const pluralRulesCache = new Map<string, Intl.PluralRules>();
+function pluralRulesFor(lang: SupportedLanguage): Intl.PluralRules {
+  const tag = languageTag(lang);
+  let rules = pluralRulesCache.get(tag);
+  if (!rules) {
+    rules = new Intl.PluralRules(tag);
+    pluralRulesCache.set(tag, rules);
+  }
+  return rules;
+}
+
+export function tPlural(base: string, count: number, values?: InterpolationValues): string {
+  const category = pluralRulesFor(currentLanguage).select(count); // zero|one|two|few|many|other
+  const merged: InterpolationValues = { count, ...(values ?? {}) };
+  const candidate = `${base}.${category}`;
+  const key = (hasTranslation(candidate) ? candidate : `${base}.other`) as TranslationKey;
+  return t(key, merged);
 }
 
 export function formatNumber(value: number, options?: Intl.NumberFormatOptions, lang: SupportedLanguage = currentLanguage): string {

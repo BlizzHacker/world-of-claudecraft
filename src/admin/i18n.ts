@@ -1,9 +1,11 @@
 import { translations, pending, en_XA } from './i18n.resolved.generated';
+import { LOCALE_LOADERS } from './i18n.resolved.generated/loaders';
 
 // The admin dashboard's own i18n layer (overlay + registry + release-gate
 // model). Operators are users, so ALL rendered admin text routes through t().
 //
-// DICT is the dense resolved admin table (src/admin/i18n.resolved.generated.ts):
+// DICT is the dense resolved admin table (the barrel of the
+// src/admin/i18n.resolved.generated/ directory):
 // every locale overlaid onto the flat English admin base (src/admin/i18n.en.ts)
 // and filled from English, so every key always resolves. The SCANNER reads the
 // SPARSE source (i18n.en + i18n.locales/*) to decide which keys are `pending`;
@@ -45,7 +47,47 @@ function detect(): string {
 current = detect();
 
 export function adminLanguage(): string { return current; }
+// BCP-47 tag for the Intl APIs. The locale codes carry an underscore region
+// (de_DE, zh_CN, ...), which Intl rejects with a RangeError, so normalize the
+// separator to a hyphen (mirrors the game's languageTag in src/ui/i18n.ts).
+// adminLanguage() still returns the raw code for DICT/t() lookups.
+export function adminLanguageTag(): string { return current.replace("_", "-"); }
 export function setAdminLanguage(lang: string): void { if (SUPPORTED.includes(lang)) { pseudoActive = false; current = lang; } }
+
+// --- async locale-load seam (parity with the game's ensureLocaleLoaded) ----------
+//
+// Admin keeps EVERY locale static (locked decision: the admin bundle is ~38 KB gzip and
+// operators are not the mobile target), so DICT already carries every locale and this
+// resolves instantly - the load body below is unreachable while admin stays static. The
+// async surface is mirrored structurally so the admin bootstrap awaits the same shape as
+// the game client; admin never performs the static->lazy flip.
+const adminInflight = new Map<string, Promise<void>>();
+
+export function isAdminLocaleResident(lang: string): boolean {
+  return lang === "en" || DICT[lang] !== undefined;
+}
+
+export async function ensureAdminLocaleLoaded(lang: string): Promise<void> {
+  if (isAdminLocaleResident(lang)) return; // always true while admin stays static
+  const existing = adminInflight.get(lang);
+  if (existing) return existing; // coalesce onto the in-flight import
+  const loader = (LOCALE_LOADERS as Record<string, (() => Promise<Record<string, unknown>>) | undefined>)[lang];
+  if (!loader) return;
+  const task = loader()
+    .then((mod) => {
+      // Shape-tolerant read mirroring src/ui/i18n.ts (default OR named export).
+      DICT[lang] = ((mod as { default?: Record<string, string> }).default
+        ?? (mod as Record<string, Record<string, string>>)[lang]) as Record<string, string>;
+      adminInflight.delete(lang);
+    })
+    .catch((err) => {
+      adminInflight.delete(lang); // clear so a retry can start a fresh import
+      if (!isReleaseBuild()) console.warn(`admin i18n: failed to load locale "${lang}"`, err);
+      throw err;
+    });
+  adminInflight.set(lang, task);
+  return task;
+}
 
 // --- release detection + the t() miss / pending policy (mirrors src/ui/i18n.ts) ---
 //
@@ -132,9 +174,15 @@ const ADMIN_ERROR_KEYS: Record<string, string> = {
   "account not found": "error.accountNotFound",
   "moderation action failed": "error.moderationFailed",
   "force rename failed": "error.forceRenameFailed",
+  "chat mute failed": "error.chatMuteFailed",
   "moderation reason is required": "error.moderationReasonRequired",
   "suspension expiry must be in the future": "error.moderationExpiryFuture",
   "character not found": "error.characterNotFound",
+  "admin accounts cannot be chat muted": "error.cannotChatMuteAdmin",
+  "tier must be \"soft\" or \"hard\"": "error.invalidWordTier",
+  "word is empty after normalization": "error.wordEmptyAfterNormalization",
+  "word not found": "error.wordNotFound",
+  "chat mute expiry must be in the future": "error.chatMuteExpiryFuture",
 };
 export function localizeAdminError(message: string): string {
   const key = ADMIN_ERROR_KEYS[message.trim().toLowerCase()];

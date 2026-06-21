@@ -126,7 +126,8 @@ describe('hotbar action placement', () => {
     const displacedAbility = slots[targetIndex];
 
     expect(slots).toHaveLength(barSlots);
-    expect(mageAbilities[barSlots]).toBe('ice_barrier');
+    // ice_barrier is an overflow spell learned beyond the initial bar slots.
+    expect(mageAbilities.indexOf('ice_barrier')).toBeGreaterThanOrEqual(barSlots);
     expect(slots.some((action) => action.id === 'ice_barrier')).toBe(false);
 
     const next = placeAbilityOnSlot(slots, 'ice_barrier', targetIndex);

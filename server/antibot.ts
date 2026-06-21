@@ -1,6 +1,12 @@
 import { createAutomatedBotReport } from './antibot_db';
 
-export type BotEvidenceKind = 'timing' | 'reaction' | 'multi_ip';
+export type BotEvidenceKind =
+  // One "cadence" family at the gate — not independent (see BEHAVIORAL_FAMILY).
+  | 'timing' | 'reaction'
+  // Independent behavioral families; not all emitted yet (future signals plug in).
+  | 'sequence' | 'trajectory' | 'impossible' | 'honeypot'
+  // Network context: scored and reported, but never gates a response.
+  | 'multi_ip';
 
 export interface BotEvidence {
   kind: BotEvidenceKind;
@@ -14,6 +20,7 @@ export interface BotTracker {
   // Never read them outside onSimTick / checkEscalation.
   evidence: BotEvidence[];
   score: number;
+  // Raw distinct-kind count — observability only; the gate uses behavioralFamilyCount.
   distinctKinds: number;
   aboveLogSince: number | null;
   aboveThrottleSince: number | null;
@@ -21,9 +28,7 @@ export interface BotTracker {
   throttleMultiplier: number;          // 1.0 normal, 2.0 shadow-throttle active
   throttleActiveSince: number | null;  // when throttleMultiplier became 2.0; 30-min safety valve
   autoReportSent: boolean;
-  // action timing (combat command intervals)
   timing: { lastActionAt: number; deltas: number[] };  // ring buffer, max 20 deltas
-  // reaction time (stimulus → next combat command)
   reactionPending: { eventType: string; eventAt: number } | null;
   reactionDeltas: number[];            // ring buffer, max 20
 }
@@ -49,8 +54,22 @@ const MAX_THROTTLE_MS = 30 * 60_000;
 // meaningful here. Excludes target/tab (not execution), input (continuous stream).
 const COMBAT_CMDS = new Set(['attack', 'cast', 'castSlot', 'loot', 'interact']);
 
-// SimEvent types whose delivery to a player starts a reaction-time measurement.
-const REACTION_EVENTS = new Set(['death', 'castStop']);
+// SimEvent types that start a reaction-time measurement. Empty on purpose: the
+// original stimuli (the player's OWN castStop/death) were self-generated and
+// anticipated, so this measured rotation cadence, not reaction, and flagged normal
+// play. Re-enable only with an EXTERNAL stimulus (see the doc).
+const REACTION_EVENTS = new Set<string>();
+
+// Families used by the escalation gate: `timing`+`reaction` share one "cadence"
+// family; `multi_ip` is absent (scores but never gates); each other kind is its own.
+const BEHAVIORAL_FAMILY: Partial<Record<BotEvidenceKind, string>> = {
+  timing: 'cadence',
+  reaction: 'cadence',
+  sequence: 'sequence',
+  trajectory: 'trajectory',
+  impossible: 'impossible',
+  honeypot: 'honeypot',
+};
 
 // ---- public API --------------------------------------------------------------
 
@@ -78,6 +97,10 @@ export function addEvidence(tracker: BotTracker, ev: BotEvidence): void {
   tracker.evidence.push(ev);
 }
 
+export function removeEvidence(tracker: BotTracker, kind: BotEvidenceKind): void {
+  tracker.evidence = tracker.evidence.filter(e => e.kind !== kind);
+}
+
 export function recomputeScore(tracker: BotTracker, now: number): void {
   tracker.evidence = tracker.evidence.filter(e => e.expiresAt > now);
   tracker.score = tracker.evidence.reduce((s, e) => s + e.weight, 0);
@@ -86,7 +109,6 @@ export function recomputeScore(tracker: BotTracker, now: number): void {
 
 // Call from dispatchMessage, after field validation, before sim.* calls.
 export function observeAction(tracker: BotTracker, cmd: string, now: number): void {
-  // Action timing: near-zero variance in combat command intervals flags a scripted client.
   if (COMBAT_CMDS.has(cmd)) {
     if (tracker.timing.lastActionAt > 0) {
       pushRing(tracker.timing.deltas, now - tracker.timing.lastActionAt, RING_MAX);
@@ -95,11 +117,8 @@ export function observeAction(tracker: BotTracker, cmd: string, now: number): vo
         if (sd < 15) {
           addEvidence(tracker, { kind: 'timing', weight: 0.7, expiresAt: now + TTL_2MIN,
             detail: `action interval stdDev ${sd.toFixed(1)}ms` });
-        } else if (sd < 50) {
-          addEvidence(tracker, { kind: 'timing', weight: 0.3, expiresAt: now + TTL_2MIN,
-            detail: `action interval stdDev ${sd.toFixed(1)}ms` });
         } else {
-          // Human-like variance — remove stale timing evidence so score can decay.
+          // variance back to human-like — clear timing evidence so the score decays
           tracker.evidence = tracker.evidence.filter(e => e.kind !== 'timing');
         }
       }
@@ -107,18 +126,15 @@ export function observeAction(tracker: BotTracker, cmd: string, now: number): vo
     tracker.timing.lastActionAt = now;
   }
 
-  // Reaction time: if a stimulus event was recorded for this session,
-  // the next combat command closes the measurement window.
-  if (tracker.reactionPending !== null) {
+  // COMBAT_CMD only — closing on any command would over-count. Dormant while empty.
+  if (tracker.reactionPending !== null && COMBAT_CMDS.has(cmd)) {
     const reaction = now - tracker.reactionPending.eventAt;
     tracker.reactionPending = null;
     pushRing(tracker.reactionDeltas, reaction, RING_MAX);
     if (tracker.reactionDeltas.length >= TIMING_MIN_SAMPLES) {
       const median = computeMedian(tracker.reactionDeltas);
       const sd = computeStdDev(tracker.reactionDeltas);
-      // Phase 1: conservative 150ms threshold, no RTT correction.
-      // A bot reacts in < 5ms; even at 0 RTT humans can't sustain < 150ms median.
-      // Phase 2: subtract estimated RTT and tighten to 80ms.
+      // Conservative threshold, no RTT correction yet; only valid for an external stimulus.
       if (median < 150) {
         addEvidence(tracker, { kind: 'reaction', weight: 0.6, expiresAt: now + TTL_2MIN,
           detail: `median reaction ${median.toFixed(0)}ms` });
@@ -140,23 +156,36 @@ export function observeEvent(tracker: BotTracker, eventType: string, now: number
 }
 
 // Call once per sim tick per session (skip if evidence empty and no timers set).
-export function onSimTick(tracker: BotTracker, session: BotSessionRef, now: number): BotAction {
+// `enforce` gates throttle/kick; default false = report-only (the report still fires).
+export function onSimTick(tracker: BotTracker, session: BotSessionRef, now: number, enforce = false): BotAction {
   recomputeScore(tracker, now);
-  return checkEscalation(tracker, session, now);
+  return checkEscalation(tracker, session, now, enforce);
+}
+
+// Distinct behavioral families — what gates escalation. Cadence (timing+reaction)
+// counts once and multi_ip is excluded, so cadence-only never reaches >= 2.
+export function behavioralFamilyCount(evidence: BotEvidence[]): number {
+  const families = new Set<string>();
+  for (const e of evidence) {
+    const family = BEHAVIORAL_FAMILY[e.kind];
+    if (family !== undefined) families.add(family);
+  }
+  return families.size;
 }
 
 // ---- internal ----------------------------------------------------------------
 
-function checkEscalation(tracker: BotTracker, session: BotSessionRef, now: number): BotAction {
-  const { score, distinctKinds } = tracker;
+function checkEscalation(tracker: BotTracker, session: BotSessionRef, now: number, enforce: boolean): BotAction {
+  const { score } = tracker;
+  const families = behavioralFamilyCount(tracker.evidence);
 
-  if (score >= 0.5 && distinctKinds >= 2) {
+  if (score >= 0.5 && families >= 2) {
     tracker.aboveLogSince ??= now;
   } else {
     tracker.aboveLogSince = null;
   }
 
-  if (score >= 0.8 && distinctKinds >= 2) {
+  if (score >= 0.8 && families >= 2) {
     tracker.aboveThrottleSince ??= now;
   } else {
     tracker.aboveThrottleSince = null;
@@ -164,19 +193,22 @@ function checkEscalation(tracker: BotTracker, session: BotSessionRef, now: numbe
     tracker.throttleActiveSince = null;
   }
 
-  // Same ≥ 2 kinds guard: a honeypot hit alone (score=1.0, kinds=1) throttles
-  // + reports but never auto-kicks. Admin confirms before ban.
-  if (score >= 1.0 && distinctKinds >= 2) {
+  if (score >= 1.0 && families >= 2) {
     tracker.aboveKickSince ??= now;
   } else {
     tracker.aboveKickSince = null;
   }
 
+  // The report fires regardless of `enforce` (it is the point of report-only);
+  // only the throttle/kick below are gated.
   if (tracker.aboveLogSince !== null && now - tracker.aboveLogSince >= 30_000 && !tracker.autoReportSent) {
     tracker.autoReportSent = true;
     void createAutomatedBotReport(session, tracker)
       .catch(err => console.error('[antibot] report insert failed', err));
   }
+
+  // Report-only: timers above still advance, but no throttle/kick is applied.
+  if (!enforce) return 'none';
 
   if (tracker.aboveThrottleSince !== null && now - tracker.aboveThrottleSince >= 60_000) {
     tracker.throttleMultiplier = 2.0;

@@ -50,4 +50,30 @@ describe('arena leaderboard', () => {
       { name: 'Thrall', class: 'shaman', level: 60, rating: 1832, wins: 12, losses: 3 },
     ]);
   });
+
+  it('uses legacy-compatible 1v1 state fields by default', async () => {
+    dbMock.query.mockResolvedValueOnce({ rows: [] });
+
+    await topArenaRatings();
+
+    const [sql] = dbMock.query.mock.calls[0];
+    expect(sql).toContain("state->>'arena1v1Rating'");
+    expect(sql).toContain("state->>'arenaRating'");
+    expect(sql).toContain("state->>'arena1v1Wins'");
+    expect(sql).toContain("state->>'arenaWins'");
+    expect(sql).not.toContain("state->>'arena2v2Rating'");
+  });
+
+  it('uses independent 2v2 state fields when requested', async () => {
+    dbMock.query.mockResolvedValueOnce({ rows: [] });
+
+    await topArenaRatings(20, '2v2');
+
+    const [sql] = dbMock.query.mock.calls[0];
+    expect(sql).toContain("state->>'arena2v2Rating'");
+    expect(sql).toContain("state->>'arena2v2Wins'");
+    expect(sql).toContain("state->>'arena2v2Losses'");
+    expect(sql).not.toContain("state->>'arena1v1Rating'");
+    expect(sql).not.toContain("state->>'arenaRating'");
+  });
 });

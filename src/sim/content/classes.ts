@@ -39,7 +39,7 @@ export const CLASSES: Record<PlayerClass, ClassDef> = {
     resourceType: 'rage',
     startWeapon: 'worn_sword',
     startChest: 'recruit_tunic',
-    abilities: ['heroic_strike', 'battle_shout', 'charge', 'rend', 'thunder_clap', 'hamstring', 'bloodrage', 'overpower', 'execute', 'slam', 'cleave', 'defensive_stance', 'sunder_armor', 'taunt'],
+    abilities: ['heroic_strike', 'battle_shout', 'commanding_shout', 'charge', 'rend', 'thunder_clap', 'hamstring', 'bloodrage', 'overpower', 'execute', 'slam', 'cleave', 'defensive_stance', 'demoralizing_shout', 'sunder_armor', 'taunt'],
     color: 0xc79c6e,
   },
   mage: {
@@ -55,7 +55,7 @@ export const CLASSES: Record<PlayerClass, ClassDef> = {
     startWeapon: 'gnarled_staff',
     startChest: 'apprentice_robe',
     ranged: { min: 3, max: 6, speed: 1.8, maxRange: 30, minRange: 0, wand: true, school: 'arcane' },
-    abilities: ['fireball', 'frost_armor', 'arcane_intellect', 'frostbolt', 'conjure_water', 'fire_blast', 'arcane_missiles', 'polymorph', 'frost_nova', 'arcane_explosion', 'scorch', 'ice_barrier'],
+    abilities: ['fireball', 'frost_armor', 'arcane_intellect', 'frostbolt', 'conjure_water', 'conjure_food', 'fire_blast', 'arcane_missiles', 'polymorph', 'frost_nova', 'arcane_explosion', 'scorch', 'ice_barrier', 'pyroblast'],
     color: 0x69ccf0,
   },
   rogue: {
@@ -70,7 +70,7 @@ export const CLASSES: Record<PlayerClass, ClassDef> = {
     resourceType: 'energy',
     startWeapon: 'rusty_dagger',
     startChest: 'footpad_jerkin',
-    abilities: ['sinister_strike', 'eviscerate', 'backstab', 'gouge', 'evasion', 'slice_and_dice', 'sprint', 'kidney_shot', 'ambush', 'adrenaline_rush', 'stealth'],
+    abilities: ['sinister_strike', 'eviscerate', 'garrote', 'backstab', 'gouge', 'cheap_shot', 'evasion', 'sap', 'slice_and_dice', 'sprint', 'crippling_poison', 'kidney_shot', 'expose_armor', 'ambush', 'rupture', 'vanish', 'instant_poison', 'adrenaline_rush', 'deadly_poison', 'blind', 'stealth'],
     color: 0xfff569,
   },
   paladin: {
@@ -85,7 +85,7 @@ export const CLASSES: Record<PlayerClass, ClassDef> = {
     resourceType: 'mana',
     startWeapon: 'training_mace',
     startChest: 'recruit_tunic',
-    abilities: ['seal_of_righteousness', 'holy_light', 'devotion_aura', 'judgement', 'blessing_of_might', 'divine_protection', 'hammer_of_justice', 'lay_on_hands', 'flash_of_light', 'exorcism', 'consecration', 'righteous_fury'],
+    abilities: ['seal_of_righteousness', 'holy_light', 'devotion_aura', 'judgement', 'blessing_of_might', 'divine_protection', 'hammer_of_justice', 'lay_on_hands', 'flash_of_light', 'exorcism', 'consecration', 'righteous_fury', 'retribution_aura'],
     color: 0xf58cba,
   },
   hunter: {
@@ -101,7 +101,7 @@ export const CLASSES: Record<PlayerClass, ClassDef> = {
     startWeapon: 'rusty_hatchet',
     startChest: 'footpad_jerkin',
     ranged: { min: 5, max: 9, speed: 2.3, maxRange: 35, minRange: 8 },
-    abilities: ['raptor_strike', 'aspect_of_the_hawk', 'serpent_sting', 'arcane_shot', 'concussive_shot', 'mongoose_bite', 'wing_clip', 'tame_beast', 'dismiss_pet', 'revive_pet', 'aspect_of_the_cheetah', 'aimed_shot', 'rapid_fire'],
+    abilities: ['raptor_strike', 'aspect_of_the_hawk', 'serpent_sting', 'arcane_shot', 'concussive_shot', 'mongoose_bite', 'wing_clip', 'tame_beast', 'dismiss_pet', 'revive_pet', 'aspect_of_the_monkey', 'aspect_of_the_cheetah', 'aimed_shot', 'rapid_fire'],
     color: 0xabd473,
   },
   priest: {
@@ -132,7 +132,7 @@ export const CLASSES: Record<PlayerClass, ClassDef> = {
     resourceType: 'mana',
     startWeapon: 'training_mace',
     startChest: 'footpad_jerkin',
-    abilities: ['lightning_bolt', 'rockbiter_weapon', 'healing_wave', 'earth_shock', 'lightning_shield', 'flame_shock', 'frost_shock', 'ghost_wolf', 'stormstrike'],
+    abilities: ['lightning_bolt', 'rockbiter_weapon', 'healing_wave', 'earth_shock', 'lightning_shield', 'flame_shock', 'flametongue_weapon', 'frost_shock', 'frostbrand_weapon', 'ghost_wolf', 'stormstrike'],
     color: 0x0070de,
   },
   warlock: {
@@ -148,7 +148,7 @@ export const CLASSES: Record<PlayerClass, ClassDef> = {
     startWeapon: 'gnarled_staff',
     startChest: 'apprentice_robe',
     ranged: { min: 3, max: 6, speed: 1.8, maxRange: 30, minRange: 0, wand: true, school: 'shadow' },
-    abilities: ['shadow_bolt', 'summon_imp', 'demon_skin', 'immolate', 'corruption', 'life_tap', 'summon_voidwalker', 'curse_of_agony', 'drain_life', 'fear', 'searing_pain', 'shadowburn'],
+    abilities: ['shadow_bolt', 'summon_imp', 'demon_skin', 'immolate', 'corruption', 'life_tap', 'summon_voidwalker', 'curse_of_agony', 'drain_life', 'fear', 'searing_pain', 'shadowburn', 'summon_succubus', 'summon_felhunter', 'summon_felguard', 'summon_infernal', 'summon_doomguard'],
     color: 0x9482c9,
   },
   druid: {
@@ -163,7 +163,7 @@ export const CLASSES: Record<PlayerClass, ClassDef> = {
     resourceType: 'mana',
     startWeapon: 'gnarled_staff',
     startChest: 'footpad_jerkin',
-    abilities: ['wrath', 'healing_touch', 'mark_of_the_wild', 'moonfire', 'rejuvenation', 'thorns', 'entangling_roots', 'bear_form', 'bear_charge', 'maul', 'growl', 'demoralizing_roar', 'cat_form', 'prowl', 'rake', 'claw', 'regrowth', 'ferocious_bite', 'barkskin', 'swipe', 'starfire'],
+    abilities: ['wrath', 'healing_touch', 'mark_of_the_wild', 'moonfire', 'rejuvenation', 'thorns', 'entangling_roots', 'bear_form', 'bear_charge', 'maul', 'growl', 'demoralizing_roar', 'cat_form', 'prowl', 'rake', 'claw', 'regrowth', 'ferocious_bite', 'barkskin', 'swipe', 'starfire', 'travel_form', 'enrage', 'bash', 'faerie_fire', 'hibernate', 'dash', 'pounce', 'insect_swarm', 'tigers_fury', 'rip'],
     color: 0xff7d0a,
   },
 };
@@ -197,6 +197,26 @@ export const ABILITIES: Record<string, AbilityDef> = {
       { rank: 3, level: 20, cost: 10, effects: [{ type: 'selfBuff', kind: 'buff_ap', value: 50, duration: 120 }] },
     ],
     description: 'Increases your attack power by 20 for 2 min.',
+  },
+  commanding_shout: {
+    id: 'commanding_shout', name: 'Commanding Shout', class: 'warrior', learnLevel: 14,
+    cost: 10, castTime: 0, cooldown: 0, range: 0, school: 'physical',
+    requiresTarget: false,
+    effects: [{ type: 'selfBuff', kind: 'buff_sta', value: 6, duration: 120 }],
+    ranks: [
+      { rank: 2, level: 24, cost: 10, effects: [{ type: 'selfBuff', kind: 'buff_sta', value: 11, duration: 120 }] },
+    ],
+    description: 'Increases your Stamina by 6 for 2 min.',
+  },
+  demoralizing_shout: {
+    id: 'demoralizing_shout', name: 'Demoralizing Shout', class: 'warrior', learnLevel: 14,
+    cost: 10, castTime: 0, cooldown: 0, range: 0, school: 'physical',
+    requiresTarget: false,
+    effects: [{ type: 'aoeAttackPower', amount: 30, duration: 30, radius: 10 }],
+    ranks: [
+      { rank: 2, level: 20, cost: 10, effects: [{ type: 'aoeAttackPower', amount: 45, duration: 30, radius: 10 }] },
+    ],
+    description: 'Lets out a fearsome shout, reducing the attack power of all nearby enemies by 30 for 30 sec.',
   },
   charge: {
     id: 'charge', name: 'Charge', class: 'warrior', learnLevel: 4,
@@ -382,6 +402,17 @@ export const ABILITIES: Record<string, AbilityDef> = {
     ],
     description: 'Conjures 2 bottles of water, restoring mana when drunk. Higher ranks conjure purer water.',
   },
+  conjure_food: {
+    id: 'conjure_food', name: 'Conjure Food', class: 'mage', learnLevel: 6,
+    cost: 45, castTime: 3, cooldown: 0, range: 0, school: 'arcane',
+    requiresTarget: false,
+    effects: [], // special-cased: creates conjured_bread{rank} in bags
+    ranks: [
+      { rank: 2, level: 12, cost: 75, effects: [] },
+      { rank: 3, level: 18, cost: 115, effects: [] },
+    ],
+    description: 'Conjures 2 servings of bread, restoring health when eaten. Higher ranks conjure heartier fare.',
+  },
   fire_blast: {
     id: 'fire_blast', name: 'Fire Blast', class: 'mage', learnLevel: 6,
     cost: 40, castTime: 0, cooldown: 8, range: 20, school: 'fire',
@@ -433,6 +464,13 @@ export const ABILITIES: Record<string, AbilityDef> = {
     requiresTarget: true,
     effects: [{ type: 'directDamage', min: 32, max: 40 }],
     description: 'Scorches the enemy for $d Fire damage. Quick to cast.',
+  },
+  pyroblast: {
+    id: 'pyroblast', name: 'Pyroblast', class: 'mage', learnLevel: 20,
+    cost: 125, castTime: 6.0, cooldown: 0, range: 30, school: 'fire',
+    requiresTarget: true,
+    effects: [{ type: 'directDamage', min: 75, max: 100 }, { type: 'dot', total: 24, duration: 12, interval: 2 }],
+    description: 'Hurls an immense fiery boulder that causes $d Fire damage plus additional damage over time.',
   },
   ice_barrier: {
     id: 'ice_barrier', name: 'Ice Barrier', class: 'mage', learnLevel: 20,
@@ -536,6 +574,80 @@ export const ABILITIES: Record<string, AbilityDef> = {
     requiresTarget: false, offGcd: true,
     effects: [{ type: 'gainResource', amount: 60 }],
     description: 'Your blood runs hot, instantly restoring 60 energy.',
+  },
+  garrote: {
+    id: 'garrote', name: 'Garrote', class: 'rogue', learnLevel: 1,
+    cost: 50, castTime: 0, cooldown: 0, range: 0, school: 'physical',
+    requiresTarget: true, awardsCombo: 1, requiresStealth: true,
+    effects: [{ type: 'directDamage', min: 5, max: 7 }, { type: 'dot', total: 60, duration: 18, interval: 3 }],
+    ranks: [{
+      rank: 2, level: 14, cost: 50,
+      effects: [{ type: 'directDamage', min: 9, max: 12 }, { type: 'dot', total: 132, duration: 18, interval: 3 }],
+    }],
+    description: 'Garrote the enemy, causing damage now and bleeding it for $d over 18 sec. Must be stealthed. Awards 1 combo point.',
+  },
+  cheap_shot: {
+    id: 'cheap_shot', name: 'Cheap Shot', class: 'rogue', learnLevel: 8,
+    cost: 60, castTime: 0, cooldown: 0, range: 0, school: 'physical',
+    requiresTarget: true, awardsCombo: 2, requiresStealth: true,
+    effects: [{ type: 'directDamage', min: 6, max: 8 }, { type: 'stun', duration: 4 }],
+    description: 'Strike the target, stunning it for 4 sec. Must be stealthed. Awards 2 combo points.',
+  },
+  sap: {
+    id: 'sap', name: 'Sap', class: 'rogue', learnLevel: 10,
+    cost: 65, castTime: 0, cooldown: 0, range: 0, school: 'physical',
+    requiresTarget: true, requiresStealth: true, requiresOutOfCombat: true,
+    effects: [{ type: 'incapacitate', duration: 8 }],
+    description: 'Incapacitates the target for 8 sec. Must be stealthed and out of combat. Any damage breaks the effect.',
+  },
+  crippling_poison: {
+    id: 'crippling_poison', name: 'Crippling Poison', class: 'rogue', learnLevel: 12,
+    cost: 40, castTime: 0, cooldown: 0, range: 0, school: 'nature',
+    requiresTarget: true,
+    effects: [{ type: 'directDamage', min: 3, max: 5 }, { type: 'slow', mult: 0.5, duration: 12 }],
+    description: 'Strikes the target with a crippling poison, dealing {damage} Nature damage and slowing its movement speed by 50% for 12 sec.',
+  },
+  expose_armor: {
+    id: 'expose_armor', name: 'Expose Armor', class: 'rogue', learnLevel: 14,
+    cost: 25, castTime: 0, cooldown: 0, range: 0, school: 'physical',
+    requiresTarget: true, spendsCombo: true,
+    effects: [{ type: 'sunder', armor: 170, maxStacks: 1 }],
+    description: "Finishing move that exposes the target, reducing its armor. More combo points spent build into a deeper cut.",
+  },
+  rupture: {
+    id: 'rupture', name: 'Rupture', class: 'rogue', learnLevel: 16,
+    cost: 25, castTime: 0, cooldown: 0, range: 0, school: 'physical',
+    requiresTarget: true, spendsCombo: true,
+    effects: [{ type: 'dot', total: 96, duration: 16, interval: 2 }],
+    description: 'Finishing move that wounds the target, causing it to bleed for $d over 16 sec.',
+  },
+  vanish: {
+    id: 'vanish', name: 'Vanish', class: 'rogue', learnLevel: 18,
+    cost: 0, castTime: 0, cooldown: 300, range: 0, school: 'physical',
+    requiresTarget: false, offGcd: true,
+    effects: [{ type: 'selfBuff', kind: 'stealth', value: 0.7, duration: 10 }],
+    description: 'Vanish from sight, entering Stealth even in combat. You move 30% slower while hidden. Lasts up to 10 sec.',
+  },
+  instant_poison: {
+    id: 'instant_poison', name: 'Instant Poison', class: 'rogue', learnLevel: 18,
+    cost: 40, castTime: 0, cooldown: 0, range: 0, school: 'nature',
+    requiresTarget: false,
+    effects: [{ type: 'imbue', bonus: 8, duration: 1800 }],
+    description: 'Coats your weapon for 30 min, causing each of your melee swings to deal 8 additional Nature damage.',
+  },
+  deadly_poison: {
+    id: 'deadly_poison', name: 'Deadly Poison', class: 'rogue', learnLevel: 20,
+    cost: 40, castTime: 0, cooldown: 0, range: 0, school: 'nature',
+    requiresTarget: false,
+    effects: [{ type: 'imbue', bonus: 14, duration: 1800 }],
+    description: 'Coats your weapon for 30 min, causing each of your melee swings to deal 14 additional Nature damage.',
+  },
+  blind: {
+    id: 'blind', name: 'Blind', class: 'rogue', learnLevel: 20,
+    cost: 50, castTime: 0, cooldown: 120, range: 5, school: 'physical',
+    requiresTarget: true,
+    effects: [{ type: 'incapacitate', duration: 8 }],
+    description: 'Blinds the target, causing it to wander disoriented for 8 sec. Any damage breaks the effect.',
   },
 
   // ====================== PALADIN ======================
@@ -643,6 +755,13 @@ export const ABILITIES: Record<string, AbilityDef> = {
     effects: [{ type: 'selfBuff', kind: 'righteous_fury', value: 1.6, duration: 1800 }],
     description: 'Increases the threat generated by your Holy damage by 60% for 30 min. The tanking paladin\'s cornerstone.',
   },
+  retribution_aura: {
+    id: 'retribution_aura', name: 'Retribution Aura', class: 'paladin', learnLevel: 16,
+    cost: 0, castTime: 0, cooldown: 0, range: 0, school: 'holy',
+    requiresTarget: false,
+    effects: [{ type: 'selfBuff', kind: 'thorns', value: 5, duration: 1800 }],
+    description: 'Surrounds you with holy energy for 30 min, dealing 5 Holy damage to any enemy that strikes you in melee.',
+  },
 
   // ====================== HUNTER ======================
   tame_beast: {
@@ -732,6 +851,13 @@ export const ABILITIES: Record<string, AbilityDef> = {
     requiresTarget: true,
     effects: [{ type: 'directDamage', min: 3, max: 5 }, { type: 'slow', mult: 0.6, duration: 10 }],
     description: 'Inflicts a wound that slows the enemy by 40% for 10 sec.',
+  },
+  aspect_of_the_monkey: {
+    id: 'aspect_of_the_monkey', name: 'Aspect of the Monkey', class: 'hunter', learnLevel: 10,
+    cost: 20, castTime: 0, cooldown: 0, range: 0, school: 'nature',
+    requiresTarget: false,
+    effects: [{ type: 'selfBuff', kind: 'buff_dodge', value: 0.08, duration: 1800 }],
+    description: 'Take on the aspect of the monkey, increasing your dodge chance by 8% for 30 min.',
   },
   aspect_of_the_cheetah: {
     id: 'aspect_of_the_cheetah', name: 'Aspect of the Cheetah', class: 'hunter', learnLevel: 14,
@@ -926,12 +1052,32 @@ export const ABILITIES: Record<string, AbilityDef> = {
     }],
     description: 'Sears the target with fire for 25 damage plus $d over 12 sec.',
   },
+  flametongue_weapon: {
+    id: 'flametongue_weapon', name: 'Flametongue Weapon', class: 'shaman', learnLevel: 10,
+    cost: 25, castTime: 0, cooldown: 0, range: 0, school: 'fire',
+    requiresTarget: false,
+    effects: [{ type: 'imbue', bonus: 8, duration: 300 }],
+    ranks: [
+      { rank: 2, level: 18, cost: 40, effects: [{ type: 'imbue', bonus: 13, duration: 300 }] },
+    ],
+    description: 'Imbues your weapon with elemental fire: each swing deals 8 additional Fire damage for 5 min.',
+  },
   frost_shock: {
     id: 'frost_shock', name: 'Frost Shock', class: 'shaman', learnLevel: 14,
     cost: 50, castTime: 0, cooldown: 6, range: 20, school: 'frost',
     requiresTarget: true,
     effects: [{ type: 'directDamage', min: 36, max: 42 }, { type: 'slow', mult: 0.5, duration: 8 }],
     description: 'Instantly shocks the target with frost for $d Frost damage and slows its movement by 50% for 8 sec.',
+  },
+  frostbrand_weapon: {
+    id: 'frostbrand_weapon', name: 'Frostbrand Weapon', class: 'shaman', learnLevel: 12,
+    cost: 25, castTime: 0, cooldown: 0, range: 0, school: 'frost',
+    requiresTarget: false,
+    effects: [{ type: 'imbue', bonus: 8, duration: 300 }],
+    ranks: [
+      { rank: 2, level: 20, cost: 40, effects: [{ type: 'imbue', bonus: 13, duration: 300 }] },
+    ],
+    description: 'Imbues your weapon with biting frost: each swing deals 8 additional damage for 5 min.',
   },
   ghost_wolf: {
     id: 'ghost_wolf', name: 'Ghost Wolf', class: 'shaman', learnLevel: 16,
@@ -1064,6 +1210,41 @@ export const ABILITIES: Record<string, AbilityDef> = {
     requiresTarget: false,
     effects: [{ type: 'summonDemon', mobId: 'voidwalker' }],
     description: 'Summons a Voidwalker under the command of the Warlock. The Voidwalker is a sturdy demon that taunts your enemies and soaks up punishment. Summoning a new demon dismisses your current one. You may have one demon at a time.',
+  },
+  summon_succubus: {
+    id: 'summon_succubus', name: 'Summon Succubus', class: 'warlock', learnLevel: 12,
+    cost: 100, castTime: 5, cooldown: 0, range: 0, school: 'shadow',
+    requiresTarget: false,
+    effects: [{ type: 'summonDemon', mobId: 'succubus' }],
+    description: 'Summons a Succubus under the command of the Warlock. The Succubus is a fragile demon that strikes quickly and hits hard in melee. Summoning a new demon dismisses your current one. You may have one demon at a time.',
+  },
+  summon_felhunter: {
+    id: 'summon_felhunter', name: 'Summon Felhunter', class: 'warlock', learnLevel: 14,
+    cost: 120, castTime: 5, cooldown: 0, range: 0, school: 'shadow',
+    requiresTarget: false,
+    effects: [{ type: 'summonDemon', mobId: 'felhunter' }],
+    description: 'Summons a Felhunter under the command of the Warlock. The Felhunter harries enemies from range with Shadow Bite and excels at hunting spellcasters. Summoning a new demon dismisses your current one. You may have one demon at a time.',
+  },
+  summon_felguard: {
+    id: 'summon_felguard', name: 'Summon Felguard', class: 'warlock', learnLevel: 16,
+    cost: 150, castTime: 5, cooldown: 0, range: 0, school: 'shadow',
+    requiresTarget: false,
+    effects: [{ type: 'summonDemon', mobId: 'felguard' }],
+    description: 'Summons a Felguard under the command of the Warlock. The Felguard is a durable melee demon that wades into battle and holds its own. Summoning a new demon dismisses your current one. You may have one demon at a time.',
+  },
+  summon_infernal: {
+    id: 'summon_infernal', name: 'Summon Infernal', class: 'warlock', learnLevel: 18,
+    cost: 140, castTime: 6, cooldown: 180, range: 0, school: 'fire',
+    requiresTarget: false,
+    effects: [{ type: 'summonDemon', mobId: 'infernal' }],
+    description: 'Binds an Infernal to your will — a hulking juggernaut with crushing melee and the deepest health and armor of any demon. A long cooldown gates its raw power. Summoning a new demon dismisses your current one. You may have one demon at a time.',
+  },
+  summon_doomguard: {
+    id: 'summon_doomguard', name: 'Summon Doomguard', class: 'warlock', learnLevel: 20,
+    cost: 150, castTime: 6, cooldown: 180, range: 0, school: 'shadow',
+    requiresTarget: false,
+    effects: [{ type: 'summonDemon', mobId: 'doomguard' }],
+    description: 'Binds a Doomguard to your will — an elite demon that rains heavy Shadow damage from afar. A long cooldown gates its devastating power. Summoning a new demon dismisses your current one. You may have one demon at a time.',
   },
 
   // ====================== DRUID ======================
@@ -1261,6 +1442,76 @@ export const ABILITIES: Record<string, AbilityDef> = {
     requiresTarget: true,
     effects: [{ type: 'directDamage', min: 60, max: 74 }],
     description: 'Calls down a bolt of stellar fire, causing $d Arcane damage.',
+  },
+  travel_form: {
+    id: 'travel_form', name: 'Travel Form', class: 'druid', learnLevel: 16,
+    cost: 30, castTime: 0, cooldown: 0, range: 0, school: 'nature',
+    requiresTarget: false,
+    effects: [{ type: 'selfBuff', kind: 'form_travel', value: 1.4, duration: 3600 }],
+    description: 'Instantly shift into a swift travel form, increasing movement speed by 40%. You cannot use other abilities while shifted, but can shift in or out of combat — ideal for escaping.',
+  },
+  enrage: {
+    id: 'enrage', name: 'Enrage', class: 'druid', learnLevel: 16,
+    cost: 0, castTime: 0, cooldown: 60, range: 0, school: 'physical',
+    requiresTarget: false, offGcd: true, requiresForm: 'bear',
+    effects: [{ type: 'gainResource', amount: 20 }],
+    description: 'Generates 20 rage instantly. Bear Form only.',
+  },
+  bash: {
+    id: 'bash', name: 'Bash', class: 'druid', learnLevel: 16,
+    cost: 10, castTime: 0, cooldown: 60, range: 8, school: 'physical',
+    requiresTarget: true, requiresForm: 'bear',
+    effects: [{ type: 'stun', duration: 2 }],
+    description: 'Stuns the target for 2 sec. Bear Form only.',
+  },
+  faerie_fire: {
+    id: 'faerie_fire', name: 'Faerie Fire', class: 'druid', learnLevel: 18,
+    cost: 30, castTime: 0, cooldown: 0, range: 30, school: 'nature',
+    requiresTarget: true,
+    effects: [{ type: 'sunder', armor: 35, maxStacks: 1 }],
+    description: "Decreases the target's armor by 35 for 40 sec.",
+  },
+  hibernate: {
+    id: 'hibernate', name: 'Hibernate', class: 'druid', learnLevel: 18,
+    cost: 50, castTime: 1.5, cooldown: 0, range: 30, school: 'nature',
+    requiresTarget: true,
+    effects: [{ type: 'incapacitate', duration: 8 }],
+    description: 'Forces the target into a deep sleep for up to 8 sec. Any damage will awaken it.',
+  },
+  dash: {
+    id: 'dash', name: 'Dash', class: 'druid', learnLevel: 18,
+    cost: 0, castTime: 0, cooldown: 60, range: 0, school: 'physical',
+    requiresTarget: false, offGcd: true, requiresForm: 'cat',
+    effects: [{ type: 'selfBuff', kind: 'buff_speed', value: 1.5, duration: 15 }],
+    description: 'Sprint forward, increasing movement speed by 50% for 15 sec. Wolf Form only.',
+  },
+  pounce: {
+    id: 'pounce', name: 'Pounce', class: 'druid', learnLevel: 18,
+    cost: 50, castTime: 0, cooldown: 0, range: 8, school: 'physical',
+    requiresTarget: true, awardsCombo: 1, requiresForm: 'cat', requiresStealth: true,
+    effects: [{ type: 'stun', duration: 2 }],
+    description: 'A stealth opener that stuns the target for 2 sec. Awards 1 combo point. Wolf Form only.',
+  },
+  insect_swarm: {
+    id: 'insect_swarm', name: 'Insect Swarm', class: 'druid', learnLevel: 20,
+    cost: 45, castTime: 0, cooldown: 0, range: 30, school: 'nature',
+    requiresTarget: true,
+    effects: [{ type: 'dot', total: 48, duration: 12, interval: 3 }],
+    description: 'The enemy is swarmed by insects, taking $d Nature damage over 12 sec.',
+  },
+  tigers_fury: {
+    id: 'tigers_fury', name: "Tiger's Fury", class: 'druid', learnLevel: 20,
+    cost: 30, castTime: 0, cooldown: 0, range: 0, school: 'physical',
+    requiresTarget: false, requiresForm: 'cat',
+    effects: [{ type: 'selfBuff', kind: 'buff_ap', value: 40, duration: 6 }],
+    description: 'Increases attack power by 40 for 6 sec. Wolf Form only.',
+  },
+  rip: {
+    id: 'rip', name: 'Rip', class: 'druid', learnLevel: 20,
+    cost: 30, castTime: 0, cooldown: 0, range: 0, school: 'physical',
+    requiresTarget: true, spendsCombo: true, requiresForm: 'cat',
+    effects: [{ type: 'dot', total: 60, duration: 12, interval: 2 }],
+    description: 'Finishing move that causes Bleed damage over 12 sec. Consumes combo points. Wolf Form only.',
   },
 
   // ============== TALENT-GRANTED (Warrior) ==============

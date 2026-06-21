@@ -99,6 +99,10 @@
   tbody tr:hover { background: var(--row-hover); }
   tr.clickable { cursor: pointer; }
   td.num, th.num { text-align: right; }
+  .table-scroll { overflow-x: auto; }
+  .usage-table { min-width: 720px; }
+  .usage-section + .usage-section { margin-top: 14px; }
+  .usage-section h4 { font-family: var(--title-font); color: var(--gold-dim); margin-bottom: 6px; font-size: 13px; }
   .empty { color: var(--text-dim); padding: 14px 8px; font-style: italic; }
   .badge { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 11px; border: 1px solid var(--gold-dim); color: var(--gold); }
   .badge.warn { border-color: #c98c36; color: #ffbf66; }
@@ -242,6 +246,20 @@
     border-color: #b34a3a;
     color: #ff7a5e;
   }
+
+  /* Mobile zoom prevention: operators are users too, and the dashboard ships to
+     phones/tablets. iOS Safari auto-zooms the page when a focused control renders
+     below 16px (and ignores the viewport settings), so floor every focusable control
+     at 16px on coarse-pointer (touch) devices. !important beats #login input's
+     id-specificity (14px); pointer:coarse leaves desktop operators (fine pointer) at
+     the compact 14px and is the only reliable cross-browser fix. */
+  @media (pointer: coarse) {
+    input,
+    textarea,
+    select {
+      font-size: 16px !important;
+    }
+  }
 </style>
 </head>
 <body>
@@ -270,6 +288,7 @@
 
     <nav id="admin-tabs">
       <button class="admin-tab active" data-admin-page="overview" data-i18n="nav.overview">Overview</button>
+      <button class="admin-tab" data-admin-page="usage" data-i18n="nav.usage">Usage</button>
       <button class="admin-tab" data-admin-page="moderation" data-i18n="nav.moderation">Moderation</button>
       <button class="admin-tab" data-admin-page="chat-filter" data-i18n="nav.chatFilter">Chat Filter</button>
       <button class="admin-tab" data-admin-page="custody" data-i18n="nav.custody">Crypto Custody</button>
@@ -298,6 +317,13 @@
         <div class="panel-title"><span data-i18n="characters.title">Characters</span> <span class="hint" data-i18n="characters.sortHint">click a column to sort</span></div>
         <div class="controls"><div class="pager" id="characters-pager"></div></div>
         <div id="characters"></div>
+      </section>
+    </main>
+
+    <main id="page-usage" class="admin-page">
+      <section class="panel">
+        <div class="panel-title"><span data-i18n="usage.title">Provider usage</span> <span class="hint" data-i18n="usage.refreshHint">refreshes every 5s</span></div>
+        <div id="usage"></div>
       </section>
     </main>
 

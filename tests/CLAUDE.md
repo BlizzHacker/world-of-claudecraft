@@ -3,7 +3,7 @@
 
 # tests/ — Vitest suite
 
-37 `*.test.ts` files (~468 cases). Tests import `src/sim/` and `server/` modules
+~240 `*.test.ts` files (~2k cases). Tests import `src/sim/` and `server/` modules
 **directly** and exercise them **deterministically** in plain Node — no live
 server, browser, or Postgres for unit tests. Browser/E2E + screenshot tests live
 in `scripts/*.mjs` (need `npm run dev`/`server`) — NOT here.
@@ -45,7 +45,29 @@ Formulas/combat/AI (`sim`, `threat`), all 9 classes & abilities (`social`, `prog
 parties/duels/trades/arena/crypt (`social`, `arena`), progression/xp incl. max-level overflow
 (`progression`, `xp`), talents (`talents`), social/guilds (`social_system`), snapshots/delta-bandwidth
 (`snapshots`, `bandwidth`, `interest`), security/auth/rate-limit (`security`), keybinds/mobile
-(`keybinds`, `mobile_controls`, `locomotion`), admin/moderation (`admin`, `moderation_db`).
+(`keybinds`, `mobile_controls`, `locomotion`), admin/moderation (`admin`, `moderation_db`),
+i18n catalog/matchers/gates (`localization_fixes`, `localization_coverage`, `i18n_*`).
+
+## i18n gates live here (don't produce strings — enforce them)
+The i18n tripwires the root CLAUDE.md names are this directory's files; run them after
+any sim/server player-text or English-catalog change. They depend on generated artifacts:
+`pretest` runs `npm run i18n:gen` (build + admin + scan), so `npm test` regenerates the
+resolved tables and `src/ui/i18n.status.json` first; a bare `npx vitest run` does NOT — run
+`npm run i18n:gen` yourself or the S3 guard throws "status.json is missing".
+- **`localization_fixes.test.ts` is the S3 guard** — it parses `src/sim/sim.ts` and
+  `server/game.ts` (`scanEmitCandidates`, exported + regression-tested against synthetic input),
+  enumerating every player-facing emit and asserting each is recognized by a `hud.ts` localize
+  arm (`localizeSystemText`/`localizeErrorText`/`localizeLootText`) or the
+  `localizeServerText`/`localizeSimText` matchers. Also checks `simDICT`/`serverDICT`/`adminDICT`
+  completeness + placeholder parity per locale, and talent-name resolution.
+  Its allow-lists are VIEWS over `i18n.status.json` (`blocked` rows, v0.7-slash `blockedSource`),
+  not hand-maintained Sets. Add/change a sim or server player string ⇒ update the matcher in the
+  SAME change or this fails.
+- **Two tiers via `I18N_RELEASE_TIER`** (read by `localization_fixes`, `localization_coverage`,
+  `i18n_status_registry`, `i18n_t_behavior`): unset = PR tier (registration/key-existence only,
+  English-only legal); `=1` = release tier (hard-fails on any `pending` locale row + full-localization
+  checks). `beforeAll` loads every locale via `ensureLocaleLoaded` so synchronous reads hit the
+  localized tables (the locales lazy-load on this branch).
 
 ## Running & adding
 - Single file (preferred while iterating): `npx vitest run tests/<file>.test.ts`.

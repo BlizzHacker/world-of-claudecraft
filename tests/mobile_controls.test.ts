@@ -1,13 +1,17 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import {
+  CHAT_LONG_PRESS_MS,
   clampJoystickOrigin,
   HAPTICS_STORE_KEY,
+  isChatLongPress,
   isPhoneTouchDevice,
+  isRecenterDoubleTap,
   loadHapticsEnabled,
   mapJoystickVector,
   mapLookVector,
   MobileControls,
   pinchZoomDelta,
+  RECENTER_DOUBLE_TAP_MS,
   saveHapticsEnabled,
   triggerHaptic,
 } from '../src/game/mobile_controls';
@@ -30,6 +34,17 @@ describe('mapJoystickVector', () => {
     expect(mapJoystickVector(0.7, -0.7)).toEqual({ forward: true, back: false, strafeLeft: false, strafeRight: true });
     expect(mapJoystickVector(-0.7, 0.7)).toEqual({ forward: false, back: true, strafeLeft: true, strafeRight: false });
   });
+
+  it('honours a custom deadzone (Joystick Deadzone setting)', () => {
+    // a small push that moves at the default deadzone stays neutral with a larger one
+    const small = mapJoystickVector(0, -0.3);
+    expect(small.forward).toBe(true);
+    const wide = mapJoystickVector(0, -0.3, 0.4);
+    expect(wide).toEqual({ forward: false, back: false, strafeLeft: false, strafeRight: false });
+    // a tiny push that's neutral by default registers with a narrow deadzone
+    const narrow = mapJoystickVector(0, -0.15, 0.1);
+    expect(narrow.forward).toBe(true);
+  });
 });
 
 describe('isPhoneTouchDevice', () => {
@@ -45,6 +60,36 @@ describe('isPhoneTouchDevice', () => {
     expect(queries[0]).toContain('pointer: coarse');
     expect(queries[0]).toContain('max-width: 940px');
     expect(queries[0]).toContain('max-height: 760px');
+  });
+});
+
+describe('isChatLongPress', () => {
+  it('treats short presses as taps (open composer)', () => {
+    expect(isChatLongPress(0)).toBe(false);
+    expect(isChatLongPress(CHAT_LONG_PRESS_MS - 1)).toBe(false);
+  });
+
+  it('treats presses at or beyond the threshold as a long press (peek the log)', () => {
+    expect(isChatLongPress(CHAT_LONG_PRESS_MS)).toBe(true);
+    expect(isChatLongPress(CHAT_LONG_PRESS_MS + 500)).toBe(true);
+  });
+});
+
+describe('isRecenterDoubleTap', () => {
+  it('fires for a quick, stationary second tap', () => {
+    expect(isRecenterDoubleTap(1000, 1000 + RECENTER_DOUBLE_TAP_MS - 50, false)).toBe(true);
+  });
+
+  it('ignores a tap that dragged the camera (a look, not a tap)', () => {
+    expect(isRecenterDoubleTap(1000, 1100, true)).toBe(false);
+  });
+
+  it('ignores a slow second tap outside the double-tap window', () => {
+    expect(isRecenterDoubleTap(1000, 1000 + RECENTER_DOUBLE_TAP_MS + 1, false)).toBe(false);
+  });
+
+  it('ignores the very first tap (no prior tap recorded)', () => {
+    expect(isRecenterDoubleTap(0, 120, false)).toBe(false);
   });
 });
 
@@ -221,6 +266,7 @@ function installMobileControlDom(): {
   moveZone: FakeElement;
   moveJoystick: FakeElement;
   cameraJoystick: FakeElement;
+  jumpButton: FakeElement;
   emoteButton: FakeElement;
   windowTarget: EventTarget;
 } {
@@ -232,6 +278,7 @@ function installMobileControlDom(): {
     ['mobile-move-stick', new FakeElement()],
     ['mobile-camera-joystick', new FakeElement()],
     ['mobile-camera-stick', new FakeElement()],
+    ['mobile-jump', new FakeElement()],
     ['mobile-emote', new FakeElement()],
   ]);
   const body = new FakeElement();
@@ -256,6 +303,7 @@ function installMobileControlDom(): {
     moveZone: elements.get('mobile-move-zone')!,
     moveJoystick: elements.get('mobile-move-joystick')!,
     cameraJoystick: elements.get('mobile-camera-joystick')!,
+    jumpButton: elements.get('mobile-jump')!,
     emoteButton: elements.get('mobile-emote')!,
     windowTarget,
   };
@@ -294,6 +342,7 @@ function mobileCallbacks() {
     onLeaderboard: noop,
     onNameplates: () => false,
     onMusic: () => true,
+    onRecenterCamera: noop,
   };
 }
 
@@ -363,6 +412,62 @@ describe('MobileControls pointer lifecycle', () => {
     emoteButton.dispatchEvent(new Event('click', { bubbles: true, cancelable: true }));
 
     expect(emotes).toBe(1);
+  });
+
+  it('closes the open More modal when tapping outside it', () => {
+    installMobileControlDom();
+    const input = {
+      setTouchMove: () => {},
+      clearTouchMove: () => {},
+      setTouchLook: () => {},
+      setTouchLookVector: () => {},
+    } as unknown as Input;
+    new MobileControls(input, mobileCallbacks()).start();
+
+    // open the More modal, then a press outside it dismisses it
+    document.body.classList.add('mobile-more-open');
+    (document as unknown as EventTarget).dispatchEvent(
+      pointerEvent('pointerdown', { pointerId: 31, clientX: 10, clientY: 10 }),
+    );
+
+    expect(document.body.classList.contains('mobile-more-open')).toBe(false);
+  });
+
+  it('ignores an outside press while the More modal is closed', () => {
+    installMobileControlDom();
+    const input = {
+      setTouchMove: () => {},
+      clearTouchMove: () => {},
+      setTouchLook: () => {},
+      setTouchLookVector: () => {},
+    } as unknown as Input;
+    new MobileControls(input, mobileCallbacks()).start();
+
+    (document as unknown as EventTarget).dispatchEvent(
+      pointerEvent('pointerdown', { pointerId: 32, clientX: 10, clientY: 10 }),
+    );
+
+    expect(document.body.classList.contains('mobile-more-open')).toBe(false);
+  });
+
+  it('fires the Jump callback immediately on pointerdown without double-firing the generated click', () => {
+    const { jumpButton } = installMobileControlDom();
+    const input = {
+      setTouchMove: () => {},
+      clearTouchMove: () => {},
+      setTouchLook: () => {},
+      setTouchLookVector: () => {},
+    } as unknown as Input;
+
+    let jumps = 0;
+    const callbacks = { ...mobileCallbacks(), onJump: () => { jumps += 1; } };
+    new MobileControls(input, callbacks).start();
+
+    jumpButton.dispatchEvent(pointerEvent('pointerdown', { pointerId: 30, pointerType: 'touch' }));
+    expect(jumps).toBe(1);
+
+    jumpButton.dispatchEvent(new Event('click', { bubbles: true, cancelable: true }));
+    expect(jumps).toBe(1);
   });
 
   it('rotates the camera from a single-finger swipe on the game canvas', () => {

@@ -132,9 +132,18 @@ export const ARENA_LAYOUT: DungeonLayout = {
   pillars: [
     { x: -14, z: -10 }, { x: 14, z: -10 },
     { x: -14, z: 14 }, { x: 14, z: 14 },
+    // Cover/parkour posts, mirrored about the centre line (z=2) so neither side
+    // is favoured. They give the Fiesta something to juke around (and ranked a
+    // little cover too) without crowding the spawns at z=-14 / z=18.
+    { x: 0, z: -4 }, { x: 0, z: 8 },
+    { x: -9, z: -10 }, { x: 9, z: -10 },
+    { x: -9, z: 14 }, { x: 9, z: 14 },
   ],
   tombs: [],
-  stubs: [],
+  // Low flanking fences along the side lanes, also mirrored about z=2.
+  stubs: [
+    { x: -11, z: 2, hw: 0.6, hd: 4 }, { x: 11, z: 2, hw: 0.6, hd: 4 },
+  ],
   dais: { x: 0, z: 2, r: 8 },
 };
 

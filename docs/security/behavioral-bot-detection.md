@@ -4,13 +4,13 @@
 
 World of ClaudeCraft already limits abuse at the network and account layers: HTTP
 rate limits, login captchas (Cloudflare Turnstile), WebSocket hardening, registration
-heuristics, and (via open PRs) a one-character-per-account online cap and a
+heuristics, a cap of two simultaneous online characters per account, and a
 browser-Origin requirement on auth in production. These measures stop scripted
 sign-up waves, programmatic token farming, and obvious connection floods, but they
 do not tell us whether an authenticated player is a human or an automated client
 actually playing the game.
 
-This document proposes **behavioral detection**: server-side checks that observe
+This document describes **behavioral detection**: server-side checks that observe
 *how* someone plays after they are already logged in. The goals are to:
 
 - reduce bot farming impact through silent, graduated responses;
@@ -20,29 +20,48 @@ This document proposes **behavioral detection**: server-side checks that observe
 Bot sophistication varies widely. Cheap scripts fire actions at fixed intervals and
 run many clients from one machine. More advanced tools add random delays, vary
 ability rotations, and spread sessions across proxies. No single metric reliably
-separates humans from bots, so the approach below combines many weak indicators
-into a per-session score. Individual detection ideas are described in the sections
-that follow, each with a **Code status** subsection grounded in the current tree.
-Response thresholds, architecture, and suggested implementation order are at the end.
+separates humans from bots, so the approach combines many weak indicators into a
+per-session score. Each detection idea is described in its own section, with a
+**Code status** subsection grounded in the current tree. Response thresholds,
+architecture, and roadmap are at the end.
 
-Two **hard guardrails** are in open PRs (see Existing Protections). The sections
-below cover detection that operates after those land; see **Implementation Phases**
-for what is already shipped.
+---
+
+## Current status
+
+The detector is deliberately in a conservative **report-only** posture: it observes
+play, scores it, and files automated moderation reports for human review, but never
+throttles or kicks on its own. Active responses are gated behind `ANTIBOT_ENFORCE`
+(off by default) and stay off until the signals are proven and the false-positive
+rate is measured on real traffic.
+
+By design, a response requires **two independent behavioral signals** agreeing. Only
+one weak behavioral signal (action-timing regularity) is wired today, with per-IP
+session count as supporting context — so the system takes no automatic action yet.
+That is the intended starting point, not a gap: it gains teeth as real signals are
+added. Next, by value: server-side impossible-action detection, then a light
+mule / shared-IP account clustering.
+
+(A reaction-time signal shipped in the first version but measured the wrong thing and
+is currently disabled — see its section.)
+
+The rest of this document is the full catalogue of signals and the architecture; a
+signal marked "planned" is a design sketch, not shipped behavior.
 
 ---
 
 ## Existing Protections (Summary)
 
-Hard guardrails (reject at the gate) and rate limits already in tree or landing via
-open PRs. These are **not** scored `BotEvidence` — they block before gameplay.
+Hard guardrails (reject at the gate) and rate limits already in tree. These are
+**not** scored `BotEvidence` — they block before gameplay.
 
 | Layer | Mechanism | File / PR | Status |
 |---|---|---|---|
 | HTTP | Rate limiting per-IP (20 req/min) | `server/ratelimit.ts` | **Shipped** |
 | HTTP | Throttle per-account (10 failures / 15 min) | `server/ratelimit.ts` | **Shipped** |
 | HTTP | Cloudflare Turnstile on login + register | `server/turnstile.ts` | **Shipped** |
-| HTTP | Same-origin `Origin` required on login/register (prod) | `server/web_login_guard.ts` | **PR [#441](https://github.com/levy-street/world-of-claudecraft/pull/441)** |
-| WS | One character online per account (GMs exempt) | `server/game.ts` `join()` | **PR [#439](https://github.com/levy-street/world-of-claudecraft/pull/439)** |
+| HTTP | Same-origin `Origin` required on login/register (prod) | `server/web_login_guard.ts` | **Shipped** |
+| WS | Max 2 simultaneous online characters per account (GMs exempt) | `server/game.ts` `join()` (`MAX_ACTIVE_SESSIONS_PER_ACCOUNT`) | **Shipped** |
 | WS | Auth timeout 10 s | `server/main.ts` | **Shipped** |
 | WS | Frame size cap 16 KiB | `server/main.ts` | **Shipped** |
 | App | Suspicious registration pattern detection | `server/moderation_db.ts` | **Shipped** |
@@ -65,7 +84,9 @@ over time.
   decays if behavior normalizes).
 - Session score = weighted sum of active evidence, not an instant boolean.
 - Responses (log, throttle, kick) require a **sustained score** and at least two
-  evidence types, never a single spike from one check alone.
+  **independent behavioral** evidence families, never a single spike from one check
+  alone. (`timing` and `reaction` are one correlated family; network context like
+  `multi_ip` does not count toward this gate — see Composite Score.)
 - Throughput and economy metrics compare a player to a **cohort** (class, level,
   zone, build, session length) so intensive but legitimate grinding is not flagged
   as botting.
@@ -80,35 +101,31 @@ interface BotEvidence {
 }
 ```
 
-Per-account session limits are a **hard guardrail** ([PR #439](https://github.com/levy-street/world-of-claudecraft/pull/439)),
-not scored evidence — farms now spread across multiple accounts instead.
+Per-account session limits are a **hard guardrail** (max 2 online characters per
+account, shipped), not scored evidence — farms spread across multiple accounts
+instead.
 
 See **Code Architecture** below for where this lives in memory vs Postgres and
 how it is wired into the game loop.
 
 ### Applicability at a glance (current codebase)
 
-Audited against `server/game.ts`, `server/main.ts`, `server/db.ts`, and `src/sim/`.
-Nothing in the antibot module exists yet; the table below rates each signal against
-**what the code already provides** vs what still needs to be built.
+Audited against `server/game.ts`, `server/main.ts`, `server/db.ts`, `src/sim/`, and
+the shipped `server/antibot.ts`. The table rates each signal by what is live today,
+its robustness against a motivated bot, and its false-positive risk.
 
-| Signal | Status | Effort | Notes |
-|---|---|---|---|
-| 1 — Timing variance | ✅ **Shipped (Phase 1)** | — | `COMBAT_CMDS` set; ring buffer + stdDev; TTL 2 min |
-| 2 — Sequence repetition | Planned (Phase 2) | Medium | Fingerprint buffer; resolve `templateId` / `zoneAt` from sim |
-| 3 — Farm / movement ratio | Planned (Phase 3) | Medium | High false-positive risk without cohort baselines |
-| 4 — Farming efficiency (offline) | Planned (Phase 3) | Medium–high | No kill log in DB; XP/h feasible from autosave deltas |
-| 6 — Multi-session per IP | ✅ **Shipped (Phase 1)** | — | Soft (score) + hard (1008 close); `MAX_WS_PER_IP_SOFT/HARD` env |
-| 7 — Impossible actions | Planned (Phase 2) | Medium | Sim validates already; needs antibot hook on repeated rejections |
-| 8 — Reaction times | ✅ **Shipped (Phase 1)** | — | `death` + `castStop`; Phase 1 threshold 150 ms, no RTT correction |
-| 9 — Trajectories | Planned (Phase 2) | Medium | In-memory first; cross-session hash needs schema |
-| 10 — Target selection | Planned (Phase 3) | Medium–high | Must define "optimal target" server-side; party false positives |
-| 11 — Economic graph (offline) | Blocked (Phase 4) | High | No trade log, no market transaction log |
-| 12 — Honeypots | Deferred | Very high | No server-only entities; sim + wire changes required |
-
-**Recommended first ship set (behavioral):** `BotDetector` shell, **6**, 1, 8 — all
-in-memory, no DB migration. Signals 11 and 12 remain roadmap items with explicit
-prerequisites.
+| Signal | Status | Robustness | FP risk | Notes |
+|---|---|---|---|---|
+| 1 — Timing variance | ✅ **Live** | Low (jitter evades) | High (rhythmic humans) | `COMBAT_CMDS` ring buffer + stdDev; weak corroborator only |
+| 6 — Multi-session per IP | ✅ **Live (context only)** | Low | High (CGNAT/shared) | Soft evidence + hard 1008 close; scores but does not gate |
+| 8 — Reaction times | ⛔ **Disabled** | — | — | Shipped then turned off: stimulus was self-generated (see section) |
+| 7 — Impossible actions | Planned — **high priority** | High (server ground truth) | Medium, if rate/margin-based | Sim already validates; hook on repeated rejections |
+| 11-light — Mule / shared-IP clusters | Planned — **high priority** | High (the bot's purpose) | Low–med | Offline; uses mostly existing IP/chat/quest data |
+| 2 — Sequence repetition | Planned | Low–med | Med | Fingerprint buffer; `templateId` / `zoneAt` from sim |
+| 9 — Trajectories | Planned | Med | Med | In-memory first; cross-session hash needs schema |
+| 3 / 4 / 10 — Ratios / efficiency / targeting | Planned (offline) | n/a (statistical) | High | Review-queue feeders, not detectors; cohort-scoped |
+| 11-full — Economic graph | Blocked | High | Low–med | Needs trade + market transaction logging |
+| 12 — Honeypots | Deferred | Very high | Very low | Needs server-only entities + snapshot filtering |
 
 ---
 
@@ -147,10 +164,14 @@ function recordAction(timing: ActionTiming, now: number) {
 }
 ```
 
-**Typical thresholds:**
-- `stdDev < 15 ms` over ≥ 10 actions → strong evidence (near-certain bot, naive scripts)
-- `stdDev < 50 ms` → moderate evidence (auto-clicker or hardware macro)
-- `stdDev ≥ 50 ms` → neutral
+**Thresholds (current):**
+- `stdDev < 15 ms` over ≥ 10 actions → strong evidence, weight 0.7 (near-certain bot,
+  naive fixed-interval scripts)
+- `stdDev ≥ 15 ms` → neutral (no evidence; clears any stale timing evidence)
+
+The old moderate band (`stdDev < 50 ms` → 0.3) was **dropped**: a metronomic human on
+a low-jitter link sits in 20–40 ms, so it flagged rhythmic players. Only near-zero
+variance now flags.
 
 **Complement — harmonic detection.** Beyond variance, measure whether intervals
 cluster around fixed multiples (500 ms, 1500 ms, 3000 ms, character GCD period).
@@ -161,6 +182,22 @@ often retains a discernible dominant frequency (autocorrelation or histogram by
 **Limits.** Well-designed bots add artificial jitter that raises standard deviation
 while preserving periodicity. This signal alone is not enough against a savvy operator —
 most useful against naive scripts and in combination with signals 2, 7, and 8.
+
+> **⚠️ Correction — rhythmic-human false positive & connection bias.** Status of
+> the three corrections:
+> - **Moderate band dropped (done).** The `stdDev < 50 ms` → 0.3 band flagged
+>   metronomic humans (20–40 ms on a low-jitter link), so it was removed; only the
+>   near-zero `< 15 ms` band remains.
+> - **Per-command-type variance, not a mixed stream (future).** Timing still lumps
+>   `attack`, `cast`, `castSlot`, `loot`, `interact` into one delta series. Machine
+>   precision is diagnostic only for a *repeated identical action*.
+> - **Harmonic detection (future, not a clean win).** A "clusters around a dominant
+>   period" test would catch jittered bots — but a human on the GCD is periodic too,
+>   so a naive version re-introduces the rhythmic-human false positive. Deferred.
+> - **Connection-quality bias.** Network jitter smears a mobile player's intervals
+>   (protecting them) while a low-latency player's true cadence is measured
+>   faithfully (easier to flag). The signal must not punish good connections —
+>   another reason to require periodicity, not raw low variance.
 
 **Code status — Implemented (Phase 1).** Hook lives in `dispatchMessage`
 (`server/game.ts`) after the `msg.t !== 'cmd'` guard, before sim routing.
@@ -262,9 +299,10 @@ can legitimately exceed p99. This signal feeds a review flag, not automatic acti
 **Principle.** A bot operator launches dozens of clients from the same machine (or
 proxy). Limiting active WS connections per IP blocks cheap bot waves.
 
-**Why this matters more after PR #439:** one-character-per-account forces farms onto
-**N accounts for N bots** — the same IP still hosts N parallel WS sessions. Signal 6
-caps that density; it is the complement to #439, not redundant with it.
+**Why this complements the per-account session cap:** capping online characters per
+account forces farms onto **many accounts** — but the same IP still hosts all those
+parallel WS sessions. Signal 6 caps that density; it is the complement to the
+account cap, not redundant with it.
 
 **Implementation.** Counter per IP in the session map; reject (close 1008) beyond
 the threshold.
@@ -320,43 +358,79 @@ are strong bot evidence because a legitimate client should not produce them at s
 - GCD spam is rejected **silently** (`gcdRemaining > 0` → return, no error) — that
   is normal client behavior, not impossible-action evidence.
 
+> **⚠️ Legitimate impossibles are common — design around rate & margin, not a
+> binary rejection (open, discuss before implementing).** A rejection is *not* by
+> itself bot evidence.
+>
+> **Confirmed in code — casting on the just-killed target.** When a mob dies,
+> `handleDeath` clears threat / aggro / markers but does **not** clear the
+> `targetId` of players who were targeting it (`src/sim/sim.ts:3346-3397`). The
+> player's focus stays on the dead mob, and the next hostile cast is rejected at
+> `src/sim/sim.ts:1904` (`target.dead` → `error('You have no target.')`). So **even
+> at zero latency**, a player who fires one more GCD after a kill before retargeting
+> produces a dead-target rejection — extremely common, ordinary play.
+>
+> **Expected (latency-driven), to verify before relying on them:**
+> - **Target died on the server** but the client hasn't received the `death` event
+>   yet → the player casts on what they still see as alive (groups: the target dies
+>   to someone else's burst mid-cast).
+> - **Target moved out of range** between the client's frame and server processing
+>   → an edge-of-range cast lands just out of range.
+> - **Cast-while-approaching / ability queueing:** the player queues a cast while
+>   closing distance on an enemy slightly out of range.
+>
+> Requirements for this to be a safe signal: trigger only on a **sustained rate /
+> ratio** of rejections (not single events); weight by **margin** (a target dead
+> for *several seconds*, or out of range by a wide distance, is far more suspicious
+> than firing one extra GCD on a corpse); subtract a per-session lag allowance; and
+> never auto-act on it alone. Treat the threshold tuning as its own calibration task.
+
 **Response:** count rejections internally; at threshold, add high-weight `impossible`
 evidence. Do not add new client-visible error messages.
 
 ---
 
-## Signal 8 — Abnormal Reaction Times
+## Signal 8 — Abnormal Reaction Times (disabled)
 
-**Principle.** Bots react too quickly and too consistently to world events. Measure
-delays between an observable event and the player's response.
+**Principle.** Bots react too quickly and too consistently to *external* world
+events. Measure the delay between an event the player did not cause and their
+response; a human floor of ~200 ms (perceive → decide → act) is hard to beat.
 
-**Measurable events:**
-- Mob enters range / becomes targetable → first cast or attack
-- Mob dies → first loot or target change
-- Cooldown ready (GCD expires) → next combat action
-- Add aggro → target switch or defensive ability use
+> **⛔ Currently disabled.** The first version measured the wrong thing and is
+> turned off. Its stimulus was the player's **own** cast finishing or own death —
+> events the player **generates and anticipates** — so what it measured was how
+> fast someone chains an already-decided next action (ability queueing), not a
+> reaction. The ~200 ms human floor does not apply to a self-generated event, so it
+> flagged ordinary skilled play. It will return only when rebuilt on an external
+> stimulus (below). In code: `REACTION_EVENTS` is empty, so no reaction evidence is
+> produced; the measurement machinery is retained for the rebuild.
 
-**Thresholds (server-measured, RTT included).** Server-measured reaction =
-client reaction time + round-trip latency. A human reacts in 200–500 ms; at
-50 ms RTT the server sees 250–550 ms. A bot reacting in < 5 ms client-side still
-reads ≈ RTT + 5 ms on the server — well below any human range at any RTT.
+**What a correct version requires.**
 
-Threshold: `(median_reaction − estimated_session_rtt) < 80 ms` or standard
-deviation < 30 ms over ≥ 10 events → suspicious. Estimate session RTT from the
-WS handshake ping/pong or the first few observed action deltas. **Never apply
-the raw 100 ms cutoff without subtracting RTT** — a 100 ms ping player would
-appear suspicious even with human-level reactions.
+1. **An external, unanticipated stimulus** — something the player did not initiate:
+   a mob entering range, the player's *current target* dying (not the player's own
+   death), a new attacker, a hostile mob *beginning* a cast aimed at the player.
+   - *Prerequisite:* no existing `SimEvent` cleanly carries "hostile action aimed at
+     *this* player" (`castStart` has no target field). This needs an enriched sim
+     event (target-bearing `castStart`, or an "incoming threat" event) — which
+     touches the sim (determinism + the `IWorld` seam) and is why the rebuild is
+     deferred. Never re-use a self-generated event as a stand-in.
+2. **Close the window only on a plausible response** — a target switch or defensive
+   cast, restricted to `COMBAT_CMDS`. (The first version closed on *any* command,
+   including `tab`/`target`/`release`/`chat`, inflating the surface.)
+3. **Discard sub-floor samples.** A delay under ~50 ms is a pre-queued action, not a
+   measurable reaction. Judge the **shape** of the distribution (a bot shows
+   near-constant ≈ RTT delays with tiny stdDev), not just the raw median.
+4. **Subtract RTT.** Server-measured reaction = client reaction + round-trip
+   latency. A human is 200–500 ms client-side; at 50 ms RTT the server sees
+   250–550 ms; a bot reacting in < 5 ms reads ≈ RTT. Flag when
+   `(median − estimated_session_rtt) < 80 ms`, or stdDev < 30 ms over ≥ 10 events.
+   Estimate RTT from the WS ping/pong. Never apply a raw cutoff without subtracting
+   RTT, or a high-ping human looks suspicious.
 
-**Complement to signal 1:** artificial jitter on inter-action intervals does not
-mask instant reactions to world events.
-
-**Code status — Implemented (Phase 1).** `observeEvent` hooked in `routeEvents`
-(`server/game.ts`) for `death` and `castStop` events (the `REACTION_EVENTS` set).
-`observeAction` clears `reactionPending` and accumulates a ring buffer (max 20).
-Phase 1 threshold: median < 150 ms → weight 0.6; stdDev < 30 ms → weight 0.3;
-both with TTL 2 min. **No RTT correction yet** (Phase 1 uses a conservative 150 ms
-threshold; even a 0-RTT bot can't sustain median < 150 ms at human-like reaction
-speed). Phase 2 will subtract estimated RTT and tighten to 80 ms.
+**Complement to timing variance:** artificial jitter on inter-action intervals does
+not mask instant reactions to genuine external events — which is why this signal is
+worth rebuilding rather than dropping for good.
 
 ---
 
@@ -428,7 +502,8 @@ is not journaled today:
 **What is feasible without new logging (signal 11 light):**
 - Cluster accounts by shared IP / user-agent / registration burst (overlap with
   existing `createSuspiciousRegistrationReport` in `moderation_db.ts`). **More
-  important after PR #439:** mule networks are necessarily cross-account.
+  important now that accounts are capped at 2 online characters:** mule networks are
+  necessarily cross-account.
 - Flag accounts with long playtime, zero chat, empty `questsDone`, high `lifetimeXp` delta.
 
 **What requires new instrumentation (Phase 3 prerequisite):**
@@ -461,39 +536,71 @@ requires sim + snapshot changes and strict false-positive review.
 - A single honeypot interaction = strong evidence, not moderate
 - Document each honeypot; periodic false-positive review
 
-> **Kick behaviour with `distinctKinds ≥ 2` required (see Escalation):** a honeypot
-> hit alone (score = 1.0, kinds = 1) immediately reaches the **shadow-throttle**
-> threshold but does **not** auto-kick. The response is throttle + moderation
-> report; an admin confirms before ban. This is intentional: honeypot false-positive
-> risk justifies human confirmation, and a half-speed bot is far less damaging than
-> a wrongly kicked legitimate player.
+> **Interaction with the escalation gate (see Composite Score).** The gate requires
+> ≥ 2 independent behavioral families, so a honeypot hit *alone* (one family) would
+> not auto-escalate under the current rules — it would file a moderation report for
+> human review. Honeypots are near-zero false-positive ("a real client cannot see a
+> server-only entity"), so whether a single honeypot hit should be allowed to act on
+> its own is a deliberate exception to revisit **when honeypots are actually built**,
+> not now.
 
-**Defer** until behavioral signals (1–9) are stable. Lowest priority.
+**Defer** until the behavioral signals are stable. Lowest priority.
 
 ---
 
 ## Composite Score and Admin Moderation
 
-**Accumulation:** each signal adds a `BotEvidence` with weight and TTL.
-Example indicative weights:
+**Accumulation:** each signal adds a `BotEvidence` (a `kind`, a `weight`, a TTL, and
+a human-readable `detail`). The session **score** is the sum of all active evidence
+weights. Indicative weights:
 
-| Signal | Weight | TTL |
-|---|---|---|
-| Impossible (signal 7) | 1.0 | 5 min |
-| Honeypot (signal 12) | 1.0 | permanent |
-| Timing < 15 ms (signal 1) | 0.7 | 2 min |
-| Reaction < 100 ms (signal 8) | 0.6 | 2 min |
-| Repeated sequence (signal 2) | 0.5 | 5 min |
-| Identical trajectory (signal 9) | 0.5 | 10 min |
-| Multi-IP (signal 6) | 0.4 | session |
-| Efficiency > 3σ (signal 4) | 0.3 | 24 h |
-| High farm ratio (signal 3) | 0.2 | 10 min |
+| Evidence kind | Weight | TTL | Notes |
+|---|---|---|---|
+| Impossible actions | 1.0 | 5 min | planned |
+| Honeypot | 1.0 | permanent | deferred |
+| Timing (stdDev < 15 ms) | 0.7 | 2 min | live; "cadence" family |
+| Reaction (median < 150 ms) | 0.6 | 2 min | **disabled**; "cadence" family |
+| Repeated sequence | 0.5 | 5 min | planned |
+| Identical trajectory | 0.5 | 10 min | planned |
+| Multi-IP | 0.4 | session | live; **context only — never gates** |
+| Efficiency > 3σ | 0.3 | 24 h | planned (offline) |
+| High farm ratio | 0.2 | 10 min | planned (offline) |
 
-**Decision thresholds (composite score, not isolated signal):**
-- Score ≥ 0.5 for 30 s with ≥ 2 evidence types → log + moderation report
-- Score ≥ 0.8 for 60 s with ≥ 2 evidence types → shadow-throttle
-- Score ≥ 1.0 for 2 min with ≥ 2 evidence types → kick + flag account for admin review
-- Admin confirmation → ban or suspend
+**The escalation gate: score *and* ≥ 2 independent behavioral families.** A response
+never fires on score alone. It also requires evidence from at least two *independent
+behavioral* families, where:
+- `timing` and `reaction` are **one** family ("cadence"). They are both functions of
+  the same underlying quantity — how fast and how regularly a player acts — so a
+  single trait (a fast, rhythmic rotation) lights up both. Counting them once stops
+  that single trait from satisfying the gate by itself. (This is why a naive sum is
+  misleading: `timing 0.7 + reaction 0.6 = 1.3` would clear the score threshold, but
+  it is still only one family.)
+- `multi_ip` is **network context**, not behavioral evidence. It adds to the score
+  and appears in the moderation report, but it can never be a gating family — a
+  shared connection (CGNAT, dorm, household) must not stand in for a second
+  observation that *this player* is automated.
+
+With only the signals in tree today (cadence + multi_ip), the gate is therefore
+never met on its own — automatic escalation waits for a genuinely independent
+behavioral signal (impossible actions, sequence, trajectory).
+
+**Decision thresholds (sustained, gated):**
+
+| Sustained for | Score ≥ | Response | Active by default? |
+|---|---|---|---|
+| 30 s | 0.5 | log + automated moderation report | **Yes** (report-only) |
+| 60 s | 0.8 | shadow-throttle (silent GCD ×2) | No — needs `ANTIBOT_ENFORCE` |
+| 2 min | 1.0 | kick + flag account for review | No — needs `ANTIBOT_ENFORCE` |
+| — | — | ban / suspend | Manual admin action |
+
+**Report-only is the production default.** The throttle and kick paths are gated
+behind the `ANTIBOT_ENFORCE` env flag (off). The moderation report still fires, so
+moderators accumulate evidence with no risk of wrongly degrading a real player.
+Before enabling enforcement: a genuinely independent behavioral signal must exist,
+the false-positive rate must be measured on real traffic, and two safety nets must
+be wired — the **meta-monitoring** alert (> 20 % of online sessions flagged in an
+hour ⇒ a miscalibrated signal, not a bot wave) and the **moderator-dismissal
+feedback loop** (a kind dismissed ≥ 5 times is flagged for recalibration).
 
 **Admin observation mode:** keep a compact summary per flagged session
 (not full raw logs):
@@ -508,16 +615,27 @@ Example indicative weights:
 ## Code Architecture
 
 This section describes how the detection model is wired into the existing server.
-**Phase 1 is shipped:** `server/antibot.ts` (BotTracker, Signals 1/6/8, escalation
-state machine), `server/antibot_db.ts` (auto-reports into `player_reports`), hooks
-in `server/game.ts` (ClientSession, join/leave, dispatchMessage, routeEvents, game
-loop) and `server/main.ts` (hard IP reject). Hard guardrails in PRs
-[#439](https://github.com/levy-street/world-of-claudecraft/pull/439) and
-[#441](https://github.com/levy-street/world-of-claudecraft/pull/441) ship separately.
-The design follows current conventions: detection logic in a dedicated module, SQL
-in a `*_db.ts` companion, per-session ephemeral state on `ClientSession` (same
-pattern as `chatTokens`), and automated flags surfaced through the existing
-moderation queue (`player_reports`).
+It is shipped: `server/antibot.ts` (the `BotTracker`, the live timing + multi-IP
+signals, the escalation state machine), `server/antibot_db.ts` (auto-reports into
+`player_reports`), hooks in `server/game.ts` (per-session state, join/leave,
+command dispatch, the game loop) and `server/main.ts` (hard IP reject). The
+per-account session cap and the web-Origin auth guard shipped separately. The design
+follows current conventions: detection logic in a dedicated module, SQL in a
+`*_db.ts` companion, per-session ephemeral state on `ClientSession` (same pattern as
+`chatTokens`), and automated flags surfaced through the existing moderation queue
+(`player_reports`).
+
+> **`server/antibot.ts` is the source of truth — the code snippets below are the
+> original design sketch and differ from shipped code in three ways:**
+> 1. `BotEvidenceKind` is `'timing' | 'reaction' | 'multi_ip'` plus the
+>    not-yet-emitted behavioral kinds (`sequence`, `trajectory`, `impossible`,
+>    `honeypot`); the sketch's `farm_ratio` / `efficiency` are not in the type yet.
+> 2. The escalation gate counts **behavioral families** (`behavioralFamilyCount`:
+>    cadence = `timing`+`reaction`; `multi_ip` excluded), not the raw `distinctKinds`
+>    the sketch shows.
+> 3. `onSimTick(tracker, session, now, enforce)` takes an **`enforce`** flag
+>    (default false). With it off, the report fires but throttle/kick are suppressed
+>    (report-only). The reaction signal is disabled (`REACTION_EVENTS` is empty).
 
 ### Where state lives
 
@@ -527,7 +645,7 @@ moderation queue (`player_reports`).
 | Active `BotEvidence[]`, composite score, escalation timers | In-memory, per session | Current WS session | Recomputed every tick; TTL is seconds to minutes |
 | Shadow-throttle multiplier | In-memory, per session | Current WS session | Must affect the sim loop immediately |
 | WS connection count per IP | In-memory, global | Process lifetime | Signal 6; derived from `GameServer.clients` |
-| Per-account online cap | Hard reject at `join()` | N/A | PR #439 — not scored, not in `BotTracker` |
+| Per-account online cap | Hard reject at `join()` | N/A | Shipped — not scored, not in `BotTracker` |
 | Auto-generated moderation reports | Postgres (`player_reports`) | Permanent | Reuses existing admin queue and review workflow |
 | Account review flag, kick/ban history | Postgres (`accounts` column or events table) | Permanent | Survives reconnect; moderators need cross-session view |
 | Trajectory hashes, efficiency baselines | Postgres | Days to weeks | Compares current session to past behavior and cohort |
@@ -595,7 +713,7 @@ an automatic ban.
 
 | Phase | What ships | DB migration? |
 |---|---|---|
-| **1** | `BotDetector`, signal 6, signals 1/8, auto-reports | **No** — reuses `player_reports` only |
+| **1** | `BotDetector`, signal 6, timing, reaction (later disabled), auto-reports | **No** — reuses `player_reports` only |
 | **2** | Signals 2/7/9, kick, shadow-throttle, audit trail | **Yes** — `bot_detection_events` (+ optional trajectory hash column) |
 | **3** | Signals 3/4/10, 11-light, cohort baselines | **Yes** — cohort tables; optional `kill_events` |
 | **4** | Signal 11-full (mule graph) | **Yes** — trade log, market transaction log, cluster table |
@@ -675,12 +793,12 @@ load from DB on join (see below).
 main.ts                          game.ts                         antibot.ts
 ────────                         ───────                         ──────────
 /api/login, /api/register
-  └─ web Origin guard (#441) ──► 403 if programmatic (prod)
+  └─ web Origin guard ──────────► 403 if programmatic (prod)
 
 WS auth handshake
   ├─ count sessions per IP  ──►  reject if over limit (signal 6)
   └─ game.join()
-       ├─ one char / account (#439) ──► reject if account already online
+       ├─ per-account session cap ──► reject if account at 2 online characters
        ├─ create BotTracker
        ├─ load account flags ──────────►  seed evidence if flagged
        └─ load trajectory hash from DB (optional)
@@ -741,7 +859,11 @@ Vitest without a running game loop.
 
 ### Escalation and responses
 
-A small state machine inside `onSimTick`, separate from individual signals:
+A small state machine inside `onSimTick`, separate from individual signals. The
+sketch below predates two shipped changes (see the banner at the top of this
+section): the gate uses `behavioralFamilyCount(...) >= 2` rather than
+`distinctKinds >= 2`, and `onSimTick`/`checkEscalation` take an `enforce` flag that
+suppresses throttle/kick (report-only) when off.
 
 ```typescript
 // Returns the action that game.ts must perform — antibot.ts never calls game.kick()
@@ -889,16 +1011,16 @@ CREATE INDEX bot_detection_events_account_idx ON bot_detection_events (account_i
 
 SQL lives in `antibot_db.ts`; DDL added to `db.ts` `SCHEMA` like every other table.
 
-### Connection limits (signal 6) and account cap (PR #439)
+### Connection limits (signal 6) and the per-account session cap
 
-Neither needs a `BotTracker`. **PR #439** handles the account cap inside
-`GameServer.join()`. **Signal 6** (per IP) still belongs in `main.ts` before
+Neither needs a `BotTracker`. The per-account session cap is handled inside
+`GameServer.join()`. **Signal 6** (per IP) belongs in `main.ts` before
 `game.join()`:
 
 ```typescript
 const ip = requestMetadata(req).ip;
 if (countSessionsByIp(ip) >= MAX_WS_PER_IP) { ws.close(1008); return; }
-// account cap: PR #439 in game.join() — do not duplicate here
+// account cap: handled in game.join() — do not duplicate here
 ```
 
 Counters for IP are derived from `game.clients` (`ip` stored on `ClientSession`
@@ -942,15 +1064,19 @@ v1 requires no new admin UI beyond what exists:
 
 ### Testing strategy
 
-- **Unit (Vitest):** `tests/antibot.test.ts` — 31 tests covering `createTracker`,
-  `addEvidence`, `recomputeScore`, Signals 1 and 8 (bot / human cases), escalation
-  state machine (log / throttle / kick timers, safety valve, honeypot single-kind
-  guard). `tests/antibot_db.test.ts` — 7 tests (dedup, insert, SQL params).
-  No WebSocket, no live DB.
-- **E2E:** `scripts/antibot_e2e.mjs` — no `ALLOW_DEV_COMMANDS=1` needed. Opens
-  5 background sessions + 1 bot session from `127.0.0.1` (triggers `multi_ip`),
-  sends `attack` every 500 ms (triggers Signal 1, stdDev ≈ 0), waits 38 s, then
-  queries Postgres to assert the auto-report was created.
+- **Unit (Vitest):** `tests/antibot.test.ts` covers `createTracker`, `addEvidence`,
+  `recomputeScore`, timing variance, the escalation state machine (log / throttle /
+  kick timers, safety valve, behavioral-family gate, `enforce` flag), report-only
+  mode, the disabled reaction signal, and a block of **false-positive regression
+  guards** (one per legitimate-player scenario the corrections fixed, plus
+  anti-regression that real bots are still caught). `tests/antibot_db.test.ts`
+  covers report dedup / insert / SQL params. No WebSocket, no live DB.
+- **E2E:** none for now. With nothing able to trigger an automated report
+  end-to-end (cadence + multi_ip is a single behavioral family), a live e2e could
+  only assert a negative ("nothing happened"), which the unit tests already cover
+  deterministically in CI. Re-introduce an e2e — one that drives the full
+  wire → sim → evidence → report pipeline — alongside the first signal that can
+  trigger a report (e.g. impossible actions).
 
 Add tests alongside each signal as it lands.
 
@@ -959,63 +1085,48 @@ Add tests alongside each signal as it lands.
 ## Graduated Responses
 
 Do not ban immediately — that alerts the bot operator and they adapt their script.
-Prefer silent escalation:
+Prefer silent escalation. **Today only the first row is active (report-only); the
+shadow-throttle and kick rows are gated behind `ANTIBOT_ENFORCE` (off).** Every row
+also requires the ≥ 2 independent-behavioral-families gate (see Composite Score).
 
 | Score / duration | Response | Effect on bot |
 |---|---|---|
-| Score ≥ 0.5, ≥ 2 evidence, 30 s | Log + auto moderation report | None (invisible) |
-| Score ≥ 0.8, ≥ 2 evidence, 60 s | **Shadow-throttle**: silent GCD ×2 | Bot slows down without noticing |
-| Score ≥ 1.0, ≥ 2 evidence, 2 min | Kick + flag account for admin review | Reconnect possible, but account marked |
+| Score ≥ 0.5, gate met, 30 s | Log + auto moderation report | None (invisible) — **active** |
+| Score ≥ 0.8, gate met, 60 s | **Shadow-throttle**: silent GCD ×2 | Bot slows down — *enforce only* |
+| Score ≥ 1.0, gate met, 2 min | Kick + flag account for admin review | Reconnect possible, but account marked — *enforce only* |
 | Admin confirmation | Ban or suspend | Definitive |
 
 Shadow-throttle is the standard MMO technique: the bot thinks it is working normally,
 it just farms half as fast, reducing impact without revealing that detection is active.
 
-**Shadow-throttle precautions:**
-- Apply only when ≥ 2 evidence types agree (avoid throttling on a single noisy signal)
+**Shadow-throttle precautions (for when enforcement is enabled):**
+- Only with the ≥ 2 independent-behavioral-families gate met (never on one noisy signal)
 - Prefer very high scores (≥ 0.8) or accounts already correlated by other signals
 - A false positive here silently degrades a real player's experience:
   kick + admin review is preferable to prolonged throttle when doubt remains
 
 ---
 
-## Implementation Phases
+## Roadmap
 
-Grouped by what the codebase can support today without new economy logging.
+**Lesson that reorders everything below.** The cheap signals were shipped first
+because they were easy. They turned out to be the *fragile* ones — easy for a bot to
+evade (add jitter) and prone to flagging humans. This is structural, not bad luck:
+**implementation effort and signal value are inversely correlated.** So the roadmap
+is ordered by **value**, not by code-readiness. The realistic goal is not a
+leak-proof auto-ban classifier (no one has that against a motivated adversary) but to
+**raise the cost of botting and give moderators good evidence**, humans in the loop.
 
-| Phase | Goal | Signals / scope | Postgres impact | Status |
-|---|---|---|---|---|
-| **Phase 1 — Real-time guardrails, no migration** | Stop cheap bot waves; collect moderator-visible evidence | **`BotDetector` shell**, signal **6**, 1, 8; auto-reports. Account cap + web login: PRs **#439**, **#441** | None | **✅ Shipped** |
-| **Phase 2 — Behavioral depth + audit trail** | Catch scripted bots; review across reconnects | 2, 7 (rejection hooks), 9; shadow-throttle; kick; `bot_detection_events`; optional trajectory hash | New audit table (+ optional columns) | Planned |
-| **Phase 3 — Offline analytics (conditional)** | Outlier farming + weak economy heuristics | 3, 4 (XP/h from saves; kills/h needs `kill_events`); 10; 11-light (IP/social/chat/quest only) | Cohort tables; optional kill log | Planned |
-| **Phase 4 — Full economy graph (blocked on logging)** | Mule-network detection | 11-full after trade + market transaction logs | Trade log, market log, `bot_economy_clusters` | Blocked |
-| **Deferred** | Honeypots | 12 — requires server-only entities + snapshot filtering | Sim + wire changes | Deferred |
+| Step | Scope | Active enforcement? | DB migration? |
+|---|---|---|---|
+| **Done — corrections (report-only)** | Disable reaction signal; cadence family; `multi_ip` non-gating; gate throttle/kick behind `ANTIBOT_ENFORCE` (off) | No (report-only) | No |
+| **Next — impossible actions (Signal 7)** | Highest robustness/effort. Hook repeated sim rejections; design around **rate & margin** (legitimate out-of-range / dead-target casts are common — see Signal 7) | No (feeds reports) | Audit table when persistence lands |
+| **Next — mule / shared-IP clustering (Signal 11-light)** | Targets the actual economic harm (farms feeding mules) using mostly-existing IP/chat/quest data; offline / nightly review flags | No (review flag) | Cohort/cluster tables |
+| **Then — enforcement** | Enable `ANTIBOT_ENFORCE` once ≥ 2 independent robust signals exist, the FP rate is measured, and meta-monitoring + the dismissal feedback loop are wired. Throttle high-confidence first | Gradual | `bot_detection_events` |
+| **Deprioritized** | Sequence (2) / trajectory (9) as corroborators; ratio/efficiency/targeting (3/4/10) as review-queue feeders only; honeypots (12) as a later precision tool | — | varies |
+| **Blocked** | Full economic graph (11-full) | — | trade + market transaction logs first |
 
-**Recommended rollout:** Phase 1 first (highest ROI, zero schema change). Phase 2 once
-thresholds are calibrated on real traffic. Phase 3 only after enough save history for
-cohorts. Phase 4 and signal 12 are explicitly gated on prerequisites listed above.
-
----
-
-## Suggested Implementation Priority
-
-Order reflects **code readiness** (see Applicability at a glance). Build the shell
-before individual detectors so each signal plugs in without rework.
-
-1. **PRs [#439](https://github.com/levy-street/world-of-claudecraft/pull/439) + [#441](https://github.com/levy-street/world-of-claudecraft/pull/441)** — hard guardrails (account cap, web Origin on auth). Not part of `BotDetector`.
-2. ✅ **`BotDetector` shell + escalation state machine** — `server/antibot.ts`, `ClientSession.bot: BotTracker`; no SQL.
-3. ✅ **Signal 6** (WS per IP) — `session.ip`, `ipSessionCounts` map, soft evidence in `join()`, hard reject in `main.ts`.
-4. ✅ **Signal 1** (timing variance) — `COMBAT_CMDS` set, ring buffer in `observeAction`. Harmonic detection (item *Complement*) not yet done.
-5. ✅ **Signal 8** (reaction times) — `observeEvent` + `observeAction`, Phase 1 threshold 150 ms without RTT correction.
-6. ✅ **Auto-reports** — `server/antibot_db.ts`; 24 h dedup; lands in existing moderation queue.
-7. **Signal 2** (sequence repetition) — abstract fingerprint via `templateId` / `zoneAt`.
-8. **Signal 7** (impossible actions) — instrument sim **rejections** (range, dead target,
-   LoS); not speedhack (already server-authoritative movement).
-9. **Signal 9** (trajectories) — in-memory first; persist hash in Phase 2.
-10. **Phase 2 persistence** — `bot_detection_events`, kick wiring, shadow-throttle.
-11. **Signals 3 & 4** (offline) — XP/h from autosave deltas; defer kills/h until
-    `kill_events` exists; always cohort-scoped.
-12. **Signal 10** (target selection) — after party false-positive policy is defined.
-13. **Signal 11-light** — IP / chat / quest heuristics (cross-account clusters post-#439).
-14. **Signal 11-full + Phase 4** — blocked until trade and market transaction logging.
-15. **Signal 12** (honeypots) — deferred; requires server-only entities.
+**Persistence note.** Real-time detection is all in-memory; the only thing in
+Postgres today is the automated `player_reports` row. An audit table
+(`bot_detection_events`) and cohort/cluster tables come with the steps that need
+them — see *Where state lives* and the per-category breakdown above.

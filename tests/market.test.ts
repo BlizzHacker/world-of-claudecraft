@@ -46,6 +46,38 @@ describe('the World Market — the Merchant', () => {
     expect(house.every((l) => l.expiresAt === Infinity && l.sellerKey === '')).toBe(true);
   });
 
+  it('browse filter narrows listings by item name and reports the full match count', () => {
+    const sim = makeWorld();
+    const seller = sim.addPlayer('warrior', 'Seller');
+    standAtMerchant(sim, seller);
+    sim.addItem('wolf_fang', 1, seller);
+    sim.addItem('bone_fragments', 1, seller);
+    sim.marketList('wolf_fang', 1, 100, seller);
+    sim.marketList('bone_fragments', 1, 100, seller);
+
+    const all = sim.marketInfoFor(seller)!;
+    expect(all.filter).toBe('');
+    expect(all.totalCount).toBe(all.listings.length);
+    expect(all.listings.some((l) => l.itemId === 'wolf_fang')).toBe(true);
+    expect(all.listings.some((l) => l.itemId === 'bone_fragments')).toBe(true);
+
+    // A substring of the Wolf Fang name must hide every non-matching listing.
+    sim.marketSearch('wolf', seller);
+    const filtered = sim.marketInfoFor(seller)!;
+    expect(filtered.filter).toBe('wolf');
+    expect(filtered.listings.length).toBeGreaterThan(0);
+    expect(filtered.listings.every((l) => l.itemId === 'wolf_fang')).toBe(true);
+    expect(filtered.totalCount).toBe(filtered.listings.length);
+
+    // A no-match query yields an empty list (the UI shows the "no matches" copy).
+    sim.marketSearch('zzzznomatch', seller);
+    expect(sim.marketInfoFor(seller)!.listings.length).toBe(0);
+
+    // Clearing the filter restores the full, unfiltered view.
+    sim.marketSearch('', seller);
+    expect(sim.marketInfoFor(seller)!.totalCount).toBe(all.totalCount);
+  });
+
   it('lists a stack from a seller\'s bags into escrow', () => {
     const sim = makeWorld();
     const seller = sim.addPlayer('warrior', 'Seller');
@@ -208,6 +240,20 @@ describe('the World Market — the Merchant', () => {
     sim.events.length = 0;
     sim.marketList('boar_hide', 1, 100, seller);
     expect(errorsSince(sim).join(' ')).toMatch(/quest items/i);
+    expect(sim.marketListings.some((l) => l.sellerKey === 'Seller')).toBe(false);
+  });
+
+  it('will not broker items flagged as unsafe for the market', () => {
+    const sim = makeWorld();
+    const seller = sim.addPlayer('warrior', 'Seller');
+    standAtMerchant(sim, seller);
+    sim.addItem('alien_armor_plate', 1, seller);
+    sim.events.length = 0;
+
+    sim.marketList('alien_armor_plate', 1, 100, seller);
+
+    expect(errorsSince(sim).join(' ')).toMatch(/cannot be listed on the World Market/i);
+    expect(sim.countItem('alien_armor_plate', seller)).toBe(1);
     expect(sim.marketListings.some((l) => l.sellerKey === 'Seller')).toBe(false);
   });
 

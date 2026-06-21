@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
 import {
@@ -19,6 +19,7 @@ import {
   formatDateTime,
   formatMoney,
   formatNumber,
+  ensureLocaleLoaded,
   isSupportedLanguage,
   languageTag,
   setLanguage,
@@ -68,6 +69,15 @@ const locales: Record<string, typeof en> = {
 const RELEASE_TIER = process.env.I18N_RELEASE_TIER === "1";
 
 describe("i18n Localization Key Coverage", () => {
+  // Lazy locale flip: non-en locales are no longer statically resident. This suite
+  // setLanguage(non-en)s and reads synchronously via t()/tEntity/formatMoney/talent helpers,
+  // so make every supported locale resident up front - the test-harness mirror of the
+  // bootstrap's await-before-paint. Each setLanguage(lang) read then resolves the localized
+  // table instead of the English fallback.
+  beforeAll(async () => {
+    await Promise.all(supportedLanguages.map((lang) => ensureLocaleLoaded(lang)));
+  });
+
   const placeholderPattern = /\b(TODO|TBD|FIXME|PLACEHOLDER|TRANSLATE|LOREM)\b/i;
   const shellKeys: TranslationKey[] = [
     "seo.title",
@@ -297,7 +307,9 @@ describe("i18n Localization Key Coverage", () => {
     action: "Open Chat",
     amount: 42,
     base: 14,
+    rested: 18,
     buyer: "Mira",
+    channel: "World",
     classes: "Warrior, Mage",
     className: "Mage",
     command: "/dance",
@@ -310,6 +322,7 @@ describe("i18n Localization Key Coverage", () => {
     dps: "7.4",
     duration: "15s",
     form: "Bear",
+    fps: 60,
     guild: "Night Watch",
     index: 2,
     item: "Rough Bracers",
@@ -338,6 +351,7 @@ describe("i18n Localization Key Coverage", () => {
     realm: "Eastbrook",
     resource: "Mana",
     seconds: 7,
+    shown: 120,
     slot: 5,
     source: "Wolf",
     speed: 2.4,
@@ -932,7 +946,7 @@ describe("i18n Localization Key Coverage", () => {
       ["ko_KR", "q_necromancers", "completion", "십일조"],
       ["ja_JP", "q_mistcaller", "text", "百人"],
       ["pt_BR", "q_drogmar", "completion", "comprou um inverno"],
-      ["ru_RU", "q_gravewyrm", "text", "полупроснувшийся Wyrm"],
+      ["ru_RU", "q_gravewyrm", "text", "полупроснувшийся Вирм"],
     ];
 
     for (const [lang, questId, field, expected] of expectations) {
@@ -941,6 +955,31 @@ describe("i18n Localization Key Coverage", () => {
     }
 
     setLanguage("en");
+  });
+
+  // Regression: the gravewyrm-arc lore creature "the Wyrm" was once left as the raw
+  // Latin word inside translated quest prose in every non-Latin-script locale, even
+  // though those locales localize "wyrm" in every item/mob/dungeon name. Release-tier
+  // only: a PR-tier English-filled overlay legitimately contains the English word.
+  it.runIf(RELEASE_TIER)("keeps non-Latin-script quest narratives free of the raw-Latin 'Wyrm'", () => {
+    const nonLatin: Record<string, typeof en> = { zh_CN, zh_TW, ja_JP, ko_KR, ru_RU };
+    const collectStrings = (node: unknown, trail: string, out: Array<[string, string]>): void => {
+      if (typeof node === "string") {
+        out.push([trail, node]);
+      } else if (node && typeof node === "object") {
+        for (const [k, v] of Object.entries(node as Record<string, unknown>)) {
+          collectStrings(v, trail ? `${trail}.${k}` : k, out);
+        }
+      }
+    };
+    for (const [lang, data] of Object.entries(nonLatin)) {
+      const quests = (data as { entities?: { quests?: unknown } }).entities?.quests ?? {};
+      const strings: Array<[string, string]> = [];
+      collectStrings(quests, "entities.quests", strings);
+      for (const [where, value] of strings) {
+        expect(/wyrm/i.test(value), `${lang}.${where} leaks raw-Latin "Wyrm" (should be localized): ${value}`).toBe(false);
+      }
+    }
   });
 
   it("should keep Traditional Chinese world content out of Simplified-only shortcuts", () => {
@@ -1171,7 +1210,10 @@ describe("i18n Localization Key Coverage", () => {
     }
     expect(html).toContain('data-i18n-content="seo.description"');
     expect(html).toContain('data-i18n-placeholder="hud.core.chatPlaceholder"');
-    expect(html).toContain('data-i18n="hud.core.chatTab"');
+    // The chat tabs (Chat / Combat Log / per-channel) are rendered by the HUD
+    // via t() rather than static markup, so #chatlog-tabs is an empty tablist
+    // here. Its labels are localized in hud.ts (initChatTabs), not in index.html.
+    expect(html).toContain('id="chatlog-tabs"');
     expect(html).toContain('data-i18n="entities.zones.eastbrook_vale.name"');
     expect(html).toContain('data-i18n-title="itemUi.bags.title"');
     expect(html).toContain('data-i18n-aria="hud.core.mobileControls"');

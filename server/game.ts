@@ -5,8 +5,13 @@ import { DT, Entity, SimEvent, dist2d, emptyMoveInput } from '../src/sim/types';
 import { parseMoveInputFrame } from '../src/sim/move_input';
 import { stealthDetectionRadius, threatEntries } from '../src/sim/threat';
 import { zoneAt, DUNGEONS } from '../src/sim/data';
-import { saveCharacterState, openPlaySession, closePlaySession, insertChatLogs, pool, loadMarketState, saveMarketState, markCharacterDead } from './db';
-import type { AccountChatMuteStatus, RequestMetadata } from './db';
+import { MECH_CHROMAS, mechChromaItemId, mechChromaSkinIndex } from '../src/sim/content/skins';
+import {
+  grantAccountMechChroma, markAccountQuestComplete, revokeAccountMechChroma, saveCharacterState, openPlaySession, closePlaySession,
+  insertChatLogs, pool, loadMarketState, saveMarketState, walletForAccount, markCharacterDead,
+} from './db';
+import { holderInfoForPubkey } from './woc_balance';
+import type { AccountChatMuteStatus, AccountCosmetics, RequestMetadata } from './db';
 import { ChatFilter } from './chat_filter';
 import { loadChatFilterState, applyChatStrike, recordChatViolation } from './chat_filter_db';
 import { offensiveName } from './auth';
@@ -20,6 +25,7 @@ import * as antibot from './antibot';
 import type { BotTracker } from './antibot';
 
 const WORLD_SEED = 20061;
+const ALDRIC_METEOR_QUEST_ID = 'q_aldrics_fallen_star';
 // Interest management: the client renders entities out to 80yd, so new
 // entities enter interest just past that, and known entities persist a
 // little farther so the boundary doesn't churn create/destroy cycles.
@@ -44,6 +50,9 @@ const WIRE_CACHE_SWEEP_TICKS = 1200;
 const EVENT_RADIUS = 90;
 const AUTOSAVE_SECONDS = 30;
 const SAVE_CONCURRENCY = 4;
+const LEAVE_SAVE_MAX_ATTEMPTS = 5;
+const LEAVE_SAVE_RETRY_BASE_MS = 250;
+const LEAVE_SAVE_RETRY_MAX_MS = 4000;
 const CHAT_RATE_BURST = 5;
 const CHAT_RATE_REFILL_PER_SECOND = 1 / 3; // sustained 20 messages/minute
 const CHAT_RATE_ERROR_COOLDOWN_SECONDS = 4;
@@ -62,6 +71,9 @@ const RESTART_COUNTDOWN_STEPS = [
   { atSeconds: 600, text: 'Server restarting now.' },
 ] as const;
 const MAX_WS_PER_IP_SOFT = Number(process.env.MAX_WS_PER_IP_SOFT ?? '5');
+// Antibot enforcement (shadow-throttle + auto-kick), off by default: detection runs
+// report-only until the signals are mature and the false-positive rate is measured.
+const ANTIBOT_ENFORCE = process.env.ANTIBOT_ENFORCE === '1';
 // Clients stream movement intent every 50ms. If that stream goes silent while
 // the last packet held a key down, stop applying it instead of turning/running
 // forever. 750ms leaves room for normal jitter and short browser stalls.
@@ -69,9 +81,16 @@ const STALE_INPUT_SECONDS = 0.75;
 // Exponential moving average weight for the per-tick duration stat.
 const TICK_EMA_ALPHA = 0.05;
 
+// How often to re-broadcast online players' $WOC holder-tier flair. Each wallet
+// read is served from the woc_balance.ts cache (CACHE_TTL_MS), which is the real
+// freshness floor; keeping this loop at/under that TTL means a token change shows
+// on the in-world badge within ~one cache window of it landing on chain.
+const HOLDER_TIER_REFRESH_MS = 60_000;
+
 export interface ClientSession {
   ws: WebSocket;
   accountId: number;
+  accountCosmetics: AccountCosmetics;
   characterId: number;
   pid: number; // player entity id in the sim
   name: string;
@@ -190,8 +209,12 @@ type RememberedChat =
 // changes. The client treats their absence in a record as "unchanged".
 function identityFields(e: Entity): Record<string, unknown> {
   const out: Record<string, unknown> = { k: e.kind, tid: e.templateId, nm: e.name, lv: e.level };
+  if (e.skinCatalog === 'mech') out.cat = 'mech';
   if (e.skin) out.sk = e.skin;
+  if (e.holderTier) out.ht = e.holderTier; // $WOC holder-tier flair (cosmetic)
+  if (e.holderBalance) out.hb = Math.round(e.holderBalance); // exact $WOC, for inspect
   if (e.dungeonId) out.dgn = e.dungeonId;
+  if (e.objectItemId) out.obj = e.objectItemId;
   if (e.scale !== 1) out.sc = e.scale;
   if (e.color !== 0xffffff) out.c = e.color;
   return out;
@@ -313,10 +336,15 @@ function chatChannelHint(session: ClientSession, text: string): string {
   return session.rememberedChat.channel;
 }
 
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export class GameServer {
   sim: Sim;
   clients = new Map<number, ClientSession>(); // by pid
   private readonly sessionsByCharacterId = new Map<number, ClientSession>();
+  private readonly accountCosmeticsByAccount = new Map<number, AccountCosmetics>();
   readonly chatLog = new ChatLogger(insertChatLogs);
   // Admin-managed soft/hard word lists + escalation config. Loaded from the DB
   // at boot (loadChatFilter) and refreshed whenever an admin edits the lists.
@@ -326,9 +354,15 @@ export class GameServer {
   private wireCache = new Map<number, EntityWireCache>();
   private lastWireSweepTick = 0;
   private interval: NodeJS.Timeout | null = null;
+  private holderTierInterval: NodeJS.Timeout | null = null;
+  private holderTierRefreshing = false; // overlap guard for the refresh cycle
+  // pids whose holder tier was forced via the dev /woctier command — the chain
+  // refresh leaves them alone so the override sticks during testing (dev only).
+  private devTierPids = new Set<number>();
   private saveTimer = 0;
   private socialPosTimer = 0;
   private saveAllInFlight: Promise<void> | null = null;
+  private readonly characterSaveQueues = new Map<number, Promise<void>>();
   private restartCountdownStartedAt: number | null = null;
   private readonly restartCountdownTimers: NodeJS.Timeout[] = [];
   private readonly startedAt = Date.now();
@@ -350,6 +384,25 @@ export class GameServer {
   // Called by main.ts before join() for the hard-reject check.
   countIpSessions(ip: string): number {
     return this.ipSessionCounts.get(ip) ?? 0;
+  }
+
+  // Reconcile multi_ip evidence for every session on `ip` against the live session
+  // count. Called on join/leave (the only events that change the count), so the
+  // signal marks all sessions on a crowded IP and clears once it thins out.
+  private refreshMultiIpEvidence(ip: string): void {
+    if (!ip) return;
+    const count = this.countIpSessions(ip);
+    const crowded = count > MAX_WS_PER_IP_SOFT;
+
+    const clientsWithSameIp = [...this.clients.values()].filter(s => s.ip === ip);
+    clientsWithSameIp.forEach(s => {
+      if (crowded) {
+        antibot.addEvidence(s.bot, { kind: 'multi_ip', weight: 0.4, expiresAt: Infinity,
+          detail: `${count} sessions from ${ip}` });
+      } else {
+        antibot.removeEvidence(s.bot, 'multi_ip');
+      }
+    });
   }
 
   // -------------------------------------------------------------------------
@@ -478,10 +531,43 @@ export class GameServer {
         void this.saveMarket();
       }
     }, 50);
+    // Refresh every online player's $WOC holder-tier flair off the 20 Hz loop:
+    // an RPC call per wallet (cached for minutes inside holderInfoForPubkey) has
+    // no place in the tick. Catches mid-session balance changes.
+    this.holderTierInterval = setInterval(() => { void this.refreshAllHolderTiers(); }, HOLDER_TIER_REFRESH_MS);
   }
 
   stop(): void {
     if (this.interval) clearInterval(this.interval);
+    if (this.holderTierInterval) clearInterval(this.holderTierInterval);
+  }
+
+  // Update one player's holder-tier flair from their linked wallet's $WOC
+  // balance. Best-effort and guarded against the player leaving mid-fetch.
+  private async refreshHolderTier(session: ClientSession): Promise<void> {
+    if (this.devTierPids.has(session.pid)) return; // dev override pinned this pid
+    const wallet = await walletForAccount(session.accountId);
+    const { tier, balance } = wallet ? await holderInfoForPubkey(wallet.pubkey) : { tier: 0, balance: 0 };
+    // The player may have left during the await; only apply if still the live
+    // session for this pid.
+    if (this.clients.get(session.pid) !== session) return;
+    const e = this.sim.entities.get(session.pid);
+    if (e && ((e.holderTier ?? 0) !== tier || (e.holderBalance ?? 0) !== balance)) {
+      e.holderTier = tier; // identity diff re-broadcasts it to nearby players
+      e.holderBalance = balance;
+      console.log(`[woc] ${session.name} holder tier → ${tier} (${balance} $WOC)`);
+    }
+  }
+
+  private async refreshAllHolderTiers(): Promise<void> {
+    if (this.holderTierRefreshing) return; // a slow cycle (RPC) must not pile up
+    this.holderTierRefreshing = true;
+    try {
+      await Promise.all([...this.clients.values()].map((session) =>
+        this.refreshHolderTier(session).catch((err) => console.error('holder-tier refresh failed:', err))));
+    } finally {
+      this.holderTierRefreshing = false;
+    }
   }
 
   // -------------------------------------------------------------------------
@@ -492,7 +578,7 @@ export class GameServer {
       // Skip sessions with no evidence and no active escalation timers (CPU budget).
       const t = session.bot;
       if (t.evidence.length === 0 && t.aboveLogSince === null && t.aboveThrottleSince === null && t.aboveKickSince === null) continue;
-      const action = antibot.onSimTick(t, session, now);
+      const action = antibot.onSimTick(t, session, now, ANTIBOT_ENFORCE);
       if (action === 'kick') {
         void this.leave(session, 'disconnected');
       }
@@ -512,6 +598,99 @@ export class GameServer {
 
   // -------------------------------------------------------------------------
 
+  private applyAccountQuestLockouts(pid: number, cosmetics: AccountCosmetics): void {
+    const meta = this.sim.meta(pid);
+    if (!meta) return;
+    for (const questId of cosmetics.completedQuestIds) {
+      meta.questsDone.add(questId);
+      meta.questLog.delete(questId);
+    }
+  }
+
+  private mergeAccountCosmetics(a: AccountCosmetics, b: AccountCosmetics): AccountCosmetics {
+    return {
+      completedQuestIds: [...new Set([...a.completedQuestIds, ...b.completedQuestIds])],
+      mechChromaIds: [...new Set([...a.mechChromaIds, ...b.mechChromaIds])],
+    };
+  }
+
+  private rememberAccountCosmetics(accountId: number, cosmetics: AccountCosmetics): AccountCosmetics {
+    const merged = this.mergeAccountCosmetics(
+      this.accountCosmeticsByAccount.get(accountId) ?? { completedQuestIds: [], mechChromaIds: [] },
+      cosmetics,
+    );
+    this.accountCosmeticsByAccount.set(accountId, merged);
+    return merged;
+  }
+
+  private updateLiveAccountCosmetics(accountId: number, cosmetics: AccountCosmetics): void {
+    const merged = this.rememberAccountCosmetics(accountId, cosmetics);
+    for (const live of this.clients.values()) {
+      if (live.accountId !== accountId) continue;
+      live.accountCosmetics = merged;
+      this.applyAccountQuestLockouts(live.pid, merged);
+      this.resyncQuests(live);
+    }
+  }
+
+  private replaceLiveAccountCosmetics(accountId: number, cosmetics: AccountCosmetics): void {
+    const exact = {
+      completedQuestIds: [...new Set(cosmetics.completedQuestIds)],
+      mechChromaIds: [...new Set(cosmetics.mechChromaIds)],
+    };
+    this.accountCosmeticsByAccount.set(accountId, exact);
+    for (const live of this.clients.values()) {
+      if (live.accountId !== accountId) continue;
+      live.accountCosmetics = exact;
+      this.applyAccountQuestLockouts(live.pid, exact);
+      this.resyncQuests(live);
+    }
+  }
+
+  private noteAccountQuestComplete(session: ClientSession, questId: string): void {
+    const current = session.accountCosmetics;
+    const completedQuestIds = current.completedQuestIds.includes(questId)
+      ? current.completedQuestIds
+      : [...current.completedQuestIds, questId];
+    this.updateLiveAccountCosmetics(session.accountId, { ...current, completedQuestIds });
+    void markAccountQuestComplete(session.accountId, questId)
+      .then((cosmetics) => this.updateLiveAccountCosmetics(session.accountId, cosmetics))
+      .catch((err) => console.error('failed to save account quest cosmetic state:', err));
+  }
+
+  private noteAccountMechChroma(session: ClientSession, chromaId: string): void {
+    const current = session.accountCosmetics;
+    const mechChromaIds = current.mechChromaIds.includes(chromaId)
+      ? current.mechChromaIds
+      : [...current.mechChromaIds, chromaId];
+    this.updateLiveAccountCosmetics(session.accountId, { ...current, mechChromaIds });
+    void grantAccountMechChroma(session.accountId, chromaId)
+      .then((cosmetics) => this.updateLiveAccountCosmetics(session.accountId, cosmetics))
+      .catch((err) => console.error('failed to save account mech chroma:', err));
+  }
+
+  private unequipAccountMechChroma(session: ClientSession, chromaId: string): void {
+    const skin = mechChromaSkinIndex(chromaId);
+    const itemId = mechChromaItemId(chromaId);
+    if (skin < 0 || !itemId || !session.accountCosmetics.mechChromaIds.includes(chromaId)) return;
+    const nextCosmetics = {
+      ...session.accountCosmetics,
+      mechChromaIds: session.accountCosmetics.mechChromaIds.filter((id) => id !== chromaId),
+    };
+    this.replaceLiveAccountCosmetics(session.accountId, nextCosmetics);
+    for (const live of this.clients.values()) {
+      if (live.accountId !== session.accountId) continue;
+      const e = this.sim.entities.get(live.pid);
+      if (e?.skinCatalog === 'mech' && e.skin === skin) {
+        this.sim.setPlayerSkin(live.pid, 0, 'class');
+      }
+    }
+    this.sim.addItem(itemId, 1, session.pid);
+    void revokeAccountMechChroma(session.accountId, chromaId)
+      .then((cosmetics) => this.replaceLiveAccountCosmetics(session.accountId, cosmetics))
+      .catch((err) => console.error('failed to remove account mech chroma:', err));
+  }
+
   join(
     ws: WebSocket,
     accountId: number,
@@ -520,7 +699,7 @@ export class GameServer {
     cls: import('../src/sim/types').PlayerClass,
     state: import('../src/sim/sim').CharacterState | null,
     isGm = false,
-    meta: RequestMetadata & Partial<AccountChatMuteStatus> & { chatStrikes?: number; hardcore?: boolean } = {},
+    meta: RequestMetadata & Partial<AccountChatMuteStatus> & { accountCosmetics?: AccountCosmetics; chatStrikes?: number; hardcore?: boolean } = {},
   ): ClientSession | { error: string } {
     if (this.sessionsByCharacterId.has(characterId)) return { error: 'character already in world' };
     // Anti-bot: cap simultaneous online characters per account. Accounts can
@@ -543,9 +722,14 @@ export class GameServer {
       const e = this.sim.entities.get(pid);
       if (e && e.level < 20) this.sim.setPlayerLevel(20, pid);
     }
+    const accountCosmetics = this.rememberAccountCosmetics(
+      accountId,
+      meta.accountCosmetics ?? { completedQuestIds: [], mechChromaIds: [] },
+    );
+    this.applyAccountQuestLockouts(pid, accountCosmetics);
     const sessionIp = meta.ip ?? '';
     const session: ClientSession = {
-      ws, accountId, characterId, pid, name, hardcore: meta.hardcore ?? false, isGm,
+      ws, accountId, accountCosmetics, characterId, pid, name, hardcore: meta.hardcore ?? false, isGm,
       lastSave: Date.now(), alive: true, joinedAt: Date.now(), dbSessionId: null, left: false,
       chatTokens: CHAT_RATE_BURST, chatLastRefill: Date.now() / 1000, chatLastRateError: 0,
       chatRateViolations: 0, chatCooldownUntil: 0,
@@ -563,17 +747,10 @@ export class GameServer {
       ip: sessionIp,
       bot: antibot.createTracker(),
     };
-    // Per-IP session counting: update the map and seed multi_ip evidence if over soft threshold.
-    const ipCount = (this.ipSessionCounts.get(sessionIp) ?? 0) + 1;
-    this.ipSessionCounts.set(sessionIp, ipCount);
-    if (sessionIp && ipCount > MAX_WS_PER_IP_SOFT) {
-      antibot.addEvidence(session.bot, {
-        kind: 'multi_ip', weight: 0.4, expiresAt: Infinity,
-        detail: `${ipCount} sessions from ${sessionIp}`,
-      });
-    }
+    this.ipSessionCounts.set(sessionIp, (this.ipSessionCounts.get(sessionIp) ?? 0) + 1);
     this.clients.set(pid, session);
     this.sessionsByCharacterId.set(characterId, session);
+    this.refreshMultiIpEvidence(sessionIp);
     this.peakOnline = Math.max(this.peakOnline, this.clients.size);
     openPlaySession(accountId, characterId, name, meta)
       .then((id) => {
@@ -604,6 +781,9 @@ export class GameServer {
     // broadcast it to everyone (and likewise don't broadcast departures below).
     this.send(session, { t: 'events', list: [{ type: 'log', text: `${name} has entered Cryptic Realm.`, color: '#ffd100' }] });
     void this.initSocial(session);
+    // Stamp the $WOC holder-tier flair (best-effort: a balance read must never
+    // affect joining the world).
+    void this.refreshHolderTier(session).catch((err) => console.error('holder-tier refresh failed:', err));
     return session;
   }
 
@@ -622,15 +802,16 @@ export class GameServer {
   }
 
   async leave(session: ClientSession, reason: string): Promise<void> {
-    if (!this.clients.has(session.pid)) return;
+    if (session.left || !this.clients.has(session.pid)) return;
     session.left = true;
     this.clients.delete(session.pid);
-    this.sessionsByCharacterId.delete(session.characterId);
     if (session.ip) {
       const prev = this.ipSessionCounts.get(session.ip) ?? 1;
       if (prev <= 1) this.ipSessionCounts.delete(session.ip);
       else this.ipSessionCounts.set(session.ip, prev - 1);
+      this.refreshMultiIpEvidence(session.ip);
     }
+    this.devTierPids.delete(session.pid);
     this.social.forget(session.characterId);
     // delete from clients first so friends see them as offline in the notice
     void this.social.announcePresence({ characterId: session.characterId, name: session.name }, false)
@@ -638,18 +819,53 @@ export class GameServer {
     if (session.dbSessionId !== null) {
       void closePlaySession(session.dbSessionId).catch((err) => console.error('failed to close play session:', err));
     }
-    await this.saveCharacter(session).catch((err) => console.error('save on leave failed:', err));
+    await this.saveCharacterOnLeave(session);
+    this.sessionsByCharacterId.delete(session.characterId);
     this.sim.removePlayer(session.pid);
     // Departures are no longer broadcast to the realm — the leaving player has
     // already disconnected, so there is no one to show their own notice to.
   }
 
+  private async saveCharacterOnLeave(session: ClientSession): Promise<void> {
+    for (let attempt = 1; attempt <= LEAVE_SAVE_MAX_ATTEMPTS; attempt++) {
+      try {
+        await this.saveCharacter(session);
+        return;
+      } catch (err) {
+        if (attempt === LEAVE_SAVE_MAX_ATTEMPTS) {
+          console.error(`save on leave failed after ${attempt} attempts for ${session.name}:`, err);
+          return;
+        }
+        const retryMs = Math.min(
+          LEAVE_SAVE_RETRY_BASE_MS * 2 ** (attempt - 1),
+          LEAVE_SAVE_RETRY_MAX_MS,
+        );
+        console.error(`save on leave failed for ${session.name}; retrying in ${retryMs}ms:`, err);
+        await delay(retryMs);
+      }
+    }
+  }
+
   async saveCharacter(session: ClientSession): Promise<void> {
-    const state = this.sim.serializeCharacter(session.pid);
-    const e = this.sim.entities.get(session.pid);
-    if (state && e) {
-      await saveCharacterState(session.characterId, e.level, state);
-      session.lastSave = Date.now();
+    const previous = this.characterSaveQueues.get(session.characterId);
+    const run = (previous ? previous.catch(() => {}) : Promise.resolve()).then(async () => {
+      const state = this.sim.serializeCharacter(session.pid);
+      const e = this.sim.entities.get(session.pid);
+      if (state && e) {
+        // Use the SERIALIZED level (not e.level): during a 2v2 Fiesta bout e.level
+        // is temporarily 20, but serializeCharacter reports the real level — so the
+        // character-list/leaderboard `level` column never reflects the temp state.
+        await saveCharacterState(session.characterId, state.level, state);
+        session.lastSave = Date.now();
+      }
+    });
+    this.characterSaveQueues.set(session.characterId, run);
+    try {
+      await run;
+    } finally {
+      if (this.characterSaveQueues.get(session.characterId) === run) {
+        this.characterSaveQueues.delete(session.characterId);
+      }
     }
   }
 
@@ -921,10 +1137,25 @@ export class GameServer {
       case 'loot': if (typeof msg.id === 'number') sim.lootCorpse(msg.id, pid); break;
       case 'pickup': if (typeof msg.id === 'number') sim.pickUpObject(msg.id, pid); break;
       case 'accept': if (typeof msg.quest === 'string') { sim.acceptQuest(msg.quest, pid); this.resyncQuests(session); } break;
-      case 'turnin': if (typeof msg.quest === 'string') { sim.turnInQuest(msg.quest, pid); this.resyncQuests(session); } break;
+      case 'turnin':
+        if (typeof msg.quest === 'string') {
+          const beforeDone = sim.meta(pid)?.questsDone.has(msg.quest) ?? false;
+          sim.turnInQuest(msg.quest, pid);
+          const afterDone = sim.meta(pid)?.questsDone.has(msg.quest) ?? false;
+          if (!beforeDone && afterDone && msg.quest === ALDRIC_METEOR_QUEST_ID) {
+            this.noteAccountQuestComplete(session, msg.quest);
+          }
+          this.resyncQuests(session);
+        }
+        break;
       case 'abandon': if (typeof msg.quest === 'string') { sim.abandonQuest(msg.quest, pid); this.resyncQuests(session); } break;
       case 'equip': if (typeof msg.item === 'string') sim.equipItem(msg.item, pid); break;
-      case 'use': if (typeof msg.item === 'string') sim.useItem(msg.item, pid); break;
+      case 'use':
+        if (typeof msg.item === 'string') {
+          const result = sim.useItem(msg.item, pid);
+          if (result?.type === 'mechChroma') this.noteAccountMechChroma(session, result.chromaId);
+        }
+        break;
       case 'discard':
         if (typeof msg.item === 'string') {
           sim.discardItem(msg.item, typeof msg.count === 'number' ? msg.count : undefined, pid);
@@ -937,7 +1168,32 @@ export class GameServer {
         }
         break;
       case 'buyback': if (typeof msg.item === 'string') sim.buyBackItem(msg.item, pid); break;
-      case 'change_skin': if (typeof msg.skin === 'number') sim.setPlayerSkin(pid, msg.skin); break;
+      case 'change_skin':
+        if (typeof msg.skin === 'number') {
+          if (msg.catalog === 'mech') {
+            const idx = Math.max(0, Math.floor(msg.skin));
+            const chroma = MECH_CHROMAS[idx];
+            if (chroma && session.accountCosmetics.mechChromaIds.includes(chroma.id)) {
+              sim.setPlayerSkin(pid, idx, 'mech');
+            }
+          } else {
+            sim.setPlayerSkin(pid, msg.skin, 'class');
+          }
+        }
+        break;
+      case 'unequip_mech_chroma':
+        if (typeof msg.chroma === 'string') this.unequipAccountMechChroma(session, msg.chroma);
+        break;
+      // Skin-select event lock-in. The Sim re-validates the skin against the
+      // rank it rolled and consumes the event token; a forged claim no-ops.
+      case 'claim_event_skin':
+        if (typeof msg.skin === 'number') {
+          const claim = sim.claimEventSkin(msg.skin, pid);
+          if (claim?.catalog === 'mech' && claim.chromaId) {
+            this.noteAccountMechChroma(session, claim.chromaId);
+          }
+        }
+        break;
       case 'release': sim.releaseSpirit(pid); break;
       case 'chat': {
         if (typeof msg.text !== 'string') break;
@@ -1045,11 +1301,15 @@ export class GameServer {
       case 'guild_disband': void this.social.guildDisband(this.actorFor(session)).catch(logSocialErr); break;
       // arena (Ashen Coliseum queue)
       case 'arena_queue': {
-        const fmt = msg.format === '2v2' ? '2v2' : '1v1';
+        const fmt = msg.format === '2v2' ? '2v2' : msg.format === 'fiesta' ? 'fiesta' : '1v1';
         sim.arenaQueueJoin(pid, fmt);
         break;
       }
       case 'arena_leave': sim.arenaQueueLeave(pid); break;
+      case 'arena_augment': {
+        if (typeof msg.augment === 'string' && msg.augment.length <= 64) sim.arenaAugmentPick(msg.augment, pid);
+        break;
+      }
 
       // post-cap cosmetic prestige (Max-Level XP Overflow)
       case 'prestige': sim.prestige(pid); break;
@@ -1083,6 +1343,7 @@ export class GameServer {
       case 'switchLoadout': if (typeof msg.index === 'number') sim.switchLoadout(msg.index | 0, pid); break;
       case 'deleteLoadout': if (typeof msg.index === 'number') sim.deleteLoadout(msg.index | 0, pid); break;
       // World Market (the Merchant's auction house)
+      case 'market_search': if (typeof msg.q === 'string') sim.marketSearch(msg.q, pid); break;
       case 'market_list':
         if (typeof msg.item === 'string' && Number.isFinite(msg.count) && Number.isFinite(msg.price)) {
           sim.marketList(msg.item, msg.count, msg.price, pid);
@@ -1268,9 +1529,11 @@ export class GameServer {
       rtype: p.resourceType,
       xp: meta.xp,
       lxp: meta.lifetimeXp,
+      rxp: Math.round(meta.restedXp),
       prk: meta.prestigeRank,
       copper: meta.copper,
       gcd: round2(p.gcdRemaining),
+      swing: round2(p.swingTimer),
       combo: p.comboPoints,
       comboTgt: p.comboTargetId,
       target: p.targetId,
@@ -1300,6 +1563,7 @@ export class GameServer {
     maybe('inv', meta.inventory);
     maybe('buyback', meta.vendorBuyback);
     maybe('equip', meta.equipment);
+    maybe('cosmetics', session.accountCosmetics);
     maybe('qlog', [...meta.questLog.values()]);
     maybe('qdone', [...meta.questsDone]);
     maybe('milestones', [...meta.unlockedMilestones]);
@@ -1386,10 +1650,6 @@ export class GameServer {
             if (ev.type === 'chat' && ev.channel === 'whisper' && ev.to === undefined && ev.fromPid !== session.pid) {
               session.lastWhisperFrom = ev.from;
             }
-            // Reaction time: record stimulus when a triggering event lands.
-            if (ev.type === 'death' || ev.type === 'castStop') {
-              antibot.observeEvent(session.bot, ev.type, Date.now());
-            }
           }
           continue;
         }
@@ -1433,6 +1693,22 @@ export class GameServer {
   private routeRememberedChat(session: ClientSession, rawText: string, pid: number): import('../src/sim/sim').SentChat | null {
     const text = rawText.trim();
     if (!text) return null;
+    // Dev-only: force this character's $WOC holder-tier flair so the in-world
+    // nameplate badge can be exercised without a funded linked wallet. Gated by
+    // ALLOW_DEV_COMMANDS (never set in production). Reset on the next balance
+    // refresh or rejoin.
+    if (process.env.ALLOW_DEV_COMMANDS === '1' && /^\/woctier\b/.test(text)) {
+      const n = Math.max(0, Math.min(10, parseInt(text.split(/\s+/)[1] ?? '', 10) || 0));
+      const e = this.sim.entities.get(pid);
+      if (e) {
+        e.holderTier = n;
+        // Demo balance so the inspect readout shows a plausible amount for the tier.
+        e.holderBalance = n > 0 ? 10 ** (n - 1) : 0;
+      }
+      this.devTierPids.add(pid); // keep the chain refresh from clobbering it
+      this.broadcastSystem(`[dev] ${session.name} $WOC holder tier → ${n}`);
+      return null;
+    }
     if (!text.startsWith('/')) {
       const body = text;
       if (!body.trim()) return null;
