@@ -117,6 +117,17 @@ for inst in "${CR_INSTANCES[@]}"; do
   fi
 done
 
+# 4c. Regenerate PER-STAGE env files (env.d/<realm>-<stage>.env) consumed by the
+#     cryptic-realm-stage@<realm>-<stage> services. Step 4b only writes the
+#     per-realm env (crypticrealm.env, …); without this the stage units lose
+#     their EnvironmentFile on every autoupdate and the NEXT restart of any
+#     stage dies with "Failed to load environment files" (the env-file landmine,
+#     see memory crypticrealm_staging). Idempotent — regenerates the full set.
+if [ -f scripts/admin/gen-stage-env.mjs ]; then
+  LOG "regenerating per-stage env (gen-stage-env.mjs → env.d/<realm>-<stage>.env)…"
+  node scripts/admin/gen-stage-env.mjs >>"$CR_LOG_FILE" 2>&1 || LOG "WARN: gen-stage-env failed"
+fi
+
 # 5. Restart every realm process. The legacy single-realm service first so
 #    the apex is restored quickly, then the template instances.
 LOG "restarting cryptic-realm.service (apex)…"

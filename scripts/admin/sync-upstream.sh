@@ -63,11 +63,39 @@ if git merge-base --is-ancestor "$UP_SHA" HEAD; then
 fi
 
 log "merging upstream @ ${UP_SHA:0:9} into ${DEV_BRANCH}…"
+REPORT="${CR_SYNC_REPORT:-/var/log/cr-upstream-sync-conflict.md}"
 if git merge --no-edit -m "merge: auto-sync upstream world-of-claudecraft @ ${UP_SHA:0:9} into dev" "$UP_SHA" >>"$LOG" 2>&1; then
   git push "$ORIGIN" "$DEV_BRANCH" >>"$LOG" 2>&1 || { log "WARN: merged but push failed"; exit 1; }
   log "merged + pushed. autoupdate timer will deploy dev."
+  # Clear any stale conflict report from a previous failed run.
+  rm -f "$REPORT" 2>/dev/null || true
 else
-  log "CONFLICT: auto-merge has conflicts — aborting, dev untouched. Human merge needed."
+  # Capture WHICH files conflicted before aborting, into a human-readable report
+  # so a maintainer can act without spelunking the raw log. The merge is aborted
+  # so dev stays clean and the live rings are never reached by a bad auto-merge.
+  CONFLICTS="$(git diff --name-only --diff-filter=U 2>/dev/null || true)"
+  N="$(printf '%s\n' "$CONFLICTS" | grep -c . || true)"
+  {
+    echo "# Cryptic Realm upstream auto-sync — CONFLICT"
+    echo
+    echo "- When: $(date -u +%FT%TZ)"
+    echo "- Upstream: ${UPSTREAM_REMOTE}/${UPSTREAM_BRANCH} @ ${UP_SHA}"
+    echo "- Dev branch: ${DEV_BRANCH} @ $(git rev-parse HEAD)"
+    echo "- Conflicted files: ${N}"
+    echo
+    echo "## Files needing a human merge"
+    echo '```'
+    printf '%s\n' "$CONFLICTS"
+    echo '```'
+    echo
+    echo "## To resolve (locally)"
+    echo '```'
+    echo "git fetch upstream main && git checkout ${DEV_BRANCH}"
+    echo "git merge upstream/main   # resolve the files above, see memory crypticrealm_upstream_sync_v0_11"
+    echo "git push origin ${DEV_BRANCH}"
+    echo '```'
+  } > "$REPORT" 2>/dev/null || true
+  log "CONFLICT: ${N} files conflict — aborting, dev untouched. Report: ${REPORT}"
   git merge --abort >>"$LOG" 2>&1 || true
   exit 2
 fi

@@ -24,7 +24,14 @@ LOGFILE="${CR_LOG_FILE:-/var/log/cryptic-realm-stage.log}"
 
 log() { echo "[$(date -u +%FT%TZ)] [$INST] $*" | tee -a "$LOGFILE"; }
 
-[ -f "$ENVFILE" ] || { log "missing $ENVFILE — run gen-stage-env + install first"; exit 1; }
+# Self-heal the per-stage env file: an autoupdate can clobber env.d/ with only
+# per-realm files, leaving <realm>-<stage>.env missing (the env-file landmine,
+# see memory crypticrealm_staging). Regenerate the full set rather than bailing.
+if [ ! -f "$ENVFILE" ]; then
+  log "missing $ENVFILE — regenerating per-stage env via gen-stage-env.mjs"
+  ( cd "$CR_TOOLING" && node scripts/admin/gen-stage-env.mjs >>"$LOGFILE" 2>&1 ) || true
+fi
+[ -f "$ENVFILE" ] || { log "still missing $ENVFILE after regen — aborting"; exit 1; }
 
 # Resolve the branch this stage tracks.
 REF="$(grep -E '^CR_GIT_REF=' "$ENVFILE" | head -1 | cut -d= -f2-)"
