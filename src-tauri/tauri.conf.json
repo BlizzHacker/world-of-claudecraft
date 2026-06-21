@@ -1,10 +1,9 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "Cryptic Realm",
-  "version": "0.9.0",
+  "version": "0.11.0",
   "identifier": "com.crypticrealm",
   "build": {
-    "comment": "Online MMO desktop shell. frontendDist points at the Vite build for a bundled/offline launcher; for the live MMO the window loads https://crypticrealm.com (see app.windows[0].url). beforeBuildCommand builds the web app first.",
     "beforeBuildCommand": "npm run build",
     "frontendDist": "../dist"
   },
@@ -29,14 +28,18 @@
   },
   "bundle": {
     "active": true,
-    "comment": "windows/nsis -> Steam-ready installer; also builds macOS .app/.dmg and Linux AppImage/.deb. Icons generated from public/cryptic-realm-logo-512.png via `npx tauri icon`.",
-    "targets": ["nsis", "app", "dmg", "appimage", "deb"],
+    "targets": ["nsis"],
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
       "icons/128x128@2x.png",
       "icons/icon.icns",
       "icons/icon.ico"
-    ]
+    ],
+    "windows": {
+      "webviewInstallMode": {
+        "type": "downloadBootstrapper"
+      }
+    }
   }
 }

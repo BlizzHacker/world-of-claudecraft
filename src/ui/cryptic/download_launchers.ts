@@ -1,20 +1,31 @@
-// Download surface for launcher status. The shipped client is the web client;
-// desktop/mobile installers link to the release pipeline until signed binaries
-// exist, so the UI does not promise unavailable downloads.
+// Download surface for launcher status. The shipped client is the web client.
+// Windows has signed-less Alpha installers (Lite/Medium) hosted on crypticrealm.com;
+// other desktop/mobile targets show their status until binaries are published.
+// No links point at the (private) source repo.
 
 const HOST_ID = 'cr-download-launchers';
-const RELEASES_URL = 'https://github.com/BlizzHacker/cryptic-realm/releases';
+
+// A single action button (primary, secondary, or one of the Windows tiers).
+interface DlAction {
+  label: string;
+  href: string;
+  meta: string;
+  track?: boolean;   // dimmer "tracking"/secondary styling
+}
 
 interface Launcher {
   os: 'web' | 'windows' | 'macos' | 'linux' | 'android' | 'ios' | 'steam';
   label: string;
   badge: string;
-  primaryLabel: string;
-  primaryHref: string;
-  primaryMeta: string;
+  // Either a primary (+optional secondary) action, OR a multi-button `actions`
+  // list (used by the Windows Lite/Medium/Heavy tiers).
+  primaryLabel?: string;
+  primaryHref?: string;
+  primaryMeta?: string;
   secondaryLabel?: string;
   secondaryHref?: string;
   secondaryMeta?: string;
+  actions?: DlAction[];
   status: string;
 }
 
@@ -32,49 +43,39 @@ const LAUNCHERS: Launcher[] = [
     os: 'steam',
     label: 'Steam',
     badge: 'STM',
-    primaryLabel: 'Track Steam',
-    primaryHref: RELEASES_URL,
-    primaryMeta: 'Windows / macOS / Linux',
-    secondaryLabel: 'Play Web',
-    secondaryHref: '/',
-    secondaryMeta: 'works today',
-    status: 'Steam build packaging is tracked here until the store page is approved.',
+    primaryLabel: 'Play Web',
+    primaryHref: '/',
+    primaryMeta: 'works today',
+    status: 'Steam build packaging is in progress; the store page is pending approval.',
   },
   {
     os: 'windows',
     label: 'Windows 10/11',
     badge: 'WIN',
-    primaryLabel: 'Track Release',
-    primaryHref: RELEASES_URL,
-    primaryMeta: 'installer pipeline',
-    secondaryLabel: 'Play Web',
-    secondaryHref: '/',
-    secondaryMeta: 'works today',
-    status: 'Installer signing/build pipeline is not published yet.',
+    actions: [
+      { label: 'Download · Lite', href: '/CrypticRealm-Setup-Lite.exe', meta: '~2 MB · recommended' },
+      { label: 'Download · Full', href: '/CrypticRealm-Setup-Medium.exe', meta: '~333 MB · offline installer', track: true },
+      { label: 'Heavy (soon)', href: '', meta: 'native client · coming soon', track: true },
+    ],
+    status: 'Alpha · experimental · not yet code-signed — Windows SmartScreen will warn. Click "More info" → "Run anyway", then run the installer. Lite downloads the small runtime on first install; Full bundles everything for offline install.',
   },
   {
     os: 'macos',
     label: 'macOS 12+',
     badge: 'MAC',
-    primaryLabel: 'Track Release',
-    primaryHref: RELEASES_URL,
-    primaryMeta: 'dmg pipeline',
-    secondaryLabel: 'Play Web',
-    secondaryHref: '/',
-    secondaryMeta: 'works today',
-    status: 'Signed DMG is not published yet.',
+    primaryLabel: 'Play Web',
+    primaryHref: '/',
+    primaryMeta: 'works today',
+    status: 'A signed macOS app is in the build pipeline; use the web client for now.',
   },
   {
     os: 'linux',
     label: 'Linux x86_64',
     badge: 'LIN',
-    primaryLabel: 'Track Release',
-    primaryHref: RELEASES_URL,
-    primaryMeta: 'AppImage pipeline',
-    secondaryLabel: 'Play Web',
-    secondaryHref: '/',
-    secondaryMeta: 'works today',
-    status: 'AppImage is not published yet.',
+    primaryLabel: 'Play Web',
+    primaryHref: '/',
+    primaryMeta: 'works today',
+    status: 'A Linux AppImage is in the build pipeline; use the web client for now.',
   },
   {
     os: 'android',
@@ -92,31 +93,48 @@ const LAUNCHERS: Launcher[] = [
     os: 'ios',
     label: 'iOS / iPadOS',
     badge: 'IOS',
-    primaryLabel: 'Track App Store',
-    primaryHref: RELEASES_URL,
-    primaryMeta: 'iOS build',
-    secondaryLabel: 'Use Mobile Web',
-    secondaryHref: '/',
-    secondaryMeta: 'Safari / PWA',
-    status: 'App Store release artifacts are not published yet.',
+    primaryLabel: 'Use Mobile Web',
+    primaryHref: '/',
+    primaryMeta: 'Safari / PWA',
+    status: 'An App Store build is in progress; add the web app to your Home Screen for now.',
   },
 ];
 
 function action(label: string, href: string, meta: string, extraClass = ''): string {
+  // Empty href => a disabled "coming soon" button (e.g. the Heavy tier).
+  if (!href) {
+    return `
+    <span class="cr-dl-btn cr-dl-disabled" aria-disabled="true">
+      <span>${label}</span><small>${meta}</small>
+    </span>`;
+  }
+  const external = href.startsWith('http');
+  // Direct binary downloads (.exe/.apk) get the download attribute so the
+  // browser saves rather than navigates.
+  const isDownload = /\.(exe|apk|dmg|appimage|zip)$/i.test(href);
   return `
-    <a class="cr-dl-btn${extraClass}" href="${href}" target="${href.startsWith('http') ? '_blank' : '_self'}" rel="${href.startsWith('http') ? 'noopener noreferrer' : ''}">
+    <a class="cr-dl-btn${extraClass}" href="${href}" target="${external ? '_blank' : '_self'}" rel="${external ? 'noopener noreferrer' : ''}"${isDownload ? ' download' : ''}>
       <span>${label}</span><small>${meta}</small>
     </a>`;
 }
 
 function card(l: Launcher): string {
-  const secondary = l.secondaryLabel && l.secondaryHref && l.secondaryMeta
-    ? action(l.secondaryLabel, l.secondaryHref, l.secondaryMeta, ' cr-dl-track')
-    : '';
+  let buttons: string;
+  if (l.actions && l.actions.length) {
+    buttons = l.actions.map((a) => action(a.label, a.href, a.meta, a.track ? ' cr-dl-track' : '')).join('');
+  } else {
+    const primary = l.primaryLabel && l.primaryHref && l.primaryMeta
+      ? action(l.primaryLabel, l.primaryHref, l.primaryMeta)
+      : '';
+    const secondary = l.secondaryLabel && l.secondaryHref && l.secondaryMeta
+      ? action(l.secondaryLabel, l.secondaryHref, l.secondaryMeta, ' cr-dl-track')
+      : '';
+    buttons = `${primary}${secondary}`;
+  }
   return `
     <div class="cr-dl-card" data-launcher="${l.os}">
       <div class="cr-dl-header"><span class="cr-dl-icon">${l.badge}</span><strong>${l.label}</strong></div>
-      <div class="cr-dl-row">${action(l.primaryLabel, l.primaryHref, l.primaryMeta)}${secondary}</div>
+      <div class="cr-dl-row">${buttons}</div>
       <div class="cr-dl-pending">${l.status}</div>
     </div>`;
 }
@@ -127,7 +145,7 @@ function render(host: HTMLElement): void {
       ${LAUNCHERS.map(card).join('')}
     </div>
     <p class="cr-dl-foot">
-      Desktop launcher work is tracked through GitHub releases. The browser client is live and remains the source of truth while installers are built, signed, and tested.
+      The browser client is live and remains the source of truth while native installers are built, signed, and tested. Windows Alpha builds are unsigned for now — your system may warn before install.
     </p>`;
 }
 
