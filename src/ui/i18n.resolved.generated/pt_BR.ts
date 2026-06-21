@@ -927,7 +927,9 @@ export const pt_BR: EnTranslations = {
     "characterCountOther": "{count} personagens",
     "selectedRealm": "Reino: {name}",
     "statsOffline": "Offline",
-    "statsRealmOffline": "{realm} (offline)"
+    "statsRealmOffline": "{realm} (offline)",
+    "enter": "Enter Realm",
+    "exchangeNote": "The Exchange is the only realm where items move between realms."
   },
   "character": {
     "loading": "Carregando...",

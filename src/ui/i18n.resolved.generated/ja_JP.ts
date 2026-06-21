@@ -927,7 +927,9 @@ export const ja_JP: EnTranslations = {
     "characterCountOther": "{count}キャラクター",
     "selectedRealm": "レルム: {name}",
     "statsOffline": "オフライン",
-    "statsRealmOffline": "{realm}（オフライン）"
+    "statsRealmOffline": "{realm}（オフライン）",
+    "enter": "Enter Realm",
+    "exchangeNote": "The Exchange is the only realm where items move between realms."
   },
   "character": {
     "loading": "読み込み中...",

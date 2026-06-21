@@ -927,7 +927,9 @@ export const ko_KR: EnTranslations = {
     "characterCountOther": "캐릭터 {count}개",
     "selectedRealm": "렐름: {name}",
     "statsOffline": "오프라인",
-    "statsRealmOffline": "{realm}(오프라인)"
+    "statsRealmOffline": "{realm}(오프라인)",
+    "enter": "Enter Realm",
+    "exchangeNote": "The Exchange is the only realm where items move between realms."
   },
   "character": {
     "loading": "불러오는 중...",

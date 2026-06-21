@@ -927,7 +927,9 @@ export const ru_RU: EnTranslations = {
     "characterCountOther": "{count} персонажа",
     "selectedRealm": "Мир: {name}",
     "statsOffline": "Не в сети",
-    "statsRealmOffline": "{realm} (не в сети)"
+    "statsRealmOffline": "{realm} (не в сети)",
+    "enter": "Enter Realm",
+    "exchangeNote": "The Exchange is the only realm where items move between realms."
   },
   "character": {
     "loading": "Загрузка...",

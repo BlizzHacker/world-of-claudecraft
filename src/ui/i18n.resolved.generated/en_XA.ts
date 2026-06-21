@@ -927,7 +927,9 @@ export const en_XA: EnTranslations = {
     "characterCountOther": "[{count} çĥáŕáçţéŕš]",
     "selectedRealm": "[Ŕéáļɱ: {name}]",
     "statsOffline": "[Óƒƒļíñé]",
-    "statsRealmOffline": "[{realm} (Óƒƒļíñé)]"
+    "statsRealmOffline": "[{realm} (Óƒƒļíñé)]",
+    "enter": "[Éñţéŕ Ŕéáļɱ]",
+    "exchangeNote": "[Ţĥé Éẋçĥáñĝé íš ţĥé óñļý ŕéáļɱ ŵĥéŕé íţéɱš ɱóʋé ƀéţŵééñ ŕéáļɱš.]"
   },
   "character": {
     "loading": "[Ļóáðíñĝ...]",

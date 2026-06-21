@@ -83,6 +83,8 @@ export const shellStrings = {
       selectedRealm: "Realm: {name}",
       statsOffline: "Offline",
       statsRealmOffline: "{realm} (Offline)",
+      enter: "Enter Realm",
+      exchangeNote: "The Exchange is the only realm where items move between realms.",
     },
     character: {
       loading: "Loading...",
@@ -1008,6 +1010,8 @@ export const shellStrings = {
       selectedRealm: "Realm: {name}",
       statsOffline: "Offline",
       statsRealmOffline: "{realm} (Offline)",
+      enter: "Enter Realm",
+      exchangeNote: "The Exchange is the only realm where items move between realms.",
     },
     character: {
       loading: "Loading...",

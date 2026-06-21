@@ -4289,6 +4289,26 @@
   .realm-pop.full { color: #ff5040; }
   .realm-pop.offline { color: #888; }
   .realm-meta { display: contents; }
+  /* Collapsed-by-realm picker: one card per realm family with a Stage segmented
+     control + ladder/hardcore population toggles (replaces the flat 96-row list). */
+  .rl-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px; padding: 10px; }
+  .realm-card { display: flex; flex-direction: column; gap: 8px; padding: 12px;
+    border: 1px solid #463a1c; border-radius: 7px; background: linear-gradient(180deg, rgba(40,36,54,0.5), rgba(13,11,19,0.5)); }
+  .realm-card.offline { opacity: 0.6; }
+  .rc-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+  .rc-name { font-family: var(--title-font); font-size: 16px; color: #f0ead8; }
+  .rc-meta { display: flex; align-items: center; gap: 8px; }
+  .rc-sub { font-size: 11px; color: #998d6a; }
+  .rc-stages { display: flex; flex-wrap: wrap; gap: 4px; }
+  .rl-stage { padding: 4px 10px; border-radius: 4px; border: 1px solid #5f4b1a; background: rgba(0,0,0,0.25);
+    color: #c9bfa8; font-size: 11px; font-weight: 600; cursor: var(--cursor-point); transition: color .12s, background .12s, border-color .12s; }
+  .rl-stage:hover { border-color: var(--gold, #ffd100); color: var(--gold, #ffd100); }
+  .rl-stage.active { background: rgba(255,209,0,0.16); border-color: var(--gold, #ffd100); color: var(--gold, #ffd100); }
+  .rl-stage[data-restricted] { border-style: dashed; }
+  .rc-pops { display: flex; flex-direction: column; gap: 4px; }
+  .rc-toggle { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #c9bfa8; cursor: var(--cursor-point); }
+  .rc-note { font-size: 11px; color: #7fd4ff; border-left: 2px solid #2f5a6a; padding-left: 8px; }
+  .rc-enter { margin-top: 2px; align-self: flex-start; padding: 7px 18px; }
   /* Stage pills (Alpha/Beta/Dev) grouped under each realm so the list stays compact. */
   .realm-stages { display: flex; gap: 4px; margin-top: 4px; justify-content: flex-end; }
   .realm-stage-pill {

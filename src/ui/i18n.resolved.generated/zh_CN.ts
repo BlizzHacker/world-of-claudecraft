@@ -927,7 +927,9 @@ export const zh_CN: EnTranslations = {
     "characterCountOther": "{count} 个角色",
     "selectedRealm": "服务器：{name}",
     "statsOffline": "离线",
-    "statsRealmOffline": "{realm}（离线）"
+    "statsRealmOffline": "{realm}（离线）",
+    "enter": "Enter Realm",
+    "exchangeNote": "The Exchange is the only realm where items move between realms."
   },
   "character": {
     "loading": "正在加载...",

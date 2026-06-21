@@ -2098,8 +2098,17 @@ function parseRealmMeta(name: string): { family: string; stage: string } {
   return { family: name.trim(), stage: 'live' };
 }
 
-// Active realm-list filters (null = show all).
-const realmFilter: { family: string | null; stage: string | null } = { family: null, stage: 'live' };
+// Per-family realm-card selection state: which stage + population the player
+// has chosen for each realm family before entering. Defaults: Live, non-ladder,
+// non-hardcore (the classic-MMO default). ladder/hardcore launch into a
+// segregated population on the same stage server (see memory
+// crypticrealm_realm_model); they're carried to the realm as ?pop= params.
+const realmChoice = new Map<string, { stage: string; ladder: boolean; hardcore: boolean }>();
+function choiceFor(family: string): { stage: string; ladder: boolean; hardcore: boolean } {
+  let c = realmChoice.get(family);
+  if (!c) { c = { stage: 'live', ladder: false, hardcore: false }; realmChoice.set(family, c); }
+  return c;
+}
 
 function showRealmList(dir?: import('./net/online').RealmDirectory): void {
   show('#realm-panel');
@@ -2109,75 +2118,83 @@ function showRealmList(dir?: import('./net/online').RealmDirectory): void {
       listEl.innerHTML = `<div class="realm-loading">${escapeHtml(t('realm.noRealms'))}</div>`;
       return;
     }
-    // Build filter chips from the distinct families + stages present.
-    const families = Array.from(new Set(d.realms.map((r) => parseRealmMeta(r.name).family)));
-    const stages = ['live', 'beta', 'alpha', 'dev'].filter((s) => d.realms.some((r) => parseRealmMeta(r.name).stage === s));
-    const chip = (kind: 'family' | 'stage', val: string | null, label: string): string => {
-      const active = realmFilter[kind] === val;
-      return `<button type="button" class="rl-chip${active ? ' active' : ''}" data-filter="${kind}" data-val="${val ?? ''}">${escapeHtml(label)}</button>`;
-    };
-    const familyChips = [chip('family', null, 'All Realms'), ...families.map((f) => chip('family', f, f))].join('');
-    const stageChips = [chip('stage', null, 'Any Stage'), ...stages.map((s) => chip('stage', s, s[0].toUpperCase() + s.slice(1)))].join('');
-    const filtered = d.realms.filter((r) => {
-      const meta = parseRealmMeta(r.name);
-      if (realmFilter.family && meta.family !== realmFilter.family) return false;
-      if (realmFilter.stage && meta.stage !== realmFilter.stage) return false;
-      return true;
-    });
-
-    // recommend the lowest-population online realm (classic MMOs nudge new players there)
     const realmTypeKeys = { 'Normal': 'realmTypes.normal', 'PvP': 'realmTypes.pvp', 'RP': 'realmTypes.rp', 'RP-PvP': 'realmTypes.rpPvp' } as const;
-    const rowsHtml = filtered.map((r) => {
-      const chars = d.characters[r.name] ?? 0;
-      const charTag = chars > 0
-        ? `<span class="rn-chars">${escapeHtml(tPlural('hudChrome.plurals.characterCount', chars))}</span>`
-        : '';
-      const typeKey = realmTypeKeys[r.type as keyof typeof realmTypeKeys];
-      const typeLabel = typeKey ? t(typeKey) : r.type;
-      return `<div class="realm-row" data-name="${escapeHtml(r.name)}" data-url="${escapeHtml(r.url)}">
-        <div><div class="realm-name">${escapeHtml(r.name)}${charTag}<span class="rn-rec" data-rec hidden>${escapeHtml(t('realm.recommended'))}</span></div>
-          <div class="realm-sub" data-sub>${escapeHtml(t('realm.checkingStatus'))}</div></div>
-        <div class="realm-meta">
-          <div class="realm-type">${escapeHtml(typeLabel)}</div>
-          <div class="realm-pop offline" data-pop>-</div>
+    // Collapse the flat directory into ONE card per realm family. Each entry's
+    // name parses to { family, stage }; we index the per-stage URLs so the card's
+    // stage selector can route to the right backend.
+    const STAGE_ORDER = ['live', 'beta', 'alpha', 'dev'];
+    const fams = new Map<string, { type: string; stages: Map<string, { url: string; name: string }> }>();
+    for (const r of d.realms) {
+      const meta = parseRealmMeta(r.name);
+      let f = fams.get(meta.family);
+      if (!f) { f = { type: r.type, stages: new Map() }; fams.set(meta.family, f); }
+      f.stages.set(meta.stage, { url: r.url, name: r.name });
+    }
+
+    const cardsHtml = Array.from(fams.entries()).map(([family, f]) => {
+      const c = choiceFor(family);
+      // Only offer stages this family actually advertises; Live is the default.
+      const stages = STAGE_ORDER.filter((s) => f.stages.has(s));
+      if (!f.stages.has(c.stage)) c.stage = stages.includes('live') ? 'live' : stages[0];
+      const stageBtns = stages.map((s) =>
+        `<button type="button" class="rl-stage${c.stage === s ? ' active' : ''}" data-fam="${escapeHtml(family)}" data-stage="${s}" ${s === 'live' ? '' : 'data-restricted="1"'}>${s[0].toUpperCase() + s.slice(1)}</button>`,
+      ).join('');
+      const typeKey = realmTypeKeys[f.type as keyof typeof realmTypeKeys];
+      const typeLabel = typeKey ? t(typeKey) : f.type;
+      // Exchange is the only cross-realm realm; flag it so the UI can note that.
+      const isExchange = /exchange/i.test(family);
+      return `<div class="realm-card" data-fam="${escapeHtml(family)}">
+        <div class="rc-head">
+          <div class="rc-name">${escapeHtml(family)}<span class="rn-rec" data-rec hidden>${escapeHtml(t('realm.recommended'))}</span></div>
+          <div class="rc-meta"><span class="realm-type">${escapeHtml(typeLabel)}</span><span class="realm-pop offline" data-pop data-fam="${escapeHtml(family)}">-</span></div>
         </div>
+        <div class="rc-sub" data-sub data-fam="${escapeHtml(family)}">${escapeHtml(t('realm.checkingStatus'))}</div>
+        <div class="rc-stages" role="group" aria-label="Stage">${stageBtns}</div>
+        <div class="rc-pops">
+          <label class="rc-toggle"><input type="checkbox" class="rl-ladder" data-fam="${escapeHtml(family)}"${c.ladder ? ' checked' : ''}/> <span data-i18n="auth.ladderChar">Ladder character</span></label>
+          <label class="rc-toggle"><input type="checkbox" class="rl-hardcore" data-fam="${escapeHtml(family)}"${c.hardcore ? ' checked' : ''}/> <span style="color:#ff6b6b" data-i18n="auth.hardcoreChar">Hardcore character</span></label>
+        </div>
+        ${isExchange ? `<div class="rc-note" data-i18n="realm.exchangeNote">The Exchange is the only realm where items move between realms.</div>` : ''}
+        <button type="button" class="btn rc-enter" data-fam="${escapeHtml(family)}">${escapeHtml(t('realm.enter'))}</button>
       </div>`;
     }).join('');
-    listEl.innerHTML = `
-      <div class="rl-filters">
-        <div class="rl-filter-group" data-cr-realm-families>${familyChips}</div>
-        <div class="rl-filter-group" data-cr-realm-stages>${stageChips}</div>
-      </div>
-      <div class="rl-rows">${rowsHtml || `<div class="realm-loading">${escapeHtml(t('realm.noRealms'))}</div>`}</div>`;
-    // Chip clicks → set filter + re-render.
-    listEl.querySelectorAll<HTMLElement>('.rl-chip').forEach((c) => c.addEventListener('click', () => {
-      const kind = c.dataset.filter as 'family' | 'stage';
-      realmFilter[kind] = c.dataset.val || null;
+
+    listEl.innerHTML = `<div class="rl-cards">${cardsHtml || `<div class="realm-loading">${escapeHtml(t('realm.noRealms'))}</div>`}</div>`;
+
+    // Stage segmented-control clicks → update the family's chosen stage.
+    listEl.querySelectorAll<HTMLElement>('.rl-stage').forEach((b) => b.addEventListener('click', () => {
+      const fam = b.dataset.fam!; choiceFor(fam).stage = b.dataset.stage!;
       render(d);
     }));
-    listEl.querySelectorAll('.realm-row').forEach((row) => row.addEventListener('click', () => {
-      const name = (row as HTMLElement).dataset.name!;
-      const entry = d.realms.find((r) => r.name === name);
-      if (entry) selectRealm(entry);
+    listEl.querySelectorAll<HTMLInputElement>('.rl-ladder').forEach((cb) => cb.addEventListener('change', () => {
+      choiceFor(cb.dataset.fam!).ladder = cb.checked;
     }));
-    // live status per realm (only the filtered/visible rows)
-    let bestPlayers = Infinity, bestName = '';
-    void Promise.all(filtered.map(async (r) => {
-      const st = await api.realmStatus(r.url || '');
-      const row = listEl.querySelector(`.realm-row[data-name="${CSS.escape(r.name)}"]`) as HTMLElement | null;
-      if (!row) return;
-      const pop = realmPopulation(st.online, st.players);
-      const popEl = row.querySelector('[data-pop]') as HTMLElement;
-      popEl.textContent = t(pop.labelKey);
-      popEl.className = `realm-pop ${pop.cls}`;
-      (row.querySelector('[data-sub]') as HTMLElement).textContent = st.online
-        ? t('realm.onlineNow', { count: st.players })
-        : t('realm.down');
-      row.classList.toggle('offline', !st.online);
-      if (st.online && st.players < bestPlayers) { bestPlayers = st.players; bestName = r.name; }
+    listEl.querySelectorAll<HTMLInputElement>('.rl-hardcore').forEach((cb) => cb.addEventListener('change', () => {
+      choiceFor(cb.dataset.fam!).hardcore = cb.checked;
+    }));
+    listEl.querySelectorAll<HTMLElement>('.rc-enter').forEach((btn) => btn.addEventListener('click', () => {
+      const fam = btn.dataset.fam!;
+      const c = choiceFor(fam);
+      const stageEntry = fams.get(fam)?.stages.get(c.stage);
+      if (!stageEntry) return;
+      enterRealmWithPopulation(stageEntry.name, stageEntry.url, c.ladder, c.hardcore);
+    }));
+    // recommend the lowest-population online realm; check each family's chosen stage.
+    let bestPlayers = Infinity, bestFam = '';
+    void Promise.all(Array.from(fams.entries()).map(async ([family, f]) => {
+      const c = choiceFor(family);
+      const entry = f.stages.get(c.stage);
+      const st = await api.realmStatus(entry?.url || '');
+      const sub = listEl.querySelector(`[data-sub][data-fam="${CSS.escape(family)}"]`) as HTMLElement | null;
+      const popEl = listEl.querySelector(`[data-pop][data-fam="${CSS.escape(family)}"]`) as HTMLElement | null;
+      if (sub) sub.textContent = st.online ? t('realm.onlineNow', { count: st.players }) : t('realm.down');
+      if (popEl) {
+        const pop = realmPopulation(st.online, st.players);
+        popEl.textContent = t(pop.labelKey); popEl.className = `realm-pop ${pop.cls}`;
+      }
+      if (st.online && st.players < bestPlayers) { bestPlayers = st.players; bestFam = family; }
     })).then(() => {
-      const recRow = bestName ? listEl.querySelector(`.realm-row[data-name="${CSS.escape(bestName)}"]`) : null;
-      recRow?.querySelector('[data-rec]')?.removeAttribute('hidden');
+      if (bestFam) listEl.querySelector(`.realm-card[data-fam="${CSS.escape(bestFam)}"] [data-rec]`)?.removeAttribute('hidden');
     });
   };
   if (dir) render(dir);
@@ -2212,6 +2229,58 @@ function selectRealm(entry: import('./net/online').RealmEntry): void {
   // Same-origin realm: no navigation needed.
   api.setRealm(entry.url);
   api.realm = entry.name;
+  show('#charselect-panel');
+  void refreshCharacters();
+}
+
+// The population (ladder/hardcore) the player chose in the realm picker, carried
+// into character creation. Persisted in sessionStorage so it survives the
+// cross-origin navigation to the realm's own host (where createCharacter runs).
+const POP_PREF_KEY = 'cr_pop_pref';
+function setPopulationPref(ladder: boolean, hardcore: boolean): void {
+  try { sessionStorage.setItem(POP_PREF_KEY, JSON.stringify({ ladder, hardcore })); } catch { /* noop */ }
+}
+function getPopulationPref(): { ladder: boolean; hardcore: boolean } {
+  try {
+    const raw = sessionStorage.getItem(POP_PREF_KEY);
+    if (raw) { const p = JSON.parse(raw); return { ladder: !!p.ladder, hardcore: !!p.hardcore }; }
+  } catch { /* noop */ }
+  return { ladder: false, hardcore: false };
+}
+// Pre-select the character-create ladder/hardcore checkboxes from the population
+// the player chose in the realm picker. They can still override before creating.
+function applyPopulationPrefToCharCreate(): void {
+  const pref = getPopulationPref();
+  const ladderCb = document.getElementById('new-char-ladder') as HTMLInputElement | null;
+  const hcCb = document.getElementById('new-char-hardcore') as HTMLInputElement | null;
+  if (ladderCb) ladderCb.checked = pref.ladder;
+  if (hcCb) hcCb.checked = pref.hardcore;
+}
+
+// Enter a realm at a chosen stage with a chosen population (ladder/hardcore).
+// Same cross-origin handling as selectRealm; the population choice rides along
+// (sessionStorage locally + ?pop= in the hash for the cross-origin hop) so the
+// character-create screen on the target realm pre-selects the right population.
+function enterRealmWithPopulation(name: string, url: string, ladder: boolean, hardcore: boolean): void {
+  localStorage.setItem(LAST_REALM_KEY, name);
+  setPopulationPref(ladder, hardcore);
+  const pop = `${ladder ? 'l' : ''}${hardcore ? 'h' : ''}` || 'n';
+  let targetOrigin = '';
+  try { targetOrigin = url ? new URL(url).origin : ''; } catch { targetOrigin = ''; }
+  const here = window.location.origin;
+  if (targetOrigin && targetOrigin !== here) {
+    const hash = new URLSearchParams({
+      auth_token: api.token ?? '',
+      auth_user: api.username ?? '',
+      auth_via: 'realm',
+      realm: name,
+      pop,
+    });
+    window.location.href = `${targetOrigin}/#${hash.toString()}`;
+    return;
+  }
+  api.setRealm(url);
+  api.realm = name;
   show('#charselect-panel');
   void refreshCharacters();
 }
@@ -4323,6 +4392,11 @@ function wireStartScreens(): void {
     if (ssoToken && /^[a-f0-9]{64}$/.test(ssoToken) && ssoUser) {
       api.token = ssoToken;
       api.username = ssoUser;
+      // Carry the population choice (ladder/hardcore) made in the picker on the
+      // previous origin across the cross-origin hop, so character creation here
+      // pre-selects it. pop: 'l'=ladder, 'h'=hardcore, 'lh'=both, 'n'=neither.
+      const popParam = ssoParams.get('pop');
+      if (popParam) setPopulationPref(popParam.includes('l'), popParam.includes('h'));
       // CR overlay: also persist to the dashboard's localStorage so the
       // logged-in header dropdown (src/ui/cryptic/user_dropdown.ts) shows
       // immediately. The dashboards (/me/, /mod/, /admin/) read the same keys.
@@ -4437,7 +4511,7 @@ function wireStartScreens(): void {
     toggleRealmDropdown();
   });
   // New Character opens the dedicated create screen; create's Back returns here.
-  $('#btn-new-character').addEventListener('click', () => show('#charcreate-panel'));
+  $('#btn-new-character').addEventListener('click', () => { applyPopulationPrefToCharCreate(); show('#charcreate-panel'); });
   $('#btn-charcreate-back').addEventListener('click', () => show('#charselect-panel'));
   // Close the realm dropdown on outside click or Escape.
   document.addEventListener('click', (e) => {
