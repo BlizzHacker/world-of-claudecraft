@@ -2547,6 +2547,10 @@
     margin-right: var(--spacing-xs);
   }
   /* $CR contract address — click-to-copy pill, sits under the performance tip. */
+  /* Hide the token/crypto pill inside the native app (Google Play review) — the
+     coin isn't minted and we don't want store-policy friction. Shown only on
+     the plain website. body.cr-native is set by the native shell. */
+  body.cr-native #token-ca { display: none !important; }
   #token-ca {
     margin: var(--spacing-lg) auto 0;
     padding-top: var(--spacing-md);
@@ -5430,6 +5434,18 @@
 </style>
 </head>
 <body>
+  <script>
+    // Mark the document as running inside the native app shell (Capacitor) so
+    // crypto/store-sensitive UI can hide itself for Play review. Capacitor loads
+    // over capacitor://localhost or injects window.Capacitor.
+    (function(){try{
+      var c = window.Capacitor || (location.protocol === 'capacitor:') ||
+              /(^|\.)localhost$/.test(location.hostname) === false && location.protocol === 'capacitor:';
+      if (window.Capacitor || location.protocol === 'capacitor:' || location.hostname === 'localhost') {
+        document.body.classList.add('cr-native');
+      }
+    }catch(e){}})();
+  </script>
   <canvas id="game-canvas"></canvas>
   <div id="nameplates"></div>
 
