@@ -126,6 +126,20 @@ done
 if [ -f scripts/admin/gen-stage-env.mjs ]; then
   LOG "regenerating per-stage env (gen-stage-env.mjs → env.d/<realm>-<stage>.env)…"
   node scripts/admin/gen-stage-env.mjs >>"$CR_LOG_FILE" 2>&1 || LOG "WARN: gen-stage-env failed"
+
+  # 4d. Keep the APEX directory (REALMS in /opt/cryptic-realm/.env, loaded by the
+  #     legacy cryptic-realm.service that serves crypticrealm.com) in sync with
+  #     stages.config — the apex .env is hand-maintained/untracked, so without
+  #     this it drifts and the homepage realm picker shows a stale subset instead
+  #     of all 24 realm×stage entries (the 96 character combos). Idempotent.
+  if [ -f .env ]; then
+    NEW_REALMS="$(node scripts/admin/gen-stage-env.mjs --directory-csv 2>/dev/null || true)"
+    if [ -n "$NEW_REALMS" ] && ! grep -qxF "$NEW_REALMS" .env; then
+      LOG "syncing apex REALMS directory in .env…"
+      cp -f .env ".env.bak-$(date +%s)" 2>/dev/null || true
+      grep -v '^REALMS=' .env > .env.tmp && printf '%s\n' "$NEW_REALMS" >> .env.tmp && mv .env.tmp .env
+    fi
+  fi
 fi
 
 # 5. Restart every realm process. The legacy single-realm service first so

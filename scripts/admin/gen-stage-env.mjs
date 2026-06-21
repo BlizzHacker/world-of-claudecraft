@@ -19,6 +19,12 @@ const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(here, '../..');
 const envDir = resolve(repoRoot, 'env.d');
 const dryRun = process.argv.includes('--print');
+// --directory-csv: print ONLY the `REALMS=` directory line and exit. Used by
+// update.sh to keep the apex /opt/cryptic-realm/.env directory in sync with
+// stages.config (the apex .env is hand-maintained/untracked, so without this it
+// drifts — which is exactly why crypticrealm.com once advertised only 10 stale
+// flat realms instead of the full 24 realm×stage set / 96 character combos).
+const directoryCsvMode = process.argv.includes('--directory-csv');
 
 // Build the directory CSV: every realm's LIVE ring is always listed; the
 // restricted stages (alpha/dev) are appended so testers/admins can reach them.
@@ -30,6 +36,11 @@ for (const realmId of Object.keys(REALMS)) {
   }
 }
 const directoryCsv = directoryEntries.join(',');
+
+if (directoryCsvMode) {
+  process.stdout.write(`REALMS=${directoryCsv}\n`);
+  process.exit(0);
+}
 
 if (!dryRun) mkdirSync(envDir, { recursive: true });
 
