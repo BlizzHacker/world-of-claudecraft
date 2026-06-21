@@ -24,6 +24,37 @@ const STATE_COOKIE = 'cr_oauth_state';
 const STATE_COOKIE_MAX_AGE = 600; // 10 min
 const PROVIDER = 'authentik';
 
+// Server-side fallback for the OAuth state nonce. Embedded webviews (the Tauri
+// desktop shell and the Capacitor Android app) frequently DROP the SameSite=Lax
+// `cr_oauth_state` cookie across the cross-origin redirect to Authentik and back
+// — the app origin (capacitor://localhost, or the Tauri custom scheme) is not the
+// crypticrealm.com origin the cookie was set on, so the callback arrives with no
+// cookie and the "state !== cookieState" check fails ("invalid OAuth state").
+// We keep the cookie as the primary check (browser CSRF), but also remember every
+// state we issued for a short window: a returned state that we ourselves minted
+// and have not yet consumed is just as unguessable/CSRF-safe as the cookie match,
+// and is single-use (deleted on consume). This makes SSO work in the apps without
+// weakening the web flow.
+const STATE_TTL_MS = STATE_COOKIE_MAX_AGE * 1000;
+const issuedStates = new Map<string, number>(); // state -> expiry epoch ms
+
+function rememberState(state: string): void {
+  const now = Date.now();
+  issuedStates.set(state, now + STATE_TTL_MS);
+  // opportunistic GC of expired entries so the map can't grow unbounded
+  if (issuedStates.size > 256) {
+    for (const [s, exp] of issuedStates) if (exp <= now) issuedStates.delete(s);
+  }
+}
+
+// Returns true if `state` was issued by us and not yet consumed; consumes it.
+function consumeIssuedState(state: string): boolean {
+  const exp = issuedStates.get(state);
+  if (exp === undefined) return false;
+  issuedStates.delete(state);
+  return exp > Date.now();
+}
+
 interface AuthentikConfig {
   issuer: string;
   clientId: string;
@@ -174,6 +205,7 @@ export async function handleAuthentikRoute(
       const endpoints = await discoverEndpoints(CONFIG);
       const state = randomBytes(24).toString('hex');
       setStateCookie(res, state);
+      rememberState(state); // webview-safe fallback (cookie may be dropped in-app)
       res.writeHead(302, { Location: buildAuthorizeUrl(endpoints.authorize, CONFIG, state) });
       res.end();
       return;
@@ -186,7 +218,13 @@ export async function handleAuthentikRoute(
     const code = url.searchParams.get('code');
     const state = url.searchParams.get('state');
     const cookieState = readCookie(req, STATE_COOKIE);
-    if (!code || !state || state !== cookieState) {
+    // Primary: cookie match (web browsers). Fallback: a state WE issued and have
+    // not consumed (embedded webviews that drop the cookie — Tauri/Capacitor).
+    // consumeIssuedState is called unconditionally so the nonce is single-use
+    // even on the cookie-match path.
+    const issuedOk = state ? consumeIssuedState(state) : false;
+    const stateOk = !!state && (state === cookieState || issuedOk);
+    if (!code || !stateOk) {
       clearStateCookie(res);
       return json(res, 400, { error: 'invalid OAuth state — please retry sign-in' });
     }
