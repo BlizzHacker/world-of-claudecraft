@@ -310,7 +310,9 @@ export const fr_CA: EnTranslations = {
     "news": "Actualités",
     "download": "Télécharger",
     "loginRegister": "Se connecter/S'enregistrer",
-    "donate": "Faire un don"
+    "donate": "Faire un don",
+    "whitepaper": "White Paper",
+    "contributions": "Contributions"
   },
   "stats": {
     "title": "Statut du royaume",

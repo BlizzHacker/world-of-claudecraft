@@ -310,7 +310,9 @@ export const en_XA: EnTranslations = {
     "news": "[Ñéŵš]",
     "download": "[Ðóŵñļóáð]",
     "loginRegister": "[Ļóĝíñ/Ŕéĝíšţéŕ]",
-    "donate": "[Ðóñáţé]"
+    "donate": "[Ðóñáţé]",
+    "whitepaper": "[Ŵĥíţé Þáþéŕ]",
+    "contributions": "[Çóñţŕíƀúţíóñš]"
   },
   "stats": {
     "title": "[Ŕéáļɱ Šţáţúš]",

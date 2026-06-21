@@ -310,7 +310,9 @@ export const es: EnTranslations = {
     "news": "Noticias",
     "download": "Descargar",
     "loginRegister": "Iniciar Sesión/Registrarse",
-    "donate": "Donar"
+    "donate": "Donar",
+    "whitepaper": "White Paper",
+    "contributions": "Contributions"
   },
   "stats": {
     "title": "Estado del Reino",

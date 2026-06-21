@@ -310,7 +310,9 @@ export const it_IT: EnTranslations = {
     "news": "Novità",
     "download": "Scarica",
     "loginRegister": "Accedi/Registrati",
-    "donate": "Dona"
+    "donate": "Dona",
+    "whitepaper": "White Paper",
+    "contributions": "Contributions"
   },
   "stats": {
     "title": "Stato del Reame",

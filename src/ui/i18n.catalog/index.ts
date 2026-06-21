@@ -90,6 +90,8 @@ export const en = {
     download: "Download",
     loginRegister: "Login/Register",
     donate: "Donate",
+    whitepaper: "White Paper",
+    contributions: "Contributions",
   },
   stats: {
     title: "Realm Status",

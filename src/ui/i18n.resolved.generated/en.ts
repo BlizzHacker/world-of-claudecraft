@@ -310,7 +310,9 @@ export const en: EnTranslations = {
     "news": "News",
     "download": "Download",
     "loginRegister": "Login/Register",
-    "donate": "Donate"
+    "donate": "Donate",
+    "whitepaper": "White Paper",
+    "contributions": "Contributions"
   },
   "stats": {
     "title": "Realm Status",

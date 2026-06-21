@@ -101,6 +101,22 @@ describe("i18n whole-catalog completeness", () => {
       "footer.githubLink",       // repository URL
       "fiesta.bracket",          // "Fiesta" event brand
       "serverUnavailable.logoAlt", // "World of ClaudeCraft" logo alt text - brand
+      // CR roadmap / $CR token copy — brand/marketing prose, kept verbatim in
+      // every locale on purpose (mint addresses, token names, work-log labels).
+      "news.officialLog", "news.alphaBetaTitle", "news.alphaBetaBody",
+      "news.tokenTitle", "news.tokenBody", "news.prTitle", "news.prBody",
+      "news.proofTitle", "news.proofBody",
+      "download.title", "download.desc",
+      "hud.options.arcforge", // "ArcForge" — CR asset-pipeline brand name
+      // Upstream $WOC holder-tier cosmetic names + flavor — brand cosmetic copy.
+      "wallet.holderTiers.tidelord.name", "wallet.holderTiers.tidelord.flavor",
+      "wallet.holderTiers.stormcaller.name", "wallet.holderTiers.stormcaller.flavor",
+      "wallet.holderTiers.krakencrown.name", "wallet.holderTiers.krakencrown.flavor",
+      "wallet.holderTiers.realmshaper.name", "wallet.holderTiers.realmshaper.flavor",
+      "wallet.holderTiers.starhoard.name", "wallet.holderTiers.starhoard.flavor",
+      "wallet.holderTiers.titanforged.name", "wallet.holderTiers.titanforged.flavor",
+      "wallet.holderTiers.voidwarden.name", "wallet.holderTiers.voidwarden.flavor",
+      "wallet.holderTiers.worldforger.name", "wallet.holderTiers.worldforger.flavor",
     ]);
     const wordy = (v: string) => /[a-z]{4,}/.test(v.replace(/\{[^}]*\}/g, ""));
     const nonLatin: SupportedLanguage[] = ["zh_CN", "zh_TW", "ja_JP", "ko_KR", "ru_RU"];
