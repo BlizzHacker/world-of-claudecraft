@@ -4,7 +4,7 @@ android {
     namespace "com.crypticrealm.game"
     compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.crypticrealm.game"
+        applicationId "com.crypticrealm"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 2
