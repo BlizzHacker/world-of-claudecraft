@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://worldofclaudecraft.com/sitemap.xml
+Sitemap: https://crypticrealm.com/sitemap.xml

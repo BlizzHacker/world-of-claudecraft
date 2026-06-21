@@ -70,8 +70,10 @@ describe('fps mode (CR overlay)', () => {
     mountFpsMode(inp as never);
     setFpsMode(inp as never, 'diablo');
     expect(isFpsActive()).toBe(false);
-    expect(inp.camDist).toBeGreaterThan(16);
-    expect(inp.camPitch).toBeGreaterThan(0.8);
+    // Diablo preset pulls the camera back and down to a fixed D2 angle
+    // (DIABLO_CAM_DIST / DIABLO_CAM_PITCH in fps_mode.ts).
+    expect(inp.camDist).toBeGreaterThan(12);
+    expect(inp.camPitch).toBeGreaterThan(0.5);
     expect(document.body.classList.contains('cr-fps-active')).toBe(false);
     expect(document.body.classList.contains('cr-diablo-camera-active')).toBe(true);
     setFpsMode(inp as never, 'off');

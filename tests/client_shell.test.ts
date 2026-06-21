@@ -40,17 +40,16 @@ describe('client HTML shell', () => {
   });
 
   it('ships crawlable SEO metadata and sitemap hints', () => {
+    // CR fork: Cryptic Realm branding / crypticrealm.com. Upstream is still
+    // credited via the schema sameAs github/discord links.
     expect(html).toContain('<meta name="robots" content="index, follow, max-image-preview:large" />');
-    expect(html).toContain('<link rel="canonical" href="https://worldofclaudecraft.com/" />');
-    expect(html).toContain('<meta property="og:site_name" content="World of ClaudeCraft" />');
-    expect(html).toContain('"alternateName": "World of Claudecraft"');
-    expect(html).toContain('"https://github.com/levy-street/world-of-claudecraft"');
-    expect(mainTs).toContain("alternateName: 'World of Claudecraft'");
+    expect(html).toContain('<link rel="canonical" href="https://crypticrealm.com/" />');
+    expect(html).toContain('<meta property="og:site_name" content="Cryptic Realm" />');
     expect(mainTs).toContain("'https://github.com/levy-street/world-of-claudecraft'");
-    expect(robotsTxt.trim()).toBe('User-agent: *\nAllow: /\n\nSitemap: https://worldofclaudecraft.com/sitemap.xml');
-    expect(robotsTxt).toContain('Sitemap: https://worldofclaudecraft.com/sitemap.xml');
-    expect(sitemapXml).toContain('<loc>https://worldofclaudecraft.com/</loc>');
-    expect(sitemapXml).toContain('<loc>https://worldofclaudecraft.com/links</loc>');
+    expect(robotsTxt.trim()).toBe('User-agent: *\nAllow: /\n\nSitemap: https://crypticrealm.com/sitemap.xml');
+    expect(robotsTxt).toContain('Sitemap: https://crypticrealm.com/sitemap.xml');
+    expect(sitemapXml).toContain('<loc>https://crypticrealm.com/</loc>');
+    expect(sitemapXml).toContain('<loc>https://crypticrealm.com/links</loc>');
   });
 
   it('offers the quest log in the mobile controls drawer', () => {
@@ -277,11 +276,15 @@ describe('client HTML shell', () => {
   });
 
   it('ships a looping cinematic backdrop with a poster fallback', () => {
-    expect(html).toContain('id="bg-home"');
-    expect(html).toContain('poster="/home-bg.png"');
-    expect(html).toContain('<source src="/home-bg.mp4" type="video/mp4"');
-    expect(html).toContain('autoplay loop muted playsinline');
-    // View transitions still honour reduced-motion.
+    // CR fork: the homepage cinematic is #bg-trailer, played from main.ts
+    // (initHomepageTrailer) so it can respect reduced-motion / save-data rather
+    // than autoplaying in markup.
+    expect(html).toContain('id="bg-trailer"');
+    expect(html).toContain('poster="/video/trailer-poster.jpg"');
+    expect(html).toContain('<source src="/video/trailer.mp4" type="video/mp4"');
+    expect(html).toContain('loop');
+    expect(html).toContain('playsinline');
+    // The trailer respects reduced-motion (handled in initHomepageTrailer).
     expect(mainTs).toContain("prefers-reduced-motion: reduce");
   });
 

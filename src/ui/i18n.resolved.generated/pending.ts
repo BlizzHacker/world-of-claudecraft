@@ -365,10 +365,6 @@ export const pending: Record<string, readonly string[]> = {
     "wallet.holderTiers.worldforger.name"
   ],
   "zh_CN": [
-    "auth.hardcoreChar",
-    "auth.hardcoreHint",
-    "auth.ladderChar",
-    "auth.ladderHint",
     "hud.options.arcforge",
     "hud.options.controller",
     "hud.options.controllerDisconnected",
@@ -424,10 +420,6 @@ export const pending: Record<string, readonly string[]> = {
     "wallet.holderTiers.worldforger.name"
   ],
   "zh_TW": [
-    "auth.hardcoreChar",
-    "auth.hardcoreHint",
-    "auth.ladderChar",
-    "auth.ladderHint",
     "hud.options.arcforge",
     "hud.options.controller",
     "hud.options.controllerDisconnected",
@@ -483,10 +475,6 @@ export const pending: Record<string, readonly string[]> = {
     "wallet.holderTiers.worldforger.name"
   ],
   "ko_KR": [
-    "auth.hardcoreChar",
-    "auth.hardcoreHint",
-    "auth.ladderChar",
-    "auth.ladderHint",
     "hud.options.arcforge",
     "hud.options.controller",
     "hud.options.controllerDisconnected",
@@ -542,10 +530,6 @@ export const pending: Record<string, readonly string[]> = {
     "wallet.holderTiers.worldforger.name"
   ],
   "ja_JP": [
-    "auth.hardcoreChar",
-    "auth.hardcoreHint",
-    "auth.ladderChar",
-    "auth.ladderHint",
     "hud.options.arcforge",
     "hud.options.controller",
     "hud.options.controllerDisconnected",
@@ -660,10 +644,6 @@ export const pending: Record<string, readonly string[]> = {
     "wallet.holderTiers.worldforger.name"
   ],
   "ru_RU": [
-    "auth.hardcoreChar",
-    "auth.hardcoreHint",
-    "auth.ladderChar",
-    "auth.ladderHint",
     "hud.options.arcforge",
     "hud.options.controller",
     "hud.options.controllerDisconnected",

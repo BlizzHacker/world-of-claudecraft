@@ -15,5 +15,8 @@ export function computeQuestState(
   if (!quest) return 'unavailable';
   if (quest.requiresQuest && !questsDone.has(quest.requiresQuest)) return 'unavailable';
   if (quest.minLevel && playerLevel < quest.minLevel) return 'unavailable';
+  // Retired quests are unavailable to fresh players (existing ready turn-ins are
+  // preserved via the questLog branch above).
+  if (quest.retired) return 'unavailable';
   return 'available';
 }
