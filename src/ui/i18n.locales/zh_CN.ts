@@ -424,6 +424,8 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   "realm.checkingStatus": "正在检查状态...",
   "realm.onlineNow": "当前 {count} 人在线",
   "realm.down": "服务器不可用",
+  "realm.enter": "进入领域",
+  "realm.exchangeNote": "交易所是唯一可以在领域之间转移物品的领域。",
   "realm.offline": "离线",
   "realm.full": "已满",
   "realm.high": "高",

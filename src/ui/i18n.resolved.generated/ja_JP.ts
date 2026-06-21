@@ -928,8 +928,8 @@ export const ja_JP: EnTranslations = {
     "selectedRealm": "レルム: {name}",
     "statsOffline": "オフライン",
     "statsRealmOffline": "{realm}（オフライン）",
-    "enter": "Enter Realm",
-    "exchangeNote": "The Exchange is the only realm where items move between realms."
+    "enter": "realmに入る",
+    "exchangeNote": "取引所は、realm間でアイテムを移動できる唯一のrealmです。"
   },
   "character": {
     "loading": "読み込み中...",

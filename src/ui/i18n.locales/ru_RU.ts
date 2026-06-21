@@ -424,6 +424,8 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   "realm.checkingStatus": "Проверка состояния...",
   "realm.onlineNow": "сейчас в сети: {count}",
   "realm.down": "Мир недоступен",
+  "realm.enter": "Войти в королевство",
+  "realm.exchangeNote": "Биржа — единственное королевство, где предметы перемещаются между королевствами.",
   "realm.offline": "Не в сети",
   "realm.full": "Заполнен",
   "realm.high": "Высокая",

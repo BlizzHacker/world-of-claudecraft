@@ -894,6 +894,7 @@ async function main(): Promise<void> {
         reason: chatMute.reason,
         chatStrikes: status.chatStrikes,
         hardcore: !!character.hardcore,
+        ladder: !!character.ladder,
         accountCosmetics,
       },
     );

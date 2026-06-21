@@ -792,6 +792,7 @@ export interface CharacterRow {
   is_gm: boolean;
   force_rename: boolean;
   hardcore?: boolean;
+  ladder?: boolean;
   died_at?: string | null;
 }
 
@@ -808,7 +809,7 @@ export async function listCharacters(accountId: number): Promise<CharacterRow[]>
 
 export async function getCharacter(accountId: number, characterId: number): Promise<CharacterRow | null> {
   const res = await pool.query(
-    'SELECT id, account_id, name, class, level, state, is_gm, force_rename, hardcore, died_at FROM characters WHERE id = $1 AND account_id = $2 AND realm = $3',
+    'SELECT id, account_id, name, class, level, state, is_gm, force_rename, hardcore, ladder, died_at FROM characters WHERE id = $1 AND account_id = $2 AND realm = $3',
     [characterId, accountId, REALM],
   );
   return res.rows[0] ?? null;

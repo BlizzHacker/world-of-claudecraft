@@ -928,8 +928,8 @@ export const ru_RU: EnTranslations = {
     "selectedRealm": "Мир: {name}",
     "statsOffline": "Не в сети",
     "statsRealmOffline": "{realm} (не в сети)",
-    "enter": "Enter Realm",
-    "exchangeNote": "The Exchange is the only realm where items move between realms."
+    "enter": "Войти в королевство",
+    "exchangeNote": "Биржа — единственное королевство, где предметы перемещаются между королевствами."
   },
   "character": {
     "loading": "Загрузка...",

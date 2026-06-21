@@ -424,6 +424,8 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   "realm.checkingStatus": "상태 확인 중...",
   "realm.onlineNow": "현재 {count}명 접속 중",
   "realm.down": "렐름이 중단되었습니다",
+  "realm.enter": "렐름 입장",
+  "realm.exchangeNote": "거래소는 렐름 간에 아이템을 옮길 수 있는 유일한 렐름입니다.",
   "realm.offline": "오프라인",
   "realm.full": "포화",
   "realm.high": "높음",

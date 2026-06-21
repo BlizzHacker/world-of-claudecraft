@@ -424,6 +424,8 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   "realm.checkingStatus": "状態を確認中...",
   "realm.onlineNow": "現在{count}人がオンライン",
   "realm.down": "レルムは停止中です",
+  "realm.enter": "realmに入る",
+  "realm.exchangeNote": "取引所は、realm間でアイテムを移動できる唯一のrealmです。",
   "realm.offline": "オフライン",
   "realm.full": "満員",
   "realm.high": "高",

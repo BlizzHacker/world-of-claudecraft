@@ -95,6 +95,7 @@ export interface ClientSession {
   pid: number; // player entity id in the sim
   name: string;
   hardcore: boolean; // hardcore character — permadeath on death
+  ladder: boolean; // ladder character — seasonal board + segregated population
   isGm: boolean; // GM/admin — unlocks in-game dev/admin commands for this session
   lastSave: number;
   alive: boolean;
@@ -699,7 +700,7 @@ export class GameServer {
     cls: import('../src/sim/types').PlayerClass,
     state: import('../src/sim/sim').CharacterState | null,
     isGm = false,
-    meta: RequestMetadata & Partial<AccountChatMuteStatus> & { accountCosmetics?: AccountCosmetics; chatStrikes?: number; hardcore?: boolean } = {},
+    meta: RequestMetadata & Partial<AccountChatMuteStatus> & { accountCosmetics?: AccountCosmetics; chatStrikes?: number; hardcore?: boolean; ladder?: boolean } = {},
   ): ClientSession | { error: string } {
     if (this.sessionsByCharacterId.has(characterId)) return { error: 'character already in world' };
     // Anti-bot: cap simultaneous online characters per account. Accounts can
@@ -714,7 +715,7 @@ export class GameServer {
         return { error: 'too many characters on this account are already in the world' };
       }
     }
-    const pid = this.sim.addPlayer(cls, name, { state: state ?? undefined });
+    const pid = this.sim.addPlayer(cls, name, { state: state ?? undefined, ladder: meta.ladder ?? false, hardcore: meta.hardcore ?? false });
     if (isGm) {
       // GM characters: invulnerable, and always at the level cap (the row is
       // created without state, so the first join levels them up)
@@ -729,7 +730,7 @@ export class GameServer {
     this.applyAccountQuestLockouts(pid, accountCosmetics);
     const sessionIp = meta.ip ?? '';
     const session: ClientSession = {
-      ws, accountId, accountCosmetics, characterId, pid, name, hardcore: meta.hardcore ?? false, isGm,
+      ws, accountId, accountCosmetics, characterId, pid, name, hardcore: meta.hardcore ?? false, ladder: meta.ladder ?? false, isGm,
       lastSave: Date.now(), alive: true, joinedAt: Date.now(), dbSessionId: null, left: false,
       chatTokens: CHAT_RATE_BURST, chatLastRefill: Date.now() / 1000, chatLastRateError: 0,
       chatRateViolations: 0, chatCooldownUntil: 0,
@@ -1474,6 +1475,9 @@ export class GameServer {
   }
 
   private canObserveEntity(viewer: Entity, e: Entity, d2: number): boolean {
+    // Cross-population players are invisible to each other entirely (segregation
+    // by (ladder, hardcore); the sim owns the rule). See crypticrealm_realm_model.
+    if (e.kind === 'player' && !this.sim.samePopulationPlayers(viewer, e)) return false;
     if (e.kind !== 'player' || !isStealthed(e)) return true;
     if (this.sim.isHostileTo(viewer, e)) return false;
     const party = this.sim.partyOf(viewer.id);
@@ -1642,6 +1646,14 @@ export class GameServer {
         // ignore list: drop chat originating from a character this player has
         // blocked, before it ever reaches their client
         if (ev.type === 'chat' && session.blockedIds.size > 0 && this.isBlockedSender(session, ev.fromPid)) continue;
+        // population segregation: global chat (world/general/yell) from a
+        // different (ladder, hardcore) population never reaches this player.
+        // Self-echo (fromPid === own pid) always passes. Proximity channels are
+        // already segregated via interest/visibility.
+        if (ev.type === 'chat' && ev.fromPid !== session.pid) {
+          const from = this.sim.entities.get(ev.fromPid);
+          if (from && !this.sim.samePopulationPlayers(p, from)) continue;
+        }
         if (ev.pid !== undefined) {
           if (ev.pid === session.pid) {
             mine.push(ev);

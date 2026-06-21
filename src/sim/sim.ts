@@ -420,6 +420,12 @@ export interface PlayerMeta {
   entityId: number;
   cls: PlayerClass;
   name: string;
+  // Population segregation: players only see / group / chat / rank with others of
+  // the SAME (ladder, hardcore) tuple within a realm-stage process. ladder also
+  // drives the seasonal board; hardcore drives permadeath + the lootable corpse.
+  // Both default false (the normal population). See memory crypticrealm_realm_model.
+  ladder: boolean;
+  hardcore: boolean;
   skin: number; // appearance index into the render SKINS[player_<cls>]; persisted, synced
   skinCatalog: SkinCatalog;
   // Cosmetic skin-select event: the rank rolled when the event token was used,
@@ -817,7 +823,7 @@ export class Sim {
   // Players: join / leave / persistence
   // -------------------------------------------------------------------------
 
-  addPlayer(cls: PlayerClass, name: string, opts?: { autoEquip?: boolean; state?: CharacterState }): number {
+  addPlayer(cls: PlayerClass, name: string, opts?: { autoEquip?: boolean; state?: CharacterState; ladder?: boolean; hardcore?: boolean }): number {
     // Characters saved inside a dungeon instance rejoin at its entrance —
     // their old instance is gone (or belongs to someone else) by now.
     let savedPos = opts?.state?.pos ?? null;
@@ -845,6 +851,8 @@ export class Sim {
       entityId: player.id,
       cls,
       name,
+      ladder: opts?.ladder ?? false,
+      hardcore: opts?.hardcore ?? false,
       skin: opts?.state?.skin ?? 0,
       skinCatalog: opts?.state?.skinCatalog === 'mech' ? 'mech' : 'class',
       pendingSkinRank: opts?.state?.pendingSkinRank ?? null,
@@ -7505,6 +7513,16 @@ export class Sim {
     return null;
   }
 
+  // Two player entities share a population iff their (ladder, hardcore) tuples
+  // match. Cross-population players never see or fight each other (segregated
+  // populations within one realm-stage process). Non-players are unaffected.
+  samePopulationPlayers(a: Entity, b: Entity): boolean {
+    if (a.kind !== 'player' || b.kind !== 'player') return true;
+    const ma = this.players.get(a.id); const mb = this.players.get(b.id);
+    if (!ma || !mb) return true;
+    return ma.ladder === mb.ladder && ma.hardcore === mb.hardcore;
+  }
+
   isHostileTo(attacker: Entity, target: Entity): boolean {
     if (target.kind === 'mob') {
       if (target.templateId.startsWith('vision_')) return false;
@@ -7519,6 +7537,9 @@ export class Sim {
       if (!attackerPlayer) return false;
       if (attackerPlayer.dead) return false;
       if (attackerPlayer.id === target.id) return false;
+      // Population segregation: players of different (ladder, hardcore)
+      // populations never interact in combat, even in the same process.
+      if (!this.samePopulationPlayers(attackerPlayer, target)) return false;
       const duel = this.duels.get(attackerPlayer.id);
       if (duel && duel.state === 'active'
         && ((duel.a === attackerPlayer.id && duel.b === target.id)

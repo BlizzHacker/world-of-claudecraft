@@ -928,8 +928,8 @@ export const ko_KR: EnTranslations = {
     "selectedRealm": "렐름: {name}",
     "statsOffline": "오프라인",
     "statsRealmOffline": "{realm}(오프라인)",
-    "enter": "Enter Realm",
-    "exchangeNote": "The Exchange is the only realm where items move between realms."
+    "enter": "렐름 입장",
+    "exchangeNote": "거래소는 렐름 간에 아이템을 옮길 수 있는 유일한 렐름입니다."
   },
   "character": {
     "loading": "불러오는 중...",

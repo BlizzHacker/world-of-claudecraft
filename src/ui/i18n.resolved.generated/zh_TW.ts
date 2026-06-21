@@ -928,8 +928,8 @@ export const zh_TW: EnTranslations = {
     "selectedRealm": "伺服器：{name}",
     "statsOffline": "離線",
     "statsRealmOffline": "{realm}（離線）",
-    "enter": "Enter Realm",
-    "exchangeNote": "The Exchange is the only realm where items move between realms."
+    "enter": "進入領域",
+    "exchangeNote": "交易所是唯一可以在領域之間轉移物品的領域。"
   },
   "character": {
     "loading": "正在載入...",
