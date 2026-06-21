@@ -32,9 +32,30 @@
     return false;
   }
 
+  // Inject self-contained nav styles ONCE, so the nav looks correct on every
+  // page regardless of that page's own .nav CSS (which was clashing — washed
+  // out, overlapping text). High contrast, wraps, scoped to .cr-nav.
+  function ensureStyle() {
+    if (document.getElementById('cr-nav-style')) return;
+    var s = document.createElement('style');
+    s.id = 'cr-nav-style';
+    s.textContent =
+      '.cr-nav{display:flex;flex-wrap:wrap;align-items:center;gap:4px;justify-content:flex-end}' +
+      '.cr-nav a{display:inline-block;padding:8px 12px;border-radius:6px;color:#e8dcc0;' +
+      'text-decoration:none;font:700 13px/1 "Segoe UI",system-ui,sans-serif;letter-spacing:.4px;' +
+      'white-space:nowrap;border:1px solid transparent;transition:color .12s,background .12s}' +
+      '.cr-nav a:hover,.cr-nav a:focus-visible{color:#ffd166;background:rgba(255,209,102,.12);' +
+      'border-color:rgba(255,209,102,.4);outline:none}' +
+      '.cr-nav a[aria-current="page"]{color:#ffd166;background:rgba(255,209,102,.16);' +
+      'box-shadow:inset 0 -2px 0 #ffd166}' +
+      '@media(max-width:820px){.cr-nav{justify-content:flex-start}.cr-nav a{padding:6px 9px;font-size:12px}}';
+    document.head.appendChild(s);
+  }
+
   function render(navEl) {
-    // Preserve the brand/logo if the page put it inside the nav; we only
-    // replace the link list. Standalone pages use a bare <nav> for links.
+    ensureStyle();
+    // Own the class so host-page .nav rules can't wash it out.
+    navEl.classList.add('cr-nav');
     var html = ITEMS.map(function (it) {
       var active = isActive(it) ? ' aria-current="page"' : '';
       return '<a href="' + it.href + '"' + active + '>' + it.label + '</a>';
