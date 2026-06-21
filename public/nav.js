@@ -39,16 +39,22 @@
     if (document.getElementById('cr-nav-style')) return;
     var s = document.createElement('style');
     s.id = 'cr-nav-style';
+    // Pixel-match the homepage .nav-link look (Cinzel serif, gold, glow) so the
+    // standalone pages are visually identical to the homepage nav. Values are
+    // the resolved homepage CSS vars (standalone pages don't define them).
     s.textContent =
-      '.cr-nav{display:flex;flex-wrap:wrap;align-items:center;gap:4px;justify-content:flex-end}' +
-      '.cr-nav a{display:inline-block;padding:8px 12px;border-radius:6px;color:#e8dcc0;' +
-      'text-decoration:none;font:700 13px/1 "Segoe UI",system-ui,sans-serif;letter-spacing:.4px;' +
-      'white-space:nowrap;border:1px solid transparent;transition:color .12s,background .12s}' +
-      '.cr-nav a:hover,.cr-nav a:focus-visible{color:#ffd166;background:rgba(255,209,102,.12);' +
-      'border-color:rgba(255,209,102,.4);outline:none}' +
-      '.cr-nav a[aria-current="page"]{color:#ffd166;background:rgba(255,209,102,.16);' +
-      'box-shadow:inset 0 -2px 0 #ffd166}' +
-      '@media(max-width:820px){.cr-nav{justify-content:flex-start}.cr-nav a{padding:6px 9px;font-size:12px}}';
+      '.cr-nav{display:flex;flex-wrap:wrap;align-items:center;gap:8px;justify-content:flex-end}' +
+      '.cr-nav a{display:inline-flex;align-items:center;justify-content:center;min-height:32px;' +
+      'padding:6px 16px;border:1px solid transparent;border-radius:4px;background:transparent;' +
+      'color:#998d6a;text-decoration:none;white-space:nowrap;' +
+      "font-family:'Cinzel','Palatino Linotype',Palatino,Georgia,serif;font-size:13.5px;letter-spacing:.5px;" +
+      'transition:color .2s,border-color .2s,box-shadow .2s,background-color .2s}' +
+      '.cr-nav a:hover,.cr-nav a:focus-visible{color:#ffd100;border-color:#c8a838;' +
+      'box-shadow:0 0 8px rgba(255,209,0,.2);background-color:rgba(255,209,0,.03);outline:none}' +
+      '.cr-nav a[aria-current="page"]{color:#ffd100;border-color:#c8a838;' +
+      'background:linear-gradient(180deg,rgba(200,168,56,.2) 0%,rgba(110,90,42,.05) 60%,rgba(11,11,18,.4) 100%);' +
+      'box-shadow:inset 0 0 5px rgba(255,209,0,.15),0 0 8px rgba(255,209,0,.2)}' +
+      '@media(max-width:820px){.cr-nav{justify-content:center;width:100%}}';
     document.head.appendChild(s);
   }
 
