@@ -42,10 +42,10 @@ function primaryLinks(): NavLink[] {
     { href: '/#highscores', label: 'High Scores' },
     { href: '/#wiki', label: 'Wiki' },
     { href: '/#news', label: 'News' },
-    { href: '/contributions.html', label: 'Contributions' },
+    { href: '/#contributions', label: 'Contributions' },
     { href: '/#download', label: 'Download' },
-    { href: '/links.html', label: 'Links' },
-    { href: '/whitepaper.html', label: 'White Paper' },
+    { href: '/#links', label: 'Links' },
+    { href: '/#whitepaper', label: 'White Paper' },
     { href: '/#login', label: 'Login/Register' },
   ];
 }

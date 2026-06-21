@@ -1852,7 +1852,7 @@ function setPanelVisibility(el: HTMLElement, visible: boolean): void {
 }
 
 function switchMainView(targetId: string): void {
-  const views = ['#hero-view', '#highscores-view', '#wiki-view', '#news-view', '#download-view'];
+  const views = ['#hero-view', '#highscores-view', '#wiki-view', '#news-view', '#download-view', '#contributions-view', '#links-view', '#whitepaper-view'];
   const currentViewId = views.find(id => {
     const el = $(id);
     return el && !el.hasAttribute('hidden');
@@ -1865,7 +1865,10 @@ function switchMainView(targetId: string): void {
     '#highscores-view': 'nav-btn-highscores',
     '#wiki-view': 'nav-btn-wiki',
     '#news-view': 'nav-btn-news',
-    '#download-view': 'nav-btn-download'
+    '#download-view': 'nav-btn-download',
+    '#contributions-view': 'nav-btn-contributions',
+    '#links-view': 'nav-btn-links',
+    '#whitepaper-view': 'nav-btn-whitepaper',
   };
 
   const activeNavId = navMap[targetId];
@@ -3084,6 +3087,33 @@ function renderReleaseBody(md: string): string {
 // News & Updates: published GitHub releases, proxied + cached by the server.
 // Re-fetched each time the view is opened (the server caches, so it is cheap).
 let newsLoading = false;
+// In-app doc views (Links / White Paper). The content still lives in the
+// retained /links.html + /whitepaper.html fragments (single source, also the
+// 302 redirect targets for old bookmarks), but it's rendered INSIDE the SPA so
+// the site has one nav and no separately-navigated pages. We fetch once, lift
+// the <main> (fallback: .wrap), strip <script>/<style>/<link> so nothing escapes
+// the view, and inject. Same-origin fetch only.
+const docFragmentLoaded = new Set<string>();
+async function loadDocFragment(url: string, targetSel: string): Promise<void> {
+  const host = document.querySelector(targetSel);
+  if (!host || docFragmentLoaded.has(url)) return;
+  try {
+    const res = await fetch(url, { headers: { Accept: 'text/html' } });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const raw = await res.text();
+    const doc = new DOMParser().parseFromString(raw, 'text/html');
+    const content = doc.querySelector('main') ?? doc.querySelector('.wrap') ?? doc.body;
+    // Drop anything executable / page-chrome before injecting.
+    content.querySelectorAll('script, style, link, nav, header.hero .hero-logo').forEach((el) => el.remove());
+    host.innerHTML = content.innerHTML;
+    docFragmentLoaded.add(url);
+    translatePage();
+  } catch (err) {
+    host.innerHTML = `<p class="cr-doc-lead">${t('news.error')}</p>`;
+    console.warn('doc fragment load failed:', url, err);
+  }
+}
+
 async function loadNews(): Promise<void> {
   const host = $('#news-feed');
   if (!host || newsLoading) return;
@@ -4612,7 +4642,10 @@ function wireStartScreens(): void {
   const navBtnHighscores = $('#nav-btn-highscores');
   const navBtnWiki = $('#nav-btn-wiki');
   const navBtnNews = $('#nav-btn-news');
+  const navBtnContributions = $('#nav-btn-contributions');
   const navBtnDownload = $('#nav-btn-download');
+  const navBtnLinks = $('#nav-btn-links');
+  const navBtnWhitepaper = $('#nav-btn-whitepaper');
   const navBtnLogin = $('#nav-btn-login');
 
   const deleteConfirmInput = $('#delete-character-confirm') as HTMLInputElement;
@@ -4693,7 +4726,19 @@ function wireStartScreens(): void {
     switchMainView('#news-view');
     void loadNews();
   });
+  setupNavBtn(navBtnContributions, '#contributions-view');
   setupNavBtn(navBtnDownload, '#download-view');
+  // Links + White Paper were standalone HTML pages; they're now in-app views.
+  // Their content is injected once (fetched from the retained /*.html fragments)
+  // so we keep a single content source without duplicating it into index.html.
+  setupNavBtn(navBtnLinks, '#links-view', () => {
+    switchMainView('#links-view');
+    void loadDocFragment('/links.html', '#links-content');
+  });
+  setupNavBtn(navBtnWhitepaper, '#whitepaper-view', () => {
+    switchMainView('#whitepaper-view');
+    void loadDocFragment('/whitepaper.html', '#whitepaper-content');
+  });
   setupNavBtn(navBtnLogin, '#hero-view', () => {
     show('#login-panel');
   });
@@ -4729,6 +4774,20 @@ function wireStartScreens(): void {
     }
     if (hash === 'download' || hash === 'downloads' || hash === 'install') {
       switchMainView('#download-view');
+      return;
+    }
+    if (hash === 'contributions') {
+      switchMainView('#contributions-view');
+      return;
+    }
+    if (hash === 'links') {
+      switchMainView('#links-view');
+      void loadDocFragment('/links.html', '#links-content');
+      return;
+    }
+    if (hash === 'whitepaper') {
+      switchMainView('#whitepaper-view');
+      void loadDocFragment('/whitepaper.html', '#whitepaper-content');
       return;
     }
     if (hash === 'login' || hash === 'register' || hash === 'account') {

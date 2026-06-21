@@ -1888,3 +1888,23 @@ body:not(.game-active) .cr-realm-first-prompt {
 .cr-dl-btn.cr-dl-disabled:hover { background: rgba(0,0,0,0.45); }
 .cr-dl-pending { margin-top: 8px; font-size: 11px; color: var(--cr-text-dim, #9a8a7a); }
 .cr-dl-foot { font-size: 12px; color: var(--cr-text-dim, #9a8a7a); margin: 6px 0 0; line-height: 1.5; }
+
+/* Unified in-app doc views (Contributions / White Paper / Links) — content that
+   used to live in standalone HTML pages now renders inside the SPA with the ONE
+   nav. Shared, self-contained styling so injected fragments look consistent. */
+.cr-doc-view { max-width: 980px; margin: 0 auto; padding: 8px 4px 24px; line-height: 1.6; }
+.cr-doc-view h2 { color: var(--gold, #ffd100); font-family: var(--title-font, 'Cinzel', Georgia, serif); margin: 0 0 10px; }
+.cr-doc-view h3 { color: var(--gold-2, #e8c879); margin: 22px 0 8px; font-size: 18px; }
+.cr-doc-view p, .cr-doc-view li { color: var(--cr-text, #d8c89a); }
+.cr-doc-view a { color: var(--gold, #ffd100); }
+.cr-doc-view code { overflow-wrap: anywhere; color: #d8f0ff; background: rgba(127,199,255,0.08);
+  border: 1px solid rgba(127,199,255,0.18); border-radius: 4px; padding: 2px 5px; }
+.cr-doc-lead { font-size: clamp(15px, 2vw, 18px); color: #f5e9c9; }
+.cr-doc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 10px 0 6px; }
+.cr-doc-card { border: 1px solid rgba(200,168,56,0.22); border-radius: 6px; padding: 12px; background: rgba(255,209,0,0.04); }
+.cr-doc-card strong { display: block; color: var(--gold-2, #e8c879); margin-bottom: 4px; }
+.cr-doc-card span { color: var(--cr-text-dim, #9a8a7a); font-size: 13px; }
+.cr-doc-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.cr-doc-tag { border: 1px solid var(--red, #c45142); color: #f0b6ad; border-radius: 4px; padding: 5px 10px; font-size: 12px; }
+.cr-doc-view section { background: rgba(0,0,0,0.22); border: 1px solid rgba(200,168,56,0.16);
+  border-radius: 8px; padding: clamp(14px,2.5vw,24px); margin: 0 0 16px; }

@@ -17,10 +17,10 @@
     { href: '/#highscores', label: 'High Scores', match: { hash: 'highscores' } },
     { href: '/#wiki', label: 'Wiki', match: { hash: 'wiki', path: '/wiki' } },
     { href: '/#news', label: 'News', match: { hash: 'news' } },
-    { href: '/contributions.html', label: 'Contributions', match: { path: '/contributions' } },
+    { href: '/#contributions', label: 'Contributions', match: { hash: 'contributions', path: '/contributions' } },
     { href: '/#download', label: 'Download', match: { hash: 'download' } },
-    { href: '/links.html', label: 'Links', match: { path: '/links' } },
-    { href: '/whitepaper.html', label: 'White Paper', match: { path: '/whitepaper' } },
+    { href: '/#links', label: 'Links', match: { hash: 'links', path: '/links' } },
+    { href: '/#whitepaper', label: 'White Paper', match: { hash: 'whitepaper', path: '/whitepaper' } },
     { href: '/#login', label: 'Login/Register', match: { hash: 'login' } },
   ];
 

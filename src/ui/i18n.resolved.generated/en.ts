@@ -361,6 +361,39 @@ export const en: EnTranslations = {
     "proofTitle": "$CR Proof",
     "proofBody": "Mint 3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv is published on the public proof page with treasury and Solscan links."
   },
+  "contributions": {
+    "title": "Contributions",
+    "lead": "Cryptic Realm is its own game, but it can still send practical engine improvements back upstream. This separates shared ClaudeCraft-friendly work from private Cryptic Realm features.",
+    "sharedTitle": "Shared Upstream Candidates",
+    "sharedBody": "Clean, generic improvements offered upstream because they help the base project without giving away Cryptic Realm-only economy, realm, or lore systems.",
+    "cAuthT": "Auth & Account Safety",
+    "cAuthB": "OIDC wiring, optional TOTP login hardening, safer login throttles, clearer dashboard sessions.",
+    "cAdminT": "Admin & Moderator Tools",
+    "cAdminB": "Account review, chat moderation, report queues, role-gated dashboards, and better status panels.",
+    "cOpsT": "Updates & Operations",
+    "cOpsB": "Auto-update maintenance mode, static cache policy, API health checks, and safer server restarts.",
+    "cWikiT": "Wiki & Public Hubs",
+    "cWikiB": "Public wiki hub fallback, release/news feed, launcher status page, and improved nav consistency.",
+    "cUiT": "Game UI Quality",
+    "cUiB": "Camera options, mobile layout fixes, clearer landing flows, and performance guidance.",
+    "cTestT": "Test Coverage",
+    "cTestB": "Security tests, OAuth tests, realm tests, launcher tests, and visual smoke scripts.",
+    "privateTitle": "Cryptic Realm-Only Work",
+    "privateBody": "These stay in the independent track because they define this game and are not handed over as generic upstream value.",
+    "tagPlatinum": "Platinum economy",
+    "tagExchange": "Exchange realm",
+    "tagLore": "Cryptic Realm lore",
+    "tagRealms": "Infernal / Classic / Dominion / Arcane realms",
+    "tagMinigames": "Original mini-games",
+    "tagCustody": "Private custody runbooks"
+  },
+  "whitepaper": {
+    "loading": "Loading the white paper…"
+  },
+  "links": {
+    "title": "Official Links",
+    "loading": "Loading official channels…"
+  },
   "download": {
     "title": "Launchers & Installs",
     "desc": "Play the live web client now and track signed installer releases for desktop and mobile."

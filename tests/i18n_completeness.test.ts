@@ -118,13 +118,19 @@ describe("i18n whole-catalog completeness", () => {
       "wallet.holderTiers.voidwarden.name", "wallet.holderTiers.voidwarden.flavor",
       "wallet.holderTiers.worldforger.name", "wallet.holderTiers.worldforger.flavor",
     ]);
+    // The Contributions view + white-paper/links headers are CR roadmap / brand
+    // prose ($CR, realms, custody, upstream-kindness copy) kept verbatim in every
+    // locale on purpose — same policy as the news.* roadmap keys above.
+    const BRAND_ALLOW_PREFIX = ["contributions.", "whitepaper.", "links."];
+    const allowed = (key: string) =>
+      BRAND_ALLOW.has(key) || BRAND_ALLOW_PREFIX.some((p) => key.startsWith(p));
     const wordy = (v: string) => /[a-z]{4,}/.test(v.replace(/\{[^}]*\}/g, ""));
     const nonLatin: SupportedLanguage[] = ["zh_CN", "zh_TW", "ja_JP", "ko_KR", "ru_RU"];
     const leaks: string[] = [];
     for (const lang of nonLatin) {
       const flat = flatten(TABLES[lang]);
       for (const [key, enValue] of Object.entries(enFlat)) {
-        if (wordy(enValue) && flat[key] === enValue && !BRAND_ALLOW.has(key)) {
+        if (wordy(enValue) && flat[key] === enValue && !allowed(key)) {
           leaks.push(`${lang} ${key}: "${enValue}"`);
         }
       }

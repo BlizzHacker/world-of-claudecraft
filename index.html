@@ -7517,16 +7517,16 @@
               <button type="button" class="nav-link" id="nav-btn-news" aria-selected="false" aria-pressed="false" data-i18n="nav.news">News</button>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/contributions.html" data-i18n="nav.contributions">Contributions</a>
+              <button type="button" class="nav-link" id="nav-btn-contributions" aria-selected="false" aria-pressed="false" data-i18n="nav.contributions">Contributions</button>
             </li>
             <li class="nav-item">
               <button type="button" class="nav-link" id="nav-btn-download" aria-selected="false" aria-pressed="false" data-i18n="nav.download">Download</button>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/links.html" data-i18n="hud.core.communityLinks">Links</a>
+              <button type="button" class="nav-link" id="nav-btn-links" aria-selected="false" aria-pressed="false" data-i18n="hud.core.communityLinks">Links</button>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/whitepaper.html" data-i18n="nav.whitepaper">White Paper</a>
+              <button type="button" class="nav-link" id="nav-btn-whitepaper" aria-selected="false" aria-pressed="false" data-i18n="nav.whitepaper">White Paper</button>
             </li>
             <li class="nav-item">
               <button type="button" class="nav-link" id="nav-btn-login" aria-selected="false" aria-pressed="false" data-i18n="nav.loginRegister">Login/Register</button>
@@ -7979,6 +7979,48 @@
           </div>
           <h2 class="skeleton-title" data-i18n="download.title">Launchers & Installs</h2>
           <p class="skeleton-desc" data-i18n="download.desc">Play the live web client now and track signed installer releases for desktop and mobile.</p>
+        </div>
+      </section>
+
+      <section id="contributions-view" class="view-section" hidden aria-hidden="true">
+        <div class="parchment-panel cr-doc-view">
+          <h2 data-i18n="contributions.title">Contributions</h2>
+          <p class="cr-doc-lead" data-i18n="contributions.lead">Cryptic Realm is its own game, but it can still send practical engine improvements back upstream. This separates shared ClaudeCraft-friendly work from private Cryptic Realm features.</p>
+          <h3 data-i18n="contributions.sharedTitle">Shared Upstream Candidates</h3>
+          <p data-i18n="contributions.sharedBody">Clean, generic improvements offered upstream because they help the base project without giving away Cryptic Realm-only economy, realm, or lore systems.</p>
+          <div class="cr-doc-grid">
+            <div class="cr-doc-card"><strong data-i18n="contributions.cAuthT">Auth &amp; Account Safety</strong><span data-i18n="contributions.cAuthB">OIDC wiring, optional TOTP login hardening, safer login throttles, clearer dashboard sessions.</span></div>
+            <div class="cr-doc-card"><strong data-i18n="contributions.cAdminT">Admin &amp; Moderator Tools</strong><span data-i18n="contributions.cAdminB">Account review, chat moderation, report queues, role-gated dashboards, and better status panels.</span></div>
+            <div class="cr-doc-card"><strong data-i18n="contributions.cOpsT">Updates &amp; Operations</strong><span data-i18n="contributions.cOpsB">Auto-update maintenance mode, static cache policy, API health checks, and safer server restarts.</span></div>
+            <div class="cr-doc-card"><strong data-i18n="contributions.cWikiT">Wiki &amp; Public Hubs</strong><span data-i18n="contributions.cWikiB">Public wiki hub fallback, release/news feed, launcher status page, and improved nav consistency.</span></div>
+            <div class="cr-doc-card"><strong data-i18n="contributions.cUiT">Game UI Quality</strong><span data-i18n="contributions.cUiB">Camera options, mobile layout fixes, clearer landing flows, and performance guidance.</span></div>
+            <div class="cr-doc-card"><strong data-i18n="contributions.cTestT">Test Coverage</strong><span data-i18n="contributions.cTestB">Security tests, OAuth tests, realm tests, launcher tests, and visual smoke scripts.</span></div>
+          </div>
+          <h3 data-i18n="contributions.privateTitle">Cryptic Realm-Only Work</h3>
+          <p data-i18n="contributions.privateBody">These stay in the independent track because they define this game and are not handed over as generic upstream value.</p>
+          <div class="cr-doc-tags">
+            <span class="cr-doc-tag">$CR</span>
+            <span class="cr-doc-tag" data-i18n="contributions.tagPlatinum">Platinum economy</span>
+            <span class="cr-doc-tag" data-i18n="contributions.tagExchange">Exchange realm</span>
+            <span class="cr-doc-tag" data-i18n="contributions.tagLore">Cryptic Realm lore</span>
+            <span class="cr-doc-tag" data-i18n="contributions.tagRealms">Infernal / Classic / Dominion / Arcane realms</span>
+            <span class="cr-doc-tag" data-i18n="contributions.tagMinigames">Original mini-games</span>
+            <span class="cr-doc-tag" data-i18n="contributions.tagCustody">Private custody runbooks</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="whitepaper-view" class="view-section" hidden aria-hidden="true">
+        <div class="parchment-panel cr-doc-view" id="whitepaper-content">
+          <h2 data-i18n="nav.whitepaper">White Paper</h2>
+          <p class="cr-doc-lead" data-i18n="whitepaper.loading">Loading the white paper…</p>
+        </div>
+      </section>
+
+      <section id="links-view" class="view-section" hidden aria-hidden="true">
+        <div class="parchment-panel cr-doc-view" id="links-content">
+          <h2 data-i18n="links.title">Official Links</h2>
+          <p class="cr-doc-lead" data-i18n="links.loading">Loading official channels…</p>
         </div>
       </section>
     </div>
