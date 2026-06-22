@@ -305,6 +305,29 @@ CREATE TABLE IF NOT EXISTS referrals (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS referrals_referrer ON referrals(referrer_account_id);
+-- Anti-cheat treasury ledger. Each row records a cheating-related action (ban,
+-- confiscation) and the crypto amount owed FROM the cheater's wallet TO the
+-- banned-account/hardening treasury. The on-chain settlement is performed by the
+-- admin wallet out-of-band; refund_status tracks it (pending → settled/failed).
+-- We never move funds here — this is the trackable, auditable ledger only.
+CREATE TABLE IF NOT EXISTS anticheat_ledger (
+  id BIGSERIAL PRIMARY KEY,
+  account_id INT REFERENCES accounts(id) ON DELETE SET NULL,
+  character_name TEXT,
+  realm TEXT NOT NULL DEFAULT '',
+  reason TEXT NOT NULL DEFAULT '',
+  evidence JSONB,
+  bot_score REAL,
+  cheater_wallet TEXT,
+  refund_amount NUMERIC NOT NULL DEFAULT 0,
+  refund_currency TEXT NOT NULL DEFAULT 'CR',
+  refund_status TEXT NOT NULL DEFAULT 'pending',
+  refund_tx TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  settled_at TIMESTAMPTZ
+);
+CREATE INDEX IF NOT EXISTS anticheat_ledger_status ON anticheat_ledger(refund_status, created_at DESC);
+CREATE INDEX IF NOT EXISTS anticheat_ledger_account ON anticheat_ledger(account_id, created_at DESC);
 `;
 
 export async function ensureSchema(): Promise<void> {
