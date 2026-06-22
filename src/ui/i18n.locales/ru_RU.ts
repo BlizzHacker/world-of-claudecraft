@@ -2387,6 +2387,8 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   "auth.newCharacter": "Новый персонаж",
   "auth.appearance": "Внешность",
   "auth.ladderChar": "Ладдер-персонаж",
+  "auth.ssoMoveweight": "Войти через MoveWeight",
+  "auth.ssoProviders": "Продолжить через Google, Facebook, Plex или Discord",
   "auth.ladderHint": "Участвует в сезонном ладдере. В конце сезона становится обычным персонажем (весь прогресс сохраняется).",
   "auth.hardcoreChar": "Хардкорный персонаж",
   "auth.hardcoreHint": "Перманентная смерть. Если этот персонаж погибнет, он навсегда выбывает и в него больше нельзя играть. Воскрешения нет.",

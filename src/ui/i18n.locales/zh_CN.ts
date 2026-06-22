@@ -2387,6 +2387,8 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   "auth.newCharacter": "新建角色",
   "auth.appearance": "外观",
   "auth.ladderChar": "天梯角色",
+  "auth.ssoMoveweight": "使用 MoveWeight 登录",
+  "auth.ssoProviders": "使用 Google、Facebook、Plex 或 Discord 继续",
   "auth.ladderHint": "参与赛季天梯。赛季结束时转为标准角色（保留全部进度）。",
   "auth.hardcoreChar": "硬核角色",
   "auth.hardcoreHint": "永久死亡。该角色一旦死亡将被永久退役，无法再次游玩。没有复活。",

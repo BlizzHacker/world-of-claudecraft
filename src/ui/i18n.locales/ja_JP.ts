@@ -2387,6 +2387,8 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   "auth.newCharacter": "新規キャラクター",
   "auth.appearance": "外見",
   "auth.ladderChar": "ラダーキャラクター",
+  "auth.ssoMoveweight": "MoveWeightでサインイン",
+  "auth.ssoProviders": "Google、Facebook、Plex、Discordで続行",
   "auth.ladderHint": "シーズンラダーで競います。シーズン終了時に通常キャラクターへ変換されます（進行状況はすべて保持）。",
   "auth.hardcoreChar": "ハードコアキャラクター",
   "auth.hardcoreHint": "パーマデス。このキャラクターが死亡すると永久に引退し、二度とプレイできません。蘇生はありません。",

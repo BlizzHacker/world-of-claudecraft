@@ -563,8 +563,6 @@ export const pending: Record<string, readonly string[]> = {
     "whitepaper.loading"
   ],
   "zh_CN": [
-    "auth.ssoMoveweight",
-    "auth.ssoProviders",
     "contributions.cAdminB",
     "contributions.cAdminT",
     "contributions.cAuthB",
@@ -628,8 +626,6 @@ export const pending: Record<string, readonly string[]> = {
     "whitepaper.loading"
   ],
   "zh_TW": [
-    "auth.ssoMoveweight",
-    "auth.ssoProviders",
     "contributions.cAdminB",
     "contributions.cAdminT",
     "contributions.cAuthB",
@@ -693,8 +689,6 @@ export const pending: Record<string, readonly string[]> = {
     "whitepaper.loading"
   ],
   "ko_KR": [
-    "auth.ssoMoveweight",
-    "auth.ssoProviders",
     "contributions.cAdminB",
     "contributions.cAdminT",
     "contributions.cAuthB",
@@ -758,8 +752,6 @@ export const pending: Record<string, readonly string[]> = {
     "whitepaper.loading"
   ],
   "ja_JP": [
-    "auth.ssoMoveweight",
-    "auth.ssoProviders",
     "contributions.cAdminB",
     "contributions.cAdminT",
     "contributions.cAuthB",
@@ -915,8 +907,6 @@ export const pending: Record<string, readonly string[]> = {
     "whitepaper.loading"
   ],
   "ru_RU": [
-    "auth.ssoMoveweight",
-    "auth.ssoProviders",
     "contributions.cAdminB",
     "contributions.cAdminT",
     "contributions.cAuthB",
