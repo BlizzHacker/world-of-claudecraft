@@ -12,6 +12,52 @@ const DIR = process.env.CR_BUG_REPORT_DIR ?? '/var/log/cryptic-realm-bug-reports
 const INDEX = path.join(DIR, 'index.log');
 const MAX_BYTES = 6 * 1024 * 1024; // reject absurdly large payloads (screenshot cap)
 
+// Auto-file each bug report as a GitHub issue on the PRIVATE repo, so the dev
+// loop sees them without tailing the server. Reuses the same token/repo as the
+// releases proxy. Best-effort + fire-and-forget: never blocks or fails the
+// player's submit. Disabled unless CR_BUG_GITHUB=1 and a token is configured.
+const BUG_GITHUB_ENABLED = process.env.CR_BUG_GITHUB === '1';
+const BUG_GITHUB_REPO = process.env.CR_BUG_GITHUB_REPO ?? process.env.GITHUB_REPO ?? 'BlizzHacker/cryptic-realm';
+const BUG_GITHUB_TOKEN = process.env.CR_BUG_GITHUB_TOKEN ?? process.env.GITHUB_TOKEN ?? '';
+
+async function fileGithubIssue(record: { id: string; note: string; url: string; realmName: string; serverRealm: string; accountId: number | null; userAgent: string; player: unknown; performance: unknown; }): Promise<void> {
+  if (!BUG_GITHUB_ENABLED || !BUG_GITHUB_TOKEN) return;
+  try {
+    const title = `[bug] ${record.note ? record.note.slice(0, 80) : record.id}`;
+    const body = [
+      `**Report id:** \`${record.id}\``,
+      `**Realm:** ${record.realmName || record.serverRealm}`,
+      `**URL:** ${record.url || '(n/a)'}`,
+      `**Account:** ${record.accountId ?? '(anon)'}`,
+      `**User agent:** ${record.userAgent || '(n/a)'}`,
+      '',
+      '### Note',
+      record.note || '(no note)',
+      '',
+      '<details><summary>Diagnostics</summary>',
+      '',
+      '```json',
+      JSON.stringify({ player: record.player, performance: record.performance }, null, 2).slice(0, 4000),
+      '```',
+      '</details>',
+      '',
+      '_Filed automatically from the in-game Report Bug button._',
+    ].join('\n');
+    await fetch(`https://api.github.com/repos/${BUG_GITHUB_REPO}/issues`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${BUG_GITHUB_TOKEN}`,
+        Accept: 'application/vnd.github+json',
+        'Content-Type': 'application/json',
+        'User-Agent': 'cryptic-realm-bug-bot',
+      },
+      body: JSON.stringify({ title, body, labels: ['bug', 'in-game-report'] }),
+    });
+  } catch (err) {
+    console.error('bug report → GitHub issue failed:', err);
+  }
+}
+
 export interface BugReportInput {
   note?: string;
   url?: string;
@@ -66,6 +112,12 @@ export function saveBugReport(input: BugReportInput, meta: { accountId: number |
       url: record.url, hasScreenshot: record.hasScreenshot, accountId: meta.accountId,
     }) + '\n';
     fs.appendFileSync(INDEX, line);
+    // Fire-and-forget: also open a GitHub issue on the private repo (no await).
+    void fileGithubIssue({
+      id, note: record.note, url: record.url, realmName: record.realmName,
+      serverRealm: meta.realm, accountId: meta.accountId, userAgent: record.userAgent,
+      player: record.player, performance: record.performance,
+    });
     return id;
   } catch {
     return null;
