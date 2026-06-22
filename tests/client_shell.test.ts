@@ -264,9 +264,11 @@ describe('client HTML shell', () => {
     expect(html).toContain('id="nav-btn-wiki"');
     expect(html).toContain('id="nav-btn-news"');
     expect(html).toContain('id="nav-btn-download"');
-    expect(html).toContain('href="/links.html"');
-    expect(html).toContain('href="/whitepaper.html"');
-    expect(html).not.toContain('href="/whitepaper.html" target="_blank"');
+    // Contributions / Links / White Paper are now in-app SPA views (one nav),
+    // not standalone-HTML nav links. See feat(nav) unification.
+    expect(html).toContain('id="nav-btn-links"');
+    expect(html).toContain('id="nav-btn-whitepaper"');
+    expect(html).toContain('id="nav-btn-contributions"');
     expect(landingTs).toContain("document.getElementById('nav-btn-highscores')");
     expect(landingTs).toContain("document.getElementById('nav-btn-wiki')");
     expect(landingTs).toContain("document.getElementById('nav-btn-news')");

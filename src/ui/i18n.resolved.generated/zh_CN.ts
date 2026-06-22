@@ -441,6 +441,8 @@ export const zh_CN: EnTranslations = {
     "realm": "服务器",
     "newCharacter": "新建角色",
     "appearance": "外观",
+    "ssoMoveweight": "Sign in with MoveWeight",
+    "ssoProviders": "Continue with Google, Facebook, Plex, or Discord",
     "ladderChar": "天梯角色",
     "ladderHint": "参与赛季天梯。赛季结束时转为标准角色（保留全部进度）。",
     "hardcoreChar": "硬核角色",

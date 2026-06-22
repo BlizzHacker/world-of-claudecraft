@@ -441,6 +441,8 @@ export const ja_JP: EnTranslations = {
     "realm": "レルム",
     "newCharacter": "新規キャラクター",
     "appearance": "外見",
+    "ssoMoveweight": "Sign in with MoveWeight",
+    "ssoProviders": "Continue with Google, Facebook, Plex, or Discord",
     "ladderChar": "ラダーキャラクター",
     "ladderHint": "シーズンラダーで競います。シーズン終了時に通常キャラクターへ変換されます（進行状況はすべて保持）。",
     "hardcoreChar": "ハードコアキャラクター",

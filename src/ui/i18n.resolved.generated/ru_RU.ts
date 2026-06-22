@@ -441,6 +441,8 @@ export const ru_RU: EnTranslations = {
     "realm": "Мир",
     "newCharacter": "Новый персонаж",
     "appearance": "Внешность",
+    "ssoMoveweight": "Sign in with MoveWeight",
+    "ssoProviders": "Continue with Google, Facebook, Plex, or Discord",
     "ladderChar": "Ладдер-персонаж",
     "ladderHint": "Участвует в сезонном ладдере. В конце сезона становится обычным персонажем (весь прогресс сохраняется).",
     "hardcoreChar": "Хардкорный персонаж",

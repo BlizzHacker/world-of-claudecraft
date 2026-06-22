@@ -1651,6 +1651,7 @@ let characterPreview: InstanceType<GameRuntime['CharacterPreview']> | null = nul
 let characterPreviewLoadPromise: Promise<void> | null = null;
 let characterPreviewTimer: number | null = null;
 let authModeApply: ((mode: 'login' | 'register') => void) | null = null;
+let applyForceSso: (() => void) | null = null; // hides password auth when SSO is forced
 let offlineSkin = 0; // chosen appearance skin for the offline quick-start character
 let onlineSkin = 0; // chosen appearance skin for new online characters
 
@@ -2114,6 +2115,8 @@ function showRealmList(dir?: import('./net/online').RealmDirectory): void {
   show('#realm-panel');
   const listEl = $('#realm-list');
   const render = (d: import('./net/online').RealmDirectory) => {
+    // Learn the force-SSO flag from the directory + apply it to the login UI.
+    if (d.forceSso) { (window as unknown as { __crForceSso?: boolean }).__crForceSso = true; applyForceSso?.(); }
     if (d.realms.length === 0) {
       listEl.innerHTML = `<div class="realm-loading">${escapeHtml(t('realm.noRealms'))}</div>`;
       return;
@@ -4427,6 +4430,19 @@ function wireStartScreens(): void {
   const passInput = $('#login-pass') as HTMLInputElement;
   const totpInput = $('#login-totp') as HTMLInputElement | null;
   const togglePassBtn = $('#btn-toggle-password') as HTMLButtonElement;
+
+  // Force-SSO: when the server reports forceSso (default), basic
+  // username/password account creation is gone — hide the password fields, the
+  // Log In button, and the Create Account toggle, leaving only the "Sign in with
+  // MoveWeight" SSO button. applyForceSso runs once we learn the flag from
+  // /api/realms (cached in window.__crForceSso by the realms fetch).
+  applyForceSso = () => {
+    if (!(window as unknown as { __crForceSso?: boolean }).__crForceSso) return;
+    document.body.classList.add('cr-force-sso');
+    // Required inputs would block any (now-hidden) submit path; relax them.
+    [userInput, passInput, totpInput].forEach((el) => { if (el) el.required = false; });
+  };
+  applyForceSso();
 
   // Wire password visibility toggle
   togglePassBtn.addEventListener('click', () => {

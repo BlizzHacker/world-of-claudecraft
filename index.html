@@ -6665,6 +6665,12 @@
   #login-panel #btn-login-back { flex: 0 0 30%; }
   #login-panel #btn-login { flex: 1 1 auto; }
   .auth-link:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; border-radius: 3px; }
+  /* Force-SSO: hide basic username/password account creation + the Log In /
+     Create Account controls, leaving the "Sign in with MoveWeight" SSO button.
+     Toggled by body.cr-force-sso (set from /api/realms forceSso). */
+  body.cr-force-sso #login-panel .auth-field,
+  body.cr-force-sso #login-panel #btn-login,
+  body.cr-force-sso #login-panel .auth-switch { display: none; }
 
   /* Class buttons with a portrait preview of that class */
   .mini-class.has-portrait {
@@ -7725,8 +7731,9 @@
           <div class="cr-sso-row">
             <a class="cr-sso-btn cr-sso-authentik" href="/api/oauth/authentik" id="btn-sso-authentik">
               <span class="cr-sso-icon" aria-hidden="true">⛨</span>
-              <span>Sign in with Authentik</span>
+              <span data-i18n="auth.ssoMoveweight">Sign in with MoveWeight</span>
             </a>
+            <p class="cr-sso-note" data-i18n="auth.ssoProviders">Continue with Google, Facebook, Plex, or Discord</p>
           </div>
           <!-- CR overlay END -->
           <p class="auth-switch">

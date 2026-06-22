@@ -147,6 +147,7 @@ export const V07_SLASH = [
   "You have no active effects.",
   "You have no combo points built up.",
   "You have no goods on the World Market.",
+  "You can't loot that.",
   "You have no mana parked while shifted.",
   "You have no one to reply to.",
   "You have no target to consider.",

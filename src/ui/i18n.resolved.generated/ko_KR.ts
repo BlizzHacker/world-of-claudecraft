@@ -441,6 +441,8 @@ export const ko_KR: EnTranslations = {
     "realm": "렐름",
     "newCharacter": "새 캐릭터",
     "appearance": "외형",
+    "ssoMoveweight": "Sign in with MoveWeight",
+    "ssoProviders": "Continue with Google, Facebook, Plex, or Discord",
     "ladderChar": "래더 캐릭터",
     "ladderHint": "시즌 래더에서 경쟁합니다. 시즌이 끝나면 일반 캐릭터로 전환됩니다(모든 진행 상황 유지).",
     "hardcoreChar": "하드코어 캐릭터",

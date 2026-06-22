@@ -401,6 +401,11 @@ function maybeCors(req: http.IncomingMessage, res: http.ServerResponse): void {
 // Anti-bot: when enabled, /api/login + /api/register require a same-origin browser
 // request (a recognised Origin header), so only the web client can obtain a token.
 const REQUIRE_WEB_LOGIN = webLoginEnforced();
+// Force-SSO: when on (default), basic username/password account CREATION is
+// disabled — new accounts come only via SSO (Authentik → Google/Facebook/Plex/
+// Discord). Existing basic accounts may still log in. Set CR_FORCE_SSO=0 to allow
+// legacy password signup (e.g. local dev).
+const FORCE_SSO = (process.env.CR_FORCE_SSO ?? '1') !== '0';
 
 async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): Promise<void> {
   const url = (req.url ?? '').split('?')[0];
@@ -412,6 +417,10 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       return json(res, 429, { error: 'too many attempts — wait a minute and try again' });
     }
     if (req.method === 'POST' && url === '/api/register') {
+      // Force-SSO: basic username/password account creation is disabled. New
+      // accounts are created only through an SSO provider (Authentik → Google /
+      // Facebook / Plex / Discord). Existing basic accounts can still /api/login.
+      if (FORCE_SSO) return json(res, 403, { error: 'Account creation is via Sign in with MoveWeight (Google, Facebook, Plex, Discord).' });
       const body = await readBody(req);
       if (!(await passesTurnstile(req, body))) return json(res, 403, { error: 'verification failed, please try again' });
       if (!validUsernameShape(body.username)) return json(res, 400, { error: 'username must be 3-24 chars (letters, digits, _)' });
@@ -566,7 +575,7 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       // characters the account has on each realm (for the realm-list screen)
       const accountId = await bearerAccount(req);
       const characters = accountId !== null ? await characterCountsByRealm(accountId) : {};
-      return json(res, 200, { current: REALM, realms: REALM_DIRECTORY, characters });
+      return json(res, 200, { current: REALM, realms: REALM_DIRECTORY, characters, forceSso: FORCE_SSO });
     }
     if (req.method === 'GET' && url === '/api/search') {
       const accountId = await bearerAccount(req);

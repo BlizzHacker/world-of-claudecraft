@@ -75,6 +75,7 @@ export interface RealmDirectory {
   current: string;
   realms: RealmEntry[];
   characters: Record<string, number>; // realm name -> how many characters you have
+  forceSso?: boolean; // server forces SSO-only account creation
 }
 
 // A published GitHub release, as surfaced by the server's /api/releases proxy
