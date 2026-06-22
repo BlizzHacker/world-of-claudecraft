@@ -257,6 +257,12 @@ function dynamicFields(e: Entity): Record<string, unknown> {
   if (e.kind === 'mob' && e.lootable && e.loot) {
     out.lootList = { copper: e.loot.copper, items: e.loot.items };
   }
+  // Hardcore player corpse: mark it so the client renders a lootable body (not a
+  // living player) and surfaces its loot list the same way mob corpses do.
+  if (e.kind === 'player' && e.hardcoreCorpse) {
+    out.hcCorpse = 1;
+    if (e.lootable && e.loot) out.lootList = { copper: e.loot.copper, items: e.loot.items };
+  }
   return out;
 }
 

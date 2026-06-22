@@ -51,6 +51,9 @@ export { computeQuestState } from './quest_state';
 // attacked). Elites, rares, and bosses are never trivial.
 const TRIVIAL_LEVEL_GAP = 10;
 const CORPSE_DURATION = 60;
+// Hardcore player corpses linger far longer than mob corpses so other live
+// players have a real window to find + loot the body before it decays.
+const HARDCORE_CORPSE_DURATION = 600;
 const EVADE_SPEED_MULT = 1.6;
 // An evading mob walks a straight line home (no pathfinding) and stalls if deep
 // water or a collider sits between it and its spawn. Since evading mobs are
@@ -667,6 +670,9 @@ export class Sim {
   readonly grid = new SpatialGrid();
   readonly playerGrid = new SpatialGrid();
   private engagedPids = new Set<number>();
+  // Reusable per-tick scratch: detached hardcore corpses whose timer expired,
+  // dropped after the entity loop so we never mutate this.entities mid-iteration.
+  private expiredCorpseIds: number[] = [];
   primaryId = -1; // the local/RL player in single-player contexts
   nextId = 1;
   events: SimEvent[] = [];
@@ -982,7 +988,13 @@ export class Sim {
       const e = this.entities.get(other.entityId);
       if (e && e.targetId === pid) e.targetId = null;
     }
-    this.dropEntity(pid);
+    // A hardcore character that died leaves its lootable CORPSE in the world for
+    // other live players (the session is gone, but the body persists + decays via
+    // corpseTimer in updatePlayerCorpses). Its population is stamped on the entity
+    // so loot/visibility checks still work without the (now-deleted) PlayerMeta.
+    const corpseEntity = this.entities.get(pid);
+    const keepCorpse = !!corpseEntity && corpseEntity.kind === 'player' && corpseEntity.hardcoreCorpse === true && corpseEntity.lootable;
+    if (!keepCorpse) this.dropEntity(pid);
     this.players.delete(pid);
     this.chatTokens.delete(pid);
     this.channelSubs.delete(pid);
@@ -1587,7 +1599,17 @@ export class Sim {
           e.respawnTimer -= DT;
           if (e.respawnTimer <= 0) e.lootable = true;
         }
+      } else if (e.kind === 'player' && e.hardcoreCorpse && !this.players.has(e.id)) {
+        // Detached hardcore corpse (its session left): count down + despawn when
+        // the timer expires or it's been fully looted. Collected and dropped
+        // AFTER the loop so we never mutate this.entities mid-iteration.
+        e.corpseTimer -= DT;
+        if (e.corpseTimer <= 0 || !e.lootable) this.expiredCorpseIds.push(e.id);
       }
+    }
+    if (this.expiredCorpseIds.length) {
+      for (const id of this.expiredCorpseIds) this.dropEntity(id);
+      this.expiredCorpseIds.length = 0;
     }
 
     // one pass over the entities collects every player a mob is engaged
@@ -4090,6 +4112,29 @@ export class Sim {
       e.chargeTargetId = null;
       e.chargePath = [];
       e.followTargetId = null;
+      // Hardcore permadeath: the dead character's body becomes a LOOTABLE CORPSE
+      // for other live players of the same population (D2-hardcore style). Their
+      // carried inventory + copper + equipped gear spill onto the corpse, which
+      // lingers for HARDCORE_CORPSE_DURATION before decaying. Deterministic: a
+      // straight transfer of meta state, no RNG. The server marks the character
+      // permanently dead + kicks the session; the corpse is a sim entity that
+      // outlives the session so others can loot it.
+      if (meta?.hardcore) {
+        const items: LootSlot[] = [];
+        for (const slot of meta.inventory) {
+          if (slot && slot.itemId && slot.count > 0) items.push({ itemId: slot.itemId, count: slot.count });
+        }
+        for (const key of Object.keys(meta.equipment) as (keyof PlayerEquipment)[]) {
+          const eqItemId = meta.equipment[key];
+          if (eqItemId) items.push({ itemId: eqItemId, count: 1 });
+        }
+        e.loot = { copper: meta.copper, items };
+        e.lootable = items.length > 0 || meta.copper > 0;
+        e.corpseTimer = HARDCORE_CORPSE_DURATION;
+        e.hardcoreCorpse = true;
+        e.corpsePopulation = { ladder: meta.ladder, hardcore: meta.hardcore };
+        this.emit({ type: 'log', text: `${e.name}'s corpse can be looted!`, color: '#ff6b6b' });
+      }
       this.emit({ type: 'playerDeath', pid: e.id });
       for (const m of this.entities.values()) {
         if (m.kind === 'mob' && !m.dead && m.aggroTargetId === e.id && m.aiState !== 'dead') {
@@ -6535,6 +6580,22 @@ export class Sim {
     const { meta, e: p } = r;
     const mob = this.entities.get(mobId);
     if (!mob || !mob.lootable || !mob.loot) return;
+    // Hardcore player corpse: any LIVE player of the SAME population may loot the
+    // body — no tap rights, open PvP loot (D2-hardcore). Items + copper transfer
+    // to the looter (subject to bag space via addItem); the corpse empties.
+    if (mob.kind === 'player' && mob.hardcoreCorpse) {
+      if (!this.samePopulationPlayers(p, mob)) { this.error(meta.entityId, "You can't loot that."); return; }
+      if (dist2d(p.pos, mob.pos) > INTERACT_RANGE) { this.error(meta.entityId, 'Too far away.'); return; }
+      if (mob.loot.copper > 0) { meta.copper += mob.loot.copper; mob.loot.copper = 0; }
+      for (const s of [...mob.loot.items]) {
+        for (let i = 0; i < s.count; i++) this.addItem(s.itemId, 1, meta.entityId);
+        s.count = 0;
+      }
+      mob.loot.items = mob.loot.items.filter((s) => s.count > 0);
+      if (mob.loot.items.length === 0 && mob.loot.copper === 0) mob.lootable = false;
+      if (p.targetId === mobId) p.targetId = null;
+      return;
+    }
     const tapperParty = mob.tappedById !== null ? this.partyOf(mob.tappedById) : null;
     const hasSharedLootRights = mob.tappedById === null
       || mob.tappedById === meta.entityId
@@ -6779,6 +6840,8 @@ export class Sim {
       const target = this.entities.get(p.targetId);
       if (target && dist2d(p.pos, target.pos) <= INTERACT_RANGE + 2) {
         if (target.kind === 'mob' && target.lootable) { this.lootCorpse(target.id, p.id); return; }
+        // Targeted hardcore player corpse → loot it.
+        if (target.kind === 'player' && target.hardcoreCorpse && target.lootable) { this.lootCorpse(target.id, p.id); return; }
         if (target.kind === 'object' && target.lootable) {
           if (target.templateId === 'dungeon_door' && target.dungeonId) { this.enterDungeon(target.dungeonId, p.id); return; }
           if (target.templateId === 'dungeon_exit') { this.leaveDungeon(p.id); return; }
@@ -6798,6 +6861,13 @@ export class Sim {
       if (e.kind === 'mob' && e.lootable && d2 < bestCorpseD2) { bestCorpse = e; bestCorpseD2 = d2; }
       if (e.kind === 'object' && e.lootable && d2 < bestObjD2) { bestObj = e; bestObjD2 = d2; }
       if (e.kind === 'npc' && d2 < bestNpcD2) { bestNpc = e; bestNpcD2 = d2; }
+    });
+    // Hardcore player corpses live in the player grid, not the mob/object grid —
+    // scan it too so a nearby lootable body is found without an explicit target.
+    this.playerGrid.forEachInRadius(p.pos.x, p.pos.z, INTERACT_RANGE, (e, d2) => {
+      if (e.id !== p.id && e.kind === 'player' && e.hardcoreCorpse && e.lootable && d2 < bestCorpseD2) {
+        bestCorpse = e; bestCorpseD2 = d2;
+      }
     });
     // re-read through wider types: TS cannot see the closure assignments above
     const corpse = bestCorpse as Entity | null;
@@ -7518,9 +7588,11 @@ export class Sim {
   // populations within one realm-stage process). Non-players are unaffected.
   samePopulationPlayers(a: Entity, b: Entity): boolean {
     if (a.kind !== 'player' || b.kind !== 'player') return true;
-    const ma = this.players.get(a.id); const mb = this.players.get(b.id);
-    if (!ma || !mb) return true;
-    return ma.ladder === mb.ladder && ma.hardcore === mb.hardcore;
+    // A detached hardcore corpse has no live meta; use its stamped population.
+    const pa = this.players.get(a.id) ?? a.corpsePopulation;
+    const pb = this.players.get(b.id) ?? b.corpsePopulation;
+    if (!pa || !pb) return true;
+    return pa.ladder === pb.ladder && pa.hardcore === pb.hardcore;
   }
 
   isHostileTo(attacker: Entity, target: Entity): boolean {

@@ -80,6 +80,7 @@ export const V07_SLASH = [
   "Aki draws on a desperate second wind!",
   "Aki flies into a frenzy!",
   "Aki has entered Cryptic Realm.",
+  "Aki's corpse can be looted!",
   "Aki is Aki: Aki",
   "Aki unleashes Aki!",
   "Arena: Aki. Aki.",

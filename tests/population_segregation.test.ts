@@ -60,3 +60,64 @@ describe('population segregation', () => {
     expect(meta.hardcore).toBe(false);
   });
 });
+
+describe('hardcore lootable corpse', () => {
+  // Apply lethal damage through the real damage path so the death/corpse branch
+  // in dealDamage fires (setting hp=0 alone does not trigger death).
+  function kill(sim: Sim, pid: number): void {
+    const e = sim.entities.get(pid)!;
+    (sim as unknown as { dealDamage: (...a: unknown[]) => void })
+      .dealDamage(null, e, e.maxHp + 9999, false, 'physical', null, 'hit');
+  }
+
+  it('a hardcore player who dies becomes a lootable corpse carrying their items', () => {
+    const sim = freshSim();
+    const pid = sim.addPlayer('warrior', 'Doomed', { hardcore: true });
+    sim.addItem('minor_healing_potion', 3, pid); // something in the bags
+    kill(sim, pid);
+    const corpse = sim.entities.get(pid)!;
+    expect(corpse.hardcoreCorpse).toBe(true);
+    expect(corpse.lootable).toBe(true);
+    expect(corpse.loot).not.toBeNull();
+    const total = (corpse.loot?.items ?? []).reduce((n, s) => n + s.count, 0);
+    expect(total).toBeGreaterThan(0);
+  });
+
+  it('a NORMAL player who dies does NOT leave a lootable corpse', () => {
+    const sim = freshSim();
+    const pid = sim.addPlayer('warrior', 'Normal', { hardcore: false });
+    sim.addItem('minor_healing_potion', 1, pid);
+    kill(sim, pid);
+    const e = sim.entities.get(pid)!;
+    expect(e.hardcoreCorpse).toBeFalsy();
+  });
+
+  it('the corpse stamps its population so it survives removePlayer', () => {
+    const sim = freshSim();
+    const pid = sim.addPlayer('warrior', 'Doomed', { hardcore: true, ladder: true });
+    sim.addItem('minor_healing_potion', 1, pid);
+    kill(sim, pid);
+    sim.removePlayer(pid); // session leaves — corpse must remain
+    const corpse = sim.entities.get(pid);
+    expect(corpse).toBeDefined();
+    expect(corpse!.hardcoreCorpse).toBe(true);
+    expect(corpse!.corpsePopulation).toEqual({ ladder: true, hardcore: true });
+  });
+
+  it('a same-population live player can loot a detached hardcore corpse', () => {
+    const sim = freshSim();
+    const dead = sim.addPlayer('warrior', 'Dead', { hardcore: true });
+    sim.addItem('minor_healing_potion', 2, dead);
+    kill(sim, dead);
+    sim.removePlayer(dead);
+    const corpse = sim.entities.get(dead)!;
+    // a live hardcore looter, placed on the corpse
+    const looter = sim.addPlayer('warrior', 'Looter', { hardcore: true });
+    const le = sim.entities.get(looter)!;
+    le.pos = { ...corpse.pos };
+    sim.lootCorpse(dead, looter);
+    const looterMeta = sim.meta(looter)!;
+    const got = looterMeta.inventory.reduce((n, s) => n + (s?.count ?? 0), 0);
+    expect(got).toBeGreaterThan(0);
+  });
+});

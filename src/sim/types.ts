@@ -895,6 +895,13 @@ export interface Entity {
   despawnTimer?: number;
   lootable: boolean;
   loot: CorpseLoot | null;
+  // True when this is a dead hardcore player's lootable body (vs a mob corpse).
+  // Drives the player-corpse loot rules + render marker; never set for mobs.
+  hardcoreCorpse?: boolean;
+  // The dead player's (ladder, hardcore) population, stamped onto the corpse so
+  // it survives removePlayer (which deletes the PlayerMeta). Looters are gated to
+  // the same population via this, not the live meta.
+  corpsePopulation?: { ladder: boolean; hardcore: boolean };
   xpValue: number;
   // npc
   questIds: string[];

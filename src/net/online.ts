@@ -717,6 +717,7 @@ export class ClientWorld implements IWorld {
       if (typeof w.emoSeq === 'number') e.overheadEmoteSeq = w.emoSeq;
       e.dead = nowDead;
       e.lootable = !!w.loot;
+      e.hardcoreCorpse = !!w.hcCorpse; // dead hardcore player's lootable body
       e.hostile = !!w.h;
       e.castingAbility = w.cast ?? null;
       e.castRemaining = w.castRem ?? 0;
