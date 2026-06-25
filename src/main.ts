@@ -46,6 +46,7 @@ import { mountDownloadLaunchers } from './ui/cryptic/download_launchers';
 import { mountChatFrame } from './ui/cryptic/chat_frame';
 import { mountMusicWidget } from './ui/cryptic/music_widget';
 import { mountHudLayout } from './ui/cryptic/hud_layout';
+import { loadDocFragment } from './ui/cryptic/doc_fragment';
 import { crypticMusic } from './game/cryptic_music';
 import { mountBestiary } from './ui/cryptic/bestiary';
 import { mountSkillTree } from './ui/cryptic/skilltree';
@@ -3159,33 +3160,6 @@ function renderReleaseBody(md: string): string {
 // News & Updates: published GitHub releases, proxied + cached by the server.
 // Re-fetched each time the view is opened (the server caches, so it is cheap).
 let newsLoading = false;
-// In-app doc views (Links / White Paper). The content still lives in the
-// retained /links.html + /whitepaper.html fragments (single source, also the
-// 302 redirect targets for old bookmarks), but it's rendered INSIDE the SPA so
-// the site has one nav and no separately-navigated pages. We fetch once, lift
-// the <main> (fallback: .wrap), strip <script>/<style>/<link> so nothing escapes
-// the view, and inject. Same-origin fetch only.
-const docFragmentLoaded = new Set<string>();
-async function loadDocFragment(url: string, targetSel: string): Promise<void> {
-  const host = document.querySelector(targetSel);
-  if (!host || docFragmentLoaded.has(url)) return;
-  try {
-    const res = await fetch(url, { headers: { Accept: 'text/html' } });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const raw = await res.text();
-    const doc = new DOMParser().parseFromString(raw, 'text/html');
-    const content = doc.querySelector('main') ?? doc.querySelector('.wrap') ?? doc.body;
-    // Drop anything executable / page-chrome before injecting.
-    content.querySelectorAll('script, style, link, nav, header.hero .hero-logo').forEach((el) => el.remove());
-    host.innerHTML = content.innerHTML;
-    docFragmentLoaded.add(url);
-    translatePage();
-  } catch (err) {
-    host.innerHTML = `<p class="cr-doc-lead">${t('news.error')}</p>`;
-    console.warn('doc fragment load failed:', url, err);
-  }
-}
-
 async function loadNews(): Promise<void> {
   const host = $('#news-feed');
   if (!host || newsLoading) return;
@@ -3205,14 +3179,14 @@ async function loadNews(): Promise<void> {
       title: t('news.tokenTitle'),
       body: t('news.tokenBody'),
       tag: '$CR',
-      url: '/links.html',
+      url: '/#links',
       realm: 'all',
     },
     {
       title: t('news.alphaBetaTitle'),
       body: t('news.alphaBetaBody'),
       tag: t('news.officialLog'),
-      url: '/whitepaper.html',
+      url: '/#whitepaper',
       realm: 'all',
     },
     {
@@ -4823,11 +4797,17 @@ function wireStartScreens(): void {
   // so we keep a single content source without duplicating it into index.html.
   setupNavBtn(navBtnLinks, '#links-view', () => {
     switchMainView('#links-view');
-    void loadDocFragment('/links.html', '#links-content');
+    void loadDocFragment('/links.html', '#links-content', {
+      errorHtml: `<p class="cr-doc-lead">${t('news.error')}</p>`,
+      afterInject: translatePage,
+    });
   });
   setupNavBtn(navBtnWhitepaper, '#whitepaper-view', () => {
     switchMainView('#whitepaper-view');
-    void loadDocFragment('/whitepaper.html', '#whitepaper-content');
+    void loadDocFragment('/whitepaper.html', '#whitepaper-content', {
+      errorHtml: `<p class="cr-doc-lead">${t('news.error')}</p>`,
+      afterInject: translatePage,
+    });
   });
   setupNavBtn(navBtnLogin, '#hero-view', () => {
     show('#login-panel');
@@ -4872,12 +4852,18 @@ function wireStartScreens(): void {
     }
     if (hash === 'links') {
       switchMainView('#links-view');
-      void loadDocFragment('/links.html', '#links-content');
+      void loadDocFragment('/links.html', '#links-content', {
+        errorHtml: `<p class="cr-doc-lead">${t('news.error')}</p>`,
+        afterInject: translatePage,
+      });
       return;
     }
     if (hash === 'whitepaper') {
       switchMainView('#whitepaper-view');
-      void loadDocFragment('/whitepaper.html', '#whitepaper-content');
+      void loadDocFragment('/whitepaper.html', '#whitepaper-content', {
+        errorHtml: `<p class="cr-doc-lead">${t('news.error')}</p>`,
+        afterInject: translatePage,
+      });
       return;
     }
     if (hash === 'login' || hash === 'register' || hash === 'account') {

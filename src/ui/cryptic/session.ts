@@ -47,6 +47,11 @@ export function writeCrypticSession(session: CrypticSession): void {
   } catch {
     // Storage can fail in strict/private contexts; auth still works in memory.
   }
+  try {
+    window.dispatchEvent(new CustomEvent('cr-session-change'));
+  } catch {
+    // Non-browser tests / locked-down webviews.
+  }
 }
 
 export function clearCrypticSession(): void {
@@ -56,5 +61,10 @@ export function clearCrypticSession(): void {
     for (const key of USER_NAME_KEYS) localStorage.removeItem(key);
   } catch {
     // Best effort.
+  }
+  try {
+    window.dispatchEvent(new CustomEvent('cr-session-change'));
+  } catch {
+    // Non-browser tests / locked-down webviews.
   }
 }

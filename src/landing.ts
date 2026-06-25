@@ -5,6 +5,7 @@ import { mountUserDropdown } from './ui/cryptic/user_dropdown';
 import { mountWalletPanel } from './ui/cryptic/wallet_panel';
 import { readCrypticSession } from './ui/cryptic/session';
 import { mountMusicWidget } from './ui/cryptic/music_widget';
+import { loadDocFragment } from './ui/cryptic/doc_fragment';
 import { crypticMusic } from './game/cryptic_music';
 
 let appPromise: Promise<typeof import('./main')> | null = null;
@@ -95,13 +96,16 @@ const APP_TRIGGER_SELECTOR = [
 ].join(',');
 
 const PANELS = ['#mode-select', '#login-panel', '#realm-panel', '#charselect-panel', '#offline-select'];
-const VIEWS = ['#hero-view', '#highscores-view', '#wiki-view', '#news-view', '#download-view'];
+const VIEWS = ['#hero-view', '#highscores-view', '#wiki-view', '#news-view', '#download-view', '#contributions-view', '#links-view', '#whitepaper-view'];
 const NAV_BY_VIEW: Record<string, string> = {
   '#hero-view': 'nav-btn-play',
   '#highscores-view': 'nav-btn-highscores',
   '#wiki-view': 'nav-btn-wiki',
   '#news-view': 'nav-btn-news',
   '#download-view': 'nav-btn-download',
+  '#contributions-view': 'nav-btn-contributions',
+  '#links-view': 'nav-btn-links',
+  '#whitepaper-view': 'nav-btn-whitepaper',
 };
 
 interface LandingLeaderboardEntry {
@@ -273,21 +277,21 @@ async function loadLandingNews(): Promise<void> {
       title: '$CR + Platinum Utility',
       body: '$CR is the Cryptic Realm Solana SPL token. Platinum is the in-game premium bridge for cosmetics, houses, mounts, marketplace listings, and Exchange realm trades. The base game stays free to play.',
       tag: '$CR',
-      url: '/links.html',
+      url: '/#links',
       realm: 'all',
     },
     {
       title: 'Alpha, Beta, And Public Realm Cadence',
       body: 'Alpha testers can earn platinum at a higher rate because alpha characters reset every two weeks. Beta promotion happens monthly into public Cryptic Realm and MoveWeight realms after review.',
       tag: 'Official Work Log',
-      url: '/whitepaper.html',
+      url: '/#whitepaper',
       realm: 'all',
     },
     {
       title: 'ClaudeCraft / ClaudeCode Contributions',
       body: 'Shared engine, auth, dashboard, auto-update, moderator, wiki, and launcher improvements are tracked separately from Cryptic Realm-only realms, $CR, platinum, and custom content.',
       tag: 'ClaudeCraft PRs',
-      url: '/contributions.html',
+      url: '/#contributions',
       realm: 'claudecraft',
     },
     {
@@ -458,9 +462,18 @@ function wireLandingPanels(): void {
     switchLandingView('#news-view');
     void loadLandingNews();
   });
+  document.getElementById('nav-btn-contributions')?.addEventListener('click', () => switchLandingView('#contributions-view'));
   document.getElementById('nav-btn-download')?.addEventListener('click', () => {
     switchLandingView('#download-view');
     void mountLandingDownloads();
+  });
+  document.getElementById('nav-btn-links')?.addEventListener('click', () => {
+    switchLandingView('#links-view');
+    void loadDocFragment('/links.html', '#links-content');
+  });
+  document.getElementById('nav-btn-whitepaper')?.addEventListener('click', () => {
+    switchLandingView('#whitepaper-view');
+    void loadDocFragment('/whitepaper.html', '#whitepaper-content');
   });
   document.getElementById('btn-play')?.addEventListener('click', () => {
     const mode = document.getElementById('server-select')?.dataset.mode ?? 'online';
@@ -596,6 +609,20 @@ function applyHashRoute(): void {
   if (hash === 'download' || hash === 'downloads' || hash === 'install') {
     switchLandingView('#download-view');
     void mountLandingDownloads();
+    return;
+  }
+  if (hash === 'contributions') {
+    switchLandingView('#contributions-view');
+    return;
+  }
+  if (hash === 'links') {
+    switchLandingView('#links-view');
+    void loadDocFragment('/links.html', '#links-content');
+    return;
+  }
+  if (hash === 'whitepaper') {
+    switchLandingView('#whitepaper-view');
+    void loadDocFragment('/whitepaper.html', '#whitepaper-content');
     return;
   }
   if (hash === 'login' || hash === 'register' || hash === 'account') {

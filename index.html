@@ -2640,6 +2640,161 @@
     margin-top: var(--spacing-sm);
   }
 
+  /* In-app document pages: links / white paper / contributions. The standalone
+     pages keep their own CSS, but the SPA injects only safe body fragments, so
+     these scoped rules preserve the card/grid layout inside normal nav views. */
+  .cr-doc-view {
+    width: min(980px, calc(100% - 32px));
+    margin: var(--spacing-lg) auto;
+    padding: clamp(18px, 3vw, 30px);
+    display: grid;
+    gap: var(--spacing-md);
+    text-align: left;
+  }
+  .cr-doc-view h2,
+  .cr-doc-view h3,
+  .cr-doc-view .section-title {
+    margin: 0 0 10px;
+    color: var(--color-primary);
+    font-family: var(--font-heading);
+    letter-spacing: 0;
+    text-align: center;
+    text-shadow: 2px 2px 4px #000;
+    text-transform: none;
+  }
+  .cr-doc-view h2,
+  .cr-doc-view .section-title { font-size: clamp(22px, 3vw, 30px); }
+  .cr-doc-view h3 { font-size: clamp(18px, 2.2vw, 23px); }
+  .cr-doc-view p,
+  .cr-doc-view li {
+    color: var(--color-text-light);
+    font-family: var(--font-sans);
+    font-size: 14.5px;
+    line-height: 1.58;
+  }
+  .cr-doc-view p { margin: 0 0 10px; }
+  .cr-doc-view ul,
+  .cr-doc-view ol { margin: 0; padding-left: 22px; }
+  .cr-doc-view main,
+  .cr-doc-view .section {
+    display: grid;
+    gap: var(--spacing-md);
+  }
+  .cr-doc-view section,
+  .cr-doc-view .notice,
+  .cr-doc-view .proof-card {
+    display: grid;
+    gap: 10px;
+    padding: clamp(14px, 2.4vw, 22px);
+    border: 1px solid rgba(201, 161, 74, 0.28);
+    border-radius: var(--radius-md);
+    background: rgba(10, 10, 16, 0.72);
+    box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.35);
+  }
+  .cr-doc-view .notice {
+    border-color: rgba(196, 81, 66, 0.42);
+    background: rgba(74, 20, 18, 0.22);
+  }
+  .cr-doc-view .grid,
+  .cr-doc-view .cr-doc-grid,
+  .cr-doc-view .realm-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 12px;
+  }
+  .cr-doc-view .card,
+  .cr-doc-view .cr-doc-card,
+  .cr-doc-view .realm-link,
+  .cr-doc-view .fact {
+    min-width: 0;
+    display: grid;
+    gap: 6px;
+    align-content: start;
+    padding: 13px 14px;
+    border: 1px solid rgba(201, 161, 74, 0.24);
+    border-radius: var(--radius-sm);
+    background: rgba(0, 0, 0, 0.28);
+    color: var(--color-text-light);
+    text-decoration: none;
+  }
+  .cr-doc-view .card:hover,
+  .cr-doc-view .card:focus-visible,
+  .cr-doc-view .realm-link:hover,
+  .cr-doc-view .realm-link:focus-visible {
+    color: var(--color-primary);
+    border-color: rgba(255, 209, 0, 0.72);
+    background: rgba(255, 209, 0, 0.05);
+    outline: none;
+  }
+  .cr-doc-view .card strong,
+  .cr-doc-view .cr-doc-card strong,
+  .cr-doc-view .realm-link strong,
+  .cr-doc-view .fact strong {
+    display: block;
+    color: var(--color-primary);
+    font-family: var(--font-heading);
+    font-size: 14px;
+    letter-spacing: 0;
+  }
+  .cr-doc-view .card span,
+  .cr-doc-view .cr-doc-card span,
+  .cr-doc-view .realm-link span {
+    display: block;
+    color: var(--color-text-muted, #b9ac82);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    line-height: 1.45;
+  }
+  .cr-doc-view .card small {
+    display: block;
+    color: #8fd4ff;
+    font-size: 11px;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+  }
+  .cr-doc-view code {
+    max-width: 100%;
+    display: inline-block;
+    padding: 2px 5px;
+    border: 1px solid rgba(127, 199, 255, 0.18);
+    border-radius: 4px;
+    background: rgba(127, 199, 255, 0.08);
+    color: #d8f0ff;
+    font-family: "Cascadia Mono", Consolas, monospace;
+    font-size: 12px;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+  .cr-doc-view .cr-doc-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+  .cr-doc-view .cr-doc-tag {
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    padding: 5px 9px;
+    border: 1px solid rgba(201, 161, 74, 0.32);
+    border-radius: var(--radius-sm);
+    background: rgba(0, 0, 0, 0.28);
+    color: var(--color-primary);
+    font-family: var(--font-heading);
+    font-size: 12px;
+  }
+  body.mobile-touch .cr-doc-view {
+    width: min(100% - 20px, 560px);
+    margin: var(--spacing-md) auto;
+    padding: var(--spacing-sm);
+  }
+  body.mobile-touch .cr-doc-view .grid,
+  body.mobile-touch .cr-doc-view .cr-doc-grid,
+  body.mobile-touch .cr-doc-view .realm-grid {
+    grid-template-columns: 1fr;
+  }
+
   /* Home-page global leaderboard (Max-Level XP Overflow) */
   .hs-panel {
     display: flex;
