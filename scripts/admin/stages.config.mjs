@@ -47,6 +47,7 @@ export function stageInstance(realmId, stage) {
 //   non-live       -> <stage>-<realm>.crypticrealm.com   (flagship: <stage>.crypticrealm.com)
 export function stageHost(realmId, stage) {
   if (stage === 'live') {
+    if (realmId === 'fps') return 'fps.moveweight.com';
     return REALMS[realmId]?.apex ? 'crypticrealm.com' : `${realmId}.crypticrealm.com`;
   }
   return REALMS[realmId]?.apex
