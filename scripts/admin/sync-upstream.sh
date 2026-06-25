@@ -20,16 +20,21 @@ UPSTREAM_REMOTE="${CR_UPSTREAM_REMOTE:-upstream}"
 UPSTREAM_BRANCH="${CR_UPSTREAM_BRANCH:-main}"
 ORIGIN="${CR_REMOTE:-origin}"
 LOG="${CR_LOG_FILE:-/var/log/cr-upstream-sync.log}"
+SYNC_WORKTREE="${CR_SYNC_WORKTREE:-/tmp/cryptic-realm-upstream-sync-worktree}"
 
 log() { echo "[$(date -u +%FT%TZ)] [upstream-sync] $*" | tee -a "$LOG"; }
 
 cd "$CR_HOME" || { log "cd $CR_HOME failed"; exit 1; }
 log "==== upstream sync start (${UPSTREAM_REMOTE}/${UPSTREAM_BRANCH} -> ${DEV_BRANCH}) ===="
 
-# Refuse to run on a dirty tree (a stuck deploy/edit) — that has bitten us.
-if [ -n "$(git status --porcelain --untracked-files=no)" ]; then
-  log "ABORT: working tree dirty; resolve before syncing"; exit 1
-fi
+# Merge from a detached temp worktree so stage worktrees can keep dev checked out.
+case "$SYNC_WORKTREE" in
+  /tmp/cryptic-realm-upstream-sync*) ;;
+  *) log "ABORT: unsafe CR_SYNC_WORKTREE path: $SYNC_WORKTREE"; exit 1 ;;
+esac
+cleanup_worktree() {
+  git -C "$CR_HOME" worktree remove --force "$SYNC_WORKTREE" >>"$LOG" 2>&1 || rm -rf "$SYNC_WORKTREE"
+}
 
 # Full (non-shallow) fetch: a shallow clone can't find the common ancestor and
 # git then refuses with "unrelated histories" even though our repo descends from
@@ -47,40 +52,47 @@ fi
 git fetch "$ORIGIN" "$DEV_BRANCH" >>"$LOG" 2>&1 || true
 
 UP_SHA="$(git rev-parse "${UPSTREAM_REMOTE}/${UPSTREAM_BRANCH}")"
-git checkout "$DEV_BRANCH" >>"$LOG" 2>&1 || { log "ABORT: cannot checkout $DEV_BRANCH"; exit 1; }
+DEV_SHA="$(git rev-parse "${ORIGIN}/${DEV_BRANCH}")"
+git worktree prune >>"$LOG" 2>&1 || true
+cleanup_worktree
+git worktree add --detach "$SYNC_WORKTREE" "$DEV_SHA" >>"$LOG" 2>&1 \
+  || { log "ABORT: cannot create detached sync worktree for $DEV_BRANCH"; exit 1; }
 
 # If there's still no common ancestor, this is a genuinely unrelated tree — do
 # NOT force it (would mangle dev). Bail for a human.
-if ! git merge-base HEAD "$UP_SHA" >/dev/null 2>&1; then
+if ! git -C "$SYNC_WORKTREE" merge-base HEAD "$UP_SHA" >/dev/null 2>&1; then
   log "ABORT: no common ancestor between dev and upstream — manual review needed"
+  cleanup_worktree
   exit 3
 fi
 
 # Already up to date?
-if git merge-base --is-ancestor "$UP_SHA" HEAD; then
+if git -C "$SYNC_WORKTREE" merge-base --is-ancestor "$UP_SHA" HEAD; then
   log "dev already contains ${UPSTREAM_REMOTE}/${UPSTREAM_BRANCH} @ ${UP_SHA:0:9} — nothing to do"
+  cleanup_worktree
   exit 0
 fi
 
 log "merging upstream @ ${UP_SHA:0:9} into ${DEV_BRANCH}…"
 REPORT="${CR_SYNC_REPORT:-/var/log/cr-upstream-sync-conflict.md}"
-if git merge --no-edit -m "merge: auto-sync upstream world-of-claudecraft @ ${UP_SHA:0:9} into dev" "$UP_SHA" >>"$LOG" 2>&1; then
-  git push "$ORIGIN" "$DEV_BRANCH" >>"$LOG" 2>&1 || { log "WARN: merged but push failed"; exit 1; }
+if git -C "$SYNC_WORKTREE" merge --no-edit -m "merge: auto-sync upstream world-of-claudecraft @ ${UP_SHA:0:9} into dev" "$UP_SHA" >>"$LOG" 2>&1; then
+  git -C "$SYNC_WORKTREE" push "$ORIGIN" "HEAD:${DEV_BRANCH}" >>"$LOG" 2>&1 || { log "WARN: merged but push failed"; cleanup_worktree; exit 1; }
   log "merged + pushed. autoupdate timer will deploy dev."
   # Clear any stale conflict report from a previous failed run.
   rm -f "$REPORT" 2>/dev/null || true
+  cleanup_worktree
 else
   # Capture WHICH files conflicted before aborting, into a human-readable report
   # so a maintainer can act without spelunking the raw log. The merge is aborted
   # so dev stays clean and the live rings are never reached by a bad auto-merge.
-  CONFLICTS="$(git diff --name-only --diff-filter=U 2>/dev/null || true)"
+  CONFLICTS="$(git -C "$SYNC_WORKTREE" diff --name-only --diff-filter=U 2>/dev/null || true)"
   N="$(printf '%s\n' "$CONFLICTS" | grep -c . || true)"
   {
     echo "# Cryptic Realm upstream auto-sync — CONFLICT"
     echo
     echo "- When: $(date -u +%FT%TZ)"
     echo "- Upstream: ${UPSTREAM_REMOTE}/${UPSTREAM_BRANCH} @ ${UP_SHA}"
-    echo "- Dev branch: ${DEV_BRANCH} @ $(git rev-parse HEAD)"
+    echo "- Dev branch: ${DEV_BRANCH} @ ${DEV_SHA}"
     echo "- Conflicted files: ${N}"
     echo
     echo "## Files needing a human merge"
@@ -96,7 +108,8 @@ else
     echo '```'
   } > "$REPORT" 2>/dev/null || true
   log "CONFLICT: ${N} files conflict — aborting, dev untouched. Report: ${REPORT}"
-  git merge --abort >>"$LOG" 2>&1 || true
+  git -C "$SYNC_WORKTREE" merge --abort >>"$LOG" 2>&1 || true
+  cleanup_worktree
   exit 2
 fi
 log "==== upstream sync done ===="
