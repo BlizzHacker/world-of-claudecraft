@@ -89,7 +89,6 @@ export function stageInstance(realmId: RealmId, stage: RealmStage): string {
 export function stageHost(realmId: RealmId, stage: RealmStage): string {
   const isApex = realmId === 'crypticrealm';
   if (stage === 'live') {
-    if (realmId === 'fps') return 'fps.moveweight.com';
     return isApex ? 'crypticrealm.com' : `${realmId}.crypticrealm.com`;
   }
   return isApex ? `${stage}.crypticrealm.com` : `${stage}-${realmId}.crypticrealm.com`;
