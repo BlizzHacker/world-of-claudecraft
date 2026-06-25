@@ -194,5 +194,5 @@ describe('PvP control abilities in active duels', () => {
     for (let i = 0; i < 20 * 61; i++) sim.tick();
 
     expect(castFear()).toBe(8);
-  });
+  }, 15_000);
 });

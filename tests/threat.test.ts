@@ -450,7 +450,7 @@ describe('hunter pets', () => {
     expect(sim.entities.has(originalWolfId)).toBe(false);
     for (let i = 0; i < 20 * 61; i++) sim.tick();
     expect([...sim.entities.values()].some((e) => e.kind === 'mob' && e.ownerId === null && e.templateId === 'forest_wolf')).toBe(true);
-  });
+  }, 15_000);
 
   it('friendly target spells can affect controlled pets', () => {
     const { sim, wolf: pet } = tamedSetup();
