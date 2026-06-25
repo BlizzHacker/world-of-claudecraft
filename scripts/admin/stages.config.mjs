@@ -26,6 +26,9 @@ export const REALMS = {
   dominion: { base: 8830, name: 'Dominion', type: 'PvP' },
   arcane: { base: 8840, name: 'Arcane', type: 'Normal' },
   claudecraft: { base: 8850, name: 'ClaudeCraft', type: 'Normal' },
+  fps: { base: 8860, name: 'FPS', type: 'Normal' },
+  exchange: { base: 8870, name: 'Exchange', type: 'RP' },
+  arcadevoid: { base: 8880, name: 'Arcade Void', type: 'Normal' },
 };
 
 export function stagePort(realmId, stage) {

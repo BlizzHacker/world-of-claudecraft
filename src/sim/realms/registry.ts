@@ -22,6 +22,7 @@ import { INFERNAL_REALM } from './content/infernal';
 import { CLASSIC_REALM } from './content/classic';
 import { DOMINION_REALM } from './content/dominion';
 import { ARCANE_REALM } from './content/arcane';
+import { ARCADE_VOID_REALM } from './content/arcade_void';
 import { FPS_REALM } from './content/fps';
 import { EXCHANGE_REALM } from './content/exchange';
 import type { RealmContent, RealmId } from './types';
@@ -32,6 +33,7 @@ export const REALMS: Record<RealmId, RealmContent> = {
   classic: CLASSIC_REALM,
   dominion: DOMINION_REALM,
   arcane: ARCANE_REALM,
+  arcadevoid: ARCADE_VOID_REALM,
   claudecraft: CLAUDECRAFT_REALM,
   fps: FPS_REALM,
   exchange: EXCHANGE_REALM,
@@ -45,6 +47,7 @@ export const REALM_LIST: readonly RealmContent[] = [
   CLASSIC_REALM,
   DOMINION_REALM,
   ARCANE_REALM,
+  ARCADE_VOID_REALM,
   CLAUDECRAFT_REALM,
   FPS_REALM,
   EXCHANGE_REALM,

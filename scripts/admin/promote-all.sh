@@ -11,7 +11,7 @@ set -uo pipefail
 TARGET="${1:?usage: promote-all.sh <alpha|beta|live>}"
 CR_TOOLING="${CR_TOOLING:-/opt/cryptic-realm}"
 LOGFILE="${CR_LOG_FILE:-/var/log/cryptic-realm-stage.log}"
-REALMS=(crypticrealm infernal classic dominion arcane claudecraft)
+REALMS=(crypticrealm infernal classic dominion arcane claudecraft fps exchange arcadevoid)
 
 log() { echo "[$(date -u +%FT%TZ)] [promote-all ${TARGET}] $*" | tee -a "$LOGFILE"; }
 

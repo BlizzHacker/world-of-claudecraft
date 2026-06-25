@@ -6,6 +6,8 @@ describe('first-person character mesh roles', () => {
     expect(firstPersonMeshRole('Knight_Head')).toBe('hide');
     expect(firstPersonMeshRole('Knight_HelmetVisor')).toBe('hide');
     expect(firstPersonMeshRole('Mage_Hat')).toBe('hide');
+    expect(firstPersonMeshRole('RogueHooded_Mask')).toBe('hide');
+    expect(firstPersonMeshRole('Barbarian_BearHat')).toBe('hide');
     expect(firstPersonMeshRole('Rogue_Body')).toBe('hide');
     expect(firstPersonMeshRole('Rogue_Cape')).toBe('hide');
   });
@@ -13,8 +15,10 @@ describe('first-person character mesh roles', () => {
   it('keeps appendages visible for first-person combat animation reads', () => {
     expect(firstPersonMeshRole('Knight_ArmLeft')).toBe('keep');
     expect(firstPersonMeshRole('Knight_ArmRight')).toBe('keep');
+    expect(firstPersonMeshRole('Knight_LeftArm')).toBe('keep');
     expect(firstPersonMeshRole('Druid_LegLeft')).toBe('keep');
     expect(firstPersonMeshRole('Druid_LegRight')).toBe('keep');
+    expect(firstPersonMeshRole('Druid_RightLeg')).toBe('keep');
   });
 
   it('leaves weapon attachments out of the body-part mask', () => {

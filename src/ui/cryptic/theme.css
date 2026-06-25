@@ -132,6 +132,28 @@
   --cr-shadow-glow: 0 0 32px rgba(168, 85, 247, 0.35);
 }
 
+[data-theme="arcadevoid"] {
+  --cr-bg-primary: #050915;
+  --cr-bg-secondary: #07111c;
+  --cr-bg-panel: rgba(4, 10, 22, 0.92);
+  --cr-bg-input: rgba(0, 0, 0, 0.58);
+  --cr-border: rgba(87, 240, 255, 0.42);
+  --cr-border-focus: #57f0ff;
+  --cr-border-glow: rgba(87, 240, 255, 0.56);
+  --cr-accent: #57f0ff;
+  --cr-accent-dim: #1d8292;
+  --cr-accent-glow: rgba(87, 240, 255, 0.28);
+  --cr-gold: #ffcf4a;
+  --cr-gold-dim: #9b761c;
+  --cr-text: #eafaff;
+  --cr-text-dim: #93c5d8;
+  --cr-text-error: #ff6b6b;
+  --cr-text-success: #4dff9b;
+  --cr-gradient-bg: linear-gradient(135deg, #02131c 0%, #090514 55%, #16060d 100%);
+  --cr-shadow: 0 20px 64px rgba(0, 0, 0, 0.68);
+  --cr-shadow-glow: 0 0 32px rgba(87, 240, 255, 0.28);
+}
+
 /* Moveable music widget — draggable now-playing + toggle (music_widget.ts). */
 #cr-music-widget {
   position: fixed;

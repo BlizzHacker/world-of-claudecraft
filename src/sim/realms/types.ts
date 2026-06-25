@@ -12,6 +12,7 @@ export type RealmId =
   | 'classic'
   | 'dominion'
   | 'arcane'
+  | 'arcadevoid'
   | 'claudecraft'
   // First-person-only realm (fps.moveweight.com). Camera is locked to the
   // first-person view; the third-person / Diablo presets are disabled here.

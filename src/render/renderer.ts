@@ -1041,6 +1041,19 @@ export class Renderer {
 
   setFirstPersonSelfView(on: boolean): void {
     this.firstPersonSelfView = on;
+    this.applyFirstPersonSelfViewToLocal();
+  }
+
+  private applyFirstPersonSelfViewToLocal(): void {
+    const v = this.views.get(this.sim.playerId);
+    if (!v) return;
+    const active = this.activeVisual(v);
+    const on = this.firstPersonSelfView;
+    v.visual?.setFirstPersonSelf(on && active === v.visual);
+    v.sheepVisual?.setFirstPersonSelf(on && active === v.sheepVisual);
+    v.bearVisual?.setFirstPersonSelf(on && active === v.bearVisual);
+    v.catVisual?.setFirstPersonSelf(on && active === v.catVisual);
+    v.travelVisual?.setFirstPersonSelf(on && active === v.travelVisual);
   }
 
   private isMobileRuntime(): boolean {

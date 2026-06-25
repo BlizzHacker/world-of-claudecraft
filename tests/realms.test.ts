@@ -17,11 +17,11 @@ import { parsePickitFilter, evaluateItem } from '../src/sim/realms/pickit';
 import { Rng } from '../src/sim/rng';
 
 describe('realm registry', () => {
-  it('ships eight realms (seven home + The Exchange)', () => {
+  it('ships nine realms (eight playable realm families + The Exchange)', () => {
     expect(Object.keys(REALMS).sort()).toEqual(
-      ['arcane', 'classic', 'claudecraft', 'crypticrealm', 'dominion', 'exchange', 'fps', 'infernal'],
+      ['arcadevoid', 'arcane', 'classic', 'claudecraft', 'crypticrealm', 'dominion', 'exchange', 'fps', 'infernal'],
     );
-    expect(REALM_LIST.length).toBe(8);
+    expect(REALM_LIST.length).toBe(9);
   });
 
   it('default realm is registered and matches DEFAULT_REALM', () => {
@@ -64,6 +64,12 @@ describe('realm registry', () => {
     const ex = getRealm('exchange');
     expect(ex.crossRealm).toBe(true);
     expect(ex.classes).toEqual([]);
+  });
+
+  it('Arcade Void uses the local private realm asset pack for branding', () => {
+    const arcade = getRealm('arcadevoid');
+    expect(arcade.branding?.loadingScreenSrc).toBe('/cr-realms/arcadevoid/cr-loggedin.png');
+    expect(arcade.classes.length).toBeGreaterThanOrEqual(3);
   });
 
   it('isRealmId narrows correctly', () => {

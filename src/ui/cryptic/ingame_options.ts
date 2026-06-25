@@ -352,10 +352,12 @@ function openCustomizationHost(): void {
   };
 }
 
-// Opens ArcForge Studio (a separate app on the MoveWeight infra) in a new tab.
-// Surfaced as a button in the in-game Game Menu, wired directly in hud.ts.
+// Surfaced as a button in the in-game Game Menu. Keep the player inside the
+// game: admins/mods can launch the live editor from the Mods tab, while the
+// standalone Studio link remains inside that ArcForge section.
 export function openArcForge(): void {
-  window.open(ARCFORGE_URL, '_blank', 'noopener,noreferrer');
+  activeTab = 'mods';
+  openCustomizationHost();
 }
 
 export function mountIngameOptions(): void {

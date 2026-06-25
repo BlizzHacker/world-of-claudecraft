@@ -15,7 +15,7 @@
 // so ports, subdomains, and multipliers never drift between them.
 
 import type { RealmId } from './types';
-import { HOME_REALM_LIST } from './registry';
+import { REALM_LIST } from './registry';
 
 export type RealmStage = 'live' | 'beta' | 'alpha' | 'dev';
 
@@ -62,11 +62,14 @@ export const REALM_PORT_BASE: Partial<Record<RealmId, number>> = {
   dominion: 8830,
   arcane: 8840,
   claudecraft: 8850,
+  fps: 8860,
+  exchange: 8870,
+  arcadevoid: 8880,
 };
 
-/** Realms that get the 4-stage treatment (the home realms). */
+/** Realms that get the 4-stage treatment, including special-purpose hubs. */
 export function stagedRealmIds(): RealmId[] {
-  return HOME_REALM_LIST.map((r) => r.id).filter((id) => REALM_PORT_BASE[id] != null);
+  return REALM_LIST.map((r) => r.id).filter((id) => REALM_PORT_BASE[id] != null);
 }
 
 export function stagePort(realmId: RealmId, stage: RealmStage): number | null {
