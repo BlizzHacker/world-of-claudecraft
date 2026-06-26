@@ -23,6 +23,8 @@ import { newToken } from './auth';
 const STATE_COOKIE = 'cr_oauth_state';
 const STATE_COOKIE_MAX_AGE = 600; // 10 min
 const PROVIDER = 'authentik';
+const DEFAULT_NATIVE_RETURN_URL = 'crypticrealm://auth/callback';
+const ALLOWED_NATIVE_SCHEMES = new Set(['crypticrealm:', 'com.crypticrealm.game:']);
 
 // Server-side fallback for the OAuth state nonce. Embedded webviews (the Tauri
 // desktop shell and the Capacitor Android app) frequently DROP the SameSite=Lax
@@ -36,23 +38,28 @@ const PROVIDER = 'authentik';
 // and is single-use (deleted on consume). This makes SSO work in the apps without
 // weakening the web flow.
 const STATE_TTL_MS = STATE_COOKIE_MAX_AGE * 1000;
-const issuedStates = new Map<string, number>(); // state -> expiry epoch ms
+interface IssuedState {
+  expiresAt: number;
+  nativeReturnUrl: string | null;
+}
 
-function rememberState(state: string): void {
+const issuedStates = new Map<string, IssuedState>(); // state -> expiry + optional app return
+
+function rememberState(state: string, nativeReturnUrl: string | null = null): void {
   const now = Date.now();
-  issuedStates.set(state, now + STATE_TTL_MS);
+  issuedStates.set(state, { expiresAt: now + STATE_TTL_MS, nativeReturnUrl });
   // opportunistic GC of expired entries so the map can't grow unbounded
   if (issuedStates.size > 256) {
-    for (const [s, exp] of issuedStates) if (exp <= now) issuedStates.delete(s);
+    for (const [s, issued] of issuedStates) if (issued.expiresAt <= now) issuedStates.delete(s);
   }
 }
 
-// Returns true if `state` was issued by us and not yet consumed; consumes it.
-function consumeIssuedState(state: string): boolean {
-  const exp = issuedStates.get(state);
-  if (exp === undefined) return false;
+// Returns metadata if `state` was issued by us and not yet consumed; consumes it.
+function consumeIssuedState(state: string): IssuedState | null {
+  const issued = issuedStates.get(state);
+  if (issued === undefined) return null;
   issuedStates.delete(state);
-  return exp > Date.now();
+  return issued.expiresAt > Date.now() ? issued : null;
 }
 
 interface AuthentikConfig {
@@ -139,6 +146,45 @@ function readCookie(req: http.IncomingMessage, name: string): string | null {
   return null;
 }
 
+function nativeReturnUrlForStart(url: URL): string | null {
+  const wantsNative = url.searchParams.get('native') === '1'
+    || url.searchParams.get('app') === '1'
+    || url.searchParams.has('native_return');
+  if (!wantsNative) return null;
+  const raw = url.searchParams.get('native_return') || DEFAULT_NATIVE_RETURN_URL;
+  try {
+    const parsed = new URL(raw);
+    if (!ALLOWED_NATIVE_SCHEMES.has(parsed.protocol)) return DEFAULT_NATIVE_RETURN_URL;
+    if (parsed.host !== 'auth') return DEFAULT_NATIVE_RETURN_URL;
+    return parsed.toString().replace(/#.*$/, '');
+  } catch {
+    return DEFAULT_NATIVE_RETURN_URL;
+  }
+}
+
+function nativeReturnUrlWithHash(nativeReturnUrl: string, hash: string): string {
+  const url = new URL(nativeReturnUrl);
+  url.search = '';
+  url.hash = hash.startsWith('#') ? hash.slice(1) : hash;
+  return url.toString();
+}
+
+function oauthBridgeHtml(hash: string, nativeReturnUrl: string | null): string {
+  const hashJson = JSON.stringify(hash);
+  const nativeUrlJson = nativeReturnUrl
+    ? JSON.stringify(nativeReturnUrlWithHash(nativeReturnUrl, hash))
+    : 'null';
+  return `<!doctype html><html><head><meta charset="utf-8">`
+    + `<meta name="viewport" content="width=device-width,initial-scale=1">`
+    + `<title>Signing in...</title>`
+    + `<style>body{margin:0;background:#07080c;color:#ffd166;font:16px/1.5 system-ui,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh}</style>`
+    + `</head><body>Signing you in...`
+    + `<script>(function(){try{var h=${hashJson};var n=${nativeUrlJson};`
+    + `if(n){setTimeout(function(){window.location.replace('/'+h);},1600);window.location.replace(n);return;}`
+    + `window.location.replace('/'+h);}catch(e){window.location.href='/';}})();</script>`
+    + `</body></html>`;
+}
+
 function buildAuthorizeUrl(authorizeEndpoint: string, cfg: AuthentikConfig, state: string): string {
   const params = new URLSearchParams({
     response_type: 'code',
@@ -204,8 +250,9 @@ export async function handleAuthentikRoute(
     try {
       const endpoints = await discoverEndpoints(CONFIG);
       const state = randomBytes(24).toString('hex');
+      const nativeReturnUrl = nativeReturnUrlForStart(url);
       setStateCookie(res, state);
-      rememberState(state); // webview-safe fallback (cookie may be dropped in-app)
+      rememberState(state, nativeReturnUrl); // webview-safe fallback (cookie may be dropped in-app)
       res.writeHead(302, { Location: buildAuthorizeUrl(endpoints.authorize, CONFIG, state) });
       res.end();
       return;
@@ -222,8 +269,8 @@ export async function handleAuthentikRoute(
     // not consumed (embedded webviews that drop the cookie — Tauri/Capacitor).
     // consumeIssuedState is called unconditionally so the nonce is single-use
     // even on the cookie-match path.
-    const issuedOk = state ? consumeIssuedState(state) : false;
-    const stateOk = !!state && (state === cookieState || issuedOk);
+    const issued = state ? consumeIssuedState(state) : null;
+    const stateOk = !!state && (state === cookieState || !!issued);
     if (!code || !stateOk) {
       clearStateCookie(res);
       return json(res, 400, { error: 'invalid OAuth state — please retry sign-in' });
@@ -255,15 +302,7 @@ export async function handleAuthentikRoute(
         auth_user: account.username,
         auth_via: PROVIDER,
       }).toString();
-      const hashJson = JSON.stringify('#' + hash);
-      const html = `<!doctype html><html><head><meta charset="utf-8">`
-        + `<meta name="viewport" content="width=device-width,initial-scale=1">`
-        + `<title>Signing in…</title>`
-        + `<style>body{margin:0;background:#07080c;color:#ffd166;font:16px/1.5 system-ui,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh}</style>`
-        + `</head><body>Signing you in…`
-        + `<script>(function(){try{var h=${hashJson};`
-        + `window.location.replace('/'+h);}catch(e){window.location.href='/';}})();</script>`
-        + `</body></html>`;
+      const html = oauthBridgeHtml('#' + hash, issued?.nativeReturnUrl ?? null);
       res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' });
       res.end(html);
       return;

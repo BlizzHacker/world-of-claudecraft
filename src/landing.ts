@@ -6,6 +6,7 @@ import { mountWalletPanel } from './ui/cryptic/wallet_panel';
 import { readCrypticSession } from './ui/cryptic/session';
 import { mountMusicWidget } from './ui/cryptic/music_widget';
 import { loadDocFragment } from './ui/cryptic/doc_fragment';
+import { installNativeSsoReturnHandler, wireNativeSsoLink } from './ui/cryptic/native_sso';
 import { crypticMusic } from './game/cryptic_music';
 
 let appPromise: Promise<typeof import('./main')> | null = null;
@@ -47,6 +48,15 @@ function bootLandingBranding(): void {
   // from main.ts startGame() instead of here (the #cr-bestiary-host div was also
   // removed from #realm-panel in index.html).
   mountWalletPanel();
+  wireNativeSsoLink();
+}
+
+function acceptNativeSsoHash(hash: string): void {
+  try { history.replaceState(null, '', window.location.pathname + window.location.search + hash); } catch { window.location.hash = hash; }
+  window.dispatchEvent(new CustomEvent('cr:sso-native-return', { detail: { hash } }));
+  void loadApp().catch((err) => {
+    console.error('[cr-boot] loadApp failed after native SSO return', err);
+  });
 }
 
 function wireContractAddressCopy(): void {
@@ -738,6 +748,7 @@ function boot(): void {
   wireHighscoresScope();
   wireLandingOfflinePanel();
   wireDeferredAppLoad();
+  void installNativeSsoReturnHandler(acceptNativeSsoHash);
   // The home page runs landing.ts (NOT main.ts), so mount the moveable music
   // widget here too. First gesture unlocks autoplay.
   mountMusicWidget();

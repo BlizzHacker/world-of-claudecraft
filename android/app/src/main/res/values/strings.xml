@@ -3,5 +3,5 @@
     <string name="app_name">Cryptic Realm</string>
     <string name="title_activity_main">Cryptic Realm</string>
     <string name="package_name">com.crypticrealm.game</string>
-    <string name="custom_url_scheme">com.crypticrealm.game</string>
+    <string name="custom_url_scheme">crypticrealm</string>
 </resources>

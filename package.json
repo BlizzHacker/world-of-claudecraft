@@ -42,6 +42,7 @@
     "tauri:build": "tauri build"
   },
   "dependencies": {
+    "@capacitor/app": "^6.0.3",
     "@noble/curves": "^1.9.7",
     "@solana/wallet-standard-chains": "^1.1.2",
     "@solana/wallet-standard-features": "^1.4.0",

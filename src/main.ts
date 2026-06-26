@@ -52,6 +52,7 @@ import { mountBestiary } from './ui/cryptic/bestiary';
 import { mountSkillTree } from './ui/cryptic/skilltree';
 import { mountLootVault } from './ui/cryptic/loot_vault';
 import { mountPickitPanel } from './ui/cryptic/pickit_panel';
+import { installNativeSsoReturnHandler, wireNativeSsoLink } from './ui/cryptic/native_sso';
 import { clearCrypticSession, readCrypticSession, writeCrypticSession } from './ui/cryptic/session';
 // Upstream v0.11 additions. createPerfMonitor / updateFollowCameraYaw / wrapAngle
 // are provided lazily through loadGameRuntime() (see GameRuntime), so only the
@@ -4394,43 +4395,58 @@ function wireStartScreens(): void {
   // `/#auth_token=...&auth_user=...` we adopt the token, clean the hash so
   // it doesn't show up in shared screenshots, and jump straight to the
   // realm select panel — same path doAuth() takes after /api/login succeeds.
-  const ssoHash = (typeof window !== 'undefined' ? window.location.hash : '') ?? '';
-  if (ssoHash.startsWith('#') && ssoHash.includes('auth_token=')) {
+  let lastAdoptedSsoHash = '';
+  const adoptSsoHash = (hash: string): boolean => {
+    const ssoHash = hash ?? '';
+    if (!ssoHash.startsWith('#') || !ssoHash.includes('auth_token=')) return false;
+    if (ssoHash === lastAdoptedSsoHash) return true;
     const ssoParams = new URLSearchParams(ssoHash.slice(1));
     const ssoToken = ssoParams.get('auth_token');
     const ssoUser = ssoParams.get('auth_user');
-    if (ssoToken && /^[a-f0-9]{64}$/.test(ssoToken) && ssoUser) {
-      api.token = ssoToken;
-      api.username = ssoUser;
-      // Carry the population choice (ladder/hardcore) made in the picker on the
-      // previous origin across the cross-origin hop, so character creation here
-      // pre-selects it. pop: 'l'=ladder, 'h'=hardcore, 'lh'=both, 'n'=neither.
-      const popParam = ssoParams.get('pop');
-      if (popParam) setPopulationPref(popParam.includes('l'), popParam.includes('h'));
-      // CR overlay: also persist to the dashboard's localStorage so the
-      // logged-in header dropdown (src/ui/cryptic/user_dropdown.ts) shows
-      // immediately. The dashboards (/me/, /mod/, /admin/) read the same keys.
+    if (!ssoToken || !/^[a-f0-9]{64}$/.test(ssoToken) || !ssoUser) return false;
+    lastAdoptedSsoHash = ssoHash;
+    api.token = ssoToken;
+    api.username = ssoUser;
+    // Carry the population choice (ladder/hardcore) made in the picker on the
+    // previous origin across the cross-origin hop, so character creation here
+    // pre-selects it. pop: 'l'=ladder, 'h'=hardcore, 'lh'=both, 'n'=neither.
+    const popParam = ssoParams.get('pop');
+    if (popParam) setPopulationPref(popParam.includes('l'), popParam.includes('h'));
+    // CR overlay: also persist to the dashboard's localStorage so the
+    // logged-in header dropdown (src/ui/cryptic/user_dropdown.ts) shows
+    // immediately. The dashboards (/me/, /mod/, /admin/) read the same keys.
+    try {
+      writeCrypticSession({ token: ssoToken, username: ssoUser });
+    } catch { /* storage unavailable */ }
+    try { history.replaceState(null, '', window.location.pathname + window.location.search); } catch { /* noop */ }
+    // Re-mount the header dropdown with the new identity.
+    void mountUserDropdown();
+    mountWalletPanel();
+    void refreshWalletLinkStatus();
+    void (async () => {
       try {
-        writeCrypticSession({ token: ssoToken, username: ssoUser });
-      } catch { /* storage unavailable */ }
-      try { history.replaceState(null, '', window.location.pathname + window.location.search); } catch { /* noop */ }
-      // Re-mount the header dropdown with the new identity.
-      void mountUserDropdown();
-      mountWalletPanel();
-      void (async () => {
-        try {
-          const userEl = document.querySelector('#charselect-user');
-          if (userEl) userEl.textContent = api.username ?? '';
-          const dir = await api.realms();
-          const listUserEl = document.querySelector('#realm-list-user');
-          if (listUserEl) listUserEl.textContent = api.username ?? '';
-          showRealmList(dir);
-        } catch (err) {
-          loginError(userFacingApiError(err));
-        }
-      })();
-    }
-  }
+        const userEl = document.querySelector('#charselect-user');
+        if (userEl) userEl.textContent = api.username ?? '';
+        const dir = await api.realms();
+        const listUserEl = document.querySelector('#realm-list-user');
+        if (listUserEl) listUserEl.textContent = api.username ?? '';
+        showRealmList(dir);
+      } catch (err) {
+        loginError(userFacingApiError(err));
+      }
+    })();
+    return true;
+  };
+  window.addEventListener('cr:sso-native-return', (event) => {
+    const hash = (event as CustomEvent<{ hash?: string }>).detail?.hash ?? '';
+    if (hash) adoptSsoHash(hash);
+  });
+  void installNativeSsoReturnHandler((hash) => {
+    try { history.replaceState(null, '', window.location.pathname + window.location.search + hash); } catch { /* noop */ }
+    adoptSsoHash(hash);
+  });
+  wireNativeSsoLink();
+  adoptSsoHash((typeof window !== 'undefined' ? window.location.hash : '') ?? '');
 
   const loginForm = $('#login-panel') as HTMLFormElement;
   const userInput = $('#login-user') as HTMLInputElement;

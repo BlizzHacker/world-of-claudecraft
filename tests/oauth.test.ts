@@ -151,6 +151,59 @@ describe('Authentik OIDC handler', () => {
     vi.unstubAllGlobals();
   });
 
+  it('callback returns a native app deep link after app SSO start', async () => {
+    const dbMod = await import('../server/db');
+    vi.mocked(dbMod.upsertOAuthAccount).mockResolvedValue({ id: 12, username: 'moveweight', created: true });
+    vi.mocked(dbMod.touchLogin).mockResolvedValue(undefined);
+    vi.mocked(dbMod.saveToken).mockResolvedValue(undefined);
+
+    const fetchMock = vi.fn(async (url: string) => {
+      if (url.includes('/.well-known/openid-configuration')) {
+        return new Response(JSON.stringify({
+          authorization_endpoint: 'https://auth.test.local/application/o/authorize/',
+          token_endpoint: 'https://auth.test.local/application/o/token/',
+          userinfo_endpoint: 'https://auth.test.local/application/o/userinfo/',
+        }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      }
+      if (url.endsWith('/token/')) {
+        return new Response(JSON.stringify({ access_token: 'access-token-native' }), {
+          status: 200, headers: { 'Content-Type': 'application/json' },
+        });
+      }
+      if (url.endsWith('/userinfo/')) {
+        return new Response(JSON.stringify({
+          sub: 'authentik-subject-native', preferred_username: 'moveweight',
+        }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      }
+      throw new Error(`unexpected fetch URL ${url}`);
+    });
+    vi.stubGlobal('fetch', fetchMock);
+
+    const { handleAuthentikRoute } = await import('../server/oauth');
+    const startReq = fakeReq({ method: 'GET', url: '/api/oauth/authentik?native=1' });
+    const startRes = fakeRes();
+    await handleAuthentikRoute(startReq, startRes);
+    const loc = new URL(startRes._headers.location as string);
+    const state = loc.searchParams.get('state');
+    expect(state).toMatch(/^[a-f0-9]{48}$/);
+
+    const req = fakeReq({
+      method: 'GET',
+      url: `/api/oauth/authentik/callback?code=auth-code&state=${state}`,
+    });
+    const res = fakeRes();
+    await handleAuthentikRoute(req, res);
+
+    expect(res.statusCode).toBe(200);
+    expect(String(res.body)).toContain('crypticrealm://auth/callback#auth_token=');
+    expect(String(res.body)).toContain('auth_user=moveweight');
+    expect(String(res.body)).toContain('setTimeout');
+    expect(String(res.body)).toContain("window.location.replace('/'+h)");
+    expect(dbMod.saveToken).toHaveBeenCalledWith('c'.repeat(64), 12);
+
+    vi.unstubAllGlobals();
+  });
+
   it('callback returns 502 when token exchange fails', async () => {
     const fetchMock = vi.fn(async (url: string) => {
       if (url.includes('/.well-known/openid-configuration')) {
