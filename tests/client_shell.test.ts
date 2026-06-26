@@ -293,7 +293,7 @@ describe('client HTML shell', () => {
     // (initHomepageTrailer) so it can respect reduced-motion / save-data rather
     // than autoplaying in markup.
     expect(html).toContain('id="bg-trailer"');
-    expect(html).toContain('poster="/video/trailer-poster.jpg"');
+    expect(html).toContain('poster="/cryptic-realm-loading-bg.webp"');
     expect(html).toContain('<source src="/video/trailer.mp4" type="video/mp4"');
     expect(html).toContain('loop');
     expect(html).toContain('playsinline');
