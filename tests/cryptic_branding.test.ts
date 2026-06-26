@@ -11,8 +11,8 @@ function setupBrandingDom(): void {
     <a class="community-link donate" href="https://github.com/sponsors/levy-street"><span>Donate</span></a>
     <div class="footer-social-row">
       <a class="social-link donate" href="https://github.com/sponsors/levy-street"><span>Donate</span></a>
-      <a class="social-link" href="https://github.com/levy-street/world-of-claudecraft"><span>GitHub</span></a>
-      <a class="social-link" href="https://discord.gg/GjhnUsBtw"><span>Discord</span></a>
+      <a class="social-link github" href="https://github.com/levy-street/world-of-claudecraft"><span>GitHub</span></a>
+      <a class="social-link discord" href="https://discord.gg/GjhnUsBtw"><span>Discord</span></a>
     </div>
     <div id="token-ca">
       <span class="token-ca-label" data-i18n="mode.caLabel">$CR Contract Address</span>
@@ -51,6 +51,9 @@ describe('Cryptic realm branding crypto surfaces', () => {
     expect(document.querySelector<HTMLElement>('.token-ca-label')?.hasAttribute('data-i18n')).toBe(false);
     expect(document.getElementById('btn-copy-ca')?.hasAttribute('data-i18n-aria')).toBe(false);
     expect(document.querySelector<HTMLElement>('.token-ca-note')?.hasAttribute('data-i18n')).toBe(false);
+    expect(document.querySelector<HTMLAnchorElement>('.social-link.github')?.href).toBe('https://github.com/BlizzHacker/cryptic-realm');
+    expect(document.querySelector<HTMLElement>('.social-link.github span')?.textContent).toBe('Cryptic Realm Source');
+    expect(document.querySelector<HTMLElement>('.social-link.discord span')?.textContent).toBe('Cryptic Realm Discord');
   });
 
   it('keeps upstream sponsors and WOC token on Claudecraft', async () => {

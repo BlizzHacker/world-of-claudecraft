@@ -28,6 +28,11 @@ describe('site and dashboard navigation', () => {
     expect(dashboardChromeTs).toContain('class="mobile-menu-toggle"');
     expect(dashboardChromeTs).toContain('class="header-menu-container"');
     expect(dashboardChromeTs).toContain('class="donate-cta"');
+    expect(dashboardChromeTs).toContain("import { mountRealmBranding } from './branding';");
+    expect(dashboardChromeTs).toContain("import { mountThemeSelect } from './theme_select';");
+    expect(dashboardChromeTs).toContain("import { mountUserDropdown } from './user_dropdown';");
+    expect(dashboardChromeTs).toContain('id="theme-picker"');
+    expect(dashboardChromeTs).toContain("mountThemeSelect({ hostId: 'theme-picker' });");
     expect(dashboardChromeTs).not.toContain('portalLinks');
     expect(dashboardChromeTs).not.toContain('nav-sep');
 

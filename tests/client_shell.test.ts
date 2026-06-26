@@ -40,12 +40,12 @@ describe('client HTML shell', () => {
   });
 
   it('ships crawlable SEO metadata and sitemap hints', () => {
-    // CR fork: Cryptic Realm branding / crypticrealm.com. Upstream is still
-    // credited via the schema sameAs github/discord links.
+    // CR fork: Cryptic Realm branding / crypticrealm.com. Upstream credits live
+    // on the contributions page and the claudecraft realm config, not site SEO.
     expect(html).toContain('<meta name="robots" content="index, follow, max-image-preview:large" />');
     expect(html).toContain('<link rel="canonical" href="https://crypticrealm.com/" />');
     expect(html).toContain('<meta property="og:site_name" content="Cryptic Realm" />');
-    expect(mainTs).toContain("'https://github.com/levy-street/world-of-claudecraft'");
+    expect(mainTs).toContain("'https://github.com/BlizzHacker/cryptic-realm'");
     expect(robotsTxt.trim()).toBe('User-agent: *\nAllow: /\n\nSitemap: https://crypticrealm.com/sitemap.xml');
     expect(robotsTxt).toContain('Sitemap: https://crypticrealm.com/sitemap.xml');
     expect(sitemapXml).toContain('<loc>https://crypticrealm.com/</loc>');

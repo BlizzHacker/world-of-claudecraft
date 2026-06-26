@@ -6,6 +6,10 @@
 // Home is the canonical source of nav order/labels; keep this list in sync
 // with public/nav.js. Self-mounts on DOMContentLoaded.
 
+import { mountRealmBranding } from './branding';
+import { mountThemeSelect } from './theme_select';
+import { mountUserDropdown } from './user_dropdown';
+
 const CHROME_ID = 'cr-dash-chrome';
 const STYLE_ID = 'cr-dash-chrome-style';
 
@@ -31,10 +35,9 @@ interface NavLink {
 // loaded. To change the nav, edit public/nav.js — not here.
 function primaryLinks(): NavLink[] {
   const shared = (window as unknown as { CR_NAV_ITEMS?: { href: string; label: string }[] }).CR_NAV_ITEMS;
-  if (Array.isArray(shared) && shared.length) {
-    return shared.map((i) => ({ href: i.href, label: i.label }));
-  }
-  return [
+  const base = Array.isArray(shared) && shared.length
+    ? shared.map((i) => ({ href: i.href, label: i.label }))
+    : [
     { href: '/#play', label: 'Play' },
     { href: '/#highscores', label: 'High Scores' },
     { href: '/wiki.html', label: 'Wiki' },
@@ -45,6 +48,22 @@ function primaryLinks(): NavLink[] {
     { href: '/whitepaper.html', label: 'White Paper' },
     { href: '/#login', label: 'Login/Register' },
   ];
+  const kind = pageKind();
+  const context = kind === 'admin'
+    ? { href: '/admin/', label: 'Admin', current: true }
+    : kind === 'mod'
+      ? { href: '/mod/', label: 'Moderator', current: true }
+      : kind === 'me'
+        ? { href: '/me/', label: 'My Account', current: true }
+        : null;
+  if (!context) return base;
+  if (base.some((l) => l.href === context.href)) {
+    return base.map((l) => ({ ...l, current: l.href === context.href }));
+  }
+  const loginIdx = base.findIndex((l) => l.href.includes('#login'));
+  const out = base.slice();
+  out.splice(loginIdx >= 0 ? loginIdx : out.length, 0, context);
+  return out;
 }
 
 function navId(label: string): string {
@@ -76,9 +95,10 @@ function buildHtml(): string {
           <ul class="nav-list" role="list">${primary}</ul>
         </nav>
         <div class="header-actions">
-          <a class="donate-cta" href="https://github.com/sponsors/levy-street" target="_blank" rel="noopener noreferrer" title="Support the project" aria-label="Donate to support World of ClaudeCraft">
+          <div id="theme-picker" aria-label="Realm selector"></div>
+          <a class="donate-cta" href="solana:GncAXx6j38osJns395XZtf6rSA9MU3K1gwafTrHpBJpi" rel="noopener noreferrer" title="Tip $CR or SOL to GncA...BJpi" aria-label="Tip $CR or SOL to support Cryptic Realm at GncAXx6j38osJns395XZtf6rSA9MU3K1gwafTrHpBJpi">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-            <span>Donate</span>
+            <span>Tip $CR</span>
           </a>
         </div>
       </div>
@@ -108,6 +128,7 @@ const STYLE = `
   .cr-dash-header .header-menu-container { display: contents; }
   .cr-dash-header .header-logo-container { display: flex; align-items: center; justify-self: start; }
   .cr-dash-header .header-actions { display: flex; align-items: center; gap: 8px; justify-self: end; }
+  .cr-dash-header #theme-picker { display: flex; align-items: center; min-width: 0; }
   .cr-dash-header .header-logo-btn {
     background: none; border: none; cursor: pointer; padding: 0; margin: 0;
     display: flex; align-items: center; border-radius: 4px; transition: filter 0.2s;
@@ -203,6 +224,7 @@ const STYLE = `
     .cr-dash-header .header-actions {
       width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;
     }
+    .cr-dash-header #theme-picker { width: 100%; justify-content: center; }
   }
 `;
 
@@ -218,7 +240,10 @@ export function mountDashboardChrome(): void {
   if (typeof document === 'undefined') return;
   const kind = pageKind();
   if (!kind) return;
-  if (document.getElementById(CHROME_ID)) return;
+  if (document.getElementById(CHROME_ID)) {
+    mountDashboardEnhancements();
+    return;
+  }
   ensureStyle();
   const host = document.createElement('div');
   host.innerHTML = buildHtml();
@@ -230,6 +255,13 @@ export function mountDashboardChrome(): void {
     toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
   });
   document.body.insertBefore(header, document.body.firstChild);
+  mountDashboardEnhancements();
+}
+
+function mountDashboardEnhancements(): void {
+  mountRealmBranding();
+  mountThemeSelect({ hostId: 'theme-picker' });
+  void mountUserDropdown();
 }
 
 if (typeof document !== 'undefined') {

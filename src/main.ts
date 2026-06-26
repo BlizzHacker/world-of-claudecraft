@@ -2930,7 +2930,9 @@ function updateSeoMetadata(lang: SupportedLanguage): void {
       description: t('seo.description'),
       inLanguage: languageTag(lang),
       sameAs: [
-        'https://github.com/levy-street/world-of-claudecraft',
+        'https://github.com/BlizzHacker/cryptic-realm',
+        'https://x.com/CrypticMMO',
+        'https://www.youtube.com/@CrypticMMO',
         'https://discord.gg/GjhnUsBtw',
       ],
     }, null, 2);

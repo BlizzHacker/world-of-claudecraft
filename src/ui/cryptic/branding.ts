@@ -6,6 +6,7 @@ import { socialsForRealm } from '../../sim/realms/social_links';
 
 const WOC_TOKEN_MINT = '3WjLscH2JsXLEFJZRA9z8ti8yRGxWGKbqymPd7UicRth';
 const WOC_SPONSORS_URL = 'https://github.com/sponsors/levy-street';
+const CR_TIP_LABEL = 'Tip $CR';
 
 const REALM_COLOR_TOKENS: Record<string, Record<string, string>> = {
   infernal: {
@@ -59,6 +60,20 @@ function setHrefAll(selector: string, value: string): void {
   });
 }
 
+function setLinkTextAll(selector: string, value: string): void {
+  document.querySelectorAll<HTMLAnchorElement>(selector).forEach((a) => {
+    const span = a.querySelector('span');
+    if (span) span.textContent = value;
+  });
+}
+
+function setLinkA11yAll(selector: string, title: string, aria = title): void {
+  document.querySelectorAll<HTMLAnchorElement>(selector).forEach((a) => {
+    a.title = title;
+    a.setAttribute('aria-label', aria);
+  });
+}
+
 function setHiddenAll(selector: string, hidden: boolean): void {
   document.querySelectorAll(selector).forEach((el) => {
     (el as HTMLElement).style.display = hidden ? 'none' : '';
@@ -69,12 +84,12 @@ function applyDonateLinks(realm: RealmContent): void {
   const socials = socialsForRealm(realm.id);
   const tipWallet = socials.tipWalletSolana;
   const href = tipWallet ? `solana:${tipWallet}` : WOC_SPONSORS_URL;
-  const label = tipWallet ? 'Tip $CR' : 'Donate';
+  const label = tipWallet ? CR_TIP_LABEL : 'Donate';
   const title = tipWallet
-    ? `Tip $CR or SOL to ${tipWallet.slice(0, 4)}...${tipWallet.slice(-4)}`
+    ? `${CR_TIP_LABEL} or SOL to ${tipWallet.slice(0, 4)}...${tipWallet.slice(-4)}`
     : 'Support the project';
   const aria = tipWallet
-    ? `Tip $CR or SOL to support Cryptic Realm at ${tipWallet}`
+    ? `${CR_TIP_LABEL} or SOL to support Cryptic Realm at ${tipWallet}`
     : 'Donate to support World of ClaudeCraft';
 
   document.querySelectorAll<HTMLAnchorElement>('.donate-cta, .social-link.donate, .community-link.donate').forEach((a) => {
@@ -84,9 +99,12 @@ function applyDonateLinks(realm: RealmContent): void {
     if (tipWallet) {
       a.removeAttribute('data-i18n-title');
       a.removeAttribute('data-i18n-aria');
+      a.removeAttribute('target');
     } else {
       a.setAttribute('data-i18n-title', 'a11y.donateProject');
       a.setAttribute('data-i18n-aria', 'a11y.donateProject');
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
     }
     const span = a.querySelector('span');
     if (span) {
@@ -152,16 +170,32 @@ function applyTo(realm: RealmContent): void {
   }
 
   if (b.discordUrl !== undefined) setHrefAll('.community-link.discord', b.discordUrl);
+  if (b.discordUrl !== undefined) setHrefAll('.social-link.discord, [data-cr-social="discord"]', b.discordUrl);
   if (b.githubUrl !== undefined) setHrefAll('.community-link.github', b.githubUrl);
+  if (b.githubUrl !== undefined) setHrefAll('.social-link.github, [data-cr-social="github"]', b.githubUrl);
 
-  const wantsCommunity = realm.id === 'claudecraft' && b.showDonate === true;
+  const isClaudecraft = realm.id === 'claudecraft';
+  setLinkA11yAll(
+    '.community-link.discord, .social-link.discord, [data-cr-social="discord"]',
+    isClaudecraft ? 'Join the World of ClaudeCraft Discord community' : 'Join the Cryptic Realm Discord community',
+  );
+  setLinkA11yAll(
+    '.community-link.github, .social-link.github, [data-cr-social="github"]',
+    isClaudecraft ? 'Open the World of ClaudeCraft GitHub project' : 'Open the Cryptic Realm GitHub project',
+  );
+  setLinkTextAll('.footer-social-row .social-link.github, .footer-social-row [data-cr-social="github"]',
+    isClaudecraft ? 'Open Source Project' : 'Cryptic Realm Source');
+  setLinkTextAll('.footer-social-row .social-link.discord, .footer-social-row [data-cr-social="discord"]',
+    isClaudecraft ? 'Join the Discord' : 'Cryptic Realm Discord');
+
+  const wantsCommunity = isClaudecraft && b.showDonate === true;
   setHiddenAll('.donate-cta', !(b.showDonate === true || hasTipWallet));
   setHiddenAll('.community-link.donate', !(wantsCommunity || hasTipWallet));
   setHiddenAll('.community-link.github', !wantsCommunity);
   setHiddenAll('.community-link.discord', !wantsCommunity);
   setHiddenAll('.footer-social-row .social-link.donate', !(wantsCommunity || hasTipWallet));
-  setHiddenAll('.footer-social-row .social-link[href*="github"]', !wantsCommunity);
-  setHiddenAll('.footer-social-row .social-link[href*="discord"]', !wantsCommunity);
+  setHiddenAll('.footer-social-row .social-link.github, .footer-social-row [data-cr-social="github"]', !wantsCommunity);
+  setHiddenAll('.footer-social-row .social-link.discord, .footer-social-row [data-cr-social="discord"]', !wantsCommunity);
   setHiddenAll('.footer-social-row', !(wantsCommunity || hasTipWallet));
 
   setHiddenAll('#btn-sso-authentik', b.showAuthentikSso === false);
