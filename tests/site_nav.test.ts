@@ -21,6 +21,12 @@ describe('site and dashboard navigation', () => {
 
   it('remounts dashboard chrome after account and moderator body rerenders', () => {
     expect(dashboardChromeTs).toContain("p.startsWith('/me') || p === '/user.html'");
+    expect(dashboardChromeTs).toContain('data-cr-main-menu');
+    expect(dashboardChromeTs).toContain('class="mobile-menu-toggle"');
+    expect(dashboardChromeTs).toContain('class="header-menu-container"');
+    expect(dashboardChromeTs).toContain('class="donate-cta"');
+    expect(dashboardChromeTs).not.toContain('portalLinks');
+    expect(dashboardChromeTs).not.toContain('nav-sep');
 
     for (const source of [userMainTs, moderatorMainTs]) {
       expect(source).toContain("import { mountDashboardChrome } from '../ui/cryptic/dashboard_chrome';");
