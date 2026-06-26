@@ -7,7 +7,7 @@ import {
 } from './api';
 import { getActiveRealm } from '../sim/realms';
 import '../ui/cryptic/theme.css';
-import '../ui/cryptic/dashboard_chrome';
+import { mountDashboardChrome } from '../ui/cryptic/dashboard_chrome';
 
 const $ = <T extends HTMLElement = HTMLElement>(sel: string): T =>
   document.querySelector(sel) as T;
@@ -38,6 +38,7 @@ function renderLoginShell(): void {
       </div>
     </div>
   `;
+  mountDashboardChrome();
   ($('#login-form') as HTMLFormElement).addEventListener('submit', async (ev) => {
     ev.preventDefault();
     const err = $('#login-error');
@@ -122,6 +123,7 @@ async function renderDashboard(): Promise<void> {
       </div>
     </div>
   `;
+  mountDashboardChrome();
   $('#signout').addEventListener('click', () => { clearSession(); renderLoginShell(); });
 
   try {

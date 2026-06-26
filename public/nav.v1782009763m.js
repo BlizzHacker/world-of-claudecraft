@@ -15,12 +15,12 @@
   var ITEMS = [
     { href: '/#play', label: 'Play', match: { hash: 'play', home: true } },
     { href: '/#highscores', label: 'High Scores', match: { hash: 'highscores' } },
-    { href: '/#wiki', label: 'Wiki', match: { hash: 'wiki', path: '/wiki' } },
+    { href: '/wiki.html', label: 'Wiki', match: { hash: 'wiki', path: '/wiki' } },
     { href: '/#news', label: 'News', match: { hash: 'news' } },
-    { href: '/#contributions', label: 'Contributions', match: { hash: 'contributions', path: '/contributions' } },
+    { href: '/contributions.html', label: 'Contributions', match: { hash: 'contributions', path: '/contributions' } },
     { href: '/#download', label: 'Download', match: { hash: 'download' } },
-    { href: '/#links', label: 'Links', match: { hash: 'links', path: '/links' } },
-    { href: '/#whitepaper', label: 'White Paper', match: { hash: 'whitepaper', path: '/whitepaper' } },
+    { href: '/links.html', label: 'Links', match: { hash: 'links', path: '/links' } },
+    { href: '/whitepaper.html', label: 'White Paper', match: { hash: 'whitepaper', path: '/whitepaper' } },
     { href: '/#login', label: 'Login/Register', match: { hash: 'login' } },
   ];
 

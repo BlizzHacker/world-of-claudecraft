@@ -2,9 +2,8 @@
 // header (index.html .homepage-header) so /me/, /mod/, and /admin/ match the
 // home page instead of carrying a divergent menu. Because the dashboards are
 // standalone pages (their own HTML + SPA, not index.html's in-page views), the
-// primary nav items link back to the homepage with the matching hash route
-// (handled by landing.ts applyHashRoute), and the dashboard-specific links
-// (/me, /mod, /admin) navigate between the portals.
+// document pages use normal URLs while pure SPA destinations still use the
+// homepage hash routes handled by landing.ts/main.ts.
 //
 // Home is the canonical source of nav order/labels; keep this list in sync
 // with the .nav-list in index.html. Self-mounts on DOMContentLoaded.
@@ -18,7 +17,7 @@ function pageKind(): PageKind | null {
   const p = window.location.pathname;
   if (p.startsWith('/admin')) return 'admin';
   if (p.startsWith('/mod')) return 'mod';
-  if (p.startsWith('/me')) return 'me';
+  if (p.startsWith('/me') || p === '/user.html') return 'me';
   return null;
 }
 
@@ -40,12 +39,12 @@ function primaryLinks(): NavLink[] {
   return [
     { href: '/#play', label: 'Play' },
     { href: '/#highscores', label: 'High Scores' },
-    { href: '/#wiki', label: 'Wiki' },
+    { href: '/wiki.html', label: 'Wiki' },
     { href: '/#news', label: 'News' },
-    { href: '/#contributions', label: 'Contributions' },
+    { href: '/contributions.html', label: 'Contributions' },
     { href: '/#download', label: 'Download' },
-    { href: '/#links', label: 'Links' },
-    { href: '/#whitepaper', label: 'White Paper' },
+    { href: '/links.html', label: 'Links' },
+    { href: '/whitepaper.html', label: 'White Paper' },
     { href: '/#login', label: 'Login/Register' },
   ];
 }

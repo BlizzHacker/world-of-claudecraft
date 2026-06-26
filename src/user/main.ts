@@ -9,7 +9,7 @@ import {
 } from './api';
 import { getActiveRealm } from '../sim/realms';
 import '../ui/cryptic/theme.css';
-import '../ui/cryptic/dashboard_chrome';
+import { mountDashboardChrome } from '../ui/cryptic/dashboard_chrome';
 
 const $ = <T extends HTMLElement = HTMLElement>(sel: string): T =>
   document.querySelector(sel) as T;
@@ -42,6 +42,7 @@ function renderLoginShell(): void {
       </div>
     </div>
   `;
+  mountDashboardChrome();
   const form = $('#login-form') as HTMLFormElement;
   form.addEventListener('submit', async (ev) => {
     ev.preventDefault();
@@ -146,6 +147,7 @@ function renderDashboard(me: MeData, security: SecurityData): void {
       </div>
     </div>
   `;
+  mountDashboardChrome();
   $('#signout').addEventListener('click', () => {
     clearSession();
     pendingTotpSetup = null;
