@@ -6,6 +6,9 @@ const navVersionedJs = readFileSync(new URL('../public/nav.v1782009763m.js', imp
 const dashboardChromeTs = readFileSync(new URL('../src/ui/cryptic/dashboard_chrome.ts', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
 const userMainTs = readFileSync(new URL('../src/user/main.ts', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
 const moderatorMainTs = readFileSync(new URL('../src/moderator/main.ts', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
+const indexHtml = readFileSync(new URL('../index.html', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
+const linksHtml = readFileSync(new URL('../public/links.html', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
+const packageJson = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
 
 describe('site and dashboard navigation', () => {
   it('uses direct document URLs for standalone and dashboard nav pages', () => {
@@ -34,6 +37,18 @@ describe('site and dashboard navigation', () => {
       const remounts = source.match(/mountDashboardChrome\(\);/g) ?? [];
       expect(rerenders.length).toBeGreaterThan(0);
       expect(remounts.length).toBeGreaterThanOrEqual(rerenders.length);
+    }
+  });
+
+  it('keeps the public footer on Cryptic versioning and Diabl0 network links', () => {
+    expect(packageJson.version).toBe('0.14.1-cr.1');
+    expect(indexHtml).toContain('<div id="game-version">v0.14.1-cr.1</div>');
+    expect(indexHtml).toContain('ClaudeCraft target v0.14.1');
+
+    for (const source of [indexHtml, linksHtml]) {
+      expect(source).toContain('https://diabl0.net');
+      expect(source).not.toContain('https://diablo.net');
+      expect(source).not.toContain('Diablo.net');
     }
   });
 });
