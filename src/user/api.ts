@@ -1,25 +1,26 @@
 // Fetch wrapper for the /me/api/* endpoints. Mirrors src/admin/api.ts so both
-// dashboards share the same {success,data,error} envelope handling, just with
-// different routes + token keys.
+// dashboards share the same {success,data,error} envelope handling.
 
-const TOKEN_KEY = 'cryptic-realm_user_token';
-const NAME_KEY = 'cryptic-realm_user_name';
+import {
+  clearCrypticSession,
+  readCrypticSession,
+  writeCrypticSession,
+} from '../ui/cryptic/session';
 
 export class ApiError extends Error {
   constructor(public status: number, message: string) { super(message); }
 }
 
 export function getToken(): string | null {
-  return localStorage.getItem(TOKEN_KEY);
+  return readCrypticSession()?.token ?? null;
 }
 
 export function getUserName(): string {
-  return localStorage.getItem(NAME_KEY) ?? '';
+  return readCrypticSession()?.username ?? '';
 }
 
 export function clearSession(): void {
-  localStorage.removeItem(TOKEN_KEY);
-  localStorage.removeItem(NAME_KEY);
+  clearCrypticSession();
 }
 
 interface Envelope<T> {
@@ -90,8 +91,7 @@ export async function userLogin(username: string, password: string, totpCode = '
     body: JSON.stringify({ username, password, totpCode }),
   });
   const data = await parseEnvelope<LoginData>(res);
-  localStorage.setItem(TOKEN_KEY, data.token);
-  localStorage.setItem(NAME_KEY, data.username);
+  writeCrypticSession({ token: data.token, username: data.username });
   return data;
 }
 

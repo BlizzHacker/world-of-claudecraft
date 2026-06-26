@@ -16,6 +16,23 @@ describe('Cryptic Realm saved session', () => {
     expect(readCrypticSession()).toEqual({ token, username: 'moveweight' });
   });
 
+  it('resumes from moderator/admin token aliases used by dashboard flows', () => {
+    window.localStorage.setItem('cryptic-realm_admin_token', 'c'.repeat(64));
+    window.localStorage.setItem('cryptic-realm_admin_name', 'moveweight');
+
+    expect(readCrypticSession()).toEqual({ token: 'c'.repeat(64), username: 'moveweight' });
+  });
+
+  it('broadcasts session changes so loaded menus refresh their auth state', () => {
+    const changes: string[] = [];
+    window.addEventListener('cr-session-change', () => changes.push('changed'));
+
+    writeCrypticSession({ token: 'a'.repeat(64), username: 'moveweight' });
+    clearCrypticSession();
+
+    expect(changes).toEqual(['changed', 'changed']);
+  });
+
   it('rejects malformed saved tokens instead of resuming a broken login state', () => {
     window.localStorage.setItem('cryptic-realm_user_token', 'not-a-token');
     window.localStorage.setItem('cryptic-realm_user_name', 'moveweight');

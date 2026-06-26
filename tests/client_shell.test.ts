@@ -277,6 +277,17 @@ describe('client HTML shell', () => {
     expect(landingTs).toContain('loadLandingNews');
   });
 
+  it('hands nav ownership from the landing shell to the full client without stale transitions', () => {
+    expect(landingTs).toContain('function landingShellActive(): boolean');
+    expect(landingTs).toContain("return document.body.dataset.crFullClient !== '1';");
+    expect(landingTs).toContain('if (!landingShellActive()) return;');
+    expect(mainTs).toContain("document.body.dataset.crFullClient = '1';");
+    expect(mainTs).toContain('let activeViewTransitionTimeout: number | null = null;');
+    expect(mainTs).toContain('function clearViewTransition(): void');
+    expect(mainTs).toContain('clearViewTransition();');
+    expect(mainTs).toContain('activeViewTransitionCleanup = () => {');
+  });
+
   it('ships a looping cinematic backdrop with a poster fallback', () => {
     // CR fork: the homepage cinematic is #bg-trailer, played from main.ts
     // (initHomepageTrailer) so it can respect reduced-motion / save-data rather

@@ -16,6 +16,10 @@ function loadApp(): Promise<typeof import('./main')> {
   return appPromise;
 }
 
+function landingShellActive(): boolean {
+  return document.body.dataset.crFullClient !== '1';
+}
+
 // Fill the "… Players Online / … Accounts Created" placeholders on the landing
 // page. main.ts does this once the game loads, but the landing shell loads
 // first and would otherwise leave the "…" placeholders. Lightweight fetch.
@@ -166,6 +170,7 @@ function wireMobileMenu(): void {
 }
 
 function switchLandingView(targetId: string): void {
+  if (!landingShellActive()) return;
   closeMobileMenu();
 
   for (const id of VIEWS) {
@@ -348,6 +353,7 @@ async function mountLandingDownloads(): Promise<void> {
 }
 
 function showPanel(selector: string): void {
+  if (!landingShellActive()) return;
   switchLandingView('#hero-view');
   for (const id of PANELS) {
     const el = document.querySelector<HTMLElement>(id);
@@ -587,6 +593,7 @@ function wireLandingOfflinePanel(): void {
 }
 
 function applyHashRoute(): void {
+  if (!landingShellActive()) return;
   const hash = window.location.hash.replace(/^#/, '').toLowerCase();
   if (hash === 'play' || hash === 'game') {
     showPanel('#mode-select');

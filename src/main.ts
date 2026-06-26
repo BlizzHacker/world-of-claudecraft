@@ -1648,6 +1648,8 @@ const REFERRAL_SLUG = (() => {
 
 let activeTransitionTimeout: number | null = null;
 let activeTransitionCleanup: (() => void) | null = null;
+let activeViewTransitionTimeout: number | null = null;
+let activeViewTransitionCleanup: (() => void) | null = null;
 let characterPreview: InstanceType<GameRuntime['CharacterPreview']> | null = null;
 let characterPreviewLoadPromise: Promise<void> | null = null;
 let characterPreviewTimer: number | null = null;
@@ -1853,14 +1855,28 @@ function setPanelVisibility(el: HTMLElement, visible: boolean): void {
   el.setAttribute('aria-hidden', visible ? 'false' : 'true');
 }
 
+function clearViewTransition(): void {
+  if (activeViewTransitionTimeout !== null) {
+    window.clearTimeout(activeViewTransitionTimeout);
+    activeViewTransitionTimeout = null;
+  }
+  if (activeViewTransitionCleanup) {
+    activeViewTransitionCleanup();
+    activeViewTransitionCleanup = null;
+  }
+}
+
+function resetViewTransitionStyle(el: HTMLElement): void {
+  el.style.opacity = '';
+  el.style.transform = '';
+}
+
 function switchMainView(targetId: string): void {
   const views = ['#hero-view', '#highscores-view', '#wiki-view', '#news-view', '#download-view', '#contributions-view', '#links-view', '#whitepaper-view'];
   const currentViewId = views.find(id => {
     const el = $(id);
     return el && !el.hasAttribute('hidden');
   });
-
-  if (currentViewId === targetId) return;
 
   const navMap: Record<string, string> = {
     '#hero-view': 'nav-btn-play',
@@ -1881,6 +1897,8 @@ function switchMainView(targetId: string): void {
     link.setAttribute('aria-pressed', isActive ? 'true' : 'false');
   });
 
+  clearViewTransition();
+
   const fromView = currentViewId ? $(currentViewId) : null;
   const toView = $(targetId);
 
@@ -1893,6 +1911,7 @@ function switchMainView(targetId: string): void {
       const el = $(id);
       if (el) {
         const isTarget = id === targetId;
+        resetViewTransitionStyle(el);
         setPanelVisibility(el, isTarget);
       }
     });
@@ -1913,6 +1932,11 @@ function switchMainView(targetId: string): void {
     }
   };
 
+  if (currentViewId === targetId) {
+    performSwitch();
+    return;
+  }
+
   if (isReducedMotion || !fromView) {
     performSwitch();
     return;
@@ -1923,6 +1947,8 @@ function switchMainView(targetId: string): void {
   fromView.style.transform = 'translateY(-8px)';
 
   const handleTransitionEnd = () => {
+    activeViewTransitionTimeout = null;
+    activeViewTransitionCleanup = null;
     performSwitch();
     
     toView.style.opacity = '0';
@@ -1934,7 +1960,11 @@ function switchMainView(targetId: string): void {
     toView.style.transform = 'translateY(0)';
   };
 
-  window.setTimeout(handleTransitionEnd, 150);
+  activeViewTransitionCleanup = () => {
+    resetViewTransitionStyle(fromView);
+    resetViewTransitionStyle(toView);
+  };
+  activeViewTransitionTimeout = window.setTimeout(handleTransitionEnd, 150);
 }
 
 function scrollStartPanelIntoView(el: string): void {
@@ -3947,6 +3977,7 @@ function wireWallet(): void {
 }
 
 function wireStartScreens(): void {
+  document.body.dataset.crFullClient = '1';
   // Initial page translation and stats load. Lazy locale flip: a stored non-en locale is now
   // a real chunk fetch, and the homepage IS the first paint (there is no loading screen to sit
   // behind), so we localize-then-reveal to prevent an English flash + text swap. The start

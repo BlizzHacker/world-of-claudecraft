@@ -8,6 +8,7 @@ const WOC_TOKEN = '3WjLscH2JsXLEFJZRA9z8ti8yRGxWGKbqymPd7UicRth';
 describe('Cryptic Realm in-game customization menu', () => {
   beforeEach(() => {
     vi.resetModules();
+    vi.doUnmock('../src/ui/cryptic/arcforge_editor');
     window.localStorage.clear();
     document.documentElement.removeAttribute('data-theme');
     document.body.innerHTML = '';
@@ -55,5 +56,32 @@ describe('Cryptic Realm in-game customization menu', () => {
     expect(modal.textContent).toContain('$WOC token');
     expect(modal.innerHTML).toContain(WOC_TOKEN);
     expect(modal.innerHTML).not.toContain(CR_TOKEN);
+  });
+
+  it('surfaces the ArcForge live editor CTA for admin/mod sessions inside the Mods tab', async () => {
+    const openEditor = vi.fn(() => {
+      const editor = document.createElement('div');
+      editor.id = 'cr-arcforge-editor-modal';
+      document.body.appendChild(editor);
+    });
+    vi.doMock('../src/ui/cryptic/arcforge_editor', () => ({
+      openArcForgeEditor: openEditor,
+      canUseArcForgeEditor: vi.fn(async () => true),
+      arcForgeEditorAllowedCached: vi.fn(() => true),
+    }));
+    const { openArcForge } = await import('../src/ui/cryptic/ingame_options');
+
+    openArcForge();
+
+    const modal = document.getElementById('cr-customization-modal')!;
+    expect(modal.hasAttribute('hidden')).toBe(false);
+    expect(modal.textContent).toContain('ArcForge');
+    const button = modal.querySelector<HTMLButtonElement>('[data-cr-arcforge-editor]');
+    expect(button?.textContent).toContain('Open Live Asset Editor');
+
+    button!.click();
+
+    expect(openEditor).toHaveBeenCalledTimes(1);
+    expect(document.getElementById('cr-arcforge-editor-modal')).not.toBeNull();
   });
 });
