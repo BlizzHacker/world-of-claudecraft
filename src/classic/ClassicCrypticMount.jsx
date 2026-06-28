@@ -14,9 +14,13 @@ export default function ClassicCrypticMount({ onExit }) {
       try { return JSON.parse(localStorage.getItem('cr_classic_save') || 'null'); }
       catch { return null; }
     })();
+    // saveData is the unwrapped save object (or null for a fresh game), exactly
+    // as the original GameOverlay passed `crypticSaveRef.current`. Passing a
+    // `{current: saved}` ref wrapper here is truthy even when empty, making the
+    // engine set this.player = wrapper.player (undefined) → boot crash.
     gameRef.current = new CrypticRealmGame(
       canvasRef.current, classId, 'normal', 1, 'high',
-      { current: saved },
+      saved,
       { settings: {}, accountKey: 'classic', apiSettings: {},
         characterId: null, chromeTopInset: 0, isAdmin: false },
     );
