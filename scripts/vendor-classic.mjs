@@ -1,4 +1,4 @@
-import { existsSync, copyFileSync, readFileSync, mkdirSync } from 'node:fs';
+import { existsSync, copyFileSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { resolve, dirname, join } from 'node:path';
 
 const SRC = '//192.168.0.5/lvm_shared/moveweight-ui/src';
@@ -37,20 +37,25 @@ console.log('Copied', seen.size - unresolved.length, 'files');
 if (unresolved.length) { console.error('UNRESOLVED:', unresolved); process.exit(1); }
 
 // --- Task 3: Vendor overlay .jsx files ---
-import { writeFileSync } from 'node:fs';
 const OVERLAYS = [
   'CrypticInventoryOverlay.jsx','CrypticSkillTreeOverlay.jsx','CrypticStashOverlay.jsx',
   'CrypticQuestLog.jsx','CrypticPauseOverlay.jsx','CrypticFishingMinigame.jsx',
   'ArcForgePalette.jsx','ArcForgeTransformPopup.jsx','ArcForgeInGameQueue.jsx',
   'OverlayControls.jsx',
 ];
+// Engine modules an overlay may reference via './X' — repointed to '../engine/X'.
+// Covers both static `from './X'` and dynamic `import('./X')` forms.
+const ENGINE_REFS = 'crypticD2CoreData|crypticAssets|CrypticRealmGame|crypticD2Engine|crypticD2Systems|FishingGame|crypticDatabase|crypticD2Formats|MpqPacker|d2MpqPaths';
 const OVDST = resolve('src/classic/overlays');
 mkdirSync(OVDST, { recursive: true });
 for (const f of OVERLAYS) {
   let code = readFileSync(join(SRC, f), 'utf8');
-  // overlays import engine modules as './X' — repoint to '../engine/X'
-  code = code.replace(/from\s+(['"])\.\/(crypticD2CoreData|crypticAssets|CrypticRealmGame|crypticD2Engine|crypticD2Systems|FishingGame|crypticDatabase|crypticD2Formats|MpqPacker)(\.js)?\1/g,
+  // static: `from './X'`
+  code = code.replace(new RegExp(`from\\s+(['"])\\./(${ENGINE_REFS})(\\.js)?\\1`, 'g'),
     (_m, q, name) => `from ${q}../engine/${name}.js${q}`);
+  // dynamic: `import('./X')`
+  code = code.replace(new RegExp(`import\\((['"])\\./(${ENGINE_REFS})(\\.js)?\\1\\)`, 'g'),
+    (_m, q, name) => `import(${q}../engine/${name}.js${q})`);
   writeFileSync(join(OVDST, f), code);
 }
 console.log('Copied overlays:', OVERLAYS.length);

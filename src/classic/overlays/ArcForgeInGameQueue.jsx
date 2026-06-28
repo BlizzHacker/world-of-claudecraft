@@ -225,7 +225,7 @@ export function ArcForgeInGameQueue({ onClose, selectedMonster, monsterChronicle
             img.onerror = reject;
             img.src = job.imageUrl;
           });
-          const { D2_MONSTER_PATHS, D2_ANIM } = await import("./d2MpqPaths.js");
+          const { D2_MONSTER_PATHS, D2_ANIM } = await import("../engine/d2MpqPaths.js");
           const entry = D2_MONSTER_PATHS[job.assetId];
           if (entry) {
             for (const [state, animMode] of Object.entries(D2_ANIM)) {
