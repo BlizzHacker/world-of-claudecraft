@@ -6,6 +6,7 @@ let root: Root | null = null;
 let host: HTMLElement | null = null;
 
 export function mountClassic(el: HTMLElement, opts?: { onExit?: () => void }): void {
+  if (root) unmountClassic(); // guard: never leak a prior root on double-mount
   host = el;
   el.style.display = 'block';
   root = createRoot(el);
