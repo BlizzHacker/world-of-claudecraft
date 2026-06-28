@@ -255,6 +255,34 @@ function propAsset(key: PropKey): PropAsset {
   return asset;
 }
 
+/** Catalog keys available to the ArcForge world-builder palette. */
+export function placeablePropKeys(): string[] {
+  return Object.keys(PROP_ASSET_DEFS);
+}
+
+/** Is `key` a known, active placeable prop? */
+export function isPlaceablePropKey(key: string): boolean {
+  return ACTIVE_PROP_KEYS.has(key as PropKey);
+}
+
+/**
+ * Build a single free-standing prop mesh group for an ArcForge-placed entity
+ * (templateId 'prop:<key>'). Origin is xz-centered with base at y=0, so the
+ * renderer can position it at the entity's ground position directly. Returns
+ * null if the key isn't an active preloaded prop (caller falls back).
+ */
+export function buildSingleProp(key: string): { group: THREE.Group; height: number } | null {
+  if (!ACTIVE_PROP_KEYS.has(key as PropKey)) return null;
+  let asset: PropAsset;
+  try { asset = propAsset(key as PropKey); }
+  catch { return null; }
+  const group = new THREE.Group();
+  for (const part of asset.parts) {
+    group.add(new THREE.Mesh(part.geo, part.mat));
+  }
+  return { group, height: asset.size.y };
+}
+
 export function buildPropMaterialPrewarmGroup(): THREE.Group {
   const group = new THREE.Group();
   group.name = 'prop-material-prewarm';

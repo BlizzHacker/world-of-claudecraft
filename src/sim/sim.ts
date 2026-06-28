@@ -8,7 +8,7 @@ import {
 import { ARENA_SPAWN_A, ARENA_SPAWN_B, ARENA_SPAWNS_A_2v2, ARENA_SPAWNS_B_2v2 } from './dungeon_layout';
 import { lineOfSightClear, resolveMovement, resolvePosition } from './colliders';
 import { PLAYER_BODY_RADIUS, PLAYER_MAX_CLIMB_SLOPE, PLAYER_SWIM_DEPTH, findPlayerPath } from './pathfind';
-import { createGroundObject, createMob, createNpc, createPlayer, recalcPlayerStats, PlayerEquipment } from './entity';
+import { createGroundObject, createMob, createNpc, createPlayer, createProp, recalcPlayerStats, PlayerEquipment } from './entity';
 import {
   computeTalentModifiers, emptyAllocation, emptyModifiers, talentsFor, talentPointsAtLevel,
   validateAllocation, cloneAllocation, pointsSpent, defaultBuild, FIRST_TALENT_LEVEL, MAX_LOADOUTS,
@@ -806,6 +806,56 @@ export class Sim {
     this.grid.update(e);
     if (e.kind === 'player') this.playerGrid.update(e);
   }
+
+  // ─── ArcForge world props (admin/mod placement) ──────────────────────────
+  // DB prop id → live entity id. Lets the server move/remove a persisted prop.
+  readonly propEntityByDbId = new Map<number, number>();
+
+  /** Spawn a placed prop entity. `dbId` ties it to its realm_props row. */
+  spawnProp(dbId: number, propKey: string, x: number, z: number, facing = 0, scale = 1): Entity {
+    const e = createProp(this.nextId++, propKey, this.groundPos(x, z), facing, scale);
+    this.addEntity(e);
+    this.propEntityByDbId.set(dbId, e.id);
+    return e;
+  }
+
+  /** Move/rotate/scale a placed prop by its DB id. Returns the entity or null. */
+  moveProp(dbId: number, x: number, z: number, facing: number, scale: number): Entity | null {
+    const eid = this.propEntityByDbId.get(dbId);
+    if (eid == null) return null;
+    const e = this.entities.get(eid);
+    if (!e) return null;
+    const gp = this.groundPos(x, z);
+    e.pos.x = gp.x; e.pos.z = gp.z; e.pos.y = gp.y;
+    e.facing = facing; e.scale = scale;
+    this.rebucket(e);
+    return e;
+  }
+
+  /** Despawn a placed prop by its DB id. Returns the removed entity id or null. */
+  removeProp(dbId: number): number | null {
+    const eid = this.propEntityByDbId.get(dbId);
+    if (eid == null) return null;
+    this.dropEntity(eid);
+    this.propEntityByDbId.delete(dbId);
+    return eid;
+  }
+
+  /** Boot-load persisted props (mirrors loadMarket). */
+  loadProps(rows: { id: number; prop_key: string; x: number; z: number; yaw: number; scale: number }[]): void {
+    for (const r of rows) this.spawnProp(r.id, r.prop_key, r.x, r.z, r.yaw, r.scale);
+  }
+
+  // ── IWorld builder seam (offline path) ──────────────────────────────────
+  // Online play routes these through the server (ClientWorld → cmd → game.ts,
+  // which re-validates admin/mod and persists). Offline single-player has no
+  // DB or auth, so we apply directly with a local synthetic id.
+  private _offlinePropId = -1;
+  placeProp(key: string, x: number, z: number, yaw: number, scale: number): void {
+    this.spawnProp(this._offlinePropId--, key, x, z, yaw, scale);
+  }
+  // moveProp/removeProp(dbId,…) already exist above and match the IWorld
+  // signatures; offline they operate on the synthetic ids placeProp assigned.
 
   private updatePendingMobRespawns(): void {
     if (this.pendingMobRespawns.length === 0) return;

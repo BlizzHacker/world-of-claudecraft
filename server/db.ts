@@ -328,6 +328,23 @@ CREATE TABLE IF NOT EXISTS anticheat_ledger (
 );
 CREATE INDEX IF NOT EXISTS anticheat_ledger_status ON anticheat_ledger(refund_status, created_at DESC);
 CREATE INDEX IF NOT EXISTS anticheat_ledger_account ON anticheat_ledger(account_id, created_at DESC);
+-- ArcForge world placement: admin/mod-placed props that persist per realm and
+-- respawn on boot. prop_key is a render PROP_ASSET_DEFS key (e.g. 'well').
+-- All writes are realm-scoped (the realm column guards update/delete like
+-- saveCharacterState) so a moved/duplicated realm can never edit another's props.
+CREATE TABLE IF NOT EXISTS realm_props (
+  id BIGSERIAL PRIMARY KEY,
+  realm TEXT NOT NULL DEFAULT '${REALM_SQL_DEFAULT}',
+  prop_key TEXT NOT NULL,
+  x REAL NOT NULL,
+  y REAL NOT NULL,
+  z REAL NOT NULL,
+  yaw REAL NOT NULL DEFAULT 0,
+  scale REAL NOT NULL DEFAULT 1,
+  placed_by BIGINT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS realm_props_realm ON realm_props(realm);
 `;
 
 export async function ensureSchema(): Promise<void> {
@@ -1449,4 +1466,57 @@ export async function pruneChatLogs(retentionDays: number): Promise<number> {
     [String(Math.floor(retentionDays))],
   );
   return res.rowCount ?? 0;
+}
+
+// ─── ArcForge world props (admin/mod placement) ────────────────────────────
+export interface RealmProp {
+  id: number;
+  prop_key: string;
+  x: number; y: number; z: number;
+  yaw: number; scale: number;
+  placed_by: number | null;
+}
+
+/** Load all placed props for this realm (called on Sim boot). */
+export async function loadRealmProps(): Promise<RealmProp[]> {
+  const res = await pool.query(
+    `SELECT id, prop_key, x, y, z, yaw, scale, placed_by
+       FROM realm_props WHERE realm = $1 ORDER BY id`,
+    [REALM],
+  );
+  return res.rows.map((r) => ({
+    id: Number(r.id), prop_key: String(r.prop_key),
+    x: Number(r.x), y: Number(r.y), z: Number(r.z),
+    yaw: Number(r.yaw), scale: Number(r.scale),
+    placed_by: r.placed_by == null ? null : Number(r.placed_by),
+  }));
+}
+
+/** Insert a placed prop; returns the new row id. Realm-scoped. */
+export async function insertRealmProp(
+  propKey: string, x: number, y: number, z: number,
+  yaw: number, scale: number, placedBy: number | null,
+): Promise<number> {
+  const res = await pool.query(
+    `INSERT INTO realm_props (realm, prop_key, x, y, z, yaw, scale, placed_by)
+     VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id`,
+    [REALM, propKey, x, y, z, yaw, scale, placedBy],
+  );
+  return Number(res.rows[0].id);
+}
+
+/** Update a placed prop's transform. Realm-scoped (no-op if moved away). */
+export async function updateRealmProp(
+  id: number, x: number, y: number, z: number, yaw: number, scale: number,
+): Promise<void> {
+  await pool.query(
+    `UPDATE realm_props SET x=$2, y=$3, z=$4, yaw=$5, scale=$6
+       WHERE id=$1 AND realm=$7`,
+    [id, x, y, z, yaw, scale, REALM],
+  );
+}
+
+/** Delete a placed prop. Realm-scoped. */
+export async function deleteRealmProp(id: number): Promise<void> {
+  await pool.query(`DELETE FROM realm_props WHERE id=$1 AND realm=$2`, [id, REALM]);
 }

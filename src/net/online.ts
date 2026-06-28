@@ -902,6 +902,16 @@ export class ClientWorld implements IWorld {
   pickUpObject(id: number): void {
     this.cmd({ cmd: 'pickup', id });
   }
+  // ArcForge world builder (server re-validates admin/mod; non-builders no-op there).
+  placeProp(key: string, x: number, z: number, yaw: number, scale: number): void {
+    this.cmd({ cmd: 'placeProp', key, x, z, yaw, scale });
+  }
+  moveProp(dbId: number, x: number, z: number, yaw: number, scale: number): void {
+    this.cmd({ cmd: 'moveProp', dbId, x, z, yaw, scale });
+  }
+  removeProp(dbId: number): void {
+    this.cmd({ cmd: 'removeProp', dbId });
+  }
   acceptQuest(questId: string): void {
     if (!this.canSendCommand()) return;
     this.pendingQuestCommands.set(questId, 'accept');

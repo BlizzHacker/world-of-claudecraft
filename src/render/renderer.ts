@@ -15,7 +15,7 @@ import { mechAssetsReady, preloadMechAssets } from './characters/assets';
 import { isVisuallyDead } from './anim_state';
 import { LocoTrack, newLocoTrack, updateLocomotion } from './locomotion';
 import type { SpatialAudioSink, Surface } from './audio_sink';
-import { buildPropMaterialPrewarmGroup, buildProps } from './props';
+import { buildPropMaterialPrewarmGroup, buildProps, buildSingleProp } from './props';
 import { plankTexture, sparkleTexture } from './textures';
 import { DungeonInteriors, ensureDungeonAssets } from './dungeon';
 import { buildGroundQuestObject } from './quest_objects';
@@ -2408,6 +2408,25 @@ export class Renderer {
       portal = built.portal;
       height = 4.6;
       objectMesh = body!;
+    } else if (e.kind === 'object' && e.templateId && e.templateId.startsWith('prop:')) {
+      // ArcForge-placed prop: render the matching PROP_ASSET_DEFS GLB.
+      const key = e.templateId.slice(5);
+      const built = buildSingleProp(key);
+      if (built) {
+        body = built.group;
+        height = built.height;
+        body.rotation.y = e.facing || 0;
+        const s = e.scale || 1;
+        if (s !== 1) body.scale.setScalar(s);
+      } else {
+        // Unknown/not-yet-loaded prop key → small placeholder so it's still
+        // selectable/movable rather than invisible.
+        const ph = buildGroundQuestObject('', e.id);
+        body = ph.group;
+        height = ph.height;
+      }
+      objectMesh = body!;
+      objectPoolKey = null;
     } else if (e.kind === 'object') {
       objectPoolKey = this.objectPoolKeyFor(e);
       const pooled = objectPoolKey ? this.takePooledObject(objectPoolKey) : null;

@@ -1936,3 +1936,11 @@ body:not(.game-active) .cr-realm-first-prompt {
 .cr-doc-tag { border: 1px solid var(--red, #c45142); color: #f0b6ad; border-radius: 4px; padding: 5px 10px; font-size: 12px; }
 .cr-doc-view section { background: rgba(0,0,0,0.22); border: 1px solid rgba(200,168,56,0.16);
   border-radius: 8px; padding: clamp(14px,2.5vw,24px); margin: 0 0 16px; }
+
+/* ArcForge World Builder palette */
+.cr-afe-build-toggle { display:flex; align-items:center; gap:8px; margin:8px 0; font-size:13px; cursor:pointer; }
+.cr-afe-build-status { font-size:12px; opacity:.8; margin:4px 0 8px; font-variant-numeric:tabular-nums; }
+.cr-afe-build-palette { display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:6px; max-height:280px; overflow:auto; padding:4px; border:1px solid rgba(176,124,255,.25); border-radius:8px; }
+.cr-afe-place { padding:7px 9px; font-size:12px; text-align:left; cursor:pointer; background:rgba(20,16,30,.6); color:#e7d8ff; border:1px solid rgba(176,124,255,.3); border-radius:6px; transition:border-color .12s, background .12s; }
+.cr-afe-place:hover { border-color:#b07cff; background:rgba(40,28,64,.7); }
+.cr-afe-place.sel { outline:2px solid #b07cff; border-color:#b07cff; background:rgba(60,40,96,.8); }

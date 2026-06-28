@@ -237,6 +237,26 @@ export function createNpc(id: number, def: NpcDef, pos: Vec3): Entity {
   return e;
 }
 
+// ArcForge-placed decorative prop. Renders via templateId 'prop:<key>' →
+// PROP_ASSET_DEFS GLB. Non-interactive scenery (not lootable, not hostile).
+export function createProp(
+  id: number, propKey: string, pos: Vec3, facing = 0, scale = 1,
+): Entity {
+  const e = baseEntity(id, pos);
+  e.kind = 'object';
+  e.templateId = 'prop:' + propKey;
+  e.name = propKey;
+  e.level = 1;
+  e.hostile = false;
+  e.maxHp = 1;
+  e.hp = 1;
+  e.objectItemId = null;
+  e.lootable = false;
+  e.facing = facing;
+  e.scale = scale;
+  return e;
+}
+
 export function createGroundObject(id: number, itemId: string, name: string, pos: Vec3): Entity {
   const e = baseEntity(id, pos);
   e.kind = 'object';

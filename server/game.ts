@@ -9,6 +9,8 @@ import { MECH_CHROMAS, mechChromaItemId, mechChromaSkinIndex } from '../src/sim/
 import {
   grantAccountMechChroma, markAccountQuestComplete, revokeAccountMechChroma, saveCharacterState, openPlaySession, closePlaySession,
   insertChatLogs, pool, loadMarketState, saveMarketState, walletForAccount, markCharacterDead,
+  isAdminAccount, isModeratorAccount,
+  loadRealmProps, insertRealmProp, updateRealmProp, deleteRealmProp,
 } from './db';
 import { holderInfoForPubkey } from './woc_balance';
 import type { AccountChatMuteStatus, AccountCosmetics, RequestMetadata } from './db';
@@ -913,6 +915,62 @@ export class GameServer {
     }
   }
 
+  /** Boot-load ArcForge-placed props for this realm (mirrors loadMarket). */
+  async loadProps(): Promise<void> {
+    try {
+      this.sim.loadProps(await loadRealmProps());
+    } catch (err) {
+      console.error('failed to load realm props:', err);
+    }
+  }
+
+  /** True if the account may use the in-game world builder (admin OR mod). */
+  private async isBuilder(accountId: number): Promise<boolean> {
+    const [admin, mod] = await Promise.all([
+      isAdminAccount(accountId).catch(() => false),
+      isModeratorAccount(accountId).catch(() => false),
+    ]);
+    return admin || mod;
+  }
+
+  /**
+   * Admin/mod world-builder command. Validates the role server-side (never trust
+   * the client), persists to realm_props, mutates the sim, and acks the client so
+   * it can map the new entity to its DB id. Sync to other players is automatic via
+   * the next snapshot (placed props are normal `object` entities).
+   */
+  private async handleBuilderCmd(session: ClientSession, msg: any): Promise<void> {
+    if (!(await this.isBuilder(session.accountId))) {
+      this.send(session, { t: 'events', list: [{ type: 'error', text: 'Builder tools require admin or moderator.' }] });
+      return;
+    }
+    try {
+      if (msg.cmd === 'placeProp') {
+        const key = String(msg.key || '');
+        const x = Number(msg.x), z = Number(msg.z);
+        const yaw = Number(msg.yaw) || 0, scale = Number(msg.scale) || 1;
+        if (!key || !Number.isFinite(x) || !Number.isFinite(z)) return;
+        const dbId = await insertRealmProp(key, x, this.sim.groundPos(x, z).y, z, yaw, scale, session.accountId);
+        const e = this.sim.spawnProp(dbId, key, x, z, yaw, scale);
+        this.send(session, { t: 'events', list: [{ type: 'propPlaced', dbId, entId: e.id, key }] });
+      } else if (msg.cmd === 'moveProp') {
+        const dbId = Number(msg.dbId);
+        const x = Number(msg.x), z = Number(msg.z);
+        const yaw = Number(msg.yaw) || 0, scale = Number(msg.scale) || 1;
+        if (!Number.isFinite(dbId) || !Number.isFinite(x) || !Number.isFinite(z)) return;
+        const e = this.sim.moveProp(dbId, x, z, yaw, scale);
+        if (e) await updateRealmProp(dbId, x, e.pos.y, z, yaw, scale);
+      } else if (msg.cmd === 'removeProp') {
+        const dbId = Number(msg.dbId);
+        if (!Number.isFinite(dbId)) return;
+        const entId = this.sim.removeProp(dbId);
+        if (entId != null) await deleteRealmProp(dbId);
+      }
+    } catch (err) {
+      console.error('builder cmd failed:', err);
+    }
+  }
+
   async saveMarket(): Promise<void> {
     try {
       await saveMarketState(this.sim.serializeMarket());
@@ -1143,6 +1201,13 @@ export class GameServer {
       case 'interact': sim.interact(pid); break;
       case 'loot': if (typeof msg.id === 'number') sim.lootCorpse(msg.id, pid); break;
       case 'pickup': if (typeof msg.id === 'number') sim.pickUpObject(msg.id, pid); break;
+      case 'placeProp':
+      case 'moveProp':
+      case 'removeProp':
+        // Admin/mod world builder. Async (DB write + role check); the sim entity
+        // change syncs to all clients on the next snapshot tick regardless.
+        void this.handleBuilderCmd(session, msg);
+        break;
       case 'accept': if (typeof msg.quest === 'string') { sim.acceptQuest(msg.quest, pid); this.resyncQuests(session); } break;
       case 'turnin':
         if (typeof msg.quest === 'string') {

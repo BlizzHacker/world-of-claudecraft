@@ -277,6 +277,10 @@ export interface IWorld {
   interact(): void;
   lootCorpse(id: number): void;
   pickUpObject(id: number): void;
+  // ArcForge world builder (admin/mod only; server re-validates the role).
+  placeProp(key: string, x: number, z: number, yaw: number, scale: number): void;
+  moveProp(dbId: number, x: number, z: number, yaw: number, scale: number): void;
+  removeProp(dbId: number): void;
   acceptQuest(questId: string): void;
   turnInQuest(questId: string): void;
   abandonQuest(questId: string): void;

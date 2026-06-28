@@ -34,6 +34,7 @@ import { hydrateIcons } from './ui/ui_icons';
 // `data-theme` to <html>, then the trigger button lives in the index.html
 // `<div id="theme-picker">` block.
 import { mountThemeSelect } from './ui/cryptic/theme_select';
+import { notePropPlaced, tryBuilderSelect } from './ui/cryptic/world_builder';
 import { mountHudGlobes, setHudSkin, resolveHudSkin } from './ui/cryptic/globes';
 import { isFpsActive, mountFpsMode, resolveFpsMode, setFpsMode } from './ui/cryptic/fps_mode';
 import { mountRealmBranding } from './ui/cryptic/branding';
@@ -1082,6 +1083,9 @@ async function startGame(world: IWorld, offlineSim: Sim | null, online: ClientWo
 
   function handlePick(x: number, y: number, button: number): void {
     const id = renderer.pick(x, y);
+    // ArcForge builder: when active, clicking a placed prop selects it for
+    // transform/delete instead of normal targeting/move.
+    if (id !== null && tryBuilderSelect(id)) return;
     const clickToMove = settings.get('clickToMove') > 0 && !world.player.dead;
     const clickToMoveButton = normalizeClickMoveButton(settings.get('clickToMoveButton'));
     const isClickMoveButton = clickToMove && button === clickToMoveButton;
@@ -1505,6 +1509,13 @@ async function startGame(world: IWorld, offlineSim: Sim | null, online: ClientWo
     }
     net.pendingFacingDelta = 0; // superseded by the interpolated follow below
     const drainedEvents = net.drainEvents();
+    // ArcForge builder: map a freshly-placed prop entity to its DB id so the
+    // builder UI can later move/delete it. (Custom event, outside SimEvent union.)
+    for (const ev of drainedEvents as Array<{ type?: string; entId?: number; dbId?: number }>) {
+      if (ev && ev.type === 'propPlaced' && typeof ev.entId === 'number' && typeof ev.dbId === 'number') {
+        notePropPlaced(ev.entId, ev.dbId);
+      }
+    }
     perf.time('events', () => perf.trace('hud.handleEvents', () => hud.handleEvents(drainedEvents), {
       mode: 'online',
       events: drainedEvents.length,

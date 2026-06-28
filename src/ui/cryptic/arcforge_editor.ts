@@ -10,7 +10,7 @@
 // shows them the public ArcForge website link instead.
 
 import { getMe, getToken } from '../../user/api';
-import { CR_PLACEABLES, CR_PLACEABLE_CATEGORIES } from '../../classic/placeables';
+import { mountWorldBuilder, unmountWorldBuilder } from './world_builder';
 
 const MODAL_ID = 'cr-arcforge-editor-modal';
 const QUEUE_KEY = 'cr_arcforge_queue_v1';
@@ -103,6 +103,7 @@ function ensureHost(): HTMLElement {
 }
 
 function closeEditor(): void {
+  unmountWorldBuilder();
   document.getElementById(MODAL_ID)?.setAttribute('hidden', '');
 }
 
@@ -293,24 +294,14 @@ export function openArcForgeEditor(): void {
 
   renderQueue();
 
-  // ── Placeable palette ────────────────────────────────────────────────────
-  // Renders the original game's placeable catalog grouped by category.
-  // TODO: click→live-scene placement is out of scope for v1 — this surfaces
-  // the palette only. Wire button clicks to the engine's addPlaceable() in a
-  // follow-up task.
-  (function renderPlaceables() {
+  // ── World Builder ────────────────────────────────────────────────────────
+  // Real in-game prop placement: pick a ClaudeCraft prop, click the ground to
+  // place it (server-authoritative, persisted, seen by all). Replaces the old
+  // static placeable list.
+  {
     const root = host.querySelector<HTMLElement>('[data-cr-afe-placeables]');
-    if (!root) return;
-    const cats = CR_PLACEABLE_CATEGORIES.filter((c) => c.id !== 'all');
-    root.innerHTML = '<div class="cr-modal-section-title">Placeables</div>' +
-      cats.map((cat) => {
-        const items = CR_PLACEABLES.filter((p) => p.category === cat.id);
-        if (!items.length) return '';
-        return `<section class="cr-afe-cat"><h4 style="color:${escapeHtml(cat.accent)}">${escapeHtml(cat.label)}</h4><div class="cr-afe-cat-items">${
-          items.map((p) => `<button type="button" class="cr-afe-place" data-place-id="${escapeHtml(p.id)}" title="${escapeHtml(p.tag ?? '')}" style="border-color:${escapeHtml(p.color)}">${escapeHtml(p.label)}</button>`).join('')
-        }</div></section>`;
-      }).join('');
-  })();
+    if (root) mountWorldBuilder(root);
+  }
 
   // Surface pipeline reachability so the admin knows the backend is alive.
   api('status').then((r) => {

@@ -778,6 +778,7 @@ async function main(): Promise<void> {
   const prunedPerfReports = await pruneClientPerfReports(PERF_REPORT_RETENTION_DAYS);
   if (prunedPerfReports > 0) console.log(`pruned ${prunedPerfReports} client perf report row(s) older than ${PERF_REPORT_RETENTION_DAYS} days`);
   await game.loadMarket();
+  await game.loadProps();
   await game.loadChatFilter();
   setInterval(() => {
     void pruneChatLogs(CHAT_LOG_RETENTION_DAYS).catch((err) => console.error('chat log prune failed:', err));
