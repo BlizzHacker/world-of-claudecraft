@@ -50,8 +50,13 @@ let keyHandler: ((ev: KeyboardEvent) => void) | null = null;
 function onGroundPointer(ev: PointerEvent): void {
   const g = game();
   if (!g) return;
-  // Only left clicks on the canvas, and only when placing.
+  // Only left clicks, and only when a prop is armed for placement.
   if (ev.button !== 0 || !state.selectedKey) return;
+  // Ignore clicks that land on UI (the dock, HUD, any overlay) — only the bare
+  // game canvas should place. If the click target isn't the canvas, bail.
+  const target = ev.target as HTMLElement | null;
+  if (!target || target.closest(`#${DOCK_ID}`)) return;
+  if (target.tagName !== 'CANVAS' && !target.closest('canvas')) return;
   const gp = g.renderer.groundPoint(ev.clientX, ev.clientY, 0);
   if (!gp) return;
   g.world.placeProp(state.selectedKey, gp.x, gp.z, state.yaw, state.scale);
@@ -82,6 +87,7 @@ function reflectSelected(): void {
   const e = g.world.entities?.get(state.selectedEnt);
   if (dbId == null || !e) return;
   g.world.moveProp(dbId, e.pos.x, e.pos.z, state.yaw, state.scale);
+  builderRefreshStatus?.();
 }
 
 function enableInteraction(): void {
@@ -98,46 +104,81 @@ function disableInteraction(): void {
   pointerHandler = null; keyHandler = null;
 }
 
-/** Render the builder palette into `root` and wire interaction. */
-export function mountWorldBuilder(root: HTMLElement): void {
+const DOCK_ID = 'cr-world-builder-dock';
+
+/**
+ * Open the World Builder as a NON-BLOCKING right-side dock. Unlike the ArcForge
+ * modal (full-screen overlay), this dock occupies only its own strip so the game
+ * world stays visible AND clickable — that's the whole point: pick a prop in the
+ * dock, then click the ground directly. No "capture clicks" hack, no escaping a
+ * modal. Mirrors the classic ArcForge Evolve sidebar.
+ */
+export function openWorldBuilderDock(): void {
+  if (typeof document === 'undefined') return;
+  let dock = document.getElementById(DOCK_ID);
+  if (dock) { dock.hidden = false; state.active = true; enableInteraction(); return; }
+
+  dock = document.createElement('div');
+  dock.id = DOCK_ID;
+  dock.className = 'cr-wb-dock';
   const keys = placeablePropKeys();
-  root.innerHTML =
-    '<div class="cr-modal-section-title">World Builder — place ClaudeCraft props</div>' +
-    '<p class="cr-afe-blurb">Pick a prop, then click the ground to place it. ' +
-    'Click a placed prop to select; <b>[</b> <b>]</b> rotate, <b>-</b> <b>=</b> scale, <b>Del</b> remove. ' +
-    'Placed props persist for the realm and everyone sees them.</p>' +
-    '<label class="cr-afe-build-toggle"><input type="checkbox" data-cr-build-active> Builder active (capture clicks)</label>' +
-    `<div class="cr-afe-build-status" data-cr-build-status>armed: none · yaw 0° · scale 1.0×</div>` +
-    '<div class="cr-afe-build-palette">' +
+  dock.innerHTML =
+    '<div class="cr-wb-head"><span class="cr-wb-title">World Builder</span>' +
+    '<button type="button" class="cr-wb-close" data-wb-close aria-label="Close">×</button></div>' +
+    '<p class="cr-wb-hint">Pick a prop, then click the ground to place it. ' +
+    'Click a placed prop to select — <b>[</b> <b>]</b> rotate, <b>-</b> <b>=</b> scale, <b>Del</b> remove.</p>' +
+    `<div class="cr-wb-status" data-wb-status></div>` +
+    '<input type="search" class="cr-wb-filter" data-wb-filter placeholder="Filter props…" autocomplete="off">' +
+    '<div class="cr-wb-palette" data-wb-palette>' +
     keys.map((k) => `<button type="button" class="cr-afe-place" data-build-key="${escapeAttr(k)}">${escapeAttr(k)}</button>`).join('') +
     '</div>';
+  document.body.appendChild(dock);
 
-  const statusEl = root.querySelector<HTMLElement>('[data-cr-build-status]');
+  const statusEl = dock.querySelector<HTMLElement>('[data-wb-status]');
   const refreshStatus = () => {
-    if (statusEl) {
-      statusEl.textContent =
-        `armed: ${state.selectedKey ?? 'none'} · yaw ${Math.round((state.yaw * 180 / Math.PI) % 360)}° · scale ${state.scale.toFixed(1)}×`;
-    }
+    if (!statusEl) return;
+    const sel = state.selectedEnt != null ? ' · selected ✏' : '';
+    statusEl.textContent =
+      `armed: ${state.selectedKey ?? 'none'} · yaw ${Math.round((state.yaw * 180 / Math.PI) % 360)}° · scale ${state.scale.toFixed(1)}×${sel}`;
   };
+  builderRefreshStatus = refreshStatus;
 
-  const activeBox = root.querySelector<HTMLInputElement>('[data-cr-build-active]');
-  activeBox?.addEventListener('change', () => {
-    state.active = !!activeBox.checked;
-    if (state.active) enableInteraction(); else { disableInteraction(); state.selectedKey = null; }
-    refreshStatus();
+  dock.querySelector('[data-wb-close]')?.addEventListener('click', () => closeWorldBuilderDock());
+
+  const filter = dock.querySelector<HTMLInputElement>('[data-wb-filter]');
+  filter?.addEventListener('input', () => {
+    const q = (filter.value || '').toLowerCase();
+    dock!.querySelectorAll<HTMLElement>('[data-build-key]').forEach((b) => {
+      b.style.display = !q || (b.dataset.buildKey || '').toLowerCase().includes(q) ? '' : 'none';
+    });
   });
 
-  root.querySelectorAll<HTMLButtonElement>('[data-build-key]').forEach((btn) => {
+  dock.querySelectorAll<HTMLButtonElement>('[data-build-key]').forEach((btn) => {
     btn.addEventListener('click', () => {
       state.selectedKey = btn.dataset.buildKey || null;
-      root.querySelectorAll('[data-build-key]').forEach((b) => b.classList.remove('sel'));
+      state.selectedEnt = null; // arming a new prop clears the edit selection
+      dock!.querySelectorAll('[data-build-key]').forEach((b) => b.classList.remove('sel'));
       btn.classList.add('sel');
-      if (!state.active && activeBox) { activeBox.checked = true; state.active = true; enableInteraction(); }
       refreshStatus();
     });
   });
+
+  // Active whenever the dock is open — placement is armed by selecting a prop.
+  state.active = true;
+  enableInteraction();
   refreshStatus();
 }
+
+export function closeWorldBuilderDock(): void {
+  const dock = document.getElementById(DOCK_ID);
+  if (dock) dock.remove();
+  state.active = false;
+  state.selectedKey = null;
+  state.selectedEnt = null;
+  disableInteraction();
+}
+
+let builderRefreshStatus: (() => void) | null = null;
 
 /**
  * Try to select a clicked entity as a builder target. Returns true if the
@@ -150,16 +191,18 @@ export function tryBuilderSelect(entId: number): boolean {
   const e = g?.world.entities?.get(entId);
   if (!e || !e.templateId || !e.templateId.startsWith('prop:')) return false;
   state.selectedEnt = entId;
+  state.selectedKey = null; // selecting an existing prop disarms placement
   state.yaw = e.facing ?? 0;
   state.scale = e.scale ?? 1;
+  builderRefreshStatus?.();
   return true;
 }
 
-/** Called when the editor closes, so we stop capturing world clicks. */
+/** Back-compat: the builder is now its own dock; closing the editor no longer
+ *  tears it down (the dock has its own close button). Left as a safe no-op-ish
+ *  helper in case a caller wants to force-close. */
 export function unmountWorldBuilder(): void {
-  state.active = false;
-  state.selectedKey = null;
-  disableInteraction();
+  // intentionally does NOT close the dock — the dock is independent of the modal.
 }
 
 function escapeAttr(s: string): string {

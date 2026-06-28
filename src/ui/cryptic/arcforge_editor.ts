@@ -10,7 +10,7 @@
 // shows them the public ArcForge website link instead.
 
 import { getMe, getToken } from '../../user/api';
-import { mountWorldBuilder, unmountWorldBuilder } from './world_builder';
+import { openWorldBuilderDock } from './world_builder';
 
 const MODAL_ID = 'cr-arcforge-editor-modal';
 const QUEUE_KEY = 'cr_arcforge_queue_v1';
@@ -103,7 +103,6 @@ function ensureHost(): HTMLElement {
 }
 
 function closeEditor(): void {
-  unmountWorldBuilder();
   document.getElementById(MODAL_ID)?.setAttribute('hidden', '');
 }
 
@@ -294,13 +293,23 @@ export function openArcForgeEditor(): void {
 
   renderQueue();
 
-  // ── World Builder ────────────────────────────────────────────────────────
-  // Real in-game prop placement: pick a ClaudeCraft prop, click the ground to
-  // place it (server-authoritative, persisted, seen by all). Replaces the old
-  // static placeable list.
+  // ── World Builder launcher ───────────────────────────────────────────────
+  // The builder is a NON-BLOCKING right-side dock (not part of this full-screen
+  // modal), so the game world stays clickable for placement. This button just
+  // opens that dock and closes this modal so the world is visible.
   {
     const root = host.querySelector<HTMLElement>('[data-cr-afe-placeables]');
-    if (root) mountWorldBuilder(root);
+    if (root) {
+      root.innerHTML =
+        '<div class="cr-modal-section-title">World Builder</div>' +
+        '<p class="cr-afe-blurb">Place ClaudeCraft props directly in the world — pick a prop, click the ground. ' +
+        'Opens as a side panel so the world stays clickable.</p>' +
+        '<button type="button" class="cr-afe-stage active" data-cr-open-builder>Open World Builder</button>';
+      root.querySelector('[data-cr-open-builder]')?.addEventListener('click', () => {
+        closeEditor();            // close the blocking modal
+        openWorldBuilderDock();   // open the non-blocking dock
+      });
+    }
   }
 
   // Surface pipeline reachability so the admin knows the backend is alive.
