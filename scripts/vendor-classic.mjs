@@ -84,3 +84,70 @@ for (const { file, rewrites } of ASSET_REWRITES) {
   writeFileSync(p, code);
   console.log('Rewrote asset paths in', file);
 }
+
+// --- Task 2: De-bloat assetManifest.js — extract the 20MB data object to a
+// gitignored runtime JSON (public/classic/asset-manifest.json) and replace the
+// vendored module with a small fetch+cache shim. Idempotent: if the copied file
+// is already the small shim (no MOVEWEIGHT_ASSET_MANIFEST literal), skip.
+{
+  const p = join(DST, 'assetManifest.js');
+  const raw = readFileSync(p, 'utf8');
+  if (raw.includes('MOVEWEIGHT_ASSET_MANIFEST = {')) {
+    const start = raw.indexOf('{', raw.indexOf('MOVEWEIGHT_ASSET_MANIFEST'));
+    const fnIdx = raw.indexOf('export function findAssetSlot');
+    const end = raw.lastIndexOf('};', fnIdx);
+    const objText = raw.slice(start, end + 1);
+    const obj = eval('(' + objText + ')'); // trusted generated manifest from our own repo
+    const pubDir = resolve('public/classic');
+    mkdirSync(pubDir, { recursive: true });
+    writeFileSync(join(pubDir, 'asset-manifest.json'), JSON.stringify(obj));
+    const shim = `// assetManifest.js — runtime-loaded asset manifest.\n`
+      + `// Data lives in /classic/asset-manifest.json (fetched once, cached) so it\n`
+      + `// never enters the JS bundle or git. findAssetSlot stays synchronous and\n`
+      + `// returns null (→ procedural fallback) until preloadAssetManifest resolves.\n\n`
+      + `let MANIFEST = { bySlot: {} };\nlet _loading = null;\n\n`
+      + `export function preloadAssetManifest(base = '/classic/asset-manifest.json') {\n`
+      + `  if (_loading) return _loading;\n`
+      + `  _loading = (typeof fetch === 'function'\n`
+      + `    ? fetch(base).then(r => (r.ok ? r.json() : null)).catch(() => null)\n`
+      + `    : Promise.resolve(null)\n`
+      + `  ).then((data) => { if (data) MANIFEST = data; return MANIFEST; });\n`
+      + `  return _loading;\n}\n\n`
+      + `export function findAssetSlot(slot, tier, kind) {\n`
+      + `  const bucket = MANIFEST.bySlot?.[slot] || {};\n`
+      + `  const exact = tier && bucket[tier]?.find(asset => !kind || asset.kind === kind);\n`
+      + `  if (exact) return exact;\n`
+      + `  const ordered = [tier, "128bit", "64bit", "32bit", "16bit", "model", "image", "archive"].filter(Boolean);\n`
+      + `  for (const key of ordered) {\n`
+      + `    const hit = bucket[key]?.find(asset => !kind || asset.kind === kind);\n`
+      + `    if (hit) return hit;\n`
+      + `  }\n  return null;\n}\n`;
+    writeFileSync(p, shim);
+    console.log('Extracted asset manifest → public/classic/asset-manifest.json; assetManifest.js shimmed');
+  } else {
+    console.log('assetManifest.js already shimmed (skip extract)');
+  }
+}
+
+// --- Task 2: Inject runtime asset-manifest preload into the game constructor ---
+// The manifest data lives in /classic/asset-manifest.json (fetched at runtime, not
+// bundled). Wire a fire-and-forget preload as the first constructor statement.
+// Idempotent: skips if already injected (guarded by the import marker).
+{
+  const p = join(DST, 'CrypticRealmGame.js');
+  let code = readFileSync(p, 'utf8');
+  if (!code.includes('preloadAssetManifest')) {
+    code = code.replace(
+      'import { findAssetSlot } from "./assetManifest.js";',
+      'import { findAssetSlot, preloadAssetManifest } from "./assetManifest.js";',
+    );
+    code = code.replace(
+      /(constructor\(canvas, chosenClass, difficulty, actIdx, quality, saveData, options = \{\}\) \{\n)/,
+      '$1    try { preloadAssetManifest(); } catch {}\n',
+    );
+    writeFileSync(p, code);
+    console.log('Injected preloadAssetManifest into CrypticRealmGame.js');
+  } else {
+    console.log('preloadAssetManifest already present (skip inject)');
+  }
+}

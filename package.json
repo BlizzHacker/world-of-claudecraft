@@ -65,6 +65,7 @@
     "@capacitor/core": "^6.2.1",
     "@capacitor/ios": "^6.1.2",
     "@gltf-transform/cli": "^4.4.0",
+    "@playwright/test": "^1.61.1",
     "@tauri-apps/cli": "^2.1.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",

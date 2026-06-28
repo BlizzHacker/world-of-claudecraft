@@ -26,7 +26,7 @@ import {
 } from "./crypticMeshyAssets.js";
 import { CR_DATABASE } from "./crypticDatabase.js";
 import { crActorAsset, crModelTarget } from "./crypticModelAssets.js";
-import { findAssetSlot } from "./assetManifest.js";
+import { findAssetSlot, preloadAssetManifest } from "./assetManifest.js";
 import {
   CRYPTIC_ACT_LORE,
   CRYPTIC_CLASSES_LORE,
@@ -1732,6 +1732,7 @@ function _genWildernessMap(actIdx, rng) {
 // ─── Main Game Class ───────────────────────────────────────────────────────────
 export class CrypticRealmGame {
   constructor(canvas, chosenClass, difficulty, actIdx, quality, saveData, options = {}) {
+    try { preloadAssetManifest(); } catch {}
     this.canvas    = canvas;
     this.ctx       = canvas.getContext("2d");
     this.quality   = _normalizeQualityTier(quality);

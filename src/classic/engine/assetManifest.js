@@ -1,8 +1,7 @@
 // assetManifest.js — runtime-loaded asset manifest.
-// The full manifest data lives in /classic/asset-manifest.json (fetched once,
-// cached in-memory) so it never enters the JS bundle or git history.
-// findAssetSlot stays SYNCHRONOUS: it serves from the cache, returning null
-// (→ procedural fallback in the engine) until preloadAssetManifest() resolves.
+// Data lives in /classic/asset-manifest.json (fetched once, cached) so it
+// never enters the JS bundle or git. findAssetSlot stays synchronous and
+// returns null (→ procedural fallback) until preloadAssetManifest resolves.
 
 let MANIFEST = { bySlot: {} };
 let _loading = null;
