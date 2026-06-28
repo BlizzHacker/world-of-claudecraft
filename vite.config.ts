@@ -115,6 +115,14 @@ export default defineConfig({
   build: {
     target: 'es2022',
     chunkSizeWarningLimit: 1500,
+    // Don't eagerly <link rel="modulepreload"> the Classic island chunk: it pulls
+    // React + the 13.9k-line vendored engine (~836 KB) and must load ONLY when a
+    // visitor chooses Classic mode, not on every landing visit. (React still never
+    // executes until the click; this just stops the unconditional download.)
+    modulePreload: {
+      resolveDependencies: (_filename, deps) =>
+        deps.filter((d) => !d.includes('classic-entry')),
+    },
     // Emit dist/.vite/manifest.json so the Phase 4 modulepreload hook can resolve each
     // lazy locale chunk's content-hashed filename. Metadata only - does not perturb the
     // bundle or move the resolved-table SHA.
