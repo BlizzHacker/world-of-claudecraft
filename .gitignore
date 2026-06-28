@@ -58,6 +58,9 @@ public/cr-realms/
 # Classic engine asset manifest — 20MB generated JSON, fetched at runtime.
 # Must be synced to the server out-of-band (deploy / asset-hosting step).
 public/classic/asset-manifest.json
+# Classic engine runtime assets — large binary dirs copied from moveweight-ui.
+# Must be synced to the server out-of-band (deploy / asset-hosting step).
+public/classic/cryptic-assets/
 
 # App packaging — track the native PROJECT source so builds are reproducible,
 # but ignore build artifacts + secrets. (Capacitor's own android/.gitignore and

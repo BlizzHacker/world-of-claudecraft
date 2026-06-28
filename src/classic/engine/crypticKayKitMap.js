@@ -7,7 +7,7 @@
 // the served URLs look like `/cryptic-assets/3d-assets/KayKit/Adventurers/.../Knight.glb`
 // (no URL-encoding needed — no spaces).
 
-export const CR_KAYKIT_BASE = "/cryptic-assets/3d-assets/KayKit";
+export const CR_KAYKIT_BASE = "/classic/cryptic-assets/3d-assets/KayKit";
 
 function _encPath(s) {
   return s.split("/").map(encodeURIComponent).join("/");

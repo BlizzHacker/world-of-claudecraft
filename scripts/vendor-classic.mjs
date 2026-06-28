@@ -59,3 +59,28 @@ for (const f of OVERLAYS) {
   writeFileSync(join(OVDST, f), code);
 }
 console.log('Copied overlays:', OVERLAYS.length);
+
+// --- Task 7: Rewrite asset base URLs so they resolve under /classic/ ---
+// The engine uses root-relative paths like /cryptic-assets/ and /crypticrealm-logo.png
+// which must be served from public/classic/ in the cryptic-realm repo.
+const ASSET_REWRITES = [
+  { file: 'crypticAssets.js', rewrites: [
+    [/(['"])\/cryptic-assets\b/g, '$1/classic/cryptic-assets'],
+    [/(['"])\/crypticrealm-logo\.png/g, '$1/classic/crypticrealm-logo.png'],
+  ]},
+  { file: 'crypticKayKitMap.js', rewrites: [
+    [/(['"])\/cryptic-assets\b/g, '$1/classic/cryptic-assets'],
+  ]},
+  { file: 'CrypticRealmGame.js', rewrites: [
+    [/(['"])\/cryptic-assets\b/g, '$1/classic/cryptic-assets'],
+    [/(['"])\/crypticrealm-logo\.png/g, '$1/classic/crypticrealm-logo.png'],
+  ]},
+];
+for (const { file, rewrites } of ASSET_REWRITES) {
+  const p = join(DST, file);
+  if (!existsSync(p)) { console.warn('SKIP rewrite (missing):', file); continue; }
+  let code = readFileSync(p, 'utf8');
+  for (const [pat, rep] of rewrites) code = code.replace(pat, rep);
+  writeFileSync(p, code);
+  console.log('Rewrote asset paths in', file);
+}

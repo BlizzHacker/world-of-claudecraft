@@ -26,7 +26,7 @@ import {
 } from "./crypticMeshyAssets.js";
 import { CR_DATABASE } from "./crypticDatabase.js";
 import { crActorAsset, crModelTarget } from "./crypticModelAssets.js";
-import { findAssetSlot, preloadAssetManifest } from "./assetManifest.js";
+import { findAssetSlot } from "./assetManifest.js";
 import {
   CRYPTIC_ACT_LORE,
   CRYPTIC_CLASSES_LORE,
@@ -69,7 +69,7 @@ const CR_LOGO_IMG = (() => {
 })();
 
 const CR_RUNTIME_ASSET_IMAGES = {};
-const CR_D2_ARMORY_BASE = "/cryptic-assets/d2-armory";
+const CR_D2_ARMORY_BASE = "/classic/cryptic-assets/d2-armory";
 const CR_D2_ARMORY_UI = {
   inventory: "inventory.png",
   equipment: "equipment.png",
@@ -1732,7 +1732,6 @@ function _genWildernessMap(actIdx, rng) {
 // ─── Main Game Class ───────────────────────────────────────────────────────────
 export class CrypticRealmGame {
   constructor(canvas, chosenClass, difficulty, actIdx, quality, saveData, options = {}) {
-    try { preloadAssetManifest(); } catch {}
     this.canvas    = canvas;
     this.ctx       = canvas.getContext("2d");
     this.quality   = _normalizeQualityTier(quality);

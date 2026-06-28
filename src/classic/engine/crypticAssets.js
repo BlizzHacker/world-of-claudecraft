@@ -6,12 +6,12 @@
 // Template sheets are also used as class-select portraits. The actual gameplay
 // frames still load from assets/, never from the labeled template sheet.
 
-export const CR_ASSET_BASE = "/cryptic-assets";
+export const CR_ASSET_BASE = "/classic/cryptic-assets";
 export const CR_ASSET_VERSION = "arcforge-pipeline-20260519-2";
 
 // Public logo URL. The deployed asset is lower-case; keep this path stable
 // across Windows dev, Linux deploy, and browser cache manifests.
-export const CR_LOGO_URL = "/crypticrealm-logo.png";
+export const CR_LOGO_URL = "/classic/crypticrealm-logo.png";
 
 // Map game class id → template folder name
 export const CR_CLASS_FOLDERS = {
