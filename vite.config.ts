@@ -130,6 +130,11 @@ export default defineConfig({
     },
   },
   test: {
-    exclude: ['**/node_modules/**', '**/dist/**', '**/.claude/**'],
+    exclude: [
+      '**/node_modules/**', '**/dist/**', '**/.claude/**',
+      // Playwright e2e specs run under `npx playwright test`, not vitest.
+      'tests/classic/landing-smoke.spec.ts',
+      'tests/classic/arcforge-gate.spec.ts',
+    ],
   },
 });
