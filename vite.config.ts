@@ -1,3 +1,4 @@
+import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import { execSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
@@ -91,7 +92,7 @@ function i18nModulepreloadPlugin() {
 
 export default defineConfig({
   base: '/',
-  plugins: [linksAliasPlugin(), i18nModulepreloadPlugin()],
+  plugins: [react({ include: /\.(jsx|tsx)$/ }), linksAliasPlugin(), i18nModulepreloadPlugin()],
   define: {
     __APP_VERSION__: JSON.stringify(appVersion),
     __APP_BUILD_ID__: JSON.stringify(appBuildId.slice(0, 12)),
