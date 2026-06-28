@@ -387,6 +387,26 @@ function showPanel(selector: string): void {
   }
 }
 
+async function launchClassic(): Promise<void> {
+  const host = document.getElementById('classic-root');
+  if (!host) return;
+  try {
+    const mod = await import('./classic/classic-entry');
+    document.querySelectorAll<HTMLElement>(
+      '#mode-select,#login-panel,#realm-panel,#charselect-panel,#offline-select',
+    ).forEach((el) => { el.style.display = 'none'; });
+    mod.mountClassic(host, {
+      onExit: () => {
+        const ms = document.getElementById('mode-select');
+        if (ms) ms.style.display = '';
+      },
+    });
+  } catch (err) {
+    console.error('[classic] failed to launch', err);
+    host.style.display = 'none';
+  }
+}
+
 // Lightweight realm-list loader for the HOME PAGE (landing.ts entry). The full
 // picker lives in main.ts but only loads after login; this lets logged-out
 // visitors browse the available realms/servers immediately. Clicking a realm
@@ -491,6 +511,7 @@ function wireLandingPanels(): void {
     switchLandingView('#whitepaper-view');
     void loadDocFragment('/whitepaper.html', '#whitepaper-content');
   });
+  document.getElementById('btn-classic-mode')?.addEventListener('click', () => { void launchClassic(); });
   document.getElementById('btn-play')?.addEventListener('click', () => {
     const mode = document.getElementById('server-select')?.dataset.mode ?? 'online';
     if (mode === 'offline') {
