@@ -30,9 +30,12 @@ Plus: restore and extend the in-game **ArcForge** builder so it works for the Cl
 - `CrypticRealmGame` constructor signature (from `GameOverlay.jsx:2324`):
   `new CrypticRealmGame(canvas, crypticClass, crypticDiff, crypticAct, gQuality, saveRef, opts)`
   where `opts = {settings, accountKey, apiSettings, characterId, chromeTopInset, isAdmin}`.
-- ArcForge editor for ClaudeCraft existed at commit `239acfa5`
-  (`src/ui/cryptic/arcforge_editor.ts` + `server/arcforge_proxy.ts`) but is **absent** from the
-  current `codex/cryptic-v016-catchup` branch (dropped during v0.16 upstream catchup).
+- ArcForge editor for ClaudeCraft (`src/ui/cryptic/arcforge_editor.ts`, 307 lines, +
+  `server/arcforge_proxy.ts`) **IS present** on the current `codex/cryptic-v016-catchup` branch
+  (verified 2026-06-28: dashboard.ts:23 imports `handleArcForgeProxy`, line 203 mounts
+  `/me/api/arcforge/`). It is a **pipeline-enqueue** editor only (stage picker, image upload,
+  enqueue regen jobs). It does NOT have the original's live placeable palette/transform system.
+  So the ArcForge work is **verify-existing + extend with placeables**, not restore-from-history.
 - cryptic-realm is **vanilla TS + Vite**; landing entry is `src/landing.ts` with a
   `PANELS` array (`#mode-select`, `#login-panel`, `#realm-panel`, `#charselect-panel`,
   `#offline-select`). It currently has **no React dependency**.
@@ -86,11 +89,8 @@ src/classic/
 
 ### 3. ArcForge for ClaudeCraft realms
 
-- Restore `src/ui/cryptic/arcforge_editor.ts` and `server/arcforge_proxy.ts` from `239acfa5`:
-  `git show 239acfa5:<path> > <path>`, then fix API drift against current v0.16
-  `server/dashboard.ts` (mount point `/me/api/arcforge/*`) and `server/db.ts`
-  (`accountForToken`, `isAdminAccount`, `isModeratorAccount` role helpers).
-- Re-mount the proxy in `handleUserApi` (dashboard.ts), admin OR moderator gated via player session.
+- Verify the **existing** `src/ui/cryptic/arcforge_editor.ts` + `server/arcforge_proxy.ts`
+  still build and the proxy stays admin/mod-gated (already mounted in dashboard.ts:203).
 - **Extend** with the original's placeable capabilities: port the `CR_ADMIN_PLACEABLES` palette
   and transform-gizmo concepts (`ArcForgePalette.jsx` / `ArcForgeTransformPopup.jsx`) into the
   ClaudeCraft in-game editor so admins can place/transform assets in the live scene, not only
