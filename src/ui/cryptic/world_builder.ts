@@ -10,6 +10,7 @@
 // the live game via window.__game (set in main.ts): { world, renderer }.
 
 import { placeablePropKeys } from '../../render/props';
+import { getToken } from '../../user/api';
 
 interface GameHandle {
   world: {
@@ -129,9 +130,15 @@ export function openWorldBuilderDock(): void {
     'Click a placed prop to select — <b>[</b> <b>]</b> rotate, <b>-</b> <b>=</b> scale, <b>Del</b> remove.</p>' +
     `<div class="cr-wb-status" data-wb-status></div>` +
     '<input type="search" class="cr-wb-filter" data-wb-filter placeholder="Filter props…" autocomplete="off">' +
+    '<div class="cr-wb-secthead">Native props</div>' +
     '<div class="cr-wb-palette" data-wb-palette>' +
     keys.map((k) => `<button type="button" class="cr-afe-place" data-build-key="${escapeAttr(k)}">${escapeAttr(k)}</button>`).join('') +
-    '</div>';
+    '</div>' +
+    '<div class="cr-wb-secthead">Forged (generated / uploaded)' +
+    '<button type="button" class="cr-wb-upload" data-wb-upload title="Upload a .glb">⬆ Upload</button>' +
+    '<button type="button" class="cr-wb-refresh" data-wb-refresh title="Refresh list">⟳</button></div>' +
+    '<div class="cr-wb-palette cr-wb-forged" data-wb-forged><div class="cr-wb-empty">loading…</div></div>' +
+    '<input type="file" accept=".glb" data-wb-file style="display:none">';
   document.body.appendChild(dock);
 
   const statusEl = dock.querySelector<HTMLElement>('[data-wb-status]');
@@ -153,15 +160,56 @@ export function openWorldBuilderDock(): void {
     });
   });
 
-  dock.querySelectorAll<HTMLButtonElement>('[data-build-key]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      state.selectedKey = btn.dataset.buildKey || null;
-      state.selectedEnt = null; // arming a new prop clears the edit selection
-      dock!.querySelectorAll('[data-build-key]').forEach((b) => b.classList.remove('sel'));
-      btn.classList.add('sel');
-      refreshStatus();
-    });
+  // Delegated arm-on-click: works for native props AND forged buttons added later.
+  const armKey = (key: string, btn: HTMLElement) => {
+    state.selectedKey = key;
+    state.selectedEnt = null; // arming a new prop clears the edit selection
+    dock!.querySelectorAll('[data-build-key]').forEach((b) => b.classList.remove('sel'));
+    btn.classList.add('sel');
+    refreshStatus();
+  };
+  dock.addEventListener('click', (ev) => {
+    const btn = (ev.target as HTMLElement).closest('[data-build-key]') as HTMLElement | null;
+    if (btn && btn.dataset.buildKey) armKey(btn.dataset.buildKey, btn);
   });
+
+  // Forged props: fetch the USB4 catalog and render a "forged:<key>" button each.
+  const forgedHost = dock.querySelector<HTMLElement>('[data-wb-forged]');
+  const loadForged = async () => {
+    if (!forgedHost) return;
+    forgedHost.innerHTML = '<div class="cr-wb-empty">loading…</div>';
+    try {
+      const res = await fetch('/api/forged-props', { credentials: 'same-origin' });
+      const data = await res.json();
+      const items: Array<{ key: string; name: string }> = data.props || [];
+      forgedHost.innerHTML = items.length
+        ? items.map((p) => `<button type="button" class="cr-afe-place" data-build-key="forged:${escapeAttr(p.key)}" title="${escapeAttr(p.name)}">${escapeAttr(p.name)}</button>`).join('')
+        : '<div class="cr-wb-empty">none yet — generate or upload a GLB</div>';
+    } catch {
+      forgedHost.innerHTML = '<div class="cr-wb-empty">failed to load</div>';
+    }
+  };
+  dock.querySelector('[data-wb-refresh]')?.addEventListener('click', () => { void loadForged(); });
+
+  // Upload a .glb → POST to the forged store → refresh the list.
+  const fileInput = dock.querySelector<HTMLInputElement>('[data-wb-file]');
+  dock.querySelector('[data-wb-upload]')?.addEventListener('click', () => fileInput?.click());
+  fileInput?.addEventListener('change', async () => {
+    const f = fileInput.files?.[0];
+    if (!f) return;
+    const token = getToken();
+    try {
+      const res = await fetch(`/me/api/arcforge/upload-glb?name=${encodeURIComponent(f.name)}`, {
+        method: 'POST',
+        headers: { 'content-type': 'model/gltf-binary', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+        body: await f.arrayBuffer(),
+      });
+      if (!res.ok) { alert('Upload failed: ' + (await res.text()).slice(0, 200)); return; }
+      await loadForged();
+    } catch (e) { alert('Upload error: ' + e); }
+    finally { fileInput.value = ''; }
+  });
+  void loadForged();
 
   // Active whenever the dock is open — placement is armed by selecting a prop.
   state.active = true;

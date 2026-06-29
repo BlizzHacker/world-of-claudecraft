@@ -16,6 +16,7 @@ import { isVisuallyDead } from './anim_state';
 import { LocoTrack, newLocoTrack, updateLocomotion } from './locomotion';
 import type { SpatialAudioSink, Surface } from './audio_sink';
 import { buildPropMaterialPrewarmGroup, buildProps, buildSingleProp } from './props';
+import { loadGltf } from './assets/loader';
 import { plankTexture, sparkleTexture } from './textures';
 import { DungeonInteriors, ensureDungeonAssets } from './dungeon';
 import { buildGroundQuestObject } from './quest_objects';
@@ -46,6 +47,25 @@ import { comboPipsFor, COMBO_PIP_MAX } from './nameplate_combo';
 import { stepCameraOcclusion, type CameraOcclusionState } from './camera_collision';
 import { castBarState } from './cast_bar';
 import { isMobThreateningViewer } from './nameplate_threat';
+
+// Forged-prop GLB cache (ArcForge generated/uploaded models served at
+// /forged/<name>.glb). buildForgedProp returns a fresh clone when cached, else
+// kicks off the async load and returns null (caller shows a placeholder; the
+// entity re-renders on the next snapshot and picks up the loaded model).
+const forgedGltfCache = new Map<string, import('three/addons/loaders/GLTFLoader.js').GLTF>();
+const forgedLoading = new Set<string>();
+function buildForgedProp(name: string): THREE.Group | null {
+  const url = `/forged/${encodeURIComponent(name)}.glb`;
+  const g = forgedGltfCache.get(name);
+  if (g) return g.scene.clone(true) as THREE.Group;
+  if (!forgedLoading.has(name)) {
+    forgedLoading.add(name);
+    loadGltf(url).then((gltf) => { forgedGltfCache.set(name, gltf); })
+      .catch(() => { /* leave uncached; placeholder stays */ })
+      .finally(() => { forgedLoading.delete(name); });
+  }
+  return null;
+}
 
 const NAMEPLATE_RANGE = 55;
 const NAMEPLATE_RANGE_SQ = NAMEPLATE_RANGE * NAMEPLATE_RANGE;
@@ -2408,6 +2428,24 @@ export class Renderer {
       portal = built.portal;
       height = 4.6;
       objectMesh = body!;
+    } else if (e.kind === 'object' && e.templateId && e.templateId.startsWith('prop:forged:')) {
+      // ArcForge FORGED prop: a generated/uploaded GLB on the USB4 store, served
+      // at /forged/<name>.glb. Loaded by URL (async) and cached per name; until
+      // it arrives we show a placeholder so the entity is selectable/movable.
+      const name = e.templateId.slice('prop:forged:'.length);
+      const built = buildForgedProp(name);
+      const s = e.scale || 1;
+      if (built) {
+        body = built;
+        height = 2;
+        body.rotation.y = e.facing || 0;
+        if (s !== 1) body.scale.setScalar(s);
+      } else {
+        const ph = buildGroundQuestObject('', e.id);
+        body = ph.group; height = ph.height;
+      }
+      objectMesh = body!;
+      objectPoolKey = null;
     } else if (e.kind === 'object' && e.templateId && e.templateId.startsWith('prop:')) {
       // ArcForge-placed prop: render the matching PROP_ASSET_DEFS GLB.
       const key = e.templateId.slice(5);

@@ -21,6 +21,7 @@ import { generateTotpSecret, otpauthUrl, verifyTotpCode } from './totp';
 import { moderationQueue } from './moderation_db';
 import { REALM } from './realm';
 import { handleArcForgeProxy } from './arcforge_proxy';
+import { handleForgedUpload } from './forged_assets';
 
 const DASH_LOGIN_MAX_PER_MINUTE = 10;
 
@@ -199,6 +200,11 @@ export async function handleUserApi(
   const url = new URL(req.url ?? '/', 'http://localhost');
   const path = url.pathname;
   try {
+    // Forged-GLB upload lands a .glb on the USB4 store (admin/mod gated inside).
+    // Must run BEFORE the pipeline proxy so it isn't forwarded upstream.
+    if (path === '/me/api/arcforge/upload-glb') {
+      if (await handleForgedUpload(req, res)) return;
+    }
     // In-game ArcForge admin live-editor proxy (admin/mod gated inside).
     if (path.startsWith('/me/api/arcforge/')) {
       if (await handleArcForgeProxy(req, res)) return;

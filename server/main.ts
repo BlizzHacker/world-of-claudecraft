@@ -11,6 +11,7 @@ import {
   accountTotpState,
 } from './db';
 import { virtualLevel } from '../src/sim/types';
+import { handleForgedStatic, handleForgedCatalog } from './forged_assets';
 import { Sim } from '../src/sim/sim';
 import type { PlayerClass } from '../src/sim/types';
 import type { LeaderboardEntry } from '../src/world_api';
@@ -804,7 +805,9 @@ async function main(): Promise<void> {
       url.startsWith('/me/api/');
     if (isApi) maybeCors(req, res);
     if (req.method === 'OPTIONS' && isApi) { res.writeHead(204); res.end(); return; }
-    if (url.startsWith('/internal/')) void handleInternalApi(req, res, game);
+    if (url.startsWith('/forged/')) { handleForgedStatic(req, res); return; }
+    else if (url === '/api/forged-props' || url.startsWith('/api/forged-props?')) { void handleForgedCatalog(req, res); return; }
+    else if (url.startsWith('/internal/')) void handleInternalApi(req, res, game);
     else if (url.startsWith('/admin/api/')) void handleAdminApi(req, res, game);
     else if (url.startsWith('/mod/api/')) void handleModeratorApi(req, res);
     else if (url.startsWith('/me/api/')) void handleUserApi(req, res);

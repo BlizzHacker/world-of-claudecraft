@@ -30,7 +30,7 @@ async function bearerAccountId(req: http.IncomingMessage): Promise<number | null
 }
 
 /** True iff the request's session belongs to an admin or moderator. */
-async function authorizeBuilder(req: http.IncomingMessage): Promise<boolean> {
+export async function authorizeBuilder(req: http.IncomingMessage): Promise<boolean> {
   const accountId = await bearerAccountId(req);
   if (accountId === null) return false;
   const [admin, mod] = await Promise.all([
