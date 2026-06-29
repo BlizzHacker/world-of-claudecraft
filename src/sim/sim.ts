@@ -810,13 +810,31 @@ export class Sim {
   // ─── ArcForge world props (admin/mod placement) ──────────────────────────
   // DB prop id → live entity id. Lets the server move/remove a persisted prop.
   readonly propEntityByDbId = new Map<number, number>();
+  // entity id → ArcForge metadata (dialogue/music/voice). Server-side only;
+  // surfaced on interact (dialogue → say bubble) without a wire-field change.
+  readonly propMetaByEnt = new Map<number, Record<string, unknown>>();
 
   /** Spawn a placed prop entity. `dbId` ties it to its realm_props row. */
-  spawnProp(dbId: number, propKey: string, x: number, z: number, facing = 0, scale = 1): Entity {
+  spawnProp(dbId: number, propKey: string, x: number, z: number, facing = 0, scale = 1, meta?: Record<string, unknown>): Entity {
     const e = createProp(this.nextId++, propKey, this.groundPos(x, z), facing, scale);
     this.addEntity(e);
     this.propEntityByDbId.set(dbId, e.id);
+    if (meta && Object.keys(meta).length) this.propMetaByEnt.set(e.id, meta);
     return e;
+  }
+
+  /** Set metadata for a placed prop by DB id (dialogue/music/voice). */
+  setPropMeta(dbId: number, meta: Record<string, unknown>): void {
+    const eid = this.propEntityByDbId.get(dbId);
+    if (eid == null) return;
+    if (meta && Object.keys(meta).length) this.propMetaByEnt.set(eid, meta);
+    else this.propMetaByEnt.delete(eid);
+  }
+
+  /** ArcForge dialogue for an entity (if any) — used by interact. */
+  propDialogueFor(entId: number): string | null {
+    const m = this.propMetaByEnt.get(entId);
+    return m && typeof m.dialogue === 'string' && m.dialogue ? m.dialogue : null;
   }
 
   /** Move/rotate/scale a placed prop by its DB id. Returns the entity or null. */
@@ -838,12 +856,13 @@ export class Sim {
     if (eid == null) return null;
     this.dropEntity(eid);
     this.propEntityByDbId.delete(dbId);
+    this.propMetaByEnt.delete(eid);
     return eid;
   }
 
   /** Boot-load persisted props (mirrors loadMarket). */
-  loadProps(rows: { id: number; prop_key: string; x: number; z: number; yaw: number; scale: number }[]): void {
-    for (const r of rows) this.spawnProp(r.id, r.prop_key, r.x, r.z, r.yaw, r.scale);
+  loadProps(rows: { id: number; prop_key: string; x: number; z: number; yaw: number; scale: number; meta?: Record<string, unknown> }[]): void {
+    for (const r of rows) this.spawnProp(r.id, r.prop_key, r.x, r.z, r.yaw, r.scale, r.meta);
   }
 
   // ── IWorld builder seam (offline path) ──────────────────────────────────
@@ -6889,6 +6908,14 @@ export class Sim {
     if (p.targetId !== null) {
       const target = this.entities.get(p.targetId);
       if (target && dist2d(p.pos, target.pos) <= INTERACT_RANGE + 2) {
+        // ArcForge prop with dialogue → speak it as a bubble over the prop.
+        if (target.kind === 'object' && target.templateId?.startsWith('prop:')) {
+          const line = this.propDialogueFor(target.id);
+          if (line) {
+            this.emit({ type: 'chat', fromPid: 0, from: target.name || 'Character', text: line, channel: 'say', entityId: target.id });
+            return;
+          }
+        }
         if (target.kind === 'mob' && target.lootable) { this.lootCorpse(target.id, p.id); return; }
         // Targeted hardcore player corpse → loot it.
         if (target.kind === 'player' && target.hardcoreCorpse && target.lootable) { this.lootCorpse(target.id, p.id); return; }

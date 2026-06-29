@@ -2009,3 +2009,6 @@ body:not(.game-active) .cr-realm-first-prompt {
 .cr-stage-card.active { border-color: #b07cff; background: rgba(60,40,96,.5); }
 .cr-options-pill { background: rgba(40,28,64,.6); color: #e7d8ff; border: 1px solid rgba(176,124,255,.3); border-radius: 6px; padding: 5px 11px; cursor: pointer; transition: all .12s; }
 .cr-options-pill:hover, .cr-options-pill.active { border-color: #b07cff; background: rgba(60,40,96,.7); }
+.cr-wb-dialogue-row input { flex:1; }
+.cr-wb-savemeta { width:100%; margin-top:4px; font-size:11px; padding:6px; background:rgba(40,28,64,.6); color:#e7d8ff; border:1px solid rgba(176,124,255,.3); border-radius:6px; cursor:pointer; }
+.cr-wb-savemeta:hover { border-color:#b07cff; background:rgba(60,40,96,.7); }

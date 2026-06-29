@@ -10,7 +10,7 @@ import {
   grantAccountMechChroma, markAccountQuestComplete, revokeAccountMechChroma, saveCharacterState, openPlaySession, closePlaySession,
   insertChatLogs, pool, loadMarketState, saveMarketState, walletForAccount, markCharacterDead,
   isAdminAccount, isModeratorAccount,
-  loadRealmProps, insertRealmProp, updateRealmProp, deleteRealmProp,
+  loadRealmProps, insertRealmProp, updateRealmProp, deleteRealmProp, updateRealmPropMeta,
 } from './db';
 import { holderInfoForPubkey } from './woc_balance';
 import type { AccountChatMuteStatus, AccountCosmetics, RequestMetadata } from './db';
@@ -965,6 +965,16 @@ export class GameServer {
         if (!Number.isFinite(dbId)) return;
         const entId = this.sim.removeProp(dbId);
         if (entId != null) await deleteRealmProp(dbId);
+      } else if (msg.cmd === 'setPropMeta') {
+        const dbId = Number(msg.dbId);
+        if (!Number.isFinite(dbId) || typeof msg.meta !== 'object' || !msg.meta) return;
+        // sanitize: only allow known fields, cap dialogue length
+        const meta: Record<string, unknown> = {};
+        if (typeof msg.meta.dialogue === 'string') meta.dialogue = msg.meta.dialogue.slice(0, 240);
+        if (typeof msg.meta.music === 'string') meta.music = msg.meta.music.slice(0, 200);
+        if (typeof msg.meta.voice === 'string') meta.voice = msg.meta.voice.slice(0, 80);
+        this.sim.setPropMeta(dbId, meta);
+        await updateRealmPropMeta(dbId, meta);
       }
     } catch (err) {
       console.error('builder cmd failed:', err);
@@ -1204,6 +1214,7 @@ export class GameServer {
       case 'placeProp':
       case 'moveProp':
       case 'removeProp':
+      case 'setPropMeta':
         // Admin/mod world builder. Async (DB write + role check); the sim entity
         // change syncs to all clients on the next snapshot tick regardless.
         void this.handleBuilderCmd(session, msg);

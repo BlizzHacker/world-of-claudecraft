@@ -17,6 +17,7 @@ interface GameHandle {
     placeProp(key: string, x: number, z: number, yaw: number, scale: number): void;
     moveProp(dbId: number, x: number, z: number, yaw: number, scale: number): void;
     removeProp(dbId: number): void;
+    setPropMeta?(dbId: number, meta: { dialogue?: string; music?: string; voice?: string }): void;
     entities?: Map<number, { id: number; templateId?: string; pos: { x: number; z: number }; facing?: number; scale?: number }>;
   };
   renderer: {
@@ -137,7 +138,13 @@ export function openWorldBuilderDock(): void {
     '<button type="button" data-wb-dup title="Duplicate selected">⧉ Duplicate</button>' +
     '<button type="button" data-wb-del title="Delete selected">🗑 Delete</button>' +
     '<button type="button" data-wb-deselect title="Deselect">✕ Deselect</button>' +
-    '</div></div>' +
+    '</div>' +
+    // Character dialogue — shows as a speech bubble when a player interacts with
+    // the selected prop. (Music/voice fields can layer on the same meta later.)
+    '<label class="cr-wb-row cr-wb-dialogue-row">Speech ' +
+    '<input type="text" data-wb-dialogue placeholder="Dialogue when interacted…" maxlength="240"></label>' +
+    '<button type="button" class="cr-wb-savemeta" data-wb-savemeta>💬 Save dialogue to selected</button>' +
+    '</div>' +
     '<input type="search" class="cr-wb-filter" data-wb-filter placeholder="Filter props…" autocomplete="off">' +
     '<div class="cr-wb-secthead">Native props</div>' +
     '<div class="cr-wb-palette" data-wb-palette>' +
@@ -209,6 +216,13 @@ export function openWorldBuilderDock(): void {
     if (!e || !e.templateId?.startsWith('prop:')) return;
     const key = e.templateId.slice(5);
     g.world.placeProp(key, e.pos.x + 1.5, e.pos.z + 1.5, e.facing ?? 0, e.scale ?? 1);
+  });
+  const dialogueEl = dock.querySelector<HTMLInputElement>('[data-wb-dialogue]');
+  dock.querySelector('[data-wb-savemeta]')?.addEventListener('click', () => {
+    if (state.selectedEnt == null) { alert('Select a placed prop first.'); return; }
+    const dbId = dbIdByEnt.get(state.selectedEnt);
+    if (dbId == null) { alert('This prop has no saved id yet — re-place it.'); return; }
+    game()?.world.setPropMeta?.(dbId, { dialogue: (dialogueEl?.value || '').slice(0, 240) });
   });
 
   // Delegated arm-on-click: works for native props AND forged buttons added later.

@@ -912,6 +912,9 @@ export class ClientWorld implements IWorld {
   removeProp(dbId: number): void {
     this.cmd({ cmd: 'removeProp', dbId });
   }
+  setPropMeta(dbId: number, meta: { dialogue?: string; music?: string; voice?: string }): void {
+    this.cmd({ cmd: 'setPropMeta', dbId, meta });
+  }
   acceptQuest(questId: string): void {
     if (!this.canSendCommand()) return;
     this.pendingQuestCommands.set(questId, 'accept');

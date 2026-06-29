@@ -1478,12 +1478,13 @@ export interface RealmProp {
   x: number; y: number; z: number;
   yaw: number; scale: number;
   placed_by: number | null;
+  meta?: Record<string, unknown>;
 }
 
 /** Load all placed props for this realm (called on Sim boot). */
 export async function loadRealmProps(): Promise<RealmProp[]> {
   const res = await pool.query(
-    `SELECT id, prop_key, x, y, z, yaw, scale, placed_by
+    `SELECT id, prop_key, x, y, z, yaw, scale, placed_by, meta
        FROM realm_props WHERE realm = $1 ORDER BY id`,
     [REALM],
   );
@@ -1492,6 +1493,7 @@ export async function loadRealmProps(): Promise<RealmProp[]> {
     x: Number(r.x), y: Number(r.y), z: Number(r.z),
     yaw: Number(r.yaw), scale: Number(r.scale),
     placed_by: r.placed_by == null ? null : Number(r.placed_by),
+    meta: (r.meta && typeof r.meta === 'object') ? r.meta : {},
   }));
 }
 
@@ -1522,4 +1524,12 @@ export async function updateRealmProp(
 /** Delete a placed prop. Realm-scoped. */
 export async function deleteRealmProp(id: number): Promise<void> {
   await pool.query(`DELETE FROM realm_props WHERE id=$1 AND realm=$2`, [id, REALM]);
+}
+
+/** Set a placed prop's metadata (dialogue/music/voice). Realm-scoped. */
+export async function updateRealmPropMeta(id: number, meta: Record<string, unknown>): Promise<void> {
+  await pool.query(
+    `UPDATE realm_props SET meta=$2::jsonb WHERE id=$1 AND realm=$3`,
+    [id, JSON.stringify(meta ?? {}), REALM],
+  );
 }

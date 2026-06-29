@@ -281,6 +281,7 @@ export interface IWorld {
   placeProp(key: string, x: number, z: number, yaw: number, scale: number): void;
   moveProp(dbId: number, x: number, z: number, yaw: number, scale: number): void;
   removeProp(dbId: number): void;
+  setPropMeta(dbId: number, meta: { dialogue?: string; music?: string; voice?: string }): void;
   acceptQuest(questId: string): void;
   turnInQuest(questId: string): void;
   abandonQuest(questId: string): void;
