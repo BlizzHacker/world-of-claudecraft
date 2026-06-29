@@ -345,6 +345,9 @@ CREATE TABLE IF NOT EXISTS realm_props (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS realm_props_realm ON realm_props(realm);
+-- ArcForge prop metadata: optional dialogue text, music/voice track ids, etc.
+-- JSONB so the editor can attach character speech/music without schema churn.
+ALTER TABLE realm_props ADD COLUMN IF NOT EXISTS meta JSONB NOT NULL DEFAULT '{}'::jsonb;
 `;
 
 export async function ensureSchema(): Promise<void> {

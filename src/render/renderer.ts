@@ -54,6 +54,28 @@ import { isMobThreateningViewer } from './nameplate_threat';
 // entity re-renders on the next snapshot and picks up the loaded model).
 const forgedGltfCache = new Map<string, import('three/addons/loaders/GLTFLoader.js').GLTF>();
 
+// Raw Meshy/Hunyuan GLBs aren't origin-normalized — they can sit off-center,
+// below ground, or be wildly mis-scaled, so they "load but don't show". Recenter
+// xz to 0, drop the base to y=0, and scale the tallest axis to ~2 units so any
+// forged asset drops in at a sane, visible size (the wrapper's scale rides on top).
+function normalizeForgedScene(root: THREE.Object3D): THREE.Object3D {
+  root.updateMatrixWorld(true);
+  const box = new THREE.Box3().setFromObject(root);
+  if (box.isEmpty()) return root;
+  const size = new THREE.Vector3(); box.getSize(size);
+  const center = new THREE.Vector3(); box.getCenter(center);
+  const wrap = new THREE.Group();
+  const tallest = Math.max(size.x, size.y, size.z) || 1;
+  const target = 2.0;
+  const k = target / tallest;
+  root.position.set(-center.x, -box.min.y, -center.z); // xz-center → 0, base → y=0
+  const inner = new THREE.Group();
+  inner.add(root);
+  inner.scale.setScalar(k);
+  wrap.add(inner);
+  return wrap;
+}
+
 const NAMEPLATE_RANGE = 55;
 const NAMEPLATE_RANGE_SQ = NAMEPLATE_RANGE * NAMEPLATE_RANGE;
 const emoteIconUrl = (id: string): string => `/ui/emotes/emote-${id}.png`;
@@ -2414,13 +2436,14 @@ export class Renderer {
     if (key.startsWith('forged:')) {
       const name = key.slice('forged:'.length);
       const url = `/forged/${name.split('/').map(encodeURIComponent).join('/')}.glb`;
+      const place = (gltf: { scene: THREE.Object3D }) => swapIn(normalizeForgedScene(gltf.scene.clone(true)));
       const cached = forgedGltfCache.get(name);
-      if (cached) { swapIn(cached.scene.clone(true)); return; }
+      if (cached) { place(cached); return; }
       wrap.add(placeholder());
       loadGltf(url).then((gltf) => {
         forgedGltfCache.set(name, gltf);
-        swapIn(gltf.scene.clone(true));
-      }).catch(() => { /* keep placeholder */ });
+        place(gltf);
+      }).catch((err) => { console.error('[worldbuilder] forged load failed', url, err); });
       return;
     }
     // native prop
