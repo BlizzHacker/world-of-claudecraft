@@ -55,7 +55,8 @@ import { isMobThreateningViewer } from './nameplate_threat';
 const forgedGltfCache = new Map<string, import('three/addons/loaders/GLTFLoader.js').GLTF>();
 const forgedLoading = new Set<string>();
 function buildForgedProp(name: string): THREE.Group | null {
-  const url = `/forged/${encodeURIComponent(name)}.glb`;
+  // name may be "<file>" or "<realm>/<file>" — encode each segment but keep the slash.
+  const url = `/forged/${name.split('/').map(encodeURIComponent).join('/')}.glb`;
   const g = forgedGltfCache.get(name);
   if (g) return g.scene.clone(true) as THREE.Group;
   if (!forgedLoading.has(name)) {

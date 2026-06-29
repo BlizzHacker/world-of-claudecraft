@@ -181,10 +181,26 @@ export function openWorldBuilderDock(): void {
     try {
       const res = await fetch('/api/forged-props', { credentials: 'same-origin' });
       const data = await res.json();
-      const items: Array<{ key: string; name: string }> = data.props || [];
-      forgedHost.innerHTML = items.length
-        ? items.map((p) => `<button type="button" class="cr-afe-place" data-build-key="forged:${escapeAttr(p.key)}" title="${escapeAttr(p.name)}">${escapeAttr(p.name)}</button>`).join('')
-        : '<div class="cr-wb-empty">none yet — generate or upload a GLB</div>';
+      const items: Array<{ key: string; name: string; group?: string }> = data.props || [];
+      if (!items.length) { forgedHost.innerHTML = '<div class="cr-wb-empty">none yet — generate or upload a GLB</div>'; return; }
+      // group by realm/category for readable sections
+      const groups = new Map<string, typeof items>();
+      for (const p of items) {
+        const g = p.group || 'forged';
+        if (!groups.has(g)) groups.set(g, []);
+        groups.get(g)!.push(p);
+      }
+      const order = ['forged', 'cryptic', 'classic', 'infernal', 'claudcraft'];
+      const sortedGroups = [...groups.keys()].sort((a, b) => {
+        const ia = order.indexOf(a), ib = order.indexOf(b);
+        return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib) || a.localeCompare(b);
+      });
+      forgedHost.innerHTML = sortedGroups.map((g) =>
+        `<div class="cr-wb-grouplabel">${escapeAttr(g)}</div>` +
+        groups.get(g)!.map((p) =>
+          `<button type="button" class="cr-afe-place" data-build-key="forged:${escapeAttr(p.key)}" title="${escapeAttr(p.name)}">${escapeAttr(p.name)}</button>`
+        ).join('')
+      ).join('');
     } catch {
       forgedHost.innerHTML = '<div class="cr-wb-empty">failed to load</div>';
     }

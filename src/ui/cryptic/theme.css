@@ -1971,3 +1971,5 @@ body:not(.game-active) .cr-realm-first-prompt {
 .cr-wb-secthead .cr-wb-upload:hover, .cr-wb-secthead .cr-wb-refresh:hover { border-color:#b07cff; }
 .cr-wb-forged { max-height:160px; }
 .cr-wb-empty { font-size:11.5px; opacity:.6; padding:8px; grid-column:1/-1; }
+.cr-wb-grouplabel { grid-column:1/-1; font-size:10.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#8a7ab0; margin:6px 0 2px; border-top:1px solid rgba(176,124,255,.15); padding-top:5px; }
+.cr-wb-grouplabel:first-child { border-top:none; margin-top:0; }

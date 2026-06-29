@@ -17,6 +17,8 @@ const FORGED_DIR = (process.env.ARCFORGE_FORGED_DIR
   ?? '/mnt/usb4/moveweight-assets/forged-glbs').replace(/\/$/, '');
 
 const GLB_RE = /^[A-Za-z0-9_.-]+\.glb$/; // safe filename, .glb only
+// A forged ref may be a bare name or "<realm>/<name>.glb" (one subdir deep).
+const GLB_REF_RE = /^([A-Za-z0-9_.-]+\/)?[A-Za-z0-9_.-]+\.glb$/;
 
 function send(res: http.ServerResponse, code: number, body: unknown): void {
   const s = JSON.stringify(body);
@@ -24,12 +26,13 @@ function send(res: http.ServerResponse, code: number, body: unknown): void {
   res.end(s);
 }
 
-/** Resolve a request name to a real file inside FORGED_DIR, or null if unsafe/missing. */
-function safeForgedPath(name: string): string | null {
-  if (!GLB_RE.test(name)) return null;
-  const full = path.join(FORGED_DIR, name);
+/** Resolve a request ref (bare name OR "<realm>/<name>.glb") to a real file
+ *  inside FORGED_DIR, or null if unsafe/missing. Allows exactly one subdir. */
+function safeForgedPath(ref: string): string | null {
+  if (!GLB_REF_RE.test(ref) || ref.includes('..')) return null;
+  const full = path.join(FORGED_DIR, ref);
   // defense-in-depth: ensure it stays within FORGED_DIR
-  if (!full.startsWith(FORGED_DIR + path.sep)) return null;
+  if (full !== FORGED_DIR && !full.startsWith(FORGED_DIR + path.sep)) return null;
   return full;
 }
 
@@ -58,13 +61,28 @@ export async function handleForgedCatalog(req: http.IncomingMessage, res: http.S
   const url = (req.url ?? '').split('?')[0];
   if (url !== '/api/forged-props') return false;
   try {
-    const files = await fsp.readdir(FORGED_DIR).catch(() => [] as string[]);
-    const items = files
-      .filter((f) => GLB_RE.test(f))
-      .map((f) => {
-        const base = f.replace(/\.glb$/, '');
-        return { key: base, name: base.replace(/[_-]+/g, ' '), url: `/forged/${encodeURIComponent(f)}` };
-      });
+    const items: Array<{ key: string; name: string; url: string; group: string }> = [];
+    const pretty = (s: string) => s.replace(/^[a-z]+__/i, '').replace(/[_-]+/g, ' ').trim();
+    const entries = await fsp.readdir(FORGED_DIR, { withFileTypes: true }).catch(() => []);
+    for (const e of entries) {
+      if (e.isFile() && GLB_RE.test(e.name)) {
+        const base = e.name.replace(/\.glb$/, '');
+        items.push({ key: base, name: pretty(base), url: `/forged/${encodeURIComponent(e.name)}`, group: 'forged' });
+      } else if (e.isDirectory() && /^[A-Za-z0-9_.-]+$/.test(e.name)) {
+        // one subdir deep = a realm/category group (infernal, classic, …)
+        const sub = await fsp.readdir(path.join(FORGED_DIR, e.name)).catch(() => [] as string[]);
+        for (const f of sub) {
+          if (!GLB_RE.test(f)) continue;
+          const base = f.replace(/\.glb$/, '');
+          items.push({
+            key: `${e.name}/${base}`,                 // ref used in templateId prop:forged:<realm>/<name>
+            name: pretty(base),
+            url: `/forged/${encodeURIComponent(e.name)}/${encodeURIComponent(f)}`,
+            group: e.name,
+          });
+        }
+      }
+    }
     send(res, 200, { props: items });
   } catch (err) {
     send(res, 500, { error: String(err) });
