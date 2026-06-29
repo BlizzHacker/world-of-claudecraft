@@ -241,13 +241,16 @@ export function openWorldBuilderDock(): void {
         if (!groups.has(g)) groups.set(g, []);
         groups.get(g)!.push(p);
       }
-      const order = ['forged', 'cryptic', 'classic', 'infernal', 'claudcraft'];
+      const order = ['forged', 'cryptic', 'classic', 'infernal', 'claudcraft', 'claudecraft', 'arcane', 'dominion', 'arcadevoid', 'exchange', 'fps'];
       const sortedGroups = [...groups.keys()].sort((a, b) => {
         const ia = order.indexOf(a), ib = order.indexOf(b);
         return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib) || a.localeCompare(b);
       });
+      const label = (g: string) => g === 'forged'
+        ? '✦ Generated / Uploaded'
+        : `🗂 ${g.charAt(0).toUpperCase()}${g.slice(1)} realm assets`;
       forgedHost.innerHTML = sortedGroups.map((g) =>
-        `<div class="cr-wb-grouplabel">${escapeAttr(g)}</div>` +
+        `<div class="cr-wb-grouplabel">${escapeAttr(label(g))} <span class="cr-wb-count">${groups.get(g)!.length}</span></div>` +
         groups.get(g)!.map((p) =>
           `<button type="button" class="cr-afe-place" data-build-key="forged:${escapeAttr(p.key)}" title="${escapeAttr(p.name)}">${escapeAttr(p.name)}</button>`
         ).join('')
