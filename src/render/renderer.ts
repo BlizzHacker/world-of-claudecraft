@@ -622,6 +622,9 @@ export class Renderer {
   private renderScale = 1; // user-requested resolution ceiling on top of the device pixel ratio
   private effectiveRenderScale = 1; // runtime value after adaptive backoff
   private firstPersonSelfView = false;
+  // Animation mixers for forged props that carry embedded clips (rigged Meshy
+  // characters). Updated each frame with dt so they animate in-world.
+  private forgedMixers: THREE.AnimationMixer[] = [];
   private frameMsEma = 16.7;
   private adaptiveGrace = 2.0;
   private adaptiveCooldown = 0;
@@ -2440,14 +2443,29 @@ export class Renderer {
     if (key.startsWith('forged:')) {
       const name = key.slice('forged:'.length);
       const url = `/forged/${name.split('/').map(encodeURIComponent).join('/')}.glb`;
-      const place = (gltf: { scene: THREE.Object3D }) => swapIn(buildForgedInstance(gltf.scene));
+      const place = (gltf: { scene: THREE.Object3D; animations?: THREE.AnimationClip[] }) => {
+        try {
+          const inst = buildForgedInstance(gltf.scene);
+          swapIn(inst);
+          // play the first embedded animation, if any (idle/loop)
+          if (gltf.animations && gltf.animations.length) {
+            const mixer = new THREE.AnimationMixer(inst);
+            mixer.clipAction(gltf.animations[0]).play();
+            this.forgedMixers.push(mixer);
+          }
+          let m = 0; inst.traverse((o) => { if ((o as THREE.Mesh).isMesh || (o as THREE.SkinnedMesh).isSkinnedMesh) m++; });
+          if (m === 0) console.warn('[worldbuilder] forged loaded but 0 meshes', url);
+        } catch (err) {
+          console.error('[worldbuilder] forged build failed', url, err);
+        }
+      };
       const cached = forgedGltfCache.get(name);
       if (cached) { place(cached); return; }
       wrap.add(placeholder());
       loadGltf(url).then((gltf) => {
         forgedGltfCache.set(name, gltf);
-        place(gltf);
-      }).catch((err) => { console.error('[worldbuilder] forged load failed', url, err); });
+        place(gltf as { scene: THREE.Object3D; animations?: THREE.AnimationClip[] });
+      }).catch((err) => { console.error('[worldbuilder] forged load FAILED', url, err); });
       return;
     }
     // native prop
@@ -3214,6 +3232,7 @@ export class Renderer {
     this.motes.update(p.pos.x, p.pos.z, dt);
     this.birds.update(p.pos.x, p.pos.z, dt);
     this.impactSite.update(p.pos.x, p.pos.z, dt);
+    if (this.forgedMixers.length) for (const mx of this.forgedMixers) mx.update(dt);
     worldStart = markWorldPhase('fish', worldStart);
     this.updateAmbience(p.pos.x, this.camera.position.y, dt);
     worldStart = markWorldPhase('ambience', worldStart);
