@@ -1983,3 +1983,29 @@ body:not(.game-active) .cr-realm-first-prompt {
 .cr-wb-btns button { flex:1; font-size:11px; padding:5px 4px; background:rgba(40,28,64,.6); color:#e7d8ff; border:1px solid rgba(176,124,255,.3); border-radius:5px; cursor:pointer; }
 .cr-wb-btns button:hover { border-color:#b07cff; background:rgba(60,40,96,.7); }
 .cr-wb-grouplabel .cr-wb-count { float:right; opacity:.55; font-weight:400; }
+
+/* ── ArcForge + Mods polish pass (match the World Builder dock aesthetic) ── */
+.cr-afe-panel { background: linear-gradient(180deg, rgba(18,14,28,.98), rgba(12,9,20,.98)); border: 1px solid rgba(176,124,255,.4); border-radius: 14px; box-shadow: 0 12px 50px rgba(0,0,0,.7); }
+.cr-afe-panel h2, #cr-afe-title { color: #d8b8ff; letter-spacing: .03em; font-weight: 700; }
+.cr-afe-field input, .cr-afe-field select, .cr-afe-field textarea {
+  background: rgba(20,16,30,.85); color: #e7d8ff; border: 1px solid rgba(176,124,255,.3);
+  border-radius: 7px; padding: 7px 9px; font-size: 13px; transition: border-color .12s;
+}
+.cr-afe-field input:focus, .cr-afe-field select:focus, .cr-afe-field textarea:focus { outline: none; border-color: #b07cff; box-shadow: 0 0 0 2px rgba(176,124,255,.18); }
+.cr-afe-stage { background: rgba(30,22,46,.7); color: #cbb6ef; border: 1px solid rgba(176,124,255,.3); border-radius: 7px; padding: 6px 11px; font-size: 12px; cursor: pointer; transition: all .12s; }
+.cr-afe-stage:hover { border-color: #b07cff; background: rgba(50,34,78,.8); }
+.cr-afe-stage.active { border-color: #b07cff; background: rgba(70,44,110,.85); color: #fff; box-shadow: 0 0 10px rgba(176,124,255,.3); }
+.cr-afe-add, .cr-afe-open, [data-cr-open-builder] {
+  background: linear-gradient(180deg, #7c4fd0, #5e34a8); color: #fff; border: 1px solid rgba(176,124,255,.5);
+  border-radius: 8px; padding: 9px 14px; font-size: 13px; font-weight: 600; cursor: pointer; transition: filter .12s;
+}
+.cr-afe-add:hover, .cr-afe-open:hover, [data-cr-open-builder]:hover { filter: brightness(1.15); }
+.cr-afe-job { background: rgba(24,18,36,.7); border: 1px solid rgba(176,124,255,.2); border-radius: 8px; padding: 8px 10px; }
+/* Mods tab pills / cards */
+.cr-modal-tab { border-radius: 8px 8px 0 0; }
+.cr-modal-tab.active { color: #d8b8ff; border-bottom: 2px solid #b07cff; }
+.cr-stage-card { background: rgba(24,18,36,.6); border: 1px solid rgba(176,124,255,.25); border-radius: 10px; transition: all .12s; }
+.cr-stage-card:hover { border-color: rgba(176,124,255,.5); }
+.cr-stage-card.active { border-color: #b07cff; background: rgba(60,40,96,.5); }
+.cr-options-pill { background: rgba(40,28,64,.6); color: #e7d8ff; border: 1px solid rgba(176,124,255,.3); border-radius: 6px; padding: 5px 11px; cursor: pointer; transition: all .12s; }
+.cr-options-pill:hover, .cr-options-pill.active { border-color: #b07cff; background: rgba(60,40,96,.7); }
