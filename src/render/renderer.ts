@@ -15,7 +15,7 @@ import { mechAssetsReady, preloadMechAssets } from './characters/assets';
 import { isVisuallyDead } from './anim_state';
 import { LocoTrack, newLocoTrack, updateLocomotion } from './locomotion';
 import type { SpatialAudioSink, Surface } from './audio_sink';
-import { buildPropMaterialPrewarmGroup, buildProps, buildSingleProp } from './props';
+import { buildPropMaterialPrewarmGroup, buildProps, buildSingleProp, ensurePropLoaded } from './props';
 import { loadGltf } from './assets/loader';
 import { plankTexture, sparkleTexture } from './textures';
 import { DungeonInteriors, ensureDungeonAssets } from './dungeon';
@@ -53,20 +53,6 @@ import { isMobThreateningViewer } from './nameplate_threat';
 // kicks off the async load and returns null (caller shows a placeholder; the
 // entity re-renders on the next snapshot and picks up the loaded model).
 const forgedGltfCache = new Map<string, import('three/addons/loaders/GLTFLoader.js').GLTF>();
-const forgedLoading = new Set<string>();
-function buildForgedProp(name: string): THREE.Group | null {
-  // name may be "<file>" or "<realm>/<file>" — encode each segment but keep the slash.
-  const url = `/forged/${name.split('/').map(encodeURIComponent).join('/')}.glb`;
-  const g = forgedGltfCache.get(name);
-  if (g) return g.scene.clone(true) as THREE.Group;
-  if (!forgedLoading.has(name)) {
-    forgedLoading.add(name);
-    loadGltf(url).then((gltf) => { forgedGltfCache.set(name, gltf); })
-      .catch(() => { /* leave uncached; placeholder stays */ })
-      .finally(() => { forgedLoading.delete(name); });
-  }
-  return null;
-}
 
 const NAMEPLATE_RANGE = 55;
 const NAMEPLATE_RANGE_SQ = NAMEPLATE_RANGE * NAMEPLATE_RANGE;
@@ -2409,6 +2395,45 @@ export class Renderer {
     return group;
   }
 
+  // Fill an ArcForge prop wrapper with its mesh. key is either a native
+  // PROP_ASSET_DEFS key, or "forged:<realm>/<name>" / "forged:<name>". Shows a
+  // placeholder immediately and swaps the real GLB in once it loads (so props
+  // are never permanently stuck as the placeholder crate).
+  private fillProp(wrap: THREE.Group, key: string): void {
+    const placeholder = () => {
+      const ph = buildGroundQuestObject('', 0);
+      ph.group.name = '__prop_placeholder';
+      return ph.group;
+    };
+    const swapIn = (mesh: THREE.Object3D) => {
+      // remove any existing children (placeholder) then add the real mesh
+      for (const c of [...wrap.children]) wrap.remove(c);
+      wrap.add(mesh);
+    };
+
+    if (key.startsWith('forged:')) {
+      const name = key.slice('forged:'.length);
+      const url = `/forged/${name.split('/').map(encodeURIComponent).join('/')}.glb`;
+      const cached = forgedGltfCache.get(name);
+      if (cached) { swapIn(cached.scene.clone(true)); return; }
+      wrap.add(placeholder());
+      loadGltf(url).then((gltf) => {
+        forgedGltfCache.set(name, gltf);
+        swapIn(gltf.scene.clone(true));
+      }).catch(() => { /* keep placeholder */ });
+      return;
+    }
+    // native prop
+    const built = buildSingleProp(key);
+    if (built) { swapIn(built.group); return; }
+    // not loaded yet (or unknown): placeholder now, retry once the preload settles
+    wrap.add(placeholder());
+    void ensurePropLoaded(key).then(() => {
+      const b = buildSingleProp(key);
+      if (b) swapIn(b.group);
+    }).catch(() => { /* keep placeholder */ });
+  }
+
   private createView(e: Entity): void {
     const group = new THREE.Group();
     setRenderCategory(group, `entity:${e.kind}`);
@@ -2429,42 +2454,19 @@ export class Renderer {
       portal = built.portal;
       height = 4.6;
       objectMesh = body!;
-    } else if (e.kind === 'object' && e.templateId && e.templateId.startsWith('prop:forged:')) {
-      // ArcForge FORGED prop: a generated/uploaded GLB on the USB4 store, served
-      // at /forged/<name>.glb. Loaded by URL (async) and cached per name; until
-      // it arrives we show a placeholder so the entity is selectable/movable.
-      const name = e.templateId.slice('prop:forged:'.length);
-      const built = buildForgedProp(name);
-      const s = e.scale || 1;
-      if (built) {
-        body = built;
-        height = 2;
-        body.rotation.y = e.facing || 0;
-        if (s !== 1) body.scale.setScalar(s);
-      } else {
-        const ph = buildGroundQuestObject('', e.id);
-        body = ph.group; height = ph.height;
-      }
-      objectMesh = body!;
-      objectPoolKey = null;
     } else if (e.kind === 'object' && e.templateId && e.templateId.startsWith('prop:')) {
-      // ArcForge-placed prop: render the matching PROP_ASSET_DEFS GLB.
-      const key = e.templateId.slice(5);
-      const built = buildSingleProp(key);
-      if (built) {
-        body = built.group;
-        height = built.height;
-        body.rotation.y = e.facing || 0;
-        const s = e.scale || 1;
-        if (s !== 1) body.scale.setScalar(s);
-      } else {
-        // Unknown/not-yet-loaded prop key → small placeholder so it's still
-        // selectable/movable rather than invisible.
-        const ph = buildGroundQuestObject('', e.id);
-        body = ph.group;
-        height = ph.height;
-      }
-      objectMesh = body!;
+      // ArcForge-placed prop (native PROP_ASSET_DEFS or forged GLB). The mesh may
+      // not be loaded yet — we attach a wrapper group now (placeholder if needed)
+      // and swap the real mesh in-place once the GLB resolves, so props never get
+      // stuck as the placeholder crate.
+      const wrap = new THREE.Group();
+      const s = e.scale || 1;
+      wrap.rotation.y = e.facing || 0;
+      if (s !== 1) wrap.scale.setScalar(s);
+      height = 2;
+      this.fillProp(wrap, e.templateId.slice(5));
+      body = wrap;
+      objectMesh = wrap;
       objectPoolKey = null;
     } else if (e.kind === 'object') {
       objectPoolKey = this.objectPoolKeyFor(e);

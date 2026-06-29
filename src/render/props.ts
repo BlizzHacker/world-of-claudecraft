@@ -271,6 +271,17 @@ export function isPlaceablePropKey(key: string): boolean {
  * renderer can position it at the entity's ground position directly. Returns
  * null if the key isn't an active preloaded prop (caller falls back).
  */
+// Ensure a native prop's GLB is loaded; resolves when buildSingleProp(key) will
+// succeed. Triggers the load if it wasn't preloaded. Used by the renderer to
+// swap a placeholder for the real mesh once the asset arrives.
+export function ensurePropLoaded(key: string): Promise<void> {
+  if (!ACTIVE_PROP_KEYS.has(key as PropKey)) return Promise.reject(new Error('unknown prop ' + key));
+  if (loadedProps.has(key)) return Promise.resolve();
+  const def = PROP_ASSET_DEFS[key as PropKey];
+  if (!def) return Promise.reject(new Error('no def ' + key));
+  return loadGltf(def.url).then((gltf) => { loadedProps.set(key, gltf); });
+}
+
 export function buildSingleProp(key: string): { group: THREE.Group; height: number } | null {
   if (!ACTIVE_PROP_KEYS.has(key as PropKey)) return null;
   let asset: PropAsset;

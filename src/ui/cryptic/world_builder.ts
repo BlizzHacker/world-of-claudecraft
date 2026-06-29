@@ -126,9 +126,18 @@ export function openWorldBuilderDock(): void {
   dock.innerHTML =
     '<div class="cr-wb-head"><span class="cr-wb-title">World Builder</span>' +
     '<button type="button" class="cr-wb-close" data-wb-close aria-label="Close">×</button></div>' +
-    '<p class="cr-wb-hint">Pick a prop, then click the ground to place it. ' +
-    'Click a placed prop to select — <b>[</b> <b>]</b> rotate, <b>-</b> <b>=</b> scale, <b>Del</b> remove.</p>' +
+    '<p class="cr-wb-hint">Pick a prop → click ground to place. Click a placed prop to select & edit below.</p>' +
     `<div class="cr-wb-status" data-wb-status></div>` +
+    // Transform controls — apply to the armed prop (before placing) AND the
+    // selected placed prop (live). Easy scaling = the slider, not just keys.
+    '<div class="cr-wb-xform">' +
+    '<label class="cr-wb-row">Scale <input type="range" data-wb-scale min="0.1" max="8" step="0.1" value="1"><span data-wb-scaleval>1.0×</span></label>' +
+    '<label class="cr-wb-row">Rotate <input type="range" data-wb-yaw min="0" max="360" step="5" value="0"><span data-wb-yawval>0°</span></label>' +
+    '<div class="cr-wb-btns">' +
+    '<button type="button" data-wb-dup title="Duplicate selected">⧉ Duplicate</button>' +
+    '<button type="button" data-wb-del title="Delete selected">🗑 Delete</button>' +
+    '<button type="button" data-wb-deselect title="Deselect">✕ Deselect</button>' +
+    '</div></div>' +
     '<input type="search" class="cr-wb-filter" data-wb-filter placeholder="Filter props…" autocomplete="off">' +
     '<div class="cr-wb-secthead">Native props</div>' +
     '<div class="cr-wb-palette" data-wb-palette>' +
@@ -158,6 +167,48 @@ export function openWorldBuilderDock(): void {
     dock!.querySelectorAll<HTMLElement>('[data-build-key]').forEach((b) => {
       b.style.display = !q || (b.dataset.buildKey || '').toLowerCase().includes(q) ? '' : 'none';
     });
+  });
+
+  // ── Transform sliders (scale / rotate) ──────────────────────────────────
+  const scaleEl = dock.querySelector<HTMLInputElement>('[data-wb-scale]');
+  const yawEl = dock.querySelector<HTMLInputElement>('[data-wb-yaw]');
+  const scaleVal = dock.querySelector<HTMLElement>('[data-wb-scaleval]');
+  const yawVal = dock.querySelector<HTMLElement>('[data-wb-yawval]');
+  const syncSliders = () => {
+    if (scaleEl) scaleEl.value = String(state.scale);
+    if (yawEl) yawEl.value = String(Math.round((state.yaw * 180 / Math.PI) % 360 + 360) % 360);
+    if (scaleVal) scaleVal.textContent = state.scale.toFixed(1) + '×';
+    if (yawVal) yawVal.textContent = (Math.round((state.yaw * 180 / Math.PI) % 360 + 360) % 360) + '°';
+  };
+  builderSyncSliders = syncSliders;
+  scaleEl?.addEventListener('input', () => {
+    state.scale = parseFloat(scaleEl.value) || 1;
+    if (scaleVal) scaleVal.textContent = state.scale.toFixed(1) + '×';
+    if (state.selectedEnt != null) reflectSelected();
+    refreshStatus();
+  });
+  yawEl?.addEventListener('input', () => {
+    state.yaw = (parseFloat(yawEl.value) || 0) * Math.PI / 180;
+    if (yawVal) yawVal.textContent = (Math.round(parseFloat(yawEl.value)) || 0) + '°';
+    if (state.selectedEnt != null) reflectSelected();
+    refreshStatus();
+  });
+  dock.querySelector('[data-wb-del]')?.addEventListener('click', () => {
+    if (state.selectedEnt == null) return;
+    const dbId = dbIdByEnt.get(state.selectedEnt);
+    if (dbId != null) { game()?.world.removeProp(dbId); dbIdByEnt.delete(state.selectedEnt); }
+    state.selectedEnt = null; refreshStatus();
+  });
+  dock.querySelector('[data-wb-deselect]')?.addEventListener('click', () => {
+    state.selectedEnt = null; refreshStatus();
+  });
+  dock.querySelector('[data-wb-dup]')?.addEventListener('click', () => {
+    // Duplicate: place the selected prop's key again at a small offset.
+    const g = game(); if (!g || state.selectedEnt == null) return;
+    const e = g.world.entities?.get(state.selectedEnt);
+    if (!e || !e.templateId?.startsWith('prop:')) return;
+    const key = e.templateId.slice(5);
+    g.world.placeProp(key, e.pos.x + 1.5, e.pos.z + 1.5, e.facing ?? 0, e.scale ?? 1);
   });
 
   // Delegated arm-on-click: works for native props AND forged buttons added later.
@@ -243,6 +294,7 @@ export function closeWorldBuilderDock(): void {
 }
 
 let builderRefreshStatus: (() => void) | null = null;
+let builderSyncSliders: (() => void) | null = null;
 
 /**
  * Try to select a clicked entity as a builder target. Returns true if the
@@ -259,6 +311,7 @@ export function tryBuilderSelect(entId: number): boolean {
   state.yaw = e.facing ?? 0;
   state.scale = e.scale ?? 1;
   builderRefreshStatus?.();
+  builderSyncSliders?.();
   return true;
 }
 
