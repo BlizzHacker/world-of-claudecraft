@@ -6908,11 +6908,19 @@ export class Sim {
     if (p.targetId !== null) {
       const target = this.entities.get(p.targetId);
       if (target && dist2d(p.pos, target.pos) <= INTERACT_RANGE + 2) {
-        // ArcForge prop with dialogue → speak it as a bubble over the prop.
+        // ArcForge prop with metadata → speak its dialogue as a bubble and carry
+        // optional music/voice so the client can play them on interact.
         if (target.kind === 'object' && target.templateId?.startsWith('prop:')) {
-          const line = this.propDialogueFor(target.id);
-          if (line) {
-            this.emit({ type: 'chat', fromPid: 0, from: target.name || 'Character', text: line, channel: 'say', entityId: target.id });
+          const m = this.propMetaByEnt.get(target.id);
+          const line = m && typeof m.dialogue === 'string' ? m.dialogue : '';
+          const music = m && typeof m.music === 'string' ? m.music : undefined;
+          const voice = m && typeof m.voice === 'string' ? m.voice : undefined;
+          if (line || music || voice) {
+            this.emit({
+              type: 'chat', fromPid: 0, from: target.name || 'Character',
+              text: line || ' ', channel: 'say', entityId: target.id,
+              propAudio: (music || voice) ? { music, voice } : undefined,
+            } as never);
             return;
           }
         }

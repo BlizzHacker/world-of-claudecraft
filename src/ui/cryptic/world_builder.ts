@@ -143,7 +143,11 @@ export function openWorldBuilderDock(): void {
     // the selected prop. (Music/voice fields can layer on the same meta later.)
     '<label class="cr-wb-row cr-wb-dialogue-row">Speech ' +
     '<input type="text" data-wb-dialogue placeholder="Dialogue when interacted…" maxlength="240"></label>' +
-    '<button type="button" class="cr-wb-savemeta" data-wb-savemeta>💬 Save dialogue to selected</button>' +
+    '<label class="cr-wb-row cr-wb-dialogue-row">Music ' +
+    '<input type="text" data-wb-music placeholder="/music/track.mp3 (plays on interact)" maxlength="200"></label>' +
+    '<label class="cr-wb-row cr-wb-dialogue-row">Voice ' +
+    '<input type="text" data-wb-voice placeholder="voice line key (optional)" maxlength="80"></label>' +
+    '<button type="button" class="cr-wb-savemeta" data-wb-savemeta>💬 Save speech / music / voice to selected</button>' +
     '</div>' +
     '<input type="search" class="cr-wb-filter" data-wb-filter placeholder="Filter props…" autocomplete="off">' +
     '<div class="cr-wb-secthead">Native props</div>' +
@@ -218,11 +222,17 @@ export function openWorldBuilderDock(): void {
     g.world.placeProp(key, e.pos.x + 1.5, e.pos.z + 1.5, e.facing ?? 0, e.scale ?? 1);
   });
   const dialogueEl = dock.querySelector<HTMLInputElement>('[data-wb-dialogue]');
+  const musicEl = dock.querySelector<HTMLInputElement>('[data-wb-music]');
+  const voiceEl = dock.querySelector<HTMLInputElement>('[data-wb-voice]');
   dock.querySelector('[data-wb-savemeta]')?.addEventListener('click', () => {
     if (state.selectedEnt == null) { alert('Select a placed prop first.'); return; }
     const dbId = dbIdByEnt.get(state.selectedEnt);
     if (dbId == null) { alert('This prop has no saved id yet — re-place it.'); return; }
-    game()?.world.setPropMeta?.(dbId, { dialogue: (dialogueEl?.value || '').slice(0, 240) });
+    game()?.world.setPropMeta?.(dbId, {
+      dialogue: (dialogueEl?.value || '').slice(0, 240),
+      music: (musicEl?.value || '').slice(0, 200),
+      voice: (voiceEl?.value || '').slice(0, 80),
+    });
   });
 
   // Delegated arm-on-click: works for native props AND forged buttons added later.

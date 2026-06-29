@@ -3604,7 +3604,15 @@ export class Hud {
           if ((ev.channel === 'say' || ev.channel === 'yell' || ev.channel === 'emote') && ev.entityId !== undefined) {
             const masked = this.maskChat(ev.text);
             const bubble = ev.channel === 'emote' ? `${ev.from} ${masked}` : masked;
-            this.renderer.showChatBubble(ev.entityId, bubble, ev.channel === 'yell');
+            if (masked.trim()) this.renderer.showChatBubble(ev.entityId, bubble, ev.channel === 'yell');
+          }
+          // ArcForge prop audio: play music track and/or voice line on interact.
+          {
+            const pa = (ev as { propAudio?: { music?: string; voice?: string } }).propAudio;
+            if (pa) {
+              if (pa.music) { try { crypticMusic.playTrack(pa.music); } catch { /* noop */ } }
+              if (pa.voice) { try { voice.play(pa.voice); } catch { /* noop */ } }
+            }
           }
           break;
         }
