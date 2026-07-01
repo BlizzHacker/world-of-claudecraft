@@ -35,7 +35,7 @@ try {
   await page.goto(`${BASE}/wiki`, { waitUntil: 'networkidle0' });
   await page.waitForSelector('.guide-hero-title', { timeout: 8000 });
   const heroText = await page.$eval('.guide-hero-title', (el) => el.textContent.trim());
-  check('home hero renders', /World of ClaudeCraft/i.test(heroText), heroText);
+  check('home hero renders', /Cryptic Realm/i.test(heroText), heroText);
   check('top nav present', (await page.$$('.guide-nav-link')).length >= 4);
   check(
     'Play CTA points at /play',

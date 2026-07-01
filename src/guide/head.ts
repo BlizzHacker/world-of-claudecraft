@@ -19,10 +19,10 @@ import { GUIDE_CLASSES } from './content.generated';
 import { LEVEL_CAP } from './data';
 
 // The site origin. Matches index.html's canonical/og:url host exactly.
-const ORIGIN = 'https://worldofclaudecraft.com';
-const LOGO = `${ORIGIN}/woc_logo_square.webp`;
-const GITHUB_URL = 'https://github.com/levy-street/world-of-claudecraft';
-const DISCORD_URL = 'https://discord.gg/GjhnUsBtw';
+const ORIGIN = 'https://crypticrealm.com';
+const LOGO = `${ORIGIN}/cryptic-realm-logo.png`;
+const CONTRIBUTIONS_URL = `${ORIGIN}/contributions.html`;
+const DISCORD_URL = 'https://discord.gg/Zdj3JGrx';
 
 // The newcomer FAQ on /guide/faq, kept in lockstep with pages/faq.ts so the FAQPage
 // JSON-LD answers the same questions the visible page does. cap rows splice the level
@@ -214,7 +214,7 @@ function videoGameNode(description: string, inLanguage: string): Record<string, 
   return {
     '@type': 'VideoGame',
     name: t('guide.brand'),
-    alternateName: 'World of Claudecraft',
+    alternateName: 'Cryptic Realm',
     genre: t('seo.genre'),
     playMode: t('seo.playMode'),
     applicationCategory: t('seo.applicationCategory'),
@@ -223,7 +223,7 @@ function videoGameNode(description: string, inLanguage: string): Record<string, 
     image: LOGO,
     description,
     inLanguage,
-    sameAs: [GITHUB_URL, DISCORD_URL],
+    sameAs: [CONTRIBUTIONS_URL, DISCORD_URL],
   };
 }
 

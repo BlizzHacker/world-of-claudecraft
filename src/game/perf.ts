@@ -741,7 +741,7 @@ export class PerfMonitor {
   copyReport(): void {
     const text = JSON.stringify(this.report(), null, 2);
     void navigator.clipboard?.writeText(text).catch(() => {
-      console.info('World of Claudecraft perf report:', text);
+      console.info('Cryptic Realm perf report:', text);
     });
   }
 

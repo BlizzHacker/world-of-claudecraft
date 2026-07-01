@@ -14,6 +14,9 @@ function setupBrandingDom(): void {
       <a class="social-link github" href="https://github.com/levy-street/world-of-claudecraft"><span>GitHub</span></a>
       <a class="social-link discord" href="https://discord.gg/GjhnUsBtw"><span>Discord</span></a>
     </div>
+    <div id="cr-wallet-panel"></div>
+    <div class="cs-wallet"><span class="cs-wallet-label">$CR Wallet</span></div>
+    <section class="account-wallet-card"><h3 class="account-card-title">$CR Wallet</h3></section>
     <div id="token-ca">
       <span class="token-ca-label" data-i18n="mode.caLabel">$CR Contract Address</span>
       <button type="button" id="btn-copy-ca" data-ca="${CR_TOKEN}" data-i18n-aria="mode.caCopyAria">
@@ -51,9 +54,14 @@ describe('Cryptic realm branding crypto surfaces', () => {
     expect(document.querySelector<HTMLElement>('.token-ca-label')?.hasAttribute('data-i18n')).toBe(false);
     expect(document.getElementById('btn-copy-ca')?.hasAttribute('data-i18n-aria')).toBe(false);
     expect(document.querySelector<HTMLElement>('.token-ca-note')?.hasAttribute('data-i18n')).toBe(false);
-    expect(document.querySelector<HTMLAnchorElement>('.social-link.github')?.href).toBe('https://github.com/BlizzHacker/cryptic-realm');
-    expect(document.querySelector<HTMLElement>('.social-link.github span')?.textContent).toBe('Cryptic Realm Source');
+    expect(document.querySelector<HTMLAnchorElement>('.social-link.github')?.getAttribute('href')).toBe('/contributions.html');
+    expect(document.querySelector<HTMLElement>('.social-link.github')?.style.display).toBe('none');
+    expect(document.querySelector<HTMLElement>('.social-link.github span')?.textContent).toBe('Contributions');
+    expect(document.querySelector<HTMLAnchorElement>('.social-link.discord')?.href).toBe('https://discord.gg/Zdj3JGrx');
     expect(document.querySelector<HTMLElement>('.social-link.discord span')?.textContent).toBe('Cryptic Realm Discord');
+    expect(document.querySelector<HTMLElement>('.cs-wallet')?.style.display).toBe('none');
+    expect(document.querySelector<HTMLElement>('.account-wallet-card')?.style.display).toBe('none');
+    expect(document.getElementById('cr-wallet-panel')?.style.display).toBe('');
   });
 
   it('keeps upstream sponsors and WOC token on Claudecraft', async () => {
@@ -71,5 +79,8 @@ describe('Cryptic realm branding crypto surfaces', () => {
     expect(document.getElementById('btn-copy-ca')?.getAttribute('data-ca')).toBe(WOC_TOKEN);
     expect(document.querySelector<HTMLElement>('.token-ca-addr')?.textContent).toBe(WOC_TOKEN);
     expect(document.querySelector<HTMLElement>('.token-ca-label')?.hasAttribute('data-i18n')).toBe(false);
+    expect(document.querySelector<HTMLElement>('.cs-wallet')?.style.display).toBe('');
+    expect(document.querySelector<HTMLElement>('.account-wallet-card')?.style.display).toBe('');
+    expect(document.getElementById('cr-wallet-panel')?.style.display).toBe('none');
   });
 });

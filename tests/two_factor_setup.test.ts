@@ -49,6 +49,7 @@ describe('classifyAuthCode', () => {
 describe('formatRecoveryCodesFile', () => {
   it('lists numbered codes with a header naming the account', () => {
     const blob = formatRecoveryCodesFile(['aaaa-bbbb', 'cccc-dddd'], 'Aelwyn');
+    expect(blob).toContain('Cryptic Realm recovery codes');
     expect(blob).toContain('Account: Aelwyn');
     expect(blob).toContain('01. aaaa-bbbb');
     expect(blob).toContain('02. cccc-dddd');

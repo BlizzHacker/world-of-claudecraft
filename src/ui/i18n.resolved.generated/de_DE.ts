@@ -535,7 +535,7 @@ export const de_DE: EnTranslations = {
       "loggedOutPrompt": "Meldet Euch an, um Euer Konto zu verwalten.",
       "memberSince": "Mitglied seit {date}",
       "sectionSettings": "Kontoeinstellungen",
-      "sectionWallet": "$WOC-Wallet",
+      "sectionWallet": "$CR-Wallet",
       "sectionCharacters": "Charaktere",
       "sectionDanger": "Gefahrenzone",
       "changePassword": "Passwort ändern",
@@ -743,7 +743,7 @@ export const de_DE: EnTranslations = {
     },
     "discord": {
       "title": "Discord",
-      "panelTitle": "World of ClaudeCraft",
+      "panelTitle": "Cryptic Realm",
       "open": "Discord",
       "close": "Schließen",
       "keybind": "Discord-Panel",
@@ -886,8 +886,8 @@ export const de_DE: EnTranslations = {
     }
   },
   "guide": {
-    "brand": "World of ClaudeCraft",
-    "brandShort": "ClaudeCraft",
+    "brand": "Cryptic Realm",
+    "brandShort": "Cryptic",
     "tagline": "Ein MMO im klassischen Stil, das du kostenlos in deinem Browser spielst.",
     "skipToContent": "Zum Hauptinhalt springen",
     "loading": "Wird geladen...",
@@ -942,12 +942,12 @@ export const de_DE: EnTranslations = {
       "heading": "Auf dieser Seite"
     },
     "footer": {
-      "blurb": "Ein quelloffenes Mikro-MMO im klassischen Stil. Erfülle Quests, schließe dich mit anderen zusammen und erkunde eine handgebaute Welt, direkt in deinem Browser.",
+      "blurb": "A classic-style micro-MMO. Quest, group up, and explore a hand-built world, right in your browser.",
       "playNow": "Jetzt spielen",
-      "github": "Quellcode auf GitHub",
+      "github": "Contributions",
       "discord": "Tritt dem Discord bei",
       "communityWiki": "Community-Wiki",
-      "rights": "World of ClaudeCraft"
+      "rights": "Cryptic Realm"
     },
     "language": {
       "label": "Sprache",
@@ -967,7 +967,7 @@ export const de_DE: EnTranslations = {
     },
     "home": {
       "eyebrow": "Browser-MMO im klassischen Stil",
-      "title": "World of ClaudeCraft",
+      "title": "Cryptic Realm",
       "subtitle": "Erfülle Quests, schließe dich mit anderen zusammen und erkunde eine handgebaute Welt, kostenlos in deinem Browser.",
       "ctaPlay": "Jetzt spielen",
       "ctaLearn": "So wird gespielt",
@@ -977,8 +977,8 @@ export const de_DE: EnTranslations = {
         "pillarPlayBody": "Kein Download, kein Launcher. Erstelle einen Charakter und du bist in Sekunden in der Welt, am Desktop oder am Smartphone.",
         "pillarClassesTitle": "Neun Klassen, drei Rollen",
         "pillarClassesBody": "Tanken, heilen oder austeilen. Jede Klasse spielt sich so, wie es ihr Archetyp verlangt, mit Talenten, um sie zu deiner eigenen zu machen.",
-        "pillarOpenTitle": "Kostenlos und Open Source",
-        "pillarOpenBody": "Bis zur Höchststufe kostenlos spielbar, und das ganze Spiel ist Open Source. Kein Pay-to-win, niemals."
+        "pillarOpenTitle": "Free to play",
+        "pillarOpenBody": "Free to play to the level cap. No pay to win, ever."
       },
       "classes": {
         "heading": "Wähle deine Klasse",
@@ -1011,7 +1011,7 @@ export const de_DE: EnTranslations = {
       "faq": {
         "heading": "Gut zu wissen",
         "q1": "Ist es kostenlos spielbar?",
-        "a1": "Ja. Das ganze Spiel ist bis zur Höchststufe kostenlos, und es ist Open Source auf GitHub.",
+        "a1": "Yes. The whole game is free to the level cap.",
         "q2": "Brauche ich eine Krypto-Wallet?",
         "a2": "Nein. Das Spiel ist ohne einen solchen vollständig spielbar. Der optionale Community-Token schaltet nur kosmetisches Beiwerk frei und wirkt sich niemals auf die Macht aus.",
         "q3": "Kann ich offline spielen?",
@@ -1024,7 +1024,7 @@ export const de_DE: EnTranslations = {
         "body": "Steig jetzt ein oder komm einfach hallo sagen. Die Welt ist besser in Gesellschaft.",
         "play": "Jetzt spielen",
         "discord": "Tritt dem Discord bei",
-        "github": "Auf GitHub mit einem Stern versehen"
+        "github": "Contributions"
       }
     },
     "howToPlay": {
@@ -1140,7 +1140,7 @@ export const de_DE: EnTranslations = {
     "faqPage": {
       "intro": "Die Fragen, die neue Spieler am häufigsten stellen.",
       "q1": "Ist es wirklich kostenlos?",
-      "a1": "Ja. Das ganze Spiel ist bis zur Höchststufe kostenlos spielbar, und der Quellcode ist offen auf GitHub.",
+      "a1": "Yes. The whole game is free to play to the level cap.",
       "q2": "Brauche ich eine Krypto-Wallet oder irgendwelche Tokens?",
       "a2": "Nein. Das Spiel ist ohne einen solchen vollständig spielbar. Der optionale Community-Token schaltet nur kosmetisches Beiwerk frei und wirkt sich niemals auf Macht oder Fortschritt aus.",
       "q3": "Kann ich auf meinem Smartphone spielen?",
@@ -1154,7 +1154,7 @@ export const de_DE: EnTranslations = {
       "q7": "Wird mein Charakter gespeichert?",
       "a7": "Online-Charaktere werden automatisch auf dem Server gespeichert. Offline-Charaktere leben für schnelle Spielsitzungen und zum Testen in deinem Browser.",
       "q8": "Kann ich meine eigene Kopie hosten?",
-      "a8": "Ja. Das Projekt ist Open Source, du kannst also deinen eigenen Server betreiben. Siehe das GitHub-Repository.",
+      "a8": "Private realms are operated through verified Cryptic Realm channels.",
       "q9": "Gibt es PvP?",
       "a9": "Ja. Duelliere dich mit jedem zum Spaß, oder betritt das Aschene Kolosseum, um gegen andere Spieler zu kämpfen. PvP ist freiwillig, du wirst also nie dazu gezwungen.",
       "q10": "Was gibt es auf der Höchststufe zu tun?",
@@ -1348,7 +1348,7 @@ export const de_DE: EnTranslations = {
     },
     "worldPage": {
       "heading": "Die Welt",
-      "intro": "World of ClaudeCraft ist ein zusammenhängendes Land, das du zu Fuß durchquerst, drei Gebiete von Süden nach Norden gereiht. Es gibt keine Schnellreise, die Reise selbst ist also Teil des Abenteuers.",
+      "intro": "Cryptic Realm ist ein zusammenhängendes Land, das du zu Fuß durchquerst, drei Gebiete von Süden nach Norden gereiht. Es gibt keine Schnellreise, die Reise selbst ist also Teil des Abenteuers.",
       "hub": "Heimatbasis",
       "mapHeading": "Der Weg nach Norden",
       "mapSub": "Drei Gebiete, von Süden nach Norden, jedes eine Stufe höher im Level. Folge der Questspur, und das Land trägt dich vom Tal bis zu den Gipfeln.",
@@ -1766,9 +1766,9 @@ export const de_DE: EnTranslations = {
     "realmName": "Realmname"
   },
   "footer": {
-    "copyright": "2026 World of ClaudeCraft",
-    "githubLink": "https://github.com/levy-street/world-of-claudecraft",
-    "githubLabel": "Open-Source-Projekt",
+    "copyright": "2026 Cryptic Realm",
+    "githubLink": "/contributions.html",
+    "githubLabel": "Contributions",
     "whitepaper": "Whitepaper",
     "terms": "Nutzungsbedingungen",
     "privacy": "Datenschutzerklärung",
@@ -1795,7 +1795,7 @@ export const de_DE: EnTranslations = {
     "error": "Neuigkeiten konnten nicht geladen werden. Bitte versuche es später erneut.",
     "empty": "Noch keine Neuigkeiten - schau bald wieder vorbei.",
     "prerelease": "Vorabversion",
-    "viewOnGithub": "Auf GitHub ansehen",
+    "viewOnGithub": "Read release notes",
     "openLink": "Open",
     "officialLog": "Official Work Log",
     "alphaBetaTitle": "Alpha, Beta, And Public Realm Cadence",
@@ -1860,13 +1860,13 @@ export const de_DE: EnTranslations = {
     "serverOnline": "Online",
     "serverOffline": "Offline",
     "play": "Spielen",
-    "playAria": "World of ClaudeCraft spielen",
+    "playAria": "Cryptic Realm spielen",
     "serverLabel": "Wähle deinen Realm",
     "serverAria": "Realm wählen: Online oder Offline",
     "serverOfflineSub": "Sofortige lokale Welt",
-    "caLabel": "$WOC-Vertragsadresse",
+    "caLabel": "$CR-Vertragsadresse",
     "caCopyAria": "Vertragsadresse kopieren",
-    "caNote": "WOC ist unser Community-Token. Es wird zum Spielen nicht benötigt. Tritt dem Discord bei, um über den Nutzen und das Schwungrad von WOC zu sprechen."
+    "caNote": "CR ist unser Community-Token. Es wird zum Spielen nicht benötigt. Tritt dem Discord bei, um über den Nutzen und das Schwungrad von CR zu sprechen."
   },
   "auth": {
     "enterRealm": "Realm betreten",
@@ -1911,7 +1911,7 @@ export const de_DE: EnTranslations = {
     "twoFactorHint": "Gib den Code aus deiner Authentifizierungs-App ein oder einen deiner Wiederherstellungscodes."
   },
   "wallet": {
-    "label": "$WOC-Wallet",
+    "label": "$CR-Wallet",
     "connect": "Wallet verifizieren",
     "connectTitle": "Euer Solana-Wallet verifizieren",
     "connectAria": "Euer Solana-Wallet verifizieren",
@@ -1944,11 +1944,11 @@ export const de_DE: EnTranslations = {
     "linkedDisconnectedAria": "Das Wallet bleibt für Euer Konto verifiziert. Verbindet Euch erneut, um die Wallet-App zu verwalten.",
     "linkTitle": "Klicken, um zu unterschreiben und dieses Wallet mit Eurem Konto zu verknüpfen.",
     "connectedTitle": "Verbunden. Loggt Euch ein, um dieses Wallet mit Eurem Konto zu verknüpfen.",
-    "balanceTitle": "$WOC-Guthaben des verifizierten Solana-Wallets",
+    "balanceTitle": "$CR-Guthaben des verifizierten Solana-Wallets",
     "balanceAria": "Guthaben des verifizierten Solana-Wallets: {balance}",
-    "balancePreviewTitle": "Vorschau auf das $WOC-Guthaben des verbundenen Wallets",
+    "balancePreviewTitle": "Vorschau auf das $CR-Guthaben des verbundenen Wallets",
     "balancePreviewAria": "Vorschau auf das Guthaben des verbundenen Wallets: {balance}. Verknüpft das Wallet, um das Inhaber-Flair zu verifizieren.",
-    "balanceAmount": "{amount} $WOC",
+    "balanceAmount": "{amount} $CR",
     "connected": "Verbunden: {address}",
     "connectedWithBalance": "Verbunden: {balance} - {address}",
     "connectedLinked": "Verifiziert: {address}",
@@ -1968,8 +1968,8 @@ export const de_DE: EnTranslations = {
     "linkFailed": "Wallet-Verifizierung fehlgeschlagen.",
     "verifyFailed": "Wallet-Verifizierung fehlgeschlagen.",
     "unlinkFailed": "Wallet konnte nicht getrennt werden.",
-    "holder": "$WOC-Inhaber",
-    "holderTierTitle": "$WOC-Inhaber mit Rang {tier}",
+    "holder": "$CR-Inhaber",
+    "holderTierTitle": "$CR-Inhaber mit Rang {tier}",
     "holderTiers": {
       "ember": {
         "name": "Glut",
@@ -1993,7 +1993,7 @@ export const de_DE: EnTranslations = {
       },
       "vaultwarden": {
         "name": "Tresorwächter",
-        "flavor": "Ihr bewacht jetzt einen echten Tresor: 0,01 % aller $WOC."
+        "flavor": "Ihr bewacht jetzt einen echten Tresor: 0,01 % aller $CR."
       },
       "whale": {
         "name": "Wal",
@@ -2061,16 +2061,16 @@ export const de_DE: EnTranslations = {
     "levelClass": "Stufe {level} - {className}",
     "topPercent": "TOP {percent} %",
     "realmSubtitle": "Realm {realm}",
-    "defaultRealm": "Welt von ClaudeCraft",
-    "brandWordmark": "WORLD OF CLAUDECRAFT",
+    "defaultRealm": "Welt von Cryptic Realm",
+    "brandWordmark": "CRYPTIC REALM",
     "recruited": "{count} rekrutiert",
     "footerHandle": "@{handle}",
     "footerHandleWithRecruits": "@{handle} - {recruited}",
     "footerCta": "Schmiedet Eure Legende: {siteUrl}",
     "arenaStat": "Arena",
-    "shareTierBit": ", $WOC-Inhaber mit Rang {tier}",
-    "shareText": "Ich schmiede meine Legende in World of ClaudeCraft: Stufe {level} {className}{tierBit}. Tretet meinem Realm bei:",
-    "nativeShareTitle": "Welt von ClaudeCraft",
+    "shareTierBit": ", $CR-Inhaber mit Rang {tier}",
+    "shareText": "Ich schmiede meine Legende in Cryptic Realm: Stufe {level} {className}{tierBit}. Tretet meinem Realm bei:",
+    "nativeShareTitle": "Welt von Cryptic Realm",
     "fileNameFallback": "spieler",
     "actionShareX": "Auf X teilen",
     "actionCopyReferral": "Empfehlungslink kopieren",
@@ -2560,14 +2560,14 @@ export const de_DE: EnTranslations = {
     }
   },
   "seo": {
-    "title": "World of ClaudeCraft: Klassisches Web-MMO",
-    "description": "Begib dich in World of ClaudeCraft auf ein episches Abenteuer, ein Micro-MMO im klassischen Stil direkt im Browser. Betritt einen gemeinsamen Realm, steigere Klassen und besiege Gegner.",
+    "title": "Cryptic Realm: Klassisches Web-MMO",
+    "description": "Begib dich in Cryptic Realm auf ein episches Abenteuer, ein Micro-MMO im klassischen Stil direkt im Browser. Betritt einen gemeinsamen Realm, steigere Klassen und besiege Gegner.",
     "genre": "MMORPG",
     "playMode": "Mehrspieler",
     "applicationCategory": "Spiel",
     "operatingSystem": "Webbrowser",
-    "officialLabel": "Offizielle Website von World of ClaudeCraft",
-    "officialBody": "worldofclaudecraft.com ist das offizielle kostenlose Browser-MMO für das Reich Claudemoon. Spiele online mit einem dauerhaften Charakter, erkunde solo offline, lies das Wiki und folge den verifizierten Community-Links auf dieser Website."
+    "officialLabel": "Offizielle Website von Cryptic Realm",
+    "officialBody": "crypticrealm.com ist das offizielle kostenlose Browser-MMO für das Reich Claudemoon. Spiele online mit einem dauerhaften Charakter, erkunde solo offline, lies das Wiki und folge den verifizierten Community-Links auf dieser Website."
   },
   "a11y": {
     "goHome": "Zur Startseite",
@@ -2575,9 +2575,9 @@ export const de_DE: EnTranslations = {
     "mainNavigation": "Hauptnavigation",
     "languageSelection": "Sprachauswahl",
     "characterActions": "Charakteraktionen",
-    "githubProject": "World of ClaudeCraft-Projekt auf GitHub öffnen",
-    "discordCommunity": "Der World of ClaudeCraft-Community auf Discord beitreten",
-    "donateProject": "Spenden, um World of ClaudeCraft zu unterstützen"
+    "githubProject": "Open Cryptic Realm contributions",
+    "discordCommunity": "Der Cryptic Realm-Community auf Discord beitreten",
+    "donateProject": "Spenden, um Cryptic Realm zu unterstützen"
   },
   "loading": {
     "world": "Welt wird geladen...",
@@ -2751,17 +2751,17 @@ export const de_DE: EnTranslations = {
     "iosStandaloneDetail": "Du bist im Vollbildmodus vom Home-Bildschirm. Halte das Gerät im Querformat.",
     "iosInstallDetail": "Für echtes Vollbild auf iPhone oder iPad füge diese Seite zuerst zum Home-Bildschirm hinzu.",
     "iosShareStep": "Tippe in Safari auf Teilen und dann auf Zum Home-Bildschirm.",
-    "iosOpenStep": "Öffne World of ClaudeCraft über das neue Symbol auf dem Home-Bildschirm.",
+    "iosOpenStep": "Öffne Cryptic Realm über das neue Symbol auf dem Home-Bildschirm.",
     "androidStandaloneDetail": "Du bist im Vollbild-App-Modus. Halte das Gerät im Querformat.",
     "androidInstallDetail": "Installiere diese Seite auf Android oder füge sie zum Startbildschirm hinzu, um Vollbild zu nutzen.",
     "androidInstallStep": "Tippe in Chrome auf das Menü und dann auf App installieren oder Zum Startbildschirm hinzufügen.",
-    "androidOpenStep": "Öffne World of ClaudeCraft über das neue Symbol.",
+    "androidOpenStep": "Öffne Cryptic Realm über das neue Symbol.",
     "otherStandaloneDetail": "Halte dein Gerät im Vollbild-Querformat.",
     "otherInstallDetail": "Installiere diese Seite oder füge sie zum Startbildschirm hinzu, um das beste mobile Vollbild-Erlebnis zu erhalten."
   },
   "serverUnavailable": {
-    "title": "World of ClaudeCraft - Realm nicht verfügbar",
-    "logoAlt": "World of ClaudeCraft",
+    "title": "Cryptic Realm - Realm nicht verfügbar",
+    "logoAlt": "Cryptic Realm",
     "eyebrow": "Realmwartung",
     "heading": "Der Realm ist vorübergehend nicht verfügbar.",
     "body": "Wir starten den Spieldienst neu und erwarten, dass Claudemoon bald zurückkehrt. Diese Seite prüft automatisch weiter.",

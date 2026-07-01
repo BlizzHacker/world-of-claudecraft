@@ -3,9 +3,9 @@ import type { TranslationKey } from '../i18n.catalog';
 
 export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'a11y.characterActions': 'Personageacties',
-  'a11y.discordCommunity': 'Word lid van de World of ClaudeCraft Discord-community',
-  'a11y.donateProject': 'Doneer om World of ClaudeCraft te steunen',
-  'a11y.githubProject': 'Open het World of ClaudeCraft GitHub-project',
+  'a11y.discordCommunity': 'Word lid van de Cryptic Realm Discord-community',
+  'a11y.donateProject': 'Doneer om Cryptic Realm te steunen',
+  'a11y.githubProject': 'Open Cryptic Realm contributions',
   'a11y.goHome': 'Ga naar de startpagina',
   'a11y.languageSelection': 'Taalkeuze',
   'a11y.mainNavigation': 'Hoofdnavigatie',
@@ -1980,10 +1980,10 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'fiesta.word.shutdown': 'AFGESLACHT!',
   'fiesta.word.spree': '{n}× REEKS!',
   'fiesta.word.wave': 'AUGMENTS!',
-  'footer.copyright': '2026 World of ClaudeCraft',
+  'footer.copyright': '2026 Cryptic Realm',
   'footer.discordLabel': 'Word lid van de Discord',
-  'footer.githubLabel': 'Opensourceproject',
-  'footer.githubLink': 'https://github.com/levy-street/world-of-claudecraft',
+  'footer.githubLabel': 'Contributions',
+  'footer.githubLink': '/contributions.html',
   'footer.whitepaper': 'Whitepaper',
   'footer.privacy': 'Privacybeleid',
   'footer.terms': 'Servicevoorwaarden',
@@ -2259,8 +2259,8 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'guide.bestiary.levelsSame': 'Niveau {min}',
   'guide.bestiary.notedLabel': 'Opmerkelijk',
   'guide.bestiary.rare': 'Zeldzaam',
-  'guide.brand': 'World of ClaudeCraft',
-  'guide.brandShort': 'ClaudeCraft',
+  'guide.brand': 'Cryptic Realm',
+  'guide.brandShort': 'Cryptic',
   'guide.breadcrumb.home': 'Gids',
   'guide.breadcrumb.label': 'Kruimelpad',
   'guide.chooser.clear': 'Wissen',
@@ -2482,8 +2482,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'guide.family.undead.desc':
     'De rusteloze doden, opgewekt door duisterder handen. Ze worden niet moe en ze vluchten niet.',
   'guide.family.undead.name': 'Ondoden',
-  'guide.faqPage.a1':
-    'Ja. Het hele spel is gratis te spelen tot aan de niveaulimiet, en de broncode is openbaar op GitHub.',
+  'guide.faqPage.a1': 'Yes. The whole game is free to play to the level cap.',
   'guide.faqPage.a10':
     'De limiet is niveau {cap}. Vanaf daar speel je de kerkers voor vijf spelers en de raid voor tien, jaag je op betere uitrusting en stel je jezelf op de proef in de arena.',
   'guide.faqPage.a11':
@@ -2500,8 +2499,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
     'Niveau {cap}, bereikt over drie verbonden gebieden vol quests, kerkers en verkenning.',
   'guide.faqPage.a7':
     'Online personages worden automatisch op de server opgeslagen. Offline personages leven in je browser voor snelle sessies en tests.',
-  'guide.faqPage.a8':
-    'Ja. Het project is open source, dus je kunt je eigen server draaien. Bekijk de GitHub-repository.',
+  'guide.faqPage.a8': 'Private realms are operated through verified Cryptic Realm channels.',
   'guide.faqPage.a9':
     'Ja. Daag iedereen uit voor de lol, of stap het Asgrauwe Colosseum binnen om tegen andere spelers te vechten. PvP is naar keuze, dus je wordt er nooit toe gedwongen.',
   'guide.faqPage.intro': 'De vragen die nieuwe spelers het vaakst stellen.',
@@ -2516,13 +2514,12 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'guide.faqPage.q7': 'Wordt mijn personage opgeslagen?',
   'guide.faqPage.q8': 'Kan ik mijn eigen kopie hosten?',
   'guide.faqPage.q9': 'Is er PvP?',
-  'guide.footer.blurb':
-    'Een open-source micro-MMO in klassieke stijl. Vervul quests, vorm groepen en verken een handgemaakte wereld, direct in je browser.',
+  'guide.footer.blurb': 'A classic-style micro-MMO. Quest, group up, and explore a hand-built world, right in your browser.',
   'guide.footer.communityWiki': 'Community-wiki',
   'guide.footer.discord': 'Word lid van de Discord',
-  'guide.footer.github': 'Broncode op GitHub',
+  'guide.footer.github': 'Contributions',
   'guide.footer.playNow': 'Speel nu',
-  'guide.footer.rights': 'World of ClaudeCraft',
+  'guide.footer.rights': 'Cryptic Realm',
   'guide.gear.consumablesElixirs':
     'Elixers geven een tijdelijke buff terwijl je avontuurt, een klein voordeel dat helpt wanneer je net iets verder wilt doorzetten.',
   'guide.gear.consumablesFood':
@@ -2655,14 +2652,13 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'guide.home.community.body':
     'Spring er nu in, of kom even gedag zeggen. De wereld is beter met gezelschap.',
   'guide.home.community.discord': 'Word lid van de Discord',
-  'guide.home.community.github': 'Geef een ster op GitHub',
+  'guide.home.community.github': 'Contributions',
   'guide.home.community.heading': 'Sluit je aan bij het rijk',
   'guide.home.community.play': 'Speel nu',
   'guide.home.ctaLearn': 'Hoe te spelen',
   'guide.home.ctaPlay': 'Speel nu',
   'guide.home.eyebrow': 'Klassieke MMO in je browser',
-  'guide.home.faq.a1':
-    'Ja. Het hele spel is gratis tot het maximale niveau, en het is open source op GitHub.',
+  'guide.home.faq.a1': 'Yes. The whole game is free to the level cap.',
   'guide.home.faq.a2':
     'Nee. Het spel is volledig speelbaar zonder. Het optionele community-token ontgrendelt alleen cosmetische opsmuk en heeft nooit invloed op kracht.',
   'guide.home.faq.a3':
@@ -2689,14 +2685,13 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
     'De wereld is solo te spelen, maar de beste buit wacht achter een goede groep.',
   'guide.home.subtitle':
     'Quest, sluit je aaneen en verken een handgebouwde wereld, gratis in je browser.',
-  'guide.home.title': 'World of ClaudeCraft',
+  'guide.home.title': 'Cryptic Realm',
   'guide.home.what.heading': 'Een klassieke MMO, gemaakt om zo op te pakken',
   'guide.home.what.pillarClassesBody':
     'Tanken, genezen of de schade uitdelen. Elke klasse speelt zoals zijn archetype hoort, met talenten om hem van jou te maken.',
   'guide.home.what.pillarClassesTitle': 'Negen klassen, drie rollen',
-  'guide.home.what.pillarOpenBody':
-    'Gratis te spelen tot het maximale niveau, met het hele spel open source. Nooit pay to win.',
-  'guide.home.what.pillarOpenTitle': 'Gratis en open source',
+  'guide.home.what.pillarOpenBody': 'Free to play to the level cap. No pay to win, ever.',
+  'guide.home.what.pillarOpenTitle': 'Free to play',
   'guide.home.what.pillarPlayBody':
     'Geen download, geen launcher. Maak een personage en je bent binnen enkele seconden in de wereld, op desktop of telefoon.',
   'guide.home.what.pillarPlayTitle': 'Speel in je browser',
@@ -3103,7 +3098,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'guide.worldPage.heading': 'De wereld',
   'guide.worldPage.hub': 'Thuisbasis',
   'guide.worldPage.intro':
-    'World of ClaudeCraft is één aaneengesloten land dat je te voet doorkruist, drie zones van zuid naar noord. Er is geen snelreizen, dus de reis is onderdeel van het avontuur.',
+    'Cryptic Realm is één aaneengesloten land dat je te voet doorkruist, drie zones van zuid naar noord. Er is geen snelreizen, dus de reis is onderdeel van het avontuur.',
   'guide.worldPage.mapHeading': 'De weg naar het noorden',
   'guide.worldPage.mapSub':
     'Drie zones, van zuid naar noord, elk een stap hoger in niveau. Volg het questspoor en het land draagt je van het dal naar de toppen.',
@@ -3718,7 +3713,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.account.sectionDanger': 'Gevarenzone',
   'hudChrome.account.sectionSecurity': 'Beveiliging',
   'hudChrome.account.sectionSettings': 'Accountinstellingen',
-  'hudChrome.account.sectionWallet': '$WOC Wallet',
+  'hudChrome.account.sectionWallet': '$CR Wallet',
   'hudChrome.account.title': 'Account',
   'hudChrome.account.twoFactorBegin': 'Instellen Starten',
   'hudChrome.account.twoFactorBeginHint': 'Voer je wachtwoord in om het instellen te starten.',
@@ -4326,7 +4321,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
     'Voor volledig scherm op Android moet je deze pagina eerst installeren of aan je beginscherm toevoegen.',
   'mobilePreflight.androidInstallStep':
     'Tik in Chrome op het menu en daarna op App installeren of Toevoegen aan beginscherm.',
-  'mobilePreflight.androidOpenStep': 'Open World of ClaudeCraft vanaf het nieuwe pictogram.',
+  'mobilePreflight.androidOpenStep': 'Open Cryptic Realm vanaf het nieuwe pictogram.',
   'mobilePreflight.androidStandaloneDetail':
     'Je bent in de volledig-scherm-appmodus. Houd het apparaat in liggende stand.',
   'mobilePreflight.baseLandscape':
@@ -4337,7 +4332,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'mobilePreflight.iosInstallDetail':
     'Voor echt volledig scherm op iPhone of iPad moet je deze pagina eerst aan je beginscherm toevoegen.',
   'mobilePreflight.iosOpenStep':
-    'Open World of ClaudeCraft vanaf het nieuwe pictogram op het beginscherm.',
+    'Open Cryptic Realm vanaf het nieuwe pictogram op het beginscherm.',
   'mobilePreflight.iosShareStep': 'Tik in Safari op Deel en daarna op Zet op beginscherm.',
   'mobilePreflight.iosStandaloneDetail':
     'Je bent in de volledig-scherm-modus vanaf het beginscherm. Houd het apparaat in liggende stand.',
@@ -4348,9 +4343,9 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'mobilePreflight.rotateTitle': 'Draai naar Liggend',
   'mobilePreflight.title': 'Speel in Liggend Volledig Scherm',
   'mode.caCopyAria': 'Contractadres kopiëren',
-  'mode.caLabel': '$WOC Contractadres',
+  'mode.caLabel': '$CR Contractadres',
   'mode.caNote':
-    'WOC is onze communitytoken. Het is niet nodig om te spelen. Word lid van Discord om de WOC-toepassing en het vliegwiel te bespreken.',
+    'CR is onze communitytoken. Het is niet nodig om te spelen. Word lid van Discord om de CR-toepassing en het vliegwiel te bespreken.',
   'mode.offlineAria': 'Offline Spelen: start direct een lokale singleplayer-sessie',
   'mode.offlineDesc':
     'Direct een singleplayer-wereld in je browser. Er wordt niets opgeslagen: perfect voor een snel gevecht of om te testen.',
@@ -4360,7 +4355,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
     'Log in op de realm. Je personages leven op de server en je deelt de wereld met iedereen die online is.',
   'mode.onlineTitle': 'Online Spelen',
   'mode.play': 'Spelen',
-  'mode.playAria': 'Speel World of ClaudeCraft',
+  'mode.playAria': 'Speel Cryptic Realm',
   'mode.serverAria': 'Kies realm: Online of Offline',
   'mode.serverLabel': 'Kies je realm',
   'mode.serverOffline': 'Offline',
@@ -4387,22 +4382,22 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'news.loading': 'De nieuwste updates worden geladen…',
   'news.prerelease': 'Voorpublicatie',
   'news.title': 'Nieuws & Updates',
-  'news.viewOnGithub': 'Bekijk op GitHub',
+  'news.viewOnGithub': 'Read release notes',
   'playerCard.actionCopyReferral': 'Verwijzingslink Kopiëren',
   'playerCard.actionDownload': 'Downloaden',
   'playerCard.actionShareNative': 'Delen...',
   'playerCard.actionShareX': 'Delen op X',
   'playerCard.arenaStat': 'Arena',
-  'playerCard.brandWordmark': 'WORLD OF CLAUDECRAFT',
+  'playerCard.brandWordmark': 'CRYPTIC REALM',
   'playerCard.close': 'Spelerskaart sluiten',
-  'playerCard.defaultRealm': 'World of ClaudeCraft',
+  'playerCard.defaultRealm': 'Cryptic Realm',
   'playerCard.fileNameFallback': 'speler',
   'playerCard.footerCta': 'Smeed je legende: {siteUrl}',
   'playerCard.footerHandle': '@{handle}',
   'playerCard.footerHandleWithRecruits': '@{handle} - {recruited}',
   'playerCard.levelClass': 'Niveau {level} - {className}',
   'playerCard.loading': 'Je kaart wordt gesmeed...',
-  'playerCard.nativeShareTitle': 'World of ClaudeCraft',
+  'playerCard.nativeShareTitle': 'Cryptic Realm',
   'playerCard.poseBattle': 'Strijd',
   'playerCard.poseGroup': 'Pose',
   'playerCard.poseHero': 'Held',
@@ -4416,8 +4411,8 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'playerCard.renderFailedStatus': 'Kaartweergave mislukt.',
   'playerCard.shareButton': 'Spelerskaart Delen',
   'playerCard.shareText':
-    'Ik smeed mijn legende in World of ClaudeCraft: Niveau {level} {className}{tierBit}. Sluit je aan bij mijn realm:',
-  'playerCard.shareTierBit': ', {tier}-rang $WOC-houder',
+    'Ik smeed mijn legende in Cryptic Realm: Niveau {level} {className}{tierBit}. Sluit je aan bij mijn realm:',
+  'playerCard.shareTierBit': ', {tier}-rang $CR-houder',
   'playerCard.statusDownloaded': 'Kaart gedownload.',
   'playerCard.statusGenericError': 'Er is iets misgegaan.',
   'playerCard.statusOpenedXWithImage': 'X geopend. Plak de kaartafbeelding in de post.',
@@ -4519,21 +4514,21 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'realmTypes.rpPvp': 'RP-PvP',
   'seo.applicationCategory': 'Spel',
   'seo.description':
-    'Begin aan een episch avontuur in World of ClaudeCraft, een micro-MMO in klassieke stijl die je rechtstreeks in je browser kunt spelen. Sluit je aan bij een blijvende gedeelde realm, level je klassen op en versla vijanden!',
+    'Begin aan een episch avontuur in Cryptic Realm, een micro-MMO in klassieke stijl die je rechtstreeks in je browser kunt spelen. Sluit je aan bij een blijvende gedeelde realm, level je klassen op en versla vijanden!',
   'seo.genre': 'MMORPG',
   'seo.officialBody':
-    'worldofclaudecraft.com is de officiële gratis browser-MMO voor de Claudemoon-realm. Speel online met een blijvend personage, verken solo offline, lees de wiki en volg geverifieerde communitylinks vanaf deze site.',
-  'seo.officialLabel': 'Officiële website van World of ClaudeCraft',
+    'crypticrealm.com is de officiële gratis browser-MMO voor de Claudemoon-realm. Speel online met een blijvend personage, verken solo offline, lees de wiki en volg geverifieerde communitylinks vanaf deze site.',
+  'seo.officialLabel': 'Officiële website van Cryptic Realm',
   'seo.operatingSystem': 'Webbrowser',
   'seo.playMode': 'Multiplayer',
-  'seo.title': 'World of ClaudeCraft: Web-MMO in Klassieke Stijl',
+  'seo.title': 'Cryptic Realm: Web-MMO in Klassieke Stijl',
   'serverUnavailable.body':
     'We herstarten de gameservice en verwachten dat Claudemoon binnenkort weer terug is. Deze pagina blijft automatisch controleren.',
   'serverUnavailable.eyebrow': 'Realmonderhoud',
   'serverUnavailable.heading': 'De realm is tijdelijk niet beschikbaar.',
-  'serverUnavailable.logoAlt': 'World of ClaudeCraft',
+  'serverUnavailable.logoAlt': 'Cryptic Realm',
   'serverUnavailable.status': 'Snel terug',
-  'serverUnavailable.title': 'World of ClaudeCraft - Realm niet beschikbaar',
+  'serverUnavailable.title': 'Cryptic Realm - Realm niet beschikbaar',
   'settings.languageLoadFailed': 'Kon die taal niet laden. Je huidige taal blijft behouden.',
   'settings.languageLoadUnavailable': 'Die taal is niet beschikbaar.',
   'settings.languageLoading': 'Taal laden...',
@@ -4639,12 +4634,12 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'stats.realmName': 'Realmnaam',
   'stats.title': 'Realmstatus',
   'wallet.appConnected': 'App verbonden',
-  'wallet.balanceAmount': '{amount} $WOC',
+  'wallet.balanceAmount': '{amount} $CR',
   'wallet.balanceAria': 'Geverifieerd Solana-portemonneesaldo: {balance}',
   'wallet.balancePreviewAria':
     'Voorbeeld van saldo van verbonden portemonnee: {balance}. Koppel de portemonnee om houderkenmerk te verifiëren.',
-  'wallet.balancePreviewTitle': 'Voorbeeld van $WOC-saldo van verbonden portemonnee',
-  'wallet.balanceTitle': 'Geverifieerd $WOC-saldo van Solana-portemonnee',
+  'wallet.balancePreviewTitle': 'Voorbeeld van $CR-saldo van verbonden portemonnee',
+  'wallet.balanceTitle': 'Geverifieerd $CR-saldo van Solana-portemonnee',
   'wallet.connect': 'Portemonnee verifiëren',
   'wallet.connectApp': 'App verbinden',
   'wallet.connectAppAria': 'Verbind de portemonnee-app in deze browser',
@@ -4681,8 +4676,8 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'wallet.hide': 'Verbergen',
   'wallet.hideAria': 'Verberg de portemonneerij op dit scherm',
   'wallet.hideTitle': 'Verberg de portemonneerij op dit scherm',
-  'wallet.holder': '$WOC-houder',
-  'wallet.holderTierTitle': '{tier} $WOC-houder',
+  'wallet.holder': '$CR-houder',
+  'wallet.holderTierTitle': '{tier} $CR-houder',
   'wallet.holderTiers.coinbearer.flavor': 'De eerste munt in de oorlogskist.',
   'wallet.holderTiers.coinbearer.name': 'Muntdrager',
   'wallet.holderTiers.coppercrest.flavor': 'Koper opgestapeld, je naam wordt genoemd.',
@@ -4710,7 +4705,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'wallet.holderTiers.tidelord.name': 'Getijdenheer',
   'wallet.holderTiers.titanforged.flavor': 'Gesmeed onder titanen: 5% van de voorraad.',
   'wallet.holderTiers.titanforged.name': 'Titaangesmeed',
-  'wallet.holderTiers.vaultwarden.flavor': 'Bewaakt nu een echte kluis: 0,01% van alle $WOC.',
+  'wallet.holderTiers.vaultwarden.flavor': 'Bewaakt nu een echte kluis: 0,01% van alle $CR.',
   'wallet.holderTiers.vaultwarden.name': 'Kluiswachter',
   'wallet.holderTiers.voidwarden.flavor': 'Hoeder aan de rand van de leegte: 7% van de voorraad.',
   'wallet.holderTiers.voidwarden.name': 'Leegtewachter',
@@ -4720,7 +4715,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'wallet.holderTiers.worldbearer.name': 'Werelddrager',
   'wallet.holderTiers.worldforger.flavor': 'Een eigen wereld smedend: 9% van de voorraad.',
   'wallet.holderTiers.worldforger.name': 'Wereldsmid',
-  'wallet.label': '$WOC-portemonnee',
+  'wallet.label': '$CR-portemonnee',
   'wallet.linkFailed': 'Portemonneeverificatie mislukt.',
   'wallet.linkTitle': 'Klik om te ondertekenen en deze portemonnee aan je account te koppelen.',
   'wallet.linkedDisconnectedAria':
@@ -4879,7 +4874,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.leaderboard.guildXp': 'Totaal XP',
   'hudChrome.leaderboard.guildEmpty': 'Nog geen gerangschikte gildes.',
   'hudChrome.discord.title': 'Discord',
-  'hudChrome.discord.panelTitle': 'World of ClaudeCraft',
+  'hudChrome.discord.panelTitle': 'Cryptic Realm',
   'hudChrome.discord.open': 'Discord',
   'hudChrome.discord.close': 'Sluiten',
   'hudChrome.discord.keybind': 'Discord-paneel',

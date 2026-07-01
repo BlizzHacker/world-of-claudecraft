@@ -3,8 +3,8 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 	exit;
 }
 
-$wgSitename = 'World of Claudecraft Wiki';
-$wgMetaNamespace = 'World_of_Claudecraft';
+$wgSitename = 'Cryptic Realm Wiki';
+$wgMetaNamespace = 'Cryptic_Realm';
 $wgScriptPath = '/wiki';
 $wgServer = getenv( 'MEDIAWIKI_SERVER' ) ?: 'http://localhost:8080';
 $wgArticlePath = "$wgScriptPath/index.php/$1";

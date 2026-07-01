@@ -535,7 +535,7 @@ export const id_ID: EnTranslations = {
       "loggedOutPrompt": "Masuk untuk mengelola akunmu.",
       "memberSince": "Anggota sejak {date}",
       "sectionSettings": "Pengaturan Akun",
-      "sectionWallet": "Dompet $WOC",
+      "sectionWallet": "Dompet $CR",
       "sectionCharacters": "Karakter",
       "sectionDanger": "Zona Bahaya",
       "changePassword": "Ubah Kata Sandi",
@@ -743,7 +743,7 @@ export const id_ID: EnTranslations = {
     },
     "discord": {
       "title": "Discord",
-      "panelTitle": "World of ClaudeCraft",
+      "panelTitle": "Cryptic Realm",
       "open": "Discord",
       "close": "Tutup",
       "keybind": "Panel Discord",
@@ -886,8 +886,8 @@ export const id_ID: EnTranslations = {
     }
   },
   "guide": {
-    "brand": "World of ClaudeCraft",
-    "brandShort": "ClaudeCraft",
+    "brand": "Cryptic Realm",
+    "brandShort": "Cryptic",
     "tagline": "MMO bergaya klasik yang bisa kamu mainkan gratis di peramban.",
     "skipToContent": "Lewati ke konten utama",
     "loading": "Memuat...",
@@ -942,12 +942,12 @@ export const id_ID: EnTranslations = {
       "heading": "Di halaman ini"
     },
     "footer": {
-      "blurb": "Mikro-MMO bergaya klasik dan bersumber terbuka. Jalani misi, bentuk kelompok, dan jelajahi dunia buatan tangan, langsung di perambanmu.",
+      "blurb": "A classic-style micro-MMO. Quest, group up, and explore a hand-built world, right in your browser.",
       "playNow": "Main Sekarang",
-      "github": "Sumber di GitHub",
+      "github": "Contributions",
       "discord": "Gabung Discord",
       "communityWiki": "Wiki Komunitas",
-      "rights": "World of ClaudeCraft"
+      "rights": "Cryptic Realm"
     },
     "language": {
       "label": "Bahasa",
@@ -967,7 +967,7 @@ export const id_ID: EnTranslations = {
     },
     "home": {
       "eyebrow": "MMO browser bergaya klasik",
-      "title": "World of ClaudeCraft",
+      "title": "Cryptic Realm",
       "subtitle": "Berpetualang, bersatu, dan jelajahi dunia rakitan tangan, gratis di browser-mu.",
       "ctaPlay": "Main Sekarang",
       "ctaLearn": "Cara Bermain",
@@ -977,8 +977,8 @@ export const id_ID: EnTranslations = {
         "pillarPlayBody": "Tanpa unduhan, tanpa peluncur. Buat karakter dan kamu sudah ada di dunia dalam hitungan detik, di desktop maupun ponsel.",
         "pillarClassesTitle": "Sembilan kelas, tiga peran",
         "pillarClassesBody": "Jadi tank, sembuhkan, atau lancarkan damage. Setiap kelas dimainkan sesuai arketipenya, dengan talent untuk menjadikannya milikmu.",
-        "pillarOpenTitle": "Gratis dan sumber terbuka",
-        "pillarOpenBody": "Gratis dimainkan hingga batas level, dengan seluruh permainan bersumber terbuka. Tanpa bayar untuk menang, selamanya."
+        "pillarOpenTitle": "Free to play",
+        "pillarOpenBody": "Free to play to the level cap. No pay to win, ever."
       },
       "classes": {
         "heading": "Pilih kelasmu",
@@ -1011,7 +1011,7 @@ export const id_ID: EnTranslations = {
       "faq": {
         "heading": "Hal-hal yang perlu diketahui",
         "q1": "Apakah gratis dimainkan?",
-        "a1": "Ya. Seluruh permainan gratis hingga batas level, dan ini sumber terbuka di GitHub.",
+        "a1": "Yes. The whole game is free to the level cap.",
         "q2": "Apakah saya perlu dompet kripto?",
         "a2": "Tidak. Permainan ini sepenuhnya bisa dimainkan tanpa itu. Token komunitas opsional hanya membuka hiasan kosmetik dan tidak pernah memengaruhi kekuatan.",
         "q3": "Bisakah saya bermain luring?",
@@ -1024,7 +1024,7 @@ export const id_ID: EnTranslations = {
         "body": "Langsung masuk sekarang, atau mampir menyapa. Dunia ini lebih seru dengan teman.",
         "play": "Main Sekarang",
         "discord": "Gabung Discord",
-        "github": "Beri Bintang di GitHub"
+        "github": "Contributions"
       }
     },
     "howToPlay": {
@@ -1140,7 +1140,7 @@ export const id_ID: EnTranslations = {
     "faqPage": {
       "intro": "Pertanyaan yang paling sering ditanyakan pemain baru.",
       "q1": "Apakah ini benar-benar gratis?",
-      "a1": "Ya. Seluruh permainan gratis dimainkan hingga batas level, dan kode sumbernya terbuka di GitHub.",
+      "a1": "Yes. The whole game is free to play to the level cap.",
       "q2": "Apakah saya butuh dompet kripto atau token apa pun?",
       "a2": "Tidak. Permainan sepenuhnya bisa dimainkan tanpa itu. Token komunitas yang opsional hanya membuka hiasan kosmetik dan tak pernah memengaruhi kekuatan atau kemajuan.",
       "q3": "Bisakah saya bermain di ponsel?",
@@ -1154,7 +1154,7 @@ export const id_ID: EnTranslations = {
       "q7": "Apakah karakter saya akan tersimpan?",
       "a7": "Karakter daring disimpan di server secara otomatis. Karakter luring tersimpan di perambanmu untuk sesi cepat dan pengujian.",
       "q8": "Bisakah saya menjalankan salinan saya sendiri?",
-      "a8": "Ya. Proyek ini bersumber terbuka, jadi kamu bisa menjalankan servermu sendiri. Lihat repositori GitHub.",
+      "a8": "Private realms are operated through verified Cryptic Realm channels.",
       "q9": "Apakah ada PvP?",
       "a9": "Ya. Bertarung tanding dengan siapa pun untuk kesenangan, atau melangkahlah ke Ashen Coliseum untuk melawan pemain lain. PvP bersifat sukarela, jadi kamu tak pernah dipaksa masuk ke dalamnya.",
       "q10": "Apa yang bisa dilakukan di level maksimal?",
@@ -1348,7 +1348,7 @@ export const id_ID: EnTranslations = {
     },
     "worldPage": {
       "heading": "Dunia",
-      "intro": "World of ClaudeCraft adalah satu daratan menyambung yang kamu lintasi dengan berjalan kaki, tiga zona terbentang dari selatan ke utara. Tidak ada perjalanan kilat, jadi pengembaraan itu sendiri bagian dari petualangan.",
+      "intro": "Cryptic Realm adalah satu daratan menyambung yang kamu lintasi dengan berjalan kaki, tiga zona terbentang dari selatan ke utara. Tidak ada perjalanan kilat, jadi pengembaraan itu sendiri bagian dari petualangan.",
       "hub": "Markas utama",
       "mapHeading": "Jalan ke utara",
       "mapSub": "Tiga zona, dari selatan ke utara, masing-masing setingkat lebih tinggi dalam level. Ikuti jejak misi dan daratan akan membawamu dari lembah ke puncak.",
@@ -1766,9 +1766,9 @@ export const id_ID: EnTranslations = {
     "realmName": "Nama Realm"
   },
   "footer": {
-    "copyright": "2026 World of ClaudeCraft",
-    "githubLink": "https://github.com/levy-street/world-of-claudecraft",
-    "githubLabel": "Proyek Sumber Terbuka",
+    "copyright": "2026 Cryptic Realm",
+    "githubLink": "/contributions.html",
+    "githubLabel": "Contributions",
     "whitepaper": "Whitepaper",
     "terms": "Ketentuan Layanan",
     "privacy": "Kebijakan Privasi",
@@ -1795,7 +1795,7 @@ export const id_ID: EnTranslations = {
     "error": "Tidak dapat memuat pembaruan. Silakan coba lagi nanti.",
     "empty": "Belum ada pembaruan — periksa lagi nanti.",
     "prerelease": "Pra-rilis",
-    "viewOnGithub": "Lihat di GitHub",
+    "viewOnGithub": "Read release notes",
     "openLink": "Open",
     "officialLog": "Official Work Log",
     "alphaBetaTitle": "Alpha, Beta, And Public Realm Cadence",
@@ -1860,13 +1860,13 @@ export const id_ID: EnTranslations = {
     "serverOnline": "Online",
     "serverOffline": "Offline",
     "play": "Main",
-    "playAria": "Mainkan World of ClaudeCraft",
+    "playAria": "Mainkan Cryptic Realm",
     "serverLabel": "Pilih realm Anda",
     "serverAria": "Pilih realm: Online atau Offline",
     "serverOfflineSub": "Dunia lokal seketika",
-    "caLabel": "Alamat Kontrak $WOC",
+    "caLabel": "Alamat Kontrak $CR",
     "caCopyAria": "Salin alamat kontrak",
-    "caNote": "WOC adalah token komunitas kami. Token ini tidak diperlukan untuk bermain. Gabung Discord untuk membahas utilitas dan flywheel WOC."
+    "caNote": "CR adalah token komunitas kami. Token ini tidak diperlukan untuk bermain. Gabung Discord untuk membahas utilitas dan flywheel CR."
   },
   "auth": {
     "enterRealm": "Masuki Realm",
@@ -1911,7 +1911,7 @@ export const id_ID: EnTranslations = {
     "twoFactorHint": "Masukkan kode dari aplikasi autentikatormu, atau salah satu kode pemulihanmu."
   },
   "wallet": {
-    "label": "Dompet $WOC",
+    "label": "Dompet $CR",
     "connect": "Verifikasi Dompet",
     "connectTitle": "Verifikasi dompet Solana Anda",
     "connectAria": "Verifikasi dompet Solana Anda",
@@ -1944,11 +1944,11 @@ export const id_ID: EnTranslations = {
     "linkedDisconnectedAria": "Dompet tetap terverifikasi untuk akun Anda. Hubungkan kembali untuk mengelola aplikasi dompet.",
     "linkTitle": "Klik untuk menandatangani dan menautkan dompet ini ke akun Anda.",
     "connectedTitle": "Terhubung. Masuk untuk menautkan dompet ini ke akun Anda.",
-    "balanceTitle": "Saldo $WOC dompet Solana terverifikasi",
+    "balanceTitle": "Saldo $CR dompet Solana terverifikasi",
     "balanceAria": "Saldo dompet Solana terverifikasi: {balance}",
-    "balancePreviewTitle": "Pratinjau saldo $WOC dompet terhubung",
+    "balancePreviewTitle": "Pratinjau saldo $CR dompet terhubung",
     "balancePreviewAria": "Pratinjau saldo dompet terhubung: {balance}. Tautkan dompet untuk memverifikasi lencana pemegang.",
-    "balanceAmount": "{amount} $WOC",
+    "balanceAmount": "{amount} $CR",
     "connected": "Terhubung: {address}",
     "connectedWithBalance": "Terhubung: {balance} - {address}",
     "connectedLinked": "Terverifikasi: {address}",
@@ -1968,8 +1968,8 @@ export const id_ID: EnTranslations = {
     "linkFailed": "Verifikasi dompet gagal.",
     "verifyFailed": "Verifikasi dompet gagal.",
     "unlinkFailed": "Tidak dapat melepas tautan dompet.",
-    "holder": "pemegang $WOC",
-    "holderTierTitle": "Pemegang $WOC {tier}",
+    "holder": "pemegang $CR",
+    "holderTierTitle": "Pemegang $CR {tier}",
     "holderTiers": {
       "ember": {
         "name": "Bara",
@@ -1993,7 +1993,7 @@ export const id_ID: EnTranslations = {
       },
       "vaultwarden": {
         "name": "Penjaga Brankas",
-        "flavor": "Kini menjaga brankas sejati: 0,01% dari seluruh $WOC."
+        "flavor": "Kini menjaga brankas sejati: 0,01% dari seluruh $CR."
       },
       "whale": {
         "name": "Paus",
@@ -2061,16 +2061,16 @@ export const id_ID: EnTranslations = {
     "levelClass": "Level {level} - {className}",
     "topPercent": "TERATAS {percent}%",
     "realmSubtitle": "Realm {realm}",
-    "defaultRealm": "World of ClaudeCraft",
-    "brandWordmark": "WORLD OF CLAUDECRAFT",
+    "defaultRealm": "Cryptic Realm",
+    "brandWordmark": "CRYPTIC REALM",
     "recruited": "{count} direkrut",
     "footerHandle": "@{handle}",
     "footerHandleWithRecruits": "@{handle} - {recruited}",
     "footerCta": "Tempa legendamu: {siteUrl}",
     "arenaStat": "Arena",
-    "shareTierBit": ", pemegang $WOC peringkat {tier}",
-    "shareText": "Aku sedang menempa legendaku di World of ClaudeCraft: Level {level} {className}{tierBit}. Bergabunglah dengan realmku:",
-    "nativeShareTitle": "World of ClaudeCraft",
+    "shareTierBit": ", pemegang $CR peringkat {tier}",
+    "shareText": "Aku sedang menempa legendaku di Cryptic Realm: Level {level} {className}{tierBit}. Bergabunglah dengan realmku:",
+    "nativeShareTitle": "Cryptic Realm",
     "fileNameFallback": "pemain",
     "actionShareX": "Bagikan ke X",
     "actionCopyReferral": "Salin Tautan Rujukan",
@@ -2560,14 +2560,14 @@ export const id_ID: EnTranslations = {
     }
   },
   "seo": {
-    "title": "World of ClaudeCraft: MMO Web Bergaya Klasik",
-    "description": "Mulailah petualangan epik di World of ClaudeCraft, micro-MMO bergaya klasik yang dapat dimainkan langsung di peramban. Bergabunglah dengan realm bersama yang persisten, naikkan level kelas, dan kalahkan musuh!",
+    "title": "Cryptic Realm: MMO Web Bergaya Klasik",
+    "description": "Mulailah petualangan epik di Cryptic Realm, micro-MMO bergaya klasik yang dapat dimainkan langsung di peramban. Bergabunglah dengan realm bersama yang persisten, naikkan level kelas, dan kalahkan musuh!",
     "genre": "MMORPG",
     "playMode": "Multipemain",
     "applicationCategory": "Permainan",
     "operatingSystem": "Peramban web",
-    "officialLabel": "Situs resmi World of ClaudeCraft",
-    "officialBody": "worldofclaudecraft.com adalah MMO peramban gratis resmi untuk realm Claudemoon. Bermain daring dengan karakter yang persisten, jelajahi solo secara luring, baca wiki, dan ikuti tautan komunitas terverifikasi dari situs ini."
+    "officialLabel": "Situs resmi Cryptic Realm",
+    "officialBody": "crypticrealm.com adalah MMO peramban gratis resmi untuk realm Claudemoon. Bermain daring dengan karakter yang persisten, jelajahi solo secara luring, baca wiki, dan ikuti tautan komunitas terverifikasi dari situs ini."
   },
   "a11y": {
     "goHome": "Ke halaman utama",
@@ -2575,9 +2575,9 @@ export const id_ID: EnTranslations = {
     "mainNavigation": "Navigasi utama",
     "languageSelection": "Pemilihan bahasa",
     "characterActions": "Aksi karakter",
-    "githubProject": "Buka proyek GitHub World of ClaudeCraft",
-    "discordCommunity": "Gabung komunitas Discord World of ClaudeCraft",
-    "donateProject": "Berdonasi untuk mendukung World of ClaudeCraft"
+    "githubProject": "Open Cryptic Realm contributions",
+    "discordCommunity": "Gabung komunitas Discord Cryptic Realm",
+    "donateProject": "Berdonasi untuk mendukung Cryptic Realm"
   },
   "loading": {
     "world": "Memuat dunia...",
@@ -2751,17 +2751,17 @@ export const id_ID: EnTranslations = {
     "iosStandaloneDetail": "Kamu berada dalam mode layar penuh layar-beranda. Pertahankan perangkat dalam posisi lanskap.",
     "iosInstallDetail": "Untuk layar penuh sejati di iPhone atau iPad, pasang halaman ini ke Layar Beranda terlebih dahulu.",
     "iosShareStep": "Di Safari, ketuk Bagikan, lalu Tambahkan ke Layar Beranda.",
-    "iosOpenStep": "Buka World of ClaudeCraft dari ikon Layar Beranda yang baru.",
+    "iosOpenStep": "Buka Cryptic Realm dari ikon Layar Beranda yang baru.",
     "androidStandaloneDetail": "Kamu berada dalam mode aplikasi layar penuh. Pertahankan perangkat dalam posisi lanskap.",
     "androidInstallDetail": "Untuk layar penuh di Android, pasang halaman ini atau tambahkan ke layar Beranda terlebih dahulu.",
     "androidInstallStep": "Di Chrome, ketuk menu, lalu Pasang aplikasi atau Tambahkan ke layar Beranda.",
-    "androidOpenStep": "Buka World of ClaudeCraft dari ikon baru.",
+    "androidOpenStep": "Buka Cryptic Realm dari ikon baru.",
     "otherStandaloneDetail": "Pertahankan perangkatmu dalam layar penuh posisi lanskap.",
     "otherInstallDetail": "Pasang atau tambahkan halaman ini ke layar Beranda untuk pengalaman seluler layar penuh terbaik."
   },
   "serverUnavailable": {
-    "title": "World of ClaudeCraft - Realm Tidak Tersedia",
-    "logoAlt": "World of ClaudeCraft",
+    "title": "Cryptic Realm - Realm Tidak Tersedia",
+    "logoAlt": "Cryptic Realm",
     "eyebrow": "Pemeliharaan realm",
     "heading": "Realm sementara tidak tersedia.",
     "body": "Kami sedang memulai ulang layanan game dan memperkirakan Claudemoon akan kembali sebentar lagi. Halaman ini akan terus memeriksa secara otomatis.",

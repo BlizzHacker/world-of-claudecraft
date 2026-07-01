@@ -11,8 +11,8 @@
 
 export const guideStrings = {
   // Brand + shared chrome.
-  brand: 'World of ClaudeCraft',
-  brandShort: 'ClaudeCraft',
+  brand: 'Cryptic Realm',
+  brandShort: 'Cryptic',
   tagline: 'A classic-style MMO you play free in your browser.',
   skipToContent: 'Skip to main content',
   loading: 'Loading...',
@@ -78,12 +78,12 @@ export const guideStrings = {
   // Footer.
   footer: {
     blurb:
-      'An open-source, classic-style micro-MMO. Quest, group up, and explore a hand-built world, right in your browser.',
+      'A classic-style micro-MMO. Quest, group up, and explore a hand-built world, right in your browser.',
     playNow: 'Play Now',
-    github: 'Source on GitHub',
+    github: 'Contributions',
     discord: 'Join the Discord',
     communityWiki: 'Community Wiki',
-    rights: 'World of ClaudeCraft',
+    rights: 'Cryptic Realm',
   },
 
   // Language picker.
@@ -109,7 +109,7 @@ export const guideStrings = {
   // Home / overview landing.
   home: {
     eyebrow: 'Classic-style browser MMO',
-    title: 'World of ClaudeCraft',
+    title: 'Cryptic Realm',
     subtitle: 'Quest, group up, and explore a hand-built world, free in your browser.',
     ctaPlay: 'Play Now',
     ctaLearn: 'How to Play',
@@ -123,9 +123,9 @@ export const guideStrings = {
       pillarClassesTitle: 'Nine classes, three roles',
       pillarClassesBody:
         'Tank, heal, or deal the damage. Every class plays the way its archetype should, with talents to make it yours.',
-      pillarOpenTitle: 'Free and open source',
+      pillarOpenTitle: 'Free to play',
       pillarOpenBody:
-        'Free to play to the level cap, with the whole game open source. No pay to win, ever.',
+        'Free to play to the level cap. No pay to win, ever.',
     },
 
     // Class chooser teaser.
@@ -166,7 +166,7 @@ export const guideStrings = {
     faq: {
       heading: 'Good to know',
       q1: 'Is it free to play?',
-      a1: 'Yes. The whole game is free to the level cap, and it is open source on GitHub.',
+      a1: 'Yes. The whole game is free to the level cap.',
       q2: 'Do I need a crypto wallet?',
       a2: 'No. The game is fully playable without one. The optional community token only unlocks cosmetic flair and never affects power.',
       q3: 'Can I play offline?',
@@ -181,7 +181,7 @@ export const guideStrings = {
       body: 'Jump in now, or come say hello. The world is better with company.',
       play: 'Play Now',
       discord: 'Join the Discord',
-      github: 'Star on GitHub',
+      github: 'Contributions',
     },
   },
 
@@ -347,7 +347,7 @@ export const guideStrings = {
   faqPage: {
     intro: 'The questions new players ask most often.',
     q1: 'Is it really free?',
-    a1: 'Yes. The whole game is free to play to the level cap, and the source code is open on GitHub.',
+    a1: 'Yes. The whole game is free to play to the level cap.',
     q2: 'Do I need a crypto wallet or any tokens?',
     a2: 'No. The game is fully playable without one. The optional community token only unlocks cosmetic flair and never affects power or progression.',
     q3: 'Can I play on my phone?',
@@ -361,7 +361,7 @@ export const guideStrings = {
     q7: 'Will my character be saved?',
     a7: 'Online characters are saved on the server automatically. Offline characters live in your browser for quick sessions and testing.',
     q8: 'Can I host my own copy?',
-    a8: 'Yes. The project is open source, so you can run your own server. See the GitHub repository.',
+    a8: 'Private realms are operated through verified Cryptic Realm channels.',
     q9: 'Is there PvP?',
     a9: 'Yes. Duel anyone for fun, or step into the Ashen Coliseum to fight other players. PvP is opt in, so you are never forced into it.',
     q10: 'What is there to do at max level?',
@@ -594,7 +594,7 @@ export const guideStrings = {
   worldPage: {
     heading: 'The world',
     intro:
-      'World of ClaudeCraft is one continuous land you cross on foot, three zones laid south to north. There is no fast travel, so the journey is part of the adventure.',
+      'Cryptic Realm is one continuous land you cross on foot, three zones laid south to north. There is no fast travel, so the journey is part of the adventure.',
     hub: 'Home base',
     mapHeading: 'The road north',
     mapSub:

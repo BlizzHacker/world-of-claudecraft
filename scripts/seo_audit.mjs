@@ -197,14 +197,14 @@ function audit() {
   });
 
   // 8. Canonical Link Check
-  const hasCanonical = html.includes('rel="canonical"') && html.includes('href="https://worldofcryptic-realm.com/"');
+  const hasCanonical = html.includes('rel="canonical"') && html.includes('href="https://crypticrealm.com/"');
   checks.push({
     category: 'SEO',
     name: 'Canonical link tag is present and correct',
     passed: hasCanonical,
     score: hasCanonical ? 10 : 0,
     maxScore: 10,
-    details: hasCanonical ? 'Found rel="canonical" pointing to worldofcryptic-realm.com.' : 'Missing rel="canonical" link tag.'
+    details: hasCanonical ? 'Found rel="canonical" pointing to crypticrealm.com.' : 'Missing rel="canonical" link tag.'
   });
 
   // 9. GEO / hreflang alternates Check

@@ -535,7 +535,7 @@ export const ru_RU: EnTranslations = {
       "loggedOutPrompt": "Войдите, чтобы управлять аккаунтом.",
       "memberSince": "Дата регистрации: {date}",
       "sectionSettings": "Настройки аккаунта",
-      "sectionWallet": "Кошелёк $WOC",
+      "sectionWallet": "Кошелёк $CR",
       "sectionCharacters": "Персонажи",
       "sectionDanger": "Опасная зона",
       "changePassword": "Сменить пароль",
@@ -743,7 +743,7 @@ export const ru_RU: EnTranslations = {
     },
     "discord": {
       "title": "Discord",
-      "panelTitle": "World of ClaudeCraft",
+      "panelTitle": "Cryptic Realm",
       "open": "Discord",
       "close": "Закрыть",
       "keybind": "Панель Discord",
@@ -886,8 +886,8 @@ export const ru_RU: EnTranslations = {
     }
   },
   "guide": {
-    "brand": "World of ClaudeCraft",
-    "brandShort": "ClaudeCraft",
+    "brand": "Cryptic Realm",
+    "brandShort": "Cryptic",
     "tagline": "Классическая MMO, в которую можно играть бесплатно прямо в браузере.",
     "skipToContent": "Перейти к основному содержимому",
     "loading": "Загрузка...",
@@ -942,12 +942,12 @@ export const ru_RU: EnTranslations = {
       "heading": "На этой странице"
     },
     "footer": {
-      "blurb": "Классическая мини-MMO с открытым исходным кодом. Выполняйте задания, объединяйтесь в группы и исследуйте созданный вручную мир прямо в браузере.",
+      "blurb": "A classic-style micro-MMO. Quest, group up, and explore a hand-built world, right in your browser.",
       "playNow": "Играть",
-      "github": "Исходный код на GitHub",
+      "github": "Contributions",
       "discord": "Присоединиться к Discord",
       "communityWiki": "Вики сообщества",
-      "rights": "World of ClaudeCraft"
+      "rights": "Cryptic Realm"
     },
     "language": {
       "label": "Язык",
@@ -967,7 +967,7 @@ export const ru_RU: EnTranslations = {
     },
     "home": {
       "eyebrow": "Классическая браузерная MMO",
-      "title": "World of ClaudeCraft",
+      "title": "Cryptic Realm",
       "subtitle": "Выполняйте задания, объединяйтесь в группы и исследуйте созданный вручную мир бесплатно прямо в браузере.",
       "ctaPlay": "Играть",
       "ctaLearn": "Как играть",
@@ -977,8 +977,8 @@ export const ru_RU: EnTranslations = {
         "pillarPlayBody": "Без скачивания и лаунчера. Создайте персонажа, и через несколько секунд вы уже в игре, на компьютере или телефоне.",
         "pillarClassesTitle": "Девять классов, три роли",
         "pillarClassesBody": "Будьте танком, лекарем или наносите урон. Каждый класс играется так, как и положено его архетипу, а таланты делают его по-настоящему вашим.",
-        "pillarOpenTitle": "Бесплатно и с открытым исходным кодом",
-        "pillarOpenBody": "Бесплатная игра до максимального уровня, а исходный код игры полностью открыт. Никакого pay-to-win, никогда."
+        "pillarOpenTitle": "Free to play",
+        "pillarOpenBody": "Free to play to the level cap. No pay to win, ever."
       },
       "classes": {
         "heading": "Выберите свой класс",
@@ -1011,7 +1011,7 @@ export const ru_RU: EnTranslations = {
       "faq": {
         "heading": "Полезно знать",
         "q1": "Игра бесплатная?",
-        "a1": "Да. Вся игра бесплатна до максимального уровня, а её исходный код открыт на GitHub.",
+        "a1": "Yes. The whole game is free to the level cap.",
         "q2": "Нужен ли мне криптокошелёк?",
         "a2": "Нет. В игру можно полноценно играть и без него. Необязательный токен сообщества открывает только косметические украшения и никогда не влияет на силу.",
         "q3": "Можно ли играть офлайн?",
@@ -1024,7 +1024,7 @@ export const ru_RU: EnTranslations = {
         "body": "Заходите прямо сейчас или просто загляните поздороваться. В компании мир становится лучше.",
         "play": "Играть",
         "discord": "Присоединиться к Discord",
-        "github": "Поставить звезду на GitHub"
+        "github": "Contributions"
       }
     },
     "howToPlay": {
@@ -1140,7 +1140,7 @@ export const ru_RU: EnTranslations = {
     "faqPage": {
       "intro": "Вопросы, которые новички задают чаще всего.",
       "q1": "Игра и правда бесплатная?",
-      "a1": "Да. Вся игра бесплатна до максимального уровня, а её исходный код открыт на GitHub.",
+      "a1": "Yes. The whole game is free to play to the level cap.",
       "q2": "Нужен ли мне криптокошелёк или какие-либо токены?",
       "a2": "Нет. В игру можно полноценно играть и без них. Необязательный токен сообщества открывает только косметические украшения и никогда не влияет на силу или развитие.",
       "q3": "Можно ли играть с телефона?",
@@ -1154,7 +1154,7 @@ export const ru_RU: EnTranslations = {
       "q7": "Сохранится ли мой персонаж?",
       "a7": "Онлайн-персонажи сохраняются на сервере автоматически. Офлайн-персонажи хранятся в вашем браузере для быстрых сессий и тестирования.",
       "q8": "Могу ли я запустить собственную копию?",
-      "a8": "Да. Проект имеет открытый исходный код, так что вы можете запустить свой сервер. Подробности в репозитории на GitHub.",
+      "a8": "Private realms are operated through verified Cryptic Realm channels.",
       "q9": "Есть ли PvP?",
       "a9": "Да. Сразитесь с кем угодно на дуэли ради забавы или войдите в Пепельный Колизей, чтобы биться с другими игроками. PvP включается по желанию, так что вас никогда не принуждают к нему.",
       "q10": "Чем заняться на максимальном уровне?",
@@ -1348,7 +1348,7 @@ export const ru_RU: EnTranslations = {
     },
     "worldPage": {
       "heading": "Мир",
-      "intro": "World of ClaudeCraft - это единый цельный край, который вы пересекаете пешком, три зоны, протянувшиеся с юга на север. Здесь нет быстрых перемещений, так что дорога - это часть приключения.",
+      "intro": "Cryptic Realm - это единый цельный край, который вы пересекаете пешком, три зоны, протянувшиеся с юга на север. Здесь нет быстрых перемещений, так что дорога - это часть приключения.",
       "hub": "Опорная база",
       "mapHeading": "Дорога на север",
       "mapSub": "Три зоны, с юга на север, каждая на ступень выше по уровню. Следуйте за цепочкой заданий, и сама земля проведет вас от долины к вершинам.",
@@ -1766,9 +1766,9 @@ export const ru_RU: EnTranslations = {
     "realmName": "Название игрового мира"
   },
   "footer": {
-    "copyright": "2026 World of ClaudeCraft",
-    "githubLink": "https://github.com/levy-street/world-of-claudecraft",
-    "githubLabel": "Проект с открытым исходным кодом",
+    "copyright": "2026 Cryptic Realm",
+    "githubLink": "/contributions.html",
+    "githubLabel": "Contributions",
     "whitepaper": "Белая книга",
     "terms": "Условия использования",
     "privacy": "Политика конфиденциальности",
@@ -1795,7 +1795,7 @@ export const ru_RU: EnTranslations = {
     "error": "Не удалось загрузить обновления. Попробуйте позже.",
     "empty": "Обновлений пока нет: загляните позже.",
     "prerelease": "Предварительная версия",
-    "viewOnGithub": "Открыть на GitHub",
+    "viewOnGithub": "Read release notes",
     "openLink": "Open",
     "officialLog": "Official Work Log",
     "alphaBetaTitle": "Alpha, Beta, And Public Realm Cadence",
@@ -1860,13 +1860,13 @@ export const ru_RU: EnTranslations = {
     "serverOnline": "В сети",
     "serverOffline": "Не в сети",
     "play": "Играть",
-    "playAria": "Играть в World of ClaudeCraft",
+    "playAria": "Играть в Cryptic Realm",
     "serverLabel": "Выберите свой мир",
     "serverAria": "Выберите мир: В сети или Не в сети",
     "serverOfflineSub": "Мгновенный локальный мир",
-    "caLabel": "Адрес контракта $WOC",
+    "caLabel": "Адрес контракта $CR",
     "caCopyAria": "Скопировать адрес контракта",
-    "caNote": "WOC - токен нашего сообщества. Он не нужен для игры. Присоединяйтесь к Discord, чтобы обсудить применение и экосистему WOC."
+    "caNote": "CR - токен нашего сообщества. Он не нужен для игры. Присоединяйтесь к Discord, чтобы обсудить применение и экосистему CR."
   },
   "auth": {
     "enterRealm": "Войти в игровой мир",
@@ -1911,7 +1911,7 @@ export const ru_RU: EnTranslations = {
     "twoFactorHint": "Введите код из приложения-аутентификатора или один из ваших кодов восстановления."
   },
   "wallet": {
-    "label": "Кошелек $WOC",
+    "label": "Кошелек $CR",
     "connect": "Подтвердить кошелек",
     "connectTitle": "Подтвердить ваш кошелек Solana",
     "connectAria": "Подтвердить ваш кошелек Solana",
@@ -1944,11 +1944,11 @@ export const ru_RU: EnTranslations = {
     "linkedDisconnectedAria": "Кошелек остается подтвержденным для вашей учетной записи. Подключитесь снова, чтобы управлять приложением кошелька.",
     "linkTitle": "Нажмите, чтобы подписать и привязать этот кошелек к вашей учетной записи.",
     "connectedTitle": "Подключено. Войдите, чтобы привязать этот кошелек к вашей учетной записи.",
-    "balanceTitle": "Баланс $WOC подтвержденного кошелька Solana",
+    "balanceTitle": "Баланс $CR подтвержденного кошелька Solana",
     "balanceAria": "Баланс подтвержденного кошелька Solana: {balance}",
-    "balancePreviewTitle": "Предпросмотр баланса $WOC подключенного кошелька",
+    "balancePreviewTitle": "Предпросмотр баланса $CR подключенного кошелька",
     "balancePreviewAria": "Предпросмотр баланса подключенного кошелька: {balance}. Привяжите кошелек, чтобы подтвердить отметку держателя.",
-    "balanceAmount": "{amount} $WOC",
+    "balanceAmount": "{amount} $CR",
     "connected": "Подключено: {address}",
     "connectedWithBalance": "Подключено: {balance} - {address}",
     "connectedLinked": "Подтверждено: {address}",
@@ -1968,8 +1968,8 @@ export const ru_RU: EnTranslations = {
     "linkFailed": "Не удалось подтвердить кошелек.",
     "verifyFailed": "Не удалось подтвердить кошелек.",
     "unlinkFailed": "Не удалось отвязать кошелек.",
-    "holder": "держатель $WOC",
-    "holderTierTitle": "{tier}: держатель $WOC",
+    "holder": "держатель $CR",
+    "holderTierTitle": "{tier}: держатель $CR",
     "holderTiers": {
       "ember": {
         "name": "Искра",
@@ -1993,7 +1993,7 @@ export const ru_RU: EnTranslations = {
       },
       "vaultwarden": {
         "name": "Хранитель хранилища",
-        "flavor": "Теперь вы храните настоящее хранилище: 0,01% всех $WOC."
+        "flavor": "Теперь вы храните настоящее хранилище: 0,01% всех $CR."
       },
       "whale": {
         "name": "Кит",
@@ -2061,16 +2061,16 @@ export const ru_RU: EnTranslations = {
     "levelClass": "Уровень {level} - {className}",
     "topPercent": "ТОП {percent}%",
     "realmSubtitle": "Мир {realm}",
-    "defaultRealm": "Мир ClaudeCraft",
-    "brandWordmark": "WORLD OF CLAUDECRAFT",
+    "defaultRealm": "Мир Cryptic Realm",
+    "brandWordmark": "CRYPTIC REALM",
     "recruited": "приглашено: {count}",
     "footerHandle": "@{handle}",
     "footerHandleWithRecruits": "@{handle} - {recruited}",
     "footerCta": "Создайте свою легенду: {siteUrl}",
     "arenaStat": "Арена",
-    "shareTierBit": ", держатель $WOC ранга {tier}",
-    "shareText": "Я создаю свою легенду в World of ClaudeCraft: уровень {level}, {className}{tierBit}. Присоединяйтесь к моему миру:",
-    "nativeShareTitle": "Мир ClaudeCraft",
+    "shareTierBit": ", держатель $CR ранга {tier}",
+    "shareText": "Я создаю свою легенду в Cryptic Realm: уровень {level}, {className}{tierBit}. Присоединяйтесь к моему миру:",
+    "nativeShareTitle": "Мир Cryptic Realm",
     "fileNameFallback": "игрок",
     "actionShareX": "Поделиться в X",
     "actionCopyReferral": "Копировать реферальную ссылку",
@@ -2560,14 +2560,14 @@ export const ru_RU: EnTranslations = {
     }
   },
   "seo": {
-    "title": "World of ClaudeCraft: веб-MMO в классическом стиле",
-    "description": "Отправьтесь в эпическое приключение в World of ClaudeCraft, микро-MMO в классическом стиле прямо в браузере. Присоединяйтесь к общему миру, развивайте классы и побеждайте врагов.",
+    "title": "Cryptic Realm: веб-MMO в классическом стиле",
+    "description": "Отправьтесь в эпическое приключение в Cryptic Realm, микро-MMO в классическом стиле прямо в браузере. Присоединяйтесь к общему миру, развивайте классы и побеждайте врагов.",
     "genre": "MMORPG",
     "playMode": "Многопользовательская игра",
     "applicationCategory": "Игра",
     "operatingSystem": "Веб-браузер",
-    "officialLabel": "Официальный сайт World of ClaudeCraft",
-    "officialBody": "worldofclaudecraft.com - официальная бесплатная браузерная MMO для мира Claudemoon. Играйте онлайн с постоянным персонажем, исследуйте мир в одиночку офлайн, читайте wiki и переходите по проверенным ссылкам сообщества с этого сайта."
+    "officialLabel": "Официальный сайт Cryptic Realm",
+    "officialBody": "crypticrealm.com - официальная бесплатная браузерная MMO для мира Claudemoon. Играйте онлайн с постоянным персонажем, исследуйте мир в одиночку офлайн, читайте wiki и переходите по проверенным ссылкам сообщества с этого сайта."
   },
   "a11y": {
     "goHome": "Перейти на главную",
@@ -2575,9 +2575,9 @@ export const ru_RU: EnTranslations = {
     "mainNavigation": "Основная навигация",
     "languageSelection": "Выбор языка",
     "characterActions": "Действия персонажа",
-    "githubProject": "Открыть проект World of ClaudeCraft на GitHub",
-    "discordCommunity": "Присоединиться к Discord-сообществу World of ClaudeCraft",
-    "donateProject": "Пожертвовать на поддержку World of ClaudeCraft"
+    "githubProject": "Open Cryptic Realm contributions",
+    "discordCommunity": "Присоединиться к Discord-сообществу Cryptic Realm",
+    "donateProject": "Пожертвовать на поддержку Cryptic Realm"
   },
   "loading": {
     "world": "Загрузка мира...",
@@ -2751,17 +2751,17 @@ export const ru_RU: EnTranslations = {
     "iosStandaloneDetail": "Вы в полноэкранном режиме с домашнего экрана. Держите устройство горизонтально.",
     "iosInstallDetail": "Для настоящего полноэкранного режима на iPhone или iPad сначала добавьте эту страницу на домашний экран.",
     "iosShareStep": "В Safari нажмите Поделиться, затем На экран Домой.",
-    "iosOpenStep": "Откройте World of ClaudeCraft через новый значок на домашнем экране.",
+    "iosOpenStep": "Откройте Cryptic Realm через новый значок на домашнем экране.",
     "androidStandaloneDetail": "Вы в полноэкранном режиме приложения. Держите устройство горизонтально.",
     "androidInstallDetail": "Для полноэкранного режима на Android установите эту страницу или добавьте ее на главный экран.",
     "androidInstallStep": "В Chrome откройте меню, затем выберите Установить приложение или Добавить на главный экран.",
-    "androidOpenStep": "Откройте World of ClaudeCraft через новый значок.",
+    "androidOpenStep": "Откройте Cryptic Realm через новый значок.",
     "otherStandaloneDetail": "Держите устройство в полноэкранном альбомном режиме.",
     "otherInstallDetail": "Установите эту страницу или добавьте ее на главный экран для лучшего мобильного полноэкранного опыта."
   },
   "serverUnavailable": {
-    "title": "World of ClaudeCraft - мир недоступен",
-    "logoAlt": "World of ClaudeCraft",
+    "title": "Cryptic Realm - мир недоступен",
+    "logoAlt": "Cryptic Realm",
     "eyebrow": "Технические работы",
     "heading": "Мир временно недоступен.",
     "body": "Мы перезапускаем игровой сервис и ожидаем, что Claudemoon скоро вернется. Эта страница продолжит проверку автоматически.",

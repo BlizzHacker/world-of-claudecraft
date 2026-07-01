@@ -38,7 +38,7 @@ export function __setEmailService(svc: EmailService | null): void {
 // public site so a missing env yields a real-looking link in dev rather than a
 // relative one no mail client can open.
 export function emailBaseUrl(env: NodeJS.ProcessEnv = process.env): string {
-  return (env.EMAIL_BASE_URL || env.PUBLIC_BASE_URL || 'https://worldofclaudecraft.com').replace(/\/+$/, '');
+  return (env.EMAIL_BASE_URL || env.PUBLIC_BASE_URL || 'https://crypticrealm.com').replace(/\/+$/, '');
 }
 
 export function emailChangeVerifyUrl(token: string, env?: NodeJS.ProcessEnv): string {

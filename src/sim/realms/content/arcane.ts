@@ -16,10 +16,9 @@ export const ARCANE_REALM: RealmContent = {
   previewColors: { primary: '#a855f7', secondary: '#3ad6c8', bg: '#0a0510' },
   branding: {
     logoSrc: '/cryptic-realm-logo.png',
-    brandText: 'Cryptic Realm — Arcane',
+    brandText: 'Cryptic Realm - Arcane',
     loadingScreenSrc: '/cryptic-realm-loading.png',
-    discordUrl: 'https://discord.gg/GjhnUsBtw',
-    githubUrl: 'https://github.com/BlizzHacker/cryptic-realm',
+    discordUrl: 'https://discord.gg/Zdj3JGrx',
     showDonate: false,
     showAuthentikSso: true,
   },

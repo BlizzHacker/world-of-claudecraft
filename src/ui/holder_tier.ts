@@ -1,6 +1,6 @@
-// $WOC holder-tier "flexonomics" ladder.
+// Legacy token holder-tier "flexonomics" ladder.
 //
-// A purely cosmetic honor badge derived from how much $WOC a connected wallet
+// A purely cosmetic honor badge derived from how much of the configured token a connected wallet
 // holds. It grants NO gameplay power (the vanilla-formula invariant forbids
 // pay-to-win); it is flair for the player card and, later, nameplate cosmetics.
 //
@@ -27,7 +27,7 @@ export interface HolderTier extends Omit<HolderTierCore, 'key'> {
   key: HolderTierKey;
   /** Display name of the rung. */
   name: string;
-  /** Minimum whole-$WOC balance to reach this rung. */
+  /** Minimum whole-token balance to reach this rung. */
   threshold: number;
   /** Short hype line shown on the card. */
   flavor: string;
@@ -98,7 +98,7 @@ const HOLDER_TIER_PRESENTATION: Record<HolderTierKey, HolderTierPresentation> = 
   },
   vaultwarden: {
     name: 'Vaultwarden',
-    flavor: 'Guarding a real vault now: 0.01% of all $WOC.',
+    flavor: 'Guarding a real vault now: 0.01% of token supply.',
     ring: '#57e0b9', glow: '#1fae86',
     glyph: `<rect x="12" y="16" width="40" height="32" rx="4" fill="none" stroke="${GLYPH_FILL}" stroke-width="4"/><circle cx="32" cy="32" r="7" fill="none" stroke="${GLYPH_FILL}" stroke-width="3.4"/><path d="M32 25v-3M32 39v3M25 32h-3M39 32h3" stroke="${GLYPH_FILL}" stroke-width="3.2" stroke-linecap="round"/>`,
   },
@@ -217,7 +217,7 @@ export function holderTierFlavorText(tier: HolderTier): string {
 
 /**
  * The highest rung a balance qualifies for, or null when there is no connected
- * wallet (balance === null) or the balance is below the first rung (< 1 $WOC).
+ * wallet (balance === null) or the balance is below the first rung (< 1 token).
  */
 export function holderTierForBalance(balance: number | null): HolderTier | null {
   const shared = sharedHolderTierForBalance(balance);

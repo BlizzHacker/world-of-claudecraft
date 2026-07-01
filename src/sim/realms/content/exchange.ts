@@ -29,10 +29,9 @@ export const EXCHANGE_REALM: RealmContent = {
   crossRealm: true,
   branding: {
     logoSrc: '/cryptic-realm-logo.png',
-    brandText: 'The Exchange — Cryptic Realm',
+    brandText: 'The Exchange - Cryptic Realm',
     loadingScreenSrc: '/cryptic-realm-loading.png',
-    discordUrl: 'https://discord.gg/GjhnUsBtw',
-    githubUrl: 'https://github.com/BlizzHacker/cryptic-realm',
+    discordUrl: 'https://discord.gg/Zdj3JGrx',
     showDonate: false,
     showAuthentikSso: true,
   },

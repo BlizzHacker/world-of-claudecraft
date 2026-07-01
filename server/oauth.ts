@@ -622,7 +622,7 @@ async function approveAuthorize(
       res,
       401,
       'access_denied',
-      'log in to your World of ClaudeCraft account first',
+      'log in to your Cryptic Realm account first',
     );
   const body = await readForm(req);
   const clientId = body.client_id ?? '';
@@ -822,7 +822,7 @@ function authorizeHtml(o: {
   }).replace(/</g, '\\u003c');
   return `<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Authorize ${escapeHtml(o.client)} · World of ClaudeCraft</title><meta name="robots" content="noindex">${PAGE_STYLE}</head>
+<title>Authorize ${escapeHtml(o.client)} · Cryptic Realm</title><meta name="robots" content="noindex">${PAGE_STYLE}</head>
 <body><main>
   <h1>Authorize access</h1>
   <p><strong>${escapeHtml(o.client)}</strong> wants <strong>read-only</strong> access to your character (${escapeHtml(o.scope)}). It cannot change anything in your account.</p>
@@ -831,7 +831,7 @@ function authorizeHtml(o: {
     <button class="primary" id="allow">Authorize</button>
     <button class="ghost" id="deny">Deny</button>
   </div>
-  <p style="font-size:13px;color:#7c6f4e">Signed in via your World of ClaudeCraft web session.</p>
+  <p style="font-size:13px;color:#7c6f4e">Signed in via your Cryptic Realm web session.</p>
 </main>
 <script>
   var REQ = ${data};
@@ -840,7 +840,7 @@ function authorizeHtml(o: {
   document.getElementById('deny').onclick=function(){ location.href=denyUrl(); };
   document.getElementById('allow').onclick=function(){
     var t=token();
-    if(!t){ document.getElementById('msg').textContent='Please log in to World of ClaudeCraft first, then reopen this link.'; return; }
+    if(!t){ document.getElementById('msg').textContent='Please log in to Cryptic Realm first, then reopen this link.'; return; }
     fetch('/oauth/authorize',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+t},body:JSON.stringify(REQ)})
       .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })
       .then(function(x){ if(x.ok&&x.j.redirect){ location.href=x.j.redirect; } else { document.getElementById('msg').textContent=(x.j.error_description||x.j.error||'authorization failed'); } })
@@ -854,20 +854,20 @@ function renderDevicePage(res: http.ServerResponse): void {
   res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' });
   res.end(`<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Link a device · World of ClaudeCraft</title><meta name="robots" content="noindex">${PAGE_STYLE}</head>
+<title>Link a device · Cryptic Realm</title><meta name="robots" content="noindex">${PAGE_STYLE}</head>
 <body><main>
   <h1>Link a device</h1>
   <p>Enter the code shown on your device to grant it <strong>read-only</strong> access to your character.</p>
   <input id="code" placeholder="XXXX-XXXX" autocomplete="one-time-code" maxlength="9">
   <div class="msg" id="msg"></div>
   <div class="row"><button class="primary" id="ok">Approve</button></div>
-  <p style="font-size:13px;color:#7c6f4e">Signed in via your World of ClaudeCraft web session.</p>
+  <p style="font-size:13px;color:#7c6f4e">Signed in via your Cryptic Realm web session.</p>
 </main>
 <script>
   var params=new URLSearchParams(location.search); var pre=params.get('user_code'); if(pre)document.getElementById('code').value=pre;
   function token(){ try { return JSON.parse(localStorage.getItem('woc_session')||'{}').token || ''; } catch(e){ return ''; } }
   document.getElementById('ok').onclick=function(){
-    var t=token(); if(!t){ document.getElementById('msg').textContent='Please log in to World of ClaudeCraft first.'; return; }
+    var t=token(); if(!t){ document.getElementById('msg').textContent='Please log in to Cryptic Realm first.'; return; }
     var code=document.getElementById('code').value;
     fetch('/oauth/device',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+t},body:JSON.stringify({user_code:code})})
       .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,j:j}; }); })

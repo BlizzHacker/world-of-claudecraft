@@ -18,7 +18,7 @@ describe('renderEmail', () => {
     expect(r.subject).toContain('Welcome');
     expect(r.text).toContain('Hi Aelwyn,');
     expect(r.html).toContain('<p>Hi Aelwyn,');
-    expect(r.html).toContain('World of ClaudeCraft');
+    expect(r.html).toContain('Cryptic Realm');
   });
 
   it('turns a bare URL line into an anchor in html', () => {

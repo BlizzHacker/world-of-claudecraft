@@ -537,15 +537,14 @@ function trackCommunityLinkClicks(): void {
       return;
     }
     const host = url.hostname.toLowerCase();
-    const isGitHub = host === 'github.com' || host.endsWith('.github.com');
     const isDiscord =
       host === 'discord.gg' ||
       host.endsWith('.discord.gg') ||
       host === 'discord.com' ||
       host.endsWith('.discord.com');
-    if (!isGitHub && !isDiscord) return;
+    if (!isDiscord) return;
     link.addEventListener('click', () => {
-      trackMetaPixel(isGitHub ? 'GitHubClick' : 'DiscordClick', {
+      trackMetaPixel('DiscordClick', {
         url: url.toString(),
         path: url.pathname,
       });
@@ -4564,8 +4563,7 @@ function updateSeoMetadata(lang: SupportedLanguage): void {
   const jsonLd = document.getElementById('structured-data') as HTMLScriptElement | null;
   if (jsonLd) {
     const sameAs = [
-      'https://github.com/BlizzHacker/cryptic-realm',
-      'https://discord.gg/GjhnUsBtw',
+      'https://discord.gg/Zdj3JGrx',
       'https://www.youtube.com/@CrypticMMO',
       'https://x.com/CrypticMMO',
     ];
@@ -4849,19 +4847,23 @@ async function loadHighscores(): Promise<void> {
   host.innerHTML = head + body;
 }
 
-// Minimal, safe Markdown → HTML for GitHub release notes. The input is escaped
+// Minimal, safe Markdown to HTML for release notes.
 // FIRST, so every regex below operates on inert text; the only markup we emit is
-// our own whitelisted tags. Deliberately tiny (no tables/images/blockquotes) —
+// our own whitelisted tags. Deliberately tiny and focused.
 // enough to make patch notes readable without pulling in a markdown dependency.
 function renderReleaseBody(md: string): string {
   const esc = (s: string): string =>
     s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
   const inline = (s: string): string =>
     esc(s)
-      // [text](url) — only http(s) links survive; anything else renders as text.
+      // [text](url): only http(s) links survive; anything else renders as text.
       .replace(
         /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
-        (_m, text, url) => `<a href="${url}" target="_blank" rel="noopener noreferrer">${text}</a>`,
+        (_m, text, url) => {
+          const rawUrl = String(url);
+          if (rawUrl.includes('github.com/') && rawUrl.includes('/cryptic-realm')) return String(text);
+          return `<a href="${url}" target="_blank" rel="noopener noreferrer">${text}</a>`;
+        },
       )
       .replace(/`([^`]+)`/g, '<code>$1</code>')
       .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
@@ -4879,7 +4881,7 @@ function renderReleaseBody(md: string): string {
     const bullet = /^\s*[-*]\s+(.*)$/.exec(line);
     if (heading) {
       closeList();
-      const level = Math.min(3, heading[1].length); // collapse h1-h6 → h1-h3
+      const level = Math.min(3, heading[1].length); // collapse h1-h6 to h1-h3
       out.push(`<h${level}>${inline(heading[2])}</h${level}>`);
     } else if (bullet) {
       if (!inList) {
@@ -4898,7 +4900,7 @@ function renderReleaseBody(md: string): string {
   return out.join('');
 }
 
-// News & Updates: published GitHub releases, proxied + cached by the server.
+// News & Updates: published release notes, proxied and cached by the server.
 // Re-fetched each time the view is opened (the server caches, so it is cheap).
 let newsLoading = false;
 async function loadNews(): Promise<void> {
@@ -4933,8 +4935,8 @@ async function loadNews(): Promise<void> {
     {
       title: t('news.prTitle'),
       body: t('news.prBody'),
-      tag: 'ClaudeCraft PRs',
-      url: 'https://github.com/BlizzHacker/cryptic-realm/pulls',
+      tag: 'Contributions',
+      url: '/#contributions',
       realm: 'claudecraft',
     },
     {
@@ -5906,7 +5908,10 @@ function wireDiscordKeepModal(): void {
         if (errEl) errEl.textContent = userFacingApiError(err);
       });
   };
-  document.getElementById('btn-discord-keep-submit')?.addEventListener('click', submit);
+  document.getElementById('discord-keep-form')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    submit();
+  });
   document
     .getElementById('btn-discord-keep-cancel')
     ?.addEventListener('click', closeDiscordKeepModal);
@@ -7364,7 +7369,10 @@ function wireStartScreens(): void {
         })
         .catch(onDiscordChoiceError);
     };
-    $('#btn-discord-link-submit').addEventListener('click', submitLink);
+    document.getElementById('discord-link-existing')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      submitLink();
+    });
     ($('#discord-link-pass') as HTMLInputElement).addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();

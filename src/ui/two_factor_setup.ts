@@ -40,7 +40,7 @@ export function classifyAuthCode(raw: string): { code: string; recoveryCode: str
 
 // Plain-text blob for the "Download Codes" button so a user can save recovery
 // codes to a file. No DOM/Blob here: the caller wraps this in a download.
-export function formatRecoveryCodesFile(codes: string[], username: string, brand = 'World of ClaudeCraft'): string {
+export function formatRecoveryCodesFile(codes: string[], username: string, brand = 'Cryptic Realm'): string {
   return [
     `${brand} recovery codes`,
     `Account: ${username}`,

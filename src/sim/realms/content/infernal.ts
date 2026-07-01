@@ -17,10 +17,9 @@ export const INFERNAL_REALM: RealmContent = {
   isDefault: true,
   branding: {
     logoSrc: '/cryptic-realm-logo.png',
-    brandText: 'Cryptic Realm — Infernal',
+    brandText: 'Cryptic Realm - Infernal',
     loadingScreenSrc: '/cryptic-realm-loading.png',
-    discordUrl: 'https://discord.gg/GjhnUsBtw',
-    githubUrl: 'https://github.com/BlizzHacker/cryptic-realm',
+    discordUrl: 'https://discord.gg/Zdj3JGrx',
     showDonate: false,
     showAuthentikSso: true,
   },

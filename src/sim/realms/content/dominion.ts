@@ -16,10 +16,9 @@ export const DOMINION_REALM: RealmContent = {
   previewColors: { primary: '#3ad6c8', secondary: '#c9a14a', bg: '#050a0f' },
   branding: {
     logoSrc: '/cryptic-realm-logo.png',
-    brandText: 'Cryptic Realm — Dominion',
+    brandText: 'Cryptic Realm - Dominion',
     loadingScreenSrc: '/cryptic-realm-loading.png',
-    discordUrl: 'https://discord.gg/GjhnUsBtw',
-    githubUrl: 'https://github.com/BlizzHacker/cryptic-realm',
+    discordUrl: 'https://discord.gg/Zdj3JGrx',
     showDonate: false,
     showAuthentikSso: true,
   },

@@ -7,13 +7,13 @@ def playIntegrityCloudProjectNumber = providers
     .trim()
 
 android {
-    namespace = "com.worldofclaudecraft"
+    namespace = "com.crypticrealm.game"
     compileSdk = rootProject.ext.compileSdkVersion
     buildFeatures {
         buildConfig true
     }
     defaultConfig {
-        applicationId "com.worldofclaudecraft"
+        applicationId "com.crypticrealm.game"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 6

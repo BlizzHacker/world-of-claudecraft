@@ -1,5 +1,5 @@
 // Rebrands public/links.html in place for non-claudecraft realms. Run as a
-// module loaded by links.html — checks the active realm and rewrites the
+// module loaded by links.html. Checks the active realm and rewrites the
 // upstream brand strings to CR equivalents.
 
 import { getActiveRealm } from '../../sim/realms';
@@ -16,7 +16,7 @@ function rebrand(): void {
     document.querySelectorAll(sel).forEach((el) => el.setAttribute('content', value));
   };
   setContent('meta[name="description"]',
-    'The only official channels for Cryptic Realm. Play the game and follow us on X, Facebook, Instagram, TikTok, YouTube, Reddit, and GitHub. If a channel is not listed here, it is not us.');
+    'The only official channels for Cryptic Realm. Play the game and follow us on X, Facebook, Instagram, TikTok, YouTube, Reddit, and Discord. If a channel is not listed here, it is not us.');
   setContent('meta[property="og:site_name"]', 'Cryptic Realm');
   setContent('meta[property="og:title"]', 'Cryptic Realm - Official Links');
   setContent('meta[property="og:description"]', 'The only official channels for Cryptic Realm. If a channel is not listed here, it is not us.');
@@ -47,8 +47,7 @@ function rebrand(): void {
       .replace(/WoClaudecraft/g, 'CrypticMMO');
     if (after !== before) t.nodeValue = after;
   }
-
-  // Rewrite all anchor hrefs that point at upstream socials → CR socials.
+  // Rewrite all anchor hrefs that point at upstream socials to CR socials.
   // (Branding overlay does this for the main homepage; we redo it here for
   //  the links page which is a separate Vite entry.)
   const pairs: [string, string | undefined][] = [
@@ -63,6 +62,12 @@ function rebrand(): void {
     ['worldofclaudecraft.com/links', socials.links],
   ];
   document.querySelectorAll<HTMLAnchorElement>('a[href]').forEach((a) => {
+    if (a.hostname.endsWith('github.com') && a.pathname.includes('cryptic-realm')) {
+      a.href = '/contributions.html';
+      a.removeAttribute('target');
+      a.removeAttribute('rel');
+      return;
+    }
     for (const [pattern, replacement] of pairs) {
       if (!replacement) continue;
       if (a.href.includes(pattern)) {
@@ -78,7 +83,7 @@ function rebrand(): void {
     fb.href = socials.facebook;
     fb.target = '_blank';
     fb.rel = 'noopener noreferrer';
-    fb.textContent = 'Facebook · /crypticmmo';
+    fb.textContent = 'Facebook - /crypticmmo';
     fb.className = 'cr-link-card';
     fb.style.cssText = 'display:block;padding:14px 18px;margin:8px 0;border:1px solid #c8a838;border-radius:10px;color:#ffd100;text-decoration:none;font-family:Cinzel,serif;';
     grid.appendChild(fb);

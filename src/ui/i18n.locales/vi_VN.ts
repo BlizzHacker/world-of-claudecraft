@@ -3,9 +3,9 @@ import type { TranslationKey } from '../i18n.catalog';
 
 export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'a11y.characterActions': 'Hành động nhân vật',
-  'a11y.discordCommunity': 'Tham gia cộng đồng Discord của World of ClaudeCraft',
-  'a11y.donateProject': 'Quyên góp ủng hộ World of ClaudeCraft',
-  'a11y.githubProject': 'Mở dự án GitHub của World of ClaudeCraft',
+  'a11y.discordCommunity': 'Tham gia cộng đồng Discord của Cryptic Realm',
+  'a11y.donateProject': 'Quyên góp ủng hộ Cryptic Realm',
+  'a11y.githubProject': 'Open Cryptic Realm contributions',
   'a11y.goHome': 'Về trang chủ',
   'a11y.languageSelection': 'Chọn ngôn ngữ',
   'a11y.mainNavigation': 'Điều hướng chính',
@@ -1974,10 +1974,10 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'fiesta.word.shutdown': 'CHẶN ĐỨNG!',
   'fiesta.word.spree': 'CHUỖI {n}×!',
   'fiesta.word.wave': 'CƯỜNG HÓA!',
-  'footer.copyright': '2026 World of ClaudeCraft',
+  'footer.copyright': '2026 Cryptic Realm',
   'footer.discordLabel': 'Tham Gia Discord',
-  'footer.githubLabel': 'Dự Án Mã Nguồn Mở',
-  'footer.githubLink': 'https://github.com/levy-street/world-of-claudecraft',
+  'footer.githubLabel': 'Contributions',
+  'footer.githubLink': '/contributions.html',
   'footer.whitepaper': 'Sách trắng',
   'footer.privacy': 'Chính Sách Bảo Mật',
   'footer.terms': 'Điều Khoản Dịch Vụ',
@@ -2244,8 +2244,8 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'guide.bestiary.levelsSame': 'Cấp {min}',
   'guide.bestiary.notedLabel': 'Đáng chú ý',
   'guide.bestiary.rare': 'Hiếm',
-  'guide.brand': 'World of ClaudeCraft',
-  'guide.brandShort': 'ClaudeCraft',
+  'guide.brand': 'Cryptic Realm',
+  'guide.brandShort': 'Cryptic',
   'guide.breadcrumb.home': 'Hướng Dẫn',
   'guide.breadcrumb.label': 'Đường dẫn',
   'guide.chooser.clear': 'Xóa bộ lọc',
@@ -2467,8 +2467,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'guide.family.undead.desc':
     'Những kẻ chết không yên nghỉ, được nâng dậy bởi những bàn tay đen tối hơn. Chúng không mệt mỏi và không bỏ chạy.',
   'guide.family.undead.name': 'Tử Linh',
-  'guide.faqPage.a1':
-    'Đúng vậy. Cả trò chơi đều miễn phí chơi đến cấp tối đa, và mã nguồn được mở trên GitHub.',
+  'guide.faqPage.a1': 'Yes. The whole game is free to play to the level cap.',
   'guide.faqPage.a10':
     'Giới hạn là cấp {cap}. Từ đó bạn chạy các hầm ngục năm người và raid mười người, săn lùng trang bị tốt hơn, và thử sức ở đấu trường.',
   'guide.faqPage.a11':
@@ -2485,8 +2484,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
     'Cấp {cap}, đạt được xuyên qua ba khu vực liền kề đầy nhiệm vụ, hầm ngục và khám phá.',
   'guide.faqPage.a7':
     'Nhân vật trực tuyến được lưu trên máy chủ một cách tự động. Nhân vật ngoại tuyến sống trong trình duyệt của bạn cho những phiên chơi nhanh và thử nghiệm.',
-  'guide.faqPage.a8':
-    'Đúng vậy. Dự án là mã nguồn mở, nên bạn có thể chạy máy chủ của riêng mình. Xem kho lưu trữ GitHub.',
+  'guide.faqPage.a8': 'Private realms are operated through verified Cryptic Realm channels.',
   'guide.faqPage.a9':
     'Đúng vậy. Đấu tay đôi với bất kỳ ai cho vui, hoặc bước vào Đấu Trường Tro Tàn để chiến đấu với những người chơi khác. PvP là tự nguyện, nên bạn không bao giờ bị ép buộc tham gia.',
   'guide.faqPage.intro': 'Những câu hỏi mà người chơi mới hay hỏi nhất.',
@@ -2501,13 +2499,12 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'guide.faqPage.q7': 'Nhân vật của tôi có được lưu lại không?',
   'guide.faqPage.q8': 'Tôi có thể tự lưu trữ bản sao của riêng mình không?',
   'guide.faqPage.q9': 'Có PvP không?',
-  'guide.footer.blurb':
-    'Một micro-MMO phong cách cổ điển, mã nguồn mở. Làm nhiệm vụ, lập nhóm, và khám phá một thế giới được dựng thủ công, ngay trong trình duyệt của bạn.',
+  'guide.footer.blurb': 'A classic-style micro-MMO. Quest, group up, and explore a hand-built world, right in your browser.',
   'guide.footer.communityWiki': 'Wiki Cộng Đồng',
   'guide.footer.discord': 'Tham gia Discord',
-  'guide.footer.github': 'Mã nguồn trên GitHub',
+  'guide.footer.github': 'Contributions',
   'guide.footer.playNow': 'Chơi Ngay',
-  'guide.footer.rights': 'World of ClaudeCraft',
+  'guide.footer.rights': 'Cryptic Realm',
   'guide.gear.consumablesElixirs':
     'Tiên dược ban một hiệu ứng tăng cường tạm thời khi bạn phiêu lưu, một lợi thế nhỏ giúp ích khi bạn muốn tiến xa hơn một chút.',
   'guide.gear.consumablesFood':
@@ -2642,14 +2639,13 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'guide.home.community.body':
     'Nhảy vào ngay, hoặc ghé qua chào một tiếng. Thế giới sẽ vui hơn khi có bạn đồng hành.',
   'guide.home.community.discord': 'Tham gia Discord',
-  'guide.home.community.github': 'Gắn sao trên GitHub',
+  'guide.home.community.github': 'Contributions',
   'guide.home.community.heading': 'Gia nhập vương quốc',
   'guide.home.community.play': 'Chơi Ngay',
   'guide.home.ctaLearn': 'Cách Chơi',
   'guide.home.ctaPlay': 'Chơi Ngay',
   'guide.home.eyebrow': 'MMO cổ điển trên trình duyệt',
-  'guide.home.faq.a1':
-    'Có. Toàn bộ trò chơi miễn phí đến cấp tối đa, và nó là mã nguồn mở trên GitHub.',
+  'guide.home.faq.a1': 'Yes. The whole game is free to the level cap.',
   'guide.home.faq.a2':
     'Không. Trò chơi hoàn toàn chơi được mà không cần ví. Token cộng đồng tùy chọn chỉ mở khóa trang trí làm đẹp và không bao giờ ảnh hưởng đến sức mạnh.',
   'guide.home.faq.a3':
@@ -2676,14 +2672,13 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
     'Thế giới có thể chơi đơn, nhưng chiến lợi phẩm tốt nhất chờ đợi sau một tổ đội ăn ý.',
   'guide.home.subtitle':
     'Làm nhiệm vụ, hợp sức và khám phá một thế giới được dựng thủ công, miễn phí ngay trong trình duyệt của bạn.',
-  'guide.home.title': 'World of ClaudeCraft',
+  'guide.home.title': 'Cryptic Realm',
   'guide.home.what.heading': 'Một MMO cổ điển, được làm ra để dễ bắt nhịp',
   'guide.home.what.pillarClassesBody':
     'Đỡ đòn, trị liệu hoặc gây sát thương. Mỗi lớp chơi đúng theo cách nguyên mẫu của nó nên có, với tài năng để biến nó thành của riêng bạn.',
   'guide.home.what.pillarClassesTitle': 'Chín lớp, ba vai trò',
-  'guide.home.what.pillarOpenBody':
-    'Miễn phí chơi đến cấp tối đa, với toàn bộ trò chơi là mã nguồn mở. Không trả tiền để thắng, không bao giờ.',
-  'guide.home.what.pillarOpenTitle': 'Miễn phí và mã nguồn mở',
+  'guide.home.what.pillarOpenBody': 'Free to play to the level cap. No pay to win, ever.',
+  'guide.home.what.pillarOpenTitle': 'Free to play',
   'guide.home.what.pillarPlayBody':
     'Không tải về, không trình khởi chạy. Tạo một nhân vật và bạn đã ở trong thế giới chỉ trong vài giây, trên máy tính hoặc điện thoại.',
   'guide.home.what.pillarPlayTitle': 'Chơi ngay trong trình duyệt',
@@ -3092,7 +3087,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'guide.worldPage.heading': 'Thế giới',
   'guide.worldPage.hub': 'Căn cứ nhà',
   'guide.worldPage.intro':
-    'World of ClaudeCraft là một vùng đất liền mạch mà bạn băng qua bằng đôi chân, ba khu vực trải dài từ nam tới bắc. Không có di chuyển nhanh, nên hành trình là một phần của cuộc phiêu lưu.',
+    'Cryptic Realm là một vùng đất liền mạch mà bạn băng qua bằng đôi chân, ba khu vực trải dài từ nam tới bắc. Không có di chuyển nhanh, nên hành trình là một phần của cuộc phiêu lưu.',
   'guide.worldPage.mapHeading': 'Con đường lên phương bắc',
   'guide.worldPage.mapSub':
     'Ba khu vực, từ nam tới bắc, mỗi nơi cao hơn một bậc về cấp độ. Hãy theo dấu vết nhiệm vụ và vùng đất sẽ đưa bạn từ thung lũng tới những đỉnh cao.',
@@ -3702,7 +3697,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.account.sectionDanger': 'Vùng Nguy Hiểm',
   'hudChrome.account.sectionSecurity': 'Bảo Mật',
   'hudChrome.account.sectionSettings': 'Cài Đặt Tài Khoản',
-  'hudChrome.account.sectionWallet': 'Ví $WOC',
+  'hudChrome.account.sectionWallet': 'Ví $CR',
   'hudChrome.account.title': 'Tài Khoản',
   'hudChrome.account.twoFactorBegin': 'Bắt Đầu Thiết Lập',
   'hudChrome.account.twoFactorBeginHint': 'Nhập mật khẩu của bạn để bắt đầu thiết lập.',
@@ -4301,7 +4296,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
     'Để chơi toàn màn hình trên Android, hãy cài đặt trang này hoặc thêm vào Màn hình chính trước.',
   'mobilePreflight.androidInstallStep':
     'Trong Chrome, chạm vào menu, rồi chọn Cài đặt ứng dụng hoặc Thêm vào Màn hình chính.',
-  'mobilePreflight.androidOpenStep': 'Mở World of ClaudeCraft từ biểu tượng mới.',
+  'mobilePreflight.androidOpenStep': 'Mở Cryptic Realm từ biểu tượng mới.',
   'mobilePreflight.androidStandaloneDetail':
     'Bạn đang ở chế độ ứng dụng toàn màn hình. Hãy giữ thiết bị ở chế độ ngang.',
   'mobilePreflight.baseLandscape': 'Hãy xoay thiết bị sang ngang trước khi vào thế giới.',
@@ -4310,7 +4305,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'mobilePreflight.continue': 'Tiếp Tục Vào Game',
   'mobilePreflight.iosInstallDetail':
     'Để chơi toàn màn hình thực sự trên iPhone hoặc iPad, hãy cài đặt trang này vào Màn hình chính trước.',
-  'mobilePreflight.iosOpenStep': 'Mở World of ClaudeCraft từ biểu tượng mới trên Màn hình chính.',
+  'mobilePreflight.iosOpenStep': 'Mở Cryptic Realm từ biểu tượng mới trên Màn hình chính.',
   'mobilePreflight.iosShareStep':
     'Trong Safari, chạm vào Chia sẻ, rồi chọn Thêm vào Màn hình chính.',
   'mobilePreflight.iosStandaloneDetail':
@@ -4323,9 +4318,9 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'mobilePreflight.rotateTitle': 'Xoay Sang Ngang',
   'mobilePreflight.title': 'Chơi Toàn Màn Hình Ngang',
   'mode.caCopyAria': 'Sao chép địa chỉ hợp đồng',
-  'mode.caLabel': 'Địa Chỉ Hợp Đồng $WOC',
+  'mode.caLabel': 'Địa Chỉ Hợp Đồng $CR',
   'mode.caNote':
-    'WOC là token cộng đồng của chúng tôi. Không cần nó để chơi. Hãy tham gia Discord để thảo luận về tiện ích và vòng xoáy tăng trưởng của WOC.',
+    'CR là token cộng đồng của chúng tôi. Không cần nó để chơi. Hãy tham gia Discord để thảo luận về tiện ích và vòng xoáy tăng trưởng của CR.',
   'mode.offlineAria': 'Chơi Ngoại Tuyến: bắt đầu phiên chơi đơn cục bộ tức thì',
   'mode.offlineDesc':
     'Thế giới chơi đơn tức thì ngay trong trình duyệt. Không lưu lại gì: hoàn hảo cho một trận đánh nhanh hoặc để thử nghiệm.',
@@ -4335,7 +4330,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
     'Đăng nhập vào máy chủ. Các nhân vật của bạn sống trên máy chủ và bạn chia sẻ thế giới với tất cả những người khác đang trực tuyến.',
   'mode.onlineTitle': 'Chơi Trực Tuyến',
   'mode.play': 'Chơi',
-  'mode.playAria': 'Chơi World of ClaudeCraft',
+  'mode.playAria': 'Chơi Cryptic Realm',
   'mode.serverAria': 'Chọn realm: Trực Tuyến hoặc Ngoại Tuyến',
   'mode.serverLabel': 'Chọn realm của bạn',
   'mode.serverOffline': 'Ngoại Tuyến',
@@ -4362,22 +4357,22 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'news.loading': 'Đang tải các cập nhật mới nhất…',
   'news.prerelease': 'Bản thử nghiệm',
   'news.title': 'Tin Tức & Cập Nhật',
-  'news.viewOnGithub': 'Xem trên GitHub',
+  'news.viewOnGithub': 'Read release notes',
   'playerCard.actionCopyReferral': 'Sao Chép Liên Kết Giới Thiệu',
   'playerCard.actionDownload': 'Tải Xuống',
   'playerCard.actionShareNative': 'Chia sẻ...',
   'playerCard.actionShareX': 'Chia Sẻ Lên X',
   'playerCard.arenaStat': 'Đấu Trường',
-  'playerCard.brandWordmark': 'WORLD OF CLAUDECRAFT',
+  'playerCard.brandWordmark': 'CRYPTIC REALM',
   'playerCard.close': 'Đóng thẻ người chơi',
-  'playerCard.defaultRealm': 'World of ClaudeCraft',
+  'playerCard.defaultRealm': 'Cryptic Realm',
   'playerCard.fileNameFallback': 'nguoichoi',
   'playerCard.footerCta': 'Rèn nên huyền thoại của bạn: {siteUrl}',
   'playerCard.footerHandle': '@{handle}',
   'playerCard.footerHandleWithRecruits': '@{handle} - {recruited}',
   'playerCard.levelClass': 'Cấp {level} - {className}',
   'playerCard.loading': 'Đang rèn thẻ của bạn...',
-  'playerCard.nativeShareTitle': 'World of ClaudeCraft',
+  'playerCard.nativeShareTitle': 'Cryptic Realm',
   'playerCard.poseBattle': 'Chiến Đấu',
   'playerCard.poseGroup': 'Tư Thế',
   'playerCard.poseHero': 'Anh Hùng',
@@ -4391,8 +4386,8 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'playerCard.renderFailedStatus': 'Kết xuất thẻ thất bại.',
   'playerCard.shareButton': 'Chia Sẻ Thẻ Người Chơi',
   'playerCard.shareText':
-    'Tôi đang rèn nên huyền thoại của mình trong World of ClaudeCraft: {className} cấp {level}{tierBit}. Hãy tham gia máy chủ của tôi:',
-  'playerCard.shareTierBit': ', người nắm giữ $WOC hạng {tier}',
+    'Tôi đang rèn nên huyền thoại của mình trong Cryptic Realm: {className} cấp {level}{tierBit}. Hãy tham gia máy chủ của tôi:',
+  'playerCard.shareTierBit': ', người nắm giữ $CR hạng {tier}',
   'playerCard.statusDownloaded': 'Đã tải xuống thẻ.',
   'playerCard.statusGenericError': 'Đã có lỗi xảy ra.',
   'playerCard.statusOpenedXWithImage': 'Đã mở X. Hãy dán hình ảnh thẻ vào bài đăng.',
@@ -4493,21 +4488,21 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'realmTypes.rpPvp': 'RP-PvP',
   'seo.applicationCategory': 'Trò chơi',
   'seo.description':
-    'Bắt đầu cuộc phiêu lưu hoành tráng trong World of ClaudeCraft, một micro-MMO phong cách cổ điển chơi trực tiếp trên trình duyệt của bạn. Tham gia một máy chủ chung bền vững, lên cấp các lớp nhân vật và đánh bại kẻ thù!',
+    'Bắt đầu cuộc phiêu lưu hoành tráng trong Cryptic Realm, một micro-MMO phong cách cổ điển chơi trực tiếp trên trình duyệt của bạn. Tham gia một máy chủ chung bền vững, lên cấp các lớp nhân vật và đánh bại kẻ thù!',
   'seo.genre': 'MMORPG',
   'seo.officialBody':
-    'worldofclaudecraft.com là trang MMO trên trình duyệt miễn phí chính thức cho máy chủ Claudemoon. Chơi trực tuyến với một nhân vật bền vững, khám phá đơn lẻ ngoại tuyến, đọc wiki và theo dõi các liên kết cộng đồng đã được xác minh từ trang này.',
-  'seo.officialLabel': 'Trang web World of ClaudeCraft chính thức',
+    'crypticrealm.com là trang MMO trên trình duyệt miễn phí chính thức cho máy chủ Claudemoon. Chơi trực tuyến với một nhân vật bền vững, khám phá đơn lẻ ngoại tuyến, đọc wiki và theo dõi các liên kết cộng đồng đã được xác minh từ trang này.',
+  'seo.officialLabel': 'Trang web Cryptic Realm chính thức',
   'seo.operatingSystem': 'Trình duyệt web',
   'seo.playMode': 'Nhiều người chơi',
-  'seo.title': 'World of ClaudeCraft: MMO Web Phong Cách Cổ Điển',
+  'seo.title': 'Cryptic Realm: MMO Web Phong Cách Cổ Điển',
   'serverUnavailable.body':
     'Chúng tôi đang khởi động lại dịch vụ trò chơi và dự kiến Claudemoon sẽ trở lại trong giây lát. Trang này sẽ tự động tiếp tục kiểm tra.',
   'serverUnavailable.eyebrow': 'Bảo trì realm',
   'serverUnavailable.heading': 'Realm tạm thời không khả dụng.',
-  'serverUnavailable.logoAlt': 'World of ClaudeCraft',
+  'serverUnavailable.logoAlt': 'Cryptic Realm',
   'serverUnavailable.status': 'Sớm trở lại',
-  'serverUnavailable.title': 'World of ClaudeCraft - Realm Không Khả Dụng',
+  'serverUnavailable.title': 'Cryptic Realm - Realm Không Khả Dụng',
   'settings.languageLoadFailed': 'Không thể tải ngôn ngữ đó. Giữ nguyên ngôn ngữ hiện tại của bạn.',
   'settings.languageLoadUnavailable': 'Ngôn ngữ đó không khả dụng.',
   'settings.languageLoading': 'Đang tải ngôn ngữ...',
@@ -4610,12 +4605,12 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'stats.realmName': 'Tên Realm',
   'stats.title': 'Trạng Thái Realm',
   'wallet.appConnected': 'Ứng dụng đã kết nối',
-  'wallet.balanceAmount': '{amount} $WOC',
+  'wallet.balanceAmount': '{amount} $CR',
   'wallet.balanceAria': 'Số dư ví Solana đã xác minh: {balance}',
   'wallet.balancePreviewAria':
     'Xem trước số dư ví đã kết nối: {balance}. Liên kết ví để xác minh huy hiệu chủ sở hữu.',
-  'wallet.balancePreviewTitle': 'Xem trước số dư $WOC của ví đã kết nối',
-  'wallet.balanceTitle': 'Số dư $WOC của ví Solana đã xác minh',
+  'wallet.balancePreviewTitle': 'Xem trước số dư $CR của ví đã kết nối',
+  'wallet.balanceTitle': 'Số dư $CR của ví Solana đã xác minh',
   'wallet.connect': 'Xác minh ví',
   'wallet.connectApp': 'Kết nối ứng dụng',
   'wallet.connectAppAria': 'Kết nối ứng dụng ví trên trình duyệt này',
@@ -4652,8 +4647,8 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'wallet.hide': 'Ẩn',
   'wallet.hideAria': 'Ẩn hàng ví trên màn hình này',
   'wallet.hideTitle': 'Ẩn hàng ví trên màn hình này',
-  'wallet.holder': 'Chủ sở hữu $WOC',
-  'wallet.holderTierTitle': 'Chủ sở hữu $WOC bậc {tier}',
+  'wallet.holder': 'Chủ sở hữu $CR',
+  'wallet.holderTierTitle': 'Chủ sở hữu $CR bậc {tier}',
   'wallet.holderTiers.coinbearer.flavor': 'Đồng xu đầu tiên trong rương chiến.',
   'wallet.holderTiers.coinbearer.name': 'Người Mang Tiền',
   'wallet.holderTiers.coppercrest.flavor': 'Đồng đã chất, tên người được nhắc.',
@@ -4680,7 +4675,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'wallet.holderTiers.tidelord.name': 'Chúa Tể Thủy Triều',
   'wallet.holderTiers.titanforged.flavor': 'Rèn giữa các titan: 5% nguồn cung.',
   'wallet.holderTiers.titanforged.name': 'Titan Rèn',
-  'wallet.holderTiers.vaultwarden.flavor': 'Giờ canh giữ một kho báu thực sự: 0,01% toàn bộ $WOC.',
+  'wallet.holderTiers.vaultwarden.flavor': 'Giờ canh giữ một kho báu thực sự: 0,01% toàn bộ $CR.',
   'wallet.holderTiers.vaultwarden.name': 'Cai Ngục Kho Báu',
   'wallet.holderTiers.voidwarden.flavor': 'Người gác bên rìa hư không: 7% nguồn cung.',
   'wallet.holderTiers.voidwarden.name': 'Cai Ngục Hư Không',
@@ -4690,7 +4685,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'wallet.holderTiers.worldbearer.name': 'Người Mang Thế Giới',
   'wallet.holderTiers.worldforger.flavor': 'Rèn nên một thế giới của riêng bạn: 9% nguồn cung.',
   'wallet.holderTiers.worldforger.name': 'Người Rèn Thế Giới',
-  'wallet.label': 'Ví $WOC',
+  'wallet.label': 'Ví $CR',
   'wallet.linkFailed': 'Xác minh ví thất bại.',
   'wallet.linkTitle': 'Nhấn để ký và liên kết ví này với tài khoản của bạn.',
   'wallet.linkedDisconnectedAria':
@@ -4847,7 +4842,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.leaderboard.guildXp': 'Tổng XP',
   'hudChrome.leaderboard.guildEmpty': 'Chưa có bang hội nào được xếp hạng.',
   'hudChrome.discord.title': 'Discord',
-  'hudChrome.discord.panelTitle': 'World of ClaudeCraft',
+  'hudChrome.discord.panelTitle': 'Cryptic Realm',
   'hudChrome.discord.open': 'Discord',
   'hudChrome.discord.close': 'Đóng',
   'hudChrome.discord.keybind': 'Bảng Discord',

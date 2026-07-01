@@ -9248,7 +9248,7 @@ export class Hud {
       balance: showWallet ? verifiedWocBalance() : null,
       referralHandle: referral?.slug ?? this.cardSlug(p.name),
       referralCount: referral?.count ?? null,
-      siteUrl: 'worldofclaudecraft.com',
+      siteUrl: 'crypticrealm.com',
     };
   }
 

@@ -1,6 +1,17 @@
 // @vitest-environment jsdom
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+const arcForgeMock = vi.hoisted(() => ({
+  allowed: false,
+  openEditor: vi.fn(),
+}));
+
+vi.mock('../src/ui/cryptic/arcforge_editor', () => ({
+  openArcForgeEditor: (...args: unknown[]) => arcForgeMock.openEditor(...args),
+  canUseArcForgeEditor: vi.fn(async () => arcForgeMock.allowed),
+  arcForgeEditorAllowedCached: vi.fn(() => arcForgeMock.allowed),
+}));
+
 const CR_TOKEN = '3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv';
 const CR_WALLET = 'GncAXx6j38osJns395XZtf6rSA9MU3K1gwafTrHpBJpi';
 const WOC_TOKEN = '3WjLscH2JsXLEFJZRA9z8ti8yRGxWGKbqymPd7UicRth';
@@ -8,7 +19,8 @@ const WOC_TOKEN = '3WjLscH2JsXLEFJZRA9z8ti8yRGxWGKbqymPd7UicRth';
 describe('Cryptic Realm in-game customization menu', () => {
   beforeEach(() => {
     vi.resetModules();
-    vi.doUnmock('../src/ui/cryptic/arcforge_editor');
+    arcForgeMock.allowed = false;
+    arcForgeMock.openEditor.mockReset();
     window.localStorage.clear();
     document.documentElement.removeAttribute('data-theme');
     document.body.innerHTML = '';
@@ -59,16 +71,12 @@ describe('Cryptic Realm in-game customization menu', () => {
   });
 
   it('surfaces the ArcForge live editor CTA for admin/mod sessions inside the Mods tab', async () => {
-    const openEditor = vi.fn(() => {
+    arcForgeMock.allowed = true;
+    arcForgeMock.openEditor.mockImplementation(() => {
       const editor = document.createElement('div');
       editor.id = 'cr-arcforge-editor-modal';
       document.body.appendChild(editor);
     });
-    vi.doMock('../src/ui/cryptic/arcforge_editor', () => ({
-      openArcForgeEditor: openEditor,
-      canUseArcForgeEditor: vi.fn(async () => true),
-      arcForgeEditorAllowedCached: vi.fn(() => true),
-    }));
     const { openArcForge } = await import('../src/ui/cryptic/ingame_options');
 
     openArcForge();
@@ -81,7 +89,7 @@ describe('Cryptic Realm in-game customization menu', () => {
 
     button!.click();
 
-    expect(openEditor).toHaveBeenCalledTimes(1);
+    expect(arcForgeMock.openEditor).toHaveBeenCalledTimes(1);
     expect(document.getElementById('cr-arcforge-editor-modal')).not.toBeNull();
   });
 });

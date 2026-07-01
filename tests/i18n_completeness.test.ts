@@ -150,17 +150,17 @@ describe('i18n whole-catalog completeness', () => {
   // it is a genuine brand/URL that should never be translated.
   it('non-Latin locales ship no untranslated English (only brand/URL leaves stay identical)', () => {
     const BRAND_ALLOW = new Set([
-      'footer.copyright', // "{year} World of ClaudeCraft" - brand
+      'footer.copyright', // "{year} Cryptic Realm" - brand
       'footer.githubLink', // repository URL
       'fiesta.bracket', // "Fiesta" event brand
-      'serverUnavailable.logoAlt', // "World of ClaudeCraft" logo alt text - brand
-      'guide.brand', // "World of ClaudeCraft" - brand (Guide)
-      'guide.brandShort', // "ClaudeCraft" - brand (Guide)
-      'guide.home.title', // "World of ClaudeCraft" - brand (Guide hero)
-      'guide.footer.rights', // "World of ClaudeCraft" - brand (Guide footer)
+      'serverUnavailable.logoAlt', // "Cryptic Realm" logo alt text - brand
+      'guide.brand', // "Cryptic Realm" - brand (Guide)
+      'guide.brandShort', // "Cryptic Realm" - brand (Guide)
+      'guide.home.title', // "Cryptic Realm" - brand (Guide hero)
+      'guide.footer.rights', // "Cryptic Realm" - brand (Guide footer)
       'hudChrome.discord.title', // "Discord" - brand
       'hudChrome.discord.open', // "Discord" - brand
-      'hudChrome.discord.panelTitle', // "World of ClaudeCraft" - brand
+      'hudChrome.discord.panelTitle', // "Cryptic Realm" - brand
       'hudChrome.discord.linkedTitle', // "Discord: {name}" - brand + player name
       'news.officialLog',
       'news.alphaBetaTitle',

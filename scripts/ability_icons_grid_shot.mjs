@@ -56,7 +56,7 @@ await page.evaluate(async (collisionGroups) => {
   document.body.appendChild(root);
 
   const title = document.createElement('h1');
-  title.textContent = 'World of ClaudeCraft: unique icon for every class ability';
+  title.textContent = 'Cryptic Realm: unique icon for every class ability';
   title.style.cssText = 'font:700 26px Georgia,serif;color:#d4af37;margin:0 0 4px';
   root.appendChild(title);
   const sub = document.createElement('div');

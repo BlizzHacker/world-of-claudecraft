@@ -19,23 +19,20 @@ describe('realm branding overrides', () => {
     }
   });
 
-  it('claudecraft points at the upstream WoC GitHub; themed realms point at BlizzHacker', () => {
+  it('keeps GitHub URLs only on the ClaudeCraft upstream realm', () => {
     const claudecraft = REALMS.claudecraft.branding ?? {};
     expect(claudecraft.githubUrl).toContain('levy-street/world-of-claudecraft');
-    // All five realms share the same Discord invite (the one from the
-    // BlizzHacker README) — there's no separate WoC server. Discord is the
-    // community, not the realm.
     for (const realm of REALM_LIST) {
-      expect(realm.branding?.discordUrl).toBe('https://discord.gg/GjhnUsBtw');
-    }
-    for (const id of ['infernal', 'classic', 'dominion', 'arcane'] as const) {
-      const b = REALMS[id].branding ?? {};
-      expect(b.githubUrl).toContain('BlizzHacker/cryptic-realm');
+      if (realm.id === 'claudecraft') {
+        expect(realm.branding?.discordUrl).toBe('https://discord.gg/GjhnUsBtw');
+      } else {
+        expect(realm.branding?.discordUrl).toBe('https://discord.gg/Zdj3JGrx');
+        expect(realm.branding?.githubUrl).toBeUndefined();
+      }
     }
   });
 
   it('themed realms hide the upstream Authentik SSO toggle off by default', () => {
-    // claudecraft keeps the pristine upstream login UI — no SSO button.
     expect(REALMS.claudecraft.branding?.showAuthentikSso).toBe(false);
     for (const id of ['infernal', 'classic', 'dominion', 'arcane'] as const) {
       expect(REALMS[id].branding?.showAuthentikSso).toBe(true);

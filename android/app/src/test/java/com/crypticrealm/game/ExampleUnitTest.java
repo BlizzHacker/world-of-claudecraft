@@ -1,4 +1,4 @@
-package com.worldofclaudecraft;
+package com.crypticrealm.game;
 
 import static org.junit.Assert.*;
 

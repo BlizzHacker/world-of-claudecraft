@@ -18,7 +18,7 @@ const ROOT = path.resolve(__dirname, "..");
 
 // Brand / acronym / pure-template tokens that legitimately stay identical across locales.
 const BRAND = [
-  "World of ClaudeCraft", "ClaudeCraft", "GitHub", "Fiesta", "MMORPG", "PvP", "PvE", "NPC", "DPS",
+  "Cryptic Realm", "Cryptic Realm", "GitHub", "Fiesta", "MMORPG", "PvP", "PvE", "NPC", "DPS",
   "HP", "MP", "XP", "2v2", "1v1", "2c2", "1c1", "Thornpeak",
 ];
 function hasTranslatableText(s: string): boolean {

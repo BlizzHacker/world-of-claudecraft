@@ -34,7 +34,7 @@ describe('buildAuthorizeUrl', () => {
     const url = new URL(
       buildAuthorizeUrl({
         clientId: '123',
-        redirectUri: 'https://worldofclaudecraft.com/api/auth/discord/callback',
+        redirectUri: 'https://crypticrealm.com/api/auth/discord/callback',
         state: 'nonce-abc',
         codeChallenge: 'chal',
       }),
@@ -43,7 +43,7 @@ describe('buildAuthorizeUrl', () => {
     expect(url.searchParams.get('response_type')).toBe('code');
     expect(url.searchParams.get('client_id')).toBe('123');
     expect(url.searchParams.get('redirect_uri')).toBe(
-      'https://worldofclaudecraft.com/api/auth/discord/callback',
+      'https://crypticrealm.com/api/auth/discord/callback',
     );
     expect(url.searchParams.get('scope')).toBe('identify guilds');
     expect(url.searchParams.get('state')).toBe('nonce-abc');

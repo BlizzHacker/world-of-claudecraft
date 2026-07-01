@@ -1,5 +1,5 @@
 /* =========================================================================
-   World of Claudecraft Wiki — "Aged Grimoire" theme for Vector 2022.
+   Cryptic Realm Wiki - "Aged Grimoire" theme for Vector 2022.
    Warm parchment reading surface, deep oak chrome, gold + wax-seal-red
    accents, elegant serif display headings.
    ========================================================================= */
@@ -91,7 +91,7 @@ body {
 }
 
 /* ---- Side columns: dark oak panels ---- */
-/* NB: don't give .vector-settings panel chrome — an empty collapsed copy of
+/* NB: don't give .vector-settings panel chrome - an empty collapsed copy of
    it lives in the right column and would render as a stray dark nub. */
 .vector-main-menu,
 .vector-toc,
@@ -175,7 +175,7 @@ body {
 }
 
 /* the header divider under "Contents"/"Appearance" defaults to light grey,
-   which paints a harsh line across the dark oak panels — soften to gold */
+   which paints a harsh line across the dark oak panels - soften to gold */
 .vector-pinnable-header {
   border-bottom: 1px solid rgba(231, 181, 74, 0.22) !important;
 }
@@ -304,7 +304,7 @@ body {
   padding: 14px;
   background:
     linear-gradient(rgba(24, 15, 10, 0), rgba(24, 15, 10, 0.85)),
-    url('/wiki/resources/assets/worldofclaudecraft-logo.png') center / contain no-repeat;
+    url('/wiki/resources/assets/cryptic-realm-logo.png') center / contain no-repeat;
   color: var(--woc-gold-soft);
   font-family: var(--woc-display);
   font-weight: 700;
@@ -332,7 +332,7 @@ body {
   padding: 8px 12px;
 }
 
-/* column + top headers — light text on oak, now actually visible */
+/* column + top headers - light text on oak, now actually visible */
 .wikitable > * > tr > th,
 .article-facts > * > tr > th {
   color: #fdeec8 !important;

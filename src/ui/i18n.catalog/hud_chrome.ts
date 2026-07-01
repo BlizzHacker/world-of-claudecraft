@@ -547,7 +547,7 @@ export const hudChromeStrings = {
     loggedOutPrompt: 'Log in to manage your account.',
     memberSince: 'Member since {date}',
     sectionSettings: 'Account Settings',
-    sectionWallet: '$WOC Wallet',
+    sectionWallet: '$CR Wallet',
     sectionCharacters: 'Characters',
     sectionDanger: 'Danger Zone',
     // Change password
@@ -800,7 +800,7 @@ export const hudChromeStrings = {
   },
   discord: {
     title: 'Discord',
-    panelTitle: 'World of ClaudeCraft',
+    panelTitle: 'Cryptic Realm',
     open: 'Discord',
     close: 'Close',
     keybind: 'Discord Panel',

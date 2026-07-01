@@ -3,9 +3,9 @@ import type { TranslationKey } from '../i18n.catalog';
 
 export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'a11y.characterActions': 'Karakter eylemleri',
-  'a11y.discordCommunity': 'World of ClaudeCraft Discord topluluğuna katıl',
-  'a11y.donateProject': "World of ClaudeCraft'a destek olmak için bağış yap",
-  'a11y.githubProject': 'World of ClaudeCraft GitHub projesini aç',
+  'a11y.discordCommunity': 'Cryptic Realm Discord topluluğuna katıl',
+  'a11y.donateProject': "Cryptic Realm'a destek olmak için bağış yap",
+  'a11y.githubProject': 'Open Cryptic Realm contributions',
   'a11y.goHome': 'Ana sayfaya git',
   'a11y.languageSelection': 'Dil seçimi',
   'a11y.mainNavigation': 'Ana gezinme',
@@ -1949,10 +1949,10 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'fiesta.word.shutdown': 'DURDURULDU!',
   'fiesta.word.spree': '{n}× SERİ!',
   'fiesta.word.wave': 'GÜÇLENDİRMELER!',
-  'footer.copyright': '2026 World of ClaudeCraft',
+  'footer.copyright': '2026 Cryptic Realm',
   'footer.discordLabel': "Discord'a Katıl",
-  'footer.githubLabel': 'Açık Kaynak Proje',
-  'footer.githubLink': 'https://github.com/levy-street/world-of-claudecraft',
+  'footer.githubLabel': 'Contributions',
+  'footer.githubLink': '/contributions.html',
   'footer.whitepaper': 'Teknik Doküman',
   'footer.privacy': 'Gizlilik Politikası',
   'footer.terms': 'Hizmet Koşulları',
@@ -2210,8 +2210,8 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'guide.bestiary.levelsSame': 'Seviye {min}',
   'guide.bestiary.notedLabel': 'Dikkate değer',
   'guide.bestiary.rare': 'Nadir',
-  'guide.brand': 'World of ClaudeCraft',
-  'guide.brandShort': 'ClaudeCraft',
+  'guide.brand': 'Cryptic Realm',
+  'guide.brandShort': 'Cryptic',
   'guide.breadcrumb.home': 'Rehber',
   'guide.breadcrumb.label': 'Gezinti İzi',
   'guide.chooser.clear': 'Temizle',
@@ -2433,8 +2433,7 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'guide.family.undead.desc':
     'Daha karanlık ellerce diriltilmiş huzursuz ölüler. Yorulmaz ve kaçmazlar.',
   'guide.family.undead.name': 'Hortlaklar',
-  'guide.faqPage.a1':
-    "Evet. Oyunun tamamı seviye sınırına kadar ücretsiz oynanabilir ve kaynak kodu GitHub'da açıktır.",
+  'guide.faqPage.a1': 'Yes. The whole game is free to play to the level cap.',
   'guide.faqPage.a10':
     'Sınır seviye {cap}. Oradan itibaren beş oyunculu zindanları ve on oyunculu akını koşar, daha iyi teçhizatın peşinden gider ve kendinizi arenada sınarsınız.',
   'guide.faqPage.a11':
@@ -2451,8 +2450,7 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
     'Görevler, zindanlar ve keşiflerle dolu, birbirine bağlı üç bölgede ulaşılan seviye {cap}.',
   'guide.faqPage.a7':
     'Çevrimiçi karakterler sunucuda otomatik olarak kaydedilir. Çevrimdışı karakterler hızlı oturumlar ve testler için tarayıcınızda yaşar.',
-  'guide.faqPage.a8':
-    'Evet. Proje açık kaynaklıdır, böylece kendi sunucunuzu çalıştırabilirsiniz. GitHub deposuna bakın.',
+  'guide.faqPage.a8': 'Private realms are operated through verified Cryptic Realm channels.',
   'guide.faqPage.a9':
     "Evet. Eğlence için herkese düello açın ya da diğer oyuncularla savaşmak için Küllü Kolezyum'a adım atın. PvP isteğe bağlıdır, dolayısıyla asla zorlanmazsınız.",
   'guide.faqPage.intro': 'Yeni oyuncuların en sık sorduğu sorular.',
@@ -2467,13 +2465,12 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'guide.faqPage.q7': 'Karakterim kaydedilecek mi?',
   'guide.faqPage.q8': 'Kendi kopyamı barındırabilir miyim?',
   'guide.faqPage.q9': 'PvP var mı?',
-  'guide.footer.blurb':
-    'Açık kaynaklı, klasik tarzda bir mikro MMO. Görev yapın, gruplaşın ve elle yapılmış bir dünyayı, tam da tarayıcınızda keşfedin.',
+  'guide.footer.blurb': 'A classic-style micro-MMO. Quest, group up, and explore a hand-built world, right in your browser.',
   'guide.footer.communityWiki': "Topluluk Wiki'si",
   'guide.footer.discord': "Discord'a Katıl",
-  'guide.footer.github': "GitHub'daki Kaynak",
+  'guide.footer.github': 'Contributions',
   'guide.footer.playNow': 'Şimdi Oyna',
-  'guide.footer.rights': 'World of ClaudeCraft',
+  'guide.footer.rights': 'Cryptic Realm',
   'guide.gear.consumablesElixirs':
     'İksirler, macera sırasında geçici bir takviye sağlar; biraz daha ileri gitmek istediğinizde işe yarayan küçük bir avantaj.',
   'guide.gear.consumablesFood':
@@ -2606,14 +2603,13 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'guide.home.community.body':
     'Hemen katıl ya da bir merhaba demeye gel. Dünya, arkadaşlarla daha güzel.',
   'guide.home.community.discord': "Discord'a katıl",
-  'guide.home.community.github': "GitHub'da yıldız ver",
+  'guide.home.community.github': 'Contributions',
   'guide.home.community.heading': 'Diyara katıl',
   'guide.home.community.play': 'Şimdi Oyna',
   'guide.home.ctaLearn': 'Nasıl Oynanır',
   'guide.home.ctaPlay': 'Şimdi Oyna',
   'guide.home.eyebrow': "Klasik tarz tarayıcı MMO'su",
-  'guide.home.faq.a1':
-    "Evet. Oyunun tamamı seviye sınırına kadar ücretsiz ve GitHub'da açık kaynak.",
+  'guide.home.faq.a1': 'Yes. The whole game is free to the level cap.',
   'guide.home.faq.a2':
     'Hayır. Oyun, cüzdan olmadan da tümüyle oynanabilir. İsteğe bağlı topluluk jetonu yalnızca görsel süsler açar ve gücü asla etkilemez.',
   'guide.home.faq.a3':
@@ -2640,14 +2636,13 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
     'Dünya tek başına aşılabilir, ama en iyi ganimet iyi bir grubun ardında bekler.',
   'guide.home.subtitle':
     'Görev yap, grup kur ve elle kurulmuş bir dünyayı keşfet; tarayıcında ücretsiz.',
-  'guide.home.title': 'World of ClaudeCraft',
+  'guide.home.title': 'Cryptic Realm',
   'guide.home.what.heading': 'Klasik bir MMO, hemen başlanacak biçimde',
   'guide.home.what.pillarClassesBody':
     'Tankla, iyileştir ya da hasarı sen ver. Her sınıf, arketipine yakışan biçimde oynanır ve onu kendine özgü kılacak yetenekler sunar.',
   'guide.home.what.pillarClassesTitle': 'Dokuz sınıf, üç rol',
-  'guide.home.what.pillarOpenBody':
-    'Seviye sınırına kadar ücretsiz oynanır, oyunun tamamı açık kaynaktır. Asla paraya dayalı üstünlük yok.',
-  'guide.home.what.pillarOpenTitle': 'Ücretsiz ve açık kaynak',
+  'guide.home.what.pillarOpenBody': 'Free to play to the level cap. No pay to win, ever.',
+  'guide.home.what.pillarOpenTitle': 'Free to play',
   'guide.home.what.pillarPlayBody':
     'İndirme yok, başlatıcı yok. Bir karakter yarat ve masaüstünde ya da telefonunda saniyeler içinde dünyaya gir.',
   'guide.home.what.pillarPlayTitle': 'Tarayıcında oyna',
@@ -3055,7 +3050,7 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'guide.worldPage.heading': 'Dünya',
   'guide.worldPage.hub': 'Ana üs',
   'guide.worldPage.intro':
-    'World of ClaudeCraft, yürüyerek aştığınız tek ve kesintisiz bir diyardır; güneyden kuzeye dizilmiş üç bölge. Hızlı seyahat yoktur, bu yüzden yolculuğun kendisi maceranın bir parçasıdır.',
+    'Cryptic Realm, yürüyerek aştığınız tek ve kesintisiz bir diyardır; güneyden kuzeye dizilmiş üç bölge. Hızlı seyahat yoktur, bu yüzden yolculuğun kendisi maceranın bir parçasıdır.',
   'guide.worldPage.mapHeading': 'Kuzeye giden yol',
   'guide.worldPage.mapSub':
     'Güneyden kuzeye üç bölge, her biri seviye olarak bir basamak daha yüksek. Görev izini takip edin, diyar sizi vadiden zirvelere taşır.',
@@ -3666,7 +3661,7 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.account.sectionDanger': 'Tehlikeli Bölge',
   'hudChrome.account.sectionSecurity': 'Güvenlik',
   'hudChrome.account.sectionSettings': 'Hesap Ayarları',
-  'hudChrome.account.sectionWallet': '$WOC Cüzdanı',
+  'hudChrome.account.sectionWallet': '$CR Cüzdanı',
   'hudChrome.account.title': 'Hesap',
   'hudChrome.account.twoFactorBegin': 'Kuruluma Başla',
   'hudChrome.account.twoFactorBeginHint': 'Kuruluma başlamak için parolanızı girin.',
@@ -4268,7 +4263,7 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
     "Android'de tam ekran için önce bu sayfayı yükleyin veya Ana ekranınıza ekleyin.",
   'mobilePreflight.androidInstallStep':
     "Chrome'da menüye dokunun, ardından Uygulamayı yükle veya Ana ekrana ekle seçeneğini seçin.",
-  'mobilePreflight.androidOpenStep': "World of ClaudeCraft'ı yeni simgeden açın.",
+  'mobilePreflight.androidOpenStep': "Cryptic Realm'ı yeni simgeden açın.",
   'mobilePreflight.androidStandaloneDetail':
     'Tam ekran uygulama modundasınız. Cihazı yatay konumda tutun.',
   'mobilePreflight.baseLandscape': 'Dünyaya girmeden önce cihazınızı yatay konuma çevirin.',
@@ -4277,7 +4272,7 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'mobilePreflight.continue': 'Oyuna Devam Et',
   'mobilePreflight.iosInstallDetail':
     "iPhone veya iPad'de gerçek tam ekran için önce bu sayfayı Ana Ekranınıza yükleyin.",
-  'mobilePreflight.iosOpenStep': "World of ClaudeCraft'ı yeni Ana Ekran simgesinden açın.",
+  'mobilePreflight.iosOpenStep': "Cryptic Realm'ı yeni Ana Ekran simgesinden açın.",
   'mobilePreflight.iosShareStep': "Safari'de Paylaş'a, ardından Ana Ekrana Ekle'ye dokunun.",
   'mobilePreflight.iosStandaloneDetail':
     'Ana ekran tam ekran modundasınız. Cihazı yatay konumda tutun.',
@@ -4288,9 +4283,9 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'mobilePreflight.rotateTitle': 'Yatay Konuma Çevir',
   'mobilePreflight.title': 'Yatay Tam Ekranda Oyna',
   'mode.caCopyAria': 'Sözleşme adresini kopyala',
-  'mode.caLabel': '$WOC Sözleşme Adresi',
+  'mode.caLabel': '$CR Sözleşme Adresi',
   'mode.caNote':
-    "WOC topluluk jetonumuzdur. Oynamak için gerekli değildir. WOC'un faydasını ve döngüsünü tartışmak için Discord'a katılın.",
+    "CR topluluk jetonumuzdur. Oynamak için gerekli değildir. CR'un faydasını ve döngüsünü tartışmak için Discord'a katılın.",
   'mode.offlineAria': 'Çevrimdışı Oyna: anında yerel tek oyunculu oturum başlat',
   'mode.offlineDesc':
     'Tarayıcınızda anında tek oyunculu dünya. Hiçbir şey kaydedilmez: hızlı bir kapışma veya test için ideal.',
@@ -4300,7 +4295,7 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
     'Diyara giriş yap. Karakterlerin sunucuda yaşar ve dünyayı çevrimiçi olan herkesle paylaşırsın.',
   'mode.onlineTitle': 'Çevrimiçi Oyna',
   'mode.play': 'Oyna',
-  'mode.playAria': 'World of ClaudeCraft oyna',
+  'mode.playAria': 'Cryptic Realm oyna',
   'mode.serverAria': 'Diyar seç: Çevrimiçi veya Çevrimdışı',
   'mode.serverLabel': 'Diyarını seç',
   'mode.serverOffline': 'Çevrimdışı',
@@ -4327,22 +4322,22 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'news.loading': 'En son güncellemeler yükleniyor…',
   'news.prerelease': 'Ön sürüm',
   'news.title': 'Haberler ve Güncellemeler',
-  'news.viewOnGithub': "GitHub'da Görüntüle",
+  'news.viewOnGithub': 'Read release notes',
   'playerCard.actionCopyReferral': 'Davet Bağlantısını Kopyala',
   'playerCard.actionDownload': 'İndir',
   'playerCard.actionShareNative': 'Paylaş...',
   'playerCard.actionShareX': "X'te Paylaş",
   'playerCard.arenaStat': 'Arena',
-  'playerCard.brandWordmark': 'WORLD OF CLAUDECRAFT',
+  'playerCard.brandWordmark': 'CRYPTIC REALM',
   'playerCard.close': 'Oyuncu kartını kapat',
-  'playerCard.defaultRealm': 'World of ClaudeCraft',
+  'playerCard.defaultRealm': 'Cryptic Realm',
   'playerCard.fileNameFallback': 'oyuncu',
   'playerCard.footerCta': 'Efsaneni yarat: {siteUrl}',
   'playerCard.footerHandle': '@{handle}',
   'playerCard.footerHandleWithRecruits': '@{handle} - {recruited}',
   'playerCard.levelClass': 'Seviye {level} - {className}',
   'playerCard.loading': 'Kartın hazırlanıyor...',
-  'playerCard.nativeShareTitle': 'World of ClaudeCraft',
+  'playerCard.nativeShareTitle': 'Cryptic Realm',
   'playerCard.poseBattle': 'Savaş',
   'playerCard.poseGroup': 'Poz',
   'playerCard.poseHero': 'Kahraman',
@@ -4355,8 +4350,8 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'playerCard.renderFailedStatus': 'Kart oluşturma başarısız oldu.',
   'playerCard.shareButton': 'Oyuncu Kartını Paylaş',
   'playerCard.shareText':
-    "World of ClaudeCraft'ta efsanemi yaratıyorum: Seviye {level} {className}{tierBit}. Diyarıma katıl:",
-  'playerCard.shareTierBit': ', {tier}-derece $WOC sahibi',
+    "Cryptic Realm'ta efsanemi yaratıyorum: Seviye {level} {className}{tierBit}. Diyarıma katıl:",
+  'playerCard.shareTierBit': ', {tier}-derece $CR sahibi',
   'playerCard.statusDownloaded': 'Kart indirildi.',
   'playerCard.statusGenericError': 'Bir şeyler ters gitti.',
   'playerCard.statusOpenedXWithImage': 'X açıldı. Kart görselini gönderiye yapıştır.',
@@ -4457,21 +4452,21 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'realmTypes.rpPvp': 'RP-PvP',
   'seo.applicationCategory': 'Oyun',
   'seo.description':
-    "Doğrudan tarayıcında oynanabilen klasik tarzı bir mikro MMO olan World of ClaudeCraft'ta destansı bir maceraya atıl. Kalıcı bir ortak diyara katıl, sınıfları geliştir ve düşmanları alt et!",
+    "Doğrudan tarayıcında oynanabilen klasik tarzı bir mikro MMO olan Cryptic Realm'ta destansı bir maceraya atıl. Kalıcı bir ortak diyara katıl, sınıfları geliştir ve düşmanları alt et!",
   'seo.genre': 'MMORPG',
   'seo.officialBody':
-    "worldofclaudecraft.com, Claudemoon diyarının resmi ücretsiz tarayıcı MMO'sudur. Kalıcı bir karakterle çevrimiçi oyna, çevrimdışı tek başına keşfet, wiki'yi oku ve bu siteden doğrulanmış topluluk bağlantılarını takip et.",
-  'seo.officialLabel': 'Resmi World of ClaudeCraft web sitesi',
+    "crypticrealm.com, Claudemoon diyarının resmi ücretsiz tarayıcı MMO'sudur. Kalıcı bir karakterle çevrimiçi oyna, çevrimdışı tek başına keşfet, wiki'yi oku ve bu siteden doğrulanmış topluluk bağlantılarını takip et.",
+  'seo.officialLabel': 'Resmi Cryptic Realm web sitesi',
   'seo.operatingSystem': 'Web tarayıcısı',
   'seo.playMode': 'Çok Oyunculu',
-  'seo.title': "World of ClaudeCraft: Klasik Tarzı Web MMO'su",
+  'seo.title': "Cryptic Realm: Klasik Tarzı Web MMO'su",
   'serverUnavailable.body':
     "Oyun hizmetini yeniden başlatıyoruz ve Claudemoon'un kısa süre içinde geri döneceğini umuyoruz. Bu sayfa otomatik olarak denetlemeye devam edecek.",
   'serverUnavailable.eyebrow': 'Diyar bakımı',
   'serverUnavailable.heading': 'Diyar geçici olarak kullanılamıyor.',
-  'serverUnavailable.logoAlt': 'World of ClaudeCraft',
+  'serverUnavailable.logoAlt': 'Cryptic Realm',
   'serverUnavailable.status': 'Birazdan döneriz',
-  'serverUnavailable.title': 'World of ClaudeCraft - Diyar Kullanılamıyor',
+  'serverUnavailable.title': 'Cryptic Realm - Diyar Kullanılamıyor',
   'settings.languageLoadFailed': 'Bu dil yüklenemedi. Mevcut dilin korunuyor.',
   'settings.languageLoadUnavailable': 'Bu dil mevcut değil.',
   'settings.languageLoading': 'Dil yükleniyor...',
@@ -4577,12 +4572,12 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'stats.realmName': 'Diyar Adı',
   'stats.title': 'Diyar Durumu',
   'wallet.appConnected': 'Uygulama Bağlandı',
-  'wallet.balanceAmount': '{amount} $WOC',
+  'wallet.balanceAmount': '{amount} $CR',
   'wallet.balanceAria': 'Doğrulanmış Solana cüzdanı bakiyesi: {balance}',
   'wallet.balancePreviewAria':
     'Bağlı cüzdan bakiyesi önizlemesi: {balance}. Sahip rozetini doğrulamak için cüzdanı bağlayın.',
-  'wallet.balancePreviewTitle': 'Bağlı cüzdan $WOC bakiyesi önizlemesi',
-  'wallet.balanceTitle': 'Doğrulanmış Solana cüzdanı $WOC bakiyesi',
+  'wallet.balancePreviewTitle': 'Bağlı cüzdan $CR bakiyesi önizlemesi',
+  'wallet.balanceTitle': 'Doğrulanmış Solana cüzdanı $CR bakiyesi',
   'wallet.connect': 'Cüzdanı Doğrula',
   'wallet.connectApp': 'Uygulamayı Bağla',
   'wallet.connectAppAria': 'Bu tarayıcıda cüzdan uygulamasını bağlayın',
@@ -4618,8 +4613,8 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'wallet.hide': 'Gizle',
   'wallet.hideAria': 'Bu ekranda cüzdan satırını gizle',
   'wallet.hideTitle': 'Bu ekranda cüzdan satırını gizle',
-  'wallet.holder': '$WOC sahibi',
-  'wallet.holderTierTitle': '{tier} $WOC sahibi',
+  'wallet.holder': '$CR sahibi',
+  'wallet.holderTierTitle': '{tier} $CR sahibi',
   'wallet.holderTiers.coinbearer.flavor': 'Savaş hazinesindeki ilk sikke.',
   'wallet.holderTiers.coinbearer.name': 'Sikke Taşıyıcı',
   'wallet.holderTiers.coppercrest.flavor': 'Bakırlar yığıldı, adın anıldı.',
@@ -4647,7 +4642,7 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'wallet.holderTiers.titanforged.flavor': "Titanlar arasında dövülmüş: arzın %5'i.",
   'wallet.holderTiers.titanforged.name': 'Titan Dövmesi',
   'wallet.holderTiers.vaultwarden.flavor':
-    "Artık gerçek bir kasayı koruyorsun: tüm $WOC'nin %0,01'i.",
+    "Artık gerçek bir kasayı koruyorsun: tüm $CR'nin %0,01'i.",
   'wallet.holderTiers.vaultwarden.name': 'Kasa Muhafızı',
   'wallet.holderTiers.voidwarden.flavor': "Boşluğun kıyısındaki bekçi: arzın %7'si.",
   'wallet.holderTiers.voidwarden.name': 'Boşluk Muhafızı',
@@ -4657,7 +4652,7 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'wallet.holderTiers.worldbearer.name': 'Dünya Taşıyıcı',
   'wallet.holderTiers.worldforger.flavor': "Kendine ait bir dünya döversin: arzın %9'u.",
   'wallet.holderTiers.worldforger.name': 'Dünya Döven',
-  'wallet.label': '$WOC Cüzdanı',
+  'wallet.label': '$CR Cüzdanı',
   'wallet.linkFailed': 'Cüzdan doğrulaması başarısız oldu.',
   'wallet.linkTitle': 'Bu cüzdanı imzalayıp hesabınıza bağlamak için tıklayın.',
   'wallet.linkedDisconnectedAria':
@@ -4816,7 +4811,7 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.leaderboard.guildXp': 'Toplam XP',
   'hudChrome.leaderboard.guildEmpty': 'Henüz sıralamada lonca yok.',
   'hudChrome.discord.title': 'Discord',
-  'hudChrome.discord.panelTitle': 'World of ClaudeCraft',
+  'hudChrome.discord.panelTitle': 'Cryptic Realm',
   'hudChrome.discord.open': 'Discord',
   'hudChrome.discord.close': 'Kapat',
   'hudChrome.discord.keybind': 'Discord Paneli',

@@ -88,7 +88,7 @@ describe('POST /api/wallet/link/challenge', () => {
     expect(status).toBe(200);
     expect(data.nonce).toMatch(/^[a-f0-9]{32}$/);
     expect(data.message).toContain(w.address);
-    expect(data.message).toContain('World of ClaudeCraft');
+    expect(data.message).toContain('Cryptic Realm');
     // the challenge is persisted with the account + address it was issued for
     const insert = dbMock.query.mock.calls.find((c) => String(c[0]).includes('INSERT INTO wallet_link_challenges'));
     expect(insert?.[1]).toEqual([data.nonce, 1, w.address, data.message, expect.any(String)]);

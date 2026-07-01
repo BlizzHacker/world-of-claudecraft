@@ -8,7 +8,7 @@ import {
 } from '../scripts/version_sync.mjs';
 
 const GRADLE = `    defaultConfig {
-        applicationId "com.worldofclaudecraft"
+        applicationId "com.crypticrealm.game"
         versionCode 4
         versionName "0.14.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -31,7 +31,7 @@ describe('setGradleVersionName', () => {
   it('preserves indentation and surrounding lines', () => {
     const out = setGradleVersionName(GRADLE, '1.2.3');
     expect(out).toContain('        versionName "1.2.3"');
-    expect(out).toContain('applicationId "com.worldofclaudecraft"');
+    expect(out).toContain('applicationId "com.crypticrealm.game"');
   });
 
   it('throws if no versionName line exists (fail loud, never silently no-op)', () => {

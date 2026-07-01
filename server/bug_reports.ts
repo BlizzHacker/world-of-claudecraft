@@ -12,16 +12,15 @@ const DIR = process.env.CR_BUG_REPORT_DIR ?? '/var/log/cryptic-realm-bug-reports
 const INDEX = path.join(DIR, 'index.log');
 const MAX_BYTES = 6 * 1024 * 1024; // reject absurdly large payloads (screenshot cap)
 
-// Auto-file each bug report as a GitHub issue on the PRIVATE repo, so the dev
-// loop sees them without tailing the server. Reuses the same token/repo as the
-// releases proxy. Best-effort + fire-and-forget: never blocks or fails the
-// player's submit. Disabled unless CR_BUG_GITHUB=1 and a token is configured.
+// Auto-file each bug report as an issue when an explicit private repo is
+// configured. Best-effort and fire-and-forget: never blocks or fails the
+// player's submit. Disabled unless CR_BUG_GITHUB=1, a repo, and a token are set.
 const BUG_GITHUB_ENABLED = process.env.CR_BUG_GITHUB === '1';
-const BUG_GITHUB_REPO = process.env.CR_BUG_GITHUB_REPO ?? process.env.GITHUB_REPO ?? 'BlizzHacker/cryptic-realm';
+const BUG_GITHUB_REPO = process.env.CR_BUG_GITHUB_REPO ?? process.env.GITHUB_REPO ?? '';
 const BUG_GITHUB_TOKEN = process.env.CR_BUG_GITHUB_TOKEN ?? process.env.GITHUB_TOKEN ?? '';
 
 async function fileGithubIssue(record: { id: string; note: string; url: string; realmName: string; serverRealm: string; accountId: number | null; userAgent: string; player: unknown; performance: unknown; }): Promise<void> {
-  if (!BUG_GITHUB_ENABLED || !BUG_GITHUB_TOKEN) return;
+  if (!BUG_GITHUB_ENABLED || !BUG_GITHUB_REPO || !BUG_GITHUB_TOKEN) return;
   try {
     const title = `[bug] ${record.note ? record.note.slice(0, 80) : record.id}`;
     const body = [
@@ -54,7 +53,7 @@ async function fileGithubIssue(record: { id: string; note: string; url: string; 
       body: JSON.stringify({ title, body, labels: ['bug', 'in-game-report'] }),
     });
   } catch (err) {
-    console.error('bug report → GitHub issue failed:', err);
+    console.error('bug report GitHub issue failed:', err);
   }
 }
 

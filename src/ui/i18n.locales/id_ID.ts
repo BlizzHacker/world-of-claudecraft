@@ -3,9 +3,9 @@ import type { TranslationKey } from '../i18n.catalog';
 
 export const id_ID: Partial<Record<TranslationKey, string>> = {
   'a11y.characterActions': 'Aksi karakter',
-  'a11y.discordCommunity': 'Gabung komunitas Discord World of ClaudeCraft',
-  'a11y.donateProject': 'Berdonasi untuk mendukung World of ClaudeCraft',
-  'a11y.githubProject': 'Buka proyek GitHub World of ClaudeCraft',
+  'a11y.discordCommunity': 'Gabung komunitas Discord Cryptic Realm',
+  'a11y.donateProject': 'Berdonasi untuk mendukung Cryptic Realm',
+  'a11y.githubProject': 'Open Cryptic Realm contributions',
   'a11y.goHome': 'Ke halaman utama',
   'a11y.languageSelection': 'Pemilihan bahasa',
   'a11y.mainNavigation': 'Navigasi utama',
@@ -1983,10 +1983,10 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'fiesta.word.shutdown': 'DIBUNGKAM!',
   'fiesta.word.spree': '{n}× BERUNTUN!',
   'fiesta.word.wave': 'AUGMEN!',
-  'footer.copyright': '2026 World of ClaudeCraft',
+  'footer.copyright': '2026 Cryptic Realm',
   'footer.discordLabel': 'Gabung Discord',
-  'footer.githubLabel': 'Proyek Sumber Terbuka',
-  'footer.githubLink': 'https://github.com/levy-street/world-of-claudecraft',
+  'footer.githubLabel': 'Contributions',
+  'footer.githubLink': '/contributions.html',
   'footer.whitepaper': 'Whitepaper',
   'footer.privacy': 'Kebijakan Privasi',
   'footer.terms': 'Ketentuan Layanan',
@@ -2260,8 +2260,8 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'guide.bestiary.levelsSame': 'Level {min}',
   'guide.bestiary.notedLabel': 'Catatan penting',
   'guide.bestiary.rare': 'Langka',
-  'guide.brand': 'World of ClaudeCraft',
-  'guide.brandShort': 'ClaudeCraft',
+  'guide.brand': 'Cryptic Realm',
+  'guide.brandShort': 'Cryptic',
   'guide.breadcrumb.home': 'Panduan',
   'guide.breadcrumb.label': 'Remah jejak',
   'guide.chooser.clear': 'Bersihkan',
@@ -2485,8 +2485,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'guide.family.undead.desc':
     'Orang mati yang gelisah, dibangkitkan oleh tangan yang lebih gelap. Mereka tak lelah dan tak melarikan diri.',
   'guide.family.undead.name': 'Mayat Hidup',
-  'guide.faqPage.a1':
-    'Ya. Seluruh permainan gratis dimainkan hingga batas level, dan kode sumbernya terbuka di GitHub.',
+  'guide.faqPage.a1': 'Yes. The whole game is free to play to the level cap.',
   'guide.faqPage.a10':
     'Batasnya adalah level {cap}. Dari sana kamu menjalankan ruang bawah tanah untuk lima pemain dan raid untuk sepuluh pemain, mengejar perlengkapan yang lebih baik, dan menguji dirimu di arena.',
   'guide.faqPage.a11':
@@ -2503,8 +2502,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
     'Level {cap}, dicapai melintasi tiga zona terhubung berisi misi, ruang bawah tanah, dan penjelajahan.',
   'guide.faqPage.a7':
     'Karakter daring disimpan di server secara otomatis. Karakter luring tersimpan di perambanmu untuk sesi cepat dan pengujian.',
-  'guide.faqPage.a8':
-    'Ya. Proyek ini bersumber terbuka, jadi kamu bisa menjalankan servermu sendiri. Lihat repositori GitHub.',
+  'guide.faqPage.a8': 'Private realms are operated through verified Cryptic Realm channels.',
   'guide.faqPage.a9':
     'Ya. Bertarung tanding dengan siapa pun untuk kesenangan, atau melangkahlah ke Ashen Coliseum untuk melawan pemain lain. PvP bersifat sukarela, jadi kamu tak pernah dipaksa masuk ke dalamnya.',
   'guide.faqPage.intro': 'Pertanyaan yang paling sering ditanyakan pemain baru.',
@@ -2519,13 +2517,12 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'guide.faqPage.q7': 'Apakah karakter saya akan tersimpan?',
   'guide.faqPage.q8': 'Bisakah saya menjalankan salinan saya sendiri?',
   'guide.faqPage.q9': 'Apakah ada PvP?',
-  'guide.footer.blurb':
-    'Mikro-MMO bergaya klasik dan bersumber terbuka. Jalani misi, bentuk kelompok, dan jelajahi dunia buatan tangan, langsung di perambanmu.',
+  'guide.footer.blurb': 'A classic-style micro-MMO. Quest, group up, and explore a hand-built world, right in your browser.',
   'guide.footer.communityWiki': 'Wiki Komunitas',
   'guide.footer.discord': 'Gabung Discord',
-  'guide.footer.github': 'Sumber di GitHub',
+  'guide.footer.github': 'Contributions',
   'guide.footer.playNow': 'Main Sekarang',
-  'guide.footer.rights': 'World of ClaudeCraft',
+  'guide.footer.rights': 'Cryptic Realm',
   'guide.gear.consumablesElixirs':
     'Eliksir memberikan buff sementara selama kamu berpetualang, sedikit keunggulan yang membantu saat kamu ingin mendorong sedikit lebih jauh.',
   'guide.gear.consumablesFood':
@@ -2660,14 +2657,13 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'guide.home.community.body':
     'Langsung masuk sekarang, atau mampir menyapa. Dunia ini lebih seru dengan teman.',
   'guide.home.community.discord': 'Gabung Discord',
-  'guide.home.community.github': 'Beri Bintang di GitHub',
+  'guide.home.community.github': 'Contributions',
   'guide.home.community.heading': 'Bergabunglah dengan realm',
   'guide.home.community.play': 'Main Sekarang',
   'guide.home.ctaLearn': 'Cara Bermain',
   'guide.home.ctaPlay': 'Main Sekarang',
   'guide.home.eyebrow': 'MMO browser bergaya klasik',
-  'guide.home.faq.a1':
-    'Ya. Seluruh permainan gratis hingga batas level, dan ini sumber terbuka di GitHub.',
+  'guide.home.faq.a1': 'Yes. The whole game is free to the level cap.',
   'guide.home.faq.a2':
     'Tidak. Permainan ini sepenuhnya bisa dimainkan tanpa itu. Token komunitas opsional hanya membuka hiasan kosmetik dan tidak pernah memengaruhi kekuatan.',
   'guide.home.faq.a3':
@@ -2694,14 +2690,13 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
     'Dunia ini bisa ditempuh sendiri, tetapi jarahan terbaik menanti di balik party yang baik.',
   'guide.home.subtitle':
     'Berpetualang, bersatu, dan jelajahi dunia rakitan tangan, gratis di browser-mu.',
-  'guide.home.title': 'World of ClaudeCraft',
+  'guide.home.title': 'Cryptic Realm',
   'guide.home.what.heading': 'MMO klasik, dibuat agar mudah dimainkan',
   'guide.home.what.pillarClassesBody':
     'Jadi tank, sembuhkan, atau lancarkan damage. Setiap kelas dimainkan sesuai arketipenya, dengan talent untuk menjadikannya milikmu.',
   'guide.home.what.pillarClassesTitle': 'Sembilan kelas, tiga peran',
-  'guide.home.what.pillarOpenBody':
-    'Gratis dimainkan hingga batas level, dengan seluruh permainan bersumber terbuka. Tanpa bayar untuk menang, selamanya.',
-  'guide.home.what.pillarOpenTitle': 'Gratis dan sumber terbuka',
+  'guide.home.what.pillarOpenBody': 'Free to play to the level cap. No pay to win, ever.',
+  'guide.home.what.pillarOpenTitle': 'Free to play',
   'guide.home.what.pillarPlayBody':
     'Tanpa unduhan, tanpa peluncur. Buat karakter dan kamu sudah ada di dunia dalam hitungan detik, di desktop maupun ponsel.',
   'guide.home.what.pillarPlayTitle': 'Main di browser-mu',
@@ -3109,7 +3104,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'guide.worldPage.heading': 'Dunia',
   'guide.worldPage.hub': 'Markas utama',
   'guide.worldPage.intro':
-    'World of ClaudeCraft adalah satu daratan menyambung yang kamu lintasi dengan berjalan kaki, tiga zona terbentang dari selatan ke utara. Tidak ada perjalanan kilat, jadi pengembaraan itu sendiri bagian dari petualangan.',
+    'Cryptic Realm adalah satu daratan menyambung yang kamu lintasi dengan berjalan kaki, tiga zona terbentang dari selatan ke utara. Tidak ada perjalanan kilat, jadi pengembaraan itu sendiri bagian dari petualangan.',
   'guide.worldPage.mapHeading': 'Jalan ke utara',
   'guide.worldPage.mapSub':
     'Tiga zona, dari selatan ke utara, masing-masing setingkat lebih tinggi dalam level. Ikuti jejak misi dan daratan akan membawamu dari lembah ke puncak.',
@@ -3723,7 +3718,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'hudChrome.account.sectionDanger': 'Zona Bahaya',
   'hudChrome.account.sectionSecurity': 'Keamanan',
   'hudChrome.account.sectionSettings': 'Pengaturan Akun',
-  'hudChrome.account.sectionWallet': 'Dompet $WOC',
+  'hudChrome.account.sectionWallet': 'Dompet $CR',
   'hudChrome.account.title': 'Akun',
   'hudChrome.account.twoFactorBegin': 'Mulai Pengaturan',
   'hudChrome.account.twoFactorBeginHint': 'Masukkan kata sandimu untuk memulai pengaturan.',
@@ -4328,7 +4323,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
     'Untuk layar penuh di Android, pasang halaman ini atau tambahkan ke layar Beranda terlebih dahulu.',
   'mobilePreflight.androidInstallStep':
     'Di Chrome, ketuk menu, lalu Pasang aplikasi atau Tambahkan ke layar Beranda.',
-  'mobilePreflight.androidOpenStep': 'Buka World of ClaudeCraft dari ikon baru.',
+  'mobilePreflight.androidOpenStep': 'Buka Cryptic Realm dari ikon baru.',
   'mobilePreflight.androidStandaloneDetail':
     'Kamu berada dalam mode aplikasi layar penuh. Pertahankan perangkat dalam posisi lanskap.',
   'mobilePreflight.baseLandscape': 'Putar perangkatmu ke posisi lanskap sebelum memasuki dunia.',
@@ -4337,7 +4332,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'mobilePreflight.continue': 'Lanjut ke Gim',
   'mobilePreflight.iosInstallDetail':
     'Untuk layar penuh sejati di iPhone atau iPad, pasang halaman ini ke Layar Beranda terlebih dahulu.',
-  'mobilePreflight.iosOpenStep': 'Buka World of ClaudeCraft dari ikon Layar Beranda yang baru.',
+  'mobilePreflight.iosOpenStep': 'Buka Cryptic Realm dari ikon Layar Beranda yang baru.',
   'mobilePreflight.iosShareStep': 'Di Safari, ketuk Bagikan, lalu Tambahkan ke Layar Beranda.',
   'mobilePreflight.iosStandaloneDetail':
     'Kamu berada dalam mode layar penuh layar-beranda. Pertahankan perangkat dalam posisi lanskap.',
@@ -4350,9 +4345,9 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'mobilePreflight.rotateTitle': 'Putar ke Lanskap',
   'mobilePreflight.title': 'Mainkan dalam Layar Penuh Lanskap',
   'mode.caCopyAria': 'Salin alamat kontrak',
-  'mode.caLabel': 'Alamat Kontrak $WOC',
+  'mode.caLabel': 'Alamat Kontrak $CR',
   'mode.caNote':
-    'WOC adalah token komunitas kami. Token ini tidak diperlukan untuk bermain. Gabung Discord untuk membahas utilitas dan flywheel WOC.',
+    'CR adalah token komunitas kami. Token ini tidak diperlukan untuk bermain. Gabung Discord untuk membahas utilitas dan flywheel CR.',
   'mode.offlineAria': 'Main Luring: mulai sesi pemain-tunggal lokal seketika',
   'mode.offlineDesc':
     'Dunia pemain-tunggal seketika di peramban kamu. Tidak ada yang disimpan: sempurna untuk pertarungan singkat atau pengujian.',
@@ -4362,7 +4357,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
     'Masuk ke realm. Karaktermu hidup di server dan kamu berbagi dunia dengan semua orang yang sedang daring.',
   'mode.onlineTitle': 'Main Daring',
   'mode.play': 'Main',
-  'mode.playAria': 'Mainkan World of ClaudeCraft',
+  'mode.playAria': 'Mainkan Cryptic Realm',
   'mode.serverAria': 'Pilih realm: Online atau Offline',
   'mode.serverLabel': 'Pilih realm Anda',
   'mode.serverOffline': 'Offline',
@@ -4389,22 +4384,22 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'news.loading': 'Memuat pembaruan terkini…',
   'news.prerelease': 'Pra-rilis',
   'news.title': 'Berita & Pembaruan',
-  'news.viewOnGithub': 'Lihat di GitHub',
+  'news.viewOnGithub': 'Read release notes',
   'playerCard.actionCopyReferral': 'Salin Tautan Rujukan',
   'playerCard.actionDownload': 'Unduh',
   'playerCard.actionShareNative': 'Bagikan...',
   'playerCard.actionShareX': 'Bagikan ke X',
   'playerCard.arenaStat': 'Arena',
-  'playerCard.brandWordmark': 'WORLD OF CLAUDECRAFT',
+  'playerCard.brandWordmark': 'CRYPTIC REALM',
   'playerCard.close': 'Tutup kartu pemain',
-  'playerCard.defaultRealm': 'World of ClaudeCraft',
+  'playerCard.defaultRealm': 'Cryptic Realm',
   'playerCard.fileNameFallback': 'pemain',
   'playerCard.footerCta': 'Tempa legendamu: {siteUrl}',
   'playerCard.footerHandle': '@{handle}',
   'playerCard.footerHandleWithRecruits': '@{handle} - {recruited}',
   'playerCard.levelClass': 'Level {level} - {className}',
   'playerCard.loading': 'Menempa kartumu...',
-  'playerCard.nativeShareTitle': 'World of ClaudeCraft',
+  'playerCard.nativeShareTitle': 'Cryptic Realm',
   'playerCard.poseBattle': 'Pertempuran',
   'playerCard.poseGroup': 'Pose',
   'playerCard.poseHero': 'Pahlawan',
@@ -4418,8 +4413,8 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'playerCard.renderFailedStatus': 'Render kartu gagal.',
   'playerCard.shareButton': 'Bagikan Kartu Pemain',
   'playerCard.shareText':
-    'Aku sedang menempa legendaku di World of ClaudeCraft: Level {level} {className}{tierBit}. Bergabunglah dengan realmku:',
-  'playerCard.shareTierBit': ', pemegang $WOC peringkat {tier}',
+    'Aku sedang menempa legendaku di Cryptic Realm: Level {level} {className}{tierBit}. Bergabunglah dengan realmku:',
+  'playerCard.shareTierBit': ', pemegang $CR peringkat {tier}',
   'playerCard.statusDownloaded': 'Kartu terunduh.',
   'playerCard.statusGenericError': 'Ada yang tidak beres.',
   'playerCard.statusOpenedXWithImage': 'X dibuka. Tempel gambar kartu ke dalam unggahan.',
@@ -4521,21 +4516,21 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'realmTypes.rpPvp': 'RP-PvP',
   'seo.applicationCategory': 'Permainan',
   'seo.description':
-    'Mulailah petualangan epik di World of ClaudeCraft, micro-MMO bergaya klasik yang dapat dimainkan langsung di peramban. Bergabunglah dengan realm bersama yang persisten, naikkan level kelas, dan kalahkan musuh!',
+    'Mulailah petualangan epik di Cryptic Realm, micro-MMO bergaya klasik yang dapat dimainkan langsung di peramban. Bergabunglah dengan realm bersama yang persisten, naikkan level kelas, dan kalahkan musuh!',
   'seo.genre': 'MMORPG',
   'seo.officialBody':
-    'worldofclaudecraft.com adalah MMO peramban gratis resmi untuk realm Claudemoon. Bermain daring dengan karakter yang persisten, jelajahi solo secara luring, baca wiki, dan ikuti tautan komunitas terverifikasi dari situs ini.',
-  'seo.officialLabel': 'Situs resmi World of ClaudeCraft',
+    'crypticrealm.com adalah MMO peramban gratis resmi untuk realm Claudemoon. Bermain daring dengan karakter yang persisten, jelajahi solo secara luring, baca wiki, dan ikuti tautan komunitas terverifikasi dari situs ini.',
+  'seo.officialLabel': 'Situs resmi Cryptic Realm',
   'seo.operatingSystem': 'Peramban web',
   'seo.playMode': 'Multipemain',
-  'seo.title': 'World of ClaudeCraft: MMO Web Bergaya Klasik',
+  'seo.title': 'Cryptic Realm: MMO Web Bergaya Klasik',
   'serverUnavailable.body':
     'Kami sedang memulai ulang layanan game dan memperkirakan Claudemoon akan kembali sebentar lagi. Halaman ini akan terus memeriksa secara otomatis.',
   'serverUnavailable.eyebrow': 'Pemeliharaan realm',
   'serverUnavailable.heading': 'Realm sementara tidak tersedia.',
-  'serverUnavailable.logoAlt': 'World of ClaudeCraft',
+  'serverUnavailable.logoAlt': 'Cryptic Realm',
   'serverUnavailable.status': 'Segera kembali',
-  'serverUnavailable.title': 'World of ClaudeCraft - Realm Tidak Tersedia',
+  'serverUnavailable.title': 'Cryptic Realm - Realm Tidak Tersedia',
   'settings.languageLoadFailed':
     'Tidak dapat memuat bahasa itu. Tetap menggunakan bahasamu saat ini.',
   'settings.languageLoadUnavailable': 'Bahasa itu tidak tersedia.',
@@ -4641,12 +4636,12 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'stats.realmName': 'Nama Realm',
   'stats.title': 'Status Realm',
   'wallet.appConnected': 'Aplikasi Terhubung',
-  'wallet.balanceAmount': '{amount} $WOC',
+  'wallet.balanceAmount': '{amount} $CR',
   'wallet.balanceAria': 'Saldo dompet Solana terverifikasi: {balance}',
   'wallet.balancePreviewAria':
     'Pratinjau saldo dompet terhubung: {balance}. Tautkan dompet untuk memverifikasi lencana pemegang.',
-  'wallet.balancePreviewTitle': 'Pratinjau saldo $WOC dompet terhubung',
-  'wallet.balanceTitle': 'Saldo $WOC dompet Solana terverifikasi',
+  'wallet.balancePreviewTitle': 'Pratinjau saldo $CR dompet terhubung',
+  'wallet.balanceTitle': 'Saldo $CR dompet Solana terverifikasi',
   'wallet.connect': 'Verifikasi Dompet',
   'wallet.connectApp': 'Hubungkan Aplikasi',
   'wallet.connectAppAria': 'Hubungkan aplikasi dompet di peramban ini',
@@ -4683,8 +4678,8 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'wallet.hide': 'Sembunyikan',
   'wallet.hideAria': 'Sembunyikan baris dompet di layar ini',
   'wallet.hideTitle': 'Sembunyikan baris dompet di layar ini',
-  'wallet.holder': 'pemegang $WOC',
-  'wallet.holderTierTitle': 'Pemegang $WOC {tier}',
+  'wallet.holder': 'pemegang $CR',
+  'wallet.holderTierTitle': 'Pemegang $CR {tier}',
   'wallet.holderTiers.coinbearer.flavor': 'Koin pertama di pundi perang.',
   'wallet.holderTiers.coinbearer.name': 'Pembawa Koin',
   'wallet.holderTiers.coppercrest.flavor': 'Tembaga menumpuk, namamu disebut.',
@@ -4712,7 +4707,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'wallet.holderTiers.tidelord.name': 'Penguasa Pasang',
   'wallet.holderTiers.titanforged.flavor': 'Ditempa di antara para titan: 5% dari pasokan.',
   'wallet.holderTiers.titanforged.name': 'Tempaan Titan',
-  'wallet.holderTiers.vaultwarden.flavor': 'Kini menjaga brankas sejati: 0,01% dari seluruh $WOC.',
+  'wallet.holderTiers.vaultwarden.flavor': 'Kini menjaga brankas sejati: 0,01% dari seluruh $CR.',
   'wallet.holderTiers.vaultwarden.name': 'Penjaga Brankas',
   'wallet.holderTiers.voidwarden.flavor': 'Penjaga di tepi kehampaan: 7% dari pasokan.',
   'wallet.holderTiers.voidwarden.name': 'Penjaga Kehampaan',
@@ -4722,7 +4717,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'wallet.holderTiers.worldbearer.name': 'Pemikul Dunia',
   'wallet.holderTiers.worldforger.flavor': 'Menempa dunia milikmu sendiri: 9% dari pasokan.',
   'wallet.holderTiers.worldforger.name': 'Penempa Dunia',
-  'wallet.label': 'Dompet $WOC',
+  'wallet.label': 'Dompet $CR',
   'wallet.linkFailed': 'Verifikasi dompet gagal.',
   'wallet.linkTitle': 'Klik untuk menandatangani dan menautkan dompet ini ke akun Anda.',
   'wallet.linkedDisconnectedAria':
@@ -4886,7 +4881,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'hudChrome.leaderboard.guildXp': 'Total XP',
   'hudChrome.leaderboard.guildEmpty': 'Belum ada guild berperingkat.',
   'hudChrome.discord.title': 'Discord',
-  'hudChrome.discord.panelTitle': 'World of ClaudeCraft',
+  'hudChrome.discord.panelTitle': 'Cryptic Realm',
   'hudChrome.discord.open': 'Discord',
   'hudChrome.discord.close': 'Tutup',
   'hudChrome.discord.keybind': 'Panel Discord',

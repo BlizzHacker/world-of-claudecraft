@@ -73,7 +73,7 @@ const supportHtml = readFileSync(
   'utf8',
 ).replace(/\r\n/g, '\n');
 const whitepaperUrl = new URL(
-  '../public/World-of-ClaudeCraft-Whitepaper-v1.0.pdf',
+  '../public/World-of-Cryptic Realm-Whitepaper-v1.0.pdf',
   import.meta.url,
 );
 const viteConfig = readFileSync(new URL('../vite.config.ts', import.meta.url), 'utf8').replace(
@@ -495,6 +495,12 @@ describe('client HTML shell', () => {
     // Declared before #start-screen opens, hence a top-level sibling, never a descendant.
     expect(modalAt).toBeLessThan(startAt);
     expect(windowAt).toBeLessThan(startAt);
+    expect(html).toContain('id="discord-keep-form"');
+    expect(html).toContain('id="discord-keep-username" name="username" type="text" autocomplete="username"');
+    expect(html).toContain('id="discord-link-existing" hidden novalidate');
+    expect(html).toContain('id="discord-link-user" name="username" type="text"');
+    expect(mainTs).toContain("document.getElementById('discord-keep-form')?.addEventListener('submit'");
+    expect(mainTs).toContain("document.getElementById('discord-link-existing')?.addEventListener('submit'");
   });
 
   it('shows a logged-in Logout nav item next to Account', () => {
@@ -511,6 +517,8 @@ describe('client HTML shell', () => {
 
   it('requires users to confirm a new account password', () => {
     expect(html).toContain('id="account-confirm-pass"');
+    expect(html).toContain('id="account-password-form" class="account-form" novalidate');
+    expect(html).toContain('name="username" type="text" autocomplete="username" tabindex="-1" aria-hidden="true"');
     expect(mainTs).toContain(
       "const confirm = ($('#account-confirm-pass') as HTMLInputElement).value;",
     );
@@ -536,7 +544,8 @@ describe('client HTML shell', () => {
     expect(html).toContain('<meta name="robots" content="index, follow, max-image-preview:large" />');
     expect(html).toContain('<link rel="canonical" href="https://crypticrealm.com/" />');
     expect(html).toContain('<meta property="og:site_name" content="Cryptic Realm" />');
-    expect(mainTs).toContain("'https://github.com/BlizzHacker/cryptic-realm'");
+    expect(mainTs).not.toContain('github.com/BlizzHacker/cryptic-realm');
+    expect(mainTs).toContain("'https://discord.gg/Zdj3JGrx'");
     expect(robotsTxt.trim()).toBe('User-agent: *\nAllow: /\n\nSitemap: https://crypticrealm.com/sitemap.xml');
     expect(robotsTxt).toContain('Sitemap: https://crypticrealm.com/sitemap.xml');
     expect(sitemapXml).toContain('<loc>https://crypticrealm.com/</loc>');
@@ -558,7 +567,7 @@ describe('client HTML shell', () => {
       "if (ev.level === 5) trackMetaPixel('ReachedLevel5', { level: ev.level });",
     );
     expect(mainTs).toContain("trackMetaPixel('AccountCreated');");
-    expect(mainTs).toContain("'GitHubClick'");
+    expect(mainTs).not.toContain("'GitHubClick'");
     expect(mainTs).toContain("'DiscordClick'");
   });
 
@@ -692,7 +701,8 @@ describe('client HTML shell', () => {
     expect(html).toContain('<summary class="community-toggle"');
     expect(html).toContain('<div class="community-tray">');
     expect(html).toContain('<a class="community-link discord"');
-    expect(html).toContain('<a class="community-link github"');
+    // CR: the GitHub community link was removed by request.
+    // Cryptic Realm does not advertise the repository.
     expect(html).toContain('<a class="community-link donate"');
     expect(hudMobileCss).toContain('body.mobile-touch.game-active #ui {\n    z-index: 80;\n  }');
     expect(hudMobileCss).toContain(
@@ -1127,13 +1137,14 @@ describe('client HTML shell', () => {
     expect(mainTs).toContain('activeViewTransitionCleanup = () => {');
   });
 
-  it('ships a looping cinematic backdrop with a poster fallback', () => {
+  it('ships a poster-backed cinematic shell without requesting a missing trailer', () => {
     // CR fork: the homepage cinematic is #bg-trailer, played from main.ts
     // (initHomepageTrailer) so it can respect reduced-motion / save-data rather
-    // than autoplaying in markup.
+    // than autoplaying in markup. There is no checked-in trailer asset right now,
+    // so the markup must not point at a guaranteed 404.
     expect(html).toContain('id="bg-trailer"');
     expect(html).toContain('poster="/cryptic-realm-loading-bg.webp"');
-    expect(html).toContain('<source src="/video/trailer.mp4" type="video/mp4"');
+    expect(html).not.toContain('<source src="/video/trailer.mp4" type="video/mp4"');
     expect(html).toContain('loop');
     expect(html).toContain('playsinline');
     // The trailer respects reduced-motion (handled in initHomepageTrailer).

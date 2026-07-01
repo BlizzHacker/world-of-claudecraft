@@ -17,7 +17,7 @@ export interface EmailTemplate {
 
 export type EmailCatalog = Record<string, Partial<Record<EmailTemplateKey, EmailTemplate>>>;
 
-const BRAND = 'World of ClaudeCraft';
+const BRAND = 'Cryptic Realm';
 
 // English source of truth. {{placeholder}} tokens are filled from the event's
 // EmailData payload. Keep copy plain: no em/en dashes or emoji (repo-wide ban).

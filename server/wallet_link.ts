@@ -60,7 +60,7 @@ export function buildLinkMessage(opts: {
   issuedAt: string;
 }): string {
   return [
-    `${opts.domain} wants you to link this Solana wallet to your World of ClaudeCraft account.`,
+    `${opts.domain} wants you to link this Solana wallet to your Cryptic Realm account.`,
     '',
     `Account: #${opts.accountId}`,
     `Wallet: ${opts.address}`,

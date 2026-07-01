@@ -39,7 +39,7 @@ export interface CharacterSheetInput {
   row: CharacterRow;
   visibility: SheetVisibility;
   realm: string;
-  origin: string; // e.g. https://worldofclaudecraft.com ('' = relative)
+  origin: string; // e.g. https://crypticrealm.com ('' = relative)
   guild: string | null;
   rank: SheetRank | null;
   // ISO timestamp for the sheet; defaults to now(). Pass the row's updated_at

@@ -9,7 +9,7 @@ COPY public/loading-screen.jpg /var/www/html/resources/assets/woc-loading-screen
 # Cryptic Realm branding (the upstream woc_* logos don't exist in this fork).
 # Destination filenames kept stable so LocalSettings.php / Common.css refs hold.
 COPY public/cr_logo_square.webp /var/www/html/resources/assets/woc-logo-square.webp
-COPY public/cryptic-realm-logo-512.png /var/www/html/resources/assets/worldofclaudecraft-logo.png
+COPY public/cryptic-realm-logo-512.png /var/www/html/resources/assets/cryptic-realm-logo.png
 
 RUN chmod +x /usr/local/bin/woc-mediawiki-entrypoint
 

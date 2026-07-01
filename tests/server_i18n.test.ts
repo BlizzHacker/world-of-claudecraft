@@ -15,7 +15,7 @@ describe('server-sent message localization', () => {
     'You found the guild <Knights>! You are its Guild Master.',
     'You have been removed from <Knights>.',
     'Mira has been removed from the guild by Bob.',
-    'Mira has entered World of ClaudeCraft.',
+    'Mira has entered Cryptic Realm.',
     'Bob has left the world. (disconnected)',
     'Who: 3 players online on Stormforge.',
     'Who: 1 player online on Stormforge.',

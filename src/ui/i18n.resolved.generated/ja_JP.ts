@@ -535,7 +535,7 @@ export const ja_JP: EnTranslations = {
       "loggedOutPrompt": "アカウントを管理するにはログインしてください。",
       "memberSince": "登録日：{date}",
       "sectionSettings": "アカウント設定",
-      "sectionWallet": "$WOC ウォレット",
+      "sectionWallet": "$CR ウォレット",
       "sectionCharacters": "キャラクター",
       "sectionDanger": "危険な操作",
       "changePassword": "パスワードの変更",
@@ -743,7 +743,7 @@ export const ja_JP: EnTranslations = {
     },
     "discord": {
       "title": "Discord",
-      "panelTitle": "World of ClaudeCraft",
+      "panelTitle": "Cryptic Realm",
       "open": "Discord",
       "close": "閉じる",
       "keybind": "Discordパネル",
@@ -886,8 +886,8 @@ export const ja_JP: EnTranslations = {
     }
   },
   "guide": {
-    "brand": "World of ClaudeCraft",
-    "brandShort": "ClaudeCraft",
+    "brand": "Cryptic Realm",
+    "brandShort": "Cryptic",
     "tagline": "ブラウザで無料で遊べる、クラシックスタイルのMMO。",
     "skipToContent": "メインコンテンツへスキップ",
     "loading": "読み込み中...",
@@ -942,12 +942,12 @@ export const ja_JP: EnTranslations = {
       "heading": "このページの内容"
     },
     "footer": {
-      "blurb": "オープンソースの、クラシックスタイルなマイクロMMO。クエストをこなし、仲間と組み、手作りのワールドを冒険しよう。すべてブラウザで。",
+      "blurb": "A classic-style micro-MMO. Quest, group up, and explore a hand-built world, right in your browser.",
       "playNow": "今すぐプレイ",
-      "github": "GitHubのソース",
+      "github": "Contributions",
       "discord": "Discordに参加",
       "communityWiki": "コミュニティWiki",
-      "rights": "World of ClaudeCraft"
+      "rights": "Cryptic Realm"
     },
     "language": {
       "label": "言語",
@@ -967,7 +967,7 @@ export const ja_JP: EnTranslations = {
     },
     "home": {
       "eyebrow": "クラシックスタイルのブラウザMMO",
-      "title": "World of ClaudeCraft",
+      "title": "Cryptic Realm",
       "subtitle": "クエストをこなし、仲間と組み、手作りのワールドを冒険しよう。ブラウザで無料。",
       "ctaPlay": "今すぐプレイ",
       "ctaLearn": "遊び方",
@@ -977,8 +977,8 @@ export const ja_JP: EnTranslations = {
         "pillarPlayBody": "ダウンロードもランチャーも不要。キャラクターを作れば数秒でワールドへ。PCでもスマホでも。",
         "pillarClassesTitle": "9つのクラス、3つのロール",
         "pillarClassesBody": "タンク、ヒーラー、ダメージのいずれでも。どのクラスもアーキタイプらしい立ち回りができ、タレントで自分好みに育てられる。",
-        "pillarOpenTitle": "無料、そしてオープンソース",
-        "pillarOpenBody": "最大レベルまで無料でプレイでき、ゲーム全体がオープンソース。Pay to Winは一切なし。"
+        "pillarOpenTitle": "Free to play",
+        "pillarOpenBody": "Free to play to the level cap. No pay to win, ever."
       },
       "classes": {
         "heading": "クラスを選ぼう",
@@ -1011,7 +1011,7 @@ export const ja_JP: EnTranslations = {
       "faq": {
         "heading": "知っておきたいこと",
         "q1": "無料で遊べますか?",
-        "a1": "はい。ゲーム全体が最大レベルまで無料で、GitHubでオープンソースとして公開されています。",
+        "a1": "Yes. The whole game is free to the level cap.",
         "q2": "暗号通貨ウォレットは必要ですか?",
         "a2": "いいえ。ウォレットがなくても完全にプレイできます。任意のコミュニティトークンは見た目の装飾を解放するだけで、性能には一切影響しません。",
         "q3": "オフラインで遊べますか?",
@@ -1024,7 +1024,7 @@ export const ja_JP: EnTranslations = {
         "body": "今すぐ飛び込むもよし、挨拶しに来るもよし。仲間がいれば世界はもっと楽しい。",
         "play": "今すぐプレイ",
         "discord": "Discordに参加",
-        "github": "GitHubでスターを付ける"
+        "github": "Contributions"
       }
     },
     "howToPlay": {
@@ -1140,7 +1140,7 @@ export const ja_JP: EnTranslations = {
     "faqPage": {
       "intro": "新規プレイヤーが最もよく尋ねる質問です。",
       "q1": "本当に無料ですか?",
-      "a1": "はい。ゲーム全体が最大レベルまで無料でプレイでき、ソースコードはGitHubで公開されています。",
+      "a1": "Yes. The whole game is free to play to the level cap.",
       "q2": "暗号通貨ウォレットやトークンは必要ですか?",
       "a2": "いいえ。ウォレットがなくても完全にプレイできます。任意のコミュニティトークンは見た目の装飾を解放するだけで、性能や進行には一切影響しません。",
       "q3": "スマートフォンで遊べますか?",
@@ -1154,7 +1154,7 @@ export const ja_JP: EnTranslations = {
       "q7": "キャラクターは保存されますか?",
       "a7": "オンラインのキャラクターはサーバーに自動で保存されます。オフラインのキャラクターは、手軽なプレイやテスト用にブラウザ内に保存されます。",
       "q8": "自分でサーバーを立てられますか?",
-      "a8": "はい。このプロジェクトはオープンソースなので、自分のサーバーを運用できます。GitHubのリポジトリをご覧ください。",
+      "a8": "Private realms are operated through verified Cryptic Realm channels.",
       "q9": "PvPはありますか。",
       "a9": "あります。誰とでも気軽に決闘できますし、灰のコロシアムに足を踏み入れて他のプレイヤーと戦うこともできます。PvPは任意参加なので、強制されることはありません。",
       "q10": "最大レベルになったら何ができますか。",
@@ -1348,7 +1348,7 @@ export const ja_JP: EnTranslations = {
     },
     "worldPage": {
       "heading": "世界",
-      "intro": "World of ClaudeCraftは、自らの足で歩いて渡る一続きの大地です。南から北へと3つのゾーンが連なっています。ファストトラベルはなく、その旅路こそが冒険の一部です。",
+      "intro": "Cryptic Realmは、自らの足で歩いて渡る一続きの大地です。南から北へと3つのゾーンが連なっています。ファストトラベルはなく、その旅路こそが冒険の一部です。",
       "hub": "拠点",
       "mapHeading": "北への道",
       "mapSub": "南から北へ三つのゾーンが並び、それぞれレベルが一段ずつ上がります。クエストの道筋をたどれば、土地が谷から峰々へとあなたを運んでいきます。",
@@ -1766,9 +1766,9 @@ export const ja_JP: EnTranslations = {
     "realmName": "レルム名"
   },
   "footer": {
-    "copyright": "2026 World of ClaudeCraft",
-    "githubLink": "https://github.com/levy-street/world-of-claudecraft",
-    "githubLabel": "オープンソースプロジェクト",
+    "copyright": "2026 Cryptic Realm",
+    "githubLink": "/contributions.html",
+    "githubLabel": "Contributions",
     "whitepaper": "ホワイトペーパー",
     "terms": "利用規約",
     "privacy": "プライバシーポリシー",
@@ -1795,7 +1795,7 @@ export const ja_JP: EnTranslations = {
     "error": "更新情報を読み込めませんでした。しばらくしてからお試しください。",
     "empty": "まだ更新はありません。またのぞいてみてください。",
     "prerelease": "プレリリース",
-    "viewOnGithub": "GitHubで見る",
+    "viewOnGithub": "Read release notes",
     "openLink": "Open",
     "officialLog": "Official Work Log",
     "alphaBetaTitle": "Alpha, Beta, And Public Realm Cadence",
@@ -1860,13 +1860,13 @@ export const ja_JP: EnTranslations = {
     "serverOnline": "オンライン",
     "serverOffline": "オフライン",
     "play": "プレイ",
-    "playAria": "World of ClaudeCraftをプレイ",
+    "playAria": "Cryptic Realmをプレイ",
     "serverLabel": "レルムを選択",
     "serverAria": "レルムを選択：オンラインまたはオフライン",
     "serverOfflineSub": "即座にローカルの世界へ",
-    "caLabel": "$WOC コントラクトアドレス",
+    "caLabel": "$CR コントラクトアドレス",
     "caCopyAria": "コントラクトアドレスをコピー",
-    "caNote": "WOCはコミュニティトークンです。プレイには必要ありません。Discordに参加して、WOCのユーティリティとフライホイールについて語り合いましょう。"
+    "caNote": "CRはコミュニティトークンです。プレイには必要ありません。Discordに参加して、CRのユーティリティとフライホイールについて語り合いましょう。"
   },
   "auth": {
     "enterRealm": "レルムに入る",
@@ -1911,7 +1911,7 @@ export const ja_JP: EnTranslations = {
     "twoFactorHint": "認証アプリに表示されたコード、またはリカバリーコードのいずれかを入力してください。"
   },
   "wallet": {
-    "label": "$WOC ウォレット",
+    "label": "$CR ウォレット",
     "connect": "ウォレット認証",
     "connectTitle": "Solanaウォレットを認証",
     "connectAria": "Solanaウォレットを認証",
@@ -1944,11 +1944,11 @@ export const ja_JP: EnTranslations = {
     "linkedDisconnectedAria": "ウォレットはアカウントで認証されたままです。ウォレットアプリを管理するには再接続してください。",
     "linkTitle": "クリックして署名し、このウォレットをアカウントに連携します。",
     "connectedTitle": "接続済みです。ログインすると、このウォレットをアカウントに連携できます。",
-    "balanceTitle": "認証済みSolanaウォレットの$WOC残高",
+    "balanceTitle": "認証済みSolanaウォレットの$CR残高",
     "balanceAria": "認証済みSolanaウォレット残高: {balance}",
-    "balancePreviewTitle": "接続中ウォレットの$WOC残高プレビュー",
+    "balancePreviewTitle": "接続中ウォレットの$CR残高プレビュー",
     "balancePreviewAria": "接続中ウォレット残高プレビュー: {balance}。ウォレットを連携するとホルダー表示を認証できます。",
-    "balanceAmount": "{amount} $WOC",
+    "balanceAmount": "{amount} $CR",
     "connected": "接続済み: {address}",
     "connectedWithBalance": "接続済み: {balance} - {address}",
     "connectedLinked": "認証済み: {address}",
@@ -1968,8 +1968,8 @@ export const ja_JP: EnTranslations = {
     "linkFailed": "ウォレット認証に失敗しました。",
     "verifyFailed": "ウォレット認証に失敗しました。",
     "unlinkFailed": "ウォレット連携を解除できませんでした。",
-    "holder": "$WOCホルダー",
-    "holderTierTitle": "{tier} $WOCホルダー",
+    "holder": "$CRホルダー",
+    "holderTierTitle": "{tier} $CRホルダー",
     "holderTiers": {
       "ember": {
         "name": "残り火",
@@ -1993,7 +1993,7 @@ export const ja_JP: EnTranslations = {
       },
       "vaultwarden": {
         "name": "宝物庫の番人",
-        "flavor": "今や本物の金庫を守っています: $WOC 全体の 0.01%。"
+        "flavor": "今や本物の金庫を守っています: $CR 全体の 0.01%。"
       },
       "whale": {
         "name": "クジラ",
@@ -2061,16 +2061,16 @@ export const ja_JP: EnTranslations = {
     "levelClass": "レベル{level} - {className}",
     "topPercent": "上位 {percent}%",
     "realmSubtitle": "{realm} レルム",
-    "defaultRealm": "ClaudeCraftの世界",
-    "brandWordmark": "WORLD OF CLAUDECRAFT",
+    "defaultRealm": "Cryptic Realmの世界",
+    "brandWordmark": "CRYPTIC REALM",
     "recruited": "招待 {count}人",
     "footerHandle": "@{handle}",
     "footerHandleWithRecruits": "@{handle} - {recruited}",
     "footerCta": "あなたの伝説を鍛えよう: {siteUrl}",
     "arenaStat": "アリーナ",
-    "shareTierBit": ", {tier}ランクの$WOCホルダー",
-    "shareText": "World of ClaudeCraftで伝説を鍛えています: レベル{level} {className}{tierBit}。私のレルムに参加してください:",
-    "nativeShareTitle": "ClaudeCraftの世界",
+    "shareTierBit": ", {tier}ランクの$CRホルダー",
+    "shareText": "Cryptic Realmで伝説を鍛えています: レベル{level} {className}{tierBit}。私のレルムに参加してください:",
+    "nativeShareTitle": "Cryptic Realmの世界",
     "fileNameFallback": "プレイヤー",
     "actionShareX": "Xで共有",
     "actionCopyReferral": "紹介リンクをコピー",
@@ -2560,14 +2560,14 @@ export const ja_JP: EnTranslations = {
     }
   },
   "seo": {
-    "title": "World of ClaudeCraft: クラシック風Web MMO",
-    "description": "ブラウザで直接遊べるクラシック風マイクロMMO、World of ClaudeCraft で壮大な冒険に出ましょう。永続的な共有レルムに参加し、クラスを育て、敵を倒してください。",
+    "title": "Cryptic Realm: クラシック風Web MMO",
+    "description": "ブラウザで直接遊べるクラシック風マイクロMMO、Cryptic Realm で壮大な冒険に出ましょう。永続的な共有レルムに参加し、クラスを育て、敵を倒してください。",
     "genre": "MMORPG",
     "playMode": "マルチプレイヤー",
     "applicationCategory": "ゲーム",
     "operatingSystem": "Webブラウザ",
-    "officialLabel": "World of ClaudeCraft 公式サイト",
-    "officialBody": "worldofclaudecraft.com は Claudemoon レルムの公式無料ブラウザMMOです。永続キャラクターでオンラインプレイし、オフラインでソロ探索し、wikiを読み、このサイトから確認済みのコミュニティリンクをたどれます。"
+    "officialLabel": "Cryptic Realm 公式サイト",
+    "officialBody": "crypticrealm.com は Claudemoon レルムの公式無料ブラウザMMOです。永続キャラクターでオンラインプレイし、オフラインでソロ探索し、wikiを読み、このサイトから確認済みのコミュニティリンクをたどれます。"
   },
   "a11y": {
     "goHome": "ホームへ移動",
@@ -2575,9 +2575,9 @@ export const ja_JP: EnTranslations = {
     "mainNavigation": "メインナビゲーション",
     "languageSelection": "言語選択",
     "characterActions": "キャラクター操作",
-    "githubProject": "GitHubでWorld of ClaudeCraftプロジェクトを開く",
-    "discordCommunity": "World of ClaudeCraftのDiscordコミュニティに参加",
-    "donateProject": "World of ClaudeCraftを支援するために寄付"
+    "githubProject": "Open Cryptic Realm contributions",
+    "discordCommunity": "Cryptic RealmのDiscordコミュニティに参加",
+    "donateProject": "Cryptic Realmを支援するために寄付"
   },
   "loading": {
     "world": "世界を読み込み中...",
@@ -2751,17 +2751,17 @@ export const ja_JP: EnTranslations = {
     "iosStandaloneDetail": "ホーム画面からの全画面モードです。端末を横向きに保ってください。",
     "iosInstallDetail": "iPhoneまたはiPadで本当の全画面を使うには、先にこのページをホーム画面に追加してください。",
     "iosShareStep": "Safariで共有をタップし、ホーム画面に追加を選びます。",
-    "iosOpenStep": "新しいホーム画面アイコンからWorld of ClaudeCraftを開きます。",
+    "iosOpenStep": "新しいホーム画面アイコンからCryptic Realmを開きます。",
     "androidStandaloneDetail": "全画面アプリモードです。端末を横向きに保ってください。",
     "androidInstallDetail": "Androidで全画面にするには、このページをインストールするかホーム画面に追加してください。",
     "androidInstallStep": "Chromeでメニューを開き、アプリをインストールまたはホーム画面に追加を選びます。",
-    "androidOpenStep": "新しいアイコンからWorld of ClaudeCraftを開きます。",
+    "androidOpenStep": "新しいアイコンからCryptic Realmを開きます。",
     "otherStandaloneDetail": "端末を横向き全画面に保ってください。",
     "otherInstallDetail": "最高のモバイル全画面体験のため、このページをインストールするかホーム画面に追加してください。"
   },
   "serverUnavailable": {
-    "title": "World of ClaudeCraft - レルム利用不可",
-    "logoAlt": "World of ClaudeCraft",
+    "title": "Cryptic Realm - レルム利用不可",
+    "logoAlt": "Cryptic Realm",
     "eyebrow": "レルムメンテナンス",
     "heading": "レルムは一時的に利用できません。",
     "body": "ゲームサービスを再起動しています。Claudemoonはまもなく戻る予定です。このページは自動的に確認を続けます。",

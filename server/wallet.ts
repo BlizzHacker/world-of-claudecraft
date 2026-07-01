@@ -1,7 +1,7 @@
 // Non-custodial Solana wallet linking.
 //
 // The chain is the source of truth for wallet ownership; this server only
-// *observes* it. To link a wallet to a World of ClaudeCraft account we issue a
+// *observes* it. To link a wallet to a Cryptic Realm account we issue a
 // short-lived, single-use challenge message, the player signs it with their
 // wallet (Solana = ed25519 over the raw UTF-8 bytes), and we verify the
 // signature here. No private keys, seeds, or funds ever touch the server.

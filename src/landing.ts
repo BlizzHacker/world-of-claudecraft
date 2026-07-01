@@ -342,7 +342,7 @@ async function loadLandingNews(): Promise<void> {
         ? `<span class="news-date">${new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' }).format(new Date(r.publishedAt))}</span>`
         : '';
       const link = r.url
-        ? `<div class="news-item-foot"><a class="news-link" href="${escapeHtml(r.url)}" target="_blank" rel="noopener noreferrer">View on GitHub</a></div>`
+        ? `<div class="news-item-foot"><a class="news-link" href="${escapeHtml(r.url)}" target="_blank" rel="noopener noreferrer">Read release notes</a></div>`
         : '';
       return `<article class="news-item" data-news-item data-realm="all"><div class="news-item-head"><h3 class="news-item-title">${title}</h3>${tag}${badge}${when}</div>`
         + `<div class="news-body">${renderReleaseBody(r.body ?? '')}</div>${link}</article>`;

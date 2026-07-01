@@ -535,7 +535,7 @@ export const ko_KR: EnTranslations = {
       "loggedOutPrompt": "계정을 관리하려면 로그인하세요.",
       "memberSince": "가입일: {date}",
       "sectionSettings": "계정 설정",
-      "sectionWallet": "$WOC 지갑",
+      "sectionWallet": "$CR 지갑",
       "sectionCharacters": "캐릭터",
       "sectionDanger": "위험 구역",
       "changePassword": "비밀번호 변경",
@@ -743,7 +743,7 @@ export const ko_KR: EnTranslations = {
     },
     "discord": {
       "title": "Discord",
-      "panelTitle": "World of ClaudeCraft",
+      "panelTitle": "Cryptic Realm",
       "open": "Discord",
       "close": "닫기",
       "keybind": "Discord 패널",
@@ -886,8 +886,8 @@ export const ko_KR: EnTranslations = {
     }
   },
   "guide": {
-    "brand": "World of ClaudeCraft",
-    "brandShort": "ClaudeCraft",
+    "brand": "Cryptic Realm",
+    "brandShort": "Cryptic",
     "tagline": "브라우저에서 무료로 즐기는 클래식 스타일 MMO입니다.",
     "skipToContent": "본문으로 건너뛰기",
     "loading": "불러오는 중...",
@@ -942,12 +942,12 @@ export const ko_KR: EnTranslations = {
       "heading": "이 페이지에서"
     },
     "footer": {
-      "blurb": "오픈 소스로 만든 클래식 스타일 마이크로 MMO입니다. 퀘스트를 수행하고, 파티를 맺고, 손수 빚은 세계를 브라우저에서 바로 탐험하세요.",
+      "blurb": "A classic-style micro-MMO. Quest, group up, and explore a hand-built world, right in your browser.",
       "playNow": "지금 플레이",
-      "github": "GitHub 소스 코드",
+      "github": "Contributions",
       "discord": "Discord 참여하기",
       "communityWiki": "커뮤니티 위키",
-      "rights": "World of ClaudeCraft"
+      "rights": "Cryptic Realm"
     },
     "language": {
       "label": "언어",
@@ -967,7 +967,7 @@ export const ko_KR: EnTranslations = {
     },
     "home": {
       "eyebrow": "클래식 스타일 브라우저 MMO",
-      "title": "World of ClaudeCraft",
+      "title": "Cryptic Realm",
       "subtitle": "퀘스트를 수행하고, 파티를 맺고, 손수 빚은 세계를 브라우저에서 무료로 탐험하세요.",
       "ctaPlay": "지금 플레이",
       "ctaLearn": "플레이 방법",
@@ -977,8 +977,8 @@ export const ko_KR: EnTranslations = {
         "pillarPlayBody": "다운로드도, 런처도 필요 없습니다. 캐릭터를 만들면 PC든 휴대전화든 몇 초 만에 세계에 들어섭니다.",
         "pillarClassesTitle": "9개의 직업, 3가지 역할",
         "pillarClassesBody": "방어 전담을 맡거나, 치유하거나, 피해를 입히세요. 모든 직업이 본연의 원형에 맞게 플레이되며, 특성으로 나만의 방식을 만들 수 있습니다.",
-        "pillarOpenTitle": "무료이자 오픈 소스",
-        "pillarOpenBody": "최고 레벨까지 무료로 플레이할 수 있고, 게임 전체가 오픈 소스입니다. 결제로 이기는 일은 결코 없습니다."
+        "pillarOpenTitle": "Free to play",
+        "pillarOpenBody": "Free to play to the level cap. No pay to win, ever."
       },
       "classes": {
         "heading": "직업을 선택하세요",
@@ -1011,7 +1011,7 @@ export const ko_KR: EnTranslations = {
       "faq": {
         "heading": "알아두면 좋은 점",
         "q1": "무료로 플레이할 수 있나요?",
-        "a1": "네. 게임 전체를 최고 레벨까지 무료로 즐길 수 있으며, GitHub에 공개된 오픈 소스입니다.",
+        "a1": "Yes. The whole game is free to the level cap.",
         "q2": "암호화폐 지갑이 필요한가요?",
         "a2": "아니요. 지갑 없이도 완전히 플레이할 수 있습니다. 선택 사항인 커뮤니티 토큰은 외형 장식만 해제하며, 결코 능력에 영향을 주지 않습니다.",
         "q3": "오프라인으로 플레이할 수 있나요?",
@@ -1024,7 +1024,7 @@ export const ko_KR: EnTranslations = {
         "body": "지금 바로 뛰어들거나, 들러서 인사를 건네세요. 세계는 함께할 때 더 즐겁습니다.",
         "play": "지금 플레이",
         "discord": "Discord 참여하기",
-        "github": "GitHub에서 별표 누르기"
+        "github": "Contributions"
       }
     },
     "howToPlay": {
@@ -1140,7 +1140,7 @@ export const ko_KR: EnTranslations = {
     "faqPage": {
       "intro": "새내기 플레이어가 가장 자주 묻는 질문들입니다.",
       "q1": "정말 무료인가요?",
-      "a1": "네. 게임 전체를 최고 레벨까지 무료로 플레이할 수 있으며, 소스 코드는 GitHub에 공개되어 있습니다.",
+      "a1": "Yes. The whole game is free to play to the level cap.",
       "q2": "암호화폐 지갑이나 토큰이 필요한가요?",
       "a2": "아니요. 그런 것 없이도 완전히 플레이할 수 있습니다. 선택 사항인 커뮤니티 토큰은 외형 장식만 해제하며, 능력이나 성장에는 결코 영향을 주지 않습니다.",
       "q3": "휴대전화로 플레이할 수 있나요?",
@@ -1154,7 +1154,7 @@ export const ko_KR: EnTranslations = {
       "q7": "제 캐릭터가 저장되나요?",
       "a7": "온라인 캐릭터는 서버에 자동으로 저장됩니다. 오프라인 캐릭터는 짧은 플레이와 시험용으로 브라우저에 보관됩니다.",
       "q8": "제 서버를 직접 운영할 수 있나요?",
-      "a8": "네. 이 프로젝트는 오픈 소스라 직접 서버를 운영할 수 있습니다. GitHub 저장소를 참고하세요.",
+      "a8": "Private realms are operated through verified Cryptic Realm channels.",
       "q9": "PvP가 있나요?",
       "a9": "있습니다. 재미로 누구와든 결투하거나, 잿빛 콜로세움에 들어가 다른 플레이어와 싸울 수 있습니다. PvP는 직접 선택하는 방식이므로 절대 강요받지 않습니다.",
       "q10": "최고 레벨에서는 무엇을 할 수 있나요?",
@@ -1348,7 +1348,7 @@ export const ko_KR: EnTranslations = {
     },
     "worldPage": {
       "heading": "세계",
-      "intro": "World of ClaudeCraft는 두 발로 가로지르는 하나로 이어진 대지이며, 남에서 북으로 펼쳐진 세 개의 지역으로 이루어져 있습니다. 빠른 이동이 없으니, 여정 자체가 모험의 일부입니다.",
+      "intro": "Cryptic Realm는 두 발로 가로지르는 하나로 이어진 대지이며, 남에서 북으로 펼쳐진 세 개의 지역으로 이루어져 있습니다. 빠른 이동이 없으니, 여정 자체가 모험의 일부입니다.",
       "hub": "본거지",
       "mapHeading": "북쪽으로 가는 길",
       "mapSub": "남쪽에서 북쪽으로 이어지는 세 지역은 각각 레벨이 한 단계씩 높아집니다. 퀘스트 길을 따라가면 땅이 당신을 골짜기에서 봉우리까지 이끌어 줍니다.",
@@ -1766,9 +1766,9 @@ export const ko_KR: EnTranslations = {
     "realmName": "렐름 이름"
   },
   "footer": {
-    "copyright": "2026 World of ClaudeCraft",
-    "githubLink": "https://github.com/levy-street/world-of-claudecraft",
-    "githubLabel": "오픈 소스 프로젝트",
+    "copyright": "2026 Cryptic Realm",
+    "githubLink": "/contributions.html",
+    "githubLabel": "Contributions",
     "whitepaper": "백서",
     "terms": "서비스 이용약관",
     "privacy": "개인정보 처리방침",
@@ -1795,7 +1795,7 @@ export const ko_KR: EnTranslations = {
     "error": "소식을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.",
     "empty": "아직 새 소식이 없습니다. 곧 다시 확인해 주세요.",
     "prerelease": "사전 출시",
-    "viewOnGithub": "GitHub에서 보기",
+    "viewOnGithub": "Read release notes",
     "openLink": "Open",
     "officialLog": "Official Work Log",
     "alphaBetaTitle": "Alpha, Beta, And Public Realm Cadence",
@@ -1860,13 +1860,13 @@ export const ko_KR: EnTranslations = {
     "serverOnline": "온라인",
     "serverOffline": "오프라인",
     "play": "플레이",
-    "playAria": "World of ClaudeCraft 플레이",
+    "playAria": "Cryptic Realm 플레이",
     "serverLabel": "렐름을 선택하세요",
     "serverAria": "렐름 선택: 온라인 또는 오프라인",
     "serverOfflineSub": "즉시 시작하는 로컬 세상",
-    "caLabel": "$WOC 계약 주소",
+    "caLabel": "$CR 계약 주소",
     "caCopyAria": "계약 주소 복사",
-    "caNote": "WOC는 커뮤니티 토큰입니다. 플레이에는 필요하지 않습니다. WOC의 활용과 선순환 구조에 관해 이야기하려면 Discord에 참여하세요."
+    "caNote": "CR는 커뮤니티 토큰입니다. 플레이에는 필요하지 않습니다. CR의 활용과 선순환 구조에 관해 이야기하려면 Discord에 참여하세요."
   },
   "auth": {
     "enterRealm": "렐름 입장",
@@ -1911,7 +1911,7 @@ export const ko_KR: EnTranslations = {
     "twoFactorHint": "인증 앱에 표시된 코드 또는 복구 코드 중 하나를 입력하세요."
   },
   "wallet": {
-    "label": "$WOC 지갑",
+    "label": "$CR 지갑",
     "connect": "지갑 인증",
     "connectTitle": "Solana 지갑 인증",
     "connectAria": "Solana 지갑 인증",
@@ -1944,11 +1944,11 @@ export const ko_KR: EnTranslations = {
     "linkedDisconnectedAria": "지갑은 계정에 계속 인증되어 있습니다. 지갑 앱을 관리하려면 다시 연결하세요.",
     "linkTitle": "클릭해 서명하고 이 지갑을 계정에 연결하세요.",
     "connectedTitle": "연결되었습니다. 로그인하면 이 지갑을 계정에 연결할 수 있습니다.",
-    "balanceTitle": "인증된 Solana 지갑 $WOC 잔액",
+    "balanceTitle": "인증된 Solana 지갑 $CR 잔액",
     "balanceAria": "인증된 Solana 지갑 잔액: {balance}",
-    "balancePreviewTitle": "연결된 지갑 $WOC 잔액 미리보기",
+    "balancePreviewTitle": "연결된 지갑 $CR 잔액 미리보기",
     "balancePreviewAria": "연결된 지갑 잔액 미리보기: {balance}. 지갑을 연결해 보유자 표시를 인증하세요.",
-    "balanceAmount": "{amount} $WOC",
+    "balanceAmount": "{amount} $CR",
     "connected": "연결됨: {address}",
     "connectedWithBalance": "연결됨: {balance} - {address}",
     "connectedLinked": "인증됨: {address}",
@@ -1968,8 +1968,8 @@ export const ko_KR: EnTranslations = {
     "linkFailed": "지갑 인증에 실패했습니다.",
     "verifyFailed": "지갑 인증에 실패했습니다.",
     "unlinkFailed": "지갑 연결을 해제하지 못했습니다.",
-    "holder": "$WOC 보유자",
-    "holderTierTitle": "{tier} $WOC 보유자",
+    "holder": "$CR 보유자",
+    "holderTierTitle": "{tier} $CR 보유자",
     "holderTiers": {
       "ember": {
         "name": "불씨",
@@ -1993,7 +1993,7 @@ export const ko_KR: EnTranslations = {
       },
       "vaultwarden": {
         "name": "금고 파수꾼",
-        "flavor": "이제 진짜 금고를 지킵니다: 전체 $WOC의 0.01%."
+        "flavor": "이제 진짜 금고를 지킵니다: 전체 $CR의 0.01%."
       },
       "whale": {
         "name": "고래",
@@ -2061,16 +2061,16 @@ export const ko_KR: EnTranslations = {
     "levelClass": "{level}레벨 - {className}",
     "topPercent": "상위 {percent}%",
     "realmSubtitle": "{realm} 렐름",
-    "defaultRealm": "ClaudeCraft의 세계",
-    "brandWordmark": "WORLD OF CLAUDECRAFT",
+    "defaultRealm": "Cryptic Realm의 세계",
+    "brandWordmark": "CRYPTIC REALM",
     "recruited": "{count}명 모집",
     "footerHandle": "@{handle}",
     "footerHandleWithRecruits": "@{handle} - {recruited}",
     "footerCta": "당신의 전설을 벼리세요: {siteUrl}",
     "arenaStat": "투기장",
-    "shareTierBit": ", {tier} 등급 $WOC 보유자",
-    "shareText": "World of ClaudeCraft에서 제 전설을 벼리고 있습니다: {level}레벨 {className}{tierBit}. 제 렐름에 합류하세요:",
-    "nativeShareTitle": "ClaudeCraft의 세계",
+    "shareTierBit": ", {tier} 등급 $CR 보유자",
+    "shareText": "Cryptic Realm에서 제 전설을 벼리고 있습니다: {level}레벨 {className}{tierBit}. 제 렐름에 합류하세요:",
+    "nativeShareTitle": "Cryptic Realm의 세계",
     "fileNameFallback": "플레이어",
     "actionShareX": "X에 공유",
     "actionCopyReferral": "추천 링크 복사",
@@ -2560,14 +2560,14 @@ export const ko_KR: EnTranslations = {
     }
   },
   "seo": {
-    "title": "World of ClaudeCraft: 클래식 스타일 웹 MMO",
-    "description": "브라우저에서 바로 즐기는 클래식 스타일 마이크로 MMO, World of ClaudeCraft에서 장대한 모험을 시작하세요. 지속되는 공유 렐름에 접속해 직업을 성장시키고 적을 물리치세요.",
+    "title": "Cryptic Realm: 클래식 스타일 웹 MMO",
+    "description": "브라우저에서 바로 즐기는 클래식 스타일 마이크로 MMO, Cryptic Realm에서 장대한 모험을 시작하세요. 지속되는 공유 렐름에 접속해 직업을 성장시키고 적을 물리치세요.",
     "genre": "MMORPG",
     "playMode": "멀티플레이어",
     "applicationCategory": "게임",
     "operatingSystem": "웹 브라우저",
-    "officialLabel": "World of ClaudeCraft 공식 웹사이트",
-    "officialBody": "worldofclaudecraft.com은 Claudemoon 렐름의 공식 무료 브라우저 MMO입니다. 지속 캐릭터로 온라인 플레이를 하거나, 오프라인에서 혼자 탐험하고, 위키를 읽고, 이 사이트에서 검증된 커뮤니티 링크를 확인하세요."
+    "officialLabel": "Cryptic Realm 공식 웹사이트",
+    "officialBody": "crypticrealm.com은 Claudemoon 렐름의 공식 무료 브라우저 MMO입니다. 지속 캐릭터로 온라인 플레이를 하거나, 오프라인에서 혼자 탐험하고, 위키를 읽고, 이 사이트에서 검증된 커뮤니티 링크를 확인하세요."
   },
   "a11y": {
     "goHome": "홈으로 이동",
@@ -2575,9 +2575,9 @@ export const ko_KR: EnTranslations = {
     "mainNavigation": "기본 탐색",
     "languageSelection": "언어 선택",
     "characterActions": "캐릭터 작업",
-    "githubProject": "GitHub에서 World of ClaudeCraft 프로젝트 열기",
-    "discordCommunity": "World of ClaudeCraft Discord 커뮤니티 참여",
-    "donateProject": "World of ClaudeCraft 후원하기"
+    "githubProject": "Open Cryptic Realm contributions",
+    "discordCommunity": "Cryptic Realm Discord 커뮤니티 참여",
+    "donateProject": "Cryptic Realm 후원하기"
   },
   "loading": {
     "world": "세계 불러오는 중...",
@@ -2751,17 +2751,17 @@ export const ko_KR: EnTranslations = {
     "iosStandaloneDetail": "홈 화면 전체 화면 모드입니다. 기기를 가로로 유지하세요.",
     "iosInstallDetail": "iPhone 또는 iPad에서 진짜 전체 화면을 사용하려면 먼저 이 페이지를 홈 화면에 추가하세요.",
     "iosShareStep": "Safari에서 공유를 누른 뒤 홈 화면에 추가를 선택하세요.",
-    "iosOpenStep": "새 홈 화면 아이콘에서 World of ClaudeCraft를 여세요.",
+    "iosOpenStep": "새 홈 화면 아이콘에서 Cryptic Realm를 여세요.",
     "androidStandaloneDetail": "전체 화면 앱 모드입니다. 기기를 가로로 유지하세요.",
     "androidInstallDetail": "Android에서 전체 화면을 사용하려면 이 페이지를 설치하거나 홈 화면에 추가하세요.",
     "androidInstallStep": "Chrome에서 메뉴를 누른 뒤 앱 설치 또는 홈 화면에 추가를 선택하세요.",
-    "androidOpenStep": "새 아이콘에서 World of ClaudeCraft를 여세요.",
+    "androidOpenStep": "새 아이콘에서 Cryptic Realm를 여세요.",
     "otherStandaloneDetail": "기기를 가로 전체 화면으로 유지하세요.",
     "otherInstallDetail": "최상의 모바일 전체 화면 경험을 위해 이 페이지를 설치하거나 홈 화면에 추가하세요."
   },
   "serverUnavailable": {
-    "title": "World of ClaudeCraft - 렐름 이용 불가",
-    "logoAlt": "World of ClaudeCraft",
+    "title": "Cryptic Realm - 렐름 이용 불가",
+    "logoAlt": "Cryptic Realm",
     "eyebrow": "렐름 점검",
     "heading": "렐름을 일시적으로 이용할 수 없습니다.",
     "body": "게임 서비스를 재시작하고 있으며 Claudemoon은 곧 돌아올 예정입니다. 이 페이지는 자동으로 계속 확인합니다.",

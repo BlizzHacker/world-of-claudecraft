@@ -535,7 +535,7 @@ export const en_CA: EnTranslations = {
       "loggedOutPrompt": "Log in to manage your account.",
       "memberSince": "Member since {date}",
       "sectionSettings": "Account Settings",
-      "sectionWallet": "$WOC Wallet",
+      "sectionWallet": "$CR Wallet",
       "sectionCharacters": "Characters",
       "sectionDanger": "Danger Zone",
       "changePassword": "Change Password",
@@ -743,7 +743,7 @@ export const en_CA: EnTranslations = {
     },
     "discord": {
       "title": "Discord",
-      "panelTitle": "World of ClaudeCraft",
+      "panelTitle": "Cryptic Realm",
       "open": "Discord",
       "close": "Close",
       "keybind": "Discord Panel",
@@ -886,8 +886,8 @@ export const en_CA: EnTranslations = {
     }
   },
   "guide": {
-    "brand": "World of ClaudeCraft",
-    "brandShort": "ClaudeCraft",
+    "brand": "Cryptic Realm",
+    "brandShort": "Cryptic",
     "tagline": "A classic-style MMO you play free in your browser.",
     "skipToContent": "Skip to main content",
     "loading": "Loading...",
@@ -942,12 +942,12 @@ export const en_CA: EnTranslations = {
       "heading": "On this page"
     },
     "footer": {
-      "blurb": "An open-source, classic-style micro-MMO. Quest, group up, and explore a hand-built world, right in your browser.",
+      "blurb": "A classic-style micro-MMO. Quest, group up, and explore a hand-built world, right in your browser.",
       "playNow": "Play Now",
-      "github": "Source on GitHub",
+      "github": "Contributions",
       "discord": "Join the Discord",
       "communityWiki": "Community Wiki",
-      "rights": "World of ClaudeCraft"
+      "rights": "Cryptic Realm"
     },
     "language": {
       "label": "Language",
@@ -967,7 +967,7 @@ export const en_CA: EnTranslations = {
     },
     "home": {
       "eyebrow": "Classic-style browser MMO",
-      "title": "World of ClaudeCraft",
+      "title": "Cryptic Realm",
       "subtitle": "Quest, group up, and explore a hand-built world, free in your browser.",
       "ctaPlay": "Play Now",
       "ctaLearn": "How to Play",
@@ -977,8 +977,8 @@ export const en_CA: EnTranslations = {
         "pillarPlayBody": "No download, no launcher. Make a character and you are in the world in seconds, on desktop or phone.",
         "pillarClassesTitle": "Nine classes, three roles",
         "pillarClassesBody": "Tank, heal, or deal the damage. Every class plays the way its archetype should, with talents to make it yours.",
-        "pillarOpenTitle": "Free and open source",
-        "pillarOpenBody": "Free to play to the level cap, with the whole game open source. No pay to win, ever."
+        "pillarOpenTitle": "Free to play",
+        "pillarOpenBody": "Free to play to the level cap. No pay to win, ever."
       },
       "classes": {
         "heading": "Choose your class",
@@ -1011,7 +1011,7 @@ export const en_CA: EnTranslations = {
       "faq": {
         "heading": "Good to know",
         "q1": "Is it free to play?",
-        "a1": "Yes. The whole game is free to the level cap, and it is open source on GitHub.",
+        "a1": "Yes. The whole game is free to the level cap.",
         "q2": "Do I need a crypto wallet?",
         "a2": "No. The game is fully playable without one. The optional community token only unlocks cosmetic flair and never affects power.",
         "q3": "Can I play offline?",
@@ -1024,7 +1024,7 @@ export const en_CA: EnTranslations = {
         "body": "Jump in now, or come say hello. The world is better with company.",
         "play": "Play Now",
         "discord": "Join the Discord",
-        "github": "Star on GitHub"
+        "github": "Contributions"
       }
     },
     "howToPlay": {
@@ -1140,7 +1140,7 @@ export const en_CA: EnTranslations = {
     "faqPage": {
       "intro": "The questions new players ask most often.",
       "q1": "Is it really free?",
-      "a1": "Yes. The whole game is free to play to the level cap, and the source code is open on GitHub.",
+      "a1": "Yes. The whole game is free to play to the level cap.",
       "q2": "Do I need a crypto wallet or any tokens?",
       "a2": "No. The game is fully playable without one. The optional community token only unlocks cosmetic flair and never affects power or progression.",
       "q3": "Can I play on my phone?",
@@ -1154,7 +1154,7 @@ export const en_CA: EnTranslations = {
       "q7": "Will my character be saved?",
       "a7": "Online characters are saved on the server automatically. Offline characters live in your browser for quick sessions and testing.",
       "q8": "Can I host my own copy?",
-      "a8": "Yes. The project is open source, so you can run your own server. See the GitHub repository.",
+      "a8": "Private realms are operated through verified Cryptic Realm channels.",
       "q9": "Is there PvP?",
       "a9": "Yes. Duel anyone for fun, or step into the Ashen Coliseum to fight other players. PvP is opt in, so you are never forced into it.",
       "q10": "What is there to do at max level?",
@@ -1348,7 +1348,7 @@ export const en_CA: EnTranslations = {
     },
     "worldPage": {
       "heading": "The world",
-      "intro": "World of ClaudeCraft is one continuous land you cross on foot, three zones laid south to north. There is no fast travel, so the journey is part of the adventure.",
+      "intro": "Cryptic Realm is one continuous land you cross on foot, three zones laid south to north. There is no fast travel, so the journey is part of the adventure.",
       "hub": "Home base",
       "mapHeading": "The road north",
       "mapSub": "Three zones, south to north, each a step higher in level. Follow the quest trail and the land carries you from the valley to the peaks.",
@@ -1766,9 +1766,9 @@ export const en_CA: EnTranslations = {
     "realmName": "Realm Name"
   },
   "footer": {
-    "copyright": "2026 World of ClaudeCraft",
-    "githubLink": "https://github.com/levy-street/world-of-claudecraft",
-    "githubLabel": "Open Source Project",
+    "copyright": "2026 Cryptic Realm",
+    "githubLink": "/contributions.html",
+    "githubLabel": "Contributions",
     "whitepaper": "Whitepaper",
     "terms": "Terms of Service",
     "privacy": "Privacy Policy",
@@ -1791,11 +1791,11 @@ export const en_CA: EnTranslations = {
   "news": {
     "title": "News & Updates",
     "desc": "Read Cryptic Realm work logs, realm rollout notes, upstream kindness PRs, and release updates.",
-    "loading": "Loading the latest updates…",
+    "loading": "Loading the latest updates...",
     "error": "Couldn't load updates. Please try again later.",
-    "empty": "No updates yet — check back soon.",
+    "empty": "No updates yet. Check back soon.",
     "prerelease": "Pre-release",
-    "viewOnGithub": "View on GitHub",
+    "viewOnGithub": "Read release notes",
     "openLink": "Open",
     "officialLog": "Official Work Log",
     "alphaBetaTitle": "Alpha, Beta, And Public Realm Cadence",
@@ -1911,7 +1911,7 @@ export const en_CA: EnTranslations = {
     "twoFactorHint": "Enter the code from your authenticator app, or one of your recovery codes."
   },
   "wallet": {
-    "label": "$WOC Wallet",
+    "label": "$CR Wallet",
     "connect": "Verify Wallet",
     "connectTitle": "Verify your Solana wallet",
     "connectAria": "Verify your Solana wallet",
@@ -1944,11 +1944,11 @@ export const en_CA: EnTranslations = {
     "linkedDisconnectedAria": "Wallet remains verified for your account. Reconnect to manage the wallet app.",
     "linkTitle": "Click to sign and link this wallet to your account.",
     "connectedTitle": "Connected. Log in to link this wallet to your account.",
-    "balanceTitle": "Verified Solana wallet $WOC balance",
+    "balanceTitle": "Verified Solana wallet $CR balance",
     "balanceAria": "Verified Solana wallet balance: {balance}",
-    "balancePreviewTitle": "Connected wallet $WOC balance preview",
+    "balancePreviewTitle": "Connected wallet $CR balance preview",
     "balancePreviewAria": "Connected wallet balance preview: {balance}. Link the wallet to verify holder flair.",
-    "balanceAmount": "{amount} $WOC",
+    "balanceAmount": "{amount} $CR",
     "connected": "Connected: {address}",
     "connectedWithBalance": "Connected: {balance} - {address}",
     "connectedLinked": "Verified: {address}",
@@ -1968,8 +1968,8 @@ export const en_CA: EnTranslations = {
     "linkFailed": "Wallet verification failed.",
     "verifyFailed": "Wallet verification failed.",
     "unlinkFailed": "Could not unlink wallet.",
-    "holder": "$WOC holder",
-    "holderTierTitle": "{tier} $WOC holder",
+    "holder": "$CR holder",
+    "holderTierTitle": "{tier} $CR holder",
     "holderTiers": {
       "ember": {
         "name": "Ember",
@@ -1993,7 +1993,7 @@ export const en_CA: EnTranslations = {
       },
       "vaultwarden": {
         "name": "Vaultwarden",
-        "flavor": "Guarding a real vault now: 0.01% of all $WOC."
+        "flavor": "Guarding a real vault now: 0.01% of all $CR."
       },
       "whale": {
         "name": "Whale",
@@ -2061,16 +2061,16 @@ export const en_CA: EnTranslations = {
     "levelClass": "Level {level} - {className}",
     "topPercent": "TOP {percent}%",
     "realmSubtitle": "{realm} Realm",
-    "defaultRealm": "World of ClaudeCraft",
-    "brandWordmark": "WORLD OF CLAUDECRAFT",
+    "defaultRealm": "Cryptic Realm",
+    "brandWordmark": "CRYPTIC REALM",
     "recruited": "{count} recruited",
     "footerHandle": "@{handle}",
     "footerHandleWithRecruits": "@{handle} - {recruited}",
     "footerCta": "Forge your legend: {siteUrl}",
     "arenaStat": "Arena",
-    "shareTierBit": ", {tier}-rank $WOC holder",
-    "shareText": "I'm forging my legend in World of ClaudeCraft: Level {level} {className}{tierBit}. Join my realm:",
-    "nativeShareTitle": "World of ClaudeCraft",
+    "shareTierBit": ", {tier}-rank $CR holder",
+    "shareText": "I'm forging my legend in Cryptic Realm: Level {level} {className}{tierBit}. Join my realm:",
+    "nativeShareTitle": "Cryptic Realm",
     "fileNameFallback": "player",
     "actionShareX": "Share to X",
     "actionCopyReferral": "Copy Referral Link",
@@ -2575,7 +2575,7 @@ export const en_CA: EnTranslations = {
     "mainNavigation": "Main navigation",
     "languageSelection": "Language selection",
     "characterActions": "Character actions",
-    "githubProject": "Open the Cryptic Realm GitHub project",
+    "githubProject": "Open Cryptic Realm contributions",
     "discordCommunity": "Join the Cryptic Realm Discord community",
     "donateProject": "Tip $CR or SOL to support Cryptic Realm"
   },
@@ -2760,8 +2760,8 @@ export const en_CA: EnTranslations = {
     "otherInstallDetail": "Install or add this page to your Home screen for the best fullscreen mobile experience."
   },
   "serverUnavailable": {
-    "title": "World of ClaudeCraft - Realm Unavailable",
-    "logoAlt": "World of ClaudeCraft",
+    "title": "Cryptic Realm - Realm Unavailable",
+    "logoAlt": "Cryptic Realm",
     "eyebrow": "Realm maintenance",
     "heading": "The realm is temporarily unavailable.",
     "body": "We are restarting the game service and expect Claudemoon to return shortly. This page will keep checking automatically.",

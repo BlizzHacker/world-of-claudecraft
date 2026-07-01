@@ -6191,4 +6191,141 @@
       display: none;
     }
   }
+
+  /* ---------- realm-list cards (CR overlay) ---------- */
+  /* The per-family realm picker. The markup (.realm-card + .rc-*) shipped without
+     styles, so it rendered cramped ("Cryptic Realm4 characters", "NormalLow"); this
+     is the missing stylesheet — dark card + gold accents, one card per realm. */
+  #realm-list .rl-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  #realm-list .realm-card {
+    background: linear-gradient(180deg, #1d1711 0%, #15110c 100%);
+    border: 1px solid var(--gold-dim);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  #realm-list .rc-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  #realm-list .rc-name {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-family: var(--title-font);
+    font-size: 17px;
+    color: var(--gold);
+  }
+  #realm-list .rn-chars {
+    font-family: var(--body-font, system-ui, sans-serif);
+    font-size: 11px;
+    font-weight: 500;
+    color: #8f7d52;
+  }
+  #realm-list .rn-rec {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: #6bd58a;
+  }
+  #realm-list .rc-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+  }
+  #realm-list .realm-type {
+    color: #c9b27a;
+  }
+  #realm-list .realm-pop {
+    padding: 1px 7px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    background: #2c2415;
+    color: #8f7d52;
+  }
+  #realm-list .realm-pop.low { color: #6bd58a; }
+  #realm-list .realm-pop.medium { color: #e8c468; }
+  #realm-list .realm-pop.high { color: #f0a050; }
+  #realm-list .realm-pop.full { color: #e05050; }
+  #realm-list .rc-sub {
+    margin: 6px 0 10px;
+    font-size: 11px;
+    color: #8f7d52;
+  }
+  /* Stage segmented control (Live / Beta / Alpha / Dev). */
+  #realm-list .rc-stages {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 12px;
+  }
+  #realm-list .rl-stage {
+    flex: 1;
+    min-height: 30px;
+    font-size: 12px;
+    color: #c9b27a;
+    background: #1a1410;
+    border: 1px solid #463a1c;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: border-color 0.12s ease, color 0.12s ease, background 0.12s ease;
+  }
+  #realm-list .rl-stage:hover {
+    color: var(--gold);
+    border-color: var(--gold-dim);
+  }
+  #realm-list .rl-stage.active {
+    color: #1a1206;
+    font-weight: 600;
+    background: linear-gradient(180deg, var(--gold), var(--gold-dim));
+    border-color: var(--gold);
+  }
+  #realm-list .rl-stage[data-restricted] { opacity: 0.85; }
+  /* Character-type toggles (Ladder / Hardcore). */
+  #realm-list .rc-pops {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+  #realm-list .rc-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #d8cba6;
+    cursor: pointer;
+  }
+  #realm-list .rc-toggle input[type='checkbox'] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--gold);
+    cursor: pointer;
+  }
+  #realm-list .rc-note {
+    margin-bottom: 12px;
+    padding: 6px 10px;
+    font-size: 11px;
+    line-height: 1.4;
+    color: #c9b27a;
+    background: #15110c;
+    border: 1px solid #2c2415;
+    border-radius: 4px;
+  }
+  #realm-list .rc-enter {
+    width: 100%;
+    min-height: 40px;
+    font-weight: 600;
+    color: #1a1206;
+    background: linear-gradient(180deg, var(--gold), var(--gold-dim));
+    border-color: var(--gold);
+  }
+  #realm-list .rc-enter:hover { filter: brightness(1.08); }
 }

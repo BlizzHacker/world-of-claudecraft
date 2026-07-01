@@ -535,7 +535,7 @@ export const sv_SE: EnTranslations = {
       "loggedOutPrompt": "Logga in för att hantera ditt konto.",
       "memberSince": "Medlem sedan {date}",
       "sectionSettings": "Kontoinställningar",
-      "sectionWallet": "$WOC-plånbok",
+      "sectionWallet": "$CR-plånbok",
       "sectionCharacters": "Rollfigurer",
       "sectionDanger": "Farozon",
       "changePassword": "Ändra lösenord",
@@ -743,7 +743,7 @@ export const sv_SE: EnTranslations = {
     },
     "discord": {
       "title": "Discord",
-      "panelTitle": "World of ClaudeCraft",
+      "panelTitle": "Cryptic Realm",
       "open": "Discord",
       "close": "Stäng",
       "keybind": "Discord-panel",
@@ -886,8 +886,8 @@ export const sv_SE: EnTranslations = {
     }
   },
   "guide": {
-    "brand": "World of ClaudeCraft",
-    "brandShort": "ClaudeCraft",
+    "brand": "Cryptic Realm",
+    "brandShort": "Cryptic",
     "tagline": "En klassisk MMO du spelar gratis i din webbläsare.",
     "skipToContent": "Hoppa till huvudinnehållet",
     "loading": "Laddar...",
@@ -942,12 +942,12 @@ export const sv_SE: EnTranslations = {
       "heading": "På den här sidan"
     },
     "footer": {
-      "blurb": "En klassiskt inspirerad mikro-MMO med öppen källkod. Lös uppdrag, gruppera dig och utforska en handbyggd värld, direkt i din webbläsare.",
+      "blurb": "A classic-style micro-MMO. Quest, group up, and explore a hand-built world, right in your browser.",
       "playNow": "Spela nu",
-      "github": "Källkod på GitHub",
+      "github": "Contributions",
       "discord": "Gå med i Discord",
       "communityWiki": "Community-wiki",
-      "rights": "World of ClaudeCraft"
+      "rights": "Cryptic Realm"
     },
     "language": {
       "label": "Språk",
@@ -967,7 +967,7 @@ export const sv_SE: EnTranslations = {
     },
     "home": {
       "eyebrow": "Klassiskt MMO i webbläsaren",
-      "title": "World of ClaudeCraft",
+      "title": "Cryptic Realm",
       "subtitle": "Lös uppdrag, slå er samman och utforska en handbyggd värld, gratis i din webbläsare.",
       "ctaPlay": "Spela nu",
       "ctaLearn": "Så spelar du",
@@ -977,8 +977,8 @@ export const sv_SE: EnTranslations = {
         "pillarPlayBody": "Ingen nedladdning, ingen launcher. Skapa en karaktär och du är i världen på några sekunder, på dator eller mobil.",
         "pillarClassesTitle": "Nio klasser, tre roller",
         "pillarClassesBody": "Tanka, läk eller dela ut skadan. Varje klass spelas så som dess arketyp bör, med talanger för att göra den till din egen.",
-        "pillarOpenTitle": "Gratis och öppen källkod",
-        "pillarOpenBody": "Gratis att spela upp till nivåtaket, med hela spelet som öppen källkod. Aldrig någonsin pay to win."
+        "pillarOpenTitle": "Free to play",
+        "pillarOpenBody": "Free to play to the level cap. No pay to win, ever."
       },
       "classes": {
         "heading": "Välj din klass",
@@ -1011,7 +1011,7 @@ export const sv_SE: EnTranslations = {
       "faq": {
         "heading": "Bra att veta",
         "q1": "Är det gratis att spela?",
-        "a1": "Ja. Hela spelet är gratis upp till nivåtaket, och det är öppen källkod på GitHub.",
+        "a1": "Yes. The whole game is free to the level cap.",
         "q2": "Behöver jag en kryptoplånbok?",
         "a2": "Nej. Spelet är fullt spelbart utan en. Den valfria community-token låser bara upp kosmetisk flärd och påverkar aldrig styrkan.",
         "q3": "Kan jag spela offline?",
@@ -1024,7 +1024,7 @@ export const sv_SE: EnTranslations = {
         "body": "Hoppa in nu, eller kom och säg hej. Världen är bättre med sällskap.",
         "play": "Spela nu",
         "discord": "Gå med i Discord",
-        "github": "Stjärnmärk på GitHub"
+        "github": "Contributions"
       }
     },
     "howToPlay": {
@@ -1140,7 +1140,7 @@ export const sv_SE: EnTranslations = {
     "faqPage": {
       "intro": "Frågorna som nya spelare ställer oftast.",
       "q1": "Är det verkligen gratis?",
-      "a1": "Ja. Hela spelet är gratis att spela ända till nivåtaket, och källkoden är öppen på GitHub.",
+      "a1": "Yes. The whole game is free to play to the level cap.",
       "q2": "Behöver jag en kryptoplånbok eller några tokens?",
       "a2": "Nej. Spelet är fullt spelbart utan en sådan. Den valfria community-token låser bara upp kosmetiska detaljer och påverkar aldrig styrka eller progression.",
       "q3": "Kan jag spela på min telefon?",
@@ -1154,7 +1154,7 @@ export const sv_SE: EnTranslations = {
       "q7": "Kommer min karaktär att sparas?",
       "a7": "Onlinekaraktärer sparas på servern automatiskt. Offlinekaraktärer lever i din webbläsare för snabba sessioner och testning.",
       "q8": "Kan jag driva min egen kopia?",
-      "a8": "Ja. Projektet är öppen källkod, så du kan köra din egen server. Se GitHub-arkivet.",
+      "a8": "Private realms are operated through verified Cryptic Realm channels.",
       "q9": "Finns det PvP?",
       "a9": "Ja. Duellera vem som helst på skoj, eller kliv in i Askkolosseum för att slåss mot andra spelare. PvP är frivilligt, så du tvingas aldrig in i det.",
       "q10": "Vad finns det att göra på maxnivå?",
@@ -1348,7 +1348,7 @@ export const sv_SE: EnTranslations = {
     },
     "worldPage": {
       "heading": "Världen",
-      "intro": "World of ClaudeCraft är ett enda sammanhängande land som du korsar till fots, tre zoner lagda från söder till norr. Det finns ingen snabbresa, så resan är en del av äventyret.",
+      "intro": "Cryptic Realm är ett enda sammanhängande land som du korsar till fots, tre zoner lagda från söder till norr. Det finns ingen snabbresa, så resan är en del av äventyret.",
       "hub": "Hembas",
       "mapHeading": "Vägen norrut",
       "mapSub": "Tre zoner, från söder till norr, var och en ett steg högre i nivå. Följ uppdragsspåret så bär landet dig från dalen till topparna.",
@@ -1766,9 +1766,9 @@ export const sv_SE: EnTranslations = {
     "realmName": "Rikets namn"
   },
   "footer": {
-    "copyright": "2026 World of ClaudeCraft",
-    "githubLink": "https://github.com/levy-street/world-of-claudecraft",
-    "githubLabel": "Projekt med öppen källkod",
+    "copyright": "2026 Cryptic Realm",
+    "githubLink": "/contributions.html",
+    "githubLabel": "Contributions",
     "whitepaper": "Whitepaper",
     "terms": "Användarvillkor",
     "privacy": "Integritetspolicy",
@@ -1795,7 +1795,7 @@ export const sv_SE: EnTranslations = {
     "error": "Kunde inte ladda uppdateringar. Försök igen senare.",
     "empty": "Inga uppdateringar ännu, kom tillbaka snart.",
     "prerelease": "Förhandsutgåva",
-    "viewOnGithub": "Visa på GitHub",
+    "viewOnGithub": "Read release notes",
     "openLink": "Open",
     "officialLog": "Official Work Log",
     "alphaBetaTitle": "Alpha, Beta, And Public Realm Cadence",
@@ -1860,13 +1860,13 @@ export const sv_SE: EnTranslations = {
     "serverOnline": "Online",
     "serverOffline": "Offline",
     "play": "Spela",
-    "playAria": "Spela World of ClaudeCraft",
+    "playAria": "Spela Cryptic Realm",
     "serverLabel": "Välj ditt rike",
     "serverAria": "Välj rike: Online eller Offline",
     "serverOfflineSub": "Direkt lokal värld",
-    "caLabel": "$WOC Kontraktsadress",
+    "caLabel": "$CR Kontraktsadress",
     "caCopyAria": "Kopiera kontraktsadress",
-    "caNote": "WOC är vår community-token. Den behövs inte för att spela. Gå med i Discord för att diskutera WOC:s nytta och svänghjul."
+    "caNote": "CR är vår community-token. Den behövs inte för att spela. Gå med i Discord för att diskutera CR:s nytta och svänghjul."
   },
   "auth": {
     "enterRealm": "Träd in i riket",
@@ -1911,7 +1911,7 @@ export const sv_SE: EnTranslations = {
     "twoFactorHint": "Ange koden från din autentiseringsapp, eller en av dina återställningskoder."
   },
   "wallet": {
-    "label": "$WOC-plånbok",
+    "label": "$CR-plånbok",
     "connect": "Verifiera plånbok",
     "connectTitle": "Verifiera din Solana-plånbok",
     "connectAria": "Verifiera din Solana-plånbok",
@@ -1944,11 +1944,11 @@ export const sv_SE: EnTranslations = {
     "linkedDisconnectedAria": "Plånboken är fortfarande verifierad för ditt konto. Återanslut för att hantera plånboksappen.",
     "linkTitle": "Klicka för att signera och länka den här plånboken till ditt konto.",
     "connectedTitle": "Ansluten. Logga in för att länka plånboken till ditt konto.",
-    "balanceTitle": "Verifierat $WOC-saldo i Solana-plånbok",
+    "balanceTitle": "Verifierat $CR-saldo i Solana-plånbok",
     "balanceAria": "Verifierat Solana-plånbokssaldo: {balance}",
-    "balancePreviewTitle": "Förhandsvisning av ansluten plånboks $WOC-saldo",
+    "balancePreviewTitle": "Förhandsvisning av ansluten plånboks $CR-saldo",
     "balancePreviewAria": "Förhandsvisning av ansluten plånboks saldo: {balance}. Länka plånboken för att verifiera innehavarmärket.",
-    "balanceAmount": "{amount} $WOC",
+    "balanceAmount": "{amount} $CR",
     "connected": "Ansluten: {address}",
     "connectedWithBalance": "Ansluten: {balance} - {address}",
     "connectedLinked": "Verifierad: {address}",
@@ -1968,8 +1968,8 @@ export const sv_SE: EnTranslations = {
     "linkFailed": "Plånboksverifieringen misslyckades.",
     "verifyFailed": "Plånboksverifieringen misslyckades.",
     "unlinkFailed": "Det gick inte att avlänka plånboken.",
-    "holder": "$WOC-innehavare",
-    "holderTierTitle": "{tier} $WOC-innehavare",
+    "holder": "$CR-innehavare",
+    "holderTierTitle": "{tier} $CR-innehavare",
     "holderTiers": {
       "ember": {
         "name": "Glöd",
@@ -1993,7 +1993,7 @@ export const sv_SE: EnTranslations = {
       },
       "vaultwarden": {
         "name": "Valvväktare",
-        "flavor": "Vaktar nu ett verkligt valv: 0,01 % av allt $WOC."
+        "flavor": "Vaktar nu ett verkligt valv: 0,01 % av allt $CR."
       },
       "whale": {
         "name": "Val",
@@ -2061,16 +2061,16 @@ export const sv_SE: EnTranslations = {
     "levelClass": "Nivå {level} - {className}",
     "topPercent": "TOPP {percent}%",
     "realmSubtitle": "Världen {realm}",
-    "defaultRealm": "World of ClaudeCraft",
-    "brandWordmark": "WORLD OF CLAUDECRAFT",
+    "defaultRealm": "Cryptic Realm",
+    "brandWordmark": "CRYPTIC REALM",
     "recruited": "{count} värvade",
     "footerHandle": "@{handle}",
     "footerHandleWithRecruits": "@{handle} - {recruited}",
     "footerCta": "Skapa din legend: {siteUrl}",
     "arenaStat": "Arena",
-    "shareTierBit": ", {tier}-rankad $WOC-innehavare",
-    "shareText": "Jag skapar min legend i World of ClaudeCraft: Nivå {level} {className}{tierBit}. Gå med i min värld:",
-    "nativeShareTitle": "World of ClaudeCraft",
+    "shareTierBit": ", {tier}-rankad $CR-innehavare",
+    "shareText": "Jag skapar min legend i Cryptic Realm: Nivå {level} {className}{tierBit}. Gå med i min värld:",
+    "nativeShareTitle": "Cryptic Realm",
     "fileNameFallback": "spelare",
     "actionShareX": "Dela på X",
     "actionCopyReferral": "Kopiera värvningslänk",
@@ -2560,14 +2560,14 @@ export const sv_SE: EnTranslations = {
     }
   },
   "seo": {
-    "title": "World of ClaudeCraft: Klassiskt inspirerad webb-MMO",
-    "description": "Ge dig ut på ett episkt äventyr i World of ClaudeCraft, en klassiskt inspirerad mikro-MMO som du spelar direkt i din webbläsare. Anslut till en beständig delad värld, höj nivå på klasser och besegra fiender!",
+    "title": "Cryptic Realm: Klassiskt inspirerad webb-MMO",
+    "description": "Ge dig ut på ett episkt äventyr i Cryptic Realm, en klassiskt inspirerad mikro-MMO som du spelar direkt i din webbläsare. Anslut till en beständig delad värld, höj nivå på klasser och besegra fiender!",
     "genre": "MMORPG",
     "playMode": "Flerspelarläge",
     "applicationCategory": "Spel",
     "operatingSystem": "Webbläsare",
-    "officialLabel": "Officiell webbplats för World of ClaudeCraft",
-    "officialBody": "worldofclaudecraft.com är den officiella gratis webbläsar-MMO:n för Claudemoon-världen. Spela online med en beständig karaktär, utforska solo offline, läs wikin och följ verifierade gemenskapslänkar från den här webbplatsen."
+    "officialLabel": "Officiell webbplats för Cryptic Realm",
+    "officialBody": "crypticrealm.com är den officiella gratis webbläsar-MMO:n för Claudemoon-världen. Spela online med en beständig karaktär, utforska solo offline, läs wikin och följ verifierade gemenskapslänkar från den här webbplatsen."
   },
   "a11y": {
     "goHome": "Gå till startsidan",
@@ -2575,9 +2575,9 @@ export const sv_SE: EnTranslations = {
     "mainNavigation": "Huvudnavigering",
     "languageSelection": "Språkval",
     "characterActions": "Karaktärshandlingar",
-    "githubProject": "Öppna GitHub-projektet World of ClaudeCraft",
-    "discordCommunity": "Gå med i World of ClaudeCraft-gemenskapen på Discord",
-    "donateProject": "Donera för att stödja World of ClaudeCraft"
+    "githubProject": "Open Cryptic Realm contributions",
+    "discordCommunity": "Gå med i Cryptic Realm-gemenskapen på Discord",
+    "donateProject": "Donera för att stödja Cryptic Realm"
   },
   "loading": {
     "world": "Läser in världen...",
@@ -2751,17 +2751,17 @@ export const sv_SE: EnTranslations = {
     "iosStandaloneDetail": "Du är i helskärmsläge från hemskärmen. Håll enheten i liggande läge.",
     "iosInstallDetail": "För äkta helskärm på iPhone eller iPad, installera först den här sidan på din Hemskärm.",
     "iosShareStep": "I Safari, tryck på Dela och sedan Lägg till på Hemskärmen.",
-    "iosOpenStep": "Öppna World of ClaudeCraft från den nya Hemskärmsikonen.",
+    "iosOpenStep": "Öppna Cryptic Realm från den nya Hemskärmsikonen.",
     "androidStandaloneDetail": "Du är i helskärmsläge för appen. Håll enheten i liggande läge.",
     "androidInstallDetail": "För helskärm på Android, installera den här sidan eller lägg först till den på din Hemskärm.",
     "androidInstallStep": "I Chrome, tryck på menyn och sedan Installera app eller Lägg till på Hemskärmen.",
-    "androidOpenStep": "Öppna World of ClaudeCraft från den nya ikonen.",
+    "androidOpenStep": "Öppna Cryptic Realm från den nya ikonen.",
     "otherStandaloneDetail": "Håll din enhet i liggande helskärm.",
     "otherInstallDetail": "Installera eller lägg till den här sidan på din Hemskärm för bästa mobila helskärmsupplevelse."
   },
   "serverUnavailable": {
-    "title": "World of ClaudeCraft - Riket otillgängligt",
-    "logoAlt": "World of ClaudeCraft",
+    "title": "Cryptic Realm - Riket otillgängligt",
+    "logoAlt": "Cryptic Realm",
     "eyebrow": "Rikesunderhåll",
     "heading": "Riket är tillfälligt otillgängligt.",
     "body": "Vi startar om speltjänsten och förväntar oss att Claudemoon är tillbaka inom kort. Den här sidan fortsätter att kontrollera automatiskt.",

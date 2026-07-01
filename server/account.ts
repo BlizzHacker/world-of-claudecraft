@@ -52,7 +52,7 @@ import {
 } from './totp';
 
 // Issuer label shown in the user's authenticator app next to the 6-digit code.
-const TOTP_ISSUER = 'World of ClaudeCraft';
+const TOTP_ISSUER = 'Cryptic Realm';
 
 const EMAIL_MAX_LENGTH = 254;
 const EMAIL_SHAPE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

@@ -30,7 +30,7 @@ if [ "${has_tables}" != "yes" ]; then
     --server "${MEDIAWIKI_SERVER}" \
     --scriptpath /wiki \
     --pass "${MEDIAWIKI_ADMIN_PASS}" \
-    "World of Claudecraft Wiki" \
+    "Cryptic Realm Wiki" \
     "${MEDIAWIKI_ADMIN_USER}"
 fi
 
@@ -45,8 +45,8 @@ if [ -f "${seed_marker}" ]; then
 fi
 
 if [ "${seed_hash}" != "${current_hash}" ]; then
-  echo "Importing World of Claudecraft wiki seed pages..."
-  printf '%s\n' 'Main Page' | php maintenance/deleteBatch.php --u "${MEDIAWIKI_ADMIN_USER}" --r 'Replace stock install page with World of Claudecraft seed' || true
+  echo "Importing Cryptic Realm wiki seed pages..."
+  printf '%s\n' 'Main Page' | php maintenance/deleteBatch.php --u "${MEDIAWIKI_ADMIN_USER}" --r 'Replace stock install page with Cryptic Realm seed' || true
   php maintenance/importDump.php --no-updates < /opt/woc/seed/pages.xml
   php maintenance/rebuildrecentchanges.php
   php maintenance/runJobs.php

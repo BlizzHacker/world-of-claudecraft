@@ -535,7 +535,7 @@ export const tr_TR: EnTranslations = {
       "loggedOutPrompt": "Hesabınızı yönetmek için giriş yapın.",
       "memberSince": "Üyelik tarihi: {date}",
       "sectionSettings": "Hesap Ayarları",
-      "sectionWallet": "$WOC Cüzdanı",
+      "sectionWallet": "$CR Cüzdanı",
       "sectionCharacters": "Karakterler",
       "sectionDanger": "Tehlikeli Bölge",
       "changePassword": "Parolayı Değiştir",
@@ -743,7 +743,7 @@ export const tr_TR: EnTranslations = {
     },
     "discord": {
       "title": "Discord",
-      "panelTitle": "World of ClaudeCraft",
+      "panelTitle": "Cryptic Realm",
       "open": "Discord",
       "close": "Kapat",
       "keybind": "Discord Paneli",
@@ -886,8 +886,8 @@ export const tr_TR: EnTranslations = {
     }
   },
   "guide": {
-    "brand": "World of ClaudeCraft",
-    "brandShort": "ClaudeCraft",
+    "brand": "Cryptic Realm",
+    "brandShort": "Cryptic",
     "tagline": "Tarayıcınızda ücretsiz oynayabileceğiniz klasik tarzda bir MMO.",
     "skipToContent": "Ana içeriğe geç",
     "loading": "Yükleniyor...",
@@ -942,12 +942,12 @@ export const tr_TR: EnTranslations = {
       "heading": "Bu sayfada"
     },
     "footer": {
-      "blurb": "Açık kaynaklı, klasik tarzda bir mikro MMO. Görev yapın, gruplaşın ve elle yapılmış bir dünyayı, tam da tarayıcınızda keşfedin.",
+      "blurb": "A classic-style micro-MMO. Quest, group up, and explore a hand-built world, right in your browser.",
       "playNow": "Şimdi Oyna",
-      "github": "GitHub'daki Kaynak",
+      "github": "Contributions",
       "discord": "Discord'a Katıl",
       "communityWiki": "Topluluk Wiki'si",
-      "rights": "World of ClaudeCraft"
+      "rights": "Cryptic Realm"
     },
     "language": {
       "label": "Dil",
@@ -967,7 +967,7 @@ export const tr_TR: EnTranslations = {
     },
     "home": {
       "eyebrow": "Klasik tarz tarayıcı MMO'su",
-      "title": "World of ClaudeCraft",
+      "title": "Cryptic Realm",
       "subtitle": "Görev yap, grup kur ve elle kurulmuş bir dünyayı keşfet; tarayıcında ücretsiz.",
       "ctaPlay": "Şimdi Oyna",
       "ctaLearn": "Nasıl Oynanır",
@@ -977,8 +977,8 @@ export const tr_TR: EnTranslations = {
         "pillarPlayBody": "İndirme yok, başlatıcı yok. Bir karakter yarat ve masaüstünde ya da telefonunda saniyeler içinde dünyaya gir.",
         "pillarClassesTitle": "Dokuz sınıf, üç rol",
         "pillarClassesBody": "Tankla, iyileştir ya da hasarı sen ver. Her sınıf, arketipine yakışan biçimde oynanır ve onu kendine özgü kılacak yetenekler sunar.",
-        "pillarOpenTitle": "Ücretsiz ve açık kaynak",
-        "pillarOpenBody": "Seviye sınırına kadar ücretsiz oynanır, oyunun tamamı açık kaynaktır. Asla paraya dayalı üstünlük yok."
+        "pillarOpenTitle": "Free to play",
+        "pillarOpenBody": "Free to play to the level cap. No pay to win, ever."
       },
       "classes": {
         "heading": "Sınıfını seç",
@@ -1011,7 +1011,7 @@ export const tr_TR: EnTranslations = {
       "faq": {
         "heading": "Bilmekte fayda var",
         "q1": "Ücretsiz mi oynanıyor?",
-        "a1": "Evet. Oyunun tamamı seviye sınırına kadar ücretsiz ve GitHub'da açık kaynak.",
+        "a1": "Yes. The whole game is free to the level cap.",
         "q2": "Kripto cüzdanına ihtiyacım var mı?",
         "a2": "Hayır. Oyun, cüzdan olmadan da tümüyle oynanabilir. İsteğe bağlı topluluk jetonu yalnızca görsel süsler açar ve gücü asla etkilemez.",
         "q3": "Çevrim dışı oynayabilir miyim?",
@@ -1024,7 +1024,7 @@ export const tr_TR: EnTranslations = {
         "body": "Hemen katıl ya da bir merhaba demeye gel. Dünya, arkadaşlarla daha güzel.",
         "play": "Şimdi Oyna",
         "discord": "Discord'a katıl",
-        "github": "GitHub'da yıldız ver"
+        "github": "Contributions"
       }
     },
     "howToPlay": {
@@ -1140,7 +1140,7 @@ export const tr_TR: EnTranslations = {
     "faqPage": {
       "intro": "Yeni oyuncuların en sık sorduğu sorular.",
       "q1": "Gerçekten ücretsiz mi?",
-      "a1": "Evet. Oyunun tamamı seviye sınırına kadar ücretsiz oynanabilir ve kaynak kodu GitHub'da açıktır.",
+      "a1": "Yes. The whole game is free to play to the level cap.",
       "q2": "Kripto cüzdanına ya da herhangi bir jetona ihtiyacım var mı?",
       "a2": "Hayır. Oyun böyle bir şey olmadan tamamen oynanabilir. İsteğe bağlı topluluk jetonu yalnızca kozmetik gösterişin kilidini açar ve gücü ya da ilerlemeyi asla etkilemez.",
       "q3": "Telefonumda oynayabilir miyim?",
@@ -1154,7 +1154,7 @@ export const tr_TR: EnTranslations = {
       "q7": "Karakterim kaydedilecek mi?",
       "a7": "Çevrimiçi karakterler sunucuda otomatik olarak kaydedilir. Çevrimdışı karakterler hızlı oturumlar ve testler için tarayıcınızda yaşar.",
       "q8": "Kendi kopyamı barındırabilir miyim?",
-      "a8": "Evet. Proje açık kaynaklıdır, böylece kendi sunucunuzu çalıştırabilirsiniz. GitHub deposuna bakın.",
+      "a8": "Private realms are operated through verified Cryptic Realm channels.",
       "q9": "PvP var mı?",
       "a9": "Evet. Eğlence için herkese düello açın ya da diğer oyuncularla savaşmak için Küllü Kolezyum'a adım atın. PvP isteğe bağlıdır, dolayısıyla asla zorlanmazsınız.",
       "q10": "Azami seviyede yapılacak ne var?",
@@ -1348,7 +1348,7 @@ export const tr_TR: EnTranslations = {
     },
     "worldPage": {
       "heading": "Dünya",
-      "intro": "World of ClaudeCraft, yürüyerek aştığınız tek ve kesintisiz bir diyardır; güneyden kuzeye dizilmiş üç bölge. Hızlı seyahat yoktur, bu yüzden yolculuğun kendisi maceranın bir parçasıdır.",
+      "intro": "Cryptic Realm, yürüyerek aştığınız tek ve kesintisiz bir diyardır; güneyden kuzeye dizilmiş üç bölge. Hızlı seyahat yoktur, bu yüzden yolculuğun kendisi maceranın bir parçasıdır.",
       "hub": "Ana üs",
       "mapHeading": "Kuzeye giden yol",
       "mapSub": "Güneyden kuzeye üç bölge, her biri seviye olarak bir basamak daha yüksek. Görev izini takip edin, diyar sizi vadiden zirvelere taşır.",
@@ -1766,9 +1766,9 @@ export const tr_TR: EnTranslations = {
     "realmName": "Diyar Adı"
   },
   "footer": {
-    "copyright": "2026 World of ClaudeCraft",
-    "githubLink": "https://github.com/levy-street/world-of-claudecraft",
-    "githubLabel": "Açık Kaynak Proje",
+    "copyright": "2026 Cryptic Realm",
+    "githubLink": "/contributions.html",
+    "githubLabel": "Contributions",
     "whitepaper": "Teknik Doküman",
     "terms": "Hizmet Koşulları",
     "privacy": "Gizlilik Politikası",
@@ -1795,7 +1795,7 @@ export const tr_TR: EnTranslations = {
     "error": "Güncellemeler yüklenemedi. Lütfen daha sonra tekrar dene.",
     "empty": "Henüz güncelleme yok — yakında tekrar bak.",
     "prerelease": "Ön sürüm",
-    "viewOnGithub": "GitHub'da Görüntüle",
+    "viewOnGithub": "Read release notes",
     "openLink": "Open",
     "officialLog": "Official Work Log",
     "alphaBetaTitle": "Alpha, Beta, And Public Realm Cadence",
@@ -1860,13 +1860,13 @@ export const tr_TR: EnTranslations = {
     "serverOnline": "Çevrimiçi",
     "serverOffline": "Çevrimdışı",
     "play": "Oyna",
-    "playAria": "World of ClaudeCraft oyna",
+    "playAria": "Cryptic Realm oyna",
     "serverLabel": "Diyarını seç",
     "serverAria": "Diyar seç: Çevrimiçi veya Çevrimdışı",
     "serverOfflineSub": "Anında yerel dünya",
-    "caLabel": "$WOC Sözleşme Adresi",
+    "caLabel": "$CR Sözleşme Adresi",
     "caCopyAria": "Sözleşme adresini kopyala",
-    "caNote": "WOC topluluk jetonumuzdur. Oynamak için gerekli değildir. WOC'un faydasını ve döngüsünü tartışmak için Discord'a katılın."
+    "caNote": "CR topluluk jetonumuzdur. Oynamak için gerekli değildir. CR'un faydasını ve döngüsünü tartışmak için Discord'a katılın."
   },
   "auth": {
     "enterRealm": "Diyara Gir",
@@ -1911,7 +1911,7 @@ export const tr_TR: EnTranslations = {
     "twoFactorHint": "Kimlik doğrulama uygulamandaki kodu ya da kurtarma kodlarından birini gir."
   },
   "wallet": {
-    "label": "$WOC Cüzdanı",
+    "label": "$CR Cüzdanı",
     "connect": "Cüzdanı Doğrula",
     "connectTitle": "Solana cüzdanınızı doğrulayın",
     "connectAria": "Solana cüzdanınızı doğrulayın",
@@ -1944,11 +1944,11 @@ export const tr_TR: EnTranslations = {
     "linkedDisconnectedAria": "Cüzdan hesabınız için doğrulanmış kalır. Cüzdan uygulamasını yönetmek için yeniden bağlanın.",
     "linkTitle": "Bu cüzdanı imzalayıp hesabınıza bağlamak için tıklayın.",
     "connectedTitle": "Bağlandı. Bu cüzdanı hesabınıza bağlamak için giriş yapın.",
-    "balanceTitle": "Doğrulanmış Solana cüzdanı $WOC bakiyesi",
+    "balanceTitle": "Doğrulanmış Solana cüzdanı $CR bakiyesi",
     "balanceAria": "Doğrulanmış Solana cüzdanı bakiyesi: {balance}",
-    "balancePreviewTitle": "Bağlı cüzdan $WOC bakiyesi önizlemesi",
+    "balancePreviewTitle": "Bağlı cüzdan $CR bakiyesi önizlemesi",
     "balancePreviewAria": "Bağlı cüzdan bakiyesi önizlemesi: {balance}. Sahip rozetini doğrulamak için cüzdanı bağlayın.",
-    "balanceAmount": "{amount} $WOC",
+    "balanceAmount": "{amount} $CR",
     "connected": "Bağlandı: {address}",
     "connectedWithBalance": "Bağlandı: {balance} - {address}",
     "connectedLinked": "Doğrulandı: {address}",
@@ -1968,8 +1968,8 @@ export const tr_TR: EnTranslations = {
     "linkFailed": "Cüzdan doğrulaması başarısız oldu.",
     "verifyFailed": "Cüzdan doğrulaması başarısız oldu.",
     "unlinkFailed": "Cüzdan bağlantısı kaldırılamadı.",
-    "holder": "$WOC sahibi",
-    "holderTierTitle": "{tier} $WOC sahibi",
+    "holder": "$CR sahibi",
+    "holderTierTitle": "{tier} $CR sahibi",
     "holderTiers": {
       "ember": {
         "name": "Köz",
@@ -1993,7 +1993,7 @@ export const tr_TR: EnTranslations = {
       },
       "vaultwarden": {
         "name": "Kasa Muhafızı",
-        "flavor": "Artık gerçek bir kasayı koruyorsun: tüm $WOC'nin %0,01'i."
+        "flavor": "Artık gerçek bir kasayı koruyorsun: tüm $CR'nin %0,01'i."
       },
       "whale": {
         "name": "Balina",
@@ -2061,16 +2061,16 @@ export const tr_TR: EnTranslations = {
     "levelClass": "Seviye {level} - {className}",
     "topPercent": "İLK %{percent}",
     "realmSubtitle": "{realm} Diyarı",
-    "defaultRealm": "World of ClaudeCraft",
-    "brandWordmark": "WORLD OF CLAUDECRAFT",
+    "defaultRealm": "Cryptic Realm",
+    "brandWordmark": "CRYPTIC REALM",
     "recruited": "{count} davet edildi",
     "footerHandle": "@{handle}",
     "footerHandleWithRecruits": "@{handle} - {recruited}",
     "footerCta": "Efsaneni yarat: {siteUrl}",
     "arenaStat": "Arena",
-    "shareTierBit": ", {tier}-derece $WOC sahibi",
-    "shareText": "World of ClaudeCraft'ta efsanemi yaratıyorum: Seviye {level} {className}{tierBit}. Diyarıma katıl:",
-    "nativeShareTitle": "World of ClaudeCraft",
+    "shareTierBit": ", {tier}-derece $CR sahibi",
+    "shareText": "Cryptic Realm'ta efsanemi yaratıyorum: Seviye {level} {className}{tierBit}. Diyarıma katıl:",
+    "nativeShareTitle": "Cryptic Realm",
     "fileNameFallback": "oyuncu",
     "actionShareX": "X'te Paylaş",
     "actionCopyReferral": "Davet Bağlantısını Kopyala",
@@ -2560,14 +2560,14 @@ export const tr_TR: EnTranslations = {
     }
   },
   "seo": {
-    "title": "World of ClaudeCraft: Klasik Tarzı Web MMO'su",
-    "description": "Doğrudan tarayıcında oynanabilen klasik tarzı bir mikro MMO olan World of ClaudeCraft'ta destansı bir maceraya atıl. Kalıcı bir ortak diyara katıl, sınıfları geliştir ve düşmanları alt et!",
+    "title": "Cryptic Realm: Klasik Tarzı Web MMO'su",
+    "description": "Doğrudan tarayıcında oynanabilen klasik tarzı bir mikro MMO olan Cryptic Realm'ta destansı bir maceraya atıl. Kalıcı bir ortak diyara katıl, sınıfları geliştir ve düşmanları alt et!",
     "genre": "MMORPG",
     "playMode": "Çok Oyunculu",
     "applicationCategory": "Oyun",
     "operatingSystem": "Web tarayıcısı",
-    "officialLabel": "Resmi World of ClaudeCraft web sitesi",
-    "officialBody": "worldofclaudecraft.com, Claudemoon diyarının resmi ücretsiz tarayıcı MMO'sudur. Kalıcı bir karakterle çevrimiçi oyna, çevrimdışı tek başına keşfet, wiki'yi oku ve bu siteden doğrulanmış topluluk bağlantılarını takip et."
+    "officialLabel": "Resmi Cryptic Realm web sitesi",
+    "officialBody": "crypticrealm.com, Claudemoon diyarının resmi ücretsiz tarayıcı MMO'sudur. Kalıcı bir karakterle çevrimiçi oyna, çevrimdışı tek başına keşfet, wiki'yi oku ve bu siteden doğrulanmış topluluk bağlantılarını takip et."
   },
   "a11y": {
     "goHome": "Ana sayfaya git",
@@ -2575,9 +2575,9 @@ export const tr_TR: EnTranslations = {
     "mainNavigation": "Ana gezinme",
     "languageSelection": "Dil seçimi",
     "characterActions": "Karakter eylemleri",
-    "githubProject": "World of ClaudeCraft GitHub projesini aç",
-    "discordCommunity": "World of ClaudeCraft Discord topluluğuna katıl",
-    "donateProject": "World of ClaudeCraft'a destek olmak için bağış yap"
+    "githubProject": "Open Cryptic Realm contributions",
+    "discordCommunity": "Cryptic Realm Discord topluluğuna katıl",
+    "donateProject": "Cryptic Realm'a destek olmak için bağış yap"
   },
   "loading": {
     "world": "Dünya yükleniyor...",
@@ -2751,17 +2751,17 @@ export const tr_TR: EnTranslations = {
     "iosStandaloneDetail": "Ana ekran tam ekran modundasınız. Cihazı yatay konumda tutun.",
     "iosInstallDetail": "iPhone veya iPad'de gerçek tam ekran için önce bu sayfayı Ana Ekranınıza yükleyin.",
     "iosShareStep": "Safari'de Paylaş'a, ardından Ana Ekrana Ekle'ye dokunun.",
-    "iosOpenStep": "World of ClaudeCraft'ı yeni Ana Ekran simgesinden açın.",
+    "iosOpenStep": "Cryptic Realm'ı yeni Ana Ekran simgesinden açın.",
     "androidStandaloneDetail": "Tam ekran uygulama modundasınız. Cihazı yatay konumda tutun.",
     "androidInstallDetail": "Android'de tam ekran için önce bu sayfayı yükleyin veya Ana ekranınıza ekleyin.",
     "androidInstallStep": "Chrome'da menüye dokunun, ardından Uygulamayı yükle veya Ana ekrana ekle seçeneğini seçin.",
-    "androidOpenStep": "World of ClaudeCraft'ı yeni simgeden açın.",
+    "androidOpenStep": "Cryptic Realm'ı yeni simgeden açın.",
     "otherStandaloneDetail": "Cihazınızı yatay tam ekran konumunda tutun.",
     "otherInstallDetail": "En iyi tam ekran mobil deneyim için bu sayfayı yükleyin veya Ana ekranınıza ekleyin."
   },
   "serverUnavailable": {
-    "title": "World of ClaudeCraft - Diyar Kullanılamıyor",
-    "logoAlt": "World of ClaudeCraft",
+    "title": "Cryptic Realm - Diyar Kullanılamıyor",
+    "logoAlt": "Cryptic Realm",
     "eyebrow": "Diyar bakımı",
     "heading": "Diyar geçici olarak kullanılamıyor.",
     "body": "Oyun hizmetini yeniden başlatıyoruz ve Claudemoon'un kısa süre içinde geri döneceğini umuyoruz. Bu sayfa otomatik olarak denetlemeye devam edecek.",

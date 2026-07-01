@@ -67,6 +67,12 @@ function setLinkTextAll(selector: string, value: string): void {
   });
 }
 
+function setTextAll(selector: string, value: string): void {
+  document.querySelectorAll<HTMLElement>(selector).forEach((el) => {
+    el.textContent = value;
+  });
+}
+
 function setLinkA11yAll(selector: string, title: string, aria = title): void {
   document.querySelectorAll<HTMLAnchorElement>(selector).forEach((a) => {
     a.title = title;
@@ -77,6 +83,19 @@ function setLinkA11yAll(selector: string, title: string, aria = title): void {
 function setHiddenAll(selector: string, hidden: boolean): void {
   document.querySelectorAll(selector).forEach((el) => {
     (el as HTMLElement).style.display = hidden ? 'none' : '';
+  });
+}
+
+function sanitizePrivateGithubLinks(): void {
+  document.querySelectorAll<HTMLAnchorElement>('a[href*="github.com"][href*="cryptic-realm"]').forEach((a) => {
+    a.href = '/contributions.html';
+    a.removeAttribute('target');
+    a.removeAttribute('rel');
+    a.title = 'Cryptic Realm contributions';
+    a.setAttribute('aria-label', 'Open Cryptic Realm contributions');
+    const span = a.querySelector('span');
+    if (span) span.textContent = 'Contributions';
+    else if ((a.textContent ?? '').trim()) a.textContent = 'Contributions';
   });
 }
 
@@ -143,6 +162,21 @@ function applyTokenCard(realm: RealmContent): void {
   note.textContent = 'WOC is our community token. It is not needed to play. Join Discord to discuss the WOC utility and flywheel.';
 }
 
+function applyWalletSurfaces(realm: RealmContent): void {
+  const isClaudecraft = realm.id === 'claudecraft';
+  setHiddenAll('.cs-wallet, .cs-wallet-hidden-note, .account-wallet-card', !isClaudecraft);
+  setHiddenAll('#cr-wallet-panel', isClaudecraft);
+
+  if (isClaudecraft) {
+    setTextAll('.cs-wallet-label', '$WOC Wallet');
+    setTextAll('.account-wallet-card .account-card-title', '$WOC Wallet');
+    return;
+  }
+
+  setTextAll('.cs-wallet-label', '$CR Wallet');
+  setTextAll('.account-wallet-card .account-card-title', '$CR Wallet');
+}
+
 function applyTo(realm: RealmContent): void {
   const b = realm.branding ?? {};
   const socials = socialsForRealm(realm.id);
@@ -181,22 +215,30 @@ function applyTo(realm: RealmContent): void {
   );
   setLinkA11yAll(
     '.community-link.github, .social-link.github, [data-cr-social="github"]',
-    isClaudecraft ? 'Open the World of ClaudeCraft GitHub project' : 'Open the Cryptic Realm GitHub project',
+    isClaudecraft ? 'Open the World of ClaudeCraft GitHub project' : 'Open Cryptic Realm contributions',
   );
   setLinkTextAll('.footer-social-row .social-link.github, .footer-social-row [data-cr-social="github"]',
-    isClaudecraft ? 'Open Source Project' : 'Cryptic Realm Source');
+    isClaudecraft ? 'Upstream Project' : 'Contributions');
   setLinkTextAll('.footer-social-row .social-link.discord, .footer-social-row [data-cr-social="discord"]',
     isClaudecraft ? 'Join the Discord' : 'Cryptic Realm Discord');
+  if (!isClaudecraft) {
+    document.querySelectorAll<HTMLAnchorElement>('.community-link.github, .social-link.github, [data-cr-social="github"]').forEach((a) => {
+      a.href = '/contributions.html';
+      a.removeAttribute('target');
+      a.removeAttribute('rel');
+    });
+  }
 
-  const wantsCommunity = isClaudecraft && b.showDonate === true;
+  const wantsUpstreamCommunity = isClaudecraft && b.showDonate === true;
+  const wantsDiscord = Boolean(b.discordUrl || socials.discord);
   setHiddenAll('.donate-cta', !(b.showDonate === true || hasTipWallet));
-  setHiddenAll('.community-link.donate', !(wantsCommunity || hasTipWallet));
-  setHiddenAll('.community-link.github', !wantsCommunity);
-  setHiddenAll('.community-link.discord', !wantsCommunity);
-  setHiddenAll('.footer-social-row .social-link.donate', !(wantsCommunity || hasTipWallet));
-  setHiddenAll('.footer-social-row .social-link.github, .footer-social-row [data-cr-social="github"]', !wantsCommunity);
-  setHiddenAll('.footer-social-row .social-link.discord, .footer-social-row [data-cr-social="discord"]', !wantsCommunity);
-  setHiddenAll('.footer-social-row', !(wantsCommunity || hasTipWallet));
+  setHiddenAll('.community-link.donate', !(wantsUpstreamCommunity || hasTipWallet));
+  setHiddenAll('.community-link.github', !wantsUpstreamCommunity);
+  setHiddenAll('.community-link.discord', !wantsDiscord);
+  setHiddenAll('.footer-social-row .social-link.donate', !(wantsUpstreamCommunity || hasTipWallet));
+  setHiddenAll('.footer-social-row .social-link.github, .footer-social-row [data-cr-social="github"]', !wantsUpstreamCommunity);
+  setHiddenAll('.footer-social-row .social-link.discord, .footer-social-row [data-cr-social="discord"]', !wantsDiscord);
+  setHiddenAll('.footer-social-row', !(wantsUpstreamCommunity || hasTipWallet || wantsDiscord));
 
   setHiddenAll('#btn-sso-authentik', b.showAuthentikSso === false);
 
@@ -207,6 +249,8 @@ function applyTo(realm: RealmContent): void {
 
   applyDonateLinks(realm);
   applyTokenCard(realm);
+  applyWalletSurfaces(realm);
+  sanitizePrivateGithubLinks();
 
   const socialPairs: [string, string | undefined][] = [
     ['x.com/WoClaudecraft', socials.x],

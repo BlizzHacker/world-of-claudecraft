@@ -12,9 +12,9 @@ export interface SocialLinks {
   youtube: string;
   reddit: string;
   discord: string;
-  github: string;
+  github?: string;
   wiki: string;
-  /** Solana wallet address — when set, shown as a tip option instead of GitHub Sponsors. */
+  /** Solana wallet address. When set, shown as a tip option instead of GitHub Sponsors. */
   tipWalletSolana?: string;
   /** SPL token mint address for the realm's public token card. */
   tokenMintSolana?: string;
@@ -29,8 +29,7 @@ const CR_SOCIALS: SocialLinks = {
   tiktok: 'https://www.tiktok.com/@crypticmmo',
   youtube: 'https://www.youtube.com/@CrypticMMO',
   reddit: 'https://www.reddit.com/r/CrypticMMO',
-  discord: 'https://discord.gg/GjhnUsBtw',
-  github: 'https://github.com/BlizzHacker/cryptic-realm',
+  discord: 'https://discord.gg/Zdj3JGrx',
   wiki: 'https://crypticrealm.com/wiki/',
   tipWalletSolana: 'GncAXx6j38osJns395XZtf6rSA9MU3K1gwafTrHpBJpi',
   tokenMintSolana: '3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv',

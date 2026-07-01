@@ -20,10 +20,9 @@ export const FPS_REALM: RealmContent = {
   fpsOnly: true,
   branding: {
     logoSrc: '/cryptic-realm-logo-512.webp',
-    brandText: 'Cryptic Realm — FPS',
+    brandText: 'Cryptic Realm - FPS',
     loadingScreenSrc: '/cryptic-realm-loading-bg.webp',
-    discordUrl: 'https://discord.gg/GjhnUsBtw',
-    githubUrl: 'https://github.com/BlizzHacker/cryptic-realm',
+    discordUrl: 'https://discord.gg/Zdj3JGrx',
     showDonate: false,
     showAuthentikSso: true,
   },

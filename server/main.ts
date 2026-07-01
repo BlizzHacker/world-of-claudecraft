@@ -311,16 +311,12 @@ async function getGuildLeaderboard(scope: 'realm' | 'global'): Promise<GuildLead
 }
 
 // ---------------------------------------------------------------------------
-// News & Updates: GitHub Releases proxy (read-only, public).
-// The home-page "News & Updates" view pulls published releases from the public
-// GitHub repo. We proxy + cache server-side rather than letting the browser hit
-// api.github.com directly so that: (1) the unauthenticated GitHub rate limit (60
-// req/IP/hr) is shared across all players as one server IP, not burned per
-// visitor; (2) an optional GITHUB_TOKEN raises that ceiling without shipping a
-// secret to the client; (3) we return only the small, sanitised subset the UI
-// needs. Same compute-once/serve-from-memory pattern as the leaderboard cache.
+// News & Updates: optional release notes proxy (read-only, public).
+// The home-page "News & Updates" view can pull published release notes when a
+// repository is explicitly configured. The public API returns only the small,
+// sanitised subset the UI needs and never emits repository URLs.
 // ---------------------------------------------------------------------------
-const GITHUB_REPO = process.env.GITHUB_REPO ?? 'BlizzHacker/cryptic-realm';
+const GITHUB_REPO = process.env.GITHUB_REPO ?? '';
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN ?? '';
 const RELEASES_TTL_MS = 15 * 60_000; // 15 min — releases change rarely
 const RELEASES_SIZE = 20;
@@ -340,6 +336,11 @@ let releasesCache: { at: number; entries: ReleaseEntry[] } | null = null;
 setUsageCacheSize('github.releases', 0, RELEASES_SIZE);
 
 async function refreshReleases(): Promise<ReleaseEntry[]> {
+  if (!GITHUB_REPO) {
+    releasesCache = { at: Date.now(), entries: [] };
+    setUsageCacheSize('github.releases', 0, RELEASES_SIZE);
+    return [];
+  }
   recordUsageMetric('github.releases.fetch');
   try {
     const res = await fetch(
@@ -348,7 +349,7 @@ async function refreshReleases(): Promise<ReleaseEntry[]> {
         headers: {
           Accept: 'application/vnd.github+json',
           'X-GitHub-Api-Version': '2022-11-28',
-          'User-Agent': 'world-of-claudecraft-server',
+          'User-Agent': 'cryptic-realm-server',
           ...(GITHUB_TOKEN ? { Authorization: `Bearer ${GITHUB_TOKEN}` } : {}),
         },
         signal: AbortSignal.timeout(8000),
@@ -363,7 +364,7 @@ async function refreshReleases(): Promise<ReleaseEntry[]> {
         tag: String(r.tag_name ?? ''),
         name: String(r.name || r.tag_name || ''),
         body: String(r.body ?? '').slice(0, RELEASE_BODY_MAX),
-        url: String(r.html_url ?? ''),
+        url: '',
         prerelease: Boolean(r.prerelease),
         publishedAt: String(r.published_at ?? r.created_at ?? ''),
       }));
