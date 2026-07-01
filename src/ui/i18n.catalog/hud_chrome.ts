@@ -581,6 +581,15 @@ export const hudChromeStrings = {
     // Wallet
     walletSummary: 'Verify a Solana wallet to show holder flair on your player card.',
     manageWallet: 'Manage Wallet',
+    // CR overlay: connected accounts / SSO link
+    sectionConnections: 'Connected Accounts',
+    connectionsSummary: 'Link Google, Facebook, or Plex so you can sign in with them.',
+    ssoNotLinked: 'Not linked.',
+    ssoLinked: 'Linked — you can sign in with Google, Facebook, or Plex.',
+    ssoLink: 'Link Google / Facebook / Plex',
+    ssoUnlink: 'Unlink',
+    ssoLinkConflict: 'That account is already linked to a different Cryptic Realm login.',
+    ssoUnlinkNeedsPassword: 'Set a password first — SSO is currently your only way to sign in.',
     // Deactivate
     deactivate: 'Deactivate Account',
     deactivateWarning:

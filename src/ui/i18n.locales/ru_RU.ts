@@ -5021,4 +5021,13 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'nav.whitepaper': 'Whitepaper',
   'realm.enter': 'Войти в мир',
   'realm.exchangeNote': 'Exchange — единственный мир, где предметы можно переносить между мирами.',
+  'auth.ssoButton': 'Продолжить через Google, Facebook или Plex',
+  'hudChrome.account.sectionConnections': 'Связанные аккаунты',
+  'hudChrome.account.connectionsSummary': 'Свяжите Google, Facebook или Plex, чтобы входить через них.',
+  'hudChrome.account.ssoNotLinked': 'Не связано.',
+  'hudChrome.account.ssoLinked': 'Связано — вы можете входить через Google, Facebook или Plex.',
+  'hudChrome.account.ssoLink': 'Связать Google / Facebook / Plex',
+  'hudChrome.account.ssoUnlink': 'Отвязать',
+  'hudChrome.account.ssoLinkConflict': 'Этот аккаунт уже связан с другим входом в Cryptic Realm.',
+  'hudChrome.account.ssoUnlinkNeedsPassword': 'Сначала задайте пароль — сейчас SSO ваш единственный способ входа.',
 };

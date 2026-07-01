@@ -3526,6 +3526,56 @@ function setupAccountPortal(): void {
     accountGoToCharacters(false),
   );
   ($('#account-logout') as HTMLElement).addEventListener('click', logoutAccount);
+  setupSsoLinkSection();
+}
+
+// CR overlay: the Connected Accounts card — link/unlink the Authentik SSO identity
+// (Google / Facebook / Plex) to the current account.
+function setupSsoLinkSection(): void {
+  const statusEl = document.getElementById('account-sso-status');
+  const linkBtn = document.getElementById('account-sso-link');
+  const unlinkBtn = document.getElementById('account-sso-unlink');
+  const errorEl = document.getElementById('account-sso-error');
+  if (!statusEl || !linkBtn || !unlinkBtn) return;
+
+  const refresh = async () => {
+    if (errorEl) errorEl.textContent = '';
+    try {
+      const s = await api.ssoStatus();
+      statusEl.textContent = s.linked ? t('hudChrome.account.ssoLinked') : t('hudChrome.account.ssoNotLinked');
+      unlinkBtn.hidden = !s.linked;
+      linkBtn.hidden = s.linked;
+    } catch {
+      /* not logged in or offline — leave defaults */
+    }
+  };
+
+  linkBtn.addEventListener('click', () => {
+    // Full-page redirect into the auth-gated link start; the bearer token rides in
+    // via the same session the SPA already holds. The server bounces back to #account.
+    window.location.href = `${api.base}/api/oauth/authentik/link`;
+  });
+
+  unlinkBtn.addEventListener('click', async () => {
+    if (errorEl) errorEl.textContent = '';
+    try {
+      await api.unlinkSso();
+      await refresh();
+    } catch (err) {
+      if (errorEl) {
+        const msg = err instanceof Error ? err.message : '';
+        errorEl.textContent = /password/i.test(msg)
+          ? t('hudChrome.account.ssoUnlinkNeedsPassword')
+          : msg || 'Unlink failed.';
+      }
+    }
+  });
+
+  // On return from a link round-trip the server bounces to /#account&sso_link=ok|conflict.
+  if (location.hash.includes('sso_link=conflict') && errorEl) {
+    errorEl.textContent = t('hudChrome.account.ssoLinkConflict');
+  }
+  void refresh();
 }
 
 // Verified email change + two-factor enrolment + data export. Split out of
@@ -7197,6 +7247,17 @@ function wireStartScreens(): void {
   }
   wireDiscordCtaBanner();
   wireDiscordKeepModal();
+
+  // Authentik SSO login (Google / Facebook / Plex). A full-page navigation to the
+  // server's OIDC entry, which 302s to Authentik; the callback mints a session and
+  // returns to the site. Mirrors the classic SSO button that predates the Discord CTA.
+  const ssoLoginBtn = $('#btn-login-sso');
+  if (ssoLoginBtn) {
+    ssoLoginBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.location.href = `${api.base}/api/oauth/authentik`;
+    });
+  }
 
   // First-time Discord login chooser: create a new account, or link an existing one.
   let pendingDiscordChoice: DiscordLoginChoice | null = null;

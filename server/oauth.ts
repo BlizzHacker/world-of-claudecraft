@@ -20,11 +20,14 @@ import * as http from 'node:http';
 import {
   accountAndScopeForToken,
   accountForToken,
+  linkOAuthToAccount,
   moderationStatusForAccount,
+  oauthLinkStatus,
   pool,
   revokeReadToken,
   saveToken,
   touchLogin,
+  unlinkOAuthFromAccount,
   upsertOAuthAccount,
 } from './db';
 import { json, readBinaryBody } from './http_util';
@@ -62,13 +65,21 @@ const STATE_TTL_MS = STATE_COOKIE_MAX_AGE * 1000;
 interface IssuedState {
   expiresAt: number;
   nativeReturnUrl: string | null;
+  // CR overlay: when set, this OAuth round-trip LINKS the resulting Authentik
+  // identity to this existing account (from the account page) instead of the
+  // default login find-or-create.
+  linkAccountId?: number;
 }
 
 const issuedStates = new Map<string, IssuedState>(); // state -> expiry + optional app return
 
-function rememberState(state: string, nativeReturnUrl: string | null = null): void {
+function rememberState(
+  state: string,
+  nativeReturnUrl: string | null = null,
+  linkAccountId?: number,
+): void {
   const now = Date.now();
-  issuedStates.set(state, { expiresAt: now + STATE_TTL_MS, nativeReturnUrl });
+  issuedStates.set(state, { expiresAt: now + STATE_TTL_MS, nativeReturnUrl, linkAccountId });
   // opportunistic GC of expired entries so the map can't grow unbounded
   if (issuedStates.size > 256) {
     for (const [s, issued] of issuedStates) if (issued.expiresAt <= now) issuedStates.delete(s);
@@ -267,6 +278,43 @@ export async function handleAuthentikRoute(
     return json(res, 501, { error: 'Authentik SSO is not configured on this server' });
   }
 
+  // CR overlay: link status for the account page (GET, auth-gated).
+  if (path === '/api/oauth/authentik/status' && req.method === 'GET') {
+    const accountId = await fullSessionAccount(req);
+    if (accountId === null) return json(res, 401, { error: 'not authenticated' });
+    return json(res, 200, await oauthLinkStatus(accountId));
+  }
+
+  // CR overlay: start a LINK round-trip — a logged-in user connects SSO to their
+  // current account. Same authorize redirect as login, but the state remembers the
+  // account id so the callback binds the identity instead of find-or-create.
+  if (path === '/api/oauth/authentik/link' && req.method === 'GET') {
+    const accountId = await fullSessionAccount(req);
+    if (accountId === null) return json(res, 401, { error: 'not authenticated' });
+    try {
+      const endpoints = await discoverEndpoints(CONFIG);
+      const state = randomBytes(24).toString('hex');
+      setStateCookie(res, state);
+      rememberState(state, nativeReturnUrlForStart(url), accountId);
+      res.writeHead(302, { Location: buildAuthorizeUrl(endpoints.authorize, CONFIG, state) });
+      res.end();
+      return;
+    } catch (err) {
+      return json(res, 502, { error: err instanceof Error ? err.message : 'OIDC discovery failed' });
+    }
+  }
+
+  // CR overlay: unlink SSO from the current account (DELETE, auth-gated).
+  if (path === '/api/oauth/authentik/link' && req.method === 'DELETE') {
+    const accountId = await fullSessionAccount(req);
+    if (accountId === null) return json(res, 401, { error: 'not authenticated' });
+    const result = await unlinkOAuthFromAccount(accountId);
+    if (result === 'needsPassword')
+      return json(res, 409, { error: 'set a password before unlinking your only sign-in method' });
+    if (result === 'notLinked') return json(res, 404, { error: 'no SSO link on this account' });
+    return json(res, 200, { unlinked: true });
+  }
+
   if (path === '/api/oauth/authentik') {
     try {
       const endpoints = await discoverEndpoints(CONFIG);
@@ -302,6 +350,22 @@ export async function handleAuthentikRoute(
       if (!tok.access_token) throw new Error('missing access_token');
       const info = await fetchUserInfo(endpoints.userinfo, tok.access_token);
       if (!info.sub) throw new Error('userinfo missing sub claim');
+
+      // CR overlay: LINK mode — bind this identity to the account that started the
+      // link, then bounce back to the account page. One identity → one account, so
+      // a conflict (already linked elsewhere) is surfaced, not silently reassigned.
+      if (issued?.linkAccountId) {
+        const outcome = await linkOAuthToAccount(issued.linkAccountId, PROVIDER, info.sub);
+        clearStateCookie(res);
+        const linkHash = new URLSearchParams({
+          sso_link: outcome === 'conflict' ? 'conflict' : 'ok',
+        }).toString();
+        const linkHtml = oauthBridgeHtml('/#account&' + linkHash, issued.nativeReturnUrl ?? null);
+        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' });
+        res.end(linkHtml);
+        return;
+      }
+
       const account = await upsertOAuthAccount({
         provider: PROVIDER,
         sub: info.sub,

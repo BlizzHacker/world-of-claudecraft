@@ -4918,4 +4918,13 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'nav.whitepaper': '백서',
   'realm.enter': '렐름 입장',
   'realm.exchangeNote': 'Exchange는 아이템이 렐름 간에 이동할 수 있는 유일한 렐름입니다.',
+  'auth.ssoButton': 'Google, Facebook 또는 Plex로 계속하기',
+  'hudChrome.account.sectionConnections': '연결된 계정',
+  'hudChrome.account.connectionsSummary': 'Google, Facebook 또는 Plex를 연결하면 해당 계정으로 로그인할 수 있습니다.',
+  'hudChrome.account.ssoNotLinked': '연결되지 않음.',
+  'hudChrome.account.ssoLinked': '연결됨 — Google, Facebook 또는 Plex로 로그인할 수 있습니다.',
+  'hudChrome.account.ssoLink': 'Google / Facebook / Plex 연결',
+  'hudChrome.account.ssoUnlink': '연결 해제',
+  'hudChrome.account.ssoLinkConflict': '해당 계정은 이미 다른 Cryptic Realm 로그인에 연결되어 있습니다.',
+  'hudChrome.account.ssoUnlinkNeedsPassword': '먼저 비밀번호를 설정하세요 — 현재 SSO가 유일한 로그인 방법입니다.',
 };

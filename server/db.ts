@@ -2049,6 +2049,62 @@ export async function upsertOAuthAccount(input: {
   return { id: res.rows[0].id, username: res.rows[0].username, created: true };
 }
 
+// CR overlay: link an Authentik/SSO identity to an EXISTING account (from the
+// account page, for a logged-in user), rather than the login find-or-create above.
+// Returns 'ok' on success, 'conflict' if that identity is already bound to a
+// DIFFERENT account (one identity → one account), 'already' if it's already this
+// account's link. Mirrors the Discord link conflict semantics.
+export async function linkOAuthToAccount(
+  accountId: number,
+  provider: string,
+  sub: string,
+): Promise<'ok' | 'conflict' | 'already'> {
+  const existing = await pool.query(
+    'SELECT id FROM accounts WHERE oauth_provider = $1 AND oauth_sub = $2 LIMIT 1',
+    [provider, sub],
+  );
+  if (existing.rows.length) {
+    return existing.rows[0].id === accountId ? 'already' : 'conflict';
+  }
+  await pool.query(
+    'UPDATE accounts SET oauth_provider = $2, oauth_sub = $3 WHERE id = $1',
+    [accountId, provider, sub],
+  );
+  return 'ok';
+}
+
+// CR overlay: remove the SSO link from an account. Refuses if the account has no
+// password set (SSO would be its only way in — unlinking would orphan it); the
+// caller surfaces that as "set a password first", mirroring the Discord unlink guard.
+export async function unlinkOAuthFromAccount(
+  accountId: number,
+): Promise<'ok' | 'needsPassword' | 'notLinked'> {
+  const res = await pool.query(
+    'SELECT oauth_provider, password_set FROM accounts WHERE id = $1',
+    [accountId],
+  );
+  const row = res.rows[0];
+  if (!row || !row.oauth_provider) return 'notLinked';
+  if (row.password_set === false) return 'needsPassword';
+  await pool.query(
+    'UPDATE accounts SET oauth_provider = NULL, oauth_sub = NULL WHERE id = $1',
+    [accountId],
+  );
+  return 'ok';
+}
+
+// CR overlay: the SSO link status for the account page.
+export async function oauthLinkStatus(
+  accountId: number,
+): Promise<{ linked: boolean; provider: string | null }> {
+  const res = await pool.query(
+    'SELECT oauth_provider FROM accounts WHERE id = $1',
+    [accountId],
+  );
+  const provider = res.rows[0]?.oauth_provider ?? null;
+  return { linked: !!provider, provider };
+}
+
 export async function isAdminAccount(accountId: number): Promise<boolean> {
   const res = await pool.query('SELECT is_admin FROM accounts WHERE id = $1', [accountId]);
   return res.rows[0]?.is_admin === true;

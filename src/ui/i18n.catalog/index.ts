@@ -256,6 +256,7 @@ export const en = {
     appearance: "Appearance",
     ssoMoveweight: "Sign in with MoveWeight",
     ssoProviders: "Continue with Google, Facebook, Plex, or Discord",
+    ssoButton: "Continue with Google, Facebook, or Plex",
     ladderChar: "Ladder character",
     ladderHint: "Competes on the seasonal ladder. At season end it converts to a standard character (keeps all progress).",
     hardcoreChar: "Hardcore character",

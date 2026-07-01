@@ -575,6 +575,17 @@ export class Api {
     await this.delete('/api/discord', password ? { password } : {});
   }
 
+  // CR overlay: Authentik/SSO link status for the account page.
+  async ssoStatus(): Promise<{ linked: boolean; provider: string | null }> {
+    return this.get('/api/oauth/authentik/status');
+  }
+
+  // CR overlay: unlink SSO from the current account. The server 409s if SSO is the
+  // account's only sign-in method (no password set) — the UI surfaces that message.
+  async unlinkSso(): Promise<void> {
+    await this.delete('/api/oauth/authentik/link', {});
+  }
+
   // ── Shareable player card + referrals ──────────────────────────────────────
   // Publish (or replace) this character's card PNG. The server may return a
   // realm-relative public page path; main.ts normalizes it to an absolute URL

@@ -4909,4 +4909,13 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'nav.whitepaper': 'ホワイトペーパー',
   'realm.enter': 'レルムに入る',
   'realm.exchangeNote': 'Exchangeは、アイテムをレルム間で移動できる唯一のレルムです。',
+  'auth.ssoButton': 'Google、Facebook、またはPlexで続行',
+  'hudChrome.account.sectionConnections': '連携アカウント',
+  'hudChrome.account.connectionsSummary': 'Google、Facebook、Plexを連携すると、それらでサインインできます。',
+  'hudChrome.account.ssoNotLinked': '未連携。',
+  'hudChrome.account.ssoLinked': '連携済み — Google、Facebook、Plexでサインインできます。',
+  'hudChrome.account.ssoLink': 'Google / Facebook / Plexを連携',
+  'hudChrome.account.ssoUnlink': '連携解除',
+  'hudChrome.account.ssoLinkConflict': 'そのアカウントは別のCryptic Realmログインに既に連携されています。',
+  'hudChrome.account.ssoUnlinkNeedsPassword': '先にパスワードを設定してください — SSOが現在唯一のサインイン方法です。',
 };

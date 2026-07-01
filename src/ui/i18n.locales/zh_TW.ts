@@ -4672,4 +4672,13 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'nav.whitepaper': '白皮書',
   'realm.enter': '進入領域',
   'realm.exchangeNote': '交易所是唯一可以在各領域之間轉移物品的領域。',
+  'auth.ssoButton': '使用 Google、Facebook 或 Plex 繼續',
+  'hudChrome.account.sectionConnections': '關聯帳戶',
+  'hudChrome.account.connectionsSummary': '關聯 Google、Facebook 或 Plex，即可用它們登入。',
+  'hudChrome.account.ssoNotLinked': '未關聯。',
+  'hudChrome.account.ssoLinked': '已關聯 — 你可以使用 Google、Facebook 或 Plex 登入。',
+  'hudChrome.account.ssoLink': '關聯 Google / Facebook / Plex',
+  'hudChrome.account.ssoUnlink': '取消關聯',
+  'hudChrome.account.ssoLinkConflict': '該帳戶已關聯到另一個 Cryptic Realm 登入。',
+  'hudChrome.account.ssoUnlinkNeedsPassword': '請先設定密碼 — SSO 目前是你唯一的登入方式。',
 };
