@@ -83,3 +83,6 @@ public/classic/cryptic-assets/
 *.keystore
 android/keystore.properties
 android/local.properties
+
+# --- merged from upstream v0.17.0 ---
+scripts/generate_treasure_chest.mjs

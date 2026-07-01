@@ -1,0 +1,100 @@
+[
+  {
+    "id": "cryptic-home",
+    "ok": true,
+    "ms": 3853,
+    "url": "https://crypticrealm.com/?codexProof=1782496267019",
+    "errors": [],
+    "badResponses": [],
+    "donateText": "Tip $CR",
+    "donateHref": "solana:GncAXx6j38osJns395XZtf6rSA9MU3K1gwafTrHpBJpi",
+    "visibleSample": "Play High Scores Wiki News Contributions Download Links White Paper Login/Register REALM Cryptic Realm ▾ Tip $CR Cryptic Realm Online 53 Players LOG IN TO PLAY $CR CONTRACT ADDRESS 3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2"
+  },
+  {
+    "id": "cryptic-click-links",
+    "ok": true,
+    "ms": 4017,
+    "url": "https://crypticrealm.com/?codexProof=1782496267019",
+    "errors": [],
+    "badResponses": [],
+    "opened": 0,
+    "active": "Links",
+    "visibleSample": "Play High Scores Wiki News Contributions Download Links White Paper Login/Register REALM Cryptic Realm ▾ Tip $CR Social Links X / Twitter Short updates and public launch notes. x.com/CrypticMMO Facebook Community posts a"
+  },
+  {
+    "id": "cryptic-click-white-paper",
+    "ok": true,
+    "ms": 4129,
+    "url": "https://crypticrealm.com/?codexProof=1782496267019",
+    "errors": [],
+    "badResponses": [],
+    "opened": 0,
+    "active": "White Paper",
+    "visibleSample": "Play High Scores Wiki News Contributions Download Links White Paper Login/Register REALM Cryptic Realm ▾ Tip $CR Summary Cryptic Realm expands the World of ClaudeCraft engine with realm identity, custom visuals, player o"
+  },
+  {
+    "id": "cryptic-click-contributions",
+    "ok": true,
+    "ms": 4042,
+    "url": "https://crypticrealm.com/?codexProof=1782496267019",
+    "errors": [],
+    "badResponses": [],
+    "opened": 0,
+    "active": "Contributions",
+    "visibleSample": "Play High Scores Wiki News Contributions Download Links White Paper Login/Register REALM Cryptic Realm ▾ Tip $CR Contributions Cryptic Realm is its own game, but it can still send practical engine improvements back upstr"
+  },
+  {
+    "id": "cryptic-admin",
+    "ok": true,
+    "ms": 2562,
+    "url": "https://crypticrealm.com/admin.html?codexProof=1782496267019",
+    "errors": [],
+    "badResponses": [],
+    "hasMenu": 1,
+    "hasTheme": 1,
+    "donateText": "Tip $CR",
+    "visibleSample": "Play High Scores Wiki News Contributions Download Links White Paper Admin Login/Register REALM Cryptic Realm ▾ Tip $CR Cryptic Realm - Admin Username Password 2FA code Sign in"
+  },
+  {
+    "id": "diabl0-hub",
+    "ok": true,
+    "ms": 4229,
+    "url": "https://diabl0.net/?diabl0=1&codexProof=1782496267019",
+    "errors": [],
+    "badResponses": [],
+    "visibleSample": "D0 DIABL0.NET GAMES MULTIPLAYER 📚 WIKI ABOUT CRYPTIC REALM ARCFORGE HOSTING UNIVERSE ← BACK D0 DIABL0.NET Play Diablo I, Diablo II: Lord of Destruction, and Cryptic Realm — natively in your browser via WebAssembly. No i"
+  },
+  {
+    "id": "diabl0-d2-mpq",
+    "ok": true,
+    "ms": 13776,
+    "url": "https://diabl0.net/?diabl0=1&game=diablo2&codexProof=1782496267019",
+    "errors": [],
+    "badResponses": [],
+    "iframeCount": 1,
+    "visibleSample": "Diabl0.net Diablo II MPQ/WASM Player Back to Diabl0 Hub"
+  },
+  {
+    "id": "diabl0-d2x-rewrite",
+    "ok": true,
+    "ms": 2357,
+    "url": "https://diabl0.net/?diabl0=1&game=diablo2-rewrite&codexProof=1782496267019",
+    "errors": [],
+    "badResponses": [],
+    "visibleSample": "DIABLO II EXIT DIABLO II MoveWeight Engine v2.0 7 Classes • 5 Acts • 3 Difficulties • Dungeons • Quests • Mercenaries • Save/Load 🏹 Amazon Ranged warrior with bows and javelins 🔮 Sorceress Master of elemental magic 💀 "
+  },
+  {
+    "id": "cryptic-icon-192",
+    "ok": true,
+    "liveBytes": 77518,
+    "localBytes": 77518,
+    "liveSha256": "b5e60e709c4feb49cb99096e3ba7f86a68330bdc24814a60d46fe8b3b889a619",
+    "localSha256": "b5e60e709c4feb49cb99096e3ba7f86a68330bdc24814a60d46fe8b3b889a619"
+  },
+  {
+    "id": "cryptic-poster",
+    "ok": true,
+    "status": 200,
+    "url": "https://crypticrealm.com/cryptic-realm-loading-bg.webp?codexProof=1782496267019"
+  }
+]

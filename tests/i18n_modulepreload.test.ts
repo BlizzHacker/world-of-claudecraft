@@ -58,7 +58,7 @@ describe("i18n modulepreload build hook", () => {
     });
 
     it("only matches the game generated dir, never the admin twin", () => {
-      const map = localeChunkMap(manifest, ["es"]);
+      const map = localeChunkMap(manifest, ["es"]) as Record<string, string>;
       expect(map.es).toBe("/assets/es-aaaa1111.js");
       expect(map.es).not.toContain("admin");
     });

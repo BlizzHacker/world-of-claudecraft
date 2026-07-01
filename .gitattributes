@@ -15,3 +15,4 @@ deploy/**   text eol=lf
 # them from language statistics. Display hygiene only - not removal, not gitignore.
 src/ui/i18n.resolved.generated/** linguist-generated
 src/admin/i18n.resolved.generated/** linguist-generated
+.browserslistrc text eol=lf

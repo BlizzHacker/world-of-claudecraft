@@ -299,6 +299,7 @@ describe('/mod/api/queue', () => {
         latestReason: 'spam',
         characterNames: [],
         online: false,
+        isAdmin: false,
       },
     ]);
     const req = fakeReq({ method: 'GET', url: '/mod/api/queue', token: TOKEN });

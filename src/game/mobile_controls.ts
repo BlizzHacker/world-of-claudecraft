@@ -1,7 +1,21 @@
-import type { Input, TouchMoveInput } from './input';
 import { t } from '../ui/i18n';
+import type { Input, TouchMoveInput } from './input';
 
-export const PHONE_TOUCH_QUERY = '(pointer: coarse) and (max-width: 940px), (pointer: coarse) and (max-height: 760px)';
+// Detects a genuinely touch-primary device (a phone or a hand-held tablet). The
+// primary test is a coarse primary pointer that cannot hover -- deliberately
+// narrower than "(any-pointer: coarse)" or navigator.maxTouchPoints, which both
+// fire on ordinary desktops/laptops that merely expose a touch-capable peripheral
+// (a precision touchpad, a pen/Wacom digitizer, or a touchscreen used alongside a
+// mouse) and would otherwise boot those machines straight into the mobile UI.
+//
+// The two phone-form-factor clauses are a safety net for a Chromium quirk:
+// Samsung (and some OnePlus) phones self-report a virtual hovering mouse, so
+// "(hover: none)" is false on a genuine touch-only Samsung phone. A coarse
+// PRIMARY pointer on a phone-sized viewport recovers those without re-matching
+// any desktop -- a desktop's primary pointer is fine, so none of these
+// "(pointer: coarse) and ..." clauses fire there regardless of viewport size.
+export const PHONE_TOUCH_QUERY =
+  '(pointer: coarse) and (hover: none), (pointer: coarse) and (max-width: 940px), (pointer: coarse) and (max-height: 760px)';
 const DEADZONE = 0.22;
 const CAMERA_SENSITIVITY = 0.8;
 const SWIPE_LOOK_DEADZONE_PX = 6;
@@ -14,13 +28,15 @@ const PINCH_ZOOM_SCALE = 0.04;
 // On by default (own localStorage key, like music's ev_music_on); try/catch +
 // feature-detect guarded so it no-ops on desktop and under Vitest/jsdom.
 export const HAPTICS_STORE_KEY = 'woc_haptics_on';
-export const HAPTIC_TAP = 10;        // a button press
-export const HAPTIC_JOYSTICK = 6;    // grabbing a joystick
+export const HAPTIC_TAP = 10; // a button press
+export const HAPTIC_JOYSTICK = 6; // grabbing a joystick
 export const HAPTIC_CONFIRM = [12, 40, 12]; // haptics toggled back on
 
 type VibrationNavigator = { vibrate?: (pattern: number | number[]) => boolean };
 
-export function loadHapticsEnabled(storage: Pick<Storage, 'getItem'> | null = safeLocalStorage()): boolean {
+export function loadHapticsEnabled(
+  storage: Pick<Storage, 'getItem'> | null = safeLocalStorage(),
+): boolean {
   if (!storage) return true;
   try {
     return storage.getItem(HAPTICS_STORE_KEY) !== '0';
@@ -29,8 +45,15 @@ export function loadHapticsEnabled(storage: Pick<Storage, 'getItem'> | null = sa
   }
 }
 
-export function saveHapticsEnabled(on: boolean, storage: Pick<Storage, 'setItem'> | null = safeLocalStorage()): void {
-  try { storage?.setItem(HAPTICS_STORE_KEY, on ? '1' : '0'); } catch { /* storage unavailable */ }
+export function saveHapticsEnabled(
+  on: boolean,
+  storage: Pick<Storage, 'setItem'> | null = safeLocalStorage(),
+): void {
+  try {
+    storage?.setItem(HAPTICS_STORE_KEY, on ? '1' : '0');
+  } catch {
+    /* storage unavailable */
+  }
 }
 
 /** Fire a haptic pulse when enabled and the Vibration API exists. Returns whether it fired. */
@@ -48,7 +71,11 @@ export function triggerHaptic(
 }
 
 function safeLocalStorage(): Pick<Storage, 'getItem' | 'setItem'> | null {
-  try { return typeof localStorage !== 'undefined' ? localStorage : null; } catch { return null; }
+  try {
+    return typeof localStorage !== 'undefined' ? localStorage : null;
+  } catch {
+    return null;
+  }
 }
 
 /** Hold the Chat button at least this long (ms) to toggle the read-only log peek
@@ -109,15 +136,69 @@ export function isPhoneTouchDevice(win: Pick<Window, 'matchMedia'> = window): bo
   return win.matchMedia(PHONE_TOUCH_QUERY).matches;
 }
 
-export interface OriginBounds { left: number; top: number; right: number; bottom: number; }
+// Player-chosen interface override (Options > Graphics > Interface Mode). 'auto'
+// keeps the device auto-detection above; 'desktop'/'touch' force one interface
+// regardless, so a tablet driven by a keyboard+mouse can pick the desktop UI and
+// a desktop user can opt into the on-screen controls.
+export type InterfaceMode = 'auto' | 'desktop' | 'touch';
+
+/** Map the numeric interfaceMode setting (0 Auto, 1 Desktop, 2 Touch) to its mode. */
+export function interfaceModeFromSetting(value: number): InterfaceMode {
+  return value >= 2 ? 'touch' : value >= 1 ? 'desktop' : 'auto';
+}
+
+/** Resolve whether to present the touch interface: an explicit override wins,
+ *  'auto' falls back to what the device auto-detection reported. */
+export function resolveTouchInterface(mode: InterfaceMode, autoDetected: boolean): boolean {
+  if (mode === 'desktop') return false;
+  if (mode === 'touch') return true;
+  return autoDetected;
+}
+
+let interfaceOverride: InterfaceMode = 'auto';
+
+/** main.ts pushes the persisted interfaceMode setting here at boot + on change. */
+export function setInterfaceMode(mode: InterfaceMode): void {
+  interfaceOverride = mode;
+}
+
+/** Whether the on-screen touch interface should be shown for this player: their
+ *  explicit override, else the device auto-detection. The native-app shell still
+ *  forces touch on top of this (see isNativeAppShell call sites). */
+export function useTouchInterface(win: Pick<Window, 'matchMedia'> = window): boolean {
+  return resolveTouchInterface(interfaceOverride, isPhoneTouchDevice(win));
+}
+
+/** True inside the packaged native mobile app (VITE_NATIVE_APP build), which
+ *  forces the touch UI regardless of the Interface Mode override. */
+export function isNativeAppShell(): boolean {
+  if (typeof document !== 'undefined' && document.body.classList.contains('native-app'))
+    return true;
+  if (typeof window === 'undefined') return false;
+  const cap = (window as unknown as { Capacitor?: { isNativePlatform?: () => boolean } }).Capacitor;
+  return cap?.isNativePlatform?.() === true;
+}
+
+export interface OriginBounds {
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
+}
 
 /**
  * Clamp a floating joystick's spawn centre so the whole circle (given `radius`)
  * stays inside `bounds`. If the zone is narrower/shorter than the joystick on an
  * axis, the centre falls back to the midpoint of that axis.
  */
-export function clampJoystickOrigin(px: number, py: number, radius: number, bounds: OriginBounds): { x: number; y: number } {
-  const clamp = (v: number, lo: number, hi: number) => (hi < lo ? (lo + hi) / 2 : Math.min(hi, Math.max(lo, v)));
+export function clampJoystickOrigin(
+  px: number,
+  py: number,
+  radius: number,
+  bounds: OriginBounds,
+): { x: number; y: number } {
+  const clamp = (v: number, lo: number, hi: number) =>
+    hi < lo ? (lo + hi) / 2 : Math.min(hi, Math.max(lo, v));
   return {
     x: clamp(px, bounds.left + radius, bounds.right - radius),
     y: clamp(py, bounds.top + radius, bounds.bottom - radius),
@@ -176,18 +257,36 @@ export class MobileControls {
   private cameraStick = document.getElementById('mobile-camera-stick') as HTMLElement | null;
   private autorunButton = document.getElementById('mobile-autorun') as HTMLElement | null;
 
-  constructor(private input: Input, private callbacks: MobileControlCallbacks) {}
+  constructor(
+    private input: Input,
+    private callbacks: MobileControlCallbacks,
+  ) {}
 
   /** Tune how far the move thumbstick must travel before movement registers. */
   setMoveDeadzone(deadzone: number): void {
     this.moveDeadzone = deadzone;
   }
 
+  /** Re-evaluate touch-interface activation after the player changes the
+   *  Interface Mode setting (main.ts calls setInterfaceMode first). Safe before start(). */
+  refreshInterfaceMode(): void {
+    this.setActive(useTouchInterface() || isNativeAppShell());
+  }
+
   start(): void {
-    if (!this.root || !this.moveJoystick || !this.moveStick || !this.cameraJoystick || !this.cameraStick) return;
+    if (
+      !this.root ||
+      !this.moveJoystick ||
+      !this.moveStick ||
+      !this.cameraJoystick ||
+      !this.cameraStick
+    )
+      return;
     this.mq = window.matchMedia(PHONE_TOUCH_QUERY);
-    this.setActive(this.mq.matches);
-    this.mq.addEventListener?.('change', (e) => this.setActive(e.matches));
+    this.setActive(useTouchInterface() || isNativeAppShell());
+    this.mq.addEventListener?.('change', () =>
+      this.setActive(useTouchInterface() || isNativeAppShell()),
+    );
 
     // The move joystick floats: the pointer lifecycle lives on the lower-left
     // capture zone (so a thumb can land anywhere), while the joystick element is
@@ -260,8 +359,12 @@ export class MobileControls {
     document.addEventListener('pointerdown', (e) => {
       if (!this.active || !document.body.classList.contains('mobile-more-open')) return;
       const target = e.target as Element | null;
-      if (target && typeof target.closest === 'function'
-        && (target.closest('#mobile-extra-controls') || target.closest('#mobile-more'))) return;
+      if (
+        target &&
+        typeof target.closest === 'function' &&
+        (target.closest('#mobile-extra-controls') || target.closest('#mobile-more'))
+      )
+        return;
       this.closeMoreModal();
     });
 
@@ -343,7 +446,9 @@ export class MobileControls {
       let suppressNextClick = false;
       button.addEventListener('pointerdown', (e) => {
         suppressNextClick = true;
-        globalThis.setTimeout(() => { suppressNextClick = false; }, 700);
+        globalThis.setTimeout(() => {
+          suppressNextClick = false;
+        }, 700);
         run(e);
       });
       button.addEventListener('click', (e) => {
@@ -386,7 +491,10 @@ export class MobileControls {
     button.classList.toggle('is-on', this.hapticsOn);
     button.setAttribute('aria-pressed', this.hapticsOn ? 'true' : 'false');
     const label = button.querySelector('.mobile-label');
-    if (label) label.textContent = this.hapticsOn ? t('hudChrome.mobile.haptics') : t('hudChrome.mobile.hapticsOff');
+    if (label)
+      label.textContent = this.hapticsOn
+        ? t('hudChrome.mobile.haptics')
+        : t('hudChrome.mobile.hapticsOff');
   }
 
   /** The Chat button taps to open the keyboard composer, but a long press toggles
@@ -397,7 +505,10 @@ export class MobileControls {
     const button = document.getElementById(id);
     if (!button) return;
     const cancel = () => {
-      if (this.chatPressTimer !== null) { clearTimeout(this.chatPressTimer); this.chatPressTimer = null; }
+      if (this.chatPressTimer !== null) {
+        clearTimeout(this.chatPressTimer);
+        this.chatPressTimer = null;
+      }
     };
     button.addEventListener('pointerdown', (e) => {
       if (!this.active) return;
@@ -435,10 +546,13 @@ export class MobileControls {
     if (document.body.classList.contains('mobile-chat-open')) {
       this.callbacks.onChat();
     } else {
-      const input = document.getElementById('chat-input') as HTMLInputElement | null;
+      const input = document.getElementById('chat-input') as HTMLTextAreaElement | null;
       if (input) {
         input.value = '';
         input.style.display = 'none';
+        // clear the autosized height so the next open starts at one line
+        input.style.height = '';
+        input.style.overflowY = '';
         input.blur();
       }
     }
@@ -460,7 +574,11 @@ export class MobileControls {
     this.moveJoystick.style.left = `${(origin.x - radius).toFixed(1)}px`;
     this.moveJoystick.style.top = `${(origin.y - radius).toFixed(1)}px`;
     this.moveJoystick.classList.add('floating', 'active');
-    try { (this.moveZone ?? this.moveJoystick).setPointerCapture(e.pointerId); } catch { /* synthetic test event */ }
+    try {
+      (this.moveZone ?? this.moveJoystick).setPointerCapture(e.pointerId);
+    } catch {
+      /* synthetic test event */
+    }
     this.onMoveMove(e);
   }
 
@@ -493,7 +611,9 @@ export class MobileControls {
         if (moveSurface?.hasPointerCapture?.(this.joyPointer)) {
           moveSurface.releasePointerCapture(this.joyPointer);
         }
-      } catch { /* capture may already be gone on mobile browser gesture changes */ }
+      } catch {
+        /* capture may already be gone on mobile browser gesture changes */
+      }
     }
     this.joyPointer = null;
     this.input.clearTouchMove();
@@ -516,14 +636,26 @@ export class MobileControls {
     this.cameraMoved = false;
     this.input.setTouchLook(true);
     triggerHaptic(HAPTIC_JOYSTICK, this.hapticsOn);
-    try { this.cameraJoystick?.setPointerCapture(e.pointerId); } catch { /* synthetic test event */ }
+    try {
+      this.cameraJoystick?.setPointerCapture(e.pointerId);
+    } catch {
+      /* synthetic test event */
+    }
     this.onCameraMove(e);
   }
 
   private onCameraMove(e: PointerEvent): void {
-    if (!this.active || e.pointerId !== this.lookPointer || !this.cameraJoystick || !this.cameraStick) return;
+    if (
+      !this.active ||
+      e.pointerId !== this.lookPointer ||
+      !this.cameraJoystick ||
+      !this.cameraStick
+    )
+      return;
     e.preventDefault();
-    if (Math.hypot(e.clientX - this.cameraDownX, e.clientY - this.cameraDownY) > RECENTER_TAP_MOVE_PX) {
+    if (
+      Math.hypot(e.clientX - this.cameraDownX, e.clientY - this.cameraDownY) > RECENTER_TAP_MOVE_PX
+    ) {
       this.cameraMoved = true;
     }
     const r = this.cameraJoystick.getBoundingClientRect();
@@ -563,7 +695,9 @@ export class MobileControls {
         if (this.cameraJoystick?.hasPointerCapture?.(this.lookPointer)) {
           this.cameraJoystick.releasePointerCapture(this.lookPointer);
         }
-      } catch { /* capture may already be gone on mobile browser gesture changes */ }
+      } catch {
+        /* capture may already be gone on mobile browser gesture changes */
+      }
     }
     this.lookPointer = null;
     this.cameraJoystick?.classList.remove('active');
@@ -609,18 +743,30 @@ export class MobileControls {
   }
 
   private onSwipeLookDown(e: PointerEvent): void {
-    if (!this.active || e.pointerType !== 'touch' || this.swipeLookPointer !== null || this.lookPointer !== null || this.pinchPointers.size > 1) return;
+    if (
+      !this.active ||
+      e.pointerType !== 'touch' ||
+      this.swipeLookPointer !== null ||
+      this.lookPointer !== null ||
+      this.pinchPointers.size > 1
+    )
+      return;
     this.swipeLookPointer = e.pointerId;
     this.swipeLookStartX = e.clientX;
     this.swipeLookStartY = e.clientY;
     this.swipeLookLastX = e.clientX;
     this.swipeLookLastY = e.clientY;
     this.swipeLookActive = false;
-    try { this.canvas?.setPointerCapture(e.pointerId); } catch { /* synthetic test event */ }
+    try {
+      this.canvas?.setPointerCapture(e.pointerId);
+    } catch {
+      /* synthetic test event */
+    }
   }
 
   private onSwipeLookMove(e: PointerEvent): void {
-    if (!this.active || e.pointerId !== this.swipeLookPointer || this.pinchPointers.size > 1) return;
+    if (!this.active || e.pointerId !== this.swipeLookPointer || this.pinchPointers.size > 1)
+      return;
     const totalDx = e.clientX - this.swipeLookStartX;
     const totalDy = e.clientY - this.swipeLookStartY;
     if (!this.swipeLookActive) {
@@ -649,7 +795,9 @@ export class MobileControls {
         if (this.canvas?.hasPointerCapture?.(this.swipeLookPointer)) {
           this.canvas.releasePointerCapture(this.swipeLookPointer);
         }
-      } catch { /* capture may already be gone on mobile browser gesture changes */ }
+      } catch {
+        /* capture may already be gone on mobile browser gesture changes */
+      }
     }
     this.swipeLookPointer = null;
     if (this.swipeLookActive) {
@@ -670,6 +818,10 @@ export function mapLookVector(x: number, y: number, deadzone = DEADZONE): { x: n
  * (curDist > prevDist) zooms IN, i.e. returns a negative delta to shrink camDist;
  * pinching together zooms out. Matches the sign convention of the wheel handler.
  */
-export function pinchZoomDelta(prevDist: number, curDist: number, scale = PINCH_ZOOM_SCALE): number {
+export function pinchZoomDelta(
+  prevDist: number,
+  curDist: number,
+  scale = PINCH_ZOOM_SCALE,
+): number {
   return (prevDist - curDist) * scale;
 }

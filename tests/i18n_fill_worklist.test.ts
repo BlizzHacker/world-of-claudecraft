@@ -254,7 +254,7 @@ describe("worklist assembly (deterministic + blocked-prose segregation, end to e
 
     // a fully-translated language produces no batch and no file entry
     expect(batchObjs.get("es")).toBeNull();
-    expect(fileEntries.map(([name]: [string, unknown]) => name)).toEqual(["de_DE.json"]);
+    expect(fileEntries.map(([name]) => name as string)).toEqual(["de_DE.json"]);
   });
 
   it("ships the glossary in every batch and resolves each term per-locale (own overlay -> English)", () => {

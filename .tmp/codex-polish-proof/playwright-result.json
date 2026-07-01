@@ -1,0 +1,32 @@
+{
+  "home": {
+    "donateText": "Tip $CR",
+    "donateHref": "solana:GncAXx6j38osJns395XZtf6rSA9MU3K1gwafTrHpBJpi",
+    "donateTitle": "Tip $CR or SOL to GncA...BJpi",
+    "logoSrc": "/cryptic-realm-logo.png",
+    "themeText": "Realm Infernal Realm ▾ Choose a realm Cryptic Realm The signature world — arcane mysteries, riddle-locked ruins, forgotten power Infernal Realm Dark gothic ARPG — blood, fire, and forgotten crypts Classic Realm Colorful low-poly fantasy — heroes, quests, and open skies Dominion Frontier Sci-fi alien war — squads, tech, and galactic conquest Arcane Void Cosmic crystal realms — portals, relics, and void mysteries Arcade Void Neon squad combat, shipyards, turrets, and void tech World of ClaudeCraft The pristine base world — vanilla WoW-Classic-style micro-MMO FPS Realm First-person only — reticle up, aim true, no third-person crutch The Exchange Neutral marketplace — auctions, cross-realm trade, no combat",
+    "bodyRealm": [
+      "cr-realm-infernal"
+    ]
+  },
+  "admin": {
+    "hasHeader": true,
+    "hasThemePicker": true,
+    "donateText": "Tip $CR",
+    "donateHref": "solana:GncAXx6j38osJns395XZtf6rSA9MU3K1gwafTrHpBJpi",
+    "navText": [
+      "Play",
+      "High Scores",
+      "Wiki",
+      "News",
+      "Contributions",
+      "Download",
+      "Links",
+      "White Paper",
+      "Admin",
+      "Login/Register"
+    ],
+    "icon": "/cryptic-realm-logo.png"
+  },
+  "consoleErrors": []
+}

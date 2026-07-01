@@ -17,6 +17,7 @@ const ZONE_TRACK: Record<MusicZone, string> = {
   town_fenbridge: 'town-hall-cryptic-realm.mp3',
   town_highwatch: 'the-journey-begins-cryptic-realm.mp3',
   vale: 'the-forest-calls-cryptic-realm.mp3',
+  vale_legacy: 'the-forest-calls-cryptic-realm.mp3',
   marsh: 'corrupted-temple-cryptic-realm.mp3',
   peaks: 'act-5-sanctum-cryptic-realm.mp3',
   dungeon_hollow_crypt: 'just-another-crypt-cryptic-realm.mp3',
