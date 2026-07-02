@@ -15,7 +15,7 @@ export const CLASSIC_REALM: RealmContent = {
   bgGradient: 'linear-gradient(135deg, #0f1a2a 0%, #080f1a 100%)',
   previewColors: { primary: '#4a9eff', secondary: '#ffd700', bg: '#0f1a2a' },
   branding: {
-    logoSrc: '/cryptic-realm-logo.png',
+    logoSrc: '/cryptic-realm-logo-512.webp',
     brandText: 'Cryptic Realm - Classic',
     loadingScreenSrc: '/cryptic-realm-loading.png',
     discordUrl: 'https://discord.gg/Zdj3JGrx',

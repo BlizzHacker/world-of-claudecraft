@@ -82,4 +82,21 @@ describe('Cryptic Realm branding guardrails', () => {
     expect(html).toContain('data-i18n="nav.contributions"');
     expect(html).not.toContain('github.com/BlizzHacker/cryptic-realm');
   });
+
+  it('never references a World-of-ClaudeCraft-named logo/image asset on public surfaces', () => {
+    // The crypticrealm-logo.png / cryptic-realm-logo.png files were WOC art and
+    // leaked into the header + SEO. They're regenerated as the Cryptic Realm
+    // emblem; this guards against a NEW woc_*.webp / woc-logo* reference sneaking
+    // back into any served HTML.
+    const forbiddenRefs = ['woc_logo', 'woc-logo', 'world-of-claudecraft-logo'];
+    const failures: string[] = [];
+    for (const rel of publicFiles) {
+      const text = readRel(rel).toLowerCase();
+      for (const needle of forbiddenRefs) {
+        if (text.includes(needle)) failures.push(`${rel}: ${needle}`);
+      }
+    }
+    expect(failures).toEqual([]);
+  });
+
 });

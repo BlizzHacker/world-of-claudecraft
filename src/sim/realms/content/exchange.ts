@@ -28,7 +28,7 @@ export const EXCHANGE_REALM: RealmContent = {
   previewColors: { primary: '#c9a14a', secondary: '#f3dfaa', bg: '#1a1408' },
   crossRealm: true,
   branding: {
-    logoSrc: '/cryptic-realm-logo.png',
+    logoSrc: '/cryptic-realm-logo-512.webp',
     brandText: 'The Exchange - Cryptic Realm',
     loadingScreenSrc: '/cryptic-realm-loading.png',
     discordUrl: 'https://discord.gg/Zdj3JGrx',

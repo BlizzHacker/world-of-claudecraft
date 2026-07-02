@@ -178,7 +178,7 @@
 /* Expanded: the full player panel. */
 #cr-music-widget .cr-mw-panel {
   display: flex; flex-direction: column; gap: 8px;
-  width: 268px; padding: 10px 12px;
+  width: 300px; padding: 10px 12px;
   border-radius: 16px;
   background: linear-gradient(180deg, rgba(22,17,28,0.97), rgba(11,8,15,0.97));
   border: 1px solid var(--cr-gold, #c9a14a);
@@ -193,7 +193,18 @@
   flex: 1; font-weight: 600; color: var(--cr-gold, #ffd100);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-#cr-music-widget .cr-mw-controls { display: flex; align-items: center; justify-content: center; gap: 4px; }
+#cr-music-widget .cr-mw-controls {
+  display: flex; align-items: center; justify-content: center;
+  flex-wrap: wrap; gap: 5px;
+}
+/* Uniform square icon buttons so the row reads as a tidy grid, not a ragged line. */
+#cr-music-widget .cr-mw-controls > button {
+  width: 34px; height: 34px; padding: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 15px;
+}
+/* "Songs" carries a label, so let it size to its text instead of the 34px square. */
+#cr-music-widget .cr-mw-controls > .cr-mw-list-btn { width: auto; padding: 0 10px; }
 #cr-music-widget .cr-mw-shuffle.cr-mw-active { color: var(--cr-gold, #ffd100); background: rgba(255,209,0,0.18); }
 #cr-music-widget .cr-mw-list {
   display: flex; flex-direction: column; gap: 1px;
@@ -234,7 +245,7 @@
 #cr-music-widget .cr-mw-toggle.cr-mw-off { color: var(--cr-text-dim, #7a6a5a); }
 #cr-music-widget.cr-mw-playing .cr-mw-toggle { animation: cr-mw-pulse 1.8s ease-in-out infinite; }
 @keyframes cr-mw-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.55; } }
-body.mobile-touch #cr-music-widget .cr-mw-panel { width: 232px; font-size: 12px; }
+body.mobile-touch #cr-music-widget .cr-mw-panel { width: 272px; font-size: 12px; }
 
 /* Controller virtual-mouse cursor — driven by gamepad_cursor.ts. Sits above
    all UI so it can click any surface; pointer-events:none so it never blocks

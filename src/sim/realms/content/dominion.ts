@@ -15,7 +15,7 @@ export const DOMINION_REALM: RealmContent = {
   bgGradient: 'linear-gradient(135deg, #02161a 0%, #020a0d 100%)',
   previewColors: { primary: '#3ad6c8', secondary: '#c9a14a', bg: '#050a0f' },
   branding: {
-    logoSrc: '/cryptic-realm-logo.png',
+    logoSrc: '/cryptic-realm-logo-512.webp',
     brandText: 'Cryptic Realm - Dominion',
     loadingScreenSrc: '/cryptic-realm-loading.png',
     discordUrl: 'https://discord.gg/Zdj3JGrx',

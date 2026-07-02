@@ -15,7 +15,7 @@ export const ARCANE_REALM: RealmContent = {
   bgGradient: 'linear-gradient(135deg, #0a0510 0%, #05020a 100%)',
   previewColors: { primary: '#a855f7', secondary: '#3ad6c8', bg: '#0a0510' },
   branding: {
-    logoSrc: '/cryptic-realm-logo.png',
+    logoSrc: '/cryptic-realm-logo-512.webp',
     brandText: 'Cryptic Realm - Arcane',
     loadingScreenSrc: '/cryptic-realm-loading.png',
     discordUrl: 'https://discord.gg/Zdj3JGrx',

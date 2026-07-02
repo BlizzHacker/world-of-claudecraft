@@ -180,7 +180,7 @@ const BODY_FONT = '"Alegreya Sans", "Segoe UI", system-ui, sans-serif';
 // served from /public. Same-origin, so drawing it does not taint the canvas.
 // Loaded best-effort: if it's missing the footer falls back to a text wordmark
 // rather than failing the whole card.
-const LOGO_URL = '/woc-logo-hero.webp';
+const LOGO_URL = '/cryptic-realm-logo-512.webp';
 
 /** Format a realm percentile as a card chip label. */
 function formatTopPercent(pct: number): string {

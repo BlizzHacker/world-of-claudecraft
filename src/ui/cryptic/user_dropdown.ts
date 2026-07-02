@@ -189,12 +189,15 @@ function ensureNavAdminLink(): void {
   const li = document.createElement('li');
   li.className = 'nav-item';
   li.id = `${NAV_ADMIN_ID}-li`;
-  const a = document.createElement('a');
+  // Use a <button> so it shares the exact .nav-link box model / baseline as its
+  // siblings (an <a> sat a couple px lower than the button tabs). Navigates on click.
+  const a = document.createElement('button');
+  a.type = 'button';
   a.className = 'nav-link';
   a.id = NAV_ADMIN_ID;
-  a.href = '/admin/';
   a.textContent = 'Admin';
   a.title = 'Open Admin dashboard';
+  a.addEventListener('click', () => { window.location.href = '/admin/'; });
   li.appendChild(a);
   if (loginBtn?.parentElement) {
     navList.insertBefore(li, loginBtn.parentElement);

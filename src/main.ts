@@ -199,6 +199,21 @@ import { mountPickitPanel } from './ui/cryptic/pickit_panel';
 import { installNativeSsoReturnHandler, wireNativeSsoLink } from './ui/cryptic/native_sso';
 import { clearCrypticSession, readCrypticSession, writeCrypticSession } from './ui/cryptic/session';
 
+// SECURITY: an SSO/realm handoff arrives as `/#auth_token=...&auth_user=...`.
+// Capture it into memory and SCRUB the address bar on the very first line of
+// execution, before any render — so the token never lingers in the visible URL,
+// browser history, or a shared screenshot. adoptSsoHash() consumes this instead
+// of re-reading window.location.hash.
+const CAPTURED_SSO_HASH = (() => {
+  if (typeof window === 'undefined') return '';
+  const h = window.location.hash ?? '';
+  if (h.startsWith('#') && h.includes('auth_token=')) {
+    try { history.replaceState(null, '', window.location.pathname + window.location.search); } catch { /* noop */ }
+    return h;
+  }
+  return '';
+})();
+
 const WORLD_SEED = 20061; // fixed: Cryptic Realm is a persistent place
 
 const CLICK_MOVE_TURN_RATE = 4.2; // rad/sec; responsive turning while the camera stays decoupled from click spam
@@ -3384,11 +3399,12 @@ function loginNavItem(): HTMLElement | null {
 const loggedInNavItems = ['#nav-item-account', '#nav-item-logout'];
 
 function enterLoggedInChrome(): void {
-  // Entries that lack the homepage account/logout nav tabs (e.g. the focused
-  // play.html entry) won't have these <li>s; toggling them is a no-op there.
+  // The logged-in account + sign-out affordances live ONLY in the header user
+  // dropdown (username ▾ → My Account / Sign out). Keep the redundant nav
+  // Account/Logout tabs hidden so there aren't two places to log out from.
   loggedInNavItems.forEach((sel) => {
     const li = document.querySelector<HTMLElement>(sel);
-    if (li) li.hidden = false;
+    if (li) li.hidden = true;
   });
   const li = loginNavItem();
   if (li) li.hidden = true;
@@ -6897,7 +6913,7 @@ function wireStartScreens(): void {
     adoptSsoHash(hash);
   });
   wireNativeSsoLink();
-  adoptSsoHash((typeof window !== 'undefined' ? window.location.hash : '') ?? '');
+  adoptSsoHash(CAPTURED_SSO_HASH || ((typeof window !== 'undefined' ? window.location.hash : '') ?? ''));
 
   const loginForm = $('#login-panel') as HTMLFormElement;
   const userInput = $('#login-user') as HTMLInputElement;

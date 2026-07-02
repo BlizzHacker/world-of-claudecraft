@@ -16,7 +16,7 @@ export const INFERNAL_REALM: RealmContent = {
   previewColors: { primary: '#d4442a', secondary: '#c9a14a', bg: '#0a0505' },
   isDefault: true,
   branding: {
-    logoSrc: '/cryptic-realm-logo.png',
+    logoSrc: '/cryptic-realm-logo-512.webp',
     brandText: 'Cryptic Realm - Infernal',
     loadingScreenSrc: '/cryptic-realm-loading.png',
     discordUrl: 'https://discord.gg/Zdj3JGrx',
