@@ -4,6 +4,7 @@
 // touches sim state. Self-mounts a launcher button when the active realm has
 // a bestiary; no-op otherwise.
 
+import './realm_env';
 import { getActiveRealm } from '../../sim/realms';
 import type { RealmAct, RealmBoss, RealmMonster } from '../../sim/realms/types';
 

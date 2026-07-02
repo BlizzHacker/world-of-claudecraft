@@ -101,7 +101,6 @@ function makeCtx() {
     get players() {
       return players;
     },
-    propMetaByEnt: new Map(),
     get cfg() {
       return cfg;
     },
@@ -174,7 +173,10 @@ function makeCtx() {
     onInventoryChangedForQuests: vi.fn(),
     checkQuestReady: vi.fn(),
     countItem: vi.fn(() => 0),
+    completeQuestForDev: vi.fn(() => false),
+    completeCurrentQuestsForDev: vi.fn(() => 0),
     lockoutNowMs: vi.fn(() => 0),
+    raidResetMs: vi.fn((nowMs: number) => nowMs),
     instanceKeyFor: vi.fn(() => 'solo:0'),
     instanceOriginOf: vi.fn(() => ({ x: 0, z: 0 })),
     enterDungeon: vi.fn(),
@@ -297,6 +299,7 @@ function makeCtx() {
     targetEntity: vi.fn(),
     partyCapacity: vi.fn(() => 5),
     marketListingBelongsTo: vi.fn(() => false),
+    propMetaByEnt: new Map(),
     samePopulationPlayers: vi.fn(() => true),
   };
   const ctx = createSimContext(host);

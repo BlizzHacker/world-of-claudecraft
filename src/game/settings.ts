@@ -139,6 +139,12 @@ export const BOOL_SETTINGS = {
   // swipe-to-look) so pushing the stick up tilts the camera down — the classic
   // flight-sim / console preference some touch players reach for (#323-adjacent)
   touchInvertLook: { def: false },
+  // on by default: classic-style "start auto-attack on ability use". When on,
+  // using an offensive ability also engages your white-swing auto-attack (read
+  // live by the HUD at cast time, see ui/attack_on_ability.ts). The sim's
+  // startAutoAttack still no-ops unless a valid hostile target is in range, and
+  // heals / buffs / damage-breakable CC (gouge, sap, sheep) never trigger it.
+  startAttackOnAbilityUse: { def: true },
 
   // --- Interface & Comfort pack (booleans). ---
   // off by default: drop every HUD cross-fade / panel animation, for players
@@ -165,6 +171,11 @@ export const BOOL_SETTINGS = {
   // on by default: include verified wallet holder/balance details in newly
   // rendered player cards. The player-card modal can toggle this per device.
   showWalletOnPlayerCard: { def: true },
+  // on by default: show the developer badge (nameplate glyph + name outline,
+  // inspect-window block, player card, and the Developers leaderboard tab).
+  // Purely a local display preference: the badge is still earned and broadcast
+  // either way, this only controls whether THIS client renders it.
+  showDevBadges: { def: true },
   // off by default: invert the vertical axis of mouselook (push mouse forward
   // to look down), the classic flight-sim preference.
   invertLookY: { def: false },

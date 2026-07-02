@@ -823,6 +823,9 @@ describe('GET /p/<slug>', () => {
       expect(html).toContain(
         'property="og:image" content="https://crypticrealm.com/p/sir-test/card.png"',
       );
+      expect(html).toContain(
+        'property="og:image" content="https://crypticrealm.com/p/sir-test/card.png"',
+      );
       expect(html).toContain('src="/p/sir-test/card.png"');
       expect(html).toContain('href="/?ref=sir-test"');
       expect(html).not.toContain('evil.example');
@@ -849,6 +852,9 @@ describe('GET /p/<slug>', () => {
       );
       expect(html).toContain(
         'property="og:url" content="https://dev.crypticrealm.com/p/sir-test"',
+      );
+      expect(html).toContain(
+        'property="og:image" content="https://dev.crypticrealm.com/p/sir-test/card.png"',
       );
       expect(html).toContain(
         'property="og:image" content="https://dev.crypticrealm.com/p/sir-test/card.png"',

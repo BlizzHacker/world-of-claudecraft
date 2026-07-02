@@ -15,7 +15,7 @@
 // so ports, subdomains, and multipliers never drift between them.
 
 import type { RealmId } from './types';
-import { REALM_LIST } from './registry';
+import { REALM_LIST, realmHostEnv } from './registry';
 
 export type RealmStage = 'live' | 'beta' | 'alpha' | 'dev';
 
@@ -102,20 +102,17 @@ const STAGE_STORE_KEY = (realmId: RealmId) => `cr_realm_stage_${realmId}`;
 
 export function resolveRealmStage(realmId: RealmId): RealmStage {
   try {
-    if (typeof window !== 'undefined') {
-      const ls = window.localStorage?.getItem(STAGE_STORE_KEY(realmId));
-      if (ls === 'beta' || ls === 'alpha' || ls === 'dev' || ls === 'live') return ls;
-    }
+    const ls = realmHostEnv()?.storageGet(STAGE_STORE_KEY(realmId));
+    if (ls === 'beta' || ls === 'alpha' || ls === 'dev' || ls === 'live') return ls;
   } catch { /* storage unavailable */ }
   return 'live';
 }
 
 export function persistRealmStage(realmId: RealmId, stage: RealmStage): void {
   try {
-    if (typeof window !== 'undefined') {
-      window.localStorage?.setItem(STAGE_STORE_KEY(realmId), stage);
-      window.dispatchEvent(new CustomEvent('cr-realm-stage-change', { detail: { realmId, stage } }));
-    }
+    const env = realmHostEnv();
+    env?.storageSet(STAGE_STORE_KEY(realmId), stage);
+    env?.notifyStageChange?.(realmId, stage);
   } catch { /* storage unavailable */ }
 }
 

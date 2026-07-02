@@ -18,6 +18,7 @@ describe('publicOriginFromRequest', () => {
         }),
       );
       expect(origin).toBe('https://crypticrealm.com');
+      expect(origin).toBe('https://crypticrealm.com');
     } finally {
       if (old === undefined) delete process.env.NODE_ENV;
       else process.env.NODE_ENV = old;

@@ -44,6 +44,18 @@ describe('web login guard (anti-bot)', () => {
     expect(isNativeAppRequest(req({ origin: 'https://crypticrealm.com', host: 'crypticrealm.com' }))).toBe(false);
     expect(isNativeAppRequest(req({ origin: 'https://evil.example.com', host: 'crypticrealm.com' }))).toBe(false);
     expect(isNativeAppRequest(req({ host: 'crypticrealm.com' }))).toBe(false);
+    expect(isWebClientRequest(req({ origin: 'capacitor://localhost', host: 'worldofclaudecraft.com' }))).toBe(true);
+    expect(isWebClientRequest(req({ origin: 'http://localhost', host: 'worldofclaudecraft.com' }))).toBe(true);
+    expect(isWebClientRequest(req({ origin: 'https://localhost', host: 'worldofclaudecraft.com' }))).toBe(true);
+  });
+
+  it('identifies native app origins for Turnstile bypass', () => {
+    expect(isNativeAppRequest(req({ origin: 'capacitor://localhost', host: 'worldofclaudecraft.com' }))).toBe(true);
+    expect(isNativeAppRequest(req({ origin: 'http://localhost', host: 'worldofclaudecraft.com' }))).toBe(true);
+    expect(isNativeAppRequest(req({ origin: 'https://localhost', host: 'worldofclaudecraft.com' }))).toBe(true);
+    expect(isNativeAppRequest(req({ origin: 'https://worldofclaudecraft.com', host: 'worldofclaudecraft.com' }))).toBe(false);
+    expect(isNativeAppRequest(req({ origin: 'https://evil.example.com', host: 'worldofclaudecraft.com' }))).toBe(false);
+    expect(isNativeAppRequest(req({ host: 'worldofclaudecraft.com' }))).toBe(false);
   });
 
   it('rejects a foreign origin', () => {

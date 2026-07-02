@@ -1,4 +1,5 @@
 import type * as http from 'node:http';
+import { DEFAULT_RAID_RESET_TIME_ZONE, isSupportedTimeZone } from './raid_reset';
 
 // The realm (world/shard) this server process serves. In the process-per-realm
 // model each instance hosts exactly one realm — set REALM_NAME per deployment
@@ -39,6 +40,31 @@ function resolveRealmType(raw: string | undefined): RealmType {
 
 // This process's own realm type (used for the single-realm default directory).
 export const REALM_TYPE: RealmType = resolveRealmType(process.env.REALM_TYPE);
+
+// The civil time zone whose 3 AM daily reset ends this realm's raid lockouts (a fixed
+// reset, classic-style). Each realm process sets REALM_RESET_TZ to its own IANA zone
+// (e.g. "Europe/Paris" for an EU realm), so a realm resets on its local server time
+// rather than a single global boundary; defaults to US Eastern (the launch region).
+// Requires a full-ICU Node: an unresolvable configured zone falls back to the default,
+// and if the runtime cannot resolve even the default we fail fast at boot rather than
+// crash on the first boss kill.
+export function resolveRaidResetTimeZone(raw: string | undefined): string {
+  const zone = (raw ?? '').trim();
+  if (zone) {
+    if (isSupportedTimeZone(zone)) return zone;
+    console.warn(
+      `REALM_RESET_TZ "${zone}" is not a resolvable IANA time zone; falling back to ${DEFAULT_RAID_RESET_TIME_ZONE}.`,
+    );
+  }
+  if (!isSupportedTimeZone(DEFAULT_RAID_RESET_TIME_ZONE)) {
+    throw new Error(
+      `Raid reset time zone ${DEFAULT_RAID_RESET_TIME_ZONE} is unavailable: run a full-ICU Node build.`,
+    );
+  }
+  return DEFAULT_RAID_RESET_TIME_ZONE;
+}
+
+export const REALM_RESET_TIME_ZONE: string = resolveRaidResetTimeZone(process.env.REALM_RESET_TZ);
 
 export function resolvePublicOrigin(rawOrigin: string | undefined): string {
   const trimmed = (rawOrigin ?? '').trim().replace(/\/+$/, '');
@@ -112,13 +138,10 @@ export const REALM_DIRECTORY: RealmEntry[] = (() => {
 })();
 
 // Cross-origin requests from these realm origins are allowed (CORS), so a
-// client served by one realm can call another realm's API after switching. The
-// explicit web origins cover apex launchers that list subrealm hosts without
-// being one of those subrealms themselves.
-export const REALM_ORIGINS: ReadonlySet<string> = new Set([
-  ...REALM_DIRECTORY.map((r) => r.url).filter(Boolean),
-  ...parseWebOrigins(process.env.WEB_ORIGINS),
-]);
+// client served by one realm can call another realm's API after switching.
+export const REALM_ORIGINS: ReadonlySet<string> = new Set(
+  REALM_DIRECTORY.map((r) => r.url).filter(Boolean),
+);
 
 // Public, unauthenticated read surfaces that any browser origin may call (CORS
 // `*`): the public character sheet and the deterministic avatar art. These carry

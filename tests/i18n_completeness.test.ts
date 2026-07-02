@@ -162,6 +162,13 @@ describe('i18n whole-catalog completeness', () => {
       'hudChrome.discord.open', // "Discord" - brand
       'hudChrome.discord.panelTitle', // "Cryptic Realm" - brand
       'hudChrome.discord.linkedTitle', // "Discord: {name}" - brand + player name
+      'hudChrome.keybinds.discord', // "Discord" - brand (Key Bindings action label)
+      'guide.footer.blurb', // CR marketing prose - brand
+      'guide.footer.github', // "Contributions" - CR brand surface
+      'guide.faqPage.a8', // CR private-realms policy prose - brand
+      'footer.githubLabel', // "Contributions" - CR brand surface
+      'news.viewOnGithub', // "Read release notes" - CR brand surface
+      'a11y.githubProject', // "Open Cryptic Realm contributions" - brand
       'news.officialLog',
       'news.alphaBetaTitle',
       'news.alphaBetaBody',
@@ -228,6 +235,7 @@ describe('i18n CLDR pluralization', () => {
     expect(bases.sort()).toEqual([
       'characterCount',
       'guildMembers',
+      'playersMatching',
       'playersOnline',
       'secondsRemaining',
     ]);

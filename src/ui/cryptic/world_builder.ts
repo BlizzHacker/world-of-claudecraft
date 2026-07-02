@@ -265,7 +265,7 @@ export function openWorldBuilderDock(): void {
         if (!groups.has(g)) groups.set(g, []);
         groups.get(g)!.push(p);
       }
-      const order = ['forged', 'cryptic', 'classic', 'infernal', 'claudcraft', 'claudecraft', 'arcane', 'dominion', 'arcadevoid', 'exchange', 'fps'];
+      const order = ['forged', 'crypticrealm', 'cryptic', 'classic', 'infernal', 'claudcraft', 'claudecraft', 'arcane', 'dominion', 'arcadevoid', 'exchange', 'fps'];
       const sortedGroups = [...groups.keys()].sort((a, b) => {
         const ia = order.indexOf(a), ib = order.indexOf(b);
         return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib) || a.localeCompare(b);

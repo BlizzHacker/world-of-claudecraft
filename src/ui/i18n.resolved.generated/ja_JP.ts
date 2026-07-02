@@ -274,11 +274,16 @@ export const ja_JP: EnTranslations = {
       "tabsLabel": "ハイスコアボード",
       "tabPlayers": "プレイヤー",
       "tabGuilds": "ギルド",
+      "tabDevs": "開発者",
       "guildName": "ギルド",
       "members": "メンバー",
       "topLevel": "最高",
       "guildXp": "累計経験値",
-      "guildEmpty": "ランク入りのギルドはまだありません。"
+      "guildEmpty": "ランク入りのギルドはまだありません。",
+      "devName": "コントリビューター",
+      "devTierCol": "バッジ",
+      "mergedPrs": "マージ済みPR",
+      "devEmpty": "ランク入りのコントリビューターはまだいません。"
     },
     "raidLockout": {
       "title": "レイドロックアウト",
@@ -308,7 +313,8 @@ export const ja_JP: EnTranslations = {
     "keybinds": {
       "emoteWheel": "エモートホイール",
       "targetFriendly": "最も近い味方をターゲット",
-      "targetFriendlyNext": "味方ターゲットを順に切り替え"
+      "targetFriendlyNext": "味方ターゲットを順に切り替え",
+      "discord": "Discord"
     },
     "options": {
       "clickMoveLeft": "左クリック",
@@ -330,8 +336,10 @@ export const ja_JP: EnTranslations = {
       "keybindHelpLockCursorOnRotate": "ドラッグでカメラを回転させている間、マウスカーソルをウィンドウ内に固定し、画面の端や別のモニターに移動しないようにします。自由なカーソルを好む場合はオフにしてください。",
       "showWalletOnCharacterScreen": "キャラクター画面にウォレットを表示",
       "showWalletOnPlayerCard": "プレイヤーカードにウォレットを表示",
+      "showDevBadges": "開発者バッジを表示",
       "uiScale": "UIスケール",
       "highContrastBackground": "高コントラスト背景",
+      "startAttackOnAbility": "アビリティ使用時に自動攻撃",
       "showItemLevel": "アイテムレベルを表示",
       "itemLevelLine": "アイテムレベル {level}",
       "itemScoreLine": "スコア {score}",
@@ -428,6 +436,9 @@ export const ja_JP: EnTranslations = {
     },
     "statInfo": {
       "fromYour": "あなたの{stat}{value}による効果:",
+      "names": {
+        "spellPower": "呪文威力"
+      },
       "desc": {
         "str": "攻撃力を上昇させ、武器による攻撃の威力を高めます。",
         "agi": "反射神経と狙いを鋭くし、複数の戦闘ステータスを向上させます。",
@@ -436,6 +447,7 @@ export const ja_JP: EnTranslations = {
         "spi": "戦闘外で休憩している間の、術者のマナ回復速度を速めます。",
         "armor": "物理攻撃のダメージを軽減します。軽減量は格下の攻撃者に対してより大きくなり、上限は75%です。",
         "attackPower": "武器による攻撃を強化します。攻撃力14ごとに秒間ダメージが1上昇します。",
+        "spellPower": "呪文のダメージと回復の効果を高めます。知力1ポイントごとに、装備やバフによる分に加えて、わずかな呪文威力を得られます。",
         "dps": "武器のダメージと速度に攻撃力を組み合わせて算出した、推定の秒間ダメージです。",
         "critChance": "攻撃がクリティカルとなり、ダメージが2倍になる確率です。",
         "dodge": "迫り来る近接攻撃を完全に回避し、ダメージを受けない確率です。"
@@ -458,6 +470,15 @@ export const ja_JP: EnTranslations = {
         "minorForClass": "あなたのクラスにはほとんど効果がありません。",
         "baseChance": "全ての冒険者が共有する5%の基本確率を含みます。",
         "dpsApprox": "推定値であり、クリティカルやアビリティによるダメージは含みません。"
+      },
+      "sources": {
+        "header": "Made up of:",
+        "base": "Base: {value}",
+        "attributes": "能力値から: {value}",
+        "fromAttribute": "From {stat}: {value}",
+        "gear": "装備: {value}",
+        "buff": "{name}: {value}",
+        "talents": "タレントと効果: {value}"
       }
     },
     "talents": {
@@ -481,6 +502,9 @@ export const ja_JP: EnTranslations = {
       "ineligible": "このクエストの条件を満たしていません。",
       "noQuestSelected": "共有するクエストをログから選択してください。",
       "linkTitle": "Shift + クリックでこのクエストをチャットにリンクします。"
+    },
+    "itemShare": {
+      "linkHint": "Shift + クリックでこのアイテムをチャットにリンクします。"
     },
     "plurals": {
       "guildMembers": {
@@ -506,6 +530,12 @@ export const ja_JP: EnTranslations = {
         "few": "Who：{realm}に{count}人のプレイヤーがオンラインです。",
         "many": "Who：{realm}に{count}人のプレイヤーがオンラインです。",
         "other": "Who：{realm}に{count}人のプレイヤーがオンラインです。"
+      },
+      "playersMatching": {
+        "one": "Who：{realm}で「{query}」に一致するプレイヤーが{count}人います。",
+        "few": "Who：{realm}で「{query}」に一致するプレイヤーが{count}人います。",
+        "many": "Who：{realm}で「{query}」に一致するプレイヤーが{count}人います。",
+        "other": "Who：{realm}で「{query}」に一致するプレイヤーが{count}人います。"
       }
     },
     "bugReport": {
@@ -632,7 +662,26 @@ export const ja_JP: EnTranslations = {
       "methodGroup": "分配方式をグループルートに設定しました。",
       "assigned": "{looter}が{item}を{target}に分配しました。",
       "unassigned": "{item}は分配されず、誰でも入手できます。",
-      "leaderOnly": "分配方式を変更できるのはパーティリーダーだけです。"
+      "leaderOnly": "分配方式を変更できるのはパーティリーダーだけです。",
+      "rollingFor": "{item}にロールしています。",
+      "looterChanged": "分配担当は{name}になりました。",
+      "thresholdSet": "品質しきい値を{threshold}に設定しました。",
+      "summaryMaster": "分配設定：マスタールート、分配担当{name}、品質しきい値{threshold}。",
+      "summaryGroup": "分配設定：グループルート。"
+    },
+    "party": {
+      "promoteLeader": "パーティリーダーに指定"
+    },
+    "lootSettings": {
+      "title": "分配設定",
+      "close": "分配設定を閉じる",
+      "menuItem": "分配設定",
+      "method": "分配方式",
+      "rollThreshold": "ロールしきい値",
+      "groupLoot": "グループルート",
+      "valueMaster": "マスタールート",
+      "leaderOption": "分配担当：パーティリーダー（あなた）",
+      "masterOption": "分配担当：{name}"
     },
     "bags": {
       "filterGroupAria": "バッグをカテゴリーで絞り込む",
@@ -740,6 +789,9 @@ export const ja_JP: EnTranslations = {
     "nameplate": {
       "mob": "[{level}] {name}",
       "mobElite": "[{level}+] {name}"
+    },
+    "itemTooltip": {
+      "requiresLevel": "必要レベル {level}"
     },
     "discord": {
       "title": "Discord",
@@ -883,6 +935,34 @@ export const ja_JP: EnTranslations = {
           "hint": "コミュニティに助けを求める"
         }
       }
+    },
+    "devBadge": {
+      "title": "開発者",
+      "tiers": {
+        "tinkerer": "修繕屋",
+        "artificer": "工匠",
+        "runesmith": "ルーン鍛冶",
+        "architect": "設計者",
+        "worldwright": "世界の造り手"
+      },
+      "flavors": {
+        "tinkerer": "最初のプルリクエストがこの世界にマージされた。",
+        "artificer": "5 件のプルリクエストを経て、世界はあなたのコードに従い始める。",
+        "runesmith": "15 件のプルリクエストが、稼働中のゲームに鍛え込まれた。",
+        "architect": "この世界の設計者：30 件のプルリクエストがマージされた。",
+        "worldwright": "世界の造り手：70 件のプルリクエストがこのゲームを形づくる。"
+      },
+      "badgeTitle": "開発者：{tier}",
+      "prsLanded": "{count} 件のプルリクエストがマージ済み",
+      "contributor": "オープンソース貢献者",
+      "link": {
+        "cta": "Link GitHub",
+        "relink": "GitHub を再連携",
+        "benefits": "GitHub を連携すると、オープンソースリポジトリにマージされたプルリクエストに応じて開発者バッジを獲得できます。",
+        "error": "GitHub を連携できませんでした。もう一度お試しください。"
+      },
+      "linkedAs": "{login} として連携済み",
+      "unlink": "GitHub の連携を解除"
     }
   },
   "guide": {
@@ -5720,6 +5800,11 @@ export const ja_JP: EnTranslations = {
         "name": "博識者キャディス",
         "title": "博識者",
         "greeting": "崩れやすい頁岩に気をつけてください、{className}。山は近ごろ落ち着きがなく、その理由を知りたいのです。"
+      },
+      "auctioneer_voss": {
+        "name": "競売人ヴォス",
+        "title": "世界市場の守り手",
+        "greeting": "世界市場はここでも利用できます、{className}。王国中の冒険者から買うことも、自分の品を売ることもできます。"
       },
       "brother_aldric_raid": {
         "name": "アルドリック修道士",

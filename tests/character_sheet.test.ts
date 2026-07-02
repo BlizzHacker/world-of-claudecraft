@@ -77,6 +77,8 @@ describe('characterSheet — shared fields', () => {
     expect(sheet.rank).toEqual({ scope: 'realm', rank: 27, total: 4012 });
     expect(sheet.avatarUrl).toBe('https://crypticrealm.com/avatar/shaman/0.png');
     expect(sheet.profileUrl).toBe('https://crypticrealm.com/c/Thrallish');
+    expect(sheet.avatarUrl).toBe('https://crypticrealm.com/avatar/shaman/0.png');
+    expect(sheet.profileUrl).toBe('https://crypticrealm.com/c/Thrallish');
     expect(sheet.arena['1v1']).toEqual({ rating: 1600, wins: 10, losses: 4 });
   });
 

@@ -3440,9 +3440,15 @@ function marketRoundTrip(): Scenario {
       rec.snapshot('listed');
 
       // 2) browse filter narrows to the wolf_fang listing, then clears.
-      sim.marketSearch('wolf', seller);
+      sim.marketSearch(
+        { search: 'wolf', itemType: 'all', subtype: 'all', rarity: 'all', page: 0 },
+        seller,
+      );
       rec.snapshot('searched');
-      sim.marketSearch('', seller);
+      sim.marketSearch(
+        { search: '', itemType: 'all', subtype: 'all', rarity: 'all', page: 0 },
+        seller,
+      );
       rec.snapshot('search-cleared');
 
       // 3) the buyer buys it: coin leaves the buyer, goods enter their bags, the
@@ -3487,7 +3493,7 @@ function inventoryVendor(): Scenario {
   return {
     name: 'inventory_vendor',
     coverage: [
-      'buyItem: meta.copper - buyValue + addItem at trader_wilkes (vendor proximity gate)',
+      'buyItem: meta.copper - buyValue*stackSize + addItem stack at trader_wilkes (vendor proximity gate)',
       'equipItem empty-slot equip + recalcPlayerStats',
       'equipItem same-slot SWAP: old piece returned to bags via addItemSilent + recalc',
       'unequipItem: piece back to bags, slot emptied, recalc',

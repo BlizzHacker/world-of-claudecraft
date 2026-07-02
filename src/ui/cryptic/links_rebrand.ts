@@ -2,6 +2,7 @@
 // module loaded by links.html. Checks the active realm and rewrites the
 // upstream brand strings to CR equivalents.
 
+import './realm_env';
 import { getActiveRealm } from '../../sim/realms';
 import { socialsForRealm } from '../../sim/realms/social_links';
 

@@ -6,6 +6,7 @@
 // Wire this up by importing once from src/main.ts and calling mountThemeSelect()
 // against an element id (the index.html overlay places <div id="theme-picker">).
 
+import './realm_env';
 import './theme.css';
 import {
   REALM_LIST,

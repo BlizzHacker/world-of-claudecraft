@@ -4,6 +4,7 @@
 // keystone). Display-only: reads RealmContent.classes, never touches sim
 // state, so it works for every realm that defines classes + skillTrees.
 
+import './realm_env';
 import { getActiveRealm } from '../../sim/realms';
 import type { RealmClassSkin, RealmRole } from '../../sim/realms/types';
 

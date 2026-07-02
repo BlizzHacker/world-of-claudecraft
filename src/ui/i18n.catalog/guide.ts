@@ -123,9 +123,9 @@ export const guideStrings = {
       pillarClassesTitle: 'Nine classes, three roles',
       pillarClassesBody:
         'Tank, heal, or deal the damage. Every class plays the way its archetype should, with talents to make it yours.',
-      pillarOpenTitle: 'Free to play',
+      pillarOpenTitle: 'Free and open source',
       pillarOpenBody:
-        'Free to play to the level cap. No pay to win, ever.',
+        'Free to play to the level cap, with the whole game open source. No pay to win, ever.',
     },
 
     // Class chooser teaser.
@@ -166,7 +166,7 @@ export const guideStrings = {
     faq: {
       heading: 'Good to know',
       q1: 'Is it free to play?',
-      a1: 'Yes. The whole game is free to the level cap.',
+      a1: 'Yes. The whole game is free to the level cap, and it is open source on GitHub.',
       q2: 'Do I need a crypto wallet?',
       a2: 'No. The game is fully playable without one. The optional community token only unlocks cosmetic flair and never affects power.',
       q3: 'Can I play offline?',
@@ -181,7 +181,7 @@ export const guideStrings = {
       body: 'Jump in now, or come say hello. The world is better with company.',
       play: 'Play Now',
       discord: 'Join the Discord',
-      github: 'Contributions',
+      github: 'Star on GitHub',
     },
   },
 
@@ -347,7 +347,7 @@ export const guideStrings = {
   faqPage: {
     intro: 'The questions new players ask most often.',
     q1: 'Is it really free?',
-    a1: 'Yes. The whole game is free to play to the level cap.',
+    a1: 'Yes. The whole game is free to play to the level cap, and the source code is open on GitHub.',
     q2: 'Do I need a crypto wallet or any tokens?',
     a2: 'No. The game is fully playable without one. The optional community token only unlocks cosmetic flair and never affects power or progression.',
     q3: 'Can I play on my phone?',

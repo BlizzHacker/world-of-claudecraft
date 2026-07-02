@@ -2,6 +2,7 @@
 // upstream news view (#news-view section) and filters .news-item cards by
 // their data-realm attribute. Cards without data-realm show in all realms.
 
+import './realm_env';
 import { REALM_LIST, resolveActiveRealmId, isRealmId, persistActiveRealm } from '../../sim/realms';
 
 const PICKER_ID = 'cr-news-realm-picker';

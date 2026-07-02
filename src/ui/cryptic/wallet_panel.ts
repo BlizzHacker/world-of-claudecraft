@@ -5,6 +5,7 @@
 // No npm imports: talks to window.solana (Phantom injects this) directly.
 // Browsers without Phantom get an install link inside the wallet flyout.
 
+import './realm_env';
 import { getActiveRealm } from '../../sim/realms';
 
 interface PhantomProvider {

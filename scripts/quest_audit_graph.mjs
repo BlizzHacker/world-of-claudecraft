@@ -203,6 +203,7 @@ writeFileSync(
   path.join(outDir, 'quest-audit-interactive-graph.html'),
   renderPage({
     title: 'World Of Cryptic Realm Quest Graph',
+    title: 'World Of ClaudeCraft Quest Graph',
     subtitle:
       'All-game quest audit. Use tabs to inspect each zone, dungeon, attunement, and raid quest flow.',
     rightPanel: baseDetail(),
@@ -213,6 +214,7 @@ writeFileSync(
   path.join(outDir, 'quest-audit-overview-graph.html'),
   renderPage({
     title: 'World Of Cryptic Realm Quest Overview',
+    title: 'World Of ClaudeCraft Quest Overview',
     subtitle: 'Overview-first all-game quest audit with tabs and source-history details.',
     rightPanel: overviewDetail(nodes),
     data: graphData,

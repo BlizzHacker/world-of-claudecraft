@@ -30,6 +30,9 @@ export const DUNGEON_LEASH_DISTANCE = 70;
 // updateMob); the boss id NYTHRAXIS_BOSS_ID lives lower in this file (C1 relocation).
 export const NYTHRAXIS_ADD_ID = 'nythraxis_skeleton_warrior';
 export const GCD = 1.5; // seconds
+// Shared cooldown across ALL combat potions (classic-era potion sickness): one
+// potion locks every other potion for this long (#103). 2 minutes, vanilla value.
+export const POTION_COOLDOWN = 120; // seconds
 export const CAST_PUSHBACK_SEC = 0.5; // vanilla: each hit delays a cast by 0.5s
 export const CHANNEL_PUSHBACK_FRACTION = 0.25; // vanilla: each hit shaves 25% off a channel
 // Tolerance for "this per-tick timer is effectively complete" comparisons (casting,
@@ -311,6 +314,10 @@ interface BaseItemDef {
   elixir?: { aura: string; kind: AuraKind; value: number; duration: number };
   quality?: 'poor' | 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary'; // gray/white/green/blue/purple/orange name colors
   requiredClass?: PlayerClass[];
+  // Minimum character level needed to equip this piece. When omitted, the level
+  // is DERIVED from `quality` (see src/sim/item_level_req.ts); set this only to
+  // override the per-quality default for a specific item.
+  requiredLevel?: number;
   /** Set id this piece belongs to; equipping enough pieces grants the set bonuses (see ITEM_SETS). */
   set?: string;
 }
@@ -1361,6 +1368,10 @@ export interface Entity {
   comboTargetId: number | null;
   overpowerUntil: number; // sim-time until which overpower is usable
   potionCooldownUntil: number; // sim-time until a combat potion can be used again (#103)
+  // Same shared potion cooldown as REMAINING seconds, materialized per tick (like
+  // gcdRemaining) so the action bar can paint a cooldown swipe without a client
+  // clock. Derived from potionCooldownUntil; excluded from the parity trace.
+  potionCdRemaining: number;
   // warrior charge: forced run toward the target along a pathfound route
   chargeTargetId: number | null;
   chargeTimeLeft: number; // seconds; failsafe so a blocked charge can't run forever
@@ -1465,6 +1476,14 @@ export interface Entity {
   discordName?: string;
   discordJoined?: number;
   discordRole?: string;
+  // Developer-badge flair (cosmetic, server-set from a verified GitHub link plus
+  // the repo's merged-PR stats; the sim never reads any of it): the tier index
+  // (0/undefined = none, 1-5 = Tinkerer…Worldwright), the count of merged pull
+  // requests backing it (for the inspect/card readout), and the GitHub login
+  // (for the inspect readout and the public profile link).
+  devTier?: number;
+  devMergedPrs?: number;
+  githubLogin?: string;
 }
 
 export interface NythraxisWardChannel {
@@ -1734,6 +1753,10 @@ export interface SimConfig {
   noPlayer?: boolean; // multiplayer server: start with an empty world and addPlayer() later
   devCommands?: boolean; // local dev: /dev level|tp|give chat cheats
   lockoutNowMs?: () => number; // host wall-clock for persisted raid lockouts
+  // Host-computed next raid-reset instant for a given lockout "now" (epoch ms). The
+  // authoritative server uses its realm-local 3 AM daily reset; offline/headless omit
+  // this and fall back to a flat 24h day. Keeps the time zone out of the sim core.
+  raidResetMs?: (nowMs: number) => number;
 }
 
 export function emptyMoveInput(): MoveInput {

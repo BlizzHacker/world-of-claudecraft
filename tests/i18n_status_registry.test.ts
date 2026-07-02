@@ -4,9 +4,8 @@ import { fileURLToPath } from 'node:url';
 import * as fs from 'fs';
 import path from 'path';
 import { describe, expect, it } from 'vitest';
-// Shared zero-dep JS hash helper. The scanner uses the SAME module, so re-deriving
-// hashes here is an independent check of the registry rather than a copy of the
-// scanner's own arithmetic.
+// SAME module, so re-deriving hashes here is an independent check of the registry
+// rather than a copy of the scanner's own arithmetic.
 import { contentHash, placeholdersOf } from '../scripts/i18n_hash.mjs';
 import { DICT as adminDICT } from '../src/admin/i18n';
 import { en, supportedLanguages } from '../src/ui/i18n';

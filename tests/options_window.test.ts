@@ -7,8 +7,8 @@ import { describe, expect, it } from 'vitest';
 // the changeLanguage hardening (PR #730), the WCAG 2.2 AA focus-return +
 // roles/aria, the bug-report + keybind dispatch, and that the window stays cold
 // (never wired into the per-frame Hud.update path).
-const painter = readFileSync(new URL('../src/ui/options_window.ts', import.meta.url), 'utf8');
-const hudTs = readFileSync(new URL('../src/ui/hud.ts', import.meta.url), 'utf8');
+const painter = readFileSync(new URL('../src/ui/options_window.ts', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
+const hudTs = readFileSync(new URL('../src/ui/hud.ts', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
 
 describe('options_window: no magic values', () => {
   it('carries no literal color in TS (colors live in the extracted stylesheet)', () => {
@@ -151,6 +151,20 @@ describe('options_window: keybind rebind dispatch (cluster 5)', () => {
     expect(painter).toContain('hooks.captureKey((code)');
     expect(painter).toContain('this.deps.keybinds().bind(actionId, index, code)');
     expect(painter).toContain('this.deps.refreshKeybindLabels()');
+  });
+});
+
+describe('options_window: viewport resync on open (PR #1118)', () => {
+  it('calls syncAppViewport() before the panel flips to display: block', () => {
+    expect(painter).toContain("import { syncAppViewport } from '../game/app_viewport'");
+    const toggle = painter.slice(painter.indexOf('toggle(): void {'));
+    const toggleEnd = toggle.indexOf('\n  }\n');
+    const body = toggle.slice(0, toggleEnd);
+    const syncIdx = body.indexOf('syncAppViewport()');
+    const displayIdx = body.indexOf("root().style.display = 'block'");
+    expect(syncIdx).toBeGreaterThan(-1);
+    expect(displayIdx).toBeGreaterThan(-1);
+    expect(syncIdx).toBeLessThan(displayIdx);
   });
 });
 

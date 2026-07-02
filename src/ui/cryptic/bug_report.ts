@@ -1,3 +1,4 @@
+import './realm_env';
 import { getActiveRealm, resolveActiveRealmId } from '../../sim/realms';
 import { getGamepadStatus } from '../../game/gamepad';
 import { readCrypticSession } from './session';

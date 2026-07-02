@@ -76,12 +76,30 @@ export function getRealm(id: RealmId): RealmContent {
   return REALMS[id] ?? REALMS[DEFAULT_REALM];
 }
 
+// Host environment seam: the sim is headless (no DOM/browser globals - see
+// tests/architecture.test.ts). The browser entry injects readers for the URL
+// query + persistent storage via setRealmHostEnv (wired in src/main.ts);
+// Node/RL hosts leave it unset and get DEFAULT_REALM.
+export interface RealmHostEnv {
+  queryParam(name: string): string | null;
+  storageGet(key: string): string | null;
+  storageSet(key: string, value: string): void;
+  notifyStageChange?(realmId: string, stage: string): void;
+}
+let hostEnv: RealmHostEnv | null = null;
+export function setRealmHostEnv(env: RealmHostEnv | null): void {
+  hostEnv = env;
+}
+export function realmHostEnv(): RealmHostEnv | null {
+  return hostEnv;
+}
+
 export function resolveActiveRealmId(): RealmId {
   try {
-    if (typeof window !== 'undefined') {
-      const q = new URLSearchParams(window.location.search).get('realm');
+    if (hostEnv) {
+      const q = hostEnv.queryParam('realm');
       if (isRealmId(q)) return q;
-      const ls = window.localStorage?.getItem(STORE_KEY);
+      const ls = hostEnv.storageGet(STORE_KEY);
       if (isRealmId(ls)) return ls;
     }
   } catch { /* SSR / sandboxed env: fall through */ }
@@ -90,9 +108,7 @@ export function resolveActiveRealmId(): RealmId {
 
 export function persistActiveRealm(id: RealmId): void {
   try {
-    if (typeof window !== 'undefined') {
-      window.localStorage?.setItem(STORE_KEY, id);
-    }
+    hostEnv?.storageSet(STORE_KEY, id);
   } catch { /* storage unavailable */ }
 }
 

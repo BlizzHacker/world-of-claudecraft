@@ -1,6 +1,8 @@
 import * as THREE from 'three';
+import { clone as cloneSkinned } from 'three/addons/utils/SkeletonUtils.js';
 import { CLASSES } from '../../sim/data';
 import type { PlayerClass } from '../../sim/types';
+import { loadGltf } from '../assets/loader';
 import { trackWebGLContext } from '../context_release';
 import type { WeaponLayoutOverride } from './manifest';
 import { CharacterVisual } from './visual';
@@ -24,6 +26,9 @@ export class CharacterPreview {
   private camera: THREE.PerspectiveCamera;
   private characterGroup: THREE.Group;
   private currentVisual: CharacterVisual | null = null;
+  private externalRoot: THREE.Object3D | null = null;
+  private externalMixer: THREE.AnimationMixer | null = null;
+  private externalLoadToken = 0;
   private currentSkin = 0;
   private clock = new THREE.Clock();
   private animationFrameId: number | null = null;
@@ -111,6 +116,7 @@ export class CharacterPreview {
     weaponOverride: WeaponLayoutOverride | null = null,
   ): void {
     if (this.destroyed) return;
+    this.clearExternalModel();
     // Clean up current visual if it exists
     if (this.currentVisual) {
       this.characterGroup.remove(this.currentVisual.root);
@@ -134,6 +140,36 @@ export class CharacterPreview {
     } catch (err) {
       console.error(`Failed to load preview character visual for ${visualKey}:`, err);
     }
+  }
+
+  setExternalModel(url: string): void {
+    if (this.destroyed) return;
+    const token = ++this.externalLoadToken;
+    this.clearExternalModel(false);
+    if (this.currentVisual) {
+      this.characterGroup.remove(this.currentVisual.root);
+      this.currentVisual.dispose();
+      this.currentVisual = null;
+    }
+    loadGltf(url)
+      .then((gltf) => {
+        if (this.destroyed || token !== this.externalLoadToken) return;
+        const root = buildExternalPreviewInstance(gltf.scene);
+        this.externalRoot = root;
+        this.characterGroup.add(root);
+        if (gltf.animations.length) {
+          const mixer = new THREE.AnimationMixer(root);
+          mixer.clipAction(gltf.animations[0]).play();
+          this.externalMixer = mixer;
+        }
+        this.characterGroup.rotation.y = 0;
+        this.syncSize();
+      })
+      .catch((err: unknown) => {
+        if (token === this.externalLoadToken) {
+          console.error(`Failed to load external preview model ${url}:`, err);
+        }
+      });
   }
 
   /** Swap the previewed skin (alternate body texture); persists across setClass. */
@@ -249,6 +285,7 @@ export class CharacterPreview {
     if (this.currentVisual) {
       this.currentVisual.update(dt, PREVIEW_ANIM_STATE, true);
     }
+    if (this.externalMixer) this.externalMixer.update(dt);
 
     this.renderer.render(this.scene, this.camera);
   };
@@ -341,6 +378,7 @@ export class CharacterPreview {
       this.currentVisual.dispose();
       this.currentVisual = null;
     }
+    this.clearExternalModel();
 
     this.unregisterContext?.();
     this.unregisterContext = null;
@@ -352,4 +390,35 @@ export class CharacterPreview {
     this.renderer.dispose();
     this.canvas.remove();
   }
+
+  private clearExternalModel(invalidateLoad = true): void {
+    if (invalidateLoad) this.externalLoadToken++;
+    if (this.externalMixer) {
+      this.externalMixer.stopAllAction();
+      this.externalMixer = null;
+    }
+    if (this.externalRoot) {
+      this.characterGroup.remove(this.externalRoot);
+      this.externalRoot = null;
+    }
+  }
+}
+
+function buildExternalPreviewInstance(scene: THREE.Object3D): THREE.Object3D {
+  const cloned = cloneSkinned(scene);
+  cloned.updateMatrixWorld(true);
+  const box = new THREE.Box3().setFromObject(cloned);
+  const wrap = new THREE.Group();
+  wrap.add(cloned);
+  if (!box.isEmpty()) {
+    const size = new THREE.Vector3();
+    const center = new THREE.Vector3();
+    box.getSize(size);
+    box.getCenter(center);
+    const tallest = Math.max(size.x, size.y, size.z) || 1;
+    const scale = 2.35 / tallest;
+    cloned.position.set(-center.x, -box.min.y, -center.z);
+    wrap.scale.setScalar(scale);
+  }
+  return wrap;
 }

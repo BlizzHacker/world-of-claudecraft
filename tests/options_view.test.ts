@@ -242,6 +242,10 @@ describe('options_view: interface dispatch matrix (cluster 5)', () => {
       'showWalletOnPlayerCard',
       'landingHighContrast',
       'invertLookY',
+      'showDevBadges',
+      'landingHighContrast',
+      'invertLookY',
+      'startAttackOnAbilityUse',
       'showItemLevel',
       'showSecondaryActionBar',
     ]);

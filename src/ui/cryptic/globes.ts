@@ -15,6 +15,7 @@
 //     classic/dominion/arcane) and 'classic' for the claudecraft realm.
 //   - No hud.ts edits. CSS toggles via the `cr-hud-skin-*` class on <body>.
 
+import './realm_env';
 import { resolveActiveRealmId } from '../../sim/realms';
 
 export type HudSkin = 'classic' | 'globes';

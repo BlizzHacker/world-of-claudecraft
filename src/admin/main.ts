@@ -11,6 +11,10 @@ startSitePresence();
 // Admin SPA entry. Loads the active locale before the first localized paint,
 // then mounts the Svelte app into #app. The CR update panel lives outside the
 // Svelte tree and self-mounts when its host exists.
+// Admin SPA entry. Loads the active locale (admin keeps every locale static, so this
+// resolves instantly; the await mirrors the game client's bootstrap shape), sets the
+// localized document title, then mounts the Svelte app into #app. All UI, auth, and
+// data flow live in components; this file only bootstraps.
 async function boot(): Promise<void> {
   await ensureAdminLocaleLoaded(adminLanguage());
   document.title = t('app.title');

@@ -274,11 +274,16 @@ export const ru_RU: EnTranslations = {
       "tabsLabel": "Таблицы рекордов",
       "tabPlayers": "Игроки",
       "tabGuilds": "Гильдии",
+      "tabDevs": "Разработчики",
       "guildName": "Гильдия",
       "members": "Состав",
       "topLevel": "Макс",
       "guildXp": "Всего опыта",
-      "guildEmpty": "Пока нет гильдий в рейтинге."
+      "guildEmpty": "Пока нет гильдий в рейтинге.",
+      "devName": "Участник",
+      "devTierCol": "Значок",
+      "mergedPrs": "Слито PR",
+      "devEmpty": "Пока нет участников в рейтинге."
     },
     "raidLockout": {
       "title": "Блокировки рейдов",
@@ -308,7 +313,8 @@ export const ru_RU: EnTranslations = {
     "keybinds": {
       "emoteWheel": "Колесо эмоций",
       "targetFriendly": "Ближайший союзник",
-      "targetFriendlyNext": "Следующий союзник"
+      "targetFriendlyNext": "Следующий союзник",
+      "discord": "Discord"
     },
     "options": {
       "clickMoveLeft": "Левая кнопка",
@@ -330,8 +336,10 @@ export const ru_RU: EnTranslations = {
       "keybindHelpLockCursorOnRotate": "Удерживает курсор мыши внутри окна, пока вы вращаете камеру перетаскиванием, чтобы он не достигал края экрана и не переходил на другой монитор. Отключите, если предпочитаете свободный курсор.",
       "showWalletOnCharacterScreen": "Показывать кошелек на экране персонажей",
       "showWalletOnPlayerCard": "Показывать кошелек на карточке игрока",
+      "showDevBadges": "Показывать значки разработчика",
       "uiScale": "Масштаб интерфейса",
       "highContrastBackground": "Фон высокой контрастности",
+      "startAttackOnAbility": "Автоатака при использовании способности",
       "showItemLevel": "Показывать уровень предмета",
       "itemLevelLine": "Уровень предмета {level}",
       "itemScoreLine": "Оценка {score}",
@@ -428,6 +436,9 @@ export const ru_RU: EnTranslations = {
     },
     "statInfo": {
       "fromYour": "От вашей характеристики ({value} {stat}):",
+      "names": {
+        "spellPower": "Сила заклинаний"
+      },
       "desc": {
         "str": "Увеличивает силу атаки, благодаря чему удары вашим оружием бьют сильнее.",
         "agi": "Обостряет реакцию и меткость, улучшая сразу несколько ваших боевых характеристик.",
@@ -436,6 +447,7 @@ export const ru_RU: EnTranslations = {
         "spi": "Ускоряет восстановление маны заклинателя во время отдыха вне боя.",
         "armor": "Смягчает входящие физические удары. Снижение урона тем больше, чем ниже уровень атакующего, и не превышает 75%.",
         "attackPower": "Усиливает атаки вашим оружием. Каждые 14 ед. силы атаки добавляют 1 ед. урона в секунду.",
+        "spellPower": "Увеличивает урон ваших заклинаний и силу исцелений. Каждая единица интеллекта дает немного силы заклинаний, вдобавок к получаемой от снаряжения и усилений.",
         "dps": "Приблизительный урон вашего оружия в секунду с учетом урона и скорости оружия, а также вашей силы атаки.",
         "critChance": "Ваш шанс нанести критический удар, наносящий двойной урон.",
         "dodge": "Ваш шанс полностью уклониться от входящей атаки в ближнем бою, не получив урона."
@@ -458,6 +470,15 @@ export const ru_RU: EnTranslations = {
         "minorForClass": "Малополезно для вашего класса.",
         "baseChance": "Включает базовый шанс 5%, общий для всех искателей приключений.",
         "dpsApprox": "Это приблизительная оценка, не учитывающая критические удары и урон от способностей."
+      },
+      "sources": {
+        "header": "Made up of:",
+        "base": "Base: {value}",
+        "attributes": "От характеристик: {value}",
+        "fromAttribute": "From {stat}: {value}",
+        "gear": "Снаряжение: {value}",
+        "buff": "{name}: {value}",
+        "talents": "Таланты и эффекты: {value}"
       }
     },
     "talents": {
@@ -481,6 +502,9 @@ export const ru_RU: EnTranslations = {
       "ineligible": "Вы не соответствуете требованиям этого задания.",
       "noQuestSelected": "Выберите задание в журнале, чтобы поделиться им.",
       "linkTitle": "Shift + клик, чтобы вставить ссылку на это задание в чат."
+    },
+    "itemShare": {
+      "linkHint": "Shift + клик, чтобы вставить ссылку на этот предмет в чат."
     },
     "plurals": {
       "guildMembers": {
@@ -506,6 +530,12 @@ export const ru_RU: EnTranslations = {
         "few": "Список игроков: на {realm} в сети {count} игрока.",
         "many": "Список игроков: на {realm} в сети {count} игроков.",
         "other": "Список игроков: на {realm} в сети {count} игрока."
+      },
+      "playersMatching": {
+        "one": "Список игроков: на {realm} по запросу «{query}» найден {count} игрок.",
+        "few": "Список игроков: на {realm} по запросу «{query}» найдено {count} игрока.",
+        "many": "Список игроков: на {realm} по запросу «{query}» найдено {count} игроков.",
+        "other": "Список игроков: на {realm} по запросу «{query}» найдено {count} игроков."
       }
     },
     "bugReport": {
@@ -632,7 +662,26 @@ export const ru_RU: EnTranslations = {
       "methodGroup": "Способ добычи изменён на групповой.",
       "assigned": "{looter} передал предмет {item} игроку {target}.",
       "unassigned": "Предмет {item} не был назначен и доступен всем.",
-      "leaderOnly": "Только лидер группы может менять способ добычи."
+      "leaderOnly": "Только лидер группы может менять способ добычи.",
+      "rollingFor": "Бросок на {item}.",
+      "looterChanged": "Теперь мастер добычи: {name}.",
+      "thresholdSet": "Порог качества установлен: {threshold}.",
+      "summaryMaster": "Настройки добычи: мастер добычи, мастер добычи {name}, порог качества {threshold}.",
+      "summaryGroup": "Настройки добычи: групповая добыча."
+    },
+    "party": {
+      "promoteLeader": "Назначить лидером"
+    },
+    "lootSettings": {
+      "title": "Настройки добычи",
+      "close": "Закрыть настройки добычи",
+      "menuItem": "Настройки добычи",
+      "method": "Способ добычи",
+      "rollThreshold": "Порог броска",
+      "groupLoot": "Групповая добыча",
+      "valueMaster": "Мастер добычи",
+      "leaderOption": "Мастер добычи: лидер группы (вы)",
+      "masterOption": "Мастер добычи: {name}"
     },
     "bags": {
       "filterGroupAria": "Фильтровать сумки по категории",
@@ -740,6 +789,9 @@ export const ru_RU: EnTranslations = {
     "nameplate": {
       "mob": "[{level}] {name}",
       "mobElite": "[{level}+] {name}"
+    },
+    "itemTooltip": {
+      "requiresLevel": "Требуется уровень {level}"
     },
     "discord": {
       "title": "Discord",
@@ -883,6 +935,34 @@ export const ru_RU: EnTranslations = {
           "hint": "Попросите сообщество о помощи"
         }
       }
+    },
+    "devBadge": {
+      "title": "Разработчик",
+      "tiers": {
+        "tinkerer": "Мастеровой",
+        "artificer": "Искусник",
+        "runesmith": "Рунный кузнец",
+        "architect": "Архитектор",
+        "worldwright": "Творец мира"
+      },
+      "flavors": {
+        "tinkerer": "Ваш первый пул-реквест слился с этим миром.",
+        "artificer": "Пять пул-реквестов спустя мир подчиняется вашему коду.",
+        "runesmith": "Пятнадцать пул-реквестов вкованы в работающую игру.",
+        "architect": "Архитектор этого мира: слито 30 пул-реквестов.",
+        "worldwright": "Творец миров: 70 пул-реквестов формируют игру."
+      },
+      "badgeTitle": "Разработчик: {tier}",
+      "prsLanded": "Слито пул-реквестов: {count}",
+      "contributor": "Контрибьютор открытого кода",
+      "link": {
+        "cta": "Link GitHub",
+        "relink": "Перепривязать GitHub",
+        "benefits": "Привяжите GitHub, чтобы получить значок разработчика за пул-реквесты, слитые в открытом репозитории.",
+        "error": "Не удалось привязать GitHub. Пожалуйста, попробуйте снова."
+      },
+      "linkedAs": "Привязан как {login}",
+      "unlink": "Отвязать GitHub"
     }
   },
   "guide": {
@@ -5720,6 +5800,11 @@ export const ru_RU: EnTranslations = {
         "name": "Хранитель знаний Каддис",
         "title": "Хранитель знаний",
         "greeting": "Осторожнее с рыхлым сланцем, {className}. Гора стала беспокойной, и я намерен узнать почему."
+      },
+      "auctioneer_voss": {
+        "name": "Аукционист Восс",
+        "title": "Хранитель мирового рынка",
+        "greeting": "Мировой рынок доступен и здесь, {className}. Покупайте у искателей приключений всего королевства или выставляйте свои товары."
       },
       "brother_aldric_raid": {
         "name": "Брат Алдрик",

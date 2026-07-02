@@ -198,5 +198,7 @@ describe("Api URL helpers", () => {
   it("resolves native or realm calls against an absolute origin", () => {
     expect(apiUrl("/api/status", "https://crypticrealm.com/")).toBe("https://crypticrealm.com/api/status");
     expect(apiUrl("https://realm.example.com/api/status", "https://crypticrealm.com")).toBe("https://realm.example.com/api/status");
+    expect(apiUrl("/api/status", "https://worldofclaudecraft.com/")).toBe("https://worldofclaudecraft.com/api/status");
+    expect(apiUrl("https://realm.example.com/api/status", "https://worldofclaudecraft.com")).toBe("https://realm.example.com/api/status");
   });
 });

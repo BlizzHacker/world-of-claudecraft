@@ -2,6 +2,7 @@
 // into the upstream options menu and opens a CR-styled modal with HUD, camera,
 // realm skin, and wallet/token controls.
 
+import './realm_env';
 import { resolveHudSkin, setHudSkin, type HudSkin } from './globes';
 import { resolveFpsMode, persistFpsMode } from './fps_mode';
 import {

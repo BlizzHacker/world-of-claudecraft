@@ -274,11 +274,16 @@ export const ko_KR: EnTranslations = {
       "tabsLabel": "최고 점수 순위표",
       "tabPlayers": "플레이어",
       "tabGuilds": "길드",
+      "tabDevs": "개발자",
       "guildName": "길드",
       "members": "인원",
       "topLevel": "최고",
       "guildXp": "누적 경험치",
-      "guildEmpty": "아직 순위에 오른 길드가 없습니다."
+      "guildEmpty": "아직 순위에 오른 길드가 없습니다.",
+      "devName": "기여자",
+      "devTierCol": "배지",
+      "mergedPrs": "병합된 PR",
+      "devEmpty": "아직 순위에 오른 기여자가 없습니다."
     },
     "raidLockout": {
       "title": "공격대 잠금",
@@ -308,7 +313,8 @@ export const ko_KR: EnTranslations = {
     "keybinds": {
       "emoteWheel": "감정 표현 휠",
       "targetFriendly": "가장 가까운 아군 대상 지정",
-      "targetFriendlyNext": "아군 대상 순환"
+      "targetFriendlyNext": "아군 대상 순환",
+      "discord": "Discord"
     },
     "options": {
       "clickMoveLeft": "왼쪽 클릭",
@@ -330,8 +336,10 @@ export const ko_KR: EnTranslations = {
       "keybindHelpLockCursorOnRotate": "드래그하여 카메라를 회전하는 동안 마우스 커서를 창 안에 유지하여 화면 가장자리에 닿거나 다른 모니터로 이동하지 않도록 합니다. 자유로운 커서를 원하면 끄세요.",
       "showWalletOnCharacterScreen": "캐릭터 화면에 지갑 표시",
       "showWalletOnPlayerCard": "플레이어 카드에 지갑 표시",
+      "showDevBadges": "개발자 배지 표시",
       "uiScale": "UI 배율",
       "highContrastBackground": "고대비 배경",
+      "startAttackOnAbility": "스킬 사용 시 자동 공격",
       "showItemLevel": "아이템 레벨 표시",
       "itemLevelLine": "아이템 레벨 {level}",
       "itemScoreLine": "점수 {score}",
@@ -428,6 +436,9 @@ export const ko_KR: EnTranslations = {
     },
     "statInfo": {
       "fromYour": "당신의 {value} {stat}에서:",
+      "names": {
+        "spellPower": "주문력"
+      },
       "desc": {
         "str": "전투력을 증가시켜 무기 공격이 더 강하게 적중하도록 합니다.",
         "agi": "반사 신경과 조준 능력을 예리하게 하여 여러 전투 능력치를 향상시킵니다.",
@@ -436,6 +447,7 @@ export const ko_KR: EnTranslations = {
         "spi": "비전투 중 휴식할 때 시전자의 마나가 회복되는 속도를 빠르게 합니다.",
         "armor": "들어오는 물리 공격을 완화합니다. 낮은 레벨의 공격자에게 더 큰 효과를 발휘하며, 최대 75%까지 적용됩니다.",
         "attackPower": "무기 공격을 강화합니다. 전투력 14당 초당 피해 1이 추가됩니다.",
+        "spellPower": "주문의 피해량과 치유량을 증가시킵니다. 지능 1당 장비나 버프로 얻는 양에 더해 약간의 주문력을 부여합니다.",
         "dps": "무기의 피해와 속도, 전투력을 종합한 예상 무기 초당 피해입니다.",
         "critChance": "공격이 치명적으로 적중하여 두 배의 피해를 입힐 확률입니다.",
         "dodge": "들어오는 근접 공격을 완전히 피해 피해를 전혀 입지 않을 확률입니다."
@@ -458,6 +470,15 @@ export const ko_KR: EnTranslations = {
         "minorForClass": "당신의 직업에는 거의 도움이 되지 않습니다.",
         "baseChance": "모든 모험가가 공유하는 5%의 기본 확률이 포함되어 있습니다.",
         "dpsApprox": "추정치이며, 치명타와 기술 피해는 제외됩니다."
+      },
+      "sources": {
+        "header": "Made up of:",
+        "base": "Base: {value}",
+        "attributes": "능력치에서: {value}",
+        "fromAttribute": "From {stat}: {value}",
+        "gear": "장비: {value}",
+        "buff": "{name}: {value}",
+        "talents": "특성 및 효과: {value}"
       }
     },
     "talents": {
@@ -481,6 +502,9 @@ export const ko_KR: EnTranslations = {
       "ineligible": "이 퀘스트의 요구 조건을 충족하지 못합니다.",
       "noQuestSelected": "공유할 퀘스트를 기록에서 선택하세요.",
       "linkTitle": "Shift + 클릭하면 이 퀘스트를 채팅에 연결합니다."
+    },
+    "itemShare": {
+      "linkHint": "Shift + 클릭하면 이 아이템을 채팅에 연결합니다."
     },
     "plurals": {
       "guildMembers": {
@@ -506,6 +530,12 @@ export const ko_KR: EnTranslations = {
         "few": "검색: {realm} 서버에 {count}명의 플레이어가 접속 중입니다.",
         "many": "검색: {realm} 서버에 {count}명의 플레이어가 접속 중입니다.",
         "other": "검색: {realm} 서버에 {count}명의 플레이어가 접속 중입니다."
+      },
+      "playersMatching": {
+        "one": "Who: {realm}에서 \"{query}\"와 일치하는 플레이어 {count}명.",
+        "few": "Who: {realm}에서 \"{query}\"와 일치하는 플레이어 {count}명.",
+        "many": "Who: {realm}에서 \"{query}\"와 일치하는 플레이어 {count}명.",
+        "other": "Who: {realm}에서 \"{query}\"와 일치하는 플레이어 {count}명."
       }
     },
     "bugReport": {
@@ -632,7 +662,26 @@ export const ko_KR: EnTranslations = {
       "methodGroup": "전리품 방식이 파티 분배로 설정되었습니다.",
       "assigned": "{looter}님이 {item}을(를) {target}에게 분배했습니다.",
       "unassigned": "{item}이(가) 분배되지 않아 모두가 획득할 수 있습니다.",
-      "leaderOnly": "파티장만 전리품 방식을 변경할 수 있습니다."
+      "leaderOnly": "파티장만 전리품 방식을 변경할 수 있습니다.",
+      "rollingFor": "{item} 주사위를 굴리는 중입니다.",
+      "looterChanged": "분배 담당자가 {name}(으)로 변경되었습니다.",
+      "thresholdSet": "품질 기준이 {threshold}(으)로 설정되었습니다.",
+      "summaryMaster": "전리품 설정: 분배 담당, 분배 담당자 {name}, 품질 기준 {threshold}.",
+      "summaryGroup": "전리품 설정: 파티 분배."
+    },
+    "party": {
+      "promoteLeader": "파티장으로 지정"
+    },
+    "lootSettings": {
+      "title": "전리품 설정",
+      "close": "전리품 설정 닫기",
+      "menuItem": "전리품 설정",
+      "method": "전리품 방식",
+      "rollThreshold": "주사위 기준",
+      "groupLoot": "파티 분배",
+      "valueMaster": "분배 담당",
+      "leaderOption": "분배 담당자: 파티장(나)",
+      "masterOption": "분배 담당자: {name}"
     },
     "bags": {
       "filterGroupAria": "가방을 분류별로 필터링",
@@ -740,6 +789,9 @@ export const ko_KR: EnTranslations = {
     "nameplate": {
       "mob": "[{level}] {name}",
       "mobElite": "[{level}+] {name}"
+    },
+    "itemTooltip": {
+      "requiresLevel": "필요 레벨 {level}"
     },
     "discord": {
       "title": "Discord",
@@ -883,6 +935,34 @@ export const ko_KR: EnTranslations = {
           "hint": "커뮤니티에 도움 요청"
         }
       }
+    },
+    "devBadge": {
+      "title": "개발자",
+      "tiers": {
+        "tinkerer": "수선공",
+        "artificer": "장인",
+        "runesmith": "룬 대장장이",
+        "architect": "설계자",
+        "worldwright": "세계 창조자"
+      },
+      "flavors": {
+        "tinkerer": "당신의 첫 풀 리퀘스트가 이 세계에 병합되었습니다.",
+        "artificer": "다섯 번의 풀 리퀘스트 끝에, 세계가 당신의 코드를 따르기 시작합니다.",
+        "runesmith": "열다섯 번의 풀 리퀘스트가 구동 중인 게임에 벼려졌습니다.",
+        "architect": "이 세계의 설계자: 30번의 풀 리퀘스트가 병합되었습니다.",
+        "worldwright": "세계의 창조자: 70번의 풀 리퀘스트가 이 게임을 빚어냅니다."
+      },
+      "badgeTitle": "개발자: {tier}",
+      "prsLanded": "{count}번의 풀 리퀘스트 병합됨",
+      "contributor": "오픈 소스 기여자",
+      "link": {
+        "cta": "Link GitHub",
+        "relink": "GitHub 다시 연결",
+        "benefits": "GitHub를 연결하면 오픈 소스 저장소에 병합된 풀 리퀘스트로 개발자 배지를 받을 수 있습니다.",
+        "error": "GitHub를 연결할 수 없습니다. 다시 시도해 주세요."
+      },
+      "linkedAs": "{login}(으)로 연결됨",
+      "unlink": "GitHub 연결 해제"
     }
   },
   "guide": {
@@ -5720,6 +5800,11 @@ export const ko_KR: EnTranslations = {
         "name": "현자 캐디스",
         "title": "현자",
         "greeting": "느슨한 혈암을 조심하십시오, {className}. 산이 요즘 불안정해졌고, 나는 그 이유를 알고 싶습니다."
+      },
+      "auctioneer_voss": {
+        "name": "경매인 보스",
+        "title": "세계 시장 관리자",
+        "greeting": "세계 시장은 이곳에서도 이용할 수 있습니다, {className}. 왕국의 모험가들에게서 물건을 사거나 자신의 물건을 내놓으십시오."
       },
       "brother_aldric_raid": {
         "name": "알드릭 수사",

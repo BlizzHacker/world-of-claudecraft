@@ -15,12 +15,24 @@ export interface RealmAssetEntry {
   url: string;
   size: number;
   animated: boolean;
+  source?: 'local-folder' | 'meshy-api';
   sourceName: string;
+  sourceRelative?: string;
+  kind?: 'character' | 'vehicle' | 'prop';
+  meshCount?: number;
+  materialCount?: number;
+  textureCount?: number;
+  skinned?: boolean;
+  animationNames?: string[];
+  forgedKey?: string;
+  forgedUrl?: string;
 }
 
 export interface RealmAssetManifest {
   realmId: RealmId;
+  name?: string;
   generatedAt: string;
+  forgedGroup?: string;
   assets: RealmAssetEntry[];
 }
 

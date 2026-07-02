@@ -34,6 +34,7 @@ await sleep(3000);
 await page.evaluate(() => {
   const hud = window.__game.hud;
   hud.addChat?.('Welcome to Cryptic Realm!', 'system');
+  hud.addChat?.('Welcome to World of ClaudeCraft!', 'system');
   hud.addChat?.('Ironhart: anyone running the dungeon?', 'say');
   hud.addChat?.('You gain 25 experience.', 'system');
   if (document.querySelector('#map-window')?.style.display === 'none') hud.toggleMap?.();

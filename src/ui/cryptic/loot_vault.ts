@@ -4,6 +4,7 @@
 // rarity tiers, slots, and affixes the engine produces. Display-only — no
 // server persistence is faked; this is a showcase / loot simulator.
 
+import './realm_env';
 import { Rng } from '../../sim/rng';
 import {
   RARITY, RARITY_ORDER, ITEM_SLOTS, generateRealmItem,

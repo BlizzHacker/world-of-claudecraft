@@ -119,6 +119,7 @@ describe('Guide entry wiring', () => {
 
   it('lists the guide in the sitemap', () => {
     expect(sitemapXml).toContain('<loc>https://crypticrealm.com/wiki</loc>');
+    expect(sitemapXml).toContain('<loc>https://crypticrealm.com/wiki</loc>');
   });
 
   // A route with no registered page silently renders the placeholder; a route or class

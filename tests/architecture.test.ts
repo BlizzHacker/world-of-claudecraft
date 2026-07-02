@@ -1,5 +1,5 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
-import { join, relative } from 'node:path';
+import { join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
@@ -140,12 +140,14 @@ const UI_PURE_CORES = [
   'src/ui/item_set_tooltip_view.ts',
   'src/ui/options_view.ts',
   'src/ui/vendor_view.ts',
+  'src/ui/loot_settings_view.ts',
   'src/ui/market_view.ts',
   'src/ui/char_view.ts',
   'src/ui/map_window_view.ts',
   'src/ui/arena_window_view.ts',
   'src/ui/leaderboard_view.ts',
   'src/ui/guild_leaderboard_view.ts',
+  'src/ui/dev_leaderboard_view.ts',
   'src/ui/spellbook_view.ts',
   'src/ui/questlog_view.ts',
   'src/ui/swing_timer.ts',
@@ -361,7 +363,8 @@ describe('src/world_api IWorld seam purity invariants', () => {
   it('pulls only TYPES from src/sim (a value sim import would drag the engine into the seam)', () => {
     const violations: string[] = [];
     for (const file of worldApiFiles) {
-      const rel = relative(repoRoot, file);
+      // Windows: path.relative yields backslashes; the allowlist keys use '/'.
+      const rel = relative(repoRoot, file).split(sep).join('/');
       const allowed = SANCTIONED_VALUE_SIM_IMPORTS[rel] ?? new Set<string>();
       const src = stripComments(readFileSync(file, 'utf8'));
       for (const m of src.matchAll(SEAM_IMPORT_RE)) {

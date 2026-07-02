@@ -66,7 +66,11 @@ import type { IWorldTelemetry } from './world_api/telemetry';
 import type { IWorldTrade } from './world_api/trade';
 
 // --- pass-through sim re-exports: downstream imports these FROM world_api ---
-export type { GuildLeaderboardPage, LeaderboardPage } from './sim/leaderboard_page';
+export type {
+  DevLeaderboardPage,
+  GuildLeaderboardPage,
+  LeaderboardPage,
+} from './sim/leaderboard_page';
 export type { ArenaCombatant, ArenaFormat, ArenaStanding, OverheadEmoteId } from './sim/types';
 
 // --- facet aux-type + value re-exports (each travels with its facet file) ---
@@ -91,7 +95,11 @@ export type {
 export type { RaidLockout } from './world_api/dungeons';
 export type { MarketInfo, MarketListingView } from './world_api/market';
 export type { PartyInfo, PartyMemberInfo } from './world_api/party';
-export type { GuildLeaderboardEntry, LeaderboardEntry } from './world_api/progression_xp';
+export type {
+  DevLeaderboardEntry,
+  GuildLeaderboardEntry,
+  LeaderboardEntry,
+} from './world_api/progression_xp';
 export type {
   CharacterSearchResult,
   FriendInfo,
@@ -185,6 +193,7 @@ export const COMMAND_NAMES = [
   'pdecline',
   'pleave',
   'pkick',
+  'ppromote',
   'praid',
   'punraid',
   'pmoveRaid',
@@ -242,6 +251,8 @@ export const COMMAND_NAMES = [
   'dev_level',
   'dev_teleport',
   'dev_give',
+  'dev_complete_quest',
+  'dev_complete_all_quests',
   'enter_crypt',
   'enter_dungeon',
   'leave_crypt',
@@ -279,6 +290,8 @@ export const DISPATCH_ONLY_COMMANDS = [
   'dev_level',
   'dev_teleport',
   'dev_give',
+  'dev_complete_quest',
+  'dev_complete_all_quests',
   'enter_crypt',
   'leave_crypt',
   'social_refresh',
@@ -375,6 +388,7 @@ export const COMMAND_FACETS = {
   pdecline: 'IWorldParty',
   pleave: 'IWorldParty',
   pkick: 'IWorldParty',
+  ppromote: 'IWorldParty',
   praid: 'IWorldParty',
   punraid: 'IWorldParty',
   pmoveRaid: 'IWorldParty',

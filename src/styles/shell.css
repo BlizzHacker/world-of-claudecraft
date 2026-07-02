@@ -4320,6 +4320,78 @@
     box-shadow: none;
     border-radius: 0;
   }
+  .cs-forged-assets {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-height: 0;
+    margin: 0 0 4px;
+  }
+  .cs-forged-assets[hidden] {
+    display: none;
+  }
+  .cs-forged-assets-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    color: var(--color-primary);
+    font-family: var(--title-font);
+    font-size: 12px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
+  .cs-forged-assets-count {
+    color: var(--color-text-muted);
+    font-family: var(--font-body);
+    font-size: 10px;
+    font-weight: 700;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .cs-forged-assets-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+    gap: 6px;
+    max-height: 88px;
+    overflow-y: auto;
+    padding-right: 2px;
+  }
+  .cs-forged-asset-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    min-width: 0;
+    min-height: 30px;
+    padding: 5px 7px;
+    border: 1px solid rgba(255, 209, 0, 0.22);
+    border-radius: var(--radius-sm);
+    background: rgba(0, 0, 0, 0.26);
+    color: #d9e4f4;
+    cursor: var(--cursor-point);
+    font-size: 11px;
+    line-height: 1.1;
+    overflow: hidden;
+    text-align: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .cs-forged-asset-btn:hover,
+  .cs-forged-asset-btn.sel {
+    border-color: var(--color-primary);
+    background: rgba(255, 209, 0, 0.1);
+  }
+  .cs-forged-asset-tag {
+    flex: 0 0 auto;
+    color: #90d9ff;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
   /* Inner class card is now frameless, the outer column provides the frame. */
   .cs-detail-col .class-details-panel {
     background: transparent !important;

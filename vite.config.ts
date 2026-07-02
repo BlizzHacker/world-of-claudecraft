@@ -189,6 +189,9 @@ export default defineConfig({
     proxy: {
       '/api': { target: 'http://127.0.0.1:8787', changeOrigin: true },
       '/admin/api': { target: 'http://127.0.0.1:8787', changeOrigin: true },
+      '/me/api': { target: 'http://127.0.0.1:8787', changeOrigin: true },
+      '/mod/api': { target: 'http://127.0.0.1:8787', changeOrigin: true },
+      '/forged': { target: 'http://127.0.0.1:8787', changeOrigin: true },
       '/ws': { target: 'ws://127.0.0.1:8787', ws: true },
     },
   },
@@ -221,6 +224,9 @@ export default defineConfig({
     },
   },
   test: {
+    // Deterministic sim scenarios run thousands of ticks; under full-suite load on
+    // Windows they can exceed vitest's 5s default without being stuck.
+    testTimeout: 30000,
     // Two kinds of exclusion, kept together:
     // - .codex/.venv are local-only worktree/venv pollution a clean CI checkout never has;
     //   excluding them keeps the local gate mirroring CI (otherwise stale .codex worktree

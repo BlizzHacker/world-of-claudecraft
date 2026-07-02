@@ -5,6 +5,7 @@ import { type WebSocket, WebSocketServer } from 'ws';
 import {
   LEADERBOARD_MAX,
   LEADERBOARD_PAGE_SIZE,
+  paginateDevLeaderboard,
   paginateGuildLeaderboard,
   paginateLeaderboard,
 } from '../src/sim/leaderboard_page';
@@ -84,7 +85,6 @@ import {
   topLifetimeXp,
   touchLogin,
 } from './db';
-import { handleModeratorApi, handleUserApi } from './dashboard';
 import {
   handleDiscordCallback,
   handleDiscordLoginLink,
@@ -103,6 +103,14 @@ import { maybeHandleEconomyApi } from './economy/api';
 import { applyEconomySchema } from './economy/db';
 import { handleForgedCatalog, handleForgedStatic } from './forged_assets';
 import { GameServer } from './game';
+import {
+  handleGitHubCallback,
+  handleGitHubStart,
+  handleGitHubStatus,
+  handleGitHubUnlink,
+} from './github';
+import { topContributors } from './github_contributors';
+import { pruneGitHubOAuthStates } from './github_db';
 import { isUniqueViolation, json, readBody } from './http_util';
 import { handleInternalApi } from './internal';
 import { isConnectionRefused } from './ip_block';
@@ -116,6 +124,7 @@ import { createNativeAttestationChallenge, verifyNativeAttestation } from './nat
 import { handleAuthentikRoute, handleOAuth, isAuthentikConfigured, seedOAuthClients } from './oauth';
 import { pruneExpiredOAuthGrants } from './oauth_db';
 import { handlePerfReport } from './perf_report';
+import { handleModeratorApi, handleUserApi } from './dashboard';
 import {
   captureReferral,
   cardUploadContentLengthTooLarge,
@@ -129,6 +138,7 @@ import {
   cardUploadRateLimited,
   clearAuthFailures,
   discordRateLimited,
+  githubRateLimited,
   publicReadRateLimited,
   rateLimited,
   recordAuthFailure,
@@ -163,11 +173,8 @@ import { bufferHandshakeMessages } from './ws_buffer';
 
 const PORT = Number(process.env.PORT ?? 8787);
 const STATIC_DIR = path.join(__dirname, '..', 'dist');
-// CR overlay: when scripts/admin/update.sh is in flight, it touches this
-// file. Web requests get served maintenance.html for the duration so users
-// see a friendly "we're updating" page instead of a half-rebuilt homepage.
-const MAINTENANCE_FLAG = path.join(__dirname, '..', '.maintenance');
 const MAINTENANCE_SHELL = path.join(STATIC_DIR, 'maintenance.html');
+const MAINTENANCE_FLAG = path.join(__dirname, '..', '.maintenance');
 function inMaintenanceMode(): boolean {
   try { return fs.existsSync(MAINTENANCE_FLAG); } catch { return false; }
 }
@@ -239,7 +246,10 @@ const LEADERBOARD_SIZE = LEADERBOARD_MAX;
 // One cache per scope: 'realm' for the in-game panel, 'global' for the
 // cross-realm home-page board.
 type LeaderboardScope = 'realm' | 'global' | 'ladder';
-const leaderboardCache: Record<LeaderboardScope, { at: number; entries: LeaderboardEntry[] } | null> = {
+const leaderboardCache: Record<
+  LeaderboardScope,
+  { at: number; entries: LeaderboardEntry[] } | null
+> = {
   realm: null,
   global: null,
   ladder: null,
@@ -849,12 +859,7 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       // no code supplied we return a challenge (not a token) so the client shows
       // the code step; with a code (or recovery code) we verify it before issuing.
       if (account.totp_enabled_at) {
-        const code =
-          typeof body.code === 'string'
-            ? body.code
-            : typeof body.totpCode === 'string'
-              ? body.totpCode
-              : '';
+        const code = typeof body.code === 'string' ? body.code : '';
         const recoveryCode = typeof body.recoveryCode === 'string' ? body.recoveryCode : '';
         if (!code && !recoveryCode) {
           return json(res, 200, { twoFactorRequired: true });
@@ -1247,23 +1252,39 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       // in-game panel). `url` is the path only, so the query string is parsed
       // from req.url.
       const params = new URLSearchParams((req.url ?? '').split('?')[1] ?? '');
-      const rawScope = params.get('scope');
-      const scope: LeaderboardScope = rawScope === 'global' ? 'global' : rawScope === 'ladder' ? 'ladder' : 'realm';
+      const scope: 'realm' | 'global' = params.get('scope') === 'global' ? 'global' : 'realm';
       // ?board=guilds ranks GUILDS by summed member lifetime XP (default 'players'
       // is the per-character board below). Same cache + paging shape; the entry
       // shape differs, so it is its own served slice.
       if (params.get('board') === 'guilds') {
-        const guildScope: 'realm' | 'global' = scope === 'global' ? 'global' : 'realm';
-        const guildEntries = await getGuildLeaderboard(guildScope);
+        const guildEntries = await getGuildLeaderboard(scope);
         const guildPageSize = Number(params.get('pageSize')) || LEADERBOARD_PAGE_SIZE;
         const guildPage = Number(params.get('page')) || 0;
         const guildSlice = paginateGuildLeaderboard(guildEntries, guildPage, guildPageSize);
         return json(res, 200, {
           realm: REALM,
-          scope: guildScope,
+          scope,
           board: 'guilds',
           metric: 'guildLifetimeXp',
           ...guildSlice,
+        });
+      }
+      // ?board=devs ranks open-source CONTRIBUTORS by merged pull requests, sourced
+      // from the cached public GitHub PR stats. The same data for every realm,
+      // so it is realm-agnostic; rate-limited per IP like the other boards via the
+      // shared route limiter is unnecessary here (it reads an in-memory cache), but
+      // a failing GitHub fetch already backs off inside topContributors.
+      if (params.get('board') === 'devs') {
+        const devEntries = await topContributors();
+        const devPageSize = Number(params.get('pageSize')) || LEADERBOARD_PAGE_SIZE;
+        const devPage = Number(params.get('page')) || 0;
+        const devSlice = paginateDevLeaderboard(devEntries, devPage, devPageSize);
+        return json(res, 200, {
+          realm: REALM,
+          scope,
+          board: 'devs',
+          metric: 'landedCommits',
+          ...devSlice,
         });
       }
       const entries = await getLeaderboard(scope);
@@ -1476,6 +1497,34 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       if (discordRateLimited(req, accountId)) return json(res, 429, { error: 'rate limited' });
       return handleDiscordUnlink(req, res, accountId);
     }
+    // GitHub OAuth link (developer badge). Link-only: the start leg resolves the
+    // caller's account first, so the verified GitHub identity attaches to a known
+    // account. The callback carries no Origin (a github.com redirect) and is
+    // exempt from the web-login Origin guard, exactly like the Discord callback.
+    if (req.method === 'POST' && url === '/api/auth/github/start') {
+      const accountId = await bearerActiveAccount(req, res);
+      if (accountId === null) return;
+      if (githubRateLimited(req, accountId)) {
+        recordUsageMetric('github.link.rate_limited');
+        return json(res, 429, { error: 'rate limited' });
+      }
+      return handleGitHubStart(req, res, { accountId });
+    }
+    if (req.method === 'GET' && url === '/api/auth/github/callback') {
+      return handleGitHubCallback(req, res);
+    }
+    if (req.method === 'GET' && url === '/api/github') {
+      const accountId = await bearerActiveAccount(req, res);
+      if (accountId === null) return;
+      if (githubRateLimited(req, accountId)) return json(res, 429, { error: 'rate limited' });
+      return handleGitHubStatus(req, res, accountId);
+    }
+    if (req.method === 'DELETE' && url === '/api/github') {
+      const accountId = await bearerActiveAccount(req, res);
+      if (accountId === null) return;
+      if (githubRateLimited(req, accountId)) return json(res, 429, { error: 'rate limited' });
+      return handleGitHubUnlink(req, res, accountId);
+    }
     // $WOC balance proxy — keeps the Solana RPC endpoint (and any key in it)
     // server-side so it never ships in the client bundle. Public (on-chain
     // balances are public) but narrow + IP rate-limited + per-wallet cached.
@@ -1592,6 +1641,9 @@ async function main(): Promise<void> {
       void pruneDiscordPendingLogins(pool).catch((err) =>
         console.error('discord pending login prune failed:', err),
       );
+      void pruneGitHubOAuthStates(pool).catch((err) =>
+        console.error('github oauth state prune failed:', err),
+      );
     },
     24 * 3600 * 1000,
   ).unref();
@@ -1617,9 +1669,6 @@ async function main(): Promise<void> {
     void refreshLeaderboard('global').catch((err) =>
       console.error('leaderboard refresh failed (global):', err),
     );
-    void refreshLeaderboard('ladder').catch((err) =>
-      console.error('leaderboard refresh failed (ladder):', err),
-    );
     void refreshGuildLeaderboard('realm').catch((err) =>
       console.error('guild leaderboard refresh failed (realm):', err),
     );
@@ -1631,14 +1680,10 @@ async function main(): Promise<void> {
   setInterval(warmLeaderboards, LEADERBOARD_TTL_MS).unref();
   console.log('database ready');
 
-  const server = http.createServer((req, res) => {
+  const server = http.createServer(async (req, res) => {
     const url = req.url ?? '';
     const path = url.split('?')[0];
-    const isApi =
-      url.startsWith('/api/') ||
-      url.startsWith('/admin/api/') ||
-      url.startsWith('/mod/api/') ||
-      url.startsWith('/me/api/');
+    const isApi = url.startsWith('/api/') || url.startsWith('/admin/api/');
     // Public read surfaces (/api/public/..., /avatar/...) are CORS-open to any
     // origin so browser-origin companion apps can call them client-side; every
     // other /api route keeps the narrow realm/native allowlist.
@@ -1650,9 +1695,9 @@ async function main(): Promise<void> {
       res.end();
       return;
     }
-    if (url.startsWith('/forged/')) { handleForgedStatic(req, res); return; }
-    else if (url === '/api/forged-props' || url.startsWith('/api/forged-props?')) { void handleForgedCatalog(req, res); return; }
-    else if (url.startsWith('/internal/')) void handleInternalApi(req, res, game);
+    if (handleForgedStatic(req, res)) return;
+    if (await handleForgedCatalog(req, res)) return;
+    if (url.startsWith('/internal/')) void handleInternalApi(req, res, game);
     else if (url.startsWith('/admin/api/')) void handleAdminApi(req, res, game);
     else if (url.startsWith('/mod/api/')) void handleModeratorApi(req, res);
     else if (url.startsWith('/me/api/')) void handleUserApi(req, res);

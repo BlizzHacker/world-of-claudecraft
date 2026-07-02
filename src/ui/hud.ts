@@ -60,6 +60,7 @@ import {
 import { specialRoleColor } from '../sim/discord_roles';
 import { armorTypeForItem, canEquipItem, weaponArchetypeForItem } from '../sim/equipment_rules';
 import { isItemLevelEligible, itemLevel, itemScore } from '../sim/item_level';
+import { requiredLevelFor } from '../sim/item_level_req';
 import type { Ante, PickAction } from '../sim/lockpick';
 import { PICK_ACTIONS } from '../sim/lockpick';
 import type { ResolvedAbility } from '../sim/sim';
@@ -68,7 +69,6 @@ import type {
   EquipSlot,
   InvSlot,
   LootRollChoice,
-  MasterLootThreshold,
   PetMode,
   PlayerClass,
   ResourceType,
@@ -109,9 +109,11 @@ import {
   ITEM_ICON_PREFIX,
 } from './action_bar_view';
 import { ArenaWindow } from './arena_window';
+import { abilityStartsAutoAttack, hasAutoAttackTarget } from './attack_on_ability';
 import { type AuraEffectInput, auraEffectDescriptor } from './aura_effect';
 import { AurasPainter, type AurasPainterDeps } from './auras_painter';
 import { type AurasDeps, createAurasView } from './auras_view';
+import { attachAvatarFallback } from './avatar_fallback';
 import { BagsWindow } from './bags_window';
 import { CastBarPainter } from './cast_bar_painter';
 import { buildPaperdollView, type PaperdollSlot } from './char_view';
@@ -144,6 +146,7 @@ import {
 import { type CardinalId, compassView } from './compass';
 import { formatMinimapCoords } from './coords';
 import { DelveMapPainter } from './delve_map_painter';
+import { devTierBadgeDataUrl, devTierByIndex, devTierDisplayName } from './dev_tier';
 import { markDialogRoot } from './dialog_root';
 import { discordStatusBadgeDataUrl, discordStatusDisplayName } from './discord_tier';
 import { dropdownKeyNav } from './dropdown_nav';
@@ -201,6 +204,8 @@ import { ReannounceMarker } from './live_region_reannounce';
 import { PICK_ACTION_HOTKEYS } from './lockpick_panel';
 import { LockpickWindow } from './lockpick_window';
 import { reconcileLootRolls as computeLootRollReconcile } from './loot_roll_reconcile';
+import { lootSettingsView } from './loot_settings_view';
+import { renderLootSettingsWindow } from './loot_settings_window';
 import { lowHealthVignette } from './low_health';
 import { lowResourceView } from './low_resource';
 import { type MapRegion, mapCanvasHeight, paintTerrainRows } from './map_terrain';
@@ -242,7 +247,7 @@ import {
 import { chatPlayerContextActions } from './player_context_menu';
 import { hydratePortraits, portraitChipHtml } from './portrait_chip';
 import { maskProfanity } from './profanity';
-import { encodeQuestLink, parseChatSegments } from './quest_link';
+import { encodeItemLink, encodeQuestLink, parseChatSegments } from './quest_link';
 import { type QuestTrackerView, questTrackerView, type TrackedQuest } from './quest_tracker';
 import { QuestLogWindow } from './questlog_window';
 import { lockoutParts, lockoutShape } from './raid_lockout';
@@ -252,7 +257,14 @@ import { localizeServerText } from './server_i18n';
 import { localizeSimAuraName, localizeSimText } from './sim_i18n';
 import { SocialWindow } from './social_window';
 import { SpellbookWindow } from './spellbook_window';
-import { buildStatTooltip, type StatId, type StatTooltipModel, weaponDps } from './stat_tooltip';
+import {
+  type BuffStatSource,
+  buildStatTooltip,
+  type GearStatSource,
+  type StatId,
+  type StatTooltipModel,
+  weaponDps,
+} from './stat_tooltip';
 import { type StatTooltipI18n, statCellHtml, statTooltipHtml } from './stat_tooltip_view';
 import { nearestSubzone } from './subzone';
 import { swingTimerState } from './swing_timer';
@@ -720,6 +732,9 @@ export class Hud {
   private targetNameEl = $('#tf-name');
   private targetLevelEl = $('#tf-level');
   private targetDiscordEl = $('#tf-discord');
+  // Diff key for the target-frame Discord line, so its per-frame update only rebuilds
+  // innerHTML (and re-attaches the avatar fallback) when the Discord content changes.
+  private targetDiscordSig = '';
   private targetHpEl = $('#tf-hp');
   private targetHpTextEl = $('#tf-hp-text');
   private targetPortraitEl = $('#tf-portrait') as unknown as HTMLCanvasElement;
@@ -858,7 +873,7 @@ export class Hud {
   });
   private openGossipNpcId: number | null = null;
   private openQuestDetailId: string | null = null;
-  private pendingChatLinks = new Map<string, string>(); // display "[Name]" -> questId
+  private pendingChatLinks = new Map<string, string>(); // display "[Name]" -> [[q:id]]/[[i:id]] token
   private questDialogTrap: FocusTrapHandle | null = null;
   private questDialogOpenedAtMs = 0;
   // swing timer: the period is captured from the reset edge (swingTimer jumping
@@ -871,9 +886,23 @@ export class Hud {
   private tradeWasOpen = false;
   private lastTradeSig = '';
   private lastPartySig = '';
-  // Separate, LOW-frequency signature for the leader-only master-loot footer control
-  // (loot settings + membership, no hp/res), so it is not churned every combat tick.
-  private lastPartyFooterSig = '';
+  // Loot Settings window (opened on demand from the right-click menu): whether it is
+  // open, and a separate LOW-frequency signature (loot settings + leadership +
+  // membership, no hp/res) so it repaints from authoritative state without churning
+  // on every combat tick.
+  private lootSettingsOpen = false;
+  private lastLootSettingsSig = '';
+  private lootSettingsTrap: FocusTrapHandle | null = null;
+  // Loot Settings window docks below the party frames; these track when to re-measure
+  // (party row count / raid grouping changed) and the last auto-placed position so a
+  // manual drag is respected (we stop auto-docking once the player moves it).
+  private lastLootGeomSig = '';
+  private lootSettingsAutoLeft = '';
+  private lootSettingsAutoTop = '';
+  // Tracks whether the local player was the party leader last frame, so we can
+  // auto-open the Loot Settings panel the moment they BECOME leader: on forming a
+  // group (creator is leader), on being promoted, or on succeeding a leader who left.
+  private wasLeaderOfParty = false;
   private lastArenaStatusSig = '';
   private arenaMatchSeen = false; // closes the queue panel once a bout starts
   // 2v2 Fiesta UI state (all transient)
@@ -1597,6 +1626,9 @@ export class Hud {
       case 'delve-board':
         this.closeDelveBoard();
         break;
+      case 'loot-settings-window':
+        this.closeLootSettings();
+        break;
       case 'bags':
         if (this.vendorOpen && document.body.classList.contains('mobile-touch')) this.closeVendor();
         // Route through the painter so focus returns to the opener (WCAG 2.4.3),
@@ -2016,7 +2048,7 @@ export class Hud {
   // channel tab. main.ts calls this on Enter so a channel tab works without
   // retyping the slash command; an explicit "/..." the player typed still wins.
   composeChatSend(typed: string): string {
-    const withLinks = this.applyPendingQuestLinks(typed);
+    const withLinks = this.applyPendingChatLinks(typed);
     const ch = this.chatFilterChannel();
     return ch ? composeChatLine(ch, withLinks) : withLinks.trim();
   }
@@ -2024,9 +2056,22 @@ export class Hud {
   // Shift-click a quest-log entry: open the chat input and insert a readable
   // [Name] link. composeChatSend swaps it for the canonical [[q:id]] token on send.
   insertQuestChatLink(questId: string): void {
+    this.insertChatLink(`[${questTitle(questId)}]`, encodeQuestLink(questId));
+  }
+
+  // Shift-click a bag item: insert a readable [Item Name] link into chat. On send,
+  // composeChatSend swaps it for the canonical [[i:id]] token (name resolved at render).
+  insertItemChatLink(itemId: string): void {
+    const item = ITEMS[itemId];
+    if (!item) return;
+    this.insertChatLink(`[${itemDisplayName(item)}]`, encodeItemLink(itemId));
+  }
+
+  // Shared affordance: append a readable [Name] to the chat input and remember the
+  // token it stands for, so applyPendingChatLinks can swap it back in on send.
+  private insertChatLink(display: string, token: string): void {
     const input = $('#chat-input') as unknown as HTMLInputElement;
-    const display = `[${questTitle(questId)}]`;
-    this.pendingChatLinks.set(display, questId);
+    this.pendingChatLinks.set(display, token);
     input.placeholder = this.activeChatPlaceholder();
     input.style.display = 'block';
     input.value =
@@ -2038,16 +2083,15 @@ export class Hud {
 
   // Drop any shift-click-inserted links that were never sent (chat closed/cleared),
   // so a stale [Name] entry can't silently rewrite a later message.
-  clearPendingQuestLinks(): void {
+  clearPendingChatLinks(): void {
     this.pendingChatLinks.clear();
   }
 
-  // Replace any inserted readable [Name] with its [[q:id]] token, then forget them.
-  private applyPendingQuestLinks(typed: string): string {
+  // Replace any inserted readable [Name] with its [[q:id]]/[[i:id]] token, then forget them.
+  private applyPendingChatLinks(typed: string): string {
     if (this.pendingChatLinks.size === 0) return typed;
     let out = typed;
-    for (const [display, questId] of this.pendingChatLinks)
-      out = out.split(display).join(encodeQuestLink(questId));
+    for (const [display, token] of this.pendingChatLinks) out = out.split(display).join(token);
     this.pendingChatLinks.clear();
     return out;
   }
@@ -2607,6 +2651,7 @@ export class Hud {
     closeVendor: () => this.closeVendor(),
     addItemToTrade: (itemId) => this.addItemToTrade(itemId),
     stageMarketSell: (itemId) => this.marketWindow.stageSell(itemId),
+    insertItemChatLink: (itemId) => this.insertItemChatLink(itemId),
     showError: (text) => this.showError(text),
     setPendingPetFeed: (active) => {
       this.pendingPetFeed = active;
@@ -2753,6 +2798,7 @@ export class Hud {
     world: () => this.sim,
     closeOthers: () => this.closeOtherWindows('#leaderboard-window'),
     ...this.windowFocus('#leaderboard-window'),
+    showDevBadges: () => this.optionsHooks?.settings.get('showDevBadges') ?? true,
   });
   // Spellbook window painter (spellbook_view.ts core + spellbook_window.ts painter).
   // The window renders ability rows (not item rows), so it composes no presentation
@@ -3026,6 +3072,14 @@ export class Hud {
     if (item.requiredClass && !armorTypeForItem(item) && !weaponArchetypeForItem(item)) {
       html += `<div class="tt-sub">${esc(t('itemUi.tooltip.classes', { classes: item.requiredClass.map(classDisplayName).join(', ') }))}</div>`;
     }
+    // Classic "Requires Level N" line for equippable gear gated above level 1.
+    // Red when the viewer is below the requirement (cannot equip yet), otherwise
+    // a normal sub line. Level math/data lives in the pure sim leaf.
+    const req = requiredLevelFor(item);
+    if ((item.kind === 'weapon' || item.kind === 'armor') && req > 1) {
+      const meets = this.sim.player.level >= req;
+      html += `<div class="${meets ? 'tt-sub' : 'tt-red'}">${esc(t('hudChrome.itemTooltip.requiresLevel', { level: itemNumber(req) }))}</div>`;
+    }
     html += this.itemSetBlock(item);
     if (item.sellValue > 0)
       html += `<div class="tt-sub">${esc(t('itemUi.tooltip.sellPrice', { money: formatLocalizedMoney(item.sellValue) }))}</div>`;
@@ -3103,14 +3157,32 @@ export class Hud {
     const sim = this.sim;
     const p = sim.player;
     const wpn = sim.equipment.mainhand ? ITEMS[sim.equipment.mainhand] : null;
+    // Equipped items + active auras feed the upstream "Made up of:" source
+    // breakdown; names resolve the same way the buff bar resolves them.
+    const gear: GearStatSource[] = [];
+    for (const id of Object.values(sim.equipment)) {
+      const item = id ? ITEMS[id] : null;
+      if (!item || (!item.stats && !item.spellPower)) continue;
+      gear.push({ name: itemDisplayName(item), stats: item.stats, spellPower: item.spellPower });
+    }
+    const buffs: BuffStatSource[] = p.auras.map((a) => ({
+      kind: a.kind,
+      value: a.value,
+      name: ABILITIES[a.id]
+        ? abilityDisplayName(ABILITIES[a.id])
+        : auraDisplayNameFromSource(a.name),
+    }));
     return buildStatTooltip(stat, {
       cls: sim.cfg.playerClass,
       stats: p.stats,
       level: p.level,
       attackPower: p.attackPower,
+      spellPower: p.spellPower,
       critChance: p.critChance,
       dodgeChance: p.dodgeChance,
       dps: weaponDps(wpn?.weapon, p.attackPower),
+      gear,
+      buffs,
     });
   }
 
@@ -3198,12 +3270,23 @@ export class Hud {
     if (rangeLine) costLine.push(rangeLine);
     if (costLine.length) html += `<div class="tt-stat">${costLine.map(esc).join(' &nbsp; ')}</div>`;
     const castLine = [abilityCastLine(res)];
-    if (a.cooldown > 0)
+    // Use the RESOLVED cooldown (res.cooldown), not res.def.cooldown, so talents that
+    // reduce cooldown (Improved Mortal Strike, Barrage, Improved Fire Blast, ...) show
+    // their effect in the tooltip.
+    if (res.cooldown > 0)
       castLine.push(
-        t('abilityUi.tooltip.cooldownSeconds', { seconds: formatAbilityNumber(a.cooldown) }),
+        t('abilityUi.tooltip.cooldownSeconds', { seconds: formatAbilityNumber(res.cooldown) }),
       );
     html += `<div class="tt-stat">${castLine.map(esc).join(' &nbsp; ')}</div>`;
     html += `<div class="tt-desc">${esc(abilityDisplayDescription(a, damageText))}</div>`;
+    // Resolved buff/aura effect line(s). Reads the RESOLVED effect value, so a buff's
+    // tooltip reflects rank AND talents that strengthen it (Improved Devotion Aura /
+    // Aspect of the Hawk / Fortitude via buffPct) - which the static description can't.
+    for (const eff of res.effects) {
+      if (eff.type === 'selfBuff' || eff.type === 'buffTarget') {
+        html += this.auraEffectTooltipHtml({ kind: eff.kind, value: eff.value });
+      }
+    }
     const requirements = abilityRequirementLines(a);
     if (requirements.length) {
       html += requirements.map((line) => `<div class="tt-sub">${esc(line)}</div>`).join('');
@@ -3516,8 +3599,27 @@ export class Hud {
     if (action?.type === 'ability') {
       // cast by ability id: the server validates against its own known list,
       // so the client-side slot remap never desyncs slot semantics
-      if (this.abilityForSlot(barSlot)) {
+      const resolved = this.abilityForSlot(barSlot);
+      if (resolved) {
         this.sim.castAbility(action.id);
+        // Optional QoL: also engage auto-attack when the ability is an offensive
+        // attack, so white swings start without a separate Attack press. Gated on
+        // the player setting; abilityStartsAutoAttack skips heals/buffs and any
+        // damage-breakable CC (gouge/sap/sheep) the swing would shatter. We MUST also
+        // gate on hasAutoAttackTarget: many damaging abilities are requiresTarget:false
+        // AOEs (Arcane Explosion, Frost Nova, Thunder Clap, ...) cast with no hostile
+        // target, where startAutoAttack does NOT no-op but errors "Invalid attack
+        // target." (sim/combat/auto_attack.ts). The explicit Attack button keeps that
+        // error feedback; this convenience path must not trip it.
+        const tid = this.sim.player.targetId;
+        const target = tid !== null ? (this.sim.entities.get(tid) ?? null) : null;
+        if (
+          this.optionsHooks?.settings.get('startAttackOnAbilityUse') &&
+          abilityStartsAutoAttack(resolved.effects) &&
+          hasAutoAttackTarget(target)
+        ) {
+          this.sim.startAutoAttack();
+        }
         this.flashActionSlot(barSlot);
       }
     } else if (action?.type === 'item' && this.isHotbarItemId(action.id)) {
@@ -6234,7 +6336,7 @@ export class Hud {
             (ev.channel === 'say' || ev.channel === 'yell' || ev.channel === 'emote') &&
             ev.entityId !== undefined
           ) {
-            const masked = this.maskChat(this.questLinkPlainText(ev.text));
+            const masked = this.maskChat(this.chatLinkPlainText(ev.text));
             const bubble = ev.channel === 'emote' ? `${ev.from} ${masked}` : masked;
             if (masked.trim()) this.renderer.showChatBubble(ev.entityId, bubble, ev.channel === 'yell');
           }
@@ -6245,6 +6347,17 @@ export class Hud {
               if (pa.music) { try { crypticMusic.playTrack(pa.music); } catch { /* noop */ } }
               if (pa.voice) { try { voice.play(pa.voice); } catch { /* noop */ } }
             }
+          }
+          // Voiced encounter dialogue (boss/NPC yells) — no-op unless a clip was
+          // generated for this exact line (scripts/voices/extra_lines.mjs).
+          if (ev.channel === 'yell') {
+            const voiced = nextVoicedYell(
+              this.lastVoicedYell,
+              yellVoiceKey(ev.text),
+              performance.now(),
+            );
+            this.lastVoicedYell = voiced.state;
+            if (voiced.play) voice.play(voiced.state.key, { gain: voicedYellGain(ev.from) });
           }
           // Voiced encounter dialogue (boss/NPC yells) — no-op unless a clip was
           // generated for this exact line (scripts/voices/extra_lines.mjs).
@@ -6716,6 +6829,10 @@ export class Hud {
         if (seg.value) parent.append(document.createTextNode(this.maskChat(seg.value)));
         continue;
       }
+      if (seg.kind === 'item') {
+        this.appendChatItemLink(parent, seg.itemId);
+        continue;
+      }
       const quest = QUESTS[seg.questId];
       if (!quest) {
         parent.append(document.createTextNode(this.maskChat('[?]')));
@@ -6737,13 +6854,36 @@ export class Hud {
     }
   }
 
-  // The plain-text form of a chat string with [[q:id]] tokens replaced by [Name]
-  // — used for 3D chat bubbles, which can't host interactive spans.
-  private questLinkPlainText(text: string): string {
+  // Render a [[i:id]] chat segment as a quality-colored, inspectable item link.
+  // Hover/focus shows the same item tooltip the bags window uses; an unknown id
+  // (e.g. content drift between players) degrades to a plain [?].
+  private appendChatItemLink(parent: HTMLElement, itemId: string): void {
+    const item = ITEMS[itemId];
+    if (!item) {
+      parent.append(document.createTextNode(this.maskChat('[?]')));
+      return;
+    }
+    const link = document.createElement('span');
+    link.className = 'chat-item-link';
+    link.style.color = QUALITY_COLOR[item.quality ?? 'common'] ?? '#fff';
+    link.textContent = `[${itemDisplayName(item)}]`;
+    link.tabIndex = 0;
+    this.attachTooltip(link, () => this.itemTooltip(item));
+    parent.append(link);
+  }
+
+  // The plain-text form of a chat string with [[q:id]]/[[i:id]] tokens replaced by
+  // [Name] — used for 3D chat bubbles, which can't host interactive spans.
+  private chatLinkPlainText(text: string): string {
     return parseChatSegments(text)
-      .map((s) =>
-        s.kind === 'text' ? s.value : `[${QUESTS[s.questId] ? questTitle(s.questId) : '?'}]`,
-      )
+      .map((s) => {
+        if (s.kind === 'text') return s.value;
+        if (s.kind === 'item') {
+          const item = ITEMS[s.itemId];
+          return `[${item ? itemDisplayName(item) : '?'}]`;
+        }
+        return `[${QUESTS[s.questId] ? questTitle(s.questId) : '?'}]`;
+      })
       .join('');
   }
 
@@ -6933,7 +7073,8 @@ export class Hud {
       'Trade window opened.': 'hud.logs.tradeOpened',
       'Trade complete.': 'hud.logs.tradeComplete',
       'Trade cancelled.': 'hud.logs.tradeCancelled',
-      'Loot method set to group loot.': 'hudChrome.masterLoot.methodGroup',
+      'Loot method set to Group Loot.': 'hudChrome.masterLoot.methodGroup',
+      'Loot Settings: Group Loot.': 'hudChrome.masterLoot.summaryGroup',
     };
     const key = exact[text];
     if (key) return t(key);
@@ -6946,8 +7087,28 @@ export class Hud {
       if (text === delve.leaveText) return delveText(delve.id, 'leaveText');
     }
 
-    let match = /^Loot method set to master loot\. Master looter: (.+)\.$/.exec(text);
+    let match = /^Loot method set to Master Loot\. Master Looter: (.+)\.$/.exec(text);
     if (match) return t('hudChrome.masterLoot.methodMaster', { name: match[1] });
+    match = /^Master Looter is now (.+)\.$/.exec(text);
+    if (match) return t('hudChrome.masterLoot.looterChanged', { name: match[1] });
+    match = /^Loot threshold set to (uncommon|rare|epic)\.$/.exec(text);
+    if (match)
+      return t('hudChrome.masterLoot.thresholdSet', {
+        threshold: t(
+          `hudChrome.masterLoot.threshold${match[1][0].toUpperCase()}${match[1].slice(1)}` as TranslationKey,
+        ),
+      });
+    match =
+      /^Loot Settings: Master Loot, Master Looter (.+), threshold (uncommon|rare|epic)\.$/.exec(
+        text,
+      );
+    if (match)
+      return t('hudChrome.masterLoot.summaryMaster', {
+        name: match[1],
+        threshold: t(
+          `hudChrome.masterLoot.threshold${match[2][0].toUpperCase()}${match[2].slice(1)}` as TranslationKey,
+        ),
+      });
     match = /^You have invited (.+) to your party\.$/.exec(text);
     if (match) return t('hud.logs.partyInviteSent', { name: match[1] });
     match = /^(.+) joins the party\.$/.exec(text);
@@ -7024,9 +7185,10 @@ export class Hud {
     if (match) return t('hud.logs.lootReceiveMoney', { money: this.localizeSimMoney(match[1]) });
     match = /^You loot (.+)\.$/.exec(text);
     if (match) return t('hud.logs.lootMoney', { money: this.localizeSimMoney(match[1]) });
+    match = /^Rolling for (\[\[i:[A-Za-z0-9_]+\]\])\.$/.exec(text);
+    if (match) return t('hudChrome.masterLoot.rollingFor', { item: match[1] });
     match = /^Everyone passed on (.+)\.$/.exec(text);
-    if (match)
-      return t('itemUi.lootRoll.everyonePassed', { item: itemDisplayNameFromSource(match[1]) });
+    if (match) return t('itemUi.lootRoll.everyonePassed', { item: match[1] });
     match = /^Sold (\d+) junk items? for (.+)\.$/.exec(text);
     if (match) {
       const n = Number(match[1]);
@@ -7039,7 +7201,7 @@ export class Hud {
     if (match)
       return t('hudChrome.masterLoot.assigned', {
         looter: match[1],
-        item: itemDisplayNameFromSource(match[2]),
+        item: match[2],
         target: match[3],
       });
     match = /^(.+) was not assigned and is free for all\.$/.exec(text);
@@ -7135,7 +7297,21 @@ export class Hud {
       div.dataset.chan = chan;
       this.hideIfFiltered(div, chan);
     }
-    div.append(document.createTextNode(text));
+    // Loot lines carry name-free item tokens ([[i:id]]); render those as clickable
+    // links via the shared chat item-link renderer. Plain system/combat lines keep
+    // the fast text-node path (the substring test never fires for tokenless lines).
+    if (el === this.chatLogEl && text.includes('[[i:')) {
+      for (const seg of parseChatSegments(text)) {
+        if (seg.kind === 'item') this.appendChatItemLink(div, seg.itemId);
+        else if (seg.kind === 'quest')
+          div.append(
+            document.createTextNode(`[${QUESTS[seg.questId] ? questTitle(seg.questId) : '?'}]`),
+          );
+        else div.append(document.createTextNode(seg.value));
+      }
+    } else {
+      div.append(document.createTextNode(text));
+    }
     el.appendChild(div);
     // Announce chat-pane lines through #chat-live (the combat pane has its own announcer).
     if (el === this.chatLogEl) this.announceChatLine(div);
@@ -7875,7 +8051,9 @@ export class Hud {
     this.activeMasterRolls.set(ev.rollId, {
       event: ev,
       receivedAt: performance.now(),
-      durationMs: 60_000,
+      // The master looter's curate window is 5 minutes (sim MASTER_LOOT_TIMEOUT),
+      // longer than a need/greed roll, so the countdown bar must span the full window.
+      durationMs: 300_000,
     });
     this.renderLootRolls();
   }
@@ -7918,16 +8096,19 @@ export class Hud {
 
   private closeLootRollsForItem(text: string): void {
     const match =
-      /^.+ wins (.+) \(\d+\)$/.exec(text) ??
-      /^Everyone passed on (.+)\.$/.exec(text) ??
-      /^.+ assigned (.+) to .+\.$/.exec(text) ??
+      /^.+ wins \[\[i:([A-Za-z0-9_]+)\]\] \(\d+\)$/.exec(text) ??
+      /^Everyone passed on \[\[i:([A-Za-z0-9_]+)\]\]\.$/.exec(text) ??
+      /^.+ assigned \[\[i:([A-Za-z0-9_]+)\]\] to .+\.$/.exec(text) ??
       /^(.+) was not assigned and is free for all\.$/.exec(text);
     if (!match) return;
+    const id = match[1];
     for (const [rollId, roll] of this.activeLootRolls) {
-      if (roll.event.itemName === match[1]) this.activeLootRolls.delete(rollId);
+      if (roll.event.itemId === id || roll.event.itemName === id)
+        this.activeLootRolls.delete(rollId);
     }
     for (const [rollId, roll] of this.activeMasterRolls) {
-      if (roll.event.itemName === match[1]) this.activeMasterRolls.delete(rollId);
+      if (roll.event.itemId === id || roll.event.itemName === id)
+        this.activeMasterRolls.delete(rollId);
     }
     this.renderLootRolls();
   }
@@ -9223,6 +9404,11 @@ export class Hud {
     if (sim.prestigeRank > 0)
       combatStats.push({ label: t('game.prestige.rank'), value: num(sim.prestigeRank) });
 
+    // Developer badge: a global display preference (no per-card modal toggle
+    // like the wallet flair has, since "hide dev badges" is meant to apply
+    // everywhere at once, not be re-decided per export).
+    const showDevBadges = this.optionsHooks?.settings.get('showDevBadges') ?? true;
+
     const slots: EquipSlot[] = ['mainhand', 'chest', 'legs', 'feet'];
     const gear = slots.map((slot) => {
       const id = sim.equipment[slot];
@@ -9246,6 +9432,8 @@ export class Hud {
       gear,
       topPercent,
       balance: showWallet ? verifiedWocBalance() : null,
+      devTier: showDevBadges ? (p.devTier ?? null) : null,
+      devMergedPrs: showDevBadges ? (p.devMergedPrs ?? null) : null,
       referralHandle: referral?.slug ?? this.cardSlug(p.name),
       referralCount: referral?.count ?? null,
       siteUrl: 'crypticrealm.com',
@@ -9688,22 +9876,32 @@ export class Hud {
         this.partyFramesPainter.clear();
         this.lastPartySig = '';
       }
-      this.lastPartyFooterSig = '';
+      if (this.lootSettingsOpen) this.closeLootSettings();
+      this.lastLootSettingsSig = '';
+      this.wasLeaderOfParty = false;
       return;
     }
-    // Leader-only master-loot control. Its signature is deliberately LOW frequency
-    // (loot settings + membership + leadership, NO hp/res), so the checkbox and
-    // dropdowns are not destroyed and rebuilt under the cursor on every combat tick
-    // (the desync/churn the master-loot control is prone to). The painter keeps the
-    // built node positioned just before the leave button across member rebuilds.
-    const isLeader = info.leader === this.sim.playerId;
-    const footerSig = isLeader
-      ? `lead:M${info.master.enabled ? 1 : 0}/${info.master.looter}/${info.master.threshold}:${info.members.map((m) => `${m.pid}:${m.name}`).join(',')}`
-      : 'member';
-    if (footerSig !== this.lastPartyFooterSig) {
-      this.lastPartyFooterSig = footerSig;
-      this.partyFramesPainter.setMasterControl(isLeader ? this.buildMasterLootControl(info) : null);
+    // The Loot Settings window (opened on demand from the right-click menu) is
+    // repainted from authoritative state while open. The signature is low frequency
+    // (loot settings + leadership + membership, NO hp/res) so it is not rebuilt every
+    // combat tick. The leader's controls and a member's read-only view both track it.
+    if (this.lootSettingsOpen) {
+      const sig = `${info.master.enabled ? 1 : 0}/${info.master.looter}/${info.master.threshold}/${info.leader}:${info.members.map((m) => `${m.pid}:${m.name}`).join(',')}`;
+      if (sig !== this.lastLootSettingsSig) {
+        this.lastLootSettingsSig = sig;
+        this.paintLootSettings(info);
+      }
     }
+    // Auto-open the Loot Settings panel the moment the local player BECOMES the party
+    // leader (leader last frame -> not, or rather not -> is): forming a group as its
+    // creator, being promoted, or succeeding a leader who left. That is when the loot
+    // rules become yours to set, so surface them. A non-explicit open: it shows without
+    // stealing keyboard focus or closing other windows mid-game. A plain member (never
+    // the leader) never triggers it.
+    const isLeaderNow = info.leader === this.sim.playerId;
+    const becameLeader = isLeaderNow && !this.wasLeaderOfParty;
+    this.wasLeaderOfParty = isLeaderNow;
+    if (becameLeader && !this.lootSettingsOpen) this.openLootSettings(false);
     // Hoist the cheap signature (a single string pass, no intermediate arrays) AHEAD
     // of the selector so an unchanged party short-circuits before selectPartyFrameMembers
     // allocates its sorted / filtered / mapped arrays.
@@ -9712,76 +9910,16 @@ export class Hud {
     this.lastPartySig = sig;
     const others = selectPartyFrameMembers(info, this.sim.playerId, this.sim.player.pos);
     this.partyFramesPainter.sync(others, info.leader, info.raid);
-  }
-
-  // Leader-only loot-method control: enable master loot, choose the master looter
-  // (the leader by default), and the quality threshold for assigned drops. Returns
-  // the built node; the party-frames painter owns its placement + lifetime.
-  private buildMasterLootControl(info: PartyInfo): HTMLElement {
-    const m = info.master;
-    const box = document.createElement('div');
-    box.className = 'party-loot panel';
-    // A label-wrapped checkbox toggles on a primary click, but the browser also
-    // toggles it on right/middle-click here, which spuriously flips the setting.
-    // Suppress non-primary activation (and the context menu) on the whole panel.
-    box.addEventListener('mousedown', (e) => {
-      if (e.button !== 0) e.preventDefault();
-    });
-    box.addEventListener('contextmenu', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-    });
-    const memberOptions = info.members
-      .map(
-        (mem) =>
-          `<option value="${mem.pid}" ${m.looter === mem.pid ? 'selected' : ''}>${esc(mem.name)}</option>`,
-      )
-      .join('');
-    const thr = (v: string, label: string) =>
-      `<option value="${v}" ${m.threshold === v ? 'selected' : ''}>${esc(label)}</option>`;
-    box.innerHTML = `
-      <label class="party-loot-row toggle">
-        <input type="checkbox" id="ml-enable" ${m.enabled ? 'checked' : ''} aria-label="${esc(t('hudChrome.masterLoot.enableAria'))}">
-        <span>${esc(t('hudChrome.masterLoot.enableLabel'))}</span>
-      </label>
-      <label class="party-loot-row">
-        <span>${esc(t('hudChrome.masterLoot.looterLabel'))}</span>
-        <select id="ml-looter" ${m.enabled ? '' : 'disabled'}>
-          <option value="0" ${m.looter === 0 ? 'selected' : ''}>${esc(t('hudChrome.masterLoot.leaderOption'))}</option>
-          ${memberOptions}
-        </select>
-      </label>
-      <label class="party-loot-row">
-        <span>${esc(t('hudChrome.masterLoot.thresholdLabel'))}</span>
-        <select id="ml-threshold" ${m.enabled ? '' : 'disabled'}>
-          ${thr('uncommon', t('hudChrome.masterLoot.thresholdUncommon'))}
-          ${thr('rare', t('hudChrome.masterLoot.thresholdRare'))}
-          ${thr('epic', t('hudChrome.masterLoot.thresholdEpic'))}
-        </select>
-      </label>`;
-    const enable = box.querySelector<HTMLInputElement>('#ml-enable')!;
-    const looter = box.querySelector<HTMLSelectElement>('#ml-looter')!;
-    const threshold = box.querySelector<HTMLSelectElement>('#ml-threshold')!;
-    const applyMaster = (enabled: boolean) =>
-      this.sim.setPartyLootMaster(
-        enabled,
-        Number(looter.value),
-        threshold.value as MasterLootThreshold,
-      );
-    // Controlled checkbox: suppress the browser's optimistic toggle and derive the
-    // next value from authoritative party state. The DOM checkbox is only updated by
-    // a server-confirmed rebuild, so it can never desync from the server (a checked
-    // box left over disabled dropdowns) or send a value read from a half-toggled DOM
-    // input.
-    enable.addEventListener('click', (e) => {
-      e.preventDefault();
-      applyMaster(!m.enabled);
-    });
-    // The selects are only enabled while master loot is on, so m.enabled is true
-    // here; keep it and update the looter / threshold.
-    looter.addEventListener('change', () => applyMaster(m.enabled));
-    threshold.addEventListener('change', () => applyMaster(m.enabled));
-    return box;
+    // Re-dock the Loot Settings panel below the (just re-synced) party frames when their
+    // size changes (row count / raid grouping). Gated so the layout measure runs on a real
+    // geometry change, not every combat tick; positionLootSettingsPanel honors a manual drag.
+    if (this.lootSettingsOpen) {
+      const geomSig = `${others.length}/${info.raid ? 1 : 0}`;
+      if (geomSig !== this.lastLootGeomSig) {
+        this.lastLootGeomSig = geomSig;
+        this.positionLootSettingsPanel();
+      }
+    }
   }
 
   // -------------------------------------------------------------------------
@@ -9800,6 +9938,8 @@ export class Hud {
       html += `<div class="ctx-item" data-act="convert-raid">${esc(t('hud.chat.context.convertToRaid'))}</div>`;
     if (canUnconvert)
       html += `<div class="ctx-item" data-act="convert-party">${esc(t('hud.chat.context.convertToParty'))}</div>`;
+    if (party)
+      html += `<div class="ctx-item" data-act="loot-settings">${esc(t('hudChrome.lootSettings.menuItem'))}</div>`;
     html += `<div class="ctx-item" data-act="close">${esc(t('hud.chat.context.cancel'))}</div>`;
     el.innerHTML = html;
     hydratePortraits(el);
@@ -9813,7 +9953,7 @@ export class Hud {
       } else if (act === 'convert-party') {
         this.sim.convertRaidToParty();
         this.socialWindow.selectRaidTab();
-      }
+      } else if (act === 'loot-settings') this.openLootSettings();
     });
   }
 
@@ -9858,8 +9998,12 @@ export class Hud {
     )}</div>`;
     if (this.reportHooks && pid !== this.sim.playerId)
       html += `<div class="ctx-item" data-act="report">${esc(t('hud.chat.context.report'))}</div>`;
-    if (isLeader && isMember && pid !== this.sim.playerId)
+    if (isLeader && isMember && pid !== this.sim.playerId) {
+      html += `<div class="ctx-item" data-act="promote">${esc(t('hudChrome.party.promoteLeader'))}</div>`;
       html += `<div class="ctx-item" data-act="kick">${esc(t('hud.chat.context.removeParty'))}</div>`;
+    }
+    if (isMember || pid === this.sim.playerId)
+      html += `<div class="ctx-item" data-act="loot-settings">${esc(t('hudChrome.lootSettings.menuItem'))}</div>`;
     html += `<div class="ctx-item" data-act="close">${esc(t('hud.chat.context.cancel'))}</div>`;
     el.innerHTML = html;
     hydratePortraits(el);
@@ -9878,20 +10022,37 @@ export class Hud {
           ignored ? this.sim.blockRemove(name) : this.sim.blockAdd(name);
         } else this.toggleChatIgnore(name);
       } else if (act === 'report') this.openReportWindow({ pid, name });
+      else if (act === 'promote') this.sim.partyPromote(pid);
       else if (act === 'kick') this.sim.partyKick(pid);
+      else if (act === 'loot-settings') this.openLootSettings();
     });
   }
 
-  // Fill the target frame's Discord line: a linked player's nickname (with PFP),
-  // their staff-role tag, and Discord rank. Hidden for mobs and unlinked players.
+  // Fill the target frame's social/badge line: a linked player's nickname (with
+  // PFP), their staff-role tag, Discord rank, and developer badge. Hidden for mobs
+  // and players with no linked flair at all.
   private updateTargetDiscordLine(target: Entity): void {
     const el = this.targetDiscordEl;
     const tier = target.discordTier ?? 0;
-    if (target.kind !== 'player' || (!tier && !target.discordName && !target.discordRole)) {
-      el.classList.remove('show');
-      el.replaceChildren();
+    const showDevBadges = this.optionsHooks?.settings.get('showDevBadges') ?? true;
+    const devIdx = showDevBadges ? (target.devTier ?? 0) : 0;
+    if (
+      target.kind !== 'player' ||
+      (!tier && !target.discordName && !target.discordRole && !devIdx)
+    ) {
+      if (this.targetDiscordSig !== '') {
+        this.targetDiscordSig = '';
+        el.classList.remove('show');
+        el.replaceChildren();
+      }
       return;
     }
+    // This runs every frame the target frame updates; only rebuild when the Discord
+    // content actually changes (else a fresh <img> per frame would re-fetch the
+    // avatar and, on a failing CDN load, flicker between the broken glyph and hidden).
+    const sig = `${tier}|${target.discordName ?? ''}|${target.discordRole ?? ''}|${target.discordAvatar ?? ''}|${devIdx}`;
+    if (sig === this.targetDiscordSig) return;
+    this.targetDiscordSig = sig;
     const roleTagLabel = (key: string | undefined): string => {
       switch (key) {
         case 'levyst':
@@ -9922,7 +10083,15 @@ export class Hud {
     if (tier > 0) {
       parts.push(`<span class="uf-dc-chip rank">${esc(discordStatusDisplayName(tier))}</span>`);
     }
+    const devDef = devTierByIndex(devIdx);
+    if (devDef) {
+      parts.push(`<span class="uf-dc-chip dev">${esc(devTierDisplayName(devDef))}</span>`);
+    }
     el.innerHTML = parts.join('');
+    // Hide the external Discord avatar if its CDN image fails to load, so the line
+    // never shows the browser's broken-image placeholder (the nickname stays).
+    const dcAvatar = el.querySelector<HTMLImageElement>('.uf-dc-name img');
+    if (dcAvatar) attachAvatarFallback(dcAvatar);
     el.classList.add('show');
   }
 
@@ -9990,6 +10159,29 @@ export class Hud {
           roleHtml +
           `</div></div>`
         : '';
+    // Developer badge: the cosmetic contributor tier, broadcast per-entity via the
+    // `dvt`/`dvc`/`dgl` identity fields. Shown only for an actual contributor
+    // (tier > 0), with the merged-PR count and the @login under the rung name,
+    // and only while the viewer's own showDevBadges display preference is on.
+    const showDevBadges = this.optionsHooks?.settings.get('showDevBadges') ?? true;
+    const devTierDef = showDevBadges ? devTierByIndex(e.devTier ?? 0) : undefined;
+    const devSub = e.devMergedPrs
+      ? t('hudChrome.devBadge.prsLanded', {
+          count: formatNumber(e.devMergedPrs, { maximumFractionDigits: 0 }),
+        })
+      : t('hudChrome.devBadge.contributor');
+    const devLoginHtml = e.githubLogin
+      ? `<div class="inspect-holder-sub inspect-dev-login">@${esc(e.githubLogin)}</div>`
+      : '';
+    const devHtml = devTierDef
+      ? `<div class="inspect-holder">` +
+        `<img class="inspect-holder-badge" src="${devTierBadgeDataUrl(devTierDef)}" alt="" draggable="false">` +
+        `<div class="inspect-holder-text">` +
+        `<div class="inspect-holder-name">${esc(devTierDisplayName(devTierDef))}</div>` +
+        `<div class="inspect-holder-sub">${esc(devSub)}</div>` +
+        devLoginHtml +
+        `</div></div>`
+      : '';
     el.innerHTML =
       `<div class="panel-title"><span>${esc(t('character.profile'))}</span>` +
       `<button type="button" class="x-btn" data-close aria-label="${esc(t('character.closeProfile'))}">${svgIcon('close')}</button></div>` +
@@ -9999,6 +10191,7 @@ export class Hud {
       `<div class="inspect-meta">${esc(t('itemUi.equipment.levelClass', { level: formatNumber(e.level, { maximumFractionDigits: 0 }), className }))}</div>` +
       holderHtml +
       discordHtml +
+      devHtml +
       `</div>` +
       // Worn gear, mirrored from the entity's render-only `equippedItems` (the
       // `eq` identity field). Item names/icons/tooltips resolve fully client-side
@@ -10010,6 +10203,16 @@ export class Hud {
       `<div class="equip-col equip-col-right" id="inspect-equip-right"></div>` +
       `</div></div>`;
     hydratePortraits(el);
+    // If the linked-Discord avatar fails to load from the CDN, degrade to exactly the
+    // no-avatar rendering (the plain status-tier badge, without the pfp's blue ring)
+    // instead of the browser's broken-image placeholder.
+    const inspectPfp = el.querySelector<HTMLImageElement>('.inspect-discord-pfp');
+    if (inspectPfp) {
+      attachAvatarFallback(inspectPfp, (img) => {
+        img.classList.remove('inspect-discord-pfp');
+        img.src = discordStatusBadgeDataUrl(discordTierIdx);
+      });
+    }
     const view = buildPaperdollView(e.equippedItems, ITEMS);
     const leftCol = el.querySelector('#inspect-equip-left');
     const rightCol = el.querySelector('#inspect-equip-right');
@@ -10019,6 +10222,78 @@ export class Hud {
       el.style.display = 'none';
     });
     el.style.display = 'block';
+  }
+
+  /** Open the Loot Settings window: the leader gets the editable master-loot
+   *  method/threshold controls, a member a read-only view of the same state. */
+  // explicit = a user-initiated open (right-click): close other windows and trap /
+  // move keyboard focus into the panel. Auto-open on forming a group passes false:
+  // it just shows the panel, leaving the player's other windows and keyboard focus
+  // (movement, chat) untouched.
+  openLootSettings(explicit = true): void {
+    const info = this.sim.partyInfo;
+    if (!info) return;
+    if (explicit) this.closeOtherWindows('#loot-settings-window');
+    this.lootSettingsOpen = true;
+    this.lastLootSettingsSig = '';
+    // A fresh open re-docks below the party frames, even if a prior open was dragged away.
+    this.lastLootGeomSig = '';
+    this.lootSettingsAutoLeft = '';
+    this.lootSettingsAutoTop = '';
+    this.paintLootSettings(info);
+    const el = $('#loot-settings-window');
+    const wasHidden = el.style.display !== 'block';
+    el.style.display = 'block';
+    this.positionLootSettingsPanel();
+    if (explicit) {
+      if (wasHidden)
+        this.lootSettingsTrap = this.focusManager.open({ root: () => $('#loot-settings-window') });
+      this.lootSettingsTrap?.focusFirst();
+    }
+  }
+
+  closeLootSettings(restoreFocus = true): void {
+    this.lootSettingsOpen = false;
+    this.lastLootGeomSig = '';
+    $('#loot-settings-window').style.display = 'none';
+    this.lootSettingsTrap?.release(restoreFocus);
+    this.lootSettingsTrap = null;
+  }
+
+  // Dock the Loot Settings window below the party frames on the left. If the left column
+  // would overflow the HUD height (a large raid pushes the panel off the bottom), fall
+  // back to docking it to the right of the party frames. Desktop only (mobile keeps the
+  // centered .window placement); honors a manual drag (stops auto-docking once moved).
+  private positionLootSettingsPanel(): void {
+    if (document.body.classList.contains('mobile-touch')) return;
+    const el = $('#loot-settings-window');
+    if (
+      this.lootSettingsAutoLeft &&
+      (el.style.left !== this.lootSettingsAutoLeft || el.style.top !== this.lootSettingsAutoTop)
+    )
+      return; // the player dragged it; leave it where they put it
+    const pf = $('#party-frames');
+    const gap = 8;
+    const belowTop = pf.offsetTop + pf.offsetHeight + gap;
+    const avail = (el.offsetParent as HTMLElement | null)?.clientHeight ?? window.innerHeight;
+    const fitsBelow = belowTop + el.offsetHeight <= avail - gap;
+    el.style.left = `${fitsBelow ? pf.offsetLeft : pf.offsetLeft + pf.offsetWidth + gap}px`;
+    el.style.top = `${fitsBelow ? belowTop : pf.offsetTop}px`;
+    el.style.transform = 'none';
+    this.lootSettingsAutoLeft = el.style.left;
+    this.lootSettingsAutoTop = el.style.top;
+  }
+
+  private paintLootSettings(info: PartyInfo): void {
+    renderLootSettingsWindow(
+      $('#loot-settings-window'),
+      lootSettingsView(info, this.sim.playerId),
+      {
+        onChange: (enabled, looter, threshold) =>
+          this.sim.setPartyLootMaster(enabled, looter, threshold),
+        onClose: () => this.closeLootSettings(),
+      },
+    );
   }
 
   // One read-only equipment row for the inspect window: icon, slot name, and the
@@ -10037,6 +10312,7 @@ export class Hud {
     if (item) this.attachTooltip(row, () => this.itemTooltip(item));
     return row;
   }
+
 
   // Raid/target marker picker for an enemy, opened from its target unit frame.
   // Party-only (markers are a coordination feature); shows the 8 symbols with a
@@ -10704,360 +10980,19 @@ export class Hud {
     parent.appendChild(row);
   }
 
-  private settingChoice(parent: HTMLElement, label: string, key: NumericSettingKey, options: { value: number; label: string }[], onChange?: () => void): void {
-    const hooks = this.optionsHooks;
-    if (!hooks) return;
-    const row = document.createElement('div');
-    row.className = 'set-row';
-    const name = document.createElement('span');
-    name.className = 'set-name';
-    name.textContent = label;
-    const wrap = document.createElement('div');
-    wrap.className = 'set-choice';
-    const sync = () => {
-      const current = Math.round(hooks.settings.get(key));
-      for (const btn of [...wrap.querySelectorAll<HTMLButtonElement>('button[data-value]')]) {
-        const selected = Number(btn.dataset.value) === current;
-        btn.classList.toggle('sel', selected);
-        btn.setAttribute('aria-pressed', String(selected));
-      }
-    };
-    for (const option of options) {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'btn set-choice-btn';
-      btn.dataset.value = String(option.value);
-      btn.textContent = option.label;
-      btn.setAttribute('aria-label', option.label);
-      btn.addEventListener('click', () => {
-        audio.click();
-        hooks.onSettingChange(key, option.value);
-        sync();
-        onChange?.();
-      });
-      wrap.appendChild(btn);
-    }
-    row.append(name, wrap);
-    parent.appendChild(row);
-    sync();
+  // True when any interactive HUD surface is open: a modal OR a managed window
+  // (bags, vendor, character, etc.). Drives the gamepad's virtual-cursor mode so a
+  // controller can point at bag slots / vendor items, not just modal dialogs.
+  isWindowOpen(): boolean {
+    return this.isModalOpen() || this.topmostOpenWindow() !== null;
   }
 
-  private settingsViewShell(title: string): HTMLElement {
-    const el = $('#options-menu');
-    el.innerHTML = `<div class="panel-title"><span>${esc(title)}</span><button type="button" class="x-btn" data-close aria-label="${esc(t('hud.options.returnToGame'))}">${svgIcon('close')}</button></div>`;
-    const body = document.createElement('div');
-    body.className = 'set-rows';
-    el.appendChild(body);
-    return body;
+  toggleOptionsMenu(): void {
+    this.optionsWindow.toggle();
   }
 
-  private settingsViewFooter(): void {
-    const el = $('#options-menu');
-    const reset = document.createElement('button');
-    reset.className = 'btn';
-    reset.textContent = t('hud.options.resetToDefaults');
-    reset.addEventListener('click', () => {
-      audio.click();
-      this.optionsHooks?.settings.reset();
-      // re-apply every setting to its subsystem, then redraw the view
-      const all = this.optionsHooks?.settings.all();
-      if (all) for (const k of Object.keys(all) as (keyof GameSettings)[]) this.optionsHooks?.onSettingChange(k, all[k]);
-      this.renderOptions();
-    });
-    const back = document.createElement('button');
-    back.className = 'btn';
-    back.textContent = t('hud.options.back');
-    back.addEventListener('click', () => { audio.click(); this.optionsView = 'main'; this.renderOptions(); });
-    el.append(reset, back);
-    el.querySelector('[data-close]')?.addEventListener('click', () => this.closeOptions());
-  }
-
-  private renderGraphics(): void {
-    const body = this.settingsViewShell(t('hud.options.graphics'));
-    this.settingChoice(body, t('hud.options.graphicsQuality'), 'graphicsPreset', [
-      { value: 1, label: t('hud.options.graphicsPresetLow') },
-      { value: 2, label: t('hud.options.graphicsPresetMedium') },
-      { value: 3, label: t('hud.options.graphicsPresetHigh') },
-      { value: 4, label: t('hud.options.graphicsPresetUltra') },
-      { value: 5, label: t('hud.options.graphicsPresetAdvanced') },
-    ], () => this.renderGraphics());
-    if (Math.round(this.optionsHooks?.settings.get('graphicsPreset') ?? 0) === 5) {
-      this.settingChoice(body, t('hud.options.terrainDetail'), 'terrainDetail', [
-        { value: 0, label: t('hud.options.terrainLow') },
-        { value: 1, label: t('hud.options.terrainHigh') },
-      ]);
-      this.settingChoice(body, t('hud.options.foliageDensity'), 'foliageDensity', [
-        { value: 0, label: t('hud.options.terrainLow') },
-        { value: 1, label: t('hud.options.terrainHigh') },
-      ]);
-      this.settingChoice(body, t('hud.options.effectsQuality'), 'effectsQuality', [
-        { value: 0, label: t('hud.options.terrainLow') },
-        { value: 1, label: t('hud.options.terrainHigh') },
-      ]);
-      this.settingChoice(body, t('hud.options.shadowQuality'), 'shadowQuality', [
-        { value: 0, label: t('hud.options.terrainLow') },
-        { value: 1, label: t('hud.options.terrainHigh') },
-      ]);
-    }
-    this.settingSlider(body, t('hud.options.cameraSpeed'), 'cameraSpeed');
-    // Camera Speed only scales mouselook; on touch the camera joystick has its
-    // own rate, so phones get a dedicated sensitivity slider here.
-    if (isPhoneTouchDevice()) this.settingSlider(body, t('hud.options.touchLookSpeed'), 'touchLookSpeed');
-    this.settingSlider(body, t('hud.options.brightness'), 'brightness');
-    this.settingSlider(body, t('hud.options.fieldOfView'), 'cameraFov', { fmt: (v) => `${formatNumber(Math.round(v), { maximumFractionDigits: 0 })}°`, step: 1 });
-    this.settingSlider(body, t('hud.options.renderQuality'), 'renderScale');
-    this.settingToggle(body, t('hud.options.fullscreen'), 'fullscreen');
-    this.settingToggle(body, t('game.settings.showOverflowXp'), 'showOverflowXp');
-    // Touch-only: lets phone players dim the on-screen joysticks + buttons.
-    if (isPhoneTouchDevice()) this.settingSlider(body, t('hud.options.touchOpacity'), 'touchOpacity');
-    this.settingToggle(body, t('game.settings.weather'), 'weather');
-    // Touch-only: lets phone players size the on-screen joysticks to their hands.
-    if (isPhoneTouchDevice()) this.settingSlider(body, t('hud.options.joystickSize'), 'joystickScale');
-    // Touch-only: lets phone players size the on-screen action buttons to taste.
-    if (isPhoneTouchDevice()) this.settingSlider(body, t('hud.options.buttonSize'), 'actionButtonScale');
-    // Touch-only: a larger deadzone resists accidental drift from a resting
-    // thumb on the move stick; only meaningful with on-screen controls.
-    if (isPhoneTouchDevice()) this.settingSlider(body, t('hud.options.joystickDeadzone'), 'joystickDeadzone');
-    // Touch-only: flips the vertical axis of the on-screen camera joystick + swipe-look.
-    if (isPhoneTouchDevice()) this.settingBoolToggle(body, t('hud.options.invertLook'), 'touchInvertLook');
-    const note = document.createElement('div');
-    note.className = 'set-note';
-    note.textContent = t('hud.options.graphicsNote');
-    $('#options-menu').appendChild(note);
-    const reloadNote = document.createElement('div');
-    reloadNote.className = 'set-note';
-    reloadNote.textContent = t('hud.options.graphicsReloadNote');
-    const reload = document.createElement('button');
-    reload.type = 'button';
-    reload.className = 'btn';
-    reload.textContent = t('hud.options.reloadNow');
-    reload.addEventListener('click', () => { audio.click(); location.reload(); });
-    $('#options-menu').append(reloadNote, reload);
-    this.settingsViewFooter();
-  }
-
-  private renderAudio(): void {
-    const body = this.settingsViewShell(t('hud.options.audio'));
-    this.settingSlider(body, t('hud.options.soundEffects'), 'sfxVolume');
-    this.settingSlider(body, t('hud.options.musicVolume'), 'musicVolume');
-    this.settingSlider(body, t('hud.options.voiceVolume'), 'voiceVolume');
-    const row = document.createElement('div');
-    row.className = 'set-row';
-    const name = document.createElement('span');
-    name.className = 'set-name';
-    name.textContent = t('hud.options.music');
-    const toggle = document.createElement('button');
-    toggle.className = 'btn set-toggle';
-    const sync = () => {
-      toggle.textContent = music.enabled ? t('hud.options.on') : t('hud.options.off');
-      toggle.classList.toggle('off', !music.enabled);
-      toggle.setAttribute('aria-pressed', String(music.enabled));
-      toggle.setAttribute('aria-label', t('hud.options.music'));
-    };
-    sync();
-    toggle.addEventListener('click', () => { audio.click(); music.setEnabled(!music.enabled); sync(); });
-    row.append(name, toggle);
-    body.appendChild(row);
-    this.settingBoolToggle(body, t('hud.options.npcVoices'), 'voiceEnabled');
-    this.settingBoolToggle(body, t('hudChrome.options.footstepSounds'), 'footstepSfx');
-    this.settingsViewFooter();
-  }
-
-  // Interface & Comfort panel: presentational HUD tuning + accessibility toggles
-  // (sliders/toggles persisted to the GameSettings store, applied via CSS in
-  // main.ts) plus the classic client-side "Show Timestamps" chat option. None of
-  // it touches the simulation.
-  // In-game language picker (Options > Interface). Mirrors the homepage footer picker so a
-  // player can switch locales without leaving the world. Switching is delegated to the
-  // OptionsHooks.changeLanguage seam (main.ts owns the locale load + page relocalization);
-  // the HUD itself relocalizes its dynamic UI off the woc:languagechange event (see ctor).
-  private languageSelect(parent: HTMLElement): void {
-    const hooks = this.optionsHooks;
-    if (!hooks) return;
-    const row = document.createElement('div');
-    row.className = 'set-row';
-    const name = document.createElement('span');
-    name.className = 'set-name';
-    name.textContent = t('hud.options.language');
-    const select = document.createElement('select');
-    select.className = 'lang-select-dropdown set-lang-select';
-    select.setAttribute('aria-label', t('hud.options.language'));
-    for (const lang of supportedLanguages) {
-      const opt = document.createElement('option');
-      opt.value = lang;
-      opt.textContent = LANGUAGE_ENDONYMS[lang];
-      select.appendChild(opt);
-    }
-    select.value = getLanguage();
-    // aria-live status for the async locale load (loading / load-failed).
-    const status = document.createElement('span');
-    status.className = 'visually-hidden';
-    status.setAttribute('role', 'status');
-    status.setAttribute('aria-live', 'polite');
-    select.addEventListener('change', () => {
-      const selected = select.value;
-      if (!isSupportedLanguage(selected) || selected === getLanguage()) return;
-      audio.click();
-      select.disabled = true;
-      void hooks.changeLanguage(selected, (msg) => { status.textContent = msg; })
-        .then((ok) => {
-          if (!ok) {
-            // The locale chunk failed to load — restore the picker to the locale that stayed active.
-            select.value = getLanguage();
-          } else if (this.optionsOpen && this.optionsView === 'interface') {
-            // Rebuild the panel in the new language, then return keyboard focus to the
-            // fresh picker (the control the user just operated) so it isn't lost to <body>.
-            // The refocus also lets screen readers announce the switch via the select's value.
-            this.renderInterface();
-            this.focusFirstInteractive($('#options-menu'), '.set-lang-select');
-          }
-        })
-        .catch(() => {
-          // A relocalization step threw after the locale loaded; keep the picker usable and
-          // surface the failure rather than leaving the control stuck disabled.
-          select.value = getLanguage();
-          status.textContent = t('settings.languageLoadFailed');
-        })
-        .finally(() => { select.disabled = false; });
-    });
-    row.append(name, select);
-    parent.append(row, status);
-  }
-
-  private renderInterface(): void {
-    const body = this.settingsViewShell(t('hud.options.interface'));
-    this.languageSelect(body);
-    this.settingSlider(body, t('hud.options.hudOpacity'), 'hudOpacity');
-    this.settingSlider(body, t('hud.options.tooltipScale'), 'tooltipScale');
-    this.settingSlider(body, t('hud.options.fctScale'), 'fctScale');
-    this.settingSlider(body, t('hud.options.chatFontScale'), 'chatFontScale');
-    this.settingSlider(body, t('hud.options.chatOpacity'), 'chatOpacity');
-    this.settingBoolToggle(body, t('hud.options.compactChat'), 'compactChat');
-    this.settingBoolToggle(body, t('hud.options.frostedPanels'), 'frostedPanels');
-    this.settingBoolToggle(body, t('hud.options.highContrastText'), 'highContrastText');
-    this.settingBoolToggle(body, t('hud.options.reduceMotion'), 'reduceMotion');
-    this.settingBoolToggle(body, t('hud.options.showFps'), 'showFps');
-    this.settingBoolToggle(body, t('hudChrome.options.showWalletOnCharacterScreen'), 'showWalletOnCharacterScreen');
-    this.settingBoolToggle(body, t('hudChrome.options.showWalletOnPlayerCard'), 'showWalletOnPlayerCard');
-    this.settingBoolToggle(body, t('hud.options.invertLookY'), 'invertLookY');
-
-    // On/off toggle for chat timestamps.
-    const tsRow = document.createElement('div');
-    tsRow.className = 'set-row';
-    const tsName = document.createElement('span');
-    tsName.className = 'set-name';
-    tsName.textContent = t('hudChrome.chatTimestamps.show');
-    const tsToggle = document.createElement('button');
-    tsToggle.className = 'btn set-toggle';
-
-    // 12/24-hour format selector — two segmented buttons, dimmed when off.
-    const fmtRow = document.createElement('div');
-    fmtRow.className = 'set-row';
-    const fmtName = document.createElement('span');
-    fmtName.className = 'set-name';
-    fmtName.textContent = t('hudChrome.chatTimestamps.format');
-    const seg = document.createElement('div');
-    seg.className = 'set-seg';
-    const btn12 = document.createElement('button');
-    btn12.className = 'btn set-seg-btn';
-    btn12.textContent = t('hudChrome.chatTimestamps.clock12h');
-    const btn24 = document.createElement('button');
-    btn24.className = 'btn set-seg-btn';
-    btn24.textContent = t('hudChrome.chatTimestamps.clock24h');
-    seg.append(btn12, btn24);
-    fmtRow.append(fmtName, seg);
-
-    const sync = () => {
-      tsToggle.textContent = this.chatTimestamps ? t('hud.options.on') : t('hud.options.off');
-      tsToggle.classList.toggle('off', !this.chatTimestamps);
-      tsToggle.setAttribute('aria-pressed', String(this.chatTimestamps));
-      btn12.classList.toggle('active', this.chatClock === '12h');
-      btn24.classList.toggle('active', this.chatClock === '24h');
-      fmtRow.classList.toggle('disabled', !this.chatTimestamps);
-      btn12.disabled = !this.chatTimestamps;
-      btn24.disabled = !this.chatTimestamps;
-    };
-    sync();
-
-    tsToggle.addEventListener('click', () => {
-      audio.click();
-      this.chatTimestamps = !this.chatTimestamps;
-      localStorage.setItem('chatTimestamps', this.chatTimestamps ? '1' : '0');
-      sync();
-    });
-    const setClock = (clock: ChatClock) => {
-      if (!this.chatTimestamps) return;
-      audio.click();
-      this.chatClock = clock;
-      localStorage.setItem('chatClock', clock);
-      sync();
-    };
-    btn12.addEventListener('click', () => setClock('12h'));
-    btn24.addEventListener('click', () => setClock('24h'));
-
-    tsRow.append(tsName, tsToggle);
-    body.append(tsRow, fmtRow);
-
-    const note = document.createElement('div');
-    note.className = 'set-note';
-    note.textContent = t('hudChrome.chatTimestamps.note');
-    $('#options-menu').appendChild(note);
-
-    const back = document.createElement('button');
-    back.className = 'btn';
-    back.textContent = t('hud.options.back');
-    back.addEventListener('click', () => { audio.click(); this.optionsView = 'main'; this.renderOptions(); });
-    $('#options-menu').appendChild(back);
-    $('#options-menu').querySelector('[data-close]')?.addEventListener('click', () => this.closeOptions());
-  }
-
-  // Display name for an action row. Action-bar slots show the shortcut that
-  // currently occupies them (slot 0 is always Attack); everything else uses
-  // its registry label.
-  private actionDisplayName(actionId: string, fallback: string): string {
-    if (!actionId.startsWith('slot')) return BIND_ACTION_LABEL_KEYS[actionId] ? t(BIND_ACTION_LABEL_KEYS[actionId]) : fallback;
-    const slot = Number(actionId.slice(4));
-    if (slot === 0) return t('hud.keybinds.actions.attack');
-    const known = this.abilityForSlot(slot);
-    if (known) return abilityDisplayName(known.def);
-    const item = this.itemForSlot(slot);
-    return item ? itemDisplayName(item) : t('hud.keybinds.actions.actionBarSlot', { slot: slot + 1 });
-  }
-
-  // Toggle row styled for the Key Bindings panel. Handles the bool Mouse Camera
-  // setting and the numeric (0/1) Click to Move setting, which both live here
-  // alongside the rebindable keys.
-  private settingToggleKeybind(parent: HTMLElement, label: string, key: BoolSettingKey | 'clickToMove'): void {
-    const hooks = this.optionsHooks;
-    if (!hooks) return;
-    const isOn = () => (key === 'clickToMove' ? hooks.settings.get(key) >= 0.5 : hooks.settings.get(key));
-    const row = document.createElement('div');
-    row.className = 'kb-row kb-toggle-row';
-    const name = document.createElement('span');
-    name.className = 'kb-name';
-    name.textContent = label;
-    const toggle = document.createElement('button');
-    toggle.type = 'button';
-    toggle.className = 'btn kb-key kb-toggle';
-    const sync = () => {
-      const on = isOn();
-      toggle.textContent = on ? t('hud.options.on') : t('hud.options.off');
-      toggle.classList.toggle('off', !on);
-      toggle.setAttribute('aria-pressed', on ? 'true' : 'false');
-      toggle.setAttribute('aria-label', label);
-    };
-    sync();
-    toggle.addEventListener('click', () => {
-      audio.click();
-      const next = !isOn();
-      if (key === 'clickToMove') hooks.onSettingChange(key, next ? 1 : 0);
-      else hooks.onSettingChange(key, hooks.settings.set(key, next));
-      sync();
-      // Attack Move reveals/hides its rebindable key row, so redraw the panel.
-      if (key === 'attackMove') this.renderKeybinds();
-    });
-    row.append(name, toggle);
-    parent.appendChild(row);
+  closeOptions(): void {
+    this.optionsWindow.close();
   }
 
   private clickMoveMouseButtonRow(parent: HTMLElement): void {
@@ -11283,9 +11218,10 @@ function describeAbilitySummary(known: ResolvedAbility, resourceType: ResourceTy
     );
   }
   parts.push(abilityCastLine(known));
-  if (known.def.cooldown > 0) {
+  // Resolved cooldown (after talent cooldown modifiers), not the base def cooldown.
+  if (known.cooldown > 0) {
     parts.push(
-      t('abilityUi.tooltip.cooldownSeconds', { seconds: formatAbilityNumber(known.def.cooldown) }),
+      t('abilityUi.tooltip.cooldownSeconds', { seconds: formatAbilityNumber(known.cooldown) }),
     );
   }
   return parts.join(' · ');

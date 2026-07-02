@@ -1,6 +1,7 @@
 // Per-realm branding overrides. Reads the active realm's branding block and
 // swaps the DOM elements affected by Cryptic Realm customization.
 
+import './realm_env';
 import { getActiveRealm, REALM_LIST, type RealmContent } from '../../sim/realms';
 import { socialsForRealm } from '../../sim/realms/social_links';
 

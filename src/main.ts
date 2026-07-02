@@ -175,6 +175,7 @@ import {
 // `data-theme` to <html>, then the trigger button lives in the index.html
 // `<div id="theme-picker">` block.
 import { mountThemeSelect } from './ui/cryptic/theme_select';
+import './ui/cryptic/realm_env';
 import { notePropPlaced, tryBuilderSelect } from './ui/cryptic/world_builder';
 import { mountHudGlobes, setHudSkin, resolveHudSkin } from './ui/cryptic/globes';
 import { isFpsActive, mountFpsMode, resolveFpsMode, setFpsMode } from './ui/cryptic/fps_mode';
@@ -198,6 +199,7 @@ import { installNativeSsoReturnHandler, wireNativeSsoLink } from './ui/cryptic/n
 import { clearCrypticSession, readCrypticSession, writeCrypticSession } from './ui/cryptic/session';
 
 const WORLD_SEED = 20061; // fixed: Cryptic Realm is a persistent place
+
 const CLICK_MOVE_TURN_RATE = 4.2; // rad/sec; responsive turning while the camera stays decoupled from click spam
 const CLICK_MOVE_WAYPOINT_STOP = 0.8; // yards; intermediate A* corners should roll through, not stutter-stop
 const CLICK_MOVE_REROUTE_DISTANCE = 4; // yards; live entity targets can move this far before we recompute the path
@@ -1189,7 +1191,7 @@ async function startGame(
     chatInput.style.height = '';
     chatInput.style.overflowY = '';
     chatInput.blur();
-    hud.clearPendingQuestLinks();
+    hud.clearPendingChatLinks();
     recoverFromMobileKeyboard();
   };
   function openChat(): void {
@@ -1359,6 +1361,7 @@ async function startGame(
       return music.enabled;
     },
     onRecenterCamera: () => input.recenterCameraBehind(world.player.facing),
+    onDiscord: () => toggleDiscordPanel(true),
   });
   mobileControls.start();
   // reflect the current music state on the touch toggle (it may already be off
@@ -2694,6 +2697,27 @@ let applyForceSso: (() => void) | null = null; // hides password auth when SSO i
 let offlineSkin = 0; // chosen appearance skin for the offline quick-start character
 let onlineSkin = 0; // chosen appearance skin for new online characters
 
+interface RealmPreviewAsset {
+  name: string;
+  url: string;
+  kind?: string;
+  animated?: boolean;
+  skinned?: boolean;
+}
+
+interface RealmPreviewManifest {
+  realmId: string;
+  name?: string;
+  assets?: RealmPreviewAsset[];
+}
+
+interface RealmPreviewCatalog {
+  realms?: Array<{ realmId: string; name?: string; manifestUrl: string }>;
+}
+
+const REALM_ASSET_PREVIEW_LIMIT = 18;
+let realmPreviewCatalogPromise: Promise<Map<string, RealmPreviewManifest>> | null = null;
+
 function releaseStartScreenPreview(): void {
   if (!characterPreview) return;
   characterPreview.destroy();
@@ -2820,6 +2844,98 @@ function refreshOnlineSkins(cls: PlayerClass): void {
   });
 }
 
+function realmPreviewIdFromName(name: string | null | undefined): string {
+  const key = (name ?? '').toLowerCase().replace(/[^a-z0-9]+/g, '');
+  if (!key) return 'crypticrealm';
+  if (key.includes('infernal')) return 'infernal';
+  if (key.includes('arcadevoid') || key.includes('starcraft') || key.includes('void')) return 'arcadevoid';
+  if (key.includes('classic')) return 'classic';
+  if (key.includes('claudecraft') || key.includes('claudcraft') || key.includes('claude')) return 'claudecraft';
+  if (key.includes('arcane')) return 'arcane';
+  if (key.includes('dominion')) return 'dominion';
+  if (key.includes('exchange')) return 'exchange';
+  if (key.includes('fps')) return 'fps';
+  if (key.includes('cryptic')) return 'crypticrealm';
+  return key;
+}
+
+async function loadRealmPreviewCatalog(): Promise<Map<string, RealmPreviewManifest>> {
+  if (realmPreviewCatalogPromise) return realmPreviewCatalogPromise;
+  realmPreviewCatalogPromise = (async () => {
+    const out = new Map<string, RealmPreviewManifest>();
+    try {
+      const indexRes = await fetch('/cr-realms/index.json', { credentials: 'same-origin' });
+      if (!indexRes.ok) return out;
+      const index = (await indexRes.json()) as RealmPreviewCatalog;
+      await Promise.all(
+        (index.realms ?? []).map(async (row) => {
+          try {
+            const res = await fetch(row.manifestUrl, { credentials: 'same-origin' });
+            if (!res.ok) return;
+            const manifest = (await res.json()) as RealmPreviewManifest;
+            out.set(manifest.realmId || row.realmId, manifest);
+          } catch {
+            // Optional generated asset manifests are absent in clean checkouts.
+          }
+        }),
+      );
+    } catch {
+      // Optional generated asset manifests are absent in clean checkouts.
+    }
+    return out;
+  })();
+  return realmPreviewCatalogPromise;
+}
+
+async function renderCharacterSelectAssetShelf(): Promise<void> {
+  const host = $('#charselect-realm-assets') as HTMLElement | null;
+  if (!host) return;
+  host.hidden = true;
+  const catalog = await loadRealmPreviewCatalog();
+  const realmId = realmPreviewIdFromName(api.realm);
+  const manifest = catalog.get(realmId) ?? catalog.get('crypticrealm');
+  const assets = (manifest?.assets ?? [])
+    .filter((a) => a.url && (a.kind === 'character' || a.kind === 'vehicle' || a.animated || a.skinned))
+    .slice(0, REALM_ASSET_PREVIEW_LIMIT);
+  if (!assets.length) {
+    host.textContent = '';
+    return;
+  }
+  host.textContent = '';
+  const head = document.createElement('div');
+  head.className = 'cs-forged-assets-head';
+  const title = document.createElement('span');
+  title.textContent = 'ArcForge';
+  const count = document.createElement('span');
+  count.className = 'cs-forged-assets-count';
+  count.textContent = `${manifest?.name ?? realmId} ${assets.length}`;
+  head.append(title, count);
+
+  const list = document.createElement('div');
+  list.className = 'cs-forged-assets-list';
+  for (const asset of assets) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'cs-forged-asset-btn';
+    button.title = asset.name;
+    button.textContent = asset.name;
+    const tag = document.createElement('span');
+    tag.className = 'cs-forged-asset-tag';
+    tag.textContent = asset.animated ? 'anim' : asset.skinned ? 'rig' : asset.kind ?? 'glb';
+    button.appendChild(tag);
+    button.addEventListener('click', () => {
+      list.querySelectorAll('.cs-forged-asset-btn').forEach((el) => el.classList.remove('sel'));
+      button.classList.add('sel');
+      void ensureCharacterPreview('#charselect-panel').then(() => {
+        characterPreview?.setExternalModel(asset.url);
+      });
+    });
+    list.appendChild(button);
+  }
+  host.append(head, list);
+  host.hidden = false;
+}
+
 function updatePreviewContainer(panelId: string): void {
   if (!characterPreview) {
     scheduleCharacterPreview(panelId);
@@ -2841,6 +2957,7 @@ function updatePreviewContainer(panelId: string): void {
     const cls = (row?.dataset.class as PlayerClass) ?? 'warrior';
     characterPreview.setClass(cls);
     characterPreview.setSkin(Number(row?.dataset.skin ?? 0) || 0);
+    void renderCharacterSelectAssetShelf();
     syncPreviewAfterPanelLayout();
     return;
   }
@@ -4177,7 +4294,9 @@ async function refreshCharacters(): Promise<void> {
         row.classList.add('sel');
         row.setAttribute('aria-selected', 'true');
         renderClassDetails('charselect-class-details', c.class);
+        characterPreview?.setClass(c.class);
         characterPreview?.setSkin(c.skin ?? 0);
+        void renderCharacterSelectAssetShelf();
       };
 
       row.addEventListener('click', selectRow);

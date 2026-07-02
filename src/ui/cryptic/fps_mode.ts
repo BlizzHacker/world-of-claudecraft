@@ -20,6 +20,7 @@
 //     base input system sees it — we use a window-level keydown listener
 //     that ignores form inputs.
 
+import './realm_env';
 import type { Input } from '../../game/input';
 import { resolveAutoFps } from './auto_fps';
 import { getActiveRealm } from '../../sim/realms';

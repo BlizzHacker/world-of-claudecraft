@@ -73,6 +73,8 @@ const CALLBACK_KEYS = [
   'onInventoryChangedForQuests',
   'checkQuestReady',
   'countItem',
+  'completeQuestForDev',
+  'completeCurrentQuestsForDev',
   // E1 entity-roster surface.
   'addEntity',
   'dropEntity',
@@ -133,8 +135,9 @@ const CALLBACK_KEYS = [
   'despawnPet',
   'respawnMob',
   'onBossDeath',
-  // I1 dungeon instancing + the shared raid-lockout clock.
+  // I1 dungeon instancing + the shared raid-lockout clock + the host reset boundary.
   'lockoutNowMs',
+  'raidResetMs',
   'instanceKeyFor',
   'instanceOriginOf',
   'enterDungeon',
@@ -222,7 +225,6 @@ function makeFakeHost() {
       return entities;
     },
     players: new Map(),
-    propMetaByEnt: new Map(),
     primaryId: -1,
     tradeInvites: new Map(),
     duelInvites: new Map(),
@@ -309,7 +311,10 @@ function makeFakeHost() {
     onInventoryChangedForQuests: vi.fn(),
     checkQuestReady: vi.fn(),
     countItem: vi.fn(() => 0),
+    completeQuestForDev: vi.fn(() => false),
+    completeCurrentQuestsForDev: vi.fn(() => 0),
     lockoutNowMs: vi.fn(() => 0),
+    raidResetMs: vi.fn((nowMs: number) => nowMs),
     instanceKeyFor: vi.fn(() => 'solo:0'),
     instanceOriginOf: vi.fn(() => ({ x: 0, z: 0 })),
     enterDungeon: vi.fn(),
@@ -428,6 +433,7 @@ function makeFakeHost() {
     targetEntity: vi.fn(),
     partyCapacity: vi.fn(() => 5),
     marketListingBelongsTo: vi.fn(() => false),
+    propMetaByEnt: new Map(),
     samePopulationPlayers: vi.fn(() => true),
   };
   return { host, rng, entities, clock };

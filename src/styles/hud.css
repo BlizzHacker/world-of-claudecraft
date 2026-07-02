@@ -58,6 +58,25 @@
     margin-right: 3px;
     filter: drop-shadow(0 1px 1px #000);
   }
+  /* developer-badge flair, inline to the left of a player's name */
+  .np-dev-tier {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    vertical-align: middle;
+    margin-right: 3px;
+    filter: drop-shadow(0 1px 1px #000);
+  }
+  /* significant-contributor name outline: a steady glow layered over whatever
+     name color applies (Discord staff or default). The colour is supplied by the
+     painter via --dev-outline (per-tier), so no hardcoded hue lives here. No
+     animation, so it is reduced-motion safe. */
+  .np-name.np-sig-dev {
+    text-shadow:
+      0 0 4px var(--dev-outline),
+      0 0 2px var(--dev-outline),
+      0 1px 1px #000;
+  }
   .np-hpbar {
     width: 78px;
     height: 6px;
@@ -1453,6 +1472,21 @@
     color: #fff176;
   }
   .chat-quest-link:focus-visible {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 2px;
+  }
+  /* Item chat link: color is set inline from the item quality, so hover just
+     brightens rather than overriding the quality hue. */
+  .chat-item-link {
+    cursor: var(--cursor-point);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+  .chat-item-link:hover {
+    filter: brightness(1.25);
+  }
+  .chat-item-link:focus-visible {
     outline: 2px solid var(--color-border-focus);
     outline-offset: 2px;
   }
@@ -3331,6 +3365,44 @@
     justify-content: space-between;
     align-items: center;
     gap: 6px;
+  }
+  #loot-settings-window {
+    min-width: 220px;
+    z-index: 30;
+  }
+  /* Position is set in JS (Hud.positionLootSettingsPanel): docked below the party
+     frames on the left, or to their right if the left column would overflow the HUD
+     height. On mobile-touch it keeps the centered .window placement. */
+  #loot-settings-window .ls-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-family: var(--title-font);
+    font-size: 12px;
+  }
+  #loot-settings-window .ls-row {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  #loot-settings-window .ls-row.ls-ro {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 14px;
+  }
+  #loot-settings-window .ls-lbl {
+    color: var(--gold);
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+  }
+  #loot-settings-window .ls-val {
+    color: var(--color-text-light);
+    font-family: var(--ui-font);
+  }
+  #loot-settings-window select {
+    width: 100%;
+    box-sizing: border-box;
   }
   .party-frame .pfm-id {
     color: var(--cls);

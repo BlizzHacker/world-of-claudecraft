@@ -91,14 +91,8 @@ import {
   resetChatStrikes,
   updateFilterConfig,
 } from '../server/chat_filter_db';
+import { accountForToken, accountMailTarget, accountTotpState, findAccount, isAdminAccount } from '../server/db';
 import { verifyPassword } from '../server/auth';
-import {
-  accountForToken,
-  accountMailTarget,
-  accountTotpState,
-  findAccount,
-  isAdminAccount,
-} from '../server/db';
 import { addBlockedIp, removeBlockedIp } from '../server/ip_block_db';
 import type { LiveSharedIp } from '../server/live_shared_ips';
 import {
@@ -110,6 +104,7 @@ import {
   moderationReportsForAccount,
   muteAccountChat,
 } from '../server/moderation_db';
+
 import { totpCode } from '../server/totp';
 
 const VALID_TOKEN = 'a'.repeat(64);
@@ -198,8 +193,6 @@ beforeEach(() => {
     chatStrikes: 0,
     violations: [],
   });
-  vi.mocked(accountTotpState).mockResolvedValue({ enabled: false, configured: false, secret: null });
-  vi.mocked(verifyPassword).mockResolvedValue(false);
 });
 
 describe('admin api auth', () => {
@@ -855,6 +848,35 @@ describe('admin api auth', () => {
       expiresAt: undefined,
     });
     expect(fakeGame.disconnectAccount).not.toHaveBeenCalled();
+  });
+
+  it('unsuspends without disconnecting the account', async () => {
+    vi.mocked(accountForToken).mockResolvedValue(7);
+    vi.mocked(isAdminAccount).mockResolvedValue(true);
+    vi.mocked(moderateAccount).mockResolvedValue();
+    const res = fakeRes();
+
+    await handleAdminApi(
+      fakeReq({
+        method: 'POST',
+        token: VALID_TOKEN,
+        url: '/admin/api/moderation/accounts/9/unsuspend',
+        body: { reason: 'appeal accepted' },
+      }),
+      res,
+      fakeGame,
+    );
+
+    expect(res.statusCode).toBe(200);
+    expect(moderateAccount).toHaveBeenCalledWith({
+      accountId: 9,
+      adminAccountId: 7,
+      action: 'unsuspend',
+      reason: 'appeal accepted',
+      expiresAt: undefined,
+    });
+    expect(fakeGame.disconnectAccount).not.toHaveBeenCalled();
+    expect(accountMailTarget).not.toHaveBeenCalled();
   });
 
   it('unsuspends without disconnecting the account', async () => {
