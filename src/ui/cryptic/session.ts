@@ -8,6 +8,7 @@ const USER_NAME_KEYS = [
   'cryptic-realm_mod_name',
   'cryptic-realm_admin_name',
 ];
+const WOC_SESSION_KEY = 'woc_session';
 
 export interface CrypticSession {
   token: string;
@@ -44,6 +45,7 @@ export function writeCrypticSession(session: CrypticSession): void {
   try {
     localStorage.setItem(USER_TOKEN_KEYS[0], session.token);
     localStorage.setItem(USER_NAME_KEYS[0], session.username);
+    localStorage.setItem(WOC_SESSION_KEY, JSON.stringify(session));
   } catch {
     // Storage can fail in strict/private contexts; auth still works in memory.
   }
@@ -59,6 +61,7 @@ export function clearCrypticSession(): void {
   try {
     for (const key of USER_TOKEN_KEYS) localStorage.removeItem(key);
     for (const key of USER_NAME_KEYS) localStorage.removeItem(key);
+    localStorage.removeItem(WOC_SESSION_KEY);
   } catch {
     // Best effort.
   }

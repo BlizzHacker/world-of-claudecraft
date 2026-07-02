@@ -14,6 +14,7 @@ describe('realm asset build helpers', () => {
     expect(realmIdForFolder('classic realm assets')).toBe('classic');
     expect(realmIdForFolder('claudcraft realm assets')).toBe('claudecraft');
     expect(realmIdForFolder('arcade void realm assets')).toBe('arcadevoid');
+    expect(realmIdForFolder('arcane void realm assets')).toBe('arcadevoid');
   });
 
   it('classifies Meshy prompts into the intended realm buckets', () => {

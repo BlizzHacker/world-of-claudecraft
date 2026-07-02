@@ -33,8 +33,8 @@ const REALMS = [
   { realmId: 'infernal', name: 'Infernal Realm' },
   { realmId: 'classic', name: 'Classic Realm' },
   { realmId: 'dominion', name: 'Dominion Realm' },
-  { realmId: 'arcane', name: 'Arcane Realm' },
-  { realmId: 'arcadevoid', name: 'Arcade Void' },
+  { realmId: 'arcane', name: 'Arcane Nexus' },
+  { realmId: 'arcadevoid', name: 'Arcane Void' },
   { realmId: 'claudecraft', name: 'Claudecraft' },
   { realmId: 'fps', name: 'FPS Realm' },
   { realmId: 'exchange', name: 'The Exchange' },
@@ -48,6 +48,7 @@ const FOLDER_TO_REALM = {
   'classic realm assets': 'classic',
   'claudcraft realm assets': 'claudecraft',
   'arcade void realm assets': 'arcadevoid',
+  'arcane void realm assets': 'arcadevoid',
 };
 
 const MESHY_LIST_ENDPOINTS = [
@@ -113,7 +114,7 @@ function normalizeText(text) {
 export function classifyRealmFromText(text, fallback = 'crypticrealm') {
   const n = normalizeText(text);
   if (
-    /\b(starcraft|arcade void|arcadevoid|space marine|protoss|zerg|terran|battlecruiser|spaceship|void)\b/.test(
+    /\b(starcraft|arcane void|arcade void|arcadevoid|space marine|protoss|zerg|terran|battlecruiser|spaceship|void)\b/.test(
       n,
     )
   ) {

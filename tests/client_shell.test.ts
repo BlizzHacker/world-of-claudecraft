@@ -56,6 +56,10 @@ const playHtml = readFileSync(new URL('../play.html', import.meta.url), 'utf8').
   /\r\n/g,
   '\n',
 );
+const userDropdownTs = readFileSync(
+  new URL('../src/ui/cryptic/user_dropdown.ts', import.meta.url),
+  'utf8',
+).replace(/\r\n/g, '\n');
 const privacyHtml = readFileSync(
   new URL('../public/privacy.html', import.meta.url),
   'utf8',
@@ -470,7 +474,8 @@ describe('client HTML shell', () => {
   it('keeps the Account nav tab hidden unless a session is restored', () => {
     expect(html).toContain('<li class="nav-item" id="nav-item-account" hidden>');
     expect(html).toContain('<li class="nav-item" id="nav-item-logout" hidden>');
-    expect(mainTs).toContain('if (api.restoreSession()) {');
+    expect(mainTs).toContain('function hydrateApiFromSavedSession(): boolean');
+    expect(mainTs).toContain('} else if (hydrateApiFromSavedSession()) {');
     expect(mainTs).toContain('} else {\n    enterLoggedOutChrome();\n  }');
   });
 
@@ -503,7 +508,7 @@ describe('client HTML shell', () => {
     expect(mainTs).toContain("document.getElementById('discord-link-existing')?.addEventListener('submit'");
   });
 
-  it('shows a logged-in Logout nav item next to Account', () => {
+  it('keeps Account/Logout nav hooks available while the user dropdown owns logged-in chrome', () => {
     expect(html).toContain('id="nav-btn-account"');
     expect(html).toContain('id="nav-btn-logout"');
     expect(html.indexOf('id="nav-btn-account"')).toBeLessThan(html.indexOf('id="nav-btn-logout"'));
@@ -513,6 +518,8 @@ describe('client HTML shell', () => {
     expect(mainTs).toContain('void api.logout().finally(finish);');
     expect(mainTs).toContain('api.clearSession();');
     expect(mainTs).toContain("setupNavBtn($('#nav-btn-logout'), '#hero-view', logoutAccount);");
+    expect(mainTs).toContain('// The logged-in account + sign-out affordances live ONLY in the header user');
+    expect(userDropdownTs).toContain('not erase an otherwise valid game session');
   });
 
   it('requires users to confirm a new account password', () => {
@@ -536,6 +543,24 @@ describe('client HTML shell', () => {
     expect(mainTs).toContain("setupNavBtn(navBtnPlay, '#hero-view', enterOnlinePlayFlow);");
     expect(mainTs).toContain('const handleOnlineSelect = () => {');
     expect(mainTs).toContain("show('#login-panel');");
+  });
+
+  it('marks realm-skinned character choices with faction and GLB metadata', () => {
+    expect(mainTs).toContain('button.dataset.faction = choice.faction;');
+    expect(mainTs).toContain('button.dataset.realmAsset = choice.assetUrl;');
+    expect(mainTs).toContain('button.dataset.realmAssetName = choice.assetName ?? choice.name;');
+    expect(mainTs).toContain('ArcForge model');
+    expect(shellCss).toContain('.mini-class-row:has(.mini-class.realm-skinned)');
+    expect(shellCss).toContain('grid-template-columns: repeat(2, minmax(0, 1fr));');
+    expect(shellCss).toContain('.mini-class.realm-skinned .mini-class-label');
+  });
+
+  it('lets the loading screen fully own the viewport during world entry', () => {
+    expect(mainTs).toContain("document.body.classList.add('is-entering-world');");
+    expect(mainTs).toContain("document.body.classList.remove('is-entering-world');");
+    expect(shellCss).toContain('#loading-screen {\n    position: fixed;');
+    expect(shellCss).toContain('body.is-entering-world #title-logo,');
+    expect(shellCss).toContain('body.is-entering-world .homepage-header');
   });
 
   it('ships crawlable SEO metadata and sitemap hints', () => {

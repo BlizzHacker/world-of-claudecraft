@@ -14,6 +14,10 @@ describe('Cryptic Realm saved session', () => {
     writeCrypticSession({ token, username: 'moveweight' });
 
     expect(readCrypticSession()).toEqual({ token, username: 'moveweight' });
+    expect(JSON.parse(window.localStorage.getItem('woc_session') ?? '{}')).toEqual({
+      token,
+      username: 'moveweight',
+    });
   });
 
   it('resumes from moderator/admin token aliases used by dashboard flows', () => {
@@ -56,5 +60,6 @@ describe('Cryptic Realm saved session', () => {
     expect(window.localStorage.getItem('cryptic-realm_user_name')).toBeNull();
     expect(window.localStorage.getItem('cryptic-realm_mod_name')).toBeNull();
     expect(window.localStorage.getItem('cryptic-realm_admin_name')).toBeNull();
+    expect(window.localStorage.getItem('woc_session')).toBeNull();
   });
 });

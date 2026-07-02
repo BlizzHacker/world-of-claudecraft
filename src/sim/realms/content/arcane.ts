@@ -5,7 +5,7 @@ import type { RealmContent } from '../types';
 
 export const ARCANE_REALM: RealmContent = {
   id: 'arcane',
-  name: 'Arcane Void',
+  name: 'Arcane Nexus',
   tagline: 'Cosmic crystal realms — portals, relics, and void mysteries',
   description:
     'Explore shattered dimensions connected by ancient portals. Harness void energy, ' +
@@ -16,7 +16,7 @@ export const ARCANE_REALM: RealmContent = {
   previewColors: { primary: '#a855f7', secondary: '#3ad6c8', bg: '#0a0510' },
   branding: {
     logoSrc: '/cryptic-realm-logo-512.webp',
-    brandText: 'Cryptic Realm - Arcane',
+    brandText: 'Cryptic Realm - Arcane Nexus',
     loadingScreenSrc: '/cryptic-realm-loading.png',
     discordUrl: 'https://discord.gg/Zdj3JGrx',
     showDonate: false,

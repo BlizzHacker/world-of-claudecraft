@@ -176,7 +176,7 @@ import {
 // `<div id="theme-picker">` block.
 import { mountThemeSelect } from './ui/cryptic/theme_select';
 import './ui/cryptic/realm_env';
-import { getActiveRealm } from './sim/realms';
+import { getActiveRealm, getRealm, isRealmId, persistActiveRealm, type RealmContent } from './sim/realms';
 import { notePropPlaced, tryBuilderSelect } from './ui/cryptic/world_builder';
 import { mountHudGlobes, setHudSkin, resolveHudSkin } from './ui/cryptic/globes';
 import { isFpsActive, mountFpsMode, resolveFpsMode, setFpsMode } from './ui/cryptic/fps_mode';
@@ -196,6 +196,12 @@ import { mountBestiary } from './ui/cryptic/bestiary';
 import { mountSkillTree } from './ui/cryptic/skilltree';
 import { mountLootVault } from './ui/cryptic/loot_vault';
 import { mountPickitPanel } from './ui/cryptic/pickit_panel';
+import {
+  classChoicesForRealm,
+  classPresentationForRealm,
+  presentationFactionsForRealm,
+  realmHasClassOverlay,
+} from './ui/cryptic/realm_class_presentation';
 import { installNativeSsoReturnHandler, wireNativeSsoLink } from './ui/cryptic/native_sso';
 import { clearCrypticSession, readCrypticSession, writeCrypticSession } from './ui/cryptic/session';
 
@@ -919,6 +925,7 @@ function showLoadingScreen(statusText: string): void {
   }
   el.classList.remove('fade');
   el.classList.add('visible');
+  document.body.classList.add('is-entering-world');
   setLoadingStatus(statusText);
 }
 
@@ -937,6 +944,7 @@ function hideLoadingScreen(): void {
   el.classList.add('fade');
   loadingHideTimer = window.setTimeout(() => {
     el.classList.remove('visible', 'fade');
+    document.body.classList.remove('is-entering-world');
     loadingHideTimer = null;
   }, LOADING_FADE_MS);
 }
@@ -2690,9 +2698,14 @@ const api = new Api();
 function hydrateApiFromSavedSession(): boolean {
   if (api.token) return true;
   const session = readCrypticSession();
-  if (!session) return false;
-  api.token = session.token;
-  api.username = session.username;
+  if (session) {
+    api.token = session.token;
+    api.username = session.username;
+    api.saveSession();
+    return true;
+  }
+  if (!api.restoreSession()) return false;
+  if (api.token && api.username) writeCrypticSession({ token: api.token, username: api.username });
   return true;
 }
 
@@ -2831,6 +2844,14 @@ function selectedSkin(rowId: string, fallback: number): number {
   return Number.isFinite(parsed) ? parsed : fallback;
 }
 
+function hideSkinPicker(rowId: string): void {
+  const row = $(rowId) as HTMLElement | null;
+  if (!row) return;
+  row.innerHTML = '';
+  const picker = row.closest('.skin-picker') as HTMLElement | null;
+  if (picker) picker.style.display = 'none';
+}
+
 function scheduleCharacterPreview(panelId: string): void {
   if (characterPreview || characterPreviewLoadPromise) return;
   if (characterPreviewTimer !== null) window.clearTimeout(characterPreviewTimer);
@@ -2848,6 +2869,10 @@ function scheduleCharacterPreview(panelId: string): void {
 function refreshOfflineSkins(cls: PlayerClass): void {
   offlineSkin = 0;
   characterPreview?.setSkin(0);
+  if (realmClassPresentation(cls)?.assetUrl) {
+    hideSkinPicker('#offline-skin-row');
+    return;
+  }
   renderSkinPicker('#offline-skin-row', cls, 0, (i) => {
     offlineSkin = i;
     characterPreview?.setSkin(i);
@@ -2858,6 +2883,10 @@ function refreshOfflineSkins(cls: PlayerClass): void {
 function refreshOnlineSkins(cls: PlayerClass): void {
   onlineSkin = 0;
   characterPreview?.setSkin(0);
+  if (realmClassPresentation(cls)?.assetUrl) {
+    hideSkinPicker('#online-skin-row');
+    return;
+  }
   renderSkinPicker('#online-skin-row', cls, 0, (i) => {
     onlineSkin = i;
     characterPreview?.setSkin(i);
@@ -2868,15 +2897,58 @@ function realmPreviewIdFromName(name: string | null | undefined): string {
   const key = (name ?? '').toLowerCase().replace(/[^a-z0-9]+/g, '');
   if (!key) return 'crypticrealm';
   if (key.includes('infernal')) return 'infernal';
-  if (key.includes('arcadevoid') || key.includes('starcraft') || key.includes('void')) return 'arcadevoid';
+  if (
+    key.includes('arcanevoid') ||
+    key.includes('arcadevoid') ||
+    key.includes('starcraft') ||
+    key.includes('terran') ||
+    key.includes('protoss') ||
+    key.includes('zerg') ||
+    key.includes('arcade')
+  ) return 'arcadevoid';
+  if (key === 'arcane' || key.includes('arcanenexus') || key.includes('arcanecrystal')) return 'arcane';
   if (key.includes('classic')) return 'classic';
   if (key.includes('claudecraft') || key.includes('claudcraft') || key.includes('claude')) return 'claudecraft';
-  if (key.includes('arcane')) return 'arcane';
   if (key.includes('dominion')) return 'dominion';
   if (key.includes('exchange')) return 'exchange';
   if (key.includes('fps')) return 'fps';
   if (key.includes('cryptic')) return 'crypticrealm';
+  if (key.includes('void')) return 'arcadevoid';
   return key;
+}
+
+function realmContentForCharacterUi(): RealmContent {
+  const fromDirectory = realmPreviewIdFromName(api.realm);
+  if (isRealmId(fromDirectory)) return getRealm(fromDirectory);
+  return getActiveRealm();
+}
+
+function persistActiveRealmFromDirectoryName(name: string): void {
+  const id = realmPreviewIdFromName(name);
+  if (!isRealmId(id)) return;
+  persistActiveRealm(id);
+  try { window.dispatchEvent(new CustomEvent('cr-realm-change')); } catch { /* noop */ }
+}
+
+function realmClassDisplayName(cls: PlayerClass): string {
+  return classPresentationForRealm(realmContentForCharacterUi(), cls)?.name ?? classDisplayName(cls);
+}
+
+function realmClassDisplayDescription(cls: PlayerClass): string {
+  return classPresentationForRealm(realmContentForCharacterUi(), cls)?.lore ?? classDisplayDescription(cls);
+}
+
+function realmClassPresentation(cls: PlayerClass) {
+  return classPresentationForRealm(realmContentForCharacterUi(), cls);
+}
+
+function showClassPreview(cls: PlayerClass): void {
+  const realmClass = realmClassPresentation(cls);
+  if (realmClass?.assetUrl) {
+    characterPreview?.setExternalModel(realmClass.assetUrl);
+    return;
+  }
+  characterPreview?.setClass(cls);
 }
 
 async function loadRealmPreviewCatalog(): Promise<Map<string, RealmPreviewManifest>> {
@@ -2956,6 +3028,143 @@ async function renderCharacterSelectAssetShelf(): Promise<void> {
   host.hidden = false;
 }
 
+function labelForMiniClass(button: HTMLElement): HTMLElement {
+  const existing = button.querySelector<HTMLElement>('.mini-class-label');
+  if (existing) return existing;
+  const label = document.createElement('span');
+  label.className = 'mini-class-label';
+  label.textContent = (button.textContent ?? '').trim();
+  button.textContent = '';
+  button.appendChild(label);
+  return label;
+}
+
+function factionBadgeForMiniClass(button: HTMLElement): HTMLElement {
+  let badge = button.querySelector<HTMLElement>('.mini-class-faction');
+  if (!badge) {
+    badge = document.createElement('span');
+    badge.className = 'mini-class-faction';
+    button.appendChild(badge);
+  }
+  return badge;
+}
+
+function selectedCreateFaction(realm: RealmContent): string | null {
+  const factions = presentationFactionsForRealm(realm);
+  if (factions.length <= 1) return null;
+  const key = `cr_charcreate_faction:${realm.id}`;
+  let stored = '';
+  try { stored = localStorage.getItem(key) ?? ''; } catch { stored = ''; }
+  if (factions.includes(stored)) return stored;
+  try { localStorage.setItem(key, factions[0]); } catch { /* storage unavailable */ }
+  return factions[0];
+}
+
+function setSelectedCreateFaction(realm: RealmContent, faction: string): void {
+  try { localStorage.setItem(`cr_charcreate_faction:${realm.id}`, faction); } catch { /* storage unavailable */ }
+}
+
+function ensureCharCreateFactionFilter(): void {
+  const row = document.querySelector<HTMLElement>('#charcreate-panel .mini-class-row');
+  if (!row) return;
+  let host = document.getElementById('charcreate-faction-filter') as HTMLElement | null;
+  if (!host) {
+    host = document.createElement('div');
+    host.id = 'charcreate-faction-filter';
+    host.className = 'realm-faction-filter';
+    row.parentElement?.insertBefore(host, row);
+  }
+  const realm = realmContentForCharacterUi();
+  const factions = presentationFactionsForRealm(realm);
+  if (factions.length <= 1) {
+    host.hidden = true;
+    host.textContent = '';
+    return;
+  }
+  const active = selectedCreateFaction(realm) ?? factions[0];
+  host.hidden = false;
+  host.innerHTML = factions
+    .map((faction) => {
+      const pressed = faction === active ? 'true' : 'false';
+      return `<button type="button" class="realm-faction-tab${faction === active ? ' sel' : ''}" data-faction="${escapeHtml(faction)}" aria-pressed="${pressed}">${escapeHtml(faction)}</button>`;
+    })
+    .join('');
+  host.querySelectorAll<HTMLElement>('.realm-faction-tab').forEach((button) => {
+    button.addEventListener('click', () => {
+      const faction = button.dataset.faction;
+      if (!faction) return;
+      setSelectedCreateFaction(realm, faction);
+      ensureCharCreateFactionFilter();
+      paintRealmClassChoices();
+      ensureVisibleClassSelection('#charcreate-panel');
+    });
+  });
+}
+
+function paintRealmClassChoices(): void {
+  currentlyRenderedClass['charcreate-class-details'] = null;
+  const realm = realmContentForCharacterUi();
+  const choices = classChoicesForRealm(realm);
+  const byClass = new Map(choices.map((choice) => [choice.baseClass, choice]));
+  const overlay = realmHasClassOverlay(realm) && choices.length > 0;
+  const activeFaction = selectedCreateFaction(realm);
+  document.querySelectorAll<HTMLElement>('#charcreate-panel .mini-class').forEach((button) => {
+    const cls = button.dataset.class as PlayerClass;
+    const label = labelForMiniClass(button);
+    const baseI18n = button.dataset.baseI18n ?? button.dataset.i18n ?? label.dataset.i18n ?? '';
+    if (baseI18n) button.dataset.baseI18n = baseI18n;
+    const choice = byClass.get(cls);
+    if (!overlay || !choice) {
+      button.hidden = false;
+      button.classList.remove('realm-skinned');
+      delete button.dataset.faction;
+      delete button.dataset.realmFaction;
+      if (baseI18n) label.dataset.i18n = baseI18n;
+      label.textContent = classDisplayName(cls);
+      button.setAttribute('aria-label', classDisplayName(cls));
+      button.querySelector('.mini-class-faction')?.remove();
+      button.style.removeProperty('--class-color');
+      return;
+    }
+    button.hidden = activeFaction !== null && choice.faction !== activeFaction;
+    button.classList.add('realm-skinned');
+    button.dataset.faction = choice.faction;
+    button.dataset.realmFaction = choice.faction;
+    if (choice.assetUrl) {
+      button.dataset.realmAsset = choice.assetUrl;
+      button.dataset.realmAssetName = choice.assetName ?? choice.name;
+    } else {
+      delete button.dataset.realmAsset;
+      delete button.dataset.realmAssetName;
+    }
+    delete label.dataset.i18n;
+    label.textContent = choice.name;
+    button.setAttribute(
+      'aria-label',
+      choice.assetUrl
+        ? `${choice.name}, ${choice.faction}, ArcForge model`
+        : `${choice.name}, ${choice.faction}`,
+    );
+    button.style.setProperty('--class-color', choice.color);
+    const badge = factionBadgeForMiniClass(button);
+    badge.textContent = choice.assetUrl
+      ? `${choice.faction} GLB`
+      : choice.faction;
+  });
+}
+
+function ensureVisibleClassSelection(panelId: '#charcreate-panel' | '#offline-select'): void {
+  const selected = document.querySelector<HTMLElement>(`${panelId} .mini-class.sel:not([hidden])`);
+  if (selected) {
+    if (panelId === '#charcreate-panel') {
+      renderClassDetails('charcreate-class-details', selected.dataset.class as PlayerClass);
+    }
+    return;
+  }
+  const first = document.querySelector<HTMLElement>(`${panelId} .mini-class:not([hidden])`);
+  if (first) first.click();
+}
+
 function updatePreviewContainer(panelId: string): void {
   if (!characterPreview) {
     scheduleCharacterPreview(panelId);
@@ -2975,7 +3184,7 @@ function updatePreviewContainer(panelId: string): void {
     // The selected roster row drives the showcase (class + that character's chroma).
     const row = document.querySelector('#char-list .char-row.sel') as HTMLElement | null;
     const cls = (row?.dataset.class as PlayerClass) ?? 'warrior';
-    characterPreview.setClass(cls);
+    showClassPreview(cls);
     characterPreview.setSkin(Number(row?.dataset.skin ?? 0) || 0);
     void renderCharacterSelectAssetShelf();
     syncPreviewAfterPanelLayout();
@@ -2989,7 +3198,7 @@ function updatePreviewContainer(panelId: string): void {
   const selEl = document.querySelector(selSelector) as HTMLElement | null;
   if (selEl) {
     const cls = selEl.dataset.class as PlayerClass;
-    characterPreview.setClass(cls);
+    showClassPreview(cls);
     if (panelId === '#charcreate-panel') refreshOnlineSkins(cls);
     else refreshOfflineSkins(cls);
   }
@@ -3198,6 +3407,10 @@ function show(el: string): void {
     ensureTurnstile();
     authModeApply?.('login');
   }
+  if (el === '#charcreate-panel') {
+    ensureCharCreateFactionFilter();
+    paintRealmClassChoices();
+  }
 
   const logoImg = $('#title-logo');
   if (logoImg) {
@@ -3259,6 +3472,7 @@ function show(el: string): void {
       setPanelVisibility($(id), id === el);
     }
     if (el === '#charselect-panel' || el === '#charcreate-panel' || el === '#offline-select') {
+      if (el === '#charcreate-panel') ensureVisibleClassSelection('#charcreate-panel');
       updatePreviewContainer(el);
     }
     scrollStartPanelIntoView(el);
@@ -3283,6 +3497,7 @@ function show(el: string): void {
     setPanelVisibility(fromPanel, false);
     setPanelVisibility(toPanel, true);
     if (el === '#charselect-panel' || el === '#charcreate-panel' || el === '#offline-select') {
+      if (el === '#charcreate-panel') ensureVisibleClassSelection('#charcreate-panel');
       updatePreviewContainer(el);
     }
     scrollStartPanelIntoView(el);
@@ -3308,6 +3523,7 @@ function show(el: string): void {
     toPanel.classList.add('panel-transition', 'panel-fade-in-start');
     setPanelVisibility(toPanel, true);
     if (el === '#charselect-panel' || el === '#charcreate-panel' || el === '#offline-select') {
+      if (el === '#charcreate-panel') ensureVisibleClassSelection('#charcreate-panel');
       updatePreviewContainer(el);
     }
     scrollStartPanelIntoView(el);
@@ -3357,11 +3573,22 @@ function realmPopulation(
 // After login the classic MMO drops you onto a Realm List screen (then character select for
 // the chosen realm). We remember the last realm and jump straight to its
 // characters, with a "Change Realm" button back to this list.
-async function enterRealmFlow(): Promise<void> {
+function preferredRealmEntry(dir: import('./net/online').RealmDirectory): import('./net/online').RealmEntry | null {
+  const remembered = localStorage.getItem(LAST_REALM_KEY);
+  const rememberedEntry = dir.realms.find((r) => r.name === remembered);
+  if (rememberedEntry) return rememberedEntry;
+  const activeRealmId = getActiveRealm().id;
+  const activeFamily = dir.realms.filter((r) => realmPreviewIdFromName(r.name) === activeRealmId);
+  const live = activeFamily.find((r) => parseRealmMeta(r.name).stage === 'live');
+  if (live) return live;
+  if (activeFamily[0]) return activeFamily[0];
+  return dir.realms.length === 1 ? dir.realms[0] : null;
+}
+
+async function enterRealmFlow(forceList = false): Promise<void> {
   const dir = await api.realms();
   $('#realm-list-user').textContent = api.username ? `${api.username}` : '';
-  const remembered = localStorage.getItem(LAST_REALM_KEY);
-  const auto = dir.realms.find((r) => r.name === remembered);
+  const auto = forceList ? null : preferredRealmEntry(dir);
   if (auto) {
     selectRealm(auto);
     return;
@@ -3408,6 +3635,10 @@ function enterLoggedInChrome(): void {
   });
   const li = loginNavItem();
   if (li) li.hidden = true;
+  if (document.getElementById('server-select')?.dataset.mode !== 'offline') {
+    document.querySelector<HTMLElement>('#btn-play .btn-play-label')?.replaceChildren('Continue');
+  }
+  void mountUserDropdown();
   // Becoming logged-in (fresh login OR restored session): pull Discord status so
   // the unlinked CTA banner can appear immediately, not only after opening the panel.
   void refreshDiscordStatus();
@@ -3425,10 +3656,14 @@ function enterLoggedOutChrome(): void {
   });
   const li = loginNavItem();
   if (li) li.hidden = false;
+  if (document.getElementById('server-select')?.dataset.mode !== 'offline') {
+    document.querySelector<HTMLElement>('#btn-play .btn-play-label')?.replaceChildren('Log In To Play');
+  }
 }
 
 function logoutAccount(): void {
   const finish = () => {
+    clearCrypticSession();
     api.clearSession();
     location.reload();
   };
@@ -3513,6 +3748,7 @@ const loggedOutModel = () =>
   });
 
 function handleAccountSessionExpired(): void {
+  clearCrypticSession();
   api.clearSession();
   enterLoggedOutChrome();
   paintAccountPortal(loggedOutModel());
@@ -3574,6 +3810,7 @@ let pendingWalletFocus = false;
 function accountGoToCharacters(focusWallet = false): void {
   pendingWalletFocus = focusWallet;
   switchMainView('#hero-view');
+  enterLoggedInChrome();
   void enterRealmFlow().then(() => {
     if (pendingWalletFocus) tryFocusWalletButton();
   });
@@ -3953,6 +4190,7 @@ function showRealmList(dir?: import('./net/online').RealmDirectory): void {
 
 function selectRealm(entry: import('./net/online').RealmEntry): void {
   localStorage.setItem(LAST_REALM_KEY, entry.name);
+  persistActiveRealmFromDirectoryName(entry.name);
   // If the realm lives on a DIFFERENT origin (e.g. dev.crypticrealm.com,
   // fps.moveweight.com), we must NAVIGATE the browser there rather than fetch
   // cross-origin: Cloudflare hijacks cross-origin OPTIONS preflights and answers
@@ -3969,6 +4207,7 @@ function selectRealm(entry: import('./net/online').RealmEntry): void {
       auth_user: api.username ?? '',
       auth_via: 'realm',
       realm: entry.name,
+      realm_id: realmPreviewIdFromName(entry.name),
     });
     window.location.href = `${targetOrigin}/#${hash.toString()}`;
     return;
@@ -4010,6 +4249,7 @@ function applyPopulationPrefToCharCreate(): void {
 // character-create screen on the target realm pre-selects the right population.
 function enterRealmWithPopulation(name: string, url: string, ladder: boolean, hardcore: boolean): void {
   localStorage.setItem(LAST_REALM_KEY, name);
+  persistActiveRealmFromDirectoryName(name);
   setPopulationPref(ladder, hardcore);
   const pop = `${ladder ? 'l' : ''}${hardcore ? 'h' : ''}` || 'n';
   let targetOrigin = '';
@@ -4021,6 +4261,7 @@ function enterRealmWithPopulation(name: string, url: string, ladder: boolean, ha
       auth_user: api.username ?? '',
       auth_via: 'realm',
       realm: name,
+      realm_id: realmPreviewIdFromName(name),
       pop,
     });
     window.location.href = `${targetOrigin}/#${hash.toString()}`;
@@ -4115,6 +4356,7 @@ function selectRealmInline(entry: import('./net/online').RealmEntry): void {
   api.setRealm(entry.url);
   api.realm = entry.name;
   localStorage.setItem(LAST_REALM_KEY, entry.name);
+  persistActiveRealmFromDirectoryName(entry.name);
   $('#charselect-realm').textContent = entry.name;
   void refreshCharacters();
 }
@@ -4212,6 +4454,7 @@ function openDeleteCharacterDialog(character: CharacterSummary): void {
 }
 
 async function refreshCharacters(): Promise<void> {
+  currentlyRenderedClass['charselect-class-details'] = null;
   if (api.realm) $('#charselect-realm').textContent = api.realm;
   updateSortButtonLabel();
   const listEl = $('#char-list');
@@ -4234,7 +4477,7 @@ async function refreshCharacters(): Promise<void> {
       row.setAttribute('aria-selected', 'false');
       row.dataset.class = c.class;
       row.dataset.skin = String(c.skin ?? 0);
-      const className = classDisplayName(c.class);
+      const className = realmClassDisplayName(c.class);
       // Online characters explain themselves on their own hint line (below the
       // class) instead of the terse "(in world)" suffix, so the reason for the
       // Take Over button is unmissable.
@@ -4315,7 +4558,7 @@ async function refreshCharacters(): Promise<void> {
         row.classList.add('sel');
         row.setAttribute('aria-selected', 'true');
         renderClassDetails('charselect-class-details', c.class);
-        characterPreview?.setClass(c.class);
+        showClassPreview(c.class);
         characterPreview?.setSkin(c.skin ?? 0);
         void renderCharacterSelectAssetShelf();
       };
@@ -4432,7 +4675,7 @@ function renderClassDetails(panelId: string, className: PlayerClass): void {
   currentlyRenderedClass[panelId] = className;
 
   if (characterPreview) {
-    characterPreview.setClass(className);
+    showClassPreview(className);
   }
 
   // Clear any active transitions for this panel to prevent stacked out-of-order renders
@@ -4450,8 +4693,9 @@ function renderClassDetails(panelId: string, className: PlayerClass): void {
 
   const existingContent = panel.querySelector('.class-details-content');
   const existingName = panel.querySelector('.class-details-name')?.textContent;
-  const classLabel = classDisplayName(className);
-  const roleLabel = t(details.roleKey);
+  const realmClass = realmClassPresentation(className);
+  const classLabel = realmClass?.name ?? classDisplayName(className);
+  const roleLabel = realmClass?.role ?? t(details.roleKey);
   const armorLabel = t(details.armorKey);
   const weaponsLabel = t(details.weaponsKey);
   const resourceKey = RESOURCE_KEYS[classDef.resourceType] ?? 'classDetails.resources.mana';
@@ -4488,7 +4732,7 @@ function renderClassDetails(panelId: string, className: PlayerClass): void {
     return;
   }
 
-  const classColorHex = `#${classDef.color.toString(16).padStart(6, '0')}`;
+  const classColorHex = realmClass?.color ?? `#${classDef.color.toString(16).padStart(6, '0')}`;
 
   // Bind class color as a custom property for clean styling
   panel.style.setProperty('--class-color', classColorHex);
@@ -4603,9 +4847,10 @@ function renderClassDetails(panelId: string, className: PlayerClass): void {
           <div class="class-details-header-text">
             <h3 class="class-details-name">${escapeHtml(classLabel)}</h3>
             <span class="class-details-role role-${details.roleType}">${escapeHtml(roleLabel)}</span>
+            ${realmClass?.faction ? `<span class="class-details-faction">${escapeHtml(realmClass.faction)}</span>` : ''}
           </div>
         </div>
-        <p class="class-details-lore">${escapeHtml(classDisplayDescription(className))}</p>
+        <p class="class-details-lore">${escapeHtml(realmClassDisplayDescription(className))}</p>
         <div class="class-details-grid">
           <div class="class-details-stats-col">
             <h4 class="details-section-title">${escapeHtml(t('classDetails.sections.startingStats'))}</h4>
@@ -6545,7 +6790,7 @@ function wireStartScreens(): void {
         btnPlayLabel.removeAttribute('data-i18n');
         btnPlayLabel.textContent = mode === 'offline'
           ? 'Start Offline'
-          : (readCrypticSession() ? 'Continue' : 'Log In To Play');
+          : (api.token || readCrypticSession() ? 'Continue' : 'Log In To Play');
       }
       subParts.forEach((part) => {
         part.toggleAttribute('hidden', part.dataset.mode !== mode);
@@ -6879,6 +7124,11 @@ function wireStartScreens(): void {
     // pre-selects it. pop: 'l'=ladder, 'h'=hardcore, 'lh'=both, 'n'=neither.
     const popParam = ssoParams.get('pop');
     if (popParam) setPopulationPref(popParam.includes('l'), popParam.includes('h'));
+    const realmIdParam = ssoParams.get('realm_id');
+    if (isRealmId(realmIdParam)) {
+      persistActiveRealm(realmIdParam);
+      try { window.dispatchEvent(new CustomEvent('cr-realm-change')); } catch { /* noop */ }
+    }
     // CR overlay: also persist to the dashboard's localStorage so the
     // logged-in header dropdown (src/ui/cryptic/user_dropdown.ts) shows
     // immediately. The dashboards (/me/, /mod/, /admin/) read the same keys.
@@ -6889,15 +7139,13 @@ function wireStartScreens(): void {
     // Re-mount the header dropdown with the new identity.
     void mountUserDropdown();
     mountWalletPanel();
+    enterLoggedInChrome();
     void refreshWalletLinkStatus();
     void (async () => {
       try {
         const userEl = document.querySelector('#charselect-user');
         if (userEl) userEl.textContent = api.username ?? '';
-        const dir = await api.realms();
-        const listUserEl = document.querySelector('#realm-list-user');
-        if (listUserEl) listUserEl.textContent = api.username ?? '';
-        showRealmList(dir);
+        await enterRealmFlow();
       } catch (err) {
         loginError(userFacingApiError(err));
       }
@@ -7019,7 +7267,12 @@ function wireStartScreens(): void {
     toggleRealmDropdown();
   });
   // New Character opens the dedicated create screen; create's Back returns here.
-  $('#btn-new-character').addEventListener('click', () => { applyPopulationPrefToCharCreate(); show('#charcreate-panel'); });
+  $('#btn-new-character').addEventListener('click', () => {
+    applyPopulationPrefToCharCreate();
+    ensureCharCreateFactionFilter();
+    paintRealmClassChoices();
+    show('#charcreate-panel');
+  });
   $('#btn-charcreate-back').addEventListener('click', () => show('#charselect-panel'));
   // Close the realm dropdown on outside click or Escape.
   document.addEventListener('click', (e) => {
@@ -7248,7 +7501,13 @@ function wireStartScreens(): void {
       charselectError.textContent = userFacingApiError(err);
     }
   });
-  $('#btn-charselect-back').addEventListener('click', () => show('#login-panel'));
+  $('#btn-charselect-back').addEventListener('click', () => {
+    if (api.token || hydrateApiFromSavedSession()) {
+      show('#mode-select');
+      return;
+    }
+    show('#login-panel');
+  });
 
   // Main Navigation View Switching
   const navBtnPlay = $('#nav-btn-play');
@@ -7370,6 +7629,11 @@ function wireStartScreens(): void {
     });
   });
   setupNavBtn(navBtnLogin, '#hero-view', () => {
+    if (api.token || hydrateApiFromSavedSession()) {
+      enterLoggedInChrome();
+      goToLoggedInPlay();
+      return;
+    }
     show('#login-panel');
   });
   setupNavBtn($('#nav-btn-account'), '#account-view', () => {
@@ -7555,7 +7819,7 @@ function wireStartScreens(): void {
   if (parkedDiscordChoice) {
     enterLoggedOutChrome();
     showDiscordChoice(parkedDiscordChoice);
-  } else if (api.restoreSession()) {
+  } else if (hydrateApiFromSavedSession()) {
     enterLoggedInChrome();
     void revalidateAccountSession();
     // Re-bind the account's linked wallet on a restored session (not just on fresh

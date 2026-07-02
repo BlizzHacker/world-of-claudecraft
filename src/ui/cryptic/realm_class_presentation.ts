@@ -1,0 +1,355 @@
+import type { PlayerClass } from '../../sim/types';
+import type { RealmClassSkin, RealmContent, RealmId, RealmRole } from '../../sim/realms/types';
+
+export const PLAYER_CLASS_ORDER: readonly PlayerClass[] = [
+  'warrior',
+  'paladin',
+  'hunter',
+  'rogue',
+  'priest',
+  'shaman',
+  'mage',
+  'warlock',
+  'druid',
+];
+
+export interface RealmClassPresentation {
+  baseClass: PlayerClass;
+  name: string;
+  faction: string;
+  lore: string;
+  color: string;
+  role: RealmRole;
+  assetUrl?: string;
+  assetName?: string;
+  assetAnimated?: boolean;
+  source?: RealmClassSkin;
+}
+
+type SkinBinding = Partial<Record<string, { baseClass: PlayerClass; faction: string }>>;
+type PresentationSeed = Omit<RealmClassPresentation, 'baseClass' | 'source'>;
+type RealmClassAsset = Pick<RealmClassPresentation, 'assetUrl' | 'assetName' | 'assetAnimated'>;
+
+const ROLE_BY_CLASS: Record<PlayerClass, RealmRole> = {
+  warrior: 'Tank',
+  paladin: 'Tank',
+  hunter: 'DPS',
+  rogue: 'Assassin',
+  priest: 'Healer',
+  shaman: 'Support',
+  mage: 'DPS',
+  warlock: 'Summoner',
+  druid: 'Support',
+};
+
+const CLASS_COLORS: Record<PlayerClass, string> = {
+  warrior: '#c79c6e',
+  paladin: '#f58cba',
+  hunter: '#abd473',
+  rogue: '#fff569',
+  priest: '#ffffff',
+  shaman: '#0070de',
+  mage: '#69ccf0',
+  warlock: '#9482c9',
+  druid: '#ff7d0a',
+};
+
+const SKIN_BINDINGS: Partial<Record<RealmId, SkinBinding>> = {
+  crypticrealm: {
+    gravecaller: { baseClass: 'warlock', faction: 'Gravebound' },
+    runewarden: { baseClass: 'warrior', faction: 'Rune Court' },
+    cipherblade: { baseClass: 'rogue', faction: 'Ciphered' },
+    oracle: { baseClass: 'priest', faction: 'Rune Court' },
+    voidseer: { baseClass: 'mage', faction: 'Voidbound' },
+  },
+  infernal: {
+    boneherald: { baseClass: 'warlock', faction: 'Ashen Court' },
+    emberwitch: { baseClass: 'mage', faction: 'Burning Hells' },
+    shadowblade: { baseClass: 'rogue', faction: 'Abyssal Legion' },
+    ironwarden: { baseClass: 'warrior', faction: 'Abyssal Legion' },
+  },
+  classic: {
+    steelcrusader: { baseClass: 'paladin', faction: 'Alliance' },
+    voidarcher: { baseClass: 'hunter', faction: 'Horde' },
+    warlock: { baseClass: 'warlock', faction: 'Horde' },
+    beasttamer: { baseClass: 'druid', faction: 'Horde' },
+    chronomancer: { baseClass: 'mage', faction: 'Alliance' },
+  },
+  dominion: {
+    vanguard: { baseClass: 'warrior', faction: 'Human Dominion' },
+    ghostsniper: { baseClass: 'hunter', faction: 'Human Dominion' },
+    fieldmedic: { baseClass: 'priest', faction: 'Frontier Corps' },
+    combatengineer: { baseClass: 'shaman', faction: 'Frontier Corps' },
+    psionicoperative: { baseClass: 'mage', faction: 'Psionic Directorate' },
+  },
+  arcane: {
+    voidwalker: { baseClass: 'mage', faction: 'Voidborn' },
+    crystalsmith: { baseClass: 'shaman', faction: 'Crystal Concord' },
+    portalkeeper: { baseClass: 'priest', faction: 'Crystal Concord' },
+    starguard: { baseClass: 'paladin', faction: 'Star Court' },
+    riftblade: { baseClass: 'rogue', faction: 'Voidborn' },
+  },
+  arcadevoid: {
+    voidmarine: { baseClass: 'warrior', faction: 'Terran Dominion' },
+    ghostpilot: { baseClass: 'hunter', faction: 'Terran Dominion' },
+    turretwright: { baseClass: 'shaman', faction: 'Terran Dominion' },
+  },
+  fps: {
+    vanguard: { baseClass: 'warrior', faction: 'Coalition' },
+    marksman: { baseClass: 'hunter', faction: 'Coalition' },
+    operator: { baseClass: 'rogue', faction: 'Rogue Cell' },
+    medic: { baseClass: 'priest', faction: 'Coalition' },
+    engineer: { baseClass: 'shaman', faction: 'Coalition' },
+  },
+};
+
+const FALLBACKS: Partial<Record<RealmId, Record<PlayerClass, PresentationSeed>>> = {
+  crypticrealm: {
+    warrior: seed('Rune Warden', 'Rune Court', 'Tank', 'A plated vault guardian who turns forbidden glyphs into armor and shield work.'),
+    paladin: seed('Gargoyle Oathsworn', 'Rune Court', 'Tank', 'A living cathedral sentinel, sworn to hold the gate while the riddles wake.'),
+    hunter: seed('Crypt Stalker', 'Gravebound', 'DPS', 'A monster-tracker who hunts by echo, bone dust, and the scent of broken seals.'),
+    rogue: seed('Cipher Blade', 'Ciphered', 'Assassin', 'A duelist whose cuts spell curses only the dying can read.'),
+    priest: seed('Oracle', 'Rune Court', 'Healer', 'A fate-reader who mends wounds by reciting the version of history where they never happened.'),
+    shaman: seed('Grave Totemist', 'Gravebound', 'Support', 'A relic-binder who plants whispering totems and makes old spirits answer.'),
+    mage: seed('Void Seer', 'Voidbound', 'DPS', 'A spellcaster who throws the dark back at the things that escaped it.'),
+    warlock: seed('Gravecaller', 'Gravebound', 'Summoner', 'A dead-language summoner who recruits every solved riddle as a servant.'),
+    druid: seed('Chimera Warden', 'Voidbound', 'Support', 'A shifting guardian stitched from crypt-beasts, moon rites, and impossible anatomy.'),
+  },
+  infernal: {
+    warrior: seed('Iron Warden', 'Abyssal Legion', 'Tank', 'A fortress of grafted iron built to walk into Baal-grade punishment.'),
+    paladin: seed('Hellknight', 'Burning Hells', 'Tank', 'A fallen crusader whose vows now burn hotter than mercy.'),
+    hunter: seed('Pit Stalker', 'Abyssal Legion', 'DPS', 'A chain-snare hunter trained to drag prey across brimstone floors.'),
+    rogue: seed('Shadow Blade', 'Abyssal Legion', 'Assassin', 'An assassin from the lightless pits, moving between heartbeats.'),
+    priest: seed('Blood Bishop', 'Ashen Court', 'Healer', 'A crimson confessor who buys miracles by the pint.'),
+    shaman: seed('Ash Shaman', 'Ashen Court', 'Support', 'A cinder-speaking ritualist who wakes old volcano spirits.'),
+    mage: seed('Ember Witch', 'Burning Hells', 'DPS', 'A fire witch whose laughter turns the air into a furnace.'),
+    warlock: seed('Bone Herald', 'Ashen Court', 'Summoner', 'A royal necromancer commanding skulls, curses, and corpse craft.'),
+    druid: seed('Plague Shifter', 'Ashen Court', 'Support', 'A blighted shapeshifter who survives by becoming the infection.'),
+  },
+  arcadevoid: {
+    warrior: seed('Void Marine', 'Terran Dominion', 'Tank', 'Powered armor, breach shields, and the job of holding the extraction line.'),
+    paladin: seed('Phase Templar', 'Protoss Alliance', 'Tank', 'A psi-bladed guardian who bends shields around allies.'),
+    hunter: seed('Ghost Pilot', 'Terran Dominion', 'DPS', 'A stealth marksman who marks targets for orbital knives.'),
+    rogue: seed('Lurker Strain', 'Zerg Swarm', 'Assassin', 'A burrowing ambusher built for sudden violence and venom lanes.'),
+    priest: seed('Khaydarin Preserver', 'Protoss Alliance', 'Healer', 'A crystal-channeling protector who restores shields and focus.'),
+    shaman: seed('Turretwright', 'Terran Dominion', 'Support', 'A battlefield engineer turning scrap into angry little machines.'),
+    mage: seed('High Templar', 'Protoss Alliance', 'DPS', 'A psionic storm-caster carrying the whole sky in both hands.'),
+    warlock: seed('Infestor Broodmind', 'Zerg Swarm', 'Summoner', 'A parasitic commander that wins fights by making enemies multiply wrong.'),
+    druid: seed('Mutalist Shifter', 'Zerg Swarm', 'Support', 'A fast-evolving strain that adapts mid-fight and refuses one final shape.'),
+  },
+  arcane: {
+    warrior: seed('Astral Juggernaut', 'Star Court', 'Tank', 'A gravity-armored defender who anchors broken dimensions in place.'),
+    paladin: seed('Star Guard', 'Star Court', 'Tank', 'A singularity knight drawing enemies into the orbit of their shield.'),
+    hunter: seed('Comet Ranger', 'Crystal Concord', 'DPS', 'A relic marksman whose shots arrive with meteor certainty.'),
+    rogue: seed('Rift Blade', 'Voidborn', 'Assassin', 'A phase duelist stepping through micro-rifts to strike from the wrong angle.'),
+    priest: seed('Portal Keeper', 'Crystal Concord', 'Healer', 'A gateway medic opening clean exits to better timelines.'),
+    shaman: seed('Crystalsmith', 'Crystal Concord', 'Support', 'A resonance engineer growing shields, beams, and singing facets.'),
+    mage: seed('Voidwalker', 'Voidborn', 'DPS', 'A dimension-stepper channeling raw nothing into clean destruction.'),
+    warlock: seed('Entropy Binder', 'Voidborn', 'Summoner', 'A pact-maker who leashes miniature collapses and calls them pets.'),
+    druid: seed('Nebula Shaper', 'Star Court', 'Support', 'A cosmic shapeshifter blooming into starlight, mist, and pressure.'),
+  },
+  classic: {
+    warrior: seed('Alliance Knight', 'Alliance', 'Tank', 'A shield-line veteran carrying banner law and plate discipline.'),
+    paladin: seed('Alliance Paladin', 'Alliance', 'Tank', 'A holy champion with judgment, plate, and impossible patience.'),
+    hunter: seed('Horde Ranger', 'Horde', 'DPS', 'A hard-country bowhand who trusts trail craft before courtly orders.'),
+    rogue: seed('Horde Outrider', 'Horde', 'Assassin', 'A raider-scout who wins before the duel is officially underway.'),
+    priest: seed('Alliance Cleric', 'Alliance', 'Healer', 'A chapel-trained healer holding the line with light and grit.'),
+    shaman: seed('Horde Shaman', 'Horde', 'Support', 'A storm-speaker who bargains with earth, fire, wind, and ancestors.'),
+    mage: seed('Alliance Archmage', 'Alliance', 'DPS', 'A tower scholar turning clean formulas into battlefield weather.'),
+    warlock: seed('Horde Warlock', 'Horde', 'Summoner', 'A dangerous contractor who treats demons as a staffing problem.'),
+    druid: seed('Horde Druid', 'Horde', 'Support', 'A wild guardian of claw, leaf, moonfire, and old roads.'),
+  },
+  dominion: {
+    warrior: seed('Vanguard', 'Human Dominion', 'Tank', 'A drop-suit bruiser rated for the first breach.'),
+    paladin: seed('Aegis Captain', 'Human Dominion', 'Tank', 'A commander projecting hard-light shields over a moving squad.'),
+    hunter: seed('Ghost Sniper', 'Human Dominion', 'DPS', 'A patient rifle specialist fighting from the edge of the map.'),
+    rogue: seed('Saboteur', 'Frontier Corps', 'Assassin', 'A breach runner with charges, knives, and plausible deniability.'),
+    priest: seed('Field Medic', 'Frontier Corps', 'Healer', 'A nano-gel surgeon rebuilding the squad under fire.'),
+    shaman: seed('Combat Engineer', 'Frontier Corps', 'Support', 'A deployable-tech expert with turrets, EMP, and repairs.'),
+    mage: seed('Psionic Operative', 'Psionic Directorate', 'DPS', 'A classified mind weapon that makes tanks feel negotiable.'),
+    warlock: seed('Xeno Binder', 'Psionic Directorate', 'Summoner', 'A handler weaponizing alien symbiotes with military paperwork.'),
+    druid: seed('Adaptive Strain', 'Psionic Directorate', 'Support', 'A gene-shifting field asset that becomes whatever the fight lacks.'),
+  },
+  fps: {
+    warrior: seed('Vanguard', 'Coalition', 'Tank', 'A shield breacher who takes space one sightline at a time.'),
+    paladin: seed('Bulwark', 'Coalition', 'Tank', 'A hard-cover specialist projecting a front line where none exists.'),
+    hunter: seed('Marksman', 'Coalition', 'DPS', 'One breath, one shot, one less problem.'),
+    rogue: seed('Operator', 'Rogue Cell', 'Assassin', 'A flanker who ends fights before the reticle catches up.'),
+    priest: seed('Combat Medic', 'Coalition', 'Healer', 'A dart-and-stim healer keeping the squad shooting.'),
+    shaman: seed('Engineer', 'Coalition', 'Support', 'A deployables expert shaping the lane with turrets and mines.'),
+    mage: seed('Arc Gunner', 'Rogue Cell', 'DPS', 'An experimental-energy wielder turning aim into chain lightning.'),
+    warlock: seed('Signal Witch', 'Rogue Cell', 'Summoner', 'A comms saboteur calling drones, decoys, and bad omens.'),
+    druid: seed('Recon Shifter', 'Rogue Cell', 'Support', 'A movement specialist swapping kit profiles as the room changes.'),
+  },
+};
+
+const CRYPTIC_BONE_HERALD = {
+  assetUrl: '/cr-realms/crypticrealm/bone-herald-black-meshy_ai_meshy_merged_animations_5fb3b8bb.glb',
+  assetName: 'Bone Herald Black',
+  assetAnimated: true,
+} satisfies RealmClassAsset;
+
+const INFERNAL_CRIMSON_BEHEMOTH = {
+  assetUrl:
+    '/cr-realms/infernal/meshy_ai_crimson_infernal_behe_biped_meshy_ai_meshy_merged_animations_27bab94d.glb',
+  assetName: 'Crimson Infernal Behemoth',
+  assetAnimated: true,
+} satisfies RealmClassAsset;
+
+const INFERNAL_DEMON_HORNED = {
+  assetUrl: '/cr-realms/infernal/demon-horned_1a19d7ca.glb',
+  assetName: 'Horned Demon',
+  assetAnimated: true,
+} satisfies RealmClassAsset;
+
+const INFERNAL_SKULLBEAST = {
+  assetUrl: '/cr-realms/infernal/skullbeast_5d2ecebf.glb',
+  assetName: 'Skullbeast',
+  assetAnimated: true,
+} satisfies RealmClassAsset;
+
+const CLASSIC_ORC = {
+  assetUrl: '/cr-realms/classic/another-orc-meshy_ai_meshy_merged_animations_743223cb.glb',
+  assetName: 'Animated Orc',
+  assetAnimated: true,
+} satisfies RealmClassAsset;
+
+const CLASSIC_BIG_ORC = {
+  assetUrl: '/cr-realms/classic/bigass-orc-meshy_ai_meshy_merged_animations_86937638.glb',
+  assetName: 'Armored Orc',
+  assetAnimated: true,
+} satisfies RealmClassAsset;
+
+const CLASSIC_ELF = {
+  assetUrl: '/cr-realms/classic/fighting-elf-meshy_ai_meshy_merged_animations_943c5367.glb',
+  assetName: 'Fighting Elf',
+  assetAnimated: true,
+} satisfies RealmClassAsset;
+
+const CLASSIC_DWARF = {
+  assetUrl: '/cr-realms/classic/gray-dwarf-meshy_ai_meshy_merged_animations_a33ff315.glb',
+  assetName: 'Gray Dwarf',
+  assetAnimated: true,
+} satisfies RealmClassAsset;
+
+const ARCANE_VOID_MECH = {
+  assetUrl: '/models/chars/players/Mech/characters/CombatMech.glb',
+  assetName: 'Combat Mech',
+  assetAnimated: true,
+} satisfies RealmClassAsset;
+
+const ASSETS_BY_REALM_CLASS: Partial<Record<RealmId, Partial<Record<PlayerClass, RealmClassAsset>>>> = {
+  crypticrealm: {
+    warrior: CRYPTIC_BONE_HERALD,
+    paladin: CRYPTIC_BONE_HERALD,
+    hunter: CRYPTIC_BONE_HERALD,
+    rogue: CRYPTIC_BONE_HERALD,
+    priest: CRYPTIC_BONE_HERALD,
+    shaman: CRYPTIC_BONE_HERALD,
+    mage: CRYPTIC_BONE_HERALD,
+    warlock: CRYPTIC_BONE_HERALD,
+    druid: CRYPTIC_BONE_HERALD,
+  },
+  infernal: {
+    warrior: INFERNAL_CRIMSON_BEHEMOTH,
+    paladin: INFERNAL_CRIMSON_BEHEMOTH,
+    hunter: INFERNAL_SKULLBEAST,
+    rogue: INFERNAL_DEMON_HORNED,
+    priest: INFERNAL_DEMON_HORNED,
+    shaman: INFERNAL_CRIMSON_BEHEMOTH,
+    mage: INFERNAL_DEMON_HORNED,
+    warlock: INFERNAL_CRIMSON_BEHEMOTH,
+    druid: INFERNAL_SKULLBEAST,
+  },
+  classic: {
+    warrior: CLASSIC_ELF,
+    paladin: CLASSIC_ELF,
+    hunter: CLASSIC_ORC,
+    rogue: CLASSIC_ORC,
+    priest: CLASSIC_DWARF,
+    shaman: CLASSIC_BIG_ORC,
+    mage: CLASSIC_ELF,
+    warlock: CLASSIC_BIG_ORC,
+    druid: CLASSIC_ORC,
+  },
+  arcadevoid: {
+    warrior: ARCANE_VOID_MECH,
+    paladin: ARCANE_VOID_MECH,
+    hunter: ARCANE_VOID_MECH,
+    rogue: ARCANE_VOID_MECH,
+    priest: ARCANE_VOID_MECH,
+    shaman: ARCANE_VOID_MECH,
+    mage: ARCANE_VOID_MECH,
+    warlock: ARCANE_VOID_MECH,
+    druid: ARCANE_VOID_MECH,
+  },
+};
+
+function seed(name: string, faction: string, role: RealmRole, lore: string): PresentationSeed {
+  return { name, faction, role, lore, color: '#ffffff' };
+}
+
+function sourceForBaseClass(realm: RealmContent, baseClass: PlayerClass): { source: RealmClassSkin; faction: string } | null {
+  const bindings: SkinBinding = SKIN_BINDINGS[realm.id] ?? {};
+  for (const source of realm.classes) {
+    const binding = bindings[source.id];
+    if (binding?.baseClass === baseClass) return { source, faction: binding.faction };
+  }
+  return null;
+}
+
+function assetForBaseClass(realm: RealmContent, baseClass: PlayerClass): RealmClassAsset {
+  return ASSETS_BY_REALM_CLASS[realm.id]?.[baseClass] ?? {};
+}
+
+export function realmHasClassOverlay(realm: RealmContent): boolean {
+  return realm.id !== 'claudecraft' && realm.id !== 'exchange' && !!FALLBACKS[realm.id];
+}
+
+export function classPresentationForRealm(
+  realm: RealmContent,
+  baseClass: PlayerClass,
+): RealmClassPresentation | null {
+  if (!realmHasClassOverlay(realm)) return null;
+  const fallback = FALLBACKS[realm.id]?.[baseClass];
+  if (!fallback) return null;
+  const bound = sourceForBaseClass(realm, baseClass);
+  if (bound) {
+    const asset = assetForBaseClass(realm, baseClass);
+    return {
+      baseClass,
+      name: bound.source.name,
+      faction: bound.faction,
+      lore: bound.source.lore,
+      color: bound.source.color,
+      role: bound.source.role,
+      ...asset,
+      source: bound.source,
+    };
+  }
+  const asset = assetForBaseClass(realm, baseClass);
+  return {
+    baseClass,
+    name: fallback.name,
+    faction: fallback.faction,
+    lore: fallback.lore,
+    color: fallback.color === '#ffffff' ? CLASS_COLORS[baseClass] : fallback.color,
+    role: fallback.role ?? ROLE_BY_CLASS[baseClass],
+    ...asset,
+  };
+}
+
+export function classChoicesForRealm(realm: RealmContent): RealmClassPresentation[] {
+  if (!realmHasClassOverlay(realm)) return [];
+  return PLAYER_CLASS_ORDER
+    .map((cls) => classPresentationForRealm(realm, cls))
+    .filter((choice): choice is RealmClassPresentation => choice !== null);
+}
+
+export function presentationFactionsForRealm(realm: RealmContent): string[] {
+  const out: string[] = [];
+  for (const choice of classChoicesForRealm(realm)) {
+    if (!out.includes(choice.faction)) out.push(choice.faction);
+  }
+  return out;
+}

@@ -1,22 +1,22 @@
-// Arcade Void - sci-fi arcade realm skin backed by the local
+// Arcane Void - sci-fi tactical realm skin backed by the local
 // public/cr-realms/arcadevoid asset pack.
 
 import type { RealmContent } from '../types';
 
 export const ARCADE_VOID_REALM: RealmContent = {
   id: 'arcadevoid',
-  name: 'Arcade Void',
+  name: 'Arcane Void',
   tagline: 'Neon squad combat, shipyards, turrets, and void tech',
   description:
-    'Arcade Void is Cryptic Realm pushed into a bright sci-fi war cabinet: ' +
+    'Arcane Void is Cryptic Realm pushed into a bright sci-fi war cabinet: ' +
     'marines, alien tech, ship silhouettes, and turret-heavy battlefield toys.',
-  mood: 'Arcade - Sci-Fi - Tactical',
+  mood: 'Sci-Fi - Tactical - Void',
   accentHex: '#57f0ff',
   bgGradient: 'linear-gradient(135deg, #02131c 0%, #090514 55%, #16060d 100%)',
   previewColors: { primary: '#57f0ff', secondary: '#ffcf4a', bg: '#07111c' },
   branding: {
     logoSrc: '/cr-realms/arcadevoid/characters.png',
-    brandText: 'Cryptic Realm - Arcade Void',
+    brandText: 'Cryptic Realm - Arcane Void',
     loadingScreenSrc: '/cr-realms/arcadevoid/cr-loggedin.png',
     discordUrl: 'https://discord.gg/Zdj3JGrx',
     showDonate: false,

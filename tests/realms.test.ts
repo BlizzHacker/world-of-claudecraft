@@ -66,8 +66,9 @@ describe('realm registry', () => {
     expect(ex.classes).toEqual([]);
   });
 
-  it('Arcade Void uses the local private realm asset pack for branding', () => {
+  it('Arcane Void uses the local private realm asset pack for branding', () => {
     const arcade = getRealm('arcadevoid');
+    expect(arcade.name).toBe('Arcane Void');
     expect(arcade.branding?.loadingScreenSrc).toBe('/cr-realms/arcadevoid/cr-loggedin.png');
     expect(arcade.classes.length).toBeGreaterThanOrEqual(3);
   });

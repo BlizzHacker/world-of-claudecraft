@@ -7,7 +7,9 @@
 //
 // Detects login by reading the same Bearer token the user dashboard writes
 // to localStorage. If no token is stored, the dropdown stays hidden. If a
-// token exists but /me/api/me 401s, we clear the session and hide it.
+// token exists, render the saved username immediately. /me/api/me enriches the
+// menu with roles/realm when available, but a transient 401 on a realm host must
+// not erase an otherwise valid game session.
 
 import { clearCrypticSession, readCrypticSession } from './session';
 
@@ -144,14 +146,9 @@ export async function mountUserDropdown(): Promise<void> {
       return;
     }
 
-    // Validate the token. If it's stale/wrong, drop it silently.
     const me = await fetchMe(token);
-    if (!me) {
-      clearCrypticSession();
-      document.getElementById('cr-user-dropdown')?.remove();
-      removeNavAdminLink();
-      return;
-    }
+    const fallbackName = readName();
+    if (!me && !fallbackName) return;
 
     // Replace any prior instance — happens after sign-out reload or after
     // a second call. Doing the remove AFTER the await so concurrent calls
@@ -162,12 +159,17 @@ export async function mountUserDropdown(): Promise<void> {
     host.id = 'cr-user-dropdown';
     container.insertBefore(host, container.firstChild);
 
-    const username = readName() || `acct-${me.accountId}`;
-    mountAt(host, username, me.roles, me.realm);
+    const username = fallbackName || `acct-${me?.accountId ?? ''}`.replace(/-$/, '');
+    mountAt(
+      host,
+      username,
+      me?.roles ?? { isAdmin: false, isModerator: false },
+      me?.realm ?? 'Cryptic Realm',
+    );
 
     // Add an "Admin" nav link in the homepage nav bar when the user is an
     // admin — quick jump to /admin/ without going through the dropdown menu.
-    if (me.roles.isAdmin) ensureNavAdminLink();
+    if (me?.roles.isAdmin) ensureNavAdminLink();
     else removeNavAdminLink();
   })();
 

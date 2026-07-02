@@ -948,6 +948,9 @@ export class ClientWorld implements IWorld {
     this.ws.onopen = () => {
       this.ws.send(JSON.stringify(buildWebSocketAuthMessage(token, characterId, this.clientSeed)));
     };
+    this.ws.onmessage = (ev) => {
+      void webSocketPayloadToText(ev.data).then((text) => this.onMessage(text));
+    };
     this.ws.onclose = () => {
       this.connected = false;
       clearInterval(this.sendTimer);
