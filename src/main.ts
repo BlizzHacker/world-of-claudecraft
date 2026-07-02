@@ -176,6 +176,7 @@ import {
 // `<div id="theme-picker">` block.
 import { mountThemeSelect } from './ui/cryptic/theme_select';
 import './ui/cryptic/realm_env';
+import { getActiveRealm } from './sim/realms';
 import { notePropPlaced, tryBuilderSelect } from './ui/cryptic/world_builder';
 import { mountHudGlobes, setHudSkin, resolveHudSkin } from './ui/cryptic/globes';
 import { isFpsActive, mountFpsMode, resolveFpsMode, setFpsMode } from './ui/cryptic/fps_mode';
@@ -893,6 +894,10 @@ let loadingHideTimer: number | null = null;
 
 function showLoadingScreen(statusText: string): void {
   const el = $('#loading-screen');
+  // Per-realm loading art: each realm's content pack names its own loading
+  // screen (theme.loadingScreenSrc); the CSS default is the Cryptic Realm art.
+  const realmLoading = getActiveRealm().branding?.loadingScreenSrc;
+  if (realmLoading) el.style.backgroundImage = `url("${realmLoading}")`;
   if (loadingHideTimer !== null) {
     window.clearTimeout(loadingHideTimer);
     loadingHideTimer = null;

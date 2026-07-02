@@ -1,12 +1,12 @@
 # Terms and Conditions
 
-**World of ClaudeCraft**
+**Cryptic Realm**
 
 Last updated: 21 June 2026
 
 ## 1. Who we are and what these terms cover
 
-These Terms and Conditions (the "Terms") are a legal agreement between you and Dream Home AI Limited, trading as Levy Street, New Zealand company number 8703066 ("we," "us," "our"). They govern your use of World of ClaudeCraft (the "Game"), worldofclaudecraft.com (the "Site"), and our mobile application (the "App"), together the "Service."
+These Terms and Conditions (the "Terms") are a legal agreement between you and MoveWeight ("we," "us," "our"). They govern your use of Cryptic Realm (the "Game"), crypticrealm.com (the "Site"), and our mobile application (the "App"), together the "Service."
 
 By using the Service you agree to these Terms and to our Privacy Policy. If you do not agree, do not use the Service.
 
@@ -78,7 +78,7 @@ The Service links to and relies on third-party services, including GitHub, Disco
 
 ## 13. Intellectual property and no affiliation
 
-World of ClaudeCraft is an independent, community project. It is not affiliated with, endorsed by, sponsored by, or associated with any third-party company, game, product, or brand. All third-party names, marks, and trademarks are the property of their respective owners. Any such names that appear are used only descriptively and do not imply any association.
+Cryptic Realm is an independent, community project. It is not affiliated with, endorsed by, sponsored by, or associated with any third-party company, game, product, or brand. All third-party names, marks, and trademarks are the property of their respective owners. Any such names that appear are used only descriptively and do not imply any association.
 
 Except for your User Content, the Service and the source code, including their original content, features, design, and branding, are owned by us or our licensors and are protected by intellectual property laws. You may not copy, distribute, or create derivative works from the Service or the source code except as these Terms expressly allow or with our prior written permission.
 
@@ -137,6 +137,6 @@ These terms apply if you obtain the App from Google Play. Your use of the App mu
 
 ## 22. Contact us
 
-Email: tony@levystreet.com
+Email: support@moveweight.com
 
 Postal: Dream Home AI Limited, 262 Thorndon Quay, Wellington 6011, New Zealand

@@ -97,6 +97,61 @@ export function handleForgedStatic(req: http.IncomingMessage, res: http.ServerRe
   return true;
 }
 
+
+// ── /cr-realms/* static store ────────────────────────────────────────────────
+// The generated realm-asset bundles (index.json + per-realm manifest/art/GLBs,
+// built by scripts/build_realm_assets.mjs) are too large for git; on the server
+// they live in a SHARED directory next to the forged store so every realm-stage
+// worktree serves the same files. CR_REALMS_DIR overrides; default is the
+// `cr-realms` sibling of the forged dir. Local dev serves public/cr-realms via
+// Vite, so this route only matters in production.
+export function configuredCrRealmsDir(envValue = process.env.CR_REALMS_DIR): string {
+  const raw = envValue?.trim() || path.join(path.dirname(FORGED_DIR), 'cr-realms');
+  return path.resolve(trimTrailingSeparators(raw));
+}
+export const CR_REALMS_DIR = configuredCrRealmsDir();
+
+const CR_REALMS_MIME: Record<string, string> = {
+  '.json': 'application/json; charset=utf-8',
+  '.glb': 'model/gltf-binary',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.webp': 'image/webp',
+  '.mp3': 'audio/mpeg',
+  '.ogg': 'audio/ogg',
+};
+const CR_REALMS_REF_RE = /^[A-Za-z0-9_.-]+(?:\/[A-Za-z0-9 _.()-]+)*$/;
+
+export function handleCrRealmsStatic(req: http.IncomingMessage, res: http.ServerResponse): boolean {
+  const url = (req.url ?? '').split('?')[0];
+  if (!url.startsWith('/cr-realms/')) return false;
+  const name = decodeURIComponent(url.slice('/cr-realms/'.length));
+  const ext = path.extname(name).toLowerCase();
+  const mime = CR_REALMS_MIME[ext];
+  // Traversal-safe: allowlisted characters only, then confirm the resolved path
+  // stays inside the store (mirrors safeForgedPath).
+  const full = path.resolve(CR_REALMS_DIR, name);
+  if (!mime || !CR_REALMS_REF_RE.test(name) || !full.startsWith(CR_REALMS_DIR + path.sep)) {
+    res.writeHead(404);
+    res.end('not found');
+    return true;
+  }
+  if (!fs.existsSync(full) || !fs.statSync(full).isFile()) {
+    res.writeHead(404);
+    res.end('not found');
+    return true;
+  }
+  const stat = fs.statSync(full);
+  res.writeHead(200, {
+    'content-type': mime,
+    'content-length': String(stat.size),
+    'cache-control': 'public, max-age=300',
+  });
+  fs.createReadStream(full).pipe(res);
+  return true;
+}
+
 export async function handleForgedCatalog(
   req: http.IncomingMessage,
   res: http.ServerResponse,

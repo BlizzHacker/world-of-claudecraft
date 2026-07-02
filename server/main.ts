@@ -101,7 +101,7 @@ import { setChainAdapter } from '../src/economy/chainAdapter';
 import { maybeBuildSolanaFromEnv } from '../src/economy/solanaAdapter';
 import { maybeHandleEconomyApi } from './economy/api';
 import { applyEconomySchema } from './economy/db';
-import { handleForgedCatalog, handleForgedStatic } from './forged_assets';
+import { handleCrRealmsStatic, handleForgedCatalog, handleForgedStatic } from './forged_assets';
 import { GameServer } from './game';
 import {
   handleGitHubCallback,
@@ -1696,6 +1696,7 @@ async function main(): Promise<void> {
       return;
     }
     if (handleForgedStatic(req, res)) return;
+    if (handleCrRealmsStatic(req, res)) return;
     if (await handleForgedCatalog(req, res)) return;
     if (url.startsWith('/internal/')) void handleInternalApi(req, res, game);
     else if (url.startsWith('/admin/api/')) void handleAdminApi(req, res, game);

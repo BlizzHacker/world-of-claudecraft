@@ -21,7 +21,7 @@
     { href: '/#download', label: 'Download', match: { hash: 'download' } },
     { href: '/links.html', label: 'Links', match: { hash: 'links', path: '/links' } },
     { href: '/whitepaper.html', label: 'White Paper', match: { hash: 'whitepaper', path: '/whitepaper' } },
-    { href: '/#login', label: 'Login/Register', match: { hash: 'login' } },
+    { href: '/terms', label: 'Terms', match: { path: '/terms' } },
   ];
 
   function isActive(item) {
@@ -58,15 +58,70 @@
     document.head.appendChild(s);
   }
 
+  // Session-aware tail: standalone pages show the SAME auth affordances as the
+  // SPA header. Logged out -> Login/Register; logged in -> Account + Logout.
+  // Tokens are the ones the SPA/dashboards write (session.ts / online.ts).
+  var TOKEN_KEYS = [
+    'woc_session',
+    'cryptic-realm_user_token',
+    'cryptic-realm_mod_token',
+    'cryptic-realm_admin_token',
+  ];
+  function sessionToken() {
+    try {
+      for (var i = 0; i < TOKEN_KEYS.length; i++) {
+        var v = localStorage.getItem(TOKEN_KEYS[i]);
+        if (v) return v;
+      }
+    } catch (e) { /* storage unavailable */ }
+    return null;
+  }
+  function clearSession() {
+    try {
+      for (var i = 0; i < TOKEN_KEYS.length; i++) localStorage.removeItem(TOKEN_KEYS[i]);
+      localStorage.removeItem('cryptic-realm_user_name');
+      localStorage.removeItem('cryptic-realm_mod_name');
+      localStorage.removeItem('cryptic-realm_admin_name');
+    } catch (e) { /* ignore */ }
+  }
+
+  function authItems() {
+    if (sessionToken()) {
+      return [
+        { href: '/#account', label: 'Account', match: { hash: 'account' } },
+        { href: '#logout', label: 'Logout', logout: true },
+      ];
+    }
+    return [{ href: '/#login', label: 'Login/Register', match: { hash: 'login' } }];
+  }
+
   function render(navEl) {
     ensureStyle();
     // Own the class so host-page .nav rules can't wash it out.
     navEl.classList.add('cr-nav');
-    var html = ITEMS.map(function (it) {
+    var items = ITEMS.concat(authItems());
+    var html = items.map(function (it) {
       var active = isActive(it) ? ' aria-current="page"' : '';
-      return '<a href="' + it.href + '"' + active + '>' + it.label + '</a>';
+      var cls = it.logout ? ' data-cr-logout="1"' : '';
+      return '<a href="' + it.href + '"' + active + cls + '>' + it.label + '</a>';
     }).join('');
     navEl.innerHTML = html;
+    var lo = navEl.querySelector('[data-cr-logout]');
+    if (lo) {
+      lo.addEventListener('click', function (ev) {
+        ev.preventDefault();
+        var tok = sessionToken();
+        clearSession();
+        // Best-effort server-side revoke, then land on the homepage.
+        try {
+          fetch('/api/account/logout', {
+            method: 'POST',
+            headers: tok ? { Authorization: 'Bearer ' + tok } : {},
+          }).catch(function () {});
+        } catch (e) { /* ignore */ }
+        window.location.href = '/';
+      });
+    }
   }
 
   function run() {

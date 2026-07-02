@@ -1794,7 +1794,7 @@
     inset: 0;
     z-index: 150;
     display: none;
-    background: #0a0d14 url("/loading-screen.jpg") center / cover no-repeat;
+    background: #0a0d14 url("/cryptic-realm-loading-bg.webp") center / cover no-repeat;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;

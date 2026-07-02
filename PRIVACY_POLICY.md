@@ -1,12 +1,12 @@
 # Privacy Policy
 
-**World of ClaudeCraft**
+**Cryptic Realm**
 
 Last updated: 21 June 2026
 
-This Privacy Policy explains what personal information we collect, why we collect it, how we use and share it, and the choices you have. It applies when you play World of ClaudeCraft (the "Game"), visit worldofclaudecraft.com (the "Site"), or use our mobile application (the "App"). The Game, Site, and App together are the "Service."
+This Privacy Policy explains what personal information we collect, why we collect it, how we use and share it, and the choices you have. It applies when you play Cryptic Realm (the "Game"), visit crypticrealm.com (the "Site"), or use our mobile application (the "App"). The Game, Site, and App together are the "Service."
 
-**Who we are.** The Service is operated by Dream Home AI Limited, trading as Levy Street, New Zealand company number 8703066 ("we," "us," "our"), based in Wellington, New Zealand. We are the data controller for personal information processed through the Service.
+**Who we are.** The Service is operated by MoveWeight ("we," "us," "our"), the operator of the MoveWeight network of games and services. We are the data controller for personal information processed through the Service.
 
 By using the Service you agree to this Policy. If you do not agree, do not use the Service.
 
@@ -154,7 +154,7 @@ The Service links to and integrates third-party services, including GitHub, GitH
 
 For privacy questions or to exercise your rights:
 
-Email: tony@levystreet.com
+Email: support@moveweight.com
 
 Postal: Dream Home AI Limited, 262 Thorndon Quay, Wellington 6011, New Zealand
 
@@ -164,7 +164,7 @@ New Zealand users may also contact the Office of the Privacy Commissioner at pri
 
 ## 14. No affiliation and the $WOC token
 
-World of ClaudeCraft is an independent, community project.
+Cryptic Realm is an independent, community project.
 
 It is not affiliated with, endorsed by, sponsored by, or associated with any third-party company, game, product, or brand. All third-party names and trademarks are the property of their respective owners.
 
