@@ -2948,6 +2948,10 @@ function showClassPreview(cls: PlayerClass): void {
     characterPreview?.setExternalModel(realmClass.assetUrl);
     return;
   }
+  if (realmClass?.assetStatus === 'comingSoon') {
+    characterPreview?.clearModel();
+    return;
+  }
   characterPreview?.setClass(cls);
 }
 
@@ -3116,20 +3120,31 @@ function paintRealmClassChoices(): void {
     const choice = byClass.get(cls);
     if (!overlay || !choice) {
       button.hidden = false;
-      button.classList.remove('realm-skinned');
+      button.classList.remove('realm-skinned', 'realm-coming-soon', 'realm-preview-only', 'realm-playable');
       delete button.dataset.faction;
       delete button.dataset.realmFaction;
+      delete button.dataset.realmAssetStatus;
+      delete button.dataset.realmAssetStatusLabel;
+      delete button.dataset.realmAssetIssue;
       if (baseI18n) label.dataset.i18n = baseI18n;
       label.textContent = classDisplayName(cls);
       button.setAttribute('aria-label', classDisplayName(cls));
+      button.removeAttribute('title');
       button.querySelector('.mini-class-faction')?.remove();
       button.style.removeProperty('--class-color');
       return;
     }
     button.hidden = activeFaction !== null && choice.faction !== activeFaction;
     button.classList.add('realm-skinned');
+    button.classList.toggle('realm-coming-soon', choice.assetStatus === 'comingSoon');
+    button.classList.toggle('realm-preview-only', choice.assetStatus === 'preview');
+    button.classList.toggle('realm-playable', choice.assetStatus === 'ready');
     button.dataset.faction = choice.faction;
     button.dataset.realmFaction = choice.faction;
+    button.dataset.realmAssetStatus = choice.assetStatus;
+    button.dataset.realmAssetStatusLabel = choice.assetStatusLabel;
+    if (choice.assetIssue) button.dataset.realmAssetIssue = choice.assetIssue;
+    else delete button.dataset.realmAssetIssue;
     if (choice.assetUrl) {
       button.dataset.realmAsset = choice.assetUrl;
       button.dataset.realmAssetName = choice.assetName ?? choice.name;
@@ -3142,14 +3157,13 @@ function paintRealmClassChoices(): void {
     button.setAttribute(
       'aria-label',
       choice.assetUrl
-        ? `${choice.name}, ${choice.faction}, ArcForge model`
-        : `${choice.name}, ${choice.faction}`,
+        ? `${choice.name}, ${choice.faction}, ${choice.assetStatusLabel}, ArcForge model`
+        : `${choice.name}, ${choice.faction}, ${choice.assetStatusLabel}`,
     );
+    button.title = choice.assetIssue ?? choice.assetStatusLabel;
     button.style.setProperty('--class-color', choice.color);
     const badge = factionBadgeForMiniClass(button);
-    badge.textContent = choice.assetUrl
-      ? `${choice.faction} GLB`
-      : choice.faction;
+    badge.textContent = `${choice.faction} - ${choice.assetStatusLabel}`;
   });
 }
 
@@ -3598,9 +3612,11 @@ async function enterRealmFlow(forceList = false): Promise<void> {
 
 // Parse a realm entry name like "Cryptic Realm [BETA]" into its family + stage.
 // Live entries have no bracket suffix → stage 'live'.
-function parseRealmMeta(name: string): { family: string; stage: string } {
+type RealmStageName = 'live' | 'beta' | 'alpha' | 'dev';
+
+function parseRealmMeta(name: string): { family: string; stage: RealmStageName } {
   const m = name.match(/^(.*?)\s*\[(DEV|ALPHA|BETA|LIVE)\]\s*$/i);
-  if (m) return { family: m[1].trim(), stage: m[2].toLowerCase() };
+  if (m) return { family: m[1].trim(), stage: m[2].toLowerCase() as RealmStageName };
   return { family: name.trim(), stage: 'live' };
 }
 
@@ -3609,11 +3625,31 @@ function parseRealmMeta(name: string): { family: string; stage: string } {
 // non-hardcore (the classic-MMO default). ladder/hardcore launch into a
 // segregated population on the same stage server (see memory
 // crypticrealm_realm_model); they're carried to the realm as ?pop= params.
-const realmChoice = new Map<string, { stage: string; ladder: boolean; hardcore: boolean }>();
-function choiceFor(family: string): { stage: string; ladder: boolean; hardcore: boolean } {
+interface RealmCardChoice {
+  stage: RealmStageName;
+  ladder: boolean;
+  hardcore: boolean;
+  showStages: boolean;
+}
+
+const realmChoice = new Map<string, RealmCardChoice>();
+function choiceFor(family: string): RealmCardChoice {
   let c = realmChoice.get(family);
-  if (!c) { c = { stage: 'live', ladder: false, hardcore: false }; realmChoice.set(family, c); }
+  if (!c) {
+    c = { stage: 'live', ladder: false, hardcore: false, showStages: false };
+    realmChoice.set(family, c);
+  }
   return c;
+}
+
+function titleCaseStage(stage: RealmStageName): string {
+  return stage[0].toUpperCase() + stage.slice(1);
+}
+
+function canUseDevStage(): boolean {
+  const roles = (window as unknown as { __crMeRoles?: { isAdmin?: boolean; isModerator?: boolean } }).__crMeRoles;
+  if (roles?.isAdmin || roles?.isModerator) return true;
+  return (api.username ?? '').toLowerCase() === 'moveweight';
 }
 
 // ── Home-page account portal ("Account" nav tab) ────────────────────────────
@@ -4097,8 +4133,9 @@ function showRealmList(dir?: import('./net/online').RealmDirectory): void {
     // Collapse the flat directory into ONE card per realm family. Each entry's
     // name parses to { family, stage }; we index the per-stage URLs so the card's
     // stage selector can route to the right backend.
-    const STAGE_ORDER = ['live', 'beta', 'alpha', 'dev'];
-    const fams = new Map<string, { type: string; stages: Map<string, { url: string; name: string }> }>();
+    const STAGE_ORDER: readonly RealmStageName[] = ['live', 'beta', 'alpha', 'dev'];
+    const fams = new Map<string, { type: string; stages: Map<RealmStageName, { url: string; name: string }> }>();
+    const devAllowed = canUseDevStage();
     for (const r of d.realms) {
       const meta = parseRealmMeta(r.name);
       let f = fams.get(meta.family);
@@ -4110,10 +4147,29 @@ function showRealmList(dir?: import('./net/online').RealmDirectory): void {
       const c = choiceFor(family);
       // Only offer stages this family actually advertises; Live is the default.
       const stages = STAGE_ORDER.filter((s) => f.stages.has(s));
-      if (!f.stages.has(c.stage)) c.stage = stages.includes('live') ? 'live' : stages[0];
-      const stageBtns = stages.map((s) =>
-        `<button type="button" class="rl-stage${c.stage === s ? ' active' : ''}" data-fam="${escapeHtml(family)}" data-stage="${s}" ${s === 'live' ? '' : 'data-restricted="1"'}>${s[0].toUpperCase() + s.slice(1)}</button>`,
-      ).join('');
+      if (!f.stages.has(c.stage)) c.stage = stages.includes('live') ? 'live' : (stages[0] ?? 'live');
+      if (c.stage === 'dev' && !devAllowed) {
+        c.stage = stages.includes('live') ? 'live' : (stages[0] ?? 'live');
+        c.showStages = false;
+      }
+      const hasTestStages = stages.some((s) => s !== 'live');
+      if (!hasTestStages) {
+        c.stage = 'live';
+        c.showStages = false;
+      }
+      if (c.stage !== 'live') c.showStages = true;
+      const stageOpen = hasTestStages && c.showStages;
+      const stageBtns = stages.map((s) => {
+        const devLocked = s === 'dev' && !devAllowed;
+        const lockedAttrs = devLocked
+          ? ' disabled aria-disabled="true" title="Approved builders only"'
+          : '';
+        return `<button type="button" class="rl-stage${c.stage === s ? ' active' : ''}" data-fam="${escapeHtml(family)}" data-stage="${s}" ${s === 'live' ? '' : 'data-restricted="1"'}${lockedAttrs}>${titleCaseStage(s)}</button>`;
+      }).join('');
+      const stageControls = hasTestStages
+        ? `<label class="rc-toggle rc-stage-toggle"><input type="checkbox" class="rl-test-rings" data-fam="${escapeHtml(family)}"${stageOpen ? ' checked' : ''}/> <span>Test rings <small>${escapeHtml(titleCaseStage(c.stage))}</small></span></label>
+           <div class="rc-stages" role="group" aria-label="Stage"${stageOpen ? '' : ' hidden'}>${stageBtns}<div class="rc-stage-note">Alpha promotes to Beta after two weeks. Beta promotes to Live on release. Dev stays Dev and is approved only.</div></div>`
+        : '';
       const typeKey = realmTypeKeys[f.type as keyof typeof realmTypeKeys];
       const typeLabel = typeKey ? t(typeKey) : f.type;
       const stageEntry = f.stages.get(c.stage);
@@ -4130,10 +4186,10 @@ function showRealmList(dir?: import('./net/online').RealmDirectory): void {
           <div class="rc-meta"><span class="realm-type">${escapeHtml(typeLabel)}</span><span class="realm-pop offline" data-pop data-fam="${escapeHtml(family)}">-</span></div>
         </div>
         <div class="rc-sub" data-sub data-fam="${escapeHtml(family)}">${escapeHtml(t('realm.checkingStatus'))}</div>
-        <div class="rc-stages" role="group" aria-label="Stage">${stageBtns}</div>
         <div class="rc-pops">
           <label class="rc-toggle"><input type="checkbox" class="rl-ladder" data-fam="${escapeHtml(family)}"${c.ladder ? ' checked' : ''}/> <span data-i18n="auth.ladderChar">Ladder character</span></label>
           <label class="rc-toggle"><input type="checkbox" class="rl-hardcore" data-fam="${escapeHtml(family)}"${c.hardcore ? ' checked' : ''}/> <span style="color:#ff6b6b" data-i18n="auth.hardcoreChar">Hardcore character</span></label>
+          ${stageControls}
         </div>
         ${isExchange ? `<div class="rc-note" data-i18n="realm.exchangeNote">The Exchange is the only realm where items move between realms.</div>` : ''}
         <button type="button" class="btn rc-enter" data-fam="${escapeHtml(family)}">${escapeHtml(t('realm.enter'))}</button>
@@ -4144,7 +4200,17 @@ function showRealmList(dir?: import('./net/online').RealmDirectory): void {
 
     // Stage segmented-control clicks → update the family's chosen stage.
     listEl.querySelectorAll<HTMLElement>('.rl-stage').forEach((b) => b.addEventListener('click', () => {
-      const fam = b.dataset.fam!; choiceFor(fam).stage = b.dataset.stage!;
+      if ((b as HTMLButtonElement).disabled) return;
+      const fam = b.dataset.fam!;
+      const c = choiceFor(fam);
+      c.stage = b.dataset.stage as RealmStageName;
+      c.showStages = true;
+      render(d);
+    }));
+    listEl.querySelectorAll<HTMLInputElement>('.rl-test-rings').forEach((cb) => cb.addEventListener('change', () => {
+      const c = choiceFor(cb.dataset.fam!);
+      c.showStages = cb.checked;
+      if (!cb.checked) c.stage = 'live';
       render(d);
     }));
     listEl.querySelectorAll<HTMLInputElement>('.rl-ladder').forEach((cb) => cb.addEventListener('change', () => {
@@ -4696,6 +4762,12 @@ function renderClassDetails(panelId: string, className: PlayerClass): void {
   const realmClass = realmClassPresentation(className);
   const classLabel = realmClass?.name ?? classDisplayName(className);
   const roleLabel = realmClass?.role ?? t(details.roleKey);
+  const assetChipHtml = realmClass
+    ? `<span class="class-details-asset asset-${escapeHtml(realmClass.assetStatus)}">${escapeHtml(realmClass.assetStatusLabel)}</span>`
+    : '';
+  const assetNoteHtml = realmClass?.assetIssue
+    ? `<p class="class-details-asset-note">${escapeHtml(realmClass.assetIssue)}</p>`
+    : '';
   const armorLabel = t(details.armorKey);
   const weaponsLabel = t(details.weaponsKey);
   const resourceKey = RESOURCE_KEYS[classDef.resourceType] ?? 'classDetails.resources.mana';
@@ -4848,9 +4920,11 @@ function renderClassDetails(panelId: string, className: PlayerClass): void {
             <h3 class="class-details-name">${escapeHtml(classLabel)}</h3>
             <span class="class-details-role role-${details.roleType}">${escapeHtml(roleLabel)}</span>
             ${realmClass?.faction ? `<span class="class-details-faction">${escapeHtml(realmClass.faction)}</span>` : ''}
+            ${assetChipHtml}
           </div>
         </div>
         <p class="class-details-lore">${escapeHtml(realmClassDisplayDescription(className))}</p>
+        ${assetNoteHtml}
         <div class="class-details-grid">
           <div class="class-details-stats-col">
             <h4 class="details-section-title">${escapeHtml(t('classDetails.sections.startingStats'))}</h4>

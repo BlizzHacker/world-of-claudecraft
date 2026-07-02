@@ -2,9 +2,9 @@ import { describe, expect, it } from 'vitest';
 import { getRealm, type RealmId } from '../src/sim/realms';
 import type { PlayerClass } from '../src/sim/types';
 import {
-  PLAYER_CLASS_ORDER,
   classChoicesForRealm,
   classPresentationForRealm,
+  PLAYER_CLASS_ORDER,
   presentationFactionsForRealm,
   realmHasClassOverlay,
 } from '../src/ui/cryptic/realm_class_presentation';
@@ -23,7 +23,15 @@ const ALL_CLASSES: readonly PlayerClass[] = [
 
 describe('realm class presentation', () => {
   it('offers a realm-flavored choice for every playable base class', () => {
-    const realms: RealmId[] = ['crypticrealm', 'infernal', 'classic', 'dominion', 'arcane', 'arcadevoid', 'fps'];
+    const realms: RealmId[] = [
+      'crypticrealm',
+      'infernal',
+      'classic',
+      'dominion',
+      'arcane',
+      'arcadevoid',
+      'fps',
+    ];
     expect(PLAYER_CLASS_ORDER).toEqual(ALL_CLASSES);
     for (const id of realms) {
       const choices = classChoicesForRealm(getRealm(id));
@@ -45,17 +53,38 @@ describe('realm class presentation', () => {
     ]);
   });
 
-  it('wires ArcForge GLB previews for the realm character rosters that have them', () => {
+  it('marks asset readiness honestly and avoids duplicated GLBs inside each roster', () => {
     expect(getRealm('arcane').name).toBe('Arcane Nexus');
     expect(getRealm('arcadevoid').name).toBe('Arcane Void');
     const realms: RealmId[] = ['crypticrealm', 'infernal', 'classic', 'arcadevoid'];
     for (const id of realms) {
       const choices = classChoicesForRealm(getRealm(id));
+      const urls = choices.map((choice) => choice.assetUrl).filter((url): url is string => !!url);
+      expect(new Set(urls).size, `${id} duplicated asset URLs`).toBe(urls.length);
       for (const choice of choices) {
-        expect(choice.assetUrl, `${id}:${choice.baseClass}`).toMatch(/\.glb$/);
-        expect(choice.assetName, `${id}:${choice.baseClass}`).toBeTruthy();
+        expect(choice.assetStatus, `${id}:${choice.baseClass}`).toMatch(/ready|preview|comingSoon/);
+        expect(choice.assetStatusLabel, `${id}:${choice.baseClass}`).toBeTruthy();
+        if (choice.assetUrl) {
+          expect(choice.assetUrl, `${id}:${choice.baseClass}`).toMatch(/\.glb$/);
+          expect(choice.assetName, `${id}:${choice.baseClass}`).toBeTruthy();
+          expect(choice.assetStatus, `${id}:${choice.baseClass}`).not.toBe('comingSoon');
+        } else {
+          expect(choice.assetStatus, `${id}:${choice.baseClass}`).toBe('comingSoon');
+        }
       }
     }
+
+    expect(classPresentationForRealm(getRealm('crypticrealm'), 'warlock')?.assetStatus).toBe(
+      'preview',
+    );
+    expect(classPresentationForRealm(getRealm('crypticrealm'), 'warrior')?.assetStatus).toBe(
+      'comingSoon',
+    );
+    expect(
+      classChoicesForRealm(getRealm('arcadevoid')).every(
+        (choice) => choice.assetStatus === 'comingSoon',
+      ),
+    ).toBe(true);
   });
 
   it('keeps realm class names distinct inside a realm roster', () => {

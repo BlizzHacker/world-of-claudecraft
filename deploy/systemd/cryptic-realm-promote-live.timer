@@ -1,6 +1,6 @@
 ## Live promotion monthly: live ← beta (public release of the soaked beta code).
-## 1st of the month, 03:00 UTC — after the beta run so beta→live cascades the
-## same night. Persistent so a missed window runs at next boot.
+## 1st of the month, 03:00 UTC — after the beta ring has soaked from the 15th.
+## Persistent so a missed window runs at next boot.
 [Unit]
 Description=Cryptic Realm — monthly live promotion (1st)
 Requires=cryptic-realm-promote@live.service

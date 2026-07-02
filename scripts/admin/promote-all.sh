@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Promote a ring across ALL staged realms on schedule. Driven by systemd timers:
-#   promote-all.sh alpha   — every 2 weeks: alpha ← dev   (each realm)
-#   promote-all.sh beta    — monthly:       beta  ← alpha
-#   promote-all.sh live    — monthly:       live  ← beta
+#   promote-all.sh alpha   — every 2 weeks: alpha ← dev code (characters stay dev)
+#   promote-all.sh beta    — after soak:     beta  ← alpha
+#   promote-all.sh live    — release:        live  ← beta
 #
 # Each per-realm promotion ff's the downstream branch to the upstream commit and
 # redeploys only that stage (promote.sh). One realm failing doesn't stop others.

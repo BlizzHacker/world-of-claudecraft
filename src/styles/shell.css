@@ -3629,13 +3629,49 @@
   .class-details-role.role-hybrid {
     color: #ffd100;
   }
+  .class-details-asset {
+    display: inline-flex;
+    width: fit-content;
+    margin-top: 4px;
+    padding: 2px 7px;
+    border: 1px solid rgba(255, 209, 0, 0.2);
+    border-radius: 999px;
+    background: rgba(255, 209, 0, 0.08);
+    color: #f3d579;
+    font-size: 9px;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
+  .class-details-asset.asset-ready {
+    border-color: rgba(111, 213, 137, 0.45);
+    background: rgba(111, 213, 137, 0.12);
+    color: #8fea9f;
+  }
+  .class-details-asset.asset-preview {
+    border-color: rgba(116, 202, 255, 0.42);
+    background: rgba(116, 202, 255, 0.12);
+    color: #9ee0ff;
+  }
+  .class-details-asset.asset-comingSoon {
+    border-color: rgba(154, 149, 166, 0.38);
+    background: rgba(154, 149, 166, 0.1);
+    color: #b9b4c7;
+  }
 
   .class-details-lore {
     font-size: 12px;
     line-height: 1.5;
     color: #a0aabf;
-    margin-bottom: var(--spacing-md);
+    margin-bottom: 8px;
     font-style: italic;
+  }
+  .class-details-asset-note {
+    margin: 0 0 var(--spacing-md);
+    color: #b9b4c7;
+    font-size: 11px;
+    line-height: 1.4;
   }
 
   .class-details-grid {
@@ -4598,6 +4634,16 @@
     min-height: 66px;
     padding: 8px 10px;
   }
+  .mini-class.realm-coming-soon {
+    border-style: dashed;
+    opacity: 0.78;
+  }
+  .mini-class.realm-preview-only {
+    box-shadow: inset 0 0 0 1px rgba(116, 202, 255, 0.12);
+  }
+  .mini-class.realm-playable {
+    box-shadow: inset 0 0 0 1px rgba(111, 213, 137, 0.12);
+  }
   .mini-class-row:has(.mini-class.realm-skinned) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
@@ -4617,6 +4663,15 @@
     letter-spacing: 0;
     text-transform: uppercase;
     opacity: 0.82;
+  }
+  .mini-class.realm-coming-soon .mini-class-faction {
+    color: #b9b4c7;
+  }
+  .mini-class.realm-preview-only .mini-class-faction {
+    color: #9ee0ff;
+  }
+  .mini-class.realm-playable .mini-class-faction {
+    color: #8fea9f;
   }
   .realm-faction-filter {
     display: flex;
@@ -6389,16 +6444,19 @@
     font-size: 11px;
     color: #8f7d52;
   }
-  /* Stage segmented control (Live / Beta / Alpha / Dev). */
+  /* Stage selector: hidden behind the compact Test rings checkbox by default. */
   #realm-list .rc-stages {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 4px;
-    margin-bottom: 12px;
+    margin: 1px 0 2px 24px;
+  }
+  #realm-list .rc-stages[hidden] {
+    display: none;
   }
   #realm-list .rl-stage {
-    flex: 1;
-    min-height: 30px;
-    font-size: 12px;
+    min-height: 28px;
+    font-size: 11px;
     color: #c9b27a;
     background: #1a1410;
     border: 1px solid #463a1c;
@@ -6417,6 +6475,27 @@
     border-color: var(--gold);
   }
   #realm-list .rl-stage[data-restricted] { opacity: 0.85; }
+  #realm-list .rl-stage:disabled {
+    color: #706b73;
+    border-color: #2c2930;
+    background: #131116;
+    cursor: not-allowed;
+    opacity: 0.62;
+  }
+  #realm-list .rc-stage-toggle small {
+    margin-left: 4px;
+    color: #8f7d52;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  #realm-list .rc-stage-note {
+    grid-column: 1 / -1;
+    margin-top: 2px;
+    color: #8f7d52;
+    font-size: 10px;
+    line-height: 1.35;
+  }
   /* Character-type toggles (Ladder / Hardcore). */
   #realm-list .rc-pops {
     display: flex;

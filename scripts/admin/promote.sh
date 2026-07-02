@@ -4,9 +4,9 @@
 #
 #   promote.sh <realm> <alpha|beta|live>
 #
-#   alpha ← dev    (run every 2 weeks)
-#   beta  ← alpha  (run monthly)
-#   live  ← beta   (run monthly)
+#   alpha ← dev code (run every 2 weeks; dev characters stay dev)
+#   beta  ← alpha   (after the alpha ring has soaked for roughly 2 weeks)
+#   live  ← beta    (public release cadence)
 #
 # Promotion is a fast-forward of the downstream branch ref on origin, so the
 # exact code testers vetted moves forward verbatim. dev is never a promotion
@@ -22,9 +22,10 @@ LOGFILE="${CR_LOG_FILE:-/var/log/cryptic-realm-stage.log}"
 log() { echo "[$(date -u +%FT%TZ)] [promote ${REALM}/${TARGET}] $*" | tee -a "$LOGFILE"; }
 
 # FROM = upstream GIT branch the downstream ring fast-forwards to.
-# FROM_STAGE = upstream STAGE whose characters migrate down (dev→alpha→beta→live).
+# FROM_STAGE = upstream STAGE whose characters migrate down (alpha→beta→live).
+# Dev is code-only: dev characters always stay on the dev ring.
 case "$TARGET" in
-  alpha) FROM='codex/cryptic-token-runtime'; FROM_STAGE='dev';   TO='alpha' ;;
+  alpha) FROM='codex/cryptic-token-runtime'; FROM_STAGE='';      TO='alpha' ;;
   beta)  FROM='alpha';                       FROM_STAGE='alpha'; TO='beta'  ;;
   live)  FROM='beta';                        FROM_STAGE='beta';  TO='live'  ;;
   *) log "invalid target '$TARGET' (alpha|beta|live)"; exit 1 ;;
@@ -47,8 +48,8 @@ bash "$CR_TOOLING/scripts/admin/deploy-stage.sh" "$REALM" "$TARGET"
 # realm column). Done AFTER the downstream stage is rebuilt+running so the
 # characters land on a live process. The realm-guard on saveCharacterState
 # (server/db.ts) protects against a lingering upstream autosave clobbering a
-# moved row. dev is the source for alpha; alpha for beta; beta for live.
-if command -v node >/dev/null 2>&1 && [ -f "$CR_TOOLING/scripts/admin/ladder-admin.mjs" ]; then
+# moved row. Alpha is the source for beta; beta is the source for live.
+if [ -n "$FROM_STAGE" ] && command -v node >/dev/null 2>&1 && [ -f "$CR_TOOLING/scripts/admin/ladder-admin.mjs" ]; then
   FROM_STAGE_NAME="$(node -e "import('file://$CR_TOOLING/scripts/admin/stages.config.mjs').then(m=>console.log(m.stageRealmName('$REALM','$FROM_STAGE')))" 2>/dev/null)"
   TO_STAGE_NAME="$(node -e "import('file://$CR_TOOLING/scripts/admin/stages.config.mjs').then(m=>console.log(m.stageRealmName('$REALM','$TARGET')))" 2>/dev/null)"
   if [ -n "$FROM_STAGE_NAME" ] && [ -n "$TO_STAGE_NAME" ]; then

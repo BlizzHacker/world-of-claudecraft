@@ -5,6 +5,7 @@ import type { PlayerClass } from '../../sim/types';
 import { loadGltf } from '../assets/loader';
 import { trackWebGLContext } from '../context_release';
 import type { WeaponLayoutOverride } from './manifest';
+import { chooseExternalPreviewClipName } from './preview_clip';
 import { CharacterVisual } from './visual';
 
 const PREVIEW_ANIM_STATE = {
@@ -159,7 +160,12 @@ export class CharacterPreview {
         this.characterGroup.add(root);
         if (gltf.animations.length) {
           const mixer = new THREE.AnimationMixer(root);
-          mixer.clipAction(gltf.animations[0]).play();
+          const clipName = chooseExternalPreviewClipName(
+            gltf.animations.map((clip) => clip.name),
+          );
+          const clip =
+            gltf.animations.find((animation) => animation.name === clipName) ?? gltf.animations[0];
+          mixer.clipAction(clip).play();
           this.externalMixer = mixer;
         }
         this.characterGroup.rotation.y = 0;
@@ -170,6 +176,17 @@ export class CharacterPreview {
           console.error(`Failed to load external preview model ${url}:`, err);
         }
       });
+  }
+
+  /** Clear the turntable when a realm class is still waiting on a unique model. */
+  clearModel(): void {
+    if (this.destroyed) return;
+    this.clearExternalModel();
+    if (this.currentVisual) {
+      this.characterGroup.remove(this.currentVisual.root);
+      this.currentVisual.dispose();
+      this.currentVisual = null;
+    }
   }
 
   /** Swap the previewed skin (alternate body texture); persists across setClass. */

@@ -143,6 +143,7 @@ export async function mountUserDropdown(): Promise<void> {
       // Logged out: tear down any chip left over from a previous session.
       document.getElementById('cr-user-dropdown')?.remove();
       removeNavAdminLink();
+      delete (window as unknown as { __crMeRoles?: MeRoles }).__crMeRoles;
       return;
     }
 
@@ -160,6 +161,10 @@ export async function mountUserDropdown(): Promise<void> {
     container.insertBefore(host, container.firstChild);
 
     const username = fallbackName || `acct-${me?.accountId ?? ''}`.replace(/-$/, '');
+    (window as unknown as { __crMeRoles?: MeRoles }).__crMeRoles = me?.roles ?? {
+      isAdmin: false,
+      isModerator: false,
+    };
     mountAt(
       host,
       username,

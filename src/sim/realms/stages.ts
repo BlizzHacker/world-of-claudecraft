@@ -5,10 +5,10 @@
 //   alpha — two-week tester ring (reset-prone); larger bonus.
 //   dev   — admin/mod fast-iteration ring; updated live anytime, highest bonus.
 //
-// Promotion spine (handled by scripts/admin/promote.sh + a systemd timer):
-//   alpha  ← dev   every 2 weeks
-//   beta   ← alpha monthly
-//   live   ← beta  monthly
+// Promotion spine (handled by scripts/admin/promote.sh + systemd timers):
+//   alpha  ← dev code every 2 weeks (dev characters stay dev)
+//   beta   ← alpha after the alpha ring has soaked for roughly 2 weeks
+//   live   ← beta on the release cadence
 //
 // This module is the single source of truth shared by the client realm/stage
 // picker AND the server-side env generation (scripts/admin/gen-stage-env.mjs),

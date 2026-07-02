@@ -20,15 +20,23 @@ export interface RealmClassPresentation {
   lore: string;
   color: string;
   role: RealmRole;
+  assetStatus: RealmClassAssetStatus;
+  assetStatusLabel: string;
+  assetIssue?: string;
   assetUrl?: string;
   assetName?: string;
   assetAnimated?: boolean;
   source?: RealmClassSkin;
 }
 
+export type RealmClassAssetStatus = 'ready' | 'preview' | 'comingSoon';
+
 type SkinBinding = Partial<Record<string, { baseClass: PlayerClass; faction: string }>>;
-type PresentationSeed = Omit<RealmClassPresentation, 'baseClass' | 'source'>;
-type RealmClassAsset = Pick<RealmClassPresentation, 'assetUrl' | 'assetName' | 'assetAnimated'>;
+type PresentationSeed = Pick<RealmClassPresentation, 'name' | 'faction' | 'role' | 'lore' | 'color'>;
+type RealmClassAsset = Pick<
+  RealmClassPresentation,
+  'assetUrl' | 'assetName' | 'assetAnimated' | 'assetStatus' | 'assetStatusLabel' | 'assetIssue'
+>;
 
 const ROLE_BY_CLASS: Record<PlayerClass, RealmRole> = {
   warrior: 'Tank',
@@ -183,105 +191,169 @@ const FALLBACKS: Partial<Record<RealmId, Record<PlayerClass, PresentationSeed>>>
   },
 };
 
-const CRYPTIC_BONE_HERALD = {
-  assetUrl: '/cr-realms/crypticrealm/bone-herald-black-meshy_ai_meshy_merged_animations_5fb3b8bb.glb',
-  assetName: 'Bone Herald Black',
-  assetAnimated: true,
+type AssetBase = Pick<RealmClassAsset, 'assetUrl' | 'assetName' | 'assetAnimated'>;
+
+function asset(
+  status: RealmClassAssetStatus,
+  label: string,
+  base: AssetBase,
+  issue?: string,
+): RealmClassAsset {
+  return {
+    ...base,
+    assetStatus: status,
+    assetStatusLabel: label,
+    ...(issue ? { assetIssue: issue } : {}),
+  };
+}
+
+const COMING_SOON_ASSET = {
+  assetStatus: 'comingSoon',
+  assetStatusLabel: 'Coming Soon',
+  assetIssue: 'ArcForge/Meshy character job queued; gameplay uses the class kit until the model is complete.',
 } satisfies RealmClassAsset;
 
-const INFERNAL_CRIMSON_BEHEMOTH = {
-  assetUrl:
-    '/cr-realms/infernal/meshy_ai_crimson_infernal_behe_biped_meshy_ai_meshy_merged_animations_27bab94d.glb',
-  assetName: 'Crimson Infernal Behemoth',
-  assetAnimated: true,
-} satisfies RealmClassAsset;
+const CRYPTIC_BONE_HERALD = asset(
+  'preview',
+  'Animation Pass',
+  {
+    assetUrl: '/cr-realms/crypticrealm/bone-herald-black-meshy_ai_meshy_merged_animations_5fb3b8bb.glb',
+    assetName: 'Bone Herald Black',
+    assetAnimated: true,
+  },
+  'Run/walk only; needs idle, attack, cast, hit, and death clips before full release.',
+);
 
-const INFERNAL_DEMON_HORNED = {
-  assetUrl: '/cr-realms/infernal/demon-horned_1a19d7ca.glb',
-  assetName: 'Horned Demon',
-  assetAnimated: true,
-} satisfies RealmClassAsset;
+const INFERNAL_CRIMSON_BEHEMOTH = asset(
+  'preview',
+  'Animation Pass',
+  {
+    assetUrl:
+      '/cr-realms/infernal/meshy_ai_crimson_infernal_behe_biped_meshy_ai_meshy_merged_animations_27bab94d.glb',
+    assetName: 'Crimson Infernal Behemoth',
+    assetAnimated: true,
+  },
+  'Locomotion and jump pack present; queued for melee, cast, hit, and death clips.',
+);
 
-const INFERNAL_SKULLBEAST = {
-  assetUrl: '/cr-realms/infernal/skullbeast_5d2ecebf.glb',
-  assetName: 'Skullbeast',
-  assetAnimated: true,
-} satisfies RealmClassAsset;
+const INFERNAL_DEMON_HORNED = asset(
+  'preview',
+  'Animation Pass',
+  {
+    assetUrl: '/cr-realms/infernal/demon-horned_1a19d7ca.glb',
+    assetName: 'Horned Demon',
+    assetAnimated: true,
+  },
+  'Run/walk only; queued for combat and spell animation coverage.',
+);
 
-const CLASSIC_ORC = {
+const INFERNAL_SKULLBEAST = asset(
+  'ready',
+  'Playable GLB',
+  {
+    assetUrl: '/cr-realms/infernal/skullbeast_5d2ecebf.glb',
+    assetName: 'Skullbeast',
+    assetAnimated: true,
+  },
+  'Has locomotion plus slash; still queued for class-specific casting and death clips.',
+);
+
+const CLASSIC_ORC = asset('ready', 'Playable GLB', {
   assetUrl: '/cr-realms/classic/another-orc-meshy_ai_meshy_merged_animations_743223cb.glb',
   assetName: 'Animated Orc',
   assetAnimated: true,
-} satisfies RealmClassAsset;
+});
 
-const CLASSIC_BIG_ORC = {
-  assetUrl: '/cr-realms/classic/bigass-orc-meshy_ai_meshy_merged_animations_86937638.glb',
-  assetName: 'Armored Orc',
-  assetAnimated: true,
-} satisfies RealmClassAsset;
+const CLASSIC_BIG_ORC = asset(
+  'preview',
+  'Animation Pass',
+  {
+    assetUrl: '/cr-realms/classic/bigass-orc-meshy_ai_meshy_merged_animations_86937638.glb',
+    assetName: 'Armored Orc',
+    assetAnimated: true,
+  },
+  'Movement/jump pack present; combat, cast, hit, and death clips still needed.',
+);
 
-const CLASSIC_ELF = {
+const CLASSIC_FIGHTING_ELF = asset('ready', 'Playable GLB', {
   assetUrl: '/cr-realms/classic/fighting-elf-meshy_ai_meshy_merged_animations_943c5367.glb',
   assetName: 'Fighting Elf',
   assetAnimated: true,
-} satisfies RealmClassAsset;
+});
 
-const CLASSIC_DWARF = {
-  assetUrl: '/cr-realms/classic/gray-dwarf-meshy_ai_meshy_merged_animations_a33ff315.glb',
-  assetName: 'Gray Dwarf',
-  assetAnimated: true,
-} satisfies RealmClassAsset;
+const CLASSIC_DWARF = asset(
+  'preview',
+  'Animation Pass',
+  {
+    assetUrl: '/cr-realms/classic/gray-dwarf-meshy_ai_meshy_merged_animations_a33ff315.glb',
+    assetName: 'Gray Dwarf',
+    assetAnimated: true,
+  },
+  'Run/walk only; queued for attack, cast, hit, and death clips.',
+);
 
-const ARCANE_VOID_MECH = {
-  assetUrl: '/models/chars/players/Mech/characters/CombatMech.glb',
-  assetName: 'Combat Mech',
-  assetAnimated: true,
-} satisfies RealmClassAsset;
+const CLASSIC_FEMALE_ELF = asset(
+  'preview',
+  'Animation Pass',
+  {
+    assetUrl: '/cr-realms/classic/female-elf-meshy_ai_meshy_merged_animations_2dde3113.glb',
+    assetName: 'Female Elf',
+    assetAnimated: true,
+  },
+  'Run/walk only; queued for healer/caster animation coverage.',
+);
+
+const CLASSIC_FEMALE_ORC = asset(
+  'preview',
+  'Animation Pass',
+  {
+    assetUrl: '/cr-realms/classic/female-orc-meshy_ai_meshy_merged_animations_a5a08a67.glb',
+    assetName: 'Female Orc',
+    assetAnimated: true,
+  },
+  'Run/walk only; queued for rogue attack and hit reactions.',
+);
+
+const CLASSIC_TREASURE_DWARF = asset(
+  'preview',
+  'Animation Pass',
+  {
+    assetUrl: '/cr-realms/classic/treasure-dwarf-meshy_ai_meshy_merged_animations_91488daf.glb',
+    assetName: 'Treasure Dwarf',
+    assetAnimated: true,
+  },
+  'Run/walk only; queued for spellcast and death clips.',
+);
+
+const CLASSIC_KITTY = asset(
+  'preview',
+  'Animation Pass',
+  {
+    assetUrl: '/cr-realms/classic/kitty_a4be04fa.glb',
+    assetName: 'Kitty',
+    assetAnimated: true,
+  },
+  'Single imported clip; queued for normalized locomotion and class action set.',
+);
 
 const ASSETS_BY_REALM_CLASS: Partial<Record<RealmId, Partial<Record<PlayerClass, RealmClassAsset>>>> = {
   crypticrealm: {
-    warrior: CRYPTIC_BONE_HERALD,
-    paladin: CRYPTIC_BONE_HERALD,
-    hunter: CRYPTIC_BONE_HERALD,
-    rogue: CRYPTIC_BONE_HERALD,
-    priest: CRYPTIC_BONE_HERALD,
-    shaman: CRYPTIC_BONE_HERALD,
-    mage: CRYPTIC_BONE_HERALD,
     warlock: CRYPTIC_BONE_HERALD,
-    druid: CRYPTIC_BONE_HERALD,
   },
   infernal: {
     warrior: INFERNAL_CRIMSON_BEHEMOTH,
-    paladin: INFERNAL_CRIMSON_BEHEMOTH,
-    hunter: INFERNAL_SKULLBEAST,
     rogue: INFERNAL_DEMON_HORNED,
-    priest: INFERNAL_DEMON_HORNED,
-    shaman: INFERNAL_CRIMSON_BEHEMOTH,
-    mage: INFERNAL_DEMON_HORNED,
-    warlock: INFERNAL_CRIMSON_BEHEMOTH,
     druid: INFERNAL_SKULLBEAST,
   },
   classic: {
-    warrior: CLASSIC_ELF,
-    paladin: CLASSIC_ELF,
+    warrior: CLASSIC_DWARF,
+    paladin: CLASSIC_FIGHTING_ELF,
     hunter: CLASSIC_ORC,
-    rogue: CLASSIC_ORC,
-    priest: CLASSIC_DWARF,
+    rogue: CLASSIC_FEMALE_ORC,
+    priest: CLASSIC_FEMALE_ELF,
     shaman: CLASSIC_BIG_ORC,
-    mage: CLASSIC_ELF,
-    warlock: CLASSIC_BIG_ORC,
-    druid: CLASSIC_ORC,
-  },
-  arcadevoid: {
-    warrior: ARCANE_VOID_MECH,
-    paladin: ARCANE_VOID_MECH,
-    hunter: ARCANE_VOID_MECH,
-    rogue: ARCANE_VOID_MECH,
-    priest: ARCANE_VOID_MECH,
-    shaman: ARCANE_VOID_MECH,
-    mage: ARCANE_VOID_MECH,
-    warlock: ARCANE_VOID_MECH,
-    druid: ARCANE_VOID_MECH,
+    mage: CLASSIC_TREASURE_DWARF,
+    druid: CLASSIC_KITTY,
   },
 };
 
@@ -299,7 +371,7 @@ function sourceForBaseClass(realm: RealmContent, baseClass: PlayerClass): { sour
 }
 
 function assetForBaseClass(realm: RealmContent, baseClass: PlayerClass): RealmClassAsset {
-  return ASSETS_BY_REALM_CLASS[realm.id]?.[baseClass] ?? {};
+  return ASSETS_BY_REALM_CLASS[realm.id]?.[baseClass] ?? COMING_SOON_ASSET;
 }
 
 export function realmHasClassOverlay(realm: RealmContent): boolean {

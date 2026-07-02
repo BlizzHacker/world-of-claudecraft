@@ -547,12 +547,23 @@ describe('client HTML shell', () => {
 
   it('marks realm-skinned character choices with faction and GLB metadata', () => {
     expect(mainTs).toContain('button.dataset.faction = choice.faction;');
+    expect(mainTs).toContain('button.dataset.realmAssetStatus = choice.assetStatus;');
     expect(mainTs).toContain('button.dataset.realmAsset = choice.assetUrl;');
     expect(mainTs).toContain('button.dataset.realmAssetName = choice.assetName ?? choice.name;');
     expect(mainTs).toContain('ArcForge model');
+    expect(mainTs).toContain('realm-coming-soon');
     expect(shellCss).toContain('.mini-class-row:has(.mini-class.realm-skinned)');
     expect(shellCss).toContain('grid-template-columns: repeat(2, minmax(0, 1fr));');
     expect(shellCss).toContain('.mini-class.realm-skinned .mini-class-label');
+    expect(shellCss).toContain('.class-details-asset.asset-comingSoon');
+  });
+
+  it('keeps test realm rings behind a compact checkbox', () => {
+    expect(mainTs).toContain('class="rl-test-rings"');
+    expect(mainTs).toContain('Dev stays Dev and is approved only.');
+    expect(mainTs).toContain('function canUseDevStage()');
+    expect(shellCss).toContain('#realm-list .rc-stages[hidden]');
+    expect(shellCss).toContain('#realm-list .rc-stage-toggle small');
   });
 
   it('lets the loading screen fully own the viewport during world entry', () => {
