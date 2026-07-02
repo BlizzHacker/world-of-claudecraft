@@ -3599,11 +3599,23 @@ function preferredRealmEntry(dir: import('./net/online').RealmDirectory): import
   return dir.realms.length === 1 ? dir.realms[0] : null;
 }
 
-async function enterRealmFlow(forceList = false): Promise<void> {
+async function enterRealmFlow(forceList = false, noCrossOriginAuto = false): Promise<void> {
   const dir = await api.realms();
   $('#realm-list-user').textContent = api.username ? `${api.username}` : '';
   const auto = forceList ? null : preferredRealmEntry(dir);
   if (auto) {
+    // Loop breaker: when we just ARRIVED via a cross-origin realm hop
+    // (auth_via=realm), auto-resume must never immediately navigate to yet
+    // another origin — two origins whose remembered realms point at each other
+    // would bounce the browser forever. Show the list and let the player pick.
+    if (noCrossOriginAuto) {
+      let autoOrigin = '';
+      try { autoOrigin = auto.url ? new URL(auto.url).origin : ''; } catch { autoOrigin = ''; }
+      if (autoOrigin && autoOrigin !== window.location.origin) {
+        showRealmList(dir);
+        return;
+      }
+    }
     selectRealm(auto);
     return;
   }
@@ -7203,6 +7215,15 @@ function wireStartScreens(): void {
       persistActiveRealm(realmIdParam);
       try { window.dispatchEvent(new CustomEvent('cr-realm-change')); } catch { /* noop */ }
     }
+    // Realm hop (auth_via=realm): remember the realm we hopped here FOR, so
+    // enterRealmFlow below resumes it instead of this origin's stale
+    // woc_last_realm — a stale value pointing at another origin ping-pongs the
+    // browser between the two sites forever.
+    const viaRealmHop = ssoParams.get('auth_via') === 'realm';
+    const hopRealmName = ssoParams.get('realm');
+    if (viaRealmHop && hopRealmName) {
+      try { localStorage.setItem(LAST_REALM_KEY, hopRealmName); } catch { /* noop */ }
+    }
     // CR overlay: also persist to the dashboard's localStorage so the
     // logged-in header dropdown (src/ui/cryptic/user_dropdown.ts) shows
     // immediately. The dashboards (/me/, /mod/, /admin/) read the same keys.
@@ -7219,7 +7240,7 @@ function wireStartScreens(): void {
       try {
         const userEl = document.querySelector('#charselect-user');
         if (userEl) userEl.textContent = api.username ?? '';
-        await enterRealmFlow();
+        await enterRealmFlow(false, viaRealmHop);
       } catch (err) {
         loginError(userFacingApiError(err));
       }
