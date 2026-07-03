@@ -34,13 +34,13 @@ const STORE_KEY = 'cr_fps_mode';
 const RETICLE_ID = 'cr-fps-reticle';
 const FPS_CAM_DIST = 0.55;
 const FPS_CAM_PITCH = 0.04;
-// Diablo camera — tuned to match the DuranceOfHate Unreal reference: a tight,
-// telephoto high-three-quarter ARPG angle at ~40° above the horizon
-// (0.70 rad ≈ 40°), pulled in a touch closer than the old 35° preset so the
-// playfield reads at the DoH zoom. Locked each frame so scroll-wheel zoom and
-// auto-FPS can't drift it off the DoH angle.
-const DIABLO_CAM_DIST = 13;
-const DIABLO_CAM_PITCH = 0.7;
+// Diablo camera — tuned to match the DuranceOfHate reference: a tight, close,
+// near-overhead ARPG angle. DoH sits high and zoomed IN, so the pitch is steep
+// (0.95 rad ≈ 54° above horizon) and the distance is pulled well in (9 vs the
+// default 12). Hard-locked every frame (pitch, dist, AND yaw stays where the
+// player faces) so wheel zoom, pitch-drag, pinch, and auto-FPS can't drift it.
+const DIABLO_CAM_DIST = 9;
+const DIABLO_CAM_PITCH = 0.95;
 
 type FpsMode = 'on' | 'off' | 'diablo';
 
@@ -211,4 +211,25 @@ export function mountFpsMode(input: Input, opts: MountFpsOptions = {}): void {
 
 export function isFpsActive(): boolean {
   return runtime?.mode === 'on';
+}
+
+/** True when the Diablo (DuranceOfHate) camera preset is active. */
+export function isDiabloCamActive(): boolean {
+  return runtime?.mode === 'diablo';
+}
+
+/**
+ * Enforce the Diablo camera lock at the exact frame the game loop syncs
+ * input → renderer (main.ts). The fps_mode rAF tick and the game loop are
+ * separate rAF callbacks, so a tick-only lock can lose the ordering race and
+ * let the input handlers' last-written pitch/dist (the default over-shoulder
+ * angle) reach the renderer for a frame. Calling this immediately before the
+ * renderer reads camPitch/camDist makes the lock deterministic: in Diablo mode
+ * the fixed angle/zoom ALWAYS wins over wheel zoom, pitch-drag, and pinch.
+ * No-op in any other mode.
+ */
+export function enforceDiabloLock(input: Input): void {
+  if (runtime?.mode !== 'diablo') return;
+  input.camDist = DIABLO_CAM_DIST;
+  input.camPitch = DIABLO_CAM_PITCH;
 }

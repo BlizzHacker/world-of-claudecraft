@@ -179,7 +179,7 @@ import './ui/cryptic/realm_env';
 import { getActiveRealm, getRealm, isRealmId, persistActiveRealm, type RealmContent } from './sim/realms';
 import { notePropPlaced, tryBuilderSelect } from './ui/cryptic/world_builder';
 import { mountHudGlobes, setHudSkin, resolveHudSkin } from './ui/cryptic/globes';
-import { isFpsActive, mountFpsMode, resolveFpsMode, setFpsMode } from './ui/cryptic/fps_mode';
+import { enforceDiabloLock, isFpsActive, mountFpsMode, resolveFpsMode, setFpsMode } from './ui/cryptic/fps_mode';
 import { mountRealmBranding } from './ui/cryptic/branding';
 import { mountIngameOptions } from './ui/cryptic/ingame_options';
 import { mountUserDropdown } from './ui/cryptic/user_dropdown';
@@ -2443,6 +2443,7 @@ async function startGame(
           frameDtMs: frameDt * 1000,
         },
       );
+      enforceDiabloLock(input); // Diablo preset wins over input handlers this frame
       renderer.camYaw = input.camYaw;
       renderer.camPitch = input.camPitch;
       renderer.camDist = input.camDist;
@@ -2544,6 +2545,7 @@ async function startGame(
         lastSnapAge: net.lastSnapAt > 0 ? performance.now() - net.lastSnapAt : -1,
       },
     );
+    enforceDiabloLock(input); // Diablo preset wins over input handlers this frame
     renderer.camYaw = input.camYaw;
     renderer.camPitch = input.camPitch;
     renderer.camDist = input.camDist;
