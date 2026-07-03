@@ -4511,6 +4511,9 @@ export const zh_CN: EnTranslations = {
       "gravecaller_sigil": {
         "name": "唤墓者徽记"
       },
+      "sigil_of_hate": {
+        "name": "Sigil of Hate"
+      },
       "blessed_wax": {
         "name": "祝福油脂"
       },

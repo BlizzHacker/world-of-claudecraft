@@ -913,6 +913,15 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     sellValue: 0,
     questId: 'q_whispers',
   },
+  sigil_of_hate: {
+    id: 'sigil_of_hate',
+    name: 'Sigil of Hate',
+    kind: 'quest',
+    sellValue: 0,
+    questId: 'q_sigils_of_hate',
+    pickupDeny: 'The sigil burns cold to the touch — you have no reason to take it yet.',
+    pickupEnough: 'You already carry all three Sigils of Hate.',
+  },
   blessed_wax: {
     id: 'blessed_wax',
     name: 'Blessed Tallow',

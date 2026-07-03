@@ -4511,6 +4511,9 @@ export const sv_SE: EnTranslations = {
       "gravecaller_sigil": {
         "name": "Gravkallarens sigill"
       },
+      "sigil_of_hate": {
+        "name": "Sigil of Hate"
+      },
       "blessed_wax": {
         "name": "Välsignat talg"
       },

@@ -78,6 +78,10 @@ export const DELVE_MODULE_NAMES: Record<string, string> = {
   reliquary_bell_niche: 'The Bell Niche',
   reliquary_saintless_hall: 'The Saintless Hall',
   reliquary_finale: 'The Bell-Buried Chamber',
+  durance_outer_sanctum: 'The Outer Sanctum',
+  durance_blood_gallery: 'The Blood Gallery',
+  durance_hollow_descent: 'The Hollow Descent',
+  durance_finale: "The Hatelord's Sanctum",
 };
 // Lore journal entries unlocked one-per-clear across repeat runs (PRD §6.4 / §7.6).
 // Ids match the `delveUi.lore.*` i18n keys.

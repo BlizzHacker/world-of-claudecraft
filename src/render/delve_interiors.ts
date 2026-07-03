@@ -11,6 +11,12 @@ const DELVE_MODULE_VARIANT: Record<DelveModuleId, DungeonInteriorVariant> = {
   reliquary_bell_niche: 'delve_bell',
   reliquary_saintless_hall: 'delve_hall',
   reliquary_finale: 'delve_finale',
+  // Durance of Hate reuses the ember-red crypt dressing variants: tomb-lined
+  // sanctum, alcove gallery, colonnade descent, and the boss chamber.
+  durance_outer_sanctum: 'delve_ossuary',
+  durance_blood_gallery: 'delve_bell',
+  durance_hollow_descent: 'delve_hall',
+  durance_finale: 'delve_finale',
 };
 
 /** Build one delve module at a world origin (crypt KayKit kit + that module's delve layout). */

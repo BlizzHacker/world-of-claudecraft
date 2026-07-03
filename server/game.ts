@@ -2855,6 +2855,12 @@ export class GameServer {
         const delve = DELVES[msg.delveId];
         if (!e || !delve || e.dead) break;
         if (Math.hypot(e.pos.x - delve.doorPos.x, e.pos.z - delve.doorPos.z) > 12) break;
+        // Durance of Hate (Diabl0 Easter egg) is gated behind the Sigils of Hate
+        // quest: the well only opens once all three sigils have been recovered.
+        if (msg.delveId === 'durance_of_hate' && !(sim.meta(pid)?.questsDone.has('q_sigils_of_hate') ?? false)) {
+          this.sendChatNotice(session, 'The well is silent. Something must first be awakened.');
+          break;
+        }
         sim.enterDelve(msg.delveId, msg.tierId, pid);
         this.resyncDelves(session);
         break;

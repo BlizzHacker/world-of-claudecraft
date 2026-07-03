@@ -8,7 +8,11 @@ export type DelveModuleId =
   | 'reliquary_sunken_ossuary'
   | 'reliquary_bell_niche'
   | 'reliquary_saintless_hall'
-  | 'reliquary_finale';
+  | 'reliquary_finale'
+  | 'durance_outer_sanctum'
+  | 'durance_blood_gallery'
+  | 'durance_hollow_descent'
+  | 'durance_finale';
 
 interface GridPoint {
   x: number;
@@ -144,11 +148,89 @@ export const RELIQUARY_FINALE_LAYOUT: DungeonLayout = {
   clutter: FINALE_CLUTTER,
 };
 
+// ── Durance of Hate (Diabl0 Easter-egg delve) ───────────────────────────────
+// Dark stone halls descending from the Eastbrook well. Module 0 has no doorZ
+// (players drop in through the well); the rest carry the porch door.
+
+/** Outer Sanctum: broad pillared entry hall, twin tomb rows flank the aisle. */
+export const DURANCE_OUTER_SANCTUM_LAYOUT: DungeonLayout = {
+  zMin: Z_MIN,
+  zMax: Z_MAX,
+  sideWallZ: SIDE_Z,
+  sideWallHd: SIDE_HD,
+  wallX: WALL_X,
+  pillars: grid(14, 66, 26, [-15, 15]),
+  tombs: grid(18, 68, 25, [-19, 19]),
+  stubs: [],
+  dais: { x: 0, z: 80, r: 9 },
+  clutter: AISLE_CLUTTER,
+};
+
+/** Blood Gallery: deep alcove stubs guarding the Behemoth's open centre. */
+export const DURANCE_BLOOD_GALLERY_LAYOUT: DungeonLayout = {
+  zMin: Z_MIN,
+  zMax: Z_MAX,
+  sideWallZ: SIDE_Z,
+  sideWallHd: SIDE_HD,
+  wallX: WALL_X,
+  doorZ: DOOR_Z,
+  pillars: grid(16, 66, 25, [-14, 14]),
+  tombs: [],
+  stubs: [
+    { x: -15, z: 30, hw: 10, hd: 5 },
+    { x: 15, z: 30, hw: 10, hd: 5 },
+    { x: -15, z: 60, hw: 10, hd: 5 },
+    { x: 15, z: 60, hw: 10, hd: 5 },
+  ],
+  dais: { x: 0, z: 80, r: 8 },
+  clutter: BELL_NICHE_CLUTTER,
+};
+
+/** Hollow Descent: three colonnade rows, defaced tomb rows, the final stair. */
+export const DURANCE_HOLLOW_DESCENT_LAYOUT: DungeonLayout = {
+  zMin: Z_MIN,
+  zMax: Z_MAX,
+  sideWallZ: SIDE_Z,
+  sideWallHd: SIDE_HD,
+  wallX: WALL_X,
+  doorZ: DOOR_Z,
+  pillars: grid(14, 66, 26, [-14, 14]),
+  tombs: grid(20, 68, 24, [-19, 19]),
+  stubs: [],
+  dais: { x: 0, z: 80, r: 8 },
+  clutter: AISLE_CLUTTER,
+};
+
+/** Hatelord's Sanctum: boss arena, clutter south, wide r=12 dais for Baelgor's
+ *  Wave of Hate stomp. */
+export const DURANCE_FINALE_LAYOUT: DungeonLayout = {
+  zMin: Z_MIN,
+  zMax: Z_MAX,
+  sideWallZ: SIDE_Z,
+  sideWallHd: SIDE_HD,
+  wallX: WALL_X,
+  doorZ: DOOR_Z,
+  pillars: [
+    { x: -14, z: 12 },
+    { x: 14, z: 12 },
+    { x: -14, z: 28 },
+    { x: 14, z: 28 },
+  ],
+  tombs: grid(16, 28, 12, [-19, 19]),
+  stubs: [],
+  dais: { x: 0, z: 80, r: 12 },
+  clutter: FINALE_CLUTTER,
+};
+
 export const DELVE_MODULE_LAYOUTS: Record<DelveModuleId, DungeonLayout> = {
   reliquary_sunken_ossuary: RELIQUARY_SUNKEN_OSSUARY_LAYOUT,
   reliquary_bell_niche: RELIQUARY_BELL_NICHE_LAYOUT,
   reliquary_saintless_hall: RELIQUARY_SAINTLESS_HALL_LAYOUT,
   reliquary_finale: RELIQUARY_FINALE_LAYOUT,
+  durance_outer_sanctum: DURANCE_OUTER_SANCTUM_LAYOUT,
+  durance_blood_gallery: DURANCE_BLOOD_GALLERY_LAYOUT,
+  durance_hollow_descent: DURANCE_HOLLOW_DESCENT_LAYOUT,
+  durance_finale: DURANCE_FINALE_LAYOUT,
 };
 
 /** Interior collision set for a delve module, in instance-local coordinates. */

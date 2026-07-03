@@ -4511,6 +4511,9 @@ export const ko_KR: EnTranslations = {
       "gravecaller_sigil": {
         "name": "무덤부름 인장"
       },
+      "sigil_of_hate": {
+        "name": "Sigil of Hate"
+      },
       "blessed_wax": {
         "name": "축복받은 수지"
       },

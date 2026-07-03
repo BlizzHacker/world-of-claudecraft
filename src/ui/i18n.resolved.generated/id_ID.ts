@@ -4511,6 +4511,9 @@ export const id_ID: EnTranslations = {
       "gravecaller_sigil": {
         "name": "Sigil Gravecaller"
       },
+      "sigil_of_hate": {
+        "name": "Sigil of Hate"
+      },
       "blessed_wax": {
         "name": "Lemak Berkah"
       },

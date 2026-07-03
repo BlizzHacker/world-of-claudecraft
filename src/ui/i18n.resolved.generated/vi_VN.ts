@@ -4511,6 +4511,9 @@ export const vi_VN: EnTranslations = {
       "gravecaller_sigil": {
         "name": "Ấn Phù Của Triệu Mộ Giả"
       },
+      "sigil_of_hate": {
+        "name": "Sigil of Hate"
+      },
       "blessed_wax": {
         "name": "Mỡ Nến Ban Phước"
       },

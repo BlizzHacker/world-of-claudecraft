@@ -4511,6 +4511,9 @@ export const tr_TR: EnTranslations = {
       "gravecaller_sigil": {
         "name": "Mezarçağıran'ın Mührü"
       },
+      "sigil_of_hate": {
+        "name": "Sigil of Hate"
+      },
       "blessed_wax": {
         "name": "Kutsanmış Don Yağı"
       },

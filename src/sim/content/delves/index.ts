@@ -2,6 +2,7 @@ import type { NpcDef } from '../../types';
 
 export { DELVE_AFFIXES } from './affixes';
 export { COLLAPSED_RELIQUARY_DELVE, COLLAPSED_RELIQUARY_MODULES } from './collapsed_reliquary';
+export { DURANCE_OF_HATE_DELVE, DURANCE_OF_HATE_MODULES, WARDEN_KAINE } from './durance_of_hate';
 export { COMPANION_UPGRADE_COSTS, DELVE_COMPANIONS } from './companions';
 export { DELVE_MOBS } from './mobs';
 export type { DelveShopEntry, DelveShopGate, DelveShopOffer } from './shop';

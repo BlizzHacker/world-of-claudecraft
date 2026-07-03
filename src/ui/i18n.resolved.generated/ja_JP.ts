@@ -4511,6 +4511,9 @@ export const ja_JP: EnTranslations = {
       "gravecaller_sigil": {
         "name": "グレイブコーラーの印章"
       },
+      "sigil_of_hate": {
+        "name": "Sigil of Hate"
+      },
       "blessed_wax": {
         "name": "祝福された獣脂"
       },

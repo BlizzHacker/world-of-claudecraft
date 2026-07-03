@@ -1731,6 +1731,29 @@ export const GUIDE_DELVES: GuideDelve[] = [
       "Unstable Roof",
       "Cult Remnants"
     ]
+  },
+  {
+    "id": "durance_of_hate",
+    "name": "The Durance of Hate",
+    "theme": "crypt",
+    "minLevel": 10,
+    "suggestedPlayers": 2,
+    "keeper": {
+      "name": "Warden Kaine",
+      "title": "Keeper of the Descent"
+    },
+    "tiers": [
+      "Normal",
+      "Infernal"
+    ],
+    "affixes": [
+      "Restless Graves",
+      "Bad Air",
+      "Candleblind",
+      "Grave Tax",
+      "Unstable Roof",
+      "Cult Remnants"
+    ]
   }
 ];
 

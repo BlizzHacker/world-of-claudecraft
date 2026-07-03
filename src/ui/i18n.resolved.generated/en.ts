@@ -4511,6 +4511,9 @@ export const en: EnTranslations = {
       "gravecaller_sigil": {
         "name": "Gravecaller's Sigil"
       },
+      "sigil_of_hate": {
+        "name": "Sigil of Hate"
+      },
       "blessed_wax": {
         "name": "Blessed Tallow"
       },

@@ -4511,6 +4511,9 @@ export const en_XA: EnTranslations = {
       "gravecaller_sigil": {
         "name": "[Ĝŕáʋéçáļļéŕ'š Šíĝíļ]"
       },
+      "sigil_of_hate": {
+        "name": "[Šíĝíļ óƒ Ĥáţé]"
+      },
       "blessed_wax": {
         "name": "[Ɓļéššéð Ţáļļóŵ]"
       },

@@ -4511,6 +4511,9 @@ export const nl_NL: EnTranslations = {
       "gravecaller_sigil": {
         "name": "Grafroepers Zegel"
       },
+      "sigil_of_hate": {
+        "name": "Sigil of Hate"
+      },
       "blessed_wax": {
         "name": "Gezegend Talk"
       },

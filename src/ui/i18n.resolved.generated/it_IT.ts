@@ -4511,6 +4511,9 @@ export const it_IT: EnTranslations = {
       "gravecaller_sigil": {
         "name": "Sigillo di Gravecaller"
       },
+      "sigil_of_hate": {
+        "name": "Sigil of Hate"
+      },
       "blessed_wax": {
         "name": "Sego benedetto"
       },

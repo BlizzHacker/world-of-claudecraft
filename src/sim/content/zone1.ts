@@ -519,7 +519,7 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
     pos: { x: 4, z: 6 },
     facing: Math.PI,
     color: 0xb7950b,
-    questIds: ['q_wolves', 'q_greyjaw', 'q_bandits', 'q_ringleader', 'q_mogger'],
+    questIds: ['q_wolves', 'q_greyjaw', 'q_bandits', 'q_ringleader', 'q_mogger', 'q_sigils_of_hate'],
     greeting: 'Keep your blade close, $C. The Vale is not what it was.',
   },
   trader_wilkes: {
@@ -930,6 +930,25 @@ export const ZONE1_QUESTS: Record<string, QuestDef> = {
     minLevel: 6,
     suggestedPlayers: 3,
   },
+  // The Durance of Hate — hidden Diabl0 Easter-egg quest. Marshal Redbrook
+  // (beside the well) sets you to recover 3 Sigils of Hate scattered around
+  // Eastbrook Vale. Completing it makes Warden Kaine appear at the well and
+  // opens the Durance of Hate delve (gated in the enter_delve handler).
+  q_sigils_of_hate: {
+    id: 'q_sigils_of_hate',
+    name: 'The Sigils of Hate',
+    giverNpcId: 'marshal_redbrook',
+    turnInNpcId: 'marshal_redbrook',
+    text: "Old wives say the well runs deeper than any rope, down to a place the maps forgot — the Durance of Hate. Three sigils were struck to seal it: one cast among the graves, one lost to the mine, one drowned by the docks. Bring me all three, $N, and we will see what the water is hiding.",
+    completionText: 'Three sigils, all bleeding the same red light. Take them to the well — Warden Kaine has already come to meet you. The descent is yours to make.',
+    objectives: [
+      { type: 'collect', itemId: 'sigil_of_hate', count: 3, label: 'Sigil of Hate recovered' },
+    ],
+    xpReward: 1000,
+    copperReward: 600,
+    itemRewards: {},
+    minLevel: 8,
+  },
 };
 
 export const ZONE1_QUEST_ORDER = [
@@ -951,6 +970,7 @@ export const ZONE1_QUEST_ORDER = [
   'q_hollow',
   'q_gravecallers_trail',
   'q_mogger',
+  'q_sigils_of_hate',
 ];
 
 // ---------------------------------------------------------------------------
@@ -1028,6 +1048,20 @@ export const ZONE1_OBJECTS: GroundObjectDef[] = [
     itemId: 'morthen_grimoire',
     name: "Morthen's Grimoire",
     positions: [{ x: 78, z: 86 }],
+  },
+  {
+    // Durance Easter-egg: the 3 hidden Sigils of Hate — one among the chapel
+    // graves, one at the mine mouth (SW), one drowned by the docks (W).
+    // Recovering all three completes q_sigils_of_hate and opens the well delve.
+    // (Placed LAST so the first ground object remains the supply crate that
+    // sim.test.ts's quest-gating test looks up by kind.)
+    itemId: 'sigil_of_hate',
+    name: 'Sigil of Hate',
+    positions: [
+      { x: -14, z: -14 },
+      { x: -86, z: -66 },
+      { x: -62, z: 58 },
+    ],
   },
 ];
 

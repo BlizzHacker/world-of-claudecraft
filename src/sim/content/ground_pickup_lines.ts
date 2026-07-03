@@ -25,6 +25,10 @@ export const GROUND_PICKUP_LINES: Record<string, GroundPickupLines> = {
     deny: "The grimoire's clasp is magically sealed.",
     enough: "You already have Morthen's Grimoire.",
   },
+  sigil_of_hate: {
+    deny: 'The sigil burns cold to the touch — you have no reason to take it yet.',
+    enough: 'You already carry all three Sigils of Hate.',
+  },
   fen_muster_order: {
     deny: 'The wax seal holds until the order is yours to claim.',
     enough: 'You already have the Fenbridge muster order.',

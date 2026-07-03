@@ -29,6 +29,9 @@ import {
   COLLAPSED_RELIQUARY_DELVE,
   COLLAPSED_RELIQUARY_MODULES,
   DELVE_MOBS,
+  DURANCE_OF_HATE_DELVE,
+  DURANCE_OF_HATE_MODULES,
+  WARDEN_KAINE,
 } from './content/delves';
 import { DUNGEON_DEFS, DUNGEON_MOBS } from './content/dungeons';
 import { GROUND_PICKUP_LINES } from './content/ground_pickup_lines';
@@ -159,6 +162,7 @@ export const NPCS: Record<string, NpcDef> = {
   ...ZONE3_NPCS,
   ...TEMPLE_NPCS,
   brother_halven: BROTHER_HALVEN,
+  warden_kaine: WARDEN_KAINE,
 };
 
 export const QUESTS: Record<string, QuestDef> = {
@@ -407,10 +411,12 @@ export function delveAt(x: number): DelveDef | null {
 
 export const DELVES: Record<string, DelveDef> = {
   [COLLAPSED_RELIQUARY_DELVE.id]: COLLAPSED_RELIQUARY_DELVE,
+  [DURANCE_OF_HATE_DELVE.id]: DURANCE_OF_HATE_DELVE,
 };
 export const DELVE_LIST: DelveDef[] = Object.values(DELVES).sort((a, b) => a.index - b.index);
 export const DELVE_MODULES: Record<string, DelveModuleDef> = {
   ...COLLAPSED_RELIQUARY_MODULES,
+  ...DURANCE_OF_HATE_MODULES,
 };
 
 function delveModuleFootprint(moduleId: string): number {
