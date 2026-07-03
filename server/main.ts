@@ -179,6 +179,106 @@ function inMaintenanceMode(): boolean {
   try { return fs.existsSync(MAINTENANCE_FLAG); } catch { return false; }
 }
 const WIKI_URL = process.env.WIKI_URL?.trim() ?? '';
+
+// Cryptic Realm 3.0 client downloads (Unreal heavy-tier builds). Served from a
+// persistent directory OUTSIDE dist/ so deploys (which wipe dist) never delete
+// uploaded installers. Drop versioned zips into CR_DOWNLOADS_DIR; /downloads
+// lists them newest-first and /downloads/<file> streams them with Range
+// support (resume matters for multi-GB builds).
+const DOWNLOADS_DIR = process.env.CR_DOWNLOADS_DIR?.trim() || '/opt/cr-downloads';
+
+function humanSize(bytes: number): string {
+  if (bytes >= 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024 * 1024)).toFixed(2)} GB`;
+  if (bytes >= 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  return `${Math.max(1, Math.round(bytes / 1024))} KB`;
+}
+
+function serveDownloads(req: http.IncomingMessage, res: http.ServerResponse, urlPath: string): void {
+  const rel = decodeURIComponent(urlPath.replace(/^\/downloads\/?/, ''));
+  // listing page
+  if (rel === '') {
+    let entries: { name: string; size: number; mtime: Date }[] = [];
+    try {
+      entries = fs
+        .readdirSync(DOWNLOADS_DIR)
+        .filter((n) => !n.startsWith('.'))
+        .map((n) => {
+          const s = fs.statSync(path.join(DOWNLOADS_DIR, n));
+          return { name: n, size: s.size, mtime: s.mtime };
+        })
+        .filter((e) => e.size > 0)
+        .sort((a, b) => b.mtime.getTime() - a.mtime.getTime());
+    } catch {
+      /* dir missing → empty listing */
+    }
+    const rows = entries
+      .map(
+        (e) =>
+          `<li><a href="/downloads/${encodeURIComponent(e.name)}">${e.name
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')}</a>` +
+          `<span class="meta">${humanSize(e.size)} · ${e.mtime.toISOString().slice(0, 10)}</span></li>`,
+      )
+      .join('\n');
+    const body = `<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cryptic Realm — Downloads</title>
+<style>
+body{background:#0b0709;color:#d8cfc0;font-family:Georgia,serif;max-width:720px;margin:8vh auto;padding:0 20px}
+h1{color:#e6b34a;letter-spacing:.35em;font-weight:normal;text-align:center}
+h2{color:#8a2f1d;text-align:center;font-weight:normal;font-size:1rem;margin-top:-.6em}
+ul{list-style:none;padding:0}
+li{display:flex;justify-content:space-between;gap:1em;padding:14px 16px;margin:10px 0;background:#151013;border:1px solid #2c2126;border-radius:6px}
+a{color:#e6b34a;text-decoration:none} a:hover{text-decoration:underline}
+.meta{color:#6f6459;white-space:nowrap}
+p{color:#8d8276;text-align:center}
+.back{display:block;text-align:center;margin-top:2em;color:#6f6459}
+</style></head><body>
+<h1>CRYPTIC REALM</h1><h2>Unreal Client Downloads — Cryptic Realm 3.0</h2>
+${entries.length ? `<ul>${rows}</ul>` : '<p>No builds published yet — check back soon.</p>'}
+<p>Windows: unzip and run CrypticRealmUnreal.exe. Browser play stays at <a href="/">crypticrealm.com</a>.</p>
+<a class="back" href="/">&larr; back to the realm</a>
+</body></html>`;
+    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' });
+    res.end(body);
+    return;
+  }
+  // file download (Range-aware for resumable multi-GB installers)
+  const file = path.join(DOWNLOADS_DIR, path.posix.normalize(rel).replace(/^([.][.][/\\])+/, ''));
+  const stats = file.startsWith(DOWNLOADS_DIR) && fs.existsSync(file) ? fs.statSync(file) : null;
+  if (!stats?.isFile()) {
+    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    res.end('not found');
+    return;
+  }
+  const base = {
+    'Content-Type': 'application/octet-stream',
+    'Content-Disposition': `attachment; filename="${path.basename(file)}"`,
+    'Accept-Ranges': 'bytes',
+    'Cache-Control': 'no-cache',
+  };
+  const range = /^bytes=(\d*)-(\d*)$/.exec(String(req.headers.range ?? ''));
+  if (range && (range[1] !== '' || range[2] !== '')) {
+    const start = range[1] === '' ? Math.max(0, stats.size - Number(range[2])) : Number(range[1]);
+    const end = range[1] !== '' && range[2] !== '' ? Math.min(Number(range[2]), stats.size - 1) : stats.size - 1;
+    if (start > end || start >= stats.size) {
+      res.writeHead(416, { 'Content-Range': `bytes */${stats.size}` });
+      res.end();
+      return;
+    }
+    res.writeHead(206, {
+      ...base,
+      'Content-Range': `bytes ${start}-${end}/${stats.size}`,
+      'Content-Length': end - start + 1,
+    });
+    if (req.method === 'HEAD') { res.end(); return; }
+    fs.createReadStream(file, { start, end }).pipe(res);
+    return;
+  }
+  res.writeHead(200, { ...base, 'Content-Length': stats.size });
+  if (req.method === 'HEAD') { res.end(); return; }
+  fs.createReadStream(file).pipe(res);
+}
 // Pretty URLs that serve standalone static HTML pages.
 const STATIC_PAGE_ALIASES = new Map([
   ['/links', '/links.html'],
@@ -573,6 +673,11 @@ function dashboardShellFor(urlPath: string): string | null {
 
 function serveStatic(req: http.IncomingMessage, res: http.ServerResponse): void {
   let urlPath = (req.url ?? '/').split('?')[0];
+  // Unreal client installers — persistent dir, survives deploys and maintenance.
+  if (urlPath === '/downloads' || urlPath === '/downloads/' || urlPath.startsWith('/downloads/')) {
+    serveDownloads(req, res, urlPath);
+    return;
+  }
   // CR overlay: if scripts/admin/update.sh is in flight, serve a friendly
   // maintenance page for any homepage / admin-shell request. Asset URLs
   // (so the maintenance page itself can pull its CSS/icons) pass through.
