@@ -34,13 +34,13 @@ const STORE_KEY = 'cr_fps_mode';
 const RETICLE_ID = 'cr-fps-reticle';
 const FPS_CAM_DIST = 0.55;
 const FPS_CAM_PITCH = 0.04;
-// Diablo II camera: a fixed high-three-quarter ARPG angle. D2's classic view is
-// ~35° above the horizon (not the near-top-down 0.92 rad ≈ 53° we had, which
-// felt flat/overhead). 0.62 rad ≈ 35.5°. Distance pulled in a touch so the
-// playfield reads at the original Cryptic Realm zoom. Locked each frame so
-// scroll-wheel zoom and auto-FPS can't drift it off the D2 angle.
-const DIABLO_CAM_DIST = 15;
-const DIABLO_CAM_PITCH = 0.62;
+// Diablo camera — tuned to match the DuranceOfHate Unreal reference: a tight,
+// telephoto high-three-quarter ARPG angle at ~40° above the horizon
+// (0.70 rad ≈ 40°), pulled in a touch closer than the old 35° preset so the
+// playfield reads at the DoH zoom. Locked each frame so scroll-wheel zoom and
+// auto-FPS can't drift it off the DoH angle.
+const DIABLO_CAM_DIST = 13;
+const DIABLO_CAM_PITCH = 0.7;
 
 type FpsMode = 'on' | 'off' | 'diablo';
 
