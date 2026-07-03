@@ -1451,6 +1451,10 @@ export interface Entity {
   color: number;
   skinCatalog: SkinCatalog; // player appearance catalog: class texture set or cosmetic body.
   skin: number; // player appearance: index into SKINS[visualKey]; 0 = default. synced in identity fields.
+  // Realm-specific player body GLB, set by the realm server and synced in
+  // identity fields (terse `vk`). Render-only; class/templateId still drives
+  // gameplay, abilities, stats, and equipment.
+  visualKey: string | null;
   // Equipped mainhand item id (players only; null otherwise). Render-only: the
   // client maps it to a held weapon model. Recomputed in recalcPlayerStats and
   // synced in identity fields (terse `mh`). The sim never reads it for gameplay.

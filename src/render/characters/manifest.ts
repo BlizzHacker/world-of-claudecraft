@@ -216,6 +216,20 @@ const CHICKEN_COW: ClipMap = {
   jump: 'Jump',
 };
 
+const meshyBiped = (
+  attack: string[] = [],
+  opts: Partial<Pick<ClipMap, 'walk' | 'run' | 'jump'>> = {},
+): ClipMap => ({
+  idle: 'Idle',
+  walk: opts.walk ?? 'Walking',
+  run: opts.run ?? 'Running',
+  attack,
+  hit: ['Hit'],
+  death: 'Death',
+  cast: 'Cast',
+  jump: opts.jump ?? 'Basic_Jump',
+});
+
 // ---------------------------------------------------------------------------
 // Asset urls
 // ---------------------------------------------------------------------------
@@ -224,6 +238,7 @@ const PLAYERS = 'models/chars/players';
 const ENEMIES = 'models/chars/enemies';
 const CREATURES = 'models/creatures';
 const WEAPONS = 'models/weapons';
+const REALM_MODELS = '/cr-realms';
 
 /** GLB url for an equipped mainhand item's held weapon model, or null if the item
  *  has no mapped model (then the class default attach is kept). Mirrors the bag
@@ -458,6 +473,91 @@ export const VISUALS: Record<string, VisualDef> = {
     // model just like every other class. The sword is only the no-weapon default.
     attach: [{ url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' }],
     weaponSlots: [0],
+    lazyPreload: true,
+  },
+
+  // -- ArcForge / Meshy realm player bodies --------------------------------
+  // These override only the rendered body. templateId remains the upstream
+  // class, so combat, equipment, spells, talents, and persistence stay stable.
+  realm_cryptic_bone_herald: {
+    url: `${REALM_MODELS}/crypticrealm/bone-herald-black-meshy_ai_meshy_merged_animations_5fb3b8bb.glb`,
+    height: HUMANOID_H,
+    clips: meshyBiped(),
+    lazyPreload: true,
+  },
+  realm_infernal_crimson_behemoth: {
+    url: `${REALM_MODELS}/infernal/meshy_ai_crimson_infernal_behe_biped_meshy_ai_meshy_merged_animations_27bab94d.glb`,
+    height: 2.9,
+    clips: meshyBiped([], { run: 'RunFast' }),
+    lazyPreload: true,
+  },
+  realm_infernal_horned_demon: {
+    url: `${REALM_MODELS}/infernal/demon-horned_1a19d7ca.glb`,
+    height: HUMANOID_H,
+    clips: meshyBiped(),
+    lazyPreload: true,
+  },
+  realm_infernal_skullbeast: {
+    url: `${REALM_MODELS}/infernal/skullbeast_5d2ecebf.glb`,
+    height: 2.4,
+    clips: meshyBiped(['Left_Slash'], { walk: 'Monster_Walk', run: 'Running' }),
+    lazyPreload: true,
+  },
+  realm_classic_orc: {
+    url: `${REALM_MODELS}/classic/another-orc-meshy_ai_meshy_merged_animations_743223cb.glb`,
+    height: HUMANOID_H,
+    clips: meshyBiped(['Attack']),
+    lazyPreload: true,
+  },
+  realm_classic_big_orc: {
+    url: `${REALM_MODELS}/classic/bigass-orc-meshy_ai_meshy_merged_animations_86937638.glb`,
+    height: 2.8,
+    clips: meshyBiped(),
+    lazyPreload: true,
+  },
+  realm_classic_fighting_elf: {
+    url: `${REALM_MODELS}/classic/fighting-elf-meshy_ai_meshy_merged_animations_943c5367.glb`,
+    height: HUMANOID_H,
+    clips: meshyBiped(['Reaping_Swing', 'Dodge_and_Counter', 'Counter_Attack'], {
+      run: 'RunFast',
+      jump: 'Backflip_Sweep_Kick',
+    }),
+    lazyPreload: true,
+  },
+  realm_classic_dwarf: {
+    url: `${REALM_MODELS}/classic/gray-dwarf-meshy_ai_meshy_merged_animations_a33ff315.glb`,
+    height: 2.25,
+    clips: meshyBiped(),
+    lazyPreload: true,
+  },
+  realm_classic_female_elf: {
+    url: `${REALM_MODELS}/classic/female-elf-meshy_ai_meshy_merged_animations_2dde3113.glb`,
+    height: HUMANOID_H,
+    clips: meshyBiped(),
+    lazyPreload: true,
+  },
+  realm_classic_female_orc: {
+    url: `${REALM_MODELS}/classic/female-orc-meshy_ai_meshy_merged_animations_a5a08a67.glb`,
+    height: HUMANOID_H,
+    clips: meshyBiped(),
+    lazyPreload: true,
+  },
+  realm_classic_treasure_dwarf: {
+    url: `${REALM_MODELS}/classic/treasure-dwarf-meshy_ai_meshy_merged_animations_91488daf.glb`,
+    height: 2.25,
+    clips: meshyBiped(),
+    lazyPreload: true,
+  },
+  realm_classic_kitty: {
+    url: `${REALM_MODELS}/classic/kitty_a4be04fa.glb`,
+    height: 1.3,
+    clips: {
+      ...meshyBiped([], {
+        walk: 'Armature|Unreal Take|baselayer',
+        run: 'Armature|Unreal Take|baselayer',
+      }),
+      jump: 'Armature|Unreal Take|baselayer',
+    },
     lazyPreload: true,
   },
 
@@ -914,6 +1014,7 @@ const NPC_KEYS: Record<string, string> = {
 export function visualKeyFor(e: Entity): string {
   if (e.kind === 'player') {
     if (e.skinCatalog === 'mech') return 'player_mech';
+    if (e.visualKey && VISUALS[e.visualKey]) return e.visualKey;
     return VISUALS[`player_${e.templateId}`] ? `player_${e.templateId}` : 'player_warrior';
   }
   if (e.kind === 'mob') {

@@ -348,7 +348,7 @@ export function skinTexture(key: string, skinIndex: number): THREE.Texture | nul
  *  not-yet-loaded atlas (otherwise the body shows the default until a relog). */
 export function ensureSkinTexture(key: string, skinIndex: number): Promise<void> | null {
   // applySkinMaterials consumes BOTH the base atlas and (when the skin has one)
-  // the emissive atlas — warm whichever of the two is missing so a glow skin
+  // the emissive atlas - warm whichever of the two is missing so a glow skin
   // doesn't re-apply with a not-yet-loaded emissive map.
   const baseUrl = SKINS[key]?.[skinIndex] ?? null;
   const emisUrl = SKIN_EMISSIVE[key]?.[skinIndex] ?? null;
@@ -367,37 +367,59 @@ export function skinEmissiveTexture(key: string, skinIndex: number): THREE.Textu
   return url ? (skinEmisTexByUrl.get(url) ?? null) : null;
 }
 
-// Lazy fetch for cosmetic-only bodies (the Combat Mech) — the GLB plus every
-// chroma + emissive map. Memoized: opening the preview repeatedly is free. Kept
-// out of the boot sweep so the ~4 MB asset set never delays every client's load.
-let mechAssetsPromise: Promise<void> | null = null;
-export function preloadMechAssets(): Promise<void> {
-  if (mechAssetsPromise) return mechAssetsPromise;
-  const def = VISUALS.player_mech;
+// Lazy fetch for cosmetic-only bodies (the Combat Mech) - the GLB plus every
+// skin/emissive maps. Kept out of the boot sweep so large optional character
+// sets never delay every client's load.
+const lazyVisualPromises = new Map<string, Promise<void>>();
+
+function visualGltfUrls(def: VisualDef): string[] {
+  const urls = new Set<string>([def.url]);
+  for (const url of def.animUrls ?? []) urls.add(url);
+  for (const a of def.attach ?? []) urls.add(a.url);
+  return [...urls];
+}
+
+function loadGltfInto(url: string): Promise<void> {
+  const resolvedUrl = assetUrl(url);
+  if (gltfByUrl.has(resolvedUrl)) return Promise.resolve();
+  return loadGltf(resolvedUrl).then((g) => {
+    gltfByUrl.set(resolvedUrl, g);
+  });
+}
+
+// Lazy fetch for cosmetic or realm-specific bodies: GLBs plus any key-owned
+// skin/emissive maps. Memoized so preview/open-world retries are cheap.
+export function preloadVisualAssets(key: string): Promise<void> {
+  const hit = lazyVisualPromises.get(key);
+  if (hit) return hit;
+  const def = VISUALS[key];
   if (!def) return Promise.resolve();
-  const jobs: Promise<unknown>[] = [
-    loadGltf(def.url).then((g) => {
-      gltfByUrl.set(def.url, g);
-    }),
-  ];
-  for (const url of SKINS.player_mech ?? []) if (url) jobs.push(loadSkinTexInto(url, skinTexByUrl));
+  const jobs: Promise<unknown>[] = visualGltfUrls(def).map((url) => loadGltfInto(url));
+  for (const url of SKINS[key] ?? []) if (url) jobs.push(loadSkinTexInto(url, skinTexByUrl));
   if (GFX.standardMaterials) {
-    for (const url of SKIN_EMISSIVE.player_mech ?? [])
+    for (const url of SKIN_EMISSIVE[key] ?? [])
       if (url) jobs.push(loadSkinTexInto(url, skinEmisTexByUrl));
   }
-  mechAssetsPromise = Promise.all(jobs).then(() => undefined);
-  return mechAssetsPromise;
+  const pending = Promise.all(jobs).then(() => undefined);
+  lazyVisualPromises.set(key, pending);
+  return pending;
+}
+
+export function visualAssetsReady(key: string): boolean {
+  const def = VISUALS[key];
+  if (!def) return false;
+  if (!visualGltfUrls(def).every((url) => gltfByUrl.has(assetUrl(url)))) return false;
+  const skinsReady = (SKINS[key] ?? []).every((url) => !url || skinTexByUrl.has(url));
+  if (!GFX.standardMaterials) return skinsReady;
+  return skinsReady && (SKIN_EMISSIVE[key] ?? []).every((url) => !url || skinEmisTexByUrl.has(url));
+}
+
+export function preloadMechAssets(): Promise<void> {
+  return preloadVisualAssets('player_mech');
 }
 
 export function mechAssetsReady(): boolean {
-  const def = VISUALS.player_mech;
-  if (!def || !gltfByUrl.has(assetUrl(def.url))) return false;
-  const skinsReady = (SKINS.player_mech ?? []).every((url) => !url || skinTexByUrl.has(url));
-  if (!GFX.standardMaterials) return skinsReady;
-  return (
-    skinsReady &&
-    (SKIN_EMISSIVE.player_mech ?? []).every((url) => !url || skinEmisTexByUrl.has(url))
-  );
+  return visualAssetsReady('player_mech');
 }
 
 function resolvedGltf(url: string): GLTF {

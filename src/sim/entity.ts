@@ -117,6 +117,7 @@ function baseEntity(id: number, pos: Vec3): Entity {
     color: 0xffffff,
     skinCatalog: 'class',
     skin: 0,
+    visualKey: null,
     mainhandItemId: null,
     equippedItems: {},
     guild: '',

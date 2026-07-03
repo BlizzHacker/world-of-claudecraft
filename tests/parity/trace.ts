@@ -170,6 +170,7 @@ export const ENTITY_EXCLUDE: ReadonlySet<string> = new Set([
   'color',
   'skin', // appearance
   'skinCatalog',
+  'visualKey', // render-only realm body override; sim never reads it for gameplay
   'potionCdRemaining', // derived display copy of potionCooldownUntil (the pinned authority)
   'mainhandItemId', // render-only; "the sim never reads it for gameplay"
   'equippedItems', // render-only mirror for inspect; sim never reads it for gameplay

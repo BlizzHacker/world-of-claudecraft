@@ -149,6 +149,7 @@ describe('exclude lists are pinned and real (anti-loosening guard)', () => {
       'skin',
       'skinCatalog',
       'stealthed',
+      'visualKey',
       'vx',
       'vy',
       'vz',

@@ -1198,6 +1198,7 @@ export class Sim {
       characterId?: number;
       ladder?: boolean;
       hardcore?: boolean;
+      visualKey?: string | null;
     },
   ): number {
     const savedState = opts?.state ? sanitizeRemovedZone1Content(opts.state).state : undefined;
@@ -1288,6 +1289,7 @@ export class Sim {
     this.players.set(player.id, meta);
     player.skinCatalog = meta.skinCatalog;
     player.skin = meta.skin; // mirror onto the entity so the renderer + wire can read it
+    player.visualKey = opts?.visualKey ?? null;
     if (this.primaryId === -1) this.primaryId = player.id;
 
     if (savedState) {

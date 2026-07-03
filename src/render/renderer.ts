@@ -44,7 +44,7 @@ import { type BirdsView, buildBirds } from './birds';
 import { type CameraOcclusionState, stepCameraOcclusion } from './camera_collision';
 import { characterSoulRendActive } from './character_effects';
 import { type AnimState, type CharacterVisual, createCharacterVisual } from './characters';
-import { mechAssetsReady, preloadMechAssets } from './characters/assets';
+import { preloadVisualAssets, visualAssetsReady } from './characters/assets';
 import { skinCount, visualKeyFor } from './characters/manifest';
 import { CLICK_MARKER_LIFETIME, clickMarkerAnim, clickMarkerColor } from './click_marker';
 import { trackWebGLContext } from './context_release';
@@ -2053,6 +2053,7 @@ export class Renderer {
       color,
       scale,
       skin,
+      visualKey: null,
       dead: false,
       castingAbility: null,
       overheadEmoteId: null,
@@ -3207,9 +3208,9 @@ export class Renderer {
       group.add(sparkle);
     } else {
       const visualKey = visualKeyFor(e);
-      if (visualKey === 'player_mech' && !mechAssetsReady()) {
-        void preloadMechAssets().catch((err) =>
-          console.error('Failed to preload live mech cosmetic:', err),
+      if (!visualAssetsReady(visualKey)) {
+        void preloadVisualAssets(visualKey).catch((err) =>
+          console.error(`Failed to preload live character visual ${visualKey}:`, err),
         );
         return;
       }
@@ -3461,9 +3462,9 @@ export class Renderer {
     if (!v.visual) return;
     const nextKey = visualKeyFor(e);
     if (nextKey === v.visualKey) return;
-    if (nextKey === 'player_mech' && !mechAssetsReady()) {
-      void preloadMechAssets().catch((err) =>
-        console.error('Failed to preload live mech cosmetic:', err),
+    if (!visualAssetsReady(nextKey)) {
+      void preloadVisualAssets(nextKey).catch((err) =>
+        console.error(`Failed to preload live character visual ${nextKey}:`, err),
       );
       return;
     }

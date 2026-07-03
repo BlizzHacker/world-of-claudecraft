@@ -25,6 +25,8 @@ export { parsePickitFilter, evaluateItem } from './pickit';
 export type { PickitOp, PickitCondition, PickitRule, PickitResult } from './pickit';
 export { getRealmAssetManifest, realmHasAssets } from './assets';
 export type { RealmAssetEntry, RealmAssetManifest } from './assets';
+export { normalizeRealmVisualId, realmClassVisualKey } from './class_visuals';
+export type { RealmRuntimeVisualKey } from './class_visuals';
 export type { RealmBranding } from './types';
 export {
   STAGE_ORDER, STAGE_META, STAGE_GIT_REF, REALM_PORT_BASE,

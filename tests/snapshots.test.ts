@@ -18,6 +18,7 @@ import { saveCharacterState } from '../server/db';
 import { type ClientSession, GameServer, wireEntity } from '../server/game';
 import { ClientWorld } from '../src/net/online';
 import { mechHeldWeaponOverride, visualKeyFor } from '../src/render/characters/manifest';
+import { realmClassVisualKey } from '../src/sim/realms/class_visuals';
 import { DELVES } from '../src/sim/data';
 import { Sim } from '../src/sim/sim';
 import { type Aura, DT, type PlayerClass } from '../src/sim/types';
@@ -318,6 +319,41 @@ describe('Combat Mech held weapon over the wire', () => {
     expect(mirrored.mainhandItemId).toBe('worn_sword');
     expect(visualKeyFor(mirrored)).toBe('player_mech');
     expect(mechHeldWeaponOverride(mirrored.templateId as PlayerClass)).toBeNull();
+  });
+});
+
+describe('realm class visual over the wire', () => {
+  it('mirrors a realm GLB body override into the renderer visual key', () => {
+    const sim = new Sim({ seed: 7, playerClass: 'priest', playerName: 'Cleric' });
+    const key = realmClassVisualKey('Classic', 'priest');
+    expect(key).toBe('realm_classic_female_elf');
+    sim.player.visualKey = key;
+
+    const wire = wireEntity(sim.player);
+    expect(wire.tid).toBe('priest');
+    expect(wire.vk).toBe('realm_classic_female_elf');
+
+    const client = bareClient(sim.playerId + 1000);
+    (client as any).applySnapshot({ t: 'snap', ents: [wire] });
+    const mirrored = client.entities.get(sim.playerId)!;
+
+    expect(mirrored.templateId).toBe('priest');
+    expect(mirrored.visualKey).toBe('realm_classic_female_elf');
+    expect(visualKeyFor(mirrored)).toBe('realm_classic_female_elf');
+  });
+
+  it('lets the explicit mech cosmetic override a realm body', () => {
+    const sim = new Sim({ seed: 7, playerClass: 'warrior', playerName: 'Knight' });
+    sim.player.visualKey = realmClassVisualKey('classic', 'warrior');
+    sim.setPlayerSkin(sim.playerId, 0, 'mech');
+
+    const client = bareClient(sim.playerId + 1000);
+    (client as any).applySnapshot({ t: 'snap', ents: [wireEntity(sim.player)] });
+    const mirrored = client.entities.get(sim.playerId)!;
+
+    expect(mirrored.visualKey).toBe('realm_classic_dwarf');
+    expect(mirrored.skinCatalog).toBe('mech');
+    expect(visualKeyFor(mirrored)).toBe('player_mech');
   });
 });
 

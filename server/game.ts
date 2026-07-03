@@ -17,6 +17,7 @@ import { parseRelayCommand } from '../src/sim/discord_relay';
 import type { PickAction } from '../src/sim/lockpick';
 import { sanitizeMarketQuery } from '../src/sim/market_query';
 import { parseMoveInputFrame } from '../src/sim/move_input';
+import { realmClassVisualKey } from '../src/sim/realms/class_visuals';
 import type { PetState, PlayerMeta } from '../src/sim/sim';
 import { MAX_CHAT_MESSAGE_LEN, Sim } from '../src/sim/sim';
 import { stealthDetectionRadius, threatEntries } from '../src/sim/threat';
@@ -516,6 +517,7 @@ function identityFields(e: Entity): Record<string, unknown> {
   const out: Record<string, unknown> = { k: e.kind, tid: e.templateId, nm: e.name, lv: e.level };
   if (e.skinCatalog === 'mech') out.cat = 'mech';
   if (e.skin) out.sk = e.skin;
+  if (e.kind === 'player' && e.visualKey) out.vk = e.visualKey;
   if (e.mainhandItemId) out.mh = e.mainhandItemId; // equipped mainhand → held weapon model (render-only)
   // Full worn set, for the inspect-another-player window. Players only and only
   // when something is equipped; rides the identity record (first appearance +
@@ -1457,6 +1459,7 @@ export class GameServer {
       characterId,
       ladder: meta.ladder ?? false,
       hardcore: meta.hardcore ?? false,
+      visualKey: realmClassVisualKey(process.env.CR_REALM_ID ?? REALM, cls),
     });
     if (isGm) {
       // GM characters: invulnerable, and always at the level cap (the row is
