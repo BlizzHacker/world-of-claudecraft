@@ -2363,6 +2363,7 @@ export const zh_TW: EnTranslations = {
       "title": "秘探",
       "objective": "目標",
       "module": "第 {current} 區，共 {total} 區",
+      "descend": "Descend the Durance",
       "affix": "詞綴",
       "complete": "完成",
       "marks": "秘探印記：{count}",

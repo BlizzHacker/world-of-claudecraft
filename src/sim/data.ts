@@ -394,9 +394,28 @@ export const DELVE_MODULE_GAP = 16;
 export const DELVE_MODULE_Z_START = 8;
 const DELVE_Z0 = -1250;
 const DELVE_SLOT_SPACING = 620; // covers 110u×4 rooms + 16u×3 gaps + 40u margin ≈ 536u
+// Connected-floor delves (Durance of Hate) stack DOZENS of rooms into one instance
+// and roam the whole z-band, so their per-slot z-footprint is far larger than a
+// 4-room sequential crawl. Each delve owns its own x-column (index*600), so its
+// slot z-spacing is independent of every other delve — we can give Durance a wide
+// band without touching the reliquary's tight one. A 50-room floor is
+// ~50*(112+16)=6400u deep; 7000u/slot leaves a comfortable inter-instance margin.
+const DELVE_WIDE_SLOT_SPACING = 7000;
+const WIDE_SLOT_DELVE_IDS = new Set(['durance_of_hate']);
+
+/** Per-delve slot z-spacing: wide for connected-floor delves, tight otherwise. */
+export function delveSlotSpacing(delveIndex: number): number {
+  const delve = DELVE_LIST.find((d) => d.index === delveIndex);
+  return delve && WIDE_SLOT_DELVE_IDS.has(delve.id)
+    ? DELVE_WIDE_SLOT_SPACING
+    : DELVE_SLOT_SPACING;
+}
 
 export function delveOrigin(delveIndex: number, slot: number): { x: number; z: number } {
-  return { x: DELVE_X_MIN + delveIndex * 600, z: DELVE_Z0 + slot * DELVE_SLOT_SPACING };
+  return {
+    x: DELVE_X_MIN + delveIndex * 600,
+    z: DELVE_Z0 + slot * delveSlotSpacing(delveIndex),
+  };
 }
 
 export function isDelvePos(x: number): boolean {

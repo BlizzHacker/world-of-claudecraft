@@ -55,7 +55,18 @@ export interface DungeonLayout {
   doorZ?: number;
   /** floor scatter positions, renderer places props here AND collision circles back them */
   clutter?: GridPoint[];
+  /**
+   * Connected-floor rooms: cut a central DOORWAY opening (half-width `doorway.hw`)
+   * into the front (zMin) and/or back (zMax) end walls instead of a solid slab, so
+   * the player can walk between stacked rooms through the inter-module corridor. The
+   * wall becomes two segments flanking a central gap. Used by the Durance of Hate
+   * open-floor delve; unset elsewhere (solid end walls, sequential crawl).
+   */
+  doorway?: { front?: boolean; back?: boolean; hw?: number };
 }
+
+/** Default half-width of the walkable doorway cut into an open-floor end wall. */
+export const DUNGEON_DOORWAY_HW = 6;
 
 function grid(zFrom: number, zTo: number, zStep: number, xs: readonly number[]): GridPoint[] {
   const out: GridPoint[] = [];
@@ -223,9 +234,38 @@ export function layoutColliders(layout: DungeonLayout): Collider[] {
       rot: 0,
     });
   }
-  // back wall, then front wall (entrance porch: chase cam fits inside)
-  out.push({ type: 'obb', x: 0, z: layout.zMax, hw: endWallHw, hd: DUNGEON_WALL_HW, rot: 0 });
-  out.push({ type: 'obb', x: 0, z: layout.zMin, hw: endWallHw, hd: DUNGEON_WALL_HW, rot: 0 });
+  // back wall, then front wall (entrance porch: chase cam fits inside).
+  // Connected-floor rooms cut a central doorway so stacked rooms link up: the wall
+  // becomes two segments flanking a walkable central gap. `pushEndWall` emits a solid
+  // slab, or two flanking segments when this end has a doorway.
+  const doorHw = layout.doorway?.hw ?? DUNGEON_DOORWAY_HW;
+  const pushEndWall = (z: number, open: boolean): void => {
+    if (!open) {
+      out.push({ type: 'obb', x: 0, z, hw: endWallHw, hd: DUNGEON_WALL_HW, rot: 0 });
+      return;
+    }
+    // Two segments: [-endWallHw, -doorHw] and [doorHw, endWallHw]. Each segment's
+    // centre is the midpoint of its span, its hw the half-span.
+    const segHw = (endWallHw - doorHw) / 2;
+    if (segHw > 0) {
+      const cx = doorHw + segHw;
+      out.push({ type: 'obb', x: -cx, z, hw: segHw, hd: DUNGEON_WALL_HW, rot: 0 });
+      out.push({ type: 'obb', x: cx, z, hw: segHw, hd: DUNGEON_WALL_HW, rot: 0 });
+    }
+  };
+  pushEndWall(layout.zMax, layout.doorway?.back ?? false);
+  pushEndWall(layout.zMin, layout.doorway?.front ?? false);
+  // Corridor side walls: when the FRONT wall has a doorway, the 16u inter-module gap
+  // just south of zMin is walkable. Flank it with short side walls at |x|=doorHw so
+  // the player is funnelled through the corridor and cannot drift out into the void.
+  // (The gap belongs to THIS room's collider band at negative localZ, so these live
+  // here.) DELVE_MODULE_GAP=16; cover a bit past it toward the previous room's back.
+  if (layout.doorway?.front) {
+    const gapCentreZ = layout.zMin - 8; // midpoint of the 16u gap south of the front wall
+    for (const sx of [-doorHw, doorHw]) {
+      out.push({ type: 'obb', x: sx, z: gapCentreZ, hw: DUNGEON_WALL_HW, hd: 9, rot: 0 });
+    }
+  }
   // chamber waists
   for (const s of layout.stubs)
     out.push({ type: 'obb', x: s.x, z: s.z, hw: s.hw, hd: s.hd, rot: 0 });

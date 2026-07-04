@@ -2363,6 +2363,7 @@ export const ko_KR: EnTranslations = {
       "title": "탐굴",
       "objective": "목표",
       "module": "구역 {current}/{total}",
+      "descend": "Descend the Durance",
       "affix": "고난 요소",
       "complete": "완료",
       "marks": "탐굴 증표: {count}",

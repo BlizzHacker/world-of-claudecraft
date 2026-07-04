@@ -5273,7 +5273,9 @@ export class Hud {
   }
 
   private delveObjectiveLine(run: DelveRunInfo): string {
-    const isFinale = run.moduleIndex >= run.moduleCount - 1;
+    // Connected floor: the objective is always to reach and slay the boss deep in
+    // the descent (no per-room "clear this room" step).
+    const isFinale = run.openFloor || run.moduleIndex >= run.moduleCount - 1;
     if (!isFinale) return t('delveUi.objective.clear_room');
     if (run.objective.kind === 'kill_boss') {
       const bossId = DELVES[run.delveId]?.bosses[0] ?? 'deacon_varric';
@@ -5316,12 +5318,17 @@ export class Hud {
     const delveName = delveDisplayName(run.delveId);
     const tierLabel =
       run.tierId === 'heroic' ? t('delveUi.board.tier.heroic') : t('delveUi.board.tier.normal');
-    const modId = run.modules[run.moduleIndex];
+    // Connected floor (Durance): no room-by-room progression — the whole floor is
+    // one space. Show a descent line instead of "Room 1/41" (moduleIndex is pinned
+    // at 0 and never advances on an open floor).
+    const modId = run.openFloor ? '' : run.modules[run.moduleIndex];
     const modName = modId ? t(`delveUi.moduleName.${modId}` as TranslationKey) : '';
-    const moduleLine = t('delveUi.tracker.module', {
-      current: formatNumber(run.moduleIndex + 1, { maximumFractionDigits: 0 }),
-      total: formatNumber(run.moduleCount, { maximumFractionDigits: 0 }),
-    });
+    const moduleLine = run.openFloor
+      ? t('delveUi.tracker.descend')
+      : t('delveUi.tracker.module', {
+          current: formatNumber(run.moduleIndex + 1, { maximumFractionDigits: 0 }),
+          total: formatNumber(run.moduleCount, { maximumFractionDigits: 0 }),
+        });
     const objectiveLine = this.delveObjectiveLine(run);
     const complete =
       run.objective.complete || run.completed
@@ -5338,7 +5345,7 @@ export class Hud {
     }
     const marks = formatNumber(this.sim.delveMarks, { maximumFractionDigits: 0 });
     let exitHint = '';
-    if (run.moduleIndex < run.moduleCount - 1) {
+    if (!run.openFloor && run.moduleIndex < run.moduleCount - 1) {
       if (run.exitPortalOpen) {
         exitHint = `<div class="dt-obj dt-hint">-> ${esc(t('delveUi.tracker.exitHintOpen'))}</div>`;
       } else {

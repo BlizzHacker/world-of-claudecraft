@@ -2363,6 +2363,7 @@ export const ru_RU: EnTranslations = {
       "title": "Вылазка",
       "objective": "Задача",
       "module": "Секция {current} из {total}",
+      "descend": "Descend the Durance",
       "affix": "Аффиксы",
       "complete": "Завершено",
       "marks": "Метки Вылазок: {count}",

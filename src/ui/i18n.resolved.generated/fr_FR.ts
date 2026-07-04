@@ -2363,6 +2363,7 @@ export const fr_FR: EnTranslations = {
       "title": "Plongée",
       "objective": "Objectif",
       "module": "Module {current} sur {total}",
+      "descend": "Descend the Durance",
       "affix": "Affixes",
       "complete": "Terminé",
       "marks": "Marques de plongée : {count}",

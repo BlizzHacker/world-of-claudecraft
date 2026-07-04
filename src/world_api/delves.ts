@@ -16,6 +16,9 @@ export interface DelveRunInfo {
   /** §7.6: this run rolled Bountiful: the reward chest is a purple Coffer that
    * only yields to a Hard + Premium-ante solve and guarantees a signature rare. */
   bountiful: boolean;
+  /** Connected-floor delve (Durance): all rooms live at once, no per-room portals;
+   * the HUD shows a "descend & slay the boss" objective instead of room counters. */
+  openFloor?: boolean;
 }
 
 // Render-safe projection of an active lockpicking attempt. Only ever holds cells

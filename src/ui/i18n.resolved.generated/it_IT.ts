@@ -2363,6 +2363,7 @@ export const it_IT: EnTranslations = {
       "title": "Incursione",
       "objective": "Obiettivo",
       "module": "Modulo {current} di {total}",
+      "descend": "Descend the Durance",
       "affix": "Affissi",
       "complete": "Completata",
       "marks": "Sigilli d'Incursione: {count}",

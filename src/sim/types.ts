@@ -2178,6 +2178,12 @@ export interface DelveRun {
    *  (random per-room roll). If still false when the party reaches the final
    *  room, the finale spawns him for the guaranteed showdown. */
   butcherAmbushed?: boolean;
+  /** Durance of Hate: this run is a CONNECTED FLOOR, not a sequential crawl. All
+   *  modules' mobs/objects are spawned at once at their stacked world-z bands, the
+   *  16u inter-module gaps are walkable corridors, and the player roams the whole
+   *  z-stack freely (no per-room cage, no exit-portal gating). The floor is cleared
+   *  when every mob across every room is dead. Set at claim time in claimDelveRun. */
+  openFloor?: boolean;
   /** §7.6, this run rolled Bountiful (ultra-rare): the reward chest is a purple
    * Coffer that only yields to a Hard-tier + Premium-ante lockpick solve and
    * guarantees a signature rare. Rolled once at run start (Heroic 5% / Normal 2%). */

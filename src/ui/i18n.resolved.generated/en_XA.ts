@@ -2363,6 +2363,7 @@ export const en_XA: EnTranslations = {
       "title": "[Ðéļʋé]",
       "objective": "[Óƀĵéçţíʋé]",
       "module": "[Ɱóðúļé {current} óƒ {total}]",
+      "descend": "[Ðéšçéñð ţĥé Ðúŕáñçé]",
       "affix": "[Áƒƒíẋéš]",
       "complete": "[Çóɱþļéţé]",
       "marks": "[Ðéļʋé Ɱáŕķš: {count}]",

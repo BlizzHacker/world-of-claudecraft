@@ -2363,6 +2363,7 @@ export const fr_CA: EnTranslations = {
       "title": "Excavation",
       "objective": "Objectif",
       "module": "Module {current} sur {total}",
+      "descend": "Descend the Durance",
       "affix": "Affixes",
       "complete": "Terminé",
       "marks": "Marques d'excavation : {count}",

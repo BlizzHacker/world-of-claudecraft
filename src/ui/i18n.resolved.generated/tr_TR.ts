@@ -2363,6 +2363,7 @@ export const tr_TR: EnTranslations = {
       "title": "Mağara",
       "objective": "Hedef",
       "module": "Bölüm {current} / {total}",
+      "descend": "Descend the Durance",
       "affix": "Ekler",
       "complete": "Tamamlandı",
       "marks": "Mağara Nişanları: {count}",

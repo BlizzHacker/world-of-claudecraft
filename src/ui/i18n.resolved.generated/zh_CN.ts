@@ -2363,6 +2363,7 @@ export const zh_CN: EnTranslations = {
       "title": "探秘",
       "objective": "目标",
       "module": "第 {current} / {total} 区",
+      "descend": "Descend the Durance",
       "affix": "词缀",
       "complete": "已完成",
       "marks": "探秘印记：{count}",

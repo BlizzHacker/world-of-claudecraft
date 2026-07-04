@@ -2363,6 +2363,7 @@ export const de_DE: EnTranslations = {
       "title": "Tiefgang",
       "objective": "Ziel",
       "module": "Modul {current} von {total}",
+      "descend": "Descend the Durance",
       "affix": "Affixe",
       "complete": "Abgeschlossen",
       "marks": "Tiefgang-Marken: {count}",

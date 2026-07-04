@@ -2363,6 +2363,7 @@ export const es_ES: EnTranslations = {
       "title": "Profundidad",
       "objective": "Objetivo",
       "module": "Módulo {current} de {total}",
+      "descend": "Descend the Durance",
       "affix": "Afijos",
       "complete": "Completada",
       "marks": "Marcas de Profundidad: {count}",

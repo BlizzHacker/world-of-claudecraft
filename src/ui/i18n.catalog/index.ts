@@ -627,6 +627,7 @@ export const en = {
       title: 'Delve',
       objective: 'Objective',
       module: 'Module {current} of {total}',
+      descend: 'Descend the Durance',
       affix: 'Affixes',
       complete: 'Complete',
       marks: 'Delve Marks: {count}',

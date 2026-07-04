@@ -2363,6 +2363,7 @@ export const sv_SE: EnTranslations = {
       "title": "Delve",
       "objective": "Mål",
       "module": "Modul {current} av {total}",
+      "descend": "Descend the Durance",
       "affix": "Affixer",
       "complete": "Slutförd",
       "marks": "Delve-märken: {count}",

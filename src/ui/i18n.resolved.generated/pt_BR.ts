@@ -2363,6 +2363,7 @@ export const pt_BR: EnTranslations = {
       "title": "Incursão",
       "objective": "Objetivo",
       "module": "Módulo {current} de {total}",
+      "descend": "Descend the Durance",
       "affix": "Afixos",
       "complete": "Concluído",
       "marks": "Selos de Incursão: {count}",

@@ -2363,6 +2363,7 @@ export const id_ID: EnTranslations = {
       "title": "Delve",
       "objective": "Sasaran",
       "module": "Modul {current} dari {total}",
+      "descend": "Descend the Durance",
       "affix": "Afiks",
       "complete": "Selesai",
       "marks": "Tanda Delve: {count}",

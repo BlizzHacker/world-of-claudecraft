@@ -2363,6 +2363,7 @@ export const nl_NL: EnTranslations = {
       "title": "Delve",
       "objective": "Doel",
       "module": "Module {current} van {total}",
+      "descend": "Descend the Durance",
       "affix": "Affixen",
       "complete": "Voltooid",
       "marks": "Delve-Tekens: {count}",

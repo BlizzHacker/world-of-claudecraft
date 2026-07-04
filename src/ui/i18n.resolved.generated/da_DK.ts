@@ -2363,6 +2363,7 @@ export const da_DK: EnTranslations = {
       "title": "Delve",
       "objective": "Mål",
       "module": "Modul {current} af {total}",
+      "descend": "Descend the Durance",
       "affix": "Affikser",
       "complete": "Fuldført",
       "marks": "Delve-Mærker: {count}",

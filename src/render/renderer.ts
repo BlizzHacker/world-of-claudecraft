@@ -3588,7 +3588,11 @@ export class Renderer {
     void ensureDelveInteriorKit().catch(() => undefined);
     for (let mi = 0; mi < modules.length; mi++) {
       const moduleId = modules[mi];
-      const key = `delve:${delveId}:${slot}:${moduleId}`;
+      // Key by module INDEX, not just id: connected floors repeat the same handful
+      // of room types across dozens of stacked positions, so an id-only key would
+      // collapse all copies into one build at a single z (leaving the rest of the
+      // floor undrawn). The index makes each stacked position build its own mesh.
+      const key = `delve:${delveId}:${slot}:${mi}:${moduleId}`;
       if (this.builtInteriors.has(key) || this.pendingInteriors.has(key)) continue;
       const zOff = delveModuleZOffset(modules, mi);
       this.scheduleDelveModuleBuild(key, moduleId, origin.x, origin.z + zOff);

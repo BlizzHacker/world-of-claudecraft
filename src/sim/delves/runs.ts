@@ -141,12 +141,41 @@ export function clampDelveModuleBounds(
   z: number,
   r: number,
 ): { x: number; z: number } {
+  // ── Connected floor: clamp to the WHOLE stacked descent, not one room ──────
+  // The player roams freely across every module. Keep the body inside the front
+  // wall of the first room and the back wall of the last room; the widest room's
+  // side walls bound X (per-room narrower walls + corridors are enforced by the
+  // real layout colliders in resolvePosition, so this outer clamp only stops you
+  // leaving the map entirely, never funnels you room-to-room).
+  if (run.openFloor) {
+    const first = DELVE_MODULE_LAYOUTS[run.modules[0] as DelveModuleId];
+    const lastId = run.modules[run.modules.length - 1] as DelveModuleId;
+    const last = DELVE_MODULE_LAYOUTS[lastId];
+    if (!first || !last) return { x, z };
+    let maxWallX = DUNGEON_WALL_X;
+    for (const id of run.modules) {
+      const l = DELVE_MODULE_LAYOUTS[id as DelveModuleId];
+      if (l) maxWallX = Math.max(maxWallX, l.wallX ?? DUNGEON_WALL_X);
+    }
+    const halfX = maxWallX - DUNGEON_WALL_HW - r;
+    const localX = x - run.origin.x;
+    const clampedX = Math.max(-halfX, Math.min(halfX, localX));
+    // zBase already includes DELVE_MODULE_Z_START, so these are full run-relative z.
+    const firstBase = delveModuleZOffset(run, 0);
+    const lastBase = delveModuleZOffset(run, run.modules.length - 1);
+    const floorMinZ = firstBase + first.zMin + DUNGEON_WALL_HW + r;
+    const floorMaxZ = lastBase + last.zMax - DUNGEON_WALL_HW - r;
+    const localZ = z - run.origin.z;
+    const clampedZ = Math.max(floorMinZ, Math.min(floorMaxZ, localZ));
+    return { x: clampedX + run.origin.x, z: clampedZ + run.origin.z };
+  }
+
   const moduleId = run.modules[run.moduleIndex] as DelveModuleId;
   const layout = DELVE_MODULE_LAYOUTS[moduleId];
   if (!layout) return { x, z };
   const wallX = layout.wallX ?? DUNGEON_WALL_X;
   const halfX = wallX - DUNGEON_WALL_HW - r; // inner wall face minus body radius
-  const zBase = delveModuleZOffset(run);
+  const zBase = delveModuleZOffset(run, run.moduleIndex);
   const localX = x - run.origin.x;
   const localZ = z - (run.origin.z + zBase);
   const clampedX = Math.max(-halfX, Math.min(halfX, localX));
@@ -251,16 +280,29 @@ export function refreshDelveDaily(ctx: SimContext, meta: PlayerMeta): void {
 export function pickDelveModules(delve: DelveDef, seed: number, tierId: string): string[] {
   const rng = new Rng(seed);
   const pool = delve.modules.filter((id) => id !== delve.finaleModuleId);
-  const shuffled = [...pool];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = rng.int(0, i);
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
+  const shuffle = (): string[] => {
+    const s = [...pool];
+    for (let i = s.length - 1; i > 0; i--) {
+      const j = rng.int(0, i);
+      [s[i], s[j]] = [s[j], s[i]];
+    }
+    return s;
+  };
   // moduleCount is [normal, heroic] in tier order; pick by the tier's position so
   // a higher tier can run more rooms. Defaults to the Normal count if unmatched.
   const tierIdx = delve.tiers.findIndex((t) => t.id === tierId);
   const count = delve.moduleCount[tierIdx >= 0 ? tierIdx : 0] ?? delve.moduleCount[0];
-  const picked = shuffled.slice(0, count);
+  // Fill to `count` rooms by cycling reshuffled passes of the pool. Sequential
+  // crawls (count ≤ pool size) get a plain shuffled slice; connected floors ask
+  // for far more rooms than there are distinct room types, so pool types recur —
+  // a fresh shuffle each pass keeps ordering varied, all deterministic off seed.
+  const picked: string[] = [];
+  while (picked.length < count && pool.length > 0) {
+    for (const id of shuffle()) {
+      if (picked.length >= count) break;
+      picked.push(id);
+    }
+  }
   picked.push(delve.finaleModuleId);
   return picked;
 }
@@ -380,6 +422,12 @@ export function claimDelveRun(
   run.affixes = rollDelveAffixes(delve, tierId, run.seed);
   run.modules = pickDelveModules(delve, run.seed, tierId);
   run.moduleIndex = 0;
+  // Durance of Hate is a CONNECTED FLOOR: every room spawns at once and the
+  // player roams the whole descent freely (see spawnDelveModule openFloor branch,
+  // clampDelveModuleBounds, and tickDelveFloorClear). All other delves stay on the
+  // sequential room-at-a-time crawl.
+  run.openFloor = delveId === 'durance_of_hate';
+  run.butcherAmbushed = false;
   run.completed = false;
   run.emptyFor = 0;
   run.deathsThisRun = {};
@@ -398,66 +446,51 @@ export function claimDelveRun(
   spawnDelveModule(ctx, run);
 }
 
-export function spawnDelveModule(ctx: SimContext, run: DelveRun): void {
-  for (const id of run.mobIds) {
-    if (!ctx.entities.has(id)) continue;
-    for (const meta of ctx.players.values()) {
-      const e = ctx.entities.get(meta.entityId);
-      if (e?.targetId === id) e.targetId = null;
-      if (e?.comboTargetId === id) {
-        e.comboTargetId = null;
-        e.comboPoints = 0;
-      }
-    }
-    ctx.dropEntity(id);
-  }
-  run.mobIds = [];
-  for (const id of run.objectIds) {
-    if (ctx.entities.has(id)) ctx.dropEntity(id);
-  }
-  run.objectIds = [];
-  run.objectState = {};
-  run.raiseDeadChannel = null;
-  run.exitPortalOpen = false;
-  run.rewardChestId = null;
-  run.surfaceExitId = null;
-
-  const moduleId = run.modules[run.moduleIndex];
+// Spawn one module's mob pack + interactables at its stacked world-z band. Shared
+// by the sequential crawl (spawns only the active module) and the connected-floor
+// path (loops every module). Draws entity ids via ctx.nextId++ in spawn-set order;
+// the caller controls the module-visit order so the id block stays deterministic
+// and identical across the offline/server/headless hosts.
+function spawnOneDelveModule(
+  ctx: SimContext,
+  run: DelveRun,
+  delve: DelveDef,
+  moduleIndex: number,
+): void {
+  const moduleId = run.modules[moduleIndex];
   const mod = DELVE_MODULES[moduleId];
   if (!mod) return;
-  const delve = DELVES[run.delveId];
   const tier = delve.tiers.find((t) => t.id === run.tierId) ?? delve.tiers[0];
-  const zBase = delveModuleZOffset(run);
-  const spawnSet = pickDelveSpawnSet(mod, run.seed, run.moduleIndex);
-  if (!spawnSet) return;
-  for (const spawn of spawnSet.spawns) {
-    const template = MOBS[spawn.mobId];
-    if (!template) continue;
-    const level = template.minLevel + tier.enemyLevelBonus;
-    const mob = createMob(
-      ctx.nextId++,
-      template,
-      level,
-      ctx.groundPos(run.origin.x + spawn.x, run.origin.z + zBase + spawn.z),
-    );
-    mob.facing = Math.PI;
-    mob.prevFacing = mob.facing;
-    ctx.addEntity(mob);
-    run.mobIds.push(mob.id);
+  const zBase = delveModuleZOffset(run, moduleIndex);
+  const spawnSet = pickDelveSpawnSet(mod, run.seed, moduleIndex);
+  if (spawnSet) {
+    for (const spawn of spawnSet.spawns) {
+      const template = MOBS[spawn.mobId];
+      if (!template) continue;
+      const level = template.minLevel + tier.enemyLevelBonus;
+      const mob = createMob(
+        ctx.nextId++,
+        template,
+        level,
+        ctx.groundPos(run.origin.x + spawn.x, run.origin.z + zBase + spawn.z),
+      );
+      mob.facing = Math.PI;
+      mob.prevFacing = mob.facing;
+      ctx.addEntity(mob);
+      run.mobIds.push(mob.id);
+    }
   }
   spawnDelveInteractables(ctx, run, mod, zBase);
-  const isFinale = mod.id === delve.finaleModuleId || run.moduleIndex >= run.modules.length - 1;
+  const isFinale = mod.id === delve.finaleModuleId || moduleIndex >= run.modules.length - 1;
 
   // ── The Butcher's random ambush (Durance of Hate) ──────────────────────────
   // On any non-finale room, a chance he bursts out mid-crawl — "Fresh meat!".
-  // Rolls at most once per run; the finale spawn set spawns him guaranteed if he
-  // never randomly appeared. Deterministic off the run seed + room index.
+  // Rolls at most once per run; the finale room spawns him guaranteed if he never
+  // randomly appeared. Deterministic off the run seed + room index. On the
+  // connected floor this fires per-room at spawn time so he can be lurking deep.
   if (run.delveId === 'durance_of_hate' && !isFinale && !run.butcherAmbushed) {
-    // ~12% per room after the first, so most full crawls see him early; some
-    // don't and get the guaranteed finale showdown instead. Deterministic off
-    // the run seed + room index (same Rng sub-stream idiom as bountiful).
-    const roll = new Rng((run.seed ^ (run.moduleIndex * 977 + 0xb17c)) >>> 0).chance(0.12);
-    if (run.moduleIndex >= 1 && roll) {
+    const roll = new Rng((run.seed ^ (moduleIndex * 977 + 0xb17c)) >>> 0).chance(0.12);
+    if (moduleIndex >= 1 && roll) {
       const butcher = MOBS['durance_the_butcher'];
       if (butcher) {
         const bl = butcher.minLevel + tier.enemyLevelBonus;
@@ -481,7 +514,70 @@ export function spawnDelveModule(ctx: SimContext, run: DelveRun): void {
     }
   }
 
-  if (!isFinale) spawnDelveModuleExit(ctx, run, mod, zBase);
+  // Sequential crawl seals each non-finale room with a passage; the connected
+  // floor has no gates (you just walk the corridors), so skip the exit portal.
+  if (!isFinale && !run.openFloor) spawnDelveModuleExit(ctx, run, mod, zBase);
+}
+
+// Clear the current spawn/object state so a module (or the whole floor) can be
+// (re)spawned. Shared reset for both paths.
+function clearDelveSpawns(ctx: SimContext, run: DelveRun): void {
+  for (const id of run.mobIds) {
+    if (!ctx.entities.has(id)) continue;
+    for (const meta of ctx.players.values()) {
+      const e = ctx.entities.get(meta.entityId);
+      if (e?.targetId === id) e.targetId = null;
+      if (e?.comboTargetId === id) {
+        e.comboTargetId = null;
+        e.comboPoints = 0;
+      }
+    }
+    ctx.dropEntity(id);
+  }
+  run.mobIds = [];
+  for (const id of run.objectIds) {
+    if (ctx.entities.has(id)) ctx.dropEntity(id);
+  }
+  run.objectIds = [];
+  run.objectState = {};
+  run.raiseDeadChannel = null;
+  run.exitPortalOpen = false;
+  run.rewardChestId = null;
+  run.surfaceExitId = null;
+}
+
+export function spawnDelveModule(ctx: SimContext, run: DelveRun): void {
+  clearDelveSpawns(ctx, run);
+  const delve = DELVES[run.delveId];
+  if (!delve) return;
+
+  // ── Connected floor (Durance of Hate): spawn EVERY room at once ────────────
+  // All modules' mob packs + clutter go live simultaneously at their stacked
+  // world-z bands, so the player roams the whole descent freely and can never
+  // sneak past a pack. Visited in ascending module order → deterministic
+  // contiguous ctx.nextId++ block, identical on all three hosts.
+  if (run.openFloor) {
+    for (let mi = 0; mi < run.modules.length; mi++) {
+      spawnOneDelveModule(ctx, run, delve, mi);
+    }
+    const firstMod = DELVE_MODULES[run.modules[0]];
+    if (firstMod) emitDelveModuleEnter(ctx, run, firstMod);
+    if (run.companion) {
+      const companion = ctx.entities.get(run.companion.entityId);
+      if (companion) {
+        const entry = delveModuleEntry(ctx, run);
+        companion.pos = ctx.groundPos(entry.x + 1.5, entry.z);
+        companion.prevPos = { ...companion.pos };
+        ctx.rebucket(companion);
+      }
+    }
+    return;
+  }
+
+  // ── Sequential crawl (all other delves): spawn only the active room ────────
+  const mod = DELVE_MODULES[run.modules[run.moduleIndex]];
+  if (!mod) return;
+  spawnOneDelveModule(ctx, run, delve, run.moduleIndex);
   emitDelveModuleEnter(ctx, run, mod);
   if (run.companion) {
     const companion = ctx.entities.get(run.companion.entityId);
@@ -607,10 +703,16 @@ export function onDelveBossDefeated(ctx: SimContext, run: DelveRun): void {
   // Guard against double-spawn (e.g. if called twice due to a race)
   if (run.rewardChestId !== null) return;
   const delve = DELVES[run.delveId];
-  const moduleId = run.modules[run.moduleIndex] as DelveModuleId;
+  // Connected floor: the finale room is the LAST module (moduleIndex stays 0 and
+  // never advances), so target its band directly. Sequential crawl: the boss only
+  // dies in the currently-active finale room.
+  const finaleIndex = run.openFloor
+    ? run.modules.length - 1
+    : run.moduleIndex;
+  const moduleId = run.modules[finaleIndex] as DelveModuleId;
   if (moduleId !== delve.finaleModuleId) return;
   const layout = DELVE_MODULE_LAYOUTS[moduleId];
-  const zBase = delveModuleZOffset(run);
+  const zBase = delveModuleZOffset(run, finaleIndex);
   const dais = layout?.dais ?? { x: 0, z: 52 };
   // Centre aisle, toward the entrance (south) edge of the dais and facing the
   // approaching player, clear of the north surface-exit stairs at dais.z+6.
@@ -716,9 +818,11 @@ export function grantDelveRewards(ctx: SimContext, run: DelveRun): void {
 
 export function openDelveSurfaceExit(ctx: SimContext, run: DelveRun): void {
   if (run.surfaceExitId !== null) return;
-  const moduleId = run.modules[run.moduleIndex] as DelveModuleId;
+  // Connected floor: stairs open at the finale (last) room's dais; moduleIndex is 0.
+  const exitIndex = run.openFloor ? run.modules.length - 1 : run.moduleIndex;
+  const moduleId = run.modules[exitIndex] as DelveModuleId;
   const layout = DELVE_MODULE_LAYOUTS[moduleId];
-  const zBase = delveModuleZOffset(run);
+  const zBase = delveModuleZOffset(run, exitIndex);
   const dais = layout?.dais ?? { x: 0, z: 52 };
   const exitLocalZ = Math.min(layout.zMax - 2, dais.z + 6);
   const exitPos = ctx.groundPos(run.origin.x + dais.x, run.origin.z + zBase + exitLocalZ);
@@ -818,7 +922,9 @@ export function createDelveObject(ctx: SimContext, run: DelveRun, kind: string, 
 
 export function tickDelveRun(ctx: SimContext, run: DelveRun): void {
   tickDelvePressurePlates(ctx, run);
-  tickDelveModuleExit(ctx, run);
+  // Connected floor has no per-room exit portals (you roam freely); the sequential
+  // crawl advances room-to-room through the sealed passage.
+  if (!run.openFloor) tickDelveModuleExit(ctx, run);
   tickDelveRaiseDeadChannel(ctx, run);
   tickDelveBadAir(ctx, run);
   tickDelveRestlessGraves(ctx, run);
@@ -1407,6 +1513,7 @@ export function delveRunWire(ctx: SimContext, pid: number): object | null {
     completed: run.completed,
     exitPortalOpen: run.exitPortalOpen,
     bountiful: run.bountiful,
+    openFloor: run.openFloor ?? false,
   };
 }
 

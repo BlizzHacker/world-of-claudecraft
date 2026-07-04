@@ -2363,6 +2363,7 @@ export const es: EnTranslations = {
       "title": "Expedición",
       "objective": "Objetivo",
       "module": "Módulo {current} de {total}",
+      "descend": "Descend the Durance",
       "affix": "Modificadores",
       "complete": "Completado",
       "marks": "Marcas de Expedición: {count}",

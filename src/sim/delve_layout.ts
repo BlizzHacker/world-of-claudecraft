@@ -154,29 +154,43 @@ export const RELIQUARY_FINALE_LAYOUT: DungeonLayout = {
 // The Durance is a LONG, sprawling infernal descent — each room is a cavernous
 // hall, far bigger than a reliquary module. Durance-specific dimensions (wider
 // and deeper) so the reliquary layouts above keep their exact size.
-const D_ZMIN = -24; // deeper porch
-const D_ZMAX = 176; // ~200-unit rooms (vs 110)
-const D_SIDE_Z = 76; // side-slab centre = midpoint of the extended run
-const D_SIDE_HD = 100; // half-depth covers the full 200u room
-const D_WALL_X = 42; // much wider halls (vs 25)
+// Connected-floor rooms: TIGHTER than the old 200u halls so the 20-yd mob aggro
+// covers the whole room and dense packs can't be skirted. ~110u deep, ~52u wide.
+// Every room links to its neighbours through a central doorway (set per-room via
+// `doorway`), and the 16u inter-module gap becomes a walkable corridor.
+const D_ZMIN = -8; // shallow porch (corridor enters here)
+const D_ZMAX = 104; // ~112-unit rooms (was 200)
+const D_SIDE_Z = 48; // side-slab centre = midpoint of the room run
+const D_SIDE_HD = 60; // half-depth covers the full room + a little overhang
+const D_WALL_X = 26; // packed halls (was 42) — aggro reaches wall-to-wall
 const D_DOOR_Z = D_ZMIN + 2;
-const D_DAIS = { x: 0, z: 160, r: 18 }; // big boss dais deep at the back
+const D_DAIS = { x: 0, z: 92, r: 16 }; // boss dais deep at the back of the finale
+// Doorway presets: first room opens only north; middle rooms both ends; finale only south.
+const D_DOOR_FIRST = { back: true } as const;
+const D_DOOR_MID = { front: true, back: true } as const;
+const D_DOOR_LAST = { front: true } as const;
 
-/** Outer Sanctum: broad pillared entry hall, twin tomb rows flank the aisle. */
+// Tight-room feature bands: props live in z 8..96 (inside the 112u room), x within
+// the packed |x|<26 walls. Every pool room links both ends; the finale opens south
+// only (Butcher's dead-end sanctum). doorZ marks the entry archway for the renderer.
+
+/** Outer Sanctum: pillared entry hall, twin tomb rows flank the aisle. */
 export const DURANCE_OUTER_SANCTUM_LAYOUT: DungeonLayout = {
   zMin: D_ZMIN,
   zMax: D_ZMAX,
   sideWallZ: D_SIDE_Z,
   sideWallHd: D_SIDE_HD,
   wallX: D_WALL_X,
-  pillars: grid(20, 140, 30, [-28, -10, 10, 28]),
-  tombs: grid(28, 150, 30, [-36, 36]),
+  doorZ: D_DOOR_Z,
+  doorway: D_DOOR_MID,
+  pillars: grid(16, 88, 18, [-16, 16]),
+  tombs: grid(20, 90, 22, [-21, 21]),
   stubs: [],
   dais: D_DAIS,
   clutter: AISLE_CLUTTER,
 };
 
-/** Blood Gallery: deep alcove stubs guarding the Behemoth's open centre. */
+/** Blood Gallery: alcove stubs guarding the Behemoth's open centre. */
 export const DURANCE_BLOOD_GALLERY_LAYOUT: DungeonLayout = {
   zMin: D_ZMIN,
   zMax: D_ZMAX,
@@ -184,19 +198,20 @@ export const DURANCE_BLOOD_GALLERY_LAYOUT: DungeonLayout = {
   sideWallHd: D_SIDE_HD,
   wallX: D_WALL_X,
   doorZ: D_DOOR_Z,
-  pillars: grid(20, 140, 30, [-26, 26]),
+  doorway: D_DOOR_MID,
+  pillars: grid(18, 86, 24, [-15, 15]),
   tombs: [],
   stubs: [
-    { x: -28, z: 40, hw: 14, hd: 8 },
-    { x: 28, z: 40, hw: 14, hd: 8 },
-    { x: -28, z: 100, hw: 14, hd: 8 },
-    { x: 28, z: 100, hw: 14, hd: 8 },
+    { x: -18, z: 30, hw: 8, hd: 6 },
+    { x: 18, z: 30, hw: 8, hd: 6 },
+    { x: -18, z: 72, hw: 8, hd: 6 },
+    { x: 18, z: 72, hw: 8, hd: 6 },
   ],
   dais: D_DAIS,
   clutter: BELL_NICHE_CLUTTER,
 };
 
-/** Hollow Descent: broad colonnade rows, defaced tomb rows, the long stair. */
+/** Hollow Descent: colonnade rows, defaced tomb rows. */
 export const DURANCE_HOLLOW_DESCENT_LAYOUT: DungeonLayout = {
   zMin: D_ZMIN,
   zMax: D_ZMAX,
@@ -204,8 +219,9 @@ export const DURANCE_HOLLOW_DESCENT_LAYOUT: DungeonLayout = {
   sideWallHd: D_SIDE_HD,
   wallX: D_WALL_X,
   doorZ: D_DOOR_Z,
-  pillars: grid(20, 140, 26, [-28, -10, 10, 28]),
-  tombs: grid(30, 145, 30, [-36, 36]),
+  doorway: D_DOOR_MID,
+  pillars: grid(16, 88, 16, [-16, 16]),
+  tombs: grid(20, 88, 22, [-21, 21]),
   stubs: [],
   dais: D_DAIS,
   clutter: AISLE_CLUTTER,
@@ -219,20 +235,21 @@ export const DURANCE_BURNING_CHASM_LAYOUT: DungeonLayout = {
   sideWallHd: D_SIDE_HD,
   wallX: D_WALL_X,
   doorZ: D_DOOR_Z,
+  doorway: D_DOOR_MID,
   pillars: [
-    { x: -30, z: 40 }, { x: 30, z: 44 }, { x: -18, z: 90 }, { x: 20, z: 96 },
-    { x: -32, z: 130 }, { x: 32, z: 128 },
+    { x: -18, z: 26 }, { x: 18, z: 30 }, { x: -12, z: 58 }, { x: 14, z: 62 },
+    { x: -19, z: 84 }, { x: 19, z: 82 },
   ],
   tombs: [],
   stubs: [
-    { x: -34, z: 70, hw: 8, hd: 12 },
-    { x: 34, z: 110, hw: 8, hd: 12 },
+    { x: -20, z: 46, hw: 5, hd: 8 },
+    { x: 20, z: 70, hw: 5, hd: 8 },
   ],
   dais: D_DAIS,
   clutter: FINALE_CLUTTER,
 };
 
-/** Pyre Hall: twin colonnades framing a central processional to the deep stair. */
+/** Pyre Hall: twin colonnades framing a central processional. */
 export const DURANCE_PYRE_HALL_LAYOUT: DungeonLayout = {
   zMin: D_ZMIN,
   zMax: D_ZMAX,
@@ -240,15 +257,16 @@ export const DURANCE_PYRE_HALL_LAYOUT: DungeonLayout = {
   sideWallHd: D_SIDE_HD,
   wallX: D_WALL_X,
   doorZ: D_DOOR_Z,
-  pillars: grid(24, 148, 20, [-32, 32]),
-  tombs: grid(40, 130, 45, [-16, 16]),
+  doorway: D_DOOR_MID,
+  pillars: grid(18, 88, 14, [-20, 20]),
+  tombs: grid(26, 82, 28, [-10, 10]),
   stubs: [],
   dais: D_DAIS,
   clutter: AISLE_CLUTTER,
 };
 
-/** The Butcher's Sanctum: a huge boss arena. Clutter south, wide r=18 dais deep
- *  at the back for the Butcher's big cleave. */
+/** The Butcher's Sanctum: the boss arena. Opens south only; wide dais deep at the
+ *  back for the Butcher's big cleave. */
 export const DURANCE_FINALE_LAYOUT: DungeonLayout = {
   zMin: D_ZMIN,
   zMax: D_ZMAX,
@@ -256,10 +274,11 @@ export const DURANCE_FINALE_LAYOUT: DungeonLayout = {
   sideWallHd: D_SIDE_HD,
   wallX: D_WALL_X,
   doorZ: D_DOOR_Z,
+  doorway: D_DOOR_LAST,
   pillars: [
-    { x: -30, z: 20 }, { x: 30, z: 20 }, { x: -30, z: 50 }, { x: 30, z: 50 },
+    { x: -18, z: 16 }, { x: 18, z: 16 }, { x: -18, z: 40 }, { x: 18, z: 40 },
   ],
-  tombs: grid(24, 56, 16, [-36, 36]),
+  tombs: grid(18, 44, 13, [-21, 21]),
   stubs: [],
   dais: D_DAIS,
   clutter: FINALE_CLUTTER,

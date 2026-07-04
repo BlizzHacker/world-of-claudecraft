@@ -2363,6 +2363,7 @@ export const pl_PL: EnTranslations = {
       "title": "Wyprawa",
       "objective": "Cel",
       "module": "Moduł {current} z {total}",
+      "descend": "Descend the Durance",
       "affix": "Afiksy",
       "complete": "Ukończono",
       "marks": "Znaki Wypraw: {count}",

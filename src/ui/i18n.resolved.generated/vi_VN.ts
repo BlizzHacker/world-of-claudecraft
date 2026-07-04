@@ -2363,6 +2363,7 @@ export const vi_VN: EnTranslations = {
       "title": "Hang Sâu",
       "objective": "Mục Tiêu",
       "module": "Khu {current} trên {total}",
+      "descend": "Descend the Durance",
       "affix": "Đặc Tính",
       "complete": "Hoàn Thành",
       "marks": "Huy Hiệu Hang Sâu: {count}",

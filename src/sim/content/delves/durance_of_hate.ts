@@ -15,20 +15,22 @@ import type { DelveDef, DelveModuleDef, NpcDef } from '../../types';
 // Rooms are big (~200yd) now, so packs are DENSE and spread across the hall —
 // a real dungeon-crawler mob count. x ranges within the ±36 wide halls; z spans
 // the room depth so you fight the whole way through, not one clump.
+// TIGHT connected-floor rooms (z 8..92, walls at |x|=26). Packs are DENSE and
+// spread across the whole ~112u room so the 20-yd mob aggro reaches wall-to-wall —
+// you cannot skirt them. ~7-8 mobs per room; with every room live at once that is
+// a floor of ~200+ demons between the well and The Butcher.
 const OUTER_SANCTUM_SPAWNS = {
   id: 'durance_outer_trash',
   weight: 1,
   spawns: [
-    { mobId: 'durance_hateful_husk', x: -14, z: 24 },
-    { mobId: 'durance_hateful_husk', x: 12, z: 26 },
-    { mobId: 'durance_hateful_husk', x: 0, z: 34 },
-    { mobId: 'durance_sigilbound_acolyte', x: -20, z: 58 },
-    { mobId: 'durance_sigilbound_acolyte', x: 20, z: 60 },
-    { mobId: 'durance_hateful_husk', x: -8, z: 92 },
-    { mobId: 'durance_hateful_husk', x: 8, z: 96 },
-    { mobId: 'durance_hateful_husk', x: -18, z: 120 },
-    { mobId: 'durance_sigilbound_acolyte', x: 0, z: 128 },
-    { mobId: 'durance_hateful_husk', x: 16, z: 132 },
+    { mobId: 'durance_hateful_husk', x: -12, z: 18 },
+    { mobId: 'durance_hateful_husk', x: 12, z: 20 },
+    { mobId: 'durance_hateful_husk', x: 0, z: 30 },
+    { mobId: 'durance_sigilbound_acolyte', x: -16, z: 50 },
+    { mobId: 'durance_sigilbound_acolyte', x: 16, z: 52 },
+    { mobId: 'durance_hateful_husk', x: -10, z: 74 },
+    { mobId: 'durance_hateful_husk', x: 10, z: 78 },
+    { mobId: 'durance_hateful_husk', x: 0, z: 88 },
   ],
 };
 
@@ -36,15 +38,13 @@ const BLOOD_GALLERY_SPAWNS = {
   id: 'durance_gallery_trash',
   weight: 1,
   spawns: [
-    { mobId: 'durance_sigilbound_acolyte', x: -22, z: 26 },
-    { mobId: 'durance_hateful_husk', x: 22, z: 28 },
-    { mobId: 'durance_hateful_husk', x: -10, z: 40 },
-    { mobId: 'durance_hateful_husk', x: 10, z: 44 },
-    { mobId: 'durance_blood_behemoth', x: -18, z: 78 },
-    { mobId: 'durance_blood_behemoth', x: 18, z: 82 },
-    { mobId: 'durance_hateful_husk', x: 0, z: 100 },
-    { mobId: 'durance_sigilbound_acolyte', x: -14, z: 128 },
-    { mobId: 'durance_sigilbound_acolyte', x: 14, z: 132 },
+    { mobId: 'durance_sigilbound_acolyte', x: -15, z: 20 },
+    { mobId: 'durance_hateful_husk', x: 15, z: 22 },
+    { mobId: 'durance_hateful_husk', x: -8, z: 34 },
+    { mobId: 'durance_hateful_husk', x: 8, z: 38 },
+    { mobId: 'durance_blood_behemoth', x: 0, z: 58 },
+    { mobId: 'durance_hateful_husk', x: -14, z: 80 },
+    { mobId: 'durance_sigilbound_acolyte', x: 14, z: 84 },
   ],
 };
 
@@ -52,42 +52,36 @@ const HOLLOW_DESCENT_SPAWNS = {
   id: 'durance_descent_trash',
   weight: 1,
   spawns: [
-    { mobId: 'durance_hateful_husk', x: -16, z: 24 },
-    { mobId: 'durance_hateful_husk', x: 16, z: 26 },
-    { mobId: 'durance_sigilbound_acolyte', x: 0, z: 40 },
-    { mobId: 'durance_hateful_husk', x: -22, z: 62 },
-    { mobId: 'durance_hateful_husk', x: 22, z: 66 },
-    { mobId: 'durance_blood_behemoth', x: 0, z: 84 },
-    { mobId: 'durance_sigilbound_acolyte', x: -18, z: 110 },
-    { mobId: 'durance_sigilbound_acolyte', x: 18, z: 114 },
-    { mobId: 'durance_hateful_husk', x: -8, z: 134 },
-    { mobId: 'durance_hateful_husk', x: 8, z: 138 },
+    { mobId: 'durance_hateful_husk', x: -14, z: 18 },
+    { mobId: 'durance_hateful_husk', x: 14, z: 20 },
+    { mobId: 'durance_sigilbound_acolyte', x: 0, z: 32 },
+    { mobId: 'durance_hateful_husk', x: -16, z: 52 },
+    { mobId: 'durance_hateful_husk', x: 16, z: 56 },
+    { mobId: 'durance_blood_behemoth', x: 0, z: 66 },
+    { mobId: 'durance_sigilbound_acolyte', x: -12, z: 84 },
+    { mobId: 'durance_sigilbound_acolyte', x: 12, z: 88 },
   ],
 };
 
-// Finale: The Butcher strides onto the dais deep at the back (dais z=160,
-// r=18 → spawn just south at z=148).
+// Finale: The Butcher strides onto the dais deep at the back (dais z=92, r=16 →
+// spawn just south at z=80, well inside the tight finale room).
 const BUTCHER_SPAWNS = {
   id: 'boss',
   weight: 1,
-  spawns: [{ mobId: 'durance_the_butcher', x: 0, z: 148 }],
+  spawns: [{ mobId: 'durance_the_butcher', x: 0, z: 80 }],
 };
 
-// Extra deep-descent packs — the Durance is a long, sprawling descent, so there
-// are many distinct room encounters between the well and The Butcher.
 const CHASM_SPAWNS = {
   id: 'durance_chasm_trash',
   weight: 1,
   spawns: [
-    { mobId: 'durance_blood_behemoth', x: -20, z: 34 },
-    { mobId: 'durance_blood_behemoth', x: 20, z: 38 },
-    { mobId: 'durance_hateful_husk', x: -8, z: 30 },
-    { mobId: 'durance_hateful_husk', x: 8, z: 32 },
-    { mobId: 'durance_hateful_husk', x: 0, z: 70 },
-    { mobId: 'durance_sigilbound_acolyte', x: -24, z: 96 },
-    { mobId: 'durance_sigilbound_acolyte', x: 24, z: 100 },
-    { mobId: 'durance_hateful_husk', x: -12, z: 128 },
-    { mobId: 'durance_hateful_husk', x: 12, z: 132 },
+    { mobId: 'durance_blood_behemoth', x: -14, z: 26 },
+    { mobId: 'durance_blood_behemoth', x: 14, z: 30 },
+    { mobId: 'durance_hateful_husk', x: 0, z: 22 },
+    { mobId: 'durance_hateful_husk', x: -10, z: 54 },
+    { mobId: 'durance_hateful_husk', x: 10, z: 58 },
+    { mobId: 'durance_sigilbound_acolyte', x: -16, z: 82 },
+    { mobId: 'durance_sigilbound_acolyte', x: 16, z: 84 },
   ],
 };
 
@@ -95,15 +89,14 @@ const PYRE_SPAWNS = {
   id: 'durance_pyre_trash',
   weight: 1,
   spawns: [
-    { mobId: 'durance_sigilbound_acolyte', x: -26, z: 26 },
-    { mobId: 'durance_sigilbound_acolyte', x: 26, z: 28 },
-    { mobId: 'durance_hateful_husk', x: -12, z: 44 },
-    { mobId: 'durance_hateful_husk', x: 12, z: 46 },
-    { mobId: 'durance_hateful_husk', x: 0, z: 74 },
-    { mobId: 'durance_blood_behemoth', x: -16, z: 104 },
-    { mobId: 'durance_blood_behemoth', x: 16, z: 108 },
-    { mobId: 'durance_hateful_husk', x: -8, z: 134 },
-    { mobId: 'durance_sigilbound_acolyte', x: 8, z: 138 },
+    { mobId: 'durance_sigilbound_acolyte', x: -18, z: 18 },
+    { mobId: 'durance_sigilbound_acolyte', x: 18, z: 20 },
+    { mobId: 'durance_hateful_husk', x: -10, z: 36 },
+    { mobId: 'durance_hateful_husk', x: 10, z: 40 },
+    { mobId: 'durance_hateful_husk', x: 0, z: 56 },
+    { mobId: 'durance_blood_behemoth', x: -12, z: 76 },
+    { mobId: 'durance_blood_behemoth', x: 12, z: 80 },
+    { mobId: 'durance_hateful_husk', x: 0, z: 90 },
   ],
 };
 
@@ -113,15 +106,15 @@ const PYRE_SPAWNS = {
 // Breakable dungeon clutter along the flanks of every big hall — smash them for
 // copper/scraps, D2-style. 'breakable_barrel'/'breakable_urn' are real delve-
 // object kinds (createDelveObject: 5 HP, lootable).
+// Breakable clutter along the flanks (|x|=22, clear of the |x|<6 doorways at both
+// ends). Smash them D2-style for copper/scraps. 6 per tight room.
 const BARRELS = [
-  { x: -30, z: 20, variants: ['breakable_barrel'] },
-  { x: 30, z: 24, variants: ['breakable_urn'] },
-  { x: -34, z: 62, variants: ['breakable_barrel'] },
-  { x: 34, z: 66, variants: ['breakable_barrel'] },
-  { x: -28, z: 104, variants: ['breakable_urn'] },
-  { x: 28, z: 108, variants: ['breakable_barrel'] },
-  { x: -32, z: 142, variants: ['breakable_barrel'] },
-  { x: 32, z: 146, variants: ['breakable_urn'] },
+  { x: -22, z: 16, variants: ['breakable_barrel'] },
+  { x: 22, z: 20, variants: ['breakable_urn'] },
+  { x: -22, z: 50, variants: ['breakable_barrel'] },
+  { x: 22, z: 54, variants: ['breakable_barrel'] },
+  { x: -22, z: 84, variants: ['breakable_urn'] },
+  { x: 22, z: 88, variants: ['breakable_barrel'] },
 ];
 
 export const DURANCE_OF_HATE_MODULES: Record<string, DelveModuleDef> = {
@@ -194,9 +187,10 @@ export const DURANCE_OF_HATE_DELVE: DelveDef = {
     'durance_burning_chasm',
     'durance_pyre_hall',
   ],
-  // A LONG dungeon crawl: 24–30 big rooms drawn from the pool before the
-  // Butcher's dais — smash barrels and cut through demon packs the whole way down.
-  moduleCount: [24, 30],
+  // A LONG connected-floor crusade: 40–50 tight rooms drawn from the pool before
+  // the Butcher's dais, all live at once and linked by corridors — roam freely and
+  // cut through demon packs the whole way down. (Normal 40 / Infernal 50.)
+  moduleCount: [40, 50],
   finaleModuleId: 'durance_finale',
   bosses: ['durance_the_butcher'],
   objective: 'kill_boss',

@@ -2363,6 +2363,7 @@ export const ja_JP: EnTranslations = {
       "title": "デルヴ",
       "objective": "目標",
       "module": "モジュール {current}/{total}",
+      "descend": "Descend the Durance",
       "affix": "アフィックス",
       "complete": "完了",
       "marks": "デルヴの刻印: {count}",
