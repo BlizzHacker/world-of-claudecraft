@@ -3293,53 +3293,17 @@ async function loadRealmPreviewCatalog(): Promise<Map<string, RealmPreviewManife
   return realmPreviewCatalogPromise;
 }
 
+// The ArcForge asset shelf (a raw list of the realm's 3D asset filenames) was a
+// dev/debug readout that cluttered the player-facing character-select (the ugly
+// "Meshy Ai …" name row under the preview). Keep it permanently hidden so the
+// character preview stays clean and the character list has room to breathe.
+// eslint-disable-next-line @typescript-eslint/require-await
 async function renderCharacterSelectAssetShelf(): Promise<void> {
   const host = $('#charselect-realm-assets') as HTMLElement | null;
-  if (!host) return;
-  host.hidden = true;
-  const catalog = await loadRealmPreviewCatalog();
-  const realmId = realmPreviewIdFromName(api.realm);
-  const manifest = catalog.get(realmId) ?? catalog.get('crypticrealm');
-  const assets = (manifest?.assets ?? [])
-    .filter((a) => a.url && (a.kind === 'character' || a.kind === 'vehicle' || a.animated || a.skinned))
-    .slice(0, REALM_ASSET_PREVIEW_LIMIT);
-  if (!assets.length) {
+  if (host) {
+    host.hidden = true;
     host.textContent = '';
-    return;
   }
-  host.textContent = '';
-  const head = document.createElement('div');
-  head.className = 'cs-forged-assets-head';
-  const title = document.createElement('span');
-  title.textContent = 'ArcForge';
-  const count = document.createElement('span');
-  count.className = 'cs-forged-assets-count';
-  count.textContent = `${manifest?.name ?? realmId} ${assets.length}`;
-  head.append(title, count);
-
-  const list = document.createElement('div');
-  list.className = 'cs-forged-assets-list';
-  for (const asset of assets) {
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.className = 'cs-forged-asset-btn';
-    button.title = asset.name;
-    button.textContent = asset.name;
-    const tag = document.createElement('span');
-    tag.className = 'cs-forged-asset-tag';
-    tag.textContent = asset.animated ? 'anim' : asset.skinned ? 'rig' : asset.kind ?? 'glb';
-    button.appendChild(tag);
-    button.addEventListener('click', () => {
-      list.querySelectorAll('.cs-forged-asset-btn').forEach((el) => el.classList.remove('sel'));
-      button.classList.add('sel');
-      void ensureCharacterPreview('#charselect-panel').then(() => {
-        characterPreview?.setExternalModel(asset.url);
-      });
-    });
-    list.appendChild(button);
-  }
-  host.append(head, list);
-  host.hidden = false;
 }
 
 function labelForMiniClass(button: HTMLElement): HTMLElement {

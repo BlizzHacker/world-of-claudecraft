@@ -847,6 +847,10 @@ export class Hud {
   private pfHpTextEl = $('#pf-hp-text');
   private pfResEl = $('#pf-res');
   private pfResTextEl = $('#pf-res-text');
+  // D2-style HP/MP orb fills (flank the nameplate); height is set live from the same
+  // hp/resource fraction that drives the bars. May be absent on non-orb HUD variants.
+  private pfHpOrbFillEl = $('#pf-hp-orb-fill') as HTMLElement | null;
+  private pfMpOrbFillEl = $('#pf-mp-orb-fill') as HTMLElement | null;
   private pfResourceEl = $('#pf-resource');
   private pfAbsorbEl = $('#pf-absorb');
   private buffBarEl = $('#buff-bar');
@@ -5296,6 +5300,17 @@ export class Hud {
     );
     this.updateLowHealthVignette(p.hp, p.maxHp);
     this.updateLowResource(p);
+
+    // D2-style orbs: fill height mirrors the hp / resource fraction (globe drains
+    // from the top as you lose hp/mana). Cheap string writes, only when present.
+    if (this.pfHpOrbFillEl) {
+      const hpPct = Math.max(0, Math.min(100, (p.hp / Math.max(1, p.maxHp)) * 100));
+      this.pfHpOrbFillEl.style.height = `${hpPct}%`;
+    }
+    if (this.pfMpOrbFillEl) {
+      const mpPct = Math.max(0, Math.min(100, (p.resource / Math.max(1, p.maxResource)) * 100));
+      this.pfMpOrbFillEl.style.height = `${mpPct}%`;
+    }
 
     // combo points: character-bound (retail-style), so the row of pips rides the
     // PLAYER frame (over the hp bar) and stays lit across target swaps until the

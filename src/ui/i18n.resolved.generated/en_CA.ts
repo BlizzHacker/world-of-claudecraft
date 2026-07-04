@@ -187,8 +187,8 @@ export const en_CA: EnTranslations = {
       "close": "Close daily rewards",
       "loading": "Loading daily rewards...",
       "error": "Could not load daily rewards.",
-      "intro": "Hold enough WOC in your verified wallet to unlock daily rewards. Earn points with one daily spin and rotating tasks, then climb the daily leaderboard for a share of the prize pool.",
-      "disclaimer": "WOC price can move quickly. We recommend holding more than the $20 USD minimum so normal price swings do not lock you out. This is not financial advice.",
+      "intro": "Hold enough $CR in your verified wallet to unlock daily rewards. Earn points with one daily spin and rotating tasks, then climb the daily leaderboard for a share of the prize pool.",
+      "disclaimer": "$CR price can move quickly. We recommend holding more than the $20 USD minimum so normal price swings do not lock you out. This is not financial advice.",
       "prize": "Prize Pool",
       "reset": "Reset",
       "endsIn": "Ends in {time}",
@@ -196,7 +196,7 @@ export const en_CA: EnTranslations = {
       "remainingMinutes": "{minutes}m",
       "remainingHoursMinutes": "{hours}h {minutes}m",
       "score": "Score",
-      "walletValue": "Wallet Value (WOC)",
+      "walletValue": "Wallet Value ($CR)",
       "usd": "{amount} USD",
       "sol": "{amount} SOL",
       "unknown": "Unknown",
@@ -219,16 +219,16 @@ export const en_CA: EnTranslations = {
       "noLeaders": "No points yet.",
       "noHistory": "No payouts yet.",
       "walletConnectTitle": "Verify Wallet",
-      "walletConnectBody": "Verify a Solana wallet with WOC to unlock daily rewards.",
+      "walletConnectBody": "Verify a Solana wallet with $CR to unlock daily rewards.",
       "walletConnectButton": "Verify Wallet",
-      "walletHoldTitle": "Hold WOC",
-      "walletHoldBody": "Hold at least {amount} USD in WOC to unlock daily rewards.",
-      "walletPriceBody": "WOC pricing is unavailable right now. Check back shortly.",
+      "walletHoldTitle": "Hold $CR",
+      "walletHoldBody": "Hold at least {amount} USD in $CR to unlock daily rewards.",
+      "walletPriceBody": "$CR pricing is unavailable right now. Check back shortly.",
       "reason": {
         "eligible": "Rewards unlocked.",
-        "no_wallet": "Connect a wallet with at least $20 USD in WOC.",
-        "under_minimum": "Wallet is below the $20 USD WOC minimum.",
-        "price_unavailable": "WOC price is unavailable, rewards are temporarily locked."
+        "no_wallet": "Connect a wallet with at least $20 USD in $CR.",
+        "under_minimum": "Wallet is below the $20 USD $CR minimum.",
+        "price_unavailable": "$CR price is unavailable, rewards are temporarily locked."
       }
     },
     "theme": {

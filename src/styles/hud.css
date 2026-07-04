@@ -431,6 +431,63 @@
     min-width: 0;
     max-width: 520px;
   }
+  /* ── D2-style health / mana ORBS flanking the nameplate ──────────────────────
+     Red HP orb (left) + blue MP orb (right), globe fill rises from the bottom.
+     They are the first/last flex children of #player-frame, so they sit to the
+     LEFT and RIGHT of the portrait + bars (the nameplate). Driven by hud.ts,
+     which sets each .orb-fill height to the same fraction as the HP/MP bar. */
+  #player-frame .hp-orb,
+  #player-frame .mp-orb {
+    position: relative;
+    flex: 0 0 auto;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow:
+      0 0 0 2px rgba(0, 0, 0, 0.55),
+      0 0 0 4px var(--orb-ring, #3a2a1a),
+      0 0 10px 2px rgba(0, 0, 0, 0.6),
+      inset 0 0 12px 4px rgba(0, 0, 0, 0.55);
+    background: radial-gradient(circle at 50% 35%, #1a0606, #000 80%);
+  }
+  #player-frame .hp-orb {
+    --orb-ring: #5a1414;
+    margin-right: 8px;
+  }
+  #player-frame .mp-orb {
+    --orb-ring: #14285a;
+    margin-left: 8px;
+  }
+  #player-frame .orb-fill {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%; /* set live by hud.ts as a percentage */
+    transition: height 0.18s ease-out;
+  }
+  #player-frame .hp-orb .orb-fill {
+    background: radial-gradient(circle at 50% 30%, #ff5a4a, #c81e1e 55%, #6e0d0d 100%);
+  }
+  #player-frame .mp-orb .orb-fill {
+    background: radial-gradient(circle at 50% 30%, #5aa8ff, #1e5ec8 55%, #0d2e6e 100%);
+  }
+  /* Glassy highlight over the orb so it reads as a sphere, not a flat disc. */
+  #player-frame .orb-gloss {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 38% 26%, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 42%),
+      radial-gradient(circle at 50% 120%, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0) 55%);
+  }
+  /* Hide the old stacked HP/MP bars when orbs are active (orbs replace them as the
+     primary read); keep the name + combo row. Bars stay in the DOM for hud.ts. */
+  #player-frame.has-orbs .uf-bars .bar {
+    display: none;
+  }
   /* The player frame once MOVED (MovableFrame sets pf-detached alongside the
      saved left/top): hud.ts reparents it from the action-bar stack to #ui (a
      transformed #bottom-bar ancestor would hijack the positioning), where it

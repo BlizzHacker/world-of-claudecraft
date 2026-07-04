@@ -304,7 +304,10 @@
     <div id="bottom-bar">
       <div id="actionbar-row">
         <div id="actionbar-stack">
-          <div id="player-frame" class="unitframe" role="group" data-i18n-aria="hudChrome.unitFrame.playerLabel" aria-label="Your Hero">
+          <div id="player-frame" class="unitframe has-orbs" role="group" data-i18n-aria="hudChrome.unitFrame.playerLabel" aria-label="Your Hero">
+            <!-- D2-style health orb (red), left of the nameplate. Mirrors #pf-hp; the
+                 fill height is driven by hud.ts (same value as the HP bar). -->
+            <div class="hp-orb" id="pf-hp-orb" aria-hidden="true"><div class="orb-fill" id="pf-hp-orb-fill"></div><div class="orb-gloss"></div></div>
             <div class="portrait-wrap">
               <div class="portrait"><canvas id="pf-portrait" width="54" height="54"></canvas></div>
               <div class="level-chip" id="pf-level">1</div>
@@ -316,6 +319,8 @@
               <div class="bar hp"><div class="bar-fill" id="pf-hp"></div><div class="bar-absorb" id="pf-absorb"></div><div class="bar-text" id="pf-hp-text"></div></div>
               <div class="bar mana" id="pf-resource"><div class="bar-fill" id="pf-res"></div><div class="bar-text" id="pf-res-text"></div><div class="low-resource-label" id="pf-low-resource"></div></div>
             </div>
+            <!-- D2-style mana orb (blue), right of the nameplate. Mirrors #pf-res. -->
+            <div class="mp-orb" id="pf-mp-orb" aria-hidden="true"><div class="orb-fill" id="pf-mp-orb-fill"></div><div class="orb-gloss"></div></div>
           </div>
           <div id="petbar" class="panel"></div>
           <div id="xpbar"><div class="fill"></div><div class="rested"></div><div class="ticks"></div><div class="label"></div></div>
