@@ -168,7 +168,7 @@ export const RELIQUARY_FINALE_LAYOUT: DungeonLayout = {
 // covers the whole room and dense packs can't be skirted. ~110u deep, ~52u wide.
 // Every room links to its neighbours through a central doorway (set per-room via
 // `doorway`), and the 16u inter-module gap becomes a walkable corridor.
-const D_ZMIN = -8; // shallow porch (corridor enters here)
+const D_ZMIN = -8; // shallow porch (corridor enters here) — shared front so corridors align
 const D_ZMAX = 104; // ~112-unit rooms (was 200)
 const D_SIDE_Z = 48; // side-slab centre = midpoint of the room run
 const D_SIDE_HD = 60; // half-depth covers the full room + a little overhang
@@ -180,18 +180,39 @@ const D_DOOR_FIRST = { back: true } as const;
 const D_DOOR_MID = { front: true, back: true } as const;
 const D_DOOR_LAST = { front: true } as const;
 
+// ── Varied room sizes ────────────────────────────────────────────────────────
+// The connected floor mixes big and small rooms so it doesn't read as one uniform
+// tube. Each room keeps the shared front (zMin) so the north-stacked corridors keep
+// aligning, but varies its DEPTH (zMax) and WIDTH (wallX). The side-wall slab is
+// derived from the depth so it always covers the room. Doorways stay centred at
+// x=0, so wider/narrower rooms still connect. `hd` = half the room depth + overhang.
+function hellmawDims(zMax: number, wallX: number): {
+  zMin: number;
+  zMax: number;
+  sideWallZ: number;
+  sideWallHd: number;
+  wallX: number;
+  doorZ: number;
+} {
+  const depth = zMax - D_ZMIN;
+  return {
+    zMin: D_ZMIN,
+    zMax,
+    sideWallZ: D_ZMIN + depth / 2,
+    sideWallHd: depth / 2 + 8,
+    wallX,
+    doorZ: D_DOOR_Z,
+  };
+}
+
 // Tight-room feature bands: props live in z 8..96 (inside the 112u room), x within
 // the packed |x|<26 walls. Every pool room links both ends; the finale opens south
 // only (Butcher's dead-end sanctum). doorZ marks the entry archway for the renderer.
 
 /** Outer Sanctum: pillared entry hall, twin tomb rows flank the aisle. */
 export const HELLMAW_OUTER_MAW_LAYOUT: DungeonLayout = {
-  zMin: D_ZMIN,
-  zMax: D_ZMAX,
-  sideWallZ: D_SIDE_Z,
-  sideWallHd: D_SIDE_HD,
-  wallX: D_WALL_X,
-  doorZ: D_DOOR_Z,
+  // Standard entry hall.
+  ...hellmawDims(104, 26),
   doorway: D_DOOR_MID,
   pillars: grid(16, 88, 18, [-16, 16]),
   tombs: grid(20, 90, 22, [-21, 21]),
@@ -202,12 +223,7 @@ export const HELLMAW_OUTER_MAW_LAYOUT: DungeonLayout = {
 
 /** Blood Gallery: alcove stubs guarding the Behemoth's open centre. */
 export const HELLMAW_EMBER_GALLERY_LAYOUT: DungeonLayout = {
-  zMin: D_ZMIN,
-  zMax: D_ZMAX,
-  sideWallZ: D_SIDE_Z,
-  sideWallHd: D_SIDE_HD,
-  wallX: D_WALL_X,
-  doorZ: D_DOOR_Z,
+  ...hellmawDims(110, 32),
   doorway: D_DOOR_MID,
   pillars: grid(18, 86, 24, [-15, 15]),
   tombs: [],
@@ -223,12 +239,7 @@ export const HELLMAW_EMBER_GALLERY_LAYOUT: DungeonLayout = {
 
 /** Hollow Descent: colonnade rows, defaced tomb rows. */
 export const HELLMAW_HOLLOW_DESCENT_LAYOUT: DungeonLayout = {
-  zMin: D_ZMIN,
-  zMax: D_ZMAX,
-  sideWallZ: D_SIDE_Z,
-  sideWallHd: D_SIDE_HD,
-  wallX: D_WALL_X,
-  doorZ: D_DOOR_Z,
+  ...hellmawDims(134, 24),
   doorway: D_DOOR_MID,
   pillars: grid(16, 88, 16, [-16, 16]),
   tombs: grid(20, 88, 22, [-21, 21]),
@@ -239,12 +250,7 @@ export const HELLMAW_HOLLOW_DESCENT_LAYOUT: DungeonLayout = {
 
 /** Burning Chasm: an open cavern, a scatter of pillars around a wide centre. */
 export const HELLMAW_BURNING_CHASM_LAYOUT: DungeonLayout = {
-  zMin: D_ZMIN,
-  zMax: D_ZMAX,
-  sideWallZ: D_SIDE_Z,
-  sideWallHd: D_SIDE_HD,
-  wallX: D_WALL_X,
-  doorZ: D_DOOR_Z,
+  ...hellmawDims(148, 36),
   doorway: D_DOOR_MID,
   pillars: [
     { x: -18, z: 26 }, { x: 18, z: 30 }, { x: -12, z: 58 }, { x: 14, z: 62 },
@@ -261,12 +267,7 @@ export const HELLMAW_BURNING_CHASM_LAYOUT: DungeonLayout = {
 
 /** Pyre Hall: twin colonnades framing a central processional. */
 export const HELLMAW_PYRE_HALL_LAYOUT: DungeonLayout = {
-  zMin: D_ZMIN,
-  zMax: D_ZMAX,
-  sideWallZ: D_SIDE_Z,
-  sideWallHd: D_SIDE_HD,
-  wallX: D_WALL_X,
-  doorZ: D_DOOR_Z,
+  ...hellmawDims(150, 20),
   doorway: D_DOOR_MID,
   pillars: grid(18, 88, 14, [-20, 20]),
   tombs: grid(26, 82, 28, [-10, 10]),
@@ -278,12 +279,7 @@ export const HELLMAW_PYRE_HALL_LAYOUT: DungeonLayout = {
 /** The Butcher's Sanctum: the boss arena. Opens south only; wide dais deep at the
  *  back for the Butcher's big cleave. */
 export const HELLMAW_FINALE_LAYOUT: DungeonLayout = {
-  zMin: D_ZMIN,
-  zMax: D_ZMAX,
-  sideWallZ: D_SIDE_Z,
-  sideWallHd: D_SIDE_HD,
-  wallX: D_WALL_X,
-  doorZ: D_DOOR_Z,
+  ...hellmawDims(124, 30),
   doorway: D_DOOR_LAST,
   pillars: [
     { x: -18, z: 16 }, { x: 18, z: 16 }, { x: -18, z: 40 }, { x: 18, z: 40 },

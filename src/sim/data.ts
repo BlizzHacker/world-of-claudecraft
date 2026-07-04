@@ -496,7 +496,7 @@ const DELVE_SLOT_SPACING = 620; // covers 110u×4 rooms + 16u×3 gaps + 40u marg
 // slot z-spacing is independent of every other delve — we can give Durance a wide
 // band without touching the reliquary's tight one. A 50-room floor is
 // ~50*(112+16)=6400u deep; 7000u/slot leaves a comfortable inter-instance margin.
-const DELVE_WIDE_SLOT_SPACING = 7000;
+const DELVE_WIDE_SLOT_SPACING = 9000;
 const WIDE_SLOT_DELVE_IDS = new Set(['hellmaw_well']);
 
 /** Per-delve slot z-spacing: wide for connected-floor delves, tight otherwise. */
