@@ -418,6 +418,43 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     use: { type: 'skinSelect', catalog: 'class' },
     sellValue: 0,
   },
+  // ── Durance of Hate — Baelgor's signature epic drops (Diabl0 easter-egg) ──
+  // One per archetype so any victor has a trophy to chase. Infernal-themed,
+  // epic quality, well above the delve's level band — the reward for finding
+  // and clearing the hidden descent.
+  baelgors_hateforged_cleaver: {
+    id: 'baelgors_hateforged_cleaver',
+    name: "Baelgor's Hateforged Cleaver",
+    kind: 'weapon',
+    slot: 'mainhand',
+    quality: 'epic',
+    weapon: { min: 22, max: 34, speed: 2.7 },
+    stats: { str: 9, sta: 6 },
+    sellValue: 1400,
+    requiredClass: WAR,
+  },
+  sigilbrand_of_the_durance: {
+    id: 'sigilbrand_of_the_durance',
+    name: 'Sigilbrand of the Durance',
+    kind: 'weapon',
+    slot: 'mainhand',
+    quality: 'epic',
+    weapon: { min: 18, max: 30, speed: 2.6 },
+    stats: { int: 10, spi: 5, sta: 4 },
+    sellValue: 1400,
+    requiredClass: MAG,
+  },
+  hollow_fang_of_hate: {
+    id: 'hollow_fang_of_hate',
+    name: 'Hollow Fang of Hate',
+    kind: 'weapon',
+    slot: 'mainhand',
+    quality: 'epic',
+    weapon: { min: 20, max: 28, speed: 1.9 },
+    stats: { agi: 9, sta: 5 },
+    sellValue: 1400,
+    requiredClass: ROG,
+  },
   raw_mirror_trout: {
     id: 'raw_mirror_trout',
     name: 'Raw Mirror Trout',

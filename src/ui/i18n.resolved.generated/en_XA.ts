@@ -4514,6 +4514,15 @@ export const en_XA: EnTranslations = {
       "sigil_of_hate": {
         "name": "[Šíĝíļ óƒ Ĥáţé]"
       },
+      "baelgors_hateforged_cleaver": {
+        "name": "[Ɓáéļĝóŕ'š Ĥáţéƒóŕĝéð Çļéáʋéŕ]"
+      },
+      "sigilbrand_of_the_durance": {
+        "name": "[Šíĝíļƀŕáñð óƒ ţĥé Ðúŕáñçé]"
+      },
+      "hollow_fang_of_hate": {
+        "name": "[Ĥóļļóŵ Ƒáñĝ óƒ Ĥáţé]"
+      },
       "blessed_wax": {
         "name": "[Ɓļéššéð Ţáļļóŵ]"
       },

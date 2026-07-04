@@ -4514,6 +4514,15 @@ export const vi_VN: EnTranslations = {
       "sigil_of_hate": {
         "name": "Sigil of Hate"
       },
+      "baelgors_hateforged_cleaver": {
+        "name": "Baelgor's Hateforged Cleaver"
+      },
+      "sigilbrand_of_the_durance": {
+        "name": "Sigilbrand of the Durance"
+      },
+      "hollow_fang_of_hate": {
+        "name": "Hollow Fang of Hate"
+      },
       "blessed_wax": {
         "name": "Mỡ Nến Ban Phước"
       },

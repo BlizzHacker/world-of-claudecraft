@@ -214,7 +214,14 @@ export const DELVE_MOBS: Record<string, MobTemplate> = {
     stomp: { radius: 9, every: 11, duration: 1.6, min: 18, max: 28, name: 'Wave of Hate' },
     summonAdds: { mobId: 'durance_hateful_husk', count: 3, atHpPct: [0.6, 0.3] },
     enrage: { belowHpPct: 0.2, dmgMult: 1.5, hasteMult: 1.25 },
-    loot: [{ copper: 500, chance: 1 }],
+    loot: [
+      { copper: 800, chance: 1 },
+      // One signature epic per archetype, exclusive roll — every clear has a
+      // real shot at a Durance trophy.
+      { itemId: 'baelgors_hateforged_cleaver', chance: 0.34, rollGroup: 'baelgor_epic' },
+      { itemId: 'sigilbrand_of_the_durance', chance: 0.33, rollGroup: 'baelgor_epic' },
+      { itemId: 'hollow_fang_of_hate', chance: 0.33, rollGroup: 'baelgor_epic' },
+    ],
     scale: 1.8,
     color: 0x9a1f26,
   },
