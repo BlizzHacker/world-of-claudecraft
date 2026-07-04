@@ -12,14 +12,23 @@ import type { DelveDef, DelveModuleDef, NpcDef } from '../../types';
 // ── Enemy spawn sets per module ─────────────────────────────────────────────
 // Blood-warped horrors of the Durance: fast Hateful Husks rush, Sigil-Bound
 // casters brand from range, and the Behemoth anchors the deep hall.
+// Rooms are big (~200yd) now, so packs are DENSE and spread across the hall —
+// a real dungeon-crawler mob count. x ranges within the ±36 wide halls; z spans
+// the room depth so you fight the whole way through, not one clump.
 const OUTER_SANCTUM_SPAWNS = {
   id: 'durance_outer_trash',
   weight: 1,
   spawns: [
-    { mobId: 'durance_hateful_husk', x: -5, z: 26 },
-    { mobId: 'durance_hateful_husk', x: 5, z: 28 },
-    { mobId: 'durance_sigilbound_acolyte', x: -4, z: 54 },
-    { mobId: 'durance_hateful_husk', x: 4, z: 56 },
+    { mobId: 'durance_hateful_husk', x: -14, z: 24 },
+    { mobId: 'durance_hateful_husk', x: 12, z: 26 },
+    { mobId: 'durance_hateful_husk', x: 0, z: 34 },
+    { mobId: 'durance_sigilbound_acolyte', x: -20, z: 58 },
+    { mobId: 'durance_sigilbound_acolyte', x: 20, z: 60 },
+    { mobId: 'durance_hateful_husk', x: -8, z: 92 },
+    { mobId: 'durance_hateful_husk', x: 8, z: 96 },
+    { mobId: 'durance_hateful_husk', x: -18, z: 120 },
+    { mobId: 'durance_sigilbound_acolyte', x: 0, z: 128 },
+    { mobId: 'durance_hateful_husk', x: 16, z: 132 },
   ],
 };
 
@@ -27,9 +36,15 @@ const BLOOD_GALLERY_SPAWNS = {
   id: 'durance_gallery_trash',
   weight: 1,
   spawns: [
-    { mobId: 'durance_sigilbound_acolyte', x: -6, z: 26 },
-    { mobId: 'durance_hateful_husk', x: 6, z: 28 },
-    { mobId: 'durance_blood_behemoth', x: 0, z: 58 },
+    { mobId: 'durance_sigilbound_acolyte', x: -22, z: 26 },
+    { mobId: 'durance_hateful_husk', x: 22, z: 28 },
+    { mobId: 'durance_hateful_husk', x: -10, z: 40 },
+    { mobId: 'durance_hateful_husk', x: 10, z: 44 },
+    { mobId: 'durance_blood_behemoth', x: -18, z: 78 },
+    { mobId: 'durance_blood_behemoth', x: 18, z: 82 },
+    { mobId: 'durance_hateful_husk', x: 0, z: 100 },
+    { mobId: 'durance_sigilbound_acolyte', x: -14, z: 128 },
+    { mobId: 'durance_sigilbound_acolyte', x: 14, z: 132 },
   ],
 };
 
@@ -37,31 +52,42 @@ const HOLLOW_DESCENT_SPAWNS = {
   id: 'durance_descent_trash',
   weight: 1,
   spawns: [
-    { mobId: 'durance_hateful_husk', x: -4, z: 26 },
-    { mobId: 'durance_sigilbound_acolyte', x: 4, z: 28 },
-    { mobId: 'durance_sigilbound_acolyte', x: -5, z: 54 },
-    { mobId: 'durance_hateful_husk', x: 5, z: 56 },
+    { mobId: 'durance_hateful_husk', x: -16, z: 24 },
+    { mobId: 'durance_hateful_husk', x: 16, z: 26 },
+    { mobId: 'durance_sigilbound_acolyte', x: 0, z: 40 },
+    { mobId: 'durance_hateful_husk', x: -22, z: 62 },
+    { mobId: 'durance_hateful_husk', x: 22, z: 66 },
+    { mobId: 'durance_blood_behemoth', x: 0, z: 84 },
+    { mobId: 'durance_sigilbound_acolyte', x: -18, z: 110 },
+    { mobId: 'durance_sigilbound_acolyte', x: 18, z: 114 },
+    { mobId: 'durance_hateful_husk', x: -8, z: 134 },
+    { mobId: 'durance_hateful_husk', x: 8, z: 138 },
   ],
 };
 
-// Finale: The Butcher strides onto the dais as the encounter opens (dais z=80,
-// r=12 → spawn just south at z=72, matching the reliquary finale convention).
+// Finale: The Butcher strides onto the dais deep at the back (dais z=160,
+// r=18 → spawn just south at z=148).
 const BUTCHER_SPAWNS = {
   id: 'boss',
   weight: 1,
-  spawns: [{ mobId: 'durance_the_butcher', x: 0, z: 72 }],
+  spawns: [{ mobId: 'durance_the_butcher', x: 0, z: 148 }],
 };
 
-// Extra deep-descent packs — the Durance is now a long, sprawling descent, so
-// there are more distinct room encounters between the well and The Butcher.
+// Extra deep-descent packs — the Durance is a long, sprawling descent, so there
+// are many distinct room encounters between the well and The Butcher.
 const CHASM_SPAWNS = {
   id: 'durance_chasm_trash',
   weight: 1,
   spawns: [
-    { mobId: 'durance_blood_behemoth', x: -6, z: 30 },
-    { mobId: 'durance_hateful_husk', x: 7, z: 34 },
-    { mobId: 'durance_hateful_husk', x: -7, z: 58 },
-    { mobId: 'durance_sigilbound_acolyte', x: 6, z: 62 },
+    { mobId: 'durance_blood_behemoth', x: -20, z: 34 },
+    { mobId: 'durance_blood_behemoth', x: 20, z: 38 },
+    { mobId: 'durance_hateful_husk', x: -8, z: 30 },
+    { mobId: 'durance_hateful_husk', x: 8, z: 32 },
+    { mobId: 'durance_hateful_husk', x: 0, z: 70 },
+    { mobId: 'durance_sigilbound_acolyte', x: -24, z: 96 },
+    { mobId: 'durance_sigilbound_acolyte', x: 24, z: 100 },
+    { mobId: 'durance_hateful_husk', x: -12, z: 128 },
+    { mobId: 'durance_hateful_husk', x: 12, z: 132 },
   ],
 };
 
@@ -69,16 +95,35 @@ const PYRE_SPAWNS = {
   id: 'durance_pyre_trash',
   weight: 1,
   spawns: [
-    { mobId: 'durance_sigilbound_acolyte', x: -6, z: 28 },
-    { mobId: 'durance_sigilbound_acolyte', x: 6, z: 30 },
-    { mobId: 'durance_hateful_husk', x: 0, z: 56 },
-    { mobId: 'durance_blood_behemoth', x: 0, z: 64 },
+    { mobId: 'durance_sigilbound_acolyte', x: -26, z: 26 },
+    { mobId: 'durance_sigilbound_acolyte', x: 26, z: 28 },
+    { mobId: 'durance_hateful_husk', x: -12, z: 44 },
+    { mobId: 'durance_hateful_husk', x: 12, z: 46 },
+    { mobId: 'durance_hateful_husk', x: 0, z: 74 },
+    { mobId: 'durance_blood_behemoth', x: -16, z: 104 },
+    { mobId: 'durance_blood_behemoth', x: 16, z: 108 },
+    { mobId: 'durance_hateful_husk', x: -8, z: 134 },
+    { mobId: 'durance_sigilbound_acolyte', x: 8, z: 138 },
   ],
 };
 
 // ── Modules — the Durance is a LONG, sprawling descent. Six big distinct room
 // types (each a wide 200-yd hall) feed the finale. Layout ids === keys. Interior
 // 'crypt' reuses the dark stone kit; the delve is dressed infernal at build time.
+// Breakable dungeon clutter along the flanks of every big hall — smash them for
+// copper/scraps, D2-style. 'breakable_barrel'/'breakable_urn' are real delve-
+// object kinds (createDelveObject: 5 HP, lootable).
+const BARRELS = [
+  { x: -30, z: 20, variants: ['breakable_barrel'] },
+  { x: 30, z: 24, variants: ['breakable_urn'] },
+  { x: -34, z: 62, variants: ['breakable_barrel'] },
+  { x: 34, z: 66, variants: ['breakable_barrel'] },
+  { x: -28, z: 104, variants: ['breakable_urn'] },
+  { x: 28, z: 108, variants: ['breakable_barrel'] },
+  { x: -32, z: 142, variants: ['breakable_barrel'] },
+  { x: 32, z: 146, variants: ['breakable_urn'] },
+];
+
 export const DURANCE_OF_HATE_MODULES: Record<string, DelveModuleDef> = {
   durance_outer_sanctum: {
     id: 'durance_outer_sanctum',
@@ -86,7 +131,7 @@ export const DURANCE_OF_HATE_MODULES: Record<string, DelveModuleDef> = {
     layout: 'durance_outer_sanctum',
     length: 200,
     spawnSets: [OUTER_SANCTUM_SPAWNS],
-    interactableSlots: [{ x: -7, z: 40, variants: ['durance_brazier', 'durance_bones'] }],
+    interactableSlots: [...BARRELS],
   },
   durance_blood_gallery: {
     id: 'durance_blood_gallery',
@@ -94,7 +139,7 @@ export const DURANCE_OF_HATE_MODULES: Record<string, DelveModuleDef> = {
     layout: 'durance_blood_gallery',
     length: 200,
     spawnSets: [BLOOD_GALLERY_SPAWNS],
-    interactableSlots: [],
+    interactableSlots: [...BARRELS],
   },
   durance_hollow_descent: {
     id: 'durance_hollow_descent',
@@ -102,7 +147,7 @@ export const DURANCE_OF_HATE_MODULES: Record<string, DelveModuleDef> = {
     layout: 'durance_hollow_descent',
     length: 200,
     spawnSets: [HOLLOW_DESCENT_SPAWNS],
-    interactableSlots: [],
+    interactableSlots: [...BARRELS],
   },
   durance_burning_chasm: {
     id: 'durance_burning_chasm',
@@ -110,7 +155,7 @@ export const DURANCE_OF_HATE_MODULES: Record<string, DelveModuleDef> = {
     layout: 'durance_burning_chasm',
     length: 220,
     spawnSets: [CHASM_SPAWNS],
-    interactableSlots: [{ x: 7, z: 44, variants: ['durance_brazier', 'durance_bones'] }],
+    interactableSlots: [...BARRELS],
   },
   durance_pyre_hall: {
     id: 'durance_pyre_hall',
@@ -118,7 +163,7 @@ export const DURANCE_OF_HATE_MODULES: Record<string, DelveModuleDef> = {
     layout: 'durance_pyre_hall',
     length: 220,
     spawnSets: [PYRE_SPAWNS],
-    interactableSlots: [],
+    interactableSlots: [...BARRELS],
   },
   durance_finale: {
     id: 'durance_finale',
@@ -126,7 +171,7 @@ export const DURANCE_OF_HATE_MODULES: Record<string, DelveModuleDef> = {
     layout: 'durance_finale',
     length: 240,
     spawnSets: [BUTCHER_SPAWNS],
-    interactableSlots: [{ x: 0, z: 88, variants: ['durance_hate_reliquary'] }],
+    interactableSlots: [...BARRELS],
   },
 };
 
@@ -149,8 +194,9 @@ export const DURANCE_OF_HATE_DELVE: DelveDef = {
     'durance_burning_chasm',
     'durance_pyre_hall',
   ],
-  // A long descent: 6–7 big rooms drawn from the pool before the Butcher's dais.
-  moduleCount: [6, 7],
+  // A LONG dungeon crawl: 24–30 big rooms drawn from the pool before the
+  // Butcher's dais — smash barrels and cut through demon packs the whole way down.
+  moduleCount: [24, 30],
   finaleModuleId: 'durance_finale',
   bosses: ['durance_the_butcher'],
   objective: 'kill_boss',

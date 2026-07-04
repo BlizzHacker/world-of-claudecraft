@@ -1055,6 +1055,7 @@ export class Sim {
           badAirTimer: 0,
           companionBarks: [],
           exitPortalOpen: false,
+          butcherAmbushed: false,
           bountiful: false,
           rewardChestId: null,
           surfaceExitId: null,

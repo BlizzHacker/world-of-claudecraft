@@ -447,6 +447,40 @@ export function spawnDelveModule(ctx: SimContext, run: DelveRun): void {
   }
   spawnDelveInteractables(ctx, run, mod, zBase);
   const isFinale = mod.id === delve.finaleModuleId || run.moduleIndex >= run.modules.length - 1;
+
+  // ── The Butcher's random ambush (Durance of Hate) ──────────────────────────
+  // On any non-finale room, a chance he bursts out mid-crawl — "Fresh meat!".
+  // Rolls at most once per run; the finale spawn set spawns him guaranteed if he
+  // never randomly appeared. Deterministic off the run seed + room index.
+  if (run.delveId === 'durance_of_hate' && !isFinale && !run.butcherAmbushed) {
+    // ~12% per room after the first, so most full crawls see him early; some
+    // don't and get the guaranteed finale showdown instead. Deterministic off
+    // the run seed + room index (same Rng sub-stream idiom as bountiful).
+    const roll = new Rng((run.seed ^ (run.moduleIndex * 977 + 0xb17c)) >>> 0).chance(0.12);
+    if (run.moduleIndex >= 1 && roll) {
+      const butcher = MOBS['durance_the_butcher'];
+      if (butcher) {
+        const bl = butcher.minLevel + tier.enemyLevelBonus;
+        const bmob = createMob(
+          ctx.nextId++,
+          butcher,
+          bl,
+          ctx.groundPos(run.origin.x, run.origin.z + zBase + 40),
+        );
+        bmob.facing = Math.PI;
+        bmob.prevFacing = bmob.facing;
+        ctx.addEntity(bmob);
+        run.mobIds.push(bmob.id);
+        run.butcherAmbushed = true;
+        if (run.partyKey) {
+          for (const pid of ctx.partyMembersForKey(run.partyKey)) {
+            ctx.emit({ type: 'log', text: 'AH… FRESH MEAT! The Butcher bursts from the dark!', color: '#f33', pid });
+          }
+        }
+      }
+    }
+  }
+
   if (!isFinale) spawnDelveModuleExit(ctx, run, mod, zBase);
   emitDelveModuleEnter(ctx, run, mod);
   if (run.companion) {
@@ -752,13 +786,22 @@ export function createDelveObject(ctx: SimContext, run: DelveRun, kind: string, 
     reward_chest: 'Reliquary Chest',
     locked_chest: 'Warded Reliquary Chest',
     surface_exit: 'Ascend to the Surface',
+    breakable_barrel: 'Barrel',
+    breakable_urn: 'Infernal Urn',
   };
-  const maxHp = kind === 'destructible_wall' ? 80 : 1;
+  // Breakables smash in a hit or two like D2 dungeon barrels; walls are tougher.
+  const maxHp =
+    kind === 'destructible_wall' ? 80 : kind === 'breakable_barrel' || kind === 'breakable_urn' ? 5 : 1;
   const obj = createGroundObject(ctx.nextId++, '', names[kind] ?? kind, pos);
   obj.templateId = `delve_${kind}`;
   obj.maxHp = maxHp;
   obj.hp = maxHp;
-  obj.lootable = kind === 'cracked_grave' || kind === 'destructible_wall' || kind === 'module_exit';
+  obj.lootable =
+    kind === 'cracked_grave' ||
+    kind === 'destructible_wall' ||
+    kind === 'module_exit' ||
+    kind === 'breakable_barrel' ||
+    kind === 'breakable_urn';
   const startOpen = kind !== 'locked_door' && kind !== 'locked_chest';
   run.objectState[obj.id] = {
     kind,

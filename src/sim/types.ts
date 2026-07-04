@@ -2174,6 +2174,10 @@ export interface DelveRun {
   companionBarks: string[];
   /** True when the current module exit portal is active (trash cleared + plate if any). */
   exitPortalOpen: boolean;
+  /** Durance of Hate: set once The Butcher has burst out and ambushed the party
+   *  (random per-room roll). If still false when the party reaches the final
+   *  room, the finale spawns him for the guaranteed showdown. */
+  butcherAmbushed?: boolean;
   /** §7.6, this run rolled Bountiful (ultra-rare): the reward chest is a purple
    * Coffer that only yields to a Hard-tier + Premium-ante lockpick solve and
    * guarantees a signature rare. Rolled once at run start (Heroic 5% / Normal 2%). */
