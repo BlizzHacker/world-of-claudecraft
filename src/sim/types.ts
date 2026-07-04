@@ -1557,6 +1557,11 @@ export interface Entity {
   /** GM character: invulnerable (dealDamage no-ops). Server-set from the
    *  characters.is_gm column; never user-settable. */
   gm?: boolean;
+  /** Godmode (admin tester): outgoing damage one-shots any target, and the player
+   *  is invulnerable (gm is set alongside). Toggled by the admin-gated /godmode dev
+   *  command so a tester can run to the final bosses without dying. Runtime-only,
+   *  never persisted; re-arm after reconnect. */
+  godmode?: boolean;
   /** True for a mob spawned BY a delve affix (e.g. Restless Graves' Raised
    *  Bonewalker). Affix re-trigger checks exclude these so an affix-spawned mob's
    *  own death can never re-trigger the same affix (would otherwise chain forever). */

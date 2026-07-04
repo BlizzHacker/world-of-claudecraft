@@ -34,13 +34,13 @@ const STORE_KEY = 'cr_fps_mode';
 const RETICLE_ID = 'cr-fps-reticle';
 const FPS_CAM_DIST = 0.55;
 const FPS_CAM_PITCH = 0.04;
-// Diablo camera — tuned to match the DuranceOfHate reference: a tight, close,
-// near-overhead ARPG angle. DoH sits high and zoomed IN, so the pitch is steep
-// (0.95 rad ≈ 54° above horizon) and the distance is pulled well in (9 vs the
-// default 12). Hard-locked every frame (pitch, dist, AND yaw stays where the
-// player faces) so wheel zoom, pitch-drag, pinch, and auto-FPS can't drift it.
-const DIABLO_CAM_DIST = 9;
-const DIABLO_CAM_PITCH = 0.95;
+// Diablo camera — the DuranceOfHate reference angle, zoomed OUT a bit more for the
+// overview the user wants: dist 13 (pulled back from 9) so you see more of the room
+// around you, at the steep near-overhead ARPG pitch (0.98 rad ≈ 56°). Hard-LOCKED
+// every frame (pitch + dist) so wheel zoom, pitch-drag, pinch, and auto-FPS can't
+// drift it — this is a fixed, non-adjustable view.
+const DIABLO_CAM_DIST = 13;
+const DIABLO_CAM_PITCH = 0.98;
 
 type FpsMode = 'on' | 'off' | 'diablo';
 
@@ -229,9 +229,17 @@ export function isDiabloCamActive(): boolean {
  * No-op in any other mode.
  */
 export function enforceDiabloLock(input: Input): void {
-  if (runtime?.mode !== 'diablo') return;
-  input.camDist = DIABLO_CAM_DIST;
-  input.camPitch = DIABLO_CAM_PITCH;
+  // Diablo mode: fully locked (dist + pitch) — a fixed non-adjustable view.
+  if (runtime?.mode === 'diablo') {
+    input.camDist = DIABLO_CAM_DIST;
+    input.camPitch = DIABLO_CAM_PITCH;
+    return;
+  }
+  // FPS mode: LOCK the zoom so the wheel/pinch can't pull the camera out of
+  // first-person (the pitch stays free so the player can still look around).
+  if (runtime?.mode === 'on') {
+    input.camDist = FPS_CAM_DIST;
+  }
 }
 
 /**

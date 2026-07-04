@@ -141,6 +141,30 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
     return null;
   }
 
+  // "/godmode" — admin/GM tester toggle: one-shot every target + invulnerable, so a
+  // GM can run to the final bosses without dying. Gated on the player already being a
+  // GM (set server-side from the account's is_gm at join), so it works in production
+  // for admins WITHOUT enabling the global dev-command flag. Toggles on/off.
+  if (/^\/godmode\s*$/i.test(raw)) {
+    const e = ctx.entities.get(r.meta.entityId);
+    if (!e || !e.gm) {
+      ctx.error(r.meta.entityId, 'Unknown command.');
+      return null;
+    }
+    const on = !e.godmode;
+    e.godmode = on;
+    e.gm = true; // keep invulnerable while godmode is on; GM stays set either way
+    ctx.emit({
+      type: 'log',
+      text: on
+        ? '[godmode] ON — you are invulnerable and one-shot every foe.'
+        : '[godmode] OFF — one-shot disabled (still GM-invulnerable).',
+      color: on ? '#ff5a2e' : '#ffd100',
+      pid: r.meta.entityId,
+    });
+    return null;
+  }
+
   if (ctx.devCommands) {
     // null means "handled, nothing to broadcast": returning it here is what
     // keeps a dev command from falling through to the unknown-command error.

@@ -80,12 +80,20 @@ export function dealDamage(
 ): void {
   if (target.dead) return;
   if (target.gm) return; // GM characters are invulnerable — every damage path funnels here
+  // Godmode tester: any hit from a godmode player one-shots the target. Force a
+  // guaranteed-lethal amount and let the normal damage→death flow below apply it
+  // (so loot/xp/death all fire correctly). Skip self.
+  const godmodeOneShot = !!source?.godmode && source.id !== target.id;
   // A mob that broke leash (or a pet freed to the wild) is in 'evade': it has
   // dropped its hate table and walks home without fighting back, healing to
   // full only on arrival. Classic mechanics make it immune while it retreats,
   // so it can't be chipped down — or killed outright — for a risk-free kill.
   if (target.kind === 'mob' && target.aiState === 'evade') return;
   amount = Math.max(0, amount);
+  // Godmode one-shot: force a lethal amount that overruns maxHp so it beats armor,
+  // mitigation, and cheat-death (hp→1) branches below. The normal death flow then
+  // fires loot/xp/threat teardown as usual.
+  if (godmodeOneShot) amount = (target.maxHp || 1) + target.hp + 1_000_000;
 
   // Defensive Stance, classic: deal 10% less, take 10% less (and +30% threat below)
   if (
