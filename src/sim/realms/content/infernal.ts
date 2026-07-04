@@ -85,4 +85,18 @@ export const INFERNAL_REALM: RealmContent = {
       skillTrees: ['Verdant Path', 'Spore Mastery', 'Ancient Grove'],
     },
   ],
+  // Per-realm world re-skin: a grander, darker Diabl0-style settlement. Bigger
+  // buildings, pushed apart, under a dim red-shifted infernal sky with heavier fog
+  // and a changing-weather cycle. claudecraft has no worldTheme so it stays vanilla.
+  worldTheme: {
+    buildingScale: 1.9,
+    buildingSpread: 2.6,
+    lighting: {
+      ambientHex: '#5a2018',
+      ambientScale: 0.62,
+      skyHex: '#3a0e0a',
+      fogScale: 1.6,
+    },
+    weather: { enabled: true, moods: ['emberfall', 'bloodmoon', 'ashstorm', 'brooding'] },
+  },
 };

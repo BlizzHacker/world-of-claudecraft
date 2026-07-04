@@ -168,4 +168,40 @@ export interface RealmContent {
   /** Optional themed bestiary (acts → zones / monsters / bosses) surfaced in
    *  the Monster Chronicle. Display content only; never drives Sim state. */
   bestiary?: RealmBestiary;
+  /** Per-realm WORLD THEME: how this realm re-skins the shared overworld — town
+   *  building scale/spacing, ambient lighting, sky/weather. Applied by
+   *  themeWorldForRealm (data.ts) on top of BUILTIN_WORLD, so claudecraft (which
+   *  omits this) stays vanilla / true to upstream. Render-only + prop layout; it
+   *  never changes Sim entity spawns or determinism. */
+  worldTheme?: RealmWorldTheme;
+}
+
+/** Per-realm re-skin of the shared overworld. Every field optional; an absent
+ *  field means "leave the built-in world as-is" (so a realm with no worldTheme,
+ *  like claudecraft, is untouched). */
+export interface RealmWorldTheme {
+  /** Multiply every town building's footprint (w/d) by this — a larger, grander
+   *  WoW-style settlement. Collision derives from the same w/d, so it stays solid. */
+  buildingScale?: number;
+  /** Multiply the spread of building positions from the hub centre by this, so a
+   *  bigger settlement doesn't overlap itself. */
+  buildingSpread?: number;
+  /** Ambient/scene lighting tint + intensity for a darker or moodier realm
+   *  (e.g. infernal = dim, red-shifted). Render-only. */
+  lighting?: {
+    /** Hex tint multiplied into the ambient/hemisphere light. */
+    ambientHex?: string;
+    /** 0..1 ambient intensity scale (1 = default; <1 = darker). */
+    ambientScale?: number;
+    /** Hex sky/fog tint for the horizon + fog (e.g. a bruised red sky). */
+    skyHex?: string;
+    /** Fog density scale (1 = default; >1 = thicker, gloomier air). */
+    fogScale?: number;
+  };
+  /** Weather: enable a changing-sky system for this realm. */
+  weather?: {
+    enabled?: boolean;
+    /** Weighted moods the sky cycles through (e.g. ['stormy','ashfall','bloodmoon']). */
+    moods?: string[];
+  };
 }

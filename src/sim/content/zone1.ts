@@ -1124,6 +1124,9 @@ export const ZONE1_ROADS: { x: number; z: number }[][] = [
 // ---------------------------------------------------------------------------
 
 export const ZONE1_PROPS: ZonePropsDef = {
+  // Base (vanilla) town buildings. Per-realm re-skins enlarge/space these via
+  // RealmContent.worldTheme (themeWorldForRealm in data.ts); claudecraft has no
+  // worldTheme so it keeps these exact vanilla sizes/positions.
   buildings: [
     { kind: 'house', x: 10, z: 12, w: 7, d: 6, rot: -0.4 },
     { kind: 'house', x: -10, z: 10, w: 6, d: 5, rot: 0.5 },

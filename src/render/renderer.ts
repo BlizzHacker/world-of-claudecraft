@@ -32,6 +32,7 @@ import {
   WORLD_MIN_Z,
   ZONES,
 } from '../sim/data';
+import { getActiveRealm } from '../sim/realms/registry';
 import type { DelveModuleId } from '../sim/delve_layout';
 import type { BiomeId } from '../sim/types';
 import { ALL_CLASSES, type Entity, type SimEvent } from '../sim/types';
@@ -1146,6 +1147,36 @@ export class Renderer {
     this.scene.add(sun);
     this.scene.add(sun.target);
     this.sun = sun;
+    // ── Per-realm lighting re-skin ──────────────────────────────────────────────
+    // A realm's worldTheme.lighting darkens/tints the scene (infernal = dim, red-
+    // shifted, heavy fog) so the world reads wicked instead of bright/green.
+    // Applied on top of the default lights; realms with no worldTheme (claudecraft)
+    // skip this entirely and stay vanilla.
+    const realmLight = getActiveRealm().worldTheme?.lighting;
+    if (realmLight) {
+      if (realmLight.ambientScale != null) {
+        hemi.intensity *= realmLight.ambientScale;
+        sun.intensity *= Math.max(0.4, realmLight.ambientScale);
+      }
+      if (realmLight.ambientHex) {
+        const tint = new THREE.Color(realmLight.ambientHex);
+        hemi.color.lerp(tint, 0.6);
+        hemi.groundColor.lerp(tint, 0.7);
+        sun.color.lerp(tint, 0.35);
+      }
+      if (realmLight.skyHex) {
+        const sky = new THREE.Color(realmLight.skyHex);
+        (this.scene.fog as THREE.Fog).color.lerp(sky, 0.7);
+        if (this.sky) this.sky.visible = true;
+        // Tint the sky dome material if it exposes a uniform/color; harmless if not.
+        this.scene.background = sky.clone().lerp(new THREE.Color(0x000000), 0.35);
+      }
+      if (realmLight.fogScale != null && realmLight.fogScale !== 1) {
+        const fog = this.scene.fog as THREE.Fog;
+        fog.far = fog.far / realmLight.fogScale;
+        fog.near = fog.near / Math.max(1, realmLight.fogScale * 0.85);
+      }
+    }
     // characters can self-cull only where they cast no sun shadow (low/lean tier)
     this.cullCharacters = !sun.castShadow;
     this.sunDir.copy(SUN_DIR);

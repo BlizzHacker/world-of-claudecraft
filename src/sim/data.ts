@@ -38,6 +38,8 @@ import {
   DROWNED_LITANY_MODULES,
 } from './content/delves';
 import { DUNGEON_DEFS, DUNGEON_MOBS } from './content/dungeons';
+import { getActiveRealm } from './realms/registry';
+import type { RealmWorldTheme } from './realms/types';
 import {
   type GraveyardDef,
   OVERWORLD_GRAVEYARDS,
@@ -317,10 +319,44 @@ export const BUILTIN_WORLD: WorldContent = {
 
 let activeWorld: WorldContent = BUILTIN_WORLD;
 
+// Per-realm world-theme cache: getActiveWorldContent is hit per-frame by render +
+// collision, so the themed world (buildings scaled/spread for the active realm) is
+// computed once per (base world, realm id) pair and reused. Keyed by the base
+// world object identity + realm id.
+let themedWorld: WorldContent | null = null;
+let themedWorldKey = '';
+
+// Apply a realm's worldTheme to the base world: scale/space the town buildings for
+// a grander settlement. Both render (props.ts) and collision (colliders.ts) read
+// through getActiveWorldContent, so the themed buildings stay consistent between
+// what you SEE and what BLOCKS you. Realms with no worldTheme (claudecraft) return
+// the base world untouched — vanilla / true to upstream.
+function themeWorldForRealm(base: WorldContent, theme: RealmWorldTheme | undefined): WorldContent {
+  const scale = theme?.buildingScale ?? 1;
+  const spread = theme?.buildingSpread ?? 1;
+  if (scale === 1 && spread === 1) return base;
+  const buildings = base.props.buildings.map((b) => ({
+    ...b,
+    x: b.x * spread,
+    z: b.z * spread,
+    w: b.w * scale,
+    d: b.d * scale,
+  }));
+  return { ...base, props: { ...base.props, buildings } };
+}
+
 // The world content the terrain function and renderer should sample. Defaults to
-// the built-in 3-zone world; the editor swaps it for a custom map during play-test.
+// the built-in 3-zone world (themed for the active realm); the editor swaps it for
+// a custom map during play-test (no theming applied to custom maps).
 export function getActiveWorldContent(): WorldContent {
-  return activeWorld;
+  // Custom editor world: never themed (it's an authored map).
+  if (activeWorld !== BUILTIN_WORLD) return activeWorld;
+  const realm = getActiveRealm();
+  const key = `builtin:${realm.id}`;
+  if (themedWorld && themedWorldKey === key) return themedWorld;
+  themedWorld = themeWorldForRealm(BUILTIN_WORLD, realm.worldTheme);
+  themedWorldKey = key;
+  return themedWorld;
 }
 
 // Swap in a custom world (editor play-test) or restore the built-in (pass nothing).
@@ -328,6 +364,8 @@ export function getActiveWorldContent(): WorldContent {
 // through getActiveWorldContent. Spawns come from SimConfig.world too (sim.ts ctor).
 export function setActiveWorldContent(world: WorldContent | null): void {
   activeWorld = world ?? BUILTIN_WORLD;
+  themedWorld = null; // invalidate the per-realm theme cache
+  themedWorldKey = '';
 }
 
 // Zone containing a world position (overworld only; clamps to the strip ends).
