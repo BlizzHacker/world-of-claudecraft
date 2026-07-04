@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import type { GLTF } from 'three/addons/loaders/GLTFLoader.js';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { getActiveWorldContent, WORLD_MIN_Z } from '../sim/data';
+import { getActiveRealm } from '../sim/realms/registry';
 import { hash2 } from '../sim/rng';
 import { terrainHeight, waterLevel } from '../sim/world';
 import { loadGltf } from './assets/loader';
@@ -1297,6 +1298,10 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
   const delvePortals: THREE.Mesh[] = [];
   for (const dm of getActiveWorldContent().props.delveMarkers ?? []) {
     if (!loadedProps.has('delveEntrance2')) continue;
+    // The Hellmaw Well is an infernal-realm exclusive: its portal only renders on
+    // the infernal realm (entry is server-gated there too). On every other realm
+    // the town well stays a plain well with no infernal portal beside it.
+    if (dm.delveId === 'hellmaw_well' && getActiveRealm().id !== 'infernal') continue;
     const isDrowned = dm.delveId === 'drowned_litany';
     // The portal mouth faces the hub the players approach from: Reliquary Hill's
     // town is north (+z) of its door, Mirefen Marsh's hub (z~300) is SOUTH (-z)
