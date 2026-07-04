@@ -198,9 +198,10 @@ export const HELLMAW_WELL_DELVE: DelveDef = {
   id: 'hellmaw_well',
   name: 'The Hellmaw Well',
   theme: 'crypt',
-  index: 1,
+  index: 2,
   minLevel: 10,
   suggestedPlayers: 2,
+  maxPlayers: 2,
   doorPos: { x: 0, z: 2 },
   modules: [
     'hellmaw_outer_maw',

@@ -2,10 +2,81 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const da_DK: Partial<Record<TranslationKey, string>> = {
+  'entities.npcs.auctioneer_voss.greeting':
+    'Verdensmarkedet er også åbent her, {className}. Køb fra alle eventyrere i riget, eller læg dine egne varer frem.',
+  'entities.npcs.auctioneer_voss.name': 'Auktionarius Voss',
+  'entities.npcs.auctioneer_voss.title': 'Vogter af Verdensmarkedet',
+  'hudChrome.devBadge.badgeTitle': 'Udvikler: {tier}',
+  'hudChrome.devBadge.contributor': 'Open source-bidragyder',
+  'hudChrome.devBadge.flavors.architect': 'En arkitekt af riget: 30 pull requests flettet ind.',
+  'hudChrome.devBadge.flavors.artificer':
+    'Fem pull requests inde, og verden føjer sig efter din kode.',
+  'hudChrome.devBadge.flavors.runesmith': 'Femten pull requests smedet ind i det kørende spil.',
+  'hudChrome.devBadge.flavors.tinkerer': 'Din første pull request landede i riget.',
+  'hudChrome.devBadge.flavors.worldwright': 'En verdensbygger: 70 pull requests former spillet.',
+  'hudChrome.devBadge.link.benefits':
+    'Tilknyt din GitHub for at optjene et udviklermærke for de pull requests, du har fået flettet ind i open source-repoet.',
+  'hudChrome.devBadge.link.cta': 'Tilknyt GitHub',
+  'hudChrome.devBadge.link.error': 'Kunne ikke tilknytte GitHub. Prøv igen.',
+  'hudChrome.devBadge.link.relink': 'Tilknyt GitHub igen',
+  'hudChrome.devBadge.linkedAs': 'Tilknyttet som {login}',
+  'hudChrome.devBadge.prsLanded': '{count} pull requests flettet ind',
+  'hudChrome.devBadge.tiers.architect': 'Arkitekt',
+  'hudChrome.devBadge.tiers.artificer': 'Kunstsmed',
+  'hudChrome.devBadge.tiers.runesmith': 'Runesmed',
+  'hudChrome.devBadge.tiers.tinkerer': 'Pusler',
+  'hudChrome.devBadge.tiers.worldwright': 'Verdensbygger',
+  'hudChrome.devBadge.title': 'Udvikler',
+  'hudChrome.devBadge.unlink': 'Fjern GitHub-tilknytning',
+  'hudChrome.itemShare.linkHint': 'Shift-klik for at linke denne genstand i chatten.',
+  'hudChrome.itemTooltip.requiresLevel': 'Kræver niveau {level}',
+  'hudChrome.keybinds.discord': 'Discord',
+  'hudChrome.leaderboard.devEmpty': 'Ingen rangerede bidragydere endnu.',
+  'hudChrome.leaderboard.devName': 'Bidragyder',
+  'hudChrome.leaderboard.devTierCol': 'Mærke',
+  'hudChrome.leaderboard.mergedPrs': "Flettede PR'er",
+  'hudChrome.leaderboard.tabDevs': 'Udviklere',
+  'hudChrome.lootSettings.close': 'Luk byttindstillinger',
+  'hudChrome.lootSettings.groupLoot': 'Gruppebytte',
+  'hudChrome.lootSettings.leaderOption': 'Bytteleder: Leder (dig)',
+  'hudChrome.lootSettings.masterOption': 'Bytteleder: {name}',
+  'hudChrome.lootSettings.menuItem': 'Bytteindstillinger',
+  'hudChrome.lootSettings.method': 'Byttemetode',
+  'hudChrome.lootSettings.rollThreshold': 'Terningtærskel',
+  'hudChrome.lootSettings.title': 'Bytteindstillinger',
+  'hudChrome.lootSettings.valueMaster': 'Mesterbytte',
+  'hudChrome.masterLoot.looterChanged': 'Bytteleder er nu {name}.',
+  'hudChrome.masterLoot.rollingFor': 'Slår terning om {item}.',
+  'hudChrome.masterLoot.summaryGroup': 'Bytteindstillinger: Gruppebytte.',
+  'hudChrome.masterLoot.summaryMaster':
+    'Bytteindstillinger: Mesterbytte, bytteleder {name}, tærskel {threshold}.',
+  'hudChrome.masterLoot.thresholdSet': 'Byttetærskel sat til {threshold}.',
+  'hudChrome.options.showDevBadges': 'Vis udviklermærker',
+  'hudChrome.options.groundReticle': 'Jordsigte-retikel',
+  'hudChrome.options.startAttackOnAbility': 'Autoangreb ved brug af evne',
+  'hudChrome.party.promoteLeader': 'Forfrem til leder',
+  'hudChrome.plurals.playersMatching.few':
+    'Hvem: {count} spillere, der matcher "{query}" på {realm}.',
+  'hudChrome.plurals.playersMatching.many':
+    'Hvem: {count} spillere, der matcher "{query}" på {realm}.',
+  'hudChrome.plurals.playersMatching.one':
+    'Hvem: {count} spiller, der matcher "{query}" på {realm}.',
+  'hudChrome.plurals.playersMatching.other':
+    'Hvem: {count} spillere, der matcher "{query}" på {realm}.',
+  'hudChrome.statInfo.desc.spellPower':
+    'Øger skaden fra dine besværgelser og styrken af dine helbredelser. Hvert point Intellekt giver en smule Besværgelseskraft, oven i det, der kommer fra udstyr eller buffs.',
+  'hudChrome.statInfo.names.spellPower': 'Besværgelseskraft',
+  'hudChrome.statInfo.sources.attributes': 'Fra dine attributter: {value}',
+  'hudChrome.statInfo.sources.base': 'Basis: {value}',
+  'hudChrome.statInfo.sources.buff': '{name}: {value}',
+  'hudChrome.statInfo.sources.fromAttribute': 'Fra {stat}: {value}',
+  'hudChrome.statInfo.sources.gear': 'Udstyret grej: {value}',
+  'hudChrome.statInfo.sources.header': 'Sammensat af:',
+  'hudChrome.statInfo.sources.talents': 'Talenter og effekter: {value}',
   'a11y.characterActions': 'Karakterhandlinger',
   'a11y.discordCommunity': 'Deltag i Cryptic Realm Discord-fællesskabet',
   'a11y.donateProject': 'Donér for at støtte Cryptic Realm',
-  'a11y.githubProject': 'Open Cryptic Realm contributions',
+  'a11y.githubProject': 'Åbn Cryptic Realm GitHub-projektet',
   'a11y.goHome': 'Gå til forsiden',
   'a11y.languageSelection': 'Sprogvalg',
   'a11y.mainNavigation': 'Hovednavigation',
@@ -21,6 +92,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'abilityUi.actionBar.slotAria': 'Handlingsplads {slot}: {ability}',
   'abilityUi.cast.demonHeal': 'Dæmonhelbredelse',
   'abilityUi.cast.fishing': 'Fiskeri',
+  'abilityUi.cast.thunzharrStormcall': 'Stormkald',
   'abilityUi.forms.bear': 'Bjørn',
   'abilityUi.forms.cat': 'Ulv',
   'abilityUi.resources.energy': 'Energi',
@@ -331,7 +403,9 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'delveUi.tracker.module': 'Modul {current} af {total}',
   'delveUi.tracker.objective': 'Mål',
   'delveUi.tracker.title': 'Delve',
-  'download.desc': 'Hent den selvstændige launcher for optimeret ydeevne og fuldskærmsspil.',  'entities.abilities.adrenaline_rush.description':
+  'download.desc': 'Hent den selvstændige launcher for optimeret ydeevne og fuldskærmsspil.',
+  'download.title': 'Download Desktop-launcher',
+  'entities.abilities.adrenaline_rush.description':
     'Dit blod koger, og genopretter øjeblikkeligt 60 energi.',
   'entities.abilities.adrenaline_rush.name': 'Adrenalinrus',
   'entities.abilities.aimed_shot.description':
@@ -489,6 +563,21 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.fireball.description':
     'Slynger en flammende kugle, der volder {damage} ildskade plus yderligere skade over tid.',
   'entities.abilities.fireball.name': 'Ildkugle',
+  'entities.abilities.rain_of_fire.name': 'Ildregn',
+  'entities.abilities.rain_of_fire.description':
+    'Nedkalder en ildregn over målområdet og brænder fjender for {damage} Ildskade.',
+  'entities.abilities.volley.name': 'Pileregn',
+  'entities.abilities.volley.description':
+    'Nedkalder en regn af pile over målområdet og påfører {damage} skade på fjender i det.',
+  'entities.abilities.hurricane.name': 'Orkan',
+  'entities.abilities.hurricane.description':
+    'Slipper en orkan løs over målområdet og rammer fjender for {damage} Naturskade.',
+  'entities.abilities.earthquake.name': 'Jordskælv',
+  'entities.abilities.earthquake.description':
+    'Ryster målområdet og rammer fjender for {damage} Naturskade.',
+  'entities.abilities.flamestrike.name': 'Flammeslag',
+  'entities.abilities.flamestrike.description':
+    'Nedkalder en flammeeksplosion på målområdet, der giver {damage} Ildskade til fjender fanget i eksplosionen.',
   'entities.abilities.flame_shock.description':
     'Svider målet med ild for 25 skade plus {damage} over 12 sek.',
   'entities.abilities.flame_shock.name': 'Flammechok',
@@ -969,6 +1058,15 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'entities.items.moggers_shiv.name': 'Moggers Dolk',
   'entities.items.moggers_stomper_boots.name': 'Moggers Trampestøvler',
   'entities.items.monarch_crown_helm.name': 'Monarkens Krone',
+  'entities.items.copper_mining_pick.name': 'Kobberminehakke',
+  'entities.items.iron_mining_pick.name': 'Jernminehakke',
+  'entities.items.mithril_mining_pick.name': 'Mithrilminehakke',
+  'entities.items.handaxe.name': 'Håndøkse',
+  'entities.items.felling_axe.name': 'Fældeøkse',
+  'entities.items.ironbark_axe.name': 'Jernbarksøkse',
+  'entities.items.gathering_sickle.name': 'Høstsegl',
+  'entities.items.bronze_sickle.name': 'Bronzesegl',
+  'entities.items.silverleaf_sickle.name': 'Sølvbladsegl',
   'entities.items.moongate_rubbing.name': 'Værneaftryk',
   'entities.items.moonpale_scale.name': 'Måneblegt Skæl',
   'entities.items.moonscale_saber.name': 'Måneskæl-Sabel',
@@ -1067,6 +1165,14 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'entities.items.steel_orange_armor_plate.name': 'Stålorange',
   'entities.items.storm_core.name': 'Stormkerne',
   'entities.items.stormcallers_crown.name': 'Stormkalderens Krone',
+  'entities.items.crownforged_gauntlets.name': 'Kronesmedede Handsker',
+  'entities.items.nighttalon_grips.name': 'Natteklo-Greb',
+  'entities.items.soulflame_gloves.name': 'Sjæleflamme-Handsker',
+  'entities.items.stormcallers_handguards.name': 'Stormkalderens Håndværn',
+  'entities.items.crownforged_girdle.name': 'Kronesmedet Bælte',
+  'entities.items.nighttalon_waistband.name': 'Natteklo-Livrem',
+  'entities.items.soulflame_cord.name': 'Sjæleflamme-Snor',
+  'entities.items.stormcallers_waistguard.name': 'Stormkalderens Livværn',
   'entities.items.stormcallers_spaulders.name': 'Stormkalderens Skulderplader',
   'entities.items.stormshard_leggings.name': 'Stormskår-Benbeklædning',
   'entities.items.sturdy_belt.name': 'Robust Rejsebælte',
@@ -1108,6 +1214,11 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'entities.items.widowfang_dirk.name': 'Enketands-Dolk',
   'entities.items.windguard_leggings.name': 'Vindvagt-Benbeklædning',
   'entities.items.wolf_fang.name': 'Revnet Ulvetand',
+  'entities.items.linen_pouch.name': 'Lærredspung',
+  'entities.items.travelers_knapsack.name': 'Rejsendes rygsæk',
+  'entities.items.wolfhide_satchel.name': 'Ulveskindstaske',
+  'entities.items.gravewoven_bag.name': 'Gravvævet taske',
+  'entities.items.mistcallers_duffel.name': 'Tågekalderens køjesæk',
   'entities.items.worn_sword.name': 'Slidt Kortsværd',
   'entities.items.woven_robe.name': 'Dalvævet Kjortel',
   'entities.items.wyrmcult_grand_robe.name': 'Ormekultens Storkjortel',
@@ -1137,14 +1248,14 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.deathstalker_voss.name': 'Dødssniger Voss',
   'entities.mobs.deepfen_murloc.name': 'Dybmose-Snapper',
   'entities.mobs.deeprock_kobold.name': 'Dybsten-Tunnelgraver',
-  'entities.mobs.doomguard.name': 'Domsvogter',
+  'entities.mobs.wraithborn.name': 'Domsvogter',
   'entities.mobs.drowned_dead.name': 'Druknede Døde',
   'entities.mobs.drowned_templeguard.name': 'Druknet Tempelvogter',
   'entities.mobs.drowned_thrall.name': 'Druknet Træl',
   'entities.mobs.drowned_votary.name': 'Druknet Tilbeder',
   'entities.mobs.fallen_captain_aldren.name': 'Falden Kaptajn Aldren',
-  'entities.mobs.felguard.name': 'Felvogter',
-  'entities.mobs.felhunter.name': 'Feljæger',
+  'entities.mobs.warfiend.name': 'Felvogter',
+  'entities.mobs.spellhound.name': 'Feljæger',
   'entities.mobs.fen_troll.name': 'Mosekær-Trold',
   'entities.mobs.forest_wolf.name': 'Skovulv',
   'entities.mobs.glimmermere_wader.name': 'Glimmersø-Vader',
@@ -1157,8 +1268,8 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.grix_the_tunnelking.name': 'Grix Tunnelkongen',
   'entities.mobs.grubjaw.name': 'Larvekæft den Frådser',
   'entities.mobs.hollow_acolyte.name': 'Hul Akolyt',
-  'entities.mobs.imp.name': 'Imp',
-  'entities.mobs.infernal.name': 'Infernal',
+  'entities.mobs.emberkin.name': 'Imp',
+  'entities.mobs.pyre_colossus.name': 'Infernal',
   'entities.mobs.ironvein_foreman.name': 'Jernåre-Formand',
   'entities.mobs.ironvein_sapper.name': 'Jernåre-Minør',
   'entities.mobs.knight_commander_olen.name': 'Ridderkommandør Olen',
@@ -1199,7 +1310,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.sister_nhalia.name': 'Søster Nhalia',
   'entities.mobs.sloomtooth_the_drowned.name': 'Sloomtand den Druknede',
   'entities.mobs.stormcrag_elemental.name': 'Stormklippe-Elemental',
-  'entities.mobs.succubus.name': 'Succubus',
+  'entities.mobs.duskborn.name': 'Succubus',
   'entities.mobs.thornpeak_ogre.name': 'Tornetop-Ogre',
   'entities.mobs.tidebound_acolyte.name': 'Tidebunden Akolyt',
   'entities.mobs.tunnel_rat.name': 'Tunnelrotte-Graver',
@@ -1209,7 +1320,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.vision_aldren_warrior.name': 'Syn af Kaptajn Aldren',
   'entities.mobs.vision_deathstalker_voss.name': 'Syn af Kongelig Snigmorder Voss',
   'entities.mobs.vision_malric_mage.name': 'Syn af Ypperstepræst Malric',
-  'entities.mobs.voidwalker.name': 'Tomvandrer',
+  'entities.mobs.gloomshade.name': 'Tomvandrer',
   'entities.mobs.voskar_emberwing.name': 'Voskar Glødevinge',
   'entities.mobs.warlock_imp.name': 'Ilddæmon',
   'entities.mobs.warlock_voidwalker.name': 'Tomdæmon',
@@ -1953,8 +2064,8 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'fiesta.word.wave': 'FORSTÆRKNINGER!',
   'footer.copyright': '2026 Cryptic Realm',
   'footer.discordLabel': 'Bliv medlem af Discord',
-  'footer.githubLabel': 'Contributions',
-  'footer.githubLink': '/contributions.html',
+  'footer.githubLabel': 'Open Source-projekt',
+  'footer.githubLink': 'https://github.com/levy-street/world-of-claudecraft',
   'footer.whitepaper': 'Whitepaper',
   'footer.privacy': 'Privatlivspolitik',
   'footer.terms': 'Servicevilkår',
@@ -2218,7 +2329,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'guide.bestiary.notedLabel': 'Værd at bemærke',
   'guide.bestiary.rare': 'Sjælden',
   'guide.brand': 'Cryptic Realm',
-  'guide.brandShort': 'Cryptic',
+  'guide.brandShort': 'ClaudeCraft',
   'guide.breadcrumb.home': 'Guide',
   'guide.breadcrumb.label': 'Brødkrumme',
   'guide.chooser.clear': 'Ryd',
@@ -2423,12 +2534,12 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'guide.family.humanoid.desc':
     'Banditter, kultister og andre, der valgte det forkerte erhverv. De kæmper med taktik, ikke kun tænder.',
   'guide.family.humanoid.name': 'Humanoider',
-  'guide.family.kobold.desc':
+  'guide.family.burrower.desc':
     'Stearinhovedede gravere, der hærger miner og huler og voldsomt vogter deres malm.',
-  'guide.family.kobold.name': 'Kobolder',
-  'guide.family.murloc.desc':
+  'guide.family.burrower.name': 'Kobolder',
+  'guide.family.mudfin.desc':
     'Amfibiske sumpbeboere, der sværmer i det lave vand i larmende, territoriale flokke.',
-  'guide.family.murloc.name': 'Murlocer',
+  'guide.family.mudfin.name': 'Murlocer',
   'guide.family.ogre.desc':
     'Enorme, langsomme i opfattelsen og farlige. De slår lejr i de høje pas og rammer som et jordskred.',
   'guide.family.ogre.name': 'Ogrer',
@@ -2440,7 +2551,8 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'guide.family.undead.desc':
     'De hvileløse døde, rejst af mørkere hænder. De bliver ikke trætte, og de flygter ikke.',
   'guide.family.undead.name': 'Udøde',
-  'guide.faqPage.a1': 'Yes. The whole game is free to play to the level cap.',
+  'guide.faqPage.a1':
+    'Ja. Hele spillet er gratis at spille til niveaugrænsen, og kildekoden er åben på GitHub.',
   'guide.faqPage.a10':
     'Grænsen er niveau {cap}. Derfra løber du fangehullerne for fem spillere og raidet for ti, jagter bedre udstyr og afprøver dig selv i arenaen.',
   'guide.faqPage.a11':
@@ -2457,7 +2569,8 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
     'Niveau {cap}, nået på tværs af tre forbundne zoner med opgaver, fangehuller og udforskning.',
   'guide.faqPage.a7':
     'Online-figurer gemmes automatisk på serveren. Offline-figurer lever i din browser til hurtige sessioner og afprøvning.',
-  'guide.faqPage.a8': 'Private realms are operated through verified Cryptic Realm channels.',
+  'guide.faqPage.a8':
+    'Ja. Projektet er open source, så du kan køre din egen server. Se GitHub-arkivet.',
   'guide.faqPage.a9':
     'Ja. Dyster mod hvem som helst for sjov, eller træd ind i Aske-Kolosseum for at kæmpe mod andre spillere. PvP er valgfrit, så du tvinges aldrig ind i det.',
   'guide.faqPage.intro': 'De spørgsmål, nye spillere oftest stiller.',
@@ -2472,10 +2585,11 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'guide.faqPage.q7': 'Bliver min figur gemt?',
   'guide.faqPage.q8': 'Kan jeg være vært for min egen kopi?',
   'guide.faqPage.q9': 'Er der PvP?',
-  'guide.footer.blurb': 'A classic-style micro-MMO. Quest, group up, and explore a hand-built world, right in your browser.',
+  'guide.footer.blurb':
+    'En open-source mikro-MMO i klassisk stil. Tag på eventyr, dann grupper og udforsk en håndbygget verden, direkte i din browser.',
   'guide.footer.communityWiki': 'Fællesskabswiki',
   'guide.footer.discord': 'Bliv en del af Discord',
-  'guide.footer.github': 'Contributions',
+  'guide.footer.github': 'Kildekode på GitHub',
   'guide.footer.playNow': 'Spil nu',
   'guide.footer.rights': 'Cryptic Realm',
   'guide.gear.consumablesElixirs':
@@ -2610,13 +2724,14 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'guide.home.classes.sub': 'Ni klassiske arketyper, hver med sin egen følelse og rolle i gruppen.',
   'guide.home.community.body': 'Hop ind nu, eller kom og sig hej. Verden er bedre med selskab.',
   'guide.home.community.discord': 'Bliv medlem af Discord',
-  'guide.home.community.github': 'Contributions',
+  'guide.home.community.github': 'Giv en stjerne på GitHub',
   'guide.home.community.heading': 'Slut dig til realmen',
   'guide.home.community.play': 'Spil nu',
   'guide.home.ctaLearn': 'Sådan spiller du',
   'guide.home.ctaPlay': 'Spil nu',
   'guide.home.eyebrow': 'Klassisk browser-MMO',
-  'guide.home.faq.a1': 'Yes. The whole game is free to the level cap.',
+  'guide.home.faq.a1':
+    'Ja. Hele spillet er gratis til maksniveauet, og det er open source på GitHub.',
   'guide.home.faq.a2':
     'Nej. Spillet er fuldt spilbart uden en. Den valgfrie community-token låser kun op for kosmetisk pynt og påvirker aldrig styrke.',
   'guide.home.faq.a3':
@@ -2646,8 +2761,9 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'guide.home.what.pillarClassesBody':
     'Tank, helbred, eller del skaden ud. Hver klasse spiller, som dens arketype bør, med talenter, der gør den til din.',
   'guide.home.what.pillarClassesTitle': 'Ni klasser, tre roller',
-  'guide.home.what.pillarOpenBody': 'Free to play to the level cap. No pay to win, ever.',
-  'guide.home.what.pillarOpenTitle': 'Free to play',
+  'guide.home.what.pillarOpenBody':
+    'Gratis at spille til maksniveauet, med hele spillet som open source. Ingen pay to win, nogensinde.',
+  'guide.home.what.pillarOpenTitle': 'Gratis og open source',
   'guide.home.what.pillarPlayBody':
     'Ingen download, ingen launcher. Lav en karakter, og du er i verden på sekunder, på computer eller telefon.',
   'guide.home.what.pillarPlayTitle': 'Spil i din browser',
@@ -2761,15 +2877,15 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'guide.notFound.body': 'Den side, du ledte efter, findes ikke eller er måske flyttet.',
   'guide.notFound.home': 'Tilbage til oversigten',
   'guide.notFound.title': 'Vi kunne ikke finde den side',
-  'guide.petHook.doomguard': 'En elite-besværger, der regner tung skygge ned fra det fjerne.',
-  'guide.petHook.felguard':
+  'guide.petHook.wraithborn': 'En elite-besværger, der regner tung skygge ned fra det fjerne.',
+  'guide.petHook.warfiend':
     'En sejlivet nærkampskæmpe, altmuligmanden så snart du kan tilkalde den.',
-  'guide.petHook.felhunter': 'En skyggekriger der jager fjendtlige besværgere.',
-  'guide.petHook.imp': 'En fjernkamps-ildboltdæmon der pikker på fjender fra sikker afstand.',
-  'guide.petHook.infernal':
+  'guide.petHook.spellhound': 'En skyggekriger der jager fjendtlige besværgere.',
+  'guide.petHook.emberkin': 'En fjernkamps-ildboltdæmon der pikker på fjender fra sikker afstand.',
+  'guide.petHook.pyre_colossus':
     'En kæmpemæssig juggernaut med knusende nærkamp, tilkaldt for ren kraft.',
-  'guide.petHook.succubus': 'En hurtig nærkampsdæmon der slår hårdt, men knækker under pres.',
-  'guide.petHook.voidwalker':
+  'guide.petHook.duskborn': 'En hurtig nærkampsdæmon der slår hårdt, men knækker under pres.',
+  'guide.petHook.gloomshade':
     'En robust dæmon der håner og opsuger slag, så du kan besværge i fred.',
   'guide.placeholder.note': 'Denne del af guiden er på vej.',
   'guide.progression.bandLabel': 'Niveau {min} til {max}',
@@ -4285,7 +4401,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'mode.caCopyAria': 'Kopiér kontraktadresse',
   'mode.caLabel': '$CR Kontraktadresse',
   'mode.caNote':
-    'CR er vores fællesskabstoken. Det er ikke nødvendigt for at spille. Tilslut dig Discord for at diskutere CR-nytten og svinghjulet.',
+    'WOC er vores fællesskabstoken. Det er ikke nødvendigt for at spille. Tilslut dig Discord for at diskutere WOC-nytten og svinghjulet.',
   'mode.offlineAria': 'Spil offline: start en øjeblikkelig lokal singleplayer-session',
   'mode.offlineDesc':
     'Øjeblikkelig singleplayer-verden i din browser. Intet gemmes: perfekt til en hurtig dyst eller test.',
@@ -4322,7 +4438,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'news.loading': 'Indlæser de seneste opdateringer…',
   'news.prerelease': 'Forhåndsudgivelse',
   'news.title': 'Nyheder og opdateringer',
-  'news.viewOnGithub': 'Read release notes',
+  'news.viewOnGithub': 'Vis på GitHub',
   'playerCard.actionCopyReferral': 'Kopiér henvisningslink',
   'playerCard.actionDownload': 'Download',
   'playerCard.actionShareNative': 'Del...',
@@ -4770,24 +4886,37 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'hudChrome.masterLoot.assigned': '{looter} tildelte {item} til {target}.',
   'hudChrome.masterLoot.unassigned': '{item} blev ikke tildelt og er frit for alle.',
   'hudChrome.masterLoot.leaderOnly': 'Kun gruppelederen kan aendre lootmetoden.',
+  'entities.itemSets.boundstone_vanguard.name': 'Bundstens-fortrop',
+  'entities.itemSets.boundstone_vanguard.bonus3': 'Øger angrebs- og magihastighed med 15%.',
   'entities.itemSets.crownforged.name': 'Kronesmedet kampudstyr',
   'entities.itemSets.crownforged.bonus2': 'Øger angrebskraft med 40.',
-  'entities.itemSets.crownforged.bonus3': 'Øger styrke med 15 og udholdenhed med 15.',
+  'entities.itemSets.crownforged.bonus3':
+    'Øger styrke med 15, udholdenhed med 15 og angrebs- og magihastighed med 15%.',
   'entities.itemSets.deathlord.name': 'Dødsherrens kampudstyr',
   'entities.itemSets.deathlord.bonus2': 'Øger angrebskraft med 40.',
   'entities.itemSets.deathlord.bonus3': 'Øger styrke med 15 og udholdenhed med 15.',
+  'entities.itemSets.greyjaw_stalker.name': 'Gråkæbe-jægerens udstyr',
+  'entities.itemSets.greyjaw_stalker.bonus3': 'Øger angrebs- og magihastighed med 15%.',
   'entities.itemSets.necromancers.name': 'Nekromantikerens klæder',
-  'entities.itemSets.necromancers.bonus2': 'Reducerer kastetilbageslag fra skade med 50%.',
-  'entities.itemSets.necromancers.bonus3': 'Skade forsinker ikke dine besværgelser.',
+  'entities.itemSets.necromancers.bonus2':
+    'Du kan ikke stødes tilbage (100% modstand mod tilbagestød).',
+  'entities.itemSets.necromancers.bonus3': 'Øger intellekt med 10 og udholdenhed med 10.',
   'entities.itemSets.nighttalon.name': 'Natteklos læderudstyr',
   'entities.itemSets.nighttalon.bonus2': 'Øger angrebskraft med 40.',
-  'entities.itemSets.nighttalon.bonus3': 'Øger smidighed med 15 og kritisk chance med 2%.',
+  'entities.itemSets.nighttalon.bonus3':
+    'Øger smidighed med 15, kritisk chance med 2% og angrebs- og magihastighed med 15%.',
   'entities.itemSets.soulflame.name': 'Sjæleflamme-klæder',
-  'entities.itemSets.soulflame.bonus2': 'Reducerer kastetilbageslag fra skade med 50%.',
-  'entities.itemSets.soulflame.bonus3': 'Skade forsinker ikke dine besværgelser.',
+  'entities.itemSets.soulflame.bonus2':
+    'Du kan ikke stødes tilbage (100% modstand mod tilbagestød).',
+  'entities.itemSets.soulflame.bonus3':
+    'Øger intellekt med 15, ånd med 15 og angrebs- og magihastighed med 15%.',
   'entities.itemSets.stormcallers.name': 'Stormkalderens klæder',
-  'entities.itemSets.stormcallers.bonus2': 'Reducerer kastetilbageslag fra skade med 50%.',
-  'entities.itemSets.stormcallers.bonus3': 'Skade forsinker ikke dine besværgelser.',
+  'entities.itemSets.stormcallers.bonus2':
+    'Du kan ikke stødes tilbage (100% modstand mod tilbagestød).',
+  'entities.itemSets.stormcallers.bonus3':
+    'Øger intellekt med 15, ånd med 15 og angrebs- og magihastighed med 15%.',
+  'entities.itemSets.vale_arcanist.name': 'Dalarkanistens klæder',
+  'entities.itemSets.vale_arcanist.bonus3': 'Øger angrebs- og magihastighed med 15%.',
   'entities.itemSets.wyrmshadow.name': 'Wyrmskygge-udstyr',
   'entities.itemSets.wyrmshadow.bonus2': 'Øger angrebskraft med 40.',
   'entities.itemSets.wyrmshadow.bonus3': 'Øger smidighed med 15 og kritisk chance med 2%.',
@@ -4925,4 +5054,85 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.relay.help.label': 'Brug for hjælp',
   'hudChrome.discord.relay.help.hint': 'Bed fællesskabet om hjælp',
   'hudChrome.options.showSecondaryActionBar': 'Vis sekundær handlingslinje',
+  'desktop.crash.body': 'Spilvisningen holdt op med at virke. Genindlæs den?',
+  'desktop.crash.fatalBody': 'Cryptic Realm stødte på en uventet fejl og skal lukke.',
+  'desktop.crash.quit': 'Afslut',
+  'desktop.crash.reload': 'Genindlæs',
+  'desktop.crash.title': 'Cryptic Realm',
+  'desktop.update.downloading': 'Downloader opdatering {version}...',
+  'desktop.update.later': 'Senere',
+  'desktop.update.ready':
+    'Opdatering {version} er klar. Den installeres, når du afslutter, eller genstart nu.',
+  'desktop.update.restart': 'Genstart nu',
+  'hudChrome.dailyRewards.close': 'Luk daglige belønninger',
+  'hudChrome.dailyRewards.endsIn': 'Slutter om {time}',
+  'hudChrome.dailyRewards.error': 'Kunne ikke indlæse daglige belønninger.',
+  'hudChrome.dailyRewards.history': 'Tidligere vindere',
+  'hudChrome.dailyRewards.intro':
+    'Behold nok WOC i din verificerede wallet for at låse daglige belønninger op. Optjen point med én daglig drejning og skiftende opgaver, og klatr så op ad den daglige resultattavle for en andel af præmiepuljen.',
+  'hudChrome.dailyRewards.leaderboard': 'Daglig resultattavle',
+  'hudChrome.dailyRewards.loading': 'Indlæser daglige belønninger...',
+  'hudChrome.dailyRewards.noHistory': 'Ingen udbetalinger endnu.',
+  'hudChrome.dailyRewards.noLeaders': 'Ingen point endnu.',
+  'hudChrome.dailyRewards.prize': 'Præmiepulje',
+  'hudChrome.dailyRewards.reason.eligible': 'Belønninger låst op.',
+  'hudChrome.dailyRewards.reason.no_wallet': 'Forbind en wallet med mindst 20 USD i WOC.',
+  'hudChrome.dailyRewards.reason.price_unavailable':
+    'WOC-prisen er utilgængelig, belønninger er midlertidigt låst.',
+  'hudChrome.dailyRewards.reason.under_minimum': 'Wallet er under WOC-minimummet på 20 USD.',
+  'hudChrome.dailyRewards.remainingHoursMinutes': '{hours}t {minutes}m',
+  'hudChrome.dailyRewards.remainingLessThanMinute': '<1m',
+  'hudChrome.dailyRewards.remainingMinutes': '{minutes}m',
+  'hudChrome.dailyRewards.reset': 'Nulstil',
+  'hudChrome.dailyRewards.score': 'Score',
+  'hudChrome.dailyRewards.sol': '{amount} SOL',
+  'hudChrome.dailyRewards.spinButton': 'Drej',
+  'hudChrome.dailyRewards.spinClaimed': 'Indløst: +{points} point.',
+  'hudChrome.dailyRewards.spinClose': 'Luk daglig drejning',
+  'hudChrome.dailyRewards.spinDialogTitle': 'Daglig belønningsdrejning',
+  'hudChrome.dailyRewards.spinReady': 'Én drejning er klar.',
+  'hudChrome.dailyRewards.spinResult': '+{points} point',
+  'hudChrome.dailyRewards.spinTitle': 'Daglig drejning',
+  'hudChrome.dailyRewards.tasks': 'Opgaver',
+  'hudChrome.dailyRewards.showChestButton': 'Vis kiste',
+  'hudChrome.dailyRewards.hideChestButton': 'Skjul kiste',
+  'hudChrome.dailyRewards.title': 'Daglige belønninger',
+  'hudChrome.dailyRewards.unknown': 'Ukendt',
+  'hudChrome.dailyRewards.usd': '{amount} USD',
+  'hudChrome.dailyRewards.walletConnectBody':
+    'Verificer en Solana-wallet med WOC for at låse daglige belønninger op.',
+  'hudChrome.dailyRewards.walletConnectButton': 'Verificer wallet',
+  'hudChrome.dailyRewards.walletConnectTitle': 'Verificer wallet',
+  'hudChrome.dailyRewards.walletHoldBody':
+    'Behold mindst {amount} USD i WOC for at låse daglige belønninger op.',
+  'hudChrome.dailyRewards.walletHoldTitle': 'Behold WOC',
+  'hudChrome.dailyRewards.walletPriceBody':
+    'WOC-prissætning er utilgængelig lige nu. Kom tilbage om lidt.',
+  'hudChrome.dailyRewards.walletValue': 'Wallet-værdi (WOC)',
+  'hudChrome.nativeUpdate.body':
+    'En ny version af Cryptic Realm er tilgængelig. Opdater nu for de nyeste rettelser og forbedringer.',
+  'hudChrome.nativeUpdate.bodyWithVersion':
+    'Version {version} af Cryptic Realm er tilgængelig. Opdater nu for de nyeste rettelser og forbedringer.',
+  'hudChrome.nativeUpdate.notNow': 'Ikke nu',
+  'hudChrome.nativeUpdate.title': 'Opdatering tilgængelig',
+  'hudChrome.nativeUpdate.update': 'Opdater',
+  'errors.api.desktopCodeInvalid':
+    'Desktop-loginkoden er ugyldig eller udløbet. Prøv venligst igen.',
+  // Ravenpost authored letters
+  'entities.letters.ravenpost_welcome.sender': 'Ravneposten',
+  'entities.letters.ravenpost_welcome.subject': 'Ravnene flyver nu for dig',
+  'entities.letters.ravenpost_welcome.body':
+    'Vejfarende,\n\nRavneposten har rejst sine siddepinde over hele dalen. Find ravnesøjlerne i Eastbrook, Fenbridge og Highwatch: fra enhver af dem kan du sende breve, mønter og varer til andre eventyrere og hente alt, hvad ravnene bringer dig.\n\nVedlagt en lille opmærksomhed til dit første frimærke.\n\nVingerne op,\nRavneposten',
+  'entities.letters.letter_q_wolves.sender': 'Marskal Redbrook',
+  'entities.letters.letter_q_wolves.subject': 'Der er ro ved foldene igen',
+  'entities.letters.letter_q_wolves.body':
+    'Hyrderne kan for en gangs skyld sove med begge øjne lukkede, og det er din fortjeneste. Jeg har bedt Ravneposten bringe dig en lille skilling fra vagtkassen.\n\nHold din klinge smurt.\n- Marskal Redbrook',
+  'entities.letters.letter_q_greyjaw.sender': 'Marskal Redbrook',
+  'entities.letters.letter_q_greyjaw.subject': 'Gamle Gråkæbe, endelig',
+  'entities.letters.letter_q_greyjaw.body':
+    'Rygter løber hurtigt i så lille en by. Hyrderne skålede for dit helbred i aftes, og Wilkes sværger, at ulven var stor som en kærre. Lad dem bare brodere: du har fortjent det.\n\nTag et måltid på vagtens regning.\n- Marskal Redbrook',
+  'entities.letters.letter_q_hollow.sender': 'Broder Aldric',
+  'entities.letters.letter_q_hollow.subject': 'Det, du gjorde i mørket',
+  'entities.letters.letter_q_hollow.body':
+    'Kun få vil nogensinde vide, hvad der lå begravet i den lavning, og endnu færre ville tro det. Jeg ved det, og jeg glemmer det ikke.\n\nMå din vej forblive oplyst.\n- Broder Aldric',
 };

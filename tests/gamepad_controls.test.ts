@@ -1,88 +1,69 @@
-import { describe, expect, it, vi } from 'vitest';
-import { mountGamepadControls, moveInputFromGamepad, type GamepadLike } from '../src/game/gamepad';
+import { describe, expect, it } from 'vitest';
+import {
+  AXIS,
+  GP,
+  risingEdges,
+  stickToLook,
+  stickToMoveFlags,
+} from '../src/game/gamepad_map';
 
-function pad(options: { axes?: number[]; pressed?: number[]; id?: string } = {}): GamepadLike {
-  const pressed = new Set(options.pressed ?? []);
-  return {
-    index: 0,
-    id: options.id ?? 'Test Controller',
-    connected: true,
-    axes: options.axes ?? [0, 0, 0, 0],
-    buttons: Array.from({ length: 16 }, (_, i) => ({
-      pressed: pressed.has(i),
-      value: pressed.has(i) ? 1 : 0,
-    })),
-  };
-}
+// v0.20 rewrote the gamepad consumer into GamepadManager (side effects) plus the
+// pure math core in gamepad_map.ts. These tests pin the deterministic core that
+// the old moveInputFromGamepad/mountGamepadControls bridge used to wrap.
 
-describe('gamepad controls', () => {
-  it('maps the left stick and jump button into movement intent', () => {
-    const result = moveInputFromGamepad(pad({ axes: [0.85, -0.92, 0, 0], pressed: [0] }));
+const DZ = 0.18;
 
-    expect(result.movementActive).toBe(true);
-    expect(result.move).toMatchObject({
+describe('gamepad movement mapping', () => {
+  it('maps the left stick into 8-way movement flags (up = forward)', () => {
+    const move = stickToMoveFlags(0.85, -0.92, DZ);
+    expect(move).toMatchObject({
       forward: true,
       back: false,
       strafeLeft: false,
       strafeRight: true,
-      jump: true,
     });
   });
 
-  it('drives the existing controller bridge with camera-facing movement', () => {
-    const moves: { input: unknown; facing?: unknown }[] = [];
-    const input = { camYaw: 1.25, camPitch: 0.2 };
-    const mounted = mountGamepadControls(input, {
-      autoStart: false,
-      getGamepads: () => [pad({ axes: [0, -1, 0.5, 0] })],
-      controller: {
-        move: (moveInput, facing) => moves.push({ input: moveInput, facing }),
-        face: vi.fn(),
-        stop: vi.fn(),
-      },
+  it('returns no movement inside the deadzone', () => {
+    const move = stickToMoveFlags(0.05, -0.05, DZ);
+    expect(move).toMatchObject({
+      forward: false,
+      back: false,
+      strafeLeft: false,
+      strafeRight: false,
     });
+  });
+});
 
-    mounted.poll(32);
+describe('gamepad camera look', () => {
+  it('turns the camera from the right stick and returns zero in the deadzone', () => {
+    const look = stickToLook(0.5, -1, DZ, 2.4, false, 0.032);
+    // Pushing the right stick right yields a negative yaw delta (turn right).
+    expect(look.yaw).toBeLessThan(0);
+    expect(look.pitch).not.toBe(0);
 
-    expect(moves.at(-1)?.input).toMatchObject({ forward: true });
-    expect(moves.at(-1)?.facing).toBeCloseTo(input.camYaw);
-    expect(input.camYaw).toBeLessThan(1.25);
+    const still = stickToLook(0, 0, DZ, 2.4, false, 0.032);
+    expect(still).toEqual({ yaw: 0, pitch: 0 });
   });
 
-  it('fires edge actions once while a button remains held', () => {
-    let current = pad({ pressed: [2] });
-    const attack = vi.fn();
-    const mounted = mountGamepadControls({ camYaw: 0, camPitch: 0 }, {
-      autoStart: false,
-      getGamepads: () => [current],
-      onAttackNearest: attack,
-      controller: { move: vi.fn(), face: vi.fn(), stop: vi.fn() },
-    });
-
-    mounted.poll(16);
-    mounted.poll(32);
-    current = pad();
-    mounted.poll(48);
-    current = pad({ pressed: [2] });
-    mounted.poll(64);
-
-    expect(attack).toHaveBeenCalledTimes(2);
+  it('exposes the standard axis and button index tables', () => {
+    expect(AXIS.LEFT_Y).toBe(1);
+    expect(typeof GP.A).toBe('number');
   });
+});
 
-  it('keeps the Start button available while gameplay keys are blocked', () => {
-    const menu = vi.fn();
-    const move = vi.fn();
-    const mounted = mountGamepadControls({ camYaw: 0, camPitch: 0 }, {
-      autoStart: false,
-      getGamepads: () => [pad({ axes: [0, -1, 0, 0], pressed: [9] })],
-      canUseGameKeys: () => false,
-      onMenu: menu,
-      controller: { move, face: vi.fn(), stop: vi.fn() },
-    });
+describe('gamepad edge detection', () => {
+  it('reports a button only on its rising edge (up -> down)', () => {
+    const none = new Array(17).fill(false);
+    const attackDown = none.slice();
+    attackDown[GP.X] = true;
 
-    mounted.poll(16);
-
-    expect(menu).toHaveBeenCalledTimes(1);
-    expect(move).not.toHaveBeenCalled();
+    // First press: rising edge fires.
+    expect(risingEdges(none, attackDown)).toContain(GP.X);
+    // Held: no new edge.
+    expect(risingEdges(attackDown, attackDown)).not.toContain(GP.X);
+    // Released then pressed again: edge fires once more.
+    expect(risingEdges(attackDown, none)).not.toContain(GP.X);
+    expect(risingEdges(none, attackDown)).toContain(GP.X);
   });
 });

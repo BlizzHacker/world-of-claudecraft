@@ -2,10 +2,84 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const id_ID: Partial<Record<TranslationKey, string>> = {
+  'entities.npcs.auctioneer_voss.greeting':
+    'World Market juga buka di sini, {className}. Belilah dari setiap petualang di alam ini, atau gelarlah daganganmu sendiri.',
+  'entities.npcs.auctioneer_voss.name': 'Pelelang Voss',
+  'entities.npcs.auctioneer_voss.title': 'Penjaga World Market',
+  'hudChrome.devBadge.badgeTitle': 'Pengembang: {tier}',
+  'hudChrome.devBadge.contributor': 'Kontributor sumber terbuka',
+  'hudChrome.devBadge.flavors.architect':
+    'Seorang arsitek alam ini: 30 pull request telah digabungkan.',
+  'hudChrome.devBadge.flavors.artificer':
+    'Lima pull request masuk, dan dunia pun tunduk pada kodemu.',
+  'hudChrome.devBadge.flavors.runesmith':
+    'Lima belas pull request ditempa ke dalam permainan yang berjalan.',
+  'hudChrome.devBadge.flavors.tinkerer': 'Pull request pertamamu telah mendarat di alam ini.',
+  'hudChrome.devBadge.flavors.worldwright':
+    'Seorang perancang dunia: 70 pull request membentuk permainan ini.',
+  'hudChrome.devBadge.link.benefits':
+    'Tautkan GitHub-mu untuk mendapatkan lencana pengembang atas pull request yang telah digabungkan ke repositori sumber terbuka.',
+  'hudChrome.devBadge.link.cta': 'Tautkan GitHub',
+  'hudChrome.devBadge.link.error': 'Tidak dapat menautkan GitHub. Silakan coba lagi.',
+  'hudChrome.devBadge.link.relink': 'Tautkan Ulang GitHub',
+  'hudChrome.devBadge.linkedAs': 'Tertaut sebagai {login}',
+  'hudChrome.devBadge.prsLanded': '{count} pull request digabungkan',
+  'hudChrome.devBadge.tiers.architect': 'Arsitek',
+  'hudChrome.devBadge.tiers.artificer': 'Perekayasa',
+  'hudChrome.devBadge.tiers.runesmith': 'Pandai Rune',
+  'hudChrome.devBadge.tiers.tinkerer': 'Perakit',
+  'hudChrome.devBadge.tiers.worldwright': 'Perancang Dunia',
+  'hudChrome.devBadge.title': 'Pengembang',
+  'hudChrome.devBadge.unlink': 'Putuskan Tautan GitHub',
+  'hudChrome.itemShare.linkHint': 'Shift-klik untuk menautkan item ini di obrolan.',
+  'hudChrome.itemTooltip.requiresLevel': 'Membutuhkan Level {level}',
+  'hudChrome.keybinds.discord': 'Discord',
+  'hudChrome.leaderboard.devEmpty': 'Belum ada kontributor berperingkat.',
+  'hudChrome.leaderboard.devName': 'Kontributor',
+  'hudChrome.leaderboard.devTierCol': 'Lencana',
+  'hudChrome.leaderboard.mergedPrs': 'PR Digabungkan',
+  'hudChrome.leaderboard.tabDevs': 'Pengembang',
+  'hudChrome.lootSettings.close': 'Tutup pengaturan jarahan',
+  'hudChrome.lootSettings.groupLoot': 'Jarahan Kelompok',
+  'hudChrome.lootSettings.leaderOption': 'Penjarah Utama: Pemimpin (Anda)',
+  'hudChrome.lootSettings.masterOption': 'Penjarah Utama: {name}',
+  'hudChrome.lootSettings.menuItem': 'Pengaturan Jarahan',
+  'hudChrome.lootSettings.method': 'Metode Jarahan',
+  'hudChrome.lootSettings.rollThreshold': 'Ambang Lempar Dadu',
+  'hudChrome.lootSettings.title': 'Pengaturan Jarahan',
+  'hudChrome.lootSettings.valueMaster': 'Jarahan Utama',
+  'hudChrome.masterLoot.looterChanged': 'Penjarah Utama kini adalah {name}.',
+  'hudChrome.masterLoot.rollingFor': 'Melempar dadu untuk {item}.',
+  'hudChrome.masterLoot.summaryGroup': 'Pengaturan Jarahan: Jarahan Kelompok.',
+  'hudChrome.masterLoot.summaryMaster':
+    'Pengaturan Jarahan: Jarahan Utama, Penjarah Utama {name}, ambang {threshold}.',
+  'hudChrome.masterLoot.thresholdSet': 'Ambang jarahan diatur ke {threshold}.',
+  'hudChrome.options.showDevBadges': 'Tampilkan Lencana Pengembang',
+  'hudChrome.options.groundReticle': 'Retikel bidik darat',
+  'hudChrome.options.startAttackOnAbility': 'Serangan Otomatis Saat Memakai Kemampuan',
+  'hudChrome.party.promoteLeader': 'Angkat jadi Pemimpin',
+  'hudChrome.plurals.playersMatching.few':
+    'Siapa: {count} pemain yang cocok dengan "{query}" di {realm}.',
+  'hudChrome.plurals.playersMatching.many':
+    'Siapa: {count} pemain yang cocok dengan "{query}" di {realm}.',
+  'hudChrome.plurals.playersMatching.one':
+    'Siapa: {count} pemain yang cocok dengan "{query}" di {realm}.',
+  'hudChrome.plurals.playersMatching.other':
+    'Siapa: {count} pemain yang cocok dengan "{query}" di {realm}.',
+  'hudChrome.statInfo.desc.spellPower':
+    'Meningkatkan kerusakan mantra dan kekuatan penyembuhanmu. Setiap poin Kecerdasan memberi sedikit Kekuatan Mantra, di atas apa pun dari perlengkapan atau buff.',
+  'hudChrome.statInfo.names.spellPower': 'Kekuatan Mantra',
+  'hudChrome.statInfo.sources.attributes': 'Dari atributmu: {value}',
+  'hudChrome.statInfo.sources.base': 'Dasar: {value}',
+  'hudChrome.statInfo.sources.buff': '{name}: {value}',
+  'hudChrome.statInfo.sources.fromAttribute': 'Dari {stat}: {value}',
+  'hudChrome.statInfo.sources.gear': 'Perlengkapan terpasang: {value}',
+  'hudChrome.statInfo.sources.header': 'Terdiri dari:',
+  'hudChrome.statInfo.sources.talents': 'Talenta dan efek: {value}',
   'a11y.characterActions': 'Aksi karakter',
   'a11y.discordCommunity': 'Gabung komunitas Discord Cryptic Realm',
   'a11y.donateProject': 'Berdonasi untuk mendukung Cryptic Realm',
-  'a11y.githubProject': 'Open Cryptic Realm contributions',
+  'a11y.githubProject': 'Buka proyek GitHub Cryptic Realm',
   'a11y.goHome': 'Ke halaman utama',
   'a11y.languageSelection': 'Pemilihan bahasa',
   'a11y.mainNavigation': 'Navigasi utama',
@@ -21,6 +95,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'abilityUi.actionBar.slotAria': 'Slot aksi {slot}: {ability}',
   'abilityUi.cast.demonHeal': 'Penyembuhan Iblis',
   'abilityUi.cast.fishing': 'Memancing',
+  'abilityUi.cast.thunzharrStormcall': 'Panggilan Badai',
   'abilityUi.forms.bear': 'Beruang',
   'abilityUi.forms.cat': 'Serigala',
   'abilityUi.resources.energy': 'Energi',
@@ -340,7 +415,9 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'delveUi.tracker.module': 'Modul {current} dari {total}',
   'delveUi.tracker.objective': 'Sasaran',
   'delveUi.tracker.title': 'Delve',
-  'download.desc': 'Dapatkan peluncur mandiri untuk performa optimal dan permainan layar penuh.',  'entities.abilities.adrenaline_rush.description':
+  'download.desc': 'Dapatkan peluncur mandiri untuk performa optimal dan permainan layar penuh.',
+  'download.title': 'Unduh Peluncur Desktop',
+  'entities.abilities.adrenaline_rush.description':
     'Darahmu mendidih, seketika memulihkan 60 energi.',
   'entities.abilities.adrenaline_rush.name': 'Lonjakan Adrenalin',
   'entities.abilities.aimed_shot.description':
@@ -509,6 +586,21 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.fireball.description':
     'Melontarkan bola berkobar yang menimbulkan {damage} kerusakan Api ditambah kerusakan tambahan seiring waktu.',
   'entities.abilities.fireball.name': 'Bola Api',
+  'entities.abilities.rain_of_fire.name': 'Hujan Api',
+  'entities.abilities.rain_of_fire.description':
+    'Menurunkan hujan api di area sasaran, membakar musuh sebesar {damage} kerusakan Api.',
+  'entities.abilities.volley.name': 'Hujan Panah',
+  'entities.abilities.volley.description':
+    'Menghujani area sasaran dengan panah, memberi {damage} kerusakan kepada musuh di dalamnya.',
+  'entities.abilities.hurricane.name': 'Badai',
+  'entities.abilities.hurricane.description':
+    'Mendatangkan badai di area sasaran, menghantam musuh sebesar {damage} kerusakan Alam.',
+  'entities.abilities.earthquake.name': 'Gempa Bumi',
+  'entities.abilities.earthquake.description':
+    'Mengguncang area sasaran, menghantam musuh sebesar {damage} kerusakan Alam.',
+  'entities.abilities.flamestrike.name': 'Hantaman Api',
+  'entities.abilities.flamestrike.description':
+    'Memanggil ledakan api di area sasaran, memberikan {damage} kerusakan Api kepada musuh yang terkena ledakan.',
   'entities.abilities.flame_shock.description':
     'Membakar target dengan api sebesar 25 kerusakan ditambah {damage} selama 12 detik.',
   'entities.abilities.flame_shock.name': 'Kejut Nyala Api',
@@ -999,6 +1091,15 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'entities.items.moggers_shiv.name': 'Belati Mogger',
   'entities.items.moggers_stomper_boots.name': 'Bot Penginjak Mogger',
   'entities.items.monarch_crown_helm.name': 'Mahkota Sang Raja',
+  'entities.items.copper_mining_pick.name': 'Beliung Tambang Tembaga',
+  'entities.items.iron_mining_pick.name': 'Beliung Tambang Besi',
+  'entities.items.mithril_mining_pick.name': 'Beliung Tambang Mithril',
+  'entities.items.handaxe.name': 'Kapak Tangan',
+  'entities.items.felling_axe.name': 'Kapak Tebang',
+  'entities.items.ironbark_axe.name': 'Kapak Kulit Besi',
+  'entities.items.gathering_sickle.name': 'Sabit Panen',
+  'entities.items.bronze_sickle.name': 'Sabit Perunggu',
+  'entities.items.silverleaf_sickle.name': 'Sabit Daun Perak',
   'entities.items.moongate_rubbing.name': 'Gosokan Penangkal',
   'entities.items.moonpale_scale.name': 'Sisik Pucat Bulan',
   'entities.items.moonscale_saber.name': 'Sabel Sisik Bulan',
@@ -1097,6 +1198,14 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'entities.items.steel_orange_armor_plate.name': 'Oranye Baja',
   'entities.items.storm_core.name': 'Inti Badai',
   'entities.items.stormcallers_crown.name': 'Mahkota Pemanggil Badai',
+  'entities.items.crownforged_gauntlets.name': 'Sarung Tangan Tempaan Mahkota',
+  'entities.items.nighttalon_grips.name': 'Cengkeraman Cakar Malam',
+  'entities.items.soulflame_gloves.name': 'Sarung Tangan Api Jiwa',
+  'entities.items.stormcallers_handguards.name': 'Pelindung Tangan Pemanggil Badai',
+  'entities.items.crownforged_girdle.name': 'Sabuk Tempaan Mahkota',
+  'entities.items.nighttalon_waistband.name': 'Ikat Pinggang Cakar Malam',
+  'entities.items.soulflame_cord.name': 'Tali Pinggang Api Jiwa',
+  'entities.items.stormcallers_waistguard.name': 'Pelindung Pinggang Pemanggil Badai',
   'entities.items.stormcallers_spaulders.name': 'Pelindung Bahu Pemanggil Badai',
   'entities.items.stormshard_leggings.name': 'Legging Serpihan Badai',
   'entities.items.sturdy_belt.name': 'Sabuk Pengembara Kokoh',
@@ -1138,6 +1247,11 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'entities.items.widowfang_dirk.name': 'Belati Taring Janda',
   'entities.items.windguard_leggings.name': 'Legging Penjaga Angin',
   'entities.items.wolf_fang.name': 'Taring Serigala Retak',
+  'entities.items.linen_pouch.name': 'Kantong Linen',
+  'entities.items.travelers_knapsack.name': 'Ransel Pengelana',
+  'entities.items.wolfhide_satchel.name': 'Tas Kulit Serigala',
+  'entities.items.gravewoven_bag.name': 'Tas Tenunan Makam',
+  'entities.items.mistcallers_duffel.name': 'Tas Sang Pemanggil Kabut',
   'entities.items.worn_sword.name': 'Pedang Pendek Usang',
   'entities.items.woven_robe.name': 'Jubah Tenun Lembah',
   'entities.items.wyrmcult_grand_robe.name': 'Jubah Agung Sekte Wyrm',
@@ -1167,14 +1281,14 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.deathstalker_voss.name': 'Pembayang Maut Voss',
   'entities.mobs.deepfen_murloc.name': 'Penggigit Deepfen',
   'entities.mobs.deeprock_kobold.name': 'Penggali Terowongan Deeprock',
-  'entities.mobs.doomguard.name': 'Doomguard',
+  'entities.mobs.wraithborn.name': 'Doomguard',
   'entities.mobs.drowned_dead.name': 'Mayat Tenggelam',
   'entities.mobs.drowned_templeguard.name': 'Penjaga Kuil Tenggelam',
   'entities.mobs.drowned_thrall.name': 'Budak Tenggelam',
   'entities.mobs.drowned_votary.name': 'Pemuja Tenggelam',
   'entities.mobs.fallen_captain_aldren.name': 'Kapten Aldren yang Gugur',
-  'entities.mobs.felguard.name': 'Felguard',
-  'entities.mobs.felhunter.name': 'Felhunter',
+  'entities.mobs.warfiend.name': 'Felguard',
+  'entities.mobs.spellhound.name': 'Felhunter',
   'entities.mobs.fen_troll.name': 'Troll Mirefen',
   'entities.mobs.forest_wolf.name': 'Serigala Hutan',
   'entities.mobs.glimmermere_wader.name': 'Pengarung Glimmermere',
@@ -1187,8 +1301,8 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.grix_the_tunnelking.name': 'Grix sang Raja Terowongan',
   'entities.mobs.grubjaw.name': 'Grubjaw si Rakus',
   'entities.mobs.hollow_acolyte.name': 'Akolit Berongga',
-  'entities.mobs.imp.name': 'Imp',
-  'entities.mobs.infernal.name': 'Infernal',
+  'entities.mobs.emberkin.name': 'Imp',
+  'entities.mobs.pyre_colossus.name': 'Infernal',
   'entities.mobs.ironvein_foreman.name': 'Mandor Ironvein',
   'entities.mobs.ironvein_sapper.name': 'Peledak Ironvein',
   'entities.mobs.knight_commander_olen.name': 'Komandan Ksatria Olen',
@@ -1229,7 +1343,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.sister_nhalia.name': 'Suster Nhalia',
   'entities.mobs.sloomtooth_the_drowned.name': 'Sloomtooth sang Tenggelam',
   'entities.mobs.stormcrag_elemental.name': 'Elemental Stormcrag',
-  'entities.mobs.succubus.name': 'Succubus',
+  'entities.mobs.duskborn.name': 'Succubus',
   'entities.mobs.thornpeak_ogre.name': 'Ogre Thornpeak',
   'entities.mobs.tidebound_acolyte.name': 'Akolit Terikat Pasang',
   'entities.mobs.tunnel_rat.name': 'Tikus Penggali Terowongan',
@@ -1239,7 +1353,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.vision_aldren_warrior.name': 'Bayangan Kapten Aldren',
   'entities.mobs.vision_deathstalker_voss.name': 'Bayangan Pembunuh Kerajaan Voss',
   'entities.mobs.vision_malric_mage.name': 'Bayangan Pendeta Tinggi Malric',
-  'entities.mobs.voidwalker.name': 'Voidwalker',
+  'entities.mobs.gloomshade.name': 'Voidwalker',
   'entities.mobs.voskar_emberwing.name': 'Voskar sang Sayap Bara',
   'entities.mobs.warlock_imp.name': 'Iblis Api',
   'entities.mobs.warlock_voidwalker.name': 'Iblis Kehampaan',
@@ -1985,8 +2099,8 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'fiesta.word.wave': 'AUGMEN!',
   'footer.copyright': '2026 Cryptic Realm',
   'footer.discordLabel': 'Gabung Discord',
-  'footer.githubLabel': 'Contributions',
-  'footer.githubLink': '/contributions.html',
+  'footer.githubLabel': 'Proyek Sumber Terbuka',
+  'footer.githubLink': 'https://github.com/levy-street/world-of-claudecraft',
   'footer.whitepaper': 'Whitepaper',
   'footer.privacy': 'Kebijakan Privasi',
   'footer.terms': 'Ketentuan Layanan',
@@ -2261,7 +2375,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'guide.bestiary.notedLabel': 'Catatan penting',
   'guide.bestiary.rare': 'Langka',
   'guide.brand': 'Cryptic Realm',
-  'guide.brandShort': 'Cryptic',
+  'guide.brandShort': 'ClaudeCraft',
   'guide.breadcrumb.home': 'Panduan',
   'guide.breadcrumb.label': 'Remah jejak',
   'guide.chooser.clear': 'Bersihkan',
@@ -2468,12 +2582,12 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'guide.family.humanoid.desc':
     'Bandit, pemuja, dan lainnya yang menempuh jalan yang salah. Mereka bertarung dengan siasat, bukan sekadar taring.',
   'guide.family.humanoid.name': 'Humanoid',
-  'guide.family.kobold.desc':
+  'guide.family.burrower.desc':
     'Penggali berkepala lilin yang menjangkiti tambang dan liang, menjaga bijih mereka dengan garang.',
-  'guide.family.kobold.name': 'Kobold',
-  'guide.family.murloc.desc':
+  'guide.family.burrower.name': 'Kobold',
+  'guide.family.mudfin.desc':
     'Penghuni rawa amfibi yang menyerbu perairan dangkal dalam gerombolan berisik dan teritorial.',
-  'guide.family.murloc.name': 'Murloc',
+  'guide.family.mudfin.name': 'Murloc',
   'guide.family.ogre.desc':
     'Besar, berpikiran lamban, dan berbahaya. Mereka berkemah di celah gunung yang tinggi dan memukul bagai tanah longsor.',
   'guide.family.ogre.name': 'Ogre',
@@ -2485,7 +2599,8 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'guide.family.undead.desc':
     'Orang mati yang gelisah, dibangkitkan oleh tangan yang lebih gelap. Mereka tak lelah dan tak melarikan diri.',
   'guide.family.undead.name': 'Mayat Hidup',
-  'guide.faqPage.a1': 'Yes. The whole game is free to play to the level cap.',
+  'guide.faqPage.a1':
+    'Ya. Seluruh permainan gratis dimainkan hingga batas level, dan kode sumbernya terbuka di GitHub.',
   'guide.faqPage.a10':
     'Batasnya adalah level {cap}. Dari sana kamu menjalankan ruang bawah tanah untuk lima pemain dan raid untuk sepuluh pemain, mengejar perlengkapan yang lebih baik, dan menguji dirimu di arena.',
   'guide.faqPage.a11':
@@ -2502,7 +2617,8 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
     'Level {cap}, dicapai melintasi tiga zona terhubung berisi misi, ruang bawah tanah, dan penjelajahan.',
   'guide.faqPage.a7':
     'Karakter daring disimpan di server secara otomatis. Karakter luring tersimpan di perambanmu untuk sesi cepat dan pengujian.',
-  'guide.faqPage.a8': 'Private realms are operated through verified Cryptic Realm channels.',
+  'guide.faqPage.a8':
+    'Ya. Proyek ini bersumber terbuka, jadi kamu bisa menjalankan servermu sendiri. Lihat repositori GitHub.',
   'guide.faqPage.a9':
     'Ya. Bertarung tanding dengan siapa pun untuk kesenangan, atau melangkahlah ke Ashen Coliseum untuk melawan pemain lain. PvP bersifat sukarela, jadi kamu tak pernah dipaksa masuk ke dalamnya.',
   'guide.faqPage.intro': 'Pertanyaan yang paling sering ditanyakan pemain baru.',
@@ -2517,10 +2633,11 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'guide.faqPage.q7': 'Apakah karakter saya akan tersimpan?',
   'guide.faqPage.q8': 'Bisakah saya menjalankan salinan saya sendiri?',
   'guide.faqPage.q9': 'Apakah ada PvP?',
-  'guide.footer.blurb': 'A classic-style micro-MMO. Quest, group up, and explore a hand-built world, right in your browser.',
+  'guide.footer.blurb':
+    'Mikro-MMO bergaya klasik dan bersumber terbuka. Jalani misi, bentuk kelompok, dan jelajahi dunia buatan tangan, langsung di perambanmu.',
   'guide.footer.communityWiki': 'Wiki Komunitas',
   'guide.footer.discord': 'Gabung Discord',
-  'guide.footer.github': 'Contributions',
+  'guide.footer.github': 'Sumber di GitHub',
   'guide.footer.playNow': 'Main Sekarang',
   'guide.footer.rights': 'Cryptic Realm',
   'guide.gear.consumablesElixirs':
@@ -2657,13 +2774,14 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'guide.home.community.body':
     'Langsung masuk sekarang, atau mampir menyapa. Dunia ini lebih seru dengan teman.',
   'guide.home.community.discord': 'Gabung Discord',
-  'guide.home.community.github': 'Contributions',
+  'guide.home.community.github': 'Beri Bintang di GitHub',
   'guide.home.community.heading': 'Bergabunglah dengan realm',
   'guide.home.community.play': 'Main Sekarang',
   'guide.home.ctaLearn': 'Cara Bermain',
   'guide.home.ctaPlay': 'Main Sekarang',
   'guide.home.eyebrow': 'MMO browser bergaya klasik',
-  'guide.home.faq.a1': 'Yes. The whole game is free to the level cap.',
+  'guide.home.faq.a1':
+    'Ya. Seluruh permainan gratis hingga batas level, dan ini sumber terbuka di GitHub.',
   'guide.home.faq.a2':
     'Tidak. Permainan ini sepenuhnya bisa dimainkan tanpa itu. Token komunitas opsional hanya membuka hiasan kosmetik dan tidak pernah memengaruhi kekuatan.',
   'guide.home.faq.a3':
@@ -2695,8 +2813,9 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'guide.home.what.pillarClassesBody':
     'Jadi tank, sembuhkan, atau lancarkan damage. Setiap kelas dimainkan sesuai arketipenya, dengan talent untuk menjadikannya milikmu.',
   'guide.home.what.pillarClassesTitle': 'Sembilan kelas, tiga peran',
-  'guide.home.what.pillarOpenBody': 'Free to play to the level cap. No pay to win, ever.',
-  'guide.home.what.pillarOpenTitle': 'Free to play',
+  'guide.home.what.pillarOpenBody':
+    'Gratis dimainkan hingga batas level, dengan seluruh permainan bersumber terbuka. Tanpa bayar untuk menang, selamanya.',
+  'guide.home.what.pillarOpenTitle': 'Gratis dan sumber terbuka',
   'guide.home.what.pillarPlayBody':
     'Tanpa unduhan, tanpa peluncur. Buat karakter dan kamu sudah ada di dunia dalam hitungan detik, di desktop maupun ponsel.',
   'guide.home.what.pillarPlayTitle': 'Main di browser-mu',
@@ -2812,16 +2931,16 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'guide.notFound.body': 'Halaman yang kamu cari tidak ada atau mungkin telah dipindahkan.',
   'guide.notFound.home': 'Kembali ke ikhtisar',
   'guide.notFound.title': 'Kami tidak dapat menemukan halaman itu',
-  'guide.petHook.doomguard': 'Perapal elite yang menghujankan bayangan berat dari kejauhan.',
-  'guide.petHook.felguard':
+  'guide.petHook.wraithborn': 'Perapal elite yang menghujankan bayangan berat dari kejauhan.',
+  'guide.petHook.warfiend':
     'Petarung jarak dekat yang tangguh, serba bisa begitu kamu mampu memanggilnya.',
-  'guide.petHook.felhunter': 'Penyerang bayangan yang memburu pemantra musuh.',
-  'guide.petHook.imp': 'Iblis pelontar api jarak jauh yang menggerus musuh dari jarak aman.',
-  'guide.petHook.infernal':
+  'guide.petHook.spellhound': 'Penyerang bayangan yang memburu pemantra musuh.',
+  'guide.petHook.emberkin': 'Iblis pelontar api jarak jauh yang menggerus musuh dari jarak aman.',
+  'guide.petHook.pyre_colossus':
     'Raksasa kekar dengan serangan jarak dekat yang menghancurkan, dipanggil demi kekuatan murni.',
-  'guide.petHook.succubus':
+  'guide.petHook.duskborn':
     'Iblis jarak dekat yang gesit, memukul keras tetapi mudah tumbang di bawah tekanan.',
-  'guide.petHook.voidwalker':
+  'guide.petHook.gloomshade':
     'Iblis kokoh yang memprovokasi dan menahan serangan agar kamu bisa memantra dengan tenang.',
   'guide.placeholder.note': 'Bagian panduan ini sedang dalam pengerjaan.',
   'guide.progression.bandLabel': 'Level {min} sampai {max}',
@@ -4347,7 +4466,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'mode.caCopyAria': 'Salin alamat kontrak',
   'mode.caLabel': 'Alamat Kontrak $CR',
   'mode.caNote':
-    'CR adalah token komunitas kami. Token ini tidak diperlukan untuk bermain. Gabung Discord untuk membahas utilitas dan flywheel CR.',
+    'WOC adalah token komunitas kami. Token ini tidak diperlukan untuk bermain. Gabung Discord untuk membahas utilitas dan flywheel WOC.',
   'mode.offlineAria': 'Main Luring: mulai sesi pemain-tunggal lokal seketika',
   'mode.offlineDesc':
     'Dunia pemain-tunggal seketika di peramban kamu. Tidak ada yang disimpan: sempurna untuk pertarungan singkat atau pengujian.',
@@ -4384,7 +4503,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'news.loading': 'Memuat pembaruan terkini…',
   'news.prerelease': 'Pra-rilis',
   'news.title': 'Berita & Pembaruan',
-  'news.viewOnGithub': 'Read release notes',
+  'news.viewOnGithub': 'Lihat di GitHub',
   'playerCard.actionCopyReferral': 'Salin Tautan Rujukan',
   'playerCard.actionDownload': 'Unduh',
   'playerCard.actionShareNative': 'Bagikan...',
@@ -4836,29 +4955,38 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'hudChrome.masterLoot.assigned': '{looter} memberikan {item} kepada {target}.',
   'hudChrome.masterLoot.unassigned': '{item} tidak diberikan dan bebas untuk semua.',
   'hudChrome.masterLoot.leaderOnly': 'Hanya pemimpin grup yang dapat mengubah metode loot.',
+  'entities.itemSets.boundstone_vanguard.name': 'Garda Depan Batu Terikat',
+  'entities.itemSets.boundstone_vanguard.bonus3':
+    'Meningkatkan kecepatan serangan dan rapal sebesar 15%.',
   'entities.itemSets.crownforged.name': 'Perlengkapan tempur Tempa Mahkota',
   'entities.itemSets.crownforged.bonus2': 'Meningkatkan daya serang sebesar 40.',
   'entities.itemSets.crownforged.bonus3':
-    'Meningkatkan kekuatan sebesar 15 dan stamina sebesar 15.',
+    'Meningkatkan kekuatan sebesar 15, stamina sebesar 15, serta kecepatan serangan dan rapal sebesar 15%.',
   'entities.itemSets.deathlord.name': 'Perlengkapan tempur Penguasa Maut',
   'entities.itemSets.deathlord.bonus2': 'Meningkatkan daya serang sebesar 40.',
   'entities.itemSets.deathlord.bonus3': 'Meningkatkan kekuatan sebesar 15 dan stamina sebesar 15.',
+  'entities.itemSets.greyjaw_stalker.name': 'Perlengkapan Penguntit Greyjaw',
+  'entities.itemSets.greyjaw_stalker.bonus3':
+    'Meningkatkan kecepatan serangan dan rapal sebesar 15%.',
   'entities.itemSets.necromancers.name': 'Jubah ahli nujum',
-  'entities.itemSets.necromancers.bonus2':
-    'Mengurangi dorongan balik sihir akibat kerusakan sebesar 50%.',
-  'entities.itemSets.necromancers.bonus3': 'Kerusakan yang diterima tidak menunda perapalan sihir.',
+  'entities.itemSets.necromancers.bonus2': 'Kamu tidak dapat terpental (ketahanan pentalan 100%).',
+  'entities.itemSets.necromancers.bonus3':
+    'Meningkatkan kecerdasan sebesar 10 dan stamina sebesar 10.',
   'entities.itemSets.nighttalon.name': 'Perlengkapan kulit Cakar Malam',
   'entities.itemSets.nighttalon.bonus2': 'Meningkatkan daya serang sebesar 40.',
   'entities.itemSets.nighttalon.bonus3':
-    'Meningkatkan kelincahan sebesar 15 dan peluang kritis sebesar 2%.',
+    'Meningkatkan kelincahan sebesar 15, peluang kritis sebesar 2%, serta kecepatan serangan dan rapal sebesar 15%.',
   'entities.itemSets.soulflame.name': 'Jubah Api Jiwa',
-  'entities.itemSets.soulflame.bonus2':
-    'Mengurangi dorongan balik sihir akibat kerusakan sebesar 50%.',
-  'entities.itemSets.soulflame.bonus3': 'Kerusakan yang diterima tidak menunda perapalan sihir.',
+  'entities.itemSets.soulflame.bonus2': 'Kamu tidak dapat terpental (ketahanan pentalan 100%).',
+  'entities.itemSets.soulflame.bonus3':
+    'Meningkatkan kecerdasan sebesar 15, roh sebesar 15, serta kecepatan serangan dan rapal sebesar 15%.',
   'entities.itemSets.stormcallers.name': 'Jubah Pemanggil Badai',
-  'entities.itemSets.stormcallers.bonus2':
-    'Mengurangi dorongan balik sihir akibat kerusakan sebesar 50%.',
-  'entities.itemSets.stormcallers.bonus3': 'Kerusakan yang diterima tidak menunda perapalan sihir.',
+  'entities.itemSets.stormcallers.bonus2': 'Kamu tidak dapat terpental (ketahanan pentalan 100%).',
+  'entities.itemSets.stormcallers.bonus3':
+    'Meningkatkan kecerdasan sebesar 15, roh sebesar 15, serta kecepatan serangan dan rapal sebesar 15%.',
+  'entities.itemSets.vale_arcanist.name': 'Perlengkapan Arkanis Lembah',
+  'entities.itemSets.vale_arcanist.bonus3':
+    'Meningkatkan kecepatan serangan dan rapal sebesar 15%.',
   'entities.itemSets.wyrmshadow.name': 'Perlengkapan Bayangan Wyrm',
   'entities.itemSets.wyrmshadow.bonus2': 'Meningkatkan daya serang sebesar 40.',
   'entities.itemSets.wyrmshadow.bonus3':
@@ -4997,4 +5125,87 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.relay.help.label': 'Butuh Bantuan',
   'hudChrome.discord.relay.help.hint': 'Minta bantuan dari komunitas',
   'hudChrome.options.showSecondaryActionBar': 'Tampilkan Bilah Aksi Sekunder',
+  'errors.api.desktopCodeInvalid':
+    'Kode masuk desktop tidak valid atau kedaluwarsa. Silakan coba lagi.',
+  'desktop.crash.body': 'Tampilan gim berhenti bekerja. Muat ulang?',
+  'desktop.crash.fatalBody':
+    'Cryptic Realm mengalami kesalahan tak terduga dan perlu ditutup.',
+  'desktop.crash.quit': 'Keluar',
+  'desktop.crash.reload': 'Muat Ulang',
+  'desktop.crash.title': 'Cryptic Realm',
+  'desktop.update.downloading': 'Mengunduh pembaruan {version}...',
+  'desktop.update.later': 'Nanti',
+  'desktop.update.ready':
+    'Pembaruan {version} siap. Akan terpasang saat kamu keluar, atau mulai ulang sekarang.',
+  'desktop.update.restart': 'Mulai Ulang Sekarang',
+  'hudChrome.dailyRewards.close': 'Tutup hadiah harian',
+  'hudChrome.dailyRewards.endsIn': 'Berakhir dalam {time}',
+  'hudChrome.dailyRewards.error': 'Tidak dapat memuat hadiah harian.',
+  'hudChrome.dailyRewards.history': 'Pemenang Sebelumnya',
+  'hudChrome.dailyRewards.intro':
+    'Simpan cukup WOC di dompet terverifikasimu untuk membuka hadiah harian. Kumpulkan poin lewat satu putaran harian dan tugas yang bergilir, lalu naiki papan peringkat harian untuk mendapat bagian dari kolam hadiah.',
+  'hudChrome.dailyRewards.leaderboard': 'Papan Peringkat Harian',
+  'hudChrome.dailyRewards.loading': 'Memuat hadiah harian...',
+  'hudChrome.dailyRewards.noHistory': 'Belum ada pembayaran.',
+  'hudChrome.dailyRewards.noLeaders': 'Belum ada poin.',
+  'hudChrome.dailyRewards.prize': 'Kolam Hadiah',
+  'hudChrome.dailyRewards.reason.eligible': 'Hadiah terbuka.',
+  'hudChrome.dailyRewards.reason.no_wallet':
+    'Hubungkan dompet dengan setidaknya $20 USD dalam WOC.',
+  'hudChrome.dailyRewards.reason.price_unavailable':
+    'Harga WOC tidak tersedia, hadiah terkunci sementara.',
+  'hudChrome.dailyRewards.reason.under_minimum': 'Dompet di bawah batas minimum $20 USD WOC.',
+  'hudChrome.dailyRewards.remainingHoursMinutes': '{hours}j {minutes}m',
+  'hudChrome.dailyRewards.remainingLessThanMinute': '<1m',
+  'hudChrome.dailyRewards.remainingMinutes': '{minutes}m',
+  'hudChrome.dailyRewards.reset': 'Atur Ulang',
+  'hudChrome.dailyRewards.score': 'Skor',
+  'hudChrome.dailyRewards.sol': '{amount} SOL',
+  'hudChrome.dailyRewards.spinButton': 'Putar',
+  'hudChrome.dailyRewards.spinClaimed': 'Diklaim: +{points} poin.',
+  'hudChrome.dailyRewards.spinClose': 'Tutup putaran harian',
+  'hudChrome.dailyRewards.spinDialogTitle': 'Putaran Hadiah Harian',
+  'hudChrome.dailyRewards.spinReady': 'Satu putaran siap.',
+  'hudChrome.dailyRewards.spinResult': '+{points} poin',
+  'hudChrome.dailyRewards.spinTitle': 'Putaran Harian',
+  'hudChrome.dailyRewards.tasks': 'Tugas',
+  'hudChrome.dailyRewards.showChestButton': 'Tampilkan Peti',
+  'hudChrome.dailyRewards.hideChestButton': 'Sembunyikan Peti',
+  'hudChrome.dailyRewards.title': 'Hadiah Harian',
+  'hudChrome.dailyRewards.unknown': 'Tidak diketahui',
+  'hudChrome.dailyRewards.usd': '{amount} USD',
+  'hudChrome.dailyRewards.walletConnectBody':
+    'Verifikasi dompet Solana berisi WOC untuk membuka hadiah harian.',
+  'hudChrome.dailyRewards.walletConnectButton': 'Verifikasi Dompet',
+  'hudChrome.dailyRewards.walletConnectTitle': 'Verifikasi Dompet',
+  'hudChrome.dailyRewards.walletHoldBody':
+    'Simpan minimal {amount} USD dalam WOC untuk membuka hadiah harian.',
+  'hudChrome.dailyRewards.walletHoldTitle': 'Simpan WOC',
+  'hudChrome.dailyRewards.walletPriceBody':
+    'Harga WOC tidak tersedia saat ini. Silakan cek kembali sebentar lagi.',
+  'hudChrome.dailyRewards.walletValue': 'Nilai Dompet (WOC)',
+  'hudChrome.nativeUpdate.body':
+    'Versi baru Cryptic Realm tersedia. Perbarui sekarang untuk perbaikan dan peningkatan terbaru.',
+  'hudChrome.nativeUpdate.bodyWithVersion':
+    'Versi {version} Cryptic Realm tersedia. Perbarui sekarang untuk perbaikan dan peningkatan terbaru.',
+  'hudChrome.nativeUpdate.notNow': 'Jangan sekarang',
+  'hudChrome.nativeUpdate.title': 'Pembaruan Tersedia',
+  'hudChrome.nativeUpdate.update': 'Perbarui',
+  // Ravenpost authored letters
+  'entities.letters.ravenpost_welcome.sender': 'Pos Gagak',
+  'entities.letters.ravenpost_welcome.subject': 'Kini para gagak terbang untukmu',
+  'entities.letters.ravenpost_welcome.body':
+    'Pengelana,\n\nPos Gagak telah membuka tenggeran di seluruh lembah. Carilah pilar gagak di Eastbrook, Fenbridge, dan Highwatch: dari mana pun kau bisa mengirim surat, koin, dan barang kepada petualang lain, serta mengambil apa pun yang dibawa para gagak untukmu.\n\nTerlampir sedikit tanda mata untuk perangko pertamamu.\n\nKepakkan sayap,\nPos Gagak',
+  'entities.letters.letter_q_wolves.sender': 'Marsekal Redbrook',
+  'entities.letters.letter_q_wolves.subject': 'Kandang kembali tenang',
+  'entities.letters.letter_q_wolves.body':
+    'Para gembala akhirnya bisa tidur nyenyak, dan itu berkat dirimu. Kuminta Pos Gagak mengantarkan sedikit imbalan dari kas penjaga.\n\nJaga bilahmu tetap terasah.\n- Marsekal Redbrook',
+  'entities.letters.letter_q_greyjaw.sender': 'Marsekal Redbrook',
+  'entities.letters.letter_q_greyjaw.subject': 'Si Tua Rahang Kelabu, akhirnya',
+  'entities.letters.letter_q_greyjaw.body':
+    'Kabar cepat menyebar di kota sekecil ini. Semalam para gembala bersulang untuk kesehatanmu, dan Wilkes bersumpah serigala itu sebesar gerobak. Biarkan mereka melebih-lebihkan: kau pantas mendapatkannya.\n\nNikmati makan atas nama penjaga.\n- Marsekal Redbrook',
+  'entities.letters.letter_q_hollow.sender': 'Bruder Aldric',
+  'entities.letters.letter_q_hollow.subject': 'Apa yang kaulakukan dalam gelap',
+  'entities.letters.letter_q_hollow.body':
+    'Hanya segelintir yang akan tahu apa yang terkubur di lembah itu, dan lebih sedikit lagi yang akan percaya. Aku tahu, dan aku tidak akan melupakannya.\n\nSemoga jalanmu tetap terang.\n- Bruder Aldric',
 };

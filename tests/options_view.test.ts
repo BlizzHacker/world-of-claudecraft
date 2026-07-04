@@ -229,6 +229,8 @@ describe('options_view: interface dispatch matrix (cluster 5)', () => {
     const controls = buildInterfaceControls(makeSource());
     expect(keysOf(controls)).toEqual([
       'uiScale',
+      'playerFrameScale',
+      'targetFrameScale',
       'hudOpacity',
       'tooltipScale',
       'fctScale',
@@ -243,11 +245,16 @@ describe('options_view: interface dispatch matrix (cluster 5)', () => {
       'landingHighContrast',
       'invertLookY',
       'showDevBadges',
+      'showOwnNameplate',
       'landingHighContrast',
       'invertLookY',
       'startAttackOnAbilityUse',
+      'walkByAutoloot',
+      'groundReticle',
+      'aurasOnPlayerFrame',
       'showItemLevel',
       'showSecondaryActionBar',
+      'showDailyRewardsChest',
     ]);
     expect(find(controls, 'reduceMotion')).toMatchObject({ control: 'boolToggle' });
   });

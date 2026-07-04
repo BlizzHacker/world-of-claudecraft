@@ -63,6 +63,12 @@ export interface DungeonLayout {
    * open-floor delve; unset elsewhere (solid end walls, sequential crawl).
    */
   doorway?: { front?: boolean; back?: boolean; hw?: number };
+  /** Room shell outline (CCW, simple, star-shaped from `shellPole`), instance-local.
+   * When present, render/collision derive the room's walls and floor mask from this
+   * polygon instead of the rectangular wallX/zMin/zMax shell. */
+  shellPolygon?: Array<{ x: number; z: number }>;
+  /** Star-shaping pole paired with `shellPolygon` (see geometry2d.polygonIsStarShaped). */
+  shellPole?: { x: number; z: number };
 }
 
 /** Default half-width of the walkable doorway cut into an open-floor end wall. */

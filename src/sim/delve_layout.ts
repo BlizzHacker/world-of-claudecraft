@@ -2,6 +2,12 @@
 // modular 10 to 20 minute instances (~40yd wide, ~80yd deep). Sim layer: no
 // three.js imports.
 import type { Collider } from './colliders';
+import {
+  isLitanyModuleId,
+  type LitanyModuleId,
+  litanyModuleColliders,
+  litanyModuleLayout,
+} from './delve_litany_layout';
 import { type DungeonLayout, layoutColliders } from './dungeon_layout';
 
 export type DelveModuleId =
@@ -14,18 +20,22 @@ export type DelveModuleId =
   | 'hellmaw_hollow_descent'
   | 'hellmaw_burning_chasm'
   | 'hellmaw_pyre_hall'
-  | 'hellmaw_finale';
+  | 'hellmaw_finale'
+  // The Drowned Litany (Mirefen Marsh, delve index 1). Each module is an
+  // irregular marsh-ruin shape carved from the shared rectangular footprint by
+  // interior obstacles only (stubs/pillars/tombs/clutter): crescent,
+  // island_cluster, ring, sinkhole, fan, y_split, asymmetric_apse.
+  | 'litany_sluice'
+  | 'litany_ledger'
+  | 'litany_ring'
+  | 'litany_baptistry'
+  | 'litany_choir_loft'
+  | 'litany_causeway'
+  | 'litany_apse';
 
 interface GridPoint {
   x: number;
   z: number;
-}
-
-interface WallStub {
-  x: number;
-  z: number;
-  hw: number;
-  hd: number;
 }
 
 function grid(zFrom: number, zTo: number, zStep: number, xs: readonly number[]): GridPoint[] {
@@ -283,6 +293,24 @@ export const HELLMAW_FINALE_LAYOUT: DungeonLayout = {
   dais: D_DAIS,
   clutter: FINALE_CLUTTER,
 };
+// ---------------------------------------------------------------------------
+// The Drowned Litany (Mirefen Marsh): compatibility layouts only.
+// Real room shape lives in delve_litany_layout.ts.
+// ---------------------------------------------------------------------------
+
+function litanyCompatLayout(moduleId: LitanyModuleId): DungeonLayout {
+  const layout = litanyModuleLayout(moduleId);
+  if (!layout) throw new Error(`Expected Litany geometry for ${moduleId}`);
+  return { ...layout, litanyModuleId: moduleId } as DungeonLayout & { litanyModuleId: string };
+}
+
+export const LITANY_SLUICE_LAYOUT = litanyCompatLayout('litany_sluice');
+export const LITANY_LEDGER_LAYOUT = litanyCompatLayout('litany_ledger');
+export const LITANY_RING_LAYOUT = litanyCompatLayout('litany_ring');
+export const LITANY_BAPTISTRY_LAYOUT = litanyCompatLayout('litany_baptistry');
+export const LITANY_CHOIR_LOFT_LAYOUT = litanyCompatLayout('litany_choir_loft');
+export const LITANY_CAUSEWAY_LAYOUT = litanyCompatLayout('litany_causeway');
+export const LITANY_APSE_LAYOUT = litanyCompatLayout('litany_apse');
 
 export const DELVE_MODULE_LAYOUTS: Record<DelveModuleId, DungeonLayout> = {
   reliquary_sunken_ossuary: RELIQUARY_SUNKEN_OSSUARY_LAYOUT,
@@ -295,10 +323,19 @@ export const DELVE_MODULE_LAYOUTS: Record<DelveModuleId, DungeonLayout> = {
   hellmaw_burning_chasm: HELLMAW_BURNING_CHASM_LAYOUT,
   hellmaw_pyre_hall: HELLMAW_PYRE_HALL_LAYOUT,
   hellmaw_finale: HELLMAW_FINALE_LAYOUT,
+  // The Drowned Litany (Mirefen Marsh): distinct irregular marsh-ruin shapes.
+  litany_sluice: LITANY_SLUICE_LAYOUT, // crescent: curved banked channel
+  litany_ledger: LITANY_LEDGER_LAYOUT, // island_cluster: scattered ledges + channels
+  litany_ring: LITANY_RING_LAYOUT, // ring: sealed central mass, loop around it
+  litany_baptistry: LITANY_BAPTISTRY_LAYOUT, // sinkhole: central pit + walkway rim
+  litany_choir_loft: LITANY_CHOIR_LOFT_LAYOUT, // fan: ranks fanning from the entrance
+  litany_causeway: LITANY_CAUSEWAY_LAYOUT, // y_split: central spine, two lanes rejoin
+  litany_apse: LITANY_APSE_LAYOUT, // asymmetric_apse: boss ring, west-heavy cover
 };
 
 /** Interior collision set for a delve module, in instance-local coordinates. */
 export function delveModuleColliders(moduleId: DelveModuleId): Collider[] {
+  if (isLitanyModuleId(moduleId)) return litanyModuleColliders(moduleId);
   return layoutColliders(DELVE_MODULE_LAYOUTS[moduleId]);
 }
 

@@ -33,7 +33,7 @@ export const shellStrings = {
       world: 'Loading world...',
       worldProgress: 'Loading world... {done}/{total}',
       enteringWorld: 'Entering the world...',
-      connectingRealm: 'Connecting to realm...',
+      connectingRealm: 'Connecting to world...',
       assetsFailed: 'Asset loading failed: try reloading. {error}',
       rendererFailed: 'Could not start the renderer: try reloading. {error}',
       enterTimeout: 'Could not enter world. The connection timed out. Is the game server running?',
@@ -57,6 +57,7 @@ export const shellStrings = {
         usernameTaken: 'That username is already taken.',
         invalidCredentials: 'Invalid username or password.',
         verificationFailed: 'Verification failed. Please try again.',
+        desktopCodeInvalid: 'Desktop login code is invalid or expired. Please try again.',
         invalidCharacterName: 'Invalid character name. Use 2-16 letters.',
         characterNameNotAllowed: 'That character name is not allowed.',
         invalidClass: 'Invalid class.',
@@ -75,6 +76,25 @@ export const shellStrings = {
         renameNotPermitted: 'Renaming this character is not allowed.',
       },
     },
+    // Desktop (Electron) shell surfaces: the auto-update toast rendered by the
+    // renderer (src/ui/desktop_update_toast.ts) and the crash-dialog strings
+    // the renderer pushes to the main process (src/game/desktop_shell_strings.ts,
+    // mirrored by electron/shell_strings.cjs DEFAULT_SHELL_STRINGS in English).
+    desktop: {
+      update: {
+        downloading: 'Downloading update {version}...',
+        ready: 'Update {version} is ready. It installs when you quit, or restart now.',
+        restart: 'Restart now',
+        later: 'Later',
+      },
+      crash: {
+        title: 'Cryptic Realm',
+        body: 'The game view stopped working. Reload it?',
+        reload: 'Reload',
+        quit: 'Quit',
+        fatalBody: 'Cryptic Realm hit an unexpected error and needs to close.',
+      },
+    },
     realm: {
       noRealms: "No realms available.",
       loading: "Loading realms...",
@@ -90,7 +110,7 @@ export const shellStrings = {
       popTipLow:
         'Low population: fewer than 15 players online right now. Plenty of room; great for a fresh start.',
       popTipMedium:
-        'Medium population: 15 to 39 players online right now. A healthy, active realm.',
+        'Medium population: 15 to 39 players online right now. A healthy, active world.',
       popTipHigh:
         'High population: 40 to 79 players online right now. Busy, with lots of players around.',
       popTipFull:
@@ -187,18 +207,18 @@ export const shellStrings = {
         warrior:
           'Warriors are battle-hardened melee fighters who build Rage as they deal or take damage. They absorb heavy hits or crush foes with powerful weapons.',
         paladin:
-          'Paladins are holy crusaders who support allies with blessings, heal wounds with Holy Light, and protect the weak in heavy armor.',
+          'Paladins are holy crusaders who support allies with blessings, heal wounds with Mending Light, and protect the weak in heavy armor.',
         hunter:
           'Hunters are ranged specialists who fight beside a tamed beast, peppering enemies with aimed and rapid shots, slowing them with stings and concussive fire, and shifting aspects to suit the moment.',
         rogue:
           'Rogues are stealthy assassins who spend Energy and Combo Points on backstabs and finishing moves from the shadows.',
         priest:
-          'Priests call on Holy Light to heal and shield allies, while Shadow magic lets them drain the life of their enemies.',
+          'Priests call on Mending Light to heal and shield allies, while Shadow magic lets them drain the life of their enemies.',
         shaman:
           'Shaman command the elements, imbuing weapons with power, shocking enemies with lightning, and restoring allies.',
-        mage: 'Mages bend Fire, Frost, and Arcane power to destroy enemies, conjure water, and freeze threats in place.',
+        mage: 'Mages bend Fire, Frost, and arcane force to destroy enemies, summon water, and freeze threats in place.',
         warlock:
-          'Warlocks summon demons, apply curses and damage-over-time magic, and drain life from enemies to endure.',
+          'Warlocks summon demons, apply curses and damage-over-time magic, and leech life from enemies to endure.',
         druid:
           'Druids channel nature, healing wounds, entangling foes, and shifting into animal forms for defense or damage.',
       },

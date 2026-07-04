@@ -2,10 +2,82 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const tr_TR: Partial<Record<TranslationKey, string>> = {
+  'entities.npcs.auctioneer_voss.greeting':
+    'World Market burada da açık, {className}. Diyardaki her maceracıdan alışveriş yap ya da kendi mallarını sergile.',
+  'entities.npcs.auctioneer_voss.name': 'Mezatçı Voss',
+  'entities.npcs.auctioneer_voss.title': 'World Market Bekçisi',
+  'hudChrome.devBadge.badgeTitle': 'Geliştirici: {tier}',
+  'hudChrome.devBadge.contributor': 'Açık kaynak katkıcısı',
+  'hudChrome.devBadge.flavors.architect': 'Diyarın bir mimarı: 30 pull request birleştirildi.',
+  'hudChrome.devBadge.flavors.artificer':
+    'Beş pull request geldi ve dünya senin koduna göre şekilleniyor.',
+  'hudChrome.devBadge.flavors.runesmith': 'On beş pull request çalışan oyuna işlendi.',
+  'hudChrome.devBadge.flavors.tinkerer': "İlk pull request'in diyara indi.",
+  'hudChrome.devBadge.flavors.worldwright':
+    'Dünyaların bir ustası: 70 pull request oyunu şekillendiriyor.',
+  'hudChrome.devBadge.link.benefits':
+    "Açık kaynak deposuna birleştirilen pull request'lerin için bir geliştirici rozeti kazanmak üzere GitHub hesabını bağla.",
+  'hudChrome.devBadge.link.cta': "GitHub'ı Bağla",
+  'hudChrome.devBadge.link.error': 'GitHub bağlanamadı. Lütfen tekrar dene.',
+  'hudChrome.devBadge.link.relink': "GitHub'ı Yeniden Bağla",
+  'hudChrome.devBadge.linkedAs': '{login} olarak bağlandı',
+  'hudChrome.devBadge.prsLanded': '{count} pull request birleştirildi',
+  'hudChrome.devBadge.tiers.architect': 'Mimar',
+  'hudChrome.devBadge.tiers.artificer': 'Zanaatkâr',
+  'hudChrome.devBadge.tiers.runesmith': 'Rün Ustası',
+  'hudChrome.devBadge.tiers.tinkerer': 'Tamirci',
+  'hudChrome.devBadge.tiers.worldwright': 'Dünya Ustası',
+  'hudChrome.devBadge.title': 'Geliştirici',
+  'hudChrome.devBadge.unlink': 'GitHub Bağlantısını Kaldır',
+  'hudChrome.itemShare.linkHint': 'Bu eşyayı sohbete bağlamak için Shift+tıkla.',
+  'hudChrome.itemTooltip.requiresLevel': 'Gereken Seviye {level}',
+  'hudChrome.keybinds.discord': 'Discord',
+  'hudChrome.leaderboard.devEmpty': 'Henüz sıralı katkıcı yok.',
+  'hudChrome.leaderboard.devName': 'Katkıcı',
+  'hudChrome.leaderboard.devTierCol': 'Rozet',
+  'hudChrome.leaderboard.mergedPrs': "Birleştirilen PR'ler",
+  'hudChrome.leaderboard.tabDevs': 'Geliştiriciler',
+  'hudChrome.lootSettings.close': 'Ganimet ayarlarını kapat',
+  'hudChrome.lootSettings.groupLoot': 'Grup Ganimeti',
+  'hudChrome.lootSettings.leaderOption': 'Ganimet Yöneticisi: Lider (Sen)',
+  'hudChrome.lootSettings.masterOption': 'Ganimet Yöneticisi: {name}',
+  'hudChrome.lootSettings.menuItem': 'Ganimet Ayarları',
+  'hudChrome.lootSettings.method': 'Ganimet Yöntemi',
+  'hudChrome.lootSettings.rollThreshold': 'Zar Eşiği',
+  'hudChrome.lootSettings.title': 'Ganimet Ayarları',
+  'hudChrome.lootSettings.valueMaster': 'Yönetilen Ganimet',
+  'hudChrome.masterLoot.looterChanged': 'Ganimet Yöneticisi artık {name}.',
+  'hudChrome.masterLoot.rollingFor': '{item} için zar atılıyor.',
+  'hudChrome.masterLoot.summaryGroup': 'Ganimet Ayarları: Grup Ganimeti.',
+  'hudChrome.masterLoot.summaryMaster':
+    'Ganimet Ayarları: Yönetilen Ganimet, Ganimet Yöneticisi {name}, eşik {threshold}.',
+  'hudChrome.masterLoot.thresholdSet': 'Ganimet eşiği {threshold} olarak ayarlandı.',
+  'hudChrome.options.showDevBadges': 'Geliştirici Rozetlerini Göster',
+  'hudChrome.options.groundReticle': 'Yer hedefleme halkası',
+  'hudChrome.options.startAttackOnAbility': 'Yetenek Kullanımında Otomatik Saldırı',
+  'hudChrome.party.promoteLeader': 'Lider Yap',
+  'hudChrome.plurals.playersMatching.few':
+    'Kim: {realm} sunucusunda "{query}" ile eşleşen {count} oyuncu.',
+  'hudChrome.plurals.playersMatching.many':
+    'Kim: {realm} sunucusunda "{query}" ile eşleşen {count} oyuncu.',
+  'hudChrome.plurals.playersMatching.one':
+    'Kim: {realm} sunucusunda "{query}" ile eşleşen {count} oyuncu.',
+  'hudChrome.plurals.playersMatching.other':
+    'Kim: {realm} sunucusunda "{query}" ile eşleşen {count} oyuncu.',
+  'hudChrome.statInfo.desc.spellPower':
+    'Büyülerinin hasarını ve iyileştirmelerinin gücünü artırır. Her Zeka puanı, teçhizat veya güçlendirmelerden gelenlere ek olarak biraz Büyü Gücü sağlar.',
+  'hudChrome.statInfo.names.spellPower': 'Büyü Gücü',
+  'hudChrome.statInfo.sources.attributes': 'Özelliklerinden: {value}',
+  'hudChrome.statInfo.sources.base': 'Temel: {value}',
+  'hudChrome.statInfo.sources.buff': '{name}: {value}',
+  'hudChrome.statInfo.sources.fromAttribute': '{stat} özelliğinden: {value}',
+  'hudChrome.statInfo.sources.gear': 'Kuşanılan teçhizat: {value}',
+  'hudChrome.statInfo.sources.header': 'Şunlardan oluşur:',
+  'hudChrome.statInfo.sources.talents': 'Yetenekler ve etkiler: {value}',
   'a11y.characterActions': 'Karakter eylemleri',
   'a11y.discordCommunity': 'Cryptic Realm Discord topluluğuna katıl',
   'a11y.donateProject': "Cryptic Realm'a destek olmak için bağış yap",
-  'a11y.githubProject': 'Open Cryptic Realm contributions',
+  'a11y.githubProject': 'Cryptic Realm GitHub projesini aç',
   'a11y.goHome': 'Ana sayfaya git',
   'a11y.languageSelection': 'Dil seçimi',
   'a11y.mainNavigation': 'Ana gezinme',
@@ -21,6 +93,7 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'abilityUi.actionBar.slotAria': 'Eylem yuvası {slot}: {ability}',
   'abilityUi.cast.demonHeal': 'Şeytan İyileştirmesi',
   'abilityUi.cast.fishing': 'Balık Tutma',
+  'abilityUi.cast.thunzharrStormcall': 'Fırtına Çağrısı',
   'abilityUi.forms.bear': 'Ayı',
   'abilityUi.forms.cat': 'Kurt',
   'abilityUi.resources.energy': 'Enerji',
@@ -337,7 +410,9 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'delveUi.tracker.objective': 'Hedef',
   'delveUi.tracker.title': 'Mağara',
   'download.desc':
-    'Optimize edilmiş performans ve tam ekran oyun için bağımsız başlatıcıyı edinin.',  'entities.abilities.adrenaline_rush.description':
+    'Optimize edilmiş performans ve tam ekran oyun için bağımsız başlatıcıyı edinin.',
+  'download.title': 'Masaüstü Başlatıcısını İndir',
+  'entities.abilities.adrenaline_rush.description':
     'Kanın kaynar, anında 60 enerji geri kazandırır.',
   'entities.abilities.adrenaline_rush.name': 'Adrenalin Patlaması',
   'entities.abilities.aimed_shot.description':
@@ -493,6 +568,21 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.fireball.description':
     'Ateşli bir top fırlatarak {damage} Ateş hasarı ve ek olarak zamana yayılı hasar verir.',
   'entities.abilities.fireball.name': 'Ateş Topu',
+  'entities.abilities.rain_of_fire.name': 'Ateş Yağmuru',
+  'entities.abilities.rain_of_fire.description':
+    'Hedef alana ateş yağdırır ve düşmanları yakarak {damage} Ateş hasarı verir.',
+  'entities.abilities.volley.name': 'Ok Yağmuru',
+  'entities.abilities.volley.description':
+    'Hedef alana ok yağdırır ve içindeki düşmanlara {damage} hasar verir.',
+  'entities.abilities.hurricane.name': 'Kasırga',
+  'entities.abilities.hurricane.description':
+    'Hedef alana bir kasırga indirir ve düşmanlara {damage} Doğa hasarı verir.',
+  'entities.abilities.earthquake.name': 'Deprem',
+  'entities.abilities.earthquake.description':
+    'Hedef alanı sarsar ve düşmanlara {damage} Doğa hasarı verir.',
+  'entities.abilities.flamestrike.name': 'Alev Vuruşu',
+  'entities.abilities.flamestrike.description':
+    'Hedef alanda bir alev patlaması yaratır ve patlamaya yakalanan düşmanlara {damage} Ateş hasarı verir.',
   'entities.abilities.flame_shock.description':
     'Hedefi ateşle dağlar: 25 hasar artı 12 saniye boyunca {damage}.',
   'entities.abilities.flame_shock.name': 'Alev Şoku',
@@ -976,6 +1066,15 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'entities.items.moggers_shiv.name': "Mogger'ın Şişi",
   'entities.items.moggers_stomper_boots.name': "Mogger'ın Ezici Çizmeleri",
   'entities.items.monarch_crown_helm.name': "Hükümdar'ın Tacı",
+  'entities.items.copper_mining_pick.name': 'Bakır Maden Kazması',
+  'entities.items.iron_mining_pick.name': 'Demir Maden Kazması',
+  'entities.items.mithril_mining_pick.name': 'Mithril Maden Kazması',
+  'entities.items.handaxe.name': 'El Baltası',
+  'entities.items.felling_axe.name': 'Kesim Baltası',
+  'entities.items.ironbark_axe.name': 'Demir Kabuklu Balta',
+  'entities.items.gathering_sickle.name': 'Toplama Orağı',
+  'entities.items.bronze_sickle.name': 'Bronz Orak',
+  'entities.items.silverleaf_sickle.name': 'Gümüşyaprak Orağı',
   'entities.items.moongate_rubbing.name': 'Koruyucu İz Baskısı',
   'entities.items.moonpale_scale.name': 'Ay Solgunu Pul',
   'entities.items.moonscale_saber.name': 'Aypulu Pala',
@@ -1074,6 +1173,14 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'entities.items.steel_orange_armor_plate.name': 'Çelik Turuncu',
   'entities.items.storm_core.name': 'Fırtına Çekirdeği',
   'entities.items.stormcallers_crown.name': 'Fırtınaçağıranın Tacı',
+  'entities.items.crownforged_gauntlets.name': 'Taçdövme Eldivenleri',
+  'entities.items.nighttalon_grips.name': 'Gecepençe Kavrayıcıları',
+  'entities.items.soulflame_gloves.name': 'Ruhalevi Eldivenleri',
+  'entities.items.stormcallers_handguards.name': 'Fırtınaçağıranın El Koruyucuları',
+  'entities.items.crownforged_girdle.name': 'Taçdövme Kemeri',
+  'entities.items.nighttalon_waistband.name': 'Gecepençe Kuşağı',
+  'entities.items.soulflame_cord.name': 'Ruhalevi Kordonu',
+  'entities.items.stormcallers_waistguard.name': 'Fırtınaçağıranın Bel Koruyucusu',
   'entities.items.stormcallers_spaulders.name': 'Fırtınaçağıranın Omuzlukları',
   'entities.items.stormshard_leggings.name': 'Fırtınaparçası Tozlukları',
   'entities.items.sturdy_belt.name': 'Sağlam Yolcu Kemeri',
@@ -1115,6 +1222,11 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'entities.items.widowfang_dirk.name': 'Duldişi Hançeri',
   'entities.items.windguard_leggings.name': 'Rüzgârmuhafızı Tozlukları',
   'entities.items.wolf_fang.name': 'Çatlak Kurt Dişi',
+  'entities.items.linen_pouch.name': 'Keten Kese',
+  'entities.items.travelers_knapsack.name': 'Gezginin Sırt Çantası',
+  'entities.items.wolfhide_satchel.name': 'Kurt Derisi Çanta',
+  'entities.items.gravewoven_bag.name': 'Mezar Dokuması Çanta',
+  'entities.items.mistcallers_duffel.name': 'Sis Çağıranın Denizci Çantası',
   'entities.items.worn_sword.name': 'Yıpranmış Kısa Kılıç',
   'entities.items.woven_robe.name': 'Vadidokuma Cübbesi',
   'entities.items.wyrmcult_grand_robe.name': 'Ejdertarikatı Görkemli Cübbesi',
@@ -1144,14 +1256,14 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.deathstalker_voss.name': 'Ölümavcısı Voss',
   'entities.mobs.deepfen_murloc.name': 'Derinbatak Kapanı',
   'entities.mobs.deeprock_kobold.name': 'Derinkaya Tünelcisi',
-  'entities.mobs.doomguard.name': 'Kıyamet Muhafızı',
+  'entities.mobs.wraithborn.name': 'Kıyamet Muhafızı',
   'entities.mobs.drowned_dead.name': 'Boğulmuş Ölü',
   'entities.mobs.drowned_templeguard.name': 'Boğulmuş Tapınak Muhafızı',
   'entities.mobs.drowned_thrall.name': 'Boğulmuş Köle',
   'entities.mobs.drowned_votary.name': 'Boğulmuş Mürit',
   'entities.mobs.fallen_captain_aldren.name': 'Düşmüş Kaptan Aldren',
-  'entities.mobs.felguard.name': 'İfrit Muhafızı',
-  'entities.mobs.felhunter.name': 'İfrit Avcısı',
+  'entities.mobs.warfiend.name': 'İfrit Muhafızı',
+  'entities.mobs.spellhound.name': 'İfrit Avcısı',
   'entities.mobs.fen_troll.name': 'Mirefen Trolü',
   'entities.mobs.forest_wolf.name': 'Orman Kurdu',
   'entities.mobs.glimmermere_wader.name': 'Glimmermere Yürüyücüsü',
@@ -1164,8 +1276,8 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.grix_the_tunnelking.name': 'Tünelkral Grix',
   'entities.mobs.grubjaw.name': 'Obur Grubjaw',
   'entities.mobs.hollow_acolyte.name': 'Oyuk Çömezi',
-  'entities.mobs.imp.name': 'İblisçik',
-  'entities.mobs.infernal.name': 'Cehennem Zebanisi',
+  'entities.mobs.emberkin.name': 'İblisçik',
+  'entities.mobs.pyre_colossus.name': 'Cehennem Zebanisi',
   'entities.mobs.ironvein_foreman.name': 'Demirdamar Ustabaşı',
   'entities.mobs.ironvein_sapper.name': 'Demirdamar Lağımcısı',
   'entities.mobs.knight_commander_olen.name': 'Şövalye-Komutan Olen',
@@ -1206,7 +1318,7 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.sister_nhalia.name': 'Rahibe Nhalia',
   'entities.mobs.sloomtooth_the_drowned.name': 'Boğulmuş Sloomtooth',
   'entities.mobs.stormcrag_elemental.name': 'Fırtınakaya Elementali',
-  'entities.mobs.succubus.name': 'Sukubus',
+  'entities.mobs.duskborn.name': 'Sukubus',
   'entities.mobs.thornpeak_ogre.name': 'Dikenzirve Ogresi',
   'entities.mobs.tidebound_acolyte.name': 'Gelgitbağlı Çömez',
   'entities.mobs.tunnel_rat.name': 'Tünel Faresi Kazıcısı',
@@ -1216,7 +1328,7 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.vision_aldren_warrior.name': "Kaptan Aldren'in Hayali",
   'entities.mobs.vision_deathstalker_voss.name': "Kraliyet Suikastçısı Voss'un Hayali",
   'entities.mobs.vision_malric_mage.name': "Baş Rahip Malric'in Hayali",
-  'entities.mobs.voidwalker.name': 'Boşlukgezer',
+  'entities.mobs.gloomshade.name': 'Boşlukgezer',
   'entities.mobs.voskar_emberwing.name': 'Korkanat Voskar',
   'entities.mobs.warlock_imp.name': 'Ateş İblisi',
   'entities.mobs.warlock_voidwalker.name': 'Boşluk İblisi',
@@ -1951,8 +2063,8 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'fiesta.word.wave': 'GÜÇLENDİRMELER!',
   'footer.copyright': '2026 Cryptic Realm',
   'footer.discordLabel': "Discord'a Katıl",
-  'footer.githubLabel': 'Contributions',
-  'footer.githubLink': '/contributions.html',
+  'footer.githubLabel': 'Açık Kaynak Proje',
+  'footer.githubLink': 'https://github.com/levy-street/world-of-claudecraft',
   'footer.whitepaper': 'Teknik Doküman',
   'footer.privacy': 'Gizlilik Politikası',
   'footer.terms': 'Hizmet Koşulları',
@@ -2211,7 +2323,7 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'guide.bestiary.notedLabel': 'Dikkate değer',
   'guide.bestiary.rare': 'Nadir',
   'guide.brand': 'Cryptic Realm',
-  'guide.brandShort': 'Cryptic',
+  'guide.brandShort': 'ClaudeCraft',
   'guide.breadcrumb.home': 'Rehber',
   'guide.breadcrumb.label': 'Gezinti İzi',
   'guide.chooser.clear': 'Temizle',
@@ -2416,12 +2528,12 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'guide.family.humanoid.desc':
     'Haydutlar, tarikatçılar ve yanlış işe bulaşmış diğerleri. Sadece dişle değil, taktikle savaşırlar.',
   'guide.family.humanoid.name': 'İnsansılar',
-  'guide.family.kobold.desc':
+  'guide.family.burrower.desc':
     'Madenleri ve oyukları istila eden, cevherlerini hırsla koruyan mum başlı kazıcılar.',
-  'guide.family.kobold.name': 'Koboldlar',
-  'guide.family.murloc.desc':
+  'guide.family.burrower.name': 'Koboldlar',
+  'guide.family.mudfin.desc':
     'Sığ suları gürültülü, bölgeci sürüler hâlinde saran amfibik bataklık sakinleri.',
-  'guide.family.murloc.name': 'Murloclar',
+  'guide.family.mudfin.name': 'Murloclar',
   'guide.family.ogre.desc':
     'Devasa, kıt akıllı ve tehlikeli. Yüksek geçitlere konaklar ve bir heyelan gibi vururlar.',
   'guide.family.ogre.name': 'Devler',
@@ -2433,7 +2545,8 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'guide.family.undead.desc':
     'Daha karanlık ellerce diriltilmiş huzursuz ölüler. Yorulmaz ve kaçmazlar.',
   'guide.family.undead.name': 'Hortlaklar',
-  'guide.faqPage.a1': 'Yes. The whole game is free to play to the level cap.',
+  'guide.faqPage.a1':
+    "Evet. Oyunun tamamı seviye sınırına kadar ücretsiz oynanabilir ve kaynak kodu GitHub'da açıktır.",
   'guide.faqPage.a10':
     'Sınır seviye {cap}. Oradan itibaren beş oyunculu zindanları ve on oyunculu akını koşar, daha iyi teçhizatın peşinden gider ve kendinizi arenada sınarsınız.',
   'guide.faqPage.a11':
@@ -2450,7 +2563,8 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
     'Görevler, zindanlar ve keşiflerle dolu, birbirine bağlı üç bölgede ulaşılan seviye {cap}.',
   'guide.faqPage.a7':
     'Çevrimiçi karakterler sunucuda otomatik olarak kaydedilir. Çevrimdışı karakterler hızlı oturumlar ve testler için tarayıcınızda yaşar.',
-  'guide.faqPage.a8': 'Private realms are operated through verified Cryptic Realm channels.',
+  'guide.faqPage.a8':
+    'Evet. Proje açık kaynaklıdır, böylece kendi sunucunuzu çalıştırabilirsiniz. GitHub deposuna bakın.',
   'guide.faqPage.a9':
     "Evet. Eğlence için herkese düello açın ya da diğer oyuncularla savaşmak için Küllü Kolezyum'a adım atın. PvP isteğe bağlıdır, dolayısıyla asla zorlanmazsınız.",
   'guide.faqPage.intro': 'Yeni oyuncuların en sık sorduğu sorular.',
@@ -2465,10 +2579,11 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'guide.faqPage.q7': 'Karakterim kaydedilecek mi?',
   'guide.faqPage.q8': 'Kendi kopyamı barındırabilir miyim?',
   'guide.faqPage.q9': 'PvP var mı?',
-  'guide.footer.blurb': 'A classic-style micro-MMO. Quest, group up, and explore a hand-built world, right in your browser.',
+  'guide.footer.blurb':
+    'Açık kaynaklı, klasik tarzda bir mikro MMO. Görev yapın, gruplaşın ve elle yapılmış bir dünyayı, tam da tarayıcınızda keşfedin.',
   'guide.footer.communityWiki': "Topluluk Wiki'si",
   'guide.footer.discord': "Discord'a Katıl",
-  'guide.footer.github': 'Contributions',
+  'guide.footer.github': "GitHub'daki Kaynak",
   'guide.footer.playNow': 'Şimdi Oyna',
   'guide.footer.rights': 'Cryptic Realm',
   'guide.gear.consumablesElixirs':
@@ -2603,13 +2718,14 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'guide.home.community.body':
     'Hemen katıl ya da bir merhaba demeye gel. Dünya, arkadaşlarla daha güzel.',
   'guide.home.community.discord': "Discord'a katıl",
-  'guide.home.community.github': 'Contributions',
+  'guide.home.community.github': "GitHub'da yıldız ver",
   'guide.home.community.heading': 'Diyara katıl',
   'guide.home.community.play': 'Şimdi Oyna',
   'guide.home.ctaLearn': 'Nasıl Oynanır',
   'guide.home.ctaPlay': 'Şimdi Oyna',
   'guide.home.eyebrow': "Klasik tarz tarayıcı MMO'su",
-  'guide.home.faq.a1': 'Yes. The whole game is free to the level cap.',
+  'guide.home.faq.a1':
+    "Evet. Oyunun tamamı seviye sınırına kadar ücretsiz ve GitHub'da açık kaynak.",
   'guide.home.faq.a2':
     'Hayır. Oyun, cüzdan olmadan da tümüyle oynanabilir. İsteğe bağlı topluluk jetonu yalnızca görsel süsler açar ve gücü asla etkilemez.',
   'guide.home.faq.a3':
@@ -2641,8 +2757,9 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'guide.home.what.pillarClassesBody':
     'Tankla, iyileştir ya da hasarı sen ver. Her sınıf, arketipine yakışan biçimde oynanır ve onu kendine özgü kılacak yetenekler sunar.',
   'guide.home.what.pillarClassesTitle': 'Dokuz sınıf, üç rol',
-  'guide.home.what.pillarOpenBody': 'Free to play to the level cap. No pay to win, ever.',
-  'guide.home.what.pillarOpenTitle': 'Free to play',
+  'guide.home.what.pillarOpenBody':
+    'Seviye sınırına kadar ücretsiz oynanır, oyunun tamamı açık kaynaktır. Asla paraya dayalı üstünlük yok.',
+  'guide.home.what.pillarOpenTitle': 'Ücretsiz ve açık kaynak',
   'guide.home.what.pillarPlayBody':
     'İndirme yok, başlatıcı yok. Bir karakter yarat ve masaüstünde ya da telefonunda saniyeler içinde dünyaya gir.',
   'guide.home.what.pillarPlayTitle': 'Tarayıcında oyna',
@@ -2757,17 +2874,17 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'guide.notFound.body': 'Aradığın sayfa yok ya da taşınmış olabilir.',
   'guide.notFound.home': 'Genel bakışa dön',
   'guide.notFound.title': 'O sayfayı bulamadık',
-  'guide.petHook.doomguard': 'Uzaktan ağır gölge yağdıran seçkin bir büyücü.',
-  'guide.petHook.felguard':
+  'guide.petHook.wraithborn': 'Uzaktan ağır gölge yağdıran seçkin bir büyücü.',
+  'guide.petHook.warfiend':
     'Dayanıklı bir yakın dövüş kabadayısı; onu çağırabildiğin andan itibaren her işe yarayan bir yoldaş.',
-  'guide.petHook.felhunter': 'Düşman büyücülerin peşine düşen bir gölge akıncısı.',
-  'guide.petHook.imp':
+  'guide.petHook.spellhound': 'Düşman büyücülerin peşine düşen bir gölge akıncısı.',
+  'guide.petHook.emberkin':
     'Düşmanları güvenli bir mesafeden ateş oklarıyla hırpalayan menzilli bir iblis.',
-  'guide.petHook.infernal':
+  'guide.petHook.pyre_colossus':
     'Ezici yakın dövüşüyle iri yarı bir devasa güç, çiğ kuvvet için çağrılır.',
-  'guide.petHook.succubus':
+  'guide.petHook.duskborn':
     'Sert vuran ama baskı altında çabuk dağılan hızlı bir yakın dövüş iblisi.',
-  'guide.petHook.voidwalker':
+  'guide.petHook.gloomshade':
     'Kışkırtıp darbeleri üzerine çeken sağlam bir iblis, böylece rahatça büyü yapabilirsin.',
   'guide.placeholder.note': 'Rehberin bu bölümü yolda, yakında geliyor.',
   'guide.progression.bandLabel': 'Seviye {min} ile {max} arası',
@@ -4285,7 +4402,7 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'mode.caCopyAria': 'Sözleşme adresini kopyala',
   'mode.caLabel': '$CR Sözleşme Adresi',
   'mode.caNote':
-    "CR topluluk jetonumuzdur. Oynamak için gerekli değildir. CR'un faydasını ve döngüsünü tartışmak için Discord'a katılın.",
+    "WOC topluluk jetonumuzdur. Oynamak için gerekli değildir. WOC'un faydasını ve döngüsünü tartışmak için Discord'a katılın.",
   'mode.offlineAria': 'Çevrimdışı Oyna: anında yerel tek oyunculu oturum başlat',
   'mode.offlineDesc':
     'Tarayıcınızda anında tek oyunculu dünya. Hiçbir şey kaydedilmez: hızlı bir kapışma veya test için ideal.',
@@ -4322,7 +4439,7 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'news.loading': 'En son güncellemeler yükleniyor…',
   'news.prerelease': 'Ön sürüm',
   'news.title': 'Haberler ve Güncellemeler',
-  'news.viewOnGithub': 'Read release notes',
+  'news.viewOnGithub': "GitHub'da Görüntüle",
   'playerCard.actionCopyReferral': 'Davet Bağlantısını Kopyala',
   'playerCard.actionDownload': 'İndir',
   'playerCard.actionShareNative': 'Paylaş...',
@@ -4772,24 +4889,33 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.masterLoot.assigned': '{looter}, {item} esyasini {target} oyuncusuna atadi.',
   'hudChrome.masterLoot.unassigned': '{item} atanmadi ve herkes icin serbest.',
   'hudChrome.masterLoot.leaderOnly': 'Ganimet yontemini yalnizca grup lideri degistirebilir.',
+  'entities.itemSets.boundstone_vanguard.name': 'Bağlıtaş Öncüsü',
+  'entities.itemSets.boundstone_vanguard.bonus3': 'Saldırı ve büyü hızını %15 artırır.',
   'entities.itemSets.crownforged.name': 'Taçdövme savaş takımı',
   'entities.itemSets.crownforged.bonus2': 'Saldırı gücünü 40 artırır.',
-  'entities.itemSets.crownforged.bonus3': 'Gücü 15 ve dayanıklılığı 15 artırır.',
+  'entities.itemSets.crownforged.bonus3':
+    'Gücü 15, dayanıklılığı 15, saldırı ve büyü hızını %15 artırır.',
   'entities.itemSets.deathlord.name': 'Ölüm Lordu savaş takımı',
   'entities.itemSets.deathlord.bonus2': 'Saldırı gücünü 40 artırır.',
   'entities.itemSets.deathlord.bonus3': 'Gücü 15 ve dayanıklılığı 15 artırır.',
+  'entities.itemSets.greyjaw_stalker.name': 'Greyjaw İzsürücü takımı',
+  'entities.itemSets.greyjaw_stalker.bonus3': 'Saldırı ve büyü hızını %15 artırır.',
   'entities.itemSets.necromancers.name': 'Nekromansır giysileri',
-  'entities.itemSets.necromancers.bonus2': 'Hasarın neden olduğu büyü geri itmesini %50 azaltır.',
-  'entities.itemSets.necromancers.bonus3': 'Alınan hasar büyü yapmanı geciktirmez.',
+  'entities.itemSets.necromancers.bonus2': 'Geri itilemezsin (%100 geri itilme direnci).',
+  'entities.itemSets.necromancers.bonus3': 'Zekayı 10 ve dayanıklılığı 10 artırır.',
   'entities.itemSets.nighttalon.name': 'Gece Pençesi deri takımı',
   'entities.itemSets.nighttalon.bonus2': 'Saldırı gücünü 40 artırır.',
-  'entities.itemSets.nighttalon.bonus3': 'Çevikliği 15 ve kritik şansını %2 artırır.',
+  'entities.itemSets.nighttalon.bonus3':
+    'Çevikliği 15, kritik şansını %2, saldırı ve büyü hızını %15 artırır.',
   'entities.itemSets.soulflame.name': 'Ruh Alevi giysileri',
-  'entities.itemSets.soulflame.bonus2': 'Hasarın neden olduğu büyü geri itmesini %50 azaltır.',
-  'entities.itemSets.soulflame.bonus3': 'Alınan hasar büyü yapmanı geciktirmez.',
+  'entities.itemSets.soulflame.bonus2': 'Geri itilemezsin (%100 geri itilme direnci).',
+  'entities.itemSets.soulflame.bonus3': 'Zekayı 15, ruhu 15, saldırı ve büyü hızını %15 artırır.',
   'entities.itemSets.stormcallers.name': 'Fırtına Çağıran giysileri',
-  'entities.itemSets.stormcallers.bonus2': 'Hasarın neden olduğu büyü geri itmesini %50 azaltır.',
-  'entities.itemSets.stormcallers.bonus3': 'Alınan hasar büyü yapmanı geciktirmez.',
+  'entities.itemSets.stormcallers.bonus2': 'Geri itilemezsin (%100 geri itilme direnci).',
+  'entities.itemSets.stormcallers.bonus3':
+    'Zekayı 15, ruhu 15, saldırı ve büyü hızını %15 artırır.',
+  'entities.itemSets.vale_arcanist.name': 'Vadi Arkanisti giysileri',
+  'entities.itemSets.vale_arcanist.bonus3': 'Saldırı ve büyü hızını %15 artırır.',
   'entities.itemSets.wyrmshadow.name': 'Wyrm Gölgesi takımı',
   'entities.itemSets.wyrmshadow.bonus2': 'Saldırı gücünü 40 artırır.',
   'entities.itemSets.wyrmshadow.bonus3': 'Çevikliği 15 ve kritik şansını %2 artırır.',
@@ -4928,4 +5054,87 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.relay.help.label': 'Yardım Lazım',
   'hudChrome.discord.relay.help.hint': 'Topluluktan yardım iste',
   'hudChrome.options.showSecondaryActionBar': 'İkincil Eylem Çubuğunu Göster',
+  'errors.api.desktopCodeInvalid':
+    'Masaüstü giriş kodu geçersiz veya süresi dolmuş. Lütfen tekrar deneyin.',
+  'desktop.crash.body': 'Oyun görünümü çalışmayı durdurdu. Yeniden yüklensin mi?',
+  'desktop.crash.fatalBody':
+    'Cryptic Realm beklenmeyen bir hatayla karşılaştı ve kapatılması gerekiyor.',
+  'desktop.crash.quit': 'Çık',
+  'desktop.crash.reload': 'Yeniden Yükle',
+  'desktop.crash.title': 'Cryptic Realm',
+  'desktop.update.downloading': '{version} güncellemesi indiriliyor...',
+  'desktop.update.later': 'Daha Sonra',
+  'desktop.update.ready':
+    '{version} güncellemesi hazır. Çıkış yaptığında kurulur ya da şimdi yeniden başlat.',
+  'desktop.update.restart': 'Şimdi Yeniden Başlat',
+  'hudChrome.dailyRewards.close': 'Günlük ödülleri kapat',
+  'hudChrome.dailyRewards.endsIn': 'Bitmesine {time}',
+  'hudChrome.dailyRewards.error': 'Günlük ödüller yüklenemedi.',
+  'hudChrome.dailyRewards.history': 'Geçmiş Kazananlar',
+  'hudChrome.dailyRewards.intro':
+    'Günlük ödüllerin kilidini açmak için doğrulanmış cüzdanında yeterince WOC bulundur. Bir günlük çevirme ve dönüşümlü görevlerle puan kazan, ardından ödül havuzundan pay almak için günlük lider tablosunda yüksel.',
+  'hudChrome.dailyRewards.leaderboard': 'Günlük Lider Tablosu',
+  'hudChrome.dailyRewards.loading': 'Günlük ödüller yükleniyor...',
+  'hudChrome.dailyRewards.noHistory': 'Henüz ödeme yok.',
+  'hudChrome.dailyRewards.noLeaders': 'Henüz puan yok.',
+  'hudChrome.dailyRewards.prize': 'Ödül Havuzu',
+  'hudChrome.dailyRewards.reason.eligible': 'Ödüllerin kilidi açıldı.',
+  'hudChrome.dailyRewards.reason.no_wallet': 'En az 20 USD değerinde WOC bulunan bir cüzdan bağla.',
+  'hudChrome.dailyRewards.reason.price_unavailable':
+    'WOC fiyatı alınamıyor, ödüller geçici olarak kilitli.',
+  'hudChrome.dailyRewards.reason.under_minimum':
+    'Cüzdan, 20 USD değerindeki WOC alt sınırının altında.',
+  'hudChrome.dailyRewards.remainingHoursMinutes': '{hours}sa {minutes}dk',
+  'hudChrome.dailyRewards.remainingLessThanMinute': '<1dk',
+  'hudChrome.dailyRewards.remainingMinutes': '{minutes}dk',
+  'hudChrome.dailyRewards.reset': 'Sıfırla',
+  'hudChrome.dailyRewards.score': 'Skor',
+  'hudChrome.dailyRewards.sol': '{amount} SOL',
+  'hudChrome.dailyRewards.spinButton': 'Çevir',
+  'hudChrome.dailyRewards.spinClaimed': 'Alındı: +{points} puan.',
+  'hudChrome.dailyRewards.spinClose': 'Günlük çevirmeyi kapat',
+  'hudChrome.dailyRewards.spinDialogTitle': 'Günlük Ödül Çevirmesi',
+  'hudChrome.dailyRewards.spinReady': 'Bir çevirme hazır.',
+  'hudChrome.dailyRewards.spinResult': '+{points} puan',
+  'hudChrome.dailyRewards.spinTitle': 'Günlük Çevirme',
+  'hudChrome.dailyRewards.tasks': 'Görevler',
+  'hudChrome.dailyRewards.showChestButton': 'Sandığı Göster',
+  'hudChrome.dailyRewards.hideChestButton': 'Sandığı Gizle',
+  'hudChrome.dailyRewards.title': 'Günlük Ödüller',
+  'hudChrome.dailyRewards.unknown': 'Bilinmiyor',
+  'hudChrome.dailyRewards.usd': '{amount} USD',
+  'hudChrome.dailyRewards.walletConnectBody':
+    'Günlük ödüllerin kilidini açmak için WOC bulunan bir Solana cüzdanını doğrula.',
+  'hudChrome.dailyRewards.walletConnectButton': 'Cüzdanı Doğrula',
+  'hudChrome.dailyRewards.walletConnectTitle': 'Cüzdanı Doğrula',
+  'hudChrome.dailyRewards.walletHoldBody':
+    'Günlük ödüllerin kilidini açmak için en az {amount} USD değerinde WOC bulundur.',
+  'hudChrome.dailyRewards.walletHoldTitle': 'WOC Bulundur',
+  'hudChrome.dailyRewards.walletPriceBody':
+    'WOC fiyatı şu anda alınamıyor. Kısa süre sonra tekrar bak.',
+  'hudChrome.dailyRewards.walletValue': 'Cüzdan Değeri (WOC)',
+  'hudChrome.nativeUpdate.body':
+    "Cryptic Realm'ın yeni bir sürümü mevcut. En son düzeltmeler ve iyileştirmeler için şimdi güncelle.",
+  'hudChrome.nativeUpdate.bodyWithVersion':
+    "Cryptic Realm'ın {version} sürümü mevcut. En son düzeltmeler ve iyileştirmeler için şimdi güncelle.",
+  'hudChrome.nativeUpdate.notNow': 'Şimdi Değil',
+  'hudChrome.nativeUpdate.title': 'Güncelleme Mevcut',
+  'hudChrome.nativeUpdate.update': 'Güncelle',
+  // Ravenpost authored letters
+  'entities.letters.ravenpost_welcome.sender': 'Kuzgun Postası',
+  'entities.letters.ravenpost_welcome.subject': 'Kuzgunlar artık senin için uçuyor',
+  'entities.letters.ravenpost_welcome.body':
+    'Yolcu,\n\nKuzgun Postası tünek direklerini vadinin dört bir yanına kurdu. Eastbrook, Fenbridge ve Highwatch’taki kuzgun sütunlarını ara: herhangi birinden diğer maceracılara mektup, para ve eşya gönderebilir, kuzgunların sana getirdiklerini alabilirsin.\n\nİlk pulun için küçük bir armağan ekledik.\n\nKanatlar yukarı,\nKuzgun Postası',
+  'entities.letters.letter_q_wolves.sender': 'Mareşal Redbrook',
+  'entities.letters.letter_q_wolves.subject': 'Ağıllar yeniden sessiz',
+  'entities.letters.letter_q_wolves.body':
+    'Çobanlar nihayet rahat uyuyabiliyor ve bu senin sayende. Kuzgun Postası’ndan nöbet kasasından sana küçük bir şey ulaştırmasını istedim.\n\nKılıcını yağlı tut.\n- Mareşal Redbrook',
+  'entities.letters.letter_q_greyjaw.sender': 'Mareşal Redbrook',
+  'entities.letters.letter_q_greyjaw.subject': 'Yaşlı Bozçene, sonunda',
+  'entities.letters.letter_q_greyjaw.body':
+    'Böyle küçük bir kasabada haber tez yayılır. Çobanlar dün gece sağlığına kadeh kaldırdı, Wilkes ise kurdun bir araba kadar iri olduğuna yemin ediyor. Bırak abartsınlar: bunu hak ettin.\n\nNöbetçilerin hesabına bir yemek ye.\n- Mareşal Redbrook',
+  'entities.letters.letter_q_hollow.sender': 'Birader Aldric',
+  'entities.letters.letter_q_hollow.subject': 'Karanlıkta yaptıkların',
+  'entities.letters.letter_q_hollow.body':
+    'O çukurda neyin gömülü olduğunu çok az kişi bilecek, inanacak olansa daha da az. Ben biliyorum ve unutmayacağım.\n\nYolun hep aydınlık olsun.\n- Birader Aldric',
 };

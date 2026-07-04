@@ -154,6 +154,11 @@ export const tr_TR: EnTranslations = {
     "spectate": {
       "banner": "{name} izleniyor"
     },
+    "death": {
+      "resurrectAtCorpse": "Resurrect at Corpse",
+      "resurrectAtHealer": "The Pale Keeper (Keeper's Toll)",
+      "spiritHealerAlive": "The Pale Keeper watches over the dead. You are still among the living."
+    },
     "emotes": {
       "wave": "El Salla",
       "laugh": "LOL",
@@ -176,6 +181,55 @@ export const tr_TR: EnTranslations = {
     "emoteEditor": {
       "title": "İfadeler",
       "done": "Tamam"
+    },
+    "dailyRewards": {
+      "title": "Günlük Ödüller",
+      "close": "Günlük ödülleri kapat",
+      "loading": "Günlük ödüller yükleniyor...",
+      "error": "Günlük ödüller yüklenemedi.",
+      "intro": "Günlük ödüllerin kilidini açmak için doğrulanmış cüzdanında yeterince WOC bulundur. Bir günlük çevirme ve dönüşümlü görevlerle puan kazan, ardından ödül havuzundan pay almak için günlük lider tablosunda yüksel.",
+      "disclaimer": "WOC price can move quickly. We recommend holding more than the $20 USD minimum so normal price swings do not lock you out. This is not financial advice.",
+      "prize": "Ödül Havuzu",
+      "reset": "Sıfırla",
+      "endsIn": "Bitmesine {time}",
+      "remainingLessThanMinute": "<1dk",
+      "remainingMinutes": "{minutes}dk",
+      "remainingHoursMinutes": "{hours}sa {minutes}dk",
+      "score": "Skor",
+      "walletValue": "Cüzdan Değeri (WOC)",
+      "usd": "{amount} USD",
+      "sol": "{amount} SOL",
+      "unknown": "Bilinmiyor",
+      "spinTitle": "Günlük Çevirme",
+      "spinDialogTitle": "Günlük Ödül Çevirmesi",
+      "spinClose": "Günlük çevirmeyi kapat",
+      "spinReady": "Bir çevirme hazır.",
+      "spinClaimed": "Alındı: +{points} puan.",
+      "spinResult": "+{points} puan",
+      "spinButton": "Çevir",
+      "tasks": "Görevler",
+      "taskMultiplier": "x{multiplier} multiplier",
+      "pointsGained": "{points} daily rewards points gained.",
+      "showChestButton": "Sandığı Göster",
+      "hideChestButton": "Sandığı Gizle",
+      "leaderboard": "Günlük Lider Tablosu",
+      "totalPlayer": "{count} player today",
+      "totalPlayers": "{count} players today",
+      "history": "Geçmiş Kazananlar",
+      "noLeaders": "Henüz puan yok.",
+      "noHistory": "Henüz ödeme yok.",
+      "walletConnectTitle": "Cüzdanı Doğrula",
+      "walletConnectBody": "Günlük ödüllerin kilidini açmak için WOC bulunan bir Solana cüzdanını doğrula.",
+      "walletConnectButton": "Cüzdanı Doğrula",
+      "walletHoldTitle": "WOC Bulundur",
+      "walletHoldBody": "Günlük ödüllerin kilidini açmak için en az {amount} USD değerinde WOC bulundur.",
+      "walletPriceBody": "WOC fiyatı şu anda alınamıyor. Kısa süre sonra tekrar bak.",
+      "reason": {
+        "eligible": "Ödüllerin kilidi açıldı.",
+        "no_wallet": "En az 20 USD değerinde WOC bulunan bir cüzdan bağla.",
+        "under_minimum": "Cüzdan, 20 USD değerindeki WOC alt sınırının altında.",
+        "price_unavailable": "WOC fiyatı alınamıyor, ödüller geçici olarak kilitli."
+      }
     },
     "theme": {
       "preset": "Arayüz Teması",
@@ -234,7 +288,10 @@ export const tr_TR: EnTranslations = {
       "targetAnnounce": "{name} hedefini işaretle",
       "partyLabel": "Takımın",
       "partyGroup": "Grup {n}",
-      "durationUnitSeconds": "sn"
+      "durationUnitSeconds": "sn",
+      "durationUnitMinutes": "m",
+      "durationUnitHours": "h",
+      "durationUnitDays": "d"
     },
     "character": {
       "modelPreview": "Karakter Modeli Önizlemesi"
@@ -265,6 +322,13 @@ export const tr_TR: EnTranslations = {
       "heading": "Yön",
       "minimapZoom": "Mini harita yakınlaştırması"
     },
+    "nativeUpdate": {
+      "title": "Güncelleme Mevcut",
+      "body": "Cryptic Realm'ın yeni bir sürümü mevcut. En son düzeltmeler ve iyileştirmeler için şimdi güncelle.",
+      "bodyWithVersion": "Cryptic Realm'ın {version} sürümü mevcut. En son düzeltmeler ve iyileştirmeler için şimdi güncelle.",
+      "notNow": "Şimdi Değil",
+      "update": "Güncelle"
+    },
     "castBar": {
       "playerAria": "Senin Büyü Çubuğun",
       "targetAria": "Birim Büyü Çubuğu"
@@ -274,16 +338,16 @@ export const tr_TR: EnTranslations = {
       "tabsLabel": "Yüksek skor tabloları",
       "tabPlayers": "Oyuncular",
       "tabGuilds": "Loncalar",
-      "tabDevs": "Developers",
+      "tabDevs": "Geliştiriciler",
       "guildName": "Lonca",
       "members": "Üyeler",
       "topLevel": "En İyi",
       "guildXp": "Toplam XP",
       "guildEmpty": "Henüz sıralamada lonca yok.",
-      "devName": "Contributor",
-      "devTierCol": "Badge",
-      "mergedPrs": "Merged PRs",
-      "devEmpty": "No ranked contributors yet."
+      "devName": "Katkıcı",
+      "devTierCol": "Rozet",
+      "mergedPrs": "Birleştirilen PR'ler",
+      "devEmpty": "Henüz sıralı katkıcı yok."
     },
     "raidLockout": {
       "title": "Akın Kilitleri",
@@ -336,14 +400,21 @@ export const tr_TR: EnTranslations = {
       "keybindHelpLockCursorOnRotate": "Kamerayı döndürmek için sürüklerken fare imlecini pencerenin içinde tutar, böylece ekran kenarına ulaşamaz veya başka bir monitöre geçemez. Serbest imleç tercih ediyorsanız kapatın.",
       "showWalletOnCharacterScreen": "Cüzdanı Karakter Ekranında Göster",
       "showWalletOnPlayerCard": "Cüzdanı Oyuncu Kartında Göster",
-      "showDevBadges": "Show Developer Badges",
+      "showDevBadges": "Geliştirici Rozetlerini Göster",
+      "showOwnNameplate": "Show My Nameplate",
       "uiScale": "Arayüz Ölçeği",
+      "playerFrameScale": "Player Frame Scale",
+      "targetFrameScale": "Target Frame Scale",
+      "aurasOnPlayerFrame": "Buffs on the Player Frame",
       "highContrastBackground": "Yüksek Kontrastlı Arka Plan",
-      "startAttackOnAbility": "Auto-Attack on Ability Use",
+      "startAttackOnAbility": "Yetenek Kullanımında Otomatik Saldırı",
+      "walkByAutoloot": "Walk-by Autoloot",
+      "groundReticle": "Yer hedefleme halkası",
       "showItemLevel": "Eşya Seviyesini Göster",
       "itemLevelLine": "Eşya Seviyesi {level}",
       "itemScoreLine": "Puan {score}",
-      "showSecondaryActionBar": "İkincil Eylem Çubuğunu Göster"
+      "showSecondaryActionBar": "İkincil Eylem Çubuğunu Göster",
+      "showDailyRewardsChest": "Show Daily Rewards Chest"
     },
     "controller": {
       "title": "Oyun Kolu",
@@ -437,7 +508,7 @@ export const tr_TR: EnTranslations = {
     "statInfo": {
       "fromYour": "{value} {stat} değerinden:",
       "names": {
-        "spellPower": "Spell Power"
+        "spellPower": "Büyü Gücü"
       },
       "desc": {
         "str": "Saldırı gücünü artırır, böylece silah darbelerin daha sert iner.",
@@ -447,7 +518,7 @@ export const tr_TR: EnTranslations = {
         "spi": "Bir büyücünün savaş dışında dinlenirken manasının ne kadar hızlı dolduğunu artırır.",
         "armor": "Gelen fiziksel darbeleri yumuşatır. Azalma, daha düşük seviyeli saldırganlara karşı daha büyüktür ve en fazla %75 ile sınırlıdır.",
         "attackPower": "Silah saldırılarına güç katar. Her 14 saldırı gücü, saniye başına 1 hasar ekler.",
-        "spellPower": "Increases the damage of your spells and the strength of your heals. Each point of Intellect grants a little Spell Power, on top of any from gear or buffs.",
+        "spellPower": "Büyülerinin hasarını ve iyileştirmelerinin gücünü artırır. Her Zeka puanı, teçhizat veya güçlendirmelerden gelenlere ek olarak biraz Büyü Gücü sağlar.",
         "dps": "Silahının hasarını ve hızını saldırı gücünle birleştiren, saniye başına tahmini silah hasarın.",
         "critChance": "Bir saldırının kritik vurma ve çift hasar verme şansın.",
         "dodge": "Gelen bir yakın dövüş saldırısından hiç hasar almadan tamamen kaçınma şansın."
@@ -472,13 +543,13 @@ export const tr_TR: EnTranslations = {
         "dpsApprox": "Bir tahmindir; kritik vuruşları ve yetenek hasarını hariç tutar."
       },
       "sources": {
-        "header": "Made up of:",
-        "base": "Base: {value}",
-        "attributes": "From your attributes: {value}",
-        "fromAttribute": "From {stat}: {value}",
-        "gear": "Equipped gear: {value}",
+        "header": "Şunlardan oluşur:",
+        "base": "Temel: {value}",
+        "attributes": "Özelliklerinden: {value}",
+        "fromAttribute": "{stat} özelliğinden: {value}",
+        "gear": "Kuşanılan teçhizat: {value}",
         "buff": "{name}: {value}",
-        "talents": "Talents and effects: {value}"
+        "talents": "Yetenekler ve etkiler: {value}"
       }
     },
     "talents": {
@@ -504,7 +575,7 @@ export const tr_TR: EnTranslations = {
       "linkTitle": "Bu görevi sohbette bağlamak için Shift'e basılı tutarak tıkla."
     },
     "itemShare": {
-      "linkHint": "Shift-click to link this item in chat."
+      "linkHint": "Bu eşyayı sohbete bağlamak için Shift+tıkla."
     },
     "plurals": {
       "guildMembers": {
@@ -532,10 +603,10 @@ export const tr_TR: EnTranslations = {
         "other": "Kimler: {realm} sunucusunda {count} oyuncu çevrimiçi."
       },
       "playersMatching": {
-        "one": "Who: {count} player matching \"{query}\" on {realm}.",
-        "few": "Who: {count} players matching \"{query}\" on {realm}.",
-        "many": "Who: {count} players matching \"{query}\" on {realm}.",
-        "other": "Who: {count} players matching \"{query}\" on {realm}."
+        "one": "Kim: {realm} sunucusunda \"{query}\" ile eşleşen {count} oyuncu.",
+        "few": "Kim: {realm} sunucusunda \"{query}\" ile eşleşen {count} oyuncu.",
+        "many": "Kim: {realm} sunucusunda \"{query}\" ile eşleşen {count} oyuncu.",
+        "other": "Kim: {realm} sunucusunda \"{query}\" ile eşleşen {count} oyuncu."
       }
     },
     "bugReport": {
@@ -663,25 +734,26 @@ export const tr_TR: EnTranslations = {
       "assigned": "{looter}, {item} esyasini {target} oyuncusuna atadi.",
       "unassigned": "{item} atanmadi ve herkes icin serbest.",
       "leaderOnly": "Ganimet yontemini yalnizca grup lideri degistirebilir.",
-      "rollingFor": "Rolling for {item}.",
-      "looterChanged": "Master Looter is now {name}.",
-      "thresholdSet": "Loot threshold set to {threshold}.",
-      "summaryMaster": "Loot Settings: Master Loot, Master Looter {name}, threshold {threshold}.",
-      "summaryGroup": "Loot Settings: Group Loot."
+      "rollingFor": "{item} için zar atılıyor.",
+      "looterChanged": "Ganimet Yöneticisi artık {name}.",
+      "thresholdSet": "Ganimet eşiği {threshold} olarak ayarlandı.",
+      "summaryMaster": "Ganimet Ayarları: Yönetilen Ganimet, Ganimet Yöneticisi {name}, eşik {threshold}.",
+      "summaryGroup": "Ganimet Ayarları: Grup Ganimeti."
     },
     "party": {
-      "promoteLeader": "Promote to Leader"
+      "promoteLeader": "Lider Yap",
+      "inviteUsage": "Invite whom? Usage: /invite <name>."
     },
     "lootSettings": {
-      "title": "Loot Settings",
-      "close": "Close loot settings",
-      "menuItem": "Loot Settings",
-      "method": "Loot Method",
-      "rollThreshold": "Roll Threshold",
-      "groupLoot": "Group Loot",
-      "valueMaster": "Master Loot",
-      "leaderOption": "Master Looter: Leader (You)",
-      "masterOption": "Master Looter: {name}"
+      "title": "Ganimet Ayarları",
+      "close": "Ganimet ayarlarını kapat",
+      "menuItem": "Ganimet Ayarları",
+      "method": "Ganimet Yöntemi",
+      "rollThreshold": "Zar Eşiği",
+      "groupLoot": "Grup Ganimeti",
+      "valueMaster": "Yönetilen Ganimet",
+      "leaderOption": "Ganimet Yöneticisi: Lider (Sen)",
+      "masterOption": "Ganimet Yöneticisi: {name}"
     },
     "bags": {
       "filterGroupAria": "Çantaları kategoriye göre filtrele",
@@ -697,7 +769,13 @@ export const tr_TR: EnTranslations = {
       "sortName": "Ad",
       "searchPlaceholder": "Öge ara",
       "searchAria": "Çanta ögelerini ada göre ara",
-      "noMatch": "Filtrelerinizle eşleşen öge yok."
+      "noMatch": "Filtrelerinizle eşleşen öge yok.",
+      "capacity": "{used}/{total}",
+      "capacityAria": "Bag slots used: {used} of {total}",
+      "backpack": "Backpack",
+      "bagSocketAria": "{name}: {slots}",
+      "socketEmpty": "Empty bag slot",
+      "unequipHint": "Click to remove this bag"
     },
     "raidConvert": {
       "toPartyDone": "Akının yeniden gruba dönüştü.",
@@ -740,6 +818,7 @@ export const tr_TR: EnTranslations = {
         "spi": "Reduce el espíritu en {value}",
         "allStats": "Reduce todos los atributos en {value}"
       },
+      "allStatsPctReduce": "Reduces all attributes by {pct}%",
       "dodge": "Aumenta la probabilidad de esquivar un {pct}%",
       "dodgeReduce": "Reduce la probabilidad de esquivar un {pct}%",
       "armorFlat": "Reduce la armadura en {value}",
@@ -779,6 +858,9 @@ export const tr_TR: EnTranslations = {
         "nature": "Doğa"
       }
     },
+    "worldBoss": {
+      "spawn": "{name} rises over Thornpeak Heights!"
+    },
     "loot": {
       "chestTitle": "Sandık"
     },
@@ -790,8 +872,25 @@ export const tr_TR: EnTranslations = {
       "mob": "[{level}] {name}",
       "mobElite": "[{level}+] {name}"
     },
+    "mobTooltip": {
+      "levelFamily": "Level {level} {family}",
+      "familyDemon": "Demon",
+      "hostile": "Hostile",
+      "friendly": "Friendly"
+    },
+    "targetFrame": {
+      "unlock": "Move target frame",
+      "lock": "Lock target frame"
+    },
+    "playerFrame": {
+      "unlock": "Move player frame",
+      "lock": "Lock player frame"
+    },
+    "frameReset": {
+      "label": "Reset Frame Positions"
+    },
     "itemTooltip": {
-      "requiresLevel": "Requires Level {level}"
+      "requiresLevel": "Gereken Seviye {level}"
     },
     "discord": {
       "title": "Discord",
@@ -871,6 +970,7 @@ export const tr_TR: EnTranslations = {
       "memberSinceDays": "Discord'da {days}g",
       "roleTag": {
         "levyst": "Levy St",
+        "admin": "Admin",
         "devs": "Geliştirici",
         "mods": "Moderatör",
         "artists": "Sanatçı"
@@ -937,37 +1037,147 @@ export const tr_TR: EnTranslations = {
       }
     },
     "devBadge": {
-      "title": "Developer",
+      "title": "Geliştirici",
       "tiers": {
-        "tinkerer": "Tinkerer",
-        "artificer": "Artificer",
-        "runesmith": "Runesmith",
-        "architect": "Architect",
-        "worldwright": "Worldwright"
+        "tinkerer": "Tamirci",
+        "artificer": "Zanaatkâr",
+        "runesmith": "Rün Ustası",
+        "architect": "Mimar",
+        "worldwright": "Dünya Ustası"
       },
       "flavors": {
-        "tinkerer": "Your first pull request landed in the realm.",
-        "artificer": "Five pull requests in, and the world bends to your code.",
-        "runesmith": "Fifteen pull requests forged into the running game.",
-        "architect": "An architect of the realm: 30 pull requests merged.",
-        "worldwright": "A wright of worlds: 70 pull requests shape the game."
+        "tinkerer": "İlk pull request'in diyara indi.",
+        "artificer": "Beş pull request geldi ve dünya senin koduna göre şekilleniyor.",
+        "runesmith": "On beş pull request çalışan oyuna işlendi.",
+        "architect": "Diyarın bir mimarı: 30 pull request birleştirildi.",
+        "worldwright": "Dünyaların bir ustası: 70 pull request oyunu şekillendiriyor."
       },
-      "badgeTitle": "Developer: {tier}",
-      "prsLanded": "{count} pull requests merged",
-      "contributor": "Open-source contributor",
+      "badgeTitle": "Geliştirici: {tier}",
+      "prsLanded": "{count} pull request birleştirildi",
+      "contributor": "Açık kaynak katkıcısı",
       "link": {
-        "cta": "Link GitHub",
-        "relink": "Relink GitHub",
-        "benefits": "Link your GitHub to earn a developer badge for the pull requests you have had merged into the open-source repo.",
-        "error": "Could not link GitHub. Please try again."
+        "cta": "GitHub'ı Bağla",
+        "relink": "GitHub'ı Yeniden Bağla",
+        "benefits": "Açık kaynak deposuna birleştirilen pull request'lerin için bir geliştirici rozeti kazanmak üzere GitHub hesabını bağla.",
+        "error": "GitHub bağlanamadı. Lütfen tekrar dene."
       },
-      "linkedAs": "Linked as {login}",
-      "unlink": "Unlink GitHub"
+      "linkedAs": "{login} olarak bağlandı",
+      "unlink": "GitHub Bağlantısını Kaldır"
+    },
+    "mailbox": {
+      "title": "Mailbox",
+      "subtitle": "The Ravenpost",
+      "close": "Close mailbox",
+      "tabInbox": "Inbox",
+      "tabInboxWithCount": "Inbox ({count})",
+      "tabSend": "Send",
+      "empty": "Your mailbox is empty.",
+      "truncated": "Showing the newest {shown} of {total} letters.",
+      "attachmentsBadge": "Parcel attached",
+      "unreadBadge": "Unread",
+      "back": "Back",
+      "take": "Take attachments",
+      "delete": "Delete letter",
+      "deleteAria": "Delete the letter {subject}",
+      "openAria": "Read the letter {subject} from {name}",
+      "noSubject": "(no subject)",
+      "toLabel": "To",
+      "toPlaceholder": "Character name",
+      "subjectLabel": "Subject",
+      "bodyLabel": "Message",
+      "coinLabel": "Attach coin",
+      "parcelsLabel": "Parcels",
+      "parcelsHint": "Click an item in your bags to attach it.",
+      "removeParcelAria": "Remove {item} from the letter",
+      "sendButton": "Send letter",
+      "postageNote": "Postage: {amount}. The raven flies for about {seconds}s.",
+      "arrivedBanner": "The raven has landed: mail from {name}.",
+      "arrivedLog": "You have new mail from {name}.",
+      "indicatorAria": "Unread mail: {count}",
+      "indicatorTip": "You have {count} unread letters. Visit a mailbox to read them.",
+      "clickAttach": "Click to attach to your letter.",
+      "cannotMail": "This cannot be mailed.",
+      "result": {
+        "sent": "A raven takes wing with your letter to {name} ({postage} postage).",
+        "collected": "You collect {amount} from the letter.",
+        "tooFar": "You must be at a mailbox to tend your post.",
+        "needRecipient": "Name a recipient for your letter.",
+        "noRecipient": "No one by that name holds a mailbox here.",
+        "tooManyParcels": "A letter carries at most {count} parcels.",
+        "noMailQuestItems": "You cannot mail quest items.",
+        "notEnoughItems": "You do not have that many to send.",
+        "cantAffordPostage": "You cannot afford the postage.",
+        "recipientBoxFull": "Their mailbox is full.",
+        "letterGone": "That letter is no longer in your box.",
+        "takeParcelsFirst": "Take the parcels out before discarding the letter."
+      }
+    },
+    "calendar": {
+      "title": "Event Calendar",
+      "close": "Close calendar",
+      "keybindLabel": "Event Calendar",
+      "prevMonth": "Previous month",
+      "nextMonth": "Next month",
+      "dayAria": "{date}: {count} events",
+      "noEvents": "Nothing planned for this day.",
+      "allDay": "All day",
+      "bookedBy": "Booked by {name}",
+      "deleteAria": "Remove the event {title}",
+      "bookTitle": "Book a guild event",
+      "titlePlaceholder": "Event title",
+      "notePlaceholder": "Note (optional)",
+      "hourLabel": "Hour (UTC)",
+      "hourAllDay": "All day",
+      "addButton": "Book event",
+      "guildOnlyNote": "Join a guild to plan events together.",
+      "result": {
+        "created": "The event is on the guild calendar.",
+        "removed": "The event was taken off the calendar.",
+        "notInGuild": "You are not in a guild.",
+        "notOfficer": "Only officers and the Guild Master may manage guild events.",
+        "badInput": "Give the event a title and a valid day.",
+        "calendarFull": "The guild calendar is full.",
+        "eventGone": "That event is no longer on the calendar."
+      },
+      "events": {
+        "raidCall": {
+          "title": "Raid Call",
+          "note": "Wardens sound the horn: gather a party for the crypts and the raid."
+        },
+        "marketDay": {
+          "title": "Market Day",
+          "note": "The Merchant expects fresh stock. A fine day to browse the World Market."
+        },
+        "fiestaNight": {
+          "title": "Fiesta Night",
+          "note": "The 2v2 Fiesta ring draws its loudest crowds tonight."
+        },
+        "arenaClash": {
+          "title": "Arena Clash",
+          "note": "Duelists flock to the Ashen Coliseum. Queue up and climb the ladder."
+        },
+        "fishingDerby": {
+          "title": "Fishing Derby",
+          "note": "Anglers line the lakes. Bring a pole and swap fishing tales."
+        },
+        "delveDay": {
+          "title": "Delve Day",
+          "note": "Brother Halven marks his charts: a fine day to brave the Collapsed Reliquary."
+        },
+        "moongateCommunion": {
+          "title": "Moongate Communion",
+          "note": "Pilgrims gather at the temple moongate under the mid-month moon."
+        }
+      }
+    },
+    "social": {
+      "lastSeen": "Last seen: {when}",
+      "lastSeenNever": "never"
     }
   },
   "guide": {
     "brand": "Cryptic Realm",
-    "brandShort": "Cryptic",
+    "brandShort": "ClaudeCraft",
     "tagline": "Tarayıcınızda ücretsiz oynayabileceğiniz klasik tarzda bir MMO.",
     "skipToContent": "Ana içeriğe geç",
     "loading": "Yükleniyor...",
@@ -1022,9 +1232,9 @@ export const tr_TR: EnTranslations = {
       "heading": "Bu sayfada"
     },
     "footer": {
-      "blurb": "A classic-style micro-MMO. Quest, group up, and explore a hand-built world, right in your browser.",
+      "blurb": "Açık kaynaklı, klasik tarzda bir mikro MMO. Görev yapın, gruplaşın ve elle yapılmış bir dünyayı, tam da tarayıcınızda keşfedin.",
       "playNow": "Şimdi Oyna",
-      "github": "Contributions",
+      "github": "GitHub'daki Kaynak",
       "discord": "Discord'a Katıl",
       "communityWiki": "Topluluk Wiki'si",
       "rights": "Cryptic Realm"
@@ -1057,8 +1267,8 @@ export const tr_TR: EnTranslations = {
         "pillarPlayBody": "İndirme yok, başlatıcı yok. Bir karakter yarat ve masaüstünde ya da telefonunda saniyeler içinde dünyaya gir.",
         "pillarClassesTitle": "Dokuz sınıf, üç rol",
         "pillarClassesBody": "Tankla, iyileştir ya da hasarı sen ver. Her sınıf, arketipine yakışan biçimde oynanır ve onu kendine özgü kılacak yetenekler sunar.",
-        "pillarOpenTitle": "Free to play",
-        "pillarOpenBody": "Free to play to the level cap. No pay to win, ever."
+        "pillarOpenTitle": "Ücretsiz ve açık kaynak",
+        "pillarOpenBody": "Seviye sınırına kadar ücretsiz oynanır, oyunun tamamı açık kaynaktır. Asla paraya dayalı üstünlük yok."
       },
       "classes": {
         "heading": "Sınıfını seç",
@@ -1091,7 +1301,7 @@ export const tr_TR: EnTranslations = {
       "faq": {
         "heading": "Bilmekte fayda var",
         "q1": "Ücretsiz mi oynanıyor?",
-        "a1": "Yes. The whole game is free to the level cap.",
+        "a1": "Evet. Oyunun tamamı seviye sınırına kadar ücretsiz ve GitHub'da açık kaynak.",
         "q2": "Kripto cüzdanına ihtiyacım var mı?",
         "a2": "Hayır. Oyun, cüzdan olmadan da tümüyle oynanabilir. İsteğe bağlı topluluk jetonu yalnızca görsel süsler açar ve gücü asla etkilemez.",
         "q3": "Çevrim dışı oynayabilir miyim?",
@@ -1104,7 +1314,7 @@ export const tr_TR: EnTranslations = {
         "body": "Hemen katıl ya da bir merhaba demeye gel. Dünya, arkadaşlarla daha güzel.",
         "play": "Şimdi Oyna",
         "discord": "Discord'a katıl",
-        "github": "Contributions"
+        "github": "GitHub'da yıldız ver"
       }
     },
     "howToPlay": {
@@ -1220,7 +1430,7 @@ export const tr_TR: EnTranslations = {
     "faqPage": {
       "intro": "Yeni oyuncuların en sık sorduğu sorular.",
       "q1": "Gerçekten ücretsiz mi?",
-      "a1": "Yes. The whole game is free to play to the level cap.",
+      "a1": "Evet. Oyunun tamamı seviye sınırına kadar ücretsiz oynanabilir ve kaynak kodu GitHub'da açıktır.",
       "q2": "Kripto cüzdanına ya da herhangi bir jetona ihtiyacım var mı?",
       "a2": "Hayır. Oyun böyle bir şey olmadan tamamen oynanabilir. İsteğe bağlı topluluk jetonu yalnızca kozmetik gösterişin kilidini açar ve gücü ya da ilerlemeyi asla etkilemez.",
       "q3": "Telefonumda oynayabilir miyim?",
@@ -1234,7 +1444,7 @@ export const tr_TR: EnTranslations = {
       "q7": "Karakterim kaydedilecek mi?",
       "a7": "Çevrimiçi karakterler sunucuda otomatik olarak kaydedilir. Çevrimdışı karakterler hızlı oturumlar ve testler için tarayıcınızda yaşar.",
       "q8": "Kendi kopyamı barındırabilir miyim?",
-      "a8": "Private realms are operated through verified Cryptic Realm channels.",
+      "a8": "Evet. Proje açık kaynaklıdır, böylece kendi sunucunuzu çalıştırabilirsiniz. GitHub deposuna bakın.",
       "q9": "PvP var mı?",
       "a9": "Evet. Eğlence için herkese düello açın ya da diğer oyuncularla savaşmak için Küllü Kolezyum'a adım atın. PvP isteğe bağlıdır, dolayısıyla asla zorlanmazsınız.",
       "q10": "Azami seviyede yapılacak ne var?",
@@ -1361,13 +1571,13 @@ export const tr_TR: EnTranslations = {
       "thorns": "Bir dostu korur, böylece yakın dövüş saldırganları vurdukları için kendilerine zarar verir."
     },
     "petHook": {
-      "imp": "Düşmanları güvenli bir mesafeden ateş oklarıyla hırpalayan menzilli bir iblis.",
-      "voidwalker": "Kışkırtıp darbeleri üzerine çeken sağlam bir iblis, böylece rahatça büyü yapabilirsin.",
-      "succubus": "Sert vuran ama baskı altında çabuk dağılan hızlı bir yakın dövüş iblisi.",
-      "felhunter": "Düşman büyücülerin peşine düşen bir gölge akıncısı.",
-      "felguard": "Dayanıklı bir yakın dövüş kabadayısı; onu çağırabildiğin andan itibaren her işe yarayan bir yoldaş.",
-      "infernal": "Ezici yakın dövüşüyle iri yarı bir devasa güç, çiğ kuvvet için çağrılır.",
-      "doomguard": "Uzaktan ağır gölge yağdıran seçkin bir büyücü."
+      "emberkin": "Düşmanları güvenli bir mesafeden ateş oklarıyla hırpalayan menzilli bir iblis.",
+      "gloomshade": "Kışkırtıp darbeleri üzerine çeken sağlam bir iblis, böylece rahatça büyü yapabilirsin.",
+      "duskborn": "Sert vuran ama baskı altında çabuk dağılan hızlı bir yakın dövüş iblisi.",
+      "spellhound": "Düşman büyücülerin peşine düşen bir gölge akıncısı.",
+      "warfiend": "Dayanıklı bir yakın dövüş kabadayısı; onu çağırabildiğin andan itibaren her işe yarayan bir yoldaş.",
+      "pyre_colossus": "Ezici yakın dövüşüyle iri yarı bir devasa güç, çiğ kuvvet için çağrılır.",
+      "wraithborn": "Uzaktan ağır gölge yağdıran seçkin bir büyücü."
     },
     "bestiary": {
       "heading": "Yaratıklar Kitabı",
@@ -1393,11 +1603,11 @@ export const tr_TR: EnTranslations = {
         "name": "Örümcekler",
         "desc": "Karanlık, çapraşık yerlerde yuvalanan ağ örücüler ve zehirli pusucular. Avcılar onları, tıpkı yabani hayvanlar gibi evcilleştirebilir."
       },
-      "murloc": {
+      "mudfin": {
         "name": "Murloclar",
         "desc": "Sığ suları gürültülü, bölgeci sürüler hâlinde saran amfibik bataklık sakinleri."
       },
-      "kobold": {
+      "burrower": {
         "name": "Koboldlar",
         "desc": "Madenleri ve oyukları istila eden, cevherlerini hırsla koruyan mum başlı kazıcılar."
       },
@@ -1791,6 +2001,430 @@ export const tr_TR: EnTranslations = {
       "home": "Genel bakışa dön"
     }
   },
+  "editor": {
+    "appTitle": "Map Editor",
+    "docTitle": "Map Editor - Cryptic Realm",
+    "untitledMap": "Untitled Map",
+    "playtestPlayerName": "Mapmaker",
+    "topbar": {
+      "label": "Editor actions",
+      "mapNameLabel": "Map name",
+      "dirty": "Unsaved changes",
+      "dirtyDot": "This map has unsaved changes",
+      "clean": "All changes saved",
+      "savedLocal": "Saved in this browser",
+      "savedServer": "Saved to server (v{version})",
+      "saving": "Saving...",
+      "neverSaved": "Not saved yet",
+      "new": "New",
+      "newTitle": "Start a new map from the built-in world",
+      "open": "Open",
+      "openTitle": "Open a saved map (browser or server)",
+      "save": "Save",
+      "saveTitle": "Save to this browser, and to the server when signed in (Ctrl+S)",
+      "saveAs": "Save As",
+      "saveAsTitle": "Save a copy under a new name",
+      "fork": "Fork",
+      "forkTitle": "Create your own server-side copy of this map",
+      "forkDisabledTitle": "Open a server map first to fork it",
+      "import": "Import",
+      "importTitle": "Import a map from a JSON file",
+      "export": "Export",
+      "exportTitle": "Download this map as a JSON file",
+      "uploadAsset": "Upload Asset",
+      "uploadAssetTitle": "Upload a GLB model (up to 8 MiB) to place in your maps",
+      "uploadAssetDisabledTitle": "Sign in from the game to upload assets",
+      "playtest": "Playtest",
+      "playtestTitle": "Boot the game on this map (offline, current edits included)",
+      "viewLabel": "View mode",
+      "view3d": "3D",
+      "view3dTitle": "Edit in the rendered world",
+      "view2d": "2D",
+      "view2dTitle": "Edit on the symbolic overhead map",
+      "undoCount": "Undo: {count}",
+      "undoCountTitle": "{count} undoable steps (Ctrl+Z to undo, Ctrl+Y to redo)",
+      "autosave": "Autosave",
+      "autosaveTitle": "Automatically save the map while there are unsaved changes. Turns itself off if a save fails.",
+      "undo": "Undo",
+      "undoTitle": "Undo the last change (Ctrl+Z)",
+      "redo": "Redo",
+      "redoTitle": "Redo the last undone change (Ctrl+Y)",
+      "offline": "Offline",
+      "offlineTitle": "Not signed in: maps save to this browser only. Sign in from the game to save online.",
+      "signIn": "Sign in",
+      "signInTitle": "Open the game login screen in a new tab",
+      "help": "Help",
+      "helpTitle": "Editor guide: tools, shortcuts, and the tutorial"
+    },
+    "tool": {
+      "listLabel": "Editor tools",
+      "keyHint": "{name} ({key})",
+      "select": "Select",
+      "raise": "Raise",
+      "lower": "Lower",
+      "smooth": "Smooth",
+      "flatten": "Flatten",
+      "paint": "Paint Biome",
+      "water": "Water",
+      "place": "Place Asset",
+      "blocker": "Blocker Wall",
+      "camp": "Camp",
+      "spawn": "Spawn Point",
+      "region": "Region",
+      "erase": "Erase"
+    },
+    "inspector": {
+      "label": "Tool options"
+    },
+    "brush": {
+      "title": "Brush",
+      "size": "Brush size",
+      "strength": "Strength",
+      "sizeHint": "Keys: [ and ] resize the brush; Shift+[ and Shift+] change strength.",
+      "editCount": "Terrain edits: {count} / {max}"
+    },
+    "biome": {
+      "title": "Biome",
+      "paletteLabel": "Biome to paint",
+      "vale": "Vale",
+      "marsh": "Marsh",
+      "peaks": "Peaks",
+      "beach": "Beach",
+      "desert": "Desert",
+      "volcano": "Volcano",
+      "cave": "Cave",
+      "erase": "Erase paint",
+      "hint": "Painted cells override the zone biome for terrain shape and color.",
+      "clear": "Clear all biome paint",
+      "clearConfirm": "Remove every painted biome cell from this map?"
+    },
+    "flatten": {
+      "hint": "Flatten levels the ground to the height under the cursor when the drag starts.",
+      "hardEdge": "Hard edge"
+    },
+    "water": {
+      "title": "Water Level",
+      "level": "Water level",
+      "hint": "Sets the map-wide water surface height, from {min} to {max} yards.",
+      "reset": "Reset to the built-in level"
+    },
+    "place": {
+      "title": "Place Asset",
+      "scale": "Scale",
+      "collide": "Blocks movement",
+      "collideHint": "A blocking asset gets a collision footprint players cannot walk through.",
+      "randomRotation": "Random rotation",
+      "chosen": "Placing: {name}",
+      "none": "Pick an asset from the browser below, then click the ground to place it."
+    },
+    "blockerTool": {
+      "title": "Blocker Wall",
+      "hint": "Drag along the ground to draw an invisible wall players cannot walk or jump through. Release to place it; a wall shorter than half a yard is discarded.",
+      "count": "Blocker walls: {count} / {max}"
+    },
+    "camp": {
+      "title": "Mob Camp",
+      "mob": "Mob",
+      "count": "Count",
+      "radius": "Radius",
+      "delete": "Delete camp",
+      "hint": "Click open ground to add a camp, or click an existing camp to edit it.",
+      "playtestNote": "Mobs spawn only in playtest, never in the editor view.",
+      "selected": "Camp: {mob}",
+      "none": "No camp selected."
+    },
+    "spawn": {
+      "title": "Spawn Point",
+      "hint": "Click the ground to set where playtest drops the player.",
+      "position": "Spawn: {x}, {z}",
+      "unset": "Using the built-in start position.",
+      "clear": "Clear spawn point"
+    },
+    "region": {
+      "title": "Region",
+      "hint": "Drag a box to select placements and terrain edits. Copy, then click to paste.",
+      "hint3d": "Region boxes draw in the 2D view; copy and paste work in both views.",
+      "copy": "Copy region",
+      "pasteBeside": "Paste beside",
+      "copied": "Copied {assets} assets and {edits} terrain edits.",
+      "pasted": "Pasted {count} items.",
+      "needBox": "Draw a region box first.",
+      "needClipboard": "Copy a region first."
+    },
+    "eraseTool": {
+      "title": "Erase",
+      "hint": "Click a placed asset to remove it, or click sculpted ground to remove the newest stamp under the cursor.",
+      "blockerHint": "Clicking near a blocker wall removes that wall instead."
+    },
+    "selection": {
+      "title": "Selection",
+      "none": "Nothing selected. Use Select and click a placed asset.",
+      "asset": "Asset: {name}",
+      "x": "X",
+      "z": "Z",
+      "rotation": "Rotation",
+      "scale": "Scale",
+      "collide": "Blocks movement",
+      "radius": "Collision radius",
+      "radiusAuto": "Auto",
+      "radiusAutoTitle": "Reset the collision radius to follow the asset scale",
+      "radiusHint": "Auto derives the collision radius from the asset scale; drag the slider to override it.",
+      "footprints": "Show collision footprints",
+      "duplicate": "Duplicate",
+      "delete": "Delete",
+      "deleteHint": "Delete removes the selection; Ctrl+Z restores it.",
+      "moveHint": "Move: drag the asset along the ground in the 3D view, or nudge it with the arrow keys (0.5 yd, Shift for 2 yd).",
+      "wheelHint": "Shift+scroll rotates the asset, Alt+scroll scales it, Ctrl+D duplicates it."
+    },
+    "marker": {
+      "title": "Marker",
+      "reset": "Reset position",
+      "moved": "{count} markers moved from the built-in layout."
+    },
+    "layers": {
+      "title": "Layers",
+      "hub": "Hubs",
+      "graveyard": "Graveyards",
+      "lake": "Lakes",
+      "poi": "Points of interest",
+      "camp": "Camps",
+      "npc": "NPCs",
+      "object": "Objects",
+      "blocker": "Blocker walls"
+    },
+    "frame": {
+      "title": "Frame",
+      "all": "All"
+    },
+    "procgen": {
+      "title": "Procedural",
+      "count": "Count",
+      "scatter": "Scatter category assets",
+      "hills": "Generate rolling hills",
+      "scattered": "Scattered {count} assets from {category}.",
+      "hillsAdded": "Added {count} hills.",
+      "noAssets": "No assets in that category."
+    },
+    "assets": {
+      "title": "Asset Browser",
+      "label": "Asset browser",
+      "search": "Search assets",
+      "searchPlaceholder": "Search assets...",
+      "empty": "No matching assets.",
+      "uploadedTab": "Uploaded",
+      "uploadedEmpty": "No uploaded assets yet. Use Upload Asset to add a GLB model (up to 8 MiB).",
+      "uploadedSignIn": "Sign in from the game to upload and place your own GLB models.",
+      "uploadedLoadFailed": "Could not load your uploaded assets.",
+      "deleteAsset": "Delete uploaded asset",
+      "deleteAssetConfirm": "Delete the uploaded asset \"{name}\"? Maps that use it lose the model.",
+      "pick": "Place {name}",
+      "categoryTab": "{category} ({count})",
+      "category": {
+        "biome": "Biome",
+        "chars": "Characters",
+        "creatures": "Creatures",
+        "dungeon": "Dungeon",
+        "foliage": "Foliage",
+        "props": "Props",
+        "quest": "Quest",
+        "resources": "Resources",
+        "tools": "Tools",
+        "weapons": "Weapons"
+      }
+    },
+    "upload": {
+      "notGlb": "Pick a .glb file.",
+      "tooLarge": "That file is over the 8 MiB limit.",
+      "uploading": "Uploading asset...",
+      "uploaded": "Asset uploaded: {name}",
+      "uploadedExisting": "That model was already on the server; reusing it.",
+      "deleted": "Uploaded asset deleted."
+    },
+    "openDrawer": {
+      "title": "Open Map",
+      "close": "Close",
+      "tabLocal": "This Browser",
+      "tabMine": "My Server Maps",
+      "tabPublic": "Public Maps",
+      "colName": "Name",
+      "colUpdated": "Updated",
+      "colStatus": "Status",
+      "statusPublic": "Public",
+      "statusPrivate": "Private",
+      "open": "Open",
+      "fork": "Fork",
+      "publish": "Publish",
+      "unpublish": "Unpublish",
+      "delete": "Delete",
+      "draft": "Autosaved draft",
+      "emptyLocal": "No maps saved in this browser yet. Save one and it appears here.",
+      "emptyMine": "No maps on the server yet. Save while signed in to create one.",
+      "emptyPublic": "No public maps yet.",
+      "loading": "Loading maps...",
+      "loadFailed": "Could not load maps from the server.",
+      "signInHint": "Sign in from the game to browse, save, and fork server maps.",
+      "deleteLocalConfirm": "Delete the local map \"{name}\"?",
+      "deleteServerConfirm": "Delete the server map \"{name}\"? This cannot be undone.",
+      "prev": "Previous page",
+      "next": "Next page",
+      "page": "Page {page}"
+    },
+    "status": {
+      "savedLocal": "Saved \"{name}\" to this browser.",
+      "savedServer": "Saved \"{name}\" to the server (v{version}).",
+      "savedLocalOnly": "Saved \"{name}\" to this browser. Sign in to save online.",
+      "saveFailedLocal": "Local save failed (storage blocked).",
+      "opened": "Opened \"{name}\".",
+      "imported": "Imported \"{name}\".",
+      "importFailed": "Import cancelled, or the file is not a valid map.",
+      "exported": "Downloaded \"{name}\".",
+      "newMap": "New map started from the built-in world.",
+      "forked": "Forked to \"{name}\". You are editing your own copy now.",
+      "published": "Map published. Anyone can now find and fork it.",
+      "unpublished": "Map unpublished.",
+      "deleted": "Map deleted.",
+      "assetPlacedFirst": "Pick an asset in the browser first.",
+      "loading3d": "Loading the world...",
+      "playtestLaunch": "Launching playtest...",
+      "playtestFailed": "Could not start the playtest (storage blocked).",
+      "draftSaved": "Draft autosaved.",
+      "draftRestored": "Restored the autosaved draft.",
+      "autosaveFailed": "Autosave failed (browser storage is full or blocked). Export the map to keep a backup.",
+      "terrainCapReached": "Terrain edit limit reached ({max}). Extra sculpt stamps were not added.",
+      "placementCapReached": "Placement limit reached ({max}). Extra assets were not added.",
+      "blockerCapReached": "Blocker wall limit reached ({max}). The new wall was not added.",
+      "autosaveOff": "Autosave turned off: {reason} Save manually, then turn it back on."
+    },
+    "confirm": {
+      "ok": "OK",
+      "cancel": "Cancel",
+      "discardTitle": "Discard changes?",
+      "discardBody": "You have unsaved changes on \"{name}\". Discard them?",
+      "discard": "Discard",
+      "conflictTitle": "Save conflict",
+      "conflictBody": "This map changed on the server since you opened it (now v{version}). Save your version as a new copy?",
+      "conflictSaveCopy": "Save As Copy"
+    },
+    "prompt": {
+      "saveAsTitle": "Save As",
+      "nameLabel": "New map name"
+    },
+    "serverError": {
+      "invalid_map_name": "That map name is not allowed. Use letters, numbers, spaces, apostrophes, or hyphens.",
+      "map_name_not_allowed": "That map name is not allowed.",
+      "invalid_map_doc": "The server rejected the map document.",
+      "invalid_version": "The save request was malformed. Reload and try again.",
+      "map_limit_reached": "You have reached the server map limit. Delete a map to save more.",
+      "map_not_found": "That map no longer exists on the server.",
+      "version_conflict": "The map changed on the server since you opened it.",
+      "slug_unavailable": "The server could not make a link for that name. Try a different name.",
+      "map_too_large": "The map document is too large to save on the server.",
+      "invalid_glb": "That file is not a valid GLB model.",
+      "asset_blocked": "That asset has been blocked by moderation.",
+      "asset_limit_reached": "You have reached the uploaded asset limit. Delete one to upload more.",
+      "asset_storage_limit_reached": "You are out of asset storage space. Delete an asset first.",
+      "asset_too_large": "That model is over the upload size limit.",
+      "asset_not_found": "That asset no longer exists on the server.",
+      "rate_limited": "Slow down a little and try again.",
+      "unauthorized": "Your session has expired. Sign in from the game again.",
+      "network": "Could not reach the server. Check your connection and try again.",
+      "timeout": "The server took too long to respond. Try again.",
+      "unknown": "Something went wrong talking to the server."
+    },
+    "hints": {
+      "nav3d": "Drag to orbit, scroll to zoom. While dragging, WASD flies and Q/E changes height.",
+      "nav2d": "Drag to pan, scroll to zoom."
+    },
+    "help": {
+      "title": "Editor Help",
+      "toolsTitle": "Tools",
+      "shortcutsTitle": "Keyboard shortcuts",
+      "mouseTitle": "Mouse and navigation",
+      "flowTitle": "Saving and playtesting",
+      "beginTutorial": "Begin tutorial",
+      "close": "Close",
+      "tool": {
+        "select": "Pick placed assets to move, rotate, and scale them; click a 2D marker to edit it.",
+        "raise": "Raise the terrain under the brush.",
+        "lower": "Lower the terrain under the brush.",
+        "smooth": "Smooth bumps toward the local average height.",
+        "flatten": "Level the ground to the height where the drag starts.",
+        "paint": "Paint biome ground cover over the zone default.",
+        "water": "Set the map-wide water level.",
+        "place": "Place catalog or uploaded assets on the ground.",
+        "blocker": "Drag invisible walls that block movement in playtest.",
+        "camp": "Add and edit mob camps that spawn in playtest.",
+        "spawn": "Set where playtest drops the player.",
+        "region": "Box-select terrain and assets to copy and paste.",
+        "erase": "Remove placed assets or sculpt stamps under the cursor."
+      },
+      "key": {
+        "tools": "Every tool has a single-letter shortcut, shown on its button in the tool rail.",
+        "brush": "[ and ] resize the brush; Shift+[ and Shift+] change its strength.",
+        "undo": "Ctrl+Z undoes the last change; Ctrl+Y or Ctrl+Shift+Z redoes it.",
+        "save": "Ctrl+S saves the map.",
+        "duplicate": "Ctrl+D duplicates the selected asset.",
+        "nudge": "Arrow keys nudge the selected asset by 0.5 yards; hold Shift for 2 yards.",
+        "wheel": "Shift+scroll rotates the selected asset; Alt+scroll scales it.",
+        "delete": "Delete removes the selected asset or camp.",
+        "escape": "Esc clears the selection first, then returns to the Select tool."
+      },
+      "mouse": {
+        "orbit3d": "3D view: drag to orbit and scroll to zoom; middle-drag or Shift+drag pans.",
+        "fly3d": "While holding a drag in 3D, WASD flies the camera and Q/E changes height.",
+        "move": "With Select active, drag a placed asset to move it across the ground.",
+        "pan2d": "2D view: drag to pan and scroll to zoom."
+      },
+      "flow": {
+        "save": "Save keeps the map in this browser, and on the server when you are signed in.",
+        "draft": "While you have unsaved changes, a draft is autosaved every 30 seconds; Open restores it.",
+        "playtest": "Playtest boots the real game on this map, including your unsaved edits."
+      }
+    },
+    "tutorial": {
+      "title": "Editor tutorial",
+      "back": "Back",
+      "next": "Next",
+      "finish": "Finish",
+      "skip": "Skip tour",
+      "counter": "Step {current} of {total}",
+      "steps": {
+        "toolbar": {
+          "title": "The tool rail",
+          "body": "Every editing tool lives here: sculpting brushes, biome paint, water, asset placement, camps, and more. Each one has a single-key shortcut, shown in its corner."
+        },
+        "stage": {
+          "title": "The world",
+          "body": "This is your map, rendered with the real game engine. Drag to orbit, scroll to zoom, and middle-drag or Shift+drag to pan. Click the ground with a tool to edit."
+        },
+        "inspector": {
+          "title": "Tool options",
+          "body": "The options for the active tool appear here: brush size, the biome palette, asset scale, camp settings, and the properties of whatever you select."
+        },
+        "viewToggle": {
+          "title": "3D and 2D",
+          "body": "Switch between the rendered 3D world and the symbolic overhead 2D map. The 2D view is best for moving zone markers and framing large areas."
+        },
+        "save": {
+          "title": "Save your work",
+          "body": "Save stores the map in this browser, and on the server when you are signed in. Export downloads a JSON backup, and Open brings back saved maps and drafts."
+        },
+        "playtest": {
+          "title": "Playtest",
+          "body": "Boot the real game on your map at any time, with your current edits included. Close the playtest tab to come back and keep editing."
+        },
+        "help": {
+          "title": "Help is here",
+          "body": "That is the whole loop. Open Help any time for the full tool list and every shortcut, or to run this tour again."
+        }
+      }
+    },
+    "a11y": {
+      "stage": "Map viewport",
+      "toasts": "Editor notifications",
+      "dialog": "Editor dialog"
+    }
+  },
   "skinEvent": {
     "title": "Kozmetik Zula",
     "subtitle": "Bir {rank} ödülün kilidini açtın — onunla aynı veya daha düşük seviyedeki herhangi bir görünümü seç.",
@@ -1847,8 +2481,8 @@ export const tr_TR: EnTranslations = {
   },
   "footer": {
     "copyright": "2026 Cryptic Realm",
-    "githubLink": "/contributions.html",
-    "githubLabel": "Contributions",
+    "githubLink": "https://github.com/levy-street/world-of-claudecraft",
+    "githubLabel": "Açık Kaynak Proje",
     "whitepaper": "Teknik Doküman",
     "terms": "Hizmet Koşulları",
     "privacy": "Gizlilik Politikası",
@@ -1875,7 +2509,7 @@ export const tr_TR: EnTranslations = {
     "error": "Güncellemeler yüklenemedi. Lütfen daha sonra tekrar dene.",
     "empty": "Henüz güncelleme yok — yakında tekrar bak.",
     "prerelease": "Ön sürüm",
-    "viewOnGithub": "Read release notes",
+    "viewOnGithub": "GitHub'da Görüntüle",
     "openLink": "Open",
     "officialLog": "Official Work Log",
     "alphaBetaTitle": "Alpha, Beta, And Public Realm Cadence",
@@ -1909,7 +2543,7 @@ export const tr_TR: EnTranslations = {
     "tagPlatinum": "Platinum economy",
     "tagExchange": "Exchange realm",
     "tagLore": "Cryptic Realm lore",
-    "tagRealms": "Infernal / Classic / Dominion / Arcane realms",
+    "tagRealms": "Hellmaw / Classic / Dominion / Arcane realms",
     "tagMinigames": "Original mini-games",
     "tagCustody": "Private custody runbooks"
   },
@@ -1921,7 +2555,7 @@ export const tr_TR: EnTranslations = {
     "loading": "Loading official channels…"
   },
   "download": {
-    "title": "Launchers & Installs",
+    "title": "Masaüstü Başlatıcısını İndir",
     "desc": "Optimize edilmiş performans ve tam ekran oyun için bağımsız başlatıcıyı edinin."
   },
   "comingSoon": {
@@ -1946,7 +2580,7 @@ export const tr_TR: EnTranslations = {
     "serverOfflineSub": "Anında yerel dünya",
     "caLabel": "$CR Sözleşme Adresi",
     "caCopyAria": "Sözleşme adresini kopyala",
-    "caNote": "CR topluluk jetonumuzdur. Oynamak için gerekli değildir. CR'un faydasını ve döngüsünü tartışmak için Discord'a katılın."
+    "caNote": "WOC topluluk jetonumuzdur. Oynamak için gerekli değildir. WOC'un faydasını ve döngüsünü tartışmak için Discord'a katılın."
   },
   "auth": {
     "enterRealm": "Diyara Gir",
@@ -1988,7 +2622,16 @@ export const tr_TR: EnTranslations = {
     "create": "Oluştur",
     "twoFactorLabel": "Kimlik doğrulama kodu",
     "twoFactorPlaceholder": "6 haneli ya da kurtarma kodu",
-    "twoFactorHint": "Kimlik doğrulama uygulamandaki kodu ya da kurtarma kodlarından birini gir."
+    "twoFactorHint": "Kimlik doğrulama uygulamandaki kodu ya da kurtarma kodlarından birini gir.",
+    "email": "Recovery email",
+    "emailError": "Please enter a valid email address.",
+    "recovery": {
+      "title": "Add a recovery email",
+      "body": "Set an email address so you can recover your account. We only use it to confirm you own this account if you ever need to reset your password.",
+      "save": "Save email",
+      "invalid": "Please enter a valid email address.",
+      "failed": "Could not save your email. Please try again."
+    }
   },
   "wallet": {
     "label": "$CR Cüzdanı",
@@ -2042,6 +2685,7 @@ export const tr_TR: EnTranslations = {
     "helpLinkedWithBalance": "Sahip ayrıcalıkları etkin. Cüzdan uygulaması bu tarayıcıda bağlı.",
     "helpLinkedDisconnected": "Sahip ayrıcalıkları etkin. İmzalamanız veya harcamanız gerektiğinde uygulamayı bağlayın.",
     "helpLinkedDisconnectedWithBalance": "Sahip ayrıcalıkları etkin. İmzalamanız veya harcamanız gerektiğinde uygulamayı bağlayın.",
+    "extensionHelp": "To see a wallet here, keep a browser wallet extension such as Solflare Wallet active.",
     "flowConnect": "Bir cüzdan seçin. Doğrulama otomatik olarak devam eder.",
     "flowSign": "Cüzdan uygulamanızda doğrulama mesajını imzalayın. İşlem veya SOL gerekmez.",
     "flowVerify": "Cüzdan sahipliği doğrulanıyor...",
@@ -2227,6 +2871,7 @@ export const tr_TR: EnTranslations = {
       "unknownTier": "Bilinmeyen delve kademesi.",
       "levelRequired": "{name} bölümüne girmek için {level}. seviyede olmalısın.",
       "levelRequiredTier": "{tier} kademesinde {name} bölümüne girmek için {level}. seviyede olmalısın.",
+      "partyTooLarge": "{name} is meant for solo or duo delves. Parties of {max} or more may not enter.",
       "instancesBusy": "{name} için tüm örnekler dolu. Birazdan tekrar dene.",
       "runFailed": "{name} seferi başarısız oldu.",
       "complete": "{name} tamamlandı.",
@@ -2236,6 +2881,14 @@ export const tr_TR: EnTranslations = {
       "doorAlreadyOpen": "Kapı zaten açık.",
       "companionRankUp": "{name} {rank}. dereceye ulaşır.",
       "bossChest": "Patron düşer. Kürsüde mühürlü bir kutsal emanet sandığı yükselir. Ganimetini almak için kilidini aç.",
+      "drownedLitanyReliquaryRise": "Sister Nhalia falls silent. The Drowned Reliquary rises from the blackwater. Approach it to begin the rite.",
+      "riteSequenceReady": "The shrines fall dark. Repeat the sequence.",
+      "riteSequencePlaying": "The shrines replay the rite. Wait.",
+      "riteCorrect": "A soft chime answers your touch.",
+      "riteWrong": "A harsh bell crack. Black water splashes at your feet.",
+      "riteReliquaryOpen": "The Drowned Reliquary opens.",
+      "riteReliquaryLocked": "Complete the shrine rite to open the reliquary.",
+      "riteReliquaryEmpty": "The reliquary is empty.",
       "surfaceStairs": "Yüzeye çıkan bir merdiven açılır. Ayrılmak için merdivenlerde F'ye bas.",
       "moduleEnter": "{name}: {objective}",
       "objectiveClearRoom": "Odayı temizle.",
@@ -2243,6 +2896,13 @@ export const tr_TR: EnTranslations = {
       "tombstoneHint": "Oda temizlendiğinde kuzeye doğru bir mezar taşı geçidi açılır.",
       "tombstoneOpen": "Mühürlü bir mezar taşı geçidi kuzeye doğru gıcırdayarak açılır. Devam etmek için içine yürü.",
       "tombstoneInto": "Mezar taşından geçerek {name} içine girersin.",
+      "bellRopeShock": "The bell rope snaps taut. Drowned Cantors reel from the shock.",
+      "eggSacBurst": "The egg-sac bursts. Spiderlings skitter free across the baptistry rim.",
+      "baptistryEggs": "The baptistry falls quiet. Spider egg-sacs cling wetly to the rim.",
+      "baptistrySpidersSealed": "You should try to destroy the spider sacs.",
+      "puzzleSealed": "You need to open the seal by applying pressure somewhere in the room.",
+      "ropesSealed": "You should try pulling the bell ropes.",
+      "baptistryWave": "Something stirs in the black baptistry water.",
       "chestEmpty": "Sandık boş.",
       "notInDelve": "Bir delvede değilsin.",
       "cannotInteract": "Onunla etkileşime giremezsin.",
@@ -2261,9 +2921,12 @@ export const tr_TR: EnTranslations = {
       "passageSealed": "Geçit mühürlü.",
       "moveCloserPassage": "Geçide yaklaş.",
       "moveCloserChest": "Sandığa yaklaş.",
+      "moveCloserReliquary": "Move closer to the reliquary.",
       "nothingToTake": "Alınacak başka bir şey kalmadı.",
       "wayOutNotOpen": "Çıkış yolu henüz açık değil.",
-      "moveCloserStairs": "Merdivenlere yaklaş."
+      "moveCloserStairs": "Merdivenlere yaklaş.",
+      "nhaliaCantorShield": "Cantors, hold the note!",
+      "nhaliaBlackwaterMark": "{name} marks {player} with Blackwater!"
     },
     "lockpick": {
       "lockYields": "Kilit açılır! {tier} ganimet.",
@@ -2326,6 +2989,26 @@ export const tr_TR: EnTranslations = {
       "abandoned": "Maşaları yavaşça geri çekiyorsun. Kilit bekliyor."
     }
   },
+  "delveRiteUi": {
+    "title": "The Drowned Reliquary Rite",
+    "blurb": "The shrines will light in order. Repeat the sequence by activating each shrine in turn. A wrong touch fails the attempt and replays the sequence, a flawless attempt earns the richest spoils, and running out of tries opens the reliquary on its meanest. Choose how the rite tests you.",
+    "easy": "Easy",
+    "medium": "Medium",
+    "hard": "Hard",
+    "guideWatch": "After you choose, the four shrines light up one at a time. Memorize the order.",
+    "guideRepeat": "When the shrines fall dark, walk to each shrine and press F (Interact) in that same order.",
+    "guideStakes": "A wrong shrine splashes you with blackwater and costs a try. Complete the sequence to open the reliquary.",
+    "showsTimes": "Sequence shown {count} times",
+    "showsOnce": "Sequence shown once",
+    "symbols": "{count} symbols",
+    "tries": "{count} tries",
+    "reward": {
+      "easy": "Modest spoils",
+      "medium": "Rich spoils",
+      "hard": "Premium spoils"
+    },
+    "closeAria": "Close"
+  },
   "delveUi": {
     "board": {
       "title": "Mağara Panosu",
@@ -2335,6 +3018,7 @@ export const tr_TR: EnTranslations = {
       "openDelveAria": "{name} üzerinden Mağara Panosunu aç",
       "marks": "Mağara Nişanları: {count}",
       "minLevel": "Seviye {level} gerektirir",
+      "partyTooLarge": "Solo or duo only ({max} players max)",
       "tier": {
         "normal": "Normal",
         "heroic": "Kahramanca"
@@ -2342,6 +3026,7 @@ export const tr_TR: EnTranslations = {
       "companion": {
         "pick": "Bir yoldaş seç",
         "tessa": "Çömez Tessa",
+        "edda": "Edda Reedhand",
         "rank": "Rütbe {rank}",
         "boon": "Dövüşler arasında grubu iyileştirir. 3. seviye, koşu başına bir kez düşmüş bir müttefiki diriltir.",
         "upgrade": "Rütbe {rank}'e yükselt ({marks} Nişan)",
@@ -2368,7 +3053,11 @@ export const tr_TR: EnTranslations = {
       "complete": "Tamamlandı",
       "marks": "Mağara Nişanları: {count}",
       "exitHintOpen": "Mezar taşı geçidine yürü (kuzey)",
-      "exitHintLocked": "Kuzeydeki geçidi açmak için çöp yaratıkları temizle"
+      "exitHintLocked": "Kuzeydeki geçidi açmak için çöp yaratıkları temizle",
+      "riteChoose": "Approach the Drowned Reliquary and press F to begin the rite",
+      "ritePlayback": "Watch the shrines: memorize the order they light up",
+      "riteInput": "Press F at each shrine in the order they lit ({current}/{total})",
+      "riteOpen": "The reliquary is open: press F on it to claim your spoils"
     },
     "objective": {
       "kill_boss": "{boss} adlı düşmanı öldür",
@@ -2389,27 +3078,54 @@ export const tr_TR: EnTranslations = {
     "npc": {
       "halven": {
         "greeting": "Aşağıdaki kutsal mahzen yine kaydı. Gece yarısından sonra zeminin ardından ilahiler duyuyoruz ve Çömez Tessa defin defterlerinin kendi mürekkeplerini değiştirdiğine yemin ediyor. Yeterince cesaretin varsa, {playerName}, bir mum al ve aşağı in. Orada duyduğun her sese güvenme. Bazıları senin adını sen doğmadan önce biliyordu."
+      },
+      "halvenMarsh": {
+        "greeting": "The trail led north to the marsh, {playerName}. Another reliquary sings under the black water, and the drowned dead answer the bells. Acolyte Edda knows these reeds better than I do, stay close to her lantern. Choose your tier, and I will hold the rope until you return."
       }
     },
     "intro": {
       "normal": "Merdiven boşluğu soğuk ve karanlık. İniş boyunca kırık aziz taşları saçılı, nemli havada yumuşak bir çan notası asılı duruyor. Çömez Tessa fısıldar: \"Kutsal mahzen bu kadar açık olmamalıydı. Yakınımda kal, {playerName}.\"",
-      "heroic": "Kapılar arkandan inleyerek kapanır. İsimler tırnak gibi taşın üzerinde kazınır. Tessa'nın mumu mavi yanar. \"Artık ölüleri çağırmıyorlar, {playerName}. Bir şeye yanıt veriyorlar.\""
+      "heroic": "Kapılar arkandan inleyerek kapanır. İsimler tırnak gibi taşın üzerinde kazınır. Tessa'nın mumu mavi yanar. \"Artık ölüleri çağırmıyorlar, {playerName}. Bir şeye yanıt veriyorlar.\"",
+      "litanyNormal": "Reed-choked stairs drop beneath Fenbridge. Edda Reedhand lifts her lantern. \"The marsh remembers every name they drowned, {playerName}. Stay in the light.\"",
+      "litanyHeroic": "Blackwater laps the causeway stones. Edda's flame gutters green. \"They are singing again below, {playerName}. Do not answer the choir.\""
     },
     "module": {
       "reliquary_sunken_ossuary": "Su, defin raflarından sızarak gümüş-siyah dereler hâlinde eski külleri taşıyor.",
       "reliquary_bell_niche": "Düzinelerce el çanı sessizlik içinde asılı duruyor, her biri cenaze bezine bağlanmış.",
       "reliquary_saintless_hall": "Yüzleri özenli bir nefretle yontulup silinmiş heykeller.",
-      "reliquary_finale": "Gömülü çan botlarının altında bir kez çınlar."
+      "reliquary_finale": "Gömülü çan botlarının altında bir kez çınlar.",
+      "litany_sluice": "Moss-choked sluice gates drip blackwater into the old choir crypt.",
+      "litany_ledger": "Ledger islands rise from flooded channels, ink bleeding into the marsh.",
+      "litany_ring": "A reliquary ring loops around a sealed central font of black water.",
+      "litany_baptistry": "A sinkhole baptistry yawns beneath cracked saint-stones and egg-sacs.",
+      "litany_choir_loft": "Fanning choir lofts echo with rope-hung bells that never quite stop.",
+      "litany_causeway": "A Y-split causeway forks over waist-deep fen water.",
+      "litany_apse": "The drowned apse opens onto Sister Nhalia's altar island."
     },
     "moduleName": {
       "reliquary_sunken_ossuary": "Batık Kemiklik",
       "reliquary_bell_niche": "Çan Hücresi",
       "reliquary_saintless_hall": "Azizsiz Salon",
-      "reliquary_finale": "Çan Gömülü Oda"
+      "reliquary_finale": "Çan Gömülü Oda",
+      "litany_sluice": "The Crescent Sluice",
+      "litany_ledger": "The Island Ledger",
+      "litany_ring": "The Ring Reliquary",
+      "litany_baptistry": "The Sinkhole Baptistry",
+      "litany_choir_loft": "The Reedsong Gallery",
+      "litany_causeway": "The Y-Split Causeway",
+      "litany_apse": "The Drowned Apse"
+    },
+    "object": {
+      "sluice_valve": "Sluice Valve",
+      "grave_tablet": "Grave Tablet",
+      "corpse_candle": "Corpse-Candle",
+      "bell_rope": "Bell Rope"
     },
     "companion": {
       "barkLine": "{name}: {line}",
       "tessa": {
+        "run_start": "I have my candle and my ledger, {playerName}. Lead on.",
+        "ally_revive": "Up now. Tonight's ledger does not carry your name.",
         "combat_start": "Ayağını sağlam bas, {playerName}. Ölüler burada huzursuz.",
         "low_hp": "Nefes al. Senin için hâlâ dualarım var.",
         "trap_spotted": "Dur. Zeminde bir şey ayak seslerini hatırlıyor.",
@@ -2421,6 +3137,20 @@ export const tr_TR: EnTranslations = {
           "3": "Kutsal Mahzen Çömezi",
           "4": "Mezarçağrısı Tanığı",
           "5": "Şapel Bekçisi"
+        }
+      },
+      "edda": {
+        "run_start": "Keep to the plank-line, {playerName}. The silt takes the proud-footed.",
+        "ally_revive": "Up, now. The marsh does not get you today.",
+        "combat_start": "Mind the blackwater, {playerName}. The marsh listens.",
+        "low_hp": "Steady. My lantern is not out yet.",
+        "trap_spotted": "Wait. The reeds are wrong here.",
+        "boss_pull": "That canticle knows your name, {playerName}. Do not sing back.",
+        "completion": "The fen can swallow its secrets for one more night.",
+        "rank": {
+          "1": "Lantern-Bearer",
+          "2": "Reed-Watcher",
+          "3": "Fenbridge Acolyte"
         }
       }
     },
@@ -2464,7 +3194,10 @@ export const tr_TR: EnTranslations = {
       "flooded_paths": "Su Basmış Yollar",
       "grave_tax": "Mezar Vergisi",
       "unstable_roof": "Çökmeye Yakın Tavan",
-      "cult_remnants": "Tarikat Kalıntıları"
+      "cult_remnants": "Tarikat Kalıntıları",
+      "high_water": "High Water",
+      "lively_choir": "Lively Choir",
+      "belligerent_dead": "Belligerent Dead"
     },
     "blessing": {
       "chapel_candle": "Şapel Mumu: daha güvenli bir koşu, tamamlamada bir eksik İşaret."
@@ -2656,7 +3389,7 @@ export const tr_TR: EnTranslations = {
     "mainNavigation": "Ana gezinme",
     "languageSelection": "Dil seçimi",
     "characterActions": "Karakter eylemleri",
-    "githubProject": "Open Cryptic Realm contributions",
+    "githubProject": "Cryptic Realm GitHub projesini aç",
     "discordCommunity": "Cryptic Realm Discord topluluğuna katıl",
     "donateProject": "Cryptic Realm'a destek olmak için bağış yap"
   },
@@ -2687,6 +3420,7 @@ export const tr_TR: EnTranslations = {
       "usernameTaken": "Bu kullanıcı adı zaten alınmış.",
       "invalidCredentials": "Geçersiz kullanıcı adı veya parola.",
       "verificationFailed": "Doğrulama başarısız oldu. Lütfen tekrar deneyin.",
+      "desktopCodeInvalid": "Masaüstü giriş kodu geçersiz veya süresi dolmuş. Lütfen tekrar deneyin.",
       "invalidCharacterName": "Geçersiz karakter adı. 2-16 harf kullanın.",
       "characterNameNotAllowed": "Bu karakter adına izin verilmiyor.",
       "invalidClass": "Geçersiz sınıf.",
@@ -2703,6 +3437,21 @@ export const tr_TR: EnTranslations = {
       "takenOver": "Karakteriniz başka bir oturum tarafından devralındı.",
       "renameBeforeEntering": "Bu karakter dünyaya girmeden önce yeniden adlandırılmalıdır.",
       "renameNotPermitted": "Bu karakterin yeniden adlandırılmasına izin verilmiyor."
+    }
+  },
+  "desktop": {
+    "update": {
+      "downloading": "{version} güncellemesi indiriliyor...",
+      "ready": "{version} güncellemesi hazır. Çıkış yaptığında kurulur ya da şimdi yeniden başlat.",
+      "restart": "Şimdi Yeniden Başlat",
+      "later": "Daha Sonra"
+    },
+    "crash": {
+      "title": "Cryptic Realm",
+      "body": "Oyun görünümü çalışmayı durdurdu. Yeniden yüklensin mi?",
+      "reload": "Yeniden Yükle",
+      "quit": "Çık",
+      "fatalBody": "Cryptic Realm beklenmeyen bir hatayla karşılaştı ve kapatılması gerekiyor."
     }
   },
   "realm": {
@@ -3490,13 +4239,16 @@ export const tr_TR: EnTranslations = {
     },
     "cast": {
       "fishing": "Balık Tutma",
-      "demonHeal": "Şeytan İyileştirmesi"
+      "demonHeal": "Şeytan İyileştirmesi",
+      "thunzharrStormcall": "Fırtına Çağrısı"
     }
   },
   "questUi": {
     "tracker": {
       "title": "Görevler",
-      "complete": "Tamamlandı"
+      "complete": "Tamamlandı",
+      "showOnMap": "Show {name} on the map",
+      "hideFromMap": "Hide {name} from the map"
     },
     "log": {
       "title": "Görev Kaydı",
@@ -3599,7 +4351,8 @@ export const tr_TR: EnTranslations = {
       "drink": "İçecek",
       "tool": "Alet",
       "potion": "Şifa İksiri",
-      "elixir": "İksir"
+      "elixir": "İksir",
+      "bag": "Bag"
     },
     "stats": {
       "armor": "Zırh",
@@ -3641,7 +4394,8 @@ export const tr_TR: EnTranslations = {
       "useManaPotion": "Kullanım: Anında {amount} mana yeniler. Savaşta kullanılabilir. 1 dk bekleme süresi.",
       "clickUseInstant": "Savaşta anında kullanmak için tıkla",
       "clickUse": "Kullanmak için tıkla",
-      "clickBuyback": "Geri satın almak için tıkla"
+      "clickBuyback": "Geri satın almak için tıkla",
+      "bagSlots": "{slots} Slot Bag"
     },
     "bags": {
       "title": "Çantalar",
@@ -3782,6 +4536,26 @@ export const tr_TR: EnTranslations = {
   },
   "entities": {
     "abilities": {
+      "flamestrike": {
+        "name": "Alev Vuruşu",
+        "description": "Hedef alanda bir alev patlaması yaratır ve patlamaya yakalanan düşmanlara {damage} Ateş hasarı verir."
+      },
+      "rain_of_fire": {
+        "name": "Ateş Yağmuru",
+        "description": "Hedef alana ateş yağdırır ve düşmanları yakarak {damage} Ateş hasarı verir."
+      },
+      "volley": {
+        "name": "Ok Yağmuru",
+        "description": "Hedef alana ok yağdırır ve içindeki düşmanlara {damage} hasar verir."
+      },
+      "hurricane": {
+        "name": "Kasırga",
+        "description": "Hedef alana bir kasırga indirir ve düşmanlara {damage} Doğa hasarı verir."
+      },
+      "earthquake": {
+        "name": "Deprem",
+        "description": "Hedef alanı sarsar ve düşmanlara {damage} Doğa hasarı verir."
+      },
       "heroic_strike": {
         "name": "Kahramanca Vuruş",
         "description": "Yakın dövüş hasarını {damage} artıran güçlü bir saldırı. Bir sonraki vuruşunda etkinleşir."
@@ -4513,7 +5287,7 @@ export const tr_TR: EnTranslations = {
         "name": "Mezarçağıran'ın Mührü"
       },
       "binding_ward": {
-        "name": "Infernal Binding Ward"
+        "name": "Hellmaw Binding Ward"
       },
       "renders_hateforged_cleaver": {
         "name": "The Render's Hateforged Cleaver"
@@ -4935,6 +5709,48 @@ export const tr_TR: EnTranslations = {
       "monarch_crown_helm": {
         "name": "Hükümdar'ın Tacı"
       },
+      "linen_pouch": {
+        "name": "Keten Kese"
+      },
+      "travelers_knapsack": {
+        "name": "Gezginin Sırt Çantası"
+      },
+      "wolfhide_satchel": {
+        "name": "Kurt Derisi Çanta"
+      },
+      "gravewoven_bag": {
+        "name": "Mezar Dokuması Çanta"
+      },
+      "mistcallers_duffel": {
+        "name": "Sis Çağıranın Denizci Çantası"
+      },
+      "copper_mining_pick": {
+        "name": "Bakır Maden Kazması"
+      },
+      "iron_mining_pick": {
+        "name": "Demir Maden Kazması"
+      },
+      "mithril_mining_pick": {
+        "name": "Mithril Maden Kazması"
+      },
+      "handaxe": {
+        "name": "El Baltası"
+      },
+      "felling_axe": {
+        "name": "Kesim Baltası"
+      },
+      "ironbark_axe": {
+        "name": "Demir Kabuklu Balta"
+      },
+      "gathering_sickle": {
+        "name": "Toplama Orağı"
+      },
+      "bronze_sickle": {
+        "name": "Bronz Orak"
+      },
+      "silverleaf_sickle": {
+        "name": "Gümüşyaprak Orağı"
+      },
       "bristleback_maul": {
         "name": "Dikensırt Balyozu"
       },
@@ -5298,6 +6114,69 @@ export const tr_TR: EnTranslations = {
       "varric_shadow_cowl": {
         "name": "Varric'in Gölge Başlığı"
       },
+      "siltguard_helm": {
+        "name": "Siltguard Helm"
+      },
+      "bulwark_rusted_pauldrons": {
+        "name": "Bulwark-Rusted Pauldrons"
+      },
+      "nhalias_bell_maul": {
+        "name": "Nhalia's Bell-Maul"
+      },
+      "reedstalker_jerkin": {
+        "name": "Reedstalker Jerkin"
+      },
+      "mirejaw_fang_knife": {
+        "name": "Mirejaw Fang-Knife"
+      },
+      "widow_silk_hood": {
+        "name": "Widow-Silk Hood"
+      },
+      "cantors_drowned_sash": {
+        "name": "Cantor's Drowned Sash"
+      },
+      "corpse_candle_focus": {
+        "name": "Corpse-Candle Focus"
+      },
+      "nhalias_litany_rod": {
+        "name": "Nhalia's Litany Rod"
+      },
+      "blackwater_vanguard_chest": {
+        "name": "Blackwater Vanguard Chestguard"
+      },
+      "siltstep_leggings": {
+        "name": "Siltstep Leggings"
+      },
+      "sunken_reliquary_hood": {
+        "name": "Sunken Reliquary Hood"
+      },
+      "litany_legs": {
+        "name": "Silt-Walker Greaves"
+      },
+      "litany_shoulder": {
+        "name": "Blackwater Drift Mantle"
+      },
+      "litany_gloves_rog": {
+        "name": "Reed-Bound Handwraps"
+      },
+      "litany_plate_chest": {
+        "name": "Sump-Warden Cuirass"
+      },
+      "litany_leather_chest": {
+        "name": "Silt-Deep Vestment"
+      },
+      "litany_cloth_chest": {
+        "name": "Choir-Drowned Raiment"
+      },
+      "litany_helm": {
+        "name": "Reliquant's Drowned Cowl"
+      },
+      "sister_nhalia_choir_plate": {
+        "name": "Sister Nhalia's Choir-Forged Plate"
+      },
+      "drowned_choir_fang": {
+        "name": "Drowned Choir-Fang"
+      },
       "the_codfather": {
         "name": "Morina Baba"
       },
@@ -5417,6 +6296,30 @@ export const tr_TR: EnTranslations = {
       },
       "vanguard_chrome_armor_plate": {
         "name": "Öncü Birlik Krom"
+      },
+      "crownforged_gauntlets": {
+        "name": "Taçdövme Eldivenleri"
+      },
+      "nighttalon_grips": {
+        "name": "Gecepençe Kavrayıcıları"
+      },
+      "soulflame_gloves": {
+        "name": "Ruhalevi Eldivenleri"
+      },
+      "stormcallers_handguards": {
+        "name": "Fırtınaçağıranın El Koruyucuları"
+      },
+      "crownforged_girdle": {
+        "name": "Taçdövme Kemeri"
+      },
+      "nighttalon_waistband": {
+        "name": "Gecepençe Kuşağı"
+      },
+      "soulflame_cord": {
+        "name": "Ruhalevi Kordonu"
+      },
+      "stormcallers_waistguard": {
+        "name": "Fırtınaçağıranın Bel Koruyucusu"
       }
     },
     "mobs": {
@@ -5609,6 +6512,45 @@ export const tr_TR: EnTranslations = {
       "acolyte_tessa": {
         "name": "Çömez Tessa"
       },
+      "drowned_cantor": {
+        "name": "Drowned Cantor"
+      },
+      "reedbound_acolyte": {
+        "name": "Reedbound Acolyte"
+      },
+      "deepfen_spearjaw": {
+        "name": "Deepfen Spearjaw"
+      },
+      "mirefen_widowling": {
+        "name": "Mirefen Widowling"
+      },
+      "spider_egg_sac": {
+        "name": "Spider Egg-Sac"
+      },
+      "grave_silt_bulwark": {
+        "name": "Grave-Silt Bulwark"
+      },
+      "sump_troll_devourer": {
+        "name": "Sump Troll Devourer"
+      },
+      "choir_thrall": {
+        "name": "Bog Thrall"
+      },
+      "sister_nhalia_drowned_canticle": {
+        "name": "Sister Nhalia, the Drowned Canticle"
+      },
+      "edda_reedhand": {
+        "name": "Edda Reedhand"
+      },
+      "tolling_bell": {
+        "name": "Tolling Bell"
+      },
+      "thunzharr_waking_peak": {
+        "name": "Thunzharr, the Waking Peak"
+      },
+      "thunzharr_stormling": {
+        "name": "Roused Stormling"
+      },
       "ironvein_foreman": {
         "name": "Demirdamar Ustabaşı"
       },
@@ -5639,13 +6581,13 @@ export const tr_TR: EnTranslations = {
       "varkas_boneguard": {
         "name": "Varkas Kemik Muhafızı"
       },
-      "imp": {
+      "emberkin": {
         "name": "İblisçik"
       },
-      "voidwalker": {
+      "gloomshade": {
         "name": "Boşlukgezer"
       },
-      "succubus": {
+      "duskborn": {
         "name": "Sukubus"
       },
       "grix_the_tunnelking": {
@@ -5669,16 +6611,16 @@ export const tr_TR: EnTranslations = {
       "wraithbinder_maldrec": {
         "name": "Hayaletbağlayan Maldrec"
       },
-      "felhunter": {
+      "spellhound": {
         "name": "İfrit Avcısı"
       },
-      "felguard": {
+      "warfiend": {
         "name": "İfrit Muhafızı"
       },
-      "infernal": {
+      "pyre_colossus": {
         "name": "Cehennem Zebanisi"
       },
-      "doomguard": {
+      "wraithborn": {
         "name": "Kıyamet Muhafızı"
       },
       "choirmother_selthe": {
@@ -5815,9 +6757,9 @@ export const tr_TR: EnTranslations = {
         "greeting": "Gevşek kayalara dikkat et, {className}. Dağ son zamanlarda... huzursuz. Nedenini öğrenmeye niyetliyim."
       },
       "auctioneer_voss": {
-        "name": "Auctioneer Voss",
-        "title": "Keeper of the World Market",
-        "greeting": "The World Market is open here too, {className}. Buy from every adventurer in the realm, or set out your own wares."
+        "name": "Mezatçı Voss",
+        "title": "World Market Bekçisi",
+        "greeting": "World Market burada da açık, {className}. Diyardaki her maceracıdan alışveriş yap ya da kendi mallarını sergile."
       },
       "brother_aldric_raid": {
         "name": "Birader Aldric",
@@ -5828,6 +6770,16 @@ export const tr_TR: EnTranslations = {
         "name": "Birader Halven",
         "title": "Emanetlik Bekçisi",
         "greeting": "Aşağıdaki kutsal emanetlik yine yer değiştirdi."
+      },
+      "brother_halven_marsh": {
+        "name": "Brother Halven",
+        "title": "Reliquary Keeper",
+        "greeting": "The trail led north. Another reliquary, another rite. Choose your tier, and I'll hold the rope until you return."
+      },
+      "spirit_healer": {
+        "name": "The Pale Keeper",
+        "title": "Warden of the Dead",
+        "greeting": "Rest now, spirit. I can return you to your body, but the crossing back leaves you weak."
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",
@@ -6268,6 +7220,36 @@ export const tr_TR: EnTranslations = {
         "objectives": {
           "0": {
             "label": "Sırt Pusucusu Postu"
+          }
+        }
+      },
+      "q_stalkers_return": {
+        "title": "The Stalkers Return",
+        "text": "Twelve dead, and the ridge crawls thicker than the day you started, {playerName}. Beasts do not throw themselves at a wall out of hunger. Something on the high ridge is pushing them down, and until I know what, the culling does not stop. Fourteen more.",
+        "completion": "Fourteen more, and still my patrols count fresh tracks by morning. My scout came back from the high ridge white as the snowline: prints the size of a shield, she says, and old kills no stalker would leave. Whatever walks up there is no ordinary cat.",
+        "objectives": {
+          "0": {
+            "label": "Ridge Stalker slain"
+          }
+        }
+      },
+      "q_stalker_cloaks": {
+        "title": "Cloaks for the Watch",
+        "text": "Eight pelts lined the officers' cloaks, and now every soldier on the wall wants the same, {playerName}. They are right to want it: winter takes fingers first and apologies never. Ten more pelts from the ridges south of the gate, and the whole watch sleeps warm.",
+        "completion": "Ten good pelts, thick as any I have... no, look at these, {playerName}. Torn, half of them, and by no blade or spear. Claw marks wide as my hand, right through the winter coat. Something on that ridge is savaging its own kind.",
+        "objectives": {
+          "0": {
+            "label": "Ridge Stalker Pelt"
+          }
+        }
+      },
+      "q_old_cragmaw": {
+        "title": "Old Cragmaw",
+        "text": "The mountain folk put a name to the prints my scout found: Old Cragmaw, a scar-pelted tyrant of a cat that has outlived three generations of its own pack. It is the reason the stalkers flood my road, {playerName}. Its den sits on the western ridge above the road south. Bring a friend, and put the old devil down.",
+        "completion": "Down at last. The mountain folk swore that cat would outlive the wall itself. The stalkers will keep to their high snows now, {playerName}, and my patrols will walk the road without bleeding for it. The whole ridge is quieter for your work.",
+        "objectives": {
+          "0": {
+            "label": "Old Cragmaw slain"
           }
         }
       },
@@ -6793,38 +7775,77 @@ export const tr_TR: EnTranslations = {
         "name": "Çökmüş Emanetlik",
         "enterText": "Çökmüş emanetliğe inersin.",
         "leaveText": "Emanetlik harabesinde Birader Halven'in yanına tırmanıp geri dönersin."
+      },
+      "drowned_litany": {
+        "name": "The Drowned Litany",
+        "enterText": "You descend into the drowned shrine at the marsh's edge.",
+        "leaveText": "You climb back to Brother Halven at the marsh's edge."
+      }
+    },
+    "letters": {
+      "ravenpost_welcome": {
+        "sender": "Kuzgun Postası",
+        "subject": "Kuzgunlar artık senin için uçuyor",
+        "body": "Yolcu,\n\nKuzgun Postası tünek direklerini vadinin dört bir yanına kurdu. Eastbrook, Fenbridge ve Highwatch’taki kuzgun sütunlarını ara: herhangi birinden diğer maceracılara mektup, para ve eşya gönderebilir, kuzgunların sana getirdiklerini alabilirsin.\n\nİlk pulun için küçük bir armağan ekledik.\n\nKanatlar yukarı,\nKuzgun Postası"
+      },
+      "letter_q_wolves": {
+        "sender": "Mareşal Redbrook",
+        "subject": "Ağıllar yeniden sessiz",
+        "body": "Çobanlar nihayet rahat uyuyabiliyor ve bu senin sayende. Kuzgun Postası’ndan nöbet kasasından sana küçük bir şey ulaştırmasını istedim.\n\nKılıcını yağlı tut.\n- Mareşal Redbrook"
+      },
+      "letter_q_greyjaw": {
+        "sender": "Mareşal Redbrook",
+        "subject": "Yaşlı Bozçene, sonunda",
+        "body": "Böyle küçük bir kasabada haber tez yayılır. Çobanlar dün gece sağlığına kadeh kaldırdı, Wilkes ise kurdun bir araba kadar iri olduğuna yemin ediyor. Bırak abartsınlar: bunu hak ettin.\n\nNöbetçilerin hesabına bir yemek ye.\n- Mareşal Redbrook"
+      },
+      "letter_q_hollow": {
+        "sender": "Birader Aldric",
+        "subject": "Karanlıkta yaptıkların",
+        "body": "O çukurda neyin gömülü olduğunu çok az kişi bilecek, inanacak olansa daha da az. Ben biliyorum ve unutmayacağım.\n\nYolun hep aydınlık olsun.\n- Birader Aldric"
       }
     },
     "itemSets": {
+      "boundstone_vanguard": {
+        "name": "Bağlıtaş Öncüsü",
+        "bonus3": "Saldırı ve büyü hızını %15 artırır."
+      },
       "crownforged": {
         "name": "Taçdövme savaş takımı",
         "bonus2": "Saldırı gücünü 40 artırır.",
-        "bonus3": "Gücü 15 ve dayanıklılığı 15 artırır."
+        "bonus3": "Gücü 15, dayanıklılığı 15, saldırı ve büyü hızını %15 artırır."
       },
       "deathlord": {
         "name": "Ölüm Lordu savaş takımı",
         "bonus2": "Saldırı gücünü 40 artırır.",
         "bonus3": "Gücü 15 ve dayanıklılığı 15 artırır."
       },
+      "greyjaw_stalker": {
+        "name": "Greyjaw İzsürücü takımı",
+        "bonus3": "Saldırı ve büyü hızını %15 artırır."
+      },
       "necromancers": {
         "name": "Nekromansır giysileri",
-        "bonus2": "Hasarın neden olduğu büyü geri itmesini %50 azaltır.",
-        "bonus3": "Alınan hasar büyü yapmanı geciktirmez."
+        "bonus2": "Geri itilemezsin (%100 geri itilme direnci).",
+        "bonus3": "Zekayı 10 ve dayanıklılığı 10 artırır."
       },
       "nighttalon": {
         "name": "Gece Pençesi deri takımı",
         "bonus2": "Saldırı gücünü 40 artırır.",
-        "bonus3": "Çevikliği 15 ve kritik şansını %2 artırır."
+        "bonus3": "Çevikliği 15, kritik şansını %2, saldırı ve büyü hızını %15 artırır."
       },
       "soulflame": {
         "name": "Ruh Alevi giysileri",
-        "bonus2": "Hasarın neden olduğu büyü geri itmesini %50 azaltır.",
-        "bonus3": "Alınan hasar büyü yapmanı geciktirmez."
+        "bonus2": "Geri itilemezsin (%100 geri itilme direnci).",
+        "bonus3": "Zekayı 15, ruhu 15, saldırı ve büyü hızını %15 artırır."
       },
       "stormcallers": {
         "name": "Fırtına Çağıran giysileri",
-        "bonus2": "Hasarın neden olduğu büyü geri itmesini %50 azaltır.",
-        "bonus3": "Alınan hasar büyü yapmanı geciktirmez."
+        "bonus2": "Geri itilemezsin (%100 geri itilme direnci).",
+        "bonus3": "Zekayı 15, ruhu 15, saldırı ve büyü hızını %15 artırır."
+      },
+      "vale_arcanist": {
+        "name": "Vadi Arkanisti giysileri",
+        "bonus3": "Saldırı ve büyü hızını %15 artırır."
       },
       "wyrmshadow": {
         "name": "Wyrm Gölgesi takımı",
@@ -6840,6 +7861,12 @@ export const tr_TR: EnTranslations = {
     "dungeonInstanceBusy": "{name} zindanının tüm kopyaları dolu. Birazdan tekrar deneyin.",
     "delveLockedChestInteract": "Kilidi açmak için F'ye bas",
     "delveRewardChestInteract": "Ganimeti almak için F'ye bas",
-    "delveSurfaceExitInteract": "Tırmanmak için F'ye bas"
+    "delveSurfaceExitInteract": "Tırmanmak için F'ye bas",
+    "delveReliquaryInteract": "Drowned Reliquary: Press F to begin the rite",
+    "delveRiteShrineBellInteract": "Bell Shrine: Press F to ring it",
+    "delveRiteShrineCandleInteract": "Candle Shrine: Press F to touch it",
+    "delveRiteShrineReedInteract": "Reed Shrine: Press F to touch it",
+    "delveRiteShrineSkullInteract": "Skull Shrine: Press F to touch it",
+    "mailboxName": "Mailbox"
   }
 };

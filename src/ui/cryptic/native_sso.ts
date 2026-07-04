@@ -56,6 +56,7 @@ export function ssoHashFromAppUrl(rawUrl: string): string | null {
 export async function installNativeSsoReturnHandler(onReturn: (hash: string) => void): Promise<void> {
   if (!isNativeCapacitorApp()) return;
   try {
+    // @ts-ignore optional native-only Capacitor plugin; not a build-time dependency
     const mod = await import('@capacitor/app');
     const App = mod.App as {
       addListener: (eventName: 'appUrlOpen', listenerFunc: (event: AppUrlOpenEvent) => void) => Promise<unknown>;

@@ -154,6 +154,11 @@ export const id_ID: EnTranslations = {
     "spectate": {
       "banner": "Menonton {name}"
     },
+    "death": {
+      "resurrectAtCorpse": "Resurrect at Corpse",
+      "resurrectAtHealer": "The Pale Keeper (Keeper's Toll)",
+      "spiritHealerAlive": "The Pale Keeper watches over the dead. You are still among the living."
+    },
     "emotes": {
       "wave": "Melambai",
       "laugh": "LOL",
@@ -176,6 +181,55 @@ export const id_ID: EnTranslations = {
     "emoteEditor": {
       "title": "Emote",
       "done": "Selesai"
+    },
+    "dailyRewards": {
+      "title": "Hadiah Harian",
+      "close": "Tutup hadiah harian",
+      "loading": "Memuat hadiah harian...",
+      "error": "Tidak dapat memuat hadiah harian.",
+      "intro": "Simpan cukup WOC di dompet terverifikasimu untuk membuka hadiah harian. Kumpulkan poin lewat satu putaran harian dan tugas yang bergilir, lalu naiki papan peringkat harian untuk mendapat bagian dari kolam hadiah.",
+      "disclaimer": "WOC price can move quickly. We recommend holding more than the $20 USD minimum so normal price swings do not lock you out. This is not financial advice.",
+      "prize": "Kolam Hadiah",
+      "reset": "Atur Ulang",
+      "endsIn": "Berakhir dalam {time}",
+      "remainingLessThanMinute": "<1m",
+      "remainingMinutes": "{minutes}m",
+      "remainingHoursMinutes": "{hours}j {minutes}m",
+      "score": "Skor",
+      "walletValue": "Nilai Dompet (WOC)",
+      "usd": "{amount} USD",
+      "sol": "{amount} SOL",
+      "unknown": "Tidak diketahui",
+      "spinTitle": "Putaran Harian",
+      "spinDialogTitle": "Putaran Hadiah Harian",
+      "spinClose": "Tutup putaran harian",
+      "spinReady": "Satu putaran siap.",
+      "spinClaimed": "Diklaim: +{points} poin.",
+      "spinResult": "+{points} poin",
+      "spinButton": "Putar",
+      "tasks": "Tugas",
+      "taskMultiplier": "x{multiplier} multiplier",
+      "pointsGained": "{points} daily rewards points gained.",
+      "showChestButton": "Tampilkan Peti",
+      "hideChestButton": "Sembunyikan Peti",
+      "leaderboard": "Papan Peringkat Harian",
+      "totalPlayer": "{count} player today",
+      "totalPlayers": "{count} players today",
+      "history": "Pemenang Sebelumnya",
+      "noLeaders": "Belum ada poin.",
+      "noHistory": "Belum ada pembayaran.",
+      "walletConnectTitle": "Verifikasi Dompet",
+      "walletConnectBody": "Verifikasi dompet Solana berisi WOC untuk membuka hadiah harian.",
+      "walletConnectButton": "Verifikasi Dompet",
+      "walletHoldTitle": "Simpan WOC",
+      "walletHoldBody": "Simpan minimal {amount} USD dalam WOC untuk membuka hadiah harian.",
+      "walletPriceBody": "Harga WOC tidak tersedia saat ini. Silakan cek kembali sebentar lagi.",
+      "reason": {
+        "eligible": "Hadiah terbuka.",
+        "no_wallet": "Hubungkan dompet dengan setidaknya $20 USD dalam WOC.",
+        "under_minimum": "Dompet di bawah batas minimum $20 USD WOC.",
+        "price_unavailable": "Harga WOC tidak tersedia, hadiah terkunci sementara."
+      }
     },
     "theme": {
       "preset": "Tema UI",
@@ -234,7 +288,10 @@ export const id_ID: EnTranslations = {
       "targetAnnounce": "Tandai {name}",
       "partyLabel": "Kelompok Anda",
       "partyGroup": "Grup {n}",
-      "durationUnitSeconds": "d"
+      "durationUnitSeconds": "d",
+      "durationUnitMinutes": "m",
+      "durationUnitHours": "h",
+      "durationUnitDays": "d"
     },
     "character": {
       "modelPreview": "Pratinjau Model Karakter"
@@ -265,6 +322,13 @@ export const id_ID: EnTranslations = {
       "heading": "Arah",
       "minimapZoom": "Zoom peta mini"
     },
+    "nativeUpdate": {
+      "title": "Pembaruan Tersedia",
+      "body": "Versi baru Cryptic Realm tersedia. Perbarui sekarang untuk perbaikan dan peningkatan terbaru.",
+      "bodyWithVersion": "Versi {version} Cryptic Realm tersedia. Perbarui sekarang untuk perbaikan dan peningkatan terbaru.",
+      "notNow": "Jangan sekarang",
+      "update": "Perbarui"
+    },
     "castBar": {
       "playerAria": "Bilah Rapal Anda",
       "targetAria": "Bilah Rapal Unit"
@@ -274,16 +338,16 @@ export const id_ID: EnTranslations = {
       "tabsLabel": "Papan skor tertinggi",
       "tabPlayers": "Pemain",
       "tabGuilds": "Guild",
-      "tabDevs": "Developers",
+      "tabDevs": "Pengembang",
       "guildName": "Guild",
       "members": "Anggota",
       "topLevel": "Teratas",
       "guildXp": "Total XP",
       "guildEmpty": "Belum ada guild berperingkat.",
-      "devName": "Contributor",
-      "devTierCol": "Badge",
-      "mergedPrs": "Merged PRs",
-      "devEmpty": "No ranked contributors yet."
+      "devName": "Kontributor",
+      "devTierCol": "Lencana",
+      "mergedPrs": "PR Digabungkan",
+      "devEmpty": "Belum ada kontributor berperingkat."
     },
     "raidLockout": {
       "title": "Penguncian Raid",
@@ -336,14 +400,21 @@ export const id_ID: EnTranslations = {
       "keybindHelpLockCursorOnRotate": "Menjaga kursor mouse tetap di dalam jendela saat Anda menyeret untuk memutar kamera, sehingga tidak mencapai tepi layar atau berpindah ke monitor lain. Matikan jika Anda lebih suka kursor bebas.",
       "showWalletOnCharacterScreen": "Tampilkan Dompet di Layar Karakter",
       "showWalletOnPlayerCard": "Tampilkan Dompet di Kartu Pemain",
-      "showDevBadges": "Show Developer Badges",
+      "showDevBadges": "Tampilkan Lencana Pengembang",
+      "showOwnNameplate": "Show My Nameplate",
       "uiScale": "Skala UI",
+      "playerFrameScale": "Player Frame Scale",
+      "targetFrameScale": "Target Frame Scale",
+      "aurasOnPlayerFrame": "Buffs on the Player Frame",
       "highContrastBackground": "Latar Kontras Tinggi",
-      "startAttackOnAbility": "Auto-Attack on Ability Use",
+      "startAttackOnAbility": "Serangan Otomatis Saat Memakai Kemampuan",
+      "walkByAutoloot": "Walk-by Autoloot",
+      "groundReticle": "Retikel bidik darat",
       "showItemLevel": "Tampilkan Level Item",
       "itemLevelLine": "Level Item {level}",
       "itemScoreLine": "Skor {score}",
-      "showSecondaryActionBar": "Tampilkan Bilah Aksi Sekunder"
+      "showSecondaryActionBar": "Tampilkan Bilah Aksi Sekunder",
+      "showDailyRewardsChest": "Show Daily Rewards Chest"
     },
     "controller": {
       "title": "Kontroler",
@@ -437,7 +508,7 @@ export const id_ID: EnTranslations = {
     "statInfo": {
       "fromYour": "Dari {value} {stat} Anda:",
       "names": {
-        "spellPower": "Spell Power"
+        "spellPower": "Kekuatan Mantra"
       },
       "desc": {
         "str": "Meningkatkan daya serang Anda, sehingga serangan senjata Anda menghantam lebih keras.",
@@ -447,7 +518,7 @@ export const id_ID: EnTranslations = {
         "spi": "Mempercepat pemulihan mana penyihir saat beristirahat, di luar pertempuran.",
         "armor": "Meredam pukulan fisik yang datang. Pengurangannya lebih besar terhadap penyerang berlevel lebih rendah dan dibatasi hingga 75%.",
         "attackPower": "Memberi tenaga pada serangan senjata Anda. Setiap 14 daya serang menambah 1 kerusakan per detik.",
-        "spellPower": "Increases the damage of your spells and the strength of your heals. Each point of Intellect grants a little Spell Power, on top of any from gear or buffs.",
+        "spellPower": "Meningkatkan kerusakan mantra dan kekuatan penyembuhanmu. Setiap poin Kecerdasan memberi sedikit Kekuatan Mantra, di atas apa pun dari perlengkapan atau buff.",
         "dps": "Perkiraan kerusakan senjata Anda per detik, menggabungkan kerusakan dan kecepatan senjata dengan daya serang Anda.",
         "critChance": "Peluang serangan Anda menghantam secara kritis, memberikan kerusakan ganda.",
         "dodge": "Peluang Anda untuk sepenuhnya menghindari serangan jarak dekat, tanpa menerima kerusakan."
@@ -472,13 +543,13 @@ export const id_ID: EnTranslations = {
         "dpsApprox": "Sebuah perkiraan, tidak termasuk serangan kritis dan kerusakan kemampuan."
       },
       "sources": {
-        "header": "Made up of:",
-        "base": "Base: {value}",
-        "attributes": "From your attributes: {value}",
-        "fromAttribute": "From {stat}: {value}",
-        "gear": "Equipped gear: {value}",
+        "header": "Terdiri dari:",
+        "base": "Dasar: {value}",
+        "attributes": "Dari atributmu: {value}",
+        "fromAttribute": "Dari {stat}: {value}",
+        "gear": "Perlengkapan terpasang: {value}",
         "buff": "{name}: {value}",
-        "talents": "Talents and effects: {value}"
+        "talents": "Talenta dan efek: {value}"
       }
     },
     "talents": {
@@ -504,7 +575,7 @@ export const id_ID: EnTranslations = {
       "linkTitle": "Shift-klik untuk menautkan misi ini di obrolan."
     },
     "itemShare": {
-      "linkHint": "Shift-click to link this item in chat."
+      "linkHint": "Shift-klik untuk menautkan item ini di obrolan."
     },
     "plurals": {
       "guildMembers": {
@@ -532,10 +603,10 @@ export const id_ID: EnTranslations = {
         "other": "Who: {count} pemain daring di {realm}."
       },
       "playersMatching": {
-        "one": "Who: {count} player matching \"{query}\" on {realm}.",
-        "few": "Who: {count} players matching \"{query}\" on {realm}.",
-        "many": "Who: {count} players matching \"{query}\" on {realm}.",
-        "other": "Who: {count} players matching \"{query}\" on {realm}."
+        "one": "Siapa: {count} pemain yang cocok dengan \"{query}\" di {realm}.",
+        "few": "Siapa: {count} pemain yang cocok dengan \"{query}\" di {realm}.",
+        "many": "Siapa: {count} pemain yang cocok dengan \"{query}\" di {realm}.",
+        "other": "Siapa: {count} pemain yang cocok dengan \"{query}\" di {realm}."
       }
     },
     "bugReport": {
@@ -663,25 +734,26 @@ export const id_ID: EnTranslations = {
       "assigned": "{looter} memberikan {item} kepada {target}.",
       "unassigned": "{item} tidak diberikan dan bebas untuk semua.",
       "leaderOnly": "Hanya pemimpin grup yang dapat mengubah metode loot.",
-      "rollingFor": "Rolling for {item}.",
-      "looterChanged": "Master Looter is now {name}.",
-      "thresholdSet": "Loot threshold set to {threshold}.",
-      "summaryMaster": "Loot Settings: Master Loot, Master Looter {name}, threshold {threshold}.",
-      "summaryGroup": "Loot Settings: Group Loot."
+      "rollingFor": "Melempar dadu untuk {item}.",
+      "looterChanged": "Penjarah Utama kini adalah {name}.",
+      "thresholdSet": "Ambang jarahan diatur ke {threshold}.",
+      "summaryMaster": "Pengaturan Jarahan: Jarahan Utama, Penjarah Utama {name}, ambang {threshold}.",
+      "summaryGroup": "Pengaturan Jarahan: Jarahan Kelompok."
     },
     "party": {
-      "promoteLeader": "Promote to Leader"
+      "promoteLeader": "Angkat jadi Pemimpin",
+      "inviteUsage": "Invite whom? Usage: /invite <name>."
     },
     "lootSettings": {
-      "title": "Loot Settings",
-      "close": "Close loot settings",
-      "menuItem": "Loot Settings",
-      "method": "Loot Method",
-      "rollThreshold": "Roll Threshold",
-      "groupLoot": "Group Loot",
-      "valueMaster": "Master Loot",
-      "leaderOption": "Master Looter: Leader (You)",
-      "masterOption": "Master Looter: {name}"
+      "title": "Pengaturan Jarahan",
+      "close": "Tutup pengaturan jarahan",
+      "menuItem": "Pengaturan Jarahan",
+      "method": "Metode Jarahan",
+      "rollThreshold": "Ambang Lempar Dadu",
+      "groupLoot": "Jarahan Kelompok",
+      "valueMaster": "Jarahan Utama",
+      "leaderOption": "Penjarah Utama: Pemimpin (Anda)",
+      "masterOption": "Penjarah Utama: {name}"
     },
     "bags": {
       "filterGroupAria": "Saring tas menurut kategori",
@@ -697,7 +769,13 @@ export const id_ID: EnTranslations = {
       "sortName": "Nama",
       "searchPlaceholder": "Cari barang",
       "searchAria": "Cari barang tas berdasarkan nama",
-      "noMatch": "Tidak ada barang yang cocok dengan saringanmu."
+      "noMatch": "Tidak ada barang yang cocok dengan saringanmu.",
+      "capacity": "{used}/{total}",
+      "capacityAria": "Bag slots used: {used} of {total}",
+      "backpack": "Backpack",
+      "bagSocketAria": "{name}: {slots}",
+      "socketEmpty": "Empty bag slot",
+      "unequipHint": "Click to remove this bag"
     },
     "raidConvert": {
       "toPartyDone": "Raid Anda telah diubah kembali menjadi rombongan.",
@@ -740,6 +818,7 @@ export const id_ID: EnTranslations = {
         "spi": "Reduce el espíritu en {value}",
         "allStats": "Reduce todos los atributos en {value}"
       },
+      "allStatsPctReduce": "Reduces all attributes by {pct}%",
       "dodge": "Aumenta la probabilidad de esquivar un {pct}%",
       "dodgeReduce": "Reduce la probabilidad de esquivar un {pct}%",
       "armorFlat": "Reduce la armadura en {value}",
@@ -779,6 +858,9 @@ export const id_ID: EnTranslations = {
         "nature": "Alam"
       }
     },
+    "worldBoss": {
+      "spawn": "{name} rises over Thornpeak Heights!"
+    },
     "loot": {
       "chestTitle": "Peti"
     },
@@ -790,8 +872,25 @@ export const id_ID: EnTranslations = {
       "mob": "[{level}] {name}",
       "mobElite": "[{level}+] {name}"
     },
+    "mobTooltip": {
+      "levelFamily": "Level {level} {family}",
+      "familyDemon": "Demon",
+      "hostile": "Hostile",
+      "friendly": "Friendly"
+    },
+    "targetFrame": {
+      "unlock": "Move target frame",
+      "lock": "Lock target frame"
+    },
+    "playerFrame": {
+      "unlock": "Move player frame",
+      "lock": "Lock player frame"
+    },
+    "frameReset": {
+      "label": "Reset Frame Positions"
+    },
     "itemTooltip": {
-      "requiresLevel": "Requires Level {level}"
+      "requiresLevel": "Membutuhkan Level {level}"
     },
     "discord": {
       "title": "Discord",
@@ -871,6 +970,7 @@ export const id_ID: EnTranslations = {
       "memberSinceDays": "{days}h di Discord",
       "roleTag": {
         "levyst": "Levy St",
+        "admin": "Admin",
         "devs": "Pengembang",
         "mods": "Moderator",
         "artists": "Seniman"
@@ -937,37 +1037,147 @@ export const id_ID: EnTranslations = {
       }
     },
     "devBadge": {
-      "title": "Developer",
+      "title": "Pengembang",
       "tiers": {
-        "tinkerer": "Tinkerer",
-        "artificer": "Artificer",
-        "runesmith": "Runesmith",
-        "architect": "Architect",
-        "worldwright": "Worldwright"
+        "tinkerer": "Perakit",
+        "artificer": "Perekayasa",
+        "runesmith": "Pandai Rune",
+        "architect": "Arsitek",
+        "worldwright": "Perancang Dunia"
       },
       "flavors": {
-        "tinkerer": "Your first pull request landed in the realm.",
-        "artificer": "Five pull requests in, and the world bends to your code.",
-        "runesmith": "Fifteen pull requests forged into the running game.",
-        "architect": "An architect of the realm: 30 pull requests merged.",
-        "worldwright": "A wright of worlds: 70 pull requests shape the game."
+        "tinkerer": "Pull request pertamamu telah mendarat di alam ini.",
+        "artificer": "Lima pull request masuk, dan dunia pun tunduk pada kodemu.",
+        "runesmith": "Lima belas pull request ditempa ke dalam permainan yang berjalan.",
+        "architect": "Seorang arsitek alam ini: 30 pull request telah digabungkan.",
+        "worldwright": "Seorang perancang dunia: 70 pull request membentuk permainan ini."
       },
-      "badgeTitle": "Developer: {tier}",
-      "prsLanded": "{count} pull requests merged",
-      "contributor": "Open-source contributor",
+      "badgeTitle": "Pengembang: {tier}",
+      "prsLanded": "{count} pull request digabungkan",
+      "contributor": "Kontributor sumber terbuka",
       "link": {
-        "cta": "Link GitHub",
-        "relink": "Relink GitHub",
-        "benefits": "Link your GitHub to earn a developer badge for the pull requests you have had merged into the open-source repo.",
-        "error": "Could not link GitHub. Please try again."
+        "cta": "Tautkan GitHub",
+        "relink": "Tautkan Ulang GitHub",
+        "benefits": "Tautkan GitHub-mu untuk mendapatkan lencana pengembang atas pull request yang telah digabungkan ke repositori sumber terbuka.",
+        "error": "Tidak dapat menautkan GitHub. Silakan coba lagi."
       },
-      "linkedAs": "Linked as {login}",
-      "unlink": "Unlink GitHub"
+      "linkedAs": "Tertaut sebagai {login}",
+      "unlink": "Putuskan Tautan GitHub"
+    },
+    "mailbox": {
+      "title": "Mailbox",
+      "subtitle": "The Ravenpost",
+      "close": "Close mailbox",
+      "tabInbox": "Inbox",
+      "tabInboxWithCount": "Inbox ({count})",
+      "tabSend": "Send",
+      "empty": "Your mailbox is empty.",
+      "truncated": "Showing the newest {shown} of {total} letters.",
+      "attachmentsBadge": "Parcel attached",
+      "unreadBadge": "Unread",
+      "back": "Back",
+      "take": "Take attachments",
+      "delete": "Delete letter",
+      "deleteAria": "Delete the letter {subject}",
+      "openAria": "Read the letter {subject} from {name}",
+      "noSubject": "(no subject)",
+      "toLabel": "To",
+      "toPlaceholder": "Character name",
+      "subjectLabel": "Subject",
+      "bodyLabel": "Message",
+      "coinLabel": "Attach coin",
+      "parcelsLabel": "Parcels",
+      "parcelsHint": "Click an item in your bags to attach it.",
+      "removeParcelAria": "Remove {item} from the letter",
+      "sendButton": "Send letter",
+      "postageNote": "Postage: {amount}. The raven flies for about {seconds}s.",
+      "arrivedBanner": "The raven has landed: mail from {name}.",
+      "arrivedLog": "You have new mail from {name}.",
+      "indicatorAria": "Unread mail: {count}",
+      "indicatorTip": "You have {count} unread letters. Visit a mailbox to read them.",
+      "clickAttach": "Click to attach to your letter.",
+      "cannotMail": "This cannot be mailed.",
+      "result": {
+        "sent": "A raven takes wing with your letter to {name} ({postage} postage).",
+        "collected": "You collect {amount} from the letter.",
+        "tooFar": "You must be at a mailbox to tend your post.",
+        "needRecipient": "Name a recipient for your letter.",
+        "noRecipient": "No one by that name holds a mailbox here.",
+        "tooManyParcels": "A letter carries at most {count} parcels.",
+        "noMailQuestItems": "You cannot mail quest items.",
+        "notEnoughItems": "You do not have that many to send.",
+        "cantAffordPostage": "You cannot afford the postage.",
+        "recipientBoxFull": "Their mailbox is full.",
+        "letterGone": "That letter is no longer in your box.",
+        "takeParcelsFirst": "Take the parcels out before discarding the letter."
+      }
+    },
+    "calendar": {
+      "title": "Event Calendar",
+      "close": "Close calendar",
+      "keybindLabel": "Event Calendar",
+      "prevMonth": "Previous month",
+      "nextMonth": "Next month",
+      "dayAria": "{date}: {count} events",
+      "noEvents": "Nothing planned for this day.",
+      "allDay": "All day",
+      "bookedBy": "Booked by {name}",
+      "deleteAria": "Remove the event {title}",
+      "bookTitle": "Book a guild event",
+      "titlePlaceholder": "Event title",
+      "notePlaceholder": "Note (optional)",
+      "hourLabel": "Hour (UTC)",
+      "hourAllDay": "All day",
+      "addButton": "Book event",
+      "guildOnlyNote": "Join a guild to plan events together.",
+      "result": {
+        "created": "The event is on the guild calendar.",
+        "removed": "The event was taken off the calendar.",
+        "notInGuild": "You are not in a guild.",
+        "notOfficer": "Only officers and the Guild Master may manage guild events.",
+        "badInput": "Give the event a title and a valid day.",
+        "calendarFull": "The guild calendar is full.",
+        "eventGone": "That event is no longer on the calendar."
+      },
+      "events": {
+        "raidCall": {
+          "title": "Raid Call",
+          "note": "Wardens sound the horn: gather a party for the crypts and the raid."
+        },
+        "marketDay": {
+          "title": "Market Day",
+          "note": "The Merchant expects fresh stock. A fine day to browse the World Market."
+        },
+        "fiestaNight": {
+          "title": "Fiesta Night",
+          "note": "The 2v2 Fiesta ring draws its loudest crowds tonight."
+        },
+        "arenaClash": {
+          "title": "Arena Clash",
+          "note": "Duelists flock to the Ashen Coliseum. Queue up and climb the ladder."
+        },
+        "fishingDerby": {
+          "title": "Fishing Derby",
+          "note": "Anglers line the lakes. Bring a pole and swap fishing tales."
+        },
+        "delveDay": {
+          "title": "Delve Day",
+          "note": "Brother Halven marks his charts: a fine day to brave the Collapsed Reliquary."
+        },
+        "moongateCommunion": {
+          "title": "Moongate Communion",
+          "note": "Pilgrims gather at the temple moongate under the mid-month moon."
+        }
+      }
+    },
+    "social": {
+      "lastSeen": "Last seen: {when}",
+      "lastSeenNever": "never"
     }
   },
   "guide": {
     "brand": "Cryptic Realm",
-    "brandShort": "Cryptic",
+    "brandShort": "ClaudeCraft",
     "tagline": "MMO bergaya klasik yang bisa kamu mainkan gratis di peramban.",
     "skipToContent": "Lewati ke konten utama",
     "loading": "Memuat...",
@@ -1022,9 +1232,9 @@ export const id_ID: EnTranslations = {
       "heading": "Di halaman ini"
     },
     "footer": {
-      "blurb": "A classic-style micro-MMO. Quest, group up, and explore a hand-built world, right in your browser.",
+      "blurb": "Mikro-MMO bergaya klasik dan bersumber terbuka. Jalani misi, bentuk kelompok, dan jelajahi dunia buatan tangan, langsung di perambanmu.",
       "playNow": "Main Sekarang",
-      "github": "Contributions",
+      "github": "Sumber di GitHub",
       "discord": "Gabung Discord",
       "communityWiki": "Wiki Komunitas",
       "rights": "Cryptic Realm"
@@ -1057,8 +1267,8 @@ export const id_ID: EnTranslations = {
         "pillarPlayBody": "Tanpa unduhan, tanpa peluncur. Buat karakter dan kamu sudah ada di dunia dalam hitungan detik, di desktop maupun ponsel.",
         "pillarClassesTitle": "Sembilan kelas, tiga peran",
         "pillarClassesBody": "Jadi tank, sembuhkan, atau lancarkan damage. Setiap kelas dimainkan sesuai arketipenya, dengan talent untuk menjadikannya milikmu.",
-        "pillarOpenTitle": "Free to play",
-        "pillarOpenBody": "Free to play to the level cap. No pay to win, ever."
+        "pillarOpenTitle": "Gratis dan sumber terbuka",
+        "pillarOpenBody": "Gratis dimainkan hingga batas level, dengan seluruh permainan bersumber terbuka. Tanpa bayar untuk menang, selamanya."
       },
       "classes": {
         "heading": "Pilih kelasmu",
@@ -1091,7 +1301,7 @@ export const id_ID: EnTranslations = {
       "faq": {
         "heading": "Hal-hal yang perlu diketahui",
         "q1": "Apakah gratis dimainkan?",
-        "a1": "Yes. The whole game is free to the level cap.",
+        "a1": "Ya. Seluruh permainan gratis hingga batas level, dan ini sumber terbuka di GitHub.",
         "q2": "Apakah saya perlu dompet kripto?",
         "a2": "Tidak. Permainan ini sepenuhnya bisa dimainkan tanpa itu. Token komunitas opsional hanya membuka hiasan kosmetik dan tidak pernah memengaruhi kekuatan.",
         "q3": "Bisakah saya bermain luring?",
@@ -1104,7 +1314,7 @@ export const id_ID: EnTranslations = {
         "body": "Langsung masuk sekarang, atau mampir menyapa. Dunia ini lebih seru dengan teman.",
         "play": "Main Sekarang",
         "discord": "Gabung Discord",
-        "github": "Contributions"
+        "github": "Beri Bintang di GitHub"
       }
     },
     "howToPlay": {
@@ -1220,7 +1430,7 @@ export const id_ID: EnTranslations = {
     "faqPage": {
       "intro": "Pertanyaan yang paling sering ditanyakan pemain baru.",
       "q1": "Apakah ini benar-benar gratis?",
-      "a1": "Yes. The whole game is free to play to the level cap.",
+      "a1": "Ya. Seluruh permainan gratis dimainkan hingga batas level, dan kode sumbernya terbuka di GitHub.",
       "q2": "Apakah saya butuh dompet kripto atau token apa pun?",
       "a2": "Tidak. Permainan sepenuhnya bisa dimainkan tanpa itu. Token komunitas yang opsional hanya membuka hiasan kosmetik dan tak pernah memengaruhi kekuatan atau kemajuan.",
       "q3": "Bisakah saya bermain di ponsel?",
@@ -1234,7 +1444,7 @@ export const id_ID: EnTranslations = {
       "q7": "Apakah karakter saya akan tersimpan?",
       "a7": "Karakter daring disimpan di server secara otomatis. Karakter luring tersimpan di perambanmu untuk sesi cepat dan pengujian.",
       "q8": "Bisakah saya menjalankan salinan saya sendiri?",
-      "a8": "Private realms are operated through verified Cryptic Realm channels.",
+      "a8": "Ya. Proyek ini bersumber terbuka, jadi kamu bisa menjalankan servermu sendiri. Lihat repositori GitHub.",
       "q9": "Apakah ada PvP?",
       "a9": "Ya. Bertarung tanding dengan siapa pun untuk kesenangan, atau melangkahlah ke Ashen Coliseum untuk melawan pemain lain. PvP bersifat sukarela, jadi kamu tak pernah dipaksa masuk ke dalamnya.",
       "q10": "Apa yang bisa dilakukan di level maksimal?",
@@ -1361,13 +1571,13 @@ export const id_ID: EnTranslations = {
       "thorns": "Melindungi sekutu sehingga penyerang jarak dekat melukai diri sendiri saat memukul."
     },
     "petHook": {
-      "imp": "Iblis pelontar api jarak jauh yang menggerus musuh dari jarak aman.",
-      "voidwalker": "Iblis kokoh yang memprovokasi dan menahan serangan agar kamu bisa memantra dengan tenang.",
-      "succubus": "Iblis jarak dekat yang gesit, memukul keras tetapi mudah tumbang di bawah tekanan.",
-      "felhunter": "Penyerang bayangan yang memburu pemantra musuh.",
-      "felguard": "Petarung jarak dekat yang tangguh, serba bisa begitu kamu mampu memanggilnya.",
-      "infernal": "Raksasa kekar dengan serangan jarak dekat yang menghancurkan, dipanggil demi kekuatan murni.",
-      "doomguard": "Perapal elite yang menghujankan bayangan berat dari kejauhan."
+      "emberkin": "Iblis pelontar api jarak jauh yang menggerus musuh dari jarak aman.",
+      "gloomshade": "Iblis kokoh yang memprovokasi dan menahan serangan agar kamu bisa memantra dengan tenang.",
+      "duskborn": "Iblis jarak dekat yang gesit, memukul keras tetapi mudah tumbang di bawah tekanan.",
+      "spellhound": "Penyerang bayangan yang memburu pemantra musuh.",
+      "warfiend": "Petarung jarak dekat yang tangguh, serba bisa begitu kamu mampu memanggilnya.",
+      "pyre_colossus": "Raksasa kekar dengan serangan jarak dekat yang menghancurkan, dipanggil demi kekuatan murni.",
+      "wraithborn": "Perapal elite yang menghujankan bayangan berat dari kejauhan."
     },
     "bestiary": {
       "heading": "Bestiari",
@@ -1393,11 +1603,11 @@ export const id_ID: EnTranslations = {
         "name": "Laba-laba",
         "desc": "Pemintal jaring dan pengintai berbisa yang bersarang di tempat gelap dan kusut. Pemburu bisa menjinakkannya, sama seperti binatang buas."
       },
-      "murloc": {
+      "mudfin": {
         "name": "Murloc",
         "desc": "Penghuni rawa amfibi yang menyerbu perairan dangkal dalam gerombolan berisik dan teritorial."
       },
-      "kobold": {
+      "burrower": {
         "name": "Kobold",
         "desc": "Penggali berkepala lilin yang menjangkiti tambang dan liang, menjaga bijih mereka dengan garang."
       },
@@ -1791,6 +2001,430 @@ export const id_ID: EnTranslations = {
       "home": "Kembali ke ikhtisar"
     }
   },
+  "editor": {
+    "appTitle": "Map Editor",
+    "docTitle": "Map Editor - Cryptic Realm",
+    "untitledMap": "Untitled Map",
+    "playtestPlayerName": "Mapmaker",
+    "topbar": {
+      "label": "Editor actions",
+      "mapNameLabel": "Map name",
+      "dirty": "Unsaved changes",
+      "dirtyDot": "This map has unsaved changes",
+      "clean": "All changes saved",
+      "savedLocal": "Saved in this browser",
+      "savedServer": "Saved to server (v{version})",
+      "saving": "Saving...",
+      "neverSaved": "Not saved yet",
+      "new": "New",
+      "newTitle": "Start a new map from the built-in world",
+      "open": "Open",
+      "openTitle": "Open a saved map (browser or server)",
+      "save": "Save",
+      "saveTitle": "Save to this browser, and to the server when signed in (Ctrl+S)",
+      "saveAs": "Save As",
+      "saveAsTitle": "Save a copy under a new name",
+      "fork": "Fork",
+      "forkTitle": "Create your own server-side copy of this map",
+      "forkDisabledTitle": "Open a server map first to fork it",
+      "import": "Import",
+      "importTitle": "Import a map from a JSON file",
+      "export": "Export",
+      "exportTitle": "Download this map as a JSON file",
+      "uploadAsset": "Upload Asset",
+      "uploadAssetTitle": "Upload a GLB model (up to 8 MiB) to place in your maps",
+      "uploadAssetDisabledTitle": "Sign in from the game to upload assets",
+      "playtest": "Playtest",
+      "playtestTitle": "Boot the game on this map (offline, current edits included)",
+      "viewLabel": "View mode",
+      "view3d": "3D",
+      "view3dTitle": "Edit in the rendered world",
+      "view2d": "2D",
+      "view2dTitle": "Edit on the symbolic overhead map",
+      "undoCount": "Undo: {count}",
+      "undoCountTitle": "{count} undoable steps (Ctrl+Z to undo, Ctrl+Y to redo)",
+      "autosave": "Autosave",
+      "autosaveTitle": "Automatically save the map while there are unsaved changes. Turns itself off if a save fails.",
+      "undo": "Undo",
+      "undoTitle": "Undo the last change (Ctrl+Z)",
+      "redo": "Redo",
+      "redoTitle": "Redo the last undone change (Ctrl+Y)",
+      "offline": "Offline",
+      "offlineTitle": "Not signed in: maps save to this browser only. Sign in from the game to save online.",
+      "signIn": "Sign in",
+      "signInTitle": "Open the game login screen in a new tab",
+      "help": "Help",
+      "helpTitle": "Editor guide: tools, shortcuts, and the tutorial"
+    },
+    "tool": {
+      "listLabel": "Editor tools",
+      "keyHint": "{name} ({key})",
+      "select": "Select",
+      "raise": "Raise",
+      "lower": "Lower",
+      "smooth": "Smooth",
+      "flatten": "Flatten",
+      "paint": "Paint Biome",
+      "water": "Water",
+      "place": "Place Asset",
+      "blocker": "Blocker Wall",
+      "camp": "Camp",
+      "spawn": "Spawn Point",
+      "region": "Region",
+      "erase": "Erase"
+    },
+    "inspector": {
+      "label": "Tool options"
+    },
+    "brush": {
+      "title": "Brush",
+      "size": "Brush size",
+      "strength": "Strength",
+      "sizeHint": "Keys: [ and ] resize the brush; Shift+[ and Shift+] change strength.",
+      "editCount": "Terrain edits: {count} / {max}"
+    },
+    "biome": {
+      "title": "Biome",
+      "paletteLabel": "Biome to paint",
+      "vale": "Vale",
+      "marsh": "Marsh",
+      "peaks": "Peaks",
+      "beach": "Beach",
+      "desert": "Desert",
+      "volcano": "Volcano",
+      "cave": "Cave",
+      "erase": "Erase paint",
+      "hint": "Painted cells override the zone biome for terrain shape and color.",
+      "clear": "Clear all biome paint",
+      "clearConfirm": "Remove every painted biome cell from this map?"
+    },
+    "flatten": {
+      "hint": "Flatten levels the ground to the height under the cursor when the drag starts.",
+      "hardEdge": "Hard edge"
+    },
+    "water": {
+      "title": "Water Level",
+      "level": "Water level",
+      "hint": "Sets the map-wide water surface height, from {min} to {max} yards.",
+      "reset": "Reset to the built-in level"
+    },
+    "place": {
+      "title": "Place Asset",
+      "scale": "Scale",
+      "collide": "Blocks movement",
+      "collideHint": "A blocking asset gets a collision footprint players cannot walk through.",
+      "randomRotation": "Random rotation",
+      "chosen": "Placing: {name}",
+      "none": "Pick an asset from the browser below, then click the ground to place it."
+    },
+    "blockerTool": {
+      "title": "Blocker Wall",
+      "hint": "Drag along the ground to draw an invisible wall players cannot walk or jump through. Release to place it; a wall shorter than half a yard is discarded.",
+      "count": "Blocker walls: {count} / {max}"
+    },
+    "camp": {
+      "title": "Mob Camp",
+      "mob": "Mob",
+      "count": "Count",
+      "radius": "Radius",
+      "delete": "Delete camp",
+      "hint": "Click open ground to add a camp, or click an existing camp to edit it.",
+      "playtestNote": "Mobs spawn only in playtest, never in the editor view.",
+      "selected": "Camp: {mob}",
+      "none": "No camp selected."
+    },
+    "spawn": {
+      "title": "Spawn Point",
+      "hint": "Click the ground to set where playtest drops the player.",
+      "position": "Spawn: {x}, {z}",
+      "unset": "Using the built-in start position.",
+      "clear": "Clear spawn point"
+    },
+    "region": {
+      "title": "Region",
+      "hint": "Drag a box to select placements and terrain edits. Copy, then click to paste.",
+      "hint3d": "Region boxes draw in the 2D view; copy and paste work in both views.",
+      "copy": "Copy region",
+      "pasteBeside": "Paste beside",
+      "copied": "Copied {assets} assets and {edits} terrain edits.",
+      "pasted": "Pasted {count} items.",
+      "needBox": "Draw a region box first.",
+      "needClipboard": "Copy a region first."
+    },
+    "eraseTool": {
+      "title": "Erase",
+      "hint": "Click a placed asset to remove it, or click sculpted ground to remove the newest stamp under the cursor.",
+      "blockerHint": "Clicking near a blocker wall removes that wall instead."
+    },
+    "selection": {
+      "title": "Selection",
+      "none": "Nothing selected. Use Select and click a placed asset.",
+      "asset": "Asset: {name}",
+      "x": "X",
+      "z": "Z",
+      "rotation": "Rotation",
+      "scale": "Scale",
+      "collide": "Blocks movement",
+      "radius": "Collision radius",
+      "radiusAuto": "Auto",
+      "radiusAutoTitle": "Reset the collision radius to follow the asset scale",
+      "radiusHint": "Auto derives the collision radius from the asset scale; drag the slider to override it.",
+      "footprints": "Show collision footprints",
+      "duplicate": "Duplicate",
+      "delete": "Delete",
+      "deleteHint": "Delete removes the selection; Ctrl+Z restores it.",
+      "moveHint": "Move: drag the asset along the ground in the 3D view, or nudge it with the arrow keys (0.5 yd, Shift for 2 yd).",
+      "wheelHint": "Shift+scroll rotates the asset, Alt+scroll scales it, Ctrl+D duplicates it."
+    },
+    "marker": {
+      "title": "Marker",
+      "reset": "Reset position",
+      "moved": "{count} markers moved from the built-in layout."
+    },
+    "layers": {
+      "title": "Layers",
+      "hub": "Hubs",
+      "graveyard": "Graveyards",
+      "lake": "Lakes",
+      "poi": "Points of interest",
+      "camp": "Camps",
+      "npc": "NPCs",
+      "object": "Objects",
+      "blocker": "Blocker walls"
+    },
+    "frame": {
+      "title": "Frame",
+      "all": "All"
+    },
+    "procgen": {
+      "title": "Procedural",
+      "count": "Count",
+      "scatter": "Scatter category assets",
+      "hills": "Generate rolling hills",
+      "scattered": "Scattered {count} assets from {category}.",
+      "hillsAdded": "Added {count} hills.",
+      "noAssets": "No assets in that category."
+    },
+    "assets": {
+      "title": "Asset Browser",
+      "label": "Asset browser",
+      "search": "Search assets",
+      "searchPlaceholder": "Search assets...",
+      "empty": "No matching assets.",
+      "uploadedTab": "Uploaded",
+      "uploadedEmpty": "No uploaded assets yet. Use Upload Asset to add a GLB model (up to 8 MiB).",
+      "uploadedSignIn": "Sign in from the game to upload and place your own GLB models.",
+      "uploadedLoadFailed": "Could not load your uploaded assets.",
+      "deleteAsset": "Delete uploaded asset",
+      "deleteAssetConfirm": "Delete the uploaded asset \"{name}\"? Maps that use it lose the model.",
+      "pick": "Place {name}",
+      "categoryTab": "{category} ({count})",
+      "category": {
+        "biome": "Biome",
+        "chars": "Characters",
+        "creatures": "Creatures",
+        "dungeon": "Dungeon",
+        "foliage": "Foliage",
+        "props": "Props",
+        "quest": "Quest",
+        "resources": "Resources",
+        "tools": "Tools",
+        "weapons": "Weapons"
+      }
+    },
+    "upload": {
+      "notGlb": "Pick a .glb file.",
+      "tooLarge": "That file is over the 8 MiB limit.",
+      "uploading": "Uploading asset...",
+      "uploaded": "Asset uploaded: {name}",
+      "uploadedExisting": "That model was already on the server; reusing it.",
+      "deleted": "Uploaded asset deleted."
+    },
+    "openDrawer": {
+      "title": "Open Map",
+      "close": "Close",
+      "tabLocal": "This Browser",
+      "tabMine": "My Server Maps",
+      "tabPublic": "Public Maps",
+      "colName": "Name",
+      "colUpdated": "Updated",
+      "colStatus": "Status",
+      "statusPublic": "Public",
+      "statusPrivate": "Private",
+      "open": "Open",
+      "fork": "Fork",
+      "publish": "Publish",
+      "unpublish": "Unpublish",
+      "delete": "Delete",
+      "draft": "Autosaved draft",
+      "emptyLocal": "No maps saved in this browser yet. Save one and it appears here.",
+      "emptyMine": "No maps on the server yet. Save while signed in to create one.",
+      "emptyPublic": "No public maps yet.",
+      "loading": "Loading maps...",
+      "loadFailed": "Could not load maps from the server.",
+      "signInHint": "Sign in from the game to browse, save, and fork server maps.",
+      "deleteLocalConfirm": "Delete the local map \"{name}\"?",
+      "deleteServerConfirm": "Delete the server map \"{name}\"? This cannot be undone.",
+      "prev": "Previous page",
+      "next": "Next page",
+      "page": "Page {page}"
+    },
+    "status": {
+      "savedLocal": "Saved \"{name}\" to this browser.",
+      "savedServer": "Saved \"{name}\" to the server (v{version}).",
+      "savedLocalOnly": "Saved \"{name}\" to this browser. Sign in to save online.",
+      "saveFailedLocal": "Local save failed (storage blocked).",
+      "opened": "Opened \"{name}\".",
+      "imported": "Imported \"{name}\".",
+      "importFailed": "Import cancelled, or the file is not a valid map.",
+      "exported": "Downloaded \"{name}\".",
+      "newMap": "New map started from the built-in world.",
+      "forked": "Forked to \"{name}\". You are editing your own copy now.",
+      "published": "Map published. Anyone can now find and fork it.",
+      "unpublished": "Map unpublished.",
+      "deleted": "Map deleted.",
+      "assetPlacedFirst": "Pick an asset in the browser first.",
+      "loading3d": "Loading the world...",
+      "playtestLaunch": "Launching playtest...",
+      "playtestFailed": "Could not start the playtest (storage blocked).",
+      "draftSaved": "Draft autosaved.",
+      "draftRestored": "Restored the autosaved draft.",
+      "autosaveFailed": "Autosave failed (browser storage is full or blocked). Export the map to keep a backup.",
+      "terrainCapReached": "Terrain edit limit reached ({max}). Extra sculpt stamps were not added.",
+      "placementCapReached": "Placement limit reached ({max}). Extra assets were not added.",
+      "blockerCapReached": "Blocker wall limit reached ({max}). The new wall was not added.",
+      "autosaveOff": "Autosave turned off: {reason} Save manually, then turn it back on."
+    },
+    "confirm": {
+      "ok": "OK",
+      "cancel": "Cancel",
+      "discardTitle": "Discard changes?",
+      "discardBody": "You have unsaved changes on \"{name}\". Discard them?",
+      "discard": "Discard",
+      "conflictTitle": "Save conflict",
+      "conflictBody": "This map changed on the server since you opened it (now v{version}). Save your version as a new copy?",
+      "conflictSaveCopy": "Save As Copy"
+    },
+    "prompt": {
+      "saveAsTitle": "Save As",
+      "nameLabel": "New map name"
+    },
+    "serverError": {
+      "invalid_map_name": "That map name is not allowed. Use letters, numbers, spaces, apostrophes, or hyphens.",
+      "map_name_not_allowed": "That map name is not allowed.",
+      "invalid_map_doc": "The server rejected the map document.",
+      "invalid_version": "The save request was malformed. Reload and try again.",
+      "map_limit_reached": "You have reached the server map limit. Delete a map to save more.",
+      "map_not_found": "That map no longer exists on the server.",
+      "version_conflict": "The map changed on the server since you opened it.",
+      "slug_unavailable": "The server could not make a link for that name. Try a different name.",
+      "map_too_large": "The map document is too large to save on the server.",
+      "invalid_glb": "That file is not a valid GLB model.",
+      "asset_blocked": "That asset has been blocked by moderation.",
+      "asset_limit_reached": "You have reached the uploaded asset limit. Delete one to upload more.",
+      "asset_storage_limit_reached": "You are out of asset storage space. Delete an asset first.",
+      "asset_too_large": "That model is over the upload size limit.",
+      "asset_not_found": "That asset no longer exists on the server.",
+      "rate_limited": "Slow down a little and try again.",
+      "unauthorized": "Your session has expired. Sign in from the game again.",
+      "network": "Could not reach the server. Check your connection and try again.",
+      "timeout": "The server took too long to respond. Try again.",
+      "unknown": "Something went wrong talking to the server."
+    },
+    "hints": {
+      "nav3d": "Drag to orbit, scroll to zoom. While dragging, WASD flies and Q/E changes height.",
+      "nav2d": "Drag to pan, scroll to zoom."
+    },
+    "help": {
+      "title": "Editor Help",
+      "toolsTitle": "Tools",
+      "shortcutsTitle": "Keyboard shortcuts",
+      "mouseTitle": "Mouse and navigation",
+      "flowTitle": "Saving and playtesting",
+      "beginTutorial": "Begin tutorial",
+      "close": "Close",
+      "tool": {
+        "select": "Pick placed assets to move, rotate, and scale them; click a 2D marker to edit it.",
+        "raise": "Raise the terrain under the brush.",
+        "lower": "Lower the terrain under the brush.",
+        "smooth": "Smooth bumps toward the local average height.",
+        "flatten": "Level the ground to the height where the drag starts.",
+        "paint": "Paint biome ground cover over the zone default.",
+        "water": "Set the map-wide water level.",
+        "place": "Place catalog or uploaded assets on the ground.",
+        "blocker": "Drag invisible walls that block movement in playtest.",
+        "camp": "Add and edit mob camps that spawn in playtest.",
+        "spawn": "Set where playtest drops the player.",
+        "region": "Box-select terrain and assets to copy and paste.",
+        "erase": "Remove placed assets or sculpt stamps under the cursor."
+      },
+      "key": {
+        "tools": "Every tool has a single-letter shortcut, shown on its button in the tool rail.",
+        "brush": "[ and ] resize the brush; Shift+[ and Shift+] change its strength.",
+        "undo": "Ctrl+Z undoes the last change; Ctrl+Y or Ctrl+Shift+Z redoes it.",
+        "save": "Ctrl+S saves the map.",
+        "duplicate": "Ctrl+D duplicates the selected asset.",
+        "nudge": "Arrow keys nudge the selected asset by 0.5 yards; hold Shift for 2 yards.",
+        "wheel": "Shift+scroll rotates the selected asset; Alt+scroll scales it.",
+        "delete": "Delete removes the selected asset or camp.",
+        "escape": "Esc clears the selection first, then returns to the Select tool."
+      },
+      "mouse": {
+        "orbit3d": "3D view: drag to orbit and scroll to zoom; middle-drag or Shift+drag pans.",
+        "fly3d": "While holding a drag in 3D, WASD flies the camera and Q/E changes height.",
+        "move": "With Select active, drag a placed asset to move it across the ground.",
+        "pan2d": "2D view: drag to pan and scroll to zoom."
+      },
+      "flow": {
+        "save": "Save keeps the map in this browser, and on the server when you are signed in.",
+        "draft": "While you have unsaved changes, a draft is autosaved every 30 seconds; Open restores it.",
+        "playtest": "Playtest boots the real game on this map, including your unsaved edits."
+      }
+    },
+    "tutorial": {
+      "title": "Editor tutorial",
+      "back": "Back",
+      "next": "Next",
+      "finish": "Finish",
+      "skip": "Skip tour",
+      "counter": "Step {current} of {total}",
+      "steps": {
+        "toolbar": {
+          "title": "The tool rail",
+          "body": "Every editing tool lives here: sculpting brushes, biome paint, water, asset placement, camps, and more. Each one has a single-key shortcut, shown in its corner."
+        },
+        "stage": {
+          "title": "The world",
+          "body": "This is your map, rendered with the real game engine. Drag to orbit, scroll to zoom, and middle-drag or Shift+drag to pan. Click the ground with a tool to edit."
+        },
+        "inspector": {
+          "title": "Tool options",
+          "body": "The options for the active tool appear here: brush size, the biome palette, asset scale, camp settings, and the properties of whatever you select."
+        },
+        "viewToggle": {
+          "title": "3D and 2D",
+          "body": "Switch between the rendered 3D world and the symbolic overhead 2D map. The 2D view is best for moving zone markers and framing large areas."
+        },
+        "save": {
+          "title": "Save your work",
+          "body": "Save stores the map in this browser, and on the server when you are signed in. Export downloads a JSON backup, and Open brings back saved maps and drafts."
+        },
+        "playtest": {
+          "title": "Playtest",
+          "body": "Boot the real game on your map at any time, with your current edits included. Close the playtest tab to come back and keep editing."
+        },
+        "help": {
+          "title": "Help is here",
+          "body": "That is the whole loop. Open Help any time for the full tool list and every shortcut, or to run this tour again."
+        }
+      }
+    },
+    "a11y": {
+      "stage": "Map viewport",
+      "toasts": "Editor notifications",
+      "dialog": "Editor dialog"
+    }
+  },
   "skinEvent": {
     "title": "Lumbung Kosmetik",
     "subtitle": "Kamu membuka hadiah {rank} — pilih skin apa pun pada tingkat itu atau di bawahnya.",
@@ -1847,8 +2481,8 @@ export const id_ID: EnTranslations = {
   },
   "footer": {
     "copyright": "2026 Cryptic Realm",
-    "githubLink": "/contributions.html",
-    "githubLabel": "Contributions",
+    "githubLink": "https://github.com/levy-street/world-of-claudecraft",
+    "githubLabel": "Proyek Sumber Terbuka",
     "whitepaper": "Whitepaper",
     "terms": "Ketentuan Layanan",
     "privacy": "Kebijakan Privasi",
@@ -1875,7 +2509,7 @@ export const id_ID: EnTranslations = {
     "error": "Tidak dapat memuat pembaruan. Silakan coba lagi nanti.",
     "empty": "Belum ada pembaruan — periksa lagi nanti.",
     "prerelease": "Pra-rilis",
-    "viewOnGithub": "Read release notes",
+    "viewOnGithub": "Lihat di GitHub",
     "openLink": "Open",
     "officialLog": "Official Work Log",
     "alphaBetaTitle": "Alpha, Beta, And Public Realm Cadence",
@@ -1909,7 +2543,7 @@ export const id_ID: EnTranslations = {
     "tagPlatinum": "Platinum economy",
     "tagExchange": "Exchange realm",
     "tagLore": "Cryptic Realm lore",
-    "tagRealms": "Infernal / Classic / Dominion / Arcane realms",
+    "tagRealms": "Hellmaw / Classic / Dominion / Arcane realms",
     "tagMinigames": "Original mini-games",
     "tagCustody": "Private custody runbooks"
   },
@@ -1921,7 +2555,7 @@ export const id_ID: EnTranslations = {
     "loading": "Loading official channels…"
   },
   "download": {
-    "title": "Launchers & Installs",
+    "title": "Unduh Peluncur Desktop",
     "desc": "Dapatkan peluncur mandiri untuk performa optimal dan permainan layar penuh."
   },
   "comingSoon": {
@@ -1946,7 +2580,7 @@ export const id_ID: EnTranslations = {
     "serverOfflineSub": "Dunia lokal seketika",
     "caLabel": "Alamat Kontrak $CR",
     "caCopyAria": "Salin alamat kontrak",
-    "caNote": "CR adalah token komunitas kami. Token ini tidak diperlukan untuk bermain. Gabung Discord untuk membahas utilitas dan flywheel CR."
+    "caNote": "WOC adalah token komunitas kami. Token ini tidak diperlukan untuk bermain. Gabung Discord untuk membahas utilitas dan flywheel WOC."
   },
   "auth": {
     "enterRealm": "Masuki Realm",
@@ -1988,7 +2622,16 @@ export const id_ID: EnTranslations = {
     "create": "Buat",
     "twoFactorLabel": "Kode autentikasi",
     "twoFactorPlaceholder": "Kode 6 digit atau pemulihan",
-    "twoFactorHint": "Masukkan kode dari aplikasi autentikatormu, atau salah satu kode pemulihanmu."
+    "twoFactorHint": "Masukkan kode dari aplikasi autentikatormu, atau salah satu kode pemulihanmu.",
+    "email": "Recovery email",
+    "emailError": "Please enter a valid email address.",
+    "recovery": {
+      "title": "Add a recovery email",
+      "body": "Set an email address so you can recover your account. We only use it to confirm you own this account if you ever need to reset your password.",
+      "save": "Save email",
+      "invalid": "Please enter a valid email address.",
+      "failed": "Could not save your email. Please try again."
+    }
   },
   "wallet": {
     "label": "Dompet $CR",
@@ -2042,6 +2685,7 @@ export const id_ID: EnTranslations = {
     "helpLinkedWithBalance": "Manfaat pemegang aktif. Aplikasi dompet terhubung di peramban ini.",
     "helpLinkedDisconnected": "Manfaat pemegang aktif. Hubungkan aplikasi saat Anda perlu menandatangani atau membelanjakan.",
     "helpLinkedDisconnectedWithBalance": "Manfaat pemegang aktif. Hubungkan aplikasi saat Anda perlu menandatangani atau membelanjakan.",
+    "extensionHelp": "To see a wallet here, keep a browser wallet extension such as Solflare Wallet active.",
     "flowConnect": "Pilih sebuah dompet. Verifikasi berlanjut secara otomatis.",
     "flowSign": "Tanda tangani pesan verifikasi di aplikasi dompet Anda. Tidak perlu transaksi atau SOL.",
     "flowVerify": "Memverifikasi kepemilikan dompet...",
@@ -2227,6 +2871,7 @@ export const id_ID: EnTranslations = {
       "unknownTier": "Tingkat delve tak dikenal.",
       "levelRequired": "Kamu harus mencapai level {level} untuk memasuki {name}.",
       "levelRequiredTier": "Kamu harus mencapai level {level} untuk memasuki {name} pada {tier}.",
+      "partyTooLarge": "{name} is meant for solo or duo delves. Parties of {max} or more may not enter.",
       "instancesBusy": "Semua instansi {name} sedang sibuk. Coba lagi sebentar lagi.",
       "runFailed": "Penjelajahan {name} gagal.",
       "complete": "{name} selesai.",
@@ -2236,6 +2881,14 @@ export const id_ID: EnTranslations = {
       "doorAlreadyOpen": "Pintu itu sudah terbuka.",
       "companionRankUp": "{name} mencapai peringkat {rank}.",
       "bossChest": "Bos tumbang. Sebuah peti relikui berpengaman muncul di mimbar. Bobol kuncinya untuk merebut rampasanmu.",
+      "drownedLitanyReliquaryRise": "Sister Nhalia falls silent. The Drowned Reliquary rises from the blackwater. Approach it to begin the rite.",
+      "riteSequenceReady": "The shrines fall dark. Repeat the sequence.",
+      "riteSequencePlaying": "The shrines replay the rite. Wait.",
+      "riteCorrect": "A soft chime answers your touch.",
+      "riteWrong": "A harsh bell crack. Black water splashes at your feet.",
+      "riteReliquaryOpen": "The Drowned Reliquary opens.",
+      "riteReliquaryLocked": "Complete the shrine rite to open the reliquary.",
+      "riteReliquaryEmpty": "The reliquary is empty.",
       "surfaceStairs": "Sebuah tangga menuju permukaan terbuka. Tekan F di tangga untuk pergi.",
       "moduleEnter": "{name}: {objective}",
       "objectiveClearRoom": "Bersihkan ruangan.",
@@ -2243,6 +2896,13 @@ export const id_ID: EnTranslations = {
       "tombstoneHint": "Sebuah lorong batu nisan terbuka ke utara saat ruangan dibersihkan.",
       "tombstoneOpen": "Sebuah lorong batu nisan tersegel berderak terbuka ke utara. Masuklah ke dalamnya untuk melanjutkan.",
       "tombstoneInto": "Kamu menembus batu nisan menuju {name}.",
+      "bellRopeShock": "The bell rope snaps taut. Drowned Cantors reel from the shock.",
+      "eggSacBurst": "The egg-sac bursts. Spiderlings skitter free across the baptistry rim.",
+      "baptistryEggs": "The baptistry falls quiet. Spider egg-sacs cling wetly to the rim.",
+      "baptistrySpidersSealed": "You should try to destroy the spider sacs.",
+      "puzzleSealed": "You need to open the seal by applying pressure somewhere in the room.",
+      "ropesSealed": "You should try pulling the bell ropes.",
+      "baptistryWave": "Something stirs in the black baptistry water.",
       "chestEmpty": "Peti itu kosong.",
       "notInDelve": "Kamu tidak berada di dalam delve.",
       "cannotInteract": "Kamu tidak dapat berinteraksi dengan itu.",
@@ -2261,9 +2921,12 @@ export const id_ID: EnTranslations = {
       "passageSealed": "Lorong itu tersegel.",
       "moveCloserPassage": "Mendekatlah ke lorong.",
       "moveCloserChest": "Mendekatlah ke peti.",
+      "moveCloserReliquary": "Move closer to the reliquary.",
       "nothingToTake": "Tidak ada lagi yang bisa diambil.",
       "wayOutNotOpen": "Jalan keluar belum terbuka.",
-      "moveCloserStairs": "Mendekatlah ke tangga."
+      "moveCloserStairs": "Mendekatlah ke tangga.",
+      "nhaliaCantorShield": "Cantors, hold the note!",
+      "nhaliaBlackwaterMark": "{name} marks {player} with Blackwater!"
     },
     "lockpick": {
       "lockYields": "Kunci terbuka! Rampasan {tier}.",
@@ -2326,6 +2989,26 @@ export const id_ID: EnTranslations = {
       "abandoned": "Anda menarik pengait keluar perlahan. Kunci pun menanti."
     }
   },
+  "delveRiteUi": {
+    "title": "The Drowned Reliquary Rite",
+    "blurb": "The shrines will light in order. Repeat the sequence by activating each shrine in turn. A wrong touch fails the attempt and replays the sequence, a flawless attempt earns the richest spoils, and running out of tries opens the reliquary on its meanest. Choose how the rite tests you.",
+    "easy": "Easy",
+    "medium": "Medium",
+    "hard": "Hard",
+    "guideWatch": "After you choose, the four shrines light up one at a time. Memorize the order.",
+    "guideRepeat": "When the shrines fall dark, walk to each shrine and press F (Interact) in that same order.",
+    "guideStakes": "A wrong shrine splashes you with blackwater and costs a try. Complete the sequence to open the reliquary.",
+    "showsTimes": "Sequence shown {count} times",
+    "showsOnce": "Sequence shown once",
+    "symbols": "{count} symbols",
+    "tries": "{count} tries",
+    "reward": {
+      "easy": "Modest spoils",
+      "medium": "Rich spoils",
+      "hard": "Premium spoils"
+    },
+    "closeAria": "Close"
+  },
   "delveUi": {
     "board": {
       "title": "Papan Delve",
@@ -2335,6 +3018,7 @@ export const id_ID: EnTranslations = {
       "openDelveAria": "Buka Papan Delve dari {name}",
       "marks": "Tanda Delve: {count}",
       "minLevel": "Membutuhkan Level {level}",
+      "partyTooLarge": "Solo or duo only ({max} players max)",
       "tier": {
         "normal": "Normal",
         "heroic": "Heroik"
@@ -2342,6 +3026,7 @@ export const id_ID: EnTranslations = {
       "companion": {
         "pick": "Pilih seorang pendamping",
         "tessa": "Akolit Tessa",
+        "edda": "Edda Reedhand",
         "rank": "Tingkat {rank}",
         "boon": "Menyembuhkan party di antara pertarungan. Peringkat 3 menghidupkan kembali sekutu yang tumbang sekali per penjelajahan.",
         "upgrade": "Tingkatkan ke Tingkat {rank} ({marks} Tanda)",
@@ -2368,7 +3053,11 @@ export const id_ID: EnTranslations = {
       "complete": "Selesai",
       "marks": "Tanda Delve: {count}",
       "exitHintOpen": "Masuki lorong batu nisan (utara)",
-      "exitHintLocked": "Bersihkan gerombolan musuh untuk membuka lorong di utara"
+      "exitHintLocked": "Bersihkan gerombolan musuh untuk membuka lorong di utara",
+      "riteChoose": "Approach the Drowned Reliquary and press F to begin the rite",
+      "ritePlayback": "Watch the shrines: memorize the order they light up",
+      "riteInput": "Press F at each shrine in the order they lit ({current}/{total})",
+      "riteOpen": "The reliquary is open: press F on it to claim your spoils"
     },
     "objective": {
       "kill_boss": "Bunuh {boss}",
@@ -2389,27 +3078,54 @@ export const id_ID: EnTranslations = {
     "npc": {
       "halven": {
         "greeting": "Relikuari di bawah telah bergeser lagi. Kami mendengar nyanyian melalui lantai sesudah tengah malam, dan Akolit Tessa bersumpah buku catatan pemakaman mengubah tintanya sendiri. Jika kau cukup berani, {playerName}, ambillah sebuah lilin dan turunlah ke bawah. Jangan percaya setiap suara yang kau dengar di bawah sana. Sebagian dari mereka mengetahui namamu sebelum kau lahir."
+      },
+      "halvenMarsh": {
+        "greeting": "The trail led north to the marsh, {playerName}. Another reliquary sings under the black water, and the drowned dead answer the bells. Acolyte Edda knows these reeds better than I do, stay close to her lantern. Choose your tier, and I will hold the rope until you return."
       }
     },
     "intro": {
       "normal": "Tangga itu dingin dan gelap. Pecahan batu santo berserakan di sepanjang turunan, dan nada lonceng yang lembut menggantung di udara lembap. Akolit Tessa berbisik, \"Relikuari ini seharusnya tidak terbuka sejauh ini. Tetaplah dekat, {playerName}.\"",
-      "heroic": "Pintu-pintu mengerang menutup di belakangmu. Nama-nama tergores di batu bagai kuku jari. Lilin Tessa menyala biru. \"Mereka tidak memanggil para mati sekarang, {playerName}. Mereka sedang menjawab sesuatu.\""
+      "heroic": "Pintu-pintu mengerang menutup di belakangmu. Nama-nama tergores di batu bagai kuku jari. Lilin Tessa menyala biru. \"Mereka tidak memanggil para mati sekarang, {playerName}. Mereka sedang menjawab sesuatu.\"",
+      "litanyNormal": "Reed-choked stairs drop beneath Fenbridge. Edda Reedhand lifts her lantern. \"The marsh remembers every name they drowned, {playerName}. Stay in the light.\"",
+      "litanyHeroic": "Blackwater laps the causeway stones. Edda's flame gutters green. \"They are singing again below, {playerName}. Do not answer the choir.\""
     },
     "module": {
       "reliquary_sunken_ossuary": "Air merembes melalui rak pemakaman, membawa abu tua dalam aliran perak kehitaman.",
       "reliquary_bell_niche": "Puluhan lonceng tangan tergantung dalam sunyi, masing-masing diikat dengan kain pemakaman.",
       "reliquary_saintless_hall": "Patung-patung dengan wajah yang dipahat hilang dengan kebencian yang cermat.",
-      "reliquary_finale": "Lonceng terkubur berdentang sekali di bawah sepatu botmu."
+      "reliquary_finale": "Lonceng terkubur berdentang sekali di bawah sepatu botmu.",
+      "litany_sluice": "Moss-choked sluice gates drip blackwater into the old choir crypt.",
+      "litany_ledger": "Ledger islands rise from flooded channels, ink bleeding into the marsh.",
+      "litany_ring": "A reliquary ring loops around a sealed central font of black water.",
+      "litany_baptistry": "A sinkhole baptistry yawns beneath cracked saint-stones and egg-sacs.",
+      "litany_choir_loft": "Fanning choir lofts echo with rope-hung bells that never quite stop.",
+      "litany_causeway": "A Y-split causeway forks over waist-deep fen water.",
+      "litany_apse": "The drowned apse opens onto Sister Nhalia's altar island."
     },
     "moduleName": {
       "reliquary_sunken_ossuary": "Osuarium Tenggelam",
       "reliquary_bell_niche": "Relung Lonceng",
       "reliquary_saintless_hall": "Aula Tanpa Santo",
-      "reliquary_finale": "Ruang Terkubur Lonceng"
+      "reliquary_finale": "Ruang Terkubur Lonceng",
+      "litany_sluice": "The Crescent Sluice",
+      "litany_ledger": "The Island Ledger",
+      "litany_ring": "The Ring Reliquary",
+      "litany_baptistry": "The Sinkhole Baptistry",
+      "litany_choir_loft": "The Reedsong Gallery",
+      "litany_causeway": "The Y-Split Causeway",
+      "litany_apse": "The Drowned Apse"
+    },
+    "object": {
+      "sluice_valve": "Sluice Valve",
+      "grave_tablet": "Grave Tablet",
+      "corpse_candle": "Corpse-Candle",
+      "bell_rope": "Bell Rope"
     },
     "companion": {
       "barkLine": "{name}: {line}",
       "tessa": {
+        "run_start": "I have my candle and my ledger, {playerName}. Lead on.",
+        "ally_revive": "Up now. Tonight's ledger does not carry your name.",
         "combat_start": "Jaga pijakanmu, {playerName}. Para mati gelisah di sini.",
         "low_hp": "Tarik napas. Aku masih menyimpan doa untukmu.",
         "trap_spotted": "Tahan. Ada sesuatu di lantai yang mengingat langkah kaki.",
@@ -2421,6 +3137,20 @@ export const id_ID: EnTranslations = {
           "3": "Akolit Relikuari",
           "4": "Saksi Panggilan Kubur",
           "5": "Penjaga Kapel"
+        }
+      },
+      "edda": {
+        "run_start": "Keep to the plank-line, {playerName}. The silt takes the proud-footed.",
+        "ally_revive": "Up, now. The marsh does not get you today.",
+        "combat_start": "Mind the blackwater, {playerName}. The marsh listens.",
+        "low_hp": "Steady. My lantern is not out yet.",
+        "trap_spotted": "Wait. The reeds are wrong here.",
+        "boss_pull": "That canticle knows your name, {playerName}. Do not sing back.",
+        "completion": "The fen can swallow its secrets for one more night.",
+        "rank": {
+          "1": "Lantern-Bearer",
+          "2": "Reed-Watcher",
+          "3": "Fenbridge Acolyte"
         }
       }
     },
@@ -2464,7 +3194,10 @@ export const id_ID: EnTranslations = {
       "flooded_paths": "Jalur Tergenang",
       "grave_tax": "Pajak Kubur",
       "unstable_roof": "Atap Rapuh",
-      "cult_remnants": "Sisa-sisa Kultus"
+      "cult_remnants": "Sisa-sisa Kultus",
+      "high_water": "High Water",
+      "lively_choir": "Lively Choir",
+      "belligerent_dead": "Belligerent Dead"
     },
     "blessing": {
       "chapel_candle": "Lilin Kapel: penjelajahan lebih aman, satu Tanda lebih sedikit saat tuntas."
@@ -2656,7 +3389,7 @@ export const id_ID: EnTranslations = {
     "mainNavigation": "Navigasi utama",
     "languageSelection": "Pemilihan bahasa",
     "characterActions": "Aksi karakter",
-    "githubProject": "Open Cryptic Realm contributions",
+    "githubProject": "Buka proyek GitHub Cryptic Realm",
     "discordCommunity": "Gabung komunitas Discord Cryptic Realm",
     "donateProject": "Berdonasi untuk mendukung Cryptic Realm"
   },
@@ -2687,6 +3420,7 @@ export const id_ID: EnTranslations = {
       "usernameTaken": "Nama pengguna itu sudah dipakai.",
       "invalidCredentials": "Nama pengguna atau kata sandi salah.",
       "verificationFailed": "Verifikasi gagal. Silakan coba lagi.",
+      "desktopCodeInvalid": "Kode masuk desktop tidak valid atau kedaluwarsa. Silakan coba lagi.",
       "invalidCharacterName": "Nama karakter tidak valid. Gunakan 2-16 huruf.",
       "characterNameNotAllowed": "Nama karakter itu tidak diperbolehkan.",
       "invalidClass": "Kelas tidak valid.",
@@ -2703,6 +3437,21 @@ export const id_ID: EnTranslations = {
       "takenOver": "Karakter Anda telah diambil alih oleh sesi lain.",
       "renameBeforeEntering": "Karakter ini harus diganti namanya sebelum memasuki dunia.",
       "renameNotPermitted": "Mengganti nama karakter ini tidak diperbolehkan."
+    }
+  },
+  "desktop": {
+    "update": {
+      "downloading": "Mengunduh pembaruan {version}...",
+      "ready": "Pembaruan {version} siap. Akan terpasang saat kamu keluar, atau mulai ulang sekarang.",
+      "restart": "Mulai Ulang Sekarang",
+      "later": "Nanti"
+    },
+    "crash": {
+      "title": "Cryptic Realm",
+      "body": "Tampilan gim berhenti bekerja. Muat ulang?",
+      "reload": "Muat Ulang",
+      "quit": "Keluar",
+      "fatalBody": "Cryptic Realm mengalami kesalahan tak terduga dan perlu ditutup."
     }
   },
   "realm": {
@@ -3490,13 +4239,16 @@ export const id_ID: EnTranslations = {
     },
     "cast": {
       "fishing": "Memancing",
-      "demonHeal": "Penyembuhan Iblis"
+      "demonHeal": "Penyembuhan Iblis",
+      "thunzharrStormcall": "Panggilan Badai"
     }
   },
   "questUi": {
     "tracker": {
       "title": "Misi",
-      "complete": "Selesai"
+      "complete": "Selesai",
+      "showOnMap": "Show {name} on the map",
+      "hideFromMap": "Hide {name} from the map"
     },
     "log": {
       "title": "Catatan Misi",
@@ -3599,7 +4351,8 @@ export const id_ID: EnTranslations = {
       "drink": "Minuman",
       "tool": "Perkakas",
       "potion": "Ramuan",
-      "elixir": "Eliksir"
+      "elixir": "Eliksir",
+      "bag": "Bag"
     },
     "stats": {
       "armor": "Zirah",
@@ -3641,7 +4394,8 @@ export const id_ID: EnTranslations = {
       "useManaPotion": "Pakai: Memulihkan {amount} mana seketika. Bisa dipakai dalam pertempuran. Jeda 1 mnt.",
       "clickUseInstant": "Klik untuk memakai seketika dalam pertempuran",
       "clickUse": "Klik untuk memakai",
-      "clickBuyback": "Klik untuk membeli kembali"
+      "clickBuyback": "Klik untuk membeli kembali",
+      "bagSlots": "{slots} Slot Bag"
     },
     "bags": {
       "title": "Tas",
@@ -3782,6 +4536,26 @@ export const id_ID: EnTranslations = {
   },
   "entities": {
     "abilities": {
+      "flamestrike": {
+        "name": "Hantaman Api",
+        "description": "Memanggil ledakan api di area sasaran, memberikan {damage} kerusakan Api kepada musuh yang terkena ledakan."
+      },
+      "rain_of_fire": {
+        "name": "Hujan Api",
+        "description": "Menurunkan hujan api di area sasaran, membakar musuh sebesar {damage} kerusakan Api."
+      },
+      "volley": {
+        "name": "Hujan Panah",
+        "description": "Menghujani area sasaran dengan panah, memberi {damage} kerusakan kepada musuh di dalamnya."
+      },
+      "hurricane": {
+        "name": "Badai",
+        "description": "Mendatangkan badai di area sasaran, menghantam musuh sebesar {damage} kerusakan Alam."
+      },
+      "earthquake": {
+        "name": "Gempa Bumi",
+        "description": "Mengguncang area sasaran, menghantam musuh sebesar {damage} kerusakan Alam."
+      },
       "heroic_strike": {
         "name": "Serangan Heroik",
         "description": "Serangan kuat yang meningkatkan kerusakan jarak dekat sebesar {damage}. Aktif pada ayunan berikutnya."
@@ -4513,7 +5287,7 @@ export const id_ID: EnTranslations = {
         "name": "Sigil Gravecaller"
       },
       "binding_ward": {
-        "name": "Infernal Binding Ward"
+        "name": "Hellmaw Binding Ward"
       },
       "renders_hateforged_cleaver": {
         "name": "The Render's Hateforged Cleaver"
@@ -4935,6 +5709,48 @@ export const id_ID: EnTranslations = {
       "monarch_crown_helm": {
         "name": "Mahkota Sang Raja"
       },
+      "linen_pouch": {
+        "name": "Kantong Linen"
+      },
+      "travelers_knapsack": {
+        "name": "Ransel Pengelana"
+      },
+      "wolfhide_satchel": {
+        "name": "Tas Kulit Serigala"
+      },
+      "gravewoven_bag": {
+        "name": "Tas Tenunan Makam"
+      },
+      "mistcallers_duffel": {
+        "name": "Tas Sang Pemanggil Kabut"
+      },
+      "copper_mining_pick": {
+        "name": "Beliung Tambang Tembaga"
+      },
+      "iron_mining_pick": {
+        "name": "Beliung Tambang Besi"
+      },
+      "mithril_mining_pick": {
+        "name": "Beliung Tambang Mithril"
+      },
+      "handaxe": {
+        "name": "Kapak Tangan"
+      },
+      "felling_axe": {
+        "name": "Kapak Tebang"
+      },
+      "ironbark_axe": {
+        "name": "Kapak Kulit Besi"
+      },
+      "gathering_sickle": {
+        "name": "Sabit Panen"
+      },
+      "bronze_sickle": {
+        "name": "Sabit Perunggu"
+      },
+      "silverleaf_sickle": {
+        "name": "Sabit Daun Perak"
+      },
       "bristleback_maul": {
         "name": "Cabikan Punggung Berbulu"
       },
@@ -5298,6 +6114,69 @@ export const id_ID: EnTranslations = {
       "varric_shadow_cowl": {
         "name": "Tudung Bayangan Varric"
       },
+      "siltguard_helm": {
+        "name": "Siltguard Helm"
+      },
+      "bulwark_rusted_pauldrons": {
+        "name": "Bulwark-Rusted Pauldrons"
+      },
+      "nhalias_bell_maul": {
+        "name": "Nhalia's Bell-Maul"
+      },
+      "reedstalker_jerkin": {
+        "name": "Reedstalker Jerkin"
+      },
+      "mirejaw_fang_knife": {
+        "name": "Mirejaw Fang-Knife"
+      },
+      "widow_silk_hood": {
+        "name": "Widow-Silk Hood"
+      },
+      "cantors_drowned_sash": {
+        "name": "Cantor's Drowned Sash"
+      },
+      "corpse_candle_focus": {
+        "name": "Corpse-Candle Focus"
+      },
+      "nhalias_litany_rod": {
+        "name": "Nhalia's Litany Rod"
+      },
+      "blackwater_vanguard_chest": {
+        "name": "Blackwater Vanguard Chestguard"
+      },
+      "siltstep_leggings": {
+        "name": "Siltstep Leggings"
+      },
+      "sunken_reliquary_hood": {
+        "name": "Sunken Reliquary Hood"
+      },
+      "litany_legs": {
+        "name": "Silt-Walker Greaves"
+      },
+      "litany_shoulder": {
+        "name": "Blackwater Drift Mantle"
+      },
+      "litany_gloves_rog": {
+        "name": "Reed-Bound Handwraps"
+      },
+      "litany_plate_chest": {
+        "name": "Sump-Warden Cuirass"
+      },
+      "litany_leather_chest": {
+        "name": "Silt-Deep Vestment"
+      },
+      "litany_cloth_chest": {
+        "name": "Choir-Drowned Raiment"
+      },
+      "litany_helm": {
+        "name": "Reliquant's Drowned Cowl"
+      },
+      "sister_nhalia_choir_plate": {
+        "name": "Sister Nhalia's Choir-Forged Plate"
+      },
+      "drowned_choir_fang": {
+        "name": "Drowned Choir-Fang"
+      },
       "the_codfather": {
         "name": "Sang Bapak Kod"
       },
@@ -5417,6 +6296,30 @@ export const id_ID: EnTranslations = {
       },
       "vanguard_chrome_armor_plate": {
         "name": "Vanguard Krom"
+      },
+      "crownforged_gauntlets": {
+        "name": "Sarung Tangan Tempaan Mahkota"
+      },
+      "nighttalon_grips": {
+        "name": "Cengkeraman Cakar Malam"
+      },
+      "soulflame_gloves": {
+        "name": "Sarung Tangan Api Jiwa"
+      },
+      "stormcallers_handguards": {
+        "name": "Pelindung Tangan Pemanggil Badai"
+      },
+      "crownforged_girdle": {
+        "name": "Sabuk Tempaan Mahkota"
+      },
+      "nighttalon_waistband": {
+        "name": "Ikat Pinggang Cakar Malam"
+      },
+      "soulflame_cord": {
+        "name": "Tali Pinggang Api Jiwa"
+      },
+      "stormcallers_waistguard": {
+        "name": "Pelindung Pinggang Pemanggil Badai"
       }
     },
     "mobs": {
@@ -5609,6 +6512,45 @@ export const id_ID: EnTranslations = {
       "acolyte_tessa": {
         "name": "Akolit Tessa"
       },
+      "drowned_cantor": {
+        "name": "Drowned Cantor"
+      },
+      "reedbound_acolyte": {
+        "name": "Reedbound Acolyte"
+      },
+      "deepfen_spearjaw": {
+        "name": "Deepfen Spearjaw"
+      },
+      "mirefen_widowling": {
+        "name": "Mirefen Widowling"
+      },
+      "spider_egg_sac": {
+        "name": "Spider Egg-Sac"
+      },
+      "grave_silt_bulwark": {
+        "name": "Grave-Silt Bulwark"
+      },
+      "sump_troll_devourer": {
+        "name": "Sump Troll Devourer"
+      },
+      "choir_thrall": {
+        "name": "Bog Thrall"
+      },
+      "sister_nhalia_drowned_canticle": {
+        "name": "Sister Nhalia, the Drowned Canticle"
+      },
+      "edda_reedhand": {
+        "name": "Edda Reedhand"
+      },
+      "tolling_bell": {
+        "name": "Tolling Bell"
+      },
+      "thunzharr_waking_peak": {
+        "name": "Thunzharr, the Waking Peak"
+      },
+      "thunzharr_stormling": {
+        "name": "Roused Stormling"
+      },
       "ironvein_foreman": {
         "name": "Mandor Ironvein"
       },
@@ -5639,13 +6581,13 @@ export const id_ID: EnTranslations = {
       "varkas_boneguard": {
         "name": "Pengawal Tulang Varkas"
       },
-      "imp": {
+      "emberkin": {
         "name": "Imp"
       },
-      "voidwalker": {
+      "gloomshade": {
         "name": "Voidwalker"
       },
-      "succubus": {
+      "duskborn": {
         "name": "Succubus"
       },
       "grix_the_tunnelking": {
@@ -5669,16 +6611,16 @@ export const id_ID: EnTranslations = {
       "wraithbinder_maldrec": {
         "name": "Pengikat Arwah Maldrec"
       },
-      "felhunter": {
+      "spellhound": {
         "name": "Felhunter"
       },
-      "felguard": {
+      "warfiend": {
         "name": "Felguard"
       },
-      "infernal": {
+      "pyre_colossus": {
         "name": "Infernal"
       },
-      "doomguard": {
+      "wraithborn": {
         "name": "Doomguard"
       },
       "choirmother_selthe": {
@@ -5815,9 +6757,9 @@ export const id_ID: EnTranslations = {
         "greeting": "Hati-hati dengan batu serpih yang longgar, {className}. Gunung ini... gelisah belakangan ini. Aku berniat mencari tahu sebabnya."
       },
       "auctioneer_voss": {
-        "name": "Auctioneer Voss",
-        "title": "Keeper of the World Market",
-        "greeting": "The World Market is open here too, {className}. Buy from every adventurer in the realm, or set out your own wares."
+        "name": "Pelelang Voss",
+        "title": "Penjaga World Market",
+        "greeting": "World Market juga buka di sini, {className}. Belilah dari setiap petualang di alam ini, atau gelarlah daganganmu sendiri."
       },
       "brother_aldric_raid": {
         "name": "Bruder Aldric",
@@ -5828,6 +6770,16 @@ export const id_ID: EnTranslations = {
         "name": "Bruder Halven",
         "title": "Penjaga Relikuari",
         "greeting": "Relikuari di bawah bergeser lagi."
+      },
+      "brother_halven_marsh": {
+        "name": "Brother Halven",
+        "title": "Reliquary Keeper",
+        "greeting": "The trail led north. Another reliquary, another rite. Choose your tier, and I'll hold the rope until you return."
+      },
+      "spirit_healer": {
+        "name": "The Pale Keeper",
+        "title": "Warden of the Dead",
+        "greeting": "Rest now, spirit. I can return you to your body, but the crossing back leaves you weak."
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",
@@ -6268,6 +7220,36 @@ export const id_ID: EnTranslations = {
         "objectives": {
           "0": {
             "label": "Kulit Ridge Stalker"
+          }
+        }
+      },
+      "q_stalkers_return": {
+        "title": "The Stalkers Return",
+        "text": "Twelve dead, and the ridge crawls thicker than the day you started, {playerName}. Beasts do not throw themselves at a wall out of hunger. Something on the high ridge is pushing them down, and until I know what, the culling does not stop. Fourteen more.",
+        "completion": "Fourteen more, and still my patrols count fresh tracks by morning. My scout came back from the high ridge white as the snowline: prints the size of a shield, she says, and old kills no stalker would leave. Whatever walks up there is no ordinary cat.",
+        "objectives": {
+          "0": {
+            "label": "Ridge Stalker slain"
+          }
+        }
+      },
+      "q_stalker_cloaks": {
+        "title": "Cloaks for the Watch",
+        "text": "Eight pelts lined the officers' cloaks, and now every soldier on the wall wants the same, {playerName}. They are right to want it: winter takes fingers first and apologies never. Ten more pelts from the ridges south of the gate, and the whole watch sleeps warm.",
+        "completion": "Ten good pelts, thick as any I have... no, look at these, {playerName}. Torn, half of them, and by no blade or spear. Claw marks wide as my hand, right through the winter coat. Something on that ridge is savaging its own kind.",
+        "objectives": {
+          "0": {
+            "label": "Ridge Stalker Pelt"
+          }
+        }
+      },
+      "q_old_cragmaw": {
+        "title": "Old Cragmaw",
+        "text": "The mountain folk put a name to the prints my scout found: Old Cragmaw, a scar-pelted tyrant of a cat that has outlived three generations of its own pack. It is the reason the stalkers flood my road, {playerName}. Its den sits on the western ridge above the road south. Bring a friend, and put the old devil down.",
+        "completion": "Down at last. The mountain folk swore that cat would outlive the wall itself. The stalkers will keep to their high snows now, {playerName}, and my patrols will walk the road without bleeding for it. The whole ridge is quieter for your work.",
+        "objectives": {
+          "0": {
+            "label": "Old Cragmaw slain"
           }
         }
       },
@@ -6793,38 +7775,77 @@ export const id_ID: EnTranslations = {
         "name": "Reliquary yang Runtuh",
         "enterText": "Kau menuruni reliquary yang runtuh.",
         "leaveText": "Kau memanjat kembali menuju Bruder Halven di reruntuhan reliquary."
+      },
+      "drowned_litany": {
+        "name": "The Drowned Litany",
+        "enterText": "You descend into the drowned shrine at the marsh's edge.",
+        "leaveText": "You climb back to Brother Halven at the marsh's edge."
+      }
+    },
+    "letters": {
+      "ravenpost_welcome": {
+        "sender": "Pos Gagak",
+        "subject": "Kini para gagak terbang untukmu",
+        "body": "Pengelana,\n\nPos Gagak telah membuka tenggeran di seluruh lembah. Carilah pilar gagak di Eastbrook, Fenbridge, dan Highwatch: dari mana pun kau bisa mengirim surat, koin, dan barang kepada petualang lain, serta mengambil apa pun yang dibawa para gagak untukmu.\n\nTerlampir sedikit tanda mata untuk perangko pertamamu.\n\nKepakkan sayap,\nPos Gagak"
+      },
+      "letter_q_wolves": {
+        "sender": "Marsekal Redbrook",
+        "subject": "Kandang kembali tenang",
+        "body": "Para gembala akhirnya bisa tidur nyenyak, dan itu berkat dirimu. Kuminta Pos Gagak mengantarkan sedikit imbalan dari kas penjaga.\n\nJaga bilahmu tetap terasah.\n- Marsekal Redbrook"
+      },
+      "letter_q_greyjaw": {
+        "sender": "Marsekal Redbrook",
+        "subject": "Si Tua Rahang Kelabu, akhirnya",
+        "body": "Kabar cepat menyebar di kota sekecil ini. Semalam para gembala bersulang untuk kesehatanmu, dan Wilkes bersumpah serigala itu sebesar gerobak. Biarkan mereka melebih-lebihkan: kau pantas mendapatkannya.\n\nNikmati makan atas nama penjaga.\n- Marsekal Redbrook"
+      },
+      "letter_q_hollow": {
+        "sender": "Bruder Aldric",
+        "subject": "Apa yang kaulakukan dalam gelap",
+        "body": "Hanya segelintir yang akan tahu apa yang terkubur di lembah itu, dan lebih sedikit lagi yang akan percaya. Aku tahu, dan aku tidak akan melupakannya.\n\nSemoga jalanmu tetap terang.\n- Bruder Aldric"
       }
     },
     "itemSets": {
+      "boundstone_vanguard": {
+        "name": "Garda Depan Batu Terikat",
+        "bonus3": "Meningkatkan kecepatan serangan dan rapal sebesar 15%."
+      },
       "crownforged": {
         "name": "Perlengkapan tempur Tempa Mahkota",
         "bonus2": "Meningkatkan daya serang sebesar 40.",
-        "bonus3": "Meningkatkan kekuatan sebesar 15 dan stamina sebesar 15."
+        "bonus3": "Meningkatkan kekuatan sebesar 15, stamina sebesar 15, serta kecepatan serangan dan rapal sebesar 15%."
       },
       "deathlord": {
         "name": "Perlengkapan tempur Penguasa Maut",
         "bonus2": "Meningkatkan daya serang sebesar 40.",
         "bonus3": "Meningkatkan kekuatan sebesar 15 dan stamina sebesar 15."
       },
+      "greyjaw_stalker": {
+        "name": "Perlengkapan Penguntit Greyjaw",
+        "bonus3": "Meningkatkan kecepatan serangan dan rapal sebesar 15%."
+      },
       "necromancers": {
         "name": "Jubah ahli nujum",
-        "bonus2": "Mengurangi dorongan balik sihir akibat kerusakan sebesar 50%.",
-        "bonus3": "Kerusakan yang diterima tidak menunda perapalan sihir."
+        "bonus2": "Kamu tidak dapat terpental (ketahanan pentalan 100%).",
+        "bonus3": "Meningkatkan kecerdasan sebesar 10 dan stamina sebesar 10."
       },
       "nighttalon": {
         "name": "Perlengkapan kulit Cakar Malam",
         "bonus2": "Meningkatkan daya serang sebesar 40.",
-        "bonus3": "Meningkatkan kelincahan sebesar 15 dan peluang kritis sebesar 2%."
+        "bonus3": "Meningkatkan kelincahan sebesar 15, peluang kritis sebesar 2%, serta kecepatan serangan dan rapal sebesar 15%."
       },
       "soulflame": {
         "name": "Jubah Api Jiwa",
-        "bonus2": "Mengurangi dorongan balik sihir akibat kerusakan sebesar 50%.",
-        "bonus3": "Kerusakan yang diterima tidak menunda perapalan sihir."
+        "bonus2": "Kamu tidak dapat terpental (ketahanan pentalan 100%).",
+        "bonus3": "Meningkatkan kecerdasan sebesar 15, roh sebesar 15, serta kecepatan serangan dan rapal sebesar 15%."
       },
       "stormcallers": {
         "name": "Jubah Pemanggil Badai",
-        "bonus2": "Mengurangi dorongan balik sihir akibat kerusakan sebesar 50%.",
-        "bonus3": "Kerusakan yang diterima tidak menunda perapalan sihir."
+        "bonus2": "Kamu tidak dapat terpental (ketahanan pentalan 100%).",
+        "bonus3": "Meningkatkan kecerdasan sebesar 15, roh sebesar 15, serta kecepatan serangan dan rapal sebesar 15%."
+      },
+      "vale_arcanist": {
+        "name": "Perlengkapan Arkanis Lembah",
+        "bonus3": "Meningkatkan kecepatan serangan dan rapal sebesar 15%."
       },
       "wyrmshadow": {
         "name": "Perlengkapan Bayangan Wyrm",
@@ -6840,6 +7861,12 @@ export const id_ID: EnTranslations = {
     "dungeonInstanceBusy": "Semua instansi {name} sedang sibuk. Coba lagi sebentar lagi.",
     "delveLockedChestInteract": "Tekan F untuk membuka kunci",
     "delveRewardChestInteract": "Tekan F untuk mengklaim rampasan",
-    "delveSurfaceExitInteract": "Tekan F untuk memanjat"
+    "delveSurfaceExitInteract": "Tekan F untuk memanjat",
+    "delveReliquaryInteract": "Drowned Reliquary: Press F to begin the rite",
+    "delveRiteShrineBellInteract": "Bell Shrine: Press F to ring it",
+    "delveRiteShrineCandleInteract": "Candle Shrine: Press F to touch it",
+    "delveRiteShrineReedInteract": "Reed Shrine: Press F to touch it",
+    "delveRiteShrineSkullInteract": "Skull Shrine: Press F to touch it",
+    "mailboxName": "Mailbox"
   }
 };

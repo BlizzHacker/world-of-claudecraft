@@ -1,8 +1,8 @@
-import { build } from 'esbuild';
-import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { execFile } from 'node:child_process';
+import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { promisify } from 'node:util';
+import { build } from 'esbuild';
 
 const outDir = resolve('mediawiki/seed');
 const tmpDir = resolve('tmp/mediawiki-seed');
@@ -16,7 +16,9 @@ await mkdir(outDir, { recursive: true });
 
 const css = await readFile('mediawiki/theme/Common.css', 'utf8');
 
-await writeFile(sourcePath, `
+await writeFile(
+  sourcePath,
+  `
 import { ABILITIES, CLASSES, DUNGEON_LIST, ITEMS, MOBS, NPCS, QUEST_ORDER, QUESTS, ZONES } from '../../src/sim/data';
 
 const css = ${JSON.stringify(css)};
@@ -107,21 +109,21 @@ add('Main Page', \`
 <div class="woc-hero">
 <div>
 <p class="woc-kicker">Community player encyclopedia</p>
-<h1>Cryptic Realm Wiki</h1>
-Cryptic Realm is a browser-playable, WoW-Classic-flavored micro-MMO with online persistence, offline play, deterministic simulation logic, and a launch-week community that quickly turned jokes, dungeon clears, level races, bug reports, and feature requests into game history.
+<h1>World of Claudecraft Wiki</h1>
+World of Claudecraft is a browser-playable, classic-style micro-MMO with online persistence, offline play, deterministic simulation logic, and a launch-week community that quickly turned jokes, dungeon clears, level races, bug reports, and feature requests into game history.
 
 '''Start here:''' [[Quick Start]] · [[All Pages]] · [[Zones]] · [[Classes]] · [[Gameplay Systems]] · [[Community Lore]] · [[Development Timeline]]
 </div>
-<div class="woc-card"><div class="woc-crest">Cryptic Realm</div></div>
+<div class="woc-card"><div class="woc-crest">World of Claudecraft</div></div>
 </div>
 </div>
 \` + section('Featured portals', bullets([
-  link('Zones') + ' - Eastbrook Vale, Mirefen Marsh, Thornpeak Heights.',
-  link('Classes') + ' - all nine playable class kits.',
-  link('Quests') + ' - the full source-defined quest chain.',
-  link('Dungeons') + ' - Hollow Crypt, Sunken Bastion, and Gravewyrm Sanctum.',
-  link('Community Lore') + ' - launch-week player culture from Discord, Reddit, and X.',
-  link('Development Timeline') + ' - issue, PR, and release themes.',
+  link('Zones') + ' — Eastbrook Vale, Mirefen Marsh, Thornpeak Heights.',
+  link('Classes') + ' — all nine playable class kits.',
+  link('Quests') + ' — the full source-defined quest chain.',
+  link('Dungeons') + ' — Hollow Crypt, Sunken Bastion, and Gravewyrm Sanctum.',
+  link('Community Lore') + ' — launch-week player culture from Discord, Reddit, and X.',
+  link('Development Timeline') + ' — issue, PR, and release themes.',
 ])), ['Wiki']);
 
 add('Quick Start', section('First hour route', bullets([
@@ -136,9 +138,9 @@ add('Quick Start', section('First hour route', bullets([
 ])), ['Guides']);
 
 add('The Gravecaller Saga', section('Overview', 'The main story follows Brother Aldric from restless bones outside Eastbrook to Korzul the Gravewyrm beneath Thornpeak.') + section('Acts', bullets([
-  link(titleBy.zone.get('eastbrook_vale'), 'Eastbrook Vale') + ' - Morthen the Gravecaller and ' + link(titleBy.dungeon.get('hollow_crypt'), 'The Hollow Crypt') + '.',
-  link(titleBy.zone.get('mirefen_marsh'), 'Mirefen Marsh') + ' - Vael the Mistcaller and ' + link(titleBy.dungeon.get('sunken_bastion'), 'The Sunken Bastion') + '.',
-  link(titleBy.zone.get('thornpeak_heights'), 'Thornpeak Heights') + ' - Wyrmcult zealots, Highwatch, and ' + link(titleBy.dungeon.get('gravewyrm_sanctum'), 'Gravewyrm Sanctum') + '.',
+  link(titleBy.zone.get('eastbrook_vale'), 'Eastbrook Vale') + ' — Morthen the Gravecaller and ' + link(titleBy.dungeon.get('hollow_crypt'), 'The Hollow Crypt') + '.',
+  link(titleBy.zone.get('mirefen_marsh'), 'Mirefen Marsh') + ' — Vael the Fogbinder and ' + link(titleBy.dungeon.get('sunken_bastion'), 'The Sunken Bastion') + '.',
+  link(titleBy.zone.get('thornpeak_heights'), 'Thornpeak Heights') + ' — Wyrmcult zealots, Highwatch, and ' + link(titleBy.dungeon.get('gravewyrm_sanctum'), 'Gravewyrm Sanctum') + '.',
 ])), ['Lore', 'Quests']);
 
 add('Community Lore', section('Launch-week myths', bullets([
@@ -152,7 +154,7 @@ add('Community Lore', section('Launch-week myths', bullets([
   'Player-facing leaderboards for level, class, arena Elo, boss kills, and guilds.',
   'Discord Rich Presence, public guild discovery, target markers, mobile improvements, mana pacing, and anti-bot handling.',
   'Arena rewards, arena accept/decline prompts, and countdown buff preservation.',
-])) + section('Outside reception', 'Early public launch threads around the upstream prototype shaped player expectations for browser MMO persistence, social play, AI-assisted development, and fast iteration. Cryptic Realm keeps its own realm identity, economy, lore, and operations while documenting shared upstream candidates separately.'), ['Community', 'Discord', 'Reddit', 'X']);
+])) + section('Outside reception', 'Recent Reddit threads framed World of Claudecraft as a viral open-source, Fable 5-built MMORPG with thousands of early players and hundreds of GitHub stars. The same discussions mixed excitement, skepticism about generated code quality, nostalgia for Fable, questions about the TypeScript/Three.js stack, and stories of players unexpectedly sticking around to grind.'), ['Community', 'Discord', 'Reddit', 'X']);
 
 add('Development Timeline', section('Release themes', table([
   ['v0.3 baseline', 'Persistent multiplayer, account flow, classes, quests, dungeons, social systems, and classic MMO presentation.'],
@@ -164,20 +166,23 @@ add('Development Timeline', section('Release themes', table([
   'Guild discovery, /who, friend/guild status clarity, and chat alias behavior.',
   'Security and correctness work around market inputs, rate limits, guild transactions, character names, report handling, and moderation.',
   'Headless environment and agent support for Codex/Claude-driven players.',
-])), ['Development']);
+])), ['Development', 'GitHub']);
 
 add('Sources Used', section('Local sources', bullets([
   'Repository README, design docs, screenshots, source code, tests, sim content, class definitions, dungeon data, and server routes.',
-  'Local development notes, test coverage, and shared-work boundaries from the Cryptic Realm repository.',
-  'Community exports and launch-week notes from verified Cryptic Realm channels.',
+  'GitHub CLI exports of 45 issues and 141 pull requests.',
+  'Discord export of 3,205 messages from the World of Claudecraft community general channel.',
 ])) + section('External sources', bullets([
-  '[https://crypticrealm.com/links.html Cryptic Realm official links]',
-  '[https://crypticrealm.com/contributions.html Cryptic Realm contributions boundary]',
-  '[https://crypticrealm.com/whitepaper.html Cryptic Realm white paper]',
+  '[https://github.com/levy-street/world-of-claudecraft GitHub repository]',
+  '[https://www.reddit.com/r/artificial/comments/1u4h7k1/world_of_claudecraft_the_first_opensource_mmorpg/ r/artificial launch thread]',
+  '[https://www.reddit.com/r/ClaudeAI/comments/1u3m6a8/i_vibe_coded_the_first_mmorpg_with_fable_5/ r/ClaudeAI Fable 5 thread]',
+  '[https://www.reddit.com/r/vibecoding/comments/1u47wo5/world_of_claudecraft_first_mmorpg_vibecoded_with/ r/vibecoding launch thread]',
+  '[https://www.reddit.com/r/AI_Agents/comments/1u4hstu/agents_have_entered_the_world_of_claudecraft_open/ r/AI_Agents thread]',
+  '[https://x.com/i/communities/2030944892999135272 World Of Claudecraft X community]',
 ])), ['Sources']);
 
 const systemRows = [
-  ['Combat', 'Vanilla-style combat math, resources, GCD, threat, leashing, death, food, drink, and recovery.'],
+  ['Combat', 'Classic-era combat math, resources, GCD, threat, leashing, death, food, drink, and recovery.'],
   ['Parties', 'Five-player grouping, shared tap rights, shared kill credit, XP bonuses, party chat, and shared instances.'],
   ['Guilds', 'Guild creation, ranks, roster management, invites, guild chat, and public-discovery roadmap requests.'],
   ['Trading', 'Nearby players stage items and copper; both sides accept; walking apart cancels.'],
@@ -188,7 +193,7 @@ const systemRows = [
   ['Mobile Play', 'Touch controls, joystick fixes, quest-log access, fullscreen polish, and launch-week mobile testing.'],
   ['Agents and Bots', 'Headless training environment, Codex/Claude agent culture, and anti-bot roadmap.'],
 ];
-add('Gameplay Systems', section('Systems index', bullets(systemRows.map(([name, desc]) => link(name) + ' - ' + desc))), ['Systems']);
+add('Gameplay Systems', section('Systems index', bullets(systemRows.map(([name, desc]) => link(name) + ' — ' + desc))), ['Systems']);
 for (const [name, desc] of systemRows) {
   add(name, section('Overview', desc), ['Systems']);
 }
@@ -274,7 +279,7 @@ const body = pages.map((page, index) => \`
       <id>\${index + 1}</id>
       <timestamp>\${now}</timestamp>
       <contributor><username>WikiAdmin</username><id>1</id></contributor>
-      <comment>Seed Cryptic Realm wiki content</comment>
+      <comment>Seed World of Claudecraft wiki content</comment>
       <model>wikitext</model>
       <format>text/x-wiki</format>
       <text xml:space="preserve" bytes="\${Buffer.byteLength(page.text)}">\${escXml(page.text)}</text>
@@ -284,7 +289,7 @@ const body = pages.map((page, index) => \`
 const xml = \`<?xml version="1.0" encoding="UTF-8"?>
 <mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" version="0.11" xml:lang="en">
   <siteinfo>
-    <sitename>Cryptic Realm Wiki</sitename>
+    <sitename>World of Claudecraft Wiki</sitename>
     <dbname>mediawiki</dbname>
     <base>http://localhost:8080/wiki/index.php/Main_Page</base>
     <generator>MediaWiki seed</generator>
@@ -300,7 +305,8 @@ const xml = \`<?xml version="1.0" encoding="UTF-8"?>
 \`;
 
 console.log(xml);
-`);
+`,
+);
 
 await build({
   entryPoints: [sourcePath],

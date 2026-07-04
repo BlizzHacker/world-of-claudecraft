@@ -21,6 +21,7 @@ vi.mock('../server/db', () => ({
   saveCharacterState: vi.fn(async () => {}),
   saveCharacterAndMarketState: vi.fn(async () => {}),
   openPlaySession: (...args: unknown[]) => openPlaySession(...(args as [])),
+  touchCharacterLogin: vi.fn(async () => {}),
   closePlaySession: (...args: unknown[]) => closePlaySession(...(args as [])),
   insertChatLogs: vi.fn(async () => {}),
   markAccountQuestComplete: (...args: unknown[]) =>
@@ -198,8 +199,11 @@ describe('GameServer sessions', () => {
         accountCosmetics: cosmetics,
       }),
     );
+    // The second live character rides the GM exemption: the session cap allows
+    // one non-GM character per account, and the account-wide sweep under test
+    // is the same either way.
     const second = expectJoined(
-      server.join(fakeWs(), 11, 102, 'Mechtwo', 'mage', null, false, {
+      server.join(fakeWs(), 11, 102, 'Mechtwo', 'mage', null, true, {
         accountCosmetics: cosmetics,
       }),
     );
@@ -370,15 +374,15 @@ describe('GameServer sessions', () => {
     expect(closePlaySession).toHaveBeenCalledWith(99);
   });
 
-  it('allows two ONLINE characters per account, and lets the account back in once one leaves', async () => {
+  it('allows one ONLINE character per account, and lets the account back in once it leaves', async () => {
     const server = new GameServer();
     const a = expectJoined(server.join(fakeWs(), 20, 201, 'Aone', 'warrior', null));
-    const a2 = expectJoined(server.join(fakeWs(), 20, 202, 'Atwo', 'mage', null));
 
-    expect((server as any).sessionByCharacterId(202)).toBe(a2);
+    expect((server as any).sessionByCharacterId(201)).toBe(a);
 
-    // same account, a third character is rejected while two are online
-    expect(server.join(fakeWs(), 20, 204, 'Athree', 'rogue', null)).toEqual({
+    // same account, a second character is rejected while one is online (Ravenpost
+    // mail moves goods between an account's characters, so dual-boxing is gone)
+    expect(server.join(fakeWs(), 20, 202, 'Atwo', 'mage', null)).toEqual({
       error: 'too many characters on this account are already in the world',
     });
 
@@ -386,19 +390,22 @@ describe('GameServer sessions', () => {
     const b = expectJoined(server.join(fakeWs(), 21, 203, 'Bone', 'priest', null));
     expect((server as any).sessionByCharacterId(203)).toBe(b);
 
-    // once one of the account's online characters leaves, another of its characters may join
+    // once the account's online character leaves, another of its characters may join
     await server.leave(a, 'test');
-    const a3 = expectJoined(server.join(fakeWs(), 20, 204, 'Athree', 'rogue', null));
-    expect((server as any).sessionByCharacterId(204)).toBe(a3);
+    const a2 = expectJoined(server.join(fakeWs(), 20, 202, 'Atwo', 'mage', null));
+    expect((server as any).sessionByCharacterId(202)).toBe(a2);
   });
 
   it('exempts GM characters from the per-account session cap (for supervision)', () => {
     const server = new GameServer();
     expectJoined(server.join(fakeWs(), 30, 301, 'Gmaa', 'warrior', null));
-    expectJoined(server.join(fakeWs(), 30, 302, 'Gmbb', 'warrior', null));
-    // a third character on the same account joins because it is flagged GM
+    // a second character on the same account joins because it is flagged GM
     expectJoined(server.join(fakeWs(), 30, 303, 'Gmcc', 'warrior', null, true));
     expect((server as any).sessionByCharacterId(303)).not.toBeNull();
+    // and the cap still applies to a non-GM sibling
+    expect(server.join(fakeWs(), 30, 302, 'Gmbb', 'warrior', null)).toEqual({
+      error: 'too many characters on this account are already in the world',
+    });
   });
 
   // The per-IP session count backs the hard connection cap (countIpSessions in

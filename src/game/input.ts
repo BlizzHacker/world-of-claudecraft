@@ -55,6 +55,7 @@ export interface InputCallbacks {
       | 'social'
       | 'arena'
       | 'leaderboard'
+      | 'calendar'
       | 'discord',
   ): void;
   onEmoteWheel(open: boolean): void;
@@ -276,6 +277,10 @@ export class Input {
     return this.cameraDragActive;
   }
 
+  cursorPoint(): { x: number; y: number } | null {
+    return this.hoverActive ? { x: this.hoverX, y: this.hoverY } : null;
+  }
+
   setClickMoveMouseButton(button: 0 | 2 | null): void {
     this.clickMoveMouseButton = button;
     if (button !== null && this.downButton === button) {
@@ -347,6 +352,22 @@ export class Input {
       this.pointerLockRequestedForDrag = false;
     }
     this.updateCursor();
+  }
+
+  setSuspendMovement(on: boolean): void {
+    if (this.suspendMovement === on) return;
+    this.suspendMovement = on;
+    if (on) {
+      const hadEmoteWheel = this.emoteWheelHeldCodes.size > 0;
+      const hadHeldInput = this.keys.size > 0 || hadEmoteWheel || this.keyJumpUntil > 0;
+      this.keys.clear();
+      this.keyJumpUntil = 0;
+      if (hadEmoteWheel) {
+        this.emoteWheelHeldCodes.clear();
+        this.cb.onEmoteWheel(false);
+      }
+      if (hadHeldInput) this.noteIntent('move');
+    }
   }
 
   captureNextKey(cb: (code: string | null) => void): void {
@@ -740,6 +761,9 @@ export class Input {
         return;
       case 'leaderboard':
         this.cb.onUiKey('leaderboard');
+        return;
+      case 'calendar':
+        this.cb.onUiKey('calendar');
         return;
       case 'discord':
         this.cb.onUiKey('discord');

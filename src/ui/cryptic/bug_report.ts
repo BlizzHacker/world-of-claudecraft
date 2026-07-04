@@ -1,10 +1,36 @@
 import './realm_env';
 import { getActiveRealm, resolveActiveRealmId } from '../../sim/realms';
-import { getGamepadStatus } from '../../game/gamepad';
 import { readCrypticSession } from './session';
 
 const MODAL_ID = 'cr-bug-report-modal';
 const STORE_KEY = 'cr_bug_reports';
+
+// Minimal gamepad snapshot for the bug-report diagnostics. v0.20 moved live
+// gamepad handling into GamepadManager (instance-scoped); the bug report has no
+// instance, so it reads navigator.getGamepads() directly for a best-effort view.
+function gamepadDiagnostics(): {
+  connected: number;
+  pads: { index: number; id: string; mapping: string; axes: number; buttons: number }[];
+} {
+  try {
+    const nav = typeof navigator !== 'undefined' ? navigator : null;
+    const list = nav && typeof nav.getGamepads === 'function' ? nav.getGamepads() : [];
+    const pads = [];
+    for (const p of list) {
+      if (!p) continue;
+      pads.push({
+        index: p.index,
+        id: p.id,
+        mapping: p.mapping,
+        axes: p.axes.length,
+        buttons: p.buttons.length,
+      });
+    }
+    return { connected: pads.length, pads };
+  } catch {
+    return { connected: 0, pads: [] };
+  }
+}
 
 type BugReport = {
   id: string;
@@ -98,7 +124,7 @@ export function collectBugReport(): BugReport {
       characterId: game.online.characterId,
     } : null,
     performance: typeof game.perf?.snapshot === 'function' ? game.perf.snapshot() : null,
-    gamepad: getGamepadStatus(),
+    gamepad: gamepadDiagnostics(),
     screenshot: captureCanvas(),
   };
 }

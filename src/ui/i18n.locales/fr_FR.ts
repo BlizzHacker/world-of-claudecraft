@@ -14,6 +14,70 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const fr_FR: Partial<Record<TranslationKey, string>> = {
+  'entities.npcs.auctioneer_voss.greeting':
+    'Le Marché du monde est ouvert ici aussi, {className}. Achetez auprès de chaque aventurier du royaume, ou proposez vos propres marchandises.',
+  'entities.npcs.auctioneer_voss.name': 'Commissaire-priseur Voss',
+  'entities.npcs.auctioneer_voss.title': 'Gardien du Marché du monde',
+  'hudChrome.devBadge.badgeTitle': 'Développeur : {tier}',
+  'hudChrome.devBadge.contributor': 'Contributeur open-source',
+  'hudChrome.devBadge.flavors.architect': 'Un architecte du royaume : 30 pull requests fusionnées.',
+  'hudChrome.devBadge.flavors.artificer': 'Cinq pull requests, et le monde se plie à votre code.',
+  'hudChrome.devBadge.flavors.runesmith':
+    "Quinze pull requests forgées dans le jeu en cours d'exécution.",
+  'hudChrome.devBadge.flavors.tinkerer': 'Votre première pull request a atterri dans le royaume.',
+  'hudChrome.devBadge.flavors.worldwright':
+    'Un façonneur de mondes : 70 pull requests modèlent le jeu.',
+  'hudChrome.devBadge.link.benefits':
+    'Liez votre compte GitHub pour gagner un badge de développeur pour les pull requests que vous avez fait fusionner dans le dépôt open-source.',
+  'hudChrome.devBadge.link.cta': 'Lier GitHub',
+  'hudChrome.devBadge.link.error': 'Impossible de lier GitHub. Veuillez réessayer.',
+  'hudChrome.devBadge.link.relink': 'Relier GitHub',
+  'hudChrome.devBadge.linkedAs': 'Lié en tant que {login}',
+  'hudChrome.devBadge.prsLanded': '{count} pull requests fusionnées',
+  'hudChrome.devBadge.tiers.architect': 'Architecte',
+  'hudChrome.devBadge.tiers.artificer': 'Artificier',
+  'hudChrome.devBadge.tiers.runesmith': 'Forgerune',
+  'hudChrome.devBadge.tiers.tinkerer': 'Bricoleur',
+  'hudChrome.devBadge.tiers.worldwright': 'Façonneur de mondes',
+  'hudChrome.devBadge.title': 'Développeur',
+  'hudChrome.devBadge.unlink': 'Délier GitHub',
+  'hudChrome.itemShare.linkHint': 'Maj-clic pour lier cet objet dans le canal de discussion.',
+  'hudChrome.itemTooltip.requiresLevel': 'Niveau requis : {level}',
+  'hudChrome.keybinds.discord': 'Discord',
+  'hudChrome.leaderboard.devEmpty': "Aucun contributeur classé pour l'instant.",
+  'hudChrome.leaderboard.devName': 'Contributeur',
+  'hudChrome.leaderboard.devTierCol': 'Badge',
+  'hudChrome.leaderboard.mergedPrs': 'PR fusionnées',
+  'hudChrome.leaderboard.tabDevs': 'Développeurs',
+  'hudChrome.lootSettings.close': 'Fermer les réglages de butin',
+  'hudChrome.lootSettings.groupLoot': 'Butin de groupe',
+  'hudChrome.lootSettings.leaderOption': 'Maître du butin : Chef (vous)',
+  'hudChrome.lootSettings.masterOption': 'Maître du butin : {name}',
+  'hudChrome.lootSettings.menuItem': 'Réglages de butin',
+  'hudChrome.lootSettings.method': 'Mode de butin',
+  'hudChrome.lootSettings.rollThreshold': 'Seuil de jet',
+  'hudChrome.lootSettings.title': 'Réglages de butin',
+  'hudChrome.lootSettings.valueMaster': 'Butin par maître',
+  'hudChrome.masterLoot.looterChanged': 'Le maître du butin est désormais {name}.',
+  'hudChrome.masterLoot.rollingFor': 'Jet en cours pour {item}.',
+  'hudChrome.masterLoot.summaryGroup': 'Réglages de butin : Butin de groupe.',
+  'hudChrome.masterLoot.summaryMaster':
+    'Réglages de butin : Butin par maître, maître du butin {name}, seuil {threshold}.',
+  'hudChrome.masterLoot.thresholdSet': 'Seuil de butin réglé sur {threshold}.',
+  'hudChrome.options.showDevBadges': 'Afficher les badges de développeur',
+  'hudChrome.options.groundReticle': 'Réticule de ciblage au sol',
+  'hudChrome.options.startAttackOnAbility': "Attaque auto à l'utilisation d'une compétence",
+  'hudChrome.party.promoteLeader': 'Promouvoir chef',
+  'hudChrome.statInfo.desc.spellPower':
+    "Augmente les dégâts de vos sorts et la puissance de vos soins. Chaque point d'Intelligence confère un peu de Puissance des sorts, en plus de celle de l'équipement ou des améliorations.",
+  'hudChrome.statInfo.names.spellPower': 'Puissance des sorts',
+  'hudChrome.statInfo.sources.attributes': 'De vos attributs : {value}',
+  'hudChrome.statInfo.sources.base': 'Base : {value}',
+  'hudChrome.statInfo.sources.buff': '{name} : {value}',
+  'hudChrome.statInfo.sources.fromAttribute': 'De {stat} : {value}',
+  'hudChrome.statInfo.sources.gear': 'Équipement porté : {value}',
+  'hudChrome.statInfo.sources.header': 'Composé de :',
+  'hudChrome.statInfo.sources.talents': 'Talents et effets : {value}',
   'hudChrome.loot.chestTitle': 'Coffre',
   'hudChrome.spellbook.addToBarAria': "Ajouter {name} à la barre d'action",
   'hudChrome.spellbook.removeFromBarAria': "Retirer {name} de la barre d'action",
@@ -398,8 +462,8 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'stats.playersOnline': 'Joueurs en ligne',
   'stats.realmName': 'Nom du royaume',
   'footer.copyright': '2026 Cryptic Realm',
-  'footer.githubLink': '/contributions.html',
-  'footer.githubLabel': 'Contributions',
+  'footer.githubLink': 'https://github.com/levy-street/world-of-claudecraft',
+  'footer.githubLabel': 'Projet open source',
   'footer.whitepaper': 'Livre blanc',
   'footer.terms': "Conditions d'utilisation",
   'footer.privacy': 'Politique de confidentialité',
@@ -410,7 +474,11 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'wiki.desc': 'Découvrez les secrets du royaume, les guides de classe et les stratégies.',
   'news.title': 'Actualités et mises à jour',
   'news.desc':
-    'Lisez les dernières notes de mise à jour, les événements et les nouvelles de la communauté.',  'comingSoon.placeholder': 'Bientôt disponible...',
+    'Lisez les dernières notes de mise à jour, les événements et les nouvelles de la communauté.',
+  'download.title': 'Télécharger le lanceur de bureau',
+  'download.desc':
+    'Obtenez le lanceur autonome pour des performances optimisées et un jeu en plein écran.',
+  'comingSoon.placeholder': 'Bientôt disponible...',
   'comingSoon.featureComingSoon': 'Cette fonctionnalité sera bientôt disponible sur le royaume.',
   'mode.onlineTitle': 'Jouer en ligne',
   'mode.onlineDesc':
@@ -576,7 +644,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'playerCard.levelClass': 'Niveau {level} - {className}',
   'playerCard.topPercent': 'TOP {percent} %',
   'playerCard.realmSubtitle': 'Royaume {realm}',
-  'playerCard.defaultRealm': 'Monde de Cryptic Realm',
+  'playerCard.defaultRealm': 'Monde de ClaudeCraft',
   'playerCard.brandWordmark': 'CRYPTIC REALM',
   'playerCard.recruited': '{count} recrutés',
   'playerCard.footerHandle': '@{handle}',
@@ -586,7 +654,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'playerCard.shareTierBit': ', détenteur $CR de rang {tier}',
   'playerCard.shareText':
     'Je forge ma légende dans Cryptic Realm: niveau {level} {className}{tierBit}. Rejoignez mon royaume:',
-  'playerCard.nativeShareTitle': 'Monde de Cryptic Realm',
+  'playerCard.nativeShareTitle': 'Monde de ClaudeCraft',
   'playerCard.fileNameFallback': 'joueur',
   'playerCard.actionShareX': 'Partager sur X',
   'playerCard.actionCopyReferral': "Copier le lien d'invitation",
@@ -660,7 +728,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'a11y.mainNavigation': 'Navigation principale',
   'a11y.languageSelection': 'Sélection de la langue',
   'a11y.characterActions': 'Actions de personnage',
-  'a11y.githubProject': 'Open Cryptic Realm contributions',
+  'a11y.githubProject': 'Ouvrir le projet Cryptic Realm sur GitHub',
   'a11y.discordCommunity': 'Rejoindre la communauté Cryptic Realm sur Discord',
   'a11y.donateProject': 'Faire un don pour soutenir Cryptic Realm',
   'loading.world': 'Chargement du monde...',
@@ -1342,9 +1410,14 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'abilityUi.forms.bear': 'ours',
   'abilityUi.forms.cat': 'loup',
   'abilityUi.cast.fishing': 'Pêche',
+  'abilityUi.cast.thunzharrStormcall': 'Appel de la tempête',
   'abilityUi.cast.demonHeal': 'Soin démoniaque',
   'questUi.tracker.title': 'Quêtes',
   'questUi.tracker.complete': 'Terminée',
+
+  'questUi.tracker.showOnMap': 'Afficher {name} sur la carte',
+
+  'questUi.tracker.hideFromMap': 'Masquer {name} sur la carte',
   'questUi.log.title': 'Journal de quêtes',
   'questUi.log.close': 'Fermer le journal de quêtes',
   'questUi.log.summary': 'Actives : {active} / Terminées : {completed}',
@@ -1646,6 +1719,21 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.taunt.description':
     'Provoque la cible: votre menace rejoint celle de son ennemi le plus haï et elle est forcée de vous attaquer pendant 3 s.',
   'entities.abilities.fireball.name': 'Boule de feu',
+  'entities.abilities.rain_of_fire.name': 'Pluie de feu',
+  'entities.abilities.rain_of_fire.description':
+    'Fait pleuvoir du feu sur la zone visée, brûlant les ennemis pour {damage} points de dégâts de Feu.',
+  'entities.abilities.volley.name': 'Volée de flèches',
+  'entities.abilities.volley.description':
+    'Fait pleuvoir des flèches sur la zone visée, infligeant {damage} points de dégâts aux ennemis présents.',
+  'entities.abilities.hurricane.name': 'Ouragan',
+  'entities.abilities.hurricane.description':
+    'Déchaîne un ouragan sur la zone visée, frappant les ennemis pour {damage} points de dégâts de Nature.',
+  'entities.abilities.earthquake.name': 'Tremblement de terre',
+  'entities.abilities.earthquake.description':
+    'Fait trembler la zone visée, frappant les ennemis pour {damage} points de dégâts de Nature.',
+  'entities.abilities.flamestrike.name': 'Frappe enflammée',
+  'entities.abilities.flamestrike.description':
+    "Fait s'abattre une explosion de flammes sur la zone visée, infligeant {damage} points de dégâts de Feu aux ennemis pris dans la déflagration.",
   'entities.abilities.fireball.description':
     'Lance une boule enflammée qui inflige {damage} points de dégâts de Feu plus des dégâts supplémentaires sur la durée.',
   'entities.abilities.frost_armor.name': 'Armure de givre',
@@ -2110,6 +2198,11 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'entities.items.weathered_ledger_page.name': 'Page de registre usée',
   'entities.items.morthen_grimoire.name': 'Grimoire de Morthen',
   'entities.items.wolf_fang.name': 'Croc de loup fendu',
+  'entities.items.linen_pouch.name': 'Pochette en lin',
+  'entities.items.travelers_knapsack.name': 'Sac à dos du voyageur',
+  'entities.items.wolfhide_satchel.name': 'Sacoche en peau de loup',
+  'entities.items.gravewoven_bag.name': 'Sac sépulcral',
+  'entities.items.mistcallers_duffel.name': "Fourre-tout de l'Appelle-brume",
   'entities.items.bandit_bandana.name': 'Bandana rouge',
   'entities.items.tough_jerky.name': 'Viande séchée coriace',
   'entities.items.mudfin_scale.name': 'Écaille de murloc visqueuse',
@@ -2360,14 +2453,14 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.nhalia_mourner.name': 'Pleureuse de Nhalia',
   'entities.mobs.sister_nhalia.name': 'Sœur Nhalia',
   'entities.mobs.varkas_boneguard.name': 'Garde-os de Varkas',
-  'entities.mobs.imp.name': 'Diablotin',
-  'entities.mobs.voidwalker.name': 'Marcheur du Vide',
-  'entities.mobs.succubus.name': 'Succube',
+  'entities.mobs.emberkin.name': 'Diablotin',
+  'entities.mobs.gloomshade.name': 'Marcheur du Vide',
+  'entities.mobs.duskborn.name': 'Succube',
   'entities.mobs.grix_the_tunnelking.name': 'Grix le Roi des tunnels',
-  'entities.mobs.felhunter.name': 'Limier corrompu',
-  'entities.mobs.felguard.name': 'Gangregarde',
-  'entities.mobs.infernal.name': 'Infernal',
-  'entities.mobs.doomguard.name': "Seigneur de l'effroi",
+  'entities.mobs.spellhound.name': 'Limier corrompu',
+  'entities.mobs.warfiend.name': 'Gangregarde',
+  'entities.mobs.pyre_colossus.name': 'Infernal',
+  'entities.mobs.wraithborn.name': "Seigneur de l'effroi",
   'entities.mobs.choirmother_selthe.name': 'Selthe, mère de chœur',
   'entities.mobs.drowned_templeguard.name': 'Garde du temple noyé',
   'entities.mobs.drowned_votary.name': 'Dévot noyé',
@@ -3029,7 +3122,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'mode.caCopyAria': "Copier l'adresse du contrat",
   'mode.caLabel': 'Adresse du contrat $CR',
   'mode.caNote':
-    "CR est notre jeton communautaire. Il n'est pas nécessaire pour jouer. Rejoignez le Discord pour discuter de l'utilité et de la dynamique du CR.",
+    "WOC est notre jeton communautaire. Il n'est pas nécessaire pour jouer. Rejoignez le Discord pour discuter de l'utilité et de la dynamique du WOC.",
   'mode.play': 'Jouer',
   'mode.playAria': 'Jouer à Cryptic Realm',
   'mode.serverAria': 'Choisir le royaume : En ligne ou Hors ligne',
@@ -3041,7 +3134,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'news.error': 'Impossible de charger les mises à jour. Réessayez plus tard.',
   'news.loading': 'Chargement des dernières mises à jour...',
   'news.prerelease': 'Préversion',
-  'news.viewOnGithub': 'Read release notes',
+  'news.viewOnGithub': 'Voir sur GitHub',
   'wiki.cta': 'Parcourir le Wiki',
   // --- qol-changes: character profile, attack-move, login/create labels ---
   'character.portraitAlt': 'Portrait de {name}',
@@ -3104,6 +3197,15 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'entities.items.brightwood_venison.name': 'Venaison de Brightwood',
   'entities.items.bramblehide_jerkin.name': 'Justaucorps en peau de ronces',
   'entities.items.monarch_crown_helm.name': 'Couronne du Monarque',
+  'entities.items.copper_mining_pick.name': 'Pic de Minage en Cuivre',
+  'entities.items.iron_mining_pick.name': 'Pic de Minage en Fer',
+  'entities.items.mithril_mining_pick.name': 'Pic de Minage en Mithril',
+  'entities.items.handaxe.name': 'Hachette',
+  'entities.items.felling_axe.name': "Hache d'Abattage",
+  'entities.items.ironbark_axe.name': "Hache d'Écorce de Fer",
+  'entities.items.gathering_sickle.name': 'Faucille de Récolte',
+  'entities.items.bronze_sickle.name': 'Faucille de Bronze',
+  'entities.items.silverleaf_sickle.name': "Faucille Feuille d'Argent",
   // v0.10.0 release fill (Fiesta / skin-select / NPC voices / chat channels / Brightwood Glade)
   'hud.core.chatChannels.add': 'Ajouter un canal de discussion',
   'hud.core.chatChannels.addTitle': 'Ajouter un canal',
@@ -3325,6 +3427,14 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.plurals.secondsRemaining.few': '{count} secondes restantes',
   'hudChrome.plurals.secondsRemaining.many': '{count} secondes restantes',
   'hudChrome.plurals.secondsRemaining.other': '{count} secondes restantes',
+  'hudChrome.plurals.playersMatching.one':
+    'Qui : {count} joueur correspondant à "{query}" sur {realm}.',
+  'hudChrome.plurals.playersMatching.few':
+    'Qui : {count} joueurs correspondant à "{query}" sur {realm}.',
+  'hudChrome.plurals.playersMatching.many':
+    'Qui : {count} joueurs correspondant à "{query}" sur {realm}.',
+  'hudChrome.plurals.playersMatching.other':
+    'Qui : {count} joueurs correspondant à "{query}" sur {realm}.',
   'hudChrome.plurals.playersOnline.one': 'Qui : {count} joueur en ligne sur {realm}.',
   'hudChrome.plurals.playersOnline.few': 'Qui : {count} joueurs en ligne sur {realm}.',
   'hudChrome.plurals.playersOnline.many': 'Qui : {count} joueurs en ligne sur {realm}.',
@@ -3355,6 +3465,17 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'entities.items.soulflame_cowl.name': "Capuche Flamme-d'âme",
   'entities.items.soulflame_mantle.name': "Mantelet Flamme-d'âme",
   'entities.items.stormcallers_crown.name': "Couronne d'Appel-tempête",
+  'entities.items.crownforged_gauntlets.name': 'Gantelets Forgécouronne',
+  'entities.items.nighttalon_grips.name': 'Poignes Serre-de-nuit',
+  'entities.items.soulflame_gloves.name': "Gants Flamme-d'âme",
+  'entities.items.stormcallers_handguards.name': "Protège-mains d'Appel-tempête",
+  'entities.items.crownforged_girdle.name': 'Ceinturon Forgécouronne',
+  'entities.items.nighttalon_waistband.name': 'Ceinture Serre-de-nuit',
+  'entities.items.soulflame_cord.name': "Corde Flamme-d'âme",
+  'entities.items.stormcallers_waistguard.name': "Protège-taille d'Appel-tempête",
+  'entities.mobs.thunzharr_waking_peak.name': 'Thunzharr, le Pic Éveillé',
+  'entities.mobs.thunzharr_stormling.name': 'Élémentaire de tempête éveillé',
+  'hudChrome.worldBoss.spawn': '{name} se dresse sur les Hauteurs de Thornpeak !',
   'entities.items.stormcallers_spaulders.name': "Spallières d'Appel-tempête",
   'hud.chat.context.convertToRaid': 'Convertir en raid',
   'hud.chat.context.convertToParty': 'Convertir en groupe',
@@ -3488,7 +3609,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'guide.bestiary.levelsSame': 'Niveau {min}',
   'guide.bestiary.rare': 'Rare',
   'guide.brand': 'Cryptic Realm',
-  'guide.brandShort': 'Cryptic',
+  'guide.brandShort': 'ClaudeCraft',
   'guide.classHook.druid':
     'Un métamorphe qui encaisse en ours, taille les ennemis en fauve ou soigne au cœur de la mêlée.',
   'guide.classHook.hunter':
@@ -3626,12 +3747,12 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'guide.family.humanoid.desc':
     'Bandits, cultistes et autres ayant embrassé le mauvais métier. Ils combattent avec tactique, pas seulement avec les crocs.',
   'guide.family.humanoid.name': 'Humanoïdes',
-  'guide.family.kobold.desc':
+  'guide.family.burrower.desc':
     'Mineurs à tête de chandelle qui infestent mines et terriers, gardant farouchement leur minerai.',
-  'guide.family.kobold.name': 'Kobolds',
-  'guide.family.murloc.desc':
+  'guide.family.burrower.name': 'Kobolds',
+  'guide.family.mudfin.desc':
     'Habitants amphibies du marais qui pullulent dans les hauts-fonds en meutes bruyantes et territoriales.',
-  'guide.family.murloc.name': 'Murlocs',
+  'guide.family.mudfin.name': 'Murlocs',
   'guide.family.ogre.desc':
     "Énormes, à l'esprit lent et dangereux. Ils campent les hauts cols et frappent comme un éboulement.",
   'guide.family.ogre.name': 'Ogres',
@@ -3643,7 +3764,8 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'guide.family.undead.desc':
     'Les morts sans repos, relevés par des mains plus sombres. Ils ne se fatiguent pas et ne fuient pas.',
   'guide.family.undead.name': 'Morts-vivants',
-  'guide.faqPage.a1': 'Yes. The whole game is free to play to the level cap.',
+  'guide.faqPage.a1':
+    "Oui. Tout le jeu est gratuit jusqu'au niveau maximum, et le code source est ouvert sur GitHub.",
   'guide.faqPage.a2':
     "Non. Le jeu est entièrement jouable sans cela. Le jeton communautaire optionnel ne débloque que des fioritures cosmétiques et n'affecte jamais la puissance ni la progression.",
   'guide.faqPage.a3':
@@ -3656,7 +3778,8 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     "Niveau {cap}, atteint à travers trois zones connectées de quêtes, de donjons et d'exploration.",
   'guide.faqPage.a7':
     'Les personnages en ligne sont sauvegardés automatiquement sur le serveur. Les personnages hors ligne vivent dans votre navigateur, pour des sessions rapides et des tests.',
-  'guide.faqPage.a8': 'Private realms are operated through verified Cryptic Realm channels.',
+  'guide.faqPage.a8':
+    'Oui. Le projet est open source, vous pouvez donc héberger votre propre serveur. Voir le dépôt GitHub.',
   'guide.faqPage.intro': 'Les questions que les nouveaux joueurs posent le plus souvent.',
   'guide.faqPage.q1': 'Est-ce vraiment gratuit ?',
   'guide.faqPage.q2': "Ai-je besoin d'un portefeuille crypto ou de jetons ?",
@@ -3666,10 +3789,11 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'guide.faqPage.q6': 'Quel est le niveau maximum ?',
   'guide.faqPage.q7': 'Mon personnage sera-t-il sauvegardé ?',
   'guide.faqPage.q8': 'Puis-je héberger ma propre copie ?',
-  'guide.footer.blurb': 'A classic-style micro-MMO. Quest, group up, and explore a hand-built world, right in your browser.',
+  'guide.footer.blurb':
+    'Un micro-MMO open source de style classique. Partez en quête, formez un groupe et explorez un monde façonné à la main, directement dans votre navigateur.',
   'guide.footer.communityWiki': 'Wiki communautaire',
   'guide.footer.discord': 'Rejoindre le Discord',
-  'guide.footer.github': 'Contributions',
+  'guide.footer.github': 'Code source sur GitHub',
   'guide.footer.playNow': 'Jouer maintenant',
   'guide.footer.rights': 'Cryptic Realm',
   'guide.glossary.aggroDef':
@@ -3714,13 +3838,14 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'guide.home.community.body':
     'Lancez-vous dès maintenant, ou venez dire bonjour. Le monde est meilleur à plusieurs.',
   'guide.home.community.discord': 'Rejoindre le Discord',
-  'guide.home.community.github': 'Contributions',
+  'guide.home.community.github': 'Mettre une étoile sur GitHub',
   'guide.home.community.heading': 'Rejoignez le royaume',
   'guide.home.community.play': 'Jouer maintenant',
   'guide.home.ctaLearn': 'Comment jouer',
   'guide.home.ctaPlay': 'Jouer maintenant',
   'guide.home.eyebrow': 'MMO de style classique sur navigateur',
-  'guide.home.faq.a1': 'Yes. The whole game is free to the level cap.',
+  'guide.home.faq.a1':
+    "Oui. Tout le jeu est gratuit jusqu'au niveau maximum, et il est open source sur GitHub.",
   'guide.home.faq.a2':
     "Non. Le jeu est entièrement jouable sans cela. Le jeton communautaire optionnel ne débloque que des fioritures cosmétiques et n'affecte jamais la puissance.",
   'guide.home.faq.a3':
@@ -3752,8 +3877,9 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'guide.home.what.pillarClassesBody':
     'Encaissez, soignez ou infligez les dégâts. Chaque classe se joue comme son archétype le veut, avec des talents pour la rendre vôtre.',
   'guide.home.what.pillarClassesTitle': 'Neuf classes, trois rôles',
-  'guide.home.what.pillarOpenBody': 'Free to play to the level cap. No pay to win, ever.',
-  'guide.home.what.pillarOpenTitle': 'Free to play',
+  'guide.home.what.pillarOpenBody':
+    "Gratuit jusqu'au niveau maximum, avec tout le jeu en open source. Pas de pay to win, jamais.",
+  'guide.home.what.pillarOpenTitle': 'Gratuit et open source',
   'guide.home.what.pillarPlayBody':
     'Pas de téléchargement, pas de lanceur. Créez un personnage et vous êtes dans le monde en quelques secondes, sur ordinateur ou téléphone.',
   'guide.home.what.pillarPlayTitle': 'Jouez dans votre navigateur',
@@ -4067,18 +4193,18 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'guide.nav.arena': 'Arène et JcJ',
   'guide.nav.talents': 'Talents',
   'guide.nav.wishIKnew': "Ce que j'aurais aimé savoir",
-  'guide.petHook.doomguard':
+  'guide.petHook.wraithborn':
     "Un lanceur de sorts d'élite qui déverse une ombre dévastatrice de loin.",
-  'guide.petHook.felguard':
+  'guide.petHook.warfiend':
     "Un cogneur de mêlée résistant, le polyvalent une fois que vous pouvez l'invoquer.",
-  'guide.petHook.felhunter': "Un escarmoucheur d'ombre qui harcèle les lanceurs de sorts ennemis.",
-  'guide.petHook.imp':
+  'guide.petHook.spellhound': "Un escarmoucheur d'ombre qui harcèle les lanceurs de sorts ennemis.",
+  'guide.petHook.emberkin':
     'Un démon à traits de feu à distance qui entame les ennemis depuis une distance sûre.',
-  'guide.petHook.infernal':
+  'guide.petHook.pyre_colossus':
     'Un colosse écrasant à la mêlée dévastatrice, invoqué pour la puissance brute.',
-  'guide.petHook.succubus':
+  'guide.petHook.duskborn':
     "Un démon de mêlée rapide qui frappe fort mais s'effondre sous la pression.",
-  'guide.petHook.voidwalker':
+  'guide.petHook.gloomshade':
     'Un démon robuste qui provoque et encaisse les coups pour que vous puissiez incanter tranquillement.',
   'guide.related': 'À voir aussi',
   'guide.search.label': 'Rechercher',
@@ -4901,28 +5027,40 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.masterLoot.assigned': '{looter} a attribue {item} a {target}.',
   'hudChrome.masterLoot.unassigned': '{item} n a pas ete attribue et devient libre pour tous.',
   'hudChrome.masterLoot.leaderOnly': 'Seul le chef de groupe peut changer le mode de butin.',
+  'entities.itemSets.boundstone_vanguard.name': 'Avant-garde de pierre-liée',
+  'entities.itemSets.boundstone_vanguard.bonus3':
+    "Augmente la vitesse d'attaque et d'incantation de 15%.",
   'entities.itemSets.crownforged.name': 'Tenue de guerre Couronneforge',
   'entities.itemSets.crownforged.bonus2': "Augmente la puissance d'attaque de 40.",
-  'entities.itemSets.crownforged.bonus3': "Augmente la force de 15 et l'endurance de 15.",
+  'entities.itemSets.crownforged.bonus3':
+    "Augmente la force de 15, l'endurance de 15 et la vitesse d'attaque et d'incantation de 15%.",
   'entities.itemSets.deathlord.name': 'Tenue de guerre du seigneur de la mort',
   'entities.itemSets.deathlord.bonus2': "Augmente la puissance d'attaque de 40.",
   'entities.itemSets.deathlord.bonus3': "Augmente la force de 15 et l'endurance de 15.",
+  'entities.itemSets.greyjaw_stalker.name': 'Équipement du traqueur de Greyjaw',
+  'entities.itemSets.greyjaw_stalker.bonus3':
+    "Augmente la vitesse d'attaque et d'incantation de 15%.",
   'entities.itemSets.necromancers.name': 'Robe du nécromancien',
   'entities.itemSets.necromancers.bonus2':
-    'Réduit de 50% le recul des incantations causé par les dégâts.',
-  'entities.itemSets.necromancers.bonus3': "Les dégâts subis ne retardent pas l'incantation.",
+    'Vous ne pouvez pas être projeté en arrière (100% de résistance à la projection).',
+  'entities.itemSets.necromancers.bonus3': "Augmente l'intelligence de 10 et l'endurance de 10.",
   'entities.itemSets.nighttalon.name': 'Tenue de cuir Serre-nuit',
   'entities.itemSets.nighttalon.bonus2': "Augmente la puissance d'attaque de 40.",
   'entities.itemSets.nighttalon.bonus3':
-    'Augmente l’agilité de 15 et les chances de critique de 2%.',
+    "Augmente l'agilité de 15, les chances de critique de 2% et la vitesse d'attaque et d'incantation de 15%.",
   'entities.itemSets.soulflame.name': 'Robe de Flamme d’âme',
   'entities.itemSets.soulflame.bonus2':
-    'Réduit de 50% le recul des incantations causé par les dégâts.',
-  'entities.itemSets.soulflame.bonus3': "Les dégâts subis ne retardent pas l'incantation.",
+    'Vous ne pouvez pas être projeté en arrière (100% de résistance à la projection).',
+  'entities.itemSets.soulflame.bonus3':
+    "Augmente l'intelligence de 15, l'esprit de 15 et la vitesse d'attaque et d'incantation de 15%.",
   'entities.itemSets.stormcallers.name': 'Robe de l’Appel-tempête',
   'entities.itemSets.stormcallers.bonus2':
-    'Réduit de 50% le recul des incantations causé par les dégâts.',
-  'entities.itemSets.stormcallers.bonus3': "Les dégâts subis ne retardent pas l'incantation.",
+    'Vous ne pouvez pas être projeté en arrière (100% de résistance à la projection).',
+  'entities.itemSets.stormcallers.bonus3':
+    "Augmente l'intelligence de 15, l'esprit de 15 et la vitesse d'attaque et d'incantation de 15%.",
+  'entities.itemSets.vale_arcanist.name': "Tenue de l'arcaniste du Val",
+  'entities.itemSets.vale_arcanist.bonus3':
+    "Augmente la vitesse d'attaque et d'incantation de 15%.",
   'entities.itemSets.wyrmshadow.name': 'Tenue d’Ombre-drake',
   'entities.itemSets.wyrmshadow.bonus2': "Augmente la puissance d'attaque de 40.",
   'entities.itemSets.wyrmshadow.bonus3':
@@ -5062,4 +5200,88 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.relay.help.label': "Besoin d'aide",
   'hudChrome.discord.relay.help.hint': "Demander de l'aide à la communauté",
   'hudChrome.options.showSecondaryActionBar': "Afficher la barre d'action secondaire",
+  'errors.api.desktopCodeInvalid':
+    "Le code de connexion de l'application de bureau est invalide ou expiré. Veuillez réessayer.",
+  'desktop.crash.body': "L'affichage du jeu a cessé de fonctionner. Le recharger ?",
+  'desktop.crash.fatalBody':
+    'Cryptic Realm a rencontré une erreur inattendue et doit se fermer.',
+  'desktop.crash.quit': 'Quitter',
+  'desktop.crash.reload': 'Recharger',
+  'desktop.crash.title': 'Cryptic Realm',
+  'desktop.update.downloading': 'Téléchargement de la mise à jour {version}...',
+  'desktop.update.later': 'Plus tard',
+  'desktop.update.ready':
+    "La mise à jour {version} est prête. Elle s'installe à la fermeture, ou redémarrez maintenant.",
+  'desktop.update.restart': 'Redémarrer maintenant',
+  'hudChrome.dailyRewards.close': 'Fermer les récompenses quotidiennes',
+  'hudChrome.dailyRewards.endsIn': 'Se termine dans {time}',
+  'hudChrome.dailyRewards.error': 'Impossible de charger les récompenses quotidiennes.',
+  'hudChrome.dailyRewards.history': 'Anciens gagnants',
+  'hudChrome.dailyRewards.intro':
+    'Détenez assez de WOC dans votre portefeuille vérifié pour débloquer les récompenses quotidiennes. Gagnez des points grâce à un tour quotidien et à des tâches en rotation, puis grimpez dans le classement quotidien pour remporter une part de la cagnotte.',
+  'hudChrome.dailyRewards.leaderboard': 'Classement quotidien',
+  'hudChrome.dailyRewards.loading': 'Chargement des récompenses quotidiennes...',
+  'hudChrome.dailyRewards.noHistory': "Aucun versement pour l'instant.",
+  'hudChrome.dailyRewards.noLeaders': "Aucun point pour l'instant.",
+  'hudChrome.dailyRewards.prize': 'Cagnotte',
+  'hudChrome.dailyRewards.reason.eligible': 'Récompenses débloquées.',
+  'hudChrome.dailyRewards.reason.no_wallet':
+    'Connectez un portefeuille contenant au moins 20 USD en WOC.',
+  'hudChrome.dailyRewards.reason.price_unavailable':
+    'Le cours du WOC est indisponible, les récompenses sont temporairement verrouillées.',
+  'hudChrome.dailyRewards.reason.under_minimum':
+    'Le portefeuille est en dessous du minimum de 20 USD en WOC.',
+  'hudChrome.dailyRewards.remainingHoursMinutes': '{hours}h {minutes}min',
+  'hudChrome.dailyRewards.remainingLessThanMinute': '<1min',
+  'hudChrome.dailyRewards.remainingMinutes': '{minutes}min',
+  'hudChrome.dailyRewards.reset': 'Réinitialisation',
+  'hudChrome.dailyRewards.score': 'Score',
+  'hudChrome.dailyRewards.sol': '{amount} SOL',
+  'hudChrome.dailyRewards.spinButton': 'Tourner',
+  'hudChrome.dailyRewards.spinClaimed': 'Récupéré : +{points} points.',
+  'hudChrome.dailyRewards.spinClose': 'Fermer le tour quotidien',
+  'hudChrome.dailyRewards.spinDialogTitle': 'Tour de récompense quotidien',
+  'hudChrome.dailyRewards.spinReady': 'Un tour est disponible.',
+  'hudChrome.dailyRewards.spinResult': '+{points} points',
+  'hudChrome.dailyRewards.spinTitle': 'Tour quotidien',
+  'hudChrome.dailyRewards.tasks': 'Tâches',
+  'hudChrome.dailyRewards.showChestButton': 'Afficher le coffre',
+  'hudChrome.dailyRewards.hideChestButton': 'Masquer le coffre',
+  'hudChrome.dailyRewards.title': 'Récompenses quotidiennes',
+  'hudChrome.dailyRewards.unknown': 'Inconnu',
+  'hudChrome.dailyRewards.usd': '{amount} USD',
+  'hudChrome.dailyRewards.walletConnectBody':
+    'Vérifiez un portefeuille Solana contenant du WOC pour débloquer les récompenses quotidiennes.',
+  'hudChrome.dailyRewards.walletConnectButton': 'Vérifier le portefeuille',
+  'hudChrome.dailyRewards.walletConnectTitle': 'Vérifier le portefeuille',
+  'hudChrome.dailyRewards.walletHoldBody':
+    'Détenez au moins {amount} USD en WOC pour débloquer les récompenses quotidiennes.',
+  'hudChrome.dailyRewards.walletHoldTitle': 'Détenir du WOC',
+  'hudChrome.dailyRewards.walletPriceBody':
+    "Le cours du WOC est indisponible pour le moment. Revenez d'ici peu.",
+  'hudChrome.dailyRewards.walletValue': 'Valeur du portefeuille (WOC)',
+  'hudChrome.nativeUpdate.body':
+    'Une nouvelle version de Cryptic Realm est disponible. Mettez à jour maintenant pour les derniers correctifs et améliorations.',
+  'hudChrome.nativeUpdate.bodyWithVersion':
+    'La version {version} de Cryptic Realm est disponible. Mettez à jour maintenant pour les derniers correctifs et améliorations.',
+  'hudChrome.nativeUpdate.notNow': 'Pas maintenant',
+  'hudChrome.nativeUpdate.title': 'Mise à jour disponible',
+  'hudChrome.nativeUpdate.update': 'Mettre à jour',
+  // Ravenpost authored letters
+  'entities.letters.ravenpost_welcome.sender': 'La Poste aux Corbeaux',
+  'entities.letters.ravenpost_welcome.subject': 'Les corbeaux volent désormais pour vous',
+  'entities.letters.ravenpost_welcome.body':
+    'Voyageur,\n\nla Poste aux Corbeaux a dressé ses perchoirs dans toute la vallée. Cherchez les piliers aux corbeaux à Eastbrook, Fenbridge et Highwatch : depuis chacun d’eux, vous pouvez envoyer lettres, pièces et objets aux autres aventuriers, et récupérer tout ce que les corbeaux vous apportent.\n\nCi-joint une petite attention pour votre premier timbre.\n\nHaut les ailes,\nLa Poste aux Corbeaux',
+  'entities.letters.letter_q_wolves.sender': 'Maréchal Redbrook',
+  'entities.letters.letter_q_wolves.subject': 'Les enclos sont de nouveau calmes',
+  'entities.letters.letter_q_wolves.body':
+    'Les bergers peuvent enfin dormir sur leurs deux oreilles, et c’est grâce à vous. J’ai demandé à la Poste aux Corbeaux de vous porter un petit quelque chose pris sur la caisse du guet.\n\nGardez votre lame huilée.\n- Maréchal Redbrook',
+  'entities.letters.letter_q_greyjaw.sender': 'Maréchal Redbrook',
+  'entities.letters.letter_q_greyjaw.subject': 'Vieux Grisemâchoire, enfin',
+  'entities.letters.letter_q_greyjaw.body':
+    'Les nouvelles vont vite dans une si petite ville. Les bergers ont bu à votre santé hier soir, et Wilkes jure que le loup était grand comme une charrette. Laissez-les broder : vous l’avez mérité.\n\nPartagez un repas aux frais du guet.\n- Maréchal Redbrook',
+  'entities.letters.letter_q_hollow.sender': 'Frère Aldric',
+  'entities.letters.letter_q_hollow.subject': 'Ce que vous avez accompli dans le noir',
+  'entities.letters.letter_q_hollow.body':
+    'Rares sont ceux qui sauront jamais ce qui était enterré dans ce creux, et plus rares encore ceux qui le croiraient. Moi, je le sais, et je ne l’oublierai pas.\n\nQue votre route reste éclairée.\n- Frère Aldric',
 };

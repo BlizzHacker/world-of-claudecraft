@@ -33,6 +33,7 @@ export type UiIconName =
   | 'emote'
   // brand mark
   | 'discord'
+  | 'chest'
   // hand-authored geometrics
   | 'close'
   | 'prev'
@@ -47,7 +48,8 @@ export type UiIconName =
   | 'autorun'
   | 'nameplates'
   | 'vibrate'
-  | 'lock';
+  | 'lock'
+  | 'mail';
 
 // Inner SVG markup per icon (one or more <path>). Default fill rule is nonzero
 // (correct for game-icons.net art incl. overlaps); the two hand-authored cut-out
@@ -88,6 +90,8 @@ const ICONS: Record<UiIconName, string> = {
   // centered vertically to fit this registry's shared 0 0 512 512 viewBox.
   discord:
     '<g transform="translate(0 62) scale(4.0271)"><path d="M107.7 8.07A105.15 105.15 0 0 0 81.47 0a72.06 72.06 0 0 0-3.36 6.83 97.68 97.68 0 0 0-29.11 0A72.37 72.37 0 0 0 45.64 0a105.89 105.89 0 0 0-26.25 8.09C2.79 32.65-1.71 56.6.54 80.21a105.73 105.73 0 0 0 32.17 16.15 77.7 77.7 0 0 0 6.89-11.11 68.42 68.42 0 0 1-10.85-5.18c.91-.66 1.8-1.34 2.66-2a75.57 75.57 0 0 0 64.32 0c.87.71 1.76 1.39 2.66 2a68.68 68.68 0 0 1-10.87 5.19 77 77 0 0 0 6.89 11.1 105.25 105.25 0 0 0 32.19-16.14c2.64-27.38-4.51-51.11-18.9-72.15zM42.45 65.69C36.18 65.69 31 60 31 53s5-12.74 11.43-12.74S54 46 53.89 53s-5.05 12.69-11.44 12.69zm42.24 0C78.41 65.69 73.25 60 73.25 53s5-12.74 11.44-12.74S96.23 46 96.12 53s-5.04 12.69-11.43 12.69z"/></g>',
+  chest:
+    '<path d="M112 144h288v-24c0-31-25-56-56-56H168c-31 0-56 25-56 56v24zm32 0v-24c0-13 11-24 24-24h176c13 0 24 11 24 24v24H144zM72 176h368v96H72zM96 272h320v168H96zM232 176h48v264h-48zM216 256h80v72h-80z"/>',
   // ── hand-authored geometrics ─────────────────────────────────────────────
   close:
     '<path d="M115 80 256 221 397 80 432 115 291 256 432 397 397 432 256 291 115 432 80 397 221 256 80 115Z"/>',
@@ -114,6 +118,9 @@ const ICONS: Record<UiIconName, string> = {
     '<path fill-rule="evenodd" d="M196 80h120a24 24 0 0 1 24 24v304a24 24 0 0 1-24 24H196a24 24 0 0 1-24-24V104a24 24 0 0 1 24-24zm4 40v272h112V120H200z"/><path d="M96 176v160h28V176zM388 176v160h28V176zM40 216v80h26v-80zM446 216v80h26v-80z"/>',
   // hand-authored padlock — shackle over a solid body (nonzero fill merges them)
   lock: '<path d="M256 96a72 72 0 0 0-72 72v64h40v-64a32 32 0 0 1 64 0v64h40v-64a72 72 0 0 0-72-72zM150 224a26 26 0 0 0-26 26v140a26 26 0 0 0 26 26h212a26 26 0 0 0 26-26V250a26 26 0 0 0-26-26z"/>',
+  // hand-authored sealed envelope (frame + flap V), distinct from the solid
+  // `whisper` glyph so mail chrome and whisper actions stay tellable apart
+  mail: '<path d="M48 128a32 32 0 0 1 32-32h352a32 32 0 0 1 32 32v256a32 32 0 0 1-32 32H80a32 32 0 0 1-32-32V128zm52 8 156 122 156-122H100zm312 50L288 296a52 52 0 0 1-64 0L100 186v190h312V186z"/>',
 };
 
 export function hasUiIcon(name: string): name is UiIconName {

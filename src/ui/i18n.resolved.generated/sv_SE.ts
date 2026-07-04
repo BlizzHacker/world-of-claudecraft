@@ -154,6 +154,11 @@ export const sv_SE: EnTranslations = {
     "spectate": {
       "banner": "Åskådar {name}"
     },
+    "death": {
+      "resurrectAtCorpse": "Resurrect at Corpse",
+      "resurrectAtHealer": "The Pale Keeper (Keeper's Toll)",
+      "spiritHealerAlive": "The Pale Keeper watches over the dead. You are still among the living."
+    },
     "emotes": {
       "wave": "Vinka",
       "laugh": "LOL",
@@ -176,6 +181,55 @@ export const sv_SE: EnTranslations = {
     "emoteEditor": {
       "title": "Gester",
       "done": "Klar"
+    },
+    "dailyRewards": {
+      "title": "Dagliga belöningar",
+      "close": "Stäng dagliga belöningar",
+      "loading": "Laddar dagliga belöningar...",
+      "error": "Kunde inte ladda dagliga belöningar.",
+      "intro": "Håll tillräckligt med WOC i din verifierade plånbok för att låsa upp dagliga belöningar. Tjäna poäng med ett dagligt snurr och roterande uppgifter, och klättra sedan på den dagliga topplistan för en andel av prispotten.",
+      "disclaimer": "WOC price can move quickly. We recommend holding more than the $20 USD minimum so normal price swings do not lock you out. This is not financial advice.",
+      "prize": "Prispott",
+      "reset": "Återställning",
+      "endsIn": "Slutar om {time}",
+      "remainingLessThanMinute": "<1 min",
+      "remainingMinutes": "{minutes} min",
+      "remainingHoursMinutes": "{hours} h {minutes} min",
+      "score": "Poäng",
+      "walletValue": "Plånbokens värde (WOC)",
+      "usd": "{amount} USD",
+      "sol": "{amount} SOL",
+      "unknown": "Okänd",
+      "spinTitle": "Dagligt snurr",
+      "spinDialogTitle": "Dagligt belöningssnurr",
+      "spinClose": "Stäng dagligt snurr",
+      "spinReady": "Ett snurr är redo.",
+      "spinClaimed": "Hämtad: +{points} poäng.",
+      "spinResult": "+{points} poäng",
+      "spinButton": "Snurra",
+      "tasks": "Uppgifter",
+      "taskMultiplier": "x{multiplier} multiplier",
+      "pointsGained": "{points} daily rewards points gained.",
+      "showChestButton": "Visa kista",
+      "hideChestButton": "Dölj kista",
+      "leaderboard": "Daglig topplista",
+      "totalPlayer": "{count} player today",
+      "totalPlayers": "{count} players today",
+      "history": "Tidigare vinnare",
+      "noLeaders": "Inga poäng ännu.",
+      "noHistory": "Inga utbetalningar ännu.",
+      "walletConnectTitle": "Verifiera plånbok",
+      "walletConnectBody": "Verifiera en Solana-plånbok med WOC för att låsa upp dagliga belöningar.",
+      "walletConnectButton": "Verifiera plånbok",
+      "walletHoldTitle": "Håll WOC",
+      "walletHoldBody": "Håll minst {amount} USD i WOC för att låsa upp dagliga belöningar.",
+      "walletPriceBody": "WOC-prissättningen är otillgänglig just nu. Kom tillbaka snart.",
+      "reason": {
+        "eligible": "Belöningar upplåsta.",
+        "no_wallet": "Anslut en plånbok med minst 20 USD i WOC.",
+        "under_minimum": "Plånboken är under WOC-miniminivån på 20 USD.",
+        "price_unavailable": "WOC-priset är otillgängligt, belöningar är tillfälligt låsta."
+      }
     },
     "theme": {
       "preset": "Gränssnittstema",
@@ -234,7 +288,10 @@ export const sv_SE: EnTranslations = {
       "targetAnnounce": "Markera {name}",
       "partyLabel": "Ditt följe",
       "partyGroup": "Grupp {n}",
-      "durationUnitSeconds": "s"
+      "durationUnitSeconds": "s",
+      "durationUnitMinutes": "m",
+      "durationUnitHours": "h",
+      "durationUnitDays": "d"
     },
     "character": {
       "modelPreview": "Förhandsvisning av karaktärsmodell"
@@ -265,6 +322,13 @@ export const sv_SE: EnTranslations = {
       "heading": "Riktning",
       "minimapZoom": "Minikartans zoom"
     },
+    "nativeUpdate": {
+      "title": "Uppdatering tillgänglig",
+      "body": "En ny version av Cryptic Realm är tillgänglig. Uppdatera nu för de senaste korrigeringarna och förbättringarna.",
+      "bodyWithVersion": "Version {version} av Cryptic Realm är tillgänglig. Uppdatera nu för de senaste korrigeringarna och förbättringarna.",
+      "notNow": "Inte nu",
+      "update": "Uppdatera"
+    },
     "castBar": {
       "playerAria": "Din besvärjelsemätare",
       "targetAria": "Enhetens besvärjelsemätare"
@@ -274,16 +338,16 @@ export const sv_SE: EnTranslations = {
       "tabsLabel": "Topplistor",
       "tabPlayers": "Spelare",
       "tabGuilds": "Gillen",
-      "tabDevs": "Developers",
+      "tabDevs": "Utvecklare",
       "guildName": "Gille",
       "members": "Medlemmar",
       "topLevel": "Topp",
       "guildXp": "Total XP",
       "guildEmpty": "Inga rankade gillen ännu.",
-      "devName": "Contributor",
-      "devTierCol": "Badge",
-      "mergedPrs": "Merged PRs",
-      "devEmpty": "No ranked contributors yet."
+      "devName": "Bidragsgivare",
+      "devTierCol": "Märke",
+      "mergedPrs": "Sammanslagna PR:er",
+      "devEmpty": "Inga rankade bidragsgivare ännu."
     },
     "raidLockout": {
       "title": "Raidlåsningar",
@@ -336,14 +400,21 @@ export const sv_SE: EnTranslations = {
       "keybindHelpLockCursorOnRotate": "Håller muspekaren inuti fönstret medan du drar för att rotera kameran, så att den inte kan nå skärmkanten eller flytta till en annan skärm. Stäng av om du föredrar en fri pekare.",
       "showWalletOnCharacterScreen": "Visa plånbok på karaktärsskärmen",
       "showWalletOnPlayerCard": "Visa plånbok på spelarkortet",
-      "showDevBadges": "Show Developer Badges",
+      "showDevBadges": "Visa utvecklarmärken",
+      "showOwnNameplate": "Show My Nameplate",
       "uiScale": "Gränssnittsskala",
+      "playerFrameScale": "Player Frame Scale",
+      "targetFrameScale": "Target Frame Scale",
+      "aurasOnPlayerFrame": "Buffs on the Player Frame",
       "highContrastBackground": "Bakgrund med hög kontrast",
-      "startAttackOnAbility": "Auto-Attack on Ability Use",
+      "startAttackOnAbility": "Automatisk attack vid förmågeanvändning",
+      "walkByAutoloot": "Walk-by Autoloot",
+      "groundReticle": "Markriktmedel",
       "showItemLevel": "Visa föremålsnivå",
       "itemLevelLine": "Föremålsnivå {level}",
       "itemScoreLine": "Poäng {score}",
-      "showSecondaryActionBar": "Visa sekundärt handlingsfält"
+      "showSecondaryActionBar": "Visa sekundärt handlingsfält",
+      "showDailyRewardsChest": "Show Daily Rewards Chest"
     },
     "controller": {
       "title": "Handkontroll",
@@ -437,7 +508,7 @@ export const sv_SE: EnTranslations = {
     "statInfo": {
       "fromYour": "Från dina {value} {stat}:",
       "names": {
-        "spellPower": "Spell Power"
+        "spellPower": "Besvärjelsekraft"
       },
       "desc": {
         "str": "Ökar din attackstyrka, så att dina vapenslag landar hårdare.",
@@ -447,7 +518,7 @@ export const sv_SE: EnTranslations = {
         "spi": "Snabbar på hur fort en besvärjares mana återkommer under vila, utanför strid.",
         "armor": "Mildrar inkommande fysiska slag. Minskningen är större mot anfallare på lägre nivå och har ett tak på 75 %.",
         "attackPower": "Driver dina vapenattacker. Var 14:e attackstyrka ger 1 skada per sekund.",
-        "spellPower": "Increases the damage of your spells and the strength of your heals. Each point of Intellect grants a little Spell Power, on top of any from gear or buffs.",
+        "spellPower": "Ökar skadan från dina besvärjelser och styrkan i dina läkningar. Varje poäng Intellekt ger lite Besvärjelsekraft, utöver det från utrustning eller förstärkningar.",
         "dps": "Din uppskattade vapenskada per sekund, som kombinerar ditt vapens skada och hastighet med din attackstyrka.",
         "critChance": "Din chans att en attack träffar kritiskt och orsakar dubbel skada.",
         "dodge": "Din chans att helt undvika en inkommande närstridsattack utan att ta skada."
@@ -472,13 +543,13 @@ export const sv_SE: EnTranslations = {
         "dpsApprox": "En uppskattning, den utesluter kritiska träffar och förmågeskada."
       },
       "sources": {
-        "header": "Made up of:",
-        "base": "Base: {value}",
-        "attributes": "From your attributes: {value}",
-        "fromAttribute": "From {stat}: {value}",
-        "gear": "Equipped gear: {value}",
+        "header": "Består av:",
+        "base": "Bas: {value}",
+        "attributes": "Från dina attribut: {value}",
+        "fromAttribute": "Från {stat}: {value}",
+        "gear": "Utrustad utrustning: {value}",
         "buff": "{name}: {value}",
-        "talents": "Talents and effects: {value}"
+        "talents": "Talanger och effekter: {value}"
       }
     },
     "talents": {
@@ -504,7 +575,7 @@ export const sv_SE: EnTranslations = {
       "linkTitle": "Skift-klicka för att länka det här uppdraget i chatten."
     },
     "itemShare": {
-      "linkHint": "Shift-click to link this item in chat."
+      "linkHint": "Skift-klicka för att länka det här föremålet i chatten."
     },
     "plurals": {
       "guildMembers": {
@@ -532,10 +603,10 @@ export const sv_SE: EnTranslations = {
         "other": "Vilka: {count} spelare online på {realm}."
       },
       "playersMatching": {
-        "one": "Who: {count} player matching \"{query}\" on {realm}.",
-        "few": "Who: {count} players matching \"{query}\" on {realm}.",
-        "many": "Who: {count} players matching \"{query}\" on {realm}.",
-        "other": "Who: {count} players matching \"{query}\" on {realm}."
+        "one": "Vilka: {count} spelare matchar \"{query}\" på {realm}.",
+        "few": "Vilka: {count} spelare matchar \"{query}\" på {realm}.",
+        "many": "Vilka: {count} spelare matchar \"{query}\" på {realm}.",
+        "other": "Vilka: {count} spelare matchar \"{query}\" på {realm}."
       }
     },
     "bugReport": {
@@ -663,25 +734,26 @@ export const sv_SE: EnTranslations = {
       "assigned": "{looter} tilldelade {item} till {target}.",
       "unassigned": "{item} tilldelades inte och ar fritt for alla.",
       "leaderOnly": "Endast gruppledaren kan andra lootmetoden.",
-      "rollingFor": "Rolling for {item}.",
-      "looterChanged": "Master Looter is now {name}.",
-      "thresholdSet": "Loot threshold set to {threshold}.",
-      "summaryMaster": "Loot Settings: Master Loot, Master Looter {name}, threshold {threshold}.",
-      "summaryGroup": "Loot Settings: Group Loot."
+      "rollingFor": "Slår tärning om {item}.",
+      "looterChanged": "Bytesmästare är nu {name}.",
+      "thresholdSet": "Bytest. tröskel satt till {threshold}.",
+      "summaryMaster": "Byteinställningar: Mästarbyte, bytesmästare {name}, tröskel {threshold}.",
+      "summaryGroup": "Byteinställningar: Gruppbyte."
     },
     "party": {
-      "promoteLeader": "Promote to Leader"
+      "promoteLeader": "Befordra till ledare",
+      "inviteUsage": "Invite whom? Usage: /invite <name>."
     },
     "lootSettings": {
-      "title": "Loot Settings",
-      "close": "Close loot settings",
-      "menuItem": "Loot Settings",
-      "method": "Loot Method",
-      "rollThreshold": "Roll Threshold",
-      "groupLoot": "Group Loot",
-      "valueMaster": "Master Loot",
-      "leaderOption": "Master Looter: Leader (You)",
-      "masterOption": "Master Looter: {name}"
+      "title": "Byteinställningar",
+      "close": "Stäng byteinställningar",
+      "menuItem": "Byteinställningar",
+      "method": "Bytesmetod",
+      "rollThreshold": "Tärningströskel",
+      "groupLoot": "Gruppbyte",
+      "valueMaster": "Mästarbyte",
+      "leaderOption": "Bytesmästare: Ledare (Du)",
+      "masterOption": "Bytesmästare: {name}"
     },
     "bags": {
       "filterGroupAria": "Filtrera väskor efter kategori",
@@ -697,7 +769,13 @@ export const sv_SE: EnTranslations = {
       "sortName": "Namn",
       "searchPlaceholder": "Sök föremål",
       "searchAria": "Sök väskföremål efter namn",
-      "noMatch": "Inga föremål matchar dina filter."
+      "noMatch": "Inga föremål matchar dina filter.",
+      "capacity": "{used}/{total}",
+      "capacityAria": "Bag slots used: {used} of {total}",
+      "backpack": "Backpack",
+      "bagSocketAria": "{name}: {slots}",
+      "socketEmpty": "Empty bag slot",
+      "unequipHint": "Click to remove this bag"
     },
     "raidConvert": {
       "toPartyDone": "Din raid har omvandlats tillbaka till en grupp.",
@@ -740,6 +818,7 @@ export const sv_SE: EnTranslations = {
         "spi": "Verringert Willenskraft um {value}",
         "allStats": "Verringert alle Attribute um {value}"
       },
+      "allStatsPctReduce": "Reduces all attributes by {pct}%",
       "dodge": "Erhöht Ausweichchance um {pct}%",
       "dodgeReduce": "Verringert Ausweichchance um {pct}%",
       "armorFlat": "Verringert Rüstung um {value}",
@@ -779,6 +858,9 @@ export const sv_SE: EnTranslations = {
         "nature": "Natur"
       }
     },
+    "worldBoss": {
+      "spawn": "{name} rises over Thornpeak Heights!"
+    },
     "loot": {
       "chestTitle": "Kista"
     },
@@ -790,8 +872,25 @@ export const sv_SE: EnTranslations = {
       "mob": "[{level}] {name}",
       "mobElite": "[{level}+] {name}"
     },
+    "mobTooltip": {
+      "levelFamily": "Level {level} {family}",
+      "familyDemon": "Demon",
+      "hostile": "Hostile",
+      "friendly": "Friendly"
+    },
+    "targetFrame": {
+      "unlock": "Move target frame",
+      "lock": "Lock target frame"
+    },
+    "playerFrame": {
+      "unlock": "Move player frame",
+      "lock": "Lock player frame"
+    },
+    "frameReset": {
+      "label": "Reset Frame Positions"
+    },
     "itemTooltip": {
-      "requiresLevel": "Requires Level {level}"
+      "requiresLevel": "Kräver nivå {level}"
     },
     "discord": {
       "title": "Discord",
@@ -871,6 +970,7 @@ export const sv_SE: EnTranslations = {
       "memberSinceDays": "{days}d i Discord",
       "roleTag": {
         "levyst": "Levy St",
+        "admin": "Admin",
         "devs": "Utvecklare",
         "mods": "Moderator",
         "artists": "Konstnär"
@@ -937,37 +1037,147 @@ export const sv_SE: EnTranslations = {
       }
     },
     "devBadge": {
-      "title": "Developer",
+      "title": "Utvecklare",
       "tiers": {
-        "tinkerer": "Tinkerer",
-        "artificer": "Artificer",
-        "runesmith": "Runesmith",
-        "architect": "Architect",
-        "worldwright": "Worldwright"
+        "tinkerer": "Pysslare",
+        "artificer": "Konstsmed",
+        "runesmith": "Runsmed",
+        "architect": "Arkitekt",
+        "worldwright": "Världsbyggare"
       },
       "flavors": {
-        "tinkerer": "Your first pull request landed in the realm.",
-        "artificer": "Five pull requests in, and the world bends to your code.",
-        "runesmith": "Fifteen pull requests forged into the running game.",
-        "architect": "An architect of the realm: 30 pull requests merged.",
-        "worldwright": "A wright of worlds: 70 pull requests shape the game."
+        "tinkerer": "Din första pull-förfrågan landade i riket.",
+        "artificer": "Fem pull-förfrågningar in, och världen böjer sig efter din kod.",
+        "runesmith": "Femton pull-förfrågningar smidda in i det körande spelet.",
+        "architect": "En arkitekt av riket: 30 sammanslagna pull-förfrågningar.",
+        "worldwright": "En världsbyggare: 70 pull-förfrågningar formar spelet."
       },
-      "badgeTitle": "Developer: {tier}",
-      "prsLanded": "{count} pull requests merged",
-      "contributor": "Open-source contributor",
+      "badgeTitle": "Utvecklare: {tier}",
+      "prsLanded": "{count} sammanslagna pull-förfrågningar",
+      "contributor": "Bidragsgivare med öppen källkod",
       "link": {
-        "cta": "Link GitHub",
-        "relink": "Relink GitHub",
-        "benefits": "Link your GitHub to earn a developer badge for the pull requests you have had merged into the open-source repo.",
-        "error": "Could not link GitHub. Please try again."
+        "cta": "Länka GitHub",
+        "relink": "Länka om GitHub",
+        "benefits": "Länka din GitHub för att förtjäna ett utvecklarmärke för de pull-förfrågningar du har fått sammanslagna i förrådet med öppen källkod.",
+        "error": "Kunde inte länka GitHub. Försök igen."
       },
-      "linkedAs": "Linked as {login}",
-      "unlink": "Unlink GitHub"
+      "linkedAs": "Länkad som {login}",
+      "unlink": "Avlänka GitHub"
+    },
+    "mailbox": {
+      "title": "Mailbox",
+      "subtitle": "The Ravenpost",
+      "close": "Close mailbox",
+      "tabInbox": "Inbox",
+      "tabInboxWithCount": "Inbox ({count})",
+      "tabSend": "Send",
+      "empty": "Your mailbox is empty.",
+      "truncated": "Showing the newest {shown} of {total} letters.",
+      "attachmentsBadge": "Parcel attached",
+      "unreadBadge": "Unread",
+      "back": "Back",
+      "take": "Take attachments",
+      "delete": "Delete letter",
+      "deleteAria": "Delete the letter {subject}",
+      "openAria": "Read the letter {subject} from {name}",
+      "noSubject": "(no subject)",
+      "toLabel": "To",
+      "toPlaceholder": "Character name",
+      "subjectLabel": "Subject",
+      "bodyLabel": "Message",
+      "coinLabel": "Attach coin",
+      "parcelsLabel": "Parcels",
+      "parcelsHint": "Click an item in your bags to attach it.",
+      "removeParcelAria": "Remove {item} from the letter",
+      "sendButton": "Send letter",
+      "postageNote": "Postage: {amount}. The raven flies for about {seconds}s.",
+      "arrivedBanner": "The raven has landed: mail from {name}.",
+      "arrivedLog": "You have new mail from {name}.",
+      "indicatorAria": "Unread mail: {count}",
+      "indicatorTip": "You have {count} unread letters. Visit a mailbox to read them.",
+      "clickAttach": "Click to attach to your letter.",
+      "cannotMail": "This cannot be mailed.",
+      "result": {
+        "sent": "A raven takes wing with your letter to {name} ({postage} postage).",
+        "collected": "You collect {amount} from the letter.",
+        "tooFar": "You must be at a mailbox to tend your post.",
+        "needRecipient": "Name a recipient for your letter.",
+        "noRecipient": "No one by that name holds a mailbox here.",
+        "tooManyParcels": "A letter carries at most {count} parcels.",
+        "noMailQuestItems": "You cannot mail quest items.",
+        "notEnoughItems": "You do not have that many to send.",
+        "cantAffordPostage": "You cannot afford the postage.",
+        "recipientBoxFull": "Their mailbox is full.",
+        "letterGone": "That letter is no longer in your box.",
+        "takeParcelsFirst": "Take the parcels out before discarding the letter."
+      }
+    },
+    "calendar": {
+      "title": "Event Calendar",
+      "close": "Close calendar",
+      "keybindLabel": "Event Calendar",
+      "prevMonth": "Previous month",
+      "nextMonth": "Next month",
+      "dayAria": "{date}: {count} events",
+      "noEvents": "Nothing planned for this day.",
+      "allDay": "All day",
+      "bookedBy": "Booked by {name}",
+      "deleteAria": "Remove the event {title}",
+      "bookTitle": "Book a guild event",
+      "titlePlaceholder": "Event title",
+      "notePlaceholder": "Note (optional)",
+      "hourLabel": "Hour (UTC)",
+      "hourAllDay": "All day",
+      "addButton": "Book event",
+      "guildOnlyNote": "Join a guild to plan events together.",
+      "result": {
+        "created": "The event is on the guild calendar.",
+        "removed": "The event was taken off the calendar.",
+        "notInGuild": "You are not in a guild.",
+        "notOfficer": "Only officers and the Guild Master may manage guild events.",
+        "badInput": "Give the event a title and a valid day.",
+        "calendarFull": "The guild calendar is full.",
+        "eventGone": "That event is no longer on the calendar."
+      },
+      "events": {
+        "raidCall": {
+          "title": "Raid Call",
+          "note": "Wardens sound the horn: gather a party for the crypts and the raid."
+        },
+        "marketDay": {
+          "title": "Market Day",
+          "note": "The Merchant expects fresh stock. A fine day to browse the World Market."
+        },
+        "fiestaNight": {
+          "title": "Fiesta Night",
+          "note": "The 2v2 Fiesta ring draws its loudest crowds tonight."
+        },
+        "arenaClash": {
+          "title": "Arena Clash",
+          "note": "Duelists flock to the Ashen Coliseum. Queue up and climb the ladder."
+        },
+        "fishingDerby": {
+          "title": "Fishing Derby",
+          "note": "Anglers line the lakes. Bring a pole and swap fishing tales."
+        },
+        "delveDay": {
+          "title": "Delve Day",
+          "note": "Brother Halven marks his charts: a fine day to brave the Collapsed Reliquary."
+        },
+        "moongateCommunion": {
+          "title": "Moongate Communion",
+          "note": "Pilgrims gather at the temple moongate under the mid-month moon."
+        }
+      }
+    },
+    "social": {
+      "lastSeen": "Last seen: {when}",
+      "lastSeenNever": "never"
     }
   },
   "guide": {
     "brand": "Cryptic Realm",
-    "brandShort": "Cryptic",
+    "brandShort": "ClaudeCraft",
     "tagline": "En klassisk MMO du spelar gratis i din webbläsare.",
     "skipToContent": "Hoppa till huvudinnehållet",
     "loading": "Laddar...",
@@ -1022,9 +1232,9 @@ export const sv_SE: EnTranslations = {
       "heading": "På den här sidan"
     },
     "footer": {
-      "blurb": "A classic-style micro-MMO. Quest, group up, and explore a hand-built world, right in your browser.",
+      "blurb": "En klassiskt inspirerad mikro-MMO med öppen källkod. Lös uppdrag, gruppera dig och utforska en handbyggd värld, direkt i din webbläsare.",
       "playNow": "Spela nu",
-      "github": "Contributions",
+      "github": "Källkod på GitHub",
       "discord": "Gå med i Discord",
       "communityWiki": "Community-wiki",
       "rights": "Cryptic Realm"
@@ -1057,8 +1267,8 @@ export const sv_SE: EnTranslations = {
         "pillarPlayBody": "Ingen nedladdning, ingen launcher. Skapa en karaktär och du är i världen på några sekunder, på dator eller mobil.",
         "pillarClassesTitle": "Nio klasser, tre roller",
         "pillarClassesBody": "Tanka, läk eller dela ut skadan. Varje klass spelas så som dess arketyp bör, med talanger för att göra den till din egen.",
-        "pillarOpenTitle": "Free to play",
-        "pillarOpenBody": "Free to play to the level cap. No pay to win, ever."
+        "pillarOpenTitle": "Gratis och öppen källkod",
+        "pillarOpenBody": "Gratis att spela upp till nivåtaket, med hela spelet som öppen källkod. Aldrig någonsin pay to win."
       },
       "classes": {
         "heading": "Välj din klass",
@@ -1091,7 +1301,7 @@ export const sv_SE: EnTranslations = {
       "faq": {
         "heading": "Bra att veta",
         "q1": "Är det gratis att spela?",
-        "a1": "Yes. The whole game is free to the level cap.",
+        "a1": "Ja. Hela spelet är gratis upp till nivåtaket, och det är öppen källkod på GitHub.",
         "q2": "Behöver jag en kryptoplånbok?",
         "a2": "Nej. Spelet är fullt spelbart utan en. Den valfria community-token låser bara upp kosmetisk flärd och påverkar aldrig styrkan.",
         "q3": "Kan jag spela offline?",
@@ -1104,7 +1314,7 @@ export const sv_SE: EnTranslations = {
         "body": "Hoppa in nu, eller kom och säg hej. Världen är bättre med sällskap.",
         "play": "Spela nu",
         "discord": "Gå med i Discord",
-        "github": "Contributions"
+        "github": "Stjärnmärk på GitHub"
       }
     },
     "howToPlay": {
@@ -1220,7 +1430,7 @@ export const sv_SE: EnTranslations = {
     "faqPage": {
       "intro": "Frågorna som nya spelare ställer oftast.",
       "q1": "Är det verkligen gratis?",
-      "a1": "Yes. The whole game is free to play to the level cap.",
+      "a1": "Ja. Hela spelet är gratis att spela ända till nivåtaket, och källkoden är öppen på GitHub.",
       "q2": "Behöver jag en kryptoplånbok eller några tokens?",
       "a2": "Nej. Spelet är fullt spelbart utan en sådan. Den valfria community-token låser bara upp kosmetiska detaljer och påverkar aldrig styrka eller progression.",
       "q3": "Kan jag spela på min telefon?",
@@ -1234,7 +1444,7 @@ export const sv_SE: EnTranslations = {
       "q7": "Kommer min karaktär att sparas?",
       "a7": "Onlinekaraktärer sparas på servern automatiskt. Offlinekaraktärer lever i din webbläsare för snabba sessioner och testning.",
       "q8": "Kan jag driva min egen kopia?",
-      "a8": "Private realms are operated through verified Cryptic Realm channels.",
+      "a8": "Ja. Projektet är öppen källkod, så du kan köra din egen server. Se GitHub-arkivet.",
       "q9": "Finns det PvP?",
       "a9": "Ja. Duellera vem som helst på skoj, eller kliv in i Askkolosseum för att slåss mot andra spelare. PvP är frivilligt, så du tvingas aldrig in i det.",
       "q10": "Vad finns det att göra på maxnivå?",
@@ -1361,13 +1571,13 @@ export const sv_SE: EnTranslations = {
       "thorns": "Skyddar en allierad så att närstridsangripare skadar sig själva när de slår."
     },
     "petHook": {
-      "imp": "En eldpilskastande demon på avstånd som naggar fiender från säkert håll.",
-      "voidwalker": "En robust demon som hånar och absorberar slag så att du kan besvärja i lugn och ro.",
-      "succubus": "En snabb närstridsdemon som slår hårt men viker sig under press.",
-      "felhunter": "En skuggstrejfare som jagar fiendens besvärjare.",
-      "felguard": "En tålig närstridskämpe, allroundern när du väl kan frammana den.",
-      "infernal": "En massiv anfallsvagn med krossande närstrid, frammanad för ren styrka.",
-      "doomguard": "En elitbesvärjare som regnar tunga skuggor på avstånd."
+      "emberkin": "En eldpilskastande demon på avstånd som naggar fiender från säkert håll.",
+      "gloomshade": "En robust demon som hånar och absorberar slag så att du kan besvärja i lugn och ro.",
+      "duskborn": "En snabb närstridsdemon som slår hårt men viker sig under press.",
+      "spellhound": "En skuggstrejfare som jagar fiendens besvärjare.",
+      "warfiend": "En tålig närstridskämpe, allroundern när du väl kan frammana den.",
+      "pyre_colossus": "En massiv anfallsvagn med krossande närstrid, frammanad för ren styrka.",
+      "wraithborn": "En elitbesvärjare som regnar tunga skuggor på avstånd."
     },
     "bestiary": {
       "heading": "Bestiarium",
@@ -1393,11 +1603,11 @@ export const sv_SE: EnTranslations = {
         "name": "Spindlar",
         "desc": "Nätspinnare och giftiga lurande varelser som bygger bo på mörka, snåriga platser. Jägare kan tämja dem, precis som bestar."
       },
-      "murloc": {
+      "mudfin": {
         "name": "Murlocer",
         "desc": "Amfibiska träskbor som svärmar i grunden i högljudda, revirhävdande flockar."
       },
-      "kobold": {
+      "burrower": {
         "name": "Koboldar",
         "desc": "Ljushuvade grävare som plågar gruvor och hålor och hetsigt vaktar sin malm."
       },
@@ -1791,6 +2001,430 @@ export const sv_SE: EnTranslations = {
       "home": "Tillbaka till översikten"
     }
   },
+  "editor": {
+    "appTitle": "Map Editor",
+    "docTitle": "Map Editor - Cryptic Realm",
+    "untitledMap": "Untitled Map",
+    "playtestPlayerName": "Mapmaker",
+    "topbar": {
+      "label": "Editor actions",
+      "mapNameLabel": "Map name",
+      "dirty": "Unsaved changes",
+      "dirtyDot": "This map has unsaved changes",
+      "clean": "All changes saved",
+      "savedLocal": "Saved in this browser",
+      "savedServer": "Saved to server (v{version})",
+      "saving": "Saving...",
+      "neverSaved": "Not saved yet",
+      "new": "New",
+      "newTitle": "Start a new map from the built-in world",
+      "open": "Open",
+      "openTitle": "Open a saved map (browser or server)",
+      "save": "Save",
+      "saveTitle": "Save to this browser, and to the server when signed in (Ctrl+S)",
+      "saveAs": "Save As",
+      "saveAsTitle": "Save a copy under a new name",
+      "fork": "Fork",
+      "forkTitle": "Create your own server-side copy of this map",
+      "forkDisabledTitle": "Open a server map first to fork it",
+      "import": "Import",
+      "importTitle": "Import a map from a JSON file",
+      "export": "Export",
+      "exportTitle": "Download this map as a JSON file",
+      "uploadAsset": "Upload Asset",
+      "uploadAssetTitle": "Upload a GLB model (up to 8 MiB) to place in your maps",
+      "uploadAssetDisabledTitle": "Sign in from the game to upload assets",
+      "playtest": "Playtest",
+      "playtestTitle": "Boot the game on this map (offline, current edits included)",
+      "viewLabel": "View mode",
+      "view3d": "3D",
+      "view3dTitle": "Edit in the rendered world",
+      "view2d": "2D",
+      "view2dTitle": "Edit on the symbolic overhead map",
+      "undoCount": "Undo: {count}",
+      "undoCountTitle": "{count} undoable steps (Ctrl+Z to undo, Ctrl+Y to redo)",
+      "autosave": "Autosave",
+      "autosaveTitle": "Automatically save the map while there are unsaved changes. Turns itself off if a save fails.",
+      "undo": "Undo",
+      "undoTitle": "Undo the last change (Ctrl+Z)",
+      "redo": "Redo",
+      "redoTitle": "Redo the last undone change (Ctrl+Y)",
+      "offline": "Offline",
+      "offlineTitle": "Not signed in: maps save to this browser only. Sign in from the game to save online.",
+      "signIn": "Sign in",
+      "signInTitle": "Open the game login screen in a new tab",
+      "help": "Help",
+      "helpTitle": "Editor guide: tools, shortcuts, and the tutorial"
+    },
+    "tool": {
+      "listLabel": "Editor tools",
+      "keyHint": "{name} ({key})",
+      "select": "Select",
+      "raise": "Raise",
+      "lower": "Lower",
+      "smooth": "Smooth",
+      "flatten": "Flatten",
+      "paint": "Paint Biome",
+      "water": "Water",
+      "place": "Place Asset",
+      "blocker": "Blocker Wall",
+      "camp": "Camp",
+      "spawn": "Spawn Point",
+      "region": "Region",
+      "erase": "Erase"
+    },
+    "inspector": {
+      "label": "Tool options"
+    },
+    "brush": {
+      "title": "Brush",
+      "size": "Brush size",
+      "strength": "Strength",
+      "sizeHint": "Keys: [ and ] resize the brush; Shift+[ and Shift+] change strength.",
+      "editCount": "Terrain edits: {count} / {max}"
+    },
+    "biome": {
+      "title": "Biome",
+      "paletteLabel": "Biome to paint",
+      "vale": "Vale",
+      "marsh": "Marsh",
+      "peaks": "Peaks",
+      "beach": "Beach",
+      "desert": "Desert",
+      "volcano": "Volcano",
+      "cave": "Cave",
+      "erase": "Erase paint",
+      "hint": "Painted cells override the zone biome for terrain shape and color.",
+      "clear": "Clear all biome paint",
+      "clearConfirm": "Remove every painted biome cell from this map?"
+    },
+    "flatten": {
+      "hint": "Flatten levels the ground to the height under the cursor when the drag starts.",
+      "hardEdge": "Hard edge"
+    },
+    "water": {
+      "title": "Water Level",
+      "level": "Water level",
+      "hint": "Sets the map-wide water surface height, from {min} to {max} yards.",
+      "reset": "Reset to the built-in level"
+    },
+    "place": {
+      "title": "Place Asset",
+      "scale": "Scale",
+      "collide": "Blocks movement",
+      "collideHint": "A blocking asset gets a collision footprint players cannot walk through.",
+      "randomRotation": "Random rotation",
+      "chosen": "Placing: {name}",
+      "none": "Pick an asset from the browser below, then click the ground to place it."
+    },
+    "blockerTool": {
+      "title": "Blocker Wall",
+      "hint": "Drag along the ground to draw an invisible wall players cannot walk or jump through. Release to place it; a wall shorter than half a yard is discarded.",
+      "count": "Blocker walls: {count} / {max}"
+    },
+    "camp": {
+      "title": "Mob Camp",
+      "mob": "Mob",
+      "count": "Count",
+      "radius": "Radius",
+      "delete": "Delete camp",
+      "hint": "Click open ground to add a camp, or click an existing camp to edit it.",
+      "playtestNote": "Mobs spawn only in playtest, never in the editor view.",
+      "selected": "Camp: {mob}",
+      "none": "No camp selected."
+    },
+    "spawn": {
+      "title": "Spawn Point",
+      "hint": "Click the ground to set where playtest drops the player.",
+      "position": "Spawn: {x}, {z}",
+      "unset": "Using the built-in start position.",
+      "clear": "Clear spawn point"
+    },
+    "region": {
+      "title": "Region",
+      "hint": "Drag a box to select placements and terrain edits. Copy, then click to paste.",
+      "hint3d": "Region boxes draw in the 2D view; copy and paste work in both views.",
+      "copy": "Copy region",
+      "pasteBeside": "Paste beside",
+      "copied": "Copied {assets} assets and {edits} terrain edits.",
+      "pasted": "Pasted {count} items.",
+      "needBox": "Draw a region box first.",
+      "needClipboard": "Copy a region first."
+    },
+    "eraseTool": {
+      "title": "Erase",
+      "hint": "Click a placed asset to remove it, or click sculpted ground to remove the newest stamp under the cursor.",
+      "blockerHint": "Clicking near a blocker wall removes that wall instead."
+    },
+    "selection": {
+      "title": "Selection",
+      "none": "Nothing selected. Use Select and click a placed asset.",
+      "asset": "Asset: {name}",
+      "x": "X",
+      "z": "Z",
+      "rotation": "Rotation",
+      "scale": "Scale",
+      "collide": "Blocks movement",
+      "radius": "Collision radius",
+      "radiusAuto": "Auto",
+      "radiusAutoTitle": "Reset the collision radius to follow the asset scale",
+      "radiusHint": "Auto derives the collision radius from the asset scale; drag the slider to override it.",
+      "footprints": "Show collision footprints",
+      "duplicate": "Duplicate",
+      "delete": "Delete",
+      "deleteHint": "Delete removes the selection; Ctrl+Z restores it.",
+      "moveHint": "Move: drag the asset along the ground in the 3D view, or nudge it with the arrow keys (0.5 yd, Shift for 2 yd).",
+      "wheelHint": "Shift+scroll rotates the asset, Alt+scroll scales it, Ctrl+D duplicates it."
+    },
+    "marker": {
+      "title": "Marker",
+      "reset": "Reset position",
+      "moved": "{count} markers moved from the built-in layout."
+    },
+    "layers": {
+      "title": "Layers",
+      "hub": "Hubs",
+      "graveyard": "Graveyards",
+      "lake": "Lakes",
+      "poi": "Points of interest",
+      "camp": "Camps",
+      "npc": "NPCs",
+      "object": "Objects",
+      "blocker": "Blocker walls"
+    },
+    "frame": {
+      "title": "Frame",
+      "all": "All"
+    },
+    "procgen": {
+      "title": "Procedural",
+      "count": "Count",
+      "scatter": "Scatter category assets",
+      "hills": "Generate rolling hills",
+      "scattered": "Scattered {count} assets from {category}.",
+      "hillsAdded": "Added {count} hills.",
+      "noAssets": "No assets in that category."
+    },
+    "assets": {
+      "title": "Asset Browser",
+      "label": "Asset browser",
+      "search": "Search assets",
+      "searchPlaceholder": "Search assets...",
+      "empty": "No matching assets.",
+      "uploadedTab": "Uploaded",
+      "uploadedEmpty": "No uploaded assets yet. Use Upload Asset to add a GLB model (up to 8 MiB).",
+      "uploadedSignIn": "Sign in from the game to upload and place your own GLB models.",
+      "uploadedLoadFailed": "Could not load your uploaded assets.",
+      "deleteAsset": "Delete uploaded asset",
+      "deleteAssetConfirm": "Delete the uploaded asset \"{name}\"? Maps that use it lose the model.",
+      "pick": "Place {name}",
+      "categoryTab": "{category} ({count})",
+      "category": {
+        "biome": "Biome",
+        "chars": "Characters",
+        "creatures": "Creatures",
+        "dungeon": "Dungeon",
+        "foliage": "Foliage",
+        "props": "Props",
+        "quest": "Quest",
+        "resources": "Resources",
+        "tools": "Tools",
+        "weapons": "Weapons"
+      }
+    },
+    "upload": {
+      "notGlb": "Pick a .glb file.",
+      "tooLarge": "That file is over the 8 MiB limit.",
+      "uploading": "Uploading asset...",
+      "uploaded": "Asset uploaded: {name}",
+      "uploadedExisting": "That model was already on the server; reusing it.",
+      "deleted": "Uploaded asset deleted."
+    },
+    "openDrawer": {
+      "title": "Open Map",
+      "close": "Close",
+      "tabLocal": "This Browser",
+      "tabMine": "My Server Maps",
+      "tabPublic": "Public Maps",
+      "colName": "Name",
+      "colUpdated": "Updated",
+      "colStatus": "Status",
+      "statusPublic": "Public",
+      "statusPrivate": "Private",
+      "open": "Open",
+      "fork": "Fork",
+      "publish": "Publish",
+      "unpublish": "Unpublish",
+      "delete": "Delete",
+      "draft": "Autosaved draft",
+      "emptyLocal": "No maps saved in this browser yet. Save one and it appears here.",
+      "emptyMine": "No maps on the server yet. Save while signed in to create one.",
+      "emptyPublic": "No public maps yet.",
+      "loading": "Loading maps...",
+      "loadFailed": "Could not load maps from the server.",
+      "signInHint": "Sign in from the game to browse, save, and fork server maps.",
+      "deleteLocalConfirm": "Delete the local map \"{name}\"?",
+      "deleteServerConfirm": "Delete the server map \"{name}\"? This cannot be undone.",
+      "prev": "Previous page",
+      "next": "Next page",
+      "page": "Page {page}"
+    },
+    "status": {
+      "savedLocal": "Saved \"{name}\" to this browser.",
+      "savedServer": "Saved \"{name}\" to the server (v{version}).",
+      "savedLocalOnly": "Saved \"{name}\" to this browser. Sign in to save online.",
+      "saveFailedLocal": "Local save failed (storage blocked).",
+      "opened": "Opened \"{name}\".",
+      "imported": "Imported \"{name}\".",
+      "importFailed": "Import cancelled, or the file is not a valid map.",
+      "exported": "Downloaded \"{name}\".",
+      "newMap": "New map started from the built-in world.",
+      "forked": "Forked to \"{name}\". You are editing your own copy now.",
+      "published": "Map published. Anyone can now find and fork it.",
+      "unpublished": "Map unpublished.",
+      "deleted": "Map deleted.",
+      "assetPlacedFirst": "Pick an asset in the browser first.",
+      "loading3d": "Loading the world...",
+      "playtestLaunch": "Launching playtest...",
+      "playtestFailed": "Could not start the playtest (storage blocked).",
+      "draftSaved": "Draft autosaved.",
+      "draftRestored": "Restored the autosaved draft.",
+      "autosaveFailed": "Autosave failed (browser storage is full or blocked). Export the map to keep a backup.",
+      "terrainCapReached": "Terrain edit limit reached ({max}). Extra sculpt stamps were not added.",
+      "placementCapReached": "Placement limit reached ({max}). Extra assets were not added.",
+      "blockerCapReached": "Blocker wall limit reached ({max}). The new wall was not added.",
+      "autosaveOff": "Autosave turned off: {reason} Save manually, then turn it back on."
+    },
+    "confirm": {
+      "ok": "OK",
+      "cancel": "Cancel",
+      "discardTitle": "Discard changes?",
+      "discardBody": "You have unsaved changes on \"{name}\". Discard them?",
+      "discard": "Discard",
+      "conflictTitle": "Save conflict",
+      "conflictBody": "This map changed on the server since you opened it (now v{version}). Save your version as a new copy?",
+      "conflictSaveCopy": "Save As Copy"
+    },
+    "prompt": {
+      "saveAsTitle": "Save As",
+      "nameLabel": "New map name"
+    },
+    "serverError": {
+      "invalid_map_name": "That map name is not allowed. Use letters, numbers, spaces, apostrophes, or hyphens.",
+      "map_name_not_allowed": "That map name is not allowed.",
+      "invalid_map_doc": "The server rejected the map document.",
+      "invalid_version": "The save request was malformed. Reload and try again.",
+      "map_limit_reached": "You have reached the server map limit. Delete a map to save more.",
+      "map_not_found": "That map no longer exists on the server.",
+      "version_conflict": "The map changed on the server since you opened it.",
+      "slug_unavailable": "The server could not make a link for that name. Try a different name.",
+      "map_too_large": "The map document is too large to save on the server.",
+      "invalid_glb": "That file is not a valid GLB model.",
+      "asset_blocked": "That asset has been blocked by moderation.",
+      "asset_limit_reached": "You have reached the uploaded asset limit. Delete one to upload more.",
+      "asset_storage_limit_reached": "You are out of asset storage space. Delete an asset first.",
+      "asset_too_large": "That model is over the upload size limit.",
+      "asset_not_found": "That asset no longer exists on the server.",
+      "rate_limited": "Slow down a little and try again.",
+      "unauthorized": "Your session has expired. Sign in from the game again.",
+      "network": "Could not reach the server. Check your connection and try again.",
+      "timeout": "The server took too long to respond. Try again.",
+      "unknown": "Something went wrong talking to the server."
+    },
+    "hints": {
+      "nav3d": "Drag to orbit, scroll to zoom. While dragging, WASD flies and Q/E changes height.",
+      "nav2d": "Drag to pan, scroll to zoom."
+    },
+    "help": {
+      "title": "Editor Help",
+      "toolsTitle": "Tools",
+      "shortcutsTitle": "Keyboard shortcuts",
+      "mouseTitle": "Mouse and navigation",
+      "flowTitle": "Saving and playtesting",
+      "beginTutorial": "Begin tutorial",
+      "close": "Close",
+      "tool": {
+        "select": "Pick placed assets to move, rotate, and scale them; click a 2D marker to edit it.",
+        "raise": "Raise the terrain under the brush.",
+        "lower": "Lower the terrain under the brush.",
+        "smooth": "Smooth bumps toward the local average height.",
+        "flatten": "Level the ground to the height where the drag starts.",
+        "paint": "Paint biome ground cover over the zone default.",
+        "water": "Set the map-wide water level.",
+        "place": "Place catalog or uploaded assets on the ground.",
+        "blocker": "Drag invisible walls that block movement in playtest.",
+        "camp": "Add and edit mob camps that spawn in playtest.",
+        "spawn": "Set where playtest drops the player.",
+        "region": "Box-select terrain and assets to copy and paste.",
+        "erase": "Remove placed assets or sculpt stamps under the cursor."
+      },
+      "key": {
+        "tools": "Every tool has a single-letter shortcut, shown on its button in the tool rail.",
+        "brush": "[ and ] resize the brush; Shift+[ and Shift+] change its strength.",
+        "undo": "Ctrl+Z undoes the last change; Ctrl+Y or Ctrl+Shift+Z redoes it.",
+        "save": "Ctrl+S saves the map.",
+        "duplicate": "Ctrl+D duplicates the selected asset.",
+        "nudge": "Arrow keys nudge the selected asset by 0.5 yards; hold Shift for 2 yards.",
+        "wheel": "Shift+scroll rotates the selected asset; Alt+scroll scales it.",
+        "delete": "Delete removes the selected asset or camp.",
+        "escape": "Esc clears the selection first, then returns to the Select tool."
+      },
+      "mouse": {
+        "orbit3d": "3D view: drag to orbit and scroll to zoom; middle-drag or Shift+drag pans.",
+        "fly3d": "While holding a drag in 3D, WASD flies the camera and Q/E changes height.",
+        "move": "With Select active, drag a placed asset to move it across the ground.",
+        "pan2d": "2D view: drag to pan and scroll to zoom."
+      },
+      "flow": {
+        "save": "Save keeps the map in this browser, and on the server when you are signed in.",
+        "draft": "While you have unsaved changes, a draft is autosaved every 30 seconds; Open restores it.",
+        "playtest": "Playtest boots the real game on this map, including your unsaved edits."
+      }
+    },
+    "tutorial": {
+      "title": "Editor tutorial",
+      "back": "Back",
+      "next": "Next",
+      "finish": "Finish",
+      "skip": "Skip tour",
+      "counter": "Step {current} of {total}",
+      "steps": {
+        "toolbar": {
+          "title": "The tool rail",
+          "body": "Every editing tool lives here: sculpting brushes, biome paint, water, asset placement, camps, and more. Each one has a single-key shortcut, shown in its corner."
+        },
+        "stage": {
+          "title": "The world",
+          "body": "This is your map, rendered with the real game engine. Drag to orbit, scroll to zoom, and middle-drag or Shift+drag to pan. Click the ground with a tool to edit."
+        },
+        "inspector": {
+          "title": "Tool options",
+          "body": "The options for the active tool appear here: brush size, the biome palette, asset scale, camp settings, and the properties of whatever you select."
+        },
+        "viewToggle": {
+          "title": "3D and 2D",
+          "body": "Switch between the rendered 3D world and the symbolic overhead 2D map. The 2D view is best for moving zone markers and framing large areas."
+        },
+        "save": {
+          "title": "Save your work",
+          "body": "Save stores the map in this browser, and on the server when you are signed in. Export downloads a JSON backup, and Open brings back saved maps and drafts."
+        },
+        "playtest": {
+          "title": "Playtest",
+          "body": "Boot the real game on your map at any time, with your current edits included. Close the playtest tab to come back and keep editing."
+        },
+        "help": {
+          "title": "Help is here",
+          "body": "That is the whole loop. Open Help any time for the full tool list and every shortcut, or to run this tour again."
+        }
+      }
+    },
+    "a11y": {
+      "stage": "Map viewport",
+      "toasts": "Editor notifications",
+      "dialog": "Editor dialog"
+    }
+  },
   "skinEvent": {
     "title": "Kosmetisk förvaring",
     "subtitle": "Du låste upp en {rank}-belöning, välj valfri skin på den nivån eller lägre.",
@@ -1847,8 +2481,8 @@ export const sv_SE: EnTranslations = {
   },
   "footer": {
     "copyright": "2026 Cryptic Realm",
-    "githubLink": "/contributions.html",
-    "githubLabel": "Contributions",
+    "githubLink": "https://github.com/levy-street/world-of-claudecraft",
+    "githubLabel": "Projekt med öppen källkod",
     "whitepaper": "Whitepaper",
     "terms": "Användarvillkor",
     "privacy": "Integritetspolicy",
@@ -1875,7 +2509,7 @@ export const sv_SE: EnTranslations = {
     "error": "Kunde inte ladda uppdateringar. Försök igen senare.",
     "empty": "Inga uppdateringar ännu, kom tillbaka snart.",
     "prerelease": "Förhandsutgåva",
-    "viewOnGithub": "Read release notes",
+    "viewOnGithub": "Visa på GitHub",
     "openLink": "Open",
     "officialLog": "Official Work Log",
     "alphaBetaTitle": "Alpha, Beta, And Public Realm Cadence",
@@ -1909,7 +2543,7 @@ export const sv_SE: EnTranslations = {
     "tagPlatinum": "Platinum economy",
     "tagExchange": "Exchange realm",
     "tagLore": "Cryptic Realm lore",
-    "tagRealms": "Infernal / Classic / Dominion / Arcane realms",
+    "tagRealms": "Hellmaw / Classic / Dominion / Arcane realms",
     "tagMinigames": "Original mini-games",
     "tagCustody": "Private custody runbooks"
   },
@@ -1921,7 +2555,7 @@ export const sv_SE: EnTranslations = {
     "loading": "Loading official channels…"
   },
   "download": {
-    "title": "Launchers & Installs",
+    "title": "Ladda ner skrivbordsstartaren",
     "desc": "Hämta den fristående startaren för optimerad prestanda och spel i helskärm."
   },
   "comingSoon": {
@@ -1946,7 +2580,7 @@ export const sv_SE: EnTranslations = {
     "serverOfflineSub": "Direkt lokal värld",
     "caLabel": "$CR Kontraktsadress",
     "caCopyAria": "Kopiera kontraktsadress",
-    "caNote": "CR är vår community-token. Den behövs inte för att spela. Gå med i Discord för att diskutera CR:s nytta och svänghjul."
+    "caNote": "WOC är vår community-token. Den behövs inte för att spela. Gå med i Discord för att diskutera WOC:s nytta och svänghjul."
   },
   "auth": {
     "enterRealm": "Träd in i riket",
@@ -1988,7 +2622,16 @@ export const sv_SE: EnTranslations = {
     "create": "Skapa",
     "twoFactorLabel": "Autentiseringskod",
     "twoFactorPlaceholder": "6-siffrig eller återställningskod",
-    "twoFactorHint": "Ange koden från din autentiseringsapp, eller en av dina återställningskoder."
+    "twoFactorHint": "Ange koden från din autentiseringsapp, eller en av dina återställningskoder.",
+    "email": "Recovery email",
+    "emailError": "Please enter a valid email address.",
+    "recovery": {
+      "title": "Add a recovery email",
+      "body": "Set an email address so you can recover your account. We only use it to confirm you own this account if you ever need to reset your password.",
+      "save": "Save email",
+      "invalid": "Please enter a valid email address.",
+      "failed": "Could not save your email. Please try again."
+    }
   },
   "wallet": {
     "label": "$CR-plånbok",
@@ -2042,6 +2685,7 @@ export const sv_SE: EnTranslations = {
     "helpLinkedWithBalance": "Innehavarförmåner är aktiva. Plånboksappen är ansluten i den här webbläsaren.",
     "helpLinkedDisconnected": "Innehavarförmåner är aktiva. Anslut appen när du behöver signera eller spendera.",
     "helpLinkedDisconnectedWithBalance": "Innehavarförmåner är aktiva. Anslut appen när du behöver signera eller spendera.",
+    "extensionHelp": "To see a wallet here, keep a browser wallet extension such as Solflare Wallet active.",
     "flowConnect": "Välj en plånbok. Verifieringen fortsätter automatiskt.",
     "flowSign": "Signera verifieringsmeddelandet i din plånboksapp. Ingen transaktion eller SOL krävs.",
     "flowVerify": "Verifierar plånboksägande...",
@@ -2227,6 +2871,7 @@ export const sv_SE: EnTranslations = {
       "unknownTier": "Okänd fördjupningsnivå.",
       "levelRequired": "Du måste vara nivå {level} för att gå in i {name}.",
       "levelRequiredTier": "Du måste vara nivå {level} för att gå in i {name} på {tier}.",
+      "partyTooLarge": "{name} is meant for solo or duo delves. Parties of {max} or more may not enter.",
       "instancesBusy": "Alla instanser av {name} är upptagna. Försök igen snart.",
       "runFailed": "{name}-körningen misslyckades.",
       "complete": "{name} slutförd.",
@@ -2236,6 +2881,14 @@ export const sv_SE: EnTranslations = {
       "doorAlreadyOpen": "Dörren är redan öppen.",
       "companionRankUp": "{name} når rang {rank}.",
       "bossChest": "Bossen faller. En spärrad relikkista reser sig på podiet. Dyrka upp dess lås för att göra anspråk på ditt byte.",
+      "drownedLitanyReliquaryRise": "Sister Nhalia falls silent. The Drowned Reliquary rises from the blackwater. Approach it to begin the rite.",
+      "riteSequenceReady": "The shrines fall dark. Repeat the sequence.",
+      "riteSequencePlaying": "The shrines replay the rite. Wait.",
+      "riteCorrect": "A soft chime answers your touch.",
+      "riteWrong": "A harsh bell crack. Black water splashes at your feet.",
+      "riteReliquaryOpen": "The Drowned Reliquary opens.",
+      "riteReliquaryLocked": "Complete the shrine rite to open the reliquary.",
+      "riteReliquaryEmpty": "The reliquary is empty.",
       "surfaceStairs": "En trappa till ytan öppnas. Tryck F vid trappan för att lämna.",
       "moduleEnter": "{name}: {objective}",
       "objectiveClearRoom": "Rensa rummet.",
@@ -2243,6 +2896,13 @@ export const sv_SE: EnTranslations = {
       "tombstoneHint": "En gravstenspassage öppnas mot norr när rummet är rensat.",
       "tombstoneOpen": "En förseglad gravstenspassage gnisslar upp mot norr. Gå in i den för att fortsätta.",
       "tombstoneInto": "Du passerar genom gravstenen in i {name}.",
+      "bellRopeShock": "The bell rope snaps taut. Drowned Cantors reel from the shock.",
+      "eggSacBurst": "The egg-sac bursts. Spiderlings skitter free across the baptistry rim.",
+      "baptistryEggs": "The baptistry falls quiet. Spider egg-sacs cling wetly to the rim.",
+      "baptistrySpidersSealed": "You should try to destroy the spider sacs.",
+      "puzzleSealed": "You need to open the seal by applying pressure somewhere in the room.",
+      "ropesSealed": "You should try pulling the bell ropes.",
+      "baptistryWave": "Something stirs in the black baptistry water.",
       "chestEmpty": "Kistan är tom.",
       "notInDelve": "Du befinner dig inte i en fördjupning.",
       "cannotInteract": "Du kan inte interagera med det.",
@@ -2261,9 +2921,12 @@ export const sv_SE: EnTranslations = {
       "passageSealed": "Passagen är förseglad.",
       "moveCloserPassage": "Gå närmare passagen.",
       "moveCloserChest": "Gå närmare kistan.",
+      "moveCloserReliquary": "Move closer to the reliquary.",
       "nothingToTake": "Det finns inget kvar att ta.",
       "wayOutNotOpen": "Vägen ut är inte öppen ännu.",
-      "moveCloserStairs": "Gå närmare trappan."
+      "moveCloserStairs": "Gå närmare trappan.",
+      "nhaliaCantorShield": "Cantors, hold the note!",
+      "nhaliaBlackwaterMark": "{name} marks {player} with Blackwater!"
     },
     "lockpick": {
       "lockYields": "Låset ger vika! {tier} byte.",
@@ -2326,6 +2989,26 @@ export const sv_SE: EnTranslations = {
       "abandoned": "Du drar försiktigt ut dyrkarna igen. Låset väntar."
     }
   },
+  "delveRiteUi": {
+    "title": "The Drowned Reliquary Rite",
+    "blurb": "The shrines will light in order. Repeat the sequence by activating each shrine in turn. A wrong touch fails the attempt and replays the sequence, a flawless attempt earns the richest spoils, and running out of tries opens the reliquary on its meanest. Choose how the rite tests you.",
+    "easy": "Easy",
+    "medium": "Medium",
+    "hard": "Hard",
+    "guideWatch": "After you choose, the four shrines light up one at a time. Memorize the order.",
+    "guideRepeat": "When the shrines fall dark, walk to each shrine and press F (Interact) in that same order.",
+    "guideStakes": "A wrong shrine splashes you with blackwater and costs a try. Complete the sequence to open the reliquary.",
+    "showsTimes": "Sequence shown {count} times",
+    "showsOnce": "Sequence shown once",
+    "symbols": "{count} symbols",
+    "tries": "{count} tries",
+    "reward": {
+      "easy": "Modest spoils",
+      "medium": "Rich spoils",
+      "hard": "Premium spoils"
+    },
+    "closeAria": "Close"
+  },
   "delveUi": {
     "board": {
       "title": "Delve-tavla",
@@ -2335,6 +3018,7 @@ export const sv_SE: EnTranslations = {
       "openDelveAria": "Öppna delve-tavlan från {name}",
       "marks": "Delve-märken: {count}",
       "minLevel": "Kräver nivå {level}",
+      "partyTooLarge": "Solo or duo only ({max} players max)",
       "tier": {
         "normal": "Normal",
         "heroic": "Heroisk"
@@ -2342,6 +3026,7 @@ export const sv_SE: EnTranslations = {
       "companion": {
         "pick": "Välj en följeslagare",
         "tessa": "Akolyten Tessa",
+        "edda": "Edda Reedhand",
         "rank": "Rang {rank}",
         "boon": "Läker gruppen mellan strider. Rang 3 återupplivar en fallen allierad en gång per runda.",
         "upgrade": "Uppgradera till rang {rank} ({marks} Märken)",
@@ -2368,7 +3053,11 @@ export const sv_SE: EnTranslations = {
       "complete": "Slutförd",
       "marks": "Delve-märken: {count}",
       "exitHintOpen": "Gå in i gravstenspassagen (norrut)",
-      "exitHintLocked": "Rensa fiendepacket för att öppna passagen norrut"
+      "exitHintLocked": "Rensa fiendepacket för att öppna passagen norrut",
+      "riteChoose": "Approach the Drowned Reliquary and press F to begin the rite",
+      "ritePlayback": "Watch the shrines: memorize the order they light up",
+      "riteInput": "Press F at each shrine in the order they lit ({current}/{total})",
+      "riteOpen": "The reliquary is open: press F on it to claim your spoils"
     },
     "objective": {
       "kill_boss": "Dräp {boss}",
@@ -2389,27 +3078,54 @@ export const sv_SE: EnTranslations = {
     "npc": {
       "halven": {
         "greeting": "Relikvariet där nere har förskjutits igen. Vi hör mässande genom golvet efter midnatt, och Akolyten Tessa svär på att begravningsliggarna ändrar sitt eget bläck. Om du har mod nog, {playerName}, ta ett ljus och gå ner. Lita inte på varje röst du hör där nere. Några av dem kände ditt namn innan du föddes."
+      },
+      "halvenMarsh": {
+        "greeting": "The trail led north to the marsh, {playerName}. Another reliquary sings under the black water, and the drowned dead answer the bells. Acolyte Edda knows these reeds better than I do, stay close to her lantern. Choose your tier, and I will hold the rope until you return."
       }
     },
     "intro": {
       "normal": "Trappuppgången är kall och mörk. Krossade helgonstenar täcker nedstigningen, och en mjuk klockton hänger i den fuktiga luften. Akolyten Tessa viskar: \"Relikvariet borde inte vara öppet så här långt ner. Håll dig nära, {playerName}.\"",
-      "heroic": "Dörrarna gnisslar igen bakom dig. Namn skrapar mot stenen som naglar. Tessas ljus brinner blått. \"De kallar inte på de döda nu, {playerName}. De svarar på något.\""
+      "heroic": "Dörrarna gnisslar igen bakom dig. Namn skrapar mot stenen som naglar. Tessas ljus brinner blått. \"De kallar inte på de döda nu, {playerName}. De svarar på något.\"",
+      "litanyNormal": "Reed-choked stairs drop beneath Fenbridge. Edda Reedhand lifts her lantern. \"The marsh remembers every name they drowned, {playerName}. Stay in the light.\"",
+      "litanyHeroic": "Blackwater laps the causeway stones. Edda's flame gutters green. \"They are singing again below, {playerName}. Do not answer the choir.\""
     },
     "module": {
       "reliquary_sunken_ossuary": "Vatten sipprar genom gravhyllorna och bär gammal aska i silversvarta strömmar.",
       "reliquary_bell_niche": "Dussintals handklockor hänger i tystnad, var och en knuten med begravningstyg.",
       "reliquary_saintless_hall": "Statyer med ansikten bortmejslade med omsorgsfullt hat.",
-      "reliquary_finale": "Den begravda klockan ringer en gång under dina stövlar."
+      "reliquary_finale": "Den begravda klockan ringer en gång under dina stövlar.",
+      "litany_sluice": "Moss-choked sluice gates drip blackwater into the old choir crypt.",
+      "litany_ledger": "Ledger islands rise from flooded channels, ink bleeding into the marsh.",
+      "litany_ring": "A reliquary ring loops around a sealed central font of black water.",
+      "litany_baptistry": "A sinkhole baptistry yawns beneath cracked saint-stones and egg-sacs.",
+      "litany_choir_loft": "Fanning choir lofts echo with rope-hung bells that never quite stop.",
+      "litany_causeway": "A Y-split causeway forks over waist-deep fen water.",
+      "litany_apse": "The drowned apse opens onto Sister Nhalia's altar island."
     },
     "moduleName": {
       "reliquary_sunken_ossuary": "Det sjunkna benhuset",
       "reliquary_bell_niche": "Klocknischen",
       "reliquary_saintless_hall": "Den helgonlösa hallen",
-      "reliquary_finale": "Den klockbegravda kammaren"
+      "reliquary_finale": "Den klockbegravda kammaren",
+      "litany_sluice": "The Crescent Sluice",
+      "litany_ledger": "The Island Ledger",
+      "litany_ring": "The Ring Reliquary",
+      "litany_baptistry": "The Sinkhole Baptistry",
+      "litany_choir_loft": "The Reedsong Gallery",
+      "litany_causeway": "The Y-Split Causeway",
+      "litany_apse": "The Drowned Apse"
+    },
+    "object": {
+      "sluice_valve": "Sluice Valve",
+      "grave_tablet": "Grave Tablet",
+      "corpse_candle": "Corpse-Candle",
+      "bell_rope": "Bell Rope"
     },
     "companion": {
       "barkLine": "{name}: {line}",
       "tessa": {
+        "run_start": "I have my candle and my ledger, {playerName}. Lead on.",
+        "ally_revive": "Up now. Tonight's ledger does not carry your name.",
         "combat_start": "Håll fotfästet, {playerName}. De döda är rastlösa här.",
         "low_hp": "Andas. Jag har böner kvar åt dig.",
         "trap_spotted": "Vänta. Något i golvet minns fotsteg.",
@@ -2421,6 +3137,20 @@ export const sv_SE: EnTranslations = {
           "3": "Relikvarieakolyt",
           "4": "Gravropsvittne",
           "5": "Kapellväktare"
+        }
+      },
+      "edda": {
+        "run_start": "Keep to the plank-line, {playerName}. The silt takes the proud-footed.",
+        "ally_revive": "Up, now. The marsh does not get you today.",
+        "combat_start": "Mind the blackwater, {playerName}. The marsh listens.",
+        "low_hp": "Steady. My lantern is not out yet.",
+        "trap_spotted": "Wait. The reeds are wrong here.",
+        "boss_pull": "That canticle knows your name, {playerName}. Do not sing back.",
+        "completion": "The fen can swallow its secrets for one more night.",
+        "rank": {
+          "1": "Lantern-Bearer",
+          "2": "Reed-Watcher",
+          "3": "Fenbridge Acolyte"
         }
       }
     },
@@ -2464,7 +3194,10 @@ export const sv_SE: EnTranslations = {
       "flooded_paths": "Översvämmade gångar",
       "grave_tax": "Gravskatt",
       "unstable_roof": "Instabilt tak",
-      "cult_remnants": "Kultlämningar"
+      "cult_remnants": "Kultlämningar",
+      "high_water": "High Water",
+      "lively_choir": "Lively Choir",
+      "belligerent_dead": "Belligerent Dead"
     },
     "blessing": {
       "chapel_candle": "Kapelljus: säkrare runda, ett märke mindre vid slutförande."
@@ -2656,7 +3389,7 @@ export const sv_SE: EnTranslations = {
     "mainNavigation": "Huvudnavigering",
     "languageSelection": "Språkval",
     "characterActions": "Karaktärshandlingar",
-    "githubProject": "Open Cryptic Realm contributions",
+    "githubProject": "Öppna GitHub-projektet Cryptic Realm",
     "discordCommunity": "Gå med i Cryptic Realm-gemenskapen på Discord",
     "donateProject": "Donera för att stödja Cryptic Realm"
   },
@@ -2687,6 +3420,7 @@ export const sv_SE: EnTranslations = {
       "usernameTaken": "Det användarnamnet är redan upptaget.",
       "invalidCredentials": "Ogiltigt användarnamn eller lösenord.",
       "verificationFailed": "Verifieringen misslyckades. Försök igen.",
+      "desktopCodeInvalid": "Inloggningskoden för skrivbordsappen är ogiltig eller har gått ut. Försök igen.",
       "invalidCharacterName": "Ogiltigt karaktärsnamn. Använd 2-16 bokstäver.",
       "characterNameNotAllowed": "Det karaktärsnamnet är inte tillåtet.",
       "invalidClass": "Ogiltig klass.",
@@ -2703,6 +3437,21 @@ export const sv_SE: EnTranslations = {
       "takenOver": "Din karaktär togs över av en annan session.",
       "renameBeforeEntering": "Denna karaktär måste byta namn innan den går in i världen.",
       "renameNotPermitted": "Det är inte tillåtet att byta namn på denna karaktär."
+    }
+  },
+  "desktop": {
+    "update": {
+      "downloading": "Laddar ner uppdatering {version}...",
+      "ready": "Uppdatering {version} är klar. Den installeras när du avslutar, eller starta om nu.",
+      "restart": "Starta om nu",
+      "later": "Senare"
+    },
+    "crash": {
+      "title": "Cryptic Realm",
+      "body": "Spelvyn slutade fungera. Ladda om den?",
+      "reload": "Ladda om",
+      "quit": "Avsluta",
+      "fatalBody": "Cryptic Realm stötte på ett oväntat fel och måste stängas."
     }
   },
   "realm": {
@@ -3490,13 +4239,16 @@ export const sv_SE: EnTranslations = {
     },
     "cast": {
       "fishing": "Fiske",
-      "demonHeal": "Demonläkning"
+      "demonHeal": "Demonläkning",
+      "thunzharrStormcall": "Stormrop"
     }
   },
   "questUi": {
     "tracker": {
       "title": "Uppdrag",
-      "complete": "Slutfört"
+      "complete": "Slutfört",
+      "showOnMap": "Show {name} on the map",
+      "hideFromMap": "Hide {name} from the map"
     },
     "log": {
       "title": "Uppdragslogg",
@@ -3599,7 +4351,8 @@ export const sv_SE: EnTranslations = {
       "drink": "Dryck",
       "tool": "Verktyg",
       "potion": "Trolldryck",
-      "elixir": "Elixir"
+      "elixir": "Elixir",
+      "bag": "Bag"
     },
     "stats": {
       "armor": "Rustning",
@@ -3641,7 +4394,8 @@ export const sv_SE: EnTranslations = {
       "useManaPotion": "Använd: Återställer omedelbart {amount} mana. Användbar i strid. 1 min nedkylning.",
       "clickUseInstant": "Klicka för att använda omedelbart i strid",
       "clickUse": "Klicka för att använda",
-      "clickBuyback": "Klicka för att köpa tillbaka"
+      "clickBuyback": "Klicka för att köpa tillbaka",
+      "bagSlots": "{slots} Slot Bag"
     },
     "bags": {
       "title": "Väskor",
@@ -3782,6 +4536,26 @@ export const sv_SE: EnTranslations = {
   },
   "entities": {
     "abilities": {
+      "flamestrike": {
+        "name": "Flamslag",
+        "description": "Kallar ner en eldexplosion på målområdet som ger {damage} Eldskada till fiender som fångas i explosionen."
+      },
+      "rain_of_fire": {
+        "name": "Eldregn",
+        "description": "Låter ett eldregn falla över målområdet och bränner fiender för {damage} Eldskada."
+      },
+      "volley": {
+        "name": "Pilregn",
+        "description": "Låter pilar regna över målområdet och vållar {damage} skada på fiender i det."
+      },
+      "hurricane": {
+        "name": "Orkan",
+        "description": "Släpper lös en orkan över målområdet och slår fiender för {damage} Naturskada."
+      },
+      "earthquake": {
+        "name": "Jordbävning",
+        "description": "Skakar målområdet och slår fiender för {damage} Naturskada."
+      },
       "heroic_strike": {
         "name": "Hjältehugg",
         "description": "Ett kraftfullt anfall som ökar närstridsskadan med {damage}. Aktiveras vid ditt nästa hugg."
@@ -4513,7 +5287,7 @@ export const sv_SE: EnTranslations = {
         "name": "Gravkallarens sigill"
       },
       "binding_ward": {
-        "name": "Infernal Binding Ward"
+        "name": "Hellmaw Binding Ward"
       },
       "renders_hateforged_cleaver": {
         "name": "The Render's Hateforged Cleaver"
@@ -4935,6 +5709,48 @@ export const sv_SE: EnTranslations = {
       "monarch_crown_helm": {
         "name": "Monarkens krona"
       },
+      "linen_pouch": {
+        "name": "Linnepung"
+      },
+      "travelers_knapsack": {
+        "name": "Resenärens ryggsäck"
+      },
+      "wolfhide_satchel": {
+        "name": "Vargskinnsväska"
+      },
+      "gravewoven_bag": {
+        "name": "Gravvävd väska"
+      },
+      "mistcallers_duffel": {
+        "name": "Dimkallarens sjösäck"
+      },
+      "copper_mining_pick": {
+        "name": "Kopparhacka"
+      },
+      "iron_mining_pick": {
+        "name": "Järnhacka"
+      },
+      "mithril_mining_pick": {
+        "name": "Mithrilhacka"
+      },
+      "handaxe": {
+        "name": "Handyxa"
+      },
+      "felling_axe": {
+        "name": "Fällyxa"
+      },
+      "ironbark_axe": {
+        "name": "Järnbarksyxa"
+      },
+      "gathering_sickle": {
+        "name": "Skördeskära"
+      },
+      "bronze_sickle": {
+        "name": "Bronsskära"
+      },
+      "silverleaf_sickle": {
+        "name": "Silverbladsskära"
+      },
       "bristleback_maul": {
         "name": "Borstryggens klubba"
       },
@@ -5298,6 +6114,69 @@ export const sv_SE: EnTranslations = {
       "varric_shadow_cowl": {
         "name": "Varrics skugghuva"
       },
+      "siltguard_helm": {
+        "name": "Siltguard Helm"
+      },
+      "bulwark_rusted_pauldrons": {
+        "name": "Bulwark-Rusted Pauldrons"
+      },
+      "nhalias_bell_maul": {
+        "name": "Nhalia's Bell-Maul"
+      },
+      "reedstalker_jerkin": {
+        "name": "Reedstalker Jerkin"
+      },
+      "mirejaw_fang_knife": {
+        "name": "Mirejaw Fang-Knife"
+      },
+      "widow_silk_hood": {
+        "name": "Widow-Silk Hood"
+      },
+      "cantors_drowned_sash": {
+        "name": "Cantor's Drowned Sash"
+      },
+      "corpse_candle_focus": {
+        "name": "Corpse-Candle Focus"
+      },
+      "nhalias_litany_rod": {
+        "name": "Nhalia's Litany Rod"
+      },
+      "blackwater_vanguard_chest": {
+        "name": "Blackwater Vanguard Chestguard"
+      },
+      "siltstep_leggings": {
+        "name": "Siltstep Leggings"
+      },
+      "sunken_reliquary_hood": {
+        "name": "Sunken Reliquary Hood"
+      },
+      "litany_legs": {
+        "name": "Silt-Walker Greaves"
+      },
+      "litany_shoulder": {
+        "name": "Blackwater Drift Mantle"
+      },
+      "litany_gloves_rog": {
+        "name": "Reed-Bound Handwraps"
+      },
+      "litany_plate_chest": {
+        "name": "Sump-Warden Cuirass"
+      },
+      "litany_leather_chest": {
+        "name": "Silt-Deep Vestment"
+      },
+      "litany_cloth_chest": {
+        "name": "Choir-Drowned Raiment"
+      },
+      "litany_helm": {
+        "name": "Reliquant's Drowned Cowl"
+      },
+      "sister_nhalia_choir_plate": {
+        "name": "Sister Nhalia's Choir-Forged Plate"
+      },
+      "drowned_choir_fang": {
+        "name": "Drowned Choir-Fang"
+      },
       "the_codfather": {
         "name": "Torskfadern"
       },
@@ -5417,6 +6296,30 @@ export const sv_SE: EnTranslations = {
       },
       "vanguard_chrome_armor_plate": {
         "name": "Förtrupp krom"
+      },
+      "crownforged_gauntlets": {
+        "name": "Kronsmidda handskar"
+      },
+      "nighttalon_grips": {
+        "name": "Nattklogrepp"
+      },
+      "soulflame_gloves": {
+        "name": "Själslågshandskar"
+      },
+      "stormcallers_handguards": {
+        "name": "Stormkallarens handskydd"
+      },
+      "crownforged_girdle": {
+        "name": "Kronsmitt bälte"
+      },
+      "nighttalon_waistband": {
+        "name": "Nattklobälte"
+      },
+      "soulflame_cord": {
+        "name": "Själslågssnöre"
+      },
+      "stormcallers_waistguard": {
+        "name": "Stormkallarens midjeskydd"
       }
     },
     "mobs": {
@@ -5609,6 +6512,45 @@ export const sv_SE: EnTranslations = {
       "acolyte_tessa": {
         "name": "Akolyten Tessa"
       },
+      "drowned_cantor": {
+        "name": "Drowned Cantor"
+      },
+      "reedbound_acolyte": {
+        "name": "Reedbound Acolyte"
+      },
+      "deepfen_spearjaw": {
+        "name": "Deepfen Spearjaw"
+      },
+      "mirefen_widowling": {
+        "name": "Mirefen Widowling"
+      },
+      "spider_egg_sac": {
+        "name": "Spider Egg-Sac"
+      },
+      "grave_silt_bulwark": {
+        "name": "Grave-Silt Bulwark"
+      },
+      "sump_troll_devourer": {
+        "name": "Sump Troll Devourer"
+      },
+      "choir_thrall": {
+        "name": "Bog Thrall"
+      },
+      "sister_nhalia_drowned_canticle": {
+        "name": "Sister Nhalia, the Drowned Canticle"
+      },
+      "edda_reedhand": {
+        "name": "Edda Reedhand"
+      },
+      "tolling_bell": {
+        "name": "Tolling Bell"
+      },
+      "thunzharr_waking_peak": {
+        "name": "Thunzharr, the Waking Peak"
+      },
+      "thunzharr_stormling": {
+        "name": "Roused Stormling"
+      },
       "ironvein_foreman": {
         "name": "Järnådersförman"
       },
@@ -5639,13 +6581,13 @@ export const sv_SE: EnTranslations = {
       "varkas_boneguard": {
         "name": "Varkas benvakt"
       },
-      "imp": {
+      "emberkin": {
         "name": "Imp"
       },
-      "voidwalker": {
+      "gloomshade": {
         "name": "Tomhetsvandrare"
       },
-      "succubus": {
+      "duskborn": {
         "name": "Succubus"
       },
       "grix_the_tunnelking": {
@@ -5669,16 +6611,16 @@ export const sv_SE: EnTranslations = {
       "wraithbinder_maldrec": {
         "name": "Vålnadsbindare Maldrec"
       },
-      "felhunter": {
+      "spellhound": {
         "name": "Feljägare"
       },
-      "felguard": {
+      "warfiend": {
         "name": "Felvakt"
       },
-      "infernal": {
+      "pyre_colossus": {
         "name": "Inferno"
       },
-      "doomguard": {
+      "wraithborn": {
         "name": "Domsväktare"
       },
       "choirmother_selthe": {
@@ -5815,9 +6757,9 @@ export const sv_SE: EnTranslations = {
         "greeting": "Akta den lösa skiffern, {className}. Berget har varit... rastlöst på sistone. Jag ämnar ta reda på varför."
       },
       "auctioneer_voss": {
-        "name": "Auctioneer Voss",
-        "title": "Keeper of the World Market",
-        "greeting": "The World Market is open here too, {className}. Buy from every adventurer in the realm, or set out your own wares."
+        "name": "Auktionsförrättare Voss",
+        "title": "Väktare av världsmarknaden",
+        "greeting": "Cryptic Realm-marknaden är öppen även här, {className}. Köp från varje äventyrare i riket, eller lägg ut dina egna varor."
       },
       "brother_aldric_raid": {
         "name": "Broder Aldric",
@@ -5828,6 +6770,16 @@ export const sv_SE: EnTranslations = {
         "name": "Broder Halven",
         "title": "Relikvarievaktare",
         "greeting": "Relikvariet där nere har förskjutits igen."
+      },
+      "brother_halven_marsh": {
+        "name": "Brother Halven",
+        "title": "Reliquary Keeper",
+        "greeting": "The trail led north. Another reliquary, another rite. Choose your tier, and I'll hold the rope until you return."
+      },
+      "spirit_healer": {
+        "name": "The Pale Keeper",
+        "title": "Warden of the Dead",
+        "greeting": "Rest now, spirit. I can return you to your body, but the crossing back leaves you weak."
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",
@@ -6268,6 +7220,36 @@ export const sv_SE: EnTranslations = {
         "objectives": {
           "0": {
             "label": "Bergskamssmygarskinn"
+          }
+        }
+      },
+      "q_stalkers_return": {
+        "title": "The Stalkers Return",
+        "text": "Twelve dead, and the ridge crawls thicker than the day you started, {playerName}. Beasts do not throw themselves at a wall out of hunger. Something on the high ridge is pushing them down, and until I know what, the culling does not stop. Fourteen more.",
+        "completion": "Fourteen more, and still my patrols count fresh tracks by morning. My scout came back from the high ridge white as the snowline: prints the size of a shield, she says, and old kills no stalker would leave. Whatever walks up there is no ordinary cat.",
+        "objectives": {
+          "0": {
+            "label": "Ridge Stalker slain"
+          }
+        }
+      },
+      "q_stalker_cloaks": {
+        "title": "Cloaks for the Watch",
+        "text": "Eight pelts lined the officers' cloaks, and now every soldier on the wall wants the same, {playerName}. They are right to want it: winter takes fingers first and apologies never. Ten more pelts from the ridges south of the gate, and the whole watch sleeps warm.",
+        "completion": "Ten good pelts, thick as any I have... no, look at these, {playerName}. Torn, half of them, and by no blade or spear. Claw marks wide as my hand, right through the winter coat. Something on that ridge is savaging its own kind.",
+        "objectives": {
+          "0": {
+            "label": "Ridge Stalker Pelt"
+          }
+        }
+      },
+      "q_old_cragmaw": {
+        "title": "Old Cragmaw",
+        "text": "The mountain folk put a name to the prints my scout found: Old Cragmaw, a scar-pelted tyrant of a cat that has outlived three generations of its own pack. It is the reason the stalkers flood my road, {playerName}. Its den sits on the western ridge above the road south. Bring a friend, and put the old devil down.",
+        "completion": "Down at last. The mountain folk swore that cat would outlive the wall itself. The stalkers will keep to their high snows now, {playerName}, and my patrols will walk the road without bleeding for it. The whole ridge is quieter for your work.",
+        "objectives": {
+          "0": {
+            "label": "Old Cragmaw slain"
           }
         }
       },
@@ -6793,38 +7775,77 @@ export const sv_SE: EnTranslations = {
         "name": "Det rasade relikvariet",
         "enterText": "Du stiger ner i det rasade relikvariet.",
         "leaveText": "Du klättrar tillbaka till broder Halven vid relikvarieruinen."
+      },
+      "drowned_litany": {
+        "name": "The Drowned Litany",
+        "enterText": "You descend into the drowned shrine at the marsh's edge.",
+        "leaveText": "You climb back to Brother Halven at the marsh's edge."
+      }
+    },
+    "letters": {
+      "ravenpost_welcome": {
+        "sender": "Korpposten",
+        "subject": "Korparna flyger nu för dig",
+        "body": "Vandrare,\n\nKorpposten har rest sina sittpinnar över hela dalen. Leta efter korppelarna i Eastbrook, Fenbridge och Highwatch: från var och en av dem kan du skicka brev, mynt och varor till andra äventyrare och hämta allt som korparna bär till dig.\n\nBifogat finns en liten gåva till ditt första frimärke.\n\nVingarna upp,\nKorpposten"
+      },
+      "letter_q_wolves": {
+        "sender": "Marskalk Redbrook",
+        "subject": "Fållorna är lugna igen",
+        "body": "Herdarna kan äntligen sova med båda ögonen slutna, och det är din förtjänst. Jag har bett Korpposten föra dig en liten slant ur vaktkassan.\n\nHåll din klinga oljad.\n- Marskalk Redbrook"
+      },
+      "letter_q_greyjaw": {
+        "sender": "Marskalk Redbrook",
+        "subject": "Gamle Gråkäft, äntligen",
+        "body": "Nyheter färdas snabbt i en så liten stad. Herdarna skålade för din hälsa i går kväll, och Wilkes svär att vargen var stor som en kärra. Låt dem brodera ut det: du har förtjänat det.\n\nÄt en måltid på vaktens bekostnad.\n- Marskalk Redbrook"
+      },
+      "letter_q_hollow": {
+        "sender": "Broder Aldric",
+        "subject": "Det du gjorde i mörkret",
+        "body": "Få kommer någonsin att veta vad som låg begravet i den sänkan, och ännu färre skulle tro det. Jag vet, och jag kommer inte att glömma.\n\nMå din väg förbli upplyst.\n- Broder Aldric"
       }
     },
     "itemSets": {
+      "boundstone_vanguard": {
+        "name": "Bundstens-förtrupp",
+        "bonus3": "Ökar attack- och magihastighet med 15%."
+      },
       "crownforged": {
         "name": "Kronsmidd stridsutrustning",
         "bonus2": "Ökar attackkraft med 40.",
-        "bonus3": "Ökar styrka med 15 och uthållighet med 15."
+        "bonus3": "Ökar styrka med 15, uthållighet med 15 samt attack- och magihastighet med 15%."
       },
       "deathlord": {
         "name": "Dödsherrens stridsutrustning",
         "bonus2": "Ökar attackkraft med 40.",
         "bonus3": "Ökar styrka med 15 och uthållighet med 15."
       },
+      "greyjaw_stalker": {
+        "name": "Gråkäftssmygarens utrustning",
+        "bonus3": "Ökar attack- och magihastighet med 15%."
+      },
       "necromancers": {
         "name": "Nekromantikerns skrud",
-        "bonus2": "Minskar kastfördröjning från skada med 50%.",
-        "bonus3": "Skada du tar fördröjer inte dina besvärjelser."
+        "bonus2": "Du kan inte knuffas bakåt (100% motstånd mot tillbakastöt).",
+        "bonus3": "Ökar intellekt med 10 och uthållighet med 10."
       },
       "nighttalon": {
         "name": "Nattklo läderutrustning",
         "bonus2": "Ökar attackkraft med 40.",
-        "bonus3": "Ökar smidighet med 15 och kritisk chans med 2%."
+        "bonus3": "Ökar smidighet med 15, kritisk chans med 2% samt attack- och magihastighet med 15%."
       },
       "soulflame": {
         "name": "Själsflammans skrud",
-        "bonus2": "Minskar kastfördröjning från skada med 50%.",
-        "bonus3": "Skada du tar fördröjer inte dina besvärjelser."
+        "bonus2": "Du kan inte knuffas bakåt (100% motstånd mot tillbakastöt).",
+        "bonus3": "Ökar intellekt med 15, ande med 15 samt attack- och magihastighet med 15%."
       },
       "stormcallers": {
         "name": "Stormkallarens skrud",
-        "bonus2": "Minskar kastfördröjning från skada med 50%.",
-        "bonus3": "Skada du tar fördröjer inte dina besvärjelser."
+        "bonus2": "Du kan inte knuffas bakåt (100% motstånd mot tillbakastöt).",
+        "bonus3": "Ökar intellekt med 15, ande med 15 samt attack- och magihastighet med 15%."
+      },
+      "vale_arcanist": {
+        "name": "Dalarkanistens skrud",
+        "bonus3": "Ökar attack- och magihastighet med 15%."
       },
       "wyrmshadow": {
         "name": "Wyrmskuggans utrustning",
@@ -6840,6 +7861,12 @@ export const sv_SE: EnTranslations = {
     "dungeonInstanceBusy": "Alla instanser av {name} är upptagna. Försök igen snart.",
     "delveLockedChestInteract": "Tryck på F för att dyrka upp låset",
     "delveRewardChestInteract": "Tryck på F för att hämta bytet",
-    "delveSurfaceExitInteract": "Tryck på F för att klättra"
+    "delveSurfaceExitInteract": "Tryck på F för att klättra",
+    "delveReliquaryInteract": "Drowned Reliquary: Press F to begin the rite",
+    "delveRiteShrineBellInteract": "Bell Shrine: Press F to ring it",
+    "delveRiteShrineCandleInteract": "Candle Shrine: Press F to touch it",
+    "delveRiteShrineReedInteract": "Reed Shrine: Press F to touch it",
+    "delveRiteShrineSkullInteract": "Skull Shrine: Press F to touch it",
+    "mailboxName": "Mailbox"
   }
 };

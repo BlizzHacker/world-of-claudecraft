@@ -14,11 +14,79 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const es: Partial<Record<TranslationKey, string>> = {
+  'entities.npcs.auctioneer_voss.greeting':
+    'El Mercado Mundial también está abierto aquí, {className}. Compra a cualquier aventurero del reino o pon a la venta tus propias mercancías.',
+  'entities.npcs.auctioneer_voss.name': 'Subastador Voss',
+  'entities.npcs.auctioneer_voss.title': 'Guardián del Mercado Mundial',
+  'hudChrome.devBadge.badgeTitle': 'Desarrollador: {tier}',
+  'hudChrome.devBadge.contributor': 'Colaborador de código abierto',
+  'hudChrome.devBadge.flavors.architect': 'Un arquitecto del reino: 30 pull requests fusionadas.',
+  'hudChrome.devBadge.flavors.artificer':
+    'Cinco pull requests después, y el mundo se pliega a tu código.',
+  'hudChrome.devBadge.flavors.runesmith': 'Quince pull requests forjadas en el juego en marcha.',
+  'hudChrome.devBadge.flavors.tinkerer': 'Tu primera pull request llegó al reino.',
+  'hudChrome.devBadge.flavors.worldwright':
+    'Un artífice de mundos: 70 pull requests dan forma al juego.',
+  'hudChrome.devBadge.link.benefits':
+    'Vincula tu GitHub para ganar una insignia de desarrollador por las pull requests que hayas fusionado en el repositorio de código abierto.',
+  'hudChrome.devBadge.link.cta': 'Vincular GitHub',
+  'hudChrome.devBadge.link.error': 'No se pudo vincular GitHub. Inténtalo de nuevo.',
+  'hudChrome.devBadge.link.relink': 'Revincular GitHub',
+  'hudChrome.devBadge.linkedAs': 'Vinculado como {login}',
+  'hudChrome.devBadge.prsLanded': '{count} pull requests fusionadas',
+  'hudChrome.devBadge.tiers.architect': 'Arquitecto',
+  'hudChrome.devBadge.tiers.artificer': 'Artífice',
+  'hudChrome.devBadge.tiers.runesmith': 'Forjarrunas',
+  'hudChrome.devBadge.tiers.tinkerer': 'Trasteador',
+  'hudChrome.devBadge.tiers.worldwright': 'Forjamundos',
+  'hudChrome.devBadge.title': 'Desarrollador',
+  'hudChrome.devBadge.unlink': 'Desvincular GitHub',
+  'hudChrome.itemShare.linkHint': 'Mayús+clic para enlazar este objeto en el chat.',
+  'hudChrome.itemTooltip.requiresLevel': 'Requiere nivel {level}',
+  'hudChrome.keybinds.discord': 'Discord',
+  'hudChrome.leaderboard.devEmpty': 'Aún no hay colaboradores clasificados.',
+  'hudChrome.leaderboard.devName': 'Colaborador',
+  'hudChrome.leaderboard.devTierCol': 'Insignia',
+  'hudChrome.leaderboard.mergedPrs': 'PR fusionadas',
+  'hudChrome.leaderboard.tabDevs': 'Desarrolladores',
+  'hudChrome.lootSettings.close': 'Cerrar ajustes de botín',
+  'hudChrome.lootSettings.groupLoot': 'Botín de grupo',
+  'hudChrome.lootSettings.leaderOption': 'Repartidor: líder (tú)',
+  'hudChrome.lootSettings.masterOption': 'Repartidor: {name}',
+  'hudChrome.lootSettings.menuItem': 'Ajustes de botín',
+  'hudChrome.lootSettings.method': 'Modo de botín',
+  'hudChrome.lootSettings.rollThreshold': 'Umbral de tirada',
+  'hudChrome.lootSettings.title': 'Ajustes de botín',
+  'hudChrome.lootSettings.valueMaster': 'Botín maestro',
+  'hudChrome.masterLoot.looterChanged': 'El repartidor ahora es {name}.',
+  'hudChrome.masterLoot.rollingFor': 'Tirando por {item}.',
+  'hudChrome.masterLoot.summaryGroup': 'Ajustes de botín: botín de grupo.',
+  'hudChrome.masterLoot.summaryMaster':
+    'Ajustes de botín: botín maestro, repartidor {name}, umbral {threshold}.',
+  'hudChrome.masterLoot.thresholdSet': 'Umbral de botín fijado en {threshold}.',
+  'hudChrome.options.showDevBadges': 'Mostrar insignias de desarrollador',
+  'hudChrome.options.groundReticle': 'Retícula de objetivo terrestre',
+  'hudChrome.options.startAttackOnAbility': 'Ataque automático al usar habilidad',
+  'hudChrome.party.promoteLeader': 'Promover a líder',
+  'hudChrome.statInfo.desc.spellPower':
+    'Aumenta el daño de tus hechizos y la potencia de tus sanaciones. Cada punto de Intelecto otorga un poco de Poder con hechizos, además del que provenga del equipo o los beneficios.',
+  'hudChrome.statInfo.names.spellPower': 'Poder con hechizos',
+  'hudChrome.statInfo.sources.attributes': 'De tus atributos: {value}',
+  'hudChrome.statInfo.sources.base': 'Base: {value}',
+  'hudChrome.statInfo.sources.buff': '{name}: {value}',
+  'hudChrome.statInfo.sources.fromAttribute': 'De {stat}: {value}',
+  'hudChrome.statInfo.sources.gear': 'Equipo equipado: {value}',
+  'hudChrome.statInfo.sources.header': 'Compuesto de:',
+  'hudChrome.statInfo.sources.talents': 'Talentos y efectos: {value}',
   'hudChrome.loot.chestTitle': 'Cofre',
   'hudChrome.spellbook.addToBarAria': 'Añadir {name} a la barra de acción',
   'hudChrome.spellbook.removeFromBarAria': 'Quitar {name} de la barra de acción',
   'hudChrome.nameplate.mob': '[{level}] {name}',
   'hudChrome.nameplate.mobElite': '[{level}+] {name}',
+  'hudChrome.mobTooltip.levelFamily': 'Nivel {level} {family}',
+  'hudChrome.mobTooltip.familyDemon': 'Demonio',
+  'hudChrome.mobTooltip.hostile': 'Hostil',
+  'hudChrome.mobTooltip.friendly': 'Amistoso',
   'hud.core.mapCanvasLabel': 'Mapa',
   'hud.core.mapSummary': 'Mapa de {zone}.',
   'hudChrome.castBar.playerAria': 'Tu barra de lanzamiento',
@@ -28,6 +96,9 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.skipLinks.chat': 'Saltar al chat',
   'hudChrome.skipLinks.mainHud': 'Saltar a la interfaz principal',
   'hudChrome.unitFrame.durationUnitSeconds': 's',
+  'hudChrome.unitFrame.durationUnitMinutes': 'm',
+  'hudChrome.unitFrame.durationUnitHours': 'h',
+  'hudChrome.unitFrame.durationUnitDays': 'd',
   'hudChrome.unitFrame.partyGroup': 'Grupo {n}',
   'hudChrome.unitFrame.partyLabel': 'Tu grupo',
   'hudChrome.unitFrame.playerLabel': 'Tu personaje',
@@ -238,6 +309,12 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.showWalletOnPlayerCard': 'Mostrar cartera en la tarjeta de jugador',
   'hudChrome.playerCard.showWalletBadge': 'Mostrar insignia de cartera',
   'hudChrome.options.uiScale': 'Escala de la interfaz',
+  'hudChrome.options.playerFrameScale': 'Escala del marco del jugador',
+  'hudChrome.options.targetFrameScale': 'Escala del marco del objetivo',
+  'hudChrome.options.aurasOnPlayerFrame': 'Beneficios en el marco del jugador',
+  'hudChrome.playerFrame.unlock': 'Mover marco del jugador',
+  'hudChrome.playerFrame.lock': 'Fijar marco del jugador',
+  'hudChrome.frameReset.label': 'Restablecer posición de los marcos',
   'hudChrome.options.highContrastBackground': 'Fondo de alto contraste',
   'hudChrome.options.showItemLevel': 'Mostrar nivel de objeto',
   'hudChrome.options.itemLevelLine': 'Nivel de objeto {level}',
@@ -391,8 +468,8 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'stats.playersOnline': 'Jugadores en Línea',
   'stats.realmName': 'Nombre del Reino',
   'footer.copyright': '2026 Cryptic Realm',
-  'footer.githubLink': '/contributions.html',
-  'footer.githubLabel': 'Contributions',
+  'footer.githubLink': 'https://github.com/levy-street/world-of-claudecraft',
+  'footer.githubLabel': 'Proyecto de Código Abierto',
   'footer.whitepaper': 'Libro blanco',
   'footer.terms': 'Términos de Servicio',
   'footer.privacy': 'Política de Privacidad',
@@ -402,7 +479,11 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'wiki.title': 'Wiki y Guía del Juego',
   'wiki.desc': 'Descubre los secretos del reino, guías de clase y estrategias.',
   'news.title': 'Noticias y Actualizaciones',
-  'news.desc': 'Lee las últimas notas del parche, eventos y noticias de la comunidad.',  'comingSoon.placeholder': 'Próximamente...',
+  'news.desc': 'Lee las últimas notas del parche, eventos y noticias de la comunidad.',
+  'download.title': 'Descargar Lanzador de Escritorio',
+  'download.desc':
+    'Consigue el lanzador independiente para un rendimiento optimizado y juego a pantalla completa.',
+  'comingSoon.placeholder': 'Próximamente...',
   'comingSoon.featureComingSoon': 'Esta característica llegará pronto al reino.',
   'mode.onlineTitle': 'Jugar en Línea',
   'mode.onlineDesc':
@@ -567,7 +648,7 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'playerCard.levelClass': 'Nivel {level} - {className}',
   'playerCard.topPercent': 'TOP {percent}%',
   'playerCard.realmSubtitle': 'Reino {realm}',
-  'playerCard.defaultRealm': 'Mundo de Cryptic Realm',
+  'playerCard.defaultRealm': 'Mundo de ClaudeCraft',
   'playerCard.brandWordmark': 'CRYPTIC REALM',
   'playerCard.recruited': '{count} reclutados',
   'playerCard.footerHandle': '@{handle}',
@@ -577,7 +658,7 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'playerCard.shareTierBit': ', titular de $CR de rango {tier}',
   'playerCard.shareText':
     'Estoy forjando mi leyenda en Cryptic Realm: nivel {level} {className}{tierBit}. Únete a mi reino:',
-  'playerCard.nativeShareTitle': 'Mundo de Cryptic Realm',
+  'playerCard.nativeShareTitle': 'Mundo de ClaudeCraft',
   'playerCard.fileNameFallback': 'jugador',
   'playerCard.actionShareX': 'Compartir en X',
   'playerCard.actionCopyReferral': 'Copiar enlace de invitación',
@@ -651,7 +732,7 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'a11y.mainNavigation': 'Navegación principal',
   'a11y.languageSelection': 'Selección de idioma',
   'a11y.characterActions': 'Acciones de personaje',
-  'a11y.githubProject': 'Open Cryptic Realm contributions',
+  'a11y.githubProject': 'Abrir el proyecto de Cryptic Realm en GitHub',
   'a11y.discordCommunity': 'Unirse a la comunidad de Cryptic Realm en Discord',
   'a11y.donateProject': 'Donar para apoyar Cryptic Realm',
   'loading.world': 'Cargando mundo...',
@@ -1332,9 +1413,12 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'abilityUi.forms.bear': 'oso',
   'abilityUi.forms.cat': 'lobo',
   'abilityUi.cast.fishing': 'Pesca',
+  'abilityUi.cast.thunzharrStormcall': 'Llamada de la tormenta',
   'abilityUi.cast.demonHeal': 'Sanación demoníaca',
   'questUi.tracker.title': 'Misiones',
   'questUi.tracker.complete': 'Completada',
+  'questUi.tracker.showOnMap': 'Mostrar {name} en el mapa',
+  'questUi.tracker.hideFromMap': 'Ocultar {name} del mapa',
   'questUi.log.title': 'Diario de misiones',
   'questUi.log.close': 'Cerrar diario de misiones',
   'questUi.log.summary': 'Activas: {active} / Completadas: {completed}',
@@ -1633,6 +1717,21 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.taunt.description':
     'Provoca al objetivo: tu amenaza sube hasta igualar la de su enemigo más odiado y queda obligado a atacarte durante 3 s.',
   'entities.abilities.fireball.name': 'Bola de Fuego',
+  'entities.abilities.rain_of_fire.name': 'Lluvia de Fuego',
+  'entities.abilities.rain_of_fire.description':
+    'Hace caer una lluvia de fuego sobre el área objetivo, quemando a los enemigos e infligiendo {damage} de daño de Fuego.',
+  'entities.abilities.volley.name': 'Andanada',
+  'entities.abilities.volley.description':
+    'Lanza una lluvia de flechas sobre el área objetivo, infligiendo {damage} de daño a los enemigos atrapados.',
+  'entities.abilities.hurricane.name': 'Huracán',
+  'entities.abilities.hurricane.description':
+    'Desata un huracán sobre el área objetivo, golpeando a los enemigos e infligiendo {damage} de daño de Naturaleza.',
+  'entities.abilities.earthquake.name': 'Terremoto',
+  'entities.abilities.earthquake.description':
+    'Sacude el área objetivo, golpeando a los enemigos e infligiendo {damage} de daño de Naturaleza.',
+  'entities.abilities.flamestrike.name': 'Llamarada',
+  'entities.abilities.flamestrike.description':
+    'Invoca un estallido de fuego en el área objetivo que inflige {damage} de daño de Fuego a los enemigos alcanzados por la explosión.',
   'entities.abilities.fireball.description':
     'Lanza una bola ígnea que causa {damage} de daño de Fuego y daño adicional en el tiempo.',
   'entities.abilities.frost_armor.name': 'Armadura de Escarcha',
@@ -2097,6 +2196,11 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'entities.items.weathered_ledger_page.name': 'Página de libro mayor ajada',
   'entities.items.morthen_grimoire.name': 'Grimorio de Morthen',
   'entities.items.wolf_fang.name': 'Colmillo de lobo quebrado',
+  'entities.items.linen_pouch.name': 'Bolsa de lino',
+  'entities.items.travelers_knapsack.name': 'Mochila de viajero',
+  'entities.items.wolfhide_satchel.name': 'Zurrón de piel de lobo',
+  'entities.items.gravewoven_bag.name': 'Bolsa sepulcral',
+  'entities.items.mistcallers_duffel.name': 'Petate del Llamaniebla',
   'entities.items.bandit_bandana.name': 'Pañuelo rojo',
   'entities.items.tough_jerky.name': 'Cecina dura',
   'entities.items.mudfin_scale.name': 'Escama viscosa de múrloc',
@@ -2347,14 +2451,14 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.nhalia_mourner.name': 'Doliente de Nhalia',
   'entities.mobs.sister_nhalia.name': 'Hermana Nhalia',
   'entities.mobs.varkas_boneguard.name': 'Guardahuesos de Varkas',
-  'entities.mobs.imp.name': 'Diablillo',
-  'entities.mobs.voidwalker.name': 'Caminante del Vacío',
-  'entities.mobs.succubus.name': 'Súcubo',
+  'entities.mobs.emberkin.name': 'Diablillo',
+  'entities.mobs.gloomshade.name': 'Caminante del Vacío',
+  'entities.mobs.duskborn.name': 'Súcubo',
   'entities.mobs.grix_the_tunnelking.name': 'Grix el Rey Túnel',
-  'entities.mobs.felhunter.name': 'Cazador vil',
-  'entities.mobs.felguard.name': 'Guardia vil',
-  'entities.mobs.infernal.name': 'Infernal',
-  'entities.mobs.doomguard.name': 'Guardián del Terror',
+  'entities.mobs.spellhound.name': 'Cazador vil',
+  'entities.mobs.warfiend.name': 'Guardia vil',
+  'entities.mobs.pyre_colossus.name': 'Infernal',
+  'entities.mobs.wraithborn.name': 'Guardián del Terror',
   'entities.mobs.choirmother_selthe.name': 'Selthe, madre del coro',
   'entities.mobs.drowned_templeguard.name': 'Guardián ahogado del templo',
   'entities.mobs.drowned_votary.name': 'Devoto ahogado',
@@ -3016,7 +3120,7 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'mode.caCopyAria': 'Copiar dirección del contrato',
   'mode.caLabel': 'Dirección del contrato de $CR',
   'mode.caNote':
-    'CR es nuestro token comunitario. No es necesario para jugar. Únete a Discord para hablar sobre la utilidad y el círculo virtuoso de CR.',
+    'WOC es nuestro token comunitario. No es necesario para jugar. Únete a Discord para hablar sobre la utilidad y el círculo virtuoso de WOC.',
   'mode.play': 'Jugar',
   'mode.playAria': 'Jugar Cryptic Realm',
   'mode.serverAria': 'Selecciona el reino: En Línea o Desconectado',
@@ -3028,7 +3132,7 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'news.error': 'No se pudieron cargar las novedades. Inténtalo de nuevo más tarde.',
   'news.loading': 'Cargando las últimas novedades...',
   'news.prerelease': 'Versión preliminar',
-  'news.viewOnGithub': 'Read release notes',
+  'news.viewOnGithub': 'Ver en GitHub',
   'wiki.cta': 'Explorar la Wiki',
   // --- qol-changes: character profile, attack-move, login/create labels ---
   'character.portraitAlt': 'Retrato de {name}',
@@ -3091,6 +3195,15 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'entities.items.brightwood_venison.name': 'Venado de Brightwood',
   'entities.items.bramblehide_jerkin.name': 'Jubón de piel de zarza',
   'entities.items.monarch_crown_helm.name': 'Corona del Monarca',
+  'entities.items.copper_mining_pick.name': 'Pico de Minería de Cobre',
+  'entities.items.iron_mining_pick.name': 'Pico de Minería de Hierro',
+  'entities.items.mithril_mining_pick.name': 'Pico de Minería de Mithril',
+  'entities.items.handaxe.name': 'Hacha de Mano',
+  'entities.items.felling_axe.name': 'Hacha de Tala',
+  'entities.items.ironbark_axe.name': 'Hacha de Corteza de Hierro',
+  'entities.items.gathering_sickle.name': 'Hoz de Recolección',
+  'entities.items.bronze_sickle.name': 'Hoz de Bronce',
+  'entities.items.silverleaf_sickle.name': 'Hoz de Hoja de Plata',
   // v0.10.0 release fill (Fiesta / skin-select / NPC voices / chat channels / Brightwood Glade)
   'hud.core.chatChannels.add': 'Añadir canal de chat',
   'hud.core.chatChannels.addTitle': 'Añadir canal',
@@ -3309,6 +3422,14 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.plurals.secondsRemaining.few': 'Quedan {count} segundos',
   'hudChrome.plurals.secondsRemaining.many': 'Quedan {count} segundos',
   'hudChrome.plurals.secondsRemaining.other': 'Quedan {count} segundos',
+  'hudChrome.plurals.playersMatching.one':
+    'Quién: {count} jugador que coincide con "{query}" en {realm}.',
+  'hudChrome.plurals.playersMatching.few':
+    'Quién: {count} jugadores que coinciden con "{query}" en {realm}.',
+  'hudChrome.plurals.playersMatching.many':
+    'Quién: {count} jugadores que coinciden con "{query}" en {realm}.',
+  'hudChrome.plurals.playersMatching.other':
+    'Quién: {count} jugadores que coinciden con "{query}" en {realm}.',
   'hudChrome.plurals.playersOnline.one': 'Quién: {count} jugador conectado en {realm}.',
   'hudChrome.plurals.playersOnline.few': 'Quién: {count} jugadores conectados en {realm}.',
   'hudChrome.plurals.playersOnline.many': 'Quién: {count} jugadores conectados en {realm}.',
@@ -3339,6 +3460,17 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'entities.items.soulflame_cowl.name': 'Caperuza Llama de Alma',
   'entities.items.soulflame_mantle.name': 'Manto Llama de Alma',
   'entities.items.stormcallers_crown.name': 'Corona del Invocatormentas',
+  'entities.items.crownforged_gauntlets.name': 'Guanteletes Forjacorona',
+  'entities.items.nighttalon_grips.name': 'Agarraderas Garra Nocturna',
+  'entities.items.soulflame_gloves.name': 'Guantes Llama de Alma',
+  'entities.items.stormcallers_handguards.name': 'Guardamanos del Invocatormentas',
+  'entities.items.crownforged_girdle.name': 'Cinturón Forjacorona',
+  'entities.items.nighttalon_waistband.name': 'Faja Garra Nocturna',
+  'entities.items.soulflame_cord.name': 'Cordón Llama de Alma',
+  'entities.items.stormcallers_waistguard.name': 'Guardacintura del Invocatormentas',
+  'entities.mobs.thunzharr_waking_peak.name': 'Thunzharr, el Pico Despierto',
+  'entities.mobs.thunzharr_stormling.name': 'Elemental de tormenta despierto',
+  'hudChrome.worldBoss.spawn': '¡{name} se alza sobre las Alturas de Thornpeak!',
   'entities.items.stormcallers_spaulders.name': 'Bufas del Invocatormentas',
   'hud.chat.context.convertToRaid': 'Convertir en banda',
   'hud.chat.context.convertToParty': 'Convertir en grupo',
@@ -3471,7 +3603,7 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'guide.bestiary.levelsSame': 'Nivel {min}',
   'guide.bestiary.rare': 'Raro',
   'guide.brand': 'Cryptic Realm',
-  'guide.brandShort': 'Cryptic',
+  'guide.brandShort': 'ClaudeCraft',
   'guide.classHook.druid':
     'Un cambiaformas que protege como oso, despedaza a sus enemigos como felino o sana en plena refriega.',
   'guide.classHook.hunter':
@@ -3609,12 +3741,12 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'guide.family.humanoid.desc':
     'Bandidos, sectarios y otros que tomaron el oficio equivocado. Luchan con tácticas, no solo con los dientes.',
   'guide.family.humanoid.name': 'Humanoides',
-  'guide.family.kobold.desc':
+  'guide.family.burrower.desc':
     'Excavadores con velas en la cabeza que infestan minas y madrigueras, defendiendo con ferocidad su mineral.',
-  'guide.family.kobold.name': 'Kobolds',
-  'guide.family.murloc.desc':
+  'guide.family.burrower.name': 'Kobolds',
+  'guide.family.mudfin.desc':
     'Habitantes anfibios de la ciénaga que pululan por los bajíos en bandadas ruidosas y territoriales.',
-  'guide.family.murloc.name': 'Múrlocs',
+  'guide.family.mudfin.name': 'Múrlocs',
   'guide.family.ogre.desc':
     'Enormes, torpes de mente y peligrosos. Acampan en los pasos elevados y golpean como un alud.',
   'guide.family.ogre.name': 'Ogros',
@@ -3626,7 +3758,8 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'guide.family.undead.desc':
     'Los muertos sin reposo, alzados por manos más oscuras. No se cansan y no huyen.',
   'guide.family.undead.name': 'No-muertos',
-  'guide.faqPage.a1': 'Yes. The whole game is free to play to the level cap.',
+  'guide.faqPage.a1':
+    'Sí. El juego completo es gratuito hasta el nivel máximo, y el código fuente es abierto en GitHub.',
   'guide.faqPage.a2':
     'No. El juego se puede jugar por completo sin ella. El token comunitario opcional solo desbloquea adornos cosméticos y nunca afecta al poder ni a la progresión.',
   'guide.faqPage.a3':
@@ -3639,7 +3772,8 @@ export const es: Partial<Record<TranslationKey, string>> = {
     'Nivel {cap}, alcanzado a través de tres zonas conectadas de misiones, mazmorras y exploración.',
   'guide.faqPage.a7':
     'Los personajes en línea se guardan en el servidor automáticamente. Los personajes sin conexión viven en tu navegador para sesiones rápidas y pruebas.',
-  'guide.faqPage.a8': 'Private realms are operated through verified Cryptic Realm channels.',
+  'guide.faqPage.a8':
+    'Sí. El proyecto es de código abierto, así que puedes alojar tu propio servidor. Consulta el repositorio de GitHub.',
   'guide.faqPage.intro': 'Las preguntas que más hacen los jugadores nuevos.',
   'guide.faqPage.q1': '¿Es realmente gratis?',
   'guide.faqPage.q2': '¿Necesito una cartera de criptomonedas o algún token?',
@@ -3649,10 +3783,11 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'guide.faqPage.q6': '¿Cuál es el nivel máximo?',
   'guide.faqPage.q7': '¿Se guardará mi personaje?',
   'guide.faqPage.q8': '¿Puedo alojar mi propia copia?',
-  'guide.footer.blurb': 'A classic-style micro-MMO. Quest, group up, and explore a hand-built world, right in your browser.',
+  'guide.footer.blurb':
+    'Un micro-MMO de estilo clásico y código abierto. Haz misiones, forma grupo y explora un mundo hecho a mano, directamente en tu navegador.',
   'guide.footer.communityWiki': 'Wiki de la comunidad',
   'guide.footer.discord': 'Únete al Discord',
-  'guide.footer.github': 'Contributions',
+  'guide.footer.github': 'Código en GitHub',
   'guide.footer.playNow': 'Jugar ahora',
   'guide.footer.rights': 'Cryptic Realm',
   'guide.glossary.aggroDef':
@@ -3696,13 +3831,14 @@ export const es: Partial<Record<TranslationKey, string>> = {
     'Nueve arquetipos clásicos, cada uno con su propia sensación y rol de grupo.',
   'guide.home.community.body': 'Únete ahora, o ven a saludar. El mundo es mejor en compañía.',
   'guide.home.community.discord': 'Únete al Discord',
-  'guide.home.community.github': 'Contributions',
+  'guide.home.community.github': 'Danos una estrella en GitHub',
   'guide.home.community.heading': 'Únete al reino',
   'guide.home.community.play': 'Jugar ahora',
   'guide.home.ctaLearn': 'Cómo jugar',
   'guide.home.ctaPlay': 'Jugar ahora',
   'guide.home.eyebrow': 'MMO de navegador de estilo clásico',
-  'guide.home.faq.a1': 'Yes. The whole game is free to the level cap.',
+  'guide.home.faq.a1':
+    'Sí. El juego completo es gratuito hasta el nivel máximo, y es de código abierto en GitHub.',
   'guide.home.faq.a2':
     'No. El juego se puede jugar por completo sin ella. El token comunitario opcional solo desbloquea adornos cosméticos y nunca afecta al poder.',
   'guide.home.faq.a3':
@@ -3734,8 +3870,9 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'guide.home.what.pillarClassesBody':
     'Protege, sana o reparte el daño. Cada clase juega como debe hacerlo su arquetipo, con talentos para hacerla tuya.',
   'guide.home.what.pillarClassesTitle': 'Nueve clases, tres roles',
-  'guide.home.what.pillarOpenBody': 'Free to play to the level cap. No pay to win, ever.',
-  'guide.home.what.pillarOpenTitle': 'Free to play',
+  'guide.home.what.pillarOpenBody':
+    'Gratuito hasta el nivel máximo, con el juego entero de código abierto. Sin pagar para ganar, nunca.',
+  'guide.home.what.pillarOpenTitle': 'Gratis y de código abierto',
   'guide.home.what.pillarPlayBody':
     'Sin descargas, sin lanzador. Crea un personaje y estarás en el mundo en segundos, en escritorio o teléfono.',
   'guide.home.what.pillarPlayTitle': 'Juega en tu navegador',
@@ -4044,17 +4181,17 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'guide.nav.arena': 'Arena y JcJ',
   'guide.nav.talents': 'Talentos',
   'guide.nav.wishIKnew': 'Lo que me habría gustado saber',
-  'guide.petHook.doomguard': 'Un lanzador de élite que descarga sombra pesada desde la distancia.',
-  'guide.petHook.felguard':
+  'guide.petHook.wraithborn': 'Un lanzador de élite que descarga sombra pesada desde la distancia.',
+  'guide.petHook.warfiend':
     'Un combatiente cuerpo a cuerpo resistente, el todoterreno una vez que puedes invocarlo.',
-  'guide.petHook.felhunter': 'Un hostigador de las sombras que acosa a los lanzadores enemigos.',
-  'guide.petHook.imp':
+  'guide.petHook.spellhound': 'Un hostigador de las sombras que acosa a los lanzadores enemigos.',
+  'guide.petHook.emberkin':
     'Un demonio de descargas de fuego a distancia que merma a los enemigos desde un lugar seguro.',
-  'guide.petHook.infernal':
+  'guide.petHook.pyre_colossus':
     'Un coloso descomunal con un cuerpo a cuerpo demoledor, invocado por puro poder.',
-  'guide.petHook.succubus':
+  'guide.petHook.duskborn':
     'Un demonio cuerpo a cuerpo veloz que golpea fuerte pero cede bajo presión.',
-  'guide.petHook.voidwalker':
+  'guide.petHook.gloomshade':
     'Un demonio robusto que provoca y absorbe golpes para que puedas lanzar en paz.',
   'guide.related': 'Relacionado',
   'guide.search.label': 'Buscar',
@@ -4870,28 +5007,40 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.masterLoot.assigned': '{looter} asigno {item} a {target}.',
   'hudChrome.masterLoot.unassigned': '{item} no fue asignado y queda libre para todos.',
   'hudChrome.masterLoot.leaderOnly': 'Solo el lider del grupo puede cambiar el metodo de botin.',
+  'entities.itemSets.boundstone_vanguard.name': 'Vanguardia Piedravínculo',
+  'entities.itemSets.boundstone_vanguard.bonus3':
+    'Aumenta la velocidad de ataque y de lanzamiento en 15%.',
   'entities.itemSets.crownforged.name': 'Equipo de batalla Forjacorona',
   'entities.itemSets.crownforged.bonus2': 'Aumenta el poder de ataque en 40.',
-  'entities.itemSets.crownforged.bonus3': 'Aumenta la fuerza en 15 y el aguante en 15.',
+  'entities.itemSets.crownforged.bonus3':
+    'Aumenta la fuerza en 15, el aguante en 15 y la velocidad de ataque y de lanzamiento en 15%.',
   'entities.itemSets.deathlord.name': 'Equipo de batalla del Señor de la Muerte',
   'entities.itemSets.deathlord.bonus2': 'Aumenta el poder de ataque en 40.',
   'entities.itemSets.deathlord.bonus3': 'Aumenta la fuerza en 15 y el aguante en 15.',
+  'entities.itemSets.greyjaw_stalker.name': 'Equipo del Acechador de Greyjaw',
+  'entities.itemSets.greyjaw_stalker.bonus3':
+    'Aumenta la velocidad de ataque y de lanzamiento en 15%.',
   'entities.itemSets.necromancers.name': 'Vestiduras del nigromante',
   'entities.itemSets.necromancers.bonus2':
-    'Reduce un 50% el retroceso de lanzamiento causado por daño.',
-  'entities.itemSets.necromancers.bonus3': 'El daño recibido no retrasa tus lanzamientos.',
+    'No puedes ser empujado hacia atrás (100% de resistencia al empuje).',
+  'entities.itemSets.necromancers.bonus3': 'Aumenta el intelecto en 10 y el aguante en 10.',
   'entities.itemSets.nighttalon.name': 'Atuendo de cuero Garra Nocturna',
   'entities.itemSets.nighttalon.bonus2': 'Aumenta el poder de ataque en 40.',
   'entities.itemSets.nighttalon.bonus3':
-    'Aumenta la agilidad en 15 y la probabilidad de crítico en 2%.',
+    'Aumenta la agilidad en 15, la probabilidad de crítico en 2% y la velocidad de ataque y de lanzamiento en 15%.',
   'entities.itemSets.soulflame.name': 'Vestiduras de Llama de Alma',
   'entities.itemSets.soulflame.bonus2':
-    'Reduce un 50% el retroceso de lanzamiento causado por daño.',
-  'entities.itemSets.soulflame.bonus3': 'El daño recibido no retrasa tus lanzamientos.',
+    'No puedes ser empujado hacia atrás (100% de resistencia al empuje).',
+  'entities.itemSets.soulflame.bonus3':
+    'Aumenta el intelecto en 15, el espíritu en 15 y la velocidad de ataque y de lanzamiento en 15%.',
   'entities.itemSets.stormcallers.name': 'Vestiduras del Invocatormentas',
   'entities.itemSets.stormcallers.bonus2':
-    'Reduce un 50% el retroceso de lanzamiento causado por daño.',
-  'entities.itemSets.stormcallers.bonus3': 'El daño recibido no retrasa tus lanzamientos.',
+    'No puedes ser empujado hacia atrás (100% de resistencia al empuje).',
+  'entities.itemSets.stormcallers.bonus3':
+    'Aumenta el intelecto en 15, el espíritu en 15 y la velocidad de ataque y de lanzamiento en 15%.',
+  'entities.itemSets.vale_arcanist.name': 'Vestiduras del Arcanista del Valle',
+  'entities.itemSets.vale_arcanist.bonus3':
+    'Aumenta la velocidad de ataque y de lanzamiento en 15%.',
   'entities.itemSets.wyrmshadow.name': 'Atuendo de Sombra de Vermis',
   'entities.itemSets.wyrmshadow.bonus2': 'Aumenta el poder de ataque en 40.',
   'entities.itemSets.wyrmshadow.bonus3':
@@ -5031,4 +5180,86 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.relay.help.label': 'Necesito ayuda',
   'hudChrome.discord.relay.help.hint': 'Pide ayuda a la comunidad',
   'hudChrome.options.showSecondaryActionBar': 'Mostrar barra de acción secundaria',
+  'errors.api.desktopCodeInvalid':
+    'El código de inicio de sesión de escritorio no es válido o expiró. Inténtalo de nuevo.',
+  'desktop.crash.body': 'La vista del juego dejó de funcionar. ¿Recargarla?',
+  'desktop.crash.fatalBody': 'Cryptic Realm tuvo un error inesperado y debe cerrarse.',
+  'desktop.crash.quit': 'Salir',
+  'desktop.crash.reload': 'Recargar',
+  'desktop.crash.title': 'Cryptic Realm',
+  'desktop.update.downloading': 'Descargando actualización {version}...',
+  'desktop.update.later': 'Más tarde',
+  'desktop.update.ready':
+    'La actualización {version} está lista. Se instala al salir, o reinicia ahora.',
+  'desktop.update.restart': 'Reiniciar ahora',
+  'hudChrome.dailyRewards.close': 'Cerrar recompensas diarias',
+  'hudChrome.dailyRewards.endsIn': 'Termina en {time}',
+  'hudChrome.dailyRewards.error': 'No se pudieron cargar las recompensas diarias.',
+  'hudChrome.dailyRewards.history': 'Ganadores anteriores',
+  'hudChrome.dailyRewards.intro':
+    'Mantén suficiente WOC en tu cartera verificada para desbloquear las recompensas diarias. Gana puntos con un giro diario y tareas rotativas, y escala la clasificación diaria para llevarte una parte del fondo de premios.',
+  'hudChrome.dailyRewards.leaderboard': 'Clasificación diaria',
+  'hudChrome.dailyRewards.loading': 'Cargando recompensas diarias...',
+  'hudChrome.dailyRewards.noHistory': 'Aún no hay pagos.',
+  'hudChrome.dailyRewards.noLeaders': 'Aún no hay puntos.',
+  'hudChrome.dailyRewards.prize': 'Fondo de premios',
+  'hudChrome.dailyRewards.reason.eligible': 'Recompensas desbloqueadas.',
+  'hudChrome.dailyRewards.reason.no_wallet': 'Conecta una cartera con al menos $20 USD en WOC.',
+  'hudChrome.dailyRewards.reason.price_unavailable':
+    'El precio de WOC no está disponible; las recompensas están bloqueadas temporalmente.',
+  'hudChrome.dailyRewards.reason.under_minimum':
+    'La cartera está por debajo del mínimo de $20 USD en WOC.',
+  'hudChrome.dailyRewards.remainingHoursMinutes': '{hours}h {minutes}min',
+  'hudChrome.dailyRewards.remainingLessThanMinute': '<1min',
+  'hudChrome.dailyRewards.remainingMinutes': '{minutes}min',
+  'hudChrome.dailyRewards.reset': 'Reinicio',
+  'hudChrome.dailyRewards.score': 'Puntuación',
+  'hudChrome.dailyRewards.sol': '{amount} SOL',
+  'hudChrome.dailyRewards.spinButton': 'Girar',
+  'hudChrome.dailyRewards.spinClaimed': 'Reclamado: +{points} puntos.',
+  'hudChrome.dailyRewards.spinClose': 'Cerrar giro diario',
+  'hudChrome.dailyRewards.spinDialogTitle': 'Giro de recompensa diaria',
+  'hudChrome.dailyRewards.spinReady': 'Tienes un giro disponible.',
+  'hudChrome.dailyRewards.spinResult': '+{points} puntos',
+  'hudChrome.dailyRewards.spinTitle': 'Giro diario',
+  'hudChrome.dailyRewards.tasks': 'Tareas',
+  'hudChrome.dailyRewards.showChestButton': 'Mostrar cofre',
+  'hudChrome.dailyRewards.hideChestButton': 'Ocultar cofre',
+  'hudChrome.dailyRewards.title': 'Recompensas diarias',
+  'hudChrome.dailyRewards.unknown': 'Desconocido',
+  'hudChrome.dailyRewards.usd': '{amount} USD',
+  'hudChrome.dailyRewards.walletConnectBody':
+    'Verifica una cartera de Solana con WOC para desbloquear las recompensas diarias.',
+  'hudChrome.dailyRewards.walletConnectButton': 'Verificar cartera',
+  'hudChrome.dailyRewards.walletConnectTitle': 'Verificar cartera',
+  'hudChrome.dailyRewards.walletHoldBody':
+    'Mantén al menos {amount} USD en WOC para desbloquear las recompensas diarias.',
+  'hudChrome.dailyRewards.walletHoldTitle': 'Mantén WOC',
+  'hudChrome.dailyRewards.walletPriceBody':
+    'El precio de WOC no está disponible en este momento. Vuelve a consultarlo pronto.',
+  'hudChrome.dailyRewards.walletValue': 'Valor de cartera (WOC)',
+  'hudChrome.nativeUpdate.body':
+    'Ya hay disponible una nueva versión de Cryptic Realm. Actualiza ahora para obtener las últimas correcciones y mejoras.',
+  'hudChrome.nativeUpdate.bodyWithVersion':
+    'La versión {version} de Cryptic Realm ya está disponible. Actualiza ahora para obtener las últimas correcciones y mejoras.',
+  'hudChrome.nativeUpdate.notNow': 'Ahora no',
+  'hudChrome.nativeUpdate.title': 'Actualización disponible',
+  'hudChrome.nativeUpdate.update': 'Actualizar',
+  // Ravenpost authored letters
+  'entities.letters.ravenpost_welcome.sender': 'El Correo del Cuervo',
+  'entities.letters.ravenpost_welcome.subject': 'Los cuervos ya vuelan por ti',
+  'entities.letters.ravenpost_welcome.body':
+    'Viajero:\n\nEl Correo del Cuervo ha abierto sus perchas a lo largo del valle. Busca los pilares del cuervo en Eastbrook, Fenbridge y Highwatch: desde cualquiera de ellos podrás enviar cartas, monedas y objetos a otros aventureros, y recoger lo que los cuervos te traigan.\n\nTe adjuntamos un pequeño detalle para tu primer sello.\n\nAlas arriba,\nEl Correo del Cuervo',
+  'entities.letters.letter_q_wolves.sender': 'Mariscal Redbrook',
+  'entities.letters.letter_q_wolves.subject': 'Los rediles vuelven a estar en calma',
+  'entities.letters.letter_q_wolves.body':
+    'Los pastores por fin pueden dormir tranquilos, y eso es obra tuya. He pedido al Correo del Cuervo que te lleve un pequeño detalle del fondo de la guardia.\n\nMantén la hoja engrasada.\n- Mariscal Redbrook',
+  'entities.letters.letter_q_greyjaw.sender': 'Mariscal Redbrook',
+  'entities.letters.letter_q_greyjaw.subject': 'El viejo Fauces Grises, por fin',
+  'entities.letters.letter_q_greyjaw.body':
+    'Las noticias vuelan en un pueblo tan pequeño. Anoche los pastores brindaron a tu salud, y Wilkes jura que el lobo era del tamaño de un carro. Deja que exageren: te lo has ganado.\n\nDate un banquete a cuenta de la guardia.\n- Mariscal Redbrook',
+  'entities.letters.letter_q_hollow.sender': 'Hermano Aldric',
+  'entities.letters.letter_q_hollow.subject': 'Lo que hiciste en la oscuridad',
+  'entities.letters.letter_q_hollow.body':
+    'Pocos sabrán jamás lo que estaba enterrado en esa hondonada, y menos aún lo creerían. Yo lo sé, y no lo olvidaré.\n\nQue tu camino siga iluminado.\n- Hermano Aldric',
 };

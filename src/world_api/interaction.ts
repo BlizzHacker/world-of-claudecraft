@@ -1,6 +1,7 @@
 export interface IWorldInteraction {
   interact(): void;
   lootCorpse(id: number): void;
+  autoLoot(id: number): void;
   pickUpObject(id: number): void;
   // ArcForge world builder (admin/mod only; server re-validates the role).
   // Downstream (Cryptic Realm) extension: live prop placement + music/voice-on-props.

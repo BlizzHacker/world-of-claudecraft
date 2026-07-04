@@ -197,6 +197,8 @@ describe('i18n whole-catalog completeness', () => {
       'wallet.holderTiers.voidwarden.flavor',
       'wallet.holderTiers.worldforger.name',
       'wallet.holderTiers.worldforger.flavor',
+      'desktop.crash.title', // "World of ClaudeCraft" - brand (desktop crash dialog title)
+      'auth.emailPlaceholder', // "you@example.com" - RFC 2606 example address, kept verbatim
     ]);
     const BRAND_ALLOW_PREFIX = ['contributions.', 'whitepaper.', 'links.'];
     const allowed = (key: string) =>

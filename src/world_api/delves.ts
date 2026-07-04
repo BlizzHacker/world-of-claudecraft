@@ -1,5 +1,17 @@
 import type { Ante, LootTier, PickAction, VisibleCell } from '../sim/lockpick';
-import type { DelveObjectiveState } from '../sim/types';
+import type { DelveObjectiveState, RiteIntensity } from '../sim/types';
+
+/** Drowned Reliquary Rite progress, surfaced so the HUD can guide the player:
+ * choose = the reliquary is up and waits for a difficulty pick, playback = the
+ * shrine sequence is being shown, input = the player must repeat it (current/
+ * total track progress through the sequence), open = the reliquary has opened. */
+export type DelveRitePhase = 'choose' | 'playback' | 'input' | 'open';
+
+export interface DelveRiteInfo {
+  phase: DelveRitePhase;
+  current: number;
+  total: number;
+}
 
 export interface DelveRunInfo {
   delveId: string;
@@ -19,6 +31,8 @@ export interface DelveRunInfo {
   /** Connected-floor delve (Durance): all rooms live at once, no per-room portals;
    * the HUD shows a "descend & slay the boss" objective instead of room counters. */
   openFloor?: boolean;
+  /** The Drowned Reliquary Rite finale state, or null while no rite is up. */
+  rite: DelveRiteInfo | null;
 }
 
 // Render-safe projection of an active lockpicking attempt. Only ever holds cells
@@ -82,6 +96,9 @@ export interface IWorldDelves {
   lockpickAction(action: PickAction): void;
   lockpickAbort(): void;
   collectDelveChestLoot(chestId: number): void;
+  /** The Drowned Litany finale: pick the rite difficulty (Easy/Medium/Hard) at
+   * the risen reliquary, which starts the shrine-sequence playback. */
+  delveRiteChoose(intensity: RiteIntensity): void;
   delveRun: DelveRunInfo | null;
   companionState: DelveCompanionInfo | null;
   delveMarks: number;

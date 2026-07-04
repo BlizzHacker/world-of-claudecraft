@@ -14,5 +14,7 @@ export function formatClockTime(date: Date, use24: boolean, lang?: SupportedLang
   const options: Intl.DateTimeFormatOptions = use24
     ? { hour: '2-digit', minute: '2-digit', hour12: false }
     : { hour: 'numeric', minute: '2-digit', hour12: true };
-  return formatDateTime(date, options, lang);
+  const out = formatDateTime(date, options, lang);
+  // Intl's hour12:false renders midnight as "24:xx" in some locales; normalize to 00.
+  return use24 ? out.replace(/^24:/, '00:') : out;
 }

@@ -1,4 +1,4 @@
-// Chat timestamps — a classic-WoW "Show Timestamps" interface option.
+// Chat timestamps — a classic-style "Show Timestamps" interface option.
 //
 // Pure, DOM-free formatting helpers (snapshot-tested in tests/). The HUD owns
 // the on/off + clock-format state and persists it to localStorage; this module
@@ -21,8 +21,11 @@ export function clampChatClock(v: string | null): ChatClock {
 // marker, and digits follow the active locale (the optional `lang` lets
 // callers/tests pin one); the surrounding [] brackets are structural.
 export function formatChatTimestamp(d: Date, clock: ChatClock, lang?: SupportedLanguage): string {
-  const options: Intl.DateTimeFormatOptions = clock === '12h'
-    ? { hour: 'numeric', minute: '2-digit', hour12: true }
-    : { hour: '2-digit', minute: '2-digit', hour12: false };
-  return `[${formatDateTime(d, options, lang)}]`;
+  const options: Intl.DateTimeFormatOptions =
+    clock === '12h'
+      ? { hour: 'numeric', minute: '2-digit', hour12: true }
+      : { hour: '2-digit', minute: '2-digit', hour12: false };
+  const out = formatDateTime(d, options, lang);
+  // Normalize Intl's midnight "24:xx" (hour12:false) to "00:xx" in 24h mode.
+  return `[${clock === '24h' ? out.replace(/^24:/, '00:') : out}]`;
 }

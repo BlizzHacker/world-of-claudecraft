@@ -211,7 +211,7 @@ export class Market {
   // List a stack from your bags for sale. The goods are escrowed (pulled from
   // your bags immediately) and held by the Merchant until bought or reclaimed.
   // Set the player's session-only World Market browse query (search + type/subtype/
-  // rarity filters + page). Purely a display/query narrowing — no gameplay effect — so
+  // rarity filters + page). Purely a display/query narrowing (no gameplay effect), so
   // it needs no proximity or liveness gate; the next marketInfoFor snapshot reflects it.
   marketSearch(query: MarketQuery, pid?: number): void {
     const r = this.ctx.resolve(pid);
@@ -243,7 +243,10 @@ export class Market {
       return;
     }
     const want = Math.max(1, Math.floor(count));
-    if (this.ctx.countItem(itemId, meta.entityId) < want) {
+    // Per-instance copies (#1165: signer/charges/rolled/boundTo) are inert on the
+    // World Market for now: count and escrow only the fungible stock, so a signed
+    // or bound item is never swept into a listing. (#1146 wires real handling later.)
+    if (this.ctx.countFungibleItem(itemId, meta.entityId) < want) {
       this.ctx.error(meta.entityId, 'You do not have that many to sell.');
       return;
     }
@@ -268,7 +271,7 @@ export class Market {
       );
       return;
     }
-    this.ctx.removeItem(itemId, want, meta.entityId); // escrow
+    this.ctx.removeFungibleItem(itemId, want, meta.entityId); // escrow (fungible-only, #1165)
     this.marketListings.push({
       id: this.nextListingId++,
       sellerKey,
@@ -320,6 +323,10 @@ export class Market {
       this.ctx.error(meta.entityId, 'You cannot afford that.');
       return;
     }
+    if (!this.ctx.canAddItem(listing.itemId, listing.count, meta.entityId)) {
+      this.ctx.error(meta.entityId, 'Your bags are full.');
+      return;
+    }
     meta.copper -= listing.price;
     this.ctx.addItem(listing.itemId, listing.count, meta.entityId);
     if (!listing.house) {
@@ -359,6 +366,10 @@ export class Market {
       this.ctx.error(meta.entityId, 'That is not your listing.');
       return;
     }
+    if (!this.ctx.canAddItem(listing.itemId, listing.count, meta.entityId)) {
+      this.ctx.error(meta.entityId, 'Your bags are full.');
+      return;
+    }
     this.marketListings.splice(idx, 1);
     this.ctx.addItem(listing.itemId, listing.count, meta.entityId);
     const def = ITEMS[listing.itemId];
@@ -392,8 +403,23 @@ export class Market {
         text: `You collect ${formatMoney(col.copper)} from the Merchant.`,
         pid: meta.entityId,
       });
+      col.copper = 0;
     }
-    for (const s of col.items) this.ctx.addItem(s.itemId, s.count, meta.entityId);
+    // Capacity gate: items that don't fit stay in the collection box (never
+    // destroyed); the gold above is always collected.
+    const kept: typeof col.items = [];
+    for (const s of col.items) {
+      if (this.ctx.canAddItem(s.itemId, s.count, meta.entityId)) {
+        this.ctx.addItem(s.itemId, s.count, meta.entityId);
+      } else {
+        kept.push(s);
+      }
+    }
+    if (kept.length > 0) {
+      col.items = kept;
+      this.ctx.error(meta.entityId, 'Your bags are full.');
+      return;
+    }
     this.marketCollections.delete(this.marketSellerKey(meta));
   }
 
