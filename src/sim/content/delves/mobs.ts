@@ -133,50 +133,51 @@ export const DELVE_MOBS: Record<string, MobTemplate> = {
   },
 
   // --- Durance of Hate (Diabl0 Easter-egg delve) ---
-  // Fast fragile rushers: swarm the descent, stack up on the tank quickly.
-  durance_hateful_husk: {
-    id: 'durance_hateful_husk',
-    name: 'Hateful Husk',
+  // Fast fragile rushers: swarm the Hellmaw, stack on the tank fast. Low HP so big
+  // packs die to cleaves/AoE — meant to come in SWARMS.
+  hellmaw_charred_husk: {
+    id: 'hellmaw_charred_husk',
+    name: 'Charred Husk',
     minLevel: 10,
     maxLevel: 11,
     family: 'undead',
-    hpBase: 42,
-    hpPerLevel: 12,
+    hpBase: 34,
+    hpPerLevel: 10,
     dmgBase: 6,
     dmgPerLevel: 1.6,
     attackSpeed: 1.8,
-    armorPerLevel: 6,
-    moveSpeed: 8,
-    aggroRadius: 17,
-    corrode: { chance: 0.4, armor: 7, maxStacks: 4, duration: 12, name: 'Hate Rot' },
+    armorPerLevel: 5,
+    moveSpeed: 8.5,
+    aggroRadius: 20,
+    corrode: { chance: 0.4, armor: 7, maxStacks: 4, duration: 12, name: 'Ember Rot' },
     loot: [{ copper: 8, chance: 1 }],
     scale: 0.9,
     color: 0x6e2c2c,
   },
-  // Ranged brand-caster: sigil pulses hurt at range; close and kill first.
-  durance_sigilbound_acolyte: {
-    id: 'durance_sigilbound_acolyte',
-    name: 'Sigil-Bound Acolyte',
+  // Ranged brand-caster: cinder pulses hurt at range; close and kill first.
+  hellmaw_cinder_acolyte: {
+    id: 'hellmaw_cinder_acolyte',
+    name: 'Cinder Acolyte',
     minLevel: 10,
     maxLevel: 11,
     family: 'humanoid',
-    hpBase: 50,
-    hpPerLevel: 15,
+    hpBase: 48,
+    hpPerLevel: 14,
     dmgBase: 7,
     dmgPerLevel: 1.9,
     attackSpeed: 2.4,
-    armorPerLevel: 9,
+    armorPerLevel: 8,
     moveSpeed: 6,
-    aggroRadius: 13,
-    aoePulse: { min: 6, max: 11, radius: 6, every: 4, name: 'Sigil Brand' },
+    aggroRadius: 20,
+    aoePulse: { min: 6, max: 11, radius: 6, every: 4, name: 'Cinder Brand' },
     loot: [{ copper: 10, chance: 1 }],
     scale: 1.0,
     color: 0x8a1c2a,
   },
   // Mini-anchor: ccImmune cleaver that guards the deep gallery; tank alone.
-  durance_blood_behemoth: {
-    id: 'durance_blood_behemoth',
-    name: 'Blood Behemoth',
+  hellmaw_ember_behemoth: {
+    id: 'hellmaw_ember_behemoth',
+    name: 'Ember Behemoth',
     minLevel: 11,
     maxLevel: 12,
     family: 'demon',
@@ -188,43 +189,44 @@ export const DELVE_MOBS: Record<string, MobTemplate> = {
     attackSpeed: 2.6,
     armorPerLevel: 16,
     moveSpeed: 6.5,
-    aggroRadius: 12,
+    aggroRadius: 18,
     stomp: { radius: 7, every: 10, duration: 1.4, min: 12, max: 20, name: 'Crushing Wrath' },
     loot: [{ copper: 120, chance: 1 }],
     scale: 1.5,
     color: 0x4a1418,
   },
   // --- Boss ---
-  durance_the_butcher: {
-    id: 'durance_the_butcher',
-    name: 'The Butcher',
+  hellmaw_the_render: {
+    id: 'hellmaw_the_render',
+    name: 'The Render',
     minLevel: 12,
     maxLevel: 12,
     family: 'demon',
     elite: true,
     boss: true,
-    // "Ah… fresh meat!" — a bigger, meaner endboss: more HP, harder hits, and
-    // a wider cleave than a normal delve boss. He charges, he enrages, he butchers.
-    hpBase: 200,
-    hpPerLevel: 34,
-    dmgBase: 14,
-    dmgPerLevel: 3.4,
+    // The Render — the Crimson Infernal Behemoth at the bottom of the Hellmaw.
+    // A bigger, meaner endboss: more HP, harder hits, a wide cleave. He charges,
+    // he enrages, he tears the party apart.
+    hpBase: 240,
+    hpPerLevel: 38,
+    dmgBase: 15,
+    dmgPerLevel: 3.6,
     attackSpeed: 2.0,
-    armorPerLevel: 26,
+    armorPerLevel: 28,
     moveSpeed: 7.5,
-    aggroRadius: 18,
-    stomp: { radius: 11, every: 10, duration: 1.6, min: 24, max: 36, name: 'Butcher’s Cleave' },
-    summonAdds: { mobId: 'durance_hateful_husk', count: 3, atHpPct: [0.6, 0.3] },
+    aggroRadius: 20,
+    stomp: { radius: 12, every: 9, duration: 1.6, min: 26, max: 40, name: 'Render’s Cleave' },
+    summonAdds: { mobId: 'hellmaw_charred_husk', count: 4, atHpPct: [0.6, 0.3] },
     enrage: { belowHpPct: 0.25, dmgMult: 1.6, hasteMult: 1.3 },
     loot: [
       { copper: 800, chance: 1 },
-      // One signature epic per archetype, exclusive roll — every clear has a
-      // real shot at a Durance trophy.
-      { itemId: 'baelgors_hateforged_cleaver', chance: 0.34, rollGroup: 'baelgor_epic' },
-      { itemId: 'sigilbrand_of_the_durance', chance: 0.33, rollGroup: 'baelgor_epic' },
-      { itemId: 'hollow_fang_of_hate', chance: 0.33, rollGroup: 'baelgor_epic' },
+      // One signature epic per archetype, exclusive roll — every clear has a real
+      // shot at a Hellmaw trophy.
+      { itemId: 'renders_hateforged_cleaver', chance: 0.34, rollGroup: 'hellmaw_epic' },
+      { itemId: 'sigilbrand_of_the_durance', chance: 0.33, rollGroup: 'hellmaw_epic' },
+      { itemId: 'hollow_fang_of_hate', chance: 0.33, rollGroup: 'hellmaw_epic' },
     ],
-    scale: 2.4,
+    scale: 2.6,
     color: 0x9a1f26,
   },
 

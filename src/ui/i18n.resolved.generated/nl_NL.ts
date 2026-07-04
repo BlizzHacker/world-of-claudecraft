@@ -2363,7 +2363,7 @@ export const nl_NL: EnTranslations = {
       "title": "Delve",
       "objective": "Doel",
       "module": "Module {current} van {total}",
-      "descend": "Descend the Durance",
+      "descend": "Descend the Hellmaw",
       "affix": "Affixen",
       "complete": "Voltooid",
       "marks": "Delve-Tekens: {count}",
@@ -4512,17 +4512,17 @@ export const nl_NL: EnTranslations = {
       "gravecaller_sigil": {
         "name": "Grafroepers Zegel"
       },
-      "sigil_of_hate": {
-        "name": "Sigil of Hate"
+      "binding_ward": {
+        "name": "Infernal Binding Ward"
       },
-      "baelgors_hateforged_cleaver": {
-        "name": "Baelgor's Hateforged Cleaver"
+      "renders_hateforged_cleaver": {
+        "name": "The Render's Hateforged Cleaver"
       },
       "sigilbrand_of_the_durance": {
-        "name": "Sigilbrand of the Durance"
+        "name": "Brand of the Hellmaw"
       },
       "hollow_fang_of_hate": {
-        "name": "Hollow Fang of Hate"
+        "name": "Hollow Fang of the Well"
       },
       "blessed_wax": {
         "name": "Gezegend Talk"

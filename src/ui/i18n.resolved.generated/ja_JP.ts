@@ -2363,7 +2363,7 @@ export const ja_JP: EnTranslations = {
       "title": "デルヴ",
       "objective": "目標",
       "module": "モジュール {current}/{total}",
-      "descend": "Descend the Durance",
+      "descend": "Descend the Hellmaw",
       "affix": "アフィックス",
       "complete": "完了",
       "marks": "デルヴの刻印: {count}",
@@ -4512,17 +4512,17 @@ export const ja_JP: EnTranslations = {
       "gravecaller_sigil": {
         "name": "グレイブコーラーの印章"
       },
-      "sigil_of_hate": {
-        "name": "Sigil of Hate"
+      "binding_ward": {
+        "name": "Infernal Binding Ward"
       },
-      "baelgors_hateforged_cleaver": {
-        "name": "Baelgor's Hateforged Cleaver"
+      "renders_hateforged_cleaver": {
+        "name": "The Render's Hateforged Cleaver"
       },
       "sigilbrand_of_the_durance": {
-        "name": "Sigilbrand of the Durance"
+        "name": "Brand of the Hellmaw"
       },
       "hollow_fang_of_hate": {
-        "name": "Hollow Fang of Hate"
+        "name": "Hollow Fang of the Well"
       },
       "blessed_wax": {
         "name": "祝福された獣脂"

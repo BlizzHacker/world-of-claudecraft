@@ -9,12 +9,12 @@ export type DelveModuleId =
   | 'reliquary_bell_niche'
   | 'reliquary_saintless_hall'
   | 'reliquary_finale'
-  | 'durance_outer_sanctum'
-  | 'durance_blood_gallery'
-  | 'durance_hollow_descent'
-  | 'durance_burning_chasm'
-  | 'durance_pyre_hall'
-  | 'durance_finale';
+  | 'hellmaw_outer_maw'
+  | 'hellmaw_ember_gallery'
+  | 'hellmaw_hollow_descent'
+  | 'hellmaw_burning_chasm'
+  | 'hellmaw_pyre_hall'
+  | 'hellmaw_finale';
 
 interface GridPoint {
   x: number;
@@ -175,7 +175,7 @@ const D_DOOR_LAST = { front: true } as const;
 // only (Butcher's dead-end sanctum). doorZ marks the entry archway for the renderer.
 
 /** Outer Sanctum: pillared entry hall, twin tomb rows flank the aisle. */
-export const DURANCE_OUTER_SANCTUM_LAYOUT: DungeonLayout = {
+export const HELLMAW_OUTER_MAW_LAYOUT: DungeonLayout = {
   zMin: D_ZMIN,
   zMax: D_ZMAX,
   sideWallZ: D_SIDE_Z,
@@ -191,7 +191,7 @@ export const DURANCE_OUTER_SANCTUM_LAYOUT: DungeonLayout = {
 };
 
 /** Blood Gallery: alcove stubs guarding the Behemoth's open centre. */
-export const DURANCE_BLOOD_GALLERY_LAYOUT: DungeonLayout = {
+export const HELLMAW_EMBER_GALLERY_LAYOUT: DungeonLayout = {
   zMin: D_ZMIN,
   zMax: D_ZMAX,
   sideWallZ: D_SIDE_Z,
@@ -212,7 +212,7 @@ export const DURANCE_BLOOD_GALLERY_LAYOUT: DungeonLayout = {
 };
 
 /** Hollow Descent: colonnade rows, defaced tomb rows. */
-export const DURANCE_HOLLOW_DESCENT_LAYOUT: DungeonLayout = {
+export const HELLMAW_HOLLOW_DESCENT_LAYOUT: DungeonLayout = {
   zMin: D_ZMIN,
   zMax: D_ZMAX,
   sideWallZ: D_SIDE_Z,
@@ -228,7 +228,7 @@ export const DURANCE_HOLLOW_DESCENT_LAYOUT: DungeonLayout = {
 };
 
 /** Burning Chasm: an open cavern, a scatter of pillars around a wide centre. */
-export const DURANCE_BURNING_CHASM_LAYOUT: DungeonLayout = {
+export const HELLMAW_BURNING_CHASM_LAYOUT: DungeonLayout = {
   zMin: D_ZMIN,
   zMax: D_ZMAX,
   sideWallZ: D_SIDE_Z,
@@ -250,7 +250,7 @@ export const DURANCE_BURNING_CHASM_LAYOUT: DungeonLayout = {
 };
 
 /** Pyre Hall: twin colonnades framing a central processional. */
-export const DURANCE_PYRE_HALL_LAYOUT: DungeonLayout = {
+export const HELLMAW_PYRE_HALL_LAYOUT: DungeonLayout = {
   zMin: D_ZMIN,
   zMax: D_ZMAX,
   sideWallZ: D_SIDE_Z,
@@ -267,7 +267,7 @@ export const DURANCE_PYRE_HALL_LAYOUT: DungeonLayout = {
 
 /** The Butcher's Sanctum: the boss arena. Opens south only; wide dais deep at the
  *  back for the Butcher's big cleave. */
-export const DURANCE_FINALE_LAYOUT: DungeonLayout = {
+export const HELLMAW_FINALE_LAYOUT: DungeonLayout = {
   zMin: D_ZMIN,
   zMax: D_ZMAX,
   sideWallZ: D_SIDE_Z,
@@ -289,12 +289,12 @@ export const DELVE_MODULE_LAYOUTS: Record<DelveModuleId, DungeonLayout> = {
   reliquary_bell_niche: RELIQUARY_BELL_NICHE_LAYOUT,
   reliquary_saintless_hall: RELIQUARY_SAINTLESS_HALL_LAYOUT,
   reliquary_finale: RELIQUARY_FINALE_LAYOUT,
-  durance_outer_sanctum: DURANCE_OUTER_SANCTUM_LAYOUT,
-  durance_blood_gallery: DURANCE_BLOOD_GALLERY_LAYOUT,
-  durance_hollow_descent: DURANCE_HOLLOW_DESCENT_LAYOUT,
-  durance_burning_chasm: DURANCE_BURNING_CHASM_LAYOUT,
-  durance_pyre_hall: DURANCE_PYRE_HALL_LAYOUT,
-  durance_finale: DURANCE_FINALE_LAYOUT,
+  hellmaw_outer_maw: HELLMAW_OUTER_MAW_LAYOUT,
+  hellmaw_ember_gallery: HELLMAW_EMBER_GALLERY_LAYOUT,
+  hellmaw_hollow_descent: HELLMAW_HOLLOW_DESCENT_LAYOUT,
+  hellmaw_burning_chasm: HELLMAW_BURNING_CHASM_LAYOUT,
+  hellmaw_pyre_hall: HELLMAW_PYRE_HALL_LAYOUT,
+  hellmaw_finale: HELLMAW_FINALE_LAYOUT,
 };
 
 /** Interior collision set for a delve module, in instance-local coordinates. */

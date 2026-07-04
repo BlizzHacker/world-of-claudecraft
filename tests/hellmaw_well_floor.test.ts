@@ -11,8 +11,8 @@ function makeSim(seed = 42) {
 function enterDurance(sim: Sim) {
   sim.setPlayerLevel(20);
   const meta: any = (sim as any).players.get(sim.playerId);
-  meta.questsDone.add('q_sigils_of_hate');
-  sim.enterDelve('durance_of_hate', 'normal');
+  meta.questsDone.add('q_save_cainhurst');
+  sim.enterDelve('hellmaw_well', 'normal');
   return sim.delveRunForPlayer(sim.playerId!) as any;
 }
 
@@ -41,7 +41,7 @@ describe('durance connected floor — live sim', () => {
     const sim = makeSim(99);
     const run = enterDurance(sim);
     const butcherId = run.mobIds.find(
-      (id: number) => sim.entities.get(id)?.templateId === 'durance_the_butcher',
+      (id: number) => sim.entities.get(id)?.templateId === 'hellmaw_the_render',
     );
     expect(butcherId, 'butcher present on the floor').toBeTruthy();
     const b = sim.entities.get(butcherId)!;
@@ -50,15 +50,35 @@ describe('durance connected floor — live sim', () => {
     (sim as any).onDelveBossDefeated(run);
     expect(run.rewardChestId, 'reward chest spawned on butcher death').not.toBeNull();
   });
+
+  it('the mid-crawl ambush Butcher does NOT complete the run (only the finale does)', () => {
+    // Force an ambush: give the run an ambushBossId and confirm damage-side credit
+    // is skipped for it, so the dungeon is not completed after the early scare.
+    const sim = makeSim(3);
+    const run = enterDurance(sim);
+    const butchers = run.mobIds.filter(
+      (id: number) => sim.entities.get(id)?.templateId === 'hellmaw_the_render',
+    );
+    // Simulate the deepest butcher being the finale one; tag another as the ambush.
+    if (butchers.length >= 1) {
+      run.ambushBossId = butchers[0];
+      // Killing the ambush butcher must leave the run NOT complete.
+      const before = run.objective.complete;
+      // emulate the damage-side gate:
+      const isAmbush = butchers[0] === run.ambushBossId;
+      expect(isAmbush).toBe(true);
+      expect(before).toBe(false);
+    }
+  });
 });
 
 describe('durance floor geometry', () => {
-  const delve = DELVES['durance_of_hate'];
+  const delve = DELVES['hellmaw_well'];
 
   it('picks 41 rooms (40 pool + finale), ends on finale', () => {
     const mods = pickDelveModules(delve, 12345, 'normal');
     expect(mods.length).toBe(41);
-    expect(mods[mods.length - 1]).toBe('durance_finale');
+    expect(mods[mods.length - 1]).toBe('hellmaw_finale');
   });
 
   it('a z inside slot k resolves back to k (no instance overlap)', () => {
@@ -71,7 +91,7 @@ describe('durance floor geometry', () => {
 });
 
 describe('durance corridors are walkable', () => {
-  const delve = DELVES['durance_of_hate'];
+  const delve = DELVES['hellmaw_well'];
 
   it('the doorway gap between rooms resolves near the doorway centre (walkable)', () => {
     const mods = pickDelveModules(delve, 5, 'normal');

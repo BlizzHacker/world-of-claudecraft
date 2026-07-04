@@ -25,7 +25,7 @@ export const GROUND_PICKUP_LINES: Record<string, GroundPickupLines> = {
     deny: "The grimoire's clasp is magically sealed.",
     enough: "You already have Morthen's Grimoire.",
   },
-  sigil_of_hate: {
+  binding_ward: {
     deny: 'The sigil burns cold to the touch — you have no reason to take it yet.',
     enough: 'You already carry all three Sigils of Hate.',
   },

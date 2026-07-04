@@ -2217,14 +2217,14 @@ export const en_CA: EnTranslations = {
   },
   "sim": {
     "delve": {
-      "cannotEnterNow": "You cannot enter a delve right now.",
+      "cannotEnterNow": "You cannot enter a dungeon right now.",
       "leaveDungeonFirst": "Leave the dungeon first.",
       "leaveArenaFirst": "Leave the arena first.",
-      "alreadyInDelve": "You are already in a delve.",
-      "whileTrading": "You cannot enter a delve while trading.",
-      "duringDuel": "You cannot enter a delve during a duel.",
-      "duringArena": "You cannot enter a delve during an arena match.",
-      "unknownTier": "Unknown delve tier.",
+      "alreadyInDelve": "You are already in a dungeon.",
+      "whileTrading": "You cannot enter a dungeon while trading.",
+      "duringDuel": "You cannot enter a dungeon during a duel.",
+      "duringArena": "You cannot enter a dungeon during an arena match.",
+      "unknownTier": "Unknown dungeon tier.",
       "levelRequired": "You must be level {level} to enter {name}.",
       "levelRequiredTier": "You must be level {level} to enter {name} on {tier}.",
       "instancesBusy": "All instances of {name} are busy. Try again soon.",
@@ -2244,7 +2244,7 @@ export const en_CA: EnTranslations = {
       "tombstoneOpen": "A sealed tombstone passage grinds open to the north. Walk into it to continue.",
       "tombstoneInto": "You pass through the tombstone into {name}.",
       "chestEmpty": "The chest is empty.",
-      "notInDelve": "You are not in a delve.",
+      "notInDelve": "You are not in a dungeon.",
       "cannotInteract": "You cannot interact with that.",
       "tooFar": "You are too far away.",
       "graveSilent": "The grave is silent for now.",
@@ -2253,10 +2253,10 @@ export const en_CA: EnTranslations = {
       "nothingHappens": "Nothing happens.",
       "unknownCompanion": "Unknown companion.",
       "companionMaxRank": "This companion is already fully upgraded.",
-      "companionMarksRequired": "You need {marks} Delve Marks to upgrade {name}.",
+      "companionMarksRequired": "You need {marks} Dungeon Marks to upgrade {name}.",
       "cannotAffordCompanionUpgrade": "You cannot afford this upgrade.",
       "shopItemLocked": "You have not unlocked that item yet.",
-      "shopMarksRequired": "You need {marks} Delve Marks to buy {name}.",
+      "shopMarksRequired": "You need {marks} Dungeon Marks to buy {name}.",
       "shopSealPremiumOnly": "This seal yields only to a master's hand. Only the Premium ante can open it.",
       "passageSealed": "The passage is sealed.",
       "moveCloserPassage": "Move closer to the passage.",
@@ -2276,7 +2276,7 @@ export const en_CA: EnTranslations = {
       "noAttempt": "No lock attempt in progress.",
       "notYours": "That is not your lock.",
       "toolSlips": "That tool slips off this lock.",
-      "lockJammed": "The lock is jammed beyond picking. Clear the delve again for another attempt.",
+      "lockJammed": "The lock is jammed beyond picking. Clear the dungeon again for another attempt.",
       "lastPickSnaps": "The last pick snaps. The lock jams. The chest is lost unless you clear the delve again."
     }
   },
@@ -2322,18 +2322,18 @@ export const en_CA: EnTranslations = {
     "summary": {
       "success": "Lock sprung, {tier} cache claimed.",
       "successGeneric": "Lock sprung, the cache is claimed.",
-      "fail": "The lock is ruined. Clear the delve again for another attempt.",
+      "fail": "The lock is ruined. Clear the dungeon again for another attempt.",
       "abandoned": "You ease the picks back out. The lock waits."
     }
   },
   "delveUi": {
     "board": {
-      "title": "Delve Board",
-      "enter": "Enter Delve",
+      "title": "Dungeon Board",
+      "enter": "Enter Dungeon",
       "enterAria": "Enter {delve} on {tier} difficulty",
       "openDelve": "Collapsed Reliquary",
-      "openDelveAria": "Open Delve Board from {name}",
-      "marks": "Delve Marks: {count}",
+      "openDelveAria": "Open Dungeon Board from {name}",
+      "marks": "Dungeon Marks: {count}",
       "minLevel": "Requires Level {level}",
       "tier": {
         "normal": "Normal",
@@ -2345,28 +2345,28 @@ export const en_CA: EnTranslations = {
         "rank": "Rank {rank}",
         "boon": "Heals the party between fights. Rank 3 revives a fallen ally once per run.",
         "upgrade": "Upgrade to Rank {rank} ({marks} Marks)",
-        "upgradeAria": "Upgrade {name} to rank {rank} for {marks} Delve Marks",
+        "upgradeAria": "Upgrade {name} to rank {rank} for {marks} Dungeon Marks",
         "maxRank": "Fully upgraded"
       },
-      "tabDelve": "Delve",
+      "tabDelve": "Dungeon",
       "tabShop": "Shop"
     },
     "shop": {
       "price": "{marks} Marks",
       "buy": "Buy",
-      "buyAria": "Buy {item} for {marks} Delve Marks",
+      "buyAria": "Buy {item} for {marks} Dungeon Marks",
       "reqHeroic": "Requires a Heroic clear",
       "reqClears": "Requires {count} clears",
       "empty": "Nothing in stock."
     },
     "tracker": {
-      "title": "Delve",
+      "title": "Dungeon",
       "objective": "Objective",
       "module": "Module {current} of {total}",
-      "descend": "Descend the Durance",
+      "descend": "Descend the Hellmaw",
       "affix": "Affixes",
       "complete": "Complete",
-      "marks": "Delve Marks: {count}",
+      "marks": "Dungeon Marks: {count}",
       "exitHintOpen": "Walk into the tombstone passage (north)",
       "exitHintLocked": "Clear trash mobs to open the passage north"
     },
@@ -2376,15 +2376,15 @@ export const en_CA: EnTranslations = {
       "clear_room": "Clear the room"
     },
     "summary": {
-      "title": "Delve Complete",
-      "marks": "{count} Delve Marks earned",
+      "title": "Dungeon Complete",
+      "marks": "{count} Dungeon Marks earned",
       "loreUnlock": "Lore unlocked: {title}"
     },
     "death": {
-      "warning": "One more death will end this delve run."
+      "warning": "One more death will end this dungeon run."
     },
     "run": {
-      "failed": "The delve run has failed. You are returned to Brother Halven."
+      "failed": "The dungeon run has failed. You are returned to Brother Halven."
     },
     "npc": {
       "halven": {
@@ -4512,17 +4512,17 @@ export const en_CA: EnTranslations = {
       "gravecaller_sigil": {
         "name": "Gravecaller's Sigil"
       },
-      "sigil_of_hate": {
-        "name": "Sigil of Hate"
+      "binding_ward": {
+        "name": "Infernal Binding Ward"
       },
-      "baelgors_hateforged_cleaver": {
-        "name": "Baelgor's Hateforged Cleaver"
+      "renders_hateforged_cleaver": {
+        "name": "The Render's Hateforged Cleaver"
       },
       "sigilbrand_of_the_durance": {
-        "name": "Sigilbrand of the Durance"
+        "name": "Brand of the Hellmaw"
       },
       "hollow_fang_of_hate": {
-        "name": "Hollow Fang of Hate"
+        "name": "Hollow Fang of the Well"
       },
       "blessed_wax": {
         "name": "Blessed Tallow"

@@ -29,9 +29,9 @@ import {
   COLLAPSED_RELIQUARY_DELVE,
   COLLAPSED_RELIQUARY_MODULES,
   DELVE_MOBS,
-  DURANCE_OF_HATE_DELVE,
-  DURANCE_OF_HATE_MODULES,
-  WARDEN_KAINE,
+  HELLMAW_WELL_DELVE,
+  HELLMAW_WELL_MODULES,
+  CAINHURST_SAGE,
 } from './content/delves';
 import { DUNGEON_DEFS, DUNGEON_MOBS } from './content/dungeons';
 import { GROUND_PICKUP_LINES } from './content/ground_pickup_lines';
@@ -162,7 +162,7 @@ export const NPCS: Record<string, NpcDef> = {
   ...ZONE3_NPCS,
   ...TEMPLE_NPCS,
   brother_halven: BROTHER_HALVEN,
-  warden_kaine: WARDEN_KAINE,
+  cainhurst_sage: CAINHURST_SAGE,
 };
 
 export const QUESTS: Record<string, QuestDef> = {
@@ -401,7 +401,7 @@ const DELVE_SLOT_SPACING = 620; // covers 110u×4 rooms + 16u×3 gaps + 40u marg
 // band without touching the reliquary's tight one. A 50-room floor is
 // ~50*(112+16)=6400u deep; 7000u/slot leaves a comfortable inter-instance margin.
 const DELVE_WIDE_SLOT_SPACING = 7000;
-const WIDE_SLOT_DELVE_IDS = new Set(['durance_of_hate']);
+const WIDE_SLOT_DELVE_IDS = new Set(['hellmaw_well']);
 
 /** Per-delve slot z-spacing: wide for connected-floor delves, tight otherwise. */
 export function delveSlotSpacing(delveIndex: number): number {
@@ -430,12 +430,12 @@ export function delveAt(x: number): DelveDef | null {
 
 export const DELVES: Record<string, DelveDef> = {
   [COLLAPSED_RELIQUARY_DELVE.id]: COLLAPSED_RELIQUARY_DELVE,
-  [DURANCE_OF_HATE_DELVE.id]: DURANCE_OF_HATE_DELVE,
+  [HELLMAW_WELL_DELVE.id]: HELLMAW_WELL_DELVE,
 };
 export const DELVE_LIST: DelveDef[] = Object.values(DELVES).sort((a, b) => a.index - b.index);
 export const DELVE_MODULES: Record<string, DelveModuleDef> = {
   ...COLLAPSED_RELIQUARY_MODULES,
-  ...DURANCE_OF_HATE_MODULES,
+  ...HELLMAW_WELL_MODULES,
 };
 
 function delveModuleFootprint(moduleId: string): number {

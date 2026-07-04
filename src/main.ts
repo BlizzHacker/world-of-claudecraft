@@ -2446,7 +2446,7 @@ async function startGame(
       enforceDiabloLock(input); // Diablo preset wins over input handlers this frame
       // The Durance of Hate forces its authored top-down infernal camera on all
       // players (unless they've explicitly chosen first-person).
-      if (world.delveRun?.delveId === 'durance_of_hate') forceDiabloForDelve(input);
+      if (world.delveRun?.delveId === 'hellmaw_well') forceDiabloForDelve(input);
       renderer.camYaw = input.camYaw;
       renderer.camPitch = input.camPitch;
       renderer.camDist = input.camDist;

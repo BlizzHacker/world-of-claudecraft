@@ -2363,7 +2363,7 @@ export const id_ID: EnTranslations = {
       "title": "Delve",
       "objective": "Sasaran",
       "module": "Modul {current} dari {total}",
-      "descend": "Descend the Durance",
+      "descend": "Descend the Hellmaw",
       "affix": "Afiks",
       "complete": "Selesai",
       "marks": "Tanda Delve: {count}",
@@ -4512,17 +4512,17 @@ export const id_ID: EnTranslations = {
       "gravecaller_sigil": {
         "name": "Sigil Gravecaller"
       },
-      "sigil_of_hate": {
-        "name": "Sigil of Hate"
+      "binding_ward": {
+        "name": "Infernal Binding Ward"
       },
-      "baelgors_hateforged_cleaver": {
-        "name": "Baelgor's Hateforged Cleaver"
+      "renders_hateforged_cleaver": {
+        "name": "The Render's Hateforged Cleaver"
       },
       "sigilbrand_of_the_durance": {
-        "name": "Sigilbrand of the Durance"
+        "name": "Brand of the Hellmaw"
       },
       "hollow_fang_of_hate": {
-        "name": "Hollow Fang of Hate"
+        "name": "Hollow Fang of the Well"
       },
       "blessed_wax": {
         "name": "Lemak Berkah"

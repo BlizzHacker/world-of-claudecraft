@@ -519,7 +519,7 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
     pos: { x: 4, z: 6 },
     facing: Math.PI,
     color: 0xb7950b,
-    questIds: ['q_wolves', 'q_greyjaw', 'q_bandits', 'q_ringleader', 'q_mogger', 'q_sigils_of_hate'],
+    questIds: ['q_wolves', 'q_greyjaw', 'q_bandits', 'q_ringleader', 'q_mogger', 'q_save_cainhurst'],
     greeting: 'Keep your blade close, $C. The Vale is not what it was.',
   },
   trader_wilkes: {
@@ -930,19 +930,20 @@ export const ZONE1_QUESTS: Record<string, QuestDef> = {
     minLevel: 6,
     suggestedPlayers: 3,
   },
-  // The Durance of Hate — hidden Diabl0 Easter-egg quest. Marshal Redbrook
-  // (beside the well) sets you to recover 3 Sigils of Hate scattered around
-  // Eastbrook Vale. Completing it makes Warden Kaine appear at the well and
-  // opens the Durance of Hate delve (gated in the enter_delve handler).
-  q_sigils_of_hate: {
-    id: 'q_sigils_of_hate',
-    name: 'The Sigils of Hate',
+  // The Hellmaw Well — hidden Infernal-Realm Easter-egg quest. Marshal Redbrook
+  // (beside the well) sets you to break the 3 infernal binding wards scattered
+  // around Eastbrook Vale that imprison Cainhurst the Sage. Completing it frees
+  // Cainhurst (he appears at the well) and opens the Hellmaw Well dungeon (gated
+  // in the enter handler).
+  q_save_cainhurst: {
+    id: 'q_save_cainhurst',
+    name: 'Save Cainhurst the Sage',
     giverNpcId: 'marshal_redbrook',
     turnInNpcId: 'marshal_redbrook',
-    text: "Old wives say the well runs deeper than any rope, down to a place the maps forgot — the Durance of Hate. Three sigils were struck to seal it: one cast among the graves, one lost to the mine, one drowned by the docks. Bring me all three, $N, and we will see what the water is hiding.",
-    completionText: 'Three sigils, all bleeding the same red light. Take them to the well — Warden Kaine has already come to meet you. The descent is yours to make.',
+    text: "Old Cainhurst — the sage who reads the deep maps — went down the well a week past and never came up. The thing below took him, and bound him with three infernal wards: one struck among the graves, one buried in the mine, one drowned at the docks. Break all three wards, $N, and you'll break his chains. Bring them to me as proof.",
+    completionText: 'The three wards, all snuffed cold. Cainhurst has crawled free — he waits at the well now, and swears the Hellmaw is open to you. He warns of something at the bottom he calls The Render.',
     objectives: [
-      { type: 'collect', itemId: 'sigil_of_hate', count: 3, label: 'Sigil of Hate recovered' },
+      { type: 'collect', itemId: 'binding_ward', count: 3, label: 'Infernal binding ward broken' },
     ],
     xpReward: 1000,
     copperReward: 600,
@@ -970,7 +971,7 @@ export const ZONE1_QUEST_ORDER = [
   'q_hollow',
   'q_gravecallers_trail',
   'q_mogger',
-  'q_sigils_of_hate',
+  'q_save_cainhurst',
 ];
 
 // ---------------------------------------------------------------------------
@@ -1050,13 +1051,13 @@ export const ZONE1_OBJECTS: GroundObjectDef[] = [
     positions: [{ x: 78, z: 86 }],
   },
   {
-    // Durance Easter-egg: the 3 hidden Sigils of Hate — one among the chapel
-    // graves, one at the mine mouth (SW), one drowned by the docks (W).
-    // Recovering all three completes q_sigils_of_hate and opens the well delve.
-    // (Placed LAST so the first ground object remains the supply crate that
-    // sim.test.ts's quest-gating test looks up by kind.)
-    itemId: 'sigil_of_hate',
-    name: 'Sigil of Hate',
+    // Hellmaw Well Easter-egg: the 3 infernal binding wards holding Cainhurst —
+    // one among the chapel graves, one at the mine mouth (SW), one drowned by the
+    // docks (W). Breaking all three completes q_save_cainhurst, frees Cainhurst,
+    // and opens the Hellmaw Well. (Placed LAST so the first ground object remains
+    // the supply crate that sim.test.ts's quest-gating test looks up by kind.)
+    itemId: 'binding_ward',
+    name: 'Infernal Binding Ward',
     positions: [
       { x: -14, z: -14 },
       { x: -86, z: -66 },
@@ -1161,5 +1162,12 @@ export const ZONE1_PROPS: ZonePropsDef = {
     { x: -14, z: -14 },
     { x: 4, z: -56 },
   ],
-  delveMarkers: [{ x: -5, z: -52, delveId: 'collapsed_reliquary' }],
+  delveMarkers: [
+    { x: -5, z: -52, delveId: 'collapsed_reliquary' },
+    // The Hellmaw Well portal: a red-void gate beside the town well, next to
+    // Cainhurst the Sage (at 0,2). Infernal-realm exclusive — entry is gated in
+    // the server enter handler (realm + q_save_cainhurst). Offset a few units east
+    // of the well so the arch stands at Cainhurst's side, not on top of him.
+    { x: 5, z: 2, delveId: 'hellmaw_well' },
+  ],
 };

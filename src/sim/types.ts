@@ -2178,6 +2178,10 @@ export interface DelveRun {
    *  (random per-room roll). If still false when the party reaches the final
    *  room, the finale spawns him for the guaranteed showdown. */
   butcherAmbushed?: boolean;
+  /** Durance of Hate: entity id of the mid-crawl AMBUSH Butcher, if one spawned.
+   *  Killing the ambush Butcher must NOT complete the run (only the finale-room
+   *  Butcher does), so boss-death credit is gated to exclude this id. */
+  ambushBossId?: number | null;
   /** Durance of Hate: this run is a CONNECTED FLOOR, not a sequential crawl. All
    *  modules' mobs/objects are spawned at once at their stacked world-z bands, the
    *  16u inter-module gaps are walkable corridors, and the player roams the whole

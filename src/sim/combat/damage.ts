@@ -549,6 +549,9 @@ export function handleDeath(ctx: SimContext, e: Entity, killer: Entity | null): 
       run &&
       template &&
       DELVES[run.delveId]?.bosses.includes(template.id) &&
+      // The mid-crawl ambush Butcher is a scripted scare, NOT the finale boss —
+      // killing it must not complete the run (only the finale-room boss does).
+      e.id !== run.ambushBossId &&
       !run.completed &&
       !run.objective.complete
     ) {

@@ -2363,7 +2363,7 @@ export const fr_FR: EnTranslations = {
       "title": "Plongée",
       "objective": "Objectif",
       "module": "Module {current} sur {total}",
-      "descend": "Descend the Durance",
+      "descend": "Descend the Hellmaw",
       "affix": "Affixes",
       "complete": "Terminé",
       "marks": "Marques de plongée : {count}",
@@ -4512,17 +4512,17 @@ export const fr_FR: EnTranslations = {
       "gravecaller_sigil": {
         "name": "Sceau de Gravecaller"
       },
-      "sigil_of_hate": {
-        "name": "Sigil of Hate"
+      "binding_ward": {
+        "name": "Infernal Binding Ward"
       },
-      "baelgors_hateforged_cleaver": {
-        "name": "Baelgor's Hateforged Cleaver"
+      "renders_hateforged_cleaver": {
+        "name": "The Render's Hateforged Cleaver"
       },
       "sigilbrand_of_the_durance": {
-        "name": "Sigilbrand of the Durance"
+        "name": "Brand of the Hellmaw"
       },
       "hollow_fang_of_hate": {
-        "name": "Hollow Fang of Hate"
+        "name": "Hollow Fang of the Well"
       },
       "blessed_wax": {
         "name": "Suif béni"

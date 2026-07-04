@@ -1733,14 +1733,14 @@ export const GUIDE_DELVES: GuideDelve[] = [
     ]
   },
   {
-    "id": "durance_of_hate",
-    "name": "The Durance of Hate",
+    "id": "hellmaw_well",
+    "name": "The Hellmaw Well",
     "theme": "crypt",
     "minLevel": 10,
     "suggestedPlayers": 2,
     "keeper": {
-      "name": "Warden Kaine",
-      "title": "Keeper of the Descent"
+      "name": "Cainhurst the Sage",
+      "title": "Keeper of the Hellmaw"
     },
     "tiers": [
       "Normal",

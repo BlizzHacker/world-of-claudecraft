@@ -418,13 +418,13 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     use: { type: 'skinSelect', catalog: 'class' },
     sellValue: 0,
   },
-  // ── Durance of Hate — Baelgor's signature epic drops (Diabl0 easter-egg) ──
-  // One per archetype so any victor has a trophy to chase. Infernal-themed,
-  // epic quality, well above the delve's level band — the reward for finding
-  // and clearing the hidden descent.
-  baelgors_hateforged_cleaver: {
-    id: 'baelgors_hateforged_cleaver',
-    name: "Baelgor's Hateforged Cleaver",
+  // ── The Hellmaw Well — The Render's signature epic drops ──────────────────
+  // One per archetype so any victor has a trophy to chase. Infernal-themed, epic
+  // quality, well above the dungeon's level band — the reward for finding and
+  // clearing the hidden descent. (Item ids kept stable for the loot table.)
+  renders_hateforged_cleaver: {
+    id: 'renders_hateforged_cleaver',
+    name: "The Render's Hateforged Cleaver",
     kind: 'weapon',
     slot: 'mainhand',
     quality: 'epic',
@@ -435,7 +435,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   },
   sigilbrand_of_the_durance: {
     id: 'sigilbrand_of_the_durance',
-    name: 'Sigilbrand of the Durance',
+    name: 'Brand of the Hellmaw',
     kind: 'weapon',
     slot: 'mainhand',
     quality: 'epic',
@@ -446,7 +446,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   },
   hollow_fang_of_hate: {
     id: 'hollow_fang_of_hate',
-    name: 'Hollow Fang of Hate',
+    name: 'Hollow Fang of the Well',
     kind: 'weapon',
     slot: 'mainhand',
     quality: 'epic',
@@ -950,14 +950,14 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     sellValue: 0,
     questId: 'q_whispers',
   },
-  sigil_of_hate: {
-    id: 'sigil_of_hate',
-    name: 'Sigil of Hate',
+  binding_ward: {
+    id: 'binding_ward',
+    name: 'Infernal Binding Ward',
     kind: 'quest',
     sellValue: 0,
-    questId: 'q_sigils_of_hate',
-    pickupDeny: 'The sigil burns cold to the touch — you have no reason to take it yet.',
-    pickupEnough: 'You already carry all three Sigils of Hate.',
+    questId: 'q_save_cainhurst',
+    pickupDeny: 'The ward burns cold to the touch — you have no reason to break it yet.',
+    pickupEnough: 'You have already broken all three binding wards.',
   },
   blessed_wax: {
     id: 'blessed_wax',

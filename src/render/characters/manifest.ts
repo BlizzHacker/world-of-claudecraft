@@ -504,32 +504,36 @@ export const VISUALS: Record<string, VisualDef> = {
     lazyPreload: true,
   },
   // --- Durance of Hate delve enemies: real infernal demon bodies (no KayKit) ---
-  durance_husk_body: {
+  hellmaw_husk_body: {
     // Hateful Husk: lava demon with horns — the rushing trash of the descent.
     url: `${REALM_MODELS}/infernal/meshy_ai_lava_demon_with_horns_0616234329_texture_9a64c154.glb`,
     height: 2.4,
     clips: meshyBiped(),
     lazyPreload: true,
   },
-  durance_acolyte_body: {
-    // Sigil-Bound Acolyte: black evil spectre — the ranged brand-caster.
-    url: `${REALM_MODELS}/infernal/meshy_ai_a_black_evil_spectr_0616234348_texture_abacb7f9.glb`,
+  hellmaw_acolyte_body: {
+    // Sigil-Bound Acolyte: a robed/cloaked demon caster (body-cover demon). The old
+    // "black spectre" GLB mis-rendered (looked like a unicorn) — swapped to a proper
+    // demonic caster body.
+    url: `${REALM_MODELS}/infernal/meshy_ai_demon_with_body_cover_0616234415_texture_540be2b1.glb`,
     height: 2.6,
     clips: meshyBiped(),
     lazyPreload: true,
   },
-  durance_behemoth_body: {
-    // Blood Behemoth: the Crimson Infernal Behemoth (animated) — mini-anchor.
-    url: `${REALM_MODELS}/infernal/meshy_ai_crimson_infernal_behe_biped_meshy_ai_meshy_merged_animations_27bab94d.glb`,
+  hellmaw_behemoth_body: {
+    // Blood Behemoth (mini-anchor): the horned demon warrior. The Crimson Infernal
+    // Behemoth model is now reserved for THE BUTCHER (the true endboss).
+    url: `${REALM_MODELS}/infernal/meshy_ai_horned_demon_warrior_0616234420_texture_2233cac0.glb`,
     height: 3.2,
-    clips: meshyBiped([], { run: 'RunFast' }),
+    clips: meshyBiped(),
     lazyPreload: true,
   },
-  durance_butcher_body: {
-    // THE BUTCHER — the horned demon warrior, oversized, the Durance's final horror.
-    url: `${REALM_MODELS}/infernal/meshy_ai_horned_demon_warrior_0616234420_texture_2233cac0.glb`,
-    height: 3.8,
-    clips: meshyBiped(),
+  hellmaw_render_body: {
+    // THE BUTCHER — the Crimson Infernal Behemoth (biped, animated). The oversized
+    // final horror of the descent (Meshy_AI_Infernal_Behemoth_biped).
+    url: `${REALM_MODELS}/infernal/meshy_ai_crimson_infernal_behe_biped_meshy_ai_meshy_merged_animations_27bab94d.glb`,
+    height: 4.2,
+    clips: meshyBiped([], { run: 'RunFast' }),
     lazyPreload: true,
   },
   realm_classic_orc: {
@@ -1000,10 +1004,10 @@ const MOB_KEYS: Record<string, string> = {
   reliquary_saintless_effigy: 'delve_skel_effigy',
   deacon_varric: 'delve_skel_varric',
   // Durance of Hate: real infernal demon bodies (no KayKit fallback)
-  durance_hateful_husk: 'durance_husk_body',
-  durance_sigilbound_acolyte: 'durance_acolyte_body',
-  durance_blood_behemoth: 'durance_behemoth_body',
-  durance_the_butcher: 'durance_butcher_body',
+  hellmaw_charred_husk: 'hellmaw_husk_body',
+  hellmaw_cinder_acolyte: 'hellmaw_acolyte_body',
+  hellmaw_ember_behemoth: 'hellmaw_behemoth_body',
+  hellmaw_the_render: 'hellmaw_render_body',
   fallen_captain_aldren: 'skel_warrior',
   corrupted_priest_malric: 'skel_necromancer',
   deathstalker_voss: 'skel_rogue',

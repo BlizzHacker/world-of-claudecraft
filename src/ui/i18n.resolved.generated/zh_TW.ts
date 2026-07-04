@@ -2363,7 +2363,7 @@ export const zh_TW: EnTranslations = {
       "title": "秘探",
       "objective": "目標",
       "module": "第 {current} 區，共 {total} 區",
-      "descend": "Descend the Durance",
+      "descend": "Descend the Hellmaw",
       "affix": "詞綴",
       "complete": "完成",
       "marks": "秘探印記：{count}",
@@ -4512,17 +4512,17 @@ export const zh_TW: EnTranslations = {
       "gravecaller_sigil": {
         "name": "喚墓者徽記"
       },
-      "sigil_of_hate": {
-        "name": "Sigil of Hate"
+      "binding_ward": {
+        "name": "Infernal Binding Ward"
       },
-      "baelgors_hateforged_cleaver": {
-        "name": "Baelgor's Hateforged Cleaver"
+      "renders_hateforged_cleaver": {
+        "name": "The Render's Hateforged Cleaver"
       },
       "sigilbrand_of_the_durance": {
-        "name": "Sigilbrand of the Durance"
+        "name": "Brand of the Hellmaw"
       },
       "hollow_fang_of_hate": {
-        "name": "Hollow Fang of Hate"
+        "name": "Hollow Fang of the Well"
       },
       "blessed_wax": {
         "name": "祝福油脂"

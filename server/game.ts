@@ -2855,11 +2855,23 @@ export class GameServer {
         const delve = DELVES[msg.delveId];
         if (!e || !delve || e.dead) break;
         if (Math.hypot(e.pos.x - delve.doorPos.x, e.pos.z - delve.doorPos.z) > 12) break;
-        // Durance of Hate (Diabl0 Easter egg) is gated behind the Sigils of Hate
-        // quest: the well only opens once all three sigils have been recovered.
-        if (msg.delveId === 'durance_of_hate' && !(sim.meta(pid)?.questsDone.has('q_sigils_of_hate') ?? false)) {
-          this.sendChatNotice(session, 'The well is silent. Something must first be awakened.');
-          break;
+        // The Hellmaw Well is an INFERNAL-REALM EXCLUSIVE. It exists in shared
+        // content code but only opens on the infernal realm; on every other realm
+        // the well stays a plain well.
+        if (msg.delveId === 'hellmaw_well') {
+          const realmId = process.env.CR_REALM_ID ?? REALM;
+          if (realmId !== 'infernal') {
+            this.sendChatNotice(session, 'The well is just a well. Whatever sleeps below, it does not stir here.');
+            break;
+          }
+          // Gated behind rescuing Cainhurst: the well only opens once his three
+          // infernal binding wards are broken. (q_sigils_of_hate = the old quest id,
+          // grandfathered so anyone who finished it before the redesign keeps access.)
+          const done = sim.meta(pid)?.questsDone;
+          if (!(done?.has('q_save_cainhurst') || done?.has('q_sigils_of_hate'))) {
+            this.sendChatNotice(session, 'The well is silent. You must first free Cainhurst from the Hellmaw.');
+            break;
+          }
         }
         sim.enterDelve(msg.delveId, msg.tierId, pid);
         this.resyncDelves(session);

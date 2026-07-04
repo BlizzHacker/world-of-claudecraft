@@ -2363,7 +2363,7 @@ export const ko_KR: EnTranslations = {
       "title": "탐굴",
       "objective": "목표",
       "module": "구역 {current}/{total}",
-      "descend": "Descend the Durance",
+      "descend": "Descend the Hellmaw",
       "affix": "고난 요소",
       "complete": "완료",
       "marks": "탐굴 증표: {count}",
@@ -4512,17 +4512,17 @@ export const ko_KR: EnTranslations = {
       "gravecaller_sigil": {
         "name": "무덤부름 인장"
       },
-      "sigil_of_hate": {
-        "name": "Sigil of Hate"
+      "binding_ward": {
+        "name": "Infernal Binding Ward"
       },
-      "baelgors_hateforged_cleaver": {
-        "name": "Baelgor's Hateforged Cleaver"
+      "renders_hateforged_cleaver": {
+        "name": "The Render's Hateforged Cleaver"
       },
       "sigilbrand_of_the_durance": {
-        "name": "Sigilbrand of the Durance"
+        "name": "Brand of the Hellmaw"
       },
       "hollow_fang_of_hate": {
-        "name": "Hollow Fang of Hate"
+        "name": "Hollow Fang of the Well"
       },
       "blessed_wax": {
         "name": "축복받은 수지"

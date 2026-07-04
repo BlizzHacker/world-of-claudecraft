@@ -2217,14 +2217,14 @@ export const en_XA: EnTranslations = {
   },
   "sim": {
     "delve": {
-      "cannotEnterNow": "[Ýóú çáññóţ éñţéŕ á ðéļʋé ŕíĝĥţ ñóŵ.]",
+      "cannotEnterNow": "[Ýóú çáññóţ éñţéŕ á ðúñĝéóñ ŕíĝĥţ ñóŵ.]",
       "leaveDungeonFirst": "[Ļéáʋé ţĥé ðúñĝéóñ ƒíŕšţ.]",
       "leaveArenaFirst": "[Ļéáʋé ţĥé áŕéñá ƒíŕšţ.]",
-      "alreadyInDelve": "[Ýóú áŕé áļŕéáðý íñ á ðéļʋé.]",
-      "whileTrading": "[Ýóú çáññóţ éñţéŕ á ðéļʋé ŵĥíļé ţŕáðíñĝ.]",
-      "duringDuel": "[Ýóú çáññóţ éñţéŕ á ðéļʋé ðúŕíñĝ á ðúéļ.]",
-      "duringArena": "[Ýóú çáññóţ éñţéŕ á ðéļʋé ðúŕíñĝ áñ áŕéñá ɱáţçĥ.]",
-      "unknownTier": "[Úñķñóŵñ ðéļʋé ţíéŕ.]",
+      "alreadyInDelve": "[Ýóú áŕé áļŕéáðý íñ á ðúñĝéóñ.]",
+      "whileTrading": "[Ýóú çáññóţ éñţéŕ á ðúñĝéóñ ŵĥíļé ţŕáðíñĝ.]",
+      "duringDuel": "[Ýóú çáññóţ éñţéŕ á ðúñĝéóñ ðúŕíñĝ á ðúéļ.]",
+      "duringArena": "[Ýóú çáññóţ éñţéŕ á ðúñĝéóñ ðúŕíñĝ áñ áŕéñá ɱáţçĥ.]",
+      "unknownTier": "[Úñķñóŵñ ðúñĝéóñ ţíéŕ.]",
       "levelRequired": "[Ýóú ɱúšţ ƀé ļéʋéļ {level} ţó éñţéŕ {name}.]",
       "levelRequiredTier": "[Ýóú ɱúšţ ƀé ļéʋéļ {level} ţó éñţéŕ {name} óñ {tier}.]",
       "instancesBusy": "[Áļļ íñšţáñçéš óƒ {name} áŕé ƀúšý. Ţŕý áĝáíñ šóóñ.]",
@@ -2244,7 +2244,7 @@ export const en_XA: EnTranslations = {
       "tombstoneOpen": "[Á šéáļéð ţóɱƀšţóñé þáššáĝé ĝŕíñðš óþéñ ţó ţĥé ñóŕţĥ. Ŵáļķ íñţó íţ ţó çóñţíñúé.]",
       "tombstoneInto": "[Ýóú þášš ţĥŕóúĝĥ ţĥé ţóɱƀšţóñé íñţó {name}.]",
       "chestEmpty": "[Ţĥé çĥéšţ íš éɱþţý.]",
-      "notInDelve": "[Ýóú áŕé ñóţ íñ á ðéļʋé.]",
+      "notInDelve": "[Ýóú áŕé ñóţ íñ á ðúñĝéóñ.]",
       "cannotInteract": "[Ýóú çáññóţ íñţéŕáçţ ŵíţĥ ţĥáţ.]",
       "tooFar": "[Ýóú áŕé ţóó ƒáŕ áŵáý.]",
       "graveSilent": "[Ţĥé ĝŕáʋé íš šíļéñţ ƒóŕ ñóŵ.]",
@@ -2253,10 +2253,10 @@ export const en_XA: EnTranslations = {
       "nothingHappens": "[Ñóţĥíñĝ ĥáþþéñš.]",
       "unknownCompanion": "[Úñķñóŵñ çóɱþáñíóñ.]",
       "companionMaxRank": "[Ţĥíš çóɱþáñíóñ íš áļŕéáðý ƒúļļý úþĝŕáðéð.]",
-      "companionMarksRequired": "[Ýóú ñééð {marks} Ðéļʋé Ɱáŕķš ţó úþĝŕáðé {name}.]",
+      "companionMarksRequired": "[Ýóú ñééð {marks} Ðúñĝéóñ Ɱáŕķš ţó úþĝŕáðé {name}.]",
       "cannotAffordCompanionUpgrade": "[Ýóú çáññóţ áƒƒóŕð ţĥíš úþĝŕáðé.]",
       "shopItemLocked": "[Ýóú ĥáʋé ñóţ úñļóçķéð ţĥáţ íţéɱ ýéţ.]",
-      "shopMarksRequired": "[Ýóú ñééð {marks} Ðéļʋé Ɱáŕķš ţó ƀúý {name}.]",
+      "shopMarksRequired": "[Ýóú ñééð {marks} Ðúñĝéóñ Ɱáŕķš ţó ƀúý {name}.]",
       "shopSealPremiumOnly": "[Ţĥíš šéáļ ýíéļðš óñļý ţó á ɱášţéŕ'š ĥáñð. Óñļý ţĥé Þŕéɱíúɱ áñţé çáñ óþéñ íţ.]",
       "passageSealed": "[Ţĥé þáššáĝé íš šéáļéð.]",
       "moveCloserPassage": "[Ɱóʋé çļóšéŕ ţó ţĥé þáššáĝé.]",
@@ -2276,7 +2276,7 @@ export const en_XA: EnTranslations = {
       "noAttempt": "[Ñó ļóçķ áţţéɱþţ íñ þŕóĝŕéšš.]",
       "notYours": "[Ţĥáţ íš ñóţ ýóúŕ ļóçķ.]",
       "toolSlips": "[Ţĥáţ ţóóļ šļíþš óƒƒ ţĥíš ļóçķ.]",
-      "lockJammed": "[Ţĥé ļóçķ íš ĵáɱɱéð ƀéýóñð þíçķíñĝ. Çļéáŕ ţĥé ðéļʋé áĝáíñ ƒóŕ áñóţĥéŕ áţţéɱþţ.]",
+      "lockJammed": "[Ţĥé ļóçķ íš ĵáɱɱéð ƀéýóñð þíçķíñĝ. Çļéáŕ ţĥé ðúñĝéóñ áĝáíñ ƒóŕ áñóţĥéŕ áţţéɱþţ.]",
       "lastPickSnaps": "[Ţĥé ļášţ þíçķ šñáþš. Ţĥé ļóçķ ĵáɱš. Ţĥé çĥéšţ íš ļóšţ úñļéšš ýóú çļéáŕ ţĥé ðéļʋé áĝáíñ.]"
     }
   },
@@ -2322,18 +2322,18 @@ export const en_XA: EnTranslations = {
     "summary": {
       "success": "[Ļóçķ šþŕúñĝ, {tier} çáçĥé çļáíɱéð.]",
       "successGeneric": "[Ļóçķ šþŕúñĝ, ţĥé çáçĥé íš çļáíɱéð.]",
-      "fail": "[Ţĥé ļóçķ íš ŕúíñéð. Çļéáŕ ţĥé ðéļʋé áĝáíñ ƒóŕ áñóţĥéŕ áţţéɱþţ.]",
+      "fail": "[Ţĥé ļóçķ íš ŕúíñéð. Çļéáŕ ţĥé ðúñĝéóñ áĝáíñ ƒóŕ áñóţĥéŕ áţţéɱþţ.]",
       "abandoned": "[Ýóú éášé ţĥé þíçķš ƀáçķ óúţ. Ţĥé ļóçķ ŵáíţš.]"
     }
   },
   "delveUi": {
     "board": {
-      "title": "[Ðéļʋé Ɓóáŕð]",
-      "enter": "[Éñţéŕ Ðéļʋé]",
+      "title": "[Ðúñĝéóñ Ɓóáŕð]",
+      "enter": "[Éñţéŕ Ðúñĝéóñ]",
       "enterAria": "[Éñţéŕ {delve} óñ {tier} ðíƒƒíçúļţý]",
       "openDelve": "[Çóļļáþšéð Ŕéļíɋúáŕý]",
-      "openDelveAria": "[Óþéñ Ðéļʋé Ɓóáŕð ƒŕóɱ {name}]",
-      "marks": "[Ðéļʋé Ɱáŕķš: {count}]",
+      "openDelveAria": "[Óþéñ Ðúñĝéóñ Ɓóáŕð ƒŕóɱ {name}]",
+      "marks": "[Ðúñĝéóñ Ɱáŕķš: {count}]",
       "minLevel": "[Ŕéɋúíŕéš Ļéʋéļ {level}]",
       "tier": {
         "normal": "[Ñóŕɱáļ]",
@@ -2345,28 +2345,28 @@ export const en_XA: EnTranslations = {
         "rank": "[Ŕáñķ {rank}]",
         "boon": "[Ĥéáļš ţĥé þáŕţý ƀéţŵééñ ƒíĝĥţš. Ŕáñķ 3 ŕéʋíʋéš á ƒáļļéñ áļļý óñçé þéŕ ŕúñ.]",
         "upgrade": "[Úþĝŕáðé ţó Ŕáñķ {rank} ({marks} Ɱáŕķš)]",
-        "upgradeAria": "[Úþĝŕáðé {name} ţó ŕáñķ {rank} ƒóŕ {marks} Ðéļʋé Ɱáŕķš]",
+        "upgradeAria": "[Úþĝŕáðé {name} ţó ŕáñķ {rank} ƒóŕ {marks} Ðúñĝéóñ Ɱáŕķš]",
         "maxRank": "[Ƒúļļý úþĝŕáðéð]"
       },
-      "tabDelve": "[Ðéļʋé]",
+      "tabDelve": "[Ðúñĝéóñ]",
       "tabShop": "[Šĥóþ]"
     },
     "shop": {
       "price": "[{marks} Ɱáŕķš]",
       "buy": "[Ɓúý]",
-      "buyAria": "[Ɓúý {item} ƒóŕ {marks} Ðéļʋé Ɱáŕķš]",
+      "buyAria": "[Ɓúý {item} ƒóŕ {marks} Ðúñĝéóñ Ɱáŕķš]",
       "reqHeroic": "[Ŕéɋúíŕéš á Ĥéŕóíç çļéáŕ]",
       "reqClears": "[Ŕéɋúíŕéš {count} çļéáŕš]",
       "empty": "[Ñóţĥíñĝ íñ šţóçķ.]"
     },
     "tracker": {
-      "title": "[Ðéļʋé]",
+      "title": "[Ðúñĝéóñ]",
       "objective": "[Óƀĵéçţíʋé]",
       "module": "[Ɱóðúļé {current} óƒ {total}]",
-      "descend": "[Ðéšçéñð ţĥé Ðúŕáñçé]",
+      "descend": "[Ðéšçéñð ţĥé Ĥéļļɱáŵ]",
       "affix": "[Áƒƒíẋéš]",
       "complete": "[Çóɱþļéţé]",
-      "marks": "[Ðéļʋé Ɱáŕķš: {count}]",
+      "marks": "[Ðúñĝéóñ Ɱáŕķš: {count}]",
       "exitHintOpen": "[Ŵáļķ íñţó ţĥé ţóɱƀšţóñé þáššáĝé (ñóŕţĥ)]",
       "exitHintLocked": "[Çļéáŕ ţŕášĥ ɱóƀš ţó óþéñ ţĥé þáššáĝé ñóŕţĥ]"
     },
@@ -2376,15 +2376,15 @@ export const en_XA: EnTranslations = {
       "clear_room": "[Çļéáŕ ţĥé ŕóóɱ]"
     },
     "summary": {
-      "title": "[Ðéļʋé Çóɱþļéţé]",
-      "marks": "[{count} Ðéļʋé Ɱáŕķš éáŕñéð]",
+      "title": "[Ðúñĝéóñ Çóɱþļéţé]",
+      "marks": "[{count} Ðúñĝéóñ Ɱáŕķš éáŕñéð]",
       "loreUnlock": "[Ļóŕé úñļóçķéð: {title}]"
     },
     "death": {
-      "warning": "[Óñé ɱóŕé ðéáţĥ ŵíļļ éñð ţĥíš ðéļʋé ŕúñ.]"
+      "warning": "[Óñé ɱóŕé ðéáţĥ ŵíļļ éñð ţĥíš ðúñĝéóñ ŕúñ.]"
     },
     "run": {
-      "failed": "[Ţĥé ðéļʋé ŕúñ ĥáš ƒáíļéð. Ýóú áŕé ŕéţúŕñéð ţó Ɓŕóţĥéŕ Ĥáļʋéñ.]"
+      "failed": "[Ţĥé ðúñĝéóñ ŕúñ ĥáš ƒáíļéð. Ýóú áŕé ŕéţúŕñéð ţó Ɓŕóţĥéŕ Ĥáļʋéñ.]"
     },
     "npc": {
       "halven": {
@@ -4512,17 +4512,17 @@ export const en_XA: EnTranslations = {
       "gravecaller_sigil": {
         "name": "[Ĝŕáʋéçáļļéŕ'š Šíĝíļ]"
       },
-      "sigil_of_hate": {
-        "name": "[Šíĝíļ óƒ Ĥáţé]"
+      "binding_ward": {
+        "name": "[Íñƒéŕñáļ Ɓíñðíñĝ Ŵáŕð]"
       },
-      "baelgors_hateforged_cleaver": {
-        "name": "[Ɓáéļĝóŕ'š Ĥáţéƒóŕĝéð Çļéáʋéŕ]"
+      "renders_hateforged_cleaver": {
+        "name": "[Ţĥé Ŕéñðéŕ'š Ĥáţéƒóŕĝéð Çļéáʋéŕ]"
       },
       "sigilbrand_of_the_durance": {
-        "name": "[Šíĝíļƀŕáñð óƒ ţĥé Ðúŕáñçé]"
+        "name": "[Ɓŕáñð óƒ ţĥé Ĥéļļɱáŵ]"
       },
       "hollow_fang_of_hate": {
-        "name": "[Ĥóļļóŵ Ƒáñĝ óƒ Ĥáţé]"
+        "name": "[Ĥóļļóŵ Ƒáñĝ óƒ ţĥé Ŵéļļ]"
       },
       "blessed_wax": {
         "name": "[Ɓļéššéð Ţáļļóŵ]"

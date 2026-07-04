@@ -2363,7 +2363,7 @@ export const vi_VN: EnTranslations = {
       "title": "Hang Sâu",
       "objective": "Mục Tiêu",
       "module": "Khu {current} trên {total}",
-      "descend": "Descend the Durance",
+      "descend": "Descend the Hellmaw",
       "affix": "Đặc Tính",
       "complete": "Hoàn Thành",
       "marks": "Huy Hiệu Hang Sâu: {count}",
@@ -4512,17 +4512,17 @@ export const vi_VN: EnTranslations = {
       "gravecaller_sigil": {
         "name": "Ấn Phù Của Triệu Mộ Giả"
       },
-      "sigil_of_hate": {
-        "name": "Sigil of Hate"
+      "binding_ward": {
+        "name": "Infernal Binding Ward"
       },
-      "baelgors_hateforged_cleaver": {
-        "name": "Baelgor's Hateforged Cleaver"
+      "renders_hateforged_cleaver": {
+        "name": "The Render's Hateforged Cleaver"
       },
       "sigilbrand_of_the_durance": {
-        "name": "Sigilbrand of the Durance"
+        "name": "Brand of the Hellmaw"
       },
       "hollow_fang_of_hate": {
-        "name": "Hollow Fang of Hate"
+        "name": "Hollow Fang of the Well"
       },
       "blessed_wax": {
         "name": "Mỡ Nến Ban Phước"

@@ -78,12 +78,12 @@ export const DELVE_MODULE_NAMES: Record<string, string> = {
   reliquary_bell_niche: 'The Bell Niche',
   reliquary_saintless_hall: 'The Saintless Hall',
   reliquary_finale: 'The Bell-Buried Chamber',
-  durance_outer_sanctum: 'The Outer Sanctum',
-  durance_blood_gallery: 'The Blood Gallery',
-  durance_hollow_descent: 'The Hollow Descent',
-  durance_burning_chasm: 'The Burning Chasm',
-  durance_pyre_hall: 'The Pyre Hall',
-  durance_finale: "The Butcher's Sanctum",
+  hellmaw_outer_maw: 'The Outer Sanctum',
+  hellmaw_ember_gallery: 'The Blood Gallery',
+  hellmaw_hollow_descent: 'The Hollow Descent',
+  hellmaw_burning_chasm: 'The Burning Chasm',
+  hellmaw_pyre_hall: 'The Pyre Hall',
+  hellmaw_finale: "The Butcher's Sanctum",
 };
 // Lore journal entries unlocked one-per-clear across repeat runs (PRD §6.4 / §7.6).
 // Ids match the `delveUi.lore.*` i18n keys.
@@ -426,8 +426,9 @@ export function claimDelveRun(
   // player roams the whole descent freely (see spawnDelveModule openFloor branch,
   // clampDelveModuleBounds, and tickDelveFloorClear). All other delves stay on the
   // sequential room-at-a-time crawl.
-  run.openFloor = delveId === 'durance_of_hate';
+  run.openFloor = delveId === 'hellmaw_well';
   run.butcherAmbushed = false;
+  run.ambushBossId = null;
   run.completed = false;
   run.emptyFor = 0;
   run.deathsThisRun = {};
@@ -484,14 +485,21 @@ function spawnOneDelveModule(
   const isFinale = mod.id === delve.finaleModuleId || moduleIndex >= run.modules.length - 1;
 
   // ── The Butcher's random ambush (Durance of Hate) ──────────────────────────
-  // On any non-finale room, a chance he bursts out mid-crawl — "Fresh meat!".
-  // Rolls at most once per run; the finale room spawns him guaranteed if he never
-  // randomly appeared. Deterministic off the run seed + room index. On the
-  // connected floor this fires per-room at spawn time so he can be lurking deep.
-  if (run.delveId === 'durance_of_hate' && !isFinale && !run.butcherAmbushed) {
-    const roll = new Rng((run.seed ^ (moduleIndex * 977 + 0xb17c)) >>> 0).chance(0.12);
-    if (moduleIndex >= 1 && roll) {
-      const butcher = MOBS['durance_the_butcher'];
+  // A chance he bursts out mid-crawl — "Fresh meat!". Rolls at most once per run;
+  // the finale room spawns him guaranteed if he never randomly appeared.
+  // Deterministic off the run seed + room index.
+  //
+  // CONNECTED FLOOR: every room's spawn rolls at ONCE (all rooms live), so a 12%
+  // per-room roll over 40 rooms would spawn him almost immediately near the mouth.
+  // Gate the ambush to the DEEP BACK HALF of the floor and use a low per-room rate,
+  // so you crawl most of the dungeon before he can appear — and the deepest room he
+  // can lurk in is still well before the guaranteed finale showdown.
+  const ambushMinIndex = run.openFloor ? Math.floor(run.modules.length * 0.6) : 1;
+  const ambushChance = run.openFloor ? 0.06 : 0.12;
+  if (run.delveId === 'hellmaw_well' && !isFinale && !run.butcherAmbushed) {
+    const roll = new Rng((run.seed ^ (moduleIndex * 977 + 0xb17c)) >>> 0).chance(ambushChance);
+    if (moduleIndex >= ambushMinIndex && roll) {
+      const butcher = MOBS['hellmaw_the_render'];
       if (butcher) {
         const bl = butcher.minLevel + tier.enemyLevelBonus;
         const bmob = createMob(
@@ -505,6 +513,7 @@ function spawnOneDelveModule(
         ctx.addEntity(bmob);
         run.mobIds.push(bmob.id);
         run.butcherAmbushed = true;
+        run.ambushBossId = bmob.id; // killing THIS one must not complete the run
         if (run.partyKey) {
           for (const pid of ctx.partyMembersForKey(run.partyKey)) {
             ctx.emit({ type: 'log', text: 'AH… FRESH MEAT! The Butcher bursts from the dark!', color: '#f33', pid });
