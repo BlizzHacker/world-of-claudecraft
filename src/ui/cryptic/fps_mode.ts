@@ -193,7 +193,13 @@ export function mountFpsMode(input: Input, opts: MountFpsOptions = {}): void {
     if (ev.key.toLowerCase() !== toggleKey) return;
     // Ignore when modifier keys are held — keep V free for browser shortcuts.
     if (ev.ctrlKey || ev.metaKey || ev.altKey) return;
-    const next: FpsMode = runtime!.mode === 'on' ? 'off' : 'on';
+    // V cycles through ALL three views: free (off) → first-person (on) →
+    // locked Diablo (diablo) → back to free. This is what lets V pull the
+    // player OUT of the locked Diablo camera — the lock re-asserts the fixed
+    // angle every frame, but an explicit mode switch still wins.
+    const order: FpsMode[] = ['off', 'on', 'diablo'];
+    const cur = order.indexOf(runtime!.mode);
+    const next: FpsMode = order[(cur + 1) % order.length];
     setFpsMode(input, next);
     ev.preventDefault();
   });

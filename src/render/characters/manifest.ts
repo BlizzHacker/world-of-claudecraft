@@ -564,11 +564,22 @@ export const VISUALS: Record<string, VisualDef> = {
     lazyPreload: true,
   },
   hellmaw_render_body: {
-    // THE BUTCHER — the Crimson Infernal Behemoth (biped, animated). The oversized
-    // final horror of the descent (Meshy_AI_Infernal_Behemoth_biped).
-    url: `${REALM_MODELS}/infernal/meshy_ai_crimson_infernal_behe_biped_meshy_ai_meshy_merged_animations_27bab94d.glb`,
-    height: 4.2,
-    clips: meshyBiped([], { run: 'RunFast' }),
+    // THE RENDER — the Infernal Behemoth (biped, animated). The oversized final
+    // horror of the descent. Ships its own clip set: Attack / Axe_Spin_Attack /
+    // Running / Walking / Basic_Jump / combos — no Idle/Death/Cast/Hit, so those
+    // alias the nearest clip (idle→Walking, cast→Axe_Spin_Attack, death/hit→Attack).
+    url: `${REALM_MODELS}/infernal/meshy_ai_infernal_behemoth_biped_merged_animations.glb`,
+    height: 4.6,
+    clips: {
+      idle: 'Walking',
+      walk: 'Walking',
+      run: 'Running',
+      attack: ['Attack', 'Double_Combo_Attack', 'Triple_Combo_Attack'],
+      hit: ['Attack'],
+      death: 'Attack',
+      cast: 'Axe_Spin_Attack',
+      jump: 'Basic_Jump',
+    },
     lazyPreload: true,
   },
   realm_classic_orc: {
