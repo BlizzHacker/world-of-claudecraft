@@ -2176,7 +2176,10 @@ async function main(): Promise<void> {
       character.name,
       character.class,
       character.state,
-      character.is_gm,
+      // GM/admin session: there is no is_gm column — admins (accounts.is_admin) ARE
+      // GMs (unlocks in-game dev/admin commands incl. /godmode). `character.is_gm`
+      // was always undefined here, which silently disabled GM for everyone.
+      isAdmin || !!character.is_gm,
       {
         ...requestMetadata(req),
         mutedUntil: status.chatMutedUntil ?? chatMute.mutedUntil,
