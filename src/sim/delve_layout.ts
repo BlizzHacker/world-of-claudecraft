@@ -12,6 +12,8 @@ export type DelveModuleId =
   | 'durance_outer_sanctum'
   | 'durance_blood_gallery'
   | 'durance_hollow_descent'
+  | 'durance_burning_chasm'
+  | 'durance_pyre_hall'
   | 'durance_finale';
 
 interface GridPoint {
@@ -149,76 +151,117 @@ export const RELIQUARY_FINALE_LAYOUT: DungeonLayout = {
 };
 
 // ── Durance of Hate (Diabl0 Easter-egg delve) ───────────────────────────────
-// Dark stone halls descending from the Eastbrook well. Module 0 has no doorZ
-// (players drop in through the well); the rest carry the porch door.
+// The Durance is a LONG, sprawling infernal descent — each room is a cavernous
+// hall, far bigger than a reliquary module. Durance-specific dimensions (wider
+// and deeper) so the reliquary layouts above keep their exact size.
+const D_ZMIN = -24; // deeper porch
+const D_ZMAX = 176; // ~200-unit rooms (vs 110)
+const D_SIDE_Z = 76; // side-slab centre = midpoint of the extended run
+const D_SIDE_HD = 100; // half-depth covers the full 200u room
+const D_WALL_X = 42; // much wider halls (vs 25)
+const D_DOOR_Z = D_ZMIN + 2;
+const D_DAIS = { x: 0, z: 160, r: 18 }; // big boss dais deep at the back
 
 /** Outer Sanctum: broad pillared entry hall, twin tomb rows flank the aisle. */
 export const DURANCE_OUTER_SANCTUM_LAYOUT: DungeonLayout = {
-  zMin: Z_MIN,
-  zMax: Z_MAX,
-  sideWallZ: SIDE_Z,
-  sideWallHd: SIDE_HD,
-  wallX: WALL_X,
-  pillars: grid(14, 66, 26, [-15, 15]),
-  tombs: grid(18, 68, 25, [-19, 19]),
+  zMin: D_ZMIN,
+  zMax: D_ZMAX,
+  sideWallZ: D_SIDE_Z,
+  sideWallHd: D_SIDE_HD,
+  wallX: D_WALL_X,
+  pillars: grid(20, 140, 30, [-28, -10, 10, 28]),
+  tombs: grid(28, 150, 30, [-36, 36]),
   stubs: [],
-  dais: { x: 0, z: 80, r: 9 },
+  dais: D_DAIS,
   clutter: AISLE_CLUTTER,
 };
 
 /** Blood Gallery: deep alcove stubs guarding the Behemoth's open centre. */
 export const DURANCE_BLOOD_GALLERY_LAYOUT: DungeonLayout = {
-  zMin: Z_MIN,
-  zMax: Z_MAX,
-  sideWallZ: SIDE_Z,
-  sideWallHd: SIDE_HD,
-  wallX: WALL_X,
-  doorZ: DOOR_Z,
-  pillars: grid(16, 66, 25, [-14, 14]),
+  zMin: D_ZMIN,
+  zMax: D_ZMAX,
+  sideWallZ: D_SIDE_Z,
+  sideWallHd: D_SIDE_HD,
+  wallX: D_WALL_X,
+  doorZ: D_DOOR_Z,
+  pillars: grid(20, 140, 30, [-26, 26]),
   tombs: [],
   stubs: [
-    { x: -15, z: 30, hw: 10, hd: 5 },
-    { x: 15, z: 30, hw: 10, hd: 5 },
-    { x: -15, z: 60, hw: 10, hd: 5 },
-    { x: 15, z: 60, hw: 10, hd: 5 },
+    { x: -28, z: 40, hw: 14, hd: 8 },
+    { x: 28, z: 40, hw: 14, hd: 8 },
+    { x: -28, z: 100, hw: 14, hd: 8 },
+    { x: 28, z: 100, hw: 14, hd: 8 },
   ],
-  dais: { x: 0, z: 80, r: 8 },
+  dais: D_DAIS,
   clutter: BELL_NICHE_CLUTTER,
 };
 
-/** Hollow Descent: three colonnade rows, defaced tomb rows, the final stair. */
+/** Hollow Descent: broad colonnade rows, defaced tomb rows, the long stair. */
 export const DURANCE_HOLLOW_DESCENT_LAYOUT: DungeonLayout = {
-  zMin: Z_MIN,
-  zMax: Z_MAX,
-  sideWallZ: SIDE_Z,
-  sideWallHd: SIDE_HD,
-  wallX: WALL_X,
-  doorZ: DOOR_Z,
-  pillars: grid(14, 66, 26, [-14, 14]),
-  tombs: grid(20, 68, 24, [-19, 19]),
+  zMin: D_ZMIN,
+  zMax: D_ZMAX,
+  sideWallZ: D_SIDE_Z,
+  sideWallHd: D_SIDE_HD,
+  wallX: D_WALL_X,
+  doorZ: D_DOOR_Z,
+  pillars: grid(20, 140, 26, [-28, -10, 10, 28]),
+  tombs: grid(30, 145, 30, [-36, 36]),
   stubs: [],
-  dais: { x: 0, z: 80, r: 8 },
+  dais: D_DAIS,
   clutter: AISLE_CLUTTER,
 };
 
-/** Hatelord's Sanctum: boss arena, clutter south, wide r=12 dais for Baelgor's
- *  Wave of Hate stomp. */
-export const DURANCE_FINALE_LAYOUT: DungeonLayout = {
-  zMin: Z_MIN,
-  zMax: Z_MAX,
-  sideWallZ: SIDE_Z,
-  sideWallHd: SIDE_HD,
-  wallX: WALL_X,
-  doorZ: DOOR_Z,
+/** Burning Chasm: an open cavern, a scatter of pillars around a wide centre. */
+export const DURANCE_BURNING_CHASM_LAYOUT: DungeonLayout = {
+  zMin: D_ZMIN,
+  zMax: D_ZMAX,
+  sideWallZ: D_SIDE_Z,
+  sideWallHd: D_SIDE_HD,
+  wallX: D_WALL_X,
+  doorZ: D_DOOR_Z,
   pillars: [
-    { x: -14, z: 12 },
-    { x: 14, z: 12 },
-    { x: -14, z: 28 },
-    { x: 14, z: 28 },
+    { x: -30, z: 40 }, { x: 30, z: 44 }, { x: -18, z: 90 }, { x: 20, z: 96 },
+    { x: -32, z: 130 }, { x: 32, z: 128 },
   ],
-  tombs: grid(16, 28, 12, [-19, 19]),
+  tombs: [],
+  stubs: [
+    { x: -34, z: 70, hw: 8, hd: 12 },
+    { x: 34, z: 110, hw: 8, hd: 12 },
+  ],
+  dais: D_DAIS,
+  clutter: FINALE_CLUTTER,
+};
+
+/** Pyre Hall: twin colonnades framing a central processional to the deep stair. */
+export const DURANCE_PYRE_HALL_LAYOUT: DungeonLayout = {
+  zMin: D_ZMIN,
+  zMax: D_ZMAX,
+  sideWallZ: D_SIDE_Z,
+  sideWallHd: D_SIDE_HD,
+  wallX: D_WALL_X,
+  doorZ: D_DOOR_Z,
+  pillars: grid(24, 148, 20, [-32, 32]),
+  tombs: grid(40, 130, 45, [-16, 16]),
   stubs: [],
-  dais: { x: 0, z: 80, r: 12 },
+  dais: D_DAIS,
+  clutter: AISLE_CLUTTER,
+};
+
+/** The Butcher's Sanctum: a huge boss arena. Clutter south, wide r=18 dais deep
+ *  at the back for the Butcher's big cleave. */
+export const DURANCE_FINALE_LAYOUT: DungeonLayout = {
+  zMin: D_ZMIN,
+  zMax: D_ZMAX,
+  sideWallZ: D_SIDE_Z,
+  sideWallHd: D_SIDE_HD,
+  wallX: D_WALL_X,
+  doorZ: D_DOOR_Z,
+  pillars: [
+    { x: -30, z: 20 }, { x: 30, z: 20 }, { x: -30, z: 50 }, { x: 30, z: 50 },
+  ],
+  tombs: grid(24, 56, 16, [-36, 36]),
+  stubs: [],
+  dais: D_DAIS,
   clutter: FINALE_CLUTTER,
 };
 
@@ -230,6 +273,8 @@ export const DELVE_MODULE_LAYOUTS: Record<DelveModuleId, DungeonLayout> = {
   durance_outer_sanctum: DURANCE_OUTER_SANCTUM_LAYOUT,
   durance_blood_gallery: DURANCE_BLOOD_GALLERY_LAYOUT,
   durance_hollow_descent: DURANCE_HOLLOW_DESCENT_LAYOUT,
+  durance_burning_chasm: DURANCE_BURNING_CHASM_LAYOUT,
+  durance_pyre_hall: DURANCE_PYRE_HALL_LAYOUT,
   durance_finale: DURANCE_FINALE_LAYOUT,
 };
 

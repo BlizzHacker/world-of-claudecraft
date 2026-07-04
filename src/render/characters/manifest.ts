@@ -503,6 +503,35 @@ export const VISUALS: Record<string, VisualDef> = {
     clips: meshyBiped(['Left_Slash'], { walk: 'Monster_Walk', run: 'Running' }),
     lazyPreload: true,
   },
+  // --- Durance of Hate delve enemies: real infernal demon bodies (no KayKit) ---
+  durance_husk_body: {
+    // Hateful Husk: lava demon with horns — the rushing trash of the descent.
+    url: `${REALM_MODELS}/infernal/meshy_ai_lava_demon_with_horns_0616234329_texture_9a64c154.glb`,
+    height: 2.4,
+    clips: meshyBiped(),
+    lazyPreload: true,
+  },
+  durance_acolyte_body: {
+    // Sigil-Bound Acolyte: black evil spectre — the ranged brand-caster.
+    url: `${REALM_MODELS}/infernal/meshy_ai_a_black_evil_spectr_0616234348_texture_abacb7f9.glb`,
+    height: 2.6,
+    clips: meshyBiped(),
+    lazyPreload: true,
+  },
+  durance_behemoth_body: {
+    // Blood Behemoth: the Crimson Infernal Behemoth (animated) — mini-anchor.
+    url: `${REALM_MODELS}/infernal/meshy_ai_crimson_infernal_behe_biped_meshy_ai_meshy_merged_animations_27bab94d.glb`,
+    height: 3.2,
+    clips: meshyBiped([], { run: 'RunFast' }),
+    lazyPreload: true,
+  },
+  durance_butcher_body: {
+    // THE BUTCHER — the horned demon warrior, oversized, the Durance's final horror.
+    url: `${REALM_MODELS}/infernal/meshy_ai_horned_demon_warrior_0616234420_texture_2233cac0.glb`,
+    height: 3.8,
+    clips: meshyBiped(),
+    lazyPreload: true,
+  },
   realm_classic_orc: {
     url: `${REALM_MODELS}/classic/another-orc-meshy_ai_meshy_merged_animations_743223cb.glb`,
     height: HUMANOID_H,
@@ -970,6 +999,11 @@ const MOB_KEYS: Record<string, string> = {
   reliquary_gravecall_acolyte: 'delve_mob_acolyte',
   reliquary_saintless_effigy: 'delve_skel_effigy',
   deacon_varric: 'delve_skel_varric',
+  // Durance of Hate: real infernal demon bodies (no KayKit fallback)
+  durance_hateful_husk: 'durance_husk_body',
+  durance_sigilbound_acolyte: 'durance_acolyte_body',
+  durance_blood_behemoth: 'durance_behemoth_body',
+  durance_the_butcher: 'durance_butcher_body',
   fallen_captain_aldren: 'skel_warrior',
   corrupted_priest_malric: 'skel_necromancer',
   deathstalker_voss: 'skel_rogue',

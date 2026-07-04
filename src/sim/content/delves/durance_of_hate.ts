@@ -44,31 +44,55 @@ const HOLLOW_DESCENT_SPAWNS = {
   ],
 };
 
-// Finale: the Hatelord strides onto the dais as the encounter opens (dais z=80,
+// Finale: The Butcher strides onto the dais as the encounter opens (dais z=80,
 // r=12 → spawn just south at z=72, matching the reliquary finale convention).
-const HATELORD_SPAWNS = {
+const BUTCHER_SPAWNS = {
   id: 'boss',
   weight: 1,
-  spawns: [{ mobId: 'durance_hatelord_baelgor', x: 0, z: 72 }],
+  spawns: [{ mobId: 'durance_the_butcher', x: 0, z: 72 }],
 };
 
-// ── Modules (layout id === key; interior 'crypt' reuses the dark stone kit) ──
+// Extra deep-descent packs — the Durance is now a long, sprawling descent, so
+// there are more distinct room encounters between the well and The Butcher.
+const CHASM_SPAWNS = {
+  id: 'durance_chasm_trash',
+  weight: 1,
+  spawns: [
+    { mobId: 'durance_blood_behemoth', x: -6, z: 30 },
+    { mobId: 'durance_hateful_husk', x: 7, z: 34 },
+    { mobId: 'durance_hateful_husk', x: -7, z: 58 },
+    { mobId: 'durance_sigilbound_acolyte', x: 6, z: 62 },
+  ],
+};
+
+const PYRE_SPAWNS = {
+  id: 'durance_pyre_trash',
+  weight: 1,
+  spawns: [
+    { mobId: 'durance_sigilbound_acolyte', x: -6, z: 28 },
+    { mobId: 'durance_sigilbound_acolyte', x: 6, z: 30 },
+    { mobId: 'durance_hateful_husk', x: 0, z: 56 },
+    { mobId: 'durance_blood_behemoth', x: 0, z: 64 },
+  ],
+};
+
+// ── Modules — the Durance is a LONG, sprawling descent. Six big distinct room
+// types (each a wide 200-yd hall) feed the finale. Layout ids === keys. Interior
+// 'crypt' reuses the dark stone kit; the delve is dressed infernal at build time.
 export const DURANCE_OF_HATE_MODULES: Record<string, DelveModuleDef> = {
   durance_outer_sanctum: {
     id: 'durance_outer_sanctum',
     interior: 'crypt',
     layout: 'durance_outer_sanctum',
-    length: 110,
+    length: 200,
     spawnSets: [OUTER_SANCTUM_SPAWNS],
-    interactableSlots: [
-      { x: -7, z: 40, variants: ['durance_brazier', 'durance_bones'] },
-    ],
+    interactableSlots: [{ x: -7, z: 40, variants: ['durance_brazier', 'durance_bones'] }],
   },
   durance_blood_gallery: {
     id: 'durance_blood_gallery',
     interior: 'crypt',
     layout: 'durance_blood_gallery',
-    length: 110,
+    length: 200,
     spawnSets: [BLOOD_GALLERY_SPAWNS],
     interactableSlots: [],
   },
@@ -76,19 +100,33 @@ export const DURANCE_OF_HATE_MODULES: Record<string, DelveModuleDef> = {
     id: 'durance_hollow_descent',
     interior: 'crypt',
     layout: 'durance_hollow_descent',
-    length: 110,
+    length: 200,
     spawnSets: [HOLLOW_DESCENT_SPAWNS],
+    interactableSlots: [],
+  },
+  durance_burning_chasm: {
+    id: 'durance_burning_chasm',
+    interior: 'crypt',
+    layout: 'durance_burning_chasm',
+    length: 220,
+    spawnSets: [CHASM_SPAWNS],
+    interactableSlots: [{ x: 7, z: 44, variants: ['durance_brazier', 'durance_bones'] }],
+  },
+  durance_pyre_hall: {
+    id: 'durance_pyre_hall',
+    interior: 'crypt',
+    layout: 'durance_pyre_hall',
+    length: 220,
+    spawnSets: [PYRE_SPAWNS],
     interactableSlots: [],
   },
   durance_finale: {
     id: 'durance_finale',
     interior: 'crypt',
     layout: 'durance_finale',
-    length: 110,
-    spawnSets: [HATELORD_SPAWNS],
-    interactableSlots: [
-      { x: 0, z: 88, variants: ['durance_hate_reliquary'] },
-    ],
+    length: 240,
+    spawnSets: [BUTCHER_SPAWNS],
+    interactableSlots: [{ x: 0, z: 88, variants: ['durance_hate_reliquary'] }],
   },
 };
 
@@ -104,10 +142,17 @@ export const DURANCE_OF_HATE_DELVE: DelveDef = {
   minLevel: 10,
   suggestedPlayers: 2,
   doorPos: { x: 0, z: 2 },
-  modules: ['durance_outer_sanctum', 'durance_blood_gallery', 'durance_hollow_descent'],
-  moduleCount: [3, 3],
+  modules: [
+    'durance_outer_sanctum',
+    'durance_blood_gallery',
+    'durance_hollow_descent',
+    'durance_burning_chasm',
+    'durance_pyre_hall',
+  ],
+  // A long descent: 6–7 big rooms drawn from the pool before the Butcher's dais.
+  moduleCount: [6, 7],
   finaleModuleId: 'durance_finale',
-  bosses: ['durance_hatelord_baelgor'],
+  bosses: ['durance_the_butcher'],
   objective: 'kill_boss',
   boardNpcId: 'warden_kaine',
   enterText: 'The well drops away into black water — and beyond it, the Durance of Hate.',

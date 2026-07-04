@@ -179,7 +179,7 @@ import './ui/cryptic/realm_env';
 import { getActiveRealm, getRealm, isRealmId, persistActiveRealm, type RealmContent } from './sim/realms';
 import { notePropPlaced, tryBuilderSelect } from './ui/cryptic/world_builder';
 import { mountHudGlobes, setHudSkin, resolveHudSkin } from './ui/cryptic/globes';
-import { enforceDiabloLock, isFpsActive, mountFpsMode, resolveFpsMode, setFpsMode } from './ui/cryptic/fps_mode';
+import { enforceDiabloLock, forceDiabloForDelve, isFpsActive, mountFpsMode, resolveFpsMode, setFpsMode } from './ui/cryptic/fps_mode';
 import { mountRealmBranding } from './ui/cryptic/branding';
 import { mountIngameOptions } from './ui/cryptic/ingame_options';
 import { mountUserDropdown } from './ui/cryptic/user_dropdown';
@@ -2444,6 +2444,9 @@ async function startGame(
         },
       );
       enforceDiabloLock(input); // Diablo preset wins over input handlers this frame
+      // The Durance of Hate forces its authored top-down infernal camera on all
+      // players (unless they've explicitly chosen first-person).
+      if (world.delveRun?.delveId === 'durance_of_hate') forceDiabloForDelve(input);
       renderer.camYaw = input.camYaw;
       renderer.camPitch = input.camPitch;
       renderer.camDist = input.camDist;

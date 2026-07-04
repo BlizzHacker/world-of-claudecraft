@@ -233,3 +233,18 @@ export function enforceDiabloLock(input: Input): void {
   input.camDist = DIABLO_CAM_DIST;
   input.camPitch = DIABLO_CAM_PITCH;
 }
+
+/**
+ * FORCE the Diablo (DuranceOfHate) camera regardless of the player's chosen
+ * mode. Called each frame the player is inside the Durance of Hate delve so the
+ * dungeon always uses its authored top-down infernal angle — first-person/3rd-
+ * person are overridden here, then restored automatically once they leave (the
+ * player's saved mode is untouched, so nothing to undo). No-op when the player
+ * is already in Diablo mode (the normal lock handles it) or in FPS mode (which
+ * the player may want even in the dungeon).
+ */
+export function forceDiabloForDelve(input: Input): void {
+  if (runtime?.mode === 'on') return; // respect an explicit first-person choice
+  input.camDist = DIABLO_CAM_DIST;
+  input.camPitch = DIABLO_CAM_PITCH;
+}

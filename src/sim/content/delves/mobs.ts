@@ -195,25 +195,27 @@ export const DELVE_MOBS: Record<string, MobTemplate> = {
     color: 0x4a1418,
   },
   // --- Boss ---
-  durance_hatelord_baelgor: {
-    id: 'durance_hatelord_baelgor',
-    name: 'Baelgor, Hatelord of the Durance',
+  durance_the_butcher: {
+    id: 'durance_the_butcher',
+    name: 'The Butcher',
     minLevel: 12,
     maxLevel: 12,
     family: 'demon',
     elite: true,
     boss: true,
-    hpBase: 140,
-    hpPerLevel: 26,
-    dmgBase: 11,
-    dmgPerLevel: 2.8,
-    attackSpeed: 2.2,
-    armorPerLevel: 22,
-    moveSpeed: 7,
-    aggroRadius: 15,
-    stomp: { radius: 9, every: 11, duration: 1.6, min: 18, max: 28, name: 'Wave of Hate' },
+    // "Ah… fresh meat!" — a bigger, meaner endboss: more HP, harder hits, and
+    // a wider cleave than a normal delve boss. He charges, he enrages, he butchers.
+    hpBase: 200,
+    hpPerLevel: 34,
+    dmgBase: 14,
+    dmgPerLevel: 3.4,
+    attackSpeed: 2.0,
+    armorPerLevel: 26,
+    moveSpeed: 7.5,
+    aggroRadius: 18,
+    stomp: { radius: 11, every: 10, duration: 1.6, min: 24, max: 36, name: 'Butcher’s Cleave' },
     summonAdds: { mobId: 'durance_hateful_husk', count: 3, atHpPct: [0.6, 0.3] },
-    enrage: { belowHpPct: 0.2, dmgMult: 1.5, hasteMult: 1.25 },
+    enrage: { belowHpPct: 0.25, dmgMult: 1.6, hasteMult: 1.3 },
     loot: [
       { copper: 800, chance: 1 },
       // One signature epic per archetype, exclusive roll — every clear has a
@@ -222,7 +224,7 @@ export const DELVE_MOBS: Record<string, MobTemplate> = {
       { itemId: 'sigilbrand_of_the_durance', chance: 0.33, rollGroup: 'baelgor_epic' },
       { itemId: 'hollow_fang_of_hate', chance: 0.33, rollGroup: 'baelgor_epic' },
     ],
-    scale: 1.8,
+    scale: 2.4,
     color: 0x9a1f26,
   },
 

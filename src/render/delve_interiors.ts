@@ -16,6 +16,8 @@ const DELVE_MODULE_VARIANT: Record<DelveModuleId, DungeonInteriorVariant> = {
   durance_outer_sanctum: 'delve_ossuary',
   durance_blood_gallery: 'delve_bell',
   durance_hollow_descent: 'delve_hall',
+  durance_burning_chasm: 'delve_ossuary',
+  durance_pyre_hall: 'delve_hall',
   durance_finale: 'delve_finale',
 };
 
