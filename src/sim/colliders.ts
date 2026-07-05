@@ -1,5 +1,7 @@
 import {
   arenaOriginAt,
+  interiorOriginAt,
+  isInteriorPos,
   DUNGEON_X_THRESHOLD,
   defaultDelveModules,
   delveAt,
@@ -292,6 +294,31 @@ const TEMPLE_COLLIDERS: Collider[] = layoutColliders(TEMPLE_LAYOUT);
 const ARENA_COLLIDERS: Collider[] = layoutColliders(ARENA_LAYOUT);
 const NYTHRAXIS_COLLIDERS: Collider[] = layoutColliders(NYTHRAXIS_LAYOUT);
 
+// Building-interior room: a small rectangular room (±ROOM_HX by ±ROOM_HZ, instance
+// local) walled on all four sides, with a door gap on the SOUTH (−z) wall where the
+// player enters/exits. Walls are thin OBBs; the door gap is centred at x=0. The exit
+// object (a return door) is a render/interaction prop placed at the gap, not a wall.
+const ROOM_HX = 18; // room half-width
+const ROOM_HZ = 12; // room half-depth
+const ROOM_WT = 0.6; // wall half-thickness
+const ROOM_DOOR_HW = 3; // door gap half-width in the south wall
+const INTERIOR_ROOM_COLLIDERS: Collider[] = (() => {
+  const c: Collider[] = [];
+  c.push({ type: 'obb', x: 0, z: ROOM_HZ, hw: ROOM_HX, hd: ROOM_WT, rot: 0 }); // north wall
+  c.push({ type: 'obb', x: -ROOM_HX, z: 0, hw: ROOM_WT, hd: ROOM_HZ, rot: 0 }); // west wall
+  c.push({ type: 'obb', x: ROOM_HX, z: 0, hw: ROOM_WT, hd: ROOM_HZ, rot: 0 }); // east wall
+  // South wall split around the central door gap.
+  const sideHw = (ROOM_HX - ROOM_DOOR_HW) / 2;
+  if (sideHw > 0) {
+    c.push({ type: 'obb', x: -(ROOM_DOOR_HW + sideHw), z: -ROOM_HZ, hw: sideHw, hd: ROOM_WT, rot: 0 });
+    c.push({ type: 'obb', x: ROOM_DOOR_HW + sideHw, z: -ROOM_HZ, hw: sideHw, hd: ROOM_WT, rot: 0 });
+  }
+  return c;
+})();
+/** Interior room instance-local entry point (just inside the south door). */
+export const INTERIOR_ROOM_ENTRY = { x: 0, z: -ROOM_HZ + 3 };
+export const INTERIOR_ROOM_EXIT_LOCAL = { x: 0, z: -ROOM_HZ + 1 }; // the return-door prop sits here
+
 // Interior collider sets keyed by DungeonDef.interior.
 const INTERIOR_COLLIDERS: Record<string, Collider[]> = {
   crypt: CRYPT_COLLIDERS,
@@ -455,6 +482,11 @@ export function resolvePosition(
     const colliders = delveModuleColliders(loc.moduleId as DelveModuleId);
     const local = resolveAgainst(colliders, loc.localX, loc.localZ, r);
     return { x: local.x + loc.ox, z: local.z + loc.oz };
+  }
+  if (isInteriorPos(x)) {
+    const o = interiorOriginAt(x, z);
+    const local = resolveAgainst(INTERIOR_ROOM_COLLIDERS, x - o.x, z - o.z, r, ignoreFences);
+    return { x: local.x + o.x, z: local.z + o.z };
   }
   if (isArenaPos(x)) {
     const o = arenaOriginAt(z);

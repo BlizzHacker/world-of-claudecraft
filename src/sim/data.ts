@@ -514,8 +514,54 @@ export function delveOrigin(delveIndex: number, slot: number): { x: number; z: n
   };
 }
 
+// Delves are bounded above so a NEW region (building interiors) can live past them.
+// Delves use indices 0..2 today; cap at index 16 (x ≈ DELVE_X_MIN+16*600 = 14400)
+// so there's vast headroom for future delves while still leaving x ≥ INTERIOR_X_MIN
+// for interiors. A delve room footprint is ≤ ~6026 wide of its centre column, so the
+// cap edge sits well clear of any real delve.
+export const DELVE_BAND_X_MAX = DELVE_X_MIN + 16 * 600 + 300; // 14700
 export function isDelvePos(x: number): boolean {
-  return x >= DELVE_BAND_X_MIN;
+  return x >= DELVE_BAND_X_MIN && x < DELVE_BAND_X_MAX;
+}
+
+// ---------------------------------------------------------------------------
+// Building interiors (shop / inn / house rooms). Their own far x-band past the
+// delve cap, mirroring how arena + delves got their bands. Clicking a building
+// door teleports the player into an interior room here; a room exit teleports
+// them back to the saved overworld spot. Each interior TYPE owns a column
+// (index*600); many buildings share a type, so rooms stack in z by slot.
+// ---------------------------------------------------------------------------
+export const INTERIOR_X_MIN = DELVE_BAND_X_MAX + 300; // 15000: first interior column
+export const INTERIOR_SLOT_COUNT = 24; // concurrent copies of one interior room
+const INTERIOR_Z0 = -1250;
+const INTERIOR_SLOT_SPACING = 200; // a house room is small (~30u); 200u leaves margin
+// The band's west edge covers the widest interior room's west wall face so a
+// position on it is never misread as a delve.
+export const INTERIOR_ROOM_HALF = 24; // half-width/depth budget for an interior room
+export const INTERIOR_BAND_X_MIN = INTERIOR_X_MIN - (INTERIOR_ROOM_HALF + 2);
+
+export function interiorOrigin(typeIndex: number, slot: number): { x: number; z: number } {
+  return { x: INTERIOR_X_MIN + typeIndex * 600, z: INTERIOR_Z0 + slot * INTERIOR_SLOT_SPACING };
+}
+export function isInteriorPos(x: number): boolean {
+  return x >= INTERIOR_BAND_X_MIN;
+}
+
+/** Resolve the interior room origin nearest a far-off (x, z): the type column from x
+ *  and the slot from z. Used by collision + render to place the room shell. */
+export function interiorOriginAt(x: number, z: number): { x: number; z: number; typeIndex: number; slot: number } {
+  const typeIndex = Math.max(0, Math.round((x - INTERIOR_X_MIN) / 600));
+  let slot = 0;
+  let bestD = Infinity;
+  for (let i = 0; i < INTERIOR_SLOT_COUNT; i++) {
+    const d = Math.abs(z - interiorOrigin(typeIndex, i).z);
+    if (d < bestD) {
+      bestD = d;
+      slot = i;
+    }
+  }
+  const o = interiorOrigin(typeIndex, slot);
+  return { x: o.x, z: o.z, typeIndex, slot };
 }
 
 export function delveAt(x: number): DelveDef | null {
