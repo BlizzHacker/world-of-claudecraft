@@ -451,6 +451,10 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     kind: 'tool',
     quality: 'common',
     use: { type: 'townPortal' },
+    // The tome IS the scroll stack: its count = scrolls left, D2's max of 20. Without
+    // this explicit override a `tool` would be unstackable (stackSizeOf caps tools at
+    // 1), so you could never carry or refill past a single scroll.
+    stackSize: 20,
     sellValue: 8,
     buyValue: 40,
   },

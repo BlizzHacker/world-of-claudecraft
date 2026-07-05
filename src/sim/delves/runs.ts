@@ -1201,7 +1201,27 @@ export function tickDelvePressurePlates(ctx: SimContext, run: DelveRun): void {
           if (!s.linkIds.includes(linkId)) return true;
           return s.triggered;
         });
-        if (!allTriggered) continue;
+        if (!allTriggered) {
+          // A plate is down but the gate still needs its partner plate(s). Tell the
+          // player so the puzzle is discoverable — a silent stay-shut looked like a bug
+          // ("I killed everything and the gate won't open"). Count what's left.
+          const remaining = run.objectIds.filter((oid) => {
+            const s = run.objectState[oid];
+            return isDelvePuzzleKind(s?.kind) && s.linkIds.includes(linkId) && !s.triggered;
+          }).length;
+          for (const party of ctx.partyMembersForKey(run.partyKey)) {
+            ctx.emit({
+              type: 'log',
+              text:
+                remaining === 1
+                  ? 'The plate sinks with a grind of stone — but the gate holds. One more pressure plate in this room must be stepped on.'
+                  : `The plate sinks with a grind of stone — but the gate holds. ${remaining} more pressure plates in this room must be stepped on.`,
+              color: '#cc9',
+              pid: party,
+            });
+          }
+          continue;
+        }
         linked.open = true;
         const doorEnt = ctx.entities.get(linkId);
         if (doorEnt) ctx.dropEntity(linkId);
