@@ -90,4 +90,5 @@ export const CRYPTICREALM_REALM: RealmContent = {
       skillTrees: ['Void Lore', 'Riftcraft', 'Annihilation'],
     },
   ],
+  combatFeel: { castTimeMult: 0.3, gcdMult: 0.4 }, maxLevel: 99,
 };

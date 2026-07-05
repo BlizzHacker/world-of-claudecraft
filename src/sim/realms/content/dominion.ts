@@ -84,4 +84,5 @@ export const DOMINION_REALM: RealmContent = {
       skillTrees: ['Telekinesis', 'Mind Arts', 'Psionic Storm'],
     },
   ],
+  combatFeel: { castTimeMult: 0.3, gcdMult: 0.4 }, maxLevel: 99,
 };

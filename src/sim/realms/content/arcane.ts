@@ -84,4 +84,5 @@ export const ARCANE_REALM: RealmContent = {
       skillTrees: ['Rift Combat', 'Phase Arts', 'Dimensional Edge'],
     },
   ],
+  combatFeel: { castTimeMult: 0.3, gcdMult: 0.4 }, maxLevel: 99,
 };

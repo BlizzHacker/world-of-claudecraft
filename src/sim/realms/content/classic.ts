@@ -84,4 +84,5 @@ export const CLASSIC_REALM: RealmContent = {
       skillTrees: ['Temporal Arts', 'Paradox Engine', 'Eternal Flux'],
     },
   ],
+  maxLevel: 80,
 };

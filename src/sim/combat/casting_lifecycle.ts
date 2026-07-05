@@ -29,6 +29,7 @@
 
 import { ITEMS, isDelvePos, MOBS } from '../data';
 import { scheduleProjectile } from '../projectile_travel';
+import { getActiveRealm } from '../realms/registry';
 import type { PlayerMeta, ResolvedAbility } from '../sim';
 import type { SimContext } from '../sim_context';
 import { abilityScalingPower, channelTickBonus } from '../spell_scaling';
@@ -418,7 +419,14 @@ export function castAbility(
   }
   p.castTargetId = target?.id ?? null;
 
-  const gcd = ctx.playerGcdFor(meta.cls);
+  // F5 instant hack-n-slash: the D2 realms collapse the GCD (gcdMult) and cast
+  // times (castTimeMult) for snappy clicky combat. Vanilla realms (classic,
+  // claudecraft) omit combatFeel and keep WoW-style timing. Only scales existing
+  // timers — no rng, no determinism change.
+  const feel = getActiveRealm().combatFeel;
+  const gcdMult = feel?.gcdMult ?? 1;
+  const castTimeMult = feel?.castTimeMult ?? 1;
+  const gcd = Math.max(0.15, ctx.playerGcdFor(meta.cls) * gcdMult); // floor so the sim can't livelock
   // A channel keeps its duration, so it must not eat a next_cast_instant charge.
   const castTime =
     !ability.channel &&
@@ -426,7 +434,7 @@ export function castAbility(
     ability.school !== 'physical' &&
     consumeNextCastInstant(ctx, p)
       ? 0
-      : res.castTime;
+      : res.castTime * castTimeMult;
   // A free cast is consumed where the cost is actually billed: here for channels
   // and instants (this tick resolves them via the local `res`), but for cast-time
   // spells the bill lands in applyAbility at completion, which RE-RESOLVES the

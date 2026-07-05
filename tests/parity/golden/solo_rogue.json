@@ -8,8 +8,8 @@
     "meleeSwing weaponStrike (sinister_strike via castAbility ~3736)",
     "combo points"
   ],
-  "draws": 154,
-  "drawDigest": "36947609",
+  "draws": 156,
+  "drawDigest": "7e888bc0",
   "frames": [
     {
       "tick": 0,
@@ -112,44 +112,44 @@
       "tick": 20,
       "time": 1,
       "nextId": 408,
-      "state": "f807fa84",
-      "events": "5125e578",
+      "state": "16e3bad4",
+      "events": "9b8be49d",
       "rng": {
-        "draws": 18,
-        "digest": "3cba59f5"
+        "draws": 19,
+        "digest": "1ccc33f8"
       }
     },
     {
       "tick": 40,
       "time": 2,
       "nextId": 408,
-      "state": "a195af10",
-      "events": "f57d95dd",
+      "state": "c9783b29",
+      "events": "8d4371ff",
       "rng": {
-        "draws": 24,
-        "digest": "672bbd02"
+        "draws": 26,
+        "digest": "2c62879c"
       }
     },
     {
       "tick": 60,
       "time": 3,
       "nextId": 408,
-      "state": "f188a260",
-      "events": "82495deb",
+      "state": "5e8c0922",
+      "events": "98540f8e",
       "rng": {
-        "draws": 103,
-        "digest": "4bf8fdbd"
+        "draws": 102,
+        "digest": "b56cf196"
       }
     },
     {
       "tick": 72,
       "time": 3.6,
       "nextId": 408,
-      "state": "de7de1c0",
-      "events": "741638a5",
+      "state": "8ab6e469",
+      "events": "c3f40163",
       "rng": {
-        "draws": 154,
-        "digest": "36947609"
+        "draws": 156,
+        "digest": "7e888bc0"
       },
       "label": "final",
       "players": [
@@ -167,8 +167,8 @@
           "cls": "rogue",
           "companionUpgrades": {},
           "counters": {
-            "damageDealt": 61,
-            "damageTaken": 27
+            "damageDealt": 114,
+            "damageTaken": 9
           },
           "craftSkills": {},
           "delveClears": {},
@@ -193,16 +193,16 @@
           "aiState": "idle",
           "attackPower": 78,
           "autoAttack": true,
-          "combatTimer": 1.2,
-          "comboPoints": 2,
-          "comboUntil": 31.2,
+          "combatTimer": 0.6,
+          "comboPoints": 3,
+          "comboUntil": 33,
           "critChance": 0.076,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.076,
           "facing": 1.570796,
           "fallStartY": 1.5,
           "fiveSecondRule": 102.6,
-          "hp": 49973,
+          "hp": 49991,
           "id": 406,
           "inCombat": true,
           "kind": "player",
@@ -212,7 +212,7 @@
           "maxResource": 100,
           "moveSpeed": 7,
           "onGround": true,
-          "overpowerUntil": -1,
+          "overpowerUntil": 6.2,
           "petMode": "defensive",
           "pos": {
             "x": 2.5,
@@ -220,7 +220,7 @@
             "z": -2
           },
           "potionCooldownUntil": -1,
-          "resource": 100,
+          "resource": 55,
           "resourceType": "energy",
           "spawnPos": {
             "x": 2,
@@ -249,7 +249,7 @@
         {
           "aggroTargetId": 406,
           "aiState": "attack",
-          "combatTimer": 1.2,
+          "combatTimer": 0.6,
           "comboUntil": -1,
           "critChance": 0.05,
           "detonateTimer": "Infinity",
@@ -258,7 +258,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hostile": true,
-          "hp": 8939,
+          "hp": 8886,
           "id": 407,
           "inCombat": true,
           "kind": "mob",
@@ -295,7 +295,7 @@
           "threat": [
             [
               406,
-              62
+              115
             ]
           ],
           "weapon": {

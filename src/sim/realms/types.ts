@@ -174,6 +174,26 @@ export interface RealmContent {
    *  omits this) stays vanilla / true to upstream. Render-only + prop layout; it
    *  never changes Sim entity spawns or determinism. */
   worldTheme?: RealmWorldTheme;
+  /** Per-realm COMBAT FEEL: how snappy the moment-to-moment combat is. The D2
+   *  realms collapse cast times + the GCD for instantaneous hack-n-slash; the
+   *  vanilla realms (classic, claudecraft) omit this and keep WoW-style timing.
+   *  Applied at the cast site (casting_lifecycle.ts). Deterministic — it only
+   *  scales existing timers, draws no rng. */
+  combatFeel?: RealmCombatFeel;
+  /** Per-realm LEVEL CAP. Absent = the global default (MAX_LEVEL, 20). The D2
+   *  realms set 99, classic 80; claudecraft omits it (vanilla 20). Read via
+   *  maxLevelForActiveRealm(). */
+  maxLevel?: number;
+}
+
+/** Per-realm combat snappiness. Every field optional; absent = vanilla WoW timing. */
+export interface RealmCombatFeel {
+  /** Multiply every ability's cast time by this (0 = fully instant, 0.35 = 65%
+   *  faster). Physical/instant abilities are already 0 so they're unaffected. */
+  castTimeMult?: number;
+  /** Multiply the global cooldown by this so abilities chain faster (D2 clicky
+   *  carnage). Clamped to a small floor so the sim can't livelock. */
+  gcdMult?: number;
 }
 
 /** Per-realm re-skin of the shared overworld. Every field optional; an absent

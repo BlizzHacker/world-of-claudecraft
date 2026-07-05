@@ -99,4 +99,9 @@ export const INFERNAL_REALM: RealmContent = {
     },
     weather: { enabled: true, moods: ['emberfall', 'bloodmoon', 'ashstorm', 'brooding'] },
   },
+  // D2 hack-n-slash: cast times collapse to ~30% and the GCD to ~40% so abilities
+  // fire the instant you press them — clicky ARPG carnage, not WoW cast bars.
+  combatFeel: { castTimeMult: 0.3, gcdMult: 0.4 },
+  // D2 power fantasy: level 99 cap (vs the vanilla 20).
+  maxLevel: 99,
 };
