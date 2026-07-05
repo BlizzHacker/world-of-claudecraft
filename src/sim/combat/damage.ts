@@ -274,7 +274,15 @@ export function dealDamage(
     }
   }
 
-  target.hp = Math.max(0, target.hp - amount);
+  // F4: a grinding field NPC can never die — it retreats home to rest (npc/roam.ts)
+  // at 55% HP, but a burst could still race past that, and an NPC has no death /
+  // respawn path (dying would permanently delete a town NPC). Floor its HP at 1 so
+  // the world stays intact; the AI recovers it. Duels (F4c) opt out via a flag.
+  if (target.kind === 'npc' && target.grinds && !target.npcDuelMortal) {
+    target.hp = Math.max(1, target.hp - amount);
+  } else {
+    target.hp = Math.max(0, target.hp - amount);
+  }
   ctx.emit({
     type: 'damage',
     sourceId: source?.id ?? -1,

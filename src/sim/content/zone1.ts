@@ -630,6 +630,33 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
     questIds: ['q_mine'],
     greeting: "Whole dig's crawling with those dirt-caked vermin!",
   },
+  // F4 grinders — wandering sellswords who hunt the field packs. They never claim
+  // a mob's tap, so if you land a hit on their quarry you own the XP/loot: help
+  // them and share the kill. They can't die (they retreat to rest when low).
+  mercenary_kael: {
+    id: 'mercenary_kael',
+    name: 'Kael the Sellsword',
+    title: 'Wandering Mercenary',
+    pos: { x: -12, z: 48 }, // near the forest_wolf packs (-15,55 / 20,70)
+    facing: 0,
+    color: 0x9a5b2a,
+    questIds: [],
+    greeting: 'Coin\'s coin, $C. Lend a blade and the beast\'s yours to loot.',
+    grinds: true,
+    grindLevel: 12,
+  },
+  huntress_verr: {
+    id: 'huntress_verr',
+    name: 'Huntress Verr',
+    title: 'Boar-Culler',
+    pos: { x: 50, z: 8 }, // near the wild_boar packs (55,12 / 80,-15)
+    facing: Math.PI,
+    color: 0x6a7a3a,
+    questIds: [],
+    greeting: 'These tuskers won\'t thin themselves. Wade in — the kill counts for you.',
+    grinds: true,
+    grindLevel: 12,
+  },
 };
 
 // ---------------------------------------------------------------------------

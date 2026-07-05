@@ -469,6 +469,19 @@ export function createNpc(id: number, def: NpcDef, pos: Vec3): Entity {
   e.questIds = [...def.questIds];
   e.vendorItems = [...(def.vendorItems ?? [])];
   if (def.roams) e.roams = true; // F4: strolls its home square (npc/roam.ts)
+  if (def.grinds) {
+    // F4: a field grinder — give it real combat stats so it can trade blows with
+    // wild mobs. HP/level/weapon scale off grindLevel so it survives packs but is
+    // still killable (duel target later). It never claims mob tap rights, so a
+    // player who aids the fight owns the XP/loot.
+    e.grinds = true;
+    const lvl = def.grindLevel ?? 12;
+    e.level = lvl;
+    e.maxHp = 400 + lvl * 60;
+    e.hp = e.maxHp;
+    e.weapon = { min: 8 + lvl * 2, max: 14 + lvl * 3, speed: 2 };
+    e.moveSpeed = 7;
+  }
   return e;
 }
 

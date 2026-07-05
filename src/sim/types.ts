@@ -1237,6 +1237,12 @@ export interface NpcDef {
   // F4: this NPC strolls a small square around its spawn so the town feels alive.
   // It halts whenever a player is close enough to talk to it (interaction-safe).
   roams?: boolean;
+  // F4: this NPC hunts nearby wild mobs (a "grinder" who farms the field). Players
+  // can AID the fight — since the NPC never claims tap rights, a player who lands a
+  // hit owns the kill's XP/loot. Implies roaming when idle. See npc/roam.ts.
+  grinds?: boolean;
+  // Combat stats for a grinding NPC (defaults applied in createNpc when grinds).
+  grindLevel?: number;
 }
 
 export interface CampDef {
@@ -1558,6 +1564,9 @@ export interface Entity {
   wanderTimer: number;
   roams?: boolean; // F4: town NPC strolls its home square (see npc/roam.ts)
   roamHop?: number; // F4: per-NPC hop counter seeding roam's pure-hash draws (off the shared rng)
+  grinds?: boolean; // F4: NPC hunts nearby wild mobs (aid-for-XP); see npc/roam.ts
+  npcResting?: boolean; // F4: grinder is retreating home to heal (rest-HP hysteresis)
+  npcDuelMortal?: boolean; // F4c: set while a grinder NPC is in a to-the-death duel (bypass HP floor)
   aggroTargetId: number | null;
   /** GM character: invulnerable (dealDamage no-ops). Server-set from the
    *  characters.is_gm column; never user-settable. */

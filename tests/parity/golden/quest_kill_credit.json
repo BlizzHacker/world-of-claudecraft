@@ -9,14 +9,14 @@
     "acceptQuest -> finalizeQuestAccept -> onInventoryChangedForQuests",
     "turnInQuest (xp + copper reward)"
   ],
-  "draws": 40,
-  "drawDigest": "0e96c13c",
+  "draws": 45,
+  "drawDigest": "7d781291",
   "frames": [
     {
       "tick": 0,
       "time": 0,
-      "nextId": 405,
-      "state": "6f097649",
+      "nextId": 407,
+      "state": "7e7f0965",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -41,7 +41,7 @@
           "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 404,
+          "entityId": 406,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -67,7 +67,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 90,
-          "id": 404,
+          "id": 406,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -110,9 +110,9 @@
     {
       "tick": 0,
       "time": 0,
-      "nextId": 405,
-      "state": "8dff9bd6",
-      "events": "790d3d07",
+      "nextId": 407,
+      "state": "0cb22f7a",
+      "events": "bdaf3d87",
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"
@@ -136,7 +136,7 @@
           "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 404,
+          "entityId": 406,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -175,7 +175,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 50000,
-          "id": 404,
+          "id": 406,
           "kind": "player",
           "level": 10,
           "lootFfaTimer": "Infinity",
@@ -218,12 +218,12 @@
     {
       "tick": 8,
       "time": 0.4,
-      "nextId": 413,
-      "state": "8ad764c8",
-      "events": "5ff35fbe",
+      "nextId": 415,
+      "state": "a425a788",
+      "events": "a9bc1419",
       "rng": {
-        "draws": 40,
-        "digest": "0e96c13c"
+        "draws": 45,
+        "digest": "7d781291"
       },
       "label": "quest-ready",
       "players": [
@@ -248,7 +248,7 @@
           "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 404,
+          "entityId": 406,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -287,7 +287,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99.4,
           "hp": 50000,
-          "id": 404,
+          "id": 406,
           "inCombat": true,
           "kind": "player",
           "level": 10,
@@ -331,12 +331,12 @@
     {
       "tick": 8,
       "time": 0.4,
-      "nextId": 413,
-      "state": "bc8f51e9",
-      "events": "89157113",
+      "nextId": 415,
+      "state": "ed4efd4d",
+      "events": "b2670ff7",
       "rng": {
-        "draws": 40,
-        "digest": "0e96c13c"
+        "draws": 45,
+        "digest": "7d781291"
       },
       "label": "quest-turned-in",
       "players": [
@@ -364,7 +364,7 @@
           "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 404,
+          "entityId": 406,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -395,7 +395,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99.4,
           "hp": 50000,
-          "id": 404,
+          "id": 406,
           "inCombat": true,
           "kind": "player",
           "level": 10,
@@ -439,12 +439,12 @@
     {
       "tick": 10,
       "time": 0.5,
-      "nextId": 413,
-      "state": "846719a1",
+      "nextId": 415,
+      "state": "8d4999e5",
       "events": "741638a5",
       "rng": {
-        "draws": 40,
-        "digest": "0e96c13c"
+        "draws": 45,
+        "digest": "7d781291"
       },
       "label": "final",
       "players": [
@@ -472,7 +472,7 @@
           "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 404,
+          "entityId": 406,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -503,7 +503,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99.5,
           "hp": 50000,
-          "id": 404,
+          "id": 406,
           "inCombat": true,
           "kind": "player",
           "level": 10,

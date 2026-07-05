@@ -7,13 +7,13 @@
     "party need/greed loot roll (lootCorpse/submitLootRoll)",
     "multi-player party"
   ],
-  "draws": 2,
-  "drawDigest": "c05535b8",
+  "draws": 6,
+  "drawDigest": "8aed17ab",
   "frames": [
     {
       "tick": 0,
       "time": 0,
-      "nextId": 404,
+      "nextId": 406,
       "state": "5bc471b0",
       "events": "741638a5",
       "rng": {
@@ -27,12 +27,12 @@
     {
       "tick": 3,
       "time": 0.15,
-      "nextId": 407,
-      "state": "8ed74dd8",
-      "events": "941a2f9c",
+      "nextId": 409,
+      "state": "80bd2f44",
+      "events": "4732eb06",
       "rng": {
-        "draws": 2,
-        "digest": "c05535b8"
+        "draws": 6,
+        "digest": "8aed17ab"
       },
       "label": "final",
       "players": [
@@ -52,7 +52,7 @@
           "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 404,
+          "entityId": 406,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -87,7 +87,7 @@
           "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 405,
+          "entityId": 407,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -113,7 +113,7 @@
           "fallStartY": 0.860353,
           "fiveSecondRule": 99.15,
           "hp": 90,
-          "id": 404,
+          "id": 406,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -162,7 +162,7 @@
           "fallStartY": 0.639595,
           "fiveSecondRule": 99.15,
           "hp": 54,
-          "id": 405,
+          "id": 407,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -214,7 +214,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 42,
-          "id": 406,
+          "id": 408,
           "kind": "mob",
           "level": 2,
           "lootFfaTimer": "Infinity",
@@ -239,7 +239,7 @@
           "stats": {
             "armor": 10
           },
-          "tappedById": 404,
+          "tappedById": 406,
           "templateId": "forest_wolf",
           "weapon": {
             "max": 6,

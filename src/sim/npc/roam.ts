@@ -18,7 +18,7 @@
 
 import { hash2 } from '../rng';
 import type { SimContext } from '../sim_context';
-import { DT, dist2d, type Entity } from '../types';
+import { angleTo, DT, dist2d, type Entity, MELEE_RANGE } from '../types';
 
 const ROAM_SEED = 0x726f616d; // 'roam'
 const ROAM_LEASH_R = 6; // never stray more than this from spawnPos (tight: quest givers stay near)
@@ -43,9 +43,84 @@ function playerEngaging(ctx: SimContext, npc: Entity): boolean {
   return false;
 }
 
-/** Advance one roaming NPC. No-op unless the NPC is flagged `roams`. */
+// ── Grinder combat (aid-for-XP) ──────────────────────────────────────────────
+const GRIND_SCAN_R = 22; // look this far from HOME for a wild mob to fight
+const GRIND_LEASH_R = 30; // give up + return home past this from home
+const GRIND_REST_HP = 0.55; // below this HP fraction, retreat home to recover
+const GRIND_REGEN = 22; // hp/sec regained while resting at home
+
+/** Nearest live, wild, hostile mob within GRIND_SCAN_R of the NPC's home. */
+function nearestWildMob(ctx: SimContext, npc: Entity): Entity | null {
+  let best: Entity | null = null;
+  let bestD2 = GRIND_SCAN_R * GRIND_SCAN_R;
+  ctx.grid.forEachInRadius(npc.spawnPos.x, npc.spawnPos.z, GRIND_SCAN_R, (m, d2) => {
+    if (m.kind !== 'mob' || m.dead || m.ownerId !== null) return; // wild mobs only (no pets/adds)
+    if (m.aiState === 'evade') return; // don't chase a leashing mob
+    if (!ctx.isHostileTo(npc, m)) return;
+    if (d2 < bestD2) {
+      bestD2 = d2;
+      best = m;
+    }
+  });
+  return best;
+}
+
+/** Drive a grinding NPC's hunt. Returns true if it handled the NPC this tick
+ *  (engaged or resting); false if it's idle and should fall through to roaming. */
+function updateGrinder(ctx: SimContext, npc: Entity): boolean {
+  npc.swingTimer = Math.max(0, npc.swingTimer - DT);
+
+  // Resting hysteresis: drop into rest below GRIND_REST_HP, and stay resting until
+  // fully healed (npcResting flag), so it doesn't yo-yo back into a losing fight.
+  if (npc.hp < npc.maxHp * GRIND_REST_HP) npc.npcResting = true;
+  if (npc.hp >= npc.maxHp) npc.npcResting = false;
+  if (npc.npcResting) {
+    npc.aggroTargetId = null;
+    const home = ctx.groundPos(npc.spawnPos.x, npc.spawnPos.z);
+    const atHome = dist2d(npc.pos, home) <= 1.5;
+    if (!atHome) ctx.moveToward(npc, home, npc.moveSpeed * ctx.moveSpeedMult(npc));
+    else npc.hp = Math.min(npc.maxHp, npc.hp + GRIND_REGEN * DT);
+    return true;
+  }
+
+  // Keep or acquire a target.
+  let target = npc.aggroTargetId !== null ? ctx.entities.get(npc.aggroTargetId) ?? null : null;
+  if (target && (target.dead || target.kind !== 'mob' || !ctx.isHostileTo(npc, target))) target = null;
+  if (target && dist2d(npc.pos, npc.spawnPos) > GRIND_LEASH_R) target = null; // strayed too far → drop
+  if (!target) target = nearestWildMob(ctx, npc);
+  npc.aggroTargetId = target?.id ?? null;
+  if (!target) return false; // nothing to fight → let it roam
+
+  // Wake an idle quarry so it fights BACK. dealDamage only adds threat; a wild
+  // mob transitions idle→chase via aggroMob, which the player-hit path calls but
+  // the NPC-hit path does not. Without this the mob stands still and lets the NPC
+  // farm it — we want a real mob-vs-NPC brawl the player can join.
+  if (target.aiState === 'idle') ctx.aggroMob(target, npc, false);
+
+  // Engage: close to melee, face, and swing on the weapon timer.
+  const d = dist2d(npc.pos, target.pos);
+  const reach = MELEE_RANGE * 0.8;
+  if (d > reach) {
+    if (!ctx.isRooted(npc)) ctx.moveToward(npc, target.pos, npc.moveSpeed * ctx.moveSpeedMult(npc));
+  } else {
+    npc.facing = angleTo(npc.pos, target.pos);
+    if (npc.swingTimer <= 0) {
+      ctx.mobSwing(npc, target); // adds threat → the mob fights back; no tap set (NPC isn't a player)
+      npc.swingTimer = npc.weapon.speed * ctx.swingIntervalMult(npc);
+    }
+  }
+  return true;
+}
+
+/** Advance one roaming/grinding NPC. No-op unless flagged `roams` or `grinds`. */
 export function updateRoamingNpc(ctx: SimContext, npc: Entity): void {
-  if (!npc.roams || npc.dead) return;
+  if (npc.dead) return;
+  // Grinders hunt wild mobs; when idle (no mob nearby) they fall through to roam.
+  // A player engaging still preempts everything (return home to talk / be dueled).
+  if (npc.grinds && !playerEngaging(ctx, npc)) {
+    if (updateGrinder(ctx, npc)) return;
+  }
+  if (!npc.roams) return;
   // While a player is engaging, RETURN to the home spot (not merely freeze) so a
   // quest turn-in / vendor is always found at its data position — a player who
   // teleports/walks to the NPC's home always ends up in talk range. Only once the
