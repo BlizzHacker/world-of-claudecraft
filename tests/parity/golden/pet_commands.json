@@ -16,8 +16,8 @@
     "petTaunt -> applyTaunt manual arm + PET_GROWL_INTERVAL cooldown",
     "stowPetForDelve/restorePetFromDelveStash (serializePet/restorePet round-trip)"
   ],
-  "draws": 174,
-  "drawDigest": "2966567a",
+  "draws": 76,
+  "drawDigest": "d66126ec",
   "frames": [
     {
       "tick": 0,
@@ -1783,10 +1783,10 @@
       "time": 3,
       "nextId": 421,
       "state": "3527dec8",
-      "events": "e7d774eb",
+      "events": "dcd65c41",
       "rng": {
-        "draws": 101,
-        "digest": "21ffa0fa"
+        "draws": 57,
+        "digest": "0b4efb11"
       }
     },
     {
@@ -1796,8 +1796,8 @@
       "state": "db0a35c4",
       "events": "a500609f",
       "rng": {
-        "draws": 174,
-        "digest": "2966567a"
+        "draws": 76,
+        "digest": "d66126ec"
       }
     },
     {
@@ -1807,8 +1807,8 @@
       "state": "db0a35c4",
       "events": "741638a5",
       "rng": {
-        "draws": 174,
-        "digest": "2966567a"
+        "draws": 76,
+        "digest": "d66126ec"
       },
       "label": "demon-heal-tick",
       "players": [
@@ -2099,8 +2099,8 @@
       "state": "e7f605ff",
       "events": "ce8887c1",
       "rng": {
-        "draws": 174,
-        "digest": "2966567a"
+        "draws": 76,
+        "digest": "d66126ec"
       },
       "label": "demon-faded",
       "players": [
@@ -2350,8 +2350,8 @@
       "state": "632a7b96",
       "events": "727d2adf",
       "rng": {
-        "draws": 174,
-        "digest": "2966567a"
+        "draws": 76,
+        "digest": "d66126ec"
       },
       "label": "demon-despawned",
       "players": [
@@ -2651,8 +2651,8 @@
       "state": "632a7b96",
       "events": "741638a5",
       "rng": {
-        "draws": 174,
-        "digest": "2966567a"
+        "draws": 76,
+        "digest": "d66126ec"
       },
       "label": "final",
       "players": [

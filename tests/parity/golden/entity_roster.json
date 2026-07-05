@@ -9,8 +9,8 @@
     "emitDueDelayedEvents drain (fires / guard-drops / stays-pending)",
     "releaseSpirit ghost release + Spirit Healer resurrect (Resurrection Sickness)"
   ],
-  "draws": 10,
-  "drawDigest": "b8d6b9b2",
+  "draws": 8,
+  "drawDigest": "a0ad3ecd",
   "frames": [
     {
       "tick": 0,
@@ -114,8 +114,8 @@
       "state": "6fc1aae5",
       "events": "8cd60446",
       "rng": {
-        "draws": 6,
-        "digest": "d5a1c8cb"
+        "draws": 2,
+        "digest": "dc70a0cd"
       }
     },
     {
@@ -123,10 +123,10 @@
       "time": 0.2,
       "nextId": 415,
       "state": "4b23e90b",
-      "events": "cb578f95",
+      "events": "4b405c82",
       "rng": {
-        "draws": 7,
-        "digest": "90648b92"
+        "draws": 5,
+        "digest": "756e0b67"
       }
     },
     {
@@ -134,10 +134,10 @@
       "time": 0.25,
       "nextId": 415,
       "state": "3ddc3117",
-      "events": "dcb325c8",
+      "events": "c395b7e1",
       "rng": {
-        "draws": 10,
-        "digest": "b8d6b9b2"
+        "draws": 8,
+        "digest": "a0ad3ecd"
       },
       "label": "post-churn",
       "players": [
@@ -232,8 +232,8 @@
       "state": "cfb83690",
       "events": "741638a5",
       "rng": {
-        "draws": 10,
-        "digest": "b8d6b9b2"
+        "draws": 8,
+        "digest": "a0ad3ecd"
       },
       "label": "ghost-release",
       "players": [
@@ -335,8 +335,8 @@
       "state": "999c0271",
       "events": "0cb42c62",
       "rng": {
-        "draws": 10,
-        "digest": "b8d6b9b2"
+        "draws": 8,
+        "digest": "a0ad3ecd"
       },
       "label": "healer-resurrect",
       "players": [
@@ -443,8 +443,8 @@
       "state": "23f96f34",
       "events": "741638a5",
       "rng": {
-        "draws": 10,
-        "digest": "b8d6b9b2"
+        "draws": 8,
+        "digest": "a0ad3ecd"
       }
     },
     {
@@ -454,8 +454,8 @@
       "state": "19d65ec8",
       "events": "741638a5",
       "rng": {
-        "draws": 10,
-        "digest": "b8d6b9b2"
+        "draws": 8,
+        "digest": "a0ad3ecd"
       },
       "label": "final",
       "players": [

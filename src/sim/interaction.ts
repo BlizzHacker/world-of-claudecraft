@@ -30,7 +30,11 @@ import {
   tryStartNythraxisWardChannel,
 } from './encounters/nythraxis';
 import { isInRaidInstance } from './instances/dungeons';
-import { buildingDoorNear, enterInterior, leaveInterior } from './interiors';
+import { buildingDoorNear, buildingEnterableNear, enterInterior, leaveInterior } from './interiors';
+
+// Server-side range for the click-to-enter building menu. Must be >= the client's
+// BUILDING_CLICK_ENTER_RANGE (main.ts, 26) so any Enter the client offered succeeds.
+const BUILDING_ENTER_RANGE = 28;
 import { activateWaypoint } from './waypoints';
 import { useTownPortal } from './town_portal';
 import { hasSharedLootRights as computeSharedLootRights, lootHasGoneFfa } from './loot/loot_ffa';
@@ -392,7 +396,7 @@ export function interact(ctx: SimContext, pid?: number): void {
   // Building entry competes on distance with ambient props/quest NPCs: a door the
   // player is standing right at wins over a random nearby crate, but a corpse (above)
   // always wins. Buildings are solid + carry no door object — the door is the
-  // building's own +z face, registered in BUILDING_DOORS at world init.
+  // building's own +z face, computed on demand from the world content.
   const door = buildingDoorNear(p.pos.x, p.pos.z);
   if (door && door.d2 <= bestObjD2 && door.d2 <= bestQuestD2) {
     enterInterior(ctx, door.interiorType, p.id);
@@ -429,6 +433,16 @@ export function interact(ctx: SimContext, pid?: number): void {
   }
   if (questEntity) {
     ctx.talkToNpc(questEntity.id, p.id);
+    return;
+  }
+  // Generous fallback for the CLICK-TO-ENTER building menu: the client offers Enter when
+  // the player clicks an enterable building within ~26u of its centre, then sends this
+  // interact. Nothing else was interacted with above, so if the player is near an
+  // enterable building, enter it (server-authoritative). The door-face check above is
+  // the tighter keyboard-interact path; this makes the click menu reliable.
+  const nearBuilding = buildingEnterableNear(p.pos.x, p.pos.z, BUILDING_ENTER_RANGE);
+  if (nearBuilding != null) {
+    enterInterior(ctx, nearBuilding, p.id);
     return;
   }
 }

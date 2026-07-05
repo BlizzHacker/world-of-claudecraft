@@ -52,6 +52,7 @@ import {
   isDelvePos,
   MOBS,
   NPCS,
+  isInteriorPos,
   QUESTS,
   questRewardItem,
   WORLD_MAX_X,
@@ -9039,6 +9040,14 @@ export class Hud {
     if (npc.vendorItems.length > 0) {
       html += `<button type="button" class="qd-list-item" data-vendor="1" aria-label="${esc(t('questUi.dialog.browseGoodsAria', { name: npcName }))}"><span class="quest-complete">$</span> ${esc(t('questUi.dialog.browseGoods'))}</button>`;
     }
+    // Leave the building: when the player is inside an interior room, the resident NPC's
+    // dialog carries the exit (talk-to-leave, as requested). It targets the room's exit
+    // door and interacts — server-authoritative leaveInterior warps them back outside.
+    const insideInterior = isInteriorPos(this.sim.player.pos.x);
+    if (insideInterior) {
+      const leaveLabel = tOptional('buildings.leave') ?? 'Step back outside';
+      html += `<button type="button" class="qd-list-item" data-leave-building="1" aria-label="${esc(leaveLabel)}"><span class="gold">↩</span> ${esc(leaveLabel)}</button>`;
+    }
     if (def?.market) {
       html += `<button type="button" class="qd-list-item" data-market="1" aria-label="${esc(t('questUi.dialog.worldMarketAria'))}"><span class="gold">${svgIcon('market')}</span> ${esc(t('questUi.dialog.worldMarket'))}</button>`;
     }
@@ -9073,6 +9082,10 @@ export class Hud {
     el.querySelector('[data-delve-board]')?.addEventListener('click', () => {
       this.closeQuestDialog(false);
       this.openDelveBoard(npc.id);
+    });
+    el.querySelector('[data-leave-building]')?.addEventListener('click', () => {
+      this.closeQuestDialog(false);
+      this.leaveBuilding();
     });
     el.querySelector('[data-close]')?.addEventListener('click', () => this.closeQuestDialog());
     el.style.display = 'block';
@@ -10860,6 +10873,47 @@ export class Hud {
       html += `</div>`;
     }
     return `<div class="char-progression">${html}</div>`;
+  }
+
+  // Click-to-enter buildings: clicking an enterable building (within range) opens this
+  // Enter / Cancel prompt. On Enter we run `onEnter`, which sends the server-authoritative
+  // interact that teleports the player into the interior room. Leaving is done by talking
+  // to the resident NPC inside (its dialog carries the Leave option).
+  openBuildingEnterPrompt(interiorType: number, onEnter: () => void): void {
+    const name =
+      interiorType === 0 ? 'the shop' : interiorType === 1 ? 'the inn' : 'the house';
+    const title = tOptional('buildings.enterTitle', { place: name }) ?? `Enter ${name}?`;
+    const body =
+      tOptional('buildings.enterBody') ??
+      'Step inside? Talk to whoever is inside when you want to leave.';
+    this.confirmDialog(
+      title,
+      body,
+      tOptional('buildings.enterOk') ?? 'Enter',
+      tOptional('buildings.enterCancel') ?? 'Not now',
+      onEnter,
+    );
+  }
+
+  // Leave the current building interior: target the room's exit door and interact,
+  // which runs the server-authoritative leaveInterior (warps back to where they entered).
+  // Reached from the resident NPC's "Step back outside" option (talk-to-leave).
+  private leaveBuilding(): void {
+    const p = this.sim.player;
+    let exitId: number | null = null;
+    let bestD = Infinity;
+    for (const e of this.sim.entities.values()) {
+      if (e.kind !== 'object' || e.templateId !== 'building_exit') continue;
+      const d = Math.hypot(e.pos.x - p.pos.x, e.pos.z - p.pos.z);
+      if (d < bestD) {
+        bestD = d;
+        exitId = e.id;
+      }
+    }
+    if (exitId != null) {
+      this.sim.targetEntity(exitId);
+      this.sim.interact();
+    }
   }
 
   private openPrestigeDialog(): void {

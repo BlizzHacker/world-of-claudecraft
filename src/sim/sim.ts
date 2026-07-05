@@ -998,6 +998,15 @@ export class Sim {
   // reach it through the seam.
   private targeting!: Targeting;
   players = new Map<number, PlayerMeta>(); // keyed by entity id
+  // Live (non-ghost, non-dead) player positions, refreshed once per tick before the mob
+  // loop. Used by mobIsDormant so each mob does a cheap check against a tiny array
+  // instead of a spatial query — the fix for the delve tick-cost blowup where ~800
+  // far-off mobs all ran full AI while the only player was alone in an instance band.
+  private activePlayerPos: { x: number; z: number }[] = [];
+  // A mob further than this from EVERY live player has nothing to do this tick (its own
+  // aggro scan reaches 25u and it wanders only a few units), so its AI is skipped. Set
+  // well beyond any per-mob interaction range so dormancy is invisible.
+  private static readonly MOB_ACTIVITY_RADIUS = 160;
   // spatial indexes for radius queries; re-bucketed at the end of each tick
   // and kept roster-exact on spawn/despawn/teleport
   readonly grid = new SpatialGrid();
@@ -2935,8 +2944,19 @@ export class Sim {
       updateAuras(this.ctx, p);
     }
 
+    // Refresh the live-player position cache for this tick's dormancy checks.
+    this.activePlayerPos.length = 0;
+    for (const meta of this.players.values()) {
+      const pe = this.entities.get(meta.entityId);
+      if (pe && !pe.dead) this.activePlayerPos.push({ x: pe.pos.x, z: pe.pos.z });
+    }
+
     for (const e of this.entities.values()) {
       if (e.kind === 'mob') {
+        // Skip AI + aura ticking for a mob no player is near (and that isn't in combat,
+        // auto'd, a pet, or a corpse) — see mobIsDormant. This is what keeps the delve
+        // tick from ballooning to ~500ms when ~800 far-off mobs would otherwise all run.
+        if (this.mobIsDormant(e)) continue;
         this.updateMob(e);
         updateAuras(this.ctx, e);
       } else if (e.kind === 'npc') {
@@ -4338,6 +4358,32 @@ export class Sim {
 
   private updateMob(mob: Entity): void {
     updateMobFn(this.ctx, mob);
+  }
+
+  /** True when a mob can safely skip its AI + aura tick THIS tick because nothing about
+   *  it can change or be observed: no live player is within MOB_ACTIVITY_RADIUS and it
+   *  is not in combat, not carrying auras (DoTs must keep counting down), not a pet, not
+   *  a dead corpse (its despawn timer must tick), and not a boss (bosses always run their
+   *  mechanics). A dormant mob just sits idle exactly as it would if updated, so the skip
+   *  is invisible — it only removes wasted far-off work that was blowing the delve tick
+   *  budget (~800 idle mobs × full AI = ~500ms/tick). */
+  mobIsDormant(mob: Entity): boolean {
+    if (mob.kind !== 'mob') return false;
+    if (mob.dead) return false; // corpse despawn/respawn timer must tick
+    if (mob.ownerId !== null) return false; // pets/companions always update
+    if (mob.inCombat || mob.aiState !== 'idle') return false;
+    if (mob.aggroTargetId !== null || mob.forcedTargetId != null) return false;
+    if (mob.auras.length > 0) return false; // auras/DoTs must keep ticking down
+    const tmpl = MOBS[mob.templateId];
+    if (tmpl?.boss || tmpl?.worldBoss) return false; // bosses always run mechanics
+    // Dormant only if EVERY live player is beyond the activity radius.
+    const r2 = Sim.MOB_ACTIVITY_RADIUS * Sim.MOB_ACTIVITY_RADIUS;
+    for (const pp of this.activePlayerPos) {
+      const dx = mob.pos.x - pp.x;
+      const dz = mob.pos.z - pp.z;
+      if (dx * dx + dz * dz <= r2) return false;
+    }
+    return true;
   }
 
   // onBossDeath (the Nythraxis phase->dead + death dialogue) moved to

@@ -9,8 +9,8 @@
     "updateDelveCompanion heel arm: moveToward owner past DELVE_COMPANION_FOLLOW, then warp + rebucket past PET_TELEPORT_DISTANCE",
     "combat_start/low_hp barks via maybeCompanionBark (stays on Sim)"
   ],
-  "draws": 23,
-  "drawDigest": "da49f719",
+  "draws": 21,
+  "drawDigest": "39223876",
   "frames": [
     {
       "tick": 0,
@@ -382,8 +382,8 @@
       "state": "a465489b",
       "events": "a175edb1",
       "rng": {
-        "draws": 20,
-        "digest": "7f871188"
+        "draws": 18,
+        "digest": "7e258299"
       },
       "label": "heal",
       "players": [
@@ -576,8 +576,8 @@
       "state": "a4fb8029",
       "events": "741638a5",
       "rng": {
-        "draws": 20,
-        "digest": "7f871188"
+        "draws": 18,
+        "digest": "7e258299"
       }
     },
     {
@@ -585,10 +585,10 @@
       "time": 2.45,
       "nextId": 422,
       "state": "3ccb0155",
-      "events": "7b5c1bcd",
+      "events": "3522ee9e",
       "rng": {
-        "draws": 23,
-        "digest": "da49f719"
+        "draws": 21,
+        "digest": "39223876"
       },
       "label": "heel-walk",
       "players": [
@@ -725,8 +725,8 @@
       "state": "4b031e4a",
       "events": "741638a5",
       "rng": {
-        "draws": 23,
-        "digest": "da49f719"
+        "draws": 21,
+        "digest": "39223876"
       }
     },
     {
@@ -736,8 +736,8 @@
       "state": "ef0f2727",
       "events": "741638a5",
       "rng": {
-        "draws": 23,
-        "digest": "da49f719"
+        "draws": 21,
+        "digest": "39223876"
       },
       "label": "heel-teleport",
       "players": [
@@ -875,8 +875,8 @@
       "state": "ef0f2727",
       "events": "741638a5",
       "rng": {
-        "draws": 23,
-        "digest": "da49f719"
+        "draws": 21,
+        "digest": "39223876"
       },
       "label": "final",
       "players": [

@@ -1,7 +1,13 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { Sim } from '../src/sim/sim';
 import { getActiveWorldContent, isInteriorPos } from '../src/sim/data';
-import { buildingDoorAt, buildingDoorNear, computeBuildingDoors } from '../src/sim/interiors';
+import {
+  buildingAtPoint,
+  buildingDoorAt,
+  buildingDoorNear,
+  buildingEnterableNear,
+  computeBuildingDoors,
+} from '../src/sim/interiors';
 import { setRealmHostEnv } from '../src/sim/realms/registry';
 
 function forceRealm(id: string) {
@@ -103,5 +109,32 @@ describe('building interiors (enterable town buildings)', () => {
     sim.interact();
     expect(isInteriorPos(p.pos.x)).toBe(true); // entered despite the nearby prop
     expect(p.interiorType).toBe(door.interiorType);
+  });
+
+  it('click-to-enter: clicking a building footprint is detected; interact near it enters', () => {
+    // The requested UX: click a building (within range) → Enter menu → enter. buildingAtPoint
+    // detects a click anywhere on the footprint; the server accepts interact within range of
+    // the building centre even off the door face (buildingEnterableNear).
+    forceRealm('infernal');
+    const sim = new Sim({ seed: 5, playerClass: 'warrior', autoEquip: true });
+    const b = getActiveWorldContent().props.buildings.find((x) => x.kind === 'house')!;
+    // A click on the building centre resolves to its interior type.
+    const hit = buildingAtPoint(b.x, b.z);
+    expect(hit).toBeTruthy();
+    expect(typeof hit!.interiorType).toBe('number');
+    // The server accepts entry from near the centre (not on the door face).
+    expect(buildingEnterableNear(b.x + 6, b.z + 6, 28)).toBe(hit!.interiorType);
+    // Stand near the building (off the door face) and interact → enter.
+    const p = sim.player;
+    p.pos.x = b.x + 6;
+    p.pos.z = b.z + 6;
+    sim.interact();
+    expect(isInteriorPos(p.pos.x)).toBe(true);
+  });
+
+  it('buildingAtPoint / buildingEnterableNear are null on vanilla realms', () => {
+    forceRealm('claudecraft');
+    expect(buildingAtPoint(0, 0)).toBeNull();
+    expect(buildingEnterableNear(0, 0, 50)).toBeNull();
   });
 });

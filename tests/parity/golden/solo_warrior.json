@@ -10,8 +10,8 @@
     "base mobSwing (mob swings the player)",
     "rollLoot via mob death (L1, ~5876/6036)"
   ],
-  "draws": 189,
-  "drawDigest": "d4a45843",
+  "draws": 62,
+  "drawDigest": "637cbc50",
   "frames": [
     {
       "tick": 0,
@@ -134,22 +134,22 @@
       "tick": 60,
       "time": 3,
       "nextId": 414,
-      "state": "4d335a18",
-      "events": "71a9f9b9",
+      "state": "5d6c852a",
+      "events": "4738b1f7",
       "rng": {
-        "draws": 114,
-        "digest": "58a476c9"
+        "draws": 40,
+        "digest": "0f55666e"
       }
     },
     {
       "tick": 72,
       "time": 3.6,
       "nextId": 414,
-      "state": "c483b0fa",
-      "events": "96cd8bc9",
+      "state": "91567cd1",
+      "events": "38d318e8",
       "rng": {
-        "draws": 172,
-        "digest": "ae90daa0"
+        "draws": 57,
+        "digest": "97074136"
       },
       "label": "kill",
       "players": [
@@ -168,7 +168,7 @@
           "companionUpgrades": {},
           "counters": {
             "damageDealt": 7073,
-            "damageTaken": 7,
+            "damageTaken": 3,
             "kills": 1
           },
           "craftSkills": {},
@@ -200,7 +200,7 @@
           "facing": 1.570796,
           "fallStartY": 1.5,
           "fiveSecondRule": 102.6,
-          "hp": 49993,
+          "hp": 49997,
           "id": 412,
           "inCombat": true,
           "kind": "player",
@@ -265,13 +265,7 @@
           },
           "level": 2,
           "loot": {
-            "copper": 9,
-            "items": [
-              {
-                "count": 1,
-                "itemId": "wolf_fang"
-              }
-            ]
+            "copper": 9
           },
           "lootFfaTimer": 60,
           "lootRecipientIds": [
@@ -314,11 +308,11 @@
       "tick": 76,
       "time": 3.8,
       "nextId": 414,
-      "state": "5d0d75f2",
+      "state": "ea145f23",
       "events": "741638a5",
       "rng": {
-        "draws": 189,
-        "digest": "d4a45843"
+        "draws": 62,
+        "digest": "637cbc50"
       },
       "label": "final",
       "players": [
@@ -337,7 +331,7 @@
           "companionUpgrades": {},
           "counters": {
             "damageDealt": 7073,
-            "damageTaken": 7,
+            "damageTaken": 3,
             "kills": 1
           },
           "craftSkills": {},
@@ -370,7 +364,7 @@
           "facing": 1.570796,
           "fallStartY": 1.5,
           "fiveSecondRule": 102.8,
-          "hp": 49993,
+          "hp": 49997,
           "id": 412,
           "inCombat": true,
           "kind": "player",
@@ -435,13 +429,7 @@
           },
           "level": 2,
           "loot": {
-            "copper": 9,
-            "items": [
-              {
-                "count": 1,
-                "itemId": "wolf_fang"
-              }
-            ]
+            "copper": 9
           },
           "lootFfaTimer": 59.8,
           "lootRecipientIds": [

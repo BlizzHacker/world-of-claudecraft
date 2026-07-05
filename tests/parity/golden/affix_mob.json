@@ -9,8 +9,8 @@
     "applyTaunt player-cast arm (taunt ability, ~4279)",
     "class:warrior"
   ],
-  "draws": 85,
-  "drawDigest": "0804e39f",
+  "draws": 55,
+  "drawDigest": "1b964411",
   "frames": [
     {
       "tick": 0,
@@ -134,10 +134,10 @@
       "time": 2.5,
       "nextId": 415,
       "state": "af8d5018",
-      "events": "a40144a0",
+      "events": "7fb67529",
       "rng": {
-        "draws": 71,
-        "digest": "60069de6"
+        "draws": 53,
+        "digest": "4e713ade"
       },
       "label": "taunt",
       "players": [
@@ -372,8 +372,8 @@
       "state": "05298415",
       "events": "741638a5",
       "rng": {
-        "draws": 85,
-        "digest": "0804e39f"
+        "draws": 55,
+        "digest": "1b964411"
       },
       "label": "final",
       "players": [

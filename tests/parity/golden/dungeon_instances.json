@@ -10,8 +10,8 @@
     "updateDoorTriggers exit portal -> leaveDungeon (~14620)",
     "updateInstances empty-reset -> freeInstance despawn + partyKey null (~14841/14816)"
   ],
-  "draws": 58,
-  "drawDigest": "6ad6900a",
+  "draws": 57,
+  "drawDigest": "d31861b0",
   "frames": [
     {
       "tick": 0,
@@ -825,7 +825,7 @@
       "tick": 4,
       "time": 0.2,
       "nextId": 428,
-      "state": "04f615f1",
+      "state": "d483140f",
       "events": "e8fec9fd",
       "rng": {
         "draws": 53,
@@ -1076,7 +1076,7 @@
         },
         {
           "aiState": "idle",
-          "combatTimer": 99.2,
+          "combatTimer": 99.15,
           "comboUntil": -1,
           "critChance": 0.05,
           "detonateTimer": "Infinity",
@@ -1095,8 +1095,8 @@
           "overpowerUntil": -1,
           "petMode": "defensive",
           "pos": {
-            "x": 891.359732,
-            "z": -1211.7214
+            "x": 891.269799,
+            "z": -1211.79105
           },
           "potionCooldownUntil": -1,
           "spawnPos": {
@@ -1111,7 +1111,7 @@
             "x": 892.736753,
             "z": -1210.654947
           },
-          "wanderTimer": 29.85,
+          "wanderTimer": 29.9,
           "weapon": {
             "max": 42,
             "min": 27,
@@ -1120,7 +1120,7 @@
         },
         {
           "aiState": "idle",
-          "combatTimer": 99.2,
+          "combatTimer": 99.15,
           "comboUntil": -1,
           "critChance": 0.05,
           "detonateTimer": "Infinity",
@@ -1139,8 +1139,8 @@
           "overpowerUntil": -1,
           "petMode": "defensive",
           "pos": {
-            "x": 895.400215,
-            "z": -1211.282715
+            "x": 895.300161,
+            "z": -1211.212036
           },
           "potionCooldownUntil": -1,
           "spawnPos": {
@@ -1155,7 +1155,7 @@
             "x": 900.653673,
             "z": -1214.993799
           },
-          "wanderTimer": 29.85,
+          "wanderTimer": 29.9,
           "weapon": {
             "max": 45,
             "min": 29,
@@ -1164,7 +1164,7 @@
         },
         {
           "aiState": "idle",
-          "combatTimer": 99.2,
+          "combatTimer": 99.15,
           "comboUntil": -1,
           "critChance": 0.05,
           "detonateTimer": "Infinity",
@@ -1183,8 +1183,8 @@
           "overpowerUntil": -1,
           "petMode": "defensive",
           "pos": {
-            "x": 908.551379,
-            "z": -1196.075919
+            "x": 908.663534,
+            "z": -1196.05694
           },
           "potionCooldownUntil": -1,
           "spawnPos": {
@@ -1199,7 +1199,7 @@
             "x": 901.943506,
             "z": -1197.194158
           },
-          "wanderTimer": 29.85,
+          "wanderTimer": 29.9,
           "weapon": {
             "max": 42,
             "min": 27,
@@ -1208,7 +1208,7 @@
         },
         {
           "aiState": "idle",
-          "combatTimer": 99.2,
+          "combatTimer": 99.15,
           "comboUntil": -1,
           "critChance": 0.05,
           "detonateTimer": "Infinity",
@@ -1227,8 +1227,8 @@
           "overpowerUntil": -1,
           "petMode": "defensive",
           "pos": {
-            "x": 904.903776,
-            "z": -1195.480459
+            "x": 904.927832,
+            "z": -1195.360344
           },
           "potionCooldownUntil": -1,
           "spawnPos": {
@@ -1243,7 +1243,7 @@
             "x": 904.092927,
             "z": -1199.52914
           },
-          "wanderTimer": 29.85,
+          "wanderTimer": 29.9,
           "weapon": {
             "max": 45,
             "min": 29,
@@ -1252,7 +1252,7 @@
         },
         {
           "aiState": "idle",
-          "combatTimer": 99.2,
+          "combatTimer": 99.15,
           "comboUntil": -1,
           "critChance": 0.05,
           "detonateTimer": "Infinity",
@@ -1271,8 +1271,8 @@
           "overpowerUntil": -1,
           "petMode": "defensive",
           "pos": {
-            "x": 894.946187,
-            "z": -1182.557408
+            "x": 894.95964,
+            "z": -1182.418056
           },
           "potionCooldownUntil": -1,
           "spawnPos": {
@@ -1287,7 +1287,7 @@
             "x": 894.530532,
             "z": -1186.862852
           },
-          "wanderTimer": 29.85,
+          "wanderTimer": 29.9,
           "weapon": {
             "max": 47,
             "min": 30,
@@ -1296,7 +1296,7 @@
         },
         {
           "aiState": "idle",
-          "combatTimer": 99.2,
+          "combatTimer": 99.15,
           "comboUntil": -1,
           "critChance": 0.05,
           "detonateTimer": "Infinity",
@@ -1315,8 +1315,8 @@
           "overpowerUntil": -1,
           "petMode": "defensive",
           "pos": {
-            "x": 898.597935,
-            "z": -1179.6102
+            "x": 898.698451,
+            "z": -1179.70765
           },
           "potionCooldownUntil": -1,
           "spawnPos": {
@@ -1331,7 +1331,7 @@
             "x": 896.571454,
             "z": -1177.645536
           },
-          "wanderTimer": 29.85,
+          "wanderTimer": 29.9,
           "weapon": {
             "max": 51,
             "min": 33,
@@ -1340,7 +1340,7 @@
         },
         {
           "aiState": "idle",
-          "combatTimer": 99.2,
+          "combatTimer": 99.15,
           "comboUntil": -1,
           "critChance": 0.05,
           "detonateTimer": "Infinity",
@@ -1359,8 +1359,8 @@
           "overpowerUntil": -1,
           "petMode": "defensive",
           "pos": {
-            "x": 895.733568,
-            "z": -1168.411234
+            "x": 895.800176,
+            "z": -1168.308426
           },
           "potionCooldownUntil": -1,
           "spawnPos": {
@@ -1375,7 +1375,7 @@
             "x": 891.51615,
             "z": -1174.920755
           },
-          "wanderTimer": 29.85,
+          "wanderTimer": 29.9,
           "weapon": {
             "max": 54,
             "min": 35,
@@ -1384,7 +1384,7 @@
         },
         {
           "aiState": "idle",
-          "combatTimer": 99.2,
+          "combatTimer": 99.15,
           "comboUntil": -1,
           "critChance": 0.05,
           "detonateTimer": "Infinity",
@@ -1403,8 +1403,8 @@
           "overpowerUntil": -1,
           "petMode": "defensive",
           "pos": {
-            "x": 900.630459,
-            "z": -1167.321775
+            "x": 900.722844,
+            "z": -1167.241332
           },
           "potionCooldownUntil": -1,
           "spawnPos": {
@@ -1419,7 +1419,7 @@
             "x": 896.042059,
             "z": -1171.317094
           },
-          "wanderTimer": 29.85,
+          "wanderTimer": 29.9,
           "weapon": {
             "max": 45,
             "min": 29,
@@ -1472,7 +1472,7 @@
         },
         {
           "aiState": "idle",
-          "combatTimer": 99.2,
+          "combatTimer": 99.15,
           "comboUntil": -1,
           "critChance": 0.05,
           "detonateTimer": "Infinity",
@@ -1491,8 +1491,8 @@
           "overpowerUntil": -1,
           "petMode": "defensive",
           "pos": {
-            "x": 895.545114,
-            "z": -1154.010164
+            "x": 895.658835,
+            "z": -1154.007623
           },
           "potionCooldownUntil": -1,
           "spawnPos": {
@@ -1507,7 +1507,7 @@
             "x": 891.887068,
             "z": -1154.091896
           },
-          "wanderTimer": 29.85,
+          "wanderTimer": 29.9,
           "weapon": {
             "max": 42,
             "min": 27,
@@ -1516,7 +1516,7 @@
         },
         {
           "aiState": "idle",
-          "combatTimer": 99.2,
+          "combatTimer": 99.15,
           "comboUntil": -1,
           "critChance": 0.05,
           "detonateTimer": "Infinity",
@@ -1535,8 +1535,8 @@
           "overpowerUntil": -1,
           "petMode": "defensive",
           "pos": {
-            "x": 904.272865,
-            "z": -1153.635899
+            "x": 904.204649,
+            "z": -1153.726924
           },
           "potionCooldownUntil": -1,
           "spawnPos": {
@@ -1551,7 +1551,7 @@
             "x": 907.264539,
             "z": -1149.643927
           },
-          "wanderTimer": 29.85,
+          "wanderTimer": 29.9,
           "weapon": {
             "max": 42,
             "min": 27,
@@ -1601,7 +1601,7 @@
       "tick": 5,
       "time": 0.25,
       "nextId": 428,
-      "state": "6baae7b7",
+      "state": "97efa0a2",
       "events": "fe0508a5",
       "rng": {
         "draws": 53,
@@ -1612,7 +1612,7 @@
       "tick": 10,
       "time": 0.5,
       "nextId": 428,
-      "state": "a47f23a9",
+      "state": "088f2d88",
       "events": "9134b2f9",
       "rng": {
         "draws": 57,
@@ -1623,7 +1623,7 @@
       "tick": 15,
       "time": 0.75,
       "nextId": 428,
-      "state": "795677a3",
+      "state": "f38d6d0e",
       "events": "741638a5",
       "rng": {
         "draws": 57,
@@ -1637,8 +1637,8 @@
       "state": "c3bf6d54",
       "events": "5b9c58be",
       "rng": {
-        "draws": 58,
-        "digest": "6ad6900a"
+        "draws": 57,
+        "digest": "d31861b0"
       }
     },
     {
@@ -1648,8 +1648,8 @@
       "state": "3570ed8c",
       "events": "741638a5",
       "rng": {
-        "draws": 58,
-        "digest": "6ad6900a"
+        "draws": 57,
+        "digest": "d31861b0"
       },
       "label": "reset",
       "players": [
@@ -1827,8 +1827,8 @@
       "state": "3570ed8c",
       "events": "741638a5",
       "rng": {
-        "draws": 58,
-        "digest": "6ad6900a"
+        "draws": 57,
+        "digest": "d31861b0"
       },
       "label": "final",
       "players": [

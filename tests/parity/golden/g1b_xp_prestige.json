@@ -10,8 +10,8 @@
     "max-level overflow -> lifetimeXp / virtualLevelUp (accrueLifetimeXp, C1)",
     "cosmetic prestige accept + below-threshold reject (prestige, G1b)"
   ],
-  "draws": 91,
-  "drawDigest": "2a6020bb",
+  "draws": 35,
+  "drawDigest": "3c9aa859",
   "frames": [
     {
       "tick": 0,
@@ -135,10 +135,10 @@
       "time": 3,
       "nextId": 413,
       "state": "6d6210b3",
-      "events": "ec637c8d",
+      "events": "13f9ce30",
       "rng": {
-        "draws": 91,
-        "digest": "2a6020bb"
+        "draws": 35,
+        "digest": "3c9aa859"
       }
     },
     {
@@ -148,8 +148,8 @@
       "state": "6d6210b3",
       "events": "741638a5",
       "rng": {
-        "draws": 91,
-        "digest": "2a6020bb"
+        "draws": 35,
+        "digest": "3c9aa859"
       },
       "label": "rested-accrued",
       "players": [
@@ -244,8 +244,8 @@
       "state": "9c9de5f0",
       "events": "c37d04f7",
       "rng": {
-        "draws": 91,
-        "digest": "2a6020bb"
+        "draws": 35,
+        "digest": "3c9aa859"
       },
       "label": "rested-consumed",
       "players": [
@@ -344,8 +344,8 @@
       "state": "10963155",
       "events": "b3f33097",
       "rng": {
-        "draws": 91,
-        "digest": "2a6020bb"
+        "draws": 35,
+        "digest": "3c9aa859"
       },
       "label": "ding",
       "players": [
@@ -445,8 +445,8 @@
       "state": "973fdc7d",
       "events": "1fa260ac",
       "rng": {
-        "draws": 91,
-        "digest": "2a6020bb"
+        "draws": 35,
+        "digest": "3c9aa859"
       },
       "label": "overflow",
       "players": [
@@ -546,8 +546,8 @@
       "state": "ccc60852",
       "events": "96265992",
       "rng": {
-        "draws": 91,
-        "digest": "2a6020bb"
+        "draws": 35,
+        "digest": "3c9aa859"
       },
       "label": "prestige-accept",
       "players": [
@@ -647,8 +647,8 @@
       "state": "ccc60852",
       "events": "741638a5",
       "rng": {
-        "draws": 91,
-        "digest": "2a6020bb"
+        "draws": 35,
+        "digest": "3c9aa859"
       },
       "label": "prestige-reject",
       "players": [
@@ -748,8 +748,8 @@
       "state": "ccc60852",
       "events": "741638a5",
       "rng": {
-        "draws": 91,
-        "digest": "2a6020bb"
+        "draws": 35,
+        "digest": "3c9aa859"
       },
       "label": "final",
       "players": [

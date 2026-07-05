@@ -191,6 +191,57 @@ export function buildingDoorAt(x: number, z: number): number | null {
   return buildingDoorNear(x, z)?.interiorType ?? null;
 }
 
+/** An enterable building whose FOOTPRINT (rotated w×d box, plus a small margin)
+ *  contains the point (x,z) — the "clicked this building" test. Returns the interior
+ *  type + the building centre (so the caller can range-check the player and place a
+ *  menu). Null on vanilla realms or when the point hits no enterable building. Used by
+ *  the click-to-enter flow: click a building → Enter/Cancel menu. */
+export function buildingAtPoint(
+  x: number,
+  z: number,
+): { interiorType: number; cx: number; cz: number } | null {
+  if (!getActiveRealm().worldTheme) return null;
+  const MARGIN = 1.5; // forgiving edge so clicking the wall/roofline still counts
+  let houseSeen = 0;
+  for (const b of getActiveWorldContent().props.buildings) {
+    const interiorType = interiorTypeForBuilding(b.kind, houseSeen);
+    if (b.kind === 'house') houseSeen++;
+    if (interiorType == null) continue;
+    // Transform the point into the building's local (un-rotated) frame and test the box.
+    const s = Math.sin(-b.rot);
+    const c = Math.cos(-b.rot);
+    const lx = (x - b.x) * c - (z - b.z) * s;
+    const lz = (x - b.x) * s + (z - b.z) * c;
+    if (Math.abs(lx) <= b.w / 2 + MARGIN && Math.abs(lz) <= b.d / 2 + MARGIN) {
+      return { interiorType, cx: b.x, cz: b.z };
+    }
+  }
+  return null;
+}
+
+/** The interior type of an enterable building whose CENTRE is within `range` of (x,z),
+ *  or null. A generous footprint-based proximity used server-side so an Enter chosen
+ *  from the click-to-enter menu succeeds from anywhere the client offered it (the client
+ *  offers the menu within the same generous range). Nearest building wins. */
+export function buildingEnterableNear(x: number, z: number, range: number): number | null {
+  if (!getActiveRealm().worldTheme) return null;
+  const r2 = range * range;
+  let best: number | null = null;
+  let bestD2 = Infinity;
+  let houseSeen = 0;
+  for (const b of getActiveWorldContent().props.buildings) {
+    const interiorType = interiorTypeForBuilding(b.kind, houseSeen);
+    if (b.kind === 'house') houseSeen++;
+    if (interiorType == null) continue;
+    const d2 = (x - b.x) ** 2 + (z - b.z) ** 2;
+    if (d2 <= r2 && d2 < bestD2) {
+      bestD2 = d2;
+      best = interiorType;
+    }
+  }
+  return best;
+}
+
 /** Teleport the player into the interior room for `interiorType`, saving the spot to
  *  return to on exit. Called from the door-interaction path. */
 export function enterInterior(ctx: SimContext, interiorType: number, pid?: number): void {

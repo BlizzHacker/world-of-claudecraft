@@ -114,7 +114,7 @@ import { desktopBridge } from './runtime';
 import { ABILITIES, CLASSES } from './sim/content/classes';
 import { ITEMS, setActiveWorldContent } from './sim/data';
 import { canEquipItem } from './sim/equipment_rules';
-import { buildingDoorNear } from './sim/interiors';
+import { buildingAtPoint, buildingDoorNear } from './sim/interiors';
 import { TAB_NEAR_RADIUS, TAB_QUERY_RADIUS, tabConeHalfAt } from './sim/tab_target';
 import {
   DT,
@@ -270,6 +270,9 @@ const CLICK_MOVE_LATENCY_WAYPOINT_MAX_EXTRA = 0.8; // yards; helps online A* cor
 const ONLINE_SELF_RENDER_ALPHA_LEAD = 0.65; // fraction of a snapshot interval to reduce local-player visual delay online
 const ATTACK_MOVE_MELEE_STOP = 3.5; // yards; how close an attack-move approach stops from its target (inside melee)
 const ATTACK_MOVE_ACQUIRE_RANGE = 12; // yards; an attack-move toward open ground auto-targets a hostile this near
+// How close (to a building's centre) a click-to-enter prompt appears. Generous so
+// "click a building near me" reliably offers Enter; the server re-validates entry.
+const BUILDING_CLICK_ENTER_RANGE = 26;
 // Aura kinds that stop the player from moving (mirrors the sim's isRooted/isStunned):
 // while one of these is up, click-to-move can't make progress, so the destination
 // marker shows a "held" state instead of looking like a stuck game.
@@ -2079,6 +2082,27 @@ async function startGame(
     const clickToMoveButton = normalizeClickMoveButton(settings.get('clickToMoveButton'));
     const isClickMoveButton = clickToMove && button === clickToMoveButton;
     if (id === null) {
+      // Click-to-enter buildings: a plain click that lands on an enterable building
+      // (not an entity) opens an Enter/Cancel menu when the player is within an obvious
+      // range. Entry itself is server-authoritative (world.interact() → sim.interact →
+      // buildingDoorNear → enterInterior). Leaving is done by talking to the NPC inside.
+      if (button === 0 && !world.player.dead) {
+        const g = renderer.groundPoint(x, y, world.player.pos.y);
+        const hit = g ? buildingAtPoint(g.x, g.z) : null;
+        if (hit) {
+          const pp = world.player.pos;
+          const near = Math.hypot(pp.x - hit.cx, pp.z - hit.cz) <= BUILDING_CLICK_ENTER_RANGE;
+          if (near) {
+            hud.openBuildingEnterPrompt(hit.interiorType, () => world.interact());
+          } else {
+            // Too far — walk toward the building's near edge, then they can click again.
+            if (wantClickFeedback) renderer.spawnClickMarker(g!.x, g!.z, false);
+            const target = resolvedClickMoveTarget(g!);
+            input.setClickMoveTarget(target, 0.5, null, clickMovePathTo(target));
+          }
+          return;
+        }
+      }
       if (button === 0) {
         world.targetEntity(null);
       }

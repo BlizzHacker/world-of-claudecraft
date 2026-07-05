@@ -10,8 +10,8 @@
     "fiesta lifesteal augment arm (~5499)",
     "multi-player fiesta meta"
   ],
-  "draws": 545,
-  "drawDigest": "2a5ebd0a",
+  "draws": 41,
+  "drawDigest": "db0c7978",
   "frames": [
     {
       "tick": 0,
@@ -43,10 +43,10 @@
       "time": 2.5,
       "nextId": 416,
       "state": "72432e4b",
-      "events": "5853c8a8",
+      "events": "89442951",
       "rng": {
-        "draws": 41,
-        "digest": "db0c7978"
+        "draws": 13,
+        "digest": "2e7eabfd"
       }
     },
     {
@@ -54,10 +54,10 @@
       "time": 3.75,
       "nextId": 416,
       "state": "984c92c9",
-      "events": "4a0b736f",
+      "events": "3239191f",
       "rng": {
-        "draws": 158,
-        "digest": "f4b89791"
+        "draws": 19,
+        "digest": "93b5c426"
       }
     },
     {
@@ -65,10 +65,10 @@
       "time": 5,
       "nextId": 416,
       "state": "920069a3",
-      "events": "1451abe2",
+      "events": "a24a0298",
       "rng": {
-        "draws": 318,
-        "digest": "f5b14f45"
+        "draws": 30,
+        "digest": "e8c60ab5"
       }
     },
     {
@@ -78,8 +78,8 @@
       "state": "d453360a",
       "events": "b6fc25a9",
       "rng": {
-        "draws": 322,
-        "digest": "dced9346"
+        "draws": 30,
+        "digest": "e8c60ab5"
       },
       "label": "midcast-pushback",
       "players": [
@@ -469,8 +469,8 @@
       "state": "63b914c4",
       "events": "7eaa4f75",
       "rng": {
-        "draws": 322,
-        "digest": "dced9346"
+        "draws": 30,
+        "digest": "e8c60ab5"
       },
       "label": "midcast-fishcancel",
       "players": [
@@ -858,8 +858,8 @@
       "state": "3949339e",
       "events": "f0f6d201",
       "rng": {
-        "draws": 322,
-        "digest": "dced9346"
+        "draws": 30,
+        "digest": "e8c60ab5"
       },
       "label": "takedown",
       "players": [
@@ -1247,10 +1247,10 @@
       "time": 6.25,
       "nextId": 416,
       "state": "c1273658",
-      "events": "2d6b5539",
+      "events": "29f1ca18",
       "rng": {
-        "draws": 443,
-        "digest": "c8311deb"
+        "draws": 33,
+        "digest": "f2e27cbb"
       }
     },
     {
@@ -1258,10 +1258,10 @@
       "time": 7.1,
       "nextId": 416,
       "state": "d97daf50",
-      "events": "264497cb",
+      "events": "30faf4bb",
       "rng": {
-        "draws": 545,
-        "digest": "2a5ebd0a"
+        "draws": 41,
+        "digest": "db0c7978"
       },
       "label": "final",
       "players": [

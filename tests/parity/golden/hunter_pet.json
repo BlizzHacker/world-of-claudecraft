@@ -8,8 +8,8 @@
     "updateRangedPetAttack friendly pet arm (~8093/8217)",
     "updateRangedPetAttack hostile-mob arm (~6776)"
   ],
-  "draws": 420,
-  "drawDigest": "b1886087",
+  "draws": 145,
+  "drawDigest": "9eaca7bf",
   "frames": [
     {
       "tick": 0,
@@ -134,55 +134,55 @@
       "tick": 60,
       "time": 3,
       "nextId": 416,
-      "state": "85e4b2e8",
-      "events": "5a265861",
+      "state": "cb832e1e",
+      "events": "15beee6f",
       "rng": {
-        "draws": 112,
-        "digest": "cd1bd84a"
+        "draws": 53,
+        "digest": "9483cd08"
       }
     },
     {
       "tick": 80,
       "time": 4,
       "nextId": 416,
-      "state": "d05de844",
-      "events": "741638a5",
+      "state": "666e7146",
+      "events": "209f7f9d",
       "rng": {
-        "draws": 209,
-        "digest": "d18d32e4"
+        "draws": 75,
+        "digest": "cf5b9a92"
       }
     },
     {
       "tick": 100,
       "time": 5,
       "nextId": 416,
-      "state": "8b6e2110",
-      "events": "990fb5e9",
+      "state": "9a9ab98c",
+      "events": "1af75f2b",
       "rng": {
-        "draws": 315,
-        "digest": "ba82da8b"
+        "draws": 109,
+        "digest": "f4851509"
       }
     },
     {
       "tick": 120,
       "time": 6,
       "nextId": 416,
-      "state": "e9752e68",
-      "events": "34bc8033",
-      "rng": {
-        "draws": 420,
-        "digest": "b1886087"
-      }
-    },
-    {
-      "tick": 120,
-      "time": 6,
-      "nextId": 416,
-      "state": "e9752e68",
+      "state": "f4d0cb10",
       "events": "741638a5",
       "rng": {
-        "draws": 420,
-        "digest": "b1886087"
+        "draws": 145,
+        "digest": "9eaca7bf"
+      }
+    },
+    {
+      "tick": 120,
+      "time": 6,
+      "nextId": 416,
+      "state": "f4d0cb10",
+      "events": "741638a5",
+      "rng": {
+        "draws": 145,
+        "digest": "9eaca7bf"
       },
       "label": "final",
       "players": [
@@ -286,7 +286,7 @@
           "facing": 1.570796,
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
-          "hp": 54,
+          "hp": 56,
           "id": 413,
           "inCombat": true,
           "kind": "mob",
@@ -332,7 +332,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hostile": true,
-          "hp": 49946,
+          "hp": 49947,
           "id": 414,
           "inCombat": true,
           "kind": "mob",
@@ -369,7 +369,7 @@
           "threat": [
             [
               413,
-              54
+              53
             ]
           ],
           "weapon": {

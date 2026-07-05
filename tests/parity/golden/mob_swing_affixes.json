@@ -10,8 +10,8 @@
     "mobSwing affix cascade: rampage stacking buff_ap (warlord_drogmar self-buff)",
     "friendly-pet mobSwing: mob.hostile=false short-circuits every proc (no debuff on its target)"
   ],
-  "draws": 266,
-  "drawDigest": "c389eba3",
+  "draws": 198,
+  "drawDigest": "22a555a8",
   "frames": [
     {
       "tick": 0,
@@ -134,22 +134,22 @@
       "tick": 60,
       "time": 3,
       "nextId": 419,
-      "state": "cc57d1aa",
-      "events": "209b72e5",
+      "state": "17ffa2f9",
+      "events": "501b498f",
       "rng": {
-        "draws": 246,
-        "digest": "6415616b"
+        "draws": 194,
+        "digest": "ee031bcf"
       }
     },
     {
       "tick": 60,
       "time": 3,
       "nextId": 419,
-      "state": "1ee0afb1",
+      "state": "270866ad",
       "events": "741638a5",
       "rng": {
-        "draws": 246,
-        "digest": "6415616b"
+        "draws": 194,
+        "digest": "ee031bcf"
       },
       "label": "affixes",
       "players": [
@@ -167,7 +167,7 @@
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {
-            "damageTaken": 1461
+            "damageTaken": 1473
           },
           "craftSkills": {},
           "delveClears": {},
@@ -193,23 +193,13 @@
           "attackPower": 106,
           "auras": [
             {
-              "duration": 4,
-              "id": "silence_gravecaller_summoner",
-              "kind": "silence",
-              "name": "Silencing Shriek",
-              "remaining": 3,
-              "school": "shadow",
-              "sourceId": 415
-            },
-            {
-              "duration": 10,
-              "id": "heal_absorb_gravecaller_summoner",
-              "kind": "heal_absorb",
-              "name": "Grave Blight",
-              "remaining": 9,
-              "school": "shadow",
-              "sourceId": 415,
-              "value": 120
+              "duration": 3,
+              "id": "ensnare_webwood_spider",
+              "kind": "root",
+              "name": "Sticky Web",
+              "remaining": 1.85,
+              "school": "nature",
+              "sourceId": 414
             },
             {
               "duration": 1,
@@ -233,13 +223,23 @@
               "value": 2
             },
             {
-              "duration": 3,
-              "id": "ensnare_webwood_spider",
-              "kind": "root",
-              "name": "Sticky Web",
-              "remaining": 2.5,
-              "school": "nature",
-              "sourceId": 414
+              "duration": 4,
+              "id": "silence_gravecaller_summoner",
+              "kind": "silence",
+              "name": "Silencing Shriek",
+              "remaining": 3.5,
+              "school": "shadow",
+              "sourceId": 415
+            },
+            {
+              "duration": 10,
+              "id": "heal_absorb_gravecaller_summoner",
+              "kind": "heal_absorb",
+              "name": "Grave Blight",
+              "remaining": 9.5,
+              "school": "shadow",
+              "sourceId": 415,
+              "value": 120
             }
           ],
           "combatTimer": 0.3,
@@ -267,7 +267,7 @@
             "z": -2
           },
           "potionCooldownUntil": -1,
-          "resource": 54.111111,
+          "resource": 54.555556,
           "resourceType": "rage",
           "spawnPos": {
             "x": 2,
@@ -383,7 +383,7 @@
         {
           "aggroTargetId": 412,
           "aiState": "attack",
-          "combatTimer": 1,
+          "combatTimer": 0.5,
           "comboUntil": -1,
           "critChance": 0.05,
           "detonateTimer": "Infinity",
@@ -497,7 +497,7 @@
           "facing": 1.570796,
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
-          "hp": 102,
+          "hp": 99,
           "id": 417,
           "inCombat": true,
           "kind": "mob",
@@ -543,7 +543,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hostile": true,
-          "hp": 199922,
+          "hp": 199919,
           "id": 418,
           "inCombat": true,
           "kind": "mob",
@@ -579,7 +579,7 @@
           "threat": [
             [
               417,
-              79
+              82
             ]
           ],
           "weapon": {
@@ -594,11 +594,11 @@
       "tick": 64,
       "time": 3.2,
       "nextId": 419,
-      "state": "d1d0f83d",
+      "state": "4e5d2559",
       "events": "741638a5",
       "rng": {
-        "draws": 266,
-        "digest": "c389eba3"
+        "draws": 198,
+        "digest": "22a555a8"
       },
       "label": "final",
       "players": [
@@ -616,7 +616,7 @@
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {
-            "damageTaken": 1461
+            "damageTaken": 1473
           },
           "craftSkills": {},
           "delveClears": {},
@@ -642,23 +642,13 @@
           "attackPower": 106,
           "auras": [
             {
-              "duration": 4,
-              "id": "silence_gravecaller_summoner",
-              "kind": "silence",
-              "name": "Silencing Shriek",
-              "remaining": 2.8,
-              "school": "shadow",
-              "sourceId": 415
-            },
-            {
-              "duration": 10,
-              "id": "heal_absorb_gravecaller_summoner",
-              "kind": "heal_absorb",
-              "name": "Grave Blight",
-              "remaining": 8.8,
-              "school": "shadow",
-              "sourceId": 415,
-              "value": 120
+              "duration": 3,
+              "id": "ensnare_webwood_spider",
+              "kind": "root",
+              "name": "Sticky Web",
+              "remaining": 1.65,
+              "school": "nature",
+              "sourceId": 414
             },
             {
               "duration": 1,
@@ -682,13 +672,23 @@
               "value": 2
             },
             {
-              "duration": 3,
-              "id": "ensnare_webwood_spider",
-              "kind": "root",
-              "name": "Sticky Web",
-              "remaining": 2.3,
-              "school": "nature",
-              "sourceId": 414
+              "duration": 4,
+              "id": "silence_gravecaller_summoner",
+              "kind": "silence",
+              "name": "Silencing Shriek",
+              "remaining": 3.3,
+              "school": "shadow",
+              "sourceId": 415
+            },
+            {
+              "duration": 10,
+              "id": "heal_absorb_gravecaller_summoner",
+              "kind": "heal_absorb",
+              "name": "Grave Blight",
+              "remaining": 9.3,
+              "school": "shadow",
+              "sourceId": 415,
+              "value": 120
             }
           ],
           "combatTimer": 0.5,
@@ -716,7 +716,7 @@
             "z": -2
           },
           "potionCooldownUntil": -1,
-          "resource": 54.111111,
+          "resource": 54.555556,
           "resourceType": "rage",
           "spawnPos": {
             "x": 2,
@@ -832,7 +832,7 @@
         {
           "aggroTargetId": 412,
           "aiState": "attack",
-          "combatTimer": 1.2,
+          "combatTimer": 0.7,
           "comboUntil": -1,
           "critChance": 0.05,
           "detonateTimer": "Infinity",
@@ -946,7 +946,7 @@
           "facing": 1.570796,
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
-          "hp": 102,
+          "hp": 99,
           "id": 417,
           "inCombat": true,
           "kind": "mob",
@@ -992,7 +992,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hostile": true,
-          "hp": 199922,
+          "hp": 199919,
           "id": 418,
           "inCombat": true,
           "kind": "mob",
@@ -1028,7 +1028,7 @@
           "threat": [
             [
               417,
-              79
+              82
             ]
           ],
           "weapon": {

@@ -8,8 +8,8 @@
     "casting lifecycle (C4a)",
     "effect dispatch + spell damage (C4b/C1)"
   ],
-  "draws": 469,
-  "drawDigest": "756722de",
+  "draws": 163,
+  "drawDigest": "5caeab93",
   "frames": [
     {
       "tick": 0,
@@ -133,55 +133,55 @@
       "tick": 60,
       "time": 3,
       "nextId": 414,
-      "state": "4fb6fa10",
-      "events": "db71c44c",
+      "state": "26ab853a",
+      "events": "269f0acc",
       "rng": {
-        "draws": 98,
-        "digest": "844c1913"
+        "draws": 50,
+        "digest": "22a11ccc"
       }
     },
     {
       "tick": 80,
       "time": 4,
       "nextId": 414,
-      "state": "2b595ac3",
-      "events": "f7ccfa9c",
+      "state": "d40cebe4",
+      "events": "5ff4fe36",
       "rng": {
-        "draws": 185,
-        "digest": "50c875e4"
+        "draws": 75,
+        "digest": "9d9286f0"
       }
     },
     {
       "tick": 100,
       "time": 5,
       "nextId": 414,
-      "state": "95d718c2",
-      "events": "05da6e82",
+      "state": "126aaa33",
+      "events": "a234be96",
       "rng": {
-        "draws": 304,
-        "digest": "dc72a9f1"
+        "draws": 105,
+        "digest": "97d851e6"
       }
     },
     {
       "tick": 120,
       "time": 6,
       "nextId": 414,
-      "state": "a7edd1ec",
-      "events": "23d98123",
+      "state": "657bca5e",
+      "events": "f65158c9",
       "rng": {
-        "draws": 415,
-        "digest": "fd501802"
+        "draws": 140,
+        "digest": "57023068"
       }
     },
     {
       "tick": 128,
       "time": 6.4,
       "nextId": 414,
-      "state": "c1d0ac4e",
-      "events": "6a30060d",
+      "state": "088be348",
+      "events": "d70a4f81",
       "rng": {
-        "draws": 469,
-        "digest": "756722de"
+        "draws": 163,
+        "digest": "5caeab93"
       },
       "label": "final",
       "players": [
@@ -199,8 +199,8 @@
           "cls": "mage",
           "companionUpgrades": {},
           "counters": {
-            "damageDealt": 319,
-            "damageTaken": 17
+            "damageDealt": 361,
+            "damageTaken": 8
           },
           "craftSkills": {},
           "delveClears": {},
@@ -233,7 +233,7 @@
           "facing": 0.182987,
           "fallStartY": 1.5,
           "fiveSecondRule": 0.25,
-          "hp": 49983,
+          "hp": 49992,
           "id": 412,
           "inCombat": true,
           "kind": "player",
@@ -311,7 +311,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hostile": true,
-          "hp": 8681,
+          "hp": 8639,
           "id": 413,
           "inCombat": true,
           "kind": "mob",
@@ -347,7 +347,7 @@
           "threat": [
             [
               412,
-              320
+              362
             ]
           ],
           "wanderTarget": {

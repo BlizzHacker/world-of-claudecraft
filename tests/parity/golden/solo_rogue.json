@@ -8,8 +8,8 @@
     "meleeSwing weaponStrike (sinister_strike via castAbility ~3736)",
     "combo points"
   ],
-  "draws": 156,
-  "drawDigest": "7e888bc0",
+  "draws": 72,
+  "drawDigest": "0986d490",
   "frames": [
     {
       "tick": 0,
@@ -134,22 +134,22 @@
       "tick": 60,
       "time": 3,
       "nextId": 414,
-      "state": "32efb5a2",
-      "events": "e283e486",
+      "state": "127b3f13",
+      "events": "b2d03000",
       "rng": {
-        "draws": 102,
-        "digest": "b56cf196"
+        "draws": 46,
+        "digest": "4a3f4183"
       }
     },
     {
       "tick": 72,
       "time": 3.6,
       "nextId": 414,
-      "state": "fe782769",
-      "events": "a90c675e",
+      "state": "9d451200",
+      "events": "dd314fbb",
       "rng": {
-        "draws": 156,
-        "digest": "7e888bc0"
+        "draws": 72,
+        "digest": "0986d490"
       },
       "label": "final",
       "players": [
@@ -168,7 +168,7 @@
           "companionUpgrades": {},
           "counters": {
             "damageDealt": 114,
-            "damageTaken": 9
+            "damageTaken": 27
           },
           "craftSkills": {},
           "delveClears": {},
@@ -194,7 +194,7 @@
           "attackPower": 78,
           "autoAttack": true,
           "combatTimer": 0.6,
-          "comboPoints": 3,
+          "comboPoints": 4,
           "comboUntil": 33,
           "critChance": 0.076,
           "detonateTimer": "Infinity",
@@ -202,7 +202,7 @@
           "facing": 1.570796,
           "fallStartY": 1.5,
           "fiveSecondRule": 102.6,
-          "hp": 49991,
+          "hp": 49973,
           "id": 412,
           "inCombat": true,
           "kind": "player",
