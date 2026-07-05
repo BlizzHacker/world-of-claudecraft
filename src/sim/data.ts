@@ -38,6 +38,7 @@ import {
   DROWNED_LITANY_MODULES,
 } from './content/delves';
 import { DUNGEON_DEFS, DUNGEON_MOBS } from './content/dungeons';
+import { INTERIOR_NPCS } from './content/interior_npcs';
 import { getActiveRealm } from './realms/registry';
 import type { RealmWorldTheme } from './realms/types';
 import {
@@ -180,6 +181,9 @@ export const NPCS: Record<string, NpcDef> = {
   // loop skips it). Kept in NPCS so the online client and world_entity_i18n can
   // resolve its name; spirit.ts spawns a copy at every graveyard.
   [SPIRIT_HEALER_NPC_ID]: SPIRIT_HEALER,
+  // Building-interior residents (dynamic; spawned by interiors.ts inside the rooms).
+  // Registered here so the online client resolves their vendorItems + names.
+  ...INTERIOR_NPCS,
 };
 
 // Graveyards + the Spirit Healer: re-exported so the Sim and spirit.ts import the

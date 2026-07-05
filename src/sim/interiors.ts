@@ -11,9 +11,14 @@
 import { INTERIOR_ROOM_EXIT_LOCAL } from './colliders';
 import { interiorOrigin, isInteriorPos } from './data';
 import { INTERIOR_ROOM_ENTRY } from './colliders';
-import { createGroundObject } from './entity';
+import {
+  INTERIOR_INNKEEPER,
+  INTERIOR_MERCHANT,
+  INTERIOR_VILLAGER,
+} from './content/interior_npcs';
+import { createGroundObject, createNpc, createProp } from './entity';
 import type { SimContext } from './sim_context';
-import type { Entity, Vec3, WorldContent } from './types';
+import type { Entity, NpcDef, Vec3, WorldContent } from './types';
 
 export const INTERIOR_TYPE_SHOP = 0;
 export const INTERIOR_TYPE_INN = 1;
@@ -33,6 +38,52 @@ function interiorTypeForBuilding(kind: string): number | null {
   return null; // chapel etc — not enterable
 }
 
+// Room-local furniture layout per interior type. Coords are room-instance-local
+// (origin at room centre; room spans ±18 x, z −12..12; the south door is at −z, so
+// furniture clusters north/sides and leaves the entry lane clear). {key} = a native
+// prop asset (renders as prop:<key>); unknown keys fall back to a crate placeholder.
+interface Furnishing { key: string; x: number; z: number; facing?: number; scale?: number }
+const ROOM_FURNITURE: Record<number, Furnishing[]> = {
+  // Shop: a counter of crates + weapon stands + an anvil, wares along the walls.
+  [INTERIOR_TYPE_SHOP]: [
+    { key: 'crateWooden', x: -6, z: 6 },
+    { key: 'crateWooden', x: -4, z: 8, scale: 0.9 },
+    { key: 'weaponStand', x: 6, z: 7, facing: Math.PI },
+    { key: 'weaponStand', x: 9, z: 5, facing: Math.PI },
+    { key: 'anvil', x: -12, z: 2, facing: Math.PI / 2 },
+    { key: 'barrel', x: 13, z: 9 },
+    { key: 'barrel', x: -13, z: 9, scale: 0.9 },
+    { key: 'lanternWall', x: 0, z: 11.4, scale: 0.8 },
+  ],
+  // Inn: barrels + crates (the cellar stock) and lanterns; the keeper stands north.
+  [INTERIOR_TYPE_INN]: [
+    { key: 'barrel', x: -8, z: 8 },
+    { key: 'barrel', x: -6, z: 9, scale: 0.9 },
+    { key: 'barrel', x: 8, z: 8 },
+    { key: 'crateWooden', x: 10, z: 6 },
+    { key: 'farmCrate', x: -11, z: 5 },
+    { key: 'lanternWall', x: -14, z: 0, scale: 0.8 },
+    { key: 'lanternWall', x: 14, z: 0, scale: 0.8 },
+  ],
+  // House: a homely hearth-ish column + a couple of crates + a lantern.
+  [INTERIOR_TYPE_HOUSE]: [
+    { key: 'column', x: 0, z: 9, scale: 0.7 },
+    { key: 'crateWooden', x: -10, z: 7 },
+    { key: 'barrel', x: 11, z: 6 },
+    { key: 'farmCrate', x: -8, z: 4, scale: 0.9 },
+    { key: 'lanternWall', x: 12, z: 10, scale: 0.8 },
+  ],
+};
+
+// The resident NPC per interior type: merchant (shop), innkeeper (inn), villager
+// (house). Defs live in content/interior_npcs.ts (a leaf, registered in NPCS so the
+// online client resolves their vendorItems); here we just pick + position them.
+function interiorNpcDef(interiorType: number): { def: NpcDef; x: number; z: number } {
+  if (interiorType === INTERIOR_TYPE_SHOP) return { def: INTERIOR_MERCHANT, x: 0, z: 7 };
+  if (interiorType === INTERIOR_TYPE_INN) return { def: INTERIOR_INNKEEPER, x: 0, z: 8 };
+  return { def: INTERIOR_VILLAGER, x: 0, z: 6 };
+}
+
 /** Spawn the shared interior rooms' exit doors + a clickable entrance door on every
  *  enterable town building. Deterministic (no rng). Called at world init on themed
  *  realms only. `nextId` yields fresh entity ids; `world` supplies the buildings. */
@@ -42,9 +93,11 @@ export function spawnBuildingInteriors(
   world: WorldContent,
 ): void {
   const add = (e: Entity): void => ctx.addEntity(e);
-  // 1) An EXIT door inside each interior room (shared slot 0), at the south door.
+  // 1) Furnish each shared interior room (slot 0): an EXIT door at the south door,
+  // furniture props, and the resident NPC.
   for (const t of [INTERIOR_TYPE_SHOP, INTERIOR_TYPE_INN, INTERIOR_TYPE_HOUSE]) {
     const o = interiorOrigin(t, 0);
+    // Exit door.
     const exit = createGroundObject(
       nextId(),
       '',
@@ -55,6 +108,17 @@ export function spawnBuildingInteriors(
     exit.objectItemId = null;
     exit.lootable = true; // interactable
     add(exit);
+    // Furniture.
+    for (const f of ROOM_FURNITURE[t] ?? []) {
+      add(createProp(nextId(), f.key, ctx.groundPos(o.x + f.x, o.z + f.z), f.facing ?? 0, f.scale ?? 1));
+    }
+    // Resident NPC (merchant / innkeeper / villager). A vendorItems NPC opens its
+    // shop through the normal talk-to-NPC path (createNpc copies vendorItems); no
+    // auction-market registration (that's the separate World Market auctioneer).
+    const npc = interiorNpcDef(t);
+    const npcEnt = createNpc(nextId(), npc.def, ctx.groundPos(o.x + npc.x, o.z + npc.z));
+    npcEnt.facing = Math.PI; // face the south door / incoming player
+    add(npcEnt);
   }
   // 2) A clickable ENTRANCE door on each enterable building, at its +z (front) face.
   for (const b of world.props.buildings) {
