@@ -206,3 +206,21 @@ describe('hellmaw gates — live sim', () => {
     expect(Math.abs(clamped.z - door.pos.z)).toBeGreaterThanOrEqual(band - 0.01);
   });
 });
+
+// ── Sealed corners: end walls must reach the side walls (no void-escape gap) ──
+describe('hellmaw sealed corners', () => {
+  const rooms = [
+    'hellmaw_outer_maw', 'hellmaw_ember_gallery', 'hellmaw_hollow_descent',
+    'hellmaw_burning_chasm', 'hellmaw_pyre_hall', 'hellmaw_finale',
+  ] as const;
+  it('each room end wall spans out to its side walls (endWallHw >= wallX)', () => {
+    for (const r of rooms) {
+      const layout = DELVE_MODULE_LAYOUTS[r];
+      const wallX = layout.wallX ?? 23;
+      const endWallHw = layout.endWallHw ?? 24;
+      // The end wall must reach at least to the side wall, or a wider room leaves a
+      // corner gap the player can slip through into the void.
+      expect(endWallHw, `${r} endWallHw covers side wall`).toBeGreaterThanOrEqual(wallX);
+    }
+  });
+});

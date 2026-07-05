@@ -827,12 +827,21 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
     blacksmith: 6.6,
     inn: 7.6,
   };
+  // A themed realm (infernal) scales building FOOTPRINTS (w/d) via worldTheme; scale
+  // their HEIGHT by the same factor so a 1.9× wider building isn't a squashed slab,
+  // and SINK the base proportionally to the extra width so a bigger footprint on
+  // sloped terrain doesn't float/clip at its far edges (the base is placed at the
+  // centre's ground height, so a wider building needs to sit a little lower). Vanilla
+  // realms (buildingScale 1) get vScale 1 + the original 0.12 sink — unchanged.
+  const buildingScale = getActiveRealm().worldTheme?.buildingScale ?? 1;
+  const vScale = buildingScale; // proportional height
+  const baseSink = 0.12 + Math.max(0, buildingScale - 1) * 1.4;
 
   for (const b of getActiveWorldContent().props.buildings) {
     const key = b.x * 13.7 + b.z * 3.1;
     const y = ground(b.x, b.z);
-    // roof Y mirrors the camera collider height in colliders.ts
-    const roofY = y + (b.kind === 'chapel' ? 10.8 : b.kind === 'inn' ? 7.8 : 8.0);
+    // roof Y mirrors the camera collider height in colliders.ts (scaled to match)
+    const roofY = y + (b.kind === 'chapel' ? 10.8 : b.kind === 'inn' ? 7.8 : 8.0) * vScale;
     if (b.kind === 'chapel') {
       // composed chapel: tall bell tower at the rear + squat stone entry hall
       // in front; the hall door lands on the footprint's +z edge.
@@ -840,14 +849,14 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
       const tower = propAsset('bellTower');
       addParts(g, 'bellTower', {
         z: -0.75,
-        scale: [(b.w * 0.98) / tower.size.x, 10.6 / tower.size.y, (b.d * 0.72) / tower.size.z],
+        scale: [(b.w * 0.98) / tower.size.x, (10.6 * vScale) / tower.size.y, (b.d * 0.72) / tower.size.z],
       });
       const hall = propAsset('house3');
       addParts(g, 'house3', {
         z: b.d / 2 - 1.62,
-        scale: [(b.w * 0.9) / hall.size.x, 2.5 / hall.size.y, 3.2 / hall.size.z],
+        scale: [(b.w * 0.9) / hall.size.x, (2.5 * vScale) / hall.size.y, 3.2 / hall.size.z],
       });
-      g.position.set(b.x, y - 0.12, b.z);
+      g.position.set(b.x, y - baseSink, b.z);
       g.rotation.y = b.rot;
       group.add(shadowed(g));
       registerHideable(g, obbFootprint(b.x, b.z, b.w / 2, b.d / 2, b.rot, roofY));
@@ -857,8 +866,10 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
       b.kind === 'inn' ? 'inn' : housePool[Math.floor(keyRand(key, 3) * 0.999 * housePool.length)];
     const a = propAsset(asset);
     const g = new THREE.Group();
-    addParts(g, asset, { scale: [b.w / a.size.x, houseHeight[asset] / a.size.y, b.d / a.size.z] });
-    g.position.set(b.x, y - 0.12, b.z);
+    addParts(g, asset, {
+      scale: [b.w / a.size.x, (houseHeight[asset] * vScale) / a.size.y, b.d / a.size.z],
+    });
+    g.position.set(b.x, y - baseSink, b.z);
     g.rotation.y = b.rot;
     group.add(shadowed(g));
     registerHideable(g, obbFootprint(b.x, b.z, b.w / 2, b.d / 2, b.rot, roofY));

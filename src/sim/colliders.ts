@@ -12,6 +12,7 @@ import {
   isDelvePos,
 } from './data';
 import { type DelveModuleId, delveModuleColliders } from './delve_layout';
+import { getActiveRealm } from './realms/registry';
 import { isLitanyModuleId, litanyModuleLosColliders } from './delve_litany_layout';
 import {
   ARENA_LAYOUT,
@@ -88,8 +89,11 @@ function staticWorldColliders(seed: number): Collider[] {
   // Hideable render props are `camGhost`: they keep blocking movement but the
   // chase cam no longer pulls in for them; the renderer hides whichever one
   // crosses the eye-to-camera segment instead.
+  // Themed realms scale building height (render/props.ts); mirror the scale here so
+  // the camera-hide top matches the taller mesh. Vanilla realms use scale 1.
+  const bScale = getActiveRealm().worldTheme?.buildingScale ?? 1;
   for (const b of PROPS.buildings) {
-    const height = b.kind === 'chapel' ? 10.8 : b.kind === 'inn' ? 7.8 : 8.0;
+    const height = (b.kind === 'chapel' ? 10.8 : b.kind === 'inn' ? 7.8 : 8.0) * bScale;
     out.push({
       type: 'obb',
       x: b.x,

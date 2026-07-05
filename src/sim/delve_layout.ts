@@ -192,6 +192,8 @@ function hellmawDims(zMax: number, wallX: number): {
   sideWallZ: number;
   sideWallHd: number;
   wallX: number;
+  endWallHw: number;
+  floorHalfX: number;
   doorZ: number;
 } {
   const depth = zMax - D_ZMIN;
@@ -201,6 +203,12 @@ function hellmawDims(zMax: number, wallX: number): {
     sideWallZ: D_ZMIN + depth / 2,
     sideWallHd: depth / 2 + 8,
     wallX,
+    // The end walls MUST span the full room width (out to the side walls at |x|=wallX),
+    // else a wider room (wallX up to 36) leaves a corner gap where neither the ±24
+    // default end wall nor the side wall reaches — the player slips into the void and
+    // walks around outside. Cover to wallX+1 so the corners overlap and seal.
+    endWallHw: wallX + 1,
+    floorHalfX: wallX,
     doorZ: D_DOOR_Z,
   };
 }
