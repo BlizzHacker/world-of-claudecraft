@@ -85,7 +85,7 @@ import {
 } from './content/talents';
 import { applyCooldowns, type SavedCooldowns, serializeCooldowns } from './cooldown_persist';
 import { activeMaxLevel, getActiveRealm } from './realms/registry';
-import { spawnBuildingInteriors } from './interiors';
+import { leaveInterior as leaveInteriorImpl, spawnBuildingInteriors } from './interiors';
 import { spawnWaypoints, waypointTravel } from './waypoints';
 import type { DelveShopGate, DelveShopOffer } from './data';
 import {
@@ -6163,6 +6163,14 @@ export class Sim {
 
   leaveDungeon(pid?: number): void {
     leaveDungeonImpl(this.ctx, pid);
+  }
+
+  // Leave the current building interior (talk-to-leave: the resident NPC's dialog
+  // sends this). No proximity gate — the player is already inside, and the exit door
+  // sits at the far south wall well beyond interact range from the NPC. Server-
+  // authoritative: warps back to where they entered (or a safe overworld fallback).
+  leaveInterior(pid?: number): void {
+    leaveInteriorImpl(this.ctx, pid);
   }
 
   // Legacy single-dungeon entry points (tests + scripts use these).

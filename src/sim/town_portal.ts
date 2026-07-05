@@ -8,10 +8,16 @@
 // pair (D2 allows one town portal per character). The tome IS the stackable scroll
 // item (its count = scrolls left), consumed one per cast in items.ts.
 
-import { ZONES } from './data';
+import { TOWN_RADIUS, ZONES } from './data';
 import { createGroundObject } from './entity';
 import type { SimContext } from './sim_context';
 import type { Entity, Vec3 } from './types';
+
+/** Overworld = the open field band (|x| <= 600); everything else is an instance
+ *  (dungeon/delve/arena/interior). Town hubs live in the overworld. */
+function isOverworld(x: number): boolean {
+  return x <= 600 && x >= -600;
+}
 
 /** Nearest town hub to a world position (by zone). Town Portal always exits to town. */
 function nearestTownHub(z: number): { x: number; z: number; name: string } {
@@ -44,10 +50,15 @@ export function castTownPortal(ctx: SimContext, nextId: () => number, pid?: numb
   const r = ctx.resolve(pid);
   if (!r || r.e.dead) return false;
   const p = r.e;
-  // Not usable inside instances (delves/dungeons/interiors) — D2 town portals only
-  // work in the field. Keeps the return math simple and avoids cross-region teleports.
-  if (p.pos.x > 600 || p.pos.x < -600) {
-    ctx.error(r.meta.entityId, 'You cannot open a town portal here.');
+  // D2 town portals are cast FROM the field/dungeon/delve to return to town — that is
+  // the whole point. The ONLY place you can't (need not) cast is while already standing
+  // in a town hub. So gate on "already in town", NOT on "inside an instance".
+  const townHere = nearestTownHub(p.pos.z);
+  const inTown =
+    isOverworld(p.pos.x) &&
+    Math.hypot(p.pos.x - townHere.x, p.pos.z - townHere.z) <= TOWN_RADIUS + 6;
+  if (inTown) {
+    ctx.error(r.meta.entityId, "You're already in town.");
     return false;
   }
   closeTownPortal(ctx, p.id); // one portal per character (D2 rule)

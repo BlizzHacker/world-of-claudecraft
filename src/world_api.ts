@@ -281,6 +281,7 @@ export const COMMAND_NAMES = [
   'enter_dungeon',
   'leave_crypt',
   'leave_dungeon',
+  'leave_building',
   'enter_delve',
   'leave_delve',
   'delve_interact',
@@ -495,6 +496,7 @@ export const COMMAND_FACETS = {
   // (untagged; on the DISPATCH_ONLY_COMMANDS allowlist), NOT IWorldDungeons.
   enter_dungeon: 'IWorldDungeons',
   leave_dungeon: 'IWorldDungeons',
+  leave_building: 'IWorldDungeons',
   // IWorldDelves: delve enter/leave + interact + companion upgrade + Marks-vendor buy
   // + lockpick lifecycle + chest collect. Note the wire-name skew: delveBuyShopItem
   // sends `delve_buy`, so the tag is keyed on the WIRE string `delve_buy`. The reads

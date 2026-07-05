@@ -3149,6 +3149,12 @@ export class GameServer {
         if (exit) sim.leaveDungeon(pid);
         break;
       }
+      case 'leave_building': {
+        // Talk-to-leave: the resident NPC's dialog sends this. No proximity gate — the
+        // sim no-ops if the player isn't actually inside an interior room.
+        sim.leaveInterior(pid);
+        break;
+      }
       case 'enter_delve': {
         if (typeof msg.delveId !== 'string' || typeof msg.tierId !== 'string') break;
         const e = sim.entities.get(pid);

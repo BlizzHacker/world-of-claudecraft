@@ -10899,21 +10899,10 @@ export class Hud {
   // which runs the server-authoritative leaveInterior (warps back to where they entered).
   // Reached from the resident NPC's "Step back outside" option (talk-to-leave).
   private leaveBuilding(): void {
-    const p = this.sim.player;
-    let exitId: number | null = null;
-    let bestD = Infinity;
-    for (const e of this.sim.entities.values()) {
-      if (e.kind !== 'object' || e.templateId !== 'building_exit') continue;
-      const d = Math.hypot(e.pos.x - p.pos.x, e.pos.z - p.pos.z);
-      if (d < bestD) {
-        bestD = d;
-        exitId = e.id;
-      }
-    }
-    if (exitId != null) {
-      this.sim.targetEntity(exitId);
-      this.sim.interact();
-    }
+    // Direct, server-authoritative leave — NOT a proximity interact on the exit door.
+    // The exit door sits at the far wall, well beyond interact range from the NPC you
+    // just talked to, so the old target+interact silently failed.
+    this.sim.leaveInterior();
   }
 
   private openPrestigeDialog(): void {

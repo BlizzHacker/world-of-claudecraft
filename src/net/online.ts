@@ -2192,6 +2192,9 @@ export class ClientWorld implements IWorld {
   leaveDungeon(): void {
     this.cmd({ cmd: 'leave_dungeon' });
   }
+  leaveInterior(): void {
+    this.cmd({ cmd: 'leave_building' });
+  }
   // Raid lockouts mirrored from snapshot self as {dungeonId: expiryEpochMs}; the
   // remaining time is derived locally so the countdown ticks down without traffic.
   private selfLockouts: Record<string, number> = {};
