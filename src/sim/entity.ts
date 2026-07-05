@@ -1,6 +1,12 @@
 import type { TalentModifiers } from './content/talents';
 import { aggregateSetBonuses, CLASSES, ITEMS, MOBS, type NpcDef } from './data';
 import { meetsLevelRequirement } from './item_level_req';
+import {
+  d2MobDmgMult,
+  d2MobHpMult,
+  d2PlayerDmgMult,
+  d2PlayerHpMult,
+} from './realms/registry';
 import type { Entity, EquipSlot, MobTemplate, PlayerClass, Stats, Vec3 } from './types';
 import { EQUIP_SLOTS, SPELL_POWER_PER_INT } from './types';
 
@@ -320,17 +326,23 @@ export function recalcPlayerStats(
       : cls === 'rogue' || cls === 'hunter'
         ? s.str + s.agi
         : s.str;
+  // F5c D2 scaling: past the vanilla cap the D2 realms ramp outgoing damage so a
+  // level-99 hero hits for D2-scale numbers. Vanilla realms return 1 (no change).
+  const d2Dmg = d2PlayerDmgMult(lvl);
   // Floor at 0 so a heavy debuff_ap stack can never bake a negative attack power
   // (mirrors effectiveAttackPower's mob floor and the agi/spi floors above).
-  e.attackPower = Math.max(0, Math.round((apFromStats + bonusAp) * (1 + (mods?.stats.apPct ?? 0))));
+  e.attackPower = Math.max(
+    0,
+    Math.round((apFromStats + bonusAp) * (1 + (mods?.stats.apPct ?? 0)) * d2Dmg),
+  );
   // Hunters: ranged AP = 2/agi (classic-era value)
   e.rangedPower =
     cls === 'hunter'
-      ? Math.max(0, Math.round((s.agi * 2 + bonusAp) * (1 + (mods?.stats.apPct ?? 0))))
+      ? Math.max(0, Math.round((s.agi * 2 + bonusAp) * (1 + (mods?.stats.apPct ?? 0)) * d2Dmg))
       : 0;
   // Spell Power: Intellect converted via SPELL_POWER_PER_INT plus flat Spell Power
   // from gear/buffs. Floored at 0 so an Intellect-draining debuff can't go negative.
-  e.spellPower = Math.max(0, Math.round(s.int * SPELL_POWER_PER_INT + bonusSp));
+  e.spellPower = Math.max(0, Math.round((s.int * SPELL_POWER_PER_INT + bonusSp) * d2Dmg));
   // Haste from item-set bonuses (the only haste-gear source). ONE aggregated
   // stat drives all three channels: faster melee and ranged auto-attack swings
   // AND shorter spell casts/channels.
@@ -345,7 +357,9 @@ export function recalcPlayerStats(
   e.dodgeChance = Math.max(0, 0.05 + s.agi * 0.0005 + bonusDodge);
 
   const hpFrac = e.maxHp > 0 ? e.hp / e.maxHp : 1;
-  e.maxHp = def.baseHp + def.hpPerLevel * (lvl - 1) + hpFromStamina(s.sta);
+  // F5c D2 scaling: ramp the HP pool past the cap on the D2 realms (mirrors a D2
+  // hero stacking Vitality into thousands of life). Vanilla realms return 1.
+  e.maxHp = Math.round((def.baseHp + def.hpPerLevel * (lvl - 1) + hpFromStamina(s.sta)) * d2PlayerHpMult(lvl));
   if (bearForm) e.maxHp = Math.round(e.maxHp * 1.15);
   if (mods?.stats.maxHpPct) e.maxHp = Math.round(e.maxHp * (1 + mods.stats.maxHpPct));
   // Fiesta "Colossus"-style buffs: growing bigger also makes you tankier.
@@ -368,7 +382,10 @@ export function recalcPlayerStats(
     const cameFromForm = e.resourceType !== 'mana';
     const manaFrac = e.maxResource > 0 ? e.resource / e.maxResource : 1;
     e.resourceType = 'mana';
-    e.maxResource = def.baseMana + def.manaPerLevel * (lvl - 1) + manaFromIntellect(s.int);
+    // F5c D2 scaling: ramp the mana pool past the cap on the D2 realms alongside HP.
+    e.maxResource = Math.round(
+      (def.baseMana + def.manaPerLevel * (lvl - 1) + manaFromIntellect(s.int)) * d2PlayerHpMult(lvl),
+    );
     e.resource = cameFromForm
       ? Math.min(e.savedMana, e.maxResource)
       : Math.round(e.maxResource * manaFrac);
@@ -420,9 +437,12 @@ export function createMob(id: number, template: MobTemplate, level: number, pos:
   // Elite scaling, classic-style: ~2.3x health, ~1.5x damage.
   const hpMult = template.elite ? 2.3 : 1;
   const dmgMult = template.elite ? 1.5 : 1;
-  e.maxHp = Math.round((template.hpBase + template.hpPerLevel * (level - 1)) * hpMult);
+  // F5c D2 scaling: on the D2 realms, mobs ramp their level-scaled HP + damage past
+  // the vanilla cap too (mirrors D2 Hell scaling monster life ×4+) so the fight
+  // stays hard as heroes reach for 99. Vanilla realms return 1 (no change).
+  e.maxHp = Math.round((template.hpBase + template.hpPerLevel * (level - 1)) * hpMult * d2MobHpMult(level));
   e.hp = e.maxHp;
-  const dmg = (template.dmgBase + template.dmgPerLevel * (level - 1)) * dmgMult;
+  const dmg = (template.dmgBase + template.dmgPerLevel * (level - 1)) * dmgMult * d2MobDmgMult(level);
   e.weapon = {
     min: Math.round(dmg * 0.8),
     max: Math.round(dmg * 1.25),

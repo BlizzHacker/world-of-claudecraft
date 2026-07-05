@@ -184,6 +184,29 @@ export interface RealmContent {
    *  realms set 99, classic 80; claudecraft omits it (vanilla 20). Read via
    *  maxLevelForActiveRealm(). */
   maxLevel?: number;
+  /** Per-realm D2 STAT SCALING: past level 20 the D2 realms ramp HP / damage /
+   *  mana super-linearly so a level-99 hero hits for hundreds→thousands (the D2
+   *  power fantasy). Absent = vanilla (no extra scaling, so the linear 20-level
+   *  curve stands — classic, claudecraft). Applied to BOTH players and mobs so the
+   *  challenge ratio holds (mirrors D2 Hell scaling monster life while heroes stack
+   *  Vitality). Deterministic — a pure multiplier off level, draws no rng. */
+  combatScaling?: RealmCombatScaling;
+}
+
+/** Per-realm D2 stat ramp. Nothing scales at/below `fromLevel` (mult = 1). Above it,
+ *  the multiplier grows geometrically per level so late levels feel like D2. */
+export interface RealmCombatScaling {
+  /** Level at/below which the multiplier is exactly 1 (the vanilla curve). Default 20. */
+  fromLevel?: number;
+  /** Per-level growth for HP/mana pools past fromLevel (e.g. 1.05 = +5%/level,
+   *  compounding — ~48× over 79 levels). */
+  hpPerLevel?: number;
+  /** Per-level growth for outgoing damage (attack power / spell power / weapon). */
+  dmgPerLevel?: number;
+  /** Same ramp applied to MONSTERS (their level-scaled HP + damage) so the fight
+   *  stays hard. Defaults to matching hp/dmg so the ratio is preserved. */
+  mobHpPerLevel?: number;
+  mobDmgPerLevel?: number;
 }
 
 /** Per-realm combat snappiness. Every field optional; absent = vanilla WoW timing. */

@@ -123,3 +123,36 @@ export function getActiveRealm(): RealmContent {
 export function activeMaxLevel(fallback: number): number {
   return getActiveRealm().maxLevel ?? fallback;
 }
+
+// F5c: D2 stat scaling. Past `fromLevel` (default 20) the D2 realms ramp HP /
+// damage / mana geometrically so a level-99 hero (and the monsters they face) hit
+// for D2-scale numbers. Vanilla realms (no combatScaling) always return 1. Pure
+// function of level — deterministic, draws no rng, safe on the hot combat path.
+function d2Mult(level: number, growth: number | undefined, fromLevel: number): number {
+  if (!growth || growth <= 1 || level <= fromLevel) return 1;
+  return growth ** (level - fromLevel);
+}
+/** Player HP/mana pool multiplier for the active realm at a given level. */
+export function d2PlayerHpMult(level: number): number {
+  const s = getActiveRealm().combatScaling;
+  if (!s) return 1;
+  return d2Mult(level, s.hpPerLevel, s.fromLevel ?? 20);
+}
+/** Player outgoing-damage multiplier (attack power / spell power) for the active realm. */
+export function d2PlayerDmgMult(level: number): number {
+  const s = getActiveRealm().combatScaling;
+  if (!s) return 1;
+  return d2Mult(level, s.dmgPerLevel, s.fromLevel ?? 20);
+}
+/** Monster HP multiplier — keeps the fight hard as heroes scale (D2 Hell-style). */
+export function d2MobHpMult(level: number): number {
+  const s = getActiveRealm().combatScaling;
+  if (!s) return 1;
+  return d2Mult(level, s.mobHpPerLevel ?? s.hpPerLevel, s.fromLevel ?? 20);
+}
+/** Monster outgoing-damage multiplier. */
+export function d2MobDmgMult(level: number): number {
+  const s = getActiveRealm().combatScaling;
+  if (!s) return 1;
+  return d2Mult(level, s.mobDmgPerLevel ?? s.dmgPerLevel, s.fromLevel ?? 20);
+}

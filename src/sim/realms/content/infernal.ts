@@ -104,4 +104,8 @@ export const INFERNAL_REALM: RealmContent = {
   combatFeel: { castTimeMult: 0.3, gcdMult: 0.4 },
   // D2 power fantasy: level 99 cap (vs the vanilla 20).
   maxLevel: 99,
+  // D2 stat scaling: past level 20, HP/mana + damage ramp ~5%/level (compounding)
+  // so a level-99 hero hits for hundreds→thousands. Mobs ramp with them so the
+  // descent stays lethal (D2 Hell-style). Nothing changes at/below level 20.
+  combatScaling: { fromLevel: 20, hpPerLevel: 1.05, dmgPerLevel: 1.055 },
 };
