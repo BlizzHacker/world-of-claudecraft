@@ -4846,7 +4846,15 @@ async function refreshCharacters(): Promise<void> {
   listEl.innerHTML = `<li class="char-list-message">${escapeHtml(t('character.loading'))}</li>`;
   try {
     const chars = sortCharacters(await api.characters(), charSortMode);
-    if (api.realm) $('#charselect-realm').textContent = api.realm;
+    if (api.realm) {
+      $('#charselect-realm').textContent = api.realm;
+      // Bind the sim's active realm to THIS stage's realm (from the server), so a
+      // stage loaded directly (e.g. infernal.crypticrealm.com, no ?realm= param)
+      // runs its own worldTheme / combatFeel / D2 scaling instead of falling back
+      // to the default realm. Without this the infernal stage rendered as the
+      // default realm's content.
+      persistActiveRealmFromDirectoryName(api.realm);
+    }
     listEl.innerHTML = '';
     if (chars.length === 0) {
       // No characters on this realm — drop straight into the create screen.
