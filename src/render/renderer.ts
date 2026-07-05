@@ -48,7 +48,7 @@ import { type CameraOcclusionState, stepCameraOcclusion } from './camera_collisi
 import { characterSoulRendActive } from './character_effects';
 import { type AnimState, type CharacterVisual, createCharacterVisual } from './characters';
 import { preloadVisualAssets, visualAssetsReady } from './characters/assets';
-import { skinCount, visualKeyFor } from './characters/manifest';
+import { isVisualLazy, skinCount, visualKeyFor } from './characters/manifest';
 import { CLICK_MARKER_LIFETIME, clickMarkerAnim, clickMarkerColor } from './click_marker';
 import { trackWebGLContext } from './context_release';
 import { buildCritters, type CritterField } from './critters';
@@ -2300,7 +2300,15 @@ export class Renderer {
       if (!template) return;
       for (let i = 0; i < copies; i++) {
         const entity = this.prewarmEntity('mob', template.id, template.color, template.scale);
-        builtModels.add(visualKeyFor(entity));
+        const vkey = visualKeyFor(entity);
+        // Skip lazy-preloaded models (e.g. the big infernal Hellmaw bodies): their
+        // GLB isn't in the boot sweep, so building one here throws "asset not
+        // preloaded" and crashes the renderer. They warm up on demand at delve entry.
+        if (isVisualLazy(vkey)) {
+          builtModels.add(vkey);
+          continue;
+        }
+        builtModels.add(vkey);
         const visual = createCharacterVisual(entity);
         const poolKey = this.visualPoolKeyFor(entity);
         if (poolKey) this.storePooledVisual(poolKey, visual);

@@ -1238,6 +1238,14 @@ const NPC_KEYS: Record<string, string> = {
   spirit_healer: 'npc_villager_robed',
 };
 
+/** True if a visual model is excluded from the boot preload sweep (lazyPreload).
+ *  The boot prewarm must SKIP these — their GLB isn't loaded yet, so building one
+ *  would throw "character asset not preloaded". They load on demand when first
+ *  needed (e.g. entering the Hellmaw delve). */
+export function isVisualLazy(visualKey: string): boolean {
+  return !!VISUALS[visualKey]?.lazyPreload;
+}
+
 export function visualKeyFor(e: Entity): string {
   if (e.kind === 'player') {
     if (e.skinCatalog === 'mech') return 'player_mech';
