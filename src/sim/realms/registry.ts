@@ -115,3 +115,11 @@ export function persistActiveRealm(id: RealmId): void {
 export function getActiveRealm(): RealmContent {
   return getRealm(resolveActiveRealmId());
 }
+
+// F5b: the level cap for the active realm. The D2 realms return 99, classic 80,
+// and any realm without an explicit cap (claudecraft) falls back to the passed
+// default (the global MAX_LEVEL). Kept here (not in sim/types.ts) so the pure
+// constants module never imports the realm registry.
+export function activeMaxLevel(fallback: number): number {
+  return getActiveRealm().maxLevel ?? fallback;
+}

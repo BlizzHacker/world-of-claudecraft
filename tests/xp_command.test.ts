@@ -1,6 +1,18 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { Sim } from '../src/sim/sim';
+import { setRealmHostEnv } from '../src/sim/realms/registry';
 import { MAX_LEVEL, SimEvent, xpForLevel } from '../src/sim/types';
+
+// The max-level readout is asserted against MAX_LEVEL (20); force a vanilla-cap
+// realm so MAX_LEVEL is the active cap (default realm crypticrealm caps at 99).
+beforeEach(() => {
+  setRealmHostEnv({
+    queryParam: (n) => (n === 'realm' ? 'claudecraft' : null),
+    storageGet: () => null,
+    storageSet: () => {},
+  });
+});
+afterEach(() => setRealmHostEnv(null));
 
 function makeWorld() {
   return new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });

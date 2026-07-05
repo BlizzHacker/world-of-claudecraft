@@ -24,6 +24,7 @@
 
 import { DELVES, GROUP_XP_BONUS, MOBS } from '../data';
 import { recalcPlayerStats } from '../entity';
+import { activeMaxLevel } from '../realms/registry';
 import { DAMAGE_IDLE_DESPAWN_MOB_IDS, DAMAGE_IDLE_DESPAWN_SECONDS } from '../entity_roster';
 import { aurasSurvivingDeath } from '../resurrection';
 import type { PlayerMeta } from '../sim';
@@ -692,7 +693,7 @@ export function grantXp(
   // never past the cap (no level bar to advance). The bonus equals the rested
   // amount drawn down, so the effective award is up to 2x while the pool lasts.
   let restedBonus = 0;
-  if (opts?.fromKill && p.level < MAX_LEVEL && meta.restedXp > 0) {
+  if (opts?.fromKill && p.level < activeMaxLevel(MAX_LEVEL) && meta.restedXp > 0) {
     restedBonus = Math.min(Math.floor(meta.restedXp), amount);
     meta.restedXp -= restedBonus;
     amount += restedBonus;
@@ -711,10 +712,13 @@ export function grantXp(
     ...(restedBonus > 0 ? { rested: restedBonus } : {}),
   });
 
-  if (p.level >= MAX_LEVEL) return; // bar frozen at cap; lifetimeXp already credited
+  // F5b: the level cap is per-realm (D2 realms 99, classic 80, claudecraft/global
+  // 20). The bar and the leveling loop stop at the ACTIVE realm's cap.
+  const cap = activeMaxLevel(MAX_LEVEL);
+  if (p.level >= cap) return; // bar frozen at cap; lifetimeXp already credited
 
   meta.xp += amount;
-  while (p.level < MAX_LEVEL && meta.xp >= xpForLevel(p.level)) {
+  while (p.level < cap && meta.xp >= xpForLevel(p.level)) {
     meta.xp -= xpForLevel(p.level);
     p.level++;
     meta.counters.levelUps++;
@@ -727,14 +731,14 @@ export function grantXp(
   }
   // Dinged to cap mid-grant: clear the leftover from the BAR. It is not lost —
   // the full award was already added to lifetimeXp above (FR-1.4).
-  if (p.level >= MAX_LEVEL) meta.xp = 0;
+  if (p.level >= cap) meta.xp = 0;
 }
 
 // Add to the monotonic lifetime counter, emitting cosmetic virtual-level-up
 // events past the cap and unlocking any newly crossed milestones. Cheap: one
 // add plus an O(log n) table lookup, never touched on the per-tick hot path.
 function accrueLifetimeXp(ctx: SimContext, amount: number, meta: PlayerMeta, p: Entity): void {
-  const atCap = p.level >= MAX_LEVEL;
+  const atCap = p.level >= activeMaxLevel(MAX_LEVEL);
   const beforeVL = atCap ? virtualLevel(meta.lifetimeXp) : 0;
   meta.lifetimeXp += amount;
   // 64-bit-safe invariant: JS numbers are exact to 2^53. A single character

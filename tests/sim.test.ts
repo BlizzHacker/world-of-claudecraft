@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { setRealmHostEnv } from '../src/sim/realms/registry';
 import { GROUND_PICKUP_LINES } from '../src/sim/content/ground_pickup_lines';
 import {
   abilitiesKnownAt,
@@ -1420,9 +1421,21 @@ describe('leveling', () => {
   });
 
   it('caps at max level', () => {
-    const sim = makeSim('warrior');
-    (sim as any).grantXp(999999);
-    expect(sim.player.level).toBe(MAX_LEVEL);
+    // Vanilla cap behaviour: force a cap-20 realm (the default crypticrealm caps
+    // at 99 now, so a huge XP grant would level past 20 there — that's tested in
+    // level_cap.test.ts).
+    setRealmHostEnv({
+      queryParam: (n) => (n === 'realm' ? 'claudecraft' : null),
+      storageGet: () => null,
+      storageSet: () => {},
+    });
+    try {
+      const sim = makeSim('warrior');
+      (sim as any).grantXp(999999);
+      expect(sim.player.level).toBe(MAX_LEVEL);
+    } finally {
+      setRealmHostEnv(null);
+    }
   });
 });
 

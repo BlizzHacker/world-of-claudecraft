@@ -5,12 +5,24 @@
 // and the cap-gated cosmetic prestige (accept + below-threshold reject). Proves the
 // extracted module is callable and the move preserved behavior.
 
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { PROPS } from '../src/sim/data';
 import { isResting, prestige, updateRested } from '../src/sim/progression/xp';
+import { setRealmHostEnv } from '../src/sim/realms/registry';
 import { Sim } from '../src/sim/sim';
 import { DT, MAX_LEVEL, PRESTIGE_XP_PER_RANK, xpForLevel } from '../src/sim/types';
 import { terrainHeight } from '../src/sim/world';
+
+// Cap/prestige assertions are anchored at MAX_LEVEL (20); force a vanilla-cap
+// realm so MAX_LEVEL is the active cap (default realm crypticrealm caps at 99).
+beforeEach(() => {
+  setRealmHostEnv({
+    queryParam: (n) => (n === 'realm' ? 'claudecraft' : null),
+    storageGet: () => null,
+    storageSet: () => {},
+  });
+});
+afterEach(() => setRealmHostEnv(null));
 
 type AnySim = Sim & Record<string, any>;
 

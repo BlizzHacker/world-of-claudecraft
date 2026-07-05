@@ -46,6 +46,7 @@ import {
   MELEE_RANGE,
   xpForLevel,
 } from '../types';
+import { activeMaxLevel } from '../realms/registry';
 import { groundHeight } from '../world';
 
 const NEARBY_RANGE = 40; // /nearby scan radius — wider than say, tighter than yell
@@ -365,7 +366,8 @@ export function targetReadout(t: Entity): string {
 // One-line leveling summary for the /xp readout. At MAX_LEVEL there is no
 // "next level" so we avoid the percent/remaining math (xpForLevel is 0 there).
 export function xpReadout(meta: PlayerMeta, level: number): string {
-  if (level >= MAX_LEVEL) return `Level ${MAX_LEVEL} — maximum level reached.`;
+  const cap = activeMaxLevel(MAX_LEVEL);
+  if (level >= cap) return `Level ${cap} — maximum level reached.`;
   const need = xpForLevel(level);
   const have = Math.max(0, Math.min(meta.xp, need));
   const pct = Math.floor((have / need) * 100);

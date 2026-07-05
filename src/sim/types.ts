@@ -2121,12 +2121,34 @@ export function normAngle(a: number): number {
 // Classic progression formulas
 // ---------------------------------------------------------------------------
 
-// XP required to go from level L to L+1 (classic-era curve values, levels 1..20)
-export const XP_TABLE = [
-  400, 900, 1400, 2100, 2800, 3600, 4500, 5400, 6500, 7600, 8800, 10100, 11400, 12900, 14400, 16000,
-  17700, 19400, 21300, 23200,
-];
+// XP required to go from level L to L+1. Levels 1..20 are the exact classic-era
+// curve values (unchanged, so claudecraft/upstream stay byte-identical); levels
+// 21..98 extend the curve for the higher-cap realms (classic 80, D2 realms 99).
+// The tail keeps the same ~arithmetic-then-geometric shape the original 20-step
+// curve implied, so each level costs progressively more without exploding.
+export const XP_TABLE = (() => {
+  const base = [
+    400, 900, 1400, 2100, 2800, 3600, 4500, 5400, 6500, 7600, 8800, 10100, 11400, 12900, 14400,
+    16000, 17700, 19400, 21300, 23200,
+  ];
+  // Continue past the 19→20 step (23,200). Early extension grows arithmetically
+  // (+~1,900/level like the original tail), easing into a gentle geometric climb
+  // so the level-99 grind has a long but finite tail.
+  let step = 23200 - 21300; // 1,900: the final classic increment
+  let last = 23200;
+  for (let lvl = 21; lvl <= 98; lvl++) {
+    step = Math.round(step * 1.035); // each level's increment grows 3.5%
+    last += step;
+    base.push(last);
+  }
+  return base;
+})();
+// The global DEFAULT cap (and claudecraft's real cap). Per-realm caps override via
+// RealmContent.maxLevel; MAX_POSSIBLE_LEVEL bounds the extended XP_TABLE. The
+// virtual-level + prestige tables stay anchored at MAX_LEVEL so upstream cosmetic
+// progression is unchanged; the per-realm cap gates only the real leveling loop.
 export const MAX_LEVEL = 20;
+export const MAX_POSSIBLE_LEVEL = 99;
 
 // Shared sim constants relocated here (C1) so both sim.ts and the extracted damage
 // core (src/sim/combat/damage.ts) can import them without a sim.ts cycle.

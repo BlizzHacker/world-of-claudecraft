@@ -6,7 +6,8 @@
 // prestige resets the bar but not lifetimeXp, persistence round-trips, the
 // XP-bar label states (pre-cap / at-cap / post-cap), and the online
 // (ClientWorld) snapshot path — not just offline.
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { setRealmHostEnv } from '../src/sim/realms/registry';
 
 // Mock the db layer so the online-path test needs no Postgres (mirrors
 // snapshots.test.ts). Hoisted by vitest, so it applies to server/game below.
@@ -40,6 +41,18 @@ import {
 } from '../src/sim/types';
 import { terrainHeight } from '../src/sim/world';
 import { formatXp, xpBarView } from '../src/ui/xp_bar';
+
+// These tests validate the level-cap + virtual-level + prestige system against
+// MAX_LEVEL (20). The default realm is now crypticrealm (cap 99), so force a
+// vanilla-cap realm (claudecraft) where MAX_LEVEL IS the active cap.
+beforeEach(() => {
+  setRealmHostEnv({
+    queryParam: (n) => (n === 'realm' ? 'claudecraft' : null),
+    storageGet: () => null,
+    storageSet: () => {},
+  });
+});
+afterEach(() => setRealmHostEnv(null));
 
 function makeSim(cls: 'warrior' | 'mage' | 'rogue' = 'warrior', seed = 42): Sim {
   return new Sim({ seed, playerClass: cls, autoEquip: true });

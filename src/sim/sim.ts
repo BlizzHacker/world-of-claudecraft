@@ -84,6 +84,7 @@ import {
   talentPointsAtLevel,
 } from './content/talents';
 import { applyCooldowns, type SavedCooldowns, serializeCooldowns } from './cooldown_persist';
+import { activeMaxLevel } from './realms/registry';
 import type { DelveShopGate, DelveShopOffer } from './data';
 import {
   abilitiesKnownAt,
@@ -1552,7 +1553,7 @@ export class Sim {
 
     if (savedState) {
       const s = savedState;
-      player.level = Math.max(1, Math.min(MAX_LEVEL, s.level));
+      player.level = Math.max(1, Math.min(activeMaxLevel(MAX_LEVEL), s.level));
       player.facing = s.facing;
       player.prevFacing = s.facing;
       meta.xp = s.xp;
@@ -2768,7 +2769,7 @@ export class Sim {
   setPlayerLevel(level: number, pid?: number): void {
     const r = this.resolve(pid);
     if (!r) return;
-    r.e.level = Math.max(1, Math.min(MAX_LEVEL, level));
+    r.e.level = Math.max(1, Math.min(activeMaxLevel(MAX_LEVEL), level));
     // Keep lifetimeXp consistent with the level so post-cap progression starts
     // from a sane baseline (virtualLevel never falls below the real level). Only
     // ever raises it — lifetimeXp is monotonic.

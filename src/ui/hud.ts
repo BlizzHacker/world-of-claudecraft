@@ -35,6 +35,7 @@ import {
 } from '../sim/content/skins';
 import { FIRST_TALENT_LEVEL, type TalentAllocation, talentsFor } from '../sim/content/talents';
 import type { ZoneDef } from '../sim/data';
+import { activeMaxLevel } from '../sim/realms/registry';
 import {
   ABILITIES,
   CLASSES,
@@ -5532,6 +5533,7 @@ export class Hud {
       lifetimeXp: sim.lifetimeXp,
       restedXp: sim.restedXp,
       showOverflow,
+      maxLevel: activeMaxLevel(MAX_LEVEL), // F5b: per-realm cap (D2=99, classic=80)
     });
     this.xpBarPainter.paint(bar);
 

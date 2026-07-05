@@ -5,6 +5,7 @@
 // (move + import, not a rewrite). The XP curve formulas (xpForLevel / canPrestige)
 // stay pure in ../types and are imported here.
 import { PROPS } from '../data';
+import { activeMaxLevel } from '../realms/registry';
 import type { PlayerMeta } from '../sim';
 import type { SimContext } from '../sim_context';
 import { canPrestige, DT, type Entity, MAX_LEVEL, xpForLevel } from '../types';
@@ -42,7 +43,7 @@ export function isResting(p: Entity): boolean {
 // XP-to-level per 8 in-game hours, clamped to 1.5 levels. Deterministic —
 // paced off DT, never wall-clock. No accrual at the cap (no level bar).
 export function updateRested(p: Entity, meta: PlayerMeta): void {
-  if (p.level >= MAX_LEVEL) return;
+  if (p.level >= activeMaxLevel(MAX_LEVEL)) return;
   const cap = RESTED_CAP_LEVELS * xpForLevel(p.level);
   if (meta.restedXp >= cap) {
     meta.restedXp = cap;

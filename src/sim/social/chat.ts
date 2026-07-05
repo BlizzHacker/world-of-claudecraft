@@ -31,6 +31,7 @@ import type { SimContext } from '../sim_context';
 import { dist2d, type Entity, MAX_LEVEL, type OverheadEmoteId, YELL_RANGE } from '../types';
 import * as readouts from './chat_readouts';
 import { npcDuelChallenge } from './npc_duel';
+import { activeMaxLevel } from '../realms/registry';
 
 const CHAT_BURST = 8; // messages a player may send back-to-back...
 const CHAT_REFILL = 2; // ...then this many more per second (caps spam amplifiers)
@@ -876,7 +877,7 @@ export function handleDevChat(
     ctx.setPlayerLevel(level, pid);
     ctx.emit({
       type: 'log',
-      text: `[dev] Level set to ${Math.max(1, Math.min(MAX_LEVEL, level))}.`,
+      text: `[dev] Level set to ${Math.max(1, Math.min(activeMaxLevel(MAX_LEVEL), level))}.`,
       pid,
     });
     return null;

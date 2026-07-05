@@ -11,6 +11,10 @@ export interface XpBarInput {
   lifetimeXp: number; // monotonic lifetime total (server-authoritative)
   showOverflow: boolean; // settings toggle; false → classic "MAX LEVEL"
   restedXp?: number; // classic inn-rested pool; doubles kill XP until spent
+  // F5b: the ACTIVE realm's real level cap (D2 realms 99, classic 80, vanilla 20).
+  // The bar advances the real level up to this before switching to the cosmetic
+  // virtual-level overflow. Defaults to the global MAX_LEVEL when omitted.
+  maxLevel?: number;
 }
 
 export interface XpBarView {
@@ -37,7 +41,8 @@ function formatPercent(frac: number): string {
 
 export function xpBarView(input: XpBarInput): XpBarView {
   const { level, xp, lifetimeXp, showOverflow } = input;
-  const atCap = level >= MAX_LEVEL;
+  const cap = input.maxLevel ?? MAX_LEVEL;
+  const atCap = level >= cap;
 
   if (!atCap) {
     const need = xpForLevel(level);
@@ -69,10 +74,10 @@ export function xpBarView(input: XpBarInput): XpBarView {
 
   // At/after the cap with overflow on: fill toward the next virtual level.
   const prog = virtualLevelProgress(lifetimeXp);
-  const extra = prog.level - MAX_LEVEL;
+  const extra = Math.max(0, prog.level - cap);
   // FR-3.3 format: "Lv 20 (+7)  ·  1,284,500 total XP  ·  62% to next"
   const label =
-    `${t('game.xp.lv')} ${MAX_LEVEL} (+${extra})  ·  ` +
+    `${t('game.xp.lv')} ${cap} (+${extra})  ·  ` +
     `${formatXp(lifetimeXp)} ${t('game.xp.totalXp')}  ·  ` +
     `${formatPercent(prog.into / prog.span)} ${t('game.xp.toNext')}`;
   return { fillFrac: clamp01(prog.into / prog.span), restedFrac: 0, label, postCap: true };
