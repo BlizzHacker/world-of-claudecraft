@@ -31,10 +31,13 @@ const TYPE_ENTER_TEXT: Record<number, string> = {
   2: 'You enter the house.',
 };
 
-/** Map a building kind to its interior type. Chapels are landmarks, not enterable. */
-function interiorTypeForBuilding(kind: string): number | null {
+/** Map a building to its interior type. Inns → inn; the FIRST house in a town → the
+ *  shop (so the merchant/shop room is reachable), remaining houses → house; chapels
+ *  are landmarks, not enterable. `houseSeen` counts houses already assigned so exactly
+ *  one becomes the shop per town. */
+function interiorTypeForBuilding(kind: string, houseSeen: number): number | null {
   if (kind === 'inn') return INTERIOR_TYPE_INN;
-  if (kind === 'house') return INTERIOR_TYPE_HOUSE;
+  if (kind === 'house') return houseSeen === 0 ? INTERIOR_TYPE_SHOP : INTERIOR_TYPE_HOUSE;
   return null; // chapel etc — not enterable
 }
 
@@ -121,8 +124,11 @@ export function spawnBuildingInteriors(
     add(npcEnt);
   }
   // 2) A clickable ENTRANCE door on each enterable building, at its +z (front) face.
+  // The first house in the town becomes the shop so every room type is reachable.
+  let houseSeen = 0;
   for (const b of world.props.buildings) {
-    const interiorType = interiorTypeForBuilding(b.kind);
+    const interiorType = interiorTypeForBuilding(b.kind, houseSeen);
+    if (b.kind === 'house') houseSeen++;
     if (interiorType == null) continue;
     // Front-door world position: the +z face centre, rotated by the building yaw,
     // nudged just outside so the player clicks it from the street.

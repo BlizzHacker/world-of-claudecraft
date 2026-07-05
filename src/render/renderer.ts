@@ -712,7 +712,11 @@ function setRenderCategory(obj: THREE.Object3D, category: RenderDiagnosticsCateg
 
 function isPersistentPortalObject(e: Entity): boolean {
   return (
-    e.kind === 'object' && (e.templateId === 'dungeon_door' || e.templateId === 'dungeon_exit')
+    e.kind === 'object' &&
+    (e.templateId === 'dungeon_door' ||
+      e.templateId === 'dungeon_exit' ||
+      e.templateId === 'building_door' ||
+      e.templateId === 'building_exit')
   );
 }
 
@@ -3318,9 +3322,14 @@ export class Renderer {
     let portal: THREE.Mesh | undefined;
     if (
       e.kind === 'object' &&
-      (e.templateId === 'dungeon_door' || e.templateId === 'dungeon_exit')
+      (e.templateId === 'dungeon_door' ||
+        e.templateId === 'dungeon_exit' ||
+        e.templateId === 'building_door' ||
+        e.templateId === 'building_exit')
     ) {
-      const entering = e.templateId === 'dungeon_door';
+      // Building doors reuse the dungeon door-marker (a glowing archway portal) so
+      // they're clearly visible + clickable. entering = an ENTRANCE (door), else exit.
+      const entering = e.templateId === 'dungeon_door' || e.templateId === 'building_door';
       const built = this.buildDoorBody(entering, e.dungeonId);
       body = built.body;
       portal = built.portal;
