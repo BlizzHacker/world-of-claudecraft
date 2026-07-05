@@ -24,14 +24,17 @@ import {
   dungeonAt,
   INSTANCE_SLOT_COUNT,
   instanceOrigin,
+  interiorOriginAt,
   isArenaPos,
   isDelvePos,
+  isInteriorPos,
   MOBS,
   NPCS,
   WORLD_MAX_Z,
   WORLD_MIN_Z,
   ZONES,
 } from '../sim/data';
+import { type DungeonLayout, INTERIOR_ROOM_LAYOUT } from '../sim/dungeon_layout';
 import { getActiveRealm } from '../sim/realms/registry';
 import type { DelveModuleId } from '../sim/delve_layout';
 import type { BiomeId } from '../sim/types';
@@ -3739,9 +3742,9 @@ export class Renderer {
   private fogState: 'outdoor' | 'dungeon' | 'temple' | 'nythraxis' | 'delve' | 'underwater' =
     'outdoor';
 
-  private buildInterior(interior: string, ox: number, oz: number): void {
+  private buildInterior(interior: string, ox: number, oz: number, layout?: DungeonLayout): void {
     this.dungeons ??= new DungeonInteriors(this.scene, this.lowGfx, this.flames, this.fireLights);
-    void this.dungeons.buildInterior(interior, ox, oz).catch((err) => {
+    void this.dungeons.buildInterior(interior, ox, oz, layout ? { layout } : undefined).catch((err) => {
       console.error('Failed to build dungeon interior:', err);
     });
   }
@@ -3834,7 +3837,17 @@ export class Renderer {
   private updateAmbience(px: number, camY: number, dt: number): void {
     const inside = px > DUNGEON_X_THRESHOLD;
     const pz = this.sim.player.pos.z;
-    if (isDelvePos(px)) {
+    if (isInteriorPos(px)) {
+      // Building interior room: build the room the player is standing in (shared
+      // slot 0 per type). Small furnished chamber via the sanctum kit.
+      void ensureDungeonAssets().catch(() => undefined);
+      const o = interiorOriginAt(px, pz);
+      const key = `interior:${o.typeIndex}:${o.slot}`;
+      if (!this.builtInteriors.has(key)) {
+        this.builtInteriors.add(key);
+        this.buildInterior('sanctum', o.x, o.z, INTERIOR_ROOM_LAYOUT);
+      }
+    } else if (isDelvePos(px)) {
       this.ensureDelveInteriorsNear(px, pz);
     } else if (inside && isArenaPos(px)) {
       void ensureDungeonAssets().catch(() => undefined);

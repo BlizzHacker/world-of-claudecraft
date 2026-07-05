@@ -84,6 +84,26 @@ export interface DungeonLayout {
 /** Default half-width of the walkable doorway cut into an open-floor end wall. */
 export const DUNGEON_DOORWAY_HW = 6;
 
+// Building interior room: a small furnished chamber (±18 x, z -12..12) with a door
+// gap on the south (zMin) wall — matches colliders.ts INTERIOR_ROOM_COLLIDERS so the
+// visible walls line up with the collision. Rendered via DungeonInteriors.buildInterior
+// with the 'sanctum' variant (warm stone). No pillars/tombs — furniture is spawned as
+// entities so it can vary per room type.
+export const INTERIOR_ROOM_LAYOUT: DungeonLayout = {
+  zMin: -12,
+  zMax: 12,
+  sideWallZ: 0,
+  sideWallHd: 13,
+  wallX: 18,
+  endWallHw: 18,
+  floorHalfX: 18,
+  pillars: [],
+  tombs: [],
+  stubs: [],
+  dais: { x: 0, z: 8, r: 3 },
+  doorway: { front: true, hw: 3 }, // south door gap (matches ROOM_DOOR_HW=3)
+};
+
 function grid(zFrom: number, zTo: number, zStep: number, xs: readonly number[]): GridPoint[] {
   const out: GridPoint[] = [];
   for (let z = zFrom; z <= zTo; z += zStep) {

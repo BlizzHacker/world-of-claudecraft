@@ -30,6 +30,7 @@ import {
   tryStartNythraxisWardChannel,
 } from './encounters/nythraxis';
 import { isInRaidInstance } from './instances/dungeons';
+import { enterInterior, leaveInterior } from './interiors';
 import { hasSharedLootRights as computeSharedLootRights, lootHasGoneFfa } from './loot/loot_ffa';
 import {
   awardSharedLootItem,
@@ -316,6 +317,16 @@ export function interact(ctx: SimContext, pid?: number): void {
           ctx.leaveDungeon(p.id);
           return;
         }
+        // Building interiors: click a building door to enter its room; click the
+        // room's exit door to step back outside.
+        if (target.templateId === 'building_door' && target.interiorType != null) {
+          enterInterior(ctx, target.interiorType, p.id);
+          return;
+        }
+        if (target.templateId === 'building_exit') {
+          leaveInterior(ctx, p.id);
+          return;
+        }
         if (target.templateId === 'mailbox') {
           ctx.emit({ type: 'mailbox', pid: p.id });
           return;
@@ -378,6 +389,14 @@ export function interact(ctx: SimContext, pid?: number): void {
     }
     if (obj.templateId === 'dungeon_exit') {
       ctx.leaveDungeon(p.id);
+      return;
+    }
+    if (obj.templateId === 'building_door' && obj.interiorType != null) {
+      enterInterior(ctx, obj.interiorType, p.id);
+      return;
+    }
+    if (obj.templateId === 'building_exit') {
+      leaveInterior(ctx, p.id);
       return;
     }
     if (obj.templateId === 'mailbox') {

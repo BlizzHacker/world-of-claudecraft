@@ -84,7 +84,8 @@ import {
   talentPointsAtLevel,
 } from './content/talents';
 import { applyCooldowns, type SavedCooldowns, serializeCooldowns } from './cooldown_persist';
-import { activeMaxLevel } from './realms/registry';
+import { activeMaxLevel, getActiveRealm } from './realms/registry';
+import { spawnBuildingInteriors } from './interiors';
 import type { DelveShopGate, DelveShopOffer } from './data';
 import {
   abilitiesKnownAt,
@@ -1222,6 +1223,13 @@ export class Sim {
     // Per-instance dungeon/raid healers spawn on claim (instances/dungeons.ts).
     // createNpc draws no rng, so world-gen determinism is preserved.
     spawnOverworldSpiritHealers(this.ctx);
+
+    // Building interiors (themed realms only): the shared shop/inn/house rooms +
+    // their exit doors + the door entities on each enterable town building. Draws
+    // no rng (deterministic placement), so world-gen determinism is preserved.
+    if (getActiveRealm().worldTheme) {
+      spawnBuildingInteriors(this.ctx, () => this.nextId++, worldContent);
+    }
 
     for (const delve of DELVE_LIST) {
       for (let i = 0; i < DELVE_SLOT_COUNT; i++) {

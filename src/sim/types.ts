@@ -1433,6 +1433,10 @@ export interface Entity {
   guild: string;
   pos: Vec3;
   prevPos: Vec3; // for render interpolation
+  // Building interiors (F: enterable town buildings): the overworld spot to return
+  // to when the player exits an interior room, saved on entry. null when outside.
+  interiorReturn?: Vec3 | null;
+  interiorType?: number | null; // which interior type-column the player is in (0=shop,1=inn,2=house)
   facing: number; // radians, 0 = +Z
   prevFacing: number;
   // online clients only: when this entity's last wire update landed and the
