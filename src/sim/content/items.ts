@@ -442,6 +442,18 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     sellValue: 6,
     buyValue: 25,
   },
+  // D2 Tome of Town Portal: right-click to consume one scroll and open a two-way
+  // portal to town. The stack count IS the scrolls left (buy more to refill); a fresh
+  // tome from the vendor comes as a stack of 3. Cheap, like D2's.
+  tome_town_portal: {
+    id: 'tome_town_portal',
+    name: 'Tome of Town Portal',
+    kind: 'tool',
+    quality: 'common',
+    use: { type: 'townPortal' },
+    sellValue: 8,
+    buyValue: 40,
+  },
   spring_water: {
     id: 'spring_water',
     name: 'Cold Well Water',

@@ -19,6 +19,7 @@
 import { addStacked, bagsFullError, equipBag as equipBagCmd } from './bags';
 import { ITEMS } from './data';
 import { recalcPlayerStats } from './entity';
+import { castTownPortal } from './town_portal';
 import { canEquipItem } from './equipment_rules';
 import { formatMoney } from './format_money';
 import { meetsLevelRequirement, requiredLevelFor } from './item_level_req';
@@ -134,6 +135,13 @@ export function useItem(ctx: SimContext, itemId: string, pid?: number): ItemUseR
   }
   if (def.use?.type === 'skinSelect') {
     ctx.openSkinSelect(meta, def.use.catalog ?? 'class', itemId);
+    return;
+  }
+  if (def.use?.type === 'townPortal') {
+    // D2 town portal: consume one scroll (a stack count) and open the two-way portal.
+    if (castTownPortal(ctx, () => ctx.nextId++, meta.entityId)) {
+      ctx.removeItem(itemId, 1, meta.entityId);
+    }
     return;
   }
   if (p.castingAbility === FISHING_CAST_ID) {

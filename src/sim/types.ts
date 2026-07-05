@@ -281,7 +281,11 @@ export type ItemUse =
   // it can gather: see src/sim/professions/tools.ts (canGatherTier). This item
   // type never carries a durability field (this repo has no durability
   // mechanic anywhere), so a base tool can never become unusable.
-  | { type: 'gatherTool'; professionId: GatheringProfessionId; tier: number };
+  | { type: 'gatherTool'; professionId: GatheringProfessionId; tier: number }
+  // D2 Town Portal: right-click consumes one scroll and opens a two-way portal —
+  // warp to the nearest town, click the return portal to come back. The tome IS the
+  // stackable scroll item here (its stack count = scrolls left, max 20).
+  | { type: 'townPortal' };
 
 // Rarity ranks for the cosmetic skin-select event, ordered low → high. A rolled
 // rank unlocks its own tier and every tier below it (epic unlocks rare+uncommon).
@@ -1438,6 +1442,8 @@ export interface Entity {
   interiorReturn?: Vec3 | null;
   interiorType?: number | null; // which interior type-column the player is in (0=shop,1=inn,2=house)
   waypointId?: string; // D2 waypoint marker: which waypoint this activatable object is
+  portalTo?: Vec3; // D2 town portal: the world spot this portal warps you to on interact
+  portalOwnerId?: number; // the player who opened this portal pair (for cleanup)
   facing: number; // radians, 0 = +Z
   prevFacing: number;
   // online clients only: when this entity's last wire update landed and the

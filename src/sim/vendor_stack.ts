@@ -20,5 +20,7 @@ export const VENDOR_STACK_SIZE = 5;
  * unit per purchase.
  */
 export function vendorStackSize(def: ItemDef): number {
+  // A fresh Tome of Town Portal comes with 3 scrolls (D2), for one listed price.
+  if (def.id === 'tome_town_portal') return 3;
   return def.kind === 'food' || def.kind === 'drink' ? VENDOR_STACK_SIZE : 1;
 }

@@ -32,6 +32,7 @@ import {
 import { isInRaidInstance } from './instances/dungeons';
 import { enterInterior, leaveInterior } from './interiors';
 import { activateWaypoint } from './waypoints';
+import { useTownPortal } from './town_portal';
 import { hasSharedLootRights as computeSharedLootRights, lootHasGoneFfa } from './loot/loot_ffa';
 import {
   awardSharedLootItem,
@@ -332,6 +333,10 @@ export function interact(ctx: SimContext, pid?: number): void {
           activateWaypoint(ctx, target.waypointId, p.id);
           return;
         }
+        if (target.templateId === 'town_portal') {
+          useTownPortal(ctx, target, p.id);
+          return;
+        }
         if (target.templateId === 'mailbox') {
           ctx.emit({ type: 'mailbox', pid: p.id });
           return;
@@ -406,6 +411,10 @@ export function interact(ctx: SimContext, pid?: number): void {
     }
     if (obj.templateId === 'waypoint' && obj.waypointId) {
       activateWaypoint(ctx, obj.waypointId, p.id);
+      return;
+    }
+    if (obj.templateId === 'town_portal') {
+      useTownPortal(ctx, obj, p.id);
       return;
     }
     if (obj.templateId === 'mailbox') {

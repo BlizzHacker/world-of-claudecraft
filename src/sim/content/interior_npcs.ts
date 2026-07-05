@@ -16,7 +16,13 @@ export const INTERIOR_MERCHANT: NpcDef = {
   questIds: [],
   dynamic: true,
   greeting: 'Wares for a wanderer? Take a look.',
-  vendorItems: ['minor_healing_potion', 'minor_mana_potion', 'baked_bread', 'spring_water'],
+  vendorItems: [
+    'tome_town_portal',
+    'minor_healing_potion',
+    'minor_mana_potion',
+    'baked_bread',
+    'spring_water',
+  ],
 };
 
 export const INTERIOR_INNKEEPER: NpcDef = {
