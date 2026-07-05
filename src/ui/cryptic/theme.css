@@ -2023,3 +2023,37 @@ body:not(.game-active) .cr-realm-first-prompt {
 .cr-wb-dialogue-row input { flex:1; }
 .cr-wb-savemeta { width:100%; margin-top:4px; font-size:11px; padding:6px; background:rgba(40,28,64,.6); color:#e7d8ff; border:1px solid rgba(176,124,255,.3); border-radius:6px; cursor:pointer; }
 .cr-wb-savemeta:hover { border-color:#b07cff; background:rgba(60,40,96,.7); }
+
+/* Master "Move HUD" button — draggable control that unlocks every movable HUD
+   frame at once. Default spot sits above the music widget (bottom-right); the
+   user can drag it anywhere (position persisted). Hidden on the mobile layout. */
+#cr-move-hud-btn {
+  position: fixed;
+  right: 16px;
+  bottom: 80px;
+  z-index: 2147483639;
+  display: flex; align-items: center; gap: 7px;
+  padding: 8px 13px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(22,17,28,0.96), rgba(11,8,15,0.96));
+  border: 1px solid var(--cr-gold, #c9a14a);
+  color: var(--cr-text, #e8d5c4);
+  box-shadow: 0 4px 18px rgba(0,0,0,0.55);
+  cursor: grab;
+  font-family: var(--cr-font-ui, system-ui, sans-serif);
+  font-size: 12px; font-weight: 600; letter-spacing: 0.02em;
+  user-select: none; touch-action: none;
+  transition: border-color .12s, box-shadow .12s, transform .08s;
+}
+#cr-move-hud-btn:hover { border-color: var(--cr-gold, #ffd100); box-shadow: 0 6px 22px rgba(0,0,0,0.7), 0 0 16px rgba(201,161,74,0.3); }
+#cr-move-hud-btn:active { cursor: grabbing; }
+#cr-move-hud-btn .cr-mhb-glyph { font-size: 15px; line-height: 1; color: var(--cr-gold, #c9a14a); }
+/* Edit-mode: button glows and pulses so it's clear every frame is now draggable. */
+#cr-move-hud-btn.cr-mhb-active {
+  border-color: #ffd100;
+  box-shadow: 0 0 0 1px rgba(255,209,0,0.5), 0 6px 24px rgba(0,0,0,0.7), 0 0 22px rgba(255,209,0,0.45);
+  animation: cr-mhb-pulse 1.5s ease-in-out infinite;
+}
+#cr-move-hud-btn.cr-mhb-active .cr-mhb-glyph { color: #ffd100; }
+@keyframes cr-mhb-pulse { 0%,100% { box-shadow: 0 0 0 1px rgba(255,209,0,0.5), 0 6px 24px rgba(0,0,0,0.7), 0 0 18px rgba(255,209,0,0.35); } 50% { box-shadow: 0 0 0 1px rgba(255,209,0,0.7), 0 6px 24px rgba(0,0,0,0.7), 0 0 28px rgba(255,209,0,0.6); } }
+body.mobile-touch #cr-move-hud-btn { display: none; }

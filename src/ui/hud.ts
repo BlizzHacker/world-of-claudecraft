@@ -269,6 +269,7 @@ import {
 } from './minimap_zoom';
 import { type MobTooltipI18n, type MobTooltipModel, mobTooltipHtml } from './mob_tooltip_view';
 import { MovableFrame } from './movable_frame';
+import { mountMoveHudButton } from './cryptic/move_hud_button';
 import { OptionsWindow } from './options_window';
 import { makeWriterFacet, type PainterHostPresentation } from './painter_host';
 import type { PartyRowAuraDeps } from './party_frame_row';
@@ -2275,6 +2276,15 @@ export class Hud {
         onPositioned: (active) => this.setPlayerFrameDetached(active),
       });
     }
+    // Master "Move HUD" button: one draggable control that unlocks every movable
+    // frame at once (the user wanted the move affordance itself repositionable).
+    mountMoveHudButton({
+      frames: () =>
+        [this.playerFrameMover, this.targetFrameMover].filter(
+          (m): m is MovableFrame => !!m,
+        ),
+      isMobileLayout,
+    });
   }
 
   // Public: snap both movable unit frames back to their stock CSS spots and

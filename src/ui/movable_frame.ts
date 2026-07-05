@@ -87,6 +87,17 @@ export class MovableFrame {
     this.refreshBtn();
   }
 
+  /** True while this frame is unlocked (draggable). */
+  get isUnlocked(): boolean {
+    return this.unlocked;
+  }
+
+  /** Public unlock toggle, so a master "Move HUD" control can drive every frame
+   *  at once (its per-frame corner button still works independently). */
+  setUnlockedPublic(unlocked: boolean): void {
+    this.setUnlocked(unlocked);
+  }
+
   /** Snap the frame back to its stock CSS spot: forget the saved position,
    *  clear the inline styles, undo any detach (onPositioned(false)), and lock
    *  the frame. Wired to the "Reset Frame Positions" interface option. */
