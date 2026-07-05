@@ -115,3 +115,55 @@ describe('durance corridors are walkable', () => {
     expect(Math.abs(res.x - origin.x)).toBeGreaterThan(5);
   });
 });
+
+// ── Maze zigzag: offset doorways must form a connected chain ──────────────────
+// Each Hellmaw room's FRONT door x must equal the previous room's BACK door x,
+// or the shared inter-module corridor won't line up and players get trapped.
+// Also asserts the doorway centre of every open end is clear of interior colliders.
+import { DELVE_MODULE_LAYOUTS, delveModuleColliders } from '../src/sim/delve_layout';
+
+describe('hellmaw maze — offset doorway chain', () => {
+  const rooms = [
+    'hellmaw_outer_maw', 'hellmaw_ember_gallery', 'hellmaw_hollow_descent',
+    'hellmaw_burning_chasm', 'hellmaw_pyre_hall', 'hellmaw_finale',
+  ] as const;
+
+  it('front door x of each room equals the previous room back door x', () => {
+    for (let i = 1; i < rooms.length; i++) {
+      const prev = DELVE_MODULE_LAYOUTS[rooms[i - 1]];
+      const cur = DELVE_MODULE_LAYOUTS[rooms[i]];
+      const prevBackX = prev.doorway?.backX ?? 0;
+      const curFrontX = cur.doorway?.frontX ?? 0;
+      expect(curFrontX, `${rooms[i]} frontX must match ${rooms[i - 1]} backX`).toBe(prevBackX);
+    }
+  });
+
+  it('the path zigzags (not all doors centred)', () => {
+    const offsets = rooms.map((r) => DELVE_MODULE_LAYOUTS[r].doorway?.backX ?? 0);
+    expect(offsets.some((o) => o > 0)).toBe(true);
+    expect(offsets.some((o) => o < 0)).toBe(true);
+  });
+
+  it('each open door centre is clear of interior colliders', () => {
+    for (const r of rooms) {
+      const layout = DELVE_MODULE_LAYOUTS[r];
+      const cols = delveModuleColliders(r);
+      const doorHw = layout.doorway?.hw ?? 6;
+      const ends: Array<{ z: number; x: number; open: boolean }> = [
+        { z: layout.zMin, x: layout.doorway?.frontX ?? 0, open: !!layout.doorway?.front },
+        { z: layout.zMax, x: layout.doorway?.backX ?? 0, open: !!layout.doorway?.back },
+      ];
+      for (const end of ends) {
+        if (!end.open) continue;
+        // No obb/circle collider should overlap the door mouth (x±doorHw at the end z).
+        const blocked = cols.some((c: any) => {
+          if (Math.abs(c.z - end.z) > 4) return false;
+          if (c.type === 'obb') return Math.abs(c.x - end.x) < (c.hw ?? 0) + doorHw - 1;
+          if (c.type === 'circle') return Math.abs(c.x - end.x) < (c.r ?? 0) + doorHw - 1;
+          return false;
+        });
+        expect(blocked, `${r} ${end.z === layout.zMin ? 'front' : 'back'} door blocked`).toBe(false);
+      }
+    }
+  });
+});

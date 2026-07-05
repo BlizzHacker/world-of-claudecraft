@@ -1193,8 +1193,9 @@ export class DungeonInteriors {
     // room, so the walkable corridor isn't rendered over the void.
     if (layout.doorway?.front) {
       const doorHw = layout.doorway.hw ?? DUNGEON_DOORWAY_HW;
+      const frontX = layout.doorway.frontX ?? 0;
       for (let z = layout.zMin - 2; z >= layout.zMin - (DELVE_MODULE_GAP + 2); z -= FLOOR_CELL) {
-        for (let x = -doorHw; x <= doorHw; x += FLOOR_CELL) {
+        for (let x = frontX - doorHw; x <= frontX + doorHw; x += FLOOR_CELL) {
           const kind = this.floorKind(variant, hash2(x * 1.31, z));
           const rot = Math.floor(hash2(z, x) * 4) * quarter;
           p.add(kind === 'grate' || kind === 'quad' ? 'floor_tile_large' : kind, x, FLOOR_Y, z, rot);
@@ -1360,8 +1361,8 @@ export class DungeonInteriors {
     // rendered gap matches the collider gap (see layoutColliders pushEndWall).
     const doorHw = layout.doorway?.hw ?? DUNGEON_DOORWAY_HW;
     for (const end of [
-      { z: layout.zMin, ry: 0, open: layout.doorway?.front ?? false },
-      { z: layout.zMax, ry: Math.PI, open: layout.doorway?.back ?? false },
+      { z: layout.zMin, ry: 0, open: layout.doorway?.front ?? false, doorX: layout.doorway?.frontX ?? 0 },
+      { z: layout.zMax, ry: Math.PI, open: layout.doorway?.back ?? false, doorX: layout.doorway?.backX ?? 0 },
     ]) {
       const target = arenaWalls
         ? end.z === layout.zMin
@@ -1369,7 +1370,7 @@ export class DungeonInteriors {
           : arenaWalls.back.placements
         : p;
       for (let x = -endWallHw + 4; x <= endWallHw - 4; x += 8) {
-        if (end.open && Math.abs(x) < doorHw + 4) continue; // leave the doorway open
+        if (end.open && Math.abs(x - end.doorX) < doorHw + 4) continue; // leave the (off-centre) doorway open
         const kind = this.wallKind(variant, hash2(x, end.z * 3.1));
         target.add(kind, x, 0, end.z, end.ry, MODULE_SCALE);
       }

@@ -213,7 +213,7 @@ function hellmawDims(zMax: number, wallX: number): {
 export const HELLMAW_OUTER_MAW_LAYOUT: DungeonLayout = {
   // Standard entry hall.
   ...hellmawDims(104, 26),
-  doorway: D_DOOR_MID,
+  doorway: { ...D_DOOR_MID, backX: 10 },
   pillars: grid(16, 88, 18, [-16, 16]),
   tombs: grid(20, 90, 22, [-21, 21]),
   stubs: [],
@@ -224,7 +224,7 @@ export const HELLMAW_OUTER_MAW_LAYOUT: DungeonLayout = {
 /** Blood Gallery: alcove stubs guarding the Behemoth's open centre. */
 export const HELLMAW_EMBER_GALLERY_LAYOUT: DungeonLayout = {
   ...hellmawDims(110, 32),
-  doorway: D_DOOR_MID,
+  doorway: { ...D_DOOR_MID, frontX: 10, backX: -10 },
   pillars: grid(18, 86, 24, [-15, 15]),
   tombs: [],
   stubs: [
@@ -240,7 +240,7 @@ export const HELLMAW_EMBER_GALLERY_LAYOUT: DungeonLayout = {
 /** Hollow Descent: colonnade rows, defaced tomb rows. */
 export const HELLMAW_HOLLOW_DESCENT_LAYOUT: DungeonLayout = {
   ...hellmawDims(134, 24),
-  doorway: D_DOOR_MID,
+  doorway: { ...D_DOOR_MID, frontX: -10, backX: 10 },
   pillars: grid(16, 88, 16, [-16, 16]),
   tombs: grid(20, 88, 22, [-21, 21]),
   stubs: [],
@@ -251,7 +251,7 @@ export const HELLMAW_HOLLOW_DESCENT_LAYOUT: DungeonLayout = {
 /** Burning Chasm: an open cavern, a scatter of pillars around a wide centre. */
 export const HELLMAW_BURNING_CHASM_LAYOUT: DungeonLayout = {
   ...hellmawDims(148, 36),
-  doorway: D_DOOR_MID,
+  doorway: { ...D_DOOR_MID, frontX: 10, backX: -10 },
   pillars: [
     { x: -18, z: 26 }, { x: 18, z: 30 }, { x: -12, z: 58 }, { x: 14, z: 62 },
     { x: -19, z: 84 }, { x: 19, z: 82 },
@@ -268,7 +268,7 @@ export const HELLMAW_BURNING_CHASM_LAYOUT: DungeonLayout = {
 /** Pyre Hall: twin colonnades framing a central processional. */
 export const HELLMAW_PYRE_HALL_LAYOUT: DungeonLayout = {
   ...hellmawDims(150, 20),
-  doorway: D_DOOR_MID,
+  doorway: { ...D_DOOR_MID, frontX: -10, backX: 10 },
   pillars: grid(18, 88, 14, [-20, 20]),
   tombs: grid(26, 82, 28, [-10, 10]),
   stubs: [],
@@ -280,7 +280,7 @@ export const HELLMAW_PYRE_HALL_LAYOUT: DungeonLayout = {
  *  back for the Butcher's big cleave. */
 export const HELLMAW_FINALE_LAYOUT: DungeonLayout = {
   ...hellmawDims(124, 30),
-  doorway: D_DOOR_LAST,
+  doorway: { ...D_DOOR_LAST, frontX: 10 },
   pillars: [
     { x: -18, z: 16 }, { x: 18, z: 16 }, { x: -18, z: 40 }, { x: 18, z: 40 },
   ],

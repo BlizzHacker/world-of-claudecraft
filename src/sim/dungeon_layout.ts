@@ -62,7 +62,17 @@ export interface DungeonLayout {
    * wall becomes two segments flanking a central gap. Used by the Durance of Hate
    * open-floor delve; unset elsewhere (solid end walls, sequential crawl).
    */
-  doorway?: { front?: boolean; back?: boolean; hw?: number };
+  doorway?: {
+    front?: boolean;
+    back?: boolean;
+    hw?: number;
+    /** Off-centre door x for the FRONT (zMin) opening. Default 0 (centred). The
+     *  corridor funnel + floor south of zMin follow this x. MUST equal the
+     *  previous room's `backX` so the shared corridor lines up. */
+    frontX?: number;
+    /** Off-centre door x for the BACK (zMax) opening. Default 0 (centred). */
+    backX?: number;
+  };
   /** Room shell outline (CCW, simple, star-shaped from `shellPole`), instance-local.
    * When present, render/collision derive the room's walls and floor mask from this
    * polygon instead of the rectangular wallX/zMin/zMax shell. */
@@ -245,30 +255,36 @@ export function layoutColliders(layout: DungeonLayout): Collider[] {
   // becomes two segments flanking a walkable central gap. `pushEndWall` emits a solid
   // slab, or two flanking segments when this end has a doorway.
   const doorHw = layout.doorway?.hw ?? DUNGEON_DOORWAY_HW;
-  const pushEndWall = (z: number, open: boolean): void => {
+  const frontX = layout.doorway?.frontX ?? 0;
+  const backX = layout.doorway?.backX ?? 0;
+  // Emit an end wall as a solid slab, or (when `open`) two segments flanking a gap
+  // centred at `doorX`. The two segments can be asymmetric so the doorway can sit
+  // off-centre (the maze zigzag): left span [-endWallHw, doorX-doorHw], right span
+  // [doorX+doorHw, endWallHw]. Either span is skipped if it would be non-positive.
+  const pushEndWall = (z: number, open: boolean, doorX: number): void => {
     if (!open) {
       out.push({ type: 'obb', x: 0, z, hw: endWallHw, hd: DUNGEON_WALL_HW, rot: 0 });
       return;
     }
-    // Two segments: [-endWallHw, -doorHw] and [doorHw, endWallHw]. Each segment's
-    // centre is the midpoint of its span, its hw the half-span.
-    const segHw = (endWallHw - doorHw) / 2;
-    if (segHw > 0) {
-      const cx = doorHw + segHw;
-      out.push({ type: 'obb', x: -cx, z, hw: segHw, hd: DUNGEON_WALL_HW, rot: 0 });
-      out.push({ type: 'obb', x: cx, z, hw: segHw, hd: DUNGEON_WALL_HW, rot: 0 });
+    const leftHw = (doorX - doorHw - -endWallHw) / 2;
+    if (leftHw > 0) {
+      out.push({ type: 'obb', x: -endWallHw + leftHw, z, hw: leftHw, hd: DUNGEON_WALL_HW, rot: 0 });
+    }
+    const rightHw = (endWallHw - (doorX + doorHw)) / 2;
+    if (rightHw > 0) {
+      out.push({ type: 'obb', x: doorX + doorHw + rightHw, z, hw: rightHw, hd: DUNGEON_WALL_HW, rot: 0 });
     }
   };
-  pushEndWall(layout.zMax, layout.doorway?.back ?? false);
-  pushEndWall(layout.zMin, layout.doorway?.front ?? false);
+  pushEndWall(layout.zMax, layout.doorway?.back ?? false, backX);
+  pushEndWall(layout.zMin, layout.doorway?.front ?? false, frontX);
   // Corridor side walls: when the FRONT wall has a doorway, the 16u inter-module gap
-  // just south of zMin is walkable. Flank it with short side walls at |x|=doorHw so
+  // just south of zMin is walkable. Flank it with short side walls at doorX±doorHw so
   // the player is funnelled through the corridor and cannot drift out into the void.
-  // (The gap belongs to THIS room's collider band at negative localZ, so these live
-  // here.) DELVE_MODULE_GAP=16; cover a bit past it toward the previous room's back.
+  // The corridor follows the off-centre door x so it lines up with the previous room's
+  // (matching) back door. DELVE_MODULE_GAP=16; cover a bit past it toward the prev room.
   if (layout.doorway?.front) {
     const gapCentreZ = layout.zMin - 8; // midpoint of the 16u gap south of the front wall
-    for (const sx of [-doorHw, doorHw]) {
+    for (const sx of [frontX - doorHw, frontX + doorHw]) {
       out.push({ type: 'obb', x: sx, z: gapCentreZ, hw: DUNGEON_WALL_HW, hd: 9, rot: 0 });
     }
   }
