@@ -468,6 +468,7 @@ export function createNpc(id: number, def: NpcDef, pos: Vec3): Entity {
   e.color = def.color;
   e.questIds = [...def.questIds];
   e.vendorItems = [...(def.vendorItems ?? [])];
+  if (def.roams) e.roams = true; // F4: strolls its home square (npc/roam.ts)
   return e;
 }
 

@@ -13,6 +13,7 @@ import * as bagsMod from './bags';
 import { addStacked, BAG_SOCKETS, bagCapacity, canAddItem, migrationBagsFor } from './bags';
 import { lineOfSightClear, resolveMovement, resolvePosition } from './colliders';
 import { auraAffectsStats, removeCancelableAura } from './combat/aura_cancel';
+import { updateRoamingNpc } from './npc/roam';
 import {
   cleanseFriendlyNpcAuras,
   isRejectedFriendlyNpcAura,
@@ -1105,6 +1106,11 @@ export class Sim {
       if (npcDef.dynamic) continue; // spawned on demand by its owning system, not surface-placed
       const safe = this.findSafePos(npcDef.pos.x, npcDef.pos.z, waterLevel() + 0.6);
       const npc = createNpc(this.nextId++, npcDef, this.groundPos(safe.x, safe.z));
+      // F4 "alive world": town NPCs stroll their home square so realms don't read
+      // as statue museums. Content may set `roams` explicitly; otherwise everyone
+      // roams EXCEPT the market auctioneer (its auction-house UI anchors to a fixed
+      // spot). Roaming halts near a player, so quests/vendors stay interactable.
+      npc.roams = npcDef.roams ?? !npcDef.market;
       this.addEntity(npc);
       if (npcDef.market) this.market.merchantIds.push(npc.id); // every auctioneer anchors the shared World Market
     }
@@ -2904,6 +2910,7 @@ export class Sim {
         updateAuras(this.ctx, e);
       } else if (e.kind === 'npc') {
         cleanseFriendlyNpcAuras(this.ctx, e);
+        updateRoamingNpc(this.ctx, e);
       } else if (e.kind === 'object') {
         if (!e.lootable) {
           e.respawnTimer -= DT;

@@ -1234,6 +1234,9 @@ export interface NpcDef {
   // mid-fight). Keeping the def in NPCS lets the online client reconstruct its
   // questIds and treat it as a turn-in NPC.
   dynamic?: boolean;
+  // F4: this NPC strolls a small square around its spawn so the town feels alive.
+  // It halts whenever a player is close enough to talk to it (interaction-safe).
+  roams?: boolean;
 }
 
 export interface CampDef {
@@ -1553,6 +1556,8 @@ export interface Entity {
   hasFled: boolean; // a cowardly mob flees only once per pull; cleared when it resets at spawn
   wanderTarget: Vec3 | null;
   wanderTimer: number;
+  roams?: boolean; // F4: town NPC strolls its home square (see npc/roam.ts)
+  roamHop?: number; // F4: per-NPC hop counter seeding roam's pure-hash draws (off the shared rng)
   aggroTargetId: number | null;
   /** GM character: invulnerable (dealDamage no-ops). Server-set from the
    *  characters.is_gm column; never user-settable. */

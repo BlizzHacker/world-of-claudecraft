@@ -1429,7 +1429,14 @@ describe('leveling', () => {
 describe('quests', () => {
   it('full wolf quest flow: accept, kill 8, turn in', () => {
     const sim = makeSim('warrior');
-    teleportTo(sim, 4, 4);
+    // The quest giver (marshal_redbrook) now strolls its home square (F4 roaming),
+    // returning to its spot when a player is near. Walk up to wherever it actually
+    // is rather than a hardcoded point.
+    const gotoGiver = () => {
+      const npc = [...sim.entities.values()].find((e) => e.templateId === 'marshal_redbrook')!;
+      teleportTo(sim, npc.pos.x, npc.pos.z + 1);
+    };
+    gotoGiver();
     sim.interact();
     expect(sim.questState('q_wolves')).toBe('active');
     const wolves = [...sim.entities.values()].filter((e) => e.templateId === 'forest_wolf');
@@ -1447,7 +1454,7 @@ describe('quests', () => {
       expect(wolf.dead).toBe(true);
     }
     expect(sim.questState('q_wolves')).toBe('ready');
-    teleportTo(sim, 4, 4);
+    gotoGiver();
     sim.interact();
     expect(sim.questState('q_wolves')).toBe('done');
     expect(sim.questState('q_bandits')).toBe('available');
