@@ -114,6 +114,7 @@ import { desktopBridge } from './runtime';
 import { ABILITIES, CLASSES } from './sim/content/classes';
 import { ITEMS, setActiveWorldContent } from './sim/data';
 import { canEquipItem } from './sim/equipment_rules';
+import { buildingDoorNear } from './sim/interiors';
 import { TAB_NEAR_RADIUS, TAB_QUERY_RADIUS, tabConeHalfAt } from './sim/tab_target';
 import {
   DT,
@@ -1965,6 +1966,17 @@ async function startGame(
         hud.openMailbox();
         return;
       }
+      // Building interior exit door, waypoint pylon, town portal: server-authoritative
+      // object interactions. Route through world.interact() (→ server sim.interact)
+      // rather than pickUpObject so the sim runs the right handler online + offline.
+      if (
+        obj.templateId === 'building_exit' ||
+        obj.templateId === 'waypoint' ||
+        obj.templateId === 'town_portal'
+      ) {
+        world.interact();
+        return;
+      }
       world.pickUpObject(bestObj);
       return;
     }
@@ -1972,6 +1984,16 @@ async function startGame(
       const npc = world.entities.get(bestNpc);
       if (npc?.kind === 'npc' && npc.templateId === 'brother_halven') hud.openDelveBoard(bestNpc);
       else hud.openQuestDialog(bestNpc);
+      return;
+    }
+    // Building entry: buildings are SOLID and carry NO entity — the door is the
+    // building's own +z face (BUILDING_DOORS registry). No corpse/object/npc was
+    // nearer, so if the player is standing in a door area, send interact() and let
+    // the server sim (sim.interact → buildingDoorNear → enterInterior) do the entry
+    // authoritatively. Without this, interactKey never called world.interact() for a
+    // building, so the server handler never ran online and entry silently failed.
+    if (buildingDoorNear(p.pos.x, p.pos.z)) {
+      world.interact();
       return;
     }
     hud.showError(t('errors.nothingInteract'));

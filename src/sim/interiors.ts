@@ -9,7 +9,7 @@
 // carries its interiorType; the exit returns to the saved overworld spot.
 
 import { INTERIOR_ROOM_EXIT_LOCAL } from './colliders';
-import { interiorOrigin, isInteriorPos } from './data';
+import { getActiveWorldContent, interiorOrigin, isInteriorPos } from './data';
 import { INTERIOR_ROOM_ENTRY } from './colliders';
 import {
   INTERIOR_INNKEEPER,
@@ -96,11 +96,8 @@ export function spawnBuildingInteriors(
   nextId: () => number,
   world: WorldContent,
 ): void {
-  // Reset the door-area registry every world init so a prior realm's doors never
-  // leak into this world (the registry is module-global).
-  BUILDING_DOORS.length = 0;
-  // Interiors are a themed-realm feature; vanilla (claudecraft) has none. On a
-  // non-themed realm we've cleared the registry and there is nothing more to spawn.
+  // Interiors are a themed-realm feature; vanilla (claudecraft) has none. Door areas
+  // are computed on demand (buildingDoorNear), so there is no registry to reset.
   if (!getActiveRealm().worldTheme) return;
   const add = (e: Entity): void => ctx.addEntity(e);
   // 1) Furnish each shared interior room (slot 0): an EXIT door at the south door,
@@ -130,20 +127,32 @@ export function spawnBuildingInteriors(
     npcEnt.facing = Math.PI; // face the south door / incoming player
     add(npcEnt);
   }
-  // 2) Register each enterable building's DOOR AREA (a world point on its +z front
-  // face) + its interior type. No separate door object is spawned — clicking the
-  // building's own door area (checked in interaction.ts via nearestBuildingDoor)
-  // loads the room. The first house in each town becomes the shop.
+  // 2) Nothing to spawn for entry: the door is the building's own +z face. Both the
+  // server sim (interaction.ts) and the online client's interact dispatcher (main.ts)
+  // resolve doors ON DEMAND from getActiveWorldContent().props.buildings via
+  // buildingDoorNear() — a PURE function, so it works identically on the client (which
+  // runs ClientWorld, never Sim, so no registry would be populated) and the server.
+}
+
+export interface BuildingDoor { x: number; z: number; interiorType: number; r: number }
+
+/** Compute the door AREAS for a set of town buildings: one per enterable building, a
+ *  world point on its +z (front) face with an enter radius. PURE + deterministic so
+ *  the client and server agree without any shared runtime registry. The first house in
+ *  a town becomes the shop (interiorTypeForBuilding), chapels are not enterable. */
+export function computeBuildingDoors(
+  buildings: readonly { kind: string; x: number; z: number; w: number; d: number; rot: number }[],
+): BuildingDoor[] {
+  const doors: BuildingDoor[] = [];
   let houseSeen = 0;
-  for (const b of world.props.buildings) {
+  for (const b of buildings) {
     const interiorType = interiorTypeForBuilding(b.kind, houseSeen);
     if (b.kind === 'house') houseSeen++;
     if (interiorType == null) continue;
-    // Front-door world point: the +z face centre, rotated by the building yaw.
     const frontLocalZ = b.d / 2;
     const s = Math.sin(b.rot);
     const cc = Math.cos(b.rot);
-    BUILDING_DOORS.push({
+    doors.push({
       x: b.x - frontLocalZ * s,
       z: b.z + frontLocalZ * cc,
       interiorType,
@@ -153,21 +162,20 @@ export function spawnBuildingInteriors(
       r: Math.max(8, b.w * 0.6 + INTERACT_RANGE),
     });
   }
+  return doors;
 }
 
-// Registered enterable-building door areas (rebuilt each world init). interaction.ts
-// checks a click against these to enter without a separate door object.
-export interface BuildingDoor { x: number; z: number; interiorType: number; r: number }
-export const BUILDING_DOORS: BuildingDoor[] = [];
-
 /** The nearest building door within its enter radius of (x,z) plus the squared
- *  distance to it, or null. The interact handler uses the distance to let a door the
- *  player is standing right at win over ambient town props, while a corpse/object
- *  literally at their feet still wins if closer. */
+ *  distance to it, or null. Reads the active realm's buildings on demand (works on
+ *  client + server). Themed realms only — vanilla realms have no worldTheme, so their
+ *  buildings never map to an interior type and this returns null. The distance lets a
+ *  door the player is standing right at win over ambient town props in the arbitration,
+ *  while a corpse/object literally at their feet still wins if closer. */
 export function buildingDoorNear(x: number, z: number): { interiorType: number; d2: number } | null {
+  if (!getActiveRealm().worldTheme) return null;
   let best: BuildingDoor | null = null;
   let bestD2 = Infinity;
-  for (const door of BUILDING_DOORS) {
+  for (const door of computeBuildingDoors(getActiveWorldContent().props.buildings)) {
     const d2 = (x - door.x) ** 2 + (z - door.z) ** 2;
     if (d2 <= door.r * door.r && d2 < bestD2) {
       bestD2 = d2;

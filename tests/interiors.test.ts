@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { Sim } from '../src/sim/sim';
-import { isInteriorPos } from '../src/sim/data';
-import { BUILDING_DOORS, buildingDoorAt } from '../src/sim/interiors';
+import { getActiveWorldContent, isInteriorPos } from '../src/sim/data';
+import { buildingDoorAt, buildingDoorNear, computeBuildingDoors } from '../src/sim/interiors';
 import { setRealmHostEnv } from '../src/sim/realms/registry';
 
 function forceRealm(id: string) {
@@ -19,34 +19,48 @@ function makeSim() {
 function objsOfType(sim: Sim, tid: string) {
   return [...sim.entities.values()].filter((e) => e.templateId === tid);
 }
+// Door areas are computed on demand from the active realm's buildings (pure), so the
+// online client — which runs ClientWorld, never Sim — resolves them identically.
+function doors() {
+  return computeBuildingDoors(getActiveWorldContent().props.buildings);
+}
 
 describe('building interiors (enterable town buildings)', () => {
-  it('themed realm registers building door areas + interior exit doors', () => {
+  it('themed realm computes building door areas + spawns interior exit doors', () => {
     forceRealm('infernal');
     const sim = makeSim();
-    void sim;
-    // Entering is by standing in a building's own door area — registered in
-    // BUILDING_DOORS, NOT a separate door object. shop/inn/house rooms each get one
-    // exit door inside.
-    expect(BUILDING_DOORS.length).toBeGreaterThan(0);
+    // Entering is by standing in a building's own door area (computed, NOT a spawned
+    // object). shop/inn/house rooms each get one exit door inside.
+    expect(doors().length).toBeGreaterThan(0);
     expect(objsOfType(sim, 'building_door').length).toBe(0); // no separate door object
     expect(objsOfType(sim, 'building_exit').length).toBe(3);
-    for (const d of BUILDING_DOORS) {
-      expect(typeof d.interiorType).toBe('number');
-    }
+    for (const d of doors()) expect(typeof d.interiorType).toBe('number');
   });
 
-  it('vanilla realms get NO interiors (solid buildings, no door areas)', () => {
+  it('vanilla realms get NO interiors (solid buildings, no enterable doors)', () => {
     forceRealm('claudecraft');
     const sim = makeSim();
-    expect(BUILDING_DOORS.length).toBe(0);
+    void sim;
+    // No worldTheme → buildingDoorNear returns null even if the realm has buildings.
+    expect(buildingDoorNear(0, 0)).toBeNull();
     expect(objsOfType(sim, 'building_exit').length).toBe(0);
+  });
+
+  it('door resolution is identical WITHOUT a Sim (the online ClientWorld case)', () => {
+    // The bug that made buildings un-enterable online: door lookup depended on a
+    // registry only Sim populated, but the online client never builds a Sim. Now it is
+    // a pure function of the active world content — no Sim needed.
+    forceRealm('infernal');
+    // No makeSim() here on purpose.
+    const ds = doors();
+    expect(ds.length).toBeGreaterThan(0);
+    expect(buildingDoorAt(ds[0].x, ds[0].z)).toBe(ds[0].interiorType);
   });
 
   it('standing in a door area + interact enters the interior; the exit returns you outside', () => {
     forceRealm('infernal');
     const sim = makeSim();
-    const door = BUILDING_DOORS[0];
+    const door = doors()[0];
     const p = sim.player;
     // Stand in the building's door area (return spot the interior remembers).
     p.pos.x = door.x;
@@ -73,17 +87,14 @@ describe('building interiors (enterable town buildings)', () => {
   });
 
   it('entering the door beats a nearby ambient prop (the real "cannot enter" bug)', () => {
-    // Regression: buildingDoorAt was only checked as the LAST interact fallback, so any
-    // town prop/object within range preempted it and the building never opened. Now the
-    // door competes on distance — standing right at it wins over a prop a few units off.
+    // Regression: buildingDoorNear was only checked as the LAST interact fallback, so
+    // any town prop/object within range preempted it. Now the door competes on distance.
     forceRealm('infernal');
     const sim = makeSim();
-    const door = BUILDING_DOORS[0];
+    const door = doors()[0];
     const p = sim.player;
     p.pos.x = door.x;
     p.pos.z = door.z;
-    // Drop a lootable ground object a few units away — closer than nothing but farther
-    // than the door the player is standing on.
     const clutter = [...sim.entities.values()].find((e) => e.kind === 'object' && e.lootable);
     if (clutter) {
       clutter.pos.x = door.x + 2.5;
@@ -92,17 +103,5 @@ describe('building interiors (enterable town buildings)', () => {
     sim.interact();
     expect(isInteriorPos(p.pos.x)).toBe(true); // entered despite the nearby prop
     expect(p.interiorType).toBe(door.interiorType);
-  });
-
-  it('the interior room stays at a finite interior position', () => {
-    forceRealm('infernal');
-    const sim = makeSim();
-    const door = BUILDING_DOORS[0];
-    const p = sim.player;
-    p.pos.x = door.x;
-    p.pos.z = door.z;
-    sim.interact();
-    expect(Number.isFinite(p.pos.x) && Number.isFinite(p.pos.z)).toBe(true);
-    expect(isInteriorPos(p.pos.x)).toBe(true);
   });
 });
