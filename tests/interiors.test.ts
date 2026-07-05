@@ -72,6 +72,28 @@ describe('building interiors (enterable town buildings)', () => {
     expect(Math.abs(p.pos.z - before.z)).toBeLessThan(5);
   });
 
+  it('entering the door beats a nearby ambient prop (the real "cannot enter" bug)', () => {
+    // Regression: buildingDoorAt was only checked as the LAST interact fallback, so any
+    // town prop/object within range preempted it and the building never opened. Now the
+    // door competes on distance — standing right at it wins over a prop a few units off.
+    forceRealm('infernal');
+    const sim = makeSim();
+    const door = BUILDING_DOORS[0];
+    const p = sim.player;
+    p.pos.x = door.x;
+    p.pos.z = door.z;
+    // Drop a lootable ground object a few units away — closer than nothing but farther
+    // than the door the player is standing on.
+    const clutter = [...sim.entities.values()].find((e) => e.kind === 'object' && e.lootable);
+    if (clutter) {
+      clutter.pos.x = door.x + 2.5;
+      clutter.pos.z = door.z + 2.5;
+    }
+    sim.interact();
+    expect(isInteriorPos(p.pos.x)).toBe(true); // entered despite the nearby prop
+    expect(p.interiorType).toBe(door.interiorType);
+  });
+
   it('the interior room stays at a finite interior position', () => {
     forceRealm('infernal');
     const sim = makeSim();

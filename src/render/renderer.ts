@@ -3860,18 +3860,71 @@ export class Renderer {
     }
   }
 
-  /** Await EVERY heavy asset a delve needs before the player is dropped in: the dungeon
-   *  kit + all mob GLBs. The HUD shows a loading screen over this promise so the crawl
-   *  starts only once the meshes are parsed — no more hitch-every-few-steps as each big
-   *  Hellmaw body first scrolls into view. Resolves even if an individual asset fails
-   *  (it falls back to a placeholder in-world) so a bad GLB never wedges the loader. */
+  /** Await EVERY heavy asset a delve needs before the player is dropped in, in TWO
+   *  stages so the crawl never hitches:
+   *    1. load — fetch the dungeon kit + all mob GLB bytes into cache.
+   *    2. prewarm — instantiate one hidden copy of each mob MODEL and link its shader
+   *       programs off the main thread (compileAsync against the live scene), then
+   *       dispose. Byte-loading alone (stage 1) does NOT stop the lag: the stall the
+   *       player hit "at the end of the first room" is the first-time SHADER COMPILE +
+   *       skeleton bind of each Hellmaw archetype as it first renders. The boot prewarm
+   *       deliberately SKIPS these lazy bodies (their GLB isn't in the boot sweep), so
+   *       this is the only place they get compiled ahead of time.
+   *  The HUD shows the loading screen over this whole promise. Resolves even if an
+   *  individual asset/compile fails (it falls back to a placeholder in-world) so a bad
+   *  GLB never wedges the loader. */
   async preloadDelveAssets(delveId: string): Promise<void> {
     this.delveMobsPreloaded.add(delveId); // the per-frame warmup can now skip re-kicking
-    const jobs: Promise<unknown>[] = [ensureDungeonAssets().catch(() => undefined)];
-    for (const key of this.delveMobVisualKeys(delveId)) {
-      if (!visualAssetsReady(key)) jobs.push(preloadVisualAssets(key).catch(() => undefined));
+    const keys = this.delveMobVisualKeys(delveId);
+    // Stage 1: bytes.
+    const loadJobs: Promise<unknown>[] = [ensureDungeonAssets().catch(() => undefined)];
+    for (const key of keys) {
+      if (!visualAssetsReady(key)) loadJobs.push(preloadVisualAssets(key).catch(() => undefined));
     }
-    await Promise.all(jobs);
+    await Promise.all(loadJobs);
+    // Stage 2: instantiate + compile each mob model once, then dispose. Only now (bytes
+    // cached) can createCharacterVisual build a lazy Hellmaw body without throwing.
+    await this.prewarmDelveMobShaders(delveId);
+  }
+
+  /** Build one hidden instance of every delve mob model, link its shaders off-thread,
+   *  then dispose — so no archetype compiles its programs live mid-crawl. Deduped by
+   *  visual-model key. Best-effort: a failed build/compile is swallowed. */
+  private async prewarmDelveMobShaders(delveId: string): Promise<void> {
+    const group = new THREE.Group();
+    setRenderCategory(group, 'prewarm');
+    group.visible = false;
+    const built: CharacterVisual[] = [];
+    const seen = new Set<string>();
+    for (const [tid, tmpl] of Object.entries(MOBS)) {
+      if (!tid.startsWith('hellmaw_') && !tid.startsWith(delveId)) continue;
+      const entity = this.prewarmEntity('mob', tmpl.id, tmpl.color, tmpl.scale);
+      const vkey = visualKeyFor(entity);
+      if (seen.has(vkey) || !visualAssetsReady(vkey)) continue;
+      seen.add(vkey);
+      try {
+        const visual = createCharacterVisual(entity);
+        visual.root.visible = true;
+        group.add(visual.root);
+        built.push(visual);
+      } catch {
+        /* a model that still won't build falls back to a placeholder in-world */
+      }
+    }
+    if (built.length === 0) return;
+    this.scene.add(group);
+    try {
+      if (this.asyncCompileSupported && this.webgl.compileAsync) {
+        await this.webgl.compileAsync(group, this.camera, this.scene);
+      } else {
+        this.webgl.compile(this.scene, this.camera);
+      }
+    } catch {
+      /* compile failure → the program links live on first draw as before */
+    } finally {
+      this.scene.remove(group);
+      for (const v of built) v.dispose();
+    }
   }
 
   private ensureDelveInteriorsNear(px: number, pz: number): void {

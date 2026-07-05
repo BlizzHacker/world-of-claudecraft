@@ -30,7 +30,7 @@ import {
   tryStartNythraxisWardChannel,
 } from './encounters/nythraxis';
 import { isInRaidInstance } from './instances/dungeons';
-import { buildingDoorAt, enterInterior, leaveInterior } from './interiors';
+import { buildingDoorNear, enterInterior, leaveInterior } from './interiors';
 import { activateWaypoint } from './waypoints';
 import { useTownPortal } from './town_portal';
 import { hasSharedLootRights as computeSharedLootRights, lootHasGoneFfa } from './loot/loot_ffa';
@@ -389,6 +389,15 @@ export function interact(ctx: SimContext, pid?: number): void {
     lootCorpse(ctx, corpse.id, p.id);
     return;
   }
+  // Building entry competes on distance with ambient props/quest NPCs: a door the
+  // player is standing right at wins over a random nearby crate, but a corpse (above)
+  // always wins. Buildings are solid + carry no door object — the door is the
+  // building's own +z face, registered in BUILDING_DOORS at world init.
+  const door = buildingDoorNear(p.pos.x, p.pos.z);
+  if (door && door.d2 <= bestObjD2 && door.d2 <= bestQuestD2) {
+    enterInterior(ctx, door.interiorType, p.id);
+    return;
+  }
   if (obj) {
     if (obj.templateId === 'dungeon_door' && obj.dungeonId) {
       ctx.enterDungeon(obj.dungeonId, p.id);
@@ -420,15 +429,6 @@ export function interact(ctx: SimContext, pid?: number): void {
   }
   if (questEntity) {
     ctx.talkToNpc(questEntity.id, p.id);
-    return;
-  }
-  // No entity to interact with: if the player is standing in a building's front-door
-  // area, entering the building loads its interior room. Buildings are solid (see
-  // colliders.ts) and carry no separate door object — the door is the building's own
-  // +z face, registered in BUILDING_DOORS at world init.
-  const doorType = buildingDoorAt(p.pos.x, p.pos.z);
-  if (doorType != null) {
-    enterInterior(ctx, doorType, p.id);
     return;
   }
 }

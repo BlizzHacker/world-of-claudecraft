@@ -19,7 +19,7 @@ import {
 import { createGroundObject, createNpc, createProp } from './entity';
 import { getActiveRealm } from './realms/registry';
 import type { SimContext } from './sim_context';
-import type { Entity, NpcDef, WorldContent } from './types';
+import { type Entity, INTERACT_RANGE, type NpcDef, type WorldContent } from './types';
 
 export const INTERIOR_TYPE_SHOP = 0;
 export const INTERIOR_TYPE_INN = 1;
@@ -147,8 +147,10 @@ export function spawnBuildingInteriors(
       x: b.x - frontLocalZ * s,
       z: b.z + frontLocalZ * cc,
       interiorType,
-      // Click radius scales a bit with the building so bigger fronts are easy to hit.
-      r: Math.max(4, b.w * 0.4),
+      // Enter radius spans the building's whole front + a comfortable street margin so
+      // walking up to the door and pressing interact reliably enters (the solid OBB
+      // keeps the player just outside the +z wall, ~INTERACT_RANGE from this point).
+      r: Math.max(8, b.w * 0.6 + INTERACT_RANGE),
     });
   }
 }
@@ -158,19 +160,27 @@ export function spawnBuildingInteriors(
 export interface BuildingDoor { x: number; z: number; interiorType: number; r: number }
 export const BUILDING_DOORS: BuildingDoor[] = [];
 
-/** The interior type of the nearest building door within its click radius of (x,z),
- *  or null. Used by the interact handler to enter a building by clicking its door. */
-export function buildingDoorAt(x: number, z: number): number | null {
+/** The nearest building door within its enter radius of (x,z) plus the squared
+ *  distance to it, or null. The interact handler uses the distance to let a door the
+ *  player is standing right at win over ambient town props, while a corpse/object
+ *  literally at their feet still wins if closer. */
+export function buildingDoorNear(x: number, z: number): { interiorType: number; d2: number } | null {
   let best: BuildingDoor | null = null;
-  let bestD = Infinity;
-  for (const d of BUILDING_DOORS) {
-    const dd = Math.hypot(x - d.x, z - d.z);
-    if (dd <= d.r && dd < bestD) {
-      bestD = dd;
-      best = d;
+  let bestD2 = Infinity;
+  for (const door of BUILDING_DOORS) {
+    const d2 = (x - door.x) ** 2 + (z - door.z) ** 2;
+    if (d2 <= door.r * door.r && d2 < bestD2) {
+      bestD2 = d2;
+      best = door;
     }
   }
-  return best?.interiorType ?? null;
+  return best ? { interiorType: best.interiorType, d2: bestD2 } : null;
+}
+
+/** The interior type of the nearest building door within its enter radius of (x,z),
+ *  or null. Convenience wrapper around buildingDoorNear. */
+export function buildingDoorAt(x: number, z: number): number | null {
+  return buildingDoorNear(x, z)?.interiorType ?? null;
 }
 
 /** Teleport the player into the interior room for `interiorType`, saving the spot to

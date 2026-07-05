@@ -13,6 +13,13 @@ import type { Renderer } from './render/renderer';
 import type { Hud } from './ui/hud';
 import { syncAppViewport as syncAppViewportShared } from './game/app_viewport';
 import { audio } from './game/audio';
+import {
+  hideLoadingScreen,
+  LOADING_FADE_MS,
+  setLoadingProgress,
+  setLoadingStatus,
+  showLoadingScreen,
+} from './game/loading_screen';
 import { AutoLoot } from './game/autoloot';
 import {
   BROWSER_BODY_CLASSES,
@@ -956,45 +963,9 @@ function requestPreferredFullscreen(): void {
 // Loading screen (shown from "enter world" until the first frame renders)
 // ---------------------------------------------------------------------------
 
-const LOADING_FADE_MS = 350; // keep in sync with the #loading-screen CSS transition
-
-let loadingHideTimer: number | null = null;
-
-function showLoadingScreen(statusText: string): void {
-  const el = $('#loading-screen');
-  // Per-realm loading art: each realm's content pack names its own loading
-  // screen (theme.loadingScreenSrc); the CSS default is the Cryptic Realm art.
-  const realmLoading = getActiveRealm().branding?.loadingScreenSrc;
-  if (realmLoading) el.style.backgroundImage = `url("${realmLoading}")`;
-  if (loadingHideTimer !== null) {
-    window.clearTimeout(loadingHideTimer);
-    loadingHideTimer = null;
-  }
-  el.classList.remove('fade');
-  el.classList.add('visible');
-  document.body.classList.add('is-entering-world');
-  setLoadingStatus(statusText);
-}
-
-function setLoadingStatus(text: string): void {
-  $('#ls-status').textContent = text;
-}
-
-function setLoadingProgress(done: number, total: number): void {
-  $('#ls-fill').style.width = total > 0 ? `${Math.round((done / total) * 100)}%` : '0%';
-  setLoadingStatus(t('loading.worldProgress', { done, total }));
-}
-
-function hideLoadingScreen(): void {
-  const el = $('#loading-screen');
-  if (!el.classList.contains('visible')) return;
-  el.classList.add('fade');
-  loadingHideTimer = window.setTimeout(() => {
-    el.classList.remove('visible', 'fade');
-    document.body.classList.remove('is-entering-world');
-    loadingHideTimer = null;
-  }, LOADING_FADE_MS);
-}
+// The loading-screen DOM ops moved to the shared leaf src/game/loading_screen.ts so
+// in-session transitions (delve entry in ui/hud.ts) drive the SAME branded screen.
+// Re-imported here (unchanged call sites below).
 
 // Resolve only after the browser has actually painted. The scene build
 // (new Renderer/new Hud) runs fully synchronously and blocks the main thread,
