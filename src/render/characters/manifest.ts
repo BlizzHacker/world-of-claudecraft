@@ -563,6 +563,49 @@ export const VISUALS: Record<string, VisualDef> = {
     clips: meshyBiped(),
     lazyPreload: true,
   },
+  // --- New infernal monster bodies (the big asset push) --------------------
+  hellmaw_spectre_body: {
+    // Wailing Spectre: a black evil wraith — fast, ghostly caster.
+    url: `${REALM_MODELS}/infernal/meshy_ai_a_black_evil_spectr_0616234348_texture_abacb7f9.glb`,
+    height: 2.6,
+    clips: meshyBiped(),
+    lazyPreload: true,
+  },
+  hellmaw_cursed_knight_body: {
+    // Cursed Iron Knight: an armored revenant, heavy melee.
+    url: `${REALM_MODELS}/infernal/meshy_ai_cursed_knight_s_iro_0616234359_texture_abda8208.glb`,
+    height: 2.8,
+    clips: meshyBiped(),
+    lazyPreload: true,
+  },
+  hellmaw_lava_fiend_body: {
+    // Lava Fiend: a molten demon with visible lava — bursting elemental.
+    url: `${REALM_MODELS}/infernal/meshy_ai_lava_demon_visible_l_0616234410_texture_a72a9ef6.glb`,
+    height: 2.5,
+    clips: meshyBiped(),
+    lazyPreload: true,
+  },
+  hellmaw_sigilbound_body: {
+    // Sigil-Bound Warlock: the second cloaked caster-demon variant.
+    url: `${REALM_MODELS}/infernal/meshy_ai_demon_with_body_cover_0616234440_texture_fd4134d0.glb`,
+    height: 2.7,
+    clips: meshyBiped(),
+    lazyPreload: true,
+  },
+  hellmaw_primal_beast_body: {
+    // Primal Emberbeast: a huge quadruped brute (Groudon-esque).
+    url: `${REALM_MODELS}/infernal/meshy_ai_a_primal_groudon_emer_0616234337_texture_194376eb.glb`,
+    height: 3.6,
+    clips: meshyBiped(),
+    lazyPreload: true,
+  },
+  hellmaw_dragon_body: {
+    // Inferno Dragon: a majestic winged terror — the infernal overworld apex mob.
+    url: `${REALM_MODELS}/infernal/meshy_ai_inferno_dragon_majest_0616234236_texture_aefc89dc.glb`,
+    height: 5.0,
+    clips: meshyBiped(),
+    lazyPreload: true,
+  },
   hellmaw_render_body: {
     // THE RENDER — the Infernal Behemoth (biped, animated). The oversized final
     // horror of the descent. Ships its own clip set: Attack / Axe_Spin_Attack /
@@ -1143,6 +1186,12 @@ const MOB_KEYS: Record<string, string> = {
   hellmaw_charred_husk: 'hellmaw_husk_body',
   hellmaw_cinder_acolyte: 'hellmaw_acolyte_body',
   hellmaw_ember_behemoth: 'hellmaw_behemoth_body',
+  hellmaw_wailing_spectre: 'hellmaw_spectre_body',
+  hellmaw_cursed_knight: 'hellmaw_cursed_knight_body',
+  hellmaw_lava_fiend: 'hellmaw_lava_fiend_body',
+  hellmaw_sigilbound_warlock: 'hellmaw_sigilbound_body',
+  hellmaw_primal_beast: 'hellmaw_primal_beast_body',
+  hellmaw_inferno_dragon: 'hellmaw_dragon_body',
   hellmaw_the_render: 'hellmaw_render_body',
   fallen_captain_aldren: 'skel_warrior',
   corrupted_priest_malric: 'skel_necromancer',
