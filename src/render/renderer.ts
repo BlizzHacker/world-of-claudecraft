@@ -716,7 +716,8 @@ function isPersistentPortalObject(e: Entity): boolean {
     (e.templateId === 'dungeon_door' ||
       e.templateId === 'dungeon_exit' ||
       e.templateId === 'building_door' ||
-      e.templateId === 'building_exit')
+      e.templateId === 'building_exit' ||
+      e.templateId === 'waypoint')
   );
 }
 
@@ -3325,11 +3326,16 @@ export class Renderer {
       (e.templateId === 'dungeon_door' ||
         e.templateId === 'dungeon_exit' ||
         e.templateId === 'building_door' ||
-        e.templateId === 'building_exit')
+        e.templateId === 'building_exit' ||
+        e.templateId === 'waypoint')
     ) {
-      // Building doors reuse the dungeon door-marker (a glowing archway portal) so
-      // they're clearly visible + clickable. entering = an ENTRANCE (door), else exit.
-      const entering = e.templateId === 'dungeon_door' || e.templateId === 'building_door';
+      // Building doors + D2 waypoints reuse the dungeon door-marker (a glowing archway
+      // portal) so they're clearly visible + clickable. entering = an ENTRANCE-type
+      // marker (door / waypoint pylon), else an exit.
+      const entering =
+        e.templateId === 'dungeon_door' ||
+        e.templateId === 'building_door' ||
+        e.templateId === 'waypoint';
       const built = this.buildDoorBody(entering, e.dungeonId);
       body = built.body;
       portal = built.portal;

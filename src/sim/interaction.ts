@@ -31,6 +31,7 @@ import {
 } from './encounters/nythraxis';
 import { isInRaidInstance } from './instances/dungeons';
 import { enterInterior, leaveInterior } from './interiors';
+import { activateWaypoint } from './waypoints';
 import { hasSharedLootRights as computeSharedLootRights, lootHasGoneFfa } from './loot/loot_ffa';
 import {
   awardSharedLootItem,
@@ -327,6 +328,10 @@ export function interact(ctx: SimContext, pid?: number): void {
           leaveInterior(ctx, p.id);
           return;
         }
+        if (target.templateId === 'waypoint' && target.waypointId) {
+          activateWaypoint(ctx, target.waypointId, p.id);
+          return;
+        }
         if (target.templateId === 'mailbox') {
           ctx.emit({ type: 'mailbox', pid: p.id });
           return;
@@ -397,6 +402,10 @@ export function interact(ctx: SimContext, pid?: number): void {
     }
     if (obj.templateId === 'building_exit') {
       leaveInterior(ctx, p.id);
+      return;
+    }
+    if (obj.templateId === 'waypoint' && obj.waypointId) {
+      activateWaypoint(ctx, obj.waypointId, p.id);
       return;
     }
     if (obj.templateId === 'mailbox') {

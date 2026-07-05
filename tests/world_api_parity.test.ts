@@ -115,6 +115,7 @@ export const IWORLD_MEMBERS = [
   { name: 'submitLootRoll', kind: 'method' },
   { name: 'activeLootRolls', kind: 'method' }, // read-returning (2/6)
   { name: 'pickUpObject', kind: 'method' },
+  { name: 'waypointTravel', kind: 'method' },
   { name: 'acceptQuest', kind: 'method' },
   { name: 'turnInQuest', kind: 'method' },
   { name: 'reportTelemetry', kind: 'method' },
@@ -357,9 +358,9 @@ beforeAll(() => {
 
 describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => {
   it('pins total / data / method counts', () => {
-    expect(IWORLD_MEMBERS.length).toBe(171);
+    expect(IWORLD_MEMBERS.length).toBe(172);
     expect(DATA_MEMBERS.length).toBe(42);
-    expect(METHOD_MEMBERS.length).toBe(129);
+    expect(METHOD_MEMBERS.length).toBe(130);
   });
 
   it('has no duplicate member names', () => {
@@ -541,6 +542,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'unlockedMilestones',
       'useItem',
       'vendorBuyback',
+      'waypointTravel',
       'xp',
     ]);
   });
@@ -723,6 +725,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'unequipItem',
       'unequipMechChroma',
       'useItem',
+      'waypointTravel',
     ]);
   });
 });
@@ -820,6 +823,7 @@ const FACET_INTERACTION = [
   'lootCorpse',
   'autoLoot',
   'pickUpObject',
+  'waypointTravel',
   // Downstream (Cryptic Realm) ArcForge world-builder commands.
   'placeProp',
   'moveProp',
@@ -1110,8 +1114,8 @@ describe('W1: aggregate IWorld member set equals the disjoint union of the 22 fa
 
   it('the union of the 22 facets equals the pinned 167-member IWORLD_MEMBERS set', () => {
     const union = Object.values(FACET_MEMBER_ARRAYS).flatMap((arr) => [...arr]);
-    expect(union.length, 'union size before dedup (catches a duplicated member)').toBe(171);
-    expect(new Set(union).size, 'union size after dedup (catches a duplicated member)').toBe(171);
+    expect(union.length, 'union size before dedup (catches a duplicated member)').toBe(172);
+    expect(new Set(union).size, 'union size after dedup (catches a duplicated member)').toBe(172);
     const sortedUnion = [...union].sort();
     const pinned = IWORLD_MEMBERS.map((m) => m.name).sort();
     expect(sortedUnion).toEqual(pinned);

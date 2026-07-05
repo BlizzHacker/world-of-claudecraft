@@ -223,6 +223,7 @@ type ClientMessage = Record<string, unknown> & {
   name?: string;
   npc?: number;
   objectId?: number;
+  waypointId?: string;
   price?: number;
   q?: string;
   quest?: string;
@@ -3186,6 +3187,14 @@ export class GameServer {
       case 'delve_interact': {
         if (typeof msg.objectId !== 'number') break;
         sim.delveInteract(msg.objectId, pid);
+        break;
+      }
+      case 'waypoint_travel': {
+        // D2 waypoint travel. Server re-validates the destination is DISCOVERED
+        // (waypointTravel gates on meta.waypointsActivated) so a hacked client
+        // can't teleport to a waypoint it never found.
+        if (typeof msg.waypointId !== 'string') break;
+        sim.waypointTravel(msg.waypointId, pid);
         break;
       }
       case 'companion_upgrade': {

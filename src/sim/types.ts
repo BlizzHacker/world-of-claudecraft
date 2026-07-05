@@ -1437,6 +1437,7 @@ export interface Entity {
   // to when the player exits an interior room, saved on entry. null when outside.
   interiorReturn?: Vec3 | null;
   interiorType?: number | null; // which interior type-column the player is in (0=shop,1=inn,2=house)
+  waypointId?: string; // D2 waypoint marker: which waypoint this activatable object is
   facing: number; // radians, 0 = +Z
   prevFacing: number;
   // online clients only: when this entity's last wire update landed and the
@@ -1832,6 +1833,13 @@ export type SimEvent = { pid?: number } & (
   | { type: 'tradeRequest'; fromPid: number; fromName: string }
   | { type: 'tradeDone' }
   | { type: 'duelRequest'; fromPid: number; fromName: string }
+  // D2 waypoint: open the travel menu. Carries every waypoint (id+name) with a
+  // `known` flag for the ones this player has discovered, so the client renders the
+  // menu without a separate wire field.
+  | {
+      type: 'waypointMenu';
+      waypoints: { id: string; name: string; known: boolean }[];
+    }
   | { type: 'duelCountdown'; seconds: number }
   | { type: 'duelStart' }
   | { type: 'duelEnd'; winnerName: string; loserName: string }

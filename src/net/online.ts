@@ -2218,6 +2218,9 @@ export class ClientWorld implements IWorld {
   delveInteract(objectId: number): void {
     this.cmd({ cmd: 'delve_interact', objectId });
   }
+  waypointTravel(waypointId: string): void {
+    this.cmd({ cmd: 'waypoint_travel', waypointId });
+  }
   companionUpgrade(companionId: string): void {
     this.cmd({ cmd: 'companion_upgrade', companionId });
   }

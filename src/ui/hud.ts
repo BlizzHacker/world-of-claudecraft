@@ -7702,6 +7702,9 @@ export class Hud {
             () => this.sim.duelDecline(),
           );
           break;
+        case 'waypointMenu':
+          this.showWaypointMenu(ev.waypoints);
+          break;
         case 'duelCountdown':
           this.showBanner(t('hud.system.duelCountdown', { seconds: ev.seconds }));
           audio.duelCountdownTick();
@@ -12000,6 +12003,44 @@ export class Hud {
         onDecline();
       }
     }, 28000);
+  }
+
+  // D2 waypoint travel menu: a floating list of the player's DISCOVERED waypoints;
+  // click one to travel. Locked (undiscovered) waypoints show greyed. Opened when
+  // the player interacts with a waypoint (the sim emits waypointMenu with the list).
+  private showWaypointMenu(waypoints: { id: string; name: string; known: boolean }[]): void {
+    document.getElementById('waypoint-menu')?.remove();
+    const stack = $('#prompt-stack');
+    const menu = document.createElement('div');
+    menu.id = 'waypoint-menu';
+    menu.className = 'prompt panel';
+    const title = document.createElement('div');
+    title.className = 'prompt-text';
+    title.innerHTML = '<b>Waypoints</b> — choose a destination';
+    menu.appendChild(title);
+    const list = document.createElement('div');
+    list.className = 'waypoint-list';
+    for (const w of waypoints) {
+      const btn = document.createElement('button');
+      btn.className = 'btn waypoint-dest';
+      btn.textContent = w.known ? w.name : `${w.name} (undiscovered)`;
+      btn.disabled = !w.known;
+      if (w.known) {
+        btn.addEventListener('click', () => {
+          menu.remove();
+          this.sim.waypointTravel(w.id);
+        });
+      }
+      list.appendChild(btn);
+    }
+    menu.appendChild(list);
+    const close = document.createElement('button');
+    close.className = 'btn';
+    close.textContent = t('hud.prompts.decline');
+    close.addEventListener('click', () => menu.remove());
+    menu.appendChild(close);
+    stack.appendChild(menu);
+    window.setTimeout(() => menu.isConnected && menu.remove(), 30000);
   }
 
   // -------------------------------------------------------------------------

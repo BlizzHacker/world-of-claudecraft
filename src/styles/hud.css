@@ -4218,3 +4218,8 @@
     letter-spacing: 0.4px;
   }
 }
+
+/* D2 waypoint travel menu — a vertical list of destination buttons. */
+#waypoint-menu .waypoint-list { display: flex; flex-direction: column; gap: 5px; margin: 8px 0; }
+#waypoint-menu .waypoint-dest { text-align: left; }
+#waypoint-menu .waypoint-dest:disabled { opacity: 0.45; cursor: default; }

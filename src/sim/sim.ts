@@ -86,6 +86,7 @@ import {
 import { applyCooldowns, type SavedCooldowns, serializeCooldowns } from './cooldown_persist';
 import { activeMaxLevel, getActiveRealm } from './realms/registry';
 import { spawnBuildingInteriors } from './interiors';
+import { spawnWaypoints, waypointTravel } from './waypoints';
 import type { DelveShopGate, DelveShopOffer } from './data';
 import {
   abilitiesKnownAt,
@@ -753,6 +754,7 @@ export interface PlayerMeta {
   known: ResolvedAbility[];
   questLog: Map<string, QuestProgress>;
   questsDone: Set<string>;
+  waypointsActivated: Set<string>; // D2 waypoints this player has unlocked (persisted)
   counters: RewardCounters;
   autoEquip: boolean;
   // sim.time when this character entered the world; powers /played. Session-only
@@ -867,6 +869,7 @@ export interface CharacterState {
   vendorBuyback?: InvSlot[];
   questLog: { questId: string; counts: number[]; state: 'active' | 'ready' | 'done' }[];
   questsDone: string[];
+  waypointsActivated?: string[]; // D2 waypoints unlocked (persisted; optional for back-compat)
   // Legacy arenaRating/Wins/Losses are treated as 1v1 data. The explicit
   // 1v1 fields are written by new saves, while old saves fall back cleanly.
   arenaRating?: number;
@@ -1230,6 +1233,8 @@ export class Sim {
     if (getActiveRealm().worldTheme) {
       spawnBuildingInteriors(this.ctx, () => this.nextId++, worldContent);
     }
+    // D2 waypoints: an activatable travel marker at each town hub (all realms).
+    spawnWaypoints(this.ctx, () => this.nextId++);
 
     for (const delve of DELVE_LIST) {
       for (let i = 0; i < DELVE_SLOT_COUNT; i++) {
@@ -1523,6 +1528,7 @@ export class Sim {
       known: [],
       questLog: new Map(),
       questsDone: new Set(),
+      waypointsActivated: new Set(),
       counters: freshCounters(),
       autoEquip: opts?.autoEquip ?? false,
       joinedAt: this.time,
@@ -1604,6 +1610,7 @@ export class Sim {
           });
       }
       for (const q of s.questsDone) meta.questsDone.add(q);
+      for (const w of s.waypointsActivated ?? []) meta.waypointsActivated.add(w);
       if (s.talents)
         // Revalidate the persisted build against the current rules + level budget
         // before it is baked into the flat mods below. A stored allocation replays
@@ -1870,6 +1877,7 @@ export class Sim {
         state: q.state,
       })),
       questsDone: [...meta.questsDone],
+      waypointsActivated: [...meta.waypointsActivated],
       arenaRating: meta.arenaRating,
       arenaWins: meta.arenaWins,
       arenaLosses: meta.arenaLosses,
@@ -5106,6 +5114,10 @@ export class Sim {
 
   buyItem(npcId: number, itemId: string, pid?: number): void {
     items.buyItem(this.ctx, npcId, itemId, pid);
+  }
+
+  waypointTravel(waypointId: string, pid?: number): void {
+    waypointTravel(this.ctx, waypointId, pid);
   }
 
   sellItem(itemId: string, count = 1, pid?: number): void {
