@@ -1228,11 +1228,11 @@ export class Sim {
     spawnOverworldSpiritHealers(this.ctx);
 
     // Building interiors (themed realms only): the shared shop/inn/house rooms +
-    // their exit doors + the door entities on each enterable town building. Draws
-    // no rng (deterministic placement), so world-gen determinism is preserved.
-    if (getActiveRealm().worldTheme) {
-      spawnBuildingInteriors(this.ctx, () => this.nextId++, worldContent);
-    }
+    // their exit doors + the door-area registry for each enterable town building.
+    // Always called so the module-level BUILDING_DOORS registry is reset per world
+    // init; it no-ops (and clears the registry) on non-themed realms. Draws no rng
+    // (deterministic placement), so world-gen determinism is preserved.
+    spawnBuildingInteriors(this.ctx, () => this.nextId++, worldContent);
     // D2 waypoints: an activatable travel marker at each town hub (all realms).
     spawnWaypoints(this.ctx, () => this.nextId++);
 

@@ -715,7 +715,6 @@ function isPersistentPortalObject(e: Entity): boolean {
     e.kind === 'object' &&
     (e.templateId === 'dungeon_door' ||
       e.templateId === 'dungeon_exit' ||
-      e.templateId === 'building_door' ||
       e.templateId === 'building_exit' ||
       e.templateId === 'waypoint' ||
       e.templateId === 'town_portal')
@@ -3326,7 +3325,6 @@ export class Renderer {
       e.kind === 'object' &&
       (e.templateId === 'dungeon_door' ||
         e.templateId === 'dungeon_exit' ||
-        e.templateId === 'building_door' ||
         e.templateId === 'building_exit' ||
         e.templateId === 'waypoint' ||
         e.templateId === 'town_portal')
@@ -3336,7 +3334,6 @@ export class Renderer {
       // ENTRANCE-type marker (door / waypoint pylon / town portal), else an exit.
       const entering =
         e.templateId === 'dungeon_door' ||
-        e.templateId === 'building_door' ||
         e.templateId === 'waypoint' ||
         e.templateId === 'town_portal';
       const built = this.buildDoorBody(entering, e.dungeonId);
@@ -3842,18 +3839,39 @@ export class Renderer {
    *  into view parsed a big mesh on the render thread mid-crawl → a hitch every few
    *  steps. Kicking all the preloads at delve entry moves that work to the one entry
    *  transition (async; mobs still pop in as each resolves) so the walk stays smooth. */
-  private preloadDelveMobVisuals(delveId: string): void {
-    if (this.delveMobsPreloaded.has(delveId)) return;
-    this.delveMobsPreloaded.add(delveId);
+  /** Every distinct character-visual key a delve can field (its own mobs + the shared
+   *  hellmaw_* roster). Used by both the fire-and-forget per-frame warmup and the
+   *  awaited entry preload. */
+  private delveMobVisualKeys(delveId: string): string[] {
     const keys = new Set<string>();
     for (const [tid, tmpl] of Object.entries(MOBS)) {
       if (!tid.startsWith('hellmaw_') && !tid.startsWith(delveId)) continue;
       const probe = { kind: 'mob', templateId: tid, family: tmpl.family } as unknown as Entity;
       keys.add(visualKeyFor(probe));
     }
-    for (const key of keys) {
+    return [...keys];
+  }
+
+  private preloadDelveMobVisuals(delveId: string): void {
+    if (this.delveMobsPreloaded.has(delveId)) return;
+    this.delveMobsPreloaded.add(delveId);
+    for (const key of this.delveMobVisualKeys(delveId)) {
       if (!visualAssetsReady(key)) void preloadVisualAssets(key).catch(() => undefined);
     }
+  }
+
+  /** Await EVERY heavy asset a delve needs before the player is dropped in: the dungeon
+   *  kit + all mob GLBs. The HUD shows a loading screen over this promise so the crawl
+   *  starts only once the meshes are parsed — no more hitch-every-few-steps as each big
+   *  Hellmaw body first scrolls into view. Resolves even if an individual asset fails
+   *  (it falls back to a placeholder in-world) so a bad GLB never wedges the loader. */
+  async preloadDelveAssets(delveId: string): Promise<void> {
+    this.delveMobsPreloaded.add(delveId); // the per-frame warmup can now skip re-kicking
+    const jobs: Promise<unknown>[] = [ensureDungeonAssets().catch(() => undefined)];
+    for (const key of this.delveMobVisualKeys(delveId)) {
+      if (!visualAssetsReady(key)) jobs.push(preloadVisualAssets(key).catch(() => undefined));
+    }
+    await Promise.all(jobs);
   }
 
   private ensureDelveInteriorsNear(px: number, pz: number): void {

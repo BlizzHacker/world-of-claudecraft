@@ -94,43 +94,17 @@ function staticWorldColliders(seed: number): Collider[] {
   // Themed realms scale building height (render/props.ts); mirror the scale here so
   // the camera-hide top matches the taller mesh. Vanilla realms use scale 1.
   const bScale = getActiveRealm().worldTheme?.buildingScale ?? 1;
-  const enterable = bScale > 1; // themed realms (infernal) get walk-in buildings
+  // Buildings are SOLID blocking boxes (one OBB each) — you can't walk through them.
+  // Entry is by CLICKING the building's front-door area (interaction.ts), which loads
+  // the interior room; there is no walk-in gap and no separate door marker object.
+  // b.w/b.d are already the themed (scaled) footprint, so this matches the render.
   for (const b of PROPS.buildings) {
     const height = (b.kind === 'chapel' ? 10.8 : b.kind === 'inn' ? 7.8 : 8.0) * bScale;
-    const camTopY = topY(seed, b.x, b.z, height);
-    if (!enterable) {
-      // Vanilla realms: buildings stay SOLID (one blocking OBB), upstream-faithful.
-      out.push({
-        type: 'obb',
-        x: b.x, z: b.z, hw: b.w / 2, hd: b.d / 2, rot: b.rot,
-        cameraTopY: camTopY, camGhost: true,
-      });
-      continue;
-    }
-    // Themed realms: emit a WALL SHELL (4 thin walls) with a door gap on the +z
-    // (front) face, so the player can walk inside instead of being blocked by a
-    // solid block. Wall thickness WT; door half-width DHW centred on the front.
-    const hw = b.w / 2;
-    const hd = b.d / 2;
-    const WT = 0.6; // wall half-thickness
-    const DHW = 3.2; // door half-width (~6.4u opening)
-    const seg = (lx: number, lz: number, shw: number, shd: number): void => {
-      const w = rotY(lx, lz, b.rot);
-      out.push({
-        type: 'obb',
-        x: b.x + w.x, z: b.z + w.z, hw: shw, hd: shd, rot: b.rot,
-        cameraTopY: camTopY, camGhost: true,
-      });
-    };
-    seg(0, -hd, hw, WT); // back wall (local -z), solid
-    seg(-hw, 0, WT, hd); // left wall
-    seg(hw, 0, WT, hd); // right wall
-    // Front wall (local +z) split into two segments flanking the central door gap.
-    const sideHw = (hw - DHW) / 2;
-    if (sideHw > 0) {
-      seg(-(DHW + sideHw), hd, sideHw, WT);
-      seg(DHW + sideHw, hd, sideHw, WT);
-    }
+    out.push({
+      type: 'obb',
+      x: b.x, z: b.z, hw: b.w / 2, hd: b.d / 2, rot: b.rot,
+      cameraTopY: topY(seed, b.x, b.z, height), camGhost: true,
+    });
   }
   for (const w of PROPS.wells)
     out.push({

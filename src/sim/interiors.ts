@@ -17,8 +17,9 @@ import {
   INTERIOR_VILLAGER,
 } from './content/interior_npcs';
 import { createGroundObject, createNpc, createProp } from './entity';
+import { getActiveRealm } from './realms/registry';
 import type { SimContext } from './sim_context';
-import type { Entity, NpcDef, Vec3, WorldContent } from './types';
+import type { Entity, NpcDef, WorldContent } from './types';
 
 export const INTERIOR_TYPE_SHOP = 0;
 export const INTERIOR_TYPE_INN = 1;
@@ -95,6 +96,12 @@ export function spawnBuildingInteriors(
   nextId: () => number,
   world: WorldContent,
 ): void {
+  // Reset the door-area registry every world init so a prior realm's doors never
+  // leak into this world (the registry is module-global).
+  BUILDING_DOORS.length = 0;
+  // Interiors are a themed-realm feature; vanilla (claudecraft) has none. On a
+  // non-themed realm we've cleared the registry and there is nothing more to spawn.
+  if (!getActiveRealm().worldTheme) return;
   const add = (e: Entity): void => ctx.addEntity(e);
   // 1) Furnish each shared interior room (slot 0): an EXIT door at the south door,
   // furniture props, and the resident NPC.
@@ -123,28 +130,47 @@ export function spawnBuildingInteriors(
     npcEnt.facing = Math.PI; // face the south door / incoming player
     add(npcEnt);
   }
-  // 2) A clickable ENTRANCE door on each enterable building, at its +z (front) face.
-  // The first house in the town becomes the shop so every room type is reachable.
+  // 2) Register each enterable building's DOOR AREA (a world point on its +z front
+  // face) + its interior type. No separate door object is spawned — clicking the
+  // building's own door area (checked in interaction.ts via nearestBuildingDoor)
+  // loads the room. The first house in each town becomes the shop.
   let houseSeen = 0;
   for (const b of world.props.buildings) {
     const interiorType = interiorTypeForBuilding(b.kind, houseSeen);
     if (b.kind === 'house') houseSeen++;
     if (interiorType == null) continue;
-    // Front-door world position: the +z face centre, rotated by the building yaw,
-    // nudged just outside so the player clicks it from the street.
-    const frontLocalZ = b.d / 2 + 0.6;
-    const c = Math.cos(b.rot);
+    // Front-door world point: the +z face centre, rotated by the building yaw.
+    const frontLocalZ = b.d / 2;
     const s = Math.sin(b.rot);
-    const dx = -0 * c - frontLocalZ * s;
-    const dz = -0 * s + frontLocalZ * c;
-    const doorPos: Vec3 = ctx.groundPos(b.x + dx, b.z + dz);
-    const door = createGroundObject(nextId(), '', 'Door', doorPos);
-    door.templateId = 'building_door';
-    door.objectItemId = null;
-    door.interiorType = interiorType;
-    door.lootable = true; // interactable
-    add(door);
+    const cc = Math.cos(b.rot);
+    BUILDING_DOORS.push({
+      x: b.x - frontLocalZ * s,
+      z: b.z + frontLocalZ * cc,
+      interiorType,
+      // Click radius scales a bit with the building so bigger fronts are easy to hit.
+      r: Math.max(4, b.w * 0.4),
+    });
   }
+}
+
+// Registered enterable-building door areas (rebuilt each world init). interaction.ts
+// checks a click against these to enter without a separate door object.
+export interface BuildingDoor { x: number; z: number; interiorType: number; r: number }
+export const BUILDING_DOORS: BuildingDoor[] = [];
+
+/** The interior type of the nearest building door within its click radius of (x,z),
+ *  or null. Used by the interact handler to enter a building by clicking its door. */
+export function buildingDoorAt(x: number, z: number): number | null {
+  let best: BuildingDoor | null = null;
+  let bestD = Infinity;
+  for (const d of BUILDING_DOORS) {
+    const dd = Math.hypot(x - d.x, z - d.z);
+    if (dd <= d.r && dd < bestD) {
+      bestD = dd;
+      best = d;
+    }
+  }
+  return best?.interiorType ?? null;
 }
 
 /** Teleport the player into the interior room for `interiorType`, saving the spot to

@@ -6032,11 +6032,25 @@ export class Hud {
       });
       el.querySelector('[data-delve-enter]')?.addEventListener('click', () => {
         const tierId = this.selectedDelveTier;
-        this.sim.enterDelve(delve.id, tierId);
-        // enterDelve queues delveEntered for the next sim tick; kick interior
-        // prebuild now so the first rendered frame is not a fog void.
-        this.renderer.handleEvent({ type: 'delveEntered', delveId: delve.id, tierId });
+        const delveId = delve.id;
+        const delveName = delve.name ?? 'the delve';
         this.closeDelveBoard();
+        // Show a loading screen and preload EVERY monster GLB + the dungeon kit before
+        // dropping the player in, so the crawl doesn't hitch as each heavy Hellmaw body
+        // first scrolls into view. On slow/failed preload we still enter (assets stream
+        // in as before) so the loader can never trap the player at the board.
+        this.showDelveLoadingScreen(delveName);
+        const enter = () => {
+          this.sim.enterDelve(delveId, tierId);
+          // enterDelve queues delveEntered for the next sim tick; kick interior
+          // prebuild now so the first rendered frame is not a fog void.
+          this.renderer.handleEvent({ type: 'delveEntered', delveId, tierId });
+          this.hideDelveLoadingScreen();
+        };
+        this.renderer
+          .preloadDelveAssets(delveId)
+          .then(enter)
+          .catch(enter);
       });
     }
     el.querySelector('[data-close]')?.addEventListener('click', () => this.closeDelveBoard());
@@ -10991,6 +11005,39 @@ export class Hud {
       });
     input?.focus();
     if (opts.readOnly || opts.selectText) input?.select?.();
+  }
+
+  // Full-screen delve loading screen. Shown over the async asset preload at delve
+  // entry so the crawl only starts once every monster GLB + the dungeon kit are
+  // parsed — killing the old "hitch every few steps as each Hellmaw body first
+  // scrolled in" lag. Built in JS (no index.html dependency) and self-removing.
+  private showDelveLoadingScreen(label: string): void {
+    document.getElementById('delve-loading')?.remove();
+    const el = document.createElement('div');
+    el.id = 'delve-loading';
+    el.setAttribute('role', 'status');
+    el.setAttribute('aria-live', 'polite');
+    el.style.cssText =
+      'position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;' +
+      'align-items:center;justify-content:center;gap:22px;' +
+      'background:radial-gradient(circle at 50% 40%,#2a0b06 0%,#120303 70%,#000 100%);' +
+      'color:#f2c88a;font-family:inherit;text-align:center;';
+    el.innerHTML =
+      `<div style="font-size:26px;letter-spacing:2px;text-shadow:0 0 18px #ff5a1e;">${esc(label)}</div>` +
+      '<div style="font-size:14px;opacity:.75;">Preparing the depths…</div>' +
+      '<div style="width:220px;height:6px;border-radius:3px;overflow:hidden;background:#3a140c;">' +
+      '<div style="height:100%;width:40%;border-radius:3px;background:linear-gradient(90deg,#ff8a3c,#ff3b12);' +
+      'animation:delveLoadBar 1s ease-in-out infinite alternate;"></div></div>' +
+      '<style>@keyframes delveLoadBar{from{margin-left:0;width:30%}to{margin-left:60%;width:40%}}</style>';
+    document.body.appendChild(el);
+  }
+
+  private hideDelveLoadingScreen(): void {
+    const el = document.getElementById('delve-loading');
+    if (!el) return;
+    el.style.transition = 'opacity .25s';
+    el.style.opacity = '0';
+    setTimeout(() => el.remove(), 260);
   }
 
   // Generic in-app dropdown (replaces native <select>). The selected value lives

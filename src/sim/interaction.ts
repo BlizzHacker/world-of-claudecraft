@@ -30,7 +30,7 @@ import {
   tryStartNythraxisWardChannel,
 } from './encounters/nythraxis';
 import { isInRaidInstance } from './instances/dungeons';
-import { enterInterior, leaveInterior } from './interiors';
+import { buildingDoorAt, enterInterior, leaveInterior } from './interiors';
 import { activateWaypoint } from './waypoints';
 import { useTownPortal } from './town_portal';
 import { hasSharedLootRights as computeSharedLootRights, lootHasGoneFfa } from './loot/loot_ffa';
@@ -319,12 +319,9 @@ export function interact(ctx: SimContext, pid?: number): void {
           ctx.leaveDungeon(p.id);
           return;
         }
-        // Building interiors: click a building door to enter its room; click the
-        // room's exit door to step back outside.
-        if (target.templateId === 'building_door' && target.interiorType != null) {
-          enterInterior(ctx, target.interiorType, p.id);
-          return;
-        }
+        // Building interiors: entering a building is by standing in its door area
+        // (handled below via buildingDoorAt) — no separate door object. Clicking the
+        // room's exit door steps the player back outside.
         if (target.templateId === 'building_exit') {
           leaveInterior(ctx, p.id);
           return;
@@ -401,10 +398,6 @@ export function interact(ctx: SimContext, pid?: number): void {
       ctx.leaveDungeon(p.id);
       return;
     }
-    if (obj.templateId === 'building_door' && obj.interiorType != null) {
-      enterInterior(ctx, obj.interiorType, p.id);
-      return;
-    }
     if (obj.templateId === 'building_exit') {
       leaveInterior(ctx, p.id);
       return;
@@ -425,5 +418,17 @@ export function interact(ctx: SimContext, pid?: number): void {
     pickUpObject(ctx, obj.id, p.id);
     return;
   }
-  if (questEntity) ctx.talkToNpc(questEntity.id, p.id);
+  if (questEntity) {
+    ctx.talkToNpc(questEntity.id, p.id);
+    return;
+  }
+  // No entity to interact with: if the player is standing in a building's front-door
+  // area, entering the building loads its interior room. Buildings are solid (see
+  // colliders.ts) and carry no separate door object — the door is the building's own
+  // +z face, registered in BUILDING_DOORS at world init.
+  const doorType = buildingDoorAt(p.pos.x, p.pos.z);
+  if (doorType != null) {
+    enterInterior(ctx, doorType, p.id);
+    return;
+  }
 }
