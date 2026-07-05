@@ -3826,9 +3826,31 @@ export class Renderer {
     this.buildAllDelveModules(delveId, run.slot, run.origin, run.modules as DelveModuleId[]);
   }
 
+  private delveMobsPreloaded = new Set<string>();
+  /** Preload EVERY mob visual a delve can field, once, on first entry. The infernal
+   *  Hellmaw fields several heavy lazy-preload GLBs (the 40MB dragon, 11MB lava fiend
+   *  / primal beast); loading them on-demand as each new monster type first scrolled
+   *  into view parsed a big mesh on the render thread mid-crawl → a hitch every few
+   *  steps. Kicking all the preloads at delve entry moves that work to the one entry
+   *  transition (async; mobs still pop in as each resolves) so the walk stays smooth. */
+  private preloadDelveMobVisuals(delveId: string): void {
+    if (this.delveMobsPreloaded.has(delveId)) return;
+    this.delveMobsPreloaded.add(delveId);
+    const keys = new Set<string>();
+    for (const [tid, tmpl] of Object.entries(MOBS)) {
+      if (!tid.startsWith('hellmaw_') && !tid.startsWith(delveId)) continue;
+      const probe = { kind: 'mob', templateId: tid, family: tmpl.family } as unknown as Entity;
+      keys.add(visualKeyFor(probe));
+    }
+    for (const key of keys) {
+      if (!visualAssetsReady(key)) void preloadVisualAssets(key).catch(() => undefined);
+    }
+  }
+
   private ensureDelveInteriorsNear(px: number, pz: number): void {
     const delve = delveAt(px);
     if (!delve) return;
+    this.preloadDelveMobVisuals(delve.id);
     const run = this.sim.delveRun;
     const modules = (
       run?.delveId === delve.id && run.modules.length ? run.modules : defaultDelveModules(delve.id)

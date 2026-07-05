@@ -18,6 +18,7 @@ import type { PickAction } from '../src/sim/lockpick';
 import { sanitizeMarketQuery } from '../src/sim/market_query';
 import { parseMoveInputFrame } from '../src/sim/move_input';
 import { realmClassVisualKey } from '../src/sim/realms/class_visuals';
+import { isRealmId, setRealmHostEnv } from '../src/sim/realms/registry';
 import type { PetState, PlayerMeta } from '../src/sim/sim';
 import { MAX_CHAT_MESSAGE_LEN, Sim } from '../src/sim/sim';
 import { stealthDetectionRadius, threatEntries } from '../src/sim/threat';
@@ -105,6 +106,26 @@ import { holderInfoForPubkey } from './woc_balance';
 import { isBackpressureExceeded } from './ws_backpressure';
 
 const WORLD_SEED = 20061;
+
+// Bind the server's ACTIVE REALM from CR_REALM_ID *before* any Sim is constructed.
+// The sim resolves per-realm content (worldTheme buildings + collision + the D2
+// combat/scaling + level cap + building interiors) through getActiveRealm(), which
+// reads a hostEnv. On the browser that's window/localStorage (realm_env.ts); on the
+// server there's no window, so without this the server ran DEFAULT_REALM
+// (crypticrealm) while the client rendered the stage's real realm — buildings,
+// doors, and collision didn't line up (walk-through + phantom walls at old spots,
+// no doors). Install a Node hostEnv that returns CR_REALM_ID as the ?realm= value.
+{
+  const realmId = (process.env.CR_REALM_ID ?? '').trim();
+  if (isRealmId(realmId)) {
+    setRealmHostEnv({
+      queryParam: (name) => (name === 'realm' ? realmId : null),
+      storageGet: () => null,
+      storageSet: () => {},
+    });
+  }
+}
+
 const ALDRIC_METEOR_QUEST_ID = 'q_aldrics_fallen_star';
 // Interest management: the client renders entities out to 80yd, so new
 // entities enter interest just past that, and known entities persist a
