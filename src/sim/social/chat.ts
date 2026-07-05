@@ -30,6 +30,7 @@ import {
 import type { SimContext } from '../sim_context';
 import { dist2d, type Entity, MAX_LEVEL, type OverheadEmoteId, YELL_RANGE } from '../types';
 import * as readouts from './chat_readouts';
+import { npcDuelChallenge } from './npc_duel';
 
 const CHAT_BURST = 8; // messages a player may send back-to-back...
 const CHAT_REFILL = 2; // ...then this many more per second (caps spam amplifiers)
@@ -162,6 +163,14 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
       color: on ? '#ff5a2e' : '#ffd100',
       pid: r.meta.entityId,
     });
+    return null;
+  }
+
+  // "/challenge" (alias "/duel") — F4c: challenge your targeted wandering mercenary
+  // to a duel to the death. Production command (no dev flag), gated inside on the
+  // target being a duelable grinding NPC in range.
+  if (/^\/(challenge|duel)\s*$/i.test(raw)) {
+    npcDuelChallenge(ctx, r.meta.entityId);
     return null;
   }
 

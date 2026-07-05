@@ -1567,6 +1567,7 @@ export interface Entity {
   grinds?: boolean; // F4: NPC hunts nearby wild mobs (aid-for-XP); see npc/roam.ts
   npcResting?: boolean; // F4: grinder is retreating home to heal (rest-HP hysteresis)
   npcDuelMortal?: boolean; // F4c: set while a grinder NPC is in a to-the-death duel (bypass HP floor)
+  npcRespawnTimer?: number; // F4c: seconds until a duel-defeated NPC restores to full at home
   aggroTargetId: number | null;
   /** GM character: invulnerable (dealDamage no-ops). Server-set from the
    *  characters.is_gm column; never user-settable. */

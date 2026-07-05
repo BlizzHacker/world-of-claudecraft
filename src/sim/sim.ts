@@ -14,6 +14,7 @@ import { addStacked, BAG_SOCKETS, bagCapacity, canAddItem, migrationBagsFor } fr
 import { lineOfSightClear, resolveMovement, resolvePosition } from './colliders';
 import { auraAffectsStats, removeCancelableAura } from './combat/aura_cancel';
 import { updateRoamingNpc } from './npc/roam';
+import { npcDuelChallenge, tickNpcDuelRespawn, updateNpcDuels } from './social/npc_duel';
 import {
   cleanseFriendlyNpcAuras,
   isRejectedFriendlyNpcAura,
@@ -553,6 +554,15 @@ export interface DuelState {
   timer: number; // countdown remaining / elapsed
 }
 
+// F4c: a player-vs-NPC duel to the death. Kept separate from the PvP `duels` map
+// (which assumes both sides are player pids everywhere). Keyed by the player pid.
+export interface NpcDuelState {
+  playerPid: number;
+  npcId: number;
+  state: 'countdown' | 'active';
+  timer: number;
+}
+
 // GroundAoE type moved to entity_roster.ts (the ground-AoE drain's home); imported above.
 
 export type { ArenaFormat } from './types';
@@ -1010,6 +1020,7 @@ export class Sim {
   tradeInvites = new Map<number, { fromPid: number; expires: number }>();
   duels = new Map<number, DuelState>(); // pid -> shared duel (both pids)
   duelInvites = new Map<number, { fromPid: number; expires: number }>();
+  npcDuels = new Map<number, NpcDuelState>(); // F4c: player pid -> player-vs-NPC duel
   // arena: format-specific queues, live bouts keyed by every participant pid,
   // and the set of busy instance slots
   arenaQueue1v1: number[] = [];
@@ -2335,6 +2346,9 @@ export class Sim {
       get duels() {
         return sim.duels;
       },
+      get npcDuels() {
+        return sim.npcDuels;
+      },
       get cfg() {
         return sim.cfg;
       },
@@ -2910,6 +2924,7 @@ export class Sim {
         updateAuras(this.ctx, e);
       } else if (e.kind === 'npc') {
         cleanseFriendlyNpcAuras(this.ctx, e);
+        tickNpcDuelRespawn(this.ctx, e); // F4c: restore a duel-defeated NPC
         updateRoamingNpc(this.ctx, e);
       } else if (e.kind === 'object') {
         if (!e.lootable) {
@@ -2959,6 +2974,7 @@ export class Sim {
     }
 
     this.updateDuels();
+    updateNpcDuels(this.ctx); // F4c: player-vs-NPC duels
     this.updateArena();
     this.updateTradesAndInvites();
     this.updateLootRolls();
@@ -5325,6 +5341,18 @@ export class Sim {
   }
 
   isHostileTo(attacker: Entity, target: Entity): boolean {
+    // F4c: player-vs-NPC duel. Both directions are hostile only while a duel between
+    // exactly this player and this NPC is ACTIVE (past the countdown). This is the
+    // sole path by which a player and a friendly NPC can damage each other. Scoped
+    // narrowly (player↔npc only) so it never touches the grinder-vs-mob path below.
+    if (target.kind === 'npc' && attacker.kind === 'player') {
+      const d = this.npcDuels.get(attacker.id);
+      return !!d && d.state === 'active' && d.npcId === target.id;
+    }
+    if (attacker.kind === 'npc' && target.kind === 'player') {
+      const d = this.npcDuels.get(target.id);
+      return !!d && d.state === 'active' && d.npcId === attacker.id;
+    }
     if (target.kind === 'mob') {
       if (target.templateId.startsWith('vision_')) return false;
       if (target.ownerId !== null) {

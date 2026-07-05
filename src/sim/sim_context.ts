@@ -22,6 +22,7 @@ import type {
   ArenaMatch,
   ArenaQueueUnit,
   DuelState,
+  NpcDuelState,
   FiestaState,
   InstanceSlot,
   ItemUseResult,
@@ -109,6 +110,7 @@ export interface SimContextPrimitives {
   // Backing fields stay on Sim. `duels` is also read per-attack by isHostileTo/
   // dealDamage (PvP hostility), so it stays Sim-owned (A2).
   readonly duels: Map<number, DuelState>;
+  readonly npcDuels: Map<number, NpcDuelState>; // F4c player-vs-NPC duels (read by isHostileTo)
   // `world` stays optional (custom play-test map, else undefined); the rest defaulted.
   readonly cfg: Required<Omit<SimConfig, 'noPlayer' | 'world'>> & Pick<SimConfig, 'world'>;
   // A2 duel + arena state. Live views: the backing fields stay on Sim (mutated in
@@ -671,6 +673,9 @@ export function createSimContext(host: SimContextHost): SimContext {
     },
     get duels() {
       return host.duels;
+    },
+    get npcDuels() {
+      return host.npcDuels;
     },
     get cfg() {
       return host.cfg;

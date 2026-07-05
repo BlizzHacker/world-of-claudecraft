@@ -18,6 +18,7 @@
 
 import { hash2 } from '../rng';
 import type { SimContext } from '../sim_context';
+import { npcDuelOpponentOf } from '../social/npc_duel';
 import { angleTo, DT, dist2d, type Entity, MELEE_RANGE } from '../types';
 
 const ROAM_SEED = 0x726f616d; // 'roam'
@@ -63,6 +64,23 @@ function nearestWildMob(ctx: SimContext, npc: Entity): Entity | null {
     }
   });
   return best;
+}
+
+/** Melee a specific target (the duel opponent): close, face, swing. */
+function fightTarget(ctx: SimContext, npc: Entity, target: Entity): void {
+  npc.swingTimer = Math.max(0, npc.swingTimer - DT);
+  npc.aggroTargetId = target.id;
+  const d = dist2d(npc.pos, target.pos);
+  const reach = MELEE_RANGE * 0.8;
+  if (d > reach) {
+    if (!ctx.isRooted(npc)) ctx.moveToward(npc, target.pos, npc.moveSpeed * ctx.moveSpeedMult(npc));
+  } else {
+    npc.facing = angleTo(npc.pos, target.pos);
+    if (npc.swingTimer <= 0) {
+      ctx.mobSwing(npc, target);
+      npc.swingTimer = npc.weapon.speed * ctx.swingIntervalMult(npc);
+    }
+  }
 }
 
 /** Drive a grinding NPC's hunt. Returns true if it handled the NPC this tick
@@ -115,6 +133,13 @@ function updateGrinder(ctx: SimContext, npc: Entity): boolean {
 /** Advance one roaming/grinding NPC. No-op unless flagged `roams` or `grinds`. */
 export function updateRoamingNpc(ctx: SimContext, npc: Entity): void {
   if (npc.dead) return;
+  // F4c: an ACTIVE duel opponent overrides everything — fight the challenger to
+  // the death (ignore the player-engage pause; this IS the engagement).
+  const duelFoe = npcDuelOpponentOf(ctx, npc);
+  if (duelFoe && !duelFoe.dead) {
+    fightTarget(ctx, npc, duelFoe);
+    return;
+  }
   // Grinders hunt wild mobs; when idle (no mob nearby) they fall through to roam.
   // A player engaging still preempts everything (return home to talk / be dueled).
   if (npc.grinds && !playerEngaging(ctx, npc)) {
