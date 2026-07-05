@@ -828,18 +828,36 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
     inn: 7.6,
   };
   // A themed realm (infernal) scales building FOOTPRINTS (w/d) via worldTheme; scale
-  // their HEIGHT by the same factor so a 1.9× wider building isn't a squashed slab,
-  // and SINK the base proportionally to the extra width so a bigger footprint on
-  // sloped terrain doesn't float/clip at its far edges (the base is placed at the
-  // centre's ground height, so a wider building needs to sit a little lower). Vanilla
-  // realms (buildingScale 1) get vScale 1 + the original 0.12 sink — unchanged.
+  // their HEIGHT by the same factor so a 1.9× wider building isn't a squashed slab.
+  // Vanilla realms (buildingScale 1) get vScale 1 and the original placement.
   const buildingScale = getActiveRealm().worldTheme?.buildingScale ?? 1;
   const vScale = buildingScale; // proportional height
-  const baseSink = 0.12 + Math.max(0, buildingScale - 1) * 1.4;
+  const scaled = buildingScale > 1;
+  // A wider building spans more (sloped) terrain, so placing its base at the CENTRE's
+  // ground height left the uphill corners buried. Sit the base at the HIGHEST ground
+  // point under the footprint (with a small sink so the walls still meet the dirt),
+  // so no corner clips underground. Sampled at the 4 corners + centre. Vanilla
+  // buildings keep the original centre-height − 0.12 placement.
+  const footBaseY = (b: { x: number; z: number; w: number; d: number; rot: number }): number => {
+    if (!scaled) return ground(b.x, b.z) - 0.12;
+    const hw = b.w / 2;
+    const hd = b.d / 2;
+    const c = Math.cos(b.rot);
+    const s = Math.sin(b.rot);
+    let maxY = ground(b.x, b.z);
+    for (const [lx, lz] of [
+      [-hw, -hd], [hw, -hd], [-hw, hd], [hw, hd],
+    ] as const) {
+      const wx = b.x + lx * c - lz * s;
+      const wz = b.z + lx * s + lz * c;
+      maxY = Math.max(maxY, ground(wx, wz));
+    }
+    return maxY - 0.4; // small sink so the walls meet the dirt, not float
+  };
 
   for (const b of getActiveWorldContent().props.buildings) {
     const key = b.x * 13.7 + b.z * 3.1;
-    const y = ground(b.x, b.z);
+    const y = footBaseY(b);
     // roof Y mirrors the camera collider height in colliders.ts (scaled to match)
     const roofY = y + (b.kind === 'chapel' ? 10.8 : b.kind === 'inn' ? 7.8 : 8.0) * vScale;
     if (b.kind === 'chapel') {
@@ -856,7 +874,7 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
         z: b.d / 2 - 1.62,
         scale: [(b.w * 0.9) / hall.size.x, (2.5 * vScale) / hall.size.y, 3.2 / hall.size.z],
       });
-      g.position.set(b.x, y - baseSink, b.z);
+      g.position.set(b.x, y, b.z);
       g.rotation.y = b.rot;
       group.add(shadowed(g));
       registerHideable(g, obbFootprint(b.x, b.z, b.w / 2, b.d / 2, b.rot, roofY));
@@ -869,7 +887,7 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
     addParts(g, asset, {
       scale: [b.w / a.size.x, (houseHeight[asset] * vScale) / a.size.y, b.d / a.size.z],
     });
-    g.position.set(b.x, y - baseSink, b.z);
+    g.position.set(b.x, y, b.z);
     g.rotation.y = b.rot;
     group.add(shadowed(g));
     registerHideable(g, obbFootprint(b.x, b.z, b.w / 2, b.d / 2, b.rot, roofY));
