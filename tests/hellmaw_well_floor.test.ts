@@ -167,3 +167,42 @@ describe('hellmaw maze — offset doorway chain', () => {
     }
   });
 });
+
+// ── Openable gates: portcullis doors spawn closed and block the aisle ─────────
+describe('hellmaw gates — live sim', () => {
+  it('spawns closed locked_door gates linked to pressure plates', () => {
+    const sim = makeSim(7);
+    const run = enterDurance(sim);
+    expect(run.openFloor).toBe(true);
+    const doorStates = run.objectIds
+      .map((id: number) => run.objectState[id])
+      .filter((s: any) => s?.kind === 'locked_door');
+    const plateStates = run.objectIds
+      .map((id: number) => run.objectState[id])
+      .filter((s: any) => s?.kind === 'pressure_plate');
+    // 5 of 6 module defs are gated (finale ungated); the 41-room floor cycles those
+    // defs, so every gated instance gets a gate (2 plates : 1 door each).
+    expect(doorStates.length).toBeGreaterThan(4);
+    expect(plateStates.length).toBe(doorStates.length * 2);
+    // Every gate starts CLOSED.
+    expect(doorStates.every((s: any) => s.open === false)).toBe(true);
+    // Every plate links to at least one door in its module.
+    expect(plateStates.every((s: any) => Array.isArray(s.linkIds) && s.linkIds.length > 0)).toBe(true);
+  });
+
+  it('a closed gate blocks movement through its door mouth', () => {
+    const sim = makeSim(7);
+    const run = enterDurance(sim);
+    const doorId = run.objectIds.find((id: number) => run.objectState[id]?.kind === 'locked_door');
+    expect(doorId).toBeTruthy();
+    const door = sim.entities.get(doorId)!;
+    // A closed gate spans the aisle with hd=1.2; the clamp pushes any point inside
+    // the hd+r=1.8 band out to the nearest face. Invariant: a point AT the door
+    // centre must be ejected to at least one face — it cannot remain inside the
+    // band. (Continuous per-frame movement then stops the player at the near face
+    // every step; a single teleport resolves to whichever face is closer.)
+    const clamped = (sim as any).clampDelveDoors(run, door.pos.x, door.pos.z + 0.4, 0.6);
+    const band = 1.2 + 0.6;
+    expect(Math.abs(clamped.z - door.pos.z)).toBeGreaterThanOrEqual(band - 0.01);
+  });
+});

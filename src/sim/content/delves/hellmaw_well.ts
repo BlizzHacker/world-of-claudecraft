@@ -139,6 +139,22 @@ const BARRELS = [
   { x: 22, z: 88, variants: ['breakable_barrel'] },
 ];
 
+// ── Openable maze gates ──────────────────────────────────────────────────────
+// Each room (except the finale) seals its northern exit with an iron portcullis
+// (`locked_door`) sitting in the off-centre maze doorway. Two pressure plates in
+// the room floor open it once BOTH are stepped on — so you must actually cross the
+// room (and its mob pack) to proceed, instead of sprinting the corridor. The
+// plate→door link is auto-wired per module by spawnDelveInteractables. `doorZ` is
+// the room's back-wall z; `doorX` the room's backX maze offset (portcullis lands
+// in the mouth). Plates flank the aisle mid-room so the pack guards the trigger.
+function mazeGate(doorZ: number, doorX: number) {
+  return [
+    { x: -8, z: Math.round(doorZ * 0.55), variants: ['pressure_plate'] },
+    { x: 8, z: Math.round(doorZ * 0.68), variants: ['pressure_plate'] },
+    { x: doorX, z: doorZ - 2, variants: ['locked_door'] },
+  ];
+}
+
 export const HELLMAW_WELL_MODULES: Record<string, DelveModuleDef> = {
   hellmaw_outer_maw: {
     id: 'hellmaw_outer_maw',
@@ -146,7 +162,7 @@ export const HELLMAW_WELL_MODULES: Record<string, DelveModuleDef> = {
     layout: 'hellmaw_outer_maw',
     length: 200,
     spawnSets: [OUTER_SANCTUM_SPAWNS],
-    interactableSlots: [...BARRELS],
+    interactableSlots: [...BARRELS, ...mazeGate(104, 10)],
   },
   hellmaw_ember_gallery: {
     id: 'hellmaw_ember_gallery',
@@ -154,7 +170,7 @@ export const HELLMAW_WELL_MODULES: Record<string, DelveModuleDef> = {
     layout: 'hellmaw_ember_gallery',
     length: 200,
     spawnSets: [BLOOD_GALLERY_SPAWNS],
-    interactableSlots: [...BARRELS],
+    interactableSlots: [...BARRELS, ...mazeGate(110, -10)],
   },
   hellmaw_hollow_descent: {
     id: 'hellmaw_hollow_descent',
@@ -162,7 +178,7 @@ export const HELLMAW_WELL_MODULES: Record<string, DelveModuleDef> = {
     layout: 'hellmaw_hollow_descent',
     length: 200,
     spawnSets: [HOLLOW_DESCENT_SPAWNS],
-    interactableSlots: [...BARRELS],
+    interactableSlots: [...BARRELS, ...mazeGate(134, 10)],
   },
   hellmaw_burning_chasm: {
     id: 'hellmaw_burning_chasm',
@@ -170,7 +186,7 @@ export const HELLMAW_WELL_MODULES: Record<string, DelveModuleDef> = {
     layout: 'hellmaw_burning_chasm',
     length: 220,
     spawnSets: [CHASM_SPAWNS],
-    interactableSlots: [...BARRELS],
+    interactableSlots: [...BARRELS, ...mazeGate(148, -10)],
   },
   hellmaw_pyre_hall: {
     id: 'hellmaw_pyre_hall',
@@ -178,7 +194,7 @@ export const HELLMAW_WELL_MODULES: Record<string, DelveModuleDef> = {
     layout: 'hellmaw_pyre_hall',
     length: 220,
     spawnSets: [PYRE_SPAWNS],
-    interactableSlots: [...BARRELS],
+    interactableSlots: [...BARRELS, ...mazeGate(150, 10)],
   },
   hellmaw_finale: {
     id: 'hellmaw_finale',
