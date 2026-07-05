@@ -44,6 +44,7 @@ import {
   placeMarshTombs,
   placeMarshWallDressing,
 } from './delve_marsh_dressing';
+import { isHellmawModuleId, placeHellmawInfernalDressing } from './delve_hellmaw_dressing';
 import { sharedUniforms } from './gfx';
 import { radialGlowTexture } from './textures';
 
@@ -708,6 +709,15 @@ export class DungeonInteriors {
         placeMarshDryIslands(group, opts.moduleId);
         placeLitanyMarshDressing(p, group, opts.moduleId, layout, variant);
       }
+    }
+    // The Hellmaw (Durance) delve keeps its ossuary/finale crypt dressing but
+    // layers infernal bone-litter + blood-ember floor glow on top for its own
+    // hellish identity. Gated on the module id (its variants are the shared
+    // delve_* ember variants, so a variant check wouldn't distinguish it).
+    if (opts?.moduleId && isHellmawModuleId(opts.moduleId)) {
+      placeHellmawInfernalDressing(p, opts.moduleId, layout, (x, z, color, y, scale) =>
+        this.addTorchGlow(group, x, z, color, y, scale),
+      );
     }
 
     this.emit(group, p, variant);
