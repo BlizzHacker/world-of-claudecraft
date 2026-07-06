@@ -273,6 +273,11 @@ import {
 import { type MobTooltipI18n, type MobTooltipModel, mobTooltipHtml } from './mob_tooltip_view';
 import { MovableFrame } from './movable_frame';
 import { mountMoveHudButton } from './cryptic/move_hud_button';
+import {
+  isMusicWidgetHidden,
+  onMusicWidgetHiddenChange,
+  toggleMusicWidget,
+} from './cryptic/music_widget';
 import { OptionsWindow } from './options_window';
 import { makeWriterFacet, type PainterHostPresentation } from './painter_host';
 import type { PartyRowAuraDeps } from './party_frame_row';
@@ -1589,16 +1594,17 @@ export class Hud {
       this.toggleEmoteWheel();
     });
     const musicBtn = $('#mm-music');
-    const styleMusicBtn = () => {
-      // keep the note clearly readable when off (a plain tan, not gold) — the
-      // slash, not dimming, signals "muted"
-      musicBtn.style.color = music.enabled ? 'var(--gold)' : '#cdbd8e';
-      musicBtn.classList.toggle('mm-muted', !music.enabled);
+    // The Music button OPENS/CLOSES the floating music player (which owns play/pause,
+    // track select, Spotify, etc.). The floater is hidden by default, so this is the one
+    // control that summons it — no second always-on floater cluttering CR realms.
+    const styleMusicBtn = (open: boolean) => {
+      musicBtn.style.color = open ? 'var(--gold)' : '#cdbd8e';
+      musicBtn.classList.toggle('mm-active', open);
     };
-    styleMusicBtn();
+    styleMusicBtn(!isMusicWidgetHidden());
+    onMusicWidgetHiddenChange((hidden) => styleMusicBtn(!hidden));
     musicBtn.addEventListener('click', () => {
-      music.setEnabled(!music.enabled);
-      styleMusicBtn();
+      toggleMusicWidget();
     });
     const startZone = zoneAt(sim.player.pos.z);
     const startZoneName = zoneDisplayName(startZone.id);

@@ -163,6 +163,9 @@
   font-family: var(--cr-font-ui, system-ui, sans-serif);
   user-select: none;
 }
+/* Hidden by default: the floater only appears when opened from the menu music button,
+   so it never shows alongside the menu control. Music keeps playing while hidden. */
+#cr-music-widget.cr-mw-hidden { display: none; }
 /* Collapsed: a single round launcher button (original CR behaviour). */
 #cr-music-widget .cr-mw-launcher {
   width: 52px; height: 52px; border-radius: 50%;

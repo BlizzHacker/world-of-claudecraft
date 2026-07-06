@@ -11,6 +11,34 @@ const ID = 'cr-music-widget';
 const POS_KEY = 'cr_music_widget_pos';
 const LOCK_KEY = 'cr_music_widget_locked';
 const EXT_KEY = 'cr_music_ext_url';
+const HIDDEN_KEY = 'cr_music_widget_hidden';
+
+// Menu-driven show/hide/toggle for the floater, set when the widget mounts. Lets the
+// top/exit-menu music button open + close the one floating player.
+interface MusicWidgetControls {
+  isHidden: () => boolean;
+  show: () => void;
+  hide: () => void;
+  toggle: () => void;
+}
+let widgetControls: MusicWidgetControls | null = null;
+const hiddenListeners = new Set<(hidden: boolean) => void>();
+
+/** Toggle the floating music player open/closed. The menu music button calls this. */
+export function toggleMusicWidget(): void {
+  widgetControls?.toggle();
+}
+export function showMusicWidget(): void {
+  widgetControls?.show();
+}
+export function isMusicWidgetHidden(): boolean {
+  return widgetControls?.isHidden() ?? true;
+}
+/** Subscribe to hidden-state changes (so a menu button can reflect open/closed). */
+export function onMusicWidgetHiddenChange(cb: (hidden: boolean) => void): () => void {
+  hiddenListeners.add(cb);
+  return () => hiddenListeners.delete(cb);
+}
 
 // Turn a Spotify / Pandora / YouTube / Apple Music share link into an embeddable
 // iframe URL. Returns null if it isn't a recognised embeddable provider.
@@ -107,7 +135,30 @@ export function mountMusicWidget(): void {
   try { startCollapsed = localStorage.getItem(COLLAPSE_KEY) !== '0'; } catch { /* default */ }
   setCollapsed(startCollapsed);
   launcher.addEventListener('click', (e) => { e.stopPropagation(); setCollapsed(false); });
-  collapseBtn.addEventListener('click', (e) => { e.stopPropagation(); setCollapsed(true); });
+  // (collapse button binding moved below to setHidden — the ▾ hides the whole floater.)
+
+  // Fully HIDDEN by default (not just collapsed): the floater only appears when the
+  // player opens it from the menu's music button. This is the "shouldn't show both" fix —
+  // one menu button toggles the one floater, instead of the floater always cluttering the
+  // screen. Music keeps playing while hidden; hiding is purely a UI affordance.
+  const setHidden = (h: boolean) => {
+    el.classList.toggle('cr-mw-hidden', h);
+    try { localStorage.setItem(HIDDEN_KEY, h ? '1' : '0'); } catch { /* ignore */ }
+    for (const cb of hiddenListeners) cb(h);
+  };
+  let startHidden = true;
+  try { startHidden = localStorage.getItem(HIDDEN_KEY) !== '0'; } catch { /* default hidden */ }
+  setHidden(startHidden);
+  // Expose open/close/toggle to the menu button.
+  widgetControls = {
+    isHidden: () => el.classList.contains('cr-mw-hidden'),
+    show: () => { setHidden(false); setCollapsed(false); },
+    hide: () => setHidden(true),
+    toggle: () => setHidden(!el.classList.contains('cr-mw-hidden')),
+  };
+  // The panel's collapse (▾) now hides the whole floater (back to the menu button),
+  // rather than leaving a stray launcher note on screen.
+  collapseBtn.addEventListener('click', (e) => { e.stopPropagation(); setHidden(true); });
 
   const pos = readPos();
   if (pos) { el.style.left = `${pos.left}px`; el.style.top = `${pos.top}px`; el.style.right = 'auto'; el.style.bottom = 'auto'; }
