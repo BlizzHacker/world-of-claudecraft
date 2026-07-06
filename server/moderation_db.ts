@@ -412,12 +412,18 @@ export async function moderateAccount(input: {
         [input.accountId, reason],
       );
     } else if (input.action === 'unban') {
-      await client.query(
+      // Only clear a ban that actually exists — mirror the unsuspend guard below.
+      // Without the `banned_at IS NOT NULL` predicate, unbanning a non-banned
+      // account silently "succeeds", stamping a moderation reason on a no-op.
+      const updated = await client.query(
         `UPDATE accounts
          SET banned_at = NULL, suspended_until = NULL, moderation_reason = $2
-         WHERE id = $1`,
+         WHERE id = $1 AND banned_at IS NOT NULL`,
         [input.accountId, reason],
       );
+      if ((updated.rowCount ?? 0) === 0) {
+        throw new Error('account is not banned');
+      }
     } else if (input.action === 'unsuspend') {
       const updated = await client.query(
         `UPDATE accounts
@@ -577,11 +583,19 @@ export async function forceCharacterRename(input: {
 }): Promise<{ accountId: number }> {
   const reason = cleanText(input.reason, ACTION_REASON_MAX);
   if (!reason) throw new Error('moderation reason is required');
-  const character = await pool.query('SELECT account_id FROM characters WHERE id = $1', [
-    input.characterId,
-  ]);
+  const character = await pool.query(
+    `SELECT c.account_id, a.is_admin
+     FROM characters c JOIN accounts a ON a.id = c.account_id
+     WHERE c.id = $1`,
+    [input.characterId],
+  );
   const accountId = character.rows[0]?.account_id;
   if (!accountId) throw new Error('character not found');
+  // Admins are protected the same way they are from suspend/ban: a moderator
+  // cannot force-rename a character that belongs to an admin account.
+  if (character.rows[0]?.is_admin) {
+    throw new Error("admin accounts' characters cannot be force-renamed");
+  }
   // Pin a single pooled client so the whole transaction is atomic; see the note
   // in moderateAccount above.
   const client = await pool.connect();

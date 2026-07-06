@@ -340,6 +340,10 @@ describe('moderation report helpers', () => {
 
   it('unbans accounts and writes an audit action in one transaction', async () => {
     const client = clientStub();
+    client.query
+      .mockResolvedValueOnce(queryResult([])) // BEGIN
+      .mockResolvedValueOnce(queryResult([], 1)) // guarded unban UPDATE hit a banned row
+      .mockResolvedValue(queryResult([]));
     connect.mockResolvedValue(client as unknown as PoolClient);
 
     await moderateAccount({
@@ -352,10 +356,27 @@ describe('moderation report helpers', () => {
     expect(connect).toHaveBeenCalledTimes(1);
     expect(client.query.mock.calls[0][0]).toBe('BEGIN');
     expect(client.query.mock.calls[1][0]).toMatch(/SET banned_at = NULL, suspended_until = NULL/);
+    expect(client.query.mock.calls[1][0]).toMatch(/banned_at IS NOT NULL/);
     expect(client.query.mock.calls[1][1]).toEqual([2, 'appeal accepted']);
     expect(client.query.mock.calls[2][0]).toMatch(/account_moderation_actions/);
     expect(client.query.mock.calls[2][1]).toEqual([2, 1, 'unban', 'appeal accepted', null]);
     expect(client.query.mock.calls[4][0]).toBe('COMMIT');
+    expect(client.release).toHaveBeenCalledTimes(1);
+  });
+
+  it('rejects unbanning an account that is not banned', async () => {
+    const client = clientStub();
+    client.query
+      .mockResolvedValueOnce(queryResult([])) // BEGIN
+      .mockResolvedValueOnce(queryResult([], 0)) // unban UPDATE matched no banned row
+      .mockResolvedValue(queryResult([]));
+    connect.mockResolvedValue(client as unknown as PoolClient);
+
+    await expect(
+      moderateAccount({ accountId: 2, adminAccountId: 1, action: 'unban', reason: 'appeal' }),
+    ).rejects.toThrow(/not banned/);
+
+    expect(client.query.mock.calls[2][0]).toBe('ROLLBACK');
     expect(client.release).toHaveBeenCalledTimes(1);
   });
 
@@ -481,7 +502,7 @@ describe('moderation report helpers', () => {
   });
 
   it('marks a character for forced rename and action-resolves its reports', async () => {
-    query.mockResolvedValueOnce(queryResult([{ account_id: 2 }]));
+    query.mockResolvedValueOnce(queryResult([{ account_id: 2, is_admin: false }]));
     const client = clientStub();
     connect.mockResolvedValue(client as unknown as PoolClient);
 
@@ -503,8 +524,19 @@ describe('moderation report helpers', () => {
     expect(client.release).toHaveBeenCalledTimes(1);
   });
 
+  it("refuses to force-rename a character belonging to an admin account", async () => {
+    query.mockResolvedValueOnce(queryResult([{ account_id: 9, is_admin: true }]));
+
+    await expect(
+      forceCharacterRename({ characterId: 20, adminAccountId: 1, reason: 'offensive name' }),
+    ).rejects.toThrow(/admin/i);
+
+    // It must bail before opening a transaction — no pooled client is taken.
+    expect(connect).not.toHaveBeenCalled();
+  });
+
   it('rolls back on the pinned client and releases it when a statement fails', async () => {
-    query.mockResolvedValueOnce(queryResult([{ account_id: 2 }]));
+    query.mockResolvedValueOnce(queryResult([{ account_id: 2, is_admin: false }]));
     const client = clientStub();
     client.query
       .mockResolvedValueOnce(queryResult([])) // BEGIN
