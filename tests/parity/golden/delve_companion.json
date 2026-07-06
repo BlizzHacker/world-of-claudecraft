@@ -111,7 +111,7 @@
       "tick": 5,
       "time": 0.25,
       "nextId": 422,
-      "state": "6d5ebcf5",
+      "state": "4afb7747",
       "events": "f987cbda",
       "rng": {
         "draws": 9,
@@ -122,7 +122,7 @@
       "tick": 10,
       "time": 0.5,
       "nextId": 422,
-      "state": "327c141a",
+      "state": "7baa8ad0",
       "events": "21d3acbb",
       "rng": {
         "draws": 12,
@@ -133,7 +133,7 @@
       "tick": 15,
       "time": 0.75,
       "nextId": 422,
-      "state": "93e9ed35",
+      "state": "bf6a8d58",
       "events": "741638a5",
       "rng": {
         "draws": 12,
@@ -144,7 +144,7 @@
       "tick": 20,
       "time": 1,
       "nextId": 422,
-      "state": "527d6757",
+      "state": "410f5022",
       "events": "a8cb37c6",
       "rng": {
         "draws": 13,
@@ -155,7 +155,7 @@
       "tick": 25,
       "time": 1.25,
       "nextId": 422,
-      "state": "7a6fc18f",
+      "state": "52ee9b60",
       "events": "741638a5",
       "rng": {
         "draws": 13,
@@ -166,7 +166,7 @@
       "tick": 30,
       "time": 1.5,
       "nextId": 422,
-      "state": "f6e0df20",
+      "state": "74142c6e",
       "events": "741638a5",
       "rng": {
         "draws": 13,
@@ -177,7 +177,7 @@
       "tick": 35,
       "time": 1.75,
       "nextId": 422,
-      "state": "382c3557",
+      "state": "6c264540",
       "events": "741638a5",
       "rng": {
         "draws": 14,
@@ -379,7 +379,7 @@
       "tick": 41,
       "time": 2.05,
       "nextId": 422,
-      "state": "a465489b",
+      "state": "608bbf60",
       "events": "a175edb1",
       "rng": {
         "draws": 18,
@@ -505,7 +505,7 @@
           "stats": {
             "armor": 32
           },
-          "swingTimer": 2.5,
+          "swingTimer": 2.55,
           "templateId": "acolyte_tessa",
           "wanderTimer": 3,
           "weapon": {
@@ -573,7 +573,7 @@
       "tick": 45,
       "time": 2.25,
       "nextId": 422,
-      "state": "a4fb8029",
+      "state": "57d7f634",
       "events": "741638a5",
       "rng": {
         "draws": 18,
@@ -584,7 +584,7 @@
       "tick": 49,
       "time": 2.45,
       "nextId": 422,
-      "state": "3ccb0155",
+      "state": "9422769c",
       "events": "3522ee9e",
       "rng": {
         "draws": 21,
@@ -707,7 +707,7 @@
           "stats": {
             "armor": 32
           },
-          "swingTimer": 1.7,
+          "swingTimer": 1.75,
           "templateId": "acolyte_tessa",
           "wanderTimer": 2.6,
           "weapon": {
@@ -722,7 +722,7 @@
       "tick": 50,
       "time": 2.5,
       "nextId": 422,
-      "state": "4b031e4a",
+      "state": "cf332ca7",
       "events": "741638a5",
       "rng": {
         "draws": 21,
@@ -733,7 +733,7 @@
       "tick": 51,
       "time": 2.55,
       "nextId": 422,
-      "state": "ef0f2727",
+      "state": "6706c988",
       "events": "741638a5",
       "rng": {
         "draws": 21,
@@ -857,7 +857,7 @@
           "stats": {
             "armor": 32
           },
-          "swingTimer": 1.5,
+          "swingTimer": 1.55,
           "templateId": "acolyte_tessa",
           "wanderTimer": 2.5,
           "weapon": {
@@ -872,7 +872,7 @@
       "tick": 51,
       "time": 2.55,
       "nextId": 422,
-      "state": "ef0f2727",
+      "state": "6706c988",
       "events": "741638a5",
       "rng": {
         "draws": 21,
@@ -996,7 +996,7 @@
           "stats": {
             "armor": 32
           },
-          "swingTimer": 1.5,
+          "swingTimer": 1.55,
           "templateId": "acolyte_tessa",
           "wanderTimer": 2.5,
           "weapon": {
