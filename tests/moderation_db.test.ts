@@ -524,7 +524,7 @@ describe('moderation report helpers', () => {
     expect(client.release).toHaveBeenCalledTimes(1);
   });
 
-  it("refuses to force-rename a character belonging to an admin account", async () => {
+  it('refuses to force-rename a character belonging to an admin account', async () => {
     query.mockResolvedValueOnce(queryResult([{ account_id: 9, is_admin: true }]));
 
     await expect(
