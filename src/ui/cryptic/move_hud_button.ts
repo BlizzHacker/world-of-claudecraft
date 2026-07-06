@@ -7,6 +7,7 @@
 // on the mobile layout, which owns its own fixed HUD positions.
 
 import type { MovableFrame } from '../movable_frame';
+import { setHudLayoutEditing } from './hud_layout';
 
 const ID = 'cr-move-hud-btn';
 const POS_KEY = 'cr_move_hud_btn_pos';
@@ -66,6 +67,9 @@ export function mountMoveHudButton(cfg: MoveHudButtonConfig): void {
     el.classList.toggle('cr-mhb-active', editing);
     el.setAttribute('aria-pressed', editing ? 'true' : 'false');
     for (const f of cfg.frames()) f.setUnlockedPublic(editing);
+    // Drive the HUD-layout targets (minimap / globes / action bar) too, so this ONE
+    // button unlocks every movable element — no separate "🔒 Move HUD" toggle.
+    setHudLayoutEditing(editing);
   };
 
   // A small movement threshold lets a tap toggle edit-mode while a real drag

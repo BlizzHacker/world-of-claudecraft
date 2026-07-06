@@ -119,12 +119,16 @@ function makeDraggable(el: HTMLElement, id: string): void {
   });
 }
 
+// Exported so the single master "Move HUD" button (move_hud_button.ts) drives HUD-layout
+// edit mode too — one control unlocks the unit frames AND these layout targets, instead of
+// two competing toggles. Idempotent.
+export function setHudLayoutEditing(on: boolean): void {
+  setEditing(on);
+}
+
 function setEditing(on: boolean): void {
   editing = on;
-  const toggle = document.getElementById(TOGGLE_ID);
   const bar = document.getElementById('cr-hud-edit-bar');
-  toggle?.classList.toggle('cr-hud-editing', on);
-  if (toggle) toggle.innerHTML = on ? '🔓 HUD: editing' : '🔒 Move HUD';
   bar?.classList.toggle('show', on);
   for (const t of TARGETS) {
     const el = document.getElementById(t.id);
@@ -147,22 +151,19 @@ function setEditing(on: boolean): void {
 }
 
 export function mountHudLayout(): void {
-  if (typeof document === 'undefined' || document.getElementById(TOGGLE_ID)) return;
-  // Only show the HUD-move toggle when the in-game HUD is actually present
-  // (don't clutter the landing/home page, which has no minimap/globes/bar).
+  // Idempotent: the edit-bar is our "already mounted" marker now (the old toggle button
+  // was removed in favor of the single master Move HUD button).
+  if (typeof document === 'undefined' || document.getElementById('cr-hud-edit-bar')) return;
+  // Only wire HUD-move when the in-game HUD is actually present (don't clutter the
+  // landing/home page, which has no minimap/globes/bar).
   const hasHud = TARGETS.some((t) => document.getElementById(t.id));
   if (!hasHud) return;
   ensureStyle();
   applySavedPositions();
 
-  const toggle = document.createElement('button');
-  toggle.id = TOGGLE_ID;
-  toggle.type = 'button';
-  toggle.title = 'Move / lock HUD elements';
-  toggle.innerHTML = '🔒 Move HUD';
-  toggle.addEventListener('click', () => setEditing(!editing));
-  document.body.appendChild(toggle);
-
+  // No standalone toggle button here anymore — the single master "Move HUD" button
+  // (move_hud_button.ts) drives edit mode via setHudLayoutEditing(). This removes the
+  // duplicate "🔒 Move HUD" control the user saw alongside the draggable one.
   const bar = document.createElement('div');
   bar.id = 'cr-hud-edit-bar';
   bar.innerHTML = `
