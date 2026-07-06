@@ -39,7 +39,8 @@ describe('building interiors (enterable town buildings)', () => {
     // object). shop/inn/house rooms each get one exit door inside.
     expect(doors().length).toBeGreaterThan(0);
     expect(objsOfType(sim, 'building_door').length).toBe(0); // no separate door object
-    expect(objsOfType(sim, 'building_exit').length).toBe(3);
+    // One shared room (+ exit door) per interior type: shop, inn, house, chapel.
+    expect(objsOfType(sim, 'building_exit').length).toBe(4);
     for (const d of doors()) expect(typeof d.interiorType).toBe('number');
   });
 
@@ -136,5 +137,19 @@ describe('building interiors (enterable town buildings)', () => {
     forceRealm('claudecraft');
     expect(buildingAtPoint(0, 0)).toBeNull();
     expect(buildingEnterableNear(0, 0, 50)).toBeNull();
+  });
+
+  it('EVERY building kind is enterable — chapels included (no dead landmarks)', () => {
+    forceRealm('infernal');
+    const sim = makeSim();
+    const kinds = new Set(getActiveWorldContent().props.buildings.map((b) => b.kind));
+    // Whatever kinds this realm places, each maps to a door (none returns null now).
+    for (const b of getActiveWorldContent().props.buildings) {
+      const door = buildingAtPoint(b.x, b.z);
+      expect(door, `building kind ${b.kind} should be enterable`).not.toBeNull();
+    }
+    // Sanity: the realm actually has a chapel to prove the fix matters.
+    expect(kinds.has('chapel')).toBe(true);
+    void sim;
   });
 });

@@ -24,12 +24,14 @@ import { type Entity, INTERACT_RANGE, type NpcDef, type WorldContent } from './t
 export const INTERIOR_TYPE_SHOP = 0;
 export const INTERIOR_TYPE_INN = 1;
 export const INTERIOR_TYPE_HOUSE = 2;
+export const INTERIOR_TYPE_CHAPEL = 3;
 const INTERIOR_SHARED_SLOT = 0; // shared public room per type
 
 const TYPE_ENTER_TEXT: Record<number, string> = {
   0: 'You step into the shop.',
   1: 'You duck into the inn.',
   2: 'You enter the house.',
+  3: 'You enter the chapel.',
 };
 
 /** Map a building to its interior type. Inns → inn; the FIRST house in a town → the
@@ -39,7 +41,8 @@ const TYPE_ENTER_TEXT: Record<number, string> = {
 function interiorTypeForBuilding(kind: string, houseSeen: number): number | null {
   if (kind === 'inn') return INTERIOR_TYPE_INN;
   if (kind === 'house') return houseSeen === 0 ? INTERIOR_TYPE_SHOP : INTERIOR_TYPE_HOUSE;
-  return null; // chapel etc — not enterable
+  if (kind === 'chapel') return INTERIOR_TYPE_CHAPEL;
+  return null; // unknown kind — not enterable
 }
 
 // Room-local furniture layout per interior type. Coords are room-instance-local
@@ -77,6 +80,16 @@ const ROOM_FURNITURE: Record<number, Furnishing[]> = {
     { key: 'farmCrate', x: -8, z: 4, scale: 0.9 },
     { key: 'lanternWall', x: 12, z: 10, scale: 0.8 },
   ],
+  // Chapel: a solemn shrine — flanking columns, an altar-ish central prop, wall lanterns.
+  [INTERIOR_TYPE_CHAPEL]: [
+    { key: 'column', x: -8, z: 9 },
+    { key: 'column', x: 8, z: 9 },
+    { key: 'column', x: -8, z: 2 },
+    { key: 'column', x: 8, z: 2 },
+    { key: 'crateWooden', x: 0, z: 10, scale: 0.8 },
+    { key: 'lanternWall', x: -14, z: 5, scale: 0.8 },
+    { key: 'lanternWall', x: 14, z: 5, scale: 0.8 },
+  ],
 };
 
 // The resident NPC per interior type: merchant (shop), innkeeper (inn), villager
@@ -102,7 +115,7 @@ export function spawnBuildingInteriors(
   const add = (e: Entity): void => ctx.addEntity(e);
   // 1) Furnish each shared interior room (slot 0): an EXIT door at the south door,
   // furniture props, and the resident NPC.
-  for (const t of [INTERIOR_TYPE_SHOP, INTERIOR_TYPE_INN, INTERIOR_TYPE_HOUSE]) {
+  for (const t of [INTERIOR_TYPE_SHOP, INTERIOR_TYPE_INN, INTERIOR_TYPE_HOUSE, INTERIOR_TYPE_CHAPEL]) {
     const o = interiorOrigin(t, 0);
     // Exit door.
     const exit = createGroundObject(
