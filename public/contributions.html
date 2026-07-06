@@ -110,6 +110,12 @@
     }
     .card strong { display: block; color: var(--gold); margin-bottom: 6px; }
     .card span { display: block; color: var(--muted); font-size: 13px; line-height: 1.45; }
+    .pr-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+    .pr-list li { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; background: rgba(255, 255, 255, 0.02); }
+    .pr-list li a { display: block; color: var(--gold); font-weight: 700; text-decoration: none; margin-bottom: 6px; }
+    .pr-list li a:hover { text-decoration: underline; }
+    .pr-list li span { display: block; color: var(--muted); font-size: 13px; line-height: 1.45; }
+    .pr-list code { color: #f5e9c9; font-size: 12px; }
     .tag {
       display: inline-flex;
       align-items: center;
@@ -174,6 +180,22 @@
         <span class="tag private">Infernal / Classic / Dominion / Arcane realms</span>
         <span class="tag private">Original mini-games</span>
         <span class="tag private">Private custody runbooks</span>
+      </section>
+
+      <section>
+        <h2>Live Upstream Pull Requests</h2>
+        <p>Real, open pull requests offered back to <a href="https://github.com/levy-street/world-of-claudecraft" target="_blank" rel="noopener noreferrer">world-of-claudecraft</a>. Each one is sanitized of Cryptic Realm-only branding, economy, and lore, and is proven with tests + a clean build before it is sent. These are receipts: an open PR on the base project is proof the work was contributed.</p>
+        <ul class="pr-list">
+          <li><a href="https://github.com/levy-street/world-of-claudecraft/pull/1516" target="_blank" rel="noopener noreferrer">PR #1516 — fix(render): boot prewarm skips lazyPreload visuals</a><span>Fixes a boot crash: the shader-prewarm sweep tried to build models flagged for on-demand loading, throwing "asset not preloaded" and killing the renderer. Now it skips lazy visuals the same way the preload sweep already does.</span></li>
+          <li><a href="https://github.com/levy-street/world-of-claudecraft/pull/1290" target="_blank" rel="noopener noreferrer">PR #1290 — fix(tests): architecture seam gate on Windows</a><span>An architecture guard test used a hard-coded path separator, so it failed on Windows checkouts. Normalizes the path lookup so the gate passes cross-platform.</span></li>
+          <li><a href="https://github.com/levy-street/world-of-claudecraft/pull/1097" target="_blank" rel="noopener noreferrer">PR #1097 — feat(prop-assets): serve external Builder GLBs</a><span>Adds server routes to serve external prop models (<code>/props</code>, <code>/api/props</code> catalog) and an admin upload endpoint, so the in-world Builder can place custom GLB assets. Pairs with the Builder's on-demand loader.</span></li>
+          <li><a href="https://github.com/levy-street/world-of-claudecraft/pull/1095" target="_blank" rel="noopener noreferrer">PR #1095 — feat(hardcore): opt-in permadeath mode</a><span>An opt-in per-character hardcore flag where death is permanent — the spirit release becomes a no-op for deceased characters. Additive persisted state, no change to the shared wire protocol.</span></li>
+          <li><a href="https://github.com/levy-street/world-of-claudecraft/pull/1056" target="_blank" rel="noopener noreferrer">PR #1056 — feat(world-builder): server-authoritative prop placement</a><span>The full in-world Builder: place/edit props live, with the server as the authority. Props ride the entity roster (no new snapshot key), fitting the base project's parity gates. The largest contribution.</span></li>
+          <li><a href="https://github.com/levy-street/world-of-claudecraft/pull/628" target="_blank" rel="noopener noreferrer">PR #628 — fix(css): mobile viewport right-shift</a><span>Defaults the app viewport CSS variables to 100% so the layout doesn't shift right on mobile before JS measures the screen.</span></li>
+          <li><a href="https://github.com/levy-street/world-of-claudecraft/pull/627" target="_blank" rel="noopener noreferrer">PR #627 — feat(realms): realm-overlay framework</a><span>A generic framework for layering alternate "realms" on the base game: a realm registry, item-rarity hooks, and a pickit-style filter — the reusable scaffolding, with Cryptic Realm's own realm content kept private.</span></li>
+          <li><a href="https://github.com/levy-street/world-of-claudecraft/pull/626" target="_blank" rel="noopener noreferrer">PR #626 — feat(admin): opt-in self-update endpoint</a><span>An optional admin self-update endpoint, control panel, and script so an operator can pull and redeploy the server safely from the admin UI.</span></li>
+          <li><a href="https://github.com/levy-street/world-of-claudecraft/pull/624" target="_blank" rel="noopener noreferrer">PR #624 — feat(auth): OIDC SSO + dashboards</a><span>OIDC single sign-on wiring plus moderator and user dashboards — generic account/auth infrastructure any deployment can use.</span></li>
+        </ul>
       </section>
 
       <section>
