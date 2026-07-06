@@ -7,6 +7,7 @@
 
 import './realm_env';
 import { getActiveRealm } from '../../sim/realms';
+import { resolveWalletChip, walletChipLabel } from './wallet_panel_core';
 
 interface PhantomProvider {
   isPhantom?: boolean;
@@ -17,7 +18,10 @@ interface PhantomProvider {
 }
 
 function getProvider(): PhantomProvider | null {
-  const w = window as unknown as { solana?: PhantomProvider; phantom?: { solana?: PhantomProvider } };
+  const w = window as unknown as {
+    solana?: PhantomProvider;
+    phantom?: { solana?: PhantomProvider };
+  };
   if (w.phantom?.solana?.isPhantom) return w.phantom.solana;
   if (w.solana?.isPhantom) return w.solana;
   return null;
@@ -88,15 +92,27 @@ async function submitClaim(amount: number): Promise<{ ok: boolean; msg: string }
 const ALPHA = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
 function bs58Encode(bytes: Uint8Array): string {
   let s = '';
-  let n = BigInt('0x' + Array.from(bytes).map((b) => b.toString(16).padStart(2, '0')).join(''));
-  while (n > 0n) { s = ALPHA[Number(n % 58n)] + s; n /= 58n; }
-  for (const b of bytes) { if (b === 0) s = '1' + s; else break; }
+  let n = BigInt(
+    '0x' +
+      Array.from(bytes)
+        .map((b) => b.toString(16).padStart(2, '0'))
+        .join(''),
+  );
+  while (n > 0n) {
+    s = ALPHA[Number(n % 58n)] + s;
+    n /= 58n;
+  }
+  for (const b of bytes) {
+    if (b === 0) s = '1' + s;
+    else break;
+  }
   return s;
 }
 
 function escapeHtml(s: string): string {
-  return s.replace(/[&<>"']/g, (c) =>
-    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string),
+  return s.replace(
+    /[&<>"']/g,
+    (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] as string,
   );
 }
 
@@ -121,17 +137,91 @@ function togglePanel(host: HTMLElement): void {
   else popover.setAttribute('hidden', '');
 }
 
+/** The trigger chip shell shared by the signed-out / unavailable fallbacks so the
+ *  wallet never silently vanishes: a logged-in-but-fetch-failed or not-yet-signed-in
+ *  user still sees a $CR chip they can click. */
+function chipShell(label: string, sublabel: string, bodyHtml: string): string {
+  return `
+    <div class="cr-wallet-widget">
+      <button type="button" class="cr-wallet-trigger" aria-haspopup="dialog" aria-expanded="false" aria-controls="cr-wallet-popover">
+        <span class="cr-wallet-mark" aria-hidden="true">$CR</span>
+        <span class="cr-wallet-trigger-copy">
+          <span class="cr-wallet-trigger-kicker">Wallet</span>
+          <span class="cr-wallet-trigger-label">${escapeHtml(label)}</span>
+        </span>
+        <span class="cr-wallet-caret" aria-hidden="true">v</span>
+      </button>
+      <div class="cr-wallet-popover" id="cr-wallet-popover" role="dialog" aria-label="Wallet and Platinum" hidden>
+        <div class="cr-wallet-card">
+          <h3>Wallet &amp; Platinum</h3>
+          <p class="cr-dim">${escapeHtml(sublabel)}</p>
+          ${bodyHtml}
+        </div>
+      </div>
+    </div>`;
+}
+
+function wireTrigger(host: HTMLElement): void {
+  host.querySelector('.cr-wallet-trigger')?.addEventListener('click', (ev) => {
+    ev.preventDefault();
+    ev.stopPropagation();
+    togglePanel(host);
+  });
+}
+
 async function render(host: HTMLElement): Promise<void> {
   const provider = getProvider();
-  const me = await fetchPlatinum();
+  const fetched = await fetchPlatinum();
+  const state = resolveWalletChip({
+    realmDisabled: getActiveRealm().id === 'claudecraft',
+    hasToken: readBearer() != null,
+    me: fetched,
+  });
 
-  if (!me) {
+  if (state.kind === 'hidden') {
     host.innerHTML = '';
     host.hidden = true;
     return;
   }
   host.hidden = false;
 
+  // Signed out: show a chip that points the user at the login button rather than
+  // hiding the wallet entirely (the old behavior, which looked like a bug).
+  if (state.kind === 'signed-out') {
+    host.innerHTML = chipShell(
+      walletChipLabel(state),
+      'Sign in to view your $CR balance and link a wallet.',
+      `<button id="cr-wallet-signin" type="button">Go to sign in</button>`,
+    );
+    wireTrigger(host);
+    host.querySelector('#cr-wallet-signin')?.addEventListener('click', () => {
+      document
+        .getElementById('nav-btn-login')
+        ?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      document
+        .getElementById('login-open')
+        ?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    });
+    return;
+  }
+
+  // Logged in but the balance fetch failed (401/500/offline). Keep the chip
+  // visible with a retry, instead of the widget disappearing.
+  if (state.kind === 'unavailable') {
+    host.innerHTML = chipShell(
+      walletChipLabel(state),
+      'Balance is temporarily unavailable.',
+      `<button id="cr-wallet-retry" type="button">Retry</button>`,
+    );
+    wireTrigger(host);
+    host.querySelector('#cr-wallet-retry')?.addEventListener('click', () => {
+      void render(host);
+    });
+    return;
+  }
+
+  // state.kind === 'connected' — me is guaranteed non-null here.
+  const me = state.me;
   const phantomNotInstalled = !provider;
   const installPrompt = `
     <p class="cr-dim">
@@ -186,7 +276,7 @@ async function render(host: HTMLElement): Promise<void> {
             <span class="cr-balance-value">${me.onChainBalance == null ? '-' : me.onChainBalance}</span>
           </div>
           ${linked}
-          ${phantomNotInstalled ? installPrompt : (me.walletAddress ? '' : linkButton)}
+          ${phantomNotInstalled ? installPrompt : me.walletAddress ? '' : linkButton}
           ${claim}
           <p class="cr-disclaimer cr-tiny">
             Items and on-chain tokens granted in Cryptic Realm are gameplay
