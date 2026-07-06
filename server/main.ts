@@ -2054,23 +2054,28 @@ async function main(): Promise<void> {
     if (handleForgedStatic(req, res)) return;
     if (handleCrRealmsStatic(req, res)) return;
     if (await handleForgedCatalog(req, res)) return;
-    if (url.startsWith('/internal/')) void handleInternalApi(req, res, game);
+    // ONE routing chain — every request matches exactly one handler and stops. Previously
+    // this was TWO separate if/else-if chains: the first ended at /api/economy/; the second
+    // started fresh with the /api/ catch-all (handleApi). BOTH ran for every request, so
+    // /api/economy/* was handled correctly by its own handler AND ALSO matched handleApi in
+    // the second chain, which raced and replied "unknown endpoint" — silently killing the
+    // wallet / platinum / economy UI on every realm. Merged into one chain.
+    if (url.startsWith('/internal/')) {
+      void (async () => {
+        if (await handleDailyRewardInternalApi(req, res)) return;
+        await handleInternalApi(req, res, game);
+      })();
+    }
     else if (url.startsWith('/admin/api/')) void handleAdminApi(req, res, game);
     else if (url.startsWith('/mod/api/')) void handleModeratorApi(req, res);
     else if (url.startsWith('/me/api/')) void handleUserApi(req, res);
     // CR overlay: Authentik SSO sits alongside /api/login. The handler
     // 501s when env vars aren't set so non-SSO deploys still work.
     else if (url.startsWith('/api/oauth/authentik')) void handleAuthentikRoute(req, res);
-    // CR overlay: economy endpoints.
+    // CR overlay: economy endpoints (wallet / platinum / balance — the wallet UI).
     else if (url.startsWith('/api/economy/')) void maybeHandleEconomyApi(req, res, url.split('?')[0]).then((handled) => {
       if (!handled) { res.writeHead(404); res.end(); }
     });
-    if (url.startsWith('/internal/')) {
-      void (async () => {
-        if (await handleDailyRewardInternalApi(req, res)) return;
-        await handleInternalApi(req, res, game);
-      })();
-    } else if (url.startsWith('/admin/api/')) void handleAdminApi(req, res, game);
     else if (url.startsWith('/api/')) void handleApi(req, res);
     else if (url.startsWith('/oauth/')) void handleOAuth(req, res);
     else if (req.method === 'GET' && url.startsWith('/p/')) void handleCardRoutes(req, res);
