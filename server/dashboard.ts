@@ -49,8 +49,8 @@ async function handleLogin(
   res: http.ServerResponse,
   requireModerator: boolean,
 ): Promise<void> {
-  if (rateLimited(req, DASH_LOGIN_MAX_PER_MINUTE)) {
-    return fail(res, 429, 'too many attempts — wait a minute and try again');
+  if (!rateLimited(req, DASH_LOGIN_MAX_PER_MINUTE).allowed) {
+    return fail(res, 429, 'too many attempts, wait a minute and try again');
   }
   const body = (await readBody(req)) as LoginBody;
   const account = typeof body.username === 'string' ? await findAccount(body.username) : null;

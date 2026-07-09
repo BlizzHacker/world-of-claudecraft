@@ -26,7 +26,7 @@ export const GROUND_PICKUP_LINES: Record<string, GroundPickupLines> = {
     enough: "You already have Morthen's Grimoire.",
   },
   binding_ward: {
-    deny: 'The sigil burns cold to the touch — you have no reason to take it yet.',
+    deny: 'The sigil burns cold to the touch, you have no reason to take it yet.',
     enough: 'You already carry all three Sigils of Hate.',
   },
   fen_muster_order: {

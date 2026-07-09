@@ -83,6 +83,7 @@ const LOCALES = [
   'ja_JP',
   'pt_BR',
   'ru_RU',
+  'cs_CZ',
   'nl_NL',
   'pl_PL',
   'id_ID',
@@ -196,6 +197,15 @@ async function loadSources() {
 }
 
 const isPresent = (v) => typeof v === 'string' && v.trim().length > 0;
+const placeholderSig = (v) => placeholdersOf(v).join('\u0000');
+const hasFreshPlaceholders = (enFlat, key, value) => {
+  const enValue = enFlat[key];
+  return (
+    typeof value !== 'string' ||
+    typeof enValue !== 'string' ||
+    placeholderSig(value) === placeholderSig(enValue)
+  );
+};
 
 async function main() {
   const { en, overlays, serverDICT, simDICT, adminEn, adminOverlays } = await loadSources();
@@ -216,14 +226,17 @@ async function main() {
   for (const lang of NON_EN) {
     const provided = new Set();
     const own = overlays[lang] || {};
-    for (const k of Object.keys(own)) if (isPresent(own[k])) provided.add(k);
+    for (const k of Object.keys(own))
+      if (isPresent(own[k]) && hasFreshPlaceholders(enFlat, k, own[k])) provided.add(k);
     const base = DIALECT_BASE[lang];
     if (base === 'en') {
       // English dialect: inherits every English leaf where it does not diverge.
       for (const k of Object.keys(enFlat)) provided.add(k);
     } else if (base) {
       const baseOverlay = overlays[base] || {};
-      for (const k of Object.keys(baseOverlay)) if (isPresent(baseOverlay[k])) provided.add(k);
+      for (const k of Object.keys(baseOverlay))
+        if (isPresent(baseOverlay[k]) && hasFreshPlaceholders(enFlat, k, baseOverlay[k]))
+          provided.add(k);
     }
     providedByLang[lang] = provided;
   }

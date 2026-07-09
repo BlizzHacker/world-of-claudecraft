@@ -1,6 +1,7 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { emptyModifiers, type TalentModifiers } from '../src/sim/content/talents';
 import { createPlayer, recalcPlayerStats } from '../src/sim/entity';
+import { setRealmHostEnv } from '../src/sim/realms/registry';
 import { type PlayerClass, SPELL_POWER_PER_INT } from '../src/sim/types';
 
 // recalcPlayerStats is the ONE place derived stats are computed (src/sim/CLAUDE.md). These
@@ -20,6 +21,14 @@ interface Derived {
   spellPower: number;
   crit: number;
   dodge: number;
+}
+
+function forceRealm(id: string) {
+  setRealmHostEnv({
+    queryParam: (n) => (n === 'realm' ? id : null),
+    storageGet: () => null,
+    storageSet: () => {},
+  });
 }
 
 function derive(cls: PlayerClass, level: number, mut?: (m: TalentModifiers) => void): Derived {
@@ -46,6 +55,9 @@ function derive(cls: PlayerClass, level: number, mut?: (m: TalentModifiers) => v
 }
 
 describe('recalcPlayerStats primary-attribute multipliers', () => {
+  beforeEach(() => forceRealm('classic'));
+  afterEach(() => setRealmHostEnv(null));
+
   it('agiPct scales Agility and everything derived from it', () => {
     const base = derive('hunter', 40);
     const buffed = derive('hunter', 40, (m) => {

@@ -504,8 +504,8 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'stats.playersOnline': 'Игроков в сети',
   'stats.realmName': 'Название игрового мира',
   'footer.copyright': '2026 Cryptic Realm',
-  'footer.githubLink': 'https://github.com/levy-street/world-of-claudecraft',
-  'footer.githubLabel': 'Проект с открытым исходным кодом',
+  'footer.githubLink': '/contributions.html',
+  'footer.githubLabel': 'Contributions',
   'footer.whitepaper': 'Белая книга',
   'footer.terms': 'Условия использования',
   'footer.privacy': 'Политика конфиденциальности',
@@ -516,7 +516,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'wiki.desc': 'Откройте секреты игрового мира, руководства по классам и стратегии.',
   'news.title': 'Новости и обновления',
   'news.desc': 'Читайте описание последних обновлений, информацию о событиях и новости сообщества.',
-  'download.title': 'Скачать загрузчик для ПК',
+  'download.title': 'Launchers & Installs',
   'download.desc':
     'Загрузите отдельный клиент для оптимальной производительности и игры на весь экран.',
   'comingSoon.placeholder': 'Скоро...',
@@ -5100,6 +5100,20 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.itemSets.wyrmshadow.bonus2': 'Сила атаки повышается на 40.',
   'entities.itemSets.wyrmshadow.bonus3':
     'Ловкость повышается на 15, вероятность критического удара на 2%.',
+  'entities.itemSets.crownforged.bonus4':
+    'Критические удары оружием раскалывают цель эффектом «Осколок кости», вызывая кровотечение на 8 ед. урона раз в 2 сек. в течение 12 сек. Суммируется до 3 раз.',
+  'entities.itemSets.deathlord.bonus4':
+    'Критические удары оружием с вероятностью 50% дают Могильную мощь, повышая силу атаки на 60 на 10 сек.',
+  'entities.itemSets.necromancers.bonus4':
+    'Ваши заклинания с вероятностью 10% дают Ясность мысли, делая следующее заклинание бесплатным.',
+  'entities.itemSets.nighttalon.bonus4':
+    'Критические удары оружием наносят Рваную рану, вызывая кровотечение на 6 ед. урона раз в 2 сек. в течение 12 сек. Суммируется до 3 раз.',
+  'entities.itemSets.soulflame.bonus4':
+    'Ваши заклинания с вероятностью 10% дают Пламя души, повышая силу заклинаний на 40 на 10 сек.',
+  'entities.itemSets.stormcallers.bonus4':
+    'Ваши заклинания с вероятностью 10% дают Пламя души, повышая силу заклинаний на 40 на 10 сек.',
+  'entities.itemSets.wyrmshadow.bonus4':
+    'Критические удары оружием с вероятностью 50% дают Клыкастый натиск, повышая скорость атаки на 25% на 8 сек.',
   'hudChrome.itemSet.header': '{name} ({have}/{total})',
   'hudChrome.itemSet.bonusLine': '({pieces}) {bonus}',
   'hudChrome.abilityScaling.bonus': '(+{value})',

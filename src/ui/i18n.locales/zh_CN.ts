@@ -472,8 +472,8 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'stats.playersOnline': '在线玩家数',
   'stats.realmName': '服务器名称',
   'footer.copyright': '2026 Cryptic Realm',
-  'footer.githubLink': 'https://github.com/levy-street/world-of-claudecraft',
-  'footer.githubLabel': '开源项目',
+  'footer.githubLink': '/contributions.html',
+  'footer.githubLabel': 'Contributions',
   'footer.whitepaper': '白皮书',
   'footer.terms': '服务条款',
   'footer.privacy': '隐私政策',
@@ -484,7 +484,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'wiki.desc': '探索世界的秘密、职业指南以及战术策略。',
   'news.title': '新闻与更新说明',
   'news.desc': '阅读最新补丁说明、游戏内事件和社区动态。',
-  'download.title': '下载电脑版启动器',
+  'download.title': 'Launchers & Installs',
   'download.desc': '获取独立启动器，以获得更优化的性能和全屏游戏体验。',
   'comingSoon.placeholder': '敬请期待...',
   'comingSoon.featureComingSoon': '该功能即将上线，敬请期待。',
@@ -4740,6 +4740,20 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.itemSets.wyrmshadow.name': '龙影外衣',
   'entities.itemSets.wyrmshadow.bonus2': '攻击强度提高 40 点。',
   'entities.itemSets.wyrmshadow.bonus3': '敏捷提高 15 点，致命一击几率提高 2%。',
+  'entities.itemSets.crownforged.bonus4':
+    '你的武器爆击会以骨裂撕裂目标，使其每 2 秒流血受到 8 点伤害，持续 12 秒。最多叠加 3 次。',
+  'entities.itemSets.deathlord.bonus4':
+    '你的武器爆击有 50% 几率获得坟墓之力，使攻击强度提高 60 点，持续 10 秒。',
+  'entities.itemSets.necromancers.bonus4':
+    '你的法术有 10% 几率获得节能施法，使你的下一个法术不消耗资源。',
+  'entities.itemSets.nighttalon.bonus4':
+    '你的武器爆击会撕开粗糙裂伤，使目标每 2 秒流血受到 6 点伤害，持续 12 秒。最多叠加 3 次。',
+  'entities.itemSets.soulflame.bonus4':
+    '你的法术有 10% 几率获得魂焰，使法术强度提高 40 点，持续 10 秒。',
+  'entities.itemSets.stormcallers.bonus4':
+    '你的法术有 10% 几率获得魂焰，使法术强度提高 40 点，持续 10 秒。',
+  'entities.itemSets.wyrmshadow.bonus4':
+    '你的武器爆击有 50% 几率获得迅牙，使攻击速度提高 25%，持续 8 秒。',
   'hudChrome.itemSet.header': '{name} ({have}/{total})',
   'hudChrome.itemSet.bonusLine': '({pieces}) {bonus}',
   'hudChrome.abilityScaling.bonus': '(+{value})',

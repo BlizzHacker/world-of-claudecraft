@@ -7,6 +7,7 @@ import { mechHeldWeaponOverride, visualKeyFor } from './manifest';
 import { CharacterVisual, type CharacterVisualOptions } from './visual';
 
 export { CharacterPreview } from './preview';
+export type { PreviewAppearance } from './preview_appearance';
 export type { AnimState, CharacterVisualOptions } from './visual';
 export { CharacterVisual } from './visual';
 

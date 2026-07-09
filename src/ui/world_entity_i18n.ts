@@ -18,6 +18,7 @@ import { DELVES, DUNGEONS, MOBS, NPCS, QUESTS, ZONES } from '../sim/data';
 // consumed, so this object carries only `en`.
 
 const MOB_IDS = [
+  'yumi_cat',
   'forest_wolf',
   'old_greyjaw',
   'wild_boar',
@@ -38,6 +39,7 @@ const MOB_IDS = [
   'gravecaller_summoner',
   'gravecaller_mender',
   'deacon_voss',
+  'training_dummy',
   'ridge_stalker',
   'deeprock_kobold',
   'thornpeak_ogre',
@@ -94,6 +96,18 @@ const MOB_IDS = [
   'sister_nhalia_drowned_canticle',
   'edda_reedhand',
   'tolling_bell',
+  'vale_cup_ball',
+  // Hellmaw Well delve mobs
+  'hellmaw_charred_husk',
+  'hellmaw_cinder_acolyte',
+  'hellmaw_cursed_knight',
+  'hellmaw_ember_behemoth',
+  'hellmaw_inferno_dragon',
+  'hellmaw_lava_fiend',
+  'hellmaw_primal_beast',
+  'hellmaw_sigilbound_warlock',
+  'hellmaw_the_render',
+  'hellmaw_wailing_spectre',
   // Thornpeak Heights world boss + its summoned adds
   'thunzharr_waking_peak',
   'thunzharr_stormling',
@@ -118,12 +132,23 @@ const NPC_IDS = [
   'scout_maren_highwatch',
   'quartermaster_bree',
   'armorer_hode',
+  'heroic_quartermaster', // Heroic Marks vendor (Highwatch, zone 3)
   'loremaster_caddis',
   'auctioneer_voss', // second World Market auctioneer (Highwatch, zone 3)
+  'bursar_fernando', // Gilded Strongbox banker (Eastbrook, zone 1)
+  'bursar_petra_vell', // Gilded Strongbox banker (Fenbridge, zone 2)
+  'bursar_aldous_crane', // Gilded Strongbox banker (Highwatch, zone 3)
   'brother_aldric_raid', // dynamically-spawned raid turn-in NPC (Crypt of Nythraxis)
   'brother_halven', // Collapsed Reliquary delve board NPC
   'brother_halven_marsh', // Drowned Litany delve board NPC (same character, marsh camp)
+  'cainhurst_sage', // Hellmaw Well delve board NPC
+  'mercenary_kael', // Eastbrook field helper NPC
+  'huntress_verr', // Eastbrook field helper NPC
+  'interior_merchant', // Building interior shopkeeper
+  'interior_innkeeper', // Building interior innkeeper
+  'interior_villager', // Building interior resident
   'spirit_healer', // the graveyard angel (spawned at every graveyard + dungeon entry)
+  'groundskeeper_bram', // Vale Cup queue master at the Sowfield gate (docs/prd/vale-cup.md)
 ] as const;
 
 const QUEST_IDS = [
@@ -195,12 +220,15 @@ const QUEST_IDS = [
   'q_velkhar',
   'q_gravewyrm',
   'q_the_codfather',
+  'q_save_cainhurst',
   'q_nythraxis_restless_dead',
   'q_nythraxis_graves',
   'q_nythraxis_sealed_crypt',
   'q_nythraxis_bound_guardian',
   'q_nythraxis_scourges_end',
   'q_mogger',
+  'q_archetype_acceptance',
+  'q_prof_make_amends',
 ] as const;
 
 const ZONE_IDS = ['eastbrook_vale', 'mirefen_marsh', 'thornpeak_heights'] as const;
@@ -211,7 +239,7 @@ const DUNGEON_IDS = [
   'nythraxis_crypt',
   'nythraxis_boss_arena',
 ] as const;
-const DELVE_IDS = ['collapsed_reliquary', 'drowned_litany'] as const;
+const DELVE_IDS = ['collapsed_reliquary', 'drowned_litany', 'hellmaw_well'] as const;
 // Ravenpost authored letters (src/sim/content/letters.ts): the welcome letter
 // plus every quest thank-you letter, keyed by letterId.
 const LETTER_IDS = [

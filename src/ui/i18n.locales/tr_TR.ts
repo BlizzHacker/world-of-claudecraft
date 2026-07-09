@@ -411,7 +411,7 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'delveUi.tracker.title': 'Mağara',
   'download.desc':
     'Optimize edilmiş performans ve tam ekran oyun için bağımsız başlatıcıyı edinin.',
-  'download.title': 'Masaüstü Başlatıcısını İndir',
+  'download.title': 'Launchers & Installs',
   'entities.abilities.adrenaline_rush.description':
     'Kanın kaynar, anında 60 enerji geri kazandırır.',
   'entities.abilities.adrenaline_rush.name': 'Adrenalin Patlaması',
@@ -2063,8 +2063,8 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'fiesta.word.wave': 'GÜÇLENDİRMELER!',
   'footer.copyright': '2026 Cryptic Realm',
   'footer.discordLabel': "Discord'a Katıl",
-  'footer.githubLabel': 'Açık Kaynak Proje',
-  'footer.githubLink': 'https://github.com/levy-street/world-of-claudecraft',
+  'footer.githubLabel': 'Contributions',
+  'footer.githubLink': '/contributions.html',
   'footer.whitepaper': 'Teknik Doküman',
   'footer.privacy': 'Gizlilik Politikası',
   'footer.terms': 'Hizmet Koşulları',

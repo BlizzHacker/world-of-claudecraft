@@ -15,7 +15,7 @@
     {
       "tick": 0,
       "time": 0,
-      "nextId": 412,
+      "nextId": 417,
       "state": "5bc471b0",
       "events": "741638a5",
       "rng": {
@@ -29,9 +29,9 @@
     {
       "tick": 25,
       "time": 1.25,
-      "nextId": 416,
-      "state": "b9c0d1e9",
-      "events": "b8f1507e",
+      "nextId": 421,
+      "state": "86fdcaf3",
+      "events": "8d1e15cf",
       "rng": {
         "draws": 9,
         "digest": "49bb19a6"
@@ -40,9 +40,9 @@
     {
       "tick": 50,
       "time": 2.5,
-      "nextId": 416,
-      "state": "72432e4b",
-      "events": "ff946e98",
+      "nextId": 421,
+      "state": "5509333d",
+      "events": "ffc0aaab",
       "rng": {
         "draws": 17,
         "digest": "851665cd"
@@ -51,9 +51,9 @@
     {
       "tick": 75,
       "time": 3.75,
-      "nextId": 416,
-      "state": "984c92c9",
-      "events": "b9a59fb7",
+      "nextId": 421,
+      "state": "552d3b8b",
+      "events": "42d25382",
       "rng": {
         "draws": 23,
         "digest": "b9524c66"
@@ -62,9 +62,9 @@
     {
       "tick": 100,
       "time": 5,
-      "nextId": 416,
-      "state": "920069a3",
-      "events": "752eab22",
+      "nextId": 421,
+      "state": "653366e9",
+      "events": "d9cff708",
       "rng": {
         "draws": 33,
         "digest": "627bf58c"
@@ -73,20 +73,20 @@
     {
       "tick": 125,
       "time": 6.25,
-      "nextId": 416,
-      "state": "2d941965",
-      "events": "6799652c",
+      "nextId": 421,
+      "state": "ac1052db",
+      "events": "e2835edf",
       "rng": {
-        "draws": 39,
-        "digest": "ef530401"
+        "draws": 38,
+        "digest": "64624440"
       }
     },
     {
       "tick": 150,
       "time": 7.5,
-      "nextId": 416,
-      "state": "1eef1e5d",
-      "events": "7bd237e8",
+      "nextId": 421,
+      "state": "ea97f147",
+      "events": "b33d483c",
       "rng": {
         "draws": 42,
         "digest": "8e61adc1"
@@ -95,9 +95,9 @@
     {
       "tick": 163,
       "time": 8.15,
-      "nextId": 416,
-      "state": "cf04cdae",
-      "events": "734f7351",
+      "nextId": 421,
+      "state": "b1a5bb88",
+      "events": "98ba143b",
       "rng": {
         "draws": 46,
         "digest": "9fcc5bce"
@@ -106,6 +106,7 @@
       "players": [
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -114,15 +115,17 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {
             "kills": 1
           },
           "craftSkills": {},
+          "craftThrottle": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 412,
+          "entityId": 417,
           "equipment": {
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
@@ -135,7 +138,15 @@
             }
           },
           "gatheringProficiency": {},
+          "heroicDaily": {},
+          "inventory": [
+            {
+              "count": 5,
+              "itemId": "baked_bread"
+            }
+          ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {
@@ -147,10 +158,11 @@
             },
             "spec": "arms"
           },
-          "worldBossDaily": {}
+          "townFocus": {}
         },
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -159,13 +171,15 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "mage",
           "companionUpgrades": {},
           "counters": {},
           "craftSkills": {},
+          "craftThrottle": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 413,
+          "entityId": 418,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
@@ -178,7 +192,19 @@
             }
           },
           "gatheringProficiency": {},
+          "heroicDaily": {},
+          "inventory": [
+            {
+              "count": 5,
+              "itemId": "baked_bread"
+            },
+            {
+              "count": 5,
+              "itemId": "spring_water"
+            }
+          ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {
@@ -190,10 +216,11 @@
             },
             "spec": "arcane"
           },
-          "worldBossDaily": {}
+          "townFocus": {}
         },
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -202,15 +229,17 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "rogue",
           "companionUpgrades": {},
           "counters": {
             "deaths": 1
           },
           "craftSkills": {},
+          "craftThrottle": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 414,
+          "entityId": 419,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
@@ -226,7 +255,15 @@
             }
           },
           "gatheringProficiency": {},
+          "heroicDaily": {},
+          "inventory": [
+            {
+              "count": 5,
+              "itemId": "baked_bread"
+            }
+          ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {
@@ -238,10 +275,11 @@
             },
             "spec": "assassination"
           },
-          "worldBossDaily": {}
+          "townFocus": {}
         },
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "bags": [
@@ -250,13 +288,15 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "hunter",
           "companionUpgrades": {},
           "counters": {},
           "craftSkills": {},
+          "craftThrottle": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 415,
+          "entityId": 420,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
@@ -269,7 +309,19 @@
             }
           },
           "gatheringProficiency": {},
+          "heroicDaily": {},
+          "inventory": [
+            {
+              "count": 5,
+              "itemId": "baked_bread"
+            },
+            {
+              "count": 5,
+              "itemId": "spring_water"
+            }
+          ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {
@@ -281,7 +333,7 @@
             },
             "spec": "beast_mastery"
           },
-          "worldBossDaily": {}
+          "townFocus": {}
         }
       ],
       "entities": [
@@ -295,7 +347,7 @@
           "dodgeChance": 0.0795,
           "fiveSecondRule": 107.15,
           "hp": 812,
-          "id": 412,
+          "id": 417,
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",
@@ -342,7 +394,7 @@
           "dodgeChance": 0.056,
           "fiveSecondRule": 107.15,
           "hp": 418,
-          "id": 413,
+          "id": 418,
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",
@@ -391,7 +443,7 @@
           "facing": 3.141593,
           "fiveSecondRule": 107.15,
           "hp": 510,
-          "id": 414,
+          "id": 419,
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",
@@ -441,7 +493,7 @@
           "facing": 3.141593,
           "fiveSecondRule": 107.15,
           "hp": 848,
-          "id": 415,
+          "id": 420,
           "kind": "player",
           "level": 20,
           "lootFfaTimer": "Infinity",

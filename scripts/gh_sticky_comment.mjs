@@ -23,7 +23,9 @@ function ghHeaders(token) {
 // Upsert a sticky comment. Returns 'created' | 'updated', or null when it could not
 // post (no token, no PR number, or a non-write token, e.g. a fork PR). Never throws on
 // a missing token so callers can stay non-blocking; real API errors do throw.
-export async function upsertStickyComment({ marker, body, prNumber, token, repo }) {
+// updateOnly: when true, edit an existing sticky but never create a new one (used to flip
+// a prior screenshot comment to a "no visual changes" note without spamming plain PRs).
+export async function upsertStickyComment({ marker, body, prNumber, token, repo, updateOnly }) {
   token = token ?? process.env.GITHUB_TOKEN;
   repo = repo ?? process.env.GITHUB_REPOSITORY;
   if (!token || !repo || !prNumber) {
@@ -52,6 +54,11 @@ export async function upsertStickyComment({ marker, body, prNumber, token, repo 
     });
     if (!res.ok) throw new Error(`PATCH comment failed: HTTP ${res.status} ${await res.text()}`);
     return 'updated';
+  }
+
+  if (updateOnly) {
+    // Nothing to edit and we were told not to create: stay silent.
+    return null;
   }
 
   const res = await fetch(`${API}/repos/${repo}/issues/${prNumber}/comments`, {

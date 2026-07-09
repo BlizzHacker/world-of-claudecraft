@@ -212,6 +212,10 @@ export const ko_KR: EnTranslations = {
       "pointsGained": "{points} 일일 보상 포인트를 획득했습니다.",
       "showChestButton": "보물상자 표시",
       "hideChestButton": "보물상자 숨기기",
+      "hideChestConfirmTitle": "Hide Daily Rewards Chest?",
+      "hideChestConfirmBody": "This removes the chest shortcut from your HUD. Rewards, eligibility, and this panel stay available; you can bring the shortcut back from Options.",
+      "hideChestConfirmOk": "Hide Chest",
+      "hideChestConfirmCancel": "Cancel",
       "leaderboard": "일일 순위표",
       "totalPlayer": "오늘 플레이어 {count}명",
       "totalPlayers": "오늘 플레이어 {count}명",
@@ -287,6 +291,7 @@ export const ko_KR: EnTranslations = {
       "targetLabel": "내 대상",
       "targetAnnounce": "대상: {name}",
       "partyLabel": "내 파티",
+      "partyChip": "Party",
       "partyGroup": "{n}번 그룹",
       "durationUnitSeconds": "초",
       "durationUnitMinutes": "분",
@@ -304,10 +309,21 @@ export const ko_KR: EnTranslations = {
       "autorun": "자동 달리기",
       "jump": "점프",
       "leaderboard": "순위",
+      "dailyRewards": "Rewards",
       "nameplates": "이름표",
       "haptics": "진동",
       "hapticsOff": "진동 꺼짐",
-      "toggleHaptics": "진동 전환"
+      "toggleHaptics": "진동 전환",
+      "hotbarPage": "Skills",
+      "hotbarPageAria": "Show next set of skills",
+      "actionRing": "Combat actions",
+      "actionPageToggle": "Switch action page",
+      "actionPageIndicator": "{page}",
+      "targetCycle": "Swap target",
+      "targetCycleShort": "Target",
+      "spellbookPageLabel": "Page {page}",
+      "hideKeyboard": "Hide keyboard",
+      "chatPlaceholder": "Say something..."
     },
     "tutorial": {
       "moveBodyTouch": "이동 스틱으로 이동하고 화면을 끌어 주위를 둘러보세요. 몇 걸음 움직여 시작하세요.",
@@ -356,7 +372,9 @@ export const ko_KR: EnTranslations = {
       "hoursMinutes": "{h}시간 {m}분",
       "minutes": "{m}분",
       "lessThanMinute": "1분 미만",
-      "lockedToast": "{raid}에 잠겨 있습니다. {time} 후 해제됩니다."
+      "lockedToast": "{raid}에 잠겨 있습니다. {time} 후 해제됩니다.",
+      "heroicName": "Heroic {name}",
+      "heroicLocked": "You are locked to Heroic {name}."
     },
     "compass": {
       "N": "북",
@@ -378,11 +396,149 @@ export const ko_KR: EnTranslations = {
       "emoteWheel": "감정 표현 휠",
       "targetFriendly": "가장 가까운 아군 대상 지정",
       "targetFriendlyNext": "아군 대상 순환",
-      "discord": "Discord"
+      "discord": "Discord",
+      "valecup": "Vale Cup"
+    },
+    "vcup": {
+      "title": "The Vale Cup",
+      "shootPower": "POWER",
+      "close": "Close the Vale Cup window",
+      "offlineNote": "The fixture book is closed. The Vale Cup is not available right now.",
+      "recordLine": "Your record: {wins} wins, {losses} losses, {draws} draws.",
+      "bracketsAria": "Match bracket",
+      "bracketLabel": "{n}v{n}",
+      "waitingCount": "{count} waiting",
+      "nationsHeading": "Banner nation",
+      "nation": {
+        "vale": "Eastbrook Vale",
+        "mirefen": "The Mirefen",
+        "thornpeak": "Thornpeak",
+        "coliseum": "The Ashen Coliseum",
+        "choir": "The Pale Choir",
+        "ogre": "The Ogre Clans",
+        "moon": "The Pale Moon",
+        "copperdig": "The Copper Dig"
+      },
+      "awayNote": "If both sides fly the same banner, the away side plays the inverted palette.",
+      "rolesHeading": "Sport role",
+      "role": {
+        "allrounder": {
+          "name": "All-Rounder",
+          "desc": "A bit of everything: kick, boot, and a fair shoulder."
+        },
+        "striker": {
+          "name": "Striker",
+          "desc": "Lives for the long boot and the quick sidestep."
+        },
+        "sweeper": {
+          "name": "Sweeper",
+          "desc": "Bumps runners off the ball and hoofs it clear."
+        },
+        "keeper": {
+          "name": "Keeper",
+          "desc": "Guards the goal box with grip, dive, and punt."
+        }
+      },
+      "queue": "Join the Queue",
+      "leaveQueue": "Leave the Queue",
+      "queueNote": "Queue from anywhere; the whistle calls you to the Sowfield.",
+      "queuedStatus": "Queued for {bracket}: position {position} of {count}.",
+      "blockNation": "Pick a banner nation first.",
+      "blockPartySize": "That bracket needs a smaller party.",
+      "blockNotLeader": "Only the party leader can queue the team.",
+      "inMatchNote": "Your team is on the pitch. Play on!",
+      "deserterNote": "The Groundskeeper remembers. You may queue again in {seconds} sec.",
+      "liveHeading": "Now at the Sowfield",
+      "liveAria": "Vale Cup: {nationA} {scoreA}, {nationB} {scoreB}",
+      "walkUp": "Walk up to the Sowfield to watch from the stands.",
+      "noLive": "The pitch is quiet. No match is being played.",
+      "boardHeading": "Winners board",
+      "boardEmpty": "No winners recorded yet. The Copper Pail waits.",
+      "boardWins": "{count} wins",
+      "enterAsGuild": "Enter under the banner of {guild}",
+      "guildRecordLine": "Your guild record: {wins} wins, {losses} losses.",
+      "guildBoardHeading": "Guild banners",
+      "guildBoardEmpty": "No guild has taken the field yet. Fly your banner!",
+      "guildBoardWl": "{wins} W, {losses} L",
+      "practice": "Practice vs. Bots",
+      "practiceNote": "Starts a private bot match on your own practice pitch right away.",
+      "practicingNow": "Practicing now ({count}):",
+      "clock": "{minutes}:{seconds}",
+      "indicatorQueued": "Vale Cup queue: {bracket}, position {position} of {count}",
+      "indicatorLive": "Vale Cup",
+      "indicatorOpen": "Open the Vale Cup window",
+      "phaseCountdown": "Kickoff in {seconds}",
+      "phaseGoal": "GOAL!",
+      "phaseGolden": "GOLDEN GOAL",
+      "phaseOver": "FULL TIME",
+      "bannerFound": "The Vale Cup calls: {nationA} vs {nationB}!",
+      "bannerCountdown": "Kickoff in {seconds}...",
+      "bannerKickoff": "KICKOFF!",
+      "bannerGoal": "GOAL! {nation} scores!",
+      "bannerSave": "{name} SAVES!",
+      "bannerGolden": "GOLDEN GOAL: next score wins!",
+      "bannerEnd": "Full time: {nationA} {scoreA}, {nationB} {scoreB}",
+      "bannerWin": "Victory at the Sowfield!",
+      "bannerDraw": "A draw at the Sowfield.",
+      "bannerLoss": "Defeat at the Sowfield.",
+      "logQueued": "You join the Vale Cup queue for {bracket} (position {position}).",
+      "logUnqueued": "You leave the Vale Cup queue.",
+      "logFound": "Your Vale Cup match is ready: {nationA} vs {nationB}.",
+      "logRoster": "Your side: {allies}. Their side: {enemies}.",
+      "logGoal": "{name} scores for {nation}! {nationA} {scoreA}, {nationB} {scoreB}.",
+      "logSave": "{name} makes the save!",
+      "logWin": "You win the bout at the Sowfield.",
+      "logDraw": "The bout at the Sowfield ends in a draw.",
+      "logLoss": "You lose the bout at the Sowfield.",
+      "gossipOpen": "The book of fixtures",
+      "gossipOpenAria": "Open the Vale Cup window",
+      "mobileLabel": "Cup",
+      "briefing": {
+        "subtitle": "Pre-match briefing",
+        "vs": "vs",
+        "rulesHeading": "How to play",
+        "rule1": "Kick or pass the ball into the enemy goal to score.",
+        "rule2": "First to 5 goals wins, or the most goals when full time blows.",
+        "rule3": "A level match at full time goes to golden goal: the next score wins.",
+        "rule4": "Tackles only tumble you over. Nobody gets hurt under the harvest truce.",
+        "rule5": "Anyone can walk up and cheer you on from the stands.",
+        "kitHeading": "Your kit",
+        "kitNote": "These moves replace your class abilities for the match.",
+        "rosterHeading": "The team sheet",
+        "you": "You",
+        "bot": "Bot",
+        "ready": "I'm ready",
+        "readyDone": "Ready",
+        "readyAria": "Ready up for kickoff",
+        "waiting": "Waiting for the other side to ready up...",
+        "whistle": "The whistle blows in {seconds}s.",
+        "readyCount": "{ready} of {total} ready"
+      },
+      "bet": {
+        "title": "Match Bets",
+        "aria": "Vale Cup match betting",
+        "closesIn": "Bets close in {seconds}s",
+        "closed": "Betting closed",
+        "prize": "Pool {amount}",
+        "splitAria": "Share of the betting pool on each team",
+        "expand": "View bets and wager",
+        "collapse": "Hide bets",
+        "oddsLabel": "Pays",
+        "back": "Back {team}",
+        "form": "{wins}W-{losses}L",
+        "mine": "Your bet: {amount} on {team}",
+        "none": "You have no bet on this match yet.",
+        "record": "Betting record: {wins}W-{losses}L, {sign}{net}",
+        "wonBanner": "Your bet won!",
+        "wonLog": "Your Vale Cup bet won: {amount} returned.",
+        "lostLog": "Your Vale Cup bet lost: {amount}.",
+        "refundLog": "Bets voided, your {amount} stake was returned."
+      }
     },
     "options": {
       "clickMoveLeft": "왼쪽 클릭",
       "clickMoveRight": "오른쪽 클릭",
+      "version": "v{version} ({build})",
       "browserEffects": "브라우저 효과",
       "browserEffectsAuto": "자동",
       "browserEffectsFull": "전체",
@@ -414,7 +570,9 @@ export const ko_KR: EnTranslations = {
       "itemLevelLine": "아이템 레벨 {level}",
       "itemScoreLine": "점수 {score}",
       "showSecondaryActionBar": "보조 액션 바 표시",
-      "showDailyRewardsChest": "일일 보상 보물상자 표시"
+      "showDailyRewardsChest": "일일 보상 보물상자 표시",
+      "mobileCameraJoystick": "Camera joystick",
+      "mobileLeftHanded": "Left-handed layout"
     },
     "controller": {
       "title": "컨트롤러",
@@ -465,7 +623,9 @@ export const ko_KR: EnTranslations = {
         "fps01Low": "0.1% 최저",
         "ping": "핑",
         "jitter": "지터",
+        "predLead": "Prediction Lead",
         "snapshot": "스냅샷 전송률",
+        "serverTick": "Server Tick Rate",
         "connection": "연결",
         "drawCalls": "드로우 콜",
         "triangles": "삼각형",
@@ -508,7 +668,9 @@ export const ko_KR: EnTranslations = {
     "statInfo": {
       "fromYour": "당신의 {value} {stat}에서:",
       "names": {
-        "spellPower": "주문력"
+        "spellPower": "주문력",
+        "critRating": "Crit Rating",
+        "hasteRating": "Haste Rating"
       },
       "desc": {
         "str": "전투력을 증가시켜 무기 공격이 더 강하게 적중하도록 합니다.",
@@ -521,7 +683,9 @@ export const ko_KR: EnTranslations = {
         "spellPower": "주문의 피해량과 치유량을 증가시킵니다. 지능 1당 장비나 버프로 얻는 양에 더해 약간의 주문력을 부여합니다.",
         "dps": "무기의 피해와 속도, 전투력을 종합한 예상 무기 초당 피해입니다.",
         "critChance": "공격이 치명적으로 적중하여 두 배의 피해를 입힐 확률입니다.",
-        "dodge": "들어오는 근접 공격을 완전히 피해 피해를 전혀 입지 않을 확률입니다."
+        "dodge": "들어오는 근접 공격을 완전히 피해 피해를 전혀 입지 않을 확률입니다.",
+        "critRating": "Crit rating from your gear and set bonuses, raising your critical strike chance. About 10 rating grants 1% crit.",
+        "hasteRating": "Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. About 10 rating grants 1% haste."
       },
       "effects": {
         "attackPower": "+{value} 전투력",
@@ -561,6 +725,15 @@ export const ko_KR: EnTranslations = {
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
+    },
+    "itemProc": {
+      "onMeleeHit": "Chance on hit ({chance}%): {effect}",
+      "onSpellDamage": "Chance on your damaging spells ({chance}%): {effect}",
+      "onHeal": "Chance on your heals ({chance}%): {effect}",
+      "chainArc": "blasts the target with a {school} {name} ({damage}) that leaps to {jumps} nearby foes for decaying damage",
+      "attackSlow": "and slows the target attack speed by {pct}% for {duration} sec",
+      "dot": "festers {name}, a {school} damage-over-time dealing {total} over {duration} sec",
+      "hot": "blooms {name}, a heal-over-time restoring {total} over {duration} sec"
     },
     "questShare": {
       "notShareable": "이 퀘스트는 공유할 수 없습니다.",
@@ -740,6 +913,32 @@ export const ko_KR: EnTranslations = {
       "summaryMaster": "전리품 설정: 분배 담당, 분배 담당자 {name}, 품질 기준 {threshold}.",
       "summaryGroup": "전리품 설정: 파티 분배."
     },
+    "corpseHarvest": {
+      "title": "Harvest",
+      "harvestButton": "Harvest",
+      "concentrateHint": "Fewer chosen components yield a higher tier each.",
+      "alreadyHarvested": "This corpse has already been harvested.",
+      "componentAria": "Harvest {component}",
+      "components": {
+        "hide": "Hide",
+        "fang": "Fang",
+        "silk": "Silk",
+        "venomSac": "Venom Sac",
+        "gills": "Gills",
+        "claw": "Claw",
+        "horn": "Horn",
+        "tusk": "Tusk"
+      }
+    },
+    "townFocus": {
+      "title": "Town Focus",
+      "hint": "Focus points add a bonus on top of every component's baseline yield. Unfocused components stay at baseline.",
+      "budgetLabel": "Points remaining: {remaining} / {budget}",
+      "saveButton": "Save Focus",
+      "notInTownHint": "You must be in town to set your focus.",
+      "increaseAria": "Increase focus on {component}",
+      "decreaseAria": "Decrease focus on {component}"
+    },
     "party": {
       "promoteLeader": "파티장으로 지정",
       "inviteUsage": "누구를 초대하시겠습니까? 사용법: /invite <이름>."
@@ -755,7 +954,13 @@ export const ko_KR: EnTranslations = {
       "leaderOption": "분배 담당자: 파티장(나)",
       "masterOption": "분배 담당자: {name}"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "Set Dungeon Difficulty: Heroic",
+      "setNormal": "Set Dungeon Difficulty: Normal"
+    },
     "bags": {
+      "cannotDestroy": "This item cannot be destroyed.",
+      "rightClickDestroy": "Right-click to destroy",
       "filterGroupAria": "가방을 분류별로 필터링",
       "filterAll": "전체",
       "filterWeapon": "무기",
@@ -819,10 +1024,19 @@ export const ko_KR: EnTranslations = {
         "allStats": "모든 능력치를 {value} 감소시킵니다"
       },
       "allStatsPctReduce": "모든 능력치를 {pct}% 감소시킵니다",
+      "increasePct": {
+        "ap": "Increases attack power by {pct}%",
+        "armor": "Increases armor by {pct}%",
+        "int": "Increases Intellect by {pct}%",
+        "sta": "Increases Stamina by {pct}%",
+        "allStats": "Increases all attributes by {pct}%"
+      },
       "dodge": "회피 확률을 {pct}% 증가시킵니다",
       "dodgeReduce": "회피 확률을 {pct}% 감소시킵니다",
       "armorFlat": "방어도를 {value} 감소시킵니다",
       "armorFlatStacks": "방어도를 {value} 감소시킵니다 ({stacks}중첩)",
+      "armorPct": "Reduces armor by {pct}%",
+      "armorPctStacks": "Reduces armor by {pct}% ({stacks} stacks)",
       "mortalWound": "받는 치유량을 {pct}% 감소시킵니다",
       "vulnerability": "받는 피해를 {pct}% 증가시킵니다",
       "physVuln": "받는 물리 피해를 {pct}% 증가시킵니다",
@@ -971,6 +1185,7 @@ export const ko_KR: EnTranslations = {
       "roleTag": {
         "levyst": "Levy St",
         "admin": "관리자",
+        "coredevs": "Core Dev",
         "devs": "개발자",
         "mods": "운영자",
         "artists": "아티스트"
@@ -1112,6 +1327,50 @@ export const ko_KR: EnTranslations = {
         "takeParcelsFirst": "편지를 버리기 전에 소포를 먼저 꺼내세요."
       }
     },
+    "bank": {
+      "title": "Bank",
+      "subtitle": "The Gilded Strongbox",
+      "close": "Close bank",
+      "capacity": "{used}/{total}",
+      "capacityAria": "Bank slots used: {used} of {total}",
+      "empty": "Your bank is empty.",
+      "tooFar": "You must be at a banker to view your bank.",
+      "buySlots": "Buy {count} slots",
+      "buySlotsMaxed": "Fully expanded",
+      "buyConfirm": "Purchase {count} additional bank slots for {price}?",
+      "buyConfirmAccept": "Purchase",
+      "withdrawHint": "Click to withdraw",
+      "withdrawPartialHint": "Shift-click to withdraw a partial amount",
+      "depositHint": "Click to deposit",
+      "depositPartialHint": "Shift-click to deposit a partial amount",
+      "cannotDeposit": "Cannot be banked",
+      "depositQuantityTitle": "Deposit {item}",
+      "depositQuantityInput": "Quantity to deposit",
+      "depositQuantityConfirm": "Deposit",
+      "withdrawQuantityTitle": "Withdraw {item}",
+      "withdrawQuantityInput": "Quantity to withdraw",
+      "withdrawQuantityConfirm": "Withdraw",
+      "filterGroupAria": "Filter bank by category",
+      "sortAria": "Sort bank items",
+      "searchAria": "Search bank items by name",
+      "depositAll": "Deposit all materials",
+      "depositAllDone": "Materials deposited: {count}.",
+      "depositAllFull": "Materials deposited: {count}. Bank now full.",
+      "depositAllNone": "Bank full: nothing deposited.",
+      "bonusTitle": "Bonus slots",
+      "bonusEarned": "+{count}",
+      "bonusStatusEarned": "+{count}",
+      "bonusSourceEmail": "Verified email",
+      "bonusSourceDiscord": "Discord linked",
+      "bonusSourceWallet": "Wallet linked",
+      "bonusSourceReferral": "Referred friends",
+      "bonusAdvertEmail": "Verify your email to earn 2 slots.",
+      "bonusAdvertDiscord": "Link your Discord to earn 2 slots.",
+      "bonusAdvertWallet": "Link a wallet to earn 2 slots.",
+      "bonusReferralProgress": "{count}/{cap}",
+      "bonusReferralExplainer": "Invite a friend: when they reach level 10 you each earn 2 slots, up to 5 friends.",
+      "bonusSectionAria": "Bonus bank slots and how to earn more"
+    },
     "calendar": {
       "title": "이벤트 달력",
       "close": "달력 닫기",
@@ -1173,6 +1432,132 @@ export const ko_KR: EnTranslations = {
     "social": {
       "lastSeen": "마지막 접속: {when}",
       "lastSeenNever": "없음"
+    },
+    "gathering": {
+      "title": "Gathering",
+      "mining": "Mining",
+      "logging": "Logging",
+      "herbalism": "Herbalism"
+    },
+    "archetypeTitle": {
+      "label": "Title",
+      "none": "None",
+      "hobbyLabel": "Hobby",
+      "armorcrafting": "Armorer",
+      "weaponcrafting": "Weaponsmith",
+      "jewelcrafting": "Jeweler",
+      "alchemy": "Alchemist",
+      "engineering": "Tinkerer",
+      "cooking": "Chef",
+      "inscription": "Scribe",
+      "enchanting": "Enchanter",
+      "tailoring": "Tailor",
+      "leatherworking": "Leathercrafter"
+    },
+    "crafting": {
+      "title": "Crafting",
+      "close": "Close crafting",
+      "craft": "Craft",
+      "reagentsNeeded": "Requires:",
+      "reagentLine": "{name} x{have}/{required}",
+      "empty": "No recipes known yet.",
+      "resultAria": "Craft {name}",
+      "craftedToast": "Crafted: {name}",
+      "insufficientMaterials": "You do not have the materials for that.",
+      "unknownRecipe": "That recipe does not exist.",
+      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe.",
+      "notAtHub": "You must be at the crafting hub, at the required level, to craft that.",
+      "throttled": "You are crafting too quickly. Wait a moment and try again.",
+      "recipeNotLearned": "You have not learned that recipe yet."
+    }
+  },
+  "apiError": {
+    "validation": {
+      "failed": "Some fields are invalid. Check the form and try again."
+    },
+    "json": {
+      "malformed": "That request could not be read. Please try again."
+    },
+    "body": {
+      "too_large": "That request is too large. Try again with less data.",
+      "unsupported_media_type": "Unsupported request format."
+    },
+    "db": {
+      "conflict": "That change conflicted with another update. Please try again."
+    },
+    "rate_limit": {
+      "exceeded": "Too many requests. Try again in {seconds}."
+    },
+    "internal": {
+      "error": "Something went wrong on our end. Please try again."
+    },
+    "auth": {
+      "token_missing": "You need to be signed in to do that.",
+      "token_invalid": "Your session has expired. Please sign in again.",
+      "forbidden": "You do not have permission to do that.",
+      "invalid_credentials": "Invalid username or password.",
+      "required": "Not authenticated.",
+      "web_login_only": "Logins are only allowed from the game client.",
+      "too_many_attempts": "Too many attempts. Wait a minute and try again.",
+      "too_many_failed_attempts": "Too many failed attempts. Wait a few minutes and try again.",
+      "current_password_incorrect": "Your current password is incorrect.",
+      "password_incorrect": "Your password is incorrect.",
+      "verification_failed": "Verification failed. Please try again."
+    },
+    "account": {
+      "username_invalid": "Username must be 3-24 characters and use letters, digits, or underscore.",
+      "username_not_allowed": "That username is not allowed.",
+      "username_taken": "That username is already taken.",
+      "username_mismatch": "That username does not match your account.",
+      "password_too_short": "Password must be at least 6 characters.",
+      "password_too_long": "New password must be at most 128 characters.",
+      "characters_online": "Log out all of your characters before deactivating.",
+      "deactivated": "This account has been deactivated. Contact an admin to restore it.",
+      "not_found": "Account not found."
+    },
+    "character": {
+      "name_invalid": "Invalid character name. Use 2-16 letters.",
+      "name_not_allowed": "That character name is not allowed.",
+      "invalid_class": "Invalid class.",
+      "limit_reached": "Character limit reached.",
+      "name_taken": "That name is taken.",
+      "not_found": "Character not found.",
+      "online": "Character is currently online.",
+      "rename_not_permitted": "Renaming this character is not allowed.",
+      "delete_confirm": "Type the character name to confirm deletion.",
+      "already_in_world": "Character is already in world.",
+      "taken_over": "Your character was taken over by another session.",
+      "rename_required": "This character must be renamed before entering the world."
+    },
+    "moderation": {
+      "suspended_until": "This account is suspended until {date}.",
+      "suspended": "This account is suspended.",
+      "banned": "This account has been banned.",
+      "force_rename": "A moderator requires one of your characters to be renamed."
+    },
+    "email": {
+      "invalid": "Enter a valid email address.",
+      "unchanged": "That is already your email address."
+    },
+    "two_factor": {
+      "code_invalid": "That code is not valid, try again.",
+      "setup_required": "Start two-factor setup first.",
+      "already_enabled": "Two-factor is already enabled.",
+      "not_enabled": "Two-factor is not enabled."
+    },
+    "origin": {
+      "cross_site": "Request blocked for security reasons."
+    },
+    "discord": {
+      "not_configured": "Discord integration is not available right now.",
+      "expired": "That Discord sign-in expired. Please sign in with Discord again.",
+      "already_linked": "That Discord account is already linked to another account.",
+      "password_required": "Set a password before unlinking your Discord account.",
+      "unknown_swag": "That reward is not available.",
+      "link_required": "Link your Discord account first.",
+      "swag_claimed": "You have already claimed this reward.",
+      "swag_tier": "Reach a higher rank to claim this.",
+      "swag_points": "Not enough points."
     }
   },
   "guide": {
@@ -1190,6 +1575,7 @@ export const ko_KR: EnTranslations = {
       "bestiary": "몬스터 도감",
       "models": "3D 모델",
       "gear": "장비와 물품",
+      "professions": "Professions",
       "economy": "경제와 거래",
       "social": "사교와 파티",
       "stats": "캐릭터와 능력치",
@@ -1200,9 +1586,11 @@ export const ko_KR: EnTranslations = {
       "delves": "탐굴",
       "reference": "참고 자료",
       "controls": "조작법",
+      "settings": "Settings & Performance",
       "combat": "전투",
       "talents": "특성",
       "arena": "투기장과 PvP",
+      "valeCup": "Vale Cup",
       "glossary": "용어집",
       "wishIKnew": "미리 알았으면 좋았을 것들",
       "faq": "자주 묻는 질문",
@@ -1367,6 +1755,66 @@ export const ko_KR: EnTranslations = {
       "mobileBody": "휴대전화와 태블릿에서는 터치 조작이 자동으로 나타납니다. 왼쪽에는 이동 스틱, 오른쪽 아무 곳이나 끌면 시점 전환, 그리고 능력과 메뉴를 위한 화면 버튼이 표시됩니다.",
       "controllerHeading": "컨트롤러에서",
       "controllerBody": "게임패드도 사용할 수 있으며, 컨트롤러 지원은 기본으로 켜져 있습니다. 왼쪽 스틱으로 이동하고, 오른쪽 스틱으로 카메라를 조준하며, 얼굴 버튼과 어깨 버튼으로 능력 사용, 점프, 상호작용을 처리합니다. 창을 열면 메뉴를 다룰 화면 포인터가 나타납니다. 옵션의 컨트롤러 설정에서 버튼을 재배치하고 스틱 데드존, 카메라 속도, 진동, 시점 반전을 조정할 수 있습니다."
+    },
+    "settingsPage": {
+      "heading": "Settings & Performance",
+      "intro": "Make the game look its best or run its fastest. Three ready-made loadouts, plus what every graphics option really does.",
+      "wherePath": "Everything on this page lives in the game: press Esc and look in Graphics, Interface, and Performance Overlay.",
+      "fairnessTitle": "Fair by design",
+      "fairnessBody": "No option here trades beauty for power. Lower settings shed cosmetic polish only, never information you fight with: your debuffs, cast bars, party health, and damage numbers are identical from Low to Ultra. Playing on a modest machine is never a handicap.",
+      "loadoutsHeading": "Three ready-made loadouts",
+      "loadoutsIntro": "Start from the loadout that sounds like your machine, then adjust one option at a time until it feels right.",
+      "recommended": "Recommended",
+      "whyLabel": "Why it works:",
+      "tagReload": "after reload",
+      "fpsTitle": "Best FPS",
+      "fpsTagline": "For older laptops, integrated graphics, and battery play.",
+      "fpsWhy": "Graphics Quality is the master switch, and Render Quality is the strongest slider: at 70% the world draws roughly half the pixels while the interface stays perfectly sharp.",
+      "balancedTitle": "Balanced",
+      "balancedTagline": "The sweet spot for most machines, and our default advice.",
+      "balancedWhy": "Medium brings real shadows and full materials; High adds ambient occlusion and bloom. Below Ultra a built-in safety net absorbs sudden dips in busy fights, so Balanced stays smooth without babysitting.",
+      "visualsTitle": "Best Visuals",
+      "visualsTagline": "Screenshot mode for powerful desktop machines.",
+      "visualsWhy": "Ultra renders at the highest resolution your display offers with the richest lighting. It also switches the safety net off, and it is desktop-only: phones and the app top out at High.",
+      "value50to70": "50 to 70%",
+      "value90to100": "90 to 100%",
+      "value100": "100%",
+      "valueHighOrMedium": "High on a gaming PC, Medium on a laptop",
+      "valueOnOptional": "On (optional)",
+      "howHeading": "How the options behave",
+      "factDetectTitle": "The game tunes itself first",
+      "factDetectBody": "On your first launch the game reads your device and picks a sensible tier, from Low on a modest phone to Ultra on a strong desktop. Any choice you make yourself always wins.",
+      "factReloadTitle": "Two kinds of options",
+      "factReloadBody": "Graphics Quality and the Advanced pickers take effect after a reload, and the panel offers a Reload Now button when needed. Every other option applies the moment you change it.",
+      "factGovernorTitle": "A built-in safety net",
+      "factGovernorBody": "On every tier below Ultra, the game quietly thins grass, effects, and lighting for a moment when a big fight spikes, then restores them. Choosing Ultra tells it you would rather keep every detail.",
+      "advancedHeading": "The Advanced preset: mix your own",
+      "advancedBody": "Advanced starts from the High tier and unlocks four extra pickers, so you can spend your frames where you actually notice them: Terrain Detail, Foliage Density, Effects & Lighting, and Shadow Quality. Like Graphics Quality, they apply after a reload.",
+      "advancedMixes": "Two favorite mixes: keep Shadow Quality on High and set Effects & Lighting to Low for a crisp, glow-free look that runs light, or do the reverse to keep the bloom and soften the shadows.",
+      "tableHeading": "Every option, explained",
+      "colSetting": "Setting",
+      "colDoes": "What it does",
+      "colImpact": "FPS impact",
+      "impactNone": "None",
+      "impactLight": "Light",
+      "impactModerate": "Moderate",
+      "impactHeavy": "Heavy",
+      "rowGraphicsQuality": "The master switch. Each step changes resolution, shadows, materials, foliage, and lighting effects together. The biggest single difference you can make.",
+      "rowRenderQuality": "Draws the 3D world at a lower internal resolution and scales it up; the interface stays sharp. The strongest instant slider on weaker machines and high-resolution screens.",
+      "rowFieldOfView": "How much of the world fits on screen, from a zoomed 55 to a sweeping 100 degrees. A comfort choice; wider views draw slightly more.",
+      "rowBrightness": "Scene exposure, darker or brighter. Pure preference.",
+      "rowWeather": "Ambient rain and snow. Atmosphere only, and switching it off saves a little during storms.",
+      "rowBrowserEffects": "How fancy the interface itself is allowed to be: glass blur, glow, animated menus. Auto matches your browser; the 3D world is untouched either way.",
+      "rowTerrainDetail": "Rich, blended ground textures versus a simpler, faster terrain look.",
+      "rowFoliageDensity": "How far and how thick the grass grows around your character.",
+      "rowEffectsQuality": "Bloom, ambient occlusion, and how many torches and spells cast real light. The single biggest saving among the Advanced pickers.",
+      "rowShadowQuality": "Shadow crispness. Low keeps shadows but softens their edges.",
+      "rowFrostedPanels": "A frosted-glass blur behind windows. Pretty, and exactly the kind of effect a weaker browser feels; leave it off for the classic crisp look.",
+      "rowReduceMotion": "Removes interface animations so windows appear instantly. An accessibility option first, with a small performance bonus.",
+      "rowPerfOverlay": "An on-screen readout of FPS, frame time, and more. Turn it on while you tune this page, then hide it again.",
+      "tableFoot": "Looking for a draw-distance slider or an FPS cap? There is nothing to hunt for: view distance is part of each quality tier, and frame pacing follows your display.",
+      "mobileTitle": "On phones and tablets",
+      "mobileBody": "Mobile manages more for you: the game picks the tier, holds resolution a touch lower to protect battery and heat, and keeps the highest tiers desktop-only. The loadouts above still apply; phones simply top out at High."
     },
     "combat": {
       "intro": "전투는 익숙한 클래식 MMO 규칙을 따릅니다. 잘 플레이하기 위해 이를 공부할 필요는 전혀 없으며, 그저 전투가 어떻게 돌아가는지에 대한 개요일 뿐입니다.",
@@ -1793,10 +2241,38 @@ export const ko_KR: EnTranslations = {
       "waveGoldBody": "중반 웨이브: 양날의 조합으로, 이 무렵부터 당신의 빌드가 모습을 갖추고 노래하기 시작합니다.",
       "wavePrismaticTitle": "프리즘",
       "wavePrismaticBody": "마지막 웨이브: 빌드를 결정짓고 화면을 녹여 버리는 폭발적인 한 방으로, 더없이 통쾌하게 터무니없는 느낌을 주려는 것입니다.",
+      "yumiHeading": "Protect Yumi",
+      "yumiBody": "Protect Yumi is a team objective mode played in a maze: each side guards its own cat familiar while hunting the other. Every so often both cats blink to new corners of the maze, so the fight swings between defending, hunting, and racing to find them again. Queue as three versus three or five versus five; falling in battle only benches you for a moment.",
       "powerupsTitle": "원형 안의 강화 효과",
       "powerupsBody": "빛나는 구슬이 전투 도중 투기장 안으로 떨어지기도 하며, 먼저 닿는 사람이 임자입니다. 일부러 과장되게 만들어졌고 효과는 잠깐뿐입니다. 눈이 멀 듯한 속도를 주는 스피드 데몬, 굼뜬 거인으로 부풀어 오르는 콜로서스, 저중력으로 통통 튀어 오르게 하는 문 부츠, 그리고 분노가 한순간에 폭발하는 버서커가 있습니다.",
       "ladderHeading": "순위 올리기",
       "ladderBody": "등급전은 시간이 지나며 당신의 순위를 기록합니다. 순위표를 확인해 자신의 위치와 서버 정상에 오른 이가 누구인지 살펴보세요."
+    },
+    "valeCupPage": {
+      "heading": "The Vale Cup",
+      "intro": "Boarball at the Sowfield: pick a banner, pick a role, and kick a stuffed boar hide past a keeper for the Copper Pail. No blood, no loot, just the roar of the stands.",
+      "loreHeading": "Boarball and the harvest truce",
+      "loreOldSow": "Long before the dead woke, Eastbrook's farmhands played boarball on the stubble fields after harvest: two mobs, one boar's hide stuffed with straw, and two wagon gates dragged to either end of the green. The first ball, the Old Sow, hangs bronzed above the tavern hearth.",
+      "loreTruce": "When the Ashen Coliseum began sanctioning war games, Marshal Redbrook answered with something gentler: a standing harvest truce on the old green. The wagon gates became goalposts, the green got walls, stands, and a name, the Sowfield, and the prize was always the same dented milk pail the winners drank from: the Copper Pail.",
+      "howHeading": "How to play",
+      "howQueue": "Queue from anywhere through the Vale Cup window, or talk to Groundskeeper Bram at the Sowfield gate. Pick a bracket from one-a-side up to five-a-side, a banner nation, and a sport role; queue solo or bring your party.",
+      "howMatch": "On kickoff your class kit is swapped for a sport kit and restored exactly afterward. Kicks aim at the ground reticle, the ball banks off the boards, and dribbling is just running with the ball. Score more goals than the other side before full time; a draw goes to golden goal.",
+      "howTruce": "Nobody bleeds at the Sowfield: tackles tumble, nothing hurts, and pets sit the match out.",
+      "spectateBody": "One match plays at a time at the stadium, and anyone can walk up and watch from the stands.",
+      "nationsHeading": "The eight banner nations",
+      "nationsBody": "Every team plays under a banner. The captain picks the nation, and if both sides fly the same one, the away side plays the inverted palette.",
+      "nationVale": "Green and gold, flying the wheat sheaf: the home side, farmhands to the bone.",
+      "nationMirefen": "Teal and grey under the heron: patient, long-legged, never hurried.",
+      "nationThornpeak": "Ice blue and white under the mountain peak: sure-footed and stubborn.",
+      "nationColiseum": "Red and black with crossed swords: they play like it is still a war game.",
+      "nationChoir": "Pale blue and silver under the bell: eerie, precise, and very quiet.",
+      "nationOgre": "Orange and umber behind the fist: shoulder-first and proud of it.",
+      "nationMoon": "Violet and silver under the crescent: night players, light on their feet.",
+      "nationCopperdig": "Copper and brown with the pickaxe: diggers who never stop running.",
+      "rolesHeading": "Sport roles",
+      "rolesBody": "Your role decides the kit you carry onto the pitch. Everyone kicks; the rest is temperament.",
+      "rewardsHeading": "Truce rules",
+      "rewardsBody": "Truce rules mean no experience and no loot: a decided match counts toward your record and the winners board, and daily-reward points come with it. Deserting a match benches your slot, and the Groundskeeper remembers."
     },
     "wishPage": {
       "heading": "미리 알았으면 좋았을 것들",
@@ -1882,6 +2358,35 @@ export const ko_KR: EnTranslations = {
       "cosmeticsCache": "그중 일부는 신비한 외형 상자에서 나옵니다. 열면 세 가지 품질 등급 중 하나가 결정되어 그에 맞는 외형을 주는 봉인된 보상입니다. 순전히 보기 위한 것이라, 그 안의 무엇도 당신을 더 강하게 만들지 않고 그저 더 멋져 보이게 할 뿐입니다.",
       "cosmeticsApply": "캐릭터 화면의 외형 항목에서 현재 외형을 설정하고, 해금한 모든 외형을 자유롭게 바꿀 수 있습니다."
     },
+    "professions": {
+      "intro": "Beyond combat and quests, the world rewards you for working the land and the forge: gathering raw materials, turning them into gear at the crafting stations of ten different trades, and settling into an identity as one of the ten archetypes those trades represent.",
+      "gatherTitle": "Gathering: Mining, Logging, and Herbalism",
+      "gatherIntro": "Three gathering trades let you pull raw materials straight out of the world: Mining strikes ore and stone from veins, Logging fells timber from stands of trees, and Herbalism collects herbs and plants growing wild. Each is tracked separately, so working one never slows your progress in another.",
+      "gatherWhatTitle": "Resource nodes",
+      "gatherWhatBody": "Ore veins, wood stands, and herb patches are placed out in the zones as visible, unowned fixtures. Walk up to one and interact with it to harvest whatever it holds. Once you have harvested a node, it needs time to recover before you personally can harvest it again, though it never blocks anyone else: another player can harvest the very same node in the meantime.",
+      "gatherProficiencyTitle": "Proficiency and material quality",
+      "gatherProficiencyBody": "Every successful harvest builds your proficiency in that gathering trade. A higher proficiency shifts what you pull out of a node toward rarer grades of material, from common on up, though the rarest grades stay rare even at high proficiency. More practice never hurts your odds, it only ever improves them.",
+      "gatherToolsTitle": "Tools of the trade",
+      "gatherToolsBody": "Vendors sell basic tools for each gathering trade, and better ones can be crafted, so working a resource node is meant to feel more capable as you gear up for it rather than staying static. Higher-tier tools are the intended way to unlock access to richer nodes and to work them more efficiently over a long session.",
+      "craftTitle": "The ten crafts",
+      "craftIntro": "Ten crafting trades turn gathered materials into finished gear and goods: Armorcrafting, Weaponcrafting, and Jewelcrafting shape raw matter into wearable gear; Alchemy and Engineering are driven by trial and error; Cooking, Inscription, and Enchanting each touch other crafts' output; Tailoring and Leatherworking work from exact patterns. Together they form a wheel, with each craft sitting next to two neighbors and opposite one other.",
+      "craftRingTitle": "A wheel of specialties",
+      "craftRingBody": "The ten crafts are arranged in a fixed ring, and where a craft sits on that ring matters: crafts next to each other on the wheel share more in common with each other than crafts on opposite sides do. Committing to one craft is meant to feel like joining a family of related trades, not picking an isolated skill.",
+      "craftRecipesTitle": "Recipes and reagents",
+      "craftRecipesBody": "Every craft has its own recipes, each calling for specific reagents you gather or buy. The most basic recipes in each craft ask for nothing but common materials and are craftable from the very start, so you can begin working a trade the moment you pick it up rather than waiting to unlock it.",
+      "craftMasteryTitle": "Skill and mastery",
+      "craftMasteryBody": "Crafting successfully builds skill in that trade, and richer recipes are gated behind higher skill: the basic recipes are open to everyone, while progressively more advanced ones ask for progressively more mastery to attempt. Growing your skill in a craft is the path from simple starter goods to its more ambitious recipes.",
+      "craftComboTitle": "Combination recipes",
+      "craftComboBody": "Beyond a single craft's own recipe list, the wheel also supports combination recipes that call on two neighboring crafts at once, rewarding a character (or a pair of trading partners) who has invested in adjacent trades on the ring rather than one in isolation.",
+      "archetypeTitle": "The ten archetypes",
+      "archetypeIntro": "Each of the ten crafts also stands for an archetype, a broader identity you can adopt beyond just working that trade. Your active archetype is a single choice at a time, not a checklist: you carry one, and can change which one later if you choose to.",
+      "archetypeChooseTitle": "Choosing your archetype",
+      "archetypeChooseBody": "You declare your first archetype through an early, zone one story quest that formally accepts you into that identity. Until you complete that quest, you have not yet chosen an archetype at all.",
+      "archetypeSwitchTitle": "Changing your mind",
+      "archetypeSwitchBody": "Having declared an archetype once does not lock you into it forever. Changing to a different archetype means first completing a repeatable \"make amends\" quest for your old one, and each time you switch, the amends expected of you the next time grow a little steeper, so switching stays meaningful rather than costless.",
+      "archetypeIdentityTitle": "What your archetype means",
+      "archetypeIdentityBody": "Your active archetype is a statement about who your character is in the world, recognized in how others and the world address you. The exact rewards and recognition that come with it are still being finalized; check back as the system fills in."
+    },
     "economy": {
       "intro": "동전은 온 세계를 움직이는 기름입니다. 장비와 보급품, 여행 장비를 사고, 플레이어들 사이에서 손을 바꿉니다. 이 모든 것은 그저 플레이하는 것만으로 익히게 되니, 이 페이지를 돈이 어디서 들어오고 어디로 나가는지 보여 주는 지도라 여기세요.",
       "coinTitle": "금화, 은화, 동화",
@@ -1890,6 +2395,10 @@ export const ko_KR: EnTranslations = {
       "vendorsBody": "마을과 전초기지에는 저마다 다른 물건을 다루는 상인들이 흩어져 있습니다. 보급상은 음식과 음료를 갖추고, 무기 제작자와 방어구 제작자는 장비를 다루며, 병참장교는 실용적인 여행 장비를 둡니다. 다가서면 그들이 무엇을 파는지 볼 수 있습니다.",
       "marksTitle": "두 번째 화폐: 탐굴 증표",
       "marksBody": "모아두는 것이 금화만 있는 것은 아닙니다. 탐굴은 탐굴 증표를 보상으로 주며, 이는 오직 탐굴 관리인에게서만 동료 강화와 다른 곳에서는 구할 수 없는 장비에 쓰는 별도의 화폐입니다. 탐굴 증표는 금화와 절대 섞이지 않습니다.",
+      "bankTitle": "The bank",
+      "bankBody": "Every hub town keeps a branch of The Gilded Strongbox, the banking house of the realm. Speak to the bursar there to open your vault, a private store of room beyond your bags that your character keeps for life. Whatever you leave with them waits safely, whichever branch you visit next.",
+      "bankHow": "With the vault open, click an item in your bags to deposit it and click it in the vault to take it back. The vault holds goods only, never coin, and quest items stay with you. When your bags fill up mid-journey, one button sweeps all your crafting materials in at once.",
+      "bankSlots": "A fresh vault starts small and grows with you. The bursar sells further slots for coin at ever-steeper prices, and playing online earns bonus room on top, for things like a verified email, linked accounts, and friends you bring into the game.",
       "buyingTitle": "사고팔기",
       "buyingBody": "상인 가까이 서면 상점 창이 열립니다. 형편이 닿는 한 그들이 갖춘 물건은 무엇이든 살 수 있고, 가방 속 대부분은 동전을 받고 팔 수 있습니다. 실수로 무언가를 팔았다면, 상인이 최근 판매 내역을 보관해 두므로 되살 수 있습니다.",
       "junkTitle": "잡동사니 정리",
@@ -2481,8 +2990,8 @@ export const ko_KR: EnTranslations = {
   },
   "footer": {
     "copyright": "2026 Cryptic Realm",
-    "githubLink": "https://github.com/levy-street/world-of-claudecraft",
-    "githubLabel": "오픈 소스 프로젝트",
+    "githubLink": "/contributions.html",
+    "githubLabel": "Contributions",
     "whitepaper": "백서",
     "terms": "서비스 이용약관",
     "privacy": "개인정보 처리방침",
@@ -2555,8 +3064,12 @@ export const ko_KR: EnTranslations = {
     "loading": "Loading official channels…"
   },
   "download": {
-    "title": "데스크톱 런처 다운로드",
-    "desc": "최적화된 성능과 전체 화면 플레이를 위해 독립형 런처를 다운로드하세요."
+    "title": "Launchers & Installs",
+    "desc": "최적화된 성능과 전체 화면 플레이를 위해 독립형 런처를 다운로드하세요.",
+    "macCta": "Download for macOS",
+    "linuxCta": "Download for Linux",
+    "linuxHint": "AppImage: make it executable, then run it. No install needed.",
+    "windowsPending": "Windows build pending."
   },
   "comingSoon": {
     "placeholder": "준비 중...",
@@ -2624,11 +3137,13 @@ export const ko_KR: EnTranslations = {
     "twoFactorPlaceholder": "6자리 또는 복구 코드",
     "twoFactorHint": "인증 앱에 표시된 코드 또는 복구 코드 중 하나를 입력하세요.",
     "email": "이메일",
+    "emailPlaceholder": "you@example.com",
     "emailError": "유효한 이메일 주소를 입력하세요.",
     "recovery": {
       "title": "복구 이메일 추가",
       "body": "계정을 복구할 수 있도록 이메일 주소를 설정하세요. 비밀번호를 재설정해야 할 경우 이 계정의 소유자임을 확인하는 용도로만 사용됩니다.",
       "save": "이메일 저장",
+      "logOut": "Log out",
       "invalid": "유효한 이메일 주소를 입력하세요.",
       "failed": "이메일을 저장하지 못했습니다. 다시 시도해 주세요."
     }
@@ -3009,6 +3524,10 @@ export const ko_KR: EnTranslations = {
     },
     "closeAria": "닫기"
   },
+  "heroicShop": {
+    "balance": "Heroic Marks: {count}",
+    "buyAria": "Buy {item} for {marks} Heroic Marks"
+  },
   "delveUi": {
     "board": {
       "title": "탐굴 게시판",
@@ -3204,6 +3723,45 @@ export const ko_KR: EnTranslations = {
     },
     "chest": {
       "flavor": "죽은 자들이 내어줄 수 있는 것을 내놓았습니다."
+    }
+  },
+  "yumi": {
+    "bracket3": "Yumi 3v3",
+    "bracket5": "Yumi 5v5",
+    "enterQueue": "Join Protect Yumi!",
+    "queue": {
+      "join": "You join the Protect Yumi queue. Guard your familiar…",
+      "leave": "You leave the Protect Yumi queue.",
+      "teamLeave": "Your team leaves the Protect Yumi queue."
+    },
+    "error": {
+      "partyTooBig3": "Protect Yumi 3v3 allows a party of up to three.",
+      "partyTooBig5": "Protect Yumi 5v5 allows a party of up to five."
+    },
+    "log": {
+      "start": "Protect Yumi! Defend your familiar and hunt theirs."
+    },
+    "hud": {
+      "title": "PROTECT YUMI",
+      "getReady": "Get ready…",
+      "teleportIn": "Yumis move in {s}",
+      "suddenDeath": "SUDDEN DEATH",
+      "yourYumi": "Your Yumi",
+      "enemyYumi": "Enemy Yumi",
+      "aria": "Your Yumi at {mine} of {max} health, enemy Yumi at {theirs}.",
+      "collapse": "Collapse the Protect Yumi bars",
+      "expand": "Expand the Protect Yumi bars"
+    },
+    "respawn": {
+      "title": "DOWNED!"
+    },
+    "banner": {
+      "sudden": "SUDDEN DEATH! The Yumis hold their ground!",
+      "teleport": "The Yumis teleport!"
+    },
+    "end": {
+      "win": "VICTORY! Yumi is safe!",
+      "loss": "DEFEAT! Your Yumi has fallen."
     }
   },
   "fiesta": {
@@ -3402,6 +3960,7 @@ export const ko_KR: EnTranslations = {
     "rendererFailed": "렌더러를 시작할 수 없습니다. 새로고침해 보세요. {error}",
     "enterTimeout": "세계에 입장할 수 없습니다. 연결 시간이 초과되었습니다. 게임 서버가 실행 중인가요?",
     "connectionLost": "서버와의 연결이 끊어졌습니다.",
+    "reconnecting": "Connection lost. Reconnecting...",
     "connectionRejected": "서버가 연결을 종료했습니다."
   },
   "errors": {
@@ -3434,9 +3993,12 @@ export const ko_KR: EnTranslations = {
       "webLoginOnly": "로그인은 게임 클라이언트에서만 허용됩니다.",
       "accountSuspended": "이 계정은 {date}까지 정지되었습니다.",
       "alreadyInWorld": "캐릭터가 이미 세계에 있습니다.",
+      "accountSessionLimit": "Too many characters on this account are already in the world.",
       "takenOver": "다른 세션이 캐릭터를 넘겨받았습니다.",
       "renameBeforeEntering": "이 캐릭터는 세계에 들어가기 전에 이름을 변경해야 합니다.",
-      "renameNotPermitted": "이 캐릭터의 이름을 변경할 수 없습니다."
+      "renameNotPermitted": "이 캐릭터의 이름을 변경할 수 없습니다.",
+      "unsupportedMediaType": "Unsupported request format.",
+      "crossSiteOrigin": "Request blocked for security reasons."
     }
   },
   "desktop": {
@@ -3650,6 +4212,7 @@ export const ko_KR: EnTranslations = {
       "mobileSocial": "소셜",
       "mobileArena": "투기장",
       "mobileMenu": "메뉴",
+      "mobileSettings": "Settings",
       "mobileUse": "사용",
       "mobileMeters": "미터",
       "mobileMap": "지도",
@@ -4225,6 +4788,7 @@ export const ko_KR: EnTranslations = {
       "offGlobalCooldown": "공용 재사용 대기시간 없음",
       "friendlyTarget": "아군 대상",
       "enemyTarget": "적 대상",
+      "selfOnly": "Self only",
       "damageRange": "{min}에서 {max}",
       "finisherDamage": "기본 {base}, 연계 점수당 {perCombo}"
     },
@@ -4327,12 +4891,14 @@ export const ko_KR: EnTranslations = {
     "slots": {
       "mainhand": "주장비",
       "helmet": "머리",
+      "neck": "Neck",
       "shoulder": "어깨",
       "chest": "가슴",
       "waist": "허리",
       "legs": "다리",
       "gloves": "손",
-      "feet": "발"
+      "feet": "발",
+      "ring": "Finger"
     },
     "quality": {
       "poor": "하급",
@@ -4531,11 +5097,52 @@ export const ko_KR: EnTranslations = {
       "needAria": "{item} 필요",
       "greedAria": "{item} 탐욕",
       "passAria": "{item} 포기",
-      "everyonePassed": "모두 {item}을(를) 포기했습니다."
+      "everyonePassed": "모두 {item}을(를) 포기했습니다.",
+      "rolled": "{answered}/{total} rolled"
     }
   },
   "entities": {
     "abilities": {
+      "sport_kick": {
+        "name": "Kick",
+        "description": "Knock the ball along the ground toward the aim point."
+      },
+      "sport_shoot": {
+        "name": "Shoot",
+        "description": "Hold to build power, release to shoot at goal. Too much power sails over."
+      },
+      "sport_pass": {
+        "name": "Pass",
+        "description": "Roll a firm pass to your targeted teammate, leading their run."
+      },
+      "sport_boot": {
+        "name": "Big Boot",
+        "description": "A long lofted boot toward the aim point. The crowd loves it."
+      },
+      "sport_hoof": {
+        "name": "Hoof It",
+        "description": "Hammer the ball low and hard up the field."
+      },
+      "sport_punt": {
+        "name": "Long Punt",
+        "description": "A keeper's punt, high and far."
+      },
+      "sport_feint": {
+        "name": "Feint",
+        "description": "A quick sidestep burst toward the aim point."
+      },
+      "sport_dive": {
+        "name": "Dive",
+        "description": "Fling yourself toward the aim point. A crossing ball sticks to you."
+      },
+      "sport_shoulder": {
+        "name": "Shoulder",
+        "description": "A fair harvest-truce shoulder. Sends them tumbling off the ball."
+      },
+      "sport_second_wind": {
+        "name": "Fresh Legs",
+        "description": "Find your legs: move 50% faster for 4 sec."
+      },
       "flamestrike": {
         "name": "화염 폭발",
         "description": "지정한 지역에 화염 폭발을 일으켜 폭발 범위 안의 적에게 {damage}의 화염 피해를 입힙니다."
@@ -4562,15 +5169,15 @@ export const ko_KR: EnTranslations = {
       },
       "battle_shout": {
         "name": "전투의 외침",
-        "description": "2분 동안 전투력이 20만큼 증가합니다."
+        "description": "A shout that increases the attack power of all party members by {buff}% for 2 min."
       },
       "commanding_shout": {
         "name": "지휘의 외침",
-        "description": "2분 동안 체력이 6만큼 증가합니다."
+        "description": "Increases your Stamina by {buff} for 2 min."
       },
       "demoralizing_shout": {
         "name": "사기의 외침",
-        "description": "무시무시한 외침을 내질러 30초 동안 주위 모든 적의 전투력을 30만큼 감소시킵니다."
+        "description": "Lets out a fearsome shout, reducing the attack power of all nearby enemies by {buff} for 30 sec."
       },
       "charge": {
         "name": "돌진",
@@ -4578,7 +5185,7 @@ export const ko_KR: EnTranslations = {
       },
       "rend": {
         "name": "분쇄",
-        "description": "대상을 상처 입혀 9초에 걸쳐 {damage}의 출혈 피해를 입힙니다."
+        "description": "Wounds the target, causing them to bleed for {damage} damage over {duration} sec."
       },
       "thunder_clap": {
         "name": "천둥벼락",
@@ -4586,7 +5193,7 @@ export const ko_KR: EnTranslations = {
       },
       "hamstring": {
         "name": "무력화",
-        "description": "적에게 5의 피해를 입히고 15초 동안 이동 속도를 50%만큼 감소시킵니다."
+        "description": "Maims the enemy for {damage} damage, slowing its movement by 50% for 15 sec."
       },
       "bloodrage": {
         "name": "피의 분노",
@@ -4594,7 +5201,7 @@ export const ko_KR: EnTranslations = {
       },
       "overpower": {
         "name": "제압",
-        "description": "무기 피해 +5를 즉시 입힙니다. 대상이 회피한 후에만 사용할 수 있습니다. 회피할 수 없습니다."
+        "description": "Instant attack for weapon damage plus {damage}. Only usable after the target dodges. Cannot be dodged."
       },
       "execute": {
         "name": "마무리 일격",
@@ -4626,11 +5233,11 @@ export const ko_KR: EnTranslations = {
       },
       "frost_armor": {
         "name": "냉기 갑옷",
-        "description": "자신을 냉기로 감싸 30분 동안 방어도를 30만큼 증가시킵니다."
+        "description": "Encases you in frost, increasing armor by {buff} for 30 min."
       },
       "arcane_intellect": {
         "name": "비전 지능",
-        "description": "30분 동안 지능이 2만큼 증가합니다."
+        "description": "Increases the Intellect of all party members by {buff}% for 30 min."
       },
       "frostbolt": {
         "name": "얼음 화살",
@@ -4654,7 +5261,7 @@ export const ko_KR: EnTranslations = {
       },
       "polymorph": {
         "name": "변이",
-        "description": "적을 최대 15초 동안 양으로 변이시킵니다. 양은 돌아다니며 빠르게 회복합니다. 피해를 받으면 효과가 해제됩니다. 야수와 인간형에게만 사용할 수 있습니다."
+        "description": "Transforms the enemy into a toad for up to {duration} sec. The toad wanders and heals rapidly. Any damage breaks the effect. Beasts and humanoids only."
       },
       "frost_nova": {
         "name": "얼음 회오리",
@@ -4674,7 +5281,7 @@ export const ko_KR: EnTranslations = {
       },
       "ice_barrier": {
         "name": "얼음 보호막",
-        "description": "얼음으로 자신을 보호해 60초 동안 130의 피해를 흡수합니다."
+        "description": "Shields you in ice, absorbing {damage} damage for 60 sec."
       },
       "sinister_strike": {
         "name": "사악한 일격",
@@ -4682,7 +5289,7 @@ export const ko_KR: EnTranslations = {
       },
       "eviscerate": {
         "name": "절개",
-        "description": "연계 점수당 피해를 입히는 결정타입니다."
+        "description": "Finishing move that causes {damage}."
       },
       "backstab": {
         "name": "기습",
@@ -4690,7 +5297,7 @@ export const ko_KR: EnTranslations = {
       },
       "gouge": {
         "name": "후려치기",
-        "description": "대상을 가격해 4초 동안 행동 불가 상태로 만듭니다. 피해를 받으면 효과가 해제됩니다. 연계 점수 1점을 얻습니다."
+        "description": "Strikes the target for {damage} damage, incapacitating it for 4 sec. Any damage breaks the effect. Awards 1 combo point."
       },
       "evasion": {
         "name": "회피",
@@ -4722,11 +5329,11 @@ export const ko_KR: EnTranslations = {
       },
       "garrote": {
         "name": "목조르기",
-        "description": "적의 목을 졸라 즉시 피해를 입히고 18초에 걸쳐 {damage}의 출혈 피해를 입힙니다. 은신 상태여야 합니다. 연계 점수 1점을 얻습니다."
+        "description": "Garrote the enemy, causing {damage} damage now and bleeding it for {overTime} over 18 sec. Must be stealthed. Awards 1 combo point."
       },
       "cheap_shot": {
         "name": "비열한 습격",
-        "description": "대상을 가격해 4초 동안 기절시킵니다. 은신 상태여야 합니다. 연계 점수 2점을 얻습니다."
+        "description": "Strike the target for {damage} damage, stunning it for 4 sec. Must be stealthed. Awards 2 combo points."
       },
       "sap": {
         "name": "관자놀이 가격",
@@ -4738,7 +5345,7 @@ export const ko_KR: EnTranslations = {
       },
       "expose_armor": {
         "name": "방어구 노출",
-        "description": "대상의 약점을 드러내 방어도를 감소시키는 결정타입니다. 연계 점수를 많이 소모할수록 더 깊게 베어 들어갑니다."
+        "description": "Finishing move that exposes the target, reducing its armor by {damage}% for 30 sec."
       },
       "rupture": {
         "name": "파열",
@@ -4762,7 +5369,7 @@ export const ko_KR: EnTranslations = {
       },
       "seal_of_righteousness": {
         "name": "정의의 문장",
-        "description": "30초 동안 신성한 힘으로 가득 차 근접 공격마다 4의 추가 신성 피해를 입힙니다. 심판으로 해방할 수 있습니다."
+        "description": "Fills you with Holy power for 30 sec, causing each of your melee swings to deal {damage} additional Holy damage. Unleash with Verdict."
       },
       "holy_light": {
         "name": "성스러운 빛",
@@ -4770,7 +5377,7 @@ export const ko_KR: EnTranslations = {
       },
       "devotion_aura": {
         "name": "기원의 오라",
-        "description": "30분 동안 방어도가 40만큼 증가합니다."
+        "description": "Increases the armor of all party members by {buff}% for 30 min."
       },
       "judgement": {
         "name": "심판",
@@ -4778,19 +5385,19 @@ export const ko_KR: EnTranslations = {
       },
       "blessing_of_might": {
         "name": "힘의 축복",
-        "description": "아군 대상에게 축복을 내려 5분 동안 전투력을 15만큼 증가시킵니다."
+        "description": "Blesses the party, increasing the attack power of all party members by {buff}% for 30 min."
       },
       "divine_protection": {
         "name": "신의 가호",
-        "description": "신성한 보호막이 10초 동안 50의 피해를 흡수합니다."
+        "description": "A protective ward absorbs {damage} damage for 10 sec."
       },
       "hammer_of_justice": {
         "name": "심판의 망치",
-        "description": "대상을 3초 동안 기절시킵니다."
+        "description": "Stuns the target for {duration} sec."
       },
       "lay_on_hands": {
         "name": "신의 축복",
-        "description": "막대한 치유의 힘으로 생명력 250을 회복시킵니다. 재사용 대기시간 10분."
+        "description": "A massive surge of healing: restores {damage} health. 10 min cooldown."
       },
       "flash_of_light": {
         "name": "빛의 섬광",
@@ -4822,11 +5429,11 @@ export const ko_KR: EnTranslations = {
       },
       "raptor_strike": {
         "name": "랩터의 일격",
-        "description": "강력한 근접 공격으로 피해가 5만큼 증가합니다. 다음 무기 공격 시 발동됩니다."
+        "description": "A strong melee attack that increases damage by {damage}. Activates on your next swing."
       },
       "aspect_of_the_hawk": {
         "name": "매의 상",
-        "description": "매의 상을 취해 30분 동안 전투력이 20만큼 증가합니다."
+        "description": "Take on the harrier's guise, increasing attack power by {buff} for 30 min."
       },
       "serpent_sting": {
         "name": "독사 쐐기",
@@ -4838,15 +5445,15 @@ export const ko_KR: EnTranslations = {
       },
       "concussive_shot": {
         "name": "충격포",
-        "description": "대상을 멍하게 만들어 4초 동안 이동 속도를 50%만큼 감소시킵니다."
+        "description": "Dazes the target for {damage} damage, slowing movement by 50% for 4 sec."
       },
       "mongoose_bite": {
         "name": "살쾡이의 이빨",
-        "description": "대상이 회피한 후 반격하여 무기 피해에 12를 더한 피해를 입힙니다. 회피할 수 없습니다."
+        "description": "Counterattack after the target dodges for weapon damage plus {damage}. Cannot be dodged."
       },
       "wing_clip": {
         "name": "날개 절단",
-        "description": "상처를 내어 10초 동안 적의 이동 속도를 40%만큼 감소시킵니다."
+        "description": "Inflicts a wound for {damage} damage, slowing the enemy by 40% for 10 sec."
       },
       "aspect_of_the_monkey": {
         "name": "원숭이의 상",
@@ -4874,7 +5481,7 @@ export const ko_KR: EnTranslations = {
       },
       "power_word_fortitude": {
         "name": "신의 권능: 인내",
-        "description": "30분 동안 대상의 체력이 3만큼 증가합니다."
+        "description": "Increases the Stamina of all party members by {buff}% for 30 min."
       },
       "shadow_word_pain": {
         "name": "어둠의 권능: 고통",
@@ -4882,7 +5489,7 @@ export const ko_KR: EnTranslations = {
       },
       "power_word_shield": {
         "name": "신의 권능: 보호막",
-        "description": "대상을 보호하여 30초 동안 48의 피해를 흡수합니다."
+        "description": "Shields the target, absorbing {damage} damage for 30 sec."
       },
       "renew": {
         "name": "소생",
@@ -4910,7 +5517,7 @@ export const ko_KR: EnTranslations = {
       },
       "rockbiter_weapon": {
         "name": "대지의 무기",
-        "description": "바위의 분노로 무기를 강화합니다. 5분 동안 매 공격마다 5의 추가 피해를 입힙니다."
+        "description": "Imbues your weapon with the fury of stone: each swing deals {damage} additional damage for 5 min."
       },
       "healing_wave": {
         "name": "치유의 물결",
@@ -4922,15 +5529,15 @@ export const ko_KR: EnTranslations = {
       },
       "lightning_shield": {
         "name": "번개 보호막",
-        "description": "자신을 번개로 감싸 근접 공격자가 13의 자연 피해를 받게 합니다."
+        "description": "Surrounds you with crackling lightning: melee attackers take {buff} Nature damage, up to 3 charges and at most once every 5 seconds."
       },
       "flame_shock": {
         "name": "화염 충격",
-        "description": "대상을 불태워 25의 피해를 입히고 12초에 걸쳐 추가로 {damage}의 피해를 입힙니다."
+        "description": "Sears the target with fire for {damage} damage plus {overTime} over 12 sec."
       },
       "flametongue_weapon": {
         "name": "화염의 무기",
-        "description": "원소의 불꽃으로 무기를 강화합니다. 5분 동안 매 공격마다 8의 추가 화염 피해를 입힙니다."
+        "description": "Imbues your weapon with elemental fire: each swing deals {damage} additional Fire damage for 5 min."
       },
       "frost_shock": {
         "name": "냉기 충격",
@@ -4938,7 +5545,7 @@ export const ko_KR: EnTranslations = {
       },
       "frostbrand_weapon": {
         "name": "냉기의 무기",
-        "description": "살을 에는 냉기로 무기를 강화합니다. 5분 동안 매 공격마다 8의 추가 피해를 입힙니다."
+        "description": "Imbues your weapon with biting frost: each swing deals {damage} additional damage for 5 min."
       },
       "ghost_wolf": {
         "name": "늑대 정령",
@@ -4954,11 +5561,11 @@ export const ko_KR: EnTranslations = {
       },
       "demon_skin": {
         "name": "악마의 피부",
-        "description": "악마의 피부가 30분 동안 방어도를 30만큼 증가시킵니다."
+        "description": "Demonic skin increases your armor by {buff} for 30 min."
       },
       "immolate": {
         "name": "제물",
-        "description": "적을 불태워 11의 화염 피해를 입히고 15초에 걸쳐 추가로 {damage}의 피해를 입힙니다."
+        "description": "Burns the enemy for {damage} Fire damage and an additional {overTime} over 15 sec."
       },
       "corruption": {
         "name": "부패",
@@ -4966,7 +5573,7 @@ export const ko_KR: EnTranslations = {
       },
       "life_tap": {
         "name": "생명력 전환",
-        "description": "생명력 30을 마나 30으로 전환합니다."
+        "description": "Converts {damage} health into {damage} mana."
       },
       "curse_of_agony": {
         "name": "고통의 저주",
@@ -4998,7 +5605,7 @@ export const ko_KR: EnTranslations = {
       },
       "mark_of_the_wild": {
         "name": "야생의 징표",
-        "description": "아군 대상에게 야생의 징표를 걸어 30분 동안 방어도를 25만큼 증가시킵니다."
+        "description": "Places the Wildward on the party, increasing all attributes of all party members by {buff}% for 30 min."
       },
       "moonfire": {
         "name": "달빛 섬광",
@@ -5010,7 +5617,7 @@ export const ko_KR: EnTranslations = {
       },
       "thorns": {
         "name": "가시",
-        "description": "대상에게 가시가 돋아 근접 공격자가 3의 자연 피해를 받습니다."
+        "description": "Thorns sprout from the target: melee attackers take {buff} Nature damage."
       },
       "entangling_roots": {
         "name": "휘감는 뿌리",
@@ -5038,7 +5645,7 @@ export const ko_KR: EnTranslations = {
       },
       "ferocious_bite": {
         "name": "흉포한 이빨",
-        "description": "연계 점수당 피해를 입히는 결정타입니다. 늑대 변신 전용."
+        "description": "Finishing move that causes {damage}. Wolf Form only."
       },
       "swipe": {
         "name": "휘둘러치기",
@@ -5070,7 +5677,7 @@ export const ko_KR: EnTranslations = {
       },
       "faerie_fire": {
         "name": "요정의 불꽃",
-        "description": "대상의 방어도를 40초 동안 35만큼 감소시킵니다."
+        "description": "Decreases the target's armor by {damage}% for 40 sec. Does not stack with Armor Shear."
       },
       "hibernate": {
         "name": "동면",
@@ -5094,7 +5701,7 @@ export const ko_KR: EnTranslations = {
       },
       "rip": {
         "name": "찢기",
-        "description": "12초에 걸쳐 출혈 피해를 입히는 결정타입니다. 연계 점수를 소모합니다. 늑대 변신 전용."
+        "description": "Finishing move that causes {damage} Bleed damage over 12 sec. Consumes combo points. Wolf Form only."
       },
       "mortal_strike": {
         "name": "죽음의 일격",
@@ -5751,6 +6358,42 @@ export const ko_KR: EnTranslations = {
       "silverleaf_sickle": {
         "name": "은엽 낫"
       },
+      "thorium_mining_pick": {
+        "name": "Thorium Mining Pick"
+      },
+      "arcanite_mining_pick": {
+        "name": "Arcanite Mining Pick"
+      },
+      "ashwood_axe": {
+        "name": "Ashwood Axe"
+      },
+      "elderwood_axe": {
+        "name": "Elderwood Axe"
+      },
+      "goldleaf_sickle": {
+        "name": "Goldleaf Sickle"
+      },
+      "sunpetal_sickle": {
+        "name": "Sunpetal Sickle"
+      },
+      "thorium_ore": {
+        "name": "Thorium Ore"
+      },
+      "arcanite_bar": {
+        "name": "Arcanite Bar"
+      },
+      "ashwood_log": {
+        "name": "Ashwood Log"
+      },
+      "elderwood_log": {
+        "name": "Elderwood Log"
+      },
+      "goldleaf_herb": {
+        "name": "Goldleaf Herb"
+      },
+      "sunpetal_herb": {
+        "name": "Sunpetal Herb"
+      },
       "bristleback_maul": {
         "name": "뻣센등뼈 철퇴"
       },
@@ -6087,6 +6730,9 @@ export const ko_KR: EnTranslations = {
       "wyrmshadow_talongrips": {
         "name": "고룡그림자 갈퀴손아귀"
       },
+      "tome_town_portal": {
+        "name": "Tome of Town Portal"
+      },
       "reliquary_plate_chest": {
         "name": "성물실 수호 갑옷"
       },
@@ -6216,6 +6862,132 @@ export const ko_KR: EnTranslations = {
       "event_skin_token": {
         "name": "신비한 외형 상자"
       },
+      "heroic_mark": {
+        "name": "Heroic Mark"
+      },
+      "morthens_cryptforged_hauberk": {
+        "name": "Morthen's Cryptforged Hauberk"
+      },
+      "shadowpulse_handwraps": {
+        "name": "Shadowpulse Handwraps"
+      },
+      "bonechill_striders": {
+        "name": "Bonechill Striders"
+      },
+      "mistcallers_fang": {
+        "name": "Mistcaller's Fang"
+      },
+      "tidebound_spaulders": {
+        "name": "Tidebound Spaulders"
+      },
+      "sash_of_the_sunken_court": {
+        "name": "Sash of the Sunken Court"
+      },
+      "lunar_tide_greatstaff": {
+        "name": "Lunar Tide Greatstaff"
+      },
+      "tidewoven_trousers": {
+        "name": "Tidewoven Trousers"
+      },
+      "choirmothers_casque": {
+        "name": "Choirmother's Casque"
+      },
+      "gravewyrm_cleaver": {
+        "name": "Gravewyrm Cleaver"
+      },
+      "shroud_of_the_gravewyrm": {
+        "name": "Shroud of the Gravewyrm"
+      },
+      "sanctum_prowlers_grips": {
+        "name": "Sanctum Prowler's Grips"
+      },
+      "scepter_of_the_deathless_court": {
+        "name": "Scepter of the Deathless Court"
+      },
+      "deathless_warguard_legmail": {
+        "name": "Deathless Warguard Legmail"
+      },
+      "soulrend_diadem": {
+        "name": "Soulrend Diadem"
+      },
+      "scourgehide_carapace": {
+        "name": "Scourgehide Carapace"
+      },
+      "cryptplate_helm": {
+        "name": "Cryptplate Helm"
+      },
+      "shadowpulse_slippers": {
+        "name": "Shadowpulse Slippers"
+      },
+      "bonechill_cord": {
+        "name": "Bonechill Cord"
+      },
+      "mistforged_pauldrons": {
+        "name": "Mistforged Pauldrons"
+      },
+      "tideguard_faceguard": {
+        "name": "Tideguard Faceguard"
+      },
+      "sunken_court_mantle": {
+        "name": "Sunken Court Mantle"
+      },
+      "lunar_choir_leggings": {
+        "name": "Lunar Choir Leggings"
+      },
+      "choir_blessed_spaulders": {
+        "name": "Choir-Blessed Spaulders"
+      },
+      "tideworn_warboots": {
+        "name": "Tideworn Warboots"
+      },
+      "gravewyrm_claws": {
+        "name": "Gravewyrm Claws"
+      },
+      "gravescale_girdle": {
+        "name": "Gravescale Girdle"
+      },
+      "wyrmchoir_handwraps": {
+        "name": "Wyrmchoir Handwraps"
+      },
+      "deathless_greatblade": {
+        "name": "Deathless Greatblade"
+      },
+      "soulforged_warplate": {
+        "name": "Soulforged Warplate"
+      },
+      "stormcallers_focus": {
+        "name": "Stormcaller's Focus"
+      },
+      "seal_of_the_nine_oaths": {
+        "name": "Seal of the Nine Oaths"
+      },
+      "nielas_coldlight_band": {
+        "name": "Niela's Coldlight Band"
+      },
+      "sutils_gambit": {
+        "name": "Sutil's Gambit"
+      },
+      "oath_of_the_round_table": {
+        "name": "Oath of the Round Table"
+      },
+      "zyzzs_deathless_signet": {
+        "name": "Zyzz's Deathless Signet"
+      },
+      "architects_cornerstone": {
+        "name": "The Architect's Cornerstone"
+      },
+      "swiftfang_talisman": {
+        "name": "Swiftfang Talisman"
+      },
+      "yumis_keepsake_locket": {
+        "name": "Yumi's Keepsake Locket"
+      },
+      "zense_meridian": {
+        "name": "Zense Meridian"
+      },
+      "medallion_of_endless_profit": {
+        "name": "Medallion of Endless Profit"
+      },
       "deathless_heartwood": {
         "name": "죽지 않는 왕관의 심재"
       },
@@ -6323,6 +7095,9 @@ export const ko_KR: EnTranslations = {
       }
     },
     "mobs": {
+      "yumi_cat": {
+        "name": "Yumi"
+      },
       "forest_wolf": {
         "name": "숲늑대"
       },
@@ -6382,6 +7157,9 @@ export const ko_KR: EnTranslations = {
       },
       "deacon_voss": {
         "name": "부제 보스"
+      },
+      "training_dummy": {
+        "name": "Training Dummy"
       },
       "ridge_stalker": {
         "name": "산등성이 추적자"
@@ -6544,6 +7322,39 @@ export const ko_KR: EnTranslations = {
       },
       "tolling_bell": {
         "name": "울리는 종"
+      },
+      "vale_cup_ball": {
+        "name": "Boarball"
+      },
+      "hellmaw_charred_husk": {
+        "name": "Charred Husk"
+      },
+      "hellmaw_cinder_acolyte": {
+        "name": "Cinder Acolyte"
+      },
+      "hellmaw_cursed_knight": {
+        "name": "Cursed Iron Knight"
+      },
+      "hellmaw_ember_behemoth": {
+        "name": "Ember Behemoth"
+      },
+      "hellmaw_inferno_dragon": {
+        "name": "Inferno Dragon"
+      },
+      "hellmaw_lava_fiend": {
+        "name": "Lava Fiend"
+      },
+      "hellmaw_primal_beast": {
+        "name": "Primal Emberbeast"
+      },
+      "hellmaw_sigilbound_warlock": {
+        "name": "Sigil-Bound Warlock"
+      },
+      "hellmaw_the_render": {
+        "name": "The Render"
+      },
+      "hellmaw_wailing_spectre": {
+        "name": "Wailing Spectre"
       },
       "thunzharr_waking_peak": {
         "name": "천자르, 깨어나는 봉우리"
@@ -6751,6 +7562,11 @@ export const ko_KR: EnTranslations = {
         "title": "장인 방어구 제작자",
         "greeting": "화덕은 뜨겁고 숫돌은 돌고 있습니다. 베는 물건이라면 팝니다."
       },
+      "heroic_quartermaster": {
+        "name": "Quartermaster Vex",
+        "title": "Heroic Quartermaster",
+        "greeting": "Proof of the heroic depths buys the finest rings and pendants in Highwatch. Show me your marks."
+      },
       "loremaster_caddis": {
         "name": "현자 캐디스",
         "title": "현자",
@@ -6760,6 +7576,21 @@ export const ko_KR: EnTranslations = {
         "name": "경매인 보스",
         "title": "세계 시장 관리자",
         "greeting": "세계 시장은 이곳에서도 이용할 수 있습니다, {className}. 왕국의 모험가들에게서 물건을 사거나 자신의 물건을 내놓으십시오."
+      },
+      "bursar_fernando": {
+        "name": "Bursar Fernando",
+        "title": "The Gilded Strongbox",
+        "greeting": "Welcome to the Gilded Strongbox. Your goods rest safe behind our locks."
+      },
+      "bursar_petra_vell": {
+        "name": "Bursar Petra Vell",
+        "title": "The Gilded Strongbox",
+        "greeting": "The Gilded Strongbox keeps clean ledgers and cleaner vaults. What shall we stow for you?"
+      },
+      "bursar_aldous_crane": {
+        "name": "Bursar Aldous Crane",
+        "title": "The Gilded Strongbox",
+        "greeting": "Every crate, coffer, and trinket is safe with the Gilded Strongbox."
       },
       "brother_aldric_raid": {
         "name": "알드릭 수사",
@@ -6776,10 +7607,45 @@ export const ko_KR: EnTranslations = {
         "title": "성물실 관리인",
         "greeting": "오솔길이 북쪽으로 이어졌소. 또 다른 성물실, 또 다른 의식. 난이도를 고르시오, 그대가 돌아올 때까지 밧줄을 잡고 있겠소."
       },
+      "cainhurst_sage": {
+        "name": "Cainhurst the Sage",
+        "title": "Keeper of the Hellmaw",
+        "greeting": "You pulled me from the Hellmaw, friend - I do not forget it. The well is open to you now. Steel yourself: The Render waits at the bottom."
+      },
+      "mercenary_kael": {
+        "name": "Kael the Sellsword",
+        "title": "Wandering Mercenary",
+        "greeting": "Coin's coin, {className}. Lend a blade and the beast's yours to loot."
+      },
+      "huntress_verr": {
+        "name": "Huntress Verr",
+        "title": "Boar-Culler",
+        "greeting": "These tuskers won't thin themselves. Wade in - the kill counts for you."
+      },
+      "interior_merchant": {
+        "name": "Merchant",
+        "title": "Shopkeeper",
+        "greeting": "Wares for a wanderer? Take a look."
+      },
+      "interior_innkeeper": {
+        "name": "Innkeeper",
+        "title": "Host",
+        "greeting": "Rest your boots, traveller. The fire's warm."
+      },
+      "interior_villager": {
+        "name": "Villager",
+        "title": "Resident",
+        "greeting": "Oh - a visitor! Mind the mess."
+      },
       "spirit_healer": {
         "name": "영혼 치유사",
         "title": "죽은 자의 수호자",
         "greeting": "편히 쉬게, 영혼이여. 그대를 육신으로 돌려보낼 수 있으나, 돌아오는 길은 그대를 약하게 만들 것이네."
+      },
+      "groundskeeper_bram": {
+        "name": "Groundskeeper Bram",
+        "title": "Keeper of the Sowfield",
+        "greeting": "The truce holds at the Sowfield, {className}: boots and shoulders only. Care to play for the Copper Pail?"
       },
       "tidewatcher_ondrel": {
         "name": "온드렐 베인",
@@ -7492,6 +8358,16 @@ export const ko_KR: EnTranslations = {
           }
         }
       },
+      "q_save_cainhurst": {
+        "title": "Save Cainhurst the Sage",
+        "text": "Old Cainhurst - the sage who reads the deep maps - went down the well a week past and never came up. The thing below took him, and bound him with three cursed wards: one struck among the graves, one buried in the mine, one drowned at the docks. Break all three wards, {playerName}, and you'll break his chains. Bring them to me as proof.",
+        "completion": "The three wards, all snuffed cold. Cainhurst has crawled free - he waits at the well now, and swears the Hellmaw is open to you. He warns of something at the bottom he calls The Render.",
+        "objectives": {
+          "0": {
+            "label": "Hellmaw binding ward broken"
+          }
+        }
+      },
       "q_nythraxis_restless_dead": {
         "title": "뼈 들판의 소요",
         "text": "쏜피크 고지에 변화가 생겼습니다, {playerName}. 죽은 자들이 더는 정처 없이 떠돌지 않습니다. 그들은 하이워치 너머 북쪽 뼈 들판, 옛 전장과 절벽길이 만나는 곳에서 모여 행군합니다. 그곳으로 가서 뼈갑옷 망령들의 소요를 조사하고, 무엇이 그들을 움직이는지 보여 줄 증거를 가져오십시오.",
@@ -7567,6 +8443,26 @@ export const ko_KR: EnTranslations = {
         "objectives": {
           "0": {
             "label": "모거 처치"
+          }
+        }
+      },
+      "q_archetype_acceptance": {
+        "title": "A Craft to Call Your Own",
+        "text": "Every artisan of Eastbrook eventually settles on one craft to call their own. Prove yourself with a single deed, {playerName}, and declare your path.",
+        "completion": "Your path is chosen; walk it well.",
+        "objectives": {
+          "0": {
+            "label": "Forest Wolf slain"
+          }
+        }
+      },
+      "q_prof_make_amends": {
+        "title": "Making Amends",
+        "text": "To set aside one craft for another, an artisan must first make amends for the path not walked, {playerName}.",
+        "completion": "Amends made; a new path is open to you.",
+        "objectives": {
+          "0": {
+            "label": "Forest Wolf slain"
           }
         }
       },
@@ -7668,6 +8564,9 @@ export const ko_KR: EnTranslations = {
           },
           "9": {
             "label": "브라이트우드 숲"
+          },
+          "10": {
+            "label": "The Sowfield"
           }
         }
       },
@@ -7780,6 +8679,11 @@ export const ko_KR: EnTranslations = {
         "name": "익사한 연도",
         "enterText": "그대는 늪지의 끝자락에서 익사한 신전으로 내려간다.",
         "leaveText": "그대는 늪지의 끝자락으로 올라가 할벤 수사에게 돌아간다."
+      },
+      "hellmaw_well": {
+        "name": "The Hellmaw Well",
+        "enterText": "The well mouth yawns into red dark - and the Hellmaw swallows you down.",
+        "leaveText": "You haul yourself back up the well shaft, the Hellmaw seething below."
       }
     },
     "letters": {
@@ -7812,12 +8716,14 @@ export const ko_KR: EnTranslations = {
       "crownforged": {
         "name": "왕관벼림 전투장비",
         "bonus2": "전투력이 40만큼 증가합니다.",
-        "bonus3": "힘이 15, 체력이 15만큼 증가하고 공격 속도와 시전 속도가 15% 증가합니다."
+        "bonus3": "힘이 15, 체력이 15만큼 증가하고 공격 속도와 시전 속도가 15% 증가합니다.",
+        "bonus4": "무기 치명타가 대상에게 뼈파편을 남겨 12초 동안 2초마다 8의 출혈 피해를 입힙니다. 최대 3번 중첩됩니다."
       },
       "deathlord": {
         "name": "죽음군주의 전투장비",
         "bonus2": "전투력이 40만큼 증가합니다.",
-        "bonus3": "힘이 15, 체력이 15만큼 증가합니다."
+        "bonus3": "힘이 15, 체력이 15만큼 증가합니다.",
+        "bonus4": "무기 치명타가 50% 확률로 무덤의 힘을 부여해 10초 동안 전투력을 60만큼 증가시킵니다."
       },
       "greyjaw_stalker": {
         "name": "그레이죠 추적자의 장비",
@@ -7826,22 +8732,26 @@ export const ko_KR: EnTranslations = {
       "necromancers": {
         "name": "강령술사의 의복",
         "bonus2": "넉백되지 않습니다 (넉백 저항 100%).",
-        "bonus3": "지능이 10, 체력이 10만큼 증가합니다."
+        "bonus3": "지능이 10, 체력이 10만큼 증가합니다.",
+        "bonus4": "주문이 10% 확률로 정신 집중을 부여해 다음 주문의 비용을 없앱니다."
       },
       "nighttalon": {
         "name": "밤발톱 가죽장비",
         "bonus2": "전투력이 40만큼 증가합니다.",
-        "bonus3": "민첩이 15, 치명타 확률이 2% 증가하고 공격 속도와 시전 속도가 15% 증가합니다."
+        "bonus3": "민첩이 15, 치명타 확률이 2% 증가하고 공격 속도와 시전 속도가 15% 증가합니다.",
+        "bonus4": "무기 치명타가 거친 상처를 찢어 12초 동안 2초마다 6의 출혈 피해를 입힙니다. 최대 3번 중첩됩니다."
       },
       "soulflame": {
         "name": "영혼불꽃 의복",
         "bonus2": "넉백되지 않습니다 (넉백 저항 100%).",
-        "bonus3": "지능이 15, 정신력이 15만큼 증가하고 공격 속도와 시전 속도가 15% 증가합니다."
+        "bonus3": "지능이 15, 정신력이 15만큼 증가하고 공격 속도와 시전 속도가 15% 증가합니다.",
+        "bonus4": "주문이 10% 확률로 영혼불꽃을 부여해 10초 동안 주문력을 40만큼 증가시킵니다."
       },
       "stormcallers": {
         "name": "폭풍소환사의 의복",
         "bonus2": "넉백되지 않습니다 (넉백 저항 100%).",
-        "bonus3": "지능이 15, 정신력이 15만큼 증가하고 공격 속도와 시전 속도가 15% 증가합니다."
+        "bonus3": "지능이 15, 정신력이 15만큼 증가하고 공격 속도와 시전 속도가 15% 증가합니다.",
+        "bonus4": "주문이 10% 확률로 영혼불꽃을 부여해 10초 동안 주문력을 40만큼 증가시킵니다."
       },
       "vale_arcanist": {
         "name": "계곡 비전술사의 예복",
@@ -7850,7 +8760,8 @@ export const ko_KR: EnTranslations = {
       "wyrmshadow": {
         "name": "고룡그림자 의복",
         "bonus2": "전투력이 40만큼 증가합니다.",
-        "bonus3": "민첩이 15, 치명타 확률이 2% 증가합니다."
+        "bonus3": "민첩이 15, 치명타 확률이 2% 증가합니다.",
+        "bonus4": "무기 치명타가 50% 확률로 송곳니 돌진을 부여해 8초 동안 공격 속도를 25% 증가시킵니다."
       }
     }
   },

@@ -32,6 +32,7 @@
 import { mkdirSync, readdirSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import * as esbuild from 'esbuild';
+import { placeholdersOf } from './i18n_hash.mjs';
 import { flatten, unflatten } from './i18n_flatten.mjs';
 import { pseudoLocalize } from './i18n_pseudo.mjs';
 
@@ -64,6 +65,7 @@ const LOCALES = [
   'ja_JP',
   'pt_BR',
   'ru_RU',
+  'cs_CZ',
   'nl_NL',
   'pl_PL',
   'id_ID',
@@ -257,6 +259,30 @@ function emitBarrel(locales) {
 // This is the exact same rule as scripts/i18n_scan.mjs `providedByLang`, kept in
 // lockstep so the build's runtime `pending` and the registry's `pending` agree.
 const isPresent = (v) => typeof v === 'string' && v.trim().length > 0;
+const placeholderSig = (v) => placeholdersOf(v).join('\u0000');
+
+function sanitizePlaceholderDrift(en, locales) {
+  const enFlat = flatten(en);
+  const out = { ...locales, en };
+  for (const lang of LOCALES) {
+    if (lang === 'en') continue;
+    const src = locales[lang] || {};
+    const clean = {};
+    for (const [key, value] of Object.entries(src)) {
+      const enValue = enFlat[key];
+      if (
+        typeof value === 'string' &&
+        typeof enValue === 'string' &&
+        placeholderSig(value) !== placeholderSig(enValue)
+      ) {
+        continue;
+      }
+      clean[key] = value;
+    }
+    out[lang] = clean;
+  }
+  return out;
+}
 
 function computePending(en, locales) {
   const enFlatKeys = Object.keys(flatten(en));
@@ -313,8 +339,9 @@ function writeModuleDir(dir, modules) {
 }
 
 async function main() {
-  const locales = await loadLocales();
-  const en = locales.en;
+  const loadedLocales = await loadLocales();
+  const en = loadedLocales.en;
+  const locales = sanitizePlaceholderDrift(en, loadedLocales);
   const resolved = {};
   for (const lang of LOCALES) {
     // `en` is nested and authoritative; every other locale is a flat dotted-key

@@ -494,8 +494,8 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'stats.playersOnline': 'オンラインプレイヤー数',
   'stats.realmName': 'レルム名',
   'footer.copyright': '2026 Cryptic Realm',
-  'footer.githubLink': 'https://github.com/levy-street/world-of-claudecraft',
-  'footer.githubLabel': 'オープンソースプロジェクト',
+  'footer.githubLink': '/contributions.html',
+  'footer.githubLabel': 'Contributions',
   'footer.whitepaper': 'ホワイトペーパー',
   'footer.terms': '利用規約',
   'footer.privacy': 'プライバシーポリシー',
@@ -506,7 +506,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'wiki.desc': 'レルムの秘密、クラスガイド、戦略を確認しましょう。',
   'news.title': 'ニュース & アップデート',
   'news.desc': '最新のパッチノート、イベント、コミュニティの更新情報を確認しましょう。',
-  'download.title': 'デスクトップランチャーのダウンロード',
+  'download.title': 'Launchers & Installs',
   'download.desc':
     '最適化されたパフォーマンスと全画面表示でのプレイのために、スタンドアロン版ランチャーを入手してください。',
   'comingSoon.placeholder': '近日公開...',
@@ -4990,6 +4990,20 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.itemSets.wyrmshadow.name': '竜影の装束',
   'entities.itemSets.wyrmshadow.bonus2': '攻撃力が40上昇します。',
   'entities.itemSets.wyrmshadow.bonus3': '敏捷性が15、クリティカル率が2%上昇します。',
+  'entities.itemSets.crownforged.bonus4':
+    '武器のクリティカル攻撃で対象にボーンスプリンターを刻み、2秒ごとに8の出血ダメージを12秒間与えます。最大3回まで蓄積します。',
+  'entities.itemSets.deathlord.bonus4':
+    '武器のクリティカル攻撃は50%の確率でグレイブマイトを付与し、攻撃力を10秒間60上昇させます。',
+  'entities.itemSets.necromancers.bonus4':
+    '呪文は10%の確率でクリアキャスティングを付与し、次の呪文のコストを0にします。',
+  'entities.itemSets.nighttalon.bonus4':
+    '武器のクリティカル攻撃で粗い裂傷を刻み、対象に2秒ごとに6の出血ダメージを12秒間与えます。最大3回まで蓄積します。',
+  'entities.itemSets.soulflame.bonus4':
+    '呪文は10%の確率でソウルブレイズを付与し、呪文威力を10秒間40上昇させます。',
+  'entities.itemSets.stormcallers.bonus4':
+    '呪文は10%の確率でソウルブレイズを付与し、呪文威力を10秒間40上昇させます。',
+  'entities.itemSets.wyrmshadow.bonus4':
+    '武器のクリティカル攻撃は50%の確率でファングラッシュを付与し、攻撃速度を8秒間25%上昇させます。',
   'hudChrome.itemSet.header': '{name} ({have}/{total})',
   'hudChrome.itemSet.bonusLine': '({pieces}) {bonus}',
   'hudChrome.abilityScaling.bonus': '(+{value})',

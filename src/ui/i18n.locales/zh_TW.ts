@@ -473,8 +473,8 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'stats.playersOnline': '線上玩家數',
   'stats.realmName': '伺服器名稱',
   'footer.copyright': '2026 Cryptic Realm',
-  'footer.githubLink': 'https://github.com/levy-street/world-of-claudecraft',
-  'footer.githubLabel': '開源專案',
+  'footer.githubLink': '/contributions.html',
+  'footer.githubLabel': 'Contributions',
   'footer.whitepaper': '白皮書',
   'footer.terms': '服務條款',
   'footer.privacy': '隱私權政策',
@@ -485,7 +485,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'wiki.desc': '探索世界的秘密、職業指南以及戰術策略。',
   'news.title': '新聞與更新說明',
   'news.desc': '閱讀最新修補程式說明、遊戲內事件和社群動態。',
-  'download.title': '下載電腦版啟動器',
+  'download.title': 'Launchers & Installs',
   'download.desc': '獲取獨立啟動器，以獲得更優化的效能和全螢幕遊戲體驗。',
   'comingSoon.placeholder': '敬請期待...',
   'comingSoon.featureComingSoon': '該功能即將上線，敬請期待。',
@@ -4741,6 +4741,20 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'entities.itemSets.wyrmshadow.name': '龍影外衣',
   'entities.itemSets.wyrmshadow.bonus2': '攻擊強度提高 40 點。',
   'entities.itemSets.wyrmshadow.bonus3': '敏捷提高 15 點，致命一擊機率提高 2%。',
+  'entities.itemSets.crownforged.bonus4':
+    '你的武器致命一擊會以骨裂撕裂目標，使其每 2 秒流血受到 8 點傷害，持續 12 秒。最多堆疊 3 次。',
+  'entities.itemSets.deathlord.bonus4':
+    '你的武器致命一擊有 50% 機率獲得墳墓之力，使攻擊強度提高 60 點，持續 10 秒。',
+  'entities.itemSets.necromancers.bonus4':
+    '你的法術有 10% 機率獲得節能施法，使你的下一個法術不消耗資源。',
+  'entities.itemSets.nighttalon.bonus4':
+    '你的武器致命一擊會撕開粗糙裂傷，使目標每 2 秒流血受到 6 點傷害，持續 12 秒。最多堆疊 3 次。',
+  'entities.itemSets.soulflame.bonus4':
+    '你的法術有 10% 機率獲得魂焰，使法術強度提高 40 點，持續 10 秒。',
+  'entities.itemSets.stormcallers.bonus4':
+    '你的法術有 10% 機率獲得魂焰，使法術強度提高 40 點，持續 10 秒。',
+  'entities.itemSets.wyrmshadow.bonus4':
+    '你的武器致命一擊有 50% 機率獲得迅牙，使攻擊速度提高 25%，持續 8 秒。',
   'hudChrome.itemSet.header': '{name} ({have}/{total})',
   'hudChrome.itemSet.bonusLine': '({pieces}) {bonus}',
   'hudChrome.abilityScaling.bonus': '(+{value})',

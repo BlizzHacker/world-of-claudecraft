@@ -34,6 +34,13 @@ const TRIVIAL_LEVEL_GAP = 10;
 // attacker. With no living threat left, it evades home instead of grabbing a
 // nearby bystander who never acted on the mob.
 export function retargetMob(ctx: SimContext, mob: Entity): void {
+  if (mob.ownerId !== null) {
+    mob.aggroTargetId = null;
+    mob.aiState = 'idle';
+    mob.inCombat = false;
+    mob.despawnTimer = undefined;
+    return;
+  }
   const next = highestThreatTarget(ctx, mob);
   if (next) {
     mob.aggroTargetId = next.id;

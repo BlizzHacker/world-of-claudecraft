@@ -1,5 +1,6 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import {
+  cs_CZ,
   da_DK,
   de_DE,
   en,
@@ -30,6 +31,7 @@ import {
   zh_CN,
   zh_TW,
 } from '../src/ui/i18n';
+import { pending as generatedPending } from '../src/ui/i18n.resolved.generated';
 
 // Whole-catalog i18n completeness guards that the per-key sample tests in
 // localization_coverage.test.ts do not cover: full interpolation-token parity
@@ -52,6 +54,7 @@ const TABLES: Record<SupportedLanguage, unknown> = {
   ja_JP,
   pt_BR,
   ru_RU,
+  cs_CZ,
   nl_NL,
   pl_PL,
   id_ID,
@@ -81,6 +84,13 @@ function placeholders(value: string): string[] {
 }
 
 const enFlat = flatten(en);
+const RELEASE_TIER = process.env.I18N_RELEASE_TIER === '1';
+const PENDING_SETS: Partial<Record<SupportedLanguage, ReadonlySet<string>>> = {};
+for (const [lang, keys] of Object.entries(generatedPending)) {
+  PENDING_SETS[lang as SupportedLanguage] = new Set(keys);
+}
+const isPendingAtPrTier = (lang: SupportedLanguage, key: string) =>
+  !RELEASE_TIER && PENDING_SETS[lang]?.has(key);
 
 describe('i18n whole-catalog completeness', () => {
   beforeAll(async () => {
@@ -101,6 +111,7 @@ describe('i18n whole-catalog completeness', () => {
         if (typeof localeValue !== 'string') continue;
         const a = placeholders(enValue).join(',');
         const b = placeholders(localeValue).join(',');
+        if (a !== b && isPendingAtPrTier(lang, key)) continue;
         if (a !== b) mismatches.push(`${lang} ${key}: en{${a}} vs {${b}}`);
       }
     }
@@ -210,6 +221,7 @@ describe('i18n whole-catalog completeness', () => {
       const flat = flatten(TABLES[lang]);
       for (const [key, enValue] of Object.entries(enFlat)) {
         if (wordy(enValue) && flat[key] === enValue && !allowed(key)) {
+          if (isPendingAtPrTier(lang, key)) continue;
           leaks.push(`${lang} ${key}: "${enValue}"`);
         }
       }

@@ -70,10 +70,9 @@ describe('fps mode (CR overlay)', () => {
     mountFpsMode(inp as never);
     setFpsMode(inp as never, 'diablo');
     expect(isFpsActive()).toBe(false);
-    // Diablo (DuranceOfHate) preset: steep and pulled IN to a tight, close
-    // near-overhead angle (DIABLO_CAM_DIST 9, DIABLO_CAM_PITCH 0.95 in
-    // fps_mode.ts). Zoom is closer than default (12), pitch well above it.
-    expect(inp.camDist).toBeLessThan(12);
+    // Diablo preset: steep and slightly pulled OUT for a fixed tactical
+    // overview. Zoom is intentionally wider than the default (12), pitch well above it.
+    expect(inp.camDist).toBe(13);
     expect(inp.camPitch).toBeGreaterThan(0.8);
     expect(document.body.classList.contains('cr-fps-active')).toBe(false);
     expect(document.body.classList.contains('cr-diablo-camera-active')).toBe(true);

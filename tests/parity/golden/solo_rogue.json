@@ -14,8 +14,8 @@
     {
       "tick": 0,
       "time": 0,
-      "nextId": 413,
-      "state": "a623b9ba",
+      "nextId": 418,
+      "state": "1f775e57",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -25,6 +25,7 @@
       "players": [
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "autoEquip": true,
@@ -34,24 +35,34 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "rogue",
           "companionUpgrades": {},
           "counters": {},
           "craftSkills": {},
+          "craftThrottle": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 412,
+          "entityId": 417,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
           },
           "gatheringProficiency": {},
+          "heroicDaily": {},
+          "inventory": [
+            {
+              "count": 5,
+              "itemId": "baked_bread"
+            }
+          ],
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
           },
-          "worldBossDaily": {}
+          "townFocus": {}
         }
       ],
       "entities": [
@@ -66,7 +77,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 62,
-          "id": 412,
+          "id": 417,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -111,31 +122,31 @@
     {
       "tick": 20,
       "time": 1,
-      "nextId": 414,
-      "state": "34bfd9bc",
-      "events": "bdbb88c3",
+      "nextId": 419,
+      "state": "918abc2b",
+      "events": "31cba048",
       "rng": {
-        "draws": 19,
-        "digest": "1ccc33f8"
+        "draws": 18,
+        "digest": "3cba59f5"
       }
     },
     {
       "tick": 40,
       "time": 2,
-      "nextId": 414,
-      "state": "6e84ffe1",
-      "events": "9917029a",
+      "nextId": 419,
+      "state": "f6d9cc36",
+      "events": "b2a4e639",
       "rng": {
-        "draws": 26,
-        "digest": "2c62879c"
+        "draws": 27,
+        "digest": "94e8799a"
       }
     },
     {
       "tick": 60,
       "time": 3,
-      "nextId": 414,
-      "state": "127b3f13",
-      "events": "b2d03000",
+      "nextId": 419,
+      "state": "8a77de6c",
+      "events": "875e76a1",
       "rng": {
         "draws": 46,
         "digest": "4a3f4183"
@@ -144,9 +155,9 @@
     {
       "tick": 72,
       "time": 3.6,
-      "nextId": 414,
-      "state": "9d451200",
-      "events": "dd314fbb",
+      "nextId": 419,
+      "state": "0a24f4ab",
+      "events": "8b944459",
       "rng": {
         "draws": 72,
         "digest": "0986d490"
@@ -155,6 +166,7 @@
       "players": [
         {
           "activeLoadout": -1,
+          "archetype": {},
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "autoEquip": true,
@@ -164,28 +176,38 @@
             null,
             null
           ],
+          "bank": {},
           "cls": "rogue",
           "companionUpgrades": {},
           "counters": {
-            "damageDealt": 114,
-            "damageTaken": 27
+            "damageDealt": 116,
+            "damageTaken": 9
           },
           "craftSkills": {},
+          "craftThrottle": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 412,
+          "entityId": 417,
           "equipment": {
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
           },
           "gatheringProficiency": {},
+          "heroicDaily": {},
+          "inventory": [
+            {
+              "count": 5,
+              "itemId": "baked_bread"
+            }
+          ],
           "lifetimeXp": 27600,
           "mailWelcomed": true,
+          "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
             "ranks": {}
           },
-          "worldBossDaily": {}
+          "townFocus": {}
         }
       ],
       "entities": [
@@ -194,7 +216,7 @@
           "attackPower": 78,
           "autoAttack": true,
           "combatTimer": 0.6,
-          "comboPoints": 4,
+          "comboPoints": 5,
           "comboUntil": 33,
           "critChance": 0.076,
           "detonateTimer": "Infinity",
@@ -202,8 +224,8 @@
           "facing": 1.570796,
           "fallStartY": 1.5,
           "fiveSecondRule": 102.6,
-          "hp": 49973,
-          "id": 412,
+          "hp": 49991,
+          "id": 417,
           "inCombat": true,
           "kind": "player",
           "level": 10,
@@ -212,7 +234,7 @@
           "maxResource": 100,
           "moveSpeed": 7,
           "onGround": true,
-          "overpowerUntil": 6.2,
+          "overpowerUntil": 5.6,
           "petMode": "defensive",
           "pos": {
             "x": 2.5,
@@ -237,7 +259,7 @@
             "str": 26
           },
           "swingTimer": 0.05,
-          "targetId": 413,
+          "targetId": 418,
           "templateId": "rogue",
           "weapon": {
             "dagger": true,
@@ -247,7 +269,7 @@
           }
         },
         {
-          "aggroTargetId": 412,
+          "aggroTargetId": 417,
           "aiState": "attack",
           "combatTimer": 0.6,
           "comboUntil": -1,
@@ -258,8 +280,8 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hostile": true,
-          "hp": 8886,
-          "id": 413,
+          "hp": 8884,
+          "id": 418,
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -289,13 +311,13 @@
             "armor": 40
           },
           "swingTimer": 0.45,
-          "tappedById": 412,
-          "targetId": 412,
+          "tappedById": 417,
+          "targetId": 417,
           "templateId": "forest_wolf",
           "threat": [
             [
-              412,
-              115
+              417,
+              117
             ]
           ],
           "weapon": {

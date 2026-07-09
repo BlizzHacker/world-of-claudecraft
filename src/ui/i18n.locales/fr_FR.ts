@@ -462,8 +462,8 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'stats.playersOnline': 'Joueurs en ligne',
   'stats.realmName': 'Nom du royaume',
   'footer.copyright': '2026 Cryptic Realm',
-  'footer.githubLink': 'https://github.com/levy-street/world-of-claudecraft',
-  'footer.githubLabel': 'Projet open source',
+  'footer.githubLink': '/contributions.html',
+  'footer.githubLabel': 'Contributions',
   'footer.whitepaper': 'Livre blanc',
   'footer.terms': "Conditions d'utilisation",
   'footer.privacy': 'Politique de confidentialité',
@@ -475,7 +475,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'news.title': 'Actualités et mises à jour',
   'news.desc':
     'Lisez les dernières notes de mise à jour, les événements et les nouvelles de la communauté.',
-  'download.title': 'Télécharger le lanceur de bureau',
+  'download.title': 'Launchers & Installs',
   'download.desc':
     'Obtenez le lanceur autonome pour des performances optimisées et un jeu en plein écran.',
   'comingSoon.placeholder': 'Bientôt disponible...',

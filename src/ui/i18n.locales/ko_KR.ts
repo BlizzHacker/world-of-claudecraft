@@ -495,8 +495,8 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'stats.playersOnline': '현재 접속자 수',
   'stats.realmName': '렐름 이름',
   'footer.copyright': '2026 Cryptic Realm',
-  'footer.githubLink': 'https://github.com/levy-street/world-of-claudecraft',
-  'footer.githubLabel': '오픈 소스 프로젝트',
+  'footer.githubLink': '/contributions.html',
+  'footer.githubLabel': 'Contributions',
   'footer.whitepaper': '백서',
   'footer.terms': '서비스 이용약관',
   'footer.privacy': '개인정보 처리방침',
@@ -507,7 +507,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'wiki.desc': '렐름의 비밀과 클래스 가이드, 전략 등을 확인해 보세요.',
   'news.title': '새소식 및 업데이트',
   'news.desc': '최신 패치 노트, 이벤트 소식, 커뮤니티 업데이트를 확인해 보세요.',
-  'download.title': '데스크톱 런처 다운로드',
+  'download.title': 'Launchers & Installs',
   'download.desc': '최적화된 성능과 전체 화면 플레이를 위해 독립형 런처를 다운로드하세요.',
   'comingSoon.placeholder': '준비 중...',
   'comingSoon.featureComingSoon': '이 기능은 곧 렐름에 업데이트될 예정입니다.',
@@ -4998,6 +4998,20 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.itemSets.wyrmshadow.name': '고룡그림자 의복',
   'entities.itemSets.wyrmshadow.bonus2': '전투력이 40만큼 증가합니다.',
   'entities.itemSets.wyrmshadow.bonus3': '민첩이 15, 치명타 확률이 2% 증가합니다.',
+  'entities.itemSets.crownforged.bonus4':
+    '무기 치명타가 대상에게 뼈파편을 남겨 12초 동안 2초마다 8의 출혈 피해를 입힙니다. 최대 3번 중첩됩니다.',
+  'entities.itemSets.deathlord.bonus4':
+    '무기 치명타가 50% 확률로 무덤의 힘을 부여해 10초 동안 전투력을 60만큼 증가시킵니다.',
+  'entities.itemSets.necromancers.bonus4':
+    '주문이 10% 확률로 정신 집중을 부여해 다음 주문의 비용을 없앱니다.',
+  'entities.itemSets.nighttalon.bonus4':
+    '무기 치명타가 거친 상처를 찢어 12초 동안 2초마다 6의 출혈 피해를 입힙니다. 최대 3번 중첩됩니다.',
+  'entities.itemSets.soulflame.bonus4':
+    '주문이 10% 확률로 영혼불꽃을 부여해 10초 동안 주문력을 40만큼 증가시킵니다.',
+  'entities.itemSets.stormcallers.bonus4':
+    '주문이 10% 확률로 영혼불꽃을 부여해 10초 동안 주문력을 40만큼 증가시킵니다.',
+  'entities.itemSets.wyrmshadow.bonus4':
+    '무기 치명타가 50% 확률로 송곳니 돌진을 부여해 8초 동안 공격 속도를 25% 증가시킵니다.',
   'hudChrome.itemSet.header': '{name} ({have}/{total})',
   'hudChrome.itemSet.bonusLine': '({pieces}) {bonus}',
   'hudChrome.abilityScaling.bonus': '(+{value})',

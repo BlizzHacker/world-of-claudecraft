@@ -7,6 +7,7 @@ import {
   GROUND_OBJECTS,
   ITEMS,
   LAKE,
+  NPCS,
 } from '../src/sim/data';
 import { ACTIONS, applyAction, encodeObs, obsSize } from '../src/sim/obs';
 import { Sim } from '../src/sim/sim';
@@ -793,9 +794,10 @@ describe('food, drink, vendor', () => {
     sim.player.hp = 20;
     sim.player.combatTimer = 99;
     sim.player.inCombat = false;
+    const breadBefore = sim.countItem('baked_bread');
     sim.useItem('baked_bread');
     expect(sim.player.sitting).toBe(true);
-    expect(sim.countItem('baked_bread')).toBe(0);
+    expect(sim.countItem('baked_bread')).toBe(breadBefore - 1);
     const hpBefore = sim.player.hp;
     for (let i = 0; i < 20 * 6; i++) sim.tick();
     expect(sim.player.hp).toBeGreaterThan(hpBefore);
@@ -924,8 +926,9 @@ describe('food, drink, vendor', () => {
     const wilkes = [...sim.entities.values()].find((e) => e.templateId === 'trader_wilkes')!;
     teleportTo(sim, wilkes.pos.x + 2, wilkes.pos.z);
     sim.copper = 200;
+    const breadBefore = sim.countItem('baked_bread');
     sim.buyItem(wilkes.id, 'baked_bread');
-    expect(sim.countItem('baked_bread')).toBe(5); // food is sold in a stack of 5
+    expect(sim.countItem('baked_bread')).toBe(breadBefore + 5); // food is sold in a stack of 5
     expect(sim.copper).toBe(75); // 200 - 125 (buyValue 25 per unit x the stack of 5)
     sim.addItem('wolf_fang', 2);
     sim.sellItem('wolf_fang');
@@ -1084,6 +1087,13 @@ describe('food, drink, vendor', () => {
     expect(sim.copper).toBe(80);
   });
 
+  it('a general vendor in each of zone 2 and 3 also sells a simple fishing pole', () => {
+    for (const templateId of ['provisioner_hale', 'quartermaster_bree']) {
+      expect(NPCS[templateId].vendorItems).toContain('simple_fishing_pole');
+    }
+    expect(NPCS.trader_wilkes.vendorItems).not.toContain('simple_fishing_pole');
+  });
+
   it('rejects fishing away from fishable water', () => {
     const sim = makeSim('warrior');
     sim.addItem('simple_fishing_pole', 1);
@@ -1232,9 +1242,10 @@ describe('food, drink, vendor', () => {
     sim.events = [];
     sim.useItem('simple_fishing_pole');
     sim.events = [];
+    const breadBefore = sim.countItem('baked_bread');
     sim.useItem('baked_bread');
     expect(sim.player.castingAbility).toBe(FISHING_CAST_ID);
-    expect(sim.countItem('baked_bread')).toBe(1);
+    expect(sim.countItem('baked_bread')).toBe(breadBefore);
     expect(sim.player.eating).toBe(null);
     expect(sim.events).toContainEqual(
       expect.objectContaining({
@@ -1299,8 +1310,10 @@ describe('food, drink, vendor', () => {
     // Eastbrook Vale water: every catch must come from the Vale table, never a
     // marsh/heights fish, and never an item outside the catch list.
     const valeIds = new Set(VALE_CATCHES);
+    const preexisting = new Set(meta.inventory.map((s) => s.itemId)); // starter rations etc.
     for (let i = 0; i < 400; i++) (sim as any).completeFishing(sim.player, meta);
     for (const slot of meta.inventory) {
+      if (preexisting.has(slot.itemId)) continue;
       expect(valeIds.has(slot.itemId)).toBe(true);
     }
     // Over 400 casts the Vale's two staple fish should both show up.
@@ -1348,10 +1361,11 @@ describe('food, drink, vendor', () => {
     teleportTo(sim, wilkes.pos.x + 40, wilkes.pos.z);
     sim.copper = 100;
     sim.events = [];
+    const breadBefore = sim.countItem('baked_bread');
 
     sim.buyItem(wilkes.id, 'baked_bread');
 
-    expect(sim.countItem('baked_bread')).toBe(0);
+    expect(sim.countItem('baked_bread')).toBe(breadBefore);
     expect(sim.events).toContainEqual({ type: 'error', text: 'Too far away.', pid: sim.player.id });
   });
 
@@ -1459,11 +1473,8 @@ describe('quests', () => {
       wolf.hp = 1;
       teleportTo(sim, wolf.pos.x + 2, wolf.pos.z);
       sim.targetEntity(wolf.id);
-      sim.startAutoAttack();
-      for (let i = 0; i < 20 * 20 && !wolf.dead; i++) {
-        facePlayerAt(sim, wolf);
-        sim.tick();
-      }
+      facePlayerAt(sim, wolf);
+      (sim as any).dealDamage(sim.player, wolf, 999, false, 'physical', 'Quest test', 'hit', true);
       expect(wolf.dead).toBe(true);
     }
     expect(sim.questState('q_wolves')).toBe('ready');

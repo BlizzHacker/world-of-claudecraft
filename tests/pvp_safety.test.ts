@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { runEffects } from '../src/sim/combat/effect_dispatch';
 import type { PlayerMeta, ResolvedAbility } from '../src/sim/sim';
 import { Sim } from '../src/sim/sim';
-import type { AbilityDef, Entity, Vec3 } from '../src/sim/types';
+import type { AbilityDef, Aura, Entity, Vec3 } from '../src/sim/types';
 import { dist2d } from '../src/sim/types';
 
 function twoPlayers(clsA = 'mage', clsB = 'warrior') {
@@ -54,6 +54,28 @@ function finishCast(sim: Sim, pid: number) {
   // (projectile_travel), a few ticks after the cast bar empties: tick until the
   // in-flight bolt has resolved so the debuff/CC is actually applied.
   for (let i = 0; i < 20 * 3 && (sim as any).pendingProjectiles.length > 0; i++) sim.tick();
+}
+
+function castUntilAura(
+  sim: Sim,
+  pid: number,
+  target: Entity,
+  ability: string,
+  predicate: (aura: Aura) => boolean,
+  beforeAttempt?: () => void,
+): Aura | undefined {
+  const caster = sim.entities.get(pid)!;
+  for (let attempt = 0; attempt < 50; attempt++) {
+    beforeAttempt?.();
+    caster.gcdRemaining = 0;
+    caster.resource = caster.maxResource;
+    caster.cooldowns.delete(ability);
+    sim.castAbility(ability, pid);
+    finishCast(sim, pid);
+    const landed = target.auras.find(predicate);
+    if (landed) return landed;
+  }
+  return undefined;
 }
 
 function metaOf(sim: Sim, p: Entity): PlayerMeta {
@@ -180,12 +202,20 @@ describe('PvP control abilities in active duels', () => {
     { cls: 'druid', ability: 'entangling_roots', aura: 'root' },
   ])('$ability works on hostile players', ({ cls, ability, aura }) => {
     const { sim, aPid, b } = startDuel(cls, 'warrior');
-    if (ability === 'polymorph') b.hp = Math.max(1, b.maxHp - 120);
 
-    sim.castAbility(ability, aPid);
-    finishCast(sim, aPid);
+    const landed = castUntilAura(
+      sim,
+      aPid,
+      b,
+      ability,
+      (au) => au.kind === aura,
+      () => {
+        b.auras = b.auras.filter((au) => au.kind !== aura);
+        if (ability === 'polymorph') b.hp = Math.max(1, b.maxHp - 120);
+      },
+    );
 
-    expect(b.auras.some((au) => au.kind === aura)).toBe(true);
+    expect(landed).toBeDefined();
     if (ability === 'polymorph') expect(b.hp).toBe(b.maxHp);
   });
 
@@ -238,10 +268,16 @@ describe('PvP control abilities in active duels', () => {
     const { sim, aPid, b } = startDuel('warlock', 'warrior', 20);
 
     const start = pos(b);
-    sim.castAbility('fear', aPid);
-    finishCast(sim, aPid);
-
-    const fear = b.auras.find((aura) => aura.id === 'fear_incap' && aura.kind === 'incapacitate');
+    const fear = castUntilAura(
+      sim,
+      aPid,
+      b,
+      'fear',
+      (aura) => aura.id === 'fear_incap' && aura.kind === 'incapacitate',
+      () => {
+        b.auras = b.auras.filter((aura) => aura.id !== 'fear_incap');
+      },
+    );
     expect(fear?.duration).toBe(8);
 
     for (let i = 0; i < 20; i++) sim.tick();

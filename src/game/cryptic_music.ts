@@ -20,6 +20,7 @@ const ZONE_TRACK: Record<MusicZone, string> = {
   vale_legacy: 'the-forest-calls-cryptic-realm.mp3',
   marsh: 'corrupted-temple-cryptic-realm.mp3',
   peaks: 'act-5-sanctum-cryptic-realm.mp3',
+  vale_cup: 'the-forest-calls-cryptic-realm.mp3',
   dungeon_hollow_crypt: 'just-another-crypt-cryptic-realm.mp3',
   dungeon_sunken_bastion: 'catacomb-calls-cryptic-realm.mp3',
   dungeon_gravewyrm_sanctum: 'dungeon-time-cryptic-realm.mp3',

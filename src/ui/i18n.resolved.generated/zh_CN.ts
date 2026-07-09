@@ -212,6 +212,10 @@ export const zh_CN: EnTranslations = {
       "pointsGained": "已获得 {points} 每日奖励积分。",
       "showChestButton": "显示宝箱",
       "hideChestButton": "隐藏宝箱",
+      "hideChestConfirmTitle": "Hide Daily Rewards Chest?",
+      "hideChestConfirmBody": "This removes the chest shortcut from your HUD. Rewards, eligibility, and this panel stay available; you can bring the shortcut back from Options.",
+      "hideChestConfirmOk": "Hide Chest",
+      "hideChestConfirmCancel": "Cancel",
       "leaderboard": "每日排行榜",
       "totalPlayer": "今天 {count} 名玩家",
       "totalPlayers": "今天 {count} 名玩家",
@@ -287,6 +291,7 @@ export const zh_CN: EnTranslations = {
       "targetLabel": "你的目标",
       "targetAnnounce": "目标：{name}",
       "partyLabel": "你的队伍",
+      "partyChip": "Party",
       "partyGroup": "小队 {n}",
       "durationUnitSeconds": "秒",
       "durationUnitMinutes": "分",
@@ -304,10 +309,21 @@ export const zh_CN: EnTranslations = {
       "autorun": "自动奔跑",
       "jump": "跳跃",
       "leaderboard": "排行榜",
+      "dailyRewards": "Rewards",
       "nameplates": "姓名板",
       "haptics": "震动反馈",
       "hapticsOff": "震动反馈：关",
-      "toggleHaptics": "切换震动反馈"
+      "toggleHaptics": "切换震动反馈",
+      "hotbarPage": "Skills",
+      "hotbarPageAria": "Show next set of skills",
+      "actionRing": "Combat actions",
+      "actionPageToggle": "Switch action page",
+      "actionPageIndicator": "{page}",
+      "targetCycle": "Swap target",
+      "targetCycleShort": "Target",
+      "spellbookPageLabel": "Page {page}",
+      "hideKeyboard": "Hide keyboard",
+      "chatPlaceholder": "Say something..."
     },
     "tutorial": {
       "moveBodyTouch": "使用摇杆移动，拖动屏幕环顾四周。先走几步开始吧。",
@@ -356,7 +372,9 @@ export const zh_CN: EnTranslations = {
       "hoursMinutes": "{h}小时{m}分",
       "minutes": "{m}分",
       "lessThanMinute": "<1分",
-      "lockedToast": "你已锁定到{raid}。{time}后解锁。"
+      "lockedToast": "你已锁定到{raid}。{time}后解锁。",
+      "heroicName": "Heroic {name}",
+      "heroicLocked": "You are locked to Heroic {name}."
     },
     "compass": {
       "N": "北",
@@ -378,11 +396,149 @@ export const zh_CN: EnTranslations = {
       "emoteWheel": "表情轮盘",
       "targetFriendly": "选中最近友方",
       "targetFriendlyNext": "切换友方目标",
-      "discord": "Discord"
+      "discord": "Discord",
+      "valecup": "Vale Cup"
+    },
+    "vcup": {
+      "title": "The Vale Cup",
+      "shootPower": "POWER",
+      "close": "Close the Vale Cup window",
+      "offlineNote": "The fixture book is closed. The Vale Cup is not available right now.",
+      "recordLine": "Your record: {wins} wins, {losses} losses, {draws} draws.",
+      "bracketsAria": "Match bracket",
+      "bracketLabel": "{n}v{n}",
+      "waitingCount": "{count} waiting",
+      "nationsHeading": "Banner nation",
+      "nation": {
+        "vale": "Eastbrook Vale",
+        "mirefen": "The Mirefen",
+        "thornpeak": "Thornpeak",
+        "coliseum": "The Ashen Coliseum",
+        "choir": "The Pale Choir",
+        "ogre": "The Ogre Clans",
+        "moon": "The Pale Moon",
+        "copperdig": "The Copper Dig"
+      },
+      "awayNote": "If both sides fly the same banner, the away side plays the inverted palette.",
+      "rolesHeading": "Sport role",
+      "role": {
+        "allrounder": {
+          "name": "All-Rounder",
+          "desc": "A bit of everything: kick, boot, and a fair shoulder."
+        },
+        "striker": {
+          "name": "Striker",
+          "desc": "Lives for the long boot and the quick sidestep."
+        },
+        "sweeper": {
+          "name": "Sweeper",
+          "desc": "Bumps runners off the ball and hoofs it clear."
+        },
+        "keeper": {
+          "name": "Keeper",
+          "desc": "Guards the goal box with grip, dive, and punt."
+        }
+      },
+      "queue": "Join the Queue",
+      "leaveQueue": "Leave the Queue",
+      "queueNote": "Queue from anywhere; the whistle calls you to the Sowfield.",
+      "queuedStatus": "Queued for {bracket}: position {position} of {count}.",
+      "blockNation": "Pick a banner nation first.",
+      "blockPartySize": "That bracket needs a smaller party.",
+      "blockNotLeader": "Only the party leader can queue the team.",
+      "inMatchNote": "Your team is on the pitch. Play on!",
+      "deserterNote": "The Groundskeeper remembers. You may queue again in {seconds} sec.",
+      "liveHeading": "Now at the Sowfield",
+      "liveAria": "Vale Cup: {nationA} {scoreA}, {nationB} {scoreB}",
+      "walkUp": "Walk up to the Sowfield to watch from the stands.",
+      "noLive": "The pitch is quiet. No match is being played.",
+      "boardHeading": "Winners board",
+      "boardEmpty": "No winners recorded yet. The Copper Pail waits.",
+      "boardWins": "{count} wins",
+      "enterAsGuild": "Enter under the banner of {guild}",
+      "guildRecordLine": "Your guild record: {wins} wins, {losses} losses.",
+      "guildBoardHeading": "Guild banners",
+      "guildBoardEmpty": "No guild has taken the field yet. Fly your banner!",
+      "guildBoardWl": "{wins} W, {losses} L",
+      "practice": "Practice vs. Bots",
+      "practiceNote": "Starts a private bot match on your own practice pitch right away.",
+      "practicingNow": "Practicing now ({count}):",
+      "clock": "{minutes}:{seconds}",
+      "indicatorQueued": "Vale Cup queue: {bracket}, position {position} of {count}",
+      "indicatorLive": "Vale Cup",
+      "indicatorOpen": "Open the Vale Cup window",
+      "phaseCountdown": "Kickoff in {seconds}",
+      "phaseGoal": "GOAL!",
+      "phaseGolden": "GOLDEN GOAL",
+      "phaseOver": "FULL TIME",
+      "bannerFound": "The Vale Cup calls: {nationA} vs {nationB}!",
+      "bannerCountdown": "Kickoff in {seconds}...",
+      "bannerKickoff": "KICKOFF!",
+      "bannerGoal": "GOAL! {nation} scores!",
+      "bannerSave": "{name} SAVES!",
+      "bannerGolden": "GOLDEN GOAL: next score wins!",
+      "bannerEnd": "Full time: {nationA} {scoreA}, {nationB} {scoreB}",
+      "bannerWin": "Victory at the Sowfield!",
+      "bannerDraw": "A draw at the Sowfield.",
+      "bannerLoss": "Defeat at the Sowfield.",
+      "logQueued": "You join the Vale Cup queue for {bracket} (position {position}).",
+      "logUnqueued": "You leave the Vale Cup queue.",
+      "logFound": "Your Vale Cup match is ready: {nationA} vs {nationB}.",
+      "logRoster": "Your side: {allies}. Their side: {enemies}.",
+      "logGoal": "{name} scores for {nation}! {nationA} {scoreA}, {nationB} {scoreB}.",
+      "logSave": "{name} makes the save!",
+      "logWin": "You win the bout at the Sowfield.",
+      "logDraw": "The bout at the Sowfield ends in a draw.",
+      "logLoss": "You lose the bout at the Sowfield.",
+      "gossipOpen": "The book of fixtures",
+      "gossipOpenAria": "Open the Vale Cup window",
+      "mobileLabel": "Cup",
+      "briefing": {
+        "subtitle": "Pre-match briefing",
+        "vs": "vs",
+        "rulesHeading": "How to play",
+        "rule1": "Kick or pass the ball into the enemy goal to score.",
+        "rule2": "First to 5 goals wins, or the most goals when full time blows.",
+        "rule3": "A level match at full time goes to golden goal: the next score wins.",
+        "rule4": "Tackles only tumble you over. Nobody gets hurt under the harvest truce.",
+        "rule5": "Anyone can walk up and cheer you on from the stands.",
+        "kitHeading": "Your kit",
+        "kitNote": "These moves replace your class abilities for the match.",
+        "rosterHeading": "The team sheet",
+        "you": "You",
+        "bot": "Bot",
+        "ready": "I'm ready",
+        "readyDone": "Ready",
+        "readyAria": "Ready up for kickoff",
+        "waiting": "Waiting for the other side to ready up...",
+        "whistle": "The whistle blows in {seconds}s.",
+        "readyCount": "{ready} of {total} ready"
+      },
+      "bet": {
+        "title": "Match Bets",
+        "aria": "Vale Cup match betting",
+        "closesIn": "Bets close in {seconds}s",
+        "closed": "Betting closed",
+        "prize": "Pool {amount}",
+        "splitAria": "Share of the betting pool on each team",
+        "expand": "View bets and wager",
+        "collapse": "Hide bets",
+        "oddsLabel": "Pays",
+        "back": "Back {team}",
+        "form": "{wins}W-{losses}L",
+        "mine": "Your bet: {amount} on {team}",
+        "none": "You have no bet on this match yet.",
+        "record": "Betting record: {wins}W-{losses}L, {sign}{net}",
+        "wonBanner": "Your bet won!",
+        "wonLog": "Your Vale Cup bet won: {amount} returned.",
+        "lostLog": "Your Vale Cup bet lost: {amount}.",
+        "refundLog": "Bets voided, your {amount} stake was returned."
+      }
     },
     "options": {
       "clickMoveLeft": "左键",
       "clickMoveRight": "右键",
+      "version": "v{version} ({build})",
       "browserEffects": "浏览器特效",
       "browserEffectsAuto": "自动",
       "browserEffectsFull": "完整",
@@ -414,7 +570,9 @@ export const zh_CN: EnTranslations = {
       "itemLevelLine": "物品等级 {level}",
       "itemScoreLine": "评分 {score}",
       "showSecondaryActionBar": "显示副动作条",
-      "showDailyRewardsChest": "显示每日奖励宝箱"
+      "showDailyRewardsChest": "显示每日奖励宝箱",
+      "mobileCameraJoystick": "Camera joystick",
+      "mobileLeftHanded": "Left-handed layout"
     },
     "controller": {
       "title": "手柄",
@@ -465,7 +623,9 @@ export const zh_CN: EnTranslations = {
         "fps01Low": "0.1% 低帧",
         "ping": "延迟",
         "jitter": "抖动",
+        "predLead": "Prediction Lead",
         "snapshot": "快照频率",
+        "serverTick": "Server Tick Rate",
         "connection": "连接",
         "drawCalls": "绘制调用",
         "triangles": "三角面",
@@ -508,7 +668,9 @@ export const zh_CN: EnTranslations = {
     "statInfo": {
       "fromYour": "来自你的 {value} 点{stat}：",
       "names": {
-        "spellPower": "法术强度"
+        "spellPower": "法术强度",
+        "critRating": "Crit Rating",
+        "hasteRating": "Haste Rating"
       },
       "desc": {
         "str": "提高你的攻击强度，使你的武器攻击造成更高的伤害。",
@@ -521,7 +683,9 @@ export const zh_CN: EnTranslations = {
         "spellPower": "提高你法术造成的伤害和治疗的强度。每点智力都会提供少量法术强度，此外还有来自装备和增益的加成。",
         "dps": "你的预估武器每秒伤害，由武器的伤害与速度以及你的攻击强度共同计算得出。",
         "critChance": "你的攻击造成暴击的几率，暴击将造成双倍伤害。",
-        "dodge": "你完全躲开来袭近战攻击、不受任何伤害的几率。"
+        "dodge": "你完全躲开来袭近战攻击、不受任何伤害的几率。",
+        "critRating": "Crit rating from your gear and set bonuses, raising your critical strike chance. About 10 rating grants 1% crit.",
+        "hasteRating": "Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. About 10 rating grants 1% haste."
       },
       "effects": {
         "attackPower": "+{value} 攻击强度",
@@ -561,6 +725,15 @@ export const zh_CN: EnTranslations = {
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
+    },
+    "itemProc": {
+      "onMeleeHit": "Chance on hit ({chance}%): {effect}",
+      "onSpellDamage": "Chance on your damaging spells ({chance}%): {effect}",
+      "onHeal": "Chance on your heals ({chance}%): {effect}",
+      "chainArc": "blasts the target with a {school} {name} ({damage}) that leaps to {jumps} nearby foes for decaying damage",
+      "attackSlow": "and slows the target attack speed by {pct}% for {duration} sec",
+      "dot": "festers {name}, a {school} damage-over-time dealing {total} over {duration} sec",
+      "hot": "blooms {name}, a heal-over-time restoring {total} over {duration} sec"
     },
     "questShare": {
       "notShareable": "该任务无法分享。",
@@ -740,6 +913,32 @@ export const zh_CN: EnTranslations = {
       "summaryMaster": "拾取设置：队长分配，分配者{name}，品质门槛{threshold}。",
       "summaryGroup": "拾取设置：小队拾取。"
     },
+    "corpseHarvest": {
+      "title": "Harvest",
+      "harvestButton": "Harvest",
+      "concentrateHint": "Fewer chosen components yield a higher tier each.",
+      "alreadyHarvested": "This corpse has already been harvested.",
+      "componentAria": "Harvest {component}",
+      "components": {
+        "hide": "Hide",
+        "fang": "Fang",
+        "silk": "Silk",
+        "venomSac": "Venom Sac",
+        "gills": "Gills",
+        "claw": "Claw",
+        "horn": "Horn",
+        "tusk": "Tusk"
+      }
+    },
+    "townFocus": {
+      "title": "Town Focus",
+      "hint": "Focus points add a bonus on top of every component's baseline yield. Unfocused components stay at baseline.",
+      "budgetLabel": "Points remaining: {remaining} / {budget}",
+      "saveButton": "Save Focus",
+      "notInTownHint": "You must be in town to set your focus.",
+      "increaseAria": "Increase focus on {component}",
+      "decreaseAria": "Decrease focus on {component}"
+    },
     "party": {
       "promoteLeader": "提升为队长",
       "inviteUsage": "邀请谁？用法：/invite <名称>。"
@@ -755,7 +954,13 @@ export const zh_CN: EnTranslations = {
       "leaderOption": "分配者：队长（你）",
       "masterOption": "分配者：{name}"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "Set Dungeon Difficulty: Heroic",
+      "setNormal": "Set Dungeon Difficulty: Normal"
+    },
     "bags": {
+      "cannotDestroy": "This item cannot be destroyed.",
+      "rightClickDestroy": "Right-click to destroy",
       "filterGroupAria": "按类别筛选背包",
       "filterAll": "全部",
       "filterWeapon": "武器",
@@ -819,10 +1024,19 @@ export const zh_CN: EnTranslations = {
         "allStats": "所有属性降低 {value}"
       },
       "allStatsPctReduce": "所有属性降低 {pct}%",
+      "increasePct": {
+        "ap": "Increases attack power by {pct}%",
+        "armor": "Increases armor by {pct}%",
+        "int": "Increases Intellect by {pct}%",
+        "sta": "Increases Stamina by {pct}%",
+        "allStats": "Increases all attributes by {pct}%"
+      },
       "dodge": "躲闪几率提高 {pct}%",
       "dodgeReduce": "躲闪几率降低 {pct}%",
       "armorFlat": "护甲降低 {value}",
       "armorFlatStacks": "护甲降低 {value}（{stacks} 层）",
+      "armorPct": "Reduces armor by {pct}%",
+      "armorPctStacks": "Reduces armor by {pct}% ({stacks} stacks)",
       "mortalWound": "受到的治疗降低 {pct}%",
       "vulnerability": "受到的伤害提高 {pct}%",
       "physVuln": "受到的物理伤害提高 {pct}%",
@@ -971,6 +1185,7 @@ export const zh_CN: EnTranslations = {
       "roleTag": {
         "levyst": "Levy St",
         "admin": "管理员",
+        "coredevs": "Core Dev",
         "devs": "开发者",
         "mods": "管理员",
         "artists": "画师"
@@ -1112,6 +1327,50 @@ export const zh_CN: EnTranslations = {
         "takeParcelsFirst": "请先取出包裹再丢弃信件。"
       }
     },
+    "bank": {
+      "title": "Bank",
+      "subtitle": "The Gilded Strongbox",
+      "close": "Close bank",
+      "capacity": "{used}/{total}",
+      "capacityAria": "Bank slots used: {used} of {total}",
+      "empty": "Your bank is empty.",
+      "tooFar": "You must be at a banker to view your bank.",
+      "buySlots": "Buy {count} slots",
+      "buySlotsMaxed": "Fully expanded",
+      "buyConfirm": "Purchase {count} additional bank slots for {price}?",
+      "buyConfirmAccept": "Purchase",
+      "withdrawHint": "Click to withdraw",
+      "withdrawPartialHint": "Shift-click to withdraw a partial amount",
+      "depositHint": "Click to deposit",
+      "depositPartialHint": "Shift-click to deposit a partial amount",
+      "cannotDeposit": "Cannot be banked",
+      "depositQuantityTitle": "Deposit {item}",
+      "depositQuantityInput": "Quantity to deposit",
+      "depositQuantityConfirm": "Deposit",
+      "withdrawQuantityTitle": "Withdraw {item}",
+      "withdrawQuantityInput": "Quantity to withdraw",
+      "withdrawQuantityConfirm": "Withdraw",
+      "filterGroupAria": "Filter bank by category",
+      "sortAria": "Sort bank items",
+      "searchAria": "Search bank items by name",
+      "depositAll": "Deposit all materials",
+      "depositAllDone": "Materials deposited: {count}.",
+      "depositAllFull": "Materials deposited: {count}. Bank now full.",
+      "depositAllNone": "Bank full: nothing deposited.",
+      "bonusTitle": "Bonus slots",
+      "bonusEarned": "+{count}",
+      "bonusStatusEarned": "+{count}",
+      "bonusSourceEmail": "Verified email",
+      "bonusSourceDiscord": "Discord linked",
+      "bonusSourceWallet": "Wallet linked",
+      "bonusSourceReferral": "Referred friends",
+      "bonusAdvertEmail": "Verify your email to earn 2 slots.",
+      "bonusAdvertDiscord": "Link your Discord to earn 2 slots.",
+      "bonusAdvertWallet": "Link a wallet to earn 2 slots.",
+      "bonusReferralProgress": "{count}/{cap}",
+      "bonusReferralExplainer": "Invite a friend: when they reach level 10 you each earn 2 slots, up to 5 friends.",
+      "bonusSectionAria": "Bonus bank slots and how to earn more"
+    },
     "calendar": {
       "title": "活动日历",
       "close": "关闭日历",
@@ -1173,6 +1432,132 @@ export const zh_CN: EnTranslations = {
     "social": {
       "lastSeen": "最后在线: {when}",
       "lastSeenNever": "从未"
+    },
+    "gathering": {
+      "title": "Gathering",
+      "mining": "Mining",
+      "logging": "Logging",
+      "herbalism": "Herbalism"
+    },
+    "archetypeTitle": {
+      "label": "Title",
+      "none": "None",
+      "hobbyLabel": "Hobby",
+      "armorcrafting": "Armorer",
+      "weaponcrafting": "Weaponsmith",
+      "jewelcrafting": "Jeweler",
+      "alchemy": "Alchemist",
+      "engineering": "Tinkerer",
+      "cooking": "Chef",
+      "inscription": "Scribe",
+      "enchanting": "Enchanter",
+      "tailoring": "Tailor",
+      "leatherworking": "Leathercrafter"
+    },
+    "crafting": {
+      "title": "Crafting",
+      "close": "Close crafting",
+      "craft": "Craft",
+      "reagentsNeeded": "Requires:",
+      "reagentLine": "{name} x{have}/{required}",
+      "empty": "No recipes known yet.",
+      "resultAria": "Craft {name}",
+      "craftedToast": "Crafted: {name}",
+      "insufficientMaterials": "You do not have the materials for that.",
+      "unknownRecipe": "That recipe does not exist.",
+      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe.",
+      "notAtHub": "You must be at the crafting hub, at the required level, to craft that.",
+      "throttled": "You are crafting too quickly. Wait a moment and try again.",
+      "recipeNotLearned": "You have not learned that recipe yet."
+    }
+  },
+  "apiError": {
+    "validation": {
+      "failed": "Some fields are invalid. Check the form and try again."
+    },
+    "json": {
+      "malformed": "That request could not be read. Please try again."
+    },
+    "body": {
+      "too_large": "That request is too large. Try again with less data.",
+      "unsupported_media_type": "Unsupported request format."
+    },
+    "db": {
+      "conflict": "That change conflicted with another update. Please try again."
+    },
+    "rate_limit": {
+      "exceeded": "Too many requests. Try again in {seconds}."
+    },
+    "internal": {
+      "error": "Something went wrong on our end. Please try again."
+    },
+    "auth": {
+      "token_missing": "You need to be signed in to do that.",
+      "token_invalid": "Your session has expired. Please sign in again.",
+      "forbidden": "You do not have permission to do that.",
+      "invalid_credentials": "Invalid username or password.",
+      "required": "Not authenticated.",
+      "web_login_only": "Logins are only allowed from the game client.",
+      "too_many_attempts": "Too many attempts. Wait a minute and try again.",
+      "too_many_failed_attempts": "Too many failed attempts. Wait a few minutes and try again.",
+      "current_password_incorrect": "Your current password is incorrect.",
+      "password_incorrect": "Your password is incorrect.",
+      "verification_failed": "Verification failed. Please try again."
+    },
+    "account": {
+      "username_invalid": "Username must be 3-24 characters and use letters, digits, or underscore.",
+      "username_not_allowed": "That username is not allowed.",
+      "username_taken": "That username is already taken.",
+      "username_mismatch": "That username does not match your account.",
+      "password_too_short": "Password must be at least 6 characters.",
+      "password_too_long": "New password must be at most 128 characters.",
+      "characters_online": "Log out all of your characters before deactivating.",
+      "deactivated": "This account has been deactivated. Contact an admin to restore it.",
+      "not_found": "Account not found."
+    },
+    "character": {
+      "name_invalid": "Invalid character name. Use 2-16 letters.",
+      "name_not_allowed": "That character name is not allowed.",
+      "invalid_class": "Invalid class.",
+      "limit_reached": "Character limit reached.",
+      "name_taken": "That name is taken.",
+      "not_found": "Character not found.",
+      "online": "Character is currently online.",
+      "rename_not_permitted": "Renaming this character is not allowed.",
+      "delete_confirm": "Type the character name to confirm deletion.",
+      "already_in_world": "Character is already in world.",
+      "taken_over": "Your character was taken over by another session.",
+      "rename_required": "This character must be renamed before entering the world."
+    },
+    "moderation": {
+      "suspended_until": "This account is suspended until {date}.",
+      "suspended": "This account is suspended.",
+      "banned": "This account has been banned.",
+      "force_rename": "A moderator requires one of your characters to be renamed."
+    },
+    "email": {
+      "invalid": "Enter a valid email address.",
+      "unchanged": "That is already your email address."
+    },
+    "two_factor": {
+      "code_invalid": "That code is not valid, try again.",
+      "setup_required": "Start two-factor setup first.",
+      "already_enabled": "Two-factor is already enabled.",
+      "not_enabled": "Two-factor is not enabled."
+    },
+    "origin": {
+      "cross_site": "Request blocked for security reasons."
+    },
+    "discord": {
+      "not_configured": "Discord integration is not available right now.",
+      "expired": "That Discord sign-in expired. Please sign in with Discord again.",
+      "already_linked": "That Discord account is already linked to another account.",
+      "password_required": "Set a password before unlinking your Discord account.",
+      "unknown_swag": "That reward is not available.",
+      "link_required": "Link your Discord account first.",
+      "swag_claimed": "You have already claimed this reward.",
+      "swag_tier": "Reach a higher rank to claim this.",
+      "swag_points": "Not enough points."
     }
   },
   "guide": {
@@ -1190,6 +1575,7 @@ export const zh_CN: EnTranslations = {
       "bestiary": "生物图鉴",
       "models": "3D 模型",
       "gear": "装备与物品",
+      "professions": "Professions",
       "economy": "经济与交易",
       "social": "社交与组队",
       "stats": "角色与属性",
@@ -1200,9 +1586,11 @@ export const zh_CN: EnTranslations = {
       "delves": "探秘",
       "reference": "参考",
       "controls": "操作键",
+      "settings": "Settings & Performance",
       "combat": "战斗",
       "talents": "天赋",
       "arena": "竞技场与 PvP",
+      "valeCup": "Vale Cup",
       "glossary": "术语表",
       "wishIKnew": "我希望早点知道的事",
       "faq": "常见问题",
@@ -1367,6 +1755,66 @@ export const zh_CN: EnTranslations = {
       "mobileBody": "在手机和平板上会自动出现触控操作:左侧是移动摇杆,在右侧任意位置拖动即可环顾四周,屏幕上还有用于使用技能和打开菜单的按钮。",
       "controllerHeading": "使用手柄",
       "controllerBody": "手柄同样可用，且默认开启手柄支持。左摇杆控制移动，右摇杆控制镜头，正面按键与肩部按键则负责你的技能、跳跃和互动。打开任意窗口，即可调出用于操作菜单的屏幕指针。你可以在选项的手柄设置中重新映射按键，并调整摇杆死区、镜头速度、震动以及反转视角。"
+    },
+    "settingsPage": {
+      "heading": "Settings & Performance",
+      "intro": "Make the game look its best or run its fastest. Three ready-made loadouts, plus what every graphics option really does.",
+      "wherePath": "Everything on this page lives in the game: press Esc and look in Graphics, Interface, and Performance Overlay.",
+      "fairnessTitle": "Fair by design",
+      "fairnessBody": "No option here trades beauty for power. Lower settings shed cosmetic polish only, never information you fight with: your debuffs, cast bars, party health, and damage numbers are identical from Low to Ultra. Playing on a modest machine is never a handicap.",
+      "loadoutsHeading": "Three ready-made loadouts",
+      "loadoutsIntro": "Start from the loadout that sounds like your machine, then adjust one option at a time until it feels right.",
+      "recommended": "Recommended",
+      "whyLabel": "Why it works:",
+      "tagReload": "after reload",
+      "fpsTitle": "Best FPS",
+      "fpsTagline": "For older laptops, integrated graphics, and battery play.",
+      "fpsWhy": "Graphics Quality is the master switch, and Render Quality is the strongest slider: at 70% the world draws roughly half the pixels while the interface stays perfectly sharp.",
+      "balancedTitle": "Balanced",
+      "balancedTagline": "The sweet spot for most machines, and our default advice.",
+      "balancedWhy": "Medium brings real shadows and full materials; High adds ambient occlusion and bloom. Below Ultra a built-in safety net absorbs sudden dips in busy fights, so Balanced stays smooth without babysitting.",
+      "visualsTitle": "Best Visuals",
+      "visualsTagline": "Screenshot mode for powerful desktop machines.",
+      "visualsWhy": "Ultra renders at the highest resolution your display offers with the richest lighting. It also switches the safety net off, and it is desktop-only: phones and the app top out at High.",
+      "value50to70": "50 to 70%",
+      "value90to100": "90 to 100%",
+      "value100": "100%",
+      "valueHighOrMedium": "High on a gaming PC, Medium on a laptop",
+      "valueOnOptional": "On (optional)",
+      "howHeading": "How the options behave",
+      "factDetectTitle": "The game tunes itself first",
+      "factDetectBody": "On your first launch the game reads your device and picks a sensible tier, from Low on a modest phone to Ultra on a strong desktop. Any choice you make yourself always wins.",
+      "factReloadTitle": "Two kinds of options",
+      "factReloadBody": "Graphics Quality and the Advanced pickers take effect after a reload, and the panel offers a Reload Now button when needed. Every other option applies the moment you change it.",
+      "factGovernorTitle": "A built-in safety net",
+      "factGovernorBody": "On every tier below Ultra, the game quietly thins grass, effects, and lighting for a moment when a big fight spikes, then restores them. Choosing Ultra tells it you would rather keep every detail.",
+      "advancedHeading": "The Advanced preset: mix your own",
+      "advancedBody": "Advanced starts from the High tier and unlocks four extra pickers, so you can spend your frames where you actually notice them: Terrain Detail, Foliage Density, Effects & Lighting, and Shadow Quality. Like Graphics Quality, they apply after a reload.",
+      "advancedMixes": "Two favorite mixes: keep Shadow Quality on High and set Effects & Lighting to Low for a crisp, glow-free look that runs light, or do the reverse to keep the bloom and soften the shadows.",
+      "tableHeading": "Every option, explained",
+      "colSetting": "Setting",
+      "colDoes": "What it does",
+      "colImpact": "FPS impact",
+      "impactNone": "None",
+      "impactLight": "Light",
+      "impactModerate": "Moderate",
+      "impactHeavy": "Heavy",
+      "rowGraphicsQuality": "The master switch. Each step changes resolution, shadows, materials, foliage, and lighting effects together. The biggest single difference you can make.",
+      "rowRenderQuality": "Draws the 3D world at a lower internal resolution and scales it up; the interface stays sharp. The strongest instant slider on weaker machines and high-resolution screens.",
+      "rowFieldOfView": "How much of the world fits on screen, from a zoomed 55 to a sweeping 100 degrees. A comfort choice; wider views draw slightly more.",
+      "rowBrightness": "Scene exposure, darker or brighter. Pure preference.",
+      "rowWeather": "Ambient rain and snow. Atmosphere only, and switching it off saves a little during storms.",
+      "rowBrowserEffects": "How fancy the interface itself is allowed to be: glass blur, glow, animated menus. Auto matches your browser; the 3D world is untouched either way.",
+      "rowTerrainDetail": "Rich, blended ground textures versus a simpler, faster terrain look.",
+      "rowFoliageDensity": "How far and how thick the grass grows around your character.",
+      "rowEffectsQuality": "Bloom, ambient occlusion, and how many torches and spells cast real light. The single biggest saving among the Advanced pickers.",
+      "rowShadowQuality": "Shadow crispness. Low keeps shadows but softens their edges.",
+      "rowFrostedPanels": "A frosted-glass blur behind windows. Pretty, and exactly the kind of effect a weaker browser feels; leave it off for the classic crisp look.",
+      "rowReduceMotion": "Removes interface animations so windows appear instantly. An accessibility option first, with a small performance bonus.",
+      "rowPerfOverlay": "An on-screen readout of FPS, frame time, and more. Turn it on while you tune this page, then hide it again.",
+      "tableFoot": "Looking for a draw-distance slider or an FPS cap? There is nothing to hunt for: view distance is part of each quality tier, and frame pacing follows your display.",
+      "mobileTitle": "On phones and tablets",
+      "mobileBody": "Mobile manages more for you: the game picks the tier, holds resolution a touch lower to protect battery and heat, and keeps the highest tiers desktop-only. The loadouts above still apply; phones simply top out at High."
     },
     "combat": {
       "intro": "战斗遵循经典 MMO 中熟悉的规则。你完全不必钻研这些就能玩得很好,这里只是介绍一下战斗大致的运作方式。",
@@ -1793,10 +2241,38 @@ export const zh_CN: EnTranslations = {
       "waveGoldBody": "中段一波：双刃组合，你的构筑在此开始成型、绽放光彩。",
       "wavePrismaticTitle": "棱彩",
       "wavePrismaticBody": "最后一波：足以定义构筑、炸裂屏幕的爆发，意在以最酣畅淋漓的方式让你直呼离谱。",
+      "yumiHeading": "Protect Yumi",
+      "yumiBody": "Protect Yumi is a team objective mode played in a maze: each side guards its own cat familiar while hunting the other. Every so often both cats blink to new corners of the maze, so the fight swings between defending, hunting, and racing to find them again. Queue as three versus three or five versus five; falling in battle only benches you for a moment.",
       "powerupsTitle": "竞技场中的强化道具",
       "powerupsBody": "激战正酣时，发光的能量球还会落入竞技场，谁先抢到便归谁。它们刻意夸张到极致，且只持续片刻：极速恶魔让你瞬间快得令人目眩，巨像将你膨胀成步履蹒跚的庞然大物，月靴带来低重力的弹跳腾跃，狂战士则让你猛然涌起一股暴怒。",
       "ladderHeading": "攀登天梯",
       "ladderBody": "排名对战会长期追踪你的排名。查看排行榜，看看你身处何处，以及谁占据着这片位面的榜首。"
+    },
+    "valeCupPage": {
+      "heading": "The Vale Cup",
+      "intro": "Boarball at the Sowfield: pick a banner, pick a role, and kick a stuffed boar hide past a keeper for the Copper Pail. No blood, no loot, just the roar of the stands.",
+      "loreHeading": "Boarball and the harvest truce",
+      "loreOldSow": "Long before the dead woke, Eastbrook's farmhands played boarball on the stubble fields after harvest: two mobs, one boar's hide stuffed with straw, and two wagon gates dragged to either end of the green. The first ball, the Old Sow, hangs bronzed above the tavern hearth.",
+      "loreTruce": "When the Ashen Coliseum began sanctioning war games, Marshal Redbrook answered with something gentler: a standing harvest truce on the old green. The wagon gates became goalposts, the green got walls, stands, and a name, the Sowfield, and the prize was always the same dented milk pail the winners drank from: the Copper Pail.",
+      "howHeading": "How to play",
+      "howQueue": "Queue from anywhere through the Vale Cup window, or talk to Groundskeeper Bram at the Sowfield gate. Pick a bracket from one-a-side up to five-a-side, a banner nation, and a sport role; queue solo or bring your party.",
+      "howMatch": "On kickoff your class kit is swapped for a sport kit and restored exactly afterward. Kicks aim at the ground reticle, the ball banks off the boards, and dribbling is just running with the ball. Score more goals than the other side before full time; a draw goes to golden goal.",
+      "howTruce": "Nobody bleeds at the Sowfield: tackles tumble, nothing hurts, and pets sit the match out.",
+      "spectateBody": "One match plays at a time at the stadium, and anyone can walk up and watch from the stands.",
+      "nationsHeading": "The eight banner nations",
+      "nationsBody": "Every team plays under a banner. The captain picks the nation, and if both sides fly the same one, the away side plays the inverted palette.",
+      "nationVale": "Green and gold, flying the wheat sheaf: the home side, farmhands to the bone.",
+      "nationMirefen": "Teal and grey under the heron: patient, long-legged, never hurried.",
+      "nationThornpeak": "Ice blue and white under the mountain peak: sure-footed and stubborn.",
+      "nationColiseum": "Red and black with crossed swords: they play like it is still a war game.",
+      "nationChoir": "Pale blue and silver under the bell: eerie, precise, and very quiet.",
+      "nationOgre": "Orange and umber behind the fist: shoulder-first and proud of it.",
+      "nationMoon": "Violet and silver under the crescent: night players, light on their feet.",
+      "nationCopperdig": "Copper and brown with the pickaxe: diggers who never stop running.",
+      "rolesHeading": "Sport roles",
+      "rolesBody": "Your role decides the kit you carry onto the pitch. Everyone kicks; the rest is temperament.",
+      "rewardsHeading": "Truce rules",
+      "rewardsBody": "Truce rules mean no experience and no loot: a decided match counts toward your record and the winners board, and daily-reward points come with it. Deserting a match benches your slot, and the Groundskeeper remembers."
     },
     "wishPage": {
       "heading": "我希望早点知道的事",
@@ -1882,6 +2358,35 @@ export const zh_CN: EnTranslations = {
       "cosmeticsCache": "其中少数来自一个神秘的外观宝箱，那是一份封缄的奖励，开启时会随机滚出三种品质等级中的一种，并授予与之匹配的外观。它纯粹为了好看：里面没有任何东西能让你变强，只会让你更赏心悦目。",
       "cosmeticsApply": "在角色界面的外观一栏设置你当前的造型，并在已解锁的所有外观之间自由切换。"
     },
+    "professions": {
+      "intro": "Beyond combat and quests, the world rewards you for working the land and the forge: gathering raw materials, turning them into gear at the crafting stations of ten different trades, and settling into an identity as one of the ten archetypes those trades represent.",
+      "gatherTitle": "Gathering: Mining, Logging, and Herbalism",
+      "gatherIntro": "Three gathering trades let you pull raw materials straight out of the world: Mining strikes ore and stone from veins, Logging fells timber from stands of trees, and Herbalism collects herbs and plants growing wild. Each is tracked separately, so working one never slows your progress in another.",
+      "gatherWhatTitle": "Resource nodes",
+      "gatherWhatBody": "Ore veins, wood stands, and herb patches are placed out in the zones as visible, unowned fixtures. Walk up to one and interact with it to harvest whatever it holds. Once you have harvested a node, it needs time to recover before you personally can harvest it again, though it never blocks anyone else: another player can harvest the very same node in the meantime.",
+      "gatherProficiencyTitle": "Proficiency and material quality",
+      "gatherProficiencyBody": "Every successful harvest builds your proficiency in that gathering trade. A higher proficiency shifts what you pull out of a node toward rarer grades of material, from common on up, though the rarest grades stay rare even at high proficiency. More practice never hurts your odds, it only ever improves them.",
+      "gatherToolsTitle": "Tools of the trade",
+      "gatherToolsBody": "Vendors sell basic tools for each gathering trade, and better ones can be crafted, so working a resource node is meant to feel more capable as you gear up for it rather than staying static. Higher-tier tools are the intended way to unlock access to richer nodes and to work them more efficiently over a long session.",
+      "craftTitle": "The ten crafts",
+      "craftIntro": "Ten crafting trades turn gathered materials into finished gear and goods: Armorcrafting, Weaponcrafting, and Jewelcrafting shape raw matter into wearable gear; Alchemy and Engineering are driven by trial and error; Cooking, Inscription, and Enchanting each touch other crafts' output; Tailoring and Leatherworking work from exact patterns. Together they form a wheel, with each craft sitting next to two neighbors and opposite one other.",
+      "craftRingTitle": "A wheel of specialties",
+      "craftRingBody": "The ten crafts are arranged in a fixed ring, and where a craft sits on that ring matters: crafts next to each other on the wheel share more in common with each other than crafts on opposite sides do. Committing to one craft is meant to feel like joining a family of related trades, not picking an isolated skill.",
+      "craftRecipesTitle": "Recipes and reagents",
+      "craftRecipesBody": "Every craft has its own recipes, each calling for specific reagents you gather or buy. The most basic recipes in each craft ask for nothing but common materials and are craftable from the very start, so you can begin working a trade the moment you pick it up rather than waiting to unlock it.",
+      "craftMasteryTitle": "Skill and mastery",
+      "craftMasteryBody": "Crafting successfully builds skill in that trade, and richer recipes are gated behind higher skill: the basic recipes are open to everyone, while progressively more advanced ones ask for progressively more mastery to attempt. Growing your skill in a craft is the path from simple starter goods to its more ambitious recipes.",
+      "craftComboTitle": "Combination recipes",
+      "craftComboBody": "Beyond a single craft's own recipe list, the wheel also supports combination recipes that call on two neighboring crafts at once, rewarding a character (or a pair of trading partners) who has invested in adjacent trades on the ring rather than one in isolation.",
+      "archetypeTitle": "The ten archetypes",
+      "archetypeIntro": "Each of the ten crafts also stands for an archetype, a broader identity you can adopt beyond just working that trade. Your active archetype is a single choice at a time, not a checklist: you carry one, and can change which one later if you choose to.",
+      "archetypeChooseTitle": "Choosing your archetype",
+      "archetypeChooseBody": "You declare your first archetype through an early, zone one story quest that formally accepts you into that identity. Until you complete that quest, you have not yet chosen an archetype at all.",
+      "archetypeSwitchTitle": "Changing your mind",
+      "archetypeSwitchBody": "Having declared an archetype once does not lock you into it forever. Changing to a different archetype means first completing a repeatable \"make amends\" quest for your old one, and each time you switch, the amends expected of you the next time grow a little steeper, so switching stays meaningful rather than costless.",
+      "archetypeIdentityTitle": "What your archetype means",
+      "archetypeIdentityBody": "Your active archetype is a statement about who your character is in the world, recognized in how others and the world address you. The exact rewards and recognition that come with it are still being finalized; check back as the system fills in."
+    },
     "economy": {
       "intro": "钱币让整个世界运转：它能购买你的装备、补给与旅行用具，还能在玩家之间易手。这一切只需游玩便能逐渐到手，所以不妨把本页看作一张地图，标明你的钱从何而来、又向何处去。",
       "coinTitle": "金币、银币与铜币",
@@ -1890,6 +2395,10 @@ export const zh_CN: EnTranslations = {
       "vendorsBody": "城镇与哨站里星罗棋布地分布着商人，各有各的营生。补给商贩备有食物与饮品，武器匠与护甲匠经营装备，军需官则备有实用的旅行用具。走到其中一位面前，便能看到他们出售的东西。",
       "marksTitle": "第二种货币：探秘印记",
       "marksBody": "你存下的不只有钱币。探秘会产出探秘印记，这是一种独立的货币，只能在探秘看守人处花费，用于同伴升级和别处找不到的装备。它们绝不会与你的钱币混在一起。",
+      "bankTitle": "The bank",
+      "bankBody": "Every hub town keeps a branch of The Gilded Strongbox, the banking house of the realm. Speak to the bursar there to open your vault, a private store of room beyond your bags that your character keeps for life. Whatever you leave with them waits safely, whichever branch you visit next.",
+      "bankHow": "With the vault open, click an item in your bags to deposit it and click it in the vault to take it back. The vault holds goods only, never coin, and quest items stay with you. When your bags fill up mid-journey, one button sweeps all your crafting materials in at once.",
+      "bankSlots": "A fresh vault starts small and grows with you. The bursar sells further slots for coin at ever-steeper prices, and playing online earns bonus room on top, for things like a verified email, linked accounts, and friends you bring into the game.",
       "buyingTitle": "买入与卖出",
       "buyingBody": "站到商人身旁即可打开他的窗口。只要付得起钱，你就能买下他所贩售的任何东西，也能把背包里的大部分物品卖掉换取钱币。若你不小心卖错了东西，商人会保留你近期售出的物品，让你可以买回。",
       "junkTitle": "清理废品",
@@ -2481,8 +2990,8 @@ export const zh_CN: EnTranslations = {
   },
   "footer": {
     "copyright": "2026 Cryptic Realm",
-    "githubLink": "https://github.com/levy-street/world-of-claudecraft",
-    "githubLabel": "开源项目",
+    "githubLink": "/contributions.html",
+    "githubLabel": "Contributions",
     "whitepaper": "白皮书",
     "terms": "服务条款",
     "privacy": "隐私政策",
@@ -2555,8 +3064,12 @@ export const zh_CN: EnTranslations = {
     "loading": "Loading official channels…"
   },
   "download": {
-    "title": "下载电脑版启动器",
-    "desc": "获取独立启动器，以获得更优化的性能和全屏游戏体验。"
+    "title": "Launchers & Installs",
+    "desc": "获取独立启动器，以获得更优化的性能和全屏游戏体验。",
+    "macCta": "Download for macOS",
+    "linuxCta": "Download for Linux",
+    "linuxHint": "AppImage: make it executable, then run it. No install needed.",
+    "windowsPending": "Windows build pending."
   },
   "comingSoon": {
     "placeholder": "敬请期待...",
@@ -2624,11 +3137,13 @@ export const zh_CN: EnTranslations = {
     "twoFactorPlaceholder": "6 位验证码或恢复码",
     "twoFactorHint": "请输入身份验证器应用中的验证码，或一个恢复码。",
     "email": "邮箱",
+    "emailPlaceholder": "you@example.com",
     "emailError": "请输入有效的邮箱地址。",
     "recovery": {
       "title": "添加找回邮箱",
       "body": "设置一个邮箱地址，以便您可以找回自己的账户。我们仅在您需要重置密码时，用它来确认您是本账户的所有者。",
       "save": "保存邮箱",
+      "logOut": "Log out",
       "invalid": "请输入有效的邮箱地址。",
       "failed": "无法保存您的邮箱，请重试。"
     }
@@ -3009,6 +3524,10 @@ export const zh_CN: EnTranslations = {
     },
     "closeAria": "关闭"
   },
+  "heroicShop": {
+    "balance": "Heroic Marks: {count}",
+    "buyAria": "Buy {item} for {marks} Heroic Marks"
+  },
   "delveUi": {
     "board": {
       "title": "探秘面板",
@@ -3204,6 +3723,45 @@ export const zh_CN: EnTranslations = {
     },
     "chest": {
       "flavor": "亡者交出了他们尚能割舍之物。"
+    }
+  },
+  "yumi": {
+    "bracket3": "Yumi 3v3",
+    "bracket5": "Yumi 5v5",
+    "enterQueue": "Join Protect Yumi!",
+    "queue": {
+      "join": "You join the Protect Yumi queue. Guard your familiar…",
+      "leave": "You leave the Protect Yumi queue.",
+      "teamLeave": "Your team leaves the Protect Yumi queue."
+    },
+    "error": {
+      "partyTooBig3": "Protect Yumi 3v3 allows a party of up to three.",
+      "partyTooBig5": "Protect Yumi 5v5 allows a party of up to five."
+    },
+    "log": {
+      "start": "Protect Yumi! Defend your familiar and hunt theirs."
+    },
+    "hud": {
+      "title": "PROTECT YUMI",
+      "getReady": "Get ready…",
+      "teleportIn": "Yumis move in {s}",
+      "suddenDeath": "SUDDEN DEATH",
+      "yourYumi": "Your Yumi",
+      "enemyYumi": "Enemy Yumi",
+      "aria": "Your Yumi at {mine} of {max} health, enemy Yumi at {theirs}.",
+      "collapse": "Collapse the Protect Yumi bars",
+      "expand": "Expand the Protect Yumi bars"
+    },
+    "respawn": {
+      "title": "DOWNED!"
+    },
+    "banner": {
+      "sudden": "SUDDEN DEATH! The Yumis hold their ground!",
+      "teleport": "The Yumis teleport!"
+    },
+    "end": {
+      "win": "VICTORY! Yumi is safe!",
+      "loss": "DEFEAT! Your Yumi has fallen."
     }
   },
   "fiesta": {
@@ -3402,6 +3960,7 @@ export const zh_CN: EnTranslations = {
     "rendererFailed": "无法启动渲染器：请尝试刷新。{error}",
     "enterTimeout": "无法进入世界。连接已超时。游戏服务器是否正在运行？",
     "connectionLost": "与服务器的连接已断开。",
+    "reconnecting": "Connection lost. Reconnecting...",
     "connectionRejected": "服务器关闭了连接。"
   },
   "errors": {
@@ -3434,9 +3993,12 @@ export const zh_CN: EnTranslations = {
       "webLoginOnly": "只能从游戏客户端登录。",
       "accountSuspended": "此账号被停用至 {date}。",
       "alreadyInWorld": "角色已在世界中。",
+      "accountSessionLimit": "Too many characters on this account are already in the world.",
       "takenOver": "你的角色已被另一个会话接管。",
       "renameBeforeEntering": "此角色必须先改名才能进入世界。",
-      "renameNotPermitted": "不允许为此角色改名。"
+      "renameNotPermitted": "不允许为此角色改名。",
+      "unsupportedMediaType": "Unsupported request format.",
+      "crossSiteOrigin": "Request blocked for security reasons."
     }
   },
   "desktop": {
@@ -3650,6 +4212,7 @@ export const zh_CN: EnTranslations = {
       "mobileSocial": "社交",
       "mobileArena": "竞技场",
       "mobileMenu": "菜单",
+      "mobileSettings": "Settings",
       "mobileUse": "使用",
       "mobileMeters": "统计",
       "mobileMap": "地图",
@@ -4225,6 +4788,7 @@ export const zh_CN: EnTranslations = {
       "offGlobalCooldown": "不触发公共冷却",
       "friendlyTarget": "友方目标",
       "enemyTarget": "敌方目标",
+      "selfOnly": "Self only",
       "damageRange": "{min} 到 {max}",
       "finisherDamage": "{base} 加每个连击点 {perCombo}"
     },
@@ -4327,12 +4891,14 @@ export const zh_CN: EnTranslations = {
     "slots": {
       "mainhand": "主手",
       "helmet": "头部",
+      "neck": "Neck",
       "shoulder": "肩部",
       "chest": "胸部",
       "waist": "腰部",
       "legs": "腿部",
       "gloves": "手部",
-      "feet": "脚部"
+      "feet": "脚部",
+      "ring": "Finger"
     },
     "quality": {
       "poor": "粗糙",
@@ -4531,11 +5097,52 @@ export const zh_CN: EnTranslations = {
       "needAria": "需求 {item}",
       "greedAria": "贪婪 {item}",
       "passAria": "放弃 {item}",
-      "everyonePassed": "所有人都放弃了 {item}。"
+      "everyonePassed": "所有人都放弃了 {item}。",
+      "rolled": "{answered}/{total} rolled"
     }
   },
   "entities": {
     "abilities": {
+      "sport_kick": {
+        "name": "Kick",
+        "description": "Knock the ball along the ground toward the aim point."
+      },
+      "sport_shoot": {
+        "name": "Shoot",
+        "description": "Hold to build power, release to shoot at goal. Too much power sails over."
+      },
+      "sport_pass": {
+        "name": "Pass",
+        "description": "Roll a firm pass to your targeted teammate, leading their run."
+      },
+      "sport_boot": {
+        "name": "Big Boot",
+        "description": "A long lofted boot toward the aim point. The crowd loves it."
+      },
+      "sport_hoof": {
+        "name": "Hoof It",
+        "description": "Hammer the ball low and hard up the field."
+      },
+      "sport_punt": {
+        "name": "Long Punt",
+        "description": "A keeper's punt, high and far."
+      },
+      "sport_feint": {
+        "name": "Feint",
+        "description": "A quick sidestep burst toward the aim point."
+      },
+      "sport_dive": {
+        "name": "Dive",
+        "description": "Fling yourself toward the aim point. A crossing ball sticks to you."
+      },
+      "sport_shoulder": {
+        "name": "Shoulder",
+        "description": "A fair harvest-truce shoulder. Sends them tumbling off the ball."
+      },
+      "sport_second_wind": {
+        "name": "Fresh Legs",
+        "description": "Find your legs: move 50% faster for 4 sec."
+      },
       "flamestrike": {
         "name": "烈焰风暴",
         "description": "在目标区域召唤一次烈焰爆发，对爆炸范围内的敌人造成 {damage} 点火焰伤害。"
@@ -4562,15 +5169,15 @@ export const zh_CN: EnTranslations = {
       },
       "battle_shout": {
         "name": "战斗怒吼",
-        "description": "使你的攻击强度提高 20，持续 2 分钟。"
+        "description": "A shout that increases the attack power of all party members by {buff}% for 2 min."
       },
       "commanding_shout": {
         "name": "命令怒吼",
-        "description": "使你的耐力提高 6，持续 2 分钟。"
+        "description": "Increases your Stamina by {buff} for 2 min."
       },
       "demoralizing_shout": {
         "name": "挫志怒吼",
-        "description": "发出可怕的怒吼，使附近所有敌人的攻击强度降低 30，持续 30 秒。"
+        "description": "Lets out a fearsome shout, reducing the attack power of all nearby enemies by {buff} for 30 sec."
       },
       "charge": {
         "name": "冲锋",
@@ -4578,7 +5185,7 @@ export const zh_CN: EnTranslations = {
       },
       "rend": {
         "name": "撕裂",
-        "description": "撕裂目标，使其在 9 秒内流血并受到 {damage} 点伤害。"
+        "description": "Wounds the target, causing them to bleed for {damage} damage over {duration} sec."
       },
       "thunder_clap": {
         "name": "雷霆一击",
@@ -4586,7 +5193,7 @@ export const zh_CN: EnTranslations = {
       },
       "hamstring": {
         "name": "断筋",
-        "description": "重创敌人，造成 5 点伤害，并使其移动速度降低 50%，持续 15 秒。"
+        "description": "Maims the enemy for {damage} damage, slowing its movement by 50% for 15 sec."
       },
       "bloodrage": {
         "name": "血性狂暴",
@@ -4594,7 +5201,7 @@ export const zh_CN: EnTranslations = {
       },
       "overpower": {
         "name": "压制",
-        "description": "立即攻击，造成武器伤害 +5。只能在目标躲闪后使用。无法被躲闪。"
+        "description": "Instant attack for weapon damage plus {damage}. Only usable after the target dodges. Cannot be dodged."
       },
       "execute": {
         "name": "斩杀",
@@ -4626,11 +5233,11 @@ export const zh_CN: EnTranslations = {
       },
       "frost_armor": {
         "name": "霜甲术",
-        "description": "以寒霜包裹自身，使护甲提高 30，持续 30 分钟。"
+        "description": "Encases you in frost, increasing armor by {buff} for 30 min."
       },
       "arcane_intellect": {
         "name": "奥术智慧",
-        "description": "使智力提高 2，持续 30 分钟。"
+        "description": "Increases the Intellect of all party members by {buff}% for 30 min."
       },
       "frostbolt": {
         "name": "寒冰箭",
@@ -4654,7 +5261,7 @@ export const zh_CN: EnTranslations = {
       },
       "polymorph": {
         "name": "变形术",
-        "description": "将敌人变成绵羊，最多持续 15 秒。绵羊会四处游荡并快速恢复。任何伤害都会打破效果。仅限野兽和人型生物。"
+        "description": "Transforms the enemy into a toad for up to {duration} sec. The toad wanders and heals rapidly. Any damage breaks the effect. Beasts and humanoids only."
       },
       "frost_nova": {
         "name": "冰霜新星",
@@ -4674,7 +5281,7 @@ export const zh_CN: EnTranslations = {
       },
       "ice_barrier": {
         "name": "寒冰护体",
-        "description": "以冰霜护盾保护你，吸收 130 点伤害，持续 60 秒。"
+        "description": "Shields you in ice, absorbing {damage} damage for 60 sec."
       },
       "sinister_strike": {
         "name": "影袭",
@@ -4682,7 +5289,7 @@ export const zh_CN: EnTranslations = {
       },
       "eviscerate": {
         "name": "剔骨",
-        "description": "终结技，根据连击点数造成伤害。"
+        "description": "Finishing move that causes {damage}."
       },
       "backstab": {
         "name": "背刺",
@@ -4690,7 +5297,7 @@ export const zh_CN: EnTranslations = {
       },
       "gouge": {
         "name": "凿击",
-        "description": "攻击目标，使其瘫痪 4 秒。任何伤害都会打破效果。奖励 1 个连击点。"
+        "description": "Strikes the target for {damage} damage, incapacitating it for 4 sec. Any damage breaks the effect. Awards 1 combo point."
       },
       "evasion": {
         "name": "闪避",
@@ -4722,11 +5329,11 @@ export const zh_CN: EnTranslations = {
       },
       "garrote": {
         "name": "锁喉",
-        "description": "勒住敌人的喉咙，立即造成伤害，并使其流血，在 18 秒内受到 {damage} 点伤害。必须处于潜行状态。奖励 1 个连击点。"
+        "description": "Garrote the enemy, causing {damage} damage now and bleeding it for {overTime} over 18 sec. Must be stealthed. Awards 1 combo point."
       },
       "cheap_shot": {
         "name": "偷袭",
-        "description": "攻击目标，使其昏迷 4 秒。必须处于潜行状态。奖励 2 个连击点。"
+        "description": "Strike the target for {damage} damage, stunning it for 4 sec. Must be stealthed. Awards 2 combo points."
       },
       "sap": {
         "name": "闷棍",
@@ -4738,7 +5345,7 @@ export const zh_CN: EnTranslations = {
       },
       "expose_armor": {
         "name": "破甲",
-        "description": "终结技，使目标护甲值降低。消耗的连击点越多，削减得越深。"
+        "description": "Finishing move that exposes the target, reducing its armor by {damage}% for 30 sec."
       },
       "rupture": {
         "name": "割裂",
@@ -4762,7 +5369,7 @@ export const zh_CN: EnTranslations = {
       },
       "seal_of_righteousness": {
         "name": "正义圣印",
-        "description": "使你充满神圣能量，持续 30 秒，使每次近战挥击造成 4 点额外神圣伤害。可用审判释放。"
+        "description": "Fills you with Holy power for 30 sec, causing each of your melee swings to deal {damage} additional Holy damage. Unleash with Verdict."
       },
       "holy_light": {
         "name": "圣光术",
@@ -4770,7 +5377,7 @@ export const zh_CN: EnTranslations = {
       },
       "devotion_aura": {
         "name": "虔诚光环",
-        "description": "使你的护甲提高 40，持续 30 分钟。"
+        "description": "Increases the armor of all party members by {buff}% for 30 min."
       },
       "judgement": {
         "name": "审判",
@@ -4778,19 +5385,19 @@ export const zh_CN: EnTranslations = {
       },
       "blessing_of_might": {
         "name": "力量祝福",
-        "description": "为一个友方目标施加祝福，使攻击强度提高 15，持续 5 分钟。"
+        "description": "Blesses the party, increasing the attack power of all party members by {buff}% for 30 min."
       },
       "divine_protection": {
         "name": "圣佑术",
-        "description": "神圣护盾吸收 50 点伤害，持续 10 秒。"
+        "description": "A protective ward absorbs {damage} damage for 10 sec."
       },
       "hammer_of_justice": {
         "name": "制裁之锤",
-        "description": "使目标昏迷 3 秒。"
+        "description": "Stuns the target for {duration} sec."
       },
       "lay_on_hands": {
         "name": "圣疗术",
-        "description": "巨大的治疗涌流：恢复 250 点生命值。10 分钟冷却时间。"
+        "description": "A massive surge of healing: restores {damage} health. 10 min cooldown."
       },
       "flash_of_light": {
         "name": "圣光闪现",
@@ -4822,11 +5429,11 @@ export const zh_CN: EnTranslations = {
       },
       "raptor_strike": {
         "name": "猛禽一击",
-        "description": "一次强力近战攻击，使伤害提高 5。在你的下一次挥击时触发。"
+        "description": "A strong melee attack that increases damage by {damage}. Activates on your next swing."
       },
       "aspect_of_the_hawk": {
         "name": "雄鹰守护",
-        "description": "获得雄鹰守护，使攻击强度提高 20，持续 30 分钟。"
+        "description": "Take on the harrier's guise, increasing attack power by {buff} for 30 min."
       },
       "serpent_sting": {
         "name": "毒蛇钉刺",
@@ -4838,15 +5445,15 @@ export const zh_CN: EnTranslations = {
       },
       "concussive_shot": {
         "name": "震荡射击",
-        "description": "使目标眩晕迟缓，移动速度降低 50%，持续 4 秒。"
+        "description": "Dazes the target for {damage} damage, slowing movement by 50% for 4 sec."
       },
       "mongoose_bite": {
         "name": "猫鼬撕咬",
-        "description": "在目标躲闪后反击，造成武器伤害加 12。无法被躲闪。"
+        "description": "Counterattack after the target dodges for weapon damage plus {damage}. Cannot be dodged."
       },
       "wing_clip": {
         "name": "摔绊",
-        "description": "造成伤口，使敌人移动速度降低 40%，持续 10 秒。"
+        "description": "Inflicts a wound for {damage} damage, slowing the enemy by 40% for 10 sec."
       },
       "aspect_of_the_monkey": {
         "name": "猿猴守护",
@@ -4874,7 +5481,7 @@ export const zh_CN: EnTranslations = {
       },
       "power_word_fortitude": {
         "name": "真言术：韧",
-        "description": "使目标的耐力提高 3，持续 30 分钟。"
+        "description": "Increases the Stamina of all party members by {buff}% for 30 min."
       },
       "shadow_word_pain": {
         "name": "暗言术：痛",
@@ -4882,7 +5489,7 @@ export const zh_CN: EnTranslations = {
       },
       "power_word_shield": {
         "name": "真言术：盾",
-        "description": "保护目标，吸收 48 点伤害，持续 30 秒。"
+        "description": "Shields the target, absorbing {damage} damage for 30 sec."
       },
       "renew": {
         "name": "恢复",
@@ -4910,7 +5517,7 @@ export const zh_CN: EnTranslations = {
       },
       "rockbiter_weapon": {
         "name": "石化武器",
-        "description": "以大地之怒灌注你的武器：每次挥击额外造成 5 点伤害，持续 5 分钟。"
+        "description": "Imbues your weapon with the fury of stone: each swing deals {damage} additional damage for 5 min."
       },
       "healing_wave": {
         "name": "治疗波",
@@ -4922,15 +5529,15 @@ export const zh_CN: EnTranslations = {
       },
       "lightning_shield": {
         "name": "闪电之盾",
-        "description": "以爆裂闪电环绕自身：近战攻击者会受到 13 点自然伤害。"
+        "description": "Surrounds you with crackling lightning: melee attackers take {buff} Nature damage, up to 3 charges and at most once every 5 seconds."
       },
       "flame_shock": {
         "name": "烈焰震击",
-        "description": "用火焰灼烧目标，造成 25 点伤害，并在 12 秒内额外造成 {damage}。"
+        "description": "Sears the target with fire for {damage} damage plus {overTime} over 12 sec."
       },
       "flametongue_weapon": {
         "name": "火舌武器",
-        "description": "用元素之火灌注你的武器：每次挥击额外造成 8 点火焰伤害，持续 5 分钟。"
+        "description": "Imbues your weapon with elemental fire: each swing deals {damage} additional Fire damage for 5 min."
       },
       "frost_shock": {
         "name": "冰霜震击",
@@ -4938,7 +5545,7 @@ export const zh_CN: EnTranslations = {
       },
       "frostbrand_weapon": {
         "name": "霜刃武器",
-        "description": "为你的武器附上刺骨寒霜：每次挥击额外造成 8 点伤害，持续 5 分钟。"
+        "description": "Imbues your weapon with biting frost: each swing deals {damage} additional damage for 5 min."
       },
       "ghost_wolf": {
         "name": "幽魂之狼",
@@ -4954,11 +5561,11 @@ export const zh_CN: EnTranslations = {
       },
       "demon_skin": {
         "name": "恶魔皮肤",
-        "description": "恶魔皮肤使你的护甲提高 30，持续 30 分钟。"
+        "description": "Demonic skin increases your armor by {buff} for 30 min."
       },
       "immolate": {
         "name": "献祭",
-        "description": "灼烧敌人，造成 11 点火焰伤害，并在 15 秒内额外造成 {damage}。"
+        "description": "Burns the enemy for {damage} Fire damage and an additional {overTime} over 15 sec."
       },
       "corruption": {
         "name": "腐蚀术",
@@ -4966,7 +5573,7 @@ export const zh_CN: EnTranslations = {
       },
       "life_tap": {
         "name": "生命分流",
-        "description": "将 30 点生命值转化为 30 点法力值。"
+        "description": "Converts {damage} health into {damage} mana."
       },
       "curse_of_agony": {
         "name": "痛苦诅咒",
@@ -4998,7 +5605,7 @@ export const zh_CN: EnTranslations = {
       },
       "mark_of_the_wild": {
         "name": "野性印记",
-        "description": "为一个友方目标施加野性印记，使护甲提高 25，持续 30 分钟。"
+        "description": "Places the Wildward on the party, increasing all attributes of all party members by {buff}% for 30 min."
       },
       "moonfire": {
         "name": "月火术",
@@ -5010,7 +5617,7 @@ export const zh_CN: EnTranslations = {
       },
       "thorns": {
         "name": "荆棘术",
-        "description": "目标身上长出荆棘：近战攻击者受到 3 点自然伤害。"
+        "description": "Thorns sprout from the target: melee attackers take {buff} Nature damage."
       },
       "entangling_roots": {
         "name": "纠缠根须",
@@ -5038,7 +5645,7 @@ export const zh_CN: EnTranslations = {
       },
       "ferocious_bite": {
         "name": "凶猛撕咬",
-        "description": "终结技，根据连击点数造成伤害。仅限狼形态。"
+        "description": "Finishing move that causes {damage}. Wolf Form only."
       },
       "swipe": {
         "name": "横扫",
@@ -5070,7 +5677,7 @@ export const zh_CN: EnTranslations = {
       },
       "faerie_fire": {
         "name": "精灵之火",
-        "description": "使目标的护甲降低 35，持续 40 秒。"
+        "description": "Decreases the target's armor by {damage}% for 40 sec. Does not stack with Armor Shear."
       },
       "hibernate": {
         "name": "休眠",
@@ -5094,7 +5701,7 @@ export const zh_CN: EnTranslations = {
       },
       "rip": {
         "name": "割裂",
-        "description": "终结技，在 12 秒内造成流血伤害。消耗连击点。仅限狼形态。"
+        "description": "Finishing move that causes {damage} Bleed damage over 12 sec. Consumes combo points. Wolf Form only."
       },
       "mortal_strike": {
         "name": "致死打击",
@@ -5751,6 +6358,42 @@ export const zh_CN: EnTranslations = {
       "silverleaf_sickle": {
         "name": "银叶镰刀"
       },
+      "thorium_mining_pick": {
+        "name": "Thorium Mining Pick"
+      },
+      "arcanite_mining_pick": {
+        "name": "Arcanite Mining Pick"
+      },
+      "ashwood_axe": {
+        "name": "Ashwood Axe"
+      },
+      "elderwood_axe": {
+        "name": "Elderwood Axe"
+      },
+      "goldleaf_sickle": {
+        "name": "Goldleaf Sickle"
+      },
+      "sunpetal_sickle": {
+        "name": "Sunpetal Sickle"
+      },
+      "thorium_ore": {
+        "name": "Thorium Ore"
+      },
+      "arcanite_bar": {
+        "name": "Arcanite Bar"
+      },
+      "ashwood_log": {
+        "name": "Ashwood Log"
+      },
+      "elderwood_log": {
+        "name": "Elderwood Log"
+      },
+      "goldleaf_herb": {
+        "name": "Goldleaf Herb"
+      },
+      "sunpetal_herb": {
+        "name": "Sunpetal Herb"
+      },
       "bristleback_maul": {
         "name": "硬鬃重槌"
       },
@@ -6087,6 +6730,9 @@ export const zh_CN: EnTranslations = {
       "wyrmshadow_talongrips": {
         "name": "龙影利爪握套"
       },
+      "tome_town_portal": {
+        "name": "Tome of Town Portal"
+      },
       "reliquary_plate_chest": {
         "name": "圣物库守卫锁甲"
       },
@@ -6216,6 +6862,132 @@ export const zh_CN: EnTranslations = {
       "event_skin_token": {
         "name": "神秘外观宝箱"
       },
+      "heroic_mark": {
+        "name": "Heroic Mark"
+      },
+      "morthens_cryptforged_hauberk": {
+        "name": "Morthen's Cryptforged Hauberk"
+      },
+      "shadowpulse_handwraps": {
+        "name": "Shadowpulse Handwraps"
+      },
+      "bonechill_striders": {
+        "name": "Bonechill Striders"
+      },
+      "mistcallers_fang": {
+        "name": "Mistcaller's Fang"
+      },
+      "tidebound_spaulders": {
+        "name": "Tidebound Spaulders"
+      },
+      "sash_of_the_sunken_court": {
+        "name": "Sash of the Sunken Court"
+      },
+      "lunar_tide_greatstaff": {
+        "name": "Lunar Tide Greatstaff"
+      },
+      "tidewoven_trousers": {
+        "name": "Tidewoven Trousers"
+      },
+      "choirmothers_casque": {
+        "name": "Choirmother's Casque"
+      },
+      "gravewyrm_cleaver": {
+        "name": "Gravewyrm Cleaver"
+      },
+      "shroud_of_the_gravewyrm": {
+        "name": "Shroud of the Gravewyrm"
+      },
+      "sanctum_prowlers_grips": {
+        "name": "Sanctum Prowler's Grips"
+      },
+      "scepter_of_the_deathless_court": {
+        "name": "Scepter of the Deathless Court"
+      },
+      "deathless_warguard_legmail": {
+        "name": "Deathless Warguard Legmail"
+      },
+      "soulrend_diadem": {
+        "name": "Soulrend Diadem"
+      },
+      "scourgehide_carapace": {
+        "name": "Scourgehide Carapace"
+      },
+      "cryptplate_helm": {
+        "name": "Cryptplate Helm"
+      },
+      "shadowpulse_slippers": {
+        "name": "Shadowpulse Slippers"
+      },
+      "bonechill_cord": {
+        "name": "Bonechill Cord"
+      },
+      "mistforged_pauldrons": {
+        "name": "Mistforged Pauldrons"
+      },
+      "tideguard_faceguard": {
+        "name": "Tideguard Faceguard"
+      },
+      "sunken_court_mantle": {
+        "name": "Sunken Court Mantle"
+      },
+      "lunar_choir_leggings": {
+        "name": "Lunar Choir Leggings"
+      },
+      "choir_blessed_spaulders": {
+        "name": "Choir-Blessed Spaulders"
+      },
+      "tideworn_warboots": {
+        "name": "Tideworn Warboots"
+      },
+      "gravewyrm_claws": {
+        "name": "Gravewyrm Claws"
+      },
+      "gravescale_girdle": {
+        "name": "Gravescale Girdle"
+      },
+      "wyrmchoir_handwraps": {
+        "name": "Wyrmchoir Handwraps"
+      },
+      "deathless_greatblade": {
+        "name": "Deathless Greatblade"
+      },
+      "soulforged_warplate": {
+        "name": "Soulforged Warplate"
+      },
+      "stormcallers_focus": {
+        "name": "Stormcaller's Focus"
+      },
+      "seal_of_the_nine_oaths": {
+        "name": "Seal of the Nine Oaths"
+      },
+      "nielas_coldlight_band": {
+        "name": "Niela's Coldlight Band"
+      },
+      "sutils_gambit": {
+        "name": "Sutil's Gambit"
+      },
+      "oath_of_the_round_table": {
+        "name": "Oath of the Round Table"
+      },
+      "zyzzs_deathless_signet": {
+        "name": "Zyzz's Deathless Signet"
+      },
+      "architects_cornerstone": {
+        "name": "The Architect's Cornerstone"
+      },
+      "swiftfang_talisman": {
+        "name": "Swiftfang Talisman"
+      },
+      "yumis_keepsake_locket": {
+        "name": "Yumi's Keepsake Locket"
+      },
+      "zense_meridian": {
+        "name": "Zense Meridian"
+      },
+      "medallion_of_endless_profit": {
+        "name": "Medallion of Endless Profit"
+      },
       "deathless_heartwood": {
         "name": "不朽王冠之心木"
       },
@@ -6323,6 +7095,9 @@ export const zh_CN: EnTranslations = {
       }
     },
     "mobs": {
+      "yumi_cat": {
+        "name": "Yumi"
+      },
       "forest_wolf": {
         "name": "森林狼"
       },
@@ -6382,6 +7157,9 @@ export const zh_CN: EnTranslations = {
       },
       "deacon_voss": {
         "name": "执事沃斯"
+      },
+      "training_dummy": {
+        "name": "Training Dummy"
       },
       "ridge_stalker": {
         "name": "山脊潜猎者"
@@ -6544,6 +7322,39 @@ export const zh_CN: EnTranslations = {
       },
       "tolling_bell": {
         "name": "鸣钟"
+      },
+      "vale_cup_ball": {
+        "name": "Boarball"
+      },
+      "hellmaw_charred_husk": {
+        "name": "Charred Husk"
+      },
+      "hellmaw_cinder_acolyte": {
+        "name": "Cinder Acolyte"
+      },
+      "hellmaw_cursed_knight": {
+        "name": "Cursed Iron Knight"
+      },
+      "hellmaw_ember_behemoth": {
+        "name": "Ember Behemoth"
+      },
+      "hellmaw_inferno_dragon": {
+        "name": "Inferno Dragon"
+      },
+      "hellmaw_lava_fiend": {
+        "name": "Lava Fiend"
+      },
+      "hellmaw_primal_beast": {
+        "name": "Primal Emberbeast"
+      },
+      "hellmaw_sigilbound_warlock": {
+        "name": "Sigil-Bound Warlock"
+      },
+      "hellmaw_the_render": {
+        "name": "The Render"
+      },
+      "hellmaw_wailing_spectre": {
+        "name": "Wailing Spectre"
       },
       "thunzharr_waking_peak": {
         "name": "桑扎尔，觉醒之峰"
@@ -6751,6 +7562,11 @@ export const zh_CN: EnTranslations = {
         "title": "护甲大师",
         "greeting": "炉火正旺，砂轮正转。能砍的东西，我都卖。"
       },
+      "heroic_quartermaster": {
+        "name": "Quartermaster Vex",
+        "title": "Heroic Quartermaster",
+        "greeting": "Proof of the heroic depths buys the finest rings and pendants in Highwatch. Show me your marks."
+      },
       "loremaster_caddis": {
         "name": "凯迪斯博学者",
         "title": "博学者",
@@ -6760,6 +7576,21 @@ export const zh_CN: EnTranslations = {
         "name": "拍卖师沃斯",
         "title": "世界市场守护者",
         "greeting": "世界市场在此亦可使用，{className}。从王国各地的冒险者手中购买，或出售你自己的货物。"
+      },
+      "bursar_fernando": {
+        "name": "Bursar Fernando",
+        "title": "The Gilded Strongbox",
+        "greeting": "Welcome to the Gilded Strongbox. Your goods rest safe behind our locks."
+      },
+      "bursar_petra_vell": {
+        "name": "Bursar Petra Vell",
+        "title": "The Gilded Strongbox",
+        "greeting": "The Gilded Strongbox keeps clean ledgers and cleaner vaults. What shall we stow for you?"
+      },
+      "bursar_aldous_crane": {
+        "name": "Bursar Aldous Crane",
+        "title": "The Gilded Strongbox",
+        "greeting": "Every crate, coffer, and trinket is safe with the Gilded Strongbox."
       },
       "brother_aldric_raid": {
         "name": "奥德里克修士",
@@ -6776,10 +7607,45 @@ export const zh_CN: EnTranslations = {
         "title": "圣物库守护人",
         "greeting": "小径向北延伸。又一座圣物库，又一场仪式。选择你的难度，我会为你守住绳索，直到你归来。"
       },
+      "cainhurst_sage": {
+        "name": "Cainhurst the Sage",
+        "title": "Keeper of the Hellmaw",
+        "greeting": "You pulled me from the Hellmaw, friend - I do not forget it. The well is open to you now. Steel yourself: The Render waits at the bottom."
+      },
+      "mercenary_kael": {
+        "name": "Kael the Sellsword",
+        "title": "Wandering Mercenary",
+        "greeting": "Coin's coin, {className}. Lend a blade and the beast's yours to loot."
+      },
+      "huntress_verr": {
+        "name": "Huntress Verr",
+        "title": "Boar-Culler",
+        "greeting": "These tuskers won't thin themselves. Wade in - the kill counts for you."
+      },
+      "interior_merchant": {
+        "name": "Merchant",
+        "title": "Shopkeeper",
+        "greeting": "Wares for a wanderer? Take a look."
+      },
+      "interior_innkeeper": {
+        "name": "Innkeeper",
+        "title": "Host",
+        "greeting": "Rest your boots, traveller. The fire's warm."
+      },
+      "interior_villager": {
+        "name": "Villager",
+        "title": "Resident",
+        "greeting": "Oh - a visitor! Mind the mess."
+      },
       "spirit_healer": {
         "name": "灵魂医者",
         "title": "亡者的守护者",
         "greeting": "安息吧，灵魂。我可以让你重返躯体，但归途会让你变得虚弱。"
+      },
+      "groundskeeper_bram": {
+        "name": "Groundskeeper Bram",
+        "title": "Keeper of the Sowfield",
+        "greeting": "The truce holds at the Sowfield, {className}: boots and shoulders only. Care to play for the Copper Pail?"
       },
       "tidewatcher_ondrel": {
         "name": "翁德雷尔·凡恩",
@@ -7492,6 +8358,16 @@ export const zh_CN: EnTranslations = {
           }
         }
       },
+      "q_save_cainhurst": {
+        "title": "Save Cainhurst the Sage",
+        "text": "Old Cainhurst - the sage who reads the deep maps - went down the well a week past and never came up. The thing below took him, and bound him with three cursed wards: one struck among the graves, one buried in the mine, one drowned at the docks. Break all three wards, {playerName}, and you'll break his chains. Bring them to me as proof.",
+        "completion": "The three wards, all snuffed cold. Cainhurst has crawled free - he waits at the well now, and swears the Hellmaw is open to you. He warns of something at the bottom he calls The Render.",
+        "objectives": {
+          "0": {
+            "label": "Hellmaw binding ward broken"
+          }
+        }
+      },
       "q_nythraxis_restless_dead": {
         "title": "骨原的异动",
         "text": "荆峰高地出事了，{playerName}。亡者不再漫无目的地游荡。他们在高望以北的骨原集结并行军，那里是旧战场与峭壁道路交汇之处。去那里调查骨甲亡魂的异动，并带回任何能说明是什么驱使它们的证据。",
@@ -7567,6 +8443,26 @@ export const zh_CN: EnTranslations = {
         "objectives": {
           "0": {
             "label": "击败莫格"
+          }
+        }
+      },
+      "q_archetype_acceptance": {
+        "title": "A Craft to Call Your Own",
+        "text": "Every artisan of Eastbrook eventually settles on one craft to call their own. Prove yourself with a single deed, {playerName}, and declare your path.",
+        "completion": "Your path is chosen; walk it well.",
+        "objectives": {
+          "0": {
+            "label": "Forest Wolf slain"
+          }
+        }
+      },
+      "q_prof_make_amends": {
+        "title": "Making Amends",
+        "text": "To set aside one craft for another, an artisan must first make amends for the path not walked, {playerName}.",
+        "completion": "Amends made; a new path is open to you.",
+        "objectives": {
+          "0": {
+            "label": "Forest Wolf slain"
           }
         }
       },
@@ -7668,6 +8564,9 @@ export const zh_CN: EnTranslations = {
           },
           "9": {
             "label": "明木林地"
+          },
+          "10": {
+            "label": "The Sowfield"
           }
         }
       },
@@ -7780,6 +8679,11 @@ export const zh_CN: EnTranslations = {
         "name": "溺亡连祷",
         "enterText": "你潜入沼泽边缘，进入那座溺亡的神殿。",
         "leaveText": "你爬回沼泽边缘，回到哈尔文修士身边。"
+      },
+      "hellmaw_well": {
+        "name": "The Hellmaw Well",
+        "enterText": "The well mouth yawns into red dark - and the Hellmaw swallows you down.",
+        "leaveText": "You haul yourself back up the well shaft, the Hellmaw seething below."
       }
     },
     "letters": {
@@ -7812,12 +8716,14 @@ export const zh_CN: EnTranslations = {
       "crownforged": {
         "name": "铸冠战装",
         "bonus2": "攻击强度提高 40 点。",
-        "bonus3": "力量提高 15 点，耐力提高 15 点，攻击速度和施法速度提高 15%。"
+        "bonus3": "力量提高 15 点，耐力提高 15 点，攻击速度和施法速度提高 15%。",
+        "bonus4": "你的武器爆击会以骨裂撕裂目标，使其每 2 秒流血受到 8 点伤害，持续 12 秒。最多叠加 3 次。"
       },
       "deathlord": {
         "name": "死王战甲",
         "bonus2": "攻击强度提高 40 点。",
-        "bonus3": "力量提高 15 点，耐力提高 15 点。"
+        "bonus3": "力量提高 15 点，耐力提高 15 点。",
+        "bonus4": "你的武器爆击有 50% 几率获得坟墓之力，使攻击强度提高 60 点，持续 10 秒。"
       },
       "greyjaw_stalker": {
         "name": "灰颚追猎者装备",
@@ -7826,22 +8732,26 @@ export const zh_CN: EnTranslations = {
       "necromancers": {
         "name": "死灵法师法衣",
         "bonus2": "你不会被击退（击退抗性 100%）。",
-        "bonus3": "智力提高 10 点，耐力提高 10 点。"
+        "bonus3": "智力提高 10 点，耐力提高 10 点。",
+        "bonus4": "你的法术有 10% 几率获得节能施法，使你的下一个法术不消耗资源。"
       },
       "nighttalon": {
         "name": "夜爪皮甲",
         "bonus2": "攻击强度提高 40 点。",
-        "bonus3": "敏捷提高 15 点，致命一击几率提高 2%，攻击速度和施法速度提高 15%。"
+        "bonus3": "敏捷提高 15 点，致命一击几率提高 2%，攻击速度和施法速度提高 15%。",
+        "bonus4": "你的武器爆击会撕开粗糙裂伤，使目标每 2 秒流血受到 6 点伤害，持续 12 秒。最多叠加 3 次。"
       },
       "soulflame": {
         "name": "魂焰法衣",
         "bonus2": "你不会被击退（击退抗性 100%）。",
-        "bonus3": "智力提高 15 点，精神提高 15 点，攻击速度和施法速度提高 15%。"
+        "bonus3": "智力提高 15 点，精神提高 15 点，攻击速度和施法速度提高 15%。",
+        "bonus4": "你的法术有 10% 几率获得魂焰，使法术强度提高 40 点，持续 10 秒。"
       },
       "stormcallers": {
         "name": "唤雷者法衣",
         "bonus2": "你不会被击退（击退抗性 100%）。",
-        "bonus3": "智力提高 15 点，精神提高 15 点，攻击速度和施法速度提高 15%。"
+        "bonus3": "智力提高 15 点，精神提高 15 点，攻击速度和施法速度提高 15%。",
+        "bonus4": "你的法术有 10% 几率获得魂焰，使法术强度提高 40 点，持续 10 秒。"
       },
       "vale_arcanist": {
         "name": "谷地秘法师法衣",
@@ -7850,7 +8760,8 @@ export const zh_CN: EnTranslations = {
       "wyrmshadow": {
         "name": "龙影外衣",
         "bonus2": "攻击强度提高 40 点。",
-        "bonus3": "敏捷提高 15 点，致命一击几率提高 2%。"
+        "bonus3": "敏捷提高 15 点，致命一击几率提高 2%。",
+        "bonus4": "你的武器爆击有 50% 几率获得迅牙，使攻击速度提高 25%，持续 8 秒。"
       }
     }
   },

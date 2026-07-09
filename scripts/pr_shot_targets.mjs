@@ -80,3 +80,63 @@ export const TARGETS = [
 export function resolveTargets(changedFiles) {
   return TARGETS.filter((t) => changedFiles.some((f) => t.when.some((w) => f.includes(w))));
 }
+
+// Every path a unified diff touches. Reads BOTH sides of each file header: an addition has
+// only a real "+++ b/" path, a deletion only a real "--- a/" path (its "+++" side is
+// /dev/null, which must still count as a visual change when a renderer/CSS file is removed).
+export function diffChangedPaths(diff) {
+  const paths = new Set();
+  for (const m of diff.matchAll(/^(?:---|\+\+\+) [ab]\/(.+)$/gm)) paths.add(m[1]);
+  return [...paths];
+}
+
+// Path prefixes/names that make a change "visual": the renderer, the HUD/UI, the extracted
+// CSS, local input/camera/mobile controls, and the two HTML shells. A change here can alter
+// what the client looks like even when it does not map to a specific window target above.
+const VISUAL_PREFIXES = ['src/render/', 'src/ui/', 'src/styles/', 'src/game/'];
+const VISUAL_FILES = ['index.html', 'play.html'];
+
+// Not visual even under those prefixes: the i18n text tables (labels are text, not layout),
+// and the test/doc files that sit alongside the code.
+function isTextOrTest(path) {
+  return (
+    path.includes('i18n') ||
+    path.includes('.test.') ||
+    path.startsWith('tests/') ||
+    path.endsWith('.md')
+  );
+}
+
+function isVisualPath(path) {
+  if (isTextOrTest(path)) return false;
+  if (VISUAL_FILES.includes(path)) return true;
+  return VISUAL_PREFIXES.some((p) => path.startsWith(p));
+}
+
+// A change touches the mobile/responsive surface: the mobile HUD CSS, the touch controls,
+// or the /play shell (which carries its own chrome and mobile layout).
+function isMobilePath(path) {
+  return path.includes('hud.mobile') || path.includes('mobile') || path.includes('play.html');
+}
+
+// Decide, from the changed files alone, WHAT to shoot:
+//   specific  the window targets the diff maps to (bags, world map, ...). Shot when non-empty.
+//   generic   fallback HUD frames ('hud-desktop', optionally 'hud-mobile') used only when the
+//             change is visual but maps to no specific window, so the reviewer still sees the
+//             in-world view the change lives in.
+//   isVisual  true when anything visual changed at all. When false, capture nothing: a
+//             backend/data/i18n-only diff gets no screenshots.
+// This is the whole "only shoot visual changes, and only the relevant sections" policy, kept
+// pure so it is unit-tested without a browser.
+export function classifyDiff(changedFiles) {
+  const specific = resolveTargets(changedFiles);
+  const visualFiles = changedFiles.filter(isVisualPath);
+  const isVisual = specific.length > 0 || visualFiles.length > 0;
+
+  let generic = [];
+  if (specific.length === 0 && visualFiles.length > 0) {
+    generic = ['hud-desktop'];
+    if (visualFiles.some(isMobilePath)) generic.push('hud-mobile');
+  }
+  return { specific, generic, isVisual };
+}

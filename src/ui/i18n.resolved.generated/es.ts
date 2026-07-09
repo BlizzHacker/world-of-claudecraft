@@ -212,6 +212,10 @@ export const es: EnTranslations = {
       "pointsGained": "{points} daily rewards points gained.",
       "showChestButton": "Mostrar cofre",
       "hideChestButton": "Ocultar cofre",
+      "hideChestConfirmTitle": "Hide Daily Rewards Chest?",
+      "hideChestConfirmBody": "This removes the chest shortcut from your HUD. Rewards, eligibility, and this panel stay available; you can bring the shortcut back from Options.",
+      "hideChestConfirmOk": "Hide Chest",
+      "hideChestConfirmCancel": "Cancel",
       "leaderboard": "Clasificación diaria",
       "totalPlayer": "{count} player today",
       "totalPlayers": "{count} players today",
@@ -287,6 +291,7 @@ export const es: EnTranslations = {
       "targetLabel": "Tu objetivo",
       "targetAnnounce": "Objetivo: {name}",
       "partyLabel": "Tu grupo",
+      "partyChip": "Party",
       "partyGroup": "Grupo {n}",
       "durationUnitSeconds": "s",
       "durationUnitMinutes": "m",
@@ -304,10 +309,21 @@ export const es: EnTranslations = {
       "autorun": "Carrera automática",
       "jump": "Saltar",
       "leaderboard": "Clasificación",
+      "dailyRewards": "Rewards",
       "nameplates": "Nombres",
       "haptics": "Vibración",
       "hapticsOff": "Vibración desactivada",
-      "toggleHaptics": "Alternar vibración"
+      "toggleHaptics": "Alternar vibración",
+      "hotbarPage": "Skills",
+      "hotbarPageAria": "Show next set of skills",
+      "actionRing": "Combat actions",
+      "actionPageToggle": "Switch action page",
+      "actionPageIndicator": "{page}",
+      "targetCycle": "Swap target",
+      "targetCycleShort": "Target",
+      "spellbookPageLabel": "Page {page}",
+      "hideKeyboard": "Hide keyboard",
+      "chatPlaceholder": "Say something..."
     },
     "tutorial": {
       "moveBodyTouch": "Usa el joystick de movimiento para moverte y arrastra la pantalla para mirar alrededor. Da unos pasos para empezar.",
@@ -356,7 +372,9 @@ export const es: EnTranslations = {
       "hoursMinutes": "{h}h {m}min",
       "minutes": "{m}min",
       "lessThanMinute": "<1min",
-      "lockedToast": "Estás bloqueado en {raid}. Se desbloquea en {time}."
+      "lockedToast": "Estás bloqueado en {raid}. Se desbloquea en {time}.",
+      "heroicName": "Heroic {name}",
+      "heroicLocked": "You are locked to Heroic {name}."
     },
     "compass": {
       "N": "N",
@@ -378,11 +396,149 @@ export const es: EnTranslations = {
       "emoteWheel": "Rueda de gestos",
       "targetFriendly": "Objetivo amistoso más cercano",
       "targetFriendlyNext": "Objetivo amistoso siguiente",
-      "discord": "Discord"
+      "discord": "Discord",
+      "valecup": "Vale Cup"
+    },
+    "vcup": {
+      "title": "The Vale Cup",
+      "shootPower": "POWER",
+      "close": "Close the Vale Cup window",
+      "offlineNote": "The fixture book is closed. The Vale Cup is not available right now.",
+      "recordLine": "Your record: {wins} wins, {losses} losses, {draws} draws.",
+      "bracketsAria": "Match bracket",
+      "bracketLabel": "{n}v{n}",
+      "waitingCount": "{count} waiting",
+      "nationsHeading": "Banner nation",
+      "nation": {
+        "vale": "Eastbrook Vale",
+        "mirefen": "The Mirefen",
+        "thornpeak": "Thornpeak",
+        "coliseum": "The Ashen Coliseum",
+        "choir": "The Pale Choir",
+        "ogre": "The Ogre Clans",
+        "moon": "The Pale Moon",
+        "copperdig": "The Copper Dig"
+      },
+      "awayNote": "If both sides fly the same banner, the away side plays the inverted palette.",
+      "rolesHeading": "Sport role",
+      "role": {
+        "allrounder": {
+          "name": "All-Rounder",
+          "desc": "A bit of everything: kick, boot, and a fair shoulder."
+        },
+        "striker": {
+          "name": "Striker",
+          "desc": "Lives for the long boot and the quick sidestep."
+        },
+        "sweeper": {
+          "name": "Sweeper",
+          "desc": "Bumps runners off the ball and hoofs it clear."
+        },
+        "keeper": {
+          "name": "Keeper",
+          "desc": "Guards the goal box with grip, dive, and punt."
+        }
+      },
+      "queue": "Join the Queue",
+      "leaveQueue": "Leave the Queue",
+      "queueNote": "Queue from anywhere; the whistle calls you to the Sowfield.",
+      "queuedStatus": "Queued for {bracket}: position {position} of {count}.",
+      "blockNation": "Pick a banner nation first.",
+      "blockPartySize": "That bracket needs a smaller party.",
+      "blockNotLeader": "Only the party leader can queue the team.",
+      "inMatchNote": "Your team is on the pitch. Play on!",
+      "deserterNote": "The Groundskeeper remembers. You may queue again in {seconds} sec.",
+      "liveHeading": "Now at the Sowfield",
+      "liveAria": "Vale Cup: {nationA} {scoreA}, {nationB} {scoreB}",
+      "walkUp": "Walk up to the Sowfield to watch from the stands.",
+      "noLive": "The pitch is quiet. No match is being played.",
+      "boardHeading": "Winners board",
+      "boardEmpty": "No winners recorded yet. The Copper Pail waits.",
+      "boardWins": "{count} wins",
+      "enterAsGuild": "Enter under the banner of {guild}",
+      "guildRecordLine": "Your guild record: {wins} wins, {losses} losses.",
+      "guildBoardHeading": "Guild banners",
+      "guildBoardEmpty": "No guild has taken the field yet. Fly your banner!",
+      "guildBoardWl": "{wins} W, {losses} L",
+      "practice": "Practice vs. Bots",
+      "practiceNote": "Starts a private bot match on your own practice pitch right away.",
+      "practicingNow": "Practicing now ({count}):",
+      "clock": "{minutes}:{seconds}",
+      "indicatorQueued": "Vale Cup queue: {bracket}, position {position} of {count}",
+      "indicatorLive": "Vale Cup",
+      "indicatorOpen": "Open the Vale Cup window",
+      "phaseCountdown": "Kickoff in {seconds}",
+      "phaseGoal": "GOAL!",
+      "phaseGolden": "GOLDEN GOAL",
+      "phaseOver": "FULL TIME",
+      "bannerFound": "The Vale Cup calls: {nationA} vs {nationB}!",
+      "bannerCountdown": "Kickoff in {seconds}...",
+      "bannerKickoff": "KICKOFF!",
+      "bannerGoal": "GOAL! {nation} scores!",
+      "bannerSave": "{name} SAVES!",
+      "bannerGolden": "GOLDEN GOAL: next score wins!",
+      "bannerEnd": "Full time: {nationA} {scoreA}, {nationB} {scoreB}",
+      "bannerWin": "Victory at the Sowfield!",
+      "bannerDraw": "A draw at the Sowfield.",
+      "bannerLoss": "Defeat at the Sowfield.",
+      "logQueued": "You join the Vale Cup queue for {bracket} (position {position}).",
+      "logUnqueued": "You leave the Vale Cup queue.",
+      "logFound": "Your Vale Cup match is ready: {nationA} vs {nationB}.",
+      "logRoster": "Your side: {allies}. Their side: {enemies}.",
+      "logGoal": "{name} scores for {nation}! {nationA} {scoreA}, {nationB} {scoreB}.",
+      "logSave": "{name} makes the save!",
+      "logWin": "You win the bout at the Sowfield.",
+      "logDraw": "The bout at the Sowfield ends in a draw.",
+      "logLoss": "You lose the bout at the Sowfield.",
+      "gossipOpen": "The book of fixtures",
+      "gossipOpenAria": "Open the Vale Cup window",
+      "mobileLabel": "Cup",
+      "briefing": {
+        "subtitle": "Pre-match briefing",
+        "vs": "vs",
+        "rulesHeading": "How to play",
+        "rule1": "Kick or pass the ball into the enemy goal to score.",
+        "rule2": "First to 5 goals wins, or the most goals when full time blows.",
+        "rule3": "A level match at full time goes to golden goal: the next score wins.",
+        "rule4": "Tackles only tumble you over. Nobody gets hurt under the harvest truce.",
+        "rule5": "Anyone can walk up and cheer you on from the stands.",
+        "kitHeading": "Your kit",
+        "kitNote": "These moves replace your class abilities for the match.",
+        "rosterHeading": "The team sheet",
+        "you": "You",
+        "bot": "Bot",
+        "ready": "I'm ready",
+        "readyDone": "Ready",
+        "readyAria": "Ready up for kickoff",
+        "waiting": "Waiting for the other side to ready up...",
+        "whistle": "The whistle blows in {seconds}s.",
+        "readyCount": "{ready} of {total} ready"
+      },
+      "bet": {
+        "title": "Match Bets",
+        "aria": "Vale Cup match betting",
+        "closesIn": "Bets close in {seconds}s",
+        "closed": "Betting closed",
+        "prize": "Pool {amount}",
+        "splitAria": "Share of the betting pool on each team",
+        "expand": "View bets and wager",
+        "collapse": "Hide bets",
+        "oddsLabel": "Pays",
+        "back": "Back {team}",
+        "form": "{wins}W-{losses}L",
+        "mine": "Your bet: {amount} on {team}",
+        "none": "You have no bet on this match yet.",
+        "record": "Betting record: {wins}W-{losses}L, {sign}{net}",
+        "wonBanner": "Your bet won!",
+        "wonLog": "Your Vale Cup bet won: {amount} returned.",
+        "lostLog": "Your Vale Cup bet lost: {amount}.",
+        "refundLog": "Bets voided, your {amount} stake was returned."
+      }
     },
     "options": {
       "clickMoveLeft": "Clic izquierdo",
       "clickMoveRight": "Clic derecho",
+      "version": "v{version} ({build})",
       "browserEffects": "Efectos del navegador",
       "browserEffectsAuto": "Auto",
       "browserEffectsFull": "Completos",
@@ -414,7 +570,9 @@ export const es: EnTranslations = {
       "itemLevelLine": "Nivel de objeto {level}",
       "itemScoreLine": "Puntuación {score}",
       "showSecondaryActionBar": "Mostrar barra de acción secundaria",
-      "showDailyRewardsChest": "Show Daily Rewards Chest"
+      "showDailyRewardsChest": "Show Daily Rewards Chest",
+      "mobileCameraJoystick": "Camera joystick",
+      "mobileLeftHanded": "Left-handed layout"
     },
     "controller": {
       "title": "Mando",
@@ -465,7 +623,9 @@ export const es: EnTranslations = {
         "fps01Low": "0.1% inferior",
         "ping": "Ping",
         "jitter": "Fluctuación",
+        "predLead": "Prediction Lead",
         "snapshot": "Tasa de instantáneas",
+        "serverTick": "Server Tick Rate",
         "connection": "Conexión",
         "drawCalls": "Llamadas de dibujado",
         "triangles": "Triángulos",
@@ -508,7 +668,9 @@ export const es: EnTranslations = {
     "statInfo": {
       "fromYour": "De tu {value} de {stat}:",
       "names": {
-        "spellPower": "Poder con hechizos"
+        "spellPower": "Poder con hechizos",
+        "critRating": "Crit Rating",
+        "hasteRating": "Haste Rating"
       },
       "desc": {
         "str": "Aumenta tu poder de ataque, así que tus golpes con el arma impactan con más fuerza.",
@@ -521,7 +683,9 @@ export const es: EnTranslations = {
         "spellPower": "Aumenta el daño de tus hechizos y la potencia de tus sanaciones. Cada punto de Intelecto otorga un poco de Poder con hechizos, además del que provenga del equipo o los beneficios.",
         "dps": "El daño por segundo estimado de tu arma, combinando el daño y la velocidad de tu arma con tu poder de ataque.",
         "critChance": "Tu probabilidad de que un ataque aseste un golpe crítico, infligiendo el doble de daño.",
-        "dodge": "Tu probabilidad de evitar por completo un ataque cuerpo a cuerpo entrante, sin recibir daño."
+        "dodge": "Tu probabilidad de evitar por completo un ataque cuerpo a cuerpo entrante, sin recibir daño.",
+        "critRating": "Crit rating from your gear and set bonuses, raising your critical strike chance. About 10 rating grants 1% crit.",
+        "hasteRating": "Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. About 10 rating grants 1% haste."
       },
       "effects": {
         "attackPower": "+{value} de poder de ataque",
@@ -561,6 +725,15 @@ export const es: EnTranslations = {
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
+    },
+    "itemProc": {
+      "onMeleeHit": "Chance on hit ({chance}%): {effect}",
+      "onSpellDamage": "Chance on your damaging spells ({chance}%): {effect}",
+      "onHeal": "Chance on your heals ({chance}%): {effect}",
+      "chainArc": "blasts the target with a {school} {name} ({damage}) that leaps to {jumps} nearby foes for decaying damage",
+      "attackSlow": "and slows the target attack speed by {pct}% for {duration} sec",
+      "dot": "festers {name}, a {school} damage-over-time dealing {total} over {duration} sec",
+      "hot": "blooms {name}, a heal-over-time restoring {total} over {duration} sec"
     },
     "questShare": {
       "notShareable": "Esta misión no se puede compartir.",
@@ -740,6 +913,32 @@ export const es: EnTranslations = {
       "summaryMaster": "Ajustes de botín: botín maestro, repartidor {name}, umbral {threshold}.",
       "summaryGroup": "Ajustes de botín: botín de grupo."
     },
+    "corpseHarvest": {
+      "title": "Harvest",
+      "harvestButton": "Harvest",
+      "concentrateHint": "Fewer chosen components yield a higher tier each.",
+      "alreadyHarvested": "This corpse has already been harvested.",
+      "componentAria": "Harvest {component}",
+      "components": {
+        "hide": "Hide",
+        "fang": "Fang",
+        "silk": "Silk",
+        "venomSac": "Venom Sac",
+        "gills": "Gills",
+        "claw": "Claw",
+        "horn": "Horn",
+        "tusk": "Tusk"
+      }
+    },
+    "townFocus": {
+      "title": "Town Focus",
+      "hint": "Focus points add a bonus on top of every component's baseline yield. Unfocused components stay at baseline.",
+      "budgetLabel": "Points remaining: {remaining} / {budget}",
+      "saveButton": "Save Focus",
+      "notInTownHint": "You must be in town to set your focus.",
+      "increaseAria": "Increase focus on {component}",
+      "decreaseAria": "Decrease focus on {component}"
+    },
     "party": {
       "promoteLeader": "Promover a líder",
       "inviteUsage": "Invite whom? Usage: /invite <name>."
@@ -755,7 +954,13 @@ export const es: EnTranslations = {
       "leaderOption": "Repartidor: líder (tú)",
       "masterOption": "Repartidor: {name}"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "Set Dungeon Difficulty: Heroic",
+      "setNormal": "Set Dungeon Difficulty: Normal"
+    },
     "bags": {
+      "cannotDestroy": "This item cannot be destroyed.",
+      "rightClickDestroy": "Right-click to destroy",
       "filterGroupAria": "Filtrar bolsas por categoría",
       "filterAll": "Todos",
       "filterWeapon": "Armas",
@@ -819,10 +1024,19 @@ export const es: EnTranslations = {
         "allStats": "Reduce todos los atributos en {value}"
       },
       "allStatsPctReduce": "Reduces all attributes by {pct}%",
+      "increasePct": {
+        "ap": "Increases attack power by {pct}%",
+        "armor": "Increases armor by {pct}%",
+        "int": "Increases Intellect by {pct}%",
+        "sta": "Increases Stamina by {pct}%",
+        "allStats": "Increases all attributes by {pct}%"
+      },
       "dodge": "Aumenta la probabilidad de esquivar un {pct}%",
       "dodgeReduce": "Reduce la probabilidad de esquivar un {pct}%",
       "armorFlat": "Reduce la armadura en {value}",
       "armorFlatStacks": "Reduce la armadura en {value} ({stacks} acumulaciones)",
+      "armorPct": "Reduces armor by {pct}%",
+      "armorPctStacks": "Reduces armor by {pct}% ({stacks} stacks)",
       "mortalWound": "Reduce la sanación recibida un {pct}%",
       "vulnerability": "Aumenta el daño recibido un {pct}%",
       "physVuln": "Aumenta el daño físico recibido un {pct}%",
@@ -971,6 +1185,7 @@ export const es: EnTranslations = {
       "roleTag": {
         "levyst": "Levy St",
         "admin": "Admin",
+        "coredevs": "Core Dev",
         "devs": "Dev",
         "mods": "Mod",
         "artists": "Artista"
@@ -1112,6 +1327,50 @@ export const es: EnTranslations = {
         "takeParcelsFirst": "Take the parcels out before discarding the letter."
       }
     },
+    "bank": {
+      "title": "Bank",
+      "subtitle": "The Gilded Strongbox",
+      "close": "Close bank",
+      "capacity": "{used}/{total}",
+      "capacityAria": "Bank slots used: {used} of {total}",
+      "empty": "Your bank is empty.",
+      "tooFar": "You must be at a banker to view your bank.",
+      "buySlots": "Buy {count} slots",
+      "buySlotsMaxed": "Fully expanded",
+      "buyConfirm": "Purchase {count} additional bank slots for {price}?",
+      "buyConfirmAccept": "Purchase",
+      "withdrawHint": "Click to withdraw",
+      "withdrawPartialHint": "Shift-click to withdraw a partial amount",
+      "depositHint": "Click to deposit",
+      "depositPartialHint": "Shift-click to deposit a partial amount",
+      "cannotDeposit": "Cannot be banked",
+      "depositQuantityTitle": "Deposit {item}",
+      "depositQuantityInput": "Quantity to deposit",
+      "depositQuantityConfirm": "Deposit",
+      "withdrawQuantityTitle": "Withdraw {item}",
+      "withdrawQuantityInput": "Quantity to withdraw",
+      "withdrawQuantityConfirm": "Withdraw",
+      "filterGroupAria": "Filter bank by category",
+      "sortAria": "Sort bank items",
+      "searchAria": "Search bank items by name",
+      "depositAll": "Deposit all materials",
+      "depositAllDone": "Materials deposited: {count}.",
+      "depositAllFull": "Materials deposited: {count}. Bank now full.",
+      "depositAllNone": "Bank full: nothing deposited.",
+      "bonusTitle": "Bonus slots",
+      "bonusEarned": "+{count}",
+      "bonusStatusEarned": "+{count}",
+      "bonusSourceEmail": "Verified email",
+      "bonusSourceDiscord": "Discord linked",
+      "bonusSourceWallet": "Wallet linked",
+      "bonusSourceReferral": "Referred friends",
+      "bonusAdvertEmail": "Verify your email to earn 2 slots.",
+      "bonusAdvertDiscord": "Link your Discord to earn 2 slots.",
+      "bonusAdvertWallet": "Link a wallet to earn 2 slots.",
+      "bonusReferralProgress": "{count}/{cap}",
+      "bonusReferralExplainer": "Invite a friend: when they reach level 10 you each earn 2 slots, up to 5 friends.",
+      "bonusSectionAria": "Bonus bank slots and how to earn more"
+    },
     "calendar": {
       "title": "Event Calendar",
       "close": "Close calendar",
@@ -1173,6 +1432,132 @@ export const es: EnTranslations = {
     "social": {
       "lastSeen": "Last seen: {when}",
       "lastSeenNever": "never"
+    },
+    "gathering": {
+      "title": "Gathering",
+      "mining": "Mining",
+      "logging": "Logging",
+      "herbalism": "Herbalism"
+    },
+    "archetypeTitle": {
+      "label": "Title",
+      "none": "None",
+      "hobbyLabel": "Hobby",
+      "armorcrafting": "Armorer",
+      "weaponcrafting": "Weaponsmith",
+      "jewelcrafting": "Jeweler",
+      "alchemy": "Alchemist",
+      "engineering": "Tinkerer",
+      "cooking": "Chef",
+      "inscription": "Scribe",
+      "enchanting": "Enchanter",
+      "tailoring": "Tailor",
+      "leatherworking": "Leathercrafter"
+    },
+    "crafting": {
+      "title": "Crafting",
+      "close": "Close crafting",
+      "craft": "Craft",
+      "reagentsNeeded": "Requires:",
+      "reagentLine": "{name} x{have}/{required}",
+      "empty": "No recipes known yet.",
+      "resultAria": "Craft {name}",
+      "craftedToast": "Crafted: {name}",
+      "insufficientMaterials": "You do not have the materials for that.",
+      "unknownRecipe": "That recipe does not exist.",
+      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe.",
+      "notAtHub": "You must be at the crafting hub, at the required level, to craft that.",
+      "throttled": "You are crafting too quickly. Wait a moment and try again.",
+      "recipeNotLearned": "You have not learned that recipe yet."
+    }
+  },
+  "apiError": {
+    "validation": {
+      "failed": "Some fields are invalid. Check the form and try again."
+    },
+    "json": {
+      "malformed": "That request could not be read. Please try again."
+    },
+    "body": {
+      "too_large": "That request is too large. Try again with less data.",
+      "unsupported_media_type": "Unsupported request format."
+    },
+    "db": {
+      "conflict": "That change conflicted with another update. Please try again."
+    },
+    "rate_limit": {
+      "exceeded": "Too many requests. Try again in {seconds}."
+    },
+    "internal": {
+      "error": "Something went wrong on our end. Please try again."
+    },
+    "auth": {
+      "token_missing": "You need to be signed in to do that.",
+      "token_invalid": "Your session has expired. Please sign in again.",
+      "forbidden": "You do not have permission to do that.",
+      "invalid_credentials": "Invalid username or password.",
+      "required": "Not authenticated.",
+      "web_login_only": "Logins are only allowed from the game client.",
+      "too_many_attempts": "Too many attempts. Wait a minute and try again.",
+      "too_many_failed_attempts": "Too many failed attempts. Wait a few minutes and try again.",
+      "current_password_incorrect": "Your current password is incorrect.",
+      "password_incorrect": "Your password is incorrect.",
+      "verification_failed": "Verification failed. Please try again."
+    },
+    "account": {
+      "username_invalid": "Username must be 3-24 characters and use letters, digits, or underscore.",
+      "username_not_allowed": "That username is not allowed.",
+      "username_taken": "That username is already taken.",
+      "username_mismatch": "That username does not match your account.",
+      "password_too_short": "Password must be at least 6 characters.",
+      "password_too_long": "New password must be at most 128 characters.",
+      "characters_online": "Log out all of your characters before deactivating.",
+      "deactivated": "This account has been deactivated. Contact an admin to restore it.",
+      "not_found": "Account not found."
+    },
+    "character": {
+      "name_invalid": "Invalid character name. Use 2-16 letters.",
+      "name_not_allowed": "That character name is not allowed.",
+      "invalid_class": "Invalid class.",
+      "limit_reached": "Character limit reached.",
+      "name_taken": "That name is taken.",
+      "not_found": "Character not found.",
+      "online": "Character is currently online.",
+      "rename_not_permitted": "Renaming this character is not allowed.",
+      "delete_confirm": "Type the character name to confirm deletion.",
+      "already_in_world": "Character is already in world.",
+      "taken_over": "Your character was taken over by another session.",
+      "rename_required": "This character must be renamed before entering the world."
+    },
+    "moderation": {
+      "suspended_until": "This account is suspended until {date}.",
+      "suspended": "This account is suspended.",
+      "banned": "This account has been banned.",
+      "force_rename": "A moderator requires one of your characters to be renamed."
+    },
+    "email": {
+      "invalid": "Enter a valid email address.",
+      "unchanged": "That is already your email address."
+    },
+    "two_factor": {
+      "code_invalid": "That code is not valid, try again.",
+      "setup_required": "Start two-factor setup first.",
+      "already_enabled": "Two-factor is already enabled.",
+      "not_enabled": "Two-factor is not enabled."
+    },
+    "origin": {
+      "cross_site": "Request blocked for security reasons."
+    },
+    "discord": {
+      "not_configured": "Discord integration is not available right now.",
+      "expired": "That Discord sign-in expired. Please sign in with Discord again.",
+      "already_linked": "That Discord account is already linked to another account.",
+      "password_required": "Set a password before unlinking your Discord account.",
+      "unknown_swag": "That reward is not available.",
+      "link_required": "Link your Discord account first.",
+      "swag_claimed": "You have already claimed this reward.",
+      "swag_tier": "Reach a higher rank to claim this.",
+      "swag_points": "Not enough points."
     }
   },
   "guide": {
@@ -1190,6 +1575,7 @@ export const es: EnTranslations = {
       "bestiary": "Bestiario",
       "models": "Modelos 3D",
       "gear": "Equipo y objetos",
+      "professions": "Professions",
       "economy": "Economía y comercio",
       "social": "Social y grupos",
       "stats": "Personaje y características",
@@ -1200,9 +1586,11 @@ export const es: EnTranslations = {
       "delves": "Expediciones",
       "reference": "Referencia",
       "controls": "Controles",
+      "settings": "Settings & Performance",
       "combat": "Combate",
       "talents": "Talentos",
       "arena": "Arena y JcJ",
+      "valeCup": "Vale Cup",
       "glossary": "Glosario",
       "wishIKnew": "Lo que me habría gustado saber",
       "faq": "Preguntas frecuentes",
@@ -1367,6 +1755,66 @@ export const es: EnTranslations = {
       "mobileBody": "Los controles táctiles aparecen automáticamente en teléfonos y tabletas: un joystick de movimiento a la izquierda, arrastra en cualquier punto de la derecha para mirar y botones en pantalla para tus habilidades y menús.",
       "controllerHeading": "Con un mando",
       "controllerBody": "Los mandos también funcionan, y el soporte para mando está activado de forma predeterminada. El stick izquierdo mueve, el stick derecho controla la cámara, y los botones frontales y los gatillos cubren tus habilidades, el salto y la interacción. Abre cualquier ventana para que aparezca un puntero en pantalla con el que navegar los menús. Puedes reasignar los botones y ajustar la zona muerta del stick, la velocidad de la cámara, la vibración y la vista invertida desde la configuración del mando, en las opciones."
+    },
+    "settingsPage": {
+      "heading": "Settings & Performance",
+      "intro": "Make the game look its best or run its fastest. Three ready-made loadouts, plus what every graphics option really does.",
+      "wherePath": "Everything on this page lives in the game: press Esc and look in Graphics, Interface, and Performance Overlay.",
+      "fairnessTitle": "Fair by design",
+      "fairnessBody": "No option here trades beauty for power. Lower settings shed cosmetic polish only, never information you fight with: your debuffs, cast bars, party health, and damage numbers are identical from Low to Ultra. Playing on a modest machine is never a handicap.",
+      "loadoutsHeading": "Three ready-made loadouts",
+      "loadoutsIntro": "Start from the loadout that sounds like your machine, then adjust one option at a time until it feels right.",
+      "recommended": "Recommended",
+      "whyLabel": "Why it works:",
+      "tagReload": "after reload",
+      "fpsTitle": "Best FPS",
+      "fpsTagline": "For older laptops, integrated graphics, and battery play.",
+      "fpsWhy": "Graphics Quality is the master switch, and Render Quality is the strongest slider: at 70% the world draws roughly half the pixels while the interface stays perfectly sharp.",
+      "balancedTitle": "Balanced",
+      "balancedTagline": "The sweet spot for most machines, and our default advice.",
+      "balancedWhy": "Medium brings real shadows and full materials; High adds ambient occlusion and bloom. Below Ultra a built-in safety net absorbs sudden dips in busy fights, so Balanced stays smooth without babysitting.",
+      "visualsTitle": "Best Visuals",
+      "visualsTagline": "Screenshot mode for powerful desktop machines.",
+      "visualsWhy": "Ultra renders at the highest resolution your display offers with the richest lighting. It also switches the safety net off, and it is desktop-only: phones and the app top out at High.",
+      "value50to70": "50 to 70%",
+      "value90to100": "90 to 100%",
+      "value100": "100%",
+      "valueHighOrMedium": "High on a gaming PC, Medium on a laptop",
+      "valueOnOptional": "On (optional)",
+      "howHeading": "How the options behave",
+      "factDetectTitle": "The game tunes itself first",
+      "factDetectBody": "On your first launch the game reads your device and picks a sensible tier, from Low on a modest phone to Ultra on a strong desktop. Any choice you make yourself always wins.",
+      "factReloadTitle": "Two kinds of options",
+      "factReloadBody": "Graphics Quality and the Advanced pickers take effect after a reload, and the panel offers a Reload Now button when needed. Every other option applies the moment you change it.",
+      "factGovernorTitle": "A built-in safety net",
+      "factGovernorBody": "On every tier below Ultra, the game quietly thins grass, effects, and lighting for a moment when a big fight spikes, then restores them. Choosing Ultra tells it you would rather keep every detail.",
+      "advancedHeading": "The Advanced preset: mix your own",
+      "advancedBody": "Advanced starts from the High tier and unlocks four extra pickers, so you can spend your frames where you actually notice them: Terrain Detail, Foliage Density, Effects & Lighting, and Shadow Quality. Like Graphics Quality, they apply after a reload.",
+      "advancedMixes": "Two favorite mixes: keep Shadow Quality on High and set Effects & Lighting to Low for a crisp, glow-free look that runs light, or do the reverse to keep the bloom and soften the shadows.",
+      "tableHeading": "Every option, explained",
+      "colSetting": "Setting",
+      "colDoes": "What it does",
+      "colImpact": "FPS impact",
+      "impactNone": "None",
+      "impactLight": "Light",
+      "impactModerate": "Moderate",
+      "impactHeavy": "Heavy",
+      "rowGraphicsQuality": "The master switch. Each step changes resolution, shadows, materials, foliage, and lighting effects together. The biggest single difference you can make.",
+      "rowRenderQuality": "Draws the 3D world at a lower internal resolution and scales it up; the interface stays sharp. The strongest instant slider on weaker machines and high-resolution screens.",
+      "rowFieldOfView": "How much of the world fits on screen, from a zoomed 55 to a sweeping 100 degrees. A comfort choice; wider views draw slightly more.",
+      "rowBrightness": "Scene exposure, darker or brighter. Pure preference.",
+      "rowWeather": "Ambient rain and snow. Atmosphere only, and switching it off saves a little during storms.",
+      "rowBrowserEffects": "How fancy the interface itself is allowed to be: glass blur, glow, animated menus. Auto matches your browser; the 3D world is untouched either way.",
+      "rowTerrainDetail": "Rich, blended ground textures versus a simpler, faster terrain look.",
+      "rowFoliageDensity": "How far and how thick the grass grows around your character.",
+      "rowEffectsQuality": "Bloom, ambient occlusion, and how many torches and spells cast real light. The single biggest saving among the Advanced pickers.",
+      "rowShadowQuality": "Shadow crispness. Low keeps shadows but softens their edges.",
+      "rowFrostedPanels": "A frosted-glass blur behind windows. Pretty, and exactly the kind of effect a weaker browser feels; leave it off for the classic crisp look.",
+      "rowReduceMotion": "Removes interface animations so windows appear instantly. An accessibility option first, with a small performance bonus.",
+      "rowPerfOverlay": "An on-screen readout of FPS, frame time, and more. Turn it on while you tune this page, then hide it again.",
+      "tableFoot": "Looking for a draw-distance slider or an FPS cap? There is nothing to hunt for: view distance is part of each quality tier, and frame pacing follows your display.",
+      "mobileTitle": "On phones and tablets",
+      "mobileBody": "Mobile manages more for you: the game picks the tier, holds resolution a touch lower to protect battery and heat, and keeps the highest tiers desktop-only. The loadouts above still apply; phones simply top out at High."
     },
     "combat": {
       "intro": "El combate sigue las reglas habituales de los MMO clásicos. Nunca necesitas estudiar nada de esto para jugar bien, simplemente así es como funcionan los combates.",
@@ -1793,10 +2241,38 @@ export const es: EnTranslations = {
       "waveGoldBody": "La oleada intermedia: combinaciones de doble filo donde tu construcción empieza a tomar forma y a lucirse.",
       "wavePrismaticTitle": "Prismático",
       "wavePrismaticBody": "La oleada final: picos que definen tu construcción y derriten la pantalla, pensados para sentirse ridículos en el mejor de los sentidos.",
+      "yumiHeading": "Protect Yumi",
+      "yumiBody": "Protect Yumi is a team objective mode played in a maze: each side guards its own cat familiar while hunting the other. Every so often both cats blink to new corners of the maze, so the fight swings between defending, hunting, and racing to find them again. Queue as three versus three or five versus five; falling in battle only benches you for a moment.",
       "powerupsTitle": "Potenciadores en el ruedo",
       "powerupsBody": "Esferas brillantes también caen en la arena en mitad del combate, libres para quien las alcance primero. Son deliberadamente exageradas y duran solo un instante: Demonio de Velocidad para un parpadeo de paso cegador, Coloso para hincharte hasta volverte un gigante torpe, Botas Lunares para un salto rebotante de baja gravedad y Berserker para una repentina oleada de furia.",
       "ladderHeading": "Ascender en la clasificación",
       "ladderBody": "El juego clasificatorio registra tu posición a lo largo del tiempo. Consulta la clasificación para ver dónde estás y quién ocupa la cima del reino."
+    },
+    "valeCupPage": {
+      "heading": "The Vale Cup",
+      "intro": "Boarball at the Sowfield: pick a banner, pick a role, and kick a stuffed boar hide past a keeper for the Copper Pail. No blood, no loot, just the roar of the stands.",
+      "loreHeading": "Boarball and the harvest truce",
+      "loreOldSow": "Long before the dead woke, Eastbrook's farmhands played boarball on the stubble fields after harvest: two mobs, one boar's hide stuffed with straw, and two wagon gates dragged to either end of the green. The first ball, the Old Sow, hangs bronzed above the tavern hearth.",
+      "loreTruce": "When the Ashen Coliseum began sanctioning war games, Marshal Redbrook answered with something gentler: a standing harvest truce on the old green. The wagon gates became goalposts, the green got walls, stands, and a name, the Sowfield, and the prize was always the same dented milk pail the winners drank from: the Copper Pail.",
+      "howHeading": "How to play",
+      "howQueue": "Queue from anywhere through the Vale Cup window, or talk to Groundskeeper Bram at the Sowfield gate. Pick a bracket from one-a-side up to five-a-side, a banner nation, and a sport role; queue solo or bring your party.",
+      "howMatch": "On kickoff your class kit is swapped for a sport kit and restored exactly afterward. Kicks aim at the ground reticle, the ball banks off the boards, and dribbling is just running with the ball. Score more goals than the other side before full time; a draw goes to golden goal.",
+      "howTruce": "Nobody bleeds at the Sowfield: tackles tumble, nothing hurts, and pets sit the match out.",
+      "spectateBody": "One match plays at a time at the stadium, and anyone can walk up and watch from the stands.",
+      "nationsHeading": "The eight banner nations",
+      "nationsBody": "Every team plays under a banner. The captain picks the nation, and if both sides fly the same one, the away side plays the inverted palette.",
+      "nationVale": "Green and gold, flying the wheat sheaf: the home side, farmhands to the bone.",
+      "nationMirefen": "Teal and grey under the heron: patient, long-legged, never hurried.",
+      "nationThornpeak": "Ice blue and white under the mountain peak: sure-footed and stubborn.",
+      "nationColiseum": "Red and black with crossed swords: they play like it is still a war game.",
+      "nationChoir": "Pale blue and silver under the bell: eerie, precise, and very quiet.",
+      "nationOgre": "Orange and umber behind the fist: shoulder-first and proud of it.",
+      "nationMoon": "Violet and silver under the crescent: night players, light on their feet.",
+      "nationCopperdig": "Copper and brown with the pickaxe: diggers who never stop running.",
+      "rolesHeading": "Sport roles",
+      "rolesBody": "Your role decides the kit you carry onto the pitch. Everyone kicks; the rest is temperament.",
+      "rewardsHeading": "Truce rules",
+      "rewardsBody": "Truce rules mean no experience and no loot: a decided match counts toward your record and the winners board, and daily-reward points come with it. Deserting a match benches your slot, and the Groundskeeper remembers."
     },
     "wishPage": {
       "heading": "Lo que me habría gustado saber",
@@ -1882,6 +2358,35 @@ export const es: EnTranslations = {
       "cosmeticsCache": "Unos cuantos de estos provienen de un misterioso alijo cosmético, un premio sellado que al abrirlo decide uno de tres grados de calidad y concede el aspecto correspondiente. Es puramente estético: nada de su interior te hace más fuerte, solo más vistoso.",
       "cosmeticsApply": "Define tu aspecto activo desde la fila de apariencia en tu pantalla de personaje, y cambia con libertad entre cuanto hayas desbloqueado."
     },
+    "professions": {
+      "intro": "Beyond combat and quests, the world rewards you for working the land and the forge: gathering raw materials, turning them into gear at the crafting stations of ten different trades, and settling into an identity as one of the ten archetypes those trades represent.",
+      "gatherTitle": "Gathering: Mining, Logging, and Herbalism",
+      "gatherIntro": "Three gathering trades let you pull raw materials straight out of the world: Mining strikes ore and stone from veins, Logging fells timber from stands of trees, and Herbalism collects herbs and plants growing wild. Each is tracked separately, so working one never slows your progress in another.",
+      "gatherWhatTitle": "Resource nodes",
+      "gatherWhatBody": "Ore veins, wood stands, and herb patches are placed out in the zones as visible, unowned fixtures. Walk up to one and interact with it to harvest whatever it holds. Once you have harvested a node, it needs time to recover before you personally can harvest it again, though it never blocks anyone else: another player can harvest the very same node in the meantime.",
+      "gatherProficiencyTitle": "Proficiency and material quality",
+      "gatherProficiencyBody": "Every successful harvest builds your proficiency in that gathering trade. A higher proficiency shifts what you pull out of a node toward rarer grades of material, from common on up, though the rarest grades stay rare even at high proficiency. More practice never hurts your odds, it only ever improves them.",
+      "gatherToolsTitle": "Tools of the trade",
+      "gatherToolsBody": "Vendors sell basic tools for each gathering trade, and better ones can be crafted, so working a resource node is meant to feel more capable as you gear up for it rather than staying static. Higher-tier tools are the intended way to unlock access to richer nodes and to work them more efficiently over a long session.",
+      "craftTitle": "The ten crafts",
+      "craftIntro": "Ten crafting trades turn gathered materials into finished gear and goods: Armorcrafting, Weaponcrafting, and Jewelcrafting shape raw matter into wearable gear; Alchemy and Engineering are driven by trial and error; Cooking, Inscription, and Enchanting each touch other crafts' output; Tailoring and Leatherworking work from exact patterns. Together they form a wheel, with each craft sitting next to two neighbors and opposite one other.",
+      "craftRingTitle": "A wheel of specialties",
+      "craftRingBody": "The ten crafts are arranged in a fixed ring, and where a craft sits on that ring matters: crafts next to each other on the wheel share more in common with each other than crafts on opposite sides do. Committing to one craft is meant to feel like joining a family of related trades, not picking an isolated skill.",
+      "craftRecipesTitle": "Recipes and reagents",
+      "craftRecipesBody": "Every craft has its own recipes, each calling for specific reagents you gather or buy. The most basic recipes in each craft ask for nothing but common materials and are craftable from the very start, so you can begin working a trade the moment you pick it up rather than waiting to unlock it.",
+      "craftMasteryTitle": "Skill and mastery",
+      "craftMasteryBody": "Crafting successfully builds skill in that trade, and richer recipes are gated behind higher skill: the basic recipes are open to everyone, while progressively more advanced ones ask for progressively more mastery to attempt. Growing your skill in a craft is the path from simple starter goods to its more ambitious recipes.",
+      "craftComboTitle": "Combination recipes",
+      "craftComboBody": "Beyond a single craft's own recipe list, the wheel also supports combination recipes that call on two neighboring crafts at once, rewarding a character (or a pair of trading partners) who has invested in adjacent trades on the ring rather than one in isolation.",
+      "archetypeTitle": "The ten archetypes",
+      "archetypeIntro": "Each of the ten crafts also stands for an archetype, a broader identity you can adopt beyond just working that trade. Your active archetype is a single choice at a time, not a checklist: you carry one, and can change which one later if you choose to.",
+      "archetypeChooseTitle": "Choosing your archetype",
+      "archetypeChooseBody": "You declare your first archetype through an early, zone one story quest that formally accepts you into that identity. Until you complete that quest, you have not yet chosen an archetype at all.",
+      "archetypeSwitchTitle": "Changing your mind",
+      "archetypeSwitchBody": "Having declared an archetype once does not lock you into it forever. Changing to a different archetype means first completing a repeatable \"make amends\" quest for your old one, and each time you switch, the amends expected of you the next time grow a little steeper, so switching stays meaningful rather than costless.",
+      "archetypeIdentityTitle": "What your archetype means",
+      "archetypeIdentityBody": "Your active archetype is a statement about who your character is in the world, recognized in how others and the world address you. The exact rewards and recognition that come with it are still being finalized; check back as the system fills in."
+    },
     "economy": {
       "intro": "Las monedas engrasan el mundo entero: compran tu equipo, tus suministros y tus enseres de viaje, y cambian de manos entre los jugadores. Consigues todas estas cosas solo con jugar, así que piensa en esta página como un mapa de dónde viene y adónde va tu dinero.",
       "coinTitle": "Oro, plata y cobre",
@@ -1890,6 +2395,10 @@ export const es: EnTranslations = {
       "vendorsBody": "Pueblos y puestos de avanzada están salpicados de mercaderes, cada uno con su propio oficio. Los abastecedores tienen comida y bebida, los herreros y armeros llevan equipo, y un intendente guarda enseres prácticos de viaje. Acércate a uno para ver lo que vende.",
       "marksTitle": "Una segunda moneda: Marcas de Expedición",
       "marksBody": "El dinero no es lo único que guardas. Las expediciones pagan Marcas de Expedición, una moneda aparte que solo gastas con el guardián de expediciones, en mejoras para tu compañera y equipo que no encontrarás en otro sitio. Nunca se mezclan con tu dinero.",
+      "bankTitle": "The bank",
+      "bankBody": "Every hub town keeps a branch of The Gilded Strongbox, the banking house of the realm. Speak to the bursar there to open your vault, a private store of room beyond your bags that your character keeps for life. Whatever you leave with them waits safely, whichever branch you visit next.",
+      "bankHow": "With the vault open, click an item in your bags to deposit it and click it in the vault to take it back. The vault holds goods only, never coin, and quest items stay with you. When your bags fill up mid-journey, one button sweeps all your crafting materials in at once.",
+      "bankSlots": "A fresh vault starts small and grows with you. The bursar sells further slots for coin at ever-steeper prices, and playing online earns bonus room on top, for things like a verified email, linked accounts, and friends you bring into the game.",
       "buyingTitle": "Comprar y vender",
       "buyingBody": "Acércate a un mercader para abrir su ventana. Puedes comprar cualquier cosa de las que tenga en stock si te la puedes permitir, y vender la mayor parte de lo que llevas en las bolsas a cambio de monedas. Si vendes algo por error, un vendedor te guardará tus ventas recientes para que puedas recomprarlas.",
       "junkTitle": "Despejar la chatarra",
@@ -2105,7 +2614,7 @@ export const es: EnTranslations = {
     "water": {
       "title": "Water Level",
       "level": "Water level",
-      "hint": "Sets the map-wide water surface height, from {min} to {max} yards.",
+      "hint": "Sets each declared lake's water surface height, from {min} to {max} yards.",
       "reset": "Reset to the built-in level"
     },
     "place": {
@@ -2350,7 +2859,7 @@ export const es: EnTranslations = {
         "smooth": "Smooth bumps toward the local average height.",
         "flatten": "Level the ground to the height where the drag starts.",
         "paint": "Paint biome ground cover over the zone default.",
-        "water": "Set the map-wide water level.",
+        "water": "Set a declared lake's water level.",
         "place": "Place catalog or uploaded assets on the ground.",
         "blocker": "Drag invisible walls that block movement in playtest.",
         "camp": "Add and edit mob camps that spawn in playtest.",
@@ -2481,8 +2990,8 @@ export const es: EnTranslations = {
   },
   "footer": {
     "copyright": "2026 Cryptic Realm",
-    "githubLink": "https://github.com/levy-street/world-of-claudecraft",
-    "githubLabel": "Proyecto de Código Abierto",
+    "githubLink": "/contributions.html",
+    "githubLabel": "Contributions",
     "whitepaper": "Libro blanco",
     "terms": "Términos de Servicio",
     "privacy": "Política de Privacidad",
@@ -2555,8 +3064,12 @@ export const es: EnTranslations = {
     "loading": "Loading official channels…"
   },
   "download": {
-    "title": "Descargar Lanzador de Escritorio",
-    "desc": "Consigue el lanzador independiente para un rendimiento optimizado y juego a pantalla completa."
+    "title": "Launchers & Installs",
+    "desc": "Consigue el lanzador independiente para un rendimiento optimizado y juego a pantalla completa.",
+    "macCta": "Download for macOS",
+    "linuxCta": "Download for Linux",
+    "linuxHint": "AppImage: make it executable, then run it. No install needed.",
+    "windowsPending": "Windows build pending."
   },
   "comingSoon": {
     "placeholder": "Próximamente...",
@@ -2624,11 +3137,13 @@ export const es: EnTranslations = {
     "twoFactorPlaceholder": "Código de 6 dígitos o de recuperación",
     "twoFactorHint": "Introduce el código de tu app de autenticación, o uno de tus códigos de recuperación.",
     "email": "Recovery email",
+    "emailPlaceholder": "you@example.com",
     "emailError": "Please enter a valid email address.",
     "recovery": {
       "title": "Add a recovery email",
       "body": "Set an email address so you can recover your account. We only use it to confirm you own this account if you ever need to reset your password.",
       "save": "Save email",
+      "logOut": "Log out",
       "invalid": "Please enter a valid email address.",
       "failed": "Could not save your email. Please try again."
     }
@@ -3009,6 +3524,10 @@ export const es: EnTranslations = {
     },
     "closeAria": "Close"
   },
+  "heroicShop": {
+    "balance": "Heroic Marks: {count}",
+    "buyAria": "Buy {item} for {marks} Heroic Marks"
+  },
   "delveUi": {
     "board": {
       "title": "Tablón de Expediciones",
@@ -3204,6 +3723,45 @@ export const es: EnTranslations = {
     },
     "chest": {
       "flavor": "Los muertos han entregado lo que pueden ceder."
+    }
+  },
+  "yumi": {
+    "bracket3": "Yumi 3v3",
+    "bracket5": "Yumi 5v5",
+    "enterQueue": "Join Protect Yumi!",
+    "queue": {
+      "join": "You join the Protect Yumi queue. Guard your familiar…",
+      "leave": "You leave the Protect Yumi queue.",
+      "teamLeave": "Your team leaves the Protect Yumi queue."
+    },
+    "error": {
+      "partyTooBig3": "Protect Yumi 3v3 allows a party of up to three.",
+      "partyTooBig5": "Protect Yumi 5v5 allows a party of up to five."
+    },
+    "log": {
+      "start": "Protect Yumi! Defend your familiar and hunt theirs."
+    },
+    "hud": {
+      "title": "PROTECT YUMI",
+      "getReady": "Get ready…",
+      "teleportIn": "Yumis move in {s}",
+      "suddenDeath": "SUDDEN DEATH",
+      "yourYumi": "Your Yumi",
+      "enemyYumi": "Enemy Yumi",
+      "aria": "Your Yumi at {mine} of {max} health, enemy Yumi at {theirs}.",
+      "collapse": "Collapse the Protect Yumi bars",
+      "expand": "Expand the Protect Yumi bars"
+    },
+    "respawn": {
+      "title": "DOWNED!"
+    },
+    "banner": {
+      "sudden": "SUDDEN DEATH! The Yumis hold their ground!",
+      "teleport": "The Yumis teleport!"
+    },
+    "end": {
+      "win": "VICTORY! Yumi is safe!",
+      "loss": "DEFEAT! Your Yumi has fallen."
     }
   },
   "fiesta": {
@@ -3402,6 +3960,7 @@ export const es: EnTranslations = {
     "rendererFailed": "No se pudo iniciar el renderizador: intenta recargar. {error}",
     "enterTimeout": "No se pudo entrar al mundo. La conexión agotó el tiempo de espera. ¿El servidor del juego está en ejecución?",
     "connectionLost": "Se perdió la conexión con el servidor.",
+    "reconnecting": "Connection lost. Reconnecting...",
     "connectionRejected": "El servidor cerró la conexión."
   },
   "errors": {
@@ -3434,9 +3993,12 @@ export const es: EnTranslations = {
       "webLoginOnly": "El inicio de sesión solo se permite desde el cliente del juego.",
       "accountSuspended": "Esta cuenta está suspendida hasta {date}.",
       "alreadyInWorld": "El personaje ya está en el mundo.",
+      "accountSessionLimit": "Too many characters on this account are already in the world.",
       "takenOver": "Otra sesión tomó el control de tu personaje.",
       "renameBeforeEntering": "Este personaje debe cambiar de nombre antes de entrar al mundo.",
-      "renameNotPermitted": "No se permite cambiar el nombre de este personaje."
+      "renameNotPermitted": "No se permite cambiar el nombre de este personaje.",
+      "unsupportedMediaType": "Unsupported request format.",
+      "crossSiteOrigin": "Request blocked for security reasons."
     }
   },
   "desktop": {
@@ -3650,6 +4212,7 @@ export const es: EnTranslations = {
       "mobileSocial": "Comunidad",
       "mobileArena": "Arena",
       "mobileMenu": "Menú",
+      "mobileSettings": "Settings",
       "mobileUse": "Usar",
       "mobileMeters": "Medidores",
       "mobileMap": "Mapa",
@@ -4225,6 +4788,7 @@ export const es: EnTranslations = {
       "offGlobalCooldown": "Fuera del tiempo de reutilización global",
       "friendlyTarget": "Objetivo amistoso",
       "enemyTarget": "Objetivo enemigo",
+      "selfOnly": "Self only",
       "damageRange": "{min} a {max}",
       "finisherDamage": "{base} más {perCombo} por punto de combo"
     },
@@ -4327,12 +4891,14 @@ export const es: EnTranslations = {
     "slots": {
       "mainhand": "Mano principal",
       "helmet": "Cabeza",
+      "neck": "Neck",
       "shoulder": "Hombros",
       "chest": "Pecho",
       "waist": "Cintura",
       "legs": "Piernas",
       "gloves": "Manos",
-      "feet": "Pies"
+      "feet": "Pies",
+      "ring": "Finger"
     },
     "quality": {
       "poor": "Pobre",
@@ -4531,11 +5097,52 @@ export const es: EnTranslations = {
       "needAria": "Necesidad por {item}",
       "greedAria": "Codicia por {item}",
       "passAria": "Pasar por {item}",
-      "everyonePassed": "Todos pasaron por {item}."
+      "everyonePassed": "Todos pasaron por {item}.",
+      "rolled": "{answered}/{total} rolled"
     }
   },
   "entities": {
     "abilities": {
+      "sport_kick": {
+        "name": "Kick",
+        "description": "Knock the ball along the ground toward the aim point."
+      },
+      "sport_shoot": {
+        "name": "Shoot",
+        "description": "Hold to build power, release to shoot at goal. Too much power sails over."
+      },
+      "sport_pass": {
+        "name": "Pass",
+        "description": "Roll a firm pass to your targeted teammate, leading their run."
+      },
+      "sport_boot": {
+        "name": "Big Boot",
+        "description": "A long lofted boot toward the aim point. The crowd loves it."
+      },
+      "sport_hoof": {
+        "name": "Hoof It",
+        "description": "Hammer the ball low and hard up the field."
+      },
+      "sport_punt": {
+        "name": "Long Punt",
+        "description": "A keeper's punt, high and far."
+      },
+      "sport_feint": {
+        "name": "Feint",
+        "description": "A quick sidestep burst toward the aim point."
+      },
+      "sport_dive": {
+        "name": "Dive",
+        "description": "Fling yourself toward the aim point. A crossing ball sticks to you."
+      },
+      "sport_shoulder": {
+        "name": "Shoulder",
+        "description": "A fair harvest-truce shoulder. Sends them tumbling off the ball."
+      },
+      "sport_second_wind": {
+        "name": "Fresh Legs",
+        "description": "Find your legs: move 50% faster for 4 sec."
+      },
       "flamestrike": {
         "name": "Llamarada",
         "description": "Invoca un estallido de fuego en el área objetivo que inflige {damage} de daño de Fuego a los enemigos alcanzados por la explosión."
@@ -4562,15 +5169,15 @@ export const es: EnTranslations = {
       },
       "battle_shout": {
         "name": "Grito de batalla",
-        "description": "Aumenta tu poder de ataque en 20 durante 2 min."
+        "description": "A shout that increases the attack power of all party members by {buff}% for 2 min."
       },
       "commanding_shout": {
         "name": "Grito de mando",
-        "description": "Aumenta tu Aguante en 6 durante 2 min."
+        "description": "Increases your Stamina by {buff} for 2 min."
       },
       "demoralizing_shout": {
         "name": "Grito desmoralizador",
-        "description": "Lanza un grito aterrador que reduce el poder de ataque de todos los enemigos cercanos en 30 durante 30 s."
+        "description": "Lets out a fearsome shout, reducing the attack power of all nearby enemies by {buff} for 30 sec."
       },
       "charge": {
         "name": "Cargar",
@@ -4578,7 +5185,7 @@ export const es: EnTranslations = {
       },
       "rend": {
         "name": "Desgarrar",
-        "description": "Hiere al objetivo y le hace sangrar por {damage} de daño durante 9 s."
+        "description": "Wounds the target, causing them to bleed for {damage} damage over {duration} sec."
       },
       "thunder_clap": {
         "name": "Atronar",
@@ -4586,7 +5193,7 @@ export const es: EnTranslations = {
       },
       "hamstring": {
         "name": "Seccionar",
-        "description": "Mutila al enemigo por 5 de daño y reduce su velocidad de movimiento un 50% durante 15 s."
+        "description": "Maims the enemy for {damage} damage, slowing its movement by 50% for 15 sec."
       },
       "bloodrage": {
         "name": "Ira sangrienta",
@@ -4594,7 +5201,7 @@ export const es: EnTranslations = {
       },
       "overpower": {
         "name": "Abrumar",
-        "description": "Ataque instantáneo que inflige daño de arma +5. Solo se puede usar después de que el objetivo esquive. No puede esquivarse."
+        "description": "Instant attack for weapon damage plus {damage}. Only usable after the target dodges. Cannot be dodged."
       },
       "execute": {
         "name": "Ejecutar",
@@ -4626,11 +5233,11 @@ export const es: EnTranslations = {
       },
       "frost_armor": {
         "name": "Armadura de Escarcha",
-        "description": "Te envuelve en escarcha y aumenta la armadura en 30 durante 30 min."
+        "description": "Encases you in frost, increasing armor by {buff} for 30 min."
       },
       "arcane_intellect": {
         "name": "Intelecto Arcano",
-        "description": "Aumenta el Intelecto en 2 durante 30 min."
+        "description": "Increases the Intellect of all party members by {buff}% for 30 min."
       },
       "frostbolt": {
         "name": "Descarga de Escarcha",
@@ -4654,7 +5261,7 @@ export const es: EnTranslations = {
       },
       "polymorph": {
         "name": "Polimorfia",
-        "description": "Transforma al enemigo en oveja durante hasta 15 s. La oveja deambula y se cura rápidamente. Cualquier daño rompe el efecto. Solo bestias y humanoides."
+        "description": "Transforms the enemy into a toad for up to {duration} sec. The toad wanders and heals rapidly. Any damage breaks the effect. Beasts and humanoids only."
       },
       "frost_nova": {
         "name": "Nova de Escarcha",
@@ -4674,7 +5281,7 @@ export const es: EnTranslations = {
       },
       "ice_barrier": {
         "name": "Barrera de Hielo",
-        "description": "Te protege con hielo y absorbe 130 de daño durante 60 s."
+        "description": "Shields you in ice, absorbing {damage} damage for 60 sec."
       },
       "sinister_strike": {
         "name": "Golpe siniestro",
@@ -4682,7 +5289,7 @@ export const es: EnTranslations = {
       },
       "eviscerate": {
         "name": "Eviscerar",
-        "description": "Remate que causa daño por punto de combo."
+        "description": "Finishing move that causes {damage}."
       },
       "backstab": {
         "name": "Puñalada",
@@ -4690,7 +5297,7 @@ export const es: EnTranslations = {
       },
       "gouge": {
         "name": "Gubia",
-        "description": "Golpea al objetivo y lo incapacita durante 4 s. Cualquier daño rompe el efecto. Otorga 1 punto de combo."
+        "description": "Strikes the target for {damage} damage, incapacitating it for 4 sec. Any damage breaks the effect. Awards 1 combo point."
       },
       "evasion": {
         "name": "Evasión",
@@ -4722,11 +5329,11 @@ export const es: EnTranslations = {
       },
       "garrote": {
         "name": "Garrote",
-        "description": "Estrangula al enemigo con un garrote, infligiendo daño de inmediato y haciéndolo sangrar {damage} durante 18 s. Debes estar en sigilo. Otorga 1 punto de combo."
+        "description": "Garrote the enemy, causing {damage} damage now and bleeding it for {overTime} over 18 sec. Must be stealthed. Awards 1 combo point."
       },
       "cheap_shot": {
         "name": "Ataque artero",
-        "description": "Golpea al objetivo, aturdiéndolo durante 4 s. Debes estar en sigilo. Otorga 2 puntos de combo."
+        "description": "Strike the target for {damage} damage, stunning it for 4 sec. Must be stealthed. Awards 2 combo points."
       },
       "sap": {
         "name": "Pasmar",
@@ -4738,7 +5345,7 @@ export const es: EnTranslations = {
       },
       "expose_armor": {
         "name": "Exponer armadura",
-        "description": "Movimiento final que deja al descubierto al objetivo, reduciendo su armadura. Cuantos más puntos de combo se gasten, más profundo es el corte."
+        "description": "Finishing move that exposes the target, reducing its armor by {damage}% for 30 sec."
       },
       "rupture": {
         "name": "Descoyuntar",
@@ -4762,7 +5369,7 @@ export const es: EnTranslations = {
       },
       "seal_of_righteousness": {
         "name": "Sello de rectitud",
-        "description": "Te llena de poder Sagrado durante 30 s, haciendo que cada golpe cuerpo a cuerpo inflija 4 de daño Sagrado adicional. Desátalo con Sentencia."
+        "description": "Fills you with Holy power for 30 sec, causing each of your melee swings to deal {damage} additional Holy damage. Unleash with Verdict."
       },
       "holy_light": {
         "name": "Luz Sagrada",
@@ -4770,7 +5377,7 @@ export const es: EnTranslations = {
       },
       "devotion_aura": {
         "name": "Aura de devoción",
-        "description": "Aumenta tu armadura en 40 durante 30 min."
+        "description": "Increases the armor of all party members by {buff}% for 30 min."
       },
       "judgement": {
         "name": "Sentencia",
@@ -4778,19 +5385,19 @@ export const es: EnTranslations = {
       },
       "blessing_of_might": {
         "name": "Bendición de poderío",
-        "description": "Coloca una Bendición sobre un objetivo amistoso y aumenta su poder de ataque en 15 durante 5 min."
+        "description": "Blesses the party, increasing the attack power of all party members by {buff}% for 30 min."
       },
       "divine_protection": {
         "name": "Protección divina",
-        "description": "Un escudo sagrado absorbe 50 de daño durante 10 s."
+        "description": "A protective ward absorbs {damage} damage for 10 sec."
       },
       "hammer_of_justice": {
         "name": "Martillo de justicia",
-        "description": "Aturde al objetivo durante 3 s."
+        "description": "Stuns the target for {duration} sec."
       },
       "lay_on_hands": {
         "name": "Imposición de manos",
-        "description": "Una enorme oleada de sanación: restaura 250 de salud. Tiempo de reutilización de 10 min."
+        "description": "A massive surge of healing: restores {damage} health. 10 min cooldown."
       },
       "flash_of_light": {
         "name": "Destello de Luz",
@@ -4822,11 +5429,11 @@ export const es: EnTranslations = {
       },
       "raptor_strike": {
         "name": "Golpe de raptor",
-        "description": "Ataque cuerpo a cuerpo fuerte que aumenta el daño en 5. Se activa en tu siguiente golpe."
+        "description": "A strong melee attack that increases damage by {damage}. Activates on your next swing."
       },
       "aspect_of_the_hawk": {
         "name": "Aspecto del halcón",
-        "description": "Adoptas el aspecto del halcón y aumentas el poder de ataque en 20 durante 30 min."
+        "description": "Take on the harrier's guise, increasing attack power by {buff} for 30 min."
       },
       "serpent_sting": {
         "name": "Picadura de serpiente",
@@ -4838,15 +5445,15 @@ export const es: EnTranslations = {
       },
       "concussive_shot": {
         "name": "Disparo de conmoción",
-        "description": "Aturde levemente al objetivo y reduce su velocidad de movimiento un 50% durante 4 s."
+        "description": "Dazes the target for {damage} damage, slowing movement by 50% for 4 sec."
       },
       "mongoose_bite": {
         "name": "Mordedura de mangosta",
-        "description": "Contraataca después de que el objetivo esquive e inflige daño de arma más 12. No puede esquivarse."
+        "description": "Counterattack after the target dodges for weapon damage plus {damage}. Cannot be dodged."
       },
       "wing_clip": {
         "name": "Cortar alas",
-        "description": "Inflige una herida que ralentiza al enemigo un 40% durante 10 s."
+        "description": "Inflicts a wound for {damage} damage, slowing the enemy by 40% for 10 sec."
       },
       "aspect_of_the_monkey": {
         "name": "Aspecto del mono",
@@ -4874,7 +5481,7 @@ export const es: EnTranslations = {
       },
       "power_word_fortitude": {
         "name": "Palabra de poder: entereza",
-        "description": "Aumenta el Aguante del objetivo en 3 durante 30 min."
+        "description": "Increases the Stamina of all party members by {buff}% for 30 min."
       },
       "shadow_word_pain": {
         "name": "Palabra de las Sombras: dolor",
@@ -4882,7 +5489,7 @@ export const es: EnTranslations = {
       },
       "power_word_shield": {
         "name": "Palabra de poder: escudo",
-        "description": "Protege al objetivo y absorbe 48 de daño durante 30 s."
+        "description": "Shields the target, absorbing {damage} damage for 30 sec."
       },
       "renew": {
         "name": "Renovar",
@@ -4910,7 +5517,7 @@ export const es: EnTranslations = {
       },
       "rockbiter_weapon": {
         "name": "Arma Muerdepiedras",
-        "description": "Imbuye tu arma con la furia de la piedra: cada golpe inflige 5 de daño adicional durante 5 min."
+        "description": "Imbues your weapon with the fury of stone: each swing deals {damage} additional damage for 5 min."
       },
       "healing_wave": {
         "name": "Ola de sanación",
@@ -4922,15 +5529,15 @@ export const es: EnTranslations = {
       },
       "lightning_shield": {
         "name": "Escudo de relámpagos",
-        "description": "Te rodea de relámpagos crepitantes: los atacantes cuerpo a cuerpo reciben 13 de daño de Naturaleza."
+        "description": "Surrounds you with crackling lightning: melee attackers take {buff} Nature damage, up to 3 charges and at most once every 5 seconds."
       },
       "flame_shock": {
         "name": "Choque de llamas",
-        "description": "Abrasa al objetivo con fuego por 25 de daño más {damage} durante 12 s."
+        "description": "Sears the target with fire for {damage} damage plus {overTime} over 12 sec."
       },
       "flametongue_weapon": {
         "name": "Arma Lengua de Fuego",
-        "description": "Imbuye tu arma con fuego elemental: cada golpe inflige 8 de daño de Fuego adicional durante 5 min."
+        "description": "Imbues your weapon with elemental fire: each swing deals {damage} additional Fire damage for 5 min."
       },
       "frost_shock": {
         "name": "Choque de Escarcha",
@@ -4938,7 +5545,7 @@ export const es: EnTranslations = {
       },
       "frostbrand_weapon": {
         "name": "Arma Tizón de Escarcha",
-        "description": "Imbuye tu arma con escarcha mordiente: cada golpe inflige 8 de daño adicional durante 5 min."
+        "description": "Imbues your weapon with biting frost: each swing deals {damage} additional damage for 5 min."
       },
       "ghost_wolf": {
         "name": "Lobo fantasmal",
@@ -4954,11 +5561,11 @@ export const es: EnTranslations = {
       },
       "demon_skin": {
         "name": "Piel de demonio",
-        "description": "La piel demoníaca aumenta tu armadura en 30 durante 30 min."
+        "description": "Demonic skin increases your armor by {buff} for 30 min."
       },
       "immolate": {
         "name": "Inmolar",
-        "description": "Quema al enemigo por 11 de daño de Fuego y {damage} adicionales durante 15 s."
+        "description": "Burns the enemy for {damage} Fire damage and an additional {overTime} over 15 sec."
       },
       "corruption": {
         "name": "Corrupción",
@@ -4966,7 +5573,7 @@ export const es: EnTranslations = {
       },
       "life_tap": {
         "name": "Transfusión de vida",
-        "description": "Convierte 30 de salud en 30 de maná."
+        "description": "Converts {damage} health into {damage} mana."
       },
       "curse_of_agony": {
         "name": "Maldición de agonía",
@@ -4998,7 +5605,7 @@ export const es: EnTranslations = {
       },
       "mark_of_the_wild": {
         "name": "Marca de lo Salvaje",
-        "description": "Coloca la Marca de lo Salvaje sobre un objetivo amistoso y aumenta su armadura en 25 durante 30 min."
+        "description": "Places the Wildward on the party, increasing all attributes of all party members by {buff}% for 30 min."
       },
       "moonfire": {
         "name": "Fuego lunar",
@@ -5010,7 +5617,7 @@ export const es: EnTranslations = {
       },
       "thorns": {
         "name": "Espinas",
-        "description": "Brotan espinas del objetivo: los atacantes cuerpo a cuerpo reciben 3 de daño de Naturaleza."
+        "description": "Thorns sprout from the target: melee attackers take {buff} Nature damage."
       },
       "entangling_roots": {
         "name": "Raíces enredadoras",
@@ -5038,7 +5645,7 @@ export const es: EnTranslations = {
       },
       "ferocious_bite": {
         "name": "Mordedura feroz",
-        "description": "Remate que causa daño por punto de combo. Solo en Forma de lobo."
+        "description": "Finishing move that causes {damage}. Wolf Form only."
       },
       "swipe": {
         "name": "Flagelo",
@@ -5070,7 +5677,7 @@ export const es: EnTranslations = {
       },
       "faerie_fire": {
         "name": "Fuego feérico",
-        "description": "Reduce la armadura del objetivo en 35 durante 40 s."
+        "description": "Decreases the target's armor by {damage}% for 40 sec. Does not stack with Armor Shear."
       },
       "hibernate": {
         "name": "Hibernar",
@@ -5094,7 +5701,7 @@ export const es: EnTranslations = {
       },
       "rip": {
         "name": "Desgarrar",
-        "description": "Remate que causa daño de sangrado durante 12 s. Consume puntos de combo. Solo en Forma de lobo."
+        "description": "Finishing move that causes {damage} Bleed damage over 12 sec. Consumes combo points. Wolf Form only."
       },
       "mortal_strike": {
         "name": "Golpe mortal",
@@ -5751,6 +6358,42 @@ export const es: EnTranslations = {
       "silverleaf_sickle": {
         "name": "Hoz de Hoja de Plata"
       },
+      "thorium_mining_pick": {
+        "name": "Thorium Mining Pick"
+      },
+      "arcanite_mining_pick": {
+        "name": "Arcanite Mining Pick"
+      },
+      "ashwood_axe": {
+        "name": "Ashwood Axe"
+      },
+      "elderwood_axe": {
+        "name": "Elderwood Axe"
+      },
+      "goldleaf_sickle": {
+        "name": "Goldleaf Sickle"
+      },
+      "sunpetal_sickle": {
+        "name": "Sunpetal Sickle"
+      },
+      "thorium_ore": {
+        "name": "Thorium Ore"
+      },
+      "arcanite_bar": {
+        "name": "Arcanite Bar"
+      },
+      "ashwood_log": {
+        "name": "Ashwood Log"
+      },
+      "elderwood_log": {
+        "name": "Elderwood Log"
+      },
+      "goldleaf_herb": {
+        "name": "Goldleaf Herb"
+      },
+      "sunpetal_herb": {
+        "name": "Sunpetal Herb"
+      },
       "bristleback_maul": {
         "name": "Maza Bristleback"
       },
@@ -6087,6 +6730,9 @@ export const es: EnTranslations = {
       "wyrmshadow_talongrips": {
         "name": "Agarraderas Garra Sombravermis"
       },
+      "tome_town_portal": {
+        "name": "Tome of Town Portal"
+      },
       "reliquary_plate_chest": {
         "name": "Loriga de la Guardia del Relicario"
       },
@@ -6216,6 +6862,132 @@ export const es: EnTranslations = {
       "event_skin_token": {
         "name": "Alijo cosmético misterioso"
       },
+      "heroic_mark": {
+        "name": "Heroic Mark"
+      },
+      "morthens_cryptforged_hauberk": {
+        "name": "Morthen's Cryptforged Hauberk"
+      },
+      "shadowpulse_handwraps": {
+        "name": "Shadowpulse Handwraps"
+      },
+      "bonechill_striders": {
+        "name": "Bonechill Striders"
+      },
+      "mistcallers_fang": {
+        "name": "Mistcaller's Fang"
+      },
+      "tidebound_spaulders": {
+        "name": "Tidebound Spaulders"
+      },
+      "sash_of_the_sunken_court": {
+        "name": "Sash of the Sunken Court"
+      },
+      "lunar_tide_greatstaff": {
+        "name": "Lunar Tide Greatstaff"
+      },
+      "tidewoven_trousers": {
+        "name": "Tidewoven Trousers"
+      },
+      "choirmothers_casque": {
+        "name": "Choirmother's Casque"
+      },
+      "gravewyrm_cleaver": {
+        "name": "Gravewyrm Cleaver"
+      },
+      "shroud_of_the_gravewyrm": {
+        "name": "Shroud of the Gravewyrm"
+      },
+      "sanctum_prowlers_grips": {
+        "name": "Sanctum Prowler's Grips"
+      },
+      "scepter_of_the_deathless_court": {
+        "name": "Scepter of the Deathless Court"
+      },
+      "deathless_warguard_legmail": {
+        "name": "Deathless Warguard Legmail"
+      },
+      "soulrend_diadem": {
+        "name": "Soulrend Diadem"
+      },
+      "scourgehide_carapace": {
+        "name": "Scourgehide Carapace"
+      },
+      "cryptplate_helm": {
+        "name": "Cryptplate Helm"
+      },
+      "shadowpulse_slippers": {
+        "name": "Shadowpulse Slippers"
+      },
+      "bonechill_cord": {
+        "name": "Bonechill Cord"
+      },
+      "mistforged_pauldrons": {
+        "name": "Mistforged Pauldrons"
+      },
+      "tideguard_faceguard": {
+        "name": "Tideguard Faceguard"
+      },
+      "sunken_court_mantle": {
+        "name": "Sunken Court Mantle"
+      },
+      "lunar_choir_leggings": {
+        "name": "Lunar Choir Leggings"
+      },
+      "choir_blessed_spaulders": {
+        "name": "Choir-Blessed Spaulders"
+      },
+      "tideworn_warboots": {
+        "name": "Tideworn Warboots"
+      },
+      "gravewyrm_claws": {
+        "name": "Gravewyrm Claws"
+      },
+      "gravescale_girdle": {
+        "name": "Gravescale Girdle"
+      },
+      "wyrmchoir_handwraps": {
+        "name": "Wyrmchoir Handwraps"
+      },
+      "deathless_greatblade": {
+        "name": "Deathless Greatblade"
+      },
+      "soulforged_warplate": {
+        "name": "Soulforged Warplate"
+      },
+      "stormcallers_focus": {
+        "name": "Stormcaller's Focus"
+      },
+      "seal_of_the_nine_oaths": {
+        "name": "Seal of the Nine Oaths"
+      },
+      "nielas_coldlight_band": {
+        "name": "Niela's Coldlight Band"
+      },
+      "sutils_gambit": {
+        "name": "Sutil's Gambit"
+      },
+      "oath_of_the_round_table": {
+        "name": "Oath of the Round Table"
+      },
+      "zyzzs_deathless_signet": {
+        "name": "Zyzz's Deathless Signet"
+      },
+      "architects_cornerstone": {
+        "name": "The Architect's Cornerstone"
+      },
+      "swiftfang_talisman": {
+        "name": "Swiftfang Talisman"
+      },
+      "yumis_keepsake_locket": {
+        "name": "Yumi's Keepsake Locket"
+      },
+      "zense_meridian": {
+        "name": "Zense Meridian"
+      },
+      "medallion_of_endless_profit": {
+        "name": "Medallion of Endless Profit"
+      },
       "deathless_heartwood": {
         "name": "Duramen de la Corona Inmortal"
       },
@@ -6323,6 +7095,9 @@ export const es: EnTranslations = {
       }
     },
     "mobs": {
+      "yumi_cat": {
+        "name": "Yumi"
+      },
       "forest_wolf": {
         "name": "Lobo del bosque"
       },
@@ -6382,6 +7157,9 @@ export const es: EnTranslations = {
       },
       "deacon_voss": {
         "name": "Diácono Voss"
+      },
+      "training_dummy": {
+        "name": "Training Dummy"
       },
       "ridge_stalker": {
         "name": "Acechador de la cresta"
@@ -6544,6 +7322,39 @@ export const es: EnTranslations = {
       },
       "tolling_bell": {
         "name": "Tolling Bell"
+      },
+      "vale_cup_ball": {
+        "name": "Boarball"
+      },
+      "hellmaw_charred_husk": {
+        "name": "Charred Husk"
+      },
+      "hellmaw_cinder_acolyte": {
+        "name": "Cinder Acolyte"
+      },
+      "hellmaw_cursed_knight": {
+        "name": "Cursed Iron Knight"
+      },
+      "hellmaw_ember_behemoth": {
+        "name": "Ember Behemoth"
+      },
+      "hellmaw_inferno_dragon": {
+        "name": "Inferno Dragon"
+      },
+      "hellmaw_lava_fiend": {
+        "name": "Lava Fiend"
+      },
+      "hellmaw_primal_beast": {
+        "name": "Primal Emberbeast"
+      },
+      "hellmaw_sigilbound_warlock": {
+        "name": "Sigil-Bound Warlock"
+      },
+      "hellmaw_the_render": {
+        "name": "The Render"
+      },
+      "hellmaw_wailing_spectre": {
+        "name": "Wailing Spectre"
       },
       "thunzharr_waking_peak": {
         "name": "Thunzharr, el Pico Despierto"
@@ -6751,6 +7562,11 @@ export const es: EnTranslations = {
         "title": "Maestro armero",
         "greeting": "La forja está caliente y la piedra gira. Si corta, lo vendo."
       },
+      "heroic_quartermaster": {
+        "name": "Quartermaster Vex",
+        "title": "Heroic Quartermaster",
+        "greeting": "Proof of the heroic depths buys the finest rings and pendants in Highwatch. Show me your marks."
+      },
       "loremaster_caddis": {
         "name": "Maestro de saber Caddis",
         "title": "Maestro de saber",
@@ -6760,6 +7576,21 @@ export const es: EnTranslations = {
         "name": "Subastador Voss",
         "title": "Guardián del Mercado Mundial",
         "greeting": "El Mercado Mundial también está abierto aquí, {className}. Compra a cualquier aventurero del reino o pon a la venta tus propias mercancías."
+      },
+      "bursar_fernando": {
+        "name": "Bursar Fernando",
+        "title": "The Gilded Strongbox",
+        "greeting": "Welcome to the Gilded Strongbox. Your goods rest safe behind our locks."
+      },
+      "bursar_petra_vell": {
+        "name": "Bursar Petra Vell",
+        "title": "The Gilded Strongbox",
+        "greeting": "The Gilded Strongbox keeps clean ledgers and cleaner vaults. What shall we stow for you?"
+      },
+      "bursar_aldous_crane": {
+        "name": "Bursar Aldous Crane",
+        "title": "The Gilded Strongbox",
+        "greeting": "Every crate, coffer, and trinket is safe with the Gilded Strongbox."
       },
       "brother_aldric_raid": {
         "name": "Hermano Aldric",
@@ -6776,10 +7607,45 @@ export const es: EnTranslations = {
         "title": "Reliquary Keeper",
         "greeting": "The trail led north. Another reliquary, another rite. Choose your tier, and I'll hold the rope until you return."
       },
+      "cainhurst_sage": {
+        "name": "Cainhurst the Sage",
+        "title": "Keeper of the Hellmaw",
+        "greeting": "You pulled me from the Hellmaw, friend - I do not forget it. The well is open to you now. Steel yourself: The Render waits at the bottom."
+      },
+      "mercenary_kael": {
+        "name": "Kael the Sellsword",
+        "title": "Wandering Mercenary",
+        "greeting": "Coin's coin, {className}. Lend a blade and the beast's yours to loot."
+      },
+      "huntress_verr": {
+        "name": "Huntress Verr",
+        "title": "Boar-Culler",
+        "greeting": "These tuskers won't thin themselves. Wade in - the kill counts for you."
+      },
+      "interior_merchant": {
+        "name": "Merchant",
+        "title": "Shopkeeper",
+        "greeting": "Wares for a wanderer? Take a look."
+      },
+      "interior_innkeeper": {
+        "name": "Innkeeper",
+        "title": "Host",
+        "greeting": "Rest your boots, traveller. The fire's warm."
+      },
+      "interior_villager": {
+        "name": "Villager",
+        "title": "Resident",
+        "greeting": "Oh - a visitor! Mind the mess."
+      },
       "spirit_healer": {
         "name": "The Pale Keeper",
         "title": "Warden of the Dead",
         "greeting": "Rest now, spirit. I can return you to your body, but the crossing back leaves you weak."
+      },
+      "groundskeeper_bram": {
+        "name": "Groundskeeper Bram",
+        "title": "Keeper of the Sowfield",
+        "greeting": "The truce holds at the Sowfield, {className}: boots and shoulders only. Care to play for the Copper Pail?"
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",
@@ -7492,6 +8358,16 @@ export const es: EnTranslations = {
           }
         }
       },
+      "q_save_cainhurst": {
+        "title": "Save Cainhurst the Sage",
+        "text": "Old Cainhurst - the sage who reads the deep maps - went down the well a week past and never came up. The thing below took him, and bound him with three cursed wards: one struck among the graves, one buried in the mine, one drowned at the docks. Break all three wards, {playerName}, and you'll break his chains. Bring them to me as proof.",
+        "completion": "The three wards, all snuffed cold. Cainhurst has crawled free - he waits at the well now, and swears the Hellmaw is open to you. He warns of something at the bottom he calls The Render.",
+        "objectives": {
+          "0": {
+            "label": "Hellmaw binding ward broken"
+          }
+        }
+      },
       "q_nythraxis_restless_dead": {
         "title": "Inquietud en los campos de huesos",
         "text": "Algo ha cambiado en Thornpeak Heights, {playerName}. Los muertos ya no vagan sin rumbo. Se reúnen y marchan por los campos de huesos del norte, más allá de Highwatch, donde el viejo campo de batalla llega al camino del acantilado. Ve allí, investiga la inquietud entre los Revenants de Hueso, y trae cualquier prueba de lo que los impulsa.",
@@ -7567,6 +8443,26 @@ export const es: EnTranslations = {
         "objectives": {
           "0": {
             "label": "Mogger abatido"
+          }
+        }
+      },
+      "q_archetype_acceptance": {
+        "title": "A Craft to Call Your Own",
+        "text": "Every artisan of Eastbrook eventually settles on one craft to call their own. Prove yourself with a single deed, {playerName}, and declare your path.",
+        "completion": "Your path is chosen; walk it well.",
+        "objectives": {
+          "0": {
+            "label": "Forest Wolf slain"
+          }
+        }
+      },
+      "q_prof_make_amends": {
+        "title": "Making Amends",
+        "text": "To set aside one craft for another, an artisan must first make amends for the path not walked, {playerName}.",
+        "completion": "Amends made; a new path is open to you.",
+        "objectives": {
+          "0": {
+            "label": "Forest Wolf slain"
           }
         }
       },
@@ -7668,6 +8564,9 @@ export const es: EnTranslations = {
           },
           "9": {
             "label": "Claro de Brightwood"
+          },
+          "10": {
+            "label": "The Sowfield"
           }
         }
       },
@@ -7780,6 +8679,11 @@ export const es: EnTranslations = {
         "name": "The Drowned Litany",
         "enterText": "You descend into the drowned shrine at the marsh's edge.",
         "leaveText": "You climb back to Brother Halven at the marsh's edge."
+      },
+      "hellmaw_well": {
+        "name": "The Hellmaw Well",
+        "enterText": "The well mouth yawns into red dark - and the Hellmaw swallows you down.",
+        "leaveText": "You haul yourself back up the well shaft, the Hellmaw seething below."
       }
     },
     "letters": {
@@ -7812,12 +8716,14 @@ export const es: EnTranslations = {
       "crownforged": {
         "name": "Equipo de batalla Forjacorona",
         "bonus2": "Aumenta el poder de ataque en 40.",
-        "bonus3": "Aumenta la fuerza en 15, el aguante en 15 y la velocidad de ataque y de lanzamiento en 15%."
+        "bonus3": "Aumenta la fuerza en 15, el aguante en 15 y la velocidad de ataque y de lanzamiento en 15%.",
+        "bonus4": "Your weapon critical strikes splinter the target with Bonesplinter, bleeding it for 8 damage every 2 sec for 12 sec. Stacks up to 3 times."
       },
       "deathlord": {
         "name": "Equipo de batalla del Señor de la Muerte",
         "bonus2": "Aumenta el poder de ataque en 40.",
-        "bonus3": "Aumenta la fuerza en 15 y el aguante en 15."
+        "bonus3": "Aumenta la fuerza en 15 y el aguante en 15.",
+        "bonus4": "Your weapon critical strikes have a 50% chance to grant Gravemight, increasing attack power by 60 for 10 sec."
       },
       "greyjaw_stalker": {
         "name": "Equipo del Acechador de Greyjaw",
@@ -7826,22 +8732,26 @@ export const es: EnTranslations = {
       "necromancers": {
         "name": "Vestiduras del nigromante",
         "bonus2": "No puedes ser empujado hacia atrás (100% de resistencia al empuje).",
-        "bonus3": "Aumenta el intelecto en 10 y el aguante en 10."
+        "bonus3": "Aumenta el intelecto en 10 y el aguante en 10.",
+        "bonus4": "Your spells have a 10% chance to grant Clearcasting, making your next spell free."
       },
       "nighttalon": {
         "name": "Atuendo de cuero Garra Nocturna",
         "bonus2": "Aumenta el poder de ataque en 40.",
-        "bonus3": "Aumenta la agilidad en 15, la probabilidad de crítico en 2% y la velocidad de ataque y de lanzamiento en 15%."
+        "bonus3": "Aumenta la agilidad en 15, la probabilidad de crítico en 2% y la velocidad de ataque y de lanzamiento en 15%.",
+        "bonus4": "Your weapon critical strikes tear a Ragged Gash, bleeding the target for 6 damage every 2 sec for 12 sec. Stacks up to 3 times."
       },
       "soulflame": {
         "name": "Vestiduras de Llama de Alma",
         "bonus2": "No puedes ser empujado hacia atrás (100% de resistencia al empuje).",
-        "bonus3": "Aumenta el intelecto en 15, el espíritu en 15 y la velocidad de ataque y de lanzamiento en 15%."
+        "bonus3": "Aumenta el intelecto en 15, el espíritu en 15 y la velocidad de ataque y de lanzamiento en 15%.",
+        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
       },
       "stormcallers": {
         "name": "Vestiduras del Invocatormentas",
         "bonus2": "No puedes ser empujado hacia atrás (100% de resistencia al empuje).",
-        "bonus3": "Aumenta el intelecto en 15, el espíritu en 15 y la velocidad de ataque y de lanzamiento en 15%."
+        "bonus3": "Aumenta el intelecto en 15, el espíritu en 15 y la velocidad de ataque y de lanzamiento en 15%.",
+        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
       },
       "vale_arcanist": {
         "name": "Vestiduras del Arcanista del Valle",
@@ -7850,7 +8760,8 @@ export const es: EnTranslations = {
       "wyrmshadow": {
         "name": "Atuendo de Sombra de Vermis",
         "bonus2": "Aumenta el poder de ataque en 40.",
-        "bonus3": "Aumenta la agilidad en 15 y la probabilidad de crítico en 2%."
+        "bonus3": "Aumenta la agilidad en 15 y la probabilidad de crítico en 2%.",
+        "bonus4": "Your weapon critical strikes have a 50% chance to grant Fangrush, increasing attack speed by 25% for 8 sec."
       }
     }
   },

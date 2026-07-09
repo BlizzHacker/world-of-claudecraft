@@ -6,6 +6,7 @@
 // OPERATOR RULING, 2026-07-02, ip-refactor/02-WORKING-MEMORY.md); ability/aura IDS are frozen.
 
 import { describe, expect, it } from 'vitest';
+import { ABILITIES } from '../../src/sim/data';
 import type { Recorder } from './record';
 import { record } from './record';
 import { SCENARIOS } from './scenarios';
@@ -721,8 +722,15 @@ describe('coverage: each scenario fires its subsystem', () => {
     // paladin consecration: a ground AoE was pushed (on-cast pulse path).
     expect((rec.sim as any).groundAoEs.length).toBeGreaterThanOrEqual(1);
     // warlock fear: the incapacitate aura landed on the warlock's mob (fear-angle draw).
-    const warlockMob = ents.find((e) => e.id === rec.notes.warlockMobId);
-    expect(warlockMob?.auras?.some((a: Ev) => a.kind === 'incapacitate')).toBe(true);
+    expect(
+      ev.some(
+        (e) =>
+          e.type === 'aura' &&
+          e.targetId === rec.notes.warlockMobId &&
+          e.name === ABILITIES.fear.name &&
+          e.gained === true,
+      ),
+    ).toBe(true);
     // warlock summon_imp: a pet now belongs to the warlock (summonDemon -> summonPet).
     expect(ents.some((e) => e.ownerId === rec.notes.warlockId)).toBe(true);
     // druid form switch: the LAST form (cat) is active and bear was stripped.
@@ -809,8 +817,8 @@ describe('coverage: each scenario fires its subsystem', () => {
     // atomic swap moved goods + coin both directions.
     expect(sim.countItem('wolf_fang', a)).toBe(1); // 3 - 2
     expect(sim.countItem('wolf_fang', b)).toBe(2);
-    expect(sim.countItem('baked_bread', a)).toBe(1);
-    expect(sim.countItem('baked_bread', b)).toBe(1); // 2 - 1
+    expect(sim.countItem('baked_bread', a)).toBe(6); // 5 starter + 1 traded
+    expect(sim.countItem('baked_bread', b)).toBe(6); // 5 starter + 2 - 1
     expect(sim.players.get(a)?.copper).toBe(80); // 100 - 30 + 10
     expect(sim.players.get(b)?.copper).toBe(70); // 50 - 10 + 30
     // every session ended cleared (swap close + explicit cancel + drift sweep).

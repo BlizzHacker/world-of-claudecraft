@@ -396,7 +396,18 @@ export const DELVE_MOBS: Record<string, MobTemplate> = {
     // Ranged attacker: hurls single-target Rotwater Vials from the back of the pack
     // (the hostile-caster petSpell path; updateRangedPetAttack draws a projectile).
     // Matches the PRD MVP "rotwater_vial: ranged damage at target".
-    petSpell: { name: 'Rotwater Vial', school: 'nature', min: 5, max: 8, range: 22, every: 2.6 },
+    // windup 0.85s (17 ticks): the telegraph before the vial leaves the hand,
+    // tuned so the Stone Cantor Cast clip's release pose (1.45s authored, at the
+    // visual def's 1.7x attackTimeScale) lands exactly on the release.
+    petSpell: {
+      name: 'Rotwater Vial',
+      school: 'nature',
+      min: 5,
+      max: 8,
+      range: 22,
+      every: 2.6,
+      windup: 0.85,
+    },
     loot: [{ copper: 9, chance: 1 }],
     scale: 0.95,
     color: 0x5b6b4a,

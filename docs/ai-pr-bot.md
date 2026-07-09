@@ -7,33 +7,50 @@ them is a required check.
 ## What it does
 
 1. **Screenshots of changes** (`screenshots` job). Boots the Vite dev client headless on
-   a runner (software GL via SwiftShader, no GPU needed) and captures PNGs of the relevant
-   screens. The frames are uploaded as the `pr-screenshots` artifact and linked from a
-   sticky PR comment. Two modes (`scripts/pr_screenshots.mjs`):
-   - **Change-aware** (when a diff is available): it maps the changed paths to the screens
-     they imply and shoots exactly those, cropped to the relevant region. A change under
-     `src/ui/bags*` captures the inventory window; a change under `src/sim/content/zones*`
-     (or the map/terrain renderer) teleports to a landmark and captures the world map. The
-     target registry (which paths imply which screen, and how to bring it up + clip it)
-     lives in `scripts/pr_shot_targets.mjs`; add coverage with one entry there.
-   - **Fixed tour** (no diff or no matched target): a consistent baseline, character
-     select, desktop HUD, mobile HUD. Keep all recipes offline and quick.
-2. **AI review** (`ai-review` job). Reviews the PR diff with the OpenAI Codex CLI,
-   authenticated with a ChatGPT account via OAuth (no API key), and posts a short review
-   as a sticky PR comment, grouped into Correctness / Invariants / Tests / Nits with
-   severity tags. Codex runs as an agent with READ-ONLY access to the checkout (sandboxed,
-   no network for the agent itself), so it can verify imports and helpers against the real
-   tree instead of guessing from the diff. The reviewer is `scripts/ai_review.mjs`; the
-   GitHub comment helper is `scripts/gh_sticky_comment.mjs`. No new npm dependencies in
-   the repo: the workflow installs `@openai/codex` globally on the runner, and the GitHub
-   side is Node's built-in `fetch` against the REST API.
+   a runner (software GL via SwiftShader, no GPU needed) and, only when the diff has a
+   visual change, captures PNGs of the sections it touches, then **embeds them inline** in a
+   sticky PR comment (no artifact to download). The capture plan comes from the diff alone
+   (`scripts/pr_screenshots.mjs` + the classifier in `scripts/pr_shot_targets.mjs`):
+   - **Specific windows**: a change under `src/ui/bags*` captures the inventory window; a
+     change under `src/sim/content/zones*` (or the map/terrain renderer) teleports to a
+     landmark and captures the world map, each cropped to that window. The target registry
+     (which paths imply which screen, and how to bring it up + clip it) lives in
+     `scripts/pr_shot_targets.mjs`; add coverage with one entry there.
+   - **Generic HUD**: a visual change that maps to no specific window (renderer, HUD chrome,
+     CSS) captures the in-world desktop HUD, plus the mobile HUD when the change touches the
+     mobile/responsive surface (`hud.mobile`, `play.html`, touch controls).
+   - **Nothing**: a backend/data/i18n-only diff is not visual, so it captures no frames and
+     posts no screenshots. There is no fixed tour of unrelated screens.
+
+   Inline embedding needs a URL GitHub can fetch (artifacts are not embeddable and markdown
+   does not render `data:` URIs), so `scripts/gh_image_host.mjs` uploads each PNG to a
+   bot-owned orphan branch (`bot-pr-screenshots`) via the REST API and references its raw
+   URL. This needs the job's `contents: write` permission. If hosting fails while
+   commenting still works, the comment degrades to a note instead of broken image links;
+   on a fork PR the read-only token can do neither, so the comment is skipped entirely.
+2. **AI review** (`ai-review` job). Reviews the PR with the OpenAI Codex CLI,
+   authenticated with a ChatGPT account via OAuth (no API key), and posts the review as a
+   sticky PR comment: a short overall assessment, a "Verified" list of the commands it
+   ran with their outcomes, then findings grouped into Correctness / Invariants / Tests /
+   Nits with severity tags. The job checks out the PR HEAD, installs dependencies
+   (`npm ci --ignore-scripts`) and generates the i18n artifacts, so Codex runs as a
+   VERIFYING agent: it is required to read the changed files in the tree, run
+   `npx tsc --noEmit`, and run the vitest files covering the change before writing, and
+   to only report findings it confirmed (anything unverifiable is at most a low-severity
+   question). The inlined prompt diff is pre-filtered (`scripts/ai_review_diff.mjs`
+   drops generated i18n tables, parity goldens, lockfiles, and binary assets) and capped
+   on a file boundary; the agent reads the full diff itself via `git diff BASE HEAD`.
+   The reviewer is `scripts/ai_review.mjs`; the GitHub comment helper is
+   `scripts/gh_sticky_comment.mjs`. No new npm dependencies in the repo: the workflow
+   installs `@openai/codex` globally on the runner, and the GitHub side is Node's
+   built-in `fetch` against the REST API.
 3. **AI review on demand** (`ai-review-comment` job). An OWNER, MEMBER, or COLLABORATOR
    of this repo can comment `/review` or `/suggest <focus>` on a PR (for example
    `/suggest check the null handling around the new cache`) to re-run the same reviewer
    whenever they want, optionally pointed at a specific concern. It runs the same
-   `scripts/ai_review.mjs`, fetching the diff itself from the GitHub API instead of a
-   precomputed file, and posts its answer as a fresh reply comment rather than editing
-   the standing sticky review, so a one-off question does not overwrite it.
+   `scripts/ai_review.mjs` with the same PR-head checkout and verification setup, and
+   posts its answer as a fresh reply comment rather than editing the standing sticky
+   review, so a one-off question does not overwrite it.
 
 ## Enabling the AI review
 
@@ -64,19 +81,24 @@ opt-in and authenticates with a ChatGPT account through OAuth, not an API key:
 
 ## Requesting a review on demand
 
-Comment `/review` on a PR to re-run the reviewer over the current diff, or
+Comment `/review` on a PR to re-run the reviewer over the current state of the PR, or
 `/suggest <focus>` to ask it to prioritize something specific (the rest of the comment
 after the command is passed to the model as the thing to focus on; it still mentions
 other high-confidence findings). Only comments from an OWNER, MEMBER, or COLLABORATOR of
 this repo trigger it, checked against this repo regardless of whose PR it is, so a first-
-time contributor cannot self-trigger it on their own fork PR by commenting on it. This
-gate exists because, unlike the automatic `pull_request`-triggered job, a comment trigger
-always runs with this repo's secrets available, even against a fork PR: the job never
-checks out or executes the PR's own code, it only reads the diff as text through the
-GitHub API, but the trust gate keeps it from being invoked, and the ChatGPT plan's Codex
-quota spent, by an untrusted commenter. Codex itself additionally runs in a read-only
-sandbox with network access disabled, so even a malicious diff crafted as a prompt
-injection cannot make the agent modify the checkout or call out anywhere.
+time contributor cannot self-trigger it on their own fork PR by commenting on it.
+
+Know what you are opting into on a FORK PR: unlike the old diff-only reviewer, this job
+checks out the fork's code and exercises it (the i18n generation step, and whatever tests
+the agent runs), in a job that holds the `CODEX_AUTH_JSON` secret. The mitigations are
+real but not absolute: the reviewer scripts themselves run from a TRUSTED default-branch
+checkout while the PR head sits in a separate `pr/` tree (so a fork cannot replace
+`ai_review.mjs` and read the secret from inside the secret-holding step),
+`npm ci --ignore-scripts` keeps third-party install hooks from running, the raw secret is
+scrubbed from the agent's child environment (only the materialized `CODEX_HOME/auth.json`
+exists, in a throwaway temp dir), and the `GITHUB_TOKEN` carries only `contents: read`
+plus `pull-requests: write`. Skim a fork PR's diff for anything that reads credentials or
+phones home before typing `/review` on it; for same-repo PRs there is no new exposure.
 
 ## Privacy: read before enabling on private code
 
@@ -92,21 +114,26 @@ The screenshots job sends nothing to a third party; it only renders your own cli
 Pull requests from forks get a read-only `GITHUB_TOKEN` and cannot read repo secrets on
 the `pull_request` trigger. Both comment steps and the automatic AI review degrade to a
 no-op there (the scripts detect the missing write access / auth and skip), so the workflow
-never errors on a fork PR. Screenshots are still captured and uploaded as an artifact.
+never errors on a fork PR. Screenshots are still captured, but a read-only token can
+neither host the images nor post a comment at all, so on a fork PR the screenshot comment
+is skipped entirely (the frames exist only in the job log's capture output).
 
 The on-demand `/review` and `/suggest` comment trigger is different: `issue_comment`
-always runs with full repo secrets, regardless of whether the PR is from a fork. It is
-still safe against a fork PR because the job never checks out or runs the PR's own code,
-and because it is gated on the commenter's `author_association` with this repo, not with
-the PR's origin (see "Requesting a review on demand" above).
+always runs with full repo secrets, regardless of whether the PR is from a fork, and it
+checks out and exercises the PR's own code so the agent can verify it. That combination
+is gated on the commenter's `author_association` with this repo, not the PR's origin,
+and is a deliberate maintainer opt-in with documented mitigations (see "Requesting a
+review on demand" above).
 
-## Running the screenshot tour locally
+## Running the screenshot capture locally
 
 ```sh
 npm run dev                       # serves the client on :5173
-BROWSER_PATH=/path/to/chrome \
-  node scripts/pr_screenshots.mjs # writes PNGs into pr-shots/
+git diff --no-color origin/main > pr.diff   # the change to classify
+BROWSER_PATH=/path/to/chrome DIFF_FILE=pr.diff \
+  node scripts/pr_screenshots.mjs # writes PNGs into pr-shots/ (none if not visual)
 ```
 
-`BROWSER_PATH` is only needed if no Chrome/Edge/Chromium is on a standard path
-(see `scripts/browser_path.mjs`).
+The capture is diff-driven: with no `DIFF_FILE` (or a diff that changes nothing visual)
+it captures nothing. `BROWSER_PATH` is only needed if no Chrome/Edge/Chromium is on a
+standard path (see `scripts/browser_path.mjs`), and only when there is something to shoot.
