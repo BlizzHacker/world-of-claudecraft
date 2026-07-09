@@ -1,8 +1,14 @@
 // E2E Verification Script: checks homepage layout, view switching, and localization.
+import { readFileSync } from 'node:fs';
 import puppeteer from 'puppeteer-core';
 import { BROWSER_PATH } from './browser_path.mjs';
 
-const URL = process.env.GAME_URL ?? 'http://localhost:5173';
+const GAME_URL = process.env.GAME_URL ?? 'http://localhost:5173';
+const EXPECTED_APP_VERSION =
+  process.env.EXPECTED_APP_VERSION ??
+  JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')).version;
+const BASE_URL = new URL(GAME_URL);
+const IS_LOCAL = ['localhost', '127.0.0.1', '::1'].includes(BASE_URL.hostname);
 
 async function waitForServer(url, timeoutMs = 15000) {
   const start = Date.now();
@@ -10,7 +16,7 @@ async function waitForServer(url, timeoutMs = 15000) {
     try {
       const res = await fetch(url);
       if (res.ok) return;
-    } catch (e) {
+    } catch {
       // ignore connection errors
     }
     await new Promise((r) => setTimeout(r, 500));
@@ -18,14 +24,57 @@ async function waitForServer(url, timeoutMs = 15000) {
   throw new Error(`Timeout waiting for server at ${url}`);
 }
 
-async function main() {
-  console.log('Waiting for dev server and game server to be ready...');
+function isExpectedUnauthedResponse(url, status) {
+  if (status !== 401 && status !== 403) return false;
   try {
-    await waitForServer('http://localhost:5173');
-    await waitForServer('http://127.0.0.1:8787/api/project-stats');
+    const parsed = new URL(url);
+    return (
+      parsed.pathname === '/api/oauth/authentik/status' ||
+      parsed.pathname === '/me/api/me' ||
+      parsed.pathname === '/api/account'
+    );
+  } catch {
+    return false;
+  }
+}
+
+function isExpectedConsoleNoise(text) {
+  return (
+    text.includes('502') ||
+    text.includes('Bad Gateway') ||
+    text.includes('project-stats') ||
+    text.startsWith('Failed to load resource: the server responded with a status of 401') ||
+    text.startsWith('Failed to load resource: the server responded with a status of 403')
+  );
+}
+
+async function waitForIdlePaint(page) {
+  await page.waitForSelector('#hero-view', { timeout: 15000 });
+  await new Promise((r) => setTimeout(r, 500));
+}
+
+async function readText(page, selector) {
+  return page.evaluate((sel) => document.querySelector(sel)?.textContent?.trim() ?? '', selector);
+}
+
+async function waitForHtmlLang(page, expected) {
+  await page.waitForFunction(
+    (lang) => document.documentElement.lang === lang,
+    {
+      timeout: 10000,
+    },
+    expected,
+  );
+}
+
+async function main() {
+  if (IS_LOCAL) {
+    console.log('Waiting for local dev server and game server to be ready...');
+    await waitForServer(BASE_URL.origin);
+    await waitForServer(`${BASE_URL.origin}/api/project-stats`);
     console.log('Servers are ready.');
-  } catch (err) {
-    console.error(err.message);
+  } else {
+    console.log(`Running production homepage verification against ${BASE_URL.origin}.`);
   }
 
   console.log(`Launching browser from: ${BROWSER_PATH}`);
@@ -38,6 +87,7 @@ async function main() {
 
   const page = await browser.newPage();
   const pageErrors = [];
+  const unexpectedResponses = [];
   page.on('pageerror', (e) => {
     console.error(`Browser Page Error: ${e.message}`);
     pageErrors.push(e);
@@ -45,18 +95,24 @@ async function main() {
   page.on('console', (msg) => {
     if (msg.type() === 'error') {
       const text = msg.text();
-      if (text.includes('502') || text.includes('Bad Gateway') || text.includes('project-stats')) {
-        console.log(`Ignoring transient browser startup network error: ${text}`);
+      if (isExpectedConsoleNoise(text)) {
+        console.log(`Ignoring expected browser startup network noise: ${text}`);
         return;
       }
       console.error(`Browser Console Error: ${text}`);
       pageErrors.push(new Error(text));
     }
   });
+  page.on('response', (res) => {
+    const status = res.status();
+    if (status < 400 || isExpectedUnauthedResponse(res.url(), status)) return;
+    unexpectedResponses.push({ status, url: res.url() });
+  });
 
   try {
-    console.log(`Navigating to ${URL}...`);
-    await page.goto(URL, { waitUntil: 'networkidle0', timeout: 15000 });
+    console.log(`Navigating to ${GAME_URL}...`);
+    await page.goto(GAME_URL, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    await waitForIdlePaint(page);
 
     // Verify Title and Meta Description
     const pageTitle = await page.title();
@@ -70,8 +126,16 @@ async function main() {
       return meta ? meta.getAttribute('content') : null;
     });
     console.log(`Meta Description: "${metaDescription}"`);
-    if (!metaDescription || !metaDescription.includes('Cryptic Realm')) {
+    if (!metaDescription?.includes('Cryptic Realm')) {
       throw new Error(`Unexpected or missing meta description: "${metaDescription}"`);
+    }
+
+    const footerVersion = await readText(page, '#game-version');
+    console.log(`Footer Version: "${footerVersion}"`);
+    if (!footerVersion.startsWith(`v${EXPECTED_APP_VERSION}`)) {
+      throw new Error(
+        `Deployed footer version "${footerVersion}" does not match expected v${EXPECTED_APP_VERSION}.`,
+      );
     }
 
     // Define views and their corresponding navigation buttons
@@ -79,7 +143,7 @@ async function main() {
       { id: '#hero-view', btn: '#nav-btn-play' },
       { id: '#highscores-view', btn: '#nav-btn-highscores' },
       { id: '#news-view', btn: '#nav-btn-news' },
-      { id: '#download-view', btn: '#nav-btn-download' }
+      { id: '#download-view', btn: '#nav-btn-download' },
     ];
 
     // Helper to assert view visibility
@@ -102,14 +166,18 @@ async function main() {
             throw new Error(`Expected active view ${view.id} to be visible, but it is hidden.`);
           }
           if (ariaHidden !== 'false') {
-            throw new Error(`Expected active view ${view.id} to have aria-hidden="false", got "${ariaHidden}".`);
+            throw new Error(
+              `Expected active view ${view.id} to have aria-hidden="false", got "${ariaHidden}".`,
+            );
           }
         } else {
           if (!isHidden) {
             throw new Error(`Expected inactive view ${view.id} to be hidden, but it is visible.`);
           }
           if (ariaHidden !== 'true') {
-            throw new Error(`Expected inactive view ${view.id} to have aria-hidden="true", got "${ariaHidden}".`);
+            throw new Error(
+              `Expected inactive view ${view.id} to have aria-hidden="true", got "${ariaHidden}".`,
+            );
           }
         }
       }
@@ -137,15 +205,12 @@ async function main() {
 
     // 3. Verify Dynamic Translation (English -> Spanish)
     console.log('Verifying dynamic localization switcher...');
-    
+
     // Check initial English texts
-    const engRealmStatusText = await page.evaluate(() => {
-      const el = document.querySelector('#project-stats-panel h2');
-      return el ? el.textContent.trim() : '';
-    });
-    console.log(`English Status Title: "${engRealmStatusText}"`);
-    if (engRealmStatusText !== 'Realm Status') {
-      throw new Error(`Expected English stats title to be "Realm Status", got "${engRealmStatusText}"`);
+    const engPlayText = await readText(page, '#nav-btn-play');
+    console.log(`English Play nav text: "${engPlayText}"`);
+    if (engPlayText !== 'Play') {
+      throw new Error(`Expected English play nav text to be "Play", got "${engPlayText}"`);
     }
 
     // Change language to Spanish (es)
@@ -158,7 +223,7 @@ async function main() {
       }
     });
     // Wait for client translation
-    await new Promise((r) => setTimeout(r, 300));
+    await waitForHtmlLang(page, 'es');
 
     // Verify html lang attribute
     const htmlLang = await page.evaluate(() => document.documentElement.lang);
@@ -175,15 +240,11 @@ async function main() {
     }
 
     // Check Spanish translations
-    const espRealmStatusText = await page.evaluate(() => {
-      const el = document.querySelector('#project-stats-panel h2');
-      return el ? el.textContent.trim() : '';
-    });
-    console.log(`Spanish Status Title: "${espRealmStatusText}"`);
-    if (espRealmStatusText !== 'Estado del Reino') {
-      throw new Error(`Expected Spanish stats title to be "Estado del Reino", got "${espRealmStatusText}"`);
+    const espPlayText = await readText(page, '#nav-btn-play');
+    console.log(`Spanish Play nav text: "${espPlayText}"`);
+    if (espPlayText !== 'Jugar') {
+      throw new Error(`Expected Spanish play nav text to be "Jugar", got "${espPlayText}"`);
     }
-
 
     // Switch back to English (en)
     console.log('Switching back to English (en)...');
@@ -194,7 +255,7 @@ async function main() {
         select.dispatchEvent(new Event('change', { bubbles: true }));
       }
     });
-    await new Promise((r) => setTimeout(r, 300));
+    await waitForHtmlLang(page, 'en');
 
     // Verify URL updates to include English lang parameter
     const englishUrl = await page.url();
@@ -204,13 +265,10 @@ async function main() {
     }
 
     // Verify back in English
-    const engStatusTitle = await page.evaluate(() => {
-      const el = document.querySelector('#project-stats-panel h2');
-      return el ? el.textContent.trim() : '';
-    });
-    console.log(`English Status Title restored: "${engStatusTitle}"`);
-    if (engStatusTitle !== 'Realm Status') {
-      throw new Error(`Expected English stats title to be "Realm Status", got "${engStatusTitle}"`);
+    const engPlayRestored = await readText(page, '#nav-btn-play');
+    console.log(`English Play nav text restored: "${engPlayRestored}"`);
+    if (engPlayRestored !== 'Play') {
+      throw new Error(`Expected English play nav text to be "Play", got "${engPlayRestored}"`);
     }
 
     // 4. Verify all new target languages from i18n via URL query parameters
@@ -227,14 +285,15 @@ async function main() {
       { code: 'ko_KR', expectedPlay: '플레이' },
       { code: 'ja_JP', expectedPlay: 'プレイ' },
       { code: 'pt_BR', expectedPlay: 'Jogar' },
-      { code: 'ru_RU', expectedPlay: 'Играть' }
+      { code: 'ru_RU', expectedPlay: 'Играть' },
     ];
 
     for (const langCheck of langChecks) {
       console.log(`Checking language "${langCheck.code}"...`);
-      const langUrl = `${URL}/?lang=${langCheck.code}`;
-      await page.goto(langUrl, { waitUntil: 'networkidle0', timeout: 15000 });
-      
+      const langUrl = `${GAME_URL}/?lang=${langCheck.code}`;
+      await page.goto(langUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
+      await waitForIdlePaint(page);
+
       const currentHtmlLang = await page.evaluate(() => document.documentElement.lang);
       const expectedHtmlLang = langCheck.code.replace('_', '-');
       if (currentHtmlLang !== expectedHtmlLang) {
@@ -247,12 +306,19 @@ async function main() {
       });
       console.log(`  [${langCheck.code}] Play nav link text: "${playText}"`);
       if (playText !== langCheck.expectedPlay) {
-        throw new Error(`Expected play nav link text for "${langCheck.code}" to be "${langCheck.expectedPlay}", got "${playText}"`);
+        throw new Error(
+          `Expected play nav link text for "${langCheck.code}" to be "${langCheck.expectedPlay}", got "${playText}"`,
+        );
       }
     }
 
     if (pageErrors.length > 0) {
       throw new Error(`Page encountered errors during test execution: ${pageErrors[0].message}`);
+    }
+    if (unexpectedResponses.length > 0) {
+      throw new Error(
+        `Unexpected HTTP error during test execution: ${JSON.stringify(unexpectedResponses[0])}`,
+      );
     }
 
     console.log('E2E Verification completed successfully! All checks passed.');

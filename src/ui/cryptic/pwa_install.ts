@@ -1,6 +1,7 @@
 // PWA install prompt. Catches beforeinstallprompt, surfaces a banner with
 // an "Install Cryptic Realm" button, persists user dismissal so we don't
 // nag.
+import './pwa_install.css';
 
 let deferred: BeforeInstallPromptEvent | null = null;
 const DISMISS_KEY = 'cr_pwa_dismissed';
@@ -12,11 +13,19 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 function dismissed(): boolean {
-  try { return localStorage.getItem(DISMISS_KEY) === '1'; } catch { return false; }
+  try {
+    return localStorage.getItem(DISMISS_KEY) === '1';
+  } catch {
+    return false;
+  }
 }
 
 function rememberDismissed(): void {
-  try { localStorage.setItem(DISMISS_KEY, '1'); } catch { /* noop */ }
+  try {
+    localStorage.setItem(DISMISS_KEY, '1');
+  } catch {
+    /* noop */
+  }
 }
 
 function renderBanner(): void {
@@ -41,7 +50,10 @@ function renderBanner(): void {
     await deferred.prompt();
     const { outcome } = await deferred.userChoice;
     if (outcome === 'accepted') el.remove();
-    if (outcome === 'dismissed') { rememberDismissed(); el.remove(); }
+    if (outcome === 'dismissed') {
+      rememberDismissed();
+      el.remove();
+    }
     deferred = null;
   });
   el.querySelector('#cr-pwa-dismiss')?.addEventListener('click', () => {
@@ -59,8 +71,9 @@ export function mountPwaInstall(): void {
   });
   // On iOS Safari there's no event; show a manual instruction banner.
   const isIos = /iPhone|iPad|iPod/.test(navigator.userAgent);
-  const standalone = (window.matchMedia('(display-mode: standalone)').matches ||
-    (navigator as unknown as { standalone?: boolean }).standalone === true);
+  const standalone =
+    window.matchMedia('(display-mode: standalone)').matches ||
+    (navigator as unknown as { standalone?: boolean }).standalone === true;
   if (isIos && !standalone && !dismissed()) {
     setTimeout(() => {
       if (document.getElementById(BANNER_ID)) return;

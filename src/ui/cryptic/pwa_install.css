@@ -1,0 +1,50 @@
+.cr-pwa-banner {
+  box-sizing: border-box;
+  width: min(560px, calc(100vw - 32px));
+}
+
+.cr-pwa-text {
+  flex: 1 1 260px;
+  min-width: 0;
+  line-height: 1.35;
+}
+
+.cr-pwa-actions {
+  flex: 0 0 auto;
+  align-items: center;
+}
+
+@media (max-width: 520px) {
+  .cr-pwa-banner {
+    right: max(12px, env(safe-area-inset-right));
+    bottom: max(12px, env(safe-area-inset-bottom));
+    left: max(12px, env(safe-area-inset-left));
+    transform: none;
+    width: auto;
+    max-width: none;
+    padding: 12px 14px;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .cr-pwa-actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .cr-pwa-actions #cr-pwa-install,
+  .cr-pwa-link {
+    min-height: 40px;
+  }
+}
+
+@media (max-width: 360px) {
+  .cr-pwa-banner {
+    flex-direction: column;
+  }
+
+  .cr-pwa-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}

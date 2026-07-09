@@ -77,7 +77,6 @@ function audit() {
   const titles = getFullTags('title');
   const titleText = titles.length > 0 ? titles[0].content : '';
   const hasTitle = titles.length === 1 && titleText.length > 0;
-  const isTitleGoodLength = titleText.length >= 10 && titleText.length <= 70;
   const hasTitleEmDash = titleText.includes('\u2014');
 
   checks.push({
@@ -184,18 +183,13 @@ function audit() {
   // 7. Interactive Element Accessible Names
   const buttons = getTags('button');
   let missingLabels = 0;
-  let okLabels = 0;
   for (const btn of buttons) {
-    const id = getAttribute(btn, 'id');
     const ariaLabel = getAttribute(btn, 'aria-label') || getAttribute(btn, 'data-i18n-aria');
-    const textLabel = html.includes(btn); // simplified
     const isHamburger = btn.includes('mobile-menu-toggle');
     const isPasswordToggle = btn.includes('password-toggle');
 
     if ((isHamburger || isPasswordToggle) && !ariaLabel) {
       missingLabels++;
-    } else {
-      okLabels++;
     }
   }
   const allBtnsHaveLabel = missingLabels === 0;
@@ -210,7 +204,8 @@ function audit() {
   });
 
   // 8. Canonical Link Check
-  const hasCanonical = html.includes('rel="canonical"') && html.includes('href="https://crypticrealm.com/"');
+  const hasCanonical =
+    html.includes('rel="canonical"') && html.includes('href="https://crypticrealm.com/"');
   checks.push({
     category: 'SEO',
     name: 'Canonical link tag is present and correct',
@@ -250,7 +245,9 @@ function audit() {
   const ogDesc = html.includes('property="og:description"');
   const ogType = html.includes('property="og:type"');
   const ogUrl = html.includes('property="og:url"');
-  const ogImage = html.includes('property="og:image"') && html.includes('woc_logo_square.webp');
+  const ogImage =
+    html.includes('property="og:image"') &&
+    html.includes('https://crypticrealm.com/cr_og_square.png');
   const hasAllOg = ogTitle && ogDesc && ogType && ogUrl && ogImage;
   checks.push({
     category: 'SEO',
