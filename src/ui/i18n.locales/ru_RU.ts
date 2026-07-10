@@ -14,6 +14,19 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ru_RU: Partial<Record<TranslationKey, string>> = {
+  'news.officialLog': 'Ofitsialnyi zhurnal',
+  'news.alphaBetaTitle': 'Ritm alpha, beta i public realm',
+  'news.alphaBetaBody':
+    'Alpha-testery poluchayut bolshe platiny, potomu chto personazhi sbrosyatsya kazhdye dve nedeli. Beta prodvigaetsya ezhemesyachno posle proverki.',
+  'news.tokenTitle': '$CR i polza platiny',
+  'news.tokenBody':
+    '$CR eto Solana SPL token Cryptic Realm. Platina svyazyvaet kosmetiku, doma, mounty, market i Exchange.',
+  'news.prTitle': 'Upstream-trek',
+  'news.prBody':
+    'Obshchie uluchsheniya engine, auth, dashboard i wiki peredayutsya ClaudeCraft; svoe Cryptic Realm ostaetsya zdes.',
+  'news.proofTitle': 'Dokazatelstvo $CR',
+  'news.proofBody': 'Publichnaya stranitsa pokazyvaet mint, treasury i ssylki Solscan.',
+  'news.openLink': 'Otkryt',
   'download.macCta': 'Скачать для macOS',
   'download.linuxCta': 'Скачать для Linux',
   'download.linuxHint': 'AppImage: сделайте файл исполняемым и запустите его. Установка не нужна.',

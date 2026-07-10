@@ -14,6 +14,19 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ja_JP: Partial<Record<TranslationKey, string>> = {
+  'news.officialLog': 'Koshiki log',
+  'news.alphaBetaTitle': 'Alpha, beta, kokai realm no rizumu',
+  'news.alphaBetaBody':
+    'Alpha tester wa futatsu no shuuki de character ga reset sareru tame yori ooku no platinum o emasu. Beta wa maitsuki review go ni kokai realm e utsurimasu.',
+  'news.tokenTitle': '$CR to platinum no yoto',
+  'news.tokenBody':
+    '$CR wa Cryptic Realm no Solana SPL token desu. Platinum wa cosmetic, ie, mount, market, Exchange o tsunagimasu.',
+  'news.prTitle': 'Upstream kyoryoku',
+  'news.prBody':
+    'Engine, auth, dashboard, wiki no ippan kaizen wa ClaudeCraft to kyoyu shi, Cryptic Realm koyu no kino wa koko ni nokoshimasu.',
+  'news.proofTitle': '$CR shomei',
+  'news.proofBody': 'Kokai shomei page ni mint, treasury, Solscan link o keisai shiteimasu.',
+  'news.openLink': 'Hiraku',
   'download.macCta': 'macOS用ダウンロード',
   'download.linuxCta': 'Linux用ダウンロード',
   'download.linuxHint': 'AppImage: 実行可能にして起動します。インストールは不要です。',

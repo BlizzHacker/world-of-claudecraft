@@ -2,6 +2,19 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const vi_VN: Partial<Record<TranslationKey, string>> = {
+  'news.officialLog': 'Nhat ky chinh thuc',
+  'news.alphaBetaTitle': 'Nhip alpha, beta va realm cong khai',
+  'news.alphaBetaBody':
+    'Nguoi thu alpha nhan nhieu platinum hon vi nhan vat dat lai moi hai tuan. Beta duoc dua len hang thang sau khi duyet.',
+  'news.tokenTitle': '$CR va cong dung platinum',
+  'news.tokenBody':
+    '$CR la token SPL Solana cua Cryptic Realm. Platinum ket noi my pham, nha, thu cuoi, thi truong va Exchange.',
+  'news.prTitle': 'Duong upstream',
+  'news.prBody':
+    'Cai tien chung ve engine, auth, bang dieu khien va wiki duoc chia se voi ClaudeCraft; phan rieng cua Cryptic Realm o lai day.',
+  'news.proofTitle': 'Bang chung $CR',
+  'news.proofBody': 'Trang bang chung cong khai hien mint, treasury va lien ket Solscan.',
+  'news.openLink': 'Mo',
   'download.macCta': 'Tai cho macOS',
   'download.linuxCta': 'Tai cho Linux',
   'download.linuxHint': 'AppImage: dat quyen chay roi mo. Khong can cai dat.',

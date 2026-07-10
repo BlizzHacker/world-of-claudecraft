@@ -2,6 +2,19 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const sv_SE: Partial<Record<TranslationKey, string>> = {
+  'news.officialLog': 'Officiell logg',
+  'news.alphaBetaTitle': 'Alpha-, beta- och publik realm-takt',
+  'news.alphaBetaBody':
+    'Alpha-testare far mer platinum eftersom deras karaktarer nollstalls varannan vecka. Beta flyttas manadsvis efter granskning.',
+  'news.tokenTitle': '$CR och platinum-nytta',
+  'news.tokenBody':
+    '$CR ar Cryptic Realms Solana SPL-token. Platinum binder kosmetik, hus, mounts, marknad och Exchange.',
+  'news.prTitle': 'Upstream-spar',
+  'news.prBody':
+    'Generella engine-, auth-, dashboard- och wiki-forbattringar delas med ClaudeCraft; Cryptic Realm-eget arbete stannar har.',
+  'news.proofTitle': '$CR-bevis',
+  'news.proofBody': 'Den publika bevissidan visar mint, treasury och Solscan-lankar.',
+  'news.openLink': 'Oppna',
   'download.macCta': 'Ladda ner for macOS',
   'download.linuxCta': 'Ladda ner for Linux',
   'download.linuxHint': 'AppImage: gor den korbar och starta den. Ingen installation behovs.',

@@ -14,6 +14,19 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const zh_CN: Partial<Record<TranslationKey, string>> = {
+  'news.officialLog': 'Guanfang rizhi',
+  'news.alphaBetaTitle': 'Alpha, beta he gongkai jiezou',
+  'news.alphaBetaBody':
+    'Alpha ceshiyuan huode gengduo bojin, yinwei juese liang zhou chongzhi. Beta mei yue shenhe hou jinru gongkai realm.',
+  'news.tokenTitle': '$CR he bojin yongtu',
+  'news.tokenBody':
+    '$CR shi Cryptic Realm de Solana SPL token. Bojin lianjie waiguan, fangwu, zuoqi, shichang he Exchange.',
+  'news.prTitle': 'Shangyou xiezuo',
+  'news.prBody':
+    'Tongyong yinqing, renzheng, mianban he wiki gaijin hui fenxiang gei ClaudeCraft; Cryptic Realm zhuanshu neirong liuzai zheli.',
+  'news.proofTitle': '$CR zhengming',
+  'news.proofBody': 'Gongkai zhengming ye liechu mint, treasury he Solscan lianjie.',
+  'news.openLink': 'Dakai',
   'download.macCta': '下载 macOS 版',
   'download.linuxCta': '下载 Linux 版',
   'download.linuxHint': 'AppImage：设为可执行后运行，无需安装。',

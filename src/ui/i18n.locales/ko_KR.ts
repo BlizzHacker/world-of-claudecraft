@@ -14,6 +14,19 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ko_KR: Partial<Record<TranslationKey, string>> = {
+  'news.officialLog': 'Gongsik logu',
+  'news.alphaBetaTitle': 'Alpha, beta, gonggae realm jujugi',
+  'news.alphaBetaBody':
+    'Alpha tester neun du ju mada character ga reset doeeo platinum eul deo batseumnida. Beta neun geomto hu mae dal gonggae realm euro ollagamnida.',
+  'news.tokenTitle': '$CR gwa platinum yongdo',
+  'news.tokenBody':
+    '$CR neun Cryptic Realm ui Solana SPL token imnida. Platinum eun cosmetic, house, mount, market, Exchange reul yeongyeolhamnida.',
+  'news.prTitle': 'Upstream hyeomnyeok',
+  'news.prBody':
+    'Engine, auth, dashboard, wiki ui gongtong gaeseon eun ClaudeCraft wa gongyu hago Cryptic Realm jeonyong gineung eun yeogi namgyeodumnida.',
+  'news.proofTitle': '$CR jeungmyeong',
+  'news.proofBody': 'Gonggae jeungmyeong page e mint, treasury, Solscan link ga itsseumnida.',
+  'news.openLink': 'Yeolgi',
   'download.macCta': 'macOS용 다운로드',
   'download.linuxCta': 'Linux용 다운로드',
   'download.linuxHint': 'AppImage: 실행 가능하게 만든 뒤 실행하세요. 설치는 필요 없습니다.',

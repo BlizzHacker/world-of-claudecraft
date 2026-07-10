@@ -2,6 +2,19 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const nl_NL: Partial<Record<TranslationKey, string>> = {
+  'news.officialLog': 'Officieel logboek',
+  'news.alphaBetaTitle': 'Alpha-, beta- en publiek realm-ritme',
+  'news.alphaBetaBody':
+    'Alpha-testers verdienen meer platinum omdat personages elke twee weken resetten. Beta promoveert maandelijks na review.',
+  'news.tokenTitle': '$CR en platinum nut',
+  'news.tokenBody':
+    '$CR is de Solana SPL-token van Cryptic Realm. Platinum verbindt cosmetica, huizen, mounts, markt en Exchange.',
+  'news.prTitle': 'Upstream spoor',
+  'news.prBody':
+    'Generieke engine-, auth-, dashboard- en wiki-verbeteringen gaan naar ClaudeCraft; Cryptic Realm-eigen werk blijft hier.',
+  'news.proofTitle': '$CR bewijs',
+  'news.proofBody': 'De publieke bewijs-pagina toont mint, treasury en Solscan-links.',
+  'news.openLink': 'Openen',
   'download.macCta': 'Download voor macOS',
   'download.linuxCta': 'Download voor Linux',
   'download.linuxHint': 'AppImage: maak het uitvoerbaar en start het. Geen installatie nodig.',

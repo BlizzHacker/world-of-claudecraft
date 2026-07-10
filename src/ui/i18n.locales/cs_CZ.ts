@@ -2,6 +2,19 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const cs_CZ: Partial<Record<TranslationKey, string>> = {
+  'news.officialLog': 'Oficialni zaznam',
+  'news.alphaBetaTitle': 'Rytmus alpha, beta a verejneho realmu',
+  'news.alphaBetaBody':
+    'Alpha testeri ziskavaji vic platiny, protoze postavy se resetuji kazde dva tydny. Beta postupuje mesicne po kontrole.',
+  'news.tokenTitle': '$CR a vyuziti platiny',
+  'news.tokenBody':
+    '$CR je Solana SPL token Cryptic Realm. Platina propojuje kosmetiku, domy, mounty, trh a Exchange.',
+  'news.prTitle': 'Upstream stopa',
+  'news.prBody':
+    'Obecna vylepseni enginu, auth, panelu a wiki se sdileji s ClaudeCraft; vlastni veci Cryptic Realm zustavaji zde.',
+  'news.proofTitle': 'Dukaz $CR',
+  'news.proofBody': 'Verejna dukazova stranka ukazuje mint, treasury a odkazy Solscan.',
+  'news.openLink': 'Otevrit',
   'nav.whitepaper': 'Bila kniha',
   'nav.contributions': 'Prispevky',
   'entities.abilities.sport_boot.description':

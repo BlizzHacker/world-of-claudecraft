@@ -2,6 +2,19 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const pl_PL: Partial<Record<TranslationKey, string>> = {
+  'news.officialLog': 'Oficjalny dziennik',
+  'news.alphaBetaTitle': 'Rytm alpha, beta i publicznego realmu',
+  'news.alphaBetaBody':
+    'Testerzy alpha dostaja wiecej platyny, bo postacie resetuja sie co dwa tygodnie. Beta awansuje co miesiac po przegladzie.',
+  'news.tokenTitle': '$CR i uzycie platyny',
+  'news.tokenBody':
+    '$CR to token SPL Solana gry Cryptic Realm. Platyna laczy kosmetyki, domy, mounty, market i Exchange.',
+  'news.prTitle': 'Sciezka upstream',
+  'news.prBody':
+    'Og?lne ulepszenia engine, auth, paneli i wiki trafiaja do ClaudeCraft; funkcje Cryptic Realm zostaja tutaj.',
+  'news.proofTitle': 'Dowod $CR',
+  'news.proofBody': 'Publiczna strona dowodu pokazuje mint, treasury i linki Solscan.',
+  'news.openLink': 'Otworz',
   'nav.whitepaper': 'Biala ksiega',
   'nav.contributions': 'Wklady',
   'entities.abilities.sport_boot.description':

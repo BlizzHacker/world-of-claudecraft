@@ -2,6 +2,19 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const id_ID: Partial<Record<TranslationKey, string>> = {
+  'news.officialLog': 'Log resmi',
+  'news.alphaBetaTitle': 'Irama alpha, beta, dan realm publik',
+  'news.alphaBetaBody':
+    'Tester alpha mendapat platinum lebih banyak karena karakter direset tiap dua minggu. Beta dipromosikan bulanan setelah ulasan.',
+  'news.tokenTitle': 'Kegunaan $CR dan platinum',
+  'news.tokenBody':
+    '$CR adalah token SPL Solana Cryptic Realm. Platinum menghubungkan kosmetik, rumah, mount, market, dan Exchange.',
+  'news.prTitle': 'Jalur upstream',
+  'news.prBody':
+    'Peningkatan umum engine, auth, dashboard, dan wiki dibagikan ke ClaudeCraft; fitur khusus Cryptic Realm tetap di sini.',
+  'news.proofTitle': 'Bukti $CR',
+  'news.proofBody': 'Halaman bukti publik menampilkan mint, treasury, dan tautan Solscan.',
+  'news.openLink': 'Buka',
   'download.macCta': 'Unduh untuk macOS',
   'download.linuxCta': 'Unduh untuk Linux',
   'download.linuxHint': 'AppImage: buat dapat dijalankan, lalu buka. Tidak perlu instalasi.',

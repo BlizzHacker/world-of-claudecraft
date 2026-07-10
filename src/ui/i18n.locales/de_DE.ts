@@ -14,6 +14,19 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const de_DE: Partial<Record<TranslationKey, string>> = {
+  'news.officialLog': 'Offizielles Protokoll',
+  'news.alphaBetaTitle': 'Alpha-, Beta- und Public-Realm-Takt',
+  'news.alphaBetaBody':
+    'Alpha-Tester erhalten mehr Platin, weil ihre Charaktere alle zwei Wochen zurueckgesetzt werden. Beta wird monatlich nach Pruefung befoerdert.',
+  'news.tokenTitle': '$CR und Platin-Nutzen',
+  'news.tokenBody':
+    '$CR ist der Solana-SPL-Token von Cryptic Realm. Platin verbindet Kosmetik, Haeuser, Reittiere, Markt und Exchange.',
+  'news.prTitle': 'Upstream-Spur',
+  'news.prBody':
+    'Generische Engine-, Auth-, Dashboard- und Wiki-Verbesserungen gehen an ClaudeCraft; Cryptic-Realm-eigene Arbeit bleibt hier.',
+  'news.proofTitle': '$CR-Nachweis',
+  'news.proofBody': 'Die oeffentliche Nachweisseite zeigt Mint, Treasury und Solscan-Links.',
+  'news.openLink': 'Oeffnen',
   'download.macCta': 'Fuer macOS herunterladen',
   'download.linuxCta': 'Fuer Linux herunterladen',
   'download.linuxHint': 'AppImage: ausfuehrbar machen und starten. Keine Installation noetig.',

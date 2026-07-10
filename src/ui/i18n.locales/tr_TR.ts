@@ -2,6 +2,19 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const tr_TR: Partial<Record<TranslationKey, string>> = {
+  'news.officialLog': 'Resmi kayit',
+  'news.alphaBetaTitle': 'Alpha, beta ve acik realm temposu',
+  'news.alphaBetaBody':
+    'Alpha testcileri daha cok platinum kazanir cunku karakterler iki haftada bir sifirlanir. Beta incelemeden sonra aylik olarak acik realme cikar.',
+  'news.tokenTitle': '$CR ve platinum kullanimi',
+  'news.tokenBody':
+    '$CR, Cryptic Realm icin Solana SPL tokenidir. Platinum kozmetik, ev, binek, pazar ve Exchange ile bag kurar.',
+  'news.prTitle': 'Upstream izi',
+  'news.prBody':
+    'Genel motor, auth, panel ve wiki iyilestirmeleri ClaudeCraft ile paylasilir; Cryptic Realm ozel isleri burada kalir.',
+  'news.proofTitle': '$CR kaniti',
+  'news.proofBody': 'Acik kanit sayfasi mint, treasury ve Solscan baglantilarini gosterir.',
+  'news.openLink': 'Ac',
   'download.macCta': 'macOS icin indir',
   'download.linuxCta': 'Linux icin indir',
   'download.linuxHint': 'AppImage: calistirilabilir yap, sonra ac. Kurulum gerekmez.',
