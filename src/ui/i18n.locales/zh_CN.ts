@@ -14,6 +14,14 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const zh_CN: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.account.sectionConnections': 'Lianjie zhanghao',
+  'hudChrome.account.connectionsSummary': 'Guanli ci zhanghao de denglu tigongfang lianjie.',
+  'hudChrome.account.ssoLink': 'Lianjie Discord',
+  'hudChrome.account.ssoLinked': 'Discord yi lianjie.',
+  'hudChrome.account.ssoNotLinked': 'Discord wei lianjie.',
+  'hudChrome.account.ssoUnlink': 'Jiechubangding Discord',
+  'hudChrome.account.ssoLinkConflict': 'Gai Discord zhanghao yi lianjie dao ling yi ge zhanghao.',
+  'hudChrome.account.ssoUnlinkNeedsPassword': 'Jiechubangding Discord qian qing xian shezhi mima.',
   'news.officialLog': 'Guanfang rizhi',
   'news.alphaBetaTitle': 'Alpha, beta he gongkai jiezou',
   'news.alphaBetaBody':

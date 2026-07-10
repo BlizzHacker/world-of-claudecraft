@@ -2,6 +2,15 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const vi_VN: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.account.sectionConnections': 'Tai khoan da ket noi',
+  'hudChrome.account.connectionsSummary':
+    'Quan ly nha cung cap dang nhap da lien ket voi tai khoan nay.',
+  'hudChrome.account.ssoLink': 'Lien ket Discord',
+  'hudChrome.account.ssoLinked': 'Discord da lien ket.',
+  'hudChrome.account.ssoNotLinked': 'Discord chua lien ket.',
+  'hudChrome.account.ssoUnlink': 'Bo lien ket Discord',
+  'hudChrome.account.ssoLinkConflict': 'Tai khoan Discord do da lien ket voi tai khoan khac.',
+  'hudChrome.account.ssoUnlinkNeedsPassword': 'Dat mat khau truoc khi bo lien ket Discord.',
   'news.officialLog': 'Nhat ky chinh thuc',
   'news.alphaBetaTitle': 'Nhip alpha, beta va realm cong khai',
   'news.alphaBetaBody':

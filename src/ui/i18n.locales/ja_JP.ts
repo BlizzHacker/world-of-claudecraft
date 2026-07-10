@@ -14,6 +14,17 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ja_JP: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.account.sectionConnections': 'Renketsu account',
+  'hudChrome.account.connectionsSummary':
+    'Kono account ni tsunagatta sign-in provider o kanri shimasu.',
+  'hudChrome.account.ssoLink': 'Discord o renkei',
+  'hudChrome.account.ssoLinked': 'Discord renkei zumi.',
+  'hudChrome.account.ssoNotLinked': 'Discord wa mirenkei.',
+  'hudChrome.account.ssoUnlink': 'Discord renkei kaijo',
+  'hudChrome.account.ssoLinkConflict':
+    'Sono Discord account wa sudeni betsu no account ni renkei sareteimasu.',
+  'hudChrome.account.ssoUnlinkNeedsPassword':
+    'Discord renkei kaijo no mae ni password o settei shite kudasai.',
   'news.officialLog': 'Koshiki log',
   'news.alphaBetaTitle': 'Alpha, beta, kokai realm no rizumu',
   'news.alphaBetaBody':

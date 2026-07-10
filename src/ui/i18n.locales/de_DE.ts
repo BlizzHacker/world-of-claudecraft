@@ -14,6 +14,15 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const de_DE: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.account.sectionConnections': 'Verbundene Konten',
+  'hudChrome.account.connectionsSummary': 'Verwalte verknuepfte Anmeldeanbieter fuer dieses Konto.',
+  'hudChrome.account.ssoLink': 'Discord verknuepfen',
+  'hudChrome.account.ssoLinked': 'Discord verknuepft.',
+  'hudChrome.account.ssoNotLinked': 'Discord nicht verknuepft.',
+  'hudChrome.account.ssoUnlink': 'Discord trennen',
+  'hudChrome.account.ssoLinkConflict':
+    'Dieses Discord-Konto ist bereits mit einem anderen Konto verknuepft.',
+  'hudChrome.account.ssoUnlinkNeedsPassword': 'Lege ein Passwort fest, bevor du Discord trennst.',
   'news.officialLog': 'Offizielles Protokoll',
   'news.alphaBetaTitle': 'Alpha-, Beta- und Public-Realm-Takt',
   'news.alphaBetaBody':

@@ -14,6 +14,17 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ko_KR: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.account.sectionConnections': 'Yeongyeol doen gyejeong',
+  'hudChrome.account.connectionsSummary':
+    'I gyejeongui yeongyeol login gonggeupjareul gwanrihamnida.',
+  'hudChrome.account.ssoLink': 'Discord yeongyeol',
+  'hudChrome.account.ssoLinked': 'Discord yeongyeol doem.',
+  'hudChrome.account.ssoNotLinked': 'Discord yeongyeol an doem.',
+  'hudChrome.account.ssoUnlink': 'Discord yeongyeol haeje',
+  'hudChrome.account.ssoLinkConflict':
+    'Geu Discord gyejeong eun imi dareun gyejeong e yeongyeol doeeotseumnida.',
+  'hudChrome.account.ssoUnlinkNeedsPassword':
+    'Discord yeongyeol haeje jeon password reul seoljeonghaseyo.',
   'news.officialLog': 'Gongsik logu',
   'news.alphaBetaTitle': 'Alpha, beta, gonggae realm jujugi',
   'news.alphaBetaBody':

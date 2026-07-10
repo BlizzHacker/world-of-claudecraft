@@ -2,6 +2,16 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const nl_NL: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.account.sectionConnections': 'Verbonden accounts',
+  'hudChrome.account.connectionsSummary':
+    'Beheer aanmeldproviders die aan dit account zijn gekoppeld.',
+  'hudChrome.account.ssoLink': 'Discord koppelen',
+  'hudChrome.account.ssoLinked': 'Discord gekoppeld.',
+  'hudChrome.account.ssoNotLinked': 'Discord niet gekoppeld.',
+  'hudChrome.account.ssoUnlink': 'Discord loskoppelen',
+  'hudChrome.account.ssoLinkConflict': 'Dat Discord-account is al aan een ander account gekoppeld.',
+  'hudChrome.account.ssoUnlinkNeedsPassword':
+    'Stel een wachtwoord in voordat je Discord loskoppelt.',
   'news.officialLog': 'Officieel logboek',
   'news.alphaBetaTitle': 'Alpha-, beta- en publiek realm-ritme',
   'news.alphaBetaBody':

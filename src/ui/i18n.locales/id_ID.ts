@@ -2,6 +2,14 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const id_ID: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.account.sectionConnections': 'Akun terhubung',
+  'hudChrome.account.connectionsSummary': 'Kelola penyedia login yang tertaut ke akun ini.',
+  'hudChrome.account.ssoLink': 'Tautkan Discord',
+  'hudChrome.account.ssoLinked': 'Discord tertaut.',
+  'hudChrome.account.ssoNotLinked': 'Discord belum tertaut.',
+  'hudChrome.account.ssoUnlink': 'Putuskan Discord',
+  'hudChrome.account.ssoLinkConflict': 'Akun Discord itu sudah tertaut ke akun lain.',
+  'hudChrome.account.ssoUnlinkNeedsPassword': 'Tetapkan kata sandi sebelum memutuskan Discord.',
   'news.officialLog': 'Log resmi',
   'news.alphaBetaTitle': 'Irama alpha, beta, dan realm publik',
   'news.alphaBetaBody':

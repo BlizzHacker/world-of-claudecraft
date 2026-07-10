@@ -2,6 +2,14 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const tr_TR: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.account.sectionConnections': 'Bagli hesaplar',
+  'hudChrome.account.connectionsSummary': 'Bu hesaba bagli oturum acma saglayicilarini yonet.',
+  'hudChrome.account.ssoLink': 'Discord bagla',
+  'hudChrome.account.ssoLinked': 'Discord baglandi.',
+  'hudChrome.account.ssoNotLinked': 'Discord bagli degil.',
+  'hudChrome.account.ssoUnlink': 'Discord bagini kes',
+  'hudChrome.account.ssoLinkConflict': 'Bu Discord hesabi zaten baska bir hesaba bagli.',
+  'hudChrome.account.ssoUnlinkNeedsPassword': 'Discord bagini kesmeden once parola ayarla.',
   'news.officialLog': 'Resmi kayit',
   'news.alphaBetaTitle': 'Alpha, beta ve acik realm temposu',
   'news.alphaBetaBody':

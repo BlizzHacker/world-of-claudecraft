@@ -2,6 +2,15 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const da_DK: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.account.sectionConnections': 'Forbundne konti',
+  'hudChrome.account.connectionsSummary': 'Administrer loginudbydere forbundet med denne konto.',
+  'hudChrome.account.ssoLink': 'Forbind Discord',
+  'hudChrome.account.ssoLinked': 'Discord forbundet.',
+  'hudChrome.account.ssoNotLinked': 'Discord ikke forbundet.',
+  'hudChrome.account.ssoUnlink': 'Afbryd Discord',
+  'hudChrome.account.ssoLinkConflict':
+    'Den Discord-konto er allerede forbundet med en anden konto.',
+  'hudChrome.account.ssoUnlinkNeedsPassword': 'Angiv en adgangskode for du afbryder Discord.',
   'news.officialLog': 'Officiel log',
   'news.alphaBetaTitle': 'Alpha-, beta- og public realm-rytme',
   'news.alphaBetaBody':

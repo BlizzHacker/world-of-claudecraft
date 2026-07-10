@@ -2,6 +2,15 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const pl_PL: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.account.sectionConnections': 'Polaczone konta',
+  'hudChrome.account.connectionsSummary':
+    'Zarzadzaj dostawcami logowania polaczonymi z tym kontem.',
+  'hudChrome.account.ssoLink': 'Polacz Discord',
+  'hudChrome.account.ssoLinked': 'Discord polaczony.',
+  'hudChrome.account.ssoNotLinked': 'Discord niepolaczony.',
+  'hudChrome.account.ssoUnlink': 'Odlacz Discord',
+  'hudChrome.account.ssoLinkConflict': 'To konto Discord jest juz polaczone z innym kontem.',
+  'hudChrome.account.ssoUnlinkNeedsPassword': 'Ustaw haslo przed odlaczeniem Discord.',
   'news.officialLog': 'Oficjalny dziennik',
   'news.alphaBetaTitle': 'Rytm alpha, beta i publicznego realmu',
   'news.alphaBetaBody':

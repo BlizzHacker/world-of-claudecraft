@@ -2,6 +2,15 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const cs_CZ: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.account.sectionConnections': 'Pripojene ucty',
+  'hudChrome.account.connectionsSummary':
+    'Spravuj poskytovatele prihlaseni pripojene k tomuto uctu.',
+  'hudChrome.account.ssoLink': 'Pripojit Discord',
+  'hudChrome.account.ssoLinked': 'Discord pripojen.',
+  'hudChrome.account.ssoNotLinked': 'Discord neni pripojen.',
+  'hudChrome.account.ssoUnlink': 'Odpojit Discord',
+  'hudChrome.account.ssoLinkConflict': 'Tento Discord ucet je uz pripojen k jinemu uctu.',
+  'hudChrome.account.ssoUnlinkNeedsPassword': 'Pred odpojenim Discordu nastav heslo.',
   'news.officialLog': 'Oficialni zaznam',
   'news.alphaBetaTitle': 'Rytmus alpha, beta a verejneho realmu',
   'news.alphaBetaBody':

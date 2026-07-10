@@ -14,6 +14,16 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const es: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.account.sectionConnections': 'Cuentas conectadas',
+  'hudChrome.account.connectionsSummary':
+    'Gestiona proveedores de inicio de sesion vinculados a esta cuenta.',
+  'hudChrome.account.ssoLink': 'Vincular Discord',
+  'hudChrome.account.ssoLinked': 'Discord vinculado.',
+  'hudChrome.account.ssoNotLinked': 'Discord no vinculado.',
+  'hudChrome.account.ssoUnlink': 'Desvincular Discord',
+  'hudChrome.account.ssoLinkConflict': 'Esa cuenta de Discord ya esta vinculada a otra cuenta.',
+  'hudChrome.account.ssoUnlinkNeedsPassword':
+    'Configura una contrasena antes de desvincular Discord.',
   'news.officialLog': 'Registro oficial',
   'news.alphaBetaTitle': 'Ritmo de alpha, beta y reino publico',
   'news.alphaBetaBody':

@@ -14,6 +14,15 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ru_RU: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.account.sectionConnections': 'Svyazannye akkaunty',
+  'hudChrome.account.connectionsSummary':
+    'Upravlyayte provayderami vhoda, privyazannymi k etomu akkauntu.',
+  'hudChrome.account.ssoLink': 'Privyazat Discord',
+  'hudChrome.account.ssoLinked': 'Discord privyazan.',
+  'hudChrome.account.ssoNotLinked': 'Discord ne privyazan.',
+  'hudChrome.account.ssoUnlink': 'Otvyazat Discord',
+  'hudChrome.account.ssoLinkConflict': 'Etot Discord akkaunt uzhe privyazan k drugomu akkauntu.',
+  'hudChrome.account.ssoUnlinkNeedsPassword': 'Zadaite parol pered otvyazkoi Discord.',
   'news.officialLog': 'Ofitsialnyi zhurnal',
   'news.alphaBetaTitle': 'Ritm alpha, beta i public realm',
   'news.alphaBetaBody':
