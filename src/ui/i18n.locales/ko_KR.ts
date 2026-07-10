@@ -531,6 +531,16 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'auth.passwordPlaceholder': '비밀번호 입력',
   'auth.email': '이메일',
   'auth.emailError': '유효한 이메일 주소를 입력하세요.',
+  'auth.emailPlaceholder': 'you@example.com',
+  'auth.ssoMoveweight': 'MoveWeight ro login',
+  'auth.ssoProviders': 'Google, Facebook, Plex ttoneun Discord ro gyesok',
+  'auth.ssoButton': 'Google, Facebook ttoneun Plex ro gyesok',
+  'auth.ladderChar': 'Laedeo kaerikteo',
+  'auth.ladderHint':
+    'Season ladder e chamyeohamnida. Season jongnyo si pyojun kaerikteo ro byeonhwan doego jinhaengdo yuji doemnida.',
+  'auth.hardcoreChar': 'Hardcore kaerikteo',
+  'auth.hardcoreHint':
+    'Yeongu si mang. I kaerikteoga jugeumyeon yeonggu retire doego dasi play hal su eopseumnida. Buhwal eopseumnida.',
   'auth.recovery.title': '복구 이메일 추가',
   'auth.recovery.body':
     '계정을 복구할 수 있도록 이메일 주소를 설정하세요. 비밀번호를 재설정해야 할 경우 이 계정의 소유자임을 확인하는 용도로만 사용됩니다.',

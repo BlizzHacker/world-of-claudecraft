@@ -4769,6 +4769,18 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'wallet.holderTiers.worldbearer.name': 'Dünya Taşıyıcı',
   'wallet.holderTiers.worldforger.flavor': "Kendine ait bir dünya döversin: arzın %9'u.",
   'wallet.holderTiers.worldforger.name': 'Dünya Döven',
+  'auth.email': 'Kurtarma e-postasi',
+  'auth.emailPlaceholder': 'you@example.com',
+  'auth.emailError': 'Gecerli bir e-posta adresi gir.',
+  'auth.ssoMoveweight': 'MoveWeight ile giris yap',
+  'auth.ssoProviders': 'Google, Facebook, Plex veya Discord ile devam et',
+  'auth.ssoButton': 'Google, Facebook veya Plex ile devam et',
+  'auth.ladderChar': 'Ladder karakteri',
+  'auth.ladderHint':
+    'Sezonluk ladder da yarisir. Sezon sonunda standart karaktere donusur ve tum ilerlemeyi korur.',
+  'auth.hardcoreChar': 'Hardcore karakter',
+  'auth.hardcoreHint':
+    'Kalici olum. Bu karakter olurse kalici olarak emekli olur ve artik oynanamaz. Dirilis yoktur.',
   'auth.recovery.title': 'Kurtarma e-postasi ekle',
   'auth.recovery.body':
     'Hesabini kurtarabilmen icin bir e-posta adresi belirle. Bunu yalnizca sifreni sifirlaman gerekirse hesabin sana ait oldugunu dogrulamak icin kullaniriz.',

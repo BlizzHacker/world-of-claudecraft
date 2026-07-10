@@ -230,6 +230,18 @@ export const fr_CA: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auraEffect.school.shadow': 'ombre',
   'hudChrome.auraEffect.school.holy': 'sacré',
   'hudChrome.auraEffect.school.nature': 'nature',
+  'auth.email': 'Courriel de recuperation',
+  'auth.emailPlaceholder': 'you@example.com',
+  'auth.emailError': 'Entre une adresse courriel valide.',
+  'auth.ssoMoveweight': 'Connexion avec MoveWeight',
+  'auth.ssoProviders': 'Continuer avec Google, Facebook, Plex ou Discord',
+  'auth.ssoButton': 'Continuer avec Google, Facebook ou Plex',
+  'auth.ladderChar': 'Personnage de saison',
+  'auth.ladderHint':
+    'Participe au classement saisonnier. A la fin de la saison, il devient un personnage standard et conserve sa progression.',
+  'auth.hardcoreChar': 'Personnage hardcore',
+  'auth.hardcoreHint':
+    'Mort permanente. Si ce personnage meurt, il est retire definitivement et ne peut plus etre joue. Pas de resurrection.',
   'auth.recovery.title': 'Ajouter un courriel de recuperation',
   'auth.recovery.body':
     'Definis une adresse courriel afin de pouvoir recuperer ton compte. Nous l utilisons seulement pour confirmer que ce compte t appartient si tu dois reinitialiser ton mot de passe.',

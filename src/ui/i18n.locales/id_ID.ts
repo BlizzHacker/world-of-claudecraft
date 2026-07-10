@@ -4836,6 +4836,18 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'wallet.holderTiers.worldbearer.name': 'Pemikul Dunia',
   'wallet.holderTiers.worldforger.flavor': 'Menempa dunia milikmu sendiri: 9% dari pasokan.',
   'wallet.holderTiers.worldforger.name': 'Penempa Dunia',
+  'auth.email': 'Email pemulihan',
+  'auth.emailPlaceholder': 'you@example.com',
+  'auth.emailError': 'Masukkan alamat email yang valid.',
+  'auth.ssoMoveweight': 'Masuk dengan MoveWeight',
+  'auth.ssoProviders': 'Lanjutkan dengan Google, Facebook, Plex, atau Discord',
+  'auth.ssoButton': 'Lanjutkan dengan Google, Facebook, atau Plex',
+  'auth.ladderChar': 'Karakter ladder',
+  'auth.ladderHint':
+    'Bersaing di ladder musiman. Di akhir musim, karakter ini menjadi karakter standar dan menyimpan semua progres.',
+  'auth.hardcoreChar': 'Karakter hardcore',
+  'auth.hardcoreHint':
+    'Kematian permanen. Jika karakter ini mati, karakter akan pensiun permanen dan tidak bisa dimainkan lagi. Tidak ada kebangkitan.',
   'auth.recovery.title': 'Tambahkan email pemulihan',
   'auth.recovery.body':
     'Atur alamat email agar kamu dapat memulihkan akun. Kami hanya menggunakannya untuk memastikan akun ini milikmu jika suatu saat kamu perlu mengatur ulang kata sandi.',

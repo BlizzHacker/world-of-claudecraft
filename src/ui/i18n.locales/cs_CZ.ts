@@ -490,6 +490,16 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
   'auth.recovery.failed': 'E-mail se nepodařilo uložit. Zkus to prosím znovu.',
   'auth.recovery.invalid': 'Zadej platnou e-mailovou adresu.',
   'auth.recovery.save': 'Uložit e-mail',
+  'auth.emailPlaceholder': 'you@example.com',
+  'auth.ssoMoveweight': 'Prihlasit pres MoveWeight',
+  'auth.ssoProviders': 'Pokracovat pres Google, Facebook, Plex nebo Discord',
+  'auth.ssoButton': 'Pokracovat pres Google, Facebook nebo Plex',
+  'auth.ladderChar': 'Zebrickovy charakter',
+  'auth.ladderHint':
+    'Soutezi v sezonim zebricku. Na konci sezony se zmeni na standardni charakter a zachova si postup.',
+  'auth.hardcoreChar': 'Hardcore charakter',
+  'auth.hardcoreHint':
+    'Trvala smrt. Pokud tento charakter zemre, bude trvale vyrazen a uz ho nelze hrat. Neexistuje oziveni.',
   'auth.recovery.title': 'Přidat e-mail pro obnovu',
   'auth.recovery.logOut': 'Odhlasit se',
   'auth.showPassword': 'Zobrazit heslo',

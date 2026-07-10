@@ -508,6 +508,18 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'auth.enterWorld': 'Welt betreten',
   'auth.offlineCharacter': 'Offline-Charakter',
   'auth.create': 'Erstellen',
+  'auth.email': 'Wiederherstellungs-E-Mail',
+  'auth.emailPlaceholder': 'you@example.com',
+  'auth.emailError': 'Bitte gib eine gueltige E-Mail-Adresse ein.',
+  'auth.ssoMoveweight': 'Mit MoveWeight anmelden',
+  'auth.ssoProviders': 'Mit Google, Facebook, Plex oder Discord fortfahren',
+  'auth.ssoButton': 'Mit Google, Facebook oder Plex fortfahren',
+  'auth.ladderChar': 'Ladder-Charakter',
+  'auth.ladderHint':
+    'Nimmt an der saisonalen Ladder teil. Am Saisonende wird er zu einem Standardcharakter und behaelt den Fortschritt.',
+  'auth.hardcoreChar': 'Hardcore-Charakter',
+  'auth.hardcoreHint':
+    'Permadeath. Wenn dieser Charakter stirbt, wird er dauerhaft stillgelegt und kann nicht mehr gespielt werden. Es gibt keine Wiederbelebung.',
   'auth.recovery.title': 'Wiederherstellungs-E-Mail hinzufuegen',
   'auth.recovery.body':
     'Lege eine E-Mail-Adresse fest, damit du dein Konto wiederherstellen kannst. Wir verwenden sie nur, um zu bestaetigen, dass dieses Konto dir gehoert, falls du dein Passwort zuruecksetzen musst.',

@@ -4833,6 +4833,18 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'wallet.holderTiers.worldbearer.name': 'Werelddrager',
   'wallet.holderTiers.worldforger.flavor': 'Een eigen wereld smedend: 9% van de voorraad.',
   'wallet.holderTiers.worldforger.name': 'Wereldsmid',
+  'auth.email': 'Herstel-e-mail',
+  'auth.emailPlaceholder': 'you@example.com',
+  'auth.emailError': 'Voer een geldig e-mailadres in.',
+  'auth.ssoMoveweight': 'Inloggen met MoveWeight',
+  'auth.ssoProviders': 'Doorgaan met Google, Facebook, Plex of Discord',
+  'auth.ssoButton': 'Doorgaan met Google, Facebook of Plex',
+  'auth.ladderChar': 'Ladder-personage',
+  'auth.ladderHint':
+    'Doet mee aan de seizoensladder. Aan het einde van het seizoen wordt dit een standaardpersonage en blijft alle voortgang behouden.',
+  'auth.hardcoreChar': 'Hardcore-personage',
+  'auth.hardcoreHint':
+    'Permanente dood. Als dit personage sterft, wordt het voorgoed met pensioen gestuurd en kan het niet meer worden gespeeld. Er is geen opstanding.',
   'auth.recovery.title': 'Herstel-e-mail toevoegen',
   'auth.recovery.body':
     'Stel een e-mailadres in zodat je je account kunt herstellen. We gebruiken dit alleen om te bevestigen dat dit account van jou is als je ooit je wachtwoord moet resetten.',

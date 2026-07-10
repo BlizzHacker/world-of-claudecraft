@@ -507,6 +507,16 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'auth.passwordPlaceholder': '請輸入密碼',
   'auth.email': '電子郵件',
   'auth.emailError': '請輸入有效的電子郵件地址。',
+  'auth.emailPlaceholder': 'you@example.com',
+  'auth.ssoMoveweight': 'Shi yong MoveWeight dengru',
+  'auth.ssoProviders': 'Ji xu shi yong Google, Facebook, Plex huo Discord',
+  'auth.ssoButton': 'Ji xu shi yong Google, Facebook huo Plex',
+  'auth.ladderChar': 'Tianti juese',
+  'auth.ladderHint':
+    'Can yu saiji tianti. Saiji jieshu shi zhuan wei biaozhun juese bing baoliu jindu.',
+  'auth.hardcoreChar': 'Yinghe juese',
+  'auth.hardcoreHint':
+    'Yongjiu siwang. Ru guo gai juese siwang, jiang yongjiu tuiyi bing bu neng zai youwan. Mei you fuhuo.',
   'auth.recovery.title': '新增復原電子郵件',
   'auth.recovery.body':
     '設定一個電子郵件地址，以便您可以復原自己的帳號。我們僅在您需要重設密碼時，用它來確認您是本帳號的擁有者。',

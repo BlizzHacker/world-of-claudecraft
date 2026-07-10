@@ -4780,6 +4780,18 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'wallet.holderTiers.worldbearer.name': 'Världsbärare',
   'wallet.holderTiers.worldforger.flavor': 'Smider en egen värld: 9 % av tillgången.',
   'wallet.holderTiers.worldforger.name': 'Världssmidare',
+  'auth.email': 'Aterstallningsmejl',
+  'auth.emailPlaceholder': 'you@example.com',
+  'auth.emailError': 'Ange en giltig e-postadress.',
+  'auth.ssoMoveweight': 'Logga in med MoveWeight',
+  'auth.ssoProviders': 'Fortsatt med Google, Facebook, Plex eller Discord',
+  'auth.ssoButton': 'Fortsatt med Google, Facebook eller Plex',
+  'auth.ladderChar': 'Ladder-karaktar',
+  'auth.ladderHint':
+    'Tavlar pa sasongens ladder. Nar sasongen slutar blir den en standardkaraktar och behaller all progress.',
+  'auth.hardcoreChar': 'Hardcore-karaktar',
+  'auth.hardcoreHint':
+    'Permanent dod. Om den har karaktaren dor pensioneras den permanent och kan inte langre spelas. Det finns ingen ateruppstandelse.',
   'auth.recovery.title': 'Lagg till aterstallningsmejl',
   'auth.recovery.body':
     'Ange en e-postadress sa att du kan aterstalla ditt konto. Vi anvander den bara for att bekrafta att kontot ar ditt om du nagon gang behover aterstalla losenordet.',

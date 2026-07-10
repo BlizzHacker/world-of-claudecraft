@@ -369,6 +369,16 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'auth.recovery.failed': 'Nie udało się zapisać adresu e-mail. Spróbuj ponownie.',
   'auth.recovery.invalid': 'Wprowadź prawidłowy adres e-mail.',
   'auth.recovery.save': 'Zapisz e-mail',
+  'auth.emailPlaceholder': 'you@example.com',
+  'auth.ssoMoveweight': 'Zaloguj przez MoveWeight',
+  'auth.ssoProviders': 'Kontynuuj przez Google, Facebook, Plex lub Discord',
+  'auth.ssoButton': 'Kontynuuj przez Google, Facebook lub Plex',
+  'auth.ladderChar': 'Postac rankingowa',
+  'auth.ladderHint':
+    'Rywalizuje w sezonowym rankingu. Po zakonczeniu sezonu zmienia sie w postac standardowa i zachowuje postep.',
+  'auth.hardcoreChar': 'Postac hardcore',
+  'auth.hardcoreHint':
+    'Permanentna smierc. Jesli ta postac umrze, zostanie trwale wycofana i nie bedzie mozna nia grac. Nie ma wskrzeszenia.',
   'auth.recovery.title': 'Dodaj e-mail odzyskiwania',
   'auth.recovery.logOut': 'Wyloguj sie',
   'delveRiteUi.blurb':

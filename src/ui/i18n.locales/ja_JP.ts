@@ -531,6 +531,16 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'auth.passwordPlaceholder': 'パスワードを入力',
   'auth.email': 'メールアドレス',
   'auth.emailError': '有効なメールアドレスを入力してください。',
+  'auth.emailPlaceholder': 'you@example.com',
+  'auth.ssoMoveweight': 'MoveWeight de login',
+  'auth.ssoProviders': 'Google, Facebook, Plex mata wa Discord de tsuzukeru',
+  'auth.ssoButton': 'Google, Facebook mata wa Plex de tsuzukeru',
+  'auth.ladderChar': 'Radaa kyara',
+  'auth.ladderHint':
+    'Season ladder ni sanka shimasu. Season shuryo ji ni standard character ni kawari, progress wa hoji saremasu.',
+  'auth.hardcoreChar': 'Haadokoa kyara',
+  'auth.hardcoreHint':
+    'Eikyu shi. Kono character ga shibo shitara eikyu ni retire sare, futatabi play dekimasen. Fukkatsu wa arimasen.',
   'auth.recovery.title': '復旧用メールアドレスを追加',
   'auth.recovery.body':
     'メールアドレスを設定すると、アカウントを復旧できるようになります。パスワードのリセットが必要になった際に、このアカウントの所有者であることを確認するためだけに使用します。',

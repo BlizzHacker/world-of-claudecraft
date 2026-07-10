@@ -4800,6 +4800,18 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'wallet.holderTiers.worldbearer.name': 'Người Mang Thế Giới',
   'wallet.holderTiers.worldforger.flavor': 'Rèn nên một thế giới của riêng bạn: 9% nguồn cung.',
   'wallet.holderTiers.worldforger.name': 'Người Rèn Thế Giới',
+  'auth.email': 'Email khoi phuc',
+  'auth.emailPlaceholder': 'you@example.com',
+  'auth.emailError': 'Vui long nhap dia chi email hop le.',
+  'auth.ssoMoveweight': 'Dang nhap bang MoveWeight',
+  'auth.ssoProviders': 'Tiep tuc bang Google, Facebook, Plex hoac Discord',
+  'auth.ssoButton': 'Tiep tuc bang Google, Facebook hoac Plex',
+  'auth.ladderChar': 'Nhan vat ladder',
+  'auth.ladderHint':
+    'Tham gia bang xep hang mua. Khi ket thuc mua, nhan vat se chuyen thanh tieu chuan va giu toan bo tien trinh.',
+  'auth.hardcoreChar': 'Nhan vat hardcore',
+  'auth.hardcoreHint':
+    'Chet vinh vien. Neu nhan vat nay chet, nhan vat se bi nghi huu vinh vien va khong the choi tiep. Khong co hoi sinh.',
   'auth.recovery.title': 'Them email khoi phuc',
   'auth.recovery.body':
     'Thiet lap dia chi email de ban co the khoi phuc tai khoan. Chung toi chi dung email nay de xac nhan tai khoan thuoc ve ban neu ban can dat lai mat khau.',

@@ -506,6 +506,16 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'auth.passwordPlaceholder': '请输入密码',
   'auth.email': '邮箱',
   'auth.emailError': '请输入有效的邮箱地址。',
+  'auth.emailPlaceholder': 'you@example.com',
+  'auth.ssoMoveweight': 'Shi yong MoveWeight denglu',
+  'auth.ssoProviders': 'Ji xu shi yong Google, Facebook, Plex huo Discord',
+  'auth.ssoButton': 'Ji xu shi yong Google, Facebook huo Plex',
+  'auth.ladderChar': 'Tianti juese',
+  'auth.ladderHint':
+    'Can yu saiji tianti. Saiji jieshu shi zhuan wei biaozhun juese bing baoliu jindu.',
+  'auth.hardcoreChar': 'Yinghe juese',
+  'auth.hardcoreHint':
+    'Yongjiu siwang. Ru guo gai juese siwang, jiang yongjiu tuiyi bing bu neng zai youwan. Mei you fuhuo.',
   'auth.recovery.title': '添加找回邮箱',
   'auth.recovery.body':
     '设置一个邮箱地址，以便您可以找回自己的账户。我们仅在您需要重置密码时，用它来确认您是本账户的所有者。',

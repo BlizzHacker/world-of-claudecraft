@@ -4767,6 +4767,18 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'wallet.holderTiers.worldbearer.name': 'Verdensbærer',
   'wallet.holderTiers.worldforger.flavor': 'Smeder en verden helt din egen: 9 % af forsyningen.',
   'wallet.holderTiers.worldforger.name': 'Verdenssmed',
+  'auth.email': 'Gendannelsesmail',
+  'auth.emailPlaceholder': 'you@example.com',
+  'auth.emailError': 'Indtast en gyldig e-mailadresse.',
+  'auth.ssoMoveweight': 'Log ind med MoveWeight',
+  'auth.ssoProviders': 'Fortsat med Google, Facebook, Plex eller Discord',
+  'auth.ssoButton': 'Fortsat med Google, Facebook eller Plex',
+  'auth.ladderChar': 'Ladder-figur',
+  'auth.ladderHint':
+    'Konkurrerer pa sezonens ladder. Ved sezonens slutning bliver den til en standardfigur og beholder al fremgang.',
+  'auth.hardcoreChar': 'Hardcore-figur',
+  'auth.hardcoreHint':
+    'Permanent dod. Hvis denne figur dor, pensioneres den permanent og kan ikke spilles mere. Der er ingen genopstandelse.',
   'auth.recovery.title': 'Tilfoj en gendannelsesmail',
   'auth.recovery.body':
     'Angiv en e-mailadresse, sa du kan gendanne din konto. Vi bruger den kun til at bekraefte, at kontoen er din, hvis du far brug for at nulstille din adgangskode.',

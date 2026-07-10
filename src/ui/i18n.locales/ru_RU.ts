@@ -541,6 +541,16 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'auth.passwordPlaceholder': 'Введите пароль',
   'auth.email': 'Эл. почта',
   'auth.emailError': 'Введите корректный адрес эл. почты.',
+  'auth.emailPlaceholder': 'you@example.com',
+  'auth.ssoMoveweight': 'Vojti cherez MoveWeight',
+  'auth.ssoProviders': 'Prodolzhit cherez Google, Facebook, Plex ili Discord',
+  'auth.ssoButton': 'Prodolzhit cherez Google, Facebook ili Plex',
+  'auth.ladderChar': 'Ladder personazh',
+  'auth.ladderHint':
+    'Uchastvuet v sezonnom reitinge. V kontse sezona stanovitsya obychnym personazhem i sohranyaet progress.',
+  'auth.hardcoreChar': 'Hardcore personazh',
+  'auth.hardcoreHint':
+    'Permanentnaya smert. Esli personazh umret, on budet navsegda spisan i bolshe ne smozhet igrat. Voskresheniya net.',
   'auth.recovery.title': 'Добавьте резервный адрес эл. почты',
   'auth.recovery.body':
     'Укажите адрес эл. почты, чтобы вы могли восстановить доступ к аккаунту. Мы используем его только для подтверждения того, что аккаунт принадлежит вам, если вам когда-нибудь понадобится сбросить пароль.',

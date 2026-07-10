@@ -503,6 +503,18 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'auth.enterWorld': 'Entra nel mondo',
   'auth.offlineCharacter': 'Personaggio offline',
   'auth.create': 'Crea',
+  'auth.email': 'E-mail di recupero',
+  'auth.emailPlaceholder': 'you@example.com',
+  'auth.emailError': 'Inserisci un indirizzo e-mail valido.',
+  'auth.ssoMoveweight': 'Accedi con MoveWeight',
+  'auth.ssoProviders': 'Continua con Google, Facebook, Plex o Discord',
+  'auth.ssoButton': 'Continua con Google, Facebook o Plex',
+  'auth.ladderChar': 'Personaggio ladder',
+  'auth.ladderHint':
+    'Compete nella ladder stagionale. A fine stagione diventa un personaggio standard e conserva i progressi.',
+  'auth.hardcoreChar': 'Personaggio hardcore',
+  'auth.hardcoreHint':
+    'Morte permanente. Se questo personaggio muore, viene ritirato per sempre e non puo piu essere giocato. Non esiste resurrezione.',
   'auth.recovery.title': 'Aggiungi un e-mail di recupero',
   'auth.recovery.body':
     'Imposta un indirizzo e-mail per poter recuperare il tuo account. Lo usiamo solo per confermare che l account e tuo se dovessi reimpostare la password.',
