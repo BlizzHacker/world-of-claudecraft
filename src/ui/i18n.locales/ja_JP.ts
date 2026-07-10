@@ -14,6 +14,10 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ja_JP: Partial<Record<TranslationKey, string>> = {
+  'download.macCta': 'macOS用ダウンロード',
+  'download.linuxCta': 'Linux用ダウンロード',
+  'download.linuxHint': 'AppImage: 実行可能にして起動します。インストールは不要です。',
+  'download.windowsPending': 'Windowsビルドは準備中です。',
   'nav.whitepaper': 'ホワイトペーパー',
   'nav.contributions': '貢献',
   // Guild roster last-seen (M16 non-Latin fill)

@@ -3066,10 +3066,10 @@ export const da_DK: EnTranslations = {
   "download": {
     "title": "Launchers & Installs",
     "desc": "Hent den selvstændige launcher for optimeret ydeevne og fuldskærmsspil.",
-    "macCta": "Download for macOS",
-    "linuxCta": "Download for Linux",
-    "linuxHint": "AppImage: make it executable, then run it. No install needed.",
-    "windowsPending": "Windows build pending."
+    "macCta": "Download til macOS",
+    "linuxCta": "Download til Linux",
+    "linuxHint": "AppImage: gor den eksekverbar og start den. Ingen installation kraeves.",
+    "windowsPending": "Windows-build afventer."
   },
   "comingSoon": {
     "placeholder": "Kommer snart...",

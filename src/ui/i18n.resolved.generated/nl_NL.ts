@@ -3066,10 +3066,10 @@ export const nl_NL: EnTranslations = {
   "download": {
     "title": "Launchers & Installs",
     "desc": "Download de losse launcher voor optimale prestaties en schermvullend spelen.",
-    "macCta": "Download for macOS",
-    "linuxCta": "Download for Linux",
-    "linuxHint": "AppImage: make it executable, then run it. No install needed.",
-    "windowsPending": "Windows build pending."
+    "macCta": "Download voor macOS",
+    "linuxCta": "Download voor Linux",
+    "linuxHint": "AppImage: maak het uitvoerbaar en start het. Geen installatie nodig.",
+    "windowsPending": "Windows-build volgt nog."
   },
   "comingSoon": {
     "placeholder": "Binnenkort beschikbaar...",

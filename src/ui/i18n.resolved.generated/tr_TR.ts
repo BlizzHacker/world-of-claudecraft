@@ -3066,10 +3066,10 @@ export const tr_TR: EnTranslations = {
   "download": {
     "title": "Launchers & Installs",
     "desc": "Optimize edilmiş performans ve tam ekran oyun için bağımsız başlatıcıyı edinin.",
-    "macCta": "Download for macOS",
-    "linuxCta": "Download for Linux",
-    "linuxHint": "AppImage: make it executable, then run it. No install needed.",
-    "windowsPending": "Windows build pending."
+    "macCta": "macOS icin indir",
+    "linuxCta": "Linux icin indir",
+    "linuxHint": "AppImage: calistirilabilir yap, sonra ac. Kurulum gerekmez.",
+    "windowsPending": "Windows surumu beklemede."
   },
   "comingSoon": {
     "placeholder": "Yakında...",

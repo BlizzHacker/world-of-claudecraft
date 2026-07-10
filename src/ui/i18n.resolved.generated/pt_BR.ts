@@ -3066,10 +3066,10 @@ export const pt_BR: EnTranslations = {
   "download": {
     "title": "Launchers & Installs",
     "desc": "Obtenha o launcher independente para desempenho otimizado e jogo em tela cheia.",
-    "macCta": "Download for macOS",
-    "linuxCta": "Download for Linux",
-    "linuxHint": "AppImage: make it executable, then run it. No install needed.",
-    "windowsPending": "Windows build pending."
+    "macCta": "Baixar para macOS",
+    "linuxCta": "Baixar para Linux",
+    "linuxHint": "AppImage: torne executavel e execute. Nao precisa instalar.",
+    "windowsPending": "Build do Windows pendente."
   },
   "comingSoon": {
     "placeholder": "Em breve...",

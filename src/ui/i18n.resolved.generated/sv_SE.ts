@@ -3066,10 +3066,10 @@ export const sv_SE: EnTranslations = {
   "download": {
     "title": "Launchers & Installs",
     "desc": "Hämta den fristående startaren för optimerad prestanda och spel i helskärm.",
-    "macCta": "Download for macOS",
-    "linuxCta": "Download for Linux",
-    "linuxHint": "AppImage: make it executable, then run it. No install needed.",
-    "windowsPending": "Windows build pending."
+    "macCta": "Ladda ner for macOS",
+    "linuxCta": "Ladda ner for Linux",
+    "linuxHint": "AppImage: gor den korbar och starta den. Ingen installation behovs.",
+    "windowsPending": "Windows-bygge vantar."
   },
   "comingSoon": {
     "placeholder": "Kommer snart...",

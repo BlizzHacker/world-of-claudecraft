@@ -3066,10 +3066,10 @@ export const ko_KR: EnTranslations = {
   "download": {
     "title": "Launchers & Installs",
     "desc": "최적화된 성능과 전체 화면 플레이를 위해 독립형 런처를 다운로드하세요.",
-    "macCta": "Download for macOS",
-    "linuxCta": "Download for Linux",
-    "linuxHint": "AppImage: make it executable, then run it. No install needed.",
-    "windowsPending": "Windows build pending."
+    "macCta": "macOS용 다운로드",
+    "linuxCta": "Linux용 다운로드",
+    "linuxHint": "AppImage: 실행 가능하게 만든 뒤 실행하세요. 설치는 필요 없습니다.",
+    "windowsPending": "Windows 빌드 대기 중."
   },
   "comingSoon": {
     "placeholder": "준비 중...",

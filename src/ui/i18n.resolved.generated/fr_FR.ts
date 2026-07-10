@@ -3066,10 +3066,10 @@ export const fr_FR: EnTranslations = {
   "download": {
     "title": "Launchers & Installs",
     "desc": "Obtenez le lanceur autonome pour des performances optimisées et un jeu en plein écran.",
-    "macCta": "Download for macOS",
-    "linuxCta": "Download for Linux",
-    "linuxHint": "AppImage: make it executable, then run it. No install needed.",
-    "windowsPending": "Windows build pending."
+    "macCta": "Telecharger pour macOS",
+    "linuxCta": "Telecharger pour Linux",
+    "linuxHint": "AppImage : rendez-le executable, puis lancez-le. Aucune installation requise.",
+    "windowsPending": "Version Windows en attente."
   },
   "comingSoon": {
     "placeholder": "Bientôt disponible...",

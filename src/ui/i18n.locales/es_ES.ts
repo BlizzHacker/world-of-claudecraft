@@ -11,6 +11,10 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const es_ES: Partial<Record<TranslationKey, string>> = {
+  'download.macCta': 'Descargar para macOS',
+  'download.linuxCta': 'Descargar para Linux',
+  'download.linuxHint': 'AppImage: hazlo ejecutable y ejecutalo. No requiere instalacion.',
+  'download.windowsPending': 'Compilacion de Windows pendiente.',
   'nav.whitepaper': 'Libro blanco',
   'nav.contributions': 'Contribuciones',
   // Stat tooltips inherit the es base: none of these keys needs a genuine Iberian

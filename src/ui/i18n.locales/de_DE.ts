@@ -14,6 +14,10 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const de_DE: Partial<Record<TranslationKey, string>> = {
+  'download.macCta': 'Fuer macOS herunterladen',
+  'download.linuxCta': 'Fuer Linux herunterladen',
+  'download.linuxHint': 'AppImage: ausfuehrbar machen und starten. Keine Installation noetig.',
+  'download.windowsPending': 'Windows-Build steht noch aus.',
   'nav.whitepaper': 'Weissbuch',
   'nav.contributions': 'Beitraege',
   'entities.npcs.auctioneer_voss.greeting':

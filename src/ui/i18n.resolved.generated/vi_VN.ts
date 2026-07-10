@@ -3066,10 +3066,10 @@ export const vi_VN: EnTranslations = {
   "download": {
     "title": "Launchers & Installs",
     "desc": "Tải trình khởi chạy độc lập để có hiệu năng tối ưu và chơi toàn màn hình.",
-    "macCta": "Download for macOS",
-    "linuxCta": "Download for Linux",
-    "linuxHint": "AppImage: make it executable, then run it. No install needed.",
-    "windowsPending": "Windows build pending."
+    "macCta": "Tai cho macOS",
+    "linuxCta": "Tai cho Linux",
+    "linuxHint": "AppImage: dat quyen chay roi mo. Khong can cai dat.",
+    "windowsPending": "Ban Windows dang cho."
   },
   "comingSoon": {
     "placeholder": "Sắp Ra Mắt...",

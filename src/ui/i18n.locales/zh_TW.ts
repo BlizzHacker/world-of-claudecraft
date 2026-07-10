@@ -14,6 +14,10 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const zh_TW: Partial<Record<TranslationKey, string>> = {
+  'download.macCta': '下載 macOS 版',
+  'download.linuxCta': '下載 Linux 版',
+  'download.linuxHint': 'AppImage：設為可執行後執行，無需安裝。',
+  'download.windowsPending': 'Windows 版本待發布。',
   'nav.whitepaper': '白皮書',
   'nav.contributions': '貢獻',
   // Guild roster last-seen (M16 non-Latin fill)

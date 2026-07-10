@@ -2,6 +2,10 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const tr_TR: Partial<Record<TranslationKey, string>> = {
+  'download.macCta': 'macOS icin indir',
+  'download.linuxCta': 'Linux icin indir',
+  'download.linuxHint': 'AppImage: calistirilabilir yap, sonra ac. Kurulum gerekmez.',
+  'download.windowsPending': 'Windows surumu beklemede.',
   'nav.whitepaper': 'Teknik belge',
   'nav.contributions': 'Katkilar',
   'entities.npcs.auctioneer_voss.greeting':

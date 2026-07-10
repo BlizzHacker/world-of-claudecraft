@@ -14,6 +14,10 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ko_KR: Partial<Record<TranslationKey, string>> = {
+  'download.macCta': 'macOS용 다운로드',
+  'download.linuxCta': 'Linux용 다운로드',
+  'download.linuxHint': 'AppImage: 실행 가능하게 만든 뒤 실행하세요. 설치는 필요 없습니다.',
+  'download.windowsPending': 'Windows 빌드 대기 중.',
   'nav.whitepaper': '백서',
   'nav.contributions': '기여',
   // Guild roster last-seen (M16 non-Latin fill)

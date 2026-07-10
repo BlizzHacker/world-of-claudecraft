@@ -3066,10 +3066,10 @@ export const id_ID: EnTranslations = {
   "download": {
     "title": "Launchers & Installs",
     "desc": "Dapatkan peluncur mandiri untuk performa optimal dan permainan layar penuh.",
-    "macCta": "Download for macOS",
-    "linuxCta": "Download for Linux",
-    "linuxHint": "AppImage: make it executable, then run it. No install needed.",
-    "windowsPending": "Windows build pending."
+    "macCta": "Unduh untuk macOS",
+    "linuxCta": "Unduh untuk Linux",
+    "linuxHint": "AppImage: buat dapat dijalankan, lalu buka. Tidak perlu instalasi.",
+    "windowsPending": "Build Windows belum tersedia."
   },
   "comingSoon": {
     "placeholder": "Segera Hadir...",

@@ -2,6 +2,10 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const vi_VN: Partial<Record<TranslationKey, string>> = {
+  'download.macCta': 'Tai cho macOS',
+  'download.linuxCta': 'Tai cho Linux',
+  'download.linuxHint': 'AppImage: dat quyen chay roi mo. Khong can cai dat.',
+  'download.windowsPending': 'Ban Windows dang cho.',
   'nav.whitepaper': 'Sach trang',
   'nav.contributions': 'Dong gop',
   'entities.npcs.auctioneer_voss.greeting':

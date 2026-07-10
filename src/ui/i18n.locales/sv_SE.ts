@@ -2,6 +2,10 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const sv_SE: Partial<Record<TranslationKey, string>> = {
+  'download.macCta': 'Ladda ner for macOS',
+  'download.linuxCta': 'Ladda ner for Linux',
+  'download.linuxHint': 'AppImage: gor den korbar och starta den. Ingen installation behovs.',
+  'download.windowsPending': 'Windows-bygge vantar.',
   'nav.whitepaper': 'Vitbok',
   'nav.contributions': 'Bidrag',
   'entities.npcs.auctioneer_voss.greeting':

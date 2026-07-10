@@ -3066,10 +3066,10 @@ export const ru_RU: EnTranslations = {
   "download": {
     "title": "Launchers & Installs",
     "desc": "Загрузите отдельный клиент для оптимальной производительности и игры на весь экран.",
-    "macCta": "Download for macOS",
-    "linuxCta": "Download for Linux",
-    "linuxHint": "AppImage: make it executable, then run it. No install needed.",
-    "windowsPending": "Windows build pending."
+    "macCta": "Скачать для macOS",
+    "linuxCta": "Скачать для Linux",
+    "linuxHint": "AppImage: сделайте файл исполняемым и запустите его. Установка не нужна.",
+    "windowsPending": "Сборка Windows пока готовится."
   },
   "comingSoon": {
     "placeholder": "Скоро...",

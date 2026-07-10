@@ -3066,10 +3066,10 @@ export const zh_TW: EnTranslations = {
   "download": {
     "title": "Launchers & Installs",
     "desc": "獲取獨立啟動器，以獲得更優化的效能和全螢幕遊戲體驗。",
-    "macCta": "Download for macOS",
-    "linuxCta": "Download for Linux",
-    "linuxHint": "AppImage: make it executable, then run it. No install needed.",
-    "windowsPending": "Windows build pending."
+    "macCta": "下載 macOS 版",
+    "linuxCta": "下載 Linux 版",
+    "linuxHint": "AppImage：設為可執行後執行，無需安裝。",
+    "windowsPending": "Windows 版本待發布。"
   },
   "comingSoon": {
     "placeholder": "敬請期待...",

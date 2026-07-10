@@ -3066,10 +3066,10 @@ export const ja_JP: EnTranslations = {
   "download": {
     "title": "Launchers & Installs",
     "desc": "最適化されたパフォーマンスと全画面表示でのプレイのために、スタンドアロン版ランチャーを入手してください。",
-    "macCta": "Download for macOS",
-    "linuxCta": "Download for Linux",
-    "linuxHint": "AppImage: make it executable, then run it. No install needed.",
-    "windowsPending": "Windows build pending."
+    "macCta": "macOS用ダウンロード",
+    "linuxCta": "Linux用ダウンロード",
+    "linuxHint": "AppImage: 実行可能にして起動します。インストールは不要です。",
+    "windowsPending": "Windowsビルドは準備中です。"
   },
   "comingSoon": {
     "placeholder": "近日公開...",

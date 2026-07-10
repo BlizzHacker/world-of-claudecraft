@@ -14,6 +14,10 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ru_RU: Partial<Record<TranslationKey, string>> = {
+  'download.macCta': 'Скачать для macOS',
+  'download.linuxCta': 'Скачать для Linux',
+  'download.linuxHint': 'AppImage: сделайте файл исполняемым и запустите его. Установка не нужна.',
+  'download.windowsPending': 'Сборка Windows пока готовится.',
   'nav.whitepaper': 'Белая книга',
   'nav.contributions': 'Вклад',
   // Guild roster last-seen (M16 non-Latin fill)
