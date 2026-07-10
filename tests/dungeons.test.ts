@@ -16,6 +16,7 @@ import {
   updateDoorTriggers,
   updateInstances,
 } from '../src/sim/instances/dungeons';
+import { d2MobDmgMult, d2MobHpMult } from '../src/sim/realms/registry';
 import { Sim } from '../src/sim/sim';
 import {
   type Entity,
@@ -75,12 +76,14 @@ function expectedHeroicStats(template: MobTemplate, dungeonId: string) {
   const dmg =
     (template.dmgBase * tuning.damageMultiplier +
       template.dmgPerLevel * tuning.damageMultiplier * levelUps) *
-    dmgMult;
+    dmgMult *
+    d2MobDmgMult(tuning.level);
   return {
     maxHp: Math.round(
       (template.hpBase * tuning.healthMultiplier +
         template.hpPerLevel * tuning.healthMultiplier * levelUps) *
-        hpMult,
+        hpMult *
+        d2MobHpMult(tuning.level),
     ),
     weaponMin: Math.round(dmg * 0.8),
     weaponMax: Math.round(dmg * 1.25),
