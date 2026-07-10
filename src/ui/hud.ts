@@ -486,10 +486,12 @@ const SHOOT_CHARGE_MS = 850;
 const SHOOT_TAP_CHARGE = 0.6;
 const MOBILE_CONTEXT_LONG_PRESS_MS = 650;
 // Vale Cup walk-up "theatre": the anchored kickoff/goal/save/golden/end/countdown
-// banners + crowd fx. Played only when the emitting match's pitch is within
-// VCUP_THEATRE_RADIUS of the local player (the Sowfield you walked up to, or your
-// own practice pitch), so a distant match never leaks its alerts in. Personal
-// events (vcupFound/Result/BetSettled) are NOT here and always reach their owner.
+// banners + crowd fx. The real Sowfield match's theatre is gated to the stadium
+// footprint (isAtSowfield, the same predicate that arms the stadium music), so no
+// alert leaves the football ground; a private practice pitch (a far, isolated
+// instance) shows its theatre only to someone within VCUP_THEATRE_RADIUS of that
+// pitch. Personal events (vcupFound/Result/BetSettled) are NOT here and always
+// reach their owner.
 const VCUP_WALKUP_EVENTS = new Set([
   'vcupCountdown',
   'vcupKickoff',
@@ -8470,9 +8472,19 @@ export class Hud {
       // batch here, so this proximity gate is what keeps matches from crossing.
       if (VCUP_WALKUP_EVENTS.has(ev.type)) {
         const a = ev as unknown as { x: number; z: number };
-        const dx = a.x - sim.player.pos.x;
-        const dz = a.z - sim.player.pos.z;
-        if (dx * dx + dz * dz > VCUP_THEATRE_RADIUS * VCUP_THEATRE_RADIUS) continue;
+        if (isAtSowfield(a.x, a.z)) {
+          // Real Sowfield match: its theatre is gated to the stadium footprint,
+          // the same predicate that arms the stadium music, so no kickoff/goal
+          // banner leaks into Eastbrook or the wider map.
+          if (!isAtSowfield(sim.player.pos.x, sim.player.pos.z)) continue;
+        } else {
+          // A private practice instance (a far, isolated pitch): show its
+          // theatre only to someone standing on that same pitch, never the main
+          // match's audience.
+          const dx = a.x - sim.player.pos.x;
+          const dz = a.z - sim.player.pos.z;
+          if (dx * dx + dz * dz > VCUP_THEATRE_RADIUS * VCUP_THEATRE_RADIUS) continue;
+        }
       }
       // visual effects (swings, projectiles, glows) — for everyone nearby,
       // not just events involving this player
