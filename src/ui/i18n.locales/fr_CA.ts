@@ -230,4 +230,11 @@ export const fr_CA: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auraEffect.school.shadow': 'ombre',
   'hudChrome.auraEffect.school.holy': 'sacré',
   'hudChrome.auraEffect.school.nature': 'nature',
+  'auth.recovery.title': 'Ajouter un courriel de recuperation',
+  'auth.recovery.body':
+    'Definis une adresse courriel afin de pouvoir recuperer ton compte. Nous l utilisons seulement pour confirmer que ce compte t appartient si tu dois reinitialiser ton mot de passe.',
+  'auth.recovery.save': 'Enregistrer le courriel',
+  'auth.recovery.logOut': 'Se deconnecter',
+  'auth.recovery.invalid': 'Entre une adresse courriel valide.',
+  'auth.recovery.failed': 'Impossible d enregistrer ton courriel. Reessaie.',
 };

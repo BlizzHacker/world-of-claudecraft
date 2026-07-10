@@ -3140,12 +3140,12 @@ export const da_DK: EnTranslations = {
     "emailPlaceholder": "you@example.com",
     "emailError": "Please enter a valid email address.",
     "recovery": {
-      "title": "Add a recovery email",
-      "body": "Set an email address so you can recover your account. We only use it to confirm you own this account if you ever need to reset your password.",
-      "save": "Save email",
-      "logOut": "Log out",
-      "invalid": "Please enter a valid email address.",
-      "failed": "Could not save your email. Please try again."
+      "title": "Tilfoj en gendannelsesmail",
+      "body": "Angiv en e-mailadresse, sa du kan gendanne din konto. Vi bruger den kun til at bekraefte, at kontoen er din, hvis du far brug for at nulstille din adgangskode.",
+      "save": "Gem e-mail",
+      "logOut": "Log ud",
+      "invalid": "Indtast en gyldig e-mailadresse.",
+      "failed": "E-mailen kunne ikke gemmes. Prov igen."
     }
   },
   "wallet": {

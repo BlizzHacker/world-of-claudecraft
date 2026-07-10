@@ -503,6 +503,13 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'auth.enterWorld': 'Entra nel mondo',
   'auth.offlineCharacter': 'Personaggio offline',
   'auth.create': 'Crea',
+  'auth.recovery.title': 'Aggiungi un e-mail di recupero',
+  'auth.recovery.body':
+    'Imposta un indirizzo e-mail per poter recuperare il tuo account. Lo usiamo solo per confermare che l account e tuo se dovessi reimpostare la password.',
+  'auth.recovery.save': 'Salva e-mail',
+  'auth.recovery.logOut': 'Esci',
+  'auth.recovery.invalid': 'Inserisci un indirizzo e-mail valido.',
+  'auth.recovery.failed': 'Impossibile salvare l e-mail. Riprova.',
   'wallet.label': 'Portafoglio $CR',
   'wallet.connect': 'Verifica portafoglio',
   'wallet.connectTitle': 'Verifica il tuo portafoglio Solana',
@@ -858,8 +865,7 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'mobilePreflight.iosInstallDetail':
     'Per il vero schermo intero su iPhone o iPad, installa prima questa pagina nella schermata Home.',
   'mobilePreflight.iosShareStep': 'In Safari, tocca Condividi e poi Aggiungi alla schermata Home.',
-  'mobilePreflight.iosOpenStep':
-    'Apri Cryptic Realm dalla nuova icona nella schermata Home.',
+  'mobilePreflight.iosOpenStep': 'Apri Cryptic Realm dalla nuova icona nella schermata Home.',
   'mobilePreflight.androidStandaloneDetail':
     'Sei in modalità app a schermo intero. Mantieni il dispositivo in orizzontale.',
   'mobilePreflight.androidInstallDetail':
@@ -5156,8 +5162,7 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'errors.api.desktopCodeInvalid':
     'Il codice di accesso desktop non è valido o è scaduto. Riprova.',
   'desktop.crash.body': 'La vista di gioco ha smesso di funzionare. Ricaricarla?',
-  'desktop.crash.fatalBody':
-    'Cryptic Realm ha riscontrato un errore imprevisto e deve chiudersi.',
+  'desktop.crash.fatalBody': 'Cryptic Realm ha riscontrato un errore imprevisto e deve chiudersi.',
   'desktop.crash.quit': 'Esci',
   'desktop.crash.reload': 'Ricarica',
   'desktop.crash.title': 'Cryptic Realm',

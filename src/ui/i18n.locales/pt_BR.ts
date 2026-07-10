@@ -505,6 +505,13 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'auth.enterWorld': 'Entrar no mundo',
   'auth.offlineCharacter': 'Personagem offline',
   'auth.create': 'Criar',
+  'auth.recovery.title': 'Adicionar e-mail de recuperacao',
+  'auth.recovery.body':
+    'Defina um endereco de e-mail para recuperar sua conta. Nos o usamos apenas para confirmar que esta conta e sua se voce precisar redefinir sua senha.',
+  'auth.recovery.save': 'Salvar e-mail',
+  'auth.recovery.logOut': 'Sair',
+  'auth.recovery.invalid': 'Informe um endereco de e-mail valido.',
+  'auth.recovery.failed': 'Nao foi possivel salvar seu e-mail. Tente novamente.',
   'wallet.label': 'Carteira $CR',
   'wallet.connect': 'Verificar carteira',
   'wallet.connectTitle': 'Verifique sua carteira Solana',
@@ -5148,8 +5155,7 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'errors.api.desktopCodeInvalid':
     'O código de login do desktop é inválido ou expirou. Tente novamente.',
   'desktop.crash.body': 'A visualização do jogo parou de funcionar. Recarregar?',
-  'desktop.crash.fatalBody':
-    'O Cryptic Realm encontrou um erro inesperado e precisa fechar.',
+  'desktop.crash.fatalBody': 'O Cryptic Realm encontrou um erro inesperado e precisa fechar.',
   'desktop.crash.quit': 'Sair',
   'desktop.crash.reload': 'Recarregar',
   'desktop.crash.title': 'Cryptic Realm',

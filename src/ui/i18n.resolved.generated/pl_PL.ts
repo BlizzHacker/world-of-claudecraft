@@ -3143,7 +3143,7 @@ export const pl_PL: EnTranslations = {
       "title": "Dodaj e-mail odzyskiwania",
       "body": "Ustaw adres e-mail, aby móc odzyskać konto. Używamy go wyłącznie do potwierdzenia, że to konto należy do ciebie, gdybyś kiedykolwiek musiał zresetować hasło.",
       "save": "Zapisz e-mail",
-      "logOut": "Log out",
+      "logOut": "Wyloguj sie",
       "invalid": "Wprowadź prawidłowy adres e-mail.",
       "failed": "Nie udało się zapisać adresu e-mail. Spróbuj ponownie."
     }

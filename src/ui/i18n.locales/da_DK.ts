@@ -4767,6 +4767,13 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'wallet.holderTiers.worldbearer.name': 'Verdensbærer',
   'wallet.holderTiers.worldforger.flavor': 'Smeder en verden helt din egen: 9 % af forsyningen.',
   'wallet.holderTiers.worldforger.name': 'Verdenssmed',
+  'auth.recovery.title': 'Tilfoj en gendannelsesmail',
+  'auth.recovery.body':
+    'Angiv en e-mailadresse, sa du kan gendanne din konto. Vi bruger den kun til at bekraefte, at kontoen er din, hvis du far brug for at nulstille din adgangskode.',
+  'auth.recovery.save': 'Gem e-mail',
+  'auth.recovery.logOut': 'Log ud',
+  'auth.recovery.invalid': 'Indtast en gyldig e-mailadresse.',
+  'auth.recovery.failed': 'E-mailen kunne ikke gemmes. Prov igen.',
   'wallet.label': '$CR-pung',
   'wallet.linkFailed': 'Verificering af pung mislykkedes.',
   'wallet.linkTitle': 'Klik for at underskrive og tilknytte denne pung til din konto.',

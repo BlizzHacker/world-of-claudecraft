@@ -3143,7 +3143,7 @@ export const zh_CN: EnTranslations = {
       "title": "添加找回邮箱",
       "body": "设置一个邮箱地址，以便您可以找回自己的账户。我们仅在您需要重置密码时，用它来确认您是本账户的所有者。",
       "save": "保存邮箱",
-      "logOut": "Log out",
+      "logOut": "退出登录",
       "invalid": "请输入有效的邮箱地址。",
       "failed": "无法保存您的邮箱，请重试。"
     }

@@ -537,6 +537,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'auth.recovery.save': '이메일 저장',
   'auth.recovery.invalid': '유효한 이메일 주소를 입력하세요.',
   'auth.recovery.failed': '이메일을 저장하지 못했습니다. 다시 시도해 주세요.',
+  'auth.recovery.logOut': '로그아웃',
   'auth.showPassword': '비밀번호 표시',
   'auth.hidePassword': '비밀번호 숨기기',
   'auth.logIn': '로그인',

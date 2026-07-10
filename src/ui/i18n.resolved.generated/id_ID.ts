@@ -3140,12 +3140,12 @@ export const id_ID: EnTranslations = {
     "emailPlaceholder": "you@example.com",
     "emailError": "Please enter a valid email address.",
     "recovery": {
-      "title": "Add a recovery email",
-      "body": "Set an email address so you can recover your account. We only use it to confirm you own this account if you ever need to reset your password.",
-      "save": "Save email",
-      "logOut": "Log out",
-      "invalid": "Please enter a valid email address.",
-      "failed": "Could not save your email. Please try again."
+      "title": "Tambahkan email pemulihan",
+      "body": "Atur alamat email agar kamu dapat memulihkan akun. Kami hanya menggunakannya untuk memastikan akun ini milikmu jika suatu saat kamu perlu mengatur ulang kata sandi.",
+      "save": "Simpan email",
+      "logOut": "Keluar",
+      "invalid": "Masukkan alamat email yang valid.",
+      "failed": "Email tidak dapat disimpan. Coba lagi."
     }
   },
   "wallet": {

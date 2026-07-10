@@ -3140,12 +3140,12 @@ export const pt_BR: EnTranslations = {
     "emailPlaceholder": "you@example.com",
     "emailError": "Please enter a valid email address.",
     "recovery": {
-      "title": "Add a recovery email",
-      "body": "Set an email address so you can recover your account. We only use it to confirm you own this account if you ever need to reset your password.",
-      "save": "Save email",
-      "logOut": "Log out",
-      "invalid": "Please enter a valid email address.",
-      "failed": "Could not save your email. Please try again."
+      "title": "Adicionar e-mail de recuperacao",
+      "body": "Defina um endereco de e-mail para recuperar sua conta. Nos o usamos apenas para confirmar que esta conta e sua se voce precisar redefinir sua senha.",
+      "save": "Salvar e-mail",
+      "logOut": "Sair",
+      "invalid": "Informe um endereco de e-mail valido.",
+      "failed": "Nao foi possivel salvar seu e-mail. Tente novamente."
     }
   },
   "wallet": {

@@ -547,6 +547,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'auth.recovery.save': 'Сохранить почту',
   'auth.recovery.invalid': 'Введите корректный адрес эл. почты.',
   'auth.recovery.failed': 'Не удалось сохранить вашу почту. Пожалуйста, попробуйте ещё раз.',
+  'auth.recovery.logOut': 'Выйти',
   'auth.showPassword': 'Показать пароль',
   'auth.hidePassword': 'Скрыть пароль',
   'auth.logIn': 'Войти',
@@ -655,8 +656,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'wallet.holderTiers.gilded.name': 'Позолоченный',
   'wallet.holderTiers.gilded.flavor': 'В позолоте и с улыбкой.',
   'wallet.holderTiers.vaultwarden.name': 'Хранитель хранилища',
-  'wallet.holderTiers.vaultwarden.flavor':
-    'Теперь вы храните настоящее хранилище: 0,01% всех $CR.',
+  'wallet.holderTiers.vaultwarden.flavor': 'Теперь вы храните настоящее хранилище: 0,01% всех $CR.',
   'wallet.holderTiers.whale.name': 'Кит',
   'wallet.holderTiers.whale.flavor': 'Глубины расступаются, когда вы плывете: 0,1% предложения.',
   'wallet.holderTiers.leviathan.name': 'Левиафан',
@@ -936,8 +936,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'mobilePreflight.iosInstallDetail':
     'Для настоящего полноэкранного режима на iPhone или iPad сначала добавьте эту страницу на домашний экран.',
   'mobilePreflight.iosShareStep': 'В Safari нажмите Поделиться, затем На экран Домой.',
-  'mobilePreflight.iosOpenStep':
-    'Откройте Cryptic Realm через новый значок на домашнем экране.',
+  'mobilePreflight.iosOpenStep': 'Откройте Cryptic Realm через новый значок на домашнем экране.',
   'mobilePreflight.androidStandaloneDetail':
     'Вы в полноэкранном режиме приложения. Держите устройство горизонтально.',
   'mobilePreflight.androidInstallDetail':
@@ -5275,8 +5274,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'desktop.crash.body': 'Игровой экран перестал отвечать. Перезагрузить его?',
   'desktop.crash.reload': 'Перезагрузить',
   'desktop.crash.quit': 'Выйти',
-  'desktop.crash.fatalBody':
-    'Cryptic Realm столкнулась с непредвиденной ошибкой и будет закрыта.',
+  'desktop.crash.fatalBody': 'Cryptic Realm столкнулась с непредвиденной ошибкой и будет закрыта.',
   // Map editor (/editor), added with the editor catalog domain.
   'editor.appTitle': 'Редактор карт',
   'editor.docTitle': 'Редактор карт - Cryptic Realm',

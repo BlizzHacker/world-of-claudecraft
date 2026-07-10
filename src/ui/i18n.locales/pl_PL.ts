@@ -370,6 +370,7 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'auth.recovery.invalid': 'Wprowadź prawidłowy adres e-mail.',
   'auth.recovery.save': 'Zapisz e-mail',
   'auth.recovery.title': 'Dodaj e-mail odzyskiwania',
+  'auth.recovery.logOut': 'Wyloguj sie',
   'delveRiteUi.blurb':
     'Kapliczki rozbłysną po kolei. Powtórz sekwencję, aktywując każdą kapliczkę w tej samej kolejności. Błędne dotknięcie przekreśla próbę i odtwarza sekwencję od nowa, bezbłędna próba przynosi najbogatsze łupy, a wyczerpanie prób otwiera relikwiarz w najskromniejszej postaci. Wybierz, jak obrzęd ma cię wypróbować.',
   'delveRiteUi.closeAria': 'Zamknij',

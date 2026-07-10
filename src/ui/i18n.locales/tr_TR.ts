@@ -4769,6 +4769,13 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'wallet.holderTiers.worldbearer.name': 'Dünya Taşıyıcı',
   'wallet.holderTiers.worldforger.flavor': "Kendine ait bir dünya döversin: arzın %9'u.",
   'wallet.holderTiers.worldforger.name': 'Dünya Döven',
+  'auth.recovery.title': 'Kurtarma e-postasi ekle',
+  'auth.recovery.body':
+    'Hesabini kurtarabilmen icin bir e-posta adresi belirle. Bunu yalnizca sifreni sifirlaman gerekirse hesabin sana ait oldugunu dogrulamak icin kullaniriz.',
+  'auth.recovery.save': 'E-postayi kaydet',
+  'auth.recovery.logOut': 'Cikis yap',
+  'auth.recovery.invalid': 'Gecerli bir e-posta adresi gir.',
+  'auth.recovery.failed': 'E-postan kaydedilemedi. Lutfen tekrar dene.',
   'wallet.label': '$CR Cüzdanı',
   'wallet.linkFailed': 'Cüzdan doğrulaması başarısız oldu.',
   'wallet.linkTitle': 'Bu cüzdanı imzalayıp hesabınıza bağlamak için tıklayın.',

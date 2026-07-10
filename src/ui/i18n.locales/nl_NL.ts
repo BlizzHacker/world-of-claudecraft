@@ -4833,6 +4833,13 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'wallet.holderTiers.worldbearer.name': 'Werelddrager',
   'wallet.holderTiers.worldforger.flavor': 'Een eigen wereld smedend: 9% van de voorraad.',
   'wallet.holderTiers.worldforger.name': 'Wereldsmid',
+  'auth.recovery.title': 'Herstel-e-mail toevoegen',
+  'auth.recovery.body':
+    'Stel een e-mailadres in zodat je je account kunt herstellen. We gebruiken dit alleen om te bevestigen dat dit account van jou is als je ooit je wachtwoord moet resetten.',
+  'auth.recovery.save': 'E-mail opslaan',
+  'auth.recovery.logOut': 'Uitloggen',
+  'auth.recovery.invalid': 'Voer een geldig e-mailadres in.',
+  'auth.recovery.failed': 'Je e-mail kon niet worden opgeslagen. Probeer het opnieuw.',
   'wallet.label': '$CR-portemonnee',
   'wallet.linkFailed': 'Portemonneeverificatie mislukt.',
   'wallet.linkTitle': 'Klik om te ondertekenen en deze portemonnee aan je account te koppelen.',

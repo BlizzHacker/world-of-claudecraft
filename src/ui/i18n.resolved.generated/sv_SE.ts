@@ -3140,12 +3140,12 @@ export const sv_SE: EnTranslations = {
     "emailPlaceholder": "you@example.com",
     "emailError": "Please enter a valid email address.",
     "recovery": {
-      "title": "Add a recovery email",
-      "body": "Set an email address so you can recover your account. We only use it to confirm you own this account if you ever need to reset your password.",
-      "save": "Save email",
-      "logOut": "Log out",
-      "invalid": "Please enter a valid email address.",
-      "failed": "Could not save your email. Please try again."
+      "title": "Lagg till aterstallningsmejl",
+      "body": "Ange en e-postadress sa att du kan aterstalla ditt konto. Vi anvander den bara for att bekrafta att kontot ar ditt om du nagon gang behover aterstalla losenordet.",
+      "save": "Spara e-post",
+      "logOut": "Logga ut",
+      "invalid": "Ange en giltig e-postadress.",
+      "failed": "Det gick inte att spara din e-post. Forsok igen."
     }
   },
   "wallet": {

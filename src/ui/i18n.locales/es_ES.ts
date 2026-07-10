@@ -283,4 +283,11 @@ export const es_ES: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auraEffect.school.shadow': 'Sombra',
   'hudChrome.auraEffect.school.holy': 'Sagrada',
   'hudChrome.auraEffect.school.nature': 'Natural',
+  'auth.recovery.title': 'Anadir correo de recuperacion',
+  'auth.recovery.body':
+    'Configura una direccion de correo para poder recuperar tu cuenta. Solo la usamos para confirmar que esta cuenta te pertenece si alguna vez necesitas restablecer tu contrasena.',
+  'auth.recovery.save': 'Guardar correo',
+  'auth.recovery.logOut': 'Cerrar sesion',
+  'auth.recovery.invalid': 'Introduce una direccion de correo valida.',
+  'auth.recovery.failed': 'No se pudo guardar tu correo. Intentalo de nuevo.',
 };

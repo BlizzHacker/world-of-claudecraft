@@ -4836,6 +4836,13 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'wallet.holderTiers.worldbearer.name': 'Pemikul Dunia',
   'wallet.holderTiers.worldforger.flavor': 'Menempa dunia milikmu sendiri: 9% dari pasokan.',
   'wallet.holderTiers.worldforger.name': 'Penempa Dunia',
+  'auth.recovery.title': 'Tambahkan email pemulihan',
+  'auth.recovery.body':
+    'Atur alamat email agar kamu dapat memulihkan akun. Kami hanya menggunakannya untuk memastikan akun ini milikmu jika suatu saat kamu perlu mengatur ulang kata sandi.',
+  'auth.recovery.save': 'Simpan email',
+  'auth.recovery.logOut': 'Keluar',
+  'auth.recovery.invalid': 'Masukkan alamat email yang valid.',
+  'auth.recovery.failed': 'Email tidak dapat disimpan. Coba lagi.',
   'wallet.label': 'Dompet $CR',
   'wallet.linkFailed': 'Verifikasi dompet gagal.',
   'wallet.linkTitle': 'Klik untuk menandatangani dan menautkan dompet ini ke akun Anda.',
@@ -5128,8 +5135,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'errors.api.desktopCodeInvalid':
     'Kode masuk desktop tidak valid atau kedaluwarsa. Silakan coba lagi.',
   'desktop.crash.body': 'Tampilan gim berhenti bekerja. Muat ulang?',
-  'desktop.crash.fatalBody':
-    'Cryptic Realm mengalami kesalahan tak terduga dan perlu ditutup.',
+  'desktop.crash.fatalBody': 'Cryptic Realm mengalami kesalahan tak terduga dan perlu ditutup.',
   'desktop.crash.quit': 'Keluar',
   'desktop.crash.reload': 'Muat Ulang',
   'desktop.crash.title': 'Cryptic Realm',

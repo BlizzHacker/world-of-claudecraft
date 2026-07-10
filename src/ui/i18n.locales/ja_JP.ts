@@ -537,6 +537,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'auth.recovery.save': 'メールを保存',
   'auth.recovery.invalid': '有効なメールアドレスを入力してください。',
   'auth.recovery.failed': 'メールアドレスを保存できませんでした。もう一度お試しください。',
+  'auth.recovery.logOut': 'ログアウト',
   'auth.showPassword': 'パスワードを表示',
   'auth.hidePassword': 'パスワードを非表示',
   'auth.logIn': 'ログイン',

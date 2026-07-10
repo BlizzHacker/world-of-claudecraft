@@ -4800,6 +4800,13 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'wallet.holderTiers.worldbearer.name': 'Người Mang Thế Giới',
   'wallet.holderTiers.worldforger.flavor': 'Rèn nên một thế giới của riêng bạn: 9% nguồn cung.',
   'wallet.holderTiers.worldforger.name': 'Người Rèn Thế Giới',
+  'auth.recovery.title': 'Them email khoi phuc',
+  'auth.recovery.body':
+    'Thiet lap dia chi email de ban co the khoi phuc tai khoan. Chung toi chi dung email nay de xac nhan tai khoan thuoc ve ban neu ban can dat lai mat khau.',
+  'auth.recovery.save': 'Luu email',
+  'auth.recovery.logOut': 'Dang xuat',
+  'auth.recovery.invalid': 'Vui long nhap dia chi email hop le.',
+  'auth.recovery.failed': 'Khong the luu email cua ban. Vui long thu lai.',
   'wallet.label': 'Ví $CR',
   'wallet.linkFailed': 'Xác minh ví thất bại.',
   'wallet.linkTitle': 'Nhấn để ký và liên kết ví này với tài khoản của bạn.',

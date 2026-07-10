@@ -3143,7 +3143,7 @@ export const cs_CZ: EnTranslations = {
       "title": "Přidat e-mail pro obnovu",
       "body": "Nastav e-mailovou adresu, abys mohl(a) obnovit účet. Použijeme ji jen k potvrzení, že ti účet patří, pokud budeš někdy potřebovat resetovat heslo.",
       "save": "Uložit e-mail",
-      "logOut": "Log out",
+      "logOut": "Odhlasit se",
       "invalid": "Zadej platnou e-mailovou adresu.",
       "failed": "E-mail se nepodařilo uložit. Zkus to prosím znovu."
     }

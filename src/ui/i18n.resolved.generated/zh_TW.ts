@@ -3143,7 +3143,7 @@ export const zh_TW: EnTranslations = {
       "title": "新增復原電子郵件",
       "body": "設定一個電子郵件地址，以便您可以復原自己的帳號。我們僅在您需要重設密碼時，用它來確認您是本帳號的擁有者。",
       "save": "儲存電子郵件",
-      "logOut": "Log out",
+      "logOut": "登出",
       "invalid": "請輸入有效的電子郵件地址。",
       "failed": "無法儲存您的電子郵件，請重試。"
     }

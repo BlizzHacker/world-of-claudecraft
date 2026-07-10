@@ -513,6 +513,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'auth.recovery.save': '儲存電子郵件',
   'auth.recovery.invalid': '請輸入有效的電子郵件地址。',
   'auth.recovery.failed': '無法儲存您的電子郵件，請重試。',
+  'auth.recovery.logOut': '登出',
   'auth.showPassword': '顯示密碼',
   'auth.hidePassword': '隱藏密碼',
   'auth.logIn': '登入',
@@ -4896,8 +4897,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.devBadge.linkedAs': '已連結為 {login}',
   'hudChrome.devBadge.unlink': '取消連結 GitHub',
   'hudChrome.nativeUpdate.title': '有可用更新',
-  'hudChrome.nativeUpdate.body':
-    'Cryptic Realm 有新版本可用。立即更新以取得最新修正與改進。',
+  'hudChrome.nativeUpdate.body': 'Cryptic Realm 有新版本可用。立即更新以取得最新修正與改進。',
   'hudChrome.nativeUpdate.bodyWithVersion':
     'Cryptic Realm {version} 版本已可用。立即更新以取得最新修正與改進。',
   'hudChrome.nativeUpdate.notNow': '暫不',

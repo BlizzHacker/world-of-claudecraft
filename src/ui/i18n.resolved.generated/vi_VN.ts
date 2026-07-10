@@ -3140,12 +3140,12 @@ export const vi_VN: EnTranslations = {
     "emailPlaceholder": "you@example.com",
     "emailError": "Please enter a valid email address.",
     "recovery": {
-      "title": "Add a recovery email",
-      "body": "Set an email address so you can recover your account. We only use it to confirm you own this account if you ever need to reset your password.",
-      "save": "Save email",
-      "logOut": "Log out",
-      "invalid": "Please enter a valid email address.",
-      "failed": "Could not save your email. Please try again."
+      "title": "Them email khoi phuc",
+      "body": "Thiet lap dia chi email de ban co the khoi phuc tai khoan. Chung toi chi dung email nay de xac nhan tai khoan thuoc ve ban neu ban can dat lai mat khau.",
+      "save": "Luu email",
+      "logOut": "Dang xuat",
+      "invalid": "Vui long nhap dia chi email hop le.",
+      "failed": "Khong the luu email cua ban. Vui long thu lai."
     }
   },
   "wallet": {

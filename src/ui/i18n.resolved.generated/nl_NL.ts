@@ -3140,12 +3140,12 @@ export const nl_NL: EnTranslations = {
     "emailPlaceholder": "you@example.com",
     "emailError": "Please enter a valid email address.",
     "recovery": {
-      "title": "Add a recovery email",
-      "body": "Set an email address so you can recover your account. We only use it to confirm you own this account if you ever need to reset your password.",
-      "save": "Save email",
-      "logOut": "Log out",
-      "invalid": "Please enter a valid email address.",
-      "failed": "Could not save your email. Please try again."
+      "title": "Herstel-e-mail toevoegen",
+      "body": "Stel een e-mailadres in zodat je je account kunt herstellen. We gebruiken dit alleen om te bevestigen dat dit account van jou is als je ooit je wachtwoord moet resetten.",
+      "save": "E-mail opslaan",
+      "logOut": "Uitloggen",
+      "invalid": "Voer een geldig e-mailadres in.",
+      "failed": "Je e-mail kon niet worden opgeslagen. Probeer het opnieuw."
     }
   },
   "wallet": {

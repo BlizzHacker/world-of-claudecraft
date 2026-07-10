@@ -4780,6 +4780,13 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'wallet.holderTiers.worldbearer.name': 'Världsbärare',
   'wallet.holderTiers.worldforger.flavor': 'Smider en egen värld: 9 % av tillgången.',
   'wallet.holderTiers.worldforger.name': 'Världssmidare',
+  'auth.recovery.title': 'Lagg till aterstallningsmejl',
+  'auth.recovery.body':
+    'Ange en e-postadress sa att du kan aterstalla ditt konto. Vi anvander den bara for att bekrafta att kontot ar ditt om du nagon gang behover aterstalla losenordet.',
+  'auth.recovery.save': 'Spara e-post',
+  'auth.recovery.logOut': 'Logga ut',
+  'auth.recovery.invalid': 'Ange en giltig e-postadress.',
+  'auth.recovery.failed': 'Det gick inte att spara din e-post. Forsok igen.',
   'wallet.label': '$CR-plånbok',
   'wallet.linkFailed': 'Plånboksverifieringen misslyckades.',
   'wallet.linkTitle': 'Klicka för att signera och länka den här plånboken till ditt konto.',

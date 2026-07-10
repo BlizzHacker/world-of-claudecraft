@@ -512,6 +512,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'auth.recovery.save': '保存邮箱',
   'auth.recovery.invalid': '请输入有效的邮箱地址。',
   'auth.recovery.failed': '无法保存您的邮箱，请重试。',
+  'auth.recovery.logOut': '退出登录',
   'auth.showPassword': '显示密码',
   'auth.hidePassword': '隐藏密码',
   'auth.logIn': '登录',
@@ -4896,8 +4897,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.devBadge.linkedAs': '已关联为 {login}',
   'hudChrome.devBadge.unlink': '取消关联 GitHub',
   'hudChrome.nativeUpdate.title': '有可用更新',
-  'hudChrome.nativeUpdate.body':
-    'Cryptic Realm 有新版本可用。立即更新以获取最新修复和改进。',
+  'hudChrome.nativeUpdate.body': 'Cryptic Realm 有新版本可用。立即更新以获取最新修复和改进。',
   'hudChrome.nativeUpdate.bodyWithVersion':
     'Cryptic Realm {version} 版本已可用。立即更新以获取最新修复和改进。',
   'hudChrome.nativeUpdate.notNow': '暂不',

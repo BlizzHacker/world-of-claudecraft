@@ -508,6 +508,13 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'auth.enterWorld': 'Welt betreten',
   'auth.offlineCharacter': 'Offline-Charakter',
   'auth.create': 'Erstellen',
+  'auth.recovery.title': 'Wiederherstellungs-E-Mail hinzufuegen',
+  'auth.recovery.body':
+    'Lege eine E-Mail-Adresse fest, damit du dein Konto wiederherstellen kannst. Wir verwenden sie nur, um zu bestaetigen, dass dieses Konto dir gehoert, falls du dein Passwort zuruecksetzen musst.',
+  'auth.recovery.save': 'E-Mail speichern',
+  'auth.recovery.logOut': 'Abmelden',
+  'auth.recovery.invalid': 'Bitte gib eine gueltige E-Mail-Adresse ein.',
+  'auth.recovery.failed': 'Deine E-Mail konnte nicht gespeichert werden. Bitte versuche es erneut.',
   'wallet.label': '$CR-Wallet',
   'wallet.connect': 'Wallet verifizieren',
   'wallet.connectTitle': 'Euer Solana-Wallet verifizieren',

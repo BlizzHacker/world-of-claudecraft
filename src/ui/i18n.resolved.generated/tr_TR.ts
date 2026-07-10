@@ -3140,12 +3140,12 @@ export const tr_TR: EnTranslations = {
     "emailPlaceholder": "you@example.com",
     "emailError": "Please enter a valid email address.",
     "recovery": {
-      "title": "Add a recovery email",
-      "body": "Set an email address so you can recover your account. We only use it to confirm you own this account if you ever need to reset your password.",
-      "save": "Save email",
-      "logOut": "Log out",
-      "invalid": "Please enter a valid email address.",
-      "failed": "Could not save your email. Please try again."
+      "title": "Kurtarma e-postasi ekle",
+      "body": "Hesabini kurtarabilmen icin bir e-posta adresi belirle. Bunu yalnizca sifreni sifirlaman gerekirse hesabin sana ait oldugunu dogrulamak icin kullaniriz.",
+      "save": "E-postayi kaydet",
+      "logOut": "Cikis yap",
+      "invalid": "Gecerli bir e-posta adresi gir.",
+      "failed": "E-postan kaydedilemedi. Lutfen tekrar dene."
     }
   },
   "wallet": {

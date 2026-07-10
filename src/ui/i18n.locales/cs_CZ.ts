@@ -491,6 +491,7 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
   'auth.recovery.invalid': 'Zadej platnou e-mailovou adresu.',
   'auth.recovery.save': 'Uložit e-mail',
   'auth.recovery.title': 'Přidat e-mail pro obnovu',
+  'auth.recovery.logOut': 'Odhlasit se',
   'auth.showPassword': 'Zobrazit heslo',
   'auth.twoFactorHint': 'Zadej kód z autentizační aplikace nebo jeden ze svých obnovovacích kódů.',
   'auth.twoFactorLabel': 'Autentizační kód',

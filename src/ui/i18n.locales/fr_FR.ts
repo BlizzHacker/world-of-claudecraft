@@ -513,6 +513,13 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'auth.enterWorld': 'Entrer dans le monde',
   'auth.offlineCharacter': 'Personnage hors ligne',
   'auth.create': 'Créer',
+  'auth.recovery.title': 'Ajouter une adresse e-mail de recuperation',
+  'auth.recovery.body':
+    'Definis une adresse e-mail afin de pouvoir recuperer ton compte. Nous l utilisons uniquement pour confirmer que ce compte t appartient si tu dois reinitialiser ton mot de passe.',
+  'auth.recovery.save': 'Enregistrer l e-mail',
+  'auth.recovery.logOut': 'Se deconnecter',
+  'auth.recovery.invalid': 'Saisis une adresse e-mail valide.',
+  'auth.recovery.failed': 'Impossible d enregistrer ton e-mail. Reessaie.',
   'wallet.label': 'Portefeuille $CR',
   'wallet.connect': 'Vérifier le portefeuille',
   'wallet.connectTitle': 'Vérifiez votre portefeuille Solana',
@@ -5203,8 +5210,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'errors.api.desktopCodeInvalid':
     "Le code de connexion de l'application de bureau est invalide ou expiré. Veuillez réessayer.",
   'desktop.crash.body': "L'affichage du jeu a cessé de fonctionner. Le recharger ?",
-  'desktop.crash.fatalBody':
-    'Cryptic Realm a rencontré une erreur inattendue et doit se fermer.',
+  'desktop.crash.fatalBody': 'Cryptic Realm a rencontré une erreur inattendue et doit se fermer.',
   'desktop.crash.quit': 'Quitter',
   'desktop.crash.reload': 'Recharger',
   'desktop.crash.title': 'Cryptic Realm',
