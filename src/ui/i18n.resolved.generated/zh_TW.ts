@@ -2979,8 +2979,8 @@ export const zh_TW: EnTranslations = {
     "account": "帳號",
     "logout": "登出",
     "donate": "捐贈",
-    "whitepaper": "White Paper",
-    "contributions": "Contributions"
+    "whitepaper": "白皮書",
+    "contributions": "貢獻"
   },
   "stats": {
     "title": "伺服器狀態",

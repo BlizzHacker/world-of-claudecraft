@@ -2979,8 +2979,8 @@ export const de_DE: EnTranslations = {
     "account": "Konto",
     "logout": "Ausloggen",
     "donate": "Spenden",
-    "whitepaper": "White Paper",
-    "contributions": "Contributions"
+    "whitepaper": "Weissbuch",
+    "contributions": "Beitraege"
   },
   "stats": {
     "title": "Realmstatus",

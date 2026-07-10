@@ -2979,8 +2979,8 @@ export const nl_NL: EnTranslations = {
     "account": "Account",
     "logout": "Uitloggen",
     "donate": "Doneren",
-    "whitepaper": "White Paper",
-    "contributions": "Contributions"
+    "whitepaper": "Witboek",
+    "contributions": "Bijdragen"
   },
   "stats": {
     "title": "Realmstatus",

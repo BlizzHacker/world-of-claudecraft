@@ -2979,8 +2979,8 @@ export const vi_VN: EnTranslations = {
     "account": "Tài Khoản",
     "logout": "Đăng Xuất",
     "donate": "Ủng Hộ",
-    "whitepaper": "White Paper",
-    "contributions": "Contributions"
+    "whitepaper": "Sach trang",
+    "contributions": "Dong gop"
   },
   "stats": {
     "title": "Trạng Thái Realm",

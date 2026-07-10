@@ -2979,8 +2979,8 @@ export const ru_RU: EnTranslations = {
     "account": "Аккаунт",
     "logout": "Выйти",
     "donate": "Пожертвовать",
-    "whitepaper": "White Paper",
-    "contributions": "Contributions"
+    "whitepaper": "Белая книга",
+    "contributions": "Вклад"
   },
   "stats": {
     "title": "Статус игрового мира",

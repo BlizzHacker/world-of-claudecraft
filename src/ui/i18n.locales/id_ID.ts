@@ -2,6 +2,8 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const id_ID: Partial<Record<TranslationKey, string>> = {
+  'nav.whitepaper': 'Buku putih',
+  'nav.contributions': 'Kontribusi',
   'entities.npcs.auctioneer_voss.greeting':
     'World Market juga buka di sini, {className}. Belilah dari setiap petualang di alam ini, atau gelarlah daganganmu sendiri.',
   'entities.npcs.auctioneer_voss.name': 'Pelelang Voss',

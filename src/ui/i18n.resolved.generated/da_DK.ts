@@ -2979,8 +2979,8 @@ export const da_DK: EnTranslations = {
     "account": "Konto",
     "logout": "Log ud",
     "donate": "Donér",
-    "whitepaper": "White Paper",
-    "contributions": "Contributions"
+    "whitepaper": "Hvidbog",
+    "contributions": "Bidrag"
   },
   "stats": {
     "title": "Realm-status",

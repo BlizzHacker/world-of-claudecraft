@@ -14,6 +14,8 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ja_JP: Partial<Record<TranslationKey, string>> = {
+  'nav.whitepaper': 'ホワイトペーパー',
+  'nav.contributions': '貢献',
   // Guild roster last-seen (M16 non-Latin fill)
   'hudChrome.social.lastSeen': '最終ログイン: {when}',
   'hudChrome.social.lastSeenNever': 'なし',

@@ -2979,8 +2979,8 @@ export const tr_TR: EnTranslations = {
     "account": "Hesap",
     "logout": "Çıkış Yap",
     "donate": "Bağış Yap",
-    "whitepaper": "White Paper",
-    "contributions": "Contributions"
+    "whitepaper": "Teknik belge",
+    "contributions": "Katkilar"
   },
   "stats": {
     "title": "Diyar Durumu",

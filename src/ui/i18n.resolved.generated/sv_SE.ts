@@ -2979,8 +2979,8 @@ export const sv_SE: EnTranslations = {
     "account": "Konto",
     "logout": "Logga ut",
     "donate": "Donera",
-    "whitepaper": "White Paper",
-    "contributions": "Contributions"
+    "whitepaper": "Vitbok",
+    "contributions": "Bidrag"
   },
   "stats": {
     "title": "Rikesstatus",

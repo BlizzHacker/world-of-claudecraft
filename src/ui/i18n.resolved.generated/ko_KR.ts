@@ -2979,8 +2979,8 @@ export const ko_KR: EnTranslations = {
     "account": "계정",
     "logout": "로그아웃",
     "donate": "후원",
-    "whitepaper": "White Paper",
-    "contributions": "Contributions"
+    "whitepaper": "백서",
+    "contributions": "기여"
   },
   "stats": {
     "title": "렐름 상태",

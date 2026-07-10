@@ -14,6 +14,8 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const fr_FR: Partial<Record<TranslationKey, string>> = {
+  'nav.whitepaper': 'Livre blanc',
+  'nav.contributions': 'Contributions',
   'entities.npcs.auctioneer_voss.greeting':
     'Le Marché du monde est ouvert ici aussi, {className}. Achetez auprès de chaque aventurier du royaume, ou proposez vos propres marchandises.',
   'entities.npcs.auctioneer_voss.name': 'Commissaire-priseur Voss',

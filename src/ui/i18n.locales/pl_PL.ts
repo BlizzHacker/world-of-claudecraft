@@ -2,6 +2,8 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const pl_PL: Partial<Record<TranslationKey, string>> = {
+  'nav.whitepaper': 'Biala ksiega',
+  'nav.contributions': 'Wklady',
   'entities.abilities.sport_boot.description':
     'Długie, wysokie wykopnięcie w stronę punktu celowania. Trybuny to uwielbiają.',
   'entities.abilities.sport_boot.name': 'Potężny Wykop',

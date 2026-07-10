@@ -2979,7 +2979,7 @@ export const fr_FR: EnTranslations = {
     "account": "Compte",
     "logout": "Déconnexion",
     "donate": "Faire un don",
-    "whitepaper": "White Paper",
+    "whitepaper": "Livre blanc",
     "contributions": "Contributions"
   },
   "stats": {

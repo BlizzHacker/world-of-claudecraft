@@ -2979,8 +2979,8 @@ export const cs_CZ: EnTranslations = {
     "account": "Účet",
     "logout": "Odhlásit se",
     "donate": "Přispět",
-    "whitepaper": "White Paper",
-    "contributions": "Contributions"
+    "whitepaper": "Bila kniha",
+    "contributions": "Prispevky"
   },
   "stats": {
     "title": "Stav světa",

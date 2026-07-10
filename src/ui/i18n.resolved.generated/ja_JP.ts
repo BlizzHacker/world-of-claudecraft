@@ -2979,8 +2979,8 @@ export const ja_JP: EnTranslations = {
     "account": "アカウント",
     "logout": "ログアウト",
     "donate": "寄付",
-    "whitepaper": "White Paper",
-    "contributions": "Contributions"
+    "whitepaper": "ホワイトペーパー",
+    "contributions": "貢献"
   },
   "stats": {
     "title": "レルムステータス",

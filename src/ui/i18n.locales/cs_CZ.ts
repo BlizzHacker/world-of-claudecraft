@@ -2,6 +2,8 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const cs_CZ: Partial<Record<TranslationKey, string>> = {
+  'nav.whitepaper': 'Bila kniha',
+  'nav.contributions': 'Prispevky',
   'entities.abilities.sport_boot.description':
     'Dlouhý vysoký odkop směrem k zaměřovanému bodu. Dav to miluje.',
   'entities.abilities.sport_boot.name': 'Velký odkop',

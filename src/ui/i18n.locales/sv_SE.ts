@@ -2,6 +2,8 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const sv_SE: Partial<Record<TranslationKey, string>> = {
+  'nav.whitepaper': 'Vitbok',
+  'nav.contributions': 'Bidrag',
   'entities.npcs.auctioneer_voss.greeting':
     'Cryptic Realm-marknaden är öppen även här, {className}. Köp från varje äventyrare i riket, eller lägg ut dina egna varor.',
   'entities.npcs.auctioneer_voss.name': 'Auktionsförrättare Voss',

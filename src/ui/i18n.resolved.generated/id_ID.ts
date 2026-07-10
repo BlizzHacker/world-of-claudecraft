@@ -2979,8 +2979,8 @@ export const id_ID: EnTranslations = {
     "account": "Akun",
     "logout": "Keluar",
     "donate": "Donasi",
-    "whitepaper": "White Paper",
-    "contributions": "Contributions"
+    "whitepaper": "Buku putih",
+    "contributions": "Kontribusi"
   },
   "stats": {
     "title": "Status Realm",

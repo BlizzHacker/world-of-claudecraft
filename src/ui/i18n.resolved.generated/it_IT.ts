@@ -2979,8 +2979,8 @@ export const it_IT: EnTranslations = {
     "account": "Account",
     "logout": "Esci",
     "donate": "Dona",
-    "whitepaper": "White Paper",
-    "contributions": "Contributions"
+    "whitepaper": "Libro bianco",
+    "contributions": "Contributi"
   },
   "stats": {
     "title": "Stato del Reame",

@@ -14,6 +14,8 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ru_RU: Partial<Record<TranslationKey, string>> = {
+  'nav.whitepaper': 'Белая книга',
+  'nav.contributions': 'Вклад',
   // Guild roster last-seen (M16 non-Latin fill)
   'hudChrome.social.lastSeen': 'Последний вход: {when}',
   'hudChrome.social.lastSeenNever': 'никогда',

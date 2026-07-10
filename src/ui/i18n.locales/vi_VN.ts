@@ -2,6 +2,8 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const vi_VN: Partial<Record<TranslationKey, string>> = {
+  'nav.whitepaper': 'Sach trang',
+  'nav.contributions': 'Dong gop',
   'entities.npcs.auctioneer_voss.greeting':
     'World Market cũng mở cửa ở đây, {className}. Hãy mua từ mọi nhà thám hiểm trong vương quốc, hoặc bày bán hàng hóa của riêng ngươi.',
   'entities.npcs.auctioneer_voss.name': 'Người Đấu Giá Voss',

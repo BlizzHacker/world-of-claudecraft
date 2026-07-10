@@ -14,6 +14,8 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const zh_CN: Partial<Record<TranslationKey, string>> = {
+  'nav.whitepaper': '白皮书',
+  'nav.contributions': '贡献',
   // Guild roster last-seen (M16 non-Latin fill)
   'hudChrome.social.lastSeen': '最后在线: {when}',
   'hudChrome.social.lastSeenNever': '从未',

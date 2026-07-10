@@ -2979,8 +2979,8 @@ export const es: EnTranslations = {
     "account": "Cuenta",
     "logout": "Cerrar sesión",
     "donate": "Donar",
-    "whitepaper": "White Paper",
-    "contributions": "Contributions"
+    "whitepaper": "Libro blanco",
+    "contributions": "Contribuciones"
   },
   "stats": {
     "title": "Estado del Reino",

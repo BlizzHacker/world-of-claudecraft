@@ -2979,8 +2979,8 @@ export const zh_CN: EnTranslations = {
     "account": "账户",
     "logout": "退出登录",
     "donate": "捐赠",
-    "whitepaper": "White Paper",
-    "contributions": "Contributions"
+    "whitepaper": "白皮书",
+    "contributions": "贡献"
   },
   "stats": {
     "title": "服务器状态",
