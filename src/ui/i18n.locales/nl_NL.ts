@@ -2,6 +2,7 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const nl_NL: Partial<Record<TranslationKey, string>> = {
+  'hud.core.mobileSettings': 'Instellingen',
   'hudChrome.account.sectionConnections': 'Verbonden accounts',
   'hudChrome.account.connectionsSummary':
     'Beheer aanmeldproviders die aan dit account zijn gekoppeld.',

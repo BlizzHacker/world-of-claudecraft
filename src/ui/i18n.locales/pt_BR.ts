@@ -14,6 +14,7 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const pt_BR: Partial<Record<TranslationKey, string>> = {
+  'hud.core.mobileSettings': 'Configuracoes',
   'hudChrome.account.sectionConnections': 'Contas conectadas',
   'hudChrome.account.connectionsSummary': 'Gerencie provedores de login vinculados a esta conta.',
   'hudChrome.account.ssoLink': 'Vincular Discord',

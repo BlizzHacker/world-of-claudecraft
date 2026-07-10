@@ -2,6 +2,7 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const da_DK: Partial<Record<TranslationKey, string>> = {
+  'hud.core.mobileSettings': 'Indstillinger',
   'hudChrome.account.sectionConnections': 'Forbundne konti',
   'hudChrome.account.connectionsSummary': 'Administrer loginudbydere forbundet med denne konto.',
   'hudChrome.account.ssoLink': 'Forbind Discord',

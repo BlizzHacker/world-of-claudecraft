@@ -14,6 +14,7 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const zh_CN: Partial<Record<TranslationKey, string>> = {
+  'hud.core.mobileSettings': '设置',
   'hudChrome.account.sectionConnections': 'Lianjie zhanghao',
   'hudChrome.account.connectionsSummary': 'Guanli ci zhanghao de denglu tigongfang lianjie.',
   'hudChrome.account.ssoLink': 'Lianjie Discord',

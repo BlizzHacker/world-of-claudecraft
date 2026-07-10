@@ -4212,7 +4212,7 @@ export const fr_CA: EnTranslations = {
       "mobileSocial": "Relations",
       "mobileArena": "Arène",
       "mobileMenu": "Menu",
-      "mobileSettings": "Settings",
+      "mobileSettings": "Parametres",
       "mobileUse": "Utiliser",
       "mobileMeters": "Compteurs",
       "mobileMap": "Carte",

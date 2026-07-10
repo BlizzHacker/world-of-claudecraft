@@ -14,6 +14,7 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ja_JP: Partial<Record<TranslationKey, string>> = {
+  'hud.core.mobileSettings': '設定',
   'hudChrome.account.sectionConnections': 'Renketsu account',
   'hudChrome.account.connectionsSummary':
     'Kono account ni tsunagatta sign-in provider o kanri shimasu.',

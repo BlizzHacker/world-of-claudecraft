@@ -14,6 +14,7 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ko_KR: Partial<Record<TranslationKey, string>> = {
+  'hud.core.mobileSettings': '설정',
   'hudChrome.account.sectionConnections': 'Yeongyeol doen gyejeong',
   'hudChrome.account.connectionsSummary':
     'I gyejeongui yeongyeol login gonggeupjareul gwanrihamnida.',

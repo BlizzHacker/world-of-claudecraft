@@ -14,6 +14,7 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ru_RU: Partial<Record<TranslationKey, string>> = {
+  'hud.core.mobileSettings': 'Настройки',
   'hudChrome.account.sectionConnections': 'Svyazannye akkaunty',
   'hudChrome.account.connectionsSummary':
     'Upravlyayte provayderami vhoda, privyazannymi k etomu akkauntu.',

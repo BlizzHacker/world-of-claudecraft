@@ -2,6 +2,7 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const vi_VN: Partial<Record<TranslationKey, string>> = {
+  'hud.core.mobileSettings': 'Cai dat',
   'hudChrome.account.sectionConnections': 'Tai khoan da ket noi',
   'hudChrome.account.connectionsSummary':
     'Quan ly nha cung cap dang nhap da lien ket voi tai khoan nay.',

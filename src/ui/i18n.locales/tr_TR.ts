@@ -2,6 +2,7 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const tr_TR: Partial<Record<TranslationKey, string>> = {
+  'hud.core.mobileSettings': 'Ayarlar',
   'hudChrome.account.sectionConnections': 'Bagli hesaplar',
   'hudChrome.account.connectionsSummary': 'Bu hesaba bagli oturum acma saglayicilarini yonet.',
   'hudChrome.account.ssoLink': 'Discord bagla',

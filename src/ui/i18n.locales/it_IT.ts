@@ -14,6 +14,7 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const it_IT: Partial<Record<TranslationKey, string>> = {
+  'hud.core.mobileSettings': 'Impostazioni',
   'hudChrome.account.sectionConnections': 'Account collegati',
   'hudChrome.account.connectionsSummary':
     'Gestisci i provider di accesso collegati a questo account.',

@@ -2,6 +2,7 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const sv_SE: Partial<Record<TranslationKey, string>> = {
+  'hud.core.mobileSettings': 'Installningar',
   'hudChrome.account.sectionConnections': 'Kopplade konton',
   'hudChrome.account.connectionsSummary':
     'Hantera inloggningsleverantorer kopplade till detta konto.',
