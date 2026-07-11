@@ -22,8 +22,13 @@
     {
       "tick": 0,
       "time": 0,
+<<<<<<< HEAD
       "nextId": 418,
       "state": "37149be4",
+=======
+      "nextId": 406,
+      "state": "d5a08679",
+>>>>>>> v0.24.0
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -56,6 +61,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -134,9 +140,15 @@
     {
       "tick": 0,
       "time": 0,
+<<<<<<< HEAD
       "nextId": 420,
       "state": "e3c3fbd1",
       "events": "e499b5c8",
+=======
+      "nextId": 408,
+      "state": "14dc47d0",
+      "events": "e042fd30",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"
@@ -168,6 +180,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -288,9 +301,15 @@
     {
       "tick": 0,
       "time": 0,
+<<<<<<< HEAD
       "nextId": 420,
       "state": "289f174f",
       "events": "8c849546",
+=======
+      "nextId": 408,
+      "state": "ef04212f",
+      "events": "97340448",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 0,
         "digest": "811c9dc5"
@@ -322,6 +341,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -456,9 +476,15 @@
     {
       "tick": 20,
       "time": 1,
+<<<<<<< HEAD
       "nextId": 420,
       "state": "c1684359",
       "events": "9260830e",
+=======
+      "nextId": 408,
+      "state": "9ace25bd",
+      "events": "d70fb9f2",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 8,
         "digest": "41a4496d"
@@ -467,9 +493,15 @@
     {
       "tick": 40,
       "time": 2,
+<<<<<<< HEAD
       "nextId": 420,
       "state": "f4dca537",
       "events": "91479b47",
+=======
+      "nextId": 408,
+      "state": "437717a7",
+      "events": "1a2734ed",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 8,
         "digest": "41a4496d"
@@ -478,8 +510,13 @@
     {
       "tick": 40,
       "time": 2,
+<<<<<<< HEAD
       "nextId": 421,
       "state": "f39043e7",
+=======
+      "nextId": 409,
+      "state": "f859ff56",
+>>>>>>> v0.24.0
       "events": "741638a5",
       "rng": {
         "draws": 8,
@@ -512,6 +549,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -708,9 +746,15 @@
     {
       "tick": 40,
       "time": 2,
+<<<<<<< HEAD
       "nextId": 421,
       "state": "4d9378c7",
       "events": "70a797e8",
+=======
+      "nextId": 409,
+      "state": "9bb4fb4c",
+      "events": "5aadc799",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 8,
         "digest": "41a4496d"
@@ -742,6 +786,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -877,9 +922,15 @@
     {
       "tick": 40,
       "time": 2,
+<<<<<<< HEAD
       "nextId": 423,
       "state": "780d89cb",
       "events": "f779da83",
+=======
+      "nextId": 411,
+      "state": "c77dad06",
+      "events": "1b51753b",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 8,
         "digest": "41a4496d"
@@ -911,6 +962,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -1087,9 +1139,15 @@
     {
       "tick": 40,
       "time": 2,
+<<<<<<< HEAD
       "nextId": 423,
       "state": "8ae7b1a3",
       "events": "b7248d08",
+=======
+      "nextId": 411,
+      "state": "c00dc452",
+      "events": "39bbf203",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 8,
         "digest": "41a4496d"
@@ -1121,6 +1179,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -1297,8 +1356,13 @@
     {
       "tick": 40,
       "time": 2,
+<<<<<<< HEAD
       "nextId": 423,
       "state": "4d9378c7",
+=======
+      "nextId": 411,
+      "state": "9bb4fb4c",
+>>>>>>> v0.24.0
       "events": "741638a5",
       "rng": {
         "draws": 8,
@@ -1331,6 +1395,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -1466,8 +1531,13 @@
     {
       "tick": 40,
       "time": 2,
+<<<<<<< HEAD
       "nextId": 424,
       "state": "4d9378c7",
+=======
+      "nextId": 412,
+      "state": "9bb4fb4c",
+>>>>>>> v0.24.0
       "events": "741638a5",
       "rng": {
         "draws": 8,
@@ -1500,6 +1570,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -1635,9 +1706,15 @@
     {
       "tick": 40,
       "time": 2,
+<<<<<<< HEAD
       "nextId": 426,
       "state": "e5dbfd7a",
       "events": "452b36ff",
+=======
+      "nextId": 414,
+      "state": "273cbf24",
+      "events": "d74bfbad",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 8,
         "digest": "41a4496d"
@@ -1669,6 +1746,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -1714,6 +1792,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -1946,9 +2025,15 @@
     {
       "tick": 60,
       "time": 3,
+<<<<<<< HEAD
       "nextId": 426,
       "state": "eaf15056",
       "events": "f0778d96",
+=======
+      "nextId": 414,
+      "state": "1abb14a3",
+      "events": "9da7147b",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 52,
         "digest": "ec536694"
@@ -1957,9 +2042,15 @@
     {
       "tick": 80,
       "time": 4,
+<<<<<<< HEAD
       "nextId": 426,
       "state": "71985848",
       "events": "688675da",
+=======
+      "nextId": 414,
+      "state": "89319e53",
+      "events": "1005cba8",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 69,
         "digest": "dedae5c3"
@@ -1968,8 +2059,13 @@
     {
       "tick": 80,
       "time": 4,
+<<<<<<< HEAD
       "nextId": 426,
       "state": "71985848",
+=======
+      "nextId": 414,
+      "state": "89319e53",
+>>>>>>> v0.24.0
       "events": "741638a5",
       "rng": {
         "draws": 69,
@@ -2004,6 +2100,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -2049,6 +2146,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -2290,14 +2388,20 @@
     {
       "tick": 80,
       "time": 4,
+<<<<<<< HEAD
       "nextId": 427,
       "state": "33eba11e",
       "events": "22164192",
+=======
+      "nextId": 416,
+      "state": "d6b95091",
+      "events": "d9be4bae",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 69,
         "digest": "dedae5c3"
       },
-      "label": "demon-faded",
+      "label": "demon-resummoned",
       "players": [
         {
           "activeLoadout": -1,
@@ -2326,6 +2430,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -2371,6 +2476,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -2565,15 +2671,62 @@
             "min": 3,
             "speed": 2.9
           }
+        },
+        {
+          "aiState": "idle",
+          "combatTimer": 99,
+          "comboUntil": -1,
+          "critChance": 0.05,
+          "detonateTimer": "Infinity",
+          "dodgeChance": 0.05,
+          "fallStartY": -0.525705,
+          "fiveSecondRule": 99,
+          "hp": 378,
+          "id": 415,
+          "kind": "mob",
+          "level": 12,
+          "lootFfaTimer": "Infinity",
+          "maxHp": 378,
+          "moveSpeed": 5,
+          "onGround": true,
+          "overpowerUntil": -1,
+          "ownerId": 412,
+          "petMode": "defensive",
+          "pos": {
+            "x": 34,
+            "y": -0.525705,
+            "z": -1
+          },
+          "potionCooldownUntil": -1,
+          "spawnPos": {
+            "x": 34,
+            "y": -0.525705,
+            "z": -1
+          },
+          "stats": {
+            "armor": 495
+          },
+          "templateId": "gloomshade",
+          "weapon": {
+            "max": 15,
+            "min": 10,
+            "speed": 2
+          }
         }
       ]
     },
     {
       "tick": 80,
       "time": 4,
+<<<<<<< HEAD
       "nextId": 429,
       "state": "8b5635c7",
       "events": "97e59b60",
+=======
+      "nextId": 418,
+      "state": "2c5f4cbe",
+      "events": "2cf8a2d5",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 69,
         "digest": "dedae5c3"
@@ -2607,6 +2760,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -2652,6 +2806,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -2859,7 +3014,11 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 50000,
+<<<<<<< HEAD
           "id": 428,
+=======
+          "id": 417,
+>>>>>>> v0.24.0
           "inCombat": true,
           "kind": "mob",
           "level": 8,
@@ -2883,7 +3042,11 @@
           "stats": {
             "armor": 70
           },
+<<<<<<< HEAD
           "targetId": 427,
+=======
+          "targetId": 416,
+>>>>>>> v0.24.0
           "templateId": "forest_wolf",
           "threat": [
             [
@@ -2902,8 +3065,13 @@
     {
       "tick": 80,
       "time": 4,
+<<<<<<< HEAD
       "nextId": 429,
       "state": "8b5635c7",
+=======
+      "nextId": 418,
+      "state": "2c5f4cbe",
+>>>>>>> v0.24.0
       "events": "741638a5",
       "rng": {
         "draws": 69,
@@ -2938,6 +3106,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -2983,6 +3152,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -3190,7 +3360,11 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 50000,
+<<<<<<< HEAD
           "id": 428,
+=======
+          "id": 417,
+>>>>>>> v0.24.0
           "inCombat": true,
           "kind": "mob",
           "level": 8,
@@ -3214,7 +3388,11 @@
           "stats": {
             "armor": 70
           },
+<<<<<<< HEAD
           "targetId": 427,
+=======
+          "targetId": 416,
+>>>>>>> v0.24.0
           "templateId": "forest_wolf",
           "threat": [
             [

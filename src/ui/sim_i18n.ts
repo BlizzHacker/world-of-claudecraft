@@ -4147,7 +4147,7 @@ export function tSim(
 
 // Reverse maps: the sim splices English item/mob names into its text; localize them.
 const itemNameToId = new Map<string, string>();
-for (const [id, it] of Object.entries(ITEMS)) itemNameToId.set(it.name, id);
+for (const [id, it] of Object.entries(ITEMS)) itemNameToId.set(it.name, it.heroicOf ?? id);
 const mobNameToId = new Map<string, string>();
 for (const [id, m] of Object.entries(MOBS)) mobNameToId.set(m.name, id);
 const abilityNameToId = new Map<string, string>();
@@ -5366,6 +5366,7 @@ function enPassthrough(english: string, localized: string): string {
 }
 
 const RULES: Rule[] = [
+<<<<<<< HEAD
   {
     re: /^Unknown command\.$/,
     build: () => enPassthrough('Unknown command.', t('hud.errors.unknownCommand', { command: '' })),
@@ -5459,6 +5460,13 @@ const RULES: Rule[] = [
   {
     re: /^(.+)'s corpse can be looted!$/,
     build: (m) => tSim('log.corpseLootable', { name: m[1] }),
+=======
+  // Ready-check result summary (social/ready_check.ts finalizeReadyCheck).
+  {
+    re: /^Ready check: (\d+) ready, (\d+) not ready, (\d+) no response\.$/,
+    build: (m) =>
+      t('hudChrome.readyCheck.result', { ready: m[1], notReady: m[2], noResponse: m[3] }),
+>>>>>>> v0.24.0
   },
   { re: /^Your class has no talent tree yet\.$/, build: () => t('game.talents.readout.noTree') },
   {

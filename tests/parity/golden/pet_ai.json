@@ -10,14 +10,24 @@
     "updatePet melee arm: close + auto-taunt + mobSwing (PET_COMBAT_LINGER owner inCombat)",
     "petFollow heel transition (pets return to a moved owner)"
   ],
+<<<<<<< HEAD
   "draws": 247,
   "drawDigest": "dec6e6af",
+=======
+  "draws": 771,
+  "drawDigest": "7163258d",
+>>>>>>> v0.24.0
   "frames": [
     {
       "tick": 0,
       "time": 0,
+<<<<<<< HEAD
       "nextId": 418,
       "state": "37149be4",
+=======
+      "nextId": 406,
+      "state": "d5a08679",
+>>>>>>> v0.24.0
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -50,6 +60,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -128,9 +139,15 @@
     {
       "tick": 20,
       "time": 1,
+<<<<<<< HEAD
       "nextId": 422,
       "state": "0d95849b",
       "events": "f1856518",
+=======
+      "nextId": 410,
+      "state": "98539300",
+      "events": "036cadcd",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 24,
         "digest": "ec0f967e"
@@ -139,8 +156,13 @@
     {
       "tick": 40,
       "time": 2,
+<<<<<<< HEAD
       "nextId": 422,
       "state": "d8877c63",
+=======
+      "nextId": 410,
+      "state": "d189ad82",
+>>>>>>> v0.24.0
       "events": "741638a5",
       "rng": {
         "draws": 24,
@@ -150,9 +172,15 @@
     {
       "tick": 60,
       "time": 3,
+<<<<<<< HEAD
       "nextId": 422,
       "state": "8c840e8f",
       "events": "410cc343",
+=======
+      "nextId": 410,
+      "state": "ced46b47",
+      "events": "ac0e0d97",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 57,
         "digest": "d31861b0"
@@ -161,9 +189,15 @@
     {
       "tick": 80,
       "time": 4,
+<<<<<<< HEAD
       "nextId": 422,
       "state": "eb6928b1",
       "events": "d1b0bb2a",
+=======
+      "nextId": 410,
+      "state": "a27a550f",
+      "events": "741638a5",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 72,
         "digest": "c76d97b0"
@@ -172,9 +206,15 @@
     {
       "tick": 100,
       "time": 5,
+<<<<<<< HEAD
       "nextId": 422,
       "state": "f1ec56bf",
       "events": "d99b724e",
+=======
+      "nextId": 410,
+      "state": "834a9b10",
+      "events": "cac4bb75",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 119,
         "digest": "b94c8e6a"
@@ -183,23 +223,41 @@
     {
       "tick": 120,
       "time": 6,
+<<<<<<< HEAD
       "nextId": 422,
       "state": "666a8f1c",
       "events": "9b3ebb14",
       "rng": {
         "draws": 147,
         "digest": "3706c648"
+=======
+      "nextId": 410,
+      "state": "3fd8be81",
+      "events": "741638a5",
+      "rng": {
+        "draws": 426,
+        "digest": "dc1fbd7c"
+>>>>>>> v0.24.0
       }
     },
     {
       "tick": 120,
       "time": 6,
+<<<<<<< HEAD
       "nextId": 422,
       "state": "03e1c2f3",
       "events": "741638a5",
       "rng": {
         "draws": 147,
         "digest": "3706c648"
+=======
+      "nextId": 410,
+      "state": "134f2dc8",
+      "events": "741638a5",
+      "rng": {
+        "draws": 426,
+        "digest": "dc1fbd7c"
+>>>>>>> v0.24.0
       },
       "label": "heel",
       "players": [
@@ -230,6 +288,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -527,45 +586,81 @@
     {
       "tick": 140,
       "time": 7,
+<<<<<<< HEAD
       "nextId": 422,
       "state": "8ff952dc",
       "events": "1148784b",
       "rng": {
         "draws": 184,
         "digest": "d899576a"
+=======
+      "nextId": 410,
+      "state": "4aa9d2bf",
+      "events": "741638a5",
+      "rng": {
+        "draws": 517,
+        "digest": "9df7f4ef"
+>>>>>>> v0.24.0
       }
     },
     {
       "tick": 160,
       "time": 8,
+<<<<<<< HEAD
       "nextId": 422,
       "state": "208f705b",
       "events": "26e0f36d",
       "rng": {
         "draws": 206,
         "digest": "455c829c"
+=======
+      "nextId": 410,
+      "state": "a836ab22",
+      "events": "741638a5",
+      "rng": {
+        "draws": 638,
+        "digest": "d23eadc6"
+>>>>>>> v0.24.0
       }
     },
     {
       "tick": 180,
       "time": 9,
+<<<<<<< HEAD
       "nextId": 422,
       "state": "305e3a8d",
       "events": "cf326931",
       "rng": {
         "draws": 247,
         "digest": "dec6e6af"
+=======
+      "nextId": 410,
+      "state": "3a160066",
+      "events": "741638a5",
+      "rng": {
+        "draws": 771,
+        "digest": "7163258d"
+>>>>>>> v0.24.0
       }
     },
     {
       "tick": 180,
       "time": 9,
+<<<<<<< HEAD
       "nextId": 422,
       "state": "305e3a8d",
       "events": "741638a5",
       "rng": {
         "draws": 247,
         "digest": "dec6e6af"
+=======
+      "nextId": 410,
+      "state": "3a160066",
+      "events": "741638a5",
+      "rng": {
+        "draws": 771,
+        "digest": "7163258d"
+>>>>>>> v0.24.0
       },
       "label": "final",
       "players": [
@@ -596,6 +691,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [

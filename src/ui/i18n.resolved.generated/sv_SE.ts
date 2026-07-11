@@ -154,6 +154,14 @@ export const sv_SE: EnTranslations = {
     "spectate": {
       "banner": "Åskådar {name}"
     },
+    "readyCheck": {
+      "prompt": "{name} har startat en beredskapskontroll. Är du redo?",
+      "ready": "Redo",
+      "notReady": "Inte redo",
+      "result": "Beredskapskontroll: {ready} redo, {notReady} inte redo, {noResponse} inget svar.",
+      "notInPartyError": "Du måste vara med i en grupp för att starta en beredskapskontroll.",
+      "inProgressError": "En beredskapskontroll pågår redan."
+    },
     "death": {
       "resurrectAtCorpse": "Resurrect at Corpse",
       "resurrectAtHealer": "The Pale Keeper (Keeper's Toll)",
@@ -232,7 +240,8 @@ export const sv_SE: EnTranslations = {
         "eligible": "Belöningar upplåsta.",
         "no_wallet": "Anslut en plånbok med minst 20 USD i WOC.",
         "under_minimum": "Plånboken är under WOC-miniminivån på 20 USD.",
-        "price_unavailable": "WOC-priset är otillgängligt, belöningar är tillfälligt låsta."
+        "price_unavailable": "WOC-priset är otillgängligt, belöningar är tillfälligt låsta.",
+        "banned": "Du är avstängd från dagliga belöningar. Orsak: {reason}"
       }
     },
     "theme": {
@@ -306,7 +315,6 @@ export const sv_SE: EnTranslations = {
       "chat": "Hoppa till chatt"
     },
     "mobile": {
-      "autorun": "Autospring",
       "jump": "Hoppa",
       "leaderboard": "Ranking",
       "dailyRewards": "Rewards",
@@ -314,6 +322,7 @@ export const sv_SE: EnTranslations = {
       "haptics": "Haptik",
       "hapticsOff": "Haptik av",
       "toggleHaptics": "Växla haptik",
+<<<<<<< HEAD
       "hotbarPage": "Skills",
       "hotbarPageAria": "Show next set of skills",
       "actionRing": "Combat actions",
@@ -324,6 +333,20 @@ export const sv_SE: EnTranslations = {
       "spellbookPageLabel": "Page {page}",
       "hideKeyboard": "Hide keyboard",
       "chatPlaceholder": "Say something..."
+=======
+      "showMenuButtons": "Visa menyknappar",
+      "hideMenuButtons": "Dölj menyknappar",
+      "hotbarPage": "Förmågor",
+      "hotbarPageAria": "Visa nästa uppsättning förmågor",
+      "actionRing": "Stridsaktioner",
+      "actionPageToggle": "Byt åtgärdssida",
+      "actionPageIndicator": "Sida {page}",
+      "targetCycle": "Byt mål",
+      "targetCycleShort": "Mål",
+      "spellbookPageLabel": "Sida {page}",
+      "hideKeyboard": "Dölj tangentbordet",
+      "chatPlaceholder": "Säg något..."
+>>>>>>> v0.24.0
     },
     "tutorial": {
       "moveBodyTouch": "Använd rörelsespaken för att gå och dra på skärmen för att se dig omkring. Ta några steg för att börja.",
@@ -397,7 +420,17 @@ export const sv_SE: EnTranslations = {
       "targetFriendly": "Måltavla närmaste vänlig",
       "targetFriendlyNext": "Växla vänligt mål",
       "discord": "Discord",
+<<<<<<< HEAD
       "valecup": "Vale Cup"
+=======
+      "valecup": "Dalcupen",
+      "categoryPet": "Djur",
+      "petAttack": "Djur: Anfall",
+      "petStop": "Djur: Stanna",
+      "petTaunt": "Djur: Provocera",
+      "petDefensive": "Djur: Defensivt",
+      "petAggressive": "Djur: Aggressivt"
+>>>>>>> v0.24.0
     },
     "vcup": {
       "title": "The Vale Cup",
@@ -570,9 +603,92 @@ export const sv_SE: EnTranslations = {
       "itemLevelLine": "Föremålsnivå {level}",
       "itemScoreLine": "Poäng {score}",
       "showSecondaryActionBar": "Visa sekundärt handlingsfält",
+<<<<<<< HEAD
       "showDailyRewardsChest": "Show Daily Rewards Chest",
       "mobileCameraJoystick": "Camera joystick",
       "mobileLeftHanded": "Left-handed layout"
+=======
+      "showDailyRewardsChest": "Visa kistan för dagliga belöningar",
+      "mobileCameraJoystick": "Kamera joystick",
+      "mobileLeftHanded": "Vänsterhänt layout",
+      "ia": {
+        "railDisplay": "Visning",
+        "railInput": "Inmatning",
+        "railSystem": "Systeminställningar",
+        "catOverviewName": "Översikt",
+        "catOverviewSub": "Fästa grundinställningar, snabbåtgärder och ändringar.",
+        "catGraphicsSub": "Kvalitet, sikt och världsgrafik.",
+        "catInterfaceSub": "HUD-skala, paneler, chatt och enhetsramar.",
+        "catAccessibilityName": "Tillgänglighet",
+        "catAccessibilitySub": "Rörelse, kontrast och behagligt innehåll.",
+        "catControlsName": "Kontroller",
+        "catControlsSub": "Kamera, rörelse, strid och återkoppling.",
+        "catKeybindsSub": "Bind tangenter till varje åtgärd.",
+        "catControllerSub": "Handkontrollens känsla och knapplayout.",
+        "catTouchName": "Pekstyrning",
+        "catTouchSub": "Styrspakar på skärmen, blick och knappar.",
+        "catAudioSub": "Volym och ljudinställningar.",
+        "catSystemName": "Systeminställningar",
+        "catSystemSub": "Prestanda, hjälp och information."
+      },
+      "done": "Klar",
+      "resetAllTitle": "Återställ alla inställningar?",
+      "resetAllBody": "Detta återställer alla inställningar till standardvärdena. Det går inte att ångra.",
+      "searchPlaceholder": "Sök inställningar",
+      "searchScopeAll": "Alla inställningar",
+      "searchScopeThis": "Det här avsnittet",
+      "searchEmpty": "Inga inställningar matchar din sökning.",
+      "searchGoTo": "Gå till {category}",
+      "modeOnline": "Anslutet läge",
+      "modeOffline": "Frånkopplat läge",
+      "changed": "{count} ändrade",
+      "changedSummary": "{count} ändrade från standardvärdena",
+      "legend": {
+        "category": "Kategori",
+        "navigate": "Navigera",
+        "select": "Markera",
+        "back": "Tillbaka",
+        "reset": "Återställ",
+        "clear": "Rensa",
+        "page": "Sida"
+      },
+      "keybindCleared": "Tilldelningen för {action} rensades",
+      "keybindRebinding": "Tilldelar om {action}. Tryck på en tangent eller Escape för att avbryta.",
+      "keybindEvicted": "Tilldelade {key} till {action}; tog bort den från {evicted}",
+      "keybindTaken": "Tangent borttagen",
+      "keybindUnbound": "{action} har ingen tangent",
+      "keybindModifierHint": "Tips: du kan tilldela kombinationer med modifieringstangenter. Håll ned Shift, Ctrl eller Alt medan du trycker på en tangent för att registrera kombinationen, till exempel Shift+1.",
+      "conflictDot": "Tilldelningskonflikt",
+      "overviewConflictAlert": "Vissa tangenttilldelningar krockar eller saknas.",
+      "sec": {
+        "quality": "Kvalitet",
+        "view": "Vy",
+        "general": "Allmänt",
+        "scaleText": "Skala och text",
+        "panels": "Paneler",
+        "unitFrames": "Enhetsramar",
+        "actionBars": "Åtgärdsfält",
+        "chat": "Chatt",
+        "combatTooltips": "Strid och verktygstips",
+        "hudExtras": "Extra HUD-element",
+        "motionContrast": "Rörelse och kontrast",
+        "content": "Innehåll",
+        "camera": "Kamerastyrning",
+        "movement": "Förflyttning",
+        "combat": "Strid",
+        "feedback": "Återkoppling",
+        "inputMode": "Inmatningsläge",
+        "feel": "Känsla",
+        "sticks": "Styrspakar",
+        "look": "Blickstyrning",
+        "buttons": "Knappar",
+        "volume": "Volym",
+        "toggles": "Växlar",
+        "performance": "Prestanda",
+        "support": "Hjälp",
+        "about": "Information"
+      }
+>>>>>>> v0.24.0
     },
     "controller": {
       "title": "Handkontroll",
@@ -584,7 +700,8 @@ export const sv_SE: EnTranslations = {
       "buttons": "Knapplayout",
       "resetButtons": "Återställ knapplayout",
       "menuAction": "Spelmeny",
-      "help": "Vänster spak rör sig, höger spak siktar. Öppna ett fönster för att använda skärmpekaren."
+      "help": "Vänster spak rör sig, höger spak siktar. Öppna ett fönster för att använda skärmpekaren.",
+      "duplicate": "Även tilldelad till {buttons}"
     },
     "perf": {
       "title": "Prestandaöverlägg",
@@ -717,11 +834,17 @@ export const sv_SE: EnTranslations = {
       }
     },
     "talents": {
-      "defaultBuildName": "Bygge {n}"
+      "defaultBuildName": "Bygge {n}",
+      "choicesTab": "Val",
+      "resetChoices": "Återställ val",
+      "tierLevel": "Nivå {n}",
+      "tierLevelLabel": "Nivå"
     },
     "tips": {
       "joinChannels": "Tips: skriv /join world eller /join lfg för att chatta med spelare över hela världen."
     },
+    "itemHeroicTag": "[HEROISK]",
+    "itemSoulbound": "Själabunden",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1075,6 +1198,26 @@ export const sv_SE: EnTranslations = {
     "worldBoss": {
       "spawn": "{name} rises over Thornpeak Heights!"
     },
+    "auth": {
+      "appleLoginCta": "Fortsätt med Apple",
+      "appleError": "Det gick inte att logga in med Apple. Försök igen.",
+      "appleChoiceIntro": "Skapa ett nytt konto eller länka Apple till ett konto du redan har.",
+      "appleChoiceExpired": "Den här Apple-inloggningen har gått ut. Logga in med Apple igen.",
+      "forgotPrompt": "Glömt lösenordet?",
+      "forgotTitle": "Återställ ditt lösenord",
+      "forgotHint": "Ange ditt användarnamn så skickar vi en återställningslänk till den registrerade e-postadressen.",
+      "forgotUsername": "Användarnamn",
+      "forgotSubmit": "Skicka återställningslänk",
+      "forgotSent": "Om ett konto med det användarnamnet har en registrerad e-postadress har vi skickat en återställningslänk. Kolla din inkorg.",
+      "forgotBack": "Tillbaka till inloggning",
+      "resetTitle": "Välj ett nytt lösenord",
+      "resetNewPassword": "Nytt lösenord",
+      "resetConfirm": "Bekräfta nytt lösenord",
+      "resetSubmit": "Uppdatera lösenord",
+      "resetDone": "Ditt lösenord har uppdaterats. Du kan nu logga in.",
+      "resetMismatch": "Lösenorden stämmer inte överens.",
+      "resetErrInvalid": "Den här återställningslänken är ogiltig eller har gått ut. Begär en ny."
+    },
     "loot": {
       "chestTitle": "Kista"
     },
@@ -1280,6 +1423,7 @@ export const sv_SE: EnTranslations = {
       "unlink": "Avlänka GitHub"
     },
     "mailbox": {
+<<<<<<< HEAD
       "title": "Mailbox",
       "subtitle": "The Ravenpost",
       "close": "Close mailbox",
@@ -1312,6 +1456,42 @@ export const sv_SE: EnTranslations = {
       "indicatorTip": "You have {count} unread letters. Visit a mailbox to read them.",
       "clickAttach": "Click to attach to your letter.",
       "cannotMail": "This cannot be mailed.",
+=======
+      "title": "Brevlåda",
+      "subtitle": "Korpposten",
+      "close": "Stäng brevlådan",
+      "tabInbox": "Inkorg",
+      "tabInboxWithCount": "Inkorg ({count})",
+      "tabSend": "Skicka",
+      "empty": "Din brevlåda är tom.",
+      "truncated": "Visar de {shown} nyaste av {total} brev.",
+      "attachmentsBadge": "Paket bifogat",
+      "unreadBadge": "Oläst",
+      "back": "Tillbaka",
+      "take": "Ta bilagor",
+      "delete": "Radera brev",
+      "deleteAria": "Radera brevet {subject}",
+      "openAria": "Läs brevet {subject} från {name}",
+      "noSubject": "(inget ämne)",
+      "toLabel": "Till",
+      "toPlaceholder": "Karaktärsnamn",
+      "subjectLabel": "Ämne",
+      "bodyLabel": "Meddelande",
+      "coinLabel": "Bifoga mynt",
+      "parcelsLabel": "Paket",
+      "parcelsHint": "Klicka på ett föremål i dina väskor för att bifoga det.",
+      "removeParcelAria": "Ta bort {item} från brevet",
+      "parcelQtyDecreaseAria": "Skicka en {item} mindre",
+      "parcelQtyIncreaseAria": "Skicka en till {item}",
+      "sendButton": "Skicka brev",
+      "postageNote": "Porto: {amount}. Korpen flyger i ungefär {seconds}s.",
+      "arrivedBanner": "Korpen har landat: post från {name}.",
+      "arrivedLog": "Du har ny post från {name}.",
+      "indicatorAria": "Oläst post: {count}",
+      "indicatorTip": "Du har {count} olästa brev. Besök en brevlåda för att läsa dem.",
+      "clickAttach": "Klicka för att bifoga i ditt brev.",
+      "cannotMail": "Det här kan inte skickas med post.",
+>>>>>>> v0.24.0
       "result": {
         "sent": "A raven takes wing with your letter to {name} ({postage} postage).",
         "collected": "You collect {amount} from the letter.",
@@ -3960,8 +4140,23 @@ export const sv_SE: EnTranslations = {
     "rendererFailed": "Kunde inte starta renderaren: försök läsa om sidan. {error}",
     "enterTimeout": "Kunde inte gå in i världen. Anslutningen tog för lång tid. Körs spelservern?",
     "connectionLost": "Anslutningen till servern bröts.",
+<<<<<<< HEAD
     "reconnecting": "Connection lost. Reconnecting...",
     "connectionRejected": "Servern stängde anslutningen."
+=======
+    "reconnecting": "Anslutning förlorad. Återansluter...",
+    "connectionRejected": "Servern stängde anslutningen.",
+    "tips": {
+      "classes": "Tips: var och en av de 9 klasserna spelas på sitt eget sätt. Prova några innan du bestämmer dig för en.",
+      "talents": "Tips: du kan återställa dina talanger när du inte strider, så ett tidigt val blir aldrig en fälla.",
+      "dungeons": "Tips: prova en grotta på heroisk svårighetsgrad när din utrustning blivit för bra för normal, för en tuffare och mer givande strid.",
+      "market": "Tips: på Världsmarknaden kan du köpa och sälja med spelare från hela riket.",
+      "guilds": "Tips: när du går med i ett gille får du en privat chattkanal och en gemensam lista över dina gilleskamrater.",
+      "professions": "Tips: samlar- och hantverksyrken kan tränas parallellt med din stridsklass.",
+      "loadouts": "Tips: spara mer än en talanguppsättning för att växla mellan byggen utan att spendera poäng två gånger.",
+      "pvp": "Tips: utmana en annan spelare på en vänskaplig duell, eller ställ dig i kö till arenan i Det askgråa colosseumet för att testa ditt bygge."
+    }
+>>>>>>> v0.24.0
   },
   "errors": {
     "nothingInteract": "Inget att interagera med.",
@@ -4985,6 +5180,8 @@ export const sv_SE: EnTranslations = {
       "buybackTitle": "Återköp",
       "buybackEmpty": "Inga föremål",
       "buybackAria": "Köp tillbaka {item} för {price}",
+      "sellItemAria": "Sälj {item} för {price}",
+      "sellRolledWarning": "Slumpade egenskaper kan inte återställas genom återköp.",
       "sellQuantityTitle": "Sälj {item}",
       "sellQuantityInput": "Antal att sälja",
       "sellQuantityConfirm": "Sälj",
@@ -5920,6 +6117,9 @@ export const sv_SE: EnTranslations = {
       "greyjaw_fang": {
         "name": "Gamle Gråkäftens huggtand"
       },
+      "chunk_of_ore": {
+        "name": "Malmklump"
+      },
       "weathered_ledger_page": {
         "name": "Väderbiten liggarsida"
       },
@@ -5949,6 +6149,15 @@ export const sv_SE: EnTranslations = {
       },
       "linen_scrap": {
         "name": "Linnetrasa"
+      },
+      "arcane_dust": {
+        "name": "Arkanstoft"
+      },
+      "arcane_essence": {
+        "name": "Arkanessens"
+      },
+      "arcane_shard": {
+        "name": "Arkanskärva"
       },
       "fen_muster_order": {
         "name": "Kärrbros mönstringsorder"
@@ -7654,6 +7863,16 @@ export const sv_SE: EnTranslations = {
       }
     },
     "quests": {
+      "q_prof_intro": {
+        "title": "Ett yrke för varje hand",
+        "text": "Alla i Östbäck har ett yrke vid sidan om svärdet, {playerName}. Det finns malmådror utspridda runt staden, så svinga en hacka och ge mig 5 klumpar. Bryt dem själv, märk väl; jag ser skillnaden.",
+        "completion": "Ser du? Malm i packningen och valkar på händerna. Fortsätt med gruvdrift, skogsavverkning och örtplockning medan du färdas längs vägarna. När du är tillbaka i staden, kom ihåg Stadsfokus-tavlan vid marknaden och arbetsbänken i närheten. Det går att försörja sig hederligt på alltihop, om du vill.",
+        "objectives": {
+          "0": {
+            "label": "Malmklump"
+          }
+        }
+      },
       "q_wolves": {
         "title": "Vargar vid dörren",
         "text": "Skogsvargarna blir djärva och nafsar efter resenärer på norra vägen. Decimera dem, {playerName}. Dräp 8 skogsvargar så andas Östbäck lättare.",

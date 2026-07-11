@@ -8,8 +8,13 @@
     "multi-player PlayerMeta sampling",
     "classes:warrior,mage"
   ],
+<<<<<<< HEAD
   "draws": 35,
   "drawDigest": "41323ac3",
+=======
+  "draws": 483,
+  "drawDigest": "ae452b6c",
+>>>>>>> v0.24.0
   "frames": [
     {
       "tick": 0,
@@ -28,9 +33,15 @@
     {
       "tick": 25,
       "time": 1.25,
+<<<<<<< HEAD
       "nextId": 419,
       "state": "ff369780",
       "events": "0bd8d65c",
+=======
+      "nextId": 407,
+      "state": "fde7bd4a",
+      "events": "10366efa",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 9,
         "digest": "225c6323"
@@ -39,9 +50,15 @@
     {
       "tick": 50,
       "time": 2.5,
+<<<<<<< HEAD
       "nextId": 419,
       "state": "7ed2f34c",
       "events": "b9a0ddd2",
+=======
+      "nextId": 407,
+      "state": "82e887c6",
+      "events": "084c2ae4",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 15,
         "digest": "abb972aa"
@@ -50,9 +67,15 @@
     {
       "tick": 75,
       "time": 3.75,
+<<<<<<< HEAD
       "nextId": 419,
       "state": "a50b5300",
       "events": "244cb158",
+=======
+      "nextId": 407,
+      "state": "ee13a89e",
+      "events": "0166c11c",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 17,
         "digest": "991b6d6e"
@@ -61,9 +84,15 @@
     {
       "tick": 100,
       "time": 5,
+<<<<<<< HEAD
       "nextId": 419,
       "state": "78ea5738",
       "events": "8ceb4b58",
+=======
+      "nextId": 407,
+      "state": "0bcd515a",
+      "events": "d8f42c8c",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 25,
         "digest": "516526ee"
@@ -72,9 +101,15 @@
     {
       "tick": 125,
       "time": 6.25,
+<<<<<<< HEAD
       "nextId": 419,
       "state": "ec3e78a3",
       "events": "21804529",
+=======
+      "nextId": 407,
+      "state": "16bbc2c5",
+      "events": "57e1d7bf",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 33,
         "digest": "08d823d7"
@@ -83,12 +118,21 @@
     {
       "tick": 142,
       "time": 7.1,
+<<<<<<< HEAD
       "nextId": 419,
       "state": "47b02703",
       "events": "49d358ff",
       "rng": {
         "draws": 35,
         "digest": "41323ac3"
+=======
+      "nextId": 407,
+      "state": "2542bea5",
+      "events": "741638a5",
+      "rng": {
+        "draws": 483,
+        "digest": "ae452b6c"
+>>>>>>> v0.24.0
       },
       "label": "final",
       "players": [
@@ -117,6 +161,7 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -160,6 +205,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [

@@ -8,6 +8,7 @@ import {
   levelDistribution,
   listAccounts,
   listCharacters,
+  listModerationActions,
   listSharedIps,
   onlineHistory,
   overviewCounts,
@@ -89,6 +90,8 @@ import {
   moderationReportsForAccount,
   muteAccountChat,
   recordPasswordReset,
+  setDailyRewardsBan,
+  setDailyRewardsIpBan,
 } from './moderation_db';
 import { providerUsageSnapshot } from './provider_usage';
 import { rateLimited } from './ratelimit';
@@ -176,6 +179,7 @@ function cleanTier(value: unknown): WordTier | null {
 
 type SharedIpSort = 'accounts' | 'last_seen';
 type SharedIpSortDirection = 'asc' | 'desc';
+type ModerationHistoryTab = 'all' | 'mine' | 'notes';
 
 function sharedIpSortParams(params: URLSearchParams): {
   sort: SharedIpSort;
@@ -204,6 +208,11 @@ function sortSharedIpRows<T extends { ip: string; accountCount: number; lastSeen
         : b.lastSeenAt.localeCompare(a.lastSeenAt);
     return primary * multiplier || secondary || a.ip.localeCompare(b.ip);
   });
+}
+
+function moderationHistoryTab(params: URLSearchParams): ModerationHistoryTab {
+  const tab = params.get('tab');
+  return tab === 'mine' || tab === 'notes' ? tab : 'all';
 }
 
 function getBlockedIpsForAccount(
@@ -498,6 +507,47 @@ export async function handleAdminApi(
         return ok(res, { ok: true });
       } catch (err) {
         return fail(res, 400, err instanceof Error ? err.message : 'chat mute failed');
+      }
+    }
+    const dailyRewardsBanMatch =
+      /^\/admin\/api\/moderation\/accounts\/(\d+)\/daily-rewards-(ban|unban)$/.exec(path);
+    if (req.method === 'POST' && dailyRewardsBanMatch) {
+      const body = await readBody(req);
+      try {
+        await setDailyRewardsBan({
+          accountId: Number(dailyRewardsBanMatch[1]),
+          adminAccountId: accountId,
+          banned: dailyRewardsBanMatch[2] === 'ban',
+          reason: body.reason,
+        });
+        return ok(res, { ok: true });
+      } catch (err) {
+        return fail(
+          res,
+          400,
+          err instanceof Error ? err.message : 'daily rewards moderation failed',
+        );
+      }
+    }
+    const dailyRewardsIpBanMatch =
+      /^\/admin\/api\/moderation\/accounts\/(\d+)\/daily-rewards-ip-(ban|unban)$/.exec(path);
+    if (req.method === 'POST' && dailyRewardsIpBanMatch) {
+      const body = await readBody(req);
+      try {
+        await setDailyRewardsIpBan({
+          accountId: Number(dailyRewardsIpBanMatch[1]),
+          adminAccountId: accountId,
+          ip: body.ip,
+          banned: dailyRewardsIpBanMatch[2] === 'ban',
+          reason: body.reason,
+        });
+        return ok(res, { ok: true });
+      } catch (err) {
+        return fail(
+          res,
+          400,
+          err instanceof Error ? err.message : 'daily rewards IP moderation failed',
+        );
       }
     }
     const ignoreMatch = /^\/admin\/api\/moderation\/reports\/(\d+)\/ignore$/.exec(path);
@@ -823,6 +873,13 @@ export async function handleAdminApi(
     if (path === '/admin/api/moderation/queue') {
       return ok(res, { rows: await moderationQueue(game.liveAccountIds()) });
     }
+    if (path === '/admin/api/moderation/history') {
+      const { page, limit } = parsePageParams(url.searchParams);
+      return ok(
+        res,
+        await listModerationActions(moderationHistoryTab(url.searchParams), accountId, page, limit),
+      );
+    }
     if (path === '/admin/api/bug-reports') {
       const { page, limit } = parsePageParams(url.searchParams);
       const { rows, total } = await listBugReports(limit, (page - 1) * limit);
@@ -1036,6 +1093,7 @@ function makeRealAdminDb() {
     levelDistribution,
     listAccounts,
     listCharacters,
+    listModerationActions,
     listSharedIps,
     onlineHistory,
     overviewCounts,
@@ -1081,6 +1139,8 @@ function makeRealAdminDb() {
     updatePasswordHash,
     revokeTokensExcept,
     recordPasswordReset,
+    setDailyRewardsBan,
+    setDailyRewardsIpBan,
     emailSecurityIncident,
     providerUsageSnapshot,
     rateLimited,
@@ -1557,6 +1617,48 @@ async function chatMuteHandler(ctx: Ctx): Promise<void> {
   }
 }
 
+/** POST daily-rewards-ban/unban: change reward eligibility with an audited reason. */
+async function dailyRewardsBanHandler(ctx: Ctx): Promise<void> {
+  const banned = ctx.path.endsWith('/daily-rewards-ban');
+  const body = await readBody(ctx.req);
+  try {
+    await adminDb().setDailyRewardsBan({
+      accountId: adminTargetId(ctx),
+      adminAccountId: ctxAccountId(ctx),
+      banned,
+      reason: body.reason,
+    });
+    return ok(ctx.res, { ok: true });
+  } catch (err) {
+    return fail(
+      ctx.res,
+      400,
+      err instanceof Error ? err.message : 'daily rewards moderation failed',
+    );
+  }
+}
+
+async function dailyRewardsIpBanHandler(ctx: Ctx): Promise<void> {
+  const banned = ctx.path.endsWith('/daily-rewards-ip-ban');
+  const body = await readBody(ctx.req);
+  try {
+    await adminDb().setDailyRewardsIpBan({
+      accountId: adminTargetId(ctx),
+      adminAccountId: ctxAccountId(ctx),
+      ip: body.ip,
+      banned,
+      reason: body.reason,
+    });
+    return ok(ctx.res, { ok: true });
+  } catch (err) {
+    return fail(
+      ctx.res,
+      400,
+      err instanceof Error ? err.message : 'daily rewards IP moderation failed',
+    );
+  }
+}
+
 /** POST /admin/api/moderation/reports/:id/ignore: resolve one open report. */
 async function ignoreReportHandler(ctx: Ctx): Promise<void> {
   const body = await readBody(ctx.req);
@@ -1630,6 +1732,20 @@ async function resetStrikesHandler(ctx: Ctx): Promise<void> {
 /** GET /admin/api/moderation/queue: accounts with open reports. */
 async function moderationQueueHandler(ctx: Ctx): Promise<void> {
   ok(ctx.res, { rows: await adminDb().moderationQueue(useAdminRuntime().liveAccountIds()) });
+}
+
+/** GET /admin/api/moderation/history: latest audit actions, optionally scoped to caller. */
+async function moderationHistoryHandler(ctx: Ctx): Promise<void> {
+  const { page, limit } = parsePageParams(ctx.url.searchParams);
+  ok(
+    ctx.res,
+    await adminDb().listModerationActions(
+      moderationHistoryTab(ctx.url.searchParams),
+      ctxAccountId(ctx),
+      page,
+      limit,
+    ),
+  );
 }
 
 /** GET /admin/api/moderation/accounts/:id: full moderation detail for one account. */
@@ -2059,6 +2175,38 @@ export const routes: RouteDef[] = [
   },
   {
     method: 'POST',
+    path: '/admin/api/moderation/accounts/:id/daily-rewards-ban',
+    surface: 'admin',
+    middleware: [requireAdmin, requireAdminTarget('account')],
+    meta: adminTargetMeta('account'),
+    handler: dailyRewardsBanHandler,
+  },
+  {
+    method: 'POST',
+    path: '/admin/api/moderation/accounts/:id/daily-rewards-unban',
+    surface: 'admin',
+    middleware: [requireAdmin, requireAdminTarget('account')],
+    meta: adminTargetMeta('account'),
+    handler: dailyRewardsBanHandler,
+  },
+  {
+    method: 'POST',
+    path: '/admin/api/moderation/accounts/:id/daily-rewards-ip-ban',
+    surface: 'admin',
+    middleware: [requireAdmin, requireAdminTarget('account')],
+    meta: adminTargetMeta('account'),
+    handler: dailyRewardsIpBanHandler,
+  },
+  {
+    method: 'POST',
+    path: '/admin/api/moderation/accounts/:id/daily-rewards-ip-unban',
+    surface: 'admin',
+    middleware: [requireAdmin, requireAdminTarget('account')],
+    meta: adminTargetMeta('account'),
+    handler: dailyRewardsIpBanHandler,
+  },
+  {
+    method: 'POST',
     path: '/admin/api/moderation/accounts/:id/lift-mute',
     surface: 'admin',
     middleware: [requireAdmin, requireAdminTarget('account')],
@@ -2112,6 +2260,14 @@ export const routes: RouteDef[] = [
     middleware: [requireAdmin],
     meta: ADMIN_META,
     handler: moderationQueueHandler,
+  },
+  {
+    method: 'GET',
+    path: '/admin/api/moderation/history',
+    surface: 'admin',
+    middleware: [requireAdmin],
+    meta: ADMIN_META,
+    handler: moderationHistoryHandler,
   },
   {
     method: 'GET',

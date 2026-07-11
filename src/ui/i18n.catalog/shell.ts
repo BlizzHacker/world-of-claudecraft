@@ -40,6 +40,22 @@ export const shellStrings = {
       connectionLost: 'Connection to the server was lost.',
       reconnecting: 'Connection lost. Reconnecting...',
       connectionRejected: 'The server closed the connection.',
+      tips: {
+        classes:
+          'Tip: each of the 9 classes plays differently. Try a few before committing to one.',
+        talents:
+          'Tip: you can reset your talents any time you are out of combat, so an early pick is never a trap.',
+        dungeons:
+          'Tip: try a dungeon on heroic difficulty once you outgear normal for a tougher, more rewarding fight.',
+        market: 'Tip: the World Market lets you buy and sell with players across the whole realm.',
+        guilds:
+          'Tip: joining a guild gives you a private chat channel and a shared roster of your guildmates.',
+        professions:
+          'Tip: gathering and crafting professions can be trained alongside your combat class.',
+        loadouts:
+          'Tip: save more than one talent loadout to swap between builds without spending points twice.',
+        pvp: 'Tip: challenge another player to a friendly duel, or queue for the Ashen Coliseum arena, to test your build.',
+      },
     },
     errors: {
       nothingInteract: 'Nothing to interact with.',
@@ -230,6 +246,7 @@ export const shellStrings = {
       statBarAria: '{stat}: {value} out of 25',
     },
     mobilePreflight: {
+<<<<<<< HEAD
       title: "Play in Landscape Fullscreen",
       continue: "Continue to Game",
       rotateTitle: "Rotate to Landscape",
@@ -246,6 +263,28 @@ export const shellStrings = {
       androidOpenStep: "Open Cryptic Realm from the new icon.",
       otherStandaloneDetail: "Keep your device in landscape fullscreen.",
       otherInstallDetail: "Install or add this page to your Home screen for the best fullscreen mobile experience.",
+=======
+      title: 'Play in Landscape Fullscreen',
+      continue: 'Continue to Game',
+      rotateTitle: 'Rotate to Landscape',
+      rotateSub: 'Portrait mode is not supported. Rotate your device to landscape to continue.',
+      baseLandscape: 'Rotate your device to landscape before entering the world.',
+      basePerformance:
+        'Mobile performance may be degraded. Close extra tabs and lower Render Quality if the game feels slow.',
+      iosStandaloneDetail: 'You are in home-screen fullscreen mode. Keep the device in landscape.',
+      iosInstallDetail:
+        'For true fullscreen on iPhone or iPad, install this page to your Home Screen first.',
+      iosShareStep: 'In Safari, tap Share, then Add to Home Screen.',
+      iosOpenStep: 'Open World of ClaudeCraft from the new Home Screen icon.',
+      androidStandaloneDetail: 'You are in fullscreen app mode. Keep the device in landscape.',
+      androidInstallDetail:
+        'For fullscreen on Android, install this page or add it to your Home screen first.',
+      androidInstallStep: 'In Chrome, tap the menu, then Install app or Add to Home screen.',
+      androidOpenStep: 'Open World of ClaudeCraft from the new icon.',
+      otherStandaloneDetail: 'Keep your device in landscape fullscreen.',
+      otherInstallDetail:
+        'Install or add this page to your Home screen for the best fullscreen mobile experience.',
+>>>>>>> v0.24.0
     },
     serverUnavailable: {
       title: 'Cryptic Realm - Realm Unavailable',
@@ -1254,6 +1293,7 @@ export const shellStrings = {
       statBarAria: '{stat}: {value} out of 25',
     },
     mobilePreflight: {
+<<<<<<< HEAD
       title: "Play in Landscape Fullscreen",
       continue: "Continue to Game",
       rotateTitle: "Rotate to Landscape",
@@ -1270,6 +1310,28 @@ export const shellStrings = {
       androidOpenStep: "Open Cryptic Realm from the new icon.",
       otherStandaloneDetail: "Keep your device in landscape fullscreen.",
       otherInstallDetail: "Install or add this page to your Home screen for the best fullscreen mobile experience.",
+=======
+      title: 'Play in Landscape Fullscreen',
+      continue: 'Continue to Game',
+      rotateTitle: 'Rotate to Landscape',
+      rotateSub: 'Portrait mode is not supported. Rotate your device to landscape to continue.',
+      baseLandscape: 'Rotate your device to landscape before entering the world.',
+      basePerformance:
+        'Mobile performance may be degraded. Close extra tabs and lower Render Quality if the game feels slow.',
+      iosStandaloneDetail: 'You are in home-screen fullscreen mode. Keep the device in landscape.',
+      iosInstallDetail:
+        'For true fullscreen on iPhone or iPad, install this page to your Home Screen first.',
+      iosShareStep: 'In Safari, tap Share, then Add to Home Screen.',
+      iosOpenStep: 'Open World of ClaudeCraft from the new Home Screen icon.',
+      androidStandaloneDetail: 'You are in fullscreen app mode. Keep the device in landscape.',
+      androidInstallDetail:
+        'For fullscreen on Android, install this page or add it to your Home screen first.',
+      androidInstallStep: 'In Chrome, tap the menu, then Install app or Add to Home screen.',
+      androidOpenStep: 'Open World of ClaudeCraft from the new icon.',
+      otherStandaloneDetail: 'Keep your device in landscape fullscreen.',
+      otherInstallDetail:
+        'Install or add this page to your Home screen for the best fullscreen mobile experience.',
+>>>>>>> v0.24.0
     },
     serverUnavailable: {
       title: 'Cryptic Realm - Realm Unavailable',

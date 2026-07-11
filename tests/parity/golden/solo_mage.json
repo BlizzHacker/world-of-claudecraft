@@ -8,14 +8,24 @@
     "casting lifecycle (C4a)",
     "effect dispatch + spell damage (C4b/C1)"
   ],
+<<<<<<< HEAD
   "draws": 137,
   "drawDigest": "ffb01691",
+=======
+  "draws": 421,
+  "drawDigest": "cb4febb2",
+>>>>>>> v0.24.0
   "frames": [
     {
       "tick": 0,
       "time": 0,
+<<<<<<< HEAD
       "nextId": 418,
       "state": "38f45ae1",
+=======
+      "nextId": 406,
+      "state": "96e7aa04",
+>>>>>>> v0.24.0
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -48,6 +58,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -125,9 +136,15 @@
     {
       "tick": 20,
       "time": 1,
+<<<<<<< HEAD
       "nextId": 419,
       "state": "3bf8b92c",
       "events": "cb38f00b",
+=======
+      "nextId": 407,
+      "state": "84cc3bf9",
+      "events": "6f4af3da",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 11,
         "digest": "16649628"
@@ -136,9 +153,15 @@
     {
       "tick": 40,
       "time": 2,
+<<<<<<< HEAD
       "nextId": 419,
       "state": "4195af10",
       "events": "50ab1609",
+=======
+      "nextId": 407,
+      "state": "5bf5388b",
+      "events": "32aafa0f",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 11,
         "digest": "16649628"
@@ -147,9 +170,15 @@
     {
       "tick": 60,
       "time": 3,
+<<<<<<< HEAD
       "nextId": 419,
       "state": "8e8b7914",
       "events": "386b76d4",
+=======
+      "nextId": 407,
+      "state": "6b1fc6cb",
+      "events": "c880e87c",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 43,
         "digest": "3e6faf96"
@@ -158,45 +187,81 @@
     {
       "tick": 80,
       "time": 4,
+<<<<<<< HEAD
       "nextId": 419,
       "state": "c3eaa780",
       "events": "bde58941",
       "rng": {
         "draws": 62,
         "digest": "4f93b29a"
+=======
+      "nextId": 407,
+      "state": "63b35e5f",
+      "events": "c880e87c",
+      "rng": {
+        "draws": 163,
+        "digest": "5caeab93"
+>>>>>>> v0.24.0
       }
     },
     {
       "tick": 100,
       "time": 5,
+<<<<<<< HEAD
       "nextId": 419,
       "state": "eb0f4cd4",
       "events": "31e27802",
       "rng": {
         "draws": 91,
         "digest": "ae3e1e2b"
+=======
+      "nextId": 407,
+      "state": "24aca4e7",
+      "events": "894957f3",
+      "rng": {
+        "draws": 259,
+        "digest": "bf0b305f"
+>>>>>>> v0.24.0
       }
     },
     {
       "tick": 120,
       "time": 6,
+<<<<<<< HEAD
       "nextId": 419,
       "state": "f6a9b6c8",
       "events": "20d2e8d4",
       "rng": {
         "draws": 121,
         "digest": "090b2e92"
+=======
+      "nextId": 407,
+      "state": "71717b3e",
+      "events": "c880e87c",
+      "rng": {
+        "draws": 380,
+        "digest": "ed0c4a9f"
+>>>>>>> v0.24.0
       }
     },
     {
       "tick": 128,
       "time": 6.4,
+<<<<<<< HEAD
       "nextId": 419,
       "state": "77fc708d",
       "events": "6c35f56f",
       "rng": {
         "draws": 137,
         "digest": "ffb01691"
+=======
+      "nextId": 407,
+      "state": "a4f0295b",
+      "events": "741638a5",
+      "rng": {
+        "draws": 421,
+        "digest": "cb4febb2"
+>>>>>>> v0.24.0
       },
       "label": "final",
       "players": [
@@ -225,6 +290,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -257,7 +323,11 @@
           "critChance": 0.056,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.056,
+<<<<<<< HEAD
           "facing": -0.023425,
+=======
+          "facing": -0.113451,
+>>>>>>> v0.24.0
           "fallStartY": 1.5,
           "fiveSecondRule": 105.4,
           "hp": 50000,
@@ -308,7 +378,11 @@
           "critChance": 0.05,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.05,
+<<<<<<< HEAD
           "facing": -0.212774,
+=======
+          "facing": -0.172454,
+>>>>>>> v0.24.0
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hostile": true,
@@ -323,9 +397,15 @@
           "overpowerUntil": -1,
           "petMode": "defensive",
           "pos": {
+<<<<<<< HEAD
             "x": 1.526975,
             "y": 1.500071,
             "z": 18.189486
+=======
+            "x": -0.600457,
+            "y": 1.497999,
+            "z": 20.823045
+>>>>>>> v0.24.0
           },
           "potionCooldownUntil": -1,
           "spawnPos": {
@@ -337,7 +417,16 @@
             "armor": 40
           },
           "templateId": "forest_wolf",
+<<<<<<< HEAD
           "wanderTimer": 3.769578,
+=======
+          "wanderTarget": {
+            "x": -1.188086,
+            "y": 1.250784,
+            "z": 24.196644
+          },
+          "wanderTimer": 28.7,
+>>>>>>> v0.24.0
           "weapon": {
             "max": 12,
             "min": 8,

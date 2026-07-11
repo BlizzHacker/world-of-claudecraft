@@ -15,8 +15,13 @@
     {
       "tick": 0,
       "time": 0,
+<<<<<<< HEAD
       "nextId": 418,
       "state": "1f775e57",
+=======
+      "nextId": 406,
+      "state": "7301c7f4",
+>>>>>>> v0.24.0
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -49,6 +54,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -123,9 +129,15 @@
     {
       "tick": 10,
       "time": 0.5,
+<<<<<<< HEAD
       "nextId": 429,
       "state": "03701cbc",
       "events": "29ce6dee",
+=======
+      "nextId": 417,
+      "state": "389dc174",
+      "events": "2758fde1",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 11,
         "digest": "de021f51"
@@ -134,9 +146,15 @@
     {
       "tick": 20,
       "time": 1,
+<<<<<<< HEAD
       "nextId": 429,
       "state": "06f7f9dc",
       "events": "ea02f49d",
+=======
+      "nextId": 417,
+      "state": "9af029d4",
+      "events": "9cfda0e2",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 11,
         "digest": "de021f51"
@@ -145,8 +163,13 @@
     {
       "tick": 30,
       "time": 1.5,
+<<<<<<< HEAD
       "nextId": 429,
       "state": "4a44d53a",
+=======
+      "nextId": 417,
+      "state": "d966255a",
+>>>>>>> v0.24.0
       "events": "741638a5",
       "rng": {
         "draws": 11,
@@ -156,8 +179,13 @@
     {
       "tick": 40,
       "time": 2,
+<<<<<<< HEAD
       "nextId": 429,
       "state": "3db095ac",
+=======
+      "nextId": 417,
+      "state": "8a6566e4",
+>>>>>>> v0.24.0
       "events": "741638a5",
       "rng": {
         "draws": 11,
@@ -167,9 +195,15 @@
     {
       "tick": 50,
       "time": 2.5,
+<<<<<<< HEAD
       "nextId": 429,
       "state": "44cfbde6",
       "events": "65a5879e",
+=======
+      "nextId": 417,
+      "state": "ef2279e6",
+      "events": "741638a5",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 17,
         "digest": "fe3cd8d6"
@@ -178,8 +212,13 @@
     {
       "tick": 60,
       "time": 3,
+<<<<<<< HEAD
       "nextId": 429,
       "state": "bbad3350",
+=======
+      "nextId": 417,
+      "state": "537c4848",
+>>>>>>> v0.24.0
       "events": "741638a5",
       "rng": {
         "draws": 17,
@@ -189,9 +228,15 @@
     {
       "tick": 69,
       "time": 3.45,
+<<<<<<< HEAD
       "nextId": 430,
       "state": "a9e7b33a",
       "events": "192c5036",
+=======
+      "nextId": 418,
+      "state": "ac1c4f5a",
+      "events": "b6936edd",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 17,
         "digest": "fe3cd8d6"
@@ -227,6 +272,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -340,8 +386,13 @@
     {
       "tick": 70,
       "time": 3.5,
+<<<<<<< HEAD
       "nextId": 430,
       "state": "5899f56a",
+=======
+      "nextId": 418,
+      "state": "8028038a",
+>>>>>>> v0.24.0
       "events": "741638a5",
       "rng": {
         "draws": 17,
@@ -351,8 +402,13 @@
     {
       "tick": 71,
       "time": 3.55,
+<<<<<<< HEAD
       "nextId": 430,
       "state": "9149bba6",
+=======
+      "nextId": 418,
+      "state": "d54969a6",
+>>>>>>> v0.24.0
       "events": "741638a5",
       "rng": {
         "draws": 17,
@@ -389,6 +445,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [

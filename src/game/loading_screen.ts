@@ -5,6 +5,7 @@
 // imports, so hud.ts can import it without a cycle.
 
 import { getActiveRealm } from '../sim/realms';
+import { createLoadingTipRotation, type LoadingTipRotation } from '../ui/loading_tips';
 import { t } from '../ui/i18n';
 
 export const LOADING_FADE_MS = 350; // keep in sync with the #loading-screen CSS transition
@@ -16,6 +17,34 @@ let loadingHideTimer: number | null = null;
 
 /** Show the branded loading screen with a status line. Idempotent — safe to call
  *  while already visible (it just updates the status + cancels a pending fade). */
+
+const LOADING_TIP_ROTATE_MS = 5000;
+let loadingTipRotation: LoadingTipRotation | null = null;
+let loadingTipTimer: number | null = null;
+
+// Rotating "did you know" copy under the progress bar, purely cosmetic (no
+// gameplay-relevant info), so entering/leaving the loading screen sets it up
+// and tears it down independent of the actual asset/scene-build progress.
+function startLoadingTips(): void {
+  if (loadingTipTimer !== null) return; // already running
+  loadingTipRotation = createLoadingTipRotation();
+  const tipEl = document.querySelector<HTMLElement>('#ls-tip');
+  if (!tipEl) return;
+  tipEl.textContent = loadingTipRotation.current();
+  loadingTipTimer = window.setInterval(() => {
+    if (!loadingTipRotation) return;
+    tipEl.textContent = loadingTipRotation.next();
+  }, LOADING_TIP_ROTATE_MS);
+}
+
+function stopLoadingTips(): void {
+  if (loadingTipTimer !== null) {
+    window.clearInterval(loadingTipTimer);
+    loadingTipTimer = null;
+  }
+  loadingTipRotation = null;
+}
+
 export function showLoadingScreen(statusText: string): void {
   const el = $('#loading-screen');
   if (!el) return;
@@ -31,6 +60,7 @@ export function showLoadingScreen(statusText: string): void {
   el.classList.add('visible');
   document.body.classList.add('is-entering-world');
   setLoadingStatus(statusText);
+  startLoadingTips();
 }
 
 export function setLoadingStatus(text: string): void {
@@ -54,4 +84,5 @@ export function hideLoadingScreen(): void {
     document.body.classList.remove('is-entering-world');
     loadingHideTimer = null;
   }, LOADING_FADE_MS);
+  stopLoadingTips();
 }

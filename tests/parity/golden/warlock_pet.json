@@ -15,8 +15,13 @@
     {
       "tick": 0,
       "time": 0,
+<<<<<<< HEAD
       "nextId": 418,
       "state": "5ec9c765",
+=======
+      "nextId": 406,
+      "state": "5c1732e8",
+>>>>>>> v0.24.0
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -49,6 +54,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -126,9 +132,15 @@
     {
       "tick": 20,
       "time": 1,
+<<<<<<< HEAD
       "nextId": 418,
       "state": "42488772",
       "events": "bc03bf57",
+=======
+      "nextId": 406,
+      "state": "f9acec26",
+      "events": "52e2641a",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 8,
         "digest": "fdda16da"
@@ -137,9 +149,15 @@
     {
       "tick": 40,
       "time": 2,
+<<<<<<< HEAD
       "nextId": 420,
       "state": "03933dd9",
       "events": "7306009f",
+=======
+      "nextId": 406,
+      "state": "769c8ab4",
+      "events": "741638a5",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 17,
         "digest": "c4ed38f5"
@@ -148,9 +166,15 @@
     {
       "tick": 60,
       "time": 3,
+<<<<<<< HEAD
       "nextId": 420,
       "state": "6c8be9a0",
       "events": "aea53dc2",
+=======
+      "nextId": 406,
+      "state": "467df583",
+      "events": "741638a5",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 50,
         "digest": "5138fbe4"
@@ -159,9 +183,15 @@
     {
       "tick": 80,
       "time": 4,
+<<<<<<< HEAD
       "nextId": 420,
       "state": "726404b8",
       "events": "b18e8085",
+=======
+      "nextId": 406,
+      "state": "0365c77e",
+      "events": "741638a5",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 76,
         "digest": "6658c4e2"
@@ -170,9 +200,15 @@
     {
       "tick": 100,
       "time": 5,
+<<<<<<< HEAD
       "nextId": 420,
       "state": "ee8fa6fb",
       "events": "400e220b",
+=======
+      "nextId": 407,
+      "state": "a1873f72",
+      "events": "beca190f",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 113,
         "digest": "550e086d"
@@ -181,9 +217,15 @@
     {
       "tick": 120,
       "time": 6,
+<<<<<<< HEAD
       "nextId": 420,
       "state": "356fd1c8",
       "events": "3f9ba243",
+=======
+      "nextId": 408,
+      "state": "7c491cb9",
+      "events": "fc7e12c5",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 136,
         "digest": "eb037b72"
@@ -192,15 +234,22 @@
     {
       "tick": 140,
       "time": 7,
+<<<<<<< HEAD
       "nextId": 420,
       "state": "633a2642",
       "events": "5b42343c",
+=======
+      "nextId": 408,
+      "state": "27363bec",
+      "events": "c6409e52",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 170,
         "digest": "11028479"
       }
     },
     {
+<<<<<<< HEAD
       "tick": 150,
       "time": 7.5,
       "nextId": 420,
@@ -209,6 +258,60 @@
       "rng": {
         "draws": 182,
         "digest": "61ff02c6"
+=======
+      "tick": 160,
+      "time": 8,
+      "nextId": 408,
+      "state": "bb3f4f08",
+      "events": "a1589300",
+      "rng": {
+        "draws": 636,
+        "digest": "d50b74c3"
+      }
+    },
+    {
+      "tick": 180,
+      "time": 9,
+      "nextId": 408,
+      "state": "ccd5d98e",
+      "events": "11371c1e",
+      "rng": {
+        "draws": 774,
+        "digest": "89995251"
+      }
+    },
+    {
+      "tick": 200,
+      "time": 10,
+      "nextId": 408,
+      "state": "c96f736b",
+      "events": "9508a0b6",
+      "rng": {
+        "draws": 944,
+        "digest": "1771d9a2"
+      }
+    },
+    {
+      "tick": 220,
+      "time": 11,
+      "nextId": 408,
+      "state": "deb845f4",
+      "events": "27530f47",
+      "rng": {
+        "draws": 1021,
+        "digest": "c5358026"
+      }
+    },
+    {
+      "tick": 220,
+      "time": 11,
+      "nextId": 408,
+      "state": "9dcf93f4",
+      "events": "741638a5",
+      "rng": {
+        "draws": 1021,
+        "digest": "c5358026"
+>>>>>>> v0.24.0
       },
       "label": "pet-taunt",
       "players": [
@@ -239,6 +342,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -429,11 +533,19 @@
       ]
     },
     {
+<<<<<<< HEAD
       "tick": 154,
       "time": 7.7,
       "nextId": 420,
       "state": "39c3493c",
       "events": "7cf20eb2",
+=======
+      "tick": 224,
+      "time": 11.2,
+      "nextId": 408,
+      "state": "1782699d",
+      "events": "e253d2ca",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 195,
         "digest": "867772a5"
@@ -467,6 +579,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -556,8 +669,13 @@
           "facing": 1.570796,
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
+<<<<<<< HEAD
           "hp": 346,
           "id": 418,
+=======
+          "hp": 339,
+          "id": 406,
+>>>>>>> v0.24.0
           "inCombat": true,
           "kind": "mob",
           "level": 12,
@@ -606,8 +724,13 @@
           "forcedTargetId": 418,
           "forcedTargetTimer": 2.8,
           "hostile": true,
+<<<<<<< HEAD
           "hp": 49936,
           "id": 419,
+=======
+          "hp": 49927,
+          "id": 407,
+>>>>>>> v0.24.0
           "inCombat": true,
           "kind": "mob",
           "leashAnchor": {
@@ -646,8 +769,13 @@
               14
             ],
             [
+<<<<<<< HEAD
               418,
               53
+=======
+              406,
+              52
+>>>>>>> v0.24.0
             ]
           ],
           "weapon": {

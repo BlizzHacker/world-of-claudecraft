@@ -154,6 +154,14 @@ export const de_DE: EnTranslations = {
     "spectate": {
       "banner": "{name} wird beobachtet"
     },
+    "readyCheck": {
+      "prompt": "{name} hat einen Bereitschaftscheck gestartet. Bist du bereit?",
+      "ready": "Bereit",
+      "notReady": "Nicht bereit",
+      "result": "Bereitschaftscheck: {ready} bereit, {notReady} nicht bereit, {noResponse} ohne Antwort.",
+      "notInPartyError": "Du musst einer Gruppe angehören, um einen Bereitschaftscheck zu starten.",
+      "inProgressError": "Ein Bereitschaftscheck läuft bereits."
+    },
     "death": {
       "resurrectAtCorpse": "Resurrect at Corpse",
       "resurrectAtHealer": "The Pale Keeper (Keeper's Toll)",
@@ -232,7 +240,8 @@ export const de_DE: EnTranslations = {
         "eligible": "Belohnungen freigeschaltet.",
         "no_wallet": "Verbinde eine Wallet mit mindestens 20 USD in WOC.",
         "under_minimum": "Deine Wallet liegt unter dem Mindestwert von 20 USD in WOC.",
-        "price_unavailable": "Der WOC-Preis ist nicht verfügbar, Belohnungen sind vorübergehend gesperrt."
+        "price_unavailable": "Der WOC-Preis ist nicht verfügbar, Belohnungen sind vorübergehend gesperrt.",
+        "banned": "Du bist von den täglichen Belohnungen ausgeschlossen. Grund: {reason}"
       }
     },
     "theme": {
@@ -306,7 +315,6 @@ export const de_DE: EnTranslations = {
       "chat": "Zum Chat springen"
     },
     "mobile": {
-      "autorun": "Auto-Laufen",
       "jump": "Springen",
       "leaderboard": "Rangliste",
       "dailyRewards": "Rewards",
@@ -314,6 +322,7 @@ export const de_DE: EnTranslations = {
       "haptics": "Haptik",
       "hapticsOff": "Haptik aus",
       "toggleHaptics": "Haptik umschalten",
+<<<<<<< HEAD
       "hotbarPage": "Skills",
       "hotbarPageAria": "Show next set of skills",
       "actionRing": "Combat actions",
@@ -324,6 +333,20 @@ export const de_DE: EnTranslations = {
       "spellbookPageLabel": "Page {page}",
       "hideKeyboard": "Hide keyboard",
       "chatPlaceholder": "Say something..."
+=======
+      "showMenuButtons": "Menütasten anzeigen",
+      "hideMenuButtons": "Menütasten ausblenden",
+      "hotbarPage": "Fähigkeiten",
+      "hotbarPageAria": "Nächste Fähigkeitengruppe anzeigen",
+      "actionRing": "Kampfhandlungen",
+      "actionPageToggle": "Aktionsseite wechseln",
+      "actionPageIndicator": "Seite {page}",
+      "targetCycle": "Ziel tauschen",
+      "targetCycleShort": "Ziel",
+      "spellbookPageLabel": "Seite {page}",
+      "hideKeyboard": "Tastatur ausblenden",
+      "chatPlaceholder": "Sag etwas..."
+>>>>>>> v0.24.0
     },
     "tutorial": {
       "moveBodyTouch": "Nutze den Bewegungsstick zum Bewegen und zieh über den Bildschirm, um dich umzusehen. Mach ein paar Schritte, um zu beginnen.",
@@ -397,7 +420,17 @@ export const de_DE: EnTranslations = {
       "targetFriendly": "Nächsten Verbündeten anvisieren",
       "targetFriendlyNext": "Freundliches Ziel wechseln",
       "discord": "Discord",
+<<<<<<< HEAD
       "valecup": "Vale Cup"
+=======
+      "valecup": "Talpokal",
+      "categoryPet": "Begleiter",
+      "petAttack": "Begleiter: Angreifen",
+      "petStop": "Begleiter: Stopp",
+      "petTaunt": "Begleiter: Verspotten",
+      "petDefensive": "Begleiter: Defensiv",
+      "petAggressive": "Begleiter: Aggressiv"
+>>>>>>> v0.24.0
     },
     "vcup": {
       "title": "The Vale Cup",
@@ -570,9 +603,92 @@ export const de_DE: EnTranslations = {
       "itemLevelLine": "Gegenstandsstufe {level}",
       "itemScoreLine": "Wertung {score}",
       "showSecondaryActionBar": "Zweite Aktionsleiste anzeigen",
+<<<<<<< HEAD
       "showDailyRewardsChest": "Show Daily Rewards Chest",
       "mobileCameraJoystick": "Camera joystick",
       "mobileLeftHanded": "Left-handed layout"
+=======
+      "showDailyRewardsChest": "Truhe der täglichen Belohnungen anzeigen",
+      "mobileCameraJoystick": "Kamera-Joystick",
+      "mobileLeftHanded": "Linkshänder-Layout",
+      "ia": {
+        "railDisplay": "Anzeige",
+        "railInput": "Eingabe",
+        "railSystem": "Systemeinstellungen",
+        "catOverviewName": "Übersicht",
+        "catOverviewSub": "Angeheftete Grundlagen, Schnellaktionen und Änderungen.",
+        "catGraphicsSub": "Qualität, Sichtweite und Weltdarstellung.",
+        "catInterfaceSub": "HUD-Skalierung, Fenster, Chat und Einheitenrahmen.",
+        "catAccessibilityName": "Barrierefreiheit",
+        "catAccessibilitySub": "Bewegung, Kontrast und angenehme Inhaltsdarstellung.",
+        "catControlsName": "Steuerung",
+        "catControlsSub": "Kamera, Bewegung, Kampf und Rückmeldungen.",
+        "catKeybindsSub": "Tasten für jede Aktion belegen.",
+        "catControllerSub": "Gamepad-Gefühl und Tastenbelegung.",
+        "catTouchName": "Touch-Steuerung",
+        "catTouchSub": "Bildschirmsticks, Blicksteuerung und Tasten.",
+        "catAudioSub": "Lautstärke und Soundoptionen.",
+        "catSystemName": "Systemeinstellungen",
+        "catSystemSub": "Leistung, Support und Info."
+      },
+      "done": "Fertig",
+      "resetAllTitle": "Alle Einstellungen zurücksetzen?",
+      "resetAllBody": "Dadurch werden alle Einstellungen auf ihre Standardwerte zurückgesetzt. Dies kann nicht rückgängig gemacht werden.",
+      "searchPlaceholder": "Einstellungen durchsuchen",
+      "searchScopeAll": "Alle Einstellungen",
+      "searchScopeThis": "Dieser Abschnitt",
+      "searchEmpty": "Keine Einstellungen entsprechen deiner Suche.",
+      "searchGoTo": "Zu {category} wechseln",
+      "modeOnline": "Mit Verbindung",
+      "modeOffline": "Ohne Verbindung",
+      "changed": "{count} geändert",
+      "changedSummary": "{count} gegenüber den Standardwerten geändert",
+      "legend": {
+        "category": "Kategorie",
+        "navigate": "Navigieren",
+        "select": "Auswählen",
+        "back": "Zurück",
+        "reset": "Zurücksetzen",
+        "clear": "Löschen",
+        "page": "Seite"
+      },
+      "keybindCleared": "Belegung für {action} gelöscht",
+      "keybindRebinding": "{action} neu belegen. Drücke eine Taste oder Escape zum Abbrechen.",
+      "keybindEvicted": "{key} an {action} gebunden und Belegung von {evicted} entfernt",
+      "keybindTaken": "Taste entfernt",
+      "keybindUnbound": "{action} hat keine Taste",
+      "keybindModifierHint": "Tipp: Du kannst Tastenkombinationen mit Modifikatoren belegen. Halte Umschalt, Strg oder Alt gedrückt, während du eine Taste drückst, um die Kombination zu erfassen, zum Beispiel Umschalt+1.",
+      "conflictDot": "Belegungskonflikt",
+      "overviewConflictAlert": "Einige Tastenbelegungen stehen im Konflikt oder sind nicht belegt.",
+      "sec": {
+        "quality": "Qualität",
+        "view": "Sicht",
+        "general": "Allgemein",
+        "scaleText": "Skalierung und Text",
+        "panels": "Fenster",
+        "unitFrames": "Einheitenrahmen",
+        "actionBars": "Aktionsleisten",
+        "chat": "Unterhaltung",
+        "combatTooltips": "Kampf und Tooltips",
+        "hudExtras": "HUD-Extras",
+        "motionContrast": "Bewegung und Kontrast",
+        "content": "Inhalte",
+        "camera": "Kamera",
+        "movement": "Bewegung",
+        "combat": "Kampf",
+        "feedback": "Rückmeldungen",
+        "inputMode": "Eingabemodus",
+        "feel": "Spielgefühl",
+        "sticks": "Steuerknüppel",
+        "look": "Blicksteuerung",
+        "buttons": "Tasten",
+        "volume": "Lautstärke",
+        "toggles": "Schalter",
+        "performance": "Leistung",
+        "support": "Hilfe",
+        "about": "Info"
+      }
+>>>>>>> v0.24.0
     },
     "controller": {
       "title": "Controller",
@@ -584,7 +700,8 @@ export const de_DE: EnTranslations = {
       "buttons": "Tastenbelegung",
       "resetButtons": "Tastenbelegung zurücksetzen",
       "menuAction": "Spielmenü",
-      "help": "Linker Stick bewegt, rechter Stick steuert die Kamera. Öffne ein Fenster, um den Bildschirmzeiger zu verwenden."
+      "help": "Linker Stick bewegt, rechter Stick steuert die Kamera. Öffne ein Fenster, um den Bildschirmzeiger zu verwenden.",
+      "duplicate": "Auch an {buttons} gebunden"
     },
     "perf": {
       "title": "Leistungsanzeige",
@@ -717,11 +834,17 @@ export const de_DE: EnTranslations = {
       }
     },
     "talents": {
-      "defaultBuildName": "Build {n}"
+      "defaultBuildName": "Build {n}",
+      "choicesTab": "Auswahlmöglichkeiten",
+      "resetChoices": "Auswahl zurücksetzen",
+      "tierLevel": "Stufe {n}",
+      "tierLevelLabel": "Stufe"
     },
     "tips": {
       "joinChannels": "Tipp: Gebt /join world oder /join lfg ein, um mit Spielern im ganzen Realm zu chatten."
     },
+    "itemHeroicTag": "[HEROISCH]",
+    "itemSoulbound": "Seelengebunden",
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
@@ -1075,6 +1198,26 @@ export const de_DE: EnTranslations = {
     "worldBoss": {
       "spawn": "{name} erhebt sich über den Thornpeak-Höhen!"
     },
+    "auth": {
+      "appleLoginCta": "Mit Apple fortfahren",
+      "appleError": "Die Anmeldung mit Apple ist fehlgeschlagen. Bitte versuche es erneut.",
+      "appleChoiceIntro": "Erstelle ein neues Konto oder verknüpfe Apple mit einem bestehenden Konto.",
+      "appleChoiceExpired": "Diese Apple-Anmeldung ist abgelaufen. Melde dich bitte erneut mit Apple an.",
+      "forgotPrompt": "Passwort vergessen?",
+      "forgotTitle": "Passwort zurücksetzen",
+      "forgotHint": "Gib deinen Benutzernamen ein und wir senden einen Link zum Zurücksetzen an die hinterlegte E-Mail-Adresse.",
+      "forgotUsername": "Benutzername",
+      "forgotSubmit": "Link zum Zurücksetzen senden",
+      "forgotSent": "Falls ein Konto mit diesem Benutzernamen eine E-Mail-Adresse hinterlegt hat, haben wir einen Link zum Zurücksetzen gesendet. Prüfe deinen Posteingang.",
+      "forgotBack": "Zurück zur Anmeldung",
+      "resetTitle": "Neues Passwort wählen",
+      "resetNewPassword": "Neues Passwort",
+      "resetConfirm": "Neues Passwort bestätigen",
+      "resetSubmit": "Passwort aktualisieren",
+      "resetDone": "Dein Passwort wurde aktualisiert. Du kannst dich jetzt anmelden.",
+      "resetMismatch": "Die Passwörter stimmen nicht überein.",
+      "resetErrInvalid": "Dieser Link zum Zurücksetzen ist ungültig oder abgelaufen. Fordere einen neuen an."
+    },
     "loot": {
       "chestTitle": "Truhe"
     },
@@ -1280,6 +1423,7 @@ export const de_DE: EnTranslations = {
       "unlink": "GitHub trennen"
     },
     "mailbox": {
+<<<<<<< HEAD
       "title": "Mailbox",
       "subtitle": "The Ravenpost",
       "close": "Close mailbox",
@@ -1312,6 +1456,42 @@ export const de_DE: EnTranslations = {
       "indicatorTip": "You have {count} unread letters. Visit a mailbox to read them.",
       "clickAttach": "Click to attach to your letter.",
       "cannotMail": "This cannot be mailed.",
+=======
+      "title": "Briefkasten",
+      "subtitle": "Die Rabenpost",
+      "close": "Briefkasten schließen",
+      "tabInbox": "Posteingang",
+      "tabInboxWithCount": "Posteingang ({count})",
+      "tabSend": "Senden",
+      "empty": "Dein Briefkasten ist leer.",
+      "truncated": "Zeigt die neuesten {shown} von {total} Briefen.",
+      "attachmentsBadge": "Paket beigefügt",
+      "unreadBadge": "Ungelesen",
+      "back": "Zurück",
+      "take": "Anhänge entnehmen",
+      "delete": "Brief löschen",
+      "deleteAria": "Den Brief {subject} löschen",
+      "openAria": "Den Brief {subject} von {name} lesen",
+      "noSubject": "(kein Betreff)",
+      "toLabel": "An",
+      "toPlaceholder": "Charaktername",
+      "subjectLabel": "Betreff",
+      "bodyLabel": "Nachricht",
+      "coinLabel": "Münzen beilegen",
+      "parcelsLabel": "Pakete",
+      "parcelsHint": "Klicke einen Gegenstand in deinen Taschen an, um ihn beizulegen.",
+      "removeParcelAria": "{item} aus dem Brief entfernen",
+      "parcelQtyDecreaseAria": "Ein Stück weniger von {item} senden",
+      "parcelQtyIncreaseAria": "Ein Stück mehr von {item} senden",
+      "sendButton": "Brief senden",
+      "postageNote": "Porto: {amount}. Der Rabe ist etwa {seconds}s unterwegs.",
+      "arrivedBanner": "Der Rabe ist gelandet: Post von {name}.",
+      "arrivedLog": "Du hast neue Post von {name}.",
+      "indicatorAria": "Ungelesene Post: {count}",
+      "indicatorTip": "Du hast {count} ungelesene Briefe. Besuche einen Briefkasten, um sie zu lesen.",
+      "clickAttach": "Klicke, um es deinem Brief beizulegen.",
+      "cannotMail": "Das kann nicht verschickt werden.",
+>>>>>>> v0.24.0
       "result": {
         "sent": "A raven takes wing with your letter to {name} ({postage} postage).",
         "collected": "You collect {amount} from the letter.",
@@ -3960,8 +4140,23 @@ export const de_DE: EnTranslations = {
     "rendererFailed": "Renderer konnte nicht gestartet werden: bitte neu laden. {error}",
     "enterTimeout": "Die Welt konnte nicht betreten werden. Die Verbindung ist abgelaufen. Läuft der Spielserver?",
     "connectionLost": "Die Verbindung zum Server wurde unterbrochen.",
+<<<<<<< HEAD
     "reconnecting": "Connection lost. Reconnecting...",
     "connectionRejected": "Der Server hat die Verbindung geschlossen."
+=======
+    "reconnecting": "Verbindung verloren. Verbindung wird wieder hergestellt...",
+    "connectionRejected": "Der Server hat die Verbindung geschlossen.",
+    "tips": {
+      "classes": "Tipp: Jede der 9 Klassen spielt sich anders. Probiere einige aus, bevor du dich für eine entscheidest.",
+      "talents": "Tipp: Du kannst deine Talente jederzeit außerhalb des Kampfes zurücksetzen, eine frühe Wahl ist also nie eine Falle.",
+      "dungeons": "Tipp: Versuche einen Dungeon auf heroischer Schwierigkeit, sobald du für den normalen Schwierigkeitsgrad zu gut ausgerüstet bist. Dich erwartet ein härterer und lohnenderer Kampf.",
+      "market": "Tipp: Auf dem Weltmarkt kannst du mit Spielern aus dem gesamten Reich kaufen und verkaufen.",
+      "guilds": "Tipp: Der Beitritt zu einer Gilde gibt dir einen privaten Chatkanal und eine gemeinsame Liste deiner Gildenmitglieder.",
+      "professions": "Tipp: Sammel- und Handwerksberufe können parallel zu deiner Kampfklasse erlernt werden.",
+      "loadouts": "Tipp: Speichere mehr als eine Talentausrüstung, um zwischen Builds zu wechseln, ohne Punkte doppelt auszugeben.",
+      "pvp": "Tipp: Fordere einen anderen Spieler zu einem freundschaftlichen Duell heraus oder reihe dich für die Arena des Aschenen Kolosseums ein, um deinen Build zu testen."
+    }
+>>>>>>> v0.24.0
   },
   "errors": {
     "nothingInteract": "Nichts zum Interagieren in Reichweite.",
@@ -4985,6 +5180,8 @@ export const de_DE: EnTranslations = {
       "buybackTitle": "Rückkauf",
       "buybackEmpty": "Keine Gegenstände",
       "buybackAria": "{item} für {price} zurückkaufen",
+      "sellItemAria": "{item} für {price} verkaufen",
+      "sellRolledWarning": "Zufällig erzeugte Werte können durch Rückkauf nicht wiederhergestellt werden.",
       "sellQuantityTitle": "{item} verkaufen",
       "sellQuantityInput": "Zu verkaufende Menge",
       "sellQuantityConfirm": "Verkaufen",
@@ -5920,6 +6117,9 @@ export const de_DE: EnTranslations = {
       "greyjaw_fang": {
         "name": "Zahn des alten Greyjaw"
       },
+      "chunk_of_ore": {
+        "name": "Erzbrocken"
+      },
       "weathered_ledger_page": {
         "name": "Verwitterte Buchseite"
       },
@@ -5949,6 +6149,15 @@ export const de_DE: EnTranslations = {
       },
       "linen_scrap": {
         "name": "Leinenfetzen"
+      },
+      "arcane_dust": {
+        "name": "Arkanstaub"
+      },
+      "arcane_essence": {
+        "name": "Arkanessenz"
+      },
+      "arcane_shard": {
+        "name": "Arkansplitter"
       },
       "fen_muster_order": {
         "name": "Musterungsbefehl von Fenbridge"
@@ -7654,6 +7863,16 @@ export const de_DE: EnTranslations = {
       }
     },
     "quests": {
+      "q_prof_intro": {
+        "title": "Ein Handwerk für jede Hand",
+        "text": "Jeder in Eastbrook übt neben dem Schwert ein Handwerk aus, {playerName}. Rund um die Stadt gibt es Erzadern, also schwing die Spitzhacke und bring mir 5 Brocken. Bau sie selbst ab, wohlgemerkt; ich werde den Unterschied erkennen.",
+        "completion": "Siehst du? Erz in deinem Rucksack und Schwielen an deinen Händen. Bleib beim Bergbau, Holzfällen und Kräutersammeln, während du die Straßen bereist. Wenn du wieder in der Stadt bist, wirf einen Blick auf die Stadtfokus-Tafel am Markt und die Werkbank in der Nähe. In all dem wartet ein ehrlicher Verdienst, wenn du ihn willst.",
+        "objectives": {
+          "0": {
+            "label": "Erzbrocken"
+          }
+        }
+      },
       "q_wolves": {
         "title": "Wölfe vor der Tür",
         "text": "Die Waldwölfe fallen Reisende auf der Nordstraße an, {playerName}. Töte 8 von ihnen, damit Eastbrook wieder freier atmen kann.",

@@ -27,9 +27,15 @@
     {
       "tick": 3,
       "time": 0.15,
+<<<<<<< HEAD
       "nextId": 420,
       "state": "5a78831d",
       "events": "6c701116",
+=======
+      "nextId": 408,
+      "state": "39578b1b",
+      "events": "dc5c470f",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 7,
         "digest": "7563cdb9"
@@ -60,6 +66,7 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -100,6 +107,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [

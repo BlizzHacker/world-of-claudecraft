@@ -9,8 +9,13 @@
     "augment wave: fiestaPickOffers + arenaAugmentPick (fiestaAugments on meta + augmentOffer/Chosen events)",
     "multi-player meta"
   ],
+<<<<<<< HEAD
   "draws": 46,
   "drawDigest": "9fcc5bce",
+=======
+  "draws": 606,
+  "drawDigest": "509fee2b",
+>>>>>>> v0.24.0
   "frames": [
     {
       "tick": 0,
@@ -29,9 +34,15 @@
     {
       "tick": 25,
       "time": 1.25,
+<<<<<<< HEAD
       "nextId": 421,
       "state": "86fdcaf3",
       "events": "8d1e15cf",
+=======
+      "nextId": 409,
+      "state": "41f07ef7",
+      "events": "5146ee9f",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 9,
         "digest": "49bb19a6"
@@ -40,9 +51,15 @@
     {
       "tick": 50,
       "time": 2.5,
+<<<<<<< HEAD
       "nextId": 421,
       "state": "5509333d",
       "events": "ffc0aaab",
+=======
+      "nextId": 409,
+      "state": "91863671",
+      "events": "90b217f1",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 17,
         "digest": "851665cd"
@@ -51,9 +68,15 @@
     {
       "tick": 75,
       "time": 3.75,
+<<<<<<< HEAD
       "nextId": 421,
       "state": "552d3b8b",
       "events": "42d25382",
+=======
+      "nextId": 409,
+      "state": "1cc9e26f",
+      "events": "d13b86f9",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 23,
         "digest": "b9524c66"
@@ -62,45 +85,81 @@
     {
       "tick": 100,
       "time": 5,
+<<<<<<< HEAD
       "nextId": 421,
       "state": "653366e9",
       "events": "d9cff708",
       "rng": {
         "draws": 33,
         "digest": "627bf58c"
+=======
+      "nextId": 409,
+      "state": "90f28975",
+      "events": "669c1069",
+      "rng": {
+        "draws": 231,
+        "digest": "e2ff5500"
+>>>>>>> v0.24.0
       }
     },
     {
       "tick": 125,
       "time": 6.25,
+<<<<<<< HEAD
       "nextId": 421,
       "state": "ac1052db",
       "events": "e2835edf",
       "rng": {
         "draws": 38,
         "digest": "64624440"
+=======
+      "nextId": 409,
+      "state": "fc186737",
+      "events": "081653c5",
+      "rng": {
+        "draws": 385,
+        "digest": "e8022e47"
+>>>>>>> v0.24.0
       }
     },
     {
       "tick": 150,
       "time": 7.5,
+<<<<<<< HEAD
       "nextId": 421,
       "state": "ea97f147",
       "events": "b33d483c",
       "rng": {
         "draws": 42,
         "digest": "8e61adc1"
+=======
+      "nextId": 409,
+      "state": "5587a5ab",
+      "events": "741638a5",
+      "rng": {
+        "draws": 537,
+        "digest": "e6907c7a"
+>>>>>>> v0.24.0
       }
     },
     {
       "tick": 163,
       "time": 8.15,
+<<<<<<< HEAD
       "nextId": 421,
       "state": "b1a5bb88",
       "events": "98ba143b",
       "rng": {
         "draws": 46,
         "digest": "9fcc5bce"
+=======
+      "nextId": 409,
+      "state": "ef6eaff4",
+      "events": "384ae6a8",
+      "rng": {
+        "draws": 606,
+        "digest": "509fee2b"
+>>>>>>> v0.24.0
       },
       "label": "final",
       "players": [
@@ -130,6 +189,7 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "fiestaRestore": {
             "level": 1,
             "talents": {
@@ -184,6 +244,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "fiestaRestore": {
             "level": 1,
             "talents": {
@@ -244,6 +305,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
           },
+          "equipmentInstance": {},
           "fiestaAugments": [
             "aug_fleetfoot"
           ],
@@ -301,6 +363,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "fiestaRestore": {
             "level": 1,
             "talents": {

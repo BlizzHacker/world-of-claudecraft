@@ -14,8 +14,13 @@
     {
       "tick": 0,
       "time": 0,
+<<<<<<< HEAD
       "nextId": 418,
       "state": "151263d0",
+=======
+      "nextId": 406,
+      "state": "d2923341",
+>>>>>>> v0.24.0
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -48,6 +53,7 @@
             "chest": "recruit_tunic",
             "mainhand": "training_mace"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -125,9 +131,15 @@
     {
       "tick": 20,
       "time": 1,
+<<<<<<< HEAD
       "nextId": 419,
       "state": "09a85945",
       "events": "13642e4a",
+=======
+      "nextId": 407,
+      "state": "4fa2ac6f",
+      "events": "78472286",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 14,
         "digest": "c2508e61"
@@ -136,8 +148,13 @@
     {
       "tick": 40,
       "time": 2,
+<<<<<<< HEAD
       "nextId": 419,
       "state": "96910130",
+=======
+      "nextId": 407,
+      "state": "49c2c606",
+>>>>>>> v0.24.0
       "events": "741638a5",
       "rng": {
         "draws": 14,
@@ -147,9 +164,15 @@
     {
       "tick": 60,
       "time": 3,
+<<<<<<< HEAD
       "nextId": 419,
       "state": "2d414557",
       "events": "b381b58d",
+=======
+      "nextId": 407,
+      "state": "92af29ea",
+      "events": "93f4f111",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 45,
         "digest": "f92fa6cf"
@@ -158,8 +181,13 @@
     {
       "tick": 80,
       "time": 4,
+<<<<<<< HEAD
       "nextId": 419,
       "state": "a0e1b864",
+=======
+      "nextId": 407,
+      "state": "55253aa9",
+>>>>>>> v0.24.0
       "events": "741638a5",
       "rng": {
         "draws": 67,
@@ -169,9 +197,15 @@
     {
       "tick": 100,
       "time": 5,
+<<<<<<< HEAD
       "nextId": 419,
       "state": "3af97838",
       "events": "3a66dc5b",
+=======
+      "nextId": 407,
+      "state": "43ad5343",
+      "events": "a511432c",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 111,
         "digest": "d76e3a1e"
@@ -180,9 +214,15 @@
     {
       "tick": 120,
       "time": 6,
+<<<<<<< HEAD
       "nextId": 419,
       "state": "83d3747d",
       "events": "d1b0bb2a",
+=======
+      "nextId": 407,
+      "state": "7d8b14ba",
+      "events": "741638a5",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 131,
         "digest": "3e3fe967"
@@ -191,9 +231,15 @@
     {
       "tick": 140,
       "time": 7,
+<<<<<<< HEAD
       "nextId": 419,
       "state": "80de409b",
       "events": "1e5af4aa",
+=======
+      "nextId": 407,
+      "state": "18e9852e",
+      "events": "993e6f90",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 177,
         "digest": "536e88a1"
@@ -202,8 +248,13 @@
     {
       "tick": 160,
       "time": 8,
+<<<<<<< HEAD
       "nextId": 419,
       "state": "ae6e393d",
+=======
+      "nextId": 407,
+      "state": "6876dca4",
+>>>>>>> v0.24.0
       "events": "741638a5",
       "rng": {
         "draws": 208,
@@ -213,9 +264,15 @@
     {
       "tick": 180,
       "time": 9,
+<<<<<<< HEAD
       "nextId": 419,
       "state": "febb0493",
       "events": "4ee9bb7f",
+=======
+      "nextId": 407,
+      "state": "e647bbc6",
+      "events": "f3585c8e",
+>>>>>>> v0.24.0
       "rng": {
         "draws": 253,
         "digest": "f4f3a6cc"
@@ -224,8 +281,13 @@
     {
       "tick": 200,
       "time": 10,
+<<<<<<< HEAD
       "nextId": 419,
       "state": "ae53febc",
+=======
+      "nextId": 407,
+      "state": "5cf3da5b",
+>>>>>>> v0.24.0
       "events": "741638a5",
       "rng": {
         "draws": 282,
@@ -235,8 +297,13 @@
     {
       "tick": 201,
       "time": 10.05,
+<<<<<<< HEAD
       "nextId": 419,
       "state": "bf9521ce",
+=======
+      "nextId": 407,
+      "state": "ee59fd43",
+>>>>>>> v0.24.0
       "events": "741638a5",
       "rng": {
         "draws": 284,
@@ -272,6 +339,7 @@
             "chest": "recruit_tunic",
             "mainhand": "training_mace"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
