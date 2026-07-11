@@ -29,7 +29,7 @@ import {
   mobileCategoryRows,
 } from './options_mobile_shell_view';
 import type { RailEnv } from './options_view';
-import { svgIcon } from './ui_icons';
+import { svgIcon, type UiIconName } from './ui_icons';
 
 /**
  * OptionsWindow-supplied glue. The shell renders no settings rows itself; it
@@ -60,6 +60,10 @@ export interface MobileShellDeps {
   onResetAll(): void;
   /** Log out / return to the title screen (the grid's action tile). */
   onLogout(): void;
+  // Cryptic Realm launchers (mirror the desktop Overview quick actions).
+  onCustomization(): void;
+  onMods(): void;
+  onArcForge(): void;
   appendLandingAlerts(parent: HTMLElement): void;
   appendPins(parent: HTMLElement): void;
   appendStatus(parent: HTMLElement): void;
@@ -163,11 +167,12 @@ function categoryRow(
  *  separate button row that crowded the landing. */
 function actionTile(
   labelKey: TranslationKey,
-  iconName: 'swap' | 'prev',
+  iconName: UiIconName,
   onActivate: () => void,
+  danger = true,
 ): HTMLButtonElement {
   const label = t(labelKey);
-  const btn = el('button', 'opt-mshell-cat is-danger');
+  const btn = el('button', danger ? 'opt-mshell-cat is-danger' : 'opt-mshell-cat');
   btn.type = 'button';
   btn.setAttribute('aria-label', label);
   const icon = el('span', 'opt-mshell-cat-icon');
@@ -209,6 +214,11 @@ function fillLandingLower(lower: HTMLElement, deps: MobileShellDeps): void {
           const grid = el('div', 'opt-mshell-grid');
           const rows = mobileCategoryRows(deps.env(), deps.changedCount, deps.hasConflict);
           for (const row of rows) grid.appendChild(categoryRow(row, deps));
+          grid.appendChild(
+            actionTile('hud.options.customization', 'character', deps.onCustomization, false),
+          );
+          grid.appendChild(actionTile('hud.options.mods', 'more', deps.onMods, false));
+          grid.appendChild(actionTile('hud.options.arcforge', 'crown', deps.onArcForge, false));
           grid.appendChild(actionTile('hud.options.resetToDefaults', 'swap', deps.onResetAll));
           grid.appendChild(actionTile('hud.options.logout', 'prev', deps.onLogout));
           lower.appendChild(grid);
