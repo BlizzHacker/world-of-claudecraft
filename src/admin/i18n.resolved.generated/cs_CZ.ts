@@ -677,5 +677,10 @@ export const cs_CZ: AdminTranslations = {
   "auth.loadingSession": "Načítá se tvoje relace...",
   "auth.sessionLoadFailed": "Tvoji relaci se nepodařilo načíst. Zkontroluj připojení a zkus to znovu.",
   "auth.retry": "Zkusit znovu",
-  "auth.noAccess": "Tento účet nemá oprávnění k dashboardu. Požádej administrátora o přiřazení role."
+  "auth.noAccess": "Tento účet nemá oprávnění k dashboardu. Požádej administrátora o přiřazení role.",
+  "usage.metric.githubContributorsFetch": "GitHub contributor stats fetches",
+  "usage.metric.githubContributorsFetchFailure": "GitHub contributor stats fetch failures",
+  "usage.metric.githubLinkRequest": "GitHub link requests",
+  "usage.metric.githubLinkFailure": "GitHub link failures",
+  "usage.metric.githubLinkRateLimited": "GitHub link throttled requests"
 };

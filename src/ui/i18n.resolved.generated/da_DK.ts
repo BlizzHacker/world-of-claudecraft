@@ -43,7 +43,7 @@ export const da_DK: EnTranslations = {
       "subtitle": "Samlet XP",
       "rank": "Rang",
       "name": "Navn",
-      "realmCol": "Rige",
+      "realmCol": "Verden",
       "level": "Niv",
       "vlevel": "V.Niv",
       "lifetimeXp": "Samlet XP",
@@ -52,7 +52,7 @@ export const da_DK: EnTranslations = {
       "loading": "Indlæser placeringer…",
       "unranked": "Uplaceret",
       "you": "Dig",
-      "globalSubtitle": "Topmestre på tværs af alle riger",
+      "globalSubtitle": "Topmestre på tværs af alle verdener",
       "retry": "Resultattavlen kunne ikke indlæses. Prøv igen."
     },
     "milestone": {
@@ -163,9 +163,9 @@ export const da_DK: EnTranslations = {
       "inProgressError": "Et klar-tjek er allerede i gang."
     },
     "death": {
-      "resurrectAtCorpse": "Resurrect at Corpse",
-      "resurrectAtHealer": "The Pale Keeper (Keeper's Toll)",
-      "spiritHealerAlive": "The Pale Keeper watches over the dead. You are still among the living."
+      "resurrectAtCorpse": "Genopstå ved liget",
+      "resurrectAtHealer": "Den Blege Vogter (Vogterens Klokke)",
+      "spiritHealerAlive": "Den Blege Vogter våger over de døde. Du er stadig blandt de levende."
     },
     "emotes": {
       "wave": "Vink",
@@ -196,7 +196,7 @@ export const da_DK: EnTranslations = {
       "loading": "Indlæser daglige belønninger...",
       "error": "Kunne ikke indlæse daglige belønninger.",
       "intro": "Behold nok WOC i din verificerede wallet for at låse daglige belønninger op. Optjen point med én daglig drejning og skiftende opgaver, og klatr så op ad den daglige resultattavle for en andel af præmiepuljen.",
-      "disclaimer": "$CR price can move quickly. We recommend holding more than the $20 USD minimum so normal price swings do not lock you out. This is not financial advice.",
+      "disclaimer": "WOC-kursen kan bevæge sig hurtigt. Vi anbefaler at holde mere end minimummet på 20 USD, så normale kursudsving ikke lukker dig ude. Dette er ikke finansiel rådgivning.",
       "prize": "Præmiepulje",
       "reset": "Nulstil",
       "endsIn": "Slutter om {time}",
@@ -216,17 +216,17 @@ export const da_DK: EnTranslations = {
       "spinResult": "+{points} point",
       "spinButton": "Drej",
       "tasks": "Opgaver",
-      "taskMultiplier": "x{multiplier} multiplier",
-      "pointsGained": "{points} daily rewards points gained.",
+      "taskMultiplier": "x{multiplier} multiplikator",
+      "pointsGained": "{points} daglige belønningspoint optjent.",
       "showChestButton": "Vis kiste",
       "hideChestButton": "Skjul kiste",
-      "hideChestConfirmTitle": "Hide Daily Rewards Chest?",
-      "hideChestConfirmBody": "This removes the chest shortcut from your HUD. Rewards, eligibility, and this panel stay available; you can bring the shortcut back from Options.",
-      "hideChestConfirmOk": "Hide Chest",
-      "hideChestConfirmCancel": "Cancel",
+      "hideChestConfirmTitle": "Skjul kisten med daglige belønninger?",
+      "hideChestConfirmBody": "Dette fjerner kiste-genvejen fra dit HUD. Belønninger, adgang og dette panel forbliver tilgængelige; du kan hente genvejen tilbage fra indstillingerne.",
+      "hideChestConfirmOk": "Skjul kiste",
+      "hideChestConfirmCancel": "Annuller",
       "leaderboard": "Daglig resultattavle",
-      "totalPlayer": "{count} player today",
-      "totalPlayers": "{count} players today",
+      "totalPlayer": "{count} spiller i dag",
+      "totalPlayers": "{count} spillere i dag",
       "history": "Tidligere vindere",
       "noLeaders": "Ingen point endnu.",
       "noHistory": "Ingen udbetalinger endnu.",
@@ -300,11 +300,11 @@ export const da_DK: EnTranslations = {
       "targetLabel": "Dit mål",
       "targetAnnounce": "Markér {name}",
       "partyLabel": "Dit følge",
-      "partyChip": "Party",
+      "partyChip": "Gruppe",
       "partyGroup": "Gruppe {n}",
       "durationUnitSeconds": "s",
       "durationUnitMinutes": "m",
-      "durationUnitHours": "h",
+      "durationUnitHours": "t",
       "durationUnitDays": "d"
     },
     "character": {
@@ -317,23 +317,11 @@ export const da_DK: EnTranslations = {
     "mobile": {
       "jump": "Hop",
       "leaderboard": "Rangliste",
-      "dailyRewards": "Rewards",
+      "dailyRewards": "Belønninger",
       "nameplates": "Navne",
       "haptics": "Haptik",
       "hapticsOff": "Haptik fra",
       "toggleHaptics": "Slå haptik til/fra",
-<<<<<<< HEAD
-      "hotbarPage": "Skills",
-      "hotbarPageAria": "Show next set of skills",
-      "actionRing": "Combat actions",
-      "actionPageToggle": "Switch action page",
-      "actionPageIndicator": "{page}",
-      "targetCycle": "Swap target",
-      "targetCycleShort": "Target",
-      "spellbookPageLabel": "Page {page}",
-      "hideKeyboard": "Hide keyboard",
-      "chatPlaceholder": "Say something..."
-=======
       "showMenuButtons": "Vis menuknapper",
       "hideMenuButtons": "Skjul menuknapper",
       "hotbarPage": "Evner",
@@ -345,8 +333,8 @@ export const da_DK: EnTranslations = {
       "targetCycleShort": "Mål",
       "spellbookPageLabel": "Side {page}",
       "hideKeyboard": "Skjul tastatur",
-      "chatPlaceholder": "Sig noget..."
->>>>>>> v0.24.0
+      "chatPlaceholder": "Sig noget...",
+      "autorun": "Auto"
     },
     "tutorial": {
       "moveBodyTouch": "Brug bevægelsesstikken til at bevæge dig og træk på skærmen for at se dig omkring. Tag et par skridt for at begynde.",
@@ -363,8 +351,8 @@ export const da_DK: EnTranslations = {
     },
     "nativeUpdate": {
       "title": "Opdatering tilgængelig",
-      "body": "En ny version af Cryptic Realm er tilgængelig. Opdater nu for de nyeste rettelser og forbedringer.",
-      "bodyWithVersion": "Version {version} af Cryptic Realm er tilgængelig. Opdater nu for de nyeste rettelser og forbedringer.",
+      "body": "En ny version af World of ClaudeCraft er tilgængelig. Opdater nu for de nyeste rettelser og forbedringer.",
+      "bodyWithVersion": "Version {version} af World of ClaudeCraft er tilgængelig. Opdater nu for de nyeste rettelser og forbedringer.",
       "notNow": "Ikke nu",
       "update": "Opdater"
     },
@@ -396,8 +384,8 @@ export const da_DK: EnTranslations = {
       "minutes": "{m}m",
       "lessThanMinute": "<1m",
       "lockedToast": "Du er låst til {raid}. Låses op om {time}.",
-      "heroicName": "Heroic {name}",
-      "heroicLocked": "You are locked to Heroic {name}."
+      "heroicName": "Heroisk {name}",
+      "heroicLocked": "Du er låst til Heroisk {name}."
     },
     "compass": {
       "N": "N",
@@ -420,9 +408,6 @@ export const da_DK: EnTranslations = {
       "targetFriendly": "Sigt mod nærmeste allierede",
       "targetFriendlyNext": "Skift allieret mål",
       "discord": "Discord",
-<<<<<<< HEAD
-      "valecup": "Vale Cup"
-=======
       "valecup": "Dalpokalen",
       "categoryPet": "Kæledyr",
       "petAttack": "Kæledyr: Angrib",
@@ -430,142 +415,141 @@ export const da_DK: EnTranslations = {
       "petTaunt": "Kæledyr: Hån",
       "petDefensive": "Kæledyr: Defensiv",
       "petAggressive": "Kæledyr: Aggressiv"
->>>>>>> v0.24.0
     },
     "vcup": {
-      "title": "The Vale Cup",
-      "shootPower": "POWER",
-      "close": "Close the Vale Cup window",
-      "offlineNote": "The fixture book is closed. The Vale Cup is not available right now.",
-      "recordLine": "Your record: {wins} wins, {losses} losses, {draws} draws.",
-      "bracketsAria": "Match bracket",
-      "bracketLabel": "{n}v{n}",
-      "waitingCount": "{count} waiting",
-      "nationsHeading": "Banner nation",
+      "title": "Dalpokalen",
+      "shootPower": "KRAFT",
+      "close": "Luk Dalpokal-vinduet",
+      "offlineNote": "Kampbogen er lukket. Dalpokalen er ikke tilgængelig lige nu.",
+      "recordLine": "Din statistik: {wins} sejre, {losses} nederlag, {draws} uafgjorte.",
+      "bracketsAria": "Kamprække",
+      "bracketLabel": "{n} mod {n}",
+      "waitingCount": "{count} venter",
+      "nationsHeading": "Bannernation",
       "nation": {
-        "vale": "Eastbrook Vale",
-        "mirefen": "The Mirefen",
-        "thornpeak": "Thornpeak",
-        "coliseum": "The Ashen Coliseum",
-        "choir": "The Pale Choir",
-        "ogre": "The Ogre Clans",
-        "moon": "The Pale Moon",
-        "copperdig": "The Copper Dig"
+        "vale": "Østbæk Dal",
+        "mirefen": "Mosekæret",
+        "thornpeak": "Tornetop",
+        "coliseum": "Askekolosseet",
+        "choir": "Det Blege Kor",
+        "ogre": "Ogreklanerne",
+        "moon": "Den Blege Måne",
+        "copperdig": "Kobbergraven"
       },
-      "awayNote": "If both sides fly the same banner, the away side plays the inverted palette.",
-      "rolesHeading": "Sport role",
+      "awayNote": "Fører begge sider det samme banner, spiller udeholdet i den omvendte palet.",
+      "rolesHeading": "Sportsrolle",
       "role": {
         "allrounder": {
-          "name": "All-Rounder",
-          "desc": "A bit of everything: kick, boot, and a fair shoulder."
+          "name": "Allrounder",
+          "desc": "Lidt af det hele: spark, kæmpespark og et fair skulderpuf."
         },
         "striker": {
-          "name": "Striker",
-          "desc": "Lives for the long boot and the quick sidestep."
+          "name": "Angriber",
+          "desc": "Lever for det lange spark og det hurtige sidespring."
         },
         "sweeper": {
-          "name": "Sweeper",
-          "desc": "Bumps runners off the ball and hoofs it clear."
+          "name": "Libero",
+          "desc": "Puffer løbere væk fra bolden og rydder den langt op ad banen."
         },
         "keeper": {
-          "name": "Keeper",
-          "desc": "Guards the goal box with grip, dive, and punt."
+          "name": "Målmand",
+          "desc": "Vogter målfeltet med greb, dyk og udspark."
         }
       },
-      "queue": "Join the Queue",
-      "leaveQueue": "Leave the Queue",
-      "queueNote": "Queue from anywhere; the whistle calls you to the Sowfield.",
-      "queuedStatus": "Queued for {bracket}: position {position} of {count}.",
-      "blockNation": "Pick a banner nation first.",
-      "blockPartySize": "That bracket needs a smaller party.",
-      "blockNotLeader": "Only the party leader can queue the team.",
-      "inMatchNote": "Your team is on the pitch. Play on!",
-      "deserterNote": "The Groundskeeper remembers. You may queue again in {seconds} sec.",
-      "liveHeading": "Now at the Sowfield",
-      "liveAria": "Vale Cup: {nationA} {scoreA}, {nationB} {scoreB}",
-      "walkUp": "Walk up to the Sowfield to watch from the stands.",
-      "noLive": "The pitch is quiet. No match is being played.",
-      "boardHeading": "Winners board",
-      "boardEmpty": "No winners recorded yet. The Copper Pail waits.",
-      "boardWins": "{count} wins",
-      "enterAsGuild": "Enter under the banner of {guild}",
-      "guildRecordLine": "Your guild record: {wins} wins, {losses} losses.",
-      "guildBoardHeading": "Guild banners",
-      "guildBoardEmpty": "No guild has taken the field yet. Fly your banner!",
-      "guildBoardWl": "{wins} W, {losses} L",
-      "practice": "Practice vs. Bots",
-      "practiceNote": "Starts a private bot match on your own practice pitch right away.",
-      "practicingNow": "Practicing now ({count}):",
+      "queue": "Stil dig i kø",
+      "leaveQueue": "Forlad køen",
+      "queueNote": "Stil dig i kø hvor som helst; fløjten kalder dig til Somarken.",
+      "queuedStatus": "I kø til {bracket}: plads {position} af {count}.",
+      "blockNation": "Vælg en bannernation først.",
+      "blockPartySize": "Den række kræver en mindre gruppe.",
+      "blockNotLeader": "Kun gruppelederen kan sætte holdet i kø.",
+      "inMatchNote": "Dit hold er på banen. Spil videre!",
+      "deserterNote": "Banemesteren husker det. Du kan stille dig i kø igen om {seconds} sek.",
+      "liveHeading": "Lige nu på Somarken",
+      "liveAria": "Dalpokalen: {nationA} {scoreA}, {nationB} {scoreB}",
+      "walkUp": "Gå hen til Somarken for at se med fra tribunerne.",
+      "noLive": "Banen er stille. Der spilles ingen kamp.",
+      "boardHeading": "Vindertavlen",
+      "boardEmpty": "Ingen vindere noteret endnu. Kobberspanden venter.",
+      "boardWins": "{count} sejre",
+      "enterAsGuild": "Stil op under {guild}s banner",
+      "guildRecordLine": "Dit laugs statistik: {wins} sejre, {losses} nederlag.",
+      "guildBoardHeading": "Laugsbannere",
+      "guildBoardEmpty": "Intet laug har endnu været på banen. Hejs jeres banner!",
+      "guildBoardWl": "{wins} S, {losses} N",
+      "practice": "Træning mod bots",
+      "practiceNote": "Starter straks en privat botkamp på din egen træningsbane.",
+      "practicingNow": "Træner lige nu ({count}):",
       "clock": "{minutes}:{seconds}",
-      "indicatorQueued": "Vale Cup queue: {bracket}, position {position} of {count}",
-      "indicatorLive": "Vale Cup",
-      "indicatorOpen": "Open the Vale Cup window",
-      "phaseCountdown": "Kickoff in {seconds}",
-      "phaseGoal": "GOAL!",
-      "phaseGolden": "GOLDEN GOAL",
-      "phaseOver": "FULL TIME",
-      "bannerFound": "The Vale Cup calls: {nationA} vs {nationB}!",
-      "bannerCountdown": "Kickoff in {seconds}...",
-      "bannerKickoff": "KICKOFF!",
-      "bannerGoal": "GOAL! {nation} scores!",
-      "bannerSave": "{name} SAVES!",
-      "bannerGolden": "GOLDEN GOAL: next score wins!",
-      "bannerEnd": "Full time: {nationA} {scoreA}, {nationB} {scoreB}",
-      "bannerWin": "Victory at the Sowfield!",
-      "bannerDraw": "A draw at the Sowfield.",
-      "bannerLoss": "Defeat at the Sowfield.",
-      "logQueued": "You join the Vale Cup queue for {bracket} (position {position}).",
-      "logUnqueued": "You leave the Vale Cup queue.",
-      "logFound": "Your Vale Cup match is ready: {nationA} vs {nationB}.",
-      "logRoster": "Your side: {allies}. Their side: {enemies}.",
-      "logGoal": "{name} scores for {nation}! {nationA} {scoreA}, {nationB} {scoreB}.",
-      "logSave": "{name} makes the save!",
-      "logWin": "You win the bout at the Sowfield.",
-      "logDraw": "The bout at the Sowfield ends in a draw.",
-      "logLoss": "You lose the bout at the Sowfield.",
-      "gossipOpen": "The book of fixtures",
-      "gossipOpenAria": "Open the Vale Cup window",
-      "mobileLabel": "Cup",
+      "indicatorQueued": "Dalpokal-kø: {bracket}, plads {position} af {count}",
+      "indicatorLive": "Dalpokalen",
+      "indicatorOpen": "Åbn Dalpokal-vinduet",
+      "phaseCountdown": "Kampstart om {seconds}",
+      "phaseGoal": "MÅL!",
+      "phaseGolden": "GYLDENT MÅL",
+      "phaseOver": "FULD TID",
+      "bannerFound": "Dalpokalen kalder: {nationA} mod {nationB}!",
+      "bannerCountdown": "Kampstart om {seconds}...",
+      "bannerKickoff": "KAMPSTART!",
+      "bannerGoal": "MÅL! {nation} scorer!",
+      "bannerSave": "{name} REDDER!",
+      "bannerGolden": "GYLDENT MÅL: næste scoring vinder!",
+      "bannerEnd": "Fuld tid: {nationA} {scoreA}, {nationB} {scoreB}",
+      "bannerWin": "Sejr på Somarken!",
+      "bannerDraw": "Uafgjort på Somarken.",
+      "bannerLoss": "Nederlag på Somarken.",
+      "logQueued": "Du stiller dig i Dalpokal-køen til {bracket} (plads {position}).",
+      "logUnqueued": "Du forlader Dalpokal-køen.",
+      "logFound": "Din Dalpokal-kamp er klar: {nationA} mod {nationB}.",
+      "logRoster": "Din side: {allies}. Deres side: {enemies}.",
+      "logGoal": "{name} scorer for {nation}! {nationA} {scoreA}, {nationB} {scoreB}.",
+      "logSave": "{name} redder!",
+      "logWin": "Du vinder dysten på Somarken.",
+      "logDraw": "Dysten på Somarken ender uafgjort.",
+      "logLoss": "Du taber dysten på Somarken.",
+      "gossipOpen": "Kampbogen",
+      "gossipOpenAria": "Åbn Dalpokal-vinduet",
+      "mobileLabel": "Pokal",
       "briefing": {
-        "subtitle": "Pre-match briefing",
-        "vs": "vs",
-        "rulesHeading": "How to play",
-        "rule1": "Kick or pass the ball into the enemy goal to score.",
-        "rule2": "First to 5 goals wins, or the most goals when full time blows.",
-        "rule3": "A level match at full time goes to golden goal: the next score wins.",
-        "rule4": "Tackles only tumble you over. Nobody gets hurt under the harvest truce.",
-        "rule5": "Anyone can walk up and cheer you on from the stands.",
-        "kitHeading": "Your kit",
-        "kitNote": "These moves replace your class abilities for the match.",
-        "rosterHeading": "The team sheet",
-        "you": "You",
+        "subtitle": "Briefing før kampen",
+        "vs": "mod",
+        "rulesHeading": "Sådan spiller du",
+        "rule1": "Spark eller aflever bolden i modstandernes mål for at score.",
+        "rule2": "Først til 5 mål vinder, eller flest mål når der fløjtes af.",
+        "rule3": "Står det lige ved fuld tid, går kampen til gyldent mål: næste scoring vinder.",
+        "rule4": "Tacklinger vælter dig kun omkuld. Ingen kommer til skade under høstfreden.",
+        "rule5": "Enhver kan gå hen og heppe på dig fra tribunerne.",
+        "kitHeading": "Dit sæt",
+        "kitNote": "Disse træk erstatter dine klasseevner under kampen.",
+        "rosterHeading": "Holdkortet",
+        "you": "Dig",
         "bot": "Bot",
-        "ready": "I'm ready",
-        "readyDone": "Ready",
-        "readyAria": "Ready up for kickoff",
-        "waiting": "Waiting for the other side to ready up...",
-        "whistle": "The whistle blows in {seconds}s.",
-        "readyCount": "{ready} of {total} ready"
+        "ready": "Jeg er klar",
+        "readyDone": "Klar",
+        "readyAria": "Meld dig klar til kampstart",
+        "waiting": "Venter på, at den anden side melder klar...",
+        "whistle": "Fløjten lyder om {seconds}s.",
+        "readyCount": "{ready} af {total} klar"
       },
       "bet": {
-        "title": "Match Bets",
-        "aria": "Vale Cup match betting",
-        "closesIn": "Bets close in {seconds}s",
-        "closed": "Betting closed",
-        "prize": "Pool {amount}",
-        "splitAria": "Share of the betting pool on each team",
-        "expand": "View bets and wager",
-        "collapse": "Hide bets",
-        "oddsLabel": "Pays",
-        "back": "Back {team}",
-        "form": "{wins}W-{losses}L",
-        "mine": "Your bet: {amount} on {team}",
-        "none": "You have no bet on this match yet.",
-        "record": "Betting record: {wins}W-{losses}L, {sign}{net}",
-        "wonBanner": "Your bet won!",
-        "wonLog": "Your Vale Cup bet won: {amount} returned.",
-        "lostLog": "Your Vale Cup bet lost: {amount}.",
-        "refundLog": "Bets voided, your {amount} stake was returned."
+        "title": "Kampvæddemål",
+        "aria": "Væddemål på Dalpokal-kamp",
+        "closesIn": "Væddemål lukker om {seconds}s",
+        "closed": "Væddemål lukket",
+        "prize": "Pulje {amount}",
+        "splitAria": "Andel af væddepuljen på hvert hold",
+        "expand": "Se væddemål og sats",
+        "collapse": "Skjul væddemål",
+        "oddsLabel": "Udbetaler",
+        "back": "Hold på {team}",
+        "form": "{wins}S-{losses}N",
+        "mine": "Dit væddemål: {amount} på {team}",
+        "none": "Du har endnu ikke væddet på denne kamp.",
+        "record": "Væddestatistik: {wins}S-{losses}N, {sign}{net}",
+        "wonBanner": "Dit væddemål vandt!",
+        "wonLog": "Dit Dalpokal-væddemål vandt: {amount} retur.",
+        "lostLog": "Dit Dalpokal-væddemål tabte: {amount}.",
+        "refundLog": "Væddemål annulleret, din indsats på {amount} blev returneret."
       }
     },
     "options": {
@@ -590,24 +574,19 @@ export const da_DK: EnTranslations = {
       "showWalletOnCharacterScreen": "Vis pengepung på karakterskærm",
       "showWalletOnPlayerCard": "Vis pengepung på spillerkort",
       "showDevBadges": "Vis udviklermærker",
-      "showOwnNameplate": "Show My Nameplate",
+      "showOwnNameplate": "Vis mit navneskilt",
       "uiScale": "UI-skala",
-      "playerFrameScale": "Player Frame Scale",
-      "targetFrameScale": "Target Frame Scale",
-      "aurasOnPlayerFrame": "Buffs on the Player Frame",
+      "playerFrameScale": "Spillerrammens skala",
+      "targetFrameScale": "Målrammens skala",
+      "aurasOnPlayerFrame": "Buffs på spillerrammen",
       "highContrastBackground": "Baggrund med høj kontrast",
       "startAttackOnAbility": "Autoangreb ved brug af evne",
-      "walkByAutoloot": "Walk-by Autoloot",
+      "walkByAutoloot": "Auto-plyndring i forbifarten",
       "groundReticle": "Jordsigte-retikel",
       "showItemLevel": "Vis genstandsniveau",
       "itemLevelLine": "Genstandsniveau {level}",
       "itemScoreLine": "Score {score}",
       "showSecondaryActionBar": "Vis sekundær handlingslinje",
-<<<<<<< HEAD
-      "showDailyRewardsChest": "Show Daily Rewards Chest",
-      "mobileCameraJoystick": "Camera joystick",
-      "mobileLeftHanded": "Left-handed layout"
-=======
       "showDailyRewardsChest": "Vis kisten med daglige belønninger",
       "mobileCameraJoystick": "Kamera joystick",
       "mobileLeftHanded": "Venstrehånds layout",
@@ -688,7 +667,6 @@ export const da_DK: EnTranslations = {
         "support": "Hjælp",
         "about": "Information"
       }
->>>>>>> v0.24.0
     },
     "controller": {
       "title": "Controller",
@@ -740,9 +718,9 @@ export const da_DK: EnTranslations = {
         "fps01Low": "0,1% lav",
         "ping": "Ping",
         "jitter": "Jitter",
-        "predLead": "Prediction Lead",
+        "predLead": "Forudsigelsesforspring",
         "snapshot": "Snapshothastighed",
-        "serverTick": "Server Tick Rate",
+        "serverTick": "Servertickhastighed",
         "connection": "Forbindelse",
         "drawCalls": "Tegnekald",
         "triangles": "Trekanter",
@@ -786,8 +764,8 @@ export const da_DK: EnTranslations = {
       "fromYour": "Fra din {value} {stat}:",
       "names": {
         "spellPower": "Besværgelseskraft",
-        "critRating": "Crit Rating",
-        "hasteRating": "Haste Rating"
+        "critRating": "Kritvurdering",
+        "hasteRating": "Hastevurdering"
       },
       "desc": {
         "str": "Øger din angrebsstyrke, så dine våbenslag rammer hårdere.",
@@ -801,8 +779,8 @@ export const da_DK: EnTranslations = {
         "dps": "Din anslåede våbenskade pr. sekund, der kombinerer dit våbens skade og hastighed med din angrebsstyrke.",
         "critChance": "Din chance for at et angreb rammer kritisk og gør dobbelt skade.",
         "dodge": "Din chance for helt at undgå et indkommende nærkampsangreb og tage ingen skade.",
-        "critRating": "Crit rating from your gear and set bonuses, raising your critical strike chance. About 10 rating grants 1% crit.",
-        "hasteRating": "Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. About 10 rating grants 1% haste."
+        "critRating": "Kritvurdering fra dit udstyr og sætbonusser, der hæver din chance for kritisk slag. Cirka 10 vurdering giver 1% krit.",
+        "hasteRating": "Hastevurdering fra dit udstyr og sætbonusser, der fremskynder dine angreb og besværgelser. Cirka 10 vurdering giver 1% hast."
       },
       "effects": {
         "attackPower": "+{value} Angrebsstyrke",
@@ -841,7 +819,7 @@ export const da_DK: EnTranslations = {
       "tierLevelLabel": "Niveau"
     },
     "tips": {
-      "joinChannels": "Tip: skriv /join world eller /join lfg for at chatte med spillere på tværs af realmet."
+      "joinChannels": "Tip: skriv /join world eller /join lfg for at chatte med spillere på tværs af verdenen."
     },
     "itemHeroicTag": "[HEROISK]",
     "itemSoulbound": "Sjælebundet",
@@ -850,13 +828,13 @@ export const da_DK: EnTranslations = {
       "bonusLine": "({pieces}) {bonus}"
     },
     "itemProc": {
-      "onMeleeHit": "Chance on hit ({chance}%): {effect}",
-      "onSpellDamage": "Chance on your damaging spells ({chance}%): {effect}",
-      "onHeal": "Chance on your heals ({chance}%): {effect}",
-      "chainArc": "blasts the target with a {school} {name} ({damage}) that leaps to {jumps} nearby foes for decaying damage",
-      "attackSlow": "and slows the target attack speed by {pct}% for {duration} sec",
-      "dot": "festers {name}, a {school} damage-over-time dealing {total} over {duration} sec",
-      "hot": "blooms {name}, a heal-over-time restoring {total} over {duration} sec"
+      "onMeleeHit": "Chance ved træffer ({chance}%): {effect}",
+      "onSpellDamage": "Chance ved dine skadevoldende besværgelser ({chance}%): {effect}",
+      "onHeal": "Chance ved dine helbredelser ({chance}%): {effect}",
+      "chainArc": "rammer målet med en {school} {name} ({damage}), der springer til {jumps} nærliggende fjender for aftagende skade",
+      "attackSlow": "og sænker målets angrebshastighed med {pct}% i {duration} sek.",
+      "dot": "fremkalder {name}, en {school} skade-over-tid der volder {total} over {duration} sek.",
+      "hot": "udløser {name}, en helbredelse-over-tid der genopretter {total} over {duration} sek."
     },
     "questShare": {
       "notShareable": "Denne opgave kan ikke deles.",
@@ -907,7 +885,7 @@ export const da_DK: EnTranslations = {
     },
     "bugReport": {
       "menuButton": "Rapportér en fejl",
-      "realm": "Rige",
+      "realm": "Verden",
       "character": "Figur",
       "position": "Position",
       "unknown": "Ukendt",
@@ -932,7 +910,7 @@ export const da_DK: EnTranslations = {
       "loggedOutPrompt": "Log ind for at administrere din konto.",
       "memberSince": "Medlem siden {date}",
       "sectionSettings": "Kontoindstillinger",
-      "sectionWallet": "$CR Wallet",
+      "sectionWallet": "$WOC Wallet",
       "sectionCharacters": "Figurer",
       "sectionDanger": "Farezone",
       "changePassword": "Skift adgangskode",
@@ -961,14 +939,6 @@ export const da_DK: EnTranslations = {
       "goToCharacters": "Vis figurer",
       "walletSummary": "Bekræft en Solana-wallet for at vise holder-flair på dit spillerkort.",
       "manageWallet": "Administrér wallet",
-      "sectionConnections": "Forbundne konti",
-      "connectionsSummary": "Administrer loginudbydere forbundet med denne konto.",
-      "ssoNotLinked": "Discord ikke forbundet.",
-      "ssoLinked": "Discord forbundet.",
-      "ssoLink": "Forbind Discord",
-      "ssoUnlink": "Afbryd Discord",
-      "ssoLinkConflict": "Den Discord-konto er allerede forbundet med en anden konto.",
-      "ssoUnlinkNeedsPassword": "Angiv en adgangskode for du afbryder Discord.",
       "deactivate": "Deaktivér konto",
       "deactivateWarning": "Deaktivering låser din konto og logger dig ud overalt. Kontakt en administrator for at gendanne den. Bekræft ved at indtaste dit brugernavn og din adgangskode igen.",
       "confirmUsername": "Indtast dit brugernavn for at bekræfte",
@@ -1009,7 +979,15 @@ export const da_DK: EnTranslations = {
       "exportHint": "Download en kopi af din konto og dine figurer som en JSON-fil. Vi sender dig også en bekræftelse på e-mail.",
       "exportBtn": "Download mine data",
       "exportDone": "Dine data blev downloadet. Vi har sendt dig en bekræftelse på e-mail.",
-      "exportFailed": "Kunne ikke eksportere dine data. Prøv igen om et øjeblik."
+      "exportFailed": "Kunne ikke eksportere dine data. Prøv igen om et øjeblik.",
+      "sectionConnections": "Connected Accounts",
+      "connectionsSummary": "Link Google, Facebook, or Plex so you can sign in with them.",
+      "ssoNotLinked": "Not linked.",
+      "ssoLinked": "Linked — you can sign in with Google, Facebook, or Plex.",
+      "ssoLink": "Link Google / Facebook / Plex",
+      "ssoUnlink": "Unlink",
+      "ssoLinkConflict": "That account is already linked to a different Cryptic Realm login.",
+      "ssoUnlinkNeedsPassword": "Set a password first — SSO is currently your only way to sign in."
     },
     "masterLoot": {
       "title": "Master loot",
@@ -1037,34 +1015,34 @@ export const da_DK: EnTranslations = {
       "summaryGroup": "Bytteindstillinger: Gruppebytte."
     },
     "corpseHarvest": {
-      "title": "Harvest",
-      "harvestButton": "Harvest",
-      "concentrateHint": "Fewer chosen components yield a higher tier each.",
-      "alreadyHarvested": "This corpse has already been harvested.",
-      "componentAria": "Harvest {component}",
+      "title": "Høst",
+      "harvestButton": "Høst",
+      "concentrateHint": "Jo færre dele du vælger, desto højere kvalitetsgrad får hver enkelt.",
+      "alreadyHarvested": "Dette kadaver er allerede blevet høstet.",
+      "componentAria": "Høst {component}",
       "components": {
-        "hide": "Hide",
-        "fang": "Fang",
-        "silk": "Silk",
-        "venomSac": "Venom Sac",
-        "gills": "Gills",
-        "claw": "Claw",
+        "hide": "Skind",
+        "fang": "Hugtand",
+        "silk": "Silke",
+        "venomSac": "Giftsæk",
+        "gills": "Gæller",
+        "claw": "Klo",
         "horn": "Horn",
-        "tusk": "Tusk"
+        "tusk": "Stødtand"
       }
     },
     "townFocus": {
-      "title": "Town Focus",
-      "hint": "Focus points add a bonus on top of every component's baseline yield. Unfocused components stay at baseline.",
-      "budgetLabel": "Points remaining: {remaining} / {budget}",
-      "saveButton": "Save Focus",
-      "notInTownHint": "You must be in town to set your focus.",
-      "increaseAria": "Increase focus on {component}",
-      "decreaseAria": "Decrease focus on {component}"
+      "title": "Byfokus",
+      "hint": "Fokuspoint lægger en bonus oven på hver komponents grundudbytte. Ufokuserede komponenter bliver på grundniveauet.",
+      "budgetLabel": "Point tilbage: {remaining} / {budget}",
+      "saveButton": "Gem fokus",
+      "notInTownHint": "Du skal være i byen for at sætte dit fokus.",
+      "increaseAria": "Øg fokus på {component}",
+      "decreaseAria": "Sænk fokus på {component}"
     },
     "party": {
       "promoteLeader": "Forfrem til leder",
-      "inviteUsage": "Invite whom? Usage: /invite <name>."
+      "inviteUsage": "Invitér hvem? Brug: /invite <navn>."
     },
     "lootSettings": {
       "title": "Bytteindstillinger",
@@ -1078,12 +1056,12 @@ export const da_DK: EnTranslations = {
       "masterOption": "Bytteleder: {name}"
     },
     "dungeonDifficulty": {
-      "setHeroic": "Set Dungeon Difficulty: Heroic",
-      "setNormal": "Set Dungeon Difficulty: Normal"
+      "setHeroic": "Indstil fangekældersværhedsgrad: Heroisk",
+      "setNormal": "Indstil fangekældersværhedsgrad: Normal"
     },
     "bags": {
-      "cannotDestroy": "This item cannot be destroyed.",
-      "rightClickDestroy": "Right-click to destroy",
+      "cannotDestroy": "Denne genstand kan ikke ødelægges.",
+      "rightClickDestroy": "Højreklik for at ødelægge",
       "filterGroupAria": "Filtrér tasker efter kategori",
       "filterAll": "Alle",
       "filterWeapon": "Våben",
@@ -1099,11 +1077,11 @@ export const da_DK: EnTranslations = {
       "searchAria": "Søg i taskegenstande efter navn",
       "noMatch": "Ingen genstande matcher dine filtre.",
       "capacity": "{used}/{total}",
-      "capacityAria": "Bag slots used: {used} of {total}",
-      "backpack": "Backpack",
+      "capacityAria": "Taskepladser brugt: {used} af {total}",
+      "backpack": "Rygsæk",
       "bagSocketAria": "{name}: {slots}",
-      "socketEmpty": "Empty bag slot",
-      "unequipHint": "Click to remove this bag"
+      "socketEmpty": "Tom taskeplads",
+      "unequipHint": "Klik for at fjerne denne taske"
     },
     "raidConvert": {
       "toPartyDone": "Dit raid er konverteret tilbage til en gruppe.",
@@ -1146,20 +1124,20 @@ export const da_DK: EnTranslations = {
         "spi": "Verringert Willenskraft um {value}",
         "allStats": "Verringert alle Attribute um {value}"
       },
-      "allStatsPctReduce": "Reduces all attributes by {pct}%",
+      "allStatsPctReduce": "Reducerer alle attributter med {pct}%",
       "increasePct": {
-        "ap": "Increases attack power by {pct}%",
-        "armor": "Increases armor by {pct}%",
-        "int": "Increases Intellect by {pct}%",
-        "sta": "Increases Stamina by {pct}%",
-        "allStats": "Increases all attributes by {pct}%"
+        "ap": "Øger angrebskraft med {pct}%",
+        "armor": "Øger rustning med {pct}%",
+        "int": "Øger Intellekt med {pct}%",
+        "sta": "Øger Udholdenhed med {pct}%",
+        "allStats": "Øger alle attributter med {pct}%"
       },
       "dodge": "Erhöht Ausweichchance um {pct}%",
       "dodgeReduce": "Verringert Ausweichchance um {pct}%",
       "armorFlat": "Verringert Rüstung um {value}",
       "armorFlatStacks": "Verringert Rüstung um {value} ({stacks} Stapel)",
-      "armorPct": "Reduces armor by {pct}%",
-      "armorPctStacks": "Reduces armor by {pct}% ({stacks} stacks)",
+      "armorPct": "Reducerer rustning med {pct}%",
+      "armorPctStacks": "Reducerer rustning med {pct}% ({stacks} stakke)",
       "mortalWound": "Verringert erhaltene Heilung um {pct}%",
       "vulnerability": "Erhöht erlittenen Schaden um {pct}%",
       "physVuln": "Erhöht erlittenen physischen Schaden um {pct}%",
@@ -1169,20 +1147,20 @@ export const da_DK: EnTranslations = {
       "stun": "Betäubt: handlungsunfähig",
       "root": "Festgewurzelt: bewegungsunfähig",
       "incapacitate": "Handlungsunfähig: kann nicht handeln",
-      "polymorph": "Verwandelt: handlungsunfähig",
+      "polymorph": "Forvandlet: ude af stand til at handle",
       "hex": "Verringert verursachten Schaden und Heilung um {pct}%",
       "blind": "Geblendet: handlungsunfähig",
       "silence": "Zum Schweigen gebracht: kann keine Zauber wirken",
       "disarm": "Entwaffnet: kann keine Waffenangriffe nutzen",
       "lockout": "Zauberschule gesperrt",
       "imbue": "Waffe mit Bonuseffekten erfüllt",
-      "imbueRange": "Waffe erfüllt: {min} bis {max} Bonusschaden bei Richturteil",
+      "imbueRange": "Våben gennemsyret: {min} til {max} bonusskade ved Dom",
       "stealth": "Verborgen; Bewegungstempo um {pct}% verringert",
-      "formBear": "Bärengestalt: Gesundheit und Rüstung erhöht",
+      "formBear": "Bruin-form: øget helbred og rustning",
       "formCat": "Katzengestalt: Nahkampfschaden und Energie",
-      "formTravel": "Reisegestalt: Bewegungstempo um {pct}% erhöht",
-      "defensiveStance": "Verteidigungshaltung: weniger erlittener Schaden, mehr Bedrohung",
-      "righteousFury": "Rechtschaffener Zorn: stark erhöhte Bedrohung durch Heiligschaden",
+      "formTravel": "Fleet-form: bevægelseshastighed øget med {pct}%",
+      "defensiveStance": "Værgende Stilling: mindre modtaget skade, mere trussel",
+      "righteousFury": "Brændende Ed: stærkt øget trussel fra Hellig skade",
       "scale": "Größe um {pct}% erhöht",
       "jump": "Sprunghöhe um {pct}% erhöht",
       "school": {
@@ -1196,7 +1174,7 @@ export const da_DK: EnTranslations = {
       }
     },
     "worldBoss": {
-      "spawn": "{name} rises over Thornpeak Heights!"
+      "spawn": "{name} rejser sig over Tornetop Højder!"
     },
     "auth": {
       "appleLoginCta": "Fortsæt med Apple",
@@ -1230,28 +1208,28 @@ export const da_DK: EnTranslations = {
       "mobElite": "[{level}+] {name}"
     },
     "mobTooltip": {
-      "levelFamily": "Level {level} {family}",
-      "familyDemon": "Demon",
-      "hostile": "Hostile",
-      "friendly": "Friendly"
+      "levelFamily": "Niveau {level} {family}",
+      "familyDemon": "Dæmon",
+      "hostile": "Fjendtlig",
+      "friendly": "Venlig"
     },
     "targetFrame": {
-      "unlock": "Move target frame",
-      "lock": "Lock target frame"
+      "unlock": "Flyt målrammen",
+      "lock": "Lås målrammen"
     },
     "playerFrame": {
-      "unlock": "Move player frame",
-      "lock": "Lock player frame"
+      "unlock": "Flyt spillerrammen",
+      "lock": "Lås spillerrammen"
     },
     "frameReset": {
-      "label": "Reset Frame Positions"
+      "label": "Nulstil rammepositioner"
     },
     "itemTooltip": {
       "requiresLevel": "Kræver niveau {level}"
     },
     "discord": {
       "title": "Discord",
-      "panelTitle": "Cryptic Realm",
+      "panelTitle": "World of ClaudeCraft",
       "open": "Discord",
       "close": "Luk",
       "keybind": "Discord-panel",
@@ -1328,7 +1306,7 @@ export const da_DK: EnTranslations = {
       "roleTag": {
         "levyst": "Levy St",
         "admin": "Admin",
-        "coredevs": "Core Dev",
+        "coredevs": "Kerneudvikler",
         "devs": "Udvikler",
         "mods": "Moderator",
         "artists": "Kunstner"
@@ -1423,40 +1401,12 @@ export const da_DK: EnTranslations = {
       "unlink": "Fjern GitHub-tilknytning"
     },
     "mailbox": {
-      "title": "Mailbox",
-      "subtitle": "The Ravenpost",
-      "close": "Close mailbox",
-      "tabInbox": "Inbox",
-      "tabInboxWithCount": "Inbox ({count})",
+      "title": "Postkasse",
+      "subtitle": "Ravneposten",
+      "close": "Luk postkassen",
+      "tabInbox": "Indbakke",
+      "tabInboxWithCount": "Indbakke ({count})",
       "tabSend": "Send",
-<<<<<<< HEAD
-      "empty": "Your mailbox is empty.",
-      "truncated": "Showing the newest {shown} of {total} letters.",
-      "attachmentsBadge": "Parcel attached",
-      "unreadBadge": "Unread",
-      "back": "Back",
-      "take": "Take attachments",
-      "delete": "Delete letter",
-      "deleteAria": "Delete the letter {subject}",
-      "openAria": "Read the letter {subject} from {name}",
-      "noSubject": "(no subject)",
-      "toLabel": "To",
-      "toPlaceholder": "Character name",
-      "subjectLabel": "Subject",
-      "bodyLabel": "Message",
-      "coinLabel": "Attach coin",
-      "parcelsLabel": "Parcels",
-      "parcelsHint": "Click an item in your bags to attach it.",
-      "removeParcelAria": "Remove {item} from the letter",
-      "sendButton": "Send letter",
-      "postageNote": "Postage: {amount}. The raven flies for about {seconds}s.",
-      "arrivedBanner": "The raven has landed: mail from {name}.",
-      "arrivedLog": "You have new mail from {name}.",
-      "indicatorAria": "Unread mail: {count}",
-      "indicatorTip": "You have {count} unread letters. Visit a mailbox to read them.",
-      "clickAttach": "Click to attach to your letter.",
-      "cannotMail": "This cannot be mailed.",
-=======
       "empty": "Din postkasse er tom.",
       "truncated": "Viser de nyeste {shown} af {total} breve.",
       "attachmentsBadge": "Pakke vedhæftet",
@@ -1485,257 +1435,256 @@ export const da_DK: EnTranslations = {
       "indicatorTip": "Du har {count} ulæste breve. Besøg en postkasse for at læse dem.",
       "clickAttach": "Klik for at vedhæfte til dit brev.",
       "cannotMail": "Dette kan ikke sendes med posten.",
->>>>>>> v0.24.0
       "result": {
-        "sent": "A raven takes wing with your letter to {name} ({postage} postage).",
-        "collected": "You collect {amount} from the letter.",
-        "tooFar": "You must be at a mailbox to tend your post.",
-        "needRecipient": "Name a recipient for your letter.",
-        "noRecipient": "No one by that name holds a mailbox here.",
-        "tooManyParcels": "A letter carries at most {count} parcels.",
-        "noMailQuestItems": "You cannot mail quest items.",
-        "notEnoughItems": "You do not have that many to send.",
-        "cantAffordPostage": "You cannot afford the postage.",
-        "recipientBoxFull": "Their mailbox is full.",
-        "letterGone": "That letter is no longer in your box.",
-        "takeParcelsFirst": "Take the parcels out before discarding the letter."
+        "sent": "En ravn letter med dit brev til {name} ({postage} i porto).",
+        "collected": "Du henter {amount} fra brevet.",
+        "tooFar": "Du skal stå ved en postkasse for at ordne din post.",
+        "needRecipient": "Angiv en modtager til dit brev.",
+        "noRecipient": "Ingen med det navn har en postkasse her.",
+        "tooManyParcels": "Et brev kan højst rumme {count} pakker.",
+        "noMailQuestItems": "Du kan ikke sende opgavegenstande med posten.",
+        "notEnoughItems": "Du har ikke så mange at sende.",
+        "cantAffordPostage": "Du har ikke råd til portoen.",
+        "recipientBoxFull": "Modtagerens postkasse er fuld.",
+        "letterGone": "Det brev er ikke længere i din postkasse.",
+        "takeParcelsFirst": "Tag pakkerne ud, før du kasserer brevet."
       }
     },
     "bank": {
       "title": "Bank",
-      "subtitle": "The Gilded Strongbox",
-      "close": "Close bank",
+      "subtitle": "Det Forgyldte Pengeskrin",
+      "close": "Luk banken",
       "capacity": "{used}/{total}",
-      "capacityAria": "Bank slots used: {used} of {total}",
-      "empty": "Your bank is empty.",
-      "tooFar": "You must be at a banker to view your bank.",
-      "buySlots": "Buy {count} slots",
-      "buySlotsMaxed": "Fully expanded",
-      "buyConfirm": "Purchase {count} additional bank slots for {price}?",
-      "buyConfirmAccept": "Purchase",
-      "withdrawHint": "Click to withdraw",
-      "withdrawPartialHint": "Shift-click to withdraw a partial amount",
-      "depositHint": "Click to deposit",
-      "depositPartialHint": "Shift-click to deposit a partial amount",
-      "cannotDeposit": "Cannot be banked",
-      "depositQuantityTitle": "Deposit {item}",
-      "depositQuantityInput": "Quantity to deposit",
-      "depositQuantityConfirm": "Deposit",
-      "withdrawQuantityTitle": "Withdraw {item}",
-      "withdrawQuantityInput": "Quantity to withdraw",
-      "withdrawQuantityConfirm": "Withdraw",
-      "filterGroupAria": "Filter bank by category",
-      "sortAria": "Sort bank items",
-      "searchAria": "Search bank items by name",
-      "depositAll": "Deposit all materials",
-      "depositAllDone": "Materials deposited: {count}.",
-      "depositAllFull": "Materials deposited: {count}. Bank now full.",
-      "depositAllNone": "Bank full: nothing deposited.",
-      "bonusTitle": "Bonus slots",
+      "capacityAria": "Brugte bankpladser: {used} af {total}",
+      "empty": "Din bank er tom.",
+      "tooFar": "Du skal stå hos en skatmester for at se din bank.",
+      "buySlots": "Køb {count} pladser",
+      "buySlotsMaxed": "Fuldt udvidet",
+      "buyConfirm": "Køb {count} ekstra bankpladser for {price}?",
+      "buyConfirmAccept": "Køb",
+      "withdrawHint": "Klik for at tage ud",
+      "withdrawPartialHint": "Shift-klik for at tage et mindre antal ud",
+      "depositHint": "Klik for at indsætte",
+      "depositPartialHint": "Shift-klik for at indsætte et mindre antal",
+      "cannotDeposit": "Kan ikke lægges i banken",
+      "depositQuantityTitle": "Indsæt {item}",
+      "depositQuantityInput": "Antal at indsætte",
+      "depositQuantityConfirm": "Indsæt",
+      "withdrawQuantityTitle": "Tag {item} ud",
+      "withdrawQuantityInput": "Antal at tage ud",
+      "withdrawQuantityConfirm": "Tag ud",
+      "filterGroupAria": "Filtrér banken efter kategori",
+      "sortAria": "Sortér bankens genstande",
+      "searchAria": "Søg i bankens genstande efter navn",
+      "depositAll": "Indsæt alle materialer",
+      "depositAllDone": "Materialer indsat: {count}.",
+      "depositAllFull": "Materialer indsat: {count}. Banken er nu fuld.",
+      "depositAllNone": "Banken er fuld: intet indsat.",
+      "bonusTitle": "Bonuspladser",
       "bonusEarned": "+{count}",
       "bonusStatusEarned": "+{count}",
-      "bonusSourceEmail": "Verified email",
-      "bonusSourceDiscord": "Discord linked",
-      "bonusSourceWallet": "Wallet linked",
-      "bonusSourceReferral": "Referred friends",
-      "bonusAdvertEmail": "Verify your email to earn 2 slots.",
-      "bonusAdvertDiscord": "Link your Discord to earn 2 slots.",
-      "bonusAdvertWallet": "Link a wallet to earn 2 slots.",
+      "bonusSourceEmail": "Bekræftet e-mail",
+      "bonusSourceDiscord": "Discord forbundet",
+      "bonusSourceWallet": "Wallet forbundet",
+      "bonusSourceReferral": "Henviste venner",
+      "bonusAdvertEmail": "Bekræft din e-mail for at optjene 2 pladser.",
+      "bonusAdvertDiscord": "Forbind din Discord for at optjene 2 pladser.",
+      "bonusAdvertWallet": "Forbind en wallet for at optjene 2 pladser.",
       "bonusReferralProgress": "{count}/{cap}",
-      "bonusReferralExplainer": "Invite a friend: when they reach level 10 you each earn 2 slots, up to 5 friends.",
-      "bonusSectionAria": "Bonus bank slots and how to earn more"
+      "bonusReferralExplainer": "Invitér en ven: når din ven når niveau 10, optjener I hver især 2 pladser, op til 5 venner.",
+      "bonusSectionAria": "Bonuspladser i banken, og hvordan du optjener flere"
     },
     "calendar": {
-      "title": "Event Calendar",
-      "close": "Close calendar",
-      "keybindLabel": "Event Calendar",
-      "prevMonth": "Previous month",
-      "nextMonth": "Next month",
-      "dayAria": "{date}: {count} events",
-      "noEvents": "Nothing planned for this day.",
-      "allDay": "All day",
-      "bookedBy": "Booked by {name}",
-      "deleteAria": "Remove the event {title}",
-      "bookTitle": "Book a guild event",
-      "titlePlaceholder": "Event title",
-      "notePlaceholder": "Note (optional)",
-      "hourLabel": "Hour (UTC)",
-      "hourAllDay": "All day",
-      "addButton": "Book event",
-      "guildOnlyNote": "Join a guild to plan events together.",
+      "title": "Begivenhedskalender",
+      "close": "Luk kalenderen",
+      "keybindLabel": "Begivenhedskalender",
+      "prevMonth": "Forrige måned",
+      "nextMonth": "Næste måned",
+      "dayAria": "{date}: {count} begivenheder",
+      "noEvents": "Intet planlagt for denne dag.",
+      "allDay": "Hele dagen",
+      "bookedBy": "Booket af {name}",
+      "deleteAria": "Fjern begivenheden {title}",
+      "bookTitle": "Book en laugsbegivenhed",
+      "titlePlaceholder": "Begivenhedstitel",
+      "notePlaceholder": "Note (valgfrit)",
+      "hourLabel": "Time (UTC)",
+      "hourAllDay": "Hele dagen",
+      "addButton": "Book begivenhed",
+      "guildOnlyNote": "Slut dig til et laug for at planlægge begivenheder sammen.",
       "result": {
-        "created": "The event is on the guild calendar.",
-        "removed": "The event was taken off the calendar.",
-        "notInGuild": "You are not in a guild.",
-        "notOfficer": "Only officers and the Guild Master may manage guild events.",
-        "badInput": "Give the event a title and a valid day.",
-        "calendarFull": "The guild calendar is full.",
-        "eventGone": "That event is no longer on the calendar."
+        "created": "Begivenheden står nu i laugskalenderen.",
+        "removed": "Begivenheden blev fjernet fra kalenderen.",
+        "notInGuild": "Du er ikke i et laug.",
+        "notOfficer": "Kun officerer og lavsmesteren kan administrere laugsbegivenheder.",
+        "badInput": "Giv begivenheden en titel og en gyldig dag.",
+        "calendarFull": "Laugskalenderen er fuld.",
+        "eventGone": "Den begivenhed står ikke længere i kalenderen."
       },
       "events": {
         "raidCall": {
-          "title": "Raid Call",
-          "note": "Wardens sound the horn: gather a party for the crypts and the raid."
+          "title": "Raidkald",
+          "note": "Vogtere blæser i hornet: saml en gruppe til krypterne og raidet."
         },
         "marketDay": {
-          "title": "Market Day",
-          "note": "The Merchant expects fresh stock. A fine day to browse the World Market."
+          "title": "Markedsdag",
+          "note": "Købmanden venter friske varer. En fin dag at kigge på Verdensmarkedet."
         },
         "fiestaNight": {
-          "title": "Fiesta Night",
-          "note": "The 2v2 Fiesta ring draws its loudest crowds tonight."
+          "title": "Fiesta-Aften",
+          "note": "2v2-Fiesta-ringen trækker sine mest højrøstede tilskuere i aften."
         },
         "arenaClash": {
-          "title": "Arena Clash",
-          "note": "Duelists flock to the Ashen Coliseum. Queue up and climb the ladder."
+          "title": "Arenasammenstød",
+          "note": "Duellanter strømmer til Askekolosseet. Stil dig i kø, og klatr op ad ranglisten."
         },
         "fishingDerby": {
-          "title": "Fishing Derby",
-          "note": "Anglers line the lakes. Bring a pole and swap fishing tales."
+          "title": "Fiskederby",
+          "note": "Lystfiskere står langs søerne. Tag en stang med, og udveksl fiskehistorier."
         },
         "delveDay": {
-          "title": "Delve Day",
-          "note": "Brother Halven marks his charts: a fine day to brave the Collapsed Reliquary."
+          "title": "Delve-Dag",
+          "note": "Broder Halven markerer sine kort: en fin dag at trodse Det Sammenstyrtede Relikvarium."
         },
         "moongateCommunion": {
-          "title": "Moongate Communion",
-          "note": "Pilgrims gather at the temple moongate under the mid-month moon."
+          "title": "Måneports-Andagt",
+          "note": "Pilgrimme samles ved templets måneport under midtmånedens måne."
         }
       }
     },
     "social": {
-      "lastSeen": "Last seen: {when}",
-      "lastSeenNever": "never"
+      "lastSeen": "Sidst set: {when}",
+      "lastSeenNever": "aldrig"
     },
     "gathering": {
-      "title": "Gathering",
-      "mining": "Mining",
-      "logging": "Logging",
-      "herbalism": "Herbalism"
+      "title": "Indsamling",
+      "mining": "Minedrift",
+      "logging": "Skovhugst",
+      "herbalism": "Urtekundskab"
     },
     "archetypeTitle": {
-      "label": "Title",
-      "none": "None",
-      "hobbyLabel": "Hobby",
-      "armorcrafting": "Armorer",
-      "weaponcrafting": "Weaponsmith",
-      "jewelcrafting": "Jeweler",
-      "alchemy": "Alchemist",
-      "engineering": "Tinkerer",
-      "cooking": "Chef",
-      "inscription": "Scribe",
-      "enchanting": "Enchanter",
-      "tailoring": "Tailor",
-      "leatherworking": "Leathercrafter"
+      "label": "Titel",
+      "none": "Ingen",
+      "hobbyLabel": "Fritid",
+      "armorcrafting": "Rustningssmed",
+      "weaponcrafting": "Våbensmed",
+      "jewelcrafting": "Juveler",
+      "alchemy": "Alkymist",
+      "engineering": "Ingeniør",
+      "cooking": "Kok",
+      "inscription": "Skriver",
+      "enchanting": "Fortryller",
+      "tailoring": "Skrædder",
+      "leatherworking": "Garver"
     },
     "crafting": {
-      "title": "Crafting",
-      "close": "Close crafting",
-      "craft": "Craft",
-      "reagentsNeeded": "Requires:",
-      "reagentLine": "{name} x{have}/{required}",
-      "empty": "No recipes known yet.",
-      "resultAria": "Craft {name}",
-      "craftedToast": "Crafted: {name}",
-      "insufficientMaterials": "You do not have the materials for that.",
-      "unknownRecipe": "That recipe does not exist.",
-      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe.",
-      "notAtHub": "You must be at the crafting hub, at the required level, to craft that.",
-      "throttled": "You are crafting too quickly. Wait a moment and try again.",
-      "recipeNotLearned": "You have not learned that recipe yet."
+      "title": "Håndværk",
+      "close": "Tæt håndværk",
+      "craft": "Håndværk",
+      "reagentsNeeded": "Kræver:",
+      "reagentLine": "{name}: {have}/{required}",
+      "empty": "Ingen opskrifter kendt endnu.",
+      "resultAria": "Håndværk {name}",
+      "craftedToast": "Udformet: {name}",
+      "insufficientMaterials": "Det har du ikke materialerne til.",
+      "unknownRecipe": "Den opskrift findes ikke.",
+      "comboRequirementUnmet": "Du har ikke begge de krævede håndværk på det krævede niveau til den opskrift.",
+      "notAtHub": "Du skal være ved håndværksstationen og på det krævede niveau for at lave det.",
+      "throttled": "Du laver ting for hurtigt. Vent et øjeblik, og prøv igen.",
+      "recipeNotLearned": "Du har ikke lært den opskrift endnu."
     }
   },
   "apiError": {
     "validation": {
-      "failed": "Some fields are invalid. Check the form and try again."
+      "failed": "Nogle felter er ugyldige. Tjek formularen og prøv igen."
     },
     "json": {
-      "malformed": "That request could not be read. Please try again."
+      "malformed": "Anmodningen kunne ikke læses. Prøv venligst igen."
     },
     "body": {
-      "too_large": "That request is too large. Try again with less data.",
-      "unsupported_media_type": "Unsupported request format."
+      "too_large": "Anmodningen er for stor. Prøv igen med færre data.",
+      "unsupported_media_type": "Anmodningsformatet understøttes ikke."
     },
     "db": {
-      "conflict": "That change conflicted with another update. Please try again."
+      "conflict": "Ændringen kom i konflikt med en anden opdatering. Prøv venligst igen."
     },
     "rate_limit": {
-      "exceeded": "Too many requests. Try again in {seconds}."
+      "exceeded": "For mange anmodninger. Prøv igen om {seconds}."
     },
     "internal": {
-      "error": "Something went wrong on our end. Please try again."
+      "error": "Der gik noget galt hos os. Prøv venligst igen."
     },
     "auth": {
-      "token_missing": "You need to be signed in to do that.",
-      "token_invalid": "Your session has expired. Please sign in again.",
-      "forbidden": "You do not have permission to do that.",
-      "invalid_credentials": "Invalid username or password.",
-      "required": "Not authenticated.",
-      "web_login_only": "Logins are only allowed from the game client.",
-      "too_many_attempts": "Too many attempts. Wait a minute and try again.",
-      "too_many_failed_attempts": "Too many failed attempts. Wait a few minutes and try again.",
-      "current_password_incorrect": "Your current password is incorrect.",
-      "password_incorrect": "Your password is incorrect.",
-      "verification_failed": "Verification failed. Please try again."
+      "token_missing": "Du skal være logget ind for at gøre det.",
+      "token_invalid": "Din session er udløbet. Log venligst ind igen.",
+      "forbidden": "Du har ikke tilladelse til at gøre det.",
+      "invalid_credentials": "Ugyldigt brugernavn eller adgangskode.",
+      "required": "Ikke godkendt.",
+      "web_login_only": "Login er kun tilladt fra spilklienten.",
+      "too_many_attempts": "For mange forsøg. Vent et minut og prøv igen.",
+      "too_many_failed_attempts": "For mange mislykkede forsøg. Vent et par minutter og prøv igen.",
+      "current_password_incorrect": "Din nuværende adgangskode er forkert.",
+      "password_incorrect": "Din adgangskode er forkert.",
+      "verification_failed": "Verificeringen mislykkedes. Prøv venligst igen."
     },
     "account": {
-      "username_invalid": "Username must be 3-24 characters and use letters, digits, or underscore.",
-      "username_not_allowed": "That username is not allowed.",
-      "username_taken": "That username is already taken.",
-      "username_mismatch": "That username does not match your account.",
-      "password_too_short": "Password must be at least 6 characters.",
-      "password_too_long": "New password must be at most 128 characters.",
-      "characters_online": "Log out all of your characters before deactivating.",
-      "deactivated": "This account has been deactivated. Contact an admin to restore it.",
-      "not_found": "Account not found."
+      "username_invalid": "Brugernavnet skal være på 3-24 tegn og bruge bogstaver, cifre eller understregning.",
+      "username_not_allowed": "Det brugernavn er ikke tilladt.",
+      "username_taken": "Det brugernavn er allerede optaget.",
+      "username_mismatch": "Det brugernavn passer ikke til din konto.",
+      "password_too_short": "Adgangskoden skal være på mindst 6 tegn.",
+      "password_too_long": "Den nye adgangskode må højst være på 128 tegn.",
+      "characters_online": "Log ud af alle dine karakterer, før du deaktiverer.",
+      "deactivated": "Denne konto er blevet deaktiveret. Kontakt en administrator for at genoprette den.",
+      "not_found": "Kontoen blev ikke fundet."
     },
     "character": {
-      "name_invalid": "Invalid character name. Use 2-16 letters.",
-      "name_not_allowed": "That character name is not allowed.",
-      "invalid_class": "Invalid class.",
-      "limit_reached": "Character limit reached.",
-      "name_taken": "That name is taken.",
-      "not_found": "Character not found.",
-      "online": "Character is currently online.",
-      "rename_not_permitted": "Renaming this character is not allowed.",
-      "delete_confirm": "Type the character name to confirm deletion.",
-      "already_in_world": "Character is already in world.",
-      "taken_over": "Your character was taken over by another session.",
-      "rename_required": "This character must be renamed before entering the world."
+      "name_invalid": "Ugyldigt karakternavn. Brug 2-16 bogstaver.",
+      "name_not_allowed": "Det karakternavn er ikke tilladt.",
+      "invalid_class": "Ugyldig klasse.",
+      "limit_reached": "Grænsen for antal karakterer er nået.",
+      "name_taken": "Det navn er optaget.",
+      "not_found": "Karakteren blev ikke fundet.",
+      "online": "Karakteren er i øjeblikket online.",
+      "rename_not_permitted": "Det er ikke tilladt at omdøbe denne karakter.",
+      "delete_confirm": "Skriv karakterens navn for at bekræfte sletning.",
+      "already_in_world": "Karakteren er allerede i verdenen.",
+      "taken_over": "Din karakter blev overtaget af en anden session.",
+      "rename_required": "Denne karakter skal omdøbes, før den kan komme ind i verdenen."
     },
     "moderation": {
-      "suspended_until": "This account is suspended until {date}.",
-      "suspended": "This account is suspended.",
-      "banned": "This account has been banned.",
-      "force_rename": "A moderator requires one of your characters to be renamed."
+      "suspended_until": "Denne konto er suspenderet indtil {date}.",
+      "suspended": "Denne konto er suspenderet.",
+      "banned": "Denne konto er blevet udelukket.",
+      "force_rename": "En moderator kræver, at en af dine karakterer omdøbes."
     },
     "email": {
-      "invalid": "Enter a valid email address.",
-      "unchanged": "That is already your email address."
+      "invalid": "Indtast en gyldig e-mailadresse.",
+      "unchanged": "Det er allerede din e-mailadresse."
     },
     "two_factor": {
-      "code_invalid": "That code is not valid, try again.",
-      "setup_required": "Start two-factor setup first.",
-      "already_enabled": "Two-factor is already enabled.",
-      "not_enabled": "Two-factor is not enabled."
+      "code_invalid": "Den kode er ikke gyldig, prøv igen.",
+      "setup_required": "Start opsætning af to-faktor først.",
+      "already_enabled": "To-faktor er allerede aktiveret.",
+      "not_enabled": "To-faktor er ikke aktiveret."
     },
     "origin": {
-      "cross_site": "Request blocked for security reasons."
+      "cross_site": "Anmodningen blev blokeret af sikkerhedsmæssige årsager."
     },
     "discord": {
-      "not_configured": "Discord integration is not available right now.",
-      "expired": "That Discord sign-in expired. Please sign in with Discord again.",
-      "already_linked": "That Discord account is already linked to another account.",
-      "password_required": "Set a password before unlinking your Discord account.",
-      "unknown_swag": "That reward is not available.",
-      "link_required": "Link your Discord account first.",
-      "swag_claimed": "You have already claimed this reward.",
-      "swag_tier": "Reach a higher rank to claim this.",
-      "swag_points": "Not enough points."
+      "not_configured": "Discord-integration er ikke tilgængelig lige nu.",
+      "expired": "Det Discord-login er udløbet. Log venligst ind med Discord igen.",
+      "already_linked": "Den Discord-konto er allerede knyttet til en anden konto.",
+      "password_required": "Angiv en adgangskode, før du fjerner tilknytningen til din Discord-konto.",
+      "unknown_swag": "Den belønning er ikke tilgængelig.",
+      "link_required": "Knyt din Discord-konto først.",
+      "swag_claimed": "Du har allerede indløst denne belønning.",
+      "swag_tier": "Nå en højere rang for at indløse denne.",
+      "swag_points": "Ikke nok point."
     }
   },
   "guide": {
-    "brand": "Cryptic Realm",
+    "brand": "World of ClaudeCraft",
     "brandShort": "ClaudeCraft",
     "tagline": "En klassisk MMO, du spiller gratis i din browser.",
     "skipToContent": "Spring til hovedindhold",
@@ -1749,7 +1698,7 @@ export const da_DK: EnTranslations = {
       "bestiary": "Bestiarium",
       "models": "3D-modeller",
       "gear": "Udstyr & Genstande",
-      "professions": "Professions",
+      "professions": "Professioner",
       "economy": "Økonomi & Handel",
       "social": "Socialt & Grupper",
       "stats": "Karakter & Egenskaber",
@@ -1760,11 +1709,11 @@ export const da_DK: EnTranslations = {
       "delves": "Delve",
       "reference": "Reference",
       "controls": "Styring",
-      "settings": "Settings & Performance",
+      "settings": "Indstillinger og ydeevne",
       "combat": "Kamp",
       "talents": "Talenter",
       "arena": "Arena & PvP",
-      "valeCup": "Vale Cup",
+      "valeCup": "Dalpokalen",
       "glossary": "Ordliste",
       "wishIKnew": "Ting jeg ville ønske jeg vidste",
       "faq": "FAQ",
@@ -1799,7 +1748,7 @@ export const da_DK: EnTranslations = {
       "github": "Kildekode på GitHub",
       "discord": "Bliv en del af Discord",
       "communityWiki": "Fællesskabswiki",
-      "rights": "Cryptic Realm"
+      "rights": "World of ClaudeCraft"
     },
     "language": {
       "label": "Sprog",
@@ -1819,7 +1768,7 @@ export const da_DK: EnTranslations = {
     },
     "home": {
       "eyebrow": "Klassisk browser-MMO",
-      "title": "Cryptic Realm",
+      "title": "World of ClaudeCraft",
       "subtitle": "Tag på quest, slå jer sammen, og udforsk en håndbygget verden, gratis i din browser.",
       "ctaPlay": "Spil nu",
       "ctaLearn": "Sådan spiller du",
@@ -1845,7 +1794,7 @@ export const da_DK: EnTranslations = {
         "valeName": "Østbæk Dal",
         "valeBlurb": "Grønne bakker og gamle skove, hvor ethvert eventyr begynder.",
         "marshName": "Mosekær Sump",
-        "marshBlurb": "Sunkne moser og tidevandsslidte ruiner, hjemsted for murlocs og værre.",
+        "marshBlurb": "Sunkne moser og tidevandsslidte ruiner, hjemsted for mudfiner og værre.",
         "peaksName": "Tornetop Højder",
         "peaksBlurb": "Vindslidte højderygge, der klatrer mod realmens koldeste farer."
       },
@@ -1867,12 +1816,12 @@ export const da_DK: EnTranslations = {
         "q2": "Skal jeg bruge en crypto-wallet?",
         "a2": "Nej. Spillet er fuldt spilbart uden en. Den valgfrie community-token låser kun op for kosmetisk pynt og påvirker aldrig styrke.",
         "q3": "Kan jeg spille offline?",
-        "a3": "Ja. Der er en øjeblikkelig enkeltspillertilstand i din browser, plus den delte online-realm.",
+        "a3": "Ja. Der er en øjeblikkelig enkeltspillertilstand i din browser, plus den delte online-verden.",
         "q4": "Hvor lang tid tager det at nå maksniveau?",
         "a4": "Grænsen er niveau {cap}, nået på tværs af tre zoner med quests, fangehuller og udforskning."
       },
       "community": {
-        "heading": "Slut dig til realmen",
+        "heading": "Slut dig til verdenen",
         "body": "Hop ind nu, eller kom og sig hej. Verden er bedre med selskab.",
         "play": "Spil nu",
         "discord": "Bliv medlem af Discord",
@@ -1906,7 +1855,7 @@ export const da_DK: EnTranslations = {
       "groupingTitle": "Spil sammen",
       "groupingBody": "Inviter andre til en gruppe for at dele quest-fremgang og tage fangehuller. Det meste af verden kan klares solo, så det at danne gruppe er et valg, ikke et besvær.",
       "onlineTitle": "Online eller offline",
-      "onlineBody": "Spil den delte online-realm med alle andre, eller start en øjeblikkelig offline-verden i din browser for at lære det grundlæggende.",
+      "onlineBody": "Spil den delte online-verden med alle andre, eller start en øjeblikkelig offline-verden i din browser for at lære det grundlæggende.",
       "reassure": "Talenter låses op på niveau 10 og kan nulstilles når som helst, så dine tidlige valg er aldrig permanente. Eksperimentér frit.",
       "controlsLink": "Se den fulde oversigt over styring"
     },
@@ -1931,64 +1880,64 @@ export const da_DK: EnTranslations = {
       "controllerBody": "Gamepads virker også, og controllerstyring er slået til som standard. Venstre pind bevæger dig, højre pind sigter kameraet, og knapperne foran og på skuldrene dækker dine evner, hop og interaktion. Åbn et hvilket som helst vindue for at få en markør frem på skærmen til menuer. Du kan ombinde knapperne og justere pindens dødzone, kamerahastighed, vibration og omvendt kig fra controllerafsnittet i spillets indstillinger."
     },
     "settingsPage": {
-      "heading": "Settings & Performance",
-      "intro": "Make the game look its best or run its fastest. Three ready-made loadouts, plus what every graphics option really does.",
-      "wherePath": "Everything on this page lives in the game: press Esc and look in Graphics, Interface, and Performance Overlay.",
-      "fairnessTitle": "Fair by design",
-      "fairnessBody": "No option here trades beauty for power. Lower settings shed cosmetic polish only, never information you fight with: your debuffs, cast bars, party health, and damage numbers are identical from Low to Ultra. Playing on a modest machine is never a handicap.",
-      "loadoutsHeading": "Three ready-made loadouts",
-      "loadoutsIntro": "Start from the loadout that sounds like your machine, then adjust one option at a time until it feels right.",
-      "recommended": "Recommended",
-      "whyLabel": "Why it works:",
-      "tagReload": "after reload",
-      "fpsTitle": "Best FPS",
-      "fpsTagline": "For older laptops, integrated graphics, and battery play.",
-      "fpsWhy": "Graphics Quality is the master switch, and Render Quality is the strongest slider: at 70% the world draws roughly half the pixels while the interface stays perfectly sharp.",
-      "balancedTitle": "Balanced",
-      "balancedTagline": "The sweet spot for most machines, and our default advice.",
-      "balancedWhy": "Medium brings real shadows and full materials; High adds ambient occlusion and bloom. Below Ultra a built-in safety net absorbs sudden dips in busy fights, so Balanced stays smooth without babysitting.",
-      "visualsTitle": "Best Visuals",
-      "visualsTagline": "Screenshot mode for powerful desktop machines.",
-      "visualsWhy": "Ultra renders at the highest resolution your display offers with the richest lighting. It also switches the safety net off, and it is desktop-only: phones and the app top out at High.",
-      "value50to70": "50 to 70%",
-      "value90to100": "90 to 100%",
-      "value100": "100%",
-      "valueHighOrMedium": "High on a gaming PC, Medium on a laptop",
-      "valueOnOptional": "On (optional)",
-      "howHeading": "How the options behave",
-      "factDetectTitle": "The game tunes itself first",
-      "factDetectBody": "On your first launch the game reads your device and picks a sensible tier, from Low on a modest phone to Ultra on a strong desktop. Any choice you make yourself always wins.",
-      "factReloadTitle": "Two kinds of options",
-      "factReloadBody": "Graphics Quality and the Advanced pickers take effect after a reload, and the panel offers a Reload Now button when needed. Every other option applies the moment you change it.",
-      "factGovernorTitle": "A built-in safety net",
-      "factGovernorBody": "On every tier below Ultra, the game quietly thins grass, effects, and lighting for a moment when a big fight spikes, then restores them. Choosing Ultra tells it you would rather keep every detail.",
-      "advancedHeading": "The Advanced preset: mix your own",
-      "advancedBody": "Advanced starts from the High tier and unlocks four extra pickers, so you can spend your frames where you actually notice them: Terrain Detail, Foliage Density, Effects & Lighting, and Shadow Quality. Like Graphics Quality, they apply after a reload.",
-      "advancedMixes": "Two favorite mixes: keep Shadow Quality on High and set Effects & Lighting to Low for a crisp, glow-free look that runs light, or do the reverse to keep the bloom and soften the shadows.",
-      "tableHeading": "Every option, explained",
-      "colSetting": "Setting",
-      "colDoes": "What it does",
-      "colImpact": "FPS impact",
-      "impactNone": "None",
-      "impactLight": "Light",
-      "impactModerate": "Moderate",
-      "impactHeavy": "Heavy",
-      "rowGraphicsQuality": "The master switch. Each step changes resolution, shadows, materials, foliage, and lighting effects together. The biggest single difference you can make.",
-      "rowRenderQuality": "Draws the 3D world at a lower internal resolution and scales it up; the interface stays sharp. The strongest instant slider on weaker machines and high-resolution screens.",
-      "rowFieldOfView": "How much of the world fits on screen, from a zoomed 55 to a sweeping 100 degrees. A comfort choice; wider views draw slightly more.",
-      "rowBrightness": "Scene exposure, darker or brighter. Pure preference.",
-      "rowWeather": "Ambient rain and snow. Atmosphere only, and switching it off saves a little during storms.",
-      "rowBrowserEffects": "How fancy the interface itself is allowed to be: glass blur, glow, animated menus. Auto matches your browser; the 3D world is untouched either way.",
-      "rowTerrainDetail": "Rich, blended ground textures versus a simpler, faster terrain look.",
-      "rowFoliageDensity": "How far and how thick the grass grows around your character.",
-      "rowEffectsQuality": "Bloom, ambient occlusion, and how many torches and spells cast real light. The single biggest saving among the Advanced pickers.",
-      "rowShadowQuality": "Shadow crispness. Low keeps shadows but softens their edges.",
-      "rowFrostedPanels": "A frosted-glass blur behind windows. Pretty, and exactly the kind of effect a weaker browser feels; leave it off for the classic crisp look.",
-      "rowReduceMotion": "Removes interface animations so windows appear instantly. An accessibility option first, with a small performance bonus.",
-      "rowPerfOverlay": "An on-screen readout of FPS, frame time, and more. Turn it on while you tune this page, then hide it again.",
-      "tableFoot": "Looking for a draw-distance slider or an FPS cap? There is nothing to hunt for: view distance is part of each quality tier, and frame pacing follows your display.",
-      "mobileTitle": "On phones and tablets",
-      "mobileBody": "Mobile manages more for you: the game picks the tier, holds resolution a touch lower to protect battery and heat, and keeps the highest tiers desktop-only. The loadouts above still apply; phones simply top out at High."
+      "heading": "Indstillinger og ydeevne",
+      "intro": "Få spillet til at se bedst ud, eller kør det hurtigste. Tre færdige loadouts, plus hvad enhver grafikfunktion virkelig gør.",
+      "wherePath": "Alt på denne side lever i spillet: Tryk på Esc og kig i Grafik, Interface og Performance Overlay.",
+      "fairnessTitle": "Fair af design",
+      "fairnessBody": "Ingen mulighed her bytter skønhed for magt. Lower indstillinger afgiver kun kosmetisk polering, aldrig information, du kæmper med: dine debuffs, cast bars, partysundhed og skadetal er identiske fra Low til Ultra. At spille på en beskeden maskine er aldrig et handicap.",
+      "loadoutsHeading": "Tre færdige loadouts",
+      "loadoutsIntro": "Start fra belastningen, der lyder som din maskine, og juster derefter én mulighed ad gangen, indtil den føles rigtig.",
+      "recommended": "Anbefales",
+      "whyLabel": "Hvorfor virker det:",
+      "tagReload": "efter genindlæsning",
+      "fpsTitle": "Bedste FPS",
+      "fpsTagline": "Til ældre bærbare computere, integreret grafik og batterispil.",
+      "fpsWhy": "Grafikkvalitet er hovedafbryderen, og gengivelseskvalitet er den stærkeste skyder: Med 70 % trækker verden omkring halvdelen af ​​pixels, mens grænsefladen forbliver perfekt skarp.",
+      "balancedTitle": "Balanceret",
+      "balancedTagline": "Det søde sted for de fleste maskiner og vores standardråd.",
+      "balancedWhy": "Medium bringer ægte skygger og fulde materialer; High tilføjer omgivende okklusion og blomstring. Under Ultra absorberer et indbygget sikkerhedsnet pludselige fald i travle kampe, så Balanced forbliver glat uden at passe baby.",
+      "visualsTitle": "Bedste Visuals",
+      "visualsTagline": "Skærmbilledetilstand til kraftfulde stationære maskiner.",
+      "visualsWhy": "Ultra gengiver med den højeste opløsning, din skærm tilbyder med den rigeste belysning. Det slukker også for sikkerhedsnettet, og det er kun til desktop: telefoner og appen topper ud ved High.",
+      "value50to70": "50 til 70 %",
+      "value90to100": "90 til 100 %",
+      "value100": "100 %",
+      "valueHighOrMedium": "High på en gaming-pc, Medium på en bærbar computer",
+      "valueOnOptional": "Til (valgfrit)",
+      "howHeading": "Hvordan mulighederne opfører sig",
+      "factDetectTitle": "Spillet tuner sig selv først",
+      "factDetectBody": "Ved din første lancering læser spillet din enhed og vælger et fornuftigt niveau, fra Low på en beskeden telefon til Ultra på et stærkt skrivebord. Ethvert valg, du selv træffer, vinder altid.",
+      "factReloadTitle": "To slags muligheder",
+      "factReloadBody": "Grafikkvalitet og de avancerede vælgere træder i kraft efter en genindlæsning, og panelet tilbyder en Genindlæs nu-knap, når det er nødvendigt. Hver anden mulighed gælder i det øjeblik, du ændrer den.",
+      "factGovernorTitle": "Et indbygget sikkerhedsnet",
+      "factGovernorBody": "På hvert niveau under Ultra tynder spillet stille og roligt græs, effekter og belysning et øjeblik, når en stor kamp spidser til, og genopretter dem derefter. Hvis du vælger Ultra, fortæller det, at du hellere vil beholde alle detaljer.",
+      "advancedHeading": "Den avancerede forudindstilling: bland din egen",
+      "advancedBody": "Avanceret starter fra High-niveauet og låser op for fire ekstra vælgere, så du kan bruge dine rammer, hvor du rent faktisk bemærker dem: Terrændetaljer, Løvtæthed, Effekter og belysning og Skyggekvalitet. Ligesom grafikkvalitet gælder de efter en genindlæsning.",
+      "advancedMixes": "To yndlingsblandinger: Hold Shadow Quality på High og indstil Effects & Lighting til Low for et sprødt, glødfrit look, der kører let, eller gør det omvendte for at bevare blomstringen og blødgøre skyggerne.",
+      "tableHeading": "Hver mulighed, forklaret",
+      "colSetting": "Indstilling",
+      "colDoes": "Hvad den gør",
+      "colImpact": "FPS virkning",
+      "impactNone": "Ingen",
+      "impactLight": "Lys",
+      "impactModerate": "Moderat",
+      "impactHeavy": "Tung",
+      "rowGraphicsQuality": "Hovedafbryderen. Hvert trin ændrer opløsning, skygger, materialer, løv og lyseffekter sammen. Den største enkeltstående forskel, du kan gøre.",
+      "rowRenderQuality": "Tegner 3D-verdenen med en lavere intern opløsning og skalerer den op; grænsefladen forbliver skarp. Den stærkeste øjeblikkelige skyder på svagere maskiner og højopløselige skærme.",
+      "rowFieldOfView": "Hvor meget af verden passer på skærmen, fra zoomet 55 til fejende 100 grader. Et komfortvalg; bredere visninger trækker lidt mere.",
+      "rowBrightness": "Sceneeksponering, mørkere eller lysere. Ren præference.",
+      "rowWeather": "Omgivende regn og sne. Kun atmosfære, og at slukke for den sparer lidt under storme.",
+      "rowBrowserEffects": "Hvor fancy selve grænsefladen får lov at være: glassløring, glød, animerede menuer. Auto matcher din browser; 3D-verdenen er uberørt på begge måder.",
+      "rowTerrainDetail": "Rige, blandede jordstrukturer kontra et enklere, hurtigere terrænlook.",
+      "rowFoliageDensity": "Hvor langt og hvor tykt græsset vokser omkring din karakter.",
+      "rowEffectsQuality": "Blomstring, omgivende okklusion, og hvor mange fakler og besværgelser, der kaster rigtigt lys. Den største enkeltbesparelse blandt de avancerede vælgere.",
+      "rowShadowQuality": "Skygge sprødhed. Low bevarer skygger, men blødgør deres kanter.",
+      "rowFrostedPanels": "Sløring af matteret glas bag vinduer. Smuk, og præcis den slags effekt en svagere browser føler; lad det være for det klassiske sprøde look.",
+      "rowReduceMotion": "Fjerner grænsefladeanimationer, så vinduer vises med det samme. Først en tilgængelighedsmulighed med en lille præstationsbonus.",
+      "rowPerfOverlay": "En skærmudlæsning af FPS, billedtid og mere. Slå den til, mens du tuner denne side, og skjul den derefter igen.",
+      "tableFoot": "Leder du efter en skyder til trækafstand eller en FPS kasket? Der er ikke noget at jage efter: Visningsafstand er en del af hvert kvalitetsniveau, og frame pacing følger din skærm.",
+      "mobileTitle": "På telefoner og tablets",
+      "mobileBody": "Mobile klarer mere for dig: Spillet vælger niveauet, holder opløsningen et tryk lavere for at beskytte batteri og varme og beholder de højeste niveauer kun på skrivebordet. Ovenstående belastninger gælder stadig; telefoner fyldes blot ud ved High."
     },
     "combat": {
       "intro": "Kamp følger velkendte klassiske MMO-regler. Du behøver aldrig at studere noget af det for at spille godt, dette er bare formen på hvordan kampe fungerer.",
@@ -2002,7 +1951,7 @@ export const da_DK: EnTranslations = {
       "growBody": "Hvert niveau gør dig sejere og låser nye evner op, helt op til loftet på niveau {cap}. Quests er den hurtigste vej op; fangekældre og udforskning runder det af.",
       "effectsTitle": "Forstærkninger, svækkelser og massekontrol",
       "effectsBody": "Mange evner påfører en effekt der hænger ved. De gavnlige (forstærkninger) hæver dine egenskaber, skjolder dig eller helbreder dig lidt ad gangen; de skadelige (svækkelser) dræner dit helbred med skade over tid eller svækker dig. Hold øje med de små ikoner nær din handlingsbjælke for at se hvad der er på dig og hvor længe det varer.",
-      "ccBody": "Massekontrol er en særlig slags svækkelse der begrænser hvad et mål kan gøre: lammelser, rødder og sløvninger, forstummelser der stopper besværgelser, afvæbninger, frygt og polymorfi der gør en fjende harmløs et øjeblik. Nogle af disse, som rødder, frygt og polymorfi, mister deres greb når de påføres igen for hurtigt, så de kan ikke lænkes i det uendelige.",
+      "ccBody": "Massekontrol er en særlig slags svækkelse der begrænser hvad et mål kan gøre: lammelser, rødder og sløvninger, forstummelser der stopper besværgelser, afvæbninger, frygt og forvandlinger der gør en fjende harmløs et øjeblik. Nogle af disse, som rødder, frygt og forvandlinger, mister deres greb når de påføres igen for hurtigt, så de kan ikke lænkes i det uendelige.",
       "deathTitle": "Når du falder",
       "deathBody": "Hvis dit helbred når nul, bliver du slået ned. Frigiv din ånd for at genopstå ved den nærmeste kirkegård ved fuldt helbred, og find så vej tilbage, så en død koster dig lidt tid, ikke din fremgang. Mellem kampe, sæt dig ned for at spise og drikke, så du starter den næste ved fuld styrke."
     },
@@ -2148,7 +2097,7 @@ export const da_DK: EnTranslations = {
       "devotion_aura": "En vedvarende selvforstærkning der hæver rustningen så slag rammer blødere.",
       "judgement": "Bruger dit aktive Segl til at ramme en fjende på kort afstand.",
       "blessing_of_might": "Hæver et venligt måls angrebsstyrke, god at kaste før kampen.",
-      "divine_protection": "Et hurtigt helligt skjold til at opsuge skade når det bliver hårdt.",
+      "divine_protection": "Et hurtigt beskyttende værn til at opsuge skade når det bliver hårdt.",
       "raptor_strike": "Et hårdt nærkampssving til når noget kommer tæt på dig.",
       "aspect_of_the_hawk": "En holdning du holder oppe for at skærpe din angrebsstyrke på afstand.",
       "serpent_sting": "Lander en gift der bløder naturskade over tid.",
@@ -2180,7 +2129,7 @@ export const da_DK: EnTranslations = {
       "conjure_water": "Frembringer drikke der genopretter mana, så du kan fylde op mellem kampene.",
       "conjure_food": "Frembringer mad der genopretter helbred når du sætter dig ned for at spise.",
       "shadow_bolt": "Et lyn af skygge du kaster mod et mål, din foretrukne bombe.",
-      "summon_imp": "Tilkalder en imp der slynger ildlyn mod fjender på afstand.",
+      "summon_imp": "Tilkalder en Emberkin der slynger ildlyn mod fjender på afstand.",
       "demon_skin": "En vedvarende selvforstærkning der hærder din hud og tilføjer rustning.",
       "immolate": "Sætter ild til et mål for et indledende slag og en brand der hænger ved.",
       "corruption": "Forrådner et mål med skygge der tikker mens du gør andre ting.",
@@ -2212,7 +2161,7 @@ export const da_DK: EnTranslations = {
         "old_greyjaw": "En arret gammel ulv ingen fælde har holdt, beskyldt for tre jagthunde og en staldknægts arm. Han jager de dybe skove alene og bliver mere vild jo længere en kamp trækker ud.",
         "grubjaw": "En sumptrold så grådig at de andre trolde ikke vil grave ved siden af ham, siges at have ædt en handelsmands sidste to lastmuldyr, seletøj og det hele.",
         "shardlord_kazzix": "Et stormelementar med skuldre, der vandrer på de fjerne klipper over Stormcrag med en hjerteskår det er værd at trodse lynet for.",
-        "mirejaw_frenzy": "En sumpmurloc der pisker sig selv op i et tæskende raseri midt i kampen, det højlydteste i en støjende, territorial flok.",
+        "mirejaw_frenzy": "En sump-mudfin der pisker sig selv op i et tæskende raseri midt i kampen, det højlydteste i en støjende, territorial flok.",
         "gravecaller_cultist": "Kappeklædte tjenere af dødskulten hvis virke besudler gravene fra Dalen til toppene. Hvor de samles, hviler de døde ikke."
       }
     },
@@ -2226,12 +2175,12 @@ export const da_DK: EnTranslations = {
         "desc": "Spindlere og giftige lurere, der bygger rede på mørke, sammenfiltrede steder. Jægere kan tæmme dem, ligesom bæster."
       },
       "mudfin": {
-        "name": "Murlocer",
+        "name": "Mudfiner",
         "desc": "Amfibiske sumpbeboere, der sværmer i det lave vand i larmende, territoriale flokke."
       },
       "burrower": {
-        "name": "Kobolder",
-        "desc": "Stearinhovedede gravere, der hærger miner og huler og voldsomt vogter deres malm."
+        "name": "Gravere",
+        "desc": "Jordklistrede gravere, der hærger miner og huler og voldsomt vogter deres malm."
       },
       "humanoid": {
         "name": "Humanoider",
@@ -2260,14 +2209,14 @@ export const da_DK: EnTranslations = {
     },
     "worldPage": {
       "heading": "Verdenen",
-      "intro": "Cryptic Realm er ét sammenhængende land, du krydser til fods, tre zoner lagt fra syd til nord. Der er ingen hurtigrejse, så rejsen er en del af eventyret.",
+      "intro": "World of ClaudeCraft er ét sammenhængende land, du krydser til fods, tre zoner lagt fra syd til nord. Der er ingen hurtigrejse, så rejsen er en del af eventyret.",
       "hub": "Hjemmebase",
       "mapHeading": "Vejen mod nord",
       "mapSub": "Tre zoner, fra syd til nord, hver et trin højere i niveau. Følg questsporet, og landet bærer dig fra dalen til tinderne.",
       "places": "Bemærkelsesværdige steder",
       "residents": "Hvem du vil møde",
       "valeBlurb": "Den grønne startdal, hvor nye helte prøver kræfter med ulve og banditter omkring byen Eastbrook.",
-      "marshBlurb": "Et druknet land af tåge og ruiner. Murlocs vrimler i lavvandet, og noget ældre rører på sig under vandet, holdt under opsyn fra brobyen Fenbridge.",
+      "marshBlurb": "Et druknet land af tåge og ruiner. Mudfiner vrimler i lavvandet, og noget ældre rører på sig under vandet, holdt under opsyn fra brobyen Fenbridge.",
       "peaksBlurb": "Vindskurede rygge og gamle minegange, der klatrer mod rigets koldeste og højeste farer, holdt af forposten Highwatch.",
       "valeGreeting": "Hold dit blad nært. Dalen er ikke, hvad den var.",
       "valeGreeter": "Marskal Redbrook, Eastbrook",
@@ -2275,9 +2224,9 @@ export const da_DK: EnTranslations = {
       "marshGreeter": "Vægter Fenwick, Fenbridge",
       "peaksGreeting": "I to hundrede år har denne mur holdt. Den brister ikke på min vagt, men den knager.",
       "peaksGreeter": "Kaptajn Thessaly, Highwatch",
-      "valePlaceNotes": "Eastbrook er din første hjemmebase. Wolf Run og Boar Meadow er milde jagtmarker; Mirror Lake er stille vand at fiske i; Webwood og Copper Dig skjuler edderkopper og malmgriske gravere; en Bandit Camp og Fallen Chapel rummer barskere arbejde; Reliquary Hill falder ned i Collapsed Reliquary, rigets første delve; og Brightwood Glade er en rolig, solbeskinnet lund i nord.",
-      "marshPlaceNotes": "Fenbridge bevogter den eneste tørre vej. Prowler Reeds og Deepfen Shallows myldrer med mosebæster og murlocs; Widow Thicket er spundet tæt med spind; Drowned Chapel og Troll Mounds rummer ældre farer; Gravecaller Encampment er kulten gravet ind, og Den Sunkne Bastion er mosens instans-hjerte.",
-      "peaksPlaceNotes": "Highwatch holder muren. Stalker Ridge og Deeprock Burrows tilhører ryg-katte og kobolds; Ogre Foothills og Drogmar's War-Camp tilhører lejede bøller; Stormcrag knitrer med elementaler, og Glimmermere gløder nedenfor; Wyrmcult Tents og Revenant Fields omkranser kultens høje grund, med Gravormens Helligdom på dens top.",
+      "valePlaceNotes": "Eastbrook er din første hjemmebase. Wolf Run og Boar Meadow er milde jagtmarker; Spejlsøen er stille vand at fiske i; Sableweb og Copper Dig skjuler edderkopper og malmgriske gravere; en Bandit Camp og Fallen Chapel rummer barskere arbejde; Reliquary Hill falder ned i Collapsed Reliquary, rigets første delve; og Brightwood Glade er en rolig, solbeskinnet lund i nord.",
+      "marshPlaceNotes": "Fenbridge bevogter den eneste tørre vej. Prowler Reeds og Deepfen Shallows myldrer med mosebæster og mudfiner; Widow Thicket er spundet tæt med spind; Drowned Chapel og Troll Mounds rummer ældre farer; Gravecaller Encampment er kulten gravet ind, og Den Sunkne Bastion er mosens instans-hjerte.",
+      "peaksPlaceNotes": "Highwatch holder muren. Stalker Ridge og Deeprock Burrows tilhører ryg-katte og gravere; Ogre Foothills og Drogmar's War-Camp tilhører lejede bøller; Stormcrag knitrer med elementaler, og Glimmermere gløder nedenfor; Wyrmcult Tents og Revenant Fields omkranser kultens høje grund, med Gravormens Helligdom på dens top.",
       "gladeTitle": "Et stille hjørne: Brightwood Glade",
       "gladeBody": "Ikke hver historie i the Vale handler om de døde. Mod nord holder en solbeskinnet lund kaldet Brightwood Glade sin egen blidere rytme, med lutter stille stier og spættet lys under grenene. Den er en blød modvægt til det spor, du følger, og værd at se, når vejen giver dig plads til at vandre."
     },
@@ -2312,7 +2261,7 @@ export const da_DK: EnTranslations = {
       "sagaValeTitle": "Dalen: et navn på et segl",
       "sagaValeBody": "I Eastbrook vil de døde ikke hvile, og mærket bag det tilhører en sekt man længe troede borte. Spor det til en Gravkalder der arbejder i kapelkrypten, og hans egne papirer peger dig mod mosen i nord.",
       "sagaMarshTitle": "Sumpen: en tiende af sjæle",
-      "sagaMarshBody": "I Mirefen er druknedødene ingen ulykke. Nogen fylder mosen som en tiendekasse og rejser lydige døde fra hver rejsende vandet tager. Følg ordrerne op gennem rækkerne til en Tågekalder i den druknede bastion, hvis sidste ord nævner noget endnu ældre, der rører på sig under tinderne.",
+      "sagaMarshBody": "I Mirefen er druknedødene ingen ulykke. Nogen fylder mosen som en tiendekasse og rejser lydige døde fra hver rejsende vandet tager. Følg ordrerne op gennem rækkerne til en Fogbinder i den druknede bastion, hvis sidste ord nævner noget endnu ældre, der rører på sig under tinderne.",
       "sagaPeaksTitle": "Tinderne: hvad tienden var til",
       "sagaPeaksBody": "På Thornpeak bliver hele planen klar. Hver sjæl, der er blevet stjålet siden the Vale, var en tiende hældt mod kultens grumme værk i bjergets hjerte. Sporet, der begyndte i en kapelgård, ender her, i en nedstigning for fem spillere for at møde hånden bag det hele. Vi lader dig selv finde ud af, hvem der venter i bunden.",
       "sideTitle": "Tråde uden for hovedvejen",
@@ -2415,38 +2364,38 @@ export const da_DK: EnTranslations = {
       "waveGoldBody": "Den midterste bølge: tveæggede kombinationer hvor din build begynder at tage form og synge.",
       "wavePrismaticTitle": "Prismatisk",
       "wavePrismaticBody": "Den sidste bølge: build-definerende, skærm-smeltende spidser der skal føles latterlige på den bedste måde.",
-      "yumiHeading": "Protect Yumi",
-      "yumiBody": "Protect Yumi is a team objective mode played in a maze: each side guards its own cat familiar while hunting the other. Every so often both cats blink to new corners of the maze, so the fight swings between defending, hunting, and racing to find them again. Queue as three versus three or five versus five; falling in battle only benches you for a moment.",
+      "yumiHeading": "Beskyt Yumi",
+      "yumiBody": "Beskyt Yumi er en holdbaseret måltilstand, der spilles i en labyrint: hver side vogter sin egen katfølgesvend, mens den jager modstanderens. Med jævne mellemrum blinker begge katte til nye hjørner af labyrinten, så kampen svinger mellem at forsvare, jage og kapløbet om at finde dem igen. Stil op som tre mod tre eller fem mod fem; at falde i kamp sætter dig kun på bænken et øjeblik.",
       "powerupsTitle": "Power-ups i ringen",
       "powerupsBody": "Glødende kugler falder også ned i arenaen midt i kampen, gratis for den der når dem først. De er bevidst overdrevne og varer kun et kort øjeblik: Speed Demon for et glimt af blændende fart, Colossus for at svulme op til en kluntet kæmpe, Moon Boots for et hoppende, lavtyngdekrafts-hop, og Berserker for et pludseligt udbrud af raseri.",
       "ladderHeading": "At klatre op ad rangstigen",
       "ladderBody": "Rangeret spil følger din placering over tid. Tjek ranglisten for at se hvor du ligger og hvem der holder toppen af riget."
     },
     "valeCupPage": {
-      "heading": "The Vale Cup",
-      "intro": "Boarball at the Sowfield: pick a banner, pick a role, and kick a stuffed boar hide past a keeper for the Copper Pail. No blood, no loot, just the roar of the stands.",
-      "loreHeading": "Boarball and the harvest truce",
-      "loreOldSow": "Long before the dead woke, Eastbrook's farmhands played boarball on the stubble fields after harvest: two mobs, one boar's hide stuffed with straw, and two wagon gates dragged to either end of the green. The first ball, the Old Sow, hangs bronzed above the tavern hearth.",
-      "loreTruce": "When the Ashen Coliseum began sanctioning war games, Marshal Redbrook answered with something gentler: a standing harvest truce on the old green. The wagon gates became goalposts, the green got walls, stands, and a name, the Sowfield, and the prize was always the same dented milk pail the winners drank from: the Copper Pail.",
-      "howHeading": "How to play",
-      "howQueue": "Queue from anywhere through the Vale Cup window, or talk to Groundskeeper Bram at the Sowfield gate. Pick a bracket from one-a-side up to five-a-side, a banner nation, and a sport role; queue solo or bring your party.",
-      "howMatch": "On kickoff your class kit is swapped for a sport kit and restored exactly afterward. Kicks aim at the ground reticle, the ball banks off the boards, and dribbling is just running with the ball. Score more goals than the other side before full time; a draw goes to golden goal.",
-      "howTruce": "Nobody bleeds at the Sowfield: tackles tumble, nothing hurts, and pets sit the match out.",
-      "spectateBody": "One match plays at a time at the stadium, and anyone can walk up and watch from the stands.",
-      "nationsHeading": "The eight banner nations",
-      "nationsBody": "Every team plays under a banner. The captain picks the nation, and if both sides fly the same one, the away side plays the inverted palette.",
-      "nationVale": "Green and gold, flying the wheat sheaf: the home side, farmhands to the bone.",
-      "nationMirefen": "Teal and grey under the heron: patient, long-legged, never hurried.",
-      "nationThornpeak": "Ice blue and white under the mountain peak: sure-footed and stubborn.",
-      "nationColiseum": "Red and black with crossed swords: they play like it is still a war game.",
-      "nationChoir": "Pale blue and silver under the bell: eerie, precise, and very quiet.",
-      "nationOgre": "Orange and umber behind the fist: shoulder-first and proud of it.",
-      "nationMoon": "Violet and silver under the crescent: night players, light on their feet.",
-      "nationCopperdig": "Copper and brown with the pickaxe: diggers who never stop running.",
-      "rolesHeading": "Sport roles",
-      "rolesBody": "Your role decides the kit you carry onto the pitch. Everyone kicks; the rest is temperament.",
-      "rewardsHeading": "Truce rules",
-      "rewardsBody": "Truce rules mean no experience and no loot: a decided match counts toward your record and the winners board, and daily-reward points come with it. Deserting a match benches your slot, and the Groundskeeper remembers."
+      "heading": "Dalpokalen",
+      "intro": "Vildsvinebold på Somarken: vælg et banner, vælg en rolle, og spark et udstoppet vildsvineskind forbi en målmand for at vinde Kobberspanden. Intet blod, intet bytte, kun tribunernes brøl.",
+      "loreHeading": "Vildsvinebold og høstfreden",
+      "loreOldSow": "Længe før de døde vågnede, spillede Østbæks karle vildsvinebold på stubmarkerne efter høst: to flokke, ét vildsvineskind stoppet med halm og to vognporte slæbt til hver sin ende af grønningen. Den første bold, Den Gamle So, hænger bronzeret over kroens ildsted.",
+      "loreTruce": "Da Askekolosseet begyndte at godkende krigslege, svarede Marskal Redbrook med noget mildere: en stående høstfred på den gamle grønning. Vognportene blev til målstolper, grønningen fik mure, tribuner og et navn, Somarken, og præmien var altid den samme bulede mælkespand, som vinderne drak af: Kobberspanden.",
+      "howHeading": "Sådan spiller du",
+      "howQueue": "Stil dig i kø hvor som helst gennem Dalpokal-vinduet, eller tal med Banemester Bram ved Somarkens port. Vælg en række fra en mod en op til fem mod fem, en bannernation og en sportsrolle; stil op alene, eller tag din gruppe med.",
+      "howMatch": "Ved kampstart byttes dit klassesæt ud med et sportssæt og gendannes nøjagtigt bagefter. Spark sigter mod jordsigtet, bolden preller af på banderne, og driblinger er bare at løbe med bolden. Scor flere mål end den anden side inden fuld tid; uafgjort går til gyldent mål.",
+      "howTruce": "Ingen bløder på Somarken: tacklinger ender i kolbøtter, intet gør ondt, og kæledyr sidder kampen over.",
+      "spectateBody": "Én kamp spilles ad gangen på stadion, og enhver kan gå hen og se med fra tribunerne.",
+      "nationsHeading": "De otte bannernationer",
+      "nationsBody": "Hvert hold spiller under et banner. Anføreren vælger nationen, og fører begge sider det samme, spiller udeholdet i den omvendte palet.",
+      "nationVale": "Grøn og guld under hvedeneget: hjemmeholdet, bondekarle ind til benet.",
+      "nationMirefen": "Blågrøn og grå under hejren: tålmodige, langbenede, aldrig forjagede.",
+      "nationThornpeak": "Isblå og hvid under bjergtinden: sikre på fødderne og stædige.",
+      "nationColiseum": "Rød og sort med korslagte sværd: de spiller, som var det stadig en krigsleg.",
+      "nationChoir": "Lyseblå og sølv under klokken: uhyggelige, præcise og meget stille.",
+      "nationOgre": "Orange og umbra bag næven: skulderen først, og stolte af det.",
+      "nationMoon": "Violet og sølv under halvmånen: natspillere, lette på fødderne.",
+      "nationCopperdig": "Kobber og brun med hakken: gravere, der aldrig holder op med at løbe.",
+      "rolesHeading": "Sportsroller",
+      "rolesBody": "Din rolle afgør det sæt, du bærer med ind på banen. Alle sparker; resten er temperament.",
+      "rewardsHeading": "Fredens regler",
+      "rewardsBody": "Fredens regler betyder ingen erfaring og intet bytte: en afgjort kamp tæller med i din statistik og på vindertavlen, og der følger daglige belønningspoint med. Deserterer du en kamp, sættes din plads på bænken, og Banemesteren husker det."
     },
     "wishPage": {
       "heading": "Ting jeg ville ønske jeg vidste",
@@ -2533,33 +2482,33 @@ export const da_DK: EnTranslations = {
       "cosmeticsApply": "Vælg dit aktive udseende fra udseenderækken på din karakterskærm, og skift frit mellem alt, du har låst op."
     },
     "professions": {
-      "intro": "Beyond combat and quests, the world rewards you for working the land and the forge: gathering raw materials, turning them into gear at the crafting stations of ten different trades, and settling into an identity as one of the ten archetypes those trades represent.",
-      "gatherTitle": "Gathering: Mining, Logging, and Herbalism",
-      "gatherIntro": "Three gathering trades let you pull raw materials straight out of the world: Mining strikes ore and stone from veins, Logging fells timber from stands of trees, and Herbalism collects herbs and plants growing wild. Each is tracked separately, so working one never slows your progress in another.",
-      "gatherWhatTitle": "Resource nodes",
-      "gatherWhatBody": "Ore veins, wood stands, and herb patches are placed out in the zones as visible, unowned fixtures. Walk up to one and interact with it to harvest whatever it holds. Once you have harvested a node, it needs time to recover before you personally can harvest it again, though it never blocks anyone else: another player can harvest the very same node in the meantime.",
-      "gatherProficiencyTitle": "Proficiency and material quality",
-      "gatherProficiencyBody": "Every successful harvest builds your proficiency in that gathering trade. A higher proficiency shifts what you pull out of a node toward rarer grades of material, from common on up, though the rarest grades stay rare even at high proficiency. More practice never hurts your odds, it only ever improves them.",
-      "gatherToolsTitle": "Tools of the trade",
-      "gatherToolsBody": "Vendors sell basic tools for each gathering trade, and better ones can be crafted, so working a resource node is meant to feel more capable as you gear up for it rather than staying static. Higher-tier tools are the intended way to unlock access to richer nodes and to work them more efficiently over a long session.",
-      "craftTitle": "The ten crafts",
-      "craftIntro": "Ten crafting trades turn gathered materials into finished gear and goods: Armorcrafting, Weaponcrafting, and Jewelcrafting shape raw matter into wearable gear; Alchemy and Engineering are driven by trial and error; Cooking, Inscription, and Enchanting each touch other crafts' output; Tailoring and Leatherworking work from exact patterns. Together they form a wheel, with each craft sitting next to two neighbors and opposite one other.",
-      "craftRingTitle": "A wheel of specialties",
-      "craftRingBody": "The ten crafts are arranged in a fixed ring, and where a craft sits on that ring matters: crafts next to each other on the wheel share more in common with each other than crafts on opposite sides do. Committing to one craft is meant to feel like joining a family of related trades, not picking an isolated skill.",
-      "craftRecipesTitle": "Recipes and reagents",
-      "craftRecipesBody": "Every craft has its own recipes, each calling for specific reagents you gather or buy. The most basic recipes in each craft ask for nothing but common materials and are craftable from the very start, so you can begin working a trade the moment you pick it up rather than waiting to unlock it.",
-      "craftMasteryTitle": "Skill and mastery",
-      "craftMasteryBody": "Crafting successfully builds skill in that trade, and richer recipes are gated behind higher skill: the basic recipes are open to everyone, while progressively more advanced ones ask for progressively more mastery to attempt. Growing your skill in a craft is the path from simple starter goods to its more ambitious recipes.",
-      "craftComboTitle": "Combination recipes",
-      "craftComboBody": "Beyond a single craft's own recipe list, the wheel also supports combination recipes that call on two neighboring crafts at once, rewarding a character (or a pair of trading partners) who has invested in adjacent trades on the ring rather than one in isolation.",
-      "archetypeTitle": "The ten archetypes",
-      "archetypeIntro": "Each of the ten crafts also stands for an archetype, a broader identity you can adopt beyond just working that trade. Your active archetype is a single choice at a time, not a checklist: you carry one, and can change which one later if you choose to.",
-      "archetypeChooseTitle": "Choosing your archetype",
-      "archetypeChooseBody": "You declare your first archetype through an early, zone one story quest that formally accepts you into that identity. Until you complete that quest, you have not yet chosen an archetype at all.",
-      "archetypeSwitchTitle": "Changing your mind",
-      "archetypeSwitchBody": "Having declared an archetype once does not lock you into it forever. Changing to a different archetype means first completing a repeatable \"make amends\" quest for your old one, and each time you switch, the amends expected of you the next time grow a little steeper, so switching stays meaningful rather than costless.",
-      "archetypeIdentityTitle": "What your archetype means",
-      "archetypeIdentityBody": "Your active archetype is a statement about who your character is in the world, recognized in how others and the world address you. The exact rewards and recognition that come with it are still being finalized; check back as the system fills in."
+      "intro": "Ud over kamp og opdrag belønner verden dig for at arbejde med jorden og essen: at samle råmaterialer, forvandle dem til udstyr ved ti forskellige fags håndværksstationer og finde sig til rette i en identitet som en af de ti arketyper, fagene står for.",
+      "gatherTitle": "Samlerfag: Minedrift, Skovhugst og Urtekundskab",
+      "gatherIntro": "Tre samlerfag lader dig hente råmaterialer direkte ud af verden: Minedrift slår malm og sten løs fra årer, Skovhugst fælder tømmer i trægrupper, og Urtekundskab samler urter og planter, der vokser vildt. Hvert fag spores for sig, så arbejde i det ene aldrig sinker dine fremskridt i et andet.",
+      "gatherWhatTitle": "Ressourceforekomster",
+      "gatherWhatBody": "Malmårer, trægrupper og urtebede står ude i zonerne som synlige forekomster, som ingen ejer. Gå hen til en og interager med den for at høste, hvad den rummer. Når du har høstet en forekomst, skal den bruge tid på at komme sig, før du personligt kan høste den igen, men den blokerer aldrig for andre: en anden spiller kan høste den selvsamme forekomst i mellemtiden.",
+      "gatherProficiencyTitle": "Kyndighed og materialekvalitet",
+      "gatherProficiencyBody": "Hver vellykket høst opbygger din kyndighed i det samlerfag. Højere kyndighed forskyder, hvad du får ud af en forekomst, mod sjældnere materialegrader, fra almindelig og opefter, selvom de sjældneste grader forbliver sjældne selv ved høj kyndighed. Mere øvelse skader aldrig dine odds, den forbedrer dem kun.",
+      "gatherToolsTitle": "Fagets værktøj",
+      "gatherToolsBody": "Handlende sælger grundlæggende værktøj til hvert samlerfag, og bedre kan fremstilles, så arbejdet ved en ressourceforekomst gerne skulle føles stærkere og stærkere, efterhånden som du udstyrer dig til det, frem for at stå i stampe. Værktøj af højere grad er den tiltænkte vej til at få adgang til rigere forekomster og arbejde dem mere effektivt over en lang session.",
+      "craftTitle": "De ti håndværk",
+      "craftIntro": "Ti håndværksfag forvandler indsamlede materialer til færdigt udstyr og varer: Rustningssmedning, Våbensmedning og Juvelering former råstof til udstyr, man kan bære; Alkymi og Ingeniørkunst drives af forsøg og fejl; Madlavning, Skriverkunst og Fortryllelse rører hver ved andre håndværks frembringelser; Skrædderi og Garveri arbejder ud fra nøjagtige mønstre. Sammen danner de et hjul, hvor hvert håndværk sidder ved siden af to naboer og over for ét andet.",
+      "craftRingTitle": "Et hjul af specialer",
+      "craftRingBody": "De ti håndværk er ordnet i en fast ring, og hvor et håndværk sidder på ringen, betyder noget: håndværk ved siden af hinanden på hjulet har mere til fælles end håndværk på modsatte sider. At binde sig til ét håndværk skal føles som at træde ind i en familie af beslægtede fag, ikke som at vælge en isoleret færdighed.",
+      "craftRecipesTitle": "Opskrifter og reagenser",
+      "craftRecipesBody": "Hvert håndværk har sine egne opskrifter, som hver kræver bestemte reagenser, du samler eller køber. De mest grundlæggende opskrifter i hvert håndværk kræver ikke andet end almindelige materialer og kan laves fra første færd, så du kan begynde at arbejde med et fag i samme øjeblik, du tager det op, i stedet for at vente på at låse det op.",
+      "craftMasteryTitle": "Færdighed og mesterskab",
+      "craftMasteryBody": "Vellykket håndværk opbygger færdighed i faget, og rigere opskrifter er låst bag højere færdighed: de grundlæggende opskrifter er åbne for alle, mens stadig mere avancerede kræver stadig mere mesterskab at forsøge sig med. At øge din færdighed i et håndværk er vejen fra simple begyndervarer til fagets mere ambitiøse opskrifter.",
+      "craftComboTitle": "Kombinationsopskrifter",
+      "craftComboBody": "Ud over et enkelt håndværks egen opskriftsliste understøtter hjulet også kombinationsopskrifter, der trækker på to nabohåndværk på én gang, og belønner en karakter (eller et par handelspartnere), som har investeret i tilstødende fag på ringen frem for ét i isolation.",
+      "archetypeTitle": "De ti arketyper",
+      "archetypeIntro": "Hvert af de ti håndværk står også for en arketype, en bredere identitet du kan påtage dig ud over blot at arbejde med faget. Din aktive arketype er ét valg ad gangen, ikke en tjekliste: du bærer én og kan senere skifte til en anden, hvis du vil.",
+      "archetypeChooseTitle": "Valg af din arketype",
+      "archetypeChooseBody": "Du erklærer din første arketype gennem et tidligt historieopdrag i zone et, som formelt optager dig i den identitet. Før du har fuldført det opdrag, har du slet ikke valgt en arketype endnu.",
+      "archetypeSwitchTitle": "At skifte mening",
+      "archetypeSwitchBody": "At have erklæret en arketype én gang låser dig ikke fast for evigt. At skifte til en anden arketype kræver først, at du fuldfører et gentageligt \"gør bod\"-opdrag for din gamle, og hver gang du skifter, bliver den bod, der forventes af dig næste gang, lidt større, så et skifte forbliver meningsfuldt frem for omkostningsfrit.",
+      "archetypeIdentityTitle": "Hvad din arketype betyder",
+      "archetypeIdentityBody": "Din aktive arketype er en erklæring om, hvem din karakter er i verden, og den anerkendes i, hvordan andre og verden tiltaler dig. De præcise belønninger og den anerkendelse, der følger med, er stadig ved at blive fastlagt; kig forbi igen, efterhånden som systemet vokser til."
     },
     "economy": {
       "intro": "Mønter smører hele verden: de køber dit udstyr, dine forsyninger og dit rejsegrej og skifter hænder mellem spillere. Du opsamler det hele bare ved at spille, så tænk på denne side som et kort over, hvor dine penge kommer fra og går hen.",
@@ -2569,10 +2518,10 @@ export const da_DK: EnTranslations = {
       "vendorsBody": "Byer og udposter er fyldt med købmænd, hver med deres egen handel. Provianthandlere fører mad og drikke, våbensmede og rustningssmede bærer udstyr, og en kvartermester holder praktisk rejsegrej. Gå hen til en for at se, hvad de sælger.",
       "marksTitle": "En anden valuta: Delve-Mærker",
       "marksBody": "Mønter er ikke det eneste, du lægger til side. Delves udbetaler Delve-Mærker, en særskilt valuta, du kun bruger hos delve-vogteren, på ledsageropgraderinger og udstyr, du ikke finder andre steder. De blandes aldrig med dine mønter.",
-      "bankTitle": "The bank",
-      "bankBody": "Every hub town keeps a branch of The Gilded Strongbox, the banking house of the realm. Speak to the bursar there to open your vault, a private store of room beyond your bags that your character keeps for life. Whatever you leave with them waits safely, whichever branch you visit next.",
-      "bankHow": "With the vault open, click an item in your bags to deposit it and click it in the vault to take it back. The vault holds goods only, never coin, and quest items stay with you. When your bags fill up mid-journey, one button sweeps all your crafting materials in at once.",
-      "bankSlots": "A fresh vault starts small and grows with you. The bursar sells further slots for coin at ever-steeper prices, and playing online earns bonus room on top, for things like a verified email, linked accounts, and friends you bring into the game.",
+      "bankTitle": "Banken",
+      "bankBody": "Hver hjemmebase har en filial af Det Forgyldte Pengeskrin, rigets bankhus. Tal med skatmesteren der for at åbne din boks, en privat opbevaringsplads ud over dine tasker, som din karakter beholder livet ud. Hvad end du efterlader hos dem, venter i sikkerhed, uanset hvilken filial du besøger næste gang.",
+      "bankHow": "Med boksen åben klikker du på en genstand i dine tasker for at indsætte den, og klikker på den i boksen for at tage den tilbage. Boksen rummer kun varer, aldrig mønter, og opgavegenstande bliver hos dig. Når dine tasker fyldes op undervejs, fejer én knap alle dine håndværksmaterialer ind på én gang.",
+      "bankSlots": "En ny boks starter i det små og vokser med dig. Skatmesteren sælger flere pladser for mønter til stadigt stejlere priser, og at spille online giver bonusplads oveni, for ting som en bekræftet e-mail, forbundne konti og venner, du bringer ind i spillet.",
       "buyingTitle": "Køb og salg",
       "buyingBody": "Stil dig nær en købmand for at åbne deres vindue. Du kan købe alt, de har på lager, hvis du har råd, og sælge det meste af det, der er i dine tasker, for mønter. Hvis du sælger noget ved en fejl, holder en handlende på dine seneste salg, så du kan købe dem tilbage.",
       "junkTitle": "Rydde ud i skrammel",
@@ -2685,427 +2634,427 @@ export const da_DK: EnTranslations = {
     }
   },
   "editor": {
-    "appTitle": "Map Editor",
-    "docTitle": "Map Editor - Cryptic Realm",
-    "untitledMap": "Untitled Map",
-    "playtestPlayerName": "Mapmaker",
+    "appTitle": "Korteditor",
+    "docTitle": "Korteditor - World of ClaudeCraft",
+    "untitledMap": "Unavngivet kort",
+    "playtestPlayerName": "Kortmager",
     "topbar": {
-      "label": "Editor actions",
-      "mapNameLabel": "Map name",
-      "dirty": "Unsaved changes",
-      "dirtyDot": "This map has unsaved changes",
-      "clean": "All changes saved",
-      "savedLocal": "Saved in this browser",
-      "savedServer": "Saved to server (v{version})",
-      "saving": "Saving...",
-      "neverSaved": "Not saved yet",
-      "new": "New",
-      "newTitle": "Start a new map from the built-in world",
-      "open": "Open",
-      "openTitle": "Open a saved map (browser or server)",
-      "save": "Save",
-      "saveTitle": "Save to this browser, and to the server when signed in (Ctrl+S)",
-      "saveAs": "Save As",
-      "saveAsTitle": "Save a copy under a new name",
-      "fork": "Fork",
-      "forkTitle": "Create your own server-side copy of this map",
-      "forkDisabledTitle": "Open a server map first to fork it",
-      "import": "Import",
-      "importTitle": "Import a map from a JSON file",
-      "export": "Export",
-      "exportTitle": "Download this map as a JSON file",
-      "uploadAsset": "Upload Asset",
-      "uploadAssetTitle": "Upload a GLB model (up to 8 MiB) to place in your maps",
-      "uploadAssetDisabledTitle": "Sign in from the game to upload assets",
-      "playtest": "Playtest",
-      "playtestTitle": "Boot the game on this map (offline, current edits included)",
-      "viewLabel": "View mode",
+      "label": "Editorhandlinger",
+      "mapNameLabel": "Kortnavn",
+      "dirty": "Ugemte ændringer",
+      "dirtyDot": "Dette kort har ugemte ændringer",
+      "clean": "Alle ændringer er gemt",
+      "savedLocal": "Gemt i denne browser",
+      "savedServer": "Gemt på serveren (v{version})",
+      "saving": "Gemmer...",
+      "neverSaved": "Ikke gemt endnu",
+      "new": "Nyt",
+      "newTitle": "Start et nyt kort fra den indbyggede verden",
+      "open": "Åbn",
+      "openTitle": "Åbn et gemt kort (browser eller server)",
+      "save": "Gem",
+      "saveTitle": "Gem i denne browser, og på serveren når du er logget ind (Ctrl+S)",
+      "saveAs": "Gem som",
+      "saveAsTitle": "Gem en kopi under et nyt navn",
+      "fork": "Forgren",
+      "forkTitle": "Opret din egen serverkopi af dette kort",
+      "forkDisabledTitle": "Åbn først et serverkort for at forgrene det",
+      "import": "Importér",
+      "importTitle": "Importér et kort fra en JSON-fil",
+      "export": "Eksportér",
+      "exportTitle": "Download dette kort som en JSON-fil",
+      "uploadAsset": "Upload asset",
+      "uploadAssetTitle": "Upload en GLB-model (op til 8 MiB) til at placere på dine kort",
+      "uploadAssetDisabledTitle": "Log ind fra spillet for at uploade assets",
+      "playtest": "Prøvespil",
+      "playtestTitle": "Start spillet på dette kort (offline, med dine aktuelle ændringer)",
+      "viewLabel": "Visningstilstand",
       "view3d": "3D",
-      "view3dTitle": "Edit in the rendered world",
+      "view3dTitle": "Rediger i den renderede verden",
       "view2d": "2D",
-      "view2dTitle": "Edit on the symbolic overhead map",
-      "undoCount": "Undo: {count}",
-      "undoCountTitle": "{count} undoable steps (Ctrl+Z to undo, Ctrl+Y to redo)",
-      "autosave": "Autosave",
-      "autosaveTitle": "Automatically save the map while there are unsaved changes. Turns itself off if a save fails.",
-      "undo": "Undo",
-      "undoTitle": "Undo the last change (Ctrl+Z)",
-      "redo": "Redo",
-      "redoTitle": "Redo the last undone change (Ctrl+Y)",
+      "view2dTitle": "Rediger på det symbolske oversigtskort",
+      "undoCount": "Fortryd: {count}",
+      "undoCountTitle": "{count} trin kan fortrydes (Ctrl+Z for at fortryde, Ctrl+Y for at gentage)",
+      "autosave": "Autogem",
+      "autosaveTitle": "Gem automatisk kortet, mens der er ugemte ændringer. Slår sig selv fra, hvis et gem mislykkes.",
+      "undo": "Fortryd",
+      "undoTitle": "Fortryd den seneste ændring (Ctrl+Z)",
+      "redo": "Gentag",
+      "redoTitle": "Gentag den senest fortrudte ændring (Ctrl+Y)",
       "offline": "Offline",
-      "offlineTitle": "Not signed in: maps save to this browser only. Sign in from the game to save online.",
-      "signIn": "Sign in",
-      "signInTitle": "Open the game login screen in a new tab",
-      "help": "Help",
-      "helpTitle": "Editor guide: tools, shortcuts, and the tutorial"
+      "offlineTitle": "Ikke logget ind: kort gemmes kun i denne browser. Log ind fra spillet for at gemme online.",
+      "signIn": "Log ind",
+      "signInTitle": "Åbn spillets loginskærm i en ny fane",
+      "help": "Hjælp",
+      "helpTitle": "Editorguide: værktøjer, genveje og rundvisningen"
     },
     "tool": {
-      "listLabel": "Editor tools",
+      "listLabel": "Editorværktøjer",
       "keyHint": "{name} ({key})",
-      "select": "Select",
-      "raise": "Raise",
-      "lower": "Lower",
-      "smooth": "Smooth",
-      "flatten": "Flatten",
-      "paint": "Paint Biome",
-      "water": "Water",
-      "place": "Place Asset",
-      "blocker": "Blocker Wall",
-      "camp": "Camp",
-      "spawn": "Spawn Point",
+      "select": "Vælg",
+      "raise": "Hæv",
+      "lower": "Sænk",
+      "smooth": "Udglat",
+      "flatten": "Planér",
+      "paint": "Mal biom",
+      "water": "Vand",
+      "place": "Placér asset",
+      "blocker": "Spærrevæg",
+      "camp": "Lejr",
+      "spawn": "Startpunkt",
       "region": "Region",
-      "erase": "Erase"
+      "erase": "Visk ud"
     },
     "inspector": {
-      "label": "Tool options"
+      "label": "Værktøjsindstillinger"
     },
     "brush": {
-      "title": "Brush",
-      "size": "Brush size",
-      "strength": "Strength",
-      "sizeHint": "Keys: [ and ] resize the brush; Shift+[ and Shift+] change strength.",
-      "editCount": "Terrain edits: {count} / {max}"
+      "title": "Pensel",
+      "size": "Penselstørrelse",
+      "strength": "Styrke",
+      "sizeHint": "Taster: [ og ] ændrer penslens størrelse; Shift+[ og Shift+] ændrer styrken.",
+      "editCount": "Terrænændringer: {count} / {max}"
     },
     "biome": {
-      "title": "Biome",
-      "paletteLabel": "Biome to paint",
-      "vale": "Vale",
-      "marsh": "Marsh",
-      "peaks": "Peaks",
-      "beach": "Beach",
-      "desert": "Desert",
-      "volcano": "Volcano",
-      "cave": "Cave",
-      "erase": "Erase paint",
-      "hint": "Painted cells override the zone biome for terrain shape and color.",
-      "clear": "Clear all biome paint",
-      "clearConfirm": "Remove every painted biome cell from this map?"
+      "title": "Biom",
+      "paletteLabel": "Biom at male",
+      "vale": "Dal",
+      "marsh": "Sump",
+      "peaks": "Tinder",
+      "beach": "Strand",
+      "desert": "Ørken",
+      "volcano": "Vulkan",
+      "cave": "Hule",
+      "erase": "Visk maling ud",
+      "hint": "Malede celler tilsidesætter zonens biom for terrænform og farve.",
+      "clear": "Ryd al biommaling",
+      "clearConfirm": "Fjern alle malede biomceller fra dette kort?"
     },
     "flatten": {
-      "hint": "Flatten levels the ground to the height under the cursor when the drag starts.",
-      "hardEdge": "Hard edge"
+      "hint": "Planér jævner jorden til højden under markøren, dér hvor trækket begynder.",
+      "hardEdge": "Hård kant"
     },
     "water": {
-      "title": "Water Level",
-      "level": "Water level",
-      "hint": "Sets each declared lake's water surface height, from {min} to {max} yards.",
-      "reset": "Reset to the built-in level"
+      "title": "Vandstand",
+      "level": "Vandstand",
+      "hint": "Angiver vandoverfladens højde for hele kortet, fra {min} til {max} yard.",
+      "reset": "Nulstil til det indbyggede niveau"
     },
     "place": {
-      "title": "Place Asset",
-      "scale": "Scale",
-      "collide": "Blocks movement",
-      "collideHint": "A blocking asset gets a collision footprint players cannot walk through.",
-      "randomRotation": "Random rotation",
-      "chosen": "Placing: {name}",
-      "none": "Pick an asset from the browser below, then click the ground to place it."
+      "title": "Placér asset",
+      "scale": "Skala",
+      "collide": "Blokerer bevægelse",
+      "collideHint": "Et blokerende asset får et kollisionsaftryk, som spillere ikke kan gå igennem.",
+      "randomRotation": "Tilfældig rotation",
+      "chosen": "Placerer: {name}",
+      "none": "Vælg et asset i browseren nedenfor, og klik derefter på jorden for at placere det."
     },
     "blockerTool": {
-      "title": "Blocker Wall",
-      "hint": "Drag along the ground to draw an invisible wall players cannot walk or jump through. Release to place it; a wall shorter than half a yard is discarded.",
-      "count": "Blocker walls: {count} / {max}"
+      "title": "Spærrevæg",
+      "hint": "Træk hen over jorden for at tegne en usynlig væg, som spillere ikke kan gå eller hoppe igennem. Slip for at placere den; en væg kortere end en halv yard kasseres.",
+      "count": "Spærrevægge: {count} / {max}"
     },
     "camp": {
-      "title": "Mob Camp",
+      "title": "Mob-lejr",
       "mob": "Mob",
-      "count": "Count",
+      "count": "Antal",
       "radius": "Radius",
-      "delete": "Delete camp",
-      "hint": "Click open ground to add a camp, or click an existing camp to edit it.",
-      "playtestNote": "Mobs spawn only in playtest, never in the editor view.",
-      "selected": "Camp: {mob}",
-      "none": "No camp selected."
+      "delete": "Slet lejr",
+      "hint": "Klik på åben jord for at tilføje en lejr, eller klik på en eksisterende lejr for at redigere den.",
+      "playtestNote": "Mobs spawner kun i prøvespil, aldrig i editorvisningen.",
+      "selected": "Lejr: {mob}",
+      "none": "Ingen lejr valgt."
     },
     "spawn": {
-      "title": "Spawn Point",
-      "hint": "Click the ground to set where playtest drops the player.",
-      "position": "Spawn: {x}, {z}",
-      "unset": "Using the built-in start position.",
-      "clear": "Clear spawn point"
+      "title": "Startpunkt",
+      "hint": "Klik på jorden for at angive, hvor prøvespillet sætter spilleren af.",
+      "position": "Start: {x}, {z}",
+      "unset": "Bruger den indbyggede startposition.",
+      "clear": "Ryd startpunkt"
     },
     "region": {
       "title": "Region",
-      "hint": "Drag a box to select placements and terrain edits. Copy, then click to paste.",
-      "hint3d": "Region boxes draw in the 2D view; copy and paste work in both views.",
-      "copy": "Copy region",
-      "pasteBeside": "Paste beside",
-      "copied": "Copied {assets} assets and {edits} terrain edits.",
-      "pasted": "Pasted {count} items.",
-      "needBox": "Draw a region box first.",
-      "needClipboard": "Copy a region first."
+      "hint": "Træk en boks for at markere placeringer og terrænændringer. Kopiér, og klik derefter for at indsætte.",
+      "hint3d": "Regionbokse tegnes i 2D-visningen; kopiér og indsæt virker i begge visninger.",
+      "copy": "Kopiér region",
+      "pasteBeside": "Indsæt ved siden af",
+      "copied": "Kopierede {assets} assets og {edits} terrænændringer.",
+      "pasted": "Indsatte {count} elementer.",
+      "needBox": "Tegn først en regionboks.",
+      "needClipboard": "Kopiér først en region."
     },
     "eraseTool": {
-      "title": "Erase",
-      "hint": "Click a placed asset to remove it, or click sculpted ground to remove the newest stamp under the cursor.",
-      "blockerHint": "Clicking near a blocker wall removes that wall instead."
+      "title": "Visk ud",
+      "hint": "Klik på et placeret asset for at fjerne det, eller klik på skulpteret jord for at fjerne det nyeste stempel under markøren.",
+      "blockerHint": "Klikker du nær en spærrevæg, fjernes den væg i stedet."
     },
     "selection": {
-      "title": "Selection",
-      "none": "Nothing selected. Use Select and click a placed asset.",
+      "title": "Markering",
+      "none": "Intet markeret. Brug Vælg, og klik på et placeret asset.",
       "asset": "Asset: {name}",
       "x": "X",
       "z": "Z",
       "rotation": "Rotation",
-      "scale": "Scale",
-      "collide": "Blocks movement",
-      "radius": "Collision radius",
+      "scale": "Skala",
+      "collide": "Blokerer bevægelse",
+      "radius": "Kollisionsradius",
       "radiusAuto": "Auto",
-      "radiusAutoTitle": "Reset the collision radius to follow the asset scale",
-      "radiusHint": "Auto derives the collision radius from the asset scale; drag the slider to override it.",
-      "footprints": "Show collision footprints",
-      "duplicate": "Duplicate",
-      "delete": "Delete",
-      "deleteHint": "Delete removes the selection; Ctrl+Z restores it.",
-      "moveHint": "Move: drag the asset along the ground in the 3D view, or nudge it with the arrow keys (0.5 yd, Shift for 2 yd).",
-      "wheelHint": "Shift+scroll rotates the asset, Alt+scroll scales it, Ctrl+D duplicates it."
+      "radiusAutoTitle": "Nulstil kollisionsradius, så den følger assetets skala",
+      "radiusHint": "Auto udleder kollisionsradius af assetets skala; træk i skyderen for at tilsidesætte den.",
+      "footprints": "Vis kollisionsaftryk",
+      "duplicate": "Duplikér",
+      "delete": "Slet",
+      "deleteHint": "Delete fjerner markeringen; Ctrl+Z gendanner den.",
+      "moveHint": "Flyt: træk dit asset hen over jorden i 3D-visningen, eller skub det med piletasterne (0,5 yd, Shift for 2 yd).",
+      "wheelHint": "Shift+rul roterer dit asset, Alt+rul skalerer det, Ctrl+D duplikerer det."
     },
     "marker": {
-      "title": "Marker",
-      "reset": "Reset position",
-      "moved": "{count} markers moved from the built-in layout."
+      "title": "Markør",
+      "reset": "Nulstil position",
+      "moved": "{count} markører flyttet fra det indbyggede layout."
     },
     "layers": {
-      "title": "Layers",
-      "hub": "Hubs",
-      "graveyard": "Graveyards",
-      "lake": "Lakes",
-      "poi": "Points of interest",
-      "camp": "Camps",
-      "npc": "NPCs",
-      "object": "Objects",
-      "blocker": "Blocker walls"
+      "title": "Lag",
+      "hub": "Knudepunkter",
+      "graveyard": "Kirkegårde",
+      "lake": "Søer",
+      "poi": "Interessepunkter",
+      "camp": "Lejre",
+      "npc": "NPC'er",
+      "object": "Objekter",
+      "blocker": "Spærrevægge"
     },
     "frame": {
-      "title": "Frame",
-      "all": "All"
+      "title": "Indramning",
+      "all": "Alt"
     },
     "procgen": {
-      "title": "Procedural",
-      "count": "Count",
-      "scatter": "Scatter category assets",
-      "hills": "Generate rolling hills",
-      "scattered": "Scattered {count} assets from {category}.",
-      "hillsAdded": "Added {count} hills.",
-      "noAssets": "No assets in that category."
+      "title": "Procedurel generering",
+      "count": "Antal",
+      "scatter": "Spred assets fra kategori",
+      "hills": "Generér bølgende bakker",
+      "scattered": "Spredte {count} assets fra {category}.",
+      "hillsAdded": "Tilføjede {count} bakker.",
+      "noAssets": "Ingen assets i den kategori."
     },
     "assets": {
-      "title": "Asset Browser",
-      "label": "Asset browser",
-      "search": "Search assets",
-      "searchPlaceholder": "Search assets...",
-      "empty": "No matching assets.",
-      "uploadedTab": "Uploaded",
-      "uploadedEmpty": "No uploaded assets yet. Use Upload Asset to add a GLB model (up to 8 MiB).",
-      "uploadedSignIn": "Sign in from the game to upload and place your own GLB models.",
-      "uploadedLoadFailed": "Could not load your uploaded assets.",
-      "deleteAsset": "Delete uploaded asset",
-      "deleteAssetConfirm": "Delete the uploaded asset \"{name}\"? Maps that use it lose the model.",
-      "pick": "Place {name}",
+      "title": "Asset-browser",
+      "label": "Asset-browser",
+      "search": "Søg i assets",
+      "searchPlaceholder": "Søg i assets...",
+      "empty": "Ingen matchende assets.",
+      "uploadedTab": "Uploadede",
+      "uploadedEmpty": "Ingen uploadede assets endnu. Brug Upload asset til at tilføje en GLB-model (op til 8 MiB).",
+      "uploadedSignIn": "Log ind fra spillet for at uploade og placere dine egne GLB-modeller.",
+      "uploadedLoadFailed": "Kunne ikke indlæse dine uploadede assets.",
+      "deleteAsset": "Slet uploadet asset",
+      "deleteAssetConfirm": "Slet det uploadede asset \"{name}\"? Kort, der bruger det, mister modellen.",
+      "pick": "Placér {name}",
       "categoryTab": "{category} ({count})",
       "category": {
-        "biome": "Biome",
-        "chars": "Characters",
-        "creatures": "Creatures",
-        "dungeon": "Dungeon",
-        "foliage": "Foliage",
-        "props": "Props",
+        "biome": "Biom",
+        "chars": "Karakterer",
+        "creatures": "Skabninger",
+        "dungeon": "Fangekælder",
+        "foliage": "Bevoksning",
+        "props": "Rekvisitter",
         "quest": "Quest",
-        "resources": "Resources",
-        "tools": "Tools",
-        "weapons": "Weapons"
+        "resources": "Ressourcer",
+        "tools": "Værktøj",
+        "weapons": "Våben"
       }
     },
     "upload": {
-      "notGlb": "Pick a .glb file.",
-      "tooLarge": "That file is over the 8 MiB limit.",
-      "uploading": "Uploading asset...",
-      "uploaded": "Asset uploaded: {name}",
-      "uploadedExisting": "That model was already on the server; reusing it.",
-      "deleted": "Uploaded asset deleted."
+      "notGlb": "Vælg en .glb-fil.",
+      "tooLarge": "Den fil er over grænsen på 8 MiB.",
+      "uploading": "Uploader asset...",
+      "uploaded": "Asset uploadet: {name}",
+      "uploadedExisting": "Den model var allerede på serveren; den genbruges.",
+      "deleted": "Uploadet asset slettet."
     },
     "openDrawer": {
-      "title": "Open Map",
-      "close": "Close",
-      "tabLocal": "This Browser",
-      "tabMine": "My Server Maps",
-      "tabPublic": "Public Maps",
-      "colName": "Name",
-      "colUpdated": "Updated",
+      "title": "Åbn kort",
+      "close": "Luk",
+      "tabLocal": "Denne browser",
+      "tabMine": "Mine serverkort",
+      "tabPublic": "Offentlige kort",
+      "colName": "Navn",
+      "colUpdated": "Opdateret",
       "colStatus": "Status",
-      "statusPublic": "Public",
-      "statusPrivate": "Private",
-      "open": "Open",
-      "fork": "Fork",
-      "publish": "Publish",
-      "unpublish": "Unpublish",
-      "delete": "Delete",
-      "draft": "Autosaved draft",
-      "emptyLocal": "No maps saved in this browser yet. Save one and it appears here.",
-      "emptyMine": "No maps on the server yet. Save while signed in to create one.",
-      "emptyPublic": "No public maps yet.",
-      "loading": "Loading maps...",
-      "loadFailed": "Could not load maps from the server.",
-      "signInHint": "Sign in from the game to browse, save, and fork server maps.",
-      "deleteLocalConfirm": "Delete the local map \"{name}\"?",
-      "deleteServerConfirm": "Delete the server map \"{name}\"? This cannot be undone.",
-      "prev": "Previous page",
-      "next": "Next page",
-      "page": "Page {page}"
+      "statusPublic": "Offentlig",
+      "statusPrivate": "Privat",
+      "open": "Åbn",
+      "fork": "Forgren",
+      "publish": "Udgiv",
+      "unpublish": "Afpublicér",
+      "delete": "Slet",
+      "draft": "Autogemt kladde",
+      "emptyLocal": "Ingen kort gemt i denne browser endnu. Gem et, så vises det her.",
+      "emptyMine": "Ingen kort på serveren endnu. Gem, mens du er logget ind, for at oprette et.",
+      "emptyPublic": "Ingen offentlige kort endnu.",
+      "loading": "Indlæser kort...",
+      "loadFailed": "Kunne ikke indlæse kort fra serveren.",
+      "signInHint": "Log ind fra spillet for at gennemse, gemme og forgrene serverkort.",
+      "deleteLocalConfirm": "Slet det lokale kort \"{name}\"?",
+      "deleteServerConfirm": "Slet serverkortet \"{name}\"? Dette kan ikke fortrydes.",
+      "prev": "Forrige side",
+      "next": "Næste side",
+      "page": "Side {page}"
     },
     "status": {
-      "savedLocal": "Saved \"{name}\" to this browser.",
-      "savedServer": "Saved \"{name}\" to the server (v{version}).",
-      "savedLocalOnly": "Saved \"{name}\" to this browser. Sign in to save online.",
-      "saveFailedLocal": "Local save failed (storage blocked).",
-      "opened": "Opened \"{name}\".",
-      "imported": "Imported \"{name}\".",
-      "importFailed": "Import cancelled, or the file is not a valid map.",
-      "exported": "Downloaded \"{name}\".",
-      "newMap": "New map started from the built-in world.",
-      "forked": "Forked to \"{name}\". You are editing your own copy now.",
-      "published": "Map published. Anyone can now find and fork it.",
-      "unpublished": "Map unpublished.",
-      "deleted": "Map deleted.",
-      "assetPlacedFirst": "Pick an asset in the browser first.",
-      "loading3d": "Loading the world...",
-      "playtestLaunch": "Launching playtest...",
-      "playtestFailed": "Could not start the playtest (storage blocked).",
-      "draftSaved": "Draft autosaved.",
-      "draftRestored": "Restored the autosaved draft.",
-      "autosaveFailed": "Autosave failed (browser storage is full or blocked). Export the map to keep a backup.",
-      "terrainCapReached": "Terrain edit limit reached ({max}). Extra sculpt stamps were not added.",
-      "placementCapReached": "Placement limit reached ({max}). Extra assets were not added.",
-      "blockerCapReached": "Blocker wall limit reached ({max}). The new wall was not added.",
-      "autosaveOff": "Autosave turned off: {reason} Save manually, then turn it back on."
+      "savedLocal": "Gemte \"{name}\" i denne browser.",
+      "savedServer": "Gemte \"{name}\" på serveren (v{version}).",
+      "savedLocalOnly": "Gemte \"{name}\" i denne browser. Log ind for at gemme online.",
+      "saveFailedLocal": "Lokalt gem mislykkedes (lager blokeret).",
+      "opened": "Åbnede \"{name}\".",
+      "imported": "Importerede \"{name}\".",
+      "importFailed": "Importen blev annulleret, eller filen er ikke et gyldigt kort.",
+      "exported": "Downloadede \"{name}\".",
+      "newMap": "Nyt kort startet fra den indbyggede verden.",
+      "forked": "Forgrenet til \"{name}\". Du redigerer nu din egen kopi.",
+      "published": "Kortet er udgivet. Alle kan nu finde og forgrene det.",
+      "unpublished": "Kortet er ikke længere udgivet.",
+      "deleted": "Kortet er slettet.",
+      "assetPlacedFirst": "Vælg først et asset i browseren.",
+      "loading3d": "Indlæser verdenen...",
+      "playtestLaunch": "Starter prøvespil...",
+      "playtestFailed": "Kunne ikke starte prøvespillet (lager blokeret).",
+      "draftSaved": "Kladden er autogemt.",
+      "draftRestored": "Den autogemte kladde er gendannet.",
+      "autosaveFailed": "Autogem mislykkedes (browserlageret er fuldt eller blokeret). Eksportér kortet for at have en sikkerhedskopi.",
+      "terrainCapReached": "Grænsen for terrænændringer er nået ({max}). Overskydende stempler blev ikke tilføjet.",
+      "placementCapReached": "Placeringsgrænsen er nået ({max}). Overskydende assets blev ikke tilføjet.",
+      "blockerCapReached": "Grænsen for spærrevægge er nået ({max}). Den nye væg blev ikke tilføjet.",
+      "autosaveOff": "Autogem slået fra: {reason} Gem manuelt, og slå det til igen."
     },
     "confirm": {
       "ok": "OK",
-      "cancel": "Cancel",
-      "discardTitle": "Discard changes?",
-      "discardBody": "You have unsaved changes on \"{name}\". Discard them?",
-      "discard": "Discard",
-      "conflictTitle": "Save conflict",
-      "conflictBody": "This map changed on the server since you opened it (now v{version}). Save your version as a new copy?",
-      "conflictSaveCopy": "Save As Copy"
+      "cancel": "Annuller",
+      "discardTitle": "Kassér ændringer?",
+      "discardBody": "Du har ugemte ændringer på \"{name}\". Kassér dem?",
+      "discard": "Kassér",
+      "conflictTitle": "Gem-konflikt",
+      "conflictBody": "Dette kort er ændret på serveren, siden du åbnede det (nu v{version}). Gem din version som en ny kopi?",
+      "conflictSaveCopy": "Gem som kopi"
     },
     "prompt": {
-      "saveAsTitle": "Save As",
-      "nameLabel": "New map name"
+      "saveAsTitle": "Gem som",
+      "nameLabel": "Nyt kortnavn"
     },
     "serverError": {
-      "invalid_map_name": "That map name is not allowed. Use letters, numbers, spaces, apostrophes, or hyphens.",
-      "map_name_not_allowed": "That map name is not allowed.",
-      "invalid_map_doc": "The server rejected the map document.",
-      "invalid_version": "The save request was malformed. Reload and try again.",
-      "map_limit_reached": "You have reached the server map limit. Delete a map to save more.",
-      "map_not_found": "That map no longer exists on the server.",
-      "version_conflict": "The map changed on the server since you opened it.",
-      "slug_unavailable": "The server could not make a link for that name. Try a different name.",
-      "map_too_large": "The map document is too large to save on the server.",
-      "invalid_glb": "That file is not a valid GLB model.",
-      "asset_blocked": "That asset has been blocked by moderation.",
-      "asset_limit_reached": "You have reached the uploaded asset limit. Delete one to upload more.",
-      "asset_storage_limit_reached": "You are out of asset storage space. Delete an asset first.",
-      "asset_too_large": "That model is over the upload size limit.",
-      "asset_not_found": "That asset no longer exists on the server.",
-      "rate_limited": "Slow down a little and try again.",
-      "unauthorized": "Your session has expired. Sign in from the game again.",
-      "network": "Could not reach the server. Check your connection and try again.",
-      "timeout": "The server took too long to respond. Try again.",
-      "unknown": "Something went wrong talking to the server."
+      "invalid_map_name": "Det kortnavn er ikke tilladt. Brug bogstaver, tal, mellemrum, apostroffer eller bindestreger.",
+      "map_name_not_allowed": "Det kortnavn er ikke tilladt.",
+      "invalid_map_doc": "Serveren afviste kortdokumentet.",
+      "invalid_version": "Gem-anmodningen var ugyldigt udformet. Genindlæs, og prøv igen.",
+      "map_limit_reached": "Du har nået grænsen for serverkort. Slet et kort for at gemme flere.",
+      "map_not_found": "Det kort findes ikke længere på serveren.",
+      "version_conflict": "Kortet er ændret på serveren, siden du åbnede det.",
+      "slug_unavailable": "Serveren kunne ikke lave et link til det navn. Prøv et andet navn.",
+      "map_too_large": "Kortdokumentet er for stort til at blive gemt på serveren.",
+      "invalid_glb": "Den fil er ikke en gyldig GLB-model.",
+      "asset_blocked": "Det asset er blevet blokeret af moderationen.",
+      "asset_limit_reached": "Du har nået grænsen for uploadede assets. Slet et for at uploade flere.",
+      "asset_storage_limit_reached": "Du er løbet tør for lagerplads til assets. Slet først et asset.",
+      "asset_too_large": "Den model er over størrelsesgrænsen for upload.",
+      "asset_not_found": "Det asset findes ikke længere på serveren.",
+      "rate_limited": "Sæt tempoet lidt ned, og prøv igen.",
+      "unauthorized": "Din session er udløbet. Log ind fra spillet igen.",
+      "network": "Kunne ikke nå serveren. Tjek din forbindelse, og prøv igen.",
+      "timeout": "Serveren var for længe om at svare. Prøv igen.",
+      "unknown": "Noget gik galt i kommunikationen med serveren."
     },
     "hints": {
-      "nav3d": "Drag to orbit, scroll to zoom. While dragging, WASD flies and Q/E changes height.",
-      "nav2d": "Drag to pan, scroll to zoom."
+      "nav3d": "Træk for at kredse, rul for at zoome. Mens du trækker, flyver WASD, og Q/E ændrer højden.",
+      "nav2d": "Træk for at panorere, rul for at zoome."
     },
     "help": {
-      "title": "Editor Help",
-      "toolsTitle": "Tools",
-      "shortcutsTitle": "Keyboard shortcuts",
-      "mouseTitle": "Mouse and navigation",
-      "flowTitle": "Saving and playtesting",
-      "beginTutorial": "Begin tutorial",
-      "close": "Close",
+      "title": "Editorhjælp",
+      "toolsTitle": "Værktøjer",
+      "shortcutsTitle": "Tastaturgenveje",
+      "mouseTitle": "Mus og navigation",
+      "flowTitle": "Gem og prøvespil",
+      "beginTutorial": "Begynd rundvisningen",
+      "close": "Luk",
       "tool": {
-        "select": "Pick placed assets to move, rotate, and scale them; click a 2D marker to edit it.",
-        "raise": "Raise the terrain under the brush.",
-        "lower": "Lower the terrain under the brush.",
-        "smooth": "Smooth bumps toward the local average height.",
-        "flatten": "Level the ground to the height where the drag starts.",
-        "paint": "Paint biome ground cover over the zone default.",
-        "water": "Set a declared lake's water level.",
-        "place": "Place catalog or uploaded assets on the ground.",
-        "blocker": "Drag invisible walls that block movement in playtest.",
-        "camp": "Add and edit mob camps that spawn in playtest.",
-        "spawn": "Set where playtest drops the player.",
-        "region": "Box-select terrain and assets to copy and paste.",
-        "erase": "Remove placed assets or sculpt stamps under the cursor."
+        "select": "Vælg placerede assets for at flytte, rotere og skalere dem; klik på en 2D-markør for at redigere den.",
+        "raise": "Hæv terrænet under penslen.",
+        "lower": "Sænk terrænet under penslen.",
+        "smooth": "Udglat buler mod den lokale gennemsnitshøjde.",
+        "flatten": "Jævn jorden til højden dér, hvor trækket begynder.",
+        "paint": "Mal biom-bunddække hen over zonens standard.",
+        "water": "Angiv vandstanden for hele kortet.",
+        "place": "Placér katalog-assets eller uploadede assets på jorden.",
+        "blocker": "Træk usynlige vægge, der blokerer bevægelse i prøvespil.",
+        "camp": "Tilføj og rediger mob-lejre, der spawner i prøvespil.",
+        "spawn": "Angiv, hvor prøvespillet sætter spilleren af.",
+        "region": "Boks-markér terræn og assets for at kopiere og indsætte.",
+        "erase": "Fjern placerede assets eller skulpturstempler under markøren."
       },
       "key": {
-        "tools": "Every tool has a single-letter shortcut, shown on its button in the tool rail.",
-        "brush": "[ and ] resize the brush; Shift+[ and Shift+] change its strength.",
-        "undo": "Ctrl+Z undoes the last change; Ctrl+Y or Ctrl+Shift+Z redoes it.",
-        "save": "Ctrl+S saves the map.",
-        "duplicate": "Ctrl+D duplicates the selected asset.",
-        "nudge": "Arrow keys nudge the selected asset by 0.5 yards; hold Shift for 2 yards.",
-        "wheel": "Shift+scroll rotates the selected asset; Alt+scroll scales it.",
-        "delete": "Delete removes the selected asset or camp.",
-        "escape": "Esc clears the selection first, then returns to the Select tool."
+        "tools": "Hvert værktøj har en genvej på ét bogstav, vist på dets knap i værktøjsskinnen.",
+        "brush": "[ og ] ændrer penslens størrelse; Shift+[ og Shift+] ændrer dens styrke.",
+        "undo": "Ctrl+Z fortryder den seneste ændring; Ctrl+Y eller Ctrl+Shift+Z gentager den.",
+        "save": "Ctrl+S gemmer kortet.",
+        "duplicate": "Ctrl+D duplikerer det valgte asset.",
+        "nudge": "Piletasterne skubber det valgte asset 0,5 yard; hold Shift for 2 yard.",
+        "wheel": "Shift+rul roterer det valgte asset; Alt+rul skalerer det.",
+        "delete": "Delete fjerner det valgte asset eller den valgte lejr.",
+        "escape": "Esc rydder først markeringen og vender derefter tilbage til værktøjet Vælg."
       },
       "mouse": {
-        "orbit3d": "3D view: drag to orbit and scroll to zoom; middle-drag or Shift+drag pans.",
-        "fly3d": "While holding a drag in 3D, WASD flies the camera and Q/E changes height.",
-        "move": "With Select active, drag a placed asset to move it across the ground.",
-        "pan2d": "2D view: drag to pan and scroll to zoom."
+        "orbit3d": "3D-visning: træk for at kredse, og rul for at zoome; midtertræk eller Shift+træk panorerer.",
+        "fly3d": "Mens du holder et træk i 3D, flyver WASD kameraet, og Q/E ændrer højden.",
+        "move": "Med Vælg aktivt kan du trække et placeret asset for at flytte det hen over jorden.",
+        "pan2d": "2D-visning: træk for at panorere, og rul for at zoome."
       },
       "flow": {
-        "save": "Save keeps the map in this browser, and on the server when you are signed in.",
-        "draft": "While you have unsaved changes, a draft is autosaved every 30 seconds; Open restores it.",
-        "playtest": "Playtest boots the real game on this map, including your unsaved edits."
+        "save": "Gem beholder kortet i denne browser, og på serveren når du er logget ind.",
+        "draft": "Mens du har ugemte ændringer, autogemmes en kladde hvert 30. sekund; Åbn gendanner den.",
+        "playtest": "Prøvespil starter det rigtige spil på dette kort, inklusive dine ugemte ændringer."
       }
     },
     "tutorial": {
-      "title": "Editor tutorial",
-      "back": "Back",
-      "next": "Next",
-      "finish": "Finish",
-      "skip": "Skip tour",
-      "counter": "Step {current} of {total}",
+      "title": "Editor-rundvisning",
+      "back": "Tilbage",
+      "next": "Næste",
+      "finish": "Afslut",
+      "skip": "Spring rundvisningen over",
+      "counter": "Trin {current} af {total}",
       "steps": {
         "toolbar": {
-          "title": "The tool rail",
-          "body": "Every editing tool lives here: sculpting brushes, biome paint, water, asset placement, camps, and more. Each one has a single-key shortcut, shown in its corner."
+          "title": "Værktøjsskinnen",
+          "body": "Alle redigeringsværktøjer bor her: skulpturpensler, biommaling, vand, asset-placering, lejre og mere. Hvert af dem har en genvej på én tast, vist i hjørnet."
         },
         "stage": {
-          "title": "The world",
-          "body": "This is your map, rendered with the real game engine. Drag to orbit, scroll to zoom, and middle-drag or Shift+drag to pan. Click the ground with a tool to edit."
+          "title": "Verdenen",
+          "body": "Dette er dit kort, renderet med den rigtige spilmotor. Træk for at kredse, rul for at zoome, og midtertræk eller Shift+træk for at panorere. Klik på jorden med et værktøj for at redigere."
         },
         "inspector": {
-          "title": "Tool options",
-          "body": "The options for the active tool appear here: brush size, the biome palette, asset scale, camp settings, and the properties of whatever you select."
+          "title": "Værktøjsindstillinger",
+          "body": "Indstillingerne for det aktive værktøj vises her: penselstørrelse, biompaletten, asset-skala, lejrindstillinger og egenskaberne for det, du markerer."
         },
         "viewToggle": {
-          "title": "3D and 2D",
-          "body": "Switch between the rendered 3D world and the symbolic overhead 2D map. The 2D view is best for moving zone markers and framing large areas."
+          "title": "3D og 2D",
+          "body": "Skift mellem den renderede 3D-verden og det symbolske 2D-oversigtskort. 2D-visningen er bedst til at flytte zonemarkører og indramme store områder."
         },
         "save": {
-          "title": "Save your work",
-          "body": "Save stores the map in this browser, and on the server when you are signed in. Export downloads a JSON backup, and Open brings back saved maps and drafts."
+          "title": "Gem dit arbejde",
+          "body": "Gem lagrer kortet i denne browser, og på serveren når du er logget ind. Eksportér downloader en JSON-sikkerhedskopi, og Åbn henter gemte kort og kladder frem igen."
         },
         "playtest": {
-          "title": "Playtest",
-          "body": "Boot the real game on your map at any time, with your current edits included. Close the playtest tab to come back and keep editing."
+          "title": "Prøvespil",
+          "body": "Start det rigtige spil på dit kort når som helst, med dine aktuelle ændringer inkluderet. Luk prøvespilsfanen for at komme tilbage og redigere videre."
         },
         "help": {
-          "title": "Help is here",
-          "body": "That is the whole loop. Open Help any time for the full tool list and every shortcut, or to run this tour again."
+          "title": "Hjælpen er her",
+          "body": "Det er hele kredsløbet. Åbn Hjælp når som helst for den fulde værktøjsliste og alle genveje, eller for at tage rundvisningen igen."
         }
       }
     },
     "a11y": {
-      "stage": "Map viewport",
-      "toasts": "Editor notifications",
-      "dialog": "Editor dialog"
+      "stage": "Kortvisning",
+      "toasts": "Editornotifikationer",
+      "dialog": "Editordialog"
     }
   },
   "skinEvent": {
@@ -3153,19 +3102,19 @@ export const da_DK: EnTranslations = {
     "account": "Konto",
     "logout": "Log ud",
     "donate": "Donér",
-    "whitepaper": "Hvidbog",
-    "contributions": "Bidrag"
+    "whitepaper": "White Paper",
+    "contributions": "Contributions"
   },
   "stats": {
-    "title": "Realm-status",
+    "title": "Verdensstatus",
     "accountsCreated": "Spillere",
     "playersOnline": "Spillere online",
-    "realmName": "Realm-navn"
+    "realmName": "Verdensnavn"
   },
   "footer": {
-    "copyright": "2026 Cryptic Realm",
-    "githubLink": "/contributions.html",
-    "githubLabel": "Contributions",
+    "copyright": "2026 World of ClaudeCraft",
+    "githubLink": "https://github.com/levy-street/world-of-claudecraft",
+    "githubLabel": "Open Source-projekt",
     "whitepaper": "Whitepaper",
     "terms": "Servicevilkår",
     "privacy": "Privatlivspolitik",
@@ -3178,7 +3127,7 @@ export const da_DK: EnTranslations = {
   },
   "highscores": {
     "title": "Highscore-Ranglisten",
-    "desc": "Følg rigets største mestre og sammenlign din fremgang."
+    "desc": "Følg verdenens største mestre og sammenlign din fremgang."
   },
   "wiki": {
     "title": "Spil-wiki og guide",
@@ -3193,16 +3142,16 @@ export const da_DK: EnTranslations = {
     "empty": "Ingen opdateringer endnu — kig forbi igen snart.",
     "prerelease": "Forhåndsudgivelse",
     "viewOnGithub": "Vis på GitHub",
-    "openLink": "Aabn",
-    "officialLog": "Officiel log",
-    "alphaBetaTitle": "Alpha-, beta- og public realm-rytme",
-    "alphaBetaBody": "Alpha-testere far mere platinum, fordi figurer nulstilles hver anden uge. Beta flyttes manedligt efter gennemgang.",
-    "tokenTitle": "$CR og platinum-nytte",
-    "tokenBody": "$CR er Cryptic Realms Solana SPL-token. Platinum forbinder kosmetik, huse, mounts, marked og Exchange.",
-    "prTitle": "Upstream-spor",
-    "prBody": "Generelle engine-, auth-, dashboard- og wiki-forbedringer deles med ClaudeCraft; Cryptic Realm-eget arbejde bliver her.",
-    "proofTitle": "$CR-bevis",
-    "proofBody": "Den offentlige bevisside viser mint, treasury og Solscan-links."
+    "openLink": "Open",
+    "officialLog": "Official Work Log",
+    "alphaBetaTitle": "Alpha, Beta, And Public Realm Cadence",
+    "alphaBetaBody": "Alpha testers can earn platinum at a higher rate because alpha characters reset every two weeks. Beta promotion happens monthly into public Cryptic Realm and MoveWeight realms after review.",
+    "tokenTitle": "$CR + Platinum Utility Live In The Roadmap",
+    "tokenBody": "$CR is the Cryptic Realm Solana SPL token. Platinum is the in-game premium bridge for cosmetics, houses, mounts, marketplace listings, and Exchange realm trades. The base game stays free to play.",
+    "prTitle": "Upstream Kindness Track",
+    "prBody": "Generic engine, auth, dashboard, auto-update, moderator, and wiki improvements are tracked as shareable work for the ClaudeCraft team while Cryptic Realm-specific realms and $CR features stay here.",
+    "proofTitle": "$CR Proof",
+    "proofBody": "Mint 3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv is published on the public proof page with treasury and Solscan links."
   },
   "contributions": {
     "title": "Contributions",
@@ -3238,21 +3187,21 @@ export const da_DK: EnTranslations = {
     "loading": "Loading official channels…"
   },
   "download": {
-    "title": "Launchers & Installs",
+    "title": "Download Desktop-launcher",
     "desc": "Hent den selvstændige launcher for optimeret ydeevne og fuldskærmsspil.",
     "macCta": "Download til macOS",
     "linuxCta": "Download til Linux",
-    "linuxHint": "AppImage: gor den eksekverbar og start den. Ingen installation kraeves.",
+    "linuxHint": "AppImage: gør det eksekverbart, og kør det derefter. Ingen installation nødvendig.",
     "windowsPending": "Windows-build afventer."
   },
   "comingSoon": {
     "placeholder": "Kommer snart...",
-    "featureComingSoon": "Denne funktion kommer snart til realmet."
+    "featureComingSoon": "Denne funktion kommer snart til verdenen."
   },
   "mode": {
     "onlineTitle": "Spil online",
-    "onlineDesc": "Log ind på realmet. Dine figurer lever på serveren, og du deler verdenen med alle andre, der er online.",
-    "onlineAria": "Spil online: log ind på det vedvarende delte realm",
+    "onlineDesc": "Log ind på verdenen. Dine figurer lever på serveren, og du deler verdenen med alle andre, der er online.",
+    "onlineAria": "Spil online: log ind på den vedvarende delte verden",
     "offlineTitle": "Spil offline",
     "offlineDesc": "Øjeblikkelig singleplayer-verden i din browser. Intet gemmes: perfekt til en hurtig dyst eller test.",
     "offlineAria": "Spil offline: start en øjeblikkelig lokal singleplayer-session",
@@ -3261,16 +3210,16 @@ export const da_DK: EnTranslations = {
     "serverOnline": "Online",
     "serverOffline": "Offline",
     "play": "Spil",
-    "playAria": "Spil Cryptic Realm",
-    "serverLabel": "Vælg dit realm",
-    "serverAria": "Vælg realm: Online eller Offline",
+    "playAria": "Spil World of ClaudeCraft",
+    "serverLabel": "Vælg din verden",
+    "serverAria": "Vælg verden: Online eller Offline",
     "serverOfflineSub": "Øjeblikkelig lokal verden",
-    "caLabel": "$CR Kontraktadresse",
+    "caLabel": "$WOC Kontraktadresse",
     "caCopyAria": "Kopiér kontraktadresse",
     "caNote": "WOC er vores fællesskabstoken. Det er ikke nødvendigt for at spille. Tilslut dig Discord for at diskutere WOC-nytten og svinghjulet."
   },
   "auth": {
-    "enterRealm": "Træd ind i Riget",
+    "enterRealm": "Træd ind i Verdenen",
     "username": "Brugernavn",
     "usernameError": "Indtast venligst dit brugernavn.",
     "usernamePlaceholder": "Indtast brugernavn",
@@ -3282,23 +3231,23 @@ export const da_DK: EnTranslations = {
     "logIn": "Log ind",
     "createAccount": "Opret konto",
     "back": "Tilbage",
-    "realmList": "Rigeliste",
-    "loadingRealms": "Indlæser riger...",
-    "changeRealm": "Skift Rige",
-    "realm": "Rige",
+    "realmList": "Verdensliste",
+    "loadingRealms": "Indlæser verdener...",
+    "changeRealm": "Skift Verden",
+    "realm": "Verden",
     "newCharacter": "Ny karakter",
     "appearance": "Udseende",
-    "ssoMoveweight": "Log ind med MoveWeight",
-    "ssoProviders": "Fortsat med Google, Facebook, Plex eller Discord",
-    "ssoButton": "Fortsat med Google, Facebook eller Plex",
-    "ladderChar": "Ladder-figur",
-    "ladderHint": "Konkurrerer pa sezonens ladder. Ved sezonens slutning bliver den til en standardfigur og beholder al fremgang.",
-    "hardcoreChar": "Hardcore-figur",
-    "hardcoreHint": "Permanent dod. Hvis denne figur dor, pensioneres den permanent og kan ikke spilles mere. Der er ingen genopstandelse.",
+    "ssoMoveweight": "Sign in with MoveWeight",
+    "ssoProviders": "Continue with Google, Facebook, Plex, or Discord",
+    "ssoButton": "Continue with Google, Facebook, or Plex",
+    "ladderChar": "Ladder character",
+    "ladderHint": "Competes on the seasonal ladder. At season end it converts to a standard character (keeps all progress).",
+    "hardcoreChar": "Hardcore character",
+    "hardcoreHint": "Permadeath. If this character dies, it is permanently retired and can no longer be played. There is no resurrection.",
     "class": "Klasse",
     "name": "Navn",
     "chromaOption": "Kroma {n}",
-    "noAccountPrompt": "Ny i riget?",
+    "noAccountPrompt": "Ny i verdenen?",
     "haveAccountPrompt": "Har du allerede en konto?",
     "characters": "Karakterer:",
     "createCharacter": "Opret karakter",
@@ -3310,20 +3259,20 @@ export const da_DK: EnTranslations = {
     "twoFactorLabel": "Autentificeringskode",
     "twoFactorPlaceholder": "6-cifret eller gendannelseskode",
     "twoFactorHint": "Indtast koden fra din autentificeringsapp eller en af dine gendannelseskoder.",
-    "email": "Gendannelsesmail",
-    "emailPlaceholder": "you@example.com",
-    "emailError": "Indtast en gyldig e-mailadresse.",
+    "email": "E-mail",
+    "emailPlaceholder": "dig@eksempel.com",
+    "emailError": "Indtast venligst en gyldig e-mailadresse.",
     "recovery": {
-      "title": "Tilfoj en gendannelsesmail",
-      "body": "Angiv en e-mailadresse, sa du kan gendanne din konto. Vi bruger den kun til at bekraefte, at kontoen er din, hvis du far brug for at nulstille din adgangskode.",
+      "title": "Tilføj en gendannelses-e-mail",
+      "body": "Angiv en e-mailadresse, så du kan gendanne din konto. Vi bruger den kun til at bekræfte, at du ejer denne konto, hvis du en dag skal nulstille din adgangskode.",
       "save": "Gem e-mail",
       "logOut": "Log ud",
-      "invalid": "Indtast en gyldig e-mailadresse.",
-      "failed": "E-mailen kunne ikke gemmes. Prov igen."
+      "invalid": "Indtast venligst en gyldig e-mailadresse.",
+      "failed": "Kunne ikke gemme din e-mail. Prøv igen."
     }
   },
   "wallet": {
-    "label": "$CR-pung",
+    "label": "$WOC-pung",
     "connect": "Verificer pung",
     "connectTitle": "Verificer din Solana-pung",
     "connectAria": "Verificer din Solana-pung",
@@ -3356,11 +3305,11 @@ export const da_DK: EnTranslations = {
     "linkedDisconnectedAria": "Pungen forbliver verificeret for din konto. Genopret forbindelse for at administrere pung-appen.",
     "linkTitle": "Klik for at underskrive og tilknytte denne pung til din konto.",
     "connectedTitle": "Forbundet. Log ind for at tilknytte denne pung til din konto.",
-    "balanceTitle": "Verificeret Solana-pungs $CR-saldo",
+    "balanceTitle": "Verificeret Solana-pungs $WOC-saldo",
     "balanceAria": "Verificeret Solana-pungsaldo: {balance}",
-    "balancePreviewTitle": "Forhåndsvisning af forbundet pungs $CR-saldo",
+    "balancePreviewTitle": "Forhåndsvisning af forbundet pungs $WOC-saldo",
     "balancePreviewAria": "Forhåndsvisning af forbundet pungs saldo: {balance}. Tilknyt pungen for at verificere ejer-pynt.",
-    "balanceAmount": "{amount} $CR",
+    "balanceAmount": "{amount} $WOC",
     "connected": "Forbundet: {address}",
     "connectedWithBalance": "Forbundet: {balance} - {address}",
     "connectedLinked": "Verificeret: {address}",
@@ -3374,15 +3323,15 @@ export const da_DK: EnTranslations = {
     "helpLinkedWithBalance": "Ejerfordele er aktive. Pung-app forbundet i denne browser.",
     "helpLinkedDisconnected": "Ejerfordele er aktive. Forbind appen, når du har brug for at underskrive eller bruge midler.",
     "helpLinkedDisconnectedWithBalance": "Ejerfordele er aktive. Forbind appen, når du har brug for at underskrive eller bruge midler.",
-    "extensionHelp": "To see a wallet here, keep a browser wallet extension such as Solflare Wallet active.",
+    "extensionHelp": "For at se en pung her skal du holde en browser-pungudvidelse som Solflare Wallet aktiv.",
     "flowConnect": "Vælg en pung. Verificeringen fortsætter automatisk.",
     "flowSign": "Underskriv verificeringsbeskeden i din pung-app. Ingen transaktion eller SOL kræves.",
     "flowVerify": "Verificerer ejerskab af pung...",
     "linkFailed": "Verificering af pung mislykkedes.",
     "verifyFailed": "Verificering af pung mislykkedes.",
     "unlinkFailed": "Kunne ikke frakoble pungen.",
-    "holder": "$CR-ejer",
-    "holderTierTitle": "{tier} $CR-ejer",
+    "holder": "$WOC-ejer",
+    "holderTierTitle": "{tier} $WOC-ejer",
     "holderTiers": {
       "ember": {
         "name": "Glød",
@@ -3406,7 +3355,7 @@ export const da_DK: EnTranslations = {
       },
       "vaultwarden": {
         "name": "Hvælvvogter",
-        "flavor": "Vogter nu et ægte hvælv: 0,01 % af alle $CR."
+        "flavor": "Vogter nu et ægte hvælv: 0,01 % af alle $WOC."
       },
       "whale": {
         "name": "Hval",
@@ -3473,17 +3422,17 @@ export const da_DK: EnTranslations = {
     "renderFailedStatus": "Gengivelse af kort mislykkedes.",
     "levelClass": "Niveau {level} - {className}",
     "topPercent": "TOP {percent}%",
-    "realmSubtitle": "Riget {realm}",
-    "defaultRealm": "Cryptic Realm",
-    "brandWordmark": "CRYPTIC REALM",
+    "realmSubtitle": "Verdenen {realm}",
+    "defaultRealm": "World of ClaudeCraft",
+    "brandWordmark": "WORLD OF CLAUDECRAFT",
     "recruited": "{count} rekrutteret",
     "footerHandle": "@{handle}",
     "footerHandleWithRecruits": "@{handle} - {recruited}",
     "footerCta": "Smed din legende: {siteUrl}",
     "arenaStat": "Arena",
-    "shareTierBit": ", {tier}-rangeret $CR-ejer",
-    "shareText": "Jeg smeder min legende i Cryptic Realm: Niveau {level} {className}{tierBit}. Slut dig til mit rige:",
-    "nativeShareTitle": "Cryptic Realm",
+    "shareTierBit": ", {tier}-rangeret $WOC-ejer",
+    "shareText": "Jeg smeder min legende i World of ClaudeCraft: Niveau {level} {className}{tierBit}. Slut dig til min verden:",
+    "nativeShareTitle": "World of ClaudeCraft",
     "fileNameFallback": "spiller",
     "actionShareX": "Del på X",
     "actionCopyReferral": "Kopiér henvisningslink",
@@ -3560,7 +3509,7 @@ export const da_DK: EnTranslations = {
       "unknownTier": "Ukendt delve-niveau.",
       "levelRequired": "Du skal være niveau {level} for at gå ind i {name}.",
       "levelRequiredTier": "Du skal være niveau {level} for at gå ind i {name} på {tier}.",
-      "partyTooLarge": "{name} is meant for solo or duo delves. Parties of {max} or more may not enter.",
+      "partyTooLarge": "{name} er tiltænkt solo- eller duo-delves. Grupper på {max} eller flere kan ikke gå ind.",
       "instancesBusy": "Alle instanser af {name} er optaget. Prøv igen snart.",
       "runFailed": "{name}-forsøg mislykkedes.",
       "complete": "{name} fuldført.",
@@ -3570,14 +3519,14 @@ export const da_DK: EnTranslations = {
       "doorAlreadyOpen": "Døren er allerede åben.",
       "companionRankUp": "{name} når rang {rank}.",
       "bossChest": "Bossen falder. En spærret relikviekiste hæver sig på podiet. Dirk dens lås op for at indtage dit bytte.",
-      "drownedLitanyReliquaryRise": "Sister Nhalia falls silent. The Drowned Reliquary rises from the blackwater. Approach it to begin the rite.",
-      "riteSequenceReady": "The shrines fall dark. Repeat the sequence.",
-      "riteSequencePlaying": "The shrines replay the rite. Wait.",
-      "riteCorrect": "A soft chime answers your touch.",
-      "riteWrong": "A harsh bell crack. Black water splashes at your feet.",
-      "riteReliquaryOpen": "The Drowned Reliquary opens.",
-      "riteReliquaryLocked": "Complete the shrine rite to open the reliquary.",
-      "riteReliquaryEmpty": "The reliquary is empty.",
+      "drownedLitanyReliquaryRise": "Søster Nhalia forstummer. Det Druknede Relikvarium hæver sig af sortvandet. Gå hen til det for at begynde riten.",
+      "riteSequenceReady": "Skrinene bliver mørke. Gentag sekvensen.",
+      "riteSequencePlaying": "Skrinene afspiller riten igen. Vent.",
+      "riteCorrect": "En blid klang svarer din berøring.",
+      "riteWrong": "Et hårdt klokkebrag. Sort vand sprøjter op om dine fødder.",
+      "riteReliquaryOpen": "Det Druknede Relikvarium åbner sig.",
+      "riteReliquaryLocked": "Fuldfør skrin-riten for at åbne relikvariet.",
+      "riteReliquaryEmpty": "Relikvariet er tomt.",
       "surfaceStairs": "En trappe til overfladen åbner sig. Tryk F ved trappen for at forlade.",
       "moduleEnter": "{name}: {objective}",
       "objectiveClearRoom": "Ryd rummet.",
@@ -3585,13 +3534,13 @@ export const da_DK: EnTranslations = {
       "tombstoneHint": "En gravstenspassage åbner mod nord, når rummet er ryddet.",
       "tombstoneOpen": "En forseglet gravstenspassage maler sig op mod nord. Gå ind i den for at fortsætte.",
       "tombstoneInto": "Du går gennem gravstenen ind i {name}.",
-      "bellRopeShock": "The bell rope snaps taut. Drowned Cantors reel from the shock.",
-      "eggSacBurst": "The egg-sac bursts. Spiderlings skitter free across the baptistry rim.",
-      "baptistryEggs": "The baptistry falls quiet. Spider egg-sacs cling wetly to the rim.",
-      "baptistrySpidersSealed": "You should try to destroy the spider sacs.",
-      "puzzleSealed": "You need to open the seal by applying pressure somewhere in the room.",
-      "ropesSealed": "You should try pulling the bell ropes.",
-      "baptistryWave": "Something stirs in the black baptistry water.",
+      "bellRopeShock": "Klokkerebet strammes med et ryk. Druknede Kantorer vakler af chokket.",
+      "eggSacBurst": "Ægsækken brister. Edderkoppeyngel spurter fri hen over dåbskapellets kant.",
+      "baptistryEggs": "Dåbskapellet bliver stille. Edderkoppe-ægsække klæber vådt til kanten.",
+      "baptistrySpidersSealed": "Du bør prøve at ødelægge edderkoppesækkene.",
+      "puzzleSealed": "Du skal åbne seglet ved at lægge tryk et sted i rummet.",
+      "ropesSealed": "Du bør prøve at trække i klokkerebene.",
+      "baptistryWave": "Noget rører sig i dåbskapellets sorte vand.",
       "chestEmpty": "Kisten er tom.",
       "notInDelve": "Du er ikke i et delve.",
       "cannotInteract": "Du kan ikke interagere med det.",
@@ -3610,12 +3559,12 @@ export const da_DK: EnTranslations = {
       "passageSealed": "Passagen er forseglet.",
       "moveCloserPassage": "Gå tættere på passagen.",
       "moveCloserChest": "Gå tættere på kisten.",
-      "moveCloserReliquary": "Move closer to the reliquary.",
+      "moveCloserReliquary": "Gå tættere på relikvariet.",
       "nothingToTake": "Der er ikke mere at tage.",
       "wayOutNotOpen": "Vejen ud er endnu ikke åben.",
       "moveCloserStairs": "Gå tættere på trappen.",
-      "nhaliaCantorShield": "Cantors, hold the note!",
-      "nhaliaBlackwaterMark": "{name} marks {player} with Blackwater!"
+      "nhaliaCantorShield": "Kantorer, hold tonen!",
+      "nhaliaBlackwaterMark": "{name} mærker {player} med Sortvand!"
     },
     "lockpick": {
       "lockYields": "Låsen giver efter! {tier} bytte.",
@@ -3679,28 +3628,28 @@ export const da_DK: EnTranslations = {
     }
   },
   "delveRiteUi": {
-    "title": "The Drowned Reliquary Rite",
-    "blurb": "The shrines will light in order. Repeat the sequence by activating each shrine in turn. A wrong touch fails the attempt and replays the sequence, a flawless attempt earns the richest spoils, and running out of tries opens the reliquary on its meanest. Choose how the rite tests you.",
-    "easy": "Easy",
-    "medium": "Medium",
-    "hard": "Hard",
-    "guideWatch": "After you choose, the four shrines light up one at a time. Memorize the order.",
-    "guideRepeat": "When the shrines fall dark, walk to each shrine and press F (Interact) in that same order.",
-    "guideStakes": "A wrong shrine splashes you with blackwater and costs a try. Complete the sequence to open the reliquary.",
-    "showsTimes": "Sequence shown {count} times",
-    "showsOnce": "Sequence shown once",
-    "symbols": "{count} symbols",
-    "tries": "{count} tries",
+    "title": "Det Druknede Relikvariums Rite",
+    "blurb": "Skrinene lyser op i rækkefølge. Gentag sekvensen ved at aktivere hvert skrin efter tur. En forkert berøring fejler forsøget og afspiller sekvensen igen, et fejlfrit forsøg giver det rigeste bytte, og løber du tør for forsøg, åbner relikvariet sig på sit fattigste. Vælg, hvordan riten skal prøve dig.",
+    "easy": "Let",
+    "medium": "Middel",
+    "hard": "Svær",
+    "guideWatch": "Når du har valgt, lyser de fire skrin op ét ad gangen. Husk rækkefølgen.",
+    "guideRepeat": "Når skrinene bliver mørke, så gå hen til hvert skrin og tryk på F (Interager) i samme rækkefølge.",
+    "guideStakes": "Et forkert skrin overstænker dig med sortvand og koster et forsøg. Fuldfør sekvensen for at åbne relikvariet.",
+    "showsTimes": "Sekvensen vises {count} gange",
+    "showsOnce": "Sekvensen vises én gang",
+    "symbols": "{count} symboler",
+    "tries": "{count} forsøg",
     "reward": {
-      "easy": "Modest spoils",
-      "medium": "Rich spoils",
-      "hard": "Premium spoils"
+      "easy": "Beskedent bytte",
+      "medium": "Rigt bytte",
+      "hard": "Premium-bytte"
     },
-    "closeAria": "Close"
+    "closeAria": "Luk"
   },
   "heroicShop": {
-    "balance": "Heroic Marks: {count}",
-    "buyAria": "Buy {item} for {marks} Heroic Marks"
+    "balance": "Heroiske Mærker: {count}",
+    "buyAria": "Køb {item} for {marks} Heroiske Mærker"
   },
   "delveUi": {
     "board": {
@@ -3711,7 +3660,7 @@ export const da_DK: EnTranslations = {
       "openDelveAria": "Åbn Delve-Tavlen fra {name}",
       "marks": "Delve-Mærker: {count}",
       "minLevel": "Kræver Niveau {level}",
-      "partyTooLarge": "Solo or duo only ({max} players max)",
+      "partyTooLarge": "Kun solo eller duo (højst {max} spillere)",
       "tier": {
         "normal": "Normal",
         "heroic": "Heroisk"
@@ -3719,7 +3668,7 @@ export const da_DK: EnTranslations = {
       "companion": {
         "pick": "Vælg en ledsager",
         "tessa": "Akolyt Tessa",
-        "edda": "Edda Reedhand",
+        "edda": "Edda Sivhånd",
         "rank": "Rang {rank}",
         "boon": "Helbreder gruppen mellem kampe. Rang 3 genopliver en falden allieret én gang pr. tur.",
         "upgrade": "Opgrader til Rang {rank} ({marks} Mærker)",
@@ -3747,10 +3696,10 @@ export const da_DK: EnTranslations = {
       "marks": "Delve-Mærker: {count}",
       "exitHintOpen": "Gå ind i gravstenspassagen (nord)",
       "exitHintLocked": "Ryd skidtmonstrene for at åbne passagen mod nord",
-      "riteChoose": "Approach the Drowned Reliquary and press F to begin the rite",
-      "ritePlayback": "Watch the shrines: memorize the order they light up",
-      "riteInput": "Press F at each shrine in the order they lit ({current}/{total})",
-      "riteOpen": "The reliquary is open: press F on it to claim your spoils"
+      "riteChoose": "Gå hen til Det Druknede Relikvarium, og tryk på F for at begynde riten",
+      "ritePlayback": "Hold øje med skrinene: husk den rækkefølge, de lyser op i",
+      "riteInput": "Tryk på F ved hvert skrin i den rækkefølge, de lyste op ({current}/{total})",
+      "riteOpen": "Relikvariet er åbent: tryk på F på det for at kræve dit bytte"
     },
     "objective": {
       "kill_boss": "Dræb {boss}",
@@ -3773,52 +3722,52 @@ export const da_DK: EnTranslations = {
         "greeting": "Relikvariet nedenunder har forskudt sig igen. Vi hører messen gennem gulvet efter midnat, og Akolyt Tessa sværger på, at gravprotokollerne ændrer deres eget blæk. Hvis du har mod nok, {playerName}, så tag et lys og gå derned. Stol ikke på hver stemme, du hører dernede. Nogle af dem kendte dit navn, før du blev født."
       },
       "halvenMarsh": {
-        "greeting": "The trail led north to the marsh, {playerName}. Another reliquary sings under the black water, and the drowned dead answer the bells. Acolyte Edda knows these reeds better than I do, stay close to her lantern. Choose your tier, and I will hold the rope until you return."
+        "greeting": "Sporet førte mod nord til mosen, {playerName}. Endnu et relikvarium synger under det sorte vand, og de druknede døde svarer klokkerne. Akolyt Edda kender disse siv bedre end jeg, hold dig tæt på hendes lanterne. Vælg din sværhedsgrad, så holder jeg rebet, til du vender tilbage."
       }
     },
     "intro": {
       "normal": "Trappeopgangen er kold og mørk. Brudte helgensten ligger spredt ned ad nedstigningen, og en blød klokketone hænger i den fugtige luft. Akolyt Tessa hvisker: \"Relikvariet burde ikke være åbent så langt nede. Hold dig tæt på, {playerName}.\"",
       "heroic": "Dørene stønner i lås bag dig. Navne skraber hen over stenen som fingernegle. Tessas lys brænder blåt. \"De kalder ikke på de døde nu, {playerName}. De svarer på noget.\"",
-      "litanyNormal": "Reed-choked stairs drop beneath Fenbridge. Edda Reedhand lifts her lantern. \"The marsh remembers every name they drowned, {playerName}. Stay in the light.\"",
-      "litanyHeroic": "Blackwater laps the causeway stones. Edda's flame gutters green. \"They are singing again below, {playerName}. Do not answer the choir.\""
+      "litanyNormal": "Sivkvalte trapper falder ned under Fenbridge. Edda Sivhånd løfter sin lanterne. \"Mosen husker hvert navn, de druknede, {playerName}. Bliv i lyset.\"",
+      "litanyHeroic": "Sortvand skvulper mod dæmningsvejens sten. Eddas flamme blafrer grønt. \"De synger igen dernede, {playerName}. Svar ikke koret.\""
     },
     "module": {
       "reliquary_sunken_ossuary": "Vand siver gennem gravhylderne og fører gammel aske med sig i sølvsorte strømme.",
       "reliquary_bell_niche": "Snesevis af håndklokker hænger i stilhed, hver bundet med ligklæde.",
       "reliquary_saintless_hall": "Statuer med ansigter mejslet væk med omhyggeligt had.",
       "reliquary_finale": "Den begravede klokke ringer én gang under dine støvler.",
-      "litany_sluice": "Moss-choked sluice gates drip blackwater into the old choir crypt.",
-      "litany_ledger": "Ledger islands rise from flooded channels, ink bleeding into the marsh.",
-      "litany_ring": "A reliquary ring loops around a sealed central font of black water.",
-      "litany_baptistry": "A sinkhole baptistry yawns beneath cracked saint-stones and egg-sacs.",
-      "litany_choir_loft": "Fanning choir lofts echo with rope-hung bells that never quite stop.",
-      "litany_causeway": "A Y-split causeway forks over waist-deep fen water.",
-      "litany_apse": "The drowned apse opens onto Sister Nhalia's altar island."
+      "litany_sluice": "Moskvalte sluseporte drypper sortvand ned i den gamle korkrypt.",
+      "litany_ledger": "Protokoløer hæver sig af oversvømmede kanaler, mens blæk bløder ud i mosen.",
+      "litany_ring": "En relikvariering slynger sig om en forseglet døbefont af sort vand i midten.",
+      "litany_baptistry": "Et dåbskapel i et jordfaldshul gaber under revnede helgensten og ægsække.",
+      "litany_choir_loft": "Viftende korpulpiturer genlyder af rebophængte klokker, der aldrig helt tier.",
+      "litany_causeway": "En Y-delt dæmningsvej forgrener sig over hoftedybt kærvand.",
+      "litany_apse": "Den druknede apsis åbner sig mod Søster Nhalias alterø."
     },
     "moduleName": {
       "reliquary_sunken_ossuary": "Det Sunkne Benhus",
       "reliquary_bell_niche": "Klokkenichen",
       "reliquary_saintless_hall": "Den Helgenløse Hal",
       "reliquary_finale": "Det Klokkebegravede Kammer",
-      "litany_sluice": "The Crescent Sluice",
-      "litany_ledger": "The Island Ledger",
-      "litany_ring": "The Ring Reliquary",
-      "litany_baptistry": "The Sinkhole Baptistry",
-      "litany_choir_loft": "The Reedsong Gallery",
-      "litany_causeway": "The Y-Split Causeway",
-      "litany_apse": "The Drowned Apse"
+      "litany_sluice": "Halvmåneslusen",
+      "litany_ledger": "Ø-Protokollen",
+      "litany_ring": "Ringrelikvariet",
+      "litany_baptistry": "Jordfalds-Dåbskapellet",
+      "litany_choir_loft": "Sivsangsgalleriet",
+      "litany_causeway": "Den Y-Delte Dæmningsvej",
+      "litany_apse": "Den Druknede Apsis"
     },
     "object": {
-      "sluice_valve": "Sluice Valve",
-      "grave_tablet": "Grave Tablet",
-      "corpse_candle": "Corpse-Candle",
-      "bell_rope": "Bell Rope"
+      "sluice_valve": "Sluseventil",
+      "grave_tablet": "Gravtavle",
+      "corpse_candle": "Ligkerte",
+      "bell_rope": "Klokkereb"
     },
     "companion": {
       "barkLine": "{name}: {line}",
       "tessa": {
-        "run_start": "I have my candle and my ledger, {playerName}. Lead on.",
-        "ally_revive": "Up now. Tonight's ledger does not carry your name.",
+        "run_start": "Jeg har mit lys og min protokol, {playerName}. Før an.",
+        "ally_revive": "Op med dig. Nattens protokol bærer ikke dit navn.",
         "combat_start": "Hold fodfæstet, {playerName}. De døde er urolige her.",
         "low_hp": "Træk vejret. Jeg har stadig bønner tilbage til dig.",
         "trap_spotted": "Stop. Noget i gulvet husker fodtrin.",
@@ -3833,17 +3782,17 @@ export const da_DK: EnTranslations = {
         }
       },
       "edda": {
-        "run_start": "Keep to the plank-line, {playerName}. The silt takes the proud-footed.",
-        "ally_revive": "Up, now. The marsh does not get you today.",
-        "combat_start": "Mind the blackwater, {playerName}. The marsh listens.",
-        "low_hp": "Steady. My lantern is not out yet.",
-        "trap_spotted": "Wait. The reeds are wrong here.",
-        "boss_pull": "That canticle knows your name, {playerName}. Do not sing back.",
-        "completion": "The fen can swallow its secrets for one more night.",
+        "run_start": "Hold dig til plankestien, {playerName}. Dyndet tager dem, der træder stolt.",
+        "ally_revive": "Op med dig, nu. Mosen får dig ikke i dag.",
+        "combat_start": "Pas på sortvandet, {playerName}. Mosen lytter.",
+        "low_hp": "Rolig. Min lanterne er ikke slukket endnu.",
+        "trap_spotted": "Vent. Sivene er forkerte her.",
+        "boss_pull": "Den kantikel kender dit navn, {playerName}. Syng ikke tilbage.",
+        "completion": "Kæret kan sluge sine hemmeligheder én nat til.",
         "rank": {
-          "1": "Lantern-Bearer",
-          "2": "Reed-Watcher",
-          "3": "Fenbridge Acolyte"
+          "1": "Lanternebærer",
+          "2": "Sivvogter",
+          "3": "Fenbridge-Akolyt"
         }
       }
     },
@@ -3888,9 +3837,9 @@ export const da_DK: EnTranslations = {
       "grave_tax": "Gravskat",
       "unstable_roof": "Ustabilt Tag",
       "cult_remnants": "Kultrester",
-      "high_water": "High Water",
-      "lively_choir": "Lively Choir",
-      "belligerent_dead": "Belligerent Dead"
+      "high_water": "Højvande",
+      "lively_choir": "Livligt Kor",
+      "belligerent_dead": "Stridslystne Døde"
     },
     "blessing": {
       "chapel_candle": "Kapellys: en sikrere tur, ét Mærke mindre ved fuldførelse."
@@ -3900,42 +3849,42 @@ export const da_DK: EnTranslations = {
     }
   },
   "yumi": {
-    "bracket3": "Yumi 3v3",
-    "bracket5": "Yumi 5v5",
-    "enterQueue": "Join Protect Yumi!",
+    "bracket3": "Yumi 3 mod 3",
+    "bracket5": "Yumi 5 mod 5",
+    "enterQueue": "Tilmeld dig Beskyt Yumi!",
     "queue": {
-      "join": "You join the Protect Yumi queue. Guard your familiar…",
-      "leave": "You leave the Protect Yumi queue.",
-      "teamLeave": "Your team leaves the Protect Yumi queue."
+      "join": "Du stiller dig i Beskyt Yumi-køen. Vogt din følgesvend…",
+      "leave": "Du forlader Beskyt Yumi-køen.",
+      "teamLeave": "Dit hold forlader Beskyt Yumi-køen."
     },
     "error": {
-      "partyTooBig3": "Protect Yumi 3v3 allows a party of up to three.",
-      "partyTooBig5": "Protect Yumi 5v5 allows a party of up to five."
+      "partyTooBig3": "Beskyt Yumi 3 mod 3 tillader en gruppe på op til tre.",
+      "partyTooBig5": "Beskyt Yumi 5 mod 5 tillader en gruppe på op til fem."
     },
     "log": {
-      "start": "Protect Yumi! Defend your familiar and hunt theirs."
+      "start": "Beskyt Yumi! Forsvar din følgesvend, og jag deres."
     },
     "hud": {
-      "title": "PROTECT YUMI",
-      "getReady": "Get ready…",
-      "teleportIn": "Yumis move in {s}",
-      "suddenDeath": "SUDDEN DEATH",
-      "yourYumi": "Your Yumi",
-      "enemyYumi": "Enemy Yumi",
-      "aria": "Your Yumi at {mine} of {max} health, enemy Yumi at {theirs}.",
-      "collapse": "Collapse the Protect Yumi bars",
-      "expand": "Expand the Protect Yumi bars"
+      "title": "BESKYT YUMI",
+      "getReady": "Gør dig klar…",
+      "teleportIn": "Yumierne flytter sig om {s}",
+      "suddenDeath": "PLUDSELIG DØD",
+      "yourYumi": "Din Yumi",
+      "enemyYumi": "Fjendens Yumi",
+      "aria": "Din Yumi på {mine} af {max} helbred, fjendens Yumi på {theirs}.",
+      "collapse": "Skjul Beskyt Yumi-bjælkerne",
+      "expand": "Vis Beskyt Yumi-bjælkerne"
     },
     "respawn": {
-      "title": "DOWNED!"
+      "title": "SLÅET NED!"
     },
     "banner": {
-      "sudden": "SUDDEN DEATH! The Yumis hold their ground!",
-      "teleport": "The Yumis teleport!"
+      "sudden": "PLUDSELIG DØD! Yumierne holder stand!",
+      "teleport": "Yumierne teleporterer!"
     },
     "end": {
-      "win": "VICTORY! Yumi is safe!",
-      "loss": "DEFEAT! Your Yumi has fallen."
+      "win": "SEJR! Yumi er i sikkerhed!",
+      "loss": "NEDERLAG! Din Yumi er faldet."
     }
   },
   "fiesta": {
@@ -4012,7 +3961,7 @@ export const da_DK: EnTranslations = {
         "desc": "Dine fysiske slag rammer 15% hårdere."
       },
       "aug_spellfire": {
-        "name": "Trolddomsild",
+        "name": "Dysterild",
         "desc": "Dine besværgelser forvolder 15% mere skade."
       },
       "aug_toughness": {
@@ -4056,7 +4005,7 @@ export const da_DK: EnTranslations = {
         "desc": "+18% skade af alle slags og +12% bevægelseshastighed."
       },
       "aug_lightwell": {
-        "name": "Lysbrønd",
+        "name": "Gravlys",
         "desc": "+30% helbredelse og +15% maksimalt helbred. Vær holdets anker."
       },
       "aug_bounty_hunter": {
@@ -4106,14 +4055,14 @@ export const da_DK: EnTranslations = {
     }
   },
   "seo": {
-    "title": "Cryptic Realm: Klassisk-inspireret web-MMO",
-    "description": "Begiv dig ud på et episk eventyr i Cryptic Realm, en klassisk-inspireret micro-MMO, der kan spilles direkte i din browser. Slut dig til et vedvarende delt rige, lev op dine klasser, og besejr fjender!",
+    "title": "World of ClaudeCraft: Klassisk-inspireret web-MMO",
+    "description": "Begiv dig ud på et episk eventyr i World of ClaudeCraft, en klassisk-inspireret micro-MMO, der kan spilles direkte i din browser. Slut dig til en vedvarende delt verden, lev op dine klasser, og besejr fjender!",
     "genre": "MMORPG",
     "playMode": "Flerspiller",
     "applicationCategory": "Spil",
     "operatingSystem": "Webbrowser",
-    "officialLabel": "Officiel Cryptic Realm-hjemmeside",
-    "officialBody": "crypticrealm.com er den officielle gratis browser-MMO for Claudemoon-riget. Spil online med en vedvarende karakter, udforsk solo offline, læs wikien, og følg verificerede fællesskabslinks fra denne side."
+    "officialLabel": "Officiel World of ClaudeCraft-hjemmeside",
+    "officialBody": "worldofclaudecraft.com er den officielle gratis browser-MMO for Claudemoon-verdenen. Spil online med en vedvarende karakter, udforsk solo offline, læs wikien, og følg verificerede fællesskabslinks fra denne side."
   },
   "a11y": {
     "goHome": "Gå til forsiden",
@@ -4121,23 +4070,19 @@ export const da_DK: EnTranslations = {
     "mainNavigation": "Hovednavigation",
     "languageSelection": "Sprogvalg",
     "characterActions": "Karakterhandlinger",
-    "githubProject": "Åbn Cryptic Realm GitHub-projektet",
-    "discordCommunity": "Deltag i Cryptic Realm Discord-fællesskabet",
-    "donateProject": "Donér for at støtte Cryptic Realm"
+    "githubProject": "Åbn World of ClaudeCraft GitHub-projektet",
+    "discordCommunity": "Deltag i World of ClaudeCraft Discord-fællesskabet",
+    "donateProject": "Donér for at støtte World of ClaudeCraft"
   },
   "loading": {
     "world": "Indlæser verden...",
     "worldProgress": "Indlæser verden... {done}/{total}",
     "enteringWorld": "Træder ind i verdenen...",
-    "connectingRealm": "Forbinder til realm...",
+    "connectingRealm": "Forbinder til verdenen...",
     "assetsFailed": "Indlæsning af aktiver mislykkedes: prøv at genindlæse. {error}",
     "rendererFailed": "Kunne ikke starte gengiveren: prøv at genindlæse. {error}",
     "enterTimeout": "Kunne ikke komme ind i verdenen. Forbindelsen fik timeout. Kører spilserveren?",
     "connectionLost": "Forbindelsen til serveren gik tabt.",
-<<<<<<< HEAD
-    "reconnecting": "Connection lost. Reconnecting...",
-    "connectionRejected": "Serveren lukkede forbindelsen."
-=======
     "reconnecting": "Forbindelse mistet. Genopretter forbindelse...",
     "connectionRejected": "Serveren lukkede forbindelsen.",
     "tips": {
@@ -4150,7 +4095,6 @@ export const da_DK: EnTranslations = {
       "loadouts": "Tip: Gem mere end én talentopsætning, så du kan skifte mellem varianter uden at bruge point to gange.",
       "pvp": "Tip: Udfordr en anden spiller til en venskabelig duel, eller stil dig i kø til arenaen i Det Askegrå Colosseum for at afprøve din opbygning."
     }
->>>>>>> v0.24.0
   },
   "errors": {
     "nothingInteract": "Intet at interagere med.",
@@ -4182,12 +4126,12 @@ export const da_DK: EnTranslations = {
       "webLoginOnly": "Login er kun tilladt fra spilklienten.",
       "accountSuspended": "Denne konto er suspenderet indtil {date}.",
       "alreadyInWorld": "Karakteren er allerede i verdenen.",
-      "accountSessionLimit": "Too many characters on this account are already in the world.",
+      "accountSessionLimit": "For mange karakterer på denne konto er allerede i verdenen.",
       "takenOver": "Din karakter blev overtaget af en anden session.",
       "renameBeforeEntering": "Denne karakter skal omdøbes, før den kan komme ind i verdenen.",
       "renameNotPermitted": "Det er ikke tilladt at omdøbe denne karakter.",
-      "unsupportedMediaType": "Unsupported request format.",
-      "crossSiteOrigin": "Request blocked for security reasons."
+      "unsupportedMediaType": "Anmodningsformatet understøttes ikke.",
+      "crossSiteOrigin": "Anmodningen blev blokeret af sikkerhedsmæssige årsager."
     }
   },
   "desktop": {
@@ -4198,33 +4142,33 @@ export const da_DK: EnTranslations = {
       "later": "Senere"
     },
     "crash": {
-      "title": "Cryptic Realm",
+      "title": "World of ClaudeCraft",
       "body": "Spilvisningen holdt op med at virke. Genindlæs den?",
       "reload": "Genindlæs",
       "quit": "Afslut",
-      "fatalBody": "Cryptic Realm stødte på en uventet fejl og skal lukke."
+      "fatalBody": "World of ClaudeCraft stødte på en uventet fejl og skal lukke."
     }
   },
   "realm": {
-    "noRealms": "Ingen realms tilgængelige.",
-    "loading": "Indlæser realms...",
+    "noRealms": "Ingen verdener tilgængelige.",
+    "loading": "Indlæser verdener...",
     "recommended": "Anbefalet",
     "checkingStatus": "Tjekker status...",
     "onlineNow": "{count} online nu",
-    "down": "Realm er nede",
+    "down": "Verdenen er nede",
     "offline": "Offline",
     "full": "Fuldt",
     "high": "Høj",
     "medium": "Mellem",
     "low": "Lav",
     "popTipLow": "Lav befolkning: færre end 15 spillere online lige nu. Masser af plads; perfekt til en frisk start.",
-    "popTipMedium": "Mellem befolkning: 15 til 39 spillere online lige nu. Et sundt, aktivt realm.",
+    "popTipMedium": "Mellem befolkning: 15 til 39 spillere online lige nu. En sund, aktiv verden.",
     "popTipHigh": "Høj befolkning: 40 til 79 spillere online lige nu. Travlt, med masser af spillere omkring dig.",
     "popTipFull": "Fuld befolkning: 80 eller flere spillere online lige nu. Meget travlt; du venter måske i en login-kø.",
-    "popTipOffline": "Offline: dette realm er ikke tilgængeligt lige nu og kan ikke tilsluttes.",
+    "popTipOffline": "Offline: denne verden er ikke tilgængelig lige nu og kan ikke tilsluttes.",
     "characterCountOne": "{count} karakter",
     "characterCountOther": "{count} karakterer",
-    "selectedRealm": "Realm: {name}",
+    "selectedRealm": "Verden: {name}",
     "statsOffline": "Offline",
     "statsRealmOffline": "{realm} (Offline)",
     "enter": "Enter Realm",
@@ -4310,13 +4254,13 @@ export const da_DK: EnTranslations = {
     },
     "lore": {
       "warrior": "Krigere er kamphærdede nærkæmpere, der opbygger Raseri, når de uddeler eller tager skade. De opsuger hårde slag eller knuser fjender med kraftfulde våben.",
-      "paladin": "Paladiner er hellige korsfarere, der støtter allierede med velsignelser, helbreder sår med Helligt Lys og beskytter de svage i tung rustning.",
+      "paladin": "Paladiner er hellige korsfarere, der støtter allierede med velsignelser, helbreder sår med Lægende Lys og beskytter de svage i tung rustning.",
       "hunter": "Jægere er afstandsspecialister, der kæmper side om side med et tæmmet bæst, overøser fjender med sigtede og hurtige skud, sinker dem med stik og rystende beskydning og skifter aspekter, så de passer til øjeblikket.",
       "rogue": "Slyngler er snigende snigmordere, der bruger Energi og Combo-point på dolkestød og afsluttende manøvrer fra skyggerne.",
-      "priest": "Præster påkalder Helligt Lys for at helbrede og skærme allierede, mens Skyggemagi lader dem dræne livet af deres fjender.",
+      "priest": "Præster påkalder Lægende Lys for at helbrede og skærme allierede, mens Skyggemagi lader dem dræne livet af deres fjender.",
       "shaman": "Shamaner befaler elementerne, gennemtrænger våben med kraft, chokerer fjender med lyn og genopretter allierede.",
-      "mage": "Magikere bøjer Ild-, Frost- og Arkan-kraft for at tilintetgøre fjender, frembringe vand og fryse trusler på stedet.",
-      "warlock": "Heksemestre tilkalder dæmoner, kaster forbandelser og skade-over-tid-magi og dræner liv fra fjender for at holde ud.",
+      "mage": "Magikere bøjer Ild-, Frost- og arkankraft for at tilintetgøre fjender, frembringe vand og fryse trusler på stedet.",
+      "warlock": "Heksemestre tilkalder dæmoner, kaster forbandelser og skade-over-tid-magi og suger liv fra fjender for at holde ud.",
       "druid": "Druider kanaliserer naturen, helbreder sår, omslynger fjender og skifter til dyreformer til forsvar eller skade."
     },
     "aria": "Klassedetaljer for {className}: rolle {role}. Startværdier: Styrke {str}, Smidighed {agi}, Udholdenhed {sta}, Intellekt {int}, Ånd {spi}.",
@@ -4332,19 +4276,19 @@ export const da_DK: EnTranslations = {
     "iosStandaloneDetail": "Du er i fuldskærmstilstand fra startskærmen. Hold enheden i liggende format.",
     "iosInstallDetail": "For ægte fuldskærm på iPhone eller iPad skal du først installere denne side på din startskærm.",
     "iosShareStep": "I Safari skal du trykke på Del og derefter Føj til hjemmeskærm.",
-    "iosOpenStep": "Åbn Cryptic Realm fra det nye ikon på startskærmen.",
+    "iosOpenStep": "Åbn World of ClaudeCraft fra det nye ikon på startskærmen.",
     "androidStandaloneDetail": "Du er i fuldskærms-apptilstand. Hold enheden i liggende format.",
     "androidInstallDetail": "For fuldskærm på Android skal du først installere denne side eller føje den til din startskærm.",
     "androidInstallStep": "I Chrome skal du trykke på menuen og derefter Installér app eller Føj til startskærm.",
-    "androidOpenStep": "Åbn Cryptic Realm fra det nye ikon.",
+    "androidOpenStep": "Åbn World of ClaudeCraft fra det nye ikon.",
     "otherStandaloneDetail": "Hold din enhed i liggende fuldskærm.",
     "otherInstallDetail": "Installér eller føj denne side til din startskærm for den bedste mobile fuldskærmsoplevelse."
   },
   "serverUnavailable": {
-    "title": "Cryptic Realm - Realm utilgængeligt",
-    "logoAlt": "Cryptic Realm",
-    "eyebrow": "Realm-vedligeholdelse",
-    "heading": "Realmet er midlertidigt utilgængeligt.",
+    "title": "World of ClaudeCraft - Verden utilgængelig",
+    "logoAlt": "World of ClaudeCraft",
+    "eyebrow": "Verdens-vedligeholdelse",
+    "heading": "Verdenen er midlertidigt utilgængelig.",
     "body": "Vi genstarter spiltjenesten og forventer, at Claudemoon vender tilbage om kort tid. Denne side bliver ved med at tjekke automatisk.",
     "status": "Tilbage snart"
   },
@@ -4692,9 +4636,9 @@ export const da_DK: EnTranslations = {
       "requiresCombo": "Den evne kræver kombopoint.",
       "requiresForm": "Du skal være i {form}-form.",
       "cantInForm": "Du kan ikke gøre det i {form}-form.",
-      "bear": "Bjørn",
+      "bear": "Bruin",
       "cat": "Ulv",
-      "travel": "Rejse",
+      "travel": "Fleet",
       "shapeshifted": "Du kan ikke gøre det, mens du er formskiftet.",
       "stealthed": "Du skal være sneget.",
       "inCombat": "Du kan ikke gøre det, mens du er i kamp.",
@@ -4977,7 +4921,7 @@ export const da_DK: EnTranslations = {
       "offGlobalCooldown": "Uden for den globale nedkøling",
       "friendlyTarget": "Venligt mål",
       "enemyTarget": "Fjendtligt mål",
-      "selfOnly": "Self only",
+      "selfOnly": "Kun på dig selv",
       "damageRange": "{min} til {max}",
       "finisherDamage": "{base} plus {perCombo} per combopoint"
     },
@@ -5000,8 +4944,8 @@ export const da_DK: EnTranslations = {
     "tracker": {
       "title": "Quests",
       "complete": "Klar",
-      "showOnMap": "Show {name} on the map",
-      "hideFromMap": "Hide {name} from the map"
+      "showOnMap": "Vis {name} på kortet",
+      "hideFromMap": "Skjul {name} på kortet"
     },
     "log": {
       "title": "Quest-log",
@@ -5080,7 +5024,7 @@ export const da_DK: EnTranslations = {
     "slots": {
       "mainhand": "Hovedhånd",
       "helmet": "Hjelm",
-      "neck": "Neck",
+      "neck": "Hals",
       "shoulder": "Skulder",
       "chest": "Bryst",
       "waist": "Talje",
@@ -5107,7 +5051,7 @@ export const da_DK: EnTranslations = {
       "tool": "Værktøj",
       "potion": "Eliksir",
       "elixir": "Eliksir",
-      "bag": "Bag"
+      "bag": "Taske"
     },
     "stats": {
       "armor": "Rustning",
@@ -5150,7 +5094,7 @@ export const da_DK: EnTranslations = {
       "clickUseInstant": "Klik for at bruge øjeblikkeligt i kamp",
       "clickUse": "Klik for at bruge",
       "clickBuyback": "Klik for at købe tilbage",
-      "bagSlots": "{slots} Slot Bag"
+      "bagSlots": "Taske med {slots} pladser"
     },
     "bags": {
       "title": "Tasker",
@@ -5289,50 +5233,50 @@ export const da_DK: EnTranslations = {
       "greedAria": "Grådighed efter {item}",
       "passAria": "Stå over {item}",
       "everyonePassed": "Alle stod over {item}.",
-      "rolled": "{answered}/{total} rolled"
+      "rolled": "{answered}/{total} har slået"
     }
   },
   "entities": {
     "abilities": {
       "sport_kick": {
-        "name": "Kick",
-        "description": "Knock the ball along the ground toward the aim point."
+        "name": "Spark",
+        "description": "Spark bolden langs jorden mod sigtepunktet."
       },
       "sport_shoot": {
-        "name": "Shoot",
-        "description": "Hold to build power, release to shoot at goal. Too much power sails over."
+        "name": "Skud",
+        "description": "Hold for at lade op, slip for at skyde på mål. For meget kraft sender bolden over mål."
       },
       "sport_pass": {
-        "name": "Pass",
-        "description": "Roll a firm pass to your targeted teammate, leading their run."
+        "name": "Aflevering",
+        "description": "Spil en fast aflevering til din udvalgte holdkammerat, lige foran deres løb."
       },
       "sport_boot": {
-        "name": "Big Boot",
-        "description": "A long lofted boot toward the aim point. The crowd loves it."
+        "name": "Kæmpespark",
+        "description": "Et langt, højt spark mod sigtepunktet. Publikum elsker det."
       },
       "sport_hoof": {
-        "name": "Hoof It",
-        "description": "Hammer the ball low and hard up the field."
+        "name": "Ryd Bolden",
+        "description": "Hamr bolden lavt og hårdt op ad banen."
       },
       "sport_punt": {
-        "name": "Long Punt",
-        "description": "A keeper's punt, high and far."
+        "name": "Langt Udspark",
+        "description": "Et målmandsudspark, højt og langt."
       },
       "sport_feint": {
-        "name": "Feint",
-        "description": "A quick sidestep burst toward the aim point."
+        "name": "Finte",
+        "description": "Et hurtigt sidespring mod sigtepunktet."
       },
       "sport_dive": {
-        "name": "Dive",
-        "description": "Fling yourself toward the aim point. A crossing ball sticks to you."
+        "name": "Dyk",
+        "description": "Kast dig mod sigtepunktet. Et indlæg klæber sig fast til dig."
       },
       "sport_shoulder": {
-        "name": "Shoulder",
-        "description": "A fair harvest-truce shoulder. Sends them tumbling off the ball."
+        "name": "Skulderpuf",
+        "description": "Et fair skulderpuf under høstfreden. Sender dem tumlende væk fra bolden."
       },
       "sport_second_wind": {
-        "name": "Fresh Legs",
-        "description": "Find your legs: move 50% faster for 4 sec."
+        "name": "Friske Ben",
+        "description": "Find benene: bevæg dig 50% hurtigere i 4 sek."
       },
       "flamestrike": {
         "name": "Flammeslag",
@@ -5340,270 +5284,270 @@ export const da_DK: EnTranslations = {
       },
       "rain_of_fire": {
         "name": "Ildregn",
-        "description": "Nedkalder en ildregn over målområdet og brænder fjender for {damage} Ildskade."
+        "description": "Nedkalder en ildregn over målområdet i 4 sek og brænder fjender for {damage} Ildskade hvert sekund."
       },
       "volley": {
         "name": "Pileregn",
-        "description": "Nedkalder en regn af pile over målområdet og påfører {damage} skade på fjender i det."
+        "description": "Nedkalder en regn af pile over målområdet i 3 sek og påfører {damage} skade hvert 0,5 sek på fjender fanget i det."
       },
       "hurricane": {
         "name": "Orkan",
-        "description": "Slipper en orkan løs over målområdet og rammer fjender for {damage} Naturskade."
+        "description": "Slipper en orkan løs over målområdet i 6 sek og rammer fjender for {damage} Naturskade hvert sekund."
       },
       "earthquake": {
         "name": "Jordskælv",
-        "description": "Ryster målområdet og rammer fjender for {damage} Naturskade."
+        "description": "Ryster målområdet i 6 sek og rammer fjender for {damage} Naturskade hvert 1,5 sek."
       },
       "heroic_strike": {
-        "name": "Heroisk Slag",
+        "name": "Plyndrerslag",
         "description": "Et stærkt angreb, der øger nærkampsskaden med {damage}. Aktiveres ved dit næste hug."
       },
       "battle_shout": {
-        "name": "Kampråb",
-        "description": "A shout that increases the attack power of all party members by {buff}% for 2 min."
+        "name": "Jernbrøl",
+        "description": "Øger din angrebskraft med {buff} i 2 min."
       },
       "commanding_shout": {
-        "name": "Befalingsråb",
-        "description": "Increases your Stamina by {buff} for 2 min."
+        "name": "Styrkende Råb",
+        "description": "Øger din Udholdenhed med {buff} i 2 min."
       },
       "demoralizing_shout": {
-        "name": "Demoraliserende Råb",
-        "description": "Lets out a fearsome shout, reducing the attack power of all nearby enemies by {buff} for 30 sec."
+        "name": "Rædselshyl",
+        "description": "Udstøder et frygtindgydende råb, der sænker angrebsstyrken hos alle nærliggende fjender med {buff} i 30 sek."
       },
       "charge": {
-        "name": "Storm",
+        "name": "Fremstorm",
         "description": "Storm mod en fjende, generér 9 raseri og bedøv den i 1 sek. 8-25 m rækkevidde."
       },
       "rend": {
-        "name": "Flænge",
-        "description": "Wounds the target, causing them to bleed for {damage} damage over {duration} sec."
+        "name": "Dyb Flænge",
+        "description": "Sårer målet og får det til at bløde for {damage} skade over {duration} sek."
       },
       "thunder_clap": {
-        "name": "Tordenbrag",
+        "name": "Rystende Slag",
         "description": "Sprænger nærliggende fjender for {damage} skade og sløver deres angreb med 10 % i 10 sek."
       },
       "hamstring": {
-        "name": "Haseskær",
-        "description": "Maims the enemy for {damage} damage, slowing its movement by 50% for 15 sec."
+        "name": "Lammende Snit",
+        "description": "Lemlæster fjenden for {damage} skade og sænker dens bevægelse med 50% i 15 sek."
       },
       "bloodrage": {
-        "name": "Blodraseri",
+        "name": "Blodtold",
         "description": "Genererer 10 raseri på bekostning af helbred."
       },
       "overpower": {
-        "name": "Overmande",
-        "description": "Instant attack for weapon damage plus {damage}. Only usable after the target dodges. Cannot be dodged."
+        "name": "Rødhånd",
+        "description": "Øjeblikkeligt angreb for våbenskade plus {damage}. Kan kun bruges efter målet undviger. Kan ikke undviges."
       },
       "execute": {
-        "name": "Henrettelse",
+        "name": "Tidlig Grav",
         "description": "Forsøg på at gøre det af med en såret fjende, hvilket volder {damage} skade. Kan kun bruges på fjender under 20% helbred."
       },
       "slam": {
-        "name": "Drøn",
+        "name": "Brutalt Sving",
         "description": "Drøner modstanderen for våbenskade plus {damage}."
       },
       "cleave": {
-        "name": "Kløv",
+        "name": "Mejende Bue",
         "description": "Et fejende slag, der rammer alle fjender foran dig for {damage} skade."
       },
       "defensive_stance": {
-        "name": "Defensiv Stilling",
+        "name": "Værgende Stilling",
         "description": "En defensiv kampstilling: du skaber 30% mere trussel, men volder og modtager 10% mindre skade. Aktivér igen for at forlade stillingen."
       },
       "sunder_armor": {
-        "name": "Sønderbryd Rustning",
-        "description": "Sønderbryder målets rustning og reducerer den med {damage} per anvendelse. Stabler op til 5 gange. Genererer en stor mængde trussel."
+        "name": "Rustningsskær",
+        "description": "Flænger målets rustning og sænker den med {damage}% pr. anvendelse. Stakker op til 5 gange. Skaber en stor mængde trussel."
       },
       "taunt": {
-        "name": "Hån",
+        "name": "Ægge",
         "description": "Håner målet: din trussel stiger til at matche dets mest forhadte fjende, og det tvinges til at angribe dig i 3 sek."
       },
       "fireball": {
-        "name": "Ildkugle",
+        "name": "Glødlyn",
         "description": "Slynger en flammende kugle, der volder {damage} ildskade plus yderligere skade over tid."
       },
       "frost_armor": {
-        "name": "Frostrustning",
-        "description": "Encases you in frost, increasing armor by {buff} for 30 min."
+        "name": "Rimfrost-Kappe",
+        "description": "Indhyller dig i frost og øger rustningen med {buff} i 30 min."
       },
       "arcane_intellect": {
-        "name": "Arkan Intellekt",
-        "description": "Increases the Intellect of all party members by {buff}% for 30 min."
+        "name": "Æterindsigt",
+        "description": "Øger Intellekt med {buff} i 30 min."
       },
       "frostbolt": {
-        "name": "Frostlyn",
+        "name": "Rimlanse",
         "description": "Affyrer et frostlyn, der volder {damage} frostskade og sænker bevægelsen med 40%."
       },
       "conjure_water": {
-        "name": "Frembring Vand",
+        "name": "Vandbinding",
         "description": "Frembringer 2 flasker vand, der genopretter mana, når de drikkes. Højere rang frembringer renere vand."
       },
       "conjure_food": {
-        "name": "Frembring Mad",
+        "name": "Brødbinding",
         "description": "Frembringer 2 portioner brød, der genopretter helbred, når de spises. Højere rang frembringer mere mættende kost."
       },
       "fire_blast": {
-        "name": "Ildstød",
+        "name": "Gløderfald",
         "description": "Sprænger fjenden for {damage} ildskade. Øjeblikkelig."
       },
       "arcane_missiles": {
-        "name": "Arkane Missiler",
-        "description": "Affyrer Arkane Missiler mod fjenden, der forvolder {damage} Arkan skade hvert sekund i 3 sek."
+        "name": "Æterpile",
+        "description": "Affyrer Æterpile mod fjenden, der forvolder {damage} Arkan skade hvert sekund i 3 sek."
       },
       "polymorph": {
-        "name": "Polymorfi",
-        "description": "Transforms the enemy into a toad for up to {duration} sec. The toad wanders and heals rapidly. Any damage breaks the effect. Beasts and humanoids only."
+        "name": "Forheks",
+        "description": "Forvandler fjenden til en tudse i op til {duration} sek. Tudsen vandrer omkring og helbredes hurtigt. Enhver skade bryder effekten. Kun bæster og humanoider."
       },
       "frost_nova": {
-        "name": "Frostnova",
+        "name": "Isbinding",
         "description": "Fryser alle nærliggende fjender fast i op til 8 sek og volder {damage} frostskade."
       },
       "arcane_explosion": {
-        "name": "Arkan Eksplosion",
+        "name": "Æterudbrud",
         "description": "Et udbrud af Arkan energi rammer alle nærliggende fjender for {damage} Arkan skade."
       },
       "scorch": {
-        "name": "Svidning",
+        "name": "Skoldning",
         "description": "Svider fjenden for {damage} Ild skade. Hurtig at kaste."
       },
       "pyroblast": {
-        "name": "Pyrosprængning",
+        "name": "Bållanse",
         "description": "Slynger en enorm flammende kampesten, der volder {damage} ildskade plus yderligere skade over tid."
       },
       "ice_barrier": {
-        "name": "Isbarriere",
-        "description": "Shields you in ice, absorbing {damage} damage for 60 sec."
+        "name": "Frostslør",
+        "description": "Beskytter dig med is og opsuger {damage} skade i 60 sek."
       },
       "sinister_strike": {
-        "name": "Ondsindet Slag",
+        "name": "Ondsindet Hug",
         "description": "Et øjeblikkeligt slag for våbenskade plus {damage}. Giver 1 kombopoint."
       },
       "eviscerate": {
-        "name": "Sønderflæng",
-        "description": "Finishing move that causes {damage}."
+        "name": "Gravsøvn",
+        "description": "Afslutningstræk der volder {damage}."
       },
       "backstab": {
-        "name": "Dolkestød",
+        "name": "Fejt Stød",
         "description": "Dolk målet i ryggen for 150% våbenskade plus {damage}. Skal være bag målet. Kræver en dolk. Giver 1 kombopoint."
       },
       "gouge": {
-        "name": "Udstik",
-        "description": "Strikes the target for {damage} damage, incapacitating it for 4 sec. Any damage breaks the effect. Awards 1 combo point."
+        "name": "Øjenstik",
+        "description": "Rammer målet for {damage} skade og sætter det ud af spillet i 4 sek. Enhver skade bryder effekten. Giver 1 kombopoint."
       },
       "evasion": {
-        "name": "Undvigelse",
+        "name": "Spøgelsesfod",
         "description": "Øger din chance for at undvige med 50% i 15 sek."
       },
       "slice_and_dice": {
-        "name": "Snit og Hug",
+        "name": "Skånselsløst Tempo",
         "description": "Afslutningsangreb der øger nærkampsangrebshastighed med 30 %. Varer længere per kombopoint."
       },
       "sprint": {
-        "name": "Spurt",
+        "name": "Hurtige Hæle",
         "description": "Øger din bevægelseshastighed med 70 % i 15 sek."
       },
       "kidney_shot": {
-        "name": "Nyreslag",
+        "name": "Lavt Slag",
         "description": "Afslutningstræk der bedøver målet. Varer 1 sek længere pr. kombopoint."
       },
       "ambush": {
-        "name": "Baghold",
+        "name": "Luskerens Slag",
         "description": "Læg baghold mod målet for 250% våbenskade plus {damage}. Skal være sneget og bag målet. Kræver en dolk. Giver 1 kombopoint."
       },
       "stealth": {
-        "name": "Snigen",
-        "description": "Skjuler dig i skyggerne: fjender lægger knap mærke til dig, men du bevæger dig 50 % langsommere. Angreb eller skade bryder Snigen. Kast igen for at træde frem."
+        "name": "Duskveil",
+        "description": "Skjuler dig i skyggerne: fjender lægger knap mærke til dig, men du bevæger dig 50 % langsommere. Angreb eller skade bryder Duskveil. Kast igen for at træde frem."
       },
       "adrenaline_rush": {
-        "name": "Adrenalinrus",
+        "name": "Fremskyndet Blod",
         "description": "Dit blod koger, og genopretter øjeblikkeligt 60 energi."
       },
       "garrote": {
-        "name": "Garrotte",
-        "description": "Garrote the enemy, causing {damage} damage now and bleeding it for {overTime} over 18 sec. Must be stealthed. Awards 1 combo point."
+        "name": "Strubetråd",
+        "description": "Garrotterer fjenden, hvilket volder {damage} skade nu og får den til at bløde for {overTime} over 18 sek. Du skal være sneget. Giver 1 kombopoint."
       },
       "cheap_shot": {
-        "name": "Lumsk Slag",
-        "description": "Strike the target for {damage} damage, stunning it for 4 sec. Must be stealthed. Awards 2 combo points."
+        "name": "Maveslag",
+        "description": "Slå målet for {damage} skade, og bedøv det i 4 sek. Skal være sneget. Giver 2 kombopoint."
       },
       "sap": {
         "name": "Bedøvelse",
         "description": "Sætter målet ud af spillet i 8 sek. Du skal være i snigen og uden for kamp. Enhver skade bryder effekten."
       },
       "crippling_poison": {
-        "name": "Krøblende Gift",
-        "description": "Rammer målet med en krøblende gift, der giver {damage} Natur-skade og nedsætter dets bevægelseshastighed med 50% i 12 sek."
+        "name": "Blytung Gift",
+        "description": "Slår målet med en blytung gift, der giver {damage} Natur-skade og nedsætter dets bevægelseshastighed med 50% i 12 sek."
       },
       "expose_armor": {
-        "name": "Blotlæg Rustning",
-        "description": "Finishing move that exposes the target, reducing its armor by {damage}% for 30 sec."
+        "name": "Rustningsbrud",
+        "description": "Afslutningstræk der blotlægger målet og sænker dets rustning med {damage} i 30 sek."
       },
       "rupture": {
-        "name": "Bristning",
+        "name": "Forblødning",
         "description": "Afslutningsangreb der sårer målet og får det til at bløde for {damage} over 16 sek."
       },
       "vanish": {
-        "name": "Forsvinding",
-        "description": "Forsvind fra syne og træd ind i Snigen selv i kamp. Du bevæger dig 50 % langsommere mens du er skjult. Varer op til 10 sek."
+        "name": "Røgskridt",
+        "description": "Forsvind fra syne og træd ind i Duskveil selv i kamp. Du bevæger dig 50 % langsommere mens du er skjult. Varer op til 10 sek."
       },
       "instant_poison": {
-        "name": "Øjeblikkelig Gift",
+        "name": "Hugormbid",
         "description": "Smører dit våben i 30 min, så hvert af dine nærkampshug volder 8 ekstra naturskade."
       },
       "deadly_poison": {
-        "name": "Dødelig Gift",
+        "name": "Betændt Gift",
         "description": "Smører dit våben i 30 min, så hvert af dine nærkampshug volder 14 ekstra naturskade."
       },
       "blind": {
-        "name": "Forblænding",
+        "name": "Jordkast",
         "description": "Forblænder målet, så det vandrer forvirret omkring i 8 sek. Enhver skade bryder effekten."
       },
       "seal_of_righteousness": {
-        "name": "Retfærdighedens Segl",
-        "description": "Fills you with Holy power for 30 sec, causing each of your melee swings to deal {damage} additional Holy damage. Unleash with Verdict."
+        "name": "Edsbrand",
+        "description": "Fylder dig med Hellig kraft i 30 sek, så hvert af dine nærkampshug tilføjer {damage} ekstra Hellig skade. Udløs med Dom."
       },
       "holy_light": {
-        "name": "Helligt Lys",
+        "name": "Lægende Lys",
         "description": "Helbreder et venligt mål for {damage}."
       },
       "devotion_aura": {
-        "name": "Hengivenhedens Aura",
-        "description": "Increases the armor of all party members by {buff}% for 30 min."
+        "name": "Standhaftig Aura",
+        "description": "Øger din rustning med {buff} i 30 min."
       },
       "judgement": {
         "name": "Dom",
-        "description": "Udløser dit aktive Segl mod fjenden og forbruger det for at volde dets domsskade."
+        "description": "Udløser dit aktive Segl mod fjenden og forbruger det for at volde dets oplagrede Hellig skade."
       },
       "blessing_of_might": {
-        "name": "Magtens Velsignelse",
-        "description": "Blesses the party, increasing the attack power of all party members by {buff}% for 30 min."
+        "name": "Jernets Ed",
+        "description": "Lægger en Velsignelse på et venligt mål, og øger angrebskraften med {buff} i 5 min."
       },
       "divine_protection": {
-        "name": "Guddommelig Beskyttelse",
-        "description": "A protective ward absorbs {damage} damage for 10 sec."
+        "name": "Troens Værn",
+        "description": "Et helligt værn opsuger {damage} skade i 10 sek."
       },
       "hammer_of_justice": {
-        "name": "Retfærdighedens Hammer",
-        "description": "Stuns the target for {duration} sec."
+        "name": "Splintrende Dommerhammer",
+        "description": "Bedøver målet i {duration} sek."
       },
       "lay_on_hands": {
-        "name": "Håndspålæggelse",
-        "description": "A massive surge of healing: restores {damage} health. 10 min cooldown."
+        "name": "Sidste Rite",
+        "description": "En massiv bølge af helbredelse: genopretter {damage} helbred. 10 min afkøling."
       },
       "flash_of_light": {
-        "name": "Lysglimt",
-        "description": "Et hurtigt, effektivt glimt af Lys, der helbreder et venligt mål for {damage}."
+        "name": "Lyslægning",
+        "description": "Et hurtigt, effektivt udbrud af Lys, der helbreder et venligt mål for {damage}."
       },
       "exorcism": {
-        "name": "Eksorcisme",
+        "name": "Uddrivelsesrite",
         "description": "Forviser de onde med hellig vrede, hvilket volder {damage} hellig skade."
       },
       "consecration": {
-        "name": "Indvielse",
-        "description": "Indvier jorden under dig, og svider nærliggende fjender for {damage} Hellig skade."
+        "name": "Hellig Jord",
+        "description": "Indvier jorden under dig, og svider nærliggende fjender for {damage} Hellig skade hvert 2. sek i 10 sek."
       },
       "righteous_fury": {
-        "name": "Retfærdig Vrede",
+        "name": "Brændende Ed",
         "description": "Øger truslen genereret af din Hellige skade med 60 % i 30 min. Den tankende paladins hjørnesten."
       },
       "retribution_aura": {
@@ -5611,55 +5555,55 @@ export const da_DK: EnTranslations = {
         "description": "Omgiver dig med hellig energi i 30 min og tilføjer 5 Hellig skade til enhver fjende, der rammer dig i nærkamp."
       },
       "tame_beast": {
-        "name": "Tæm Bæst",
+        "name": "Vildbånd",
         "description": "Begynder at tæmme et bæst, der skal være din ledsager. Det skal være på dit niveau eller lavere og ikke en elite. Dit kæledyr følger dig, angriber dine fjender og holder sin egen trussel. Du kan have ét kæledyr ad gangen."
       },
       "dismiss_pet": {
-        "name": "Bortsend Kæledyr",
+        "name": "Slip Følgesvend",
         "description": "Sender dit kæledyr tilbage til vildmarken."
       },
       "raptor_strike": {
-        "name": "Raptorslag",
-        "description": "A strong melee attack that increases damage by {damage}. Activates on your next swing."
+        "name": "Sprættende Slag",
+        "description": "Et stærkt nærkampsangreb, der øger skaden med {damage}. Aktiveres ved dit næste hug."
       },
       "aspect_of_the_hawk": {
-        "name": "Høgens Aspekt",
-        "description": "Take on the harrier's guise, increasing attack power by {buff} for 30 min."
+        "name": "Kærhøgens Skikkelse",
+        "description": "Antag kærhøgens skikkelse, og øg angrebskraften med {buff} i 30 min."
       },
       "serpent_sting": {
-        "name": "Slangestik",
+        "name": "Giftbrod",
         "description": "Stikker målet og tilføjer {damage} Natur skade over 15 sek."
       },
       "arcane_shot": {
-        "name": "Arkant Skud",
+        "name": "Grumt Skud",
         "description": "Et øjeblikkeligt skud, der giver {damage} Arkan skade."
       },
       "concussive_shot": {
-        "name": "Lammende Skud",
-        "description": "Dazes the target for {damage} damage, slowing movement by 50% for 4 sec."
+        "name": "Rystende Skud",
+        "description": "Lammer målet for {damage} skade og nedsætter bevægelse med 50% i 4 sek."
       },
       "mongoose_bite": {
-        "name": "Mangustbid",
-        "description": "Counterattack after the target dodges for weapon damage plus {damage}. Cannot be dodged."
+        "name": "Modbid",
+        "description": "Modangreb efter målet undviger for våbenskade plus {damage}. Kan ikke undviges."
       },
       "wing_clip": {
-        "name": "Vingeknæk",
-        "description": "Inflicts a wound for {damage} damage, slowing the enemy by 40% for 10 sec."
+        "name": "Lænkende Snit",
+        "description": "Påfører et sår for {damage} skade, der sløver fjenden med 40% i 10 sek."
       },
       "aspect_of_the_monkey": {
-        "name": "Abens Aspekt",
-        "description": "Antag abens aspekt, og øg din undvigechance med 8% i 30 min."
+        "name": "Mårens Skikkelse",
+        "description": "Antag mårens skikkelse, og øg din undvigechance med 8% i 30 min."
       },
       "aspect_of_the_cheetah": {
-        "name": "Gepardens Aspekt",
-        "description": "Antag gepardens aspekt, og øg bevægelseshastigheden med 30% i 30 min."
+        "name": "Gangerens Skikkelse",
+        "description": "Antag gangerens skikkelse, og øg bevægelseshastigheden med 30% i 30 min."
       },
       "aimed_shot": {
-        "name": "Sigtet Skud",
-        "description": "Et omhyggeligt sigtet skud, der giver {damage} skade."
+        "name": "Langt Optræk",
+        "description": "Et omhyggeligt optrukket skud, der giver {damage} skade."
       },
       "rapid_fire": {
-        "name": "Hurtigskydning",
+        "name": "Febrilsk Optræk",
         "description": "Øger din angrebshastighed med 40% i 15 sek."
       },
       "smite": {
@@ -5667,164 +5611,164 @@ export const da_DK: EnTranslations = {
         "description": "Slår fjenden for {damage} Hellig skade."
       },
       "lesser_heal": {
-        "name": "Mindre Helbredelse",
+        "name": "Hvisket Bøn",
         "description": "Helbreder et venligt mål for {damage}."
       },
       "power_word_fortitude": {
-        "name": "Magtord: Sejhed",
-        "description": "Increases the Stamina of all party members by {buff}% for 30 min."
+        "name": "Beslutsomhedens Litani",
+        "description": "Øger målets Udholdenhed med {buff} i 30 min."
       },
       "shadow_word_pain": {
-        "name": "Skyggeord: Smerte",
+        "name": "Forfaldets Klagesang",
         "description": "Et mørkets ord forårsager {damage} Skygge skade over 18 sek."
       },
       "power_word_shield": {
-        "name": "Magtord: Skjold",
-        "description": "Shields the target, absorbing {damage} damage for 30 sec."
+        "name": "Værnets Salme",
+        "description": "Beskytter målet og opsuger {damage} skade i 30 sek."
       },
       "renew": {
-        "name": "Fornyelse",
+        "name": "Dvælende Nåde",
         "description": "Helbreder målet for {damage} over 15 sek."
       },
       "mind_blast": {
-        "name": "Sindsstød",
+        "name": "Sindsbrud",
         "description": "Sprænger målets sind for {damage} skyggeskade."
       },
       "heal": {
-        "name": "Helbredelse",
+        "name": "Højtidelig Bøn",
         "description": "En langsom, men kraftfuld bøn, der helbreder et venligt mål for {damage}."
       },
       "mind_flay": {
-        "name": "Sindsflåning",
+        "name": "Jammerens Litani",
         "description": "Angriber målets sind med skyggeenergi, hvilket volder {damage} skade hvert sekund i 3 sek."
       },
       "flash_heal": {
-        "name": "Lynhelbredelse",
+        "name": "Hastende Bøn",
         "description": "En hurtig bøn, der helbreder et venligt mål for {damage}."
       },
       "lightning_bolt": {
-        "name": "Lynnedslag",
+        "name": "Lysbuelyn",
         "description": "Slynger et lyn for {damage} naturskade."
       },
       "rockbiter_weapon": {
-        "name": "Stenbider-Våben",
-        "description": "Imbues your weapon with the fury of stone: each swing deals {damage} additional damage for 5 min."
+        "name": "Stenbundet Våben",
+        "description": "Gennemstrømmer dit våben med stenets vrede: hvert hug tilføjer {damage} ekstra skade i 5 min."
       },
       "healing_wave": {
-        "name": "Helbredende Bølge",
+        "name": "Lægende Vande",
         "description": "Helbreder et venligt mål for {damage}."
       },
       "earth_shock": {
-        "name": "Jordchok",
+        "name": "Jordstød",
         "description": "Chokerer øjeblikkeligt målet med rystende kraft for {damage} naturskade."
       },
       "lightning_shield": {
-        "name": "Lynskjold",
-        "description": "Surrounds you with crackling lightning: melee attackers take {buff} Nature damage, up to 3 charges and at most once every 5 seconds."
+        "name": "Tordenværn",
+        "description": "Omgiver dig med knitrende lyn: nærkampsangribere tager {buff} Naturskade, op til 3 ladninger og højst én gang hvert 5. sekund."
       },
       "flame_shock": {
-        "name": "Flammechok",
-        "description": "Sears the target with fire for {damage} damage plus {overTime} over 12 sec."
+        "name": "Glødstød",
+        "description": "Svider målet med ild for {damage} skade plus {overTime} over 12 sek."
       },
       "flametongue_weapon": {
-        "name": "Flammetunge-Våben",
-        "description": "Imbues your weapon with elemental fire: each swing deals {damage} additional Fire damage for 5 min."
+        "name": "Bålbrand-Våben",
+        "description": "Gennemtrænger dit våben med elementær ild: hvert hug volder {damage} ekstra Ildskade i 5 min."
       },
       "frost_shock": {
-        "name": "Frostchok",
+        "name": "Rimstød",
         "description": "Chokerer øjeblikkeligt målet med frost for {damage} frostskade og sænker dets bevægelse med 50% i 8 sek."
       },
       "frostbrand_weapon": {
-        "name": "Frostbrand-Våben",
-        "description": "Imbues your weapon with biting frost: each swing deals {damage} additional damage for 5 min."
+        "name": "Rimbundet Våben",
+        "description": "Gennemtrænger dit våben med bidende frost: hvert hug volder {damage} ekstra skade i 5 min."
       },
       "ghost_wolf": {
-        "name": "Spøgelsesulv",
-        "description": "Forvandler dig til en Spøgelsesulv og øger bevægelseshastigheden med 40% i 10 min."
+        "name": "Shadewolf",
+        "description": "Forvandler dig til en Shadewolf og øger bevægelseshastigheden med 40% i 10 min."
       },
       "stormstrike": {
-        "name": "Stormslag",
+        "name": "Forfædrenes Slag",
         "description": "Kanaliserer stormen gennem dit våben og rammer øjeblikkeligt for våbenskade plus {damage}."
       },
       "shadow_bolt": {
-        "name": "Skyggelyn",
+        "name": "Dysterlyn",
         "description": "Sender et skyggefuldt lyn mod fjenden for {damage} Skygge skade."
       },
       "demon_skin": {
-        "name": "Dæmonhud",
-        "description": "Demonic skin increases your armor by {buff} for 30 min."
+        "name": "Djævlehud",
+        "description": "Dæmonisk hud øger din rustning med {buff} i 30 min."
       },
       "immolate": {
-        "name": "Opbrænding",
-        "description": "Burns the enemy for {damage} Fire damage and an additional {overTime} over 15 sec."
+        "name": "Brændende Pagt",
+        "description": "Brænder fjenden for {damage} Ildskade og yderligere {overTime} over 15 sek."
       },
       "corruption": {
-        "name": "Fordærv",
+        "name": "Sortråd",
         "description": "Fordærver målet, og forvolder {damage} Skygge-skade over 18 sek."
       },
       "life_tap": {
-        "name": "Livstapning",
-        "description": "Converts {damage} health into {damage} mana."
+        "name": "Hård Handel",
+        "description": "Omdanner {damage} helbred til {damage} mana."
       },
       "curse_of_agony": {
-        "name": "Kvalens Forbandelse",
+        "name": "Kvalens Forgørelse",
         "description": "Forbander målet med kval: {damage} skyggeskade over 24 sek."
       },
       "drain_life": {
-        "name": "Dræn Liv",
+        "name": "Fortær",
         "description": "Dræner målets liv og overfører {damage} helbred til dig hvert sekund i 5 sek."
       },
       "fear": {
-        "name": "Frygt",
+        "name": "Hjemsøg",
         "description": "Slår rædsel i fjenden, så den kryber sammen i op til 8 sek. Enhver skade bryder effekten."
       },
       "searing_pain": {
-        "name": "Sviende Smerte",
+        "name": "Svid",
         "description": "Brænder fjenden med pinefuld ild for {damage} Ild skade. Hurtig at kaste."
       },
       "shadowburn": {
-        "name": "Skyggebrand",
-        "description": "Sprænger øjeblikkeligt målet med Skyggeflamme for {damage} Skygge skade."
+        "name": "Skumringsild",
+        "description": "Sprænger øjeblikkeligt målet med sviende skygge for {damage} Skygge skade."
       },
       "wrath": {
-        "name": "Vrede",
+        "name": "Vildlyn",
         "description": "Slynger et lyn af naturenergi for {damage} Natur skade."
       },
       "healing_touch": {
-        "name": "Helbredende Berøring",
+        "name": "Vildlægning",
         "description": "Helbreder et venligt mål for {damage}."
       },
       "mark_of_the_wild": {
-        "name": "Vildmarkens Mærke",
-        "description": "Places the Wildward on the party, increasing all attributes of all party members by {buff}% for 30 min."
+        "name": "Wildward",
+        "description": "Anbringer Wildward på et venligt mål og øger rustningen med {buff} i 30 min."
       },
       "moonfire": {
-        "name": "Måneild",
+        "name": "Månestorm",
         "description": "Brænder fjenden med måneild for {damage} arkan skade plus skade over tid."
       },
       "rejuvenation": {
-        "name": "Foryngelse",
+        "name": "Vildblomst",
         "description": "Helbreder målet for {damage} over 12 sek."
       },
       "thorns": {
-        "name": "Torne",
-        "description": "Thorns sprout from the target: melee attackers take {buff} Nature damage."
+        "name": "Torneværn",
+        "description": "Torne spirer frem fra målet: nærkampsangribere tager {buff} Natur skade."
       },
       "entangling_roots": {
-        "name": "Snærende Rødder",
+        "name": "Gribende Rødder",
         "description": "Forankrer målet på stedet i op til 12 sek."
       },
       "bear_form": {
-        "name": "Bjørneform",
-        "description": "Forvandl dig til en bjørn: rustning +65%, angrebskraft +15, dine angreb opbygger raseri og genererer 30% mere trussel. Kast igen for at vende tilbage til besværgerform."
+        "name": "Bruin-form",
+        "description": "Forvandl dig til en bjørn: rustning +90%, stærkt øget angrebskraft, dine angreb opbygger raseri og genererer 30% mere trussel. Kast igen for at vende tilbage til besværgerform."
       },
       "maul": {
-        "name": "Lemlæstelse",
-        "description": "Et lemlæstende angreb, der øger nærkampsskaden med {damage} og skaber en stor mængde trussel. Aktiveres ved dit næste hug. Kun i Bjørneform."
+        "name": "Knogleknus",
+        "description": "Et lemlæstende angreb, der øger nærkampsskaden med {damage} og skaber en stor mængde trussel. Aktiveres ved dit næste hug. Kun i Bruin-form."
       },
       "growl": {
-        "name": "Knurren",
-        "description": "Knurrer ad målet: din trussel stiger til at matche dets mest forhadte fjende, og det tvinges til at angribe dig i 3 sek. Kun i Bjørneform."
+        "name": "Trussel",
+        "description": "Knurrer ad målet: din trussel stiger til at matche dets mest forhadte fjende, og det tvinges til at angribe dig i 3 sek. Kun i Bruin-form."
       },
       "cat_form": {
         "name": "Ulveform",
@@ -5835,43 +5779,43 @@ export const da_DK: EnTranslations = {
         "description": "Klo fjenden for våbenskade plus {damage}. Giver 1 kombopoint. Kun i Ulveform."
       },
       "ferocious_bite": {
-        "name": "Glubsk Bid",
-        "description": "Finishing move that causes {damage}. Wolf Form only."
+        "name": "Blodbid",
+        "description": "Afslutningstræk der volder {damage}. Kun i Ulveform."
       },
       "swipe": {
-        "name": "Sving",
-        "description": "Sving mod nærliggende fjender for {damage} skade. Forårsager ekstra trussel. Kun i Bjørneform."
+        "name": "Fejende Kløer",
+        "description": "Sving mod nærliggende fjender for {damage} skade. Forårsager ekstra trussel. Kun i Bruin-form."
       },
       "regrowth": {
-        "name": "Genvækst",
+        "name": "Anden Blomstring",
         "description": "Helbreder et venligt mål for {damage} og en yderligere mængde over 21 sek."
       },
       "barkskin": {
-        "name": "Barkhud",
+        "name": "Egehud",
         "description": "Din hud hærder som bark, og øger rustning med 150 i 15 sek."
       },
       "starfire": {
-        "name": "Stjerneild",
+        "name": "Himmelfald",
         "description": "Nedkalder et lyn af stjerneild og forårsager {damage} Arkan skade."
       },
       "travel_form": {
-        "name": "Rejseform",
-        "description": "Skift øjeblikkeligt til en hurtig rejseform, der øger bevægelseshastighed med 40 %. Du kan ikke bruge andre evner mens du er forvandlet, men kan skifte ind eller ud af kamp, ideelt til at flygte."
+        "name": "Fleet-form",
+        "description": "Skift øjeblikkeligt til en hurtig Fleet-form, der øger bevægelseshastighed med 40 %. Du kan ikke bruge andre evner mens du er forvandlet, men kan skifte ind eller ud af kamp, ideelt til at flygte."
       },
       "enrage": {
-        "name": "Forbittrelse",
-        "description": "Skaber 20 raseri øjeblikkeligt. Kun i Bjørneform."
+        "name": "Optænding",
+        "description": "Skaber 20 raseri øjeblikkeligt. Kun i Bruin-form."
       },
       "bash": {
-        "name": "Smæk",
-        "description": "Bedøver målet i 2 sek. Kun i Bjørneform."
+        "name": "Chokslag",
+        "description": "Bedøver målet i 2 sek. Kun i Bruin-form."
       },
       "faerie_fire": {
-        "name": "Feild",
-        "description": "Decreases the target's armor by {damage}% for 40 sec. Does not stack with Armor Shear."
+        "name": "Hekselys",
+        "description": "Sænker målets rustning med {damage}% i 40 sek. Stakker ikke med Rustningsskær."
       },
       "hibernate": {
-        "name": "Dvale",
+        "name": "Slummer",
         "description": "Tvinger målet ind i en dyb søvn i op til 8 sek. Enhver skade vækker det."
       },
       "dash": {
@@ -5879,83 +5823,83 @@ export const da_DK: EnTranslations = {
         "description": "Spurt fremad og øg bevægelseshastigheden med 50% i 15 sek. Kun i Ulveform."
       },
       "pounce": {
-        "name": "Spring",
+        "name": "Luskeslag",
         "description": "En snigeåbner der bedøver målet i 2 sek. Giver 1 kombopoint. Kun i Ulveform."
       },
       "insect_swarm": {
-        "name": "Insektsværm",
+        "name": "Stikkende Sværm",
         "description": "Fjenden sværmes af insekter og tager {damage} naturskade over 12 sek."
       },
       "tigers_fury": {
-        "name": "Tigerens Raseri",
+        "name": "Ulveblod",
         "description": "Øger angrebskraft med 40 i 6 sek. Kun i Ulveform."
       },
       "rip": {
         "name": "Sønderriv",
-        "description": "Finishing move that causes {damage} Bleed damage over 12 sec. Consumes combo points. Wolf Form only."
+        "description": "Afslutningsangreb der forårsager {damage} Blødningsskade over 12 sek. Forbruger kombopoint. Kun i Ulveform."
       },
       "mortal_strike": {
-        "name": "Dødbringende Slag",
+        "name": "Lemlæstende Slag",
         "description": "Et ondskabsfuldt slag, der volder våbenskade plus {damage}. (Arms-signatur)"
       },
       "bloodthirst": {
-        "name": "Blodtørst",
-        "description": "Angrib øjeblikkeligt i et blodraseri for {damage}. (Furie-signatur)"
+        "name": "Åreladning",
+        "description": "Angrib øjeblikkeligt i et blodraseri for 60% våbenskade plus {damage}. (Furie-signatur)"
       },
       "shield_slam": {
-        "name": "Skjoldslag",
-        "description": "Slå målet med dit skjold for {damage} og enorm trussel. (Beskyttelses-kendetegn)"
+        "name": "Skjoldknæk",
+        "description": "Slå målet med dit skjold for 50% våbenskade plus {damage} og enorm trussel. (Beskyttelses-kendetegn)"
       },
       "whirlwind": {
-        "name": "Hvirvelvind",
+        "name": "Klingehvirvel",
         "description": "Snur i en dødelig bue og ram alle nærliggende fjender for {damage}. (Raseri-talent)"
       },
       "berserker_rage": {
-        "name": "Bersærkerraseri",
-        "description": "Gå i bersærkerraseri, og generér 20 raseri. (Krigertalent)"
+        "name": "Sydende Raseri",
+        "description": "Gå i et sydende raseri, og generér 20 raseri. (Krigertalent)"
       },
       "summon_imp": {
-        "name": "Tilkald Imp",
-        "description": "Tilkalder en Imp under Heksemesterens kommando. Imp'en slynger Ildlyn mod dine fjender fra det fjerne. At tilkalde en ny dæmon bortsender din nuværende. Du kan have én dæmon ad gangen."
+        "name": "Tilkald Emberkin",
+        "description": "Tilkalder en Emberkin under Heksemesterens kommando. Emberkinen slynger Askelyn mod dine fjender fra det fjerne. At tilkalde en ny dæmon bortsender din nuværende. Du kan have én dæmon ad gangen."
       },
       "summon_voidwalker": {
-        "name": "Tilkald Tomvandrer",
-        "description": "Tilkalder en Tomvandrer under Heksemesterens kommando. Tomvandreren er en robust dæmon, der håner dine fjender og opsuger tæsk. At tilkalde en ny dæmon bortsender din nuværende. Du kan have én dæmon ad gangen."
+        "name": "Tilkald Gloomshade",
+        "description": "Tilkalder en Gloomshade under Heksemesterens kommando. Gloomshaden er en robust dæmon, der håner dine fjender og opsuger tæsk. At tilkalde en ny dæmon bortsender din nuværende. Du kan have én dæmon ad gangen."
       },
       "summon_succubus": {
-        "name": "Tilkald Succubus",
-        "description": "Tilkalder en Succubus under Heksemesterens kommando. Succubus'en er en skrøbelig dæmon, der slår hurtigt og rammer hårdt i nærkamp. At tilkalde en ny dæmon bortsender din nuværende. Du kan have én dæmon ad gangen."
+        "name": "Tilkald Duskborn",
+        "description": "Tilkalder en Duskborn under Heksemesterens kommando. Duskbornen er en skrøbelig dæmon, der slår hurtigt og rammer hårdt i nærkamp. At tilkalde en ny dæmon bortsender din nuværende. Du kan have én dæmon ad gangen."
       },
       "summon_felhunter": {
-        "name": "Tilkald Feljæger",
-        "description": "Tilkalder en Feljæger under Heksemesterens kommando. Feljægeren plager fjender fra afstand med Skyggebid og udmærker sig ved at jage besværgere. At tilkalde en ny dæmon bortsender din nuværende. Du kan have én dæmon ad gangen."
+        "name": "Tilkald Spellhound",
+        "description": "Tilkalder en Spellhound under Heksemesterens kommando. Spellhounden plager fjender fra afstand med Dysterbid og udmærker sig ved at jage besværgere. At tilkalde en ny dæmon bortsender din nuværende. Du kan have én dæmon ad gangen."
       },
       "summon_felguard": {
-        "name": "Tilkald Felvogter",
-        "description": "Tilkalder en Felvogter under Heksemesterens kommando. Felvogteren er en sejlivet nærkampsdæmon, der vader ind i kampen og klarer sig selv. At tilkalde en ny dæmon bortsender din nuværende. Du kan have én dæmon ad gangen."
+        "name": "Tilkald Warfiend",
+        "description": "Tilkalder en Warfiend under Heksemesterens kommando. Warfienden er en sejlivet nærkampsdæmon, der vader ind i kampen og klarer sig selv. At tilkalde en ny dæmon bortsender din nuværende. Du kan have én dæmon ad gangen."
       },
       "summon_infernal": {
-        "name": "Tilkald Infernal",
-        "description": "Binder en Infernal til din vilje, en kæmpemæssig juggernaut med knusende nærkamp og det dybeste helbred og den tykkeste rustning af enhver dæmon. En lang nedkøling holder dens rå kraft i skak. At tilkalde en ny dæmon bortsender din nuværende. Du kan have én dæmon ad gangen."
+        "name": "Tilkald Pyre Colossus",
+        "description": "Binder en Pyre Colossus til din vilje, en kæmpemæssig juggernaut med knusende nærkamp og det dybeste helbred og den tykkeste rustning af enhver dæmon. En lang nedkøling holder dens rå kraft i skak. At tilkalde en ny dæmon bortsender din nuværende. Du kan have én dæmon ad gangen."
       },
       "summon_doomguard": {
-        "name": "Tilkald Domsvogter",
-        "description": "Binder en Domsvogter til din vilje, en elitedæmon der regner tung Skygge skade ned på afstand. En lang nedkøling holder dens ødelæggende kraft i skak. At tilkalde en ny dæmon bortsender din nuværende. Du kan have én dæmon ad gangen."
+        "name": "Tilkald Wraithborn",
+        "description": "Binder en Wraithborn til din vilje, en elitedæmon der regner tung Skygge skade ned på afstand. En lang nedkøling holder dens ødelæggende kraft i skak. At tilkalde en ny dæmon bortsender din nuværende. Du kan have én dæmon ad gangen."
       },
       "bear_charge": {
-        "name": "Bjørnestorm",
-        "description": "Storm mod en fjende, generér 9 raseri og bedøv den i 1 sek. 8-25 m rækkevidde. Kun i Bjørneform."
+        "name": "Bruin-storm",
+        "description": "Storm mod en fjende, generér 9 raseri og bedøv den i 1 sek. 8-25 m rækkevidde. Kun i Bruin-form."
       },
       "demoralizing_roar": {
-        "name": "Demoraliserende Brøl",
-        "description": "Demoraliserer nærliggende fjender og sænker deres angrebsstyrke med 20 i 20 sek. Kun i Bjørneform."
+        "name": "Fejt Brøl",
+        "description": "Demoraliserer nærliggende fjender og sænker deres angrebsstyrke med 20 i 20 sek. Kun i Bruin-form."
       },
       "prowl": {
-        "name": "Luske",
+        "name": "Snig",
         "description": "Gå i sneg-tilstand mens du er i Ulveform, og bevæg dig 50 % langsommere. Kan ikke bruges i kamp."
       },
       "rake": {
-        "name": "Kradsning",
+        "name": "Flæns",
         "description": "En snigeåbner der kradser fjenden for våbenskade plus {damage} og volder blødningsskade over 9 sek. Giver 1 kombopoint. Kun i Ulveform."
       },
       "revive_pet": {
@@ -5965,10 +5909,10 @@ export const da_DK: EnTranslations = {
     },
     "items": {
       "worn_sword": {
-        "name": "Slidt Kortsværd"
+        "name": "Rustæret Kortsværd"
       },
       "gnarled_staff": {
-        "name": "Knortet Stav"
+        "name": "Moseeg-Stav"
       },
       "rusty_dagger": {
         "name": "Rusten Dolk"
@@ -5980,13 +5924,13 @@ export const da_DK: EnTranslations = {
         "name": "Rusten Økse"
       },
       "recruit_tunic": {
-        "name": "Rekruttens Tunika"
+        "name": "Værnepligtigs Tunika"
       },
       "apprentice_robe": {
-        "name": "Lærlingens Kappe"
+        "name": "Luvslidt Kappe"
       },
       "footpad_jerkin": {
-        "name": "Stratenrøvers Vams"
+        "name": "Lommetyvens Vams"
       },
       "redbrook_blade": {
         "name": "Rødbæk-Militsklinge"
@@ -6016,22 +5960,22 @@ export const da_DK: EnTranslations = {
         "name": "Gråkæbes Pelsbenklæder"
       },
       "baked_bread": {
-        "name": "Nybagt Brød"
+        "name": "Bondebrød"
       },
       "spring_water": {
-        "name": "Forfriskende Kildevand"
+        "name": "Koldt Brøndvand"
       },
       "roasted_boar": {
-        "name": "Stegt Vildsvinekød"
+        "name": "Spiddet Vildsvinekølle"
       },
       "conjured_water": {
-        "name": "Frembragt Kildevand"
+        "name": "Frembragt Regnvand"
       },
       "conjured_water2": {
-        "name": "Frembragt Mineralvand"
+        "name": "Frembragt Brøndvand"
       },
       "conjured_water3": {
-        "name": "Frembragt Danskvand"
+        "name": "Frembragt Klarvand"
       },
       "eastbrook_arming_sword": {
         "name": "Østbæk Væbnersværd"
@@ -6103,7 +6047,7 @@ export const da_DK: EnTranslations = {
         "name": "Spøgelsesagtig Essens"
       },
       "webwood_silk": {
-        "name": "Spindeskov-Silkekirtel"
+        "name": "Sableweb-Silkekirtel"
       },
       "supply_crate": {
         "name": "Stjålen Forsyningskasse"
@@ -6127,13 +6071,13 @@ export const da_DK: EnTranslations = {
         "name": "Rødt Bandana"
       },
       "tough_jerky": {
-        "name": "Sejt Tørkød"
+        "name": "Saltet Tørkød"
       },
       "mudfin_scale": {
-        "name": "Slimet Murloc-Skæl"
+        "name": "Slimet Mudfin-Skæl"
       },
       "tallow_candle": {
-        "name": "Tællelys"
+        "name": "Fedtet Tælleklump"
       },
       "spider_leg": {
         "name": "Dirrende Edderkoppeben"
@@ -6208,7 +6152,7 @@ export const da_DK: EnTranslations = {
         "name": "Sumpskridter-Støvler"
       },
       "mistcallers_edge": {
-        "name": "Tågekalderens Æg"
+        "name": "Fogbinderens Æg"
       },
       "vaels_mist_staff": {
         "name": "Vaels Tågestav"
@@ -6352,7 +6296,7 @@ export const da_DK: EnTranslations = {
         "name": "Velkhars Stav"
       },
       "shadowmeld_tunic": {
-        "name": "Skyggesmeltnings-Tunika"
+        "name": "Natslør-Tunika"
       },
       "gravewyrm_scale_hauberk": {
         "name": "Gravorm-Skælbrynje"
@@ -6421,13 +6365,13 @@ export const da_DK: EnTranslations = {
         "name": "Knækket Ormeskæl"
       },
       "conjured_bread": {
-        "name": "Frembragt Brød"
+        "name": "Frembragt Havrekage"
       },
       "conjured_bread2": {
-        "name": "Frembragt Pumpernikkel"
+        "name": "Frembragt Sortbrød"
       },
       "conjured_bread3": {
-        "name": "Frembragt Sød Bolle"
+        "name": "Frembragt Honningkage"
       },
       "roadwardens_helm": {
         "name": "Vejvogterens Hjelm"
@@ -6532,7 +6476,7 @@ export const da_DK: EnTranslations = {
         "name": "Gravvævet taske"
       },
       "mistcallers_duffel": {
-        "name": "Tågekalderens køjesæk"
+        "name": "Fogbinderens køjesæk"
       },
       "copper_mining_pick": {
         "name": "Kobberminehakke"
@@ -6562,43 +6506,43 @@ export const da_DK: EnTranslations = {
         "name": "Sølvbladsegl"
       },
       "thorium_mining_pick": {
-        "name": "Thorium Mining Pick"
+        "name": "Thoriumminehakke"
       },
       "arcanite_mining_pick": {
-        "name": "Arcanite Mining Pick"
+        "name": "Arkanitminehakke"
       },
       "ashwood_axe": {
-        "name": "Ashwood Axe"
+        "name": "Askeøkse"
       },
       "elderwood_axe": {
-        "name": "Elderwood Axe"
+        "name": "Gammeltræsøkse"
       },
       "goldleaf_sickle": {
-        "name": "Goldleaf Sickle"
+        "name": "Guldbladssegl"
       },
       "sunpetal_sickle": {
-        "name": "Sunpetal Sickle"
+        "name": "Solkronbladssegl"
       },
       "thorium_ore": {
-        "name": "Thorium Ore"
+        "name": "Thoriummalm"
       },
       "arcanite_bar": {
-        "name": "Arcanite Bar"
+        "name": "Arkanitbarre"
       },
       "ashwood_log": {
-        "name": "Ashwood Log"
+        "name": "Askeved Stamme"
       },
       "elderwood_log": {
-        "name": "Elderwood Log"
+        "name": "Gammel Hyldeved Stamme"
       },
       "goldleaf_herb": {
-        "name": "Goldleaf Herb"
+        "name": "Guldbladurt"
       },
       "sunpetal_herb": {
-        "name": "Sunpetal Herb"
+        "name": "Solkroneurt"
       },
       "bristleback_maul": {
-        "name": "Børsterygs-Lemlæster"
+        "name": "Gallowglass-Hammer"
       },
       "broodmother_silk_robe": {
         "name": "Yngelmoderens Silkekappe"
@@ -6607,16 +6551,16 @@ export const da_DK: EnTranslations = {
         "name": "Kryptben-Benskinner"
       },
       "cryptstalker_jerkin": {
-        "name": "Kryptlusker-Vams"
+        "name": "Gravlusker-Vams"
       },
       "deathlord_legguards": {
-        "name": "Dødsherre-Benværn"
+        "name": "Barrowlord-Benværn"
       },
       "deathlord_sabatons": {
-        "name": "Dødsherre-Jernstøvler"
+        "name": "Barrowlord-Jernstøvler"
       },
       "deathlord_warplate": {
-        "name": "Dødsherre-Krigsplade"
+        "name": "Barrowlord-Krigsplade"
       },
       "drogmar_warboots": {
         "name": "Drogmars Krigsstøvler"
@@ -6694,13 +6638,13 @@ export const da_DK: EnTranslations = {
         "name": "Moggers Trampestøvler"
       },
       "necromancers_legwraps": {
-        "name": "Nekromantikerens Benomvikkel"
+        "name": "Mournweave-Benomvikling"
       },
       "necromancers_soulsteps": {
-        "name": "Nekromantikerens Sjælestøvler"
+        "name": "Mournweave-Sjælestøvler"
       },
       "necromancers_starshroud": {
-        "name": "Nekromantikerens Stjerneslør"
+        "name": "Mournweave-Stjerneslør"
       },
       "nhalias_dirgeblade": {
         "name": "Nhalias Sørgeklinge"
@@ -6736,13 +6680,13 @@ export const da_DK: EnTranslations = {
         "name": "Ormekultens Sjælestøvler"
       },
       "wyrmshadow_harness": {
-        "name": "Ormeskygge-Sele"
+        "name": "Nightfang-Sele"
       },
       "wyrmshadow_legguards": {
-        "name": "Ormeskygge-Benværn"
+        "name": "Nightfang-Benværn"
       },
       "wyrmshadow_treads": {
-        "name": "Ormeskygge-Trædesko"
+        "name": "Nightfang-Trædesko"
       },
       "glimmerfin_koi": {
         "name": "Glimtfinne-Koi"
@@ -6760,7 +6704,7 @@ export const da_DK: EnTranslations = {
         "name": "Rå Flodaborre"
       },
       "raw_stonescale_carp": {
-        "name": "Rå Stenskæl-Karpe"
+        "name": "Rå Skiferfinne-Karpe"
       },
       "soggy_boot": {
         "name": "Gennemvåd Støvle"
@@ -6871,13 +6815,13 @@ export const da_DK: EnTranslations = {
         "name": "Måneskæl-Sabel"
       },
       "moonshroud_breastplate": {
-        "name": "Måneslør-Brystplade"
+        "name": "Moonwrack-Brystplade"
       },
       "moonshroud_robe": {
-        "name": "Måneslør-Kåbe"
+        "name": "Moonwrack-Kåbe"
       },
       "moonshroud_tunic": {
-        "name": "Måneslørs-Tunika"
+        "name": "Moonwrack-Tunika"
       },
       "pale_pearl": {
         "name": "Bleg Perle"
@@ -6913,7 +6857,7 @@ export const da_DK: EnTranslations = {
         "name": "Kryptben-Skulderplader"
       },
       "deathlords_dread_visage": {
-        "name": "Dødsherrens Rædselsmaske"
+        "name": "Barrowlords Rædselsmaske"
       },
       "gravewyrm_gauntlets": {
         "name": "Gravorm-Panserhandsker"
@@ -6928,10 +6872,10 @@ export const da_DK: EnTranslations = {
         "name": "Tågeslør-Greb"
       },
       "necromancers_soulspire_mantle": {
-        "name": "Nekromantikerens Sjælespir-Kappe"
+        "name": "Mournweave Sjælespir-Kappe"
       },
       "wyrmshadow_talongrips": {
-        "name": "Ormeskygge-Klogreb"
+        "name": "Nightfang-Klogreb"
       },
       "tome_town_portal": {
         "name": "Tome of Town Portal"
@@ -6964,67 +6908,67 @@ export const da_DK: EnTranslations = {
         "name": "Varrics Skyggehætte"
       },
       "siltguard_helm": {
-        "name": "Siltguard Helm"
+        "name": "Dyndvogter-Hjelm"
       },
       "bulwark_rusted_pauldrons": {
-        "name": "Bulwark-Rusted Pauldrons"
+        "name": "Bolværksrustne Skulderplader"
       },
       "nhalias_bell_maul": {
-        "name": "Nhalia's Bell-Maul"
+        "name": "Nhalias Klokkekølle"
       },
       "reedstalker_jerkin": {
-        "name": "Reedstalker Jerkin"
+        "name": "Sivsniger-Vams"
       },
       "mirejaw_fang_knife": {
-        "name": "Mirejaw Fang-Knife"
+        "name": "Sumpkæft-Hugtandskniv"
       },
       "widow_silk_hood": {
-        "name": "Widow-Silk Hood"
+        "name": "Enkesilke-Hætte"
       },
       "cantors_drowned_sash": {
-        "name": "Cantor's Drowned Sash"
+        "name": "Kantorens Druknede Skærf"
       },
       "corpse_candle_focus": {
-        "name": "Corpse-Candle Focus"
+        "name": "Ligkerte-Fokus"
       },
       "nhalias_litany_rod": {
-        "name": "Nhalia's Litany Rod"
+        "name": "Nhalias Litanistav"
       },
       "blackwater_vanguard_chest": {
-        "name": "Blackwater Vanguard Chestguard"
+        "name": "Sortvandsfortroppens Brystværn"
       },
       "siltstep_leggings": {
-        "name": "Siltstep Leggings"
+        "name": "Dyndtrins-Bukser"
       },
       "sunken_reliquary_hood": {
-        "name": "Sunken Reliquary Hood"
+        "name": "Sunket Relikvarie-Hætte"
       },
       "litany_legs": {
-        "name": "Silt-Walker Greaves"
+        "name": "Dyndvandrer-Benskinner"
       },
       "litany_shoulder": {
-        "name": "Blackwater Drift Mantle"
+        "name": "Sortvandsdrift-Kappe"
       },
       "litany_gloves_rog": {
-        "name": "Reed-Bound Handwraps"
+        "name": "Sivbundne Håndsvøb"
       },
       "litany_plate_chest": {
-        "name": "Sump-Warden Cuirass"
+        "name": "Sumpvogter-Brynje"
       },
       "litany_leather_chest": {
-        "name": "Silt-Deep Vestment"
+        "name": "Dynddybt Ornat"
       },
       "litany_cloth_chest": {
-        "name": "Choir-Drowned Raiment"
+        "name": "Kordruknet Skrud"
       },
       "litany_helm": {
-        "name": "Reliquant's Drowned Cowl"
+        "name": "Relikvantens Druknede Kutte"
       },
       "sister_nhalia_choir_plate": {
-        "name": "Sister Nhalia's Choir-Forged Plate"
+        "name": "Søster Nhalias Kor-Smedede Pladebrynje"
       },
       "drowned_choir_fang": {
-        "name": "Drowned Choir-Fang"
+        "name": "Druknet Korhugtand"
       },
       "the_codfather": {
         "name": "Torskefaderen"
@@ -7066,160 +7010,160 @@ export const da_DK: EnTranslations = {
         "name": "Mystisk Kosmetisk Skrin"
       },
       "heroic_mark": {
-        "name": "Heroic Mark"
+        "name": "Heroisk Mærke"
       },
       "morthens_cryptforged_hauberk": {
-        "name": "Morthen's Cryptforged Hauberk"
+        "name": "Morthens Kryptsmedede Brynje"
       },
       "shadowpulse_handwraps": {
-        "name": "Shadowpulse Handwraps"
+        "name": "Skyggepuls-Håndomvikling"
       },
       "bonechill_striders": {
-        "name": "Bonechill Striders"
+        "name": "Benkulde-Skridtsko"
       },
       "mistcallers_fang": {
-        "name": "Mistcaller's Fang"
+        "name": "Fogbinderens Hugtand"
       },
       "tidebound_spaulders": {
-        "name": "Tidebound Spaulders"
+        "name": "Tidevandsbundne Skulderplader"
       },
       "sash_of_the_sunken_court": {
-        "name": "Sash of the Sunken Court"
+        "name": "Skærf fra Det Sunkne Hof"
       },
       "lunar_tide_greatstaff": {
-        "name": "Lunar Tide Greatstaff"
+        "name": "Månetidevands-Storstav"
       },
       "tidewoven_trousers": {
-        "name": "Tidewoven Trousers"
+        "name": "Tidevandsvævede Benklæder"
       },
       "choirmothers_casque": {
-        "name": "Choirmother's Casque"
+        "name": "Kormoderens Hjelm"
       },
       "gravewyrm_cleaver": {
-        "name": "Gravewyrm Cleaver"
+        "name": "Gravorm-Kløver"
       },
       "shroud_of_the_gravewyrm": {
-        "name": "Shroud of the Gravewyrm"
+        "name": "Gravormens Ligklæde"
       },
       "sanctum_prowlers_grips": {
-        "name": "Sanctum Prowler's Grips"
+        "name": "Helligdommens Luskers Greb"
       },
       "scepter_of_the_deathless_court": {
-        "name": "Scepter of the Deathless Court"
+        "name": "Scepter fra Det Udødelige Hof"
       },
       "deathless_warguard_legmail": {
-        "name": "Deathless Warguard Legmail"
+        "name": "Udødelig Krigsvagt-Benbrynje"
       },
       "soulrend_diadem": {
-        "name": "Soulrend Diadem"
+        "name": "Sjæleflæng-Diadem"
       },
       "scourgehide_carapace": {
-        "name": "Scourgehide Carapace"
+        "name": "Svøbehud-Panser"
       },
       "cryptplate_helm": {
-        "name": "Cryptplate Helm"
+        "name": "Kryptplade-Hjelm"
       },
       "shadowpulse_slippers": {
-        "name": "Shadowpulse Slippers"
+        "name": "Skyggepuls-Futter"
       },
       "bonechill_cord": {
-        "name": "Bonechill Cord"
+        "name": "Benkulde-Snor"
       },
       "mistforged_pauldrons": {
-        "name": "Mistforged Pauldrons"
+        "name": "Tågesmedede Skulderplader"
       },
       "tideguard_faceguard": {
-        "name": "Tideguard Faceguard"
+        "name": "Tidevandsvagt-Ansigtsværn"
       },
       "sunken_court_mantle": {
-        "name": "Sunken Court Mantle"
+        "name": "Kappe fra Det Sunkne Hof"
       },
       "lunar_choir_leggings": {
-        "name": "Lunar Choir Leggings"
+        "name": "Månekor-Benbeklædning"
       },
       "choir_blessed_spaulders": {
-        "name": "Choir-Blessed Spaulders"
+        "name": "Korvelsignede Skulderplader"
       },
       "tideworn_warboots": {
-        "name": "Tideworn Warboots"
+        "name": "Tidevandsslidte Krigsstøvler"
       },
       "gravewyrm_claws": {
-        "name": "Gravewyrm Claws"
+        "name": "Gravorm-Kløer"
       },
       "gravescale_girdle": {
-        "name": "Gravescale Girdle"
+        "name": "Gravskæl-Livgjord"
       },
       "wyrmchoir_handwraps": {
-        "name": "Wyrmchoir Handwraps"
+        "name": "Ormekor-Håndomvikling"
       },
       "deathless_greatblade": {
-        "name": "Deathless Greatblade"
+        "name": "Udødelig Storklinge"
       },
       "soulforged_warplate": {
-        "name": "Soulforged Warplate"
+        "name": "Sjælesmedet Krigsplade"
       },
       "stormcallers_focus": {
-        "name": "Stormcaller's Focus"
+        "name": "Stormkalderens Fokus"
       },
       "seal_of_the_nine_oaths": {
-        "name": "Seal of the Nine Oaths"
+        "name": "Segl over De Ni Eder"
       },
       "nielas_coldlight_band": {
-        "name": "Niela's Coldlight Band"
+        "name": "Nielas Koldlys-Ring"
       },
       "sutils_gambit": {
-        "name": "Sutil's Gambit"
+        "name": "Sutils Gambit"
       },
       "oath_of_the_round_table": {
-        "name": "Oath of the Round Table"
+        "name": "Ed til Det Runde Bord"
       },
       "zyzzs_deathless_signet": {
-        "name": "Zyzz's Deathless Signet"
+        "name": "Zyzzs Udødelige Signetring"
       },
       "architects_cornerstone": {
-        "name": "The Architect's Cornerstone"
+        "name": "Arkitektens Hjørnesten"
       },
       "swiftfang_talisman": {
-        "name": "Swiftfang Talisman"
+        "name": "Snartand-Talisman"
       },
       "yumis_keepsake_locket": {
-        "name": "Yumi's Keepsake Locket"
+        "name": "Yumis Minde-Medaljon"
       },
       "zense_meridian": {
-        "name": "Zense Meridian"
+        "name": "Zense-Meridian"
       },
       "medallion_of_endless_profit": {
-        "name": "Medallion of Endless Profit"
+        "name": "Medaljon for Uendelig Profit"
       },
       "deathless_heartwood": {
         "name": "Kerneved fra Den Udødelige Krone"
       },
       "kingsbane_last_oath": {
-        "name": "Kongebane, Tornetops Sidste Ed"
+        "name": "Tronebane, Tornetops Sidste Ed"
       },
       "crownforged_dreadhelm": {
-        "name": "Kronesmedet Rædselshjelm"
+        "name": "Bonewrought Rædselshjelm"
       },
       "crownforged_warspaulders": {
-        "name": "Kronesmedede Krigsskulderplader"
+        "name": "Bonewrought Krigsskulderplader"
       },
       "nighttalon_crown": {
-        "name": "Natteklo-Krone"
+        "name": "Direfang-Krone"
       },
       "nighttalon_shoulderguards": {
-        "name": "Natteklo-Skulderværn"
+        "name": "Direfang-Skulderværn"
       },
       "soulflame_cowl": {
-        "name": "Sjæleflamme-Hætte"
+        "name": "Wraithfire-Hætte"
       },
       "soulflame_mantle": {
-        "name": "Sjæleflamme-Kappe"
+        "name": "Wraithfire-Kappe"
       },
       "stormcallers_crown": {
-        "name": "Stormkalderens Krone"
+        "name": "Galecall-Krone"
       },
       "stormcallers_spaulders": {
-        "name": "Stormkalderens Skulderplader"
+        "name": "Galecall-Skulderplader"
       },
       "unknown_alien_weaponry": {
         "name": "Ukendt Fremmedartet Våben"
@@ -7311,13 +7255,13 @@ export const da_DK: EnTranslations = {
         "name": "Vildsvin"
       },
       "webwood_spider": {
-        "name": "Spindelskov-Lurer"
+        "name": "Sableweb-Lusker"
       },
       "mudfin_murloc": {
         "name": "Mudfinne-Sniger"
       },
       "tunnel_rat": {
-        "name": "Tunnelrotte-Graver"
+        "name": "Dybsten-Graver"
       },
       "vale_bandit": {
         "name": "Dal-Bandit"
@@ -7362,7 +7306,7 @@ export const da_DK: EnTranslations = {
         "name": "Diakon Voss"
       },
       "training_dummy": {
-        "name": "Training Dummy"
+        "name": "Træningsdukke"
       },
       "ridge_stalker": {
         "name": "Bjergkamssniger"
@@ -7422,13 +7366,13 @@ export const da_DK: EnTranslations = {
         "name": "Ridderkommandør Olen"
       },
       "vael_the_mistcaller": {
-        "name": "Vael Tågekalderen"
+        "name": "Vael Fogbinderen"
       },
       "sanctum_boneguard": {
         "name": "Helligdoms-Benvogter"
       },
       "sanctum_drakonid": {
-        "name": "Helligdoms-Drakonid"
+        "name": "Helligdoms-Skælvogter"
       },
       "raised_bonewalker": {
         "name": "Genopvakt Benvandrer"
@@ -7494,40 +7438,40 @@ export const da_DK: EnTranslations = {
         "name": "Akolyt Tessa"
       },
       "drowned_cantor": {
-        "name": "Drowned Cantor"
+        "name": "Druknet Kantor"
       },
       "reedbound_acolyte": {
-        "name": "Reedbound Acolyte"
+        "name": "Sivbunden Akolyt"
       },
       "deepfen_spearjaw": {
-        "name": "Deepfen Spearjaw"
+        "name": "Dybmose-Spydkæft"
       },
       "mirefen_widowling": {
-        "name": "Mirefen Widowling"
+        "name": "Mosekær-Enkeyngel"
       },
       "spider_egg_sac": {
-        "name": "Spider Egg-Sac"
+        "name": "Edderkoppe-Ægsæk"
       },
       "grave_silt_bulwark": {
-        "name": "Grave-Silt Bulwark"
+        "name": "Gravdynd-Bolværk"
       },
       "sump_troll_devourer": {
-        "name": "Sump Troll Devourer"
+        "name": "Sumptrold-Fortærer"
       },
       "choir_thrall": {
-        "name": "Bog Thrall"
+        "name": "Sumptræl"
       },
       "sister_nhalia_drowned_canticle": {
-        "name": "Sister Nhalia, the Drowned Canticle"
+        "name": "Søster Nhalia, den Druknede Kantikel"
       },
       "edda_reedhand": {
-        "name": "Edda Reedhand"
+        "name": "Edda Sivhånd"
       },
       "tolling_bell": {
-        "name": "Tolling Bell"
+        "name": "Klemtende Klokke"
       },
       "vale_cup_ball": {
-        "name": "Boarball"
+        "name": "Vildsvinebold"
       },
       "hellmaw_charred_husk": {
         "name": "Charred Husk"
@@ -7560,10 +7504,10 @@ export const da_DK: EnTranslations = {
         "name": "Wailing Spectre"
       },
       "thunzharr_waking_peak": {
-        "name": "Thunzharr, the Waking Peak"
+        "name": "Thunzharr, den Vågnende Tinde"
       },
       "thunzharr_stormling": {
-        "name": "Roused Stormling"
+        "name": "Vækket Stormling"
       },
       "ironvein_foreman": {
         "name": "Jernåre-Formand"
@@ -7596,13 +7540,13 @@ export const da_DK: EnTranslations = {
         "name": "Varkas Benvogter"
       },
       "emberkin": {
-        "name": "Imp"
+        "name": "Emberkin"
       },
       "gloomshade": {
-        "name": "Tomvandrer"
+        "name": "Gloomshade"
       },
       "duskborn": {
-        "name": "Succubus"
+        "name": "Duskborn"
       },
       "grix_the_tunnelking": {
         "name": "Grix Tunnelkongen"
@@ -7626,16 +7570,16 @@ export const da_DK: EnTranslations = {
         "name": "Genfærdsbinder Maldrec"
       },
       "spellhound": {
-        "name": "Feljæger"
+        "name": "Spellhound"
       },
       "warfiend": {
-        "name": "Felvogter"
+        "name": "Warfiend"
       },
       "pyre_colossus": {
-        "name": "Infernal"
+        "name": "Pyre Colossus"
       },
       "wraithborn": {
-        "name": "Domsvogter"
+        "name": "Wraithborn"
       },
       "choirmother_selthe": {
         "name": "Kormoder Selthe"
@@ -7708,12 +7652,12 @@ export const da_DK: EnTranslations = {
       "fisherman_brandt": {
         "name": "Fisker Brandt",
         "title": "Gammel Søulk",
-        "greeting": "Grlmurlgrl- undskyld, har lyttet for længe til de fiskemænd."
+        "greeting": "Blrb-glub- undskyld, har lyttet for længe til de fiskemænd."
       },
       "foreman_odell": {
         "name": "Formand Odell",
         "title": "Mineformand",
-        "greeting": "Hele udgravningen vrimler med de stearinlyshovedede skadedyr!"
+        "greeting": "Hele udgravningen vrimler med de jordklistrede skadedyr!"
       },
       "warden_fenwick": {
         "name": "Vogter Fenwick",
@@ -7766,9 +7710,9 @@ export const da_DK: EnTranslations = {
         "greeting": "Essen er varm og slibestenen drejer. Hvis det skærer, sælger jeg det."
       },
       "heroic_quartermaster": {
-        "name": "Quartermaster Vex",
-        "title": "Heroic Quartermaster",
-        "greeting": "Proof of the heroic depths buys the finest rings and pendants in Highwatch. Show me your marks."
+        "name": "Kvartermester Vex",
+        "title": "Heroisk Kvartermester",
+        "greeting": "Bevis på de heroiske dyb køber de fineste ringe og vedhæng i Højvagt. Vis mig dine mærker."
       },
       "loremaster_caddis": {
         "name": "Lærdomsmester Caddis",
@@ -7781,19 +7725,19 @@ export const da_DK: EnTranslations = {
         "greeting": "Verdensmarkedet er også åbent her, {className}. Køb fra alle eventyrere i riget, eller læg dine egne varer frem."
       },
       "bursar_fernando": {
-        "name": "Bursar Fernando",
-        "title": "The Gilded Strongbox",
-        "greeting": "Welcome to the Gilded Strongbox. Your goods rest safe behind our locks."
+        "name": "Skatmester Fernando",
+        "title": "Det Forgyldte Pengeskrin",
+        "greeting": "Velkommen til Det Forgyldte Pengeskrin. Dine varer hviler trygt bag vores låse."
       },
       "bursar_petra_vell": {
-        "name": "Bursar Petra Vell",
-        "title": "The Gilded Strongbox",
-        "greeting": "The Gilded Strongbox keeps clean ledgers and cleaner vaults. What shall we stow for you?"
+        "name": "Skatmester Petra Vell",
+        "title": "Det Forgyldte Pengeskrin",
+        "greeting": "Det Forgyldte Pengeskrin fører rene regnskaber og endnu renere hvælv. Hvad skal vi opbevare for dig?"
       },
       "bursar_aldous_crane": {
-        "name": "Bursar Aldous Crane",
-        "title": "The Gilded Strongbox",
-        "greeting": "Every crate, coffer, and trinket is safe with the Gilded Strongbox."
+        "name": "Skatmester Aldous Crane",
+        "title": "Det Forgyldte Pengeskrin",
+        "greeting": "Hver kasse, hvert skrin og hvert smykke er i sikkerhed hos Det Forgyldte Pengeskrin."
       },
       "brother_aldric_raid": {
         "name": "Broder Aldric",
@@ -7806,9 +7750,9 @@ export const da_DK: EnTranslations = {
         "greeting": "Relikvariet nedenunder har flyttet sig igen."
       },
       "brother_halven_marsh": {
-        "name": "Brother Halven",
-        "title": "Reliquary Keeper",
-        "greeting": "The trail led north. Another reliquary, another rite. Choose your tier, and I'll hold the rope until you return."
+        "name": "Broder Halven",
+        "title": "Relikvarievogter",
+        "greeting": "Sporet førte mod nord. Endnu et relikvarium, endnu en rite. Vælg din sværhedsgrad, så holder jeg rebet, til du vender tilbage."
       },
       "cainhurst_sage": {
         "name": "Cainhurst the Sage",
@@ -7841,14 +7785,14 @@ export const da_DK: EnTranslations = {
         "greeting": "Oh - a visitor! Mind the mess."
       },
       "spirit_healer": {
-        "name": "The Pale Keeper",
-        "title": "Warden of the Dead",
-        "greeting": "Rest now, spirit. I can return you to your body, but the crossing back leaves you weak."
+        "name": "Den Blege Vogter",
+        "title": "De Dødes Vogter",
+        "greeting": "Hvil nu, ånd. Jeg kan føre dig tilbage til din krop, men overfarten tilbage efterlader dig svækket."
       },
       "groundskeeper_bram": {
-        "name": "Groundskeeper Bram",
-        "title": "Keeper of the Sowfield",
-        "greeting": "The truce holds at the Sowfield, {className}: boots and shoulders only. Care to play for the Copper Pail?"
+        "name": "Banemester Bram",
+        "title": "Somarkens Vogter",
+        "greeting": "Freden holder på Somarken, {className}: kun spark og skulderpuf. Har du lyst til at spille om Kobberspanden?"
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",
@@ -7888,7 +7832,7 @@ export const da_DK: EnTranslations = {
         }
       },
       "q_boars": {
-        "title": "Børsteryg-Skind",
+        "title": "Børstede Vildsvineskind",
         "text": "Vildsvineskind giver de fineste rejsetasker, og engene vest for byen vrimler med bæsterne. Bring mig 5 Børstede Vildsvineskind, så skal jeg gøre det umagen værd.",
         "completion": "Ah, fine børstede skind! Disse vil indbringe en god pris.",
         "objectives": {
@@ -7898,21 +7842,21 @@ export const da_DK: EnTranslations = {
         }
       },
       "q_spiders": {
-        "title": "Vævskovens Trussel",
-        "text": "Luskerne i de østlige skove spinder en silke, jeg har brug for til mine omslag - og de er desuden blevet alt for talrige. Nedlæg 6 Vævskovs-Luskere og skær 4 silkekirtler ud af deres maver.",
+        "title": "Sablewebs Trussel",
+        "text": "Luskerne i de østlige skove spinder en silke, jeg har brug for til mine omslag - og de er desuden blevet alt for talrige. Nedlæg 6 Sableweb-Luskere og skær 4 silkekirtler ud af deres maver.",
         "completion": "Uha, stadig rykker det. Perfekt. Her, du har fortjent dette.",
         "objectives": {
           "0": {
-            "label": "Vævskovs-Lusker dræbt"
+            "label": "Sableweb-Lusker dræbt"
           },
           "1": {
-            "label": "Vævskovs-Silkekirtel"
+            "label": "Sableweb-Silkekirtel"
           }
         }
       },
       "q_murlocs": {
         "title": "Ballade ved Søen",
-        "text": "I tyve år har jeg fisket i Spejlsøen, og aldrig mistet et net, før de gurglende fiskemænd kravlede op af lavvandet. Driv Mudfin tilbage - dræb 8 af dem. Og pas på dig selv: hvor der er én murloc, er der fem.",
+        "text": "I tyve år har jeg fisket i Spejlsøen, og aldrig mistet et net, før de gurglende fiskemænd kravlede op af lavvandet. Driv Mudfin tilbage - dræb 8 af dem. Og pas på dig selv: hvor der er én mudfin, er der fem.",
         "completion": "Hah! Det skal lære dem at passe deres egne mudderhuller.",
         "objectives": {
           "0": {
@@ -7922,11 +7866,11 @@ export const da_DK: EnTranslations = {
       },
       "q_mine": {
         "title": "Rotter i Minen",
-        "text": "Vi stødte på en fin kobberåre, og så væltede de koboldskadedyr ud af bakkesiden. Mit hold sætter ikke fod i udgravningen, før den er ryddet. Slå 10 Tunnelrotte-Gravere ned.",
+        "text": "Vi stødte på en fin kobberåre, og så væltede de gravende skadedyr ud af bakkesiden. Mit hold sætter ikke fod i udgravningen, før den er ryddet. Slå 10 Dybsten-Gravere ned.",
         "completion": "Ha! Tilbage til arbejdet, drenge! Du har min tak - og min mønt.",
         "objectives": {
           "0": {
-            "label": "Tunnelrotte-Graver dræbt"
+            "label": "Dybsten-Graver dræbt"
           }
         }
       },
@@ -7982,7 +7926,7 @@ export const da_DK: EnTranslations = {
       },
       "q_rite": {
         "title": "Den Bindende Rite",
-        "text": "Krypten under kapellet må åbnes, hvis vi skal standse Gravkalderen - men kun en bindende rite vil lade de levende passere. Jeg har brug for 4 klumper Velsignet Tælle - kobold-graverne hamstrer stearinlys i kassevis - og 6 Spøgelsesagtige Essenser fra de hvileløse døde.",
+        "text": "Krypten under kapellet må åbnes, hvis vi skal standse Gravecalleren - men kun en bindende rite vil lade de levende passere. Jeg har brug for 4 klumper Velsignet Tælle - minens gravere hamstrer tælle i kassevis - og 6 Spøgelsesagtige Essenser fra de hvileløse døde.",
         "completion": "Det er gjort. Vejen nedenunder står åben... og må Lyset tilgive mig for at åbne den. Saml dine stærkeste ledsagere, før du stiger ned, {playerName}. Ingen bør møde Den Hule alene.",
         "objectives": {
           "0": {
@@ -8016,7 +7960,7 @@ export const da_DK: EnTranslations = {
       "q_gravecallers_trail": {
         "title": "Gravkalderens Spor",
         "text": "Morthen er død, men et spørgsmål nager mig: en sekt, der gemte sig i et århundrede, ødsler ikke sig selv på ét landsbykapel. Han holdt en grimoire - sine riter, sin korrespondance. Hvis noget af den overlever, ligger det i sakristiet i det forfaldne kapel over krypten. Søg ruinen igennem og bring mig, hvad der er tilbage af hans skrifter, {playerName}.",
-        "completion": "Morthen skrev til en 'Tågekalder' i den nordlige mose. Sekten er ikke død, {playerName} - den har blot været tålmodig.",
+        "completion": "Morthen skrev til en 'Fogbinder' i den nordlige mose. Sekten er ikke død, {playerName} - den har blot været tålmodig.",
         "objectives": {
           "0": {
             "label": "Morthens Grimoire"
@@ -8045,7 +7989,7 @@ export const da_DK: EnTranslations = {
       },
       "q_fenbridge_muster": {
         "title": "Mønstring ved Fenbridge",
-        "text": "Morthens skrifter nævnte en mester i den nordlige sump - en 'Tågekalder'. Nu har Vogter Fenwick blæst i mønstringshornet ved Fenbridge, og jeg tror ikke på tilfældigheder, {playerName}. Tag dæmningsvejen mod nord, riv mønstringsordren fra portstolpen, og forelæg den for Vogteren.",
+        "text": "Morthens skrifter nævnte en mester i den nordlige sump - en 'Fogbinder'. Nu har Vogter Fenwick blæst i mønstringshornet ved Fenbridge, og jeg tror ikke på tilfældigheder, {playerName}. Tag dæmningsvejen mod nord, riv mønstringsordren fra portstolpen, og forelæg den for Vogteren.",
         "completion": "Aldrics segl, er det? Så dur du. Mosen har slugt mine patruljer hele, og jeg har brug for hvert blad, der flyder.",
         "objectives": {
           "0": {
@@ -8085,7 +8029,7 @@ export const da_DK: EnTranslations = {
       },
       "q_deepfen": {
         "title": "Dybmosen Rører Sig",
-        "text": "Dybmose-murlocserne holdt sig til deres lavvande i tyve år. Nu sværmer de østbredden som fluer på et ådsel - og mine vogtere siger, at de slæber ting op fra søbunden. Hvad end der har rørt dem op, vil jeg have det standset. Slå 12 af snapperne ned.",
+        "text": "Dybmose-mudfinerne holdt sig til deres lavvande i tyve år. Nu sværmer de østbredden som fluer på et ådsel - og mine vogtere siger, at de slæber ting op fra søbunden. Hvad end der har rørt dem op, vil jeg have det standset. Slå 12 af snapperne ned.",
         "completion": "Det skubber dem tilbage i mudderet en stund. Men noget satte dem til at grave, og jeg agter at finde ud af hvad.",
         "objectives": {
           "0": {
@@ -8115,7 +8059,7 @@ export const da_DK: EnTranslations = {
       },
       "q_deepfen_purge": {
         "title": "Tilbage til Lavvandet",
-        "text": "Aldric siger, at de afguder er kult-værk - hvilket betyder, at murlocserne haler mosens gamle ondskab op én favnfuld ad gangen. Jeg vil ikke have den skyllet op på min dæmningsvej. Vend tilbage til lavvandet og bryd opmudringen for alvor: 14 snappere til.",
+        "text": "Aldric siger, at de afguder er kult-værk - hvilket betyder, at mudfinerne haler mosens gamle ondskab op én favnfuld ad gangen. Jeg vil ikke have den skyllet op på min dæmningsvej. Vend tilbage til lavvandet og bryd opmudringen for alvor: 14 snappere til.",
         "completion": "Hensynsløst og grundigt. Hvis denne sump nogensinde tørrer ud, venter der vogterarbejde på dig.",
         "objectives": {
           "0": {
@@ -8222,7 +8166,7 @@ export const da_DK: EnTranslations = {
       "q_summoners": {
         "title": "At Standse Tilkaldelsen",
         "text": "Marens rapporter nævner tilkaldere blandt kultisterne - stemmer, der kalder de druknede op af vandet som hunde til en fløjte. Deres chiffre vil stave kommandovejen ud. Bring 8 tilkaldere til tavshed og bring mig 4 af deres chiffre.",
-        "completion": "Hver chiffer er medunderskrevet 'Diakon Voss' - og adresseret videre til en 'Tågekalder' i Bastionen. Morthens mester, {playerName}. Vi har fundet ham.",
+        "completion": "Hver chiffer er medunderskrevet 'Diakon Voss' - og adresseret videre til en 'Fogbinder' i Bastionen. Morthens mester, {playerName}. Vi har fundet ham.",
         "objectives": {
           "0": {
             "label": "Gravkalder-Tilkalder dræbt"
@@ -8244,7 +8188,7 @@ export const da_DK: EnTranslations = {
       },
       "q_bastion_door": {
         "title": "Den Sunkne Bastion",
-        "text": "Den Sunkne Bastion - en ridders fæste, der druknede i mosen for et århundrede siden - er hvor Voss' breve peger hen, og hvor denne Tågekalder synger sine druknehymner. Kulten har værget dens dør med gravsten. Bring mig en af vagtstenene, {playerName}, så vil jeg løse seglet op.",
+        "text": "Den Sunkne Bastion - en ridders fæste, der druknede i mosen for et århundrede siden - er hvor Voss' breve peger hen, og hvor denne Fogbinder synger sine druknehymner. Kulten har værget dens dør med gravsten. Bring mig en af vagtstenene, {playerName}, så vil jeg løse seglet op.",
         "completion": "Vagtbåndet skilles ad som rådnet reb. Døren står åben... og mørket dernede lytter.",
         "objectives": {
           "0": {
@@ -8254,7 +8198,7 @@ export const da_DK: EnTranslations = {
       },
       "q_olen": {
         "title": "Ridderkommandørens Skam",
-        "text": "Ridderkommandør Olen holdt Bastionen, da den sank - druknede på sin post snarere end at forlade den. Hver vogter lærer hans navn med stolthed. Nu har Tågekalderen rejst ham som en marionet til at vogte netop den dør, han døde for at forsvare. Den skam ender her, {playerName}. Tag fire ledsagere med ned og skænk Olen den hvile, han fortjente.",
+        "text": "Ridderkommandør Olen holdt Bastionen, da den sank - druknede på sin post snarere end at forlade den. Hver vogter lærer hans navn med stolthed. Nu har Fogbinderen rejst ham som en marionet til at vogte netop den dør, han døde for at forsvare. Den skam ender her, {playerName}. Tag fire ledsagere med ned og skænk Olen den hvile, han fortjente.",
         "completion": "Så er hans vagt endelig forbi. Jeg skal selv sørge for, at hans navn bliver hugget ind i porten. Tak, {playerName}.",
         "objectives": {
           "0": {
@@ -8263,12 +8207,12 @@ export const da_DK: EnTranslations = {
         }
       },
       "q_mistcaller": {
-        "title": "Tågekalderen",
-        "text": "På bunden af Bastionen venter Vael Tågekalderen - Morthens mester, Voss' mester, stemmen der har druknet hundrede rejsende for at rejse sig en hær. Han er langt ud over nogen enkelt helt: tag fire ledsagere, ikke færre. Gør det af med ham, {playerName}, og sumpens døde kan endelig ligge stille.",
+        "title": "Fogbinderen",
+        "text": "På bunden af Bastionen venter Vael Fogbinderen - Morthens mester, Voss' mester, stemmen der har druknet hundrede rejsende for at rejse sig en hær. Han er langt ud over nogen enkelt helt: tag fire ledsagere, ikke færre. Gør det af med ham, {playerName}, og sumpens døde kan endelig ligge stille.",
         "completion": "Vael er død, og tågen letter for første gang i årevis. Men Maren hørte hans sidste ord, og de får mit blod til at fryse: 'Ormen rører på sig under tinderne.' Sekten tjener noget ældre, end vi nogensinde anede, {playerName}. Hvil mens du kan - bjergene er de næste.",
         "objectives": {
           "0": {
-            "label": "Vael Tågekalderen dræbt"
+            "label": "Vael Fogbinderen dræbt"
           }
         }
       },
@@ -8303,48 +8247,48 @@ export const da_DK: EnTranslations = {
         }
       },
       "q_stalkers_return": {
-        "title": "The Stalkers Return",
-        "text": "Twelve dead, and the ridge crawls thicker than the day you started, {playerName}. Beasts do not throw themselves at a wall out of hunger. Something on the high ridge is pushing them down, and until I know what, the culling does not stop. Fourteen more.",
-        "completion": "Fourteen more, and still my patrols count fresh tracks by morning. My scout came back from the high ridge white as the snowline: prints the size of a shield, she says, and old kills no stalker would leave. Whatever walks up there is no ordinary cat.",
+        "title": "Snigerne Vender Tilbage",
+        "text": "Tolv døde, og bjergkammen kryber tættere end den dag, du begyndte, {playerName}. Bæster kaster sig ikke mod en mur af sult alene. Noget på den høje bjergkam presser dem ned, og indtil jeg ved hvad, stopper nedslagtningen ikke. Fjorten til.",
+        "completion": "Fjorten til, og stadig tæller mine patruljer friske spor ved morgengry. Min spejder kom tilbage fra den høje bjergkam hvid som snegrænsen: aftryk på størrelse med et skjold, siger hun, og gamle byttedyr, ingen sniger ville efterlade. Hvad end der går deroppe, er ingen almindelig kat.",
         "objectives": {
           "0": {
-            "label": "Ridge Stalker slain"
+            "label": "Bjergkamssniger dræbt"
           }
         }
       },
       "q_stalker_cloaks": {
-        "title": "Cloaks for the Watch",
-        "text": "Eight pelts lined the officers' cloaks, and now every soldier on the wall wants the same, {playerName}. They are right to want it: winter takes fingers first and apologies never. Ten more pelts from the ridges south of the gate, and the whole watch sleeps warm.",
-        "completion": "Ten good pelts, thick as any I have... no, look at these, {playerName}. Torn, half of them, and by no blade or spear. Claw marks wide as my hand, right through the winter coat. Something on that ridge is savaging its own kind.",
+        "title": "Kapper til Vagten",
+        "text": "Otte pelse forede officerernes kapper, og nu vil hver soldat på muren have det samme, {playerName}. De har ret i at ville det: vinteren tager fingre først og undskylder aldrig. Ti pelse mere fra bjergkammene syd for porten, og hele vagten sover varmt.",
+        "completion": "Ti gode pelse, tykke som nogen, jeg har... nej, se på de her, {playerName}. Flåede, halvdelen af dem, og ikke af nogen klinge eller noget spyd. Klomærker brede som min hånd, lige gennem vinterpelsen. Noget på den bjergkam mishandler sine egne.",
         "objectives": {
           "0": {
-            "label": "Ridge Stalker Pelt"
+            "label": "Bjergkam-Snigerens Pels"
           }
         }
       },
       "q_old_cragmaw": {
-        "title": "Old Cragmaw",
-        "text": "The mountain folk put a name to the prints my scout found: Old Cragmaw, a scar-pelted tyrant of a cat that has outlived three generations of its own pack. It is the reason the stalkers flood my road, {playerName}. Its den sits on the western ridge above the road south. Bring a friend, and put the old devil down.",
-        "completion": "Down at last. The mountain folk swore that cat would outlive the wall itself. The stalkers will keep to their high snows now, {playerName}, and my patrols will walk the road without bleeding for it. The whole ridge is quieter for your work.",
+        "title": "Gamle Klippekæft",
+        "text": "Bjergfolket satte navn på de spor, min spejder fandt: Gamle Klippekæft, en arret tyran af en kat, der har overlevet tre generationer af sin egen flok. Den er grunden til, at snigerne oversvømmer min vej, {playerName}. Dens hule ligger på den vestlige bjergkam over vejen mod syd. Tag en ven med, og læg den gamle djævel ned.",
+        "completion": "Endelig nede. Bjergfolket svor, at den kat ville overleve selve muren. Snigerne holder sig til deres høje sne nu, {playerName}, og mine patruljer kan gå ad vejen uden at bløde for det. Hele bjergkammen er mere stille takket være dit arbejde.",
         "objectives": {
           "0": {
-            "label": "Old Cragmaw slain"
+            "label": "Gamle Klippekæft dræbt"
           }
         }
       },
       "q_kobold_tunnels": {
         "title": "Dybklippe-Bøvl",
-        "text": "Kobolderne ved Dybklippe-Hulerne graver dybere, end nogen lyserotte har ærinde at grave - lige ned, som om noget kaldte på dem. Deres tunneler løber under vores mur, {playerName}. Få bugt med sagen: dræb tolv Dybklippe-Tunnelgravere.",
-        "completion": "Lige ned, hver eneste skakt af det - kobolder graver ikke sådan af sig selv. Jeg må rådføre mig med mine bøger.",
+        "text": "Tunnelgraverne ved Dybsten-Hulerne graver dybere, end nogen gruberotte har ærinde at grave - lige ned, som om noget kaldte på dem. Deres tunneler løber under vores mur, {playerName}. Få bugt med sagen: dræb tolv Dybsten-Tunnelgravere.",
+        "completion": "Lige ned, hver eneste skakt af det - graverne graver ikke sådan af sig selv. Jeg må rådføre mig med mine bøger.",
         "objectives": {
           "0": {
-            "label": "Dybklippe-Tunnelgraver dræbt"
+            "label": "Dybsten-Tunnelgraver dræbt"
           }
         }
       },
       "q_glowing_wax": {
         "title": "Sælsom Voks",
-        "text": "Caddis viste mig et lys taget af en af de tunnelgravere - voksen gløder, {playerName}, og den er varm som et hjerteslag. Han vil have mere til studie, og jeg vil have det af min rekvisitionsliste. Bring seks klumper af den glødende voks tilbage.",
+        "text": "Caddis viste mig en klump voks taget af en af de tunnelgravere - den gløder, {playerName}, og den er varm som et hjerteslag. Han vil have mere til studie, og jeg vil have det af min rekvisitionsliste. Bring seks klumper af den glødende voks tilbage.",
         "completion": "Stadig varmt. Lærdomsmesteren siger, at gløden ikke passer til nogen flamme, han kender. Jeg siger, det er bjergbøvl, og jeg siger det venligt.",
         "objectives": {
           "0": {
@@ -8660,22 +8604,22 @@ export const da_DK: EnTranslations = {
         }
       },
       "q_archetype_acceptance": {
-        "title": "A Craft to Call Your Own",
-        "text": "Every artisan of Eastbrook eventually settles on one craft to call their own. Prove yourself with a single deed, {playerName}, and declare your path.",
-        "completion": "Your path is chosen; walk it well.",
+        "title": "Et håndværk at kalde dit eget",
+        "text": "Hver eneste håndværker fra Eastbrook sætter sig til sidst over på et håndværk, som de kalder deres eget. Bevis dig selv med en enkelt gerning, {playerName}, og erklær din vej.",
+        "completion": "Din vej er valgt; gå det godt.",
         "objectives": {
           "0": {
-            "label": "Forest Wolf slain"
+            "label": "Skovulv dræbt"
           }
         }
       },
       "q_prof_make_amends": {
-        "title": "Making Amends",
-        "text": "To set aside one craft for another, an artisan must first make amends for the path not walked, {playerName}.",
-        "completion": "Amends made; a new path is open to you.",
+        "title": "Gøre bod",
+        "text": "For at afsætte et håndværk til et andet, skal en håndværker først råde bod på stien, der ikke er gået, {playerName}.",
+        "completion": "Foretagne ændringer; en ny vej er åben for dig.",
         "objectives": {
           "0": {
-            "label": "Forest Wolf slain"
+            "label": "Skovulv dræbt"
           }
         }
       },
@@ -8761,7 +8705,7 @@ export const da_DK: EnTranslations = {
             "label": "Spejlsøen"
           },
           "4": {
-            "label": "Spindelskoven"
+            "label": "Sableweb"
           },
           "5": {
             "label": "Kobbergraven"
@@ -8779,7 +8723,7 @@ export const da_DK: EnTranslations = {
             "label": "Lysskovlysningen"
           },
           "10": {
-            "label": "The Sowfield"
+            "label": "Somarken"
           }
         }
       },
@@ -8889,9 +8833,9 @@ export const da_DK: EnTranslations = {
         "leaveText": "Du klatrer tilbage til Broder Halven ved relikvariets ruin."
       },
       "drowned_litany": {
-        "name": "The Drowned Litany",
-        "enterText": "You descend into the drowned shrine at the marsh's edge.",
-        "leaveText": "You climb back to Brother Halven at the marsh's edge."
+        "name": "Det Druknede Litani",
+        "enterText": "Du stiger ned i den druknede helligdom ved mosens rand.",
+        "leaveText": "Du klatrer tilbage til Broder Halven ved mosens rand."
       },
       "hellmaw_well": {
         "name": "The Hellmaw Well",
@@ -8927,54 +8871,54 @@ export const da_DK: EnTranslations = {
         "bonus3": "Øger angrebs- og magihastighed med 15%."
       },
       "crownforged": {
-        "name": "Kronesmedet kampudstyr",
+        "name": "Bonewrought regalier",
         "bonus2": "Øger angrebskraft med 40.",
         "bonus3": "Øger styrke med 15, udholdenhed med 15 og angrebs- og magihastighed med 15%.",
-        "bonus4": "Your weapon critical strikes splinter the target with Bonesplinter, bleeding it for 8 damage every 2 sec for 12 sec. Stacks up to 3 times."
+        "bonus4": "Dine kritiske våbenslag splintrer målet med Bensplint og påfører 8 blødningsskade hvert 2. sek. i 12 sek. Stakker op til 3 gange."
       },
       "deathlord": {
-        "name": "Dødsherrens kampudstyr",
+        "name": "Barrowlord kampudstyr",
         "bonus2": "Øger angrebskraft med 40.",
         "bonus3": "Øger styrke med 15 og udholdenhed med 15.",
-        "bonus4": "Your weapon critical strikes have a 50% chance to grant Gravemight, increasing attack power by 60 for 10 sec."
+        "bonus4": "Dine kritiske våbenslag har 50% chance for at give Gravmagt og øge angrebskraft med 60 i 10 sek."
       },
       "greyjaw_stalker": {
         "name": "Gråkæbe-jægerens udstyr",
         "bonus3": "Øger angrebs- og magihastighed med 15%."
       },
       "necromancers": {
-        "name": "Nekromantikerens klæder",
+        "name": "Mournweave klæder",
         "bonus2": "Du kan ikke stødes tilbage (100% modstand mod tilbagestød).",
         "bonus3": "Øger intellekt med 10 og udholdenhed med 10.",
-        "bonus4": "Your spells have a 10% chance to grant Clearcasting, making your next spell free."
+        "bonus4": "Dine besværgelser har 10% chance for at give Klartrylleri, som gør din næste besværgelse gratis."
       },
       "nighttalon": {
-        "name": "Natteklos læderudstyr",
+        "name": "Direfang pels",
         "bonus2": "Øger angrebskraft med 40.",
         "bonus3": "Øger smidighed med 15, kritisk chance med 2% og angrebs- og magihastighed med 15%.",
-        "bonus4": "Your weapon critical strikes tear a Ragged Gash, bleeding the target for 6 damage every 2 sec for 12 sec. Stacks up to 3 times."
+        "bonus4": "Dine kritiske våbenslag river en Laset Flænge og påfører 6 blødningsskade hvert 2. sek. i 12 sek. Stakker op til 3 gange."
       },
       "soulflame": {
-        "name": "Sjæleflamme-klæder",
+        "name": "Wraithfire regalier",
         "bonus2": "Du kan ikke stødes tilbage (100% modstand mod tilbagestød).",
         "bonus3": "Øger intellekt med 15, ånd med 15 og angrebs- og magihastighed med 15%.",
-        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
+        "bonus4": "Dine besværgelser har 10% chance for at give Sjælebrand og øge besværgelseskraft med 40 i 10 sek."
       },
       "stormcallers": {
-        "name": "Stormkalderens klæder",
+        "name": "Galecall klæder",
         "bonus2": "Du kan ikke stødes tilbage (100% modstand mod tilbagestød).",
         "bonus3": "Øger intellekt med 15, ånd med 15 og angrebs- og magihastighed med 15%.",
-        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
+        "bonus4": "Dine besværgelser har 10% chance for at give Sjælebrand og øge besværgelseskraft med 40 i 10 sek."
       },
       "vale_arcanist": {
         "name": "Dalarkanistens klæder",
         "bonus3": "Øger angrebs- og magihastighed med 15%."
       },
       "wyrmshadow": {
-        "name": "Wyrmskygge-udstyr",
+        "name": "Nightfang klæder",
         "bonus2": "Øger angrebskraft med 40.",
         "bonus3": "Øger smidighed med 15 og kritisk chance med 2%.",
-        "bonus4": "Your weapon critical strikes have a 50% chance to grant Fangrush, increasing attack speed by 25% for 8 sec."
+        "bonus4": "Dine kritiske våbenslag har 50% chance for at give Hugtandsfart og øge angrebshastighed med 25% i 8 sek."
       }
     }
   },
@@ -8986,11 +8930,11 @@ export const da_DK: EnTranslations = {
     "delveLockedChestInteract": "Tryk på F for at dirke låsen op",
     "delveRewardChestInteract": "Tryk på F for at kræve byttet",
     "delveSurfaceExitInteract": "Tryk på F for at klatre",
-    "delveReliquaryInteract": "Drowned Reliquary: Press F to begin the rite",
-    "delveRiteShrineBellInteract": "Bell Shrine: Press F to ring it",
-    "delveRiteShrineCandleInteract": "Candle Shrine: Press F to touch it",
-    "delveRiteShrineReedInteract": "Reed Shrine: Press F to touch it",
-    "delveRiteShrineSkullInteract": "Skull Shrine: Press F to touch it",
-    "mailboxName": "Mailbox"
+    "delveReliquaryInteract": "Det Druknede Relikvarium: Tryk på F for at begynde riten",
+    "delveRiteShrineBellInteract": "Klokkeskrin: Tryk på F for at ringe med klokken",
+    "delveRiteShrineCandleInteract": "Kerteskrin: Tryk på F for at røre det",
+    "delveRiteShrineReedInteract": "Sivskrin: Tryk på F for at røre det",
+    "delveRiteShrineSkullInteract": "Kranieskrin: Tryk på F for at røre det",
+    "mailboxName": "Postkasse"
   }
 };

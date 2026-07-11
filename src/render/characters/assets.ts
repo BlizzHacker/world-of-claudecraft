@@ -24,7 +24,6 @@ import {
   visibleAttachmentsForGraphics,
   visualAssetUrlForGraphics,
 } from './manifest';
-import { shouldPreserveFirstPersonMeshPart } from './first_person_parts';
 import { mergeSkinnedParts } from './rig_merge';
 
 const DEFAULT_TINT_STRENGTH = 0.4;

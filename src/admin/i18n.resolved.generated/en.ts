@@ -677,5 +677,10 @@ export const en: AdminTranslations = {
   "auth.loadingSession": "Loading your session...",
   "auth.sessionLoadFailed": "Could not load your session. Check your connection and retry.",
   "auth.retry": "Retry",
-  "auth.noAccess": "This account has no dashboard permissions. Ask an administrator to assign a role."
+  "auth.noAccess": "This account has no dashboard permissions. Ask an administrator to assign a role.",
+  "usage.metric.githubContributorsFetch": "GitHub contributor stats fetches",
+  "usage.metric.githubContributorsFetchFailure": "GitHub contributor stats fetch failures",
+  "usage.metric.githubLinkRequest": "GitHub link requests",
+  "usage.metric.githubLinkFailure": "GitHub link failures",
+  "usage.metric.githubLinkRateLimited": "GitHub link throttled requests"
 };

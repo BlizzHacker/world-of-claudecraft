@@ -27,15 +27,10 @@ function makeSim(cls: PlayerClass, level = 20, seed = 77): { sim: TestSim; p: En
 }
 
 function spawnTarget(sim: TestSim, p: Entity, dz = 4): Entity {
-  const origin = sim.groundPos(20, 22);
-  p.pos = origin;
-  p.prevPos = { ...origin };
-  p.moveIntent = { forward: false, back: false, left: false, right: false };
-  const targetPos = sim.groundPos(origin.x, origin.z + dz);
   const mob = createMob(sim.nextId++, MOBS.forest_wolf, 1, {
-    x: targetPos.x,
-    y: targetPos.y,
-    z: targetPos.z,
+    x: p.pos.x,
+    y: p.pos.y,
+    z: p.pos.z + dz,
   });
   mob.maxHp = 50000;
   mob.hp = 50000;

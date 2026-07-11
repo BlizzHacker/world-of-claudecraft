@@ -333,7 +333,8 @@ export const cs_CZ: EnTranslations = {
       "targetCycleShort": "Cíl",
       "spellbookPageLabel": "Strana {page}",
       "hideKeyboard": "Skrýt klávesnici",
-      "chatPlaceholder": "Něco napiš..."
+      "chatPlaceholder": "Něco napiš...",
+      "autorun": "Auto"
     },
     "tutorial": {
       "moveBodyTouch": "Pohybuj se páčkou pohybu a tažením po obrazovce se rozhlížej. Udělej pár kroků a začni.",
@@ -938,14 +939,6 @@ export const cs_CZ: EnTranslations = {
       "goToCharacters": "Zobrazit postavy",
       "walletSummary": "Ověř peněženku Solana a zobraz odznak držitele na kartě hráče.",
       "manageWallet": "Spravovat peněženku",
-      "sectionConnections": "Pripojene ucty",
-      "connectionsSummary": "Spravuj poskytovatele prihlaseni pripojene k tomuto uctu.",
-      "ssoNotLinked": "Discord neni pripojen.",
-      "ssoLinked": "Discord pripojen.",
-      "ssoLink": "Pripojit Discord",
-      "ssoUnlink": "Odpojit Discord",
-      "ssoLinkConflict": "Tento Discord ucet je uz pripojen k jinemu uctu.",
-      "ssoUnlinkNeedsPassword": "Pred odpojenim Discordu nastav heslo.",
       "deactivate": "Deaktivovat účet",
       "deactivateWarning": "Deaktivace uzamkne účet a všude tě odhlásí. Pro obnovení kontaktuj admina. Potvrď znovu zadáním uživatelského jména a hesla.",
       "confirmUsername": "Pro potvrzení napiš své uživatelské jméno",
@@ -986,7 +979,15 @@ export const cs_CZ: EnTranslations = {
       "exportHint": "Stáhni si kopii svého účtu a postav jako JSON soubor. Také ti pošleme potvrzení e-mailem.",
       "exportBtn": "Stáhnout moje data",
       "exportDone": "Tvoje data byla stažena. Poslali jsme ti potvrzení e-mailem.",
-      "exportFailed": "Tvoje data se nepodařilo exportovat. Zkus to za chvíli znovu."
+      "exportFailed": "Tvoje data se nepodařilo exportovat. Zkus to za chvíli znovu.",
+      "sectionConnections": "Pripojene ucty",
+      "connectionsSummary": "Spravuj poskytovatele prihlaseni pripojene k tomuto uctu.",
+      "ssoNotLinked": "Discord neni pripojen.",
+      "ssoLinked": "Discord pripojen.",
+      "ssoLink": "Pripojit Discord",
+      "ssoUnlink": "Odpojit Discord",
+      "ssoLinkConflict": "Tento Discord ucet je uz pripojen k jinemu uctu.",
+      "ssoUnlinkNeedsPassword": "Pred odpojenim Discordu nastav heslo."
     },
     "masterLoot": {
       "title": "Master loot",

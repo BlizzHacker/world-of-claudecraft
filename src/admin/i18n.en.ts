@@ -694,6 +694,13 @@ export const en = {
   'auth.retry': 'Retry',
   'auth.noAccess':
     'This account has no dashboard permissions. Ask an administrator to assign a role.',
+
+  // Restored upstream v0.24 keys (referenced by upstream admin code/overlays)
+  'usage.metric.githubContributorsFetch': 'GitHub contributor stats fetches',
+  'usage.metric.githubContributorsFetchFailure': 'GitHub contributor stats fetch failures',
+  'usage.metric.githubLinkRequest': 'GitHub link requests',
+  'usage.metric.githubLinkFailure': 'GitHub link failures',
+  'usage.metric.githubLinkRateLimited': 'GitHub link throttled requests',
 };
 
 export type AdminTranslations = typeof en;

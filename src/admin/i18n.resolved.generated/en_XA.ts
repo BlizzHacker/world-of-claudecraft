@@ -677,5 +677,10 @@ export const en_XA: AdminTranslations = {
   "auth.loadingSession": "[Ļóáðíñĝ ýóúŕ šéššíóñ...]",
   "auth.sessionLoadFailed": "[Çóúļð ñóţ ļóáð ýóúŕ šéššíóñ. Çĥéçķ ýóúŕ çóññéçţíóñ áñð ŕéţŕý.]",
   "auth.retry": "[Ŕéţŕý]",
-  "auth.noAccess": "[Ţĥíš áççóúñţ ĥáš ñó ðášĥƀóáŕð þéŕɱíššíóñš. Ášķ áñ áðɱíñíšţŕáţóŕ ţó áššíĝñ á ŕóļé.]"
+  "auth.noAccess": "[Ţĥíš áççóúñţ ĥáš ñó ðášĥƀóáŕð þéŕɱíššíóñš. Ášķ áñ áðɱíñíšţŕáţóŕ ţó áššíĝñ á ŕóļé.]",
+  "usage.metric.githubContributorsFetch": "[ĜíţĤúƀ çóñţŕíƀúţóŕ šţáţš ƒéţçĥéš]",
+  "usage.metric.githubContributorsFetchFailure": "[ĜíţĤúƀ çóñţŕíƀúţóŕ šţáţš ƒéţçĥ ƒáíļúŕéš]",
+  "usage.metric.githubLinkRequest": "[ĜíţĤúƀ ļíñķ ŕéɋúéšţš]",
+  "usage.metric.githubLinkFailure": "[ĜíţĤúƀ ļíñķ ƒáíļúŕéš]",
+  "usage.metric.githubLinkRateLimited": "[ĜíţĤúƀ ļíñķ ţĥŕóţţļéð ŕéɋúéšţš]"
 };

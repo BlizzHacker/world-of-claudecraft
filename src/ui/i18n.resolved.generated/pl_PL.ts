@@ -333,7 +333,8 @@ export const pl_PL: EnTranslations = {
       "targetCycleShort": "Cel",
       "spellbookPageLabel": "Strona {page}",
       "hideKeyboard": "Ukryj klawiaturę",
-      "chatPlaceholder": "Powiedz coś..."
+      "chatPlaceholder": "Powiedz coś...",
+      "autorun": "Auto"
     },
     "tutorial": {
       "moveBodyTouch": "Użyj gałki ruchu, aby się poruszać, i przeciągaj ekran, aby się rozglądać. Zrób kilka kroków, by zacząć.",
@@ -938,14 +939,6 @@ export const pl_PL: EnTranslations = {
       "goToCharacters": "Zobacz postacie",
       "walletSummary": "Zweryfikuj portfel Solana, aby pokazać znaczek posiadacza na swojej karcie gracza.",
       "manageWallet": "Zarządzaj portfelem",
-      "sectionConnections": "Polaczone konta",
-      "connectionsSummary": "Zarzadzaj dostawcami logowania polaczonymi z tym kontem.",
-      "ssoNotLinked": "Discord niepolaczony.",
-      "ssoLinked": "Discord polaczony.",
-      "ssoLink": "Polacz Discord",
-      "ssoUnlink": "Odlacz Discord",
-      "ssoLinkConflict": "To konto Discord jest juz polaczone z innym kontem.",
-      "ssoUnlinkNeedsPassword": "Ustaw haslo przed odlaczeniem Discord.",
       "deactivate": "Dezaktywuj konto",
       "deactivateWarning": "Dezaktywacja blokuje konto i wylogowuje cię wszędzie. Skontaktuj się z administratorem, aby je przywrócić. Potwierdź, wpisując ponownie nazwę użytkownika i hasło.",
       "confirmUsername": "Wpisz swoją nazwę użytkownika, aby potwierdzić",
@@ -986,7 +979,15 @@ export const pl_PL: EnTranslations = {
       "exportHint": "Pobierz kopię swojego konta i postaci jako plik JSON. Wysyłamy ci też potwierdzenie e-mailem.",
       "exportBtn": "Pobierz moje dane",
       "exportDone": "Twoje dane zostały pobrane. Wysłaliśmy ci potwierdzenie e-mailem.",
-      "exportFailed": "Nie udało się wyeksportować twoich danych. Spróbuj ponownie za chwilę."
+      "exportFailed": "Nie udało się wyeksportować twoich danych. Spróbuj ponownie za chwilę.",
+      "sectionConnections": "Polaczone konta",
+      "connectionsSummary": "Zarzadzaj dostawcami logowania polaczonymi z tym kontem.",
+      "ssoNotLinked": "Discord niepolaczony.",
+      "ssoLinked": "Discord polaczony.",
+      "ssoLink": "Polacz Discord",
+      "ssoUnlink": "Odlacz Discord",
+      "ssoLinkConflict": "To konto Discord jest juz polaczone z innym kontem.",
+      "ssoUnlinkNeedsPassword": "Ustaw haslo przed odlaczeniem Discord."
     },
     "masterLoot": {
       "title": "Mistrz lupow",

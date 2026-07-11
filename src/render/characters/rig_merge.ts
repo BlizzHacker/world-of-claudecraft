@@ -33,6 +33,7 @@
 //
 // Payoff: a rig drops from ~9 skinned draws (each with its own skeleton update
 // and bone-texture upload, in the main pass AND the shadow pass) to 1.
+import { shouldPreserveFirstPersonMeshPart } from './first_person_parts';
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 
@@ -188,11 +189,15 @@ function hasMorphTargets(sm: THREE.SkinnedMesh): boolean {
  * untouched as its own SkinnedMesh, so a rig we cannot prove safe still renders
  * correctly (just without the saving).
  */
-export function mergeSkinnedParts(root: THREE.Object3D): void {
+export function mergeSkinnedParts(
+  root: THREE.Object3D,
+  opts: { preserveFirstPersonParts?: boolean } = {},
+): void {
   const groups = new Map<string, THREE.SkinnedMesh[]>();
   root.traverse((o) => {
     const sm = o as THREE.SkinnedMesh;
     if (!sm.isSkinnedMesh || !sm.visible) return;
+    if (opts.preserveFirstPersonParts && shouldPreserveFirstPersonMeshPart(sm.name)) return;
     if (Array.isArray(sm.material)) return; // never happens via GLTFLoader
     if (hasMorphTargets(sm)) return; // would be silently dropped by the rebake
     const key = bucketKey(sm);

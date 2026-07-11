@@ -238,16 +238,10 @@ export const en: EnTranslations = {
       "walletPriceBody": "$CR pricing is unavailable right now. Check back shortly.",
       "reason": {
         "eligible": "Rewards unlocked.",
-<<<<<<< HEAD
         "no_wallet": "Connect a wallet with at least $20 USD in $CR.",
         "under_minimum": "Wallet is below the $20 USD $CR minimum.",
-        "price_unavailable": "$CR price is unavailable, rewards are temporarily locked."
-=======
-        "no_wallet": "Connect a wallet with at least $20 USD in WOC.",
-        "under_minimum": "Wallet is below the $20 USD WOC minimum.",
-        "price_unavailable": "WOC price is unavailable, rewards are temporarily locked.",
+        "price_unavailable": "$CR price is unavailable, rewards are temporarily locked.",
         "banned": "You are banned from Daily Rewards. Reason: {reason}"
->>>>>>> v0.24.0
       }
     },
     "theme": {
@@ -339,7 +333,8 @@ export const en: EnTranslations = {
       "targetCycleShort": "Target",
       "spellbookPageLabel": "Page {page}",
       "hideKeyboard": "Hide keyboard",
-      "chatPlaceholder": "Say something..."
+      "chatPlaceholder": "Say something...",
+      "autorun": "Auto"
     },
     "tutorial": {
       "moveBodyTouch": "Use the movement stick to move and drag the screen to look around. Take a few steps to begin.",
@@ -944,14 +939,6 @@ export const en: EnTranslations = {
       "goToCharacters": "View Characters",
       "walletSummary": "Verify a Solana wallet to show holder flair on your player card.",
       "manageWallet": "Manage Wallet",
-      "sectionConnections": "Connected Accounts",
-      "connectionsSummary": "Link Google, Facebook, or Plex so you can sign in with them.",
-      "ssoNotLinked": "Not linked.",
-      "ssoLinked": "Linked — you can sign in with Google, Facebook, or Plex.",
-      "ssoLink": "Link Google / Facebook / Plex",
-      "ssoUnlink": "Unlink",
-      "ssoLinkConflict": "That account is already linked to a different Cryptic Realm login.",
-      "ssoUnlinkNeedsPassword": "Set a password first — SSO is currently your only way to sign in.",
       "deactivate": "Deactivate Account",
       "deactivateWarning": "Deactivation locks your account and signs you out everywhere. Contact an admin to restore it. Confirm by re-entering your username and password.",
       "confirmUsername": "Type your username to confirm",
@@ -992,7 +979,15 @@ export const en: EnTranslations = {
       "exportHint": "Download a copy of your account and characters as a JSON file. We also email you a confirmation.",
       "exportBtn": "Download My Data",
       "exportDone": "Your data was downloaded. We emailed you a confirmation.",
-      "exportFailed": "Could not export your data. Try again in a moment."
+      "exportFailed": "Could not export your data. Try again in a moment.",
+      "sectionConnections": "Connected Accounts",
+      "connectionsSummary": "Link Google, Facebook, or Plex so you can sign in with them.",
+      "ssoNotLinked": "Not linked.",
+      "ssoLinked": "Linked — you can sign in with Google, Facebook, or Plex.",
+      "ssoLink": "Link Google / Facebook / Plex",
+      "ssoUnlink": "Unlink",
+      "ssoLinkConflict": "That account is already linked to a different Cryptic Realm login.",
+      "ssoUnlinkNeedsPassword": "Set a password first — SSO is currently your only way to sign in."
     },
     "masterLoot": {
       "title": "Master Loot",
@@ -4275,7 +4270,7 @@ export const en: EnTranslations = {
     "title": "Play in Landscape Fullscreen",
     "continue": "Continue to Game",
     "rotateTitle": "Rotate to Landscape",
-    "rotateSub": "Portrait mode is not supported. Rotate your device to landscape to continue.",
+    "rotateSub": "Play in landscape fullscreen for the best mobile experience.",
     "baseLandscape": "Rotate your device to landscape before entering the world.",
     "basePerformance": "Mobile performance may be degraded. Close extra tabs and lower Render Quality if the game feels slow.",
     "iosStandaloneDetail": "You are in home-screen fullscreen mode. Keep the device in landscape.",

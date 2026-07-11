@@ -220,10 +220,10 @@ export const ru_RU: EnTranslations = {
       "pointsGained": "Получено {points} очков ежедневных наград.",
       "showChestButton": "Показать сундук",
       "hideChestButton": "Скрыть сундук",
-      "hideChestConfirmTitle": "Hide Daily Rewards Chest?",
-      "hideChestConfirmBody": "This removes the chest shortcut from your HUD. Rewards, eligibility, and this panel stay available; you can bring the shortcut back from Options.",
-      "hideChestConfirmOk": "Hide Chest",
-      "hideChestConfirmCancel": "Cancel",
+      "hideChestConfirmTitle": "Скрыть сундук ежедневных наград?",
+      "hideChestConfirmBody": "Это уберёт ярлык сундука с вашего HUD. Награды, право на участие и эта панель останутся доступны; вернуть ярлык можно в настройках.",
+      "hideChestConfirmOk": "Скрыть сундук",
+      "hideChestConfirmCancel": "Отмена",
       "leaderboard": "Ежедневная таблица лидеров",
       "totalPlayer": "Сегодня {count} игрок",
       "totalPlayers": "Сегодня {count} игроков",
@@ -300,7 +300,7 @@ export const ru_RU: EnTranslations = {
       "targetLabel": "Ваша цель",
       "targetAnnounce": "Цель: {name}",
       "partyLabel": "Ваша группа",
-      "partyChip": "Party",
+      "partyChip": "Группа",
       "partyGroup": "Группа {n}",
       "durationUnitSeconds": "с",
       "durationUnitMinutes": "м",
@@ -317,23 +317,11 @@ export const ru_RU: EnTranslations = {
     "mobile": {
       "jump": "Прыжок",
       "leaderboard": "Рейтинг",
-      "dailyRewards": "Rewards",
+      "dailyRewards": "Награды",
       "nameplates": "Имена",
       "haptics": "Вибрация",
       "hapticsOff": "Вибрация выкл.",
       "toggleHaptics": "Вкл/выкл вибрацию",
-<<<<<<< HEAD
-      "hotbarPage": "Skills",
-      "hotbarPageAria": "Show next set of skills",
-      "actionRing": "Combat actions",
-      "actionPageToggle": "Switch action page",
-      "actionPageIndicator": "{page}",
-      "targetCycle": "Swap target",
-      "targetCycleShort": "Target",
-      "spellbookPageLabel": "Page {page}",
-      "hideKeyboard": "Hide keyboard",
-      "chatPlaceholder": "Say something..."
-=======
       "showMenuButtons": "Показать кнопки меню",
       "hideMenuButtons": "Скрыть кнопки меню",
       "hotbarPage": "Навыки",
@@ -345,8 +333,8 @@ export const ru_RU: EnTranslations = {
       "targetCycleShort": "Цель",
       "spellbookPageLabel": "Страница {page}",
       "hideKeyboard": "Скрыть клавиатуру",
-      "chatPlaceholder": "Напишите сообщение..."
->>>>>>> v0.24.0
+      "chatPlaceholder": "Напишите сообщение...",
+      "autorun": "Auto"
     },
     "tutorial": {
       "moveBodyTouch": "Используйте джойстик передвижения, чтобы двигаться, и проведите по экрану, чтобы осмотреться. Сделайте несколько шагов, чтобы начать.",
@@ -363,8 +351,8 @@ export const ru_RU: EnTranslations = {
     },
     "nativeUpdate": {
       "title": "Доступно обновление",
-      "body": "Доступна новая версия Cryptic Realm. Обновите сейчас, чтобы получить последние исправления и улучшения.",
-      "bodyWithVersion": "Доступна версия {version} Cryptic Realm. Обновите сейчас, чтобы получить последние исправления и улучшения.",
+      "body": "Доступна новая версия World of ClaudeCraft. Обновите сейчас, чтобы получить последние исправления и улучшения.",
+      "bodyWithVersion": "Доступна версия {version} World of ClaudeCraft. Обновите сейчас, чтобы получить последние исправления и улучшения.",
       "notNow": "Не сейчас",
       "update": "Обновить"
     },
@@ -396,8 +384,8 @@ export const ru_RU: EnTranslations = {
       "minutes": "{m}м",
       "lessThanMinute": "<1м",
       "lockedToast": "Вы привязаны к {raid}. Разблокировка через {time}.",
-      "heroicName": "Heroic {name}",
-      "heroicLocked": "You are locked to Heroic {name}."
+      "heroicName": "Героический режим: {name}",
+      "heroicLocked": "Вы закреплены за героическим подземельем: {name}."
     },
     "compass": {
       "N": "С",
@@ -420,9 +408,6 @@ export const ru_RU: EnTranslations = {
       "targetFriendly": "Ближайший союзник",
       "targetFriendlyNext": "Следующий союзник",
       "discord": "Discord",
-<<<<<<< HEAD
-      "valecup": "Vale Cup"
-=======
       "valecup": "Кубок Долины",
       "categoryPet": "Питомец",
       "petAttack": "Питомец: атака",
@@ -430,142 +415,141 @@ export const ru_RU: EnTranslations = {
       "petTaunt": "Питомец: провокация",
       "petDefensive": "Питомец: защита",
       "petAggressive": "Питомец: агрессия"
->>>>>>> v0.24.0
     },
     "vcup": {
-      "title": "The Vale Cup",
-      "shootPower": "POWER",
-      "close": "Close the Vale Cup window",
-      "offlineNote": "The fixture book is closed. The Vale Cup is not available right now.",
-      "recordLine": "Your record: {wins} wins, {losses} losses, {draws} draws.",
-      "bracketsAria": "Match bracket",
-      "bracketLabel": "{n}v{n}",
-      "waitingCount": "{count} waiting",
-      "nationsHeading": "Banner nation",
+      "title": "Кубок Долины",
+      "shootPower": "СИЛА",
+      "close": "Закрыть окно Кубка Долины",
+      "offlineNote": "Книга матчей закрыта. Кубок Долины сейчас недоступен.",
+      "recordLine": "Ваш счёт: побед {wins}, поражений {losses}, ничьих {draws}.",
+      "bracketsAria": "Формат матча",
+      "bracketLabel": "{n} на {n}",
+      "waitingCount": "в очереди: {count}",
+      "nationsHeading": "Знамённая нация",
       "nation": {
-        "vale": "Eastbrook Vale",
-        "mirefen": "The Mirefen",
-        "thornpeak": "Thornpeak",
-        "coliseum": "The Ashen Coliseum",
-        "choir": "The Pale Choir",
-        "ogre": "The Ogre Clans",
-        "moon": "The Pale Moon",
-        "copperdig": "The Copper Dig"
+        "vale": "Истврукская долина",
+        "mirefen": "Мирефен",
+        "thornpeak": "Терновый пик",
+        "coliseum": "Пепельный Колизей",
+        "choir": "Бледный хор",
+        "ogre": "Кланы огров",
+        "moon": "Бледная луна",
+        "copperdig": "Медный рудник"
       },
-      "awayNote": "If both sides fly the same banner, the away side plays the inverted palette.",
-      "rolesHeading": "Sport role",
+      "awayNote": "Если обе стороны подняли одно знамя, гости играют в инвертированных цветах.",
+      "rolesHeading": "Игровая роль",
       "role": {
         "allrounder": {
-          "name": "All-Rounder",
-          "desc": "A bit of everything: kick, boot, and a fair shoulder."
+          "name": "Универсал",
+          "desc": "Всего понемногу: удар, дальний удар и честный толчок плечом."
         },
         "striker": {
-          "name": "Striker",
-          "desc": "Lives for the long boot and the quick sidestep."
+          "name": "Нападающий",
+          "desc": "Живёт дальним ударом и резким финтом."
         },
         "sweeper": {
-          "name": "Sweeper",
-          "desc": "Bumps runners off the ball and hoofs it clear."
+          "name": "Чистильщик",
+          "desc": "Сбивает бегущих с мяча и выносит его подальше."
         },
         "keeper": {
-          "name": "Keeper",
-          "desc": "Guards the goal box with grip, dive, and punt."
+          "name": "Вратарь",
+          "desc": "Держит ворота хватом, броском и длинным выбросом."
         }
       },
-      "queue": "Join the Queue",
-      "leaveQueue": "Leave the Queue",
-      "queueNote": "Queue from anywhere; the whistle calls you to the Sowfield.",
-      "queuedStatus": "Queued for {bracket}: position {position} of {count}.",
-      "blockNation": "Pick a banner nation first.",
-      "blockPartySize": "That bracket needs a smaller party.",
-      "blockNotLeader": "Only the party leader can queue the team.",
-      "inMatchNote": "Your team is on the pitch. Play on!",
-      "deserterNote": "The Groundskeeper remembers. You may queue again in {seconds} sec.",
-      "liveHeading": "Now at the Sowfield",
-      "liveAria": "Vale Cup: {nationA} {scoreA}, {nationB} {scoreB}",
-      "walkUp": "Walk up to the Sowfield to watch from the stands.",
-      "noLive": "The pitch is quiet. No match is being played.",
-      "boardHeading": "Winners board",
-      "boardEmpty": "No winners recorded yet. The Copper Pail waits.",
-      "boardWins": "{count} wins",
-      "enterAsGuild": "Enter under the banner of {guild}",
-      "guildRecordLine": "Your guild record: {wins} wins, {losses} losses.",
-      "guildBoardHeading": "Guild banners",
-      "guildBoardEmpty": "No guild has taken the field yet. Fly your banner!",
-      "guildBoardWl": "{wins} W, {losses} L",
-      "practice": "Practice vs. Bots",
-      "practiceNote": "Starts a private bot match on your own practice pitch right away.",
-      "practicingNow": "Practicing now ({count}):",
+      "queue": "Встать в очередь",
+      "leaveQueue": "Покинуть очередь",
+      "queueNote": "Вставайте в очередь откуда угодно; свисток позовёт вас на Свиное поле.",
+      "queuedStatus": "В очереди на {bracket}: место {position} из {count}.",
+      "blockNation": "Сначала выбери знамённую нацию.",
+      "blockPartySize": "Для этой категории нужна группа поменьше.",
+      "blockNotLeader": "Поставить команду в очередь может только лидер группы.",
+      "inMatchNote": "Ваша команда на поле. Играйте!",
+      "deserterNote": "Смотритель поля помнит. Снова встать в очередь можно через {seconds} сек.",
+      "liveHeading": "Сейчас на Свином поле",
+      "liveAria": "Кубок Долины: {nationA} {scoreA}, {nationB} {scoreB}",
+      "walkUp": "Подойдите к Свиному полю и смотрите с трибун.",
+      "noLive": "На поле тихо. Матч не идёт.",
+      "boardHeading": "Доска победителей",
+      "boardEmpty": "Победителей пока нет. Медное ведро ждёт.",
+      "boardWins": "побед: {count}",
+      "enterAsGuild": "Выступить под знаменем гильдии {guild}",
+      "guildRecordLine": "Счёт вашей гильдии: {wins} побед, {losses} поражений.",
+      "guildBoardHeading": "Знамёна гильдий",
+      "guildBoardEmpty": "Пока ни одна гильдия не вышла на поле. Поднимите своё знамя!",
+      "guildBoardWl": "{wins} побед, {losses} поражений",
+      "practice": "Тренировка с ботами",
+      "practiceNote": "Немедленно начинает полный матч с ботами на Свином поле.",
+      "practicingNow": "Сейчас тренируются ({count}):",
       "clock": "{minutes}:{seconds}",
-      "indicatorQueued": "Vale Cup queue: {bracket}, position {position} of {count}",
-      "indicatorLive": "Vale Cup",
-      "indicatorOpen": "Open the Vale Cup window",
-      "phaseCountdown": "Kickoff in {seconds}",
-      "phaseGoal": "GOAL!",
-      "phaseGolden": "GOLDEN GOAL",
-      "phaseOver": "FULL TIME",
-      "bannerFound": "The Vale Cup calls: {nationA} vs {nationB}!",
-      "bannerCountdown": "Kickoff in {seconds}...",
-      "bannerKickoff": "KICKOFF!",
-      "bannerGoal": "GOAL! {nation} scores!",
-      "bannerSave": "{name} SAVES!",
-      "bannerGolden": "GOLDEN GOAL: next score wins!",
-      "bannerEnd": "Full time: {nationA} {scoreA}, {nationB} {scoreB}",
-      "bannerWin": "Victory at the Sowfield!",
-      "bannerDraw": "A draw at the Sowfield.",
-      "bannerLoss": "Defeat at the Sowfield.",
-      "logQueued": "You join the Vale Cup queue for {bracket} (position {position}).",
-      "logUnqueued": "You leave the Vale Cup queue.",
-      "logFound": "Your Vale Cup match is ready: {nationA} vs {nationB}.",
-      "logRoster": "Your side: {allies}. Their side: {enemies}.",
-      "logGoal": "{name} scores for {nation}! {nationA} {scoreA}, {nationB} {scoreB}.",
-      "logSave": "{name} makes the save!",
-      "logWin": "You win the bout at the Sowfield.",
-      "logDraw": "The bout at the Sowfield ends in a draw.",
-      "logLoss": "You lose the bout at the Sowfield.",
-      "gossipOpen": "The book of fixtures",
-      "gossipOpenAria": "Open the Vale Cup window",
-      "mobileLabel": "Cup",
+      "indicatorQueued": "Очередь Кубка Долины: {bracket}, место {position} из {count}",
+      "indicatorLive": "Кубок Долины",
+      "indicatorOpen": "Открыть окно Кубка Долины",
+      "phaseCountdown": "До начала {seconds}",
+      "phaseGoal": "ГОЛ!",
+      "phaseGolden": "ЗОЛОТОЙ ГОЛ",
+      "phaseOver": "ФИНАЛЬНЫЙ СВИСТОК",
+      "bannerFound": "Кубок Долины зовёт: {nationA} против {nationB}!",
+      "bannerCountdown": "До начала {seconds} сек...",
+      "bannerKickoff": "НАЧАЛО МАТЧА!",
+      "bannerGoal": "ГОЛ! Забивает {nation}!",
+      "bannerSave": "{name} СПАСАЕТ!",
+      "bannerGolden": "ЗОЛОТОЙ ГОЛ: следующий гол решает всё!",
+      "bannerEnd": "Финальный свисток: {nationA} {scoreA}, {nationB} {scoreB}",
+      "bannerWin": "Победа на Свином поле!",
+      "bannerDraw": "Ничья на Свином поле.",
+      "bannerLoss": "Поражение на Свином поле.",
+      "logQueued": "Вы встали в очередь Кубка Долины на {bracket} (место {position}).",
+      "logUnqueued": "Вы покинули очередь Кубка Долины.",
+      "logFound": "Ваш матч Кубка Долины готов: {nationA} против {nationB}.",
+      "logRoster": "Ваша сторона: {allies}. Их сторона: {enemies}.",
+      "logGoal": "{name} забивает за {nation}! {nationA} {scoreA}, {nationB} {scoreB}.",
+      "logSave": "{name} делает сейв!",
+      "logWin": "Вы выиграли встречу на Свином поле.",
+      "logDraw": "Встреча на Свином поле закончилась вничью.",
+      "logLoss": "Вы проиграли встречу на Свином поле.",
+      "gossipOpen": "Книга матчей",
+      "gossipOpenAria": "Открыть окно Кубка Долины",
+      "mobileLabel": "Кубок",
       "briefing": {
-        "subtitle": "Pre-match briefing",
-        "vs": "vs",
-        "rulesHeading": "How to play",
-        "rule1": "Kick or pass the ball into the enemy goal to score.",
-        "rule2": "First to 5 goals wins, or the most goals when full time blows.",
-        "rule3": "A level match at full time goes to golden goal: the next score wins.",
-        "rule4": "Tackles only tumble you over. Nobody gets hurt under the harvest truce.",
-        "rule5": "Anyone can walk up and cheer you on from the stands.",
-        "kitHeading": "Your kit",
-        "kitNote": "These moves replace your class abilities for the match.",
-        "rosterHeading": "The team sheet",
-        "you": "You",
-        "bot": "Bot",
-        "ready": "I'm ready",
-        "readyDone": "Ready",
-        "readyAria": "Ready up for kickoff",
-        "waiting": "Waiting for the other side to ready up...",
-        "whistle": "The whistle blows in {seconds}s.",
-        "readyCount": "{ready} of {total} ready"
+        "subtitle": "Предматчевый инструктаж",
+        "vs": "против",
+        "rulesHeading": "Как играть",
+        "rule1": "Забейте, пробив или отдав пас в ворота соперника.",
+        "rule2": "Побеждает первый до 5 голов или лучший по голам к финалу.",
+        "rule3": "Ничья к финалу ведёт к золотому голу: следующий гол решает.",
+        "rule4": "Подкаты лишь сбивают с ног. Под перемирием жатвы никто не страдает.",
+        "rule5": "Любой может подойти и поболеть за вас с трибун.",
+        "kitHeading": "Ваш набор",
+        "kitNote": "На время матча эти приёмы заменяют способности класса.",
+        "rosterHeading": "Список состава",
+        "you": "Вы",
+        "bot": "Бот",
+        "ready": "Я готов",
+        "readyDone": "Готов",
+        "readyAria": "Приготовиться к вбрасыванию",
+        "waiting": "Ожидание готовности другой стороны...",
+        "whistle": "Свисток прозвучит через {seconds} с.",
+        "readyCount": "Готовы: {ready} из {total}"
       },
       "bet": {
-        "title": "Match Bets",
-        "aria": "Vale Cup match betting",
-        "closesIn": "Bets close in {seconds}s",
-        "closed": "Betting closed",
-        "prize": "Pool {amount}",
-        "splitAria": "Share of the betting pool on each team",
-        "expand": "View bets and wager",
-        "collapse": "Hide bets",
-        "oddsLabel": "Pays",
-        "back": "Back {team}",
-        "form": "{wins}W-{losses}L",
-        "mine": "Your bet: {amount} on {team}",
-        "none": "You have no bet on this match yet.",
-        "record": "Betting record: {wins}W-{losses}L, {sign}{net}",
-        "wonBanner": "Your bet won!",
-        "wonLog": "Your Vale Cup bet won: {amount} returned.",
-        "lostLog": "Your Vale Cup bet lost: {amount}.",
-        "refundLog": "Bets voided, your {amount} stake was returned."
+        "title": "Ставки на матч",
+        "aria": "Ставки на матч Кубка Долины",
+        "closesIn": "Приём ставок закроется через {seconds} с",
+        "closed": "Приём ставок закрыт",
+        "prize": "Банк {amount}",
+        "splitAria": "Доля банка на каждую команду",
+        "expand": "Ставки и сделать ставку",
+        "collapse": "Скрыть ставки",
+        "oddsLabel": "Выплата",
+        "back": "Ставка на {team}",
+        "form": "В{wins}-П{losses}",
+        "mine": "Ваша ставка: {amount} на {team}",
+        "none": "Вы ещё не сделали ставку на этот матч.",
+        "record": "История ставок: {wins}-{losses}, {sign}{net}",
+        "wonBanner": "Ваша ставка сыграла!",
+        "wonLog": "Ставка на Кубок Долины сыграла: возвращено {amount}.",
+        "lostLog": "Ставка на Кубок Долины проиграна: {amount}.",
+        "refundLog": "Ставки аннулированы, ваша ставка {amount} возвращена."
       }
     },
     "options": {
@@ -604,10 +588,6 @@ export const ru_RU: EnTranslations = {
       "itemScoreLine": "Оценка {score}",
       "showSecondaryActionBar": "Показывать вторичную панель действий",
       "showDailyRewardsChest": "Показывать сундук ежедневных наград",
-<<<<<<< HEAD
-      "mobileCameraJoystick": "Camera joystick",
-      "mobileLeftHanded": "Left-handed layout"
-=======
       "mobileCameraJoystick": "Джойстик камеры",
       "mobileLeftHanded": "Раскладка для левшей",
       "ia": {
@@ -687,7 +667,6 @@ export const ru_RU: EnTranslations = {
         "support": "Поддержка",
         "about": "О программе"
       }
->>>>>>> v0.24.0
     },
     "controller": {
       "title": "Геймпад",
@@ -739,9 +718,9 @@ export const ru_RU: EnTranslations = {
         "fps01Low": "0,1% мин.",
         "ping": "Пинг",
         "jitter": "Джиттер",
-        "predLead": "Prediction Lead",
+        "predLead": "Упреждение прогноза",
         "snapshot": "Частота снимков",
-        "serverTick": "Server Tick Rate",
+        "serverTick": "Частота тиков сервера",
         "connection": "Соединение",
         "drawCalls": "Вызовы отрисовки",
         "triangles": "Треугольники",
@@ -785,8 +764,8 @@ export const ru_RU: EnTranslations = {
       "fromYour": "От вашей характеристики ({value} {stat}):",
       "names": {
         "spellPower": "Сила заклинаний",
-        "critRating": "Crit Rating",
-        "hasteRating": "Haste Rating"
+        "critRating": "Рейтинг крит. удара",
+        "hasteRating": "Рейтинг ускорения"
       },
       "desc": {
         "str": "Увеличивает силу атаки, благодаря чему удары вашим оружием бьют сильнее.",
@@ -800,8 +779,8 @@ export const ru_RU: EnTranslations = {
         "dps": "Приблизительный урон вашего оружия в секунду с учетом урона и скорости оружия, а также вашей силы атаки.",
         "critChance": "Ваш шанс нанести критический удар, наносящий двойной урон.",
         "dodge": "Ваш шанс полностью уклониться от входящей атаки в ближнем бою, не получив урона.",
-        "critRating": "Crit rating from your gear and set bonuses, raising your critical strike chance. About 10 rating grants 1% crit.",
-        "hasteRating": "Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. About 10 rating grants 1% haste."
+        "critRating": "Рейтинг критического удара от снаряжения и бонусов комплекта повышает шанс критического удара. Примерно 10 рейтинга дают 1% крит. удара.",
+        "hasteRating": "Рейтинг ускорения от снаряжения и бонусов комплекта ускоряет ваши атаки и заклинания. Примерно 10 рейтинга дают 1% ускорения."
       },
       "effects": {
         "attackPower": "+{value} к силе атаки",
@@ -849,13 +828,13 @@ export const ru_RU: EnTranslations = {
       "bonusLine": "({pieces}) {bonus}"
     },
     "itemProc": {
-      "onMeleeHit": "Chance on hit ({chance}%): {effect}",
-      "onSpellDamage": "Chance on your damaging spells ({chance}%): {effect}",
-      "onHeal": "Chance on your heals ({chance}%): {effect}",
-      "chainArc": "blasts the target with a {school} {name} ({damage}) that leaps to {jumps} nearby foes for decaying damage",
-      "attackSlow": "and slows the target attack speed by {pct}% for {duration} sec",
-      "dot": "festers {name}, a {school} damage-over-time dealing {total} over {duration} sec",
-      "hot": "blooms {name}, a heal-over-time restoring {total} over {duration} sec"
+      "onMeleeHit": "Шанс при попадании ({chance}%): {effect}",
+      "onSpellDamage": "Шанс от уронных заклинаний ({chance}%): {effect}",
+      "onHeal": "Шанс при исцелении ({chance}%): {effect}",
+      "chainArc": "поражает цель эффектом «{name}» ({school}, {damage}) и перескакивает на {jumps} ближайших врагов с затухающим уроном",
+      "attackSlow": "и снижает скорость атаки цели на {pct}% на {duration} сек",
+      "dot": "вызывает «{name}», периодический урон ({school}), нанося {total} за {duration} сек",
+      "hot": "распускает «{name}», периодическое исцеление, восполняя {total} за {duration} сек"
     },
     "questShare": {
       "notShareable": "Этим заданием нельзя поделиться.",
@@ -931,7 +910,7 @@ export const ru_RU: EnTranslations = {
       "loggedOutPrompt": "Войдите, чтобы управлять аккаунтом.",
       "memberSince": "Дата регистрации: {date}",
       "sectionSettings": "Настройки аккаунта",
-      "sectionWallet": "Кошелёк $CR",
+      "sectionWallet": "Кошелёк $WOC",
       "sectionCharacters": "Персонажи",
       "sectionDanger": "Опасная зона",
       "changePassword": "Сменить пароль",
@@ -960,14 +939,6 @@ export const ru_RU: EnTranslations = {
       "goToCharacters": "Показать персонажей",
       "walletSummary": "Подтвердите кошелёк Solana, чтобы показать знак держателя на карточке игрока.",
       "manageWallet": "Управление кошельком",
-      "sectionConnections": "Svyazannye akkaunty",
-      "connectionsSummary": "Upravlyayte provayderami vhoda, privyazannymi k etomu akkauntu.",
-      "ssoNotLinked": "Discord ne privyazan.",
-      "ssoLinked": "Discord privyazan.",
-      "ssoLink": "Privyazat Discord",
-      "ssoUnlink": "Otvyazat Discord",
-      "ssoLinkConflict": "Etot Discord akkaunt uzhe privyazan k drugomu akkauntu.",
-      "ssoUnlinkNeedsPassword": "Zadaite parol pered otvyazkoi Discord.",
       "deactivate": "Деактивировать аккаунт",
       "deactivateWarning": "Деактивация заблокирует ваш аккаунт и выполнит выход на всех устройствах. Для восстановления обратитесь к администратору. Подтвердите, повторно введя имя пользователя и пароль.",
       "confirmUsername": "Введите имя пользователя для подтверждения",
@@ -1008,7 +979,15 @@ export const ru_RU: EnTranslations = {
       "exportHint": "Скачайте копию вашей учётной записи и персонажей в виде файла JSON. Мы также отправим вам подтверждение по email.",
       "exportBtn": "Скачать мои данные",
       "exportDone": "Ваши данные были скачаны. Мы отправили вам подтверждение по email.",
-      "exportFailed": "Не удалось экспортировать ваши данные. Попробуйте снова через мгновение."
+      "exportFailed": "Не удалось экспортировать ваши данные. Попробуйте снова через мгновение.",
+      "sectionConnections": "Connected Accounts",
+      "connectionsSummary": "Link Google, Facebook, or Plex so you can sign in with them.",
+      "ssoNotLinked": "Not linked.",
+      "ssoLinked": "Linked — you can sign in with Google, Facebook, or Plex.",
+      "ssoLink": "Link Google / Facebook / Plex",
+      "ssoUnlink": "Unlink",
+      "ssoLinkConflict": "That account is already linked to a different Cryptic Realm login.",
+      "ssoUnlinkNeedsPassword": "Set a password first — SSO is currently your only way to sign in."
     },
     "masterLoot": {
       "title": "Распределение добычи",
@@ -1036,30 +1015,30 @@ export const ru_RU: EnTranslations = {
       "summaryGroup": "Настройки добычи: групповая добыча."
     },
     "corpseHarvest": {
-      "title": "Harvest",
-      "harvestButton": "Harvest",
-      "concentrateHint": "Fewer chosen components yield a higher tier each.",
-      "alreadyHarvested": "This corpse has already been harvested.",
-      "componentAria": "Harvest {component}",
+      "title": "Сбор",
+      "harvestButton": "Собрать",
+      "concentrateHint": "Чем меньше выбрано компонентов, тем выше их качество.",
+      "alreadyHarvested": "Этот труп уже был собран.",
+      "componentAria": "Собрать {component}",
       "components": {
-        "hide": "Hide",
-        "fang": "Fang",
-        "silk": "Silk",
-        "venomSac": "Venom Sac",
-        "gills": "Gills",
-        "claw": "Claw",
-        "horn": "Horn",
-        "tusk": "Tusk"
+        "hide": "Шкура",
+        "fang": "Клык",
+        "silk": "Шелк",
+        "venomSac": "Мешок с ядом",
+        "gills": "Жабры",
+        "claw": "Коготь",
+        "horn": "Рог",
+        "tusk": "Бивень"
       }
     },
     "townFocus": {
-      "title": "Town Focus",
-      "hint": "Focus points add a bonus on top of every component's baseline yield. Unfocused components stay at baseline.",
-      "budgetLabel": "Points remaining: {remaining} / {budget}",
-      "saveButton": "Save Focus",
-      "notInTownHint": "You must be in town to set your focus.",
-      "increaseAria": "Increase focus on {component}",
-      "decreaseAria": "Decrease focus on {component}"
+      "title": "Фокус города",
+      "hint": "Очки фокуса добавляют бонус поверх базового выхода каждого компонента. Компоненты без фокуса остаются на базовом уровне.",
+      "budgetLabel": "Осталось очков: {remaining} / {budget}",
+      "saveButton": "Сохранить фокус",
+      "notInTownHint": "Чтобы задать фокус, нужно находиться в городе.",
+      "increaseAria": "Увеличить фокус на {component}",
+      "decreaseAria": "Уменьшить фокус на {component}"
     },
     "party": {
       "promoteLeader": "Назначить лидером",
@@ -1077,12 +1056,12 @@ export const ru_RU: EnTranslations = {
       "masterOption": "Мастер добычи: {name}"
     },
     "dungeonDifficulty": {
-      "setHeroic": "Set Dungeon Difficulty: Heroic",
-      "setNormal": "Set Dungeon Difficulty: Normal"
+      "setHeroic": "Установить сложность подземелий: героическая",
+      "setNormal": "Установить сложность подземелий: обычная"
     },
     "bags": {
-      "cannotDestroy": "This item cannot be destroyed.",
-      "rightClickDestroy": "Right-click to destroy",
+      "cannotDestroy": "Этот предмет нельзя уничтожить.",
+      "rightClickDestroy": "Правый клик, чтобы уничтожить",
       "filterGroupAria": "Фильтровать сумки по категории",
       "filterAll": "Все",
       "filterWeapon": "Оружие",
@@ -1147,18 +1126,18 @@ export const ru_RU: EnTranslations = {
       },
       "allStatsPctReduce": "Снижает все характеристики на {pct}%",
       "increasePct": {
-        "ap": "Increases attack power by {pct}%",
-        "armor": "Increases armor by {pct}%",
-        "int": "Increases Intellect by {pct}%",
-        "sta": "Increases Stamina by {pct}%",
-        "allStats": "Increases all attributes by {pct}%"
+        "ap": "Повышает силу атаки на {pct}%",
+        "armor": "Повышает броню на {pct}%",
+        "int": "Повышает интеллект на {pct}%",
+        "sta": "Повышает выносливость на {pct}%",
+        "allStats": "Повышает все характеристики на {pct}%"
       },
       "dodge": "Повышает шанс уклонения на {pct}%",
       "dodgeReduce": "Снижает шанс уклонения на {pct}%",
       "armorFlat": "Снижает броню на {value}",
       "armorFlatStacks": "Снижает броню на {value} ({stacks} зарядов)",
-      "armorPct": "Reduces armor by {pct}%",
-      "armorPctStacks": "Reduces armor by {pct}% ({stacks} stacks)",
+      "armorPct": "Снижает броню на {pct}%",
+      "armorPctStacks": "Снижает броню на {pct}% ({stacks} зарядов)",
       "mortalWound": "Снижает получаемое исцеление на {pct}%",
       "vulnerability": "Увеличивает получаемый урон на {pct}%",
       "physVuln": "Увеличивает получаемый физический урон на {pct}%",
@@ -1175,13 +1154,13 @@ export const ru_RU: EnTranslations = {
       "disarm": "Обезоруживание: невозможно использовать атаки оружием",
       "lockout": "Школа заклинаний заблокирована",
       "imbue": "Оружие наделено дополнительными эффектами",
-      "imbueRange": "Оружие наделено: от {min} до {max} дополнительного урона при правосудии",
+      "imbueRange": "Оружие наделено: от {min} до {max} дополнительного урона при Приговоре",
       "stealth": "Скрытность; скорость передвижения снижена на {pct}%",
-      "formBear": "Облик медведя: повышенное здоровье и броня",
+      "formBear": "Облик бурого: повышенное здоровье и броня",
       "formCat": "Облик кошки: урон в ближнем бою и энергия",
-      "formTravel": "Походный облик: скорость передвижения повышена на {pct}%",
-      "defensiveStance": "Защитная стойка: сниженный получаемый урон, больше угрозы",
-      "righteousFury": "Праведная ярость: значительно повышенная угроза от урона Святой школы",
+      "formTravel": "Форма скорохода: скорость передвижения повышена на {pct}%",
+      "defensiveStance": "Стойка стража: сниженный получаемый урон, больше угрозы",
+      "righteousFury": "Пылающая клятва: значительно повышенная угроза от урона Святой школы",
       "scale": "Размер увеличен на {pct}%",
       "jump": "Высота прыжка увеличена на {pct}%",
       "school": {
@@ -1250,7 +1229,7 @@ export const ru_RU: EnTranslations = {
     },
     "discord": {
       "title": "Discord",
-      "panelTitle": "Cryptic Realm",
+      "panelTitle": "World of ClaudeCraft",
       "open": "Discord",
       "close": "Закрыть",
       "keybind": "Панель Discord",
@@ -1327,7 +1306,7 @@ export const ru_RU: EnTranslations = {
       "roleTag": {
         "levyst": "Levy St",
         "admin": "Администратор",
-        "coredevs": "Core Dev",
+        "coredevs": "Ведущий разработчик",
         "devs": "Разработчик",
         "mods": "Модератор",
         "artists": "Художник"
@@ -1427,18 +1406,18 @@ export const ru_RU: EnTranslations = {
       "close": "Закрыть почтовый ящик",
       "tabInbox": "Входящие",
       "tabInboxWithCount": "Входящие ({count})",
-      "tabSend": "Send",
+      "tabSend": "Отправить",
       "empty": "Ваш почтовый ящик пуст.",
       "truncated": "Показаны последние {shown} из {total} писем.",
       "attachmentsBadge": "Вложение",
       "unreadBadge": "Непрочитано",
-      "back": "Back",
+      "back": "Назад",
       "take": "Забрать вложения",
       "delete": "Удалить письмо",
       "deleteAria": "Удалить письмо {subject}",
       "openAria": "Прочитать письмо {subject} от {name}",
       "noSubject": "(без темы)",
-      "toLabel": "To",
+      "toLabel": "Кому",
       "toPlaceholder": "Имя персонажа",
       "subjectLabel": "Тема",
       "bodyLabel": "Сообщение",
@@ -1472,48 +1451,48 @@ export const ru_RU: EnTranslations = {
       }
     },
     "bank": {
-      "title": "Bank",
-      "subtitle": "The Gilded Strongbox",
-      "close": "Close bank",
+      "title": "Банк",
+      "subtitle": "Золочёный сундук",
+      "close": "Закрыть банк",
       "capacity": "{used}/{total}",
-      "capacityAria": "Bank slots used: {used} of {total}",
-      "empty": "Your bank is empty.",
-      "tooFar": "You must be at a banker to view your bank.",
-      "buySlots": "Buy {count} slots",
-      "buySlotsMaxed": "Fully expanded",
-      "buyConfirm": "Purchase {count} additional bank slots for {price}?",
-      "buyConfirmAccept": "Purchase",
-      "withdrawHint": "Click to withdraw",
-      "withdrawPartialHint": "Shift-click to withdraw a partial amount",
-      "depositHint": "Click to deposit",
-      "depositPartialHint": "Shift-click to deposit a partial amount",
-      "cannotDeposit": "Cannot be banked",
-      "depositQuantityTitle": "Deposit {item}",
-      "depositQuantityInput": "Quantity to deposit",
-      "depositQuantityConfirm": "Deposit",
-      "withdrawQuantityTitle": "Withdraw {item}",
-      "withdrawQuantityInput": "Quantity to withdraw",
-      "withdrawQuantityConfirm": "Withdraw",
-      "filterGroupAria": "Filter bank by category",
-      "sortAria": "Sort bank items",
-      "searchAria": "Search bank items by name",
-      "depositAll": "Deposit all materials",
-      "depositAllDone": "Materials deposited: {count}.",
-      "depositAllFull": "Materials deposited: {count}. Bank now full.",
-      "depositAllNone": "Bank full: nothing deposited.",
-      "bonusTitle": "Bonus slots",
+      "capacityAria": "Занято ячеек банка: {used} из {total}",
+      "empty": "Ваш банк пуст.",
+      "tooFar": "Чтобы открыть банк, нужно стоять у банкира.",
+      "buySlots": "Купить {count} ячеек",
+      "buySlotsMaxed": "Полностью расширен",
+      "buyConfirm": "Купить {count} дополнительных ячеек банка за {price}?",
+      "buyConfirmAccept": "Купить",
+      "withdrawHint": "Нажмите, чтобы забрать",
+      "withdrawPartialHint": "Shift+клик, чтобы забрать часть",
+      "depositHint": "Нажмите, чтобы положить",
+      "depositPartialHint": "Shift+клик, чтобы положить часть",
+      "cannotDeposit": "Нельзя хранить в банке",
+      "depositQuantityTitle": "Положить {item}",
+      "depositQuantityInput": "Количество для внесения",
+      "depositQuantityConfirm": "Положить",
+      "withdrawQuantityTitle": "Забрать {item}",
+      "withdrawQuantityInput": "Количество для получения",
+      "withdrawQuantityConfirm": "Забрать",
+      "filterGroupAria": "Фильтровать банк по категории",
+      "sortAria": "Сортировать предметы в банке",
+      "searchAria": "Поиск предметов в банке по названию",
+      "depositAll": "Положить все материалы",
+      "depositAllDone": "Материалов положено: {count}.",
+      "depositAllFull": "Материалов положено: {count}. Банк заполнен.",
+      "depositAllNone": "Банк заполнен: ничего не положено.",
+      "bonusTitle": "Бонусные ячейки",
       "bonusEarned": "+{count}",
       "bonusStatusEarned": "+{count}",
-      "bonusSourceEmail": "Verified email",
-      "bonusSourceDiscord": "Discord linked",
-      "bonusSourceWallet": "Wallet linked",
-      "bonusSourceReferral": "Referred friends",
-      "bonusAdvertEmail": "Verify your email to earn 2 slots.",
-      "bonusAdvertDiscord": "Link your Discord to earn 2 slots.",
-      "bonusAdvertWallet": "Link a wallet to earn 2 slots.",
+      "bonusSourceEmail": "Почта подтверждена",
+      "bonusSourceDiscord": "Discord привязан",
+      "bonusSourceWallet": "Кошелёк привязан",
+      "bonusSourceReferral": "Приглашённые друзья",
+      "bonusAdvertEmail": "Подтвердите почту, чтобы получить 2 ячейки.",
+      "bonusAdvertDiscord": "Привяжите Discord, чтобы получить 2 ячейки.",
+      "bonusAdvertWallet": "Привяжите кошелёк, чтобы получить 2 ячейки.",
       "bonusReferralProgress": "{count}/{cap}",
-      "bonusReferralExplainer": "Invite a friend: when they reach level 10 you each earn 2 slots, up to 5 friends.",
-      "bonusSectionAria": "Bonus bank slots and how to earn more"
+      "bonusReferralExplainer": "Пригласите друга: когда он достигнет 10 уровня, вы оба получите по 2 ячейки, до 5 друзей.",
+      "bonusSectionAria": "Бонусные ячейки банка и способы их получить"
     },
     "calendar": {
       "title": "Календарь событий",
@@ -1578,134 +1557,134 @@ export const ru_RU: EnTranslations = {
       "lastSeenNever": "никогда"
     },
     "gathering": {
-      "title": "Gathering",
-      "mining": "Mining",
-      "logging": "Logging",
-      "herbalism": "Herbalism"
+      "title": "Собирательство",
+      "mining": "Горное дело",
+      "logging": "Лесозаготовка",
+      "herbalism": "Травничество"
     },
     "archetypeTitle": {
-      "label": "Title",
-      "none": "None",
-      "hobbyLabel": "Hobby",
-      "armorcrafting": "Armorer",
-      "weaponcrafting": "Weaponsmith",
-      "jewelcrafting": "Jeweler",
-      "alchemy": "Alchemist",
-      "engineering": "Tinkerer",
-      "cooking": "Chef",
-      "inscription": "Scribe",
-      "enchanting": "Enchanter",
-      "tailoring": "Tailor",
-      "leatherworking": "Leathercrafter"
+      "label": "Титул",
+      "none": "Нет",
+      "hobbyLabel": "Хобби",
+      "armorcrafting": "Бронник",
+      "weaponcrafting": "Оружейник",
+      "jewelcrafting": "Ювелир",
+      "alchemy": "Алхимик",
+      "engineering": "Механик",
+      "cooking": "Повар",
+      "inscription": "Писарь",
+      "enchanting": "Зачарователь",
+      "tailoring": "Портной",
+      "leatherworking": "Кожевник"
     },
     "crafting": {
-      "title": "Crafting",
-      "close": "Close crafting",
-      "craft": "Craft",
-      "reagentsNeeded": "Requires:",
-      "reagentLine": "{name} x{have}/{required}",
-      "empty": "No recipes known yet.",
-      "resultAria": "Craft {name}",
-      "craftedToast": "Crafted: {name}",
-      "insufficientMaterials": "You do not have the materials for that.",
-      "unknownRecipe": "That recipe does not exist.",
-      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe.",
-      "notAtHub": "You must be at the crafting hub, at the required level, to craft that.",
-      "throttled": "You are crafting too quickly. Wait a moment and try again.",
-      "recipeNotLearned": "You have not learned that recipe yet."
+      "title": "Крафт",
+      "close": "Закрыть крафт",
+      "craft": "Создать",
+      "reagentsNeeded": "Требуется:",
+      "reagentLine": "{name}: {have}/{required}",
+      "empty": "Известных рецептов пока нет.",
+      "resultAria": "Создать {name}",
+      "craftedToast": "Создано: {name}",
+      "insufficientMaterials": "У вас недостаточно материалов.",
+      "unknownRecipe": "Такого рецепта не существует.",
+      "comboRequirementUnmet": "У вас нет обоих требуемых ремесел нужного уровня для этого рецепта.",
+      "notAtHub": "Чтобы создать это, вы должны находиться у ремесленного центра и иметь требуемый уровень.",
+      "throttled": "Вы создаете предметы слишком быстро. Подождите немного и попробуйте снова.",
+      "recipeNotLearned": "Вы еще не изучили этот рецепт."
     }
   },
   "apiError": {
     "validation": {
-      "failed": "Some fields are invalid. Check the form and try again."
+      "failed": "Некоторые поля заполнены неверно. Проверьте форму и попробуйте снова."
     },
     "json": {
-      "malformed": "That request could not be read. Please try again."
+      "malformed": "Не удалось прочитать запрос. Повторите попытку."
     },
     "body": {
-      "too_large": "That request is too large. Try again with less data.",
-      "unsupported_media_type": "Unsupported request format."
+      "too_large": "Запрос слишком большой. Повторите попытку с меньшим объёмом данных.",
+      "unsupported_media_type": "Неподдерживаемый формат запроса."
     },
     "db": {
-      "conflict": "That change conflicted with another update. Please try again."
+      "conflict": "Изменение конфликтует с другим обновлением. Повторите попытку."
     },
     "rate_limit": {
-      "exceeded": "Too many requests. Try again in {seconds}."
+      "exceeded": "Слишком много запросов. Повторите попытку через {seconds}."
     },
     "internal": {
-      "error": "Something went wrong on our end. Please try again."
+      "error": "На нашей стороне произошла ошибка. Повторите попытку."
     },
     "auth": {
-      "token_missing": "You need to be signed in to do that.",
-      "token_invalid": "Your session has expired. Please sign in again.",
-      "forbidden": "You do not have permission to do that.",
-      "invalid_credentials": "Invalid username or password.",
-      "required": "Not authenticated.",
-      "web_login_only": "Logins are only allowed from the game client.",
-      "too_many_attempts": "Too many attempts. Wait a minute and try again.",
-      "too_many_failed_attempts": "Too many failed attempts. Wait a few minutes and try again.",
-      "current_password_incorrect": "Your current password is incorrect.",
-      "password_incorrect": "Your password is incorrect.",
-      "verification_failed": "Verification failed. Please try again."
+      "token_missing": "Чтобы сделать это, необходимо войти в систему.",
+      "token_invalid": "Ваша сессия истекла. Войдите снова.",
+      "forbidden": "У вас нет прав для этого действия.",
+      "invalid_credentials": "Неверное имя пользователя или пароль.",
+      "required": "Нет авторизации.",
+      "web_login_only": "Вход разрешён только из игрового клиента.",
+      "too_many_attempts": "Слишком много попыток. Подождите минуту и попробуйте снова.",
+      "too_many_failed_attempts": "Слишком много неудачных попыток. Подождите несколько минут и попробуйте снова.",
+      "current_password_incorrect": "Текущий пароль неверен.",
+      "password_incorrect": "Неверный пароль.",
+      "verification_failed": "Проверка не пройдена. Повторите попытку."
     },
     "account": {
-      "username_invalid": "Username must be 3-24 characters and use letters, digits, or underscore.",
-      "username_not_allowed": "That username is not allowed.",
-      "username_taken": "That username is already taken.",
-      "username_mismatch": "That username does not match your account.",
-      "password_too_short": "Password must be at least 6 characters.",
-      "password_too_long": "New password must be at most 128 characters.",
-      "characters_online": "Log out all of your characters before deactivating.",
-      "deactivated": "This account has been deactivated. Contact an admin to restore it.",
-      "not_found": "Account not found."
+      "username_invalid": "Имя пользователя должно содержать 3-24 символа: буквы, цифры или нижнее подчеркивание.",
+      "username_not_allowed": "Это имя пользователя запрещено.",
+      "username_taken": "Это имя пользователя уже занято.",
+      "username_mismatch": "Это имя пользователя не совпадает с вашим аккаунтом.",
+      "password_too_short": "Пароль должен содержать не менее 6 символов.",
+      "password_too_long": "Новый пароль должен содержать не более 128 символов.",
+      "characters_online": "Выйдите из всех персонажей перед деактивацией.",
+      "deactivated": "Этот аккаунт деактивирован. Для восстановления обратитесь к администратору.",
+      "not_found": "Аккаунт не найден."
     },
     "character": {
-      "name_invalid": "Invalid character name. Use 2-16 letters.",
-      "name_not_allowed": "That character name is not allowed.",
-      "invalid_class": "Invalid class.",
-      "limit_reached": "Character limit reached.",
-      "name_taken": "That name is taken.",
-      "not_found": "Character not found.",
-      "online": "Character is currently online.",
-      "rename_not_permitted": "Renaming this character is not allowed.",
-      "delete_confirm": "Type the character name to confirm deletion.",
-      "already_in_world": "Character is already in world.",
-      "taken_over": "Your character was taken over by another session.",
-      "rename_required": "This character must be renamed before entering the world."
+      "name_invalid": "Недопустимое имя персонажа. Используйте 2-16 букв.",
+      "name_not_allowed": "Это имя персонажа запрещено.",
+      "invalid_class": "Недопустимый класс.",
+      "limit_reached": "Достигнут лимит персонажей.",
+      "name_taken": "Это имя уже занято.",
+      "not_found": "Персонаж не найден.",
+      "online": "Персонаж сейчас в сети.",
+      "rename_not_permitted": "Переименование этого персонажа не разрешено.",
+      "delete_confirm": "Введите имя персонажа, чтобы подтвердить удаление.",
+      "already_in_world": "Персонаж уже находится в мире.",
+      "taken_over": "Вашего персонажа перехватила другая сессия.",
+      "rename_required": "Перед входом в мир этому персонажу нужно сменить имя."
     },
     "moderation": {
-      "suspended_until": "This account is suspended until {date}.",
-      "suspended": "This account is suspended.",
-      "banned": "This account has been banned.",
-      "force_rename": "A moderator requires one of your characters to be renamed."
+      "suspended_until": "Эта учетная запись заблокирована до {date}.",
+      "suspended": "Эта учетная запись заблокирована.",
+      "banned": "Эта учетная запись заблокирована.",
+      "force_rename": "Модератор требует переименовать одного из ваших персонажей."
     },
     "email": {
-      "invalid": "Enter a valid email address.",
-      "unchanged": "That is already your email address."
+      "invalid": "Введите корректный адрес эл. почты.",
+      "unchanged": "Это уже ваш текущий адрес email."
     },
     "two_factor": {
-      "code_invalid": "That code is not valid, try again.",
-      "setup_required": "Start two-factor setup first.",
-      "already_enabled": "Two-factor is already enabled.",
-      "not_enabled": "Two-factor is not enabled."
+      "code_invalid": "Этот код недействителен, попробуйте ещё раз.",
+      "setup_required": "Сначала начните настройку двухфакторной аутентификации.",
+      "already_enabled": "Двухфакторная аутентификация уже включена.",
+      "not_enabled": "Двухфакторная аутентификация не включена."
     },
     "origin": {
-      "cross_site": "Request blocked for security reasons."
+      "cross_site": "Запрос заблокирован по соображениям безопасности."
     },
     "discord": {
-      "not_configured": "Discord integration is not available right now.",
-      "expired": "That Discord sign-in expired. Please sign in with Discord again.",
-      "already_linked": "That Discord account is already linked to another account.",
-      "password_required": "Set a password before unlinking your Discord account.",
-      "unknown_swag": "That reward is not available.",
-      "link_required": "Link your Discord account first.",
-      "swag_claimed": "You have already claimed this reward.",
-      "swag_tier": "Reach a higher rank to claim this.",
-      "swag_points": "Not enough points."
+      "not_configured": "Интеграция с Discord сейчас недоступна.",
+      "expired": "Этот вход через Discord истёк. Войдите через Discord ещё раз.",
+      "already_linked": "Этот аккаунт Discord уже привязан к другому аккаунту.",
+      "password_required": "Перед отвязкой аккаунта Discord задайте пароль.",
+      "unknown_swag": "Эта награда недоступна.",
+      "link_required": "Сначала привяжите аккаунт Discord.",
+      "swag_claimed": "Вы уже получили эту награду.",
+      "swag_tier": "Достигните более высокого ранга, чтобы получить это.",
+      "swag_points": "Недостаточно очков."
     }
   },
   "guide": {
-    "brand": "Cryptic Realm",
+    "brand": "World of ClaudeCraft",
     "brandShort": "ClaudeCraft",
     "tagline": "Классическая MMO, в которую можно играть бесплатно прямо в браузере.",
     "skipToContent": "Перейти к основному содержимому",
@@ -1719,7 +1698,7 @@ export const ru_RU: EnTranslations = {
       "bestiary": "Бестиарий",
       "models": "3D-модели",
       "gear": "Снаряжение и предметы",
-      "professions": "Professions",
+      "professions": "Ремесла",
       "economy": "Экономика и торговля",
       "social": "Общение и группы",
       "stats": "Персонаж и характеристики",
@@ -1730,11 +1709,11 @@ export const ru_RU: EnTranslations = {
       "delves": "Вылазки",
       "reference": "Справочник",
       "controls": "Управление",
-      "settings": "Settings & Performance",
+      "settings": "Настройки и производительность",
       "combat": "Бой",
       "talents": "Таланты",
       "arena": "Арена и PvP",
-      "valeCup": "Vale Cup",
+      "valeCup": "Кубок Долины",
       "glossary": "Глоссарий",
       "wishIKnew": "Что бы я хотел знать заранее",
       "faq": "ЧаВо",
@@ -1769,7 +1748,7 @@ export const ru_RU: EnTranslations = {
       "github": "Исходный код на GitHub",
       "discord": "Присоединиться к Discord",
       "communityWiki": "Вики сообщества",
-      "rights": "Cryptic Realm"
+      "rights": "World of ClaudeCraft"
     },
     "language": {
       "label": "Язык",
@@ -1789,7 +1768,7 @@ export const ru_RU: EnTranslations = {
     },
     "home": {
       "eyebrow": "Классическая браузерная MMO",
-      "title": "Cryptic Realm",
+      "title": "World of ClaudeCraft",
       "subtitle": "Выполняйте задания, объединяйтесь в группы и исследуйте созданный вручную мир бесплатно прямо в браузере.",
       "ctaPlay": "Играть",
       "ctaLearn": "Как играть",
@@ -1815,7 +1794,7 @@ export const ru_RU: EnTranslations = {
         "valeName": "Долина Истбрук",
         "valeBlurb": "Зелёные холмы и древние леса, где начинается любое приключение.",
         "marshName": "Топь Мирфен",
-        "marshBlurb": "Затопленные болота и изъеденные приливами руины, дом мурлоков и тварей пострашнее.",
+        "marshBlurb": "Затопленные болота и изъеденные приливами руины, дом мадфинов и тварей пострашнее.",
         "peaksName": "Тернопиковые высоты",
         "peaksBlurb": "Выскобленные ветром хребты, что уходят ввысь к самым холодным опасностям королевства."
       },
@@ -1842,7 +1821,7 @@ export const ru_RU: EnTranslations = {
         "a4": "Предел - {cap} уровень, который достигается через три зоны с заданиями, подземельями и исследованиями."
       },
       "community": {
-        "heading": "Присоединяйтесь к королевству",
+        "heading": "Присоединяйтесь к миру",
         "body": "Заходите прямо сейчас или просто загляните поздороваться. В компании мир становится лучше.",
         "play": "Играть",
         "discord": "Присоединиться к Discord",
@@ -1876,7 +1855,7 @@ export const ru_RU: EnTranslations = {
       "groupingTitle": "Игра вместе",
       "groupingBody": "Приглашайте других в группу, чтобы делить зачёт по заданиям и проходить подземелья. Большую часть мира можно пройти в одиночку, так что группа - это выбор, а не обязанность.",
       "onlineTitle": "Онлайн или офлайн",
-      "onlineBody": "Играйте в общем онлайн-королевстве вместе со всеми или запустите мгновенный офлайн-мир в браузере, чтобы освоиться.",
+      "onlineBody": "Играйте в общем онлайн-мире вместе со всеми или запустите мгновенный офлайн-мир в браузере, чтобы освоиться.",
       "reassure": "Таланты открываются на 10 уровне и в любой момент могут быть сброшены, так что ранние решения никогда не бывают окончательными. Экспериментируйте смело.",
       "controlsLink": "Посмотреть полный справочник по управлению"
     },
@@ -1901,64 +1880,64 @@ export const ru_RU: EnTranslations = {
       "controllerBody": "Геймпады тоже поддерживаются, и поддержка контроллера включена по умолчанию. Левый стик отвечает за передвижение, правый наводит камеру, а лицевые кнопки и бамперы закрывают ваши способности, прыжки и взаимодействие. Откройте любое окно, чтобы вызвать экранный указатель для меню. Вы можете переназначить кнопки и настроить мёртвую зону стиков, скорость камеры, вибрацию и инверсию обзора в настройках контроллера в параметрах."
     },
     "settingsPage": {
-      "heading": "Settings & Performance",
-      "intro": "Make the game look its best or run its fastest. Three ready-made loadouts, plus what every graphics option really does.",
-      "wherePath": "Everything on this page lives in the game: press Esc and look in Graphics, Interface, and Performance Overlay.",
-      "fairnessTitle": "Fair by design",
-      "fairnessBody": "No option here trades beauty for power. Lower settings shed cosmetic polish only, never information you fight with: your debuffs, cast bars, party health, and damage numbers are identical from Low to Ultra. Playing on a modest machine is never a handicap.",
-      "loadoutsHeading": "Three ready-made loadouts",
-      "loadoutsIntro": "Start from the loadout that sounds like your machine, then adjust one option at a time until it feels right.",
-      "recommended": "Recommended",
-      "whyLabel": "Why it works:",
-      "tagReload": "after reload",
-      "fpsTitle": "Best FPS",
-      "fpsTagline": "For older laptops, integrated graphics, and battery play.",
-      "fpsWhy": "Graphics Quality is the master switch, and Render Quality is the strongest slider: at 70% the world draws roughly half the pixels while the interface stays perfectly sharp.",
-      "balancedTitle": "Balanced",
-      "balancedTagline": "The sweet spot for most machines, and our default advice.",
-      "balancedWhy": "Medium brings real shadows and full materials; High adds ambient occlusion and bloom. Below Ultra a built-in safety net absorbs sudden dips in busy fights, so Balanced stays smooth without babysitting.",
-      "visualsTitle": "Best Visuals",
-      "visualsTagline": "Screenshot mode for powerful desktop machines.",
-      "visualsWhy": "Ultra renders at the highest resolution your display offers with the richest lighting. It also switches the safety net off, and it is desktop-only: phones and the app top out at High.",
-      "value50to70": "50 to 70%",
-      "value90to100": "90 to 100%",
+      "heading": "Настройки и производительность",
+      "intro": "Настройте игру на максимум красоты или на максимум скорости. Три готовых набора настроек, а также объяснение, что на самом деле делает каждый графический параметр.",
+      "wherePath": "Все, о чем рассказывает эта страница, находится прямо в игре: нажмите Esc и загляните в разделы «Графика», «Интерфейс» и «Оверлей производительности».",
+      "fairnessTitle": "Честность по замыслу",
+      "fairnessBody": "Ни одна настройка здесь не разменивает красоту на игровое преимущество. Низкие уровни убирают только косметический лоск и никогда не отнимают информацию, которой вы сражаетесь: ваши дебаффы, полосы применения заклинаний, здоровье группы и цифры урона одинаковы что на уровне «Низкое», что на «Ультра». Скромная машина никогда не ставит вас в невыгодное положение.",
+      "loadoutsHeading": "Три готовых набора настроек",
+      "loadoutsIntro": "Начните с набора, который лучше всего описывает вашу машину, а затем меняйте по одной настройке за раз, пока результат вас не устроит.",
+      "recommended": "Рекомендуем",
+      "whyLabel": "Почему это работает:",
+      "tagReload": "после перезагрузки",
+      "fpsTitle": "Максимум FPS",
+      "fpsTagline": "Для старых ноутбуков, встроенной графики и игры от батареи.",
+      "fpsWhy": "«Качество графики» служит главным переключателем, а «Качество рендера» остается самым сильным ползунком: при 70% мир отрисовывается примерно вдвое меньшим числом пикселей, а интерфейс сохраняет идеальную четкость.",
+      "balancedTitle": "Баланс",
+      "balancedTagline": "Золотая середина для большинства машин и наш совет по умолчанию.",
+      "balancedWhy": "«Среднее» включает настоящие тени и полноценные материалы, а «Высокое» добавляет объемное затенение и блум. На уровнях ниже «Ультра» встроенная подстраховка сглаживает внезапные просадки в жарких боях, поэтому «Баланс» остается плавным без лишней возни.",
+      "visualsTitle": "Лучшая картинка",
+      "visualsTagline": "Режим скриншотов для мощных настольных машин.",
+      "visualsWhy": "«Ультра» отрисовывает игру в самом высоком разрешении вашего экрана и с самым богатым освещением. Этот уровень также отключает встроенную подстраховку и доступен только на настольных компьютерах: телефоны и приложение ограничены уровнем «Высокое».",
+      "value50to70": "От 50 до 70%",
+      "value90to100": "От 90 до 100%",
       "value100": "100%",
-      "valueHighOrMedium": "High on a gaming PC, Medium on a laptop",
-      "valueOnOptional": "On (optional)",
-      "howHeading": "How the options behave",
-      "factDetectTitle": "The game tunes itself first",
-      "factDetectBody": "On your first launch the game reads your device and picks a sensible tier, from Low on a modest phone to Ultra on a strong desktop. Any choice you make yourself always wins.",
-      "factReloadTitle": "Two kinds of options",
-      "factReloadBody": "Graphics Quality and the Advanced pickers take effect after a reload, and the panel offers a Reload Now button when needed. Every other option applies the moment you change it.",
-      "factGovernorTitle": "A built-in safety net",
-      "factGovernorBody": "On every tier below Ultra, the game quietly thins grass, effects, and lighting for a moment when a big fight spikes, then restores them. Choosing Ultra tells it you would rather keep every detail.",
-      "advancedHeading": "The Advanced preset: mix your own",
-      "advancedBody": "Advanced starts from the High tier and unlocks four extra pickers, so you can spend your frames where you actually notice them: Terrain Detail, Foliage Density, Effects & Lighting, and Shadow Quality. Like Graphics Quality, they apply after a reload.",
-      "advancedMixes": "Two favorite mixes: keep Shadow Quality on High and set Effects & Lighting to Low for a crisp, glow-free look that runs light, or do the reverse to keep the bloom and soften the shadows.",
-      "tableHeading": "Every option, explained",
-      "colSetting": "Setting",
-      "colDoes": "What it does",
-      "colImpact": "FPS impact",
-      "impactNone": "None",
-      "impactLight": "Light",
-      "impactModerate": "Moderate",
-      "impactHeavy": "Heavy",
-      "rowGraphicsQuality": "The master switch. Each step changes resolution, shadows, materials, foliage, and lighting effects together. The biggest single difference you can make.",
-      "rowRenderQuality": "Draws the 3D world at a lower internal resolution and scales it up; the interface stays sharp. The strongest instant slider on weaker machines and high-resolution screens.",
-      "rowFieldOfView": "How much of the world fits on screen, from a zoomed 55 to a sweeping 100 degrees. A comfort choice; wider views draw slightly more.",
-      "rowBrightness": "Scene exposure, darker or brighter. Pure preference.",
-      "rowWeather": "Ambient rain and snow. Atmosphere only, and switching it off saves a little during storms.",
-      "rowBrowserEffects": "How fancy the interface itself is allowed to be: glass blur, glow, animated menus. Auto matches your browser; the 3D world is untouched either way.",
-      "rowTerrainDetail": "Rich, blended ground textures versus a simpler, faster terrain look.",
-      "rowFoliageDensity": "How far and how thick the grass grows around your character.",
-      "rowEffectsQuality": "Bloom, ambient occlusion, and how many torches and spells cast real light. The single biggest saving among the Advanced pickers.",
-      "rowShadowQuality": "Shadow crispness. Low keeps shadows but softens their edges.",
-      "rowFrostedPanels": "A frosted-glass blur behind windows. Pretty, and exactly the kind of effect a weaker browser feels; leave it off for the classic crisp look.",
-      "rowReduceMotion": "Removes interface animations so windows appear instantly. An accessibility option first, with a small performance bonus.",
-      "rowPerfOverlay": "An on-screen readout of FPS, frame time, and more. Turn it on while you tune this page, then hide it again.",
-      "tableFoot": "Looking for a draw-distance slider or an FPS cap? There is nothing to hunt for: view distance is part of each quality tier, and frame pacing follows your display.",
-      "mobileTitle": "On phones and tablets",
-      "mobileBody": "Mobile manages more for you: the game picks the tier, holds resolution a touch lower to protect battery and heat, and keeps the highest tiers desktop-only. The loadouts above still apply; phones simply top out at High."
+      "valueHighOrMedium": "«Высокое» на игровом ПК, «Среднее» на ноутбуке",
+      "valueOnOptional": "Вкл. (по желанию)",
+      "howHeading": "Как ведут себя настройки",
+      "factDetectTitle": "Игра сначала настраивается сама",
+      "factDetectBody": "При первом запуске игра оценивает ваше устройство и подбирает разумный уровень: от уровня «Низкое» на скромном телефоне до «Ультра» на мощном настольном компьютере. Но любой ваш собственный выбор всегда важнее автоматики.",
+      "factReloadTitle": "Два типа настроек",
+      "factReloadBody": "«Качество графики» и параметры пресета «Расширенное» вступают в силу после перезагрузки, и при необходимости панель предложит кнопку «Перезагрузить сейчас». Все остальные настройки применяются в тот же момент, как вы их меняете.",
+      "factGovernorTitle": "Встроенная подстраховка",
+      "factGovernorBody": "На любом уровне ниже «Ультра» игра при резком скачке нагрузки в большом бою незаметно и ненадолго упрощает траву, эффекты и освещение, а затем возвращает их обратно. Выбирая «Ультра», вы сообщаете ей, что предпочитаете сохранить каждую деталь.",
+      "advancedHeading": "Пресет «Расширенное»: соберите свое сочетание",
+      "advancedBody": "Пресет «Расширенное» начинается с уровня «Высокое» и открывает четыре дополнительных параметра, чтобы вы тратили кадры там, где действительно замечаете разницу: «Детализация местности», «Плотность растительности», «Эффекты и освещение» и «Качество теней». Как и «Качество графики», они применяются после перезагрузки.",
+      "advancedMixes": "Два любимых сочетания: оставьте «Качество теней» на уровне «Высокое», а «Эффекты и освещение» поставьте на «Низкое», чтобы получить четкую картинку без свечения, которая почти не нагружает машину; или сделайте наоборот, чтобы сохранить блум и смягчить тени.",
+      "tableHeading": "Все настройки с пояснениями",
+      "colSetting": "Параметр",
+      "colDoes": "Что делает",
+      "colImpact": "Влияние на FPS",
+      "impactNone": "Нет",
+      "impactLight": "Слабое",
+      "impactModerate": "Умеренное",
+      "impactHeavy": "Сильное",
+      "rowGraphicsQuality": "Главный переключатель. Каждая ступень одновременно меняет разрешение, тени, материалы, растительность и световые эффекты. Самая большая разница, которую можно получить одним действием.",
+      "rowRenderQuality": "Отрисовывает трехмерный мир в пониженном внутреннем разрешении и растягивает картинку; интерфейс остается четким. Самый действенный мгновенный ползунок на слабых машинах и экранах высокого разрешения.",
+      "rowFieldOfView": "Сколько мира помещается на экране: от приближенных 55 до размашистых 100 градусов. Вопрос удобства; широкий обзор нагружает отрисовку чуть сильнее.",
+      "rowBrightness": "Экспозиция сцены, темнее или светлее. Чистое дело вкуса.",
+      "rowWeather": "Фоновые дождь и снег. Только атмосфера; отключение немного экономит ресурсы в грозу.",
+      "rowBrowserEffects": "Насколько нарядным разрешено быть самому интерфейсу: размытие в стиле стекла, свечение, анимированные меню. Режим «Авто» подстраивается под ваш браузер; трехмерный мир в любом случае не затрагивается.",
+      "rowTerrainDetail": "Богатые, плавно смешанные текстуры земли либо более простой и быстрый вид местности.",
+      "rowFoliageDensity": "Как далеко и как густо растет трава вокруг вашего персонажа.",
+      "rowEffectsQuality": "Блум, объемное затенение и то, сколько факелов и заклинаний отбрасывают настоящий свет. Самая большая экономия среди параметров пресета «Расширенное».",
+      "rowShadowQuality": "Четкость теней. Уровень «Низкое» сохраняет тени, но смягчает их края.",
+      "rowFrostedPanels": "Размытие в стиле матового стекла позади окон. Красиво, и именно такие эффекты первым чувствует слабый браузер; оставьте его выключенным ради классической четкой картинки.",
+      "rowReduceMotion": "Убирает анимацию интерфейса, и окна появляются мгновенно. В первую очередь это настройка специальных возможностей, но она дает и небольшой прирост производительности.",
+      "rowPerfOverlay": "Экранная сводка с FPS, временем кадра и другими показателями. Включите ее, пока подбираете настройки с этой страницы, а затем снова скройте.",
+      "tableFoot": "Ищете ползунок дальности прорисовки или ограничитель FPS? Искать нечего: дальность обзора входит в каждый уровень качества, а темп кадров подстраивается под ваш экран.",
+      "mobileTitle": "На телефонах и планшетах",
+      "mobileBody": "На мобильных устройствах игра берет больше на себя: сама выбирает уровень, держит разрешение чуть ниже, чтобы беречь батарею и не перегревать устройство, и оставляет самые высокие уровни только настольным компьютерам. Наборы выше по-прежнему применимы, просто телефоны ограничены уровнем «Высокое»."
     },
     "combat": {
       "intro": "Бой подчиняется привычным правилам классических MMO. Чтобы хорошо играть, изучать их вовсе не обязательно, это лишь общее представление о том, как устроены сражения.",
@@ -2113,12 +2092,12 @@ export const ru_RU: EnTranslations = {
       "charge": "Рывок к далекому врагу, открывающий бой коротким оглушением.",
       "rend": "Открывает кровотечение, которое изматывает цель со временем.",
       "thunder_clap": "Бьет по всем вокруг вас и замедляет их атаки.",
-      "seal_of_righteousness": "Наполняет ваши удары священным уроном, который затем тратится правосудием.",
+      "seal_of_righteousness": "Наполняет ваши удары священным уроном, который затем тратится Приговором.",
       "holy_light": "Ровное, ощутимое лечение, чтобы долечить союзника или себя.",
       "devotion_aura": "Длительное усиление на себя, которое повышает броню, так что удары проходят мягче.",
       "judgement": "Тратит вашу активную печать, чтобы ударить врага с короткой дистанции.",
       "blessing_of_might": "Повышает силу атаки дружественной цели, удобно наложить перед началом боя.",
-      "divine_protection": "Быстрый священный щит, поглощающий урон, когда становится туго.",
+      "divine_protection": "Быстрый защитный оберег, поглощающий урон, когда становится туго.",
       "raptor_strike": "Тяжелый удар в ближнем бою на случай, когда кто-то сократил с вами дистанцию.",
       "aspect_of_the_hawk": "Стойка, которую вы держите постоянно, чтобы повысить силу дальних атак.",
       "serpent_sting": "Поражает цель ядом, наносящим урон силами природы со временем.",
@@ -2150,7 +2129,7 @@ export const ru_RU: EnTranslations = {
       "conjure_water": "Создает напитки, восстанавливающие ману, чтобы вы могли пополнить ее между боями.",
       "conjure_food": "Создает пищу, которая восстанавливает здоровье, когда вы садитесь поесть.",
       "shadow_bolt": "Стрела тьмы, которую вы запускаете в цель, ваш основной удар.",
-      "summon_imp": "Призывает беса, который издалека швыряет в врагов огненные стрелы.",
+      "summon_imp": "Призывает Уголька, который издалека швыряет в врагов огненные стрелы.",
       "demon_skin": "Длительное усиление на себя, которое укрепляет кожу и добавляет броню.",
       "immolate": "Поджигает цель: наносит урон при наложении и оставляет затяжной ожог.",
       "corruption": "Поражает цель порчей, которая наносит урон, пока вы заняты другим.",
@@ -2182,7 +2161,7 @@ export const ru_RU: EnTranslations = {
         "old_greyjaw": "Покрытый шрамами старый волк, которого не удержал ни один капкан. На него списывают трёх гончих и руку конюшонка. Он охотится в глубоких лесах в одиночку и звереет тем сильнее, чем дольше тянется схватка.",
         "grubjaw": "Болотный тролль, столь жадный, что прочие тролли не станут рыть рядом с ним. Поговаривают, будто он сожрал двух последних вьючных мулов одного торговца, прямо со сбруей.",
         "shardlord_kazzix": "Грозовой элементаль, обретший плечи. Он бродит по дальним утёсам над Бурехребтом, и его сердечный осколок стоит того, чтобы бросить вызов молниям.",
-        "mirejaw_frenzy": "Болотный мурлок, что посреди боя взвинчивает себя до бешеной ярости, самый громкий из шумной, оберегающей свою территорию стаи.",
+        "mirejaw_frenzy": "Болотный мадфин, что посреди боя взвинчивает себя до бешеной ярости, самый громкий из шумной, оберегающей свою территорию стаи.",
         "gravecaller_cultist": "Облачённые в рясы прислужники культа смерти, чьи труды оскверняют могилы от Долины до самых вершин. Там, где они собираются, мёртвым нет покоя."
       }
     },
@@ -2196,12 +2175,12 @@ export const ru_RU: EnTranslations = {
         "desc": "Плетущие паутину и ядовитые твари, что гнездятся в тёмных, запутанных местах. Охотники могут приручать их так же, как зверей."
       },
       "mudfin": {
-        "name": "Мурлоки",
+        "name": "Мадфины",
         "desc": "Земноводные обитатели топей, что кишат на мелководье шумными, оберегающими свою территорию стаями."
       },
       "burrower": {
-        "name": "Кобольды",
-        "desc": "Землекопы со свечками на головах, что наводняют шахты и норы, яростно охраняя свою руду."
+        "name": "Землекопы",
+        "desc": "Землекопы, покрытые коркой грязи, что наводняют шахты и норы, яростно охраняя свою руду."
       },
       "humanoid": {
         "name": "Гуманоиды",
@@ -2230,14 +2209,14 @@ export const ru_RU: EnTranslations = {
     },
     "worldPage": {
       "heading": "Мир",
-      "intro": "Cryptic Realm - это единый цельный край, который вы пересекаете пешком, три зоны, протянувшиеся с юга на север. Здесь нет быстрых перемещений, так что дорога - это часть приключения.",
+      "intro": "World of ClaudeCraft - это единый цельный край, который вы пересекаете пешком, три зоны, протянувшиеся с юга на север. Здесь нет быстрых перемещений, так что дорога - это часть приключения.",
       "hub": "Опорная база",
       "mapHeading": "Дорога на север",
       "mapSub": "Три зоны, с юга на север, каждая на ступень выше по уровню. Следуйте за цепочкой заданий, и сама земля проведет вас от долины к вершинам.",
       "places": "Примечательные места",
       "residents": "Кого вы встретите",
       "valeBlurb": "Зеленая стартовая долина, где новые герои набираются опыта на волках и разбойниках вокруг города Восточный Брод.",
-      "marshBlurb": "Утонувший край тумана и руин. Мурлоки кишат на мелководье, а под водой шевелится нечто древнее, за которым наблюдают из города-моста Топкомостье.",
+      "marshBlurb": "Утонувший край тумана и руин. Мадфины кишат на мелководье, а под водой шевелится нечто древнее, за которым наблюдают из города-моста Топкомостье.",
       "peaksBlurb": "Истерзанные ветрами хребты и старые рудники, поднимающиеся к самым холодным и высоким опасностям королевства, что удерживает застава Высокий Дозор.",
       "valeGreeting": "Держите клинок наготове. Долина уже не та, что прежде.",
       "valeGreeter": "Маршал Редбрук, Истврук",
@@ -2245,9 +2224,9 @@ export const ru_RU: EnTranslations = {
       "marshGreeter": "Страж Фенвик, Топкомостье",
       "peaksGreeting": "Две сотни лет держится эта стена. На моём посту она не падёт, но стонет.",
       "peaksGreeter": "Капитан Тессали, Хайвотч",
-      "valePlaceNotes": "Eastbrook — ваша первая опорная база. Wolf Run и Boar Meadow — спокойные охотничьи угодья; Mirror Lake — тихая вода для рыбалки; Webwood и Copper Dig прячут пауков и жадных до руды землекопов; Bandit Camp и Fallen Chapel хранят работу погрубее; Reliquary Hill ведёт вниз, в Collapsed Reliquary — первую вылазку королевства; а Brightwood Glade — тихая солнечная роща на севере.",
-      "marshPlaceNotes": "Топкомостье стережёт единственную сухую дорогу. Хищные камыши и Глубокотопкие мели кишат болотными тварями и мурлоками, Вдовья чаща густо оплетена паутиной, Утонувшая часовня и Курганы троллей хранят опасности постарше, Стан Зовущих Могилу, это окопавшийся культ, а Затонувший бастион, это сердце топи в инстансе.",
-      "peaksPlaceNotes": "Хайвотч держит стену. Хребет Преследователя и Глубокоскальные норы принадлежат горным котам и кобольдам, Огрские предгорья и Военный лагерь Дрогмара, наёмным громилам, Бурехребет трещит от элементалей, а под ним сияет Глиммермир, Шатры Культа Вирма и Поля ревенантов кольцом окружают высоты культа, а на самом их пике, Святилище Могильного Вирма.",
+      "valePlaceNotes": "Истбрук, ваша первая опорная база. Волчья тропа и Кабаний луг, это спокойные охотничьи угодья; Зеркальное озеро, это тихая вода для рыбалки; Сейблвеб и Медный карьер прячут пауков и жадных до руды землекопов; Лагерь бандитов и Павшая часовня хранят работу погрубее; Холм реликвария ведёт вниз, в Обрушившийся реликварий, первую вылазку мира; а Поляна Светлолесья, это тихая солнечная роща на севере.",
+      "marshPlaceNotes": "Топкомостье стережёт единственную сухую дорогу. Хищные камыши и Глубокотопкие мели кишат болотными тварями и мадфинами, Вдовья чаща густо оплетена паутиной, Утонувшая часовня и Курганы троллей хранят опасности постарше, Стан Зовущих Могилу, это окопавшийся культ, а Затонувший бастион, это сердце топи в инстансе.",
+      "peaksPlaceNotes": "Хайвотч держит стену. Хребет Преследователя и Глубокоскальные норы принадлежат горным котам и землекопам, Огрские предгорья и Военный лагерь Дрогмара, наёмным громилам, Бурехребет трещит от элементалей, а под ним сияет Глиммермир, Шатры Культа Вирма и Поля ревенантов кольцом окружают высоты культа, а на самом их пике, Святилище Могильного Вирма.",
       "gladeTitle": "Тихий уголок: Поляна Брайтвуда",
       "gladeBody": "Не всякая история в Vale рассказывает о мёртвых. На севере солнечная роща под названием Brightwood Glade живёт в собственном, более мягком ритме: сплошь тихие тропы и пятнистый свет под ветвями. Это спокойный контрапункт следу, по которому вы идёте, и его стоит увидеть, когда дорога даст время побродить."
     },
@@ -2282,7 +2261,7 @@ export const ru_RU: EnTranslations = {
       "sagaValeTitle": "Долина: имя на печати",
       "sagaValeBody": "В Иствруке мёртвым нет покоя, а печать за этим принадлежит секте, что давно считалась сгинувшей. Проследите её до Зовущего Могилу, трудящегося в крипте часовни, и его собственные бумаги укажут вам путь к топи на севере.",
       "sagaMarshTitle": "Топь: подать из душ",
-      "sagaMarshBody": "В Мирефене утопления, это не случайность. Кто-то наполняет топь, точно копилку для подати, поднимая покорных мертвецов из каждого путника, что забрала вода. Идите по приказам вверх по цепочке к Зовущему Туман в утонувшем бастионе, чьи последние слова называют нечто ещё более древнее, что шевелится под пиками.",
+      "sagaMarshBody": "В Мирефене утопления, это не случайность. Кто-то наполняет топь, точно копилку для подати, поднимая покорных мертвецов из каждого путника, что забрала вода. Идите по приказам вверх по цепочке к Вязателю Тумана в утонувшем бастионе, чьи последние слова называют нечто ещё более древнее, что шевелится под пиками.",
       "sagaPeaksTitle": "Пики: для чего была подать",
       "sagaPeaksBody": "На Thornpeak весь замысел проясняется. Каждая душа, украденная ещё со времён Vale, была податью, что лилась на мрачное дело культа в сердце горы. След, что начался во дворе часовни, кончается здесь — в спуске на пятерых игроков навстречу той руке, что стоит за всем этим. А кто ждёт на самом дне, мы дадим вам узнать самим.",
       "sideTitle": "Нити в стороне от главной дороги",
@@ -2385,38 +2364,38 @@ export const ru_RU: EnTranslations = {
       "waveGoldBody": "Средняя волна: двусторонние сочетания, в которых ваша сборка начинает обретать форму и звучать в полную силу.",
       "wavePrismaticTitle": "Радужный",
       "wavePrismaticBody": "Финальная волна: определяющие сборку, выжигающие экран всплески, которым положено казаться нелепо мощными в самом лучшем смысле.",
-      "yumiHeading": "Protect Yumi",
-      "yumiBody": "Protect Yumi is a team objective mode played in a maze: each side guards its own cat familiar while hunting the other. Every so often both cats blink to new corners of the maze, so the fight swings between defending, hunting, and racing to find them again. Queue as three versus three or five versus five; falling in battle only benches you for a moment.",
+      "yumiHeading": "Защитите Yumi",
+      "yumiBody": "Protect Yumi: командный режим с целью, который разыгрывается в лабиринте. Каждая команда защищает свою кошку-фамильяра и охотится на чужую. Время от времени обе кошки переносятся в новые углы лабиринта, и бой качается между защитой, охотой и поиском. Очередь на 3 на 3 или 5 на 5; павший лишь ненадолго садится на скамью.",
       "powerupsTitle": "Усиления на ринге",
       "powerupsBody": "Прямо посреди схватки на арену падают и светящиеся сферы, доступные тому, кто доберётся до них первым. Они нарочно сделаны вызывающе яркими и держатся лишь короткий миг: Демон скорости дарит вспышку слепящей прыти, Колосс раздувает вас в неповоротливого великана, Лунные ботинки превращают шаг в прыжок при пониженной гравитации, а Берсерк дарует внезапный прилив неистовства.",
       "ladderHeading": "Восхождение по рейтингу",
       "ladderBody": "Рейтинговые бои отслеживают ваш ранг со временем. Загляните в таблицу лидеров, чтобы увидеть свое место и тех, кто держит вершину королевства."
     },
     "valeCupPage": {
-      "heading": "The Vale Cup",
-      "intro": "Boarball at the Sowfield: pick a banner, pick a role, and kick a stuffed boar hide past a keeper for the Copper Pail. No blood, no loot, just the roar of the stands.",
-      "loreHeading": "Boarball and the harvest truce",
-      "loreOldSow": "Long before the dead woke, Eastbrook's farmhands played boarball on the stubble fields after harvest: two mobs, one boar's hide stuffed with straw, and two wagon gates dragged to either end of the green. The first ball, the Old Sow, hangs bronzed above the tavern hearth.",
-      "loreTruce": "When the Ashen Coliseum began sanctioning war games, Marshal Redbrook answered with something gentler: a standing harvest truce on the old green. The wagon gates became goalposts, the green got walls, stands, and a name, the Sowfield, and the prize was always the same dented milk pail the winners drank from: the Copper Pail.",
-      "howHeading": "How to play",
-      "howQueue": "Queue from anywhere through the Vale Cup window, or talk to Groundskeeper Bram at the Sowfield gate. Pick a bracket from one-a-side up to five-a-side, a banner nation, and a sport role; queue solo or bring your party.",
-      "howMatch": "On kickoff your class kit is swapped for a sport kit and restored exactly afterward. Kicks aim at the ground reticle, the ball banks off the boards, and dribbling is just running with the ball. Score more goals than the other side before full time; a draw goes to golden goal.",
-      "howTruce": "Nobody bleeds at the Sowfield: tackles tumble, nothing hurts, and pets sit the match out.",
-      "spectateBody": "One match plays at a time at the stadium, and anyone can walk up and watch from the stands.",
-      "nationsHeading": "The eight banner nations",
-      "nationsBody": "Every team plays under a banner. The captain picks the nation, and if both sides fly the same one, the away side plays the inverted palette.",
-      "nationVale": "Green and gold, flying the wheat sheaf: the home side, farmhands to the bone.",
-      "nationMirefen": "Teal and grey under the heron: patient, long-legged, never hurried.",
-      "nationThornpeak": "Ice blue and white under the mountain peak: sure-footed and stubborn.",
-      "nationColiseum": "Red and black with crossed swords: they play like it is still a war game.",
-      "nationChoir": "Pale blue and silver under the bell: eerie, precise, and very quiet.",
-      "nationOgre": "Orange and umber behind the fist: shoulder-first and proud of it.",
-      "nationMoon": "Violet and silver under the crescent: night players, light on their feet.",
-      "nationCopperdig": "Copper and brown with the pickaxe: diggers who never stop running.",
-      "rolesHeading": "Sport roles",
-      "rolesBody": "Your role decides the kit you carry onto the pitch. Everyone kicks; the rest is temperament.",
-      "rewardsHeading": "Truce rules",
-      "rewardsBody": "Truce rules mean no experience and no loot: a decided match counts toward your record and the winners board, and daily-reward points come with it. Deserting a match benches your slot, and the Groundskeeper remembers."
+      "heading": "Кубок Долины",
+      "intro": "Кабанбол на Свином поле: выбери знамя, выбери роль и загони набитую соломой кабанью шкуру мимо вратаря ради Медного ведра. Ни крови, ни добычи, только рёв трибун.",
+      "loreHeading": "Кабанбол и жатвенное перемирие",
+      "loreOldSow": "Задолго до того, как проснулись мёртвые, батраки Иструка играли в кабанбол на стерне после жатвы: две ватаги, одна кабанья шкура, набитая соломой, и двое ворот от повозок, притащенных на края луга. Первый мяч, Старая Свинья, покрыт бронзой и висит над очагом таверны.",
+      "loreTruce": "Когда Пепельный Колизей начал устраивать военные игрища, маршал Редбрук ответил чем-то более мягким: объявил на старом лугу постоянное жатвенное перемирие. Ворота повозок стали штангами, луг получил стены, трибуны и имя, Свиное поле, а призом всегда было одно и то же мятое молочное ведро, из которого пили победители: Медное ведро.",
+      "howHeading": "Как играть",
+      "howQueue": "Вставайте в очередь откуда угодно через окно Кубка Долины или поговорите со смотрителем поля Брамом у ворот Свиного поля. Выберите формат от один на один до пять на пять, знамённую нацию и роль; идите в одиночку или с группой.",
+      "howMatch": "С началом матча ваш классовый набор заменяется спортивным и после точно восстанавливается. Удары целятся наземным прицелом, мяч отскакивает от бортов, а вести мяч значит просто бежать вместе с ним. Забейте больше соперника до финального свистка; ничья ведёт к золотому голу.",
+      "howTruce": "На Свином поле никто не проливает кровь: подкаты лишь опрокидывают, ничто не ранит, а питомцы пережидают матч в стороне.",
+      "spectateBody": "На стадионе идёт только один матч за раз, и любой может подойти и смотреть с трибун.",
+      "nationsHeading": "Восемь знамённых наций",
+      "nationsBody": "Каждая команда играет под знаменем. Капитан выбирает нацию, а если обе стороны подняли одно знамя, гости играют в инвертированных цветах.",
+      "nationVale": "Зелёный и золотой, сноп пшеницы на знамени: хозяева поля, батраки до мозга костей.",
+      "nationMirefen": "Бирюзовый и серый под цаплей: терпеливы, длинноноги, никогда не спешат.",
+      "nationThornpeak": "Ледяная синь и белый под горной вершиной: твёрдый шаг и упрямый нрав.",
+      "nationColiseum": "Красный и чёрный со скрещёнными мечами: играют так, будто это всё ещё война.",
+      "nationChoir": "Бледно-голубой и серебро под колоколом: жуткие, точные и очень тихие.",
+      "nationOgre": "Оранжевый и умбра за кулаком: плечом вперёд, и этим гордятся.",
+      "nationMoon": "Фиолетовый и серебро под полумесяцем: ночные игроки, лёгкие на ногу.",
+      "nationCopperdig": "Медь и бурый с киркой: рудокопы, которые не перестают бегать.",
+      "rolesHeading": "Игровые роли",
+      "rolesBody": "Роль определяет набор, который вы выносите на поле. Бить по мячу умеют все; остальное дело характера.",
+      "rewardsHeading": "Правила перемирия",
+      "rewardsBody": "Правила перемирия означают: ни опыта, ни добычи. Результативный матч идёт в ваш счёт и на доску победителей, а с ним приходят очки ежедневных наград. Дезертирство оставляет ваше место пустым, и смотритель поля помнит."
     },
     "wishPage": {
       "heading": "Что бы я хотел знать заранее",
@@ -2503,33 +2482,33 @@ export const ru_RU: EnTranslations = {
       "cosmeticsApply": "Задайте текущий облик в ряду внешнего вида на экране персонажа и свободно переключайтесь между всем, что вы открыли."
     },
     "professions": {
-      "intro": "Beyond combat and quests, the world rewards you for working the land and the forge: gathering raw materials, turning them into gear at the crafting stations of ten different trades, and settling into an identity as one of the ten archetypes those trades represent.",
-      "gatherTitle": "Gathering: Mining, Logging, and Herbalism",
-      "gatherIntro": "Three gathering trades let you pull raw materials straight out of the world: Mining strikes ore and stone from veins, Logging fells timber from stands of trees, and Herbalism collects herbs and plants growing wild. Each is tracked separately, so working one never slows your progress in another.",
-      "gatherWhatTitle": "Resource nodes",
-      "gatherWhatBody": "Ore veins, wood stands, and herb patches are placed out in the zones as visible, unowned fixtures. Walk up to one and interact with it to harvest whatever it holds. Once you have harvested a node, it needs time to recover before you personally can harvest it again, though it never blocks anyone else: another player can harvest the very same node in the meantime.",
-      "gatherProficiencyTitle": "Proficiency and material quality",
-      "gatherProficiencyBody": "Every successful harvest builds your proficiency in that gathering trade. A higher proficiency shifts what you pull out of a node toward rarer grades of material, from common on up, though the rarest grades stay rare even at high proficiency. More practice never hurts your odds, it only ever improves them.",
-      "gatherToolsTitle": "Tools of the trade",
-      "gatherToolsBody": "Vendors sell basic tools for each gathering trade, and better ones can be crafted, so working a resource node is meant to feel more capable as you gear up for it rather than staying static. Higher-tier tools are the intended way to unlock access to richer nodes and to work them more efficiently over a long session.",
-      "craftTitle": "The ten crafts",
-      "craftIntro": "Ten crafting trades turn gathered materials into finished gear and goods: Armorcrafting, Weaponcrafting, and Jewelcrafting shape raw matter into wearable gear; Alchemy and Engineering are driven by trial and error; Cooking, Inscription, and Enchanting each touch other crafts' output; Tailoring and Leatherworking work from exact patterns. Together they form a wheel, with each craft sitting next to two neighbors and opposite one other.",
-      "craftRingTitle": "A wheel of specialties",
-      "craftRingBody": "The ten crafts are arranged in a fixed ring, and where a craft sits on that ring matters: crafts next to each other on the wheel share more in common with each other than crafts on opposite sides do. Committing to one craft is meant to feel like joining a family of related trades, not picking an isolated skill.",
-      "craftRecipesTitle": "Recipes and reagents",
-      "craftRecipesBody": "Every craft has its own recipes, each calling for specific reagents you gather or buy. The most basic recipes in each craft ask for nothing but common materials and are craftable from the very start, so you can begin working a trade the moment you pick it up rather than waiting to unlock it.",
-      "craftMasteryTitle": "Skill and mastery",
-      "craftMasteryBody": "Crafting successfully builds skill in that trade, and richer recipes are gated behind higher skill: the basic recipes are open to everyone, while progressively more advanced ones ask for progressively more mastery to attempt. Growing your skill in a craft is the path from simple starter goods to its more ambitious recipes.",
-      "craftComboTitle": "Combination recipes",
-      "craftComboBody": "Beyond a single craft's own recipe list, the wheel also supports combination recipes that call on two neighboring crafts at once, rewarding a character (or a pair of trading partners) who has invested in adjacent trades on the ring rather than one in isolation.",
-      "archetypeTitle": "The ten archetypes",
-      "archetypeIntro": "Each of the ten crafts also stands for an archetype, a broader identity you can adopt beyond just working that trade. Your active archetype is a single choice at a time, not a checklist: you carry one, and can change which one later if you choose to.",
-      "archetypeChooseTitle": "Choosing your archetype",
-      "archetypeChooseBody": "You declare your first archetype through an early, zone one story quest that formally accepts you into that identity. Until you complete that quest, you have not yet chosen an archetype at all.",
-      "archetypeSwitchTitle": "Changing your mind",
-      "archetypeSwitchBody": "Having declared an archetype once does not lock you into it forever. Changing to a different archetype means first completing a repeatable \"make amends\" quest for your old one, and each time you switch, the amends expected of you the next time grow a little steeper, so switching stays meaningful rather than costless.",
-      "archetypeIdentityTitle": "What your archetype means",
-      "archetypeIdentityBody": "Your active archetype is a statement about who your character is in the world, recognized in how others and the world address you. The exact rewards and recognition that come with it are still being finalized; check back as the system fills in."
+      "intro": "Помимо боя и заданий, мир вознаграждает и тех, кто трудится на земле и у горна: собирайте сырье, превращайте его в снаряжение на ремесленных станциях десяти разных ремесел и обретайте одну из десяти призваний, которые эти ремесла олицетворяют.",
+      "gatherTitle": "Сбор: горное дело, лесозаготовка и травничество",
+      "gatherIntro": "Три ремесла сбора позволяют добывать сырье прямо из мира: горное дело извлекает руду и камень из жил, лесозаготовка валит древесину в рощах, а травничество собирает дикорастущие травы и растения. Каждое отслеживается отдельно, так что развитие в одном никогда не замедляет прогресс в другом.",
+      "gatherWhatTitle": "Узлы ресурсов",
+      "gatherWhatBody": "Рудные жилы, рощи и травяные поляны размещены по зонам как видимые, ничейные объекты. Подойдите и взаимодействуйте с узлом, чтобы собрать то, что в нем есть. После сбора узлу требуется время на восстановление, прежде чем вы сможете собрать его снова, но это никогда не мешает другим: другой игрок может собрать тот же узел в это время.",
+      "gatherProficiencyTitle": "Мастерство и качество материалов",
+      "gatherProficiencyBody": "Каждый успешный сбор повышает ваше мастерство в этом ремесле. Более высокое мастерство смещает то, что вы получаете из узла, в сторону более редких сортов материала, начиная с обычного, хотя самые редкие сорта остаются редкими даже при высоком мастерстве. Практика никогда не ухудшает шансы, только улучшает их.",
+      "gatherToolsTitle": "Инструменты ремесла",
+      "gatherToolsBody": "Торговцы продают базовые инструменты для каждого ремесла сбора, а лучшие можно скрафтить, так что работа с узлом ресурсов должна ощущаться как постепенный рост возможностей по мере снаряжения, а не топтание на месте. Инструменты более высокого уровня задуманы как способ открыть доступ к более богатым узлам и работать с ними эффективнее в течение долгой сессии.",
+      "craftTitle": "Десять ремесел",
+      "craftIntro": "Десять ремесел превращают собранные материалы в готовое снаряжение и вещи: бронеделие, оружейное дело и ювелирное дело придают сырью форму носимого снаряжения; алхимия и инженерия основаны на пробах и ошибках; кулинария, начертание и зачарование каждое дорабатывает продукцию других ремесел; портняжное дело и кожевничество работают по точным выкройкам. Вместе они образуют колесо, в котором каждое ремесло соседствует с двумя другими и противостоит одному.",
+      "craftRingTitle": "Колесо специальностей",
+      "craftRingBody": "Десять ремесел расположены на фиксированном колесе, и то, где ремесло находится на этом колесе, имеет значение: соседние на колесе ремесла имеют между собой больше общего, чем ремесла на противоположных сторонах. Посвятить себя одному ремеслу должно ощущаться как присоединение к семье родственных занятий, а не выбор изолированного навыка.",
+      "craftRecipesTitle": "Рецепты и реагенты",
+      "craftRecipesBody": "У каждого ремесла свои рецепты, каждый из которых требует конкретных реагентов, которые вы собираете или покупаете. Самые базовые рецепты каждого ремесла требуют лишь обычных материалов и доступны с самого начала, так что вы можете начать работать в ремесле сразу же, как только его освоите, не дожидаясь разблокировки.",
+      "craftMasteryTitle": "Навык и мастерство",
+      "craftMasteryBody": "Успешное изготовление повышает ваш навык в этом ремесле, а более богатые рецепты открываются за более высоким навыком: базовые рецепты доступны всем, а чем дальше, тем более продвинутые требуют все большего мастерства для попытки. Развитие навыка в ремесле — это путь от простых стартовых изделий к его более амбициозным рецептам.",
+      "craftComboTitle": "Комбинированные рецепты",
+      "craftComboBody": "Помимо собственного списка рецептов одного ремесла, колесо также поддерживает комбинированные рецепты, требующие сразу двух соседних ремесел, вознаграждая персонажа (или пару торговых партнеров), вложившихся в соседние ремесла на колесе, а не в одно изолированное.",
+      "archetypeTitle": "Десять призваний",
+      "archetypeIntro": "Каждое из десяти ремесел также олицетворяет призвание — более широкую идентичность, которую можно принять помимо простого занятия этим ремеслом. Ваше текущее призвание — это единственный выбор в один момент времени, а не список: вы носите одно, и при желании можете позже сменить его на другое.",
+      "archetypeChooseTitle": "Выбор призвания",
+      "archetypeChooseBody": "Вы заявляете свое первое призвание через раннее сюжетное задание в первой зоне, которое официально принимает вас в эту идентичность. Пока вы не выполните это задание, у вас еще нет никакого призвания.",
+      "archetypeSwitchTitle": "Перемена решения",
+      "archetypeSwitchBody": "Однажды заявленное призвание не привязывает вас к нему навсегда. Смена на другое призвание означает сначала выполнение повторяемого задания на «искупление» для прежнего, и с каждой сменой требуемое в следующий раз искупление становится немного тяжелее, так что смена всегда остается значимой, а не бесплатной.",
+      "archetypeIdentityTitle": "Что значит ваше призвание",
+      "archetypeIdentityBody": "Ваше текущее призвание — это заявление о том, кем является ваш персонаж в этом мире, отражающееся в том, как к вам обращаются другие и сам мир. Конкретные награды и признание, связанные с ним, еще уточняются; загляните позже, когда система будет доработана."
     },
     "economy": {
       "intro": "Монеты смазывают весь мир: на них покупают снаряжение, припасы и походный набор, и они переходят из рук в руки между игроками. Всё это приходит к вам просто по ходу игры, так что считайте эту страницу картой того, откуда берутся и куда уходят ваши деньги.",
@@ -2539,10 +2518,10 @@ export const ru_RU: EnTranslations = {
       "vendorsBody": "Города и заставы усеяны торговцами, у каждого из которых своё дело. Снабженцы держат еду и питьё, оружейники и бронники — снаряжение, а квартирмейстер хранит практичный походный набор. Подойдите к одному из них, чтобы увидеть, что он продаёт.",
       "marksTitle": "Вторая валюта: Метки Вылазок",
       "marksBody": "Монеты, это не единственное, что вы откладываете. Вылазки приносят Метки Вылазок, отдельную валюту, которую вы тратите только у хранителя вылазок, на улучшения спутницы и снаряжение, которого не найти больше нигде. С вашими монетами они никогда не смешиваются.",
-      "bankTitle": "The bank",
-      "bankBody": "Every hub town keeps a branch of The Gilded Strongbox, the banking house of the realm. Speak to the bursar there to open your vault, a private store of room beyond your bags that your character keeps for life. Whatever you leave with them waits safely, whichever branch you visit next.",
-      "bankHow": "With the vault open, click an item in your bags to deposit it and click it in the vault to take it back. The vault holds goods only, never coin, and quest items stay with you. When your bags fill up mid-journey, one button sweeps all your crafting materials in at once.",
-      "bankSlots": "A fresh vault starts small and grows with you. The bursar sells further slots for coin at ever-steeper prices, and playing online earns bonus room on top, for things like a verified email, linked accounts, and friends you bring into the game.",
+      "bankTitle": "Банк",
+      "bankBody": "В каждом узловом городе есть отделение Золочёного сундука, банкирского дома этих земель. Поговорите с казначеем, и он откроет ваше хранилище: личный запас места помимо сумок, который остаётся за персонажем навсегда. Всё, что вы оставили, будет спокойно ждать вас в любом отделении.",
+      "bankHow": "Пока хранилище открыто, щёлкните предмет в сумках, чтобы положить его, и щёлкните предмет в хранилище, чтобы забрать обратно. Хранилище принимает только вещи, но не монеты, а квестовые предметы всегда остаются при вас. Если сумки переполнились в дороге, отдельная кнопка разом убирает все ремесленные материалы.",
+      "bankSlots": "Свежее хранилище невелико, но растёт вместе с вами. Казначей продаёт дополнительные ячейки за монеты, и каждая следующая ступень дороже прежней. Игра онлайн приносит и бонусное место: за подтверждённую почту, привязанные аккаунты и друзей, которых вы привели в игру.",
       "buyingTitle": "Покупка и продажа",
       "buyingBody": "Встаньте рядом с торговцем, чтобы открыть его окно. Вы можете купить всё, что у него в запасе, если хватит средств, и продать за монеты почти всё из своих сумок. Если вы продали что-то по ошибке, торговец придержит ваши недавние продажи, чтобы вы могли выкупить их обратно.",
       "junkTitle": "Избавление от хлама",
@@ -2656,7 +2635,7 @@ export const ru_RU: EnTranslations = {
   },
   "editor": {
     "appTitle": "Редактор карт",
-    "docTitle": "Редактор карт - Cryptic Realm",
+    "docTitle": "Редактор карт - World of ClaudeCraft",
     "untitledMap": "Карта без названия",
     "playtestPlayerName": "Картограф",
     "topbar": {
@@ -2698,9 +2677,9 @@ export const ru_RU: EnTranslations = {
       "undoCountTitle": "Можно отменить {count} шагов (Ctrl+Z отмена, Ctrl+Y повтор)",
       "autosave": "Автосохранение",
       "autosaveTitle": "Автоматически сохранять карту, пока есть несохраненные изменения. Отключается само при ошибке сохранения.",
-      "undo": "Undo",
+      "undo": "Отменить",
       "undoTitle": "Отменить последнее изменение (Ctrl+Z)",
-      "redo": "Redo",
+      "redo": "Повторить",
       "redoTitle": "Вернуть отмененное изменение (Ctrl+Y)",
       "offline": "Офлайн",
       "offlineTitle": "Вы не вошли: карты сохраняются только в этом браузере. Войдите в игру, чтобы сохранять онлайн.",
@@ -3123,8 +3102,8 @@ export const ru_RU: EnTranslations = {
     "account": "Аккаунт",
     "logout": "Выйти",
     "donate": "Пожертвовать",
-    "whitepaper": "Белая книга",
-    "contributions": "Вклад"
+    "whitepaper": "White Paper",
+    "contributions": "Contributions"
   },
   "stats": {
     "title": "Статус игрового мира",
@@ -3133,9 +3112,9 @@ export const ru_RU: EnTranslations = {
     "realmName": "Название игрового мира"
   },
   "footer": {
-    "copyright": "2026 Cryptic Realm",
-    "githubLink": "/contributions.html",
-    "githubLabel": "Contributions",
+    "copyright": "2026 World of ClaudeCraft",
+    "githubLink": "https://github.com/levy-street/world-of-claudecraft",
+    "githubLabel": "Проект с открытым исходным кодом",
     "whitepaper": "Белая книга",
     "terms": "Условия использования",
     "privacy": "Политика конфиденциальности",
@@ -3163,16 +3142,16 @@ export const ru_RU: EnTranslations = {
     "empty": "Обновлений пока нет: загляните позже.",
     "prerelease": "Предварительная версия",
     "viewOnGithub": "Открыть на GitHub",
-    "openLink": "Otkryt",
-    "officialLog": "Ofitsialnyi zhurnal",
-    "alphaBetaTitle": "Ritm alpha, beta i public realm",
-    "alphaBetaBody": "Alpha-testery poluchayut bolshe platiny, potomu chto personazhi sbrosyatsya kazhdye dve nedeli. Beta prodvigaetsya ezhemesyachno posle proverki.",
-    "tokenTitle": "$CR i polza platiny",
-    "tokenBody": "$CR eto Solana SPL token Cryptic Realm. Platina svyazyvaet kosmetiku, doma, mounty, market i Exchange.",
-    "prTitle": "Upstream-trek",
-    "prBody": "Obshchie uluchsheniya engine, auth, dashboard i wiki peredayutsya ClaudeCraft; svoe Cryptic Realm ostaetsya zdes.",
-    "proofTitle": "Dokazatelstvo $CR",
-    "proofBody": "Publichnaya stranitsa pokazyvaet mint, treasury i ssylki Solscan."
+    "openLink": "Open",
+    "officialLog": "Official Work Log",
+    "alphaBetaTitle": "Alpha, Beta, And Public Realm Cadence",
+    "alphaBetaBody": "Alpha testers can earn platinum at a higher rate because alpha characters reset every two weeks. Beta promotion happens monthly into public Cryptic Realm and MoveWeight realms after review.",
+    "tokenTitle": "$CR + Platinum Utility Live In The Roadmap",
+    "tokenBody": "$CR is the Cryptic Realm Solana SPL token. Platinum is the in-game premium bridge for cosmetics, houses, mounts, marketplace listings, and Exchange realm trades. The base game stays free to play.",
+    "prTitle": "Upstream Kindness Track",
+    "prBody": "Generic engine, auth, dashboard, auto-update, moderator, and wiki improvements are tracked as shareable work for the ClaudeCraft team while Cryptic Realm-specific realms and $CR features stay here.",
+    "proofTitle": "$CR Proof",
+    "proofBody": "Mint 3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv is published on the public proof page with treasury and Solscan links."
   },
   "contributions": {
     "title": "Contributions",
@@ -3208,12 +3187,12 @@ export const ru_RU: EnTranslations = {
     "loading": "Loading official channels…"
   },
   "download": {
-    "title": "Launchers & Installs",
+    "title": "Скачать загрузчик для ПК",
     "desc": "Загрузите отдельный клиент для оптимальной производительности и игры на весь экран.",
     "macCta": "Скачать для macOS",
     "linuxCta": "Скачать для Linux",
-    "linuxHint": "AppImage: сделайте файл исполняемым и запустите его. Установка не нужна.",
-    "windowsPending": "Сборка Windows пока готовится."
+    "linuxHint": "Формат AppImage: сделайте файл исполняемым и запустите его, установка не требуется.",
+    "windowsPending": "Сборка для Windows готовится."
   },
   "comingSoon": {
     "placeholder": "Скоро...",
@@ -3231,11 +3210,11 @@ export const ru_RU: EnTranslations = {
     "serverOnline": "В сети",
     "serverOffline": "Не в сети",
     "play": "Играть",
-    "playAria": "Играть в Cryptic Realm",
+    "playAria": "Играть в World of ClaudeCraft",
     "serverLabel": "Выберите свой мир",
     "serverAria": "Выберите мир: В сети или Не в сети",
     "serverOfflineSub": "Мгновенный локальный мир",
-    "caLabel": "Адрес контракта $CR",
+    "caLabel": "Адрес контракта $WOC",
     "caCopyAria": "Скопировать адрес контракта",
     "caNote": "WOC - токен нашего сообщества. Он не нужен для игры. Присоединяйтесь к Discord, чтобы обсудить применение и экосистему WOC."
   },
@@ -3258,13 +3237,13 @@ export const ru_RU: EnTranslations = {
     "realm": "Мир",
     "newCharacter": "Новый персонаж",
     "appearance": "Внешность",
-    "ssoMoveweight": "Vojti cherez MoveWeight",
-    "ssoProviders": "Prodolzhit cherez Google, Facebook, Plex ili Discord",
-    "ssoButton": "Prodolzhit cherez Google, Facebook ili Plex",
-    "ladderChar": "Ladder personazh",
-    "ladderHint": "Uchastvuet v sezonnom reitinge. V kontse sezona stanovitsya obychnym personazhem i sohranyaet progress.",
-    "hardcoreChar": "Hardcore personazh",
-    "hardcoreHint": "Permanentnaya smert. Esli personazh umret, on budet navsegda spisan i bolshe ne smozhet igrat. Voskresheniya net.",
+    "ssoMoveweight": "Sign in with MoveWeight",
+    "ssoProviders": "Continue with Google, Facebook, Plex, or Discord",
+    "ssoButton": "Continue with Google, Facebook, or Plex",
+    "ladderChar": "Ladder character",
+    "ladderHint": "Competes on the seasonal ladder. At season end it converts to a standard character (keeps all progress).",
+    "hardcoreChar": "Hardcore character",
+    "hardcoreHint": "Permadeath. If this character dies, it is permanently retired and can no longer be played. There is no resurrection.",
     "class": "Класс",
     "name": "Имя",
     "chromaOption": "Расцветка {n}",
@@ -3281,7 +3260,7 @@ export const ru_RU: EnTranslations = {
     "twoFactorPlaceholder": "6-значный код или код восстановления",
     "twoFactorHint": "Введите код из приложения-аутентификатора или один из ваших кодов восстановления.",
     "email": "Эл. почта",
-    "emailPlaceholder": "you@example.com",
+    "emailPlaceholder": "ivan@example.com",
     "emailError": "Введите корректный адрес эл. почты.",
     "recovery": {
       "title": "Добавьте резервный адрес эл. почты",
@@ -3293,7 +3272,7 @@ export const ru_RU: EnTranslations = {
     }
   },
   "wallet": {
-    "label": "Кошелек $CR",
+    "label": "Кошелек $WOC",
     "connect": "Подтвердить кошелек",
     "connectTitle": "Подтвердить ваш кошелек Solana",
     "connectAria": "Подтвердить ваш кошелек Solana",
@@ -3326,11 +3305,11 @@ export const ru_RU: EnTranslations = {
     "linkedDisconnectedAria": "Кошелек остается подтвержденным для вашей учетной записи. Подключитесь снова, чтобы управлять приложением кошелька.",
     "linkTitle": "Нажмите, чтобы подписать и привязать этот кошелек к вашей учетной записи.",
     "connectedTitle": "Подключено. Войдите, чтобы привязать этот кошелек к вашей учетной записи.",
-    "balanceTitle": "Баланс $CR подтвержденного кошелька Solana",
+    "balanceTitle": "Баланс $WOC подтвержденного кошелька Solana",
     "balanceAria": "Баланс подтвержденного кошелька Solana: {balance}",
-    "balancePreviewTitle": "Предпросмотр баланса $CR подключенного кошелька",
+    "balancePreviewTitle": "Предпросмотр баланса $WOC подключенного кошелька",
     "balancePreviewAria": "Предпросмотр баланса подключенного кошелька: {balance}. Привяжите кошелек, чтобы подтвердить отметку держателя.",
-    "balanceAmount": "{amount} $CR",
+    "balanceAmount": "{amount} $WOC",
     "connected": "Подключено: {address}",
     "connectedWithBalance": "Подключено: {balance} - {address}",
     "connectedLinked": "Подтверждено: {address}",
@@ -3351,8 +3330,8 @@ export const ru_RU: EnTranslations = {
     "linkFailed": "Не удалось подтвердить кошелек.",
     "verifyFailed": "Не удалось подтвердить кошелек.",
     "unlinkFailed": "Не удалось отвязать кошелек.",
-    "holder": "держатель $CR",
-    "holderTierTitle": "{tier}: держатель $CR",
+    "holder": "держатель $WOC",
+    "holderTierTitle": "{tier}: держатель $WOC",
     "holderTiers": {
       "ember": {
         "name": "Искра",
@@ -3376,7 +3355,7 @@ export const ru_RU: EnTranslations = {
       },
       "vaultwarden": {
         "name": "Хранитель хранилища",
-        "flavor": "Теперь вы храните настоящее хранилище: 0,01% всех $CR."
+        "flavor": "Теперь вы храните настоящее хранилище: 0,01% всех $WOC."
       },
       "whale": {
         "name": "Кит",
@@ -3445,14 +3424,14 @@ export const ru_RU: EnTranslations = {
     "topPercent": "ТОП {percent}%",
     "realmSubtitle": "Мир {realm}",
     "defaultRealm": "Мир ClaudeCraft",
-    "brandWordmark": "CRYPTIC REALM",
+    "brandWordmark": "WORLD OF CLAUDECRAFT",
     "recruited": "приглашено: {count}",
     "footerHandle": "@{handle}",
     "footerHandleWithRecruits": "@{handle} - {recruited}",
     "footerCta": "Создайте свою легенду: {siteUrl}",
     "arenaStat": "Арена",
-    "shareTierBit": ", держатель $CR ранга {tier}",
-    "shareText": "Я создаю свою легенду в Cryptic Realm: уровень {level}, {className}{tierBit}. Присоединяйтесь к моему миру:",
+    "shareTierBit": ", держатель $WOC ранга {tier}",
+    "shareText": "Я создаю свою легенду в World of ClaudeCraft: уровень {level}, {className}{tierBit}. Присоединяйтесь к моему миру:",
     "nativeShareTitle": "Мир ClaudeCraft",
     "fileNameFallback": "игрок",
     "actionShareX": "Поделиться в X",
@@ -3651,9 +3630,9 @@ export const ru_RU: EnTranslations = {
   "delveRiteUi": {
     "title": "Обряд Утонувшего Реликвария",
     "blurb": "Святилища загорятся по порядку. Повторите последовательность, активируя каждое святилище по очереди. Неверное касание проваливает попытку и повторяет последовательность, безупречная попытка приносит богатейшую добычу, а исчерпание попыток открывает реликварий с самой скудной добычей. Выберите, как обряд испытает вас.",
-    "easy": "Easy",
+    "easy": "Лёгкий",
     "medium": "Средний",
-    "hard": "Hard",
+    "hard": "Сложный",
     "guideWatch": "После выбора четыре святилища будут загораться по очереди. Запомните порядок.",
     "guideRepeat": "Когда святилища погаснут, подойдите к каждому в том же порядке и нажмите F (взаимодействие).",
     "guideStakes": "Ошибка окатит вас черной водой и отнимет попытку. Завершите последовательность, чтобы открыть реликварий.",
@@ -3669,8 +3648,8 @@ export const ru_RU: EnTranslations = {
     "closeAria": "Закрыть"
   },
   "heroicShop": {
-    "balance": "Heroic Marks: {count}",
-    "buyAria": "Buy {item} for {marks} Heroic Marks"
+    "balance": "Героические знаки: {count}",
+    "buyAria": "Купить {item} за {marks} героических знаков"
   },
   "delveUi": {
     "board": {
@@ -3782,7 +3761,7 @@ export const ru_RU: EnTranslations = {
       "sluice_valve": "Шлюзовой Клапан",
       "grave_tablet": "Могильная Табличка",
       "corpse_candle": "Трупная Свеча",
-      "bell_rope": "Bell Rope"
+      "bell_rope": "Колокольная Верёвка"
     },
     "companion": {
       "barkLine": "{name}: {line}",
@@ -3870,42 +3849,42 @@ export const ru_RU: EnTranslations = {
     }
   },
   "yumi": {
-    "bracket3": "Yumi 3v3",
-    "bracket5": "Yumi 5v5",
-    "enterQueue": "Join Protect Yumi!",
+    "bracket3": "Yumi 3 на 3",
+    "bracket5": "Yumi 5 на 5",
+    "enterQueue": "В бой за Yumi!",
     "queue": {
-      "join": "You join the Protect Yumi queue. Guard your familiar…",
-      "leave": "You leave the Protect Yumi queue.",
-      "teamLeave": "Your team leaves the Protect Yumi queue."
+      "join": "Вы встаёте в очередь Protect Yumi. Берегите своего фамильяра…",
+      "leave": "Вы покидаете очередь Protect Yumi.",
+      "teamLeave": "Ваша команда покидает очередь Protect Yumi."
     },
     "error": {
-      "partyTooBig3": "Protect Yumi 3v3 allows a party of up to three.",
-      "partyTooBig5": "Protect Yumi 5v5 allows a party of up to five."
+      "partyTooBig3": "В Protect Yumi 3 на 3 группа может быть не больше трёх игроков.",
+      "partyTooBig5": "В Protect Yumi 5 на 5 группа может быть не больше пяти игроков."
     },
     "log": {
-      "start": "Protect Yumi! Defend your familiar and hunt theirs."
+      "start": "Protect Yumi! Защищайте своего фамильяра и охотьтесь на чужого."
     },
     "hud": {
       "title": "PROTECT YUMI",
-      "getReady": "Get ready…",
-      "teleportIn": "Yumis move in {s}",
-      "suddenDeath": "SUDDEN DEATH",
-      "yourYumi": "Your Yumi",
-      "enemyYumi": "Enemy Yumi",
-      "aria": "Your Yumi at {mine} of {max} health, enemy Yumi at {theirs}.",
-      "collapse": "Collapse the Protect Yumi bars",
-      "expand": "Expand the Protect Yumi bars"
+      "getReady": "Приготовьтесь…",
+      "teleportIn": "Yumi переместятся через {s}",
+      "suddenDeath": "ВНЕЗАПНАЯ СМЕРТЬ",
+      "yourYumi": "Ваша Yumi",
+      "enemyYumi": "Вражеская Yumi",
+      "aria": "Ваша Yumi: {mine} из {max} здоровья, вражеская Yumi: {theirs}.",
+      "collapse": "Свернуть полосы Protect Yumi",
+      "expand": "Развернуть полосы Protect Yumi"
     },
     "respawn": {
-      "title": "DOWNED!"
+      "title": "ВЫ ПАЛИ!"
     },
     "banner": {
-      "sudden": "SUDDEN DEATH! The Yumis hold their ground!",
-      "teleport": "The Yumis teleport!"
+      "sudden": "ВНЕЗАПНАЯ СМЕРТЬ! Yumi больше не перемещаются!",
+      "teleport": "Yumi переместились!"
     },
     "end": {
-      "win": "VICTORY! Yumi is safe!",
-      "loss": "DEFEAT! Your Yumi has fallen."
+      "win": "ПОБЕДА! Yumi в безопасности!",
+      "loss": "ПОРАЖЕНИЕ! Ваша Yumi пала."
     }
   },
   "fiesta": {
@@ -3982,7 +3961,7 @@ export const ru_RU: EnTranslations = {
         "desc": "Твои физические удары бьют на 15% сильнее."
       },
       "aug_spellfire": {
-        "name": "Магический огонь",
+        "name": "Мрачный огонь",
         "desc": "Твои заклинания наносят на 15% больше урона."
       },
       "aug_toughness": {
@@ -4026,7 +4005,7 @@ export const ru_RU: EnTranslations = {
         "desc": "+18% к урону любого вида и +12% к скорости передвижения."
       },
       "aug_lightwell": {
-        "name": "Колодец света",
+        "name": "Могильный свет",
         "desc": "+30% к исцелению и +15% к максимальному здоровью. Стань опорой команды."
       },
       "aug_bounty_hunter": {
@@ -4076,14 +4055,14 @@ export const ru_RU: EnTranslations = {
     }
   },
   "seo": {
-    "title": "Cryptic Realm: веб-MMO в классическом стиле",
-    "description": "Отправьтесь в эпическое приключение в Cryptic Realm, микро-MMO в классическом стиле прямо в браузере. Присоединяйтесь к общему миру, развивайте классы и побеждайте врагов.",
+    "title": "World of ClaudeCraft: веб-MMO в классическом стиле",
+    "description": "Отправьтесь в эпическое приключение в World of ClaudeCraft, микро-MMO в классическом стиле прямо в браузере. Присоединяйтесь к постоянному общему миру, развивайте классы и побеждайте врагов.",
     "genre": "MMORPG",
     "playMode": "Многопользовательская игра",
     "applicationCategory": "Игра",
     "operatingSystem": "Веб-браузер",
-    "officialLabel": "Официальный сайт Cryptic Realm",
-    "officialBody": "crypticrealm.com - официальная бесплатная браузерная MMO для мира Claudemoon. Играйте онлайн с постоянным персонажем, исследуйте мир в одиночку офлайн, читайте wiki и переходите по проверенным ссылкам сообщества с этого сайта."
+    "officialLabel": "Официальный сайт World of ClaudeCraft",
+    "officialBody": "worldofclaudecraft.com - официальная бесплатная браузерная MMO для мира Claudemoon. Играйте онлайн с постоянным персонажем, исследуйте мир в одиночку офлайн, читайте wiki и переходите по проверенным ссылкам сообщества с этого сайта."
   },
   "a11y": {
     "goHome": "Перейти на главную",
@@ -4091,9 +4070,9 @@ export const ru_RU: EnTranslations = {
     "mainNavigation": "Основная навигация",
     "languageSelection": "Выбор языка",
     "characterActions": "Действия персонажа",
-    "githubProject": "Открыть проект Cryptic Realm на GitHub",
-    "discordCommunity": "Присоединиться к Discord-сообществу Cryptic Realm",
-    "donateProject": "Пожертвовать на поддержку Cryptic Realm"
+    "githubProject": "Открыть проект World of ClaudeCraft на GitHub",
+    "discordCommunity": "Присоединиться к Discord-сообществу World of ClaudeCraft",
+    "donateProject": "Пожертвовать на поддержку World of ClaudeCraft"
   },
   "loading": {
     "world": "Загрузка мира...",
@@ -4104,10 +4083,6 @@ export const ru_RU: EnTranslations = {
     "rendererFailed": "Не удалось запустить рендерер: попробуйте обновить страницу. {error}",
     "enterTimeout": "Не удалось войти в мир. Время подключения истекло. Запущен ли игровой сервер?",
     "connectionLost": "Соединение с сервером потеряно.",
-<<<<<<< HEAD
-    "reconnecting": "Connection lost. Reconnecting...",
-    "connectionRejected": "Сервер закрыл соединение."
-=======
     "reconnecting": "Соединение потеряно. Повторное подключение...",
     "connectionRejected": "Сервер закрыл соединение.",
     "tips": {
@@ -4120,7 +4095,6 @@ export const ru_RU: EnTranslations = {
       "loadouts": "Совет: сохраните несколько наборов талантов, чтобы менять билды, не тратя очки заново.",
       "pvp": "Совет: вызовите другого игрока на дружескую дуэль или встаньте в очередь на арену Пепельного Колизея, чтобы испытать свой билд."
     }
->>>>>>> v0.24.0
   },
   "errors": {
     "nothingInteract": "Нет объекта для взаимодействия.",
@@ -4152,12 +4126,12 @@ export const ru_RU: EnTranslations = {
       "webLoginOnly": "Вход разрешён только из игрового клиента.",
       "accountSuspended": "Эта учетная запись заблокирована до {date}.",
       "alreadyInWorld": "Персонаж уже находится в мире.",
-      "accountSessionLimit": "Too many characters on this account are already in the world.",
+      "accountSessionLimit": "Слишком много персонажей этой учетной записи уже находятся в мире.",
       "takenOver": "Вашего персонажа перехватила другая сессия.",
       "renameBeforeEntering": "Перед входом в мир этому персонажу нужно сменить имя.",
       "renameNotPermitted": "Переименование этого персонажа не разрешено.",
-      "unsupportedMediaType": "Unsupported request format.",
-      "crossSiteOrigin": "Request blocked for security reasons."
+      "unsupportedMediaType": "Неподдерживаемый формат запроса.",
+      "crossSiteOrigin": "Запрос заблокирован по соображениям безопасности."
     }
   },
   "desktop": {
@@ -4168,11 +4142,11 @@ export const ru_RU: EnTranslations = {
       "later": "Позже"
     },
     "crash": {
-      "title": "Cryptic Realm",
+      "title": "World of ClaudeCraft",
       "body": "Игровой экран перестал отвечать. Перезагрузить его?",
       "reload": "Перезагрузить",
       "quit": "Выйти",
-      "fatalBody": "Cryptic Realm столкнулась с непредвиденной ошибкой и будет закрыта."
+      "fatalBody": "World of ClaudeCraft столкнулась с непредвиденной ошибкой и будет закрыта."
     }
   },
   "realm": {
@@ -4280,13 +4254,13 @@ export const ru_RU: EnTranslations = {
     },
     "lore": {
       "warrior": "Воины - закаленные бойцы ближнего боя, накапливающие ярость от нанесенного и полученного урона. Они держат удар или сокрушают врагов.",
-      "paladin": "Паладины - священные крестоносцы, поддерживающие благословениями, исцеляющие Светом и защищающие слабых тяжелой броней.",
+      "paladin": "Паладины, священные крестоносцы, поддерживающие союзников благословениями, исцеляющие раны Целительным Светом и защищающие слабых тяжёлой бронёй.",
       "hunter": "Охотники - мастера дальнего боя, что сражаются бок о бок с прирученным зверем, осыпают врагов прицельными и беглыми выстрелами, замедляют их жалами и оглушающим огнем и меняют аспекты под стать моменту.",
       "rogue": "Разбойники - скрытные убийцы, расходующие энергию и очки серии на удары из тени.",
-      "priest": "Жрецы призывают Святой Свет для исцеления и защиты союзников, а магия Тьмы вытягивает жизнь врагов.",
+      "priest": "Жрецы призывают Целительный Свет для исцеления и защиты союзников, а магия Тьмы вытягивает жизнь их врагов.",
       "shaman": "Шаманы повелевают стихиями, усиливают оружие, поражают врагов молниями и восстанавливают союзников.",
-      "mage": "Маги управляют огнем, льдом и тайной магией, уничтожают врагов, создают воду и замораживают угрозы.",
-      "warlock": "Чернокнижники призывают демонов, накладывают проклятия и длительный урон, затем вытягивают жизнь, чтобы выжить.",
+      "mage": "Маги управляют огнём, льдом и тайной силой, уничтожают врагов, призывают воду и замораживают угрозы.",
+      "warlock": "Чернокнижники призывают демонов, накладывают проклятия и длительный урон, затем вытягивают жизнь врагов, чтобы выжить.",
       "druid": "Друиды направляют силу природы, лечат раны, оплетают врагов и принимают звериные формы для защиты или урона."
     },
     "aria": "Описание класса {className}: роль {role}. Начальные характеристики: Сила {str}, Ловкость {agi}, Выносливость {sta}, Интеллект {int}, Дух {spi}.",
@@ -4302,17 +4276,17 @@ export const ru_RU: EnTranslations = {
     "iosStandaloneDetail": "Вы в полноэкранном режиме с домашнего экрана. Держите устройство горизонтально.",
     "iosInstallDetail": "Для настоящего полноэкранного режима на iPhone или iPad сначала добавьте эту страницу на домашний экран.",
     "iosShareStep": "В Safari нажмите Поделиться, затем На экран Домой.",
-    "iosOpenStep": "Откройте Cryptic Realm через новый значок на домашнем экране.",
+    "iosOpenStep": "Откройте World of ClaudeCraft через новый значок на домашнем экране.",
     "androidStandaloneDetail": "Вы в полноэкранном режиме приложения. Держите устройство горизонтально.",
     "androidInstallDetail": "Для полноэкранного режима на Android установите эту страницу или добавьте ее на главный экран.",
     "androidInstallStep": "В Chrome откройте меню, затем выберите Установить приложение или Добавить на главный экран.",
-    "androidOpenStep": "Откройте Cryptic Realm через новый значок.",
+    "androidOpenStep": "Откройте World of ClaudeCraft через новый значок.",
     "otherStandaloneDetail": "Держите устройство в полноэкранном альбомном режиме.",
     "otherInstallDetail": "Установите эту страницу или добавьте ее на главный экран для лучшего мобильного полноэкранного опыта."
   },
   "serverUnavailable": {
-    "title": "Cryptic Realm - мир недоступен",
-    "logoAlt": "Cryptic Realm",
+    "title": "World of ClaudeCraft - мир недоступен",
+    "logoAlt": "World of ClaudeCraft",
     "eyebrow": "Технические работы",
     "heading": "Мир временно недоступен.",
     "body": "Мы перезапускаем игровой сервис и ожидаем, что Claudemoon скоро вернется. Эта страница продолжит проверку автоматически.",
@@ -4662,9 +4636,9 @@ export const ru_RU: EnTranslations = {
       "requiresCombo": "Этой способности нужны очки серии.",
       "requiresForm": "Вы должны быть в облике {form}.",
       "cantInForm": "В облике {form} это невозможно.",
-      "bear": "медведя",
+      "bear": "бурого",
       "cat": "волка",
-      "travel": "путешествия",
+      "travel": "скорохода",
       "shapeshifted": "В измененном облике это невозможно.",
       "stealthed": "Вы должны быть в незаметности.",
       "inCombat": "В бою это невозможно.",
@@ -4947,7 +4921,7 @@ export const ru_RU: EnTranslations = {
       "offGlobalCooldown": "Вне глобального восстановления",
       "friendlyTarget": "Дружественная цель",
       "enemyTarget": "Вражеская цель",
-      "selfOnly": "Self only",
+      "selfOnly": "Только на себя",
       "damageRange": "от {min} до {max}",
       "finisherDamage": "{base} плюс {perCombo} за прием серии"
     },
@@ -5050,14 +5024,14 @@ export const ru_RU: EnTranslations = {
     "slots": {
       "mainhand": "Правая рука",
       "helmet": "Голова",
-      "neck": "Neck",
+      "neck": "Шея",
       "shoulder": "Плечи",
       "chest": "Грудь",
       "waist": "Пояс",
       "legs": "Ноги",
       "gloves": "Кисти рук",
       "feet": "Ступни",
-      "ring": "Finger"
+      "ring": "Палец"
     },
     "quality": {
       "poor": "Низкое",
@@ -5077,7 +5051,7 @@ export const ru_RU: EnTranslations = {
       "tool": "Инструмент",
       "potion": "Зелье",
       "elixir": "Эликсир",
-      "bag": "Bag"
+      "bag": "Сумка"
     },
     "stats": {
       "armor": "Броня",
@@ -5120,7 +5094,7 @@ export const ru_RU: EnTranslations = {
       "clickUseInstant": "Нажмите, чтобы мгновенно использовать в бою",
       "clickUse": "Нажмите, чтобы использовать",
       "clickBuyback": "Нажмите, чтобы выкупить",
-      "bagSlots": "{slots} Slot Bag"
+      "bagSlots": "Сумка на {slots} ячеек"
     },
     "bags": {
       "title": "Сумки",
@@ -5259,50 +5233,50 @@ export const ru_RU: EnTranslations = {
       "greedAria": "Жадность: {item}",
       "passAria": "Пас: {item}",
       "everyonePassed": "Все отказались от {item}.",
-      "rolled": "{answered}/{total} rolled"
+      "rolled": "{answered}/{total} бросили"
     }
   },
   "entities": {
     "abilities": {
       "sport_kick": {
-        "name": "Kick",
-        "description": "Knock the ball along the ground toward the aim point."
+        "name": "Удар",
+        "description": "Катит мяч по земле к точке прицела."
       },
       "sport_shoot": {
-        "name": "Shoot",
-        "description": "Hold to build power, release to shoot at goal. Too much power sails over."
+        "name": "Удар по воротам",
+        "description": "Зажмите для силы, отпустите для удара по воротам. Перебор силы: мяч летит выше."
       },
       "sport_pass": {
-        "name": "Pass",
-        "description": "Roll a firm pass to your targeted teammate, leading their run."
+        "name": "Пас",
+        "description": "Уверенно катит мяч выбранному партнёру, на ход в его забег."
       },
       "sport_boot": {
-        "name": "Big Boot",
-        "description": "A long lofted boot toward the aim point. The crowd loves it."
+        "name": "Дальний удар",
+        "description": "Длинный навесной удар к точке прицела. Трибуны в восторге."
       },
       "sport_hoof": {
-        "name": "Hoof It",
-        "description": "Hammer the ball low and hard up the field."
+        "name": "Вынос мяча",
+        "description": "Мощный низкий удар, посылающий мяч вперёд по полю."
       },
       "sport_punt": {
-        "name": "Long Punt",
-        "description": "A keeper's punt, high and far."
+        "name": "Длинный выброс",
+        "description": "Вратарский выброс мяча: высоко и далеко."
       },
       "sport_feint": {
-        "name": "Feint",
-        "description": "A quick sidestep burst toward the aim point."
+        "name": "Финт",
+        "description": "Резкий рывок в сторону к точке прицела."
       },
       "sport_dive": {
-        "name": "Dive",
-        "description": "Fling yourself toward the aim point. A crossing ball sticks to you."
+        "name": "Бросок",
+        "description": "Бросаетесь к точке прицела. Летящий поперёк мяч прилипает к вам."
       },
       "sport_shoulder": {
-        "name": "Shoulder",
-        "description": "A fair harvest-truce shoulder. Sends them tumbling off the ball."
+        "name": "Толчок плечом",
+        "description": "Честный толчок плечом по правилам жатвенного перемирия. Сбивает соперника с мяча."
       },
       "sport_second_wind": {
-        "name": "Fresh Legs",
-        "description": "Find your legs: move 50% faster for 4 sec."
+        "name": "Второе дыхание",
+        "description": "Обретите ноги: скорость передвижения повышена на 50% на 4 сек."
       },
       "flamestrike": {
         "name": "Огненный удар",
@@ -5310,98 +5284,98 @@ export const ru_RU: EnTranslations = {
       },
       "rain_of_fire": {
         "name": "Огненный дождь",
-        "description": "Обрушивает огненный дождь на указанную область, сжигая врагов и нанося {damage} ед. урона от огня."
+        "description": "Обрушивает огненный дождь на указанную область на 4 сек., сжигая врагов и нанося {damage} ед. урона от огня каждую секунду."
       },
       "volley": {
         "name": "Залп",
-        "description": "Осыпает указанную область стрелами, нанося {damage} ед. урона врагам в ней."
+        "description": "Осыпает указанную область стрелами в течение 3 сек., нанося {damage} ед. урона каждые 0.5 сек. врагам в ней."
       },
       "hurricane": {
         "name": "Ураган",
-        "description": "Обрушивает ураган на указанную область, нанося врагам {damage} ед. урона силами природы."
+        "description": "Обрушивает ураган на указанную область на 6 сек., нанося врагам {damage} ед. урона силами природы каждую секунду."
       },
       "earthquake": {
         "name": "Землетрясение",
-        "description": "Сотрясает указанную область, нанося врагам {damage} ед. урона силами природы."
+        "description": "Сотрясает указанную область в течение 6 сек., нанося врагам {damage} ед. урона силами природы каждые 1.5 сек."
       },
       "heroic_strike": {
-        "name": "Удар героя",
+        "name": "Удар разорителя",
         "description": "Мощная атака, увеличивающая урон в ближнем бою на {damage}. Срабатывает при следующем взмахе оружием."
       },
       "battle_shout": {
-        "name": "Боевой крик",
-        "description": "A shout that increases the attack power of all party members by {buff}% for 2 min."
+        "name": "Железный рёв",
+        "description": "Повышает вашу силу атаки на {buff} на 2 мин."
       },
       "commanding_shout": {
-        "name": "Командный крик",
-        "description": "Increases your Stamina by {buff} for 2 min."
+        "name": "Ободряющий клич",
+        "description": "Повышает вашу выносливость на {buff} на 2 мин."
       },
       "demoralizing_shout": {
-        "name": "Деморализующий крик",
-        "description": "Lets out a fearsome shout, reducing the attack power of all nearby enemies by {buff} for 30 sec."
+        "name": "Зловещий вой",
+        "description": "Издает устрашающий крик, снижая силу атаки всех противников поблизости на {buff} на 30 сек."
       },
       "charge": {
-        "name": "Рывок",
+        "name": "Натиск",
         "description": "Вы бросаетесь к врагу, накапливаете 9 ярости и оглушаете его на 1 сек. Дальность 8-25 м."
       },
       "rend": {
-        "name": "Кровопускание",
-        "description": "Wounds the target, causing them to bleed for {damage} damage over {duration} sec."
+        "name": "Глубокий разрез",
+        "description": "Ранит цель, вызывая кровотечение на {damage} ед. урона за {duration} сек."
       },
       "thunder_clap": {
-        "name": "Удар грома",
+        "name": "Сотрясающий удар",
         "description": "Поражает ближайших врагов на {damage} ед. урона и замедляет их атаки на 10% на 10 сек."
       },
       "hamstring": {
-        "name": "Подрезать сухожилия",
-        "description": "Maims the enemy for {damage} damage, slowing its movement by 50% for 15 sec."
+        "name": "Калечащий надрез",
+        "description": "Калечит врага, нанося {damage} ед. урона и снижая его скорость передвижения на 50% на 15 сек."
       },
       "bloodrage": {
-        "name": "Кровавая ярость",
+        "name": "Кровавая дань",
         "description": "Дает 10 ед. ярости ценой здоровья."
       },
       "overpower": {
-        "name": "Превосходство",
-        "description": "Instant attack for weapon damage plus {damage}. Only usable after the target dodges. Cannot be dodged."
+        "name": "Кровавая рука",
+        "description": "Мгновенная атака, наносящая урон оружием плюс {damage}. Можно использовать только после уклонения цели. От нее нельзя уклониться."
       },
       "execute": {
-        "name": "Казнь",
+        "name": "Ранняя могила",
         "description": "Попытка добить раненого врага, нанося {damage} ед. урона. Можно использовать только против врагов с менее чем 20% здоровья."
       },
       "slam": {
-        "name": "Мощный удар",
+        "name": "Грубый замах",
         "description": "Бьет противника, нанося урон оружием плюс {damage}."
       },
       "cleave": {
-        "name": "Рассекающий удар",
+        "name": "Жатвенная дуга",
         "description": "Широкий удар, поражающий всех врагов перед вами на {damage} ед. урона."
       },
       "defensive_stance": {
-        "name": "Оборонительная стойка",
+        "name": "Стойка стража",
         "description": "Оборонительная боевая стойка: вы создаете на 30% больше угрозы, но наносите и получаете на 10% меньше урона. Примените снова, чтобы выйти из стойки."
       },
       "sunder_armor": {
-        "name": "Раскол брони",
-        "description": "Раскалывает броню цели, снижая ее на {damage} за применение. Суммируется до 5 раз. Создает большое количество угрозы."
+        "name": "Срез брони",
+        "description": "Раскалывает броню цели, снижая ее на {damage}% за применение. Суммируется до 5 раз. Создает большое количество угрозы."
       },
       "taunt": {
-        "name": "Провокация",
+        "name": "Подстрекательство",
         "description": "Провоцирует цель: ваша угроза повышается до уровня самого ненавистного ей врага, и она вынуждена атаковать вас 3 сек."
       },
       "fireball": {
-        "name": "Огненный шар",
+        "name": "Пепельная стрела",
         "description": "Бросает огненный шар, наносящий {damage} ед. урона от огня и дополнительный периодический урон."
       },
       "frost_armor": {
-        "name": "Морозный доспех",
-        "description": "Encases you in frost, increasing armor by {buff} for 30 min."
+        "name": "Мантия инея",
+        "description": "Окутывает вас морозом, повышая броню на {buff} на 30 мин."
       },
       "arcane_intellect": {
-        "name": "Чародейский интеллект",
-        "description": "Increases the Intellect of all party members by {buff}% for 30 min."
+        "name": "Постижение эфира",
+        "description": "Повышает интеллект на {buff} на 30 мин."
       },
       "frostbolt": {
-        "name": "Ледяная стрела",
+        "name": "Копьё изморози",
         "description": "Выпускает ледяную стрелу, наносящую {damage} ед. урона от магии льда и замедляющую передвижение на 40%."
       },
       "conjure_water": {
@@ -5409,227 +5383,227 @@ export const ru_RU: EnTranslations = {
         "description": "Создает 2 бутылки воды, восстанавливающей ману при питье. Более высокие ранги создают более чистую воду."
       },
       "conjure_food": {
-        "name": "Сотворение пищи",
+        "name": "Сотворение хлеба",
         "description": "Создает 2 порции хлеба, восстанавливающего здоровье при употреблении. Более высокие ранги создают более сытную пищу."
       },
       "fire_blast": {
-        "name": "Огненный взрыв",
+        "name": "Пепельный залп",
         "description": "Поражает врага на {damage} ед. урона от огня. Мгновенно."
       },
       "arcane_missiles": {
-        "name": "Чародейские стрелы",
-        "description": "Выпускает в противника Чародейские стрелы, наносящие {damage} ед. урона от тайной магии каждую секунду в течение 3 сек."
+        "name": "Стрелы эфира",
+        "description": "Выпускает в противника Стрелы эфира, наносящие {damage} ед. урона от тайной магии каждую секунду в течение 3 сек."
       },
       "polymorph": {
-        "name": "Превращение",
-        "description": "Transforms the enemy into a toad for up to {duration} sec. The toad wanders and heals rapidly. Any damage breaks the effect. Beasts and humanoids only."
+        "name": "Чары",
+        "description": "Превращает врага в жабу на срок до {duration} сек. Жаба бродит и быстро восстанавливается. Любой урон прерывает эффект. Только звери и гуманоиды."
       },
       "frost_nova": {
-        "name": "Кольцо льда",
+        "name": "Ледяные оковы",
         "description": "Примораживает всех ближайших врагов на месте на срок до 8 сек. и наносит {damage} ед. урона от магии льда."
       },
       "arcane_explosion": {
-        "name": "Чародейский взрыв",
+        "name": "Взрыв эфира",
         "description": "Всплеск тайной энергии поражает всех ближайших врагов на {damage} ед. урона от тайной магии."
       },
       "scorch": {
-        "name": "Ожог",
+        "name": "Ошпаривание",
         "description": "Обжигает врага, нанося {damage} ед. урона от огня. Быстрое заклинание."
       },
       "pyroblast": {
-        "name": "Пиробласт",
+        "name": "Огненное копьё",
         "description": "Обрушивает на врага громадный пылающий камень, наносящий {damage} ед. урона от огня и дополнительный урон с течением времени."
       },
       "ice_barrier": {
-        "name": "Ледяная преграда",
-        "description": "Shields you in ice, absorbing {damage} damage for 60 sec."
+        "name": "Морозная завеса",
+        "description": "Защищает вас льдом, поглощая {damage} ед. урона в течение 60 сек."
       },
       "sinister_strike": {
-        "name": "Коварный удар",
+        "name": "Злодейский разрез",
         "description": "Мгновенный удар, наносящий урон оружием плюс {damage}. Дает 1 прием серии."
       },
       "eviscerate": {
-        "name": "Потрошение",
-        "description": "Finishing move that causes {damage}."
+        "name": "Вечный сон",
+        "description": "Завершающий прием, наносящий {damage}."
       },
       "backstab": {
-        "name": "Удар в спину",
+        "name": "Трусливый выпад",
         "description": "Бьет цель в спину, нанося 150% урона оружием плюс {damage}. Нужно находиться позади цели. Требуется кинжал. Дает 1 прием серии."
       },
       "gouge": {
-        "name": "Ошеломление",
-        "description": "Strikes the target for {damage} damage, incapacitating it for 4 sec. Any damage breaks the effect. Awards 1 combo point."
+        "name": "Тычок в глаз",
+        "description": "Поражает цель, нанося {damage} ед. урона, и выводит ее из строя на 4 сек. Любой урон прерывает эффект. Дает 1 прием серии."
       },
       "evasion": {
-        "name": "Ускользание",
+        "name": "Призрачная поступь",
         "description": "Повышает вероятность уклонения на 50% на 15 сек."
       },
       "slice_and_dice": {
-        "name": "Мясорубка",
+        "name": "Ритм головореза",
         "description": "Завершающий прием, повышающий скорость атаки в ближнем бою на 30%. Длится дольше за каждый прием серии."
       },
       "sprint": {
-        "name": "Спринт",
+        "name": "Быстрые пятки",
         "description": "Повышает скорость передвижения на 70% на 15 сек."
       },
       "kidney_shot": {
-        "name": "Удар по почкам",
+        "name": "Подлый удар",
         "description": "Завершающий прием, оглушающий цель. Длится на 1 сек. дольше за каждый прием серии."
       },
       "ambush": {
-        "name": "Внезапный удар",
+        "name": "Удар скрытня",
         "description": "Нападает из засады, нанося 250% урона оружием плюс {damage}. Нужно быть в незаметности и позади цели. Требуется кинжал. Дает 1 прием серии."
       },
       "stealth": {
-        "name": "Незаметность",
-        "description": "Скрывает вас в тенях: враги почти не замечают вас, но вы двигаетесь на 50% медленнее. Атака или получение урона прерывает Незаметность. Примените снова, чтобы выйти."
+        "name": "Сумеречная завеса",
+        "description": "Скрывает вас в тенях: враги почти не замечают вас, но вы двигаетесь на 50% медленнее. Атака или получение урона прерывает Сумеречную завесу. Примените снова, чтобы выйти."
       },
       "adrenaline_rush": {
-        "name": "Выброс адреналина",
+        "name": "Ускоренная кровь",
         "description": "Кровь закипает, мгновенно восстанавливая 60 энергии."
       },
       "garrote": {
-        "name": "Гаррота",
-        "description": "Garrote the enemy, causing {damage} damage now and bleeding it for {overTime} over 18 sec. Must be stealthed. Awards 1 combo point."
+        "name": "Удавка",
+        "description": "Душит врага гарротой, нанося {damage} ед. урона сразу и {overTime} от кровотечения в течение 18 сек. Требуется незаметность. Дает 1 очко серии."
       },
       "cheap_shot": {
-        "name": "Удар исподтишка",
-        "description": "Strike the target for {damage} damage, stunning it for 4 sec. Must be stealthed. Awards 2 combo points."
+        "name": "Удар под дых",
+        "description": "Бьет цель, нанося {damage} ед. урона и оглушая ее на 4 сек. Требуется незаметность. Дает 2 очка серии."
       },
       "sap": {
         "name": "Ошеломление",
         "description": "Выводит цель из строя на 8 сек. Требуется незаметность и нахождение вне боя. Любой урон прерывает эффект."
       },
       "crippling_poison": {
-        "name": "Калечащий яд",
-        "description": "Поражает цель калечащим ядом, нанося {damage} ед. урона от сил природы и замедляя ее скорость передвижения на 50% в течение 12 сек."
+        "name": "Свинцовый яд",
+        "description": "Поражает цель свинцовым ядом, нанося {damage} ед. урона от сил природы и замедляя ее скорость передвижения на 50% на 12 сек."
       },
       "expose_armor": {
-        "name": "Вскрытие брони",
-        "description": "Finishing move that exposes the target, reducing its armor by {damage}% for 30 sec."
+        "name": "Пролом брони",
+        "description": "Завершающий прием, который оголяет цель, снижая ее броню на {damage} на 30 сек."
       },
       "rupture": {
-        "name": "Кровопускание",
+        "name": "Истечение кровью",
         "description": "Завершающий прием, который ранит цель, вызывая кровотечение на {damage} в течение 16 сек."
       },
       "vanish": {
-        "name": "Исчезновение",
-        "description": "Исчезает из виду, входя в незаметность даже в бою. Пока вы скрыты, вы двигаетесь на 50% медленнее. Длится до 10 сек."
+        "name": "Дымный шаг",
+        "description": "Исчезает из виду, входя в Сумеречную завесу даже в бою. Пока вы скрыты, вы двигаетесь на 50% медленнее. Длится до 10 сек."
       },
       "instant_poison": {
-        "name": "Быстродействующий яд",
+        "name": "Укус гадюки",
         "description": "Покрывает ваше оружие ядом на 30 мин, заставляя каждый ваш удар в ближнем бою наносить 8 дополнительных ед. урона от сил природы."
       },
       "deadly_poison": {
-        "name": "Смертельный яд",
+        "name": "Гнойный яд",
         "description": "Покрывает ваше оружие ядом на 30 мин, заставляя каждый ваш удар в ближнем бою наносить 14 дополнительных ед. урона от сил природы."
       },
       "blind": {
-        "name": "Ослепление",
+        "name": "Горсть земли",
         "description": "Ослепляет цель, заставляя ее дезориентированно бродить в течение 8 сек. Любой урон прерывает эффект."
       },
       "seal_of_righteousness": {
-        "name": "Печать праведности",
-        "description": "Fills you with Holy power for 30 sec, causing each of your melee swings to deal {damage} additional Holy damage. Unleash with Verdict."
+        "name": "Клеймо клятвы",
+        "description": "Наполняет вас силой Света на 30 сек., заставляя каждый удар в ближнем бою наносить {damage} ед. дополнительного урона от светлой магии. Высвобождается Приговором."
       },
       "holy_light": {
-        "name": "Свет небес",
+        "name": "Целительный Свет",
         "description": "Исцеляет дружественную цель на {damage}."
       },
       "devotion_aura": {
-        "name": "Аура благочестия",
-        "description": "Increases the armor of all party members by {buff}% for 30 min."
+        "name": "Аура стойкости",
+        "description": "Повышает вашу броню на {buff} на 30 мин."
       },
       "judgement": {
-        "name": "Правосудие",
-        "description": "Высвобождает вашу активную Печать на врага, расходуя ее и нанося урон правосудия."
+        "name": "Приговор",
+        "description": "Высвобождает вашу активную Печать на врага, расходуя её и нанося накопленный урон Святой школы."
       },
       "blessing_of_might": {
-        "name": "Благословение могущества",
-        "description": "Blesses the party, increasing the attack power of all party members by {buff}% for 30 min."
+        "name": "Клятва железа",
+        "description": "Накладывает Благословение на дружественную цель, повышая силу атаки на {buff} на 5 мин."
       },
       "divine_protection": {
-        "name": "Божественная защита",
-        "description": "A protective ward absorbs {damage} damage for 10 sec."
+        "name": "Оберег веры",
+        "description": "Защитный оберег поглощает {damage} ед. урона в течение 10 сек."
       },
       "hammer_of_justice": {
-        "name": "Молот правосудия",
-        "description": "Stuns the target for {duration} sec."
+        "name": "Раскалывающий молот",
+        "description": "Оглушает цель на {duration} сек."
       },
       "lay_on_hands": {
-        "name": "Возложение рук",
-        "description": "A massive surge of healing: restores {damage} health. 10 min cooldown."
+        "name": "Последний обряд",
+        "description": "Мощный поток исцеления: восстанавливает {damage} здоровья. Время восстановления 10 мин."
       },
       "flash_of_light": {
-        "name": "Вспышка Света",
-        "description": "Быстрая и эффективная вспышка Света, исцеляющая дружественную цель на {damage}."
+        "name": "Заживление Светом",
+        "description": "Быстрая и действенная вспышка Света, исцеляющая дружественную цель на {damage}."
       },
       "exorcism": {
-        "name": "Экзорцизм",
+        "name": "Обряд изгнания",
         "description": "Изгоняет нечестивых священным гневом, нанося {damage} ед. урона от светлой магии."
       },
       "consecration": {
-        "name": "Освящение",
-        "description": "Освящает землю под вами, обжигая ближайших врагов на {damage} ед. урона от светлой магии."
+        "name": "Святая земля",
+        "description": "Освящает землю под вами, обжигая ближайших врагов на {damage} ед. урона от светлой магии каждые 2 сек. в течение 10 сек."
       },
       "righteous_fury": {
-        "name": "Праведное неистовство",
+        "name": "Пылающая клятва",
         "description": "Повышает угрозу от вашего урона светлой магией на 60% на 30 мин. Основа паладина-танка."
       },
       "retribution_aura": {
-        "name": "Аура воздаяния",
+        "name": "Аура возмездия",
         "description": "Окружает вас священной энергией на 30 мин и наносит 5 ед. урона светлой магией любому врагу, атакующему вас в ближнем бою."
       },
       "tame_beast": {
-        "name": "Приручение зверя",
+        "name": "Дикие узы",
         "description": "Начинает приручать зверя в качестве спутника. Он должен быть не выше вашего уровня и не элитным. Ваш питомец следует за вами, атакует врагов и удерживает собственную угрозу. Одновременно можно иметь одного питомца."
       },
       "dismiss_pet": {
-        "name": "Отпустить питомца",
+        "name": "Отпустить спутника",
         "description": "Отпускает вашего питомца обратно в дикую природу."
       },
       "raptor_strike": {
-        "name": "Удар ящера",
-        "description": "A strong melee attack that increases damage by {damage}. Activates on your next swing."
+        "name": "Потрошащий удар",
+        "description": "Сильная атака в ближнем бою, увеличивающая урон на {damage}. Срабатывает при следующем взмахе оружием."
       },
       "aspect_of_the_hawk": {
-        "name": "Дух ястреба",
-        "description": "Take on the harrier's guise, increasing attack power by {buff} for 30 min."
+        "name": "Облик луня",
+        "description": "Вы принимаете облик луня, повышая силу атаки на {buff} на 30 мин."
       },
       "serpent_sting": {
-        "name": "Укус змеи",
+        "name": "Ядовитое жало",
         "description": "Жалит цель, нанося {damage} ед. урона от сил природы за 15 сек."
       },
       "arcane_shot": {
-        "name": "Чародейский выстрел",
+        "name": "Зловещий выстрел",
         "description": "Мгновенный выстрел, наносящий {damage} ед. урона от тайной магии."
       },
       "concussive_shot": {
-        "name": "Шокирующий выстрел",
-        "description": "Dazes the target for {damage} damage, slowing movement by 50% for 4 sec."
+        "name": "Сотрясающий выстрел",
+        "description": "Ошеломляет цель, нанося {damage} ед. урона и снижая скорость передвижения на 50% на 4 сек."
       },
       "mongoose_bite": {
-        "name": "Укус мангуста",
-        "description": "Counterattack after the target dodges for weapon damage plus {damage}. Cannot be dodged."
+        "name": "Ответный клык",
+        "description": "Контратака после уклонения цели, наносящая урон оружием плюс {damage}. От нее нельзя уклониться."
       },
       "wing_clip": {
-        "name": "Подрезать крылья",
-        "description": "Inflicts a wound for {damage} damage, slowing the enemy by 40% for 10 sec."
+        "name": "Сковывающий разрез",
+        "description": "Наносит рану, нанося {damage} ед. урона и замедляя врага на 40% на 10 сек."
       },
       "aspect_of_the_monkey": {
-        "name": "Дух обезьяны",
-        "description": "Вы принимаете дух обезьяны, повышая вероятность уклонения на 8% на 30 мин."
+        "name": "Облик куницы",
+        "description": "Вы принимаете облик куницы, повышая вероятность уклонения на 8% на 30 мин."
       },
       "aspect_of_the_cheetah": {
-        "name": "Дух гепарда",
-        "description": "Вы принимаете дух гепарда, повышая скорость передвижения на 30% на 30 мин."
+        "name": "Облик скакуна",
+        "description": "Вы принимаете облик скакуна, повышая скорость передвижения на 30% на 30 мин."
       },
       "aimed_shot": {
-        "name": "Прицельный выстрел",
-        "description": "Тщательно нацеленный выстрел, наносящий {damage} ед. урона."
+        "name": "Долгий натяг",
+        "description": "Тщательно натянутый выстрел, наносящий {damage} ед. урона."
       },
       "rapid_fire": {
-        "name": "Быстрая стрельба",
+        "name": "Лихорадочный натяг",
         "description": "Повышает скорость атаки на 40% на 15 сек."
       },
       "smite": {
@@ -5637,164 +5611,164 @@ export const ru_RU: EnTranslations = {
         "description": "Карает врага, нанося {damage} ед. урона от светлой магии."
       },
       "lesser_heal": {
-        "name": "Малое исцеление",
+        "name": "Тихая молитва",
         "description": "Исцеляет дружественную цель на {damage}."
       },
       "power_word_fortitude": {
-        "name": "Слово силы: Стойкость",
-        "description": "Increases the Stamina of all party members by {buff}% for 30 min."
+        "name": "Литания стойкости",
+        "description": "Повышает выносливость цели на {buff} на 30 мин."
       },
       "shadow_word_pain": {
-        "name": "Слово Тьмы: Боль",
+        "name": "Панихида распада",
         "description": "Слово тьмы наносит {damage} ед. урона от темной магии за 18 сек."
       },
       "power_word_shield": {
-        "name": "Слово силы: Щит",
-        "description": "Shields the target, absorbing {damage} damage for 30 sec."
+        "name": "Псалом ограждения",
+        "description": "Защищает цель, поглощая {damage} ед. урона в течение 30 сек."
       },
       "renew": {
-        "name": "Обновление",
+        "name": "Длящаяся благодать",
         "description": "Исцеляет цель на {damage} за 15 сек."
       },
       "mind_blast": {
-        "name": "Взрыв разума",
+        "name": "Раскол разума",
         "description": "Поражает разум цели на {damage} ед. урона от темной магии."
       },
       "heal": {
-        "name": "Исцеление",
+        "name": "Торжественная молитва",
         "description": "Медленная, но мощная молитва, исцеляющая дружественную цель на {damage}."
       },
       "mind_flay": {
-        "name": "Пытка разума",
+        "name": "Литания скорби",
         "description": "Терзает разум цели темной энергией, нанося {damage} ед. урона каждую секунду в течение 3 сек."
       },
       "flash_heal": {
-        "name": "Быстрое исцеление",
+        "name": "Спешная молитва",
         "description": "Быстрая молитва, исцеляющая дружественную цель на {damage}."
       },
       "lightning_bolt": {
-        "name": "Молния",
+        "name": "Дуговая стрела",
         "description": "Метает разряд молнии, нанося {damage} ед. урона от сил природы."
       },
       "rockbiter_weapon": {
-        "name": "Оружие Камнедробителя",
-        "description": "Imbues your weapon with the fury of stone: each swing deals {damage} additional damage for 5 min."
+        "name": "Оружие каменных уз",
+        "description": "Насыщает ваше оружие яростью камня: каждый удар наносит {damage} ед. дополнительного урона в течение 5 мин."
       },
       "healing_wave": {
-        "name": "Волна исцеления",
+        "name": "Целебные воды",
         "description": "Исцеляет дружественную цель на {damage}."
       },
       "earth_shock": {
-        "name": "Земной шок",
+        "name": "Земной толчок",
         "description": "Мгновенно поражает цель ударной силой, нанося {damage} ед. урона от сил природы."
       },
       "lightning_shield": {
-        "name": "Щит молний",
-        "description": "Surrounds you with crackling lightning: melee attackers take {buff} Nature damage, up to 3 charges and at most once every 5 seconds."
+        "name": "Громовой оберег",
+        "description": "Окружает вас потрескивающей молнией: атакующие в ближнем бою получают {buff} ед. урона от сил природы, до 3 зарядов и не чаще одного раза в 5 секунд."
       },
       "flame_shock": {
-        "name": "Огненный шок",
-        "description": "Sears the target with fire for {damage} damage plus {overTime} over 12 sec."
+        "name": "Пепельный толчок",
+        "description": "Обжигает цель огнем, нанося {damage} ед. урона и еще {overTime} за 12 сек."
       },
       "flametongue_weapon": {
-        "name": "Оружие огненного языка",
-        "description": "Imbues your weapon with elemental fire: each swing deals {damage} additional Fire damage for 5 min."
+        "name": "Оружие пламенного клейма",
+        "description": "Насыщает ваше оружие стихийным огнем: каждый удар наносит {damage} ед. дополнительного урона от огня в течение 5 мин."
       },
       "frost_shock": {
-        "name": "Ледяной шок",
+        "name": "Толчок изморози",
         "description": "Мгновенно поражает цель льдом, нанося {damage} ед. урона от магии льда и снижая скорость передвижения на 50% на 8 сек."
       },
       "frostbrand_weapon": {
-        "name": "Ледяное оружие",
-        "description": "Imbues your weapon with biting frost: each swing deals {damage} additional damage for 5 min."
+        "name": "Оружие изморози",
+        "description": "Насыщает ваше оружие кусающим холодом: каждый удар наносит {damage} ед. дополнительного урона в течение 5 мин."
       },
       "ghost_wolf": {
-        "name": "Призрачный волк",
-        "description": "Превращает вас в призрачного волка, повышая скорость передвижения на 40% на 10 мин."
+        "name": "Сумрачный волк",
+        "description": "Превращает вас в сумрачного волка, повышая скорость передвижения на 40% на 10 мин."
       },
       "stormstrike": {
-        "name": "Удар бури",
+        "name": "Удар предков",
         "description": "Направляет бурю через ваше оружие и мгновенно наносит урон оружием плюс {damage}."
       },
       "shadow_bolt": {
-        "name": "Стрела Тьмы",
+        "name": "Сумрачная стрела",
         "description": "Посылает во врага темную стрелу, нанося {damage} ед. урона от темной магии."
       },
       "demon_skin": {
-        "name": "Шкура демона",
-        "description": "Demonic skin increases your armor by {buff} for 30 min."
+        "name": "Шкура беса",
+        "description": "Демоническая кожа повышает вашу броню на {buff} на 30 мин."
       },
       "immolate": {
-        "name": "Жертвенный огонь",
-        "description": "Burns the enemy for {damage} Fire damage and an additional {overTime} over 15 sec."
+        "name": "Пылающий договор",
+        "description": "Сжигает врага, нанося {damage} ед. урона от огня и еще {overTime} за 15 сек."
       },
       "corruption": {
-        "name": "Порча",
+        "name": "Чёрная гниль",
         "description": "Поражает цель порчей, нанося {damage} ед. урона от темной магии за 18 сек."
       },
       "life_tap": {
-        "name": "Жизнеотвод",
-        "description": "Converts {damage} health into {damage} mana."
+        "name": "Тяжёлая сделка",
+        "description": "Преобразует {damage} здоровья в {damage} маны."
       },
       "curse_of_agony": {
-        "name": "Проклятие агонии",
+        "name": "Порча муки",
         "description": "Проклинает цель агонией: {damage} ед. урона от темной магии за 24 сек."
       },
       "drain_life": {
-        "name": "Похищение жизни",
+        "name": "Поглощение",
         "description": "Похищает жизнь цели, передавая вам {damage} здоровья каждую секунду в течение 5 сек."
       },
       "fear": {
-        "name": "Страх",
+        "name": "Терзание",
         "description": "Вселяет ужас во врага, заставляя его дрожать до 8 сек. Любой урон прерывает эффект."
       },
       "searing_pain": {
-        "name": "Жгучая боль",
+        "name": "Опаление",
         "description": "Обжигает врага мучительным огнем, нанося {damage} ед. урона от огня. Быстрое заклинание."
       },
       "shadowburn": {
-        "name": "Ожог Тьмы",
-        "description": "Мгновенно поражает цель пламенем Тьмы, нанося {damage} ед. урона от темной магии."
+        "name": "Сумеречный огонь",
+        "description": "Мгновенно поражает цель жгучей тьмой, нанося {damage} ед. урона от тёмной магии."
       },
       "wrath": {
-        "name": "Гнев",
+        "name": "Дикая стрела",
         "description": "Метает сгусток природной энергии, нанося {damage} ед. урона от сил природы."
       },
       "healing_touch": {
-        "name": "Целительное прикосновение",
+        "name": "Дикое заживление",
         "description": "Исцеляет дружественную цель на {damage}."
       },
       "mark_of_the_wild": {
-        "name": "Знак дикой природы",
-        "description": "Places the Wildward on the party, increasing all attributes of all party members by {buff}% for 30 min."
+        "name": "Оберег дикой природы",
+        "description": "Накладывает Оберег дикой природы на дружественную цель, повышая броню на {buff} на 30 мин."
       },
       "moonfire": {
-        "name": "Лунный огонь",
+        "name": "Лунная буря",
         "description": "Сжигает врага лунным огнем, нанося {damage} ед. урона от тайной магии и периодический урон."
       },
       "rejuvenation": {
-        "name": "Омоложение",
+        "name": "Дикий расцвет",
         "description": "Исцеляет цель на {damage} за 12 сек."
       },
       "thorns": {
-        "name": "Шипы",
-        "description": "Thorns sprout from the target: melee attackers take {buff} Nature damage."
+        "name": "Терновая защита",
+        "description": "Из цели вырастают шипы: атакующие в ближнем бою получают {buff} ед. урона от сил природы."
       },
       "entangling_roots": {
-        "name": "Оплетающие корни",
+        "name": "Хватающие корни",
         "description": "Оплетает цель корнями на месте на срок до 12 сек."
       },
       "bear_form": {
-        "name": "Облик медведя",
-        "description": "Вы принимаете облик медведя: броня +65%, сила атаки +15, ваши атаки накапливают ярость и создают на 30% больше угрозы. Примените снова, чтобы вернуться к облику заклинателя."
+        "name": "Облик бурого",
+        "description": "Вы принимаете облик медведя: броня +90%, значительно повышенная сила атаки, ваши атаки накапливают ярость и создают на 30% больше угрозы. Примените снова, чтобы вернуться к облику заклинателя."
       },
       "maul": {
-        "name": "Трепка",
-        "description": "Свирепая атака, увеличивающая урон в ближнем бою на {damage} и создающая много угрозы. Срабатывает при следующем взмахе. Только в облике медведя."
+        "name": "Костолом",
+        "description": "Свирепая атака, увеличивающая урон в ближнем бою на {damage} и создающая много угрозы. Срабатывает при следующем взмахе. Только в облике бурого."
       },
       "growl": {
-        "name": "Рык",
-        "description": "Рычит на цель: ваша угроза повышается до уровня самого ненавистного ей врага, и она вынуждена атаковать вас 3 сек. Только в облике медведя."
+        "name": "Устрашение",
+        "description": "Рычит на цель: ваша угроза повышается до уровня самого ненавистного ей врага, и она вынуждена атаковать вас 3 сек. Только в облике бурого."
       },
       "cat_form": {
         "name": "Облик волка",
@@ -5805,43 +5779,43 @@ export const ru_RU: EnTranslations = {
         "description": "Царапает врага, нанося урон оружием плюс {damage}. Дает 1 прием серии. Только в облике волка."
       },
       "ferocious_bite": {
-        "name": "Свирепый укус",
-        "description": "Finishing move that causes {damage}. Wolf Form only."
+        "name": "Кровавый укус",
+        "description": "Завершающий прием, наносящий {damage}. Только в облике волка."
       },
       "swipe": {
-        "name": "Размах",
-        "description": "Размахивает по ближайшим врагам, нанося {damage} ед. урона. Создает дополнительную угрозу. Только в облике медведя."
+        "name": "Разящие когти",
+        "description": "Размахивает по ближайшим врагам, нанося {damage} ед. урона. Создает дополнительную угрозу. Только в облике бурого."
       },
       "regrowth": {
-        "name": "Восстановление",
+        "name": "Второй расцвет",
         "description": "Исцеляет дружественную цель на {damage} и дополнительно в течение 21 сек."
       },
       "barkskin": {
-        "name": "Дубовая кожа",
+        "name": "Дубовая шкура",
         "description": "Ваша кожа твердеет, как кора, повышая броню на 150 на 15 сек."
       },
       "starfire": {
-        "name": "Звездный огонь",
+        "name": "Падение небес",
         "description": "Обрушивает вспышку звездного огня, нанося {damage} ед. урона от тайной магии."
       },
       "travel_form": {
-        "name": "Походная форма",
-        "description": "Мгновенно принимает быструю походную форму, повышая скорость передвижения на 40%. В этой форме нельзя использовать другие способности, но переход доступен и в бою: идеально для бегства."
+        "name": "Форма скорохода",
+        "description": "Мгновенно принимает быструю форму скорохода, повышая скорость передвижения на 40%. В этой форме нельзя использовать другие способности, но переход доступен и в бою: идеально для бегства."
       },
       "enrage": {
-        "name": "Озлобление",
-        "description": "Мгновенно генерирует 20 ед. ярости. Только в облике медведя."
+        "name": "Раздувание",
+        "description": "Мгновенно генерирует 20 ед. ярости. Только в облике бурого."
       },
       "bash": {
-        "name": "Ошеломление",
-        "description": "Оглушает цель на 2 сек. Только в облике медведя."
+        "name": "Контузия",
+        "description": "Оглушает цель на 2 сек. Только в облике бурого."
       },
       "faerie_fire": {
-        "name": "Колдовской огонь",
-        "description": "Decreases the target's armor by {damage}% for 40 sec. Does not stack with Armor Shear."
+        "name": "Ведьмин огонь",
+        "description": "Снижает броню цели на {damage}% на 40 сек. Не суммируется со Срезом брони."
       },
       "hibernate": {
-        "name": "Спячка",
+        "name": "Дремота",
         "description": "Погружает цель в глубокий сон на срок до 8 сек. Любой урон пробуждает ее."
       },
       "dash": {
@@ -5849,83 +5823,83 @@ export const ru_RU: EnTranslations = {
         "description": "Рывок вперед, повышающий скорость передвижения на 50% на 15 сек. Только в облике волка."
       },
       "pounce": {
-        "name": "Прыжок",
+        "name": "Крадущийся удар",
         "description": "Открывающая атака из скрытности, оглушающая цель на 2 сек. Дает 1 прием серии. Только в облике волка."
       },
       "insect_swarm": {
-        "name": "Рой насекомых",
+        "name": "Жалящий рой",
         "description": "Враг атакован роем насекомых и получает {damage} ед. урона от сил Природы в течение 12 сек."
       },
       "tigers_fury": {
-        "name": "Ярость тигра",
+        "name": "Волчья кровь",
         "description": "Повышает силу атаки на 40 на 6 сек. Только в облике волка."
       },
       "rip": {
         "name": "Разрывание",
-        "description": "Finishing move that causes {damage} Bleed damage over 12 sec. Consumes combo points. Wolf Form only."
+        "description": "Завершающий прием, наносящий {damage} ед. урона от кровотечения в течение 12 сек. Расходует приемы серии. Только в облике волка."
       },
       "mortal_strike": {
-        "name": "Смертельный удар",
+        "name": "Калечащий удар",
         "description": "Жестокий удар, наносящий урон оружием плюс {damage}. (ключевая способность ветки «Оружие»)"
       },
       "bloodthirst": {
-        "name": "Кровожадность",
-        "description": "Мгновенно атакует в кровавом исступлении, нанося {damage}. (ключевая способность ветки «Неистовство»)"
+        "name": "Кровопускание",
+        "description": "Мгновенно атакует в кровавом исступлении, нанося 60% урона оружием плюс {damage}. (ключевая способность ветки «Неистовство»)"
       },
       "shield_slam": {
-        "name": "Мощный удар щитом",
-        "description": "Бьет цель щитом, нанося {damage} и создавая огромную угрозу. (ключевая способность ветки «Защита»)"
+        "name": "Раскол щита",
+        "description": "Бьет цель щитом, нанося 50% урона оружием плюс {damage} и создавая огромную угрозу. (ключевая способность ветки «Защита»)"
       },
       "whirlwind": {
-        "name": "Вихрь",
+        "name": "Клинковый вихрь",
         "description": "Кружится смертельной дугой, поражая всех ближайших врагов на {damage}. (талант ветки «Неистовство»)"
       },
       "berserker_rage": {
-        "name": "Ярость берсерка",
-        "description": "Впадаете в ярость берсерка и получаете 20 ярости. (талант воина)"
+        "name": "Бурлящая ярость",
+        "description": "Вы впадаете в бурлящую ярость и получаете 20 ярости. (талант воина)"
       },
       "summon_imp": {
-        "name": "Призыв беса",
-        "description": "Призывает Беса под командование чернокнижника. Бес издалека мечет Огненные стрелы в ваших врагов. Призыв нового демона отпускает текущего. Одновременно у вас может быть только один демон."
+        "name": "Призыв Уголька",
+        "description": "Призывает Уголька под командование чернокнижника. Уголёк издалека мечет зольные стрелы в ваших врагов. Призыв нового демона отпускает текущего. Одновременно у вас может быть только один демон."
       },
       "summon_voidwalker": {
-        "name": "Призыв стража Бездны",
-        "description": "Призывает Стража Бездны под командование чернокнижника. Страж Бездны — крепкий демон, который провоцирует ваших врагов и принимает удары на себя. Призыв нового демона отпускает текущего. Одновременно у вас может быть только один демон."
+        "name": "Призыв Мрачной тени",
+        "description": "Призывает Мрачную тень под командование чернокнижника. Мрачная тень, крепкий демон, который провоцирует ваших врагов и принимает удары на себя. Призыв нового демона отпускает текущего. Одновременно у вас может быть только один демон."
       },
       "summon_succubus": {
-        "name": "Призыв суккуба",
-        "description": "Призывает Суккуба под командование чернокнижника. Суккуб — хрупкий демон, который стремительно атакует и наносит тяжёлый урон в ближнем бою. Призыв нового демона отпускает текущего. Одновременно у вас может быть только один демон."
+        "name": "Призыв Сумеречнорождённой",
+        "description": "Призывает Сумеречнорождённую под командование чернокнижника. Сумеречнорождённая, хрупкий демон, который стремительно атакует и наносит тяжёлый урон в ближнем бою. Призыв нового демона отпускает текущего. Одновременно у вас может быть только один демон."
       },
       "summon_felhunter": {
-        "name": "Призыв охотника Скверны",
-        "description": "Призывает Охотника Скверны под командование чернокнижника. Охотник Скверны изводит врагов на расстоянии Укусом Тьмы и превосходно охотится на заклинателей. Призыв нового демона отпускает текущего. Одновременно у вас может быть только один демон."
+        "name": "Призыв Гончей чар",
+        "description": "Призывает Гончую чар под командование чернокнижника. Гончая чар изводит врагов на расстоянии Сумрачным укусом и превосходно охотится на заклинателей. Призыв нового демона отпускает текущего. Одновременно у вас может быть только один демон."
       },
       "summon_felguard": {
-        "name": "Призыв стража Скверны",
-        "description": "Призывает Стража Скверны под командование чернокнижника. Страж Скверны — выносливый демон ближнего боя, который врывается в гущу битвы и стойко держится. Призыв нового демона отпускает текущего. Одновременно у вас может быть только один демон."
+        "name": "Призыв Боевого беса",
+        "description": "Призывает Боевого беса под командование чернокнижника. Боевой бес, выносливый демон ближнего боя, который врывается в гущу битвы и стойко держится. Призыв нового демона отпускает текущего. Одновременно у вас может быть только один демон."
       },
       "summon_infernal": {
-        "name": "Призыв инфернала",
-        "description": "Подчиняет вашей воле Инфернала — громадного исполина с сокрушительным ближним боем и самым большим запасом здоровья и брони среди всех демонов. Долгое время восстановления сдерживает его необузданную мощь. Призыв нового демона отпускает текущего. Одновременно у вас может быть только один демон."
+        "name": "Призыв Погребального колосса",
+        "description": "Подчиняет вашей воле Погребального колосса, громадного исполина с сокрушительным ближним боем и самым большим запасом здоровья и брони среди всех демонов. Долгое время восстановления сдерживает его необузданную мощь. Призыв нового демона отпускает текущего. Одновременно у вас может быть только один демон."
       },
       "summon_doomguard": {
-        "name": "Призыв стража Рока",
-        "description": "Подчиняет вашей воле Стража Рока — элитного демона, который издалека обрушивает тяжёлый урон от Тьмы. Долгое время восстановления сдерживает его разрушительную мощь. Призыв нового демона отпускает текущего. Одновременно у вас может быть только один демон."
+        "name": "Призыв Духорождённого",
+        "description": "Подчиняет вашей воле Духорождённого, элитного демона, который издалека обрушивает тяжёлый урон от Тьмы. Долгое время восстановления сдерживает его разрушительную мощь. Призыв нового демона отпускает текущего. Одновременно у вас может быть только один демон."
       },
       "bear_charge": {
-        "name": "Натиск медведя",
-        "description": "Бросок на врага, дающий 9 единиц ярости и оглушающий его на 1 сек. Дальность 8-25 м. Только в облике медведя."
+        "name": "Натиск бурого",
+        "description": "Бросок на врага, дающий 9 единиц ярости и оглушающий его на 1 сек. Дальность 8-25 м. Только в облике бурого."
       },
       "demoralizing_roar": {
-        "name": "Деморализующий рёв",
-        "description": "Деморализует врагов поблизости, снижая их силу атаки на 20 на 20 сек. Только в облике медведя."
+        "name": "Трусливый рёв",
+        "description": "Деморализует врагов поблизости, снижая их силу атаки на 20 на 20 сек. Только в облике бурого."
       },
       "prowl": {
-        "name": "Крадущийся хищник",
+        "name": "Скрадывание",
         "description": "Переход в скрытность в облике волка: вы двигаетесь на 50% медленнее. Нельзя использовать в бою."
       },
       "rake": {
-        "name": "Раздирание",
+        "name": "Свежевание",
         "description": "Скрытная атака из засады, наносящая врагу урон оружием плюс {damage} и вызывающая кровотечение в течение 9 сек. Даёт 1 очко серии приёмов. Только в облике волка."
       },
       "revive_pet": {
@@ -5935,10 +5909,10 @@ export const ru_RU: EnTranslations = {
     },
     "items": {
       "worn_sword": {
-        "name": "Изношенный короткий меч"
+        "name": "Щербатый короткий меч"
       },
       "gnarled_staff": {
-        "name": "Сучковатый посох"
+        "name": "Посох мореного дуба"
       },
       "rusty_dagger": {
         "name": "Ржавый кинжал"
@@ -5950,13 +5924,13 @@ export const ru_RU: EnTranslations = {
         "name": "Ржавый топорик"
       },
       "recruit_tunic": {
-        "name": "Китель рекрута"
+        "name": "Китель ополченца"
       },
       "apprentice_robe": {
-        "name": "Роба ученика"
+        "name": "Ветхая роба"
       },
       "footpad_jerkin": {
-        "name": "Куртка налетчика"
+        "name": "Куртка карманника"
       },
       "redbrook_blade": {
         "name": "Клинок ополчения Редбрука"
@@ -5986,22 +5960,22 @@ export const ru_RU: EnTranslations = {
         "name": "Поножи из шкуры Серой Челюсти"
       },
       "baked_bread": {
-        "name": "Свежевыпеченный хлеб"
+        "name": "Деревенский каравай"
       },
       "spring_water": {
-        "name": "Освежающая родниковая вода"
+        "name": "Холодная колодезная вода"
       },
       "roasted_boar": {
-        "name": "Жареное мясо кабана"
+        "name": "Кабанья нога на вертеле"
       },
       "conjured_water": {
-        "name": "Сотворенная родниковая вода"
+        "name": "Сотворённая дождевая вода"
       },
       "conjured_water2": {
-        "name": "Сотворенная минеральная вода"
+        "name": "Сотворённая колодезная вода"
       },
       "conjured_water3": {
-        "name": "Сотворенная газированная вода"
+        "name": "Сотворённая чистая вода"
       },
       "eastbrook_arming_sword": {
         "name": "Истврукский строевой меч"
@@ -6073,7 +6047,7 @@ export const ru_RU: EnTranslations = {
         "name": "Призрачная эссенция"
       },
       "webwood_silk": {
-        "name": "Шелковая железа Вебвуда"
+        "name": "Шёлковая железа Сейблвеба"
       },
       "supply_crate": {
         "name": "Украденный ящик припасов"
@@ -6097,13 +6071,13 @@ export const ru_RU: EnTranslations = {
         "name": "Красная бандана"
       },
       "tough_jerky": {
-        "name": "Жесткое вяленое мясо"
+        "name": "Солёное вяленое мясо"
       },
       "mudfin_scale": {
-        "name": "Слизистая чешуя мурлока"
+        "name": "Слизистая чешуя мадфина"
       },
       "tallow_candle": {
-        "name": "Сальная свеча"
+        "name": "Жирный кусок сала"
       },
       "spider_leg": {
         "name": "Дергающаяся нога паука"
@@ -6178,7 +6152,7 @@ export const ru_RU: EnTranslations = {
         "name": "Сапоги Болотного Странника"
       },
       "mistcallers_edge": {
-        "name": "Лезвие Зовущего Туман"
+        "name": "Лезвие Вязателя Тумана"
       },
       "vaels_mist_staff": {
         "name": "Туманный посох Ваэля"
@@ -6322,7 +6296,7 @@ export const ru_RU: EnTranslations = {
         "name": "Посох Велхара"
       },
       "shadowmeld_tunic": {
-        "name": "Туника Слияния с Тенью"
+        "name": "Туника Ночной завесы"
       },
       "gravewyrm_scale_hauberk": {
         "name": "Хауберк из чешуи Могильного Вирма"
@@ -6391,13 +6365,13 @@ export const ru_RU: EnTranslations = {
         "name": "Треснувшая чешуя вирма"
       },
       "conjured_bread": {
-        "name": "Сотворённый хлеб"
+        "name": "Сотворённая овсяная лепёшка"
       },
       "conjured_bread2": {
-        "name": "Сотворённый ржаной хлеб"
+        "name": "Сотворённый чёрный каравай"
       },
       "conjured_bread3": {
-        "name": "Сотворённая сладкая булочка"
+        "name": "Сотворённый медовый пряник"
       },
       "roadwardens_helm": {
         "name": "Шлем стража дорог"
@@ -6502,7 +6476,7 @@ export const ru_RU: EnTranslations = {
         "name": "Могильотканая сумка"
       },
       "mistcallers_duffel": {
-        "name": "Вещмешок Призывателя туманов"
+        "name": "Вещмешок Вязателя Тумана"
       },
       "copper_mining_pick": {
         "name": "Медная кирка"
@@ -6532,43 +6506,43 @@ export const ru_RU: EnTranslations = {
         "name": "Серебролистный серп"
       },
       "thorium_mining_pick": {
-        "name": "Thorium Mining Pick"
+        "name": "Ториевая кирка"
       },
       "arcanite_mining_pick": {
-        "name": "Arcanite Mining Pick"
+        "name": "Арканитовая кирка"
       },
       "ashwood_axe": {
-        "name": "Ashwood Axe"
+        "name": "Ясеневый топор"
       },
       "elderwood_axe": {
-        "name": "Elderwood Axe"
+        "name": "Топор из древнего дерева"
       },
       "goldleaf_sickle": {
-        "name": "Goldleaf Sickle"
+        "name": "Золотолистный серп"
       },
       "sunpetal_sickle": {
-        "name": "Sunpetal Sickle"
+        "name": "Солнцелепестковый серп"
       },
       "thorium_ore": {
-        "name": "Thorium Ore"
+        "name": "Ториевая руда"
       },
       "arcanite_bar": {
-        "name": "Arcanite Bar"
+        "name": "Слиток аркана"
       },
       "ashwood_log": {
-        "name": "Ashwood Log"
+        "name": "Бревно пепельного дерева"
       },
       "elderwood_log": {
-        "name": "Elderwood Log"
+        "name": "Бревно древней бузины"
       },
       "goldleaf_herb": {
-        "name": "Goldleaf Herb"
+        "name": "Трава золотолист"
       },
       "sunpetal_herb": {
-        "name": "Sunpetal Herb"
+        "name": "Трава солнцелепест"
       },
       "bristleback_maul": {
-        "name": "Кувалда Щетиноспина"
+        "name": "Молот Гэллоугласа"
       },
       "broodmother_silk_robe": {
         "name": "Шелковая роба Матери выводка"
@@ -6577,16 +6551,16 @@ export const ru_RU: EnTranslations = {
         "name": "Наголенники из склеповой кости"
       },
       "cryptstalker_jerkin": {
-        "name": "Куртка Склепного охотника"
+        "name": "Куртка Могильного охотника"
       },
       "deathlord_legguards": {
-        "name": "Поножи Владыки Смерти"
+        "name": "Поножи Владыки Кургана"
       },
       "deathlord_sabatons": {
-        "name": "Сабатоны Владыки Смерти"
+        "name": "Сабатоны Владыки Кургана"
       },
       "deathlord_warplate": {
-        "name": "Боевые латы Владыки Смерти"
+        "name": "Боевые латы Владыки Кургана"
       },
       "drogmar_warboots": {
         "name": "Боевые сапоги Дрогмара"
@@ -6664,13 +6638,13 @@ export const ru_RU: EnTranslations = {
         "name": "Топочущие сапоги Моггера"
       },
       "necromancers_legwraps": {
-        "name": "Ножные обмотки некроманта"
+        "name": "Ножные обмотки Скорбного плетения"
       },
       "necromancers_soulsteps": {
-        "name": "Шаги души некроманта"
+        "name": "Шаги души Скорбного плетения"
       },
       "necromancers_starshroud": {
-        "name": "Звездный покров некроманта"
+        "name": "Звёздный покров Скорбного плетения"
       },
       "nhalias_dirgeblade": {
         "name": "Плачущий клинок Налии"
@@ -6706,13 +6680,13 @@ export const ru_RU: EnTranslations = {
         "name": "Шаги души Культа вирма"
       },
       "wyrmshadow_harness": {
-        "name": "Сбруя Тени вирма"
+        "name": "Сбруя Ночного Клыка"
       },
       "wyrmshadow_legguards": {
-        "name": "Поножи Тени вирма"
+        "name": "Поножи Ночного Клыка"
       },
       "wyrmshadow_treads": {
-        "name": "Ступни Тени вирма"
+        "name": "Ступни Ночного Клыка"
       },
       "glimmerfin_koi": {
         "name": "Карп кои с мерцающими плавниками"
@@ -6730,7 +6704,7 @@ export const ru_RU: EnTranslations = {
         "name": "Сырой речной окунь"
       },
       "raw_stonescale_carp": {
-        "name": "Сырой каменночешуйчатый карп"
+        "name": "Сырой сланцеплавниковый карп"
       },
       "soggy_boot": {
         "name": "Промокший сапог"
@@ -6841,13 +6815,13 @@ export const ru_RU: EnTranslations = {
         "name": "Сабля из лунной чешуи"
       },
       "moonshroud_breastplate": {
-        "name": "Кираса Лунного савана"
+        "name": "Кираса Лунной погибели"
       },
       "moonshroud_robe": {
-        "name": "Одеяние Лунного савана"
+        "name": "Одеяние Лунной погибели"
       },
       "moonshroud_tunic": {
-        "name": "Туника Лунного савана"
+        "name": "Туника Лунной погибели"
       },
       "pale_pearl": {
         "name": "Бледная жемчужина"
@@ -6883,7 +6857,7 @@ export const ru_RU: EnTranslations = {
         "name": "Наплечники из склеповой кости"
       },
       "deathlords_dread_visage": {
-        "name": "Ужасающий лик Владыки Смерти"
+        "name": "Ужасающий лик Владыки Кургана"
       },
       "gravewyrm_gauntlets": {
         "name": "Рукавицы Могильного Вирма"
@@ -6898,10 +6872,10 @@ export const ru_RU: EnTranslations = {
         "name": "Захваты Туманной завесы"
       },
       "necromancers_soulspire_mantle": {
-        "name": "Мантия шпиля души некроманта"
+        "name": "Мантия шпиля души Скорбного плетения"
       },
       "wyrmshadow_talongrips": {
-        "name": "Захваты когтя Тени вирма"
+        "name": "Захваты когтя Ночного Клыка"
       },
       "tome_town_portal": {
         "name": "Tome of Town Portal"
@@ -7036,160 +7010,160 @@ export const ru_RU: EnTranslations = {
         "name": "Загадочный косметический тайник"
       },
       "heroic_mark": {
-        "name": "Heroic Mark"
+        "name": "Героический знак"
       },
       "morthens_cryptforged_hauberk": {
-        "name": "Morthen's Cryptforged Hauberk"
+        "name": "Кольчуга Мортена из гробничной стали"
       },
       "shadowpulse_handwraps": {
-        "name": "Shadowpulse Handwraps"
+        "name": "Обмотки теневого пульса"
       },
       "bonechill_striders": {
-        "name": "Bonechill Striders"
+        "name": "Сапоги костяного холода"
       },
       "mistcallers_fang": {
-        "name": "Mistcaller's Fang"
+        "name": "Клык призывателя туманов"
       },
       "tidebound_spaulders": {
-        "name": "Tidebound Spaulders"
+        "name": "Наплечники скованных приливов"
       },
       "sash_of_the_sunken_court": {
-        "name": "Sash of the Sunken Court"
+        "name": "Кушак затонувшего двора"
       },
       "lunar_tide_greatstaff": {
-        "name": "Lunar Tide Greatstaff"
+        "name": "Великий посох лунного прилива"
       },
       "tidewoven_trousers": {
-        "name": "Tidewoven Trousers"
+        "name": "Штаны приливного плетения"
       },
       "choirmothers_casque": {
-        "name": "Choirmother's Casque"
+        "name": "Шлем матери хора"
       },
       "gravewyrm_cleaver": {
-        "name": "Gravewyrm Cleaver"
+        "name": "Тесак могильного змея"
       },
       "shroud_of_the_gravewyrm": {
-        "name": "Shroud of the Gravewyrm"
+        "name": "Саван могильного змея"
       },
       "sanctum_prowlers_grips": {
-        "name": "Sanctum Prowler's Grips"
+        "name": "Перчатки святилищного охотника"
       },
       "scepter_of_the_deathless_court": {
-        "name": "Scepter of the Deathless Court"
+        "name": "Скипетр бессмертного двора"
       },
       "deathless_warguard_legmail": {
-        "name": "Deathless Warguard Legmail"
+        "name": "Ножные латы бессмертного стража"
       },
       "soulrend_diadem": {
-        "name": "Soulrend Diadem"
+        "name": "Диадема разрыва души"
       },
       "scourgehide_carapace": {
-        "name": "Scourgehide Carapace"
+        "name": "Панцирь бичевой шкуры"
       },
       "cryptplate_helm": {
-        "name": "Cryptplate Helm"
+        "name": "Гробничный латный шлем"
       },
       "shadowpulse_slippers": {
-        "name": "Shadowpulse Slippers"
+        "name": "Туфли теневого пульса"
       },
       "bonechill_cord": {
-        "name": "Bonechill Cord"
+        "name": "Пояс костяного холода"
       },
       "mistforged_pauldrons": {
-        "name": "Mistforged Pauldrons"
+        "name": "Наплечники туманной ковки"
       },
       "tideguard_faceguard": {
-        "name": "Tideguard Faceguard"
+        "name": "Лицевой щит стража приливов"
       },
       "sunken_court_mantle": {
-        "name": "Sunken Court Mantle"
+        "name": "Накидка затонувшего двора"
       },
       "lunar_choir_leggings": {
-        "name": "Lunar Choir Leggings"
+        "name": "Поножи лунного хора"
       },
       "choir_blessed_spaulders": {
-        "name": "Choir-Blessed Spaulders"
+        "name": "Наплечники хорового благословения"
       },
       "tideworn_warboots": {
-        "name": "Tideworn Warboots"
+        "name": "Боевые сапоги приливного износа"
       },
       "gravewyrm_claws": {
-        "name": "Gravewyrm Claws"
+        "name": "Когти могильного змея"
       },
       "gravescale_girdle": {
-        "name": "Gravescale Girdle"
+        "name": "Пояс могильной чешуи"
       },
       "wyrmchoir_handwraps": {
-        "name": "Wyrmchoir Handwraps"
+        "name": "Обмотки змеиного хора"
       },
       "deathless_greatblade": {
-        "name": "Deathless Greatblade"
+        "name": "Бессмертный великий клинок"
       },
       "soulforged_warplate": {
-        "name": "Soulforged Warplate"
+        "name": "Душекованый боевой доспех"
       },
       "stormcallers_focus": {
-        "name": "Stormcaller's Focus"
+        "name": "Средоточие буревестника"
       },
       "seal_of_the_nine_oaths": {
-        "name": "Seal of the Nine Oaths"
+        "name": "Печать девяти клятв"
       },
       "nielas_coldlight_band": {
-        "name": "Niela's Coldlight Band"
+        "name": "Кольцо холодного света Ниэлы"
       },
       "sutils_gambit": {
-        "name": "Sutil's Gambit"
+        "name": "Гамбит Сутила"
       },
       "oath_of_the_round_table": {
-        "name": "Oath of the Round Table"
+        "name": "Клятва Круглого стола"
       },
       "zyzzs_deathless_signet": {
-        "name": "Zyzz's Deathless Signet"
+        "name": "Бессмертная печатка Зизза"
       },
       "architects_cornerstone": {
-        "name": "The Architect's Cornerstone"
+        "name": "Краеугольный камень архитектора"
       },
       "swiftfang_talisman": {
-        "name": "Swiftfang Talisman"
+        "name": "Талисман быстрого клыка"
       },
       "yumis_keepsake_locket": {
-        "name": "Yumi's Keepsake Locket"
+        "name": "Медальон-память Юми"
       },
       "zense_meridian": {
-        "name": "Zense Meridian"
+        "name": "Меридиан Зенсе"
       },
       "medallion_of_endless_profit": {
-        "name": "Medallion of Endless Profit"
+        "name": "Медальон бесконечной прибыли"
       },
       "deathless_heartwood": {
         "name": "Сердцевина бессмертной короны"
       },
       "kingsbane_last_oath": {
-        "name": "Цареубийца, последняя клятва Торнпика"
+        "name": "Погибель Трона, последняя клятва Торнпика"
       },
       "crownforged_dreadhelm": {
-        "name": "Короннокованый шлем ужаса"
+        "name": "Костокованый шлем ужаса"
       },
       "crownforged_warspaulders": {
-        "name": "Короннокованые боевые наплечники"
+        "name": "Костокованые боевые наплечники"
       },
       "nighttalon_crown": {
-        "name": "Корона Ночного Когтя"
+        "name": "Корона Лютого Клыка"
       },
       "nighttalon_shoulderguards": {
-        "name": "Наплечные стражи Ночного Когтя"
+        "name": "Наплечные стражи Лютого Клыка"
       },
       "soulflame_cowl": {
-        "name": "Клобук Пламени души"
+        "name": "Клобук Призрачного пламени"
       },
       "soulflame_mantle": {
-        "name": "Оплечье Пламени души"
+        "name": "Оплечье Призрачного пламени"
       },
       "stormcallers_crown": {
-        "name": "Корона призывателя бурь"
+        "name": "Корона Зова Бури"
       },
       "stormcallers_spaulders": {
-        "name": "Наплечники призывателя бурь"
+        "name": "Наплечники Зова Бури"
       },
       "unknown_alien_weaponry": {
         "name": "Неизвестное инопланетное вооружение"
@@ -7269,7 +7243,7 @@ export const ru_RU: EnTranslations = {
     },
     "mobs": {
       "yumi_cat": {
-        "name": "Yumi"
+        "name": "Юми"
       },
       "forest_wolf": {
         "name": "Лесной волк"
@@ -7281,13 +7255,13 @@ export const ru_RU: EnTranslations = {
         "name": "Дикий кабан"
       },
       "webwood_spider": {
-        "name": "Паук-скрытень Вебвуда"
+        "name": "Паук-скрытень Сейблвеба"
       },
       "mudfin_murloc": {
         "name": "Илогривый скрытень"
       },
       "tunnel_rat": {
-        "name": "Копатель туннельных крыс"
+        "name": "Глубокоскальный копатель"
       },
       "vale_bandit": {
         "name": "Долинный бандит"
@@ -7332,7 +7306,7 @@ export const ru_RU: EnTranslations = {
         "name": "Дьякон Восс"
       },
       "training_dummy": {
-        "name": "Training Dummy"
+        "name": "Тренировочный манекен"
       },
       "ridge_stalker": {
         "name": "Хребтовый охотник"
@@ -7392,13 +7366,13 @@ export const ru_RU: EnTranslations = {
         "name": "Рыцарь-командор Олен"
       },
       "vael_the_mistcaller": {
-        "name": "Ваэль Зовущий Туман"
+        "name": "Ваэль Вязатель Тумана"
       },
       "sanctum_boneguard": {
         "name": "Костяной страж святилища"
       },
       "sanctum_drakonid": {
-        "name": "Драконид святилища"
+        "name": "Чешуйчатый страж святилища"
       },
       "raised_bonewalker": {
         "name": "Поднятый костеход"
@@ -7497,7 +7471,7 @@ export const ru_RU: EnTranslations = {
         "name": "Звонящий Колокол"
       },
       "vale_cup_ball": {
-        "name": "Boarball"
+        "name": "Кабаний мяч"
       },
       "hellmaw_charred_husk": {
         "name": "Charred Husk"
@@ -7566,13 +7540,13 @@ export const ru_RU: EnTranslations = {
         "name": "Костяной страж Варкаса"
       },
       "emberkin": {
-        "name": "Бес"
+        "name": "Уголёк"
       },
       "gloomshade": {
-        "name": "Страж Бездны"
+        "name": "Мрачная тень"
       },
       "duskborn": {
-        "name": "Суккуб"
+        "name": "Сумеречнорождённая"
       },
       "grix_the_tunnelking": {
         "name": "Грикс, Король туннелей"
@@ -7596,16 +7570,16 @@ export const ru_RU: EnTranslations = {
         "name": "Малдрек Пленитель призраков"
       },
       "spellhound": {
-        "name": "Охотник Скверны"
+        "name": "Гончая чар"
       },
       "warfiend": {
-        "name": "Страж Скверны"
+        "name": "Боевой бес"
       },
       "pyre_colossus": {
-        "name": "Инфернал"
+        "name": "Погребальный колосс"
       },
       "wraithborn": {
-        "name": "Страж Рока"
+        "name": "Духорождённый"
       },
       "choirmother_selthe": {
         "name": "Матерь хора Селте"
@@ -7678,12 +7652,12 @@ export const ru_RU: EnTranslations = {
       "fisherman_brandt": {
         "name": "Рыбак Брандт",
         "title": "Старый моряк",
-        "greeting": "Грлмурлгрл... простите, слишком долго слушал этих рыболюдей."
+        "greeting": "Блрб-глюб... простите, слишком долго слушал этих рыболюдей."
       },
       "foreman_odell": {
         "name": "Прораб Оделл",
         "title": "Горный прораб",
-        "greeting": "Вся выработка кишит этими свечеголовыми паразитами!"
+        "greeting": "Вся выработка кишит этими покрытыми коркой грязи паразитами!"
       },
       "warden_fenwick": {
         "name": "Страж Фенвик",
@@ -7736,9 +7710,9 @@ export const ru_RU: EnTranslations = {
         "greeting": "Горн горяч, точило крутится. Если режет, я это продаю."
       },
       "heroic_quartermaster": {
-        "name": "Quartermaster Vex",
-        "title": "Heroic Quartermaster",
-        "greeting": "Proof of the heroic depths buys the finest rings and pendants in Highwatch. Show me your marks."
+        "name": "Интендант Векс",
+        "title": "Героический интендант",
+        "greeting": "Знаки героических глубин покупают лучшие кольца и кулоны Хайвотча. Покажи мне свои знаки."
       },
       "loremaster_caddis": {
         "name": "Хранитель знаний Каддис",
@@ -7751,19 +7725,19 @@ export const ru_RU: EnTranslations = {
         "greeting": "Мировой рынок доступен и здесь, {className}. Покупайте у искателей приключений всего королевства или выставляйте свои товары."
       },
       "bursar_fernando": {
-        "name": "Bursar Fernando",
-        "title": "The Gilded Strongbox",
-        "greeting": "Welcome to the Gilded Strongbox. Your goods rest safe behind our locks."
+        "name": "Казначей Фернандо",
+        "title": "Золочёный сундук",
+        "greeting": "Добро пожаловать в Золочёный сундук. Ваше добро надёжно хранится за нашими замками."
       },
       "bursar_petra_vell": {
-        "name": "Bursar Petra Vell",
-        "title": "The Gilded Strongbox",
-        "greeting": "The Gilded Strongbox keeps clean ledgers and cleaner vaults. What shall we stow for you?"
+        "name": "Казначей Петра Велль",
+        "title": "Золочёный сундук",
+        "greeting": "В Золочёном сундуке чистые счётные книги и ещё более чистые хранилища. Что вам угодно оставить на хранение?"
       },
       "bursar_aldous_crane": {
-        "name": "Bursar Aldous Crane",
-        "title": "The Gilded Strongbox",
-        "greeting": "Every crate, coffer, and trinket is safe with the Gilded Strongbox."
+        "name": "Казначей Олдос Крейн",
+        "title": "Золочёный сундук",
+        "greeting": "Любой ящик, ларец и безделушка в Золочёном сундуке в полной сохранности."
       },
       "brother_aldric_raid": {
         "name": "Брат Алдрик",
@@ -7816,9 +7790,9 @@ export const ru_RU: EnTranslations = {
         "greeting": "Покойся, дух. Я могу вернуть тебя в тело, но обратный путь оставит тебя ослабленным."
       },
       "groundskeeper_bram": {
-        "name": "Groundskeeper Bram",
-        "title": "Keeper of the Sowfield",
-        "greeting": "The truce holds at the Sowfield, {className}: boots and shoulders only. Care to play for the Copper Pail?"
+        "name": "Смотритель поля Брам",
+        "title": "Хранитель Свиного поля",
+        "greeting": "На Свином поле действует перемирие, {className}: только ноги и плечи. Сыграем за Медное ведро?"
       },
       "tidewatcher_ondrel": {
         "name": "Ондрел Вейн",
@@ -7858,7 +7832,7 @@ export const ru_RU: EnTranslations = {
         }
       },
       "q_boars": {
-        "title": "Шкуры щетиноспинов",
+        "title": "Шкуры щетинистых кабанов",
         "text": "Кабанья шкура годится для лучших дорожных сумок, а луга полны зверья. Принесите мне 5 щетинистых шкур.",
         "completion": "Отличные щетинистые шкуры. За них дадут хорошую цену.",
         "objectives": {
@@ -7868,21 +7842,21 @@ export const ru_RU: EnTranslations = {
         }
       },
       "q_spiders": {
-        "title": "Угроза Вебвуда",
-        "text": "Скрытни Вебвуда дают шелк для припарок, но расплодились сверх меры. Убейте 6 и вырежьте 4 шелковые железы.",
+        "title": "Угроза Сейблвеба",
+        "text": "Скрытни в восточных лесах прядут шёлк, что нужен мне для припарок, да к тому же расплодились сверх меры. Перебейте 6 Пауков-скрытней Сейблвеба и вырежьте 4 шёлковые железы из их брюшек.",
         "completion": "Фу, еще дергаются. Прекрасно. Вы это заслужили.",
         "objectives": {
           "0": {
-            "label": "Паук-скрытень Вебвуда: убито"
+            "label": "Паук-скрытень Сейблвеба: убито"
           },
           "1": {
-            "label": "Шелковая железа Вебвуда"
+            "label": "Шёлковая железа Сейблвеба"
           }
         }
       },
       "q_murlocs": {
         "title": "Беда у озера",
-        "text": "Двадцать лет я рыбачил на Зеркальном озере, пока эти рыболюди не вылезли с мелей. Прогоните 8 Илогривых и берегитесь стаи.",
+        "text": "Двадцать лет я рыбачил на Зеркальном озере и не терял сетей, пока эти булькающие рыболюди не выползли с мелей. Оттесните мадфинов, перебейте 8 из них. И берегитесь: где один мадфин, там и пятеро.",
         "completion": "Ха! Пусть учатся сидеть в своих грязных ямах.",
         "objectives": {
           "0": {
@@ -7892,11 +7866,11 @@ export const ru_RU: EnTranslations = {
       },
       "q_mine": {
         "title": "Крысы в шахте",
-        "text": "Мы нашли добрую медную жилу, и тут из склона полезли кобольды. Уложите 10 копателей туннельных крыс.",
+        "text": "Мы нашли добрую медную жилу, и тут из склона холма полезли эти роющие паразиты. Моя бригада не ступит в выработку, пока её не расчистят. Уложите 10 Глубокоскальных копателей.",
         "completion": "Ха! За работу, парни! Вот моя благодарность и моя монета.",
         "objectives": {
           "0": {
-            "label": "Копатель туннельных крыс: убито"
+            "label": "Глубокоскальный копатель: убито"
           }
         }
       },
@@ -7952,7 +7926,7 @@ export const ru_RU: EnTranslations = {
       },
       "q_rite": {
         "title": "Обряд связывания",
-        "text": "Крипту надо открыть, но только обряд связывания пропустит живых. Нужны 4 куска благословенного сала и 6 призрачных эссенций.",
+        "text": "Крипту под часовней нужно распечатать, если мы хотим остановить Зовущего Могилу, но только обряд связывания пропустит живых. Мне нужны 4 куска благословенного сала, шахтные землекопы копят сало ящиками, и 6 призрачных эссенций от беспокойных мертвецов.",
         "completion": "Готово. Путь вниз открыт... соберите самых сильных спутников, {playerName}.",
         "objectives": {
           "0": {
@@ -7986,7 +7960,7 @@ export const ru_RU: EnTranslations = {
       "q_gravecallers_trail": {
         "title": "След Могильного Зова",
         "text": "Мортен мертв, но его секта не пряталась век ради одной деревенской часовни. Найдите его гримуар среди руин, {playerName}.",
-        "completion": "Мортен писал некому Зовущему Туман в северной топи. Секта не умерла, {playerName}, а терпеливо ждала.",
+        "completion": "Мортен писал некоему Вязателю Тумана в северной топи. Секта не умерла, {playerName}, она лишь терпеливо ждала.",
         "objectives": {
           "0": {
             "label": "Гримуар Мортена"
@@ -8015,7 +7989,7 @@ export const ru_RU: EnTranslations = {
       },
       "q_fenbridge_muster": {
         "title": "Сбор у Фенбриджа",
-        "text": "В писаниях Мортена назван хозяин в северной топи. И я не верю в совпадения, {playerName}. Снимите приказ о сборе с ворот Фенбриджа и предъявите стражу.",
+        "text": "В писаниях Мортена назван хозяин в северной топи, некий Вязатель Тумана. А теперь страж Фенвик протрубил в рог сбора у Топкомостья, и я не верю в совпадения, {playerName}. Ступайте по дамбе на север, снимите приказ о сборе со столба ворот и предъявите его стражу.",
         "completion": "Печать Алдрика? Тогда сгодитесь. Топь глотает мои патрули целиком.",
         "objectives": {
           "0": {
@@ -8055,7 +8029,7 @@ export const ru_RU: EnTranslations = {
       },
       "q_deepfen": {
         "title": "Глубокая Топь шевелится",
-        "text": "Глубинные мурлоки вытаскивают что-то со дна озера. Убейте 12 щелкунов, и мы поймем, что их растревожило.",
+        "text": "Мадфины Глубокотопья двадцать лет держались своих мелей. Теперь они роятся на восточном берегу, как мухи на падали, и мои стражи говорят, что они вытаскивают что-то со дна озера. Что бы их ни растревожило, я хочу это прекратить. Перебейте 12 щелкунов.",
         "completion": "Это загонит их обратно в грязь на время. Но что-то заставило их копать.",
         "objectives": {
           "0": {
@@ -8065,7 +8039,7 @@ export const ru_RU: EnTranslations = {
       },
       "q_idols": {
         "title": "Идолы глубин",
-        "text": "Рыболюди прижимают идолов со дна как святыни. Отберите 5 у глубинных щелкунов.",
+        "text": "Стражи Фенвика говорят, что рыболюди выуживают идолов со дна озера и прижимают их, точно святые реликвии. Если эти идолы, то, чего я боюсь, я должен увидеть их своими глазами. Отберите 5 у глубинных щелкунов, добром они с ними не расстанутся.",
         "completion": "Работа Могильного Зова, древнее Мортена. Секта началась здесь, {playerName}.",
         "objectives": {
           "0": {
@@ -8085,7 +8059,7 @@ export const ru_RU: EnTranslations = {
       },
       "q_deepfen_purge": {
         "title": "Назад на отмели",
-        "text": "Эти идолы сделаны культом, и мурлоки выгребают старое зло из топи охапками. Вернитесь на мели и убейте еще 14.",
+        "text": "Алдрик говорит, что эти идолы сделаны культом, а значит, мадфины охапка за охапкой вытаскивают из топи её древнее зло. Я не позволю ему вымыться на мою дамбу. Вернитесь на мели и покончите с этой добычей навсегда: ещё 14 щелкунов.",
         "completion": "Безжалостно и основательно. Если топь высохнет, вам найдется работа стража.",
         "objectives": {
           "0": {
@@ -8192,7 +8166,7 @@ export const ru_RU: EnTranslations = {
       "q_summoners": {
         "title": "Остановить призыв",
         "text": "Призыватели зовут утопших из воды, как собак на свист. Заставьте 8 умолкнуть и принесите 4 шифра.",
-        "completion": "Каждый шифр заверен дьяконом Воссом и адресован Зовущему Туман в бастионе. Хозяин Мортена, {playerName}. Мы нашли его.",
+        "completion": "Каждый шифр заверен подписью «дьякон Восс» и адресован дальше некоему Вязателю Тумана в бастионе. Хозяин Мортена, {playerName}. Мы нашли его.",
         "objectives": {
           "0": {
             "label": "Призыватель Могильного Зова: убито"
@@ -8214,7 +8188,7 @@ export const ru_RU: EnTranslations = {
       },
       "q_bastion_door": {
         "title": "Затонувший бастион",
-        "text": "Затонувший бастион хранит Зовущего Туман, а его дверь запечатана могильными камнями. Принесите один обереговый камень, {playerName}, и я разрушу печать.",
+        "text": "Затонувший бастион, рыцарский оплот, что век назад утонул в топи, вот куда указывают письма Восса и где этот Вязатель Тумана поёт свои топящие гимны. Культ запечатал его дверь могильными камнями. Принесите мне один из обереговых камней, {playerName}, и я разрушу печать.",
         "completion": "Печать расходится, как гнилая веревка. Дверь открыта, и тьма слушает.",
         "objectives": {
           "0": {
@@ -8224,7 +8198,7 @@ export const ru_RU: EnTranslations = {
       },
       "q_olen": {
         "title": "Позор рыцаря-командора",
-        "text": "Олен умер, защищая бастион, а теперь как кукла стережет ту же дверь. Этому позору конец, {playerName}. Спуститесь с четырьмя спутниками и дайте ему покой.",
+        "text": "Рыцарь-командор Олен держал бастион, когда тот тонул, и утонул на своём посту, но не покинул его. Каждый страж с гордостью заучивает его имя. Теперь Вязатель Тумана поднял его марионеткой стеречь ту самую дверь, которую он погиб защищая. Этому позору конец, {playerName}. Спуститесь вниз с четырьмя спутниками и даруйте Олену заслуженный им покой.",
         "completion": "Его стража наконец окончена. Я сам вырежу его имя на воротах. Спасибо, {playerName}.",
         "objectives": {
           "0": {
@@ -8233,12 +8207,12 @@ export const ru_RU: EnTranslations = {
         }
       },
       "q_mistcaller": {
-        "title": "Зовущий Туман",
-        "text": "Ваэль ждет на дне бастиона, голос, утопивший сотню путников ради армии. Возьмите четырех спутников, не меньше. Покончите с ним, {playerName}, и мертвецы топи наконец упокоятся.",
+        "title": "Вязатель Тумана",
+        "text": "На дне бастиона ждёт Ваэль Вязатель Тумана, хозяин Мортена, хозяин Восса, голос, утопивший сотню путников, чтобы поднять себе армию. Он далеко за пределами сил одного героя: возьмите четырёх спутников, не меньше. Покончите с ним, {playerName}, и мертвецы топи наконец упокоятся.",
         "completion": "Ваэль мертв, и туман поднимается. Но его последние слова леденят кровь: Вирм шевелится под пиками. Секта служит чему-то древнее, чем мы думали, {playerName}.",
         "objectives": {
           "0": {
-            "label": "Ваэль Зовущий Туман: убито"
+            "label": "Ваэль Вязатель Тумана: убито"
           }
         }
       },
@@ -8304,8 +8278,8 @@ export const ru_RU: EnTranslations = {
       },
       "q_kobold_tunnels": {
         "title": "Беда Глубокоскалья",
-        "text": "Кобольды Глубокоскалья роют прямо вниз, словно их зовут из-под стены. Их туннели идут под нашей стеной, {playerName}. Убейте 12 туннельщиков.",
-        "completion": "Каждый ствол уходит прямо вниз. Кобольды сами так не копают.",
+        "text": "Туннельщики в Глубокоскальных норах роют глубже, чем пристало любой ямной крысе, прямо вниз, будто их что-то зовёт. Их туннели идут под нашей стеной, {playerName}. Пресеките это: убейте двенадцать Глубокоскальных туннельщиков.",
+        "completion": "Прямо вниз, каждый её ствол, землекопы сами так не роют. Мне нужно свериться с моими книгами.",
         "objectives": {
           "0": {
             "label": "Глубокоскальный туннельщик: убито"
@@ -8314,7 +8288,7 @@ export const ru_RU: EnTranslations = {
       },
       "q_glowing_wax": {
         "title": "Странный воск",
-        "text": "Воск этих туннельщиков светится, {playerName}, и теплый, как сердцебиение. Принесите 6 кусков для исследований Каддиса.",
+        "text": "Каддис показал мне кусок воска, снятый с одного из тех туннельщиков: он светится, {playerName}, и тёплый, как сердцебиение. Он хочет ещё для изучения, а я хочу вычеркнуть это из своего списка припасов. Принесите шесть кусков светящегося воска.",
         "completion": "Все еще теплый. Хранитель знаний не знает пламени с таким светом.",
         "objectives": {
           "0": {
@@ -8630,22 +8604,22 @@ export const ru_RU: EnTranslations = {
         }
       },
       "q_archetype_acceptance": {
-        "title": "A Craft to Call Your Own",
-        "text": "Every artisan of Eastbrook eventually settles on one craft to call their own. Prove yourself with a single deed, {playerName}, and declare your path.",
-        "completion": "Your path is chosen; walk it well.",
+        "title": "Ремесло по душе",
+        "text": "Рано или поздно каждый ремесленник Иствуда выбирает одно ремесло своим призванием. Докажи себя одним делом, {playerName}, и объяви свой путь.",
+        "completion": "Твой путь избран; иди по нему с честью.",
         "objectives": {
           "0": {
-            "label": "Forest Wolf slain"
+            "label": "Лесной волк убит"
           }
         }
       },
       "q_prof_make_amends": {
-        "title": "Making Amends",
-        "text": "To set aside one craft for another, an artisan must first make amends for the path not walked, {playerName}.",
-        "completion": "Amends made; a new path is open to you.",
+        "title": "Искупление",
+        "text": "Чтобы оставить одно ремесло ради другого, ремесленник должен сперва искупить путь, которым не пошёл, {playerName}.",
+        "completion": "Искупление свершилось; перед тобой открыт новый путь.",
         "objectives": {
           "0": {
-            "label": "Forest Wolf slain"
+            "label": "Лесной волк убит"
           }
         }
       },
@@ -8731,7 +8705,7 @@ export const ru_RU: EnTranslations = {
             "label": "Зеркальное озеро"
           },
           "4": {
-            "label": "Вебвуд"
+            "label": "Сейблвеб"
           },
           "5": {
             "label": "Медный рудник"
@@ -8749,7 +8723,7 @@ export const ru_RU: EnTranslations = {
             "label": "Поляна Брайтвуда"
           },
           "10": {
-            "label": "The Sowfield"
+            "label": "Свиное поле"
           }
         }
       },
@@ -8897,54 +8871,54 @@ export const ru_RU: EnTranslations = {
         "bonus3": "Скорость атаки и произнесения заклинаний повышается на 15%."
       },
       "crownforged": {
-        "name": "Боевой доспех Кованой Короны",
+        "name": "Костокованые регалии",
         "bonus2": "Сила атаки повышается на 40.",
         "bonus3": "Сила повышается на 15, выносливость на 15, а скорость атаки и произнесения заклинаний на 15%.",
-        "bonus4": "Критические удары оружием раскалывают цель эффектом «Осколок кости», вызывая кровотечение на 8 ед. урона раз в 2 сек. в течение 12 сек. Суммируется до 3 раз."
+        "bonus4": "Критические удары оружием оставляют в цели «Костяной осколок»: 8 ед. урона от кровотечения каждые 2 сек. в течение 12 сек. Суммируется до 3 раз."
       },
       "deathlord": {
-        "name": "Боевой доспех Владыки Смерти",
+        "name": "Боевой доспех Владыки Кургана",
         "bonus2": "Сила атаки повышается на 40.",
         "bonus3": "Сила повышается на 15, выносливость на 15.",
-        "bonus4": "Критические удары оружием с вероятностью 50% дают Могильную мощь, повышая силу атаки на 60 на 10 сек."
+        "bonus4": "Критические удары оружием с вероятностью 50% даруют «Могильную мощь», увеличивая силу атаки на 60 на 10 сек."
       },
       "greyjaw_stalker": {
         "name": "Снаряжение ловчего Серой Челюсти",
         "bonus3": "Скорость атаки и произнесения заклинаний повышается на 15%."
       },
       "necromancers": {
-        "name": "Одеяние некроманта",
+        "name": "Одеяние Скорбного плетения",
         "bonus2": "Вас невозможно отбросить (100% сопротивление отбрасыванию).",
         "bonus3": "Интеллект повышается на 10, выносливость на 10.",
-        "bonus4": "Ваши заклинания с вероятностью 10% дают Ясность мысли, делая следующее заклинание бесплатным."
+        "bonus4": "Ваши заклинания с вероятностью 10% даруют «Ясность», делая следующее заклинание бесплатным."
       },
       "nighttalon": {
-        "name": "Кожаный доспех Ночного Когтя",
+        "name": "Кожаный доспех Лютого Клыка",
         "bonus2": "Сила атаки повышается на 40.",
         "bonus3": "Ловкость повышается на 15, вероятность критического удара на 2%, а скорость атаки и произнесения заклинаний на 15%.",
-        "bonus4": "Критические удары оружием наносят Рваную рану, вызывая кровотечение на 6 ед. урона раз в 2 сек. в течение 12 сек. Суммируется до 3 раз."
+        "bonus4": "Критические удары оружием наносят «Рваную рану»: цель теряет 6 ед. здоровья от кровотечения каждые 2 сек. в течение 12 сек. Суммируется до 3 раз."
       },
       "soulflame": {
-        "name": "Одеяние Пламени Души",
+        "name": "Одеяние Призрачного пламени",
         "bonus2": "Вас невозможно отбросить (100% сопротивление отбрасыванию).",
         "bonus3": "Интеллект повышается на 15, дух на 15, а скорость атаки и произнесения заклинаний на 15%.",
-        "bonus4": "Ваши заклинания с вероятностью 10% дают Пламя души, повышая силу заклинаний на 40 на 10 сек."
+        "bonus4": "Ваши заклинания с вероятностью 10% даруют «Пламя души», увеличивая силу заклинаний на 40 на 10 сек."
       },
       "stormcallers": {
-        "name": "Одеяние Зовущего Бурю",
+        "name": "Одеяние Зова Бури",
         "bonus2": "Вас невозможно отбросить (100% сопротивление отбрасыванию).",
         "bonus3": "Интеллект повышается на 15, дух на 15, а скорость атаки и произнесения заклинаний на 15%.",
-        "bonus4": "Ваши заклинания с вероятностью 10% дают Пламя души, повышая силу заклинаний на 40 на 10 сек."
+        "bonus4": "Ваши заклинания с вероятностью 10% даруют «Пламя души», увеличивая силу заклинаний на 40 на 10 сек."
       },
       "vale_arcanist": {
         "name": "Регалии арканиста Долины",
         "bonus3": "Скорость атаки и произнесения заклинаний повышается на 15%."
       },
       "wyrmshadow": {
-        "name": "Облачение Тени Дракона",
+        "name": "Облачение Ночного Клыка",
         "bonus2": "Сила атаки повышается на 40.",
         "bonus3": "Ловкость повышается на 15, вероятность критического удара на 2%.",
-        "bonus4": "Критические удары оружием с вероятностью 50% дают Клыкастый натиск, повышая скорость атаки на 25% на 8 сек."
+        "bonus4": "Критические удары оружием с вероятностью 50% даруют «Клыкастый порыв», увеличивая скорость атаки на 25% на 8 сек."
       }
     }
   },
