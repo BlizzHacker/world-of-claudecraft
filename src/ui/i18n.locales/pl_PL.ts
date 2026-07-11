@@ -1514,7 +1514,6 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'delveUi.tracker.title': 'Wyprawa',
   'download.desc':
     'Pobierz samodzielny launcher dla zoptymalizowanej wydajności i gry na pełnym ekranie.',
-  'download.title': 'Launchers & Installs',
   'download.macCta': 'Pobierz dla macOS',
   'download.windowsPending': 'Build Windows w przygotowaniu.',
   'entities.abilities.adrenaline_rush.description':

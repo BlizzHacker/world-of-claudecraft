@@ -11,7 +11,6 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const es_ES: Partial<Record<TranslationKey, string>> = {
-  'hud.core.mobileSettings': 'Ajustes',
   'hudChrome.account.sectionConnections': 'Cuentas conectadas',
   'hudChrome.account.connectionsSummary':
     'Gestiona proveedores de inicio de sesion vinculados a esta cuenta.',
@@ -35,8 +34,6 @@ export const es_ES: Partial<Record<TranslationKey, string>> = {
   'news.proofTitle': 'Prueba de $CR',
   'news.proofBody': 'La pagina publica de prueba muestra mint, tesoreria y enlaces de Solscan.',
   'news.openLink': 'Abrir',
-  'download.macCta': 'Descargar para macOS',
-  'download.linuxCta': 'Descargar para Linux',
   'download.linuxHint': 'AppImage: hazlo ejecutable y ejecutalo. No requiere instalacion.',
   'download.windowsPending': 'Compilacion de Windows pendiente.',
   'nav.whitepaper': 'Libro blanco',
@@ -328,7 +325,6 @@ export const es_ES: Partial<Record<TranslationKey, string>> = {
   'auth.recovery.title': 'Anadir correo de recuperacion',
   'auth.recovery.body':
     'Configura una direccion de correo para poder recuperar tu cuenta. Solo la usamos para confirmar que esta cuenta te pertenece si alguna vez necesitas restablecer tu contrasena.',
-  'auth.recovery.save': 'Guardar correo',
   'auth.recovery.logOut': 'Cerrar sesion',
   'auth.recovery.invalid': 'Introduce una direccion de correo valida.',
   'auth.recovery.failed': 'No se pudo guardar tu correo. Intentalo de nuevo.',

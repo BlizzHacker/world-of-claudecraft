@@ -3114,7 +3114,7 @@ export const vi_VN: EnTranslations = {
   "footer": {
     "copyright": "2026 Cryptic Realm",
     "githubLink": "https://github.com/levy-street/world-of-claudecraft",
-    "githubLabel": "Dự Án Mã Nguồn Mở",
+    "githubLabel": "Contributions",
     "whitepaper": "Sách trắng",
     "terms": "Điều Khoản Dịch Vụ",
     "privacy": "Chính Sách Bảo Mật",
@@ -3187,7 +3187,7 @@ export const vi_VN: EnTranslations = {
     "loading": "Loading official channels…"
   },
   "download": {
-    "title": "Tải Trình Khởi Chạy Trên Máy Tính",
+    "title": "Launchers & Installs",
     "desc": "Tải trình khởi chạy độc lập để có hiệu năng tối ưu và chơi toàn màn hình.",
     "macCta": "Tải xuống cho macOS",
     "linuxCta": "Tải xuống cho Linux",

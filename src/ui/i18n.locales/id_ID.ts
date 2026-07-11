@@ -1649,7 +1649,6 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'delveUi.tracker.objective': 'Sasaran',
   'delveUi.tracker.title': 'Delve',
   'download.desc': 'Dapatkan peluncur mandiri untuk performa optimal dan permainan layar penuh.',
-  'download.title': 'Unduh Peluncur Desktop',
   'download.macCta': 'Unduh untuk macOS',
   'download.windowsPending': 'Build Windows tertunda.',
   'entities.abilities.adrenaline_rush.description':
@@ -3347,7 +3346,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'fiesta.word.wave': 'AUGMEN!',
   'footer.copyright': '2026 Cryptic Realm',
   'footer.discordLabel': 'Gabung Discord',
-  'footer.githubLabel': 'Proyek Sumber Terbuka',
+  'footer.githubLabel': 'Contributions',
   'footer.githubLink': 'https://github.com/levy-street/world-of-claudecraft',
   'footer.whitepaper': 'Whitepaper',
   'footer.privacy': 'Kebijakan Privasi',

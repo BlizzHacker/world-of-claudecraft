@@ -444,7 +444,6 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
   'download.linuxHint':
     'AppImage: nastav soubor jako spustitelný a spusť ho. Instalace není potřeba.',
   'download.macCta': 'Stáhnout pro macOS',
-  'download.title': 'Launchers & Installs',
   'download.windowsPending': 'Sestavení pro Windows se připravuje.',
   'serverUnavailable.body':
     'Restartujeme herní službu a očekáváme, že se Claudemoon brzy vrátí. Tato stránka bude stav automaticky kontrolovat.',

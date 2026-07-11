@@ -3114,7 +3114,7 @@ export const ru_RU: EnTranslations = {
   "footer": {
     "copyright": "2026 Cryptic Realm",
     "githubLink": "https://github.com/levy-street/world-of-claudecraft",
-    "githubLabel": "Проект с открытым исходным кодом",
+    "githubLabel": "Contributions",
     "whitepaper": "Белая книга",
     "terms": "Условия использования",
     "privacy": "Политика конфиденциальности",
@@ -3187,7 +3187,7 @@ export const ru_RU: EnTranslations = {
     "loading": "Loading official channels…"
   },
   "download": {
-    "title": "Скачать загрузчик для ПК",
+    "title": "Launchers & Installs",
     "desc": "Загрузите отдельный клиент для оптимальной производительности и игры на весь экран.",
     "macCta": "Скачать для macOS",
     "linuxCta": "Скачать для Linux",

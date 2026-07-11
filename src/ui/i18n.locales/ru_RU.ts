@@ -679,7 +679,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'stats.realmName': 'Название игрового мира',
   'footer.copyright': '2026 Cryptic Realm',
   'footer.githubLink': 'https://github.com/levy-street/world-of-claudecraft',
-  'footer.githubLabel': 'Проект с открытым исходным кодом',
+  'footer.githubLabel': 'Contributions',
   'footer.whitepaper': 'Белая книга',
   'footer.terms': 'Условия использования',
   'footer.privacy': 'Политика конфиденциальности',
@@ -690,7 +690,6 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'wiki.desc': 'Откройте секреты игрового мира, руководства по классам и стратегии.',
   'news.title': 'Новости и обновления',
   'news.desc': 'Читайте описание последних обновлений, информацию о событиях и новости сообщества.',
-  'download.title': 'Скачать загрузчик для ПК',
   'download.macCta': 'Скачать для macOS',
   'download.linuxCta': 'Скачать для Linux',
   'download.linuxHint':

@@ -1468,7 +1468,6 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'delveUi.tracker.objective': 'Mål',
   'delveUi.tracker.title': 'Delve',
   'download.desc': 'Hent den selvstændige launcher for optimeret ydeevne og fuldskærmsspil.',
-  'download.title': 'Download Desktop-launcher',
   'download.macCta': 'Download til macOS',
   'download.windowsPending': 'Windows-build afventer.',
   'entities.abilities.adrenaline_rush.description':
@@ -3146,7 +3145,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'fiesta.word.wave': 'FORSTÆRKNINGER!',
   'footer.copyright': '2026 Cryptic Realm',
   'footer.discordLabel': 'Bliv medlem af Discord',
-  'footer.githubLabel': 'Open Source-projekt',
+  'footer.githubLabel': 'Contributions',
   'footer.githubLink': 'https://github.com/levy-street/world-of-claudecraft',
   'footer.whitepaper': 'Whitepaper',
   'footer.privacy': 'Privatlivspolitik',

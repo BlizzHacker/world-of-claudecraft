@@ -34,13 +34,11 @@ export const fr_CA: Partial<Record<TranslationKey, string>> = {
   'news.proofBody':
     'La page publique de preuve affiche le mint, la tresorerie et les liens Solscan.',
   'news.openLink': 'Ouvrir',
-  'download.macCta': 'Telecharger pour macOS',
   'download.linuxCta': 'Telecharger pour Linux',
   'download.linuxHint':
     'AppImage : rendez-le executable, puis lancez-le. Aucune installation requise.',
   'download.windowsPending': 'Version Windows en attente.',
   'nav.whitepaper': 'Livre blanc',
-  'nav.contributions': 'Contributions',
   // Stat tooltips inherit the fr_FR base: none of these strings has a genuine
   // Quebec-specific form, so per the divergence-only policy fr_CA carries no
   // hudChrome.statInfo.* overrides.

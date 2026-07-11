@@ -1474,7 +1474,6 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'delveUi.tracker.objective': 'Mål',
   'delveUi.tracker.title': 'Delve',
   'download.desc': 'Hämta den fristående startaren för optimerad prestanda och spel i helskärm.',
-  'download.title': 'Ladda ner skrivbordsstartaren',
   'download.macCta': 'Ladda ner för macOS',
   'download.windowsPending': 'Windows-bygge väntar.',
   'entities.abilities.adrenaline_rush.description':
@@ -3154,7 +3153,7 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'fiesta.word.wave': 'FÖRSTÄRKNINGAR!',
   'footer.copyright': '2026 Cryptic Realm',
   'footer.discordLabel': 'Gå med i Discord',
-  'footer.githubLabel': 'Projekt med öppen källkod',
+  'footer.githubLabel': 'Contributions',
   'footer.githubLink': 'https://github.com/levy-street/world-of-claudecraft',
   'footer.whitepaper': 'Whitepaper',
   'footer.privacy': 'Integritetspolicy',

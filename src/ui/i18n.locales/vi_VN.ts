@@ -1629,7 +1629,6 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'delveUi.tracker.objective': 'Mục Tiêu',
   'delveUi.tracker.title': 'Hang Sâu',
   'download.desc': 'Tải trình khởi chạy độc lập để có hiệu năng tối ưu và chơi toàn màn hình.',
-  'download.title': 'Tải Trình Khởi Chạy Trên Máy Tính',
   'download.macCta': 'Tải xuống cho macOS',
   'download.windowsPending': 'Bản dựng Windows đang chờ.',
   'entities.abilities.adrenaline_rush.description':
@@ -3325,7 +3324,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'fiesta.word.wave': 'CƯỜNG HÓA!',
   'footer.copyright': '2026 Cryptic Realm',
   'footer.discordLabel': 'Tham Gia Discord',
-  'footer.githubLabel': 'Dự Án Mã Nguồn Mở',
+  'footer.githubLabel': 'Contributions',
   'footer.githubLink': 'https://github.com/levy-street/world-of-claudecraft',
   'footer.whitepaper': 'Sách trắng',
   'footer.privacy': 'Chính Sách Bảo Mật',

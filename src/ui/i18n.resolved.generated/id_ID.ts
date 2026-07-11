@@ -3114,7 +3114,7 @@ export const id_ID: EnTranslations = {
   "footer": {
     "copyright": "2026 Cryptic Realm",
     "githubLink": "https://github.com/levy-street/world-of-claudecraft",
-    "githubLabel": "Proyek Sumber Terbuka",
+    "githubLabel": "Contributions",
     "whitepaper": "Whitepaper",
     "terms": "Ketentuan Layanan",
     "privacy": "Kebijakan Privasi",
@@ -3187,7 +3187,7 @@ export const id_ID: EnTranslations = {
     "loading": "Loading official channels…"
   },
   "download": {
-    "title": "Unduh Peluncur Desktop",
+    "title": "Launchers & Installs",
     "desc": "Dapatkan peluncur mandiri untuk performa optimal dan permainan layar penuh.",
     "macCta": "Unduh untuk macOS",
     "linuxCta": "Unduh untuk Linux",

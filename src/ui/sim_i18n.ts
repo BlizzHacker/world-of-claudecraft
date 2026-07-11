@@ -43,6 +43,9 @@ const baseEnTable = {
   'log.bankSlotsPurchased': 'You purchase additional bank slots.',
   'error.specLevel': 'You may choose a specialization at level {level}.',
   'error.equipLevel': 'You must be level {level} to equip that.',
+  'error.builderRequiresRole': 'Builder tools require admin or moderator.',
+  'log.corpseLootable': "{name}'s corpse can be looted!",
+  'error.mountCombat': "You can't mount in combat.",
   'error.invalidBuild': 'Invalid talent build.',
   'error.unknownSpec': 'Unknown specialization.',
   'error.maxLoadouts': 'You can save at most {count} loadouts.',
@@ -92,6 +95,8 @@ const baseEnTable = {
   'groundPickup.gravecallerSigilDeny': 'The sigil repels your touch.',
   'groundPickup.ledgerPageDeny': 'The ledger pages are bound too tightly to take.',
   'groundPickup.morthenGrimoireDeny': "The grimoire's clasp is magically sealed.",
+  'groundPickup.bindingWardDeny':
+    'The sigil burns cold to the touch, you have no reason to take it yet.',
   'groundPickup.fenMusterOrderDeny': 'The wax seal holds until the order is yours to claim.',
   'groundPickup.caravanGoodsDeny': "You aren't authorized to salvage these goods yet.",
   'groundPickup.rustedCenserDeny': 'The censer is chained in place.',
@@ -111,6 +116,7 @@ const baseEnTable = {
   'groundPickup.gravecallerSigilEnough': "You already carry a Gravecaller's Sigil.",
   'groundPickup.ledgerPageEnough': 'You already have enough ledger pages.',
   'groundPickup.morthenGrimoireEnough': "You already have Morthen's Grimoire.",
+  'groundPickup.bindingWardEnough': 'You already carry all three Sigils of Hate.',
   'groundPickup.fenMusterOrderEnough': 'You already have the Fenbridge muster order.',
   'groundPickup.caravanGoodsEnough': 'You already have enough caravan goods.',
   'groundPickup.rustedCenserEnough': 'You already have enough rusted censers.',
@@ -332,6 +338,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'log.bagsMigrated': 'Your belongings have been packed into new bags.',
     'error.specLevel': 'You may choose a specialization at level {level}.',
     'error.equipLevel': 'You must be level {level} to equip that.',
+    'error.builderRequiresRole': 'Builder tools require admin or moderator.',
+    'log.corpseLootable': "{name}'s corpse can be looted!",
+  'error.mountCombat': "You can't mount in combat.",
     'error.invalidBuild': 'Invalid talent build.',
     'error.unknownSpec': 'Unknown specialization.',
     'error.maxLoadouts': 'You can save at most {count} loadouts.',
@@ -496,6 +505,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'groundPickup.ledgerPageDeny':
       'Las páginas del registro están encuadernadas con demasiada firmeza para llevártelas.',
     'groundPickup.morthenGrimoireDeny': 'El broche del grimorio está sellado con magia.',
+    'groundPickup.bindingWardDeny': 'El sigilo arde frio al tacto, aun no tienes motivo para tomarlo.',
     'groundPickup.fenMusterOrderDeny':
       'El sello de cera aguanta hasta que te corresponda reclamar la orden.',
     'groundPickup.caravanGoodsDeny': 'Aún no tienes autorización para recuperar estos bienes.',
@@ -516,6 +526,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'groundPickup.gravecallerSigilEnough': 'Ya llevas un Sigilo de Gravecaller.',
     'groundPickup.ledgerPageEnough': 'Ya tienes suficientes páginas del registro.',
     'groundPickup.morthenGrimoireEnough': 'Ya tienes el Grimorio de Morthen.',
+    'groundPickup.bindingWardEnough': 'Ya llevas los tres Sigilos de Odio.',
     'groundPickup.fenMusterOrderEnough': 'Ya tienes la orden de alistamiento de Fenbridge.',
     'groundPickup.caravanGoodsEnough': 'Ya tienes suficientes bienes de la caravana.',
     'groundPickup.rustedCenserEnough': 'Ya tienes suficientes incensarios oxidados.',
@@ -633,6 +644,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'log.bagsMigrated': 'Tus pertenencias se han guardado en bolsas nuevas.',
     'error.specLevel': 'Puedes elegir una especialización al nivel {level}.',
     'error.equipLevel': 'Debes ser nivel {level} para equipar eso.',
+    'error.builderRequiresRole': 'Builder tools require admin or moderator.',
+    'log.corpseLootable': "{name}'s corpse can be looted!",
+  'error.mountCombat': "You can't mount in combat.",
     'error.invalidBuild': 'Configuración de talentos no válida.',
     'error.unknownSpec': 'Especialización desconocida.',
     'error.maxLoadouts': 'Puedes guardar como máximo {count} configuraciones.',
@@ -740,6 +754,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'groundPickup.ledgerPageDeny':
       'Las páginas del libro mayor están cosidas demasiado prietas para llevártelas.',
     'groundPickup.morthenGrimoireDeny': 'El broche del grimorio está sellado con magia.',
+    'groundPickup.bindingWardDeny': 'El sigilo arde frio al tacto, aun no tienes motivo para tomarlo.',
     'groundPickup.fenMusterOrderDeny':
       'El sello de lacre aguanta hasta que te corresponda reclamar la orden.',
     'groundPickup.caravanGoodsDeny': 'Aún no tienes autorización para recuperar estos bienes.',
@@ -760,6 +775,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'groundPickup.gravecallerSigilEnough': 'Ya llevas un Sigilo de Gravecaller.',
     'groundPickup.ledgerPageEnough': 'Ya tienes suficientes páginas del libro mayor.',
     'groundPickup.morthenGrimoireEnough': 'Ya tienes el Grimorio de Morthen.',
+    'groundPickup.bindingWardEnough': 'Ya llevas los tres Sigilos de Odio.',
     'groundPickup.fenMusterOrderEnough': 'Ya tienes la orden de alistamiento de Fenbridge.',
     'groundPickup.caravanGoodsEnough': 'Ya tienes suficientes bienes de la caravana.',
     'groundPickup.rustedCenserEnough': 'Ya tienes suficientes incensarios oxidados.',
@@ -877,6 +893,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'log.bagsMigrated': 'Tus pertenencias se han guardado en bolsas nuevas.',
     'error.specLevel': 'Podrás elegir una especialización en el nivel {level}.',
     'error.equipLevel': 'Debes ser nivel {level} para equipar eso.',
+    'error.builderRequiresRole': 'Builder tools require admin or moderator.',
+    'log.corpseLootable': "{name}'s corpse can be looted!",
+  'error.mountCombat': "You can't mount in combat.",
     'error.invalidBuild': 'Configuración de talentos no válida.',
     'error.unknownSpec': 'Especialización desconocida.',
     'error.maxLoadouts': 'Puedes guardar como máximo {count} configuraciones.',
@@ -984,6 +1003,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'groundPickup.ledgerPageDeny':
       'Les pages du registre sont trop solidement reliées pour être arrachées.',
     'groundPickup.morthenGrimoireDeny': 'Le fermoir du grimoire est scellé par magie.',
+    'groundPickup.bindingWardDeny': 'Le sceau brule froid sous vos doigts, vous n\'avez pas encore de raison de le prendre.',
     'groundPickup.fenMusterOrderDeny':
       "Le sceau de cire tient tant que l'ordre ne vous revient pas de droit.",
     'groundPickup.caravanGoodsDeny':
@@ -1005,6 +1025,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'groundPickup.gravecallerSigilEnough': 'Vous portez déjà un sceau de Gravecaller.',
     'groundPickup.ledgerPageEnough': 'Vous avez déjà assez de pages de registre.',
     'groundPickup.morthenGrimoireEnough': 'Vous avez déjà le grimoire de Morthen.',
+    'groundPickup.bindingWardEnough': 'Vous portez deja les trois Sceaux de Haine.',
     'groundPickup.fenMusterOrderEnough': "Vous avez déjà l'ordre de rassemblement de Fenbridge.",
     'groundPickup.caravanGoodsEnough': 'Vous avez déjà assez de marchandises de la caravane.',
     'groundPickup.rustedCenserEnough': "Vous avez déjà assez d'encensoirs rouillés.",
@@ -1122,6 +1143,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'log.bagsMigrated': 'Vos affaires ont été rangées dans de nouveaux sacs.',
     'error.specLevel': 'Vous pourrez choisir une spécialisation au niveau {level}.',
     'error.equipLevel': 'Vous devez être niveau {level} pour équiper cet objet.',
+    'error.builderRequiresRole': 'Builder tools require admin or moderator.',
+    'log.corpseLootable': "{name}'s corpse can be looted!",
+  'error.mountCombat': "You can't mount in combat.",
     'error.invalidBuild': 'Distribution de talents invalide.',
     'error.unknownSpec': 'Spécialisation inconnue.',
     'error.maxLoadouts': 'Vous pouvez enregistrer au maximum {count} configurations.',
@@ -1230,6 +1254,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'groundPickup.ledgerPageDeny':
       'Les pages du registre sont trop solidement reliées pour être emportées.',
     'groundPickup.morthenGrimoireDeny': 'Le fermoir du grimoire est scellé par magie.',
+    'groundPickup.bindingWardDeny': 'Le sceau brule froid sous vos doigts, vous n\'avez pas encore de raison de le prendre.',
     'groundPickup.fenMusterOrderDeny':
       'Le sceau de cire tient tant que cet ordre ne vous revient pas.',
     'groundPickup.caravanGoodsDeny': 'Rien ne vous autorise encore à récupérer ces marchandises.',
@@ -1250,6 +1275,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'groundPickup.gravecallerSigilEnough': 'Vous portez déjà un Sceau de Gravecaller.',
     'groundPickup.ledgerPageEnough': 'Vous avez déjà assez de pages de registre.',
     'groundPickup.morthenGrimoireEnough': 'Vous avez déjà le Grimoire de Morthen.',
+    'groundPickup.bindingWardEnough': 'Vous portez deja les trois Sceaux de Haine.',
     'groundPickup.fenMusterOrderEnough': 'Vous avez déjà l’Ordre de rassemblement de Fenbridge.',
     'groundPickup.caravanGoodsEnough': 'Vous avez déjà assez de marchandises de caravane.',
     'groundPickup.rustedCenserEnough': 'Vous avez déjà assez d’encensoirs rouillés.',
@@ -1367,6 +1393,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'log.bagsMigrated': 'Vos affaires ont été rangées dans de nouveaux sacs.',
     'error.specLevel': 'Vous pourrez choisir une spécialisation au niveau {level}.',
     'error.equipLevel': 'Vous devez être niveau {level} pour équiper cet objet.',
+    'error.builderRequiresRole': 'Builder tools require admin or moderator.',
+    'log.corpseLootable': "{name}'s corpse can be looted!",
+  'error.mountCombat': "You can't mount in combat.",
     'error.invalidBuild': 'Spécialisation invalide.',
     'error.unknownSpec': 'Spécialisation inconnue.',
     'error.maxLoadouts': 'Vous pouvez enregistrer au maximum {count} configurations.',
@@ -1559,6 +1588,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'log.bagsMigrated': 'Your belongings have been packed into new bags.',
     'error.specLevel': 'You may choose a specialization at level {level}.',
     'error.equipLevel': 'You must be level {level} to equip that.',
+    'error.builderRequiresRole': 'Builder tools require admin or moderator.',
+    'log.corpseLootable': "{name}'s corpse can be looted!",
+  'error.mountCombat': "You can't mount in combat.",
     'error.invalidBuild': 'Invalid talent build.',
     'error.unknownSpec': 'Unknown specialization.',
     'error.maxLoadouts': 'You can save at most {count} loadouts.',
@@ -1643,6 +1675,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'groundPickup.ledgerPageDeny':
       'Le pagine del registro sono rilegate troppo saldamente per portarle via.',
     'groundPickup.morthenGrimoireDeny': 'Il fermaglio del grimorio è sigillato dalla magia.',
+    'groundPickup.bindingWardDeny': 'Il sigillo brucia freddo al tatto, non hai ancora motivo di prenderlo.',
     'groundPickup.fenMusterOrderDeny': "Il sigillo di cera resiste finché l'ordine non ti spetta.",
     'groundPickup.caravanGoodsDeny': 'Non sei ancora autorizzato a recuperare queste merci.',
     'groundPickup.rustedCenserDeny': 'Il turibolo è incatenato al suo posto.',
@@ -1662,6 +1695,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'groundPickup.gravecallerSigilEnough': 'Porti già con te un Sigillo di Gravecaller.',
     'groundPickup.ledgerPageEnough': 'Hai già abbastanza pagine di registro.',
     'groundPickup.morthenGrimoireEnough': 'Hai già il Grimorio di Morthen.',
+    'groundPickup.bindingWardEnough': 'Hai gia tutti e tre i Sigilli dell\'Odio.',
     'groundPickup.fenMusterOrderEnough': "Hai già l'ordine di raduno di Fenbridge.",
     'groundPickup.caravanGoodsEnough': 'Hai già abbastanza merci della carovana.',
     'groundPickup.rustedCenserEnough': 'Hai già abbastanza turiboli arrugginiti.',
@@ -1778,6 +1812,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'log.bagsMigrated': 'I tuoi averi sono stati riposti in nuove borse.',
     'error.specLevel': 'Puoi scegliere una specializzazione al livello {level}.',
     'error.equipLevel': 'Devi essere di livello {level} per equipaggiarlo.',
+    'error.builderRequiresRole': 'Builder tools require admin or moderator.',
+    'log.corpseLootable': "{name}'s corpse can be looted!",
+  'error.mountCombat': "You can't mount in combat.",
     'error.invalidBuild': 'Build dei talenti non valida.',
     'error.unknownSpec': 'Specializzazione sconosciuta.',
     'error.maxLoadouts': 'Puoi salvare al massimo {count} configurazioni.',
@@ -1883,6 +1920,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'groundPickup.gravecallerSigilDeny': 'Das Siegel weist Eure Berührung ab.',
     'groundPickup.ledgerPageDeny': 'Die Buchseiten sind zu fest gebunden, um sie mitzunehmen.',
     'groundPickup.morthenGrimoireDeny': 'Die Schließe des Grimoires ist magisch versiegelt.',
+    'groundPickup.bindingWardDeny': 'Das Siegel brennt kalt bei Beruehrung, du hast noch keinen Grund, es zu nehmen.',
     'groundPickup.fenMusterOrderDeny': 'Das Wachssiegel hält, bis Euch der Befehl zusteht.',
     'groundPickup.caravanGoodsDeny': 'Ihr seid noch nicht befugt, diese Waren zu bergen.',
     'groundPickup.rustedCenserDeny': 'Das Räuchergefäß ist fest angekettet.',
@@ -1902,6 +1940,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'groundPickup.gravecallerSigilEnough': 'Ihr tragt bereits ein Gravecaller-Siegel.',
     'groundPickup.ledgerPageEnough': 'Ihr habt bereits genug Buchseiten.',
     'groundPickup.morthenGrimoireEnough': 'Ihr habt Morthens Grimoire bereits.',
+    'groundPickup.bindingWardEnough': 'Du traegst bereits alle drei Siegel des Hasses.',
     'groundPickup.fenMusterOrderEnough': 'Ihr habt den Musterungsbefehl von Fenbridge bereits.',
     'groundPickup.caravanGoodsEnough': 'Ihr habt bereits genug Karawanenwaren.',
     'groundPickup.rustedCenserEnough': 'Ihr habt bereits genug rostige Räuchergefäße.',
@@ -2018,6 +2057,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'log.bagsMigrated': 'Eure Habseligkeiten wurden in neue Taschen gepackt.',
     'error.specLevel': 'Ihr könnt auf Stufe {level} eine Spezialisierung wählen.',
     'error.equipLevel': 'Ihr müsst Stufe {level} sein, um das anzulegen.',
+    'error.builderRequiresRole': 'Builder tools require admin or moderator.',
+    'log.corpseLootable': "{name}'s corpse can be looted!",
+  'error.mountCombat': "You can't mount in combat.",
     'error.invalidBuild': 'Ungültige Talentverteilung.',
     'error.unknownSpec': 'Unbekannte Spezialisierung.',
     'error.maxLoadouts': 'Ihr könnt höchstens {count} Vorlagen speichern.',
@@ -2132,6 +2174,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'groundPickup.gravecallerSigilDeny': '徽记排斥着你的触碰。',
     'groundPickup.ledgerPageDeny': '账页装订得太紧，无法取下。',
     'groundPickup.morthenGrimoireDeny': '魔典的锁扣被魔法封住了。',
+    'groundPickup.bindingWardDeny': '???????????????????',
     'groundPickup.fenMusterOrderDeny': '在这份命令轮到你领取之前，蜡封不会开启。',
     'groundPickup.caravanGoodsDeny': '你还无权回收这些货物。',
     'groundPickup.rustedCenserDeny': '香炉被锁链固定在原地。',
@@ -2148,6 +2191,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'groundPickup.gravecallerSigilEnough': '你身上已经带着一枚唤墓者徽记了。',
     'groundPickup.ledgerPageEnough': '你已经有足够的账页了。',
     'groundPickup.morthenGrimoireEnough': '你已经拿到莫森的魔典了。',
+    'groundPickup.bindingWardEnough': '??????????????',
     'groundPickup.fenMusterOrderEnough': '你已经拿到芬桥集结令了。',
     'groundPickup.caravanGoodsEnough': '你已经有足够的商队货物了。',
     'groundPickup.rustedCenserEnough': '你已经有足够的生锈香炉了。',
@@ -2266,6 +2310,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'log.bagsMigrated': '你的物品已装入新背包。',
     'error.specLevel': '你将在{level}级时选择专精。',
     'error.equipLevel': '你必须达到等级{level}才能装备该物品。',
+    'error.builderRequiresRole': 'Builder tools require admin or moderator.',
+    'log.corpseLootable': "{name}'s corpse can be looted!",
+  'error.mountCombat': "You can't mount in combat.",
     'error.invalidBuild': '无效的天赋配置。',
     'error.unknownSpec': '未知的专精。',
     'error.maxLoadouts': '你最多只能保存{count}套配置。',
@@ -2362,6 +2409,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'groundPickup.gravecallerSigilDeny': '徽記排斥你的觸碰。',
     'groundPickup.ledgerPageDeny': '帳頁裝訂得太緊，無法取下。',
     'groundPickup.morthenGrimoireDeny': '魔典的扣環被魔法封印了。',
+    'groundPickup.bindingWardDeny': '???????????????????',
     'groundPickup.fenMusterOrderDeny': '在這道集結令歸你領取之前，蠟封不會鬆開。',
     'groundPickup.caravanGoodsDeny': '你尚未獲准回收這些貨物。',
     'groundPickup.rustedCenserDeny': '香爐被鎖鏈固定在原地。',
@@ -2378,6 +2426,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'groundPickup.gravecallerSigilEnough': '你身上已經帶著一枚喚墓者徽記了。',
     'groundPickup.ledgerPageEnough': '你已經有足夠的帳頁了。',
     'groundPickup.morthenGrimoireEnough': '你已經擁有莫森的魔典了。',
+    'groundPickup.bindingWardEnough': '??????????????',
     'groundPickup.fenMusterOrderEnough': '你已經擁有芬橋集結令了。',
     'groundPickup.caravanGoodsEnough': '你已經有足夠的商隊貨物了。',
     'groundPickup.rustedCenserEnough': '你已經有足夠的生鏽香爐了。',
@@ -2496,6 +2545,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'log.bagsMigrated': '你的物品已裝入新背包。',
     'error.specLevel': '你必須達到等級 {level} 才能選擇專精。',
     'error.equipLevel': '你必須達到等級 {level} 才能裝備該物品。',
+    'error.builderRequiresRole': 'Builder tools require admin or moderator.',
+    'log.corpseLootable': "{name}'s corpse can be looted!",
+  'error.mountCombat': "You can't mount in combat.",
     'error.invalidBuild': '無效的天賦配置。',
     'error.unknownSpec': '未知的專精。',
     'error.maxLoadouts': '你最多只能儲存 {count} 組配置。',
@@ -2592,6 +2644,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'groundPickup.gravecallerSigilDeny': '인장이 당신의 손길을 밀어냅니다.',
     'groundPickup.ledgerPageDeny': '장부 페이지가 너무 단단히 묶여 있어 뜯어낼 수 없습니다.',
     'groundPickup.morthenGrimoireDeny': '마법서의 잠금쇠가 마법으로 봉인되어 있습니다.',
+    'groundPickup.bindingWardDeny': '??? ??? ????, ?? ??? ??? ????.',
     'groundPickup.fenMusterOrderDeny':
       '명령서를 가져갈 자격이 생기기 전까지 밀랍 봉인은 풀리지 않습니다.',
     'groundPickup.caravanGoodsDeny': '아직 이 물품을 수습할 권한이 없습니다.',
@@ -2612,6 +2665,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'groundPickup.gravecallerSigilEnough': '무덤부름 인장은 이미 지니고 있습니다.',
     'groundPickup.ledgerPageEnough': '장부 페이지는 이미 충분히 갖고 있습니다.',
     'groundPickup.morthenGrimoireEnough': '모르덴의 마법서는 이미 갖고 있습니다.',
+    'groundPickup.bindingWardEnough': '??? ?? ? ?? ?? ?? ??? ????.',
     'groundPickup.fenMusterOrderEnough': '펜브리지 소집 명령서는 이미 갖고 있습니다.',
     'groundPickup.caravanGoodsEnough': '대상단 물품은 이미 충분히 갖고 있습니다.',
     'groundPickup.rustedCenserEnough': '녹슨 향로는 이미 충분히 갖고 있습니다.',
@@ -2731,6 +2785,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'log.bagsMigrated': '소지품이 새 가방에 담겼습니다.',
     'error.specLevel': '{level}레벨에 전문화를 선택할 수 있습니다.',
     'error.equipLevel': '{level}레벨이 되어야 착용할 수 있습니다.',
+    'error.builderRequiresRole': 'Builder tools require admin or moderator.',
+    'log.corpseLootable': "{name}'s corpse can be looted!",
+  'error.mountCombat': "You can't mount in combat.",
     'error.invalidBuild': '잘못된 특성 구성입니다.',
     'error.unknownSpec': '알 수 없는 전문화입니다.',
     'error.maxLoadouts': '특성 묶음은 최대 {count}개까지 저장할 수 있습니다.',
@@ -2830,6 +2887,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'groundPickup.gravecallerSigilDeny': '印章はあなたの手を拒んでいます。',
     'groundPickup.ledgerPageDeny': '帳簿のページは固く綴じられていて、抜き取れません。',
     'groundPickup.morthenGrimoireDeny': '魔導書の留め金は魔法で封じられています。',
+    'groundPickup.bindingWardDeny': '????????????????????????????',
     'groundPickup.fenMusterOrderDeny': 'その召集令があなたのものとなるまで、蝋の封は破れません。',
     'groundPickup.caravanGoodsDeny': 'まだこの物資を回収する権限がありません。',
     'groundPickup.rustedCenserDeny': '香炉は鎖でその場につながれています。',
@@ -2849,6 +2907,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'groundPickup.gravecallerSigilEnough': 'グレイブコーラーの印章はすでに携えています。',
     'groundPickup.ledgerPageEnough': '帳簿のページはすでに十分あります。',
     'groundPickup.morthenGrimoireEnough': 'モーセンの魔導書はすでに持っています。',
+    'groundPickup.bindingWardEnough': '??????????????????',
     'groundPickup.fenMusterOrderEnough': 'フェンブリッジ召集令はすでに持っています。',
     'groundPickup.caravanGoodsEnough': '隊商の物資はすでに十分あります。',
     'groundPickup.rustedCenserEnough': '錆びた香炉はすでに十分あります。',
@@ -2973,6 +3032,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'log.bagsMigrated': '持ち物は新しいバッグに収納されました。',
     'error.specLevel': '専門化はレベル{level}で選択できます。',
     'error.equipLevel': 'それを装備するにはレベル{level}が必要です。',
+    'error.builderRequiresRole': 'Builder tools require admin or moderator.',
+    'log.corpseLootable': "{name}'s corpse can be looted!",
+  'error.mountCombat': "You can't mount in combat.",
     'error.invalidBuild': '無効なタレントビルドです。',
     'error.unknownSpec': '不明な専門化です。',
     'error.maxLoadouts': 'ロードアウトは最大{count}個まで保存できます。',
@@ -3068,6 +3130,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'groundPickup.ledgerPageDeny':
       'As páginas do livro-caixa estão encadernadas firme demais para serem arrancadas.',
     'groundPickup.morthenGrimoireDeny': 'O fecho do grimório está selado por magia.',
+    'groundPickup.bindingWardDeny': 'O sigilo queima frio ao toque, voce ainda nao tem motivo para pega-lo.',
     'groundPickup.fenMusterOrderDeny':
       'O selo de cera resiste até que a ordem seja sua por direito.',
     'groundPickup.caravanGoodsDeny':
@@ -3088,6 +3151,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'groundPickup.gravecallerSigilEnough': 'Você já carrega um Sigilo de Gravecaller.',
     'groundPickup.ledgerPageEnough': 'Você já tem páginas de livro-caixa suficientes.',
     'groundPickup.morthenGrimoireEnough': 'Você já tem o Grimório de Morthen.',
+    'groundPickup.bindingWardEnough': 'Voce ja carrega os tres Sigilos do Odio.',
     'groundPickup.fenMusterOrderEnough': 'Você já tem a ordem de convocação de Fenbridge.',
     'groundPickup.caravanGoodsEnough': 'Você já tem mercadorias da caravana suficientes.',
     'groundPickup.rustedCenserEnough': 'Você já tem incensários enferrujados suficientes.',
@@ -3203,6 +3267,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'log.bagsMigrated': 'Seus pertences foram guardados em bolsas novas.',
     'error.specLevel': 'Você pode escolher uma especialização no nível {level}.',
     'error.equipLevel': 'Você precisa ser nível {level} para equipar isso.',
+    'error.builderRequiresRole': 'Builder tools require admin or moderator.',
+    'log.corpseLootable': "{name}'s corpse can be looted!",
+  'error.mountCombat': "You can't mount in combat.",
     'error.invalidBuild': 'Estrutura de talentos inválida.',
     'error.unknownSpec': 'Especialização desconhecida.',
     'error.maxLoadouts': 'Você pode salvar no máximo {count} conjuntos.',
@@ -3316,6 +3383,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'groundPickup.ledgerPageDeny':
       'Страницы погребальной книги сшиты слишком крепко, чтобы их вырвать.',
     'groundPickup.morthenGrimoireDeny': 'Застёжка гримуара запечатана магией.',
+    'groundPickup.bindingWardDeny': '????? ???????? ??????? ??? ?????????????, ? ??? ???? ??? ??????? ????? ???.',
     'groundPickup.fenMusterOrderDeny':
       'Восковая печать держится, пока приказ не станет вашим по праву.',
     'groundPickup.caravanGoodsDeny': 'Вам пока не дозволено забирать эти товары.',
@@ -3336,6 +3404,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'groundPickup.gravecallerSigilEnough': 'Вы уже несёте с собой Сигил Могильного Зова.',
     'groundPickup.ledgerPageEnough': 'У вас уже достаточно страниц погребальной книги.',
     'groundPickup.morthenGrimoireEnough': 'У вас уже есть Гримуар Мортена.',
+    'groundPickup.bindingWardEnough': '? ??? ??? ???? ??? ??? ?????? ?????????.',
     'groundPickup.fenMusterOrderEnough': 'У вас уже есть приказ о сборе в Фенбридже.',
     'groundPickup.caravanGoodsEnough': 'У вас уже достаточно товаров каравана.',
     'groundPickup.rustedCenserEnough': 'У вас уже достаточно ржавых кадил.',
@@ -3460,6 +3529,9 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'log.bagsMigrated': 'Ваши вещи разложены по новым сумкам.',
     'error.specLevel': 'Выбрать специализацию можно на {level} уровне.',
     'error.equipLevel': 'Чтобы экипировать это, нужен {level} уровень.',
+    'error.builderRequiresRole': 'Builder tools require admin or moderator.',
+    'log.corpseLootable': "{name}'s corpse can be looted!",
+  'error.mountCombat': "You can't mount in combat.",
     'error.invalidBuild': 'Недопустимая сборка талантов.',
     'error.unknownSpec': 'Неизвестная специализация.',
     'error.maxLoadouts': 'Можно сохранить не более {count} наборов.',
@@ -5304,7 +5376,105 @@ function locTalentTail(s: string): string {
 }
 
 type Rule = { re: RegExp; build: (m: RegExpExecArray) => string };
+function enPassthrough(english: string, localized: string): string {
+  return getLanguage() === 'en' ? english : localized;
+}
+
 const RULES: Rule[] = [
+  {
+    re: /^Unknown command\.$/,
+    build: () => enPassthrough('Unknown command.', t('hud.errors.unknownCommand', { command: '' })),
+  },
+  {
+    re: /^Level (.+) — maximum level reached\.$/,
+    build: (m) =>
+      enPassthrough(
+        `Level ${m[1]} — maximum level reached.`,
+        `${t('guide.dungeonsPage.levelExact', { n: m[1] })} - ${t('game.xp.maxLevel')}`,
+      ),
+  },
+  {
+    re: /^AH… FRESH MEAT! The Butcher bursts from the dark!$/,
+    build: () =>
+      enPassthrough(
+        'AH… FRESH MEAT! The Butcher bursts from the dark!',
+        t('sim.delve.baptistryWave'),
+      ),
+  },
+  {
+    re: /^(.+) accepts your challenge — to the death! \((\d+)s\)$/,
+    build: (m) =>
+      enPassthrough(
+        `${m[1]} accepts your challenge — to the death! (${m[2]}s)`,
+        `${m[1]} - ${t('hud.system.duelCountdown', { seconds: m[2] })}`,
+      ),
+  },
+  {
+    re: /^You have bested (.+) in a duel!$/,
+    build: (m) =>
+      enPassthrough(
+        `You have bested ${m[1]} in a duel!`,
+        t('hud.system.duelEndBanner', { winner: 'You', loser: m[1] }),
+      ),
+  },
+  {
+    re: /^(.+) stands victorious\.$/,
+    build: (m) =>
+      enPassthrough(
+        `${m[1]} stands victorious.`,
+        t('hud.system.duelEndBanner', { winner: m[1], loser: 'you' }),
+      ),
+  },
+  {
+    re: /^You can't challenge anyone while dead\.$/,
+    build: () =>
+      enPassthrough("You can't challenge anyone while dead.", tSim('error.cantWhileDead')),
+  },
+  {
+    re: /^You are already in a duel\.$/,
+    build: () => enPassthrough('You are already in a duel.', t('hud.errors.duelInProgress')),
+  },
+  {
+    re: /^Target a wandering mercenary to challenge them to a duel\.$/,
+    build: () =>
+      enPassthrough(
+        'Target a wandering mercenary to challenge them to a duel.',
+        t('hud.errors.noTarget'),
+      ),
+  },
+  {
+    re: /^They are in no shape to fight\.$/,
+    build: () => enPassthrough('They are in no shape to fight.', t('sim.delve.cannotInteract')),
+  },
+  {
+    re: /^Get closer to issue your challenge\.$/,
+    build: () => enPassthrough('Get closer to issue your challenge.', t('sim.delve.tooFar')),
+  },
+  {
+    re: /^They are already locked in a duel\.$/,
+    build: () =>
+      enPassthrough('They are already locked in a duel.', t('hud.errors.duelInProgress')),
+  },
+  {
+    re: /^The well is just a well\. Whatever sleeps below, it does not stir here\.$/,
+    build: () =>
+      enPassthrough(
+        'The well is just a well. Whatever sleeps below, it does not stir here.',
+        t('sim.delve.nothingHappens'),
+      ),
+  },
+  {
+    re: /^The well is silent\. You must first free Cainhurst from the Hellmaw\.$/,
+    build: () =>
+      enPassthrough(
+        'The well is silent. You must first free Cainhurst from the Hellmaw.',
+        t('sim.delve.cannotEnterNow'),
+      ),
+  },
+  {
+    re: /^(.+)'s corpse can be looted!$/,
+    build: (m) => tSim('log.corpseLootable', { name: m[1] }),
+  },
   // Ready-check result summary (social/ready_check.ts finalizeReadyCheck).
   {
     re: /^Ready check: (\d+) ready, (\d+) not ready, (\d+) no response\.$/,

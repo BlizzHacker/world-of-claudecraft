@@ -648,6 +648,17 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
   // F4 grinders — wandering sellswords who hunt the field packs. They never claim
   // a mob's tap, so if you land a hit on their quarry you own the XP/loot: help
   // them and share the kill. They can't die (they retreat to rest when low).
+  stable_master_wren: {
+    id: 'stable_master_wren',
+    name: 'Wren Saddleworth',
+    title: 'Stable Master',
+    pos: { x: -10, z: 6 },
+    facing: Math.PI / 2,
+    color: 0x8a5a2b,
+    questIds: [],
+    greeting: 'Every hero needs a steed, $C. The stag is steady, the raptor is fast, and the wyrm... the wyrm flies.',
+    vendorItems: ['mount_forest_stag', 'mount_swamp_raptor', 'mount_emerald_wyrm'],
+  },
   mercenary_kael: {
     id: 'mercenary_kael',
     name: 'Kael the Sellsword',

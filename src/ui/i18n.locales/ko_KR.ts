@@ -664,7 +664,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'stats.realmName': '월드 이름',
   'footer.copyright': '2026 Cryptic Realm',
   'footer.githubLink': 'https://github.com/levy-street/world-of-claudecraft',
-  'footer.githubLabel': '오픈 소스 프로젝트',
+  'footer.githubLabel': 'Contributions',
   'footer.whitepaper': '백서',
   'footer.terms': '서비스 이용약관',
   'footer.privacy': '개인정보 처리방침',
@@ -675,7 +675,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'wiki.desc': '렐름의 비밀과 클래스 가이드, 전략 등을 확인해 보세요.',
   'news.title': '새소식 및 업데이트',
   'news.desc': '최신 패치 노트, 이벤트 소식, 커뮤니티 업데이트를 확인해 보세요.',
-  'download.title': '데스크톱 런처 다운로드',
   'download.macCta': 'macOS용 다운로드',
   'download.linuxCta': 'Linux용 다운로드',
   'download.linuxHint':

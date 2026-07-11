@@ -3114,7 +3114,7 @@ export const nl_NL: EnTranslations = {
   "footer": {
     "copyright": "2026 Cryptic Realm",
     "githubLink": "https://github.com/levy-street/world-of-claudecraft",
-    "githubLabel": "Opensourceproject",
+    "githubLabel": "Contributions",
     "whitepaper": "Whitepaper",
     "terms": "Servicevoorwaarden",
     "privacy": "Privacybeleid",
@@ -3187,7 +3187,7 @@ export const nl_NL: EnTranslations = {
     "loading": "Loading official channels…"
   },
   "download": {
-    "title": "Desktop-launcher downloaden",
+    "title": "Launchers & Installs",
     "desc": "Download de losse launcher voor optimale prestaties en schermvullend spelen.",
     "macCta": "Download voor macOS",
     "linuxCta": "Downloaden voor Linux",
