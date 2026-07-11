@@ -2,6 +2,12 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const pl_PL: Partial<Record<TranslationKey, string>> = {
+  'entities.items.mount_forest_stag.name': 'Uzda leśnego jelenia',
+  'entities.items.mount_swamp_raptor.name': 'Siodło błotnego raptora',
+  'entities.items.mount_emerald_wyrm.name': 'Wodze szmaragdowego smoka',
+  'entities.npcs.stable_master_wren.name': 'Wren Saddleworth',
+  'entities.npcs.stable_master_wren.title': 'Stajenna',
+  'entities.npcs.stable_master_wren.greeting': 'Każdy bohater potrzebuje wierzchowca, $C. Jeleń jest pewny, raptor szybki, a smok... smok lata.',
   'hudChrome.account.sectionConnections': 'Polaczone konta',
   'hudChrome.account.connectionsSummary':
     'Zarzadzaj dostawcami logowania polaczonymi z tym kontem.',

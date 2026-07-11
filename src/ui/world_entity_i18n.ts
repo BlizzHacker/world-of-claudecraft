@@ -142,6 +142,7 @@ const NPC_IDS = [
   'brother_halven', // Collapsed Reliquary delve board NPC
   'brother_halven_marsh', // Drowned Litany delve board NPC (same character, marsh camp)
   'cainhurst_sage', // Hellmaw Well delve board NPC
+  'stable_master_wren', // town mount vendor (src/sim/content/mounts.ts)
   'mercenary_kael', // Eastbrook field helper NPC
   'huntress_verr', // Eastbrook field helper NPC
   'interior_merchant', // Building interior shopkeeper

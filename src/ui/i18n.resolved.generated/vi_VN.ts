@@ -6661,6 +6661,15 @@ export const vi_VN: EnTranslations = {
       "simple_fishing_pole": {
         "name": "Cần Câu Đơn Giản"
       },
+      "mount_forest_stag": {
+        "name": "Dây cương hươu rừng"
+      },
+      "mount_swamp_raptor": {
+        "name": "Yên raptor đầm lầy"
+      },
+      "mount_emerald_wyrm": {
+        "name": "Dây cương wyrm ngọc lục bảo"
+      },
       "tangled_weed": {
         "name": "Cỏ Dại Rối Bời"
       },
@@ -7758,6 +7767,11 @@ export const vi_VN: EnTranslations = {
         "name": "Cainhurst the Sage",
         "title": "Keeper of the Hellmaw",
         "greeting": "You pulled me from the Hellmaw, friend - I do not forget it. The well is open to you now. Steel yourself: The Render waits at the bottom."
+      },
+      "stable_master_wren": {
+        "name": "Wren Saddleworth",
+        "title": "Quản mã",
+        "greeting": "Every hero needs a steed, {className}. The stag is steady, the raptor is fast, and the wyrm... the wyrm flies."
       },
       "mercenary_kael": {
         "name": "Kael the Sellsword",

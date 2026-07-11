@@ -6661,6 +6661,15 @@ export const ko_KR: EnTranslations = {
       "simple_fishing_pole": {
         "name": "간단한 낚싯대"
       },
+      "mount_forest_stag": {
+        "name": "숲 수사슴 굴레"
+      },
+      "mount_swamp_raptor": {
+        "name": "창턱 랩터 안장"
+      },
+      "mount_emerald_wyrm": {
+        "name": "에메랄드 윔 고삐"
+      },
       "tangled_weed": {
         "name": "엉킨 물풀"
       },
@@ -7758,6 +7767,11 @@ export const ko_KR: EnTranslations = {
         "name": "Cainhurst the Sage",
         "title": "Keeper of the Hellmaw",
         "greeting": "You pulled me from the Hellmaw, friend - I do not forget it. The well is open to you now. Steel yourself: The Render waits at the bottom."
+      },
+      "stable_master_wren": {
+        "name": "렌 새들워스",
+        "title": "마구간지기",
+        "greeting": "Every hero needs a steed, {className}. The stag is steady, the raptor is fast, and the wyrm... the wyrm flies."
       },
       "mercenary_kael": {
         "name": "Kael the Sellsword",

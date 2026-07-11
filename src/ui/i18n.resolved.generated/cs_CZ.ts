@@ -6661,6 +6661,15 @@ export const cs_CZ: EnTranslations = {
       "simple_fishing_pole": {
         "name": "Jednoduchý rybářský prut"
       },
+      "mount_forest_stag": {
+        "name": "Uzda lesního jelena"
+      },
+      "mount_swamp_raptor": {
+        "name": "Sedlo bahenního ještěra"
+      },
+      "mount_emerald_wyrm": {
+        "name": "Otěže smaragdového wyrma"
+      },
       "tangled_weed": {
         "name": "Zamotaná plevelná rostlina"
       },
@@ -7758,6 +7767,11 @@ export const cs_CZ: EnTranslations = {
         "name": "Cainhurst the Sage",
         "title": "Keeper of the Hellmaw",
         "greeting": "You pulled me from the Hellmaw, friend - I do not forget it. The well is open to you now. Steel yourself: The Render waits at the bottom."
+      },
+      "stable_master_wren": {
+        "name": "Wren Saddleworth",
+        "title": "Stájník",
+        "greeting": "Every hero needs a steed, {className}. The stag is steady, the raptor is fast, and the wyrm... the wyrm flies."
       },
       "mercenary_kael": {
         "name": "Kael the Sellsword",
