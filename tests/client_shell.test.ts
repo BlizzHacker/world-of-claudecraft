@@ -2294,8 +2294,8 @@ describe('client HTML shell', () => {
     // no-ops until this init has run). The init must consider the create panel
     // and route through the full panel wiring.
     expect(mainTs).toContain("['#charselect-panel', '#charcreate-panel', '#offline-select'].find(");
-    const init = mainTs.slice(mainTs.indexOf('assetsReady()'));
-    const body = init.slice(0, init.indexOf('decorateClassChips();'));
-    expect(body).toContain('updatePreviewContainer(activePanelId);');
+    // Cryptic Realm: the preview builds lazily through loadGameRuntime()
+    // (ensureCharacterPreview applies the panel wiring itself).
+    expect(mainTs).toContain('ensureCharacterPreview(activePanelId)');
   });
 });

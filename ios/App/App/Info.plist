@@ -14,10 +14,10 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>com.crypticrealm.oauth</string>
+			<string>com.worldofclaudecraft.oauth</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>crypticrealm</string>
+				<string>worldofclaudecraft</string>
 			</array>
 		</dict>
 	</array>

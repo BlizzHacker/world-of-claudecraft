@@ -12,7 +12,7 @@
 import type { AdminTranslations } from '../i18n.en';
 
 export const de_DE: AdminTranslations = {
-  "app.title": "World of ClaudeCraft - Admin",
+  "app.title": "Cryptic Realm - Admin",
   "app.shortTitle": "WoC-Administrator",
   "auth.username": "Benutzername",
   "auth.password": "Passwort",
@@ -160,8 +160,8 @@ export const de_DE: AdminTranslations = {
   "usage.cacheColEvictions": "Entfernungen",
   "usage.cacheEntriesOfMax": "{entries} / {max}",
   "usage.notAvailable": "n/v",
-  "usage.metric.wocBalanceApi": "$WOC-Saldo-API-Anfragen",
-  "usage.metric.wocBalanceRateLimited": "Gedrosselte $WOC-Saldo-Anfragen",
+  "usage.metric.wocBalanceApi": "$CR-Saldo-API-Anfragen",
+  "usage.metric.wocBalanceRateLimited": "Gedrosselte $CR-Saldo-Anfragen",
   "usage.metric.wocBalanceRpc": "Solana-RPC-Saldolesungen",
   "usage.metric.wocBalanceRpcFailure": "Solana-RPC-Saldofehler",
   "usage.metric.turnstileVerify": "Turnstile-Verifizierungen",
@@ -177,7 +177,7 @@ export const de_DE: AdminTranslations = {
   "usage.metric.cardPublishRequest": "Veröffentlichungen von Spielerkarten",
   "usage.metric.cardPublishRejected": "Abgelehnte Spielerkarten-Veröffentlichungen",
   "usage.metric.cardPublishRateLimited": "Gedrosselte Spielerkarten-Veröffentlichungen",
-  "usage.cache.wocBalance": "$WOC-Saldo-Cache",
+  "usage.cache.wocBalance": "$CR-Saldo-Cache",
   "usage.cache.githubReleases": "GitHub-Release-Cache",
   "usage.cache.githubContributors": "GitHub-Mitwirkende-Cache",
   "tickPerf.title": "Server-Tick-Profiler",

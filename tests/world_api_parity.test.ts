@@ -404,9 +404,9 @@ beforeAll(() => {
 
 describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => {
   it('pins total / data / method counts', () => {
-    expect(IWORLD_MEMBERS.length).toBe(205);
+    expect(IWORLD_MEMBERS.length).toBe(211);
     expect(DATA_MEMBERS.length).toBe(54);
-    expect(METHOD_MEMBERS.length).toBe(151);
+    expect(METHOD_MEMBERS.length).toBe(157);
   });
   it('has no duplicate member names', () => {
     const names = IWORLD_MEMBERS.map((m) => m.name);
@@ -1294,8 +1294,8 @@ describe('W1: aggregate IWorld member set equals the disjoint union of the 25 fa
 
   it('the union of the 25 facets equals the pinned 205-member IWORLD_MEMBERS set', () => {
     const union = Object.values(FACET_MEMBER_ARRAYS).flatMap((arr) => [...arr]);
-    expect(union.length, 'union size before dedup (catches a duplicated member)').toBe(205);
-    expect(new Set(union).size, 'union size after dedup (catches a duplicated member)').toBe(205);
+    expect(union.length, 'union size before dedup (catches a duplicated member)').toBe(211);
+    expect(new Set(union).size, 'union size after dedup (catches a duplicated member)').toBe(211);
     const sortedUnion = [...union].sort();
     const pinned = IWORLD_MEMBERS.map((m) => m.name).sort();
     expect(sortedUnion).toEqual(pinned);

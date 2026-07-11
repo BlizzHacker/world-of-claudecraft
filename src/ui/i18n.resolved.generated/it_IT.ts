@@ -351,8 +351,8 @@ export const it_IT: EnTranslations = {
     },
     "nativeUpdate": {
       "title": "Aggiornamento disponibile",
-      "body": "È disponibile una nuova versione di World of ClaudeCraft. Aggiorna ora per le ultime correzioni e migliorie.",
-      "bodyWithVersion": "La versione {version} di World of ClaudeCraft è disponibile. Aggiorna ora per le ultime correzioni e migliorie.",
+      "body": "È disponibile una nuova versione di Cryptic Realm. Aggiorna ora per le ultime correzioni e migliorie.",
+      "bodyWithVersion": "La versione {version} di Cryptic Realm è disponibile. Aggiorna ora per le ultime correzioni e migliorie.",
       "notNow": "Non ora",
       "update": "Aggiorna"
     },
@@ -910,7 +910,7 @@ export const it_IT: EnTranslations = {
       "loggedOutPrompt": "Accedi per gestire il tuo account.",
       "memberSince": "Membro dal {date}",
       "sectionSettings": "Impostazioni account",
-      "sectionWallet": "Portafoglio $WOC",
+      "sectionWallet": "Portafoglio $CR",
       "sectionCharacters": "Personaggi",
       "sectionDanger": "Zona pericolosa",
       "changePassword": "Cambia password",
@@ -1229,7 +1229,7 @@ export const it_IT: EnTranslations = {
     },
     "discord": {
       "title": "Discord",
-      "panelTitle": "World of ClaudeCraft",
+      "panelTitle": "Cryptic Realm",
       "open": "Discord",
       "close": "Chiudi",
       "keybind": "Pannello Discord",
@@ -1684,7 +1684,7 @@ export const it_IT: EnTranslations = {
     }
   },
   "guide": {
-    "brand": "World of ClaudeCraft",
+    "brand": "Cryptic Realm",
     "brandShort": "ClaudeCraft",
     "tagline": "Un MMO in stile classico che giochi gratis nel tuo browser.",
     "skipToContent": "Vai al contenuto principale",
@@ -1748,7 +1748,7 @@ export const it_IT: EnTranslations = {
       "github": "Sorgente su GitHub",
       "discord": "Unisciti al Discord",
       "communityWiki": "Wiki della Comunità",
-      "rights": "World of ClaudeCraft"
+      "rights": "Cryptic Realm"
     },
     "language": {
       "label": "Lingua",
@@ -1768,7 +1768,7 @@ export const it_IT: EnTranslations = {
     },
     "home": {
       "eyebrow": "MMO da browser in stile classico",
-      "title": "World of ClaudeCraft",
+      "title": "Cryptic Realm",
       "subtitle": "Affronta missioni, raggruppati ed esplora un mondo costruito a mano, gratis nel tuo browser.",
       "ctaPlay": "Gioca Ora",
       "ctaLearn": "Come si gioca",
@@ -2209,7 +2209,7 @@ export const it_IT: EnTranslations = {
     },
     "worldPage": {
       "heading": "Il mondo",
-      "intro": "World of ClaudeCraft è una terra continua che attraversi a piedi, tre zone disposte da sud a nord. Non c'è viaggio rapido, perciò il viaggio è parte dell'avventura.",
+      "intro": "Cryptic Realm è una terra continua che attraversi a piedi, tre zone disposte da sud a nord. Non c'è viaggio rapido, perciò il viaggio è parte dell'avventura.",
       "hub": "Base operativa",
       "mapHeading": "La strada verso nord",
       "mapSub": "Tre zone, da sud a nord, ognuna un gradino più in alto di livello. Segui la scia delle missioni e la terra ti porta dalla valle alle vette.",
@@ -2635,7 +2635,7 @@ export const it_IT: EnTranslations = {
   },
   "editor": {
     "appTitle": "Editor di Mappe",
-    "docTitle": "Editor di Mappe - World of ClaudeCraft",
+    "docTitle": "Editor di Mappe - Cryptic Realm",
     "untitledMap": "Mappa senza titolo",
     "playtestPlayerName": "Cartografo",
     "topbar": {
@@ -3112,7 +3112,7 @@ export const it_IT: EnTranslations = {
     "realmName": "Nome del mondo"
   },
   "footer": {
-    "copyright": "2026 World of ClaudeCraft",
+    "copyright": "2026 Cryptic Realm",
     "githubLink": "https://github.com/levy-street/world-of-claudecraft",
     "githubLabel": "Progetto open source",
     "whitepaper": "Libro bianco",
@@ -3210,11 +3210,11 @@ export const it_IT: EnTranslations = {
     "serverOnline": "Online",
     "serverOffline": "Offline",
     "play": "Gioca",
-    "playAria": "Gioca a World of ClaudeCraft",
+    "playAria": "Gioca a Cryptic Realm",
     "serverLabel": "Scegli il tuo mondo",
     "serverAria": "Seleziona il mondo: Online o Offline",
     "serverOfflineSub": "Mondo locale istantaneo",
-    "caLabel": "Indirizzo del contratto $WOC",
+    "caLabel": "Indirizzo del contratto $CR",
     "caCopyAria": "Copia l'indirizzo del contratto",
     "caNote": "WOC è il token della nostra community. Non serve per giocare. Entra nel Discord per discutere dell'utilità e del flywheel di WOC."
   },
@@ -3272,7 +3272,7 @@ export const it_IT: EnTranslations = {
     }
   },
   "wallet": {
-    "label": "Portafoglio $WOC",
+    "label": "Portafoglio $CR",
     "connect": "Verifica portafoglio",
     "connectTitle": "Verifica il tuo portafoglio Solana",
     "connectAria": "Verifica il tuo portafoglio Solana",
@@ -3305,11 +3305,11 @@ export const it_IT: EnTranslations = {
     "linkedDisconnectedAria": "Il portafoglio resta verificato per il tuo account. Riconnettiti per gestire l'app del portafoglio.",
     "linkTitle": "Fai clic per firmare e collegare questo portafoglio al tuo account.",
     "connectedTitle": "Connesso. Accedi per collegare questo portafoglio al tuo account.",
-    "balanceTitle": "Saldo $WOC del portafoglio Solana verificato",
+    "balanceTitle": "Saldo $CR del portafoglio Solana verificato",
     "balanceAria": "Saldo del portafoglio Solana verificato: {balance}",
-    "balancePreviewTitle": "Anteprima del saldo $WOC del portafoglio connesso",
+    "balancePreviewTitle": "Anteprima del saldo $CR del portafoglio connesso",
     "balancePreviewAria": "Anteprima del saldo del portafoglio connesso: {balance}. Collega il portafoglio per verificare il distintivo da titolare.",
-    "balanceAmount": "{amount} $WOC",
+    "balanceAmount": "{amount} $CR",
     "connected": "Connesso: {address}",
     "connectedWithBalance": "Connesso: {balance} - {address}",
     "connectedLinked": "Verificato: {address}",
@@ -3330,8 +3330,8 @@ export const it_IT: EnTranslations = {
     "linkFailed": "Verifica del portafoglio non riuscita.",
     "verifyFailed": "Verifica del portafoglio non riuscita.",
     "unlinkFailed": "Impossibile scollegare il portafoglio.",
-    "holder": "Titolare $WOC",
-    "holderTierTitle": "Titolare $WOC di rango {tier}",
+    "holder": "Titolare $CR",
+    "holderTierTitle": "Titolare $CR di rango {tier}",
     "holderTiers": {
       "ember": {
         "name": "Brace",
@@ -3355,7 +3355,7 @@ export const it_IT: EnTranslations = {
       },
       "vaultwarden": {
         "name": "Custode del caveau",
-        "flavor": "Ora custodisci un vero caveau: lo 0,01% di tutto $WOC."
+        "flavor": "Ora custodisci un vero caveau: lo 0,01% di tutto $CR."
       },
       "whale": {
         "name": "Balena",
@@ -3430,8 +3430,8 @@ export const it_IT: EnTranslations = {
     "footerHandleWithRecruits": "@{handle} - {recruited}",
     "footerCta": "Forgia la tua leggenda: {siteUrl}",
     "arenaStat": "Arena",
-    "shareTierBit": ", titolare $WOC di rango {tier}",
-    "shareText": "Sto forgiando la mia leggenda in World of ClaudeCraft: livello {level} {className}{tierBit}. Unisciti al mio mondo:",
+    "shareTierBit": ", titolare $CR di rango {tier}",
+    "shareText": "Sto forgiando la mia leggenda in Cryptic Realm: livello {level} {className}{tierBit}. Unisciti al mio mondo:",
     "nativeShareTitle": "Mondo di ClaudeCraft",
     "fileNameFallback": "giocatore",
     "actionShareX": "Condividi su X",
@@ -4055,14 +4055,14 @@ export const it_IT: EnTranslations = {
     }
   },
   "seo": {
-    "title": "World of ClaudeCraft: MMO web in stile classico",
-    "description": "Parti per un'avventura epica in World of ClaudeCraft, un micro-MMO in stile classico giocabile direttamente dal browser. Entra in un mondo condiviso persistente, fai crescere le classi e sconfiggi i nemici!",
+    "title": "Cryptic Realm: MMO web in stile classico",
+    "description": "Parti per un'avventura epica in Cryptic Realm, un micro-MMO in stile classico giocabile direttamente dal browser. Entra in un mondo condiviso persistente, fai crescere le classi e sconfiggi i nemici!",
     "genre": "MMORPG",
     "playMode": "Multigiocatore",
     "applicationCategory": "Gioco",
     "operatingSystem": "Browser web",
-    "officialLabel": "Sito ufficiale di World of ClaudeCraft",
-    "officialBody": "worldofclaudecraft.com è l'MMO gratuito ufficiale da browser del mondo Claudemoon. Gioca online con un personaggio persistente, esplora offline in solitaria, leggi il wiki e segui i link della community verificati da questo sito."
+    "officialLabel": "Sito ufficiale di Cryptic Realm",
+    "officialBody": "crypticrealm.com è l'MMO gratuito ufficiale da browser del mondo Claudemoon. Gioca online con un personaggio persistente, esplora offline in solitaria, leggi il wiki e segui i link della community verificati da questo sito."
   },
   "a11y": {
     "goHome": "Vai alla pagina iniziale",
@@ -4070,9 +4070,9 @@ export const it_IT: EnTranslations = {
     "mainNavigation": "Navigazione principale",
     "languageSelection": "Selezione lingua",
     "characterActions": "Azioni personaggio",
-    "githubProject": "Apri il progetto World of ClaudeCraft su GitHub",
-    "discordCommunity": "Entra nella community Discord di World of ClaudeCraft",
-    "donateProject": "Fai una donazione per sostenere World of ClaudeCraft"
+    "githubProject": "Apri il progetto Cryptic Realm su GitHub",
+    "discordCommunity": "Entra nella community Discord di Cryptic Realm",
+    "donateProject": "Fai una donazione per sostenere Cryptic Realm"
   },
   "loading": {
     "world": "Caricamento del mondo...",
@@ -4142,11 +4142,11 @@ export const it_IT: EnTranslations = {
       "later": "Più tardi"
     },
     "crash": {
-      "title": "World of ClaudeCraft",
+      "title": "Cryptic Realm",
       "body": "La vista di gioco ha smesso di funzionare. Ricaricarla?",
       "reload": "Ricarica",
       "quit": "Esci",
-      "fatalBody": "World of ClaudeCraft ha riscontrato un errore imprevisto e deve chiudersi."
+      "fatalBody": "Cryptic Realm ha riscontrato un errore imprevisto e deve chiudersi."
     }
   },
   "realm": {
@@ -4276,17 +4276,17 @@ export const it_IT: EnTranslations = {
     "iosStandaloneDetail": "Sei in modalità schermo intero dalla schermata Home. Mantieni il dispositivo in orizzontale.",
     "iosInstallDetail": "Per il vero schermo intero su iPhone o iPad, installa prima questa pagina nella schermata Home.",
     "iosShareStep": "In Safari, tocca Condividi e poi Aggiungi alla schermata Home.",
-    "iosOpenStep": "Apri World of ClaudeCraft dalla nuova icona nella schermata Home.",
+    "iosOpenStep": "Apri Cryptic Realm dalla nuova icona nella schermata Home.",
     "androidStandaloneDetail": "Sei in modalità app a schermo intero. Mantieni il dispositivo in orizzontale.",
     "androidInstallDetail": "Per lo schermo intero su Android, installa questa pagina o aggiungila alla schermata Home.",
     "androidInstallStep": "In Chrome, tocca il menu e poi Installa app o Aggiungi alla schermata Home.",
-    "androidOpenStep": "Apri World of ClaudeCraft dalla nuova icona.",
+    "androidOpenStep": "Apri Cryptic Realm dalla nuova icona.",
     "otherStandaloneDetail": "Mantieni il dispositivo in schermo intero orizzontale.",
     "otherInstallDetail": "Installa o aggiungi questa pagina alla schermata Home per la migliore esperienza mobile a schermo intero."
   },
   "serverUnavailable": {
-    "title": "World of ClaudeCraft - Mondo non disponibile",
-    "logoAlt": "World of ClaudeCraft",
+    "title": "Cryptic Realm - Mondo non disponibile",
+    "logoAlt": "Cryptic Realm",
     "eyebrow": "Manutenzione del mondo",
     "heading": "Il mondo è temporaneamente non disponibile.",
     "body": "Stiamo riavviando il servizio di gioco e prevediamo che Claudemoon torni a breve. Questa pagina continuerà a controllare automaticamente.",

@@ -77,7 +77,7 @@ describe('appearance skin selection', () => {
       'for (const url of bootSkinUrls) registerPreload(loadSkinTexInto(url, skinTexByUrl));',
     );
     expect(characterAssetsSource).toContain(
-      'for (const url of SKINS.player_mech ?? []) if (url) jobs.push(loadSkinTexInto(url, skinTexByUrl));',
+      'for (const url of SKINS[key] ?? []) if (url) jobs.push(loadSkinTexInto(url, skinTexByUrl));',
     );
     expect(characterAssetsSource).toContain('if (!GFX.standardMaterials) return skinsReady;');
     expect(characterAssetsSource).not.toContain('Standard tier only — low tier aliases');

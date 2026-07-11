@@ -351,8 +351,8 @@ export const da_DK: EnTranslations = {
     },
     "nativeUpdate": {
       "title": "Opdatering tilgængelig",
-      "body": "En ny version af World of ClaudeCraft er tilgængelig. Opdater nu for de nyeste rettelser og forbedringer.",
-      "bodyWithVersion": "Version {version} af World of ClaudeCraft er tilgængelig. Opdater nu for de nyeste rettelser og forbedringer.",
+      "body": "En ny version af Cryptic Realm er tilgængelig. Opdater nu for de nyeste rettelser og forbedringer.",
+      "bodyWithVersion": "Version {version} af Cryptic Realm er tilgængelig. Opdater nu for de nyeste rettelser og forbedringer.",
       "notNow": "Ikke nu",
       "update": "Opdater"
     },
@@ -910,7 +910,7 @@ export const da_DK: EnTranslations = {
       "loggedOutPrompt": "Log ind for at administrere din konto.",
       "memberSince": "Medlem siden {date}",
       "sectionSettings": "Kontoindstillinger",
-      "sectionWallet": "$WOC Wallet",
+      "sectionWallet": "$CR Wallet",
       "sectionCharacters": "Figurer",
       "sectionDanger": "Farezone",
       "changePassword": "Skift adgangskode",
@@ -1229,7 +1229,7 @@ export const da_DK: EnTranslations = {
     },
     "discord": {
       "title": "Discord",
-      "panelTitle": "World of ClaudeCraft",
+      "panelTitle": "Cryptic Realm",
       "open": "Discord",
       "close": "Luk",
       "keybind": "Discord-panel",
@@ -1684,7 +1684,7 @@ export const da_DK: EnTranslations = {
     }
   },
   "guide": {
-    "brand": "World of ClaudeCraft",
+    "brand": "Cryptic Realm",
     "brandShort": "ClaudeCraft",
     "tagline": "En klassisk MMO, du spiller gratis i din browser.",
     "skipToContent": "Spring til hovedindhold",
@@ -1748,7 +1748,7 @@ export const da_DK: EnTranslations = {
       "github": "Kildekode på GitHub",
       "discord": "Bliv en del af Discord",
       "communityWiki": "Fællesskabswiki",
-      "rights": "World of ClaudeCraft"
+      "rights": "Cryptic Realm"
     },
     "language": {
       "label": "Sprog",
@@ -1768,7 +1768,7 @@ export const da_DK: EnTranslations = {
     },
     "home": {
       "eyebrow": "Klassisk browser-MMO",
-      "title": "World of ClaudeCraft",
+      "title": "Cryptic Realm",
       "subtitle": "Tag på quest, slå jer sammen, og udforsk en håndbygget verden, gratis i din browser.",
       "ctaPlay": "Spil nu",
       "ctaLearn": "Sådan spiller du",
@@ -2209,7 +2209,7 @@ export const da_DK: EnTranslations = {
     },
     "worldPage": {
       "heading": "Verdenen",
-      "intro": "World of ClaudeCraft er ét sammenhængende land, du krydser til fods, tre zoner lagt fra syd til nord. Der er ingen hurtigrejse, så rejsen er en del af eventyret.",
+      "intro": "Cryptic Realm er ét sammenhængende land, du krydser til fods, tre zoner lagt fra syd til nord. Der er ingen hurtigrejse, så rejsen er en del af eventyret.",
       "hub": "Hjemmebase",
       "mapHeading": "Vejen mod nord",
       "mapSub": "Tre zoner, fra syd til nord, hver et trin højere i niveau. Følg questsporet, og landet bærer dig fra dalen til tinderne.",
@@ -2635,7 +2635,7 @@ export const da_DK: EnTranslations = {
   },
   "editor": {
     "appTitle": "Korteditor",
-    "docTitle": "Korteditor - World of ClaudeCraft",
+    "docTitle": "Korteditor - Cryptic Realm",
     "untitledMap": "Unavngivet kort",
     "playtestPlayerName": "Kortmager",
     "topbar": {
@@ -3112,7 +3112,7 @@ export const da_DK: EnTranslations = {
     "realmName": "Verdensnavn"
   },
   "footer": {
-    "copyright": "2026 World of ClaudeCraft",
+    "copyright": "2026 Cryptic Realm",
     "githubLink": "https://github.com/levy-street/world-of-claudecraft",
     "githubLabel": "Open Source-projekt",
     "whitepaper": "Whitepaper",
@@ -3210,11 +3210,11 @@ export const da_DK: EnTranslations = {
     "serverOnline": "Online",
     "serverOffline": "Offline",
     "play": "Spil",
-    "playAria": "Spil World of ClaudeCraft",
+    "playAria": "Spil Cryptic Realm",
     "serverLabel": "Vælg din verden",
     "serverAria": "Vælg verden: Online eller Offline",
     "serverOfflineSub": "Øjeblikkelig lokal verden",
-    "caLabel": "$WOC Kontraktadresse",
+    "caLabel": "$CR Kontraktadresse",
     "caCopyAria": "Kopiér kontraktadresse",
     "caNote": "WOC er vores fællesskabstoken. Det er ikke nødvendigt for at spille. Tilslut dig Discord for at diskutere WOC-nytten og svinghjulet."
   },
@@ -3272,7 +3272,7 @@ export const da_DK: EnTranslations = {
     }
   },
   "wallet": {
-    "label": "$WOC-pung",
+    "label": "$CR-pung",
     "connect": "Verificer pung",
     "connectTitle": "Verificer din Solana-pung",
     "connectAria": "Verificer din Solana-pung",
@@ -3305,11 +3305,11 @@ export const da_DK: EnTranslations = {
     "linkedDisconnectedAria": "Pungen forbliver verificeret for din konto. Genopret forbindelse for at administrere pung-appen.",
     "linkTitle": "Klik for at underskrive og tilknytte denne pung til din konto.",
     "connectedTitle": "Forbundet. Log ind for at tilknytte denne pung til din konto.",
-    "balanceTitle": "Verificeret Solana-pungs $WOC-saldo",
+    "balanceTitle": "Verificeret Solana-pungs $CR-saldo",
     "balanceAria": "Verificeret Solana-pungsaldo: {balance}",
-    "balancePreviewTitle": "Forhåndsvisning af forbundet pungs $WOC-saldo",
+    "balancePreviewTitle": "Forhåndsvisning af forbundet pungs $CR-saldo",
     "balancePreviewAria": "Forhåndsvisning af forbundet pungs saldo: {balance}. Tilknyt pungen for at verificere ejer-pynt.",
-    "balanceAmount": "{amount} $WOC",
+    "balanceAmount": "{amount} $CR",
     "connected": "Forbundet: {address}",
     "connectedWithBalance": "Forbundet: {balance} - {address}",
     "connectedLinked": "Verificeret: {address}",
@@ -3330,8 +3330,8 @@ export const da_DK: EnTranslations = {
     "linkFailed": "Verificering af pung mislykkedes.",
     "verifyFailed": "Verificering af pung mislykkedes.",
     "unlinkFailed": "Kunne ikke frakoble pungen.",
-    "holder": "$WOC-ejer",
-    "holderTierTitle": "{tier} $WOC-ejer",
+    "holder": "$CR-ejer",
+    "holderTierTitle": "{tier} $CR-ejer",
     "holderTiers": {
       "ember": {
         "name": "Glød",
@@ -3355,7 +3355,7 @@ export const da_DK: EnTranslations = {
       },
       "vaultwarden": {
         "name": "Hvælvvogter",
-        "flavor": "Vogter nu et ægte hvælv: 0,01 % af alle $WOC."
+        "flavor": "Vogter nu et ægte hvælv: 0,01 % af alle $CR."
       },
       "whale": {
         "name": "Hval",
@@ -3423,16 +3423,16 @@ export const da_DK: EnTranslations = {
     "levelClass": "Niveau {level} - {className}",
     "topPercent": "TOP {percent}%",
     "realmSubtitle": "Verdenen {realm}",
-    "defaultRealm": "World of ClaudeCraft",
+    "defaultRealm": "Cryptic Realm",
     "brandWordmark": "WORLD OF CLAUDECRAFT",
     "recruited": "{count} rekrutteret",
     "footerHandle": "@{handle}",
     "footerHandleWithRecruits": "@{handle} - {recruited}",
     "footerCta": "Smed din legende: {siteUrl}",
     "arenaStat": "Arena",
-    "shareTierBit": ", {tier}-rangeret $WOC-ejer",
-    "shareText": "Jeg smeder min legende i World of ClaudeCraft: Niveau {level} {className}{tierBit}. Slut dig til min verden:",
-    "nativeShareTitle": "World of ClaudeCraft",
+    "shareTierBit": ", {tier}-rangeret $CR-ejer",
+    "shareText": "Jeg smeder min legende i Cryptic Realm: Niveau {level} {className}{tierBit}. Slut dig til min verden:",
+    "nativeShareTitle": "Cryptic Realm",
     "fileNameFallback": "spiller",
     "actionShareX": "Del på X",
     "actionCopyReferral": "Kopiér henvisningslink",
@@ -4055,14 +4055,14 @@ export const da_DK: EnTranslations = {
     }
   },
   "seo": {
-    "title": "World of ClaudeCraft: Klassisk-inspireret web-MMO",
-    "description": "Begiv dig ud på et episk eventyr i World of ClaudeCraft, en klassisk-inspireret micro-MMO, der kan spilles direkte i din browser. Slut dig til en vedvarende delt verden, lev op dine klasser, og besejr fjender!",
+    "title": "Cryptic Realm: Klassisk-inspireret web-MMO",
+    "description": "Begiv dig ud på et episk eventyr i Cryptic Realm, en klassisk-inspireret micro-MMO, der kan spilles direkte i din browser. Slut dig til en vedvarende delt verden, lev op dine klasser, og besejr fjender!",
     "genre": "MMORPG",
     "playMode": "Flerspiller",
     "applicationCategory": "Spil",
     "operatingSystem": "Webbrowser",
-    "officialLabel": "Officiel World of ClaudeCraft-hjemmeside",
-    "officialBody": "worldofclaudecraft.com er den officielle gratis browser-MMO for Claudemoon-verdenen. Spil online med en vedvarende karakter, udforsk solo offline, læs wikien, og følg verificerede fællesskabslinks fra denne side."
+    "officialLabel": "Officiel Cryptic Realm-hjemmeside",
+    "officialBody": "crypticrealm.com er den officielle gratis browser-MMO for Claudemoon-verdenen. Spil online med en vedvarende karakter, udforsk solo offline, læs wikien, og følg verificerede fællesskabslinks fra denne side."
   },
   "a11y": {
     "goHome": "Gå til forsiden",
@@ -4070,9 +4070,9 @@ export const da_DK: EnTranslations = {
     "mainNavigation": "Hovednavigation",
     "languageSelection": "Sprogvalg",
     "characterActions": "Karakterhandlinger",
-    "githubProject": "Åbn World of ClaudeCraft GitHub-projektet",
-    "discordCommunity": "Deltag i World of ClaudeCraft Discord-fællesskabet",
-    "donateProject": "Donér for at støtte World of ClaudeCraft"
+    "githubProject": "Åbn Cryptic Realm GitHub-projektet",
+    "discordCommunity": "Deltag i Cryptic Realm Discord-fællesskabet",
+    "donateProject": "Donér for at støtte Cryptic Realm"
   },
   "loading": {
     "world": "Indlæser verden...",
@@ -4142,11 +4142,11 @@ export const da_DK: EnTranslations = {
       "later": "Senere"
     },
     "crash": {
-      "title": "World of ClaudeCraft",
+      "title": "Cryptic Realm",
       "body": "Spilvisningen holdt op med at virke. Genindlæs den?",
       "reload": "Genindlæs",
       "quit": "Afslut",
-      "fatalBody": "World of ClaudeCraft stødte på en uventet fejl og skal lukke."
+      "fatalBody": "Cryptic Realm stødte på en uventet fejl og skal lukke."
     }
   },
   "realm": {
@@ -4276,17 +4276,17 @@ export const da_DK: EnTranslations = {
     "iosStandaloneDetail": "Du er i fuldskærmstilstand fra startskærmen. Hold enheden i liggende format.",
     "iosInstallDetail": "For ægte fuldskærm på iPhone eller iPad skal du først installere denne side på din startskærm.",
     "iosShareStep": "I Safari skal du trykke på Del og derefter Føj til hjemmeskærm.",
-    "iosOpenStep": "Åbn World of ClaudeCraft fra det nye ikon på startskærmen.",
+    "iosOpenStep": "Åbn Cryptic Realm fra det nye ikon på startskærmen.",
     "androidStandaloneDetail": "Du er i fuldskærms-apptilstand. Hold enheden i liggende format.",
     "androidInstallDetail": "For fuldskærm på Android skal du først installere denne side eller føje den til din startskærm.",
     "androidInstallStep": "I Chrome skal du trykke på menuen og derefter Installér app eller Føj til startskærm.",
-    "androidOpenStep": "Åbn World of ClaudeCraft fra det nye ikon.",
+    "androidOpenStep": "Åbn Cryptic Realm fra det nye ikon.",
     "otherStandaloneDetail": "Hold din enhed i liggende fuldskærm.",
     "otherInstallDetail": "Installér eller føj denne side til din startskærm for den bedste mobile fuldskærmsoplevelse."
   },
   "serverUnavailable": {
-    "title": "World of ClaudeCraft - Verden utilgængelig",
-    "logoAlt": "World of ClaudeCraft",
+    "title": "Cryptic Realm - Verden utilgængelig",
+    "logoAlt": "Cryptic Realm",
     "eyebrow": "Verdens-vedligeholdelse",
     "heading": "Verdenen er midlertidigt utilgængelig.",
     "body": "Vi genstarter spiltjenesten og forventer, at Claudemoon vender tilbage om kort tid. Denne side bliver ved med at tjekke automatisk.",

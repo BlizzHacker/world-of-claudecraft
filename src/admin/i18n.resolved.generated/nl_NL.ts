@@ -12,7 +12,7 @@
 import type { AdminTranslations } from '../i18n.en';
 
 export const nl_NL: AdminTranslations = {
-  "app.title": "World of ClaudeCraft - Beheer",
+  "app.title": "Cryptic Realm - Beheer",
   "app.shortTitle": "WoC-beheerder",
   "auth.username": "Gebruikersnaam",
   "auth.password": "Wachtwoord",
@@ -160,8 +160,8 @@ export const nl_NL: AdminTranslations = {
   "usage.cacheColEvictions": "Uitzettingen",
   "usage.cacheEntriesOfMax": "{entries} / {max}",
   "usage.notAvailable": "n.v.t.",
-  "usage.metric.wocBalanceApi": "$WOC-saldo-API-verzoeken",
-  "usage.metric.wocBalanceRateLimited": "Beperkte $WOC-saldoverzoeken",
+  "usage.metric.wocBalanceApi": "$CR-saldo-API-verzoeken",
+  "usage.metric.wocBalanceRateLimited": "Beperkte $CR-saldoverzoeken",
   "usage.metric.wocBalanceRpc": "Solana RPC-saldoreads",
   "usage.metric.wocBalanceRpcFailure": "Mislukte Solana RPC-saldoreads",
   "usage.metric.turnstileVerify": "Turnstile-verificaties",
@@ -177,7 +177,7 @@ export const nl_NL: AdminTranslations = {
   "usage.metric.cardPublishRequest": "Publicatieverzoeken spelerskaart",
   "usage.metric.cardPublishRejected": "Geweigerde publicaties spelerskaart",
   "usage.metric.cardPublishRateLimited": "Beperkte publicaties spelerskaart",
-  "usage.cache.wocBalance": "$WOC-saldocache",
+  "usage.cache.wocBalance": "$CR-saldocache",
   "usage.cache.githubReleases": "GitHub-releasescache",
   "usage.cache.githubContributors": "GitHub-bijdragers-cache",
   "tickPerf.title": "Server-tickprofiler",

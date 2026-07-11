@@ -12,7 +12,7 @@
 import type { AdminTranslations } from '../i18n.en';
 
 export const tr_TR: AdminTranslations = {
-  "app.title": "World of ClaudeCraft - Yönetici",
+  "app.title": "Cryptic Realm - Yönetici",
   "app.shortTitle": "WoC Yöneticisi",
   "auth.username": "Kullanıcı adı",
   "auth.password": "Parola",
@@ -160,8 +160,8 @@ export const tr_TR: AdminTranslations = {
   "usage.cacheColEvictions": "Tahliyeler",
   "usage.cacheEntriesOfMax": "{entries} / {max}",
   "usage.notAvailable": "yok",
-  "usage.metric.wocBalanceApi": "$WOC bakiye API istekleri",
-  "usage.metric.wocBalanceRateLimited": "Kısıtlanan $WOC bakiye istekleri",
+  "usage.metric.wocBalanceApi": "$CR bakiye API istekleri",
+  "usage.metric.wocBalanceRateLimited": "Kısıtlanan $CR bakiye istekleri",
   "usage.metric.wocBalanceRpc": "Solana RPC bakiye okumaları",
   "usage.metric.wocBalanceRpcFailure": "Solana RPC bakiye başarısızlıkları",
   "usage.metric.turnstileVerify": "Turnstile doğrulamaları",
@@ -177,7 +177,7 @@ export const tr_TR: AdminTranslations = {
   "usage.metric.cardPublishRequest": "Oyuncu kartı yayın istekleri",
   "usage.metric.cardPublishRejected": "Reddedilen oyuncu kartı yayınları",
   "usage.metric.cardPublishRateLimited": "Kısıtlanan oyuncu kartı yayınları",
-  "usage.cache.wocBalance": "$WOC bakiye önbelleği",
+  "usage.cache.wocBalance": "$CR bakiye önbelleği",
   "usage.cache.githubReleases": "GitHub sürümleri önbelleği",
   "usage.cache.githubContributors": "GitHub katkıda bulunanlar önbelleği",
   "tickPerf.title": "Sunucu tik profilcisi",

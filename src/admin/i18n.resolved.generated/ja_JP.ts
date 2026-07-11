@@ -12,7 +12,7 @@
 import type { AdminTranslations } from '../i18n.en';
 
 export const ja_JP: AdminTranslations = {
-  "app.title": "World of ClaudeCraft - 管理",
+  "app.title": "Cryptic Realm - 管理",
   "app.shortTitle": "WoC管理者",
   "auth.username": "ユーザー名",
   "auth.password": "パスワード",
@@ -160,8 +160,8 @@ export const ja_JP: AdminTranslations = {
   "usage.cacheColEvictions": "削除",
   "usage.cacheEntriesOfMax": "{entries} / {max}",
   "usage.notAvailable": "なし",
-  "usage.metric.wocBalanceApi": "$WOC残高APIリクエスト",
-  "usage.metric.wocBalanceRateLimited": "$WOC残高の制限リクエスト",
+  "usage.metric.wocBalanceApi": "$CR残高APIリクエスト",
+  "usage.metric.wocBalanceRateLimited": "$CR残高の制限リクエスト",
   "usage.metric.wocBalanceRpc": "Solana RPC残高読み取り",
   "usage.metric.wocBalanceRpcFailure": "Solana RPC残高失敗",
   "usage.metric.turnstileVerify": "Turnstile検証",
@@ -177,7 +177,7 @@ export const ja_JP: AdminTranslations = {
   "usage.metric.cardPublishRequest": "プレイヤーカード公開リクエスト",
   "usage.metric.cardPublishRejected": "拒否されたカード公開",
   "usage.metric.cardPublishRateLimited": "制限されたカード公開",
-  "usage.cache.wocBalance": "$WOC残高キャッシュ",
+  "usage.cache.wocBalance": "$CR残高キャッシュ",
   "usage.cache.githubReleases": "GitHubリリースキャッシュ",
   "usage.cache.githubContributors": "GitHubコントリビューターキャッシュ",
   "tickPerf.title": "サーバーティックプロファイラ",

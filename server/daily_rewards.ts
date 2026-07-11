@@ -295,6 +295,36 @@ function logRuntimeConfigFailure(err: unknown): void {
   console.warn(`[daily-rewards] using fallback config: ${message}`);
 }
 
+// --- Cryptic Realm $CR direct pricing -------------------------------------
+// DexScreener token endpoint (public, no key). Picks the deepest-liquidity pair
+// quoted in USD for the $CR mint. Cached by the runtimeConfigCache TTL above.
+const CR_PRICE_MINT = (
+  process.env.CR_SOLANA_MINT ?? '3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv'
+).trim();
+
+async function fetchCrUsdPriceDirect(): Promise<number | null> {
+  try {
+    const res = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${CR_PRICE_MINT}`, {
+      signal: AbortSignal.timeout(5000),
+    });
+    if (!res.ok) return null;
+    const body = (await res.json()) as {
+      pairs?: { priceUsd?: string; liquidity?: { usd?: number } }[];
+    };
+    const pairs = Array.isArray(body.pairs) ? body.pairs : [];
+    let best: { price: number; liq: number } | null = null;
+    for (const pair of pairs) {
+      const price = Number(pair.priceUsd);
+      const liq = Number(pair.liquidity?.usd ?? 0);
+      if (!Number.isFinite(price) || price <= 0) continue;
+      if (!best || liq > best.liq) best = { price, liq };
+    }
+    return best ? best.price : null;
+  } catch {
+    return null;
+  }
+}
+
 export async function dailyRewardRuntimeConfig(
   day = utcRewardDay(),
 ): Promise<DailyRewardRuntimeConfig> {
@@ -308,7 +338,11 @@ export async function dailyRewardRuntimeConfig(
   }
   const serviceUrl = dailyRewardServiceUrl();
   if (!serviceUrl) {
+    // Cryptic Realm: no maintainer reward service exists for $CR, so eligibility
+    // pricing comes straight from DexScreener for the $CR mint. A fetch failure
+    // leaves wocUsdPrice null (rewards read 'price_unavailable', never a crash).
     const config = fallbackRuntimeConfig();
+    config.wocUsdPrice = await fetchCrUsdPriceDirect();
     runtimeConfigCache = { day, config, at: now };
     return config;
   }

@@ -12,7 +12,7 @@
 import type { AdminTranslations } from '../i18n.en';
 
 export const pt_BR: AdminTranslations = {
-  "app.title": "World of ClaudeCraft - Admin",
+  "app.title": "Cryptic Realm - Admin",
   "app.shortTitle": "Administrador do WoC",
   "auth.username": "Usuário",
   "auth.password": "Senha",
@@ -160,8 +160,8 @@ export const pt_BR: AdminTranslations = {
   "usage.cacheColEvictions": "Expulsões",
   "usage.cacheEntriesOfMax": "{entries} / {max}",
   "usage.notAvailable": "n/d",
-  "usage.metric.wocBalanceApi": "Solicitações API de saldo $WOC",
-  "usage.metric.wocBalanceRateLimited": "Solicitações de saldo $WOC limitadas",
+  "usage.metric.wocBalanceApi": "Solicitações API de saldo $CR",
+  "usage.metric.wocBalanceRateLimited": "Solicitações de saldo $CR limitadas",
   "usage.metric.wocBalanceRpc": "Leituras RPC de saldo na Solana",
   "usage.metric.wocBalanceRpcFailure": "Falhas RPC de saldo na Solana",
   "usage.metric.turnstileVerify": "Verificações Turnstile",
@@ -177,7 +177,7 @@ export const pt_BR: AdminTranslations = {
   "usage.metric.cardPublishRequest": "Solicitações de publicação de cartão do jogador",
   "usage.metric.cardPublishRejected": "Publicações de cartão rejeitadas",
   "usage.metric.cardPublishRateLimited": "Publicações de cartão limitadas",
-  "usage.cache.wocBalance": "Cache de saldo $WOC",
+  "usage.cache.wocBalance": "Cache de saldo $CR",
   "usage.cache.githubReleases": "Cache de versões do GitHub",
   "usage.cache.githubContributors": "Cache de colaboradores do GitHub",
   "tickPerf.title": "Perfilador de ticks do servidor",

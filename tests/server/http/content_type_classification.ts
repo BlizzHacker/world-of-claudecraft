@@ -135,4 +135,9 @@ export const API_CONTENT_TYPE: Readonly<Record<string, ContentTypeClass>> = {
   '/api/assets/mine': PROBLEM_JSON,
   '/api/assets/:file': BINARY,
   '/api/assets/:id': PROBLEM_JSON,
+  // Cryptic Realm routes (economy/housing/realm shell)
+  '/api/oauth/authentik/status': PROBLEM_JSON,
+  '/api/oauth/authentik/link': REDIRECT,
+  '/api/oauth/authentik': REDIRECT,
+  '/api/oauth/authentik/callback': HTML,
 };

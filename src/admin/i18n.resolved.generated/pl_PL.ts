@@ -12,7 +12,7 @@
 import type { AdminTranslations } from '../i18n.en';
 
 export const pl_PL: AdminTranslations = {
-  "app.title": "World of ClaudeCraft - Panel administratora",
+  "app.title": "Cryptic Realm - Panel administratora",
   "app.shortTitle": "Administrator WOC",
   "auth.username": "Nazwa użytkownika",
   "auth.password": "Hasło",
@@ -160,8 +160,8 @@ export const pl_PL: AdminTranslations = {
   "usage.cacheColEvictions": "Usunięcia",
   "usage.cacheEntriesOfMax": "{entries} / {max}",
   "usage.notAvailable": "nd.",
-  "usage.metric.wocBalanceApi": "Żądania API salda $WOC",
-  "usage.metric.wocBalanceRateLimited": "Ograniczone żądania salda $WOC",
+  "usage.metric.wocBalanceApi": "Żądania API salda $CR",
+  "usage.metric.wocBalanceRateLimited": "Ograniczone żądania salda $CR",
   "usage.metric.wocBalanceRpc": "Odczyty salda Solana RPC",
   "usage.metric.wocBalanceRpcFailure": "Niepowodzenia salda Solana RPC",
   "usage.metric.turnstileVerify": "Weryfikacje Turnstile",
@@ -177,7 +177,7 @@ export const pl_PL: AdminTranslations = {
   "usage.metric.cardPublishRequest": "Żądania publikacji karty gracza",
   "usage.metric.cardPublishRejected": "Odrzucone publikacje karty gracza",
   "usage.metric.cardPublishRateLimited": "Ograniczone publikacje karty gracza",
-  "usage.cache.wocBalance": "pamięć podręczna salda $WOC",
+  "usage.cache.wocBalance": "pamięć podręczna salda $CR",
   "usage.cache.githubReleases": "pamięć podręczna wydań GitHub",
   "usage.cache.githubContributors": "Pamięć podręczna kontrybutorów GitHub",
   "tickPerf.title": "Profiler taktów serwera",

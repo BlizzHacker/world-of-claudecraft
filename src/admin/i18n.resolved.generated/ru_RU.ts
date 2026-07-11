@@ -12,7 +12,7 @@
 import type { AdminTranslations } from '../i18n.en';
 
 export const ru_RU: AdminTranslations = {
-  "app.title": "World of ClaudeCraft — Админ",
+  "app.title": "Cryptic Realm — Админ",
   "app.shortTitle": "Администратор WoC",
   "auth.username": "Имя пользователя",
   "auth.password": "Пароль",
@@ -160,8 +160,8 @@ export const ru_RU: AdminTranslations = {
   "usage.cacheColEvictions": "Удаления",
   "usage.cacheEntriesOfMax": "{entries} / {max}",
   "usage.notAvailable": "н/д",
-  "usage.metric.wocBalanceApi": "API-запросы баланса $WOC",
-  "usage.metric.wocBalanceRateLimited": "Ограниченные запросы баланса $WOC",
+  "usage.metric.wocBalanceApi": "API-запросы баланса $CR",
+  "usage.metric.wocBalanceRateLimited": "Ограниченные запросы баланса $CR",
   "usage.metric.wocBalanceRpc": "RPC-чтения баланса Solana",
   "usage.metric.wocBalanceRpcFailure": "Ошибки RPC баланса Solana",
   "usage.metric.turnstileVerify": "Проверки Turnstile",
@@ -177,7 +177,7 @@ export const ru_RU: AdminTranslations = {
   "usage.metric.cardPublishRequest": "Запросы публикации карты игрока",
   "usage.metric.cardPublishRejected": "Отклоненные публикации карты",
   "usage.metric.cardPublishRateLimited": "Ограниченные публикации карты",
-  "usage.cache.wocBalance": "Кэш баланса $WOC",
+  "usage.cache.wocBalance": "Кэш баланса $CR",
   "usage.cache.githubReleases": "Кэш релизов GitHub",
   "usage.cache.githubContributors": "Кэш участников GitHub",
   "tickPerf.title": "Профилировщик тиков сервера",

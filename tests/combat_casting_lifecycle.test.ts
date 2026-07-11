@@ -382,7 +382,9 @@ describe('casting_lifecycle: spell queue (#1360)', () => {
     spawnTarget(sim, p);
     p.spellHaste = 1; // halves cast time: a short cast completes well inside the 1.5s GCD
     castAbility(sim.ctx, 'flash_heal', p.id); // starts a cast; GCD armed at flat 1.5s
-    expect(p.gcdRemaining).toBeCloseTo(1.5, 5);
+    // Cryptic Realm: the default realm's combatFeel collapses the GCD to 40%
+    // (1.5s x 0.4 = 0.6s); the queue-hold scenario below is unchanged.
+    expect(p.gcdRemaining).toBeCloseTo(0.6, 5);
     while (p.castRemaining > CAST_QUEUE_WINDOW_SEC) sim.tick();
 
     castAbility(sim.ctx, 'flash_heal', p.id);

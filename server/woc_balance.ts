@@ -23,12 +23,17 @@ import {
 } from './provider_usage';
 import { isSolanaAddress } from './wallet_link';
 
+// Cryptic Realm: the balance gate reads the $CR SPL mint. CR_SOLANA_MINT is the
+// canonical env (shared with server/economy); the upstream WOC_* names remain as
+// fallbacks so upstream-authored tooling keeps working against a WoC deploy.
 const WOC_MINT = (
+  process.env.CR_SOLANA_MINT ??
   process.env.WOC_MINT ??
   process.env.VITE_WOC_MINT ??
-  '3WjLscH2JsXLEFJZRA9z8ti8yRGxWGKbqymPd7UicRth'
+  '3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv'
 ).trim();
 const SOLANA_RPC_URL = (
+  process.env.CR_SOLANA_RPC ??
   process.env.SOLANA_RPC_URL ??
   process.env.VITE_SOLANA_RPC_URL ??
   'https://api.mainnet-beta.solana.com'

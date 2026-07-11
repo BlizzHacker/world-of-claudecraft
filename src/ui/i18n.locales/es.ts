@@ -541,7 +541,7 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'editor.confirm.discardBody': 'Tienes cambios sin guardar en "{name}". ¿Descartarlos?',
   'editor.confirm.discardTitle': '¿Descartar los cambios?',
   'editor.confirm.ok': 'Aceptar',
-  'editor.docTitle': 'Editor de Mapas - World of ClaudeCraft',
+  'editor.docTitle': 'Editor de Mapas - Cryptic Realm',
   'editor.eraseTool.blockerHint':
     'Al hacer clic cerca de un muro de bloqueo, se elimina ese muro en su lugar.',
   'editor.eraseTool.hint':
@@ -1186,9 +1186,9 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.unitFrame.playerLabel': 'Tu personaje',
   'hudChrome.unitFrame.targetAnnounce': 'Objetivo: {name}',
   'hudChrome.unitFrame.targetLabel': 'Tu objetivo',
-  'seo.officialLabel': 'Sitio web oficial de World of ClaudeCraft',
+  'seo.officialLabel': 'Sitio web oficial de Cryptic Realm',
   'seo.officialBody':
-    'worldofclaudecraft.com es el MMO de navegador gratuito oficial del mundo Claudemoon. Juega en línea con un personaje persistente, explora en solitario sin conexión, lee la wiki y sigue los enlaces comunitarios verificados desde este sitio.',
+    'crypticrealm.com es el MMO de navegador gratuito oficial del mundo Claudemoon. Juega en línea con un personaje persistente, explora en solitario sin conexión, lee la wiki y sigue los enlaces comunitarios verificados desde este sitio.',
   'hudChrome.questShare.notShareable': 'Esta misión no se puede compartir.',
   'hudChrome.questShare.notInSharerParty':
     'Debes estar en el grupo de {name} para aceptar esa misión.',
@@ -1549,7 +1549,7 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'stats.accountsCreated': 'Jugadores',
   'stats.playersOnline': 'Jugadores en Línea',
   'stats.realmName': 'Nombre del Mundo',
-  'footer.copyright': '2026 World of ClaudeCraft',
+  'footer.copyright': '2026 Cryptic Realm',
   'footer.githubLink': 'https://github.com/levy-street/world-of-claudecraft',
   'footer.githubLabel': 'Proyecto de Código Abierto',
   'footer.whitepaper': 'Libro blanco',
@@ -1602,7 +1602,7 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'auth.enterWorld': 'Entrar al Mundo',
   'auth.offlineCharacter': 'Personaje en Solitario',
   'auth.create': 'Crear',
-  'wallet.label': 'Cartera $WOC',
+  'wallet.label': 'Cartera $CR',
   'wallet.connect': 'Verificar cartera',
   'wallet.connectTitle': 'Verifica tu cartera de Solana',
   'wallet.connectAria': 'Verifica tu cartera de Solana',
@@ -1639,12 +1639,12 @@ export const es: Partial<Record<TranslationKey, string>> = {
     'La cartera sigue verificada para tu cuenta. Vuelve a conectar para gestionar la app de cartera.',
   'wallet.linkTitle': 'Haz clic para firmar y vincular esta cartera a tu cuenta.',
   'wallet.connectedTitle': 'Conectada. Inicia sesión para vincular esta cartera a tu cuenta.',
-  'wallet.balanceTitle': 'Saldo de $WOC de la cartera de Solana verificada',
+  'wallet.balanceTitle': 'Saldo de $CR de la cartera de Solana verificada',
   'wallet.balanceAria': 'Saldo de la cartera de Solana verificada: {balance}',
-  'wallet.balancePreviewTitle': 'Vista previa del saldo de $WOC de la cartera conectada',
+  'wallet.balancePreviewTitle': 'Vista previa del saldo de $CR de la cartera conectada',
   'wallet.balancePreviewAria':
     'Vista previa del saldo de la cartera conectada: {balance}. Vincula la cartera para verificar el distintivo de titular.',
-  'wallet.balanceAmount': '{amount} $WOC',
+  'wallet.balanceAmount': '{amount} $CR',
   'wallet.connected': 'Conectada: {address}',
   'wallet.connectedWithBalance': 'Conectada: {balance} - {address}',
   'wallet.connectedLinked': 'Verificada: {address}',
@@ -1673,8 +1673,8 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'wallet.linkFailed': 'La verificación de cartera falló.',
   'wallet.verifyFailed': 'La verificación de cartera falló.',
   'wallet.unlinkFailed': 'No se pudo desvincular la cartera.',
-  'wallet.holder': 'Titular de $WOC',
-  'wallet.holderTierTitle': 'Titular de $WOC de nivel {tier}',
+  'wallet.holder': 'Titular de $CR',
+  'wallet.holderTierTitle': 'Titular de $CR de nivel {tier}',
   'wallet.holderTiers.ember.name': 'Ascua',
   'wallet.holderTiers.ember.flavor': 'La chispa está encendida.',
   'wallet.holderTiers.coinbearer.name': 'Portamonedas',
@@ -1687,7 +1687,7 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'wallet.holderTiers.gilded.flavor': 'Dorado y sonriente.',
   'wallet.holderTiers.vaultwarden.name': 'Guardián de la bóveda',
   'wallet.holderTiers.vaultwarden.flavor':
-    'Ahora custodias una bóveda real: el 0,01 % del suministro de $WOC.',
+    'Ahora custodias una bóveda real: el 0,01 % del suministro de $CR.',
   'wallet.holderTiers.whale.name': 'Ballena',
   'wallet.holderTiers.whale.flavor': 'Entras en aguas profundas: el 0,1 % del suministro.',
   'wallet.holderTiers.leviathan.name': 'Leviatán',
@@ -1739,9 +1739,9 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'playerCard.footerHandleWithRecruits': '@{handle} - {recruited}',
   'playerCard.footerCta': 'Forja tu leyenda: {siteUrl}',
   'playerCard.arenaStat': 'Arena',
-  'playerCard.shareTierBit': ', titular de $WOC de rango {tier}',
+  'playerCard.shareTierBit': ', titular de $CR de rango {tier}',
   'playerCard.shareText':
-    'Estoy forjando mi leyenda en World of ClaudeCraft: nivel {level} {className}{tierBit}. Únete a mi mundo:',
+    'Estoy forjando mi leyenda en Cryptic Realm: nivel {level} {className}{tierBit}. Únete a mi mundo:',
   'playerCard.nativeShareTitle': 'Mundo de ClaudeCraft',
   'playerCard.fileNameFallback': 'jugador',
   'playerCard.actionShareX': 'Compartir en X',
@@ -1804,9 +1804,9 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'controls.emoteWheel': 'Mantener rueda de gestos',
   'controls.friends': 'Amigos y Hermandad',
   'controls.chat': 'Abrir Chat',
-  'seo.title': 'World of ClaudeCraft: MMO web de estilo clásico',
+  'seo.title': 'Cryptic Realm: MMO web de estilo clásico',
   'seo.description':
-    'Emprende una aventura épica en World of ClaudeCraft, un micro-MMO de estilo clásico que se juega directamente en el navegador. Entra a un mundo compartido, sube de nivel y derrota enemigos.',
+    'Emprende una aventura épica en Cryptic Realm, un micro-MMO de estilo clásico que se juega directamente en el navegador. Entra a un mundo compartido, sube de nivel y derrota enemigos.',
   'seo.genre': 'MMORPG',
   'seo.playMode': 'Multijugador',
   'seo.applicationCategory': 'Juego',
@@ -1816,9 +1816,9 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'a11y.mainNavigation': 'Navegación principal',
   'a11y.languageSelection': 'Selección de idioma',
   'a11y.characterActions': 'Acciones de personaje',
-  'a11y.githubProject': 'Abrir el proyecto de World of ClaudeCraft en GitHub',
-  'a11y.discordCommunity': 'Unirse a la comunidad de World of ClaudeCraft en Discord',
-  'a11y.donateProject': 'Donar para apoyar World of ClaudeCraft',
+  'a11y.githubProject': 'Abrir el proyecto de Cryptic Realm en GitHub',
+  'a11y.discordCommunity': 'Unirse a la comunidad de Cryptic Realm en Discord',
+  'a11y.donateProject': 'Donar para apoyar Cryptic Realm',
   'loading.world': 'Cargando mundo...',
   'loading.worldProgress': 'Cargando mundo... {done}/{total}',
   'loading.enteringWorld': 'Entrando al mundo...',
@@ -1957,19 +1957,19 @@ export const es: Partial<Record<TranslationKey, string>> = {
     'Para pantalla completa real en iPhone o iPad, instala esta página en tu pantalla de inicio primero.',
   'mobilePreflight.iosShareStep': 'En Safari, toca Compartir y luego Agregar a pantalla de inicio.',
   'mobilePreflight.iosOpenStep':
-    'Abre World of ClaudeCraft desde el nuevo icono de la pantalla de inicio.',
+    'Abre Cryptic Realm desde el nuevo icono de la pantalla de inicio.',
   'mobilePreflight.androidStandaloneDetail':
     'Estás en modo de aplicación a pantalla completa. Mantén el dispositivo en horizontal.',
   'mobilePreflight.androidInstallDetail':
     'Para pantalla completa en Android, instala esta página o agrégala a la pantalla de inicio primero.',
   'mobilePreflight.androidInstallStep':
     'En Chrome, toca el menú y luego Instalar app o Agregar a pantalla de inicio.',
-  'mobilePreflight.androidOpenStep': 'Abre World of ClaudeCraft desde el nuevo icono.',
+  'mobilePreflight.androidOpenStep': 'Abre Cryptic Realm desde el nuevo icono.',
   'mobilePreflight.otherStandaloneDetail': 'Mantén el dispositivo en pantalla completa horizontal.',
   'mobilePreflight.otherInstallDetail':
     'Instala o agrega esta página a la pantalla de inicio para la mejor experiencia móvil a pantalla completa.',
-  'serverUnavailable.title': 'World of ClaudeCraft: Mundo no disponible',
-  'serverUnavailable.logoAlt': 'World of ClaudeCraft',
+  'serverUnavailable.title': 'Cryptic Realm: Mundo no disponible',
+  'serverUnavailable.logoAlt': 'Cryptic Realm',
   'serverUnavailable.eyebrow': 'Mantenimiento del mundo',
   'serverUnavailable.heading': 'El mundo no está disponible temporalmente.',
   'serverUnavailable.body':
@@ -4204,11 +4204,11 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hud.pet.noPetFood': 'No tienes comida para alimentar a tu mascota.',
   'hud.pet.petEatsFoodOnly': 'Tu mascota solo puede comer comida.',
   'mode.caCopyAria': 'Copiar dirección del contrato',
-  'mode.caLabel': 'Dirección del contrato de $WOC',
+  'mode.caLabel': 'Dirección del contrato de $CR',
   'mode.caNote':
     'WOC es nuestro token comunitario. No es necesario para jugar. Únete a Discord para hablar sobre la utilidad y el círculo virtuoso de WOC.',
   'mode.play': 'Jugar',
-  'mode.playAria': 'Jugar World of ClaudeCraft',
+  'mode.playAria': 'Jugar Cryptic Realm',
   'mode.serverAria': 'Selecciona el mundo: En Línea o Desconectado',
   'mode.serverLabel': 'Elige tu mundo',
   'mode.serverOffline': 'Desconectado',
@@ -4624,7 +4624,7 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.account.sectionCharacters': 'Personajes',
   'hudChrome.account.sectionDanger': 'Zona de Peligro',
   'hudChrome.account.sectionSettings': 'Ajustes de Cuenta',
-  'hudChrome.account.sectionWallet': 'Cartera $WOC',
+  'hudChrome.account.sectionWallet': 'Cartera $CR',
   'hudChrome.account.title': 'Cuenta',
   'hudChrome.account.walletSummary':
     'Verifica una cartera de Solana para mostrar el distintivo de titular en tu tarjeta de jugador.',
@@ -4693,7 +4693,7 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'guide.bestiary.levels': 'Niveles {min} a {max}',
   'guide.bestiary.levelsSame': 'Nivel {min}',
   'guide.bestiary.rare': 'Raro',
-  'guide.brand': 'World of ClaudeCraft',
+  'guide.brand': 'Cryptic Realm',
   'guide.brandShort': 'ClaudeCraft',
   'guide.classHook.druid':
     'Un cambiaformas que protege como oso, despedaza a sus enemigos como felino o sana en plena refriega.',
@@ -4880,7 +4880,7 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'guide.footer.discord': 'Únete al Discord',
   'guide.footer.github': 'Código en GitHub',
   'guide.footer.playNow': 'Jugar ahora',
-  'guide.footer.rights': 'World of ClaudeCraft',
+  'guide.footer.rights': 'Cryptic Realm',
   'guide.glossary.aggroDef':
     'La atención de un enemigo. El jugador que genera más amenaza mantiene la aggro y recibe los ataques.',
   'guide.glossary.aggroTerm': 'Aggro',
@@ -4956,7 +4956,7 @@ export const es: Partial<Record<TranslationKey, string>> = {
     'El mundo se puede recorrer en solitario, pero el mejor botín aguarda tras un buen grupo.',
   'guide.home.subtitle':
     'Haz misiones, forma grupo y explora un mundo hecho a mano, gratis en tu navegador.',
-  'guide.home.title': 'World of ClaudeCraft',
+  'guide.home.title': 'Cryptic Realm',
   'guide.home.what.heading': 'Un MMO clásico, hecho para empezar a jugar enseguida',
   'guide.home.what.pillarClassesBody':
     'Protege, sana o reparte el daño. Cada clase juega como debe hacerlo su arquetipo, con talentos para hacerla tuya.',
@@ -5081,7 +5081,7 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'guide.worldPage.heading': 'El mundo',
   'guide.worldPage.hub': 'Base de operaciones',
   'guide.worldPage.intro':
-    'World of ClaudeCraft es una sola tierra continua que recorres a pie, tres zonas dispuestas de sur a norte. No hay viaje rápido, así que el trayecto forma parte de la aventura.',
+    'Cryptic Realm es una sola tierra continua que recorres a pie, tres zonas dispuestas de sur a norte. No hay viaje rápido, así que el trayecto forma parte de la aventura.',
   'guide.worldPage.marshBlurb':
     'Una tierra ahogada de niebla y ruinas. Los mudfins pululan por los bajíos y algo más antiguo se agita bajo el agua, vigilado desde el pueblo-puente de Fenbridge.',
   'guide.worldPage.peaksBlurb':
@@ -6148,7 +6148,7 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.leaderboard.guildXp': 'XP total',
   'hudChrome.leaderboard.guildEmpty': 'Aún no hay hermandades clasificadas.',
   'hudChrome.discord.title': 'Discord',
-  'hudChrome.discord.panelTitle': 'World of ClaudeCraft',
+  'hudChrome.discord.panelTitle': 'Cryptic Realm',
   'hudChrome.discord.open': 'Discord',
   'hudChrome.discord.close': 'Cerrar',
   'hudChrome.discord.keybind': 'Panel de Discord',
@@ -6268,10 +6268,10 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'errors.api.desktopCodeInvalid':
     'El código de inicio de sesión de escritorio no es válido o expiró. Inténtalo de nuevo.',
   'desktop.crash.body': 'La vista del juego dejó de funcionar. ¿Recargarla?',
-  'desktop.crash.fatalBody': 'World of ClaudeCraft tuvo un error inesperado y debe cerrarse.',
+  'desktop.crash.fatalBody': 'Cryptic Realm tuvo un error inesperado y debe cerrarse.',
   'desktop.crash.quit': 'Salir',
   'desktop.crash.reload': 'Recargar',
-  'desktop.crash.title': 'World of ClaudeCraft',
+  'desktop.crash.title': 'Cryptic Realm',
   'desktop.update.downloading': 'Descargando actualización {version}...',
   'desktop.update.later': 'Más tarde',
   'desktop.update.ready':
@@ -6324,9 +6324,9 @@ export const es: Partial<Record<TranslationKey, string>> = {
     'El precio de WOC no está disponible en este momento. Vuelve a consultarlo pronto.',
   'hudChrome.dailyRewards.walletValue': 'Valor de cartera (WOC)',
   'hudChrome.nativeUpdate.body':
-    'Ya hay disponible una nueva versión de World of ClaudeCraft. Actualiza ahora para obtener las últimas correcciones y mejoras.',
+    'Ya hay disponible una nueva versión de Cryptic Realm. Actualiza ahora para obtener las últimas correcciones y mejoras.',
   'hudChrome.nativeUpdate.bodyWithVersion':
-    'La versión {version} de World of ClaudeCraft ya está disponible. Actualiza ahora para obtener las últimas correcciones y mejoras.',
+    'La versión {version} de Cryptic Realm ya está disponible. Actualiza ahora para obtener las últimas correcciones y mejoras.',
   'hudChrome.nativeUpdate.notNow': 'Ahora no',
   'hudChrome.nativeUpdate.title': 'Actualización disponible',
   'hudChrome.nativeUpdate.update': 'Actualizar',

@@ -12,7 +12,7 @@
 import type { AdminTranslations } from '../i18n.en';
 
 export const ko_KR: AdminTranslations = {
-  "app.title": "World of ClaudeCraft - 관리자",
+  "app.title": "Cryptic Realm - 관리자",
   "app.shortTitle": "WoC 관리자",
   "auth.username": "사용자명",
   "auth.password": "비밀번호",
@@ -160,8 +160,8 @@ export const ko_KR: AdminTranslations = {
   "usage.cacheColEvictions": "제거",
   "usage.cacheEntriesOfMax": "{entries} / {max}",
   "usage.notAvailable": "없음",
-  "usage.metric.wocBalanceApi": "$WOC 잔액 API 요청",
-  "usage.metric.wocBalanceRateLimited": "$WOC 잔액 제한 요청",
+  "usage.metric.wocBalanceApi": "$CR 잔액 API 요청",
+  "usage.metric.wocBalanceRateLimited": "$CR 잔액 제한 요청",
   "usage.metric.wocBalanceRpc": "Solana RPC 잔액 읽기",
   "usage.metric.wocBalanceRpcFailure": "Solana RPC 잔액 실패",
   "usage.metric.turnstileVerify": "Turnstile 확인",
@@ -177,7 +177,7 @@ export const ko_KR: AdminTranslations = {
   "usage.metric.cardPublishRequest": "플레이어 카드 게시 요청",
   "usage.metric.cardPublishRejected": "거부된 카드 게시",
   "usage.metric.cardPublishRateLimited": "제한된 카드 게시",
-  "usage.cache.wocBalance": "$WOC 잔액 캐시",
+  "usage.cache.wocBalance": "$CR 잔액 캐시",
   "usage.cache.githubReleases": "GitHub 릴리스 캐시",
   "usage.cache.githubContributors": "GitHub 기여자 캐시",
   "tickPerf.title": "서버 틱 프로파일러",

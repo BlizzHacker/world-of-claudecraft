@@ -12,7 +12,7 @@
 import type { AdminTranslations } from '../i18n.en';
 
 export const zh_CN: AdminTranslations = {
-  "app.title": "World of ClaudeCraft - 管理后台",
+  "app.title": "Cryptic Realm - 管理后台",
   "app.shortTitle": "沃克管理员",
   "auth.username": "用户名",
   "auth.password": "密码",
@@ -160,8 +160,8 @@ export const zh_CN: AdminTranslations = {
   "usage.cacheColEvictions": "淘汰",
   "usage.cacheEntriesOfMax": "{entries} / {max}",
   "usage.notAvailable": "不可用",
-  "usage.metric.wocBalanceApi": "$WOC 余额 API 请求",
-  "usage.metric.wocBalanceRateLimited": "$WOC 余额限流请求",
+  "usage.metric.wocBalanceApi": "$CR 余额 API 请求",
+  "usage.metric.wocBalanceRateLimited": "$CR 余额限流请求",
   "usage.metric.wocBalanceRpc": "Solana RPC 余额读取",
   "usage.metric.wocBalanceRpcFailure": "Solana RPC 余额读取失败",
   "usage.metric.turnstileVerify": "Turnstile 验证",
@@ -177,7 +177,7 @@ export const zh_CN: AdminTranslations = {
   "usage.metric.cardPublishRequest": "玩家卡片发布请求",
   "usage.metric.cardPublishRejected": "玩家卡片发布被拒",
   "usage.metric.cardPublishRateLimited": "玩家卡片发布限流",
-  "usage.cache.wocBalance": "$WOC 余额缓存",
+  "usage.cache.wocBalance": "$CR 余额缓存",
   "usage.cache.githubReleases": "GitHub 版本缓存",
   "usage.cache.githubContributors": "GitHub 贡献者缓存",
   "tickPerf.title": "服务器 tick 性能分析器",

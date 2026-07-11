@@ -12,7 +12,7 @@
 import type { AdminTranslations } from '../i18n.en';
 
 export const id_ID: AdminTranslations = {
-  "app.title": "World of ClaudeCraft - Admin",
+  "app.title": "Cryptic Realm - Admin",
   "app.shortTitle": "Admin WoC",
   "auth.username": "Nama pengguna",
   "auth.password": "Kata sandi",
@@ -160,8 +160,8 @@ export const id_ID: AdminTranslations = {
   "usage.cacheColEvictions": "Penggusuran",
   "usage.cacheEntriesOfMax": "{entries} / {max}",
   "usage.notAvailable": "t/a",
-  "usage.metric.wocBalanceApi": "Permintaan API saldo $WOC",
-  "usage.metric.wocBalanceRateLimited": "Permintaan saldo $WOC yang dibatasi",
+  "usage.metric.wocBalanceApi": "Permintaan API saldo $CR",
+  "usage.metric.wocBalanceRateLimited": "Permintaan saldo $CR yang dibatasi",
   "usage.metric.wocBalanceRpc": "Pembacaan saldo RPC Solana",
   "usage.metric.wocBalanceRpcFailure": "Kegagalan saldo RPC Solana",
   "usage.metric.turnstileVerify": "Verifikasi Turnstile",
@@ -177,7 +177,7 @@ export const id_ID: AdminTranslations = {
   "usage.metric.cardPublishRequest": "Permintaan penerbitan kartu pemain",
   "usage.metric.cardPublishRejected": "Penerbitan kartu pemain yang ditolak",
   "usage.metric.cardPublishRateLimited": "Penerbitan kartu pemain yang dibatasi",
-  "usage.cache.wocBalance": "cache saldo $WOC",
+  "usage.cache.wocBalance": "cache saldo $CR",
   "usage.cache.githubReleases": "cache rilis GitHub",
   "usage.cache.githubContributors": "Cache kontributor GitHub",
   "tickPerf.title": "Profiler tick server",

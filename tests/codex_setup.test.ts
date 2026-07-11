@@ -126,7 +126,9 @@ describe('Codex custom agents', () => {
     const dir = path.join(root, '.codex/agents');
     const files = fs
       .readdirSync(dir)
-      .filter((file) => file.endsWith('.toml'))
+      // Cryptic Realm: fork-local agents (non woc_*) follow the Claude agent
+      // format, not the Codex contract this gate pins — scope to upstream set.
+      .filter((file) => file.endsWith('.toml') && file.startsWith('woc_'))
       .sort();
     expect(files).toEqual([
       'woc_cross_platform.toml',
@@ -159,7 +161,9 @@ describe('Codex custom agents', () => {
 describe('Codex skills', () => {
   it('has exact discovery metadata and no generated placeholders', () => {
     const skillsDir = path.join(root, '.agents/skills');
-    const skills = fs.readdirSync(skillsDir).sort();
+    // Cryptic Realm: fork-local skills (non woc-*) are Claude skills, exempt
+    // from the Codex discovery contract.
+    const skills = fs.readdirSync(skillsDir).filter((s) => s.startsWith('woc-')).sort();
     expect(skills).toEqual([
       'woc-codex-audit',
       'woc-extract-and-test',

@@ -27,10 +27,16 @@ function makeSim(cls: PlayerClass, level = 20, seed = 77): { sim: TestSim; p: En
 }
 
 function spawnTarget(sim: TestSim, p: Entity, dz = 4): Entity {
+  // Cryptic Realm: the town spawn has LoS-blocking props upstream's doesn't, so
+  // relocate the duel to the open field first (the pre-v0.24 CR harness did too).
+  const origin = sim.groundPos(20, 22);
+  p.pos = origin;
+  p.prevPos = { ...origin };
+  const targetPos = sim.groundPos(origin.x, origin.z + dz);
   const mob = createMob(sim.nextId++, MOBS.forest_wolf, 1, {
-    x: p.pos.x,
-    y: p.pos.y,
-    z: p.pos.z + dz,
+    x: targetPos.x,
+    y: targetPos.y,
+    z: targetPos.z,
   });
   mob.maxHp = 50000;
   mob.hp = 50000;

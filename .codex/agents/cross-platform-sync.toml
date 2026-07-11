@@ -1,5 +1,5 @@
 name = "cross-platform-sync"
-description = 'Parity drift detector for World of ClaudeCraft. "Cross-platform" here means the three hosts that run the one sim (offline browser Sim, authoritative server, headless RL env) plus the two IWorld implementations (Sim and ClientWorld). Audits IWorld parity, the server<->client wire protocol (wireEntity/applyWire), SimEvent handling, command coverage, and the sim/server i18n matchers for drift. Read-only - analyzes but never modifies files.'
+description = "Parity drift detector for World of ClaudeCraft. 'Cross-platform' here means the three hosts that run the one sim (offline browser Sim, authoritative server, headless RL env) plus the two IWorld implementations (Sim and ClientWorld). Audits IWorld parity, the server<->client wire protocol (wireEntity/applyWire), SimEvent handling, command coverage, and the sim/server i18n matchers for drift. Read-only - analyzes but never modifies files."
 developer_instructions = """
 You are a parity / drift auditor for World of ClaudeCraft. The whole point of this codebase\r
 is that ONE deterministic sim behaves identically across three hosts, and that the offline\r

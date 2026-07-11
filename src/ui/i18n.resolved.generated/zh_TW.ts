@@ -351,8 +351,8 @@ export const zh_TW: EnTranslations = {
     },
     "nativeUpdate": {
       "title": "有可用更新",
-      "body": "World of ClaudeCraft 有新版本可用。立即更新以取得最新修正與改進。",
-      "bodyWithVersion": "World of ClaudeCraft {version} 版本已可用。立即更新以取得最新修正與改進。",
+      "body": "Cryptic Realm 有新版本可用。立即更新以取得最新修正與改進。",
+      "bodyWithVersion": "Cryptic Realm {version} 版本已可用。立即更新以取得最新修正與改進。",
       "notNow": "暫不",
       "update": "更新"
     },
@@ -910,7 +910,7 @@ export const zh_TW: EnTranslations = {
       "loggedOutPrompt": "登入以管理您的帳號。",
       "memberSince": "註冊於 {date}",
       "sectionSettings": "帳號設定",
-      "sectionWallet": "$WOC 錢包",
+      "sectionWallet": "$CR 錢包",
       "sectionCharacters": "角色",
       "sectionDanger": "危險區域",
       "changePassword": "變更密碼",
@@ -1229,7 +1229,7 @@ export const zh_TW: EnTranslations = {
     },
     "discord": {
       "title": "Discord",
-      "panelTitle": "World of ClaudeCraft",
+      "panelTitle": "Cryptic Realm",
       "open": "Discord",
       "close": "關閉",
       "keybind": "Discord 面板",
@@ -1684,7 +1684,7 @@ export const zh_TW: EnTranslations = {
     }
   },
   "guide": {
-    "brand": "World of ClaudeCraft",
+    "brand": "Cryptic Realm",
     "brandShort": "ClaudeCraft",
     "tagline": "一款可在瀏覽器中免費遊玩的經典風格MMO。",
     "skipToContent": "跳至主要內容",
@@ -1748,7 +1748,7 @@ export const zh_TW: EnTranslations = {
       "github": "GitHub上的原始碼",
       "discord": "加入Discord",
       "communityWiki": "社群Wiki",
-      "rights": "World of ClaudeCraft"
+      "rights": "Cryptic Realm"
     },
     "language": {
       "label": "語言",
@@ -1768,7 +1768,7 @@ export const zh_TW: EnTranslations = {
     },
     "home": {
       "eyebrow": "經典風格的瀏覽器MMO",
-      "title": "World of ClaudeCraft",
+      "title": "Cryptic Realm",
       "subtitle": "在你的瀏覽器中免費進行任務、組隊並探索一個精心打造的世界。",
       "ctaPlay": "立即遊玩",
       "ctaLearn": "如何遊玩",
@@ -2209,7 +2209,7 @@ export const zh_TW: EnTranslations = {
     },
     "worldPage": {
       "heading": "世界",
-      "intro": "World of ClaudeCraft 是一片你需徒步橫越的連綿大地，三大區域由南向北排列。沒有快速旅行，所以旅程本身就是冒險的一部分。",
+      "intro": "Cryptic Realm 是一片你需徒步橫越的連綿大地，三大區域由南向北排列。沒有快速旅行，所以旅程本身就是冒險的一部分。",
       "hub": "主據點",
       "mapHeading": "北行之路",
       "mapSub": "三個地區由南而北，等級層層遞增。跟著任務的軌跡走，這片土地會帶你從谷地一路前往群峰。",
@@ -2635,7 +2635,7 @@ export const zh_TW: EnTranslations = {
   },
   "editor": {
     "appTitle": "地圖編輯器",
-    "docTitle": "地圖編輯器 - World of ClaudeCraft",
+    "docTitle": "地圖編輯器 - Cryptic Realm",
     "untitledMap": "未命名地圖",
     "playtestPlayerName": "製圖師",
     "topbar": {
@@ -3112,7 +3112,7 @@ export const zh_TW: EnTranslations = {
     "realmName": "世界名稱"
   },
   "footer": {
-    "copyright": "2026 World of ClaudeCraft",
+    "copyright": "2026 Cryptic Realm",
     "githubLink": "https://github.com/levy-street/world-of-claudecraft",
     "githubLabel": "開源專案",
     "whitepaper": "白皮書",
@@ -3210,11 +3210,11 @@ export const zh_TW: EnTranslations = {
     "serverOnline": "線上",
     "serverOffline": "離線",
     "play": "開始遊戲",
-    "playAria": "遊玩 World of ClaudeCraft",
+    "playAria": "遊玩 Cryptic Realm",
     "serverLabel": "選擇你的世界",
     "serverAria": "選擇世界：線上或離線",
     "serverOfflineSub": "即時本地世界",
-    "caLabel": "$WOC 合約地址",
+    "caLabel": "$CR 合約地址",
     "caCopyAria": "複製合約地址",
     "caNote": "WOC 是我們的社群代幣，並非遊玩所需。加入 Discord 一起討論 WOC 的用途與飛輪效應。"
   },
@@ -3272,7 +3272,7 @@ export const zh_TW: EnTranslations = {
     }
   },
   "wallet": {
-    "label": "$WOC 錢包",
+    "label": "$CR 錢包",
     "connect": "驗證錢包",
     "connectTitle": "驗證你的 Solana 錢包",
     "connectAria": "驗證你的 Solana 錢包",
@@ -3305,11 +3305,11 @@ export const zh_TW: EnTranslations = {
     "linkedDisconnectedAria": "錢包仍為你的帳號保持驗證。重新連線以管理錢包應用程式。",
     "linkTitle": "點擊簽名並將此錢包綁定到你的帳號。",
     "connectedTitle": "已連線。登入後可將此錢包綁定到你的帳號。",
-    "balanceTitle": "已驗證 Solana 錢包的 $WOC 餘額",
+    "balanceTitle": "已驗證 Solana 錢包的 $CR 餘額",
     "balanceAria": "已驗證 Solana 錢包餘額：{balance}",
-    "balancePreviewTitle": "已連線錢包的 $WOC 餘額預覽",
+    "balancePreviewTitle": "已連線錢包的 $CR 餘額預覽",
     "balancePreviewAria": "已連線錢包餘額預覽：{balance}。綁定錢包即可驗證持有者標識。",
-    "balanceAmount": "{amount} $WOC",
+    "balanceAmount": "{amount} $CR",
     "connected": "已連線：{address}",
     "connectedWithBalance": "已連線：{balance} - {address}",
     "connectedLinked": "已驗證：{address}",
@@ -3330,8 +3330,8 @@ export const zh_TW: EnTranslations = {
     "linkFailed": "錢包驗證失敗。",
     "verifyFailed": "錢包驗證失敗。",
     "unlinkFailed": "無法解除錢包綁定。",
-    "holder": "$WOC 持有者",
-    "holderTierTitle": "{tier} $WOC 持有者",
+    "holder": "$CR 持有者",
+    "holderTierTitle": "{tier} $CR 持有者",
     "holderTiers": {
       "ember": {
         "name": "餘燼",
@@ -3355,7 +3355,7 @@ export const zh_TW: EnTranslations = {
       },
       "vaultwarden": {
         "name": "寶庫守望者",
-        "flavor": "如今守護著真正的寶庫：全部 $WOC 的 0.01%。"
+        "flavor": "如今守護著真正的寶庫：全部 $CR 的 0.01%。"
       },
       "whale": {
         "name": "巨鯨",
@@ -3430,8 +3430,8 @@ export const zh_TW: EnTranslations = {
     "footerHandleWithRecruits": "@{handle} - {recruited}",
     "footerCta": "鑄就你的傳說：{siteUrl}",
     "arenaStat": "競技場",
-    "shareTierBit": "，{tier}級 $WOC 持有者",
-    "shareText": "我正在 World of ClaudeCraft 中鑄就傳說：{level}級 {className}{tierBit}。加入我的世界：",
+    "shareTierBit": "，{tier}級 $CR 持有者",
+    "shareText": "我正在 Cryptic Realm 中鑄就傳說：{level}級 {className}{tierBit}。加入我的世界：",
     "nativeShareTitle": "ClaudeCraft 世界",
     "fileNameFallback": "玩家",
     "actionShareX": "分享到 X",
@@ -4055,14 +4055,14 @@ export const zh_TW: EnTranslations = {
     }
   },
   "seo": {
-    "title": "World of ClaudeCraft：經典風格網頁 MMO",
-    "description": "在 World of ClaudeCraft 展開史詩冒險。這是一款可直接在瀏覽器中遊玩的經典風格微型 MMO。加入持續共享的世界，提升職業等級並擊敗敵人！",
+    "title": "Cryptic Realm：經典風格網頁 MMO",
+    "description": "在 Cryptic Realm 展開史詩冒險。這是一款可直接在瀏覽器中遊玩的經典風格微型 MMO。加入持續共享的世界，提升職業等級並擊敗敵人！",
     "genre": "MMORPG",
     "playMode": "多人遊戲",
     "applicationCategory": "遊戲",
     "operatingSystem": "網頁瀏覽器",
-    "officialLabel": "World of ClaudeCraft 官方網站",
-    "officialBody": "worldofclaudecraft.com 是 Claudemoon 世界的官方免費瀏覽器 MMO。你可以用持久角色線上遊玩，也可以離線單人探索、閱讀 wiki，並從本站前往已驗證的社群連結。"
+    "officialLabel": "Cryptic Realm 官方網站",
+    "officialBody": "crypticrealm.com 是 Claudemoon 世界的官方免費瀏覽器 MMO。你可以用持久角色線上遊玩，也可以離線單人探索、閱讀 wiki，並從本站前往已驗證的社群連結。"
   },
   "a11y": {
     "goHome": "前往首頁",
@@ -4070,9 +4070,9 @@ export const zh_TW: EnTranslations = {
     "mainNavigation": "主導覽",
     "languageSelection": "語言選擇",
     "characterActions": "角色操作",
-    "githubProject": "開啟 World of ClaudeCraft 的 GitHub 專案",
-    "discordCommunity": "加入 World of ClaudeCraft 的 Discord 社群",
-    "donateProject": "捐贈支持 World of ClaudeCraft"
+    "githubProject": "開啟 Cryptic Realm 的 GitHub 專案",
+    "discordCommunity": "加入 Cryptic Realm 的 Discord 社群",
+    "donateProject": "捐贈支持 Cryptic Realm"
   },
   "loading": {
     "world": "正在載入世界...",
@@ -4142,11 +4142,11 @@ export const zh_TW: EnTranslations = {
       "later": "稍後"
     },
     "crash": {
-      "title": "World of ClaudeCraft",
+      "title": "Cryptic Realm",
       "body": "遊戲畫面已停止運作。要重新載入嗎？",
       "reload": "重新載入",
       "quit": "離開",
-      "fatalBody": "World of ClaudeCraft 發生未預期的錯誤，必須關閉。"
+      "fatalBody": "Cryptic Realm 發生未預期的錯誤，必須關閉。"
     }
   },
   "realm": {
@@ -4276,17 +4276,17 @@ export const zh_TW: EnTranslations = {
     "iosStandaloneDetail": "你正在從主畫面以全螢幕模式執行。請保持橫向。",
     "iosInstallDetail": "若要在 iPhone 或 iPad 上取得真正全螢幕，請先將此頁面加入主畫面。",
     "iosShareStep": "在 Safari 中點一下分享，然後選擇加入主畫面。",
-    "iosOpenStep": "從新的主畫面圖示開啟 World of ClaudeCraft。",
+    "iosOpenStep": "從新的主畫面圖示開啟 Cryptic Realm。",
     "androidStandaloneDetail": "你正在全螢幕應用模式中。請保持橫向。",
     "androidInstallDetail": "若要在 Android 上全螢幕，請先安裝此頁面或加入主畫面。",
     "androidInstallStep": "在 Chrome 中點選選單，然後選擇安裝應用程式或加入主畫面。",
-    "androidOpenStep": "從新圖示開啟 World of ClaudeCraft。",
+    "androidOpenStep": "從新圖示開啟 Cryptic Realm。",
     "otherStandaloneDetail": "請保持裝置為橫向全螢幕。",
     "otherInstallDetail": "安裝此頁面或將其加入主畫面，以獲得最佳行動裝置全螢幕體驗。"
   },
   "serverUnavailable": {
-    "title": "World of ClaudeCraft - 世界不可用",
-    "logoAlt": "World of ClaudeCraft",
+    "title": "Cryptic Realm - 世界不可用",
+    "logoAlt": "Cryptic Realm",
     "eyebrow": "世界維護",
     "heading": "這個世界暫時無法使用。",
     "body": "我們正在重新啟動遊戲服務，Claudemoon 應會很快恢復。此頁面會自動持續檢查。",

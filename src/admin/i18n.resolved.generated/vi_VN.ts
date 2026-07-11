@@ -12,7 +12,7 @@
 import type { AdminTranslations } from '../i18n.en';
 
 export const vi_VN: AdminTranslations = {
-  "app.title": "World of ClaudeCraft - Quản trị",
+  "app.title": "Cryptic Realm - Quản trị",
   "app.shortTitle": "Quản trị viên WoC",
   "auth.username": "Tên đăng nhập",
   "auth.password": "Mật khẩu",
@@ -160,8 +160,8 @@ export const vi_VN: AdminTranslations = {
   "usage.cacheColEvictions": "Lần loại bỏ",
   "usage.cacheEntriesOfMax": "{entries} / {max}",
   "usage.notAvailable": "không có",
-  "usage.metric.wocBalanceApi": "Yêu cầu API số dư $WOC",
-  "usage.metric.wocBalanceRateLimited": "Yêu cầu số dư $WOC bị giới hạn",
+  "usage.metric.wocBalanceApi": "Yêu cầu API số dư $CR",
+  "usage.metric.wocBalanceRateLimited": "Yêu cầu số dư $CR bị giới hạn",
   "usage.metric.wocBalanceRpc": "Lần đọc số dư Solana RPC",
   "usage.metric.wocBalanceRpcFailure": "Lần đọc số dư Solana RPC thất bại",
   "usage.metric.turnstileVerify": "Lần xác minh Turnstile",
@@ -177,7 +177,7 @@ export const vi_VN: AdminTranslations = {
   "usage.metric.cardPublishRequest": "Yêu cầu đăng thẻ người chơi",
   "usage.metric.cardPublishRejected": "Lần đăng thẻ người chơi bị từ chối",
   "usage.metric.cardPublishRateLimited": "Lần đăng thẻ người chơi bị giới hạn",
-  "usage.cache.wocBalance": "Bộ nhớ đệm số dư $WOC",
+  "usage.cache.wocBalance": "Bộ nhớ đệm số dư $CR",
   "usage.cache.githubReleases": "Bộ nhớ đệm bản phát hành GitHub",
   "usage.cache.githubContributors": "Bộ nhớ đệm người đóng góp GitHub",
   "tickPerf.title": "Trình phân tích tick máy chủ",
