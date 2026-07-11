@@ -7771,7 +7771,7 @@ export const tr_TR: EnTranslations = {
       "stable_master_wren": {
         "name": "Wren Saddleworth",
         "title": "Ahır Ustası",
-        "greeting": "Every hero needs a steed, {className}. The stag is steady, the raptor is fast, and the wyrm... the wyrm flies."
+        "greeting": "Her kahramanın bir bineğe ihtiyacı var, {className}. Geyik sağlamdır, raptor hızlıdır, ejder ise... ejder uçar."
       },
       "mercenary_kael": {
         "name": "Kael the Sellsword",

@@ -19,7 +19,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.items.mount_emerald_wyrm.name': 'エメラルドワームの手綱',
   'entities.npcs.stable_master_wren.name': 'レン・サドルワース',
   'entities.npcs.stable_master_wren.title': '厩舎長',
-  'entities.npcs.stable_master_wren.greeting': '英雄には乗騎が要るのだ、$C。牡鹿は堅実、ラプターは俊足、そしてワームは……ワームは空を飛ぶ。',
+  'entities.npcs.stable_master_wren.greeting': '英雄には乗騎が要るのだ、{className}。牡鹿は堅実、ラプターは俊足、そしてワームは……ワームは空を飛ぶ。',
   'itemUi.vendor.sellItemAria': '{item}を{price}で売却',
   'hudChrome.itemHeroicTag': '[ヒロイック]',
   'hudChrome.options.done': '完了',

@@ -7,7 +7,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'entities.items.mount_emerald_wyrm.name': 'Smaragdwyrm-teugels',
   'entities.npcs.stable_master_wren.name': 'Wren Saddleworth',
   'entities.npcs.stable_master_wren.title': 'Stalmeester',
-  'entities.npcs.stable_master_wren.greeting': 'Elke held heeft een rijdier nodig, $C. Het hert is betrouwbaar, de raptor is snel, en de wyrm... de wyrm vliegt.',
+  'entities.npcs.stable_master_wren.greeting': 'Elke held heeft een rijdier nodig, {className}. Het hert is betrouwbaar, de raptor is snel, en de wyrm... de wyrm vliegt.',
   'entities.abilities.sport_boot.description':
     'Een lange, hoge uithaal richting het richtpunt. Het publiek smult ervan.',
   'entities.abilities.sport_boot.name': 'Grote Uithaal',

@@ -19,7 +19,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'entities.items.mount_emerald_wyrm.name': 'Rênes du ver émeraude',
   'entities.npcs.stable_master_wren.name': 'Wren Saddleworth',
   'entities.npcs.stable_master_wren.title': 'Maîtresse d\'écurie',
-  'entities.npcs.stable_master_wren.greeting': 'Tout héros a besoin d\'une monture, $C. Le cerf est sûr, le raptor est rapide, et le ver... le ver vole.',
+  'entities.npcs.stable_master_wren.greeting': 'Tout héros a besoin d\'une monture, {className}. Le cerf est sûr, le raptor est rapide, et le ver... le ver vole.',
   'entities.abilities.sport_boot.description':
     'Une longue balle bottée en cloche vers le point visé. La foule adore.',
   'entities.abilities.sport_boot.name': 'Grosse botte',

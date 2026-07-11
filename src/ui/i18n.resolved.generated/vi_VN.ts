@@ -7771,7 +7771,7 @@ export const vi_VN: EnTranslations = {
       "stable_master_wren": {
         "name": "Wren Saddleworth",
         "title": "Quản mã",
-        "greeting": "Every hero needs a steed, {className}. The stag is steady, the raptor is fast, and the wyrm... the wyrm flies."
+        "greeting": "Anh hùng nào cũng cần một thú cưỡi, {className}. Hươu thì vững, raptor thì nhanh, còn wyrm... wyrm biết bay."
       },
       "mercenary_kael": {
         "name": "Kael the Sellsword",

@@ -7771,7 +7771,7 @@ export const zh_TW: EnTranslations = {
       "stable_master_wren": {
         "name": "雷恩·鞍值",
         "title": "馬廄總管",
-        "greeting": "Every hero needs a steed, {className}. The stag is steady, the raptor is fast, and the wyrm... the wyrm flies."
+        "greeting": "每位英雄都需要坐騎，{className}。雄鹿沉穩，迅猛龍迅捷，而巨龍……巨龍會飛。"
       },
       "mercenary_kael": {
         "name": "Kael the Sellsword",

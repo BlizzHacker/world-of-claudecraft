@@ -7771,7 +7771,7 @@ export const it_IT: EnTranslations = {
       "stable_master_wren": {
         "name": "Wren Saddleworth",
         "title": "Maestra di scuderia",
-        "greeting": "Every hero needs a steed, {className}. The stag is steady, the raptor is fast, and the wyrm... the wyrm flies."
+        "greeting": "Ogni eroe ha bisogno di una cavalcatura, {className}. Il cervo è costante, il raptor è rapido e il wyrm... il wyrm vola."
       },
       "mercenary_kael": {
         "name": "Kael the Sellsword",

@@ -7771,7 +7771,7 @@ export const ja_JP: EnTranslations = {
       "stable_master_wren": {
         "name": "レン・サドルワース",
         "title": "厩舎長",
-        "greeting": "Every hero needs a steed, {className}. The stag is steady, the raptor is fast, and the wyrm... the wyrm flies."
+        "greeting": "英雄には乗騎が要るのだ、{className}。牡鹿は堅実、ラプターは俊足、そしてワームは……ワームは空を飛ぶ。"
       },
       "mercenary_kael": {
         "name": "Kael the Sellsword",

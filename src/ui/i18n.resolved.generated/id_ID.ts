@@ -7771,7 +7771,7 @@ export const id_ID: EnTranslations = {
       "stable_master_wren": {
         "name": "Wren Saddleworth",
         "title": "Kepala Istal",
-        "greeting": "Every hero needs a steed, {className}. The stag is steady, the raptor is fast, and the wyrm... the wyrm flies."
+        "greeting": "Setiap pahlawan butuh tunggangan, {className}. Rusa itu tenang, raptor itu cepat, dan wyrm... wyrm bisa terbang."
       },
       "mercenary_kael": {
         "name": "Kael the Sellsword",

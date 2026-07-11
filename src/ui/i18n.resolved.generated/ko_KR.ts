@@ -7771,7 +7771,7 @@ export const ko_KR: EnTranslations = {
       "stable_master_wren": {
         "name": "렌 새들워스",
         "title": "마구간지기",
-        "greeting": "Every hero needs a steed, {className}. The stag is steady, the raptor is fast, and the wyrm... the wyrm flies."
+        "greeting": "영웅에겐 탈것이 필요하지, {className}. 수사슴은 듬직하고, 랩터는 빠르고, 윔은... 윔은 하늘을 난다네."
       },
       "mercenary_kael": {
         "name": "Kael the Sellsword",

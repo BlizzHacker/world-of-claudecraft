@@ -19,7 +19,7 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'entities.items.mount_emerald_wyrm.name': 'Rédeas do vorme esmeralda',
   'entities.npcs.stable_master_wren.name': 'Wren Saddleworth',
   'entities.npcs.stable_master_wren.title': 'Mestra dos estábulos',
-  'entities.npcs.stable_master_wren.greeting': 'Todo herói precisa de uma montaria, $C. O cervo é firme, o raptor é veloz e o vorme... o vorme voa.',
+  'entities.npcs.stable_master_wren.greeting': 'Cada herói precisa de uma montaria, {className}. O cervo é firme, o raptor é veloz e o vorme... o vorme voa.',
   'entities.abilities.sport_boot.description':
     'Um chutão alto e longo em direção ao ponto de mira. A torcida adora.',
   'entities.abilities.sport_boot.name': 'Chutão',

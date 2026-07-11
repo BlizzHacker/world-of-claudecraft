@@ -19,7 +19,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.items.mount_emerald_wyrm.name': 'Поводья изумрудного змея',
   'entities.npcs.stable_master_wren.name': 'Рен Сэдлворт',
   'entities.npcs.stable_master_wren.title': 'Смотрительница конюшни',
-  'entities.npcs.stable_master_wren.greeting': 'Каждому герою нужен скакун, $C. Олень надёжен, раптор быстр, а змей... змей летает.',
+  'entities.npcs.stable_master_wren.greeting': 'Каждому герою нужен скакун, {className}. Олень надёжен, раптор быстр, а змей... змей летает.',
   'itemUi.vendor.sellItemAria': 'Продать {item} за {price}',
   'hudChrome.itemHeroicTag': '[ГЕРОИЧЕСКИЙ]',
   'hudChrome.options.done': 'Готово',

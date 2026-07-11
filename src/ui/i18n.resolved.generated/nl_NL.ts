@@ -7771,7 +7771,7 @@ export const nl_NL: EnTranslations = {
       "stable_master_wren": {
         "name": "Wren Saddleworth",
         "title": "Stalmeester",
-        "greeting": "Every hero needs a steed, {className}. The stag is steady, the raptor is fast, and the wyrm... the wyrm flies."
+        "greeting": "Elke held heeft een rijdier nodig, {className}. Het hert is betrouwbaar, de raptor is snel, en de wyrm... de wyrm vliegt."
       },
       "mercenary_kael": {
         "name": "Kael the Sellsword",
