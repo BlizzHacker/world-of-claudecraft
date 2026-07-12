@@ -252,6 +252,7 @@ import { mountIngameOptions } from './ui/cryptic/ingame_options';
 import { mountUserDropdown } from './ui/cryptic/user_dropdown';
 import { mountWalletPanel } from './ui/cryptic/wallet_panel';
 import { mountPwaInstall } from './ui/cryptic/pwa_install';
+import { mountXboxEnv } from './game/xbox_env';
 import { mountNewsRealmFilter } from './ui/cryptic/news_realm_filter';
 import { mountDownloadLaunchers } from './ui/cryptic/download_launchers';
 import { mountChatFrame } from './ui/cryptic/chat_frame';
@@ -612,6 +613,7 @@ if (typeof document !== 'undefined') {
     void mountUserDropdown();
     mountWalletPanel();
     mountPwaInstall();
+    mountXboxEnv();
     mountNewsRealmFilter();
     mountDownloadLaunchers();
     mountMusicWidget();
