@@ -2653,6 +2653,9 @@ async function startGame(
       mode: offlineSim ? 'offline' : 'online',
       renderer,
       camYaw: () => input.camYaw,
+      // Exclude Player 1's own pad from co-op only when P1 is actually on a
+      // gamepad; null (keyboard/mouse P1) frees every pad to join.
+      primaryPadIndex: () => gamepad.activePadIndex(),
       primaryEntity: () => {
         const p = world.player;
         return { x: p.pos.x, y: p.pos.y, z: p.pos.z };
