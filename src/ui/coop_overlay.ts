@@ -12,8 +12,8 @@
 // player (Sim.addPlayer offline, a secondary ClientWorld online). All copy is
 // t()-keyed under the `coop` namespace.
 
-import { GP } from '../game/gamepad_map';
 import type { PlayerClass } from '../sim/types';
+import { GP } from '../game/gamepad_map';
 import { t } from './i18n';
 
 export interface CoopCharacterRef {
@@ -40,9 +40,18 @@ export interface CoopOverlayDeps {
     username: string,
     password: string,
   ) => Promise<{ token: string; base: string; characters: CoopCharacterRef[] }>;
+  // Online: create a brand-new character (on Player 1's account when token is
+  // null, else on the signed-in separate account) and return its ref so the
+  // joiner can enter the world as it immediately.
+  createCharacter?: (
+    name: string,
+    cls: PlayerClass,
+    token: string | null,
+    base: string | null,
+  ) => Promise<CoopCharacterRef>;
 }
 
-type Step = 'account' | 'class' | 'character' | 'login';
+type Step = 'account' | 'class' | 'character' | 'login' | 'create';
 
 const OVERLAY_ID = 'coop-join-overlay';
 const STYLE_ID = 'coop-join-overlay-styles';
@@ -84,6 +93,12 @@ function ensureCoopOverlayStyles(): void {
   }
   .coop-login-error { color: #ff8a8a; }
   .coop-empty { opacity: 0.7; }
+  .coop-create { flex-basis: 100%; background: rgba(255, 209, 0, 0.14); }
+  .coop-create-name {
+    min-height: 44px; padding: 10px 12px; font-size: 16px; border-radius: 8px;
+    background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.25); color: inherit;
+    text-align: center;
+  }
   @media (prefers-reduced-motion: reduce) { .coop-join-panel * { transition: none !important; } }
   `;
   document.head.appendChild(style);
@@ -112,7 +127,11 @@ export class CoopOverlay {
 
   constructor(private readonly deps: CoopOverlayDeps) {}
 
-  open(slot: number, onConfirm: (choice: CoopJoinChoice) => void, onCancel: () => void): void {
+  open(
+    slot: number,
+    onConfirm: (choice: CoopJoinChoice) => void,
+    onCancel: () => void,
+  ): void {
     ensureCoopOverlayStyles();
     this.close();
     this.slot = slot;
@@ -150,7 +169,8 @@ export class CoopOverlay {
 
   private moveSelection(delta: number): void {
     if (this.options.length === 0) return;
-    this.selectedIndex = (this.selectedIndex + delta + this.options.length) % this.options.length;
+    this.selectedIndex =
+      (this.selectedIndex + delta + this.options.length) % this.options.length;
     this.highlight();
   }
 
@@ -195,6 +215,7 @@ export class CoopOverlay {
     else if (this.step === 'class') this.renderClassStep(panel);
     else if (this.step === 'character') this.renderCharacterStep(panel);
     else if (this.step === 'login') this.renderLoginStep(panel);
+    else if (this.step === 'create') this.renderCreateStep(panel);
 
     const cancel = this.makeButton(t('coop.joinCancel'), () => this.cancel());
     cancel.classList.add('coop-cancel');
@@ -247,15 +268,18 @@ export class CoopOverlay {
     const label = document.createElement('p');
     label.textContent = t('coop.pickCharacter');
     panel.appendChild(label);
-    if (this.roster.length === 0) {
-      const empty = document.createElement('p');
-      empty.className = 'coop-empty';
-      empty.textContent = t('coop.noOtherCharacters');
-      panel.appendChild(empty);
-      return;
-    }
     const grid = document.createElement('div');
     grid.className = 'coop-option-grid';
+    // Make a brand-new character on this account (family play: a kid creates
+    // their own hero under the parent's login), offered first.
+    if (this.deps.createCharacter) {
+      const create = this.makeOption(`+ ${t('coop.createCharacter')}`, () => {
+        this.step = 'create';
+        this.render();
+      });
+      create.classList.add('coop-create');
+      grid.appendChild(create);
+    }
     for (const ch of this.roster) {
       grid.appendChild(
         this.makeOption(`${ch.name} (${this.deps.classLabel(ch.cls)})`, () => {
@@ -267,6 +291,51 @@ export class CoopOverlay {
           });
         }),
       );
+    }
+    panel.appendChild(grid);
+    if (this.roster.length === 0 && !this.deps.createCharacter) {
+      const empty = document.createElement('p');
+      empty.className = 'coop-empty';
+      empty.textContent = t('coop.noOtherCharacters');
+      panel.appendChild(empty);
+    }
+  }
+
+  private renderCreateStep(panel: HTMLElement): void {
+    const label = document.createElement('p');
+    label.textContent = t('coop.createTitle');
+    panel.appendChild(label);
+    const name = document.createElement('input');
+    name.type = 'text';
+    name.maxLength = 24;
+    name.placeholder = t('coop.createName');
+    name.setAttribute('aria-label', t('coop.createName'));
+    name.className = 'coop-create-name';
+    panel.appendChild(name);
+    const error = document.createElement('p');
+    error.className = 'coop-login-error';
+    error.hidden = true;
+    panel.appendChild(error);
+    const grid = document.createElement('div');
+    grid.className = 'coop-option-grid';
+    // Pick the class; a click creates the character and joins as it.
+    for (const cls of this.deps.classes) {
+      const btn = this.makeOption(this.deps.classLabel(cls), () => {
+        const nm = name.value.trim() || `${this.deps.classLabel(cls)} ${this.slot}`;
+        error.hidden = true;
+        for (const o of this.options) o.disabled = true;
+        void this.deps
+          .createCharacter?.(nm, cls, this.sepToken, this.sepBase)
+          .then((character) => {
+            this.confirm({ kind: 'online', character, token: this.sepToken, base: this.sepBase });
+          })
+          .catch(() => {
+            error.textContent = t('coop.createError');
+            error.hidden = false;
+            for (const o of this.options) o.disabled = false;
+          });
+      });
+      grid.appendChild(btn);
     }
     panel.appendChild(grid);
   }

@@ -68,6 +68,14 @@ export interface CoopControllerDeps {
       token: string | null,
       base: string | null,
     ) => CoopOnlineSession;
+    // Create a new character (on Player 1's account when token is null, else on
+    // the signed-in separate account) and resolve its ref.
+    createCharacter: (
+      name: string,
+      cls: PlayerClass,
+      token: string | null,
+      base: string | null,
+    ) => Promise<CoopCharacterRef>;
   };
 }
 
@@ -106,6 +114,7 @@ export class CoopController {
       classLabel: deps.classLabel,
       sameAccountCharacters: deps.online?.sameAccountCharacters,
       loginSeparate: deps.online?.loginSeparate,
+      createCharacter: deps.online?.createCharacter,
     });
   }
 

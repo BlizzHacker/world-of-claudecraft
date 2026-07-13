@@ -2704,6 +2704,25 @@ async function startGame(
                 getClientSeed(),
                 { coop: true },
               ),
+            createCharacter: async (name, cls, token, base) => {
+              const b = base ?? api.base;
+              const tok = token ?? api.token ?? '';
+              const authHeaders: Record<string, string> = tok
+                ? { Authorization: `Bearer ${tok}` }
+                : {};
+              const res = await fetch(apiUrl('/api/characters', b), {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', ...authHeaders },
+                body: JSON.stringify({ name, class: cls, skin: 0, ladder: false, hardcore: false }),
+              });
+              if (!res.ok) throw new Error('coop character create failed');
+              const listRes = await fetch(apiUrl('/api/characters', b), { headers: authHeaders });
+              const raw = await listRes.json().catch(() => []);
+              const arr: CharacterSummary[] = Array.isArray(raw) ? raw : (raw.characters ?? []);
+              const made = arr.find((c) => c.name === name);
+              if (!made) throw new Error('created character not found');
+              return { id: made.id, name: made.name, cls: made.class };
+            },
           }
         : undefined,
     });
