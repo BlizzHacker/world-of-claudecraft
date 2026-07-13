@@ -1811,6 +1811,11 @@ export class Sim {
       // deposits refuse, nothing is destroyed). Never passed offline (bonusSlots
       // stays the sanitized save value, [] breakdown).
       bankBonus?: { bonusSlots: number; sources: BankBonusSource[] };
+      // Couch co-op: spawn beside this already-in-world player instead of the
+      // world start (a local player joining mid-session appears next to the
+      // party, not across the zone). Ignored when a saved position exists or
+      // the anchor is gone.
+      spawnNearPid?: number;
     },
   ): number {
     const savedState = opts?.state ? sanitizeRemovedZone1Content(opts.state).state : undefined;
@@ -1830,9 +1835,15 @@ export class Sim {
       savedPos = { x: dungeon.doorPos.x, z: dungeon.doorPos.z - 4 };
     }
     const playerStart = (this.cfg.world ?? getActiveWorldContent()).playerStart;
+    const nearAnchor =
+      !savedPos && opts?.spawnNearPid !== undefined
+        ? (this.entities.get(opts.spawnNearPid) ?? null)
+        : null;
     const startPos = savedPos
       ? this.groundPos(savedPos.x, savedPos.z)
-      : this.groundPos(playerStart.x, playerStart.z);
+      : nearAnchor
+        ? this.spawnPosNear(nearAnchor)
+        : this.groundPos(playerStart.x, playerStart.z);
     const savedArena1v1: ArenaStanding = {
       rating: savedState?.arena1v1Rating ?? savedState?.arenaRating ?? arenaMod.ARENA_BASE_RATING,
       wins: savedState?.arena1v1Wins ?? savedState?.arenaWins ?? 0,
@@ -2696,6 +2707,38 @@ export class Sim {
 
   groundPos(x: number, z: number): Vec3 {
     return { x, y: groundHeight(x, z, this.cfg.seed), z };
+  }
+
+  // Couch co-op placement: a grounded, building-free spot ~2 yd from the
+  // anchor player. The offset angle steps with the player count so a second,
+  // third and fourth local player fan out instead of stacking; deterministic
+  // (no RNG draw) so joining players never perturb the sim's RNG stream.
+  private spawnPosNear(anchor: Entity): Vec3 {
+    const angle = anchor.facing + Math.PI / 2 + this.players.size * (Math.PI / 3);
+    const x = anchor.pos.x + Math.sin(angle) * 2;
+    const z = anchor.pos.z + Math.cos(angle) * 2;
+    const safe = this.findSafePos(x, z, waterLevel() + 0.6);
+    return this.groundPos(safe.x, safe.z);
+  }
+
+  /**
+   * Snap an in-world player next to another (couch co-op regroup: a joiner
+   * mid-session or an auto-resurrected local player returns to the party
+   * instead of standing at a graveyard the shared camera cannot reach).
+   * Offline/local hosts only — never exposed as an online command.
+   */
+  movePlayerNear(pid: number, anchorPid: number): boolean {
+    const mover = this.entities.get(pid);
+    const anchor = this.entities.get(anchorPid);
+    if (!mover || !anchor || mover === anchor) return false;
+    if (!this.players.has(pid) || !this.players.has(anchorPid)) return false;
+    const pos = this.spawnPosNear(anchor);
+    mover.pos.x = pos.x;
+    mover.pos.y = pos.y;
+    mover.pos.z = pos.z;
+    mover.vy = 0;
+    mover.onGround = true;
+    return true;
   }
 
   // Deterministic outward spiral to the nearest spot that is on dry-enough
