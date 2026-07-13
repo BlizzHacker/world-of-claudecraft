@@ -30,9 +30,9 @@ export const COOP_LEAVE_HOLD_MS = 2000;
 // Fixed in-world button layout for co-op pads. Action ids reuse the keybind
 // registry ids exactly like DEFAULT_GAMEPAD_BINDINGS, so the host dispatches
 // them through the per-player command path with no new vocabulary. A (jump)
-// rides the move flags; Start is reserved for join/leave; Back/L3/R3 are
-// deliberately unbound in v1 (map, autorun and friendly-target stay Player 1
-// concerns).
+// rides the move flags; Start is reserved for join/leave; Back/View pauses the
+// shared game (routed to the game menu, not a per-player command); L3/R3 stay
+// unbound (autorun and friendly-target remain Player 1 concerns).
 export const COOP_PAD_ACTIONS: Record<number, string> = {
   [GP.B]: 'interact',
   [GP.X]: 'slot0', // Attack
@@ -45,6 +45,7 @@ export const COOP_PAD_ACTIONS: Record<number, string> = {
   [GP.DPAD_RIGHT]: 'slot6',
   [GP.DPAD_DOWN]: 'slot7',
   [GP.DPAD_LEFT]: 'slot8',
+  [GP.BACK]: 'pause', // View/Select/Share: any co-op player can pause the game
 };
 
 /** 'joining': the pad owns a join-overlay session; 'active': driving a player. */

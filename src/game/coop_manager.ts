@@ -51,6 +51,8 @@ export interface CoopHost {
   overlayInput(slot: CoopSlotNumber, buttonEdges: number[]): void;
   /** A slot's join was aborted because its pad vanished mid-overlay. */
   onJoinAborted?(slot: CoopSlotNumber): void;
+  /** A co-op player pressed the pause button (toggle the shared game menu). */
+  onPause?(): void;
 }
 
 interface ActiveSlot {
@@ -158,7 +160,10 @@ export class CoopManager {
       }
       rec.handle.applyMove(worldFacing, sf.jump);
 
-      for (const action of sf.actions) routeAction(rec.handle, action);
+      for (const action of sf.actions) {
+        if (action === 'pause') this.host.onPause?.();
+        else routeAction(rec.handle, action);
+      }
 
       const ent = rec.handle.entity();
       if (ent) {

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   COOP_CAMERA_FIT_PAD_YD,
   COOP_CAMERA_MAX_DIST,
+  COOP_CAMERA_MIN_DIST,
   COOP_LEASH_YD,
   coopCameraFrame,
   coopCentroid,
@@ -36,8 +37,11 @@ describe('coopCentroid / coopSpreadRadius', () => {
 });
 
 describe('coopFitDistance', () => {
-  it('never dips below the player-chosen zoom', () => {
-    expect(coopFitDistance({ spreadYd: 0, baseDist: 12, ...FOV })).toBe(12);
+  it('floors at the co-op minimum, but honors a larger player zoom', () => {
+    // Players standing on top of each other still get the wide shared view.
+    expect(coopFitDistance({ spreadYd: 0, baseDist: 12, ...FOV })).toBe(COOP_CAMERA_MIN_DIST);
+    // A player already zoomed out past the floor keeps their wider zoom.
+    expect(coopFitDistance({ spreadYd: 0, baseDist: 34, ...FOV })).toBe(34);
   });
 
   it('grows with the spread and clamps at the max', () => {

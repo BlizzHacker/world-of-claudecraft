@@ -21,10 +21,15 @@ export interface CoopPoint {
 }
 
 // Zoom cap for the shared camera; beyond this the fit stops growing and the
-// leash (60 yd diameter fits comfortably at 45) is what keeps players visible.
-export const COOP_CAMERA_MAX_DIST = 45;
-// Extra world-yards around the farthest player so bodies never touch the frame edge.
-export const COOP_CAMERA_FIT_PAD_YD = 4;
+// leash keeps players visible.
+export const COOP_CAMERA_MAX_DIST = 60;
+// Co-op always pulls the camera back to at least this, even with the players
+// standing on top of each other, so two people get a generous shared view of
+// the world instead of a tight solo-style chase.
+export const COOP_CAMERA_MIN_DIST = 20;
+// Extra world-yards around the farthest player so bodies never touch the frame
+// edge (a wide margin: co-op wants headroom to see enemies and pickups too).
+export const COOP_CAMERA_FIT_PAD_YD = 9;
 // Max distance a co-op player may roam from the party centroid.
 export const COOP_LEASH_YD = 60;
 // Fit safety headroom: the frustum estimate below ignores pitch foreshortening,
@@ -72,7 +77,9 @@ export function coopFitDistance(opts: {
   const half = Math.min(halfX, halfY);
   const radius = opts.spreadYd + COOP_CAMERA_FIT_PAD_YD;
   const need = (radius / Math.tan(half)) * FIT_HEADROOM;
-  return Math.min(COOP_CAMERA_MAX_DIST, Math.max(opts.baseDist, need));
+  // Floor at COOP_CAMERA_MIN_DIST (wide shared view) and the player's own zoom,
+  // cap at COOP_CAMERA_MAX_DIST.
+  return Math.min(COOP_CAMERA_MAX_DIST, Math.max(COOP_CAMERA_MIN_DIST, opts.baseDist, need));
 }
 
 export interface CoopCameraFrame {

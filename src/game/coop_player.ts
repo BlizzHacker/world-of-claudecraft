@@ -71,6 +71,11 @@ export interface CoopOfflineSim {
   resurrectAtSpiritHealer(pid?: number): void;
   removePlayer(pid: number): void;
   movePlayerNear(pid: number, anchorPid: number): boolean;
+  // Auto-party: invite `targetPid` on behalf of `byPid`, then accept for
+  // `targetPid`, so co-op players share one party (party frames, split XP,
+  // teammate healthbars) the instant they join.
+  partyInvite(targetPid: number, byPid?: number): void;
+  partyAccept(pid?: number): void;
 }
 
 export class OfflineCoopPlayer implements CoopPlayer {
