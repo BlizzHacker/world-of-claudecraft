@@ -94,6 +94,10 @@ class FakeHost implements CoopHost {
   onJoinAborted(slot: number) {
     this.aborted.push(slot);
   }
+  pauses = 0;
+  onPause() {
+    this.pauses++;
+  }
 }
 
 /** Drive a pad Start-press join, then attach a fake player as the overlay would. */
@@ -178,6 +182,20 @@ describe('CoopManager per-frame input', () => {
     expect(p.casts).toContain(0); // X -> slot0 (Attack)
     expect(p.targets).toBe(1); // Y -> target
     expect(p.interacts).toBe(1); // B -> interact
+  });
+
+  it('Back/View pauses the shared game instead of a per-player command', () => {
+    const host = new FakeHost();
+    const mgr = new CoopManager(host);
+    const p = joinPlayer(mgr, host, 1);
+    host.padList = [pad(1)];
+    mgr.frame(16); // settle edges
+    host.padList = [pad(1, { buttons: { [GP.BACK]: true } })];
+    mgr.frame(16);
+    expect(host.pauses).toBe(1);
+    // Pause is not routed as a player action.
+    expect(p.casts).toEqual([]);
+    expect(p.interacts).toBe(0);
   });
 
   it('the leash blocks outward movement past the radius but not inward', () => {

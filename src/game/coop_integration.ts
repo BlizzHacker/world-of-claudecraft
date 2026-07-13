@@ -45,6 +45,8 @@ export interface CoopControllerDeps {
   classes: readonly PlayerClass[];
   classLabel: (cls: PlayerClass) => string;
   padDeadzone?: number;
+  // A co-op player pressed pause (Back/View): toggle the shared game menu.
+  pause?: () => void;
 
   // Offline: the shared Sim and how to add a local player near Player 1.
   offline?: {
@@ -94,6 +96,7 @@ export class CoopController {
         if (this.overlay.openSlot === slot) this.overlay.padInput(edges);
       },
       onJoinAborted: () => this.overlay.close(),
+      onPause: () => this.deps.pause?.(),
     };
     this.manager = new CoopManager(host);
     if (deps.padDeadzone !== undefined) this.manager.setDeadzone(deps.padDeadzone);
@@ -161,13 +164,14 @@ export class CoopController {
   private createPlayer(slot: CoopSlotNumber, choice: CoopJoinChoice): void {
     let handle: CoopPlayer | null = null;
     if (choice.kind === 'offline' && this.deps.offline) {
+      const primary = this.deps.offline.primaryPid();
       const pid = this.deps.offline.addLocalPlayer(choice.cls, choice.name);
-      handle = new OfflineCoopPlayer(
-        this.deps.offline.sim,
-        pid,
-        choice.cls,
-        this.deps.offline.primaryPid(),
-      );
+      // Auto-party the joiner onto Player 1 so party frames, teammate
+      // healthbars, and split XP light up the instant they join — no manual
+      // /invite dance on a shared screen.
+      this.deps.offline.sim.partyInvite(pid, primary);
+      this.deps.offline.sim.partyAccept(pid);
+      handle = new OfflineCoopPlayer(this.deps.offline.sim, pid, choice.cls, primary);
     } else if (choice.kind === 'online' && this.deps.online) {
       const session = this.deps.online.openSession(choice.character, choice.token, choice.base);
       handle = new OnlineCoopPlayer(session, choice.character.cls, () => {});

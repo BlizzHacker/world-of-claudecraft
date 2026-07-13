@@ -2664,6 +2664,7 @@ async function startGame(
       fovYDeg: 60,
       classes: coopClasses,
       classLabel: coopClassLabel,
+      pause: () => toggleGameMenu(),
       offline: offlineSim
         ? {
             sim: offlineSim,
@@ -2823,7 +2824,9 @@ async function startGame(
       renderer.camYaw = input.camYaw;
       renderer.camPitch = input.camPitch;
       renderer.camDist = input.camDist;
-      renderer.setFirstPersonSelfView(isFpsActive());
+      // No first-person / FPS view during couch co-op: the shared third-person
+      // camera has to frame every local player, so a self-only POV is disabled.
+      renderer.setFirstPersonSelfView(isFpsActive() && !coopController?.hasCoopPlayers);
       syncGroundAimReticle();
       perf.setNetwork(null);
       const offlineRenderFacing =
@@ -2977,7 +2980,7 @@ async function startGame(
     renderer.camYaw = input.camYaw;
     renderer.camPitch = input.camPitch;
     renderer.camDist = input.camDist;
-    renderer.setFirstPersonSelfView(isFpsActive());
+    renderer.setFirstPersonSelfView(isFpsActive() && !coopController?.hasCoopPlayers);
     syncGroundAimReticle();
     perf.time('renderer', () =>
       perf.trace(
