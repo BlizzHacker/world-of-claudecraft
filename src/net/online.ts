@@ -143,8 +143,18 @@ export function buildWebSocketAuthMessage(
   token: string,
   characterId: number,
   clientSeed = '',
-): { t: 'auth'; token: string; character: number; clientSeed: string } {
-  return { t: 'auth', token, character: characterId, clientSeed };
+  // Couch co-op secondary session (same household). Additive: omitted (not
+  // false) for every normal session, so the wire only widens.
+  coop = false,
+): { t: 'auth'; token: string; character: number; clientSeed: string; coop?: true } {
+  const msg: { t: 'auth'; token: string; character: number; clientSeed: string; coop?: true } = {
+    t: 'auth',
+    token,
+    character: characterId,
+    clientSeed,
+  };
+  if (coop) msg.coop = true;
+  return msg;
 }
 
 // Normalize a WebSocket message payload (string | Blob | ArrayBuffer | view) to
@@ -1218,6 +1228,8 @@ export class ClientWorld implements IWorld {
   private readonly token: string;
   private readonly base: string;
   private readonly clientSeed: string;
+  // Couch co-op secondary session marker, echoed on every (re)auth frame.
+  private readonly coop: boolean = false;
   private eventQueue: SimEvent[] = [];
   // inventory deltas arrive in snapshots, separate from the event frames the
   // HUD redraws on — the frame loop polls this so open panels re-render
@@ -1240,11 +1252,19 @@ export class ClientWorld implements IWorld {
   private spectateFacingPending = false;
   private pendingSpectateFacing: number | null = null;
 
-  constructor(token: string, characterId: number, cls: PlayerClass, base = '', clientSeed = '') {
+  constructor(
+    token: string,
+    characterId: number,
+    cls: PlayerClass,
+    base = '',
+    clientSeed = '',
+    opts?: { coop?: boolean },
+  ) {
     this.characterId = characterId;
     this.token = token;
     this.base = normalizeOrigin(base) || NATIVE_API_ORIGIN || DESKTOP_API_ORIGIN;
     this.clientSeed = clientSeed;
+    this.coop = opts?.coop === true;
     this.ownPlayerClass = cls;
     this.cfg = { seed: 20061, playerClass: cls };
     this.openSocket();
@@ -1262,7 +1282,9 @@ export class ClientWorld implements IWorld {
     this.ws.binaryType = 'arraybuffer';
     this.ws.onopen = () => {
       this.ws.send(
-        JSON.stringify(buildWebSocketAuthMessage(this.token, this.characterId, this.clientSeed)),
+        JSON.stringify(
+          buildWebSocketAuthMessage(this.token, this.characterId, this.clientSeed, this.coop),
+        ),
       );
     };
     this.ws.onmessage = (ev) => {
