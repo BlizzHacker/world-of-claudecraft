@@ -36,12 +36,23 @@ export type JoinPlan =
 //   login (the caller displaces them, switching the account over to the new
 //   character immediately instead of at the end of the grace window); only
 //   sessions with a live socket count against the per-account cap.
+// - Couch co-op (same-account family play on one screen): a join flagged
+//   `coop` may run the account up to maxCoopPerAccount live sessions, but
+//   only while EVERY live session on the account shares the joiner's IP (one
+//   household). The anti-bot economics of the 1-session default do not move:
+//   mail already trades goods within an account, multi-account farming was
+//   never account-capped, and the per-IP hard limit still binds. A mixed-IP
+//   account (someone already online elsewhere) falls back to the normal cap,
+//   so the flag cannot stack remote boxes.
 export function planJoin(opts: {
   accountId: number;
   isGm: boolean;
   sameCharacter: LinkdeadSessionView | null;
   liveOtherSessions: number;
   maxPerAccount: number;
+  coop?: boolean;
+  liveOtherSessionsSameIp?: number;
+  maxCoopPerAccount?: number;
 }): JoinPlan {
   if (opts.sameCharacter) {
     if (
@@ -56,7 +67,11 @@ export function planJoin(opts: {
     // the retry lands on a clean fresh join once the teardown finishes.
     return { action: 'reject', error: 'character already in world' };
   }
-  if (!opts.isGm && opts.liveOtherSessions >= opts.maxPerAccount) {
+  const coopCap = opts.maxCoopPerAccount ?? opts.maxPerAccount;
+  const coopEligible =
+    opts.coop === true && (opts.liveOtherSessionsSameIp ?? 0) === opts.liveOtherSessions;
+  const cap = coopEligible ? Math.max(coopCap, opts.maxPerAccount) : opts.maxPerAccount;
+  if (!opts.isGm && opts.liveOtherSessions >= cap) {
     return {
       action: 'reject',
       error: 'too many characters on this account are already in the world',

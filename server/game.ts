@@ -204,6 +204,13 @@ const WHO_RESULT_LIMIT = 50;
 // between an account's characters, so the old allowance of a second online
 // character (self-trade by dual-boxing) is no longer needed. GMs are exempt.
 const MAX_ACTIVE_SESSIONS_PER_ACCOUNT = 1;
+// Couch co-op carve-out: a join whose auth frame carries `coop: true` (a
+// family playing together on one screen, each character a session from the
+// same client) may run the account up to this many live sessions, but only
+// while every live session on the account shares the joiner's IP (one
+// household); see the planJoin coop arm in linkdead.ts for why this does not
+// reopen the dual-boxing anti-bot hole.
+const MAX_COOP_SESSIONS_PER_ACCOUNT = 4;
 // WS protocol-level ping cadence; see the keepalive interval in start().
 const WS_KEEPALIVE_PING_MS = 30_000;
 const RESTART_COUNTDOWN_TOTAL_SECONDS = 600;
@@ -2043,6 +2050,10 @@ export class GameServer {
         // the character state via addPlayer. Absent on a resume and for callers that
         // pass no meta (tests, the bot-detector overlay), which keep the saved value.
         bankBonus?: { bonusSlots: number; sources: BankBonusSource[] };
+        // Couch co-op secondary session (same household, same account); lifts
+        // the per-account session cap to MAX_COOP_SESSIONS_PER_ACCOUNT when
+        // every live session on the account shares this join's IP.
+        coop?: boolean;
       } = {},
   ): ClientSession | { error: string } {
     // Anti-bot: cap simultaneous online characters per account. Accounts can
@@ -2051,12 +2062,17 @@ export class GameServer {
     // the same character resumes its held session, and a different character
     // on the account displaces them instead of being blocked by them.
     const sameCharacter = this.sessionsByCharacterId.get(characterId) ?? null;
+    const joinIp = meta.ip ?? '';
     let liveOtherSessions = 0;
+    let liveOtherSessionsSameIp = 0;
     const linkdeadOthers: ClientSession[] = [];
     for (const s of this.clients.values()) {
       if (s.accountId !== accountId || s === sameCharacter) continue;
       if (s.linkdead) linkdeadOthers.push(s);
-      else liveOtherSessions++;
+      else {
+        liveOtherSessions++;
+        if (joinIp !== '' && s.ip === joinIp) liveOtherSessionsSameIp++;
+      }
     }
     const plan = planJoin({
       accountId,
@@ -2064,6 +2080,9 @@ export class GameServer {
       sameCharacter,
       liveOtherSessions,
       maxPerAccount: MAX_ACTIVE_SESSIONS_PER_ACCOUNT,
+      coop: meta.coop === true,
+      liveOtherSessionsSameIp,
+      maxCoopPerAccount: MAX_COOP_SESSIONS_PER_ACCOUNT,
     });
     if (plan.action === 'reject') return { error: plan.error };
     if (plan.action === 'resume' && sameCharacter) {
