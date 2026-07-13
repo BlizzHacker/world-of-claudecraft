@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { CoopManager, routeAction, type CoopHost } from '../src/game/coop_manager';
-import type { CoopEntitySnapshot, CoopPlayer } from '../src/game/coop_player';
 import { COOP_LEASH_YD } from '../src/game/coop_camera';
+import { type CoopHost, CoopManager, routeAction } from '../src/game/coop_manager';
+import type { CoopEntitySnapshot, CoopPlayer } from '../src/game/coop_player';
 import { COOP_LEAVE_HOLD_MS } from '../src/game/coop_slots';
 import { GP, STANDARD_BUTTON_COUNT } from '../src/game/gamepad_map';
 import type { PlayerClass } from '../src/sim/types';

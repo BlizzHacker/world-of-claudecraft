@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest';
 import {
   COOP_LEAVE_HOLD_MS,
   COOP_PAD_ACTIONS,
-  CoopSlots,
   type CoopPadSnapshot,
+  CoopSlots,
 } from '../src/game/coop_slots';
 import { GP, STANDARD_BUTTON_COUNT } from '../src/game/gamepad_map';
 
@@ -47,7 +47,11 @@ describe('join gesture', () => {
     expect(slots.claim(pad(1))).toBeNull(); // already assigned
     // A fifth pad pressing Start gets no join request while full.
     slots.frame([pad(1), pad(2), pad(3), pad(4)], 0, 16);
-    const f = slots.frame([pad(1), pad(2), pad(3), pad(4, { buttons: { [GP.START]: true } })], 0, 16);
+    const f = slots.frame(
+      [pad(1), pad(2), pad(3), pad(4, { buttons: { [GP.START]: true } })],
+      0,
+      16,
+    );
     expect(f.joinRequests).toEqual([]);
   });
 

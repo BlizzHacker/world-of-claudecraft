@@ -848,6 +848,12 @@ export class Renderer {
   camYaw = Math.PI;
   camPitch = 0.32;
   camDist = 12;
+  // Couch co-op: when set, the chase camera anchors on this shared point (the
+  // local party centroid, already smoothed by main.ts) at this distance (fit to
+  // frame every local player) instead of the self entity. Null in solo play, so
+  // the normal single-player chase is byte-for-byte unchanged.
+  coopCameraAnchor: { x: number; y: number; z: number } | null = null;
+  coopCameraDist: number | null = null;
   // Map-editor 3D mode: when set, the camera uses this free-cam pose instead of
   // chasing the player (updateCamera honors it and returns early). Editor-only;
   // always null in the shipped game.
@@ -5706,13 +5712,18 @@ export class Renderer {
     }
     const p = this.sim.player;
     const seed = this.sim.cfg.seed;
-    const px = selfPos.x;
-    const py = selfPos.y;
-    const pz = selfPos.z;
+    // Couch co-op override: anchor on the shared party centroid at the fit
+    // distance (both pre-smoothed by main.ts). Solo play leaves these null and
+    // uses the self entity + the player's own zoom exactly as before.
+    const anchor = this.coopCameraAnchor;
+    const px = anchor ? anchor.x : selfPos.x;
+    const py = anchor ? anchor.y : selfPos.y;
+    const pz = anchor ? anchor.z : selfPos.z;
+    const camDist = anchor && this.coopCameraDist !== null ? this.coopCameraDist : this.camDist;
     const eyeY = py + 2.0;
-    let cx = px - Math.sin(this.camYaw) * Math.cos(this.camPitch) * this.camDist;
-    let cy = eyeY + Math.sin(this.camPitch) * this.camDist;
-    let cz = pz - Math.cos(this.camYaw) * Math.cos(this.camPitch) * this.camDist;
+    let cx = px - Math.sin(this.camYaw) * Math.cos(this.camPitch) * camDist;
+    let cy = eyeY + Math.sin(this.camPitch) * camDist;
+    let cz = pz - Math.cos(this.camYaw) * Math.cos(this.camPitch) * camDist;
     if (isArenaPos(p.pos.x)) {
       // Arena walls hide from the camera like buildings, so the chase camera
       // stays at the player's requested zoom instead of clamping inside the pit.

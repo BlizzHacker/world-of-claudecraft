@@ -39,10 +39,31 @@ export interface CoopPlayer {
 
 // --- Offline: a pid in the one shared Sim -------------------------------------
 
-/** The slice of Sim the offline handle needs (kept narrow for testability). */
+/**
+ * The slice of Sim the offline handle needs (kept narrow for testability). The
+ * maps are `ReadonlyMap` so the real `Sim.entities: Map<number, Entity>` and
+ * `Sim.players: Map<number, PlayerMeta>` assign in structurally: `Map` is
+ * invariant in its value type, but `ReadonlyMap` is covariant, so the wider
+ * concrete value types (Entity, PlayerMeta) satisfy these narrow shapes. The
+ * handle only reads the maps; it mutates fields of the values it reads back.
+ */
 export interface CoopOfflineSim {
-  entities: Map<number, { pos: { x: number; y: number; z: number }; dead: boolean; ghost: boolean; facing: number }>;
-  players: Map<number, { moveInput: { forward: boolean; back: boolean; strafeLeft: boolean; strafeRight: boolean; jump: boolean } }>;
+  entities: ReadonlyMap<
+    number,
+    { pos: { x: number; y: number; z: number }; dead: boolean; ghost: boolean; facing: number }
+  >;
+  players: ReadonlyMap<
+    number,
+    {
+      moveInput: {
+        forward: boolean;
+        back: boolean;
+        strafeLeft: boolean;
+        strafeRight: boolean;
+        jump: boolean;
+      };
+    }
+  >;
   castAbilityBySlot(slot: number, pid?: number): void;
   tabTarget(pid?: number): void;
   interact(pid?: number): void;
