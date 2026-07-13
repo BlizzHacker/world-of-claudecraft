@@ -1683,6 +1683,28 @@ export const en_XA: EnTranslations = {
       "swag_points": "[Ñóţ éñóúĝĥ þóíñţš.]"
     }
   },
+  "coop": {
+    "joinTitle": "[Þļáýéŕ {slot}: þŕéšš ţó ĵóíñ]",
+    "pickClass": "[Çĥóóšé á çļášš]",
+    "pickCharacter": "[Çĥóóšé á çĥáŕáçţéŕ]",
+    "joinConfirm": "[Ĵóíñ]",
+    "joinCancel": "[Çáñçéļ]",
+    "accountThis": "[Ţĥíš áççóúñţ]",
+    "accountOther": "[Ðíƒƒéŕéñţ áççóúñţ]",
+    "loginTitle": "[Šíĝñ íñ Þļáýéŕ {slot}'š áççóúñţ]",
+    "loginUser": "[Úšéŕñáɱé]",
+    "loginPass": "[Þáššŵóŕð]",
+    "loginSubmit": "[Šíĝñ íñ áñð ĵóíñ]",
+    "loginError": "[Šíĝñ-íñ ƒáíļéð. Çĥéçķ ţĥé úšéŕñáɱé áñð þáššŵóŕð.]",
+    "noOtherCharacters": "[Ţĥíš áççóúñţ ĥáš ñó óţĥéŕ çĥáŕáçţéŕš ţó ƀŕíñĝ íñ.]",
+    "stripTitle": "[Ļóçáļ þļáýéŕš]",
+    "hintJoin": "[Þŕéšš Šţáŕţ óñ áñóţĥéŕ çóñţŕóļļéŕ ţó áðð á þļáýéŕ (úþ ţó 4).]",
+    "hintLeave": "[Ĥóļð Šţáŕţ óñ á çóñţŕóļļéŕ ţó ðŕóþ ţĥáţ þļáýéŕ.]",
+    "slotLabel": "[Þļáýéŕ {slot}]",
+    "slotEmpty": "[Óþéñ]",
+    "reviving": "[Ŕéʋíʋíñĝ íñ {seconds}š]",
+    "reconnecting": "[Þļáýéŕ {slot} ŕéçóññéçţíñĝ]"
+  },
   "guide": {
     "brand": "[Çŕýþţíç Ŕéáļɱ]",
     "brandShort": "[Çŕýþţíç]",
