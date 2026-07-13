@@ -3061,6 +3061,7 @@ async function startGame(
           online,
           perf,
           gamepad,
+          coopController,
           /** Opens the board and drains queued sim events. Do not call sim.lockpickEngage directly offline. */
           lockpickEngage: (objectId: number, ante: number) =>
             hud.submitLockpickEngage(objectId, ante as 1 | 2 | 3),
