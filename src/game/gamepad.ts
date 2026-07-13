@@ -122,6 +122,17 @@ export class GamepadManager {
     return this.index !== null;
   }
 
+  /**
+   * The pad index Player 1 currently owns, or null when Player 1 is not on a
+   * gamepad (keyboard/mouse, or the Controller setting is off). Couch co-op
+   * reads this to exclude Player 1's own pad from the join pool: when it is
+   * null, EVERY connected pad is free to join as Player 2-4, which is the
+   * headline setup (a parent on keyboard, kids on controllers).
+   */
+  activePadIndex(): number | null {
+    return this.index;
+  }
+
   /** Detected brand of the connected pad, for glyph labeling; 'generic' when
    *  none is connected or the pad's id is unrecognized. */
   getKind(): GamepadKind {

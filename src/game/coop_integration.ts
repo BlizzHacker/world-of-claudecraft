@@ -10,17 +10,17 @@
 // file is the thin, DOM-touching adapter.
 
 import type { PlayerClass } from '../sim/types';
-import { type CoopCharacterRef, type CoopJoinChoice, CoopOverlay } from '../ui/coop_overlay';
-import { type CoopCameraFrame, coopSmooth } from './coop_camera';
-import { type CoopHost, CoopManager } from './coop_manager';
+import { coopSmooth, type CoopCameraFrame } from './coop_camera';
+import { CoopManager, type CoopHost } from './coop_manager';
 import {
+  OfflineCoopPlayer,
+  OnlineCoopPlayer,
   type CoopOfflineSim,
   type CoopOnlineSession,
   type CoopPlayer,
-  OfflineCoopPlayer,
-  OnlineCoopPlayer,
 } from './coop_player';
 import type { CoopPadSnapshot, CoopSlotNumber } from './coop_slots';
+import { CoopOverlay, type CoopCharacterRef, type CoopJoinChoice } from '../ui/coop_overlay';
 
 interface RendererCoopCamera {
   coopCameraAnchor: { x: number; y: number; z: number } | null;
@@ -33,6 +33,10 @@ export interface CoopControllerDeps {
   renderer: RendererCoopCamera;
   // Player 1's live camera yaw (main.ts keeps input.camYaw authoritative).
   camYaw: () => number;
+  // The pad index Player 1 owns (GamepadManager.activePadIndex()), or null when
+  // Player 1 is on keyboard/mouse. That pad is excluded from the co-op join
+  // pool; null means every connected pad may join (keyboard-P1 + controllers).
+  primaryPadIndex: () => number | null;
   // Player 1's live body, for the framing centroid and the leash.
   primaryEntity: () => { x: number; y: number; z: number } | null;
   // Viewport aspect (width / height) for the fit-distance math.
@@ -77,7 +81,7 @@ export class CoopController {
   constructor(private readonly deps: CoopControllerDeps) {
     const host: CoopHost = {
       pads: () => readPadSnapshots(),
-      primaryPadIndex: () => primaryPadIndex(),
+      primaryPadIndex: () => deps.primaryPadIndex(),
       camYaw: () => deps.camYaw(),
       cameraParams: () => ({
         fovYDeg: deps.fovYDeg,
@@ -178,14 +182,6 @@ export class CoopController {
 function connectedPads(): (Gamepad | null)[] {
   if (typeof navigator === 'undefined' || typeof navigator.getGamepads !== 'function') return [];
   return Array.from(navigator.getGamepads());
-}
-
-/** Player 1's pad is the lowest connected index (matches GamepadManager). */
-function primaryPadIndex(): number | null {
-  for (const pad of connectedPads()) {
-    if (pad?.connected) return pad.index;
-  }
-  return null;
 }
 
 function readPadSnapshots(): CoopPadSnapshot[] {
