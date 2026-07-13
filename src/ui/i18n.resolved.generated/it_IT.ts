@@ -1683,6 +1683,28 @@ export const it_IT: EnTranslations = {
       "swag_points": "Punti insufficienti."
     }
   },
+  "coop": {
+    "joinTitle": "Player {slot}: press to join",
+    "pickClass": "Choose a class",
+    "pickCharacter": "Choose a character",
+    "joinConfirm": "Join",
+    "joinCancel": "Cancel",
+    "accountThis": "This account",
+    "accountOther": "Different account",
+    "loginTitle": "Sign in Player {slot}'s account",
+    "loginUser": "Username",
+    "loginPass": "Password",
+    "loginSubmit": "Sign in and join",
+    "loginError": "Sign-in failed. Check the username and password.",
+    "noOtherCharacters": "This account has no other characters to bring in.",
+    "stripTitle": "Local players",
+    "hintJoin": "Press Start on another controller to add a player (up to 4).",
+    "hintLeave": "Hold Start on a controller to drop that player.",
+    "slotLabel": "Player {slot}",
+    "slotEmpty": "Open",
+    "reviving": "Reviving in {seconds}s",
+    "reconnecting": "Player {slot} reconnecting"
+  },
   "guide": {
     "brand": "Cryptic Realm",
     "brandShort": "ClaudeCraft",
