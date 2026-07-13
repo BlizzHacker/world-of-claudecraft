@@ -12,17 +12,17 @@
 // the joining pad are forwarded to `host.overlayInput` so the overlay is fully
 // pad-navigable.
 
+import { wrapAngle } from './camera_follow';
 import type { CoopCameraFrame } from './coop_camera';
 import { coopCameraFrame, coopCentroid, coopMoveAllowed } from './coop_camera';
 import type { CoopPlayer } from './coop_player';
 import { CoopRespawnTimer } from './coop_respawn';
 import {
   COOP_PAD_ACTIONS,
-  CoopSlots,
   type CoopPadSnapshot,
   type CoopSlotNumber,
+  CoopSlots,
 } from './coop_slots';
-import { wrapAngle } from './camera_follow';
 
 export interface CoopCameraParams {
   fovYDeg: number;

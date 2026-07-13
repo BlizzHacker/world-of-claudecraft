@@ -90,6 +90,35 @@ export const en = {
   game: gameStrings,
   hudChrome: hudChromeStrings,
   apiError: apiErrorStrings,
+  // Couch co-op (shared-screen family play for up to 4 local players). English
+  // source; locale overlays fill at release like every other namespace.
+  coop: {
+    // The join overlay opened when an unassigned controller presses Start.
+    joinTitle: 'Player {slot}: press to join',
+    pickClass: 'Choose a class',
+    pickCharacter: 'Choose a character',
+    joinConfirm: 'Join',
+    joinCancel: 'Cancel',
+    // The account step, online only.
+    accountThis: 'This account',
+    accountOther: 'Different account',
+    loginTitle: "Sign in Player {slot}'s account",
+    loginUser: 'Username',
+    loginPass: 'Password',
+    loginSubmit: 'Sign in and join',
+    loginError: 'Sign-in failed. Check the username and password.',
+    noOtherCharacters: 'This account has no other characters to bring in.',
+    // Hints shown in the game menu co-op strip.
+    stripTitle: 'Local players',
+    hintJoin: 'Press Start on another controller to add a player (up to 4).',
+    hintLeave: 'Hold Start on a controller to drop that player.',
+    slotLabel: 'Player {slot}',
+    slotEmpty: 'Open',
+    // Party-frame chip while a co-op player is waiting to resurrect.
+    reviving: 'Reviving in {seconds}s',
+    // Online-only: a co-op session dropped and is reconnecting.
+    reconnecting: 'Player {slot} reconnecting',
+  },
   guide: guideStrings,
   editor: editorStrings,
   // Cosmetic skin-select event overlay. Rarity names reuse itemUi.quality.*.

@@ -25,9 +25,7 @@ export class CoopRespawnTimer {
 
   /** Countdown still to run, for the HUD chip; 0 outside the counting phase. */
   remainingMs(): number {
-    return this.phase === 'counting'
-      ? Math.max(0, COOP_RESPAWN_COUNTDOWN_MS - this.waitedMs)
-      : 0;
+    return this.phase === 'counting' ? Math.max(0, COOP_RESPAWN_COUNTDOWN_MS - this.waitedMs) : 0;
   }
 
   /**

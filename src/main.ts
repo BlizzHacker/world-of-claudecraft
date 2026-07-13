@@ -112,6 +112,7 @@ import {
 import {
   Api,
   ApiError,
+  apiUrl,
   type CharacterSummary,
   ClientWorld,
   DESKTOP_APP,
@@ -119,6 +120,8 @@ import {
   NATIVE_APP,
   type ReleaseEntry,
 } from './net/online';
+import { CoopController } from './game/coop_integration';
+import type { CoopCharacterRef } from './ui/coop_overlay';
 // The wallet module is loaded lazily via dynamic import() in the wallet
 // controller below, so it stays out of the main entry chunk and only loads when
 // the feature is enabled + used.
@@ -1096,6 +1099,9 @@ async function startGame(
   uiEffectsApplier.applyNow();
   let renderer!: Renderer;
   let hud!: Hud;
+  // Couch co-op controller (pads 2-4 -> local players). Built just before the
+  // frame loop starts, once renderer/input exist; null in solo play.
+  let coopController: CoopController | null = null;
   const autoLoot = new AutoLoot();
   const perf = createPerfMonitor(null);
   try {
@@ -2621,6 +2627,84 @@ async function startGame(
     getApm: () => inputMeter.apm(performance.now()),
   });
 
+  // Assemble the couch co-op controller for this world entry (offline or online).
+  // Returns null when neither host is present (should not happen). The heavy
+  // lifting is in CoopController/CoopManager; this only wires the live sources.
+  function buildCoopController(): CoopController | null {
+    if (!offlineSim && !online) return null;
+    const coopClasses = Object.keys(CLASSES) as PlayerClass[];
+    const coopClassLabel = (cls: PlayerClass): string =>
+      t(`classes.${cls}` as Parameters<typeof t>[0]);
+    // Online: pre-fetch the account roster so the "This account" step is instant
+    // (a family's characters already exist). Refreshed once here per world entry.
+    let coopRoster: CoopCharacterRef[] = [];
+    if (online) {
+      const selfCharId = online.characterId;
+      void api
+        .characters()
+        .then((list) => {
+          coopRoster = list
+            .filter((c) => c.id !== selfCharId)
+            .map((c) => ({ id: c.id, name: c.name, cls: c.class }));
+        })
+        .catch(() => {});
+    }
+    return new CoopController({
+      mode: offlineSim ? 'offline' : 'online',
+      renderer,
+      camYaw: () => input.camYaw,
+      primaryEntity: () => {
+        const p = world.player;
+        return { x: p.pos.x, y: p.pos.y, z: p.pos.z };
+      },
+      aspect: () => (window.innerHeight > 0 ? window.innerWidth / window.innerHeight : 16 / 9),
+      fovYDeg: 60,
+      classes: coopClasses,
+      classLabel: coopClassLabel,
+      offline: offlineSim
+        ? {
+            sim: offlineSim,
+            primaryPid: () => offlineSim.playerId,
+            addLocalPlayer: (cls, name) =>
+              offlineSim.addPlayer(cls, name, { spawnNearPid: offlineSim.playerId }),
+          }
+        : undefined,
+      online: online
+        ? {
+            sameAccountCharacters: () => coopRoster,
+            loginSeparate: async (username, password) => {
+              const base = api.base;
+              const res = await fetch(apiUrl('/api/login', base), {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password }),
+              });
+              const data = await res.json().catch(() => ({}));
+              if (!res.ok || typeof data.token !== 'string') throw new Error('coop login failed');
+              const token: string = data.token;
+              const chRes = await fetch(apiUrl('/api/characters', base), {
+                headers: { Authorization: `Bearer ${token}` },
+              });
+              const chData = await chRes.json().catch(() => []);
+              const characters: CoopCharacterRef[] = Array.isArray(chData)
+                ? chData.map((c: CharacterSummary) => ({ id: c.id, name: c.name, cls: c.class }))
+                : [];
+              return { token, base, characters };
+            },
+            openSession: (character, token, base) =>
+              new ClientWorld(
+                token ?? api.token ?? '',
+                character.id,
+                character.cls,
+                base ?? api.base,
+                getClientSeed(),
+                { coop: true },
+              ),
+          }
+        : undefined,
+    });
+  }
+
   function frame(now: number): void {
     requestAnimationFrame(frame);
     let frameDt = (now - last) / 1000;
@@ -2643,6 +2727,13 @@ async function startGame(
       frameDtMs: frameDt * 1000,
     });
     perf.trace('input.gamepad', () => gamepad.poll(frameDt), { frameDtMs: frameDt * 1000 });
+    // Couch co-op: poll pads 2-4, apply their input to the local co-op players,
+    // and write the shared framing camera anchor onto the renderer BEFORE the
+    // sim ticks and renderer.sync runs this frame. No-op (and leaves the camera
+    // untouched) in solo play.
+    perf.trace('input.coop', () => coopController?.frame(frameDt * 1000), {
+      frameDtMs: frameDt * 1000,
+    });
     perf.trace('input.hoverCursor', () => updateHoverCursor(), { active: input.hoverActive });
     perf.markInputFrame(performance.now());
 
@@ -3030,6 +3121,7 @@ async function startGame(
     console.warn('Renderer prewarm failed', err);
   }
   await nextPaint();
+  coopController = buildCoopController();
   last = performance.now();
   requestAnimationFrame(frame);
   // cut to the game only once the first frame is actually on screen
