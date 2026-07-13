@@ -635,7 +635,10 @@ body.mobile-touch #cr-music-widget .cr-mw-panel { width: 272px; font-size: 12px;
 
 /* Body-level toggle: cr-hud-skin-classic shows upstream bars, hides globes.
    cr-hud-skin-globes hides upstream bars, shows globes. */
-body.cr-hud-skin-classic #cr-hud-globes { display: none; }
+/* Retired: the player frame renders its own HP/resource orbs beside the
+   nameplate (index.html .has-orbs), so this standalone overlay is always
+   hidden to avoid a duplicate pair of globes. */
+#cr-hud-globes { display: none !important; }
 body.cr-hud-skin-globes #player-frame .uf-bars .bar { display: none; }
 body.cr-hud-skin-globes #player-frame .uf-bars .uf-name {
   /* keep the name above the globes so identity still reads at a glance */
