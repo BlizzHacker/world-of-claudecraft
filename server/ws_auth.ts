@@ -164,6 +164,10 @@ export function createWsAuth(deps: WsAuthDeps): WsAuthHandlers {
     const token = typeof msg.token === 'string' ? msg.token : '';
     const characterId = Number(msg.character ?? 'NaN');
     const clientSeed = typeof msg.clientSeed === 'string' ? msg.clientSeed : '';
+    // Additive couch co-op flag: a secondary same-account session from the
+    // same household (see the planJoin coop arm). Absent on every existing
+    // client, so the wire contract only widens.
+    const coop = msg.coop === true;
     const accountId = await accountForToken(token);
     if (accountId === null || !Number.isFinite(characterId)) {
       rejectHandshake(ws, WS_AUTH_ERROR.notAuthenticated);
@@ -215,6 +219,7 @@ export function createWsAuth(deps: WsAuthDeps): WsAuthHandlers {
       isAdmin,
       adminPermissions,
       clientSeed,
+      coop,
     };
     // Two genuinely concurrent handshakes for one character would race to stamp
     // the lease nonce; admit only the first and refuse the rest (never queue).

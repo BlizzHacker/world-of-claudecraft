@@ -121,6 +121,82 @@ describe('planJoin (pure decision core)', () => {
   });
 });
 
+describe('planJoin couch co-op arm (same-account household sessions)', () => {
+  const coopBase = {
+    accountId: 7,
+    isGm: false,
+    sameCharacter: null,
+    maxPerAccount: 1,
+    maxCoopPerAccount: 4,
+    coop: true,
+  };
+
+  it('lets a co-op join stack same-IP sessions up to the co-op cap', () => {
+    for (const live of [1, 2, 3]) {
+      expect(
+        planJoin({ ...coopBase, liveOtherSessions: live, liveOtherSessionsSameIp: live }),
+      ).toEqual({ action: 'join' });
+    }
+  });
+
+  it('rejects the fifth household session (cap is 4 total)', () => {
+    expect(planJoin({ ...coopBase, liveOtherSessions: 4, liveOtherSessionsSameIp: 4 })).toEqual({
+      action: 'reject',
+      error: 'too many characters on this account are already in the world',
+    });
+  });
+
+  it('falls back to the normal cap when any live session is on another IP', () => {
+    // Someone is already online elsewhere with this account: the co-op flag
+    // must not stack remote boxes.
+    expect(planJoin({ ...coopBase, liveOtherSessions: 1, liveOtherSessionsSameIp: 0 })).toEqual({
+      action: 'reject',
+      error: 'too many characters on this account are already in the world',
+    });
+    expect(planJoin({ ...coopBase, liveOtherSessions: 3, liveOtherSessionsSameIp: 2 })).toEqual({
+      action: 'reject',
+      error: 'too many characters on this account are already in the world',
+    });
+  });
+
+  it('a join without the coop flag keeps the old cap even from the same IP', () => {
+    expect(
+      planJoin({
+        ...coopBase,
+        coop: false,
+        liveOtherSessions: 1,
+        liveOtherSessionsSameIp: 1,
+      }),
+    ).toEqual({
+      action: 'reject',
+      error: 'too many characters on this account are already in the world',
+    });
+  });
+
+  it('the coop options are optional: legacy callers see identical behavior', () => {
+    expect(
+      planJoin({ accountId: 7, isGm: false, sameCharacter: null, liveOtherSessions: 0, maxPerAccount: 1 }),
+    ).toEqual({ action: 'join' });
+    expect(
+      planJoin({ accountId: 7, isGm: false, sameCharacter: null, liveOtherSessions: 1, maxPerAccount: 1 }),
+    ).toEqual({
+      action: 'reject',
+      error: 'too many characters on this account are already in the world',
+    });
+  });
+
+  it('a same-character conflict still wins over any co-op allowance', () => {
+    expect(
+      planJoin({
+        ...coopBase,
+        liveOtherSessions: 1,
+        liveOtherSessionsSameIp: 1,
+        sameCharacter: { accountId: 7, linkdead: false, left: false },
+      }),
+    ).toEqual({ action: 'reject', error: 'character already in world' });
+  });
+});
+
 describe('linkdead grace lifecycle', () => {
   it('holds the character in-world and online after a socket drop', () => {
     closePlaySession.mockClear();
