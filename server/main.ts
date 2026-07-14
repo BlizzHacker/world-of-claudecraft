@@ -1476,6 +1476,31 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       const results = q.trim().length >= 1 ? await searchCharacters(q, 8) : [];
       return json(res, 200, { results });
     }
+    
+    // Co-op regroup: teleport a joining co-op player next to the anchor player.
+    // Both sessions must share the same IP (couch co-op security).
+    if (req.method === 'POST' && url === '/api/coop/regroup') {
+      const accountId = await bearerActiveAccount(req, res);
+      if (accountId === null) return;
+      const body = await readBody(req);
+      const cid = Number(body.characterId);
+      const nid = Number(body.nearCharacterId);
+      if (!Number.isFinite(cid) || !Number.isFinite(nid))
+        return json(res, 400, { error: 'invalid character ids' });
+      const g = liveGame();
+      const ss = [...g.clients.values()];
+      const mover = ss.find((s) => s.characterId === cid);
+      const anchor = ss.find((s) => s.characterId === nid);
+      if (!mover || !anchor) return json(res, 404, { error: 'session not found' });
+      if (mover.ip !== anchor.ip) return json(res, 403, { error: 'same IP required for co-op regroup' });
+      const ae = g.sim.entities.get(anchor.pid);
+      if (!ae) return json(res, 404, { error: 'anchor not found' });
+      const bx = ae.pos.x + Math.sin(ae.facing + Math.PI) * 2;
+      const bz = ae.pos.z + Math.cos(ae.facing + Math.PI) * 2;
+      g.teleportSessionEntity(mover, { x: bx, z: bz });
+      return json(res, 200, { ok: true });
+    }
+
     if (req.method === 'POST' && url === '/api/bug-report') {
       // In-game Report Bug sink. Best-effort, available to any session (testers
       // may not have a character yet). accountId captured when present.

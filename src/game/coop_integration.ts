@@ -56,6 +56,7 @@ export interface CoopControllerDeps {
   };
   // Online: how to open a secondary session and enumerate characters.
   online?: {
+    primaryCharacterId: () => number | null;
     sameAccountCharacters: () => CoopCharacterRef[];
     loginSeparate: (
       username: string,
@@ -189,6 +190,18 @@ export class CoopController {
     } else if (choice.kind === 'online' && this.deps.online) {
       const session = this.deps.online.openSession(choice.character, choice.token, choice.base);
       handle = new OnlineCoopPlayer(session, choice.character.cls, () => {});
+      // Teleport P2 next to P1 so the shared camera doesn't zoom out to world spawn.
+      const p1cid = this.deps.online?.primaryCharacterId?.();
+      if (p1cid && choice.character.id) {
+        const base = choice.base || '';
+        if (base) {
+          fetch(base + '/api/coop/regroup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + (choice.token || '') },
+            body: JSON.stringify({ characterId: choice.character.id, nearCharacterId: p1cid }),
+          }).catch(() => {});
+        }
+      }
     }
     if (handle) this.manager.attachPlayer(slot, handle);
     else this.manager.cancelJoin(slot);

@@ -2675,6 +2675,7 @@ async function startGame(
         : undefined,
       online: online
         ? {
+            primaryCharacterId: () => online?.characterId ?? null,
             sameAccountCharacters: () => coopRoster,
             loginSeparate: async (username, password) => {
               const base = api.base;

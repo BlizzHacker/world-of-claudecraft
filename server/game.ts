@@ -1226,7 +1226,7 @@ export class GameServer {
     if (announce) this.sendSystemNotice(moderator, 'Stopped spectating.');
   }
 
-  private teleportSessionEntity(session: ClientSession, pos: { x: number; z: number }): void {
+  public teleportSessionEntity(session: ClientSession, pos: { x: number; z: number }): void {
     const entity = this.sim.entities.get(session.pid);
     if (!entity) return;
     const ground = this.sim.groundPos(pos.x, pos.z);
