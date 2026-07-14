@@ -1685,6 +1685,7 @@ export const en_CA: EnTranslations = {
   },
   "coop": {
     "joinTitle": "Player {slot}: press to join",
+    "joinNow": "Join now",
     "pickClass": "Choose a class",
     "pickCharacter": "Choose a character",
     "joinConfirm": "Join",
@@ -4458,6 +4459,7 @@ export const en_CA: EnTranslations = {
       "mods": "Mods",
       "reportBug": "Report Bug",
       "arcforge": "ArcForge",
+      "coop": "Join Co-Op",
       "controller": "Controller",
       "controllerDisconnected": "Not connected",
       "padLeftStick": "Left Stick",

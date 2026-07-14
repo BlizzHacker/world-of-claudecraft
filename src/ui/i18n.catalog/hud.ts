@@ -142,6 +142,7 @@ const hudStringsEn = {
       mods: "Mods",
       reportBug: "Report Bug",
       arcforge: "ArcForge",
+      coop: "Join Co-Op",
       controller: "Controller",
       controllerDisconnected: "Not connected",
       padLeftStick: "Left Stick",

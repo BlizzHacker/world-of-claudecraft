@@ -602,6 +602,7 @@ export type QuickActionId =
   | 'customization'
   | 'mods'
   | 'arcforge'
+  | 'coop'
   | 'logout'
   | 'resetAll';
 
@@ -630,6 +631,7 @@ export const OVERVIEW_QUICK_ACTIONS: readonly QuickAction[] = [
   { id: 'customization', labelKey: 'hud.options.customization', sprintTier: 'required' },
   { id: 'mods', labelKey: 'hud.options.mods', sprintTier: 'required' },
   { id: 'arcforge', labelKey: 'hud.options.arcforge', sprintTier: 'required' },
+  { id: 'coop', labelKey: 'hud.options.coop', sprintTier: 'required' },
   {
     id: 'logout',
     labelKey: 'hud.options.logout',

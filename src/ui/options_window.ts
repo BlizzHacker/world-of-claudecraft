@@ -2072,7 +2072,7 @@ export class OptionsWindow {
     for (const action of OVERVIEW_QUICK_ACTIONS) {
       if (!this.quickActionAvailable(action.id)) continue;
       const cls =
-        action.id === 'resume'
+        action.id === 'resume' || action.id === 'coop'
           ? 'btn is-primary'
           : action.id === 'logout' || action.id === 'resetAll'
             ? 'btn is-danger'
@@ -2198,6 +2198,11 @@ export class OptionsWindow {
     } else if (id === 'arcforge') {
       this.close();
       openArcForge();
+    } else if (id === 'coop') {
+      this.close();
+      // Trigger co-op join overlay via the window.__game bridge.
+      const game = (window as any).__game;
+      if (game?.openCoopJoin) game.openCoopJoin();
     } else if (id === 'logout') {
       this.deps.options()?.logout();
     } else {

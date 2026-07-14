@@ -95,6 +95,7 @@ export const en = {
   coop: {
     // The join overlay opened when an unassigned controller presses Start.
     joinTitle: 'Player {slot}: press to join',
+    joinNow: 'Join now',
     pickClass: 'Choose a class',
     pickCharacter: 'Choose a character',
     joinConfirm: 'Join',

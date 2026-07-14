@@ -1685,6 +1685,7 @@ export const en_XA: EnTranslations = {
   },
   "coop": {
     "joinTitle": "[Þļáýéŕ {slot}: þŕéšš ţó ĵóíñ]",
+    "joinNow": "[Ĵóíñ ñóŵ]",
     "pickClass": "[Çĥóóšé á çļášš]",
     "pickCharacter": "[Çĥóóšé á çĥáŕáçţéŕ]",
     "joinConfirm": "[Ĵóíñ]",
@@ -4458,6 +4459,7 @@ export const en_XA: EnTranslations = {
       "mods": "[Ɱóðš]",
       "reportBug": "[Ŕéþóŕţ Ɓúĝ]",
       "arcforge": "[ÁŕçƑóŕĝé]",
+      "coop": "[Ĵóíñ Çó-Óþ]",
       "controller": "[Çóñţŕóļļéŕ]",
       "controllerDisconnected": "[Ñóţ çóññéçţéð]",
       "padLeftStick": "[Ļéƒţ Šţíçķ]",

@@ -2728,26 +2728,6 @@ async function startGame(
     });
   }
 
-  // Keyboard shortcut for couch co-op: F2 opens the join overlay for a second
-  // local player without needing a physical controller.
-  function onCoopKey(e: KeyboardEvent): void {
-    if (e.key === 'F2' && !e.repeat && !e.ctrlKey && !e.altKey && !e.metaKey) {
-      // Don't trigger when typing in an input or chat.
-      const tag = (e.target as HTMLElement)?.tagName;
-      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
-      e.preventDefault();
-      if (coopController) {
-        coopController.requestKeyboardJoin();
-      } else {
-        // Lazy-init the co-op controller to allow keyboard joins even before
-        // the first gamepad is connected.
-        coopController = buildCoopController();
-        if (coopController) coopController.requestKeyboardJoin();
-      }
-    }
-  }
-  window.addEventListener('keydown', onCoopKey);
-
   function frame(now: number): void {
     requestAnimationFrame(frame);
     let frameDt = (now - last) / 1000;
@@ -3167,6 +3147,17 @@ async function startGame(
   }
   await nextPaint();
   coopController = buildCoopController();
+
+  // F2 keyboard shortcut for couch co-op: opens the join overlay.
+  window.addEventListener('keydown', function onCoopKey(e: KeyboardEvent) {
+    if (e.key === 'F2' && !e.repeat && !e.ctrlKey && !e.altKey && !e.metaKey) {
+      const tag = (e.target as HTMLElement)?.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      e.preventDefault();
+      coopController?.requestKeyboardJoin();
+    }
+  });
+
   last = performance.now();
   requestAnimationFrame(frame);
   // cut to the game only once the first frame is actually on screen
@@ -3199,6 +3190,7 @@ async function startGame(
           perf,
           gamepad,
           coopController,
+          openCoopJoin: () => coopController?.requestKeyboardJoin(),
           /** Opens the board and drains queued sim events. Do not call sim.lockpickEngage directly offline. */
           lockpickEngage: (objectId: number, ante: number) =>
             hud.submitLockpickEngage(objectId, ante as 1 | 2 | 3),
