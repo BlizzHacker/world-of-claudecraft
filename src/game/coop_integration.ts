@@ -192,33 +192,10 @@ export class CoopController {
     } else if (choice.kind === 'online' && this.deps.online) {
       const session = this.deps.online.openSession(choice.character, choice.token, choice.base);
       handle = new OnlineCoopPlayer(session, choice.character.cls, () => {});
-      // Teleport P2 next to P1 BEFORE attaching to the manager so the shared
-      // camera never sees P2 at world spawn. Await the regroup, then give the
-      // WebSocket a tick to deliver the updated position.
-      const p1cid = this.deps.online.primaryCharacterId?.();
-      if (p1cid && choice.character.id) {
-        const base = choice.base || this.deps.online.apiBase;
-        const token = choice.token || this.deps.online.apiToken;
-        if (base) {
-          fetch(base + '/api/coop/regroup', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-            body: JSON.stringify({ characterId: choice.character.id, nearCharacterId: p1cid }),
-          })
-            .then(() => {
-              // Give the WebSocket a frame to sync the teleported position,
-              // then attach so the camera only ever sees the post-regroup pos.
-              setTimeout(() => {
-                if (handle) this.manager.attachPlayer(slot, handle);
-              }, 150);
-            })
-            .catch(() => {
-              // Regroup failed — attach anyway (degraded mode, camera may jump).
-              if (handle) this.manager.attachPlayer(slot, handle);
-            });
-          return; // Don't attach synchronously — the .then/.catch handles it.
-        }
-      }
+      // Server-side auto-regroup in join() teleports co-op sessions next to
+      // an existing same-IP session before the hello message, so the first
+      // position snapshot already has P2 at P1's location. No client-side
+      // fetch needed — attach synchronously.
     }
     if (handle) this.manager.attachPlayer(slot, handle);
     else this.manager.cancelJoin(slot);

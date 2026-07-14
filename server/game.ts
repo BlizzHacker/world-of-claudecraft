@@ -2182,6 +2182,22 @@ export class GameServer {
     this.ipSessionCounts.set(sessionIp, (this.ipSessionCounts.get(sessionIp) ?? 0) + 1);
     this.clients.set(pid, session);
     this.sessionsByCharacterId.set(characterId, session);
+    // Couch co-op auto-regroup: when a co-op session joins from the same IP as
+    // an existing session, teleport it next to the anchor player. This runs
+    // BEFORE the hello message so the client's first position snapshot already
+    // has the correct location — no camera jump, no client-side timing hack.
+    if (meta.coop && joinIp) {
+      for (const s of this.clients.values()) {
+        if (s.pid === pid || s.ip !== joinIp) continue;
+        const ae = this.sim.entities.get(s.pid);
+        if (ae) {
+          const bx = ae.pos.x + Math.sin(ae.facing + Math.PI) * 2;
+          const bz = ae.pos.z + Math.cos(ae.facing + Math.PI) * 2;
+          this.teleportSessionEntity(session, { x: bx, z: bz });
+          break;
+        }
+      }
+    }
     this.peakOnline = Math.max(this.peakOnline, this.clients.size);
     void this.recordOnlineSnapshot();
     // Stamp this character's last world-entry time for the guild-roster "last
