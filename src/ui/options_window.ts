@@ -1452,7 +1452,10 @@ export class OptionsWindow {
       }
     }
     if (this.activeCategory === 'keybinds') this.renderKeybindTable(detail);
-    if (this.activeCategory === 'controller') this.renderControllerButtons(detail);
+    if (this.activeCategory === 'controller') {
+      this.renderControllerButtons(detail);
+      this.renderCoopControllers(detail);
+    }
     if (this.activeCategory === 'graphics') this.renderGraphicsReload(detail);
   }
 
@@ -2885,6 +2888,68 @@ export class OptionsWindow {
       this.renderDetail();
     });
     section.appendChild(reset);
+  }
+
+  private renderCoopControllers(parent: HTMLElement): void {
+    const game = (window as any).__game;
+    if (!game?.coopSlotInfo) return;
+    const slots: { slot: number; padIndex: number; phase: string }[] = game.coopSlotInfo();
+    if (slots.length === 0) return;
+
+    const section = el('div', 'opt-section');
+    parent.appendChild(section);
+    const head = el('div', 'opt-section-head');
+    const title = document.createElement('span');
+    title.textContent = 'Co-Op Players';
+    head.appendChild(title);
+    section.appendChild(head);
+
+    const actionOpts = this.gamepadActionOptions();
+    const kind = this.deps.options()?.gamepad.kind() ?? 'generic';
+
+    for (const info of slots) {
+      const slotLabel = `P${info.slot}`;
+      const padLabel = info.padIndex >= 0
+        ? `Controller ${info.padIndex + 1}`
+        : 'Keyboard';
+
+      // Slot header row
+      const { row: slotRow, control: slotCtrl } = this.optRow(slotLabel);
+      const status = el('span', 'opt-hint');
+      status.textContent = `${padLabel} — ${info.phase === 'joining' ? 'Joining...' : 'Active'}`;
+      slotCtrl.appendChild(status);
+      section.appendChild(slotRow);
+
+      if (info.phase !== 'active') continue;
+
+      // Per-button bindings for this slot
+      const bindings = game.coopGetBindings?.(info.slot) ?? {};
+      const buttons = Object.keys(bindings).map(Number).sort((a: number, b: number) => a - b);
+
+      for (const btn of buttons) {
+        const action = bindings[btn];
+        const btnLabel = gamepadButtonLabel(btn, kind);
+
+        const { row, control } = this.optRow(btnLabel);
+        row.dataset.coopSlot = String(info.slot);
+        row.dataset.coopButton = String(btn);
+
+        const dd = this.deps.buildDropdown(
+          actionOpts,
+          action,
+          (v: string) => {
+            const b = { ...game.coopGetBindings?.(info.slot) };
+            b[btn] = v;
+            game.coopSetBindings?.(info.slot, b);
+            this.renderDetail();
+          },
+          undefined,
+          { ariaLabel: btnLabel },
+        );
+        control.appendChild(dd);
+        section.appendChild(row);
+      }
+    }
   }
 
   // -------------------------------------------------------------------------
