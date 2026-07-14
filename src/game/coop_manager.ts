@@ -78,7 +78,7 @@ export class CoopManager {
       (s) => !this.slots.hasSlot(s) && !this.joining.has(s),
     );
     if (freeSlot === undefined) return false;
-    this.joining.add(freeSlot);
+    this.slots.claimKeyboard(freeSlot); this.joining.add(freeSlot);
     this.host.beginJoin(freeSlot, -1);
     return true;
   }

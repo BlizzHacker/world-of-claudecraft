@@ -137,6 +137,19 @@ hasSlot(slot: CoopSlotNumber): boolean {    return this.slots.has(slot);  }
   }
 
   /** The join flow finished: the pad now drives a player. */
+n  /** Keyboard join: register a slot without a physical pad (padIndex = -1). */
+  claimKeyboard(slot: CoopSlotNumber): boolean {
+    if (this.slots.has(slot)) return false;
+    this.slots.set(slot, {
+      padIndex: -1,
+      phase: 'joining',
+      prevButtons: [],
+      startHeldMs: 0,
+      leaveFired: false,
+    });
+    return true;
+  }
+
   activate(slot: CoopSlotNumber): void {
     const s = this.slots.get(slot);
     if (s) s.phase = 'active';
