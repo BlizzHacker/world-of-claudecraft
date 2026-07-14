@@ -126,6 +126,11 @@ export class CoopController {
     return this.manager.localPlayerCount;
   }
 
+  /** Open the join overlay from the keyboard (F2 or similar). */
+  requestKeyboardJoin(): boolean {
+    return this.manager.requestKeyboardJoin();
+  }
+
   frame(dtMs: number): void {
     const camFrame = this.manager.frame(dtMs);
     this.applyCamera(camFrame, dtMs);

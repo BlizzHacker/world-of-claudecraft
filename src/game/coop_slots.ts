@@ -106,6 +106,7 @@ export class CoopSlots {
   assignedCount(): number {
     return this.slots.size;
   }
+hasSlot(slot: CoopSlotNumber): boolean {    return this.slots.has(slot);  }
 
   phaseOf(slot: CoopSlotNumber): CoopSlotPhase | null {
     return this.slots.get(slot)?.phase ?? null;

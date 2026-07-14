@@ -51,7 +51,8 @@ export interface CoopOverlayDeps {
   ) => Promise<CoopCharacterRef>;
 }
 
-type Step = 'account' | 'class' | 'character' | 'login' | 'create';
+type Step = 'account' | 'class' | 'name' | 'character' | 'login' | 'create';
+type FlowState = 'idle' | 'loading';
 
 const OVERLAY_ID = 'coop-join-overlay';
 const STYLE_ID = 'coop-join-overlay-styles';
@@ -116,6 +117,8 @@ export class CoopOverlay {
   // Filled during the separate-account flow.
   private sepToken: string | null = null;
   private sepBase: string | null = null;
+  private flowState: FlowState = 'idle';
+  private pendingName = '';
 
   get isOpen(): boolean {
     return this.root !== null;
@@ -186,9 +189,32 @@ export class CoopOverlay {
   }
 
   private cancel(): void {
-    const cb = this.onCancel;
-    this.close();
-    cb?.();
+    // Back navigation: go to the previous step instead of closing entirely.
+    if (this.step === 'account') {
+      // At the root: close the overlay.
+      const cb = this.onCancel;
+      this.close();
+      cb?.();
+      return;
+    }
+    if (this.step === 'class') {
+      // Back from class pick: go to account step (online) or close (offline).
+      if (this.deps.mode === 'online') {
+        this.step = 'account';
+      } else {
+        const cb = this.onCancel;
+        this.close();
+        cb?.();
+        return;
+      }
+    } else if (this.step === 'name') {
+      this.step = 'class';
+    } else if (this.step === 'character' || this.step === 'create') {
+      this.step = this.deps.mode === 'online' ? 'account' : 'class';
+    } else if (this.step === 'login') {
+      this.step = 'account';
+    }
+    this.render();
   }
 
   private confirm(choice: CoopJoinChoice): void {
@@ -204,6 +230,7 @@ export class CoopOverlay {
     this.root.replaceChildren();
     this.options = [];
     this.selectedIndex = 0;
+    this.flowState = 'idle';
 
     const panel = document.createElement('div');
     panel.className = 'coop-join-panel';
@@ -213,6 +240,7 @@ export class CoopOverlay {
 
     if (this.step === 'account') this.renderAccountStep(panel);
     else if (this.step === 'class') this.renderClassStep(panel);
+    else if (this.step === 'name') this.renderNameStep(panel);
     else if (this.step === 'character') this.renderCharacterStep(panel);
     else if (this.step === 'login') this.renderLoginStep(panel);
     else if (this.step === 'create') this.renderCreateStep(panel);
@@ -256,14 +284,50 @@ export class CoopOverlay {
     for (const cls of this.deps.classes) {
       grid.appendChild(
         this.makeOption(this.deps.classLabel(cls), () => {
-          const name = `${this.deps.classLabel(cls)} ${this.slot}`;
-          this.confirm({ kind: 'offline', cls, name });
+          // Offline: go to name-entry step so the player can customize their
+          // name before joining. Online (create flow): go straight to create.
+          if (this.deps.mode === 'offline') {
+            this.pendingName = `${this.deps.classLabel(cls)} ${this.slot}`;
+            this.step = 'name';
+            this.render();
+          } else {
+            this.confirm({ kind: 'offline', cls, name: `${this.deps.classLabel(cls)} ${this.slot}` });
+          }
         }),
       );
     }
     panel.appendChild(grid);
   }
 
+  private renderNameStep(panel: HTMLElement): void {
+    const label = document.createElement('p');
+    label.textContent = t('coop.createTitle');
+    panel.appendChild(label);
+    const nameInput = document.createElement('input');
+    nameInput.type = 'text';
+    nameInput.maxLength = 24;
+    nameInput.value = this.pendingName;
+    nameInput.placeholder = t('coop.createName');
+    nameInput.setAttribute('aria-label', t('coop.createName'));
+    nameInput.className = 'coop-create-name';
+    panel.appendChild(nameInput);
+    const joinBtn = this.makeButton(t('coop.joinConfirm'), () => {
+      const nm = nameInput.value.trim() || this.pendingName;
+      // Find the class from the pendingName pattern: "ClassName N"
+      const clsMatch = this.deps.classes.find(
+        (c) => this.deps.classLabel(c) === this.pendingName.split(' ').slice(0, -1).join(' ')
+      );
+      const cls = clsMatch ?? this.deps.classes[0];
+      this.confirm({ kind: 'offline', cls, name: nm });
+    });
+    joinBtn.classList.add('coop-option');
+    joinBtn.style.marginTop = '10px';
+    panel.appendChild(joinBtn);
+    // Register the name input and join button as navigable options for pad input.
+    this.options = [joinBtn as unknown as HTMLButtonElement];
+    // Focus the name input so the user can start typing immediately.
+    setTimeout(() => nameInput.focus(), 50);
+  }
   private renderCharacterStep(panel: HTMLElement): void {
     const label = document.createElement('p');
     label.textContent = t('coop.pickCharacter');
@@ -323,7 +387,9 @@ export class CoopOverlay {
       const btn = this.makeOption(this.deps.classLabel(cls), () => {
         const nm = name.value.trim() || `${this.deps.classLabel(cls)} ${this.slot}`;
         error.hidden = true;
+        this.flowState = 'loading';
         for (const o of this.options) o.disabled = true;
+        btn.textContent = `${this.deps.classLabel(cls)}...`;
         void this.deps
           .createCharacter?.(nm, cls, this.sepToken, this.sepBase)
           .then((character) => {
@@ -367,7 +433,9 @@ export class CoopOverlay {
     form.addEventListener('submit', (ev) => {
       ev.preventDefault();
       error.hidden = true;
+      this.flowState = 'loading';
       submit.disabled = true;
+      submit.textContent = t('coop.loggingIn') || 'Signing in...';
       void this.deps
         .loginSeparate?.(user.value, pass.value)
         .then((res) => {

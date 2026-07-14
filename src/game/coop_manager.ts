@@ -67,6 +67,22 @@ export class CoopManager {
 
   constructor(private readonly host: CoopHost) {}
 
+  /**
+   * Request a co-op join from the keyboard (no physical pad required).
+   * Claims the lowest free slot and hands it to the host's overlay. Useful
+   * for testing without controllers and for keyboard/mouse Player 2-4 joins.
+   */
+  requestKeyboardJoin(): boolean {
+    if (this.slots.assignedCount() + this.joining.size >= 3) return false;
+    const freeSlot = ([2, 3, 4] as const).find(
+      (s) => !this.slots.hasSlot(s) && !this.joining.has(s),
+    );
+    if (freeSlot === undefined) return false;
+    this.joining.add(freeSlot);
+    this.host.beginJoin(freeSlot, -1);
+    return true;
+  }
+
   /** True while at least one co-op player is in the world (P2-P4). */
   get hasCoopPlayers(): boolean {
     return this.active.size > 0;

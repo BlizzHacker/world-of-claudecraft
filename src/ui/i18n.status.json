@@ -33,10 +33,10 @@
     "da_DK"
   ],
   "counts": {
-    "keys": 6859,
-    "rows": 144039,
-    "translated": 141028,
-    "pending": 2818,
+    "keys": 6865,
+    "rows": 144165,
+    "translated": 141034,
+    "pending": 2938,
     "blocked": 193,
     "blockedSource": 96
   },
@@ -33119,6 +33119,294 @@
         }
       }
     },
+    "main:coop.createCharacter": {
+      "scope": "main",
+      "enHash": "d02edc07fde8ae43",
+      "placeholders": [],
+      "locales": {
+        "es": {
+          "state": "pending"
+        },
+        "es_ES": {
+          "state": "pending"
+        },
+        "fr_FR": {
+          "state": "pending"
+        },
+        "fr_CA": {
+          "state": "pending"
+        },
+        "en_CA": {
+          "state": "translated",
+          "srcHash": "d02edc07fde8ae43",
+          "by": "human"
+        },
+        "it_IT": {
+          "state": "pending"
+        },
+        "de_DE": {
+          "state": "pending"
+        },
+        "zh_CN": {
+          "state": "pending"
+        },
+        "zh_TW": {
+          "state": "pending"
+        },
+        "ko_KR": {
+          "state": "pending"
+        },
+        "ja_JP": {
+          "state": "pending"
+        },
+        "pt_BR": {
+          "state": "pending"
+        },
+        "ru_RU": {
+          "state": "pending"
+        },
+        "cs_CZ": {
+          "state": "pending"
+        },
+        "nl_NL": {
+          "state": "pending"
+        },
+        "pl_PL": {
+          "state": "pending"
+        },
+        "id_ID": {
+          "state": "pending"
+        },
+        "tr_TR": {
+          "state": "pending"
+        },
+        "sv_SE": {
+          "state": "pending"
+        },
+        "vi_VN": {
+          "state": "pending"
+        },
+        "da_DK": {
+          "state": "pending"
+        }
+      }
+    },
+    "main:coop.createError": {
+      "scope": "main",
+      "enHash": "5723044d50a1f893",
+      "placeholders": [],
+      "locales": {
+        "es": {
+          "state": "pending"
+        },
+        "es_ES": {
+          "state": "pending"
+        },
+        "fr_FR": {
+          "state": "pending"
+        },
+        "fr_CA": {
+          "state": "pending"
+        },
+        "en_CA": {
+          "state": "translated",
+          "srcHash": "5723044d50a1f893",
+          "by": "human"
+        },
+        "it_IT": {
+          "state": "pending"
+        },
+        "de_DE": {
+          "state": "pending"
+        },
+        "zh_CN": {
+          "state": "pending"
+        },
+        "zh_TW": {
+          "state": "pending"
+        },
+        "ko_KR": {
+          "state": "pending"
+        },
+        "ja_JP": {
+          "state": "pending"
+        },
+        "pt_BR": {
+          "state": "pending"
+        },
+        "ru_RU": {
+          "state": "pending"
+        },
+        "cs_CZ": {
+          "state": "pending"
+        },
+        "nl_NL": {
+          "state": "pending"
+        },
+        "pl_PL": {
+          "state": "pending"
+        },
+        "id_ID": {
+          "state": "pending"
+        },
+        "tr_TR": {
+          "state": "pending"
+        },
+        "sv_SE": {
+          "state": "pending"
+        },
+        "vi_VN": {
+          "state": "pending"
+        },
+        "da_DK": {
+          "state": "pending"
+        }
+      }
+    },
+    "main:coop.createName": {
+      "scope": "main",
+      "enHash": "9b18b4e58aa0cca0",
+      "placeholders": [],
+      "locales": {
+        "es": {
+          "state": "pending"
+        },
+        "es_ES": {
+          "state": "pending"
+        },
+        "fr_FR": {
+          "state": "pending"
+        },
+        "fr_CA": {
+          "state": "pending"
+        },
+        "en_CA": {
+          "state": "translated",
+          "srcHash": "9b18b4e58aa0cca0",
+          "by": "human"
+        },
+        "it_IT": {
+          "state": "pending"
+        },
+        "de_DE": {
+          "state": "pending"
+        },
+        "zh_CN": {
+          "state": "pending"
+        },
+        "zh_TW": {
+          "state": "pending"
+        },
+        "ko_KR": {
+          "state": "pending"
+        },
+        "ja_JP": {
+          "state": "pending"
+        },
+        "pt_BR": {
+          "state": "pending"
+        },
+        "ru_RU": {
+          "state": "pending"
+        },
+        "cs_CZ": {
+          "state": "pending"
+        },
+        "nl_NL": {
+          "state": "pending"
+        },
+        "pl_PL": {
+          "state": "pending"
+        },
+        "id_ID": {
+          "state": "pending"
+        },
+        "tr_TR": {
+          "state": "pending"
+        },
+        "sv_SE": {
+          "state": "pending"
+        },
+        "vi_VN": {
+          "state": "pending"
+        },
+        "da_DK": {
+          "state": "pending"
+        }
+      }
+    },
+    "main:coop.createTitle": {
+      "scope": "main",
+      "enHash": "1f40657adec90299",
+      "placeholders": [],
+      "locales": {
+        "es": {
+          "state": "pending"
+        },
+        "es_ES": {
+          "state": "pending"
+        },
+        "fr_FR": {
+          "state": "pending"
+        },
+        "fr_CA": {
+          "state": "pending"
+        },
+        "en_CA": {
+          "state": "translated",
+          "srcHash": "1f40657adec90299",
+          "by": "human"
+        },
+        "it_IT": {
+          "state": "pending"
+        },
+        "de_DE": {
+          "state": "pending"
+        },
+        "zh_CN": {
+          "state": "pending"
+        },
+        "zh_TW": {
+          "state": "pending"
+        },
+        "ko_KR": {
+          "state": "pending"
+        },
+        "ja_JP": {
+          "state": "pending"
+        },
+        "pt_BR": {
+          "state": "pending"
+        },
+        "ru_RU": {
+          "state": "pending"
+        },
+        "cs_CZ": {
+          "state": "pending"
+        },
+        "nl_NL": {
+          "state": "pending"
+        },
+        "pl_PL": {
+          "state": "pending"
+        },
+        "id_ID": {
+          "state": "pending"
+        },
+        "tr_TR": {
+          "state": "pending"
+        },
+        "sv_SE": {
+          "state": "pending"
+        },
+        "vi_VN": {
+          "state": "pending"
+        },
+        "da_DK": {
+          "state": "pending"
+        }
+      }
+    },
     "main:coop.hintJoin": {
       "scope": "main",
       "enHash": "392d53f7ecb3c777",
@@ -33429,6 +33717,150 @@
         "en_CA": {
           "state": "translated",
           "srcHash": "aa6fcd12daa05644",
+          "by": "human"
+        },
+        "it_IT": {
+          "state": "pending"
+        },
+        "de_DE": {
+          "state": "pending"
+        },
+        "zh_CN": {
+          "state": "pending"
+        },
+        "zh_TW": {
+          "state": "pending"
+        },
+        "ko_KR": {
+          "state": "pending"
+        },
+        "ja_JP": {
+          "state": "pending"
+        },
+        "pt_BR": {
+          "state": "pending"
+        },
+        "ru_RU": {
+          "state": "pending"
+        },
+        "cs_CZ": {
+          "state": "pending"
+        },
+        "nl_NL": {
+          "state": "pending"
+        },
+        "pl_PL": {
+          "state": "pending"
+        },
+        "id_ID": {
+          "state": "pending"
+        },
+        "tr_TR": {
+          "state": "pending"
+        },
+        "sv_SE": {
+          "state": "pending"
+        },
+        "vi_VN": {
+          "state": "pending"
+        },
+        "da_DK": {
+          "state": "pending"
+        }
+      }
+    },
+    "main:coop.keyboardJoin": {
+      "scope": "main",
+      "enHash": "664a5506893fea14",
+      "placeholders": [],
+      "locales": {
+        "es": {
+          "state": "pending"
+        },
+        "es_ES": {
+          "state": "pending"
+        },
+        "fr_FR": {
+          "state": "pending"
+        },
+        "fr_CA": {
+          "state": "pending"
+        },
+        "en_CA": {
+          "state": "translated",
+          "srcHash": "664a5506893fea14",
+          "by": "human"
+        },
+        "it_IT": {
+          "state": "pending"
+        },
+        "de_DE": {
+          "state": "pending"
+        },
+        "zh_CN": {
+          "state": "pending"
+        },
+        "zh_TW": {
+          "state": "pending"
+        },
+        "ko_KR": {
+          "state": "pending"
+        },
+        "ja_JP": {
+          "state": "pending"
+        },
+        "pt_BR": {
+          "state": "pending"
+        },
+        "ru_RU": {
+          "state": "pending"
+        },
+        "cs_CZ": {
+          "state": "pending"
+        },
+        "nl_NL": {
+          "state": "pending"
+        },
+        "pl_PL": {
+          "state": "pending"
+        },
+        "id_ID": {
+          "state": "pending"
+        },
+        "tr_TR": {
+          "state": "pending"
+        },
+        "sv_SE": {
+          "state": "pending"
+        },
+        "vi_VN": {
+          "state": "pending"
+        },
+        "da_DK": {
+          "state": "pending"
+        }
+      }
+    },
+    "main:coop.loggingIn": {
+      "scope": "main",
+      "enHash": "5cec594f82e1e609",
+      "placeholders": [],
+      "locales": {
+        "es": {
+          "state": "pending"
+        },
+        "es_ES": {
+          "state": "pending"
+        },
+        "fr_FR": {
+          "state": "pending"
+        },
+        "fr_CA": {
+          "state": "pending"
+        },
+        "en_CA": {
+          "state": "translated",
+          "srcHash": "5cec594f82e1e609",
           "by": "human"
         },
         "it_IT": {

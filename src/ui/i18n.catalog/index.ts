@@ -107,6 +107,7 @@ export const en = {
     loginPass: 'Password',
     loginSubmit: 'Sign in and join',
     loginError: 'Sign-in failed. Check the username and password.',
+    loggingIn: 'Signing in...',
     createCharacter: 'Create a character',
     createTitle: 'Name your new hero and pick a class',
     createName: 'Character name',
@@ -116,6 +117,7 @@ export const en = {
     stripTitle: 'Local players',
     hintJoin: 'Press Start on another controller to add a player (up to 4).',
     hintLeave: 'Hold Start on a controller to drop that player.',
+    keyboardJoin: 'Press F2 to add a local player',
     slotLabel: 'Player {slot}',
     slotEmpty: 'Open',
     // Party-frame chip while a co-op player is waiting to resurrect.

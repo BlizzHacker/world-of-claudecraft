@@ -2728,6 +2728,26 @@ async function startGame(
     });
   }
 
+  // Keyboard shortcut for couch co-op: F2 opens the join overlay for a second
+  // local player without needing a physical controller.
+  function onCoopKey(e: KeyboardEvent): void {
+    if (e.key === 'F2' && !e.repeat && !e.ctrlKey && !e.altKey && !e.metaKey) {
+      // Don't trigger when typing in an input or chat.
+      const tag = (e.target as HTMLElement)?.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      e.preventDefault();
+      if (coopController) {
+        coopController.requestKeyboardJoin();
+      } else {
+        // Lazy-init the co-op controller to allow keyboard joins even before
+        // the first gamepad is connected.
+        coopController = buildCoopController();
+        if (coopController) coopController.requestKeyboardJoin();
+      }
+    }
+  }
+  window.addEventListener('keydown', onCoopKey);
+
   function frame(now: number): void {
     requestAnimationFrame(frame);
     let frameDt = (now - last) / 1000;
