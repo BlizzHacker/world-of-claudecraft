@@ -192,10 +192,24 @@ export class CoopController {
     } else if (choice.kind === 'online' && this.deps.online) {
       const session = this.deps.online.openSession(choice.character, choice.token, choice.base);
       handle = new OnlineCoopPlayer(session, choice.character.cls, () => {});
-      // Server-side auto-regroup in join() teleports co-op sessions next to
-      // an existing same-IP session before the hello message, so the first
-      // position snapshot already has P2 at P1's location. No client-side
-      // fetch needed — attach synchronously.
+      // Wait for the WebSocket hello before attaching. The server-side
+      // auto-regroup in join() runs before the hello, so P2's first position
+      // is already at P1's location. Entity reads are blocked until connected,
+      // so the camera never sees the world-spawn blank entity.
+      const waitConnect = (tries: number) => {
+        if (session.connected) {
+          if (handle) this.manager.attachPlayer(slot, handle);
+          return;
+        }
+        if (tries > 100) {
+          // 10 seconds — attach anyway (degraded mode).
+          if (handle) this.manager.attachPlayer(slot, handle);
+          return;
+        }
+        setTimeout(() => waitConnect(tries + 1), 100);
+      };
+      waitConnect(0);
+      return; // Don't fall through to synchronous attach.
     }
     if (handle) this.manager.attachPlayer(slot, handle);
     else this.manager.cancelJoin(slot);

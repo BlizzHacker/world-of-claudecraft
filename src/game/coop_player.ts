@@ -136,6 +136,7 @@ export class OfflineCoopPlayer implements CoopPlayer {
 
 /** The slice of ClientWorld the online handle needs. */
 export interface CoopOnlineSession {
+  connected: boolean;
   player: { pos: { x: number; y: number; z: number }; dead: boolean; ghost: boolean };
   setMoveInput(input: unknown, facing?: unknown): void;
   castAbilityBySlot(slot: number): void;
@@ -155,10 +156,13 @@ export class OnlineCoopPlayer implements CoopPlayer {
   ) {}
 
   entity(): CoopEntitySnapshot | null {
+    // Block reads until the session is connected (hello received). Before that,
+    // the session returns a blank entity at {0,0,0} which would pull the shared
+    // camera to world spawn. Server-side auto-regroup teleports during join(),
+    // so the first real snapshot already has P2 at P1's location.
+    if (!this.session.connected) return null;
     const p = this.session.player;
-    // A secondary session before its first snapshot reports id -1 with a zero
-    // body; the manager tolerates a null here (no camera contribution yet).
-    if (!p) return null;
+    if (!p || p.pos.x === 0 && p.pos.y === 0 && p.pos.z === 0) return null;
     return { x: p.pos.x, y: p.pos.y, z: p.pos.z, dead: p.dead, ghost: p.ghost };
   }
 
