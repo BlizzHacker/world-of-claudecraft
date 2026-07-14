@@ -2905,7 +2905,7 @@ export class OptionsWindow {
     section.appendChild(head);
 
     const actionOpts = this.gamepadActionOptions();
-    const kind = this.deps.options()?.gamepad.kind() ?? 'generic';
+    const hooks = this.deps.options(); const kind = hooks?.gamepad?.kind() ?? 'generic';
 
     for (const info of slots) {
       const slotLabel = `P${info.slot}`;
