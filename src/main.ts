@@ -3194,6 +3194,10 @@ async function startGame(
           gamepad,
           coopController,
           openCoopJoin: () => coopController?.requestKeyboardJoin(),
+          coopSlotInfo: () => coopController?.slotInfo() ?? [],
+          coopGetBindings: (s: number) => coopController?.getSlotBindings(s as CoopSlotNumber) ?? {},
+          coopSetBindings: (s: number, b: Record<number, string>) => coopController?.setSlotBindings(s as CoopSlotNumber, b),
+          coopReassignPad: (s: number, p: number) => coopController?.reassignPad(s as CoopSlotNumber, p) ?? false,
           /** Opens the board and drains queued sim events. Do not call sim.lockpickEngage directly offline. */
           lockpickEngage: (objectId: number, ante: number) =>
             hud.submitLockpickEngage(objectId, ante as 1 | 2 | 3),

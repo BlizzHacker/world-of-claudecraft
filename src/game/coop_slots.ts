@@ -152,6 +152,51 @@ hasSlot(slot: CoopSlotNumber): boolean {    return this.slots.has(slot);  }
    * per assigned pad. `excludePadIndex` is Player 1's pad (GamepadManager's),
    * which never joins co-op.
    */
+  /** Per-slot action bindings (button index → action id). Absent = COOP_PAD_ACTIONS. */
+  private slotBindings = new Map<CoopSlotNumber, Record<number, string>>();
+
+  /** Info for the controller settings UI. */
+  slotInfo(): { slot: CoopSlotNumber; padIndex: number; phase: CoopSlotPhase }[] {
+    const out: { slot: CoopSlotNumber; padIndex: number; phase: CoopSlotPhase }[] = [];
+    for (const slot of COOP_SLOT_NUMBERS) {
+      const s = this.slots.get(slot);
+      if (s) out.push({ slot, padIndex: s.padIndex, phase: s.phase });
+    }
+    return out;
+  }
+
+  getSlotBindings(slot: CoopSlotNumber): Record<number, string> {
+    return this.slotBindings.get(slot) ?? { ...COOP_PAD_ACTIONS };
+  }
+
+  setSlotBindings(slot: CoopSlotNumber, bindings: Record<number, string>): void {
+    this.slotBindings.set(slot, { ...bindings });
+  }
+
+  /** Move a physical pad to a different slot. Returns false if either slot is empty. */
+  reassignPad(slot: CoopSlotNumber, newPadIndex: number): boolean {
+    const target = this.slots.get(slot);
+    if (!target) return false;
+    // Release any other slot that currently owns this pad
+    for (const [other, s] of this.slots) {
+      if (other !== slot && s.padIndex === newPadIndex) {
+        this.slots.delete(other);
+        this.slotBindings.delete(other);
+      }
+    }
+    target.padIndex = newPadIndex;
+    // Reset prev buttons so the edge detector seeds cleanly
+    target.prevButtons = [];
+    return true;
+  }
+
+  /** Internal: get the effective action for a button on a slot. */
+  actionFor(slot: CoopSlotNumber, button: number): string | undefined {
+    const custom = this.slotBindings.get(slot);
+    if (custom && custom[button] !== undefined) return custom[button];
+    return COOP_PAD_ACTIONS[button];
+  }
+
   frame(
     pads: readonly CoopPadSnapshot[],
     excludePadIndex: number | null,
@@ -198,7 +243,7 @@ hasSlot(slot: CoopSlotNumber): boolean {    return this.slots.has(slot);  }
       for (const b of edges) {
         if (b === GP.START) continue; // reserved for join/leave
         if (s.phase === 'joining') menuEdges.push(b);
-        else if (COOP_PAD_ACTIONS[b]) actions.push(COOP_PAD_ACTIONS[b]);
+        else { const act = this.actionFor(slot, b); if (act) actions.push(act); }
       }
 
       slotFrames.push({

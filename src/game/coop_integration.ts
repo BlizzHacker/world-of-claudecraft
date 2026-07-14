@@ -130,6 +130,11 @@ export class CoopController {
   }
 
   /** Open the join overlay from the keyboard (F2 or similar). */
+  slotInfo() { return this.manager.slotInfo(); }
+  getSlotBindings(slot: CoopSlotNumber) { return this.manager.getSlotBindings(slot); }
+  setSlotBindings(slot: CoopSlotNumber, b: Record<number, string>) { this.manager.setSlotBindings(slot, b); }
+  reassignPad(slot: CoopSlotNumber, padIndex: number) { return this.manager.reassignPad(slot, padIndex); }
+
   requestKeyboardJoin(): boolean {
     return this.manager.requestKeyboardJoin();
   }

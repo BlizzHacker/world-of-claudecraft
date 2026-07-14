@@ -122,6 +122,11 @@ export class CoopManager {
     this.joining.clear();
   }
 
+  slotInfo() { return this.slots.slotInfo(); }
+  getSlotBindings(slot: CoopSlotNumber) { return this.slots.getSlotBindings(slot); }
+  setSlotBindings(slot: CoopSlotNumber, b: Record<number, string>) { this.slots.setSlotBindings(slot, b); }
+  reassignPad(slot: CoopSlotNumber, padIndex: number) { return this.slots.reassignPad(slot, padIndex); }
+
   /**
    * Advance one frame. Returns the shared camera pose when two or more local
    * players are present, else null (Player 1's normal chase camera stays).
