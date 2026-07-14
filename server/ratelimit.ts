@@ -189,6 +189,12 @@ export function requestIp(req: http.IncomingMessage): string {
   const remote = normalizeIp(String(req.socket?.remoteAddress ?? 'unknown').trim());
   if (!isTrustedProxy(remote)) return remote;
 
+  // Cloudflare sets CF-Connecting-IP to the real client IP. Use it directly
+  // instead of walking X-Forwarded-For through untrusted Cloudflare edge IPs
+  // (172.68.x.x is public, not RFC1918, so they break the proxy chain).
+  const cfIp = String(req.headers['cf-connecting-ip'] ?? '').trim();
+  if (cfIp) return normalizeIp(cfIp);
+
   // Walk X-Forwarded-For from the right (the end our own proxies append to),
   // past any trusted hops; the first address we don't control is the real
   // client. Everything left of it is client-supplied and spoofable.
