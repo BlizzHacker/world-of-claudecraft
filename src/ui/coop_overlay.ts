@@ -146,6 +146,22 @@ export class CoopOverlay {
     this.root.id = OVERLAY_ID;
     this.root.className = 'fatal-overlay coop-join-overlay';
     document.body.appendChild(this.root);
+    // Keyboard navigation: Arrow keys, Enter, Escape for keyboard-only joins.
+    this.root.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+        e.preventDefault();
+        this.moveSelection(1);
+      } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+        e.preventDefault();
+        this.moveSelection(-1);
+      } else if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        this.activateSelection();
+      } else if (e.key === 'Escape' || e.key === 'Backspace') {
+        e.preventDefault();
+        this.cancel();
+      }
+    });
     // Online starts with the account step; offline goes straight to class pick.
     this.step = this.deps.mode === 'online' ? 'account' : 'class';
     this.render();
@@ -310,6 +326,13 @@ export class CoopOverlay {
     nameInput.placeholder = t('coop.createName');
     nameInput.setAttribute('aria-label', t('coop.createName'));
     nameInput.className = 'coop-create-name';
+    // Submit on Enter in the name field.
+    nameInput.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        joinBtn.click();
+      }
+    });
     panel.appendChild(nameInput);
     const joinBtn = this.makeButton(t('coop.joinConfirm'), () => {
       const nm = nameInput.value.trim() || this.pendingName;
