@@ -720,6 +720,16 @@ The remaining systems above are still open development, not silently treated as 
   zombie-defense, housing recovery, and sanitized-PR extraction phases remain
   explicitly open and are not represented as complete.
 
+### Upstream extraction checkpoint — 2026-07-15
+
+- Added `scripts/sanitize_upstream_patch.mjs`, a read-only, fail-closed extractor
+  that rejects Cryptic-only paths, neutralizes branding/realm names, scans for
+  credentials/private hosts, and writes an upstream patch plus machine-readable
+  manifest. It never pushes or opens a pull request.
+- Added focused tests covering path policy, substitutions, secret rejection, and
+  the explicit no-publish manifest policy. The existing `/api/contributions` feed
+  remains the automatic public receipt for upstream PRs once a human submits one.
+
 - Do not mark a phase complete from code presence.
 - No later implementation begins before the prior QA is complete.
 - Checkpoint implementation never mutates production. Its QA issues PASS first, then invokes promotion.
