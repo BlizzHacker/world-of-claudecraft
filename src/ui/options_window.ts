@@ -2916,7 +2916,7 @@ export class OptionsWindow {
       // Slot header row
       const { row: slotRow, control: slotCtrl } = this.optRow(slotLabel);
       const status = el('span', 'opt-hint');
-      status.textContent = `${padLabel} — ${info.phase === 'joining' ? 'Joining...' : 'Active'}`;
+      status.textContent = `${padLabel} - ${info.phase === 'joining' ? 'Joining...' : 'Active'}`;
       slotCtrl.appendChild(status);
       section.appendChild(slotRow);
 

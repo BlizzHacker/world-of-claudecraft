@@ -1,0 +1,77 @@
+name: Production deploy
+
+# The recovery branch is the live private integration line for this cycle. Every
+# push is verified on GitHub-hosted infrastructure, then deployed by the
+# restricted self-hosted production runner. A failed verification never reaches
+# the deploy job.
+on:
+  push:
+    branches:
+      - codex/cryptic-recovery-program
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cryptic-production-deploy
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    name: Verify production candidate
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Check out candidate
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate and verify committed i18n artifacts
+        run: |
+          npm run i18n:gen
+          git diff --exit-code -- src/ui/i18n.resolved.generated src/admin/i18n.resolved.generated src/ui/i18n.status.summary.json
+
+      - name: Security gate
+        run: npm run security:gate
+
+      - name: Run full test suite
+        run: npm test
+
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      - name: Build server and client
+        run: |
+          npm run build:env
+          npm run build:server
+          npm run build
+
+  deploy:
+    name: Deploy verified candidate
+    needs: verify
+    runs-on: [self-hosted, cryptic-prod]
+    timeout-minutes: 30
+    steps:
+      - name: Deploy through restricted host wrapper
+        env:
+          GIT_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          test -n "$GIT_SHA"
+          ssh -o BatchMode=yes -o StrictHostKeyChecking=yes -i /root/.ssh/cryptic_prod_deploy root@192.168.0.6 \
+            "deploy $GIT_SHA"
+
+      - name: Verify live API
+        run: |
+          set -euo pipefail
+          ssh -o BatchMode=yes -o StrictHostKeyChecking=yes -i /root/.ssh/cryptic_prod_deploy root@192.168.0.6 \
+            status
