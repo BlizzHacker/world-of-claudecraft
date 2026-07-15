@@ -40,11 +40,11 @@ release checkpoint and production has not been mutated:
 
 ## Latest delivery checkpoint, 2026-07-15
 
-The recovery branch is pushed at `5d641226b` and contains the completed implementation
+The recovery branch is pushed at `dc688104d` and contains the completed implementation
 slice listed above. Focused recovery coverage is green (8 files, 69 tests), and the local
-malware gate is green. GitHub verification runs `29389242549` and `29389242547` are the
-authoritative full-gate checks for this candidate; they were still running when this note
-was written. The local full gate is not a clean candidate signal because the workstation has
+malware gate is green. GitHub CI run `29391133839` passed the full test, typecheck, headless,
+server, and client build gates. Production verification run `29391133874` passed its verify
+job. The local full gate is not a clean candidate signal because the workstation has
 unrelated Tauri Store edits, CRLF Codex skill files, and stale options-window source guards.
 
 Production has not been changed. Automatic deployment is configured on every push, but the
