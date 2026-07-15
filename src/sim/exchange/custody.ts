@@ -112,7 +112,7 @@ export function settleExchangeEscrow(
     hops: listing.provenance.hops + 1,
   };
   return {
-    listing: { ...listing, status: 'settled', provenance },
+    listing: { ...listing, status: 'settled', sourceItemLocked: false, provenance },
     buyerCharacterId,
     destinationRealm,
     sellerProceedsCopper,
@@ -128,5 +128,5 @@ export function cancelExchangeEscrow(
   if (listing.status !== 'escrowed') throw new Error('listing is not escrowed');
   if (sellerCharacterId !== listing.sellerCharacterId)
     throw new Error('seller does not own listing');
-  return { ...listing, status: 'cancelled' };
+  return { ...listing, status: 'cancelled', sourceItemLocked: false };
 }

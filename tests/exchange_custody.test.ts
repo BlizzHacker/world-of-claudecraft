@@ -25,6 +25,7 @@ describe('Exchange custody transitions', () => {
     });
     expect(settled.sellerProceedsCopper).toBe(9_500);
     expect(settled.feeCopper).toBe(500);
+    expect(settled.listing.sourceItemLocked).toBe(false);
     expect(settled.provenance.destinationCharacterId).toBe(22);
     expect(settled.provenance.hops).toBe(1);
   });
@@ -88,6 +89,8 @@ describe('Exchange custody transitions', () => {
       priceCopper: 50,
     });
     expect(() => cancelExchangeEscrow(escrow, 22)).toThrow('does not own');
-    expect(cancelExchangeEscrow(escrow, 11).status).toBe('cancelled');
+    const cancelled = cancelExchangeEscrow(escrow, 11);
+    expect(cancelled.status).toBe('cancelled');
+    expect(cancelled.sourceItemLocked).toBe(false);
   });
 });
