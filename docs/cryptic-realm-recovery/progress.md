@@ -752,3 +752,14 @@ The remaining systems above are still open development, not silently treated as 
 - These are implementation slices only. No production deployment or feature activation was
   performed because the permanent recovery manifest is missing and the current branch is not
   descended from the pinned upstream release ref.
+
+### Shared minigame lifecycle checkpoint - 2026-07-15
+
+- Added `src/sim/minigames/session.ts`, a deterministic 20 Hz lifecycle seam for lobby,
+  readiness, countdown, reconnect, finish/abort, and idempotent reward claims. It is
+  host-agnostic and keeps game-specific state in adapters.
+- Added seven focused lifecycle assertions to `tests/minigame_domains.test.ts`; the suite
+  passes on commit `6e9c4d7dd`.
+- The session seam is intentionally not wired to IWorld, server dispatch, snapshots, or
+  persistence yet. All five feature flags remain default-off and no production mutation was
+  performed.
