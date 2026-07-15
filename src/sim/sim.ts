@@ -65,6 +65,7 @@ import { isSpellResisted } from './combat/spell_resist';
 // the PlayerMeta interface + the power-up catalog the fiestaMatchInfo accessor reads.
 import { type AugmentSpecial, type AugmentTier, POWERUPS_BY_ID } from './content/augments';
 import { MAILBOXES } from './content/mailboxes';
+import { DURANCE_TESTER_MOUNT_ITEM_IDS } from './content/mounts';
 import type { GatheringProfessionId } from './content/professions';
 import {
   classHasSkin,
@@ -1804,6 +1805,8 @@ export class Sim {
       ladder?: boolean;
       hardcore?: boolean;
       visualKey?: string | null;
+      /** Host-verified narrow test entitlement; never client supplied. */
+      duranceTester?: boolean;
       // Server-stamped bank bonus slots, recomputed from account facts at every
       // join (email/Discord/wallet/referrals). Overrides the persisted value so
       // unlinking lowers capacity at the next login; a shrink below the used slot
@@ -2058,6 +2061,16 @@ export class Sim {
     if (opts?.bankBonus) {
       meta.bank.bonusSlots = clampBonusSlots(opts.bankBonus.bonusSlots);
       meta.bankBonusSources = opts.bankBonus.sources.map((s) => ({ ...s }));
+    }
+
+    // DuranceTester is an explicit host-side test entitlement. Apply it after
+    // loading saved inventory so reconnects are idempotent and durable.
+    if (opts?.duranceTester) {
+      for (const itemId of DURANCE_TESTER_MOUNT_ITEM_IDS) {
+        if (!meta.inventory.some((slot) => slot.itemId === itemId)) {
+          meta.inventory.push({ itemId, count: 1 });
+        }
+      }
     }
 
     // Resolve the flat talent struct once, before the stat pass + ability

@@ -101,6 +101,7 @@ import {
 import { enqueueActivity } from './discord_activity';
 import { discordFlairForAccount, grantRewardPoints } from './discord_db';
 import { enqueueRelay } from './discord_relay';
+import { isDuranceTesterCharacter } from './durance_tester_entitlement';
 import { formatDuration } from './duration';
 import { mergedPrsForLogin } from './github_contributors';
 import { githubForAccount } from './github_db';
@@ -2082,6 +2083,7 @@ export class GameServer {
       hardcore: meta.hardcore ?? false,
       visualKey: realmClassVisualKey(process.env.CR_REALM_ID ?? REALM, cls),
       bankBonus: meta.bankBonus,
+      duranceTester: isDuranceTesterCharacter(name, REALM),
     });
     if (isGm) {
       // GM characters: invulnerable, and always at the level cap (the row is

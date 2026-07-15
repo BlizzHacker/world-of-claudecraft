@@ -54,6 +54,13 @@ export function mountForAuraId(auraId: string): MountDef | null {
 
 export const STABLE_MASTER_NPC_ID = 'stable_master_wren';
 
+/** Explicit host-side QA entitlement for the DuranceTester character. */
+export const DURANCE_TESTER_MOUNT_ITEM_IDS = [
+  'mount_forest_stag',
+  'mount_swamp_raptor',
+  'mount_emerald_wyrm',
+] as const;
+
 // Bridle items. buyValue is copper (100 copper = 1 silver, 10000 = 1 gold).
 export const MOUNT_ITEMS: Record<string, ItemDef> = {
   mount_forest_stag: {
