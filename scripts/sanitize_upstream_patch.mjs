@@ -10,6 +10,7 @@
 import { execFileSync } from 'node:child_process';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const PRIVATE_PATHS = [
   /^env\.d\//i,
@@ -117,5 +118,5 @@ function main(argv) {
   process.stdout.write(`${JSON.stringify(result.manifest, null, 2)}\n`);
 }
 
-if (process.argv[1] && resolve(process.argv[1]) === resolve(new URL(import.meta.url).pathname))
+if (process.argv[1] && resolve(process.argv[1]) === resolve(fileURLToPath(import.meta.url)))
   main(process.argv);
