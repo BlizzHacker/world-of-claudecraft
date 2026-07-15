@@ -18,6 +18,7 @@
 // by the extraction.
 
 import { isRooted, isStunned } from './combat/cc';
+import { FLYING_MIN_ALTITUDE, isFlyingMountAura } from './content/mounts';
 import { PLAYER_BODY_RADIUS, PLAYER_MAX_CLIMB_SLOPE, PLAYER_SWIM_DEPTH } from './pathfind';
 import { GHOST_RUN_MULT } from './spirit';
 import { DT, type Entity, type MoveInput, normAngle, RUN_SPEED, TURN_SPEED } from './types';
@@ -37,6 +38,7 @@ export const JUMP_VELOCITY = 6; // apex = v^2/2g ≈ 1.125 yd
 export const FALL_SAFE_DISTANCE = 12; // yards of free fall before damage
 export const STEEP_SLIDE_SPEED = RUN_SPEED; // yd/s a player skids downhill off unwalkable ground
 export const SWIM_SPEED_MULT = 0.65;
+export const FLYING_VERTICAL_SPEED = 8;
 // Body bobs just below the water line at this location (terrain/feature-aware:
 // -Infinity outside a declared lake, so this is never called off a waterline
 // that doesn't exist there).
@@ -71,6 +73,11 @@ export function jumpMult(e: Entity): number {
   let m = 1;
   for (const a of e.auras) if (a.kind === 'buff_jump') m = Math.max(m, a.value);
   return m;
+}
+
+/** True only while the server-authoritative flying mount aura is active. */
+export function isFlying(e: Entity): boolean {
+  return e.auras.some((a) => isFlyingMountAura(a.id));
 }
 
 export function isSwimming(e: Entity, seed: number): boolean {
@@ -137,9 +144,13 @@ export function stepPlayerMotion(deps: PlayerMotionDeps, p: Entity, inp: MoveInp
 
   const hasMoveInput = mx !== 0 || mz !== 0;
   const swimming = isSwimming(p, deps.seed);
+  const flying = isFlying(p);
   // Standing on unwalkably steep ground: no control, no jump, slide downhill.
   const steepGround =
-    p.onGround && !swimming && terrainSteepnessAt(p.pos.x, p.pos.z, deps.seed) > MAX_CLIMB_SLOPE;
+    !flying &&
+    p.onGround &&
+    !swimming &&
+    terrainSteepnessAt(p.pos.x, p.pos.z, deps.seed) > MAX_CLIMB_SLOPE;
   const moving = hasMoveInput && !isRooted(p) && !steepGround;
   let wishX = 0,
     wishZ = 0,
@@ -166,6 +177,29 @@ export function stepPlayerMotion(deps: PlayerMotionDeps, p: Entity, inp: MoveInp
     wishX = wx;
     wishZ = wz;
     wishSpeed = speed;
+  }
+
+  if (flying) {
+    if (moving) {
+      const nx = p.pos.x + wishX * wishSpeed * DT;
+      const nz = p.pos.z + wishZ * wishSpeed * DT;
+      const resolved = deps.resolveMove(p.pos.x, p.pos.z, nx, nz, BODY_RADIUS, p, true);
+      p.pos.x = resolved.x;
+      p.pos.z = resolved.z;
+      p.vx = (resolved.x - p.prevPos.x) / DT;
+      p.vz = (resolved.z - p.prevPos.z) / DT;
+    } else {
+      p.vx = 0;
+      p.vz = 0;
+    }
+    const floor = groundHeight(p.pos.x, p.pos.z, deps.seed) + FLYING_MIN_ALTITUDE;
+    const vertical = inp.jump ? 1 : inp.back && !inp.forward ? -1 : 0;
+    p.pos.y = Math.max(floor, p.pos.y + vertical * FLYING_VERTICAL_SPEED * DT);
+    p.vy = 0;
+    p.onGround = false;
+    p.jumping = false;
+    p.fallStartY = p.pos.y;
+    return;
   }
 
   const movingOnGround = moving && (p.onGround || swimming);

@@ -16,7 +16,12 @@
 // `src/sim`-pure: no DOM/Three/render-ui-game-net imports, no Math.random/Date.now
 // (enforced by tests/architecture.test.ts). This region draws NO rng.
 
-import { MOUNTS, MOUNT_AURA_PREFIX } from './content/mounts';
+import {
+  FLYING_MIN_ALTITUDE,
+  MOUNTS,
+  MOUNT_AURA_PREFIX,
+  mountForAuraId,
+} from './content/mounts';
 import { addStacked, bagsFullError, equipBag as equipBagCmd } from './bags';
 import { ITEMS } from './data';
 import { recalcPlayerStats } from './entity';
@@ -39,6 +44,7 @@ import {
   POTION_COOLDOWN,
 } from './types';
 import { vendorStackSize } from './vendor_stack';
+import { groundHeight } from './world';
 
 const VENDOR_BUYBACK_LIMIT = 12;
 
@@ -186,7 +192,14 @@ export function useItem(ctx: SimContext, itemId: string, pid?: number): ItemUseR
     if (idx >= 0) {
       // toggle off: dismount
       const name = p.auras[idx].name;
+      const wasFlying = mountForAuraId(p.auras[idx].id)?.flying === true;
       p.auras.splice(idx, 1);
+      if (wasFlying) {
+        p.pos.y = groundHeight(p.pos.x, p.pos.z, ctx.cfg.seed);
+        p.vy = 0;
+        p.onGround = true;
+        p.jumping = false;
+      }
       ctx.emit({ type: 'aura', targetId: p.id, name, gained: false });
       return;
     }
@@ -197,8 +210,10 @@ export function useItem(ctx: SimContext, itemId: string, pid?: number): ItemUseR
     // swap: only one mount up at a time
     for (let i = p.auras.length - 1; i >= 0; i--) {
       if (p.auras[i].id.startsWith(MOUNT_AURA_PREFIX)) {
+        const wasFlying = mountForAuraId(p.auras[i].id)?.flying === true;
         ctx.emit({ type: 'aura', targetId: p.id, name: p.auras[i].name, gained: false });
         p.auras.splice(i, 1);
+        if (wasFlying) p.pos.y = groundHeight(p.pos.x, p.pos.z, ctx.cfg.seed);
       }
     }
     p.auras.push({
@@ -212,6 +227,12 @@ export function useItem(ctx: SimContext, itemId: string, pid?: number): ItemUseR
       school: 'physical',
       breaksOnDamage: true, // classic mounts: taking a hit dismounts
     });
+    if (mount.flying) {
+      p.pos.y = Math.max(p.pos.y, groundHeight(p.pos.x, p.pos.z, ctx.cfg.seed) + FLYING_MIN_ALTITUDE);
+      p.vy = 0;
+      p.onGround = false;
+      p.jumping = false;
+    }
     ctx.emit({ type: 'aura', targetId: p.id, name: mount.name, gained: true });
     return;
   }

@@ -46,6 +46,12 @@ export const MOUNTS: Record<string, MountDef> = {
 };
 
 export const MOUNT_AURA_PREFIX = 'mount_';
+export const FLYING_MIN_ALTITUDE = 2.5;
+
+export function isFlyingMountAura(auraId: string): boolean {
+  const mount = mountForAuraId(auraId);
+  return mount?.flying === true;
+}
 
 export function mountForAuraId(auraId: string): MountDef | null {
   if (!auraId.startsWith(MOUNT_AURA_PREFIX)) return null;
