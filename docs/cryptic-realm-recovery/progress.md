@@ -763,3 +763,15 @@ The remaining systems above are still open development, not silently treated as 
 - The session seam is intentionally not wired to IWorld, server dispatch, snapshots, or
   persistence yet. All five feature flags remain default-off and no production mutation was
   performed.
+
+### Local character-sheet visual checkpoint - 2026-07-15
+
+- Browser QA reached the offline world and opened the character sheet for a synthetic
+  `QaViewer` warrior. The rendered surface exposes the Equipment/Overview tabs, 16 bag
+  cells, grouped primary/combat/defense sections, currency, and the existing 3D character
+  canvas.
+- Selecting the equipped main-hand item mounted `#char-item-model-preview` with a WebGL
+  canvas, confirming the lazy 3D item-viewer path is reachable from a paperdoll slot.
+- This is functional/layout evidence only. The supplied reference images have not been
+  proven pixel-identical; typography, art tokens, and exact spacing remain a screenshot
+  comparison follow-up.
