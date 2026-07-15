@@ -800,6 +800,27 @@ function meshChainVisible(o: THREE.Object3D, stopAt: THREE.Object3D): boolean {
   return true;
 }
 
+/**
+ * GLTF primitives may carry UVs in different typed-array formats (for example
+ * normalized integer accessors beside float accessors). Three's merge helper
+ * requires matching array constructors, so dequantize every UV stream before
+ * combining baked character parts.
+ */
+export function normalizeUvAttribute(
+  uv: THREE.BufferAttribute | THREE.InterleavedBufferAttribute,
+): THREE.BufferAttribute {
+  const values = new Float32Array(uv.count * uv.itemSize);
+  for (let i = 0; i < uv.count; i++) {
+    for (let component = 0; component < uv.itemSize; component++) {
+      // BufferAttribute.getComponent() already applies Three's normalized
+      // accessor conversion; copying the returned value is therefore enough
+      // to dequantize integer UV streams into the common Float32Array format.
+      values[i * uv.itemSize + component] = uv.getComponent(i, component);
+    }
+  }
+  return new THREE.BufferAttribute(values, uv.itemSize);
+}
+
 /** Bake every visible mesh of a posed clone into one static BufferGeometry
  *  (skinned verts via applyBoneTransform), normalized into world units. */
 function bakeStaticPose(
@@ -837,7 +858,7 @@ function bakeStaticPose(
     }
     out.setAttribute('position', new THREE.BufferAttribute(baked, 3));
     const uv = srcGeo.getAttribute('uv');
-    if (uv) out.setAttribute('uv', uv.clone());
+    if (uv) out.setAttribute('uv', normalizeUvAttribute(uv));
     if (srcGeo.index) out.setIndex(srcGeo.index.clone());
     out.computeVertexNormals();
     geos.push(out);

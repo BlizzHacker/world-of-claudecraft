@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import * as THREE from 'three';
 import { describe, expect, it, vi } from 'vitest';
 import { ClientWorld } from '../src/net/online';
-import { applyMaterials } from '../src/render/characters/assets';
+import { applyMaterials, normalizeUvAttribute } from '../src/render/characters/assets';
 import type { VisualDef } from '../src/render/characters/manifest';
 import { Sim } from '../src/sim/sim';
 import type { IWorld } from '../src/world_api';
@@ -22,6 +22,15 @@ const characterAssetsSource = readFileSync(
 ).replace(/\r\n/g, '\n');
 
 describe('appearance skin selection', () => {
+  it('dequantizes normalized UVs before character geometry merging', () => {
+    const source = new THREE.BufferAttribute(new Uint16Array([0, 32768, 65535, 65535]), 2, true);
+    const normalized = normalizeUvAttribute(source);
+
+    expect(normalized.array).toBeInstanceOf(Float32Array);
+    expect(normalized.normalized).toBe(false);
+    expect([...normalized.array]).toEqual([0, expect.closeTo(32768 / 65535, 6), 1, 1]);
+  });
+
   it('updates offline player skin through the world contract', () => {
     const sim = new Sim({ seed: 1, playerClass: 'druid', playerName: 'Skintest' });
     const world: IWorld = sim;
