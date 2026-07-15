@@ -8,6 +8,7 @@ import {
 } from '../runtime';
 import { bagCapacity } from '../sim/bags';
 import { MINIGAME_FEATURES } from '../sim/minigames';
+import type { MinigameFeatureId } from '../sim/minigames';
 import { signChallenge } from '../sim/client_challenge';
 import { mechChromaItemId, mechChromaSkinIndex } from '../sim/content/skins';
 import {
@@ -79,6 +80,7 @@ import {
   type LockpickView,
   type MailInfo,
   type MarketInfo,
+  type MinigameSessionState,
   type OverheadEmoteId,
   type PartyInfo,
   type PlayerProfessionsView,
@@ -1034,6 +1036,9 @@ function blankEntity(id: number): Entity {
 export class ClientWorld implements IWorld {
   // Shared rollout registry; gameplay state is not inferred from this field.
   readonly minigameFeatures = MINIGAME_FEATURES;
+  // Authoritative generic minigame lifecycle state (`self.mg`), mirrored only;
+  // mode outcomes remain server-owned and are not predicted here.
+  minigameSession: MinigameSessionState | null = null;
   // --- IWorldEntityRoster: roster + player reads, mirrored from snapshots. The
   // `player` getter lives below the ctor (it reads `entities`/`playerId`). `known`
   // is IWorldCombat-owned but rides here as a self-wire mirror field with the rest
@@ -1462,6 +1467,29 @@ export class ClientWorld implements IWorld {
   /** Raw WS command — used by dev scripts and browser console when online. */
   devCmd(payload: Record<string, unknown>): void {
     this.rawCmd(payload);
+  }
+
+  // Generic lifecycle sends. These are intentionally outside IWorld until a
+  // mode adapter has its dedicated gameplay/persistence checkpoint; while all
+  // feature flags are false the authoritative server safely ignores them.
+  minigameCreate(kind: MinigameFeatureId, maxPlayers = 4): void {
+    this.cmd({ cmd: 'mg_create', kind, maxPlayers });
+  }
+
+  minigameJoin(sessionId: number): void {
+    this.cmd({ cmd: 'mg_join', sessionId });
+  }
+
+  minigameReady(ready: boolean): void {
+    this.cmd({ cmd: 'mg_ready', ready });
+  }
+
+  minigameAbort(): void {
+    this.cmd({ cmd: 'mg_abort' });
+  }
+
+  minigameClaim(): void {
+    this.cmd({ cmd: 'mg_claim' });
   }
 
   private onMessage(raw: string): void {
@@ -2032,6 +2060,7 @@ export class ClientWorld implements IWorld {
       if (s.tfocus !== undefined) this.townFocus = s.tfocus ?? {};
       if (s.gprof !== undefined) this.gatheringProficiency = s.gprof ?? {};
       if (s.prof !== undefined) this.professionsState = s.prof ?? { skills: [] };
+      if (s.mg !== undefined) this.minigameSession = s.mg as MinigameSessionState | null;
       // camera follows server-side facing changes when not mouselooking
       if (prevSelfFacing !== undefined && this.mouselookFacing === null) {
         let d = e.facing - prevSelfFacing;

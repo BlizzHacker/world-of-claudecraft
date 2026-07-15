@@ -271,6 +271,7 @@ import { advancePendingProjectiles, type PendingProjectile } from './projectile_
 import { sanitizeRemovedZone1Content } from './removed_zone1_content';
 import { Rng } from './rng';
 import { MINIGAME_FEATURES } from './minigames';
+import type { MinigameSessionState } from './minigames';
 import { persistedResource } from './serialize_resource';
 import { createSimContext, type SimContext, type SimContextHost } from './sim_context';
 import * as chatMod from './social/chat';
@@ -1213,6 +1214,9 @@ export class Sim {
   // Read-only rollout registry for presentation. Incomplete modes remain
   // default-off until their authoritative wire/persistence checkpoints land.
   readonly minigameFeatures = MINIGAME_FEATURES;
+  // Generic minigame sessions are host-owned (server/client transport). Offline
+  // gameplay keeps the seam explicit until a mode adapter is enabled.
+  readonly minigameSession: MinigameSessionState | null = null;
   // `world` stays optional (a custom map for play-test, else undefined for the
   // built-in world); everything else is defaulted to a concrete value below.
   cfg: Required<Omit<SimConfig, 'noPlayer' | 'world' | 'perfLap'>> &

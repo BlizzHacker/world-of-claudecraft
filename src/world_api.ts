@@ -124,6 +124,7 @@ export type { RaidLockout } from './world_api/dungeons';
 export type { MailInfo, MailKindView, MailMessageView } from './world_api/mail';
 export type { MarketInfo, MarketListingView } from './world_api/market';
 export type { IWorldMinigames } from './world_api/minigames';
+export type { MinigameSessionState } from './sim/minigames';
 export type { PartyInfo, PartyMemberAura, PartyMemberInfo } from './world_api/party';
 export type { CraftResultView, PlayerProfessionsView, RecipeDef } from './world_api/professions';
 export type {
@@ -354,6 +355,13 @@ export const COMMAND_NAMES = [
   'vcup_ready',
   'vcup_bet',
   'vcup_practice',
+  // Generic minigame lifecycle. Mode gameplay remains feature-gated; these
+  // tokens only manage the authoritative roster/session seam.
+  'mg_create',
+  'mg_join',
+  'mg_ready',
+  'mg_abort',
+  'mg_claim',
 ] as const;
 
 // The union both the send path (`online.ts`) and the dispatch switch

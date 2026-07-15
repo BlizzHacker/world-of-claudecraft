@@ -26,6 +26,20 @@ import {
 } from '../src/sim/jail';
 import type { PickAction } from '../src/sim/lockpick';
 import { sanitizeMarketQuery } from '../src/sim/market_query';
+import {
+  abortMinigameSession,
+  claimMinigameReward,
+  createMinigameSession,
+  finishMinigameSession,
+  joinMinigameSession,
+  MINIGAME_FEATURES,
+  minigameEnabled,
+  setMinigameConnection,
+  setMinigameReady,
+  stepMinigameSession,
+  type MinigameFeatureId,
+  type MinigameSessionState,
+} from '../src/sim/minigames';
 import { parseMoveInputFrame } from '../src/sim/move_input';
 import { realmClassVisualKey } from '../src/sim/realms/class_visuals';
 import { isRealmId, setRealmHostEnv } from '../src/sim/realms/registry';
@@ -305,7 +319,9 @@ type ClientMessage = Record<string, unknown> & {
   index?: number;
   item?: string;
   itemId?: string;
+  kind?: string;
   level?: number;
+  maxPlayers?: number;
   marker?: number;
   mi?: unknown;
   mode?: string;
@@ -319,9 +335,11 @@ type ClientMessage = Record<string, unknown> & {
   price?: number;
   q?: string;
   quest?: string;
+  ready?: boolean;
   r?: string;
   role?: string;
   rollId?: number;
+  sessionId?: number;
   seq?: number;
   sid?: string;
   sig?: string;
@@ -1061,6 +1079,12 @@ export class GameServer {
   // Throttle for the optional over-budget stutter log (PERF_TICK_LOG=1).
   private lastPerfLogTick = 0;
   private readonly ipSessionCounts = new Map<string, number>();
+  // Generic minigame lifecycle state. Mode-specific gameplay is deliberately
+  // not stored here; adapters consume this roster seam only after their
+  // feature checkpoint enables. Keeping it process-local is intentional until
+  // the persistence checkpoint lands.
+  private readonly minigameSessions = new Map<number, MinigameSessionState>();
+  private nextMinigameSessionId = 1;
 
   constructor() {
     this.sim = new Sim({
@@ -1506,6 +1530,7 @@ export class GameServer {
             lap('stale');
             if (this.perfDetailActive) this.simLapMark = process.hrtime.bigint();
             const events = this.sim.tick();
+            this.stepMinigameSessions();
             lap('tick');
             this.enforceJailStates();
             this.routeEvents(events);
@@ -2271,6 +2296,7 @@ export class GameServer {
     session.linkdead = false;
     session.graceUntil = 0;
     session.awaitingPong = false;
+    this.setMinigamePlayerConnection(session.pid, true);
     const sessionIp = meta.ip ?? '';
     if (sessionIp !== session.ip) {
       this.releaseIpSession(session.ip);
@@ -2327,6 +2353,7 @@ export class GameServer {
     if (session.jailVisit) this.exitJailVisit(session, false);
     session.linkdead = true;
     session.graceUntil = Date.now() + LINKDEAD_GRACE_MS;
+    this.setMinigamePlayerConnection(session.pid, false);
     this.botDetector.setTrackingConnection(session.botTrackingContext, false);
     // Stop any held movement now; the sim keeps ticking this entity (it can
     // still be attacked, healed, or die while linkdead, like any player).
@@ -2401,6 +2428,7 @@ export class GameServer {
     if (session.spectating) this.exitSpectate(session, false);
     if (session.jailVisit) this.exitJailVisit(session, false);
     session.left = true;
+    this.setMinigamePlayerConnection(session.pid, false);
     this.clients.delete(session.pid);
     this.botDetector.releaseTrackingContext(session.botTrackingContext);
     this.releaseIpSession(session.ip);
@@ -4213,6 +4241,16 @@ export class GameServer {
       // client telemetry should not be considered as unknown command. Used for offline stats computing.
       case 'telemetry':
         break;
+      // Generic minigame lifecycle. Feature gates are checked inside the
+      // helper so these protocol tokens remain safe to ship before a mode is
+      // promoted; disabled modes are intentionally silent no-ops.
+      case 'mg_create':
+      case 'mg_join':
+      case 'mg_ready':
+      case 'mg_abort':
+      case 'mg_claim':
+        this.dispatchMinigameCommand(session, msg);
+        break;
       case 'placeProp':
       case 'moveProp':
       case 'removeProp':
@@ -4235,6 +4273,91 @@ export class GameServer {
           receivedAtMs,
         );
       }
+    }
+  }
+
+  /** Apply a generic minigame roster command. Gameplay adapters remain the
+   * only code allowed to resolve outcomes; these commands only manage the
+   * server-owned lifecycle and are inert while the feature is default-off. */
+  private dispatchMinigameCommand(session: ClientSession, msg: ClientMessage): void {
+    const pid = session.pid;
+    switch (msg.cmd) {
+      case 'mg_create': {
+        if (typeof msg.kind !== 'string' || !MINIGAME_FEATURES.some((f) => f.id === msg.kind)) return;
+        const kind = msg.kind as MinigameFeatureId;
+        // No mode is live until its full wire/persistence/QA checkpoint passes.
+        if (!minigameEnabled(kind)) return;
+        if (this.minigameSessionForPid(pid)) return;
+        const id = this.nextMinigameSessionId++;
+        const seed = (this.sim.cfg.seed + id * 9973) | 0;
+        const state = createMinigameSession(id, kind, seed, pid, msg.maxPlayers);
+        this.minigameSessions.set(id, state);
+        return;
+      }
+      case 'mg_join': {
+        const sessionId = msg.sessionId;
+        if (typeof sessionId !== 'number' || !Number.isInteger(sessionId) || sessionId <= 0) return;
+        if (this.minigameSessionForPid(pid)) return;
+        const current = this.minigameSessions.get(sessionId);
+        if (!current || !minigameEnabled(current.kind)) return;
+        const mutation = joinMinigameSession(current, pid);
+        if (mutation.ok) this.minigameSessions.set(current.id, mutation.state);
+        return;
+      }
+      case 'mg_ready': {
+        const current = this.minigameSessionForPid(pid);
+        if (!current || !minigameEnabled(current.kind) || typeof msg.ready !== 'boolean') return;
+        const mutation = setMinigameReady(current, pid, msg.ready);
+        if (mutation.ok) this.minigameSessions.set(current.id, mutation.state);
+        return;
+      }
+      case 'mg_abort': {
+        const current = this.minigameSessionForPid(pid);
+        if (!current || !minigameEnabled(current.kind)) return;
+        const mutation = abortMinigameSession(current, pid);
+        if (mutation.ok) this.minigameSessions.set(current.id, mutation.state);
+        return;
+      }
+      case 'mg_claim': {
+        const current = this.minigameSessionForPid(pid);
+        if (!current || !minigameEnabled(current.kind)) return;
+        const mutation = claimMinigameReward(current, pid);
+        if (mutation.ok) this.minigameSessions.set(current.id, mutation.state);
+        return;
+      }
+      default:
+        return;
+    }
+  }
+
+  /** Adapter hook for an authoritative mode to finish a session. */
+  finishMinigame(id: number, winnerPids: readonly number[]): boolean {
+    const current = this.minigameSessions.get(id);
+    if (!current || !minigameEnabled(current.kind)) return false;
+    const mutation = finishMinigameSession(current, winnerPids);
+    if (!mutation.ok) return false;
+    this.minigameSessions.set(id, mutation.state);
+    return true;
+  }
+
+  private minigameSessionForPid(pid: number): MinigameSessionState | null {
+    for (const state of this.minigameSessions.values()) {
+      if (state.players.some((player) => player.pid === pid)) return state;
+    }
+    return null;
+  }
+
+  private setMinigamePlayerConnection(pid: number, connected: boolean): void {
+    const current = this.minigameSessionForPid(pid);
+    if (!current) return;
+    const mutation = setMinigameConnection(current, pid, connected);
+    if (mutation.ok) this.minigameSessions.set(current.id, mutation.state);
+  }
+
+  private stepMinigameSessions(): void {
+    for (const [id, current] of this.minigameSessions) {
+      if (current.phase === 'finished' || current.phase === 'aborted') continue;
+      this.minigameSessions.set(id, stepMinigameSession(current));
     }
   }
 
@@ -4469,6 +4592,9 @@ export class GameServer {
       opUntil: p.overpowerUntil > this.sim.time ? 1 : 0,
       ack: session.spectating ? 0 : anchorSession.lastInputSeq,
       ddiff: this.sim.dungeonDifficulty(anchorSession.pid),
+      // Generic lifecycle read; mode-specific state remains behind the same
+      // server-owned session and is not inferred by the client.
+      mg: this.minigameWire(anchorSession.pid),
     });
     const json = JSON.stringify(self);
     // heavy, rarely-changing fields ride along only when their serialized
@@ -4637,6 +4763,18 @@ export class GameServer {
             : null;
         })
         .filter(Boolean),
+    };
+  }
+
+  private minigameWire(pid: number): MinigameSessionState | null {
+    const state = this.minigameSessionForPid(pid);
+    if (!state) return null;
+    // Never expose a mutable server-owned object to the JSON encoder or to a
+    // future transport adapter. This also keeps reconnect snapshots stable.
+    return {
+      ...state,
+      players: state.players.map((player) => ({ ...player })),
+      winnerPids: [...state.winnerPids],
     };
   }
 
