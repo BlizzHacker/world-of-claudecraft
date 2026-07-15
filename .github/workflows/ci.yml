@@ -3,10 +3,6 @@ name: CI
 on:
   pull_request:
   push:
-    branches:
-      - main
-      - 'dev-*'
-      - 'release/**'
   workflow_dispatch:
 
 permissions:
@@ -15,7 +11,7 @@ permissions:
 # Two-tier i18n gate, split by git ref in this one file:
 #
 #   pr-gate       cheap, English-only-legal tier. Runs on pull requests, on pushes
-#                 to non-release branches (main, dev-*), and on manual dispatch.
+#                 to every non-release branch, and on manual dispatch.
 #                 It runs `npm test` WITHOUT I18N_RELEASE_TIER, so the release-only
 #                 checks (s3_localized, copied-English rendered content, 14-locale
 #                 key parity, empty-`pending`) are skipped. What it still enforces:

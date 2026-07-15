@@ -19,15 +19,19 @@ behavior **once**, then fix and re-verify **entirely locally** until the goal's 
 criteria are met. Keep a ledger at `tmp/qa-loop/LEDGER.md` (per-iteration verdicts +
 fixes applied) and write the verification artifact `tmp/qa-loop/REPORT.md`.
 
-**This release:** `<deployed>` = `release/v0.6`, `<base>` = `main`. The change set is
-`main..release/v0.6` (~40 commits). Confirm the deployed ref still matches prod with
-`ssh idyllic-games-prod 'sudo git -C /opt/eastbrook rev-parse --abbrev-ref HEAD'`.
+**Current recovery program:** the active production evidence is Proxmox `192.168.0.6`,
+LXC `171`, repository `/opt/cryptic-realm`; the preserved 2026-07-14 HEAD is
+`46be1494c58bf25ed6ac6c89884a80d5f5fbf639`. The old `idyllic-games-prod`,
+`/opt/eastbrook`, `release/v0.6`, and `dev.worldofcryptic-realm.com` profile is unverified
+legacy inventory and must never be targeted automatically. Confirm current identity with
+`ssh root@192.168.0.6 'pct exec 171 -- git -C /opt/cryptic-realm rev-parse HEAD'` and the
+permanent recovery manifest before any mutation.
 
 ### Environments
-- PROD — use ONCE for the baseline, then never again during the local fix loop. Production
-  promotion may run automatically only after the required QA and rollback gates are green:
-  https://dev.worldofcryptic-realm.com (host idyllic-games-prod; runs the ref at
-  /opt/eastbrook; dev cheats OFF).
+- PROD — use ONCE for the baseline, then never again during the local fix loop. The current
+  evidenced target is LXC 171 at `/opt/cryptic-realm`; dev cheats are OFF. Production
+  promotion may run automatically only after exact environment-manifest identity, QA,
+  backup, stage, health, and rollback gates are green.
 - LOCAL — the fix loop (assume already running; (re)start as needed):
   - Client http://localhost:5173 (vite; HMR; proxies /api,/admin/api,/ws → :8787).
   - Server http://localhost:8787 (authoritative REST+WS+world; also serves built client).
@@ -43,8 +47,8 @@ fixes applied) and write the verification artifact `tmp/qa-loop/REPORT.md`.
     {cmd:'dev_give',item,count}. Or seed `characters.state` JSONB via psql on :5433.
 
 ### Parallelism — two layers
-1. **Test-matrix parallelism (Codex subagents):** spawn an `explorer` to map the
-   `main..release/v0.6` change set, then one `worker` per slice (a feature / PR /
+1. **Test-matrix parallelism (Codex subagents):** spawn an `explorer` to map the exact
+   manifest-pinned candidate and upstream comparison, then one `worker` per slice (a feature / PR /
    regression group) to test + fix + re-verify concurrently — cap = `[agents]
    max_threads` in ~/.codex/config.toml (default 6). For a structured batch, represent
    the matrix as a CSV (one row per scenario) and fan out with `spawn_agents_on_csv`
@@ -68,7 +72,8 @@ the one baseline; records per-scenario PASS/FAIL + evidence into tmp/qa-loop/REP
   - class ∈ warrior|paladin|hunter|rogue|priest|shaman|mage|warlock|druid; ≤10/account.
 - WS: open <ws-base>/ws; first frame {t:'auth',token,character:<id>} → {t:'hello',pid};
   then {t:'snap',self,ents}/{t:'events',list}; send {t:'input',mi,facing} ~20Hz and {t:'cmd',...}.
-  LOCAL <base>=http://localhost:8787 (ws://…); PROD <base>=https://dev.worldofcryptic-realm.com (wss://…).
+  LOCAL <base>=http://localhost:8787 (ws://…). Resolve the one permitted PROD base from
+  the verified current environment manifest; never use the legacy dev hostname by default.
 - Rate limit 20/min/IP on register+login — stagger ~1 per 1–2s; locally prefer dev
   commands / DB seeding over mass registration. Namespace users `qa_<rununix>_<n>`, chars
   `Qa<Role><N>` (letters only). Clean all `qa_*` data up at the end (DELETE /api/characters/{id} or DB).
@@ -83,8 +88,9 @@ the one baseline; records per-scenario PASS/FAIL + evidence into tmp/qa-loop/REP
 - REST: GET <base>/api/status, /api/leaderboard, /api/characters.
 
 ### The change set & three test modes
-Enumerate units: `git log --oneline main..release/v0.6` + `git diff --stat` (PRs land as
-commits like `bundle(#223): … [qol]`, `feat(...)`, `fix(...)`). For each, map changed
+Enumerate units from the exact manifest-pinned candidate/base refs with `git log` and
+`git diff --stat` (PRs land as commits like `bundle(#223): … [qol]`, `feat(...)`,
+`fix(...)`). For each, map changed
 files → game system → an observable in-game scenario (use docs/prd/, docs/design/, area
 CLAUDE.md). Always include the baseline REGRESSION set: login, character creation, enter
 world, movement, target+autoattack+cast, loot, quest accept/turn-in, chat
@@ -96,8 +102,10 @@ world, movement, target+autoattack+cast, loot, quest accept/turn-in, chat
 ### Fix rules
 Follow the root invariants above. Add/update a vitest in `tests/` for each bug. Run
 `npm test` (focused while iterating: `npx vitest run tests/<file>`); don't proceed past a
-red suite. Commit each fix to `release/v0.6` with Conventional Commits + scope
-(e.g. `fix(net): …`). Do NOT `git push` or deploy inside the loop.
+red suite. Commit each fix to the current isolated recovery/candidate branch with
+Conventional Commits + scope (e.g. `fix(net): …`). Do NOT `git push` or deploy inside
+the local fix loop; the QA checkpoint owns its gated push and automatic promotion.
+Every pushed branch must trigger CI QA; `release/**` pushes use the stricter release tier.
 
 ### KNOWN ISSUE — talent modal
 Blank for 8 of 9 classes BY DESIGN: `src/sim/content/talents.ts` registers only `warrior`
@@ -111,22 +119,31 @@ full tree authoring as a human follow-up in REPORT.md.
 ### Reporting & production promotion
 Per iteration: update LEDGER.md. At convergence: REPORT.md = a prod-baseline-vs-local
 comparison + per-scenario {id, mode, system, accounts, steps, expected/actual, verdict,
-evidence} + fixes-with-shas + prioritized follow-ups. End with one line: "CONVERGED
-— all in-scope green locally on <commit>" or "STOPPED — <reason>".
-After convergence, production promotion no longer needs a separate human approval. Before
-every production push, require a private backup, a verified rollback ref, the complete
-local/CI gate, stage smoke coverage, and a clean REPORT.md. Then push the verified ref and,
-from ~/Documents/levy-street/ansible-scripts, run:
-`ansible-playbook playbooks/setup_server.yml -e target_host=idyllic-games-prod -e eastbrook_branch=release/v0.6`.
-Note: that playbook ends `failed=1` at a certbot dry-run UNRELATED to the game — not a
-failed deploy; verify via /opt/eastbrook HEAD + `curl localhost:8787/api/status` ({"ok":true}),
-not the ansible exit code. Stop promotion and roll back to the verified ref if the game
-health check, realm smoke tests, or post-deploy error checks fail.
+evidence} + fixes-with-shas + prioritized follow-ups. End with one line: "CONVERGED — all in-scope green locally on <commit>" or "STOPPED — <reason>".
+After convergence, production promotion runs automatically. Before every production push,
+require a private backup, a verified rollback ref, the complete local/CI gate, stage smoke
+coverage, and a clean REPORT.md. The promotion control plane must resolve its target and
+command from the exact permanent environment manifest; it must never fall back to the
+unverified legacy Ansible profile. Stop promotion and roll back to the verified ref if the
+game health check, realm smoke tests, or post-deploy error checks fail.
 
 ### Guardrails
 PROD: namespaced `qa_*` accounts, clean up, respect rate limits, never ALLOW_DEV_COMMANDS,
-never touch non-qa DB rows, don't grief real players. LOCAL: dev commands fine. Never
+and don't grief real players. Never touch non-QA DB rows except for the one Phase 22
+`DuranceTester` mount-entitlement operation defined below. LOCAL: dev commands fine. Never
 force-push / rewrite history / commit secrets. Stop and ask before: a substantial new
-feature outside the approved plan, a destructive/non-qa DB write, an infra/ansible design
-change, or a product/UX call outside the approved plan. A production deploy does not need
-separate approval once its mandatory QA, backup, stage, rollback, and health gates pass.
+feature outside the approved plan, a destructive/non-QA DB write outside the Phase 22
+exception, an infrastructure change outside the approved manifest-driven Phase 03 scheduler,
+Phase 04 promotion control plane, or isolated-stage design, or a product/UX call outside the
+approved plan.
+Production deploys run automatically once their mandatory QA, backup, stage, rollback, and
+health gates pass.
+
+The Phase 22 exception is permitted only after Phase 21 production health is green and
+Phase 22 has recorded a pre-operation PASS. The operation must authenticate the exact
+approved owner account and match the exact normalized character name `durancetester`. It
+must require an explicit allowlist of character-row and realm identifiers and grant only
+the three approved mount entitlements through an idempotent, auditable, and reversible
+action. Wildcard, name-only,
+global, or unrelated entitlement updates are prohibited. Every other non-QA production
+write remains prohibited.
