@@ -32,7 +32,10 @@ import {
   keyLabel,
 } from '../game/keybinds';
 import type { MenuIntentKind } from '../game/menu_gamepad_nav';
-import { isNativeAppShell, useTouchInterface } from '../game/mobile_controls';
+import {
+  useTouchInterface as detectTouchInterface,
+  isNativeAppShell,
+} from '../game/mobile_controls';
 import { music } from '../game/music';
 import {
   BOOL_SETTINGS,
@@ -44,6 +47,7 @@ import {
 import type { IWorld } from '../world_api';
 import { appVersionInfo } from './app_version';
 import { CHAT_CLOCKS, type ChatClock } from './chat_timestamp';
+import { openArcForge, openCustomization, openMods } from './cryptic/ingame_options';
 import { esc } from './esc';
 import { FOCUSABLE_SELECTOR } from './focus_manager';
 import type { BugReportHooks, OptionsHooks } from './hud';
@@ -57,7 +61,6 @@ import {
   t,
 } from './i18n';
 import type { TranslationKey } from './i18n.catalog';
-import { openArcForge, openCustomization, openMods } from './cryptic/ingame_options';
 import {
   type ControllerBindRow,
   type ControllerDuplicate,
@@ -381,7 +384,7 @@ export class OptionsWindow {
   }
 
   private env(): { touch: boolean; nativeShell: boolean } {
-    return { touch: useTouchInterface(), nativeShell: isNativeAppShell() };
+    return { touch: detectTouchInterface(), nativeShell: isNativeAppShell() };
   }
 
   /** True when the dedicated mobile back-stack shell is active. Keyed on the
@@ -2905,13 +2908,12 @@ export class OptionsWindow {
     section.appendChild(head);
 
     const actionOpts = this.gamepadActionOptions();
-    const hooks = this.deps.options(); const kind = hooks?.gamepad?.kind() ?? 'generic';
+    const hooks = this.deps.options();
+    const kind = hooks?.gamepad?.kind() ?? 'generic';
 
     for (const info of slots) {
       const slotLabel = `P${info.slot}`;
-      const padLabel = info.padIndex >= 0
-        ? `Controller ${info.padIndex + 1}`
-        : 'Keyboard';
+      const padLabel = info.padIndex >= 0 ? `Controller ${info.padIndex + 1}` : 'Keyboard';
 
       // Slot header row
       const { row: slotRow, control: slotCtrl } = this.optRow(slotLabel);
@@ -2924,7 +2926,9 @@ export class OptionsWindow {
 
       // Per-button bindings for this slot
       const bindings = game.coopGetBindings?.(info.slot) ?? {};
-      const buttons = Object.keys(bindings).map(Number).sort((a: number, b: number) => a - b);
+      const buttons = Object.keys(bindings)
+        .map(Number)
+        .sort((a: number, b: number) => a - b);
 
       for (const btn of buttons) {
         const action = bindings[btn];
