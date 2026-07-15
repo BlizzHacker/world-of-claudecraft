@@ -14,7 +14,7 @@
 // The skin-event preview randomness lives in the painter / the separate skin-event
 // overlay, never here.
 
-import type { EquipSlot, ItemDef } from '../sim/types';
+import type { EquipSlot, InvSlot, ItemDef } from '../sim/types';
 
 /** One paperdoll cell: a slot and the item equipped there (null when empty). */
 export interface PaperdollSlot {
@@ -26,6 +26,52 @@ export interface PaperdollSlot {
 export interface PaperdollView {
   left: PaperdollSlot[];
   right: PaperdollSlot[];
+}
+
+/** The two presentations intentionally mirror the reference character sheets.
+ * `equipment` is the combat-facing paperdoll (the model and slot flanks sit
+ * beside the stat groups); `overview` is the inventory-facing sheet (model,
+ * bags and stats are three stable columns). Keeping this decision in the pure
+ * view lets the DOM painter remain a thin consumer and makes the responsive
+ * CSS contract explicit and testable. */
+export type CharacterSheetTab = 'equipment' | 'overview';
+
+export interface CharacterSheetBagCell {
+  index: number;
+  item: ItemDef | null;
+  count: number;
+  empty: boolean;
+}
+
+export interface CharacterSheetLayout {
+  tab: CharacterSheetTab;
+  /** Number of cells painted in the compact bag tray. */
+  bagCapacity: number;
+  bagCells: CharacterSheetBagCell[];
+}
+
+/** Build the deterministic layout state shared by both offline and online
+ * character sheets. Unknown inventory ids remain visible as empty cells rather
+ * than leaking an invalid item reference into a painter. */
+export function buildCharacterSheetLayout(
+  tab: CharacterSheetTab,
+  inventory: readonly InvSlot[],
+  items: Record<string, ItemDef>,
+  capacity = 16,
+): CharacterSheetLayout {
+  const requestedCapacity = Number.isFinite(capacity) ? Math.trunc(capacity) : 16;
+  const bagCapacity = Math.max(16, Math.min(64, requestedCapacity));
+  const bagCells = Array.from({ length: bagCapacity }, (_, index) => {
+    const slot = inventory[index];
+    const item = slot ? (items[slot.itemId] ?? null) : null;
+    return {
+      index,
+      item,
+      count: item ? Math.max(1, Math.trunc(slot?.count ?? 1)) : 0,
+      empty: item === null,
+    };
+  });
+  return { tab, bagCapacity, bagCells };
 }
 
 // Two columns flanking the model, like the classic character sheet: the left

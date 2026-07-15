@@ -734,3 +734,21 @@ The remaining systems above are still open development, not silently treated as 
 - No later implementation begins before the prior QA is complete.
 - Checkpoint implementation never mutates production. Its QA issues PASS first, then invokes promotion.
 - Durable deferrals move to normal issue tracking before Phase 48 teardown.
+
+### Open game-domain foundations checkpoint - 2026-07-15
+
+- Added `src/sim/racing.ts` and focused tests for a deterministic 20 Hz four-player kart
+  race: drift tiers, boosts, traction surfaces, obstacles, seeded counterable items,
+  ordered checkpoints, laps, finish ties, and recovery.
+- Added deterministic default-off domain cores for the brawler, Eastbrook-first town RTS,
+  zombie defense, and safe housing ownership/build/visit/delete rules under
+  `src/sim/minigames/`. Each core has direct tests and the rollout registry keeps all five
+  incomplete features disabled until their dedicated IWorld, server wire, persistence,
+  client, and QA checkpoints pass.
+- Expanded the character sheet toward the supplied references with Equipment and Overview
+  tabs, grouped attributes/combat/defense sections, a stable 16-to-64 bag tray, responsive
+  geometry, and retained lazy 3D character and item viewers. Exact supplied pixel matching
+  still needs browser screenshot comparison and final art-token tuning.
+- These are implementation slices only. No production deployment or feature activation was
+  performed because the permanent recovery manifest is missing and the current branch is not
+  descended from the pinned upstream release ref.

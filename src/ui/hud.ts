@@ -11910,7 +11910,13 @@ export class Hud {
   private renderCharItemPreview(item: ItemDef | null): void {
     const container = $('#char-item-model-preview') as HTMLElement | null;
     const url = item ? itemModelUrl(item) : null;
-    if (!container || !url) return;
+    // The character overview tab has no item viewport. Tear down a previously
+    // selected turntable when switching tabs so its WebGL context is not retained
+    // off-screen and the next equipment-tab selection starts from a clean mount.
+    if (!container || !url) {
+      this.disposeCharItemPreview();
+      return;
+    }
     if (!this.itemPreviewCanvas) this.itemPreviewCanvas = document.createElement('canvas');
     if (!this.itemPreview) {
       container.appendChild(this.itemPreviewCanvas);

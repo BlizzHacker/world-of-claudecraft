@@ -22,7 +22,12 @@ import type { GatheringProfessionId } from '../sim/content/professions';
 import { ITEMS } from '../sim/data';
 import type { EquipSlot, ItemDef } from '../sim/types';
 import type { IWorld } from '../world_api';
-import { buildPaperdollView, type PaperdollSlot } from './char_view';
+import {
+  buildCharacterSheetLayout,
+  buildPaperdollView,
+  type CharacterSheetTab,
+  type PaperdollSlot,
+} from './char_view';
 import { classDisplayName, itemDisplayName } from './entity_i18n';
 import { esc } from './esc';
 import { buildGatheringProficiencyRows } from './gathering_view';
@@ -77,25 +82,16 @@ export function hobbyCraftText(craftId: string | null): string {
   return t(key ?? 'hudChrome.archetypeTitle.none');
 }
 
-// The ten character-sheet stat cells, primaries down the left column and derived
-// stats down the right (the CSS grid wraps two per row). The HUD builds each cell
-// from the unit-tested stat_tooltip_view model, so the order is the only stat
-// concern this painter owns.
-const STAT_GRID: readonly StatId[] = [
-  'str',
-  'armor',
-  'agi',
+const PRIMARY_STATS: readonly StatId[] = ['str', 'agi', 'sta', 'int', 'spi'];
+const COMBAT_STATS: readonly StatId[] = [
   'attackPower',
-  'sta',
   'dps',
-  'int',
   'critChance',
-  'spi',
-  'dodge',
   'spellPower',
   'critRating',
   'hasteRating',
 ];
+const DEFENSE_STATS: readonly StatId[] = ['armor', 'dodge'];
 
 /**
  * Hud-supplied glue. Composes the shared PainterHostPresentation bag
@@ -163,6 +159,7 @@ const CHAR_FRAME: WindowFrameDescriptor = {
 export class CharWindow {
   private openerFocus: HTMLElement | null = null;
   private selectedItemId: string | null = null;
+  private activeTab: CharacterSheetTab = 'equipment';
 
   constructor(private readonly deps: CharWindowDeps) {}
 
@@ -235,8 +232,18 @@ export class CharWindow {
     // The class identity strip (portrait + name + level/class/archetype/hobby): the
     // former sticky .panel-title header content, now the first body row under the
     // frame titlebar (the close moved to the frame).
-    let html = `<div class="char-identity">${portraitChipHtml({ cls: world.cfg.playerClass, skin: p.skin ?? 0, name: p.name, variant: 'md' })}<span class="char-title-text" id="char-title">${esc(p.name)} <span class="panel-subtitle">${esc(t('itemUi.equipment.levelClass', { level, className }))}</span><span class="panel-subtitle char-archetype-title">${esc(t('hudChrome.archetypeTitle.label'))}: ${esc(archetypeTitle)}</span>${hobbyRow}</span></div>`;
-    html += `<div class="paperdoll">
+    const layout = buildCharacterSheetLayout(
+      this.activeTab,
+      world.inventory ?? [],
+      ITEMS,
+      world.bagCapacity ?? 16,
+    );
+    const tabs = `<div class="char-sheet-tabs" role="tablist" aria-label="${esc(t('guide.stats.sheetHeading'))}">
+      <button type="button" role="tab" class="char-sheet-tab${this.activeTab === 'equipment' ? ' is-active' : ''}" aria-selected="${this.activeTab === 'equipment'}" data-char-tab="equipment">${esc(t('hud.keybinds.actions.char'))}</button>
+      <button type="button" role="tab" class="char-sheet-tab${this.activeTab === 'overview' ? ' is-active' : ''}" aria-selected="${this.activeTab === 'overview'}" data-char-tab="overview">${esc(t('guide.nav.overview'))}</button>
+    </div>`;
+    const identity = `<div class="char-identity">${portraitChipHtml({ cls: world.cfg.playerClass, skin: p.skin ?? 0, name: p.name, variant: 'md' })}<span class="char-title-text" id="char-title">${esc(p.name)} <span class="panel-subtitle">${esc(t('itemUi.equipment.levelClass', { level, className }))}</span><span class="panel-subtitle char-archetype-title">${esc(t('hudChrome.archetypeTitle.label'))}: ${esc(archetypeTitle)}</span>${hobbyRow}</span></div>`;
+    const paperdoll = `<div class="paperdoll">
       <div class="equip-col" id="equip-col-left"></div>
       <div class="char-model-panel">
         <div id="char-model-preview" class="char-model-preview" role="img" aria-label="${esc(t('hudChrome.character.modelPreview'))}"></div>
@@ -244,23 +251,43 @@ export class CharWindow {
       </div>
       <div class="equip-col equip-col-right" id="equip-col-right"></div>
     </div>`;
-    if (selectedItem && selectedModelUrl) {
-      html += `<section class="char-item-viewer" aria-labelledby="char-item-viewer-title">
+    const itemViewer =
+      selectedItem && selectedModelUrl
+        ? `<section class="char-item-viewer" aria-labelledby="char-item-viewer-title">
         <div class="char-item-viewer-title" id="char-item-viewer-title">${esc(t('guide.models.title'))}: ${esc(itemDisplayName(selectedItem))}</div>
         <div id="char-item-model-preview" class="char-item-model-preview" role="img" tabindex="0" aria-label="${esc(t('guide.viewer.canvasLabel', { name: itemDisplayName(selectedItem) }))}"></div>
         <div class="char-item-viewer-hint">${esc(t('guide.viewer.dragHint'))}</div>
-      </section>`;
+      </section>`
+        : '';
+    const stats = this.statsSectionsHtml();
+    const extras = `${this.deps.talentSummaryHtml()}${this.deps.progressionHtml(p.level)}${this.gatheringHtml(world)}`;
+    let html = `${identity}${tabs}`;
+    if (this.activeTab === 'overview') {
+      html += `<div class="char-sheet char-sheet-overview">
+        <section class="char-sheet-overview-model" aria-label="${esc(t('hud.keybinds.actions.char'))}">${paperdoll}</section>
+        <section class="char-sheet-bags" aria-labelledby="char-sheet-bags-title"><div class="char-sheet-section-title" id="char-sheet-bags-title">${esc(t('itemUi.bags.title'))}<span class="char-sheet-bag-count">${formatNumber(world.inventory?.length ?? 0, { maximumFractionDigits: 0 })} / ${formatNumber(layout.bagCapacity, { maximumFractionDigits: 0 })}</span></div>${this.bagGridHtml(layout)}</section>
+        <aside class="char-sheet-sidebar">${stats}${extras}</aside>
+      </div>`;
+    } else {
+      html += `<div class="char-sheet char-sheet-equipment">
+        <section class="char-sheet-paperdoll">${paperdoll}${itemViewer}</section>
+        <aside class="char-sheet-sidebar">${stats}${extras}</aside>
+      </div>`;
     }
-    html += `<div class="char-stats">${STAT_GRID.map((stat) => this.deps.statCellHtml(stat)).join('')}</div>`;
-    html += this.deps.talentSummaryHtml();
-    html += this.deps.progressionHtml(p.level);
-    html += this.gatheringHtml(world);
     html += `<div class="pc-share-row"><button type="button" class="btn pc-share-btn" data-act="share-card">${SHARE_GLYPH}<span>${esc(t('playerCard.shareButton'))}</span></button></div>`;
     body.innerHTML = html;
     hydratePortraits(body);
     body
       .querySelector('[data-act="prestige"]')
       ?.addEventListener('click', () => this.deps.openPrestige());
+    for (const tab of body.querySelectorAll<HTMLButtonElement>('[data-char-tab]')) {
+      tab.addEventListener('click', () => {
+        const next = tab.dataset.charTab;
+        if (next !== 'equipment' && next !== 'overview') return;
+        this.activeTab = next;
+        this.render();
+      });
+    }
     body.querySelector('[data-act="share-card"]')?.addEventListener('click', () => {
       audio.click();
       this.deps.openPlayerCard();
@@ -281,7 +308,46 @@ export class CharWindow {
 
     this.deps.renderPreview();
     this.deps.renderSkinPicker();
-    this.deps.renderItemPreview?.(selectedItem && selectedModelUrl ? selectedItem : null);
+    this.deps.renderItemPreview?.(
+      this.activeTab === 'equipment' && selectedItem && selectedModelUrl ? selectedItem : null,
+    );
+  }
+
+  /** The reference sheet keeps attributes, combat and defense as independently
+   * bounded groups. The stat tooltip painter still owns the value/breakdown; this
+   * method only provides the stable section grammar used by both tabs. */
+  private statsSectionsHtml(): string {
+    const groups: readonly [string, readonly StatId[]][] = [
+      [t('guide.stats.primaryHeading'), PRIMARY_STATS],
+      [t('hudChrome.options.sec.combatTooltips'), COMBAT_STATS],
+      [t('itemUi.stats.armor'), DEFENSE_STATS],
+    ];
+    return groups
+      .map(
+        ([title, stats]) =>
+          `<section class="char-sheet-section char-sheet-stat-section"><h3 class="char-sheet-section-title">${esc(title)}</h3><div class="char-stats">${stats.map((stat) => this.deps.statCellHtml(stat)).join('')}</div></section>`,
+      )
+      .join('');
+  }
+
+  /** Paints the compact overview bag tray. The actual bag window remains the
+   * interactive inventory surface; these cells are a stable, read-only summary
+   * that makes the character sheet match the equipment/overview reference. */
+  private bagGridHtml(layout: ReturnType<typeof buildCharacterSheetLayout>): string {
+    const cells = layout.bagCells
+      .map((cell) => {
+        if (!cell.item) {
+          return `<div class="char-sheet-bag-cell is-empty" aria-hidden="true"></div>`;
+        }
+        const name = itemDisplayName(cell.item);
+        const count =
+          cell.count > 1
+            ? ` <span class="char-sheet-bag-count">${esc(t('itemUi.bags.stackCount', { count: formatNumber(cell.count, { maximumFractionDigits: 0 }) }))}</span>`
+            : '';
+        return `<div class="char-sheet-bag-cell" role="img" aria-label="${esc(t('itemUi.bags.itemAria', { item: name, count: formatNumber(cell.count, { maximumFractionDigits: 0 }) }))}">${this.deps.itemIcon(cell.item)}${count}</div>`;
+      })
+      .join('');
+    return `<div class="char-sheet-bag-grid">${cells}</div>`;
   }
 
   // The "Gathering" section (issue 1124): one row per gathering profession, showing

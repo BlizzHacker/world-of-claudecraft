@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { ITEMS } from '../src/sim/data';
 import type { EquipSlot } from '../src/sim/types';
 import {
+  buildCharacterSheetLayout,
   buildPaperdollView,
   PAPERDOLL_LEFT_SLOTS,
   PAPERDOLL_RIGHT_SLOTS,
@@ -85,6 +86,48 @@ describe('char_view: determinism + ClientWorld-vs-Sim parity', () => {
     >;
     const mirrorEquip = JSON.parse(JSON.stringify(simEquip)) as Partial<Record<EquipSlot, string>>;
     expect(buildPaperdollView(simEquip, ITEMS)).toEqual(buildPaperdollView(mirrorEquip, ITEMS));
+  });
+});
+
+describe('char_view: reference character-sheet layout', () => {
+  it('keeps a stable 16-cell minimum bag tray and resolves known inventory items', () => {
+    const model = buildCharacterSheetLayout(
+      'overview',
+      [
+        { itemId: 'worn_sword', count: 1 },
+        { itemId: 'no_such_item', count: 9 },
+      ],
+      ITEMS,
+      4,
+    );
+    expect(model.tab).toBe('overview');
+    expect(model.bagCapacity).toBe(16);
+    expect(model.bagCells).toHaveLength(16);
+    expect(model.bagCells[0]).toMatchObject({
+      index: 0,
+      item: ITEMS.worn_sword,
+      count: 1,
+      empty: false,
+    });
+    expect(model.bagCells[1]).toMatchObject({ index: 1, item: null, count: 0, empty: true });
+  });
+
+  it('clamps pathological capacities without changing the offline/online shape', () => {
+    const empty = buildCharacterSheetLayout('equipment', [], ITEMS, 1000);
+    expect(empty.bagCapacity).toBe(64);
+    expect(empty.bagCells.every((cell) => cell.empty && cell.item === null)).toBe(true);
+    expect(buildCharacterSheetLayout('equipment', [], ITEMS, Number.NaN).bagCapacity).toBe(16);
+  });
+
+  it('is deterministic for Sim-shaped and JSON-mirrored inventory snapshots', () => {
+    const simInventory = Object.assign([{ itemId: 'worn_sword', count: 2 }], { dirty: true }) as {
+      itemId: string;
+      count: number;
+    }[];
+    const mirrorInventory = JSON.parse(JSON.stringify(simInventory));
+    expect(buildCharacterSheetLayout('overview', simInventory, ITEMS)).toEqual(
+      buildCharacterSheetLayout('overview', mirrorInventory, ITEMS),
+    );
   });
 });
 
