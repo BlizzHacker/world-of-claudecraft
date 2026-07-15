@@ -2,6 +2,34 @@
 
 Statuses: pending, in progress, blocked, complete. Use UTC ISO-8601 timestamps.
 
+## Implementation checkpoint — 2026-07-15
+
+The recovery branch contains a verified implementation slice, but this is not a
+release checkpoint and production has not been mutated:
+
+- Co-op: the full `origin/coop-dev` intake is present, including offline shared
+  input, same-account online sessions, server-side regrouping, connection timing,
+  keyboard joins, controller settings, and slot reassignment (`5bb7858f3` through
+  `f990c15dc`). Focused co-op coverage: 50 tests green.
+- Mounts and flight: all three mount bridles are granted idempotently to the
+  server-recognized DuranceTester Infernal character; Emerald Wyrm flight now
+  moves authoritatively with ascent, descent, collision bypass, and terrain-safe
+  landing (`e68850dda`, `b2449c6dd`).
+- Exchange: pure custody transitions plus Postgres escrow, provenance, atomic
+  cross-realm settlement, cancellation recovery, and append-only audit events are
+  wired at `/api/exchange/*` (`01453d620`, `42b29c373`).
+- Contributions: `/api/contributions` and the public ledger page now read a
+  cached upstream PR feed, with static receipts as an offline fallback
+  (`86400a655`).
+- Verification: `npm run build` and `npm run build:server` pass; focused feature
+  suites pass. The repository-wide `npm test` attempt exceeded ten minutes and
+  timed out without a failure report, so the branch remains non-promotable until
+  CI completes and a full QA report is captured.
+- Production identity was read-only verified as Proxmox `192.168.0.6`, LXC 171,
+  checkout `codex/cryptic-v016-catchup` at `46be1494c`; no deploy or database
+  migration was run. The host upstream-sync timer remains fail-closed on its
+  recorded 119-file merge conflict.
+
 ## Status table
 
 | Session | Status | Date started | Date completed | Implementation or QA commit |
