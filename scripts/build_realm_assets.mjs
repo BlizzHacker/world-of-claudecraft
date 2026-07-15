@@ -19,10 +19,15 @@ const MESHY_DOWNLOAD_DIR = path.join(REPO, 'tmp', 'meshy-api-downloads');
 const TOKEN_FILE = path.join(REPO, 'crypticrealm-meshy-api.txt');
 const MESHY_API_BASE = 'https://api.meshy.ai';
 
-const DEFAULT_FORGED_DIR =
+const USB4_FORGED_DIR =
   process.platform === 'win32'
     ? path.win32.join('C:\\', 'mnt', 'usb4', 'moveweight-assets', 'forged-glbs')
     : '/mnt/usb4/moveweight-assets/forged-glbs';
+// CI runners do not have the production USB4 mount. Keep generated manifests and
+// forged copies inside the disposable workspace there, while production retains
+// the canonical shared store unless an operator explicitly overrides it.
+const DEFAULT_FORGED_DIR =
+  process.env.CI === 'true' ? path.join(REPO, 'tmp', 'forged-glbs') : USB4_FORGED_DIR;
 
 const FORGED_DIR = path.resolve(
   process.env.ARCFORGE_FORGED_DIR?.trim() ? process.env.ARCFORGE_FORGED_DIR : DEFAULT_FORGED_DIR,
