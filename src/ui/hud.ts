@@ -3752,6 +3752,7 @@ export class Hud {
     slotName: (slot) => itemSlotName(slot),
     statCellHtml: (stat) => statCellHtml(this.statModel(stat), STAT_VIEW_DEPS),
     statTooltipHtml: (stat) => statTooltipHtml(this.statModel(stat), STAT_VIEW_DEPS),
+    moneyHtml: (copper) => this.moneyHtml(copper),
     talentSummaryHtml: () => this.talentSummaryHtml(),
     progressionHtml: (level) => this.progressionHtml(level),
     unequip: (slot) => {

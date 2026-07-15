@@ -1090,6 +1090,12 @@
     outline: 2px solid var(--color-focus-ring);
     outline-offset: -2px;
   }
+  .char-sheet-currency {
+    margin-left: auto;
+    align-self: flex-start;
+    color: var(--color-text-primary);
+    white-space: nowrap;
+  }
   .char-sheet {
     display: grid;
     gap: var(--spacing-md);

@@ -242,7 +242,8 @@ export class CharWindow {
       <button type="button" role="tab" class="char-sheet-tab${this.activeTab === 'equipment' ? ' is-active' : ''}" aria-selected="${this.activeTab === 'equipment'}" data-char-tab="equipment">${esc(t('hud.keybinds.actions.char'))}</button>
       <button type="button" role="tab" class="char-sheet-tab${this.activeTab === 'overview' ? ' is-active' : ''}" aria-selected="${this.activeTab === 'overview'}" data-char-tab="overview">${esc(t('guide.nav.overview'))}</button>
     </div>`;
-    const identity = `<div class="char-identity">${portraitChipHtml({ cls: world.cfg.playerClass, skin: p.skin ?? 0, name: p.name, variant: 'md' })}<span class="char-title-text" id="char-title">${esc(p.name)} <span class="panel-subtitle">${esc(t('itemUi.equipment.levelClass', { level, className }))}</span><span class="panel-subtitle char-archetype-title">${esc(t('hudChrome.archetypeTitle.label'))}: ${esc(archetypeTitle)}</span>${hobbyRow}</span></div>`;
+    const currency = this.deps.moneyHtml?.(world.copper) ?? '';
+    const identity = `<div class="char-identity">${portraitChipHtml({ cls: world.cfg.playerClass, skin: p.skin ?? 0, name: p.name, variant: 'md' })}<span class="char-title-text" id="char-title">${esc(p.name)} <span class="panel-subtitle">${esc(t('itemUi.equipment.levelClass', { level, className }))}</span><span class="panel-subtitle char-archetype-title">${esc(t('hudChrome.archetypeTitle.label'))}: ${esc(archetypeTitle)}</span>${hobbyRow}</span>${currency ? `<span class="char-sheet-currency">${currency}</span>` : ''}</div>`;
     const paperdoll = `<div class="paperdoll">
       <div class="equip-col" id="equip-col-left"></div>
       <div class="char-model-panel">
@@ -270,7 +271,7 @@ export class CharWindow {
       </div>`;
     } else {
       html += `<div class="char-sheet char-sheet-equipment">
-        <section class="char-sheet-paperdoll">${paperdoll}${itemViewer}</section>
+        <section class="char-sheet-paperdoll">${paperdoll}${itemViewer}<section class="char-sheet-bags" aria-labelledby="char-sheet-equipment-bags-title"><div class="char-sheet-section-title" id="char-sheet-equipment-bags-title">${esc(t('itemUi.bags.title'))}<span class="char-sheet-bag-count">${formatNumber(world.inventory?.length ?? 0, { maximumFractionDigits: 0 })} / ${formatNumber(layout.bagCapacity, { maximumFractionDigits: 0 })}</span></div>${this.bagGridHtml(layout)}</section></section>
         <aside class="char-sheet-sidebar">${stats}${extras}</aside>
       </div>`;
     }
