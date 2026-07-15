@@ -122,4 +122,19 @@ describe('generic minigame lifecycle wire', () => {
       'mg_claim',
     ]);
   });
+
+  it('tracks linkdead/reconnect connection state without changing roster ownership', () => {
+    const server = new GameServer();
+    const transport = fakeWs();
+    const joined = server.join(transport.ws, 13, 13, 'ReconnectTester', 'warrior', null);
+    if ('error' in joined) throw new Error(joined.error);
+    const state = createMinigameSession(2, 'racing', 99, joined.pid, 4);
+    (server as any).minigameSessions.set(2, state);
+
+    expect(server.socketClosed(joined, transport.ws)).toBe(true);
+    expect((server as any).minigameSessions.get(2).players[0].connected).toBe(false);
+    (server as any).resumeSession(joined, transport.ws, 'warrior', {});
+    expect((server as any).minigameSessions.get(2).players[0].connected).toBe(true);
+    expect((server as any).minigameSessions.get(2).players[0].pid).toBe(joined.pid);
+  });
 });
