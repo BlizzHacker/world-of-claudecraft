@@ -382,6 +382,11 @@ interface BaseItemDef {
   id: string;
   name: string;
   slot?: ItemSlot;
+  /** Optional lazy 3D preview asset. The URL is resolved through the generated
+   * asset manifest at runtime; it is never loaded while the item is only an
+   * icon or a world drop. Weapon variants may omit this and use the canonical
+   * held-weapon mapping instead. */
+  modelUrl?: string;
   weapon?: WeaponInfo;
   stats?: Partial<Stats>;
   // Spell Power affix (caster gear): flat Spell Power, summed in recalcPlayerStats.

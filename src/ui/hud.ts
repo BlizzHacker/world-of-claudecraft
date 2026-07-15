@@ -27,6 +27,7 @@ import {
 } from '../render/characters/portrait';
 import { isFriendlyPet, mobTooltipConColor } from '../render/reaction';
 import type { Renderer } from '../render/renderer';
+import { itemModelUrl } from './item_model_catalog';
 import { type AugmentCategory, augmentCategory } from '../sim/content/augments';
 import { HEROIC_MARK_ITEM_ID } from '../sim/content/dungeon_difficulty';
 import { HEROIC_VENDOR_STOCK } from '../sim/content/heroic_vendor';
@@ -1319,6 +1320,8 @@ export class Hud {
   private lastTargetFrameId: number | null = null;
   private charPreview: CharacterPreview | null = null;
   private charPreviewCanvas: HTMLCanvasElement | null = null;
+  private itemPreview: CharacterPreview | null = null;
+  private itemPreviewCanvas: HTMLCanvasElement | null = null;
   // Cosmetic skin-select event overlay (opened by the skinEvent cue). The shared
   // CharacterPreview above is borrowed for the rotatable 3D preview.
   private skinEventEl: HTMLElement | null = null;
@@ -3767,6 +3770,8 @@ export class Hud {
       $('#bags').classList.remove('drop-target');
     },
     renderPreview: () => this.renderCharPreview(),
+    renderItemPreview: (item) => this.renderCharItemPreview(item),
+    disposeItemPreview: () => this.disposeCharItemPreview(),
     renderSkinPicker: () => this.renderCharSkinPicker(),
     openPlayerCard: () => {
       void this.openPlayerCard();
@@ -11855,6 +11860,30 @@ export class Hud {
       this.charPreview.setClass(cls, weapon);
     }
     this.charPreview.setSkin(skin);
+  }
+
+  /** Mount the selected paperdoll piece in its own lazy 3D turntable. The item
+   * viewer intentionally uses the same CharacterPreview lifecycle and GLB cache
+   * as the character sheet, so a future catalog of thousands of authored models
+   * still loads one URL on demand and never duplicates WebGL infrastructure. */
+  private renderCharItemPreview(item: ItemDef | null): void {
+    const container = $('#char-item-model-preview') as HTMLElement | null;
+    const url = item ? itemModelUrl(item) : null;
+    if (!container || !url) return;
+    if (!this.itemPreviewCanvas) this.itemPreviewCanvas = document.createElement('canvas');
+    if (!this.itemPreview) {
+      container.appendChild(this.itemPreviewCanvas);
+      this.itemPreview = new CharacterPreview(container, this.itemPreviewCanvas);
+    } else {
+      this.itemPreview.setContainer(container);
+    }
+    this.itemPreview.setExternalModel(url);
+  }
+
+  private disposeCharItemPreview(): void {
+    this.itemPreview?.destroy();
+    this.itemPreview = null;
+    this.itemPreviewCanvas = null;
   }
 
   private renderCharSkinPicker(): void {

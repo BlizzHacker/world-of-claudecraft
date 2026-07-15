@@ -20,7 +20,7 @@
 import { audio } from '../game/audio';
 import type { GatheringProfessionId } from '../sim/content/professions';
 import { ITEMS } from '../sim/data';
-import type { EquipSlot } from '../sim/types';
+import type { EquipSlot, ItemDef } from '../sim/types';
 import type { IWorld } from '../world_api';
 import { buildPaperdollView, type PaperdollSlot } from './char_view';
 import { classDisplayName, itemDisplayName } from './entity_i18n';
@@ -28,6 +28,7 @@ import { esc } from './esc';
 import { buildGatheringProficiencyRows } from './gathering_view';
 import { formatNumber, type TranslationKey, t } from './i18n';
 import { iconDataUrl, QUALITY_COLOR } from './icons';
+import { itemModelUrl } from './item_model_catalog';
 import type { PainterHostPresentation } from './painter_host';
 import { hydratePortraits, portraitChipHtml } from './portrait_chip';
 import type { StatId } from './stat_tooltip';
@@ -124,6 +125,10 @@ export interface CharWindowDeps extends PainterHostPresentation {
   endUnequipDrag(): void;
   /** Mount the shared 3D turntable into the model panel (HUD-owned lifecycle). */
   renderPreview(): void;
+  /** Mount a lazily-loaded 3D item turntable for the selected paperdoll piece. */
+  renderItemPreview?(item: ItemDef | null): void;
+  /** Release the item turntable's WebGL context when the character window closes. */
+  disposeItemPreview?(): void;
   /** Paint the cosmetic skin picker into the skin row (HUD-owned cosmetics). */
   renderSkinPicker(): void;
   openPlayerCard(): void;
@@ -157,6 +162,7 @@ const CHAR_FRAME: WindowFrameDescriptor = {
 
 export class CharWindow {
   private openerFocus: HTMLElement | null = null;
+  private selectedItemId: string | null = null;
 
   constructor(private readonly deps: CharWindowDeps) {}
 
@@ -198,6 +204,8 @@ export class CharWindow {
     if (el.style.display !== 'block') return;
     el.style.display = 'none';
     this.deps.hideTooltip();
+    this.deps.disposeItemPreview?.();
+    this.selectedItemId = null;
     this.deps.restoreFocus(this.openerFocus);
     this.openerFocus = null;
   }
@@ -216,6 +224,8 @@ export class CharWindow {
     // title); the body repaints below. The close routes to this.close() via the
     // frame's onClose, wired once when the frame is stamped cold.
     const { body } = this.ensureFrame(el);
+    const selectedItem = this.selectedItemId ? (ITEMS[this.selectedItemId] ?? null) : null;
+    const selectedModelUrl = selectedItem ? itemModelUrl(selectedItem) : null;
     const archetypeTitle = archetypeTitleText(world.archetypeTitle);
     const hobbyCraft = hobbyCraftText(world.hobbyCraft);
     const hobbyRow =
@@ -234,6 +244,13 @@ export class CharWindow {
       </div>
       <div class="equip-col equip-col-right" id="equip-col-right"></div>
     </div>`;
+    if (selectedItem && selectedModelUrl) {
+      html += `<section class="char-item-viewer" aria-labelledby="char-item-viewer-title">
+        <div class="char-item-viewer-title" id="char-item-viewer-title">${esc(t('guide.models.title'))}: ${esc(itemDisplayName(selectedItem))}</div>
+        <div id="char-item-model-preview" class="char-item-model-preview" role="img" tabindex="0" aria-label="${esc(t('guide.viewer.canvasLabel', { name: itemDisplayName(selectedItem) }))}"></div>
+        <div class="char-item-viewer-hint">${esc(t('guide.viewer.dragHint'))}</div>
+      </section>`;
+    }
     html += `<div class="char-stats">${STAT_GRID.map((stat) => this.deps.statCellHtml(stat)).join('')}</div>`;
     html += this.deps.talentSummaryHtml();
     html += this.deps.progressionHtml(p.level);
@@ -264,6 +281,7 @@ export class CharWindow {
 
     this.deps.renderPreview();
     this.deps.renderSkinPicker();
+    this.deps.renderItemPreview?.(selectedItem && selectedModelUrl ? selectedItem : null);
   }
 
   // The "Gathering" section (issue 1124): one row per gathering profession, showing
@@ -297,6 +315,25 @@ export class CharWindow {
     row.innerHTML = `${icon}
         <div><div class="slot-name">${esc(this.deps.slotName(slot))}</div><div class="slot-item" style="color:${qColor}">${item ? esc(itemDisplayName(item)) : esc(t('itemUi.equipment.empty'))}</div></div>`;
     if (item) {
+      const modelUrl = itemModelUrl(item);
+      if (modelUrl) {
+        row.classList.add('equip-slot-3d');
+        row.setAttribute('role', 'button');
+        row.tabIndex = 0;
+        row.setAttribute('aria-label', t('guide.viewer.view3d', { name: itemDisplayName(item) }));
+        row.addEventListener('click', () => {
+          this.selectedItemId = item.id;
+          this.render();
+          document.getElementById('char-item-model-preview')?.focus();
+        });
+        row.addEventListener('keydown', (event) => {
+          if (event.key !== 'Enter' && event.key !== ' ') return;
+          event.preventDefault();
+          this.selectedItemId = item.id;
+          this.render();
+          document.getElementById('char-item-model-preview')?.focus();
+        });
+      }
       this.deps.attachTooltip(
         row,
         () =>

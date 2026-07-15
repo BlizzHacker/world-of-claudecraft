@@ -55,6 +55,30 @@ and SSH access to `192.168.0.6` is restored. The live host remains at `codex/cry
 The following requested systems remain explicitly open development slices: Exchange player
 UX, original racing, four-player brawler, town RTS, zombie defense, and housing recovery.
 
+## Live deployment and character-sheet checkpoint — 2026-07-15
+
+- SSH access is restored through `root@192.168.0.6` (backup host `192.168.0.5` also
+  responds). The restricted deployment wrapper promoted `403def38766cd151d877ea7546348b526beb7ad1`
+  to LXC 171 `/opt/cryptic-realm` on `codex/cryptic-recovery-program`; the wrapper's
+  private rollback branch is `pre-auto-20260715T061251Z-codex-cryptic-recovery-program`.
+- All realm services restarted successfully and the Cryptic Realm and Infernal status
+  endpoints report `ok: true`. The production-only `env.d/crypticrealm.env` override was
+  preserved; generated realm env files are now ignored by the deploy branch so future
+  guarded pushes do not trip the dirty-worktree check.
+- A private custom Postgres dump was captured before the live QA mutation at
+  `/root/crypticrealm-pre-durance-20260715T062916Z.dump` (SHA-256
+  `21c7b2c6df099a9588310ee23e30a00a77f8a0af206c799b20f1c9e76a390789`). Infernal
+  character 147 (`DuranceTester`) now has all three Cryptic mount bridles in its
+  persisted inventory. The grant was re-run to verify idempotency; no duplicates were
+  added.
+- The character sheet now supports a lazy 3D item viewer for selected paperdoll pieces.
+  It reuses the existing turntable/GLB cache, routes canonical weapon variants through
+  the held-weapon catalog, accepts optional authored `ItemDef.modelUrl` entries for future
+  Monster Chronicle gear, and keeps all other item models unloaded until selected.
+  Focused character/item tests and `npm run build`/`npm run build:server` pass locally.
+
+The remaining systems above are still open development, not silently treated as complete.
+
 ## Status table
 
 | Session | Status | Date started | Date completed | Implementation or QA commit |
