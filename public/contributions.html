@@ -185,7 +185,7 @@
       <section>
         <h2>Live Upstream Pull Requests</h2>
         <p>Real, open pull requests offered back to <a href="https://github.com/levy-street/world-of-claudecraft" target="_blank" rel="noopener noreferrer">world-of-claudecraft</a>. Each one is sanitized of Cryptic Realm-only branding, economy, and lore, and is proven with tests + a clean build before it is sent. These are receipts: an open PR on the base project is proof the work was contributed.</p>
-        <ul class="pr-list">
+        <ul class="pr-list" id="live-upstream-prs" aria-live="polite">
           <li><a href="https://github.com/levy-street/world-of-claudecraft/pull/1530" target="_blank" rel="noopener noreferrer">PR #1530 — fix(hud): guard entry HUD-ctor id parity</a><span>Hardens a class of renderer boot-crash: the HUD constructor resolves dozens of elements up front, and a missing id on one entry page silently null-crashes the whole HUD. Adds a test asserting every ctor-required id exists in both entry pages — and it immediately caught a live one (a target-frame element missing from /play), which the PR also fixes.</span></li>
           <li><a href="https://github.com/levy-street/world-of-claudecraft/pull/1529" target="_blank" rel="noopener noreferrer">PR #1529 — feat(desktop): Tauri desktop shell</a><span>A lightweight, Rust-based Tauri desktop wrapper — an alternative to the Electron build with much smaller binaries. Thin webview that loads the live game; app identity is configurable and all icons ship as neutral placeholders for the maintainers to replace.</span></li>
           <li><a href="https://github.com/levy-street/world-of-claudecraft/pull/1516" target="_blank" rel="noopener noreferrer">PR #1516 — fix(render): boot prewarm skips lazyPreload visuals</a><span>Fixes a boot crash: the shader-prewarm sweep tried to build models flagged for on-demand loading, throwing "asset not preloaded" and killing the renderer. Now it skips lazy visuals the same way the preload sweep already does.</span></li>
@@ -215,6 +215,31 @@
       Shared work should be submitted in small, reviewable PRs. Cryptic Realm-only features remain here unless they become generic engine improvements.
     </footer>
   </div>
+  <script>
+    (() => {
+      const list = document.getElementById('live-upstream-prs');
+      if (!list) return;
+      fetch('/api/contributions', { headers: { Accept: 'application/json' } })
+        .then((response) => response.ok ? response.json() : Promise.reject(new Error('feed unavailable')))
+        .then((payload) => {
+          if (!Array.isArray(payload.entries) || payload.entries.length === 0) return;
+          list.replaceChildren(...payload.entries.map((pr) => {
+            const item = document.createElement('li');
+            const link = document.createElement('a');
+            link.href = pr.url;
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            link.textContent = `PR #${pr.number} — ${pr.title}`;
+            const detail = document.createElement('span');
+            const labels = Array.isArray(pr.labels) && pr.labels.length ? ` · ${pr.labels.join(', ')}` : '';
+            detail.textContent = `${pr.state === 'merged' ? 'Merged' : 'Open'} · by ${pr.author}${labels}`;
+            item.append(link, detail);
+            return item;
+          }));
+        })
+        .catch(() => { /* The server feed is best-effort; static receipts remain visible. */ });
+    })();
+  </script>
   <script src="/nav.v1782009763m.js" defer></script>
 </body>
 </html>
