@@ -21,14 +21,22 @@ release checkpoint and production has not been mutated:
 - Contributions: `/api/contributions` and the public ledger page now read a
   cached upstream PR feed, with static receipts as an offline fallback
   (`86400a655`).
+- Delivery control: pushes to `codex/cryptic-recovery-program` now run the
+  production verification gate and queue an automatic restricted deploy; route
+  inventory and options-window regressions are covered (`1627c2a77`,
+  `3cddc7fa5`). Exchange listing creation also accepts a bounded idempotency key
+  and returns the original escrow on safe retries (`1d8e9161a`).
 - Verification: `npm run build` and `npm run build:server` pass; focused feature
   suites pass. The repository-wide `npm test` attempt exceeded ten minutes and
-  timed out without a failure report, so the branch remains non-promotable until
-  CI completes and a full QA report is captured.
+  timed out without a failure report. GitHub CI is still running the PR and full
+  production verification tiers, so the branch remains non-promotable until
+  those jobs complete and a full QA report is captured.
 - Production identity was read-only verified as Proxmox `192.168.0.6`, LXC 171,
   checkout `codex/cryptic-v016-catchup` at `46be1494c`; no deploy or database
   migration was run. The host upstream-sync timer remains fail-closed on its
-  recorded 119-file merge conflict.
+  recorded 119-file merge conflict. The previously working SSH key is currently
+  rejected by `192.168.0.6`, and no self-hosted `cryptic-prod` runner is
+  registered, so automatic deployment is queued but not executable yet.
 
 ## Status table
 
