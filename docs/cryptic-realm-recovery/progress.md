@@ -775,3 +775,13 @@ The remaining systems above are still open development, not silently treated as 
 - This is functional/layout evidence only. The supplied reference images have not been
   proven pixel-identical; typography, art tokens, and exact spacing remain a screenshot
   comparison follow-up.
+
+### Minigame wire checkpoint - 2026-07-15
+
+- Added the append-only `mg_create`, `mg_join`, `mg_ready`, `mg_abort`, and `mg_claim`
+  command tokens, typed `ClientWorld` senders, server-side session ownership, 20 Hz
+  lifecycle stepping, linkdead/reconnect connection state, and the `self.mg` snapshot
+  mirror.
+- The wire test proves snapshot encode/decode and verifies disabled feature commands are
+  inert. Mode adapters, persistent session storage, rewards, and UI remain gated until
+  their dedicated checkpoints pass.
