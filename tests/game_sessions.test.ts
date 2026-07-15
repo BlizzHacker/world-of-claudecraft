@@ -333,12 +333,12 @@ describe('GameServer sessions', () => {
         error: 'character already in world',
       });
 
-      await vi.runOnlyPendingTimersAsync();
+      await vi.advanceTimersByTimeAsync(250);
       await vi.waitFor(() => {
         expect(saveCharacterAndMarketState).toHaveBeenCalledTimes(2);
       });
 
-      await vi.runOnlyPendingTimersAsync();
+      await vi.advanceTimersByTimeAsync(500);
       await leaving;
 
       expect(saveCharacterAndMarketState).toHaveBeenCalledTimes(3);
