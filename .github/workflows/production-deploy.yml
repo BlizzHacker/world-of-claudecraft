@@ -22,6 +22,8 @@ jobs:
     name: Verify production candidate
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    env:
+      NODE_OPTIONS: --max-old-space-size=4096
     steps:
       - name: Check out candidate
         uses: actions/checkout@v6

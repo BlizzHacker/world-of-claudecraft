@@ -102,6 +102,8 @@ jobs:
     name: PR gate (English-only legal)
     if: github.event_name == 'pull_request' || (github.event_name == 'push' && !startsWith(github.ref, 'refs/heads/release/')) || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    env:
+      NODE_OPTIONS: --max-old-space-size=4096
 
     steps:
       - name: Check out repository
@@ -160,6 +162,7 @@ jobs:
     # The release tier; this single flag turns on every release-only check.
     env:
       I18N_RELEASE_TIER: '1'
+      NODE_OPTIONS: --max-old-space-size=4096
 
     steps:
       - name: Check out repository
