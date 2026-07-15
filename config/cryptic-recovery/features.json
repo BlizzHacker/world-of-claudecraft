@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "candidate": {
+    "branch": "codex/cryptic-recovery-program",
+    "sha": "7fac9294f",
+    "status": "local-recovery-candidate"
+  },
+  "production": {
+    "host": "192.168.0.6",
+    "container": 171,
+    "repository": "/opt/cryptic-realm",
+    "preservedHead": "46be1494c58bf25ed6ac6c89884a80d5f5fbf639",
+    "currentObservedSha": "683b08a63d41173e455bc011a005a91101053053",
+    "legacyProfiles": ["idyllic-games-prod", "/opt/eastbrook", "release/v0.6", "dev.worldofcryptic-realm.com"]
+  },
+  "upstream": {
+    "release": { "ref": "upstream/release/v0.26.0", "sha": "d8a871763d7ad1384d224a32b3c1ac0dd9cfc909" },
+    "gauntletReference": { "ref": "upstream/feature/gauntlet-event", "sha": "196487c8688825d6831278191d3160e622142ec5" },
+    "housingReference": { "ref": "housing-live", "sha": "505142a51f32550f0c6c0d917c4f22e61b51efe9" }
+  },
+  "discovery": {
+    "status": "reconciliation_required",
+    "localRefCount": 419,
+    "upstreamAdvertisedRefCount": 322,
+    "requiredRefresh": ["git for-each-ref", "git ls-remote", "git bundle list-heads"],
+    "note": "Counts and pinned refs are captured evidence; strict promotion requires a fresh exhaustive ledger and patch-ID classification."
+  },
+  "stage": { "mode": "ephemeral_required", "identity": null, "reason": "No isolated stage with manifest-pinned identity is evidenced." },
+  "features": [
+    { "id": "F-001", "name": "environment-identity", "disposition": "recovered", "enabled": false, "checkpoint": "phase-02" },
+    { "id": "F-002", "name": "recurring-upstream-intake", "disposition": "open", "enabled": false, "checkpoint": "phase-03" },
+    { "id": "F-003", "name": "realm-overlays", "disposition": "recovered", "enabled": true, "checkpoint": "phase-05" },
+    { "id": "F-004", "name": "offline-coop", "disposition": "recovered", "enabled": true, "checkpoint": "phase-12" },
+    { "id": "F-005", "name": "online-squads", "disposition": "recovered", "enabled": true, "checkpoint": "phase-13" },
+    { "id": "F-006", "name": "infernal-coop", "disposition": "recovered", "enabled": true, "checkpoint": "phase-15" },
+    { "id": "F-007", "name": "mount-core", "disposition": "recovered", "enabled": true, "checkpoint": "phase-21" },
+    { "id": "F-008", "name": "three-mounts", "disposition": "recovered", "enabled": true, "checkpoint": "phase-22" },
+    { "id": "F-009", "name": "true-flight", "disposition": "recovered", "enabled": true, "checkpoint": "phase-21" },
+    { "id": "F-010", "name": "durancetester-entitlement", "disposition": "recovered", "enabled": true, "checkpoint": "phase-22" },
+    { "id": "F-011", "name": "world-fishing", "disposition": "recovered", "enabled": true, "checkpoint": "phase-25" },
+    { "id": "F-012", "name": "cryptic-fishing-arcade", "disposition": "recovered", "enabled": true, "checkpoint": "phase-24" },
+    { "id": "F-013", "name": "realm-local-markets", "disposition": "recovered", "enabled": true, "checkpoint": "phase-27" },
+    { "id": "F-014", "name": "exchange-policy", "disposition": "recovered", "enabled": true, "checkpoint": "phase-30" },
+    { "id": "F-015", "name": "exchange-custody", "disposition": "recovered", "enabled": true, "checkpoint": "phase-30" },
+    { "id": "F-016", "name": "minigame-platform", "disposition": "open", "enabled": false, "checkpoint": "phase-31" },
+    { "id": "F-017", "name": "vale-cup", "disposition": "recovered", "enabled": true, "checkpoint": "phase-32" },
+    { "id": "F-018", "name": "racing", "disposition": "open", "enabled": false, "checkpoint": "phase-34" },
+    { "id": "F-019", "name": "brawler", "disposition": "open", "enabled": false, "checkpoint": "phase-36" },
+    { "id": "F-020", "name": "town-rts", "disposition": "open", "enabled": false, "checkpoint": "phase-39" },
+    { "id": "F-021", "name": "zombie-defense", "disposition": "open", "enabled": false, "checkpoint": "phase-41" },
+    { "id": "F-022", "name": "housing", "disposition": "open", "enabled": false, "checkpoint": "phase-44" },
+    { "id": "F-023", "name": "contribution-automation", "disposition": "recovered", "enabled": true, "checkpoint": "phase-10" },
+    { "id": "F-024", "name": "bug-reporting", "disposition": "recovered", "enabled": true, "checkpoint": "phase-45" },
+    { "id": "F-025", "name": "offline-realm-persistence", "disposition": "open", "enabled": false, "checkpoint": "phase-46" },
+    { "id": "F-026", "name": "xbox-tauri-store", "disposition": "open", "enabled": false, "checkpoint": "phase-47" },
+    { "id": "F-027", "name": "promotion-checkpoints", "disposition": "open", "enabled": false, "checkpoint": "phase-48" }
+  ]
+}
