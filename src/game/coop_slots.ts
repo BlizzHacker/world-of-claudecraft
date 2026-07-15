@@ -106,7 +106,9 @@ export class CoopSlots {
   assignedCount(): number {
     return this.slots.size;
   }
-hasSlot(slot: CoopSlotNumber): boolean {    return this.slots.has(slot);  }
+  hasSlot(slot: CoopSlotNumber): boolean {
+    return this.slots.has(slot);
+  }
 
   phaseOf(slot: CoopSlotNumber): CoopSlotPhase | null {
     return this.slots.get(slot)?.phase ?? null;
@@ -137,7 +139,7 @@ hasSlot(slot: CoopSlotNumber): boolean {    return this.slots.has(slot);  }
   }
 
   /** The join flow finished: the pad now drives a player. */
-n  /** Keyboard join: register a slot without a physical pad (padIndex = -1). */
+  /** Keyboard join: register a slot without a physical pad (padIndex = -1). */
   claimKeyboard(slot: CoopSlotNumber): boolean {
     if (this.slots.has(slot)) return false;
     this.slots.set(slot, {
@@ -256,7 +258,10 @@ n  /** Keyboard join: register a slot without a physical pad (padIndex = -1). */
       for (const b of edges) {
         if (b === GP.START) continue; // reserved for join/leave
         if (s.phase === 'joining') menuEdges.push(b);
-        else { const act = this.actionFor(slot, b); if (act) actions.push(act); }
+        else {
+          const act = this.actionFor(slot, b);
+          if (act) actions.push(act);
+        }
       }
 
       slotFrames.push({

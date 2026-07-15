@@ -121,6 +121,7 @@ import {
   type ReleaseEntry,
 } from './net/online';
 import { CoopController } from './game/coop_integration';
+import type { CoopSlotNumber } from './game/coop_slots';
 import type { CoopCharacterRef } from './ui/coop_overlay';
 // The wallet module is loaded lazily via dynamic import() in the wallet
 // controller below, so it stays out of the main entry chunk and only loads when
