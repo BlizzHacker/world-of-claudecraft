@@ -67,11 +67,13 @@ jobs:
         run: |
           set -euo pipefail
           test -n "$GIT_SHA"
-          ssh -o BatchMode=yes -o StrictHostKeyChecking=yes -i /root/.ssh/cryptic_prod_deploy root@192.168.0.6 \
+          test -r "$HOME/.ssh/cryptic_prod_deploy"
+          ssh -o BatchMode=yes -o StrictHostKeyChecking=yes -i "$HOME/.ssh/cryptic_prod_deploy" root@192.168.0.6 \
             "deploy $GIT_SHA"
 
       - name: Verify live API
         run: |
           set -euo pipefail
-          ssh -o BatchMode=yes -o StrictHostKeyChecking=yes -i /root/.ssh/cryptic_prod_deploy root@192.168.0.6 \
+          test -r "$HOME/.ssh/cryptic_prod_deploy"
+          ssh -o BatchMode=yes -o StrictHostKeyChecking=yes -i "$HOME/.ssh/cryptic_prod_deploy" root@192.168.0.6 \
             status
