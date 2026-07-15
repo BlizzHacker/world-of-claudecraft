@@ -707,6 +707,19 @@ The remaining systems above are still open development, not silently treated as 
 
 ## Program notes
 
+### Exchange player surface checkpoint — 2026-07-15
+
+- Added a live in-game Exchange window (`mm-exchange`) backed by the atomic
+  `/api/exchange/listings` custody routes. It filters listings to source realms
+  different from the current destination realm, lists eligible inventory items,
+  settles purchases, cancels owned escrow, and refreshes from authoritative state.
+- Added a DOM-free view model and focused tests for inventory resolution and
+  per-stack price display. The server remains the only authority for ownership,
+  class/level compatibility, currency, provenance, and settlement.
+- This closes the player-facing Exchange gap; the separate racing, brawler, RTS,
+  zombie-defense, housing recovery, and sanitized-PR extraction phases remain
+  explicitly open and are not represented as complete.
+
 - Do not mark a phase complete from code presence.
 - No later implementation begins before the prior QA is complete.
 - Checkpoint implementation never mutates production. Its QA issues PASS first, then invokes promotion.

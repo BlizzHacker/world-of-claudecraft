@@ -218,6 +218,7 @@ import {
   zonePoiLabel,
 } from './entity_i18n';
 import { esc } from './esc';
+import { ExchangeWindow, exchangeAuthFromWorld } from './exchange_window';
 import { fctSpawnShape } from './fct_event';
 import { FctPainter } from './fct_painter';
 import { FocusManager, type FocusTrapHandle } from './focus_manager';
@@ -1764,6 +1765,7 @@ export class Hud {
     $('#mm-arena').addEventListener('click', () => this.toggleArena());
     $('#mm-valecup').addEventListener('click', () => this.toggleValeCup());
     $('#mm-leaderboard').addEventListener('click', () => this.toggleLeaderboard());
+    $('#mm-exchange')?.addEventListener('click', () => this.toggleExchange());
     const emoteBtn = $('#mm-emote');
     emoteBtn.addEventListener('click', (ev) => {
       ev.preventDefault();
@@ -2223,6 +2225,9 @@ export class Hud {
         break;
       case 'market-window':
         this.closeMarket();
+        break;
+      case 'exchange-window':
+        this.closeExchange();
         break;
       case 'mailbox-window':
         // Route through the painter so focus returns to the opener (WCAG 2.2 AA).
@@ -3608,6 +3613,14 @@ export class Hud {
       }
     },
   });
+  private readonly exchangeWindow = new ExchangeWindow({
+    root: () => $('#exchange-window'),
+    world: () => this.sim,
+    closeOthers: () => this.closeOtherWindows('#exchange-window'),
+    ...this.windowFocus('#exchange-window'),
+    showError: (text) => this.showError(text),
+    auth: () => exchangeAuthFromWorld(this.sim),
+  });
   // Ravenpost mailbox window painter (mailbox_view.ts core + mailbox_window.ts
   // painter). It owns the mailbox view-state (tab, opened letter, staged
   // parcels); the bags window rides alongside the Send tab and stages parcels
@@ -4591,6 +4604,7 @@ export class Hud {
     if (this.openHeroicVendorNpcId !== null && $('#vendor-window').style.display !== 'none')
       this.renderHeroicVendor();
     if (this.marketWindow.isOpen) this.marketWindow.render();
+    if (this.exchangeWindow.isOpen) this.exchangeWindow.render();
     if (this.bankWindow.isOpen) this.bankWindow.render();
     this.charWindow.renderIfOpen();
     // The arena window's render-skip signature is text-independent (offline sentinel or a
@@ -7082,6 +7096,7 @@ export class Hud {
       if (!this.nearbyMarketNpc()) this.marketWindow.close();
       else this.marketWindow.refreshIfChanged();
     }
+    if (slowHud && this.exchangeWindow.isOpen) void this.exchangeWindow.refresh();
     // The mailbox closes itself when the mail mirror goes null (walked away).
     if (slowHud && this.mailboxWindow.isOpen) this.mailboxWindow.refreshIfChanged();
     // The bank closes itself when the bank mirror goes null (left the banker).
@@ -11634,6 +11649,22 @@ export class Hud {
 
   get marketWindowOpen(): boolean {
     return this.marketWindow.isOpen;
+  }
+
+  toggleExchange(): void {
+    this.exchangeWindow.toggle();
+  }
+
+  openExchange(): void {
+    this.exchangeWindow.open();
+  }
+
+  closeExchange(): void {
+    this.exchangeWindow.close();
+  }
+
+  get exchangeWindowOpen(): boolean {
+    return this.exchangeWindow.isOpen;
   }
 
   openMailbox(): void {

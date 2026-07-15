@@ -6003,6 +6003,45 @@
     overflow: hidden;
     min-height: 0;
   }
+
+  /* Cross-realm custody window. It intentionally shares the market chrome but
+     has its own compact cards so source realm, destination and atomic action are
+     visible together at a glance. */
+  #exchange-window {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    width: min(620px, calc(100vw - 32px));
+    max-height: min(760px, calc(100vh - 48px));
+    overflow: auto;
+    padding: 14px;
+  }
+  #exchange-window .exchange-body { display: grid; gap: 12px; }
+  #exchange-window .exchange-summary,
+  #exchange-window .exchange-listing,
+  #exchange-window form[data-list] {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  #exchange-window .exchange-summary { justify-content: space-between; color: var(--gold); }
+  #exchange-window .exchange-listings,
+  #exchange-window .exchange-create { display: grid; gap: 8px; }
+  #exchange-window .exchange-listings h3,
+  #exchange-window .exchange-create h3 { margin: 0; color: var(--gold); }
+  #exchange-window .exchange-listing {
+    justify-content: space-between;
+    padding: 8px 10px;
+    border: 1px solid var(--panel-border);
+    border-radius: 4px;
+    background: color-mix(in srgb, var(--panel-bg) 80%, transparent);
+  }
+  #exchange-window .exchange-listing div { display: grid; gap: 3px; }
+  #exchange-window .exchange-listing small { color: var(--text-muted); }
+  #exchange-window form[data-list] { flex-wrap: wrap; align-items: end; }
+  #exchange-window form[data-list] label { display: grid; gap: 4px; flex: 1 1 150px; }
+  #exchange-window form[data-list] input,
+  #exchange-window form[data-list] select { min-width: 0; }
   /* The title (name + subtitle) and the close button are flex siblings; let the
      title shrink and ellipsize so the close button can never overlap the name,
      however verbose the localized title runs. */
