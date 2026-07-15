@@ -785,3 +785,14 @@ The remaining systems above are still open development, not silently treated as 
 - The wire test proves snapshot encode/decode and verifies disabled feature commands are
   inert. Mode adapters, persistent session storage, rewards, and UI remain gated until
   their dedicated checkpoints pass.
+
+### Character viewer renderer hardening checkpoint - 2026-07-15
+
+- The browser character-sheet smoke test exposed Three.js merge warnings when baked
+  character parts contained normalized integer UV accessors alongside float UVs.
+- `normalizeUvAttribute` now copies Three's already-dequantized accessor values into a
+  shared `Float32Array` before `mergeGeometries`; the helper accepts regular and
+  interleaved attributes. The regression test and focused character/item suite pass on
+  commit `6584125a4`.
+- This removes the observed merge-warning path; it does not establish pixel-perfect
+  identity with the supplied references or make the still-default-off minigames live.
