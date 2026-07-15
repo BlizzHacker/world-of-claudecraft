@@ -82,6 +82,9 @@ export class ExchangeWindow {
 
   async refresh(force = false): Promise<void> {
     if (!this.opened) return;
+    // Do not poll while the form is open: rebuilding the body would erase a
+    // player's typed quantity/price. Actions and the next open already refresh
+    // from authoritative custody state.
     if (!force && (this.loading || Date.now() - this.lastRefreshAt < 1500)) return;
     const auth = this.deps.auth();
     if (!auth) {
