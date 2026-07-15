@@ -4,7 +4,11 @@ import { itemModelUrl } from '../src/ui/item_model_catalog';
 describe('item_model_catalog', () => {
   it('prefers an authored model URL without loading the asset', () => {
     expect(
-      itemModelUrl({ id: 'chronicle_blade', kind: 'armor', modelUrl: 'models/items/chronicle_blade.glb' }),
+      itemModelUrl({
+        id: 'chronicle_blade',
+        kind: 'armor',
+        modelUrl: 'models/items/chronicle_blade.glb',
+      }),
     ).toBe('models/items/chronicle_blade.glb');
   });
 

@@ -3,8 +3,8 @@
 // Keeping the resolver separate means a catalog with thousands of Monster
 // Chronicle items can be indexed without paying the loading cost up front.
 
-import type { ItemDef } from '../sim/types';
 import { itemWeaponModelUrl } from '../render/characters/manifest';
+import type { ItemDef } from '../sim/types';
 
 /** Return the authored 3D model URL for an item, or null when the item is still
  * represented by its 2D icon. Weapon items inherit the same variant mapping as
@@ -14,4 +14,3 @@ export function itemModelUrl(item: Pick<ItemDef, 'id' | 'kind' | 'modelUrl'>): s
   if (item.modelUrl) return item.modelUrl;
   return item.kind === 'weapon' ? itemWeaponModelUrl(item.id) : null;
 }
-

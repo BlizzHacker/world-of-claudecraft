@@ -1,7 +1,8 @@
 import { audio } from '../game/audio';
-import { hideLoadingScreen, showLoadingScreen } from '../game/loading_screen';
+import { crypticMusic } from '../game/cryptic_music';
 import type { GamepadKind } from '../game/gamepad_map';
 import type { Keybinds } from '../game/keybinds';
+import { hideLoadingScreen, showLoadingScreen } from '../game/loading_screen';
 import type { MenuIntentKind } from '../game/menu_gamepad_nav';
 import { music, musicZoneForLocation, shouldResetMusicForDungeonEntry } from '../game/music';
 import type { GameSettings, Settings } from '../game/settings';
@@ -27,7 +28,6 @@ import {
 } from '../render/characters/portrait';
 import { isFriendlyPet, mobTooltipConColor } from '../render/reaction';
 import type { Renderer } from '../render/renderer';
-import { itemModelUrl } from './item_model_catalog';
 import { type AugmentCategory, augmentCategory } from '../sim/content/augments';
 import { HEROIC_MARK_ITEM_ID } from '../sim/content/dungeon_difficulty';
 import { HEROIC_VENDOR_STOCK } from '../sim/content/heroic_vendor';
@@ -41,7 +41,6 @@ import {
 import { FIRST_TALENT_LEVEL, type TalentAllocation, talentsFor } from '../sim/content/talents';
 import { SPORT_ABILITIES } from '../sim/content/vale_cup';
 import type { ZoneDef } from '../sim/data';
-import { activeMaxLevel } from '../sim/realms/registry';
 import {
   ABILITIES,
   CLASSES,
@@ -55,9 +54,9 @@ import {
   dungeonAt,
   ITEMS,
   isDelvePos,
+  isInteriorPos,
   MOBS,
   NPCS,
-  isInteriorPos,
   QUESTS,
   questRewardItem,
   WORLD_MAX_X,
@@ -75,6 +74,7 @@ import type { Ante, PickAction } from '../sim/lockpick';
 import { PICK_ACTIONS } from '../sim/lockpick';
 import { FOCUS_POINT_BUDGET, isInTownZone } from '../sim/professions/focus';
 import { type QuestObjectiveRef, questObjectivesForMob } from '../sim/quest_targets';
+import { activeMaxLevel } from '../sim/realms/registry';
 import type { ResolvedAbility } from '../sim/sim';
 import type {
   AbilityDef,
@@ -195,6 +195,12 @@ import { corpseHarvestView } from './corpse_harvest_view';
 import { renderCorpseHarvestPicker } from './corpse_harvest_window';
 import { buildCraftingView } from './crafting_view';
 import { renderCraftingWindow } from './crafting_window';
+import { mountMoveHudButton } from './cryptic/move_hud_button';
+import {
+  isMusicWidgetHidden,
+  onMusicWidgetHiddenChange,
+  toggleMusicWidget,
+} from './cryptic/music_widget';
 import { DailyRewardsWindow } from './daily_rewards_window';
 import { DelveMapPainter } from './delve_map_painter';
 import { devTierBadgeDataUrl, devTierByIndex, devTierDisplayName } from './dev_tier';
@@ -215,7 +221,6 @@ import { esc } from './esc';
 import { fctSpawnShape } from './fct_event';
 import { FctPainter } from './fct_painter';
 import { FocusManager, type FocusTrapHandle } from './focus_manager';
-import { crypticMusic } from '../game/cryptic_music';
 import {
   type AimPoint,
   abilityAoeRadius,
@@ -253,7 +258,6 @@ import {
 import {
   formatMoney as formatLocalizedMoney,
   formatNumber,
-  getLanguage,
   moneyParts,
   type SupportedLanguage,
   type TranslationKey,
@@ -264,6 +268,7 @@ import {
 import { iconDataUrl, QUALITY_COLOR, raidMarkerDataUrl } from './icons';
 import { itemArmorTypeLabelKey } from './item_armor_type';
 import { itemStatDeltas } from './item_compare';
+import { itemModelUrl } from './item_model_catalog';
 import { itemSetMemberCounts, itemSetTooltipModel } from './item_set_tooltip_view';
 import { LeaderboardWindow } from './leaderboard_window';
 import { ReannounceMarker } from './live_region_reannounce';
@@ -312,12 +317,6 @@ import {
 } from './mobile_action_page_view';
 import { MobileActionRingPainter } from './mobile_action_ring_painter';
 import { MovableFrame } from './movable_frame';
-import { mountMoveHudButton } from './cryptic/move_hud_button';
-import {
-  isMusicWidgetHidden,
-  onMusicWidgetHiddenChange,
-  toggleMusicWidget,
-} from './cryptic/music_widget';
 import { OptionsWindow } from './options_window';
 import { makeWriterFacet, type PainterHostPresentation } from './painter_host';
 import { loadPartyCollapsed, savePartyCollapsed } from './party_collapse';
@@ -2608,9 +2607,7 @@ export class Hud {
     // frame at once (the user wanted the move affordance itself repositionable).
     mountMoveHudButton({
       frames: () =>
-        [this.playerFrameMover, this.targetFrameMover].filter(
-          (m): m is MovableFrame => !!m,
-        ),
+        [this.playerFrameMover, this.targetFrameMover].filter((m): m is MovableFrame => !!m),
       isMobileLayout,
     });
   }
@@ -5270,7 +5267,7 @@ export class Hud {
       }
     } else if (action?.type === 'item' && this.isHotbarItemId(action.id)) {
       if (this.tradeOpen) return;
-      this.sim.useItem(action.id);
+      this.sim['useItem'](action.id);
       if ($('#bags').style.display !== 'none') this.renderBags();
       this.flashActionSlot(barSlot);
     }
@@ -5762,7 +5759,7 @@ export class Hud {
           return;
         }
         audio.click();
-        this.useConsumableSlot(i);
+        this.consumeConsumableSlot(i);
         btn.blur();
       });
       // Long-press-to-inspect, arming the peek guard the tap handler consumes
@@ -5819,10 +5816,10 @@ export class Hud {
   // authoritative 'use' command), minus the hotbar-eligibility gate: the bar's
   // ids come pre-filtered from consumable_bar_view, which deliberately INCLUDES
   // elixirs (usable from bags, just never hotbar-placeable).
-  private useConsumableSlot(i: number): void {
+  private consumeConsumableSlot(i: number): void {
     const id = this.consumableBarIds[i];
     if (!id || this.tradeOpen) return;
-    this.sim.useItem(id);
+    this.sim['useItem'](id);
     if ($('#bags').style.display !== 'none') this.renderBags();
     const btn = this.consumableBarSlotBtns[i];
     if (btn) this.flashActionButton(btn);
@@ -7427,7 +7424,8 @@ export class Hud {
         // failed preload we still enter (assets stream in as before) so the loader can
         // never trap the player at the board.
         showLoadingScreen(
-          tOptional('loading.enteringDelve', { delve: delveName }) ?? `Descending into ${delveName}…`,
+          tOptional('loading.enteringDelve', { delve: delveName }) ??
+            `Descending into ${delveName}…`,
         );
         const enter = () => {
           this.sim.enterDelve(delveId, tierId);
@@ -7436,10 +7434,7 @@ export class Hud {
           this.renderer.handleEvent({ type: 'delveEntered', delveId, tierId });
           hideLoadingScreen();
         };
-        this.renderer
-          .preloadDelveAssets(delveId)
-          .then(enter)
-          .catch(enter);
+        this.renderer.preloadDelveAssets(delveId).then(enter).catch(enter);
       });
     }
     el.querySelector('[data-close]')?.addEventListener('click', () => this.closeDelveBoard());
@@ -9009,14 +9004,27 @@ export class Hud {
           ) {
             const masked = this.maskChat(this.chatLinkPlainText(ev.text));
             const bubble = ev.channel === 'emote' ? `${ev.from} ${masked}` : masked;
-            if (masked.trim()) this.renderer.showChatBubble(ev.entityId, bubble, ev.channel === 'yell');
+            if (masked.trim())
+              this.renderer.showChatBubble(ev.entityId, bubble, ev.channel === 'yell');
           }
           // ArcForge prop audio: play music track and/or voice line on interact.
           {
             const pa = (ev as { propAudio?: { music?: string; voice?: string } }).propAudio;
             if (pa) {
-              if (pa.music) { try { crypticMusic.playTrack(pa.music); } catch { /* noop */ } }
-              if (pa.voice) { try { voice.play(pa.voice); } catch { /* noop */ } }
+              if (pa.music) {
+                try {
+                  crypticMusic.playTrack(pa.music);
+                } catch {
+                  /* noop */
+                }
+              }
+              if (pa.voice) {
+                try {
+                  voice.play(pa.voice);
+                } catch {
+                  /* noop */
+                }
+              }
             }
           }
           // Voiced encounter dialogue (boss/NPC yells) — no-op unless a clip was
@@ -11261,9 +11269,10 @@ export class Hud {
     // Curate-then-roll: the looter checks a subset and presses Roll. One checked
     // member is granted directly server-side; two or more open a need/greed roll for
     // just that subset. The select-all header mirrors / drives the per-member boxes.
-    const all = row.querySelector<HTMLInputElement>('.ml-all')!;
+    const all = row.querySelector<HTMLInputElement>('.ml-all');
     const pickEls = [...row.querySelectorAll<HTMLInputElement>('.ml-pick')];
-    const rollBtn = row.querySelector<HTMLButtonElement>('.ml-roll')!;
+    const rollBtn = row.querySelector<HTMLButtonElement>('.ml-roll');
+    if (!all || !rollBtn) return;
     const syncRoll = (): void => {
       const checked = pickEls.filter((p) => p.checked).length;
       rollBtn.disabled = checked === 0;
@@ -12907,8 +12916,7 @@ export class Hud {
   // interact that teleports the player into the interior room. Leaving is done by talking
   // to the resident NPC inside (its dialog carries the Leave option).
   openBuildingEnterPrompt(interiorType: number, onEnter: () => void): void {
-    const name =
-      interiorType === 0 ? 'the shop' : interiorType === 1 ? 'the inn' : 'the house';
+    const name = interiorType === 0 ? 'the shop' : interiorType === 1 ? 'the inn' : 'the house';
     const title = tOptional('buildings.enterTitle', { place: name }) ?? `Enter ${name}?`;
     const body =
       tOptional('buildings.enterBody') ??
@@ -13816,7 +13824,6 @@ export class Hud {
     return row;
   }
 
-
   // Raid/target marker picker for an enemy, opened from its target unit frame.
   // Party-only (markers are a coordination feature); shows the 8 symbols with a
   // check on the one currently on this mob, plus localized clear and cancel actions.
@@ -14448,7 +14455,7 @@ export class Hud {
     this.optionsWindow.close();
   }
 
-/*
+  /*
   private renderOptions(): void {
     // The wide multi-column layout belongs to the keybinds view only; clear it
     // so the other sub-views (and the main menu) keep their default width.
