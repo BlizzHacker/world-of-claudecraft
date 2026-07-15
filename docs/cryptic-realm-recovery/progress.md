@@ -76,6 +76,9 @@ UX, original racing, four-player brawler, town RTS, zombie defense, and housing 
   the held-weapon catalog, accepts optional authored `ItemDef.modelUrl` entries for future
   Monster Chronicle gear, and keeps all other item models unloaded until selected.
   Focused character/item tests and `npm run build`/`npm run build:server` pass locally.
+- Follow-up lint/format cleanup is pushed and deployed at
+  `3e29e17368b000d7e2871e6dad7aefbd27e778d9`; the remote changed-file gate is green and
+  its full PR gate is still running at report time.
 
 The remaining systems above are still open development, not silently treated as complete.
 
