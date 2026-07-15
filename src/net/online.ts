@@ -7,6 +7,7 @@ import {
   runtimeWebSocketUrl,
 } from '../runtime';
 import { bagCapacity } from '../sim/bags';
+import { MINIGAME_FEATURES } from '../sim/minigames';
 import { signChallenge } from '../sim/client_challenge';
 import { mechChromaItemId, mechChromaSkinIndex } from '../sim/content/skins';
 import {
@@ -1031,6 +1032,8 @@ function blankEntity(id: number): Entity {
 }
 
 export class ClientWorld implements IWorld {
+  // Shared rollout registry; gameplay state is not inferred from this field.
+  readonly minigameFeatures = MINIGAME_FEATURES;
   // --- IWorldEntityRoster: roster + player reads, mirrored from snapshots. The
   // `player` getter lives below the ctor (it reads `entities`/`playerId`). `known`
   // is IWorldCombat-owned but rides here as a self-wire mirror field with the rest
