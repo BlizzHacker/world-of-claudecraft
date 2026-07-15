@@ -25,12 +25,17 @@ CREATE TABLE IF NOT EXISTS exchange_listings (
   status TEXT NOT NULL CHECK (status IN ('escrowed','settled','cancelled')),
   source_item_locked BOOLEAN NOT NULL DEFAULT TRUE,
   provenance JSONB NOT NULL,
+  idempotency_key TEXT,
   buyer_character_id INT REFERENCES characters(id),
   destination_realm TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   settled_at TIMESTAMPTZ,
   cancelled_at TIMESTAMPTZ
 );
+ALTER TABLE exchange_listings ADD COLUMN IF NOT EXISTS idempotency_key TEXT;
+CREATE UNIQUE INDEX IF NOT EXISTS exchange_listings_seller_idempotency
+  ON exchange_listings(seller_character_id, idempotency_key)
+  WHERE idempotency_key IS NOT NULL;
 CREATE INDEX IF NOT EXISTS exchange_listings_active
   ON exchange_listings(status, created_at DESC);
 CREATE INDEX IF NOT EXISTS exchange_listings_source_realm
@@ -83,6 +88,15 @@ function positive(value: number, field: string): number {
 function text(value: string, field: string): string {
   const clean = value.trim();
   if (!clean) throw new Error(`${field} is required`);
+  return clean;
+}
+
+function idempotencyKey(value: string | undefined): string | undefined {
+  if (value === undefined) return undefined;
+  const clean = value.trim();
+  if (!/^[A-Za-z0-9._:-]{8,128}$/.test(clean)) {
+    throw new Error('idempotency key must be 8-128 ASCII letters, numbers, or . _ : -');
+  }
   return clean;
 }
 
@@ -176,12 +190,19 @@ async function insertEvent(
 
 export async function createListing(
   pool: Pool,
-  input: { sellerCharacterId: number; itemId: string; count: number; priceCopper: number },
+  input: {
+    sellerCharacterId: number;
+    itemId: string;
+    count: number;
+    priceCopper: number;
+    idempotencyKey?: string;
+  },
 ): Promise<ExchangeListingRow> {
   const sellerCharacterId = positive(input.sellerCharacterId, 'seller character id');
   const itemId = text(input.itemId, 'item id');
   const count = positive(input.count, 'item count');
   const priceCopper = positive(input.priceCopper, 'price');
+  const requestKey = idempotencyKey(input.idempotencyKey);
   const def = ITEMS[itemId];
   if (!def) throw new Error('item is not tradeable in the Exchange');
   if (def.soulbound || def.noMarketList)
@@ -197,6 +218,26 @@ export async function createListing(
     );
     const row = seller.rows[0];
     if (!row) throw new Error('seller character not found');
+    if (requestKey) {
+      const existingResult = await client.query(
+        `SELECT * FROM exchange_listings
+          WHERE seller_character_id = $1 AND idempotency_key = $2
+          FOR UPDATE`,
+        [sellerCharacterId, requestKey],
+      );
+      const existing = existingResult.rows[0];
+      if (existing) {
+        if (
+          String(existing.item_id) !== itemId ||
+          Number(existing.item_count) !== count ||
+          Number(existing.price_copper) !== priceCopper
+        ) {
+          throw new Error('idempotency key was already used for a different listing');
+        }
+        await client.query('COMMIT');
+        return rowToListing(existing);
+      }
+    }
     const sourceRealm = text(String(row.realm), 'source realm');
     const state = stateOf(row.state);
     removeFromInventory(state.inventory, itemId, count);
@@ -213,8 +254,8 @@ export async function createListing(
     ]);
     await client.query(
       `INSERT INTO exchange_listings
-         (listing_id, seller_character_id, source_realm, item_id, item_count, price_copper, fee_bps, status, provenance)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,'escrowed',$8)`,
+         (listing_id, seller_character_id, source_realm, item_id, item_count, price_copper, fee_bps, status, provenance, idempotency_key)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,'escrowed',$8,$9)`,
       [
         listingId,
         sellerCharacterId,
@@ -224,6 +265,7 @@ export async function createListing(
         priceCopper,
         EXCHANGE_FEE_BPS,
         JSON.stringify(provenance),
+        requestKey ?? null,
       ],
     );
     await insertEvent(client, listingId, 'escrowed', sellerCharacterId, sourceRealm, null, {

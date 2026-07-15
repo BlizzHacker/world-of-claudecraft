@@ -66,6 +66,7 @@ export async function maybeHandleExchangeApi(
         itemId?: unknown;
         count?: unknown;
         priceCopper?: unknown;
+        idempotencyKey?: unknown;
       };
       const characterId = Number(body.characterId);
       if (!Number.isSafeInteger(characterId) || !(await ownedCharacter(accountId, characterId))) {
@@ -79,6 +80,9 @@ export async function maybeHandleExchangeApi(
           itemId: String(body.itemId ?? ''),
           count: Number(body.count),
           priceCopper: Number(body.priceCopper),
+          idempotencyKey:
+            req.headers['idempotency-key']?.toString() ??
+            (typeof body.idempotencyKey === 'string' ? body.idempotencyKey : undefined),
         }),
       );
       return true;
