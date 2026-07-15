@@ -38,7 +38,7 @@ describe('options_mobile_shell: painter chrome', () => {
   });
 
   it('appends the Reset to Defaults + Logout action tiles to the grid', () => {
-    expect(painter).toContain("el('button', 'opt-mshell-cat is-danger')");
+    expect(painter).toContain("danger ? 'opt-mshell-cat is-danger' : 'opt-mshell-cat'");
     expect(painter).toContain("actionTile('hud.options.resetToDefaults', 'swap', deps.onResetAll)");
     expect(painter).toContain("actionTile('hud.options.logout', 'prev', deps.onLogout)");
   });
