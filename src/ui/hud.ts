@@ -5281,6 +5281,7 @@ export class Hud {
       }
     } else if (action?.type === 'item' && this.isHotbarItemId(action.id)) {
       if (this.tradeOpen) return;
+      // biome-ignore lint/complexity/useLiteralKeys: IWorld methods are intentionally bracketed here to avoid the React hook heuristic.
       this.sim['useItem'](action.id);
       if ($('#bags').style.display !== 'none') this.renderBags();
       this.flashActionSlot(barSlot);
@@ -5833,6 +5834,7 @@ export class Hud {
   private consumeConsumableSlot(i: number): void {
     const id = this.consumableBarIds[i];
     if (!id || this.tradeOpen) return;
+    // biome-ignore lint/complexity/useLiteralKeys: IWorld methods are intentionally bracketed here to avoid the React hook heuristic.
     this.sim['useItem'](id);
     if ($('#bags').style.display !== 'none') this.renderBags();
     const btn = this.consumableBarSlotBtns[i];

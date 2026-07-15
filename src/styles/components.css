@@ -6016,7 +6016,10 @@
     overflow: auto;
     padding: 14px;
   }
-  #exchange-window .exchange-body { display: grid; gap: 12px; }
+  #exchange-window .exchange-body {
+    display: grid;
+    gap: 12px;
+  }
   #exchange-window .exchange-summary,
   #exchange-window .exchange-listing,
   #exchange-window form[data-list] {
@@ -6024,11 +6027,20 @@
     align-items: center;
     gap: 10px;
   }
-  #exchange-window .exchange-summary { justify-content: space-between; color: var(--gold); }
+  #exchange-window .exchange-summary {
+    justify-content: space-between;
+    color: var(--gold);
+  }
   #exchange-window .exchange-listings,
-  #exchange-window .exchange-create { display: grid; gap: 8px; }
+  #exchange-window .exchange-create {
+    display: grid;
+    gap: 8px;
+  }
   #exchange-window .exchange-listings h3,
-  #exchange-window .exchange-create h3 { margin: 0; color: var(--gold); }
+  #exchange-window .exchange-create h3 {
+    margin: 0;
+    color: var(--gold);
+  }
   #exchange-window .exchange-listing {
     justify-content: space-between;
     padding: 8px 10px;
@@ -6036,12 +6048,26 @@
     border-radius: 4px;
     background: color-mix(in srgb, var(--panel-bg) 80%, transparent);
   }
-  #exchange-window .exchange-listing div { display: grid; gap: 3px; }
-  #exchange-window .exchange-listing small { color: var(--text-muted); }
-  #exchange-window form[data-list] { flex-wrap: wrap; align-items: end; }
-  #exchange-window form[data-list] label { display: grid; gap: 4px; flex: 1 1 150px; }
+  #exchange-window .exchange-listing div {
+    display: grid;
+    gap: 3px;
+  }
+  #exchange-window .exchange-listing small {
+    color: var(--text-muted);
+  }
+  #exchange-window form[data-list] {
+    flex-wrap: wrap;
+    align-items: end;
+  }
+  #exchange-window form[data-list] label {
+    display: grid;
+    gap: 4px;
+    flex: 1 1 150px;
+  }
   #exchange-window form[data-list] input,
-  #exchange-window form[data-list] select { min-width: 0; }
+  #exchange-window form[data-list] select {
+    min-width: 0;
+  }
   /* The title (name + subtitle) and the close button are flex siblings; let the
      title shrink and ellipsize so the close button can never overlap the name,
      however verbose the localized title runs. */
