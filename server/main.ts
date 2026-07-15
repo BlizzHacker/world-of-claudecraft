@@ -132,6 +132,8 @@ import { setChainAdapter } from '../src/economy/chainAdapter';
 import { maybeBuildSolanaFromEnv } from '../src/economy/solanaAdapter';
 import { maybeHandleEconomyApi } from './economy/api';
 import { applyEconomySchema } from './economy/db';
+import { maybeHandleExchangeApi } from './exchange/api';
+import { applyExchangeSchema } from './exchange/db';
 import { handleCrRealmsStatic, handleForgedCatalog, handleForgedStatic } from './forged_assets';
 import { GameServer } from './game';
 import {
@@ -2459,6 +2461,14 @@ export function routeHttpRequest(req: http.IncomingMessage, res: http.ServerResp
   else if (url.startsWith('/mod/api/')) void handleModeratorApi(req, res);
   else if (url.startsWith('/me/api/')) void handleUserApi(req, res);
   else if (url.startsWith('/api/oauth/authentik')) void handleAuthentikRoute(req, res);
+  else if (url.startsWith('/api/exchange/')) {
+    void maybeHandleExchangeApi(req, res, path).then((handled) => {
+      if (!handled) {
+        res.writeHead(404);
+        res.end();
+      }
+    });
+  }
   else if (url.startsWith('/api/economy/')) {
     void maybeHandleEconomyApi(req, res, path).then((handled) => {
       if (!handled) {
@@ -2509,6 +2519,8 @@ export async function startServer(): Promise<http.Server> {
   await ensureSchema();
   // CR overlay: economy schema (off-chain platinum + wallet links + purchases).
   await applyEconomySchema(pool);
+  // CR overlay: Exchange custody, provenance, and append-only audit events.
+  await applyExchangeSchema(pool);
   // CR overlay: if CR_SOLANA_* env is set, load the Solana mint authority.
   // Otherwise the chain adapter stays at LocalMockChainAdapter and the
   // /api/economy/claim endpoint returns 503.

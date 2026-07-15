@@ -23,7 +23,7 @@ export interface ExchangeEscrowListing {
   priceCopper: number;
   feeBps: number;
   status: ExchangeListingStatus;
-  sourceItemLocked: true;
+  sourceItemLocked: boolean;
   provenance: ExchangeProvenance;
 }
 
