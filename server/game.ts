@@ -4287,17 +4287,23 @@ export class GameServer {
         const kind = msg.kind as MinigameFeatureId;
         // No mode is live until its full wire/persistence/QA checkpoint passes.
         if (!minigameEnabled(kind)) return;
-        if (this.minigameSessionForPid(pid)) return;
+        const existing = this.minigameSessionForPid(pid);
+        if (existing && existing.phase !== 'finished' && existing.phase !== 'aborted') return;
         const id = this.nextMinigameSessionId++;
         const seed = (this.sim.cfg.seed + id * 9973) | 0;
-        const state = createMinigameSession(id, kind, seed, pid, msg.maxPlayers);
+        const maxPlayers =
+          typeof msg.maxPlayers === 'number' && Number.isFinite(msg.maxPlayers)
+            ? Math.trunc(msg.maxPlayers)
+            : undefined;
+        const state = createMinigameSession(id, kind, seed, pid, maxPlayers);
         this.minigameSessions.set(id, state);
         return;
       }
       case 'mg_join': {
         const sessionId = msg.sessionId;
         if (typeof sessionId !== 'number' || !Number.isInteger(sessionId) || sessionId <= 0) return;
-        if (this.minigameSessionForPid(pid)) return;
+        const existing = this.minigameSessionForPid(pid);
+        if (existing && existing.phase !== 'finished' && existing.phase !== 'aborted') return;
         const current = this.minigameSessions.get(sessionId);
         if (!current || !minigameEnabled(current.kind)) return;
         const mutation = joinMinigameSession(current, pid);
