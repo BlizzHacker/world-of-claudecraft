@@ -1,5 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import { MINIGAME_FEATURES, minigameEnabled } from '../src/sim/minigames';
+import {
+  claimMinigameReward,
+  createMinigameSession,
+  finishMinigameSession,
+  joinMinigameSession,
+  type MinigameSessionState,
+  setMinigameConnection,
+  setMinigameReady,
+  stepMinigameSession,
+  type SessionMutation,
+} from '../src/sim/minigames';
 import { type BrawlerInput, createBrawlerState, stepBrawler } from '../src/sim/minigames/brawler';
 import {
   canBuildHousing,
@@ -31,6 +42,47 @@ describe('minigame rollout guard', () => {
     expect(MINIGAME_FEATURES.every((feature) => feature.enabled)).toBe(false);
     expect(minigameEnabled('racing')).toBe(false);
     expect(minigameEnabled('housing')).toBe(false);
+  });
+});
+
+describe('shared minigame session lifecycle', () => {
+  const stateOf = (result: SessionMutation, fallback: MinigameSessionState): MinigameSessionState =>
+    result.ok ? result.state : fallback;
+
+  it('starts only after every human is ready, then enters active after a fixed countdown', () => {
+    let state = createMinigameSession(7, 'racing', 99, 1, 4);
+    expect(state.phase).toBe('lobby');
+    const joined = joinMinigameSession(state, 2);
+    expect(joined.ok).toBe(true);
+    state = joined.ok ? joined.state : state;
+    state = stateOf(setMinigameReady(state, 1, true), state);
+    expect(stepMinigameSession(state).phase).toBe('lobby');
+    state = stateOf(setMinigameReady(state, 2, true), state);
+    state = stepMinigameSession(state);
+    expect(state.phase).toBe('countdown');
+    for (let i = 0; i < 60; i += 1) state = stepMinigameSession(state);
+    expect(state.phase).toBe('active');
+    expect(state.tick).toBe(61);
+  });
+
+  it('keeps reconnect and reward claims idempotent and authoritative', () => {
+    let state = createMinigameSession(8, 'brawler', 3, 10, 2);
+    let joined = joinMinigameSession(state, 11, true);
+    expect(joined.ok).toBe(true);
+    state = joined.ok ? joined.state : state;
+    state = stateOf(setMinigameReady(state, 10, true), state);
+    state = stepMinigameSession(state);
+    for (let i = 0; i < 60; i += 1) state = stepMinigameSession(state);
+    expect(state.phase).toBe('active');
+    state = stateOf(setMinigameConnection(state, 11, false), state);
+    state = stateOf(setMinigameConnection(state, 11, true), state);
+    const finished = finishMinigameSession(state, [10, 11]);
+    expect(finished.ok).toBe(true);
+    state = finished.ok ? finished.state : state;
+    const claimed = claimMinigameReward(state, 10);
+    expect(claimed.ok).toBe(true);
+    state = claimed.ok ? claimed.state : state;
+    expect(claimMinigameReward(state, 10)).toEqual({ ok: false, reason: 'duplicate' });
   });
 });
 

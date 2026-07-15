@@ -6,6 +6,24 @@ export { BRAWLER_VERSION, createBrawlerState, stepBrawler } from './brawler';
 export { createHousingLot, HOUSING_VERSION, placeHousingPiece } from './housing';
 export { createRtsCampaign, RTS_VERSION, stepRtsCampaign } from './rts';
 export { createZombieDefense, stepZombieDefense, ZOMBIE_DEFENSE_VERSION } from './zombie_defense';
+export {
+  abortMinigameSession,
+  claimMinigameReward,
+  createMinigameSession,
+  finishMinigameSession,
+  joinMinigameSession,
+  MINIGAME_COUNTDOWN_SECONDS,
+  MINIGAME_SESSION_VERSION,
+  setMinigameConnection,
+  setMinigameReady,
+  stepMinigameSession,
+} from './session';
+export type {
+  MinigameSessionPhase,
+  MinigameSessionPlayer,
+  MinigameSessionState,
+  SessionMutation,
+} from './session';
 
 export type MinigameFeatureId = 'racing' | 'brawler' | 'town_rts' | 'zombie_defense' | 'housing';
 
