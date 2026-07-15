@@ -38,6 +38,23 @@ release checkpoint and production has not been mutated:
   rejected by `192.168.0.6`, and no self-hosted `cryptic-prod` runner is
   registered, so automatic deployment is queued but not executable yet.
 
+## Latest delivery checkpoint, 2026-07-15
+
+The recovery branch is pushed at `5d641226b` and contains the completed implementation
+slice listed above. Focused recovery coverage is green (8 files, 69 tests), and the local
+malware gate is green. GitHub verification runs `29389242549` and `29389242547` are the
+authoritative full-gate checks for this candidate; they were still running when this note
+was written. The local full gate is not a clean candidate signal because the workstation has
+unrelated Tauri Store edits, CRLF Codex skill files, and stale options-window source guards.
+
+Production has not been changed. Automatic deployment is configured on every push, but the
+restricted deploy job cannot execute until a `cryptic-prod` self-hosted runner is registered
+and SSH access to `192.168.0.6` is restored. The live host remains at `codex/cryptic-v016-catchup`
+(`46be1494c`).
+
+The following requested systems remain explicitly open development slices: Exchange player
+UX, original racing, four-player brawler, town RTS, zombie defense, and housing recovery.
+
 ## Status table
 
 | Session | Status | Date started | Date completed | Implementation or QA commit |
