@@ -12,6 +12,8 @@ vi.mock('../server/db', () => ({
   walletForAccount: vi.fn(async () => null),
   markAccountQuestComplete: vi.fn(async () => ({ completedQuestIds: [], mechChromaIds: [] })),
   grantAccountMechChroma: vi.fn(async () => ({ completedQuestIds: [], mechChromaIds: [] })),
+  loadWorldState: vi.fn(async () => null),
+  saveWorldState: vi.fn(async () => {}),
 }));
 
 import { createMinigameSession } from '../src/sim/minigames';

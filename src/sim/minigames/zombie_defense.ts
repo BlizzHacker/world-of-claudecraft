@@ -154,3 +154,41 @@ export function stepZombieDefense(state: ZombieDefenseState, ticks = 1): void {
     if (state.wave >= 10 && state.status === 'ready') state.status = 'won';
   }
 }
+
+/** Detached snapshot helpers used by the realm world-state persistence adapter. */
+export function cloneZombieDefense(state: ZombieDefenseState): ZombieDefenseState {
+  return structuredClone(state) as ZombieDefenseState;
+}
+
+export function deserializeZombieDefense(value: unknown): ZombieDefenseState | null {
+  if (!value || typeof value !== 'object') return null;
+  const input = value as Record<string, unknown>;
+  if (input.version !== ZOMBIE_DEFENSE_VERSION || typeof input.seed !== 'number' || !Number.isFinite(input.seed)) return null;
+  if (!Number.isInteger(input.tick) || Number(input.tick) < 0 || !Number.isInteger(input.wave) || Number(input.wave) < 0 || !Number.isInteger(input.lives) || Number(input.lives) < 0 || typeof input.resources !== 'number' || !Number.isFinite(input.resources) || input.resources < 0 || !Number.isInteger(input.nextId) || Number(input.nextId) <= 0) return null;
+  if (input.status !== 'ready' && input.status !== 'active' && input.status !== 'won' && input.status !== 'lost') return null;
+  if (!Array.isArray(input.route) || input.route.length < 2 || !Array.isArray(input.zombies) || !Array.isArray(input.towers)) return null;
+  const route = input.route.flatMap((cell): ZombieRouteCell[] => {
+    if (!cell || typeof cell !== 'object') return [];
+    const row = cell as Record<string, unknown>;
+    return Number.isInteger(row.x) && Number.isInteger(row.z) && Math.abs(Number(row.x)) <= 32 && Math.abs(Number(row.z)) <= 32 ? [{ x: Number(row.x), z: Number(row.z) }] : [];
+  });
+  if (route.length !== input.route.length) return null;
+  const zombies = input.zombies.flatMap((value): Zombie[] => {
+    if (!value || typeof value !== 'object') return [];
+    const row = value as Record<string, unknown>;
+    if (!Number.isInteger(row.id) || Number(row.id) <= 0 || (row.archetype !== 'shambler' && row.archetype !== 'runner' && row.archetype !== 'brute') || !Number.isInteger(row.routeIndex) || Number(row.routeIndex) < 0 || Number(row.routeIndex) >= route.length || typeof row.hp !== 'number' || !Number.isFinite(row.hp) || row.hp < 0 || typeof row.speed !== 'number' || !Number.isFinite(row.speed) || row.speed <= 0 || !Number.isInteger(row.blockedTicks) || Number(row.blockedTicks) < 0) return [];
+    return [{ id: Number(row.id), archetype: row.archetype, routeIndex: Number(row.routeIndex), hp: row.hp, speed: row.speed, blockedTicks: Number(row.blockedTicks) }];
+  });
+  if (zombies.length !== input.zombies.length) return null;
+  const towers = input.towers.flatMap((value): DefenseTower[] => {
+    if (!value || typeof value !== 'object') return [];
+    const row = value as Record<string, unknown>;
+    const cell = row.cell;
+    if (!cell || typeof cell !== 'object') return [];
+    const position = cell as Record<string, unknown>;
+    if (!Number.isInteger(row.id) || Number(row.id) <= 0 || (row.kind !== 'arrow' && row.kind !== 'slow' && row.kind !== 'cannon') || !Number.isInteger(position.x) || !Number.isInteger(position.z) || Math.abs(Number(position.x)) > 32 || Math.abs(Number(position.z)) > 32 || typeof row.cooldown !== 'number' || !Number.isFinite(row.cooldown) || row.cooldown < 0 || !Number.isInteger(row.level) || Number(row.level) <= 0) return [];
+    return [{ id: Number(row.id), kind: row.kind, cell: { x: Number(position.x), z: Number(position.z) }, cooldown: row.cooldown, level: Number(row.level) }];
+  });
+  if (towers.length !== input.towers.length || new Set(towers.map((tower) => `${tower.cell.x},${tower.cell.z}`)).size !== towers.length) return null;
+  return { version: ZOMBIE_DEFENSE_VERSION, seed: input.seed, tick: Number(input.tick), wave: Number(input.wave), lives: Number(input.lives), resources: input.resources, route, zombies, towers, nextId: Number(input.nextId), status: input.status };
+}

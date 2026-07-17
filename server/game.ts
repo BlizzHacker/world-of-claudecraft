@@ -40,8 +40,10 @@ import {
   claimMinigameReward,
   createMinigameSession,
   createZombieDefenseSession,
+  cloneZombieDefense,
   deserializeHousingLot,
   deserializeRtsCampaign,
+  deserializeZombieDefense,
   finishMinigameSession,
   joinMinigameSession,
   MINIGAME_FEATURES,
@@ -61,6 +63,7 @@ import {
   type ArcadeState,
   type HousingLot,
   type RtsCampaign,
+  type ZombieDefenseState,
   type ZombieDefenseSessionState,
   trainArcadeRts,
   placeArcadeHousing,
@@ -1123,6 +1126,7 @@ export class GameServer {
   // copied into each active session so reconnects do not erase authored work.
   private persistentTownRts: RtsCampaign | null = null;
   private persistentHousing: HousingLot | null = null;
+  private persistentZombieDefense: ZombieDefenseState | null = null;
   private nextMinigameSessionId = 1;
   private readonly minigamePreview = process.env.ALLOW_MINIGAME_PREVIEW === '1';
 
@@ -2661,6 +2665,9 @@ export class GameServer {
       ]);
       this.persistentTownRts = deserializeRtsCampaign(rts);
       this.persistentHousing = deserializeHousingLot(housing);
+      this.persistentZombieDefense = deserializeZombieDefense(
+        await loadWorldState<unknown>(`minigame:zombie:${REALM}:eastbrook`),
+      );
     } catch (err) {
       console.error('failed to load minigame world state:', err);
     }
@@ -2680,6 +2687,14 @@ export class GameServer {
         console.error('failed to persist housing state:', err),
       );
     }
+  }
+
+  private persistZombieWorldState(state: ZombieDefenseState): void {
+    const snapshot = cloneZombieDefense(state);
+    this.persistentZombieDefense = snapshot;
+    void this.enqueueMarketWrite(() => saveWorldState(`minigame:zombie:${REALM}:eastbrook`, snapshot)).catch((err) =>
+      console.error('failed to persist zombie defense state:', err),
+    );
   }
 
   /** True if the account may use the in-game world builder (admin OR mod). */
@@ -4388,7 +4403,9 @@ export class GameServer {
         }
         this.minigameSessions.set(id, state);
         if (kind === 'zombie_defense') {
-          this.zombieDefenseSessions.set(id, createZombieDefenseSession(id, seed));
+          const zombie = createZombieDefenseSession(id, seed);
+          if (this.persistentZombieDefense) zombie.state = cloneZombieDefense(this.persistentZombieDefense);
+          this.zombieDefenseSessions.set(id, zombie);
         } else {
           const arcade = createArcadeState(kind, seed, [pid], botPids);
           if (arcade.kind === 'town_rts' && this.persistentTownRts) {
@@ -4551,11 +4568,13 @@ export class GameServer {
         const zombie = current ? this.zombieDefenseSessions.get(current.id) : undefined;
         if (!current || current.kind !== 'zombie_defense' || current.phase !== 'active' || !zombie) return;
         if (!current.players.some((player) => player.pid === pid)) return;
-        startZombieDefenseWave(
+        if (startZombieDefenseWave(
           zombie,
           pid,
           current.players.map((player) => player.pid),
-        );
+        )) {
+          this.persistZombieWorldState(zombie.state);
+        }
         return;
       }
       case 'mg_zombie_build': {
@@ -4573,13 +4592,15 @@ export class GameServer {
           !Number.isInteger(z)
         )
           return;
-        buildZombieDefenseTower(
+        if (buildZombieDefenseTower(
           zombie,
           pid,
           msg.kind as TowerKind,
           { x, z },
           current.players.map((player) => player.pid),
-        );
+        )) {
+          this.persistZombieWorldState(zombie.state);
+        }
         return;
       }
       default:
@@ -4632,6 +4653,9 @@ export class GameServer {
       const zombie = this.zombieDefenseSessions.get(id);
       if (!zombie || stepped.phase !== 'active') continue;
       stepZombieDefenseSession(zombie);
+      if (zombie.state.tick % 20 === 0 || zombie.state.status !== 'active') {
+        this.persistZombieWorldState(zombie.state);
+      }
       if (zombie.state.status === 'won') {
         const mutation = finishMinigameSession(
           stepped,

@@ -57,8 +57,14 @@ export {
   stepMinigameSession,
 } from './session';
 export { MINIGAME_BOT_PID_BASE } from './session';
-export type { TowerKind } from './zombie_defense';
-export { createZombieDefense, stepZombieDefense, ZOMBIE_DEFENSE_VERSION } from './zombie_defense';
+export type { TowerKind, ZombieDefenseState } from './zombie_defense';
+export {
+  cloneZombieDefense,
+  createZombieDefense,
+  deserializeZombieDefense,
+  stepZombieDefense,
+  ZOMBIE_DEFENSE_VERSION,
+} from './zombie_defense';
 export type { ZombieDefenseSessionState } from './zombie_session';
 export {
   buildZombieDefenseTower,

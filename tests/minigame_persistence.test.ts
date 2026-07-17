@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { cloneHousingLot, createHousingLot, deserializeHousingLot, placeHousingPiece } from '../src/sim/minigames/housing';
 import { addRtsAcl, buildRtsStructure, cloneRtsCampaign, createRtsCampaign, deserializeRtsCampaign } from '../src/sim/minigames/rts';
+import { cloneZombieDefense, createZombieDefense, deserializeZombieDefense, startZombieWave } from '../src/sim/minigames/zombie_defense';
+import { EASTBROOK_ZOMBIE_ROUTE } from '../src/sim/minigames/zombie_session';
 
 describe('minigame persistence snapshots', () => {
   it('round-trips and detaches a housing lot', () => {
@@ -21,5 +23,13 @@ describe('minigame persistence snapshots', () => {
     expect(restored).not.toBe(campaign);
     expect(deserializeRtsCampaign({ ...campaign, objective: 'cheat' })).toBeNull();
     expect(deserializeRtsCampaign({ ...campaign, structures: [{ ...campaign.structures[0], cell: { x: 99, z: 0 } }] })).toBeNull();
+  });
+
+  it('round-trips an active zombie wave without accepting invalid towers', () => {
+    const state = createZombieDefense(19, EASTBROOK_ZOMBIE_ROUTE);
+    startZombieWave(state);
+    const restored = deserializeZombieDefense(JSON.parse(JSON.stringify(cloneZombieDefense(state))));
+    expect(restored).toEqual(state);
+    expect(deserializeZombieDefense({ ...state, towers: [{ id: 1, kind: 'laser', cell: { x: 0, z: 0 }, cooldown: 0, level: 1 }] })).toBeNull();
   });
 });
