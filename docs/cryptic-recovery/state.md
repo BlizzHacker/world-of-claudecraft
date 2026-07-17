@@ -40,3 +40,5 @@
 - `1fca55baf` — reuse unchanged external item preview models.
 - `2e0cdac46` — offline couch co-op invitation through the authoritative session seam.
 - `7d16d7902` — validated RTS/housing snapshots persisted through realm-scoped `world_state`.
+- `693698d35` — validated zombie-defense snapshots persisted through realm-scoped `world_state`.
+- `8bc89c17d` — online clients now receive the process-local preview availability instead of a stale optimistic flag.
