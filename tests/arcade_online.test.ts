@@ -10,6 +10,8 @@ vi.mock('../server/db', () => ({
   walletForAccount: vi.fn(async () => null),
   markAccountQuestComplete: vi.fn(async () => ({ completedQuestIds: [], mechChromaIds: [] })),
   grantAccountMechChroma: vi.fn(async () => ({ completedQuestIds: [], mechChromaIds: [] })),
+  loadWorldState: vi.fn(async () => null),
+  saveWorldState: vi.fn(async () => {}),
 }));
 
 import { type ClientSession, GameServer } from '../server/game';
@@ -63,7 +65,7 @@ describe('online arcade minigame preview', () => {
     expect(snap.mga.race.itemRng).toBeUndefined();
   });
 
-  it('runs brawler, RTS, and housing actions through one authoritative adapter', () => {
+  it('runs brawler, RTS, and housing actions through one authoritative adapter', async () => {
     const server = new GameServer();
     const ws = fakeWs();
     const owner = join(server, ws, 31, 'Arcadeowner');
@@ -87,6 +89,12 @@ describe('online arcade minigame preview', () => {
       if (kind === 'housing') expect(arcade.housing.pieces).toHaveLength(1);
       send(server, owner, { cmd: 'mg_abort' });
     }
+    await Promise.resolve();
+    const db = await import('../server/db');
+    expect(vi.mocked(db.saveWorldState)).toHaveBeenCalledWith(
+      expect.stringMatching(/^minigame:(rts|housing):/),
+      expect.any(Object),
+    );
   });
 
   it('fills a one-player online practice lobby with server-owned CPU racers', () => {

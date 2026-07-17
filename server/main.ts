@@ -2580,6 +2580,7 @@ export async function startServer(): Promise<http.Server> {
   await pruneApplePendingLogins(pool);
   await game.loadMarket();
   await game.loadProps();
+  await game.loadMinigameWorldState();
   await game.loadMail();
   await game.loadChatFilter();
   await game.loadBlockedIps();

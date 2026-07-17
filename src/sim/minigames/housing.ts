@@ -106,3 +106,37 @@ export function restoreHousingLot(lot: HousingLot, playerId: number): boolean {
   lot.revision += 1;
   return true;
 }
+
+/** Return a detached snapshot suitable for a world-state JSONB row. */
+export function cloneHousingLot(lot: HousingLot): HousingLot {
+  return structuredClone(lot) as HousingLot;
+}
+
+/** Validate and detach a persisted lot; reject corrupt or incompatible rows. */
+export function deserializeHousingLot(value: unknown): HousingLot | null {
+  if (!value || typeof value !== 'object') return null;
+  const input = value as Record<string, unknown>;
+  if (input.version !== HOUSING_VERSION || typeof input.realm !== 'string' || typeof input.town !== 'string') return null;
+  if (!Number.isInteger(input.ownerId) || Number(input.ownerId) <= 0 || !Number.isInteger(input.revision) || Number(input.revision) < 0) return null;
+  if (input.deletedAtTick !== null && (!Number.isInteger(input.deletedAtTick) || Number(input.deletedAtTick) < 0)) return null;
+  if (!input.acl || typeof input.acl !== 'object' || Array.isArray(input.acl) || !Array.isArray(input.pieces)) return null;
+  const acl: Record<number, HousingRole> = {};
+  for (const [rawId, rawRole] of Object.entries(input.acl as Record<string, unknown>)) {
+    const playerId = Number(rawId);
+    if (!Number.isInteger(playerId) || playerId <= 0 || (rawRole !== 'owner' && rawRole !== 'builder' && rawRole !== 'visitor')) return null;
+    acl[playerId] = rawRole;
+  }
+  const ownerId = Number(input.ownerId);
+  if (acl[ownerId] !== 'owner') return null;
+  const pieces = input.pieces.flatMap((value): HousingPiece[] => {
+    if (!value || typeof value !== 'object') return [];
+    const piece = value as Record<string, unknown>;
+    const cell = piece.cell;
+    if (!cell || typeof cell !== 'object') return [];
+    const position = cell as Record<string, unknown>;
+    if (typeof piece.id !== 'string' || piece.id.length < 1 || piece.id.length > 64 || typeof piece.kind !== 'string' || !HOUSING_PIECE_KINDS.has(piece.kind) || !Number.isInteger(position.x) || !Number.isInteger(position.z) || Math.abs(Number(position.x)) > 8 || Math.abs(Number(position.z)) > 8 || (piece.rotation !== 0 && piece.rotation !== 90 && piece.rotation !== 180 && piece.rotation !== 270)) return [];
+    return [{ id: piece.id, kind: piece.kind, cell: { x: Number(position.x), z: Number(position.z) }, rotation: piece.rotation }];
+  });
+  if (pieces.length !== input.pieces.length || new Set(pieces.map((piece) => `${piece.cell.x},${piece.cell.z}`)).size !== pieces.length) return null;
+  return { version: HOUSING_VERSION, realm: input.realm, town: input.town, ownerId, acl, pieces, deletedAtTick: input.deletedAtTick as number | null, revision: Number(input.revision) };
+}

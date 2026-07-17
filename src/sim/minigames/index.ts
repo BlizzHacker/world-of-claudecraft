@@ -20,8 +20,22 @@ export {
 } from './arcade';
 export type { ArcadeState, ArcadeWireState } from './arcade';
 export { BRAWLER_VERSION, createBrawlerState, stepBrawler } from './brawler';
-export { createHousingLot, HOUSING_VERSION, placeHousingPiece } from './housing';
-export { createRtsCampaign, RTS_VERSION, stepRtsCampaign } from './rts';
+export {
+  cloneHousingLot,
+  createHousingLot,
+  deserializeHousingLot,
+  HOUSING_VERSION,
+  placeHousingPiece,
+} from './housing';
+export type { HousingLot } from './housing';
+export {
+  cloneRtsCampaign,
+  createRtsCampaign,
+  deserializeRtsCampaign,
+  RTS_VERSION,
+  stepRtsCampaign,
+} from './rts';
+export type { RtsCampaign } from './rts';
 export type {
   MinigameSessionPhase,
   MinigameSessionPlayer,

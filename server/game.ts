@@ -33,11 +33,15 @@ import {
   arcadeWire,
   buildArcadeRts,
   abortMinigameSession,
+  cloneHousingLot,
+  cloneRtsCampaign,
   createArcadeState,
   buildZombieDefenseTower,
   claimMinigameReward,
   createMinigameSession,
   createZombieDefenseSession,
+  deserializeHousingLot,
+  deserializeRtsCampaign,
   finishMinigameSession,
   joinMinigameSession,
   MINIGAME_FEATURES,
@@ -55,6 +59,8 @@ import {
   type MinigameFeatureId,
   type MinigameSessionState,
   type ArcadeState,
+  type HousingLot,
+  type RtsCampaign,
   type ZombieDefenseSessionState,
   trainArcadeRts,
   placeArcadeHousing,
@@ -118,6 +124,7 @@ import {
   insertRealmProp,
   isAdminAccount,
   isModeratorAccount,
+  loadWorldState,
   loadMailState,
   loadMarketState,
   loadRealmProps,
@@ -131,6 +138,7 @@ import {
   saveCharacterState,
   saveMailState,
   saveMarketState,
+  saveWorldState,
   updateRealmProp,
   updateRealmPropMeta,
   touchCharacterLogin,
@@ -1110,6 +1118,11 @@ export class GameServer {
   private readonly minigameSessions = new Map<number, MinigameSessionState>();
   private readonly zombieDefenseSessions = new Map<number, ZombieDefenseSessionState>();
   private readonly arcadeSessions = new Map<number, ArcadeState>();
+  // Town RTS and housing are world-owned pilot surfaces, not disposable lobby
+  // state. They are loaded from the realm-scoped world_state row at boot and
+  // copied into each active session so reconnects do not erase authored work.
+  private persistentTownRts: RtsCampaign | null = null;
+  private persistentHousing: HousingLot | null = null;
   private nextMinigameSessionId = 1;
   private readonly minigamePreview = process.env.ALLOW_MINIGAME_PREVIEW === '1';
 
@@ -2635,6 +2648,37 @@ export class GameServer {
       this.sim.loadProps(await loadRealmProps());
     } catch (err) {
       console.error('failed to load realm props:', err);
+    }
+  }
+
+  /** Boot-load the pilot town RTS and housing snapshots. Invalid rows are
+   * ignored so a stale preview save cannot prevent the realm from starting. */
+  async loadMinigameWorldState(): Promise<void> {
+    try {
+      const [rts, housing] = await Promise.all([
+        loadWorldState<unknown>(`minigame:rts:${REALM}:eastbrook`),
+        loadWorldState<unknown>(`minigame:housing:${REALM}:eastbrook`),
+      ]);
+      this.persistentTownRts = deserializeRtsCampaign(rts);
+      this.persistentHousing = deserializeHousingLot(housing);
+    } catch (err) {
+      console.error('failed to load minigame world state:', err);
+    }
+  }
+
+  private persistArcadeWorldState(state: ArcadeState): void {
+    if (state.kind === 'town_rts') {
+      const snapshot = cloneRtsCampaign(state.rts);
+      this.persistentTownRts = snapshot;
+      void this.enqueueMarketWrite(() => saveWorldState(`minigame:rts:${REALM}:eastbrook`, snapshot)).catch((err) =>
+        console.error('failed to persist town RTS state:', err),
+      );
+    } else if (state.kind === 'housing') {
+      const snapshot = cloneHousingLot(state.housing);
+      this.persistentHousing = snapshot;
+      void this.enqueueMarketWrite(() => saveWorldState(`minigame:housing:${REALM}:eastbrook`, snapshot)).catch((err) =>
+        console.error('failed to persist housing state:', err),
+      );
     }
   }
 
@@ -4346,7 +4390,15 @@ export class GameServer {
         if (kind === 'zombie_defense') {
           this.zombieDefenseSessions.set(id, createZombieDefenseSession(id, seed));
         } else {
-          this.arcadeSessions.set(id, createArcadeState(kind, seed, [pid], botPids));
+          const arcade = createArcadeState(kind, seed, [pid], botPids);
+          if (arcade.kind === 'town_rts' && this.persistentTownRts) {
+            arcade.rts = cloneRtsCampaign(this.persistentTownRts);
+            addArcadePlayer(arcade, pid);
+          } else if (arcade.kind === 'housing' && this.persistentHousing) {
+            arcade.housing = cloneHousingLot(this.persistentHousing);
+            addArcadePlayer(arcade, pid);
+          }
+          this.arcadeSessions.set(id, arcade);
         }
         return;
       }
@@ -4453,7 +4505,9 @@ export class GameServer {
           (msg.kind !== 'wall' && msg.kind !== 'farm' && msg.kind !== 'barracks' && msg.kind !== 'tower') ||
           !Number.isInteger(x) || !Number.isInteger(z) || Math.abs(x) > 8 || Math.abs(z) > 8
         ) return;
-        buildArcadeRts(arcade, pid, msg.kind as RtsStructureKind, x, z);
+        if (buildArcadeRts(arcade, pid, msg.kind as RtsStructureKind, x, z)) {
+          this.persistArcadeWorldState(arcade);
+        }
         return;
       }
       case 'mg_rts_train': {
@@ -4461,7 +4515,9 @@ export class GameServer {
         const arcade = current ? this.arcadeSessions.get(current.id) : undefined;
         if (!current || current.kind !== 'town_rts' || current.phase !== 'active' || !arcade) return;
         if (msg.kind !== 'worker' && msg.kind !== 'guard' && msg.kind !== 'ranger') return;
-        trainArcadeRts(arcade, pid, msg.kind as RtsUnitKind);
+        if (trainArcadeRts(arcade, pid, msg.kind as RtsUnitKind)) {
+          this.persistArcadeWorldState(arcade);
+        }
         return;
       }
       case 'mg_housing_place': {
@@ -4480,12 +4536,14 @@ export class GameServer {
           Math.abs(candidate.cell.x) > 8 || Math.abs(candidate.cell.z) > 8 ||
           (candidate.rotation !== 0 && candidate.rotation !== 90 && candidate.rotation !== 180 && candidate.rotation !== 270)
         ) return;
-        placeArcadeHousing(arcade, pid, {
+        if (placeArcadeHousing(arcade, pid, {
           id: candidate.id,
           kind: candidate.kind,
           cell: { x: candidate.cell.x, z: candidate.cell.z },
           rotation: candidate.rotation,
-        });
+        })) {
+          this.persistArcadeWorldState(arcade);
+        }
         return;
       }
       case 'mg_zombie_start': {
