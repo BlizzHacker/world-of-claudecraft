@@ -22,6 +22,8 @@
 - Exchange custody: `server/exchange/api.ts`, `server/exchange/db.ts`,
   `src/sim/exchange/custody.ts`
 - 3D preview cache: `src/render/characters/preview.ts`, `src/ui/item_model_catalog.ts`
+- Town/housing persistence: `server/game.ts`, `server/main.ts`, `src/sim/minigames/rts.ts`,
+  `src/sim/minigames/housing.ts`
 
 ## Known blockers
 
@@ -37,3 +39,4 @@
 - `3b4fc0d96` — recovery implementation packet.
 - `1fca55baf` — reuse unchanged external item preview models.
 - `2e0cdac46` — offline couch co-op invitation through the authoritative session seam.
+- `7d16d7902` — validated RTS/housing snapshots persisted through realm-scoped `world_state`.

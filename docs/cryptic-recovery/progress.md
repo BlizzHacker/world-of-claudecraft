@@ -3,7 +3,7 @@
 | Area | Current status | Evidence |
 |---|---|---|
 | Arcade racing/brawler | Preview playable offline/online; solo CPU opponents; offline couch invite seam | `9d61ce9be`, `97d576cda`, `2e0cdac46` |
-| Town RTS/housing | Preview adapter and validation; persistence/defense open | `9d61ce9be` |
+| Town RTS/housing | Preview adapter plus realm-scoped world-state persistence; defense/wave gameplay open | `9d61ce9be`, `7d16d7902` |
 | Zombie defense | Eastbrook preview adapter and UI | `b082bcc1c` |
 | Mounts/DuranceTester | Three-bridle grant and high-level ride bypass in code | `6667d48b7` plus entitlement tests |
 | Exchange | Custody/provenance core; writes now restricted to Exchange process; shared item-level gate | `16bea311a`, `6667d48b7` |
