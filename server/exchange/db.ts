@@ -5,6 +5,7 @@
 import { randomUUID } from 'node:crypto';
 import type { Pool, PoolClient } from 'pg';
 import { ITEMS } from '../../src/sim/data';
+import { meetsLevelRequirement } from '../../src/sim/item_level_req';
 import {
   EXCHANGE_FEE_BPS,
   type ExchangeEscrowListing,
@@ -404,7 +405,7 @@ export async function settleListing(
       throw new Error('item is not accepted by the destination');
     if (def.requiredClass && !def.requiredClass.includes(buyer.class))
       throw new Error('destination class cannot receive this item');
-    if (def.requiredLevel && Number(buyer.level) < def.requiredLevel)
+    if (!meetsLevelRequirement(Number(buyer.level), def))
       throw new Error('destination level cannot receive this item');
     const buyerState = stateOf(buyer.state);
     const priceCopper = Number(listing.price_copper);
