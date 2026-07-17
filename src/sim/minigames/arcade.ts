@@ -66,6 +66,9 @@ export type ArcadeWireState =
   | { version: typeof ARCADE_STATE_VERSION; kind: 'town_rts'; rts: RtsCampaign }
   | { version: typeof ARCADE_STATE_VERSION; kind: 'housing'; housing: HousingLot };
 
+/** Deterministic, mode-neutral scoreboard values for the shared session shell. */
+export type ArcadeScores = ReadonlyMap<number, number>;
+
 export function arcadeKindSupported(kind: MinigameFeatureId): kind is ArcadeState['kind'] {
   return kind !== 'zombie_defense';
 }
@@ -283,6 +286,27 @@ export function arcadeWinnerPids(state: ArcadeState): number[] {
   }
   if (state.kind === 'town_rts' && state.rts.objective === 'won') return [state.rts.ownerId];
   return [];
+}
+
+/**
+ * Resolve placement/KO scores at the adapter boundary. The generic session
+ * deliberately does not know game rules, but it owns the compact player score
+ * field that the lobby and reward UI consume.
+ */
+export function arcadeScores(state: ArcadeState): ArcadeScores {
+  const scores = new Map<number, number>();
+  if (state.kind === 'racing') {
+    const points = [400, 300, 200, 100];
+    for (const result of raceResults(state.race)) {
+      const vehicle = state.race.vehicles.find((candidate) => candidate.id === result.vehicleId);
+      if (vehicle) scores.set(vehicle.playerId, points[result.place - 1] ?? 0);
+    }
+    return scores;
+  }
+  if (state.kind === 'brawler') {
+    for (const fighter of state.brawler.fighters) scores.set(fighter.id, fighter.score);
+  }
+  return scores;
 }
 
 export function cloneArcadeState(state: ArcadeState): ArcadeState {

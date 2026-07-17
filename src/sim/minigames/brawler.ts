@@ -40,6 +40,10 @@ export interface BrawlerFighter {
   respawnInvulnerable: number;
   facing: -1 | 1;
   attackCooldown: number;
+  /** Ring-out points earned by this fighter. */
+  score: number;
+  /** The last fighter to hit this fighter, used for deterministic KO credit. */
+  lastHitBy: number | null;
   alive: boolean;
 }
 
@@ -79,6 +83,8 @@ export function createBrawlerState(
     respawnInvulnerable: 0,
     facing: 1 as const,
     attackCooldown: 0,
+    score: 0,
+    lastHitBy: null,
     alive: true,
   }));
   return {
@@ -126,6 +132,7 @@ function respawn(fighter: BrawlerFighter, index: number): void {
   fighter.jumps = 2;
   fighter.hitstun = 0;
   fighter.respawnInvulnerable = RESPAWN_INVULNERABILITY;
+  fighter.lastHitBy = null;
   fighter.alive = fighter.stocks > 0;
 }
 
@@ -161,6 +168,7 @@ export function stepBrawler(
             continue;
           const knockback = BASE_KNOCKBACK + target.damage * DAMAGE_KNOCKBACK;
           target.damage = Math.min(999, target.damage + 8);
+          target.lastHitBy = fighter.id;
           target.vx = fighter.facing * knockback;
           target.vy = 4 + target.damage * 0.02;
           target.grounded = false;
@@ -177,6 +185,10 @@ export function stepBrawler(
     fighter.grounded = landOnPlatform(fighter, state.platforms);
     if (!fighter.grounded && fighter.z < state.bottomBlastZone) {
       fighter.stocks -= 1;
+      if (fighter.lastHitBy !== null && fighter.lastHitBy !== fighter.id) {
+        const scorer = state.fighters.find((candidate) => candidate.id === fighter.lastHitBy);
+        if (scorer) scorer.score += 1;
+      }
       events.push({ type: 'ring_out', fighterId: fighter.id, stocks: fighter.stocks });
       if (fighter.stocks > 0) {
         respawn(fighter, state.fighters.indexOf(fighter));
@@ -186,6 +198,10 @@ export function stepBrawler(
       }
     } else if (fighter.x < state.leftBlastZone || fighter.x > state.rightBlastZone) {
       fighter.stocks -= 1;
+      if (fighter.lastHitBy !== null && fighter.lastHitBy !== fighter.id) {
+        const scorer = state.fighters.find((candidate) => candidate.id === fighter.lastHitBy);
+        if (scorer) scorer.score += 1;
+      }
       events.push({ type: 'ring_out', fighterId: fighter.id, stocks: fighter.stocks });
       if (fighter.stocks > 0) {
         respawn(fighter, state.fighters.indexOf(fighter));

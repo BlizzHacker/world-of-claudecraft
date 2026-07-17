@@ -51,7 +51,7 @@ describe('Exchange custody transitions', () => {
     expect(() =>
       settleExchangeEscrow(escrow, {
         buyerCharacterId: 22,
-        destinationRealm: 'Infernal',
+        destinationRealm: 'infernal',
         buyerHasFunds: true,
         destinationAcceptsItem: true,
       }),

@@ -113,4 +113,18 @@ describe('online arcade minigame preview', () => {
     step(server, 61);
     expect(sessions.get(id).phase).toBe('active');
   });
+
+  it('persists authoritative placement scores when the server closes a race', () => {
+    const server = new GameServer();
+    const ws = fakeWs();
+    const owner = join(server, ws, 51, 'Scoreowner');
+    send(server, owner, { cmd: 'mg_create', kind: 'racing', maxPlayers: 4 });
+    const sessions = (server as any).minigameSessions as Map<number, any>;
+    const id = [...sessions.keys()][0];
+    send(server, owner, { cmd: 'mg_ready', ready: true });
+    step(server, 61);
+    expect(server.finishMinigame(id, [owner.pid])).toBe(true);
+    expect(sessions.get(id).phase).toBe('finished');
+    expect(sessions.get(id).players.find((player: any) => player.pid === owner.pid).score).toBe(400);
+  });
 });

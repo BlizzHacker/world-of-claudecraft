@@ -174,6 +174,7 @@ export function stepMinigameSession(current: MinigameSessionState): MinigameSess
 export function finishMinigameSession(
   current: MinigameSessionState,
   winnerPids: readonly number[],
+  scores?: ReadonlyMap<number, number>,
 ): SessionMutation {
   if (current.phase !== 'active' && current.phase !== 'countdown') return { ok: false, reason: 'closed' };
   const winners = [...new Set(winnerPids)].filter((pid) => player(current, pid));
@@ -181,6 +182,12 @@ export function finishMinigameSession(
   const state = clone(current);
   state.phase = 'finished';
   state.winnerPids = winners;
+  if (scores) {
+    for (const entry of state.players) {
+      const score = scores.get(entry.pid);
+      if (score !== undefined && Number.isFinite(score)) entry.score = Math.max(0, Math.trunc(score));
+    }
+  }
   return { ok: true, state };
 }
 

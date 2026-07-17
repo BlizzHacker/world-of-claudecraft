@@ -107,7 +107,7 @@ export function settleExchangeEscrow(
   const destinationRealm = nonEmpty(input.destinationRealm, 'destination realm');
   if (buyerCharacterId === listing.sellerCharacterId)
     throw new Error('seller cannot buy own listing');
-  if (listing.sourceRealm === destinationRealm)
+  if (listing.sourceRealm.toLowerCase() === destinationRealm.toLowerCase())
     throw new Error('Exchange requires a cross-realm destination');
   if (!input.buyerHasFunds) throw new Error('buyer funds are not reserved');
   if (!input.destinationAcceptsItem) throw new Error('destination cannot accept this item');
