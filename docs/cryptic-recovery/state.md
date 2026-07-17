@@ -35,6 +35,9 @@
 
 ## Latest verified commits
 
+- `7462fda0d` â€” exhaustive recovery discovery ledger and strict checker closeout.
+- `22c61b0a7` â€” redacted ledger metadata and refreshed digest.
+
 - `97d576cda` — deterministic solo CPU opponents for racing/brawler.
 - `6667d48b7` — Exchange process boundary and shared item-level settlement gate.
 - `3b4fc0d96` — recovery implementation packet.

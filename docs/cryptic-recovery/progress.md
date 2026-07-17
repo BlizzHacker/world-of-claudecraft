@@ -9,7 +9,7 @@
 | Exchange | Custody/provenance core; writes now restricted to Exchange process; shared item-level gate | `16bea311a`, `6667d48b7` |
 | Character/3D viewer | Renderer foundation exists; unchanged external GLBs are reused; armor composition/pixel match/catalog open | `1fca55baf` plus prior viewer checkpoints |
 | Contributions | Live API exists; receipts/automation and production configuration open | `server/contributions.ts` |
-| Recovery manifest | Exhaustive local/remote/bundle ledger and patch-ID classification complete; strict checker passes | `config/cryptic-recovery/discovery.json`, `check_recovery_manifest.mjs` |
+| Recovery manifest | Exhaustive local/remote/bundle ledger and patch-ID classification complete; strict checker passes | `7462fda0d`, `22c61b0a7`, `config/cryptic-recovery/discovery.json` |
 | Production | Unchanged; promotion still blocked by isolated-stage, backup, full-QA, and health gates | strict recovery manifest, `8bc89c17d` |
 
 The next implementation phase should add persistence and defense behavior behind the existing
