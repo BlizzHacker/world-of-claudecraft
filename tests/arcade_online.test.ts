@@ -88,4 +88,21 @@ describe('online arcade minigame preview', () => {
       send(server, owner, { cmd: 'mg_abort' });
     }
   });
+
+  it('fills a one-player online practice lobby with server-owned CPU racers', () => {
+    const server = new GameServer();
+    const ws = fakeWs();
+    const owner = join(server, ws, 41, 'Practiceowner');
+    send(server, owner, { cmd: 'mg_create', kind: 'racing', maxPlayers: 1 });
+    const sessions = (server as any).minigameSessions as Map<number, any>;
+    const id = [...sessions.keys()][0];
+    const session = sessions.get(id);
+    expect(session.maxPlayers).toBe(4);
+    expect(session.players).toHaveLength(4);
+    expect(session.players.filter((player: any) => player.bot)).toHaveLength(3);
+    expect((server as any).arcadeSessions.get(id).botPids).toHaveLength(3);
+    send(server, owner, { cmd: 'mg_ready', ready: true });
+    step(server, 61);
+    expect(sessions.get(id).phase).toBe('active');
+  });
 });

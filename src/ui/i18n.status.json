@@ -33,10 +33,10 @@
     "da_DK"
   ],
   "counts": {
-    "keys": 6926,
-    "rows": 145446,
-    "translated": 141115,
-    "pending": 4138,
+    "keys": 6927,
+    "rows": 145467,
+    "translated": 141116,
+    "pending": 4158,
     "blocked": 193,
     "blockedSource": 96
   },
@@ -445236,6 +445236,78 @@
         "en_CA": {
           "state": "translated",
           "srcHash": "7241f77d379a911f",
+          "by": "human"
+        },
+        "it_IT": {
+          "state": "pending"
+        },
+        "de_DE": {
+          "state": "pending"
+        },
+        "zh_CN": {
+          "state": "pending"
+        },
+        "zh_TW": {
+          "state": "pending"
+        },
+        "ko_KR": {
+          "state": "pending"
+        },
+        "ja_JP": {
+          "state": "pending"
+        },
+        "pt_BR": {
+          "state": "pending"
+        },
+        "ru_RU": {
+          "state": "pending"
+        },
+        "cs_CZ": {
+          "state": "pending"
+        },
+        "nl_NL": {
+          "state": "pending"
+        },
+        "pl_PL": {
+          "state": "pending"
+        },
+        "id_ID": {
+          "state": "pending"
+        },
+        "tr_TR": {
+          "state": "pending"
+        },
+        "sv_SE": {
+          "state": "pending"
+        },
+        "vi_VN": {
+          "state": "pending"
+        },
+        "da_DK": {
+          "state": "pending"
+        }
+      }
+    },
+    "main:hudChrome.arcade.solo": {
+      "scope": "main",
+      "enHash": "1f6a47f55c8a18bb",
+      "placeholders": [],
+      "locales": {
+        "es": {
+          "state": "pending"
+        },
+        "es_ES": {
+          "state": "pending"
+        },
+        "fr_FR": {
+          "state": "pending"
+        },
+        "fr_CA": {
+          "state": "pending"
+        },
+        "en_CA": {
+          "state": "translated",
+          "srcHash": "1f6a47f55c8a18bb",
           "by": "human"
         },
         "it_IT": {

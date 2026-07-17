@@ -10,6 +10,8 @@ import {
   setMinigameReady,
   stepMinigameSession,
   type SessionMutation,
+  practiceBotPids,
+  practiceMinigameCapacity,
 } from '../src/sim/minigames';
 import { type BrawlerInput, createBrawlerState, stepBrawler } from '../src/sim/minigames/brawler';
 import {
@@ -134,6 +136,46 @@ describe('arcade race adapter', () => {
     expect(Number.isFinite(vehicle.x)).toBe(true);
     expect(Number.isFinite(vehicle.z)).toBe(true);
     expect(arcadeFinished(state)).toBe(false);
+  });
+
+  it('fills one-player practice with deterministic CPU opponents', () => {
+    const bots = practiceBotPids('racing', 7, 1);
+    expect(bots).toEqual([1_000_057, 1_000_058, 1_000_059]);
+    expect(practiceMinigameCapacity('racing', 1)).toBe(4);
+    expect(practiceBotPids('town_rts', 7, 1)).toEqual([]);
+    const first = createArcadeState('racing', 42, [1], bots);
+    const second = createArcadeState('racing', 42, [1], bots);
+    for (let i = 0; i < 120; i += 1) {
+      stepArcadeState(first);
+      stepArcadeState(second);
+    }
+    expect(first).toEqual(second);
+    expect(
+      first.kind === 'racing' &&
+        first.race.vehicles
+          .filter((vehicle) => bots.includes(vehicle.playerId))
+          .every((vehicle) => vehicle.checkpoint > 0 || vehicle.lap > 0),
+    ).toBe(true);
+  });
+
+  it('lets a solo brawler practice match resolve against CPU fighters', () => {
+    const bots = practiceBotPids('brawler', 1, 1);
+    const state = createArcadeState('brawler', 42, [1], bots);
+    for (let i = 0; i < 300 && !arcadeFinished(state); i += 1) stepArcadeState(state);
+    expect(arcadeFinished(state)).toBe(true);
+    expect(state.kind === 'brawler' && state.brawler.winner).not.toBeNull();
+  });
+
+  it('exposes the same CPU roster through the offline Sim host', () => {
+    const sim = new Sim({ seed: 42, playerClass: 'warrior' });
+    sim.minigameCreate('brawler', 1);
+    expect(sim.minigameSession?.players).toHaveLength(4);
+    expect(sim.minigameSession?.players.filter((player) => player.bot)).toHaveLength(3);
+    sim.minigameReady(true);
+    for (let i = 0; i < 61; i += 1) sim.tick();
+    expect(sim.minigameSession?.phase).toBe('active');
+    for (let i = 0; i < 300 && sim.minigameSession?.phase === 'active'; i += 1) sim.tick();
+    expect(sim.minigameSession?.phase).toBe('finished');
   });
 });
 

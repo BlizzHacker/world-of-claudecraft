@@ -38,22 +38,26 @@ export type ArcadeState =
       kind: 'racing';
       race: RaceSession;
       raceInputs: Record<string, RaceInput>;
+      botPids: readonly number[];
     }
   | {
       version: typeof ARCADE_STATE_VERSION;
       kind: 'brawler';
       brawler: BrawlerState;
       brawlerInputs: Record<number, BrawlerInput>;
+      botPids: readonly number[];
     }
   | {
       version: typeof ARCADE_STATE_VERSION;
       kind: 'town_rts';
       rts: RtsCampaign;
+      botPids: readonly number[];
     }
   | {
       version: typeof ARCADE_STATE_VERSION;
       kind: 'housing';
       housing: HousingLot;
+      botPids: readonly number[];
     };
 
 export type ArcadeWireState =
@@ -70,7 +74,9 @@ export function createArcadeState(
   kind: Exclude<MinigameFeatureId, 'zombie_defense'>,
   seed: number,
   playerIds: readonly number[],
+  botPids: readonly number[] = [],
 ): ArcadeState {
+  const participants = [...playerIds, ...botPids];
   if (kind === 'racing') {
     return {
       version: ARCADE_STATE_VERSION,
@@ -78,26 +84,67 @@ export function createArcadeState(
       race: createRaceSession(
         defaultRaceTrack(),
         seed,
-        playerIds.map((playerId, index) => ({ id: `p${playerId || index + 1}`, playerId })),
+        participants.map((playerId, index) => ({ id: `p${playerId || index + 1}`, playerId })),
       ),
       raceInputs: {},
+      botPids: [...botPids],
     };
   }
   if (kind === 'brawler') {
     return {
       version: ARCADE_STATE_VERSION,
       kind,
-      brawler: createBrawlerState(playerIds),
+      brawler: createBrawlerState(participants),
       brawlerInputs: {},
+      botPids: [...botPids],
     };
   }
   if (kind === 'town_rts') {
-    return { version: ARCADE_STATE_VERSION, kind, rts: createRtsCampaign(playerIds[0] ?? 1) };
+    return {
+      version: ARCADE_STATE_VERSION,
+      kind,
+      rts: createRtsCampaign(playerIds[0] ?? 1),
+      botPids: [],
+    };
   }
   return {
     version: ARCADE_STATE_VERSION,
     kind,
     housing: createHousingLot('cryptic', 'eastbrook', playerIds[0] ?? 1),
+    botPids: [],
+  };
+}
+
+function botRaceInput(state: RaceSession, vehicle: RaceSession['vehicles'][number]): RaceInput {
+  if (vehicle.recoveryTicks >= 35) return { recover: true };
+  const target = state.track.checkpoints[vehicle.checkpoint] ?? state.track.recovery;
+  const desired = Math.atan2(target.x - vehicle.x, target.z - vehicle.z);
+  let delta = desired - vehicle.heading;
+  while (delta > Math.PI) delta -= Math.PI * 2;
+  while (delta < -Math.PI) delta += Math.PI * 2;
+  return {
+    throttle: 1,
+    steer: delta > 0.12 ? 1 : delta < -0.12 ? -1 : 0,
+    drift: Math.abs(delta) > 0.45 && Math.abs(vehicle.speed) >= 4,
+    useItem: vehicle.item !== null && vehicle.itemCooldown === 0,
+  };
+}
+
+function botBrawlerInput(state: BrawlerState, fighter: BrawlerState['fighters'][number]): BrawlerInput {
+  const target = state.fighters
+    .filter((candidate) => candidate.id !== fighter.id && candidate.alive)
+    .sort((a, b) => {
+      const da = Math.abs(a.x - fighter.x) + Math.abs(a.z - fighter.z);
+      const db = Math.abs(b.x - fighter.x) + Math.abs(b.z - fighter.z);
+      return da - db || a.id - b.id;
+    })[0];
+  if (!target) return { move: 0, jump: false, attack: false };
+  const dx = target.x - fighter.x;
+  const move = dx < -0.8 ? -1 : dx > 0.8 ? 1 : 0;
+  return {
+    move,
+    jump: fighter.grounded && target.z - fighter.z > 1.5,
+    attack: Math.abs(dx) <= 1.8 && Math.abs(target.z - fighter.z) <= 2.2,
   };
 }
 
@@ -181,7 +228,11 @@ export function placeArcadeHousing(
 
 export function stepArcadeState(state: ArcadeState): void {
   if (state.kind === 'racing') {
-    state.race = stepRace(state.race, state.raceInputs);
+    const inputs = { ...state.raceInputs };
+    for (const vehicle of state.race.vehicles) {
+      if (state.botPids.includes(vehicle.playerId)) inputs[vehicle.id] = botRaceInput(state.race, vehicle);
+    }
+    state.race = stepRace(state.race, inputs);
     // Checkpoints are the deterministic equivalent of item boxes. Awarding
     // through the race domain keeps the seeded item stream authoritative for
     // both offline and online sessions, while avoiding a second collision/RNG
@@ -196,7 +247,11 @@ export function stepArcadeState(state: ArcadeState): void {
     return;
   }
   if (state.kind === 'brawler') {
-    stepBrawler(state.brawler, new Map(Object.entries(state.brawlerInputs).map(([pid, input]) => [Number(pid), input])));
+    const inputs = new Map(Object.entries(state.brawlerInputs).map(([pid, input]) => [Number(pid), input]));
+    for (const fighter of state.brawler.fighters) {
+      if (state.botPids.includes(fighter.id)) inputs.set(fighter.id, botBrawlerInput(state.brawler, fighter));
+    }
+    stepBrawler(state.brawler, inputs);
     return;
   }
   if (state.kind === 'town_rts') {

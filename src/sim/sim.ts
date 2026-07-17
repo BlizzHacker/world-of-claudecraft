@@ -285,6 +285,8 @@ import {
   joinMinigameSession,
   MINIGAME_FEATURES,
   minigameAvailable,
+  practiceBotPids,
+  practiceMinigameCapacity,
   setMinigameConnection,
   setMinigameReady,
   setArcadeBrawlerInput,
@@ -3523,14 +3525,26 @@ export class Sim {
   minigameCreate(kind: MinigameFeatureId, maxPlayers = 4): void {
     if (!minigameAvailable(kind, true)) return;
     if (this.minigameSession && !['finished', 'aborted'].includes(this.minigameSession.phase)) return;
-    const session = createMinigameSession(1, kind, this.cfg.seed + 9973, this.playerId, maxPlayers);
+    const requestedMaxPlayers = Number.isFinite(maxPlayers) ? Math.trunc(maxPlayers) : 4;
+    const botPids = practiceBotPids(kind, 1, requestedMaxPlayers);
+    let session = createMinigameSession(
+      1,
+      kind,
+      this.cfg.seed + 9973,
+      this.playerId,
+      practiceMinigameCapacity(kind, requestedMaxPlayers),
+    );
+    for (const botPid of botPids) {
+      const mutation = joinMinigameSession(session, botPid, true);
+      if (mutation.ok) session = mutation.state;
+    }
     this.minigameSession = session;
     this.minigameZombieState =
       kind === 'zombie_defense' ? createZombieDefenseSession(session.id, session.seed) : null;
     this.minigameArcadeState =
       kind === 'zombie_defense'
         ? null
-        : createArcadeState(kind, session.seed, session.players.map((player) => player.pid));
+        : createArcadeState(kind, session.seed, [this.playerId], botPids);
   }
 
   minigameJoin(sessionId: number, playerId = this.playerId): void {

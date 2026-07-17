@@ -86,7 +86,7 @@ export class ArcadeMinigameWindow {
     const sameMode = session?.kind === this.mode;
     const activeSession = sameMode ? session : null;
     return `<div class="arcade-window__lobby">
-      ${!sameMode ? `<button type="button" data-arcade-create>${esc(t('hudChrome.arcade.create'))}</button>` : ''}
+      ${!sameMode ? `<button type="button" data-arcade-create>${esc(t('hudChrome.arcade.create'))}</button>${this.mode === 'racing' || this.mode === 'brawler' ? `<button type="button" data-arcade-solo>${esc(t('hudChrome.arcade.solo'))}</button>` : ''}` : ''}
       <label>${esc(t('hudChrome.arcade.code'))}<input data-arcade-code inputmode="numeric" maxlength="8" /></label>
       <button type="button" data-arcade-join>${esc(t('hudChrome.arcade.join'))}</button>
       ${activeSession ? `<span class="arcade-window__status">${esc(activeSession.phase === 'active' ? t('hudChrome.arcade.active') : activeSession.phase === 'finished' ? t('hudChrome.arcade.finished') : t('hudChrome.arcade.waiting'))}</span>
@@ -110,6 +110,10 @@ export class ArcadeMinigameWindow {
     });
     root.querySelector('[data-arcade-create]')?.addEventListener('click', () => {
       this.world().minigameCreate(this.mode, 4);
+      this.render();
+    });
+    root.querySelector('[data-arcade-solo]')?.addEventListener('click', () => {
+      this.world().minigameCreate(this.mode, 1);
       this.render();
     });
     root.querySelector('[data-arcade-join]')?.addEventListener('click', () => {
@@ -220,9 +224,20 @@ export class ArcadeMinigameWindow {
   }
 
   private drawRace(ctx: CanvasRenderingContext2D, race: Record<string, unknown>): void {
-    const vehicles = Array.isArray(race.vehicles) ? race.vehicles as Array<Record<string, number>> : [];
+    const vehicles = Array.isArray(race.vehicles)
+      ? race.vehicles as Array<Record<string, number | string>>
+      : [];
     ctx.strokeStyle = '#526b84'; ctx.strokeRect(80, 20, 400, 250);
-    vehicles.forEach((vehicle, index) => { ctx.fillStyle = ['#efc75e', '#ef6b6b', '#6bd4ef', '#9e86e8'][index % 4]; ctx.beginPath(); ctx.arc(280 + vehicle.x * 3, 145 + vehicle.z * 2, 7, 0, Math.PI * 2); ctx.fill(); });
+    vehicles.forEach((vehicle, index) => {
+      const x = 280 + Number(vehicle.x) * 3;
+      const y = 145 + Number(vehicle.z) * 2;
+      ctx.fillStyle = ['#efc75e', '#ef6b6b', '#6bd4ef', '#9e86e8'][index % 4];
+      ctx.beginPath(); ctx.arc(x, y, 7, 0, Math.PI * 2); ctx.fill();
+      if (typeof vehicle.item === 'string' && vehicle.item.length > 0) {
+        ctx.fillStyle = '#fff4b0';
+        ctx.fillText(vehicle.item.slice(0, 1).toUpperCase(), x + 9, y + 4);
+      }
+    });
   }
 
   private drawBrawler(ctx: CanvasRenderingContext2D, brawler: Record<string, unknown>): void {

@@ -34,12 +34,15 @@ export {
   createMinigameSession,
   finishMinigameSession,
   joinMinigameSession,
+  practiceBotPids,
+  practiceMinigameCapacity,
   MINIGAME_COUNTDOWN_SECONDS,
   MINIGAME_SESSION_VERSION,
   setMinigameConnection,
   setMinigameReady,
   stepMinigameSession,
 } from './session';
+export { MINIGAME_BOT_PID_BASE } from './session';
 export type { TowerKind } from './zombie_defense';
 export { createZombieDefense, stepZombieDefense, ZOMBIE_DEFENSE_VERSION } from './zombie_defense';
 export type { ZombieDefenseSessionState } from './zombie_session';

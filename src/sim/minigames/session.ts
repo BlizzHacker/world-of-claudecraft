@@ -10,6 +10,7 @@ import type { MinigameFeatureId } from './index';
  */
 export const MINIGAME_SESSION_VERSION = 'session-v1';
 export const MINIGAME_COUNTDOWN_SECONDS = 3;
+export const MINIGAME_BOT_PID_BASE = 1_000_000;
 
 export type MinigameSessionPhase = 'lobby' | 'countdown' | 'active' | 'finished' | 'aborted';
 
@@ -34,6 +35,29 @@ export interface MinigameSessionState {
   ownerPid: number;
   players: MinigameSessionPlayer[];
   winnerPids: number[];
+}
+
+/**
+ * A one-player practice lobby is filled with deterministic CPU opponents for
+ * the modes that have a local combat/race adapter. The bot IDs are positive so
+ * they can use the existing session lifecycle and reward bookkeeping, but are
+ * deliberately outside normal character-id ranges.
+ */
+export function practiceBotPids(
+  kind: MinigameFeatureId,
+  sessionId: number,
+  requestedMaxPlayers: number,
+): number[] {
+  if (requestedMaxPlayers !== 1 || (kind !== 'racing' && kind !== 'brawler')) return [];
+  const base = MINIGAME_BOT_PID_BASE + Math.max(0, Math.trunc(sessionId)) * 8;
+  return [base + 1, base + 2, base + 3];
+}
+
+export function practiceMinigameCapacity(
+  kind: MinigameFeatureId,
+  requestedMaxPlayers: number,
+): number {
+  return practiceBotPids(kind, 1, requestedMaxPlayers).length > 0 ? 4 : requestedMaxPlayers;
 }
 
 export type SessionMutation =

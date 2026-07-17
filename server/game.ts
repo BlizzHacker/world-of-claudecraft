@@ -42,6 +42,8 @@ import {
   joinMinigameSession,
   MINIGAME_FEATURES,
   minigameAvailable,
+  practiceBotPids,
+  practiceMinigameCapacity,
   setMinigameConnection,
   setMinigameReady,
   setArcadeBrawlerInput,
@@ -4324,16 +4326,27 @@ export class GameServer {
         if (existing && existing.phase !== 'finished' && existing.phase !== 'aborted') return;
         const id = this.nextMinigameSessionId++;
         const seed = (this.sim.cfg.seed + id * 9973) | 0;
-        const maxPlayers =
+        const requestedMaxPlayers =
           typeof msg.maxPlayers === 'number' && Number.isFinite(msg.maxPlayers)
             ? Math.trunc(msg.maxPlayers)
-            : undefined;
-        const state = createMinigameSession(id, kind, seed, pid, maxPlayers);
+            : 4;
+        const botPids = practiceBotPids(kind, id, requestedMaxPlayers);
+        let state = createMinigameSession(
+          id,
+          kind,
+          seed,
+          pid,
+          practiceMinigameCapacity(kind, requestedMaxPlayers),
+        );
+        for (const botPid of botPids) {
+          const mutation = joinMinigameSession(state, botPid, true);
+          if (mutation.ok) state = mutation.state;
+        }
         this.minigameSessions.set(id, state);
         if (kind === 'zombie_defense') {
           this.zombieDefenseSessions.set(id, createZombieDefenseSession(id, seed));
         } else {
-          this.arcadeSessions.set(id, createArcadeState(kind, seed, [pid]));
+          this.arcadeSessions.set(id, createArcadeState(kind, seed, [pid], botPids));
         }
         return;
       }

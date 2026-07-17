@@ -1635,6 +1635,7 @@ export const da_DK: EnTranslations = {
       "townRts": "Eastbrook Command",
       "housing": "Eastbrook Homes",
       "create": "Create session",
+      "solo": "Solo vs NPCs",
       "join": "Join by code",
       "code": "Session code",
       "invite": "Invite party member",
