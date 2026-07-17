@@ -30,6 +30,17 @@ const PREVIEW_ANIM_STATE = {
 
 const LIVE_PREVIEW_X = 0;
 
+/** Keep an already-mounted item model alive when a character-sheet repaint
+ * requests the same URL. Repaints happen after every inventory/equipment sync;
+ * reloading an unchanged GLB needlessly churns the loader and can leave a stale
+ * async result fighting the current selection. */
+export function shouldReloadExternalPreview(
+  currentUrl: string | null,
+  requestedUrl: string,
+): boolean {
+  return currentUrl !== requestedUrl;
+}
+
 export class CharacterPreview {
   private container: HTMLElement;
   private canvas: HTMLCanvasElement;
@@ -41,6 +52,7 @@ export class CharacterPreview {
   private externalRoot: THREE.Object3D | null = null;
   private externalMixer: THREE.AnimationMixer | null = null;
   private externalLoadToken = 0;
+  private externalModelUrl: string | null = null;
   private currentSkin = 0;
   // Identity of the appearance last requested via setAppearance, so an async mech
   // re-apply can bail out if a newer selection superseded it.
@@ -184,8 +196,10 @@ export class CharacterPreview {
 
   setExternalModel(url: string): void {
     if (this.destroyed) return;
+    if (!shouldReloadExternalPreview(this.externalModelUrl, url)) return;
     const token = ++this.externalLoadToken;
     this.clearExternalModel(false);
+    this.externalModelUrl = url;
     if (this.currentVisual) {
       this.characterGroup.remove(this.currentVisual.root);
       this.currentVisual.dispose();
@@ -212,6 +226,7 @@ export class CharacterPreview {
       })
       .catch((err: unknown) => {
         if (token === this.externalLoadToken) {
+          this.externalModelUrl = null;
           console.error(`Failed to load external preview model ${url}:`, err);
         }
       });
@@ -449,6 +464,7 @@ export class CharacterPreview {
 
   private clearExternalModel(invalidateLoad = true): void {
     if (invalidateLoad) this.externalLoadToken++;
+    this.externalModelUrl = null;
     if (this.externalMixer) {
       this.externalMixer.stopAllAction();
       this.externalMixer = null;

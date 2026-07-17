@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { preloadMechAssets } from '../src/render/characters/assets';
 import { mechHeldWeaponOverride } from '../src/render/characters/manifest';
-import { CharacterPreview } from '../src/render/characters/preview';
+import { CharacterPreview, shouldReloadExternalPreview } from '../src/render/characters/preview';
 import {
   appearanceSignature,
   type PreviewAppearance,
@@ -113,6 +113,18 @@ describe('appearanceSignature', () => {
     expect(appearanceSignature({ ...base, skin: 3 })).not.toBe(sig);
     expect(appearanceSignature({ ...base, skinCatalog: 'mech' })).not.toBe(sig);
     expect(appearanceSignature({ ...base, mainhandItemId: 'b' })).not.toBe(sig);
+  });
+});
+
+describe('external item preview routing', () => {
+  it('does not reload the same model URL during a sheet repaint', () => {
+    expect(shouldReloadExternalPreview(null, 'models/items/sword.glb')).toBe(true);
+    expect(shouldReloadExternalPreview('models/items/sword.glb', 'models/items/sword.glb')).toBe(
+      false,
+    );
+    expect(shouldReloadExternalPreview('models/items/sword.glb', 'models/items/shield.glb')).toBe(
+      true,
+    );
   });
 });
 
