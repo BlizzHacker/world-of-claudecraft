@@ -222,7 +222,13 @@
       fetch('/api/contributions', { headers: { Accept: 'application/json' } })
         .then((response) => response.ok ? response.json() : Promise.reject(new Error('feed unavailable')))
         .then((payload) => {
-          if (!Array.isArray(payload.entries) || payload.entries.length === 0) return;
+          if (!Array.isArray(payload.entries) || payload.entries.length === 0) {
+            list.replaceChildren(Object.assign(document.createElement('li'), {
+              className: 'feed-empty',
+              textContent: 'No current upstream pull requests are published.'
+            }));
+            return;
+          }
           list.replaceChildren(...payload.entries.map((pr) => {
             const item = document.createElement('li');
             const link = document.createElement('a');
@@ -237,7 +243,12 @@
             return item;
           }));
         })
-        .catch(() => { /* The server feed is best-effort; static receipts remain visible. */ });
+        .catch(() => {
+          list.replaceChildren(Object.assign(document.createElement('li'), {
+            className: 'feed-error',
+            textContent: 'Live upstream feed unavailable; no stale receipts are shown.'
+          }));
+        });
     })();
   </script>
   <script src="/nav.v1782009763m.js" defer></script>
