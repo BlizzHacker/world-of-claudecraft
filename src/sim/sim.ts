@@ -270,8 +270,28 @@ import { prestige as prestigeImpl, updateRested } from './progression/xp';
 import { advancePendingProjectiles, type PendingProjectile } from './projectile_travel';
 import { sanitizeRemovedZone1Content } from './removed_zone1_content';
 import { Rng } from './rng';
-import { MINIGAME_FEATURES } from './minigames';
-import type { MinigameSessionState } from './minigames';
+import {
+  abortMinigameSession,
+  buildZombieDefenseTower,
+  claimMinigameReward,
+  createMinigameSession,
+  createZombieDefenseSession,
+  finishMinigameSession,
+  joinMinigameSession,
+  MINIGAME_FEATURES,
+  minigameAvailable,
+  setMinigameConnection,
+  setMinigameReady,
+  startZombieDefenseWave,
+  stepMinigameSession,
+  stepZombieDefenseSession,
+} from './minigames';
+import type {
+  MinigameFeatureId,
+  MinigameSessionState,
+  ZombieDefenseSessionState,
+} from './minigames';
+import type { TowerKind } from './minigames/zombie_defense';
 import { persistedResource } from './serialize_resource';
 import { createSimContext, type SimContext, type SimContextHost } from './sim_context';
 import * as chatMod from './social/chat';
@@ -1214,9 +1234,10 @@ export class Sim {
   // Read-only rollout registry for presentation. Incomplete modes remain
   // default-off until their authoritative wire/persistence checkpoints land.
   readonly minigameFeatures = MINIGAME_FEATURES;
-  // Generic minigame sessions are host-owned (server/client transport). Offline
-  // gameplay keeps the seam explicit until a mode adapter is enabled.
-  readonly minigameSession: MinigameSessionState | null = null;
+  // Generic minigame sessions are owned by the same deterministic sim offline
+  // and by GameServer online. ClientWorld mirrors the resulting snapshots.
+  minigameSession: MinigameSessionState | null = null;
+  minigameZombieState: ZombieDefenseSessionState | null = null;
   // `world` stays optional (a custom map for play-test, else undefined for the
   // built-in world); everything else is defaulted to a concrete value below.
   cfg: Required<Omit<SimConfig, 'noPlayer' | 'world' | 'perfLap'>> &
@@ -3480,6 +3501,88 @@ export class Sim {
   // Main tick
   // -------------------------------------------------------------------------
 
+  minigameCreate(kind: MinigameFeatureId, maxPlayers = 4): void {
+    if (!minigameAvailable(kind, true)) return;
+    if (this.minigameSession && !['finished', 'aborted'].includes(this.minigameSession.phase)) return;
+    const session = createMinigameSession(1, kind, this.cfg.seed + 9973, this.playerId, maxPlayers);
+    this.minigameSession = session;
+    this.minigameZombieState =
+      kind === 'zombie_defense' ? createZombieDefenseSession(session.id, session.seed) : null;
+  }
+
+  minigameJoin(sessionId: number, playerId = this.playerId): void {
+    const current = this.minigameSession;
+    if (!current || current.id !== sessionId) return;
+    const mutation = joinMinigameSession(current, playerId);
+    if (mutation.ok) this.minigameSession = mutation.state;
+  }
+
+  minigameInvite(_targetPlayerId: number): void {
+    // Offline couch players do not need a transport invite: the host can add
+    // the second controller directly with minigameJoin(sessionId, playerId).
+  }
+
+  minigameReady(ready: boolean, playerId = this.playerId): void {
+    const current = this.minigameSession;
+    if (!current) return;
+    const mutation = setMinigameReady(current, playerId, ready);
+    if (mutation.ok) this.minigameSession = mutation.state;
+  }
+
+  minigameAbort(): void {
+    const current = this.minigameSession;
+    if (!current) return;
+    const mutation = abortMinigameSession(current, this.playerId);
+    if (mutation.ok) this.minigameSession = mutation.state;
+  }
+
+  minigameClaim(): void {
+    const current = this.minigameSession;
+    if (!current) return;
+    const mutation = claimMinigameReward(current, this.playerId);
+    if (mutation.ok) this.minigameSession = mutation.state;
+  }
+
+  minigameZombieStart(playerId = this.playerId): void {
+    const current = this.minigameSession;
+    const zombie = this.minigameZombieState;
+    if (!current || current.kind !== 'zombie_defense' || current.phase !== 'active' || !zombie) return;
+    startZombieDefenseWave(
+      zombie,
+      playerId,
+      current.players.map((player) => player.pid),
+    );
+  }
+
+  minigameZombieBuild(kind: TowerKind, x: number, z: number, playerId = this.playerId): void {
+    const current = this.minigameSession;
+    const zombie = this.minigameZombieState;
+    if (!current || current.kind !== 'zombie_defense' || current.phase !== 'active' || !zombie) return;
+    buildZombieDefenseTower(
+      zombie,
+      playerId,
+      kind,
+      { x, z },
+      current.players.map((player) => player.pid),
+    );
+  }
+
+  private updateMinigame(): void {
+    const current = this.minigameSession;
+    if (!current) return;
+    const stepped = stepMinigameSession(current);
+    this.minigameSession = stepped;
+    if (stepped.kind !== 'zombie_defense' || !this.minigameZombieState) return;
+    if (stepped.phase === 'active') stepZombieDefenseSession(this.minigameZombieState);
+    if (this.minigameZombieState.state.status === 'won') {
+      const mutation = finishMinigameSession(
+        stepped,
+        stepped.players.map((player) => player.pid),
+      );
+      if (mutation.ok) this.minigameSession = mutation.state;
+    }
+  }
+
   tick(): SimEvent[] {
     // The shared SimContext seam (`this.ctx`, built in the ctor) spans this whole
     // tick: the head/tail phases and the end-of-tick system block all run on the Sim
@@ -3626,6 +3729,8 @@ export class Sim {
     // tick-staggered bots), so appending it here cannot fork the draw order.
     this.updateValeCup();
     lap?.('valecup');
+    this.updateMinigame();
+    lap?.('minigame');
     this.market.update();
     lap?.('market');
     this.postOffice.update();

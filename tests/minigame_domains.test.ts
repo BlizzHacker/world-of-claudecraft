@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { MINIGAME_FEATURES, minigameEnabled } from '../src/sim/minigames';
+import { MINIGAME_FEATURES, minigameAvailable, minigameEnabled } from '../src/sim/minigames';
 import {
   claimMinigameReward,
   createMinigameSession,
@@ -35,6 +35,7 @@ import {
   startZombieWave,
   stepZombieDefense,
 } from '../src/sim/minigames/zombie_defense';
+import { Sim } from '../src/sim/sim';
 
 describe('minigame rollout guard', () => {
   it('keeps incomplete domains default-off until their checkpoints pass', () => {
@@ -42,6 +43,8 @@ describe('minigame rollout guard', () => {
     expect(MINIGAME_FEATURES.every((feature) => feature.enabled)).toBe(false);
     expect(minigameEnabled('racing')).toBe(false);
     expect(minigameEnabled('housing')).toBe(false);
+    expect(minigameAvailable('zombie_defense', true)).toBe(true);
+    expect(minigameAvailable('zombie_defense')).toBe(false);
   });
 });
 
@@ -154,6 +157,20 @@ describe('zombie defense domain', () => {
     stepZombieDefense(b, 20);
     expect(a).toEqual(b);
     expect(a.status).toBe('ready');
+  });
+
+  it('exposes the same roster lifecycle to offline couch players in preview mode', () => {
+    const sim = new Sim({ seed: 55, playerClass: 'warrior' });
+    const owner = sim.playerId;
+    sim.minigameCreate('zombie_defense', 4);
+    sim.minigameJoin(1, owner + 1);
+    sim.minigameReady(true, owner);
+    sim.minigameReady(true, owner + 1);
+    for (let i = 0; i < 61; i += 1) sim.tick();
+    expect(sim.minigameSession?.phase).toBe('active');
+    sim.minigameZombieStart(owner + 1);
+    sim.minigameZombieBuild('arrow', -3, 1, owner + 1);
+    expect(sim.minigameZombieState?.state.towers).toHaveLength(1);
   });
 });
 

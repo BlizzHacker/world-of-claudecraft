@@ -394,6 +394,7 @@ import { buildVcupHudView } from './vale_cup_hud_view';
 import { ValeCupIndicator } from './vale_cup_indicator';
 import { buildVcupIndicatorView } from './vale_cup_indicator_view';
 import { ValeCupWindow, vcupNationName } from './vale_cup_window';
+import { ZombieDefenseWindow } from './zombie_defense_window';
 import { buildVendorSellRows, buildVendorView } from './vendor_view';
 import { renderVendorWindow, type VendorTab } from './vendor_window';
 import { nextVoicedYell, type VoicedYellState, voicedYellGain } from './voice_events';
@@ -2250,6 +2251,9 @@ export class Hud {
         // Route through the painter so focus returns to the opener (WCAG 2.2 AA).
         this.valeCupWindow.close();
         break;
+      case 'zombie-defense-window':
+        this.zombieDefenseWindow.close();
+        break;
       case 'vendor-window':
         this.closeVendor();
         this.closeHeroicVendor();
@@ -3695,6 +3699,12 @@ export class Hud {
     world: () => this.sim,
     closeOthers: () => this.closeOtherWindows('#valecup-window'),
     ...this.windowFocus('#valecup-window'),
+  });
+  private readonly zombieDefenseWindow = new ZombieDefenseWindow({
+    root: () => $('#zombie-defense-window'),
+    world: () => this.sim,
+    closeOthers: () => this.closeOtherWindows('#zombie-defense-window'),
+    ...this.windowFocus('#zombie-defense-window'),
   });
   // Persistent Vale Cup indicator button (queued / live-at-the-Sowfield states;
   // hidden inside my own match). Never tier-shed: queue position and the live
@@ -7040,6 +7050,7 @@ export class Hud {
       if ($('#map-window').style.display === 'block') this.updateMapWindow();
       if ($('#arena-window').style.display === 'block') this.arenaWindow.render();
       if ($('#valecup-window').style.display === 'block') this.valeCupWindow.render();
+      if ($('#zombie-defense-window').style.display === 'block') this.zombieDefenseWindow.render();
       if (this.openLootMobId !== null) {
         const mob = sim.entities.get(this.openLootMobId);
         if (!mob?.lootable || dist2d(p.pos, mob.pos) > 7) this.closeLoot();
@@ -8134,6 +8145,10 @@ export class Hud {
     this.valeCupWindow.toggle();
   }
 
+  toggleZombieDefense(): void {
+    this.zombieDefenseWindow.toggle();
+  }
+
   /** Offline builds enable the Vale Cup practice-vs-bots button (main.ts). */
   setVcupPracticeAvailable(on: boolean): void {
     this.valeCupWindow.setPracticeAvailable(on);
@@ -9120,6 +9135,18 @@ export class Hud {
             t('hud.prompts.joinParty'),
             () => this.sim.partyAccept(),
             () => this.sim.partyDecline(),
+          );
+          break;
+        case 'minigameInvite':
+          audio.questAccept();
+          this.showPrompt(
+            t('hudChrome.zombie.invite', {
+              name: `<b>${esc(ev.fromName)}</b>`,
+              kind: t('hudChrome.zombie.title'),
+            }),
+            t('hudChrome.zombie.joinInvite'),
+            () => this.sim.minigameJoin(ev.sessionId),
+            () => {},
           );
           break;
         case 'readyCheckStart':
@@ -10702,6 +10729,9 @@ export class Hud {
     if (npc.templateId === 'groundskeeper_bram') {
       html += `<button type="button" class="qd-list-item" data-vcup="1" aria-label="${esc(t('hudChrome.vcup.gossipOpenAria'))}"><span class="gold">${svgIcon('ball')}</span> ${esc(t('hudChrome.vcup.gossipOpen'))}</button>`;
     }
+    if (npc.templateId === 'town_defense_board') {
+      html += `<button type="button" class="qd-list-item" data-zombie-defense="1" aria-label="${esc(t('hudChrome.zombie.title'))}"><span class="gold">☠</span> ${esc(t('hudChrome.zombie.title'))}</button>`;
+    }
     el.innerHTML = html;
     el.querySelectorAll('[data-quest]').forEach((item) => {
       item.addEventListener('click', () =>
@@ -10738,6 +10768,10 @@ export class Hud {
     el.querySelector('[data-vcup]')?.addEventListener('click', () => {
       this.closeQuestDialog(false);
       this.toggleValeCup();
+    });
+    el.querySelector('[data-zombie-defense]')?.addEventListener('click', () => {
+      this.closeQuestDialog(false);
+      this.toggleZombieDefense();
     });
     el.querySelector('[data-close]')?.addEventListener('click', () => this.closeQuestDialog());
     el.style.display = 'block';

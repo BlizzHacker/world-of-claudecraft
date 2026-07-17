@@ -12,6 +12,8 @@ Update this file after every implementation and QA session. Preserve factual pro
 - Last green npm run gate commit: none for this program
 - Last checkpoint promotion: none for this program
 - Current production evidence: Proxmox 192.168.0.6, LXC 171, /opt/cryptic-realm, preserved HEAD 46be1494c58bf25ed6ac6c89884a80d5f5fbf639
+- Strategy preview: Eastbrook Town Defense is implemented behind `preview:true`
+  and `ALLOW_MINIGAME_PREVIEW=1`; F-021 remains disabled pending Phase 41 QA.
 - Legacy profile: idyllic-games-prod /opt/eastbrook release/v0.6, unresolved/unverified, never auto-target
 - Rollback artifacts: Git, database, and encrypted runtime-config recovery assets verified;
   PAT revocation, independent key custody, immutability/integrity, least-privilege deploy

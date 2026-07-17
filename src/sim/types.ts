@@ -2217,6 +2217,13 @@ export type SimEvent = { pid?: number } & (
       to?: string;
     }
   | { type: 'partyInvite'; fromPid: number; fromName: string }
+  | {
+      type: 'minigameInvite';
+      fromPid: number;
+      fromName: string;
+      sessionId: number;
+      kind: 'racing' | 'brawler' | 'town_rts' | 'zombie_defense' | 'housing';
+    }
   // The party/raid leader started a ready check: the recipient's client plays a
   // sound and shows a yes/no prompt (social/ready_check.ts). Personal (pid set).
   | { type: 'readyCheckStart'; fromName: string }

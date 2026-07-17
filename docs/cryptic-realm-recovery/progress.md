@@ -2,6 +2,24 @@
 
 Statuses: pending, in progress, blocked, complete. Use UTC ISO-8601 timestamps.
 
+## Strategy preview checkpoint — 2026-07-16
+
+The recovery branch now contains a bounded, non-promoted Eastbrook Town Defense
+slice. `zombie_session.ts` is deterministic and shared by offline Sim and the
+authoritative GameServer; the client has a walk-up Town Defense Board NPC, a
+canvas route/tower/zombie view, session-code join, party-member invite, ready,
+wave, build, abort, and reward controls. Offline couch co-op can join and ready
+multiple player IDs through the same roster seam. Online preview requires the
+explicit `ALLOW_MINIGAME_PREVIEW=1` server switch; `F-021` remains `enabled:false`
+until the full Phase 41 P1–P4, persistence, reconnect, defeat/restart, reward,
+mobile/accessibility, soak, and isolated-stage QA evidence exists. Racing,
+brawler, town RTS, and housing remain default-off and are not claimed complete.
+
+Focused evidence for this slice: `tests/zombie_session.test.ts` (3),
+`tests/zombie_online.test.ts` (2), minigame/domain + command/snapshot/world API
+parity suites (247 tests in the last run), TypeScript, client build, and server
+build all pass locally. Production was not mutated.
+
 ## Implementation checkpoint — 2026-07-15
 
 The recovery branch contains a verified implementation slice, but this is not a

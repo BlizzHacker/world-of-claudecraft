@@ -552,6 +552,39 @@ export const ko_KR: EnTranslations = {
         "refundLog": "베팅 무효, 베팅금 {amount} 반환."
       }
     },
+    "zombie": {
+      "title": "Eastbrook Town Defense",
+      "close": "Close town defense",
+      "intro": "Build defenses, hold the road, and survive ten deterministic waves with your party.",
+      "unavailable": "Town Defense is still being staged. Check back after its QA checkpoint.",
+      "create": "Create defense session",
+      "join": "Join session",
+      "sessionCode": "Session code",
+      "ready": "Ready up",
+      "readyDone": "Ready",
+      "startWave": "Start wave",
+      "abort": "Abandon session",
+      "claim": "Claim reward",
+      "roster": "Roster",
+      "board": "Board",
+      "wave": "Wave {wave}",
+      "lives": "Lives {lives}",
+      "resources": "Resources {resources}",
+      "status": "Status: {status}",
+      "towerArrow": "Arrow tower",
+      "towerSlow": "Frost tower",
+      "towerCannon": "Cannon tower",
+      "buildAt": "Build at {x}, {z}",
+      "waiting": "Waiting for the party to ready up.",
+      "active": "The wave is active. Place towers or hold the line.",
+      "victory": "Eastbrook stands. Claim your reward.",
+      "defeat": "The town fell. Abandon the session and try again.",
+      "copyCode": "Share this code with your party",
+      "invite": "{name} invited you to {kind}.",
+      "joinInvite": "Join game",
+      "invitePlayer": "Invite party member",
+      "inviteHint": "Enter a party member's player ID."
+    },
     "options": {
       "clickMoveLeft": "왼쪽 클릭",
       "clickMoveRight": "오른쪽 클릭",
@@ -7837,6 +7870,11 @@ export const ko_KR: EnTranslations = {
         "name": "경기장 관리인 브람",
         "title": "소우필드의 관리인",
         "greeting": "소우필드에서는 휴전이 지켜지고 있소, {className}. 발과 어깨만 쓸 수 있소. 구리 들통을 걸고 한판 하겠소?"
+      },
+      "town_defense_board": {
+        "name": "Town Defense Board",
+        "title": "Keeper of the Eastbrook Watch",
+        "greeting": "The road needs a watch. Gather your party and hold Eastbrook against the dead."
       },
       "tidewatcher_ondrel": {
         "name": "온드렐 베인",

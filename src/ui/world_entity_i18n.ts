@@ -150,6 +150,7 @@ const NPC_IDS = [
   'interior_villager', // Building interior resident
   'spirit_healer', // the graveyard angel (spawned at every graveyard + dungeon entry)
   'groundskeeper_bram', // Vale Cup queue master at the Sowfield gate (docs/prd/vale-cup.md)
+  'town_defense_board', // Eastbrook Town Defense board
 ] as const;
 
 const QUEST_IDS = [

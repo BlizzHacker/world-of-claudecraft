@@ -659,6 +659,16 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
     greeting: 'Every hero needs a steed, $C. The stag is steady, the raptor is fast, and the wyrm... the wyrm flies.',
     vendorItems: ['mount_forest_stag', 'mount_swamp_raptor', 'mount_emerald_wyrm'],
   },
+  town_defense_board: {
+    id: 'town_defense_board',
+    name: 'Town Defense Board',
+    title: 'Keeper of the Eastbrook Watch',
+    pos: { x: 16, z: 5.5 },
+    facing: -Math.PI / 2,
+    color: 0x6b4c2e,
+    questIds: [],
+    greeting: 'The road needs a watch. Gather your party and hold Eastbrook against the dead.',
+  },
   mercenary_kael: {
     id: 'mercenary_kael',
     name: 'Kael the Sellsword',

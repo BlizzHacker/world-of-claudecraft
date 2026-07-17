@@ -552,6 +552,39 @@ export const fr_CA: EnTranslations = {
         "refundLog": "Paris annulés, votre mise de {amount} vous a été rendue."
       }
     },
+    "zombie": {
+      "title": "Eastbrook Town Defense",
+      "close": "Close town defense",
+      "intro": "Build defenses, hold the road, and survive ten deterministic waves with your party.",
+      "unavailable": "Town Defense is still being staged. Check back after its QA checkpoint.",
+      "create": "Create defense session",
+      "join": "Join session",
+      "sessionCode": "Session code",
+      "ready": "Ready up",
+      "readyDone": "Ready",
+      "startWave": "Start wave",
+      "abort": "Abandon session",
+      "claim": "Claim reward",
+      "roster": "Roster",
+      "board": "Board",
+      "wave": "Wave {wave}",
+      "lives": "Lives {lives}",
+      "resources": "Resources {resources}",
+      "status": "Status: {status}",
+      "towerArrow": "Arrow tower",
+      "towerSlow": "Frost tower",
+      "towerCannon": "Cannon tower",
+      "buildAt": "Build at {x}, {z}",
+      "waiting": "Waiting for the party to ready up.",
+      "active": "The wave is active. Place towers or hold the line.",
+      "victory": "Eastbrook stands. Claim your reward.",
+      "defeat": "The town fell. Abandon the session and try again.",
+      "copyCode": "Share this code with your party",
+      "invite": "{name} invited you to {kind}.",
+      "joinInvite": "Join game",
+      "invitePlayer": "Invite party member",
+      "inviteHint": "Enter a party member's player ID."
+    },
     "options": {
       "clickMoveLeft": "Clic gauche",
       "clickMoveRight": "Clic droit",
@@ -7837,6 +7870,11 @@ export const fr_CA: EnTranslations = {
         "name": "Intendant Bram",
         "title": "Gardien du Pré de la Truie",
         "greeting": "La trêve tient au Pré de la Truie, {className} : des bottes et des épaules, rien de plus. Envie de jouer pour le Seau de cuivre ?"
+      },
+      "town_defense_board": {
+        "name": "Town Defense Board",
+        "title": "Keeper of the Eastbrook Watch",
+        "greeting": "The road needs a watch. Gather your party and hold Eastbrook against the dead."
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",

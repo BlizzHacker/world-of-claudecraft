@@ -28,18 +28,24 @@ import type { PickAction } from '../src/sim/lockpick';
 import { sanitizeMarketQuery } from '../src/sim/market_query';
 import {
   abortMinigameSession,
+  buildZombieDefenseTower,
   claimMinigameReward,
   createMinigameSession,
+  createZombieDefenseSession,
   finishMinigameSession,
   joinMinigameSession,
   MINIGAME_FEATURES,
-  minigameEnabled,
+  minigameAvailable,
   setMinigameConnection,
   setMinigameReady,
+  startZombieDefenseWave,
   stepMinigameSession,
+  stepZombieDefenseSession,
   type MinigameFeatureId,
   type MinigameSessionState,
+  type ZombieDefenseSessionState,
 } from '../src/sim/minigames';
+import type { TowerKind } from '../src/sim/minigames/zombie_defense';
 import { parseMoveInputFrame } from '../src/sim/move_input';
 import { realmClassVisualKey } from '../src/sim/realms/class_visuals';
 import { isRealmId, setRealmHostEnv } from '../src/sim/realms/registry';
@@ -1084,7 +1090,9 @@ export class GameServer {
   // feature checkpoint enables. Keeping it process-local is intentional until
   // the persistence checkpoint lands.
   private readonly minigameSessions = new Map<number, MinigameSessionState>();
+  private readonly zombieDefenseSessions = new Map<number, ZombieDefenseSessionState>();
   private nextMinigameSessionId = 1;
+  private readonly minigamePreview = process.env.ALLOW_MINIGAME_PREVIEW === '1';
 
   constructor() {
     this.sim = new Sim({
@@ -4246,9 +4254,12 @@ export class GameServer {
       // promoted; disabled modes are intentionally silent no-ops.
       case 'mg_create':
       case 'mg_join':
+      case 'mg_invite':
       case 'mg_ready':
       case 'mg_abort':
       case 'mg_claim':
+      case 'mg_zombie_start':
+      case 'mg_zombie_build':
         this.dispatchMinigameCommand(session, msg);
         break;
       case 'placeProp':
@@ -4286,7 +4297,7 @@ export class GameServer {
         if (typeof msg.kind !== 'string' || !MINIGAME_FEATURES.some((f) => f.id === msg.kind)) return;
         const kind = msg.kind as MinigameFeatureId;
         // No mode is live until its full wire/persistence/QA checkpoint passes.
-        if (!minigameEnabled(kind)) return;
+        if (!minigameAvailable(kind, this.minigamePreview)) return;
         const existing = this.minigameSessionForPid(pid);
         if (existing && existing.phase !== 'finished' && existing.phase !== 'aborted') return;
         const id = this.nextMinigameSessionId++;
@@ -4297,6 +4308,9 @@ export class GameServer {
             : undefined;
         const state = createMinigameSession(id, kind, seed, pid, maxPlayers);
         this.minigameSessions.set(id, state);
+        if (kind === 'zombie_defense') {
+          this.zombieDefenseSessions.set(id, createZombieDefenseSession(id, seed));
+        }
         return;
       }
       case 'mg_join': {
@@ -4305,30 +4319,97 @@ export class GameServer {
         const existing = this.minigameSessionForPid(pid);
         if (existing && existing.phase !== 'finished' && existing.phase !== 'aborted') return;
         const current = this.minigameSessions.get(sessionId);
-        if (!current || !minigameEnabled(current.kind)) return;
+        if (!current || !minigameAvailable(current.kind, this.minigamePreview)) return;
         const mutation = joinMinigameSession(current, pid);
         if (mutation.ok) this.minigameSessions.set(current.id, mutation.state);
         return;
       }
+      case 'mg_invite': {
+        const current = this.minigameSessionForPid(pid);
+        const targetPid = msg.targetPlayerId;
+        if (
+          !current ||
+          !minigameAvailable(current.kind, this.minigamePreview) ||
+          current.ownerPid !== pid ||
+          typeof targetPid !== 'number' ||
+          !Number.isInteger(targetPid) ||
+          targetPid <= 0
+        )
+          return;
+        const party = this.sim.partyOf(pid);
+        if (!party || !party.members.includes(targetPid)) return;
+        const target = this.clients.get(targetPid);
+        if (!target || target.left) return;
+        this.send(target, {
+          t: 'events',
+          list: [
+            {
+              type: 'minigameInvite',
+              pid: targetPid,
+              fromPid: pid,
+              fromName: this.sim.entities.get(pid)?.name ?? 'Party leader',
+              sessionId: current.id,
+              kind: current.kind,
+            },
+          ],
+        });
+        return;
+      }
       case 'mg_ready': {
         const current = this.minigameSessionForPid(pid);
-        if (!current || !minigameEnabled(current.kind) || typeof msg.ready !== 'boolean') return;
+        if (!current || !minigameAvailable(current.kind, this.minigamePreview) || typeof msg.ready !== 'boolean') return;
         const mutation = setMinigameReady(current, pid, msg.ready);
         if (mutation.ok) this.minigameSessions.set(current.id, mutation.state);
         return;
       }
       case 'mg_abort': {
         const current = this.minigameSessionForPid(pid);
-        if (!current || !minigameEnabled(current.kind)) return;
+        if (!current || !minigameAvailable(current.kind, this.minigamePreview)) return;
         const mutation = abortMinigameSession(current, pid);
         if (mutation.ok) this.minigameSessions.set(current.id, mutation.state);
         return;
       }
       case 'mg_claim': {
         const current = this.minigameSessionForPid(pid);
-        if (!current || !minigameEnabled(current.kind)) return;
+        if (!current || !minigameAvailable(current.kind, this.minigamePreview)) return;
         const mutation = claimMinigameReward(current, pid);
         if (mutation.ok) this.minigameSessions.set(current.id, mutation.state);
+        return;
+      }
+      case 'mg_zombie_start': {
+        const current = this.minigameSessionForPid(pid);
+        const zombie = current ? this.zombieDefenseSessions.get(current.id) : undefined;
+        if (!current || current.kind !== 'zombie_defense' || current.phase !== 'active' || !zombie) return;
+        if (!current.players.some((player) => player.pid === pid)) return;
+        startZombieDefenseWave(
+          zombie,
+          pid,
+          current.players.map((player) => player.pid),
+        );
+        return;
+      }
+      case 'mg_zombie_build': {
+        const current = this.minigameSessionForPid(pid);
+        const zombie = current ? this.zombieDefenseSessions.get(current.id) : undefined;
+        if (!current || current.kind !== 'zombie_defense' || current.phase !== 'active' || !zombie) return;
+        if (!current.players.some((player) => player.pid === pid)) return;
+        const x = msg.x;
+        const z = msg.z;
+        if (
+          (msg.kind !== 'arrow' && msg.kind !== 'slow' && msg.kind !== 'cannon') ||
+          typeof x !== 'number' ||
+          typeof z !== 'number' ||
+          !Number.isInteger(x) ||
+          !Number.isInteger(z)
+        )
+          return;
+        buildZombieDefenseTower(
+          zombie,
+          pid,
+          msg.kind as TowerKind,
+          { x, z },
+          current.players.map((player) => player.pid),
+        );
         return;
       }
       default:
@@ -4339,7 +4420,7 @@ export class GameServer {
   /** Adapter hook for an authoritative mode to finish a session. */
   finishMinigame(id: number, winnerPids: readonly number[]): boolean {
     const current = this.minigameSessions.get(id);
-    if (!current || !minigameEnabled(current.kind)) return false;
+    if (!current || !minigameAvailable(current.kind, this.minigamePreview)) return false;
     const mutation = finishMinigameSession(current, winnerPids);
     if (!mutation.ok) return false;
     this.minigameSessions.set(id, mutation.state);
@@ -4363,7 +4444,19 @@ export class GameServer {
   private stepMinigameSessions(): void {
     for (const [id, current] of this.minigameSessions) {
       if (current.phase === 'finished' || current.phase === 'aborted') continue;
-      this.minigameSessions.set(id, stepMinigameSession(current));
+      const stepped = stepMinigameSession(current);
+      this.minigameSessions.set(id, stepped);
+      if (stepped.kind !== 'zombie_defense') continue;
+      const zombie = this.zombieDefenseSessions.get(id);
+      if (!zombie || stepped.phase !== 'active') continue;
+      stepZombieDefenseSession(zombie);
+      if (zombie.state.status === 'won') {
+        const mutation = finishMinigameSession(
+          stepped,
+          stepped.players.map((player) => player.pid),
+        );
+        if (mutation.ok) this.minigameSessions.set(id, mutation.state);
+      }
     }
   }
 
@@ -4637,6 +4730,7 @@ export class GameServer {
     maybe('stats', p.stats);
     maybe('weapon', p.weapon);
     maybe('party', this.partyWire(anchorSession.pid));
+    maybe('mgz', this.minigameZombieWire(anchorSession.pid));
     maybe('marks', this.markersWire(anchorSession.pid));
     maybe('trade', this.tradeWire(anchorSession.pid));
     maybe('duel', this.duelWire(anchorSession.pid));
@@ -4781,6 +4875,22 @@ export class GameServer {
       ...state,
       players: state.players.map((player) => ({ ...player })),
       winnerPids: [...state.winnerPids],
+    };
+  }
+
+  private minigameZombieWire(pid: number): ZombieDefenseSessionState | null {
+    const session = this.minigameSessionForPid(pid);
+    if (!session || session.kind !== 'zombie_defense') return null;
+    const state = this.zombieDefenseSessions.get(session.id);
+    if (!state) return null;
+    return {
+      ...state,
+      state: {
+        ...state.state,
+        route: state.state.route.map((cell) => ({ ...cell })),
+        zombies: state.state.zombies.map((zombie) => ({ ...zombie })),
+        towers: state.state.towers.map((tower) => ({ ...tower, cell: { ...tower.cell } })),
+      },
     };
   }
 

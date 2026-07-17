@@ -24,6 +24,8 @@ import { DELVES } from '../src/sim/data';
 import { Sim } from '../src/sim/sim';
 import { type Aura, DT, type PlayerClass } from '../src/sim/types';
 import { terrainHeight } from '../src/sim/world';
+import { createMinigameSession } from '../src/sim/minigames/session';
+import { createZombieDefenseSession } from '../src/sim/minigames/zombie_session';
 import { absorbTotal } from '../src/ui/absorb_bar';
 import { auraEffectDescriptor } from '../src/ui/aura_effect';
 import { isAuraDebuff } from '../src/ui/auras_view';
@@ -429,7 +431,7 @@ describe('delta snapshots', () => {
     const snap = lastSnap(fc.sent);
     expect(snap).not.toBeNull();
     // a fresh session has an empty lastSent, so EVERY maybe() delta key rides the
-    // first snapshot (even the null-valued ones like party/trade/bank); all 36 of them
+    // first snapshot (even the null-valued ones like party/trade/bank); all 37 of them
     for (const key of ALL_DELTA_KEYS) {
       expect(snap.self, `self.${key} missing from first snapshot`).toHaveProperty(key);
     }
@@ -2012,7 +2014,7 @@ describe('lockpick view rebuilds from events on the online client', () => {
 // while the prior decoded value is preserved.
 // ---------------------------------------------------------------------------
 
-// The pinned set of the 36 `maybe(...)` delta keys, sorted. Cross-checked below
+// The pinned set of the 37 `maybe(...)` delta keys, sorted. Cross-checked below
 // against the live `maybe(...)` calls scraped from server/game.ts source, so a
 // 37th unregistered delta key reddens this gate.
 const ALL_DELTA_KEYS = [
@@ -2040,6 +2042,7 @@ const ALL_DELTA_KEYS = [
   'mailU',
   'market',
   'marks',
+  'mgz',
   'milestones',
   'party',
   'prof',
@@ -2145,6 +2148,16 @@ function dirtyEveryDeltaField(): {
   pDoor.prevPos = { ...pDoor.pos };
   sim.enterDelve('collapsed_reliquary', 'normal', lp);
   const p = sim.entities.get(lp)!;
+
+  // A deterministic zombie board makes the new mgz delta non-null without
+  // enabling the production feature flag in this codec fixture.
+  const minigame = createMinigameSession(1, 'zombie_defense', 4242, lp, 4);
+  minigame.players[0].ready = true;
+  (server as any).minigameSessions.set(minigame.id, minigame);
+  (server as any).zombieDefenseSessions.set(
+    minigame.id,
+    createZombieDefenseSession(minigame.id, minigame.seed),
+  );
 
   // Poke the encoder's exact sources for the mutually-exclusive cases.
   const run = sim.delveRunForPlayer(lp) as any;
@@ -2359,9 +2372,9 @@ describe('full self-state snapshot delta fixture', () => {
 });
 
 describe('delta-key contract pins (anti-drift)', () => {
-  it('ALL_DELTA_KEYS contains exactly 36 unique keys in sorted order', () => {
-    expect(ALL_DELTA_KEYS).toHaveLength(36);
-    expect(new Set(ALL_DELTA_KEYS).size).toBe(36);
+  it('ALL_DELTA_KEYS contains exactly 37 unique keys in sorted order', () => {
+    expect(ALL_DELTA_KEYS).toHaveLength(37);
+    expect(new Set(ALL_DELTA_KEYS).size).toBe(37);
     expect([...ALL_DELTA_KEYS]).toEqual([...ALL_DELTA_KEYS].sort());
   });
 
@@ -2373,7 +2386,7 @@ describe('delta-key contract pins (anti-drift)', () => {
     const scraped = new Set<string>();
     for (let m = re.exec(src); m !== null; m = re.exec(src)) scraped.add(m[1]);
     expect(scraped.has('lockouts')).toBe(true); // the multi-line call IS captured
-    expect(scraped.size).toBe(36);
+    expect(scraped.size).toBe(37);
     expect([...scraped].sort()).toEqual([...ALL_DELTA_KEYS].sort());
   });
 

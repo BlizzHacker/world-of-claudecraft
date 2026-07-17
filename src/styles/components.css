@@ -5009,6 +5009,26 @@
     width: 400px;
     --window-pad: 14px;
   }
+  #zombie-defense-window {
+    width: 460px;
+    --window-pad: 14px;
+  }
+  .zombie-defense-body { display: flex; flex-direction: column; gap: 7px; }
+  .zombie-note { color: #b6ad8c; font-size: 12px; line-height: 1.4; margin: 3px 0; }
+  .zombie-stats { display: flex; justify-content: space-between; color: #e6d39a; font-size: 12px; }
+  .zombie-status { color: #8fd16a; font-size: 12px; }
+  .zombie-roster { display: flex; gap: 12px; list-style: none; margin: 0; padding: 0; color: #d8cba0; }
+  .zombie-roster li { min-width: 44px; }
+  .zombie-towers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .zombie-defense-body .btn { width: 100%; box-sizing: border-box; }
+  .zombie-session-code { color: #d8cba0; font-size: 12px; }
+  .zombie-session-code code { color: #ffe08a; font-size: 16px; }
+  .zombie-join { display: grid; grid-template-columns: 1fr auto; gap: 6px; align-items: end; }
+  .zombie-join label { color: #b6ad8c; font-size: 11px; display: flex; flex-direction: column; gap: 3px; }
+  .zombie-join input { min-height: 30px; background: #111722; color: #fff1bd; border: 1px solid #5a4a20; padding: 4px 7px; }
+  .zombie-board { align-self: center; width: min(100%, 420px); border: 1px solid #5a4a20; image-rendering: pixelated; }
+  .zombie-win { color: #8fd16a; }
+  .zombie-loss { color: #ff9d8d; }
   .vcup-sub {
     font-family: var(--title-font);
     color: var(--gold);

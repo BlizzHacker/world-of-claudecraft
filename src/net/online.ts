@@ -81,6 +81,8 @@ import {
   type MailInfo,
   type MarketInfo,
   type MinigameSessionState,
+  type TowerKind,
+  type ZombieDefenseSessionState,
   type OverheadEmoteId,
   type PartyInfo,
   type PlayerProfessionsView,
@@ -1039,6 +1041,7 @@ export class ClientWorld implements IWorld {
   // Authoritative generic minigame lifecycle state (`self.mg`), mirrored only;
   // mode outcomes remain server-owned and are not predicted here.
   minigameSession: MinigameSessionState | null = null;
+  minigameZombieState: ZombieDefenseSessionState | null = null;
   // --- IWorldEntityRoster: roster + player reads, mirrored from snapshots. The
   // `player` getter lives below the ctor (it reads `entities`/`playerId`). `known`
   // is IWorldCombat-owned but rides here as a self-wire mirror field with the rest
@@ -1476,11 +1479,15 @@ export class ClientWorld implements IWorld {
     this.cmd({ cmd: 'mg_create', kind, maxPlayers });
   }
 
-  minigameJoin(sessionId: number): void {
+  minigameJoin(sessionId: number, _playerId?: number): void {
     this.cmd({ cmd: 'mg_join', sessionId });
   }
 
-  minigameReady(ready: boolean): void {
+  minigameInvite(targetPlayerId: number): void {
+    this.cmd({ cmd: 'mg_invite', targetPlayerId });
+  }
+
+  minigameReady(ready: boolean, _playerId?: number): void {
     this.cmd({ cmd: 'mg_ready', ready });
   }
 
@@ -1490,6 +1497,14 @@ export class ClientWorld implements IWorld {
 
   minigameClaim(): void {
     this.cmd({ cmd: 'mg_claim' });
+  }
+
+  minigameZombieStart(_playerId?: number): void {
+    this.cmd({ cmd: 'mg_zombie_start' });
+  }
+
+  minigameZombieBuild(kind: TowerKind, x: number, z: number, _playerId?: number): void {
+    this.cmd({ cmd: 'mg_zombie_build', kind, x, z });
   }
 
   private onMessage(raw: string): void {
@@ -2061,6 +2076,8 @@ export class ClientWorld implements IWorld {
       if (s.gprof !== undefined) this.gatheringProficiency = s.gprof ?? {};
       if (s.prof !== undefined) this.professionsState = s.prof ?? { skills: [] };
       if (s.mg !== undefined) this.minigameSession = s.mg as MinigameSessionState | null;
+      if (s.mgz !== undefined)
+        this.minigameZombieState = s.mgz as ZombieDefenseSessionState | null;
       // camera follows server-side facing changes when not mouselooking
       if (prevSelfFacing !== undefined && this.mouselookFacing === null) {
         let d = e.facing - prevSelfFacing;
