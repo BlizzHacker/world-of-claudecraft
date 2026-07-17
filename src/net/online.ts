@@ -8,7 +8,7 @@ import {
 } from '../runtime';
 import { bagCapacity } from '../sim/bags';
 import { MINIGAME_FEATURES } from '../sim/minigames';
-import type { MinigameFeatureId } from '../sim/minigames';
+import type { MinigameFeatureId, MinigameFeatureStatus } from '../sim/minigames';
 import { signChallenge } from '../sim/client_challenge';
 import { mechChromaItemId, mechChromaSkinIndex } from '../sim/content/skins';
 import {
@@ -1038,7 +1038,7 @@ function blankEntity(id: number): Entity {
 
 export class ClientWorld implements IWorld {
   // Shared rollout registry; gameplay state is not inferred from this field.
-  readonly minigameFeatures = MINIGAME_FEATURES;
+  minigameFeatures: readonly MinigameFeatureStatus[] = MINIGAME_FEATURES;
   // Authoritative generic minigame lifecycle state (`self.mg`), mirrored only;
   // mode outcomes remain server-owned and are not predicted here.
   minigameSession: MinigameSessionState | null = null;
@@ -1545,6 +1545,20 @@ export class ClientWorld implements IWorld {
       this.ownPlayerId = msg.pid;
       this.cfg.seed = msg.seed;
       if (typeof msg.realm === 'string') this.realm = msg.realm;
+      if (Array.isArray(msg.minigameFeatures)) {
+        this.minigameFeatures = msg.minigameFeatures.filter(
+          (feature: unknown): feature is MinigameFeatureStatus => {
+            if (!feature || typeof feature !== 'object') return false;
+            const row = feature as Record<string, unknown>;
+            return (
+              (row.id === 'racing' || row.id === 'brawler' || row.id === 'town_rts' || row.id === 'zombie_defense' || row.id === 'housing') &&
+              typeof row.enabled === 'boolean' &&
+              (row.preview === undefined || typeof row.preview === 'boolean') &&
+              typeof row.checkpoint === 'string'
+            );
+          },
+        );
+      }
       if (Array.isArray(msg.softWords)) {
         this.profanityWords = msg.softWords.filter(
           (w: unknown): w is string => typeof w === 'string',

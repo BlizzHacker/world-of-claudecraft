@@ -1130,6 +1130,15 @@ export class GameServer {
   private nextMinigameSessionId = 1;
   private readonly minigamePreview = process.env.ALLOW_MINIGAME_PREVIEW === '1';
 
+  /** Advertise the process-local preview gate so an online client does not
+   * render controls that the authoritative server will silently reject. */
+  private minigameFeatureWire(): typeof MINIGAME_FEATURES {
+    return MINIGAME_FEATURES.map((feature) => ({
+      ...feature,
+      preview: feature.preview === true && this.minigamePreview,
+    }));
+  }
+
   constructor() {
     this.sim = new Sim({
       seed: WORLD_SEED,
@@ -2297,6 +2306,7 @@ export class GameServer {
       // Soft (cosmetic) words the client masks locally when its profanity
       // filter is on. Hard words are never sent — they're enforced server-side.
       softWords: this.chatFilter.softWords(),
+      minigameFeatures: this.minigameFeatureWire(),
       // Epoch ms of an active chat mute, or null. Lets the client show status
       // at login; sending is still gated server-side regardless.
       chatMutedUntil: session.chatMutedUntil ?? null,
@@ -2371,6 +2381,7 @@ export class GameServer {
       cls,
       realm: REALM,
       softWords: this.chatFilter.softWords(),
+      minigameFeatures: this.minigameFeatureWire(),
       chatMutedUntil: session.chatMutedUntil ?? null,
     });
     // No self "entered the world" notice here: on a seamless reconnect the
