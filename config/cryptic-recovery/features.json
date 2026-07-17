@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "candidate": {
     "branch": "codex/cryptic-recovery-program",
-    "sha": "aa065ee4b",
+    "sha": "7462fda0d",
     "status": "local-recovery-candidate"
   },
   "production": {
@@ -24,9 +24,9 @@
     "localRefCount": 445,
     "advertisedRefCount": 423,
     "bundleRefCount": 385,
-    "uniqueCommitCount": 456,
-    "generatedAt": "2026-07-17T11:58:37.332Z",
-    "digest": "176c7a74885aa5499ecdc8589d5afd696551a84abb62e911d8f48b39b29e0c85",
+    "uniqueCommitCount": 457,
+    "generatedAt": "2026-07-17T12:18:12.147Z",
+    "digest": "daf376a48055de86229adc32b81e3cb1e1b8edcc69955511d37dcd719c0dc9e0",
     "note": "Ledger generated from unfiltered local refs, advertised remote heads/tags, the preserved recovery bundle, and stable patch-ID comparison against the pinned upstream release."
   },
   "stage": { "mode": "ephemeral_required", "identity": null, "reason": "No isolated stage with manifest-pinned identity is evidenced." },

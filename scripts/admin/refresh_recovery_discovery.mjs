@@ -102,8 +102,8 @@ const localPatchIds = patchIds(uniqueCommits);
 const commits = uniqueCommits.sort().map((sha, index) => {
   const parentsLine = git(['rev-list', '--parents', '-n', '1', sha]);
   const [, ...parents] = parentsLine.split(/\s+/);
-  const subject = git(['show', '-s', '--format=%s', sha]);
-  const author = git(['show', '-s', '--format=%an <%ae>', sha]);
+  const subject = git(['show', '-s', '--format=%s', sha]).replace(/<[^>\s]+@[^>\s]+>/g, '<redacted>');
+  const author = 'redacted';
   const refs = lines(git(['for-each-ref', '--contains', sha, '--format=%(refname)']));
   const id = parents.length === 1 ? (localPatchIds.get(sha) ?? null) : null;
   const emptyPatch = parents.length === 1 && !id && spawnSync('git', ['diff-tree', '--quiet', '--no-ext-diff', parents[0], sha], { cwd: root, stdio: 'ignore' }).status === 0;
