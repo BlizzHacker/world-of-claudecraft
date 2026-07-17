@@ -29,6 +29,7 @@ import { sanitizeMarketQuery } from '../src/sim/market_query';
 import {
   addArcadePlayer,
   arcadeFinished,
+  arcadeScores,
   arcadeWinnerPids,
   arcadeWire,
   buildArcadeRts,
@@ -4624,7 +4625,12 @@ export class GameServer {
   finishMinigame(id: number, winnerPids: readonly number[]): boolean {
     const current = this.minigameSessions.get(id);
     if (!current || !minigameAvailable(current.kind, this.minigamePreview)) return false;
-    const mutation = finishMinigameSession(current, winnerPids);
+    const arcade = this.arcadeSessions.get(id);
+    const mutation = finishMinigameSession(
+      current,
+      winnerPids,
+      arcade ? arcadeScores(arcade) : undefined,
+    );
     if (!mutation.ok) return false;
     this.minigameSessions.set(id, mutation.state);
     return true;
@@ -4656,7 +4662,7 @@ export class GameServer {
         if (arcadeFinished(arcade)) {
           const winners = arcadeWinnerPids(arcade);
           if (winners.length > 0) {
-            const mutation = finishMinigameSession(stepped, winners);
+            const mutation = finishMinigameSession(stepped, winners, arcadeScores(arcade));
             if (mutation.ok) this.minigameSessions.set(id, mutation.state);
           }
         }

@@ -273,6 +273,7 @@ import { Rng } from './rng';
 import {
   addArcadePlayer,
   arcadeFinished,
+  arcadeScores,
   arcadeWinnerPids,
   buildArcadeRts,
   abortMinigameSession,
@@ -3655,7 +3656,11 @@ export class Sim {
     if (stepped.kind !== 'zombie_defense' && this.minigameArcadeState) {
       if (stepped.phase === 'active') stepArcadeState(this.minigameArcadeState);
       if (arcadeFinished(this.minigameArcadeState)) {
-        const mutation = finishMinigameSession(stepped, arcadeWinnerPids(this.minigameArcadeState));
+        const mutation = finishMinigameSession(
+          stepped,
+          arcadeWinnerPids(this.minigameArcadeState),
+          arcadeScores(this.minigameArcadeState),
+        );
         if (mutation.ok) this.minigameSession = mutation.state;
       }
       return;
