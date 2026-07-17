@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { DUNGEON_X_THRESHOLD, WORLD_MAX_X, WORLD_MAX_Z, WORLD_MIN_Z } from '../sim/data';
+import { isInThornwheelShell } from '../sim/derby_layout';
 import type { BiomeId } from '../sim/types';
 import { isInSowfieldShell } from '../sim/vale_cup_layout';
 import { terrainHeight, waterLevelAt, zoneBiomeAt } from '../sim/world';
@@ -95,6 +96,7 @@ export function buildMotes(seed: number): MotesView {
     const z = pz + Math.sin(ang) * r;
     if (Math.abs(x) > WORLD_MAX_X - 8 || z < WORLD_MIN_Z + 8 || z > WORLD_MAX_Z - 8) return false;
     if (isInSowfieldShell(x, z)) return false; // no pollen drifting over the mown pitch
+    if (isInThornwheelShell(x, z)) return false; // nor cinder dust over the circuit
     const h = terrainHeight(x, z, seed);
     if (h < waterLevelAt(x, z) + 0.5) return false; // no motes hovering over open water
     homeX[i] = x;

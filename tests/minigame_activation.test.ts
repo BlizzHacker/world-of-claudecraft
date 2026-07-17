@@ -93,7 +93,11 @@ describe('activated town minigames', () => {
     expect([...sessions.values()][1]?.kind).toBe('brawler');
   });
 
-  it('recovers a persisted housing lot into a new online session', async () => {
+  it('keeps housing out of the arcade: persisted lots load, sessions never start', async () => {
+    // Housing is Eastbrook Homes (premium), not a minigame. The persisted lot
+    // record still loads (the HousingLot core is reused by the homes domain),
+    // but the retired arcade mode is permanently disabled: mg_create for
+    // 'housing' is inert and no session or adapter appears.
     const db = await import('../server/db');
     const lot = createHousingLot('cryptic', 'eastbrook', 999);
     expect(
@@ -113,13 +117,8 @@ describe('activated town minigames', () => {
     const owner = join(server, fakeWs(), 72, 'Homeowner');
     send(server, owner, { cmd: 'mg_create', kind: 'housing', maxPlayers: 4 });
     const sessions = (server as any).minigameSessions as Map<number, any>;
-    const id = [...sessions.keys()][0];
-    send(server, owner, { cmd: 'mg_ready', ready: true });
-    step(server, 61);
-    const housing = (server as any).arcadeSessions.get(id).housing;
-    expect(housing.pieces).toEqual([
-      expect.objectContaining({ id: 'recovered-floor', cell: { x: 1, z: 1 } }),
-    ]);
-    expect(housing.acl[owner.pid]).toBe('builder');
+    expect(sessions.size).toBe(0);
+    expect((server as any).arcadeSessions.size).toBe(0);
+    expect(MINIGAME_FEATURES.find((f) => f.id === 'housing')?.enabled).toBe(false);
   });
 });

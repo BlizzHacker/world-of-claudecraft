@@ -16,8 +16,6 @@ import * as bankMod from './bank';
 import { type BankState, clampBonusSlots, sanitizeBankState } from './bank';
 import { lineOfSightClear, resolveMovement, resolvePosition } from './colliders';
 import { auraAffectsStats, removeCancelableAura } from './combat/aura_cancel';
-import { updateRoamingNpc } from './npc/roam';
-import { npcDuelChallenge, tickNpcDuelRespawn, updateNpcDuels } from './social/npc_duel';
 import { auraReplacementConflicts } from './combat/aura_stacking';
 import {
   cleanseFriendlyNpcAuras,
@@ -90,9 +88,6 @@ import {
   talentPointsAtLevel,
 } from './content/talents';
 import { applyCooldowns, type SavedCooldowns, serializeCooldowns } from './cooldown_persist';
-import { activeMaxLevel, getActiveRealm } from './realms/registry';
-import { leaveInterior as leaveInteriorImpl, spawnBuildingInteriors } from './interiors';
-import { spawnWaypoints, waypointTravel } from './waypoints';
 import type { DelveShopGate, DelveShopOffer } from './data';
 import {
   ALL_RECIPES,
@@ -154,6 +149,7 @@ import { canEquipItem, resolveEquipSlot } from './equipment_rules';
 import { fleeSpeed } from './flee_speed';
 import { formatMoney } from './format_money';
 import * as interaction from './interaction';
+import { leaveInterior as leaveInteriorImpl, spawnBuildingInteriors } from './interiors';
 import { meetsLevelRequirement } from './item_level_req';
 import * as items from './items';
 import type { JailState } from './jail';
@@ -184,6 +180,45 @@ import {
 import { type MailSave, PostOffice } from './mail/post_office';
 import { Market, type MarketListing, type MarketSave } from './market';
 import { defaultMarketQuery, type MarketQuery } from './market_query';
+import type {
+  ArcadeState,
+  MinigameFeatureId,
+  MinigameSessionState,
+  ZombieDefenseSessionState,
+} from './minigames';
+import {
+  abortMinigameSession,
+  addArcadePlayer,
+  arcadeFinished,
+  arcadeScores,
+  arcadeWinnerPids,
+  buildArcadeRts,
+  buildZombieDefenseTower,
+  claimMinigameReward,
+  createArcadeState,
+  createMinigameSession,
+  createZombieDefenseSession,
+  finishMinigameSession,
+  joinMinigameSession,
+  MINIGAME_FEATURES,
+  minigameAvailable,
+  placeArcadeHousing,
+  practiceBotPids,
+  practiceMinigameCapacity,
+  setArcadeBrawlerInput,
+  setArcadeRaceInput,
+  setMinigameConnection,
+  setMinigameReady,
+  startZombieDefenseWave,
+  stepArcadeState,
+  stepMinigameSession,
+  stepZombieDefenseSession,
+  trainArcadeRts,
+} from './minigames';
+import type { BrawlerInput } from './minigames/brawler';
+import type { HousingPiece } from './minigames/housing';
+import type { RtsStructureKind, RtsUnitKind } from './minigames/rts';
+import type { TowerKind } from './minigames/zombie_defense';
 import {
   mobCombatProfile as mobCombatProfileFn,
   mobEffectiveMeleeRange as mobEffectiveMeleeRangeFn,
@@ -198,6 +233,7 @@ import {
 } from './mob/targeting';
 import { emitMobYell } from './mob/yells';
 import type { MobCombatProfile } from './mob_combat';
+import { updateRoamingNpc } from './npc/roam';
 import {
   findPlayerPath,
   PLAYER_BODY_RADIUS,
@@ -268,51 +304,14 @@ import {
 } from './progression/talents';
 import { prestige as prestigeImpl, updateRested } from './progression/xp';
 import { advancePendingProjectiles, type PendingProjectile } from './projectile_travel';
+import type { RaceInput } from './racing';
+import { activeMaxLevel, getActiveRealm } from './realms/registry';
 import { sanitizeRemovedZone1Content } from './removed_zone1_content';
 import { Rng } from './rng';
-import {
-  addArcadePlayer,
-  arcadeFinished,
-  arcadeScores,
-  arcadeWinnerPids,
-  buildArcadeRts,
-  abortMinigameSession,
-  createArcadeState,
-  buildZombieDefenseTower,
-  claimMinigameReward,
-  createMinigameSession,
-  createZombieDefenseSession,
-  finishMinigameSession,
-  joinMinigameSession,
-  MINIGAME_FEATURES,
-  minigameAvailable,
-  practiceBotPids,
-  practiceMinigameCapacity,
-  setMinigameConnection,
-  setMinigameReady,
-  setArcadeBrawlerInput,
-  setArcadeRaceInput,
-  stepArcadeState,
-  startZombieDefenseWave,
-  stepMinigameSession,
-  stepZombieDefenseSession,
-  trainArcadeRts,
-  placeArcadeHousing,
-} from './minigames';
-import type {
-  ArcadeState,
-  MinigameFeatureId,
-  MinigameSessionState,
-  ZombieDefenseSessionState,
-} from './minigames';
-import type { BrawlerInput } from './minigames/brawler';
-import type { RaceInput } from './racing';
-import type { HousingPiece } from './minigames/housing';
-import type { RtsStructureKind, RtsUnitKind } from './minigames/rts';
-import type { TowerKind } from './minigames/zombie_defense';
 import { persistedResource } from './serialize_resource';
 import { createSimContext, type SimContext, type SimContextHost } from './sim_context';
 import * as chatMod from './social/chat';
+import { npcDuelChallenge, tickNpcDuelRespawn, updateNpcDuels } from './social/npc_duel';
 import * as tradeMod from './social/trade';
 import {
   applyResurrectionSickness,
@@ -323,6 +322,7 @@ import {
   revivePlayerAt,
   spawnOverworldSpiritHealers,
 } from './spirit';
+import { spawnWaypoints, waypointTravel } from './waypoints';
 import {
   rollWorldBossLoot as rollWorldBossLootImpl,
   scaleWorldBossHp,
@@ -380,6 +380,7 @@ import * as yumiMod from './social/yumi';
 // public path `import { Sim, eloDelta } from './sim'` (tests/arena.test.ts) holds.
 export { eloDelta } from './social/arena';
 
+import * as derbyMod from './social/derby';
 import * as fiestaMod from './social/fiesta';
 // A3: Fiesta tuning consts moved to social/fiesta.ts; these five are read back here
 // by the fiestaMatchInfo presentation accessor (which STAYS on Sim).
@@ -1348,6 +1349,9 @@ export class Sim {
   // per-bracket queues, the single Sowfield match slot, the Groundskeeper's
   // deserter book, and the live bot pids), exposed as the live ctx.vcup view.
   vcup: VcState = createVcState();
+  // The Thornwheel Derby state (social/derby.ts): the same one-holder rule
+  // (the paddock queue and the single race slot), exposed as ctx.derby.
+  derby: derbyMod.DerbyState = derbyMod.createDerbyState();
   // per-player chat token bucket (anti-spam); refilled lazily by sim time
   private chatTokens = new Map<number, { tokens: number; at: number }>();
   // per-player set of opt-in global channels (world, lfg) joined via /join
@@ -1618,6 +1622,10 @@ export class Sim {
         valeCupMod.spawnGroundskeeper(this.ctx, safe);
       }
     }
+    // Race Marshal Pip at the Thornwheel paddock gate: the same reserved-id
+    // spawn (DERBY_MARSHAL_ID), placed directly on the flattened pad (no
+    // findSafePos: the layout guarantees level, dry ground at the gate).
+    derbyMod.spawnRaceMarshal(this.ctx);
 
     for (const delve of DELVE_LIST) {
       for (let i = 0; i < DELVE_SLOT_COUNT; i++) {
@@ -1698,7 +1706,15 @@ export class Sim {
   readonly propMetaByEnt = new Map<number, Record<string, unknown>>();
 
   /** Spawn a placed prop entity. `dbId` ties it to its realm_props row. */
-  spawnProp(dbId: number, propKey: string, x: number, z: number, facing = 0, scale = 1, meta?: Record<string, unknown>): Entity {
+  spawnProp(
+    dbId: number,
+    propKey: string,
+    x: number,
+    z: number,
+    facing = 0,
+    scale = 1,
+    meta?: Record<string, unknown>,
+  ): Entity {
     const e = createProp(this.nextId++, propKey, this.groundPos(x, z), facing, scale);
     this.addEntity(e);
     this.propEntityByDbId.set(dbId, e.id);
@@ -1727,8 +1743,11 @@ export class Sim {
     const e = this.entities.get(eid);
     if (!e) return null;
     const gp = this.groundPos(x, z);
-    e.pos.x = gp.x; e.pos.z = gp.z; e.pos.y = gp.y;
-    e.facing = facing; e.scale = scale;
+    e.pos.x = gp.x;
+    e.pos.z = gp.z;
+    e.pos.y = gp.y;
+    e.facing = facing;
+    e.scale = scale;
     this.rebucket(e);
     return e;
   }
@@ -1744,7 +1763,17 @@ export class Sim {
   }
 
   /** Boot-load persisted props (mirrors loadMarket). */
-  loadProps(rows: { id: number; prop_key: string; x: number; z: number; yaw: number; scale: number; meta?: Record<string, unknown> }[]): void {
+  loadProps(
+    rows: {
+      id: number;
+      prop_key: string;
+      x: number;
+      z: number;
+      yaw: number;
+      scale: number;
+      meta?: Record<string, unknown>;
+    }[],
+  ): void {
     for (const r of rows) this.spawnProp(r.id, r.prop_key, r.x, r.z, r.yaw, r.scale, r.meta);
   }
 
@@ -2265,6 +2294,10 @@ export class Sim {
     // before the leave save (vcupResolveDesertion is a public delegate).
     valeCupMod.vcupDequeue(this.ctx, pid);
     valeCupMod.vcupResolveDesertion(this.ctx, pid);
+    // Thornwheel Derby: same shape (free to leave the paddock queue; a seated
+    // racer deserts, hands the loaner kart back, and is benched).
+    derbyMod.derbyQueueRemove(this.ctx, pid);
+    derbyMod.derbyResolveDesertion(this.ctx, pid);
     this.party.partyInvites.delete(pid);
     this.tradeInvites.delete(pid);
     this.duelInvites.delete(pid);
@@ -2294,7 +2327,11 @@ export class Sim {
     // corpseTimer in updatePlayerCorpses). Its population is stamped on the entity
     // so loot/visibility checks still work without the (now-deleted) PlayerMeta.
     const corpseEntity = this.entities.get(pid);
-    const keepCorpse = !!corpseEntity && corpseEntity.kind === 'player' && corpseEntity.hardcoreCorpse === true && corpseEntity.lootable;
+    const keepCorpse =
+      !!corpseEntity &&
+      corpseEntity.kind === 'player' &&
+      corpseEntity.hardcoreCorpse === true &&
+      corpseEntity.lootable;
     if (!keepCorpse) this.dropEntity(pid);
     this.players.delete(pid);
     this.chatTokens.delete(pid);
@@ -2324,7 +2361,8 @@ export class Sim {
     // mid-pitch position (a mid-match save or desertion must not strand the
     // character on the Sowfield). The stowed pet persists via serializePet's
     // delvePetStash fallback; known/sportRole are session-derived, not saved.
-    const cupReturn = valeCupMod.vcupReturnFor(this.ctx, pid);
+    const cupReturn =
+      valeCupMod.vcupReturnFor(this.ctx, pid) ?? derbyMod.derbyReturnFor(this.ctx, pid);
     const state: CharacterState = {
       level: restore ? restore.level : e.level,
       xp: restore ? restore.xp : meta.xp,
@@ -3030,6 +3068,10 @@ export class Sim {
       get vcup() {
         return sim.vcup;
       },
+      // The Thornwheel Derby holder (same in-place mutation rules).
+      get derby() {
+        return sim.derby;
+      },
       // LATE-bound (not .bind(sim)): a moved emit site (C5 meleeSwing/rangedSwing)
       // now emits via ctx.emit, and tests swap (sim as any).emit post-construction to
       // observe events (mob_blind/mob_cleave). An early .bind(sim) would capture the
@@ -3525,7 +3567,8 @@ export class Sim {
 
   minigameCreate(kind: MinigameFeatureId, maxPlayers = 4): void {
     if (!minigameAvailable(kind, true)) return;
-    if (this.minigameSession && !['finished', 'aborted'].includes(this.minigameSession.phase)) return;
+    if (this.minigameSession && !['finished', 'aborted'].includes(this.minigameSession.phase))
+      return;
     const requestedMaxPlayers = Number.isFinite(maxPlayers) ? Math.trunc(maxPlayers) : 4;
     const botPids = practiceBotPids(kind, 1, requestedMaxPlayers);
     let session = createMinigameSession(
@@ -3568,7 +3611,12 @@ export class Sim {
     // normal session seam owns capacity, duplicate, and phase validation.
     const current = this.minigameSession;
     if (!current || current.ownerPid !== this.playerId) return;
-    if (!Number.isInteger(targetPlayerId) || targetPlayerId <= 0 || targetPlayerId === this.playerId) return;
+    if (
+      !Number.isInteger(targetPlayerId) ||
+      targetPlayerId <= 0 ||
+      targetPlayerId === this.playerId
+    )
+      return;
     if (!this.players.has(targetPlayerId)) return;
     this.minigameJoin(current.id, targetPlayerId);
   }
@@ -3597,7 +3645,8 @@ export class Sim {
   minigameZombieStart(playerId = this.playerId): void {
     const current = this.minigameSession;
     const zombie = this.minigameZombieState;
-    if (!current || current.kind !== 'zombie_defense' || current.phase !== 'active' || !zombie) return;
+    if (!current || current.kind !== 'zombie_defense' || current.phase !== 'active' || !zombie)
+      return;
     startZombieDefenseWave(
       zombie,
       playerId,
@@ -3608,7 +3657,8 @@ export class Sim {
   minigameZombieBuild(kind: TowerKind, x: number, z: number, playerId = this.playerId): void {
     const current = this.minigameSession;
     const zombie = this.minigameZombieState;
-    if (!current || current.kind !== 'zombie_defense' || current.phase !== 'active' || !zombie) return;
+    if (!current || current.kind !== 'zombie_defense' || current.phase !== 'active' || !zombie)
+      return;
     buildZombieDefenseTower(
       zombie,
       playerId,
@@ -3822,6 +3872,10 @@ export class Sim {
     // tick-staggered bots), so appending it here cannot fork the draw order.
     this.updateValeCup();
     lap?.('valecup');
+    // The Derby phase draws ZERO shared rng (checkpoint math + timers), so
+    // appending it here cannot fork the draw order either.
+    derbyMod.updateDerby(this.ctx);
+    lap?.('derby');
     this.updateMinigame();
     lap?.('minigame');
     this.market.update();
@@ -6459,7 +6513,6 @@ export class Sim {
   // PartyMachine (src/sim/social/party.ts, A1). removeFromParty is reachable by
   // removePlayer through `this.ctx.removeFromParty` (the SimContext seam).
 
-
   // -------------------------------------------------------------------------
   // Raid markers (party-scoped target markers)
   // -------------------------------------------------------------------------
@@ -6825,6 +6878,30 @@ export class Sim {
 
   get cupInfo(): import('../world_api/vale_cup').CupInfo | null {
     return this.primaryId === -1 ? null : this.cupInfoFor(this.primaryId);
+  }
+
+  // --- IWorldDerby: the Thornwheel Derby (social/derby.ts delegates) ---
+
+  derbyQueueJoin(pid?: number): void {
+    derbyMod.derbyQueueJoin(this.ctx, pid);
+  }
+
+  derbyQueueLeave(pid?: number): void {
+    derbyMod.derbyQueueLeave(this.ctx, pid);
+  }
+
+  /** Idempotent desertion resolution; the server calls it BEFORE the leave
+   *  save (the vcupResolveDesertion precedent). */
+  derbyResolveDesertion(pid: number): void {
+    derbyMod.derbyResolveDesertion(this.ctx, pid);
+  }
+
+  derbyInfoFor(pid: number): import('../world_api/derby').DerbyInfo | null {
+    return derbyMod.derbyInfoFor(this.ctx, pid);
+  }
+
+  get derbyInfo(): import('../world_api/derby').DerbyInfo | null {
+    return this.primaryId === -1 ? null : this.derbyInfoFor(this.primaryId);
   }
 
   private fiestaMatchInfo(
@@ -7397,7 +7474,6 @@ export class Sim {
   // Delves, replayable modular instances (see docs/prd/delves.md)
   // -------------------------------------------------------------------------
 
-
   private delveModuleZOffset(run: DelveRun, moduleIndex = run.moduleIndex): number {
     return runsMod.delveModuleZOffset(run, moduleIndex);
   }
@@ -7547,7 +7623,6 @@ export class Sim {
     runsMod.unlockNextDelveLore(this.ctx, meta, pid);
   }
 
-
   private grantDelveRewards(run: DelveRun): void {
     runsMod.grantDelveRewards(this.ctx, run);
   }
@@ -7585,7 +7660,6 @@ export class Sim {
   private spawnDelveModuleExit(run: DelveRun, mod: DelveModuleDef, zBase: number): void {
     runsMod.spawnDelveModuleExit(this.ctx, run, mod, zBase);
   }
-
 
   private tryOpenDelveExitPortal(run: DelveRun): void {
     runsMod.tryOpenDelveExitPortal(this.ctx, run);
@@ -7754,9 +7828,6 @@ export class Sim {
     return runsMod.delveCompanionWire(this.ctx, pid);
   }
 
-
-
-
   craftSkillsFor(pid: number): Record<string, number> {
     return craftSkillsFor(this.ctx, pid);
   }
@@ -7788,7 +7859,6 @@ export class Sim {
   get lockpickState(): LockpickView | null {
     return this.lockpickViewFor(this.primaryId);
   }
-
 
   get companionUpgrades(): Record<string, number> {
     return this.companionUpgradesFor(this.primaryId);

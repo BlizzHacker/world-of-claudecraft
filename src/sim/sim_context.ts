@@ -22,11 +22,11 @@ import type {
   ArenaMatch,
   ArenaQueueUnit,
   DuelState,
-  NpcDuelState,
   FiestaState,
   InstanceSlot,
   ItemUseResult,
   JoinableChannel,
+  NpcDuelState,
   Party,
   PendingMobRespawn,
   PetState,
@@ -34,6 +34,7 @@ import type {
   ResolvedAbility,
   TradeSession,
 } from './sim';
+import type { DerbyState } from './social/derby';
 import type { VcState } from './social/vale_cup';
 import type { SpatialGrid } from './spatial';
 import type {
@@ -186,6 +187,10 @@ export interface SimContextPrimitives {
   // the holder), so a read-only live view suffices. Consumed by the vale_cup
   // module, the damage no-damage floor, and targeting's candidate arm.
   readonly vcup: VcState;
+
+  // The Thornwheel Derby state (social/derby.ts): the same one-holder rule
+  // (queue mutated in place, the race slot reassigned INSIDE the holder).
+  readonly derby: DerbyState;
 }
 
 // Cross-system callbacks. Each signature mirrors the still-on-`Sim` method it
@@ -867,6 +872,9 @@ export function createSimContext(host: SimContextHost): SimContext {
     },
     get vcup() {
       return host.vcup;
+    },
+    get derby() {
+      return host.derby;
     },
     emit: host.emit,
     error: host.error,

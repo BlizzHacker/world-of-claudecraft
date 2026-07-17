@@ -3,15 +3,16 @@
 // the single source shared by offline Sim and the online server.
 
 export { createRaceSession, defaultRaceTrack, stepRace } from '../racing';
+export type { ArcadeScores, ArcadeState, ArcadeWireState } from './arcade';
 export {
-  ARCADE_STATE_VERSION,
   ARCADE_RACE_TIMEOUT_TICKS,
+  ARCADE_STATE_VERSION,
   addArcadePlayer,
-  arcadeWire,
   arcadeFinished,
   arcadeKindSupported,
   arcadeScores,
   arcadeWinnerPids,
+  arcadeWire,
   buildArcadeRts,
   cloneArcadeState,
   createArcadeState,
@@ -21,8 +22,8 @@ export {
   stepArcadeState,
   trainArcadeRts,
 } from './arcade';
-export type { ArcadeScores, ArcadeState, ArcadeWireState } from './arcade';
 export { BRAWLER_VERSION, createBrawlerState, stepBrawler } from './brawler';
+export type { HousingLot } from './housing';
 export {
   cloneHousingLot,
   createHousingLot,
@@ -30,7 +31,7 @@ export {
   HOUSING_VERSION,
   placeHousingPiece,
 } from './housing';
-export type { HousingLot } from './housing';
+export type { RtsCampaign } from './rts';
 export {
   cloneRtsCampaign,
   createRtsCampaign,
@@ -38,7 +39,6 @@ export {
   RTS_VERSION,
   stepRtsCampaign,
 } from './rts';
-export type { RtsCampaign } from './rts';
 export type {
   MinigameSessionPhase,
   MinigameSessionPlayer,
@@ -51,15 +51,15 @@ export {
   createMinigameSession,
   finishMinigameSession,
   joinMinigameSession,
-  practiceBotPids,
-  practiceMinigameCapacity,
+  MINIGAME_BOT_PID_BASE,
   MINIGAME_COUNTDOWN_SECONDS,
   MINIGAME_SESSION_VERSION,
+  practiceBotPids,
+  practiceMinigameCapacity,
   setMinigameConnection,
   setMinigameReady,
   stepMinigameSession,
 } from './session';
-export { MINIGAME_BOT_PID_BASE } from './session';
 export type { TowerKind, ZombieDefenseState } from './zombie_defense';
 export {
   cloneZombieDefense,
@@ -93,7 +93,12 @@ export const MINIGAME_FEATURES: readonly MinigameFeatureStatus[] = [
   { id: 'brawler', enabled: true, checkpoint: 'phase-06-brawler-qa' },
   { id: 'town_rts', enabled: true, checkpoint: 'phase-04-rts-qa' },
   { id: 'zombie_defense', enabled: true, checkpoint: 'phase-04-zombie-qa' },
-  { id: 'housing', enabled: true, checkpoint: 'phase-05-housing-qa' },
+  // Housing is NOT a minigame: it is Eastbrook Homes, a premium paid feature
+  // (deeds settle in $CR against a homeowner entitlement). The arcade-mode
+  // flag stays registered so the mg_ wire tokens remain inert rather than
+  // unknown, but it is permanently disabled here; the HousingLot core below is
+  // reused by the Eastbrook Homes domain, not by any arcade surface.
+  { id: 'housing', enabled: false, checkpoint: 'moved-to-eastbrook-homes' },
 ];
 
 export function minigameEnabled(id: MinigameFeatureId): boolean {

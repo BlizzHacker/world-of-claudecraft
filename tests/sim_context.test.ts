@@ -10,6 +10,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { Rng } from '../src/sim/rng';
 import { Sim } from '../src/sim/sim';
 import { createSimContext, type SimContextHost } from '../src/sim/sim_context';
+import { createDerbyState } from '../src/sim/social/derby';
 import { createVcState } from '../src/sim/social/vale_cup';
 import { SpatialGrid } from '../src/sim/spatial';
 import type { Entity, SimEvent } from '../src/sim/types';
@@ -284,6 +285,7 @@ function makeFakeHost() {
     marketListings: [],
     bankerIds: [],
     vcup: createVcState(),
+    derby: createDerbyState(),
     emit: vi.fn(),
     error: vi.fn(),
     dealDamage: vi.fn(),

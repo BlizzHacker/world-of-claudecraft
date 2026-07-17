@@ -42,6 +42,7 @@
 //   bank.ts             IWorldBank           per-character deposit box (proximity-gated info +
 //                                            deposit/withdraw/buy-slots)
 //   vale_cup.ts         IWorldValeCup        Vale Cup boarball queue/roles/betting/practice
+//   derby.ts            IWorldDerby          Thornwheel Derby kart-race queue + tote board
 //
 // THREE GATES pin this seam (run before any facet edit; the literal counts are
 // pinned THERE and re-stale here, so this prose stays count-free):
@@ -60,6 +61,7 @@ import type { IWorldCombat } from './world_api/combat';
 import type { IWorldCosmetics } from './world_api/cosmetics';
 import type { IWorldDailyRewards } from './world_api/daily_rewards';
 import type { IWorldDelves } from './world_api/delves';
+import type { IWorldDerby } from './world_api/derby';
 import type { IWorldDuelArena } from './world_api/duel_arena';
 import type { IWorldDungeons } from './world_api/dungeons';
 import type { IWorldEntityRoster } from './world_api/entity_roster';
@@ -87,8 +89,15 @@ export type {
   GuildLeaderboardPage,
   LeaderboardPage,
 } from './sim/leaderboard_page';
+export type {
+  ArcadeState,
+  ArcadeWireState,
+  MinigameFeatureId,
+  MinigameSessionState,
+  ZombieDefenseSessionState,
+} from './sim/minigames';
+export type { TowerKind } from './sim/minigames/zombie_defense';
 export type { ArenaCombatant, ArenaFormat, ArenaStanding, OverheadEmoteId } from './sim/types';
-
 // --- facet aux-type + value re-exports (each travels with its facet file) ---
 export type { BankBonusSource, BankInfo } from './world_api/bank';
 export { isOverheadEmoteId, OVERHEAD_EMOTES } from './world_api/chat';
@@ -112,6 +121,13 @@ export type {
   LockpickView,
 } from './world_api/delves';
 export type {
+  DerbyInfo,
+  DerbyPhase,
+  DerbyRaceInfo,
+  DerbyRacerInfo,
+  IWorldDerby,
+} from './world_api/derby';
+export type {
   ArenaInfo,
   ArenaLadderEntry,
   DuelInfo,
@@ -124,8 +140,6 @@ export type { RaidLockout } from './world_api/dungeons';
 export type { MailInfo, MailKindView, MailMessageView } from './world_api/mail';
 export type { MarketInfo, MarketListingView } from './world_api/market';
 export type { IWorldMinigames } from './world_api/minigames';
-export type { ArcadeState, ArcadeWireState, MinigameFeatureId, MinigameSessionState, ZombieDefenseSessionState } from './sim/minigames';
-export type { TowerKind } from './sim/minigames/zombie_defense';
 export type { PartyInfo, PartyMemberAura, PartyMemberInfo } from './world_api/party';
 export type { CraftResultView, PlayerProfessionsView, RecipeDef } from './world_api/professions';
 export type {
@@ -185,7 +199,8 @@ export interface IWorld
     IWorldTelemetry,
     IWorldProfessions,
     IWorldBank,
-    IWorldValeCup {}
+    IWorldValeCup,
+    IWorldDerby {}
 
 // ---------------------------------------------------------------------------
 // Command schema (W0b): the shared wire-token vocabulary.
@@ -371,6 +386,11 @@ export const COMMAND_NAMES = [
   'mg_rts_build',
   'mg_rts_train',
   'mg_housing_place',
+  // Thornwheel Derby: physical kart racing at the circuit (real entities on
+  // real terrain); the queue is the only wire surface, derbyInfo is a
+  // snapshot read.
+  'derby_queue',
+  'derby_leave',
 ] as const;
 
 // The union both the send path (`online.ts`) and the dispatch switch
@@ -436,7 +456,8 @@ export type WorldFacet =
   | 'IWorldDailyRewards'
   | 'IWorldTelemetry'
   | 'IWorldBank'
-  | 'IWorldValeCup';
+  | 'IWorldValeCup'
+  | 'IWorldDerby';
 
 export const COMMAND_FACETS = {
   // IWorldCombat: ability casts, auto-attack, spirit release.
@@ -596,4 +617,8 @@ export const COMMAND_FACETS = {
   vcup_ready: 'IWorldValeCup',
   vcup_bet: 'IWorldValeCup',
   vcup_practice: 'IWorldValeCup',
+  // IWorldDerby: the Thornwheel Derby grid book. derbyInfo is a snapshot read
+  // (no send).
+  derby_queue: 'IWorldDerby',
+  derby_leave: 'IWorldDerby',
 } as const satisfies Partial<Record<ClientCommand, WorldFacet>>;

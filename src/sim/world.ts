@@ -1,4 +1,5 @@
 import { DUNGEON_FLOOR_Y, DUNGEON_X_THRESHOLD, getActiveWorldContent, WORLD_MAX_X } from './data';
+import { isInThornwheelShell, THORNWHEEL_FLAT } from './derby_layout';
 import { fbm2, hash2 } from './rng';
 import type { BiomeId, HeightStamp, WorldContent } from './types';
 import { isInSowfieldShell, SOWFIELD_FLAT, sowfieldStandLift } from './vale_cup_layout';
@@ -332,6 +333,22 @@ export function sowfieldFlattenWeight(x: number, z: number): number {
   return 1 - smoothstep(0, 1, d / f.falloff);
 }
 
+// The Thornwheel Circuit kart ground (src/sim/derby_layout.ts): the east-bluff
+// shelf leveled the same way (rectangle + smoothstep apron). Its apron ends at
+// x = THORNWHEEL_FLAT.xMax + falloff (152): the rim rise only STARTS at
+// |x| = 150 and the first yards of onset are a sub-climb-limit toe, so the
+// impassable band (tests/terrain_walls.test.ts samples further in) is
+// untouched by construction.
+export function thornwheelFlattenWeight(x: number, z: number): number {
+  const f = THORNWHEEL_FLAT;
+  const dx = Math.max(0, f.xMin - x, x - f.xMax);
+  const dz = Math.max(0, f.zMin - z, z - f.zMax);
+  if (dx === 0 && dz === 0) return 1;
+  const d = Math.sqrt(dx * dx + dz * dz);
+  if (d >= f.falloff) return 0;
+  return 1 - smoothstep(0, 1, d / f.falloff);
+}
+
 export function mirefenImpactCraterOffset(x: number, z: number): number {
   const dx = x - MIREFEN_IMPACT_CRATER.x;
   const dz = z - MIREFEN_IMPACT_CRATER.z;
@@ -479,6 +496,11 @@ export function terrainHeight(x: number, z: number, seed: number): number {
   // sowfieldFlattenWeight), so the rim still wins everywhere it exists.
   const sow = sowfieldFlattenWeight(x, z);
   if (sow > 0) h = lerp(h, SOWFIELD_FLAT.height, sow);
+
+  // The Thornwheel Circuit plateau (kart derby): the identical level pull on
+  // the east bluffs, same ordering rules as the Sowfield arm above.
+  const wheel = thornwheelFlattenWeight(x, z);
+  if (wheel > 0) h = lerp(h, THORNWHEEL_FLAT.height, wheel);
 
   // Mountain ridge walls between zones, pierced by the road pass
   let mountainAdd = 0;
@@ -767,6 +789,8 @@ export function generateDecorations(seed: number): Decoration[] {
       // The Sowfield stadium footprint grows no trees or rocks (hash-based
       // placement, so skipping here shifts no other decoration or rng draw).
       if (isInSowfieldShell(x, z)) continue;
+      // Same rule for the Thornwheel Circuit's racing ground.
+      if (isInThornwheelShell(x, z)) continue;
       let inHub = false;
       for (const zone of w.content.zones) {
         const dx = x - zone.hub.x,

@@ -1,19 +1,20 @@
 import { describe, expect, it } from 'vitest';
-import { MINIGAME_FEATURES, minigameAvailable, minigameEnabled } from '../src/sim/minigames';
 import {
   claimMinigameReward,
   createMinigameSession,
   finishMinigameSession,
   joinMinigameSession,
+  MINIGAME_FEATURES,
   type MinigameSessionState,
+  minigameAvailable,
+  minigameEnabled,
+  practiceBotPids,
+  practiceMinigameCapacity,
+  type SessionMutation,
   setMinigameConnection,
   setMinigameReady,
   stepMinigameSession,
-  type SessionMutation,
-  practiceBotPids,
-  practiceMinigameCapacity,
 } from '../src/sim/minigames';
-import { type BrawlerInput, createBrawlerState, stepBrawler } from '../src/sim/minigames/brawler';
 import {
   arcadeFinished,
   arcadeScores,
@@ -21,6 +22,7 @@ import {
   setArcadeRaceInput,
   stepArcadeState,
 } from '../src/sim/minigames/arcade';
+import { type BrawlerInput, createBrawlerState, stepBrawler } from '../src/sim/minigames/brawler';
 import {
   canBuildHousing,
   canVisitHousing,
@@ -53,14 +55,19 @@ describe('minigame rollout guard', () => {
     expect(minigameEnabled('brawler')).toBe(true);
     expect(minigameEnabled('town_rts')).toBe(true);
     expect(minigameEnabled('zombie_defense')).toBe(true);
-    expect(minigameEnabled('housing')).toBe(true);
+    // Housing left the minigame framework for good: it is Eastbrook Homes, a
+    // premium paid feature. The flag stays registered (wire tokens inert, not
+    // unknown) but is permanently disabled here.
+    expect(minigameEnabled('housing')).toBe(false);
     expect(minigameAvailable('zombie_defense')).toBe(true);
   });
 });
 
 describe('shared minigame session lifecycle', () => {
-  const stateOf = (result: SessionMutation, fallback: MinigameSessionState): MinigameSessionState =>
-    result.ok ? result.state : fallback;
+  const stateOf = (
+    result: SessionMutation,
+    fallback: MinigameSessionState,
+  ): MinigameSessionState => (result.ok ? result.state : fallback);
 
   it('starts only after every human is ready, then enters active after a fixed countdown', () => {
     let state = createMinigameSession(7, 'racing', 99, 1, 4);
@@ -80,7 +87,7 @@ describe('shared minigame session lifecycle', () => {
 
   it('keeps reconnect and reward claims idempotent and authoritative', () => {
     let state = createMinigameSession(8, 'brawler', 3, 10, 2);
-    let joined = joinMinigameSession(state, 11, true);
+    const joined = joinMinigameSession(state, 11, true);
     expect(joined.ok).toBe(true);
     state = joined.ok ? joined.state : state;
     state = stateOf(setMinigameReady(state, 10, true), state);
@@ -89,7 +96,14 @@ describe('shared minigame session lifecycle', () => {
     expect(state.phase).toBe('active');
     state = stateOf(setMinigameConnection(state, 11, false), state);
     state = stateOf(setMinigameConnection(state, 11, true), state);
-    const finished = finishMinigameSession(state, [10, 11], new Map([[10, 125], [11, 0]]));
+    const finished = finishMinigameSession(
+      state,
+      [10, 11],
+      new Map([
+        [10, 125],
+        [11, 0],
+      ]),
+    );
     expect(finished.ok).toBe(true);
     state = finished.ok ? finished.state : state;
     expect(state.players.find((player) => player.pid === 10)?.score).toBe(125);
@@ -132,7 +146,9 @@ describe('brawler domain', () => {
 describe('arcade race adapter', () => {
   it('keeps malformed controller values finite in the offline seam', () => {
     const state = createArcadeState('racing', 42, [1]);
-    expect(setArcadeRaceInput(state, 1, { throttle: Number.NaN, steer: Number.POSITIVE_INFINITY })).toBe(true);
+    expect(
+      setArcadeRaceInput(state, 1, { throttle: Number.NaN, steer: Number.POSITIVE_INFINITY }),
+    ).toBe(true);
     for (let i = 0; i < 20; i += 1) stepArcadeState(state);
     expect(state.kind).toBe('racing');
     if (state.kind !== 'racing') return;
@@ -144,7 +160,12 @@ describe('arcade race adapter', () => {
 
   it('exposes deterministic placement and KO scores to the shared session', () => {
     const race = createArcadeState('racing', 42, [1, 2, 3, 4]);
-    expect([...arcadeScores(race).entries()]).toEqual([[1, 400], [2, 300], [3, 200], [4, 100]]);
+    expect([...arcadeScores(race).entries()]).toEqual([
+      [1, 400],
+      [2, 300],
+      [3, 200],
+      [4, 100],
+    ]);
 
     const brawler = createArcadeState('brawler', 42, [1, 2]);
     if (brawler.kind === 'brawler') brawler.brawler.fighters[0].score = 2;

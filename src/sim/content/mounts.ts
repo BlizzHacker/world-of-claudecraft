@@ -43,6 +43,18 @@ export const MOUNTS: Record<string, MountDef> = {
     visualKey: 'mount_wyrm',
     itemId: 'mount_emerald_wyrm',
   },
+  // The Thornwheel Derby loaner kart (src/sim/social/derby.ts). NOT a bridle
+  // item: the race module seats/unseats it directly, so the itemId below is a
+  // placeholder that never appears in ITEMS, vendors, or loot. Uniform speed
+  // for every racer keeps the derby a driving contest, not a wallet contest.
+  derby_kart: {
+    id: 'derby_kart',
+    name: 'Thornwheel Kart',
+    speedMult: 1.8,
+    flying: false,
+    visualKey: 'mount_derby_kart',
+    itemId: 'derby_kart_loaner',
+  },
 };
 
 export const MOUNT_AURA_PREFIX = 'mount_';

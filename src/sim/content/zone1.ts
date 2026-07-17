@@ -40,6 +40,7 @@ export const ZONE1_ZONE: ZoneDef = {
     { x: -5, z: -52, label: 'Reliquary Hill' },
     { x: 40, z: 140, label: 'Brightwood Glade' },
     { x: -11, z: -112, label: 'The Sowfield' },
+    { x: 124, z: 32, label: 'Thornwheel Circuit' },
   ],
   welcome: 'Find Marshal Redbrook in town — he has work for you.',
   welcomeQuestId: 'q_wolves',
@@ -656,7 +657,8 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
     facing: Math.PI / 2,
     color: 0x8a5a2b,
     questIds: [],
-    greeting: 'Every hero needs a steed, $C. The stag is steady, the raptor is fast, and the wyrm... the wyrm flies.',
+    greeting:
+      'Every hero needs a steed, $C. The stag is steady, the raptor is fast, and the wyrm... the wyrm flies.',
     vendorItems: ['mount_forest_stag', 'mount_swamp_raptor', 'mount_emerald_wyrm'],
   },
   town_defense_board: {
@@ -677,7 +679,7 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
     facing: 0,
     color: 0x9a5b2a,
     questIds: [],
-    greeting: 'Coin\'s coin, $C. Lend a blade and the beast\'s yours to loot.',
+    greeting: "Coin's coin, $C. Lend a blade and the beast's yours to loot.",
     grinds: true,
     grindLevel: 12,
   },
@@ -689,7 +691,7 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
     facing: Math.PI,
     color: 0x6a7a3a,
     questIds: [],
-    greeting: 'These tuskers won\'t thin themselves. Wade in — the kill counts for you.',
+    greeting: "These tuskers won't thin themselves. Wade in — the kill counts for you.",
     grinds: true,
     grindLevel: 12,
   },
@@ -704,6 +706,23 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
     questIds: [],
     banker: true,
     greeting: 'Welcome to the Gilded Strongbox. Your goods rest safe behind our locks.',
+  },
+  race_marshal_pip: {
+    id: 'race_marshal_pip',
+    name: 'Race Marshal Pip',
+    title: 'Keeper of the Thornwheel',
+    // At the circuit's paddock gate with the grid book (derby_layout
+    // MARSHAL_POS). dynamic: the generic surface-placement loop skips her; the
+    // Derby module spawns her at world init under a RESERVED entity id so
+    // adding her never shifts the ctor id sequence (the Bram precedent;
+    // parity goldens pin nextId).
+    pos: { x: 102.5, z: 35 },
+    facing: Math.PI / 2,
+    color: 0xa66a3a,
+    questIds: [],
+    dynamic: true,
+    greeting:
+      'Six karts, three laps, and no brakes worth the name, $C. Sign the book and take a grid slot?',
   },
   groundskeeper_bram: {
     id: 'groundskeeper_bram',
@@ -1076,7 +1095,8 @@ export const ZONE1_QUESTS: Record<string, QuestDef> = {
     giverNpcId: 'marshal_redbrook',
     turnInNpcId: 'marshal_redbrook',
     text: "Old Cainhurst — the sage who reads the deep maps — went down the well a week past and never came up. The thing below took him, and bound him with three cursed wards: one struck among the graves, one buried in the mine, one drowned at the docks. Break all three wards, $N, and you'll break his chains. Bring them to me as proof.",
-    completionText: 'The three wards, all snuffed cold. Cainhurst has crawled free — he waits at the well now, and swears the Hellmaw is open to you. He warns of something at the bottom he calls The Render.',
+    completionText:
+      'The three wards, all snuffed cold. Cainhurst has crawled free — he waits at the well now, and swears the Hellmaw is open to you. He warns of something at the bottom he calls The Render.',
     objectives: [
       { type: 'collect', itemId: 'binding_ward', count: 3, label: 'Hellmaw binding ward broken' },
     ],

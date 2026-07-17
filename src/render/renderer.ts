@@ -1,12 +1,8 @@
 import * as THREE from 'three';
+import { clone as cloneSkinned } from 'three/addons/utils/SkeletonUtils.js';
 import { coerceFxTier, nameplateIntervalSec } from '../game/ui_tier_knobs';
 import { cameraOcclusion } from '../sim/colliders';
-// Downstream-only imports (forged/ext GLB props via ArcForge). Upstream's sorted
-// import block below covers the rest; these symbols are unique to our fork.
-import { buildSingleProp, ensurePropLoaded } from './props';
-import { loadGltf } from './assets/loader';
-import { clone as cloneSkinned } from 'three/addons/utils/SkeletonUtils.js';
-import { plankTexture } from './textures';
+import { mountForAuraId } from '../sim/content/mounts';
 import {
   ABILITIES,
   ARENA_SLOT_COUNT,
@@ -38,9 +34,9 @@ import {
   yumiMazeOrigin,
   ZONES,
 } from '../sim/data';
+import type { DelveModuleId } from '../sim/delve_layout';
 import { type DungeonLayout, INTERIOR_ROOM_LAYOUT } from '../sim/dungeon_layout';
 import { getActiveRealm } from '../sim/realms/registry';
-import type { DelveModuleId } from '../sim/delve_layout';
 import type { BiomeId } from '../sim/types';
 import { ALL_CLASSES, type Entity, type SimEvent } from '../sim/types';
 import { isAtSowfield } from '../sim/vale_cup_layout';
@@ -50,6 +46,7 @@ import { tEntity } from '../ui/entity_i18n';
 import type { IWorld } from '../world_api';
 import { isVisuallyDead } from './anim_state';
 import { AOE_RING_LIFETIME, aoeRingAnim } from './aoe_ring';
+import { loadGltf } from './assets/loader';
 import type { SpatialAudioSink, Surface } from './audio_sink';
 import { type BirdsView, buildBirds } from './birds';
 import {
@@ -67,6 +64,7 @@ import { buildCritters, type CritterField } from './critters';
 import { animatesEveryFrame, crowdLodScaleSq, midAnimCadence } from './crowd_lod';
 import { buildDelveModule } from './delve_interiors';
 import { buildDelveInteractable } from './delve_props';
+import { buildDerbyTrack, type DerbyTrackView } from './derby_track';
 import { buildDoorBody } from './door_portal';
 import { DungeonInteriors, ensureDungeonAssets } from './dungeon';
 import { objectDisplayName } from './entity_labels';
@@ -105,7 +103,14 @@ import { facingAlpha, remoteEntityAlpha } from './net_interp_core';
 import { resolveDirectPickEntityId } from './pick_resolution';
 import { PlacedAssetsView } from './placed_assets';
 import { buildComposer, type PostPipeline } from './post';
-import { buildPropMaterialPrewarmGroup, buildProps } from './props';
+// Downstream-only imports (forged/ext GLB props via ArcForge). Upstream's sorted
+// import block below covers the rest; these symbols are unique to our fork.
+import {
+  buildPropMaterialPrewarmGroup,
+  buildProps,
+  buildSingleProp,
+  ensurePropLoaded,
+} from './props';
 import { buildGroundQuestObject } from './quest_objects';
 import { isOwnedPetHostile } from './reaction';
 import { RenderBudgetGovernor, type RenderBudgetState } from './render_budget';
@@ -119,8 +124,7 @@ import { freezeStaticMatrices } from './static_matrix';
 import { shouldRenderStealthGhost } from './stealth';
 import { buildFlaredConeFan, buildRingXZ, drapeConeWorld } from './target_cone_debug';
 import { buildTerrain, type TerrainView } from './terrain';
-import { sparkleTexture } from './textures';
-import { mountForAuraId } from '../sim/content/mounts';
+import { plankTexture, sparkleTexture } from './textures';
 import { targetIntensity } from './travel_speed_fx';
 import { TravelSpeedFxPainter } from './travel_speed_fx_painter';
 import {
@@ -160,8 +164,10 @@ function buildForgedInstance(scene: THREE.Object3D): THREE.Object3D {
   const wrap = new THREE.Group();
   wrap.add(cloned);
   if (!box.isEmpty()) {
-    const size = new THREE.Vector3(); box.getSize(size);
-    const center = new THREE.Vector3(); box.getCenter(center);
+    const size = new THREE.Vector3();
+    box.getSize(size);
+    const center = new THREE.Vector3();
+    box.getCenter(center);
     const tallest = Math.max(size.x, size.y, size.z) || 1;
     const k = 2.0 / tallest;
     // shift the cloned root so its xz-center sits at 0 and base at y=0, then
@@ -1025,6 +1031,7 @@ export class Renderer {
   // Vale Cup: the Sowfield set piece, the staggered goal-firework volley queue,
   // and the boarball's dust pool (created lazily the first time the ball rolls).
   private valeCupStadium: ValeCupStadiumView;
+  private derbyTrack: DerbyTrackView;
   // Futuristic-fantasy skybox for the private practice pitch (a random variant
   // per bout, camera-centred, only shown while the local player is practicing).
   private valeCupSky = new ValeCupPracticeSky();
@@ -1419,6 +1426,9 @@ export class Renderer {
     // campfire flicker + ember pass.
     this.valeCupStadium = buildValeCupStadium(this.sim.cfg.seed);
     this.scene.add(this.valeCupStadium.group);
+    // The Thornwheel Circuit (Derby kart ground), same build-once + cull rules.
+    this.derbyTrack = buildDerbyTrack(this.sim.cfg.seed);
+    this.scene.add(this.derbyTrack.group);
     // The private practice-pitch copy (shown at a far instance origin when the
     // local player is practicing; positioned/toggled by valeCupStadium.update).
     this.scene.add(this.valeCupStadium.practiceGroup);
@@ -3435,30 +3445,47 @@ export class Renderer {
             mixer.clipAction(gltf.animations[0]).play();
             this.forgedMixers.push(mixer);
           }
-          let m = 0; inst.traverse((o) => { if ((o as THREE.Mesh).isMesh || (o as THREE.SkinnedMesh).isSkinnedMesh) m++; });
+          let m = 0;
+          inst.traverse((o) => {
+            if ((o as THREE.Mesh).isMesh || (o as THREE.SkinnedMesh).isSkinnedMesh) m++;
+          });
           if (m === 0) console.warn('[worldbuilder] forged loaded but 0 meshes', url);
         } catch (err) {
           console.error('[worldbuilder] forged build failed', url, err);
         }
       };
       const cached = forgedGltfCache.get(name);
-      if (cached) { place(cached); return; }
+      if (cached) {
+        place(cached);
+        return;
+      }
       wrap.add(placeholder());
-      loadGltf(url).then((gltf) => {
-        forgedGltfCache.set(name, gltf);
-        place(gltf as { scene: THREE.Object3D; animations?: THREE.AnimationClip[] });
-      }).catch((err) => { console.error('[worldbuilder] forged load FAILED', url, err); });
+      loadGltf(url)
+        .then((gltf) => {
+          forgedGltfCache.set(name, gltf);
+          place(gltf as { scene: THREE.Object3D; animations?: THREE.AnimationClip[] });
+        })
+        .catch((err) => {
+          console.error('[worldbuilder] forged load FAILED', url, err);
+        });
       return;
     }
     // native prop
     const built = buildSingleProp(key);
-    if (built) { swapIn(built.group); return; }
+    if (built) {
+      swapIn(built.group);
+      return;
+    }
     // not loaded yet (or unknown): placeholder now, retry once the preload settles
     wrap.add(placeholder());
-    void ensurePropLoaded(key).then(() => {
-      const b = buildSingleProp(key);
-      if (b) swapIn(b.group);
-    }).catch(() => { /* keep placeholder */ });
+    void ensurePropLoaded(key)
+      .then(() => {
+        const b = buildSingleProp(key);
+        if (b) swapIn(b.group);
+      })
+      .catch(() => {
+        /* keep placeholder */
+      });
   }
 
   private createView(e: Entity): void {
@@ -3608,7 +3635,9 @@ export class Renderer {
         // Downstream: first-person self views preserve FP parts and can't be pooled
         // (visualPoolKey is already null for wantsFirstPerson, so recycling stays off
         // for the self view but on for every other entity).
-        visual = createCharacterVisual(e, undefined, { preserveFirstPersonParts: wantsFirstPerson });
+        visual = createCharacterVisual(e, undefined, {
+          preserveFirstPersonParts: wantsFirstPerson,
+        });
       }
       // entity scale is applied to the whole group below, so it can update live
       // (Fiesta size buffs) and also scale lazily-built form visuals for free.
@@ -3939,9 +3968,11 @@ export class Renderer {
 
   private buildInterior(interior: string, ox: number, oz: number, layout?: DungeonLayout): void {
     this.dungeons ??= new DungeonInteriors(this.scene, this.lowGfx, this.flames, this.fireLights);
-    void this.dungeons.buildInterior(interior, ox, oz, layout ? { layout } : undefined).catch((err) => {
-      console.error('Failed to build dungeon interior:', err);
-    });
+    void this.dungeons
+      .buildInterior(interior, ox, oz, layout ? { layout } : undefined)
+      .catch((err) => {
+        console.error('Failed to build dungeon interior:', err);
+      });
   }
 
   // Outdoor fog presets per biome (high tier eases between them as the
@@ -5226,6 +5257,8 @@ export class Renderer {
     if (this.forgedMixers.length) for (const mx of this.forgedMixers) mx.update(dt);
     // null-safe cupInfo read: the offline Sim may predate the Vale Cup module
     this.valeCupStadium.update(p.pos.x, p.pos.z, dt, this.sim.cupInfo ?? null);
+    // The Thornwheel Circuit: cull + pulse the racer's next checkpoint pennant.
+    this.derbyTrack.update(p.pos.x, p.pos.z, dt, this.sim.derbyInfo ?? null);
     // Team rings ride the live entity views (positions are fresh: the entity loop
     // ran above). Reads cupInfo.match for a participant, else cupInfo.spectate (a
     // nearby walk-up at the Sowfield): the sim only fills spectate near the field,

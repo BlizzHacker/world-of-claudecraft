@@ -139,6 +139,7 @@ import {
   EMPTY_ICON_KEY,
   ITEM_ICON_PREFIX,
 } from './action_bar_view';
+import { ArcadeMinigameWindow } from './arcade_minigame_window';
 import { ArenaWindow } from './arena_window';
 import {
   abilityStartsAutoAttack,
@@ -203,6 +204,7 @@ import {
 } from './cryptic/music_widget';
 import { DailyRewardsWindow } from './daily_rewards_window';
 import { DelveMapPainter } from './delve_map_painter';
+import { DerbyHud } from './derby_hud';
 import { devTierBadgeDataUrl, devTierByIndex, devTierDisplayName } from './dev_tier';
 import { markDialogRoot } from './dialog_root';
 import { discordRoleTagLabel } from './discord_role_tag';
@@ -394,8 +396,6 @@ import { buildVcupHudView } from './vale_cup_hud_view';
 import { ValeCupIndicator } from './vale_cup_indicator';
 import { buildVcupIndicatorView } from './vale_cup_indicator_view';
 import { ValeCupWindow, vcupNationName } from './vale_cup_window';
-import { ZombieDefenseWindow } from './zombie_defense_window';
-import { ArcadeMinigameWindow } from './arcade_minigame_window';
 import { buildVendorSellRows, buildVendorView } from './vendor_view';
 import { renderVendorWindow, type VendorTab } from './vendor_window';
 import { nextVoicedYell, type VoicedYellState, voicedYellGain } from './voice_events';
@@ -415,6 +415,7 @@ import { installWindowResize, markResizableWindow } from './window_resize';
 import { formatXp, xpBarView } from './xp_bar';
 import { XpBarPainter } from './xp_bar_painter';
 import { YumiMatchPainter } from './yumi_match_painter';
+import { ZombieDefenseWindow } from './zombie_defense_window';
 
 // hooks main wires after Input exists (the options menu drives input, audio,
 // graphics, and logout, all of which live outside the HUD). PerfOverlayHooks
@@ -3729,6 +3730,12 @@ export class Hud {
     layer: () => document.getElementById('ui'),
     writers: this.writerFacet,
   });
+  // In-race Thornwheel Derby strip (lap / place / next checkpoint), snapshot-
+  // driven from derbyInfo on the same mediumHud band.
+  private readonly derbyHud = new DerbyHud({
+    layer: () => document.getElementById('ui'),
+    writers: this.writerFacet,
+  });
   // Pre-match Vale Cup briefing overlay (rules + role kit + team sheet + Ready).
   // Self-mounting full-screen card shown only while cupInfo.match.phase is
   // 'briefing'; drives itself off view.visible (no toggle wiring), rides the
@@ -4636,6 +4643,7 @@ export class Hud {
     this.vcupBetting.relocalize();
     this.vcupIndicator.relocalize();
     this.vcupMatchHud.relocalize();
+    this.derbyHud.relocalize();
     this.vcupBriefing.relocalize();
     this.vcupCharge.relocalize();
     const dialog = $('#quest-dialog');
@@ -7052,6 +7060,7 @@ export class Hud {
       // button, the in-match strip, and the open window redraw.
       this.vcupIndicator.update(buildVcupIndicatorView(this.sim.cupInfo, atSowfield));
       this.vcupMatchHud.update(buildVcupHudView(this.sim.cupInfo));
+      this.derbyHud.update(this.sim.derbyInfo ?? null);
       this.vcupBriefing.update(buildVcupBriefingView(this.sim.cupInfo));
       this.vcupBetting.update(buildVcupBettingView(this.sim.cupInfo));
       this.updateShootCharge();
@@ -7059,7 +7068,8 @@ export class Hud {
       if ($('#arena-window').style.display === 'block') this.arenaWindow.render();
       if ($('#valecup-window').style.display === 'block') this.valeCupWindow.render();
       if ($('#zombie-defense-window').style.display === 'block') this.zombieDefenseWindow.render();
-      if ($('#arcade-minigame-window').style.display === 'block') this.arcadeMinigameWindow.render();
+      if ($('#arcade-minigame-window').style.display === 'block')
+        this.arcadeMinigameWindow.render();
       if (this.openLootMobId !== null) {
         const mob = sim.entities.get(this.openLootMobId);
         if (!mob?.lootable || dist2d(p.pos, mob.pos) > 7) this.closeLoot();
@@ -8158,8 +8168,8 @@ export class Hud {
     this.zombieDefenseWindow.toggle();
   }
 
-  toggleArcadeMinigame(mode?: 'racing' | 'brawler' | 'town_rts' | 'housing'): void {
-    this.arcadeMinigameWindow.toggle(mode);
+  toggleArcadeMinigame(): void {
+    this.arcadeMinigameWindow.toggle();
   }
 
   /** Offline builds enable the Vale Cup practice-vs-bots button (main.ts). */
@@ -10742,9 +10752,24 @@ export class Hud {
     if (npc.templateId === 'groundskeeper_bram') {
       html += `<button type="button" class="qd-list-item" data-vcup="1" aria-label="${esc(t('hudChrome.vcup.gossipOpenAria'))}"><span class="gold">${svgIcon('ball')}</span> ${esc(t('hudChrome.vcup.gossipOpen'))}</button>`;
     }
+    // Race Marshal Pip keeps the grid book at the Thornwheel paddock gate:
+    // sign up for (or scratch from) the next Derby right in the gossip menu.
+    if (npc.templateId === 'race_marshal_pip') {
+      const derby = this.sim.derbyInfo;
+      if (derby?.myQueued) {
+        const label = tOptional('hudChrome.derby.gossipLeave') ?? 'Scratch from the Derby grid';
+        html += `<button type="button" class="qd-list-item" data-derby-leave="1" aria-label="${esc(label)}"><span class="gold">✕</span> ${esc(label)}</button>`;
+      } else {
+        const label = tOptional('hudChrome.derby.gossipJoin') ?? 'Sign the grid book (kart race!)';
+        html += `<button type="button" class="qd-list-item" data-derby-join="1" aria-label="${esc(label)}"><span class="gold">➤</span> ${esc(label)}</button>`;
+      }
+    }
     if (npc.templateId === 'town_defense_board') {
-      html += `<button type="button" class="qd-list-item" data-arcade-games="1" aria-label="${esc(t('hudChrome.arcade.title'))}">${esc(t('hudChrome.arcade.title'))}</button>`;
-      html += `<button type="button" class="qd-list-item" data-arcade-housing="1" aria-label="${esc(t('hudChrome.arcade.housing'))}">${esc(t('hudChrome.arcade.housing'))}</button>`;
+      // The strategy views are the exempt board games: the war table (town
+      // RTS) and zombie defense both open ONLY from this in-world board. The
+      // former arcade "housing" mode left for Eastbrook Homes (premium), and
+      // racing/brawling play at their own physical venues.
+      html += `<button type="button" class="qd-list-item" data-arcade-games="1" aria-label="${esc(t('hudChrome.arcade.townRts'))}">${esc(t('hudChrome.arcade.townRts'))}</button>`;
       html += `<button type="button" class="qd-list-item" data-zombie-defense="1" aria-label="${esc(t('hudChrome.zombie.title'))}"><span class="gold">☠</span> ${esc(t('hudChrome.zombie.title'))}</button>`;
     }
     el.innerHTML = html;
@@ -10784,6 +10809,14 @@ export class Hud {
       this.closeQuestDialog(false);
       this.toggleValeCup();
     });
+    el.querySelector('[data-derby-join]')?.addEventListener('click', () => {
+      this.closeQuestDialog(false);
+      this.sim.derbyQueueJoin();
+    });
+    el.querySelector('[data-derby-leave]')?.addEventListener('click', () => {
+      this.closeQuestDialog(false);
+      this.sim.derbyQueueLeave();
+    });
     el.querySelector('[data-zombie-defense]')?.addEventListener('click', () => {
       this.closeQuestDialog(false);
       this.toggleZombieDefense();
@@ -10791,10 +10824,6 @@ export class Hud {
     el.querySelector('[data-arcade-games]')?.addEventListener('click', () => {
       this.closeQuestDialog(false);
       this.toggleArcadeMinigame();
-    });
-    el.querySelector('[data-arcade-housing]')?.addEventListener('click', () => {
-      this.closeQuestDialog(false);
-      this.toggleArcadeMinigame('housing');
     });
     el.querySelector('[data-close]')?.addEventListener('click', () => this.closeQuestDialog());
     el.style.display = 'block';

@@ -10,8 +10,8 @@
 //   Stage 3: cut the inner 6x4 grid into 24 individual 512x512 sprites,
 //            auto-detect left/right facing, and download them as PNGs.
 //
-// No sim imports, no server writes, no asset-pack dependency — same contract as
-// minigames.ts. Wiring the produced sprites into the runtime skin/character
+// No sim imports, no server writes, no asset-pack dependency.
+// Wiring the produced sprites into the runtime skin/character
 // manifest system is a deliberate follow-up; this module delivers the tool.
 
 const MODAL_ID = 'cr-charbuilder-modal';
@@ -53,8 +53,9 @@ interface CutSprite {
 }
 
 function escapeHtml(s: string): string {
-  return s.replace(/[&<>"']/g, (c) =>
-    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string),
+  return s.replace(
+    /[&<>"']/g,
+    (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] as string,
   );
 }
 
@@ -138,7 +139,14 @@ function largestBlobInCell(
         ]) {
           const nx = px + dx;
           const ny = py + dy;
-          if (nx >= 0 && nx < cw && ny >= 0 && ny < ch && mask[(cy0 + ny) * W + (cx0 + nx)] && !vis[ny * cw + nx]) {
+          if (
+            nx >= 0 &&
+            nx < cw &&
+            ny >= 0 &&
+            ny < ch &&
+            mask[(cy0 + ny) * W + (cx0 + nx)] &&
+            !vis[ny * cw + nx]
+          ) {
             vis[ny * cw + nx] = 1;
             stack.push([nx, ny]);
           }
@@ -218,7 +226,7 @@ function flipCanvas(src: HTMLCanvasElement): HTMLCanvasElement {
   return fc;
 }
 
-// ─── Section HTML + click delegation (minigames.ts pattern) ──────────────────
+// ─── Section HTML + click delegation ──────────────────────────────────────────
 
 export function charBuilderSectionHtml(): string {
   return `
@@ -265,7 +273,12 @@ interface BuilderState {
 export function openCharBuilder(): void {
   if (typeof document === 'undefined') return;
   const host = ensureHost();
-  const state: BuilderState = { template: null, templateName: 'Character', cleared: null, sprites: [] };
+  const state: BuilderState = {
+    template: null,
+    templateName: 'Character',
+    cleared: null,
+    sprites: [],
+  };
 
   host.innerHTML = `
     <div class="cr-modal-overlay cr-charbuilder-overlay" data-cr-charbuilder-overlay>
@@ -302,7 +315,10 @@ export function openCharBuilder(): void {
 
   host.onclick = (ev) => {
     const t = ev.target as HTMLElement | null;
-    if (t?.hasAttribute('data-cr-charbuilder-close') || t?.hasAttribute('data-cr-charbuilder-overlay')) {
+    if (
+      t?.hasAttribute('data-cr-charbuilder-close') ||
+      t?.hasAttribute('data-cr-charbuilder-overlay')
+    ) {
       closeCharBuilder();
     }
   };
@@ -390,7 +406,9 @@ export function openCharBuilder(): void {
       const d = id.data;
       const isLight = isLightBg(id, W, H);
       threshWrap.style.display = isLight ? 'none' : '';
-      modeEl.textContent = isLight ? 'Mode: light-bg (already cleared)' : 'Mode: dark-bg (labeled template)';
+      modeEl.textContent = isLight
+        ? 'Mode: light-bg (already cleared)'
+        : 'Mode: dark-bg (labeled template)';
       const x0 = Math.floor(W * INNER.x0);
       const y0 = Math.floor(H * INNER.y0);
       const x1 = Math.floor(W * INNER.x1);
@@ -427,7 +445,9 @@ export function openCharBuilder(): void {
       threshVal.textContent = threshInput.value;
       process();
     });
-    body.querySelector<HTMLButtonElement>('[data-cr-back]')!.addEventListener('click', renderStage1);
+    body
+      .querySelector<HTMLButtonElement>('[data-cr-back]')!
+      .addEventListener('click', renderStage1);
     body.querySelector<HTMLButtonElement>('[data-cr-next]')!.addEventListener('click', () => {
       if (state.cleared) renderStage3();
     });
@@ -558,7 +578,9 @@ export function openCharBuilder(): void {
     };
 
     nameInput.addEventListener('blur', cut);
-    body.querySelector<HTMLButtonElement>('[data-cr-back]')!.addEventListener('click', renderStage2);
+    body
+      .querySelector<HTMLButtonElement>('[data-cr-back]')!
+      .addEventListener('click', renderStage2);
     dlBtn.addEventListener('click', () => {
       void downloadAll();
     });

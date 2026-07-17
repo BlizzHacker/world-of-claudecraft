@@ -1,7 +1,5 @@
 import {
   arenaOriginAt,
-  interiorOriginAt,
-  isInteriorPos,
   DUNGEON_X_THRESHOLD,
   defaultDelveModules,
   delveAt,
@@ -10,14 +8,16 @@ import {
   getActiveWorldContent,
   INSTANCE_SLOT_COUNT,
   instanceOrigin,
+  interiorOriginAt,
   isArenaPos,
   isDelvePos,
+  isInteriorPos,
   isYumiMazePos,
   yumiMazeOriginAt,
 } from './data';
 import { type DelveModuleId, delveModuleColliders } from './delve_layout';
-import { getActiveRealm } from './realms/registry';
 import { isLitanyModuleId, litanyModuleLosColliders } from './delve_litany_layout';
+import { derbyColliders } from './derby_layout';
 import {
   ARENA_LAYOUT,
   CRYPT_LAYOUT,
@@ -26,6 +26,7 @@ import {
   SANCTUM_LAYOUT,
   TEMPLE_LAYOUT,
 } from './dungeon_layout';
+import { getActiveRealm } from './realms/registry';
 import type { WorldContent } from './types';
 import { valeCupColliders } from './vale_cup_layout';
 import { generateDecorations, groundHeight } from './world';
@@ -106,8 +107,13 @@ function staticWorldColliders(seed: number): Collider[] {
     const height = (b.kind === 'chapel' ? 10.8 : b.kind === 'inn' ? 7.8 : 8.0) * bScale;
     out.push({
       type: 'obb',
-      x: b.x, z: b.z, hw: b.w / 2, hd: b.d / 2, rot: b.rot,
-      cameraTopY: topY(seed, b.x, b.z, height), camGhost: true,
+      x: b.x,
+      z: b.z,
+      hw: b.w / 2,
+      hd: b.d / 2,
+      rot: b.rot,
+      cameraTopY: topY(seed, b.x, b.z, height),
+      camGhost: true,
     });
   }
   for (const w of PROPS.wells)
@@ -267,6 +273,11 @@ function staticWorldColliders(seed: number): Collider[] {
   // must not be jump-through mid-match (the north gate is the way in). Applies
   // for any active content, matching the flatten arm (crater-precedent leak).
   out.push(...valeCupColliders());
+
+  // The Thornwheel Circuit sleeper fences, infield ring, and podium (the
+  // Derby). Same single-layout-module rule: derby_layout.ts drives this set,
+  // the terrain flatten, the race checkpoints, and the render dressing.
+  out.push(...derbyColliders());
   return out;
 }
 
@@ -296,7 +307,14 @@ const INTERIOR_ROOM_COLLIDERS: Collider[] = (() => {
   // South wall split around the central door gap.
   const sideHw = (ROOM_HX - ROOM_DOOR_HW) / 2;
   if (sideHw > 0) {
-    c.push({ type: 'obb', x: -(ROOM_DOOR_HW + sideHw), z: -ROOM_HZ, hw: sideHw, hd: ROOM_WT, rot: 0 });
+    c.push({
+      type: 'obb',
+      x: -(ROOM_DOOR_HW + sideHw),
+      z: -ROOM_HZ,
+      hw: sideHw,
+      hd: ROOM_WT,
+      rot: 0,
+    });
     c.push({ type: 'obb', x: ROOM_DOOR_HW + sideHw, z: -ROOM_HZ, hw: sideHw, hd: ROOM_WT, rot: 0 });
   }
   return c;

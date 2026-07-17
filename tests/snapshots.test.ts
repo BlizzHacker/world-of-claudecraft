@@ -19,14 +19,14 @@ import { saveCharacterState } from '../server/db';
 import { type ClientSession, GameServer, wireEntity } from '../server/game';
 import { ClientWorld } from '../src/net/online';
 import { mechHeldWeaponOverride, visualKeyFor } from '../src/render/characters/manifest';
-import { realmClassVisualKey } from '../src/sim/realms/class_visuals';
 import { DELVES } from '../src/sim/data';
+import { createArcadeState } from '../src/sim/minigames/arcade';
+import { createMinigameSession } from '../src/sim/minigames/session';
+import { createZombieDefenseSession } from '../src/sim/minigames/zombie_session';
+import { realmClassVisualKey } from '../src/sim/realms/class_visuals';
 import { Sim } from '../src/sim/sim';
 import { type Aura, DT, type PlayerClass } from '../src/sim/types';
 import { terrainHeight } from '../src/sim/world';
-import { createMinigameSession } from '../src/sim/minigames/session';
-import { createArcadeState } from '../src/sim/minigames/arcade';
-import { createZombieDefenseSession } from '../src/sim/minigames/zombie_session';
 import { absorbTotal } from '../src/ui/absorb_bar';
 import { auraEffectDescriptor } from '../src/ui/aura_effect';
 import { isAuraDebuff } from '../src/ui/auras_view';
@@ -2030,6 +2030,7 @@ const ALL_DELTA_KEYS = [
   'dcomp',
   'dcompanion',
   'delveDaily',
+  'derby',
   'dmarks',
   'drun',
   'duel',
@@ -2076,6 +2077,7 @@ const TERSE_TO_IWORLD: Record<string, string> = {
   dclears: 'delveClears',
   dcomp: 'companionUpgrades',
   dcompanion: 'companionState',
+  derby: 'derbyInfo',
   dmarks: 'delveMarks',
   drun: 'delveRun',
   duel: 'duelInfo',
@@ -2161,10 +2163,7 @@ function dirtyEveryDeltaField(): {
     minigame.id,
     createZombieDefenseSession(minigame.id, minigame.seed),
   );
-  (server as any).arcadeSessions.set(
-    minigame.id,
-    createArcadeState('racing', 4242, [lp]),
-  );
+  (server as any).arcadeSessions.set(minigame.id, createArcadeState('racing', 4242, [lp]));
 
   // Poke the encoder's exact sources for the mutually-exclusive cases.
   const run = sim.delveRunForPlayer(lp) as any;
@@ -2203,6 +2202,10 @@ function dirtyEveryDeltaField(): {
   meta.talents = { spec: 'arms', ranks: {}, choices: {} };
   // the Vale Cup sport kit swap ('sport' heavy key) and queue readout ('vcup')
   meta.sportRole = 'keeper';
+  // the Thornwheel Derby queue readout ('derby' delta key): a queued rider gets
+  // a non-null derbyInfoFor. queueDeadline stays null, so no grid call fires
+  // under the fixture's ticks (startRace needs a deadline or a full grid).
+  sim.derby.queue.push(lp);
   meta.talentMods.spec = 'arms';
   meta.loadouts = [{ name: 'PvP', alloc: { spec: 'arms', ranks: {}, choices: {} }, bar: [] }];
   meta.activeLoadout = 0;
@@ -2379,9 +2382,9 @@ describe('full self-state snapshot delta fixture', () => {
 });
 
 describe('delta-key contract pins (anti-drift)', () => {
-  it('ALL_DELTA_KEYS contains exactly 38 unique keys in sorted order', () => {
-    expect(ALL_DELTA_KEYS).toHaveLength(38);
-    expect(new Set(ALL_DELTA_KEYS).size).toBe(38);
+  it('ALL_DELTA_KEYS contains exactly 39 unique keys in sorted order', () => {
+    expect(ALL_DELTA_KEYS).toHaveLength(39);
+    expect(new Set(ALL_DELTA_KEYS).size).toBe(39);
     expect([...ALL_DELTA_KEYS]).toEqual([...ALL_DELTA_KEYS].sort());
   });
 
@@ -2393,7 +2396,7 @@ describe('delta-key contract pins (anti-drift)', () => {
     const scraped = new Set<string>();
     for (let m = re.exec(src); m !== null; m = re.exec(src)) scraped.add(m[1]);
     expect(scraped.has('lockouts')).toBe(true); // the multi-line call IS captured
-    expect(scraped.size).toBe(38);
+    expect(scraped.size).toBe(39);
     expect([...scraped].sort()).toEqual([...ALL_DELTA_KEYS].sort());
   });
 

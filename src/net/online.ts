@@ -7,8 +7,6 @@ import {
   runtimeWebSocketUrl,
 } from '../runtime';
 import { bagCapacity } from '../sim/bags';
-import { MINIGAME_FEATURES } from '../sim/minigames';
-import type { MinigameFeatureId, MinigameFeatureStatus } from '../sim/minigames';
 import { signChallenge } from '../sim/client_challenge';
 import { mechChromaItemId, mechChromaSkinIndex } from '../sim/content/skins';
 import {
@@ -28,6 +26,8 @@ import { deadTargetSelectable } from '../sim/dead_target';
 import { LEADERBOARD_PAGE_SIZE } from '../sim/leaderboard_page';
 import type { Ante, PickAction } from '../sim/lockpick';
 import type { MarketQuery } from '../sim/market_query';
+import type { MinigameFeatureId, MinigameFeatureStatus } from '../sim/minigames';
+import { MINIGAME_FEATURES } from '../sim/minigames';
 import { normalizeMoveFacing, sanitizeMoveInput } from '../sim/move_input';
 import { getArchetypeTitle, getHobbyCraft } from '../sim/professions/archetype';
 import type { MaterialRarity } from '../sim/professions/gathering';
@@ -70,6 +70,7 @@ import {
   type DelveDailyInfo,
   type DelveRunInfo,
   type DelveShopOfferView,
+  type DerbyInfo,
   type DevLeaderboardPage,
   type DuelInfo,
   type FriendInfo,
@@ -82,8 +83,6 @@ import {
   type MailInfo,
   type MarketInfo,
   type MinigameSessionState,
-  type TowerKind,
-  type ZombieDefenseSessionState,
   type OverheadEmoteId,
   type PartyInfo,
   type PlayerProfessionsView,
@@ -91,7 +90,9 @@ import {
   type RaidLockout,
   type RecipeDef,
   type SocialInfo,
+  type TowerKind,
   type TradeInfo,
+  type ZombieDefenseSessionState,
 } from '../world_api';
 import { isTransientReconnectRejection } from './reconnect_policy';
 
@@ -585,7 +586,13 @@ export class Api {
     return data.characters;
   }
 
-  async createCharacter(name: string, cls: PlayerClass, skin = 0, ladder = false, hardcore = false): Promise<void> {
+  async createCharacter(
+    name: string,
+    cls: PlayerClass,
+    skin = 0,
+    ladder = false,
+    hardcore = false,
+  ): Promise<void> {
     await this.post('/api/characters', { name, class: cls, skin, ladder, hardcore });
   }
 
@@ -1102,6 +1109,9 @@ export class ClientWorld implements IWorld {
   // self (`s.vcup`, delta-omitted: a missing key keeps the prior mirror, an
   // explicit null clears it, same as `s.arena`). ---
   cupInfo: CupInfo | null = null;
+  // --- IWorldDerby: Thornwheel Derby queue/race state, mirrored from the
+  // snapshot self (`s.derby`, delta-omitted; same null-clears rule as vcup). ---
+  derbyInfo: DerbyInfo | null = null;
   // My live sport role, mirrored from the wireRev-gated heavy self field
   // `s.sport` ({ role } | null, delta-omitted). NON-IWorld mirror: while set,
   // the per-snapshot known rebuild resolves the role kit via the ONE shared
@@ -1551,7 +1561,11 @@ export class ClientWorld implements IWorld {
             if (!feature || typeof feature !== 'object') return false;
             const row = feature as Record<string, unknown>;
             return (
-              (row.id === 'racing' || row.id === 'brawler' || row.id === 'town_rts' || row.id === 'zombie_defense' || row.id === 'housing') &&
+              (row.id === 'racing' ||
+                row.id === 'brawler' ||
+                row.id === 'town_rts' ||
+                row.id === 'zombie_defense' ||
+                row.id === 'housing') &&
               typeof row.enabled === 'boolean' &&
               (row.preview === undefined || typeof row.preview === 'boolean') &&
               typeof row.checkpoint === 'string'
@@ -2097,6 +2111,7 @@ export class ClientWorld implements IWorld {
       if (s.duel !== undefined) this.duelInfo = s.duel;
       if (s.arena !== undefined) this.arenaInfo = s.arena;
       if (s.vcup !== undefined) this.cupInfo = s.vcup;
+      if (s.derby !== undefined) this.derbyInfo = s.derby;
       if (s.market !== undefined) this.marketInfo = s.market;
       if (s.mail !== undefined) this.mailInfo = s.mail;
       if (s.mailU !== undefined) this.mailUnread = s.mailU ?? 0;
@@ -2116,8 +2131,7 @@ export class ClientWorld implements IWorld {
       if (s.gprof !== undefined) this.gatheringProficiency = s.gprof ?? {};
       if (s.prof !== undefined) this.professionsState = s.prof ?? { skills: [] };
       if (s.mg !== undefined) this.minigameSession = s.mg as MinigameSessionState | null;
-      if (s.mgz !== undefined)
-        this.minigameZombieState = s.mgz as ZombieDefenseSessionState | null;
+      if (s.mgz !== undefined) this.minigameZombieState = s.mgz as ZombieDefenseSessionState | null;
       if (s.mga !== undefined) this.minigameArcadeState = s.mga as ArcadeWireState | null;
       // camera follows server-side facing changes when not mouselooking
       if (prevSelfFacing !== undefined && this.mouselookFacing === null) {
@@ -2577,6 +2591,14 @@ export class ClientWorld implements IWorld {
   }
   vcupBet(side: 'A' | 'B', amount: number): void {
     this.cmd({ cmd: 'vcup_bet', side, amount });
+  }
+  // --- IWorldDerby: Thornwheel Derby queue sends (derbyInfo is a snapshot
+  // read riding the 'derby' delta key). ---
+  derbyQueueJoin(): void {
+    this.cmd({ cmd: 'derby_queue' });
+  }
+  derbyQueueLeave(): void {
+    this.cmd({ cmd: 'derby_leave' });
   }
   // Private practice bout against bots: the server seats it on an instanced pitch
   // copy far from the Sowfield, so it runs in parallel with the real match and

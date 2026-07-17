@@ -3,21 +3,24 @@
 // realm skin, and wallet/token controls.
 
 import './realm_env';
-import { resolveHudSkin, setHudSkin, type HudSkin } from './globes';
-import { resolveFpsMode, persistFpsMode } from './fps_mode';
 import {
-  REALM_LIST,
   getActiveRealm,
   persistActiveRealm,
-  resolveActiveRealmId,
+  REALM_LIST,
   type RealmContent,
   type RealmId,
+  resolveActiveRealmId,
 } from '../../sim/realms';
 import { socialsForRealm } from '../../sim/realms/social_links';
-import { handleMiniGameClick, miniGameSectionHtml } from './minigames';
+import {
+  arcForgeEditorAllowedCached,
+  canUseArcForgeEditor,
+  openArcForgeEditor,
+} from './arcforge_editor';
 import { persistAutoFps, resolveAutoFps } from './auto_fps';
 import { openBugReport } from './bug_report';
-import { openArcForgeEditor, canUseArcForgeEditor, arcForgeEditorAllowedCached } from './arcforge_editor';
+import { persistFpsMode, resolveFpsMode } from './fps_mode';
+import { type HudSkin, resolveHudSkin, setHudSkin } from './globes';
 
 const MODAL_ID = 'cr-customization-modal';
 // ArcForge Studio is a separate app on the MoveWeight infra (not this realm),
@@ -29,8 +32,9 @@ type RealmStage = 'live' | 'beta' | 'alpha' | 'dev';
 let activeTab: OptionsTab = 'customization';
 
 function escapeHtml(s: string): string {
-  return s.replace(/[&<>"']/g, (c) =>
-    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string),
+  return s.replace(
+    /[&<>"']/g,
+    (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] as string,
   );
 }
 
@@ -66,9 +70,12 @@ function realmSkinOptions(activeId: RealmId): string {
 }
 
 function realmSummary(realm: RealmContent): string {
-  const classes = realm.classes.length > 0
-    ? `${realm.classes.length} realm class skins`
-    : (realm.id === 'claudecraft' ? 'Upstream class set' : 'Shared class set');
+  const classes =
+    realm.classes.length > 0
+      ? `${realm.classes.length} realm class skins`
+      : realm.id === 'claudecraft'
+        ? 'Upstream class set'
+        : 'Shared class set';
   const scope = realm.crossRealm ? 'Cross-realm hub' : 'Home realm';
   return `${scope} - ${classes}`;
 }
@@ -103,21 +110,52 @@ function tabButton(tab: OptionsTab, label: string): string {
 function stageRows(realm: RealmContent): string {
   const activeStage = realmStage(realm.id);
   const stages: { id: RealmStage; label: string; rate: string; note: string }[] = [
-    { id: 'live', label: 'Live', rate: '1x Platinum', note: 'Stable characters and public economy.' },
-    { id: 'beta', label: 'Beta', rate: '1.5x Platinum', note: 'Monthly candidate realm for public promotion.' },
-    { id: 'alpha', label: 'Alpha', rate: '2x Platinum', note: 'Two-week tester realm with reset-prone characters.' },
-    { id: 'dev', label: 'Dev', rate: '3x Platinum', note: 'Fast iteration realm for admins, moderators, and builders.' },
+    {
+      id: 'live',
+      label: 'Live',
+      rate: '1x Platinum',
+      note: 'Stable characters and public economy.',
+    },
+    {
+      id: 'beta',
+      label: 'Beta',
+      rate: '1.5x Platinum',
+      note: 'Monthly candidate realm for public promotion.',
+    },
+    {
+      id: 'alpha',
+      label: 'Alpha',
+      rate: '2x Platinum',
+      note: 'Two-week tester realm with reset-prone characters.',
+    },
+    {
+      id: 'dev',
+      label: 'Dev',
+      rate: '3x Platinum',
+      note: 'Fast iteration realm for admins, moderators, and builders.',
+    },
   ];
   return `<div class="cr-stage-grid" role="group" aria-label="Realm stage">
-    ${stages.map((stage) => `<button type="button" class="cr-stage-card ${activeStage === stage.id ? 'active' : ''}" data-cr-stage="${stage.id}">
+    ${stages
+      .map(
+        (
+          stage,
+        ) => `<button type="button" class="cr-stage-card ${activeStage === stage.id ? 'active' : ''}" data-cr-stage="${stage.id}">
       <strong>${escapeHtml(stage.label)}</strong>
       <span>${escapeHtml(stage.rate)}</span>
       <small>${escapeHtml(stage.note)}</small>
-    </button>`).join('')}
+    </button>`,
+      )
+      .join('')}
   </div>`;
 }
 
-function customizationTabHtml(skin: HudSkin, fps: 'on' | 'off' | 'diablo', realm: RealmContent, activeId: RealmId): string {
+function customizationTabHtml(
+  skin: HudSkin,
+  fps: 'on' | 'off' | 'diablo',
+  realm: RealmContent,
+  activeId: RealmId,
+): string {
   const autoFps = resolveAutoFps();
   return `
     <div class="cr-modal-section">
@@ -181,8 +219,6 @@ function modsTabHtml(realm: RealmContent): string {
       <button type="button" class="cr-options-pill cr-report-bug-btn" data-cr-bug-report>Report Bug</button>
     </div>
 
-    ${miniGameSectionHtml()}
-
     ${arcForgeSectionHtml()}
   `;
 }
@@ -194,11 +230,12 @@ function arcForgeSectionHtml(): string {
   const allowed = arcForgeEditorAllowedCached();
   const adminCta = `<button type="button" class="cr-options-pill cr-afe-open" data-cr-arcforge-editor>Open Live Asset Editor</button>`;
   const publicCta = `<a class="cr-code-link" href="${ARCFORGE_URL}" target="_blank" rel="noopener noreferrer">Open ArcForge Studio ↗</a>`;
-  const body = allowed === true
-    ? `<p class="cr-modal-blurb">Flag a monster, item, or character and regenerate its art through the ArcForge pipeline — live, without leaving the game.</p>${adminCta}`
-    : allowed === false
-      ? `<p class="cr-modal-blurb">Generate and manage game assets in ArcForge Studio.</p>${publicCta}`
-      : `<p class="cr-modal-blurb">Checking access…</p>${publicCta}`;
+  const body =
+    allowed === true
+      ? `<p class="cr-modal-blurb">Flag a monster, item, or character and regenerate its art through the ArcForge pipeline — live, without leaving the game.</p>${adminCta}`
+      : allowed === false
+        ? `<p class="cr-modal-blurb">Generate and manage game assets in ArcForge Studio.</p>${publicCta}`
+        : `<p class="cr-modal-blurb">Checking access…</p>${publicCta}`;
   return `<div class="cr-modal-section" data-cr-arcforge-section>
       <div class="cr-modal-section-title">ArcForge</div>
       ${body}
@@ -338,8 +375,6 @@ function openCustomizationHost(): void {
       return;
     }
 
-    if (handleMiniGameClick(target)) return;
-
     if (target.closest('[data-cr-arcforge-editor]')) {
       openArcForgeEditor();
       return;
@@ -369,15 +404,19 @@ export function mountIngameOptions(): void {
   // of being injected via a MutationObserver — the observer race meant the
   // buttons silently failed to appear. This mount now only owns Escape-to-close
   // for the Customization modal.
-  window.addEventListener('keydown', (ev) => {
-    if (ev.key !== 'Escape') return;
-    const host = document.getElementById(MODAL_ID);
-    if (host && !host.hasAttribute('hidden')) {
-      closeCustomization();
-      ev.preventDefault();
-      ev.stopPropagation();
-    }
-  }, { capture: true });
+  window.addEventListener(
+    'keydown',
+    (ev) => {
+      if (ev.key !== 'Escape') return;
+      const host = document.getElementById(MODAL_ID);
+      if (host && !host.hasAttribute('hidden')) {
+        closeCustomization();
+        ev.preventDefault();
+        ev.stopPropagation();
+      }
+    },
+    { capture: true },
+  );
 }
 
 export function isAutoFpsEnabled(): boolean {

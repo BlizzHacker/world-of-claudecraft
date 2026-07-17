@@ -21,7 +21,12 @@ function fakeWs() {
   return { sent, ws: { readyState: 1, send: (payload: string) => sent.push(JSON.parse(payload)) } };
 }
 
-function join(server: GameServer, ws: ReturnType<typeof fakeWs>, id: number, name: string): ClientSession {
+function join(
+  server: GameServer,
+  ws: ReturnType<typeof fakeWs>,
+  id: number,
+  name: string,
+): ClientSession {
   const session = server.join(ws.ws as any, id, id, name, 'warrior', null);
   if ('error' in session) throw new Error(session.error);
   session.blockListLoaded = true;
@@ -60,39 +65,52 @@ describe('online arcade minigame preview', () => {
     expect(arcade.race.vehicles[0].z).toBeGreaterThan(before);
     send(server, owner, { cmd: 'mg_race_input', throttle: NaN, steer: Infinity });
     expect(Number.isFinite(arcade.race.vehicles[0].z)).toBe(true);
-    const snap = JSON.parse((server as any).selfWireJson(owner, server.sim.entities.get(owner.pid)!, server.sim.meta(owner.pid)!, owner));
+    const snap = JSON.parse(
+      (server as any).selfWireJson(
+        owner,
+        server.sim.entities.get(owner.pid)!,
+        server.sim.meta(owner.pid)!,
+        owner,
+      ),
+    );
     expect(snap.mga.kind).toBe('racing');
     expect(snap.mga.race.itemRng).toBeUndefined();
   });
 
-  it('runs brawler, RTS, and housing actions through one authoritative adapter', async () => {
+  it('runs brawler and RTS actions through one authoritative adapter', async () => {
+    // Housing is no longer an arcade mode (Eastbrook Homes is a premium
+    // feature, not a minigame): its mg_create is inert, asserted below.
     const server = new GameServer();
     const ws = fakeWs();
     const owner = join(server, ws, 31, 'Arcadeowner');
-    for (const kind of ['brawler', 'town_rts', 'housing'] as const) {
+    for (const kind of ['brawler', 'town_rts'] as const) {
       send(server, owner, { cmd: 'mg_create', kind, maxPlayers: 4 });
       const sessions = (server as any).minigameSessions as Map<number, any>;
       const id = [...sessions.keys()].at(-1)!;
       send(server, owner, { cmd: 'mg_ready', ready: true });
       step(server, 61);
-      if (kind === 'brawler') send(server, owner, { cmd: 'mg_brawler_input', move: 1, jump: true, attack: true });
+      if (kind === 'brawler')
+        send(server, owner, { cmd: 'mg_brawler_input', move: 1, jump: true, attack: true });
       if (kind === 'town_rts') {
         send(server, owner, { cmd: 'mg_rts_build', kind: 'wall', x: 1, z: 1 });
         send(server, owner, { cmd: 'mg_rts_train', kind: 'guard' });
       }
-      if (kind === 'housing') {
-        send(server, owner, { cmd: 'mg_housing_place', piece: { id: `floor-${kind}`, kind: 'floor', cell: { x: 1, z: 1 }, rotation: 0 } });
-      }
       const arcade = (server as any).arcadeSessions.get(id);
       expect(arcade.kind).toBe(kind);
-      if (kind === 'town_rts') expect(arcade.rts.structures.some((structure: any) => structure.kind === 'wall')).toBe(true);
-      if (kind === 'housing') expect(arcade.housing.pieces).toHaveLength(1);
+      if (kind === 'town_rts')
+        expect(arcade.rts.structures.some((structure: any) => structure.kind === 'wall')).toBe(
+          true,
+        );
       send(server, owner, { cmd: 'mg_abort' });
     }
+    // the retired housing arcade mode creates NO session
+    const before = ((server as any).minigameSessions as Map<number, any>).size;
+    send(server, owner, { cmd: 'mg_create', kind: 'housing', maxPlayers: 4 });
+    expect(((server as any).minigameSessions as Map<number, any>).size).toBe(before);
     await Promise.resolve();
     const db = await import('../server/db');
     expect(vi.mocked(db.saveWorldState)).toHaveBeenCalledWith(
-      expect.stringMatching(/^minigame:(rts|housing):/),
+      expect.stringMatching(/^minigame:rts:/),
       expect.any(Object),
     );
   });
@@ -125,6 +143,8 @@ describe('online arcade minigame preview', () => {
     step(server, 61);
     expect(server.finishMinigame(id, [owner.pid])).toBe(true);
     expect(sessions.get(id).phase).toBe('finished');
-    expect(sessions.get(id).players.find((player: any) => player.pid === owner.pid).score).toBe(400);
+    expect(sessions.get(id).players.find((player: any) => player.pid === owner.pid).score).toBe(
+      400,
+    );
   });
 });

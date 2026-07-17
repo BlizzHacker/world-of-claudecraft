@@ -820,6 +820,22 @@ export const VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.25,
   },
+  // The Thornwheel Derby loaner kart (src/sim/social/derby.ts): the racer
+  // rides the mine-cart prop rig while the mount_derby_kart aura is up. A
+  // static prop GLB: no authored clips, so every slot falls back to the rest
+  // pose (the yumi precedent).
+  mount_derby_kart: {
+    url: 'models/biome/cave_cart_a.glb',
+    height: 1.15,
+    clips: {
+      idle: 'None',
+      walk: 'None',
+      run: 'None',
+      attack: [],
+      death: 'None',
+      hit: [],
+    },
+  },
   mob_stag: {
     url: `${CREATURES}/stag.glb`,
     height: 1.9,

@@ -39,7 +39,9 @@ describe('Cryptic Realm in-game customization menu', () => {
     expect(modal.innerHTML).toContain(CR_TOKEN);
     expect(modal.innerHTML).toContain(CR_WALLET);
     expect(modal.querySelectorAll('[data-cr-realm]').length).toBeGreaterThanOrEqual(6);
-    expect(modal.querySelector<HTMLButtonElement>('[data-cr-fps="diablo"]')?.textContent).toContain('Diablo angle');
+    expect(modal.querySelector<HTMLButtonElement>('[data-cr-fps="diablo"]')?.textContent).toContain(
+      'Diablo angle',
+    );
     expect(modal.querySelectorAll('[data-cr-tab]')).toHaveLength(2);
 
     modal.querySelector<HTMLButtonElement>('[data-cr-tab="mods"]')!.click();
@@ -47,8 +49,10 @@ describe('Cryptic Realm in-game customization menu', () => {
     expect(modal.textContent).toContain('Realm stage');
     expect(modal.querySelectorAll('[data-cr-stage]')).toHaveLength(4);
     expect(modal.querySelector('[data-cr-bug-report]')).not.toBeNull();
-    expect(modal.querySelectorAll('[data-cr-minigame]')).toHaveLength(3);
-    expect(modal.textContent).toContain('Nova Swarm');
+    // Mini-games left the menus: they live in the world now (venues + NPCs),
+    // so the Mods tab must not offer any canvas mini-game cards.
+    expect(modal.querySelectorAll('[data-cr-minigame]')).toHaveLength(0);
+    expect(modal.textContent).not.toContain('Nova Swarm');
   });
 
   it('switches presentation realm and preserves Claudecraft WOC token', async () => {

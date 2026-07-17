@@ -27,54 +27,54 @@ import {
 import type { PickAction } from '../src/sim/lockpick';
 import { sanitizeMarketQuery } from '../src/sim/market_query';
 import {
+  type ArcadeState,
+  abortMinigameSession,
   addArcadePlayer,
   arcadeFinished,
   arcadeScores,
   arcadeWinnerPids,
   arcadeWire,
   buildArcadeRts,
-  abortMinigameSession,
-  cloneHousingLot,
-  cloneRtsCampaign,
-  createArcadeState,
   buildZombieDefenseTower,
   claimMinigameReward,
+  cloneHousingLot,
+  cloneRtsCampaign,
+  cloneZombieDefense,
+  createArcadeState,
   createMinigameSession,
   createZombieDefenseSession,
-  cloneZombieDefense,
   deserializeHousingLot,
   deserializeRtsCampaign,
   deserializeZombieDefense,
   finishMinigameSession,
+  type HousingLot,
   joinMinigameSession,
   MINIGAME_FEATURES,
+  type MinigameFeatureId,
+  type MinigameSessionState,
   minigameAvailable,
+  placeArcadeHousing,
   practiceBotPids,
   practiceMinigameCapacity,
-  setMinigameConnection,
-  setMinigameReady,
+  type RtsCampaign,
   setArcadeBrawlerInput,
   setArcadeRaceInput,
+  setMinigameConnection,
+  setMinigameReady,
   startZombieDefenseWave,
   stepArcadeState,
   stepMinigameSession,
   stepZombieDefenseSession,
-  type MinigameFeatureId,
-  type MinigameSessionState,
-  type ArcadeState,
-  type HousingLot,
-  type RtsCampaign,
-  type ZombieDefenseState,
-  type ZombieDefenseSessionState,
   trainArcadeRts,
-  placeArcadeHousing,
+  type ZombieDefenseSessionState,
+  type ZombieDefenseState,
 } from '../src/sim/minigames';
-import type { TowerKind } from '../src/sim/minigames/zombie_defense';
-import type { RaceInput } from '../src/sim/racing';
 import type { BrawlerInput } from '../src/sim/minigames/brawler';
 import type { HousingPiece } from '../src/sim/minigames/housing';
 import type { RtsStructureKind, RtsUnitKind } from '../src/sim/minigames/rts';
+import type { TowerKind } from '../src/sim/minigames/zombie_defense';
 import { parseMoveInputFrame } from '../src/sim/move_input';
+import type { RaceInput } from '../src/sim/racing';
 import { realmClassVisualKey } from '../src/sim/realms/class_visuals';
 import { isRealmId, setRealmHostEnv } from '../src/sim/realms/registry';
 import type { PetState, PlayerMeta } from '../src/sim/sim';
@@ -128,10 +128,10 @@ import {
   insertRealmProp,
   isAdminAccount,
   isModeratorAccount,
-  loadWorldState,
   loadMailState,
   loadMarketState,
   loadRealmProps,
+  loadWorldState,
   markAccountQuestComplete,
   markCharacterDead,
   openPlaySession,
@@ -143,9 +143,9 @@ import {
   saveMailState,
   saveMarketState,
   saveWorldState,
+  touchCharacterLogin,
   updateRealmProp,
   updateRealmPropMeta,
-  touchCharacterLogin,
   walletForAccount,
 } from './db';
 import { enqueueActivity } from './discord_activity';
@@ -467,6 +467,7 @@ const JAILED_BLOCKED_COMMANDS = new Set<string>([
   'vcup_queue',
   'vcup_ready',
   'vcup_practice',
+  'derby_queue',
   'enter_dungeon',
   'enter_crypt',
   'enter_delve',
@@ -1340,6 +1341,8 @@ export class GameServer {
     this.sim.arenaQueueLeave(target.pid);
     this.sim.vcupQueueLeave(target.pid);
     this.sim.vcupResolveDesertion(target.pid);
+    this.sim.derbyQueueLeave(target.pid);
+    this.sim.derbyResolveDesertion(target.pid);
     this.teleportJailedSession(target);
     // System notice (chat log), not the fading error toast: the prisoner must be
     // able to read the sentence after alt-tabbing back, like other moderation
@@ -2114,14 +2117,14 @@ export class GameServer {
     state: import('../src/sim/sim').CharacterState | null,
     isGm = false,
     meta: RequestMetadata &
-        Partial<AccountChatMuteStatus> & {
-          accountCosmetics?: AccountCosmetics;
-          chatStrikes?: number;
-          hardcore?: boolean;
-          isAdmin?: boolean;
-          ladder?: boolean;
-          adminPermissions?: readonly string[];
-          clientSeed?: string;
+      Partial<AccountChatMuteStatus> & {
+        accountCosmetics?: AccountCosmetics;
+        chatStrikes?: number;
+        hardcore?: boolean;
+        isAdmin?: boolean;
+        ladder?: boolean;
+        adminPermissions?: readonly string[];
+        clientSeed?: string;
         fbp?: string | null;
         fbc?: string | null;
         sourceUrl?: string | null;
@@ -2505,6 +2508,9 @@ export class GameServer {
     // benched slot and the counted loss are in the state serializeCharacter
     // persists (idempotent: removePlayer runs it again harmlessly below).
     this.sim.vcupResolveDesertion(session.pid);
+    // Same rule for a live Derby seat: the rider deserts (kart back, benched)
+    // before the save, so the persisted position is the paddock return spot.
+    this.sim.derbyResolveDesertion(session.pid);
     await this.saveCharacterOnLeave(session);
     this.sessionsByCharacterId.delete(session.characterId);
     // Release the per-character load lease so a fresh login (here or on another
@@ -2690,24 +2696,24 @@ export class GameServer {
     if (state.kind === 'town_rts') {
       const snapshot = cloneRtsCampaign(state.rts);
       this.persistentTownRts = snapshot;
-      void this.enqueueMarketWrite(() => saveWorldState(`minigame:rts:${REALM}:eastbrook`, snapshot)).catch((err) =>
-        console.error('failed to persist town RTS state:', err),
-      );
+      void this.enqueueMarketWrite(() =>
+        saveWorldState(`minigame:rts:${REALM}:eastbrook`, snapshot),
+      ).catch((err) => console.error('failed to persist town RTS state:', err));
     } else if (state.kind === 'housing') {
       const snapshot = cloneHousingLot(state.housing);
       this.persistentHousing = snapshot;
-      void this.enqueueMarketWrite(() => saveWorldState(`minigame:housing:${REALM}:eastbrook`, snapshot)).catch((err) =>
-        console.error('failed to persist housing state:', err),
-      );
+      void this.enqueueMarketWrite(() =>
+        saveWorldState(`minigame:housing:${REALM}:eastbrook`, snapshot),
+      ).catch((err) => console.error('failed to persist housing state:', err));
     }
   }
 
   private persistZombieWorldState(state: ZombieDefenseState): void {
     const snapshot = cloneZombieDefense(state);
     this.persistentZombieDefense = snapshot;
-    void this.enqueueMarketWrite(() => saveWorldState(`minigame:zombie:${REALM}:eastbrook`, snapshot)).catch((err) =>
-      console.error('failed to persist zombie defense state:', err),
-    );
+    void this.enqueueMarketWrite(() =>
+      saveWorldState(`minigame:zombie:${REALM}:eastbrook`, snapshot),
+    ).catch((err) => console.error('failed to persist zombie defense state:', err));
   }
 
   /** True if the account may use the in-game world builder (admin OR mod). */
@@ -2727,22 +2733,37 @@ export class GameServer {
    */
   private async handleBuilderCmd(session: ClientSession, msg: any): Promise<void> {
     if (!(await this.isBuilder(session.accountId))) {
-      this.send(session, { t: 'events', list: [{ type: 'error', text: 'Builder tools require admin or moderator.' }] });
+      this.send(session, {
+        t: 'events',
+        list: [{ type: 'error', text: 'Builder tools require admin or moderator.' }],
+      });
       return;
     }
     try {
       if (msg.cmd === 'placeProp') {
         const key = String(msg.key || '');
-        const x = Number(msg.x), z = Number(msg.z);
-        const yaw = Number(msg.yaw) || 0, scale = Number(msg.scale) || 1;
+        const x = Number(msg.x),
+          z = Number(msg.z);
+        const yaw = Number(msg.yaw) || 0,
+          scale = Number(msg.scale) || 1;
         if (!key || !Number.isFinite(x) || !Number.isFinite(z)) return;
-        const dbId = await insertRealmProp(key, x, this.sim.groundPos(x, z).y, z, yaw, scale, session.accountId);
+        const dbId = await insertRealmProp(
+          key,
+          x,
+          this.sim.groundPos(x, z).y,
+          z,
+          yaw,
+          scale,
+          session.accountId,
+        );
         const e = this.sim.spawnProp(dbId, key, x, z, yaw, scale);
         this.send(session, { t: 'events', list: [{ type: 'propPlaced', dbId, entId: e.id, key }] });
       } else if (msg.cmd === 'moveProp') {
         const dbId = Number(msg.dbId);
-        const x = Number(msg.x), z = Number(msg.z);
-        const yaw = Number(msg.yaw) || 0, scale = Number(msg.scale) || 1;
+        const x = Number(msg.x),
+          z = Number(msg.z);
+        const yaw = Number(msg.yaw) || 0,
+          scale = Number(msg.scale) || 1;
         if (!Number.isFinite(dbId) || !Number.isFinite(x) || !Number.isFinite(z)) return;
         const e = this.sim.moveProp(dbId, x, z, yaw, scale);
         if (e) await updateRealmProp(dbId, x, e.pos.y, z, yaw, scale);
@@ -3919,6 +3940,14 @@ export class GameServer {
       case 'vcup_leave':
         sim.vcupQueueLeave(pid);
         break;
+      // The Thornwheel Derby (kart racing at the circuit). Same non-heavy
+      // reasoning as vcup: queue state rides the throttled 'derby' delta key.
+      case 'derby_queue':
+        sim.derbyQueueJoin(pid);
+        break;
+      case 'derby_leave':
+        sim.derbyQueueLeave(pid);
+        break;
       case 'vcup_role':
         if (isSportRole(msg.role)) sim.vcupSetRole(msg.role, pid);
         break;
@@ -4251,7 +4280,10 @@ export class GameServer {
         if (msg.delveId === 'hellmaw_well') {
           const realmId = process.env.CR_REALM_ID ?? REALM;
           if (realmId !== 'infernal') {
-            this.sendChatNotice(session, 'The well is just a well. Whatever sleeps below, it does not stir here.');
+            this.sendChatNotice(
+              session,
+              'The well is just a well. Whatever sleeps below, it does not stir here.',
+            );
             break;
           }
           // Gated behind rescuing Cainhurst: the well only opens once his three
@@ -4259,7 +4291,10 @@ export class GameServer {
           // grandfathered so anyone who finished it before the redesign keeps access.)
           const done = sim.meta(pid)?.questsDone;
           if (!(done?.has('q_save_cainhurst') || done?.has('q_sigils_of_hate'))) {
-            this.sendChatNotice(session, 'The well is silent. You must first free Cainhurst from the Hellmaw.');
+            this.sendChatNotice(
+              session,
+              'The well is silent. You must first free Cainhurst from the Hellmaw.',
+            );
             break;
           }
         }
@@ -4390,7 +4425,8 @@ export class GameServer {
     const pid = session.pid;
     switch (msg.cmd) {
       case 'mg_create': {
-        if (typeof msg.kind !== 'string' || !MINIGAME_FEATURES.some((f) => f.id === msg.kind)) return;
+        if (typeof msg.kind !== 'string' || !MINIGAME_FEATURES.some((f) => f.id === msg.kind))
+          return;
         const kind = msg.kind as MinigameFeatureId;
         // No mode is live until its full wire/persistence/QA checkpoint passes.
         if (!minigameAvailable(kind, this.minigamePreview)) return;
@@ -4417,7 +4453,8 @@ export class GameServer {
         this.minigameSessions.set(id, state);
         if (kind === 'zombie_defense') {
           const zombie = createZombieDefenseSession(id, seed);
-          if (this.persistentZombieDefense) zombie.state = cloneZombieDefense(this.persistentZombieDefense);
+          if (this.persistentZombieDefense)
+            zombie.state = cloneZombieDefense(this.persistentZombieDefense);
           this.zombieDefenseSessions.set(id, zombie);
         } else {
           const arcade = createArcadeState(kind, seed, [pid], botPids);
@@ -4480,7 +4517,12 @@ export class GameServer {
       }
       case 'mg_ready': {
         const current = this.minigameSessionForPid(pid);
-        if (!current || !minigameAvailable(current.kind, this.minigamePreview) || typeof msg.ready !== 'boolean') return;
+        if (
+          !current ||
+          !minigameAvailable(current.kind, this.minigamePreview) ||
+          typeof msg.ready !== 'boolean'
+        )
+          return;
         const mutation = setMinigameReady(current, pid, msg.ready);
         if (mutation.ok) this.minigameSessions.set(current.id, mutation.state);
         return;
@@ -4505,7 +4547,8 @@ export class GameServer {
         if (!current || current.kind !== 'racing' || current.phase !== 'active' || !arcade) return;
         const rawThrottle = msg.throttle;
         const rawSteer = msg.steer;
-        const throttle = typeof rawThrottle === 'number' && Number.isFinite(rawThrottle) ? rawThrottle : 0;
+        const throttle =
+          typeof rawThrottle === 'number' && Number.isFinite(rawThrottle) ? rawThrottle : 0;
         const steer = typeof rawSteer === 'number' && Number.isFinite(rawSteer) ? rawSteer : 0;
         const input: RaceInput = {
           throttle: Math.max(-1, Math.min(1, throttle)),
@@ -4522,7 +4565,11 @@ export class GameServer {
         const arcade = current ? this.arcadeSessions.get(current.id) : undefined;
         if (!current || current.kind !== 'brawler' || current.phase !== 'active' || !arcade) return;
         const move = msg.move === -1 || msg.move === 1 ? msg.move : 0;
-        setArcadeBrawlerInput(arcade, pid, { move, jump: msg.jump === true, attack: msg.attack === true });
+        setArcadeBrawlerInput(arcade, pid, {
+          move,
+          jump: msg.jump === true,
+          attack: msg.attack === true,
+        });
         return;
       }
       case 'mg_rts_build': {
@@ -4531,10 +4578,20 @@ export class GameServer {
         const x = typeof msg.x === 'number' ? msg.x : NaN;
         const z = typeof msg.z === 'number' ? msg.z : NaN;
         if (
-          !current || current.kind !== 'town_rts' || current.phase !== 'active' || !arcade ||
-          (msg.kind !== 'wall' && msg.kind !== 'farm' && msg.kind !== 'barracks' && msg.kind !== 'tower') ||
-          !Number.isInteger(x) || !Number.isInteger(z) || Math.abs(x) > 8 || Math.abs(z) > 8
-        ) return;
+          !current ||
+          current.kind !== 'town_rts' ||
+          current.phase !== 'active' ||
+          !arcade ||
+          (msg.kind !== 'wall' &&
+            msg.kind !== 'farm' &&
+            msg.kind !== 'barracks' &&
+            msg.kind !== 'tower') ||
+          !Number.isInteger(x) ||
+          !Number.isInteger(z) ||
+          Math.abs(x) > 8 ||
+          Math.abs(z) > 8
+        )
+          return;
         if (buildArcadeRts(arcade, pid, msg.kind as RtsStructureKind, x, z)) {
           this.persistArcadeWorldState(arcade);
         }
@@ -4543,7 +4600,8 @@ export class GameServer {
       case 'mg_rts_train': {
         const current = this.minigameSessionForPid(pid);
         const arcade = current ? this.arcadeSessions.get(current.id) : undefined;
-        if (!current || current.kind !== 'town_rts' || current.phase !== 'active' || !arcade) return;
+        if (!current || current.kind !== 'town_rts' || current.phase !== 'active' || !arcade)
+          return;
         if (msg.kind !== 'worker' && msg.kind !== 'guard' && msg.kind !== 'ranger') return;
         if (trainArcadeRts(arcade, pid, msg.kind as RtsUnitKind)) {
           this.persistArcadeWorldState(arcade);
@@ -4555,23 +4613,41 @@ export class GameServer {
         const arcade = current ? this.arcadeSessions.get(current.id) : undefined;
         const piece = msg.piece;
         if (
-          !current || current.kind !== 'housing' || current.phase !== 'active' || !arcade ||
-          !piece || typeof piece !== 'object'
-        ) return;
+          !current ||
+          current.kind !== 'housing' ||
+          current.phase !== 'active' ||
+          !arcade ||
+          !piece ||
+          typeof piece !== 'object'
+        )
+          return;
         const candidate = piece as HousingPiece;
         if (
-          typeof candidate.id !== 'string' || candidate.id.length < 1 || candidate.id.length > 64 ||
-          typeof candidate.kind !== 'string' || candidate.kind.length < 1 || candidate.kind.length > 32 ||
-          !candidate.cell || !Number.isInteger(candidate.cell.x) || !Number.isInteger(candidate.cell.z) ||
-          Math.abs(candidate.cell.x) > 8 || Math.abs(candidate.cell.z) > 8 ||
-          (candidate.rotation !== 0 && candidate.rotation !== 90 && candidate.rotation !== 180 && candidate.rotation !== 270)
-        ) return;
-        if (placeArcadeHousing(arcade, pid, {
-          id: candidate.id,
-          kind: candidate.kind,
-          cell: { x: candidate.cell.x, z: candidate.cell.z },
-          rotation: candidate.rotation,
-        })) {
+          typeof candidate.id !== 'string' ||
+          candidate.id.length < 1 ||
+          candidate.id.length > 64 ||
+          typeof candidate.kind !== 'string' ||
+          candidate.kind.length < 1 ||
+          candidate.kind.length > 32 ||
+          !candidate.cell ||
+          !Number.isInteger(candidate.cell.x) ||
+          !Number.isInteger(candidate.cell.z) ||
+          Math.abs(candidate.cell.x) > 8 ||
+          Math.abs(candidate.cell.z) > 8 ||
+          (candidate.rotation !== 0 &&
+            candidate.rotation !== 90 &&
+            candidate.rotation !== 180 &&
+            candidate.rotation !== 270)
+        )
+          return;
+        if (
+          placeArcadeHousing(arcade, pid, {
+            id: candidate.id,
+            kind: candidate.kind,
+            cell: { x: candidate.cell.x, z: candidate.cell.z },
+            rotation: candidate.rotation,
+          })
+        ) {
           this.persistArcadeWorldState(arcade);
         }
         return;
@@ -4579,13 +4655,16 @@ export class GameServer {
       case 'mg_zombie_start': {
         const current = this.minigameSessionForPid(pid);
         const zombie = current ? this.zombieDefenseSessions.get(current.id) : undefined;
-        if (!current || current.kind !== 'zombie_defense' || current.phase !== 'active' || !zombie) return;
+        if (!current || current.kind !== 'zombie_defense' || current.phase !== 'active' || !zombie)
+          return;
         if (!current.players.some((player) => player.pid === pid)) return;
-        if (startZombieDefenseWave(
-          zombie,
-          pid,
-          current.players.map((player) => player.pid),
-        )) {
+        if (
+          startZombieDefenseWave(
+            zombie,
+            pid,
+            current.players.map((player) => player.pid),
+          )
+        ) {
           this.persistZombieWorldState(zombie.state);
         }
         return;
@@ -4593,7 +4672,8 @@ export class GameServer {
       case 'mg_zombie_build': {
         const current = this.minigameSessionForPid(pid);
         const zombie = current ? this.zombieDefenseSessions.get(current.id) : undefined;
-        if (!current || current.kind !== 'zombie_defense' || current.phase !== 'active' || !zombie) return;
+        if (!current || current.kind !== 'zombie_defense' || current.phase !== 'active' || !zombie)
+          return;
         if (!current.players.some((player) => player.pid === pid)) return;
         const x = msg.x;
         const z = msg.z;
@@ -4605,13 +4685,15 @@ export class GameServer {
           !Number.isInteger(z)
         )
           return;
-        if (buildZombieDefenseTower(
-          zombie,
-          pid,
-          msg.kind as TowerKind,
-          { x, z },
-          current.players.map((player) => player.pid),
-        )) {
+        if (
+          buildZombieDefenseTower(
+            zombie,
+            pid,
+            msg.kind as TowerKind,
+            { x, z },
+            current.players.map((player) => player.pid),
+          )
+        ) {
           this.persistZombieWorldState(zombie.state);
         }
         return;
@@ -4640,7 +4722,11 @@ export class GameServer {
     const states = [...this.minigameSessions.values()]
       .filter((state) => state.players.some((player) => player.pid === pid))
       .sort((a, b) => b.id - a.id);
-    return states.find((state) => state.phase !== 'finished' && state.phase !== 'aborted') ?? states[0] ?? null;
+    return (
+      states.find((state) => state.phase !== 'finished' && state.phase !== 'aborted') ??
+      states[0] ??
+      null
+    );
   }
 
   private setMinigamePlayerConnection(pid: number, connected: boolean): void {
@@ -4955,7 +5041,12 @@ export class GameServer {
     maybe('weapon', p.weapon);
     maybe('party', this.partyWire(anchorSession.pid));
     maybe('mgz', this.minigameZombieWire(anchorSession.pid));
-    maybe('mga', arcadeWire(this.arcadeSessions.get(this.minigameSessionForPid(anchorSession.pid)?.id ?? -1) ?? null));
+    maybe(
+      'mga',
+      arcadeWire(
+        this.arcadeSessions.get(this.minigameSessionForPid(anchorSession.pid)?.id ?? -1) ?? null,
+      ),
+    );
     maybe('marks', this.markersWire(anchorSession.pid));
     maybe('trade', this.tradeWire(anchorSession.pid));
     maybe('duel', this.duelWire(anchorSession.pid));
@@ -4970,6 +5061,9 @@ export class GameServer {
     if (this.sim.tickCount - session.lastVcupWireTick >= VC_WIRE_INTERVAL_TICKS) {
       session.lastVcupWireTick = this.sim.tickCount;
       maybe('vcup', this.sim.cupInfoFor(anchorSession.pid));
+      // The Derby readout shares the cadence: whole-second clocks and a small
+      // roster, same re-serialization economics as CupInfo.
+      maybe('derby', this.sim.derbyInfoFor(anchorSession.pid));
     }
     // market info is null unless the player is standing at the Merchant, so it
     // only rides the wire for players actually browsing the World Market
@@ -5375,85 +5469,97 @@ export class GameServer {
         }
         const mine: SimEvent[] = [];
         for (const ev of events) {
-        if (suppressedInvites !== null && suppressedInvites.has(ev)) continue;
-        // ignore list: drop chat originating from a character this player has
-        // blocked, before it ever reaches their client
-        if (
-          !session.spectating &&
-          ev.type === 'chat' &&
-          session.blockedIds.size > 0 &&
-          this.isBlockedSender(session, ev.fromPid)
-        )
-          continue;
-        // population segregation: global chat (world/general/yell) from a
-        // different (ladder, hardcore) population never reaches this player.
-        // Self-echo (fromPid === own pid) always passes. Proximity channels are
-        // already segregated via interest/visibility.
-        if (ev.type === 'chat' && ev.fromPid !== session.pid) {
-          const from = this.sim.entities.get(ev.fromPid);
-          const viewer = anchorPid === session.pid ? p : this.sim.entities.get(anchorPid);
-          if (viewer && from && !this.sim.samePopulationPlayers(viewer, from)) continue;
-        }
-        if (ev.pid !== undefined) {
+          if (suppressedInvites !== null && suppressedInvites.has(ev)) continue;
+          // ignore list: drop chat originating from a character this player has
+          // blocked, before it ever reaches their client
           if (
-            session.spectating &&
-            ev.pid === session.pid &&
+            !session.spectating &&
             ev.type === 'chat' &&
-            ev.channel !== 'say' &&
-            ev.channel !== 'yell'
-          ) {
-            if (this.isBlockedSender(session, ev.fromPid)) continue;
-            mine.push(ev);
-            if (ev.channel === 'whisper' && ev.to === undefined && ev.fromPid !== session.pid) {
-              session.lastWhisperFrom = ev.from;
-            }
-            this.botDetector.observeEvent(session.botTrackingContext, ev, eventTime);
+            session.blockedIds.size > 0 &&
+            this.isBlockedSender(session, ev.fromPid)
+          )
             continue;
+          // population segregation: global chat (world/general/yell) from a
+          // different (ladder, hardcore) population never reaches this player.
+          // Self-echo (fromPid === own pid) always passes. Proximity channels are
+          // already segregated via interest/visibility.
+          if (ev.type === 'chat' && ev.fromPid !== session.pid) {
+            const from = this.sim.entities.get(ev.fromPid);
+            const viewer = anchorPid === session.pid ? p : this.sim.entities.get(anchorPid);
+            if (viewer && from && !this.sim.samePopulationPlayers(viewer, from)) continue;
           }
-          if (ev.pid === anchorPid) {
+          if (ev.pid !== undefined) {
             if (
               session.spectating &&
+              ev.pid === session.pid &&
               ev.type === 'chat' &&
               ev.channel !== 'say' &&
               ev.channel !== 'yell'
             ) {
+              if (this.isBlockedSender(session, ev.fromPid)) continue;
+              mine.push(ev);
+              if (ev.channel === 'whisper' && ev.to === undefined && ev.fromPid !== session.pid) {
+                session.lastWhisperFrom = ev.from;
+              }
+              this.botDetector.observeEvent(session.botTrackingContext, ev, eventTime);
               continue;
             }
+            if (ev.pid === anchorPid) {
+              if (
+                session.spectating &&
+                ev.type === 'chat' &&
+                ev.channel !== 'say' &&
+                ev.channel !== 'yell'
+              ) {
+                continue;
+              }
+              mine.push(ev);
+              // a sim-driven change to a heavy self field (loot, level-up, quest
+              // credit, ...) refreshes those fields on the next snapshot
+              if (HEAVY_SELF_EVENTS.has(ev.type)) session.selfHeavyDirty = true;
+              // remember the last person to whisper us, for /r reply (the
+              // recipient copy of a whisper has no `to`; the sender echo does)
+              if (
+                ev.type === 'chat' &&
+                ev.channel === 'whisper' &&
+                ev.to === undefined &&
+                ev.fromPid !== session.pid &&
+                !session.spectating
+              ) {
+                session.lastWhisperFrom = ev.from;
+              }
+              if (!session.spectating) {
+                this.botDetector.observeEvent(session.botTrackingContext, ev, eventTime);
+              }
+            }
+            continue;
+          }
+          // world events: only those near this player
+          const anchor = this.eventAnchor(ev);
+          if (anchor === null || dist2d(anchorPos, anchor) <= EVENT_RADIUS) {
             mine.push(ev);
-            // a sim-driven change to a heavy self field (loot, level-up, quest
-            // credit, ...) refreshes those fields on the next snapshot
-            if (HEAVY_SELF_EVENTS.has(ev.type)) session.selfHeavyDirty = true;
-            // remember the last person to whisper us, for /r reply (the
-            // recipient copy of a whisper has no `to`; the sender echo does)
-            if (
-              ev.type === 'chat' &&
-              ev.channel === 'whisper' &&
-              ev.to === undefined &&
-              ev.fromPid !== session.pid &&
-              !session.spectating
-            ) {
-              session.lastWhisperFrom = ev.from;
-            }
-            if (!session.spectating) {
+            // Reaction time: castStop/death are world events (no pid) — match by entityId.
+            if ((ev.type === 'castStop' || ev.type === 'death') && ev.entityId === session.pid) {
               this.botDetector.observeEvent(session.botTrackingContext, ev, eventTime);
+              // Hardcore permadeath: mark the character dead in the DB and kick.
+              if (ev.type === 'death' && session.hardcore) {
+                void markCharacterDead(session.accountId, session.characterId).catch(() => {});
+                try {
+                  this.send(session, {
+                    t: 'error',
+                    error:
+                      'Your hardcore character has died. This character is now permanently retired.',
+                  });
+                } catch {
+                  /* noop */
+                }
+                try {
+                  session.ws.close();
+                } catch {
+                  /* noop */
+                }
+              }
             }
-          }
-          continue;
-        }
-        // world events: only those near this player
-        const anchor = this.eventAnchor(ev);
-        if (anchor === null || dist2d(anchorPos, anchor) <= EVENT_RADIUS) {
-          mine.push(ev);
-          // Reaction time: castStop/death are world events (no pid) — match by entityId.
-          if ((ev.type === 'castStop' || ev.type === 'death') && ev.entityId === session.pid) {
-            this.botDetector.observeEvent(session.botTrackingContext, ev, eventTime);
-            // Hardcore permadeath: mark the character dead in the DB and kick.
-            if (ev.type === 'death' && session.hardcore) {
-              void markCharacterDead(session.accountId, session.characterId).catch(() => {});
-              try { this.send(session, { t: 'error', error: 'Your hardcore character has died. This character is now permanently retired.' }); } catch { /* noop */ }
-              try { session.ws.close(); } catch { /* noop */ }
-            }
-          }
           }
         }
         if (mine.length > 0) this.send(session, { t: 'events', list: mine });

@@ -1064,7 +1064,9 @@
   }
   #char-window .window-frame {
     border: 1px solid var(--color-primary);
-    box-shadow: 0 0 0 1px var(--color-border-subtle), 0 18px 54px var(--color-overlay-strong);
+    box-shadow:
+      0 0 0 1px var(--color-border-subtle),
+      0 18px 54px var(--color-overlay-strong);
     background: linear-gradient(145deg, var(--panel-l2-bg), var(--panel-l0-bg));
   }
   #char-window .window-body {
@@ -1345,10 +1347,10 @@
     font-size: var(--text-xs);
     text-align: center;
   }
-  .char-item-model-preview[data-model-state='error'] {
+  .char-item-model-preview[data-model-state="error"] {
     opacity: 0.58;
   }
-  .char-item-model-preview[data-model-state='loading'] {
+  .char-item-model-preview[data-model-state="loading"] {
     cursor: progress;
   }
   .equip-slot-3d {
@@ -5055,22 +5057,87 @@
     width: 460px;
     --window-pad: 14px;
   }
-  .zombie-defense-body { display: flex; flex-direction: column; gap: 7px; }
-  .zombie-note { color: #b6ad8c; font-size: 12px; line-height: 1.4; margin: 3px 0; }
-  .zombie-stats { display: flex; justify-content: space-between; color: #e6d39a; font-size: 12px; }
-  .zombie-status { color: #8fd16a; font-size: 12px; }
-  .zombie-roster { display: flex; gap: 12px; list-style: none; margin: 0; padding: 0; color: #d8cba0; }
-  .zombie-roster li { min-width: 44px; }
-  .zombie-towers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-  .zombie-defense-body .btn { width: 100%; box-sizing: border-box; }
-  .zombie-session-code { color: #d8cba0; font-size: 12px; }
-  .zombie-session-code code { color: #ffe08a; font-size: 16px; }
-  .zombie-join { display: grid; grid-template-columns: 1fr auto; gap: 6px; align-items: end; }
-  .zombie-join label { color: #b6ad8c; font-size: 11px; display: flex; flex-direction: column; gap: 3px; }
-  .zombie-join input { min-height: 30px; background: #111722; color: #fff1bd; border: 1px solid #5a4a20; padding: 4px 7px; }
-  .zombie-board { align-self: center; width: min(100%, 420px); border: 1px solid #5a4a20; image-rendering: pixelated; }
-  .zombie-win { color: #8fd16a; }
-  .zombie-loss { color: #ff9d8d; }
+  .zombie-defense-body {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .zombie-note {
+    color: #b6ad8c;
+    font-size: 12px;
+    line-height: 1.4;
+    margin: 3px 0;
+  }
+  .zombie-stats {
+    display: flex;
+    justify-content: space-between;
+    color: #e6d39a;
+    font-size: 12px;
+  }
+  .zombie-status {
+    color: #8fd16a;
+    font-size: 12px;
+  }
+  .zombie-roster {
+    display: flex;
+    gap: 12px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    color: #d8cba0;
+  }
+  .zombie-roster li {
+    min-width: 44px;
+  }
+  .zombie-towers {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+  .zombie-defense-body .btn {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .zombie-session-code {
+    color: #d8cba0;
+    font-size: 12px;
+  }
+  .zombie-session-code code {
+    color: #ffe08a;
+    font-size: 16px;
+  }
+  .zombie-join {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 6px;
+    align-items: end;
+  }
+  .zombie-join label {
+    color: #b6ad8c;
+    font-size: 11px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .zombie-join input {
+    min-height: 30px;
+    background: #111722;
+    color: #fff1bd;
+    border: 1px solid #5a4a20;
+    padding: 4px 7px;
+  }
+  .zombie-board {
+    align-self: center;
+    width: min(100%, 420px);
+    border: 1px solid #5a4a20;
+    image-rendering: pixelated;
+  }
+  .zombie-win {
+    color: #8fd16a;
+  }
+  .zombie-loss {
+    color: #ff9d8d;
+  }
   .vcup-sub {
     font-family: var(--title-font);
     color: var(--gold);
@@ -5395,6 +5462,38 @@
      arena match is live the banner has priority, so nudge the button down */
   #arena-status[style*="block"] ~ #vcup-indicator {
     top: 118px;
+  }
+
+  /* Thornwheel Derby in-race strip: lap / place / next checkpoint, top center
+     (the vcup strip's slot; only one of the two can be live at a time: a rider
+     seated in the Derby cannot also be seated at the Sowfield). */
+  #derby-hud {
+    position: absolute;
+    top: 64px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+    align-items: center;
+    gap: 10px;
+    z-index: 18;
+    pointer-events: none;
+    background: linear-gradient(#1a120bdd, #0d0805dd);
+    border: 1px solid #8a6a28;
+    border-radius: 8px;
+    padding: 6px 16px 5px;
+    box-shadow:
+      0 2px 14px #000a,
+      inset 0 0 16px #cc9a2418;
+  }
+  #derby-hud .derbyh-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--gold, #ffd100);
+    letter-spacing: 0.04em;
+  }
+  #derby-hud .derbyh-line {
+    font-size: 12.5px;
+    color: var(--color-text, #e8d5c4);
   }
 
   /* in-match strip: flags + score + count-down clock + phase line, top center */
@@ -8887,7 +8986,7 @@
     font-variant-numeric: tabular-nums;
     color: #fff;
   }
-@media (max-width: 700px) {
+  @media (max-width: 700px) {
     .yumi-hud {
       gap: 8px;
       padding: 4px 8px;
@@ -10078,20 +10177,63 @@
 }
 .arcade-window__header,
 .arcade-window__lobby,
-.arcade-window__modes { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.arcade-window__header { justify-content: space-between; }
-.arcade-window__header h2 { margin: 0; color: #f1c75b; }
-.arcade-window__modes { margin: 8px 0; }
-.arcade-window__modes button.active { outline: 2px solid #f1c75b; }
-.arcade-window__lobby { margin-bottom: 8px; }
-.arcade-window__lobby label { display: inline-flex; align-items: center; gap: 5px; }
-.arcade-window__lobby input { width: 80px; }
-.arcade-window__status { color: #b8e37c; }
-.arcade-window__roster { flex: 1 1 100%; color: #aeb9cb; }
-.arcade-window__canvas { display: block; width: 100%; height: auto; min-height: 180px; background: #07111f; border: 1px solid #334866; }
+.arcade-window__modes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.arcade-window__header {
+  justify-content: space-between;
+}
+.arcade-window__header h2 {
+  margin: 0;
+  color: #f1c75b;
+}
+.arcade-window__modes {
+  margin: 8px 0;
+}
+.arcade-window__modes button.active {
+  outline: 2px solid #f1c75b;
+}
+.arcade-window__lobby {
+  margin-bottom: 8px;
+}
+.arcade-window__lobby label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.arcade-window__lobby input {
+  width: 80px;
+}
+.arcade-window__status {
+  color: #b8e37c;
+}
+.arcade-window__roster {
+  flex: 1 1 100%;
+  color: #aeb9cb;
+}
+.arcade-window__canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 180px;
+  background: #07111f;
+  border: 1px solid #334866;
+}
 .arcade-window__controls,
-.arcade-window__notice { margin: 8px 0 0; color: #aeb9cb; }
+.arcade-window__notice {
+  margin: 8px 0 0;
+  color: #aeb9cb;
+}
 @media (max-width: 700px) {
-  .arcade-window { inset: 3vh 12px auto; transform: none; width: auto; }
-  .arcade-window__canvas { min-height: 160px; }
+  .arcade-window {
+    inset: 3vh 12px auto;
+    transform: none;
+    width: auto;
+  }
+  .arcade-window__canvas {
+    min-height: 160px;
+  }
 }
