@@ -4,6 +4,7 @@
 import type * as http from 'node:http';
 import { accountForToken, pool } from '../db';
 import { json, readBody } from '../http_util';
+import { IS_CROSS_REALM } from '../realm';
 import {
   auditListing,
   cancelListing,
@@ -40,6 +41,12 @@ function idFrom(pathname: string, suffix: string): string | null {
   return id && !id.includes('/') ? id : null;
 }
 
+function exchangeProcessOnly(res: http.ServerResponse): boolean {
+  if (IS_CROSS_REALM) return true;
+  fail(res, 503, 'Exchange custody is served by the Exchange realm');
+  return false;
+}
+
 /** Dispatch. Returns true when the path matched and a response was written. */
 export async function maybeHandleExchangeApi(
   req: http.IncomingMessage,
@@ -56,6 +63,7 @@ export async function maybeHandleExchangeApi(
       return true;
     }
     if (pathname === '/api/exchange/listings' && req.method === 'POST') {
+      if (!exchangeProcessOnly(res)) return true;
       const accountId = await bearerAccountId(req);
       if (accountId === null) {
         fail(res, 401, 'not authenticated');
@@ -89,6 +97,7 @@ export async function maybeHandleExchangeApi(
     }
     const cancelId = idFrom(pathname, '/cancel');
     if (cancelId && req.method === 'POST') {
+      if (!exchangeProcessOnly(res)) return true;
       const accountId = await bearerAccountId(req);
       if (accountId === null) {
         fail(res, 401, 'not authenticated');
@@ -105,6 +114,7 @@ export async function maybeHandleExchangeApi(
     }
     const settleId = idFrom(pathname, '/settle');
     if (settleId && req.method === 'POST') {
+      if (!exchangeProcessOnly(res)) return true;
       const accountId = await bearerAccountId(req);
       if (accountId === null) {
         fail(res, 401, 'not authenticated');
