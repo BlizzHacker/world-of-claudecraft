@@ -29,6 +29,7 @@ describe('Exchange write-process guard', () => {
     ['/api/exchange/listings', 'POST'],
     ['/api/exchange/listings/ex-1/cancel', 'POST'],
     ['/api/exchange/listings/ex-1/settle', 'POST'],
+    ['/api/exchange/listings/ex-1/reverse', 'POST'],
   ])('rejects %s on a normal realm process', async (pathname, method) => {
     const req = { method, headers: {}, url: pathname } as any;
     const res = response();

@@ -1,11 +1,20 @@
 import { describe, expect, it } from 'vitest';
+import { EXCHANGE_SCHEMA } from '../server/exchange/db';
 import {
   cancelExchangeEscrow,
   createExchangeEscrow,
+  reverseExchangeSettlement,
   settleExchangeEscrow,
 } from '../src/sim/exchange/custody';
 
 describe('Exchange custody transitions', () => {
+  it('keeps reversal persistence additive and auditable', () => {
+    expect(EXCHANGE_SCHEMA).toContain("'reversed'");
+    expect(EXCHANGE_SCHEMA).toContain('reversed_at');
+    expect(EXCHANGE_SCHEMA).toContain('reversed_by_character_id');
+    expect(EXCHANGE_SCHEMA).toContain('exchange_events_event_type_check');
+  });
+
   it('locks source custody and carries provenance through settlement', () => {
     const escrow = createExchangeEscrow({
       id: 'ex-1',
@@ -92,5 +101,46 @@ describe('Exchange custody transitions', () => {
     const cancelled = cancelExchangeEscrow(escrow, 11);
     expect(cancelled.status).toBe('cancelled');
     expect(cancelled.sourceItemLocked).toBe(false);
+  });
+
+  it('reverses only a settled listing when both sides still have custody', () => {
+    const escrow = createExchangeEscrow({
+      id: 'ex-4',
+      sellerCharacterId: 11,
+      sourceRealm: 'Infernal',
+      itemId: 'raw_mirror_trout',
+      count: 2,
+      priceCopper: 101,
+    });
+    const settled = settleExchangeEscrow(escrow, {
+      buyerCharacterId: 22,
+      destinationRealm: 'Classic',
+      buyerHasFunds: true,
+      destinationAcceptsItem: true,
+    });
+    const reversed = reverseExchangeSettlement(settled.listing, {
+      actorCharacterId: 22,
+      buyerHasItem: true,
+      sellerHasProceeds: true,
+    });
+    expect(reversed.listing.status).toBe('reversed');
+    expect(reversed.buyerRefundCopper).toBe(101);
+    expect(reversed.sellerDebitCopper).toBe(96);
+    expect(reversed.feeCopper).toBe(5);
+    expect(reversed.provenance.destinationCharacterId).toBe(22);
+    expect(() =>
+      reverseExchangeSettlement(settled.listing, {
+        actorCharacterId: 33,
+        buyerHasItem: true,
+        sellerHasProceeds: true,
+      }),
+    ).toThrow('participant');
+    expect(() =>
+      reverseExchangeSettlement(settled.listing, {
+        actorCharacterId: 11,
+        buyerHasItem: false,
+        sellerHasProceeds: true,
+      }),
+    ).toThrow('item');
   });
 });

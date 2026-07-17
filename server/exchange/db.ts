@@ -5,12 +5,12 @@
 import { randomUUID } from 'node:crypto';
 import type { Pool, PoolClient } from 'pg';
 import { ITEMS } from '../../src/sim/data';
-import { meetsLevelRequirement } from '../../src/sim/item_level_req';
 import {
   EXCHANGE_FEE_BPS,
   type ExchangeEscrowListing,
   type ExchangeProvenance,
 } from '../../src/sim/exchange/custody';
+import { meetsLevelRequirement } from '../../src/sim/item_level_req';
 import type { CharacterState } from '../../src/sim/sim';
 import type { InvSlot } from '../../src/sim/types';
 
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS exchange_listings (
   item_count INT NOT NULL CHECK (item_count > 0),
   price_copper BIGINT NOT NULL CHECK (price_copper > 0),
   fee_bps INT NOT NULL DEFAULT ${EXCHANGE_FEE_BPS},
-  status TEXT NOT NULL CHECK (status IN ('escrowed','settled','cancelled')),
+  status TEXT NOT NULL CHECK (status IN ('escrowed','settled','cancelled','reversed')),
   source_item_locked BOOLEAN NOT NULL DEFAULT TRUE,
   provenance JSONB NOT NULL,
   idempotency_key TEXT,
@@ -31,9 +31,16 @@ CREATE TABLE IF NOT EXISTS exchange_listings (
   destination_realm TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   settled_at TIMESTAMPTZ,
-  cancelled_at TIMESTAMPTZ
+  cancelled_at TIMESTAMPTZ,
+  reversed_at TIMESTAMPTZ,
+  reversed_by_character_id INT REFERENCES characters(id)
 );
 ALTER TABLE exchange_listings ADD COLUMN IF NOT EXISTS idempotency_key TEXT;
+ALTER TABLE exchange_listings ADD COLUMN IF NOT EXISTS reversed_at TIMESTAMPTZ;
+ALTER TABLE exchange_listings ADD COLUMN IF NOT EXISTS reversed_by_character_id INT REFERENCES characters(id);
+ALTER TABLE exchange_listings DROP CONSTRAINT IF EXISTS exchange_listings_status_check;
+ALTER TABLE exchange_listings ADD CONSTRAINT exchange_listings_status_check
+  CHECK (status IN ('escrowed','settled','cancelled','reversed'));
 CREATE UNIQUE INDEX IF NOT EXISTS exchange_listings_seller_idempotency
   ON exchange_listings(seller_character_id, idempotency_key)
   WHERE idempotency_key IS NOT NULL;
@@ -45,7 +52,7 @@ CREATE INDEX IF NOT EXISTS exchange_listings_source_realm
 CREATE TABLE IF NOT EXISTS exchange_events (
   event_id UUID PRIMARY KEY,
   listing_id UUID NOT NULL REFERENCES exchange_listings(listing_id),
-  event_type TEXT NOT NULL CHECK (event_type IN ('escrowed','settled','cancelled')),
+  event_type TEXT NOT NULL CHECK (event_type IN ('escrowed','settled','cancelled','reversed')),
   actor_character_id INT NOT NULL REFERENCES characters(id),
   source_realm TEXT NOT NULL,
   destination_realm TEXT,
@@ -54,6 +61,9 @@ CREATE TABLE IF NOT EXISTS exchange_events (
 );
 CREATE INDEX IF NOT EXISTS exchange_events_listing
   ON exchange_events(listing_id, occurred_at ASC);
+ALTER TABLE exchange_events DROP CONSTRAINT IF EXISTS exchange_events_event_type_check;
+ALTER TABLE exchange_events ADD CONSTRAINT exchange_events_event_type_check
+  CHECK (event_type IN ('escrowed','settled','cancelled','reversed'));
 `;
 
 export async function applyExchangeSchema(pool: Pool): Promise<void> {
@@ -64,6 +74,8 @@ export interface ExchangeListingRow extends ExchangeEscrowListing {
   createdAt: string;
   settledAt?: string;
   cancelledAt?: string;
+  reversedAt?: string;
+  reversedByCharacterId?: number;
   buyerCharacterId?: number;
   destinationRealm?: string;
 }
@@ -71,7 +83,7 @@ export interface ExchangeListingRow extends ExchangeEscrowListing {
 export interface ExchangeAuditEvent {
   eventId: string;
   listingId: string;
-  eventType: 'escrowed' | 'settled' | 'cancelled';
+  eventType: 'escrowed' | 'settled' | 'cancelled' | 'reversed';
   actorCharacterId: number;
   sourceRealm: string;
   destinationRealm?: string;
@@ -159,6 +171,10 @@ function rowToListing(row: Record<string, unknown>): ExchangeListingRow {
     createdAt: new Date(String(row.created_at)).toISOString(),
     settledAt: row.settled_at ? new Date(String(row.settled_at)).toISOString() : undefined,
     cancelledAt: row.cancelled_at ? new Date(String(row.cancelled_at)).toISOString() : undefined,
+    reversedAt: row.reversed_at ? new Date(String(row.reversed_at)).toISOString() : undefined,
+    reversedByCharacterId: row.reversed_by_character_id
+      ? Number(row.reversed_by_character_id)
+      : undefined,
     buyerCharacterId: row.buyer_character_id ? Number(row.buyer_character_id) : undefined,
     destinationRealm: row.destination_realm ? String(row.destination_realm) : undefined,
   };
@@ -167,7 +183,7 @@ function rowToListing(row: Record<string, unknown>): ExchangeListingRow {
 async function insertEvent(
   client: PoolClient,
   listingId: string,
-  eventType: 'escrowed' | 'settled' | 'cancelled',
+  eventType: 'escrowed' | 'settled' | 'cancelled' | 'reversed',
   actorCharacterId: number,
   sourceRealm: string,
   destinationRealm: string | null,
@@ -304,7 +320,7 @@ export async function listActiveListings(
   let filter = '';
   if (destinationRealm?.trim()) {
     params.push(destinationRealm.trim());
-    filter = ' AND source_realm <> $1';
+    filter = ' AND LOWER(source_realm) <> LOWER($1)';
   }
   const result = await pool.query(
     `SELECT * FROM exchange_listings WHERE status = 'escrowed'${filter} ORDER BY created_at DESC LIMIT 200`,
@@ -458,6 +474,116 @@ export async function settleListing(
       destination_realm: destRealm,
       provenance,
       settled_at: new Date().toISOString(),
+    });
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => {});
+    throw err;
+  } finally {
+    client.release();
+  }
+}
+
+/**
+ * Atomically unwind a settled listing. Both participant character rows are
+ * locked in the same transaction as the listing row. The buyer must still
+ * hold the exact escrowed stack and the seller must still have the proceeds;
+ * otherwise the operation aborts without changing either character. The fee
+ * amount is included in the audit payload so a separate Exchange treasury can
+ * refund it without making the character rows authoritative for that ledger.
+ */
+export async function reverseListing(
+  pool: Pool,
+  listingId: string,
+  actorCharacterId: number,
+): Promise<ExchangeListingRow> {
+  const id = text(listingId, 'listing id');
+  const actorId = positive(actorCharacterId, 'actor character id');
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    const listingResult = await client.query(
+      'SELECT * FROM exchange_listings WHERE listing_id = $1 FOR UPDATE',
+      [id],
+    );
+    const listing = listingResult.rows[0];
+    if (!listing) throw new Error('listing not found');
+    if (listing.status !== 'settled') throw new Error('listing is not settled');
+    const sellerId = Number(listing.seller_character_id);
+    const buyerId = Number(listing.buyer_character_id);
+    if (!Number.isSafeInteger(buyerId) || buyerId <= 0) {
+      throw new Error('settled listing has no buyer');
+    }
+    if (actorId !== sellerId && actorId !== buyerId) {
+      throw new Error('actor is not a settlement participant');
+    }
+
+    // The listing lock serializes settlement/reversal for this item. Locking
+    // both characters before mutating either state makes the unwind atomic.
+    const buyerResult = await client.query(
+      'SELECT id, state FROM characters WHERE id = $1 FOR UPDATE',
+      [buyerId],
+    );
+    const sellerResult = await client.query(
+      'SELECT id, state FROM characters WHERE id = $1 FOR UPDATE',
+      [sellerId],
+    );
+    if (!buyerResult.rows[0]) throw new Error('buyer character not found');
+    if (!sellerResult.rows[0]) throw new Error('seller character not found');
+    const buyerState = stateOf(buyerResult.rows[0].state);
+    const sellerState = stateOf(sellerResult.rows[0].state);
+    const itemId = String(listing.item_id);
+    const count = Number(listing.item_count);
+    // removeFromInventory throws before any UPDATE, so a consumed or moved
+    // item cannot be duplicated by a retry.
+    removeFromInventory(buyerState.inventory, itemId, count);
+    const priceCopper = Number(listing.price_copper);
+    const feeCopper = Math.floor((priceCopper * Number(listing.fee_bps)) / 10_000);
+    const sellerProceedsCopper = priceCopper - feeCopper;
+    if (sellerState.copper < sellerProceedsCopper) {
+      throw new Error('seller proceeds are not available to reverse');
+    }
+    addToInventory(sellerState.inventory, itemId, count);
+    buyerState.copper += priceCopper;
+    sellerState.copper -= sellerProceedsCopper;
+    await client.query('UPDATE characters SET state = $2, updated_at = now() WHERE id = $1', [
+      buyerId,
+      JSON.stringify(buyerState),
+    ]);
+    await client.query('UPDATE characters SET state = $2, updated_at = now() WHERE id = $1', [
+      sellerId,
+      JSON.stringify(sellerState),
+    ]);
+    await client.query(
+      `UPDATE exchange_listings
+          SET status = 'reversed', source_item_locked = FALSE,
+              reversed_by_character_id = $2, reversed_at = now()
+        WHERE listing_id = $1`,
+      [id, actorId],
+    );
+    await insertEvent(
+      client,
+      id,
+      'reversed',
+      actorId,
+      String(listing.source_realm),
+      listing.destination_realm ? String(listing.destination_realm) : null,
+      {
+        itemId,
+        count,
+        priceCopper,
+        feeCopper,
+        sellerDebitCopper: sellerProceedsCopper,
+        buyerRefundCopper: priceCopper,
+        provenance: listing.provenance,
+      },
+    );
+    await client.query('COMMIT');
+    return rowToListing({
+      ...listing,
+      status: 'reversed',
+      source_item_locked: false,
+      reversed_by_character_id: actorId,
+      reversed_at: new Date().toISOString(),
     });
   } catch (err) {
     await client.query('ROLLBACK').catch(() => {});

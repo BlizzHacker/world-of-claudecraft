@@ -13,7 +13,7 @@ export interface ExchangeListingView {
   count: number;
   priceCopper: number;
   feeBps: number;
-  status: 'escrowed' | 'settled' | 'cancelled';
+  status: 'escrowed' | 'settled' | 'cancelled' | 'reversed';
   sellerCharacterId: number;
   sourceItemLocked: boolean;
   provenance: { sourceRealm?: string; hops?: number };

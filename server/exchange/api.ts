@@ -10,6 +10,7 @@ import {
   cancelListing,
   createListing,
   listActiveListings,
+  reverseListing,
   settleListing,
 } from './db';
 
@@ -137,6 +138,23 @@ export async function maybeHandleExchangeApi(
     const auditId = idFrom(pathname, '/audit');
     if (auditId && req.method === 'GET') {
       ok(res, await auditListing(pool, auditId));
+      return true;
+    }
+    const reverseId = idFrom(pathname, '/reverse');
+    if (reverseId && req.method === 'POST') {
+      if (!exchangeProcessOnly(res)) return true;
+      const accountId = await bearerAccountId(req);
+      if (accountId === null) {
+        fail(res, 401, 'not authenticated');
+        return true;
+      }
+      const body = (await readBody(req)) as { characterId?: unknown };
+      const characterId = Number(body.characterId);
+      if (!Number.isSafeInteger(characterId) || !(await ownedCharacter(accountId, characterId))) {
+        fail(res, 404, 'character not found');
+        return true;
+      }
+      ok(res, await reverseListing(pool, reverseId, characterId));
       return true;
     }
     fail(res, 404, 'exchange route not found');

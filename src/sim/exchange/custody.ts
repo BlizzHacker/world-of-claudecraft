@@ -2,7 +2,7 @@
 // persistence and transaction boundaries; offline uses the same transitions in a
 // local profile ledger without gaining any online import/export capability.
 
-export type ExchangeListingStatus = 'escrowed' | 'settled' | 'cancelled';
+export type ExchangeListingStatus = 'escrowed' | 'settled' | 'cancelled' | 'reversed';
 
 export interface ExchangeProvenance {
   itemId: string;
@@ -32,6 +32,14 @@ export interface ExchangeSettlement {
   buyerCharacterId: number;
   destinationRealm: string;
   sellerProceedsCopper: number;
+  feeCopper: number;
+  provenance: ExchangeProvenance;
+}
+
+export interface ExchangeReversal {
+  listing: ExchangeEscrowListing;
+  buyerRefundCopper: number;
+  sellerDebitCopper: number;
   feeCopper: number;
   provenance: ExchangeProvenance;
 }
@@ -129,4 +137,38 @@ export function cancelExchangeEscrow(
   if (sellerCharacterId !== listing.sellerCharacterId)
     throw new Error('seller does not own listing');
   return { ...listing, status: 'cancelled', sourceItemLocked: false };
+}
+
+/**
+ * Reverse a completed settlement. This is intentionally a separate terminal
+ * transition: an escrow can be cancelled by its seller, while a settlement can
+ * only be reversed after both parties' custody and currency are verified by
+ * the authoritative host. The fee is reported separately so the persistence
+ * adapter can unwind its Exchange fee reserve atomically as well.
+ */
+export function reverseExchangeSettlement(
+  listing: ExchangeEscrowListing,
+  input: {
+    actorCharacterId: number;
+    buyerHasItem: boolean;
+    sellerHasProceeds: boolean;
+  },
+): ExchangeReversal {
+  if (listing.status !== 'settled') throw new Error('listing is not settled');
+  const actorCharacterId = positiveInteger(input.actorCharacterId, 'actor character id');
+  const buyerCharacterId = listing.provenance.destinationCharacterId;
+  if (!buyerCharacterId) throw new Error('settled listing has no buyer');
+  if (actorCharacterId !== listing.sellerCharacterId && actorCharacterId !== buyerCharacterId) {
+    throw new Error('actor is not a settlement participant');
+  }
+  if (!input.buyerHasItem) throw new Error('buyer no longer holds the exchanged item');
+  if (!input.sellerHasProceeds) throw new Error('seller proceeds are not available to reverse');
+  const feeCopper = Math.floor((listing.priceCopper * listing.feeBps) / BPS_DENOMINATOR);
+  return {
+    listing: { ...listing, status: 'reversed', sourceItemLocked: false },
+    buyerRefundCopper: listing.priceCopper,
+    sellerDebitCopper: listing.priceCopper - feeCopper,
+    feeCopper,
+    provenance: { ...listing.provenance },
+  };
 }
