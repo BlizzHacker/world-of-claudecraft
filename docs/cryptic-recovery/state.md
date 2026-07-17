@@ -21,6 +21,7 @@
 - Launcher: `src/ui/arcade_minigame_window.ts`, `src/ui/hud.ts`
 - Exchange custody: `server/exchange/api.ts`, `server/exchange/db.ts`,
   `src/sim/exchange/custody.ts`
+- 3D preview cache: `src/render/characters/preview.ts`, `src/ui/item_model_catalog.ts`
 
 ## Known blockers
 
@@ -28,3 +29,11 @@
   discovery/patch-ID classification and isolated stage identity are not complete.
 - Full `npm run gate` currently stops at i18n freshness when unrelated pre-existing admin generated
   artifacts are unstaged. Preserve those changes; never stage them opportunistically.
+
+## Latest verified commits
+
+- `97d576cda` — deterministic solo CPU opponents for racing/brawler.
+- `6667d48b7` — Exchange process boundary and shared item-level settlement gate.
+- `3b4fc0d96` — recovery implementation packet.
+- `1fca55baf` — reuse unchanged external item preview models.
+- `2e0cdac46` — offline couch co-op invitation through the authoritative session seam.
