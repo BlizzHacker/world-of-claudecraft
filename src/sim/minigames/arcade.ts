@@ -31,6 +31,8 @@ import {
 import type { MinigameFeatureId } from './index';
 
 export const ARCADE_STATE_VERSION = 'arcade-v1';
+/** Three minutes at the shared 20 Hz tick gives stalled racers a fair finish window. */
+export const ARCADE_RACE_TIMEOUT_TICKS = 20 * 180;
 
 export type ArcadeState =
   | {
@@ -246,6 +248,11 @@ export function stepArcadeState(state: ArcadeState): void {
       if (!vehicle || vehicle.finished || vehicle.item !== null || vehicle.itemCooldown > 0) continue;
       const place = raceResults(state.race).find((result) => result.vehicleId === vehicle.id)?.place ?? 1;
       state.race = grantRaceItem(state.race, vehicle.id, place);
+    }
+    if (!state.race.finished && state.race.tick >= ARCADE_RACE_TIMEOUT_TICKS) {
+      // A disconnected or idle racer must not hold the authoritative lobby
+      // open forever after the active racers have completed the course.
+      state.race = { ...state.race, finished: true };
     }
     return;
   }

@@ -81,8 +81,8 @@ describe('generic minigame lifecycle wire', () => {
     if ('error' in joined) throw new Error(joined.error);
     joined.blockListLoaded = true;
 
-    // Feature flags stay default-off in production. Injecting a session here
-    // tests only the transport shape; creation itself is still rejected below.
+    // Injecting a session here keeps this assertion focused on transport shape;
+    // promoted modes are also exercised through the real create command below.
     const state = createMinigameSession(1, 'racing', 42, joined.pid, 4);
     (server as any).minigameSessions.set(1, state);
     (server as any).broadcastSnapshots();
@@ -97,14 +97,14 @@ describe('generic minigame lifecycle wire', () => {
     expect(client.minigameSession).toMatchObject({ id: 1, seed: 42, phase: 'lobby' });
   });
 
-  it('keeps default-off lifecycle commands inert and client sends typed tokens', () => {
+  it('accepts promoted lifecycle commands and client sends typed tokens', () => {
     const server = new GameServer();
     const transport = fakeWs();
     const joined = server.join(transport.ws, 12, 12, 'OffTester', 'warrior', null);
     if ('error' in joined) throw new Error(joined.error);
     joined.blockListLoaded = true;
     server.handleMessage(joined, JSON.stringify({ t: 'cmd', cmd: 'mg_create', kind: 'racing' }));
-    expect((server as any).minigameSessions.size).toBe(0);
+    expect((server as any).minigameSessions.size).toBe(1);
 
     const outbound: any[] = [];
     const client: any = Object.create(ClientWorld.prototype);

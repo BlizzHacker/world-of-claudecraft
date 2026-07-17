@@ -1,13 +1,16 @@
-// Bounded minigame domains. These are host-agnostic and intentionally default-off
-// until their IWorld, server wire, persistence, and dedicated QA checkpoints land.
+// Bounded minigame domains. Modes only become active after their host, wire,
+// persistence, and dedicated QA checkpoints land. The rollout table below is
+// the single source shared by offline Sim and the online server.
 
 export { createRaceSession, defaultRaceTrack, stepRace } from '../racing';
 export {
   ARCADE_STATE_VERSION,
+  ARCADE_RACE_TIMEOUT_TICKS,
   addArcadePlayer,
   arcadeWire,
   arcadeFinished,
   arcadeKindSupported,
+  arcadeScores,
   arcadeWinnerPids,
   buildArcadeRts,
   cloneArcadeState,
@@ -18,7 +21,7 @@ export {
   stepArcadeState,
   trainArcadeRts,
 } from './arcade';
-export type { ArcadeState, ArcadeWireState } from './arcade';
+export type { ArcadeScores, ArcadeState, ArcadeWireState } from './arcade';
 export { BRAWLER_VERSION, createBrawlerState, stepBrawler } from './brawler';
 export {
   cloneHousingLot,
@@ -80,17 +83,17 @@ export type MinigameFeatureId = 'racing' | 'brawler' | 'town_rts' | 'zombie_defe
 export interface MinigameFeatureStatus {
   id: MinigameFeatureId;
   enabled: boolean;
-  /** Implemented locally behind an explicit preview switch; not promoted. */
+  /** Implemented locally behind the rollout table; preview marks staged modes. */
   preview?: boolean;
   checkpoint: string;
 }
 
 export const MINIGAME_FEATURES: readonly MinigameFeatureStatus[] = [
-  { id: 'racing', enabled: false, preview: true, checkpoint: 'phase-33-racing-qa' },
-  { id: 'brawler', enabled: false, preview: true, checkpoint: 'phase-36-brawler-qa' },
-  { id: 'town_rts', enabled: false, preview: true, checkpoint: 'phase-39-rts-qa' },
-  { id: 'zombie_defense', enabled: false, preview: true, checkpoint: 'phase-41-zombie-qa' },
-  { id: 'housing', enabled: false, preview: true, checkpoint: 'phase-44-housing-qa' },
+  { id: 'racing', enabled: true, checkpoint: 'phase-06-racing-qa' },
+  { id: 'brawler', enabled: true, checkpoint: 'phase-06-brawler-qa' },
+  { id: 'town_rts', enabled: true, checkpoint: 'phase-04-rts-qa' },
+  { id: 'zombie_defense', enabled: true, checkpoint: 'phase-04-zombie-qa' },
+  { id: 'housing', enabled: true, checkpoint: 'phase-05-housing-qa' },
 ];
 
 export function minigameEnabled(id: MinigameFeatureId): boolean {

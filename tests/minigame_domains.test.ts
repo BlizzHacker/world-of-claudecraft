@@ -16,6 +16,7 @@ import {
 import { type BrawlerInput, createBrawlerState, stepBrawler } from '../src/sim/minigames/brawler';
 import {
   arcadeFinished,
+  arcadeScores,
   createArcadeState,
   setArcadeRaceInput,
   stepArcadeState,
@@ -46,13 +47,14 @@ import {
 import { Sim } from '../src/sim/sim';
 
 describe('minigame rollout guard', () => {
-  it('keeps incomplete domains default-off until their checkpoints pass', () => {
+  it('activates every completed online/offline domain', () => {
     expect(MINIGAME_FEATURES).toHaveLength(5);
-    expect(MINIGAME_FEATURES.every((feature) => feature.enabled)).toBe(false);
-    expect(minigameEnabled('racing')).toBe(false);
-    expect(minigameEnabled('housing')).toBe(false);
-    expect(minigameAvailable('zombie_defense', true)).toBe(true);
-    expect(minigameAvailable('zombie_defense')).toBe(false);
+    expect(minigameEnabled('racing')).toBe(true);
+    expect(minigameEnabled('brawler')).toBe(true);
+    expect(minigameEnabled('town_rts')).toBe(true);
+    expect(minigameEnabled('zombie_defense')).toBe(true);
+    expect(minigameEnabled('housing')).toBe(true);
+    expect(minigameAvailable('zombie_defense')).toBe(true);
   });
 });
 
@@ -87,9 +89,10 @@ describe('shared minigame session lifecycle', () => {
     expect(state.phase).toBe('active');
     state = stateOf(setMinigameConnection(state, 11, false), state);
     state = stateOf(setMinigameConnection(state, 11, true), state);
-    const finished = finishMinigameSession(state, [10, 11]);
+    const finished = finishMinigameSession(state, [10, 11], new Map([[10, 125], [11, 0]]));
     expect(finished.ok).toBe(true);
     state = finished.ok ? finished.state : state;
+    expect(state.players.find((player) => player.pid === 10)?.score).toBe(125);
     const claimed = claimMinigameReward(state, 10);
     expect(claimed.ok).toBe(true);
     state = claimed.ok ? claimed.state : state;
@@ -122,6 +125,7 @@ describe('brawler domain', () => {
     a.fighters[1].x = a.rightBlastZone + 1;
     stepBrawler(a, new Map());
     expect(a.fighters[1].stocks).toBe(2);
+    expect(a.fighters[0].score).toBe(1);
   });
 });
 
@@ -136,6 +140,15 @@ describe('arcade race adapter', () => {
     expect(Number.isFinite(vehicle.x)).toBe(true);
     expect(Number.isFinite(vehicle.z)).toBe(true);
     expect(arcadeFinished(state)).toBe(false);
+  });
+
+  it('exposes deterministic placement and KO scores to the shared session', () => {
+    const race = createArcadeState('racing', 42, [1, 2, 3, 4]);
+    expect([...arcadeScores(race).entries()]).toEqual([[1, 400], [2, 300], [3, 200], [4, 100]]);
+
+    const brawler = createArcadeState('brawler', 42, [1, 2]);
+    if (brawler.kind === 'brawler') brawler.brawler.fighters[0].score = 2;
+    expect(arcadeScores(brawler).get(1)).toBe(2);
   });
 
   it('fills one-player practice with deterministic CPU opponents', () => {
@@ -156,6 +169,14 @@ describe('arcade race adapter', () => {
           .filter((vehicle) => bots.includes(vehicle.playerId))
           .every((vehicle) => vehicle.checkpoint > 0 || vehicle.lap > 0),
     ).toBe(true);
+  });
+
+  it('closes a stalled CPU practice race at the deterministic deadline', () => {
+    const bots = practiceBotPids('racing', 8, 1);
+    const state = createArcadeState('racing', 42, [1], bots);
+    for (let i = 0; i < 20 * 180 && !arcadeFinished(state); i += 1) stepArcadeState(state);
+    expect(arcadeFinished(state)).toBe(true);
+    expect(state.kind === 'racing' && state.race.finished).toBe(true);
   });
 
   it('lets a solo brawler practice match resolve against CPU fighters', () => {
