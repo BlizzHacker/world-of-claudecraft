@@ -14,7 +14,7 @@
 // The active realm is resolved in this order:
 //   1. ?realm=<id> query string (dev / shareable links).
 //   2. localStorage 'cr_active_realm' (last-picked).
-//   3. DEFAULT_REALM ('infernal') — matches the LXC overlay's default.
+//   3. DEFAULT_REALM ('crypticrealm') — the namesake landing experience.
 
 import { CRYPTICREALM_REALM } from './content/crypticrealm';
 import { CLAUDECRAFT_REALM } from './content/claudecraft';

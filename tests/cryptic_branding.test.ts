@@ -83,4 +83,18 @@ describe('Cryptic realm branding crypto surfaces', () => {
     expect(document.querySelector<HTMLElement>('.account-wallet-card')?.style.display).toBe('');
     expect(document.getElementById('cr-wallet-panel')?.style.display).toBe('none');
   });
+
+  it('keeps the shared Cryptic logo when Arcade Void is selected', async () => {
+    document.body.innerHTML += `
+      <img class="header-logo" src="/icon-192.png" alt="">
+      <img class="main-logo" src="/cryptic-realm-logo-512.webp" alt="">
+    `;
+    window.localStorage.setItem('cr_active_realm', 'arcadevoid');
+    const { mountRealmBranding } = await import('../src/ui/cryptic/branding');
+
+    mountRealmBranding();
+
+    expect(document.querySelector<HTMLImageElement>('.header-logo')?.src).toContain('/cryptic-realm-logo-512.webp');
+    expect(document.querySelector<HTMLImageElement>('.main-logo')?.src).toContain('/cryptic-realm-logo-512.webp');
+  });
 });

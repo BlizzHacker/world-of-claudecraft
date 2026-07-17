@@ -15,7 +15,12 @@ export const ARCADE_VOID_REALM: RealmContent = {
   bgGradient: 'linear-gradient(135deg, #02131c 0%, #090514 55%, #16060d 100%)',
   previewColors: { primary: '#57f0ff', secondary: '#ffcf4a', bg: '#07111c' },
   branding: {
-    logoSrc: '/cr-realms/arcadevoid/characters.png',
+    // `characters.png` is the Arcane Void character sheet, not a logo. It was
+    // previously wired here and made the landing header render a random
+    // creature whenever a player had the Arcade Void realm selected. Keep the
+    // Cryptic Realm mark in the shared chrome; realm art belongs in the hero /
+    // in-world surfaces where it cannot replace the product identity.
+    logoSrc: '/cryptic-realm-logo-512.webp',
     brandText: 'Cryptic Realm - Arcane Void',
     loadingScreenSrc: '/cr-realms/arcadevoid/cr-loggedin.png',
     discordUrl: 'https://discord.gg/Zdj3JGrx',
