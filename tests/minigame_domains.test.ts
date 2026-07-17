@@ -177,6 +177,14 @@ describe('arcade race adapter', () => {
     for (let i = 0; i < 300 && sim.minigameSession?.phase === 'active'; i += 1) sim.tick();
     expect(sim.minigameSession?.phase).toBe('finished');
   });
+
+  it('admits an existing couch player through the offline invite seam', () => {
+    const sim = new Sim({ seed: 42, playerClass: 'warrior' });
+    const couchPlayer = sim.addPlayer('mage', 'CouchTwo');
+    sim.minigameCreate('racing', 4);
+    sim.minigameInvite(couchPlayer);
+    expect(sim.minigameSession?.players.some((player) => player.pid === couchPlayer)).toBe(true);
+  });
 });
 
 describe('town RTS domain', () => {

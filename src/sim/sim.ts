@@ -3560,9 +3560,16 @@ export class Sim {
     }
   }
 
-  minigameInvite(_targetPlayerId: number): void {
-    // Offline couch players do not need a transport invite: the host can add
-    // the second controller directly with minigameJoin(sessionId, playerId).
+  minigameInvite(targetPlayerId: number): void {
+    // Offline couch co-op has no transport event, but it still needs the same
+    // authoritative roster admission as online play. A locally-created player
+    // (for example from a controller slot) can therefore be invited by id; the
+    // normal session seam owns capacity, duplicate, and phase validation.
+    const current = this.minigameSession;
+    if (!current || current.ownerPid !== this.playerId) return;
+    if (!Number.isInteger(targetPlayerId) || targetPlayerId <= 0 || targetPlayerId === this.playerId) return;
+    if (!this.players.has(targetPlayerId)) return;
+    this.minigameJoin(current.id, targetPlayerId);
   }
 
   minigameReady(ready: boolean, playerId = this.playerId): void {
