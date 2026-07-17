@@ -18,7 +18,7 @@ import {
 } from '../game/ui_tier_knobs';
 import { voice, voiceDistanceGain } from '../game/voice';
 import { castBarState, consumeBarState } from '../render/cast_bar';
-import { CharacterPreview } from '../render/characters';
+import { CharacterPreview, type ExternalPreviewState } from '../render/characters';
 import { preloadMechAssets } from '../render/characters/assets';
 import { mechHeldWeaponOverride, skinCount } from '../render/characters/manifest';
 import {
@@ -10744,6 +10744,7 @@ export class Hud {
     }
     if (npc.templateId === 'town_defense_board') {
       html += `<button type="button" class="qd-list-item" data-arcade-games="1" aria-label="${esc(t('hudChrome.arcade.title'))}">${esc(t('hudChrome.arcade.title'))}</button>`;
+      html += `<button type="button" class="qd-list-item" data-arcade-housing="1" aria-label="${esc(t('hudChrome.arcade.housing'))}">${esc(t('hudChrome.arcade.housing'))}</button>`;
       html += `<button type="button" class="qd-list-item" data-zombie-defense="1" aria-label="${esc(t('hudChrome.zombie.title'))}"><span class="gold">☠</span> ${esc(t('hudChrome.zombie.title'))}</button>`;
     }
     el.innerHTML = html;
@@ -10790,6 +10791,10 @@ export class Hud {
     el.querySelector('[data-arcade-games]')?.addEventListener('click', () => {
       this.closeQuestDialog(false);
       this.toggleArcadeMinigame();
+    });
+    el.querySelector('[data-arcade-housing]')?.addEventListener('click', () => {
+      this.closeQuestDialog(false);
+      this.toggleArcadeMinigame('housing');
     });
     el.querySelector('[data-close]')?.addEventListener('click', () => this.closeQuestDialog());
     el.style.display = 'block';
@@ -11977,7 +11982,20 @@ export class Hud {
     } else {
       this.itemPreview.setContainer(container);
     }
-    this.itemPreview.setExternalModel(url);
+    this.itemPreview.setExternalModel(url, (state) => {
+      const status = document.getElementById('char-item-model-status');
+      if (!status) return;
+      const messages: Record<ExternalPreviewState, string> = {
+        idle: '',
+        loading: t('guide.viewer.loading'),
+        ready: '',
+        error: t('guide.viewer.error', {
+          name: item ? itemDisplayName(item) : t('guide.models.title'),
+        }),
+      };
+      status.textContent = messages[state];
+      container.dataset.modelState = state;
+    });
   }
 
   private disposeCharItemPreview(): void {
