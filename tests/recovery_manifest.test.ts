@@ -9,14 +9,15 @@ const manifestPath = resolve(root, 'config/cryptic-recovery/features.json');
 const checker = resolve(root, 'scripts/admin/check_recovery_manifest.mjs');
 
 describe('permanent recovery manifest', () => {
-  it('passes structural checks while explicitly reporting promotion blocked', () => {
+  it('passes structural and discovery checks', () => {
     const output = execFileSync(process.execPath, [checker], { cwd: root, encoding: 'utf8' });
     expect(output).toContain('PASS');
-    expect(output).toContain('promotion blocked');
+    expect(output).not.toContain('promotion blocked');
   });
 
-  it('strict mode fails closed until exhaustive discovery is refreshed', () => {
-    expect(() => execFileSync(process.execPath, [checker, '--strict'], { cwd: root, encoding: 'utf8', stdio: 'pipe' })).toThrow();
+  it('strict mode passes only with the committed discovery ledger', () => {
+    const output = execFileSync(process.execPath, [checker, '--strict'], { cwd: root, encoding: 'utf8' });
+    expect(output).toContain('PASS');
   });
 
   it('pins the production target, upstream anchors, and every feature contract', () => {

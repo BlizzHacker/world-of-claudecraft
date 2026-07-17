@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "candidate": {
     "branch": "codex/cryptic-recovery-program",
-    "sha": "7fac9294f",
+    "sha": "aa065ee4b",
     "status": "local-recovery-candidate"
   },
   "production": {
@@ -19,11 +19,15 @@
     "housingReference": { "ref": "housing-live", "sha": "505142a51f32550f0c6c0d917c4f22e61b51efe9" }
   },
   "discovery": {
-    "status": "reconciliation_required",
-    "localRefCount": 419,
-    "upstreamAdvertisedRefCount": 322,
-    "requiredRefresh": ["git for-each-ref", "git ls-remote", "git bundle list-heads"],
-    "note": "Counts and pinned refs are captured evidence; strict promotion requires a fresh exhaustive ledger and patch-ID classification."
+    "status": "complete",
+    "ledger": "config/cryptic-recovery/discovery.json",
+    "localRefCount": 445,
+    "advertisedRefCount": 423,
+    "bundleRefCount": 385,
+    "uniqueCommitCount": 456,
+    "generatedAt": "2026-07-17T11:58:37.332Z",
+    "digest": "176c7a74885aa5499ecdc8589d5afd696551a84abb62e911d8f48b39b29e0c85",
+    "note": "Ledger generated from unfiltered local refs, advertised remote heads/tags, the preserved recovery bundle, and stable patch-ID comparison against the pinned upstream release."
   },
   "stage": { "mode": "ephemeral_required", "identity": null, "reason": "No isolated stage with manifest-pinned identity is evidenced." },
   "features": [

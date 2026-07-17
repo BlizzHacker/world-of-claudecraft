@@ -27,8 +27,9 @@
 
 ## Known blockers
 
-- `node scripts/admin/check_recovery_manifest.mjs --strict` fails closed because exhaustive ref
-  discovery/patch-ID classification and isolated stage identity are not complete.
+- `node scripts/admin/check_recovery_manifest.mjs --strict` passes against the committed
+  exhaustive ref/bundle ledger. Promotion remains blocked because no isolated stage identity,
+  backup evidence, full QA report, or post-deploy health evidence is pinned.
 - Full `npm run gate` currently stops at i18n freshness when unrelated pre-existing admin generated
   artifacts are unstaged. Preserve those changes; never stage them opportunistically.
 

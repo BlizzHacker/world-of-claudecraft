@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { dirname, resolve } from 'node:path';
@@ -14,6 +15,43 @@ const disabledOpen = new Set(['F-002', 'F-016', 'F-018', 'F-019', 'F-020', 'F-02
 function requireValue(condition, message) { if (!condition) errors.push(message); }
 function git(...args) {
   return execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim();
+}
+
+function validateDiscoveryLedger() {
+  const relative = manifest.discovery?.ledger;
+  if (typeof relative !== 'string' || !relative.startsWith('config/cryptic-recovery/')) {
+    errors.push('discovery ledger must be a repository-local config/cryptic-recovery path');
+    return;
+  }
+  let ledger;
+  try {
+    ledger = JSON.parse(readFileSync(resolve(root, relative), 'utf8'));
+  } catch (error) {
+    errors.push(`discovery ledger cannot be read: ${error.message}`);
+    return;
+  }
+  requireValue(ledger.schemaVersion === 1, 'discovery ledger schemaVersion must be 1');
+  requireValue(ledger.candidateSha === git('rev-parse', `${manifest.candidate.sha}^{commit}`), 'discovery ledger candidate SHA must match the manifest candidate');
+  requireValue(ledger.localRefs?.length === manifest.discovery.localRefCount, 'discovery local ref count drifted');
+  requireValue(ledger.advertisedRefs?.length === manifest.discovery.advertisedRefCount, 'discovery advertised ref count drifted');
+  requireValue(ledger.preservedBundle?.refs?.length === manifest.discovery.bundleRefCount, 'discovery bundle ref count drifted');
+  requireValue(ledger.uniqueCommits?.length === manifest.discovery.uniqueCommitCount, 'discovery unique commit count drifted');
+  const allowed = new Set(['recovered', 'superseded', 'rejected', 'dead-letter']);
+  for (const commit of ledger.uniqueCommits ?? []) {
+    requireValue(/^[0-9a-f]{40}$/.test(commit.sha ?? ''), 'discovery commit SHA must be full length');
+    requireValue(Array.isArray(commit.parents), `${commit.sha ?? 'unknown'} is missing parents`);
+    requireValue(allowed.has(commit.disposition), `${commit.sha ?? 'unknown'} has an invalid disposition`);
+    requireValue(typeof commit.owner === 'string' && commit.owner.length > 0, `${commit.sha ?? 'unknown'} is ownerless`);
+    requireValue(typeof commit.evidence === 'string' && commit.evidence.length > 0, `${commit.sha ?? 'unknown'} is evidence-free`);
+    if (commit.parents.length === 1) requireValue(/^[0-9a-f]{40}$/.test(commit.patchId ?? '') || commit.emptyPatchMarker === 'empty', `${commit.sha ?? 'unknown'} is missing a stable patch ID or empty marker`);
+    if (commit.parents.length > 1) requireValue(commit.mergeMarker === 'merge', `${commit.sha ?? 'unknown'} is missing its merge marker`);
+    if (commit.disposition === 'superseded') requireValue(typeof commit.upstreamEquivalenceRef === 'string' || /^[0-9a-f]{40}$/.test(commit.upstreamEquivalentSha ?? ''), `${commit.sha ?? 'unknown'} is superseded without an upstream equivalence`);
+  }
+  const copy = JSON.parse(JSON.stringify(ledger));
+  const digest = copy.digest;
+  delete copy.digest;
+  requireValue(typeof digest === 'string' && createHash('sha256').update(JSON.stringify(copy)).digest('hex') === digest, 'discovery ledger digest mismatch');
+  requireValue(manifest.discovery.digest === digest, 'manifest discovery digest does not match the ledger');
 }
 
 requireValue(manifest.schemaVersion === 1, 'schemaVersion must be 1');
@@ -33,6 +71,7 @@ for (const feature of manifest.features ?? []) {
   if (disabledOpen.has(feature.id)) requireValue(feature.enabled === false, `${feature.id} must remain default-off`);
 }
 requireValue(manifest.stage?.mode === 'ephemeral_required', 'stage must fail closed until an isolated identity is pinned');
+if (manifest.discovery?.status === 'complete') validateDiscoveryLedger();
 
 const currentSha = git('rev-parse', 'HEAD');
 const currentBranch = git('branch', '--show-current');
