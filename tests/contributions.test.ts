@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { normalizeUpstreamPulls } from '../server/contributions';
+import { isPublicContributionUrl, normalizeUpstreamPulls } from '../server/contributions';
 
 describe('upstream contribution feed', () => {
   it('keeps open and merged PRs while excluding closed unmerged work', () => {
@@ -37,5 +37,52 @@ describe('upstream contribution feed', () => {
       [8, 'merged'],
     ]);
     expect(entries[1].labels).toEqual(['safe']);
+  });
+
+  it('accepts only canonical public GitHub pull links', () => {
+    expect(
+      isPublicContributionUrl('https://github.com/levy-street/world-of-claudecraft/pull/8', 8),
+    ).toBe(true);
+    expect(
+      isPublicContributionUrl(
+        'https://github.com/levy-street/world-of-claudecraft/pull/8?redirect=https://evil.example',
+        8,
+      ),
+    ).toBe(false);
+    expect(
+      isPublicContributionUrl('https://github.com.evil.example/levy-street/repo/pull/8', 8),
+    ).toBe(false);
+    expect(
+      isPublicContributionUrl('http://github.com/levy-street/world-of-claudecraft/pull/8', 8),
+    ).toBe(false);
+    expect(
+      isPublicContributionUrl('https://github.com/levy-street/world-of-claudecraft/issues/8', 8),
+    ).toBe(false);
+  });
+
+  it('drops malformed or unsafe rows before the public feed is rendered', () => {
+    const entries = normalizeUpstreamPulls([
+      {
+        number: 11,
+        title: 'safe row',
+        html_url: 'https://github.com/levy-street/world-of-claudecraft/pull/11',
+        state: 'open',
+      },
+      {
+        number: 12,
+        title: 'private host',
+        html_url: 'https://git.internal.example/levy-street/world-of-claudecraft/pull/12',
+        state: 'open',
+      },
+      {
+        number: 13,
+        title: 'mismatched number',
+        html_url: 'https://github.com/levy-street/world-of-claudecraft/pull/99',
+        state: 'open',
+      },
+      null as never,
+    ]);
+    expect(entries).toHaveLength(1);
+    expect(entries[0].url).toBe('https://github.com/levy-street/world-of-claudecraft/pull/11');
   });
 });

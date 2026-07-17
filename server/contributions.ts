@@ -26,18 +26,56 @@ interface PullRequestLike {
   labels?: Array<{ name?: unknown }>;
 }
 
+const PUBLIC_PULL_PATH = /^\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+\/pull\/[1-9][0-9]*\/?$/;
+
+/**
+ * Accept only canonical, public GitHub pull-request links for the public feed.
+ *
+ * GitHub's API supplies `html_url`, but the feed is also a boundary for any
+ * cached or fallback rows. Keeping the URL check independent of the API shape
+ * prevents an upstream response from turning the public page into an arbitrary
+ * link redirector.
+ */
+export function isPublicContributionUrl(value: unknown, number?: number): value is string {
+  if (typeof value !== 'string') return false;
+  const raw = value.trim();
+  if (!raw) return false;
+  let parsed: URL;
+  try {
+    parsed = new URL(raw);
+  } catch {
+    return false;
+  }
+  if (
+    parsed.protocol !== 'https:' ||
+    parsed.hostname !== 'github.com' ||
+    parsed.port ||
+    parsed.username ||
+    parsed.password ||
+    parsed.search ||
+    parsed.hash ||
+    !PUBLIC_PULL_PATH.test(parsed.pathname)
+  )
+    return false;
+  if (number === undefined) return true;
+  const match = parsed.pathname.match(/\/pull\/([1-9][0-9]*)\/?$/);
+  return match !== null && Number(match[1]) === number;
+}
+
 export function normalizeUpstreamPulls(rows: readonly PullRequestLike[]): ContributionEntry[] {
   return rows
     .flatMap((row) => {
+      if (!row || typeof row !== 'object') return [];
       const number = Number(row.number);
       const title = typeof row.title === 'string' ? row.title.trim() : '';
-      const url = typeof row.html_url === 'string' ? row.html_url : '';
+      const url = typeof row.html_url === 'string' ? row.html_url.trim() : '';
       const merged = typeof row.merged_at === 'string' && row.merged_at.length > 0;
       const open = row.state === 'open';
       if (
         !Number.isSafeInteger(number) ||
+        number < 1 ||
         !title ||
-        !/^https:\/\/github\.com\//.test(url) ||
+        !isPublicContributionUrl(url, number) ||
         (!open && !merged)
       )
         return [];
