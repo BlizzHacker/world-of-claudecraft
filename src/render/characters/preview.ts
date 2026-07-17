@@ -16,6 +16,11 @@ import { CharacterVisual } from './visual';
 
 export type { PreviewAppearance } from './preview_appearance';
 
+/** Lifecycle exposed to the character-sheet item viewer.  The viewer remains
+ * useful when a Chronicle asset is still loading (or unavailable) because the
+ * 2D item icon stays mounted as the authoritative fallback. */
+export type ExternalPreviewState = 'idle' | 'loading' | 'ready' | 'error';
+
 const PREVIEW_ANIM_STATE = {
   speed: 0,
   moving: false,
@@ -53,6 +58,8 @@ export class CharacterPreview {
   private externalMixer: THREE.AnimationMixer | null = null;
   private externalLoadToken = 0;
   private externalModelUrl: string | null = null;
+  private externalState: ExternalPreviewState = 'idle';
+  private externalStateListener: ((state: ExternalPreviewState) => void) | null = null;
   private currentSkin = 0;
   // Identity of the appearance last requested via setAppearance, so an async mech
   // re-apply can bail out if a newer selection superseded it.
@@ -194,12 +201,21 @@ export class CharacterPreview {
     }
   }
 
-  setExternalModel(url: string): void {
+  setExternalModel(
+    url: string,
+    onState?: (state: ExternalPreviewState) => void,
+  ): void {
     if (this.destroyed) return;
-    if (!shouldReloadExternalPreview(this.externalModelUrl, url)) return;
+    this.externalStateListener = onState ?? null;
+    if (!shouldReloadExternalPreview(this.externalModelUrl, url)) {
+      onState?.(this.externalState);
+      return;
+    }
     const token = ++this.externalLoadToken;
     this.clearExternalModel(false);
     this.externalModelUrl = url;
+    this.externalState = 'loading';
+    this.externalStateListener?.('loading');
     if (this.currentVisual) {
       this.characterGroup.remove(this.currentVisual.root);
       this.currentVisual.dispose();
@@ -223,10 +239,14 @@ export class CharacterPreview {
         }
         this.characterGroup.rotation.y = 0;
         this.syncSize();
+        this.externalState = 'ready';
+        this.externalStateListener?.('ready');
       })
       .catch((err: unknown) => {
         if (token === this.externalLoadToken) {
           this.externalModelUrl = null;
+          this.externalState = 'error';
+          this.externalStateListener?.('error');
           console.error(`Failed to load external preview model ${url}:`, err);
         }
       });
@@ -465,6 +485,8 @@ export class CharacterPreview {
   private clearExternalModel(invalidateLoad = true): void {
     if (invalidateLoad) this.externalLoadToken++;
     this.externalModelUrl = null;
+    this.externalState = 'idle';
+    if (invalidateLoad) this.externalStateListener = null;
     if (this.externalMixer) {
       this.externalMixer.stopAllAction();
       this.externalMixer = null;

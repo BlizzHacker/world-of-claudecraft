@@ -19,4 +19,10 @@ describe('item_model_catalog', () => {
   it('returns null for items without an authored or canonical model', () => {
     expect(itemModelUrl({ id: 'mystery_trinket', kind: 'junk' })).toBeNull();
   });
+
+  it('rejects blank and cross-origin model metadata', () => {
+    expect(itemModelUrl({ id: 'blank', kind: 'armor', modelUrl: '  ' })).toBeNull();
+    expect(itemModelUrl({ id: 'remote', kind: 'armor', modelUrl: 'https://example.test/a.glb' })).toBeNull();
+    expect(itemModelUrl({ id: 'inline', kind: 'armor', modelUrl: 'data:model/gltf-binary;base64,AA==' })).toBeNull();
+  });
 });

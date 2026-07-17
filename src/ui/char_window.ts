@@ -257,6 +257,7 @@ export class CharWindow {
         ? `<section class="char-item-viewer" aria-labelledby="char-item-viewer-title">
         <div class="char-item-viewer-title" id="char-item-viewer-title">${esc(t('guide.models.title'))}: ${esc(itemDisplayName(selectedItem))}</div>
         <div id="char-item-model-preview" class="char-item-model-preview" role="img" tabindex="0" aria-label="${esc(t('guide.viewer.canvasLabel', { name: itemDisplayName(selectedItem) }))}"></div>
+        <div id="char-item-model-status" class="char-item-model-status" role="status" aria-live="polite">${esc(t('guide.viewer.loading'))}</div>
         <div class="char-item-viewer-hint">${esc(t('guide.viewer.dragHint'))}</div>
       </section>`
         : '';

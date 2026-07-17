@@ -23,7 +23,12 @@ function fakeWs() {
   return { sent, ws: { readyState: 1, send: (payload: string) => sent.push(JSON.parse(payload)) } };
 }
 
-function join(server: GameServer, ws: ReturnType<typeof fakeWs>, id: number, name: string): ClientSession {
+function join(
+  server: GameServer,
+  ws: ReturnType<typeof fakeWs>,
+  id: number,
+  name: string,
+): ClientSession {
   const session = server.join(ws.ws as any, id, id, name, 'warrior', null);
   if ('error' in session) throw new Error(session.error);
   session.blockListLoaded = true;
@@ -47,7 +52,9 @@ describe('activated town minigames', () => {
 
   it('runs RTS and zombie defense online without the preview override', () => {
     expect(MINIGAME_FEATURES.find((feature) => feature.id === 'town_rts')?.enabled).toBe(true);
-    expect(MINIGAME_FEATURES.find((feature) => feature.id === 'zombie_defense')?.enabled).toBe(true);
+    expect(MINIGAME_FEATURES.find((feature) => feature.id === 'zombie_defense')?.enabled).toBe(
+      true,
+    );
 
     const server = new GameServer();
     const owner = join(server, fakeWs(), 71, 'Rtsowner');

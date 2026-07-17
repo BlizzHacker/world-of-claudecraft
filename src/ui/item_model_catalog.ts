@@ -11,6 +11,22 @@ import type { ItemDef } from '../sim/types';
  * the in-world character attachment so the preview and equipped model cannot
  * drift. */
 export function itemModelUrl(item: Pick<ItemDef, 'id' | 'kind' | 'modelUrl'>): string | null {
-  if (item.modelUrl) return item.modelUrl;
+  const authored = authoredModelUrl(item.modelUrl);
+  if (authored) return authored;
   return item.kind === 'weapon' ? itemWeaponModelUrl(item.id) : null;
+}
+
+/**
+ * Item metadata is content-owned and can eventually be supplied by the
+ * Monster Chronicle catalog. Keep the viewer on same-origin GLB paths so a
+ * malformed or imported record cannot turn a character-sheet repaint into a
+ * cross-origin fetch. The resolver is deliberately synchronous; loading stays
+ * lazy in CharacterPreview.
+ */
+function authoredModelUrl(value: string | undefined): string | null {
+  if (typeof value !== 'string') return null;
+  const url = value.trim();
+  if (!url || /^(?:blob:|data:|https?:|javascript:)/i.test(url)) return null;
+  if (!/(?:^|\/)models\//.test(url) && !url.startsWith('/cr-realms/')) return null;
+  return url;
 }
