@@ -313,6 +313,7 @@ export const SIM_LAP_PHASES = [
   'instances',
   'delves',
   'valecup',
+  'minigame',
   'market',
   'postOffice',
   'delayedEv',

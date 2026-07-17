@@ -7,6 +7,15 @@ import { describe, expect, it } from 'vitest';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = (relative: string) => fs.readFileSync(path.join(root, relative), 'utf8');
+const bash =
+  process.platform === 'win32' && fs.existsSync('C:\\Program Files\\Git\\bin\\bash.exe')
+    ? 'C:\\Program Files\\Git\\bin\\bash.exe'
+    : 'bash';
+const stripWslNotice = (value: string) =>
+  value
+    .replace(/\0/g, '')
+    .replace(/Windows Subsystem for Linux has no installed distributions\.[\s\S]*?(?=\{|$)/i, '')
+    .trimStart();
 
 interface HookHandler {
   type: string;
@@ -69,17 +78,17 @@ describe('Codex project configuration', () => {
       fs.writeFileSync(agent, 'name = "clean"\n');
 
       const run = (active: boolean) =>
-        spawnSync('bash', [path.join(fixture, '.codex/hooks/qa-stop.sh')], {
+        spawnSync(bash, [path.join(fixture, '.codex/hooks/qa-stop.sh')], {
           cwd: fixture,
           input: JSON.stringify({ stop_hook_active: active }),
           encoding: 'utf8',
         });
-      expect(run(false).stdout).toBe('');
+      expect(stripWslNotice(run(false).stdout)).toBe('');
 
       fs.writeFileSync(agent, `name = "bad ${String.fromCodePoint(0x2014)} copy"\n`);
       const blocked = run(false);
       expect(blocked.status).toBe(0);
-      expect(JSON.parse(blocked.stdout)).toMatchObject({ decision: 'block' });
+      expect(JSON.parse(stripWslNotice(blocked.stdout))).toMatchObject({ decision: 'block' });
 
       fs.writeFileSync(agent, 'name = "clean"\n');
       fs.writeFileSync(path.join(fixture, 'src/helper.mts'), 'export const clean = true;\n');
@@ -103,7 +112,7 @@ describe('Codex project configuration', () => {
       fs.appendFileSync(path.join(fixture, 'src/helper.mts'), 'debugger;\n');
       const trackedBlocked = run(false);
       expect(trackedBlocked.status).toBe(0);
-      expect(JSON.parse(trackedBlocked.stdout).reason).toContain('leftover debugger');
+      expect(JSON.parse(stripWslNotice(trackedBlocked.stdout)).reason).toContain('leftover debugger');
       expect(run(true).stdout).toBe('');
     } finally {
       fs.rmSync(fixture, { recursive: true, force: true });
@@ -178,7 +187,7 @@ describe('Codex skills', () => {
     const descriptions = new Set<string>();
     for (const skill of skills) {
       const text = fs.readFileSync(path.join(skillsDir, skill, 'SKILL.md'), 'utf8');
-      const frontmatter = text.match(/^---\n([\s\S]*?)\n---\n/)?.[1];
+      const frontmatter = text.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n/)?.[1];
       if (!frontmatter) throw new Error(`${skill} has no YAML frontmatter`);
       const keys = [...frontmatter.matchAll(/^([a-z_]+):/gm)].map((match) => match[1]);
       expect(keys, skill).toEqual(['name', 'description']);

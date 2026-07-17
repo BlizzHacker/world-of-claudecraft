@@ -2451,6 +2451,9 @@
   body.mobile-touch #emote-editor,
   body.mobile-touch #arena-window,
   body.mobile-touch #valecup-window,
+  body.mobile-touch #zombie-defense-window,
+  body.mobile-touch #arcade-minigame-window,
+  body.mobile-touch #exchange-window,
   body.mobile-touch #delve-board,
   body.mobile-touch #leaderboard-window,
   body.mobile-touch #daily-rewards-window,
@@ -2542,7 +2545,10 @@
      480px desktop-centered box clipped the second column off-screen with no
      horizontal affordance). */
   body.mobile-touch #leaderboard-window,
-  body.mobile-touch #daily-rewards-window {
+  body.mobile-touch #daily-rewards-window,
+  body.mobile-touch #zombie-defense-window,
+  body.mobile-touch #arcade-minigame-window,
+  body.mobile-touch #exchange-window {
     max-height: calc(var(--app-vh) / var(--ui-scale, 1) - 20px);
   }
   /* Loot Settings is a small dialog; JS docks it beside the party frames on desktop

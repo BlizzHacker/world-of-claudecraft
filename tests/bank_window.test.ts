@@ -487,11 +487,12 @@ describe('bank_window: mobile pairing (hud.mobile.css)', () => {
     // uiScale 1 (halves gap above 1, overlap below 1; the 2026-07-07 QA finding).
     // The split must divide the shared --app-vw box by the live scale.
     const split = 'calc(var(--app-vw) / var(--ui-scale, 1) / 2)';
-    expect(mobileCss).toContain(
-      `body.mobile-touch.bank-open #bank-window {\n    left: max(10px, env(safe-area-inset-left));\n    right: ${split};`,
+    const normalized = mobileCss.replace(/\s+/g, ' ');
+    expect(normalized).toContain(
+      `body.mobile-touch.bank-open #bank-window { left: max(10px, env(safe-area-inset-left)); right: ${split};`,
     );
-    expect(mobileCss).toContain(
-      `body.mobile-touch.bank-open #bags {\n    left: ${split};\n    right: max(10px, env(safe-area-inset-right));`,
+    expect(normalized).toContain(
+      `body.mobile-touch.bank-open #bags { left: ${split}; right: max(10px, env(safe-area-inset-right));`,
     );
   });
 

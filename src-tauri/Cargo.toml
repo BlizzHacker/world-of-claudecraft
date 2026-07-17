@@ -1,6 +1,6 @@
 [package]
 name = "cryptic-realm"
-version = "0.11.0"
+version = "0.24.0-cr.1"
 description = "Cryptic Realm desktop shell"
 authors = ["BlizzHacker"]
 edition = "2021"

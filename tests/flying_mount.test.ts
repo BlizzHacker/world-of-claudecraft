@@ -6,8 +6,8 @@ import { terrainHeight } from '../src/sim/world';
 
 describe('authoritative flying mount motion', () => {
   it('leaves ground collision, climbs, and descends without gravity', () => {
-    const sim = new Sim({ seed: 42, playerClass: 'warrior', autoEquip: false });
-    const pid = sim.player.id;
+    const sim = new Sim({ seed: 42, playerClass: 'warrior', autoEquip: false, noPlayer: true });
+    const pid = sim.addPlayer('warrior', 'DuranceTester', { duranceTester: true });
     sim.addItem('mount_emerald_wyrm', 1, pid);
     sim.useItem('mount_emerald_wyrm', pid);
     const p = sim.player;
@@ -34,8 +34,8 @@ describe('authoritative flying mount motion', () => {
   });
 
   it('lands cleanly when the flying mount is toggled off', () => {
-    const sim = new Sim({ seed: 42, playerClass: 'warrior', autoEquip: false });
-    const pid = sim.player.id;
+    const sim = new Sim({ seed: 42, playerClass: 'warrior', autoEquip: false, noPlayer: true });
+    const pid = sim.addPlayer('warrior', 'DuranceTester', { duranceTester: true });
     sim.addItem('mount_emerald_wyrm', 1, pid);
     sim.useItem('mount_emerald_wyrm', pid);
     const meta = sim.players.get(pid);
