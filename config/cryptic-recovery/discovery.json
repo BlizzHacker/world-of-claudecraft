@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-17T12:18:12.147Z",
-  "candidateSha": "7462fda0db31404b0b13e1aa98e3834abf28ff0a",
+  "generatedAt": "2026-07-17T15:18:53.242Z",
+  "candidateSha": "48291b330df9e515f8cb0c66b2102d8ac97a73f8",
   "preservedBundle": {
     "path": "tmp/recovery/cryptic-realm-prod-lxc171-20260714-46be1494c.bundle",
     "refs": [
@@ -1935,11 +1935,6 @@
   "localRefs": [
     {
       "source": "local",
-      "ref": "refs/codex/turn-diffs/captures/1784287691143/a084e4d0-84cb-4b87-8a3d-5398873c4179/base",
-      "sha": "452c303d6eb0a5db972459e761b20f47ded74aed"
-    },
-    {
-      "source": "local",
       "ref": "refs/codex/turn-diffs/checkpoints/3554f32e158593593bfe3db779978a229c416e762cf9506b88e40d83696296a6/951c5d000f10e3b41d065facfa129afd346563359689594631865ed7952473f8/1783711527809/c6e8066d-d983-43a7-b5e8-201c0ab8cc90",
       "sha": "e1e6e9e0a8466a3541a0eefbabf0a1161b93c559"
     },
@@ -1950,8 +1945,8 @@
     },
     {
       "source": "local",
-      "ref": "refs/codex/turn-diffs/checkpoints/cb87b4abd157da7defc656e7199e3d1503de9e81bf853f71c7f0d335aa948288/23e66df708a2e60211c735c23ed7081ba764ac4121d9b9eff4d393c6d30ac130/1784287418951/684d860f-27ac-471f-b6a4-046daf6486c7",
-      "sha": "452c303d6eb0a5db972459e761b20f47ded74aed"
+      "ref": "refs/codex/turn-diffs/checkpoints/cb87b4abd157da7defc656e7199e3d1503de9e81bf853f71c7f0d335aa948288/02557793492e70c4ca0323950b333ca18270537323bdbedcc3dc7e52ce98610b/1784297762484/7424b1e9-d7af-407b-b002-bd2ed9d47e3a",
+      "sha": "41e556fc92cdba2ac344aea3c2316b49859e36fa"
     },
     {
       "source": "local",
@@ -1976,7 +1971,7 @@
     {
       "source": "local",
       "ref": "refs/heads/codex/cryptic-recovery-program",
-      "sha": "7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "sha": "48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "source": "local",
@@ -2276,7 +2271,7 @@
     {
       "source": "local",
       "ref": "refs/remotes/origin/codex/cryptic-recovery-program",
-      "sha": "683b08a63d41173e455bc011a005a91101053053"
+      "sha": "48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "source": "local",
@@ -4268,7 +4263,7 @@
     {
       "source": "deploy",
       "ref": "refs/heads/codex/cryptic-recovery-program",
-      "sha": "683b08a63d41173e455bc011a005a91101053053"
+      "sha": "48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "source": "deploy",
@@ -4413,7 +4408,7 @@
     {
       "source": "origin",
       "ref": "refs/heads/codex/cryptic-recovery-program",
-      "sha": "683b08a63d41173e455bc011a005a91101053053"
+      "sha": "48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "source": "origin",
@@ -5332,6 +5327,11 @@
     },
     {
       "source": "upstream",
+      "ref": "refs/heads/fix/deeds-retro-grants",
+      "sha": "270fc7efb56f81b2e68a7fd580dc4f4b076791ce"
+    },
+    {
+      "source": "upstream",
       "ref": "refs/heads/fix/desktop-community-links-stay-open",
       "sha": "d99ab2123bc9857e46134ed13fbc68770405bce2"
     },
@@ -5579,6 +5579,11 @@
       "source": "upstream",
       "ref": "refs/heads/fix/private-bot-detector-docker",
       "sha": "99b927f3ff7f709e155447fe7716d5af44dd53f9"
+    },
+    {
+      "source": "upstream",
+      "ref": "refs/heads/fix/professions-2-phase-01-qa",
+      "sha": "88a6e8fa5ec8cca0c2664320bb416f99a5e64423"
     },
     {
       "source": "upstream",
@@ -6013,7 +6018,7 @@
     {
       "source": "upstream",
       "ref": "refs/heads/release/v0.27.0",
-      "sha": "fbfa6bafddc0b1f7d6898692b61ad184eddef7f4"
+      "sha": "67a6b1bb4646503c181826ace6a9a9a8b40630d8"
     },
     {
       "source": "upstream",
@@ -6666,7 +6671,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "01415ef1df8134c486d509c7f6fdf410453411a9",
@@ -6679,13 +6684,14 @@
       "upstreamEquivalentSha": null,
       "upstreamEquivalenceRef": null,
       "sourceRefs": [
-        "refs/heads/codex/cryptic-recovery-program"
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
       ],
       "subject": "docs(recovery): record character sheet visual checkpoint",
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "01453d6203d7e096a0fb3d53c70bd1455fda01c6",
@@ -6705,7 +6711,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "0188472f2ddd0eea3ed5907282ab7f04e343a114",
@@ -6751,7 +6757,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "03d78dfeb4e0686c86aa806dea828aa4144b9742",
@@ -6824,7 +6830,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "064f206ac9a2bea55d93d1acaddea06b9a57177a",
@@ -6892,7 +6898,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "08c23bbc3ebfa48fe3a3d075e360f9bfc6800048",
@@ -6960,7 +6966,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "09581d908957647d12f8b3beb91c356084280076",
@@ -7046,7 +7052,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "09cc1af8a8a68aa1599e841959014334e461eab6",
@@ -7089,7 +7095,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "0a0fd22889709e96f575e671bb5c929ebd6eb457",
@@ -7158,7 +7164,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "0c1feed0bb6ee9475cf48b9c22cae19bc9b7ab41",
@@ -7197,7 +7203,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "0d71497c808d8785262f8cb4cf1bc73dd2335010",
@@ -7265,7 +7271,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "0d7e6d529b0f2e37e4aef09b04d3a848e1264e4c",
@@ -7348,7 +7354,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "0f1cfc8d0a673e81766ea1b2b93cd13c336a2940",
@@ -7416,7 +7422,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "0f623f6caa24833511eb86db5c4db9785185b636",
@@ -7485,7 +7491,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "0f690ca1191507bf47092981f9d2e191d9ee1f64",
@@ -7505,7 +7511,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "104ad0b4ecaf3478067f19e3c4edbd55ea9704e5",
@@ -7573,7 +7579,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "10b7df48ae0334e0760725c1cf2a420fa2e679eb",
@@ -7630,7 +7636,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "10ce4c37611da582f301377325498294a1f39ce6",
@@ -7685,7 +7691,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "11469d809ff922e5c52b7e1646714f98bdc05479",
@@ -7722,7 +7728,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "118cdcea7e7b4c07459e7ca61797b47f799bf6a9",
@@ -7791,7 +7797,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "1242e5d0008418e8c76c9ffdedcbaf0e45bc7998",
@@ -7856,7 +7862,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "127179ea903bc341e2c666b6cfbc4b982e856177",
@@ -7944,7 +7950,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "1376e009a5fbd580f3822822b515c810aefde991",
@@ -8013,7 +8019,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "145ee4ae7fba86d6245e32848cbc97441919ea70",
@@ -8066,7 +8072,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "14a401fb3ca3d984dc7ce93950bc42ef31de52a8",
@@ -8086,7 +8092,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "155ca6aa2cf9430044a1dd73ba6e6c2a814fcba8",
@@ -8141,7 +8147,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "1605048459644f8e512dca1138a59639afd4e2f3",
@@ -8180,7 +8186,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "16bea311ad29369d631e446f02a646840ca70720",
@@ -8193,13 +8199,14 @@
       "upstreamEquivalentSha": null,
       "upstreamEquivalenceRef": null,
       "sourceRefs": [
-        "refs/heads/codex/cryptic-recovery-program"
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
       ],
       "subject": "fix(exchange): restrict custody writes to exchange realm",
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "1762d71e56b2e21bf6c193f7128dedb4d548a645",
@@ -8315,7 +8322,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "1ab07dc7e158343e42bc268384f3967685c47d22",
@@ -8408,7 +8415,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "1c13f2ba82777dabd2f3d4551cf8627227a855d6",
@@ -8465,7 +8472,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "1ce2157fce436593cf15e3b5ac08e5cce03ef838",
@@ -8534,7 +8541,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "1cf48c489edb83bab8f0f19ed8c13bb7ca4ccfc8",
@@ -8596,7 +8603,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "1d73bd1e158979e0d03e25faa913960cd0ed5aac",
@@ -8658,7 +8665,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "1d8e9161a5facd780e6c02a0cc9392c44d23c8ff",
@@ -8678,7 +8685,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "1e5a73476e6d314135ba9fe4411b269cddf0ad3b",
@@ -8761,7 +8768,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "1f5bc8bca5fecb6a3a498921673c2d88c14f50e4",
@@ -8814,7 +8821,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "1fca55baf686f8870ee896c1e792ca86d93fa880",
@@ -8827,13 +8834,14 @@
       "upstreamEquivalentSha": null,
       "upstreamEquivalenceRef": null,
       "sourceRefs": [
-        "refs/heads/codex/cryptic-recovery-program"
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
       ],
       "subject": "fix(preview): reuse unchanged external item models",
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "2043e0352fe5bdffbbbf7f04e19dbaded9a8222a",
@@ -8901,7 +8909,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "20b961ed6688ca0f1316b787949c9801b2a1b78c",
@@ -8974,7 +8982,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "2124e0df5d1b5ce611aa77b4f68b7e085ab7acd9",
@@ -9020,7 +9028,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "21f84d2e950fea16339e595a0474cfbefd81c05e",
@@ -9088,7 +9096,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "22be85a53055846770086d3dc201b6fa1f576899",
@@ -9108,6 +9116,26 @@
       "disposition": "dead-letter",
       "owner": "recovery-audit",
       "evidence": "reachable from a preserved non-candidate ref; retained for audit and not promoted"
+    },
+    {
+      "sha": "22c61b0a7958c8500727ca10eb65a29354fc3161",
+      "parents": [
+        "7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      ],
+      "patchId": "35fbdf004605912cf54f72c67b93189bbeaab420",
+      "emptyPatchMarker": null,
+      "mergeMarker": null,
+      "upstreamEquivalentSha": null,
+      "upstreamEquivalenceRef": null,
+      "sourceRefs": [
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
+      ],
+      "subject": "fix(ops): redact recovery ledger metadata",
+      "author": "redacted",
+      "disposition": "recovered",
+      "owner": "recovery-audit",
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "2379ed0b9a3dd90934bc6c5f52c96401f9da0854",
@@ -9175,7 +9203,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "239acfa5c93a91fea61e90a7523fa1aa4afa3013",
@@ -9243,7 +9271,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "242ace908c8e3dd1267e2adf2cfca56811fe9503",
@@ -9312,7 +9340,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "24f82ca952395718744fe5be780979e79bd1c70c",
@@ -9374,7 +9402,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "266b80f32c408c3f798206e78ba29f12731ae11f",
@@ -9442,7 +9470,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "268580f208ad54b54dd627aa905f65edc22ea683",
@@ -9547,7 +9575,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "27c688f789d24d4b53289b94a10dd3faaf646a6e",
@@ -9677,7 +9705,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "29fd152910c777ecf7b6d736544e3a0a147c7fe4",
@@ -9745,7 +9773,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "2a11289328abf176e1e16d876ec02b1e8b94b67c",
@@ -9758,13 +9786,14 @@
       "upstreamEquivalentSha": null,
       "upstreamEquivalenceRef": null,
       "sourceRefs": [
-        "refs/heads/codex/cryptic-recovery-program"
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
       ],
       "subject": "feat(character): mirror currency and bag layout",
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "2a451885d93b2b5bda75c2f8a84dfadfb3a020ed",
@@ -9817,7 +9846,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "2a4e74622e68116648df79f9b77a82de702abd27",
@@ -9860,7 +9889,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "2a7e7954829df61d6d947158529f20525d5df898",
@@ -9915,7 +9944,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "2b3ef4db4a8d18c9ace632800aae24c5880c554d",
@@ -9977,7 +10006,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "2be2a253e47b70e301d2bb68f895d910f6c1ce7d",
@@ -10023,7 +10052,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "2cd4a03d5001e225993a077f86b2f1def1bd597a",
@@ -10085,7 +10114,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "2d35ec5eac315b908a8cc0024c5ed6b5d34520f1",
@@ -10154,7 +10183,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "2e0cdac46db74d85887b63ddeb4d46e5cb41ce3b",
@@ -10167,13 +10196,14 @@
       "upstreamEquivalentSha": null,
       "upstreamEquivalenceRef": null,
       "sourceRefs": [
-        "refs/heads/codex/cryptic-recovery-program"
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
       ],
       "subject": "fix(minigames): admit offline couch co-op invites",
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "2e42cd8ab7c1f2faa1cf274536a749ef985d3737",
@@ -10186,13 +10216,14 @@
       "upstreamEquivalentSha": null,
       "upstreamEquivalenceRef": null,
       "sourceRefs": [
-        "refs/heads/codex/cryptic-recovery-program"
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
       ],
       "subject": "feat(minigames): add default-off game domain foundations",
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "2e8fe180b554e6ea617ada16d13bc42409e8b259",
@@ -10212,7 +10243,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "2f09e2e35e67b9120d1baf09de6c26a215506ac6",
@@ -10280,7 +10311,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "2f268aad304f3649734e8bbee2b7ac08e61f173e",
@@ -10366,7 +10397,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "2fac1607353044f3c26a9b6fa4688cdcf3723eae",
@@ -10447,7 +10478,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "312c57835046a0827edbd05d89315e54bbff9da2",
@@ -10509,7 +10540,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "31fefc505d6482018c0138df30e6c26bce029bb9",
@@ -10578,7 +10609,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "321ac1368a106fec962627963910a4944bce84da",
@@ -10646,7 +10677,27 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
+    },
+    {
+      "sha": "329f086ce68725579d174f8ce9e28737270a8098",
+      "parents": [
+        "22c61b0a7958c8500727ca10eb65a29354fc3161"
+      ],
+      "patchId": "c51118b2f3ecb90e3effa7578f6da22d2801c45b",
+      "emptyPatchMarker": null,
+      "mergeMarker": null,
+      "upstreamEquivalentSha": null,
+      "upstreamEquivalenceRef": null,
+      "sourceRefs": [
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
+      ],
+      "subject": "docs(recovery): record manifest closeout",
+      "author": "redacted",
+      "disposition": "recovered",
+      "owner": "recovery-audit",
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "336bd403f257b1f0fcad0851282a1e4adecac1b6",
@@ -10715,7 +10766,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "33d5f4e6bd6e20d78a6e5c84c0c8f83549c9b7ca",
@@ -10768,7 +10819,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "343909a2f52aaf57d9dfe798e6db26e9000dbf05",
@@ -10824,7 +10875,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "35d7eab1a95ed4ad23c622e5e30b264b1d391e75",
@@ -10886,7 +10937,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "366f197df08836be4ed59316dc15d26ad50f4d7e",
@@ -10988,7 +11039,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "3a0ef5e88e4241da67bd8780a8e3bd478439ecd8",
@@ -11087,7 +11138,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "3b4fc0d96daf8f71ae587eca7629c646c366718f",
@@ -11100,13 +11151,14 @@
       "upstreamEquivalentSha": null,
       "upstreamEquivalenceRef": null,
       "sourceRefs": [
-        "refs/heads/codex/cryptic-recovery-program"
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
       ],
       "subject": "docs: add cryptic recovery implementation packet",
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "3b7ba226f418adf677ef6a38da608644432a10ad",
@@ -11168,7 +11220,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "3bd6557f73e4e34ada11a4af22c77113ea7235a9",
@@ -11237,7 +11289,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "3cddc7fa546976f99017a731c80d269618d009c3",
@@ -11257,7 +11309,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "3d067bb67cf944c7a95456d3af803c6cb7cd606f",
@@ -11310,7 +11362,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "3d49ca22275821c9a6557c7620c6f444489efbf5",
@@ -11363,7 +11415,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "3d7923e909bf259b9a6070099d18e466d6c1420f",
@@ -11409,7 +11461,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "3dd88cb7a99c77fdf3cbe041b350a6bc33dc2cdf",
@@ -11448,7 +11500,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "3ee607b47f42b16b27e7307e84af5251286fd49e",
@@ -11494,7 +11546,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "3fa83043f2eb4a62641875ce591b37977ee17a4a",
@@ -11563,7 +11615,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "3faf2942075cd71196a84800b7d3c1ea4cdc09d1",
@@ -11616,7 +11668,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "403def38766cd151d877ea7546348b526beb7ad1",
@@ -11636,7 +11688,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "4079ca414c8ad8b35b08723951e0f0b0c557d61a",
@@ -11684,7 +11736,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "41ef92eb2d5d0f251e1f1ba96e091e0f2fa310a1",
@@ -11737,7 +11789,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "4259998ac59170a895eab6532ab0dadb95ba18a4",
@@ -11799,7 +11851,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "42b29c3733a0fd7caca5e519819bd7ed32943510",
@@ -11819,7 +11871,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "43957788dded29da798d839c6f5773670ca769e3",
@@ -11900,7 +11952,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "454c9b747250d80997bcfaf3ef06656f30df42f8",
@@ -11923,6 +11975,26 @@
       "evidence": "reachable from a preserved non-candidate ref; retained for audit and not promoted"
     },
     {
+      "sha": "48291b330df9e515f8cb0c66b2102d8ac97a73f8",
+      "parents": [
+        "6fc6e56ee472030aa35b28729715633d400c0f05"
+      ],
+      "patchId": "0aaf8d857fa33ef7a2948e905df3d25e40b52cc6",
+      "emptyPatchMarker": null,
+      "mergeMarker": null,
+      "upstreamEquivalentSha": null,
+      "upstreamEquivalenceRef": null,
+      "sourceRefs": [
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
+      ],
+      "subject": "test(parity): refresh goldens after town defense board",
+      "author": "redacted",
+      "disposition": "recovered",
+      "owner": "recovery-audit",
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
+    },
+    {
       "sha": "4869459f27240a2d3fc3a82824bcb2e34ad06e8f",
       "parents": [
         "683b08a63d41173e455bc011a005a91101053053"
@@ -11933,13 +12005,14 @@
       "upstreamEquivalentSha": null,
       "upstreamEquivalenceRef": null,
       "sourceRefs": [
-        "refs/heads/codex/cryptic-recovery-program"
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
       ],
       "subject": "feat(racing): add deterministic kart race domain",
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "4896bd98274b830a3972da36213ec97200c09f06",
@@ -11959,7 +12032,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "496ea4e091ec04d47580f1ad19ead5bfc81eb632",
@@ -12036,7 +12109,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "4a0c121420f78d86ca8e072cf5a234e081399947",
@@ -12139,7 +12212,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "4bb64766b9c5a7865679319cdc4c298edb75b62f",
@@ -12207,7 +12280,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "4ed502df9be056c4c61f9c6697e33e4fdf76d31f",
@@ -12310,7 +12383,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "50ab30b5710f1e0cfec98b1b876903c20919c8f8",
@@ -12330,7 +12403,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "530bd0811dd67e31c072e529eb9a00db10816153",
@@ -12435,7 +12508,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "554f43f3e3784f9e4f807fcaad611d495c3af9b1",
@@ -12488,7 +12561,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "55532bef8643b75e01c9c992efc7303f79609cad",
@@ -12557,7 +12630,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "55cbfc4f9d590e17822654fd63e5a2d2d8b3f624",
@@ -12626,7 +12699,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "5719377401d9c11bebd7f721a62925ca76734731",
@@ -12694,7 +12767,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "580e9e251db07d1dae38f503d86a6aa70005501f",
@@ -12742,7 +12815,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "58b6980cd9a59835bff4374d920cc4ffbd8dcfac",
@@ -12810,7 +12883,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "59f6402ad2cd1aaa6354499d8abefb8ae2ffd5d1",
@@ -12823,13 +12896,14 @@
       "upstreamEquivalentSha": null,
       "upstreamEquivalenceRef": null,
       "sourceRefs": [
-        "refs/heads/codex/cryptic-recovery-program"
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
       ],
       "subject": "feat(minigames): expose rollout status through IWorld",
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "5a4dca2f09ad2d3d405bf2b378991322b20c16d2",
@@ -12891,7 +12965,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "5c233cfb0dd088a1beaabcffc37a7f4eec70e55f",
@@ -12977,7 +13051,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "5c5eaa3d547e1762ac66335d20a9e6885a0e79ea",
@@ -13039,7 +13113,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "5cc118942a84f76d5790e4da6beca983a0134761",
@@ -13077,7 +13151,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "5cfe20b1ed52918db018023e0b15061b3bb83cc2",
@@ -13130,7 +13204,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "5d641226bd58918765f52da0da88d4159433f76b",
@@ -13150,7 +13224,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "5eb1d81340eaf02bb1c42eb05ba202a84e418b37",
@@ -13170,7 +13244,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "5ef2225b0fb06caed7f8f3129c6b7a426c9d7ea5",
@@ -13263,7 +13337,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "5f92332947e7cd004b6f2d918491c441781a1be1",
@@ -13300,7 +13374,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "603471ab64524752b527d6f57573910ebadbb7b9",
@@ -13371,7 +13445,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "6042af04cf9d1ae39167a44e08b4184bfbd9974f",
@@ -13391,7 +13465,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "612c965b08fd2843ecc2f22ae3a9905ce9207a67",
@@ -13411,7 +13485,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "6168e72f40d5753c00bf975d24e2316978d3bbcd",
@@ -13479,7 +13553,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "619fe3cb6c1bf2f3c157f5f5aa5efe518ee1f199",
@@ -13589,7 +13663,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "62dfaa293431a0fd82721d174b48cf5e485b5cb2",
@@ -13609,7 +13683,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "63b493a3b5c765358fa1c4a1a2eb5d9ab95aa9f9",
@@ -13677,7 +13751,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "640f23991eb7352fe6a801bb9f36eb3a17205091",
@@ -13697,7 +13771,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "644401a61fb178f579bfc5ea9649303441e6b0f3",
@@ -13710,13 +13784,14 @@
       "upstreamEquivalentSha": null,
       "upstreamEquivalenceRef": null,
       "sourceRefs": [
-        "refs/heads/codex/cryptic-recovery-program"
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
       ],
       "subject": "test(net): cover minigame reconnect lifecycle",
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "65551c3364c893b57ab1c1557daecb58a323b24a",
@@ -13785,7 +13860,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "6584125a402a6c37659c1debaa44a4fde42e2dbb",
@@ -13798,13 +13873,14 @@
       "upstreamEquivalentSha": null,
       "upstreamEquivalenceRef": null,
       "sourceRefs": [
-        "refs/heads/codex/cryptic-recovery-program"
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
       ],
       "subject": "fix(render): normalize character UV merge attributes",
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "658a31a937a654236bb42ff2f8d90a7f1ccc9024",
@@ -13824,7 +13900,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "6667d48b7eb496c68bd8fd852aa80ba5c9d7fc30",
@@ -13837,13 +13913,14 @@
       "upstreamEquivalentSha": null,
       "upstreamEquivalenceRef": null,
       "sourceRefs": [
-        "refs/heads/codex/cryptic-recovery-program"
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
       ],
       "subject": "fix(exchange): apply shared item level requirements",
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "672e50cff496d9a58fec552a5ab5fa7802228f22",
@@ -13896,7 +13973,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "683b08a63d41173e455bc011a005a91101053053",
@@ -13916,7 +13993,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "693698d35a00b5ab98865f30672318980b9fa3c0",
@@ -13929,13 +14006,14 @@
       "upstreamEquivalentSha": null,
       "upstreamEquivalenceRef": null,
       "sourceRefs": [
-        "refs/heads/codex/cryptic-recovery-program"
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
       ],
       "subject": "feat(minigames): persist zombie defense state",
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "694c02a36551b7a1aeda69df9376b25f87c668b5",
@@ -13955,7 +14033,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "69580667abfc90383b639009c2eba431eabbaf36",
@@ -14023,7 +14101,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "697c2781dee86783a61a2773d813254f5fd24ccc",
@@ -14085,7 +14163,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "6a210301fed139da042a4ff2abc9301e04607365",
@@ -14140,7 +14218,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "6a54fbb60b5e187703170932d10c64316532ee93",
@@ -14177,7 +14255,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "6b24fb6d4d89c162e8f6aa8b7b800551aaf091d5",
@@ -14245,7 +14323,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "6c1a21a631751002281a97247c25bf077c3a05d7",
@@ -14307,7 +14385,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "6c6ddeec238eae5d46d4ed0641b8f777ad36bf5f",
@@ -14376,7 +14454,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "6d766770327b207c473ef9c9314bb8fa17945528",
@@ -14419,7 +14497,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "6e20ac2ab899fe1555b3408356acd971dfd1d383",
@@ -14487,7 +14565,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "6e9c4d7dda542efde113df623d587f41b9a49283",
@@ -14500,13 +14578,14 @@
       "upstreamEquivalentSha": null,
       "upstreamEquivalenceRef": null,
       "sourceRefs": [
-        "refs/heads/codex/cryptic-recovery-program"
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
       ],
       "subject": "feat(minigames): add deterministic session lifecycle",
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "6fac98f6d5a845d63da9476831dbc32b92179895",
@@ -14568,7 +14647,27 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
+    },
+    {
+      "sha": "6fc6e56ee472030aa35b28729715633d400c0f05",
+      "parents": [
+        "84631746b9779be2e2ac24d979e363dc4966c7f6"
+      ],
+      "patchId": "32e31a56f2b806323541c3e657ea681436f7309e",
+      "emptyPatchMarker": null,
+      "mergeMarker": null,
+      "upstreamEquivalentSha": null,
+      "upstreamEquivalenceRef": null,
+      "sourceRefs": [
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
+      ],
+      "subject": "fix(gate): align mobile mounts and release checks",
+      "author": "redacted",
+      "disposition": "recovered",
+      "owner": "recovery-audit",
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "70530b7e02844c54c9304c60c67d627028eca994",
@@ -14621,7 +14720,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "71edaed56aede4b37d37ad0f0d3fa60d417ba407",
@@ -14664,7 +14763,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "71efd5d92a29bb417c3d393e83a5da15a05defd9",
@@ -14722,7 +14821,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "7223b20f5e6592128cba6f5c5ac2d37b62780cd4",
@@ -14808,7 +14907,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "72269e09ec39d67e91e0aee54540d673ad759465",
@@ -14828,7 +14927,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "723c3dadb12742deb07698198a610c868035928a",
@@ -14871,7 +14970,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "736b4694e4403057f74e64ec4f02f071cb166fc9",
@@ -14944,7 +15043,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "7462fda0db31404b0b13e1aa98e3834abf28ff0a",
@@ -14957,13 +15056,14 @@
       "upstreamEquivalentSha": null,
       "upstreamEquivalenceRef": null,
       "sourceRefs": [
-        "refs/heads/codex/cryptic-recovery-program"
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
       ],
       "subject": "feat(ops): close recovery discovery ledger",
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "74f0728c5672f53b9e6d5c8df5063c99b0ae21bb",
@@ -15025,7 +15125,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "74fd85e8733e0efe29ccef4a9b21ab4927e1ad52",
@@ -15082,7 +15182,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "750575af0e5588cbecebee6814ab8d1ed2495435",
@@ -15170,7 +15270,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "752fd7ff5441c219b6f0d603133e08cff4927c03",
@@ -15190,7 +15290,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "75340b5b54503315f3ae4604d127c32b35220c08",
@@ -15203,13 +15303,14 @@
       "upstreamEquivalentSha": null,
       "upstreamEquivalenceRef": null,
       "sourceRefs": [
-        "refs/heads/codex/cryptic-recovery-program"
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
       ],
       "subject": "docs(recovery): record character viewer renderer fix",
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "75f54db9d7cb3b7217507c5b29fa223bdb6cb37d",
@@ -15298,7 +15399,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "7652b48f4ab1b88abdac119f20fb577f39a332e2",
@@ -15358,7 +15459,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "771e2bb7882c92391b8a8ddfb74629b5b17f25b5",
@@ -15426,7 +15527,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "77c815b1af1fb8d1f5d795710dd2400b23eebbae",
@@ -15488,7 +15589,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "77c9ae2ad2abd66a038c8681a391f9a26befef49",
@@ -15565,7 +15666,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "78b6bc5133f200a8f4b153befbf365534b799d4d",
@@ -15627,7 +15728,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "78eb76772bf4574c23c760776a881a0040a5d34e",
@@ -15683,7 +15784,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "79d99d7d562b83c955e7175e3473a3793dcb64be",
@@ -15774,7 +15875,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "7b7dbf8c077245f6d927a0a64907ca710aae37b8",
@@ -15847,13 +15948,14 @@
       "upstreamEquivalentSha": null,
       "upstreamEquivalenceRef": null,
       "sourceRefs": [
-        "refs/heads/codex/cryptic-recovery-program"
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
       ],
       "subject": "feat(minigames): persist town and housing state",
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "7d22fc884e8128361ab703b3fd6db0148b6b848c",
@@ -15915,7 +16017,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "7d64f5bdc846502d6c55afd47e00661146a00d5d",
@@ -15977,7 +16079,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "7ef8dd273f66d7e4fef0e247fdfe5527b319eccd",
@@ -16064,7 +16166,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "7f34f231e30954a07b59206a0ed7cdf4d887e51f",
@@ -16133,7 +16235,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "7fac9294fc5e65281a953bf57f6fe734a2c8bf7f",
@@ -16146,13 +16248,14 @@
       "upstreamEquivalentSha": null,
       "upstreamEquivalenceRef": null,
       "sourceRefs": [
-        "refs/heads/codex/cryptic-recovery-program"
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
       ],
       "subject": "docs(recovery): record minigame lifecycle checkpoint",
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "807404ff2d839d28b9e57646820682aeca937e5e",
@@ -16220,7 +16323,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "80d9c00bb4737a1390c5e798cb4c8f2f49eef14d",
@@ -16240,7 +16343,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "80efefb63a941b9f83d01ed51de87c9f65eb0139",
@@ -16293,7 +16396,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "80f089b7eb7c8f885f71aa14448d3cc73dfdcf25",
@@ -16332,7 +16435,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "81730ccde8d0f66e72ef1eaa4b82e459dcc36d55",
@@ -16423,7 +16526,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "82ceeafb45bcb4721a9b20fa56c67bcfa1c56300",
@@ -16508,7 +16611,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "845bcae1c2be22b496555bec853160e0e567d520",
@@ -16573,7 +16676,27 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
+    },
+    {
+      "sha": "84631746b9779be2e2ac24d979e363dc4966c7f6",
+      "parents": [
+        "e88fab22198763d7b977eb456348ea3e71b28f20"
+      ],
+      "patchId": "177dc56fe730c89e268dcf17f6c4df6a3994272c",
+      "emptyPatchMarker": null,
+      "mergeMarker": null,
+      "upstreamEquivalentSha": null,
+      "upstreamEquivalenceRef": null,
+      "sourceRefs": [
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
+      ],
+      "subject": "fix(contributions): avoid stale PR receipts",
+      "author": "redacted",
+      "disposition": "recovered",
+      "owner": "recovery-audit",
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "857c9610f923c4417bc4f512113028e72078dc89",
@@ -16641,7 +16764,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "85feea6a75b9d1cd18ec8c8a1ac76359763723ab",
@@ -16703,7 +16826,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "86400a655c21492acc37d2150717e3364527ec1b",
@@ -16723,7 +16846,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "871b9397470114fda1dc28e03403b7508dcc3b37",
@@ -16791,7 +16914,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "877b05ac5351ffc354b0d5c29e42a9ecef072e6e",
@@ -16865,7 +16988,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "87aec8b215a59ed353e695dcf8775b3d01440d3b",
@@ -16978,7 +17101,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "8a06152901b6656437c988e9dd7471560cab2cac",
@@ -16991,13 +17114,14 @@
       "upstreamEquivalentSha": null,
       "upstreamEquivalenceRef": null,
       "sourceRefs": [
-        "refs/heads/codex/cryptic-recovery-program"
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
       ],
       "subject": "test(architecture): register exchange view core",
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "8ab5176f2de8c0b9fffcf03343aa4aee2f8170e3",
@@ -17065,7 +17189,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "8b5b075dfc318839200dcf4b1ce4f0282655a075",
@@ -17085,7 +17209,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "8bc89c17d0b5b9536a773730c3a83d7a66a4f7c5",
@@ -17098,13 +17222,14 @@
       "upstreamEquivalentSha": null,
       "upstreamEquivalenceRef": null,
       "sourceRefs": [
-        "refs/heads/codex/cryptic-recovery-program"
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
       ],
       "subject": "fix(minigames): sync online preview availability",
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "8bda3a937632796af6d42063f6a7d4d540e077a2",
@@ -17124,7 +17249,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "8e413a3780098eab5f01552701d5134bff4264f9",
@@ -17220,7 +17345,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "8eff25864e6e2fce506afc025ec3cf423dec7724",
@@ -17277,7 +17402,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "8f1e1877770f93c30844282c797b43c3160518a8",
@@ -17330,7 +17455,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "8f536d449e62678fe28fd5330514fed2182847b3",
@@ -17398,7 +17523,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "8fa6d6e98987ac9efb25abbcdbbd36354df16508",
@@ -17486,7 +17611,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "917ea1dbab5d8efa3aa93869682317d50ec42d1b",
@@ -17543,7 +17668,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "924828b0f1be350c46b30a3cab54fb199737c27a",
@@ -17605,7 +17730,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "9302639ef91ad6a5030664de78776abc7674ab99",
@@ -17696,7 +17821,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "955f44553e5f11c133c17fb91d85b6bd58ff28ab",
@@ -17765,7 +17890,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "95857a6bb78ca03bd6528740a98f7240708bde04",
@@ -17802,7 +17927,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "958dbf29c355becb506d15c92c45ed1351b63f32",
@@ -17845,7 +17970,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "95e96c70f54f6c96d0c1b35927ccb4160a9164eb",
@@ -17970,7 +18095,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "971133c02148ddc36105414c300d2bf64c24c628",
@@ -18039,7 +18164,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "97412b458907755f166b41f5d8fa5b48d45c052a",
@@ -18072,13 +18197,14 @@
       "upstreamEquivalentSha": null,
       "upstreamEquivalenceRef": null,
       "sourceRefs": [
-        "refs/heads/codex/cryptic-recovery-program"
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
       ],
       "subject": "feat(minigames): add deterministic solo practice opponents",
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "97ea36f46a2b8d60c4003bcb3f369d506abb52a7",
@@ -18147,7 +18273,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "98fe04207f086db25142b987986b354e53c972a4",
@@ -18167,7 +18293,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "9a29f26b8194c0e67496f997c92aa28696f8bb63",
@@ -18232,7 +18358,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "9aea8a04ee69187708489b8964d311beeaa41f2a",
@@ -18294,7 +18420,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "9beaab7305be0f8d2837b21a142560ddebb87b83",
@@ -18362,7 +18488,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "9ce59c6fc34e90e028908713aefa29f684320a30",
@@ -18438,7 +18564,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "9d61ce9be125a3e02279a8b9c8c7cf402e466a85",
@@ -18451,13 +18577,14 @@
       "upstreamEquivalentSha": null,
       "upstreamEquivalenceRef": null,
       "sourceRefs": [
-        "refs/heads/codex/cryptic-recovery-program"
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
       ],
       "subject": "feat(minigames): wire arcade preview modes through hosts",
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "9d69bb1c5d4a6f571ce0cd1d700b6353561376d3",
@@ -18546,7 +18673,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "9dc48dccd6b3ce89283af6d24fb8d8a0e82b87bc",
@@ -18615,7 +18742,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "9ddf991bc46815062a026c702d2cb1fe14fc729c",
@@ -18635,7 +18762,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "9eec22836af73cbd7e84d5a7147e9b4de42d4dc7",
@@ -18721,7 +18848,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "9ef470607961d12c655a76ad9c17dac466d99de1",
@@ -18804,7 +18931,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "a11b81742dcd6a0905f30b5bc99986dcdd1ac94a",
@@ -18872,7 +18999,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "a17c1dfb4690473659470c12a350743e9bc4aada",
@@ -18892,7 +19019,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "a20ee09086998cc7d96f78bb210daada593ff3f4",
@@ -18960,7 +19087,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "a29d9b8535dff44378b7ad53285023314c34f07e",
@@ -19022,7 +19149,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "a2b5a3c5b0df9aae1d4c06f0038ff76d7e8e470e",
@@ -19091,7 +19218,27 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
+    },
+    {
+      "sha": "a2fc29e6b8f6700f302a28425901bdb6df3529ba",
+      "parents": [
+        "329f086ce68725579d174f8ce9e28737270a8098"
+      ],
+      "patchId": "c43cf348a394e8860fbfda4145f062d7bb046229",
+      "emptyPatchMarker": null,
+      "mergeMarker": null,
+      "upstreamEquivalentSha": null,
+      "upstreamEquivalenceRef": null,
+      "sourceRefs": [
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
+      ],
+      "subject": "fix(branding): keep Cryptic logo across realm chrome",
+      "author": "redacted",
+      "disposition": "recovered",
+      "owner": "recovery-audit",
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "a38f9dc7a1e57cd68d168a4a498ea819dd2c4da3",
@@ -19104,13 +19251,14 @@
       "upstreamEquivalentSha": null,
       "upstreamEquivalenceRef": null,
       "sourceRefs": [
-        "refs/heads/codex/cryptic-recovery-program"
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
       ],
       "subject": "feat(net): add default-off minigame lifecycle wire",
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "a418348db68db9c6e9a25f4ee203c2df07d90e96",
@@ -19193,7 +19341,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "a4bb3263c385e246390766d725d9b1b00759e9b9",
@@ -19258,7 +19406,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "a507b27b047013e3c907c2187ad9165246bd1099",
@@ -19327,7 +19475,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "a56856954ec6265eee57bc8f41f030d2d2e05e60",
@@ -19347,7 +19495,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "a5ee10e4419553f51dc94b0b2d1a68a6c244e700",
@@ -19409,7 +19557,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "a61a3e63bd17a5369a18c11f47b48f2db67b9a85",
@@ -19462,7 +19610,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "a6712c08a41925e9997cc175de549d12038f288e",
@@ -19616,7 +19764,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "a8f7d789efc658214cab47e88102370c2f6c038f",
@@ -19672,13 +19820,14 @@
       "upstreamEquivalentSha": null,
       "upstreamEquivalenceRef": null,
       "sourceRefs": [
-        "refs/heads/codex/cryptic-recovery-program"
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
       ],
       "subject": "fix(net): validate minigame session roster inputs",
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "aa065ee4b04f8b733a975fc0e5cf6c5b842cc4cc",
@@ -19691,13 +19840,14 @@
       "upstreamEquivalentSha": null,
       "upstreamEquivalenceRef": null,
       "sourceRefs": [
-        "refs/heads/codex/cryptic-recovery-program"
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
       ],
       "subject": "docs: record zombie persistence and preview gate",
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "aa37b01dfabdc2c3abd0e33d725153a7fb229021",
@@ -19787,7 +19937,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "aa9b58f6f2e5beebbc07eebf1d4fd0e66b75dc8e",
@@ -19884,7 +20034,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "ab3c4c92b2452db2a6867a2c8d29a702a6286623",
@@ -19973,7 +20123,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "abd468dfd9ae533c828dbdb81ab3e9834a8afaa9",
@@ -20030,7 +20180,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "abf1e1d62a1ffe401d549b3613896b2f457c2e15",
@@ -20087,7 +20237,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "abf9c074ec4714506aed35d2b9ac58456327ab1f",
@@ -20155,7 +20305,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "acb84e6578769ad0c2251d62198aef21fa6bbb78",
@@ -20224,7 +20374,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "acebb14a12904f0e16d0cf84b04bc06de296dcc6",
@@ -20272,7 +20422,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "ae2311f75907aa149e663cfde3f69acecc1b1ea9",
@@ -20315,7 +20465,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "af1d36558d8978948bfc75cb5fdbb4fc912e0ae2",
@@ -20347,13 +20497,14 @@
       "upstreamEquivalentSha": null,
       "upstreamEquivalenceRef": null,
       "sourceRefs": [
-        "refs/heads/codex/cryptic-recovery-program"
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
       ],
       "subject": "feat(minigames): add Eastbrook zombie defense preview slice",
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "b2449c6dd6eece96303933b04b00f0f42dadd424",
@@ -20373,7 +20524,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "b24aac11e1fc4df15abde78cb3a8743e3bb3d5cd",
@@ -20435,7 +20586,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "b301439d6ebf960146c4a42c8af5599ff22c2414",
@@ -20455,7 +20606,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "b3359cbba476912d38ac79ca67cda0df0a52d74a",
@@ -20524,7 +20675,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "b6454e909ab4f4b931ec3ed2fb8b2b488b9fa11a",
@@ -20592,7 +20743,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "b6669708f4c0a2f2cc2047fb6e768e50a80dae2b",
@@ -20660,7 +20811,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "b6d4e1d76cdb771a71e80d761329303b149803ee",
@@ -20736,7 +20887,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "b6d715e325f8edf535a01481553fc9b2f0d96da7",
@@ -20827,7 +20978,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "b78ed50ec0b49404f0155fbc9facb73247a8bd4d",
@@ -20889,7 +21040,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "b7be5b818af844509925300e3a5b70c7df5c561d",
@@ -20909,7 +21060,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "b846e967073e9a53d4ab5c4b0ee43530eef0e171",
@@ -20929,7 +21080,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "b8ab6e960f6665beb481f03643d93d95aeb0b338",
@@ -20991,7 +21142,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "b9f3a53cbb223008f55719a71e39bcb273b09349",
@@ -21048,7 +21199,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "b9f3adfa26666eaff761547d78b2053299033285",
@@ -21116,7 +21267,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "bae6708ffbeae18f1b5e8da70d3d801405bc4d57",
@@ -21204,7 +21355,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "bc9a0f3660188da9857fbcc9ce0f0a33626f0cd0",
@@ -21272,7 +21423,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "be2f30d58e7864d492d027434d9a933b737bc0fe",
@@ -21325,7 +21476,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "bf1efb4666e22b618f88073509c0074ce0f31330",
@@ -21369,7 +21520,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "bf4e57469ca4477c4c491e2347c13c78664429f3",
@@ -21437,7 +21588,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "c090e16456eca473437eaa4eed43e6b2d9f96920",
@@ -21505,7 +21656,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "c0b438ebcfa27ab66459bd82a54ba467ed1ff576",
@@ -21562,7 +21713,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "c24378488579f0c0b6dea99027c902809f32771f",
@@ -21599,7 +21750,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "c259299ed0a2270d74eb8287603b32c773bd96e9",
@@ -21654,7 +21805,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "c3d76256f2c09e693e5f48ccf0978c5027159fc2",
@@ -21697,7 +21848,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "c3e36ccdb7381845a1a9a040b5d99c1679906b51",
@@ -21837,7 +21988,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "c4c370c15a58bef00dda5047574394b7826f392c",
@@ -21905,7 +22056,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "c546e6ef8b9b7f08ac397ecb5daa873215c9a177",
@@ -21925,7 +22076,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "c5502b5ac5b2f002477275c89ab2c665534898fa",
@@ -21993,7 +22144,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "c56f52d74c24c1c9ed0982ba5dcc9ead763fbed8",
@@ -22103,7 +22254,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "c6f63c41e77bdd3304b9ee1cc2dd9fd4950cfad9",
@@ -22156,7 +22307,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "c77acff23f99eaad8826b9fe8c3cf96a7be2d17f",
@@ -22218,7 +22369,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "c7bedf5edba6eb43c54f1b6d43a7a87535da99ac",
@@ -22231,13 +22382,14 @@
       "upstreamEquivalentSha": null,
       "upstreamEquivalenceRef": null,
       "sourceRefs": [
-        "refs/heads/codex/cryptic-recovery-program"
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
       ],
       "subject": "feat(ops): add cryptic recovery manifest guards",
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "c7c97fc6543087add13918b4de9dc71fc5bb61fe",
@@ -22257,7 +22409,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "c7f94b88d2a61d952d721694984427698650ed89",
@@ -22347,7 +22499,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "c8a3a794a25c128bb44d30cfbe21b36a4867d71e",
@@ -22428,7 +22580,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "ca20e46ffd67f01915de5250aa0ff3f0a59ae2d9",
@@ -22518,7 +22670,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "cb9c8fb19773e397f02f3f9e210a26a5c2e8bfb4",
@@ -22586,7 +22738,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "cbb388375e64329b04c446e357e1bf8f70c124b6",
@@ -22643,7 +22795,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "cc0c45d5b9c44ebc18db7d619277fda7da7fbaf6",
@@ -22708,7 +22860,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "cc7c2abd87b1baaf6a95a73895f0dd6d0b5023e2",
@@ -22800,7 +22952,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "ceea5d02185e2b4b8b0ba07a0b996f8585a98bd3",
@@ -22865,7 +23017,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "ceea628cd8c591f9315f76c3da9ddfc0e73dad0b",
@@ -22933,7 +23085,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "d09356868fb38055369861044355d400e5f70a0c",
@@ -22953,7 +23105,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "d0c3f6c21a7c5c12fecebc206a1c2f7ce8c3e9a7",
@@ -23022,7 +23174,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "d0e398543a9226493f6f31c226c332d47fc7b9d1",
@@ -23146,7 +23298,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "d233966eb52f952a8f80644e7af0961d9349b80b",
@@ -23214,7 +23366,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "d2c71fe8a49609cba1c847490496cfcd1bace118",
@@ -23283,7 +23435,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "d33b4e07776c49d7bb53ba3342c670531aa015f6",
@@ -23336,7 +23488,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "d46a57f781ab72278209cb76f9b547d0f7ee2338",
@@ -23356,7 +23508,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "d5381a31eaf96d6752b66b88dcb674f1f21266cf",
@@ -23444,7 +23596,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "d79b507e359b4363f48058a5c53629192f9d2e7a",
@@ -23506,7 +23658,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "d923651b07451fc46834a62e658182f2396637a0",
@@ -23571,7 +23723,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "d9cd89898b76648d80b8b8aaa4ba4c28cd451c63",
@@ -23639,7 +23791,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "d9e903f3911a7623ca977e1139e9232b11374860",
@@ -23697,7 +23849,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "da08055b5de00d4e40ece12a180d9823962a9121",
@@ -23762,7 +23914,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "da291f4ddaf0a722d4429fdf3b22c916712ae590",
@@ -23844,7 +23996,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "db66fa1a79f83765477ed7e31f64ce56697617e6",
@@ -23922,7 +24074,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "dbc7836443666cf79862aec7a6f564b3d24f24ed",
@@ -23977,7 +24129,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "dc688104da22770719ce619be81c87eb79a3cbc3",
@@ -23997,7 +24149,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "dca79c19d37dc0354a59dd63d7caa20a93240a6d",
@@ -24050,7 +24202,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "dd86cf6512149dce7ed4c9fcc3c623860e13e340",
@@ -24118,7 +24270,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "ddb68fbe47c3716eb310f0cf0dfd1f5017a3984f",
@@ -24180,7 +24332,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "de7cf09e05814e2cdc34d0f7f1cb387ed45130a8",
@@ -24223,7 +24375,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "dfafbdc145d2ed72c8589822258452e7d8dd57cd",
@@ -24263,7 +24415,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "e118d6c4fc318faf6a887fc1bfe7185b27034436",
@@ -24332,7 +24484,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "e129e09cda7b7512b479f93f5b5f450d3bd7967b",
@@ -24352,7 +24504,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "e19bb12ded615540156ac1f5a38563b6d94cd8e3",
@@ -24442,7 +24594,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "e407e74dff3a383f2be701be1bff37b30807ff89",
@@ -24510,7 +24662,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "e4390f56670ae3e6b648fc55410a704574e31357",
@@ -24530,7 +24682,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "e46f846321f4fb8c82e52c2c3bb0f316d73de638",
@@ -24598,7 +24750,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "e4d410a9a5c507e0a1b00ecff1d031d545c30368",
@@ -24653,7 +24805,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "e5408979809bafcc532f1ac22ae7ea8075862872",
@@ -24715,7 +24867,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "e54c28e6066134af733907ca57e0c6bf8bf0a0aa",
@@ -24784,7 +24936,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "e68850dda5dba2eb019ddc8abf54afc935735d53",
@@ -24804,7 +24956,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "e6c0eb9c927df2595d906015ef7efebbe8c537e1",
@@ -24872,7 +25024,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "e6f7c15e4ad9a4db5ec8e202090810fcb275aa77",
@@ -24947,7 +25099,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "e79d320a5dc8bba814708cd54fd2b66a97d76132",
@@ -24967,6 +25119,26 @@
       "disposition": "dead-letter",
       "owner": "recovery-audit",
       "evidence": "reachable from a preserved non-candidate ref; retained for audit and not promoted"
+    },
+    {
+      "sha": "e88fab22198763d7b977eb456348ea3e71b28f20",
+      "parents": [
+        "a2fc29e6b8f6700f302a28425901bdb6df3529ba"
+      ],
+      "patchId": "47d20de5a73f86c06946f981be85282e6424b8ba",
+      "emptyPatchMarker": null,
+      "mergeMarker": null,
+      "upstreamEquivalentSha": null,
+      "upstreamEquivalenceRef": null,
+      "sourceRefs": [
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
+      ],
+      "subject": "fix(contributions): reject unsafe public PR links",
+      "author": "redacted",
+      "disposition": "recovered",
+      "owner": "recovery-audit",
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "e8c9d20eb66dffa929c7e66534c0a4638a9ba567",
@@ -25026,7 +25198,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "e9b28ce30d40b2402378c288bc8aeda945c44a93",
@@ -25094,7 +25266,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "e9f45c2defe288f1527d28e235f515b069748329",
@@ -25162,7 +25334,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "ea114541e2ec808ff525374ac4a08e0411560b6e",
@@ -25230,7 +25402,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "ea1d9c3cf995760c1dfea84e42fe16ca04e81b44",
@@ -25292,7 +25464,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "eaa854e9d69a849a5685ea12b67603b88f2ad8b4",
@@ -25339,7 +25511,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "eb41e3118b54f9d5db2b2b4831c1b09f42d58bff",
@@ -25392,7 +25564,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "eb861c37f2140c6b58ab8a14d03e65cacb1d7e71",
@@ -25454,7 +25626,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "ec10ddfbf19716a5cf33cd1476afab9138f7c6e2",
@@ -25507,7 +25679,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "ee325471fa5d359293472013442a9a99517a51be",
@@ -25575,7 +25747,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "eea560dfd51cb27ca12e02c3e125442f3ce01a3f",
@@ -25644,7 +25816,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "eee60bcfb742315bf8d8d9acd96e890ea385692c",
@@ -25664,7 +25836,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "ef0846559802794f3ff427b384e4675eeb8ff414",
@@ -25684,7 +25856,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "ef29ba947dc727d709e5e7b7b79d3f6281b513b3",
@@ -25745,13 +25917,14 @@
       "upstreamEquivalentSha": null,
       "upstreamEquivalenceRef": null,
       "sourceRefs": [
-        "refs/heads/codex/cryptic-recovery-program"
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
       ],
       "subject": "docs(recovery): record minigame wire checkpoint",
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "f0fbdb22405c5ef85c85f3a7b625a55c78da31d1",
@@ -25804,7 +25977,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "f167781f458d858ca5cf8d18b9b163cab604e35b",
@@ -25864,7 +26037,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "f2ae56fb3bbb0268daaf6613bc6fbd98a56b2d5d",
@@ -25884,7 +26057,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "f46200c9a915184cccfc95153c013e96aeff6b18",
@@ -25958,7 +26131,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "f56151b9783224d5b9a2d09147354876c50eed02",
@@ -26026,7 +26199,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "f57160d1ce886a735fa4065a9c23ee95ad547215",
@@ -26094,7 +26267,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "f5e8ff9e17a96f9ba461f36cd81fd678d8a9b98c",
@@ -26107,13 +26280,14 @@
       "upstreamEquivalentSha": null,
       "upstreamEquivalenceRef": null,
       "sourceRefs": [
-        "refs/heads/codex/cryptic-recovery-program"
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
       ],
       "subject": "docs: record latest recovery checkpoints",
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "f644d0d90dc8067b45c2b5048afa141fd99f2563",
@@ -26150,7 +26324,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "f72719fbe2957b45643afd29116c83c3db601e6f",
@@ -26218,7 +26392,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "f84a1e0ac42d8c66fbaeb0317c8a3b6932a91c0c",
@@ -26286,7 +26460,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "f88da0cfb26310825ad112619a4e4577e4378a09",
@@ -26348,7 +26522,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "f8a4551c1008aaed5e0cd20fe0dd6bab81a55b64",
@@ -26361,13 +26535,14 @@
       "upstreamEquivalentSha": null,
       "upstreamEquivalenceRef": null,
       "sourceRefs": [
-        "refs/heads/codex/cryptic-recovery-program"
+        "refs/heads/codex/cryptic-recovery-program",
+        "refs/remotes/origin/codex/cryptic-recovery-program"
       ],
       "subject": "docs: record minigame persistence checkpoint",
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "f8cc5b1e718d176b3ea42e5afbb28c125976211d",
@@ -26436,7 +26611,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "f9240a0830f1ce9dee6b2db6e8c231fbc4d23175",
@@ -26505,7 +26680,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "f9431a4f9ea23849b95c03471e477ed97957b80b",
@@ -26551,7 +26726,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "f990c15dcd2d36a5a12d5a0df4d8b26ee51e26b6",
@@ -26571,7 +26746,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "fa287ffa6b8c95607d441c9f559b92659f8a55f8",
@@ -26649,7 +26824,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "faf9dad1e848fc828bf0f8b6f82147ef08b2bb61",
@@ -26740,7 +26915,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "fbbf74eb56f58efa29209b0770a870b097c6da17",
@@ -26808,7 +26983,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "fc6a19ca1014b766cccd2cdca9749e19156b6139",
@@ -26873,7 +27048,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "fd5321489c03b155eedbc5c0efc70b7d6d32e15c",
@@ -26919,7 +27094,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "fd5f0b686958bd53270590bb911b4762dfad34ca",
@@ -26960,7 +27135,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "feaa25b4d34924d5456a00e8277b9da966f7ed16",
@@ -27043,7 +27218,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     },
     {
       "sha": "ff16ae1c7128ae9aa346c0817cdb49fa8b602824",
@@ -27066,7 +27241,7 @@
       "author": "redacted",
       "disposition": "recovered",
       "owner": "recovery-audit",
-      "evidence": "reachable from candidate 7462fda0db31404b0b13e1aa98e3834abf28ff0a"
+      "evidence": "reachable from candidate 48291b330df9e515f8cb0c66b2102d8ac97a73f8"
     }
   ],
   "classificationPolicy": {
@@ -27075,5 +27250,5 @@
     "deadLetter": "commit is preserved by another local ref but is not part of the candidate recovery line",
     "merge": "merge commits carry an explicit merge marker instead of a synthetic patch-id"
   },
-  "digest": "daf376a48055de86229adc32b81e3cb1e1b8edcc69955511d37dcd719c0dc9e0"
+  "digest": "20ebaad981e08e3da3be7c5fa4cc136a48d86d940be4ed892c5f4118981a16a5"
 }
