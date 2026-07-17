@@ -271,7 +271,12 @@ import { advancePendingProjectiles, type PendingProjectile } from './projectile_
 import { sanitizeRemovedZone1Content } from './removed_zone1_content';
 import { Rng } from './rng';
 import {
+  addArcadePlayer,
+  arcadeFinished,
+  arcadeWinnerPids,
+  buildArcadeRts,
   abortMinigameSession,
+  createArcadeState,
   buildZombieDefenseTower,
   claimMinigameReward,
   createMinigameSession,
@@ -282,15 +287,25 @@ import {
   minigameAvailable,
   setMinigameConnection,
   setMinigameReady,
+  setArcadeBrawlerInput,
+  setArcadeRaceInput,
+  stepArcadeState,
   startZombieDefenseWave,
   stepMinigameSession,
   stepZombieDefenseSession,
+  trainArcadeRts,
+  placeArcadeHousing,
 } from './minigames';
 import type {
+  ArcadeState,
   MinigameFeatureId,
   MinigameSessionState,
   ZombieDefenseSessionState,
 } from './minigames';
+import type { BrawlerInput } from './minigames/brawler';
+import type { RaceInput } from './racing';
+import type { HousingPiece } from './minigames/housing';
+import type { RtsStructureKind, RtsUnitKind } from './minigames/rts';
 import type { TowerKind } from './minigames/zombie_defense';
 import { persistedResource } from './serialize_resource';
 import { createSimContext, type SimContext, type SimContextHost } from './sim_context';
@@ -836,6 +851,8 @@ export interface PlayerMeta {
   // devCommands): a stationary player you can target and whisper to exercise social
   // features offline; a whisper to it auto-replies. Runtime-only, never serialized.
   isDevBot?: boolean;
+  /** Host-verified DuranceTester QA entitlement; runtime-only and never persisted. */
+  isDuranceTester?: boolean;
   skin: number; // appearance index into the render SKINS[player_<cls>]; persisted, synced
   skinCatalog: SkinCatalog;
   // Cosmetic skin-select event: the rank rolled when the event token was used,
@@ -1238,6 +1255,7 @@ export class Sim {
   // and by GameServer online. ClientWorld mirrors the resulting snapshots.
   minigameSession: MinigameSessionState | null = null;
   minigameZombieState: ZombieDefenseSessionState | null = null;
+  minigameArcadeState: ArcadeState | null = null;
   // `world` stays optional (a custom map for play-test, else undefined for the
   // built-in world); everything else is defaulted to a concrete value below.
   cfg: Required<Omit<SimConfig, 'noPlayer' | 'world' | 'perfLap'>> &
@@ -1896,6 +1914,7 @@ export class Sim {
       name,
       ladder: opts?.ladder ?? false,
       hardcore: opts?.hardcore ?? false,
+      isDuranceTester: opts?.duranceTester === true,
       skin: savedState?.skin ?? 0,
       skinCatalog: savedState?.skinCatalog === 'mech' ? 'mech' : 'class',
       pendingSkinRank: savedState?.pendingSkinRank ?? null,
@@ -3508,13 +3527,23 @@ export class Sim {
     this.minigameSession = session;
     this.minigameZombieState =
       kind === 'zombie_defense' ? createZombieDefenseSession(session.id, session.seed) : null;
+    this.minigameArcadeState =
+      kind === 'zombie_defense'
+        ? null
+        : createArcadeState(kind, session.seed, session.players.map((player) => player.pid));
   }
 
   minigameJoin(sessionId: number, playerId = this.playerId): void {
     const current = this.minigameSession;
     if (!current || current.id !== sessionId) return;
     const mutation = joinMinigameSession(current, playerId);
-    if (mutation.ok) this.minigameSession = mutation.state;
+    if (mutation.ok) {
+      this.minigameSession = mutation.state;
+      if (this.minigameArcadeState) {
+        const player = mutation.state.players.find((entry) => entry.pid === playerId);
+        if (player) addArcadePlayer(this.minigameArcadeState, playerId);
+      }
+    }
   }
 
   minigameInvite(_targetPlayerId: number): void {
@@ -3567,11 +3596,49 @@ export class Sim {
     );
   }
 
+  minigameRaceInput(input: RaceInput): void {
+    const current = this.minigameSession;
+    if (!current || current.kind !== 'racing' || !this.minigameArcadeState) return;
+    setArcadeRaceInput(this.minigameArcadeState, this.playerId, input);
+  }
+
+  minigameBrawlerInput(input: BrawlerInput): void {
+    const current = this.minigameSession;
+    if (!current || current.kind !== 'brawler' || !this.minigameArcadeState) return;
+    setArcadeBrawlerInput(this.minigameArcadeState, this.playerId, input);
+  }
+
+  minigameRtsBuild(kind: RtsStructureKind, x: number, z: number): void {
+    const current = this.minigameSession;
+    if (!current || current.kind !== 'town_rts' || !this.minigameArcadeState) return;
+    buildArcadeRts(this.minigameArcadeState, this.playerId, kind, x, z);
+  }
+
+  minigameRtsTrain(kind: RtsUnitKind): void {
+    const current = this.minigameSession;
+    if (!current || current.kind !== 'town_rts' || !this.minigameArcadeState) return;
+    trainArcadeRts(this.minigameArcadeState, this.playerId, kind);
+  }
+
+  minigameHousingPlace(piece: HousingPiece): void {
+    const current = this.minigameSession;
+    if (!current || current.kind !== 'housing' || !this.minigameArcadeState) return;
+    placeArcadeHousing(this.minigameArcadeState, this.playerId, piece);
+  }
+
   private updateMinigame(): void {
     const current = this.minigameSession;
     if (!current) return;
     const stepped = stepMinigameSession(current);
     this.minigameSession = stepped;
+    if (stepped.kind !== 'zombie_defense' && this.minigameArcadeState) {
+      if (stepped.phase === 'active') stepArcadeState(this.minigameArcadeState);
+      if (arcadeFinished(this.minigameArcadeState)) {
+        const mutation = finishMinigameSession(stepped, arcadeWinnerPids(this.minigameArcadeState));
+        if (mutation.ok) this.minigameSession = mutation.state;
+      }
+      return;
+    }
     if (stepped.kind !== 'zombie_defense' || !this.minigameZombieState) return;
     if (stepped.phase === 'active') stepZombieDefenseSession(this.minigameZombieState);
     if (this.minigameZombieState.state.status === 'won') {

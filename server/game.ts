@@ -27,7 +27,13 @@ import {
 import type { PickAction } from '../src/sim/lockpick';
 import { sanitizeMarketQuery } from '../src/sim/market_query';
 import {
+  addArcadePlayer,
+  arcadeFinished,
+  arcadeWinnerPids,
+  arcadeWire,
+  buildArcadeRts,
   abortMinigameSession,
+  createArcadeState,
   buildZombieDefenseTower,
   claimMinigameReward,
   createMinigameSession,
@@ -38,14 +44,24 @@ import {
   minigameAvailable,
   setMinigameConnection,
   setMinigameReady,
+  setArcadeBrawlerInput,
+  setArcadeRaceInput,
   startZombieDefenseWave,
+  stepArcadeState,
   stepMinigameSession,
   stepZombieDefenseSession,
   type MinigameFeatureId,
   type MinigameSessionState,
+  type ArcadeState,
   type ZombieDefenseSessionState,
+  trainArcadeRts,
+  placeArcadeHousing,
 } from '../src/sim/minigames';
 import type { TowerKind } from '../src/sim/minigames/zombie_defense';
+import type { RaceInput } from '../src/sim/racing';
+import type { BrawlerInput } from '../src/sim/minigames/brawler';
+import type { HousingPiece } from '../src/sim/minigames/housing';
+import type { RtsStructureKind, RtsUnitKind } from '../src/sim/minigames/rts';
 import { parseMoveInputFrame } from '../src/sim/move_input';
 import { realmClassVisualKey } from '../src/sim/realms/class_visuals';
 import { isRealmId, setRealmHostEnv } from '../src/sim/realms/registry';
@@ -1091,6 +1107,7 @@ export class GameServer {
   // the persistence checkpoint lands.
   private readonly minigameSessions = new Map<number, MinigameSessionState>();
   private readonly zombieDefenseSessions = new Map<number, ZombieDefenseSessionState>();
+  private readonly arcadeSessions = new Map<number, ArcadeState>();
   private nextMinigameSessionId = 1;
   private readonly minigamePreview = process.env.ALLOW_MINIGAME_PREVIEW === '1';
 
@@ -4260,6 +4277,11 @@ export class GameServer {
       case 'mg_claim':
       case 'mg_zombie_start':
       case 'mg_zombie_build':
+      case 'mg_race_input':
+      case 'mg_brawler_input':
+      case 'mg_rts_build':
+      case 'mg_rts_train':
+      case 'mg_housing_place':
         this.dispatchMinigameCommand(session, msg);
         break;
       case 'placeProp':
@@ -4310,6 +4332,8 @@ export class GameServer {
         this.minigameSessions.set(id, state);
         if (kind === 'zombie_defense') {
           this.zombieDefenseSessions.set(id, createZombieDefenseSession(id, seed));
+        } else {
+          this.arcadeSessions.set(id, createArcadeState(kind, seed, [pid]));
         }
         return;
       }
@@ -4321,7 +4345,11 @@ export class GameServer {
         const current = this.minigameSessions.get(sessionId);
         if (!current || !minigameAvailable(current.kind, this.minigamePreview)) return;
         const mutation = joinMinigameSession(current, pid);
-        if (mutation.ok) this.minigameSessions.set(current.id, mutation.state);
+        if (mutation.ok) {
+          this.minigameSessions.set(current.id, mutation.state);
+          const arcade = this.arcadeSessions.get(current.id);
+          if (arcade) addArcadePlayer(arcade, pid);
+        }
         return;
       }
       case 'mg_invite': {
@@ -4376,6 +4404,77 @@ export class GameServer {
         if (mutation.ok) this.minigameSessions.set(current.id, mutation.state);
         return;
       }
+      case 'mg_race_input': {
+        const current = this.minigameSessionForPid(pid);
+        const arcade = current ? this.arcadeSessions.get(current.id) : undefined;
+        if (!current || current.kind !== 'racing' || current.phase !== 'active' || !arcade) return;
+        const rawThrottle = msg.throttle;
+        const rawSteer = msg.steer;
+        const throttle = typeof rawThrottle === 'number' && Number.isFinite(rawThrottle) ? rawThrottle : 0;
+        const steer = typeof rawSteer === 'number' && Number.isFinite(rawSteer) ? rawSteer : 0;
+        const input: RaceInput = {
+          throttle: Math.max(-1, Math.min(1, throttle)),
+          steer: Math.max(-1, Math.min(1, steer)),
+          drift: msg.drift === true,
+          useItem: msg.useItem === true,
+          recover: msg.recover === true,
+        };
+        setArcadeRaceInput(arcade, pid, input);
+        return;
+      }
+      case 'mg_brawler_input': {
+        const current = this.minigameSessionForPid(pid);
+        const arcade = current ? this.arcadeSessions.get(current.id) : undefined;
+        if (!current || current.kind !== 'brawler' || current.phase !== 'active' || !arcade) return;
+        const move = msg.move === -1 || msg.move === 1 ? msg.move : 0;
+        setArcadeBrawlerInput(arcade, pid, { move, jump: msg.jump === true, attack: msg.attack === true });
+        return;
+      }
+      case 'mg_rts_build': {
+        const current = this.minigameSessionForPid(pid);
+        const arcade = current ? this.arcadeSessions.get(current.id) : undefined;
+        const x = typeof msg.x === 'number' ? msg.x : NaN;
+        const z = typeof msg.z === 'number' ? msg.z : NaN;
+        if (
+          !current || current.kind !== 'town_rts' || current.phase !== 'active' || !arcade ||
+          (msg.kind !== 'wall' && msg.kind !== 'farm' && msg.kind !== 'barracks' && msg.kind !== 'tower') ||
+          !Number.isInteger(x) || !Number.isInteger(z) || Math.abs(x) > 8 || Math.abs(z) > 8
+        ) return;
+        buildArcadeRts(arcade, pid, msg.kind as RtsStructureKind, x, z);
+        return;
+      }
+      case 'mg_rts_train': {
+        const current = this.minigameSessionForPid(pid);
+        const arcade = current ? this.arcadeSessions.get(current.id) : undefined;
+        if (!current || current.kind !== 'town_rts' || current.phase !== 'active' || !arcade) return;
+        if (msg.kind !== 'worker' && msg.kind !== 'guard' && msg.kind !== 'ranger') return;
+        trainArcadeRts(arcade, pid, msg.kind as RtsUnitKind);
+        return;
+      }
+      case 'mg_housing_place': {
+        const current = this.minigameSessionForPid(pid);
+        const arcade = current ? this.arcadeSessions.get(current.id) : undefined;
+        const piece = msg.piece;
+        if (
+          !current || current.kind !== 'housing' || current.phase !== 'active' || !arcade ||
+          !piece || typeof piece !== 'object'
+        ) return;
+        const candidate = piece as HousingPiece;
+        if (
+          typeof candidate.id !== 'string' || candidate.id.length < 1 || candidate.id.length > 64 ||
+          typeof candidate.kind !== 'string' || candidate.kind.length < 1 || candidate.kind.length > 32 ||
+          !candidate.cell || !Number.isInteger(candidate.cell.x) || !Number.isInteger(candidate.cell.z) ||
+          Math.abs(candidate.cell.x) > 8 || Math.abs(candidate.cell.z) > 8 ||
+          (candidate.rotation !== 0 && candidate.rotation !== 90 && candidate.rotation !== 180 && candidate.rotation !== 270)
+        ) return;
+        placeArcadeHousing(arcade, pid, {
+          id: candidate.id,
+          kind: candidate.kind,
+          cell: { x: candidate.cell.x, z: candidate.cell.z },
+          rotation: candidate.rotation,
+        });
+        return;
+      }
       case 'mg_zombie_start': {
         const current = this.minigameSessionForPid(pid);
         const zombie = current ? this.zombieDefenseSessions.get(current.id) : undefined;
@@ -4428,10 +4527,10 @@ export class GameServer {
   }
 
   private minigameSessionForPid(pid: number): MinigameSessionState | null {
-    for (const state of this.minigameSessions.values()) {
-      if (state.players.some((player) => player.pid === pid)) return state;
-    }
-    return null;
+    const states = [...this.minigameSessions.values()]
+      .filter((state) => state.players.some((player) => player.pid === pid))
+      .sort((a, b) => b.id - a.id);
+    return states.find((state) => state.phase !== 'finished' && state.phase !== 'aborted') ?? states[0] ?? null;
   }
 
   private setMinigamePlayerConnection(pid: number, connected: boolean): void {
@@ -4446,7 +4545,19 @@ export class GameServer {
       if (current.phase === 'finished' || current.phase === 'aborted') continue;
       const stepped = stepMinigameSession(current);
       this.minigameSessions.set(id, stepped);
-      if (stepped.kind !== 'zombie_defense') continue;
+      if (stepped.kind !== 'zombie_defense') {
+        const arcade = this.arcadeSessions.get(id);
+        if (!arcade || stepped.phase !== 'active') continue;
+        stepArcadeState(arcade);
+        if (arcadeFinished(arcade)) {
+          const winners = arcadeWinnerPids(arcade);
+          if (winners.length > 0) {
+            const mutation = finishMinigameSession(stepped, winners);
+            if (mutation.ok) this.minigameSessions.set(id, mutation.state);
+          }
+        }
+        continue;
+      }
       const zombie = this.zombieDefenseSessions.get(id);
       if (!zombie || stepped.phase !== 'active') continue;
       stepZombieDefenseSession(zombie);
@@ -4731,6 +4842,7 @@ export class GameServer {
     maybe('weapon', p.weapon);
     maybe('party', this.partyWire(anchorSession.pid));
     maybe('mgz', this.minigameZombieWire(anchorSession.pid));
+    maybe('mga', arcadeWire(this.arcadeSessions.get(this.minigameSessionForPid(anchorSession.pid)?.id ?? -1) ?? null));
     maybe('marks', this.markersWire(anchorSession.pid));
     maybe('trade', this.tradeWire(anchorSession.pid));
     maybe('duel', this.duelWire(anchorSession.pid));

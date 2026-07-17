@@ -207,6 +207,10 @@ export function useItem(ctx: SimContext, itemId: string, pid?: number): ItemUseR
       ctx.error(meta.entityId, "You can't mount in combat.");
       return;
     }
+    if (!meta.isDuranceTester && !meetsLevelRequirement(p.level, def)) {
+      ctx.error(meta.entityId, `You must be level ${requiredLevelFor(def)} to ride that mount.`);
+      return;
+    }
     // swap: only one mount up at a time
     for (let i = p.auras.length - 1; i >= 0; i--) {
       if (p.auras[i].id.startsWith(MOUNT_AURA_PREFIX)) {

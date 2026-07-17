@@ -8845,7 +8845,7 @@
     font-variant-numeric: tabular-nums;
     color: #fff;
   }
-  @media (max-width: 700px) {
+@media (max-width: 700px) {
     .yumi-hud {
       gap: 8px;
       padding: 4px 8px;
@@ -10021,4 +10021,35 @@
       background: Mark;
     }
   }
+}
+
+.arcade-window {
+  position: fixed;
+  inset: 7vh 50% auto auto;
+  transform: translateX(50%);
+  width: min(640px, calc(100vw - 24px));
+  z-index: 1300;
+  padding: 14px;
+  background: rgba(8, 13, 24, 0.97);
+  border: 1px solid #8c6b2a;
+  box-shadow: 0 16px 60px rgba(0, 0, 0, 0.55);
+}
+.arcade-window__header,
+.arcade-window__lobby,
+.arcade-window__modes { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.arcade-window__header { justify-content: space-between; }
+.arcade-window__header h2 { margin: 0; color: #f1c75b; }
+.arcade-window__modes { margin: 8px 0; }
+.arcade-window__modes button.active { outline: 2px solid #f1c75b; }
+.arcade-window__lobby { margin-bottom: 8px; }
+.arcade-window__lobby label { display: inline-flex; align-items: center; gap: 5px; }
+.arcade-window__lobby input { width: 80px; }
+.arcade-window__status { color: #b8e37c; }
+.arcade-window__roster { flex: 1 1 100%; color: #aeb9cb; }
+.arcade-window__canvas { display: block; width: 100%; height: auto; min-height: 180px; background: #07111f; border: 1px solid #334866; }
+.arcade-window__controls,
+.arcade-window__notice { margin: 8px 0 0; color: #aeb9cb; }
+@media (max-width: 700px) {
+  .arcade-window { inset: 3vh 12px auto; transform: none; width: auto; }
+  .arcade-window__canvas { min-height: 160px; }
 }

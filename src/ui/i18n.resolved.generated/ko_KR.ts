@@ -1625,6 +1625,32 @@ export const ko_KR: EnTranslations = {
       "notAtHub": "그것을 제작하려면 필요한 레벨로 제작 거점에 있어야 합니다.",
       "throttled": "너무 빨리 제작하고 있습니다. 잠시 후 다시 시도하세요.",
       "recipeNotLearned": "아직 그 제작법을 배우지 않았습니다."
+    },
+    "arcade": {
+      "title": "Realm Games",
+      "close": "Close games",
+      "choose": "Choose a game",
+      "racing": "Cryptic Circuit",
+      "brawler": "Four-player Brawl",
+      "townRts": "Eastbrook Command",
+      "housing": "Eastbrook Homes",
+      "create": "Create session",
+      "join": "Join by code",
+      "code": "Session code",
+      "invite": "Invite party member",
+      "inviteHint": "Enter a party member player ID.",
+      "ready": "Ready",
+      "unready": "Unready",
+      "start": "Start",
+      "abort": "Leave session",
+      "waiting": "Waiting for players",
+      "active": "Game active",
+      "finished": "Game finished",
+      "unavailable": "This game is not enabled on this server.",
+      "controls": "Controls: arrows/WASD to steer or move, Space to drift or jump, J/K to attack, E to use an item.",
+      "build": "Build",
+      "train": "Train guard",
+      "place": "Place piece"
     }
   },
   "apiError": {

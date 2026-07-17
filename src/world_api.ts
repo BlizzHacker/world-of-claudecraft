@@ -124,7 +124,7 @@ export type { RaidLockout } from './world_api/dungeons';
 export type { MailInfo, MailKindView, MailMessageView } from './world_api/mail';
 export type { MarketInfo, MarketListingView } from './world_api/market';
 export type { IWorldMinigames } from './world_api/minigames';
-export type { MinigameSessionState, ZombieDefenseSessionState } from './sim/minigames';
+export type { ArcadeState, ArcadeWireState, MinigameFeatureId, MinigameSessionState, ZombieDefenseSessionState } from './sim/minigames';
 export type { TowerKind } from './sim/minigames/zombie_defense';
 export type { PartyInfo, PartyMemberAura, PartyMemberInfo } from './world_api/party';
 export type { CraftResultView, PlayerProfessionsView, RecipeDef } from './world_api/professions';
@@ -366,6 +366,11 @@ export const COMMAND_NAMES = [
   'mg_claim',
   'mg_zombie_start',
   'mg_zombie_build',
+  'mg_race_input',
+  'mg_brawler_input',
+  'mg_rts_build',
+  'mg_rts_train',
+  'mg_housing_place',
 ] as const;
 
 // The union both the send path (`online.ts`) and the dispatch switch

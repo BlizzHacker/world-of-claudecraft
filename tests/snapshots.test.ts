@@ -25,6 +25,7 @@ import { Sim } from '../src/sim/sim';
 import { type Aura, DT, type PlayerClass } from '../src/sim/types';
 import { terrainHeight } from '../src/sim/world';
 import { createMinigameSession } from '../src/sim/minigames/session';
+import { createArcadeState } from '../src/sim/minigames/arcade';
 import { createZombieDefenseSession } from '../src/sim/minigames/zombie_session';
 import { absorbTotal } from '../src/ui/absorb_bar';
 import { auraEffectDescriptor } from '../src/ui/aura_effect';
@@ -2014,9 +2015,9 @@ describe('lockpick view rebuilds from events on the online client', () => {
 // while the prior decoded value is preserved.
 // ---------------------------------------------------------------------------
 
-// The pinned set of the 37 `maybe(...)` delta keys, sorted. Cross-checked below
+// The pinned set of the 38 `maybe(...)` delta keys, sorted. Cross-checked below
 // against the live `maybe(...)` calls scraped from server/game.ts source, so a
-// 37th unregistered delta key reddens this gate.
+// 38th unregistered delta key reddens this gate.
 const ALL_DELTA_KEYS = [
   'arena',
   'bags',
@@ -2042,6 +2043,7 @@ const ALL_DELTA_KEYS = [
   'mailU',
   'market',
   'marks',
+  'mga',
   'mgz',
   'milestones',
   'party',
@@ -2088,6 +2090,7 @@ const TERSE_TO_IWORLD: Record<string, string> = {
   mailU: 'mailUnread',
   market: 'marketInfo',
   marks: 'markers',
+  mga: 'minigameArcadeState',
   milestones: 'unlockedMilestones',
   mres: 'maxResource',
   party: 'partyInfo',
@@ -2157,6 +2160,10 @@ function dirtyEveryDeltaField(): {
   (server as any).zombieDefenseSessions.set(
     minigame.id,
     createZombieDefenseSession(minigame.id, minigame.seed),
+  );
+  (server as any).arcadeSessions.set(
+    minigame.id,
+    createArcadeState('racing', 4242, [lp]),
   );
 
   // Poke the encoder's exact sources for the mutually-exclusive cases.
@@ -2372,9 +2379,9 @@ describe('full self-state snapshot delta fixture', () => {
 });
 
 describe('delta-key contract pins (anti-drift)', () => {
-  it('ALL_DELTA_KEYS contains exactly 37 unique keys in sorted order', () => {
-    expect(ALL_DELTA_KEYS).toHaveLength(37);
-    expect(new Set(ALL_DELTA_KEYS).size).toBe(37);
+  it('ALL_DELTA_KEYS contains exactly 38 unique keys in sorted order', () => {
+    expect(ALL_DELTA_KEYS).toHaveLength(38);
+    expect(new Set(ALL_DELTA_KEYS).size).toBe(38);
     expect([...ALL_DELTA_KEYS]).toEqual([...ALL_DELTA_KEYS].sort());
   });
 
@@ -2386,7 +2393,7 @@ describe('delta-key contract pins (anti-drift)', () => {
     const scraped = new Set<string>();
     for (let m = re.exec(src); m !== null; m = re.exec(src)) scraped.add(m[1]);
     expect(scraped.has('lockouts')).toBe(true); // the multi-line call IS captured
-    expect(scraped.size).toBe(37);
+    expect(scraped.size).toBe(38);
     expect([...scraped].sort()).toEqual([...ALL_DELTA_KEYS].sort());
   });
 

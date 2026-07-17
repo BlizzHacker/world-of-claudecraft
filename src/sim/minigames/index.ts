@@ -2,6 +2,23 @@
 // until their IWorld, server wire, persistence, and dedicated QA checkpoints land.
 
 export { createRaceSession, defaultRaceTrack, stepRace } from '../racing';
+export {
+  ARCADE_STATE_VERSION,
+  addArcadePlayer,
+  arcadeWire,
+  arcadeFinished,
+  arcadeKindSupported,
+  arcadeWinnerPids,
+  buildArcadeRts,
+  cloneArcadeState,
+  createArcadeState,
+  placeArcadeHousing,
+  setArcadeBrawlerInput,
+  setArcadeRaceInput,
+  stepArcadeState,
+  trainArcadeRts,
+} from './arcade';
+export type { ArcadeState, ArcadeWireState } from './arcade';
 export { BRAWLER_VERSION, createBrawlerState, stepBrawler } from './brawler';
 export { createHousingLot, HOUSING_VERSION, placeHousingPiece } from './housing';
 export { createRtsCampaign, RTS_VERSION, stepRtsCampaign } from './rts';
@@ -46,11 +63,11 @@ export interface MinigameFeatureStatus {
 }
 
 export const MINIGAME_FEATURES: readonly MinigameFeatureStatus[] = [
-  { id: 'racing', enabled: false, checkpoint: 'phase-33-racing-qa' },
-  { id: 'brawler', enabled: false, checkpoint: 'phase-36-brawler-qa' },
-  { id: 'town_rts', enabled: false, checkpoint: 'phase-39-rts-qa' },
+  { id: 'racing', enabled: false, preview: true, checkpoint: 'phase-33-racing-qa' },
+  { id: 'brawler', enabled: false, preview: true, checkpoint: 'phase-36-brawler-qa' },
+  { id: 'town_rts', enabled: false, preview: true, checkpoint: 'phase-39-rts-qa' },
   { id: 'zombie_defense', enabled: false, preview: true, checkpoint: 'phase-41-zombie-qa' },
-  { id: 'housing', enabled: false, checkpoint: 'phase-44-housing-qa' },
+  { id: 'housing', enabled: false, preview: true, checkpoint: 'phase-44-housing-qa' },
 ];
 
 export function minigameEnabled(id: MinigameFeatureId): boolean {

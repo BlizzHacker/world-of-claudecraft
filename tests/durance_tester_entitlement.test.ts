@@ -27,4 +27,17 @@ describe('DuranceTester mount entitlement', () => {
         ?.inventory.filter((slot) => DURANCE_TESTER_MOUNT_ITEM_IDS.includes(slot.itemId as never)),
     ).toHaveLength(3);
   });
+
+  it('lets only the host-stamped tester ride mounts above the normal level gate', () => {
+    const normal = new Sim({ seed: 9, playerClass: 'warrior', autoEquip: false });
+    normal.addItem('mount_emerald_wyrm', 1, normal.player.id);
+    normal.useItem('mount_emerald_wyrm', normal.player.id);
+    expect(normal.player.auras.some((a) => a.id === 'mount_emerald_wyrm')).toBe(false);
+    expect(normal.drainEvents().some((e) => e.type === 'error' && e.text.includes('level 20'))).toBe(true);
+
+    const tester = new Sim({ seed: 9, playerClass: 'warrior', noPlayer: true });
+    const pid = tester.addPlayer('warrior', 'DuranceTester', { duranceTester: true });
+    tester.useItem('mount_emerald_wyrm', pid);
+    expect(tester.entities.get(pid)?.auras.some((a) => a.id === 'mount_emerald_wyrm')).toBe(true);
+  });
 });

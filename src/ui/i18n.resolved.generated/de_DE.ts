@@ -1625,6 +1625,32 @@ export const de_DE: EnTranslations = {
       "notAtHub": "Ihr müsst Euch am Handwerksplatz und auf der erforderlichen Stufe befinden, um das herzustellen.",
       "throttled": "Ihr stellt zu schnell her. Wartet einen Moment und versucht es erneut.",
       "recipeNotLearned": "Ihr habt dieses Rezept noch nicht erlernt."
+    },
+    "arcade": {
+      "title": "Realm Games",
+      "close": "Close games",
+      "choose": "Choose a game",
+      "racing": "Cryptic Circuit",
+      "brawler": "Four-player Brawl",
+      "townRts": "Eastbrook Command",
+      "housing": "Eastbrook Homes",
+      "create": "Create session",
+      "join": "Join by code",
+      "code": "Session code",
+      "invite": "Invite party member",
+      "inviteHint": "Enter a party member player ID.",
+      "ready": "Ready",
+      "unready": "Unready",
+      "start": "Start",
+      "abort": "Leave session",
+      "waiting": "Waiting for players",
+      "active": "Game active",
+      "finished": "Game finished",
+      "unavailable": "This game is not enabled on this server.",
+      "controls": "Controls: arrows/WASD to steer or move, Space to drift or jump, J/K to attack, E to use an item.",
+      "build": "Build",
+      "train": "Train guard",
+      "place": "Place piece"
     }
   },
   "apiError": {

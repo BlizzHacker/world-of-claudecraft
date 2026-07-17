@@ -13,6 +13,12 @@ import {
 } from '../src/sim/minigames';
 import { type BrawlerInput, createBrawlerState, stepBrawler } from '../src/sim/minigames/brawler';
 import {
+  arcadeFinished,
+  createArcadeState,
+  setArcadeRaceInput,
+  stepArcadeState,
+} from '../src/sim/minigames/arcade';
+import {
   canBuildHousing,
   canVisitHousing,
   createHousingLot,
@@ -114,6 +120,20 @@ describe('brawler domain', () => {
     a.fighters[1].x = a.rightBlastZone + 1;
     stepBrawler(a, new Map());
     expect(a.fighters[1].stocks).toBe(2);
+  });
+});
+
+describe('arcade race adapter', () => {
+  it('keeps malformed controller values finite in the offline seam', () => {
+    const state = createArcadeState('racing', 42, [1]);
+    expect(setArcadeRaceInput(state, 1, { throttle: Number.NaN, steer: Number.POSITIVE_INFINITY })).toBe(true);
+    for (let i = 0; i < 20; i += 1) stepArcadeState(state);
+    expect(state.kind).toBe('racing');
+    if (state.kind !== 'racing') return;
+    const vehicle = state.race.vehicles[0];
+    expect(Number.isFinite(vehicle.x)).toBe(true);
+    expect(Number.isFinite(vehicle.z)).toBe(true);
+    expect(arcadeFinished(state)).toBe(false);
   });
 });
 

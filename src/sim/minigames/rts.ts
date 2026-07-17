@@ -7,6 +7,9 @@ export type RtsRole = 'owner' | 'builder' | 'commander' | 'spectator';
 export type RtsStructureKind = 'town_hall' | 'wall' | 'farm' | 'barracks' | 'tower';
 export type RtsUnitKind = 'worker' | 'guard' | 'ranger';
 
+const STRUCTURE_KINDS: readonly RtsStructureKind[] = ['town_hall', 'wall', 'farm', 'barracks', 'tower'];
+const UNIT_KINDS: readonly RtsUnitKind[] = ['worker', 'guard', 'ranger'];
+
 export interface RtsAclEntry {
   playerId: number;
   role: RtsRole;
@@ -97,7 +100,14 @@ export function addRtsAcl(
   playerId: number,
   role: RtsRole,
 ): boolean {
-  if (rtsRole(campaign, actorId) !== 'owner' || playerId === campaign.ownerId) return false;
+  if (
+    rtsRole(campaign, actorId) !== 'owner' ||
+    !Number.isInteger(playerId) ||
+    playerId <= 0 ||
+    playerId === campaign.ownerId ||
+    role === 'owner'
+  )
+    return false;
   const existing = campaign.acl.find((entry) => entry.playerId === playerId);
   if (existing) existing.role = role;
   else campaign.acl.push({ playerId, role });
@@ -113,6 +123,11 @@ export function buildRtsStructure(
 ): boolean {
   if (
     !canCommand(campaign, playerId) ||
+    !STRUCTURE_KINDS.includes(kind) ||
+    !Number.isInteger(cell.x) ||
+    !Number.isInteger(cell.z) ||
+    Math.abs(cell.x) > 8 ||
+    Math.abs(cell.z) > 8 ||
     campaign.structures.some(
       (structure) => structure.cell.x === cell.x && structure.cell.z === cell.z,
     )
@@ -127,7 +142,7 @@ export function buildRtsStructure(
 }
 
 export function trainRtsUnit(campaign: RtsCampaign, playerId: number, kind: RtsUnitKind): boolean {
-  if (!canCommand(campaign, playerId)) return false;
+  if (!canCommand(campaign, playerId) || !UNIT_KINDS.includes(kind)) return false;
   const cost = UNIT_COST[kind];
   if (campaign.resources < cost) return false;
   campaign.resources -= cost;

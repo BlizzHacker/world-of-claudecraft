@@ -1,5 +1,6 @@
 export const HOUSING_VERSION = 'housing-v1';
 export type HousingRole = 'owner' | 'builder' | 'visitor';
+const HOUSING_PIECE_KINDS = new Set(['floor', 'wall', 'door', 'roof', 'decoration']);
 export interface HousingCell {
   x: number;
   z: number;
@@ -53,7 +54,14 @@ export function setHousingAccess(
   playerId: number,
   role: HousingRole,
 ): boolean {
-  if (housingRole(lot, ownerId) !== 'owner' || playerId === lot.ownerId) return false;
+  if (
+    housingRole(lot, ownerId) !== 'owner' ||
+    !Number.isInteger(playerId) ||
+    playerId <= 0 ||
+    playerId === lot.ownerId ||
+    (role !== 'builder' && role !== 'visitor')
+  )
+    return false;
   lot.acl[playerId] = role;
   lot.revision += 1;
   return true;
@@ -62,6 +70,17 @@ export function setHousingAccess(
 export function placeHousingPiece(lot: HousingLot, playerId: number, piece: HousingPiece): boolean {
   if (
     !canBuildHousing(lot, playerId) ||
+    !piece ||
+    !piece.cell ||
+    typeof piece.id !== 'string' ||
+    piece.id.length < 1 ||
+    piece.id.length > 64 ||
+    !HOUSING_PIECE_KINDS.has(piece.kind) ||
+    !Number.isInteger(piece.cell.x) ||
+    !Number.isInteger(piece.cell.z) ||
+    Math.abs(piece.cell.x) > 8 ||
+    Math.abs(piece.cell.z) > 8 ||
+    (piece.rotation !== 0 && piece.rotation !== 90 && piece.rotation !== 180 && piece.rotation !== 270) ||
     lot.pieces.some(
       (existing) => existing.cell.x === piece.cell.x && existing.cell.z === piece.cell.z,
     )

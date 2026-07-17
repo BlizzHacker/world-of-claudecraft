@@ -395,6 +395,7 @@ import { ValeCupIndicator } from './vale_cup_indicator';
 import { buildVcupIndicatorView } from './vale_cup_indicator_view';
 import { ValeCupWindow, vcupNationName } from './vale_cup_window';
 import { ZombieDefenseWindow } from './zombie_defense_window';
+import { ArcadeMinigameWindow } from './arcade_minigame_window';
 import { buildVendorSellRows, buildVendorView } from './vendor_view';
 import { renderVendorWindow, type VendorTab } from './vendor_window';
 import { nextVoicedYell, type VoicedYellState, voicedYellGain } from './voice_events';
@@ -2254,6 +2255,9 @@ export class Hud {
       case 'zombie-defense-window':
         this.zombieDefenseWindow.close();
         break;
+      case 'arcade-minigame-window':
+        this.arcadeMinigameWindow.close();
+        break;
       case 'vendor-window':
         this.closeVendor();
         this.closeHeroicVendor();
@@ -3705,6 +3709,10 @@ export class Hud {
     world: () => this.sim,
     closeOthers: () => this.closeOtherWindows('#zombie-defense-window'),
     ...this.windowFocus('#zombie-defense-window'),
+  });
+  private readonly arcadeMinigameWindow = new ArcadeMinigameWindow({
+    root: () => $('#arcade-minigame-window'),
+    world: () => this.sim,
   });
   // Persistent Vale Cup indicator button (queued / live-at-the-Sowfield states;
   // hidden inside my own match). Never tier-shed: queue position and the live
@@ -7051,6 +7059,7 @@ export class Hud {
       if ($('#arena-window').style.display === 'block') this.arenaWindow.render();
       if ($('#valecup-window').style.display === 'block') this.valeCupWindow.render();
       if ($('#zombie-defense-window').style.display === 'block') this.zombieDefenseWindow.render();
+      if ($('#arcade-minigame-window').style.display === 'block') this.arcadeMinigameWindow.render();
       if (this.openLootMobId !== null) {
         const mob = sim.entities.get(this.openLootMobId);
         if (!mob?.lootable || dist2d(p.pos, mob.pos) > 7) this.closeLoot();
@@ -8147,6 +8156,10 @@ export class Hud {
 
   toggleZombieDefense(): void {
     this.zombieDefenseWindow.toggle();
+  }
+
+  toggleArcadeMinigame(mode?: 'racing' | 'brawler' | 'town_rts' | 'housing'): void {
+    this.arcadeMinigameWindow.toggle(mode);
   }
 
   /** Offline builds enable the Vale Cup practice-vs-bots button (main.ts). */
@@ -10730,6 +10743,7 @@ export class Hud {
       html += `<button type="button" class="qd-list-item" data-vcup="1" aria-label="${esc(t('hudChrome.vcup.gossipOpenAria'))}"><span class="gold">${svgIcon('ball')}</span> ${esc(t('hudChrome.vcup.gossipOpen'))}</button>`;
     }
     if (npc.templateId === 'town_defense_board') {
+      html += `<button type="button" class="qd-list-item" data-arcade-games="1" aria-label="${esc(t('hudChrome.arcade.title'))}">${esc(t('hudChrome.arcade.title'))}</button>`;
       html += `<button type="button" class="qd-list-item" data-zombie-defense="1" aria-label="${esc(t('hudChrome.zombie.title'))}"><span class="gold">☠</span> ${esc(t('hudChrome.zombie.title'))}</button>`;
     }
     el.innerHTML = html;
@@ -10772,6 +10786,10 @@ export class Hud {
     el.querySelector('[data-zombie-defense]')?.addEventListener('click', () => {
       this.closeQuestDialog(false);
       this.toggleZombieDefense();
+    });
+    el.querySelector('[data-arcade-games]')?.addEventListener('click', () => {
+      this.closeQuestDialog(false);
+      this.toggleArcadeMinigame();
     });
     el.querySelector('[data-close]')?.addEventListener('click', () => this.closeQuestDialog());
     el.style.display = 'block';

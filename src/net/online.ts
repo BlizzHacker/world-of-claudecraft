@@ -55,6 +55,7 @@ import {
 } from '../sim/types';
 import {
   type AccountCosmetics,
+  type ArcadeWireState,
   type ArenaInfo,
   type BankInfo,
   type CharacterSearchResult,
@@ -1042,6 +1043,7 @@ export class ClientWorld implements IWorld {
   // mode outcomes remain server-owned and are not predicted here.
   minigameSession: MinigameSessionState | null = null;
   minigameZombieState: ZombieDefenseSessionState | null = null;
+  minigameArcadeState: ArcadeWireState | null = null;
   // --- IWorldEntityRoster: roster + player reads, mirrored from snapshots. The
   // `player` getter lives below the ctor (it reads `entities`/`playerId`). `known`
   // is IWorldCombat-owned but rides here as a self-wire mirror field with the rest
@@ -1505,6 +1507,30 @@ export class ClientWorld implements IWorld {
 
   minigameZombieBuild(kind: TowerKind, x: number, z: number, _playerId?: number): void {
     this.cmd({ cmd: 'mg_zombie_build', kind, x, z });
+  }
+
+  minigameRaceInput(input: import('../sim/racing').RaceInput): void {
+    this.cmd({ cmd: 'mg_race_input', ...input });
+  }
+
+  minigameBrawlerInput(input: import('../sim/minigames/brawler').BrawlerInput): void {
+    this.cmd({ cmd: 'mg_brawler_input', ...input });
+  }
+
+  minigameRtsBuild(
+    kind: import('../sim/minigames/rts').RtsStructureKind,
+    x: number,
+    z: number,
+  ): void {
+    this.cmd({ cmd: 'mg_rts_build', kind, x, z });
+  }
+
+  minigameRtsTrain(kind: import('../sim/minigames/rts').RtsUnitKind): void {
+    this.cmd({ cmd: 'mg_rts_train', kind });
+  }
+
+  minigameHousingPlace(piece: import('../sim/minigames/housing').HousingPiece): void {
+    this.cmd({ cmd: 'mg_housing_place', piece });
   }
 
   private onMessage(raw: string): void {
@@ -2078,6 +2104,7 @@ export class ClientWorld implements IWorld {
       if (s.mg !== undefined) this.minigameSession = s.mg as MinigameSessionState | null;
       if (s.mgz !== undefined)
         this.minigameZombieState = s.mgz as ZombieDefenseSessionState | null;
+      if (s.mga !== undefined) this.minigameArcadeState = s.mga as ArcadeWireState | null;
       // camera follows server-side facing changes when not mouselooking
       if (prevSelfFacing !== undefined && this.mouselookFacing === null) {
         let d = e.facing - prevSelfFacing;

@@ -1625,6 +1625,32 @@ export const es: EnTranslations = {
       "notAtHub": "Debes estar en el centro de elaboración, con el nivel requerido, para elaborar eso.",
       "throttled": "Estás elaborando demasiado rápido. Espera un momento e inténtalo de nuevo.",
       "recipeNotLearned": "Aún no has aprendido esa receta."
+    },
+    "arcade": {
+      "title": "Realm Games",
+      "close": "Close games",
+      "choose": "Choose a game",
+      "racing": "Cryptic Circuit",
+      "brawler": "Four-player Brawl",
+      "townRts": "Eastbrook Command",
+      "housing": "Eastbrook Homes",
+      "create": "Create session",
+      "join": "Join by code",
+      "code": "Session code",
+      "invite": "Invite party member",
+      "inviteHint": "Enter a party member player ID.",
+      "ready": "Ready",
+      "unready": "Unready",
+      "start": "Start",
+      "abort": "Leave session",
+      "waiting": "Waiting for players",
+      "active": "Game active",
+      "finished": "Game finished",
+      "unavailable": "This game is not enabled on this server.",
+      "controls": "Controls: arrows/WASD to steer or move, Space to drift or jump, J/K to attack, E to use an item.",
+      "build": "Build",
+      "train": "Train guard",
+      "place": "Place piece"
     }
   },
   "apiError": {

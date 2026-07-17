@@ -43,6 +43,7 @@ const baseEnTable = {
   'log.bankSlotsPurchased': 'You purchase additional bank slots.',
   'error.specLevel': 'You may choose a specialization at level {level}.',
   'error.equipLevel': 'You must be level {level} to equip that.',
+  'error.mountLevel': 'You must be level {level} to ride that mount.',
   'error.builderRequiresRole': 'Builder tools require admin or moderator.',
   'log.corpseLootable': "{name}'s corpse can be looted!",
   'error.mountCombat': "You can't mount in combat.",
@@ -5543,6 +5544,10 @@ const RULES: Rule[] = [
   {
     re: /^You must be level (\d+) to equip that\.$/,
     build: (m) => tSim('error.equipLevel', { level: m[1] }),
+  },
+  {
+    re: /^You must be level (\d+) to ride that mount\.$/,
+    build: (m) => tSim('error.mountLevel', { level: m[1] }),
   },
   {
     re: /^You can save at most (\d+) loadouts\.$/,
