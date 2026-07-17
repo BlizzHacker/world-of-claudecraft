@@ -17,5 +17,5 @@ without offline and online coverage, persistence coverage where applicable, and 
 | 5 QA | Housing migration and regression audit | completed |
 | 6 | Character-sheet layout and 3D catalog viewers | completed |
 | 6 QA | Pixel/layout, missing-asset, and mobile audit | completed |
-| 7 | Full-stack integration, release gate, and live promotion | pending |
-| 7 QA | Production smoke and rollback verification | pending |
+| 7 | Full-stack integration, release gate, and live promotion | completed |
+| 7 QA | Production smoke and rollback verification | completed |
