@@ -825,7 +825,7 @@ export const VISUALS: Record<string, VisualDef> = {
   // static prop GLB: no authored clips, so every slot falls back to the rest
   // pose (the yumi precedent).
   mount_derby_kart: {
-    url: 'models/biome/cave_cart_a.glb',
+    url: 'models/vehicles/gokart_bluestar.glb',
     height: 1.15,
     clips: {
       idle: 'None',

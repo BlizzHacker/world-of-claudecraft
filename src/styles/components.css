@@ -5464,6 +5464,36 @@
     top: 118px;
   }
 
+  /* Dead Road horde strip: wave / wards / countdown, the derby slot's twin. */
+  #horde-hud {
+    position: absolute;
+    top: 96px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+    align-items: center;
+    gap: 10px;
+    z-index: 18;
+    pointer-events: none;
+    background: linear-gradient(#1a0b0bdd, #0d0505dd);
+    border: 1px solid #8a2828;
+    border-radius: 8px;
+    padding: 6px 16px 5px;
+    box-shadow:
+      0 2px 14px #000a,
+      inset 0 0 16px #cc242418;
+  }
+  #horde-hud .hordeh-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: #ff6b6b;
+    letter-spacing: 0.04em;
+  }
+  #horde-hud .hordeh-line {
+    font-size: 12.5px;
+    color: var(--color-text, #e8d5c4);
+  }
+
   /* Thornwheel Derby in-race strip: lap / place / next checkpoint, top center
      (the vcup strip's slot; only one of the two can be live at a time: a rider
      seated in the Derby cannot also be seated at the Sowfield). */

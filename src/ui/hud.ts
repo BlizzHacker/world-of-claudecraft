@@ -205,6 +205,7 @@ import {
 import { DailyRewardsWindow } from './daily_rewards_window';
 import { DelveMapPainter } from './delve_map_painter';
 import { DerbyHud } from './derby_hud';
+import { HordeHud } from './horde_hud';
 import { devTierBadgeDataUrl, devTierByIndex, devTierDisplayName } from './dev_tier';
 import { markDialogRoot } from './dialog_root';
 import { discordRoleTagLabel } from './discord_role_tag';
@@ -3736,6 +3737,11 @@ export class Hud {
     layer: () => document.getElementById('ui'),
     writers: this.writerFacet,
   });
+  // The Dead Road horde strip (wave / wards / countdown), same band.
+  private readonly hordeHud = new HordeHud({
+    layer: () => document.getElementById('ui'),
+    writers: this.writerFacet,
+  });
   // Pre-match Vale Cup briefing overlay (rules + role kit + team sheet + Ready).
   // Self-mounting full-screen card shown only while cupInfo.match.phase is
   // 'briefing'; drives itself off view.visible (no toggle wiring), rides the
@@ -4644,6 +4650,7 @@ export class Hud {
     this.vcupIndicator.relocalize();
     this.vcupMatchHud.relocalize();
     this.derbyHud.relocalize();
+    this.hordeHud.relocalize();
     this.vcupBriefing.relocalize();
     this.vcupCharge.relocalize();
     const dialog = $('#quest-dialog');
@@ -7061,6 +7068,7 @@ export class Hud {
       this.vcupIndicator.update(buildVcupIndicatorView(this.sim.cupInfo, atSowfield));
       this.vcupMatchHud.update(buildVcupHudView(this.sim.cupInfo));
       this.derbyHud.update(this.sim.derbyInfo ?? null);
+      this.hordeHud.update(this.sim.hordeInfo ?? null);
       this.vcupBriefing.update(buildVcupBriefingView(this.sim.cupInfo));
       this.vcupBetting.update(buildVcupBettingView(this.sim.cupInfo));
       this.updateShootCharge();
@@ -10808,6 +10816,18 @@ export class Hud {
       // racing/brawling play at their own physical venues.
       html += `<button type="button" class="qd-list-item" data-arcade-games="1" aria-label="${esc(t('hudChrome.arcade.townRts'))}">${esc(t('hudChrome.arcade.townRts'))}</button>`;
       html += `<button type="button" class="qd-list-item" data-zombie-defense="1" aria-label="${esc(t('hudChrome.zombie.title'))}"><span class="gold">☠</span> ${esc(t('hudChrome.zombie.title'))}</button>`;
+      // The Dead Road: the LIVE horde assault on the town itself (real mobs,
+      // real defenders). Alarm when quiet; fortify between waves.
+      const horde = this.sim.hordeInfo;
+      if (!horde || horde.phase === 'idle') {
+        const label = tOptional('hudChrome.horde.gossipStart') ?? 'Sound the horde alarm (live event!)';
+        html += `<button type="button" class="qd-list-item" data-horde-start="1" aria-label="${esc(label)}"><span class="gold">⚔</span> ${esc(label)}</button>`;
+      } else if (horde.phase === 'prep' || horde.phase === 'intermission') {
+        const label =
+          (tOptional('hudChrome.horde.gossipFortify') ?? 'Fortify the town') +
+          ` (${Math.floor(horde.fortifyCostCopper / 100)}s)`;
+        html += `<button type="button" class="qd-list-item" data-horde-fortify="1" aria-label="${esc(label)}"><span class="gold">🛡</span> ${esc(label)}</button>`;
+      }
     }
     el.innerHTML = html;
     el.querySelectorAll('[data-quest]').forEach((item) => {
@@ -10861,6 +10881,14 @@ export class Hud {
     el.querySelector('[data-pit-leave]')?.addEventListener('click', () => {
       this.closeQuestDialog(false);
       this.sim.pitQueueLeave();
+    });
+    el.querySelector('[data-horde-start]')?.addEventListener('click', () => {
+      this.closeQuestDialog(false);
+      this.sim.hordeStart();
+    });
+    el.querySelector('[data-horde-fortify]')?.addEventListener('click', () => {
+      this.closeQuestDialog(false);
+      this.sim.hordeFortify();
     });
     el.querySelectorAll<HTMLElement>('[data-home-buy]').forEach((btn) => {
       btn.addEventListener('click', () => {

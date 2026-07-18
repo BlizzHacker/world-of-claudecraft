@@ -9,8 +9,8 @@
 // its hub. Server-authoritative — the whole flow routes through the sim.
 
 import { ZONES } from './data';
-import type { SimContext } from './sim_context';
 import { createGroundObject } from './entity';
+import type { SimContext } from './sim_context';
 import type { Entity } from './types';
 
 export interface WaypointDef {
@@ -33,10 +33,16 @@ export function waypointDefs(): WaypointDef[] {
     // A wilderness waypoint ~⅔ into the zone (past the hub, toward the next zone),
     // offset west so it's out on the trail, not on the hub.
     const wildZ = z.hub.z + (z.zMax - z.hub.z) * 0.55;
+    // Authored per-zone west/east offset: the naive -40 dropped the Mirefen
+    // trail pylon INSIDE the (-40,450) fen lake footprint (players traveling
+    // there surfaced in open water and drowned home). Surveyed dry ground per
+    // zone; keep any new zone OFF its lake footprints (world.ts LAKE blend
+    // radius is authored radius x1.6).
+    const wildX = z.id === 'mirefen_marsh' ? 25 : -40;
     out.push({
       id: `wp_${z.id}_wild`,
       name: `${z.hub.name} Trail`,
-      x: -40,
+      x: wildX,
       z: Math.round(wildZ),
       zoneId: z.id,
     });
@@ -122,5 +128,10 @@ export function waypointTravel(ctx: SimContext, destId: string, pid?: number): v
   ctx.rebucket(p);
   p.targetId = null;
   p.autoAttack = false;
-  ctx.emit({ type: 'log', text: `You travel to ${dest.name}.`, color: '#6cf', pid: r.meta.entityId });
+  ctx.emit({
+    type: 'log',
+    text: `You travel to ${dest.name}.`,
+    color: '#6cf',
+    pid: r.meta.entityId,
+  });
 }

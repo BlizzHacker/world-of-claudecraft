@@ -5382,6 +5382,105 @@ function enPassthrough(english: string, localized: string): string {
 }
 
 const RULES: Rule[] = [
+  // --- The Dead Road horde + Boarpit presence rule -------------------------
+  {
+    re: /^THE HORDE ALARM SOUNDS! The dead march on Eastbrook from the north road!$/,
+    build: () =>
+      enPassthrough(
+        'THE HORDE ALARM SOUNDS! The dead march on Eastbrook from the north road!',
+        t('sim.venues.hordeAlarm'),
+      ),
+  },
+  {
+    re: /^You fortify the town\. Wards: (.+)\. The line stands taller\.$/,
+    build: (m) =>
+      enPassthrough(
+        `You fortify the town. Wards: ${m[1]}. The line stands taller.`,
+        t('sim.venues.hordeFortified', { wards: m[1] }),
+      ),
+  },
+  {
+    re: /^WAVE (.+) of (.+): (.+) of the dead are on the road!$/,
+    build: (m) =>
+      enPassthrough(
+        `WAVE ${m[1]} of ${m[2]}: ${m[3]} of the dead are on the road!`,
+        t('sim.venues.hordeWave', { wave: m[1], waves: m[2], count: m[3] }),
+      ),
+  },
+  {
+    re: /^The town stands! The bursar counts out your share: 80s\.$/,
+    build: () =>
+      enPassthrough(
+        'The town stands! The bursar counts out your share: 80s.',
+        t('sim.venues.hordeWin'),
+      ),
+  },
+  {
+    re: /^The last ward falls\. The dead have Eastbrook tonight\.$/,
+    build: () =>
+      enPassthrough(
+        'The last ward falls. The dead have Eastbrook tonight.',
+        t('sim.venues.hordeLoss'),
+      ),
+  },
+  {
+    re: /^The dead break into the square! Wards left: (.+)\.$/,
+    build: (m) =>
+      enPassthrough(
+        `The dead break into the square! Wards left: ${m[1]}.`,
+        t('sim.venues.hordeBreach', { wards: m[1] }),
+      ),
+  },
+  {
+    re: /^Wave (.+) is down\. Fortify while you can — the next comes soon\.$/,
+    build: (m) =>
+      enPassthrough(
+        `Wave ${m[1]} is down. Fortify while you can — the next comes soon.`,
+        t('sim.venues.hordeWaveDown', { wave: m[1] }),
+      ),
+  },
+  {
+    re: /^The horde alarm is already sounding\.$/,
+    build: () =>
+      enPassthrough('The horde alarm is already sounding.', t('sim.venues.hordeErrRunning')),
+  },
+  {
+    re: /^Sound the alarm from the town defense board\.$/,
+    build: () =>
+      enPassthrough('Sound the alarm from the town defense board.', t('sim.venues.hordeErrBoard')),
+  },
+  {
+    re: /^Fortify between waves, not while the dead are inside the walls\.$/,
+    build: () =>
+      enPassthrough(
+        'Fortify between waves, not while the dead are inside the walls.',
+        t('sim.venues.hordeErrMidWave'),
+      ),
+  },
+  {
+    re: /^The town is fortified to the rafters already\.$/,
+    build: () =>
+      enPassthrough(
+        'The town is fortified to the rafters already.',
+        t('sim.venues.hordeErrMaxWards'),
+      ),
+  },
+  {
+    re: /^Fortifying the town costs 20s in timber and nails\.$/,
+    build: () =>
+      enPassthrough(
+        'Fortifying the town costs 20s in timber and nails.',
+        t('sim.venues.hordeErrCost'),
+      ),
+  },
+  {
+    re: /^The bell rang without you\. Your Boarpit card spot is forfeit\.$/,
+    build: () =>
+      enPassthrough(
+        'The bell rang without you. Your Boarpit card spot is forfeit.',
+        t('sim.venues.pitBellMissed'),
+      ),
+  },
   // --- Realm venues (Thornwheel Derby / Boarpit / Eastbrook Homes) ---------
   {
     re: /^You are signed up for the Thornwheel Derby \((.+) on the grid\)\.$/,

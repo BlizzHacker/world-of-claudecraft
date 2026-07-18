@@ -382,6 +382,7 @@ export { eloDelta } from './social/arena';
 
 import * as boarpitMod from './social/boarpit';
 import * as homesMod from './social/homes';
+import * as hordeMod from './social/horde';
 import * as derbyMod from './social/derby';
 import * as fiestaMod from './social/fiesta';
 // A3: Fiesta tuning consts moved to social/fiesta.ts; these five are read back here
@@ -1365,6 +1366,8 @@ export class Sim {
   // Eastbrook Homes ownership (social/homes.ts): plain serializable holder;
   // the SERVER persists it (world-state store) after every purchase.
   homes: homesMod.HomesState = homesMod.createHomesState();
+  // The Dead Road horde defense (social/horde.ts): same one-holder rule.
+  horde: hordeMod.HordeState = hordeMod.createHordeState();
   // per-player chat token bucket (anti-spam); refilled lazily by sim time
   private chatTokens = new Map<number, { tokens: number; at: number }>();
   // per-player set of opt-in global channels (world, lfg) joined via /join
@@ -3104,6 +3107,10 @@ export class Sim {
       get homes() {
         return sim.homes;
       },
+      // The Dead Road horde holder (same in-place mutation rules).
+      get horde() {
+        return sim.horde;
+      },
       // LATE-bound (not .bind(sim)): a moved emit site (C5 meleeSwing/rangedSwing)
       // now emits via ctx.emit, and tests swap (sim as any).emit post-construction to
       // observe events (mob_blind/mob_cleave). An early .bind(sim) would capture the
@@ -3911,6 +3918,10 @@ export class Sim {
     // The Boarpit phase also draws ZERO shared rng (timers + KO bookkeeping).
     boarpitMod.updateBoarpit(this.ctx);
     lap?.('boarpit');
+    // The Dead Road horde: idle-early-out per tick; live events spawn/reap
+    // real mobs. Draws only its PRIVATE rng, never the shared stream.
+    hordeMod.updateHorde(this.ctx);
+    lap?.('horde');
     this.updateMinigame();
     lap?.('minigame');
     this.market.update();
@@ -6979,6 +6990,24 @@ export class Sim {
 
   get homesInfo(): import('../world_api/homes').HomesInfo | null {
     return this.primaryId === -1 ? null : this.homesInfoFor(this.primaryId);
+  }
+
+  // --- IWorldHorde: the Dead Road (social/horde.ts delegates) ---
+
+  hordeStart(pid?: number): void {
+    hordeMod.hordeStart(this.ctx, pid);
+  }
+
+  hordeFortify(pid?: number): void {
+    hordeMod.hordeFortify(this.ctx, pid);
+  }
+
+  hordeInfoFor(pid: number): import('../world_api/horde').HordeInfo | null {
+    return hordeMod.hordeInfoFor(this.ctx, pid);
+  }
+
+  get hordeInfo(): import('../world_api/horde').HordeInfo | null {
+    return this.primaryId === -1 ? null : this.hordeInfoFor(this.primaryId);
   }
 
   private fiestaMatchInfo(

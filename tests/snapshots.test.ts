@@ -2037,6 +2037,7 @@ const ALL_DELTA_KEYS = [
   'equip',
   'gprof',
   'homes',
+  'horde',
   'inv',
   'lockouts',
   'lroll',
@@ -2086,6 +2087,7 @@ const TERSE_TO_IWORLD: Record<string, string> = {
   equip: 'equipment',
   gprof: 'gatheringProficiency',
   homes: 'homesInfo',
+  horde: 'hordeInfo',
   inv: 'inventory',
   lockouts: 'selfLockouts',
   lroll: 'lootRollPrompts',
@@ -2216,6 +2218,10 @@ function dirtyEveryDeltaField(): {
   // the Eastbrook Homes readout ('homes' delta key): owning a lot makes
   // homesInfo non-null anywhere in the world.
   sim.homes.lots.lot_a = { owner: leader.name, characterId: null, at: 0 };
+  // the Dead Road readout ('horde' delta key): a non-idle phase answers the
+  // readout regardless of distance, so the fixture arms the prep timer.
+  sim.horde.phase = 'prep';
+  sim.horde.phaseLeft = 9999;
   meta.talentMods.spec = 'arms';
   meta.loadouts = [{ name: 'PvP', alloc: { spec: 'arms', ranks: {}, choices: {} }, bar: [] }];
   meta.activeLoadout = 0;
@@ -2392,9 +2398,9 @@ describe('full self-state snapshot delta fixture', () => {
 });
 
 describe('delta-key contract pins (anti-drift)', () => {
-  it('ALL_DELTA_KEYS contains exactly 41 unique keys in sorted order', () => {
-    expect(ALL_DELTA_KEYS).toHaveLength(41);
-    expect(new Set(ALL_DELTA_KEYS).size).toBe(41);
+  it('ALL_DELTA_KEYS contains exactly 42 unique keys in sorted order', () => {
+    expect(ALL_DELTA_KEYS).toHaveLength(42);
+    expect(new Set(ALL_DELTA_KEYS).size).toBe(42);
     expect([...ALL_DELTA_KEYS]).toEqual([...ALL_DELTA_KEYS].sort());
   });
 
@@ -2406,7 +2412,7 @@ describe('delta-key contract pins (anti-drift)', () => {
     const scraped = new Set<string>();
     for (let m = re.exec(src); m !== null; m = re.exec(src)) scraped.add(m[1]);
     expect(scraped.has('lockouts')).toBe(true); // the multi-line call IS captured
-    expect(scraped.size).toBe(41);
+    expect(scraped.size).toBe(42);
     expect([...scraped].sort()).toEqual([...ALL_DELTA_KEYS].sort());
   });
 

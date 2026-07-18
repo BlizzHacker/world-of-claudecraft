@@ -3993,6 +3993,14 @@ export class GameServer {
           void this.persistHomes();
         }
         break;
+      // The Dead Road horde defense: live event at the town, snapshot-read
+      // state on the 'horde' delta key.
+      case 'horde_start':
+        sim.hordeStart(pid);
+        break;
+      case 'horde_fortify':
+        sim.hordeFortify(pid);
+        break;
       case 'vcup_role':
         if (isSportRole(msg.role)) sim.vcupSetRole(msg.role, pid);
         break;
@@ -5111,6 +5119,7 @@ export class GameServer {
       maybe('derby', this.sim.derbyInfoFor(anchorSession.pid));
       maybe('pit', this.sim.pitInfoFor(anchorSession.pid));
       maybe('homes', this.sim.homesInfoFor(anchorSession.pid));
+      maybe('horde', this.sim.hordeInfoFor(anchorSession.pid));
     }
     // market info is null unless the player is standing at the Merchant, so it
     // only rides the wire for players actually browsing the World Market

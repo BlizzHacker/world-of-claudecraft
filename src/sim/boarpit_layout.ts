@@ -48,14 +48,15 @@ export const PIT_GATE_HALF_ANGLE = 0.28; // radians of stake line left open
 // The Pit Master's post, just outside the gate.
 export const PIT_MASTER_POS = { x: 30, z: 122.5, facing: Math.PI };
 
-// Six fighter slots around the ring interior, facing the center.
+// Four fighter slots around the ring interior, facing the center — bouts are
+// 1v1 up to a 4-way free-for-all (the smash-bros card size).
 export interface PitSlot {
   x: number;
   z: number;
   facing: number;
 }
-export const PIT_SLOTS: readonly PitSlot[] = Array.from({ length: 6 }, (_, i) => {
-  const ang = (i / 6) * Math.PI * 2;
+export const PIT_SLOTS: readonly PitSlot[] = Array.from({ length: 4 }, (_, i) => {
+  const ang = (i / 4) * Math.PI * 2;
   const x = BOARPIT_CENTER.x + Math.sin(ang) * (PIT_R - 3);
   const z = BOARPIT_CENTER.z + Math.cos(ang) * (PIT_R - 3);
   return { x, z, facing: Math.atan2(BOARPIT_CENTER.x - x, BOARPIT_CENTER.z - z) };

@@ -3611,7 +3611,20 @@ export const ja_JP: EnTranslations = {
       "homeErrRealtor": "See Realtor Maribel on Homestead Lane to buy a home.",
       "homeErrEntitlement": "A deed on Homestead Lane costs {price} $CR — settle the deed payment first.",
       "homeErrOwned": "That home already has an owner.",
-      "homeErrHaveDeed": "You already hold a deed on Homestead Lane."
+      "homeErrHaveDeed": "You already hold a deed on Homestead Lane.",
+      "hordeAlarm": "THE HORDE ALARM SOUNDS! The dead march on Eastbrook from the north road!",
+      "hordeFortified": "You fortify the town. Wards: {wards}. The line stands taller.",
+      "hordeWave": "WAVE {wave} of {waves}: {count} of the dead are on the road!",
+      "hordeWin": "The town stands! The bursar counts out your share: 80s.",
+      "hordeLoss": "The last ward falls. The dead have Eastbrook tonight.",
+      "hordeBreach": "The dead break into the square! Wards left: {wards}.",
+      "hordeWaveDown": "Wave {wave} is down. Fortify while you can — the next comes soon.",
+      "hordeErrRunning": "The horde alarm is already sounding.",
+      "hordeErrBoard": "Sound the alarm from the town defense board.",
+      "hordeErrMidWave": "Fortify between waves, not while the dead are inside the walls.",
+      "hordeErrMaxWards": "The town is fortified to the rafters already.",
+      "hordeErrCost": "Fortifying the town costs 20s in timber and nails.",
+      "pitBellMissed": "The bell rang without you. Your Boarpit card spot is forfeit."
     },
     "delve": {
       "cannotEnterNow": "今はデルヴに入れない。",

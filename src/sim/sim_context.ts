@@ -36,6 +36,7 @@ import type {
 } from './sim';
 import type { PitState } from './social/boarpit';
 import type { HomesState } from './social/homes';
+import type { HordeState } from './social/horde';
 import type { DerbyState } from './social/derby';
 import type { VcState } from './social/vale_cup';
 import type { SpatialGrid } from './spatial';
@@ -200,6 +201,9 @@ export interface SimContextPrimitives {
   // Eastbrook Homes ownership (social/homes.ts): same one-holder rule; the
   // server persists the holder's lots record through its world-state store.
   readonly homes: HomesState;
+
+  // The Dead Road horde defense (social/horde.ts): same one-holder rule.
+  readonly horde: HordeState;
 }
 
 // Cross-system callbacks. Each signature mirrors the still-on-`Sim` method it
@@ -890,6 +894,9 @@ export function createSimContext(host: SimContextHost): SimContext {
     },
     get homes() {
       return host.homes;
+    },
+    get horde() {
+      return host.horde;
     },
     emit: host.emit,
     error: host.error,

@@ -45,6 +45,7 @@
 //   derby.ts            IWorldDerby          Thornwheel Derby kart-race queue + tote board
 //   boarpit.ts          IWorldBoarpit        Boarpit knockout-brawl signup + bout readout
 //   homes.ts            IWorldHomes          Eastbrook Homes premium deeds ($CR entitlement)
+//   horde.ts            IWorldHorde          The Dead Road live horde defense (alarm/fortify)
 //
 // THREE GATES pin this seam (run before any facet edit; the literal counts are
 // pinned THERE and re-stale here, so this prose stays count-free):
@@ -65,6 +66,7 @@ import type { IWorldDailyRewards } from './world_api/daily_rewards';
 import type { IWorldDelves } from './world_api/delves';
 import type { IWorldBoarpit } from './world_api/boarpit';
 import type { IWorldHomes } from './world_api/homes';
+import type { IWorldHorde } from './world_api/horde';
 import type { IWorldDerby } from './world_api/derby';
 import type { IWorldDuelArena } from './world_api/duel_arena';
 import type { IWorldDungeons } from './world_api/dungeons';
@@ -139,6 +141,7 @@ export type {
   PitPhase,
 } from './world_api/boarpit';
 export type { HomeLotView, HomesInfo, IWorldHomes } from './world_api/homes';
+export type { HordeInfo, HordePhase, IWorldHorde } from './world_api/horde';
 export type {
   ArenaInfo,
   ArenaLadderEntry,
@@ -214,7 +217,8 @@ export interface IWorld
     IWorldValeCup,
     IWorldDerby,
     IWorldBoarpit,
-    IWorldHomes {}
+    IWorldHomes,
+    IWorldHorde {}
 
 // ---------------------------------------------------------------------------
 // Command schema (W0b): the shared wire-token vocabulary.
@@ -412,6 +416,9 @@ export const COMMAND_NAMES = [
   // Eastbrook Homes (PREMIUM, not a minigame): buying a deed requires the
   // paid homeowner entitlement; homesInfo is a snapshot read.
   'home_buy',
+  // The Dead Road: live horde defense at the town (alarm + fortify).
+  'horde_start',
+  'horde_fortify',
 ] as const;
 
 // The union both the send path (`online.ts`) and the dispatch switch
@@ -480,7 +487,8 @@ export type WorldFacet =
   | 'IWorldValeCup'
   | 'IWorldDerby'
   | 'IWorldBoarpit'
-  | 'IWorldHomes';
+  | 'IWorldHomes'
+  | 'IWorldHorde';
 
 export const COMMAND_FACETS = {
   // IWorldCombat: ability casts, auto-attack, spirit release.
@@ -649,4 +657,7 @@ export const COMMAND_FACETS = {
   pit_leave: 'IWorldBoarpit',
   // IWorldHomes: Eastbrook Homes deed purchase (paid entitlement gated).
   home_buy: 'IWorldHomes',
+  // IWorldHorde: the Dead Road alarm/fortify. hordeInfo is a snapshot read.
+  horde_start: 'IWorldHorde',
+  horde_fortify: 'IWorldHorde',
 } as const satisfies Partial<Record<ClientCommand, WorldFacet>>;

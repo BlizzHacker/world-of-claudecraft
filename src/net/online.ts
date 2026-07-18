@@ -72,6 +72,7 @@ import {
   type DelveShopOfferView,
   type DerbyInfo,
   type HomesInfo,
+  type HordeInfo,
   type PitInfo,
   type DevLeaderboardPage,
   type DuelInfo,
@@ -1120,6 +1121,9 @@ export class ClientWorld implements IWorld {
   // --- IWorldHomes: Eastbrook Homes premium deed state, mirrored from the
   // snapshot self (`s.homes`, delta-omitted; same null-clears rule). ---
   homesInfo: HomesInfo | null = null;
+  // --- IWorldHorde: Dead Road horde state, mirrored from the snapshot self
+  // (`s.horde`, delta-omitted; same null-clears rule). ---
+  hordeInfo: HordeInfo | null = null;
   // My live sport role, mirrored from the wireRev-gated heavy self field
   // `s.sport` ({ role } | null, delta-omitted). NON-IWorld mirror: while set,
   // the per-snapshot known rebuild resolves the role kit via the ONE shared
@@ -2122,6 +2126,7 @@ export class ClientWorld implements IWorld {
       if (s.derby !== undefined) this.derbyInfo = s.derby;
       if (s.pit !== undefined) this.pitInfo = s.pit;
       if (s.homes !== undefined) this.homesInfo = s.homes;
+      if (s.horde !== undefined) this.hordeInfo = s.horde;
       if (s.market !== undefined) this.marketInfo = s.market;
       if (s.mail !== undefined) this.mailInfo = s.mail;
       if (s.mailU !== undefined) this.mailUnread = s.mailU ?? 0;
@@ -2622,6 +2627,14 @@ export class ClientWorld implements IWorld {
   // server-side; homesInfo rides the 'homes' delta key). ---
   homeBuy(lotId: string): void {
     this.cmd({ cmd: 'home_buy', lot: lotId });
+  }
+  // --- IWorldHorde: Dead Road alarm/fortify sends (hordeInfo rides the
+  // 'horde' delta key). ---
+  hordeStart(): void {
+    this.cmd({ cmd: 'horde_start' });
+  }
+  hordeFortify(): void {
+    this.cmd({ cmd: 'horde_fortify' });
   }
   // Private practice bout against bots: the server seats it on an instanced pitch
   // copy far from the Sowfield, so it runs in parallel with the real match and

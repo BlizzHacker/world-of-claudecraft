@@ -16,6 +16,7 @@ import type { PitBoutInfo, PitFighterInfo, PitInfo } from '../../world_api/boarp
 import {
   BOARPIT_CENTER,
   isAtBoarpit,
+  isInPit,
   PIT_KO_SPOT,
   PIT_MASTER_POS,
   PIT_MAX_FIGHTERS,
@@ -129,7 +130,9 @@ export function pitQueueJoin(ctx: SimContext, pid?: number): void {
     ctx.error(meta.entityId, 'A bout is on. Wait for the next bell.');
     return;
   }
-  if (pit.queue.length >= PIT_MAX_FIGHTERS) {
+  // The card holds three bouts' worth of names: four seats fight, the rest
+  // queue for the next bell (the presence rule reorders around no-shows).
+  if (pit.queue.length >= PIT_MAX_FIGHTERS * 3) {
     ctx.error(meta.entityId, 'The card is full for the next bout.');
     return;
   }
@@ -176,10 +179,27 @@ function placeFighter(
 function startBout(ctx: SimContext): void {
   const pit = ctx.boarpit;
   const seats: PitSeat[] = [];
+  const held: number[] = []; // presence rule survivors who missed the seat cap
   for (const pid of pit.queue) {
     const e = ctx.entities.get(pid);
     const meta = ctx.players.get(pid);
     if (!e || !meta || e.dead) continue;
+    // THE PRESENCE RULE: you answer the bell IN the ring (or right at its
+    // gate) or you forfeit your card spot to the next signed fighter. No
+    // remote seats: the live pit bout is a show fought in front of the crowd.
+    if (!isInPit(e.pos.x, e.pos.z) && !isAtBoarpit(e.pos.x, e.pos.z)) {
+      ctx.emit({
+        type: 'log',
+        text: 'The bell rang without you. Your Boarpit card spot is forfeit.',
+        color: '#ff8080',
+        pid,
+      });
+      continue;
+    }
+    if (seats.length >= PIT_MAX_FIGHTERS) {
+      held.push(pid); // present but the card is full: first in line next bout
+      continue;
+    }
     seats.push({
       pid,
       out: false,
@@ -189,7 +209,8 @@ function startBout(ctx: SimContext): void {
     });
   }
   pit.queue.length = 0;
-  pit.queueDeadline = null;
+  pit.queue.push(...held);
+  pit.queueDeadline = held.length > 0 ? ctx.time + PIT_QUEUE_WAIT : null;
   if (seats.length < PIT_MIN_FIGHTERS) {
     // not enough answered the bell: everyone stays queued for the next call
     for (const s of seats) pit.queue.push(s.pid);
