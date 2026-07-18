@@ -3587,6 +3587,32 @@ export const ja_JP: EnTranslations = {
     "chat": "チャットを開く"
   },
   "sim": {
+    "venues": {
+      "derbyQueued": "You are signed up for the Thornwheel Derby ({count} on the grid).",
+      "derbyGrid": "Grid position {slot}. {laps} laps: follow the flags. Green in {seconds}...",
+      "derbyGreen": "GREEN FLAG! Go go go!",
+      "derbyFinishPurse": "Checkered flag! You take {place} place and a {silver}s purse.",
+      "derbyFinish": "Checkered flag! You finish in {place} place.",
+      "derbyTimeUp": "Time! The Marshal waves you in.",
+      "derbyErrMarshal": "Sign up with the Race Marshal at the Thornwheel gate.",
+      "derbyErrRunning": "A race is already running. Wait for the next grid.",
+      "derbyErrFull": "The grid is full for the next race.",
+      "pitQueued": "You are on the card for the next Boarpit bout ({count} signed).",
+      "pitEnter": "Into the pit! {count} fighters. Fists in {seconds}...",
+      "pitFight": "FIGHT!",
+      "pitKo": "Knocked out! You are hauled to the rail.",
+      "pitForfeit": "You forfeit the bout.",
+      "pitWin": "Last one standing! You take the pot: {silver}s.",
+      "pitDraw": "The Pit Master calls it a draw.",
+      "pitErrMaster": "Sign up with the Pit Master at the Boarpit gate.",
+      "pitErrRunning": "A bout is on. Wait for the next bell.",
+      "pitErrFull": "The card is full for the next bout.",
+      "homeDeed": "The deed to {name} is yours. Welcome home.",
+      "homeErrRealtor": "See Realtor Maribel on Homestead Lane to buy a home.",
+      "homeErrEntitlement": "A deed on Homestead Lane costs {price} $CR — settle the deed payment first.",
+      "homeErrOwned": "That home already has an owner.",
+      "homeErrHaveDeed": "You already hold a deed on Homestead Lane."
+    },
     "delve": {
       "cannotEnterNow": "今はデルヴに入れない。",
       "leaveDungeonFirst": "まずダンジョンから出よ。",
@@ -7902,6 +7928,21 @@ export const ja_JP: EnTranslations = {
         "name": "Town Defense Board",
         "title": "Keeper of the Eastbrook Watch",
         "greeting": "The road needs a watch. Gather your party and hold Eastbrook against the dead."
+      },
+      "race_marshal_pip": {
+        "name": "レースマーシャル・ピップ",
+        "title": "ソーンホイールの番人",
+        "greeting": "カートは6台、3周勝負、ブレーキは名ばかりだ、{className}よ。台帳にサインしてグリッドに並ぶかい？"
+      },
+      "pit_master_grott": {
+        "name": "ピットマスター・グロット",
+        "title": "ボアピットの番人",
+        "greeting": "拳も足も、谷が授けたものは何でもありだ、{className}よ。俺のピットじゃ誰も死なない——杭がそれを保証する。出場札に名を書くかい？"
+      },
+      "realtor_maribel": {
+        "name": "不動産屋マリベル",
+        "title": "Eastbrook Homes",
+        "greeting": "上等な区画が4つ、{className}様。谷の空気はタダだが、権利書はそうはいかない。ホームステッド小路の家はご贔屓様だけのもの、CRコインでのご精算となります。"
       },
       "tidewatcher_ondrel": {
         "name": "オンドレル・ヴェイン",

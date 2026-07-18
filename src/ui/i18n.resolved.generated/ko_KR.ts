@@ -3587,6 +3587,32 @@ export const ko_KR: EnTranslations = {
     "chat": "채팅창 열기"
   },
   "sim": {
+    "venues": {
+      "derbyQueued": "You are signed up for the Thornwheel Derby ({count} on the grid).",
+      "derbyGrid": "Grid position {slot}. {laps} laps: follow the flags. Green in {seconds}...",
+      "derbyGreen": "GREEN FLAG! Go go go!",
+      "derbyFinishPurse": "Checkered flag! You take {place} place and a {silver}s purse.",
+      "derbyFinish": "Checkered flag! You finish in {place} place.",
+      "derbyTimeUp": "Time! The Marshal waves you in.",
+      "derbyErrMarshal": "Sign up with the Race Marshal at the Thornwheel gate.",
+      "derbyErrRunning": "A race is already running. Wait for the next grid.",
+      "derbyErrFull": "The grid is full for the next race.",
+      "pitQueued": "You are on the card for the next Boarpit bout ({count} signed).",
+      "pitEnter": "Into the pit! {count} fighters. Fists in {seconds}...",
+      "pitFight": "FIGHT!",
+      "pitKo": "Knocked out! You are hauled to the rail.",
+      "pitForfeit": "You forfeit the bout.",
+      "pitWin": "Last one standing! You take the pot: {silver}s.",
+      "pitDraw": "The Pit Master calls it a draw.",
+      "pitErrMaster": "Sign up with the Pit Master at the Boarpit gate.",
+      "pitErrRunning": "A bout is on. Wait for the next bell.",
+      "pitErrFull": "The card is full for the next bout.",
+      "homeDeed": "The deed to {name} is yours. Welcome home.",
+      "homeErrRealtor": "See Realtor Maribel on Homestead Lane to buy a home.",
+      "homeErrEntitlement": "A deed on Homestead Lane costs {price} $CR — settle the deed payment first.",
+      "homeErrOwned": "That home already has an owner.",
+      "homeErrHaveDeed": "You already hold a deed on Homestead Lane."
+    },
     "delve": {
       "cannotEnterNow": "지금은 탐굴에 진입할 수 없습니다.",
       "leaveDungeonFirst": "먼저 던전에서 나가세요.",
@@ -7902,6 +7928,21 @@ export const ko_KR: EnTranslations = {
         "name": "Town Defense Board",
         "title": "Keeper of the Eastbrook Watch",
         "greeting": "The road needs a watch. Gather your party and hold Eastbrook against the dead."
+      },
+      "race_marshal_pip": {
+        "name": "경주 진행관 핍",
+        "title": "가시바퀴의 관리인",
+        "greeting": "카트 여섯 대, 세 바퀴, 그리고 이름값도 못 하는 브레이크지, {className}. 장부에 서명하고 그리드 한 자리 잡겠나?"
+      },
+      "pit_master_grott": {
+        "name": "구덩이 관리인 그로트",
+        "title": "멧돼지 구덩이의 관리인",
+        "greeting": "주먹이든 발이든, 골짜기가 준 것이라면 뭐든 좋다, {className}. 내 구덩이에서는 아무도 죽지 않아 — 말뚝이 지켜주니까. 출전 명단에 이름을 올리겠나?"
+      },
+      "realtor_maribel": {
+        "name": "공인중개사 마리벨",
+        "title": "Eastbrook Homes",
+        "greeting": "좋은 부지가 넷 있지요, {className}. 골짜기 공기는 공짜지만 집문서는 아니랍니다. 홈스테드 골목의 집은 후원자 전용으로, CR 코인으로 결제됩니다."
       },
       "tidewatcher_ondrel": {
         "name": "온드렐 베인",

@@ -3587,6 +3587,32 @@ export const id_ID: EnTranslations = {
     "chat": "Buka Obrolan"
   },
   "sim": {
+    "venues": {
+      "derbyQueued": "You are signed up for the Thornwheel Derby ({count} on the grid).",
+      "derbyGrid": "Grid position {slot}. {laps} laps: follow the flags. Green in {seconds}...",
+      "derbyGreen": "GREEN FLAG! Go go go!",
+      "derbyFinishPurse": "Checkered flag! You take {place} place and a {silver}s purse.",
+      "derbyFinish": "Checkered flag! You finish in {place} place.",
+      "derbyTimeUp": "Time! The Marshal waves you in.",
+      "derbyErrMarshal": "Sign up with the Race Marshal at the Thornwheel gate.",
+      "derbyErrRunning": "A race is already running. Wait for the next grid.",
+      "derbyErrFull": "The grid is full for the next race.",
+      "pitQueued": "You are on the card for the next Boarpit bout ({count} signed).",
+      "pitEnter": "Into the pit! {count} fighters. Fists in {seconds}...",
+      "pitFight": "FIGHT!",
+      "pitKo": "Knocked out! You are hauled to the rail.",
+      "pitForfeit": "You forfeit the bout.",
+      "pitWin": "Last one standing! You take the pot: {silver}s.",
+      "pitDraw": "The Pit Master calls it a draw.",
+      "pitErrMaster": "Sign up with the Pit Master at the Boarpit gate.",
+      "pitErrRunning": "A bout is on. Wait for the next bell.",
+      "pitErrFull": "The card is full for the next bout.",
+      "homeDeed": "The deed to {name} is yours. Welcome home.",
+      "homeErrRealtor": "See Realtor Maribel on Homestead Lane to buy a home.",
+      "homeErrEntitlement": "A deed on Homestead Lane costs {price} $CR — settle the deed payment first.",
+      "homeErrOwned": "That home already has an owner.",
+      "homeErrHaveDeed": "You already hold a deed on Homestead Lane."
+    },
     "delve": {
       "cannotEnterNow": "Kamu tidak dapat memasuki delve saat ini.",
       "leaveDungeonFirst": "Tinggalkan dungeon dulu.",
@@ -7902,6 +7928,21 @@ export const id_ID: EnTranslations = {
         "name": "Town Defense Board",
         "title": "Keeper of the Eastbrook Watch",
         "greeting": "The road needs a watch. Gather your party and hold Eastbrook against the dead."
+      },
+      "race_marshal_pip": {
+        "name": "Marsekal Balap Pip",
+        "title": "Penjaga Roda Duri",
+        "greeting": "Enam gerobak balap, tiga putaran, dan rem yang tak pantas disebut rem, {className}. Mau tanda tangan di buku dan ambil posisi start?"
+      },
+      "pit_master_grott": {
+        "name": "Juragan Arena Grott",
+        "title": "Penjaga Lubang Babi Hutan",
+        "greeting": "Tinju, kaki, dan apa pun pemberian lembah ini, {className}. Tak ada yang mati di lubangku — pancang-pancang itu jaminannya. Mau daftar di papan laga?"
+      },
+      "realtor_maribel": {
+        "name": "Agen Properti Maribel",
+        "title": "Eastbrook Homes",
+        "greeting": "Empat kavling bagus, {className}, dan udara lembah ini gratis — surat tanahnya tidak. Rumah di Lorong Homestead hanya untuk para patron kami, dibayar dengan koin CR."
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",

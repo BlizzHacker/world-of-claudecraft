@@ -3587,6 +3587,32 @@ export const zh_CN: EnTranslations = {
     "chat": "打开聊天框"
   },
   "sim": {
+    "venues": {
+      "derbyQueued": "You are signed up for the Thornwheel Derby ({count} on the grid).",
+      "derbyGrid": "Grid position {slot}. {laps} laps: follow the flags. Green in {seconds}...",
+      "derbyGreen": "GREEN FLAG! Go go go!",
+      "derbyFinishPurse": "Checkered flag! You take {place} place and a {silver}s purse.",
+      "derbyFinish": "Checkered flag! You finish in {place} place.",
+      "derbyTimeUp": "Time! The Marshal waves you in.",
+      "derbyErrMarshal": "Sign up with the Race Marshal at the Thornwheel gate.",
+      "derbyErrRunning": "A race is already running. Wait for the next grid.",
+      "derbyErrFull": "The grid is full for the next race.",
+      "pitQueued": "You are on the card for the next Boarpit bout ({count} signed).",
+      "pitEnter": "Into the pit! {count} fighters. Fists in {seconds}...",
+      "pitFight": "FIGHT!",
+      "pitKo": "Knocked out! You are hauled to the rail.",
+      "pitForfeit": "You forfeit the bout.",
+      "pitWin": "Last one standing! You take the pot: {silver}s.",
+      "pitDraw": "The Pit Master calls it a draw.",
+      "pitErrMaster": "Sign up with the Pit Master at the Boarpit gate.",
+      "pitErrRunning": "A bout is on. Wait for the next bell.",
+      "pitErrFull": "The card is full for the next bout.",
+      "homeDeed": "The deed to {name} is yours. Welcome home.",
+      "homeErrRealtor": "See Realtor Maribel on Homestead Lane to buy a home.",
+      "homeErrEntitlement": "A deed on Homestead Lane costs {price} $CR — settle the deed payment first.",
+      "homeErrOwned": "That home already has an owner.",
+      "homeErrHaveDeed": "You already hold a deed on Homestead Lane."
+    },
     "delve": {
       "cannotEnterNow": "你现在无法进入探秘。",
       "leaveDungeonFirst": "请先离开地下城。",
@@ -7902,6 +7928,21 @@ export const zh_CN: EnTranslations = {
         "name": "Town Defense Board",
         "title": "Keeper of the Eastbrook Watch",
         "greeting": "The road needs a watch. Gather your party and hold Eastbrook against the dead."
+      },
+      "race_marshal_pip": {
+        "name": "赛事总管皮普",
+        "title": "荆棘车轮看守",
+        "greeting": "六辆矿车、三圈赛道，刹车更是徒有其名，{className}。要在登记簿上签个名，占个发车位吗？"
+      },
+      "pit_master_grott": {
+        "name": "斗坑之主格罗特",
+        "title": "野猪坑看守",
+        "greeting": "拳头、脚，还有山谷赋予你的一切都能用，{className}。我的坑里没人会死——木桩会保证这一点。要在出场名单上签名吗？"
+      },
+      "realtor_maribel": {
+        "name": "房产经纪玛丽贝尔",
+        "title": "Eastbrook Homes",
+        "greeting": "四块上好的地皮，{className}。山谷的空气免费，地契可不免费。家园巷的宅子只属于我们的赞助人，以 CR 币结算。"
       },
       "tidewatcher_ondrel": {
         "name": "翁德雷尔·凡恩",

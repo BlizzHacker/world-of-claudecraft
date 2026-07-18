@@ -3587,6 +3587,32 @@ export const cs_CZ: EnTranslations = {
     "chat": "Otevřít chat"
   },
   "sim": {
+    "venues": {
+      "derbyQueued": "You are signed up for the Thornwheel Derby ({count} on the grid).",
+      "derbyGrid": "Grid position {slot}. {laps} laps: follow the flags. Green in {seconds}...",
+      "derbyGreen": "GREEN FLAG! Go go go!",
+      "derbyFinishPurse": "Checkered flag! You take {place} place and a {silver}s purse.",
+      "derbyFinish": "Checkered flag! You finish in {place} place.",
+      "derbyTimeUp": "Time! The Marshal waves you in.",
+      "derbyErrMarshal": "Sign up with the Race Marshal at the Thornwheel gate.",
+      "derbyErrRunning": "A race is already running. Wait for the next grid.",
+      "derbyErrFull": "The grid is full for the next race.",
+      "pitQueued": "You are on the card for the next Boarpit bout ({count} signed).",
+      "pitEnter": "Into the pit! {count} fighters. Fists in {seconds}...",
+      "pitFight": "FIGHT!",
+      "pitKo": "Knocked out! You are hauled to the rail.",
+      "pitForfeit": "You forfeit the bout.",
+      "pitWin": "Last one standing! You take the pot: {silver}s.",
+      "pitDraw": "The Pit Master calls it a draw.",
+      "pitErrMaster": "Sign up with the Pit Master at the Boarpit gate.",
+      "pitErrRunning": "A bout is on. Wait for the next bell.",
+      "pitErrFull": "The card is full for the next bout.",
+      "homeDeed": "The deed to {name} is yours. Welcome home.",
+      "homeErrRealtor": "See Realtor Maribel on Homestead Lane to buy a home.",
+      "homeErrEntitlement": "A deed on Homestead Lane costs {price} $CR — settle the deed payment first.",
+      "homeErrOwned": "That home already has an owner.",
+      "homeErrHaveDeed": "You already hold a deed on Homestead Lane."
+    },
     "delve": {
       "cannotEnterNow": "Teď nemůžeš vstoupit do výpravy.",
       "leaveDungeonFirst": "Nejdřív opusť dungeon.",
@@ -7902,6 +7928,21 @@ export const cs_CZ: EnTranslations = {
         "name": "Town Defense Board",
         "title": "Keeper of the Eastbrook Watch",
         "greeting": "The road needs a watch. Gather your party and hold Eastbrook against the dead."
+      },
+      "race_marshal_pip": {
+        "name": "Traťová komisařka Pip",
+        "title": "Strážkyně Trnového kola",
+        "greeting": "Šest motokár, tři kola a brzdy, které si to jméno nezaslouží, {className}. Podepíšeš knihu a vezmeš si místo na roštu?"
+      },
+      "pit_master_grott": {
+        "name": "Mistr jámy Grott",
+        "title": "Strážce Kančí jámy",
+        "greeting": "Pěsti, nohy a co ti údolí nadělilo, {className}. V mé jámě nikdo neumírá — o to se postarají kůly. Zapíšeš se na listinu?"
+      },
+      "realtor_maribel": {
+        "name": "Realitní makléřka Maribel",
+        "title": "Eastbrook Homes",
+        "greeting": "Čtyři pěkné parcely, {className}, a vzduch v údolí je zadarmo — listiny ne. Dům v Usedlostní uličce je pro naše mecenáše, splatný v minci CR."
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",

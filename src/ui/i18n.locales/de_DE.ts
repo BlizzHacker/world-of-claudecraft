@@ -52,6 +52,18 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
     'Auf dem Saufeld gilt der Erntefrieden, {className}: nur Kicks und Rempler. Lust auf ein Spiel um den Kupfereimer?',
   'entities.npcs.groundskeeper_bram.name': 'Platzwart Bram',
   'entities.npcs.groundskeeper_bram.title': 'Hüter des Saufelds',
+  'entities.npcs.pit_master_grott.greeting':
+    'Fäuste, Füße und was dir das Tal sonst gab, {className}. In meiner Grube stirbt niemand — dafür sorgen die Pfähle. Trägst du dich auf die Kampfliste ein?',
+  'entities.npcs.pit_master_grott.name': 'Grubenmeister Grott',
+  'entities.npcs.pit_master_grott.title': 'Hüter der Ebergrube',
+  'entities.npcs.race_marshal_pip.greeting':
+    'Sechs Loren, drei Runden und Bremsen, die den Namen nicht verdienen, {className}. Trag dich ins Buch ein und nimm einen Startplatz?',
+  'entities.npcs.race_marshal_pip.name': 'Rennmarschallin Pip',
+  'entities.npcs.race_marshal_pip.title': 'Hüterin des Dornrads',
+  'entities.npcs.realtor_maribel.greeting':
+    'Vier feine Parzellen, {className}, und die Talluft ist gratis — die Urkunden nicht. Ein Heim in der Heimstättengasse ist unseren Gönnern vorbehalten, beglichen in CR-Münze.',
+  'entities.npcs.realtor_maribel.name': 'Maklerin Maribel',
+  'entities.npcs.realtor_maribel.title': 'Eastbrook Homes',
   'entities.zones.eastbrook_vale.pois.10.label': 'Das Saufeld',
   'guide.nav.professions': 'Berufe',
   'guide.nav.valeCup': 'Talpokal',

@@ -1242,7 +1242,10 @@ export const GUIDE_ZONES: GuideZoneInfo[] = [
       "Fallen Chapel",
       "Reliquary Hill",
       "Brightwood Glade",
-      "The Sowfield"
+      "The Sowfield",
+      "Thornwheel Circuit",
+      "The Boarpit",
+      "Eastbrook Homes"
     ],
     "welcome": "Find Marshal Redbrook in town — he has work for you."
   },

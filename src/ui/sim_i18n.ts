@@ -5382,6 +5382,164 @@ function enPassthrough(english: string, localized: string): string {
 }
 
 const RULES: Rule[] = [
+  // --- Realm venues (Thornwheel Derby / Boarpit / Eastbrook Homes) ---------
+  {
+    re: /^You are signed up for the Thornwheel Derby \((.+) on the grid\)\.$/,
+    build: (m) =>
+      enPassthrough(
+        `You are signed up for the Thornwheel Derby (${m[1]} on the grid).`,
+        t('sim.venues.derbyQueued', { count: m[1] }),
+      ),
+  },
+  {
+    re: /^Grid position (.+)\. (.+) laps: follow the flags\. Green in (.+)\.\.\.$/,
+    build: (m) =>
+      enPassthrough(
+        `Grid position ${m[1]}. ${m[2]} laps: follow the flags. Green in ${m[3]}...`,
+        t('sim.venues.derbyGrid', { slot: m[1], laps: m[2], seconds: m[3] }),
+      ),
+  },
+  {
+    re: /^GREEN FLAG! Go go go!$/,
+    build: () => enPassthrough('GREEN FLAG! Go go go!', t('sim.venues.derbyGreen')),
+  },
+  {
+    re: /^Checkered flag! You take (.+) place and a (.+)s purse\.$/,
+    build: (m) =>
+      enPassthrough(
+        `Checkered flag! You take ${m[1]} place and a ${m[2]}s purse.`,
+        t('sim.venues.derbyFinishPurse', { place: m[1], silver: m[2] }),
+      ),
+  },
+  {
+    re: /^Checkered flag! You finish in (.+) place\.$/,
+    build: (m) =>
+      enPassthrough(
+        `Checkered flag! You finish in ${m[1]} place.`,
+        t('sim.venues.derbyFinish', { place: m[1] }),
+      ),
+  },
+  {
+    re: /^Time! The Marshal waves you in\.$/,
+    build: () => enPassthrough('Time! The Marshal waves you in.', t('sim.venues.derbyTimeUp')),
+  },
+  {
+    re: /^Sign up with the Race Marshal at the Thornwheel gate\.$/,
+    build: () =>
+      enPassthrough(
+        'Sign up with the Race Marshal at the Thornwheel gate.',
+        t('sim.venues.derbyErrMarshal'),
+      ),
+  },
+  {
+    re: /^A race is already running\. Wait for the next grid\.$/,
+    build: () =>
+      enPassthrough(
+        'A race is already running. Wait for the next grid.',
+        t('sim.venues.derbyErrRunning'),
+      ),
+  },
+  {
+    re: /^The grid is full for the next race\.$/,
+    build: () =>
+      enPassthrough('The grid is full for the next race.', t('sim.venues.derbyErrFull')),
+  },
+  {
+    re: /^You are on the card for the next Boarpit bout \((.+) signed\)\.$/,
+    build: (m) =>
+      enPassthrough(
+        `You are on the card for the next Boarpit bout (${m[1]} signed).`,
+        t('sim.venues.pitQueued', { count: m[1] }),
+      ),
+  },
+  {
+    re: /^Into the pit! (.+) fighters\. Fists in (.+)\.\.\.$/,
+    build: (m) =>
+      enPassthrough(
+        `Into the pit! ${m[1]} fighters. Fists in ${m[2]}...`,
+        t('sim.venues.pitEnter', { count: m[1], seconds: m[2] }),
+      ),
+  },
+  {
+    re: /^FIGHT!$/,
+    build: () => enPassthrough('FIGHT!', t('sim.venues.pitFight')),
+  },
+  {
+    re: /^Knocked out! You are hauled to the rail\.$/,
+    build: () =>
+      enPassthrough('Knocked out! You are hauled to the rail.', t('sim.venues.pitKo')),
+  },
+  {
+    re: /^You forfeit the bout\.$/,
+    build: () => enPassthrough('You forfeit the bout.', t('sim.venues.pitForfeit')),
+  },
+  {
+    re: /^Last one standing! You take the pot: (.+)s\.$/,
+    build: (m) =>
+      enPassthrough(
+        `Last one standing! You take the pot: ${m[1]}s.`,
+        t('sim.venues.pitWin', { silver: m[1] }),
+      ),
+  },
+  {
+    re: /^The Pit Master calls it a draw\.$/,
+    build: () => enPassthrough('The Pit Master calls it a draw.', t('sim.venues.pitDraw')),
+  },
+  {
+    re: /^Sign up with the Pit Master at the Boarpit gate\.$/,
+    build: () =>
+      enPassthrough(
+        'Sign up with the Pit Master at the Boarpit gate.',
+        t('sim.venues.pitErrMaster'),
+      ),
+  },
+  {
+    re: /^A bout is on\. Wait for the next bell\.$/,
+    build: () =>
+      enPassthrough('A bout is on. Wait for the next bell.', t('sim.venues.pitErrRunning')),
+  },
+  {
+    re: /^The card is full for the next bout\.$/,
+    build: () =>
+      enPassthrough('The card is full for the next bout.', t('sim.venues.pitErrFull')),
+  },
+  {
+    re: /^The deed to (.+) is yours\. Welcome home\.$/,
+    build: (m) =>
+      enPassthrough(
+        `The deed to ${m[1]} is yours. Welcome home.`,
+        t('sim.venues.homeDeed', { name: m[1] }),
+      ),
+  },
+  {
+    re: /^See Realtor Maribel on Homestead Lane to buy a home\.$/,
+    build: () =>
+      enPassthrough(
+        'See Realtor Maribel on Homestead Lane to buy a home.',
+        t('sim.venues.homeErrRealtor'),
+      ),
+  },
+  {
+    re: /^A deed on Homestead Lane costs (.+) \$CR — settle the deed payment first\.$/,
+    build: (m) =>
+      enPassthrough(
+        `A deed on Homestead Lane costs ${m[1]} $CR — settle the deed payment first.`,
+        t('sim.venues.homeErrEntitlement', { price: m[1] }),
+      ),
+  },
+  {
+    re: /^That home already has an owner\.$/,
+    build: () =>
+      enPassthrough('That home already has an owner.', t('sim.venues.homeErrOwned')),
+  },
+  {
+    re: /^You already hold a deed on Homestead Lane\.$/,
+    build: () =>
+      enPassthrough(
+        'You already hold a deed on Homestead Lane.',
+        t('sim.venues.homeErrHaveDeed'),
+      ),
+  },
   {
     re: /^Unknown command\.$/,
     build: () => enPassthrough('Unknown command.', t('hud.errors.unknownCommand', { command: '' })),

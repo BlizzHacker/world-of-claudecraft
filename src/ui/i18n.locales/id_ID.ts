@@ -171,6 +171,18 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
     'Gencatan tetap berlaku di Sowfield, {className}: hanya tendangan dan benturan bahu. Mau bermain memperebutkan Ember Tembaga?',
   'entities.npcs.groundskeeper_bram.name': 'Penjaga Lapangan Bram',
   'entities.npcs.groundskeeper_bram.title': 'Penjaga Sowfield',
+  'entities.npcs.pit_master_grott.greeting':
+    'Tinju, kaki, dan apa pun pemberian lembah ini, {className}. Tak ada yang mati di lubangku — pancang-pancang itu jaminannya. Mau daftar di papan laga?',
+  'entities.npcs.pit_master_grott.name': 'Juragan Arena Grott',
+  'entities.npcs.pit_master_grott.title': 'Penjaga Lubang Babi Hutan',
+  'entities.npcs.race_marshal_pip.greeting':
+    'Enam gerobak balap, tiga putaran, dan rem yang tak pantas disebut rem, {className}. Mau tanda tangan di buku dan ambil posisi start?',
+  'entities.npcs.race_marshal_pip.name': 'Marsekal Balap Pip',
+  'entities.npcs.race_marshal_pip.title': 'Penjaga Roda Duri',
+  'entities.npcs.realtor_maribel.greeting':
+    'Empat kavling bagus, {className}, dan udara lembah ini gratis — surat tanahnya tidak. Rumah di Lorong Homestead hanya untuk para patron kami, dibayar dengan koin CR.',
+  'entities.npcs.realtor_maribel.name': 'Agen Properti Maribel',
+  'entities.npcs.realtor_maribel.title': 'Eastbrook Homes',
   'entities.zones.eastbrook_vale.pois.10.label': 'Sowfield',
   'guide.nav.professions': 'Profesi',
   'guide.nav.valeCup': 'Piala Lembah',

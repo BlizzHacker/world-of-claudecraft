@@ -172,6 +172,18 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
     'Lệnh hưu chiến vẫn giữ vững tại Sân Heo Nái, {className}: chỉ có sút bóng và va vai thôi. Muốn thi đấu vì Chiếc Xô Đồng chứ?',
   'entities.npcs.groundskeeper_bram.name': 'Quản Sân Bram',
   'entities.npcs.groundskeeper_bram.title': 'Người Trông Coi Sân Heo Nái',
+  'entities.npcs.pit_master_grott.greeting':
+    'Nắm đấm, đôi chân, và bất cứ thứ gì thung lũng ban cho ngươi, {className}. Không ai chết trong hố của ta — hàng cọc lo chuyện đó. Ghi tên vào bảng đấu chứ?',
+  'entities.npcs.pit_master_grott.name': 'Chủ hố đấu Grott',
+  'entities.npcs.pit_master_grott.title': 'Người giữ Hố Lợn Rừng',
+  'entities.npcs.race_marshal_pip.greeting':
+    'Sáu chiếc xe goòng, ba vòng đua, và phanh thì chẳng đáng gọi là phanh, {className}. Ký vào sổ và nhận một ô xuất phát chứ?',
+  'entities.npcs.race_marshal_pip.name': 'Trọng tài đường đua Pip',
+  'entities.npcs.race_marshal_pip.title': 'Người giữ Bánh Xe Gai',
+  'entities.npcs.realtor_maribel.greeting':
+    'Bốn lô đất đẹp, {className}, và không khí thung lũng thì miễn phí — còn giấy tờ nhà thì không. Một mái nhà trên Ngõ Trang Trại chỉ dành cho các mạnh thường quân, thanh toán bằng đồng CR.',
+  'entities.npcs.realtor_maribel.name': 'Môi giới nhà đất Maribel',
+  'entities.npcs.realtor_maribel.title': 'Eastbrook Homes',
   'entities.zones.eastbrook_vale.pois.10.label': 'Sân Heo Nái',
   'guide.nav.professions': 'Nghề Nghiệp',
   'guide.nav.valeCup': 'Cúp Thung Lũng',

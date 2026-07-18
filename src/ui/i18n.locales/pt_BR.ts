@@ -53,6 +53,18 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
     'A trégua vale no Sowfield, {className}: só chutes e ombradas. Quer jogar pelo Balde de Cobre?',
   'entities.npcs.groundskeeper_bram.name': 'Zelador Bram',
   'entities.npcs.groundskeeper_bram.title': 'Zelador do Sowfield',
+  'entities.npcs.pit_master_grott.greeting':
+    'Punhos, pés e o que mais o vale te deu, {className}. No meu fosso ninguém morre — as estacas garantem isso. Vai assinar o cartaz?',
+  'entities.npcs.pit_master_grott.name': 'Mestre do fosso Grott',
+  'entities.npcs.pit_master_grott.title': 'Guardião do Fosso dos Javalis',
+  'entities.npcs.race_marshal_pip.greeting':
+    'Seis karts, três voltas e freios que não merecem o nome, {className}. Assina o registro e pega um lugar no grid?',
+  'entities.npcs.race_marshal_pip.name': 'Comissária de corrida Pip',
+  'entities.npcs.race_marshal_pip.title': 'Guardiã da Roda de Espinhos',
+  'entities.npcs.realtor_maribel.greeting':
+    'Quatro lotes finos, {className}, e o ar do vale é de graça — as escrituras não. Uma casa na Travessa dos Lares é para nossos patronos, quitada em moeda CR.',
+  'entities.npcs.realtor_maribel.name': 'Corretora Maribel',
+  'entities.npcs.realtor_maribel.title': 'Eastbrook Homes',
   'entities.zones.eastbrook_vale.pois.10.label': 'O Sowfield',
   'guide.nav.professions': 'Profissões',
   'guide.nav.valeCup': 'Copa do Vale',

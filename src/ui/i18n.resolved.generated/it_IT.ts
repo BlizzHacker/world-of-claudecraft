@@ -3587,6 +3587,32 @@ export const it_IT: EnTranslations = {
     "chat": "Apri chat"
   },
   "sim": {
+    "venues": {
+      "derbyQueued": "You are signed up for the Thornwheel Derby ({count} on the grid).",
+      "derbyGrid": "Grid position {slot}. {laps} laps: follow the flags. Green in {seconds}...",
+      "derbyGreen": "GREEN FLAG! Go go go!",
+      "derbyFinishPurse": "Checkered flag! You take {place} place and a {silver}s purse.",
+      "derbyFinish": "Checkered flag! You finish in {place} place.",
+      "derbyTimeUp": "Time! The Marshal waves you in.",
+      "derbyErrMarshal": "Sign up with the Race Marshal at the Thornwheel gate.",
+      "derbyErrRunning": "A race is already running. Wait for the next grid.",
+      "derbyErrFull": "The grid is full for the next race.",
+      "pitQueued": "You are on the card for the next Boarpit bout ({count} signed).",
+      "pitEnter": "Into the pit! {count} fighters. Fists in {seconds}...",
+      "pitFight": "FIGHT!",
+      "pitKo": "Knocked out! You are hauled to the rail.",
+      "pitForfeit": "You forfeit the bout.",
+      "pitWin": "Last one standing! You take the pot: {silver}s.",
+      "pitDraw": "The Pit Master calls it a draw.",
+      "pitErrMaster": "Sign up with the Pit Master at the Boarpit gate.",
+      "pitErrRunning": "A bout is on. Wait for the next bell.",
+      "pitErrFull": "The card is full for the next bout.",
+      "homeDeed": "The deed to {name} is yours. Welcome home.",
+      "homeErrRealtor": "See Realtor Maribel on Homestead Lane to buy a home.",
+      "homeErrEntitlement": "A deed on Homestead Lane costs {price} $CR — settle the deed payment first.",
+      "homeErrOwned": "That home already has an owner.",
+      "homeErrHaveDeed": "You already hold a deed on Homestead Lane."
+    },
     "delve": {
       "cannotEnterNow": "Non puoi entrare in un'incursione in questo momento.",
       "leaveDungeonFirst": "Esci prima dal dungeon.",
@@ -7902,6 +7928,21 @@ export const it_IT: EnTranslations = {
         "name": "Town Defense Board",
         "title": "Keeper of the Eastbrook Watch",
         "greeting": "The road needs a watch. Gather your party and hold Eastbrook against the dead."
+      },
+      "race_marshal_pip": {
+        "name": "Commissaria di gara Pip",
+        "title": "Custode della Ruota di Spine",
+        "greeting": "Sei kart, tre giri e freni indegni del nome, {className}. Firmi il registro e prendi un posto in griglia?"
+      },
+      "pit_master_grott": {
+        "name": "Mastro della fossa Grott",
+        "title": "Custode della Fossa dei Cinghiali",
+        "greeting": "Pugni, piedi e tutto ciò che la valle ti ha dato, {className}. Nella mia fossa non muore nessuno: ci pensano i pali. Ti iscrivi al cartellone?"
+      },
+      "realtor_maribel": {
+        "name": "Agente immobiliare Maribel",
+        "title": "Eastbrook Homes",
+        "greeting": "Quattro bei lotti, {className}, e l’aria della valle è gratis — gli atti no. Una casa sul Vicolo dei Focolari è per i nostri mecenati, saldata in moneta CR."
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",

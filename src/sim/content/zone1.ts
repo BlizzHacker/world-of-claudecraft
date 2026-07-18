@@ -723,7 +723,7 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
     questIds: [],
     dynamic: true,
     greeting:
-      'Four fine lots, $C, and the vale air is free — the deeds are not. A home on Homestead Lane is for our patrons, settled in $CR.',
+      'Four fine lots, $C, and the vale air is free — the deeds are not. A home on Homestead Lane is for our patrons, and deeds settle in CR coin.',
   },
   pit_master_grott: {
     id: 'pit_master_grott',

@@ -170,6 +170,18 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
     "Domuz Tarlası'nda ateşkes geçerli, {className}: yalnızca vuruş ve omuz. Bakır Kova için oynamaya var mısın?",
   'entities.npcs.groundskeeper_bram.name': 'Saha Bekçisi Bram',
   'entities.npcs.groundskeeper_bram.title': "Domuz Tarlası'nın Bekçisi",
+  'entities.npcs.pit_master_grott.greeting':
+    'Yumruklar, tekmeler ve vadinin sana verdiği her şey, {className}. Benim çukurumda kimse ölmez — kazıklar buna göz kulak olur. Afişe adını yazdırır mısın?',
+  'entities.npcs.pit_master_grott.name': 'Çukur Ustası Grott',
+  'entities.npcs.pit_master_grott.title': 'Yaban Domuzu Çukuru Bekçisi',
+  'entities.npcs.race_marshal_pip.greeting':
+    'Altı araba, üç tur ve adına layık olmayan frenler, {className}. Deftere imzayı atıp gridde yerini alır mısın?',
+  'entities.npcs.race_marshal_pip.name': 'Yarış Hakemi Pip',
+  'entities.npcs.race_marshal_pip.title': 'Dikenli Çark Bekçisi',
+  'entities.npcs.realtor_maribel.greeting':
+    'Dört güzel arsa, {className}, vadinin havası bedava — tapular değil. Çiftlik Yolu’ndaki bir ev hamilerimize özeldir, CR parasıyla ödenir.',
+  'entities.npcs.realtor_maribel.name': 'Emlakçı Maribel',
+  'entities.npcs.realtor_maribel.title': 'Eastbrook Homes',
   'entities.zones.eastbrook_vale.pois.10.label': 'Domuz Tarlası',
   'guide.nav.professions': 'Meslekler',
   'guide.nav.valeCup': 'Vadi Kupası',

@@ -6490,6 +6490,18 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
     '휴전 규칙이란 경험치도 전리품도 없다는 뜻입니다. 승부가 난 경기는 전적과 우승자 명판에 기록되고 일일 보상 점수가 따라옵니다. 경기를 버리면 자리가 비고, 경기장 관리인은 기억합니다.',
   'entities.npcs.groundskeeper_bram.name': '경기장 관리인 브람',
   'entities.npcs.groundskeeper_bram.title': '소우필드의 관리인',
+  'entities.npcs.pit_master_grott.greeting':
+    '주먹이든 발이든, 골짜기가 준 것이라면 뭐든 좋다, {className}. 내 구덩이에서는 아무도 죽지 않아 — 말뚝이 지켜주니까. 출전 명단에 이름을 올리겠나?',
+  'entities.npcs.pit_master_grott.name': '구덩이 관리인 그로트',
+  'entities.npcs.pit_master_grott.title': '멧돼지 구덩이의 관리인',
+  'entities.npcs.race_marshal_pip.greeting':
+    '카트 여섯 대, 세 바퀴, 그리고 이름값도 못 하는 브레이크지, {className}. 장부에 서명하고 그리드 한 자리 잡겠나?',
+  'entities.npcs.race_marshal_pip.name': '경주 진행관 핍',
+  'entities.npcs.race_marshal_pip.title': '가시바퀴의 관리인',
+  'entities.npcs.realtor_maribel.greeting':
+    '좋은 부지가 넷 있지요, {className}. 골짜기 공기는 공짜지만 집문서는 아니랍니다. 홈스테드 골목의 집은 후원자 전용으로, CR 코인으로 결제됩니다.',
+  'entities.npcs.realtor_maribel.name': '공인중개사 마리벨',
+  'entities.npcs.realtor_maribel.title': 'Eastbrook Homes',
   'entities.npcs.groundskeeper_bram.greeting':
     '소우필드에서는 휴전이 지켜지고 있소, {className}. 발과 어깨만 쓸 수 있소. 구리 들통을 걸고 한판 하겠소?',
   'entities.zones.eastbrook_vale.pois.10.label': '소우필드',

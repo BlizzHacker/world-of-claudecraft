@@ -151,6 +151,9 @@ const NPC_IDS = [
   'spirit_healer', // the graveyard angel (spawned at every graveyard + dungeon entry)
   'groundskeeper_bram', // Vale Cup queue master at the Sowfield gate (docs/prd/vale-cup.md)
   'town_defense_board', // Eastbrook Town Defense board
+  'race_marshal_pip', // Thornwheel Derby grid book (src/sim/social/derby.ts)
+  'pit_master_grott', // Boarpit bout card (src/sim/social/boarpit.ts)
+  'realtor_maribel', // Eastbrook Homes premium deeds (src/sim/social/homes.ts)
 ] as const;
 
 const QUEST_IDS = [

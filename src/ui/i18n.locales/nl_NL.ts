@@ -38,6 +38,18 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
     'Het bestand houdt stand op het Zeugveld, {className}: alleen trappen en schouders. Zin om te spelen voor de Koperen Emmer?',
   'entities.npcs.groundskeeper_bram.name': 'Terreinmeester Bram',
   'entities.npcs.groundskeeper_bram.title': 'Hoeder van het Zeugveld',
+  'entities.npcs.pit_master_grott.greeting':
+    'Vuisten, voeten en wat het dal je verder gaf, {className}. In mijn kuil sterft niemand — daar zorgen de palen voor. Zet je je op de kaart?',
+  'entities.npcs.pit_master_grott.name': 'Putmeester Grott',
+  'entities.npcs.pit_master_grott.title': 'Hoeder van de Zwijnenkuil',
+  'entities.npcs.race_marshal_pip.greeting':
+    'Zes karts, drie ronden en remmen die de naam niet waard zijn, {className}. Teken het boek en neem een startplek?',
+  'entities.npcs.race_marshal_pip.name': 'Racemarshal Pip',
+  'entities.npcs.race_marshal_pip.title': 'Hoedster van het Doornwiel',
+  'entities.npcs.realtor_maribel.greeting':
+    'Vier fraaie kavels, {className}, en de dallucht is gratis — de aktes niet. Een huis aan het Hoevelaantje is voor onze begunstigers, voldaan in CR-munt.',
+  'entities.npcs.realtor_maribel.name': 'Makelaar Maribel',
+  'entities.npcs.realtor_maribel.title': 'Eastbrook Homes',
   'entities.zones.eastbrook_vale.pois.10.label': 'Het Zeugveld',
   'guide.nav.professions': 'Beroepen',
   'guide.nav.valeCup': 'Dalbeker',

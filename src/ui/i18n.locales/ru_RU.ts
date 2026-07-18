@@ -6633,6 +6633,18 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
     'Правила перемирия означают: ни опыта, ни добычи. Результативный матч идёт в ваш счёт и на доску победителей, а с ним приходят очки ежедневных наград. Дезертирство оставляет ваше место пустым, и смотритель поля помнит.',
   'entities.npcs.groundskeeper_bram.name': 'Смотритель поля Брам',
   'entities.npcs.groundskeeper_bram.title': 'Хранитель Свиного поля',
+  'entities.npcs.pit_master_grott.greeting':
+    'Кулаки, ноги и всё, чем одарила тебя долина, {className}. В моей яме никто не умирает — за этим следят колья. Впишешь себя в список боёв?',
+  'entities.npcs.pit_master_grott.name': 'Хозяин ямы Гротт',
+  'entities.npcs.pit_master_grott.title': 'Хранитель Кабаньей Ямы',
+  'entities.npcs.race_marshal_pip.greeting':
+    'Шесть карт, три круга и тормоза, не стоящие своего имени, {className}. Распишешься в книге и займёшь место на решётке?',
+  'entities.npcs.race_marshal_pip.name': 'Распорядительница гонок Пип',
+  'entities.npcs.race_marshal_pip.title': 'Хранительница Тернового Колеса',
+  'entities.npcs.realtor_maribel.greeting':
+    'Четыре славных участка, {className}, и воздух долины бесплатен — купчие нет. Дом на Усадебной улочке — для наших покровителей, оплачивается монетой CR.',
+  'entities.npcs.realtor_maribel.name': 'Риелтор Марибель',
+  'entities.npcs.realtor_maribel.title': 'Eastbrook Homes',
   'entities.npcs.groundskeeper_bram.greeting':
     'На Свином поле действует перемирие, {className}: только ноги и плечи. Сыграем за Медное ведро?',
   'entities.zones.eastbrook_vale.pois.10.label': 'Свиное поле',

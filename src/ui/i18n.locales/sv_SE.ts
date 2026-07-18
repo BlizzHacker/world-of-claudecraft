@@ -37,6 +37,18 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
     'Freden håller på Suggfältet, {className}: bara sparkar och axeltacklingar. Vill du spela om Kopparspannen?',
   'entities.npcs.groundskeeper_bram.name': 'Vaktmästare Bram',
   'entities.npcs.groundskeeper_bram.title': 'Suggfältets vårdare',
+  'entities.npcs.pit_master_grott.greeting':
+    'Nävar, fötter och vad dalen än gett dig, {className}. Ingen dör i min grop — det ser pålarna till. Skriver du upp dig på listan?',
+  'entities.npcs.pit_master_grott.name': 'Gropmästare Grott',
+  'entities.npcs.pit_master_grott.title': 'Vildsvinsgropens väktare',
+  'entities.npcs.race_marshal_pip.greeting':
+    'Sex kartar, tre varv och bromsar som inte förtjänar namnet, {className}. Skriver du in dig i boken och tar en startruta?',
+  'entities.npcs.race_marshal_pip.name': 'Tävlingsmarskalk Pip',
+  'entities.npcs.race_marshal_pip.title': 'Törnhjulets väktare',
+  'entities.npcs.realtor_maribel.greeting':
+    'Fyra fina tomter, {className}, och dalens luft är gratis — lagfarterna är det inte. Ett hem på Gårdsgränden är för våra gynnare, betalt i CR-mynt.',
+  'entities.npcs.realtor_maribel.name': 'Mäklare Maribel',
+  'entities.npcs.realtor_maribel.title': 'Eastbrook Homes',
   'entities.zones.eastbrook_vale.pois.10.label': 'Suggfältet',
   'guide.nav.professions': 'Yrken',
   'guide.nav.valeCup': 'Dalcupen',

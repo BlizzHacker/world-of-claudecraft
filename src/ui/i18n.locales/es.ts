@@ -52,6 +52,18 @@ export const es: Partial<Record<TranslationKey, string>> = {
     'La tregua se respeta en el Sembradal, {className}: solo patadas y hombrazos. ¿Te animas a jugar por el Cubo de Cobre?',
   'entities.npcs.groundskeeper_bram.name': 'Guardacampo Bram',
   'entities.npcs.groundskeeper_bram.title': 'Guarda del Sembradal',
+  'entities.npcs.pit_master_grott.greeting':
+    'Puños, pies y lo que el valle te haya dado, {className}. En mi foso no muere nadie: de eso se encargan las estacas. ¿Te apuntas al cartel?',
+  'entities.npcs.pit_master_grott.name': 'Maestro del foso Grott',
+  'entities.npcs.pit_master_grott.title': 'Guardián del Foso del Jabalí',
+  'entities.npcs.race_marshal_pip.greeting':
+    '¿Seis karts, tres vueltas y unos frenos que no merecen el nombre, {className}? Firma el registro y toma un puesto en la parrilla.',
+  'entities.npcs.race_marshal_pip.name': 'Comisaria de carrera Pip',
+  'entities.npcs.race_marshal_pip.title': 'Guardiana de la Rueda Espinosa',
+  'entities.npcs.realtor_maribel.greeting':
+    'Cuatro parcelas estupendas, {className}, y el aire del valle es gratis; las escrituras no. Una casa en el Camino de los Hogares es para nuestros mecenas, pagada en moneda CR.',
+  'entities.npcs.realtor_maribel.name': 'Agente inmobiliaria Maribel',
+  'entities.npcs.realtor_maribel.title': 'Eastbrook Homes',
   'entities.zones.eastbrook_vale.pois.10.label': 'El Sembradal',
   'guide.nav.professions': 'Oficios',
   'guide.nav.valeCup': 'Copa del Valle',

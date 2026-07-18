@@ -537,6 +537,35 @@ export const en = {
   // Locale overlays are English-filled + marked pending by the i18n build until a
   // translation pass. ENGLISH ONLY here; never add per-locale blocks to this section.
   sim: {
+    venues: {
+      // Realm venue system messages (Thornwheel Derby, the Boarpit, Eastbrook
+      // Homes). Emitted in English by the sim modules under src/sim/social/
+      // and re-localized client-side via sim_i18n RULES.
+      derbyQueued: 'You are signed up for the Thornwheel Derby ({count} on the grid).',
+      derbyGrid: 'Grid position {slot}. {laps} laps: follow the flags. Green in {seconds}...',
+      derbyGreen: 'GREEN FLAG! Go go go!',
+      derbyFinishPurse: 'Checkered flag! You take {place} place and a {silver}s purse.',
+      derbyFinish: 'Checkered flag! You finish in {place} place.',
+      derbyTimeUp: 'Time! The Marshal waves you in.',
+      derbyErrMarshal: 'Sign up with the Race Marshal at the Thornwheel gate.',
+      derbyErrRunning: 'A race is already running. Wait for the next grid.',
+      derbyErrFull: 'The grid is full for the next race.',
+      pitQueued: 'You are on the card for the next Boarpit bout ({count} signed).',
+      pitEnter: 'Into the pit! {count} fighters. Fists in {seconds}...',
+      pitFight: 'FIGHT!',
+      pitKo: 'Knocked out! You are hauled to the rail.',
+      pitForfeit: 'You forfeit the bout.',
+      pitWin: 'Last one standing! You take the pot: {silver}s.',
+      pitDraw: 'The Pit Master calls it a draw.',
+      pitErrMaster: 'Sign up with the Pit Master at the Boarpit gate.',
+      pitErrRunning: 'A bout is on. Wait for the next bell.',
+      pitErrFull: 'The card is full for the next bout.',
+      homeDeed: 'The deed to {name} is yours. Welcome home.',
+      homeErrRealtor: 'See Realtor Maribel on Homestead Lane to buy a home.',
+      homeErrEntitlement: 'A deed on Homestead Lane costs {price} $CR — settle the deed payment first.',
+      homeErrOwned: 'That home already has an owner.',
+      homeErrHaveDeed: 'You already hold a deed on Homestead Lane.',
+    },
     delve: {
       cannotEnterNow: 'You cannot enter a dungeon right now.',
       leaveDungeonFirst: 'Leave the dungeon first.',

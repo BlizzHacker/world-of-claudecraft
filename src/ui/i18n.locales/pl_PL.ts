@@ -62,6 +62,18 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
     'Na Maciorowym Błoniu obowiązuje rozejm, {className}: tylko kopniaki i barki. Zagrasz o Miedziany Skopek?',
   'entities.npcs.groundskeeper_bram.name': 'Opiekun Murawy Bram',
   'entities.npcs.groundskeeper_bram.title': 'Opiekun Maciorowego Błonia',
+  'entities.npcs.pit_master_grott.greeting':
+    'Pięści, nogi i co tam dolina ci dała, {className}. W mojej jamie nikt nie umiera — pale tego pilnują. Wpiszesz się na afisz?',
+  'entities.npcs.pit_master_grott.name': 'Mistrz jamy Grott',
+  'entities.npcs.pit_master_grott.title': 'Strażnik Dziczej Jamy',
+  'entities.npcs.race_marshal_pip.greeting':
+    'Sześć gokartów, trzy okrążenia i hamulce niegodne tej nazwy, {className}. Podpiszesz księgę i zajmiesz miejsce na starcie?',
+  'entities.npcs.race_marshal_pip.name': 'Sędzia wyścigu Pip',
+  'entities.npcs.race_marshal_pip.title': 'Strażniczka Ciernistego Koła',
+  'entities.npcs.realtor_maribel.greeting':
+    'Cztery ładne działki, {className}, a powietrze doliny jest za darmo — akty własności nie. Dom przy Zagrodowej uliczce jest dla naszych patronów, opłacany monetą CR.',
+  'entities.npcs.realtor_maribel.name': 'Pośredniczka Maribel',
+  'entities.npcs.realtor_maribel.title': 'Eastbrook Homes',
   'entities.zones.eastbrook_vale.pois.10.label': 'Maciorowe Błonie',
   'guide.nav.professions': 'Profesje',
   'guide.nav.valeCup': 'Puchar Doliny',

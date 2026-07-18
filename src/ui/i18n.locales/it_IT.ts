@@ -51,6 +51,18 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
     'La tregua regge al Campo della Scrofa, {className}: solo calci e spallate. Ti va di giocare per il Secchio di Rame?',
   'entities.npcs.groundskeeper_bram.name': 'Guardacampo Bram',
   'entities.npcs.groundskeeper_bram.title': 'Custode del Campo della Scrofa',
+  'entities.npcs.pit_master_grott.greeting':
+    'Pugni, piedi e tutto ciò che la valle ti ha dato, {className}. Nella mia fossa non muore nessuno: ci pensano i pali. Ti iscrivi al cartellone?',
+  'entities.npcs.pit_master_grott.name': 'Mastro della fossa Grott',
+  'entities.npcs.pit_master_grott.title': 'Custode della Fossa dei Cinghiali',
+  'entities.npcs.race_marshal_pip.greeting':
+    'Sei kart, tre giri e freni indegni del nome, {className}. Firmi il registro e prendi un posto in griglia?',
+  'entities.npcs.race_marshal_pip.name': 'Commissaria di gara Pip',
+  'entities.npcs.race_marshal_pip.title': 'Custode della Ruota di Spine',
+  'entities.npcs.realtor_maribel.greeting':
+    'Quattro bei lotti, {className}, e l’aria della valle è gratis — gli atti no. Una casa sul Vicolo dei Focolari è per i nostri mecenati, saldata in moneta CR.',
+  'entities.npcs.realtor_maribel.name': 'Agente immobiliare Maribel',
+  'entities.npcs.realtor_maribel.title': 'Eastbrook Homes',
   'entities.zones.eastbrook_vale.pois.10.label': 'Il Campo della Scrofa',
   'guide.nav.professions': 'Professioni',
   'guide.nav.valeCup': 'Coppa della Valle',

@@ -6169,6 +6169,18 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
     '休战规矩意味着没有经验也没有战利品：一场分出胜负的比赛会计入你的战绩和优胜者榜，并附带每日奖励点数。中途弃赛会让你的位置空缺，而场地管理员记着呢。',
   'entities.npcs.groundskeeper_bram.name': '场地管理员布拉姆',
   'entities.npcs.groundskeeper_bram.title': '母猪场看守',
+  'entities.npcs.pit_master_grott.greeting':
+    '拳头、脚，还有山谷赋予你的一切都能用，{className}。我的坑里没人会死——木桩会保证这一点。要在出场名单上签名吗？',
+  'entities.npcs.pit_master_grott.name': '斗坑之主格罗特',
+  'entities.npcs.pit_master_grott.title': '野猪坑看守',
+  'entities.npcs.race_marshal_pip.greeting':
+    '六辆矿车、三圈赛道，刹车更是徒有其名，{className}。要在登记簿上签个名，占个发车位吗？',
+  'entities.npcs.race_marshal_pip.name': '赛事总管皮普',
+  'entities.npcs.race_marshal_pip.title': '荆棘车轮看守',
+  'entities.npcs.realtor_maribel.greeting':
+    '四块上好的地皮，{className}。山谷的空气免费，地契可不免费。家园巷的宅子只属于我们的赞助人，以 CR 币结算。',
+  'entities.npcs.realtor_maribel.name': '房产经纪玛丽贝尔',
+  'entities.npcs.realtor_maribel.title': 'Eastbrook Homes',
   'entities.npcs.groundskeeper_bram.greeting':
     '休战约定在母猪场依然有效，{className}：只许用脚和肩膀。想为铜奶桶一战吗？',
   'entities.zones.eastbrook_vale.pois.10.label': '母猪场',

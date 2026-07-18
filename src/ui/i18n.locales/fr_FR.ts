@@ -52,6 +52,18 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     'La trêve tient au Pré de la Truie, {className} : des bottes et des épaules, rien de plus. Envie de jouer pour le Seau de cuivre ?',
   'entities.npcs.groundskeeper_bram.name': 'Intendant Bram',
   'entities.npcs.groundskeeper_bram.title': 'Gardien du Pré de la Truie',
+  'entities.npcs.pit_master_grott.greeting':
+    'Les poings, les pieds et tout ce que la vallée t’a donné, {className}. Personne ne meurt dans ma fosse — les pieux y veillent. On s’inscrit au programme ?',
+  'entities.npcs.pit_master_grott.name': 'Maître de fosse Grott',
+  'entities.npcs.pit_master_grott.title': 'Gardien de la Fosse aux Sangliers',
+  'entities.npcs.race_marshal_pip.greeting':
+    'Six karts, trois tours, et des freins indignes de ce nom, {className}. On signe le registre et on prend une place sur la grille ?',
+  'entities.npcs.race_marshal_pip.name': 'Commissaire de course Pip',
+  'entities.npcs.race_marshal_pip.title': 'Gardienne de la Roue-d’Épines',
+  'entities.npcs.realtor_maribel.greeting':
+    'Quatre belles parcelles, {className}, et l’air de la vallée est gratuit — pas les actes. Une maison sur l’allée des Foyers est réservée à nos mécènes, réglée en monnaie CR.',
+  'entities.npcs.realtor_maribel.name': 'Agente immobilière Maribel',
+  'entities.npcs.realtor_maribel.title': 'Eastbrook Homes',
   'entities.zones.eastbrook_vale.pois.10.label': 'Le Pré de la Truie',
   'guide.nav.professions': 'Métiers',
   'guide.nav.valeCup': 'Coupe du Val',

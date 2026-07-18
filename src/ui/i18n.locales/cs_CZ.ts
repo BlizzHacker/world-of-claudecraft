@@ -63,6 +63,18 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
     'Na Prasečím poli platí příměří, {className}: jen kopy a ramena. Chceš si zahrát o Měděný kbelík?',
   'entities.npcs.groundskeeper_bram.name': 'Správce hřiště Bram',
   'entities.npcs.groundskeeper_bram.title': 'Správce Prasečího pole',
+  'entities.npcs.pit_master_grott.greeting':
+    'Pěsti, nohy a co ti údolí nadělilo, {className}. V mé jámě nikdo neumírá — o to se postarají kůly. Zapíšeš se na listinu?',
+  'entities.npcs.pit_master_grott.name': 'Mistr jámy Grott',
+  'entities.npcs.pit_master_grott.title': 'Strážce Kančí jámy',
+  'entities.npcs.race_marshal_pip.greeting':
+    'Šest motokár, tři kola a brzdy, které si to jméno nezaslouží, {className}. Podepíšeš knihu a vezmeš si místo na roštu?',
+  'entities.npcs.race_marshal_pip.name': 'Traťová komisařka Pip',
+  'entities.npcs.race_marshal_pip.title': 'Strážkyně Trnového kola',
+  'entities.npcs.realtor_maribel.greeting':
+    'Čtyři pěkné parcely, {className}, a vzduch v údolí je zadarmo — listiny ne. Dům v Usedlostní uličce je pro naše mecenáše, splatný v minci CR.',
+  'entities.npcs.realtor_maribel.name': 'Realitní makléřka Maribel',
+  'entities.npcs.realtor_maribel.title': 'Eastbrook Homes',
   'entities.zones.eastbrook_vale.pois.10.label': 'Prasečí pole',
   'guide.nav.professions': 'Profese',
   'guide.nav.valeCup': 'Pohár údolí',

@@ -3587,6 +3587,32 @@ export const ru_RU: EnTranslations = {
     "chat": "Открыть чат"
   },
   "sim": {
+    "venues": {
+      "derbyQueued": "You are signed up for the Thornwheel Derby ({count} on the grid).",
+      "derbyGrid": "Grid position {slot}. {laps} laps: follow the flags. Green in {seconds}...",
+      "derbyGreen": "GREEN FLAG! Go go go!",
+      "derbyFinishPurse": "Checkered flag! You take {place} place and a {silver}s purse.",
+      "derbyFinish": "Checkered flag! You finish in {place} place.",
+      "derbyTimeUp": "Time! The Marshal waves you in.",
+      "derbyErrMarshal": "Sign up with the Race Marshal at the Thornwheel gate.",
+      "derbyErrRunning": "A race is already running. Wait for the next grid.",
+      "derbyErrFull": "The grid is full for the next race.",
+      "pitQueued": "You are on the card for the next Boarpit bout ({count} signed).",
+      "pitEnter": "Into the pit! {count} fighters. Fists in {seconds}...",
+      "pitFight": "FIGHT!",
+      "pitKo": "Knocked out! You are hauled to the rail.",
+      "pitForfeit": "You forfeit the bout.",
+      "pitWin": "Last one standing! You take the pot: {silver}s.",
+      "pitDraw": "The Pit Master calls it a draw.",
+      "pitErrMaster": "Sign up with the Pit Master at the Boarpit gate.",
+      "pitErrRunning": "A bout is on. Wait for the next bell.",
+      "pitErrFull": "The card is full for the next bout.",
+      "homeDeed": "The deed to {name} is yours. Welcome home.",
+      "homeErrRealtor": "See Realtor Maribel on Homestead Lane to buy a home.",
+      "homeErrEntitlement": "A deed on Homestead Lane costs {price} $CR — settle the deed payment first.",
+      "homeErrOwned": "That home already has an owner.",
+      "homeErrHaveDeed": "You already hold a deed on Homestead Lane."
+    },
     "delve": {
       "cannotEnterNow": "Сейчас вы не можете войти в вылазку.",
       "leaveDungeonFirst": "Сначала покиньте подземелье.",
@@ -7902,6 +7928,21 @@ export const ru_RU: EnTranslations = {
         "name": "Town Defense Board",
         "title": "Keeper of the Eastbrook Watch",
         "greeting": "The road needs a watch. Gather your party and hold Eastbrook against the dead."
+      },
+      "race_marshal_pip": {
+        "name": "Распорядительница гонок Пип",
+        "title": "Хранительница Тернового Колеса",
+        "greeting": "Шесть карт, три круга и тормоза, не стоящие своего имени, {className}. Распишешься в книге и займёшь место на решётке?"
+      },
+      "pit_master_grott": {
+        "name": "Хозяин ямы Гротт",
+        "title": "Хранитель Кабаньей Ямы",
+        "greeting": "Кулаки, ноги и всё, чем одарила тебя долина, {className}. В моей яме никто не умирает — за этим следят колья. Впишешь себя в список боёв?"
+      },
+      "realtor_maribel": {
+        "name": "Риелтор Марибель",
+        "title": "Eastbrook Homes",
+        "greeting": "Четыре славных участка, {className}, и воздух долины бесплатен — купчие нет. Дом на Усадебной улочке — для наших покровителей, оплачивается монетой CR."
       },
       "tidewatcher_ondrel": {
         "name": "Ондрел Вейн",

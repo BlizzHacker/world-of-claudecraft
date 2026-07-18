@@ -6506,6 +6506,18 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     '休戦の掟のもとでは経験値も戦利品もない。決着のついた試合は戦績と勝者の掲示板に刻まれ、デイリー報酬ポイントが付いてくる。試合を放棄すれば席はベンチ送りとなり、整備人は覚えている。',
   'entities.npcs.groundskeeper_bram.name': '整備人ブラム',
   'entities.npcs.groundskeeper_bram.title': 'ソウフィールドの番人',
+  'entities.npcs.pit_master_grott.greeting':
+    '拳も足も、谷が授けたものは何でもありだ、{className}よ。俺のピットじゃ誰も死なない——杭がそれを保証する。出場札に名を書くかい？',
+  'entities.npcs.pit_master_grott.name': 'ピットマスター・グロット',
+  'entities.npcs.pit_master_grott.title': 'ボアピットの番人',
+  'entities.npcs.race_marshal_pip.greeting':
+    'カートは6台、3周勝負、ブレーキは名ばかりだ、{className}よ。台帳にサインしてグリッドに並ぶかい？',
+  'entities.npcs.race_marshal_pip.name': 'レースマーシャル・ピップ',
+  'entities.npcs.race_marshal_pip.title': 'ソーンホイールの番人',
+  'entities.npcs.realtor_maribel.greeting':
+    '上等な区画が4つ、{className}様。谷の空気はタダだが、権利書はそうはいかない。ホームステッド小路の家はご贔屓様だけのもの、CRコインでのご精算となります。',
+  'entities.npcs.realtor_maribel.name': '不動産屋マリベル',
+  'entities.npcs.realtor_maribel.title': 'Eastbrook Homes',
   'entities.npcs.groundskeeper_bram.greeting':
     'ソウフィールドでは休戦が守られている、{className}よ。使っていいのは足と肩だけだ。銅のミルク桶を懸けて一戦どうだ?',
   'entities.zones.eastbrook_vale.pois.10.label': 'ソウフィールド',

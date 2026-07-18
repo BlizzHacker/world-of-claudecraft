@@ -38,6 +38,18 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
     'Freden holder på Somarken, {className}: kun spark og skulderpuf. Har du lyst til at spille om Kobberspanden?',
   'entities.npcs.groundskeeper_bram.name': 'Banemester Bram',
   'entities.npcs.groundskeeper_bram.title': 'Somarkens Vogter',
+  'entities.npcs.pit_master_grott.greeting':
+    'Næver, fødder og hvad dalen ellers gav dig, {className}. Ingen dør i min grav — det sørger pælene for. Skriver du dig på plakaten?',
+  'entities.npcs.pit_master_grott.name': 'Grubemester Grott',
+  'entities.npcs.pit_master_grott.title': 'Vildsvinegravens vogter',
+  'entities.npcs.race_marshal_pip.greeting':
+    'Seks karts, tre omgange og bremser, der ikke fortjener navnet, {className}. Skriver du dig i bogen og tager en startplads?',
+  'entities.npcs.race_marshal_pip.name': 'Løbsmarskal Pip',
+  'entities.npcs.race_marshal_pip.title': 'Tornhjulets vogter',
+  'entities.npcs.realtor_maribel.greeting':
+    'Fire fine grunde, {className}, og dalens luft er gratis — skøderne er ikke. Et hjem på Gårdstien er for vores velyndere, betalt i CR-mønt.',
+  'entities.npcs.realtor_maribel.name': 'Ejendomsmægler Maribel',
+  'entities.npcs.realtor_maribel.title': 'Eastbrook Homes',
   'entities.zones.eastbrook_vale.pois.10.label': 'Somarken',
   'guide.nav.professions': 'Professioner',
   'guide.nav.valeCup': 'Dalpokalen',
