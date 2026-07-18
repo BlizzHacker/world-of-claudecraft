@@ -7941,7 +7941,7 @@ export const ja_JP: EnTranslations = {
       },
       "realtor_maribel": {
         "name": "不動産屋マリベル",
-        "title": "Eastbrook Homes",
+        "title": "イーストブルック・ホームズ",
         "greeting": "上等な区画が4つ、{className}様。谷の空気はタダだが、権利書はそうはいかない。ホームステッド小路の家はご贔屓様だけのもの、CRコインでのご精算となります。"
       },
       "tidewatcher_ondrel": {

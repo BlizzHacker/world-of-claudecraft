@@ -6180,7 +6180,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.realtor_maribel.greeting':
     '四块上好的地皮，{className}。山谷的空气免费，地契可不免费。家园巷的宅子只属于我们的赞助人，以 CR 币结算。',
   'entities.npcs.realtor_maribel.name': '房产经纪玛丽贝尔',
-  'entities.npcs.realtor_maribel.title': 'Eastbrook Homes',
+  'entities.npcs.realtor_maribel.title': '东溪家园',
   'entities.npcs.groundskeeper_bram.greeting':
     '休战约定在母猪场依然有效，{className}：只许用脚和肩膀。想为铜奶桶一战吗？',
   'entities.zones.eastbrook_vale.pois.10.label': '母猪场',

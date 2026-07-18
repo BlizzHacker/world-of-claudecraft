@@ -6644,7 +6644,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.realtor_maribel.greeting':
     'Четыре славных участка, {className}, и воздух долины бесплатен — купчие нет. Дом на Усадебной улочке — для наших покровителей, оплачивается монетой CR.',
   'entities.npcs.realtor_maribel.name': 'Риелтор Марибель',
-  'entities.npcs.realtor_maribel.title': 'Eastbrook Homes',
+  'entities.npcs.realtor_maribel.title': 'Истврукские дома',
   'entities.npcs.groundskeeper_bram.greeting':
     'На Свином поле действует перемирие, {className}: только ноги и плечи. Сыграем за Медное ведро?',
   'entities.zones.eastbrook_vale.pois.10.label': 'Свиное поле',

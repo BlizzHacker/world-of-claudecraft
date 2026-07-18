@@ -6501,7 +6501,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.realtor_maribel.greeting':
     '좋은 부지가 넷 있지요, {className}. 골짜기 공기는 공짜지만 집문서는 아니랍니다. 홈스테드 골목의 집은 후원자 전용으로, CR 코인으로 결제됩니다.',
   'entities.npcs.realtor_maribel.name': '공인중개사 마리벨',
-  'entities.npcs.realtor_maribel.title': 'Eastbrook Homes',
+  'entities.npcs.realtor_maribel.title': '이스트브룩 주택',
   'entities.npcs.groundskeeper_bram.greeting':
     '소우필드에서는 휴전이 지켜지고 있소, {className}. 발과 어깨만 쓸 수 있소. 구리 들통을 걸고 한판 하겠소?',
   'entities.zones.eastbrook_vale.pois.10.label': '소우필드',

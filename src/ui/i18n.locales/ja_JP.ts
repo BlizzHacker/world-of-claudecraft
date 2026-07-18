@@ -6517,7 +6517,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.realtor_maribel.greeting':
     '上等な区画が4つ、{className}様。谷の空気はタダだが、権利書はそうはいかない。ホームステッド小路の家はご贔屓様だけのもの、CRコインでのご精算となります。',
   'entities.npcs.realtor_maribel.name': '不動産屋マリベル',
-  'entities.npcs.realtor_maribel.title': 'Eastbrook Homes',
+  'entities.npcs.realtor_maribel.title': 'イーストブルック・ホームズ',
   'entities.npcs.groundskeeper_bram.greeting':
     'ソウフィールドでは休戦が守られている、{className}よ。使っていいのは足と肩だけだ。銅のミルク桶を懸けて一戦どうだ?',
   'entities.zones.eastbrook_vale.pois.10.label': 'ソウフィールド',

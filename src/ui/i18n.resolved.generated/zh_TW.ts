@@ -7941,7 +7941,7 @@ export const zh_TW: EnTranslations = {
       },
       "realtor_maribel": {
         "name": "房產經紀瑪麗貝爾",
-        "title": "Eastbrook Homes",
+        "title": "東溪家園",
         "greeting": "四塊上好的地皮，{className}。山谷的空氣免費，地契可不免費。家園巷的宅子只屬於我們的贊助人，以 CR 幣結算。"
       },
       "tidewatcher_ondrel": {

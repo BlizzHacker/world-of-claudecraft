@@ -7941,7 +7941,7 @@ export const ru_RU: EnTranslations = {
       },
       "realtor_maribel": {
         "name": "Риелтор Марибель",
-        "title": "Eastbrook Homes",
+        "title": "Истврукские дома",
         "greeting": "Четыре славных участка, {className}, и воздух долины бесплатен — купчие нет. Дом на Усадебной улочке — для наших покровителей, оплачивается монетой CR."
       },
       "tidewatcher_ondrel": {

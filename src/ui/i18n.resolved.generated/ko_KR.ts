@@ -7941,7 +7941,7 @@ export const ko_KR: EnTranslations = {
       },
       "realtor_maribel": {
         "name": "공인중개사 마리벨",
-        "title": "Eastbrook Homes",
+        "title": "이스트브룩 주택",
         "greeting": "좋은 부지가 넷 있지요, {className}. 골짜기 공기는 공짜지만 집문서는 아니랍니다. 홈스테드 골목의 집은 후원자 전용으로, CR 코인으로 결제됩니다."
       },
       "tidewatcher_ondrel": {

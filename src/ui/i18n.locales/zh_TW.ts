@@ -6181,7 +6181,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.realtor_maribel.greeting':
     '四塊上好的地皮，{className}。山谷的空氣免費，地契可不免費。家園巷的宅子只屬於我們的贊助人，以 CR 幣結算。',
   'entities.npcs.realtor_maribel.name': '房產經紀瑪麗貝爾',
-  'entities.npcs.realtor_maribel.title': 'Eastbrook Homes',
+  'entities.npcs.realtor_maribel.title': '東溪家園',
   'entities.npcs.groundskeeper_bram.greeting':
     '休戰約定在母豬場依然有效，{className}：只許用腳和肩膀。想為銅奶桶一戰嗎？',
   'entities.zones.eastbrook_vale.pois.10.label': '母豬場',
