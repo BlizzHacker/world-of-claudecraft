@@ -8833,6 +8833,15 @@ export const vi_VN: EnTranslations = {
           },
           "10": {
             "label": "Sân Heo Nái"
+          },
+          "11": {
+            "label": "Thornwheel Circuit"
+          },
+          "12": {
+            "label": "The Boarpit"
+          },
+          "13": {
+            "label": "Eastbrook Homes"
           }
         }
       },

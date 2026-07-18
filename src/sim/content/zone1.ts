@@ -42,6 +42,7 @@ export const ZONE1_ZONE: ZoneDef = {
     { x: -11, z: -112, label: 'The Sowfield' },
     { x: 124, z: 32, label: 'Thornwheel Circuit' },
     { x: 30, z: 110, label: 'The Boarpit' },
+    { x: -36, z: -36, label: 'Eastbrook Homes' },
   ],
   welcome: 'Find Marshal Redbrook in town — he has work for you.',
   welcomeQuestId: 'q_wolves',
@@ -707,6 +708,22 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
     questIds: [],
     banker: true,
     greeting: 'Welcome to the Gilded Strongbox. Your goods rest safe behind our locks.',
+  },
+  realtor_maribel: {
+    id: 'realtor_maribel',
+    name: 'Realtor Maribel',
+    title: 'Eastbrook Homes',
+    // At the east end of Homestead Lane (homes_layout REALTOR_POS). dynamic:
+    // spawned at world init under a RESERVED entity id (Bram/Pip/Grott
+    // precedent). Housing is a PREMIUM feature: her deed flow checks the paid
+    // homeowner entitlement, never copper.
+    pos: { x: -26.5, z: -30 },
+    facing: -Math.PI / 2,
+    color: 0xc9a14a,
+    questIds: [],
+    dynamic: true,
+    greeting:
+      'Four fine lots, $C, and the vale air is free — the deeds are not. A home on Homestead Lane is for our patrons, settled in $CR.',
   },
   pit_master_grott: {
     id: 'pit_master_grott',

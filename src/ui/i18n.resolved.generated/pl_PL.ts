@@ -8833,6 +8833,15 @@ export const pl_PL: EnTranslations = {
           },
           "10": {
             "label": "Maciorowe Błonie"
+          },
+          "11": {
+            "label": "Thornwheel Circuit"
+          },
+          "12": {
+            "label": "The Boarpit"
+          },
+          "13": {
+            "label": "Eastbrook Homes"
           }
         }
       },

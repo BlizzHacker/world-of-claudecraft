@@ -19,6 +19,7 @@ import { type DelveModuleId, delveModuleColliders } from './delve_layout';
 import { isLitanyModuleId, litanyModuleLosColliders } from './delve_litany_layout';
 import { boarpitColliders } from './boarpit_layout';
 import { derbyColliders } from './derby_layout';
+import { homesColliders } from './homes_layout';
 import {
   ARENA_LAYOUT,
   CRYPT_LAYOUT,
@@ -283,6 +284,9 @@ function staticWorldColliders(seed: number): Collider[] {
   // The Boarpit stake ring (knockout brawls): same single-layout-module rule
   // (boarpit_layout.ts drives this set, the flatten, and the render).
   out.push(...boarpitColliders());
+
+  // Homestead Lane foundations + sale boards (Eastbrook Homes premium).
+  out.push(...homesColliders());
   return out;
 }
 

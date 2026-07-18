@@ -49,7 +49,6 @@ import { AOE_RING_LIFETIME, aoeRingAnim } from './aoe_ring';
 import { loadGltf } from './assets/loader';
 import type { SpatialAudioSink, Surface } from './audio_sink';
 import { type BirdsView, buildBirds } from './birds';
-import { type BoarpitView, buildBoarpit } from './boarpit';
 import {
   type CameraOcclusionState,
   resolveCameraBaseFov,
@@ -65,6 +64,8 @@ import { buildCritters, type CritterField } from './critters';
 import { animatesEveryFrame, crowdLodScaleSq, midAnimCadence } from './crowd_lod';
 import { buildDelveModule } from './delve_interiors';
 import { buildDelveInteractable } from './delve_props';
+import { type BoarpitView, buildBoarpit } from './boarpit';
+import { buildEastbrookHomes, type EastbrookHomesView } from './eastbrook_homes';
 import { buildDerbyTrack, type DerbyTrackView } from './derby_track';
 import { buildDoorBody } from './door_portal';
 import { DungeonInteriors, ensureDungeonAssets } from './dungeon';
@@ -1034,6 +1035,7 @@ export class Renderer {
   private valeCupStadium: ValeCupStadiumView;
   private derbyTrack: DerbyTrackView;
   private boarpitView: BoarpitView;
+  private homesView: EastbrookHomesView;
   // Futuristic-fantasy skybox for the private practice pitch (a random variant
   // per bout, camera-centred, only shown while the local player is practicing).
   private valeCupSky = new ValeCupPracticeSky();
@@ -1434,6 +1436,9 @@ export class Renderer {
     // The Boarpit stake ring, same build-once + cull rules.
     this.boarpitView = buildBoarpit(this.sim.cfg.seed);
     this.scene.add(this.boarpitView.group);
+    // Homestead Lane (Eastbrook Homes premium): cottages appear per homesInfo.
+    this.homesView = buildEastbrookHomes(this.sim.cfg.seed);
+    this.scene.add(this.homesView.group);
     // The private practice-pitch copy (shown at a far instance origin when the
     // local player is practicing; positioned/toggled by valeCupStadium.update).
     this.scene.add(this.valeCupStadium.practiceGroup);
@@ -5265,6 +5270,7 @@ export class Renderer {
     // The Thornwheel Circuit: cull + pulse the racer's next checkpoint pennant.
     this.derbyTrack.update(p.pos.x, p.pos.z, dt, this.sim.derbyInfo ?? null);
     this.boarpitView.update(p.pos.x, p.pos.z, dt);
+    this.homesView.update(p.pos.x, p.pos.z, dt, this.sim.homesInfo ?? null);
     // Team rings ride the live entity views (positions are fresh: the entity loop
     // ran above). Reads cupInfo.match for a participant, else cupInfo.spectate (a
     // nearby walk-up at the Sowfield): the sim only fills spectate near the field,

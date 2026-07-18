@@ -8833,6 +8833,15 @@ export const fr_FR: EnTranslations = {
           },
           "10": {
             "label": "Le Pré de la Truie"
+          },
+          "11": {
+            "label": "Thornwheel Circuit"
+          },
+          "12": {
+            "label": "The Boarpit"
+          },
+          "13": {
+            "label": "Eastbrook Homes"
           }
         }
       },

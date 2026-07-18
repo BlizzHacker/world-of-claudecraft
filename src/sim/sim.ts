@@ -381,6 +381,7 @@ import * as yumiMod from './social/yumi';
 export { eloDelta } from './social/arena';
 
 import * as boarpitMod from './social/boarpit';
+import * as homesMod from './social/homes';
 import * as derbyMod from './social/derby';
 import * as fiestaMod from './social/fiesta';
 // A3: Fiesta tuning consts moved to social/fiesta.ts; these five are read back here
@@ -858,6 +859,11 @@ export interface PlayerMeta {
   isDevBot?: boolean;
   /** Host-verified DuranceTester QA entitlement; runtime-only and never persisted. */
   isDuranceTester?: boolean;
+  /** Eastbrook Homes PAID entitlement (a $CR deed payment cleared on the
+   *  account). Set server-side from the account record at login
+   *  (server/homeowner_entitlement.ts); runtime-only, never persisted here —
+   *  the account row is the durable source. Free accounts never buy. */
+  homeownerEntitled?: boolean;
   skin: number; // appearance index into the render SKINS[player_<cls>]; persisted, synced
   skinCatalog: SkinCatalog;
   // Cosmetic skin-select event: the rank rolled when the event token was used,
@@ -1356,6 +1362,9 @@ export class Sim {
   // The Boarpit state (social/boarpit.ts): the same one-holder rule (the
   // signup card and the single bout slot), exposed as ctx.boarpit.
   boarpit: boarpitMod.PitState = boarpitMod.createPitState();
+  // Eastbrook Homes ownership (social/homes.ts): plain serializable holder;
+  // the SERVER persists it (world-state store) after every purchase.
+  homes: homesMod.HomesState = homesMod.createHomesState();
   // per-player chat token bucket (anti-spam); refilled lazily by sim time
   private chatTokens = new Map<number, { tokens: number; at: number }>();
   // per-player set of opt-in global channels (world, lfg) joined via /join
@@ -1632,6 +1641,9 @@ export class Sim {
     derbyMod.spawnRaceMarshal(this.ctx);
     // Pit Master Grott at the Boarpit gate: reserved id, flattened pad.
     boarpitMod.spawnPitMaster(this.ctx);
+    // Realtor Maribel on Homestead Lane (Eastbrook Homes, premium): same
+    // reserved-id spawn.
+    homesMod.spawnRealtor(this.ctx);
 
     for (const delve of DELVE_LIST) {
       for (let i = 0; i < DELVE_SLOT_COUNT; i++) {
@@ -1892,6 +1904,7 @@ export class Sim {
       visualKey?: string | null;
       /** Host-verified narrow test entitlement; never client supplied. */
       duranceTester?: boolean;
+      homeowner?: boolean;
       // Server-stamped bank bonus slots, recomputed from account facts at every
       // join (email/Discord/wallet/referrals). Overrides the persisted value so
       // unlinking lowers capacity at the next login; a shrink below the used slot
@@ -1953,6 +1966,7 @@ export class Sim {
       ladder: opts?.ladder ?? false,
       hardcore: opts?.hardcore ?? false,
       isDuranceTester: opts?.duranceTester === true,
+      homeownerEntitled: opts?.homeowner === true,
       skin: savedState?.skin ?? 0,
       skinCatalog: savedState?.skinCatalog === 'mech' ? 'mech' : 'class',
       pendingSkinRank: savedState?.pendingSkinRank ?? null,
@@ -3085,6 +3099,10 @@ export class Sim {
       // The Boarpit holder (same in-place mutation rules).
       get boarpit() {
         return sim.boarpit;
+      },
+      // Eastbrook Homes ownership (same in-place mutation rules).
+      get homes() {
+        return sim.homes;
       },
       // LATE-bound (not .bind(sim)): a moved emit site (C5 meleeSwing/rangedSwing)
       // now emits via ctx.emit, and tests swap (sim as any).emit post-construction to
@@ -6947,6 +6965,20 @@ export class Sim {
 
   get pitInfo(): import('../world_api/boarpit').PitInfo | null {
     return this.primaryId === -1 ? null : this.pitInfoFor(this.primaryId);
+  }
+
+  // --- IWorldHomes: Eastbrook Homes premium deeds (social/homes.ts) ---
+
+  homeBuy(lotId: string, pid?: number): void {
+    homesMod.homeBuy(this.ctx, lotId, pid);
+  }
+
+  homesInfoFor(pid: number): import('../world_api/homes').HomesInfo | null {
+    return homesMod.homesInfoFor(this.ctx, pid);
+  }
+
+  get homesInfo(): import('../world_api/homes').HomesInfo | null {
+    return this.primaryId === -1 ? null : this.homesInfoFor(this.primaryId);
   }
 
   private fiestaMatchInfo(

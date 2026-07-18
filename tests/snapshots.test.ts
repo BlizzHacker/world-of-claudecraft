@@ -2036,6 +2036,7 @@ const ALL_DELTA_KEYS = [
   'duel',
   'equip',
   'gprof',
+  'homes',
   'inv',
   'lockouts',
   'lroll',
@@ -2084,6 +2085,7 @@ const TERSE_TO_IWORLD: Record<string, string> = {
   duel: 'duelInfo',
   equip: 'equipment',
   gprof: 'gatheringProficiency',
+  homes: 'homesInfo',
   inv: 'inventory',
   lockouts: 'selfLockouts',
   lroll: 'lootRollPrompts',
@@ -2211,6 +2213,9 @@ function dirtyEveryDeltaField(): {
   // the Boarpit signup readout ('pit' delta key): same rule, queued fighter,
   // deadline left null so no bout starts under the fixture's ticks.
   sim.boarpit.queue.push(lp);
+  // the Eastbrook Homes readout ('homes' delta key): owning a lot makes
+  // homesInfo non-null anywhere in the world.
+  sim.homes.lots.lot_a = { owner: leader.name, characterId: null, at: 0 };
   meta.talentMods.spec = 'arms';
   meta.loadouts = [{ name: 'PvP', alloc: { spec: 'arms', ranks: {}, choices: {} }, bar: [] }];
   meta.activeLoadout = 0;
@@ -2387,9 +2392,9 @@ describe('full self-state snapshot delta fixture', () => {
 });
 
 describe('delta-key contract pins (anti-drift)', () => {
-  it('ALL_DELTA_KEYS contains exactly 40 unique keys in sorted order', () => {
-    expect(ALL_DELTA_KEYS).toHaveLength(40);
-    expect(new Set(ALL_DELTA_KEYS).size).toBe(40);
+  it('ALL_DELTA_KEYS contains exactly 41 unique keys in sorted order', () => {
+    expect(ALL_DELTA_KEYS).toHaveLength(41);
+    expect(new Set(ALL_DELTA_KEYS).size).toBe(41);
     expect([...ALL_DELTA_KEYS]).toEqual([...ALL_DELTA_KEYS].sort());
   });
 
@@ -2401,7 +2406,7 @@ describe('delta-key contract pins (anti-drift)', () => {
     const scraped = new Set<string>();
     for (let m = re.exec(src); m !== null; m = re.exec(src)) scraped.add(m[1]);
     expect(scraped.has('lockouts')).toBe(true); // the multi-line call IS captured
-    expect(scraped.size).toBe(40);
+    expect(scraped.size).toBe(41);
     expect([...scraped].sort()).toEqual([...ALL_DELTA_KEYS].sort());
   });
 

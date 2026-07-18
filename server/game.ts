@@ -152,6 +152,7 @@ import { enqueueActivity } from './discord_activity';
 import { discordFlairForAccount, grantRewardPoints } from './discord_db';
 import { enqueueRelay } from './discord_relay';
 import { isDuranceTesterCharacter } from './durance_tester_entitlement';
+import { isHomeownerCharacter } from './homeowner_entitlement';
 import { formatDuration } from './duration';
 import { mergedPrsForLogin } from './github_contributors';
 import { githubForAccount } from './github_db';
@@ -2189,6 +2190,7 @@ export class GameServer {
       visualKey: realmClassVisualKey(process.env.CR_REALM_ID ?? REALM, cls),
       bankBonus: meta.bankBonus,
       duranceTester: isDuranceTesterCharacter(name, REALM),
+      homeowner: isHomeownerCharacter(name, REALM),
     });
     if (isGm) {
       // GM characters: invulnerable, and always at the level cap (the row is
@@ -2681,6 +2683,15 @@ export class GameServer {
 
   /** Boot-load the pilot town RTS and housing snapshots. Invalid rows are
    * ignored so a stale preview save cannot prevent the realm from starting. */
+  /** Persist the Eastbrook Homes ownership record (plain data holder). */
+  async persistHomes(): Promise<void> {
+    try {
+      await saveWorldState(`homes:${REALM}:eastbrook`, this.sim.homes);
+    } catch (err) {
+      console.error('failed to persist Eastbrook Homes state:', err);
+    }
+  }
+
   async loadMinigameWorldState(): Promise<void> {
     try {
       const [rts, housing] = await Promise.all([
@@ -2692,6 +2703,17 @@ export class GameServer {
       this.persistentZombieDefense = deserializeZombieDefense(
         await loadWorldState<unknown>(`minigame:zombie:${REALM}:eastbrook`),
       );
+      // Eastbrook Homes ownership (premium): restore the plain lots record;
+      // a malformed row is ignored, the lane just reads all-for-sale.
+      const homes = await loadWorldState<unknown>(`homes:${REALM}:eastbrook`);
+      if (
+        homes &&
+        typeof homes === 'object' &&
+        typeof (homes as { lots?: unknown }).lots === 'object' &&
+        (homes as { lots?: unknown }).lots !== null
+      ) {
+        this.sim.homes.lots = (homes as { lots: Record<string, never> }).lots;
+      }
     } catch (err) {
       console.error('failed to load minigame world state:', err);
     }
@@ -3961,6 +3983,14 @@ export class GameServer {
       case 'pit_leave':
         sim.pitQueueLeave(pid);
         break;
+      // Eastbrook Homes (PREMIUM): the sim re-validates the paid entitlement,
+      // proximity, and ownership; a successful purchase is persisted at once.
+      case 'home_buy':
+        if (typeof msg.lot === 'string' && msg.lot.length <= 16) {
+          sim.homeBuy(msg.lot, pid);
+          void this.persistHomes();
+        }
+        break;
       case 'vcup_role':
         if (isSportRole(msg.role)) sim.vcupSetRole(msg.role, pid);
         break;
@@ -5078,6 +5108,7 @@ export class GameServer {
       // roster, same re-serialization economics as CupInfo.
       maybe('derby', this.sim.derbyInfoFor(anchorSession.pid));
       maybe('pit', this.sim.pitInfoFor(anchorSession.pid));
+      maybe('homes', this.sim.homesInfoFor(anchorSession.pid));
     }
     // market info is null unless the player is standing at the Merchant, so it
     // only rides the wire for players actually browsing the World Market

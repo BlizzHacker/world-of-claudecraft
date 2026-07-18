@@ -8833,6 +8833,15 @@ export const zh_CN: EnTranslations = {
           },
           "10": {
             "label": "母猪场"
+          },
+          "11": {
+            "label": "Thornwheel Circuit"
+          },
+          "12": {
+            "label": "The Boarpit"
+          },
+          "13": {
+            "label": "Eastbrook Homes"
           }
         }
       },

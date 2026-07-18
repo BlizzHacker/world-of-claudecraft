@@ -8833,6 +8833,15 @@ export const de_DE: EnTranslations = {
           },
           "10": {
             "label": "Das Saufeld"
+          },
+          "11": {
+            "label": "Thornwheel Circuit"
+          },
+          "12": {
+            "label": "The Boarpit"
+          },
+          "13": {
+            "label": "Eastbrook Homes"
           }
         }
       },

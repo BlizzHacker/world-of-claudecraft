@@ -23,8 +23,8 @@ import { COMMAND_NAMES, type CommandName, DISPATCH_ONLY_COMMANDS } from '../src/
 const repoRoot = fileURLToPath(new URL('..', import.meta.url));
 
 // Verified counts on the current tree (re-derived below; never trust stale prose).
-const EXPECTED_SEND_COUNT = 155; // + arcade + derby_queue/derby_leave + pit_queue/pit_leave.
-const EXPECTED_DISPATCH_COUNT = 164; // + arcade + the derby and boarpit cases.
+const EXPECTED_SEND_COUNT = 156; // + arcade + derby/pit queue pairs + home_buy.
+const EXPECTED_DISPATCH_COUNT = 165; // + arcade + derby/boarpit cases + home_buy.
 const EXPECTED_DISPATCH_ONLY_COUNT = 9;
 
 // The chat sub-channel routing switch (server/game.ts `switch

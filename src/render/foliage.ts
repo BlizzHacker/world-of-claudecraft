@@ -10,6 +10,7 @@ import {
   ZONES,
 } from '../sim/data';
 import { isInBoarpitShell } from '../sim/boarpit_layout';
+import { isInHomesShell } from '../sim/homes_layout';
 import { isInThornwheelShell } from '../sim/derby_layout';
 import type { BiomeId } from '../sim/types';
 import { isInSowfieldShell } from '../sim/vale_cup_layout';
@@ -1181,6 +1182,7 @@ function generateDressing(seed: number): DressingSpot[] {
       if (isInSowfieldShell(x, z)) continue; // keep bushes/plants off the football ground
       if (isInThornwheelShell(x, z)) continue; // and off the Derby circuit
       if (isInBoarpitShell(x, z)) continue; // and out of the Boarpit
+      if (isInHomesShell(x, z)) continue; // and off Homestead Lane
       const kind = dressKindFor(biome, hashAt(gx, gz, 44));
       const [sMin, sRange] = DRESS_SCALE[kind];
       out.push({ x, z, kind, scale: (sMin + hashAt(gx, gz, 45) * sRange) * scaleBoost });
@@ -1518,6 +1520,7 @@ function buildGrassRing(parent: THREE.Group, seed: number): GrassRing {
         if (isInSowfieldShell(x, z)) continue; // the Sowfield is a mown pitch, not meadow
         if (isInThornwheelShell(x, z)) continue; // the circuit is packed cinder, not meadow
         if (isInBoarpitShell(x, z)) continue; // the pit is stamped earth, not meadow
+        if (isInHomesShell(x, z)) continue; // the lane is kept yards, not meadow
         const s = (lush ? 0.55 : 0.45) + r * (lush ? 1.1 : 1);
         q.setFromAxisAngle(up, r * 12.4);
         m.compose(v.set(x, h, z), q, sv.set(s, s, s));

@@ -8833,6 +8833,15 @@ export const da_DK: EnTranslations = {
           },
           "10": {
             "label": "Somarken"
+          },
+          "11": {
+            "label": "Thornwheel Circuit"
+          },
+          "12": {
+            "label": "The Boarpit"
+          },
+          "13": {
+            "label": "Eastbrook Homes"
           }
         }
       },

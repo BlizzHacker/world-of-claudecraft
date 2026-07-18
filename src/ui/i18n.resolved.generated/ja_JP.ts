@@ -8833,6 +8833,15 @@ export const ja_JP: EnTranslations = {
           },
           "10": {
             "label": "ソウフィールド"
+          },
+          "11": {
+            "label": "Thornwheel Circuit"
+          },
+          "12": {
+            "label": "The Boarpit"
+          },
+          "13": {
+            "label": "Eastbrook Homes"
           }
         }
       },

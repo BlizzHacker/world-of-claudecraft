@@ -35,6 +35,7 @@ import type {
   TradeSession,
 } from './sim';
 import type { PitState } from './social/boarpit';
+import type { HomesState } from './social/homes';
 import type { DerbyState } from './social/derby';
 import type { VcState } from './social/vale_cup';
 import type { SpatialGrid } from './spatial';
@@ -195,6 +196,10 @@ export interface SimContextPrimitives {
 
   // The Boarpit state (social/boarpit.ts): same one-holder rule again.
   readonly boarpit: PitState;
+
+  // Eastbrook Homes ownership (social/homes.ts): same one-holder rule; the
+  // server persists the holder's lots record through its world-state store.
+  readonly homes: HomesState;
 }
 
 // Cross-system callbacks. Each signature mirrors the still-on-`Sim` method it
@@ -882,6 +887,9 @@ export function createSimContext(host: SimContextHost): SimContext {
     },
     get boarpit() {
       return host.boarpit;
+    },
+    get homes() {
+      return host.homes;
     },
     emit: host.emit,
     error: host.error,

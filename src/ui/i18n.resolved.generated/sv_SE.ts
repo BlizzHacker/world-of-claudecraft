@@ -8833,6 +8833,15 @@ export const sv_SE: EnTranslations = {
           },
           "10": {
             "label": "Suggfältet"
+          },
+          "11": {
+            "label": "Thornwheel Circuit"
+          },
+          "12": {
+            "label": "The Boarpit"
+          },
+          "13": {
+            "label": "Eastbrook Homes"
           }
         }
       },

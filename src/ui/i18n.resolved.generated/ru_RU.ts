@@ -8833,6 +8833,15 @@ export const ru_RU: EnTranslations = {
           },
           "10": {
             "label": "Свиное поле"
+          },
+          "11": {
+            "label": "Thornwheel Circuit"
+          },
+          "12": {
+            "label": "The Boarpit"
+          },
+          "13": {
+            "label": "Eastbrook Homes"
           }
         }
       },

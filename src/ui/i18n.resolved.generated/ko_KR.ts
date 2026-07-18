@@ -8833,6 +8833,15 @@ export const ko_KR: EnTranslations = {
           },
           "10": {
             "label": "소우필드"
+          },
+          "11": {
+            "label": "Thornwheel Circuit"
+          },
+          "12": {
+            "label": "The Boarpit"
+          },
+          "13": {
+            "label": "Eastbrook Homes"
           }
         }
       },

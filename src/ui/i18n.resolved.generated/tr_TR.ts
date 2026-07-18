@@ -8833,6 +8833,15 @@ export const tr_TR: EnTranslations = {
           },
           "10": {
             "label": "Domuz Tarlası"
+          },
+          "11": {
+            "label": "Thornwheel Circuit"
+          },
+          "12": {
+            "label": "The Boarpit"
+          },
+          "13": {
+            "label": "Eastbrook Homes"
           }
         }
       },

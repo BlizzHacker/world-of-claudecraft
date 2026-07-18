@@ -71,6 +71,8 @@ import {
   type DelveRunInfo,
   type DelveShopOfferView,
   type DerbyInfo,
+  type HomesInfo,
+  type PitInfo,
   type DevLeaderboardPage,
   type DuelInfo,
   type FriendInfo,
@@ -85,7 +87,6 @@ import {
   type MinigameSessionState,
   type OverheadEmoteId,
   type PartyInfo,
-  type PitInfo,
   type PlayerProfessionsView,
   type PresenceStatus,
   type RaidLockout,
@@ -1116,6 +1117,9 @@ export class ClientWorld implements IWorld {
   // --- IWorldBoarpit: Boarpit signup/bout state, mirrored from the snapshot
   // self (`s.pit`, delta-omitted; same null-clears rule). ---
   pitInfo: PitInfo | null = null;
+  // --- IWorldHomes: Eastbrook Homes premium deed state, mirrored from the
+  // snapshot self (`s.homes`, delta-omitted; same null-clears rule). ---
+  homesInfo: HomesInfo | null = null;
   // My live sport role, mirrored from the wireRev-gated heavy self field
   // `s.sport` ({ role } | null, delta-omitted). NON-IWorld mirror: while set,
   // the per-snapshot known rebuild resolves the role kit via the ONE shared
@@ -2117,6 +2121,7 @@ export class ClientWorld implements IWorld {
       if (s.vcup !== undefined) this.cupInfo = s.vcup;
       if (s.derby !== undefined) this.derbyInfo = s.derby;
       if (s.pit !== undefined) this.pitInfo = s.pit;
+      if (s.homes !== undefined) this.homesInfo = s.homes;
       if (s.market !== undefined) this.marketInfo = s.market;
       if (s.mail !== undefined) this.mailInfo = s.mail;
       if (s.mailU !== undefined) this.mailUnread = s.mailU ?? 0;
@@ -2612,6 +2617,11 @@ export class ClientWorld implements IWorld {
   }
   pitQueueLeave(): void {
     this.cmd({ cmd: 'pit_leave' });
+  }
+  // --- IWorldHomes: Eastbrook Homes deed purchase (paid entitlement gated
+  // server-side; homesInfo rides the 'homes' delta key). ---
+  homeBuy(lotId: string): void {
+    this.cmd({ cmd: 'home_buy', lot: lotId });
   }
   // Private practice bout against bots: the server seats it on an instanced pitch
   // copy far from the Sowfield, so it runs in parallel with the real match and

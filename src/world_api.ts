@@ -44,6 +44,7 @@
 //   vale_cup.ts         IWorldValeCup        Vale Cup boarball queue/roles/betting/practice
 //   derby.ts            IWorldDerby          Thornwheel Derby kart-race queue + tote board
 //   boarpit.ts          IWorldBoarpit        Boarpit knockout-brawl signup + bout readout
+//   homes.ts            IWorldHomes          Eastbrook Homes premium deeds ($CR entitlement)
 //
 // THREE GATES pin this seam (run before any facet edit; the literal counts are
 // pinned THERE and re-stale here, so this prose stays count-free):
@@ -57,12 +58,13 @@
 // ---------------------------------------------------------------------------
 
 import type { IWorldBank } from './world_api/bank';
-import type { IWorldBoarpit } from './world_api/boarpit';
 import type { IWorldChat } from './world_api/chat';
 import type { IWorldCombat } from './world_api/combat';
 import type { IWorldCosmetics } from './world_api/cosmetics';
 import type { IWorldDailyRewards } from './world_api/daily_rewards';
 import type { IWorldDelves } from './world_api/delves';
+import type { IWorldBoarpit } from './world_api/boarpit';
+import type { IWorldHomes } from './world_api/homes';
 import type { IWorldDerby } from './world_api/derby';
 import type { IWorldDuelArena } from './world_api/duel_arena';
 import type { IWorldDungeons } from './world_api/dungeons';
@@ -102,13 +104,6 @@ export type { TowerKind } from './sim/minigames/zombie_defense';
 export type { ArenaCombatant, ArenaFormat, ArenaStanding, OverheadEmoteId } from './sim/types';
 // --- facet aux-type + value re-exports (each travels with its facet file) ---
 export type { BankBonusSource, BankInfo } from './world_api/bank';
-export type {
-  IWorldBoarpit,
-  PitBoutInfo,
-  PitFighterInfo,
-  PitInfo,
-  PitPhase,
-} from './world_api/boarpit';
 export { isOverheadEmoteId, OVERHEAD_EMOTES } from './world_api/chat';
 export type { AccountCosmetics } from './world_api/cosmetics';
 export type {
@@ -136,6 +131,14 @@ export type {
   DerbyRacerInfo,
   IWorldDerby,
 } from './world_api/derby';
+export type {
+  IWorldBoarpit,
+  PitBoutInfo,
+  PitFighterInfo,
+  PitInfo,
+  PitPhase,
+} from './world_api/boarpit';
+export type { HomeLotView, HomesInfo, IWorldHomes } from './world_api/homes';
 export type {
   ArenaInfo,
   ArenaLadderEntry,
@@ -210,7 +213,8 @@ export interface IWorld
     IWorldBank,
     IWorldValeCup,
     IWorldDerby,
-    IWorldBoarpit {}
+    IWorldBoarpit,
+    IWorldHomes {}
 
 // ---------------------------------------------------------------------------
 // Command schema (W0b): the shared wire-token vocabulary.
@@ -405,6 +409,9 @@ export const COMMAND_NAMES = [
   // only wire surface, pitInfo is a snapshot read.
   'pit_queue',
   'pit_leave',
+  // Eastbrook Homes (PREMIUM, not a minigame): buying a deed requires the
+  // paid homeowner entitlement; homesInfo is a snapshot read.
+  'home_buy',
 ] as const;
 
 // The union both the send path (`online.ts`) and the dispatch switch
@@ -472,7 +479,8 @@ export type WorldFacet =
   | 'IWorldBank'
   | 'IWorldValeCup'
   | 'IWorldDerby'
-  | 'IWorldBoarpit';
+  | 'IWorldBoarpit'
+  | 'IWorldHomes';
 
 export const COMMAND_FACETS = {
   // IWorldCombat: ability casts, auto-attack, spirit release.
@@ -639,4 +647,6 @@ export const COMMAND_FACETS = {
   // IWorldBoarpit: the Boarpit signup card. pitInfo is a snapshot read.
   pit_queue: 'IWorldBoarpit',
   pit_leave: 'IWorldBoarpit',
+  // IWorldHomes: Eastbrook Homes deed purchase (paid entitlement gated).
+  home_buy: 'IWorldHomes',
 } as const satisfies Partial<Record<ClientCommand, WorldFacet>>;

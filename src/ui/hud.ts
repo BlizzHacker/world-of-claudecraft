@@ -10754,6 +10754,32 @@ export class Hud {
     }
     // Race Marshal Pip keeps the grid book at the Thornwheel paddock gate:
     // sign up for (or scratch from) the next Derby right in the gossip menu.
+    // Realtor Maribel sells Eastbrook Homes deeds — the PREMIUM housing
+    // feature. The gossip lists each lot; buying is entitlement-gated in the
+    // sim (free accounts get the deed-price notice, never a purchase).
+    if (npc.templateId === 'realtor_maribel') {
+      const homes = this.sim.homesInfo;
+      if (homes) {
+        for (const lotView of homes.lots) {
+          if (lotView.owner !== '') {
+            const owned = lotView.mine
+              ? (tOptional('hudChrome.homes.yours') ?? 'Your home')
+              : lotView.owner;
+            html += `<div class="qd-list-item qd-list-item--static">${esc(lotView.name)} — ${esc(owned)}</div>`;
+          } else {
+            const label =
+              (tOptional('hudChrome.homes.buy') ?? 'Buy deed') + ` (${homes.priceCr} $CR)`;
+            html += `<button type="button" class="qd-list-item" data-home-buy="${esc(lotView.id)}" aria-label="${esc(lotView.name)}"><span class="gold">⌂</span> ${esc(lotView.name)} — ${esc(label)}</button>`;
+          }
+        }
+        if (!homes.entitled && !homes.myLotId) {
+          const note =
+            tOptional('hudChrome.homes.entitlementNote') ??
+            'Deeds settle in $CR and require the Eastbrook Homes entitlement.';
+          html += `<div class="qd-list-item qd-list-item--static">${esc(note)}</div>`;
+        }
+      }
+    }
     // Pit Master Grott keeps the Boarpit card at the stake ring's gate.
     if (npc.templateId === 'pit_master_grott') {
       const pit = this.sim.pitInfo;
@@ -10835,6 +10861,13 @@ export class Hud {
     el.querySelector('[data-pit-leave]')?.addEventListener('click', () => {
       this.closeQuestDialog(false);
       this.sim.pitQueueLeave();
+    });
+    el.querySelectorAll<HTMLElement>('[data-home-buy]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const lotId = btn.dataset.homeBuy;
+        this.closeQuestDialog(false);
+        if (lotId) this.sim.homeBuy(lotId);
+      });
     });
     el.querySelector('[data-zombie-defense]')?.addEventListener('click', () => {
       this.closeQuestDialog(false);

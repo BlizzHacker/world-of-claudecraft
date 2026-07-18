@@ -8833,6 +8833,15 @@ export const nl_NL: EnTranslations = {
           },
           "10": {
             "label": "Het Zeugveld"
+          },
+          "11": {
+            "label": "Thornwheel Circuit"
+          },
+          "12": {
+            "label": "The Boarpit"
+          },
+          "13": {
+            "label": "Eastbrook Homes"
           }
         }
       },

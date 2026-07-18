@@ -8833,6 +8833,15 @@ export const id_ID: EnTranslations = {
           },
           "10": {
             "label": "Sowfield"
+          },
+          "11": {
+            "label": "Thornwheel Circuit"
+          },
+          "12": {
+            "label": "The Boarpit"
+          },
+          "13": {
+            "label": "Eastbrook Homes"
           }
         }
       },

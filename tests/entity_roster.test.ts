@@ -19,6 +19,7 @@ import {
 import { Rng } from '../src/sim/rng';
 import { createSimContext, type SimContextHost } from '../src/sim/sim_context';
 import { createPitState } from '../src/sim/social/boarpit';
+import { createHomesState } from '../src/sim/social/homes';
 import { createDerbyState } from '../src/sim/social/derby';
 import { createVcState } from '../src/sim/social/vale_cup';
 import { SpatialGrid } from '../src/sim/spatial';
@@ -221,6 +222,7 @@ function makeCtx() {
     vcup: createVcState(),
     derby: createDerbyState(),
     boarpit: createPitState(),
+    homes: createHomesState(),
     grantXp: vi.fn(),
     enterCombat: vi.fn(),
     hexOutputMult: vi.fn(() => 1),
