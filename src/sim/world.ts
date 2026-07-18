@@ -1,4 +1,5 @@
 import { DUNGEON_FLOOR_Y, DUNGEON_X_THRESHOLD, getActiveWorldContent, WORLD_MAX_X } from './data';
+import { BOARPIT_FLAT, isInBoarpitShell } from './boarpit_layout';
 import { isInThornwheelShell, THORNWHEEL_FLAT } from './derby_layout';
 import { fbm2, hash2 } from './rng';
 import type { BiomeId, HeightStamp, WorldContent } from './types';
@@ -349,6 +350,17 @@ export function thornwheelFlattenWeight(x: number, z: number): number {
   return 1 - smoothstep(0, 1, d / f.falloff);
 }
 
+// The Boarpit knoll (src/sim/boarpit_layout.ts): the same rectangle + apron.
+export function boarpitFlattenWeight(x: number, z: number): number {
+  const f = BOARPIT_FLAT;
+  const dx = Math.max(0, f.xMin - x, x - f.xMax);
+  const dz = Math.max(0, f.zMin - z, z - f.zMax);
+  if (dx === 0 && dz === 0) return 1;
+  const d = Math.sqrt(dx * dx + dz * dz);
+  if (d >= f.falloff) return 0;
+  return 1 - smoothstep(0, 1, d / f.falloff);
+}
+
 export function mirefenImpactCraterOffset(x: number, z: number): number {
   const dx = x - MIREFEN_IMPACT_CRATER.x;
   const dz = z - MIREFEN_IMPACT_CRATER.z;
@@ -501,6 +513,10 @@ export function terrainHeight(x: number, z: number, seed: number): number {
   // the east bluffs, same ordering rules as the Sowfield arm above.
   const wheel = thornwheelFlattenWeight(x, z);
   if (wheel > 0) h = lerp(h, THORNWHEEL_FLAT.height, wheel);
+
+  // The Boarpit pad (knockout brawls), same ordering rules again.
+  const pitW = boarpitFlattenWeight(x, z);
+  if (pitW > 0) h = lerp(h, BOARPIT_FLAT.height, pitW);
 
   // Mountain ridge walls between zones, pierced by the road pass
   let mountainAdd = 0;
@@ -791,6 +807,8 @@ export function generateDecorations(seed: number): Decoration[] {
       if (isInSowfieldShell(x, z)) continue;
       // Same rule for the Thornwheel Circuit's racing ground.
       if (isInThornwheelShell(x, z)) continue;
+      // And for the Boarpit's fighting ground.
+      if (isInBoarpitShell(x, z)) continue;
       let inHub = false;
       for (const zone of w.content.zones) {
         const dx = x - zone.hub.x,

@@ -24,11 +24,12 @@
 
 import { DELVES, GROUP_XP_BONUS, MOBS } from '../data';
 import { recalcPlayerStats } from '../entity';
-import { activeMaxLevel } from '../realms/registry';
 import { DAMAGE_IDLE_DESPAWN_MOB_IDS, DAMAGE_IDLE_DESPAWN_SECONDS } from '../entity_roster';
+import { activeMaxLevel } from '../realms/registry';
 import { aurasSurvivingDeath } from '../resurrection';
 import type { PlayerMeta } from '../sim';
 import type { SimContext } from '../sim_context';
+import { pitBothFighting, pitEliminate } from '../social/boarpit';
 import { vcupBothSeated } from '../social/vale_cup';
 import { addThreat, clearThreat } from '../threat';
 import type { Entity } from '../types';
@@ -209,6 +210,31 @@ export function dealDamage(
       ctx.endDuel(duel, sourcePlayer.id);
       return;
     }
+  }
+
+  // Boarpit bouts KO at 1 hp — nobody dies in the pit (the duel arm's rule
+  // above). The felled fighter is eliminated and hauled to the gate rail by
+  // the boarpit module; the winner is settled on the next pit tick.
+  if (
+    target.kind === 'player' &&
+    sourcePlayer &&
+    pitBothFighting(ctx, sourcePlayer.id, target.id) &&
+    target.hp - amount < 1
+  ) {
+    amount = Math.max(0, target.hp - 1);
+    target.hp = 1;
+    ctx.emit({
+      type: 'damage',
+      sourceId: source?.id ?? -1,
+      targetId: target.id,
+      amount,
+      crit,
+      school,
+      ability,
+      kind,
+    });
+    pitEliminate(ctx, target.id, 'ko');
+    return;
   }
 
   // Fiesta takedowns score a point and put the victim on a (growing) respawn

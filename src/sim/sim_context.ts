@@ -34,6 +34,7 @@ import type {
   ResolvedAbility,
   TradeSession,
 } from './sim';
+import type { PitState } from './social/boarpit';
 import type { DerbyState } from './social/derby';
 import type { VcState } from './social/vale_cup';
 import type { SpatialGrid } from './spatial';
@@ -191,6 +192,9 @@ export interface SimContextPrimitives {
   // The Thornwheel Derby state (social/derby.ts): the same one-holder rule
   // (queue mutated in place, the race slot reassigned INSIDE the holder).
   readonly derby: DerbyState;
+
+  // The Boarpit state (social/boarpit.ts): same one-holder rule again.
+  readonly boarpit: PitState;
 }
 
 // Cross-system callbacks. Each signature mirrors the still-on-`Sim` method it
@@ -875,6 +879,9 @@ export function createSimContext(host: SimContextHost): SimContext {
     },
     get derby() {
       return host.derby;
+    },
+    get boarpit() {
+      return host.boarpit;
     },
     emit: host.emit,
     error: host.error,

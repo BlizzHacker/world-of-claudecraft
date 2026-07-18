@@ -43,6 +43,7 @@
 //                                            deposit/withdraw/buy-slots)
 //   vale_cup.ts         IWorldValeCup        Vale Cup boarball queue/roles/betting/practice
 //   derby.ts            IWorldDerby          Thornwheel Derby kart-race queue + tote board
+//   boarpit.ts          IWorldBoarpit        Boarpit knockout-brawl signup + bout readout
 //
 // THREE GATES pin this seam (run before any facet edit; the literal counts are
 // pinned THERE and re-stale here, so this prose stays count-free):
@@ -56,6 +57,7 @@
 // ---------------------------------------------------------------------------
 
 import type { IWorldBank } from './world_api/bank';
+import type { IWorldBoarpit } from './world_api/boarpit';
 import type { IWorldChat } from './world_api/chat';
 import type { IWorldCombat } from './world_api/combat';
 import type { IWorldCosmetics } from './world_api/cosmetics';
@@ -100,6 +102,13 @@ export type { TowerKind } from './sim/minigames/zombie_defense';
 export type { ArenaCombatant, ArenaFormat, ArenaStanding, OverheadEmoteId } from './sim/types';
 // --- facet aux-type + value re-exports (each travels with its facet file) ---
 export type { BankBonusSource, BankInfo } from './world_api/bank';
+export type {
+  IWorldBoarpit,
+  PitBoutInfo,
+  PitFighterInfo,
+  PitInfo,
+  PitPhase,
+} from './world_api/boarpit';
 export { isOverheadEmoteId, OVERHEAD_EMOTES } from './world_api/chat';
 export type { AccountCosmetics } from './world_api/cosmetics';
 export type {
@@ -200,7 +209,8 @@ export interface IWorld
     IWorldProfessions,
     IWorldBank,
     IWorldValeCup,
-    IWorldDerby {}
+    IWorldDerby,
+    IWorldBoarpit {}
 
 // ---------------------------------------------------------------------------
 // Command schema (W0b): the shared wire-token vocabulary.
@@ -391,6 +401,10 @@ export const COMMAND_NAMES = [
   // snapshot read.
   'derby_queue',
   'derby_leave',
+  // The Boarpit: knockout brawls at the physical stake ring; signup is the
+  // only wire surface, pitInfo is a snapshot read.
+  'pit_queue',
+  'pit_leave',
 ] as const;
 
 // The union both the send path (`online.ts`) and the dispatch switch
@@ -457,7 +471,8 @@ export type WorldFacet =
   | 'IWorldTelemetry'
   | 'IWorldBank'
   | 'IWorldValeCup'
-  | 'IWorldDerby';
+  | 'IWorldDerby'
+  | 'IWorldBoarpit';
 
 export const COMMAND_FACETS = {
   // IWorldCombat: ability casts, auto-attack, spirit release.
@@ -621,4 +636,7 @@ export const COMMAND_FACETS = {
   // (no send).
   derby_queue: 'IWorldDerby',
   derby_leave: 'IWorldDerby',
+  // IWorldBoarpit: the Boarpit signup card. pitInfo is a snapshot read.
+  pit_queue: 'IWorldBoarpit',
+  pit_leave: 'IWorldBoarpit',
 } as const satisfies Partial<Record<ClientCommand, WorldFacet>>;

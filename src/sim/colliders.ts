@@ -17,6 +17,7 @@ import {
 } from './data';
 import { type DelveModuleId, delveModuleColliders } from './delve_layout';
 import { isLitanyModuleId, litanyModuleLosColliders } from './delve_litany_layout';
+import { boarpitColliders } from './boarpit_layout';
 import { derbyColliders } from './derby_layout';
 import {
   ARENA_LAYOUT,
@@ -278,6 +279,10 @@ function staticWorldColliders(seed: number): Collider[] {
   // Derby). Same single-layout-module rule: derby_layout.ts drives this set,
   // the terrain flatten, the race checkpoints, and the render dressing.
   out.push(...derbyColliders());
+
+  // The Boarpit stake ring (knockout brawls): same single-layout-module rule
+  // (boarpit_layout.ts drives this set, the flatten, and the render).
+  out.push(...boarpitColliders());
   return out;
 }
 

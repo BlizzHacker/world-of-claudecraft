@@ -85,6 +85,7 @@ import {
   type MinigameSessionState,
   type OverheadEmoteId,
   type PartyInfo,
+  type PitInfo,
   type PlayerProfessionsView,
   type PresenceStatus,
   type RaidLockout,
@@ -1112,6 +1113,9 @@ export class ClientWorld implements IWorld {
   // --- IWorldDerby: Thornwheel Derby queue/race state, mirrored from the
   // snapshot self (`s.derby`, delta-omitted; same null-clears rule as vcup). ---
   derbyInfo: DerbyInfo | null = null;
+  // --- IWorldBoarpit: Boarpit signup/bout state, mirrored from the snapshot
+  // self (`s.pit`, delta-omitted; same null-clears rule). ---
+  pitInfo: PitInfo | null = null;
   // My live sport role, mirrored from the wireRev-gated heavy self field
   // `s.sport` ({ role } | null, delta-omitted). NON-IWorld mirror: while set,
   // the per-snapshot known rebuild resolves the role kit via the ONE shared
@@ -2112,6 +2116,7 @@ export class ClientWorld implements IWorld {
       if (s.arena !== undefined) this.arenaInfo = s.arena;
       if (s.vcup !== undefined) this.cupInfo = s.vcup;
       if (s.derby !== undefined) this.derbyInfo = s.derby;
+      if (s.pit !== undefined) this.pitInfo = s.pit;
       if (s.market !== undefined) this.marketInfo = s.market;
       if (s.mail !== undefined) this.mailInfo = s.mail;
       if (s.mailU !== undefined) this.mailUnread = s.mailU ?? 0;
@@ -2599,6 +2604,14 @@ export class ClientWorld implements IWorld {
   }
   derbyQueueLeave(): void {
     this.cmd({ cmd: 'derby_leave' });
+  }
+  // --- IWorldBoarpit: Boarpit signup sends (pitInfo is a snapshot read
+  // riding the 'pit' delta key). ---
+  pitQueueJoin(): void {
+    this.cmd({ cmd: 'pit_queue' });
+  }
+  pitQueueLeave(): void {
+    this.cmd({ cmd: 'pit_leave' });
   }
   // Private practice bout against bots: the server seats it on an instanced pitch
   // copy far from the Sowfield, so it runs in parallel with the real match and

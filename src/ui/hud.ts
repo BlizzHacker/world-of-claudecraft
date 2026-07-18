@@ -10754,6 +10754,17 @@ export class Hud {
     }
     // Race Marshal Pip keeps the grid book at the Thornwheel paddock gate:
     // sign up for (or scratch from) the next Derby right in the gossip menu.
+    // Pit Master Grott keeps the Boarpit card at the stake ring's gate.
+    if (npc.templateId === 'pit_master_grott') {
+      const pit = this.sim.pitInfo;
+      if (pit?.myQueued) {
+        const label = tOptional('hudChrome.pit.gossipLeave') ?? 'Scratch from the bout card';
+        html += `<button type="button" class="qd-list-item" data-pit-leave="1" aria-label="${esc(label)}"><span class="gold">✕</span> ${esc(label)}</button>`;
+      } else {
+        const label = tOptional('hudChrome.pit.gossipJoin') ?? 'Sign the bout card (brawl!)';
+        html += `<button type="button" class="qd-list-item" data-pit-join="1" aria-label="${esc(label)}"><span class="gold">⚔</span> ${esc(label)}</button>`;
+      }
+    }
     if (npc.templateId === 'race_marshal_pip') {
       const derby = this.sim.derbyInfo;
       if (derby?.myQueued) {
@@ -10816,6 +10827,14 @@ export class Hud {
     el.querySelector('[data-derby-leave]')?.addEventListener('click', () => {
       this.closeQuestDialog(false);
       this.sim.derbyQueueLeave();
+    });
+    el.querySelector('[data-pit-join]')?.addEventListener('click', () => {
+      this.closeQuestDialog(false);
+      this.sim.pitQueueJoin();
+    });
+    el.querySelector('[data-pit-leave]')?.addEventListener('click', () => {
+      this.closeQuestDialog(false);
+      this.sim.pitQueueLeave();
     });
     el.querySelector('[data-zombie-defense]')?.addEventListener('click', () => {
       this.closeQuestDialog(false);

@@ -468,6 +468,7 @@ const JAILED_BLOCKED_COMMANDS = new Set<string>([
   'vcup_ready',
   'vcup_practice',
   'derby_queue',
+  'pit_queue',
   'enter_dungeon',
   'enter_crypt',
   'enter_delve',
@@ -1343,6 +1344,8 @@ export class GameServer {
     this.sim.vcupResolveDesertion(target.pid);
     this.sim.derbyQueueLeave(target.pid);
     this.sim.derbyResolveDesertion(target.pid);
+    this.sim.pitQueueLeave(target.pid);
+    this.sim.pitResolveDesertion(target.pid);
     this.teleportJailedSession(target);
     // System notice (chat log), not the fading error toast: the prisoner must be
     // able to read the sentence after alt-tabbing back, like other moderation
@@ -2511,6 +2514,8 @@ export class GameServer {
     // Same rule for a live Derby seat: the rider deserts (kart back, benched)
     // before the save, so the persisted position is the paddock return spot.
     this.sim.derbyResolveDesertion(session.pid);
+    // And a live Boarpit seat: forfeit before the save.
+    this.sim.pitResolveDesertion(session.pid);
     await this.saveCharacterOnLeave(session);
     this.sessionsByCharacterId.delete(session.characterId);
     // Release the per-character load lease so a fresh login (here or on another
@@ -3948,6 +3953,14 @@ export class GameServer {
       case 'derby_leave':
         sim.derbyQueueLeave(pid);
         break;
+      // The Boarpit (knockout brawls at the stake ring). Same non-heavy
+      // reasoning: signup state rides the throttled 'pit' delta key.
+      case 'pit_queue':
+        sim.pitQueueJoin(pid);
+        break;
+      case 'pit_leave':
+        sim.pitQueueLeave(pid);
+        break;
       case 'vcup_role':
         if (isSportRole(msg.role)) sim.vcupSetRole(msg.role, pid);
         break;
@@ -5064,6 +5077,7 @@ export class GameServer {
       // The Derby readout shares the cadence: whole-second clocks and a small
       // roster, same re-serialization economics as CupInfo.
       maybe('derby', this.sim.derbyInfoFor(anchorSession.pid));
+      maybe('pit', this.sim.pitInfoFor(anchorSession.pid));
     }
     // market info is null unless the player is standing at the Merchant, so it
     // only rides the wire for players actually browsing the World Market

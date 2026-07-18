@@ -380,6 +380,7 @@ import * as yumiMod from './social/yumi';
 // public path `import { Sim, eloDelta } from './sim'` (tests/arena.test.ts) holds.
 export { eloDelta } from './social/arena';
 
+import * as boarpitMod from './social/boarpit';
 import * as derbyMod from './social/derby';
 import * as fiestaMod from './social/fiesta';
 // A3: Fiesta tuning consts moved to social/fiesta.ts; these five are read back here
@@ -1352,6 +1353,9 @@ export class Sim {
   // The Thornwheel Derby state (social/derby.ts): the same one-holder rule
   // (the paddock queue and the single race slot), exposed as ctx.derby.
   derby: derbyMod.DerbyState = derbyMod.createDerbyState();
+  // The Boarpit state (social/boarpit.ts): the same one-holder rule (the
+  // signup card and the single bout slot), exposed as ctx.boarpit.
+  boarpit: boarpitMod.PitState = boarpitMod.createPitState();
   // per-player chat token bucket (anti-spam); refilled lazily by sim time
   private chatTokens = new Map<number, { tokens: number; at: number }>();
   // per-player set of opt-in global channels (world, lfg) joined via /join
@@ -1626,6 +1630,8 @@ export class Sim {
     // spawn (DERBY_MARSHAL_ID), placed directly on the flattened pad (no
     // findSafePos: the layout guarantees level, dry ground at the gate).
     derbyMod.spawnRaceMarshal(this.ctx);
+    // Pit Master Grott at the Boarpit gate: reserved id, flattened pad.
+    boarpitMod.spawnPitMaster(this.ctx);
 
     for (const delve of DELVE_LIST) {
       for (let i = 0; i < DELVE_SLOT_COUNT; i++) {
@@ -2298,6 +2304,8 @@ export class Sim {
     // racer deserts, hands the loaner kart back, and is benched).
     derbyMod.derbyQueueRemove(this.ctx, pid);
     derbyMod.derbyResolveDesertion(this.ctx, pid);
+    boarpitMod.pitQueueRemove(this.ctx, pid);
+    boarpitMod.pitResolveDesertion(this.ctx, pid);
     this.party.partyInvites.delete(pid);
     this.tradeInvites.delete(pid);
     this.duelInvites.delete(pid);
@@ -2362,7 +2370,9 @@ export class Sim {
     // character on the Sowfield). The stowed pet persists via serializePet's
     // delvePetStash fallback; known/sportRole are session-derived, not saved.
     const cupReturn =
-      valeCupMod.vcupReturnFor(this.ctx, pid) ?? derbyMod.derbyReturnFor(this.ctx, pid);
+      valeCupMod.vcupReturnFor(this.ctx, pid) ??
+      derbyMod.derbyReturnFor(this.ctx, pid) ??
+      boarpitMod.pitReturnFor(this.ctx, pid);
     const state: CharacterState = {
       level: restore ? restore.level : e.level,
       xp: restore ? restore.xp : meta.xp,
@@ -3071,6 +3081,10 @@ export class Sim {
       // The Thornwheel Derby holder (same in-place mutation rules).
       get derby() {
         return sim.derby;
+      },
+      // The Boarpit holder (same in-place mutation rules).
+      get boarpit() {
+        return sim.boarpit;
       },
       // LATE-bound (not .bind(sim)): a moved emit site (C5 meleeSwing/rangedSwing)
       // now emits via ctx.emit, and tests swap (sim as any).emit post-construction to
@@ -3876,6 +3890,9 @@ export class Sim {
     // appending it here cannot fork the draw order either.
     derbyMod.updateDerby(this.ctx);
     lap?.('derby');
+    // The Boarpit phase also draws ZERO shared rng (timers + KO bookkeeping).
+    boarpitMod.updateBoarpit(this.ctx);
+    lap?.('boarpit');
     this.updateMinigame();
     lap?.('minigame');
     this.market.update();
@@ -6406,6 +6423,10 @@ export class Sim {
       // action can ever target them; GM invulnerability (dealDamage) is the
       // backstop. isFriendlyTo mirrors this, so prisoners cannot cross-heal.
       if (attackerPlayer.jailed && target.jailed) return true;
+      // The Boarpit: fighters seated in the live bout are mutually hostile
+      // (the jail-brawl arm's shape, scoped to the one active bout). The KO
+      // clamp in combat/damage.ts keeps the pit non-lethal.
+      if (boarpitMod.pitBothFighting(this.ctx, attackerPlayer.id, target.id)) return true;
       // One-way warden arm: a GM (the visiting moderator; enterJailVisit sets
       // the flag) MAY strike prisoners. Deliberately asymmetric: the reverse
       // direction stays non-hostile, and any reflected/proc damage still
@@ -6902,6 +6923,30 @@ export class Sim {
 
   get derbyInfo(): import('../world_api/derby').DerbyInfo | null {
     return this.primaryId === -1 ? null : this.derbyInfoFor(this.primaryId);
+  }
+
+  // --- IWorldBoarpit: the Boarpit (social/boarpit.ts delegates) ---
+
+  pitQueueJoin(pid?: number): void {
+    boarpitMod.pitQueueJoin(this.ctx, pid);
+  }
+
+  pitQueueLeave(pid?: number): void {
+    boarpitMod.pitQueueLeave(this.ctx, pid);
+  }
+
+  /** Idempotent desertion resolution; the server calls it BEFORE the leave
+   *  save (the vcup/derby precedent). */
+  pitResolveDesertion(pid: number): void {
+    boarpitMod.pitResolveDesertion(this.ctx, pid);
+  }
+
+  pitInfoFor(pid: number): import('../world_api/boarpit').PitInfo | null {
+    return boarpitMod.pitInfoFor(this.ctx, pid);
+  }
+
+  get pitInfo(): import('../world_api/boarpit').PitInfo | null {
+    return this.primaryId === -1 ? null : this.pitInfoFor(this.primaryId);
   }
 
   private fiestaMatchInfo(

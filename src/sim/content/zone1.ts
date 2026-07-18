@@ -41,6 +41,7 @@ export const ZONE1_ZONE: ZoneDef = {
     { x: 40, z: 140, label: 'Brightwood Glade' },
     { x: -11, z: -112, label: 'The Sowfield' },
     { x: 124, z: 32, label: 'Thornwheel Circuit' },
+    { x: 30, z: 110, label: 'The Boarpit' },
   ],
   welcome: 'Find Marshal Redbrook in town — he has work for you.',
   welcomeQuestId: 'q_wolves',
@@ -706,6 +707,21 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
     questIds: [],
     banker: true,
     greeting: 'Welcome to the Gilded Strongbox. Your goods rest safe behind our locks.',
+  },
+  pit_master_grott: {
+    id: 'pit_master_grott',
+    name: 'Pit Master Grott',
+    title: 'Keeper of the Boarpit',
+    // At the stake ring's south gate (boarpit_layout PIT_MASTER_POS). dynamic:
+    // spawned at world init under a RESERVED entity id (the Bram/Pip
+    // precedent; parity goldens pin nextId).
+    pos: { x: 30, z: 122.5 },
+    facing: Math.PI,
+    color: 0x8a4a2a,
+    questIds: [],
+    dynamic: true,
+    greeting:
+      'Fists, feet, and whatever the vale gave you, $C. Nobody dies in my pit — the stakes see to that. Care to sign the card?',
   },
   race_marshal_pip: {
     id: 'race_marshal_pip',

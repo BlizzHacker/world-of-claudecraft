@@ -49,6 +49,7 @@ import { AOE_RING_LIFETIME, aoeRingAnim } from './aoe_ring';
 import { loadGltf } from './assets/loader';
 import type { SpatialAudioSink, Surface } from './audio_sink';
 import { type BirdsView, buildBirds } from './birds';
+import { type BoarpitView, buildBoarpit } from './boarpit';
 import {
   type CameraOcclusionState,
   resolveCameraBaseFov,
@@ -1032,6 +1033,7 @@ export class Renderer {
   // and the boarball's dust pool (created lazily the first time the ball rolls).
   private valeCupStadium: ValeCupStadiumView;
   private derbyTrack: DerbyTrackView;
+  private boarpitView: BoarpitView;
   // Futuristic-fantasy skybox for the private practice pitch (a random variant
   // per bout, camera-centred, only shown while the local player is practicing).
   private valeCupSky = new ValeCupPracticeSky();
@@ -1429,6 +1431,9 @@ export class Renderer {
     // The Thornwheel Circuit (Derby kart ground), same build-once + cull rules.
     this.derbyTrack = buildDerbyTrack(this.sim.cfg.seed);
     this.scene.add(this.derbyTrack.group);
+    // The Boarpit stake ring, same build-once + cull rules.
+    this.boarpitView = buildBoarpit(this.sim.cfg.seed);
+    this.scene.add(this.boarpitView.group);
     // The private practice-pitch copy (shown at a far instance origin when the
     // local player is practicing; positioned/toggled by valeCupStadium.update).
     this.scene.add(this.valeCupStadium.practiceGroup);
@@ -5259,6 +5264,7 @@ export class Renderer {
     this.valeCupStadium.update(p.pos.x, p.pos.z, dt, this.sim.cupInfo ?? null);
     // The Thornwheel Circuit: cull + pulse the racer's next checkpoint pennant.
     this.derbyTrack.update(p.pos.x, p.pos.z, dt, this.sim.derbyInfo ?? null);
+    this.boarpitView.update(p.pos.x, p.pos.z, dt);
     // Team rings ride the live entity views (positions are fresh: the entity loop
     // ran above). Reads cupInfo.match for a participant, else cupInfo.spectate (a
     // nearby walk-up at the Sowfield): the sim only fills spectate near the field,

@@ -2048,6 +2048,7 @@ const ALL_DELTA_KEYS = [
   'mgz',
   'milestones',
   'party',
+  'pit',
   'prof',
   'qdone',
   'qlog',
@@ -2096,6 +2097,7 @@ const TERSE_TO_IWORLD: Record<string, string> = {
   milestones: 'unlockedMilestones',
   mres: 'maxResource',
   party: 'partyInfo',
+  pit: 'pitInfo',
   prk: 'prestigeRank',
   prof: 'professionsState',
   qdone: 'questsDone',
@@ -2206,6 +2208,9 @@ function dirtyEveryDeltaField(): {
   // a non-null derbyInfoFor. queueDeadline stays null, so no grid call fires
   // under the fixture's ticks (startRace needs a deadline or a full grid).
   sim.derby.queue.push(lp);
+  // the Boarpit signup readout ('pit' delta key): same rule, queued fighter,
+  // deadline left null so no bout starts under the fixture's ticks.
+  sim.boarpit.queue.push(lp);
   meta.talentMods.spec = 'arms';
   meta.loadouts = [{ name: 'PvP', alloc: { spec: 'arms', ranks: {}, choices: {} }, bar: [] }];
   meta.activeLoadout = 0;
@@ -2382,9 +2387,9 @@ describe('full self-state snapshot delta fixture', () => {
 });
 
 describe('delta-key contract pins (anti-drift)', () => {
-  it('ALL_DELTA_KEYS contains exactly 39 unique keys in sorted order', () => {
-    expect(ALL_DELTA_KEYS).toHaveLength(39);
-    expect(new Set(ALL_DELTA_KEYS).size).toBe(39);
+  it('ALL_DELTA_KEYS contains exactly 40 unique keys in sorted order', () => {
+    expect(ALL_DELTA_KEYS).toHaveLength(40);
+    expect(new Set(ALL_DELTA_KEYS).size).toBe(40);
     expect([...ALL_DELTA_KEYS]).toEqual([...ALL_DELTA_KEYS].sort());
   });
 
@@ -2396,7 +2401,7 @@ describe('delta-key contract pins (anti-drift)', () => {
     const scraped = new Set<string>();
     for (let m = re.exec(src); m !== null; m = re.exec(src)) scraped.add(m[1]);
     expect(scraped.has('lockouts')).toBe(true); // the multi-line call IS captured
-    expect(scraped.size).toBe(39);
+    expect(scraped.size).toBe(40);
     expect([...scraped].sort()).toEqual([...ALL_DELTA_KEYS].sort());
   });
 
