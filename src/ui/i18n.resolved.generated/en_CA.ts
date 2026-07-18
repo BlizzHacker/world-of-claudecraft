@@ -3624,7 +3624,14 @@ export const en_CA: EnTranslations = {
       "hordeErrMidWave": "Fortify between waves, not while the dead are inside the walls.",
       "hordeErrMaxWards": "The town is fortified to the rafters already.",
       "hordeErrCost": "Fortifying the town costs 20s in timber and nails.",
-      "pitBellMissed": "The bell rang without you. Your Boarpit card spot is forfeit."
+      "pitBellMissed": "The bell rang without you. Your Boarpit card spot is forfeit.",
+      "hordeErrBuildMidWave": "Build between waves, not while the dead are inside the walls.",
+      "hordeErrBuildCost": "Raising a watch post costs 15s in timber and bowstrings.",
+      "hordePostUp": "A watch post rises on the line ({built} of {total}).",
+      "hordePostMax": "The watch posts are built out.",
+      "hordePostReinforced": "A watch post is reinforced to strength {level}.",
+      "homeForSale": "That plot is still for sale.",
+      "homeShownDoor": "You are shown to the door."
     },
     "delve": {
       "cannotEnterNow": "You cannot enter a dungeon right now.",

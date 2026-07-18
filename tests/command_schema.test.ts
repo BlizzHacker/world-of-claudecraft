@@ -23,8 +23,8 @@ import { COMMAND_NAMES, type CommandName, DISPATCH_ONLY_COMMANDS } from '../src/
 const repoRoot = fileURLToPath(new URL('..', import.meta.url));
 
 // Verified counts on the current tree (re-derived below; never trust stale prose).
-const EXPECTED_SEND_COUNT = 158; // + venue queue pairs + home_buy + horde_start/fortify.
-const EXPECTED_DISPATCH_COUNT = 167; // + venue cases + home_buy + the horde pair.
+const EXPECTED_SEND_COUNT = 159; // + venue pairs + home_buy + horde start/fortify/build.
+const EXPECTED_DISPATCH_COUNT = 168; // + venue cases + home_buy + the horde trio.
 const EXPECTED_DISPATCH_ONLY_COUNT = 9;
 
 // The chat sub-channel routing switch (server/game.ts `switch

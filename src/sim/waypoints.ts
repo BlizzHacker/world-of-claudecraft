@@ -50,6 +50,14 @@ export function waypointDefs(): WaypointDef[] {
   return out;
 }
 
+/** Authored pylon offset from the waypoint's logical point. Eastbrook's town
+ *  pylon stands at the well plaza (the crypt-mouth heart of town); everywhere
+ *  else keeps the classic NE-edge landmark spot. */
+export function pylonOffset(id: string): { x: number; z: number } {
+  if (id === 'wp_eastbrook_vale') return { x: 6, z: 5 };
+  return { x: 14, z: 14 };
+}
+
 export function waypointById(id: string): WaypointDef | null {
   return waypointDefs().find((w) => w.id === id) ?? null;
 }
@@ -61,8 +69,11 @@ export function spawnWaypoints(ctx: SimContext, nextId: () => number): void {
   for (const wp of waypointDefs()) {
     // Place the waypoint pylon well off the hub centre (where quest givers/vendors
     // cluster) so it never overlaps an NPC's interaction spot — 14u to the NE edge
-    // of the town, a clear landmark.
-    const e = createGroundObject(nextId(), '', wp.name, ctx.groundPos(wp.x + 14, wp.z + 14));
+    // of the town, a clear landmark. EXCEPTION: Eastbrook's pylon stands right
+    // beside the town well (the well is now the Hollow Crypt's mouth, so the
+    // plaza is the town's arrival-and-departure heart).
+    const off = pylonOffset(wp.id);
+    const e = createGroundObject(nextId(), '', wp.name, ctx.groundPos(wp.x + off.x, wp.z + off.z));
     e.templateId = 'waypoint';
     e.waypointId = wp.id;
     e.objectItemId = null;
@@ -123,7 +134,8 @@ export function waypointTravel(ctx: SimContext, destId: string, pid?: number): v
   }
   // Arrive at the destination waypoint pylon (matches its spawn offset), just south
   // of it so you face the town, not standing inside the pylon.
-  p.pos = ctx.groundPos(dest.x + 14, dest.z + 11);
+  const off = pylonOffset(dest.id);
+  p.pos = ctx.groundPos(dest.x + off.x, dest.z + off.z - 3);
   p.prevPos = { ...p.pos };
   ctx.rebucket(p);
   p.targetId = null;

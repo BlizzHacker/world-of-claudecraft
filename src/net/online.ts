@@ -2636,6 +2636,9 @@ export class ClientWorld implements IWorld {
   hordeFortify(): void {
     this.cmd({ cmd: 'horde_fortify' });
   }
+  hordeBuild(): void {
+    this.cmd({ cmd: 'horde_build' });
+  }
   // Private practice bout against bots: the server seats it on an instanced pitch
   // copy far from the Sowfield, so it runs in parallel with the real match and
   // every other practice. Same command online and off.

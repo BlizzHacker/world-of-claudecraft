@@ -32,12 +32,12 @@ import {
 } from './encounters/nythraxis';
 import { isInRaidInstance } from './instances/dungeons';
 import { buildingDoorNear, buildingEnterableNear, enterInterior, leaveInterior } from './interiors';
+import { homeEnter } from './social/homes';
 
 // Server-side range for the click-to-enter building menu. Must be >= the client's
 // BUILDING_CLICK_ENTER_RANGE (main.ts, 26) so any Enter the client offered succeeds.
 const BUILDING_ENTER_RANGE = 28;
-import { activateWaypoint } from './waypoints';
-import { useTownPortal } from './town_portal';
+
 import { hasSharedLootRights as computeSharedLootRights, lootHasGoneFfa } from './loot/loot_ffa';
 import {
   awardSharedLootItem,
@@ -58,7 +58,9 @@ import {
   rollCorpseMaterialRarity,
 } from './professions/gathering';
 import type { SimContext } from './sim_context';
+import { useTownPortal } from './town_portal';
 import { dist2d, type Entity, INTERACT_RANGE, type InvSlot, OBJECT_RESPAWN } from './types';
+import { activateWaypoint } from './waypoints';
 import { markWorldBossLooted } from './world_boss';
 
 // Shared corpse loot-rights snapshot for both the manual `lootCorpse` and the passive
@@ -539,6 +541,10 @@ export function interact(ctx: SimContext, pid?: number): void {
   // player is standing right at wins over a random nearby crate, but a corpse (above)
   // always wins. Buildings are solid + carry no door object — the door is the
   // building's own +z face, computed on demand from the world content.
+  // Homestead Lane cottages come first and work on EVERY realm (the themed
+  // building-door path below is worldTheme-gated): standing on an owned lot's
+  // doorstep and interacting walks you in (or tells you it's locked).
+  if (homeEnter(ctx, p.id)) return;
   const door = buildingDoorNear(p.pos.x, p.pos.z);
   if (door && door.d2 <= bestObjD2 && door.d2 <= bestQuestD2) {
     enterInterior(ctx, door.interiorType, p.id);

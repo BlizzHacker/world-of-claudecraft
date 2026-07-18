@@ -419,6 +419,7 @@ export const COMMAND_NAMES = [
   // The Dead Road: live horde defense at the town (alarm + fortify).
   'horde_start',
   'horde_fortify',
+  'horde_build',
 ] as const;
 
 // The union both the send path (`online.ts`) and the dispatch switch
@@ -660,4 +661,5 @@ export const COMMAND_FACETS = {
   // IWorldHorde: the Dead Road alarm/fortify. hordeInfo is a snapshot read.
   horde_start: 'IWorldHorde',
   horde_fortify: 'IWorldHorde',
+  horde_build: 'IWorldHorde',
 } as const satisfies Partial<Record<ClientCommand, WorldFacet>>;

@@ -5382,6 +5382,50 @@ function enPassthrough(english: string, localized: string): string {
 }
 
 const RULES: Rule[] = [
+  {
+    re: /^Build between waves, not while the dead are inside the walls\.$/,
+    build: () =>
+      enPassthrough(
+        'Build between waves, not while the dead are inside the walls.',
+        t('sim.venues.hordeErrBuildMidWave'),
+      ),
+  },
+  {
+    re: /^Raising a watch post costs 15s in timber and bowstrings\.$/,
+    build: () =>
+      enPassthrough(
+        'Raising a watch post costs 15s in timber and bowstrings.',
+        t('sim.venues.hordeErrBuildCost'),
+      ),
+  },
+  {
+    re: /^A watch post rises on the line \((.+) of (.+)\)\.$/,
+    build: (m) =>
+      enPassthrough(
+        `A watch post rises on the line (${m[1]} of ${m[2]}).`,
+        t('sim.venues.hordePostUp', { built: m[1], total: m[2] }),
+      ),
+  },
+  {
+    re: /^The watch posts are built out\.$/,
+    build: () => enPassthrough('The watch posts are built out.', t('sim.venues.hordePostMax')),
+  },
+  {
+    re: /^A watch post is reinforced to strength (.+)\.$/,
+    build: (m) =>
+      enPassthrough(
+        `A watch post is reinforced to strength ${m[1]}.`,
+        t('sim.venues.hordePostReinforced', { level: m[1] }),
+      ),
+  },
+  {
+    re: /^That plot is still for sale\.$/,
+    build: () => enPassthrough('That plot is still for sale.', t('sim.venues.homeForSale')),
+  },
+  {
+    re: /^You are shown to the door\.$/,
+    build: () => enPassthrough('You are shown to the door.', t('sim.venues.homeShownDoor')),
+  },
   // --- The Dead Road horde + Boarpit presence rule -------------------------
   {
     re: /^THE HORDE ALARM SOUNDS! The dead march on Eastbrook from the north road!$/,

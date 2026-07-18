@@ -16,6 +16,9 @@ export interface HordeInfo {
   kills: number; // event kill count
   won: boolean; // set once the event settles
   fortifyCostCopper: number;
+  /** Built watch posts (count, levels) for the board readout. */
+  posts: { level: number }[];
+  buildCostCopper: number;
 }
 
 export interface IWorldHorde {
@@ -25,4 +28,6 @@ export interface IWorldHorde {
   hordeStart(): void;
   /** Spend copper between waves: +1 ward and the hired line is healed. */
   hordeFortify(): void;
+  /** Build the next watch post / upgrade the weakest (prep+intermission). */
+  hordeBuild(): void;
 }

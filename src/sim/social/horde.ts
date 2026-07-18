@@ -36,6 +36,19 @@ export const HORDE_FORTIFY_COST = 2000; // copper: +1 ward and heals the line
 export const HORDE_WIN_PURSE = 8000; // copper per defender standing at the win
 export const HORDE_MOB_ID = 'restless_bones';
 export const HORDE_GUARD_IDS = ['mercenary_kael', 'huntress_verr'] as const;
+// Watch posts: buildable defenses flanking the line. Each build hires a
+// boar-culler archer at the next free post; further builds UPGRADE the
+// weakest post (+levels). Cost scales per action.
+export const HORDE_POSTS: readonly { x: number; z: number }[] = [
+  { x: -14, z: 34 },
+  { x: 16, z: 34 },
+  { x: -6, z: 26 },
+  { x: 8, z: 26 },
+];
+export const HORDE_POST_BASE_LEVEL = 14;
+export const HORDE_POST_UPGRADE_LEVELS = 4;
+export const HORDE_POST_MAX_LEVEL = 30;
+export const HORDE_BUILD_COST = 1500; // copper per build/upgrade action
 
 // The town square breach circle: a zombie inside costs a ward.
 export const HORDE_PLAZA = { x: 0, z: 2, r: 16 };
@@ -77,6 +90,7 @@ export interface HordeState {
   won: boolean;
   zombieIds: number[]; // live wave mobs (module-owned entities)
   guardIds: number[]; // hired line NPCs for this event
+  posts: { entityId: number; level: number; postIndex: number }[]; // built watch posts
   // Private jittered spawn spread; NEVER the shared stream (parity).
   rng: Rng | null;
 }
@@ -91,6 +105,7 @@ export function createHordeState(): HordeState {
     won: false,
     zombieIds: [],
     guardIds: [],
+    posts: [],
     rng: null,
   };
 }
@@ -163,6 +178,67 @@ export function hordeFortify(ctx: SimContext, pid?: number): void {
   ctx.emit({
     type: 'log',
     text: `You fortify the town. Wards: ${h.wards}. The line stands taller.`,
+    color: '#6cf',
+    pid: r.e.id,
+  });
+}
+
+/** Build the next watch post, or upgrade the weakest one (the "build and
+ *  upgrade the defenses" loop). Prep/intermission only, copper-priced. */
+export function hordeBuild(ctx: SimContext, pid?: number): void {
+  const r = ctx.resolve(pid);
+  if (!r) return;
+  const h = ctx.horde;
+  if (h.phase !== 'intermission' && h.phase !== 'prep') {
+    ctx.error(r.meta.entityId, 'Build between waves, not while the dead are inside the walls.');
+    return;
+  }
+  if (r.meta.copper < HORDE_BUILD_COST) {
+    ctx.error(r.meta.entityId, 'Raising a watch post costs 15s in timber and bowstrings.');
+    return;
+  }
+  const def = NPCS.huntress_verr;
+  if (!def) return;
+  if (h.posts.length < HORDE_POSTS.length) {
+    r.meta.copper -= HORDE_BUILD_COST;
+    const postIndex = h.posts.length;
+    const spot = HORDE_POSTS[postIndex];
+    const npc = createNpc(
+      ctx.nextId++,
+      { ...def, grindLevel: HORDE_POST_BASE_LEVEL },
+      ctx.groundPos(spot.x, spot.z),
+    );
+    ctx.addEntity(npc);
+    h.posts.push({ entityId: npc.id, level: HORDE_POST_BASE_LEVEL, postIndex });
+    ctx.emit({
+      type: 'log',
+      text: `A watch post rises on the line (${h.posts.length} of ${HORDE_POSTS.length}).`,
+      color: '#6cf',
+      pid: r.e.id,
+    });
+    return;
+  }
+  // All posts built: upgrade the weakest.
+  const weakest = [...h.posts].sort((a, b) => a.level - b.level)[0];
+  if (!weakest || weakest.level >= HORDE_POST_MAX_LEVEL) {
+    ctx.error(r.meta.entityId, 'The watch posts are built out.');
+    return;
+  }
+  r.meta.copper -= HORDE_BUILD_COST;
+  weakest.level = Math.min(HORDE_POST_MAX_LEVEL, weakest.level + HORDE_POST_UPGRADE_LEVELS);
+  const old = ctx.entities.get(weakest.entityId);
+  const spot = HORDE_POSTS[weakest.postIndex];
+  if (old) ctx.dropEntity(weakest.entityId);
+  const npc = createNpc(
+    ctx.nextId++,
+    { ...def, grindLevel: weakest.level },
+    ctx.groundPos(spot.x, spot.z),
+  );
+  ctx.addEntity(npc);
+  weakest.entityId = npc.id;
+  ctx.emit({
+    type: 'log',
+    text: `A watch post is reinforced to strength ${weakest.level}.`,
     color: '#6cf',
     pid: r.e.id,
   });
@@ -311,6 +387,11 @@ export function updateHorde(ctx: SimContext): void {
   h.phaseLeft -= DT;
   if (h.phaseLeft <= 0) {
     despawnAll(ctx, h.guardIds);
+    despawnAll(
+      ctx,
+      h.posts.map((p) => p.entityId),
+    );
+    h.posts.length = 0;
     const fresh = createHordeState();
     h.phase = fresh.phase;
     h.phaseLeft = fresh.phaseLeft;
@@ -343,5 +424,7 @@ export function hordeInfoFor(ctx: SimContext, pid?: number): HordeInfo | null {
     kills: h.kills,
     won: h.won,
     fortifyCostCopper: HORDE_FORTIFY_COST,
+    posts: h.posts.map((p) => ({ level: p.level })),
+    buildCostCopper: HORDE_BUILD_COST,
   };
 }

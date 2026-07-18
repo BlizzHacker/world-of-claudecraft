@@ -8,14 +8,9 @@
 // Interior TYPES (type-column index): 0 = shop, 1 = inn, 2 = house. A building's door
 // carries its interiorType; the exit returns to the saved overworld spot.
 
-import { INTERIOR_ROOM_EXIT_LOCAL } from './colliders';
+import { INTERIOR_ROOM_ENTRY, INTERIOR_ROOM_EXIT_LOCAL } from './colliders';
+import { INTERIOR_INNKEEPER, INTERIOR_MERCHANT, INTERIOR_VILLAGER } from './content/interior_npcs';
 import { getActiveWorldContent, interiorOrigin, isInteriorPos } from './data';
-import { INTERIOR_ROOM_ENTRY } from './colliders';
-import {
-  INTERIOR_INNKEEPER,
-  INTERIOR_MERCHANT,
-  INTERIOR_VILLAGER,
-} from './content/interior_npcs';
 import { createGroundObject, createNpc, createProp } from './entity';
 import { getActiveRealm } from './realms/registry';
 import type { SimContext } from './sim_context';
@@ -25,6 +20,9 @@ export const INTERIOR_TYPE_SHOP = 0;
 export const INTERIOR_TYPE_INN = 1;
 export const INTERIOR_TYPE_HOUSE = 2;
 export const INTERIOR_TYPE_CHAPEL = 3;
+// Eastbrook Homes cottages (per-LOT slots, not the shared room; access is
+// owner + the owner's party, enforced in social/homes.ts).
+export const INTERIOR_TYPE_HOME = 4;
 const INTERIOR_SHARED_SLOT = 0; // shared public room per type
 
 const TYPE_ENTER_TEXT: Record<number, string> = {
@@ -49,7 +47,13 @@ function interiorTypeForBuilding(kind: string, houseSeen: number): number | null
 // (origin at room centre; room spans ±18 x, z −12..12; the south door is at −z, so
 // furniture clusters north/sides and leaves the entry lane clear). {key} = a native
 // prop asset (renders as prop:<key>); unknown keys fall back to a crate placeholder.
-interface Furnishing { key: string; x: number; z: number; facing?: number; scale?: number }
+interface Furnishing {
+  key: string;
+  x: number;
+  z: number;
+  facing?: number;
+  scale?: number;
+}
 const ROOM_FURNITURE: Record<number, Furnishing[]> = {
   // Shop: a counter of crates + weapon stands + an anvil, wares along the walls.
   [INTERIOR_TYPE_SHOP]: [
@@ -115,7 +119,12 @@ export function spawnBuildingInteriors(
   const add = (e: Entity): void => ctx.addEntity(e);
   // 1) Furnish each shared interior room (slot 0): an EXIT door at the south door,
   // furniture props, and the resident NPC.
-  for (const t of [INTERIOR_TYPE_SHOP, INTERIOR_TYPE_INN, INTERIOR_TYPE_HOUSE, INTERIOR_TYPE_CHAPEL]) {
+  for (const t of [
+    INTERIOR_TYPE_SHOP,
+    INTERIOR_TYPE_INN,
+    INTERIOR_TYPE_HOUSE,
+    INTERIOR_TYPE_CHAPEL,
+  ]) {
     const o = interiorOrigin(t, 0);
     // Exit door.
     const exit = createGroundObject(
@@ -130,7 +139,15 @@ export function spawnBuildingInteriors(
     add(exit);
     // Furniture.
     for (const f of ROOM_FURNITURE[t] ?? []) {
-      add(createProp(nextId(), f.key, ctx.groundPos(o.x + f.x, o.z + f.z), f.facing ?? 0, f.scale ?? 1));
+      add(
+        createProp(
+          nextId(),
+          f.key,
+          ctx.groundPos(o.x + f.x, o.z + f.z),
+          f.facing ?? 0,
+          f.scale ?? 1,
+        ),
+      );
     }
     // Resident NPC (merchant / innkeeper / villager). A vendorItems NPC opens its
     // shop through the normal talk-to-NPC path (createNpc copies vendorItems); no
@@ -147,7 +164,12 @@ export function spawnBuildingInteriors(
   // runs ClientWorld, never Sim, so no registry would be populated) and the server.
 }
 
-export interface BuildingDoor { x: number; z: number; interiorType: number; r: number }
+export interface BuildingDoor {
+  x: number;
+  z: number;
+  interiorType: number;
+  r: number;
+}
 
 /** Compute the door AREAS for a set of town buildings: one per enterable building, a
  *  world point on its +z (front) face with an enter radius. PURE + deterministic so
@@ -184,7 +206,10 @@ export function computeBuildingDoors(
  *  buildings never map to an interior type and this returns null. The distance lets a
  *  door the player is standing right at win over ambient town props in the arbitration,
  *  while a corpse/object literally at their feet still wins if closer. */
-export function buildingDoorNear(x: number, z: number): { interiorType: number; d2: number } | null {
+export function buildingDoorNear(
+  x: number,
+  z: number,
+): { interiorType: number; d2: number } | null {
   if (!getActiveRealm().worldTheme) return null;
   let best: BuildingDoor | null = null;
   let bestD2 = Infinity;
@@ -256,8 +281,15 @@ export function buildingEnterableNear(x: number, z: number, range: number): numb
 }
 
 /** Teleport the player into the interior room for `interiorType`, saving the spot to
- *  return to on exit. Called from the door-interaction path. */
-export function enterInterior(ctx: SimContext, interiorType: number, pid?: number): void {
+ *  return to on exit. Called from the door-interaction path. `slot` picks a
+ *  private room instance (Eastbrook Homes: one per lot); defaults to the
+ *  shared public room every town building uses. */
+export function enterInterior(
+  ctx: SimContext,
+  interiorType: number,
+  pid?: number,
+  slot: number = INTERIOR_SHARED_SLOT,
+): void {
   const r = ctx.resolve(pid);
   if (!r) return;
   const p = r.e;
@@ -265,7 +297,7 @@ export function enterInterior(ctx: SimContext, interiorType: number, pid?: numbe
   // Save the overworld return point (just outside the door we came in).
   p.interiorReturn = { x: p.pos.x, y: p.pos.y, z: p.pos.z };
   p.interiorType = interiorType;
-  const o = interiorOrigin(interiorType, INTERIOR_SHARED_SLOT);
+  const o = interiorOrigin(interiorType, slot);
   p.pos = ctx.groundPos(o.x + INTERIOR_ROOM_ENTRY.x, o.z + INTERIOR_ROOM_ENTRY.z);
   p.prevPos = { ...p.pos };
   ctx.rebucket(p);

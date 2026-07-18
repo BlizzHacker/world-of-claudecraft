@@ -14,7 +14,8 @@
 import type { HomesInfo } from '../../world_api/homes';
 import { NPCS } from '../data';
 import { createNpc } from '../entity';
-import { HOME_LOTS, HOME_PRICE_CR, isAtHomes, REALTOR_POS } from '../homes_layout';
+import { HOME_LOTS, HOME_PRICE_CR, type HomeLotDef, isAtHomes, REALTOR_POS } from '../homes_layout';
+import { enterInterior, INTERIOR_TYPE_HOME, leaveInterior } from '../interiors';
 import type { SimContext } from '../sim_context';
 import { dist2d } from '../types';
 
@@ -118,4 +119,87 @@ export function homesInfoFor(ctx: SimContext, pid?: number): HomesInfo | null {
     myLotId,
     priceCr: HOME_PRICE_CR,
   };
+}
+
+// ---------------------------------------------------------------------------
+// Living in the home: the cottage door is a real door. The owner walks in;
+// party members walk in WITH the owner's party; everyone else finds it locked.
+// Members who leave (or are kicked from) the party are walked out on the next
+// tick — a home is private space, not a raid instance.
+// ---------------------------------------------------------------------------
+
+export const HOME_DOOR_RANGE = 4; // yd from the doorstep that counts as "at the door"
+
+/** The lot whose doorstep contains (x,z), or null. */
+export function homeLotAt(x: number, z: number): HomeLotDef | null {
+  for (const lot of HOME_LOTS) {
+    if (Math.hypot(x - lot.door.x, z - lot.door.z) <= HOME_DOOR_RANGE) return lot;
+  }
+  return null;
+}
+
+/** May this player pass the door of `lotId`? Owner always; anyone in a party
+ *  that ALSO contains the (online) owner rides along. */
+export function homeAccessAllowed(ctx: SimContext, pid: number, lotId: string): boolean {
+  const meta = ctx.players.get(pid);
+  if (!meta) return false;
+  const own = ctx.homes.lots[lotId];
+  if (!own) return false;
+  if (own.owner.toLowerCase() === meta.name.toLowerCase()) return true;
+  const party = ctx.partyOf(pid);
+  if (!party) return false;
+  for (const memberPid of party.members) {
+    const m = ctx.players.get(memberPid);
+    if (m && m.name.toLowerCase() === own.owner.toLowerCase()) return true;
+  }
+  return false;
+}
+
+/** Door interaction: enter the cottage if allowed (per-lot private room). */
+export function homeEnter(ctx: SimContext, pid?: number): boolean {
+  const r = ctx.resolve(pid);
+  if (!r) return false;
+  const lot = homeLotAt(r.e.pos.x, r.e.pos.z);
+  if (!lot) return false;
+  const own = ctx.homes.lots[lot.id];
+  if (!own) {
+    ctx.error(r.meta.entityId, 'That plot is still for sale.');
+    return true;
+  }
+  if (!homeAccessAllowed(ctx, r.e.id, lot.id)) {
+    ctx.error(r.meta.entityId, 'The door is locked.');
+    return true;
+  }
+  const slot = HOME_LOTS.findIndex((l) => l.id === lot.id) + 1; // slot 0 = shared
+  r.meta.homeInteriorLot = lot.id;
+  enterInterior(ctx, INTERIOR_TYPE_HOME, r.e.id, slot);
+  return true;
+}
+
+/** Per-tick guest sweep: anyone inside a home who lost access (kicked from or
+ *  left the owner's party, or the deed changed hands) is walked out. */
+export function updateHomes(ctx: SimContext): void {
+  for (const [pid, meta] of ctx.players) {
+    const lotId = meta.homeInteriorLot;
+    if (!lotId) continue;
+    const e = ctx.entities.get(pid);
+    if (!e) {
+      meta.homeInteriorLot = null;
+      continue;
+    }
+    if (e.interiorType !== INTERIOR_TYPE_HOME) {
+      meta.homeInteriorLot = null; // walked out on their own
+      continue;
+    }
+    if (!homeAccessAllowed(ctx, pid, lotId)) {
+      meta.homeInteriorLot = null;
+      leaveInterior(ctx, pid);
+      ctx.emit({
+        type: 'log',
+        text: 'You are shown to the door.',
+        color: '#ff8080',
+        pid,
+      });
+    }
+  }
 }

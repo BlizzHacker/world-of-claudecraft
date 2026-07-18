@@ -4001,6 +4001,9 @@ export class GameServer {
       case 'horde_fortify':
         sim.hordeFortify(pid);
         break;
+      case 'horde_build':
+        sim.hordeBuild(pid);
+        break;
       case 'vcup_role':
         if (isSportRole(msg.role)) sim.vcupSetRole(msg.role, pid);
         break;

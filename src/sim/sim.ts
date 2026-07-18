@@ -860,6 +860,9 @@ export interface PlayerMeta {
   isDevBot?: boolean;
   /** Host-verified DuranceTester QA entitlement; runtime-only and never persisted. */
   isDuranceTester?: boolean;
+  /** The Homestead Lane lot this player is currently inside (interiors
+   *  slot bookkeeping for the per-tick guest sweep); runtime-only. */
+  homeInteriorLot?: string | null;
   /** Eastbrook Homes PAID entitlement (a $CR deed payment cleared on the
    *  account). Set server-side from the account record at login
    *  (server/homeowner_entitlement.ts); runtime-only, never persisted here —
@@ -1970,6 +1973,7 @@ export class Sim {
       hardcore: opts?.hardcore ?? false,
       isDuranceTester: opts?.duranceTester === true,
       homeownerEntitled: opts?.homeowner === true,
+      homeInteriorLot: null,
       skin: savedState?.skin ?? 0,
       skinCatalog: savedState?.skinCatalog === 'mech' ? 'mech' : 'class',
       pendingSkinRank: savedState?.pendingSkinRank ?? null,
@@ -3922,6 +3926,9 @@ export class Sim {
     // real mobs. Draws only its PRIVATE rng, never the shared stream.
     hordeMod.updateHorde(this.ctx);
     lap?.('horde');
+    // Home guest sweep: kicked/departed party members are shown the door.
+    homesMod.updateHomes(this.ctx);
+    lap?.('homes');
     this.updateMinigame();
     lap?.('minigame');
     this.market.update();
@@ -7000,6 +7007,10 @@ export class Sim {
 
   hordeFortify(pid?: number): void {
     hordeMod.hordeFortify(this.ctx, pid);
+  }
+
+  hordeBuild(pid?: number): void {
+    hordeMod.hordeBuild(this.ctx, pid);
   }
 
   hordeInfoFor(pid: number): import('../world_api/horde').HordeInfo | null {

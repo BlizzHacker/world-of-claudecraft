@@ -10827,6 +10827,10 @@ export class Hud {
           (tOptional('hudChrome.horde.gossipFortify') ?? 'Fortify the town') +
           ` (${Math.floor(horde.fortifyCostCopper / 100)}s)`;
         html += `<button type="button" class="qd-list-item" data-horde-fortify="1" aria-label="${esc(label)}"><span class="gold">🛡</span> ${esc(label)}</button>`;
+        const bLabel =
+          (tOptional('hudChrome.horde.gossipBuild') ?? 'Raise/upgrade a watch post') +
+          ` (${Math.floor(horde.buildCostCopper / 100)}s · ${horde.posts.length}/4)`;
+        html += `<button type="button" class="qd-list-item" data-horde-build="1" aria-label="${esc(bLabel)}"><span class="gold">🏰</span> ${esc(bLabel)}</button>`;
       }
     }
     el.innerHTML = html;
@@ -10889,6 +10893,10 @@ export class Hud {
     el.querySelector('[data-horde-fortify]')?.addEventListener('click', () => {
       this.closeQuestDialog(false);
       this.sim.hordeFortify();
+    });
+    el.querySelector('[data-horde-build]')?.addEventListener('click', () => {
+      this.closeQuestDialog(false);
+      this.sim.hordeBuild();
     });
     el.querySelectorAll<HTMLElement>('[data-home-buy]').forEach((btn) => {
       btn.addEventListener('click', () => {

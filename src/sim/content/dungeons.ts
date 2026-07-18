@@ -581,7 +581,10 @@ export const DUNGEON_DEFS: Record<string, DungeonDef> = {
     id: 'hollow_crypt',
     name: 'The Hollow Crypt',
     index: 0,
-    doorPos: { x: 80, z: 90 }, // entrance portal at the chapel ruin
+    // The TOWN WELL is the crypt's mouth: the entrance portal sits on the
+    // well itself (props.wells[0] at 0,2) — you descend THROUGH the well.
+    // (Formerly a free-standing portal at the chapel ruin, 80,90.)
+    doorPos: { x: 0, z: 2 },
     // Arrive back near the exit portal so the first pack (z 18+) is outside aggro
     // range on entry: no mob can pull the moment you zone in. See dungeon_entry_clearance test.
     entry: { x: 0, z: -2 },
