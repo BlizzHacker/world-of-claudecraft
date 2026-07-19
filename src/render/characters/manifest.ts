@@ -1416,7 +1416,7 @@ const REALM_NPC_KEYS: Partial<Record<string, Record<string, string>>> = {
   infernal: {
     bursar_fernando: 'realm_infernal_durance_humanoid',
     marshal_redbrook: 'realm_infernal_durance_humanoid',
-    warden_fenwick: 'realm_infernal_dark_paladin',
+    warden_fenwick: 'realm_infernal_durance_humanoid',
     captain_thessaly: 'realm_infernal_durance_humanoid',
     loremaster_caddis: 'realm_infernal_durance_humanoid',
     smith_haldren: 'realm_infernal_durance_humanoid',
@@ -1469,7 +1469,9 @@ const REALM_MOB_FAMILY_KEYS: Partial<Record<string, Partial<Record<string, strin
     undead: 'realm_cryptic_bone_herald', demon: 'realm_cryptic_bone_herald',
   },
   infernal: {
-    beast: 'hellmaw_primal_beast_body', humanoid: 'realm_infernal_durance_humanoid',
+    // Generic beasts remain animals; Infernal demon bodies are reserved for
+    // demon-family mobs and named Hellmaw encounters.
+    beast: 'mob_wolf', humanoid: 'realm_infernal_durance_humanoid',
     undead: 'skel_warrior', demon: 'hellmaw_husk_body', elemental: 'hellmaw_lava_fiend_body',
     dragonkin: 'hellmaw_dragon_body',
   },
@@ -1503,7 +1505,11 @@ export function visualKeyFor(e: Entity): string {
   }
   // npcs — Brother Aldric recurs in every hub under suffixed ids
   if (e.templateId.startsWith('brother_aldric')) return 'npc_aldric';
-  const realmKeys = REALM_NPC_KEYS[resolveActiveRealmId()];
+  const realm = resolveActiveRealmId();
+  // Infernal NPCs are human civilians and officials. Enemy commanders are
+  // mobs, not NPCs; never fall through to a KayKit elf, orc, or villager.
+  if (realm === 'infernal') return 'realm_infernal_durance_humanoid';
+  const realmKeys = REALM_NPC_KEYS[realm];
   return realmKeys?.[e.templateId] ?? NPC_KEYS[e.templateId] ?? 'npc_villager';
 }
 
