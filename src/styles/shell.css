@@ -7418,6 +7418,25 @@
     line-height: 1.15;
     overflow-wrap: anywhere;
   }
+  .mini-class-row.infernal-diablo-roster {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-height: min(52vh, 560px);
+    overflow-y: auto;
+    align-content: start;
+    padding-right: 4px;
+  }
+  .infernal-diablo-roster .mini-class-label small {
+    display: block;
+    margin-top: 3px;
+    color: rgba(231, 220, 193, 0.68);
+    font-size: 9px;
+    font-weight: 600;
+  }
+  .infernal-diablo-roster .mini-class-faction {
+    display: block;
+    margin-top: 4px;
+    font-size: 9px;
+  }
   .class-details-asset.asset-comingSoon {
     border-color: rgba(154, 149, 166, 0.38);
     background: rgba(154, 149, 166, 0.1);

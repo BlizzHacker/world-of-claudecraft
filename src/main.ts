@@ -271,6 +271,7 @@ import { mountPickitPanel } from './ui/cryptic/pickit_panel';
 import {
   classChoicesForRealm,
   classPresentationForRealm,
+  infernalDiabloClassChoicesForRealm,
   presentationFactionsForRealm,
   realmHasClassOverlay,
 } from './ui/cryptic/realm_class_presentation';
@@ -3554,7 +3555,16 @@ function realmClassDisplayDescription(cls: PlayerClass): string {
 }
 
 function realmClassPresentation(cls: PlayerClass) {
-  return classPresentationForRealm(realmContentForCharacterUi(), cls);
+  const realm = realmContentForCharacterUi();
+  if (realm.id === 'infernal') {
+    const selected = document.querySelector<HTMLElement>('#charcreate-panel .mini-class.sel[data-diablo-id]');
+    const selectedId = selected?.dataset.diabloId;
+    const diablo = infernalDiabloClassChoicesForRealm(realm).find(
+      (choice) => choice.diabloId === selectedId && choice.baseClass === cls,
+    );
+    if (diablo) return diablo;
+  }
+  return classPresentationForRealm(realm, cls);
 }
 
 function showClassPreview(cls: PlayerClass): void {
@@ -3687,9 +3697,44 @@ function ensureCharCreateFactionFilter(): void {
   });
 }
 
+function paintInfernalDiabloRoster(
+  row: HTMLElement,
+  choices: ReturnType<typeof infernalDiabloClassChoicesForRealm>,
+  activeFaction: string | null,
+): void {
+  row.classList.add('infernal-diablo-roster');
+  row.innerHTML = choices
+    .filter((choice) => !activeFaction || choice.faction === activeFaction)
+    .map((choice) => `<button type="button" class="mini-class realm-skinned realm-playable" data-class="${choice.baseClass}" data-diablo-id="${choice.diabloId}" data-faction="${choice.faction}" data-realm-faction="${choice.faction}" data-realm-asset="${choice.assetUrl}" data-realm-asset-name="${choice.assetName}" data-realm-asset-status="ready" aria-label="${escapeHtml(`${choice.name}, ${choice.lineage}, ${choice.faction}`)}" aria-pressed="false" title="${escapeHtml(`${choice.lineage} — ${choice.assetName}`)}"><span class="mini-class-label">${escapeHtml(choice.name)}<small>${escapeHtml(choice.lineage)}</small></span><span class="mini-class-faction">${escapeHtml(choice.faction)} - Playable GLB</span></button>`)
+    .join('');
+  row.querySelectorAll<HTMLElement>('.mini-class').forEach((card) => {
+    const select = () => {
+      row.querySelectorAll<HTMLElement>('.mini-class').forEach((other) => {
+        other.classList.remove('sel');
+        other.setAttribute('aria-pressed', 'false');
+      });
+      card.classList.add('sel');
+      card.setAttribute('aria-pressed', 'true');
+      currentlyRenderedClass['charcreate-class-details'] = null;
+      const cls = card.dataset.class as PlayerClass;
+      renderClassDetails('charcreate-class-details', cls);
+      refreshOnlineSkins(cls);
+    };
+    card.addEventListener('click', select);
+    card.addEventListener('keydown', (event) => handleKeyboardActivation(event as KeyboardEvent, select));
+  });
+  const first = row.querySelector<HTMLElement>('.mini-class');
+  if (first) first.click();
+}
+
 function paintRealmClassChoices(): void {
   currentlyRenderedClass['charcreate-class-details'] = null;
   const realm = realmContentForCharacterUi();
+  const row = document.querySelector<HTMLElement>('#charcreate-panel .mini-class-row');
+  if (row && realm.id === 'infernal') {
+    paintInfernalDiabloRoster(row, infernalDiabloClassChoicesForRealm(realm), selectedCreateFaction(realm));
+    return;
+  }
   const choices = classChoicesForRealm(realm);
   const byClass = new Map(choices.map((choice) => [choice.baseClass, choice]));
   const overlay = realmHasClassOverlay(realm) && choices.length > 0;

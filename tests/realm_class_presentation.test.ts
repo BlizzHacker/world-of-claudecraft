@@ -4,6 +4,7 @@ import type { PlayerClass } from '../src/sim/types';
 import {
   classChoicesForRealm,
   classPresentationForRealm,
+  infernalDiabloClassChoicesForRealm,
   PLAYER_CLASS_ORDER,
   presentationFactionsForRealm,
   realmHasClassOverlay,
@@ -92,6 +93,23 @@ describe('realm class presentation', () => {
       const names = classChoicesForRealm(getRealm(id)).map((choice) => choice.name);
       expect(new Set(names).size).toBe(names.length);
     }
+  });
+
+  it('exposes the complete Infernal Diablo roster on real GLBs', () => {
+    const choices = infernalDiabloClassChoicesForRealm(getRealm('infernal'));
+    expect(choices).toHaveLength(35);
+    expect(new Set(choices.map((choice) => choice.diabloId)).size).toBe(choices.length);
+    expect(choices.map((choice) => choice.lineage)).toEqual(
+      expect.arrayContaining(['Diablo I', 'Diablo II', 'Diablo III', 'Diablo IV', 'Diablo Immortal']),
+    );
+    expect(choices.every((choice) => choice.assetStatus === 'ready')).toBe(true);
+    expect(choices.every((choice) => choice.assetUrl?.endsWith('.glb'))).toBe(true);
+    expect(choices.find((choice) => choice.name === 'Warrior')?.assetUrl).toContain(
+      'durance_tester_humanoid.glb',
+    );
+    expect(new Set(choices.map((choice) => choice.faction))).toEqual(
+      new Set(['Heavenly Host', 'Burning Hells', 'Ashen Court']),
+    );
   });
 
   it('leaves pristine and exchange realms on vanilla class labels', () => {

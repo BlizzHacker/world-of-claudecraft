@@ -15,13 +15,19 @@ const entry = (
   lineage: DiabloLineage,
   name: string,
   engineClass: PlayerClass,
-  factionSide: DiabloRealmClass['factionSide'] = 'sanctuary',
+  factionSide?: DiabloRealmClass['factionSide'],
 ): DiabloRealmClass => ({
   id: `${lineage.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
   name,
   lineage,
   engineClass,
-  factionSide,
+  factionSide:
+    factionSide ??
+    (/necromancer|witch doctor|warlock/i.test(name)
+      ? 'hell'
+      : /blood knight|tempest|demon hunter/i.test(name)
+        ? 'surprise'
+        : 'sanctuary'),
 });
 
 export const INFERNAL_DIABLO_CLASSES: readonly DiabloRealmClass[] = [

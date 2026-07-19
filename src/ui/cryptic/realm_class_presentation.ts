@@ -1,6 +1,7 @@
 import type { PlayerClass } from '../../sim/types';
 import { factionForRealmClass } from '../../sim/realms/factions';
 import type { RealmClassSkin, RealmContent, RealmId, RealmRole } from '../../sim/realms/types';
+import { diabloClassesForRealm, type DiabloRealmClass } from '../../sim/realms/diablo_classes';
 
 export const PLAYER_CLASS_ORDER: readonly PlayerClass[] = [
   'warrior',
@@ -28,6 +29,12 @@ export interface RealmClassPresentation {
   assetName?: string;
   assetAnimated?: boolean;
   source?: RealmClassSkin;
+}
+
+export interface InfernalDiabloClassPresentation extends RealmClassPresentation {
+  diabloId: string;
+  lineage: DiabloRealmClass['lineage'];
+  factionSide: DiabloRealmClass['factionSide'];
 }
 
 export type RealmClassAssetStatus = 'ready' | 'preview' | 'comingSoon';
@@ -259,6 +266,30 @@ const INFERNAL_SKULLBEAST = asset(
   'Has locomotion plus slash; still queued for class-specific casting and death clips.',
 );
 
+const INFERNAL_DURANCE_HUMANOID = asset('ready', 'Playable humanoid GLB', {
+  assetUrl: '/cr-realms/infernal/durance_tester_humanoid.glb',
+  assetName: 'Durance Tester Humanoid',
+  assetAnimated: true,
+});
+
+const INFERNAL_DARK_PALADIN = asset('ready', 'Playable enemy GLB', {
+  assetUrl: '/cr-realms/infernal/dark_paladin_commander.glb',
+  assetName: 'Dark Paladin Commander',
+  assetAnimated: true,
+});
+
+const INFERNAL_UNIQUE_ASSETS: readonly RealmClassAsset[] = [
+  INFERNAL_DURANCE_HUMANOID,
+  INFERNAL_DARK_PALADIN,
+  asset('ready', 'Playable GLB', { assetUrl: '/cr-realms/infernal/demon-horned_1a19d7ca.glb', assetName: 'Horned Demon', assetAnimated: true }),
+  asset('ready', 'Playable GLB', { assetUrl: '/cr-realms/infernal/meshy_ai_crimson_infernal_behe_biped_meshy_ai_meshy_merged_animations_27bab94d.glb', assetName: 'Crimson Infernal Behemoth', assetAnimated: true }),
+  INFERNAL_SKULLBEAST,
+  asset('ready', 'Playable GLB', { assetUrl: '/cr-realms/infernal/meshy_ai_infernal_behemoth_biped_merged_animations.glb', assetName: 'Infernal Behemoth', assetAnimated: true }),
+  asset('ready', 'Playable GLB', { assetUrl: '/cr-realms/infernal/meshy_ai_cursed_knight_s_iro_0616234359_texture_abda8208.glb', assetName: 'Cursed Knight', assetAnimated: true }),
+  asset('ready', 'Playable GLB', { assetUrl: '/cr-realms/infernal/meshy_ai_demon_with_body_cover_0616234415_texture_540be2b1.glb', assetName: 'Covered Demon', assetAnimated: true }),
+  asset('ready', 'Playable GLB', { assetUrl: '/cr-realms/infernal/meshy_ai_horned_demon_warrior_0616234420_texture_2233cac0.glb', assetName: 'Horned Demon Warrior', assetAnimated: true }),
+];
+
 const CLASSIC_ORC = asset('ready', 'Playable GLB', {
   assetUrl: '/cr-realms/classic/another-orc-meshy_ai_meshy_merged_animations_743223cb.glb',
   assetName: 'Animated Orc',
@@ -342,9 +373,17 @@ const ASSETS_BY_REALM_CLASS: Partial<Record<RealmId, Partial<Record<PlayerClass,
     warlock: CRYPTIC_BONE_HERALD,
   },
   infernal: {
-    warrior: INFERNAL_CRIMSON_BEHEMOTH,
-    rogue: INFERNAL_DEMON_HORNED,
-    druid: INFERNAL_SKULLBEAST,
+    // Iron Warden is intentionally a real humanoid. The old crimson demon
+    // body was a placeholder and must never be used for this character.
+    warrior: INFERNAL_UNIQUE_ASSETS[0],
+    paladin: INFERNAL_UNIQUE_ASSETS[1],
+    hunter: INFERNAL_UNIQUE_ASSETS[2],
+    rogue: INFERNAL_UNIQUE_ASSETS[3],
+    priest: INFERNAL_UNIQUE_ASSETS[4],
+    shaman: INFERNAL_UNIQUE_ASSETS[5],
+    mage: INFERNAL_UNIQUE_ASSETS[6],
+    warlock: INFERNAL_UNIQUE_ASSETS[7],
+    druid: INFERNAL_UNIQUE_ASSETS[8],
   },
   classic: {
     warrior: CLASSIC_DWARF,
@@ -419,7 +458,58 @@ export function classChoicesForRealm(realm: RealmContent): RealmClassPresentatio
     .filter((choice): choice is RealmClassPresentation => choice !== null);
 }
 
+function infernalFactionForDiabloClass(choice: DiabloRealmClass): { name: string; color: string } {
+  if (choice.factionSide === 'hell') return { name: 'Burning Hells', color: '#d24a3a' };
+  if (choice.factionSide === 'surprise') return { name: 'Ashen Court', color: '#c5a86a' };
+  return { name: 'Heavenly Host', color: '#9fc8ff' };
+}
+
+/**
+ * The Infernal creator has a Diablo-sized class roster, while the combat
+ * server intentionally persists the existing nine mechanical classes. This
+ * presentation layer keeps those contracts separate: every visible card is a
+ * real named Diablo class, but its selection still submits engineClass.
+ */
+export function infernalDiabloClassChoicesForRealm(
+  realm: RealmContent,
+): InfernalDiabloClassPresentation[] {
+  if (realm.id !== 'infernal') return [];
+  return diabloClassesForRealm(realm.id).map((diablo) => {
+    const faction = infernalFactionForDiabloClass(diablo);
+    const base = classPresentationForRealm(realm, diablo.engineClass);
+    const isHell = diablo.factionSide === 'hell';
+    const assetChoice = isHell ? INFERNAL_DARK_PALADIN : INFERNAL_DURANCE_HUMANOID;
+    return {
+      ...(base ?? {
+        baseClass: diablo.engineClass,
+        name: diablo.name,
+        faction: faction.name,
+        lore: `${diablo.name}, forged for the ${diablo.lineage} war against the Burning Hells.`,
+        color: faction.color,
+        role: ROLE_BY_CLASS[diablo.engineClass],
+      }),
+      baseClass: diablo.engineClass,
+      name: diablo.name,
+      faction: faction.name,
+      lore: `${diablo.name} — ${diablo.lineage} class. Choose a real animated body and carry this role into the Infernal Realm.`,
+      color: faction.color,
+      assetStatus: assetChoice.assetStatus,
+      assetStatusLabel: assetChoice.assetStatusLabel,
+      assetUrl: assetChoice.assetUrl,
+      assetName: assetChoice.assetName,
+      assetAnimated: assetChoice.assetAnimated,
+      assetIssue: undefined,
+      diabloId: diablo.id,
+      lineage: diablo.lineage,
+      factionSide: diablo.factionSide,
+    };
+  });
+}
+
 export function presentationFactionsForRealm(realm: RealmContent): string[] {
+  if (realm.id === 'infernal') {
+    return [...new Set(infernalDiabloClassChoicesForRealm(realm).map((choice) => choice.faction))];
+  }
   const out: string[] = [];
   for (const choice of classChoicesForRealm(realm)) {
     if (!out.includes(choice.faction)) out.push(choice.faction);
