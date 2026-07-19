@@ -3631,7 +3631,26 @@ export const zh_CN: EnTranslations = {
       "hordePostMax": "The watch posts are built out.",
       "hordePostReinforced": "A watch post is reinforced to strength {level}.",
       "homeForSale": "That plot is still for sale.",
-      "homeShownDoor": "You are shown to the door."
+      "homeShownDoor": "You are shown to the door.",
+      "skErrBusy": "You can't muster a warcamp right now.",
+      "skErrFull": "The muster roll is full.",
+      "skQueued": "You are on the muster roll for a Warcamp Skirmish ({count} of 4).",
+      "skBuilderDead": "Your camp builder has fallen.",
+      "skAxe": "Your builder shoulders the axe.",
+      "skPick": "Your builder hefts the pick.",
+      "skErrCost": "Not enough timber and stone for that.",
+      "skHasBarracks": "Your camp already has a barracks.",
+      "skBarracksUp": "Your barracks stands. Footmen may muster.",
+      "skTowersMax": "Your camp has all its watchtowers.",
+      "skTowerUp": "A watchtower rises over your camp.",
+      "skNeedBarracks": "Footmen need a barracks.",
+      "skFootmanUp": "A footman answers the muster.",
+      "skRally": "Your footmen march on the rally point.",
+      "skStart": "WARCAMP SKIRMISH: raise your camp, hold your tent, break the warband banner!",
+      "skWave": "Warband wave {wave} rides for the camps!",
+      "skTentDown": "Your Command Tent has fallen. Your camp is out.",
+      "skWin": "The warband banner falls! The field is yours: 120s the commander.",
+      "skLoss": "The warband overruns the field. The skirmish is lost."
     },
     "delve": {
       "cannotEnterNow": "你现在无法进入探秘。",
@@ -7963,6 +7982,21 @@ export const zh_CN: EnTranslations = {
         "name": "房产经纪玛丽贝尔",
         "title": "东溪家园",
         "greeting": "四块上好的地皮，{className}。山谷的空气免费，地契可不免费。家园巷的宅子只属于我们的赞助人，以 CR 币结算。"
+      },
+      "skirmish_post": {
+        "name": "营垒建筑",
+        "title": "战地营垒遭遇战",
+        "greeting": "营垒依然坚守。"
+      },
+      "skirmish_builder": {
+        "name": "营地建造者",
+        "title": "战地营垒遭遇战",
+        "greeting": "斧头还是镐子，指挥官——指个方向就行。"
+      },
+      "skirmish_footman": {
+        "name": "营地步兵",
+        "title": "战地营垒遭遇战",
+        "greeting": "给我指出匪帮的方向。"
       },
       "tidewatcher_ondrel": {
         "name": "翁德雷尔·凡恩",

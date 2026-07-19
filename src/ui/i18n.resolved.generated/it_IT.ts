@@ -3631,7 +3631,26 @@ export const it_IT: EnTranslations = {
       "hordePostMax": "The watch posts are built out.",
       "hordePostReinforced": "A watch post is reinforced to strength {level}.",
       "homeForSale": "That plot is still for sale.",
-      "homeShownDoor": "You are shown to the door."
+      "homeShownDoor": "You are shown to the door.",
+      "skErrBusy": "You can't muster a warcamp right now.",
+      "skErrFull": "The muster roll is full.",
+      "skQueued": "You are on the muster roll for a Warcamp Skirmish ({count} of 4).",
+      "skBuilderDead": "Your camp builder has fallen.",
+      "skAxe": "Your builder shoulders the axe.",
+      "skPick": "Your builder hefts the pick.",
+      "skErrCost": "Not enough timber and stone for that.",
+      "skHasBarracks": "Your camp already has a barracks.",
+      "skBarracksUp": "Your barracks stands. Footmen may muster.",
+      "skTowersMax": "Your camp has all its watchtowers.",
+      "skTowerUp": "A watchtower rises over your camp.",
+      "skNeedBarracks": "Footmen need a barracks.",
+      "skFootmanUp": "A footman answers the muster.",
+      "skRally": "Your footmen march on the rally point.",
+      "skStart": "WARCAMP SKIRMISH: raise your camp, hold your tent, break the warband banner!",
+      "skWave": "Warband wave {wave} rides for the camps!",
+      "skTentDown": "Your Command Tent has fallen. Your camp is out.",
+      "skWin": "The warband banner falls! The field is yours: 120s the commander.",
+      "skLoss": "The warband overruns the field. The skirmish is lost."
     },
     "delve": {
       "cannotEnterNow": "Non puoi entrare in un'incursione in questo momento.",
@@ -7963,6 +7982,21 @@ export const it_IT: EnTranslations = {
         "name": "Agente immobiliare Maribel",
         "title": "Eastbrook Homes",
         "greeting": "Quattro bei lotti, {className}, e l’aria della valle è gratis — gli atti no. Una casa sul Vicolo dei Focolari è per i nostri mecenati, saldata in moneta CR."
+      },
+      "skirmish_post": {
+        "name": "Struttura del campo di guerra",
+        "title": "Schermaglia del campo di guerra",
+        "greeting": "Il campo di guerra regge."
+      },
+      "skirmish_builder": {
+        "name": "Costruttore del campo",
+        "title": "Schermaglia del campo di guerra",
+        "greeting": "Ascia o piccone, comandante: basta indicare."
+      },
+      "skirmish_footman": {
+        "name": "Fante del campo",
+        "title": "Schermaglia del campo di guerra",
+        "greeting": "Indicami la banda di guerra."
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",

@@ -3631,7 +3631,26 @@ export const en: EnTranslations = {
       "hordePostMax": "The watch posts are built out.",
       "hordePostReinforced": "A watch post is reinforced to strength {level}.",
       "homeForSale": "That plot is still for sale.",
-      "homeShownDoor": "You are shown to the door."
+      "homeShownDoor": "You are shown to the door.",
+      "skErrBusy": "You can't muster a warcamp right now.",
+      "skErrFull": "The muster roll is full.",
+      "skQueued": "You are on the muster roll for a Warcamp Skirmish ({count} of 4).",
+      "skBuilderDead": "Your camp builder has fallen.",
+      "skAxe": "Your builder shoulders the axe.",
+      "skPick": "Your builder hefts the pick.",
+      "skErrCost": "Not enough timber and stone for that.",
+      "skHasBarracks": "Your camp already has a barracks.",
+      "skBarracksUp": "Your barracks stands. Footmen may muster.",
+      "skTowersMax": "Your camp has all its watchtowers.",
+      "skTowerUp": "A watchtower rises over your camp.",
+      "skNeedBarracks": "Footmen need a barracks.",
+      "skFootmanUp": "A footman answers the muster.",
+      "skRally": "Your footmen march on the rally point.",
+      "skStart": "WARCAMP SKIRMISH: raise your camp, hold your tent, break the warband banner!",
+      "skWave": "Warband wave {wave} rides for the camps!",
+      "skTentDown": "Your Command Tent has fallen. Your camp is out.",
+      "skWin": "The warband banner falls! The field is yours: 120s the commander.",
+      "skLoss": "The warband overruns the field. The skirmish is lost."
     },
     "delve": {
       "cannotEnterNow": "You cannot enter a dungeon right now.",
@@ -7963,6 +7982,21 @@ export const en: EnTranslations = {
         "name": "Realtor Maribel",
         "title": "Eastbrook Homes",
         "greeting": "Four fine lots, {className}, and the vale air is free - the deeds are not. A home on Homestead Lane is for our patrons, and deeds settle in CR coin."
+      },
+      "skirmish_post": {
+        "name": "Warcamp Structure",
+        "title": "Warcamp Skirmish",
+        "greeting": "The warcamp holds."
+      },
+      "skirmish_builder": {
+        "name": "Camp Builder",
+        "title": "Warcamp Skirmish",
+        "greeting": "Axe or pick, commander - just point."
+      },
+      "skirmish_footman": {
+        "name": "Camp Footman",
+        "title": "Warcamp Skirmish",
+        "greeting": "Point me at the warband."
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",

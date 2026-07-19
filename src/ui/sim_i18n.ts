@@ -5383,6 +5383,110 @@ function enPassthrough(english: string, localized: string): string {
 
 const RULES: Rule[] = [
   {
+    re: /^You can't muster a warcamp right now\.$/,
+    build: () =>
+      enPassthrough("You can't muster a warcamp right now.", t('sim.venues.skErrBusy')),
+  },
+  {
+    re: /^The muster roll is full\.$/,
+    build: () => enPassthrough('The muster roll is full.', t('sim.venues.skErrFull')),
+  },
+  {
+    re: /^You are on the muster roll for a Warcamp Skirmish \((.+) of 4\)\.$/,
+    build: (m) =>
+      enPassthrough(
+        `You are on the muster roll for a Warcamp Skirmish (${m[1]} of 4).`,
+        t('sim.venues.skQueued', { count: m[1] }),
+      ),
+  },
+  {
+    re: /^Your camp builder has fallen\.$/,
+    build: () => enPassthrough('Your camp builder has fallen.', t('sim.venues.skBuilderDead')),
+  },
+  {
+    re: /^Your builder shoulders the axe\.$/,
+    build: () => enPassthrough('Your builder shoulders the axe.', t('sim.venues.skAxe')),
+  },
+  {
+    re: /^Your builder hefts the pick\.$/,
+    build: () => enPassthrough('Your builder hefts the pick.', t('sim.venues.skPick')),
+  },
+  {
+    re: /^Not enough timber and stone for that\.$/,
+    build: () =>
+      enPassthrough('Not enough timber and stone for that.', t('sim.venues.skErrCost')),
+  },
+  {
+    re: /^Your camp already has a barracks\.$/,
+    build: () =>
+      enPassthrough('Your camp already has a barracks.', t('sim.venues.skHasBarracks')),
+  },
+  {
+    re: /^Your barracks stands\. Footmen may muster\.$/,
+    build: () =>
+      enPassthrough('Your barracks stands. Footmen may muster.', t('sim.venues.skBarracksUp')),
+  },
+  {
+    re: /^Your camp has all its watchtowers\.$/,
+    build: () =>
+      enPassthrough('Your camp has all its watchtowers.', t('sim.venues.skTowersMax')),
+  },
+  {
+    re: /^A watchtower rises over your camp\.$/,
+    build: () =>
+      enPassthrough('A watchtower rises over your camp.', t('sim.venues.skTowerUp')),
+  },
+  {
+    re: /^Footmen need a barracks\.$/,
+    build: () => enPassthrough('Footmen need a barracks.', t('sim.venues.skNeedBarracks')),
+  },
+  {
+    re: /^A footman answers the muster\.$/,
+    build: () => enPassthrough('A footman answers the muster.', t('sim.venues.skFootmanUp')),
+  },
+  {
+    re: /^Your footmen march on the rally point\.$/,
+    build: () =>
+      enPassthrough('Your footmen march on the rally point.', t('sim.venues.skRally')),
+  },
+  {
+    re: /^WARCAMP SKIRMISH: raise your camp, hold your tent, break the warband banner!$/,
+    build: () =>
+      enPassthrough(
+        'WARCAMP SKIRMISH: raise your camp, hold your tent, break the warband banner!',
+        t('sim.venues.skStart'),
+      ),
+  },
+  {
+    re: /^Warband wave (.+) rides for the camps!$/,
+    build: (m) =>
+      enPassthrough(
+        `Warband wave ${m[1]} rides for the camps!`,
+        t('sim.venues.skWave', { wave: m[1] }),
+      ),
+  },
+  {
+    re: /^Your Command Tent has fallen\. Your camp is out\.$/,
+    build: () =>
+      enPassthrough('Your Command Tent has fallen. Your camp is out.', t('sim.venues.skTentDown')),
+  },
+  {
+    re: /^The warband banner falls! The field is yours: 120s the commander\.$/,
+    build: () =>
+      enPassthrough(
+        'The warband banner falls! The field is yours: 120s the commander.',
+        t('sim.venues.skWin'),
+      ),
+  },
+  {
+    re: /^The warband overruns the field\. The skirmish is lost\.$/,
+    build: () =>
+      enPassthrough(
+        'The warband overruns the field. The skirmish is lost.',
+        t('sim.venues.skLoss'),
+      ),
+  },
+  {
     re: /^Build between waves, not while the dead are inside the walls\.$/,
     build: () =>
       enPassthrough(

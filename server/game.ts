@@ -1349,6 +1349,7 @@ export class GameServer {
     this.sim.derbyResolveDesertion(target.pid);
     this.sim.pitQueueLeave(target.pid);
     this.sim.pitResolveDesertion(target.pid);
+    this.sim.skirmishResolveDesertion(target.pid);
     this.teleportJailedSession(target);
     // System notice (chat log), not the fading error toast: the prisoner must be
     // able to read the sentence after alt-tabbing back, like other moderation
@@ -2520,6 +2521,7 @@ export class GameServer {
     this.sim.derbyResolveDesertion(session.pid);
     // And a live Boarpit seat: forfeit before the save.
     this.sim.pitResolveDesertion(session.pid);
+    this.sim.skirmishResolveDesertion(session.pid);
     await this.saveCharacterOnLeave(session);
     this.sessionsByCharacterId.delete(session.characterId);
     // Release the per-character load lease so a fresh login (here or on another
@@ -4004,6 +4006,28 @@ export class GameServer {
       case 'horde_build':
         sim.hordeBuild(pid);
         break;
+      // Warcamp Skirmish: instanced C&C battle orders.
+      case 'skirmish_queue':
+        sim.skirmishQueueJoin(pid);
+        break;
+      case 'skirmish_leave':
+        sim.skirmishQueueLeave(pid);
+        break;
+      case 'skirmish_gather':
+        if (msg.kind === 'wood' || msg.kind === 'stone') sim.skirmishGather(msg.kind, pid);
+        break;
+      case 'skirmish_build':
+        if (msg.kind === 'barracks' || msg.kind === 'watchtower') sim.skirmishBuild(msg.kind, pid);
+        break;
+      case 'skirmish_train':
+        sim.skirmishTrain(pid);
+        break;
+      case 'skirmish_rally': {
+        const x = Number(msg.x);
+        const z = Number(msg.z);
+        if (Number.isFinite(x) && Number.isFinite(z)) sim.skirmishRally(x, z, pid);
+        break;
+      }
       case 'vcup_role':
         if (isSportRole(msg.role)) sim.vcupSetRole(msg.role, pid);
         break;
@@ -5123,6 +5147,7 @@ export class GameServer {
       maybe('pit', this.sim.pitInfoFor(anchorSession.pid));
       maybe('homes', this.sim.homesInfoFor(anchorSession.pid));
       maybe('horde', this.sim.hordeInfoFor(anchorSession.pid));
+      maybe('skirmish', this.sim.skirmishInfoFor(anchorSession.pid));
     }
     // market info is null unless the player is standing at the Merchant, so it
     // only rides the wire for players actually browsing the World Market

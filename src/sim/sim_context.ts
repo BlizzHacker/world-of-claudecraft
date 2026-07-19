@@ -37,6 +37,7 @@ import type {
 import type { PitState } from './social/boarpit';
 import type { HomesState } from './social/homes';
 import type { HordeState } from './social/horde';
+import type { SkirmishState } from './social/skirmish';
 import type { DerbyState } from './social/derby';
 import type { VcState } from './social/vale_cup';
 import type { SpatialGrid } from './spatial';
@@ -204,6 +205,9 @@ export interface SimContextPrimitives {
 
   // The Dead Road horde defense (social/horde.ts): same one-holder rule.
   readonly horde: HordeState;
+
+  // Warcamp Skirmish (social/skirmish.ts): same one-holder rule.
+  readonly skirmish: SkirmishState;
 }
 
 // Cross-system callbacks. Each signature mirrors the still-on-`Sim` method it
@@ -897,6 +901,9 @@ export function createSimContext(host: SimContextHost): SimContext {
     },
     get horde() {
       return host.horde;
+    },
+    get skirmish() {
+      return host.skirmish;
     },
     emit: host.emit,
     error: host.error,

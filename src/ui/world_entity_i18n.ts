@@ -154,6 +154,9 @@ const NPC_IDS = [
   'race_marshal_pip', // Thornwheel Derby grid book (src/sim/social/derby.ts)
   'pit_master_grott', // Boarpit bout card (src/sim/social/boarpit.ts)
   'realtor_maribel', // Eastbrook Homes premium deeds (src/sim/social/homes.ts)
+  'skirmish_post', // Warcamp Skirmish buildings (src/sim/social/skirmish.ts)
+  'skirmish_builder', // Warcamp Skirmish harvester unit
+  'skirmish_footman', // Warcamp Skirmish soldier unit
 ] as const;
 
 const QUEST_IDS = [

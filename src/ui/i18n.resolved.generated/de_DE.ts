@@ -3631,7 +3631,26 @@ export const de_DE: EnTranslations = {
       "hordePostMax": "The watch posts are built out.",
       "hordePostReinforced": "A watch post is reinforced to strength {level}.",
       "homeForSale": "That plot is still for sale.",
-      "homeShownDoor": "You are shown to the door."
+      "homeShownDoor": "You are shown to the door.",
+      "skErrBusy": "You can't muster a warcamp right now.",
+      "skErrFull": "The muster roll is full.",
+      "skQueued": "You are on the muster roll for a Warcamp Skirmish ({count} of 4).",
+      "skBuilderDead": "Your camp builder has fallen.",
+      "skAxe": "Your builder shoulders the axe.",
+      "skPick": "Your builder hefts the pick.",
+      "skErrCost": "Not enough timber and stone for that.",
+      "skHasBarracks": "Your camp already has a barracks.",
+      "skBarracksUp": "Your barracks stands. Footmen may muster.",
+      "skTowersMax": "Your camp has all its watchtowers.",
+      "skTowerUp": "A watchtower rises over your camp.",
+      "skNeedBarracks": "Footmen need a barracks.",
+      "skFootmanUp": "A footman answers the muster.",
+      "skRally": "Your footmen march on the rally point.",
+      "skStart": "WARCAMP SKIRMISH: raise your camp, hold your tent, break the warband banner!",
+      "skWave": "Warband wave {wave} rides for the camps!",
+      "skTentDown": "Your Command Tent has fallen. Your camp is out.",
+      "skWin": "The warband banner falls! The field is yours: 120s the commander.",
+      "skLoss": "The warband overruns the field. The skirmish is lost."
     },
     "delve": {
       "cannotEnterNow": "Du kannst jetzt keinen Tiefgang betreten.",
@@ -7963,6 +7982,21 @@ export const de_DE: EnTranslations = {
         "name": "Maklerin Maribel",
         "title": "Eastbrook Homes",
         "greeting": "Vier feine Parzellen, {className}, und die Talluft ist gratis — die Urkunden nicht. Ein Heim in der Heimstättengasse ist unseren Gönnern vorbehalten, beglichen in CR-Münze."
+      },
+      "skirmish_post": {
+        "name": "Kriegslager-Bauwerk",
+        "title": "Kriegslager-Scharmützel",
+        "greeting": "Das Kriegslager hält."
+      },
+      "skirmish_builder": {
+        "name": "Lagerbaumeister",
+        "title": "Kriegslager-Scharmützel",
+        "greeting": "Axt oder Spitzhacke, Kommandant — zeig nur hin."
+      },
+      "skirmish_footman": {
+        "name": "Lagerfußsoldat",
+        "title": "Kriegslager-Scharmützel",
+        "greeting": "Zeig mir die Kriegsbande."
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",

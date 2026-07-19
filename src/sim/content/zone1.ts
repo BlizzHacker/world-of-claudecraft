@@ -709,6 +709,42 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
     banker: true,
     greeting: 'Welcome to the Gilded Strongbox. Your goods rest safe behind our locks.',
   },
+  skirmish_post: {
+    id: 'skirmish_post',
+    name: 'Warcamp Structure',
+    title: 'Warcamp Skirmish',
+    // Skirmish buildings (Command Tent / Barracks / Watchtower share the rig;
+    // the module names the ROLE in its logs). Spawned only inside skirmish
+    // instances by src/sim/social/skirmish.ts; never in the overworld.
+    pos: { x: 0, z: 0 },
+    facing: 0,
+    color: 0x8a6a3a,
+    questIds: [],
+    dynamic: true,
+    greeting: 'The warcamp holds.',
+  },
+  skirmish_builder: {
+    id: 'skirmish_builder',
+    name: 'Camp Builder',
+    title: 'Warcamp Skirmish',
+    pos: { x: 0, z: 0 },
+    facing: 0,
+    color: 0xb8a06a,
+    questIds: [],
+    dynamic: true,
+    greeting: 'Axe or pick, commander — just point.',
+  },
+  skirmish_footman: {
+    id: 'skirmish_footman',
+    name: 'Camp Footman',
+    title: 'Warcamp Skirmish',
+    pos: { x: 0, z: 0 },
+    facing: 0,
+    color: 0x7a8a9a,
+    questIds: [],
+    dynamic: true,
+    greeting: 'Point me at the warband.',
+  },
   realtor_maribel: {
     id: 'realtor_maribel',
     name: 'Realtor Maribel',

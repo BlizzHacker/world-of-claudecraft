@@ -3631,7 +3631,26 @@ export const ko_KR: EnTranslations = {
       "hordePostMax": "The watch posts are built out.",
       "hordePostReinforced": "A watch post is reinforced to strength {level}.",
       "homeForSale": "That plot is still for sale.",
-      "homeShownDoor": "You are shown to the door."
+      "homeShownDoor": "You are shown to the door.",
+      "skErrBusy": "You can't muster a warcamp right now.",
+      "skErrFull": "The muster roll is full.",
+      "skQueued": "You are on the muster roll for a Warcamp Skirmish ({count} of 4).",
+      "skBuilderDead": "Your camp builder has fallen.",
+      "skAxe": "Your builder shoulders the axe.",
+      "skPick": "Your builder hefts the pick.",
+      "skErrCost": "Not enough timber and stone for that.",
+      "skHasBarracks": "Your camp already has a barracks.",
+      "skBarracksUp": "Your barracks stands. Footmen may muster.",
+      "skTowersMax": "Your camp has all its watchtowers.",
+      "skTowerUp": "A watchtower rises over your camp.",
+      "skNeedBarracks": "Footmen need a barracks.",
+      "skFootmanUp": "A footman answers the muster.",
+      "skRally": "Your footmen march on the rally point.",
+      "skStart": "WARCAMP SKIRMISH: raise your camp, hold your tent, break the warband banner!",
+      "skWave": "Warband wave {wave} rides for the camps!",
+      "skTentDown": "Your Command Tent has fallen. Your camp is out.",
+      "skWin": "The warband banner falls! The field is yours: 120s the commander.",
+      "skLoss": "The warband overruns the field. The skirmish is lost."
     },
     "delve": {
       "cannotEnterNow": "지금은 탐굴에 진입할 수 없습니다.",
@@ -7963,6 +7982,21 @@ export const ko_KR: EnTranslations = {
         "name": "공인중개사 마리벨",
         "title": "이스트브룩 주택",
         "greeting": "좋은 부지가 넷 있지요, {className}. 골짜기 공기는 공짜지만 집문서는 아니랍니다. 홈스테드 골목의 집은 후원자 전용으로, CR 코인으로 결제됩니다."
+      },
+      "skirmish_post": {
+        "name": "군영 건조물",
+        "title": "워캠프 스커미시",
+        "greeting": "군영은 버티고 있다."
+      },
+      "skirmish_builder": {
+        "name": "군영 건설공",
+        "title": "워캠프 스커미시",
+        "greeting": "도끼든 곡괭이든, 지휘관님 — 가리키기만 하십시오."
+      },
+      "skirmish_footman": {
+        "name": "군영 보병",
+        "title": "워캠프 스커미시",
+        "greeting": "도적단이 어디인지 가리켜 주십시오."
       },
       "tidewatcher_ondrel": {
         "name": "온드렐 베인",

@@ -383,6 +383,7 @@ export { eloDelta } from './social/arena';
 import * as boarpitMod from './social/boarpit';
 import * as homesMod from './social/homes';
 import * as hordeMod from './social/horde';
+import * as skirmishMod from './social/skirmish';
 import * as derbyMod from './social/derby';
 import * as fiestaMod from './social/fiesta';
 // A3: Fiesta tuning consts moved to social/fiesta.ts; these five are read back here
@@ -1371,6 +1372,8 @@ export class Sim {
   homes: homesMod.HomesState = homesMod.createHomesState();
   // The Dead Road horde defense (social/horde.ts): same one-holder rule.
   horde: hordeMod.HordeState = hordeMod.createHordeState();
+  // Warcamp Skirmish (social/skirmish.ts): same one-holder rule.
+  skirmish: skirmishMod.SkirmishState = skirmishMod.createSkirmishState();
   // per-player chat token bucket (anti-spam); refilled lazily by sim time
   private chatTokens = new Map<number, { tokens: number; at: number }>();
   // per-player set of opt-in global channels (world, lfg) joined via /join
@@ -2327,6 +2330,7 @@ export class Sim {
     derbyMod.derbyResolveDesertion(this.ctx, pid);
     boarpitMod.pitQueueRemove(this.ctx, pid);
     boarpitMod.pitResolveDesertion(this.ctx, pid);
+    skirmishMod.skirmishResolveDesertion(this.ctx, pid);
     this.party.partyInvites.delete(pid);
     this.tradeInvites.delete(pid);
     this.duelInvites.delete(pid);
@@ -2393,7 +2397,8 @@ export class Sim {
     const cupReturn =
       valeCupMod.vcupReturnFor(this.ctx, pid) ??
       derbyMod.derbyReturnFor(this.ctx, pid) ??
-      boarpitMod.pitReturnFor(this.ctx, pid);
+      boarpitMod.pitReturnFor(this.ctx, pid) ??
+      skirmishMod.skirmishReturnFor(this.ctx, pid);
     const state: CharacterState = {
       level: restore ? restore.level : e.level,
       xp: restore ? restore.xp : meta.xp,
@@ -3114,6 +3119,10 @@ export class Sim {
       // The Dead Road horde holder (same in-place mutation rules).
       get horde() {
         return sim.horde;
+      },
+      // Warcamp Skirmish holder (same in-place mutation rules).
+      get skirmish() {
+        return sim.skirmish;
       },
       // LATE-bound (not .bind(sim)): a moved emit site (C5 meleeSwing/rangedSwing)
       // now emits via ctx.emit, and tests swap (sim as any).emit post-construction to
@@ -3929,6 +3938,9 @@ export class Sim {
     // Home guest sweep: kicked/departed party members are shown the door.
     homesMod.updateHomes(this.ctx);
     lap?.('homes');
+    // Warcamp Skirmish: instanced battles step their builders/footmen/waves.
+    skirmishMod.updateSkirmish(this.ctx);
+    lap?.('skirmish');
     this.updateMinigame();
     lap?.('minigame');
     this.market.update();
@@ -7019,6 +7031,44 @@ export class Sim {
 
   get hordeInfo(): import('../world_api/horde').HordeInfo | null {
     return this.primaryId === -1 ? null : this.hordeInfoFor(this.primaryId);
+  }
+
+  // --- IWorldSkirmish: the Warcamp Skirmish (social/skirmish.ts delegates) ---
+
+  skirmishQueueJoin(pid?: number): void {
+    skirmishMod.skirmishQueueJoin(this.ctx, pid);
+  }
+
+  skirmishQueueLeave(pid?: number): void {
+    skirmishMod.skirmishQueueLeave(this.ctx, pid);
+  }
+
+  skirmishGather(kind: 'wood' | 'stone', pid?: number): void {
+    skirmishMod.skirmishGather(this.ctx, kind, pid);
+  }
+
+  skirmishBuild(kind: 'barracks' | 'watchtower', pid?: number): void {
+    skirmishMod.skirmishBuild(this.ctx, kind, pid);
+  }
+
+  skirmishTrain(pid?: number): void {
+    skirmishMod.skirmishTrain(this.ctx, pid);
+  }
+
+  skirmishRally(x: number, z: number, pid?: number): void {
+    skirmishMod.skirmishRally(this.ctx, x, z, pid);
+  }
+
+  skirmishResolveDesertion(pid: number): void {
+    skirmishMod.skirmishResolveDesertion(this.ctx, pid);
+  }
+
+  skirmishInfoFor(pid: number): import('../world_api/skirmish').SkirmishInfo | null {
+    return skirmishMod.skirmishInfoFor(this.ctx, pid);
+  }
+
+  get skirmishInfo(): import('../world_api/skirmish').SkirmishInfo | null {
+    return this.primaryId === -1 ? null : this.skirmishInfoFor(this.primaryId);
   }
 
   private fiestaMatchInfo(

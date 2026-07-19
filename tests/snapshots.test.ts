@@ -2054,6 +2054,7 @@ const ALL_DELTA_KEYS = [
   'prof',
   'qdone',
   'qlog',
+  'skirmish',
   'sport',
   'stats',
   'tal',
@@ -2109,6 +2110,7 @@ const TERSE_TO_IWORLD: Record<string, string> = {
   res: 'resource',
   rtype: 'resourceType',
   rxp: 'restedXp',
+  skirmish: 'skirmishInfo',
   sport: 'sportRole',
   tfocus: 'townFocus',
   vcup: 'cupInfo',
@@ -2222,6 +2224,8 @@ function dirtyEveryDeltaField(): {
   // readout regardless of distance, so the fixture arms the prep timer.
   sim.horde.phase = 'prep';
   sim.horde.phaseLeft = 9999;
+  // the Warcamp readout ('skirmish' delta key): a queued commander answers.
+  sim.skirmish.queue.push(lp);
   meta.talentMods.spec = 'arms';
   meta.loadouts = [{ name: 'PvP', alloc: { spec: 'arms', ranks: {}, choices: {} }, bar: [] }];
   meta.activeLoadout = 0;
@@ -2398,9 +2402,9 @@ describe('full self-state snapshot delta fixture', () => {
 });
 
 describe('delta-key contract pins (anti-drift)', () => {
-  it('ALL_DELTA_KEYS contains exactly 42 unique keys in sorted order', () => {
-    expect(ALL_DELTA_KEYS).toHaveLength(42);
-    expect(new Set(ALL_DELTA_KEYS).size).toBe(42);
+  it('ALL_DELTA_KEYS contains exactly 43 unique keys in sorted order', () => {
+    expect(ALL_DELTA_KEYS).toHaveLength(43);
+    expect(new Set(ALL_DELTA_KEYS).size).toBe(43);
     expect([...ALL_DELTA_KEYS]).toEqual([...ALL_DELTA_KEYS].sort());
   });
 
@@ -2412,7 +2416,7 @@ describe('delta-key contract pins (anti-drift)', () => {
     const scraped = new Set<string>();
     for (let m = re.exec(src); m !== null; m = re.exec(src)) scraped.add(m[1]);
     expect(scraped.has('lockouts')).toBe(true); // the multi-line call IS captured
-    expect(scraped.size).toBe(42);
+    expect(scraped.size).toBe(43);
     expect([...scraped].sort()).toEqual([...ALL_DELTA_KEYS].sort());
   });
 

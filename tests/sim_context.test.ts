@@ -13,6 +13,7 @@ import { createSimContext, type SimContextHost } from '../src/sim/sim_context';
 import { createPitState } from '../src/sim/social/boarpit';
 import { createHomesState } from '../src/sim/social/homes';
 import { createHordeState } from '../src/sim/social/horde';
+import { createSkirmishState } from '../src/sim/social/skirmish';
 import { createDerbyState } from '../src/sim/social/derby';
 import { createVcState } from '../src/sim/social/vale_cup';
 import { SpatialGrid } from '../src/sim/spatial';
@@ -292,6 +293,7 @@ function makeFakeHost() {
     boarpit: createPitState(),
     homes: createHomesState(),
     horde: createHordeState(),
+    skirmish: createSkirmishState(),
     emit: vi.fn(),
     error: vi.fn(),
     dealDamage: vi.fn(),

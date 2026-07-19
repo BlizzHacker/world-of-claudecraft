@@ -46,6 +46,7 @@
 //   boarpit.ts          IWorldBoarpit        Boarpit knockout-brawl signup + bout readout
 //   homes.ts            IWorldHomes          Eastbrook Homes premium deeds ($CR entitlement)
 //   horde.ts            IWorldHorde          The Dead Road live horde defense (alarm/fortify)
+//   skirmish.ts         IWorldSkirmish       Warcamp Skirmish (instanced C&C battle)
 //
 // THREE GATES pin this seam (run before any facet edit; the literal counts are
 // pinned THERE and re-stale here, so this prose stays count-free):
@@ -67,6 +68,7 @@ import type { IWorldDelves } from './world_api/delves';
 import type { IWorldBoarpit } from './world_api/boarpit';
 import type { IWorldHomes } from './world_api/homes';
 import type { IWorldHorde } from './world_api/horde';
+import type { IWorldSkirmish } from './world_api/skirmish';
 import type { IWorldDerby } from './world_api/derby';
 import type { IWorldDuelArena } from './world_api/duel_arena';
 import type { IWorldDungeons } from './world_api/dungeons';
@@ -143,6 +145,12 @@ export type {
 export type { HomeLotView, HomesInfo, IWorldHomes } from './world_api/homes';
 export type { HordeInfo, HordePhase, IWorldHorde } from './world_api/horde';
 export type {
+  IWorldSkirmish,
+  SkirmishInfo,
+  SkirmishPhase,
+  SkirmishSeatInfo,
+} from './world_api/skirmish';
+export type {
   ArenaInfo,
   ArenaLadderEntry,
   DuelInfo,
@@ -218,7 +226,8 @@ export interface IWorld
     IWorldDerby,
     IWorldBoarpit,
     IWorldHomes,
-    IWorldHorde {}
+    IWorldHorde,
+    IWorldSkirmish {}
 
 // ---------------------------------------------------------------------------
 // Command schema (W0b): the shared wire-token vocabulary.
@@ -420,6 +429,13 @@ export const COMMAND_NAMES = [
   'horde_start',
   'horde_fortify',
   'horde_build',
+  // Warcamp Skirmish: the instanced C&C battle (muster + camp orders).
+  'skirmish_queue',
+  'skirmish_leave',
+  'skirmish_gather',
+  'skirmish_build',
+  'skirmish_train',
+  'skirmish_rally',
 ] as const;
 
 // The union both the send path (`online.ts`) and the dispatch switch
@@ -489,7 +505,8 @@ export type WorldFacet =
   | 'IWorldDerby'
   | 'IWorldBoarpit'
   | 'IWorldHomes'
-  | 'IWorldHorde';
+  | 'IWorldHorde'
+  | 'IWorldSkirmish';
 
 export const COMMAND_FACETS = {
   // IWorldCombat: ability casts, auto-attack, spirit release.
@@ -662,4 +679,11 @@ export const COMMAND_FACETS = {
   horde_start: 'IWorldHorde',
   horde_fortify: 'IWorldHorde',
   horde_build: 'IWorldHorde',
+  // IWorldSkirmish: warcamp muster + orders. skirmishInfo is a snapshot read.
+  skirmish_queue: 'IWorldSkirmish',
+  skirmish_leave: 'IWorldSkirmish',
+  skirmish_gather: 'IWorldSkirmish',
+  skirmish_build: 'IWorldSkirmish',
+  skirmish_train: 'IWorldSkirmish',
+  skirmish_rally: 'IWorldSkirmish',
 } as const satisfies Partial<Record<ClientCommand, WorldFacet>>;

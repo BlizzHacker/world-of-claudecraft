@@ -3631,7 +3631,26 @@ export const ru_RU: EnTranslations = {
       "hordePostMax": "The watch posts are built out.",
       "hordePostReinforced": "A watch post is reinforced to strength {level}.",
       "homeForSale": "That plot is still for sale.",
-      "homeShownDoor": "You are shown to the door."
+      "homeShownDoor": "You are shown to the door.",
+      "skErrBusy": "You can't muster a warcamp right now.",
+      "skErrFull": "The muster roll is full.",
+      "skQueued": "You are on the muster roll for a Warcamp Skirmish ({count} of 4).",
+      "skBuilderDead": "Your camp builder has fallen.",
+      "skAxe": "Your builder shoulders the axe.",
+      "skPick": "Your builder hefts the pick.",
+      "skErrCost": "Not enough timber and stone for that.",
+      "skHasBarracks": "Your camp already has a barracks.",
+      "skBarracksUp": "Your barracks stands. Footmen may muster.",
+      "skTowersMax": "Your camp has all its watchtowers.",
+      "skTowerUp": "A watchtower rises over your camp.",
+      "skNeedBarracks": "Footmen need a barracks.",
+      "skFootmanUp": "A footman answers the muster.",
+      "skRally": "Your footmen march on the rally point.",
+      "skStart": "WARCAMP SKIRMISH: raise your camp, hold your tent, break the warband banner!",
+      "skWave": "Warband wave {wave} rides for the camps!",
+      "skTentDown": "Your Command Tent has fallen. Your camp is out.",
+      "skWin": "The warband banner falls! The field is yours: 120s the commander.",
+      "skLoss": "The warband overruns the field. The skirmish is lost."
     },
     "delve": {
       "cannotEnterNow": "Сейчас вы не можете войти в вылазку.",
@@ -7963,6 +7982,21 @@ export const ru_RU: EnTranslations = {
         "name": "Риелтор Марибель",
         "title": "Истврукские дома",
         "greeting": "Четыре славных участка, {className}, и воздух долины бесплатен — купчие нет. Дом на Усадебной улочке — для наших покровителей, оплачивается монетой CR."
+      },
+      "skirmish_post": {
+        "name": "Постройка военного лагеря",
+        "title": "Стычка военного лагеря",
+        "greeting": "Военный лагерь держится."
+      },
+      "skirmish_builder": {
+        "name": "Лагерный строитель",
+        "title": "Стычка военного лагеря",
+        "greeting": "Топор или кирка, командир — только укажи."
+      },
+      "skirmish_footman": {
+        "name": "Лагерный пехотинец",
+        "title": "Стычка военного лагеря",
+        "greeting": "Укажи мне на банду."
       },
       "tidewatcher_ondrel": {
         "name": "Ондрел Вейн",

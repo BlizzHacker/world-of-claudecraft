@@ -3631,7 +3631,26 @@ export const pl_PL: EnTranslations = {
       "hordePostMax": "The watch posts are built out.",
       "hordePostReinforced": "A watch post is reinforced to strength {level}.",
       "homeForSale": "That plot is still for sale.",
-      "homeShownDoor": "You are shown to the door."
+      "homeShownDoor": "You are shown to the door.",
+      "skErrBusy": "You can't muster a warcamp right now.",
+      "skErrFull": "The muster roll is full.",
+      "skQueued": "You are on the muster roll for a Warcamp Skirmish ({count} of 4).",
+      "skBuilderDead": "Your camp builder has fallen.",
+      "skAxe": "Your builder shoulders the axe.",
+      "skPick": "Your builder hefts the pick.",
+      "skErrCost": "Not enough timber and stone for that.",
+      "skHasBarracks": "Your camp already has a barracks.",
+      "skBarracksUp": "Your barracks stands. Footmen may muster.",
+      "skTowersMax": "Your camp has all its watchtowers.",
+      "skTowerUp": "A watchtower rises over your camp.",
+      "skNeedBarracks": "Footmen need a barracks.",
+      "skFootmanUp": "A footman answers the muster.",
+      "skRally": "Your footmen march on the rally point.",
+      "skStart": "WARCAMP SKIRMISH: raise your camp, hold your tent, break the warband banner!",
+      "skWave": "Warband wave {wave} rides for the camps!",
+      "skTentDown": "Your Command Tent has fallen. Your camp is out.",
+      "skWin": "The warband banner falls! The field is yours: 120s the commander.",
+      "skLoss": "The warband overruns the field. The skirmish is lost."
     },
     "delve": {
       "cannotEnterNow": "Nie możesz teraz wejść do eskapady.",
@@ -7963,6 +7982,21 @@ export const pl_PL: EnTranslations = {
         "name": "Pośredniczka Maribel",
         "title": "Eastbrook Homes",
         "greeting": "Cztery ładne działki, {className}, a powietrze doliny jest za darmo — akty własności nie. Dom przy Zagrodowej uliczce jest dla naszych patronów, opłacany monetą CR."
+      },
+      "skirmish_post": {
+        "name": "Budowla obozu wojennego",
+        "title": "Potyczka obozu wojennego",
+        "greeting": "Obóz wojenny się trzyma."
+      },
+      "skirmish_builder": {
+        "name": "Budowniczy obozu",
+        "title": "Potyczka obozu wojennego",
+        "greeting": "Topór czy kilof, dowódco — tylko wskaż."
+      },
+      "skirmish_footman": {
+        "name": "Piechur obozowy",
+        "title": "Potyczka obozu wojennego",
+        "greeting": "Wskaż mi bandę wojenną."
       },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",

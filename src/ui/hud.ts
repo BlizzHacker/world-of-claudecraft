@@ -10816,6 +10816,15 @@ export class Hud {
       // racing/brawling play at their own physical venues.
       html += `<button type="button" class="qd-list-item" data-arcade-games="1" aria-label="${esc(t('hudChrome.arcade.townRts'))}">${esc(t('hudChrome.arcade.townRts'))}</button>`;
       html += `<button type="button" class="qd-list-item" data-zombie-defense="1" aria-label="${esc(t('hudChrome.zombie.title'))}"><span class="gold">☠</span> ${esc(t('hudChrome.zombie.title'))}</button>`;
+      // Warcamp Skirmish: the instanced C&C battle (muster from the board).
+      const skirmish = this.sim.skirmishInfo;
+      if (!skirmish?.myQueued && !skirmish?.seat) {
+        const sLabel = tOptional('hudChrome.skirmish.gossipJoin') ?? 'Muster a Warcamp Skirmish (1-4 players)';
+        html += `<button type="button" class="qd-list-item" data-skirmish-join="1" aria-label="${esc(sLabel)}"><span class="gold">⚑</span> ${esc(sLabel)}</button>`;
+      } else if (skirmish?.myQueued) {
+        const sLabel = tOptional('hudChrome.skirmish.gossipLeave') ?? 'Leave the muster roll';
+        html += `<button type="button" class="qd-list-item" data-skirmish-leave="1" aria-label="${esc(sLabel)}"><span class="gold">✕</span> ${esc(sLabel)}</button>`;
+      }
       // The Dead Road: the LIVE horde assault on the town itself (real mobs,
       // real defenders). Alarm when quiet; fortify between waves.
       const horde = this.sim.hordeInfo;
@@ -10897,6 +10906,14 @@ export class Hud {
     el.querySelector('[data-horde-build]')?.addEventListener('click', () => {
       this.closeQuestDialog(false);
       this.sim.hordeBuild();
+    });
+    el.querySelector('[data-skirmish-join]')?.addEventListener('click', () => {
+      this.closeQuestDialog(false);
+      this.sim.skirmishQueueJoin();
+    });
+    el.querySelector('[data-skirmish-leave]')?.addEventListener('click', () => {
+      this.closeQuestDialog(false);
+      this.sim.skirmishQueueLeave();
     });
     el.querySelectorAll<HTMLElement>('[data-home-buy]').forEach((btn) => {
       btn.addEventListener('click', () => {

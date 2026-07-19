@@ -73,6 +73,7 @@ import {
   type DerbyInfo,
   type HomesInfo,
   type HordeInfo,
+  type SkirmishInfo,
   type PitInfo,
   type DevLeaderboardPage,
   type DuelInfo,
@@ -1124,6 +1125,9 @@ export class ClientWorld implements IWorld {
   // --- IWorldHorde: Dead Road horde state, mirrored from the snapshot self
   // (`s.horde`, delta-omitted; same null-clears rule). ---
   hordeInfo: HordeInfo | null = null;
+  // --- IWorldSkirmish: warcamp state, mirrored from the snapshot self
+  // (`s.skirmish`, delta-omitted; same null-clears rule). ---
+  skirmishInfo: SkirmishInfo | null = null;
   // My live sport role, mirrored from the wireRev-gated heavy self field
   // `s.sport` ({ role } | null, delta-omitted). NON-IWorld mirror: while set,
   // the per-snapshot known rebuild resolves the role kit via the ONE shared
@@ -2127,6 +2131,7 @@ export class ClientWorld implements IWorld {
       if (s.pit !== undefined) this.pitInfo = s.pit;
       if (s.homes !== undefined) this.homesInfo = s.homes;
       if (s.horde !== undefined) this.hordeInfo = s.horde;
+      if (s.skirmish !== undefined) this.skirmishInfo = s.skirmish;
       if (s.market !== undefined) this.marketInfo = s.market;
       if (s.mail !== undefined) this.mailInfo = s.mail;
       if (s.mailU !== undefined) this.mailUnread = s.mailU ?? 0;
@@ -2638,6 +2643,26 @@ export class ClientWorld implements IWorld {
   }
   hordeBuild(): void {
     this.cmd({ cmd: 'horde_build' });
+  }
+  // --- IWorldSkirmish: warcamp sends (skirmishInfo rides the 'skirmish'
+  // delta key). ---
+  skirmishQueueJoin(): void {
+    this.cmd({ cmd: 'skirmish_queue' });
+  }
+  skirmishQueueLeave(): void {
+    this.cmd({ cmd: 'skirmish_leave' });
+  }
+  skirmishGather(kind: 'wood' | 'stone'): void {
+    this.cmd({ cmd: 'skirmish_gather', kind });
+  }
+  skirmishBuild(kind: 'barracks' | 'watchtower'): void {
+    this.cmd({ cmd: 'skirmish_build', kind });
+  }
+  skirmishTrain(): void {
+    this.cmd({ cmd: 'skirmish_train' });
+  }
+  skirmishRally(x: number, z: number): void {
+    this.cmd({ cmd: 'skirmish_rally', x, z });
   }
   // Private practice bout against bots: the server seats it on an instanced pitch
   // copy far from the Sowfield, so it runs in parallel with the real match and
