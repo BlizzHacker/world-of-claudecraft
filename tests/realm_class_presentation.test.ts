@@ -107,6 +107,7 @@ describe('realm class presentation', () => {
     expect(choices.find((choice) => choice.name === 'Warrior')?.assetUrl).toContain(
       'durance_tester_humanoid.glb',
     );
+    expect(choices.find((choice) => choice.name === 'Necromancer')?.assetName).toBe('Bone Herald');
     expect(new Set(choices.map((choice) => choice.faction))).toEqual(
       new Set(['Heavenly Host', 'Burning Hells', 'Ashen Court']),
     );

@@ -296,7 +296,7 @@ const INFERNAL_DIABLO_ASSETS: Record<string, RealmClassAsset> = {
   Sorcerer: asset('ready', 'Playable GLB', { assetUrl: '/cr-realms/infernal/meshy_ai_infernal_behemoth_biped_merged_animations.glb', assetName: 'Infernal Behemoth', assetAnimated: true }),
   Amazon: asset('ready', 'Playable GLB', { assetUrl: '/cr-realms/infernal/meshy_ai_crimson_infernal_behe_biped_character_output_56b1ac0c.glb', assetName: 'Crimson Infernal Champion', assetAnimated: true }),
   Barbarian: asset('ready', 'Playable GLB', { assetUrl: '/cr-realms/infernal/meshy_ai_horned_demon_warrior_0616234420_texture_2233cac0.glb', assetName: 'Horned Demon Warrior', assetAnimated: true }),
-  Necromancer: INFERNAL_SKULLBEAST,
+  Necromancer: asset('ready', 'Playable undead caster GLB', { assetUrl: '/cr-realms/infernal/bone-herald-black-meshy_ai_meshy_merged_animations_5fb3b8bb.glb', assetName: 'Bone Herald', assetAnimated: true }),
   Paladin: INFERNAL_DARK_PALADIN,
   Sorceress: asset('ready', 'Playable GLB', { assetUrl: '/cr-realms/infernal/meshy_ai_cursed_knight_s_iro_0616234359_texture_abda8208.glb', assetName: 'Cursed Knight', assetAnimated: true }),
   Druid: asset('ready', 'Playable GLB', { assetUrl: '/cr-realms/infernal/meshy_ai_a_black_evil_spectr_0616234348_texture_abacb7f9.glb', assetName: 'Black Evil Specter', assetAnimated: true }),
