@@ -67,9 +67,8 @@ export function factionForRealmClass(id: RealmId, cls: PlayerClass): RealmFactio
   return factionsForRealm(id).find((entry) => entry.classes.includes(cls)) ?? null;
 }
 
-/** Character identity overrides are intentionally explicit. DuranceTester is the
- * authored Diablo-form Infernal QA character, so the demon body is never presented
- * as a neutral or heroic human: it belongs to the Burning Hells faction. */
+/** Character identity overrides are intentionally explicit. DuranceTester is a
+ * humanoid Infernal tester; demon bodies remain reserved for Hell enemies. */
 export function factionForRealmCharacter(
   id: RealmId,
   cls: PlayerClass,
@@ -77,7 +76,7 @@ export function factionForRealmCharacter(
 ): RealmFactionRoster | null {
   const normalized = characterName.toLowerCase().replace(/[^a-z0-9]+/g, '');
   if (id === 'infernal' && normalized === 'durancetester') {
-    return factionsForRealm(id).find((entry) => entry.id === 'burning-hells') ?? null;
+    return factionsForRealm(id).find((entry) => entry.id === 'heavenly-host') ?? null;
   }
   return factionForRealmClass(id, cls);
 }

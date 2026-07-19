@@ -44,6 +44,8 @@ export { getRealmAssetManifest, realmHasAssets } from './assets';
 export type { RealmAssetEntry, RealmAssetManifest } from './assets';
 export { normalizeRealmVisualId, realmClassVisualKey } from './class_visuals';
 export type { RealmRuntimeVisualKey } from './class_visuals';
+export { INFERNAL_DIABLO_CLASSES, diabloClassesForRealm } from './diablo_classes';
+export type { DiabloLineage, DiabloRealmClass } from './diablo_classes';
 export type { RealmBranding } from './types';
 export {
   STAGE_ORDER, STAGE_META, STAGE_GIT_REF, REALM_PORT_BASE,

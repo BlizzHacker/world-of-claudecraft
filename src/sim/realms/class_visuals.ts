@@ -14,7 +14,7 @@ export type RealmRuntimeVisualKey =
   | 'realm_classic_female_orc'
   | 'realm_classic_treasure_dwarf'
   | 'realm_classic_kitty'
-  | 'realm_infernal_diablo_tester';
+  | 'realm_infernal_durance_humanoid';
 
 const REALM_CLASS_VISUALS: Partial<
   Record<RealmId, Partial<Record<PlayerClass, RealmRuntimeVisualKey>>>
@@ -23,9 +23,15 @@ const REALM_CLASS_VISUALS: Partial<
     warlock: 'realm_cryptic_bone_herald',
   },
   infernal: {
-    warrior: 'realm_infernal_crimson_behemoth',
-    rogue: 'realm_infernal_horned_demon',
-    druid: 'realm_infernal_skullbeast',
+    warrior: 'realm_infernal_durance_humanoid',
+    paladin: 'realm_infernal_durance_humanoid',
+    hunter: 'realm_infernal_durance_humanoid',
+    rogue: 'realm_infernal_durance_humanoid',
+    priest: 'realm_infernal_durance_humanoid',
+    shaman: 'realm_infernal_durance_humanoid',
+    mage: 'realm_infernal_durance_humanoid',
+    warlock: 'realm_infernal_durance_humanoid',
+    druid: 'realm_infernal_durance_humanoid',
   },
   classic: {
     warrior: 'realm_classic_dwarf',

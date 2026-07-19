@@ -556,22 +556,34 @@ export const VISUALS: Record<string, VisualDef> = {
     clips: meshyBiped(['Left_Slash'], { walk: 'Monster_Walk', run: 'Running' }),
     lazyPreload: true,
   },
-  // DuranceTester is the named Infernal QA character. Keep the exact Diablo-style
-  // behemoth body and its authored attack combo set instead of the normal class
-  // skin; clip resolution supplies safe fallbacks for the export's missing hit and
-  // death takes.
-  realm_infernal_diablo_tester: {
-    url: `${REALM_MODELS}/infernal/meshy_ai_infernal_behemoth_biped_merged_animations_379db419.glb`,
-    height: 4.6,
+  // DuranceTester and Infernal player classes use an authored humanoid export.
+  // The asset builder promotes the body and compatible motion donors under
+  // stable names. This deliberately is not a Diablo/demon or KayKit fallback.
+  realm_infernal_durance_humanoid: {
+    url: `${REALM_MODELS}/infernal/durance_tester_humanoid.glb`,
+    height: 2.15,
     clips: {
       idle: 'Walking',
       walk: 'Walking',
       run: 'Running',
-      attack: ['Attack', 'Double_Combo_Attack', 'Triple_Combo_Attack', 'Axe_Spin_Attack'],
-      hit: ['Attack'],
-      death: 'Attack',
-      cast: 'Axe_Spin_Attack',
-      jump: 'Basic_Jump',
+      attack: ['Reaping_Swing', 'Counterstrike'],
+      hit: ['Dodge_and_Counter'],
+      death: 'Injured_Walk',
+      cast: 'Boom_Dance',
+      jump: 'Backflip_Sweep_Kick',
+    },
+    lazyPreload: true,
+  },
+  realm_infernal_dark_paladin: {
+    url: `${REALM_MODELS}/infernal/dark_paladin_commander.glb`,
+    animUrls: [
+      `${REALM_MODELS}/infernal/dark_paladin_running.glb`,
+      `${REALM_MODELS}/infernal/dark_paladin_reaping_swing.glb`,
+    ],
+    height: 2.35,
+    clips: {
+      idle: 'Walking', walk: 'Walking', run: 'Running',
+      attack: ['Reaping_Swing'], death: 'Walking', hit: ['Walking'],
     },
     lazyPreload: true,
   },
@@ -1320,7 +1332,9 @@ const MOB_KEYS: Record<string, string> = {
   hellmaw_cinder_acolyte: 'hellmaw_acolyte_body',
   hellmaw_ember_behemoth: 'hellmaw_behemoth_body',
   hellmaw_wailing_spectre: 'hellmaw_spectre_body',
-  hellmaw_cursed_knight: 'hellmaw_cursed_knight_body',
+  // Road/hell patrol leader: the approved Dark Paladin body commands the
+  // corrupted soldiers instead of inheriting a generic KayKit humanoid.
+  hellmaw_cursed_knight: 'realm_infernal_dark_paladin',
   hellmaw_lava_fiend: 'hellmaw_lava_fiend_body',
   hellmaw_sigilbound_warlock: 'hellmaw_sigilbound_body',
   hellmaw_primal_beast: 'hellmaw_primal_beast_body',
@@ -1377,26 +1391,47 @@ const NPC_KEYS: Record<string, string> = {
 // reusing the tiny KayKit villager roster. New realm asset drops extend this
 // table without touching the sim identities or NPC behavior.
 const REALM_NPC_KEYS: Partial<Record<string, Record<string, string>>> = {
+  crypticrealm: {
+    bursar_fernando: 'realm_cryptic_bone_herald',
+    marshal_redbrook: 'realm_cryptic_bone_herald',
+    warden_fenwick: 'realm_cryptic_bone_herald',
+    captain_thessaly: 'realm_cryptic_bone_herald',
+    loremaster_caddis: 'realm_cryptic_bone_herald',
+    smith_haldren: 'realm_cryptic_bone_herald',
+    armorer_hode: 'realm_cryptic_bone_herald',
+    foreman_odell: 'realm_cryptic_bone_herald',
+    scout_maren: 'realm_cryptic_bone_herald',
+    scout_maren_highwatch: 'realm_cryptic_bone_herald',
+    apothecary_lin: 'realm_cryptic_bone_herald',
+    herbalist_yara: 'realm_cryptic_bone_herald',
+    trader_wilkes: 'realm_cryptic_bone_herald',
+    fisherman_brandt: 'realm_cryptic_bone_herald',
+    provisioner_hale: 'realm_cryptic_bone_herald',
+    quartermaster_bree: 'realm_cryptic_bone_herald',
+    brother_halven: 'realm_cryptic_bone_herald',
+    brother_halven_marsh: 'realm_cryptic_bone_herald',
+    spirit_healer: 'realm_cryptic_bone_herald',
+  },
   infernal: {
-    bursar_fernando: 'realm_infernal_horned_demon',
-    marshal_redbrook: 'realm_infernal_crimson_behemoth',
-    warden_fenwick: 'hellmaw_cursed_knight_body',
-    captain_thessaly: 'realm_infernal_crimson_behemoth',
-    loremaster_caddis: 'realm_infernal_skullbeast',
-    smith_haldren: 'realm_infernal_crimson_behemoth',
-    armorer_hode: 'realm_infernal_crimson_behemoth',
-    foreman_odell: 'realm_infernal_horned_demon',
-    scout_maren: 'realm_infernal_horned_demon',
-    scout_maren_highwatch: 'realm_infernal_horned_demon',
-    apothecary_lin: 'realm_infernal_skullbeast',
-    herbalist_yara: 'realm_infernal_skullbeast',
-    trader_wilkes: 'realm_infernal_horned_demon',
-    fisherman_brandt: 'realm_infernal_horned_demon',
-    provisioner_hale: 'realm_infernal_horned_demon',
-    quartermaster_bree: 'realm_infernal_crimson_behemoth',
-    brother_halven: 'realm_infernal_crimson_behemoth',
-    brother_halven_marsh: 'realm_infernal_crimson_behemoth',
-    spirit_healer: 'realm_infernal_skullbeast',
+    bursar_fernando: 'realm_infernal_durance_humanoid',
+    marshal_redbrook: 'realm_infernal_durance_humanoid',
+    warden_fenwick: 'realm_infernal_dark_paladin',
+    captain_thessaly: 'realm_infernal_durance_humanoid',
+    loremaster_caddis: 'realm_infernal_durance_humanoid',
+    smith_haldren: 'realm_infernal_durance_humanoid',
+    armorer_hode: 'realm_infernal_durance_humanoid',
+    foreman_odell: 'realm_infernal_durance_humanoid',
+    scout_maren: 'realm_infernal_durance_humanoid',
+    scout_maren_highwatch: 'realm_infernal_durance_humanoid',
+    apothecary_lin: 'realm_infernal_durance_humanoid',
+    herbalist_yara: 'realm_infernal_durance_humanoid',
+    trader_wilkes: 'realm_infernal_durance_humanoid',
+    fisherman_brandt: 'realm_infernal_durance_humanoid',
+    provisioner_hale: 'realm_infernal_durance_humanoid',
+    quartermaster_bree: 'realm_infernal_durance_humanoid',
+    brother_halven: 'realm_infernal_durance_humanoid',
+    brother_halven_marsh: 'realm_infernal_durance_humanoid',
+    spirit_healer: 'realm_infernal_durance_humanoid',
   },
   classic: {
     bursar_fernando: 'realm_classic_female_orc',
@@ -1422,8 +1457,21 @@ const REALM_NPC_KEYS: Partial<Record<string, Record<string, string>>> = {
 };
 
 const REALM_MOB_DEFAULTS: Partial<Record<string, string>> = {
+  crypticrealm: 'realm_cryptic_bone_herald',
   infernal: 'realm_infernal_horned_demon',
   classic: 'realm_classic_orc',
+};
+
+const REALM_MOB_FAMILY_KEYS: Partial<Record<string, Partial<Record<string, string>>>> = {
+  crypticrealm: {
+    beast: 'realm_cryptic_bone_herald', humanoid: 'realm_cryptic_bone_herald',
+    undead: 'realm_cryptic_bone_herald', demon: 'realm_cryptic_bone_herald',
+  },
+  infernal: {
+    beast: 'hellmaw_primal_beast_body', humanoid: 'realm_infernal_durance_humanoid',
+    undead: 'skel_warrior', demon: 'hellmaw_husk_body', elemental: 'hellmaw_lava_fiend_body',
+    dragonkin: 'hellmaw_dragon_body',
+  },
 };
 
 /** True if a visual model is excluded from the boot preload sweep (lazyPreload).
@@ -1441,10 +1489,19 @@ export function visualKeyFor(e: Entity): string {
     return VISUALS[`player_${e.templateId}`] ? `player_${e.templateId}` : 'player_warrior';
   }
   if (e.kind === 'mob') {
+    const realm = resolveActiveRealmId();
     const override = MOB_KEYS[e.templateId];
-    if (override) return override;
     const family = MOBS[e.templateId]?.family;
-    return (family && FAMILY_KEYS[family]) || REALM_MOB_DEFAULTS[resolveActiveRealmId()] || 'mob_bandit';
+    const realmFamily = family && REALM_MOB_FAMILY_KEYS[realm]?.[family];
+    if (realmFamily) {
+      // Keep authored named Hellmaw bodies and the intentional skeleton roster;
+      // generic family fallback must never silently reintroduce KayKit here.
+      if (realm !== 'infernal' || !override || override.startsWith('mob_') || override.startsWith('npc_')) {
+        return realmFamily;
+      }
+    }
+    if (override) return override;
+    return (family && FAMILY_KEYS[family]) || REALM_MOB_DEFAULTS[realm] || 'mob_bandit';
   }
   // npcs — Brother Aldric recurs in every hub under suffixed ids
   if (e.templateId.startsWith('brother_aldric')) return 'npc_aldric';

@@ -39,6 +39,20 @@ const PICKTURA_ROOT = process.env.PICKTURA_ROOT?.trim()
 const INFERNAL_WAYPOINT_GLB = process.env.INFERNAL_WAYPOINT_GLB?.trim()
   ? path.resolve(process.env.INFERNAL_WAYPOINT_GLB.trim())
   : '';
+const INFERNAL_DURANCE_HUMANOID_GLB = process.env.INFERNAL_DURANCE_HUMANOID_GLB?.trim()
+  ? path.resolve(process.env.INFERNAL_DURANCE_HUMANOID_GLB.trim())
+  : '';
+const INFERNAL_DURANCE_ANIM_DIR = process.env.INFERNAL_DURANCE_ANIM_DIR?.trim()
+  ? path.resolve(process.env.INFERNAL_DURANCE_ANIM_DIR.trim())
+  : '';
+const INFERNAL_ASSET_ROOT = process.env.INFERNAL_ASSET_ROOT?.trim()
+  ? path.resolve(process.env.INFERNAL_ASSET_ROOT.trim()) : '';
+const CRYPTIC_ASSET_ROOT = process.env.CRYPTIC_ASSET_ROOT?.trim()
+  ? path.resolve(process.env.CRYPTIC_ASSET_ROOT.trim()) : '';
+const INFERNAL_DARK_PALADIN_GLB = process.env.INFERNAL_DARK_PALADIN_GLB?.trim()
+  ? path.resolve(process.env.INFERNAL_DARK_PALADIN_GLB.trim()) : '';
+const INFERNAL_DARK_PALADIN_ANIM_DIR = process.env.INFERNAL_DARK_PALADIN_ANIM_DIR?.trim()
+  ? path.resolve(process.env.INFERNAL_DARK_PALADIN_ANIM_DIR.trim()) : '';
 const PICKTURA_INCLUDE = process.env.PICKTURA_INCLUDE?.trim()
   ? new RegExp(process.env.PICKTURA_INCLUDE.trim(), 'i')
   : null;
@@ -359,19 +373,123 @@ async function gatherPickturaCandidates() {
 }
 
 async function gatherExplicitCandidates() {
-  if (!INFERNAL_WAYPOINT_GLB) return [];
-  const stat = await fs.stat(INFERNAL_WAYPOINT_GLB).catch(() => null);
-  if (!stat?.isFile() || !/\.glb$/i.test(INFERNAL_WAYPOINT_GLB)) return [];
-  return [{
-    source: 'local-folder',
-    realmId: 'infernal',
-    sourcePath: INFERNAL_WAYPOINT_GLB,
-    sourceName: path.basename(INFERNAL_WAYPOINT_GLB),
-    outputName: 'infernal_dungeon_entrance.glb',
-    sourceRelative: path.basename(INFERNAL_WAYPOINT_GLB),
-    size: stat.size,
-    kind: 'prop',
-  }];
+  const explicit = [];
+  if (INFERNAL_WAYPOINT_GLB) {
+    const stat = await fs.stat(INFERNAL_WAYPOINT_GLB).catch(() => null);
+    if (stat?.isFile() && /\.glb$/i.test(INFERNAL_WAYPOINT_GLB)) {
+      explicit.push({
+        source: 'local-folder',
+        realmId: 'infernal',
+        sourcePath: INFERNAL_WAYPOINT_GLB,
+        sourceName: path.basename(INFERNAL_WAYPOINT_GLB),
+        outputName: 'infernal_dungeon_entrance.glb',
+        sourceRelative: path.basename(INFERNAL_WAYPOINT_GLB),
+        size: stat.size,
+        kind: 'prop',
+      });
+    }
+  }
+
+  // The named tester is deliberately curated as a humanoid. PICKTURA's
+  // animated exports are one clip per GLB, so promote the compatible motion
+  // donors alongside the walking body and expose them through animUrls in the
+  // character manifest. This keeps DuranceTester out of the demon/boss pool.
+  if (INFERNAL_DURANCE_HUMANOID_GLB) {
+    const stat = await fs.stat(INFERNAL_DURANCE_HUMANOID_GLB).catch(() => null);
+    if (stat?.isFile() && /\.glb$/i.test(INFERNAL_DURANCE_HUMANOID_GLB)) {
+      explicit.push({
+        source: 'local-folder',
+        realmId: 'infernal',
+        sourcePath: INFERNAL_DURANCE_HUMANOID_GLB,
+        sourceName: path.basename(INFERNAL_DURANCE_HUMANOID_GLB),
+        outputName: 'durance_tester_humanoid.glb',
+        sourceRelative: path.basename(INFERNAL_DURANCE_HUMANOID_GLB),
+        size: stat.size,
+        kind: 'character',
+      });
+    }
+  }
+  if (INFERNAL_DURANCE_ANIM_DIR) {
+    const donorActions = new Set([
+      'Walking', 'Running', 'Attack', 'Axe_Spin_Attack', 'Double_Combo_Attack',
+      'Charged_Spell_Cast', 'Dead', 'BeHit_FlyUp',
+    ]);
+    const files = await walkFiles(INFERNAL_DURANCE_ANIM_DIR);
+    for (const sourcePath of files) {
+      const sourceName = path.basename(sourcePath);
+      if (!/\.glb$/i.test(sourceName) || /_armature\.glb$/i.test(sourceName)) continue;
+      if (!/Ragged[_ -]?Warlord/i.test(sourceName)) continue;
+      const action = sourceName.match(/__([^_]+(?:_[^_]+)*)\.glb$/i)?.[1] ?? '';
+      if (!donorActions.has(action)) continue;
+      const stat = await fs.stat(sourcePath);
+      const outputName = `durance_tester_${safeAssetName(action)}.glb`;
+      if (explicit.some((entry) => entry.outputName === outputName)) continue;
+      explicit.push({
+        source: 'local-folder', realmId: 'infernal', sourcePath, sourceName,
+        outputName, sourceRelative: path.basename(sourcePath), size: stat.size,
+        kind: 'character', action,
+      });
+    }
+  }
+  if (INFERNAL_DARK_PALADIN_GLB) {
+    const stat = await fs.stat(INFERNAL_DARK_PALADIN_GLB).catch(() => null);
+    if (stat?.isFile() && /\.glb$/i.test(INFERNAL_DARK_PALADIN_GLB)) {
+      explicit.push({
+        source: 'approved-asset', realmId: 'infernal', sourcePath: INFERNAL_DARK_PALADIN_GLB,
+        sourceName: path.basename(INFERNAL_DARK_PALADIN_GLB),
+        outputName: 'dark_paladin_commander.glb', sourceRelative: path.basename(INFERNAL_DARK_PALADIN_GLB),
+        size: stat.size, kind: 'character', action: 'leader',
+      });
+    }
+  }
+  if (INFERNAL_DARK_PALADIN_ANIM_DIR) {
+    const files = await walkFiles(INFERNAL_DARK_PALADIN_ANIM_DIR);
+    for (const sourcePath of files) {
+      const sourceName = path.basename(sourcePath);
+      if (!/\.glb$/i.test(sourceName)) continue;
+      const action = /Running/i.test(sourceName) ? 'running' : /Walking/i.test(sourceName) ? 'walking' : /Reaping_Swing/i.test(sourceName) ? 'reaping_swing' : '';
+      if (!action) continue;
+      const stat = await fs.stat(sourcePath);
+      const outputName = `dark_paladin_${action}.glb`;
+      if (explicit.some((entry) => entry.outputName === outputName)) continue;
+      explicit.push({ source: 'approved-asset', realmId: 'infernal', sourcePath, sourceName,
+        outputName, sourceRelative: sourceName, size: stat.size, kind: 'character', action });
+    }
+  }
+  return explicit;
+}
+
+async function gatherApprovedAssetRoot(root, realmId) {
+  if (!root) return [];
+  const candidates = [];
+  const stableNames = new Map([
+    ['bone-herald-black-meshy_ai_meshy_merged_animations.glb', 'bone-herald-black-meshy_ai_meshy_merged_animations_5fb3b8bb.glb'],
+    ['demon-horned.glb', 'demon-horned_1a19d7ca.glb'],
+    ['skullbeast.glb', 'skullbeast_5d2ecebf.glb'],
+    ['meshy_ai_a_black_evil_spectr_0616234348_texture.glb', 'meshy_ai_a_black_evil_spectr_0616234348_texture_abacb7f9.glb'],
+    ['meshy_ai_a_primal_groudon_emer_0616234337_texture.glb', 'meshy_ai_a_primal_groudon_emer_0616234337_texture_194376eb.glb'],
+    ['meshy_ai_crimson_infernal_behe_biped_meshy_ai_meshy_merged_animations.glb', 'meshy_ai_crimson_infernal_behe_biped_meshy_ai_meshy_merged_animations_27bab94d.glb'],
+    ['meshy_ai_cursed_knight’s_iro_0616234359_texture.glb', 'meshy_ai_cursed_knight_s_iro_0616234359_texture_abda8208.glb'],
+    ['meshy_ai_demon_with_body_cover_0616234415_texture.glb', 'meshy_ai_demon_with_body_cover_0616234415_texture_540be2b1.glb'],
+    ['meshy_ai_demon_with_body_cover_0616234440_texture.glb', 'meshy_ai_demon_with_body_cover_0616234440_texture_fd4134d0.glb'],
+    ['meshy_ai_horned_demon_warrior__0616234420_texture.glb', 'meshy_ai_horned_demon_warrior_0616234420_texture_2233cac0.glb'],
+    ['meshy_ai_infernal_behemoth_biped_merged_animations.glb', 'meshy_ai_infernal_behemoth_biped_merged_animations.glb'],
+    ['meshy_ai_inferno_dragon_majest_0616234236_texture.glb', 'meshy_ai_inferno_dragon_majest_0616234236_texture_aefc89dc.glb'],
+    ['meshy_ai_lava_demon_visible_l_0616234410_texture.glb', 'meshy_ai_lava_demon_visible_l_0616234410_texture_a72a9ef6.glb'],
+    ['meshy_ai_lava_demon_with_horns_0616234329_texture.glb', 'meshy_ai_lava_demon_with_horns_0616234329_texture_9a64c154.glb'],
+  ]);
+  for (const sourcePath of await walkFiles(root)) {
+    const sourceName = path.basename(sourcePath);
+    if (!/\.glb$/i.test(sourceName) || /_armature\.glb$/i.test(sourceName)) continue;
+    const stat = await fs.stat(sourcePath);
+    if (MAX_BYTES_PER_FILE && stat.size > MAX_BYTES_PER_FILE) continue;
+    candidates.push({
+      source: 'approved-asset', realmId, sourcePath, sourceName,
+      sourceRelative: path.relative(root, sourcePath).replace(/\\/g, '/'), size: stat.size,
+      ...(stableNames.get(sourceName.toLowerCase()) ? { outputName: stableNames.get(sourceName.toLowerCase()) } : {}),
+    });
+  }
+  return candidates;
 }
 
 function readTaskList(payload) {
@@ -647,6 +765,8 @@ async function main() {
     candidates.push(...(await gatherLocalCandidates()));
     candidates.push(...(await gatherPickturaCandidates()));
     candidates.push(...(await gatherExplicitCandidates()));
+    candidates.push(...(await gatherApprovedAssetRoot(INFERNAL_ASSET_ROOT, 'infernal')));
+    candidates.push(...(await gatherApprovedAssetRoot(CRYPTIC_ASSET_ROOT, 'crypticrealm')));
   }
 
   if (!SKIP_API) {

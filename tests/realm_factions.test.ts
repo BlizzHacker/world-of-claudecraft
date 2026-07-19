@@ -42,12 +42,12 @@ describe('realm faction registry', () => {
     expect(infernal.find((entry) => entry.id === 'ashen-court')?.alignment).toBe('mixed');
   });
 
-  it('keeps DuranceTester on the Burning Hells identity for the Diablo body', () => {
+  it('keeps DuranceTester on the humanoid Heavenly Host identity', () => {
     expect(factionForRealmCharacter('infernal', 'warrior', 'DuranceTester')?.id).toBe(
-      'burning-hells',
+      'heavenly-host',
     );
     expect(factionForRealmCharacter('infernal', 'warrior', 'Durance Tester')?.id).toBe(
-      'burning-hells',
+      'heavenly-host',
     );
   });
 });

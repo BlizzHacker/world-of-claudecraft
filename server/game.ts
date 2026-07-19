@@ -2191,7 +2191,7 @@ export class GameServer {
       ladder: meta.ladder ?? false,
       hardcore: meta.hardcore ?? false,
       visualKey: isDuranceTesterCharacter(name, REALM)
-        ? 'realm_infernal_diablo_tester'
+        ? 'realm_infernal_durance_humanoid'
         : realmClassVisualKey(process.env.CR_REALM_ID ?? REALM, cls),
       bankBonus: meta.bankBonus,
       duranceTester: isDuranceTesterCharacter(name, REALM),
