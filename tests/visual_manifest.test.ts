@@ -13,6 +13,7 @@ import {
   visibleAttachmentsForGraphics,
   visualKeyFor,
 } from '../src/render/characters/manifest';
+import { setRealmHostEnv } from '../src/sim/realms/registry';
 
 function expectedClipNames(clips: ClipMap): string[] {
   return [
@@ -48,18 +49,35 @@ async function glbAnimationNames(path: string): Promise<Set<string>> {
 }
 
 describe('character visual manifest', () => {
+  it('keeps named wolves and boars on their animal GLBs in Infernal', () => {
+    setRealmHostEnv({
+      queryParam: (name) => (name === 'realm' ? 'infernal' : null),
+      storageGet: () => null,
+      storageSet: () => undefined,
+    });
+    expect(visualKeyFor({ kind: 'mob', templateId: 'forest_wolf' } as never)).toBe('mob_wolf');
+    expect(visualKeyFor({ kind: 'mob', templateId: 'wild_boar' } as never)).toBe('mob_boar');
+    setRealmHostEnv(null);
+  });
+
   it('keeps Bursar Fernando in his likeness atlas (the Eastbrook banker easter egg)', () => {
     // The maintainer-approved easter egg: black shoulder-length hair and light
     // brown skin ride a repainted rogue palette resolved at skin index 0 (NPCs
     // always resolve skin 0; the mech precedent for a real index-0 texture).
     // The def must stay TINT-FREE: an entity tint would wash the repaint back
     // toward the gold villager look. Do not "clean up" any of the three.
+    setRealmHostEnv({
+      queryParam: (name) => (name === 'realm' ? 'claudecraft' : null),
+      storageGet: () => null,
+      storageSet: () => undefined,
+    });
     const key = visualKeyFor({ kind: 'npc', templateId: 'bursar_fernando' } as never);
     expect(key).toBe('npc_fernando');
     expect(VISUALS.npc_fernando.tint).toBeUndefined();
     const atlas = SKINS.npc_fernando?.[0];
     expect(atlas).toBe('textures/skins/rogue/fernando.png');
     expect(existsSync(fileURLToPath(new URL(`../public/${atlas}`, import.meta.url)))).toBe(true);
+    setRealmHostEnv(null);
   });
 
   it('uses the custom boar death clip without relying on a speed override', () => {

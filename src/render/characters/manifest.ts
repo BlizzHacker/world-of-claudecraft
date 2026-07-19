@@ -1277,6 +1277,7 @@ const MOB_KEYS: Record<string, string> = {
   warlock_imp: 'mob_demon_flying',
   warlock_voidwalker: 'mob_demonalt',
   wild_boar: 'mob_boar',
+  forest_wolf: 'mob_wolf',
   // beasts that would otherwise fall back to the wolf model (FAMILY_KEYS.beast)
   old_cragmaw: 'mob_bear',
   bog_bloat: 'mob_murloc',
@@ -1493,14 +1494,11 @@ export function visualKeyFor(e: Entity): string {
     const override = MOB_KEYS[e.templateId];
     const family = MOBS[e.templateId]?.family;
     const realmFamily = family && REALM_MOB_FAMILY_KEYS[realm]?.[family];
-    if (realmFamily) {
-      // Keep authored named Hellmaw bodies and the intentional skeleton roster;
-      // generic family fallback must never silently reintroduce KayKit here.
-      if (realm !== 'infernal' || !override || override.startsWith('mob_') || override.startsWith('npc_')) {
-        return realmFamily;
-      }
-    }
+    // An explicit creature mapping always wins. In particular, a wolf or boar
+    // must never be replaced by the Infernal beast-family fallback just because
+    // the active realm has a themed monster family.
     if (override) return override;
+    if (realmFamily) return realmFamily;
     return (family && FAMILY_KEYS[family]) || REALM_MOB_DEFAULTS[realm] || 'mob_bandit';
   }
   // npcs — Brother Aldric recurs in every hub under suffixed ids

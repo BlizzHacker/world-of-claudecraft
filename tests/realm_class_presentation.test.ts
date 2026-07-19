@@ -97,8 +97,8 @@ describe('realm class presentation', () => {
 
   it('exposes the complete Infernal Diablo roster on real GLBs', () => {
     const choices = infernalDiabloClassChoicesForRealm(getRealm('infernal'));
-    expect(choices).toHaveLength(35);
-    expect(new Set(choices.map((choice) => choice.diabloId)).size).toBe(choices.length);
+    expect(choices).toHaveLength(19);
+    expect(new Set(choices.map((choice) => choice.name)).size).toBe(choices.length);
     expect(choices.map((choice) => choice.lineage)).toEqual(
       expect.arrayContaining(['Diablo I', 'Diablo II', 'Diablo III', 'Diablo IV', 'Diablo Immortal']),
     );

@@ -3705,7 +3705,7 @@ function paintInfernalDiabloRoster(
   row.classList.add('infernal-diablo-roster');
   row.innerHTML = choices
     .filter((choice) => !activeFaction || choice.faction === activeFaction)
-    .map((choice) => `<button type="button" class="mini-class realm-skinned realm-playable" data-class="${choice.baseClass}" data-diablo-id="${choice.diabloId}" data-faction="${choice.faction}" data-realm-faction="${choice.faction}" data-realm-asset="${choice.assetUrl}" data-realm-asset-name="${choice.assetName}" data-realm-asset-status="ready" aria-label="${escapeHtml(`${choice.name}, ${choice.lineage}, ${choice.faction}`)}" aria-pressed="false" title="${escapeHtml(`${choice.lineage} — ${choice.assetName}`)}"><span class="mini-class-label">${escapeHtml(choice.name)}<small>${escapeHtml(choice.lineage)}</small></span><span class="mini-class-faction">${escapeHtml(choice.faction)} - Playable GLB</span></button>`)
+    .map((choice) => `<button type="button" class="mini-class realm-skinned realm-playable" data-class="${choice.baseClass}" data-diablo-id="${choice.diabloId}" data-faction="${choice.faction}" data-realm-faction="${choice.faction}" data-realm-asset="${choice.assetUrl}" data-realm-asset-name="${choice.assetName}" data-realm-asset-status="ready" aria-label="${escapeHtml(`${choice.name}, ${choice.faction}`)}" aria-pressed="false" title="${escapeHtml(choice.assetName ?? choice.name)}"><span class="mini-class-label">${escapeHtml(choice.name)}</span><span class="mini-class-faction">${escapeHtml(choice.faction)} - Playable GLB</span></button>`)
     .join('');
   row.querySelectorAll<HTMLElement>('.mini-class').forEach((card) => {
     const select = () => {
