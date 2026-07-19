@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { factionForRealmClass, factionsForRealm, REALM_FACTIONS } from '../src/sim/realms/factions';
+import {
+  factionForRealmCharacter,
+  factionForRealmClass,
+  factionsForRealm,
+  REALM_FACTIONS,
+} from '../src/sim/realms/factions';
 import { REALMS } from '../src/sim/realms/registry';
 import type { PlayerClass } from '../src/sim/types';
 
@@ -35,5 +40,14 @@ describe('realm faction registry', () => {
     const infernal = factionsForRealm('infernal');
     expect(infernal.filter((entry) => entry.surprise).map((entry) => entry.id)).toEqual(['ashen-court', 'redeemed']);
     expect(infernal.find((entry) => entry.id === 'ashen-court')?.alignment).toBe('mixed');
+  });
+
+  it('keeps DuranceTester on the Burning Hells identity for the Diablo body', () => {
+    expect(factionForRealmCharacter('infernal', 'warrior', 'DuranceTester')?.id).toBe(
+      'burning-hells',
+    );
+    expect(factionForRealmCharacter('infernal', 'warrior', 'Durance Tester')?.id).toBe(
+      'burning-hells',
+    );
   });
 });

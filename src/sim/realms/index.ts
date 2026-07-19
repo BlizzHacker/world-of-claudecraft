@@ -10,7 +10,13 @@ export type {
   RealmFaction,
   RealmFactionAlignment,
 } from './types';
-export { REALM_FACTIONS, factionsForRealm, factionForRealmClass, factionIdsForRealm } from './factions';
+export {
+  REALM_FACTIONS,
+  factionsForRealm,
+  factionForRealmClass,
+  factionForRealmCharacter,
+  factionIdsForRealm,
+} from './factions';
 export type { RealmFactionRoster } from './factions';
 export {
   REALMS,

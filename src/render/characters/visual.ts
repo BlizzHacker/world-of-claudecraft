@@ -25,6 +25,7 @@ import {
   type AssembleModelOptions,
 } from './assets';
 import { firstPersonMeshRole } from './first_person_parts';
+import { resolveClipMap } from './clip_resolution';
 import type { EmoteClipSpec, VisualDef, WeaponLayoutOverride } from './manifest';
 
 export type { AnimState, BaseState } from './anim_state';
@@ -133,9 +134,10 @@ export class CharacterVisual {
     // wearer class's held-weapon layout (e.g. the rogue dual-wields in both hands).
     // Override just attach + weaponSlots on a shallow def clone, leaving the rest of
     // the def (clips/height/tint) intact and never mutating the shared cached def.
+    const resolvedDef = resolveClipMap(prep.def.clips, [...prep.clips.keys()]);
     this.def = weaponOverride
-      ? { ...prep.def, attach: weaponOverride.attach, weaponSlots: weaponOverride.weaponSlots }
-      : prep.def;
+      ? { ...prep.def, clips: resolvedDef, attach: weaponOverride.attach, weaponSlots: weaponOverride.weaponSlots }
+      : { ...prep.def, clips: resolvedDef };
     this.key = key;
     this.entityColor = entityColor;
     this.skinIndex = skinIndex;

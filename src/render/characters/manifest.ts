@@ -4,6 +4,7 @@
 
 import { MECH_CHROMAS, type MechChroma } from '../../sim/content/skins';
 import { MOBS } from '../../sim/data';
+import { resolveActiveRealmId } from '../../sim/realms/registry';
 import type { Entity, PlayerClass } from '../../sim/types';
 import { ITEM_WEAPON_VARIANTS } from '../../ui/weapon_variants';
 import type { OverheadEmoteId } from '../../world_api';
@@ -553,6 +554,25 @@ export const VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/skullbeast_5d2ecebf.glb`,
     height: 2.4,
     clips: meshyBiped(['Left_Slash'], { walk: 'Monster_Walk', run: 'Running' }),
+    lazyPreload: true,
+  },
+  // DuranceTester is the named Infernal QA character. Keep the exact Diablo-style
+  // behemoth body and its authored attack combo set instead of the normal class
+  // skin; clip resolution supplies safe fallbacks for the export's missing hit and
+  // death takes.
+  realm_infernal_diablo_tester: {
+    url: `${REALM_MODELS}/infernal/meshy_ai_infernal_behemoth_biped_merged_animations_379db419.glb`,
+    height: 4.6,
+    clips: {
+      idle: 'Walking',
+      walk: 'Walking',
+      run: 'Running',
+      attack: ['Attack', 'Double_Combo_Attack', 'Triple_Combo_Attack', 'Axe_Spin_Attack'],
+      hit: ['Attack'],
+      death: 'Attack',
+      cast: 'Axe_Spin_Attack',
+      jump: 'Basic_Jump',
+    },
     lazyPreload: true,
   },
   // --- Durance of Hate delve enemies: real infernal demon bodies (no KayKit) ---
@@ -1352,6 +1372,60 @@ const NPC_KEYS: Record<string, string> = {
   spirit_healer: 'npc_villager_robed',
 };
 
+// Realm-owned NPC bodies. Claudecraft intentionally stays on NPC_KEYS above;
+// every other supported realm gets a deliberate silhouette instead of silently
+// reusing the tiny KayKit villager roster. New realm asset drops extend this
+// table without touching the sim identities or NPC behavior.
+const REALM_NPC_KEYS: Partial<Record<string, Record<string, string>>> = {
+  infernal: {
+    bursar_fernando: 'realm_infernal_horned_demon',
+    marshal_redbrook: 'realm_infernal_crimson_behemoth',
+    warden_fenwick: 'hellmaw_cursed_knight_body',
+    captain_thessaly: 'realm_infernal_crimson_behemoth',
+    loremaster_caddis: 'realm_infernal_skullbeast',
+    smith_haldren: 'realm_infernal_crimson_behemoth',
+    armorer_hode: 'realm_infernal_crimson_behemoth',
+    foreman_odell: 'realm_infernal_horned_demon',
+    scout_maren: 'realm_infernal_horned_demon',
+    scout_maren_highwatch: 'realm_infernal_horned_demon',
+    apothecary_lin: 'realm_infernal_skullbeast',
+    herbalist_yara: 'realm_infernal_skullbeast',
+    trader_wilkes: 'realm_infernal_horned_demon',
+    fisherman_brandt: 'realm_infernal_horned_demon',
+    provisioner_hale: 'realm_infernal_horned_demon',
+    quartermaster_bree: 'realm_infernal_crimson_behemoth',
+    brother_halven: 'realm_infernal_crimson_behemoth',
+    brother_halven_marsh: 'realm_infernal_crimson_behemoth',
+    spirit_healer: 'realm_infernal_skullbeast',
+  },
+  classic: {
+    bursar_fernando: 'realm_classic_female_orc',
+    marshal_redbrook: 'realm_classic_orc',
+    warden_fenwick: 'realm_classic_big_orc',
+    captain_thessaly: 'realm_classic_fighting_elf',
+    loremaster_caddis: 'realm_classic_treasure_dwarf',
+    smith_haldren: 'realm_classic_big_orc',
+    armorer_hode: 'realm_classic_dwarf',
+    foreman_odell: 'realm_classic_dwarf',
+    scout_maren: 'realm_classic_female_orc',
+    scout_maren_highwatch: 'realm_classic_female_orc',
+    apothecary_lin: 'realm_classic_female_elf',
+    herbalist_yara: 'realm_classic_female_elf',
+    trader_wilkes: 'realm_classic_dwarf',
+    fisherman_brandt: 'realm_classic_orc',
+    provisioner_hale: 'realm_classic_dwarf',
+    quartermaster_bree: 'realm_classic_big_orc',
+    brother_halven: 'realm_classic_fighting_elf',
+    brother_halven_marsh: 'realm_classic_fighting_elf',
+    spirit_healer: 'realm_classic_female_elf',
+  },
+};
+
+const REALM_MOB_DEFAULTS: Partial<Record<string, string>> = {
+  infernal: 'realm_infernal_horned_demon',
+  classic: 'realm_classic_orc',
+};
+
 /** True if a visual model is excluded from the boot preload sweep (lazyPreload).
  *  The boot prewarm must SKIP these — their GLB isn't loaded yet, so building one
  *  would throw "character asset not preloaded". They load on demand when first
@@ -1370,11 +1444,12 @@ export function visualKeyFor(e: Entity): string {
     const override = MOB_KEYS[e.templateId];
     if (override) return override;
     const family = MOBS[e.templateId]?.family;
-    return (family && FAMILY_KEYS[family]) || 'mob_bandit';
+    return (family && FAMILY_KEYS[family]) || REALM_MOB_DEFAULTS[resolveActiveRealmId()] || 'mob_bandit';
   }
   // npcs — Brother Aldric recurs in every hub under suffixed ids
   if (e.templateId.startsWith('brother_aldric')) return 'npc_aldric';
-  return NPC_KEYS[e.templateId] ?? 'npc_villager';
+  const realmKeys = REALM_NPC_KEYS[resolveActiveRealmId()];
+  return realmKeys?.[e.templateId] ?? NPC_KEYS[e.templateId] ?? 'npc_villager';
 }
 
 /** Held-weapon layout override for the class-agnostic Combat Mech body. The mech

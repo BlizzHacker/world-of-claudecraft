@@ -13,7 +13,8 @@ export type RealmRuntimeVisualKey =
   | 'realm_classic_female_elf'
   | 'realm_classic_female_orc'
   | 'realm_classic_treasure_dwarf'
-  | 'realm_classic_kitty';
+  | 'realm_classic_kitty'
+  | 'realm_infernal_diablo_tester';
 
 const REALM_CLASS_VISUALS: Partial<
   Record<RealmId, Partial<Record<PlayerClass, RealmRuntimeVisualKey>>>
