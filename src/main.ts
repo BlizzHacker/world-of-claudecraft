@@ -3564,7 +3564,10 @@ function showClassPreview(cls: PlayerClass): void {
     return;
   }
   if (realmClass?.assetStatus === 'comingSoon') {
-    characterPreview?.clearModel();
+    // Keep the playable class rig visible while a realm-specific GLB is being
+    // curated or generated. A content-status label should never turn the
+    // character turntable into an empty black panel.
+    characterPreview?.setClass(cls);
     return;
   }
   characterPreview?.setClass(cls);
