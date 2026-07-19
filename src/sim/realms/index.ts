@@ -1,6 +1,17 @@
 // Realm overlay barrel. Import from here in UI code so the registry path
 // is the only seam any consumer touches.
-export type { RealmId, RealmContent, RealmClassSkin, RealmClassSkill, RealmClassStats, RealmRole } from './types';
+export type {
+  RealmId,
+  RealmContent,
+  RealmClassSkin,
+  RealmClassSkill,
+  RealmClassStats,
+  RealmRole,
+  RealmFaction,
+  RealmFactionAlignment,
+} from './types';
+export { REALM_FACTIONS, factionsForRealm, factionForRealmClass, factionIdsForRealm } from './factions';
+export type { RealmFactionRoster } from './factions';
 export {
   REALMS,
   REALM_LIST,

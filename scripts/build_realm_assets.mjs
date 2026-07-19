@@ -29,6 +29,26 @@ const USB4_FORGED_DIR =
 const DEFAULT_FORGED_DIR =
   process.env.CI === 'true' ? path.join(REPO, 'tmp', 'forged-glbs') : USB4_FORGED_DIR;
 
+// Optional mounted libraries are opt-in so CI and contributors without the
+// shared drives keep the same deterministic source set. PICKTURA_ROOT should
+// point at T:\meshy\PICKTURA on the Windows workstation or the equivalent
+// mounted directory in an asset staging job.
+const PICKTURA_ROOT = process.env.PICKTURA_ROOT?.trim()
+  ? path.resolve(process.env.PICKTURA_ROOT.trim())
+  : '';
+const INFERNAL_WAYPOINT_GLB = process.env.INFERNAL_WAYPOINT_GLB?.trim()
+  ? path.resolve(process.env.INFERNAL_WAYPOINT_GLB.trim())
+  : '';
+const PICKTURA_INCLUDE = process.env.PICKTURA_INCLUDE?.trim()
+  ? new RegExp(process.env.PICKTURA_INCLUDE.trim(), 'i')
+  : null;
+const PICKTURA_FORMATS = new Set(
+  (process.env.PICKTURA_FORMATS?.trim() || 'animated,glb')
+    .split(',')
+    .map((value) => value.trim().toLowerCase())
+    .filter(Boolean),
+);
+
 const FORGED_DIR = path.resolve(
   process.env.ARCFORGE_FORGED_DIR?.trim() ? process.env.ARCFORGE_FORGED_DIR : DEFAULT_FORGED_DIR,
 );
@@ -130,13 +150,16 @@ export function classifyRealmFromText(text, fallback = 'crypticrealm') {
   ) {
     return 'infernal';
   }
+  if (/\b(fps|gun|gunslinger|rifle|ranger|first person|shooter|soldier)\b/.test(n)) {
+    return 'fps';
+  }
   if (/\b(claude|claudcraft|claudecraft|minecraft|block|voxel)\b/.test(n)) {
     return 'claudecraft';
   }
-  if (/\b(classic|warrior|huntress|sorceress|orc|queen|rider|knight|ninja|gunslinger)\b/.test(n)) {
+  if (/\b(classic|warrior|huntress|sorceress|orc|goblin|dwarf|elf|queen|rider|knight|ninja)\b/.test(n)) {
     return 'classic';
   }
-  if (/\b(arcane|mage|wizard|spell|rune|crystal)\b/.test(n)) {
+  if (/\b(arcane|mage|archmage|wizard|sorcerer|spell|rune|crystal|astral)\b/.test(n)) {
     return 'arcane';
   }
   if (/\b(dominion|empire|royal|soldier)\b/.test(n)) {
@@ -145,9 +168,6 @@ export function classifyRealmFromText(text, fallback = 'crypticrealm') {
   if (/\b(exchange|market|merchant|vendor)\b/.test(n)) {
     return 'exchange';
   }
-  if (/\b(fps|gun|rifle|first person)\b/.test(n)) {
-    return 'fps';
-  }
   return REALM_IDS.has(fallback) ? fallback : 'crypticrealm';
 }
 
@@ -155,7 +175,42 @@ export function realmIdForFolder(folderName) {
   return FOLDER_TO_REALM[folderName.toLowerCase()] ?? classifyRealmFromText(folderName);
 }
 
+export function parsePickturaManifestCsv(text) {
+  const lines = String(text ?? '').split(/\r?\n/).filter(Boolean);
+  if (!lines.length) return [];
+  const header = lines[0].split(',').map((field) => field.trim().toLowerCase());
+  const indexOf = (...names) => names.map((name) => header.indexOf(name)).find((index) => index >= 0) ?? -1;
+  const idIndex = indexOf('resultid', 'id');
+  const filenameIndex = indexOf('filename');
+  const actionIndex = indexOf('action');
+  const kindIndex = indexOf('kind', 'format');
+  const licenseIndex = indexOf('license');
+  const authorIndex = indexOf('author');
+  const bytesIndex = indexOf('bytes');
+  const rows = [];
+  for (const line of lines.slice(1)) {
+    const fields = line.split(',');
+    const filename = fields[filenameIndex]?.trim();
+    if (!filename || !/\.glb$/i.test(filename) || /_armature\.glb$/i.test(filename)) continue;
+    const row = {
+      resultId: fields[idIndex]?.trim() ?? '',
+      filename,
+      action: fields[actionIndex]?.trim() ?? '',
+      license: fields[licenseIndex]?.trim() ?? '',
+      author: fields[authorIndex]?.trim() ?? '',
+      bytes: Number(fields[bytesIndex]) || 0,
+    };
+    const kind = fields[kindIndex]?.trim() ?? '';
+    if (kind) row.kind = kind;
+    rows.push(row);
+  }
+  return rows;
+}
+
 export function classifyAssetKind(name, inspection = {}) {
+  if (inspection.kind === 'character' || inspection.kind === 'vehicle' || inspection.kind === 'prop') {
+    return inspection.kind;
+  }
   const n = normalizeText(name);
   if (/\b(ship|spaceship|battlecruiser|cruiser|tank|mount|rider|dragon)\b/.test(n))
     return 'vehicle';
@@ -268,6 +323,55 @@ async function gatherLocalCandidates() {
     }
   }
   return candidates;
+}
+
+async function gatherPickturaCandidates() {
+  if (!PICKTURA_ROOT) return [];
+  const candidates = [];
+  const sources = [
+    ['animated', 'manifest.animated.csv'],
+    ['glb', 'manifest.glb.csv'],
+  ];
+  for (const [format, manifestName] of sources) {
+    if (!PICKTURA_FORMATS.has(format)) continue;
+    const manifestPath = path.join(PICKTURA_ROOT, '_manifest', manifestName);
+    const manifest = await fs.readFile(manifestPath, 'utf8').catch(() => '');
+    for (const row of parsePickturaManifestCsv(manifest)) {
+      if (PICKTURA_INCLUDE && !PICKTURA_INCLUDE.test(row.filename)) continue;
+      const sourcePath = path.join(PICKTURA_ROOT, format === 'animated' ? 'animated' : 'glb', row.filename);
+      const stat = await fs.stat(sourcePath).catch(() => null);
+      if (!stat?.isFile()) continue;
+      candidates.push({
+        source: 'local-folder',
+        realmId: classifyRealmFromText(row.filename, 'crypticrealm'),
+        sourcePath,
+        sourceName: row.filename,
+        sourceRelative: `PICKTURA/${format}/${row.filename}`,
+        size: stat.size,
+        license: row.license,
+        author: row.author,
+        action: row.action,
+        kind: format === 'glb' ? row.kind === 'prop' ? 'prop' : undefined : undefined,
+      });
+    }
+  }
+  return candidates;
+}
+
+async function gatherExplicitCandidates() {
+  if (!INFERNAL_WAYPOINT_GLB) return [];
+  const stat = await fs.stat(INFERNAL_WAYPOINT_GLB).catch(() => null);
+  if (!stat?.isFile() || !/\.glb$/i.test(INFERNAL_WAYPOINT_GLB)) return [];
+  return [{
+    source: 'local-folder',
+    realmId: 'infernal',
+    sourcePath: INFERNAL_WAYPOINT_GLB,
+    sourceName: path.basename(INFERNAL_WAYPOINT_GLB),
+    outputName: 'infernal_dungeon_entrance.glb',
+    sourceRelative: path.basename(INFERNAL_WAYPOINT_GLB),
+    size: stat.size,
+    kind: 'prop',
+  }];
 }
 
 function readTaskList(payload) {
@@ -387,7 +491,22 @@ function candidateSort(a, b) {
   return a.sourceName.localeCompare(b.sourceName);
 }
 
+export function limitCandidatesByRealm(candidates, limit) {
+  if (!limit || limit <= 0) return candidates;
+  const byRealm = new Map();
+  for (const candidate of candidates) {
+    const list = byRealm.get(candidate.realmId) ?? [];
+    list.push(candidate);
+    byRealm.set(candidate.realmId, list);
+  }
+  return [...byRealm.values()].flatMap((list) => list.sort(candidateSort).slice(0, limit));
+}
+
 function uniqueOutputName(candidate, used) {
+  if (candidate.outputName && !used.has(candidate.outputName)) {
+    used.add(candidate.outputName);
+    return candidate.outputName;
+  }
   const seed = `${candidate.sourceRelative}|${candidate.size}`;
   const base = `${safeAssetName(candidate.sourceName)}_${hashShort(seed)}`;
   let name = `${base}.glb`;
@@ -468,6 +587,9 @@ async function buildRealm(realm, candidates) {
       source: c.source,
       sourceName: c.sourceName,
       sourceRelative: c.sourceRelative,
+      ...(c.license ? { license: c.license } : {}),
+      ...(c.author ? { author: c.author } : {}),
+      ...(c.action ? { action: c.action } : {}),
       kind: classifyAssetKind(c.sourceName, c),
       meshCount: c.meshCount ?? 0,
       materialCount: c.materialCount ?? 0,
@@ -523,6 +645,8 @@ async function main() {
 
   if (!API_ONLY) {
     candidates.push(...(await gatherLocalCandidates()));
+    candidates.push(...(await gatherPickturaCandidates()));
+    candidates.push(...(await gatherExplicitCandidates()));
   }
 
   if (!SKIP_API) {
@@ -534,6 +658,10 @@ async function main() {
     }
   }
 
+  // Limit before GLB inspection. A mounted library can contain thousands of
+  // files and inspection is intentionally expensive because it reads the
+  // complete glTF graph and animation list.
+  candidates = limitCandidatesByRealm(candidates, MAX_PER_REALM);
   candidates = await inspectCandidates(candidates);
 
   const byRealm = Object.fromEntries(REALMS.map((r) => [r.realmId, []]));

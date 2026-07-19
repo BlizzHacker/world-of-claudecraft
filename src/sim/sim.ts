@@ -1631,7 +1631,7 @@ export class Sim {
     // (deterministic placement), so world-gen determinism is preserved.
     spawnBuildingInteriors(this.ctx, () => this.nextId++, worldContent);
     // D2 waypoints: an activatable travel marker at each town hub (all realms).
-    spawnWaypoints(this.ctx, () => this.nextId++);
+    spawnWaypoints(this.ctx, () => this.nextId++, getActiveRealm().id);
     // Groundskeeper Bram at the Sowfield gate (Vale Cup). Placed through the
     // SAME findSafePos path as the generic NPC loop above, but under a RESERVED
     // entity id outside the nextId sequence (and after the rng-drawing camp

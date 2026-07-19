@@ -216,14 +216,17 @@ export class CharacterPreview {
     this.externalModelUrl = url;
     this.externalState = 'loading';
     this.externalStateListener?.('loading');
-    if (this.currentVisual) {
-      this.characterGroup.remove(this.currentVisual.root);
-      this.currentVisual.dispose();
-      this.currentVisual = null;
-    }
     loadGltf(url)
       .then((gltf) => {
         if (this.destroyed || token !== this.externalLoadToken) return;
+        // Keep the class rig visible until the replacement has loaded. A missing
+        // generated asset must degrade to a useful character preview, never to an
+        // empty turntable while the network request is pending or after it fails.
+        if (this.currentVisual) {
+          this.characterGroup.remove(this.currentVisual.root);
+          this.currentVisual.dispose();
+          this.currentVisual = null;
+        }
         const root = buildExternalPreviewInstance(gltf.scene);
         this.externalRoot = root;
         this.characterGroup.add(root);

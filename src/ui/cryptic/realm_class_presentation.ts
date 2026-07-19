@@ -1,4 +1,5 @@
 import type { PlayerClass } from '../../sim/types';
+import { factionForRealmClass } from '../../sim/realms/factions';
 import type { RealmClassSkin, RealmContent, RealmId, RealmRole } from '../../sim/realms/types';
 
 export const PLAYER_CLASS_ORDER: readonly PlayerClass[] = [
@@ -391,7 +392,7 @@ export function classPresentationForRealm(
     return {
       baseClass,
       name: bound.source.name,
-      faction: bound.faction,
+      faction: factionForRealmClass(realm.id, baseClass)?.name ?? bound.faction,
       lore: bound.source.lore,
       color: bound.source.color,
       role: bound.source.role,
@@ -403,7 +404,7 @@ export function classPresentationForRealm(
   return {
     baseClass,
     name: fallback.name,
-    faction: fallback.faction,
+    faction: factionForRealmClass(realm.id, baseClass)?.name ?? fallback.faction,
     lore: fallback.lore,
     color: fallback.color === '#ffffff' ? CLASS_COLORS[baseClass] : fallback.color,
     role: fallback.role ?? ROLE_BY_CLASS[baseClass],

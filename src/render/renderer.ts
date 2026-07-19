@@ -3511,7 +3511,20 @@ export class Renderer {
     const isQuestVision = e.kind === 'mob' && e.templateId.startsWith('vision_');
 
     let portal: THREE.Mesh | undefined;
-    if (
+    if (e.kind === 'object' && e.templateId === 'waypoint' && e.objectItemId === 'infernal_dungeon_entrance') {
+      // The Hellmaw waypoint keeps the normal waypoint interaction and travel
+      // semantics, but uses the player's authored entrance GLB as its landmark.
+      // The forged copy is populated by build_realm_assets.mjs from the mounted
+      // Downloads asset; the wrapper retains a visible placeholder until it is ready.
+      const wrap = new THREE.Group();
+      wrap.rotation.y = e.facing || 0;
+      wrap.scale.setScalar(e.scale || 1.15);
+      this.fillProp(wrap, 'forged:infernal/infernal_dungeon_entrance');
+      body = wrap;
+      height = 5.5;
+      objectMesh = wrap;
+      objectPoolKey = null;
+    } else if (
       e.kind === 'object' &&
       (e.templateId === 'dungeon_door' ||
         e.templateId === 'dungeon_exit' ||

@@ -25,6 +25,16 @@ export type RealmId =
 
 export type RealmRole = 'Tank' | 'DPS' | 'Healer' | 'Support' | 'Assassin' | 'Summoner';
 
+export type RealmFactionAlignment = 'good' | 'evil' | 'neutral' | 'mixed';
+
+export interface RealmFaction {
+  id: string;
+  name: string;
+  alignment: RealmFactionAlignment;
+  lore: string;
+  surprise?: boolean;
+}
+
 /** A class skin: how the realm presents one of the underlying upstream classes. */
 export interface RealmClassSkin {
   /** Stable id; unique per realm. */

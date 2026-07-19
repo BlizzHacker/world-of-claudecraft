@@ -9,6 +9,7 @@
 // its hub. Server-authoritative — the whole flow routes through the sim.
 
 import { ZONES } from './data';
+import type { RealmId } from './realms/types';
 import { createGroundObject } from './entity';
 import type { SimContext } from './sim_context';
 import type { Entity } from './types';
@@ -19,6 +20,8 @@ export interface WaypointDef {
   x: number;
   z: number;
   zoneId: string;
+  realmId?: RealmId;
+  assetKey?: string;
 }
 
 // Waypoints: one at each town hub PLUS a wilderness waypoint deeper in each zone
@@ -47,6 +50,10 @@ export function waypointDefs(): WaypointDef[] {
       zoneId: z.id,
     });
   }
+  out.push({
+    id: 'wp_infernal_dungeon', name: 'Hellmaw Dungeon', x: 5, z: 2,
+    zoneId: 'zone1', realmId: 'infernal', assetKey: 'infernal_dungeon_entrance',
+  });
   return out;
 }
 
@@ -65,8 +72,9 @@ export function waypointById(id: string): WaypointDef | null {
 /** Spawn the activatable waypoint markers at each town hub. Deterministic (no rng).
  *  Called at world init on every realm (waypoints are a universal travel convenience,
  *  not a themed-realm feature). */
-export function spawnWaypoints(ctx: SimContext, nextId: () => number): void {
+export function spawnWaypoints(ctx: SimContext, nextId: () => number, realmId?: RealmId): void {
   for (const wp of waypointDefs()) {
+    if (wp.realmId && wp.realmId !== realmId) continue;
     // Place the waypoint pylon well off the hub centre (where quest givers/vendors
     // cluster) so it never overlaps an NPC's interaction spot — 14u to the NE edge
     // of the town, a clear landmark. EXCEPTION: Eastbrook's pylon stands right
@@ -76,7 +84,7 @@ export function spawnWaypoints(ctx: SimContext, nextId: () => number): void {
     const e = createGroundObject(nextId(), '', wp.name, ctx.groundPos(wp.x + off.x, wp.z + off.z));
     e.templateId = 'waypoint';
     e.waypointId = wp.id;
-    e.objectItemId = null;
+    e.objectItemId = wp.assetKey ?? null;
     e.lootable = true; // interactable
     (e as Entity).hostile = false;
     ctx.addEntity(e);

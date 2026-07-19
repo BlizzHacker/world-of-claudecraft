@@ -55,6 +55,25 @@ export function homeLotOf(ctx: SimContext, name: string): string {
   return '';
 }
 
+/** Return the owned home door nearest this player, if they are close enough to
+ * enter it. The public lane remains walkable, but an unowned or another
+ * character's cottage never opens a private home room. */
+export function ownedHomeDoorNear(
+  ctx: SimContext,
+  x: number,
+  z: number,
+  pid?: number,
+): { lotId: string; d2: number } | null {
+  const r = ctx.resolve(pid);
+  if (!r) return null;
+  const ownLotId = homeLotOf(ctx, r.meta.name);
+  if (!ownLotId) return null;
+  const lot = HOME_LOTS.find((candidate) => candidate.id === ownLotId);
+  if (!lot) return null;
+  const d2 = (x - lot.door.x) ** 2 + (z - lot.door.z) ** 2;
+  return d2 <= 8 * 8 ? { lotId: lot.id, d2 } : null;
+}
+
 export function homeBuy(ctx: SimContext, lotId: string, pid?: number): void {
   const r = ctx.resolve(pid);
   if (!r) return;

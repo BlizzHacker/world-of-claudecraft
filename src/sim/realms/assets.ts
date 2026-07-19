@@ -26,6 +26,9 @@ export interface RealmAssetEntry {
   animationNames?: string[];
   forgedKey?: string;
   forgedUrl?: string;
+  license?: string;
+  author?: string;
+  action?: string;
 }
 
 export interface RealmAssetManifest {
