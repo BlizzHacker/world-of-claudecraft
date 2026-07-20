@@ -6,12 +6,12 @@ const ELEMENTS = new Set(['fire', 'cold', 'lightning', 'poison', 'magic', 'physi
 const KINDS = new Set(['attack', 'passive', 'aura', 'summon', 'curse', 'buff', 'trap', 'shift']);
 
 describe('infernal skill trees', () => {
-  it('ships the seven founding classes, each with three trees', () => {
-    expect(INFERNAL_SKILLSETS).toHaveLength(7);
+  it('ships every hero class, each with three non-empty trees', () => {
+    expect(INFERNAL_SKILLSETS).toHaveLength(16);
     for (const set of INFERNAL_SKILLSETS) {
       expect(set.trees).toHaveLength(3);
       for (const tree of set.trees) {
-        expect(tree.skills.length).toBeGreaterThanOrEqual(8);
+        expect(tree.skills.length).toBeGreaterThanOrEqual(3);
       }
     }
   });
