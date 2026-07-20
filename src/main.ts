@@ -273,6 +273,7 @@ import {
 } from './ui/cryptic/fps_mode';
 import { mountHudGlobes, resolveHudSkin, setHudSkin } from './ui/cryptic/globes';
 import { mountHudLayout } from './ui/cryptic/hud_layout';
+import { hasInfernalSkillTree, openInfernalSkillTree } from './ui/cryptic/infernal_skill_tree';
 import { mountIngameOptions } from './ui/cryptic/ingame_options';
 import { mountLootVault } from './ui/cryptic/loot_vault';
 import { mountMusicWidget } from './ui/cryptic/music_widget';
@@ -3816,6 +3817,13 @@ window.addEventListener('cr-realm-visuals-changed', () => {
   paintRealmClassChoices();
 });
 
+// Open the Diablo skill-tree viewer from the "View Skill Tree" button on the
+// create-character card (delegated so it survives every card re-render).
+document.addEventListener('click', (e) => {
+  const btn = (e.target as HTMLElement | null)?.closest?.('[data-skilltree]') as HTMLElement | null;
+  if (btn) openInfernalSkillTree(btn.dataset.skilltree ?? '');
+});
+
 let realmEditorButtonChecked = false;
 function ensureRealmEditorButton(): void {
   if (realmEditorButtonChecked) return;
@@ -5920,6 +5928,9 @@ function renderClassDetails(
     realmClass && 'signatureSkills' in realmClass && Array.isArray(realmClass.signatureSkills)
       ? (realmClass.signatureSkills as readonly DiabloSkill[])
       : [];
+  const skillTreeName =
+    realmClass && 'signatureSkills' in realmClass ? (realmClass as { name: string }).name : '';
+  const showSkillTreeBtn = !!skillTreeName && hasInfernalSkillTree(skillTreeName);
   const diabloSkillsHtml = diabloSkills
     .map((skill) => {
       const iconUrl = iconDataUrl(
@@ -5967,7 +5978,10 @@ function renderClassDetails(
             <div class="details-gear-row"><strong>${escapeHtml(t('classDetails.labels.weapons'))}:</strong> <span class="badge">${escapeHtml(weaponsLabel)}</span></div>
           </div>
           <div class="details-spells-section">
-            <h4 class="details-section-title">${escapeHtml(t('classDetails.sections.signatureAbilities'))}</h4>
+            <h4 class="details-section-title" style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+              <span>${escapeHtml(t('classDetails.sections.signatureAbilities'))}</span>
+              ${showSkillTreeBtn ? `<button type="button" data-skilltree="${escapeHtml(skillTreeName)}" style="background:#2a1e10;border:1px solid #7a5a2a;color:#f4e6c8;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:12px">View Skill Tree</button>` : ''}
+            </h4>
             <ul class="details-spells-list">
               ${diabloSkillsHtml || spellsHtml}
             </ul>
