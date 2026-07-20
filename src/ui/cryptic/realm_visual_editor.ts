@@ -9,7 +9,11 @@
 import type { RealmContent } from '../../sim/realms/types';
 import { getMe, getToken } from '../../user/api';
 import { infernalDiabloClassChoicesForRealm } from './realm_class_presentation';
-import { type RealmVisualOverrideEntry, setRealmVisualOverrides } from './realm_visual_overrides';
+import {
+  type RealmVisualOverrideEntry,
+  realmVisualOverride,
+  setRealmVisualOverrides,
+} from './realm_visual_overrides';
 
 const MODAL_ID = 'cr-realm-visual-editor';
 
@@ -20,6 +24,29 @@ interface LibraryAsset {
   kind: string;
   group: string;
 }
+
+interface EditTarget {
+  key: string;
+  label: string;
+  current: string;
+}
+
+// The infernal town NPCs an operator most often reskins. Editing one writes an
+// `npc:<id>` override that applies to that NPC in the world.
+const INFERNAL_TOWN_NPCS: readonly { id: string; label: string }[] = [
+  { id: 'the_merchant', label: 'The Merchant' },
+  { id: 'marshal_redbrook', label: 'Marshal Redbrook' },
+  { id: 'apothecary_lin', label: 'Apothecary Lin' },
+  { id: 'trader_wilkes', label: 'Trader Wilkes' },
+  { id: 'smith_haldren', label: 'Smith Haldren' },
+  { id: 'foreman_odell', label: 'Foreman Odell' },
+  { id: 'cainhurst_sage', label: 'Cainhurst the Sage' },
+  { id: 'bursar_fernando', label: 'Bursar Fernando' },
+  { id: 'fisherman_brandt', label: 'Fisherman Brandt' },
+  { id: 'huntress_verr', label: 'Huntress Verr' },
+  { id: 'mercenary_kael', label: 'Mercenary Kael' },
+  { id: 'realtor_maribel', label: 'Realtor Maribel' },
+];
 
 function escapeHtml(s: string): string {
   return s.replace(
@@ -118,7 +145,18 @@ export async function openRealmVisualEditor(realm: RealmContent): Promise<void> 
     return;
   }
 
-  const heroes = infernalDiabloClassChoicesForRealm(realm);
+  const currentName = (key: string, fallback: string): string =>
+    realmVisualOverride(realm.id, key)?.assetName ?? fallback;
+  const heroTargets: EditTarget[] = infernalDiabloClassChoicesForRealm(realm).map((h) => ({
+    key: `hero:${h.name}`,
+    label: h.name,
+    current: currentName(`hero:${h.name}`, h.assetName ?? 'default'),
+  }));
+  const npcTargets: EditTarget[] = INFERNAL_TOWN_NPCS.map((n) => ({
+    key: `npc:${n.id}`,
+    label: n.label,
+    current: currentName(`npc:${n.id}`, 'default'),
+  }));
   const modal = document.createElement('div');
   modal.id = MODAL_ID;
   modal.style.cssText =
@@ -134,7 +172,7 @@ export async function openRealmVisualEditor(realm: RealmContent): Promise<void> 
           border-radius:6px;padding:4px 10px;cursor:pointer">Close</button>
       </div>
       <div style="padding:8px 14px;color:#c9b48a;font-size:12px">
-        Reassign any hero class body to a GLB from your asset library. Saves are live for every player.
+        Reassign any hero class or town NPC body to a GLB from your asset library. Saves are live for every player.
       </div>
       <ul data-rows style="list-style:none;margin:0;padding:6px 14px 16px"></ul>
       <div data-picker style="display:none;border-top:1px solid #3a2c19;padding:12px 14px"></div>
@@ -148,40 +186,42 @@ export async function openRealmVisualEditor(realm: RealmContent): Promise<void> 
     if (e.target === modal) closeEditor();
   });
 
+  const rowHtml = (t: EditTarget): string => `
+    <li style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #241a10">
+      <span style="flex:1 1 auto;font-weight:600">${escapeHtml(t.label)}</span>
+      <span style="flex:1 1 auto;color:#c9b48a;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escapeHtml(t.current)}</span>
+      <button data-pick="${escapeHtml(t.key)}" data-label="${escapeHtml(t.label)}" style="background:#2a1e10;border:1px solid #7a5a2a;color:#f4e6c8;border-radius:6px;padding:5px 10px;cursor:pointer">Change</button>
+      <button data-reset="${escapeHtml(t.key)}" data-label="${escapeHtml(t.label)}" style="background:none;border:1px solid #513c22;color:#c9b48a;border-radius:6px;padding:5px 8px;cursor:pointer">Reset</button>
+    </li>`;
+  const sectionHtml = (title: string, list: EditTarget[]): string =>
+    `<li style="padding:12px 0 4px;color:#f0c987;font-weight:700">${escapeHtml(title)}</li>` +
+    list.map(rowHtml).join('');
   const renderRows = (): void => {
     if (!rows) return;
-    rows.innerHTML = heroes
-      .map(
-        (h) => `
-      <li style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #241a10">
-        <span style="flex:1 1 auto;font-weight:600">${escapeHtml(h.name)}</span>
-        <span style="flex:1 1 auto;color:#c9b48a;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
-          ${escapeHtml(h.assetName ?? '')}</span>
-        <button data-pick="${escapeHtml(h.name)}" style="background:#2a1e10;border:1px solid #7a5a2a;
-          color:#f4e6c8;border-radius:6px;padding:5px 10px;cursor:pointer">Change</button>
-        <button data-reset="${escapeHtml(h.name)}" style="background:none;border:1px solid #513c22;
-          color:#c9b48a;border-radius:6px;padding:5px 8px;cursor:pointer">Reset</button>
-      </li>`,
-      )
-      .join('');
+    rows.innerHTML =
+      sectionHtml('Hero classes (create screen)', heroTargets) +
+      sectionHtml('Town NPCs (in the world)', npcTargets);
     rows.querySelectorAll<HTMLElement>('[data-pick]').forEach((btn) => {
-      btn.addEventListener('click', () => openPicker(btn.dataset.pick ?? ''));
+      btn.addEventListener('click', () =>
+        openPicker(btn.dataset.pick ?? '', btn.dataset.label ?? ''),
+      );
     });
     rows.querySelectorAll<HTMLElement>('[data-reset]').forEach((btn) => {
       btn.addEventListener('click', async () => {
-        const name = btn.dataset.reset ?? '';
-        const ok = await resetOverride(realm.id, `hero:${name}`);
-        notify(ok ? `Reset ${name} to default.` : `Could not reset ${name}.`);
+        const key = btn.dataset.reset ?? '';
+        const label = btn.dataset.label ?? key;
+        const ok = await resetOverride(realm.id, key);
+        notify(ok ? `Reset ${label} to default.` : `Could not reset ${label}.`);
       });
     });
   };
 
-  const openPicker = (heroName: string): void => {
+  const openPicker = (key: string, label: string): void => {
     if (!picker) return;
     picker.style.display = 'block';
     picker.innerHTML = `
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-        <strong>Pick a body for ${escapeHtml(heroName)}</strong>
+        <strong>Pick a body for ${escapeHtml(label)}</strong>
         <input data-q placeholder="Search assets (e.g. amazon, barbarian, knight)"
           style="flex:1;background:#0d0a07;border:1px solid #513c22;color:#f4e6c8;border-radius:6px;padding:6px 10px" />
       </div>
@@ -192,7 +232,7 @@ export async function openRealmVisualEditor(realm: RealmContent): Promise<void> 
     const runSearch = async (): Promise<void> => {
       if (!grid) return;
       grid.innerHTML = '<span style="color:#c9b48a">Searching...</span>';
-      const assets = await searchAssets(q?.value ?? heroName);
+      const assets = await searchAssets(q?.value ?? label);
       grid.innerHTML =
         assets.length === 0
           ? '<span style="color:#c9b48a">No matches. Try another term.</span>'
@@ -212,12 +252,12 @@ export async function openRealmVisualEditor(realm: RealmContent): Promise<void> 
         btn.addEventListener('click', async () => {
           const url = btn.dataset.asset ?? '';
           const name = btn.dataset.name ?? '';
-          const ok = await saveOverride(realm.id, `hero:${heroName}`, { url, name });
+          const ok = await saveOverride(realm.id, key, { url, name });
           if (ok) {
             picker.style.display = 'none';
-            notify(`${heroName} now uses ${name}.`);
+            notify(`${label} now uses ${name}.`);
           } else {
-            notify(`Could not save ${heroName}. Check your admin session.`);
+            notify(`Could not save ${label}. Check your admin session.`);
           }
         });
       });

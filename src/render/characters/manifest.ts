@@ -83,6 +83,12 @@ export interface VisualDef {
    *  instead — e.g. the cosmetic-only Combat Mech, loaded via preloadMechAssets()
    *  when the skin-select preview opens, so it never bloats every client's boot. */
   lazyPreload?: boolean;
+  /** Build the ClipMap from the GLB's OWN animations at prepare time. An admin
+   *  body override points a class/NPC at an arbitrary library GLB whose clip
+   *  names are unknown ahead of time; prepareVisual detects an idle/first clip
+   *  and drives every state from it. Fail-safe: no animations means the rest
+   *  pose, never a crash. */
+  autoClip?: boolean;
   /** Post-load orientation fixups for weapon/prop nodes baked INTO a creature
    *  GLB at the wrong angle (some KayKit handslot weapons ship without the grip
    *  flip the standalone weapon files carry). Node name as authored in the GLB;
@@ -609,8 +615,12 @@ export const VISUALS: Record<string, VisualDef> = {
     ],
     height: 2.35,
     clips: {
-      idle: 'Walking', walk: 'Walking', run: 'Running',
-      attack: ['Reaping_Swing'], death: 'Walking', hit: ['Walking'],
+      idle: 'Walking',
+      walk: 'Walking',
+      run: 'Running',
+      attack: ['Reaping_Swing'],
+      death: 'Walking',
+      hit: ['Walking'],
     },
     lazyPreload: true,
   },
@@ -1492,14 +1502,19 @@ const REALM_MOB_DEFAULTS: Partial<Record<string, string>> = {
 
 const REALM_MOB_FAMILY_KEYS: Partial<Record<string, Partial<Record<string, string>>>> = {
   crypticrealm: {
-    beast: 'realm_cryptic_bone_herald', humanoid: 'realm_cryptic_bone_herald',
-    undead: 'realm_cryptic_bone_herald', demon: 'realm_cryptic_bone_herald',
+    beast: 'realm_cryptic_bone_herald',
+    humanoid: 'realm_cryptic_bone_herald',
+    undead: 'realm_cryptic_bone_herald',
+    demon: 'realm_cryptic_bone_herald',
   },
   infernal: {
     // Generic beasts remain animals; Infernal demon bodies are reserved for
     // demon-family mobs and named Hellmaw encounters.
-    beast: 'mob_wolf', humanoid: 'realm_infernal_human_tainted_hood',
-    undead: 'skel_warrior', demon: 'hellmaw_husk_body', elemental: 'hellmaw_lava_fiend_body',
+    beast: 'mob_wolf',
+    humanoid: 'realm_infernal_human_tainted_hood',
+    undead: 'skel_warrior',
+    demon: 'hellmaw_husk_body',
+    elemental: 'hellmaw_lava_fiend_body',
     dragonkin: 'hellmaw_dragon_body',
   },
 };
@@ -1512,7 +1527,68 @@ export function isVisualLazy(visualKey: string): boolean {
   return !!VISUALS[visualKey]?.lazyPreload;
 }
 
+// --- Runtime admin body overrides (from /api/realm-visuals) ----------------
+// A saved override reassigns a class or NPC body to an arbitrary library GLB.
+// With no overrides installed this is a strict no-op, so normal rendering is
+// untouched; the override path only runs for entities the operator reassigned.
+interface BodyOverrideEntry {
+  assetUrl: string;
+  assetName?: string;
+}
+const BODY_OVERRIDES: Record<string, Record<string, BodyOverrideEntry>> = {};
+const OVERRIDE_AUTO_CLIPS: ClipMap = {
+  idle: '__auto__',
+  walk: '__auto__',
+  run: '__auto__',
+  attack: ['__auto__'],
+  death: '__auto__',
+};
+
+/** Install the operator's body overrides for a realm (the client calls this after
+ *  it fetches /api/realm-visuals/<realm>). Empty/undefined clears them. */
+export function setBodyOverrides(
+  realm: string,
+  overrides: Record<string, BodyOverrideEntry> | null | undefined,
+): void {
+  BODY_OVERRIDES[realm] = overrides ?? {};
+}
+
+function overrideVisualHash(url: string): string {
+  let hash = 2166136261;
+  for (let i = 0; i < url.length; i++) {
+    hash ^= url.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+  return (hash >>> 0).toString(36);
+}
+
+function registerOverrideVisual(entry: BodyOverrideEntry): string {
+  const key = `override_${overrideVisualHash(entry.assetUrl)}`;
+  if (!VISUALS[key]) {
+    VISUALS[key] = {
+      url: entry.assetUrl,
+      height: 2.0,
+      autoClip: true,
+      lazyPreload: true,
+      clips: OVERRIDE_AUTO_CLIPS,
+    };
+  }
+  return key;
+}
+
+/** The override visual key for an entity, or null. Players match `class:<class>`,
+ *  NPCs match `npc:<templateId>`. */
+function overrideVisualKeyForEntity(e: Entity): string | null {
+  if (e.kind !== 'player' && e.kind !== 'npc') return null;
+  const map = BODY_OVERRIDES[resolveActiveRealmId()];
+  if (!map) return null;
+  const entry = e.kind === 'player' ? map[`class:${e.templateId}`] : map[`npc:${e.templateId}`];
+  return entry ? registerOverrideVisual(entry) : null;
+}
+
 export function visualKeyFor(e: Entity): string {
+  const bodyOverride = overrideVisualKeyForEntity(e);
+  if (bodyOverride) return bodyOverride;
   if (e.kind === 'player') {
     if (e.skinCatalog === 'mech') return 'player_mech';
     if (e.visualKey && VISUALS[e.visualKey]) return e.visualKey;

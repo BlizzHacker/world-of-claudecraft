@@ -2,23 +2,7 @@
 // index.html and play.html both bootstrap through this module, so this one import
 // styles both game entries; admin/guide use their own entries and inline CSS.
 import './styles/index.css';
-// CR overlay: heavy game runtime (Renderer, Sim, Hud, audio, music, voice, sfx,
-// MobileControls, perf, Input, Keybinds, camera-follow yaw helpers, CharacterPreview,
-// assetsReady) is lazy-loaded via loadGameRuntime() to keep the landing bundle small
-// (commit 31fefc50). Those symbols are provided through GameRuntime, so ONLY type-only
-// and landing-safe symbols are statically imported here. audio/music/voice/sfx are NOT
-// statically imported, they come from loadGameRuntime() and init in startGame().
-import type { Sim } from './sim/sim';
-import type { Renderer } from './render/renderer';
-import type { Hud } from './ui/hud';
 import { syncAppViewport as syncAppViewportShared } from './game/app_viewport';
-import {
-  hideLoadingScreen,
-  LOADING_FADE_MS,
-  setLoadingProgress,
-  setLoadingStatus,
-  showLoadingScreen,
-} from './game/loading_screen';
 import { AutoLoot } from './game/autoloot';
 import {
   BROWSER_BODY_CLASSES,
@@ -26,6 +10,7 @@ import {
   cssEffectsTier,
   readBrowserEnv,
 } from './game/browser_env';
+import { isCameraDrivenFacingActive } from './game/camera_driven_facing';
 // camera_follow: pure math helper cameraFollowShouldSettle is landing-safe; the
 // yaw helpers updateFollowCameraYaw/wrapAngle are runtime-only (GameRuntime).
 import {
@@ -33,7 +18,6 @@ import {
   newCameraReleaseHold,
   stepCameraReleaseHold,
 } from './game/camera_follow';
-import { isCameraDrivenFacingActive } from './game/camera_driven_facing';
 import { shouldRecoverOnComposerBlur } from './game/chat_keyboard_dismiss';
 import {
   clickMoveShouldWalk,
@@ -45,6 +29,8 @@ import {
 } from './game/click_move';
 import { clientEnvBits, installPageStateTracking, pageStateBits } from './game/client_env';
 import { getClientSeed } from './game/client_seed';
+import { CoopController } from './game/coop_integration';
+import type { CoopSlotNumber } from './game/coop_slots';
 import { shouldClearAutorunOnDeath } from './game/death_input_reset';
 import { initDesktopDownload } from './game/desktop_download';
 import { initDesktopShellIntegration } from './game/desktop_shell_integration';
@@ -62,6 +48,13 @@ import {
 import { newKeyboardTurnState, stepKeyboardTurnFacing } from './game/keyboard_turn_facing';
 import { applyMobileKeyboardViewport } from './game/keyboard_viewport_applier';
 import { shouldUseStaticBackdrop } from './game/landing_backdrop';
+import {
+  hideLoadingScreen,
+  LOADING_FADE_MS,
+  setLoadingProgress,
+  setLoadingStatus,
+  showLoadingScreen,
+} from './game/loading_screen';
 // mobile_controls: landing-safe helpers only; the MobileControls class is runtime (GameRuntime).
 import {
   interfaceModeFromSetting,
@@ -81,13 +74,13 @@ import {
   SETTING_RANGES,
   Settings,
 } from './game/settings';
-import { resolveUiEffectsProfile } from './game/ui_effects_profile';
 import {
   recordSkipTap,
   type SpawnCinematic,
   spawnCinematicFor,
   spawnCinematicPose,
 } from './game/spawn_cinematic';
+import { resolveUiEffectsProfile } from './game/ui_effects_profile';
 import { currentUtcDay } from './game/utc_day';
 import {
   CHAR_SORT_MODES,
@@ -120,17 +113,10 @@ import {
   NATIVE_APP,
   type ReleaseEntry,
 } from './net/online';
-import { CoopController } from './game/coop_integration';
-import type { CoopSlotNumber } from './game/coop_slots';
-import type { CoopCharacterRef } from './ui/coop_overlay';
 // The wallet module is loaded lazily via dynamic import() in the wallet
 // controller below, so it stays out of the main entry chunk and only loads when
 // the feature is enabled + used.
 import type { WalletOption } from './net/wallet';
-import type { IWorld, LeaderboardEntry } from './world_api';
-import { findPlayerPath, resolvePlayerDestination } from './sim/pathfind';
-import { pathCrossesFence } from './sim/colliders';
-import { formatXp } from './ui/xp_bar';
 // skinCount / playerPortraitDataUrl are landing-safe (manifest data + portrait
 // rasterizer); the CharacterPreview class and assetsReady are runtime (GameRuntime).
 import type { PreviewAppearance } from './render/characters';
@@ -139,14 +125,24 @@ import { skinCount } from './render/characters/manifest';
 import { playerPortraitDataUrl } from './render/characters/portrait';
 import { installWebGLContextRelease } from './render/context_release';
 import { firstRunGraphicsPreset, GFX, graphicsPresetLabel } from './render/gfx';
+import type { Renderer } from './render/renderer';
+import type { SelfMotionFrame } from './render/self_motion';
 import { navigatorSaveData } from './render/sky';
 import { desktopBridge } from './runtime';
-import type { SelfMotionFrame } from './render/self_motion';
+import { pathCrossesFence } from './sim/colliders';
 import { isStunned } from './sim/combat/cc';
 import { ABILITIES, CLASSES } from './sim/content/classes';
 import { ITEMS, isDelvePos, setActiveWorldContent } from './sim/data';
 import { canEquipItem } from './sim/equipment_rules';
 import { buildingAtPoint, buildingDoorNear } from './sim/interiors';
+import { findPlayerPath, resolvePlayerDestination } from './sim/pathfind';
+// CR overlay: heavy game runtime (Renderer, Sim, Hud, audio, music, voice, sfx,
+// MobileControls, perf, Input, Keybinds, camera-follow yaw helpers, CharacterPreview,
+// assetsReady) is lazy-loaded via loadGameRuntime() to keep the landing bundle small
+// (commit 31fefc50). Those symbols are provided through GameRuntime, so ONLY type-only
+// and landing-safe symbols are statically imported here. audio/music/voice/sfx are NOT
+// statically imported, they come from loadGameRuntime() and init in startGame().
+import type { Sim } from './sim/sim';
 import { TAB_NEAR_RADIUS, TAB_QUERY_RADIUS, tabConeHalfAt } from './sim/tab_target';
 import {
   DT,
@@ -178,6 +174,11 @@ import { assembleBugReportMeta } from './ui/bug_report';
 import { ChatCommandMenu } from './ui/chat_command_menu';
 import { chatInputSize } from './ui/chat_input_autosize';
 import { CLASS_DETAILS, SIGNATURE_ABILITIES } from './ui/class_details_data';
+import type { CoopCharacterRef } from './ui/coop_overlay';
+// CR overlay: realm/theme picker. The mount call early-applies the saved
+// `data-theme` to <html>, then the trigger button lives in the index.html
+// `<div id="theme-picker">` block.
+import { mountThemeSelect } from './ui/cryptic/theme_select';
 import {
   type DiscordAccountStatus,
   type DiscordPresenceState,
@@ -195,6 +196,7 @@ import {
 import { renderDiscordWidget } from './ui/discord_widget';
 import { classDisplayName, tEntity } from './ui/entity_i18n';
 import { FocusManager, type FocusTrapHandle } from './ui/focus_manager';
+import type { Hud } from './ui/hud';
 import {
   ensureLocaleLoaded,
   formatDateTime,
@@ -242,32 +244,42 @@ import {
   setWocBalance,
   shouldDisconnectUnverifiedWallet,
 } from './ui/wallet_balance';
-// CR overlay: realm/theme picker. The mount call early-applies the saved
-// `data-theme` to <html>, then the trigger button lives in the index.html
-// `<div id="theme-picker">` block.
-import { mountThemeSelect } from './ui/cryptic/theme_select';
+import { formatXp } from './ui/xp_bar';
+import type { IWorld, LeaderboardEntry } from './world_api';
 import './ui/cryptic/realm_env';
-import { getActiveRealm, getRealm, isRealmId, persistActiveRealm, type RealmContent } from './sim/realms';
-import { notePropPlaced, tryBuilderSelect } from './ui/cryptic/world_builder';
-import { mountHudGlobes, setHudSkin, resolveHudSkin } from './ui/cryptic/globes';
-import { enforceDiabloLock, forceDiabloForDelve, isFpsActive, mountFpsMode, resolveFpsMode, setFpsMode } from './ui/cryptic/fps_mode';
-import { mountRealmBranding } from './ui/cryptic/branding';
-import { mountIngameOptions } from './ui/cryptic/ingame_options';
-import { mountUserDropdown } from './ui/cryptic/user_dropdown';
-import { mountWalletPanel } from './ui/cryptic/wallet_panel';
-import { mountPwaInstall } from './ui/cryptic/pwa_install';
-import { mountXboxEnv } from './game/xbox_env';
-import { mountNewsRealmFilter } from './ui/cryptic/news_realm_filter';
-import { mountDownloadLaunchers } from './ui/cryptic/download_launchers';
-import { mountChatFrame } from './ui/cryptic/chat_frame';
-import { mountMusicWidget } from './ui/cryptic/music_widget';
-import { mountHudLayout } from './ui/cryptic/hud_layout';
-import { loadDocFragment } from './ui/cryptic/doc_fragment';
 import { crypticMusic } from './game/cryptic_music';
+import { mountXboxEnv } from './game/xbox_env';
+import { setBodyOverrides } from './render/characters/manifest';
+import {
+  getActiveRealm,
+  getRealm,
+  isRealmId,
+  persistActiveRealm,
+  type RealmContent,
+} from './sim/realms';
+import type { DiabloSkill } from './sim/realms/diablo_classes';
 import { mountBestiary } from './ui/cryptic/bestiary';
-import { mountSkillTree } from './ui/cryptic/skilltree';
+import { mountRealmBranding } from './ui/cryptic/branding';
+import { mountChatFrame } from './ui/cryptic/chat_frame';
+import { loadDocFragment } from './ui/cryptic/doc_fragment';
+import { mountDownloadLaunchers } from './ui/cryptic/download_launchers';
+import {
+  enforceDiabloLock,
+  forceDiabloForDelve,
+  isFpsActive,
+  mountFpsMode,
+  resolveFpsMode,
+  setFpsMode,
+} from './ui/cryptic/fps_mode';
+import { mountHudGlobes, resolveHudSkin, setHudSkin } from './ui/cryptic/globes';
+import { mountHudLayout } from './ui/cryptic/hud_layout';
+import { mountIngameOptions } from './ui/cryptic/ingame_options';
 import { mountLootVault } from './ui/cryptic/loot_vault';
+import { mountMusicWidget } from './ui/cryptic/music_widget';
+import { installNativeSsoReturnHandler, wireNativeSsoLink } from './ui/cryptic/native_sso';
+import { mountNewsRealmFilter } from './ui/cryptic/news_realm_filter';
 import { mountPickitPanel } from './ui/cryptic/pickit_panel';
+import { mountPwaInstall } from './ui/cryptic/pwa_install';
 import {
   classChoicesForRealm,
   classPresentationForRealm,
@@ -275,12 +287,17 @@ import {
   presentationFactionsForRealm,
   realmHasClassOverlay,
 } from './ui/cryptic/realm_class_presentation';
-import type { DiabloSkill } from './sim/realms/diablo_classes';
-import { fetchRealmVisualOverrides } from './ui/cryptic/realm_visual_overrides';
 import { openRealmVisualEditor } from './ui/cryptic/realm_visual_editor';
-import { getMe as getMeForEditor, getToken as getTokenForEditor } from './user/api';
-import { installNativeSsoReturnHandler, wireNativeSsoLink } from './ui/cryptic/native_sso';
+import {
+  fetchRealmVisualOverrides,
+  getRealmVisualOverrides,
+} from './ui/cryptic/realm_visual_overrides';
 import { clearCrypticSession, readCrypticSession, writeCrypticSession } from './ui/cryptic/session';
+import { mountSkillTree } from './ui/cryptic/skilltree';
+import { mountUserDropdown } from './ui/cryptic/user_dropdown';
+import { mountWalletPanel } from './ui/cryptic/wallet_panel';
+import { notePropPlaced, tryBuilderSelect } from './ui/cryptic/world_builder';
+import { getMe as getMeForEditor, getToken as getTokenForEditor } from './user/api';
 
 // SECURITY: an SSO/realm handoff arrives as `/#auth_token=...&auth_user=...`.
 // Capture it into memory and SCRUB the address bar on the very first line of
@@ -291,7 +308,11 @@ const CAPTURED_SSO_HASH = (() => {
   if (typeof window === 'undefined') return '';
   const h = window.location.hash ?? '';
   if (h.startsWith('#') && h.includes('auth_token=')) {
-    try { history.replaceState(null, '', window.location.pathname + window.location.search); } catch { /* noop */ }
+    try {
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+    } catch {
+      /* noop */
+    }
     return h;
   }
   return '';
@@ -389,38 +410,40 @@ function loadGameRuntime(): Promise<GameRuntime> {
     import('./render/characters'),
     import('./game/perf'),
     import('./game/camera_follow'),
-  ]).then(([
-    sim,
-    renderer,
-    input,
-    keybinds,
-    mobileControls,
-    hud,
-    audioMod,
-    musicMod,
-    voiceMod,
-    sfxMod,
-    preload,
-    characters,
-    perf,
-    cameraFollow,
-  ]) => ({
-    Sim: sim.Sim,
-    Renderer: renderer.Renderer,
-    Input: input.Input,
-    Keybinds: keybinds.Keybinds,
-    MobileControls: mobileControls.MobileControls,
-    Hud: hud.Hud,
-    audio: audioMod.audio,
-    music: musicMod.music,
-    voice: voiceMod.voice,
-    sfx: sfxMod.sfx,
-    assetsReady: preload.assetsReady,
-    CharacterPreview: characters.CharacterPreview,
-    createPerfMonitor: perf.createPerfMonitor,
-    updateFollowCameraYaw: cameraFollow.updateFollowCameraYaw,
-    wrapAngle: cameraFollow.wrapAngle,
-  }));
+  ]).then(
+    ([
+      sim,
+      renderer,
+      input,
+      keybinds,
+      mobileControls,
+      hud,
+      audioMod,
+      musicMod,
+      voiceMod,
+      sfxMod,
+      preload,
+      characters,
+      perf,
+      cameraFollow,
+    ]) => ({
+      Sim: sim.Sim,
+      Renderer: renderer.Renderer,
+      Input: input.Input,
+      Keybinds: keybinds.Keybinds,
+      MobileControls: mobileControls.MobileControls,
+      Hud: hud.Hud,
+      audio: audioMod.audio,
+      music: musicMod.music,
+      voice: voiceMod.voice,
+      sfx: sfxMod.sfx,
+      assetsReady: preload.assetsReady,
+      CharacterPreview: characters.CharacterPreview,
+      createPerfMonitor: perf.createPerfMonitor,
+      updateFollowCameraYaw: cameraFollow.updateFollowCameraYaw,
+      wrapAngle: cameraFollow.wrapAngle,
+    }),
+  );
   return gameRuntimePromise;
 }
 
@@ -629,7 +652,11 @@ if (typeof document !== 'undefined') {
     // Browsers block audio autoplay until a user gesture; kick the Cryptic Realm
     // soundtrack on the first interaction so the music starts without a manual
     // play. One-shot.
-    const kickOnce = () => { crypticMusic.kick(); window.removeEventListener('pointerdown', kickOnce); window.removeEventListener('keydown', kickOnce); };
+    const kickOnce = () => {
+      crypticMusic.kick();
+      window.removeEventListener('pointerdown', kickOnce);
+      window.removeEventListener('keydown', kickOnce);
+    };
     window.addEventListener('pointerdown', kickOnce);
     window.addEventListener('keydown', kickOnce);
   };
@@ -645,7 +672,10 @@ if (typeof document !== 'undefined') {
 // The legacy mountHudSkinToggle / mountFpsToggle helpers were deleted with
 // their host divs. resolveFpsMode / setFpsMode remain imported so the
 // SSO + in-game options module can re-use them.
-void resolveFpsMode; void setFpsMode; void resolveHudSkin; void setHudSkin;
+void resolveFpsMode;
+void setFpsMode;
+void resolveHudSkin;
+void setHudSkin;
 
 function syncBuildInfo(): void {
   const el = document.getElementById('game-version');
@@ -1309,7 +1339,7 @@ async function startGame(
     if (!hud.closeAll()) hud.toggleOptionsMenu();
   };
 
-    // slot 0 (key 1) is Attack for every class, auto-attack without needing
+  // slot 0 (key 1) is Attack for every class, auto-attack without needing
   const input = new Input(
     canvas,
     {
@@ -2946,7 +2976,12 @@ async function startGame(
     // ArcForge builder: map a freshly-placed prop entity to its DB id so the
     // builder UI can later move/delete it. (Custom event, outside SimEvent union.)
     for (const ev of drainedEvents as Array<{ type?: string; entId?: number; dbId?: number }>) {
-      if (ev && ev.type === 'propPlaced' && typeof ev.entId === 'number' && typeof ev.dbId === 'number') {
+      if (
+        ev &&
+        ev.type === 'propPlaced' &&
+        typeof ev.entId === 'number' &&
+        typeof ev.dbId === 'number'
+      ) {
         notePropPlaced(ev.entId, ev.dbId);
       }
     }
@@ -3201,9 +3236,12 @@ async function startGame(
           coopController,
           openCoopJoin: () => coopController?.requestKeyboardJoin(),
           coopSlotInfo: () => coopController?.slotInfo() ?? [],
-          coopGetBindings: (s: number) => coopController?.getSlotBindings(s as CoopSlotNumber) ?? {},
-          coopSetBindings: (s: number, b: Record<number, string>) => coopController?.setSlotBindings(s as CoopSlotNumber, b),
-          coopReassignPad: (s: number, p: number) => coopController?.reassignPad(s as CoopSlotNumber, p) ?? false,
+          coopGetBindings: (s: number) =>
+            coopController?.getSlotBindings(s as CoopSlotNumber) ?? {},
+          coopSetBindings: (s: number, b: Record<number, string>) =>
+            coopController?.setSlotBindings(s as CoopSlotNumber, b),
+          coopReassignPad: (s: number, p: number) =>
+            coopController?.reassignPad(s as CoopSlotNumber, p) ?? false,
           /** Opens the board and drains queued sim events. Do not call sim.lockpickEngage directly offline. */
           lockpickEngage: (objectId: number, ante: number) =>
             hud.submitLockpickEngage(objectId, ante as 1 | 2 | 3),
@@ -3315,7 +3353,8 @@ function hydrateApiFromSavedSession(): boolean {
     return true;
   }
   if (api.restoreSession()) {
-    if (api.token && api.username) writeCrypticSession({ token: api.token, username: api.username });
+    if (api.token && api.username)
+      writeCrypticSession({ token: api.token, username: api.username });
     return true;
   }
   return false;
@@ -3478,7 +3517,8 @@ function scheduleCharacterPreview(panelId: string): void {
   characterPreviewTimer = window.setTimeout(() => {
     characterPreviewTimer = null;
     const panel = $(panelId);
-    if (!panel || panel.hasAttribute('hidden') || document.body.classList.contains('game-active')) return;
+    if (!panel || panel.hasAttribute('hidden') || document.body.classList.contains('game-active'))
+      return;
     void ensureCharacterPreview(panelId).catch((err) => {
       console.warn('character preview unavailable:', err);
     });
@@ -3525,10 +3565,13 @@ function realmPreviewIdFromName(name: string | null | undefined): string {
     key.includes('protoss') ||
     key.includes('zerg') ||
     key.includes('arcade')
-  ) return 'arcadevoid';
-  if (key === 'arcane' || key.includes('arcanenexus') || key.includes('arcanecrystal')) return 'arcane';
+  )
+    return 'arcadevoid';
+  if (key === 'arcane' || key.includes('arcanenexus') || key.includes('arcanecrystal'))
+    return 'arcane';
   if (key.includes('classic')) return 'classic';
-  if (key.includes('claudecraft') || key.includes('claudcraft') || key.includes('claude')) return 'claudecraft';
+  if (key.includes('claudecraft') || key.includes('claudcraft') || key.includes('claude'))
+    return 'claudecraft';
   if (key.includes('dominion')) return 'dominion';
   if (key.includes('exchange')) return 'exchange';
   if (key.includes('fps')) return 'fps';
@@ -3547,21 +3590,32 @@ function persistActiveRealmFromDirectoryName(name: string): void {
   const id = realmPreviewIdFromName(name);
   if (!isRealmId(id)) return;
   persistActiveRealm(id);
-  try { window.dispatchEvent(new CustomEvent('cr-realm-change')); } catch { /* noop */ }
+  try {
+    window.dispatchEvent(new CustomEvent('cr-realm-change'));
+  } catch {
+    /* noop */
+  }
 }
 
 function realmClassDisplayName(cls: PlayerClass): string {
-  return classPresentationForRealm(realmContentForCharacterUi(), cls)?.name ?? classDisplayName(cls);
+  return (
+    classPresentationForRealm(realmContentForCharacterUi(), cls)?.name ?? classDisplayName(cls)
+  );
 }
 
 function realmClassDisplayDescription(cls: PlayerClass): string {
-  return classPresentationForRealm(realmContentForCharacterUi(), cls)?.lore ?? classDisplayDescription(cls);
+  return (
+    classPresentationForRealm(realmContentForCharacterUi(), cls)?.lore ??
+    classDisplayDescription(cls)
+  );
 }
 
 function realmClassPresentation(cls: PlayerClass) {
   const realm = realmContentForCharacterUi();
   if (realm.id === 'infernal') {
-    const selected = document.querySelector<HTMLElement>('#charcreate-panel .mini-class.sel[data-diablo-id]');
+    const selected = document.querySelector<HTMLElement>(
+      '#charcreate-panel .mini-class.sel[data-diablo-id]',
+    );
     const selectedId = selected?.dataset.diabloId;
     const diablo = infernalDiabloClassChoicesForRealm(realm).find(
       (choice) => choice.diabloId === selectedId && choice.baseClass === cls,
@@ -3654,14 +3708,26 @@ function selectedCreateFaction(realm: RealmContent): string | null {
   if (factions.length <= 1) return null;
   const key = `cr_charcreate_faction:${realm.id}`;
   let stored = '';
-  try { stored = localStorage.getItem(key) ?? ''; } catch { stored = ''; }
+  try {
+    stored = localStorage.getItem(key) ?? '';
+  } catch {
+    stored = '';
+  }
   if (factions.includes(stored)) return stored;
-  try { localStorage.setItem(key, factions[0]); } catch { /* storage unavailable */ }
+  try {
+    localStorage.setItem(key, factions[0]);
+  } catch {
+    /* storage unavailable */
+  }
   return factions[0];
 }
 
 function setSelectedCreateFaction(realm: RealmContent, faction: string): void {
-  try { localStorage.setItem(`cr_charcreate_faction:${realm.id}`, faction); } catch { /* storage unavailable */ }
+  try {
+    localStorage.setItem(`cr_charcreate_faction:${realm.id}`, faction);
+  } catch {
+    /* storage unavailable */
+  }
 }
 
 function ensureCharCreateFactionFilter(): void {
@@ -3709,7 +3775,10 @@ function paintInfernalDiabloRoster(
   row.classList.add('infernal-diablo-roster');
   row.innerHTML = choices
     .filter((choice) => !activeFaction || choice.faction === activeFaction)
-    .map((choice) => `<button type="button" class="mini-class realm-skinned realm-playable" data-class="${choice.baseClass}" data-diablo-id="${choice.diabloId}" data-faction="${choice.faction}" data-realm-faction="${choice.faction}" data-realm-asset="${choice.assetUrl}" data-realm-asset-name="${choice.assetName}" data-realm-asset-status="ready" aria-label="${escapeHtml(`${choice.name}, ${choice.faction}`)}" aria-pressed="false" title="${escapeHtml(choice.assetName ?? choice.name)}"><span class="mini-class-label">${escapeHtml(choice.name)}</span><span class="mini-class-faction">${escapeHtml(choice.faction)} - Playable GLB</span></button>`)
+    .map(
+      (choice) =>
+        `<button type="button" class="mini-class realm-skinned realm-playable" data-class="${choice.baseClass}" data-diablo-id="${choice.diabloId}" data-faction="${choice.faction}" data-realm-faction="${choice.faction}" data-realm-asset="${choice.assetUrl}" data-realm-asset-name="${choice.assetName}" data-realm-asset-status="ready" aria-label="${escapeHtml(`${choice.name}, ${choice.faction}`)}" aria-pressed="false" title="${escapeHtml(choice.assetName ?? choice.name)}"><span class="mini-class-label">${escapeHtml(choice.name)}</span><span class="mini-class-faction">${escapeHtml(choice.faction)} - Playable GLB</span></button>`,
+    )
     .join('');
   row.querySelectorAll<HTMLElement>('.mini-class').forEach((card) => {
     const select = () => {
@@ -3725,7 +3794,9 @@ function paintInfernalDiabloRoster(
       refreshOnlineSkins(cls);
     };
     card.addEventListener('click', select);
-    card.addEventListener('keydown', (event) => handleKeyboardActivation(event as KeyboardEvent, select));
+    card.addEventListener('keydown', (event) =>
+      handleKeyboardActivation(event as KeyboardEvent, select),
+    );
   });
   const first = row.querySelector<HTMLElement>('.mini-class');
   if (first) first.click();
@@ -3739,7 +3810,11 @@ const realmVisualOverridesFetched = new Set<string>();
 (window as unknown as { crRealmVisualEditor?: () => void }).crRealmVisualEditor = () => {
   void openRealmVisualEditor(realmContentForCharacterUi());
 };
-window.addEventListener('cr-realm-visuals-changed', () => paintRealmClassChoices());
+window.addEventListener('cr-realm-visuals-changed', () => {
+  const realmId = realmContentForCharacterUi().id;
+  setBodyOverrides(realmId, getRealmVisualOverrides(realmId));
+  paintRealmClassChoices();
+});
 
 let realmEditorButtonChecked = false;
 function ensureRealmEditorButton(): void {
@@ -3778,12 +3853,19 @@ function paintRealmClassChoices(): void {
   if (!realmVisualOverridesFetched.has(realm.id)) {
     realmVisualOverridesFetched.add(realm.id);
     void fetchRealmVisualOverrides(realm.id).then((loaded) => {
+      // Push the same overrides into the in-world renderer so a reassigned
+      // NPC/class body applies to the world, not just the create screen.
+      setBodyOverrides(realm.id, getRealmVisualOverrides(realm.id));
       if (loaded) paintRealmClassChoices();
     });
   }
   const row = document.querySelector<HTMLElement>('#charcreate-panel .mini-class-row');
   if (row && realm.id === 'infernal') {
-    paintInfernalDiabloRoster(row, infernalDiabloClassChoicesForRealm(realm), selectedCreateFaction(realm));
+    paintInfernalDiabloRoster(
+      row,
+      infernalDiabloClassChoicesForRealm(realm),
+      selectedCreateFaction(realm),
+    );
     return;
   }
   const choices = classChoicesForRealm(realm);
@@ -3798,7 +3880,12 @@ function paintRealmClassChoices(): void {
     const choice = byClass.get(cls);
     if (!overlay || !choice) {
       button.hidden = false;
-      button.classList.remove('realm-skinned', 'realm-coming-soon', 'realm-preview-only', 'realm-playable');
+      button.classList.remove(
+        'realm-skinned',
+        'realm-coming-soon',
+        'realm-preview-only',
+        'realm-playable',
+      );
       delete button.dataset.faction;
       delete button.dataset.realmFaction;
       delete button.dataset.realmAssetStatus;
@@ -3925,7 +4012,8 @@ async function ensureCharacterPreview(panelId: string): Promise<void> {
   characterPreviewLoadPromise = (async () => {
     const { assetsReady, CharacterPreview } = await loadGameRuntime();
     await assetsReady();
-    const containerId = panelId === '#offline-select' ? '#offline-preview-container' : '#online-preview-container';
+    const containerId =
+      panelId === '#offline-select' ? '#offline-preview-container' : '#online-preview-container';
     const container = $(containerId);
     const canvas = $('#char-preview-canvas') as HTMLCanvasElement | null;
     if (container && canvas) characterPreview = new CharacterPreview(container, canvas);
@@ -4272,7 +4360,9 @@ function realmPopulation(
 // After login the classic MMO drops you onto a Realm List screen (then character select for
 // the chosen realm). We remember the last realm and jump straight to its
 // characters, with a "Change Realm" button back to this list.
-function preferredRealmEntry(dir: import('./net/online').RealmDirectory): import('./net/online').RealmEntry | null {
+function preferredRealmEntry(
+  dir: import('./net/online').RealmDirectory,
+): import('./net/online').RealmEntry | null {
   const remembered = localStorage.getItem(LAST_REALM_KEY);
   const rememberedEntry = dir.realms.find((r) => r.name === remembered);
   if (rememberedEntry) return rememberedEntry;
@@ -4295,7 +4385,11 @@ async function enterRealmFlow(forceList = false, noCrossOriginAuto = false): Pro
     // would bounce the browser forever. Show the list and let the player pick.
     if (noCrossOriginAuto) {
       let autoOrigin = '';
-      try { autoOrigin = auto.url ? new URL(auto.url).origin : ''; } catch { autoOrigin = ''; }
+      try {
+        autoOrigin = auto.url ? new URL(auto.url).origin : '';
+      } catch {
+        autoOrigin = '';
+      }
       if (autoOrigin && autoOrigin !== window.location.origin) {
         showRealmList(dir);
         return;
@@ -4344,7 +4438,9 @@ function titleCaseStage(stage: RealmStageName): string {
 }
 
 function canUseDevStage(): boolean {
-  const roles = (window as unknown as { __crMeRoles?: { isAdmin?: boolean; isModerator?: boolean } }).__crMeRoles;
+  const roles = (
+    window as unknown as { __crMeRoles?: { isAdmin?: boolean; isModerator?: boolean } }
+  ).__crMeRoles;
   if (roles?.isAdmin || roles?.isModerator) return true;
   return (api.username ?? '').toLowerCase() === 'moveweight';
 }
@@ -4390,7 +4486,9 @@ function enterLoggedOutChrome(): void {
   const li = loginNavItem();
   if (li) li.hidden = false;
   if (document.getElementById('server-select')?.dataset.mode !== 'offline') {
-    document.querySelector<HTMLElement>('#btn-play .btn-play-label')?.replaceChildren('Log In To Play');
+    document
+      .querySelector<HTMLElement>('#btn-play .btn-play-label')
+      ?.replaceChildren('Log In To Play');
   }
 }
 
@@ -4682,7 +4780,9 @@ function setupSsoLinkSection(): void {
     if (errorEl) errorEl.textContent = '';
     try {
       const s = await api.ssoStatus();
-      statusEl.textContent = s.linked ? t('hudChrome.account.ssoLinked') : t('hudChrome.account.ssoNotLinked');
+      statusEl.textContent = s.linked
+        ? t('hudChrome.account.ssoLinked')
+        : t('hudChrome.account.ssoNotLinked');
       unlinkBtn.hidden = !s.linked;
       linkBtn.hidden = s.linked;
     } catch {
@@ -4854,63 +4954,81 @@ function showRealmList(dir?: import('./net/online').RealmDirectory): void {
   const listEl = $('#realm-list');
   const render = (d: import('./net/online').RealmDirectory) => {
     // Learn the force-SSO flag from the directory + apply it to the login UI.
-    if (d.forceSso) { (window as unknown as { __crForceSso?: boolean }).__crForceSso = true; applyForceSso?.(); }
+    if (d.forceSso) {
+      (window as unknown as { __crForceSso?: boolean }).__crForceSso = true;
+      applyForceSso?.();
+    }
     if (d.realms.length === 0) {
       listEl.innerHTML = `<div class="realm-loading">${escapeHtml(t('realm.noRealms'))}</div>`;
       return;
     }
-    const realmTypeKeys = { 'Normal': 'realmTypes.normal', 'PvP': 'realmTypes.pvp', 'RP': 'realmTypes.rp', 'RP-PvP': 'realmTypes.rpPvp' } as const;
+    const realmTypeKeys = {
+      Normal: 'realmTypes.normal',
+      PvP: 'realmTypes.pvp',
+      RP: 'realmTypes.rp',
+      'RP-PvP': 'realmTypes.rpPvp',
+    } as const;
     // Collapse the flat directory into ONE card per realm family. Each entry's
     // name parses to { family, stage }; we index the per-stage URLs so the card's
     // stage selector can route to the right backend.
     const STAGE_ORDER: readonly RealmStageName[] = ['live', 'beta', 'alpha', 'dev'];
-    const fams = new Map<string, { type: string; stages: Map<RealmStageName, { url: string; name: string }> }>();
+    const fams = new Map<
+      string,
+      { type: string; stages: Map<RealmStageName, { url: string; name: string }> }
+    >();
     const devAllowed = canUseDevStage();
     for (const r of d.realms) {
       const meta = parseRealmMeta(r.name);
       let f = fams.get(meta.family);
-      if (!f) { f = { type: r.type, stages: new Map() }; fams.set(meta.family, f); }
+      if (!f) {
+        f = { type: r.type, stages: new Map() };
+        fams.set(meta.family, f);
+      }
       f.stages.set(meta.stage, { url: r.url, name: r.name });
     }
 
-    const cardsHtml = Array.from(fams.entries()).map(([family, f]) => {
-      const c = choiceFor(family);
-      // Only offer stages this family actually advertises; Live is the default.
-      const stages = STAGE_ORDER.filter((s) => f.stages.has(s));
-      if (!f.stages.has(c.stage)) c.stage = stages.includes('live') ? 'live' : (stages[0] ?? 'live');
-      if (c.stage === 'dev' && !devAllowed) {
-        c.stage = stages.includes('live') ? 'live' : (stages[0] ?? 'live');
-        c.showStages = false;
-      }
-      const hasTestStages = stages.some((s) => s !== 'live');
-      if (!hasTestStages) {
-        c.stage = 'live';
-        c.showStages = false;
-      }
-      if (c.stage !== 'live') c.showStages = true;
-      const stageOpen = hasTestStages && c.showStages;
-      const stageBtns = stages.map((s) => {
-        const devLocked = s === 'dev' && !devAllowed;
-        const lockedAttrs = devLocked
-          ? ' disabled aria-disabled="true" title="Approved builders only"'
-          : '';
-        return `<button type="button" class="rl-stage${c.stage === s ? ' active' : ''}" data-fam="${escapeHtml(family)}" data-stage="${s}" ${s === 'live' ? '' : 'data-restricted="1"'}${lockedAttrs}>${titleCaseStage(s)}</button>`;
-      }).join('');
-      const stageControls = hasTestStages
-        ? `<label class="rc-toggle rc-stage-toggle"><input type="checkbox" class="rl-test-rings" data-fam="${escapeHtml(family)}"${stageOpen ? ' checked' : ''}/> <span>Test rings <small>${escapeHtml(titleCaseStage(c.stage))}</small></span></label>
+    const cardsHtml = Array.from(fams.entries())
+      .map(([family, f]) => {
+        const c = choiceFor(family);
+        // Only offer stages this family actually advertises; Live is the default.
+        const stages = STAGE_ORDER.filter((s) => f.stages.has(s));
+        if (!f.stages.has(c.stage))
+          c.stage = stages.includes('live') ? 'live' : (stages[0] ?? 'live');
+        if (c.stage === 'dev' && !devAllowed) {
+          c.stage = stages.includes('live') ? 'live' : (stages[0] ?? 'live');
+          c.showStages = false;
+        }
+        const hasTestStages = stages.some((s) => s !== 'live');
+        if (!hasTestStages) {
+          c.stage = 'live';
+          c.showStages = false;
+        }
+        if (c.stage !== 'live') c.showStages = true;
+        const stageOpen = hasTestStages && c.showStages;
+        const stageBtns = stages
+          .map((s) => {
+            const devLocked = s === 'dev' && !devAllowed;
+            const lockedAttrs = devLocked
+              ? ' disabled aria-disabled="true" title="Approved builders only"'
+              : '';
+            return `<button type="button" class="rl-stage${c.stage === s ? ' active' : ''}" data-fam="${escapeHtml(family)}" data-stage="${s}" ${s === 'live' ? '' : 'data-restricted="1"'}${lockedAttrs}>${titleCaseStage(s)}</button>`;
+          })
+          .join('');
+        const stageControls = hasTestStages
+          ? `<label class="rc-toggle rc-stage-toggle"><input type="checkbox" class="rl-test-rings" data-fam="${escapeHtml(family)}"${stageOpen ? ' checked' : ''}/> <span>Test rings <small>${escapeHtml(titleCaseStage(c.stage))}</small></span></label>
            <div class="rc-stages" role="group" aria-label="Stage"${stageOpen ? '' : ' hidden'}>${stageBtns}<div class="rc-stage-note">Alpha promotes to Beta after two weeks. Beta promotes to Live on release. Dev stays Dev and is approved only.</div></div>`
-        : '';
-      const typeKey = realmTypeKeys[f.type as keyof typeof realmTypeKeys];
-      const typeLabel = typeKey ? t(typeKey) : f.type;
-      const stageEntry = f.stages.get(c.stage);
-      const chars = stageEntry ? d.characters[stageEntry.name] ?? 0 : 0;
-      const charTag =
-        chars > 0
-          ? `<span class="rn-chars">${escapeHtml(tPlural('hudChrome.plurals.characterCount', chars))}</span>`
           : '';
-      // Exchange is the only cross-realm realm; flag it so the UI can note that.
-      const isExchange = /exchange/i.test(family);
-      return `<div class="realm-card" data-fam="${escapeHtml(family)}">
+        const typeKey = realmTypeKeys[f.type as keyof typeof realmTypeKeys];
+        const typeLabel = typeKey ? t(typeKey) : f.type;
+        const stageEntry = f.stages.get(c.stage);
+        const chars = stageEntry ? (d.characters[stageEntry.name] ?? 0) : 0;
+        const charTag =
+          chars > 0
+            ? `<span class="rn-chars">${escapeHtml(tPlural('hudChrome.plurals.characterCount', chars))}</span>`
+            : '';
+        // Exchange is the only cross-realm realm; flag it so the UI can note that.
+        const isExchange = /exchange/i.test(family);
+        return `<div class="realm-card" data-fam="${escapeHtml(family)}">
         <div class="rc-head">
           <div class="rc-name">${escapeHtml(family)}${charTag}<span class="rn-rec" data-rec hidden>${escapeHtml(t('realm.recommended'))}</span></div>
           <div class="rc-meta"><span class="realm-type">${escapeHtml(typeLabel)}</span><span class="realm-pop offline" data-pop data-fam="${escapeHtml(family)}">-</span></div>
@@ -4924,57 +5042,85 @@ function showRealmList(dir?: import('./net/online').RealmDirectory): void {
         ${isExchange ? `<div class="rc-note" data-i18n="realm.exchangeNote">The Exchange is the only realm where items move between realms.</div>` : ''}
         <button type="button" class="btn rc-enter" data-fam="${escapeHtml(family)}">${escapeHtml(t('realm.enter'))}</button>
       </div>`;
-    }).join('');
+      })
+      .join('');
 
     listEl.innerHTML = `<div class="rl-cards">${cardsHtml || `<div class="realm-loading">${escapeHtml(t('realm.noRealms'))}</div>`}</div>`;
 
     // Stage segmented-control clicks → update the family's chosen stage.
-    listEl.querySelectorAll<HTMLElement>('.rl-stage').forEach((b) => b.addEventListener('click', () => {
-      if ((b as HTMLButtonElement).disabled) return;
-      const fam = b.dataset.fam!;
-      const c = choiceFor(fam);
-      c.stage = b.dataset.stage as RealmStageName;
-      c.showStages = true;
-      render(d);
-    }));
-    listEl.querySelectorAll<HTMLInputElement>('.rl-test-rings').forEach((cb) => cb.addEventListener('change', () => {
-      const c = choiceFor(cb.dataset.fam!);
-      c.showStages = cb.checked;
-      if (!cb.checked) c.stage = 'live';
-      render(d);
-    }));
-    listEl.querySelectorAll<HTMLInputElement>('.rl-ladder').forEach((cb) => cb.addEventListener('change', () => {
-      choiceFor(cb.dataset.fam!).ladder = cb.checked;
-    }));
-    listEl.querySelectorAll<HTMLInputElement>('.rl-hardcore').forEach((cb) => cb.addEventListener('change', () => {
-      choiceFor(cb.dataset.fam!).hardcore = cb.checked;
-    }));
-    listEl.querySelectorAll<HTMLElement>('.rc-enter').forEach((btn) => btn.addEventListener('click', () => {
-      const fam = btn.dataset.fam!;
-      const c = choiceFor(fam);
-      const stageEntry = fams.get(fam)?.stages.get(c.stage);
-      if (!stageEntry) return;
-      enterRealmWithPopulation(stageEntry.name, stageEntry.url, c.ladder, c.hardcore);
-    }));
+    listEl.querySelectorAll<HTMLElement>('.rl-stage').forEach((b) =>
+      b.addEventListener('click', () => {
+        if ((b as HTMLButtonElement).disabled) return;
+        const fam = b.dataset.fam!;
+        const c = choiceFor(fam);
+        c.stage = b.dataset.stage as RealmStageName;
+        c.showStages = true;
+        render(d);
+      }),
+    );
+    listEl.querySelectorAll<HTMLInputElement>('.rl-test-rings').forEach((cb) =>
+      cb.addEventListener('change', () => {
+        const c = choiceFor(cb.dataset.fam!);
+        c.showStages = cb.checked;
+        if (!cb.checked) c.stage = 'live';
+        render(d);
+      }),
+    );
+    listEl.querySelectorAll<HTMLInputElement>('.rl-ladder').forEach((cb) =>
+      cb.addEventListener('change', () => {
+        choiceFor(cb.dataset.fam!).ladder = cb.checked;
+      }),
+    );
+    listEl.querySelectorAll<HTMLInputElement>('.rl-hardcore').forEach((cb) =>
+      cb.addEventListener('change', () => {
+        choiceFor(cb.dataset.fam!).hardcore = cb.checked;
+      }),
+    );
+    listEl.querySelectorAll<HTMLElement>('.rc-enter').forEach((btn) =>
+      btn.addEventListener('click', () => {
+        const fam = btn.dataset.fam!;
+        const c = choiceFor(fam);
+        const stageEntry = fams.get(fam)?.stages.get(c.stage);
+        if (!stageEntry) return;
+        enterRealmWithPopulation(stageEntry.name, stageEntry.url, c.ladder, c.hardcore);
+      }),
+    );
     // recommend the lowest-population online realm; check each family's chosen stage.
-    let bestPlayers = Infinity, bestFam = '';
-    void Promise.all(Array.from(fams.entries()).map(async ([family, f]) => {
-      const c = choiceFor(family);
-      const entry = f.stages.get(c.stage);
-      const st = await api.realmStatus(entry?.url || '');
-      const sub = listEl.querySelector(`[data-sub][data-fam="${CSS.escape(family)}"]`) as HTMLElement | null;
-      const popEl = listEl.querySelector(`[data-pop][data-fam="${CSS.escape(family)}"]`) as HTMLElement | null;
-      if (sub) sub.textContent = st.online ? t('realm.onlineNow', { count: st.players }) : t('realm.down');
-      if (popEl) {
-        const pop = realmPopulation(st.online, st.players);
-        popEl.textContent = t(pop.labelKey); popEl.className = `realm-pop ${pop.cls}`;
-        const popTip = t(pop.tipKey);
-        popEl.title = popTip;
-        popEl.setAttribute('aria-label', popTip);
-      }
-      if (st.online && st.players < bestPlayers) { bestPlayers = st.players; bestFam = family; }
-    })).then(() => {
-      if (bestFam) listEl.querySelector(`.realm-card[data-fam="${CSS.escape(bestFam)}"] [data-rec]`)?.removeAttribute('hidden');
+    let bestPlayers = Infinity,
+      bestFam = '';
+    void Promise.all(
+      Array.from(fams.entries()).map(async ([family, f]) => {
+        const c = choiceFor(family);
+        const entry = f.stages.get(c.stage);
+        const st = await api.realmStatus(entry?.url || '');
+        const sub = listEl.querySelector(
+          `[data-sub][data-fam="${CSS.escape(family)}"]`,
+        ) as HTMLElement | null;
+        const popEl = listEl.querySelector(
+          `[data-pop][data-fam="${CSS.escape(family)}"]`,
+        ) as HTMLElement | null;
+        if (sub)
+          sub.textContent = st.online
+            ? t('realm.onlineNow', { count: st.players })
+            : t('realm.down');
+        if (popEl) {
+          const pop = realmPopulation(st.online, st.players);
+          popEl.textContent = t(pop.labelKey);
+          popEl.className = `realm-pop ${pop.cls}`;
+          const popTip = t(pop.tipKey);
+          popEl.title = popTip;
+          popEl.setAttribute('aria-label', popTip);
+        }
+        if (st.online && st.players < bestPlayers) {
+          bestPlayers = st.players;
+          bestFam = family;
+        }
+      }),
+    ).then(() => {
+      if (bestFam)
+        listEl
+          .querySelector(`.realm-card[data-fam="${CSS.escape(bestFam)}"] [data-rec]`)
+          ?.removeAttribute('hidden');
     });
   };
   if (dir) render(dir);
@@ -4995,7 +5141,11 @@ function selectRealm(entry: import('./net/online').RealmEntry): void {
   // /api call same-origin. Carry the auth token in the hash (same pickup path as
   // SSO) so the player stays logged in on the target origin.
   let targetOrigin = '';
-  try { targetOrigin = entry.url ? new URL(entry.url).origin : ''; } catch { targetOrigin = ''; }
+  try {
+    targetOrigin = entry.url ? new URL(entry.url).origin : '';
+  } catch {
+    targetOrigin = '';
+  }
   const here = window.location.origin;
   if (targetOrigin && targetOrigin !== here) {
     const hash = new URLSearchParams({
@@ -5020,13 +5170,22 @@ function selectRealm(entry: import('./net/online').RealmEntry): void {
 // cross-origin navigation to the realm's own host (where createCharacter runs).
 const POP_PREF_KEY = 'cr_pop_pref';
 function setPopulationPref(ladder: boolean, hardcore: boolean): void {
-  try { sessionStorage.setItem(POP_PREF_KEY, JSON.stringify({ ladder, hardcore })); } catch { /* noop */ }
+  try {
+    sessionStorage.setItem(POP_PREF_KEY, JSON.stringify({ ladder, hardcore }));
+  } catch {
+    /* noop */
+  }
 }
 function getPopulationPref(): { ladder: boolean; hardcore: boolean } {
   try {
     const raw = sessionStorage.getItem(POP_PREF_KEY);
-    if (raw) { const p = JSON.parse(raw); return { ladder: !!p.ladder, hardcore: !!p.hardcore }; }
-  } catch { /* noop */ }
+    if (raw) {
+      const p = JSON.parse(raw);
+      return { ladder: !!p.ladder, hardcore: !!p.hardcore };
+    }
+  } catch {
+    /* noop */
+  }
   return { ladder: false, hardcore: false };
 }
 // Pre-select the character-create ladder/hardcore checkboxes from the population
@@ -5043,13 +5202,22 @@ function applyPopulationPrefToCharCreate(): void {
 // Same cross-origin handling as selectRealm; the population choice rides along
 // (sessionStorage locally + ?pop= in the hash for the cross-origin hop) so the
 // character-create screen on the target realm pre-selects the right population.
-function enterRealmWithPopulation(name: string, url: string, ladder: boolean, hardcore: boolean): void {
+function enterRealmWithPopulation(
+  name: string,
+  url: string,
+  ladder: boolean,
+  hardcore: boolean,
+): void {
   localStorage.setItem(LAST_REALM_KEY, name);
   persistActiveRealmFromDirectoryName(name);
   setPopulationPref(ladder, hardcore);
   const pop = `${ladder ? 'l' : ''}${hardcore ? 'h' : ''}` || 'n';
   let targetOrigin = '';
-  try { targetOrigin = url ? new URL(url).origin : ''; } catch { targetOrigin = ''; }
+  try {
+    targetOrigin = url ? new URL(url).origin : '';
+  } catch {
+    targetOrigin = '';
+  }
   const here = window.location.origin;
   if (targetOrigin && targetOrigin !== here) {
     const hash = new URLSearchParams({
@@ -5473,6 +5641,14 @@ function syncCharselectEnterButton(): void {
 }
 
 async function enterWorld(c: CharacterSummary, button?: HTMLButtonElement): Promise<void> {
+  // Load the operator's body overrides before the world renders so any reassigned
+  // NPC/class body applies in-world from the first frame (all entry paths pass here).
+  const enterRealmId = realmContentForCharacterUi().id;
+  if (!realmVisualOverridesFetched.has(enterRealmId)) {
+    realmVisualOverridesFetched.add(enterRealmId);
+    await fetchRealmVisualOverrides(enterRealmId).catch(() => false);
+  }
+  setBodyOverrides(enterRealmId, getRealmVisualOverrides(enterRealmId));
   try {
     if (button) {
       button.disabled = true;
@@ -6170,14 +6346,12 @@ function renderReleaseBody(md: string): string {
   const inline = (s: string): string =>
     esc(s)
       // [text](url), only http(s) links survive; anything else renders as text.
-      .replace(
-        /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
-        (_m, text, url) => {
-          const rawUrl = String(url);
-          if (rawUrl.includes('github.com/') && rawUrl.includes('/cryptic-realm')) return String(text);
-          return `<a href="${url}" target="_blank" rel="noopener noreferrer">${text}</a>`;
-        },
-      )
+      .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, (_m, text, url) => {
+        const rawUrl = String(url);
+        if (rawUrl.includes('github.com/') && rawUrl.includes('/cryptic-realm'))
+          return String(text);
+        return `<a href="${url}" target="_blank" rel="noopener noreferrer">${text}</a>`;
+      })
       .replace(/`([^`]+)`/g, '<code>$1</code>')
       .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
       .replace(/(^|[^*])\*([^*]+)\*/g, '$1<em>$2</em>');
@@ -6229,7 +6403,8 @@ async function loadNews(): Promise<void> {
     releaseError = true;
   }
   newsLoading = false;
-  const esc = (s: string): string => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
+  const esc = (s: string): string =>
+    s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
   const pinned: Array<{ title: string; body: string; tag: string; url: string; realm: string }> = [
     {
       title: t('news.tokenTitle'),
@@ -6260,32 +6435,42 @@ async function loadNews(): Promise<void> {
       realm: 'all',
     },
   ];
-  const pinnedHtml = pinned.map((r) => {
-    const external = /^https?:\/\//.test(r.url);
-    return `<article class="news-item cr-news-pinned" data-news-item data-realm="${esc(r.realm)}">`
-      + `<div class="news-item-head"><h3 class="news-item-title">${esc(r.title)}</h3><span class="news-tag">${esc(r.tag)}</span></div>`
-      + `<div class="news-body"><p>${esc(r.body)}</p></div>`
-      + `<div class="news-item-foot"><a class="news-link" href="${esc(r.url)}"${external ? ' target="_blank" rel="noopener noreferrer"' : ''}>${t('news.openLink')}</a></div>`
-      + `</article>`;
-  }).join('');
-  const releasesHtml = releases.map((r) => {
-    const when = r.publishedAt
-      ? `<span class="news-date">${formatDateTime(new Date(r.publishedAt), { dateStyle: 'medium' })}</span>`
-      : '';
-    const tag = r.tag ? `<span class="news-tag">${esc(r.tag)}</span>` : '';
-    const badge = r.prerelease ? `<span class="news-badge">${t('news.prerelease')}</span>` : '';
-    const title = esc(r.name || r.tag || '');
-    const link = r.url
-      ? `<div class="news-item-foot"><a class="news-link" href="${esc(r.url)}" target="_blank" rel="noopener noreferrer">${t('news.viewOnGithub')}</a></div>`
-      : '';
-    return `<article class="news-item" data-news-item data-realm="all">`
-      + `<div class="news-item-head">`
-      + `<h3 class="news-item-title">${title}</h3><div class="news-item-meta">${tag}${badge}${when}</div></div>`
-      + `<div class="news-body">${renderReleaseBody(r.body)}</div>${link}</article>`;
-  }).join('');
+  const pinnedHtml = pinned
+    .map((r) => {
+      const external = /^https?:\/\//.test(r.url);
+      return (
+        `<article class="news-item cr-news-pinned" data-news-item data-realm="${esc(r.realm)}">` +
+        `<div class="news-item-head"><h3 class="news-item-title">${esc(r.title)}</h3><span class="news-tag">${esc(r.tag)}</span></div>` +
+        `<div class="news-body"><p>${esc(r.body)}</p></div>` +
+        `<div class="news-item-foot"><a class="news-link" href="${esc(r.url)}"${external ? ' target="_blank" rel="noopener noreferrer"' : ''}>${t('news.openLink')}</a></div>` +
+        `</article>`
+      );
+    })
+    .join('');
+  const releasesHtml = releases
+    .map((r) => {
+      const when = r.publishedAt
+        ? `<span class="news-date">${formatDateTime(new Date(r.publishedAt), { dateStyle: 'medium' })}</span>`
+        : '';
+      const tag = r.tag ? `<span class="news-tag">${esc(r.tag)}</span>` : '';
+      const badge = r.prerelease ? `<span class="news-badge">${t('news.prerelease')}</span>` : '';
+      const title = esc(r.name || r.tag || '');
+      const link = r.url
+        ? `<div class="news-item-foot"><a class="news-link" href="${esc(r.url)}" target="_blank" rel="noopener noreferrer">${t('news.viewOnGithub')}</a></div>`
+        : '';
+      return (
+        `<article class="news-item" data-news-item data-realm="all">` +
+        `<div class="news-item-head">` +
+        `<h3 class="news-item-title">${title}</h3><div class="news-item-meta">${tag}${badge}${when}</div></div>` +
+        `<div class="news-body">${renderReleaseBody(r.body)}</div>${link}</article>`
+      );
+    })
+    .join('');
   const fallback = releaseError
     ? `<div class="news-error">${t('news.error')}</div>`
-    : (releases.length === 0 ? `<div class="news-empty">${t('news.empty')}</div>` : '');
+    : releases.length === 0
+      ? `<div class="news-empty">${t('news.empty')}</div>`
+      : '';
   host.innerHTML = `${pinnedHtml}${releasesHtml}${fallback}`;
 }
 
@@ -7942,9 +8127,12 @@ function wireStartScreens(): void {
       serverValue.textContent = t(VALUE_KEY[mode]);
       if (btnPlayLabel) {
         btnPlayLabel.removeAttribute('data-i18n');
-        btnPlayLabel.textContent = mode === 'offline'
-          ? 'Start Offline'
-          : (api.token || readCrypticSession() ? 'Continue' : 'Log In To Play');
+        btnPlayLabel.textContent =
+          mode === 'offline'
+            ? 'Start Offline'
+            : api.token || readCrypticSession()
+              ? 'Continue'
+              : 'Log In To Play';
       }
       subParts.forEach((part) => {
         part.toggleAttribute('hidden', part.dataset.mode !== mode);
@@ -8253,7 +8441,9 @@ function wireStartScreens(): void {
         void mountUserDropdown();
         mountWalletPanel();
       }
-    } catch { /* storage unavailable */ }
+    } catch {
+      /* storage unavailable */
+    }
     try {
       await completeOnlineAuth();
     } catch (err) {
@@ -8285,7 +8475,11 @@ function wireStartScreens(): void {
     const realmIdParam = ssoParams.get('realm_id');
     if (isRealmId(realmIdParam)) {
       persistActiveRealm(realmIdParam);
-      try { window.dispatchEvent(new CustomEvent('cr-realm-change')); } catch { /* noop */ }
+      try {
+        window.dispatchEvent(new CustomEvent('cr-realm-change'));
+      } catch {
+        /* noop */
+      }
     }
     // Realm hop (auth_via=realm): remember the realm we hopped here FOR, so
     // enterRealmFlow below resumes it instead of this origin's stale
@@ -8294,15 +8488,25 @@ function wireStartScreens(): void {
     const viaRealmHop = ssoParams.get('auth_via') === 'realm';
     const hopRealmName = ssoParams.get('realm');
     if (viaRealmHop && hopRealmName) {
-      try { localStorage.setItem(LAST_REALM_KEY, hopRealmName); } catch { /* noop */ }
+      try {
+        localStorage.setItem(LAST_REALM_KEY, hopRealmName);
+      } catch {
+        /* noop */
+      }
     }
     // CR overlay: also persist to the dashboard's localStorage so the
     // logged-in header dropdown (src/ui/cryptic/user_dropdown.ts) shows
     // immediately. The dashboards (/me/, /mod/, /admin/) read the same keys.
     try {
       writeCrypticSession({ token: ssoToken, username: ssoUser });
-    } catch { /* storage unavailable */ }
-    try { history.replaceState(null, '', window.location.pathname + window.location.search); } catch { /* noop */ }
+    } catch {
+      /* storage unavailable */
+    }
+    try {
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+    } catch {
+      /* noop */
+    }
     // Re-mount the header dropdown with the new identity.
     void mountUserDropdown();
     mountWalletPanel();
@@ -8324,11 +8528,17 @@ function wireStartScreens(): void {
     if (hash) adoptSsoHash(hash);
   });
   void installNativeSsoReturnHandler((hash) => {
-    try { history.replaceState(null, '', window.location.pathname + window.location.search + hash); } catch { /* noop */ }
+    try {
+      history.replaceState(null, '', window.location.pathname + window.location.search + hash);
+    } catch {
+      /* noop */
+    }
     adoptSsoHash(hash);
   });
   wireNativeSsoLink();
-  adoptSsoHash(CAPTURED_SSO_HASH || ((typeof window !== 'undefined' ? window.location.hash : '') ?? ''));
+  adoptSsoHash(
+    CAPTURED_SSO_HASH || ((typeof window !== 'undefined' ? window.location.hash : '') ?? ''),
+  );
 
   const loginForm = $('#login-panel') as HTMLFormElement;
   const userInput = $('#login-user') as HTMLInputElement;
@@ -8346,7 +8556,9 @@ function wireStartScreens(): void {
     if (!(window as unknown as { __crForceSso?: boolean }).__crForceSso) return;
     document.body.classList.add('cr-force-sso');
     // Required inputs would block any (now-hidden) submit path; relax them.
-    [userInput, passInput, totpInput].forEach((el) => { if (el) el.required = false; });
+    [userInput, passInput, totpInput].forEach((el) => {
+      if (el) el.required = false;
+    });
   };
   applyForceSso();
 
@@ -8356,26 +8568,31 @@ function wireStartScreens(): void {
   });
 
   // Sync aria-invalid and error elements dynamically on interaction
-  [userInput, passInput, totpInput, emailInput].filter((input): input is HTMLInputElement => !!input).forEach((input) => {
-    input.addEventListener('blur', () => {
-      const isValid = syncInputAriaState(input);
-      input.classList.toggle('user-invalid-fallback', !isValid);
-    });
-    input.addEventListener('input', () => {
-      // Clear general login error on typing
-      loginError('');
-      if (input.classList.contains('user-invalid-fallback') || input.hasAttribute('aria-invalid')) {
+  [userInput, passInput, totpInput, emailInput]
+    .filter((input): input is HTMLInputElement => !!input)
+    .forEach((input) => {
+      input.addEventListener('blur', () => {
         const isValid = syncInputAriaState(input);
         input.classList.toggle('user-invalid-fallback', !isValid);
+      });
+      input.addEventListener('input', () => {
+        // Clear general login error on typing
+        loginError('');
+        if (
+          input.classList.contains('user-invalid-fallback') ||
+          input.hasAttribute('aria-invalid')
+        ) {
+          const isValid = syncInputAriaState(input);
+          input.classList.toggle('user-invalid-fallback', !isValid);
 
-        // Update error display element
-        const errorEl = $(`#${input.id}-error`);
-        if (errorEl) {
-          errorEl.style.display = isValid ? 'none' : 'block';
+          // Update error display element
+          const errorEl = $(`#${input.id}-error`);
+          if (errorEl) {
+            errorEl.style.display = isValid ? 'none' : 'block';
+          }
         }
-      }
+      });
     });
-  });
 
   // Standard login / create-account UX: one form that switches between two modes
   // via a link. The mode drives the title, primary button, prompt, and submit.
@@ -8435,12 +8652,14 @@ function wireStartScreens(): void {
   $('#btn-login-back').addEventListener('click', (e) => {
     e.preventDefault();
     // Clear validation state on back
-    [userInput, passInput, totpInput].filter((input): input is HTMLInputElement => !!input).forEach((input) => {
-      input.classList.remove('user-invalid-fallback');
-      input.removeAttribute('aria-invalid');
-      const errEl = $(`#${input.id}-error`);
-      if (errEl) errEl.style.display = 'none';
-    });
+    [userInput, passInput, totpInput]
+      .filter((input): input is HTMLInputElement => !!input)
+      .forEach((input) => {
+        input.classList.remove('user-invalid-fallback');
+        input.removeAttribute('aria-invalid');
+        const errEl = $(`#${input.id}-error`);
+        if (errEl) errEl.style.display = 'none';
+      });
     loginError('');
     show('#mode-select');
   });
@@ -8788,8 +9007,10 @@ function wireStartScreens(): void {
     newCharNameInput.removeAttribute('aria-invalid');
 
     try {
-      const ladder = (document.getElementById('new-char-ladder') as HTMLInputElement | null)?.checked ?? false;
-      const hardcore = (document.getElementById('new-char-hardcore') as HTMLInputElement | null)?.checked ?? false;
+      const ladder =
+        (document.getElementById('new-char-ladder') as HTMLInputElement | null)?.checked ?? false;
+      const hardcore =
+        (document.getElementById('new-char-hardcore') as HTMLInputElement | null)?.checked ?? false;
       await api.createCharacter(
         name,
         clsEl.dataset.class as PlayerClass,
@@ -9490,7 +9711,9 @@ function wireStartScreens(): void {
   // whichever picker panel is currently visible; ensureCharacterPreview sets the
   // selected class for us. decorateClassChips paints the mini-class chips now.
   decorateClassChips();
-  const activePanelId = ['#charselect-panel', '#charcreate-panel', '#offline-select'].find((id) => !$(id).hasAttribute('hidden'));
+  const activePanelId = ['#charselect-panel', '#charcreate-panel', '#offline-select'].find(
+    (id) => !$(id).hasAttribute('hidden'),
+  );
   if (activePanelId) {
     void ensureCharacterPreview(activePanelId).catch((err) => {
       console.warn('character preview unavailable:', err);
@@ -9538,11 +9761,19 @@ function initHomepageTrailer(): void {
   const saveData = Boolean(conn && conn.saveData);
   const params = new URLSearchParams(window.location.search);
   const lowGraphics = params.get('gfx') === 'low' || params.has('lowgfx');
-  const realmEntryActive = Boolean(api.token) ||
+  const realmEntryActive =
+    Boolean(api.token) ||
     window.location.hash.includes('auth_token=') ||
     document.body.dataset.pendingOfflineStart === '1';
 
-  if (reducedMotion || reducedData || saveData || lowGraphics || realmEntryActive || isPhoneTouchDevice()) {
+  if (
+    reducedMotion ||
+    reducedData ||
+    saveData ||
+    lowGraphics ||
+    realmEntryActive ||
+    isPhoneTouchDevice()
+  ) {
     // Keep the static poster during login/game entry and on constrained devices.
     video.preload = 'none';
     if (fade) fade.classList.add('revealed'); // lift the black wipe without animating
@@ -9550,10 +9781,14 @@ function initHomepageTrailer(): void {
     return;
   }
 
-  video.addEventListener('playing', () => {
-    backdrop.classList.add('trailer-ready', 'trailer-playing');
-    runFadeIn();
-  }, { once: true });
+  video.addEventListener(
+    'playing',
+    () => {
+      backdrop.classList.add('trailer-ready', 'trailer-playing');
+      runFadeIn();
+    },
+    { once: true },
+  );
 
   // Hide the loop seam: dip to black ~0.35s before the end, then fade back in
   // right after the wrap. The `loop` attribute restarts playback seamlessly
@@ -9576,9 +9811,11 @@ function initHomepageTrailer(): void {
     lastTime = currentTime;
   };
 
-  const rvfc = (video as unknown as {
-    requestVideoFrameCallback?: (cb: (now: number, meta: { mediaTime: number }) => void) => void;
-  }).requestVideoFrameCallback;
+  const rvfc = (
+    video as unknown as {
+      requestVideoFrameCallback?: (cb: (now: number, meta: { mediaTime: number }) => void) => void;
+    }
+  ).requestVideoFrameCallback;
   if (typeof rvfc === 'function') {
     const onFrame = (_now: number, meta: { mediaTime: number }): void => {
       onPlayhead(meta.mediaTime);

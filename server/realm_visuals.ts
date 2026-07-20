@@ -91,7 +91,7 @@ async function adminAccountId(req: http.IncomingMessage): Promise<number | null>
   const m = /^Bearer ([a-f0-9]{64})$/.exec(req.headers.authorization ?? '');
   if (!m) return null;
   const scoped = await accountAndScopeForToken(m[1]);
-  if (!scoped || scoped.scope !== 'full') return null;
+  if (scoped?.scope !== 'full') return null;
   return (await isAdminAccount(scoped.accountId)) ? scoped.accountId : null;
 }
 

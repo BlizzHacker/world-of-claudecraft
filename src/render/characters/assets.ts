@@ -24,6 +24,7 @@ import {
   visibleAttachmentsForGraphics,
   visualAssetUrlForGraphics,
 } from './manifest';
+import { chooseExternalPreviewClipName } from './preview_clip';
 import { mergeSkinnedParts } from './rig_merge';
 
 const DEFAULT_TINT_STRENGTH = 0.4;
@@ -695,6 +696,16 @@ export function prepareVisual(key: string): PreparedVisual {
   const def = VISUALS[key];
   if (!def) throw new Error(`unknown visual key: ${key}`);
   const gltf = resolvedGltf(def.url);
+
+  // Admin body-override GLBs carry unknown clip names: detect the GLB's own
+  // idle/first animation and drive every state from it (the override def is a
+  // unique per-URL entry, so mutating its ClipMap once is safe). No animations
+  // leaves it in the rest pose rather than throwing.
+  if (def.autoClip) {
+    const names = gltf.animations.map((a) => a.name);
+    const chosen = chooseExternalPreviewClipName(names) ?? names[0] ?? '';
+    def.clips = { idle: chosen, walk: chosen, run: chosen, attack: [chosen], death: chosen };
+  }
 
   const clips = new Map<string, THREE.AnimationClip>();
   for (const clip of gltf.animations) clips.set(clip.name, clip);

@@ -41,6 +41,11 @@ export function clearRealmVisualOverrides(): void {
   overridesByRealm = {};
 }
 
+/** The full override map for a realm (for pushing into the in-world renderer). */
+export function getRealmVisualOverrides(realm: string): Record<string, RealmVisualOverrideEntry> {
+  return overridesByRealm[realm] ?? {};
+}
+
 /**
  * Fetch the override set for a realm and cache it. Best-effort: any failure
  * leaves the compiled defaults in place. Returns true if it loaded a document.
