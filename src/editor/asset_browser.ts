@@ -10,7 +10,12 @@ import { ASSET_CATALOG, ASSET_CATEGORIES } from './asset_catalog.generated';
 import { cachedAssetThumb, requestAssetThumb } from './asset_thumbs';
 import { hashHue } from './asset_thumbs_core';
 import { el } from './dom';
-import { deleteUserAsset, EditorApiError, listMyAssets, signedIn } from './net';
+import {
+  clearLibraryAssets,
+  listLibraryAssets,
+  registerLibraryAssets,
+} from './library_assets';
+import { deleteUserAsset, EditorApiError, listAssetLibrary, listMyAssets, signedIn } from './net';
 import { editorErrorKey } from './server_errors_core';
 import {
   clearUserAssets,
@@ -21,6 +26,7 @@ import {
 } from './user_assets';
 
 const UPLOADED_TAB = 'uploaded';
+const LIBRARY_TAB = 'arcforge-library';
 const MAX_GRID_ITEMS = 220;
 const SEARCH_DEBOUNCE_MS = 120;
 // Cached thumbnails are ~15 KB canvases; cap the cache so a long session
@@ -103,10 +109,17 @@ export class AssetBrowser {
   private readonly grid: HTMLElement;
   private readonly search: HTMLInputElement;
   private readonly note: HTMLElement;
+  private readonly pager: HTMLElement;
   private category: string = ASSET_CATEGORIES[0] ?? 'props';
   private selectedId: string | null = null;
   private uploadedLoaded = false;
   private uploadedLoading = false;
+  private libraryLoaded = false;
+  private libraryLoading = false;
+  private libraryLoadFailed = false;
+  private libraryPage = 1;
+  private libraryTotal = 0;
+  private libraryRequest = 0;
   private searchTimer = 0;
   private readonly thumbCache = new Map<string, HTMLCanvasElement>();
   // Ids the grid currently shows: the cheap stale-skip probe for queued 3D
@@ -129,7 +142,14 @@ export class AssetBrowser {
     this.search.setAttribute('aria-label', t('editor.assets.search'));
     this.search.addEventListener('input', () => {
       window.clearTimeout(this.searchTimer);
-      this.searchTimer = window.setTimeout(() => this.renderGrid(), SEARCH_DEBOUNCE_MS);
+      this.searchTimer = window.setTimeout(() => {
+        if (this.category === LIBRARY_TAB) {
+          this.libraryPage = 1;
+          void this.loadLibrary();
+        } else {
+          this.renderGrid();
+        }
+      }, SEARCH_DEBOUNCE_MS);
     });
     this.search.addEventListener('keydown', (ev) => ev.stopPropagation());
     head.appendChild(this.search);
@@ -146,6 +166,10 @@ export class AssetBrowser {
     this.grid = el('div', 'ed-assets-grid');
     this.root.appendChild(this.grid);
 
+    this.pager = el('div', 'ed-assets-tabs');
+    this.pager.style.display = 'none';
+    this.root.appendChild(this.pager);
+
     this.renderTabs();
     this.renderGrid();
     parent.appendChild(this.root);
@@ -154,6 +178,7 @@ export class AssetBrowser {
   setVisible(on: boolean): void {
     this.root.style.display = on ? '' : 'none';
     if (on && this.category === UPLOADED_TAB) void this.loadUploaded();
+    if (on && this.category === LIBRARY_TAB) void this.loadLibrary();
   }
 
   get selectedAssetId(): string | null {
@@ -178,6 +203,13 @@ export class AssetBrowser {
         count: CATEGORY_COUNTS.get(c) ?? 0,
       }),
     }));
+    cats.push({
+      id: LIBRARY_TAB,
+      label: t('editor.assets.categoryTab', {
+        category: t('editor.assets.title'),
+        count: this.libraryTotal,
+      }),
+    });
     cats.push({ id: UPLOADED_TAB, label: t('editor.assets.uploadedTab') });
     for (const c of cats) {
       const b = document.createElement('button');
@@ -189,8 +221,10 @@ export class AssetBrowser {
       b.textContent = c.label;
       b.addEventListener('click', () => {
         this.category = c.id;
+        this.libraryPage = 1;
         this.renderTabs();
         if (c.id === UPLOADED_TAB) void this.loadUploaded();
+        if (c.id === LIBRARY_TAB) void this.loadLibrary();
         this.renderGrid();
       });
       this.tabs.appendChild(b);
@@ -217,7 +251,43 @@ export class AssetBrowser {
     }
   }
 
+  private async loadLibrary(): Promise<void> {
+    const request = ++this.libraryRequest;
+    this.libraryLoading = true;
+    this.libraryLoadFailed = false;
+    this.renderGrid();
+    try {
+      const result = await listAssetLibrary({
+        page: this.libraryPage,
+        limit: MAX_GRID_ITEMS,
+        q: this.search.value.trim(),
+      });
+      if (request !== this.libraryRequest) return;
+      clearLibraryAssets();
+      registerLibraryAssets(result.assets);
+      this.libraryPage = result.page;
+      this.libraryTotal = result.total;
+      this.libraryLoaded = true;
+      this.renderTabs();
+    } catch {
+      if (request !== this.libraryRequest) return;
+      this.libraryLoadFailed = true;
+    } finally {
+      if (request === this.libraryRequest) {
+        this.libraryLoading = false;
+        if (this.category === LIBRARY_TAB) this.renderGrid();
+      }
+    }
+  }
+
   private entries(): Entry[] {
+    if (this.category === LIBRARY_TAB) {
+      return listLibraryAssets().map((asset) => ({
+        id: asset.assetId,
+        label: asset.name,
+        category: asset.group,
+      }));
+    }
     if (this.category === UPLOADED_TAB) {
       return listUserAssets().map((a) => ({
         id: userAssetIdFor(a.sha256),
@@ -238,6 +308,18 @@ export class AssetBrowser {
     this.grid.innerHTML = '';
     this.note.style.display = 'none';
     this.gridIds = new Set();
+    this.pager.style.display = 'none';
+    this.pager.innerHTML = '';
+    if (this.category === LIBRARY_TAB && this.libraryLoading) {
+      this.note.textContent = t('editor.openDrawer.loading');
+      this.note.style.display = '';
+      return;
+    }
+    if (this.category === LIBRARY_TAB && this.libraryLoadFailed) {
+      this.note.textContent = t('editor.openDrawer.loadFailed');
+      this.note.style.display = '';
+      return;
+    }
     if (this.category === UPLOADED_TAB) {
       if (!signedIn()) {
         this.note.textContent = t('editor.assets.uploadedSignIn');
@@ -264,6 +346,31 @@ export class AssetBrowser {
       return;
     }
     for (const entry of items) this.grid.appendChild(this.cell(entry));
+    if (this.category === LIBRARY_TAB && this.libraryLoaded) this.renderLibraryPager();
+  }
+
+  private renderLibraryPager(): void {
+    const pageCount = Math.max(1, Math.ceil(this.libraryTotal / MAX_GRID_ITEMS));
+    if (pageCount <= 1) return;
+    this.pager.style.display = '';
+    const prev = document.createElement('button');
+    prev.type = 'button';
+    prev.textContent = t('editor.openDrawer.prev');
+    prev.disabled = this.libraryPage <= 1;
+    prev.addEventListener('click', () => {
+      this.libraryPage = Math.max(1, this.libraryPage - 1);
+      void this.loadLibrary();
+    });
+    const page = el('span', '', t('editor.openDrawer.page', { page: this.libraryPage }));
+    const next = document.createElement('button');
+    next.type = 'button';
+    next.textContent = t('editor.openDrawer.next');
+    next.disabled = this.libraryPage >= pageCount;
+    next.addEventListener('click', () => {
+      this.libraryPage = Math.min(pageCount, this.libraryPage + 1);
+      void this.loadLibrary();
+    });
+    this.pager.append(prev, page, next);
   }
 
   /** Thumbnail canvases are deterministic per asset id: cache and reuse them. */

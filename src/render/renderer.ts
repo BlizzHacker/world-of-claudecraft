@@ -114,7 +114,9 @@ import {
   ensurePropLoaded,
 } from './props';
 import { buildGroundQuestObject } from './quest_objects';
+import { npcStructureObjectId } from './npc_structures';
 import { isOwnedPetHostile } from './reaction';
+import { remotePropRef } from './remote_prop';
 import { RenderBudgetGovernor, type RenderBudgetState } from './render_budget';
 import { downscaleDims } from './screenshot';
 import { drapeRingLocalY } from './selection_ring';
@@ -2501,6 +2503,7 @@ export class Renderer {
     const builtModels = new Set<string>();
     for (const npc of Object.values(NPCS)) {
       if (performance.now() >= deadline) break;
+      if (npcStructureObjectId(npc.id)) continue;
       const entity = this.prewarmEntity('npc', npc.id, npc.color, 1);
       const modelKey = visualKeyFor(entity);
       if (builtModels.has(modelKey)) continue;
@@ -3442,9 +3445,9 @@ export class Renderer {
       wrap.add(mesh);
     };
 
-    if (key.startsWith('forged:')) {
-      const name = key.slice('forged:'.length);
-      const url = `/forged/${name.split('/').map(encodeURIComponent).join('/')}.glb`;
+    const remote = remotePropRef(key);
+    if (remote) {
+      const { cacheKey, url } = remote;
       const place = (gltf: { scene: THREE.Object3D; animations?: THREE.AnimationClip[] }) => {
         try {
           const inst = buildForgedInstance(gltf.scene);
@@ -3464,7 +3467,7 @@ export class Renderer {
           console.error('[worldbuilder] forged build failed', url, err);
         }
       };
-      const cached = forgedGltfCache.get(name);
+      const cached = forgedGltfCache.get(cacheKey);
       if (cached) {
         place(cached);
         return;
@@ -3472,7 +3475,7 @@ export class Renderer {
       wrap.add(placeholder());
       loadGltf(url)
         .then((gltf) => {
-          forgedGltfCache.set(name, gltf);
+          forgedGltfCache.set(cacheKey, gltf);
           place(gltf as { scene: THREE.Object3D; animations?: THREE.AnimationClip[] });
         })
         .catch((err) => {
@@ -3625,6 +3628,11 @@ export class Renderer {
       sparkle.scale.set(0.9, 0.9, 1);
       sparkle.position.y = 1.35;
       group.add(sparkle);
+    } else if (e.kind === 'npc' && npcStructureObjectId(e.templateId)) {
+      const built = buildGroundQuestObject(npcStructureObjectId(e.templateId)!, e.id);
+      body = built.group;
+      height = built.height;
+      objectMesh = body;
     } else if (e.kind === 'mob' && e.templateId === VALE_CUP_BALL_TEMPLATE) {
       // The boarball: bespoke stitched-leather sphere (an inert mob entity
       // would otherwise dress as a generic bandit rig). Keeps the default

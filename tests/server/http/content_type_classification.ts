@@ -118,6 +118,7 @@ export const API_CONTENT_TYPE: Readonly<Record<string, ContentTypeClass>> = {
   '/api/github': PROBLEM_JSON,
   '/api/woc/balance': PROBLEM_JSON,
   '/api/forged-props': PROBLEM_JSON,
+  '/api/asset-library': PROBLEM_JSON,
   '/api/daily-rewards': PROBLEM_JSON,
   '/api/daily-rewards/leaderboard': PROBLEM_JSON,
   '/api/daily-rewards/spin': PROBLEM_JSON,

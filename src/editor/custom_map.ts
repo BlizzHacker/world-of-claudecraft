@@ -17,6 +17,7 @@ import { WATER_LEVEL } from '../sim/world';
 import { assetById } from './asset_catalog.generated';
 import type { ZoneContent } from './model';
 import { userAssetPath } from './user_assets';
+import { libraryAssetPath } from './library_assets';
 
 export const CUSTOM_MAP_VERSION = MAP_DOC_VERSION;
 
@@ -138,7 +139,7 @@ export function placementsToRenderAssets(
   placements: readonly AssetPlacement[],
 ): (PlacedAsset | null)[] {
   return placements.map((p) => {
-    const path = userAssetPath(p.assetId) ?? assetById(p.assetId)?.path;
+    const path = libraryAssetPath(p.assetId) ?? userAssetPath(p.assetId) ?? assetById(p.assetId)?.path;
     if (!path) return null;
     const placed: PlacedAsset = { path, x: p.x, z: p.z, rotY: p.rotY, scale: p.scale };
     if (p.collide) placed.collideRadius = effectiveCollideRadius(p);

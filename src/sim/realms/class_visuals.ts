@@ -14,6 +14,16 @@ export type RealmRuntimeVisualKey =
   | 'realm_classic_female_orc'
   | 'realm_classic_treasure_dwarf'
   | 'realm_classic_kitty'
+  | 'realm_infernal_human_iron_warden'
+  | 'realm_infernal_human_vanguard'
+  | 'realm_infernal_human_forge_worker'
+  | 'realm_infernal_human_white_sage'
+  | 'realm_infernal_human_tainted_hood'
+  | 'realm_infernal_human_weathered_elder'
+  | 'realm_infernal_human_road_mercenary'
+  | 'realm_infernal_human_iron_ranger'
+  | 'realm_infernal_human_hooded_wanderer'
+  | 'realm_infernal_human_hermit'
   | 'realm_infernal_durance_humanoid';
 
 const REALM_CLASS_VISUALS: Partial<
@@ -23,15 +33,15 @@ const REALM_CLASS_VISUALS: Partial<
     warlock: 'realm_cryptic_bone_herald',
   },
   infernal: {
-    warrior: 'realm_infernal_durance_humanoid',
-    paladin: 'realm_infernal_durance_humanoid',
-    hunter: 'realm_infernal_durance_humanoid',
-    rogue: 'realm_infernal_durance_humanoid',
-    priest: 'realm_infernal_durance_humanoid',
-    shaman: 'realm_infernal_durance_humanoid',
-    mage: 'realm_infernal_durance_humanoid',
-    warlock: 'realm_infernal_durance_humanoid',
-    druid: 'realm_infernal_durance_humanoid',
+    warrior: 'realm_infernal_human_iron_warden',
+    paladin: 'realm_infernal_human_vanguard',
+    hunter: 'realm_infernal_human_iron_ranger',
+    rogue: 'realm_infernal_human_road_mercenary',
+    priest: 'realm_infernal_human_white_sage',
+    shaman: 'realm_infernal_human_weathered_elder',
+    mage: 'realm_infernal_human_hooded_wanderer',
+    warlock: 'realm_infernal_human_tainted_hood',
+    druid: 'realm_infernal_human_hermit',
   },
   classic: {
     warrior: 'realm_classic_dwarf',

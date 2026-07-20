@@ -50,6 +50,19 @@ export interface UserAssetWire {
   url: string;
 }
 
+export interface LibraryAssetWire {
+  assetId: string;
+  name: string;
+  url: string;
+  group: string;
+  realmId: string;
+  source: 'library' | 'realm' | 'forged';
+  kind: 'character' | 'prop' | 'vehicle';
+  byteSize: number;
+  animated: boolean;
+  skinned: boolean;
+}
+
 /** A server call failed with a decoded error code (null = transport failure). */
 export class EditorApiError extends Error {
   constructor(
@@ -191,4 +204,29 @@ export async function listMyAssets(): Promise<UserAssetWire[]> {
 
 export async function deleteUserAsset(id: number): Promise<void> {
   await call(`/api/assets/${id}`, { method: 'DELETE' });
+}
+
+// ---- shared ArcForge library -------------------------------------------------
+
+export async function listAssetLibrary(options: {
+  page: number;
+  limit: number;
+  q?: string;
+  group?: string;
+  realm?: string;
+}): Promise<{ assets: LibraryAssetWire[]; total: number; page: number; limit: number }> {
+  const query = new URLSearchParams({
+    page: String(options.page),
+    limit: String(options.limit),
+  });
+  if (options.q) query.set('q', options.q);
+  if (options.group) query.set('group', options.group);
+  if (options.realm) query.set('realm', options.realm);
+  const data = await call(`/api/asset-library?${query}`);
+  return {
+    assets: Array.isArray(data.assets) ? data.assets : [],
+    total: typeof data.total === 'number' ? data.total : 0,
+    page: typeof data.page === 'number' ? data.page : options.page,
+    limit: typeof data.limit === 'number' ? data.limit : options.limit,
+  };
 }

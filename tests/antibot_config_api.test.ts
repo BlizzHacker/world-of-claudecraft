@@ -13,6 +13,7 @@ vi.mock('../server/db', () => ({
   touchLogin: vi.fn(),
   saveToken: vi.fn(),
   accountForToken: vi.fn(),
+  accountAndScopeForToken: vi.fn(),
   isAdminAccount: vi.fn(),
   accountMailTarget: vi.fn(async () => null),
 }));
@@ -38,7 +39,7 @@ import {
   saveAntibotConfigChange,
 } from '../server/antibot_config_db';
 import type { ConfigField } from '../server/bot_detector/contract';
-import { accountForToken, isAdminAccount } from '../server/db';
+import { accountAndScopeForToken, accountForToken, isAdminAccount } from '../server/db';
 import { adminRolesForAccount } from '../server/staff_db';
 
 const VALID_TOKEN = 'a'.repeat(64);
@@ -127,6 +128,7 @@ async function settle(res: FakeResponse): Promise<void> {
 beforeEach(() => {
   vi.clearAllMocks();
   vi.mocked(accountForToken).mockResolvedValue(7);
+  vi.mocked(accountAndScopeForToken).mockResolvedValue({ accountId: 7, scope: 'full' });
   vi.mocked(isAdminAccount).mockResolvedValue(true);
   vi.mocked(adminRolesForAccount).mockResolvedValue({
     username: 'admin',

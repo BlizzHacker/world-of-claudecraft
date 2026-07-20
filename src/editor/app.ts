@@ -79,6 +79,7 @@ import { type EditorTool, TOOL_BY_KEY, Toolbar } from './toolbar';
 import { Topbar } from './topbar';
 import { EditorTutorial } from './tutorial';
 import { UndoStack } from './undo_core';
+import { isLibraryAssetId, libraryAssetLabel } from './library_assets';
 import { isUserAssetId, registerUserAssets, userAssetIdFor, userAssetLabel } from './user_assets';
 import { Camera, pickHandle, type ScreenPoint, type Vec2, type Viewport } from './view';
 
@@ -1148,6 +1149,7 @@ export class EditorApp {
   }
 
   private placementLabel(assetId: string): string {
+    if (isLibraryAssetId(assetId)) return libraryAssetLabel(assetId);
     if (isUserAssetId(assetId)) return userAssetLabel(assetId);
     return assetById(assetId)?.label ?? assetId;
   }

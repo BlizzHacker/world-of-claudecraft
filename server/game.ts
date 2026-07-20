@@ -110,6 +110,7 @@ import type {
   SessionRuntimeSnapshot,
   SuspiciousPlayer,
 } from './bot_detector/contract';
+import { isValidBuilderPropKey } from './builder_props';
 import {
   buildDetectionCalibrationSnapshot,
   type DetectionCalibrationSnapshot,
@@ -2774,12 +2775,12 @@ export class GameServer {
     }
     try {
       if (msg.cmd === 'placeProp') {
-        const key = String(msg.key || '');
+        const key: unknown = msg.key;
         const x = Number(msg.x),
           z = Number(msg.z);
         const yaw = Number(msg.yaw) || 0,
           scale = Number(msg.scale) || 1;
-        if (!key || !Number.isFinite(x) || !Number.isFinite(z)) return;
+        if (!isValidBuilderPropKey(key) || !Number.isFinite(x) || !Number.isFinite(z)) return;
         const dbId = await insertRealmProp(
           key,
           x,

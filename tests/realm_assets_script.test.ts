@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
+  CURATED_INFERNAL_HUMANS,
+  INFERNAL_BIPED_ACTIONS,
   classifyAssetKind,
   classifyRealmFromText,
   looksAnimatedName,
@@ -41,6 +43,13 @@ describe('realm asset build helpers', () => {
     expect(classifyAssetKind('unknown export', { skinned: true })).toBe('character');
     expect(classifyAssetKind('battlecruiser')).toBe('vehicle');
     expect(classifyAssetKind('Infernal Dungeon Entrance.glb', { kind: 'prop' })).toBe('prop');
+    expect(
+      classifyAssetKind('Chest_Pound_Taunt_armature.glb', {
+        kind: 'animation',
+        skinned: true,
+        animationNames: ['Armature|Chest_Pound_Taunt|baselayer'],
+      }),
+    ).toBe('character');
   });
 
   it('parses the PICKTURA animated manifest and excludes armature donors', () => {
@@ -85,5 +94,22 @@ describe('realm asset build helpers', () => {
       'a.glb',
       'c.glb',
     ]);
+  });
+
+  it('promotes a reviewed Infernal human roster and compact shared action pack', () => {
+    expect(CURATED_INFERNAL_HUMANS).toHaveLength(10);
+    expect(new Set(CURATED_INFERNAL_HUMANS.map((asset) => asset.outputName)).size).toBe(10);
+    expect(CURATED_INFERNAL_HUMANS.map((asset) => asset.outputName)).toContain(
+      'infernal_human_iron_warden.glb',
+    );
+    expect(INFERNAL_BIPED_ACTIONS.map((asset) => asset.outputName)).toEqual(
+      expect.arrayContaining([
+        'infernal_biped_run.glb',
+        'infernal_biped_attack.glb',
+        'infernal_biped_cast.glb',
+        'infernal_biped_death.glb',
+        'infernal_biped_taunt.glb',
+      ]),
+    );
   });
 });

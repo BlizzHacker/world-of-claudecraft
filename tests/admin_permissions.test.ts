@@ -65,6 +65,17 @@ describe('admin permission vocabulary', () => {
     }
   });
 
+  it('separates content viewing, editing, publishing, and rollback authority', () => {
+    expect(ROLE_PERMISSIONS.viewer).toContain('content.read');
+    expect(ROLE_PERMISSIONS.viewer).not.toContain('content.edit');
+    expect(ROLE_PERMISSIONS.moderator).toContain('content.read');
+    expect(ROLE_PERMISSIONS.moderator).toContain('content.edit');
+    expect(ROLE_PERMISSIONS.moderator).not.toContain('content.publish');
+    expect(ROLE_PERMISSIONS.moderator).not.toContain('content.rollback');
+    expect(ROLE_PERMISSIONS.admin).toContain('content.publish');
+    expect(ROLE_PERMISSIONS.admin).toContain('content.rollback');
+  });
+
   it('gives viewer the general read permissions, excluding the restricted ones', () => {
     // Reads that are NOT part of the general viewer bundle: anti-bot internals
     // and Operations/Usage are admin/superadmin only.

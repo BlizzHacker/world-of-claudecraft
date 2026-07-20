@@ -8,6 +8,7 @@ import { resolveActiveRealmId } from '../../sim/realms/registry';
 import type { Entity, PlayerClass } from '../../sim/types';
 import { ITEM_WEAPON_VARIANTS } from '../../ui/weapon_variants';
 import type { OverheadEmoteId } from '../../world_api';
+import { infernalNpcVisualKey, infernalOpponentVisualKey } from './infernal_roster';
 
 export interface EmoteClipSpec {
   clips: readonly string[];
@@ -241,6 +242,24 @@ const meshyBiped = (
   cast: 'Cast',
   jump: opts.jump ?? 'Basic_Jump',
 });
+
+const INFERNAL_HUMAN_CLIPS: ClipMap = {
+  idle: 'Armature|Combat_Stance|baselayer',
+  walk: 'Armature|walking_man|baselayer',
+  run: 'Armature|running|baselayer',
+  attack: ['Armature|Attack|baselayer', 'Armature|Charged_Axe_Chop|baselayer'],
+  hit: ['Armature|Face_Punch_Reaction|baselayer'],
+  death: 'Armature|Dead|baselayer',
+  cast: 'Armature|Charged_Spell_Cast|baselayer',
+  jump: 'Armature|Backflip_Sweep_Kick|baselayer',
+  emote: {
+    wave: { clips: ['Armature|Big_Wave_Hello|baselayer'] },
+    cheer: { clips: ['Armature|Chest_Pound_Taunt|baselayer'] },
+    roar: { clips: ['Armature|Chest_Pound_Taunt|baselayer'] },
+    flex: { clips: ['Armature|Chest_Pound_Taunt|baselayer'] },
+    salute: { clips: ['Armature|Big_Wave_Hello|baselayer'] },
+  },
+};
 // Raid 02 asset-pipeline rig (stone_cantor.glb): Mixamo-rigged, ships
 // Idle / Cast / Walk / Death plus a synthesized 'Hit' flinch authored by
 // scripts/_add_cantor_hit_anim.mjs (the batch has no hit-react take). A
@@ -276,6 +295,30 @@ const ENEMIES = 'models/chars/enemies';
 const CREATURES = 'models/creatures';
 const WEAPONS = 'models/weapons';
 const REALM_MODELS = '/cr-realms';
+
+const INFERNAL_HUMAN_ANIM_URLS = [
+  `${REALM_MODELS}/infernal/infernal_biped_idle.glb`,
+  `${REALM_MODELS}/infernal/infernal_biped_walk.glb`,
+  `${REALM_MODELS}/infernal/infernal_biped_run.glb`,
+  `${REALM_MODELS}/infernal/infernal_biped_attack.glb`,
+  `${REALM_MODELS}/infernal/infernal_biped_axe_attack.glb`,
+  `${REALM_MODELS}/infernal/infernal_biped_cast.glb`,
+  `${REALM_MODELS}/infernal/infernal_biped_hit.glb`,
+  `${REALM_MODELS}/infernal/infernal_biped_death.glb`,
+  `${REALM_MODELS}/infernal/infernal_biped_jump.glb`,
+  `${REALM_MODELS}/infernal/infernal_biped_wave.glb`,
+  `${REALM_MODELS}/infernal/infernal_biped_taunt.glb`,
+];
+
+function infernalHuman(fileName: string, height = 2.15): VisualDef {
+  return {
+    url: `${REALM_MODELS}/infernal/${fileName}`,
+    animUrls: INFERNAL_HUMAN_ANIM_URLS,
+    height,
+    clips: INFERNAL_HUMAN_CLIPS,
+    lazyPreload: true,
+  };
+}
 
 /** GLB url for an equipped mainhand item's held weapon model, or null if the item
  *  has no mapped model (then the class default attach is kept). Mirrors the bag
@@ -556,24 +599,21 @@ export const VISUALS: Record<string, VisualDef> = {
     clips: meshyBiped(['Left_Slash'], { walk: 'Monster_Walk', run: 'Running' }),
     lazyPreload: true,
   },
-  // DuranceTester and Infernal player classes use an authored humanoid export.
-  // The asset builder promotes the body and compatible motion donors under
-  // stable names. This deliberately is not a Diablo/demon or KayKit fallback.
-  realm_infernal_durance_humanoid: {
-    url: `${REALM_MODELS}/infernal/durance_tester_humanoid.glb`,
-    height: 2.15,
-    clips: {
-      idle: 'Walking',
-      walk: 'Walking',
-      run: 'Running',
-      attack: ['Reaping_Swing', 'Counterstrike'],
-      hit: ['Dodge_and_Counter'],
-      death: 'Injured_Walk',
-      cast: 'Boom_Dance',
-      jump: 'Backflip_Sweep_Kick',
-    },
-    lazyPreload: true,
-  },
+  // Visually reviewed PICKTURA humans. These share a compatible Meshy biped
+  // skeleton and a compact action pack, so every body can stop, run, attack,
+  // cast, react, die, jump, wave, and taunt.
+  realm_infernal_human_iron_warden: infernalHuman('infernal_human_iron_warden.glb', 2.3),
+  realm_infernal_human_vanguard: infernalHuman('infernal_human_vanguard.glb', 2.25),
+  realm_infernal_human_forge_worker: infernalHuman('infernal_human_forge_worker.glb', 2.2),
+  realm_infernal_human_white_sage: infernalHuman('infernal_human_white_sage.glb', 2.2),
+  realm_infernal_human_tainted_hood: infernalHuman('infernal_human_tainted_hood.glb', 2.2),
+  realm_infernal_human_weathered_elder: infernalHuman('infernal_human_weathered_elder.glb', 2.15),
+  realm_infernal_human_road_mercenary: infernalHuman('infernal_human_road_mercenary.glb', 2.25),
+  realm_infernal_human_iron_ranger: infernalHuman('infernal_human_iron_ranger.glb', 2.2),
+  realm_infernal_human_hooded_wanderer: infernalHuman('infernal_human_hooded_wanderer.glb', 2.15),
+  realm_infernal_human_hermit: infernalHuman('infernal_human_hermit.glb', 2.15),
+  // DuranceTester is always the armored human Iron Warden body, never a demon.
+  realm_infernal_durance_humanoid: infernalHuman('infernal_human_iron_warden.glb', 2.3),
   realm_infernal_dark_paladin: {
     url: `${REALM_MODELS}/infernal/dark_paladin_commander.glb`,
     animUrls: [
@@ -1471,7 +1511,7 @@ const REALM_MOB_FAMILY_KEYS: Partial<Record<string, Partial<Record<string, strin
   infernal: {
     // Generic beasts remain animals; Infernal demon bodies are reserved for
     // demon-family mobs and named Hellmaw encounters.
-    beast: 'mob_wolf', humanoid: 'realm_infernal_durance_humanoid',
+    beast: 'mob_wolf', humanoid: 'realm_infernal_human_tainted_hood',
     undead: 'skel_warrior', demon: 'hellmaw_husk_body', elemental: 'hellmaw_lava_fiend_body',
     dragonkin: 'hellmaw_dragon_body',
   },
@@ -1496,6 +1536,23 @@ export function visualKeyFor(e: Entity): string {
     const override = MOB_KEYS[e.templateId];
     const family = MOBS[e.templateId]?.family;
     const realmFamily = family && REALM_MOB_FAMILY_KEYS[realm]?.[family];
+    if (realm === 'infernal') {
+      if (override?.startsWith('hellmaw_') || override?.startsWith('realm_infernal_')) {
+        return override;
+      }
+      if (family && ['beast', 'spider', 'mudfin', 'troll', 'ogre'].includes(family)) {
+        return override ?? realmFamily ?? FAMILY_KEYS[family] ?? 'mob_wolf';
+      }
+      if (family === 'undead') {
+        if (override?.startsWith('skel_') || override?.startsWith('delve_skel_')) return override;
+        return 'realm_cryptic_bone_herald';
+      }
+      if (family === 'demon') return realmFamily ?? 'hellmaw_husk_body';
+      if (family === 'elemental' || family === 'dragonkin') {
+        return realmFamily ?? override ?? FAMILY_KEYS[family];
+      }
+      return infernalOpponentVisualKey(e.templateId);
+    }
     // An explicit creature mapping always wins. In particular, a wolf or boar
     // must never be replaced by the Infernal beast-family fallback just because
     // the active realm has a themed monster family.
@@ -1504,11 +1561,11 @@ export function visualKeyFor(e: Entity): string {
     return (family && FAMILY_KEYS[family]) || REALM_MOB_DEFAULTS[realm] || 'mob_bandit';
   }
   // npcs — Brother Aldric recurs in every hub under suffixed ids
-  if (e.templateId.startsWith('brother_aldric')) return 'npc_aldric';
   const realm = resolveActiveRealmId();
   // Infernal NPCs are human civilians and officials. Enemy commanders are
   // mobs, not NPCs; never fall through to a KayKit elf, orc, or villager.
-  if (realm === 'infernal') return 'realm_infernal_durance_humanoid';
+  if (realm === 'infernal') return infernalNpcVisualKey(e.templateId);
+  if (e.templateId.startsWith('brother_aldric')) return 'npc_aldric';
   const realmKeys = REALM_NPC_KEYS[realm];
   return realmKeys?.[e.templateId] ?? NPC_KEYS[e.templateId] ?? 'npc_villager';
 }

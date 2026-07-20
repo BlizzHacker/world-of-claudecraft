@@ -1,7 +1,7 @@
 import type { PlayerClass } from '../../sim/types';
 import { factionForRealmClass } from '../../sim/realms/factions';
 import type { RealmClassSkin, RealmContent, RealmId, RealmRole } from '../../sim/realms/types';
-import { diabloClassesForRealm, type DiabloRealmClass } from '../../sim/realms/diablo_classes';
+import { diabloClassesForRealm } from '../../sim/realms/diablo_classes';
 
 export const PLAYER_CLASS_ORDER: readonly PlayerClass[] = [
   'warrior',
@@ -33,8 +33,7 @@ export interface RealmClassPresentation {
 
 export interface InfernalDiabloClassPresentation extends RealmClassPresentation {
   diabloId: string;
-  lineage: DiabloRealmClass['lineage'];
-  factionSide: DiabloRealmClass['factionSide'];
+  factionSide: 'sanctuary' | 'hell';
 }
 
 export type RealmClassAssetStatus = 'ready' | 'preview' | 'comingSoon';
@@ -232,85 +231,123 @@ const CRYPTIC_BONE_HERALD = asset(
   'Run/walk only; needs idle, attack, cast, hit, and death clips before full release.',
 );
 
-const INFERNAL_CRIMSON_BEHEMOTH = asset(
-  'preview',
-  'Animation Pass',
-  {
-    assetUrl:
-      '/cr-realms/infernal/meshy_ai_crimson_infernal_behe_biped_meshy_ai_meshy_merged_animations_27bab94d.glb',
-    assetName: 'Crimson Infernal Behemoth',
+function infernalHumanAsset(fileName: string, assetName: string): RealmClassAsset {
+  return asset('ready', 'Playable human GLB', {
+    assetUrl: `/cr-realms/infernal/${fileName}`,
+    assetName,
     assetAnimated: true,
-  },
-  'Locomotion and jump pack present; queued for melee, cast, hit, and death clips.',
-);
+  });
+}
 
-const INFERNAL_DEMON_HORNED = asset(
-  'preview',
-  'Animation Pass',
-  {
-    assetUrl: '/cr-realms/infernal/demon-horned_1a19d7ca.glb',
-    assetName: 'Horned Demon',
-    assetAnimated: true,
-  },
-  'Run/walk only; queued for combat and spell animation coverage.',
-);
+const INFERNAL_HUMAN_ASSETS = {
+  ironWarden: infernalHumanAsset('infernal_human_iron_warden.glb', 'Iron Warden'),
+  vanguard: infernalHumanAsset('infernal_human_vanguard.glb', 'Vanguard'),
+  forgeWorker: infernalHumanAsset('infernal_human_forge_worker.glb', 'Forge Worker'),
+  whiteSage: infernalHumanAsset('infernal_human_white_sage.glb', 'White Sage'),
+  weatheredElder: infernalHumanAsset('infernal_human_weathered_elder.glb', 'Weathered Elder'),
+  roadMercenary: infernalHumanAsset('infernal_human_road_mercenary.glb', 'Road Mercenary'),
+  ironRanger: infernalHumanAsset('infernal_human_iron_ranger.glb', 'Iron Ranger'),
+  hoodedWanderer: infernalHumanAsset('infernal_human_hooded_wanderer.glb', 'Hooded Wanderer'),
+  hermit: infernalHumanAsset('infernal_human_hermit.glb', 'Hermit'),
+} satisfies Record<string, RealmClassAsset>;
 
-const INFERNAL_SKULLBEAST = asset(
-  'ready',
-  'Playable GLB',
-  {
-    assetUrl: '/cr-realms/infernal/skullbeast_5d2ecebf.glb',
-    assetName: 'Skullbeast',
-    assetAnimated: true,
-  },
-  'Has locomotion plus slash; still queued for class-specific casting and death clips.',
-);
-
-const INFERNAL_DURANCE_HUMANOID = asset('ready', 'Playable humanoid GLB', {
-  assetUrl: '/cr-realms/infernal/durance_tester_humanoid.glb',
-  assetName: 'Durance Tester Humanoid',
-  assetAnimated: true,
-});
-
-const INFERNAL_DARK_PALADIN = asset('ready', 'Playable enemy GLB', {
-  assetUrl: '/cr-realms/infernal/dark_paladin_commander.glb',
-  assetName: 'Dark Paladin Commander',
-  assetAnimated: true,
-});
-
-const INFERNAL_UNIQUE_ASSETS: readonly RealmClassAsset[] = [
-  INFERNAL_DURANCE_HUMANOID,
-  INFERNAL_DARK_PALADIN,
-  asset('ready', 'Playable GLB', { assetUrl: '/cr-realms/infernal/demon-horned_1a19d7ca.glb', assetName: 'Horned Demon', assetAnimated: true }),
-  asset('ready', 'Playable GLB', { assetUrl: '/cr-realms/infernal/meshy_ai_crimson_infernal_behe_biped_meshy_ai_meshy_merged_animations_27bab94d.glb', assetName: 'Crimson Infernal Behemoth', assetAnimated: true }),
-  INFERNAL_SKULLBEAST,
-  asset('ready', 'Playable GLB', { assetUrl: '/cr-realms/infernal/meshy_ai_infernal_behemoth_biped_merged_animations.glb', assetName: 'Infernal Behemoth', assetAnimated: true }),
-  asset('ready', 'Playable GLB', { assetUrl: '/cr-realms/infernal/meshy_ai_cursed_knight_s_iro_0616234359_texture_abda8208.glb', assetName: 'Cursed Knight', assetAnimated: true }),
-  asset('ready', 'Playable GLB', { assetUrl: '/cr-realms/infernal/meshy_ai_demon_with_body_cover_0616234415_texture_540be2b1.glb', assetName: 'Covered Demon', assetAnimated: true }),
-  asset('ready', 'Playable GLB', { assetUrl: '/cr-realms/infernal/meshy_ai_horned_demon_warrior_0616234420_texture_2233cac0.glb', assetName: 'Horned Demon Warrior', assetAnimated: true }),
-];
-
-const INFERNAL_DIABLO_ASSETS: Record<string, RealmClassAsset> = {
-  Warrior: INFERNAL_DURANCE_HUMANOID,
-  Rogue: asset('ready', 'Playable GLB', { assetUrl: '/cr-realms/infernal/demon-horned_1a19d7ca.glb', assetName: 'Horned Demon', assetAnimated: true }),
-  Sorcerer: asset('ready', 'Playable GLB', { assetUrl: '/cr-realms/infernal/meshy_ai_infernal_behemoth_biped_merged_animations.glb', assetName: 'Infernal Behemoth', assetAnimated: true }),
-  Amazon: asset('ready', 'Playable GLB', { assetUrl: '/cr-realms/infernal/meshy_ai_crimson_infernal_behe_biped_character_output_56b1ac0c.glb', assetName: 'Crimson Infernal Champion', assetAnimated: true }),
-  Barbarian: asset('ready', 'Playable GLB', { assetUrl: '/cr-realms/infernal/meshy_ai_horned_demon_warrior_0616234420_texture_2233cac0.glb', assetName: 'Horned Demon Warrior', assetAnimated: true }),
-  Necromancer: asset('ready', 'Playable undead caster GLB', { assetUrl: '/cr-realms/infernal/bone-herald-black-meshy_ai_meshy_merged_animations_5fb3b8bb.glb', assetName: 'Bone Herald', assetAnimated: true }),
-  Paladin: INFERNAL_DARK_PALADIN,
-  Sorceress: asset('ready', 'Playable GLB', { assetUrl: '/cr-realms/infernal/meshy_ai_cursed_knight_s_iro_0616234359_texture_abda8208.glb', assetName: 'Cursed Knight', assetAnimated: true }),
-  Druid: asset('ready', 'Playable GLB', { assetUrl: '/cr-realms/infernal/meshy_ai_a_black_evil_spectr_0616234348_texture_abacb7f9.glb', assetName: 'Black Evil Specter', assetAnimated: true }),
-  Assassin: asset('ready', 'Playable GLB', { assetUrl: '/cr-realms/infernal/meshy_ai_demon_with_body_cover_0616234415_texture_540be2b1.glb', assetName: 'Covered Demon', assetAnimated: true }),
-  'Demon Hunter': asset('ready', 'Playable GLB', { assetUrl: '/cr-realms/infernal/meshy_ai_demon_with_body_cover_0616234440_texture_fd4134d0.glb', assetName: 'Covered Demon Reaver', assetAnimated: true }),
-  Monk: asset('ready', 'Playable GLB', { assetUrl: '/cr-realms/infernal/meshy_ai_crimson_infernal_behe_biped_meshy_ai_meshy_merged_animations_27bab94d.glb', assetName: 'Crimson Behemoth', assetAnimated: true }),
-  Wizard: asset('ready', 'Playable GLB', { assetUrl: '/cr-realms/infernal/meshy_ai_lava_demon_visible_l_0616234410_texture_a72a9ef6.glb', assetName: 'Lava Demon', assetAnimated: true }),
-  'Witch Doctor': asset('ready', 'Playable GLB', { assetUrl: '/cr-realms/infernal/meshy_ai_lava_demon_with_horns_0616234329_texture_9a64c154.glb', assetName: 'Lava Demon Shaman', assetAnimated: true }),
-  Crusader: asset('ready', 'Playable GLB', { assetUrl: '/cr-realms/infernal/dark_paladin_walking.glb', assetName: 'Dark Paladin', assetAnimated: true }),
-  Spiritborn: asset('ready', 'Playable GLB', { assetUrl: '/cr-realms/infernal/meshy_ai_demon_with_body_cover_0616234440_texture_fd4134d0.glb', assetName: 'Spiritborn Demon', assetAnimated: true }),
-  Warlock: asset('ready', 'Playable GLB', { assetUrl: '/cr-realms/infernal/meshy_ai_demon_with_body_cover_0616234415_texture_540be2b1.glb', assetName: 'Hell Warlock', assetAnimated: true }),
-  'Blood Knight': asset('ready', 'Playable GLB', { assetUrl: '/cr-realms/infernal/dark_paladin_running.glb', assetName: 'Blood Knight', assetAnimated: true }),
-  Tempest: asset('ready', 'Playable GLB', { assetUrl: '/cr-realms/infernal/meshy_ai_a_primal_groudon_emer_0616234337_texture_194376eb.glb', assetName: 'Infernal Tempest', assetAnimated: true }),
+const INFERNAL_BASE_CLASS_ASSETS: Record<PlayerClass, RealmClassAsset> = {
+  warrior: INFERNAL_HUMAN_ASSETS.ironWarden,
+  paladin: INFERNAL_HUMAN_ASSETS.vanguard,
+  hunter: INFERNAL_HUMAN_ASSETS.ironRanger,
+  rogue: INFERNAL_HUMAN_ASSETS.roadMercenary,
+  priest: INFERNAL_HUMAN_ASSETS.whiteSage,
+  shaman: INFERNAL_HUMAN_ASSETS.weatheredElder,
+  mage: INFERNAL_HUMAN_ASSETS.hoodedWanderer,
+  warlock: INFERNAL_HUMAN_ASSETS.forgeWorker,
+  druid: INFERNAL_HUMAN_ASSETS.hermit,
 };
+
+const INFERNAL_HERO_ASSETS: Readonly<Record<string, RealmClassAsset>> = {
+  Warrior: INFERNAL_HUMAN_ASSETS.ironWarden,
+  Rogue: INFERNAL_HUMAN_ASSETS.roadMercenary,
+  'Sorcerer / Sorceress': INFERNAL_HUMAN_ASSETS.hoodedWanderer,
+  Amazon: INFERNAL_HUMAN_ASSETS.ironRanger,
+  Barbarian: INFERNAL_HUMAN_ASSETS.vanguard,
+  Necromancer: INFERNAL_HUMAN_ASSETS.whiteSage,
+  Paladin: INFERNAL_HUMAN_ASSETS.vanguard,
+  Druid: INFERNAL_HUMAN_ASSETS.hermit,
+  Assassin: INFERNAL_HUMAN_ASSETS.roadMercenary,
+  'Demon Hunter': INFERNAL_HUMAN_ASSETS.ironRanger,
+  Monk: INFERNAL_HUMAN_ASSETS.weatheredElder,
+  Wizard: INFERNAL_HUMAN_ASSETS.whiteSage,
+  'Witch Doctor': INFERNAL_HUMAN_ASSETS.hermit,
+  Crusader: INFERNAL_HUMAN_ASSETS.ironWarden,
+  Spiritborn: INFERNAL_HUMAN_ASSETS.hermit,
+  Warlock: INFERNAL_HUMAN_ASSETS.hoodedWanderer,
+  'Blood Knight': INFERNAL_HUMAN_ASSETS.roadMercenary,
+  Tempest: INFERNAL_HUMAN_ASSETS.weatheredElder,
+};
+
+interface InfernalEnemySeed {
+  name: string;
+  baseClass: PlayerClass;
+  asset: RealmClassAsset;
+}
+
+const INFERNAL_HELL_ENEMIES: readonly InfernalEnemySeed[] = [
+  {
+    name: 'Dark Paladin',
+    baseClass: 'paladin',
+    asset: asset('ready', 'Playable enemy GLB', {
+      assetUrl: '/cr-realms/infernal/dark_paladin_commander.glb',
+      assetName: 'Dark Paladin Commander',
+      assetAnimated: true,
+    }),
+  },
+  {
+    name: 'Tainted Hood',
+    baseClass: 'rogue',
+    asset: asset('ready', 'Playable enemy GLB', {
+      assetUrl: '/cr-realms/infernal/infernal_human_tainted_hood.glb',
+      assetName: 'Tainted Hood',
+      assetAnimated: true,
+    }),
+  },
+  {
+    name: 'Horned Demon',
+    baseClass: 'warrior',
+    asset: asset('ready', 'Playable enemy GLB', {
+      assetUrl: '/cr-realms/infernal/demon-horned_1a19d7ca.glb',
+      assetName: 'Horned Demon',
+      assetAnimated: true,
+    }),
+  },
+  {
+    name: 'Crimson Infernal Behemoth',
+    baseClass: 'warrior',
+    asset: asset('ready', 'Playable enemy GLB', {
+      assetUrl:
+        '/cr-realms/infernal/meshy_ai_crimson_infernal_behe_biped_meshy_ai_meshy_merged_animations_27bab94d.glb',
+      assetName: 'Crimson Infernal Behemoth',
+      assetAnimated: true,
+    }),
+  },
+  {
+    name: 'Bone Herald',
+    baseClass: 'warlock',
+    asset: asset('ready', 'Playable enemy GLB', {
+      assetUrl:
+        '/cr-realms/crypticrealm/bone-herald-black-meshy_ai_meshy_merged_animations_5fb3b8bb.glb',
+      assetName: 'Bone Herald',
+      assetAnimated: true,
+    }),
+  },
+  {
+    name: 'Skullbeast',
+    baseClass: 'druid',
+    asset: asset('ready', 'Playable enemy GLB', {
+      assetUrl: '/cr-realms/infernal/skullbeast_5d2ecebf.glb',
+      assetName: 'Skullbeast',
+      assetAnimated: true,
+    }),
+  },
+];
 
 const CLASSIC_ORC = asset('ready', 'Playable GLB', {
   assetUrl: '/cr-realms/classic/another-orc-meshy_ai_meshy_merged_animations_743223cb.glb',
@@ -394,19 +431,7 @@ const ASSETS_BY_REALM_CLASS: Partial<Record<RealmId, Partial<Record<PlayerClass,
   crypticrealm: {
     warlock: CRYPTIC_BONE_HERALD,
   },
-  infernal: {
-    // Iron Warden is intentionally a real humanoid. The old crimson demon
-    // body was a placeholder and must never be used for this character.
-    warrior: INFERNAL_UNIQUE_ASSETS[0],
-    paladin: INFERNAL_UNIQUE_ASSETS[1],
-    hunter: INFERNAL_UNIQUE_ASSETS[2],
-    rogue: INFERNAL_UNIQUE_ASSETS[3],
-    priest: INFERNAL_UNIQUE_ASSETS[4],
-    shaman: INFERNAL_UNIQUE_ASSETS[5],
-    mage: INFERNAL_UNIQUE_ASSETS[6],
-    warlock: INFERNAL_UNIQUE_ASSETS[7],
-    druid: INFERNAL_UNIQUE_ASSETS[8],
-  },
+  infernal: INFERNAL_BASE_CLASS_ASSETS,
   classic: {
     warrior: CLASSIC_DWARF,
     paladin: CLASSIC_FIGHTING_ELF,
@@ -480,57 +505,82 @@ export function classChoicesForRealm(realm: RealmContent): RealmClassPresentatio
     .filter((choice): choice is RealmClassPresentation => choice !== null);
 }
 
-function infernalFactionForDiabloClass(choice: DiabloRealmClass): { name: string; color: string } {
-  if (choice.factionSide === 'hell') return { name: 'Burning Hells', color: '#d24a3a' };
-  if (choice.factionSide === 'surprise') return { name: 'Ashen Court', color: '#c5a86a' };
-  return { name: 'Heavenly Host', color: '#9fc8ff' };
+const INFERNAL_HERO_FACTION = { name: 'Heavenly Host', color: '#9fc8ff' } as const;
+const INFERNAL_HELL_FACTION = { name: 'Burning Hells', color: '#d24a3a' } as const;
+
+function canonicalInfernalHeroName(name: string): string {
+  return name === 'Sorcerer' || name === 'Sorceress' ? 'Sorcerer / Sorceress' : name;
+}
+
+function infernalChoiceId(side: 'hero' | 'hell', name: string): string {
+  const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  return `infernal-${side}-${slug}`;
+}
+
+function infernalClassChoice(
+  realm: RealmContent,
+  name: string,
+  baseClass: PlayerClass,
+  factionSide: InfernalDiabloClassPresentation['factionSide'],
+  assetChoice: RealmClassAsset,
+): InfernalDiabloClassPresentation {
+  const base = classPresentationForRealm(realm, baseClass);
+  const faction = factionSide === 'hell' ? INFERNAL_HELL_FACTION : INFERNAL_HERO_FACTION;
+  const side = factionSide === 'hell' ? 'hell' : 'hero';
+  return {
+    ...(base ?? {
+      baseClass,
+      name,
+      faction: faction.name,
+      lore: name,
+      color: faction.color,
+      role: ROLE_BY_CLASS[baseClass],
+    }),
+    baseClass,
+    name,
+    faction: faction.name,
+    lore:
+      factionSide === 'hell'
+        ? `An enemy champion of the Burning Hells, offered apart from Sanctuary's human heroes.`
+        : `A human champion of Sanctuary carrying the ${name} tradition into the Infernal Realm.`,
+    color: faction.color,
+    ...assetChoice,
+    diabloId: infernalChoiceId(side, name),
+    factionSide,
+  };
 }
 
 /**
- * The Infernal creator has a Diablo-sized class roster, while the combat
- * server intentionally persists the existing nine mechanical classes. This
- * presentation layer keeps those contracts separate: every visible card is a
- * real named Diablo class, but its selection still submits engineClass.
+ * The Infernal creator offers one human card per archetype plus a separate
+ * enemy roster. The combat server still persists the existing nine mechanical
+ * classes, so every presentation choice submits its compatible baseClass.
  */
 export function infernalDiabloClassChoicesForRealm(
   realm: RealmContent,
 ): InfernalDiabloClassPresentation[] {
   if (realm.id !== 'infernal') return [];
+  const heroes: InfernalDiabloClassPresentation[] = [];
   const seen = new Set<string>();
-  return diabloClassesForRealm(realm.id).filter((diablo) => {
-    if (seen.has(diablo.name)) return false;
-    seen.add(diablo.name);
-    return true;
-  }).map((diablo) => {
-    const faction = infernalFactionForDiabloClass(diablo);
-    const base = classPresentationForRealm(realm, diablo.engineClass);
-    const isHell = diablo.factionSide === 'hell';
-    const assetChoice = INFERNAL_DIABLO_ASSETS[diablo.name] ?? (isHell ? INFERNAL_DARK_PALADIN : INFERNAL_DURANCE_HUMANOID);
-    return {
-      ...(base ?? {
-        baseClass: diablo.engineClass,
-        name: diablo.name,
-        faction: faction.name,
-        lore: `${diablo.name}, forged for the ${diablo.lineage} war against the Burning Hells.`,
-        color: faction.color,
-        role: ROLE_BY_CLASS[diablo.engineClass],
-      }),
-      baseClass: diablo.engineClass,
-      name: diablo.name,
-      faction: faction.name,
-      lore: `${diablo.name} — ${diablo.lineage} class. Choose a real animated body and carry this role into the Infernal Realm.`,
-      color: faction.color,
-      assetStatus: assetChoice.assetStatus,
-      assetStatusLabel: assetChoice.assetStatusLabel,
-      assetUrl: assetChoice.assetUrl,
-      assetName: assetChoice.assetName,
-      assetAnimated: assetChoice.assetAnimated,
-      assetIssue: undefined,
-      diabloId: diablo.id,
-      lineage: diablo.lineage,
-      factionSide: diablo.factionSide,
-    };
-  });
+  for (const source of diabloClassesForRealm(realm.id)) {
+    const name = canonicalInfernalHeroName(source.name);
+    if (seen.has(name)) continue;
+    seen.add(name);
+    heroes.push(
+      infernalClassChoice(
+        realm,
+        name,
+        source.engineClass,
+        'sanctuary',
+        INFERNAL_HERO_ASSETS[name] ?? INFERNAL_BASE_CLASS_ASSETS[source.engineClass],
+      ),
+    );
+  }
+  return [
+    ...heroes,
+    ...INFERNAL_HELL_ENEMIES.map((enemy) =>
+      infernalClassChoice(realm, enemy.name, enemy.baseClass, 'hell', enemy.asset),
+    ),
+  ];
 }
 
 export function presentationFactionsForRealm(realm: RealmContent): string[] {

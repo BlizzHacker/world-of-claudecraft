@@ -173,11 +173,14 @@ export function openWorldBuilderDock(): void {
   dock.querySelector('[data-wb-close]')?.addEventListener('click', () => closeWorldBuilderDock());
 
   const filter = dock.querySelector<HTMLInputElement>('[data-wb-filter]');
+  let librarySearchTimer = 0;
   filter?.addEventListener('input', () => {
     const q = (filter.value || '').toLowerCase();
     dock!.querySelectorAll<HTMLElement>('[data-build-key]').forEach((b) => {
       b.style.display = !q || (b.dataset.buildKey || '').toLowerCase().includes(q) ? '' : 'none';
     });
+    window.clearTimeout(librarySearchTimer);
+    librarySearchTimer = window.setTimeout(() => void loadForged(q), 180);
   });
 
   // ── Transform sliders (scale / rotate) ──────────────────────────────────
@@ -250,13 +253,33 @@ export function openWorldBuilderDock(): void {
 
   // Forged props: fetch the USB4 catalog and render a "forged:<key>" button each.
   const forgedHost = dock.querySelector<HTMLElement>('[data-wb-forged]');
-  const loadForged = async () => {
+  const loadForged = async (query = '') => {
     if (!forgedHost) return;
     forgedHost.innerHTML = '<div class="cr-wb-empty">loading…</div>';
     try {
-      const res = await fetch('/api/forged-props', { credentials: 'same-origin' });
-      const data = await res.json();
-      const items: Array<{ key: string; name: string; group?: string }> = data.props || [];
+      let res = await fetch(
+        `/api/asset-library?limit=500&q=${encodeURIComponent(query.slice(0, 80))}`,
+        { credentials: 'same-origin' },
+      );
+      let data = await res.json().catch(() => ({}));
+      let items: Array<{ placeKey: string; name: string; group: string }> = [];
+      if (res.ok && Array.isArray(data.assets)) {
+        items = data.assets.map((asset: { assetId: string; name: string; group?: string }) => ({
+          placeKey: `library:${asset.assetId.slice('library/'.length)}`,
+          name: asset.name,
+          group: asset.group || 'library',
+        }));
+      } else {
+        res = await fetch('/api/forged-props', { credentials: 'same-origin' });
+        data = await res.json();
+        items = (Array.isArray(data.props) ? data.props : []).map(
+          (asset: { key: string; name: string; group?: string }) => ({
+            placeKey: `forged:${asset.key}`,
+            name: asset.name,
+            group: asset.group || 'forged',
+          }),
+        );
+      }
       if (!items.length) { forgedHost.innerHTML = '<div class="cr-wb-empty">none yet — generate or upload a GLB</div>'; return; }
       // group by realm/category for readable sections
       const groups = new Map<string, typeof items>();
@@ -276,14 +299,16 @@ export function openWorldBuilderDock(): void {
       forgedHost.innerHTML = sortedGroups.map((g) =>
         `<div class="cr-wb-grouplabel">${escapeAttr(label(g))} <span class="cr-wb-count">${groups.get(g)!.length}</span></div>` +
         groups.get(g)!.map((p) =>
-          `<button type="button" class="cr-afe-place" data-build-key="forged:${escapeAttr(p.key)}" title="${escapeAttr(p.name)}">${escapeAttr(p.name)}</button>`
+          `<button type="button" class="cr-afe-place" data-build-key="${escapeAttr(p.placeKey)}" title="${escapeAttr(p.name)}">${escapeAttr(p.name)}</button>`
         ).join('')
       ).join('');
     } catch {
       forgedHost.innerHTML = '<div class="cr-wb-empty">failed to load</div>';
     }
   };
-  dock.querySelector('[data-wb-refresh]')?.addEventListener('click', () => { void loadForged(); });
+  dock.querySelector('[data-wb-refresh]')?.addEventListener('click', () => {
+    void loadForged(filter?.value || '');
+  });
 
   // Upload a .glb → POST to the forged store → refresh the list.
   const fileInput = dock.querySelector<HTMLInputElement>('[data-wb-file]');

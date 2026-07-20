@@ -27,7 +27,7 @@ describe('realm class runtime visuals', () => {
 
   it('maps only classes with playable runtime GLBs', () => {
     expect(realmClassVisualKey('Classic', 'priest')).toBe('realm_classic_female_elf');
-    expect(realmClassVisualKey('Infernal', 'rogue')).toBe('realm_infernal_horned_demon');
+    expect(realmClassVisualKey('Infernal', 'rogue')).toBe('realm_infernal_human_road_mercenary');
     expect(realmClassVisualKey('Cryptic Realm', 'warlock')).toBe('realm_cryptic_bone_herald');
     expect(realmClassVisualKey('Classic', 'warlock')).toBeNull();
   });
@@ -64,4 +64,3 @@ describe('realm class runtime visuals', () => {
     }
   });
 });
-

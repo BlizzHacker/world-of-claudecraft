@@ -58,11 +58,11 @@ describe('character visual manifest', () => {
     expect(visualKeyFor({ kind: 'mob', templateId: 'forest_wolf' } as never)).toBe('mob_wolf');
     expect(visualKeyFor({ kind: 'mob', templateId: 'wild_boar' } as never)).toBe('mob_boar');
     expect(visualKeyFor({ kind: 'mob', templateId: 'mire_prowler' } as never)).toBe('mob_wolf');
-    expect(visualKeyFor({ kind: 'npc', templateId: 'warden_fenwick' } as never)).toBe(
-      'realm_infernal_durance_humanoid',
+    expect(visualKeyFor({ kind: 'npc', templateId: 'warden_fenwick' } as never)).toMatch(
+      /^realm_infernal_human_/,
     );
-    expect(visualKeyFor({ kind: 'npc', templateId: 'unlisted_infernal_npc' } as never)).toBe(
-      'realm_infernal_durance_humanoid',
+    expect(visualKeyFor({ kind: 'npc', templateId: 'unlisted_infernal_npc' } as never)).toMatch(
+      /^realm_infernal_human_/,
     );
     setRealmHostEnv(null);
   });

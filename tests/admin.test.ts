@@ -10,6 +10,7 @@ vi.mock('../server/db', () => ({
   touchLogin: vi.fn(),
   saveToken: vi.fn(),
   accountForToken: vi.fn(),
+  accountAndScopeForToken: vi.fn(),
   isAdminAccount: vi.fn(),
   accountTotpState: vi.fn(),
   accountMailTarget: vi.fn(async () => null),
@@ -112,6 +113,7 @@ import {
 } from '../server/chat_filter_db';
 import {
   accountById,
+  accountAndScopeForToken,
   accountForToken,
   accountMailTarget,
   accountTotpState,
@@ -224,6 +226,12 @@ const fakeGame = fakeGameState as typeof fakeGameState & Parameters<typeof handl
 
 beforeEach(() => {
   vi.clearAllMocks();
+  vi.mocked(accountAndScopeForToken).mockImplementation(async (token: string) => {
+    const accountId = await accountForToken(token);
+    return accountId === null || accountId === undefined
+      ? null
+      : { accountId, scope: 'full' as const };
+  });
   vi.mocked(accountTotpState).mockResolvedValue({ enabled: false, configured: false, secret: null });
   vi.mocked(adminRolesForAccount).mockImplementation(async (accountId: number) =>
     (await isAdminAccount(accountId)) ? { username: 'admin', roles: ['superadmin'] } : null,
@@ -265,6 +273,17 @@ describe('admin api auth', () => {
 
     expect(res.statusCode).toBe(401);
     expect(isAdminAccount).toHaveBeenCalledWith(7);
+  });
+
+  it('rejects a read-only companion token even when its account is an admin', async () => {
+    vi.mocked(accountAndScopeForToken).mockResolvedValue({ accountId: 7, scope: 'read' });
+    vi.mocked(isAdminAccount).mockResolvedValue(true);
+    const res = fakeRes();
+
+    await handleAdminApi(fakeReq({ token: VALID_TOKEN }), res, fakeGame);
+
+    expect(res.statusCode).toBe(401);
+    expect(overviewCounts).not.toHaveBeenCalled();
   });
 
   it('serves the overview to an admin token and includes live server stats', async () => {

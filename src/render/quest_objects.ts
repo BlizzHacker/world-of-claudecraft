@@ -26,6 +26,8 @@ const QUEST_OBJECT_URLS: Record<string, string> = {
   grave_sir_aldren: '/models/dungeon/gravestone.glb',
   grave_high_priest_malric: '/models/dungeon/gravestone.glb',
   grave_captain_voss: '/models/dungeon/gravestone.glb',
+  town_defense_board: '/models/biome/camp_signpost.glb',
+  skirmish_post: '/models/biome/camp_tent.glb',
 };
 
 const QUEST_OBJECT_HEIGHTS: Record<string, number> = {
@@ -37,6 +39,8 @@ const QUEST_OBJECT_HEIGHTS: Record<string, number> = {
   grave_sir_aldren: 1.6,
   grave_high_priest_malric: 1.6,
   grave_captain_voss: 1.6,
+  town_defense_board: 2.2,
+  skirmish_post: 2.8,
 };
 
 const SCROLL_ITEM_IDS = new Set(['weathered_ledger_page', 'fen_muster_order', 'highwatch_summons']);

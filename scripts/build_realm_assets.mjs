@@ -63,6 +63,64 @@ const PICKTURA_FORMATS = new Set(
     .filter(Boolean),
 );
 
+export const CURATED_INFERNAL_HUMANS = [
+  {
+    sourceName: '0196e403-d466-7e25-9af0-61b10b968cf3__x__Walking.glb',
+    outputName: 'infernal_human_iron_warden.glb',
+  },
+  {
+    sourceName: '019b7548-998a-7eb1-84f7-9f6f58a8c25a__x__Walking.glb',
+    outputName: 'infernal_human_vanguard.glb',
+  },
+  {
+    sourceName: '01983db1-95e8-79c9-89f9-6f3fb9b618fa__x__Walking.glb',
+    outputName: 'infernal_human_forge_worker.glb',
+  },
+  {
+    sourceName: '0193ef2a-c488-7a92-80d7-88721cea2733__x__Walking.glb',
+    outputName: 'infernal_human_white_sage.glb',
+  },
+  {
+    sourceName: '0193fbb1-8ae7-70c7-b19a-f7d70d481434__x__Walking.glb',
+    outputName: 'infernal_human_tainted_hood.glb',
+  },
+  {
+    sourceName: '01941042-31a3-7674-860a-6d2cbd7ddc89__x__Walking.glb',
+    outputName: 'infernal_human_weathered_elder.glb',
+  },
+  {
+    sourceName: '0194372a-72aa-78d6-b9b7-f2c701b90f98__x__Walking.glb',
+    outputName: 'infernal_human_road_mercenary.glb',
+  },
+  {
+    sourceName: '019f4324-96c3-7112-a909-e3ffa340c077__Iron_Ranger__Walking.glb',
+    outputName: 'infernal_human_iron_ranger.glb',
+  },
+  {
+    sourceName: '0193fba8-bc38-70c6-8650-590af9f5a58a__x__Walking.glb',
+    outputName: 'infernal_human_hooded_wanderer.glb',
+  },
+  {
+    sourceName: '0194089a-19e3-7972-9ede-1dcc4ab02434__x__Walking.glb',
+    outputName: 'infernal_human_hermit.glb',
+  },
+];
+
+const INFERNAL_BIPED_DONOR = '019b7548-998a-7eb1-84f7-9f6f58a8c25a';
+export const INFERNAL_BIPED_ACTIONS = [
+  { action: 'Combat_Stance', outputName: 'infernal_biped_idle.glb' },
+  { action: 'Walking', outputName: 'infernal_biped_walk.glb' },
+  { action: 'Running', outputName: 'infernal_biped_run.glb' },
+  { action: 'Attack', outputName: 'infernal_biped_attack.glb' },
+  { action: 'Charged_Axe_Chop', outputName: 'infernal_biped_axe_attack.glb' },
+  { action: 'Charged_Spell_Cast', outputName: 'infernal_biped_cast.glb' },
+  { action: 'Face_Punch_Reaction', outputName: 'infernal_biped_hit.glb' },
+  { action: 'Dead', outputName: 'infernal_biped_death.glb' },
+  { action: 'Backflip_Sweep_Kick', outputName: 'infernal_biped_jump.glb' },
+  { action: 'Big_Wave_Hello', outputName: 'infernal_biped_wave.glb' },
+  { action: 'Chest_Pound_Taunt', outputName: 'infernal_biped_taunt.glb' },
+];
+
 const FORGED_DIR = path.resolve(
   process.env.ARCFORGE_FORGED_DIR?.trim() ? process.env.ARCFORGE_FORGED_DIR : DEFAULT_FORGED_DIR,
 );
@@ -225,6 +283,7 @@ export function classifyAssetKind(name, inspection = {}) {
   if (inspection.kind === 'character' || inspection.kind === 'vehicle' || inspection.kind === 'prop') {
     return inspection.kind;
   }
+  if (inspection.skinned || inspection.animationNames?.length) return 'character';
   const n = normalizeText(name);
   if (/\b(ship|spaceship|battlecruiser|cruiser|tank|mount|rider|dragon)\b/.test(n))
     return 'vehicle';
@@ -234,7 +293,6 @@ export function classifyAssetKind(name, inspection = {}) {
     )
   )
     return 'prop';
-  if (inspection.skinned || inspection.animationNames?.length) return 'character';
   if (
     /\b(demon|baal|butcher|orc|warrior|queen|huntress|sorceress|hero|mech|marine|knight|ninja|gunslinger|behe|behemoth|herald|wolf|creature|monster)\b/.test(
       n,
@@ -370,6 +428,50 @@ async function gatherPickturaCandidates() {
     }
   }
   return candidates;
+}
+
+async function gatherCuratedInfernalHumans() {
+  if (!PICKTURA_ROOT) return [];
+  const animatedDir = path.join(PICKTURA_ROOT, 'animated');
+  const curated = [];
+  for (const asset of CURATED_INFERNAL_HUMANS) {
+    const sourcePath = path.join(animatedDir, asset.sourceName);
+    const stat = await fs.stat(sourcePath).catch(() => null);
+    if (!stat?.isFile()) continue;
+    curated.push({
+      source: 'approved-asset',
+      realmId: 'infernal',
+      sourcePath,
+      sourceName: asset.sourceName,
+      outputName: asset.outputName,
+      sourceRelative: `PICKTURA/animated/${asset.sourceName}`,
+      size: stat.size,
+      kind: 'character',
+      license: 'approved-local',
+      author: 'PICKTURA',
+      action: 'Walking',
+    });
+  }
+  for (const asset of INFERNAL_BIPED_ACTIONS) {
+    const sourceName = `${INFERNAL_BIPED_DONOR}__x__${asset.action}_armature.glb`;
+    const sourcePath = path.join(animatedDir, sourceName);
+    const stat = await fs.stat(sourcePath).catch(() => null);
+    if (!stat?.isFile()) continue;
+    curated.push({
+      source: 'approved-asset',
+      realmId: 'infernal',
+      sourcePath,
+      sourceName,
+      outputName: asset.outputName,
+      sourceRelative: `PICKTURA/animated/${sourceName}`,
+      size: stat.size,
+      kind: 'animation',
+      license: 'approved-local',
+      author: 'PICKTURA',
+      action: asset.action,
+    });
+  }
+  return curated;
 }
 
 async function gatherExplicitCandidates() {
@@ -764,6 +866,7 @@ async function main() {
   if (!API_ONLY) {
     candidates.push(...(await gatherLocalCandidates()));
     candidates.push(...(await gatherPickturaCandidates()));
+    candidates.push(...(await gatherCuratedInfernalHumans()));
     candidates.push(...(await gatherExplicitCandidates()));
     candidates.push(...(await gatherApprovedAssetRoot(INFERNAL_ASSET_ROOT, 'infernal')));
     candidates.push(...(await gatherApprovedAssetRoot(CRYPTIC_ASSET_ROOT, 'crypticrealm')));

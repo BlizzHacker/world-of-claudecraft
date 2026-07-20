@@ -920,6 +920,16 @@ export const SURFACE_INVENTORY: readonly SurfaceRoute[] = [
     limiter: null,
     requireOwnedExpected: null,
   },
+  {
+    dispatcher: DISPATCH.mainApi,
+    method: 'GET',
+    path: '/api/asset-library',
+    handler: 'routeHttpRequest arm: /api/asset-library (handleAssetLibraryCatalog)',
+    contentType: PROBLEM_JSON,
+    authScope: AUTH_SCOPE.public,
+    limiter: null,
+    requireOwnedExpected: null,
+  },
   // Daily-rewards player family (v0.19.0, server/daily_rewards.ts): served by
   // the handleDailyRewardApi sub-dispatcher behind the main.ts PREFIX arm
   // `url.startsWith('/api/daily-rewards')`, which runs bearerActiveAccount

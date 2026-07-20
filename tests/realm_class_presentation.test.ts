@@ -22,6 +22,40 @@ const ALL_CLASSES: readonly PlayerClass[] = [
   'druid',
 ];
 
+const INFERNAL_HERO_ARCHETYPES: ReadonlyArray<readonly [string, PlayerClass]> = [
+  ['Warrior', 'warrior'],
+  ['Rogue', 'rogue'],
+  ['Sorcerer / Sorceress', 'mage'],
+  ['Amazon', 'hunter'],
+  ['Barbarian', 'warrior'],
+  ['Necromancer', 'warlock'],
+  ['Paladin', 'paladin'],
+  ['Druid', 'druid'],
+  ['Assassin', 'rogue'],
+  ['Demon Hunter', 'hunter'],
+  ['Monk', 'shaman'],
+  ['Wizard', 'mage'],
+  ['Witch Doctor', 'warlock'],
+  ['Crusader', 'paladin'],
+  ['Spiritborn', 'shaman'],
+  ['Warlock', 'warlock'],
+  ['Blood Knight', 'paladin'],
+  ['Tempest', 'shaman'],
+];
+
+const HELL_ENEMY_CHOICES = [
+  'Dark Paladin',
+  'Tainted Hood',
+  'Horned Demon',
+  'Crimson Infernal Behemoth',
+  'Bone Herald',
+  'Skullbeast',
+];
+
+const INFERNAL_VERSION_LABEL = /Diablo (?:I|II|III|IV|Immortal)/i;
+const HELL_ONLY_MODEL =
+  /diablo|demon|dark[ _-]?paladin|bone[ _-]?herald|behemoth|skullbeast|cursed|corrupt|tainted/i;
+
 describe('realm class presentation', () => {
   it('offers a realm-flavored choice for every playable base class', () => {
     const realms: RealmId[] = [
@@ -95,22 +129,65 @@ describe('realm class presentation', () => {
     }
   });
 
-  it('exposes the complete Infernal Diablo roster on real GLBs', () => {
+  it('exposes one version-neutral human hero card per Infernal archetype', () => {
     const choices = infernalDiabloClassChoicesForRealm(getRealm('infernal'));
-    expect(choices).toHaveLength(19);
-    expect(new Set(choices.map((choice) => choice.name)).size).toBe(choices.length);
-    expect(choices.map((choice) => choice.lineage)).toEqual(
-      expect.arrayContaining(['Diablo I', 'Diablo II', 'Diablo III', 'Diablo IV', 'Diablo Immortal']),
+    const heroes = choices.filter((choice) => choice.factionSide === 'sanctuary');
+
+    expect(heroes.map((choice) => [choice.name, choice.baseClass])).toEqual(
+      INFERNAL_HERO_ARCHETYPES,
     );
-    expect(choices.every((choice) => choice.assetStatus === 'ready')).toBe(true);
-    expect(choices.every((choice) => choice.assetUrl?.endsWith('.glb'))).toBe(true);
-    expect(choices.find((choice) => choice.name === 'Warrior')?.assetUrl).toContain(
-      'durance_tester_humanoid.glb',
+    expect(new Set(heroes.map((choice) => choice.name)).size).toBe(heroes.length);
+    expect(new Set(choices.map((choice) => choice.factionSide))).toEqual(
+      new Set(['sanctuary', 'hell']),
     );
-    expect(choices.find((choice) => choice.name === 'Necromancer')?.assetName).toBe('Bone Herald');
-    expect(new Set(choices.map((choice) => choice.faction))).toEqual(
-      new Set(['Heavenly Host', 'Burning Hells', 'Ashen Court']),
-    );
+
+    for (const choice of heroes) {
+      expect(choice.assetStatus, choice.name).toBe('ready');
+      expect(choice.assetAnimated, choice.name).toBe(true);
+      expect(choice.assetUrl, choice.name).toMatch(
+        /^\/cr-realms\/infernal\/(?:characters\/)?infernal_human_[a-z_]+\.glb$/,
+      );
+      expect(`${choice.assetName} ${choice.assetUrl}`, choice.name).not.toMatch(HELL_ONLY_MODEL);
+    }
+
+    for (const choice of choices) {
+      expect(choice.name, choice.diabloId).not.toMatch(INFERNAL_VERSION_LABEL);
+      expect(choice.lore, choice.diabloId).not.toMatch(INFERNAL_VERSION_LABEL);
+      expect(choice.diabloId).not.toMatch(/diablo-(?:i|ii|iii|iv|immortal)/i);
+      expect(choice).not.toHaveProperty('lineage');
+    }
+
+    const baseChoices = classChoicesForRealm(getRealm('infernal'));
+    expect(baseChoices).toHaveLength(ALL_CLASSES.length);
+    expect(
+      baseChoices.every((choice) =>
+        /^\/cr-realms\/infernal\/(?:characters\/)?infernal_human_[a-z_]+\.glb$/.test(
+          choice.assetUrl ?? '',
+        ),
+      ),
+    ).toBe(true);
+  });
+
+  it('keeps distinct demon and corrupted previews on the Hell side only', () => {
+    const choices = infernalDiabloClassChoicesForRealm(getRealm('infernal'));
+    const enemies = choices.filter((choice) => choice.factionSide === 'hell');
+
+    expect(enemies.map((choice) => choice.name)).toEqual(HELL_ENEMY_CHOICES);
+    expect(new Set(enemies.map((choice) => choice.diabloId)).size).toBe(enemies.length);
+    expect(new Set(enemies.map((choice) => choice.assetUrl)).size).toBe(enemies.length);
+    expect(enemies.every((choice) => choice.faction === 'Burning Hells')).toBe(true);
+    expect(enemies.every((choice) => choice.assetUrl?.endsWith('.glb'))).toBe(true);
+
+    for (const choice of choices) {
+      if (HELL_ONLY_MODEL.test(`${choice.assetName} ${choice.assetUrl}`)) {
+        expect(choice.factionSide, choice.name).toBe('hell');
+      }
+    }
+
+    expect(presentationFactionsForRealm(getRealm('infernal'))).toEqual([
+      'Heavenly Host',
+      'Burning Hells',
+    ]);
   });
 
   it('leaves pristine and exchange realms on vanilla class labels', () => {

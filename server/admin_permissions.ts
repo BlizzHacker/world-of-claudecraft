@@ -16,6 +16,10 @@ export const ADMIN_PERMISSIONS = [
   'moderation.spectate',
   'ipblocks.manage',
   'chatfilter.manage',
+  'content.read',
+  'content.edit',
+  'content.publish',
+  'content.rollback',
   'content.moderate',
   'botdetector.read',
   'botdetector.configure',
@@ -58,11 +62,13 @@ export const ROLE_PERMISSIONS: Record<AdminRole, readonly AdminPermission[]> = {
     'moderation.spectate',
     'ipblocks.manage',
     'chatfilter.manage',
+    'content.read',
+    'content.edit',
     'content.moderate',
   ],
   // Read-only composition brick. Deliberately EXCLUDES botdetector.read: the
   // anti-bot internals are sensitive, so only admin/superadmin see them.
-  viewer: ['analytics.read', 'accounts.read', 'support.read', 'moderation.read'],
+  viewer: ['analytics.read', 'accounts.read', 'support.read', 'moderation.read', 'content.read'],
 };
 
 export function isAdminRole(value: unknown): value is AdminRole {

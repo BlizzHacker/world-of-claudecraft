@@ -15,6 +15,7 @@ import { loadGltf, releaseGltf } from '../render/assets/loader';
 import { assetById } from './asset_catalog.generated';
 import { hashHue, ThumbBook, thumbPose } from './asset_thumbs_core';
 import { userAssetPath } from './user_assets';
+import { libraryAssetPath } from './library_assets';
 
 // 2x the cell's 72x54 CSS size for crisp thumbnails on HiDPI screens.
 const RENDER_W = 144;
@@ -49,7 +50,7 @@ let pumpScheduled = false;
 
 /** Resolve an asset id to its GLB URL the same way placement rendering does. */
 function assetGlbPath(assetId: string): string | null {
-  return userAssetPath(assetId) ?? assetById(assetId)?.path ?? null;
+  return libraryAssetPath(assetId) ?? userAssetPath(assetId) ?? assetById(assetId)?.path ?? null;
 }
 
 function ensureGl(): GlHost | null {

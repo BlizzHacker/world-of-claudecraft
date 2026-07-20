@@ -86,7 +86,7 @@ const allowedRateLimit = (): ReturnType<NonNullable<AdminDbBundle['rateLimited']
 // target reads as a normal account). Extra reads are layered per test.
 function authedAdminDb(overrides: DbOverrides = {}): void {
   setDb({
-    accountForToken: async () => ADMIN_ACCOUNT_ID,
+    accountAndScopeForToken: async () => ({ accountId: ADMIN_ACCOUNT_ID, scope: 'full' }),
     adminRolesForAccount: async (id: number) =>
       id === ADMIN_ACCOUNT_ID ? { username: 'op', roles: ['superadmin'] } : null,
     isAdminAccount: async (id: number) => id === ADMIN_ACCOUNT_ID,
@@ -271,19 +271,25 @@ describe('admin envelope contract (frozen)', () => {
 
 describe('requireAdmin gate', () => {
   it('401s a missing bearer DB-free with the legacy admin body', async () => {
-    const accountForToken = vi.fn(async () => ADMIN_ACCOUNT_ID);
+    const accountAndScopeForToken = vi.fn(async () => ({
+      accountId: ADMIN_ACCOUNT_ID,
+      scope: 'full' as const,
+    }));
     const adminRolesForAccount = vi.fn(async () => ({ username: 'op', roles: ['superadmin'] }));
-    setDb({ accountForToken, adminRolesForAccount });
+    setDb({ accountAndScopeForToken, adminRolesForAccount });
     installAdminRuntime();
     const r = await runRoute('GET', '/admin/api/overview');
     expect(r.status).toBe(401);
     expect(r.body).toEqual({ success: false, data: null, error: 'admin authentication required' });
     // A missing bearer never reaches the token lookup.
-    expect(accountForToken).not.toHaveBeenCalled();
+    expect(accountAndScopeForToken).not.toHaveBeenCalled();
   });
 
   it('401s a valid bearer whose account is NOT staff (no roles)', async () => {
-    setDb({ accountForToken: async () => 42, adminRolesForAccount: async () => null });
+    setDb({
+      accountAndScopeForToken: async () => ({ accountId: 42, scope: 'full' }),
+      adminRolesForAccount: async () => null,
+    });
     installAdminRuntime();
     const r = await runRoute('GET', '/admin/api/overview', { headers: { authorization: BEARER } });
     expect(r.status).toBe(401);
@@ -292,7 +298,7 @@ describe('requireAdmin gate', () => {
 
   it('401s a bearer that resolves to no account', async () => {
     setDb({
-      accountForToken: async () => null,
+      accountAndScopeForToken: async () => null,
       adminRolesForAccount: async () => ({ username: 'op', roles: ['superadmin'] }),
     });
     installAdminRuntime();
@@ -309,6 +315,17 @@ describe('requireAdmin gate', () => {
     const r = await runRoute('GET', '/admin/api/overview', { headers: { authorization: BEARER } });
     expect(r.status).toBe(200);
     expect((r.body as { success: boolean }).success).toBe(true);
+  });
+
+  it('401s a staff account presented through a read-only companion token', async () => {
+    setDb({
+      accountAndScopeForToken: async () => ({ accountId: ADMIN_ACCOUNT_ID, scope: 'read' }),
+      adminRolesForAccount: async () => ({ username: 'op', roles: ['superadmin'] }),
+    });
+    installAdminRuntime();
+    const r = await runRoute('GET', '/admin/api/overview', { headers: { authorization: BEARER } });
+    expect(r.status).toBe(401);
+    expect(r.body).toEqual({ success: false, data: null, error: 'admin authentication required' });
   });
 
   it('403s a staff account whose roles lack the route permission (central gate)', async () => {
@@ -425,7 +442,7 @@ describe('POST /admin/api/login', () => {
         token: 'tok123',
         username: 'bob',
         roles: ['viewer'],
-        permissions: ['analytics.read', 'accounts.read', 'support.read', 'moderation.read'],
+        permissions: ['analytics.read', 'accounts.read', 'support.read', 'moderation.read', 'content.read'],
       },
       error: null,
     });
@@ -1517,7 +1534,7 @@ describe('staff identity + role management (release v0.22.0)', () => {
       data: {
         username: 'op',
         roles: ['viewer'],
-        permissions: ['analytics.read', 'accounts.read', 'support.read', 'moderation.read'],
+        permissions: ['analytics.read', 'accounts.read', 'support.read', 'moderation.read', 'content.read'],
       },
       error: null,
     });
@@ -2040,7 +2057,7 @@ describe('reset-password RouteDef handler (accounts.password)', () => {
     // The actor holds accounts.password via the plain admin role, but the target
     // reads as staff (isAdminAccount true), so the reset is refused.
     setDb({
-      accountForToken: async () => ADMIN_ACCOUNT_ID,
+      accountAndScopeForToken: async () => ({ accountId: ADMIN_ACCOUNT_ID, scope: 'full' }),
       adminRolesForAccount: async (id: number) =>
         id === ADMIN_ACCOUNT_ID ? { username: 'op', roles: ['admin'] } : null,
       isAdminAccount: async () => true,
@@ -2065,7 +2082,7 @@ describe('reset-password RouteDef handler (accounts.password)', () => {
   it('is denied 403 by the central gate for a moderator (accounts.password not held)', async () => {
     const deps = resetDeps();
     setDb({
-      accountForToken: async () => ADMIN_ACCOUNT_ID,
+      accountAndScopeForToken: async () => ({ accountId: ADMIN_ACCOUNT_ID, scope: 'full' }),
       adminRolesForAccount: async () => ({ username: 'op', roles: ['moderator'] }),
       ...deps,
     });

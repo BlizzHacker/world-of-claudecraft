@@ -136,6 +136,7 @@ import { maybeHandleExchangeApi } from './exchange/api';
 import { applyExchangeSchema } from './exchange/db';
 import { maybeHandleContributionsApi } from './contributions';
 import { handleCrRealmsStatic, handleForgedCatalog, handleForgedStatic } from './forged_assets';
+import { handleAssetLibraryCatalog, handleAssetLibraryStatic } from './asset_library';
 import { GameServer } from './game';
 import {
   handleGitHubCallback,
@@ -2435,8 +2436,16 @@ export function routeHttpRequest(req: http.IncomingMessage, res: http.ServerResp
   // other /api route keeps the narrow realm/native allowlist.
   const publicCorsPath = isPublicCorsPath(path);
   if (applyCorsAndPreflight(req, res, isApi, publicCorsPath)) return;
+  if (path.startsWith('/asset-library/')) {
+    void handleAssetLibraryStatic(req, res);
+    return;
+  }
   if (handleForgedStatic(req, res)) return;
   if (handleCrRealmsStatic(req, res)) return;
+  if (path === '/api/asset-library') {
+    void handleAssetLibraryCatalog(req, res);
+    return;
+  }
   if (path === '/api/forged-props') {
     void handleForgedCatalog(req, res);
     return;
