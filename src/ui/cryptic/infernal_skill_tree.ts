@@ -1,4 +1,4 @@
-// In-game Diablo-styled skill-tree viewer for the Infernal realm. Reads the
+// In-game dark-fantasy skill-tree viewer for the Infernal realm. Reads the
 // authentic skill data (src/sim/realms/infernal_skills) and renders a class's
 // three trees in the dark stone D2 skill-calculator style. Display layer of the
 // Infernal skill system; a later layer wires selected skills to castable
@@ -46,7 +46,7 @@ function closeTree(): void {
   document.getElementById(MODAL_ID)?.remove();
 }
 
-/** Open the Diablo skill-tree viewer for a canonical hero class name. Returns
+/** Open the skill-tree viewer for a canonical hero class name. Returns
  *  false if that class has no skill data yet (the caller can hide its button). */
 export function openInfernalSkillTree(className: string): boolean {
   const set = infernalSkillsetFor(className);

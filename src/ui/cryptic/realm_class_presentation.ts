@@ -1,9 +1,9 @@
-import {
-  type DiabloSkill,
-  diabloClassesForRealm,
-  diabloSignatureSkills,
-} from '../../sim/realms/diablo_classes';
 import { factionForRealmClass } from '../../sim/realms/factions';
+import {
+  infernalHeroClassesForRealm,
+  type SignatureSkill,
+  signatureSkillsFor,
+} from '../../sim/realms/infernal_classes';
 import type { RealmClassSkin, RealmContent, RealmId, RealmRole } from '../../sim/realms/types';
 import type { PlayerClass } from '../../sim/types';
 import { firstRealmVisualOverride } from './realm_visual_overrides';
@@ -36,11 +36,11 @@ export interface RealmClassPresentation {
   source?: RealmClassSkin;
 }
 
-export interface InfernalDiabloClassPresentation extends RealmClassPresentation {
-  diabloId: string;
+export interface InfernalHeroPresentation extends RealmClassPresentation {
+  heroId: string;
   factionSide: 'sanctuary' | 'hell';
-  /** Real Diablo skills for this class, shown as its signature abilities. */
-  signatureSkills: readonly DiabloSkill[];
+  /** Signature skills for this class, shown as its signature abilities. */
+  signatureSkills: readonly SignatureSkill[];
 }
 
 export type RealmClassAssetStatus = 'ready' | 'preview' | 'comingSoon';
@@ -851,9 +851,9 @@ function infernalClassChoice(
   realm: RealmContent,
   name: string,
   baseClass: PlayerClass,
-  factionSide: InfernalDiabloClassPresentation['factionSide'],
+  factionSide: InfernalHeroPresentation['factionSide'],
   assetChoice: RealmClassAsset,
-): InfernalDiabloClassPresentation {
+): InfernalHeroPresentation {
   const base = classPresentationForRealm(realm, baseClass);
   const faction = factionSide === 'hell' ? INFERNAL_HELL_FACTION : INFERNAL_HERO_FACTION;
   const side = factionSide === 'hell' ? 'hell' : 'hero';
@@ -885,9 +885,9 @@ function infernalClassChoice(
         : `A human champion of Sanctuary carrying the ${name} tradition into the Infernal Realm.`,
     color: faction.color,
     ...resolvedAsset,
-    diabloId: infernalChoiceId(side, name),
+    heroId: infernalChoiceId(side, name),
     factionSide,
-    signatureSkills: diabloSignatureSkills(name),
+    signatureSkills: signatureSkillsFor(name),
   };
 }
 
@@ -896,13 +896,11 @@ function infernalClassChoice(
  * enemy roster. The combat server still persists the existing nine mechanical
  * classes, so every presentation choice submits its compatible baseClass.
  */
-export function infernalDiabloClassChoicesForRealm(
-  realm: RealmContent,
-): InfernalDiabloClassPresentation[] {
+export function infernalHeroChoicesForRealm(realm: RealmContent): InfernalHeroPresentation[] {
   if (realm.id !== 'infernal') return [];
-  const heroes: InfernalDiabloClassPresentation[] = [];
+  const heroes: InfernalHeroPresentation[] = [];
   const seen = new Set<string>();
-  for (const source of diabloClassesForRealm(realm.id)) {
+  for (const source of infernalHeroClassesForRealm(realm.id)) {
     const name = canonicalInfernalHeroName(source.name);
     if (seen.has(name)) continue;
     seen.add(name);
@@ -926,7 +924,7 @@ export function infernalDiabloClassChoicesForRealm(
 
 export function presentationFactionsForRealm(realm: RealmContent): string[] {
   if (realm.id === 'infernal') {
-    return [...new Set(infernalDiabloClassChoicesForRealm(realm).map((choice) => choice.faction))];
+    return [...new Set(infernalHeroChoicesForRealm(realm).map((choice) => choice.faction))];
   }
   const out: string[] = [];
   for (const choice of classChoicesForRealm(realm)) {

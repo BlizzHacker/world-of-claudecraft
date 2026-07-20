@@ -8,7 +8,7 @@
 
 import type { RealmContent } from '../../sim/realms/types';
 import { getMe, getToken } from '../../user/api';
-import { infernalDiabloClassChoicesForRealm } from './realm_class_presentation';
+import { infernalHeroChoicesForRealm } from './realm_class_presentation';
 import {
   type RealmVisualOverrideEntry,
   realmVisualOverride,
@@ -147,7 +147,7 @@ export async function openRealmVisualEditor(realm: RealmContent): Promise<void> 
 
   const currentName = (key: string, fallback: string): string =>
     realmVisualOverride(realm.id, key)?.assetName ?? fallback;
-  const heroTargets: EditTarget[] = infernalDiabloClassChoicesForRealm(realm).map((h) => ({
+  const heroTargets: EditTarget[] = infernalHeroChoicesForRealm(realm).map((h) => ({
     key: `hero:${h.name}`,
     label: h.name,
     current: currentName(`hero:${h.name}`, h.assetName ?? 'default'),

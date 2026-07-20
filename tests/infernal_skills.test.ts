@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { INFERNAL_DIABLO_CLASSES } from '../src/sim/realms/diablo_classes';
+import { INFERNAL_HERO_CLASSES } from '../src/sim/realms/infernal_classes';
 import { INFERNAL_SKILLSETS, infernalSkillsetFor } from '../src/sim/realms/infernal_skills';
 
 const ELEMENTS = new Set(['fire', 'cold', 'lightning', 'poison', 'magic', 'physical', 'holy']);
 const KINDS = new Set(['attack', 'passive', 'aura', 'summon', 'curse', 'buff', 'trap', 'shift']);
 
 describe('infernal skill trees', () => {
-  it('ships the seven Diablo II classes, each with three trees', () => {
+  it('ships the seven founding classes, each with three trees', () => {
     expect(INFERNAL_SKILLSETS).toHaveLength(7);
     for (const set of INFERNAL_SKILLSETS) {
       expect(set.trees).toHaveLength(3);
@@ -42,9 +42,9 @@ describe('infernal skill trees', () => {
     expect(infernalSkillsetFor('Nonexistent')).toBeNull();
   });
 
-  it('every skillset name maps to a real Diablo hero in the roster', () => {
+  it('every skillset name maps to a real hero in the roster', () => {
     const rosterNames = new Set(
-      INFERNAL_DIABLO_CLASSES.map((c) =>
+      INFERNAL_HERO_CLASSES.map((c) =>
         c.name === 'Sorcerer' || c.name === 'Sorceress' ? 'Sorcerer / Sorceress' : c.name,
       ),
     );

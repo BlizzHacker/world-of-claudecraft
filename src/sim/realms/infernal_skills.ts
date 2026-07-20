@@ -1,10 +1,10 @@
-// The Infernal skill system: authentic Diablo skill trees, data-as-code. This
+// The Infernal skill system: authentic dark-fantasy skill trees, data-as-code. This
 // layer is the DATA + display foundation (a D2-styled skill-tree viewer reads
 // it). A later layer wires selected skills to castable ClaudeCraft abilities
 // with real elemental VFX. English source strings, like the rest of the realm
 // presentation content; no i18n/DOM/engine imports here.
 //
-// req is the Diablo II skill level requirement (the tree tier). element/kind
+// req is the skill level requirement (the tree tier). element/kind
 // tag each skill so the future castable layer can pick the right VFX and effect.
 
 export type SkillElement = 'fire' | 'cold' | 'lightning' | 'poison' | 'magic' | 'physical' | 'holy';
@@ -22,7 +22,7 @@ export type SkillKind =
 export interface InfernalSkill {
   id: string;
   name: string;
-  /** Diablo II skill-level requirement (1/6/12/18/24/30 tiers). */
+  /** skill-level requirement (1/6/12/18/24/30 tiers). */
   req: number;
   element?: SkillElement;
   kind: SkillKind;
@@ -35,7 +35,7 @@ export interface InfernalSkillTree {
 }
 
 export interface InfernalClassSkillset {
-  /** Canonical hero name (matches diablo_classes / the create roster). */
+  /** Canonical hero name (matches infernal_classes / the create roster). */
   className: string;
   source: string;
   trees: readonly InfernalSkillTree[];
@@ -53,7 +53,7 @@ const s = (
 export const INFERNAL_SKILLSETS: readonly InfernalClassSkillset[] = [
   {
     className: 'Amazon',
-    source: 'Diablo II',
+    source: 'The Dark Exile',
     trees: [
       {
         name: 'Javelin and Spear',
@@ -293,7 +293,7 @@ export const INFERNAL_SKILLSETS: readonly InfernalClassSkillset[] = [
   },
   {
     className: 'Assassin',
-    source: 'Diablo II',
+    source: 'The Dark Exile',
     trees: [
       {
         name: 'Martial Arts',
@@ -540,7 +540,7 @@ export const INFERNAL_SKILLSETS: readonly InfernalClassSkillset[] = [
   },
   {
     className: 'Barbarian',
-    source: 'Diablo II',
+    source: 'The Dark Exile',
     trees: [
       {
         name: 'Warcries',
@@ -751,7 +751,7 @@ export const INFERNAL_SKILLSETS: readonly InfernalClassSkillset[] = [
   },
   {
     className: 'Druid',
-    source: 'Diablo II',
+    source: 'The Dark Exile',
     trees: [
       {
         name: 'Elemental',
@@ -976,7 +976,7 @@ export const INFERNAL_SKILLSETS: readonly InfernalClassSkillset[] = [
   },
   {
     className: 'Necromancer',
-    source: 'Diablo II',
+    source: 'The Dark Exile',
     trees: [
       {
         name: 'Summoning',
@@ -1180,7 +1180,7 @@ export const INFERNAL_SKILLSETS: readonly InfernalClassSkillset[] = [
   },
   {
     className: 'Paladin',
-    source: 'Diablo II',
+    source: 'The Dark Exile',
     trees: [
       {
         name: 'Defensive Auras',
@@ -1406,7 +1406,7 @@ export const INFERNAL_SKILLSETS: readonly InfernalClassSkillset[] = [
   },
   {
     className: 'Sorcerer / Sorceress',
-    source: 'Diablo II',
+    source: 'The Dark Exile',
     trees: [
       {
         name: 'Cold Spells',

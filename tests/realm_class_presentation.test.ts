@@ -4,7 +4,7 @@ import type { PlayerClass } from '../src/sim/types';
 import {
   classChoicesForRealm,
   classPresentationForRealm,
-  infernalDiabloClassChoicesForRealm,
+  infernalHeroChoicesForRealm,
   PLAYER_CLASS_ORDER,
   presentationFactionsForRealm,
   realmHasClassOverlay,
@@ -130,7 +130,7 @@ describe('realm class presentation', () => {
   });
 
   it('exposes one version-neutral human hero card per Infernal archetype', () => {
-    const choices = infernalDiabloClassChoicesForRealm(getRealm('infernal'));
+    const choices = infernalHeroChoicesForRealm(getRealm('infernal'));
     const heroes = choices.filter((choice) => choice.factionSide === 'sanctuary');
 
     expect(heroes.map((choice) => [choice.name, choice.baseClass])).toEqual(
@@ -151,9 +151,9 @@ describe('realm class presentation', () => {
     }
 
     for (const choice of choices) {
-      expect(choice.name, choice.diabloId).not.toMatch(INFERNAL_VERSION_LABEL);
-      expect(choice.lore, choice.diabloId).not.toMatch(INFERNAL_VERSION_LABEL);
-      expect(choice.diabloId).not.toMatch(/diablo-(?:i|ii|iii|iv|immortal)/i);
+      expect(choice.name, choice.heroId).not.toMatch(INFERNAL_VERSION_LABEL);
+      expect(choice.lore, choice.heroId).not.toMatch(INFERNAL_VERSION_LABEL);
+      expect(choice.heroId).not.toMatch(/diablo-(?:i|ii|iii|iv|immortal)/i);
       expect(choice).not.toHaveProperty('lineage');
     }
 
@@ -169,11 +169,11 @@ describe('realm class presentation', () => {
   });
 
   it('keeps distinct demon and corrupted previews on the Hell side only', () => {
-    const choices = infernalDiabloClassChoicesForRealm(getRealm('infernal'));
+    const choices = infernalHeroChoicesForRealm(getRealm('infernal'));
     const enemies = choices.filter((choice) => choice.factionSide === 'hell');
 
     expect(enemies.map((choice) => choice.name)).toEqual(HELL_ENEMY_CHOICES);
-    expect(new Set(enemies.map((choice) => choice.diabloId)).size).toBe(enemies.length);
+    expect(new Set(enemies.map((choice) => choice.heroId)).size).toBe(enemies.length);
     expect(new Set(enemies.map((choice) => choice.assetUrl)).size).toBe(enemies.length);
     expect(enemies.every((choice) => choice.faction === 'Burning Hells')).toBe(true);
     expect(enemies.every((choice) => choice.assetUrl?.endsWith('.glb'))).toBe(true);

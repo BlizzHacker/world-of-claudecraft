@@ -257,7 +257,7 @@ import {
   persistActiveRealm,
   type RealmContent,
 } from './sim/realms';
-import type { DiabloSkill } from './sim/realms/diablo_classes';
+import type { SignatureSkill } from './sim/realms/infernal_classes';
 import { mountBestiary } from './ui/cryptic/bestiary';
 import { mountRealmBranding } from './ui/cryptic/branding';
 import { mountChatFrame } from './ui/cryptic/chat_frame';
@@ -284,7 +284,7 @@ import { mountPwaInstall } from './ui/cryptic/pwa_install';
 import {
   classChoicesForRealm,
   classPresentationForRealm,
-  infernalDiabloClassChoicesForRealm,
+  infernalHeroChoicesForRealm,
   presentationFactionsForRealm,
   realmHasClassOverlay,
 } from './ui/cryptic/realm_class_presentation';
@@ -3615,13 +3615,13 @@ function realmClassPresentation(cls: PlayerClass) {
   const realm = realmContentForCharacterUi();
   if (realm.id === 'infernal') {
     const selected = document.querySelector<HTMLElement>(
-      '#charcreate-panel .mini-class.sel[data-diablo-id]',
+      '#charcreate-panel .mini-class.sel[data-hero-id]',
     );
-    const selectedId = selected?.dataset.diabloId;
-    const diablo = infernalDiabloClassChoicesForRealm(realm).find(
-      (choice) => choice.diabloId === selectedId && choice.baseClass === cls,
+    const selectedId = selected?.dataset.heroId;
+    const hero = infernalHeroChoicesForRealm(realm).find(
+      (choice) => choice.heroId === selectedId && choice.baseClass === cls,
     );
-    if (diablo) return diablo;
+    if (hero) return hero;
   }
   return classPresentationForRealm(realm, cls);
 }
@@ -3768,17 +3768,17 @@ function ensureCharCreateFactionFilter(): void {
   });
 }
 
-function paintInfernalDiabloRoster(
+function paintInfernalHeroRoster(
   row: HTMLElement,
-  choices: ReturnType<typeof infernalDiabloClassChoicesForRealm>,
+  choices: ReturnType<typeof infernalHeroChoicesForRealm>,
   activeFaction: string | null,
 ): void {
-  row.classList.add('infernal-diablo-roster');
+  row.classList.add('infernal-hero-roster');
   row.innerHTML = choices
     .filter((choice) => !activeFaction || choice.faction === activeFaction)
     .map(
       (choice) =>
-        `<button type="button" class="mini-class realm-skinned realm-playable" data-class="${choice.baseClass}" data-diablo-id="${choice.diabloId}" data-faction="${choice.faction}" data-realm-faction="${choice.faction}" data-realm-asset="${choice.assetUrl}" data-realm-asset-name="${choice.assetName}" data-realm-asset-status="ready" aria-label="${escapeHtml(`${choice.name}, ${choice.faction}`)}" aria-pressed="false" title="${escapeHtml(choice.assetName ?? choice.name)}"><span class="mini-class-label">${escapeHtml(choice.name)}</span><span class="mini-class-faction">${escapeHtml(choice.faction)} - Playable GLB</span></button>`,
+        `<button type="button" class="mini-class realm-skinned realm-playable" data-class="${choice.baseClass}" data-hero-id="${choice.heroId}" data-faction="${choice.faction}" data-realm-faction="${choice.faction}" data-realm-asset="${choice.assetUrl}" data-realm-asset-name="${choice.assetName}" data-realm-asset-status="ready" aria-label="${escapeHtml(`${choice.name}, ${choice.faction}`)}" aria-pressed="false" title="${escapeHtml(choice.assetName ?? choice.name)}"><span class="mini-class-label">${escapeHtml(choice.name)}</span><span class="mini-class-faction">${escapeHtml(choice.faction)} - Playable GLB</span></button>`,
     )
     .join('');
   row.querySelectorAll<HTMLElement>('.mini-class').forEach((card) => {
@@ -3817,7 +3817,7 @@ window.addEventListener('cr-realm-visuals-changed', () => {
   paintRealmClassChoices();
 });
 
-// Open the Diablo skill-tree viewer from the "View Skill Tree" button on the
+// Open the skill-tree viewer from the "View Skill Tree" button on the
 // create-character card (delegated so it survives every card re-render).
 document.addEventListener('click', (e) => {
   const btn = (e.target as HTMLElement | null)?.closest?.('[data-skilltree]') as HTMLElement | null;
@@ -3869,11 +3869,7 @@ function paintRealmClassChoices(): void {
   }
   const row = document.querySelector<HTMLElement>('#charcreate-panel .mini-class-row');
   if (row && realm.id === 'infernal') {
-    paintInfernalDiabloRoster(
-      row,
-      infernalDiabloClassChoicesForRealm(realm),
-      selectedCreateFaction(realm),
-    );
+    paintInfernalHeroRoster(row, infernalHeroChoicesForRealm(realm), selectedCreateFaction(realm));
     return;
   }
   const choices = classChoicesForRealm(realm);
@@ -5921,17 +5917,17 @@ function renderClassDetails(
     })
     .join('');
 
-  // Diablo realm classes show their real Diablo skill kit as the signature
+  // Infernal hero classes show their signature skill kit as the signature
   // abilities (Zeal/Fanaticism for the Paladin, and so on) instead of the base
   // engine class's spells. Icons fall back procedurally from the skill name.
-  const diabloSkills: readonly DiabloSkill[] =
+  const heroSignatureSkills: readonly SignatureSkill[] =
     realmClass && 'signatureSkills' in realmClass && Array.isArray(realmClass.signatureSkills)
-      ? (realmClass.signatureSkills as readonly DiabloSkill[])
+      ? (realmClass.signatureSkills as readonly SignatureSkill[])
       : [];
   const skillTreeName =
     realmClass && 'signatureSkills' in realmClass ? (realmClass as { name: string }).name : '';
   const showSkillTreeBtn = !!skillTreeName && hasInfernalSkillTree(skillTreeName);
-  const diabloSkillsHtml = diabloSkills
+  const heroSignatureSkillsHtml = heroSignatureSkills
     .map((skill) => {
       const iconUrl = iconDataUrl(
         'ability',
@@ -5983,7 +5979,7 @@ function renderClassDetails(
               ${showSkillTreeBtn ? `<button type="button" data-skilltree="${escapeHtml(skillTreeName)}" style="background:#2a1e10;border:1px solid #7a5a2a;color:#f4e6c8;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:12px">View Skill Tree</button>` : ''}
             </h4>
             <ul class="details-spells-list">
-              ${diabloSkillsHtml || spellsHtml}
+              ${heroSignatureSkillsHtml || spellsHtml}
             </ul>
           </div>
         </div>
