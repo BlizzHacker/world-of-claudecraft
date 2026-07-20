@@ -243,22 +243,24 @@ const meshyBiped = (
   jump: opts.jump ?? 'Basic_Jump',
 });
 
+// The Meshy-generated infernal human bodies each ship exactly ONE animation of
+// their own, 'Armature|walking_man|baselayer', authored against their exact rig.
+// The generic infernal_biped_* clip set is authored against a DIFFERENT rest
+// pose: its bones share names but not bind orientation, so applying it splays the
+// body flat in-world (the "stingray"). The character-creation preview looked fine
+// only because it plays the body's own clip. Until each body gets a compatible
+// animation pack (Meshy rig + Animation Pass), drive every state from the one
+// clip that rigs correctly, so NPCs stand and move upright instead of collapsing.
+const INFERNAL_HUMAN_BASE_CLIP = 'Armature|walking_man|baselayer';
 const INFERNAL_HUMAN_CLIPS: ClipMap = {
-  idle: 'Armature|Combat_Stance|baselayer',
-  walk: 'Armature|walking_man|baselayer',
-  run: 'Armature|running|baselayer',
-  attack: ['Armature|Attack|baselayer', 'Armature|Charged_Axe_Chop|baselayer'],
-  hit: ['Armature|Face_Punch_Reaction|baselayer'],
-  death: 'Armature|Dead|baselayer',
-  cast: 'Armature|Charged_Spell_Cast|baselayer',
-  jump: 'Armature|Backflip_Sweep_Kick|baselayer',
-  emote: {
-    wave: { clips: ['Armature|Big_Wave_Hello|baselayer'] },
-    cheer: { clips: ['Armature|Chest_Pound_Taunt|baselayer'] },
-    roar: { clips: ['Armature|Chest_Pound_Taunt|baselayer'] },
-    flex: { clips: ['Armature|Chest_Pound_Taunt|baselayer'] },
-    salute: { clips: ['Armature|Big_Wave_Hello|baselayer'] },
-  },
+  idle: INFERNAL_HUMAN_BASE_CLIP,
+  walk: INFERNAL_HUMAN_BASE_CLIP,
+  run: INFERNAL_HUMAN_BASE_CLIP,
+  attack: [INFERNAL_HUMAN_BASE_CLIP],
+  hit: [INFERNAL_HUMAN_BASE_CLIP],
+  death: INFERNAL_HUMAN_BASE_CLIP,
+  cast: INFERNAL_HUMAN_BASE_CLIP,
+  jump: INFERNAL_HUMAN_BASE_CLIP,
 };
 // Raid 02 asset-pipeline rig (stone_cantor.glb): Mixamo-rigged, ships
 // Idle / Cast / Walk / Death plus a synthesized 'Hit' flinch authored by
@@ -296,24 +298,9 @@ const CREATURES = 'models/creatures';
 const WEAPONS = 'models/weapons';
 const REALM_MODELS = '/cr-realms';
 
-const INFERNAL_HUMAN_ANIM_URLS = [
-  `${REALM_MODELS}/infernal/infernal_biped_idle.glb`,
-  `${REALM_MODELS}/infernal/infernal_biped_walk.glb`,
-  `${REALM_MODELS}/infernal/infernal_biped_run.glb`,
-  `${REALM_MODELS}/infernal/infernal_biped_attack.glb`,
-  `${REALM_MODELS}/infernal/infernal_biped_axe_attack.glb`,
-  `${REALM_MODELS}/infernal/infernal_biped_cast.glb`,
-  `${REALM_MODELS}/infernal/infernal_biped_hit.glb`,
-  `${REALM_MODELS}/infernal/infernal_biped_death.glb`,
-  `${REALM_MODELS}/infernal/infernal_biped_jump.glb`,
-  `${REALM_MODELS}/infernal/infernal_biped_wave.glb`,
-  `${REALM_MODELS}/infernal/infernal_biped_taunt.glb`,
-];
-
 function infernalHuman(fileName: string, height = 2.15): VisualDef {
   return {
     url: `${REALM_MODELS}/infernal/${fileName}`,
-    animUrls: INFERNAL_HUMAN_ANIM_URLS,
     height,
     clips: INFERNAL_HUMAN_CLIPS,
     lazyPreload: true,
