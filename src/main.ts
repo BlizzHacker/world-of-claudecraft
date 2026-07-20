@@ -275,6 +275,7 @@ import {
   presentationFactionsForRealm,
   realmHasClassOverlay,
 } from './ui/cryptic/realm_class_presentation';
+import type { DiabloSkill } from './sim/realms/diablo_classes';
 import { installNativeSsoReturnHandler, wireNativeSsoLink } from './ui/cryptic/native_sso';
 import { clearCrypticSession, readCrypticSession, writeCrypticSession } from './ui/cryptic/session';
 
@@ -5686,6 +5687,32 @@ function renderClassDetails(
     })
     .join('');
 
+  // Diablo realm classes show their real Diablo skill kit as the signature
+  // abilities (Zeal/Fanaticism for the Paladin, and so on) instead of the base
+  // engine class's spells. Icons fall back procedurally from the skill name.
+  const diabloSkills: readonly DiabloSkill[] =
+    realmClass && 'signatureSkills' in realmClass && Array.isArray(realmClass.signatureSkills)
+      ? (realmClass.signatureSkills as readonly DiabloSkill[])
+      : [];
+  const diabloSkillsHtml = diabloSkills
+    .map((skill) => {
+      const iconUrl = iconDataUrl(
+        'ability',
+        skill.name.toLowerCase().replace(/[^a-z0-9]+/g, '_'),
+        32,
+      );
+      return `
+      <li class="details-spell-item">
+        <img class="details-spell-icon-img" src="${escapeHtml(iconUrl)}" alt="${escapeHtml(skill.name)}" width="32" height="32" />
+        <div class="details-spell-text">
+          <strong>${escapeHtml(skill.name)}</strong> <span class="details-spell-source">${escapeHtml(skill.source)}</span>
+          ${escapeHtml(skill.desc)}
+        </div>
+      </li>
+    `;
+    })
+    .join('');
+
   // Ensure the panel itself is visible
   panel.classList.add('visible');
 
@@ -5716,7 +5743,7 @@ function renderClassDetails(
           <div class="details-spells-section">
             <h4 class="details-section-title">${escapeHtml(t('classDetails.sections.signatureAbilities'))}</h4>
             <ul class="details-spells-list">
-              ${spellsHtml}
+              ${diabloSkillsHtml || spellsHtml}
             </ul>
           </div>
         </div>

@@ -1,7 +1,7 @@
 import type { PlayerClass } from '../../sim/types';
 import { factionForRealmClass } from '../../sim/realms/factions';
 import type { RealmClassSkin, RealmContent, RealmId, RealmRole } from '../../sim/realms/types';
-import { diabloClassesForRealm } from '../../sim/realms/diablo_classes';
+import { type DiabloSkill, diabloClassesForRealm, diabloSignatureSkills } from '../../sim/realms/diablo_classes';
 
 export const PLAYER_CLASS_ORDER: readonly PlayerClass[] = [
   'warrior',
@@ -34,6 +34,8 @@ export interface RealmClassPresentation {
 export interface InfernalDiabloClassPresentation extends RealmClassPresentation {
   diabloId: string;
   factionSide: 'sanctuary' | 'hell';
+  /** Real Diablo skills for this class, shown as its signature abilities. */
+  signatureSkills: readonly DiabloSkill[];
 }
 
 export type RealmClassAssetStatus = 'ready' | 'preview' | 'comingSoon';
@@ -547,6 +549,7 @@ function infernalClassChoice(
     ...assetChoice,
     diabloId: infernalChoiceId(side, name),
     factionSide,
+    signatureSkills: diabloSignatureSkills(name),
   };
 }
 
