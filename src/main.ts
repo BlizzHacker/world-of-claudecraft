@@ -276,6 +276,9 @@ import {
   realmHasClassOverlay,
 } from './ui/cryptic/realm_class_presentation';
 import type { DiabloSkill } from './sim/realms/diablo_classes';
+import { fetchRealmVisualOverrides } from './ui/cryptic/realm_visual_overrides';
+import { openRealmVisualEditor } from './ui/cryptic/realm_visual_editor';
+import { getMe as getMeForEditor, getToken as getTokenForEditor } from './user/api';
 import { installNativeSsoReturnHandler, wireNativeSsoLink } from './ui/cryptic/native_sso';
 import { clearCrypticSession, readCrypticSession, writeCrypticSession } from './ui/cryptic/session';
 
@@ -3728,9 +3731,56 @@ function paintInfernalDiabloRoster(
   if (first) first.click();
 }
 
+const realmVisualOverridesFetched = new Set<string>();
+
+// Admin: expose the live body editor globally (also reachable over
+// arcforge.moveweight.com, which proxies /api/*) and repaint the create screen
+// whenever a save changes the overrides.
+(window as unknown as { crRealmVisualEditor?: () => void }).crRealmVisualEditor = () => {
+  void openRealmVisualEditor(realmContentForCharacterUi());
+};
+window.addEventListener('cr-realm-visuals-changed', () => paintRealmClassChoices());
+
+let realmEditorButtonChecked = false;
+function ensureRealmEditorButton(): void {
+  if (realmEditorButtonChecked) return;
+  realmEditorButtonChecked = true;
+  void (async () => {
+    if (!getTokenForEditor()) return;
+    let isAdmin = false;
+    try {
+      isAdmin = !!(await getMeForEditor()).roles?.isAdmin;
+    } catch {
+      isAdmin = false;
+    }
+    if (!isAdmin || document.getElementById('cr-edit-bodies-btn')) return;
+    const btn = document.createElement('button');
+    btn.id = 'cr-edit-bodies-btn';
+    btn.type = 'button';
+    btn.textContent = 'Edit Bodies (admin)';
+    btn.style.cssText =
+      'position:fixed;bottom:16px;right:16px;z-index:9000;background:#2a1e10;color:#f4e6c8;' +
+      'border:1px solid #7a5a2a;border-radius:8px;padding:8px 12px;cursor:pointer;' +
+      'font:600 13px system-ui,sans-serif;box-shadow:0 4px 16px rgba(0,0,0,.4)';
+    btn.addEventListener('click', () => {
+      void openRealmVisualEditor(realmContentForCharacterUi());
+    });
+    document.body.appendChild(btn);
+  })();
+}
+
 function paintRealmClassChoices(): void {
+  ensureRealmEditorButton();
   currentlyRenderedClass['charcreate-class-details'] = null;
   const realm = realmContentForCharacterUi();
+  // Pull the operator's live body-asset overrides once per realm, then repaint
+  // so a reassigned class/hero body shows without a code deploy.
+  if (!realmVisualOverridesFetched.has(realm.id)) {
+    realmVisualOverridesFetched.add(realm.id);
+    void fetchRealmVisualOverrides(realm.id).then((loaded) => {
+      if (loaded) paintRealmClassChoices();
+    });
+  }
   const row = document.querySelector<HTMLElement>('#charcreate-panel .mini-class-row');
   if (row && realm.id === 'infernal') {
     paintInfernalDiabloRoster(row, infernalDiabloClassChoicesForRealm(realm), selectedCreateFaction(realm));

@@ -137,6 +137,7 @@ import { applyExchangeSchema } from './exchange/db';
 import { maybeHandleContributionsApi } from './contributions';
 import { handleCrRealmsStatic, handleForgedCatalog, handleForgedStatic } from './forged_assets';
 import { handleAssetLibraryCatalog, handleAssetLibraryStatic } from './asset_library';
+import { handleRealmVisuals } from './realm_visuals';
 import { GameServer } from './game';
 import {
   handleGitHubCallback,
@@ -2444,6 +2445,10 @@ export function routeHttpRequest(req: http.IncomingMessage, res: http.ServerResp
   if (handleCrRealmsStatic(req, res)) return;
   if (path === '/api/asset-library') {
     void handleAssetLibraryCatalog(req, res);
+    return;
+  }
+  if (path.startsWith('/api/realm-visuals/')) {
+    void handleRealmVisuals(req, res);
     return;
   }
   if (path === '/api/forged-props') {
