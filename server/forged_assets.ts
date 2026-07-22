@@ -13,7 +13,7 @@ function trimTrailingSeparators(p: string): string {
 
 export function defaultForgedDir(platform: NodeJS.Platform = process.platform): string {
   return platform === 'win32'
-    ? path.win32.join('C:\\', 'mnt', 'usb4', 'moveweight-assets', 'forged-glbs')
+    ? path.win32.join('T:\\', 'moveweight-assets', 'forged-glbs')
     : '/mnt/usb4/moveweight-assets/forged-glbs';
 }
 
@@ -96,7 +96,6 @@ export function handleForgedStatic(req: http.IncomingMessage, res: http.ServerRe
   fs.createReadStream(full).pipe(res);
   return true;
 }
-
 
 // ── /cr-realms/* static store ────────────────────────────────────────────────
 // The generated realm-asset bundles (index.json + per-realm manifest/art/GLBs,

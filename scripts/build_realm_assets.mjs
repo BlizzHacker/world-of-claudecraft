@@ -21,7 +21,7 @@ const MESHY_API_BASE = 'https://api.meshy.ai';
 
 const USB4_FORGED_DIR =
   process.platform === 'win32'
-    ? path.win32.join('C:\\', 'mnt', 'usb4', 'moveweight-assets', 'forged-glbs')
+    ? path.win32.join('T:\\', 'moveweight-assets', 'forged-glbs')
     : '/mnt/usb4/moveweight-assets/forged-glbs';
 // CI runners do not have the production USB4 mount. Keep generated manifests and
 // forged copies inside the disposable workspace there, while production retains
@@ -46,13 +46,17 @@ const INFERNAL_DURANCE_ANIM_DIR = process.env.INFERNAL_DURANCE_ANIM_DIR?.trim()
   ? path.resolve(process.env.INFERNAL_DURANCE_ANIM_DIR.trim())
   : '';
 const INFERNAL_ASSET_ROOT = process.env.INFERNAL_ASSET_ROOT?.trim()
-  ? path.resolve(process.env.INFERNAL_ASSET_ROOT.trim()) : '';
+  ? path.resolve(process.env.INFERNAL_ASSET_ROOT.trim())
+  : '';
 const CRYPTIC_ASSET_ROOT = process.env.CRYPTIC_ASSET_ROOT?.trim()
-  ? path.resolve(process.env.CRYPTIC_ASSET_ROOT.trim()) : '';
+  ? path.resolve(process.env.CRYPTIC_ASSET_ROOT.trim())
+  : '';
 const INFERNAL_DARK_PALADIN_GLB = process.env.INFERNAL_DARK_PALADIN_GLB?.trim()
-  ? path.resolve(process.env.INFERNAL_DARK_PALADIN_GLB.trim()) : '';
+  ? path.resolve(process.env.INFERNAL_DARK_PALADIN_GLB.trim())
+  : '';
 const INFERNAL_DARK_PALADIN_ANIM_DIR = process.env.INFERNAL_DARK_PALADIN_ANIM_DIR?.trim()
-  ? path.resolve(process.env.INFERNAL_DARK_PALADIN_ANIM_DIR.trim()) : '';
+  ? path.resolve(process.env.INFERNAL_DARK_PALADIN_ANIM_DIR.trim())
+  : '';
 const PICKTURA_INCLUDE = process.env.PICKTURA_INCLUDE?.trim()
   ? new RegExp(process.env.PICKTURA_INCLUDE.trim(), 'i')
   : null;
@@ -104,7 +108,60 @@ export const CURATED_INFERNAL_HUMANS = [
     sourceName: '0194089a-19e3-7972-9ede-1dcc4ab02434__x__Walking.glb',
     outputName: 'infernal_human_hermit.glb',
   },
+  {
+    sourceName: '0193ef47-c2a1-7a95-acf9-0aa03703e20f__x__Walking.glb',
+    outputName: 'infernal_human_barbarian.glb',
+  },
+  {
+    sourceName: '019b5889-fdb6-7340-a135-73f138ee070b__x__Walking.glb',
+    outputName: 'infernal_human_veil_adept.glb',
+  },
+  {
+    sourceName: '0194621e-1f9e-73e5-84e4-44dd72a21fb9__x__Walking.glb',
+    outputName: 'infernal_human_assassin.glb',
+  },
+  {
+    sourceName: '01943e21-4e36-79bc-82f3-8fda196238db__x__Walking.glb',
+    outputName: 'infernal_human_monk.glb',
+  },
+  {
+    sourceName: '01941871-e476-7751-86e9-81504bcf0bc6__x__Walking.glb',
+    outputName: 'infernal_human_crusader.glb',
+  },
+  {
+    sourceName: '0193ef44-54af-7a95-9cd9-6cb81c84e530__x__Walking.glb',
+    outputName: 'infernal_human_spiritborn.glb',
+  },
+  {
+    sourceName: '0193ea64-4951-7a19-b197-09d50f83908f__x__Walking.glb',
+    outputName: 'infernal_human_blood_knight.glb',
+  },
+  {
+    sourceName: '0193ef07-b83b-7a8d-9b26-71ad9da48f1b__x__Walking.glb',
+    outputName: 'infernal_human_tempest.glb',
+  },
 ];
+
+export const CURATED_INFERNAL_CLASSES = [
+  'warrior',
+  'rogue',
+  'sorcerer',
+  'amazon',
+  'barbarian',
+  'necromancer',
+  'paladin',
+  'druid',
+  'assassin',
+  'demon_hunter',
+  'monk',
+  'wizard',
+  'witch_doctor',
+  'crusader',
+  'spiritborn',
+  'warlock',
+  'blood_knight',
+  'tempest',
+].map((classId) => ({ classId, outputName: `infernal_class_${classId}.glb` }));
 
 const INFERNAL_BIPED_DONOR = '019b7548-998a-7eb1-84f7-9f6f58a8c25a';
 export const INFERNAL_BIPED_ACTIONS = [
@@ -146,6 +203,20 @@ const FOLDER_TO_REALM = {
   'claudcraft realm assets': 'claudecraft',
   'arcade void realm assets': 'arcadevoid',
   'arcane void realm assets': 'arcadevoid',
+};
+
+const FORGED_FOLDER_TO_REALM = {
+  infernal: 'infernal',
+  classic: 'classic',
+  cryptic: 'crypticrealm',
+  crypticrealm: 'crypticrealm',
+  arcane: 'arcane',
+  arcadevoid: 'arcadevoid',
+  claudcraft: 'claudecraft',
+  claudecraft: 'claudecraft',
+  fps: 'fps',
+  dominion: 'dominion',
+  exchange: 'exchange',
 };
 
 const MESHY_LIST_ENDPOINTS = [
@@ -228,7 +299,9 @@ export function classifyRealmFromText(text, fallback = 'crypticrealm') {
   if (/\b(claude|claudcraft|claudecraft|minecraft|block|voxel)\b/.test(n)) {
     return 'claudecraft';
   }
-  if (/\b(classic|warrior|huntress|sorceress|orc|goblin|dwarf|elf|queen|rider|knight|ninja)\b/.test(n)) {
+  if (
+    /\b(classic|warrior|huntress|sorceress|orc|goblin|dwarf|elf|queen|rider|knight|ninja)\b/.test(n)
+  ) {
     return 'classic';
   }
   if (/\b(arcane|mage|archmage|wizard|sorcerer|spell|rune|crystal|astral)\b/.test(n)) {
@@ -247,11 +320,18 @@ export function realmIdForFolder(folderName) {
   return FOLDER_TO_REALM[folderName.toLowerCase()] ?? classifyRealmFromText(folderName);
 }
 
+export function realmIdForForgedFolder(folderName) {
+  return FORGED_FOLDER_TO_REALM[folderName.toLowerCase()] ?? null;
+}
+
 export function parsePickturaManifestCsv(text) {
-  const lines = String(text ?? '').split(/\r?\n/).filter(Boolean);
+  const lines = String(text ?? '')
+    .split(/\r?\n/)
+    .filter(Boolean);
   if (!lines.length) return [];
   const header = lines[0].split(',').map((field) => field.trim().toLowerCase());
-  const indexOf = (...names) => names.map((name) => header.indexOf(name)).find((index) => index >= 0) ?? -1;
+  const indexOf = (...names) =>
+    names.map((name) => header.indexOf(name)).find((index) => index >= 0) ?? -1;
   const idIndex = indexOf('resultid', 'id');
   const filenameIndex = indexOf('filename');
   const actionIndex = indexOf('action');
@@ -280,7 +360,11 @@ export function parsePickturaManifestCsv(text) {
 }
 
 export function classifyAssetKind(name, inspection = {}) {
-  if (inspection.kind === 'character' || inspection.kind === 'vehicle' || inspection.kind === 'prop') {
+  if (
+    inspection.kind === 'character' ||
+    inspection.kind === 'vehicle' ||
+    inspection.kind === 'prop'
+  ) {
     return inspection.kind;
   }
   if (inspection.skinned || inspection.animationNames?.length) return 'character';
@@ -397,6 +481,34 @@ async function gatherLocalCandidates() {
   return candidates;
 }
 
+async function gatherForgedStoreCandidates() {
+  const candidates = [];
+  for (const full of await walkFiles(FORGED_DIR)) {
+    if (!/\.glb$/i.test(full)) continue;
+    const stat = await fs.stat(full);
+    if (MAX_BYTES_PER_FILE && stat.size > MAX_BYTES_PER_FILE) continue;
+
+    const relative = path.relative(FORGED_DIR, full).replace(/\\/g, '/');
+    const parts = relative.split('/');
+    const folderRealm = parts.length > 1 ? realmIdForForgedFolder(parts[0]) : null;
+    const outputName =
+      parts.length <= 2 ? path.basename(full) : `${safeAssetName(parts.slice(1).join('__'))}.glb`;
+
+    candidates.push({
+      source: 'forged-store',
+      realmId: folderRealm ?? classifyRealmFromText(relative, 'crypticrealm'),
+      sourcePath: full,
+      sourceName: path.basename(full),
+      outputName,
+      sourceRelative: `forged-glbs/${relative}`,
+      size: stat.size,
+      license: 'approved-local',
+      author: 'ArcForge',
+    });
+  }
+  return candidates;
+}
+
 async function gatherPickturaCandidates() {
   if (!PICKTURA_ROOT) return [];
   const candidates = [];
@@ -410,7 +522,11 @@ async function gatherPickturaCandidates() {
     const manifest = await fs.readFile(manifestPath, 'utf8').catch(() => '');
     for (const row of parsePickturaManifestCsv(manifest)) {
       if (PICKTURA_INCLUDE && !PICKTURA_INCLUDE.test(row.filename)) continue;
-      const sourcePath = path.join(PICKTURA_ROOT, format === 'animated' ? 'animated' : 'glb', row.filename);
+      const sourcePath = path.join(
+        PICKTURA_ROOT,
+        format === 'animated' ? 'animated' : 'glb',
+        row.filename,
+      );
       const stat = await fs.stat(sourcePath).catch(() => null);
       if (!stat?.isFile()) continue;
       candidates.push({
@@ -423,7 +539,7 @@ async function gatherPickturaCandidates() {
         license: row.license,
         author: row.author,
         action: row.action,
-        kind: format === 'glb' ? row.kind === 'prop' ? 'prop' : undefined : undefined,
+        kind: format === 'glb' ? (row.kind === 'prop' ? 'prop' : undefined) : undefined,
       });
     }
   }
@@ -433,9 +549,12 @@ async function gatherPickturaCandidates() {
 async function gatherCuratedInfernalHumans() {
   if (!PICKTURA_ROOT) return [];
   const animatedDir = path.join(PICKTURA_ROOT, 'animated');
+  const forgedInfernalDir = path.join(FORGED_DIR, 'infernal');
   const curated = [];
   for (const asset of CURATED_INFERNAL_HUMANS) {
-    const sourcePath = path.join(animatedDir, asset.sourceName);
+    const mergedPath = path.join(forgedInfernalDir, asset.outputName);
+    const mergedStat = await fs.stat(mergedPath).catch(() => null);
+    const sourcePath = mergedStat?.isFile() ? mergedPath : path.join(animatedDir, asset.sourceName);
     const stat = await fs.stat(sourcePath).catch(() => null);
     if (!stat?.isFile()) continue;
     curated.push({
@@ -449,7 +568,7 @@ async function gatherCuratedInfernalHumans() {
       kind: 'character',
       license: 'approved-local',
       author: 'PICKTURA',
-      action: 'Walking',
+      action: mergedStat?.isFile() ? 'Full animation pack' : 'Walking',
     });
   }
   for (const asset of INFERNAL_BIPED_ACTIONS) {
@@ -513,8 +632,14 @@ async function gatherExplicitCandidates() {
   }
   if (INFERNAL_DURANCE_ANIM_DIR) {
     const donorActions = new Set([
-      'Walking', 'Running', 'Attack', 'Axe_Spin_Attack', 'Double_Combo_Attack',
-      'Charged_Spell_Cast', 'Dead', 'BeHit_FlyUp',
+      'Walking',
+      'Running',
+      'Attack',
+      'Axe_Spin_Attack',
+      'Double_Combo_Attack',
+      'Charged_Spell_Cast',
+      'Dead',
+      'BeHit_FlyUp',
     ]);
     const files = await walkFiles(INFERNAL_DURANCE_ANIM_DIR);
     for (const sourcePath of files) {
@@ -527,9 +652,15 @@ async function gatherExplicitCandidates() {
       const outputName = `durance_tester_${safeAssetName(action)}.glb`;
       if (explicit.some((entry) => entry.outputName === outputName)) continue;
       explicit.push({
-        source: 'local-folder', realmId: 'infernal', sourcePath, sourceName,
-        outputName, sourceRelative: path.basename(sourcePath), size: stat.size,
-        kind: 'character', action,
+        source: 'local-folder',
+        realmId: 'infernal',
+        sourcePath,
+        sourceName,
+        outputName,
+        sourceRelative: path.basename(sourcePath),
+        size: stat.size,
+        kind: 'character',
+        action,
       });
     }
   }
@@ -537,10 +668,15 @@ async function gatherExplicitCandidates() {
     const stat = await fs.stat(INFERNAL_DARK_PALADIN_GLB).catch(() => null);
     if (stat?.isFile() && /\.glb$/i.test(INFERNAL_DARK_PALADIN_GLB)) {
       explicit.push({
-        source: 'approved-asset', realmId: 'infernal', sourcePath: INFERNAL_DARK_PALADIN_GLB,
+        source: 'approved-asset',
+        realmId: 'infernal',
+        sourcePath: INFERNAL_DARK_PALADIN_GLB,
         sourceName: path.basename(INFERNAL_DARK_PALADIN_GLB),
-        outputName: 'dark_paladin_commander.glb', sourceRelative: path.basename(INFERNAL_DARK_PALADIN_GLB),
-        size: stat.size, kind: 'character', action: 'leader',
+        outputName: 'dark_paladin_commander.glb',
+        sourceRelative: path.basename(INFERNAL_DARK_PALADIN_GLB),
+        size: stat.size,
+        kind: 'character',
+        action: 'leader',
       });
     }
   }
@@ -549,13 +685,28 @@ async function gatherExplicitCandidates() {
     for (const sourcePath of files) {
       const sourceName = path.basename(sourcePath);
       if (!/\.glb$/i.test(sourceName)) continue;
-      const action = /Running/i.test(sourceName) ? 'running' : /Walking/i.test(sourceName) ? 'walking' : /Reaping_Swing/i.test(sourceName) ? 'reaping_swing' : '';
+      const action = /Running/i.test(sourceName)
+        ? 'running'
+        : /Walking/i.test(sourceName)
+          ? 'walking'
+          : /Reaping_Swing/i.test(sourceName)
+            ? 'reaping_swing'
+            : '';
       if (!action) continue;
       const stat = await fs.stat(sourcePath);
       const outputName = `dark_paladin_${action}.glb`;
       if (explicit.some((entry) => entry.outputName === outputName)) continue;
-      explicit.push({ source: 'approved-asset', realmId: 'infernal', sourcePath, sourceName,
-        outputName, sourceRelative: sourceName, size: stat.size, kind: 'character', action });
+      explicit.push({
+        source: 'approved-asset',
+        realmId: 'infernal',
+        sourcePath,
+        sourceName,
+        outputName,
+        sourceRelative: sourceName,
+        size: stat.size,
+        kind: 'character',
+        action,
+      });
     }
   }
   return explicit;
@@ -565,20 +716,56 @@ async function gatherApprovedAssetRoot(root, realmId) {
   if (!root) return [];
   const candidates = [];
   const stableNames = new Map([
-    ['bone-herald-black-meshy_ai_meshy_merged_animations.glb', 'bone-herald-black-meshy_ai_meshy_merged_animations_5fb3b8bb.glb'],
+    [
+      'bone-herald-black-meshy_ai_meshy_merged_animations.glb',
+      'bone-herald-black-meshy_ai_meshy_merged_animations_5fb3b8bb.glb',
+    ],
     ['demon-horned.glb', 'demon-horned_1a19d7ca.glb'],
     ['skullbeast.glb', 'skullbeast_5d2ecebf.glb'],
-    ['meshy_ai_a_black_evil_spectr_0616234348_texture.glb', 'meshy_ai_a_black_evil_spectr_0616234348_texture_abacb7f9.glb'],
-    ['meshy_ai_a_primal_groudon_emer_0616234337_texture.glb', 'meshy_ai_a_primal_groudon_emer_0616234337_texture_194376eb.glb'],
-    ['meshy_ai_crimson_infernal_behe_biped_meshy_ai_meshy_merged_animations.glb', 'meshy_ai_crimson_infernal_behe_biped_meshy_ai_meshy_merged_animations_27bab94d.glb'],
-    ['meshy_ai_cursed_knight’s_iro_0616234359_texture.glb', 'meshy_ai_cursed_knight_s_iro_0616234359_texture_abda8208.glb'],
-    ['meshy_ai_demon_with_body_cover_0616234415_texture.glb', 'meshy_ai_demon_with_body_cover_0616234415_texture_540be2b1.glb'],
-    ['meshy_ai_demon_with_body_cover_0616234440_texture.glb', 'meshy_ai_demon_with_body_cover_0616234440_texture_fd4134d0.glb'],
-    ['meshy_ai_horned_demon_warrior__0616234420_texture.glb', 'meshy_ai_horned_demon_warrior_0616234420_texture_2233cac0.glb'],
-    ['meshy_ai_infernal_behemoth_biped_merged_animations.glb', 'meshy_ai_infernal_behemoth_biped_merged_animations.glb'],
-    ['meshy_ai_inferno_dragon_majest_0616234236_texture.glb', 'meshy_ai_inferno_dragon_majest_0616234236_texture_aefc89dc.glb'],
-    ['meshy_ai_lava_demon_visible_l_0616234410_texture.glb', 'meshy_ai_lava_demon_visible_l_0616234410_texture_a72a9ef6.glb'],
-    ['meshy_ai_lava_demon_with_horns_0616234329_texture.glb', 'meshy_ai_lava_demon_with_horns_0616234329_texture_9a64c154.glb'],
+    [
+      'meshy_ai_a_black_evil_spectr_0616234348_texture.glb',
+      'meshy_ai_a_black_evil_spectr_0616234348_texture_abacb7f9.glb',
+    ],
+    [
+      'meshy_ai_a_primal_groudon_emer_0616234337_texture.glb',
+      'meshy_ai_a_primal_groudon_emer_0616234337_texture_194376eb.glb',
+    ],
+    [
+      'meshy_ai_crimson_infernal_behe_biped_meshy_ai_meshy_merged_animations.glb',
+      'meshy_ai_crimson_infernal_behe_biped_meshy_ai_meshy_merged_animations_27bab94d.glb',
+    ],
+    [
+      'meshy_ai_cursed_knight’s_iro_0616234359_texture.glb',
+      'meshy_ai_cursed_knight_s_iro_0616234359_texture_abda8208.glb',
+    ],
+    [
+      'meshy_ai_demon_with_body_cover_0616234415_texture.glb',
+      'meshy_ai_demon_with_body_cover_0616234415_texture_540be2b1.glb',
+    ],
+    [
+      'meshy_ai_demon_with_body_cover_0616234440_texture.glb',
+      'meshy_ai_demon_with_body_cover_0616234440_texture_fd4134d0.glb',
+    ],
+    [
+      'meshy_ai_horned_demon_warrior__0616234420_texture.glb',
+      'meshy_ai_horned_demon_warrior_0616234420_texture_2233cac0.glb',
+    ],
+    [
+      'meshy_ai_infernal_behemoth_biped_merged_animations.glb',
+      'meshy_ai_infernal_behemoth_biped_merged_animations.glb',
+    ],
+    [
+      'meshy_ai_inferno_dragon_majest_0616234236_texture.glb',
+      'meshy_ai_inferno_dragon_majest_0616234236_texture_aefc89dc.glb',
+    ],
+    [
+      'meshy_ai_lava_demon_visible_l_0616234410_texture.glb',
+      'meshy_ai_lava_demon_visible_l_0616234410_texture_a72a9ef6.glb',
+    ],
+    [
+      'meshy_ai_lava_demon_with_horns_0616234329_texture.glb',
+      'meshy_ai_lava_demon_with_horns_0616234329_texture_9a64c154.glb',
+    ],
   ]);
   for (const sourcePath of await walkFiles(root)) {
     const sourceName = path.basename(sourcePath);
@@ -586,9 +773,15 @@ async function gatherApprovedAssetRoot(root, realmId) {
     const stat = await fs.stat(sourcePath);
     if (MAX_BYTES_PER_FILE && stat.size > MAX_BYTES_PER_FILE) continue;
     candidates.push({
-      source: 'approved-asset', realmId, sourcePath, sourceName,
-      sourceRelative: path.relative(root, sourcePath).replace(/\\/g, '/'), size: stat.size,
-      ...(stableNames.get(sourceName.toLowerCase()) ? { outputName: stableNames.get(sourceName.toLowerCase()) } : {}),
+      source: 'approved-asset',
+      realmId,
+      sourcePath,
+      sourceName,
+      sourceRelative: path.relative(root, sourcePath).replace(/\\/g, '/'),
+      size: stat.size,
+      ...(stableNames.get(sourceName.toLowerCase())
+        ? { outputName: stableNames.get(sourceName.toLowerCase()) }
+        : {}),
     });
   }
   return candidates;
@@ -702,6 +895,10 @@ async function downloadMeshyCandidates(token) {
 
 function candidateSort(a, b) {
   if (a.realmId !== b.realmId) return a.realmId.localeCompare(b.realmId);
+  const priority = { 'forged-store': 4, 'approved-asset': 3, 'local-folder': 2, 'meshy-api': 1 };
+  const aPriority = priority[a.source] ?? 0;
+  const bPriority = priority[b.source] ?? 0;
+  if (aPriority !== bPriority) return bPriority - aPriority;
   const aAnim = a.animationNames?.length || looksAnimatedName(a.sourceName) ? 1 : 0;
   const bAnim = b.animationNames?.length || looksAnimatedName(b.sourceName) ? 1 : 0;
   if (aAnim !== bAnim) return bAnim - aAnim;
@@ -709,6 +906,20 @@ function candidateSort(a, b) {
   const bSkin = b.skinned ? 1 : 0;
   if (aSkin !== bSkin) return bSkin - aSkin;
   return a.sourceName.localeCompare(b.sourceName);
+}
+
+export function dedupeNamedCandidates(candidates) {
+  const winners = new Map();
+  const unnamed = [];
+  for (const candidate of [...candidates].sort(candidateSort)) {
+    if (!candidate.outputName) {
+      unnamed.push(candidate);
+      continue;
+    }
+    const key = `${candidate.realmId}/${candidate.outputName.toLowerCase()}`;
+    if (!winners.has(key)) winners.set(key, candidate);
+  }
+  return [...winners.values(), ...unnamed];
 }
 
 export function limitCandidatesByRealm(candidates, limit) {
@@ -864,6 +1075,9 @@ async function main() {
   let candidates = [];
 
   if (!API_ONLY) {
+    // ArcForge's reviewed store is the canonical inventory. Named-output
+    // de-duplication below prevents raw fallback exports from replacing it.
+    candidates.push(...(await gatherForgedStoreCandidates()));
     candidates.push(...(await gatherLocalCandidates()));
     candidates.push(...(await gatherPickturaCandidates()));
     candidates.push(...(await gatherCuratedInfernalHumans()));
@@ -884,6 +1098,7 @@ async function main() {
   // Limit before GLB inspection. A mounted library can contain thousands of
   // files and inspection is intentionally expensive because it reads the
   // complete glTF graph and animation list.
+  candidates = dedupeNamedCandidates(candidates);
   candidates = limitCandidatesByRealm(candidates, MAX_PER_REALM);
   candidates = await inspectCandidates(candidates);
 

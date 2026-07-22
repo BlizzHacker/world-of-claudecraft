@@ -11,6 +11,7 @@ export interface PreviewAppearance {
   skin: number;
   skinCatalog: 'class' | 'mech';
   mainhandItemId: string | null;
+  visualKey?: string | null;
 }
 
 /** The model key + held-weapon layout the appearance resolves to. */
@@ -27,7 +28,7 @@ export interface PreviewVisual {
 export function previewAppearanceVisual(a: PreviewAppearance): PreviewVisual {
   const mech = a.skinCatalog === 'mech';
   return {
-    visualKey: mech ? 'player_mech' : `player_${a.cls}`,
+    visualKey: mech ? 'player_mech' : (a.visualKey ?? `player_${a.cls}`),
     weaponItemId: a.mainhandItemId ?? null,
     weaponOverride: mech ? mechHeldWeaponOverride(a.cls) : null,
   };
@@ -36,5 +37,5 @@ export function previewAppearanceVisual(a: PreviewAppearance): PreviewVisual {
 /** Stable identity of an appearance, so an async mech re-apply can bail out if a
  *  newer selection superseded it. */
 export function appearanceSignature(a: PreviewAppearance): string {
-  return `${a.cls}|${a.skin}|${a.skinCatalog}|${a.mainhandItemId ?? ''}`;
+  return `${a.cls}|${a.skin}|${a.skinCatalog}|${a.mainhandItemId ?? ''}|${a.visualKey ?? ''}`;
 }

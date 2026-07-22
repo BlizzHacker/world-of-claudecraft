@@ -1603,7 +1603,9 @@ describe('Nythraxis raid encounter', () => {
     expect(boss.nythraxis?.deathlessTimer).toBeGreaterThan(19);
     expect(boss.nythraxis?.deathlessTimer).toBeLessThanOrEqual(20);
     expect(tank.auras.some((a) => a.id === 'nythraxis_transition_stun')).toBe(false);
-    expect(visualKeyFor(aldric!)).toBe('npc_aldric');
+    // Brother Aldric renders through the curated Infernal human bank (see
+    // infernal_roster.ts) rather than the legacy KayKit npc_aldric body.
+    expect(visualKeyFor(aldric!)).toBe('realm_infernal_human_monk');
   });
 
   it('stuns active Nythraxis adds for the full Aldric transition', () => {

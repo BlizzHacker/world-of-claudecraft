@@ -92,6 +92,11 @@ cryptic realm assets/
 infernal realm assets/
 # CR overlay: generated realm assets (run npm run assets:realms to regenerate)
 public/cr-realms/
+# CR overlay: optimized landmark GLBs (npm run assets:infernal-waypoint); prod
+# serves /forged/* from the shared forged store, dev regenerates locally.
+public/forged/
+# CR overlay: dev-only junction into the PICKTURA share for the rig QA viewer.
+public/picktura-qa/
 # Classic engine asset manifest — 20MB generated JSON, fetched at runtime.
 # Must be synced to the server out-of-band (deploy / asset-hosting step).
 public/classic/asset-manifest.json

@@ -87,6 +87,13 @@ describe('previewAppearanceVisual', () => {
     expect(v.visualKey).toBe('player_mech');
   });
 
+  it('uses the persisted realm body for a non-mech character preview', () => {
+    const v = previewAppearanceVisual(
+      appearance({ visualKey: 'realm_infernal_human_iron_warden' }),
+    );
+    expect(v.visualKey).toBe('realm_infernal_human_iron_warden');
+  });
+
   it('mirrors the wearer class hand layout on the mech (rogue dual-wields)', () => {
     const rogue = previewAppearanceVisual(
       appearance({ cls: 'rogue', skinCatalog: 'mech', mainhandItemId: 'dagger_x' }),
@@ -113,6 +120,9 @@ describe('appearanceSignature', () => {
     expect(appearanceSignature({ ...base, skin: 3 })).not.toBe(sig);
     expect(appearanceSignature({ ...base, skinCatalog: 'mech' })).not.toBe(sig);
     expect(appearanceSignature({ ...base, mainhandItemId: 'b' })).not.toBe(sig);
+    expect(
+      appearanceSignature({ ...base, visualKey: 'realm_infernal_human_iron_warden' }),
+    ).not.toBe(sig);
   });
 });
 

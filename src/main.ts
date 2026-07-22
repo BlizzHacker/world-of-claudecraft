@@ -257,7 +257,6 @@ import {
   persistActiveRealm,
   type RealmContent,
 } from './sim/realms';
-import type { SignatureSkill } from './sim/realms/infernal_classes';
 import { mountBestiary } from './ui/cryptic/bestiary';
 import { mountRealmBranding } from './ui/cryptic/branding';
 import { mountChatFrame } from './ui/cryptic/chat_frame';
@@ -273,7 +272,6 @@ import {
 } from './ui/cryptic/fps_mode';
 import { mountHudGlobes, resolveHudSkin, setHudSkin } from './ui/cryptic/globes';
 import { mountHudLayout } from './ui/cryptic/hud_layout';
-import { hasInfernalSkillTree, openInfernalSkillTree } from './ui/cryptic/infernal_skill_tree';
 import { mountIngameOptions } from './ui/cryptic/ingame_options';
 import { mountLootVault } from './ui/cryptic/loot_vault';
 import { mountMusicWidget } from './ui/cryptic/music_widget';
@@ -3582,8 +3580,10 @@ function realmPreviewIdFromName(name: string | null | undefined): string {
 }
 
 function realmContentForCharacterUi(): RealmContent {
-  const fromDirectory = realmPreviewIdFromName(api.realm);
-  if (isRealmId(fromDirectory)) return getRealm(fromDirectory);
+  // The active realm already follows the explicit URL, persisted picker, and
+  // server-directory selection in that order. Reading api.realm here made the
+  // offline creator fall back to its placeholder "Cryptic Realm" server name,
+  // even on ?realm=infernal and on the Infernal host.
   return getActiveRealm();
 }
 
@@ -3817,13 +3817,6 @@ window.addEventListener('cr-realm-visuals-changed', () => {
   paintRealmClassChoices();
 });
 
-// Open the skill-tree viewer from the "View Skill Tree" button on the
-// create-character card (delegated so it survives every card re-render).
-document.addEventListener('click', (e) => {
-  const btn = (e.target as HTMLElement | null)?.closest?.('[data-skilltree]') as HTMLElement | null;
-  if (btn) openInfernalSkillTree(btn.dataset.skilltree ?? '');
-});
-
 let realmEditorButtonChecked = false;
 function ensureRealmEditorButton(): void {
   if (realmEditorButtonChecked) return;
@@ -3856,6 +3849,9 @@ function paintRealmClassChoices(): void {
   ensureRealmEditorButton();
   currentlyRenderedClass['charcreate-class-details'] = null;
   const realm = realmContentForCharacterUi();
+  document
+    .getElementById('charcreate-panel')
+    ?.classList.toggle('infernal-roster-active', realm.id === 'infernal');
   // Pull the operator's live body-asset overrides once per realm, then repaint
   // so a reassigned class/hero body shows without a code deploy.
   if (!realmVisualOverridesFetched.has(realm.id)) {
@@ -5727,6 +5723,7 @@ function charselectAppearance(c: CharacterSummary): PreviewAppearance {
     skin: c.skin ?? 0,
     skinCatalog: c.skinCatalog ?? 'class',
     mainhandItemId: c.mainhandItemId ?? null,
+    visualKey: c.visualKey ?? null,
   };
 }
 
@@ -5917,35 +5914,6 @@ function renderClassDetails(
     })
     .join('');
 
-  // Infernal hero classes show their signature skill kit as the signature
-  // abilities (Zeal/Fanaticism for the Paladin, and so on) instead of the base
-  // engine class's spells. Icons fall back procedurally from the skill name.
-  const heroSignatureSkills: readonly SignatureSkill[] =
-    realmClass && 'signatureSkills' in realmClass && Array.isArray(realmClass.signatureSkills)
-      ? (realmClass.signatureSkills as readonly SignatureSkill[])
-      : [];
-  const skillTreeName =
-    realmClass && 'signatureSkills' in realmClass ? (realmClass as { name: string }).name : '';
-  const showSkillTreeBtn = !!skillTreeName && hasInfernalSkillTree(skillTreeName);
-  const heroSignatureSkillsHtml = heroSignatureSkills
-    .map((skill) => {
-      const iconUrl = iconDataUrl(
-        'ability',
-        skill.name.toLowerCase().replace(/[^a-z0-9]+/g, '_'),
-        32,
-      );
-      return `
-      <li class="details-spell-item">
-        <img class="details-spell-icon-img" src="${escapeHtml(iconUrl)}" alt="${escapeHtml(skill.name)}" width="32" height="32" />
-        <div class="details-spell-text">
-          <strong>${escapeHtml(skill.name)}</strong> <span class="details-spell-source">${escapeHtml(skill.source)}</span>
-          ${escapeHtml(skill.desc)}
-        </div>
-      </li>
-    `;
-    })
-    .join('');
-
   // Ensure the panel itself is visible
   panel.classList.add('visible');
 
@@ -5974,12 +5942,11 @@ function renderClassDetails(
             <div class="details-gear-row"><strong>${escapeHtml(t('classDetails.labels.weapons'))}:</strong> <span class="badge">${escapeHtml(weaponsLabel)}</span></div>
           </div>
           <div class="details-spells-section">
-            <h4 class="details-section-title" style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+            <h4 class="details-section-title">
               <span>${escapeHtml(t('classDetails.sections.signatureAbilities'))}</span>
-              ${showSkillTreeBtn ? `<button type="button" data-skilltree="${escapeHtml(skillTreeName)}" style="background:#2a1e10;border:1px solid #7a5a2a;color:#f4e6c8;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:12px">View Skill Tree</button>` : ''}
             </h4>
             <ul class="details-spells-list">
-              ${heroSignatureSkillsHtml || spellsHtml}
+              ${spellsHtml}
             </ul>
           </div>
         </div>
@@ -9027,6 +8994,7 @@ function wireStartScreens(): void {
         selectedSkin('#online-skin-row', onlineSkin),
         ladder,
         hardcore,
+        clsEl.dataset.heroId,
       );
       newCharNameInput.value = '';
       charselectError.textContent = '';

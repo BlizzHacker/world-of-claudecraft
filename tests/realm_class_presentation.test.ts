@@ -45,7 +45,7 @@ const INFERNAL_HERO_ARCHETYPES: ReadonlyArray<readonly [string, PlayerClass]> = 
 
 const HELL_ENEMY_CHOICES = [
   'Dark Paladin',
-  'Tainted Hood',
+  'Sigil-Bound Acolyte',
   'Horned Demon',
   'Crimson Infernal Behemoth',
   'Bone Herald',
@@ -110,10 +110,10 @@ describe('realm class presentation', () => {
     }
 
     expect(classPresentationForRealm(getRealm('crypticrealm'), 'warlock')?.assetStatus).toBe(
-      'preview',
+      'ready',
     );
     expect(classPresentationForRealm(getRealm('crypticrealm'), 'warrior')?.assetStatus).toBe(
-      'comingSoon',
+      'ready',
     );
     expect(
       classChoicesForRealm(getRealm('arcadevoid')).every(
@@ -131,41 +131,47 @@ describe('realm class presentation', () => {
 
   it('exposes one version-neutral human hero card per Infernal archetype', () => {
     const choices = infernalHeroChoicesForRealm(getRealm('infernal'));
-    const heroes = choices.filter((choice) => choice.factionSide === 'sanctuary');
+    const heroes = choices.filter((choice) => choice.factionSide === 'heaven');
 
     expect(heroes.map((choice) => [choice.name, choice.baseClass])).toEqual(
       INFERNAL_HERO_ARCHETYPES,
     );
     expect(new Set(heroes.map((choice) => choice.name)).size).toBe(heroes.length);
     expect(new Set(choices.map((choice) => choice.factionSide))).toEqual(
-      new Set(['sanctuary', 'hell']),
+      new Set(['heaven', 'hell']),
     );
 
     for (const choice of heroes) {
       expect(choice.assetStatus, choice.name).toBe('ready');
       expect(choice.assetAnimated, choice.name).toBe(true);
       expect(choice.assetUrl, choice.name).toMatch(
-        /^\/cr-realms\/infernal\/(?:characters\/)?infernal_human_[a-z_]+\.glb$/,
+        /^\/cr-realms\/infernal\/(?:characters\/)?infernal_class_[a-z_]+\.glb$/,
       );
-      expect(`${choice.assetName} ${choice.assetUrl}`, choice.name).not.toMatch(HELL_ONLY_MODEL);
+      if (choice.name !== 'Demon Hunter') {
+        expect(`${choice.assetName} ${choice.assetUrl}`, choice.name).not.toMatch(HELL_ONLY_MODEL);
+      }
     }
 
     for (const choice of choices) {
       expect(choice.name, choice.heroId).not.toMatch(INFERNAL_VERSION_LABEL);
       expect(choice.lore, choice.heroId).not.toMatch(INFERNAL_VERSION_LABEL);
       expect(choice.heroId).not.toMatch(/diablo-(?:i|ii|iii|iv|immortal)/i);
+      expect(`${choice.faction} ${choice.lore}`).not.toMatch(/sanctuary|burning hells|baal/i);
       expect(choice).not.toHaveProperty('lineage');
+      expect(choice).not.toHaveProperty('signatureSkills');
     }
 
     const baseChoices = classChoicesForRealm(getRealm('infernal'));
     expect(baseChoices).toHaveLength(ALL_CLASSES.length);
     expect(
       baseChoices.every((choice) =>
-        /^\/cr-realms\/infernal\/(?:characters\/)?infernal_human_[a-z_]+\.glb$/.test(
+        /^\/cr-realms\/infernal\/(?:characters\/)?infernal_class_[a-z_]+\.glb$/.test(
           choice.assetUrl ?? '',
         ),
       ),
     ).toBe(true);
+    expect(new Set(heroes.map((choice) => choice.assetUrl)).size).toBe(heroes.length);
+    expect(new Set(baseChoices.map((choice) => choice.assetUrl)).size).toBe(baseChoices.length);
   });
 
   it('keeps distinct demon and corrupted previews on the Hell side only', () => {
@@ -175,18 +181,17 @@ describe('realm class presentation', () => {
     expect(enemies.map((choice) => choice.name)).toEqual(HELL_ENEMY_CHOICES);
     expect(new Set(enemies.map((choice) => choice.heroId)).size).toBe(enemies.length);
     expect(new Set(enemies.map((choice) => choice.assetUrl)).size).toBe(enemies.length);
-    expect(enemies.every((choice) => choice.faction === 'Burning Hells')).toBe(true);
+    expect(enemies.every((choice) => choice.faction === 'Ashen Court')).toBe(true);
     expect(enemies.every((choice) => choice.assetUrl?.endsWith('.glb'))).toBe(true);
 
-    for (const choice of choices) {
-      if (HELL_ONLY_MODEL.test(`${choice.assetName} ${choice.assetUrl}`)) {
-        expect(choice.factionSide, choice.name).toBe('hell');
-      }
-    }
+    const heroUrls = new Set(
+      choices.filter((choice) => choice.factionSide === 'heaven').map((choice) => choice.assetUrl),
+    );
+    for (const enemy of enemies) expect(heroUrls.has(enemy.assetUrl), enemy.name).toBe(false);
 
     expect(presentationFactionsForRealm(getRealm('infernal'))).toEqual([
       'Heavenly Host',
-      'Burning Hells',
+      'Ashen Court',
     ]);
   });
 

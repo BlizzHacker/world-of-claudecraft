@@ -10,7 +10,13 @@
 // the live game via window.__game (set in main.ts): { world, renderer }.
 
 import { placeablePropKeys } from '../../render/props';
+import { formatNumber } from '../i18n';
 import { getToken } from '../../user/api';
+import {
+  groupWorldBuilderAssets,
+  mergeWorldBuilderAssets,
+  type WorldBuilderAssetItem,
+} from './world_builder_assets';
 
 interface GameHandle {
   world: {
@@ -18,7 +24,16 @@ interface GameHandle {
     moveProp(dbId: number, x: number, z: number, yaw: number, scale: number): void;
     removeProp(dbId: number): void;
     setPropMeta?(dbId: number, meta: { dialogue?: string; music?: string; voice?: string }): void;
-    entities?: Map<number, { id: number; templateId?: string; pos: { x: number; z: number }; facing?: number; scale?: number }>;
+    entities?: Map<
+      number,
+      {
+        id: number;
+        templateId?: string;
+        pos: { x: number; z: number };
+        facing?: number;
+        scale?: number;
+      }
+    >;
   };
   renderer: {
     groundPoint(clientX: number, clientY: number, planeY: number): { x: number; z: number } | null;
@@ -27,7 +42,7 @@ interface GameHandle {
 
 function game(): GameHandle | null {
   const g = (window as unknown as { __game?: GameHandle }).__game;
-  return g && g.world && g.renderer ? g : null;
+  return g?.world && g.renderer ? g : null;
 }
 
 // Map a freshly-placed entity to its DB id, learned from the server's
@@ -39,12 +54,18 @@ export function notePropPlaced(entId: number, dbId: number): void {
 
 type BuilderState = {
   active: boolean;
-  selectedKey: string | null;   // armed prop to place on next ground click
-  selectedEnt: number | null;   // currently selected placed entity id
+  selectedKey: string | null; // armed prop to place on next ground click
+  selectedEnt: number | null; // currently selected placed entity id
   yaw: number;
   scale: number;
 };
-const state: BuilderState = { active: false, selectedKey: null, selectedEnt: null, yaw: 0, scale: 1 };
+const state: BuilderState = {
+  active: false,
+  selectedKey: null,
+  selectedEnt: null,
+  yaw: 0,
+  scale: 1,
+};
 
 let pointerHandler: ((ev: PointerEvent) => void) | null = null;
 let keyHandler: ((ev: KeyboardEvent) => void) | null = null;
@@ -69,13 +90,24 @@ function onGroundPointer(ev: PointerEvent): void {
 function onBuilderKey(ev: KeyboardEvent): void {
   if (!state.active) return;
   // Rotate armed/selected prop with [ ], scale with - =, delete selected.
-  if (ev.key === '[') { state.yaw -= Math.PI / 8; reflectSelected(); }
-  else if (ev.key === ']') { state.yaw += Math.PI / 8; reflectSelected(); }
-  else if (ev.key === '-') { state.scale = Math.max(0.25, state.scale - 0.1); reflectSelected(); }
-  else if (ev.key === '=') { state.scale = Math.min(4, state.scale + 0.1); reflectSelected(); }
-  else if ((ev.key === 'Delete' || ev.key === 'Backspace') && state.selectedEnt != null) {
+  if (ev.key === '[') {
+    state.yaw -= Math.PI / 8;
+    reflectSelected();
+  } else if (ev.key === ']') {
+    state.yaw += Math.PI / 8;
+    reflectSelected();
+  } else if (ev.key === '-') {
+    state.scale = Math.max(0.25, state.scale - 0.1);
+    reflectSelected();
+  } else if (ev.key === '=') {
+    state.scale = Math.min(4, state.scale + 0.1);
+    reflectSelected();
+  } else if ((ev.key === 'Delete' || ev.key === 'Backspace') && state.selectedEnt != null) {
     const dbId = dbIdByEnt.get(state.selectedEnt);
-    if (dbId != null) { game()?.world.removeProp(dbId); dbIdByEnt.delete(state.selectedEnt); }
+    if (dbId != null) {
+      game()?.world.removeProp(dbId);
+      dbIdByEnt.delete(state.selectedEnt);
+    }
     state.selectedEnt = null;
   } else return;
   ev.preventDefault();
@@ -103,7 +135,8 @@ function enableInteraction(): void {
 function disableInteraction(): void {
   if (pointerHandler) window.removeEventListener('pointerdown', pointerHandler, { capture: true });
   if (keyHandler) window.removeEventListener('keydown', keyHandler, { capture: true });
-  pointerHandler = null; keyHandler = null;
+  pointerHandler = null;
+  keyHandler = null;
 }
 
 const DOCK_ID = 'cr-world-builder-dock';
@@ -118,7 +151,12 @@ const DOCK_ID = 'cr-world-builder-dock';
 export function openWorldBuilderDock(): void {
   if (typeof document === 'undefined') return;
   let dock = document.getElementById(DOCK_ID);
-  if (dock) { dock.hidden = false; state.active = true; enableInteraction(); return; }
+  if (dock) {
+    dock.hidden = false;
+    state.active = true;
+    enableInteraction();
+    return;
+  }
 
   dock = document.createElement('div');
   dock.id = DOCK_ID;
@@ -152,12 +190,20 @@ export function openWorldBuilderDock(): void {
     '<input type="search" class="cr-wb-filter" data-wb-filter placeholder="Filter props…" autocomplete="off">' +
     '<div class="cr-wb-secthead">Native props</div>' +
     '<div class="cr-wb-palette" data-wb-palette>' +
-    keys.map((k) => `<button type="button" class="cr-afe-place" data-build-key="${escapeAttr(k)}">${escapeAttr(k)}</button>`).join('') +
+    keys
+      .map(
+        (k) =>
+          `<button type="button" class="cr-afe-place" data-build-key="${escapeAttr(k)}">${escapeAttr(k)}</button>`,
+      )
+      .join('') +
     '</div>' +
     '<div class="cr-wb-secthead">Forged (generated / uploaded)' +
     '<button type="button" class="cr-wb-upload" data-wb-upload title="Upload a .glb">⬆ Upload</button>' +
     '<button type="button" class="cr-wb-refresh" data-wb-refresh title="Refresh list">⟳</button></div>' +
     '<div class="cr-wb-palette cr-wb-forged" data-wb-forged><div class="cr-wb-empty">loading…</div></div>' +
+    '<div class="cr-wb-library-footer" data-wb-library-footer hidden>' +
+    '<span data-wb-library-summary></span>' +
+    '<button type="button" data-wb-library-more aria-label="Load more assets">More</button></div>' +
     '<input type="file" accept=".glb" data-wb-file style="display:none">';
   document.body.appendChild(dock);
 
@@ -165,8 +211,7 @@ export function openWorldBuilderDock(): void {
   const refreshStatus = () => {
     if (!statusEl) return;
     const sel = state.selectedEnt != null ? ' · selected ✏' : '';
-    statusEl.textContent =
-      `armed: ${state.selectedKey ?? 'none'} · yaw ${Math.round((state.yaw * 180 / Math.PI) % 360)}° · scale ${state.scale.toFixed(1)}×${sel}`;
+    statusEl.textContent = `armed: ${state.selectedKey ?? 'none'} · yaw ${Math.round(((state.yaw * 180) / Math.PI) % 360)}° · scale ${state.scale.toFixed(1)}×${sel}`;
   };
   builderRefreshStatus = refreshStatus;
 
@@ -176,11 +221,11 @@ export function openWorldBuilderDock(): void {
   let librarySearchTimer = 0;
   filter?.addEventListener('input', () => {
     const q = (filter.value || '').toLowerCase();
-    dock!.querySelectorAll<HTMLElement>('[data-build-key]').forEach((b) => {
+    dock.querySelectorAll<HTMLElement>('[data-build-key]').forEach((b) => {
       b.style.display = !q || (b.dataset.buildKey || '').toLowerCase().includes(q) ? '' : 'none';
     });
     window.clearTimeout(librarySearchTimer);
-    librarySearchTimer = window.setTimeout(() => void loadForged(q), 180);
+    librarySearchTimer = window.setTimeout(() => void loadLibrary(q), 180);
   });
 
   // ── Transform sliders (scale / rotate) ──────────────────────────────────
@@ -190,37 +235,44 @@ export function openWorldBuilderDock(): void {
   const yawVal = dock.querySelector<HTMLElement>('[data-wb-yawval]');
   const syncSliders = () => {
     if (scaleEl) scaleEl.value = String(state.scale);
-    if (yawEl) yawEl.value = String(Math.round((state.yaw * 180 / Math.PI) % 360 + 360) % 360);
-    if (scaleVal) scaleVal.textContent = state.scale.toFixed(1) + '×';
-    if (yawVal) yawVal.textContent = (Math.round((state.yaw * 180 / Math.PI) % 360 + 360) % 360) + '°';
+    if (yawEl) yawEl.value = String(Math.round((((state.yaw * 180) / Math.PI) % 360) + 360) % 360);
+    if (scaleVal) scaleVal.textContent = `${state.scale.toFixed(1)}×`;
+    if (yawVal)
+      yawVal.textContent = `${Math.round((((state.yaw * 180) / Math.PI) % 360) + 360) % 360}°`;
   };
   builderSyncSliders = syncSliders;
   scaleEl?.addEventListener('input', () => {
     state.scale = parseFloat(scaleEl.value) || 1;
-    if (scaleVal) scaleVal.textContent = state.scale.toFixed(1) + '×';
+    if (scaleVal) scaleVal.textContent = `${state.scale.toFixed(1)}×`;
     if (state.selectedEnt != null) reflectSelected();
     refreshStatus();
   });
   yawEl?.addEventListener('input', () => {
-    state.yaw = (parseFloat(yawEl.value) || 0) * Math.PI / 180;
-    if (yawVal) yawVal.textContent = (Math.round(parseFloat(yawEl.value)) || 0) + '°';
+    state.yaw = ((parseFloat(yawEl.value) || 0) * Math.PI) / 180;
+    if (yawVal) yawVal.textContent = `${Math.round(parseFloat(yawEl.value)) || 0}°`;
     if (state.selectedEnt != null) reflectSelected();
     refreshStatus();
   });
   dock.querySelector('[data-wb-del]')?.addEventListener('click', () => {
     if (state.selectedEnt == null) return;
     const dbId = dbIdByEnt.get(state.selectedEnt);
-    if (dbId != null) { game()?.world.removeProp(dbId); dbIdByEnt.delete(state.selectedEnt); }
-    state.selectedEnt = null; refreshStatus();
+    if (dbId != null) {
+      game()?.world.removeProp(dbId);
+      dbIdByEnt.delete(state.selectedEnt);
+    }
+    state.selectedEnt = null;
+    refreshStatus();
   });
   dock.querySelector('[data-wb-deselect]')?.addEventListener('click', () => {
-    state.selectedEnt = null; refreshStatus();
+    state.selectedEnt = null;
+    refreshStatus();
   });
   dock.querySelector('[data-wb-dup]')?.addEventListener('click', () => {
     // Duplicate: place the selected prop's key again at a small offset.
-    const g = game(); if (!g || state.selectedEnt == null) return;
+    const g = game();
+    if (!g || state.selectedEnt == null) return;
     const e = g.world.entities?.get(state.selectedEnt);
-    if (!e || !e.templateId?.startsWith('prop:')) return;
+    if (!e?.templateId?.startsWith('prop:')) return;
     const key = e.templateId.slice(5);
     g.world.placeProp(key, e.pos.x + 1.5, e.pos.z + 1.5, e.facing ?? 0, e.scale ?? 1);
   });
@@ -228,9 +280,15 @@ export function openWorldBuilderDock(): void {
   const musicEl = dock.querySelector<HTMLInputElement>('[data-wb-music]');
   const voiceEl = dock.querySelector<HTMLInputElement>('[data-wb-voice]');
   dock.querySelector('[data-wb-savemeta]')?.addEventListener('click', () => {
-    if (state.selectedEnt == null) { alert('Select a placed prop first.'); return; }
+    if (state.selectedEnt == null) {
+      alert('Select a placed prop first.');
+      return;
+    }
     const dbId = dbIdByEnt.get(state.selectedEnt);
-    if (dbId == null) { alert('This prop has no saved id yet — re-place it.'); return; }
+    if (dbId == null) {
+      alert('This prop has no saved id yet — re-place it.');
+      return;
+    }
     game()?.world.setPropMeta?.(dbId, {
       dialogue: (dialogueEl?.value || '').slice(0, 240),
       music: (musicEl?.value || '').slice(0, 200),
@@ -242,17 +300,27 @@ export function openWorldBuilderDock(): void {
   const armKey = (key: string, btn: HTMLElement) => {
     state.selectedKey = key;
     state.selectedEnt = null; // arming a new prop clears the edit selection
-    dock!.querySelectorAll('[data-build-key]').forEach((b) => b.classList.remove('sel'));
+    dock.querySelectorAll('[data-build-key]').forEach((button) => {
+      button.classList.remove('sel');
+    });
     btn.classList.add('sel');
     refreshStatus();
   };
   dock.addEventListener('click', (ev) => {
     const btn = (ev.target as HTMLElement).closest('[data-build-key]') as HTMLElement | null;
-    if (btn && btn.dataset.buildKey) armKey(btn.dataset.buildKey, btn);
+    if (btn?.dataset.buildKey) armKey(btn.dataset.buildKey, btn);
   });
 
   // Forged props: fetch the USB4 catalog and render a "forged:<key>" button each.
   const forgedHost = dock.querySelector<HTMLElement>('[data-wb-forged]');
+  const libraryFooter = dock.querySelector<HTMLElement>('[data-wb-library-footer]');
+  const librarySummary = dock.querySelector<HTMLElement>('[data-wb-library-summary]');
+  const libraryMore = dock.querySelector<HTMLButtonElement>('[data-wb-library-more]');
+  const libraryPageSize = 120;
+  let libraryItems: WorldBuilderAssetItem[] = [];
+  let libraryPage = 0;
+  let libraryTotal = 0;
+  let libraryRequest = 0;
   const loadForged = async (query = '') => {
     if (!forgedHost) return;
     forgedHost.innerHTML = '<div class="cr-wb-empty">loading…</div>';
@@ -280,34 +348,139 @@ export function openWorldBuilderDock(): void {
           }),
         );
       }
-      if (!items.length) { forgedHost.innerHTML = '<div class="cr-wb-empty">none yet — generate or upload a GLB</div>'; return; }
+      if (!items.length) {
+        forgedHost.innerHTML = '<div class="cr-wb-empty">none yet — generate or upload a GLB</div>';
+        return;
+      }
       // group by realm/category for readable sections
       const groups = new Map<string, typeof items>();
       for (const p of items) {
         const g = p.group || 'forged';
         if (!groups.has(g)) groups.set(g, []);
-        groups.get(g)!.push(p);
+        groups.get(g)?.push(p);
       }
-      const order = ['forged', 'crypticrealm', 'cryptic', 'classic', 'infernal', 'claudcraft', 'claudecraft', 'arcane', 'dominion', 'arcadevoid', 'exchange', 'fps'];
+      const order = [
+        'forged',
+        'crypticrealm',
+        'cryptic',
+        'classic',
+        'infernal',
+        'claudcraft',
+        'claudecraft',
+        'arcane',
+        'dominion',
+        'arcadevoid',
+        'exchange',
+        'fps',
+      ];
       const sortedGroups = [...groups.keys()].sort((a, b) => {
-        const ia = order.indexOf(a), ib = order.indexOf(b);
+        const ia = order.indexOf(a),
+          ib = order.indexOf(b);
         return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib) || a.localeCompare(b);
       });
-      const label = (g: string) => g === 'forged'
-        ? '✦ Generated / Uploaded'
-        : `🗂 ${g.charAt(0).toUpperCase()}${g.slice(1)} realm assets`;
-      forgedHost.innerHTML = sortedGroups.map((g) =>
-        `<div class="cr-wb-grouplabel">${escapeAttr(label(g))} <span class="cr-wb-count">${groups.get(g)!.length}</span></div>` +
-        groups.get(g)!.map((p) =>
-          `<button type="button" class="cr-afe-place" data-build-key="${escapeAttr(p.placeKey)}" title="${escapeAttr(p.name)}">${escapeAttr(p.name)}</button>`
-        ).join('')
-      ).join('');
+      const label = (g: string) =>
+        g === 'forged'
+          ? '✦ Generated / Uploaded'
+          : `🗂 ${g.charAt(0).toUpperCase()}${g.slice(1)} realm assets`;
+      forgedHost.innerHTML = sortedGroups
+        .map((g) => {
+          const rows = groups.get(g) ?? [];
+          return (
+            `<div class="cr-wb-grouplabel">${escapeAttr(label(g))} <span class="cr-wb-count">${rows.length}</span></div>` +
+            rows
+              .map(
+                (p) =>
+                  `<button type="button" class="cr-afe-place" data-build-key="${escapeAttr(p.placeKey)}" title="${escapeAttr(p.name)}">${escapeAttr(p.name)}</button>`,
+              )
+              .join('')
+          );
+        })
+        .join('');
     } catch {
       forgedHost.innerHTML = '<div class="cr-wb-empty">failed to load</div>';
     }
   };
+  const renderLibrary = () => {
+    if (!forgedHost) return;
+    if (!libraryItems.length) {
+      forgedHost.innerHTML = '<div class="cr-wb-empty">No matching assets.</div>';
+    } else {
+      forgedHost.innerHTML = groupWorldBuilderAssets(libraryItems)
+        .map(
+          (group) =>
+            `<div class="cr-wb-grouplabel">${escapeAttr(group.label)} <span class="cr-wb-count">${group.items.length}</span></div>` +
+            group.items
+              .map(
+                (item) =>
+                  `<button type="button" class="cr-afe-place" data-build-key="${escapeAttr(item.placeKey)}" title="${escapeAttr(item.name)}">${escapeAttr(item.name)}</button>`,
+              )
+              .join(''),
+        )
+        .join('');
+    }
+    if (libraryFooter) libraryFooter.hidden = false;
+    if (librarySummary) {
+      librarySummary.textContent = `${formatNumber(libraryItems.length)} / ${formatNumber(libraryTotal)}`;
+    }
+    if (libraryMore) libraryMore.hidden = libraryItems.length >= libraryTotal;
+  };
+  const loadLibrary = async (query = '', append = false) => {
+    if (!forgedHost) return;
+    const request = ++libraryRequest;
+    const nextPage = append ? libraryPage + 1 : 1;
+    if (!append) {
+      libraryItems = [];
+      libraryPage = 0;
+      libraryTotal = 0;
+      forgedHost.innerHTML = '<div class="cr-wb-empty">Loading asset library...</div>';
+      if (libraryFooter) libraryFooter.hidden = true;
+    }
+    if (libraryMore) libraryMore.disabled = true;
+    try {
+      const params = new URLSearchParams({
+        page: String(nextPage),
+        limit: String(libraryPageSize),
+        q: query.slice(0, 80),
+      });
+      const res = await fetch(`/api/asset-library?${params}`, { credentials: 'same-origin' });
+      const data = await res.json().catch(() => ({}));
+      if (request !== libraryRequest) return;
+      if (!res.ok || !Array.isArray(data.assets)) {
+        if (!append) await loadForged(query);
+        if (libraryFooter) libraryFooter.hidden = true;
+        return;
+      }
+      const incoming = data.assets
+        .filter(
+          (asset: unknown): asset is { assetId: string; name: string; group?: string } =>
+            !!asset &&
+            typeof asset === 'object' &&
+            typeof (asset as { assetId?: unknown }).assetId === 'string' &&
+            (asset as { assetId: string }).assetId.startsWith('library/') &&
+            typeof (asset as { name?: unknown }).name === 'string',
+        )
+        .map((asset: { assetId: string; name: string; group?: string }) => ({
+          placeKey: `library:${asset.assetId.slice('library/'.length)}`,
+          name: asset.name,
+          group: asset.group || 'library',
+        }));
+      libraryItems = mergeWorldBuilderAssets(libraryItems, incoming, !append);
+      libraryPage = Number.isFinite(data.page) ? data.page : nextPage;
+      libraryTotal = Number.isFinite(data.total) ? Math.max(0, data.total) : libraryItems.length;
+      renderLibrary();
+    } catch {
+      if (request === libraryRequest && !libraryItems.length) {
+        forgedHost.innerHTML = '<div class="cr-wb-empty">Asset library failed to load.</div>';
+      }
+    } finally {
+      if (request === libraryRequest && libraryMore) libraryMore.disabled = false;
+    }
+  };
   dock.querySelector('[data-wb-refresh]')?.addEventListener('click', () => {
-    void loadForged(filter?.value || '');
+    void loadLibrary(filter?.value || '');
+  });
+  libraryMore?.addEventListener('click', () => {
+    void loadLibrary(filter?.value || '', true);
   });
 
   // Upload a .glb → POST to the forged store → refresh the list.
@@ -320,15 +493,24 @@ export function openWorldBuilderDock(): void {
     try {
       const res = await fetch(`/me/api/arcforge/upload-glb?name=${encodeURIComponent(f.name)}`, {
         method: 'POST',
-        headers: { 'content-type': 'model/gltf-binary', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+        headers: {
+          'content-type': 'model/gltf-binary',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: await f.arrayBuffer(),
       });
-      if (!res.ok) { alert('Upload failed: ' + (await res.text()).slice(0, 200)); return; }
-      await loadForged();
-    } catch (e) { alert('Upload error: ' + e); }
-    finally { fileInput.value = ''; }
+      if (!res.ok) {
+        alert(`Upload failed: ${(await res.text()).slice(0, 200)}`);
+        return;
+      }
+      await loadLibrary();
+    } catch (e) {
+      alert(`Upload error: ${e}`);
+    } finally {
+      fileInput.value = '';
+    }
   });
-  void loadForged();
+  void loadLibrary();
 
   // Active whenever the dock is open — placement is armed by selecting a prop.
   state.active = true;
@@ -357,7 +539,7 @@ export function tryBuilderSelect(entId: number): boolean {
   if (!state.active) return false;
   const g = game();
   const e = g?.world.entities?.get(entId);
-  if (!e || !e.templateId || !e.templateId.startsWith('prop:')) return false;
+  if (!e?.templateId?.startsWith('prop:')) return false;
   state.selectedEnt = entId;
   state.selectedKey = null; // selecting an existing prop disarms placement
   state.yaw = e.facing ?? 0;
@@ -375,5 +557,8 @@ export function unmountWorldBuilder(): void {
 }
 
 function escapeAttr(s: string): string {
-  return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string));
+  return s.replace(
+    /[&<>"']/g,
+    (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] as string,
+  );
 }

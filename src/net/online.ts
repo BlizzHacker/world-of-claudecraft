@@ -119,6 +119,8 @@ export interface CharacterSummary {
   // skinCatalog defaults to the class rig, absent mainhand shows no weapon.
   skinCatalog?: 'class' | 'mech';
   mainhandItemId?: string | null;
+  visualKey?: string | null;
+  realmHeroId?: string | null;
 }
 
 function stringList(value: unknown): string[] {
@@ -596,8 +598,16 @@ export class Api {
     skin = 0,
     ladder = false,
     hardcore = false,
+    realmHeroId?: string,
   ): Promise<void> {
-    await this.post('/api/characters', { name, class: cls, skin, ladder, hardcore });
+    await this.post('/api/characters', {
+      name,
+      class: cls,
+      skin,
+      ladder,
+      hardcore,
+      ...(realmHeroId ? { realmHeroId } : {}),
+    });
   }
 
   async renameCharacter(characterId: number, name: string): Promise<void> {
@@ -1040,6 +1050,7 @@ function blankEntity(id: number): Entity {
     skinCatalog: 'class',
     skin: 0,
     visualKey: null,
+    realmHeroId: null,
     mainhandItemId: null,
     equippedItems: {},
     equippedInstances: {},
@@ -1786,6 +1797,7 @@ export class ClientWorld implements IWorld {
         e.level = w.lv;
         e.skin = w.sk ?? 0;
         e.visualKey = typeof w.vk === 'string' ? w.vk : null;
+        e.realmHeroId = typeof w.rh === 'string' ? w.rh : null;
         e.mainhandItemId = w.mh ?? null; // equipped mainhand → held weapon model (render-only)
         e.equippedItems = w.eq ?? {}; // full worn set (render-only), for the inspect window
         e.skinCatalog = w.cat === 'mech' ? 'mech' : 'class';

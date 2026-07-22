@@ -21,6 +21,17 @@ const MAX_PAGE_SIZE = 500;
 // invalidate this cache when new assets are published.
 const CACHE_MS = 5 * 60_000;
 const SKIP_DIR_NAMES = new Set(['.git', 'node_modules', 'quarantine']);
+const REALM_GROUP_IDS = new Set([
+  'crypticrealm',
+  'infernal',
+  'classic',
+  'arcane',
+  'arcadevoid',
+  'claudecraft',
+  'fps',
+  'dominion',
+  'exchange',
+]);
 
 export interface AssetLibraryRoot {
   id: string;
@@ -66,7 +77,9 @@ export interface AssetLibraryListResult {
   };
 }
 
-export function parseAssetLibraryRoots(raw = process.env.ASSET_LIBRARY_ROOTS_JSON): AssetLibraryRoot[] {
+export function parseAssetLibraryRoots(
+  raw = process.env.ASSET_LIBRARY_ROOTS_JSON,
+): AssetLibraryRoot[] {
   if (!raw?.trim()) return [];
   let value: unknown;
   try {
@@ -154,6 +167,12 @@ export function defaultAssetLibraryRoots(
             group: 'D2-Koolo',
             realmId: 'classic',
           },
+          {
+            id: 'heroforge',
+            path: path.win32.resolve('C:\\MoveWeight\\moveweight-ui\\public\\heroforge-assets'),
+            group: 'HeroForge',
+            realmId: 'unassigned',
+          },
         ]
       : [
           {
@@ -192,7 +211,8 @@ function assetUrl(assetId: string): string {
 }
 
 function prettyName(fileName: string): string {
-  return path.basename(fileName, path.extname(fileName))
+  return path
+    .basename(fileName, path.extname(fileName))
     .replace(/^[a-f0-9-]{20,}__+/i, '')
     .replace(/^[a-z]+__/i, '')
     .replace(/[_-]+/g, ' ')
@@ -311,12 +331,15 @@ function inferKind(name: string, relativePath = ''): AssetLibraryItem['kind'] {
   return 'prop';
 }
 
-async function walkGlbs(rootPath: string): Promise<Array<{ path: string; relative: string; size: number }>> {
+async function walkGlbs(
+  rootPath: string,
+): Promise<Array<{ path: string; relative: string; size: number }>> {
   const root = path.resolve(rootPath);
   const found: Array<{ path: string; relative: string; size: number }> = [];
   const pending = [root];
   while (pending.length > 0 && found.length < MAX_DISCOVERED_ASSETS) {
-    const dir = pending.pop()!;
+    const dir = pending.pop();
+    if (!dir) break;
     const entries = await fsp.readdir(dir, { withFileTypes: true }).catch(() => []);
     for (const entry of entries) {
       if (found.length >= MAX_DISCOVERED_ASSETS) break;
@@ -371,14 +394,16 @@ async function discoverRealmAssets(realmsDir: string): Promise<IndexedAsset[]> {
     const manifestPath = path.join(root, dir.name, 'manifest.json');
     const stat = await fsp.stat(manifestPath).catch(() => null);
     if (!stat?.isFile() || stat.size > MAX_MANIFEST_BYTES) continue;
-    let manifest: any;
+    let manifest: unknown;
     try {
       manifest = JSON.parse(await fsp.readFile(manifestPath, 'utf8'));
     } catch {
       continue;
     }
-    if (!Array.isArray(manifest?.assets)) continue;
-    for (const asset of manifest.assets) {
+    if (!manifest || typeof manifest !== 'object') continue;
+    const manifestAssets = (manifest as { assets?: unknown }).assets;
+    if (!Array.isArray(manifestAssets)) continue;
+    for (const asset of manifestAssets) {
       if (!asset || typeof asset !== 'object' || typeof asset.url !== 'string') continue;
       const prefix = `/cr-realms/${dir.name}/`;
       if (!asset.url.startsWith(prefix) || !asset.url.toLowerCase().endsWith('.glb')) continue;
@@ -389,7 +414,10 @@ async function discoverRealmAssets(realmsDir: string): Promise<IndexedAsset[]> {
       const id = stableAssetId(idRoot, fileName);
       rows.push({
         assetId: id,
-        name: typeof asset.name === 'string' && asset.name.trim() ? asset.name.trim() : prettyName(fileName),
+        name:
+          typeof asset.name === 'string' && asset.name.trim()
+            ? asset.name.trim()
+            : prettyName(fileName),
         url: assetUrl(id),
         group: dir.name,
         realmId: dir.name,
@@ -413,14 +441,20 @@ async function discoverForgedAssets(forgedDir: string): Promise<IndexedAsset[]> 
   const rows = await walkGlbs(root.path);
   return rows.map((row) => {
     const top = row.relative.replace(/\\/g, '/').split('/');
-    const group = top.length > 1 && ROOT_ID_RE.test(top[0]) ? top[0] : 'forged';
+    const rawGroup = top.length > 1 && ROOT_ID_RE.test(top[0]) ? top[0] : 'forged';
+    const aliases: Record<string, string> = {
+      cryptic: 'crypticrealm',
+      claudcraft: 'claudecraft',
+    };
+    const group = aliases[rawGroup] ?? rawGroup;
+    const realmId = REALM_GROUP_IDS.has(group) ? group : 'unassigned';
     const id = stableAssetId(root.id, row.relative);
     return {
       assetId: id,
       name: prettyName(row.relative),
       url: assetUrl(id),
       group,
-      realmId: group === 'forged' ? 'unassigned' : group,
+      realmId,
       source: 'forged',
       kind: inferKind(row.relative),
       byteSize: row.size,
@@ -434,8 +468,11 @@ async function discoverForgedAssets(forgedDir: string): Promise<IndexedAsset[]> 
 export class AssetLibrary {
   private snapshot: { at: number; assets: IndexedAsset[]; byId: Map<string, IndexedAsset> } | null =
     null;
-  private loading: Promise<{ at: number; assets: IndexedAsset[]; byId: Map<string, IndexedAsset> }> | null =
-    null;
+  private loading: Promise<{
+    at: number;
+    assets: IndexedAsset[];
+    byId: Map<string, IndexedAsset>;
+  }> | null = null;
 
   constructor(
     private readonly config: {
@@ -450,7 +487,11 @@ export class AssetLibrary {
     this.snapshot = null;
   }
 
-  private async load(): Promise<{ at: number; assets: IndexedAsset[]; byId: Map<string, IndexedAsset> }> {
+  private async load(): Promise<{
+    at: number;
+    assets: IndexedAsset[];
+    byId: Map<string, IndexedAsset>;
+  }> {
     const cacheMs = this.config.cacheMs ?? CACHE_MS;
     if (this.snapshot && Date.now() - this.snapshot.at < cacheMs) return this.snapshot;
     if (this.loading) return this.loading;
@@ -500,11 +541,15 @@ export class AssetLibrary {
       if (group && asset.group.toLowerCase() !== group) return false;
       if (realmId && asset.realmId.toLowerCase() !== realmId) return false;
       if (!q) return true;
-      return `${asset.name} ${asset.assetId} ${asset.group} ${asset.realmId}`.toLowerCase().includes(q);
+      return `${asset.name} ${asset.assetId} ${asset.group} ${asset.realmId}`
+        .toLowerCase()
+        .includes(q);
     });
     const start = (page - 1) * limit;
     return {
-      assets: filtered.slice(start, start + limit).map(({ filePath: _filePath, ...asset }) => asset),
+      assets: filtered
+        .slice(start, start + limit)
+        .map(({ filePath: _filePath, ...asset }) => asset),
       page,
       limit,
       total: filtered.length,
@@ -574,9 +619,7 @@ export async function handleAssetLibraryStatic(
     return true;
   }
   if (!pathname.startsWith('/asset-library/')) return false;
-  const match = /^\/asset-library\/([a-z0-9][a-z0-9_-]{0,31})\/([a-f0-9]{24})\.glb$/.exec(
-    pathname,
-  );
+  const match = /^\/asset-library\/([a-z0-9][a-z0-9_-]{0,31})\/([a-f0-9]{24})\.glb$/.exec(pathname);
   if (!match || (req.method !== 'GET' && req.method !== 'HEAD')) {
     res.writeHead(match ? 405 : 404, match ? { allow: 'GET, HEAD' } : undefined);
     res.end();

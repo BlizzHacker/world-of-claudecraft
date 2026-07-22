@@ -1993,6 +1993,10 @@ export interface Entity {
   // identity fields (terse `vk`). Render-only; class/templateId still drives
   // gameplay, abilities, stats, and equipment.
   visualKey: string | null;
+  // Stable authored realm-character selection (for example
+  // `infernal-hero-necromancer`). Render-only identity used by the runtime
+  // body editor before its broader `class:<id>` fallback.
+  realmHeroId: string | null;
   // Equipped mainhand item id (players only; null otherwise). Render-only: the
   // client maps it to a held weapon model. Recomputed in recalcPlayerStats and
   // synced in identity fields (terse `mh`). The sim never reads it for gameplay.

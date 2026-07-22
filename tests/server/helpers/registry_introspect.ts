@@ -70,9 +70,16 @@ export function checkRequireOwnedCoverage(routes: RouteDef[]): CoverageIssue[] {
     const requireOwned = route?.meta?.requireOwned;
     const isAdminSurface = route?.surface === 'admin';
     const isPublicRead = route?.meta?.publicRead === true;
+    // A shared-resource :param route behind an explicit permission middleware
+    // (meta.permissionGated, e.g. the realm-visuals editor) has no account
+    // owner to load, so it is exempt like an operator-scoped route.
+    const isPermissionGated = route?.meta?.permissionGated === true;
     // Operator-scoped and explicitly-public routes are exempt from the missing clause.
     const exemptFromMissing =
-      isAdminSurface || isPublicRead || requireOwned?.ownerScope === 'operator';
+      isAdminSurface ||
+      isPublicRead ||
+      isPermissionGated ||
+      requireOwned?.ownerScope === 'operator';
 
     if (!exemptFromMissing && !requireOwned) {
       issues.push({ path, method, problem: 'missing-require-owned' });

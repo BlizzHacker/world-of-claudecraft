@@ -1032,18 +1032,17 @@ function rowToTotpState(row: any): AccountTotpState {
 }
 
 export async function accountTotpState(accountId: number): Promise<AccountTotpState> {
-  const res = await pool.query(
-    'SELECT totp_secret, totp_enabled_at FROM accounts WHERE id = $1',
-    [accountId],
-  );
+  const res = await pool.query('SELECT totp_secret, totp_enabled_at FROM accounts WHERE id = $1', [
+    accountId,
+  ]);
   return rowToTotpState(res.rows[0]);
 }
 
 export async function setAccountTotpSecret(accountId: number, secret: string): Promise<void> {
-  await pool.query(
-    'UPDATE accounts SET totp_secret = $2, totp_enabled_at = NULL WHERE id = $1',
-    [accountId, secret],
-  );
+  await pool.query('UPDATE accounts SET totp_secret = $2, totp_enabled_at = NULL WHERE id = $1', [
+    accountId,
+    secret,
+  ]);
 }
 
 export async function enableAccountTotp(accountId: number): Promise<void> {
@@ -1054,10 +1053,9 @@ export async function enableAccountTotp(accountId: number): Promise<void> {
 }
 
 export async function disableAccountTotp(accountId: number): Promise<void> {
-  await pool.query(
-    'UPDATE accounts SET totp_secret = NULL, totp_enabled_at = NULL WHERE id = $1',
-    [accountId],
-  );
+  await pool.query('UPDATE accounts SET totp_secret = NULL, totp_enabled_at = NULL WHERE id = $1', [
+    accountId,
+  ]);
 }
 
 export async function getAccountsCount(): Promise<number> {
@@ -2155,7 +2153,14 @@ export async function currentSeason(): Promise<number> {
   return Number(res.rows[0]?.season ?? 0);
 }
 
-export async function createCharacter(accountId: number, name: string, cls: PlayerClass, state: CharacterState | null = null, ladder = false, hardcore = false): Promise<CharacterRow> {
+export async function createCharacter(
+  accountId: number,
+  name: string,
+  cls: PlayerClass,
+  state: CharacterState | null = null,
+  ladder = false,
+  hardcore = false,
+): Promise<CharacterRow> {
   const season = ladder ? await currentSeason() : 0;
   const res = await pool.query(
     'INSERT INTO characters (account_id, name, class, realm, state, ladder, season, hardcore) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id, account_id, name, class, level, state, is_gm, force_rename, hardcore, died_at',
@@ -2464,6 +2469,24 @@ export interface OAuthUpsertResult {
   created: boolean;
 }
 
+/** Resolve an already-linked external identity without creating or mutating an
+ * account. This is intentionally separate from upsertOAuthAccount: service-to-
+ * service editor access must never create a game account as a side effect. */
+export async function accountForOAuthIdentity(
+  provider: string,
+  sub: string,
+): Promise<{ id: number; username: string } | null> {
+  const result = await pool.query(
+    `SELECT id, username
+       FROM accounts
+      WHERE oauth_provider = $1 AND oauth_sub = $2
+      LIMIT 1`,
+    [provider, sub],
+  );
+  const row = result.rows[0];
+  return row ? { id: row.id, username: row.username } : null;
+}
+
 function sanitizeUsernameCandidate(raw: string): string {
   const stripped = raw
     .toLowerCase()
@@ -2471,7 +2494,7 @@ function sanitizeUsernameCandidate(raw: string): string {
     .replace(/^_+|_+$/g, '')
     .slice(0, 20);
   // Hard floor at 3 chars; pad with 'usr' if the candidate vanished entirely.
-  return stripped.length >= 3 ? stripped : (stripped ? `${stripped}_usr` : 'usr');
+  return stripped.length >= 3 ? stripped : stripped ? `${stripped}_usr` : 'usr';
 }
 
 export async function upsertOAuthAccount(input: {
@@ -2491,7 +2514,9 @@ export async function upsertOAuthAccount(input: {
   const base = sanitizeUsernameCandidate(input.displayName || input.sub);
   let candidate = base;
   for (let n = 1; n < 9999; n++) {
-    const dupe = await pool.query('SELECT id FROM accounts WHERE username = $1 LIMIT 1', [candidate]);
+    const dupe = await pool.query('SELECT id FROM accounts WHERE username = $1 LIMIT 1', [
+      candidate,
+    ]);
     if (!dupe.rows.length) break;
     candidate = `${base.slice(0, 18)}_${n}`;
   }
@@ -2523,10 +2548,11 @@ export async function linkOAuthToAccount(
   if (existing.rows.length) {
     return existing.rows[0].id === accountId ? 'already' : 'conflict';
   }
-  await pool.query(
-    'UPDATE accounts SET oauth_provider = $2, oauth_sub = $3 WHERE id = $1',
-    [accountId, provider, sub],
-  );
+  await pool.query('UPDATE accounts SET oauth_provider = $2, oauth_sub = $3 WHERE id = $1', [
+    accountId,
+    provider,
+    sub,
+  ]);
   return 'ok';
 }
 
@@ -2536,17 +2562,15 @@ export async function linkOAuthToAccount(
 export async function unlinkOAuthFromAccount(
   accountId: number,
 ): Promise<'ok' | 'needsPassword' | 'notLinked'> {
-  const res = await pool.query(
-    'SELECT oauth_provider, password_set FROM accounts WHERE id = $1',
-    [accountId],
-  );
+  const res = await pool.query('SELECT oauth_provider, password_set FROM accounts WHERE id = $1', [
+    accountId,
+  ]);
   const row = res.rows[0];
   if (!row || !row.oauth_provider) return 'notLinked';
   if (row.password_set === false) return 'needsPassword';
-  await pool.query(
-    'UPDATE accounts SET oauth_provider = NULL, oauth_sub = NULL WHERE id = $1',
-    [accountId],
-  );
+  await pool.query('UPDATE accounts SET oauth_provider = NULL, oauth_sub = NULL WHERE id = $1', [
+    accountId,
+  ]);
   return 'ok';
 }
 
@@ -2554,10 +2578,7 @@ export async function unlinkOAuthFromAccount(
 export async function oauthLinkStatus(
   accountId: number,
 ): Promise<{ linked: boolean; provider: string | null }> {
-  const res = await pool.query(
-    'SELECT oauth_provider FROM accounts WHERE id = $1',
-    [accountId],
-  );
+  const res = await pool.query('SELECT oauth_provider FROM accounts WHERE id = $1', [accountId]);
   const provider = res.rows[0]?.oauth_provider ?? null;
   return { linked: !!provider, provider };
 }
@@ -2570,10 +2591,9 @@ export async function isAdminAccount(accountId: number): Promise<boolean> {
 export async function isModeratorAccount(accountId: number): Promise<boolean> {
   // Admins are implicitly moderators — moderator routes accept either flag so
   // we don't have to dual-grant rows.
-  const res = await pool.query(
-    'SELECT is_admin, is_moderator FROM accounts WHERE id = $1',
-    [accountId],
-  );
+  const res = await pool.query('SELECT is_admin, is_moderator FROM accounts WHERE id = $1', [
+    accountId,
+  ]);
   const row = res.rows[0];
   return row?.is_admin === true || row?.is_moderator === true;
 }
@@ -2584,10 +2604,9 @@ export interface AccountRoleFlags {
 }
 
 export async function accountRoleFlags(accountId: number): Promise<AccountRoleFlags> {
-  const res = await pool.query(
-    'SELECT is_admin, is_moderator FROM accounts WHERE id = $1',
-    [accountId],
-  );
+  const res = await pool.query('SELECT is_admin, is_moderator FROM accounts WHERE id = $1', [
+    accountId,
+  ]);
   const row = res.rows[0];
   return {
     isAdmin: row?.is_admin === true,
@@ -2670,10 +2689,11 @@ export interface LifetimeXpLeaderRow {
 // it is scoped to this process's realm (the in-game panel). Both paths sort on
 // the indexed lifetime-XP expression and are read through the main.ts cache.
 export async function setCharacterGmByName(name: string, isGm: boolean): Promise<number> {
-  const res = await pool.query(
-    'UPDATE characters SET is_gm = $1 WHERE name = $2 AND realm = $3',
-    [isGm, name, REALM],
-  );
+  const res = await pool.query('UPDATE characters SET is_gm = $1 WHERE name = $2 AND realm = $3', [
+    isGm,
+    name,
+    REALM,
+  ]);
   return res.rowCount ?? 0;
 }
 
@@ -3186,8 +3206,11 @@ export async function pruneChatLogs(retentionDays: number): Promise<number> {
 export interface RealmProp {
   id: number;
   prop_key: string;
-  x: number; y: number; z: number;
-  yaw: number; scale: number;
+  x: number;
+  y: number;
+  z: number;
+  yaw: number;
+  scale: number;
   placed_by: number | null;
   meta?: Record<string, unknown>;
 }
@@ -3200,18 +3223,27 @@ export async function loadRealmProps(): Promise<RealmProp[]> {
     [REALM],
   );
   return res.rows.map((r) => ({
-    id: Number(r.id), prop_key: String(r.prop_key),
-    x: Number(r.x), y: Number(r.y), z: Number(r.z),
-    yaw: Number(r.yaw), scale: Number(r.scale),
+    id: Number(r.id),
+    prop_key: String(r.prop_key),
+    x: Number(r.x),
+    y: Number(r.y),
+    z: Number(r.z),
+    yaw: Number(r.yaw),
+    scale: Number(r.scale),
     placed_by: r.placed_by == null ? null : Number(r.placed_by),
-    meta: (r.meta && typeof r.meta === 'object') ? r.meta : {},
+    meta: r.meta && typeof r.meta === 'object' ? r.meta : {},
   }));
 }
 
 /** Insert a placed prop; returns the new row id. Realm-scoped. */
 export async function insertRealmProp(
-  propKey: string, x: number, y: number, z: number,
-  yaw: number, scale: number, placedBy: number | null,
+  propKey: string,
+  x: number,
+  y: number,
+  z: number,
+  yaw: number,
+  scale: number,
+  placedBy: number | null,
 ): Promise<number> {
   const res = await pool.query(
     `INSERT INTO realm_props (realm, prop_key, x, y, z, yaw, scale, placed_by)
@@ -3223,7 +3255,12 @@ export async function insertRealmProp(
 
 /** Update a placed prop's transform. Realm-scoped (no-op if moved away). */
 export async function updateRealmProp(
-  id: number, x: number, y: number, z: number, yaw: number, scale: number,
+  id: number,
+  x: number,
+  y: number,
+  z: number,
+  yaw: number,
+  scale: number,
 ): Promise<void> {
   await pool.query(
     `UPDATE realm_props SET x=$2, y=$3, z=$4, yaw=$5, scale=$6
@@ -3238,11 +3275,15 @@ export async function deleteRealmProp(id: number): Promise<void> {
 }
 
 /** Set a placed prop's metadata (dialogue/music/voice). Realm-scoped. */
-export async function updateRealmPropMeta(id: number, meta: Record<string, unknown>): Promise<void> {
-  await pool.query(
-    `UPDATE realm_props SET meta=$2::jsonb WHERE id=$1 AND realm=$3`,
-    [id, JSON.stringify(meta ?? {}), REALM],
-  );
+export async function updateRealmPropMeta(
+  id: number,
+  meta: Record<string, unknown>,
+): Promise<void> {
+  await pool.query(`UPDATE realm_props SET meta=$2::jsonb WHERE id=$1 AND realm=$3`, [
+    id,
+    JSON.stringify(meta ?? {}),
+    REALM,
+  ]);
 }
 
 // ---------------------------------------------------------------------------

@@ -4,11 +4,17 @@
 
 import { MECH_CHROMAS, type MechChroma } from '../../sim/content/skins';
 import { MOBS } from '../../sim/data';
+import { infernalCharacterSelection } from '../../sim/realms/infernal_classes';
 import { resolveActiveRealmId } from '../../sim/realms/registry';
 import type { Entity, PlayerClass } from '../../sim/types';
 import { ITEM_WEAPON_VARIANTS } from '../../ui/weapon_variants';
 import type { OverheadEmoteId } from '../../world_api';
-import { infernalNpcVisualKey, infernalOpponentVisualKey } from './infernal_roster';
+import {
+  hostileHumanoidVisualKey,
+  infernalNpcVisualKey,
+  infernalOpponentVisualKey,
+  infernalUndeadVisualKey,
+} from './infernal_roster';
 
 export interface EmoteClipSpec {
   clips: readonly string[];
@@ -249,24 +255,24 @@ const meshyBiped = (
   jump: opts.jump ?? 'Basic_Jump',
 });
 
-// The Meshy-generated infernal human bodies each ship exactly ONE animation of
-// their own, 'Armature|walking_man|baselayer', authored against their exact rig.
-// The generic infernal_biped_* clip set is authored against a DIFFERENT rest
-// pose: its bones share names but not bind orientation, so applying it splays the
-// body flat in-world (the "stingray"). The character-creation preview looked fine
-// only because it plays the body's own clip. Until each body gets a compatible
-// animation pack (Meshy rig + Animation Pass), drive every state from the one
-// clip that rigs correctly, so NPCs stand and move upright instead of collapsing.
-const INFERNAL_HUMAN_BASE_CLIP = 'Armature|walking_man|baselayer';
+// Curated Infernal humans are rebuilt by build_infernal_human_rigs.mjs. Exact-rig
+// actions are used where available and donor actions are transferred as rest-pose
+// deltas, so each distinct body stays upright through every gameplay state.
 const INFERNAL_HUMAN_CLIPS: ClipMap = {
-  idle: INFERNAL_HUMAN_BASE_CLIP,
-  walk: INFERNAL_HUMAN_BASE_CLIP,
-  run: INFERNAL_HUMAN_BASE_CLIP,
-  attack: [INFERNAL_HUMAN_BASE_CLIP],
-  hit: [INFERNAL_HUMAN_BASE_CLIP],
-  death: INFERNAL_HUMAN_BASE_CLIP,
-  cast: INFERNAL_HUMAN_BASE_CLIP,
-  jump: INFERNAL_HUMAN_BASE_CLIP,
+  idle: 'Idle',
+  walk: 'Walk',
+  run: 'Run',
+  attack: ['Attack'],
+  hit: ['Hit'],
+  death: 'Death',
+  cast: 'Cast',
+  jump: 'Jump',
+  emote: {
+    wave: { clips: ['Wave'] },
+    cheer: { clips: ['Taunt'] },
+    flex: { clips: ['Taunt'] },
+    salute: { clips: ['Wave'] },
+  },
 };
 // Raid 02 asset-pipeline rig (stone_cantor.glb): Mixamo-rigged, ships
 // Idle / Cast / Walk / Death plus a synthesized 'Hit' flinch authored by
@@ -301,6 +307,7 @@ const TOLLING_BELL: ClipMap = {
 const PLAYERS = 'models/chars/players';
 const ENEMIES = 'models/chars/enemies';
 const CREATURES = 'models/creatures';
+const DUNGEON_MODELS = 'models/dungeon';
 const WEAPONS = 'models/weapons';
 const REALM_MODELS = '/cr-realms';
 
@@ -592,8 +599,29 @@ export const VISUALS: Record<string, VisualDef> = {
     clips: meshyBiped(['Left_Slash'], { walk: 'Monster_Walk', run: 'Running' }),
     lazyPreload: true,
   },
-  // Visually reviewed PICKTURA humans. These share a compatible Meshy biped
-  // skeleton and a compact action pack, so every body can stop, run, attack,
+  // Playable Infernal archetypes use one distinct, full-size body each. They
+  // are deliberately separate from the civilian bank below: changing a class
+  // can never turn every smith or merchant into that class body.
+  realm_infernal_class_warrior: infernalHuman('infernal_class_warrior.glb', 2.3),
+  realm_infernal_class_rogue: infernalHuman('infernal_class_rogue.glb', 2.2),
+  realm_infernal_class_sorcerer: infernalHuman('infernal_class_sorcerer.glb', 2.2),
+  realm_infernal_class_amazon: infernalHuman('infernal_class_amazon.glb', 2.25),
+  realm_infernal_class_barbarian: infernalHuman('infernal_class_barbarian.glb', 2.3),
+  realm_infernal_class_necromancer: infernalHuman('infernal_class_necromancer.glb', 2.2),
+  realm_infernal_class_paladin: infernalHuman('infernal_class_paladin.glb', 2.3),
+  realm_infernal_class_druid: infernalHuman('infernal_class_druid.glb', 2.2),
+  realm_infernal_class_assassin: infernalHuman('infernal_class_assassin.glb', 2.2),
+  realm_infernal_class_demon_hunter: infernalHuman('infernal_class_demon_hunter.glb', 2.2),
+  realm_infernal_class_monk: infernalHuman('infernal_class_monk.glb', 2.2),
+  realm_infernal_class_wizard: infernalHuman('infernal_class_wizard.glb', 2.2),
+  realm_infernal_class_witch_doctor: infernalHuman('infernal_class_witch_doctor.glb', 2.2),
+  realm_infernal_class_crusader: infernalHuman('infernal_class_crusader.glb', 2.3),
+  realm_infernal_class_spiritborn: infernalHuman('infernal_class_spiritborn.glb', 2.25),
+  realm_infernal_class_warlock: infernalHuman('infernal_class_warlock.glb', 2.2),
+  realm_infernal_class_blood_knight: infernalHuman('infernal_class_blood_knight.glb', 2.25),
+  realm_infernal_class_tempest: infernalHuman('infernal_class_tempest.glb', 2.2),
+  // Visually reviewed PICKTURA civilians. These share a compatible Meshy biped
+  // skeleton and a compact action pack, so every NPC can stop, run, attack,
   // cast, react, die, jump, wave, and taunt.
   realm_infernal_human_iron_warden: infernalHuman('infernal_human_iron_warden.glb', 2.3),
   realm_infernal_human_vanguard: infernalHuman('infernal_human_vanguard.glb', 2.25),
@@ -605,8 +633,18 @@ export const VISUALS: Record<string, VisualDef> = {
   realm_infernal_human_iron_ranger: infernalHuman('infernal_human_iron_ranger.glb', 2.2),
   realm_infernal_human_hooded_wanderer: infernalHuman('infernal_human_hooded_wanderer.glb', 2.15),
   realm_infernal_human_hermit: infernalHuman('infernal_human_hermit.glb', 2.15),
-  // DuranceTester is always the armored human Iron Warden body, never a demon.
-  realm_infernal_durance_humanoid: infernalHuman('infernal_human_iron_warden.glb', 2.3),
+  realm_infernal_human_barbarian: infernalHuman('infernal_human_barbarian.glb', 2.3),
+  realm_infernal_human_veil_adept: infernalHuman('infernal_human_veil_adept.glb', 2.2),
+  realm_infernal_human_assassin: infernalHuman('infernal_human_assassin.glb', 2.2),
+  realm_infernal_human_monk: infernalHuman('infernal_human_monk.glb', 2.2),
+  realm_infernal_human_crusader: infernalHuman('infernal_human_crusader.glb', 2.3),
+  realm_infernal_human_spiritborn: infernalHuman('infernal_human_spiritborn.glb', 2.25),
+  realm_infernal_human_blood_knight: infernalHuman('infernal_human_blood_knight.glb', 2.25),
+  realm_infernal_human_tempest: infernalHuman('infernal_human_tempest.glb', 2.25),
+  // DuranceTester is always the armored human Warrior body, never a demon.
+  // Character identity, house ownership, inventory, and persistence are not
+  // changed by this presentation-only override.
+  realm_infernal_durance_humanoid: infernalHuman('infernal_class_warrior.glb', 2.3),
   realm_infernal_dark_paladin: {
     url: `${REALM_MODELS}/infernal/dark_paladin_commander.glb`,
     animUrls: [
@@ -1297,6 +1335,18 @@ export const VISUALS: Record<string, VisualDef> = {
       death: 'Idle',
     },
   },
+  mob_training_dummy: {
+    url: `${DUNGEON_MODELS}/scarecrow.glb`,
+    height: 2.4,
+    clips: {
+      idle: 'None',
+      walk: 'None',
+      run: 'None',
+      attack: [],
+      death: 'None',
+      hit: [],
+    },
+  },
 };
 
 // ---------------------------------------------------------------------------
@@ -1315,6 +1365,7 @@ const MOB_KEYS: Record<string, string> = {
   warlock_voidwalker: 'mob_demonalt',
   wild_boar: 'mob_boar',
   forest_wolf: 'mob_wolf',
+  training_dummy: 'mob_training_dummy',
   // beasts that would otherwise fall back to the wolf model (FAMILY_KEYS.beast)
   old_cragmaw: 'mob_bear',
   bog_bloat: 'mob_murloc',
@@ -1429,48 +1480,6 @@ const NPC_KEYS: Record<string, string> = {
 // reusing the tiny KayKit villager roster. New realm asset drops extend this
 // table without touching the sim identities or NPC behavior.
 const REALM_NPC_KEYS: Partial<Record<string, Record<string, string>>> = {
-  crypticrealm: {
-    bursar_fernando: 'realm_cryptic_bone_herald',
-    marshal_redbrook: 'realm_cryptic_bone_herald',
-    warden_fenwick: 'realm_cryptic_bone_herald',
-    captain_thessaly: 'realm_cryptic_bone_herald',
-    loremaster_caddis: 'realm_cryptic_bone_herald',
-    smith_haldren: 'realm_cryptic_bone_herald',
-    armorer_hode: 'realm_cryptic_bone_herald',
-    foreman_odell: 'realm_cryptic_bone_herald',
-    scout_maren: 'realm_cryptic_bone_herald',
-    scout_maren_highwatch: 'realm_cryptic_bone_herald',
-    apothecary_lin: 'realm_cryptic_bone_herald',
-    herbalist_yara: 'realm_cryptic_bone_herald',
-    trader_wilkes: 'realm_cryptic_bone_herald',
-    fisherman_brandt: 'realm_cryptic_bone_herald',
-    provisioner_hale: 'realm_cryptic_bone_herald',
-    quartermaster_bree: 'realm_cryptic_bone_herald',
-    brother_halven: 'realm_cryptic_bone_herald',
-    brother_halven_marsh: 'realm_cryptic_bone_herald',
-    spirit_healer: 'realm_cryptic_bone_herald',
-  },
-  infernal: {
-    bursar_fernando: 'realm_infernal_durance_humanoid',
-    marshal_redbrook: 'realm_infernal_durance_humanoid',
-    warden_fenwick: 'realm_infernal_durance_humanoid',
-    captain_thessaly: 'realm_infernal_durance_humanoid',
-    loremaster_caddis: 'realm_infernal_durance_humanoid',
-    smith_haldren: 'realm_infernal_durance_humanoid',
-    armorer_hode: 'realm_infernal_durance_humanoid',
-    foreman_odell: 'realm_infernal_durance_humanoid',
-    scout_maren: 'realm_infernal_durance_humanoid',
-    scout_maren_highwatch: 'realm_infernal_durance_humanoid',
-    apothecary_lin: 'realm_infernal_durance_humanoid',
-    herbalist_yara: 'realm_infernal_durance_humanoid',
-    trader_wilkes: 'realm_infernal_durance_humanoid',
-    fisherman_brandt: 'realm_infernal_durance_humanoid',
-    provisioner_hale: 'realm_infernal_durance_humanoid',
-    quartermaster_bree: 'realm_infernal_durance_humanoid',
-    brother_halven: 'realm_infernal_durance_humanoid',
-    brother_halven_marsh: 'realm_infernal_durance_humanoid',
-    spirit_healer: 'realm_infernal_durance_humanoid',
-  },
   classic: {
     bursar_fernando: 'realm_classic_female_orc',
     marshal_redbrook: 'realm_classic_orc',
@@ -1495,17 +1504,19 @@ const REALM_NPC_KEYS: Partial<Record<string, Record<string, string>>> = {
 };
 
 const REALM_MOB_DEFAULTS: Partial<Record<string, string>> = {
-  crypticrealm: 'realm_cryptic_bone_herald',
+  crypticrealm: 'realm_infernal_human_tainted_hood',
   infernal: 'realm_infernal_horned_demon',
   classic: 'realm_classic_orc',
 };
 
 const REALM_MOB_FAMILY_KEYS: Partial<Record<string, Partial<Record<string, string>>>> = {
   crypticrealm: {
-    beast: 'realm_cryptic_bone_herald',
-    humanoid: 'realm_cryptic_bone_herald',
+    beast: 'mob_wolf',
+    humanoid: 'realm_infernal_human_tainted_hood',
     undead: 'realm_cryptic_bone_herald',
-    demon: 'realm_cryptic_bone_herald',
+    demon: 'realm_infernal_horned_demon',
+    elemental: 'mob_elemental',
+    dragonkin: 'mob_dragonkin',
   },
   infernal: {
     // Generic beasts remain animals; Infernal demon bodies are reserved for
@@ -1576,13 +1587,24 @@ function registerOverrideVisual(entry: BodyOverrideEntry): string {
   return key;
 }
 
-/** The override visual key for an entity, or null. Players match `class:<class>`,
- *  NPCs match `npc:<templateId>`. */
+/** The override visual key for an entity, or null. A realm hero assignment is
+ *  most specific, followed by class, NPC, and mob template assignments. */
 function overrideVisualKeyForEntity(e: Entity): string | null {
-  if (e.kind !== 'player' && e.kind !== 'npc') return null;
-  const map = BODY_OVERRIDES[resolveActiveRealmId()];
+  const realm = resolveActiveRealmId();
+  const map = BODY_OVERRIDES[realm];
   if (!map) return null;
-  const entry = e.kind === 'player' ? map[`class:${e.templateId}`] : map[`npc:${e.templateId}`];
+  let entry: BodyOverrideEntry | undefined;
+  if (e.kind === 'player') {
+    const selection = infernalCharacterSelection(realm, e.realmHeroId, e.templateId as PlayerClass);
+    entry = selection ? (map[`hero:${selection.id}`] ?? map[`hero:${selection.name}`]) : undefined;
+    entry ??= map[`class:${e.templateId}`];
+  } else if (e.kind === 'npc') {
+    entry = map[`npc:${e.templateId}`];
+  } else if (e.kind === 'mob') {
+    entry = map[`mob:${e.templateId}`];
+  } else {
+    return null;
+  }
   return entry ? registerOverrideVisual(entry) : null;
 }
 
@@ -1599,16 +1621,54 @@ export function visualKeyFor(e: Entity): string {
     const override = MOB_KEYS[e.templateId];
     const family = MOBS[e.templateId]?.family;
     const realmFamily = family && REALM_MOB_FAMILY_KEYS[realm]?.[family];
-    if (realm === 'infernal') {
-      if (override?.startsWith('hellmaw_') || override?.startsWith('realm_infernal_')) {
-        return override;
-      }
-      if (family && ['beast', 'spider', 'mudfin', 'troll', 'ogre'].includes(family)) {
+    if (realm === 'crypticrealm') {
+      // Cryptic Realm is deliberately a crossroads rather than a single-body
+      // reskin. Keep recognisable animals and authored creature silhouettes,
+      // use the Bone Herald only for undead, and rotate hostile humanoids over
+      // the full-size opponent roster. Generic KayKit adventurers never leak
+      // into this realm through mob_bandit/mob_dark_caster fallbacks.
+      if (override === 'mob_training_dummy') return override;
+      if (family && ['beast', 'spider', 'mudfin', 'burrower', 'troll', 'ogre'].includes(family)) {
         return override ?? realmFamily ?? FAMILY_KEYS[family] ?? 'mob_wolf';
       }
       if (family === 'undead') {
+        // An authored skeleton body (e.g. the Nythraxis raid boss's skel_golem)
+        // always wins over the rotating undead roster, same as the infernal arm.
         if (override?.startsWith('skel_') || override?.startsWith('delve_skel_')) return override;
-        return 'realm_cryptic_bone_herald';
+        return infernalUndeadVisualKey(e.templateId);
+      }
+      if (family === 'demon') {
+        const boundDemonBodies: Partial<Record<string, string>> = {
+          emberkin: 'hellmaw_lava_fiend_body',
+          gloomshade: 'hellmaw_acolyte_body',
+          duskborn: 'hellmaw_sigilbound_body',
+          spellhound: 'realm_infernal_skullbeast',
+          warfiend: 'realm_infernal_horned_demon',
+          pyre_colossus: 'realm_infernal_crimson_behemoth',
+          wraithborn: 'hellmaw_spectre_body',
+        };
+        return boundDemonBodies[e.templateId] ?? realmFamily ?? 'realm_infernal_horned_demon';
+      }
+      if (family === 'elemental' || family === 'dragonkin') {
+        return override ?? realmFamily ?? FAMILY_KEYS[family];
+      }
+      if (family === 'humanoid') return hostileHumanoidVisualKey(e.templateId);
+      if (override && !/^((mob|npc|player)_|delve_mob_)/.test(override)) return override;
+      return hostileHumanoidVisualKey(e.templateId);
+    }
+    if (realm === 'infernal') {
+      if (override === 'mob_training_dummy') return override;
+      if (override?.startsWith('hellmaw_') || override?.startsWith('realm_infernal_')) {
+        return override;
+      }
+      if (family && ['beast', 'spider', 'mudfin'].includes(family)) {
+        return override ?? realmFamily ?? FAMILY_KEYS[family] ?? 'mob_wolf';
+      }
+      if (family === 'troll') return 'realm_infernal_horned_demon';
+      if (family === 'ogre') return 'realm_infernal_crimson_behemoth';
+      if (family === 'undead') {
+        if (override?.startsWith('skel_') || override?.startsWith('delve_skel_')) return override;
+        return infernalUndeadVisualKey(e.templateId);
       }
       if (family === 'demon') return realmFamily ?? 'hellmaw_husk_body';
       if (family === 'elemental' || family === 'dragonkin') {
@@ -1627,7 +1687,13 @@ export function visualKeyFor(e: Entity): string {
   const realm = resolveActiveRealmId();
   // Infernal NPCs are human civilians and officials. Enemy commanders are
   // mobs, not NPCs; never fall through to a KayKit elf, orc, or villager.
-  if (realm === 'infernal') return infernalNpcVisualKey(e.templateId);
+  if (realm === 'infernal' || realm === 'crypticrealm') {
+    // The reviewed Meshy human bank is shared by both authored realms. The
+    // template id still owns quests, vendors, housing, and persistence; this
+    // branch changes only the rendered body. In particular Brother Aldric and
+    // future NPC ids cannot fall through to a miniature KayKit villager.
+    return infernalNpcVisualKey(e.templateId);
+  }
   if (e.templateId.startsWith('brother_aldric')) return 'npc_aldric';
   const realmKeys = REALM_NPC_KEYS[realm];
   return realmKeys?.[e.templateId] ?? NPC_KEYS[e.templateId] ?? 'npc_villager';

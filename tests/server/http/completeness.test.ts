@@ -298,8 +298,34 @@ describe('registry completeness: migrated baseline (public reads + auth + charac
     { method: 'GET', path: '/api/assets/mine' },
     { method: 'GET', path: '/api/assets/:file' },
     { method: 'DELETE', path: '/api/assets/:id' },
+    // The revisioned realm-visuals editor (server/realm_visuals.ts): the
+    // published read is public; draft/history/targets and every mutation sit
+    // behind requireContentPermission (meta.permissionGated, 403 denial).
+    // Router-NATIVE: born on RouteDefs, so there is no legacy handleApi
+    // rollback arm to retain (see ROUTER_NATIVE_PATHS below).
+    { method: 'GET', path: '/api/realm-visuals/:realm' },
+    { method: 'PUT', path: '/api/realm-visuals/:realm' },
+    { method: 'DELETE', path: '/api/realm-visuals/:realm' },
+    { method: 'GET', path: '/api/realm-visuals/:realm/draft' },
+    { method: 'GET', path: '/api/realm-visuals/:realm/history' },
+    { method: 'GET', path: '/api/realm-visuals/:realm/targets' },
+    { method: 'POST', path: '/api/realm-visuals/:realm/publish' },
+    { method: 'POST', path: '/api/realm-visuals/:realm/rollback' },
   ];
   const MIGRATED_PATHS = MIGRATED_ROUTES.map((r) => r.path);
+
+  // Routes born router-owned AFTER the ladder freeze (never a legacy handleApi
+  // arm): they are asserted router-owned and NOT legacy-served, mirroring the
+  // swag-claim orphan shape, and are exempt from the must-be-a-ladder-route
+  // requirement because no rollback arm ever existed to retain.
+  const ROUTER_NATIVE_PATHS = new Set<string>([
+    '/api/realm-visuals/:realm',
+    '/api/realm-visuals/:realm/draft',
+    '/api/realm-visuals/:realm/history',
+    '/api/realm-visuals/:realm/targets',
+    '/api/realm-visuals/:realm/publish',
+    '/api/realm-visuals/:realm/rollback',
+  ]);
 
   it('registers exactly the migrated /api routes (one RouteDef per path)', () => {
     // Scoped to the /api family: the /admin/api surface and the /oauth
@@ -334,6 +360,12 @@ describe('registry completeness: migrated baseline (public reads + auth + charac
       // dedicated 'excludes the documented unreachable swag-claim orphan' test pins
       // the SURFACE_INVENTORY unreachable flag + the deviation.
       if (EXCLUDED_PATHS.has(route.path)) {
+        expect(isRouterOwned(apiRegistry, route)).toBe(true);
+        expect(legacyServes(route, legacyServed)).toBe(false);
+        continue;
+      }
+      // Router-native routes (post-freeze) have no legacy arm by construction.
+      if (ROUTER_NATIVE_PATHS.has(route.path)) {
         expect(isRouterOwned(apiRegistry, route)).toBe(true);
         expect(legacyServes(route, legacyServed)).toBe(false);
         continue;

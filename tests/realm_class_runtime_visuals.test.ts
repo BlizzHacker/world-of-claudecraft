@@ -1,7 +1,10 @@
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { manifestUrls, VISUALS } from '../src/render/characters/manifest';
 import { normalizeRealmVisualId, realmClassVisualKey } from '../src/sim/realms/class_visuals';
 import type { PlayerClass } from '../src/sim/types';
+
+const rendererSource = readFileSync(new URL('../src/render/renderer.ts', import.meta.url), 'utf8');
 
 const RUNTIME_KEYS = [
   'realm_cryptic_bone_herald',
@@ -27,8 +30,10 @@ describe('realm class runtime visuals', () => {
 
   it('maps only classes with playable runtime GLBs', () => {
     expect(realmClassVisualKey('Classic', 'priest')).toBe('realm_classic_female_elf');
-    expect(realmClassVisualKey('Infernal', 'rogue')).toBe('realm_infernal_human_road_mercenary');
-    expect(realmClassVisualKey('Cryptic Realm', 'warlock')).toBe('realm_cryptic_bone_herald');
+    expect(realmClassVisualKey('Infernal', 'rogue')).toBe('realm_infernal_class_rogue');
+    expect(realmClassVisualKey('Cryptic Realm', 'warlock')).toBe(
+      'realm_infernal_human_forge_worker',
+    );
     expect(realmClassVisualKey('Classic', 'warlock')).toBeNull();
   });
 
@@ -40,6 +45,19 @@ describe('realm class runtime visuals', () => {
       expect(visual.lazyPreload, key).toBe(true);
       expect(bootUrls.has(visual.url), key).toBe(false);
     }
+  });
+
+  it('never instantiates lazy realm NPCs during the boot prewarm pass', () => {
+    const start = rendererSource.indexOf('private buildNpcPrewarmGroup');
+    const end = rendererSource.indexOf('private buildPlayerPrewarmGroup', start);
+    const npcPrewarmSource = rendererSource.slice(start, end);
+
+    expect(start).toBeGreaterThan(-1);
+    expect(end).toBeGreaterThan(start);
+    expect(npcPrewarmSource.indexOf('if (isVisualLazy(modelKey)) continue;')).toBeGreaterThan(-1);
+    expect(npcPrewarmSource.indexOf('if (isVisualLazy(modelKey)) continue;')).toBeLessThan(
+      npcPrewarmSource.indexOf('createCharacterVisual(entity)'),
+    );
   });
 
   it('does not map a class to a missing manifest key', () => {
@@ -61,6 +79,48 @@ describe('realm class runtime visuals', () => {
         const key = realmClassVisualKey(realm, cls);
         if (key) expect(VISUALS[key], `${realm}:${cls}`).toBeTruthy();
       }
+    }
+  });
+
+  it('keeps every Cryptic Realm playable class humanoid and distinct', () => {
+    const classes: PlayerClass[] = [
+      'warrior',
+      'paladin',
+      'hunter',
+      'rogue',
+      'priest',
+      'shaman',
+      'mage',
+      'warlock',
+      'druid',
+    ];
+    const keys = classes.map((cls) => realmClassVisualKey('Cryptic Realm', cls));
+
+    expect(new Set(keys).size).toBe(classes.length);
+    for (const key of keys) {
+      expect(key).toMatch(/^realm_infernal_human_/);
+      expect(key).not.toMatch(/bone_herald|elf|orc|demon/i);
+    }
+  });
+
+  it('keeps every Infernal base class on a distinct playable class body', () => {
+    const classes: PlayerClass[] = [
+      'warrior',
+      'paladin',
+      'hunter',
+      'rogue',
+      'priest',
+      'shaman',
+      'mage',
+      'warlock',
+      'druid',
+    ];
+    const keys = classes.map((cls) => realmClassVisualKey('Infernal', cls));
+
+    expect(new Set(keys).size).toBe(classes.length);
+    for (const key of keys) {
+      expect(key).toMatch(/^realm_infernal_class_/);
+      expect(key).not.toMatch(/dark_paladin|bone_herald|demon|behemoth|skullbeast/i);
     }
   });
 });

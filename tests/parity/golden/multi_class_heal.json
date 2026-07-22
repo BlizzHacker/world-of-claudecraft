@@ -1514,7 +1514,7 @@
       "tick": 5,
       "time": 0.25,
       "nextId": 428,
-      "state": "33129d35",
+      "state": "a5ceeb0b",
       "events": "2633734a",
       "rng": {
         "draws": 18,
@@ -1525,7 +1525,7 @@
       "tick": 8,
       "time": 0.4,
       "nextId": 428,
-      "state": "62e27f45",
+      "state": "dbec66f6",
       "events": "28b28d85",
       "rng": {
         "draws": 18,
@@ -2050,6 +2050,7 @@
           "critChance": 0.05,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.05,
+          "facing": 1.394614,
           "fallStartY": -1.48336,
           "fiveSecondRule": 99,
           "hp": 96,
@@ -2063,7 +2064,7 @@
           "overpowerUntil": -1,
           "ownerId": 423,
           "petMode": "defensive",
-          "petPathCooldown": 0.15,
+          "petPathCooldown": 0.2,
           "pos": {
             "x": 30,
             "y": -1.48336,
@@ -2152,7 +2153,7 @@
             ],
             [
               421,
-              393.5
+              268.5
             ],
             [
               423,
@@ -2213,7 +2214,7 @@
             ],
             [
               421,
-              287.5
+              162.5
             ],
             [
               423,
@@ -2280,7 +2281,7 @@
             ],
             [
               421,
-              287.5
+              162.5
             ],
             [
               424,

@@ -67,6 +67,78 @@ describe('character visual manifest', () => {
     setRealmHostEnv(null);
   });
 
+  it('keeps Cryptic Realm creatures distinct and every civilian on a full-size human body', () => {
+    setRealmHostEnv({
+      queryParam: (name) => (name === 'realm' ? 'crypticrealm' : null),
+      storageGet: () => null,
+      storageSet: () => undefined,
+    });
+
+    expect(visualKeyFor({ kind: 'mob', templateId: 'forest_wolf' } as never)).toBe('mob_wolf');
+    expect(visualKeyFor({ kind: 'mob', templateId: 'wild_boar' } as never)).toBe('mob_boar');
+    expect(visualKeyFor({ kind: 'mob', templateId: 'restless_bones' } as never)).toBe(
+      'realm_cryptic_bone_herald',
+    );
+    expect(visualKeyFor({ kind: 'mob', templateId: 'spellhound' } as never)).toBe(
+      'realm_infernal_skullbeast',
+    );
+    expect(visualKeyFor({ kind: 'mob', templateId: 'pyre_colossus' } as never)).toBe(
+      'realm_infernal_crimson_behemoth',
+    );
+    expect(visualKeyFor({ kind: 'mob', templateId: 'vale_bandit' } as never)).not.toMatch(
+      /bone_herald|mob_bandit|mob_dark_caster/,
+    );
+    expect(visualKeyFor({ kind: 'mob', templateId: 'training_dummy' } as never)).toBe(
+      'mob_training_dummy',
+    );
+
+    const npcIds = [
+      'brother_aldric',
+      'marshal_redbrook',
+      'apothecary_lin',
+      'smith_haldren',
+      'trader_wilkes',
+      'fisherman_brandt',
+      'scout_maren',
+      'a_future_cryptic_civilian',
+    ];
+    const npcKeys = npcIds.map((templateId) => visualKeyFor({ kind: 'npc', templateId } as never));
+    expect(new Set(npcKeys).size).toBeGreaterThanOrEqual(6);
+    for (const key of npcKeys) {
+      expect(key).toMatch(/^realm_infernal_human_/);
+      expect(key).not.toMatch(/bone_herald|npc_|elf|orc|demon/i);
+    }
+    setRealmHostEnv(null);
+  });
+
+  it('drives both curated Infernal humanoid banks through complete semantic clip packs', () => {
+    const npcKeys = Object.keys(VISUALS).filter(
+      (key) => key.startsWith('realm_infernal_human_') && key !== 'realm_infernal_durance_humanoid',
+    );
+    const classKeys = Object.keys(VISUALS).filter((key) => key.startsWith('realm_infernal_class_'));
+    expect(npcKeys).toHaveLength(18);
+    expect(classKeys).toHaveLength(18);
+    expect(new Set(npcKeys.map((key) => VISUALS[key].url)).size).toBe(18);
+    expect(new Set(classKeys.map((key) => VISUALS[key].url)).size).toBe(18);
+    expect(new Set([...npcKeys, ...classKeys].map((key) => VISUALS[key].url)).size).toBe(36);
+    for (const key of [...npcKeys, ...classKeys]) {
+      const clips = VISUALS[key].clips;
+      expect(clips.idle).toBe('Idle');
+      expect(clips.walk).toBe('Walk');
+      expect(clips.run).toBe('Run');
+      expect(clips.attack).toEqual(['Attack']);
+      expect(clips.cast).toBe('Cast');
+      expect(clips.hit).toEqual(['Hit']);
+      expect(clips.death).toBe('Death');
+      expect(clips.jump).toBe('Jump');
+      expect(clips.emote?.wave?.clips).toEqual(['Wave']);
+      expect(clips.emote?.cheer?.clips).toEqual(['Taunt']);
+    }
+    expect(VISUALS.realm_infernal_durance_humanoid.url).toBe(
+      VISUALS.realm_infernal_class_warrior.url,
+    );
+  });
+
   it('keeps Bursar Fernando in his likeness atlas (the Eastbrook banker easter egg)', () => {
     // The maintainer-approved easter egg: black shoulder-length hair and light
     // brown skin ride a repainted rogue palette resolved at skin index 0 (NPCs

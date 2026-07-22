@@ -10,9 +10,12 @@ import {
   paginateLeaderboard,
 } from '../src/sim/leaderboard_page';
 import { Sim } from '../src/sim/sim';
+import { resolveRealmCharacterVisual } from '../src/sim/realms/class_visuals';
+import { infernalCharacterSelection } from '../src/sim/realms/infernal_classes';
 import type { PlayerClass } from '../src/sim/types';
 import { virtualLevel } from '../src/sim/types';
 import type { GuildLeaderboardEntry, LeaderboardEntry } from '../src/world_api';
+import { isDuranceTesterCharacter } from './durance_tester_entitlement';
 import {
   configureAccountRuntime,
   handleAccount2faDisable,
@@ -197,7 +200,12 @@ import {
   createSuspiciousRegistrationReport,
 } from './moderation_db';
 import { createNativeAttestationChallenge, verifyNativeAttestation } from './native_attestation';
-import { handleAuthentikRoute, handleOAuth, isAuthentikConfigured, seedOAuthClients } from './oauth';
+import {
+  handleAuthentikRoute,
+  handleOAuth,
+  isAuthentikConfigured,
+  seedOAuthClients,
+} from './oauth';
 import { pruneExpiredOAuthGrants } from './oauth_db';
 import { handlePerfReport } from './perf_report';
 import { handleModeratorApi, handleUserApi } from './dashboard';
@@ -225,7 +233,13 @@ import {
   wocBalanceRateLimited,
 } from './ratelimit';
 import { createPgRateLimitStore } from './ratelimit_db';
-import { isPublicCorsPath, publicOriginFromRequest, REALM, REALM_DIRECTORY, REALM_ORIGINS } from './realm';
+import {
+  isPublicCorsPath,
+  publicOriginFromRequest,
+  REALM,
+  REALM_DIRECTORY,
+  REALM_ORIGINS,
+} from './realm';
 import { resolveReportTarget } from './report_target';
 import { BUG_REPORT_MAX_BODY_BYTES, configureReportsRuntime } from './reports';
 import { handleSitePresenceHeartbeat } from './site_presence';
@@ -278,7 +292,11 @@ const STATIC_DIR = path.join(__dirname, '..', 'dist');
 const MAINTENANCE_SHELL = path.join(STATIC_DIR, 'maintenance.html');
 const MAINTENANCE_FLAG = path.join(__dirname, '..', '.maintenance');
 function inMaintenanceMode(): boolean {
-  try { return fs.existsSync(MAINTENANCE_FLAG); } catch { return false; }
+  try {
+    return fs.existsSync(MAINTENANCE_FLAG);
+  } catch {
+    return false;
+  }
 }
 const WIKI_URL = process.env.WIKI_URL?.trim() ?? '';
 
@@ -295,7 +313,11 @@ function humanSize(bytes: number): string {
   return `${Math.max(1, Math.round(bytes / 1024))} KB`;
 }
 
-function serveDownloads(req: http.IncomingMessage, res: http.ServerResponse, urlPath: string): void {
+function serveDownloads(
+  req: http.IncomingMessage,
+  res: http.ServerResponse,
+  urlPath: string,
+): void {
   const rel = decodeURIComponent(urlPath.replace(/^\/downloads\/?/, ''));
   // listing page
   if (rel === '') {
@@ -362,7 +384,10 @@ ${entries.length ? `<ul>${rows}</ul>` : '<p>No builds published yet, check back 
   const range = /^bytes=(\d*)-(\d*)$/.exec(String(req.headers.range ?? ''));
   if (range && (range[1] !== '' || range[2] !== '')) {
     const start = range[1] === '' ? Math.max(0, stats.size - Number(range[2])) : Number(range[1]);
-    const end = range[1] !== '' && range[2] !== '' ? Math.min(Number(range[2]), stats.size - 1) : stats.size - 1;
+    const end =
+      range[1] !== '' && range[2] !== ''
+        ? Math.min(Number(range[2]), stats.size - 1)
+        : stats.size - 1;
     if (start > end || start >= stats.size) {
       res.writeHead(416, { 'Content-Range': `bytes */${stats.size}` });
       res.end();
@@ -373,12 +398,18 @@ ${entries.length ? `<ul>${rows}</ul>` : '<p>No builds published yet, check back 
       'Content-Range': `bytes ${start}-${end}/${stats.size}`,
       'Content-Length': end - start + 1,
     });
-    if (req.method === 'HEAD') { res.end(); return; }
+    if (req.method === 'HEAD') {
+      res.end();
+      return;
+    }
     fs.createReadStream(file, { start, end }).pipe(res);
     return;
   }
   res.writeHead(200, { ...base, 'Content-Length': stats.size });
-  if (req.method === 'HEAD') { res.end(); return; }
+  if (req.method === 'HEAD') {
+    res.end();
+    return;
+  }
   fs.createReadStream(file).pipe(res);
 }
 // Pretty URLs that serve standalone static HTML pages.
@@ -449,9 +480,17 @@ function initialCharacterState(
   cls: PlayerClass,
   name: string,
   skin: number,
+  realmHeroId?: string,
 ): import('../src/sim/sim').CharacterState {
   const sim = new Sim({ seed: 20061, playerClass: cls, playerName: name });
   sim.setPlayerSkin(sim.playerId, skin);
+  const appearance = resolveRealmCharacterVisual(
+    process.env.CR_REALM_ID ?? REALM,
+    cls,
+    realmHeroId,
+  );
+  sim.player.realmHeroId = appearance.realmHeroId;
+  sim.player.visualKey = appearance.visualKey;
   const character = sim.serializeCharacter(sim.playerId);
   if (!character) throw new Error('failed to serialize initial character');
   return character;
@@ -480,7 +519,10 @@ const leaderboardCache: Record<
 };
 
 async function refreshLeaderboard(scope: LeaderboardScope): Promise<LeaderboardEntry[]> {
-  const rows = await topLifetimeXp(LEADERBOARD_SIZE, { global: scope === 'global', ladder: scope === 'ladder' });
+  const rows = await topLifetimeXp(LEADERBOARD_SIZE, {
+    global: scope === 'global',
+    ladder: scope === 'ladder',
+  });
   const entries: LeaderboardEntry[] = rows.map((r, i) => ({
     rank: i + 1,
     name: r.name,
@@ -648,27 +690,37 @@ function characterListPayload(chars: CharacterRow[]): {
     playtimeSeconds: number;
     skinCatalog: 'class' | 'mech';
     mainhandItemId: string | null;
+    realmHeroId: string | null;
+    visualKey: string | null;
   }[];
 } {
   return {
     realm: REALM,
-    characters: chars.map((c) => ({
-      id: c.id,
-      name: c.name,
-      class: c.class,
-      level: c.level,
-      skin: c.state?.skin ?? 0,
-      online: [...liveGame().clients.values()].some((s) => s.characterId === c.id),
-      forceRename: c.force_rename,
-      hardcore: !!c.hardcore,
-      dead: !!c.died_at,
-      lastPlayed: c.last_played ? new Date(c.last_played).toISOString() : null,
-      playtimeSeconds: Number(c.playtime_seconds ?? 0),
-      // Real appearance for the char-select 3D preview (the client renders the
-      // Combat Mech cosmetic body and the equipped mainhand, matching the world).
-      skinCatalog: c.state?.skinCatalog === 'mech' ? 'mech' : 'class',
-      mainhandItemId: c.state?.equipment?.mainhand ?? null,
-    })),
+    characters: chars.map((c) => {
+      const realm = process.env.CR_REALM_ID ?? REALM;
+      const appearance = isDuranceTesterCharacter(c.name, realm)
+        ? { realmHeroId: null, visualKey: 'realm_infernal_durance_humanoid' as const }
+        : resolveRealmCharacterVisual(realm, c.class, c.state?.realmHeroId);
+      return {
+        id: c.id,
+        name: c.name,
+        class: c.class,
+        level: c.level,
+        skin: c.state?.skin ?? 0,
+        online: [...liveGame().clients.values()].some((s) => s.characterId === c.id),
+        forceRename: c.force_rename,
+        hardcore: !!c.hardcore,
+        dead: !!c.died_at,
+        lastPlayed: c.last_played ? new Date(c.last_played).toISOString() : null,
+        playtimeSeconds: Number(c.playtime_seconds ?? 0),
+        // Real appearance for the char-select 3D preview (the client renders the
+        // Combat Mech cosmetic body and the equipped mainhand, matching the world).
+        skinCatalog: c.state?.skinCatalog === 'mech' ? 'mech' : 'class',
+        mainhandItemId: c.state?.equipment?.mainhand ?? null,
+        realmHeroId: appearance.realmHeroId,
+        visualKey: appearance.visualKey,
+      };
+    }),
   };
 }
 
@@ -822,7 +874,9 @@ function serveStatic(req: http.IncomingMessage, res: http.ServerResponse): void 
       });
       res.end(body);
       return;
-    } catch { /* fall through to normal flow if maintenance.html missing */ }
+    } catch {
+      /* fall through to normal flow if maintenance.html missing */
+    }
   }
   const dashShell = dashboardShellFor(urlPath);
   // The curated Guide is the site wiki: a client-routed SPA served at /wiki with its
@@ -830,8 +884,13 @@ function serveStatic(req: http.IncomingMessage, res: http.ServerResponse): void 
   // the game's index.html. WIKI_URL remains an override for deployments that still
   // point to an external wiki.
   const isGuide = urlPath === '/wiki' || urlPath.startsWith('/wiki/');
-  const shell = dashShell ?? (isGuide ? 'guide.html' : isAdminRequest(req) ? 'admin.html' : 'index.html');
-  if (urlPath === '/crypto-custody' || urlPath === '/crypto-custody/' || urlPath === '/crypto-custody.html') {
+  const shell =
+    dashShell ?? (isGuide ? 'guide.html' : isAdminRequest(req) ? 'admin.html' : 'index.html');
+  if (
+    urlPath === '/crypto-custody' ||
+    urlPath === '/crypto-custody/' ||
+    urlPath === '/crypto-custody.html'
+  ) {
     res.writeHead(302, { Location: '/admin/' });
     res.end();
     return;
@@ -851,10 +910,14 @@ function serveStatic(req: http.IncomingMessage, res: http.ServerResponse): void 
   }
   if (
     urlPath === '/' ||
-    urlPath === '/admin' || urlPath === '/admin/' ||
-    urlPath === '/mod'   || urlPath === '/mod/'   ||
-    urlPath === '/me'    || urlPath === '/me/'
-  ) urlPath = `/${shell}`;
+    urlPath === '/admin' ||
+    urlPath === '/admin/' ||
+    urlPath === '/mod' ||
+    urlPath === '/mod/' ||
+    urlPath === '/me' ||
+    urlPath === '/me/'
+  )
+    urlPath = `/${shell}`;
   // normalize once and reuse for BOTH file resolution and cache policy,
   // otherwise /assets/../x would serve a mutable file with immutable caching
   urlPath = path.posix.normalize(urlPath).replace(/^([.][.][/\\])+/, '');
@@ -871,7 +934,11 @@ function serveStatic(req: http.IncomingMessage, res: http.ServerResponse): void 
     // SPA fallback
     const index = path.join(STATIC_DIR, shell);
     if (fs.existsSync(index)) {
-      res.writeHead(200, { 'Content-Type': 'text/html', 'Cache-Control': 'no-cache, must-revalidate', 'CDN-Cache-Control': 'no-store' });
+      res.writeHead(200, {
+        'Content-Type': 'text/html',
+        'Cache-Control': 'no-cache, must-revalidate',
+        'CDN-Cache-Control': 'no-store',
+      });
       fs.createReadStream(index).pipe(res);
     } else {
       res.writeHead(404);
@@ -922,15 +989,14 @@ function isOwnRealmOrigin(origin: string): boolean {
   try {
     const h = new URL(origin).hostname;
     return h === 'crypticrealm.com' || h.endsWith('.crypticrealm.com');
-  } catch { return false; }
+  } catch {
+    return false;
+  }
 }
 
 function maybeCors(req: http.IncomingMessage, res: http.ServerResponse): void {
   const origin = req.headers.origin;
-  if (
-    typeof origin === 'string' &&
-    (isOwnRealmOrigin(origin) || NATIVE_APP_ORIGINS.has(origin))
-  ) {
+  if (typeof origin === 'string' && (isOwnRealmOrigin(origin) || NATIVE_APP_ORIGINS.has(origin))) {
     res.setHeader('Access-Control-Allow-Origin', origin);
     res.setHeader('Vary', 'Origin');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
@@ -970,6 +1036,10 @@ const FORCE_SSO = (process.env.CR_FORCE_SSO ?? '1') !== '0';
 async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): Promise<void> {
   const url = (req.url ?? '').split('?')[0];
   try {
+    if (url.startsWith('/api/realm-visuals/')) {
+      await handleRealmVisuals(req, res);
+      return;
+    }
     if (req.method === 'POST' && url === '/api/native-attestation/challenge') {
       const body = await readBody(req);
       const action = typeof body.action === 'string' ? body.action : 'auth';
@@ -1025,7 +1095,11 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       // Force-SSO: basic username/password account creation is disabled. New
       // accounts are created only through an SSO provider (Authentik -> Google /
       // Facebook / Plex / Discord). Existing basic accounts can still /api/login.
-      if (FORCE_SSO) return json(res, 403, { error: 'Account creation is via Sign in with MoveWeight (Google, Facebook, Plex, Discord).' });
+      if (FORCE_SSO)
+        return json(res, 403, {
+          error:
+            'Account creation is via Sign in with MoveWeight (Google, Facebook, Plex, Discord).',
+        });
       const body = await readBody(req);
       const meta = requestMetadata(req);
       if (!(await passesTurnstile(req, body, activeConfig().turnstileSecret)))
@@ -1233,6 +1307,14 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
         ];
         if (!validClasses.includes(body.class))
           return json(res, 400, { error: 'invalid class', code: 'character.invalid_class' });
+        const requestedHeroId = body.realmHeroId;
+        if (
+          requestedHeroId !== undefined &&
+          !infernalCharacterSelection(process.env.CR_REALM_ID ?? REALM, requestedHeroId, body.class)
+        ) {
+          return json(res, 400, { error: 'invalid class', code: 'character.invalid_class' });
+        }
+        const realmHeroId = typeof requestedHeroId === 'string' ? requestedHeroId : undefined;
         const skin = Math.max(
           0,
           Math.min(7, Math.floor(typeof body.skin === 'number' ? body.skin : 0)),
@@ -1245,7 +1327,7 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
             name,
             body.class,
             10,
-            initialCharacterState(body.class, name, skin),
+            initialCharacterState(body.class, name, skin, realmHeroId),
             ladder,
             hardcore,
           );
@@ -1256,6 +1338,8 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
             class: c.class,
             level: c.level,
             skin: c.state?.skin ?? skin,
+            realmHeroId: c.state?.realmHeroId ?? null,
+            visualKey: c.state?.visualKey ?? null,
             forceRename: c.force_rename,
             hardcore: !!c.hardcore,
           });
@@ -1472,7 +1556,12 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       // characters the account has on each realm (for the realm-list screen)
       const accountId = await bearerAccount(req);
       const characters = accountId !== null ? await characterCountsByRealm(accountId) : {};
-      return json(res, 200, { current: REALM, realms: REALM_DIRECTORY, characters, forceSso: FORCE_SSO });
+      return json(res, 200, {
+        current: REALM,
+        realms: REALM_DIRECTORY,
+        characters,
+        forceSso: FORCE_SSO,
+      });
     }
     if (req.method === 'GET' && url === '/api/search') {
       const accountId = await bearerAccount(req);
@@ -1481,7 +1570,7 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       const results = q.trim().length >= 1 ? await searchCharacters(q, 8) : [];
       return json(res, 200, { results });
     }
-    
+
     // Co-op regroup: teleport a joining co-op player next to the anchor player.
     // Both sessions must share the same IP (couch co-op security).
     if (req.method === 'POST' && url === '/api/coop/regroup') {
@@ -1497,7 +1586,8 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       const mover = ss.find((s) => s.characterId === cid);
       const anchor = ss.find((s) => s.characterId === nid);
       if (!mover || !anchor) return json(res, 404, { error: 'session not found' });
-      if (mover.ip !== anchor.ip) return json(res, 403, { error: 'same IP required for co-op regroup' });
+      if (mover.ip !== anchor.ip)
+        return json(res, 403, { error: 'same IP required for co-op regroup' });
       const ae = g.sim.entities.get(anchor.pid);
       if (!ae) return json(res, 404, { error: 'anchor not found' });
       const bx = ae.pos.x + Math.sin(ae.facing + Math.PI) * 2;
@@ -1512,7 +1602,8 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       const accountId = await bearerAccount(req);
       const body = await readBody(req);
       const id = saveBugReport(body, { accountId, realm: REALM });
-      if (!id) return json(res, 400, { error: 'could not save report (too large or sink unavailable)' });
+      if (!id)
+        return json(res, 400, { error: 'could not save report (too large or sink unavailable)' });
       return json(res, 200, { ok: true, id });
     }
     if (req.method === 'POST' && url === '/api/reports') {
@@ -2447,10 +2538,6 @@ export function routeHttpRequest(req: http.IncomingMessage, res: http.ServerResp
     void handleAssetLibraryCatalog(req, res);
     return;
   }
-  if (path.startsWith('/api/realm-visuals/')) {
-    void handleRealmVisuals(req, res);
-    return;
-  }
   if (path === '/api/forged-props') {
     void handleForgedCatalog(req, res);
     return;
@@ -2483,24 +2570,21 @@ export function routeHttpRequest(req: http.IncomingMessage, res: http.ServerResp
         res.end();
       }
     });
-  }
-  else if (url.startsWith('/api/exchange/')) {
+  } else if (url.startsWith('/api/exchange/')) {
     void maybeHandleExchangeApi(req, res, path).then((handled) => {
       if (!handled) {
         res.writeHead(404);
         res.end();
       }
     });
-  }
-  else if (url.startsWith('/api/economy/')) {
+  } else if (url.startsWith('/api/economy/')) {
     void maybeHandleEconomyApi(req, res, path).then((handled) => {
       if (!handled) {
         res.writeHead(404);
         res.end();
       }
     });
-  }
-  else if (url.startsWith('/api/')) void apiEntry(req, res);
+  } else if (url.startsWith('/api/')) void apiEntry(req, res);
   else if (url.startsWith('/oauth/')) void oauthApiEntry(req, res);
   else if (req.method === 'GET' && url.startsWith('/p/')) void handleCardRoutes(req, res);
   else if (req.method === 'GET' && path.startsWith('/avatar/')) void handleAvatar(req, res);
@@ -2553,7 +2637,9 @@ export async function startServer(): Promise<http.Server> {
       setChainAdapter(solana);
       console.log(`  ECONOMY: Solana chain enabled (${solana.name})`);
     } else {
-      console.log('  ECONOMY: off-chain only (set CR_SOLANA_RPC + CR_SOLANA_MINT + CR_SOLANA_MINT_AUTHORITY to enable chain)');
+      console.log(
+        '  ECONOMY: off-chain only (set CR_SOLANA_RPC + CR_SOLANA_MINT + CR_SOLANA_MINT_AUTHORITY to enable chain)',
+      );
     }
   } catch (err) {
     console.error('  ECONOMY: chain init failed, staying off-chain:', err);
@@ -2672,7 +2758,6 @@ export async function startServer(): Promise<http.Server> {
   const server = http.createServer({ maxHeaderSize: MAX_HEADER_SIZE_BYTES }, routeHttpRequest);
   applyServerTimeouts(server);
   server.on('clientError', handleClientError);
-
 
   // cap frame size: the largest legitimate client message is a small JSON
   // command; without this the ws default (~100 MiB) lets one socket force a

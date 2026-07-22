@@ -8,8 +8,8 @@
     "updateGroundAoEs first-in-tick (~2256)",
     "pulseGroundAoE both callers (immediate ~4097 + deferred ~3052)"
   ],
-  "draws": 278,
-  "drawDigest": "270133f0",
+  "draws": 284,
+  "drawDigest": "8c092b1b",
   "frames": [
     {
       "tick": 0,
@@ -207,41 +207,41 @@
       "state": "8b2810fc",
       "events": "741638a5",
       "rng": {
-        "draws": 207,
-        "digest": "78b4dfad"
+        "draws": 208,
+        "digest": "f4ff6a22"
       }
     },
     {
       "tick": 180,
       "time": 9,
       "nextId": 421,
-      "state": "daef7a7b",
-      "events": "4b1f50b1",
+      "state": "5c09f50a",
+      "events": "c356600f",
       "rng": {
-        "draws": 250,
-        "digest": "569af84e"
+        "draws": 253,
+        "digest": "f4f3a6cc"
       }
     },
     {
       "tick": 200,
       "time": 10,
       "nextId": 421,
-      "state": "d8145d82",
+      "state": "536c15ff",
       "events": "741638a5",
       "rng": {
-        "draws": 276,
-        "digest": "936ef439"
+        "draws": 282,
+        "digest": "633c9d98"
       }
     },
     {
       "tick": 201,
       "time": 10.05,
       "nextId": 421,
-      "state": "6011bfe0",
+      "state": "aea5d6a3",
       "events": "741638a5",
       "rng": {
-        "draws": 278,
-        "digest": "270133f0"
+        "draws": 284,
+        "digest": "8c092b1b"
       },
       "label": "final",
       "players": [
@@ -261,8 +261,8 @@
           "cls": "paladin",
           "companionUpgrades": {},
           "counters": {
-            "damageDealt": 163,
-            "damageTaken": 22
+            "damageDealt": 166,
+            "damageTaken": 29
           },
           "craftSkills": {},
           "craftThrottle": {},
@@ -300,14 +300,14 @@
         {
           "aiState": "idle",
           "attackPower": 120,
-          "combatTimer": 2.05,
+          "combatTimer": 1.95,
           "comboUntil": -1,
           "critChance": 0.068,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.068,
           "fallStartY": 1.5,
           "fiveSecondRule": 10,
-          "hp": 49978,
+          "hp": 49971,
           "id": 419,
           "inCombat": true,
           "kind": "player",
@@ -352,7 +352,7 @@
         {
           "aggroTargetId": 419,
           "aiState": "attack",
-          "combatTimer": 2.05,
+          "combatTimer": 1.95,
           "comboUntil": -1,
           "critChance": 0.05,
           "detonateTimer": "Infinity",
@@ -361,7 +361,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hostile": true,
-          "hp": 39837,
+          "hp": 39834,
           "id": 420,
           "inCombat": true,
           "kind": "mob",
@@ -397,7 +397,7 @@
           "threat": [
             [
               419,
-              164
+              167
             ]
           ],
           "wanderTarget": {

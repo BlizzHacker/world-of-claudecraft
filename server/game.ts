@@ -75,7 +75,7 @@ import type { RtsStructureKind, RtsUnitKind } from '../src/sim/minigames/rts';
 import type { TowerKind } from '../src/sim/minigames/zombie_defense';
 import { parseMoveInputFrame } from '../src/sim/move_input';
 import type { RaceInput } from '../src/sim/racing';
-import { realmClassVisualKey } from '../src/sim/realms/class_visuals';
+import { resolveRealmCharacterVisual } from '../src/sim/realms/class_visuals';
 import { isRealmId, setRealmHostEnv } from '../src/sim/realms/registry';
 import type { PetState, PlayerMeta } from '../src/sim/sim';
 import { MAX_CHAT_MESSAGE_LEN, Sim } from '../src/sim/sim';
@@ -315,6 +315,9 @@ export const SIM_LAP_PHASES = [
   'lootRolls',
   'instances',
   'delves',
+  'homes',
+  'horde',
+  'skirmish',
   'valecup',
   'derby',
   'boarpit',
@@ -796,6 +799,7 @@ function identityFields(e: Entity): Record<string, unknown> {
   if (e.skinCatalog === 'mech') out.cat = 'mech';
   if (e.skin) out.sk = e.skin;
   if (e.kind === 'player' && e.visualKey) out.vk = e.visualKey;
+  if (e.kind === 'player' && e.realmHeroId) out.rh = e.realmHeroId;
   if (e.mainhandItemId) out.mh = e.mainhandItemId; // equipped mainhand → held weapon model (render-only)
   // Full worn set, for the inspect-another-player window. Players only and only
   // when something is equipped; rides the identity record (first appearance +
@@ -2186,16 +2190,21 @@ export class GameServer {
     for (const s of linkdeadOthers) {
       void this.leave(s, 'replaced by a new character login');
     }
+    const realmAppearance = resolveRealmCharacterVisual(
+      process.env.CR_REALM_ID ?? REALM,
+      cls,
+      state?.realmHeroId,
+    );
+    const duranceTester = isDuranceTesterCharacter(name, REALM);
     const pid = this.sim.addPlayer(cls, name, {
       state: state ?? undefined,
       characterId,
       ladder: meta.ladder ?? false,
       hardcore: meta.hardcore ?? false,
-      visualKey: isDuranceTesterCharacter(name, REALM)
-        ? 'realm_infernal_durance_humanoid'
-        : realmClassVisualKey(process.env.CR_REALM_ID ?? REALM, cls),
+      visualKey: duranceTester ? 'realm_infernal_durance_humanoid' : realmAppearance.visualKey,
+      realmHeroId: duranceTester ? null : realmAppearance.realmHeroId,
       bankBonus: meta.bankBonus,
-      duranceTester: isDuranceTesterCharacter(name, REALM),
+      duranceTester,
       homeowner: isHomeownerCharacter(name, REALM),
     });
     if (isGm) {

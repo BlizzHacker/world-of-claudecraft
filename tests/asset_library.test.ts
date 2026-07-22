@@ -1,4 +1,4 @@
-import { mkdtemp, mkdir, rm, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -43,12 +43,18 @@ describe('ArcForge asset library', () => {
       path.win32.resolve('T:\\meshy\\PICKTURA'),
       path.win32.resolve('T:\\arcforge-staging\\aegis-v2'),
       path.win32.resolve('C:\\MoveWeight\\cryptic-realm\\classic realm assets'),
+      path.win32.resolve('C:\\MoveWeight\\moveweight-ui\\public\\heroforge-assets'),
     ]);
     const roots = defaultAssetLibraryRoots('win32', (candidate) =>
       existing.has(path.win32.resolve(candidate)),
     );
 
-    expect(roots.map((root) => root.id)).toEqual(['piktura', 'classic-source', 'd2-koolo']);
+    expect(roots.map((root) => root.id)).toEqual([
+      'piktura',
+      'classic-source',
+      'd2-koolo',
+      'heroforge',
+    ]);
     expect(roots.every((root) => !/quarantine/i.test(root.path))).toBe(true);
     expect(configuredAssetLibraryRoots('[]', 'win32', () => true)).toEqual([]);
   });
@@ -57,7 +63,10 @@ describe('ArcForge asset library', () => {
     const root = await tempDir();
     await mkdir(path.join(root, 'animated'));
     await writeFile(path.join(root, 'animated', 'Human Warrior Walking.glb'), 'glTF-body');
-    await writeFile(path.join(root, 'animated', 'Human Warrior Walking_armature.glb'), 'glTF-donor');
+    await writeFile(
+      path.join(root, 'animated', 'Human Warrior Walking_armature.glb'),
+      'glTF-donor',
+    );
     await writeFile(path.join(root, 'animated', 'source.fbx'), 'fbx');
 
     const rows = await discoverAssetRoot({
@@ -86,8 +95,7 @@ describe('ArcForge asset library', () => {
     await mkdir(path.join(root, 'animated'));
     await mkdir(path.join(root, 'quarantine'));
     const baseName = '019f0000-0000-7000-8000-000000000001__Human_Paladin.glb';
-    const walkName =
-      '019f0000-0000-7000-8000-000000000001__Human_Paladin__Walking.glb';
+    const walkName = '019f0000-0000-7000-8000-000000000001__Human_Paladin__Walking.glb';
     await writeFile(path.join(root, 'glb', baseName), 'base');
     await writeFile(path.join(root, 'animated', walkName), 'walking');
     await writeFile(path.join(root, 'unindexed.glb'), 'not-in-manifest');
@@ -157,5 +165,22 @@ describe('ArcForge asset library', () => {
     ]);
     expect(normalized).toMatchObject({ page: 1, limit: 220 });
     for (const asset of all.assets) expect(await library.resolve(asset.assetId)).not.toBeNull();
+  });
+
+  it('normalizes legacy forged folder aliases and leaves tool libraries unassigned', async () => {
+    const realms = await tempDir();
+    const forged = await tempDir();
+    await mkdir(path.join(forged, 'cryptic'));
+    await mkdir(path.join(forged, 'claudcraft'));
+    await mkdir(path.join(forged, 'heroforge'));
+    await writeFile(path.join(forged, 'cryptic', 'bone.glb'), 'glTF');
+    await writeFile(path.join(forged, 'claudcraft', 'villager.glb'), 'glTF');
+    await writeFile(path.join(forged, 'heroforge', 'human_face.glb'), 'glTF');
+
+    const library = new AssetLibrary({ roots: [], realmsDir: realms, forgedDir: forged });
+    const result = await library.list({ page: 1, limit: 50 });
+
+    expect(result.facets.groups).toEqual({ claudecraft: 1, crypticrealm: 1, heroforge: 1 });
+    expect(result.facets.realms).toEqual({ claudecraft: 1, crypticrealm: 1, unassigned: 1 });
   });
 });

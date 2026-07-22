@@ -7,7 +7,7 @@ import { defaultForgedDir, listForgedProps, safeForgedPath } from '../server/for
 describe('forged asset catalog helpers', () => {
   it('uses the USB4-style forged store on Windows and Linux', () => {
     expect(defaultForgedDir('win32')).toBe(
-      path.win32.join('C:\\', 'mnt', 'usb4', 'moveweight-assets', 'forged-glbs'),
+      path.win32.join('T:\\', 'moveweight-assets', 'forged-glbs'),
     );
     expect(defaultForgedDir('linux')).toBe('/mnt/usb4/moveweight-assets/forged-glbs');
   });

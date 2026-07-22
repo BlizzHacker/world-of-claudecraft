@@ -1,9 +1,5 @@
 import { factionForRealmClass } from '../../sim/realms/factions';
-import {
-  infernalHeroClassesForRealm,
-  type SignatureSkill,
-  signatureSkillsFor,
-} from '../../sim/realms/infernal_classes';
+import { infernalCharacterSelectionsForRealm } from '../../sim/realms/infernal_classes';
 import type { RealmClassSkin, RealmContent, RealmId, RealmRole } from '../../sim/realms/types';
 import type { PlayerClass } from '../../sim/types';
 import { firstRealmVisualOverride } from './realm_visual_overrides';
@@ -38,9 +34,7 @@ export interface RealmClassPresentation {
 
 export interface InfernalHeroPresentation extends RealmClassPresentation {
   heroId: string;
-  factionSide: 'sanctuary' | 'hell';
-  /** Signature skills for this class, shown as its signature abilities. */
-  signatureSkills: readonly SignatureSkill[];
+  factionSide: 'heaven' | 'hell';
 }
 
 export type RealmClassAssetStatus = 'ready' | 'preview' | 'comingSoon';
@@ -89,7 +83,7 @@ const SKIN_BINDINGS: Partial<Record<RealmId, SkinBinding>> = {
   },
   infernal: {
     boneherald: { baseClass: 'warlock', faction: 'Ashen Court' },
-    emberwitch: { baseClass: 'mage', faction: 'Burning Hells' },
+    emberwitch: { baseClass: 'mage', faction: 'Ashen Court' },
     shadowblade: { baseClass: 'rogue', faction: 'Abyssal Legion' },
     ironwarden: { baseClass: 'warrior', faction: 'Abyssal Legion' },
   },
@@ -190,11 +184,11 @@ const FALLBACKS: Partial<Record<RealmId, Record<PlayerClass, PresentationSeed>>>
       'Iron Warden',
       'Abyssal Legion',
       'Tank',
-      'A fortress of grafted iron built to walk into Baal-grade punishment.',
+      "A fortress of grafted iron built to withstand a pit lord's punishment.",
     ),
     paladin: seed(
       'Hellknight',
-      'Burning Hells',
+      'Ashen Court',
       'Tank',
       'A fallen crusader whose vows now burn hotter than mercy.',
     ),
@@ -224,7 +218,7 @@ const FALLBACKS: Partial<Record<RealmId, Record<PlayerClass, PresentationSeed>>>
     ),
     mage: seed(
       'Ember Witch',
-      'Burning Hells',
+      'Ashen Court',
       'DPS',
       'A fire witch whose laughter turns the air into a furnace.',
     ),
@@ -541,18 +535,6 @@ const COMING_SOON_ASSET = {
     'ArcForge/Meshy character job queued; gameplay uses the class kit until the model is complete.',
 } satisfies RealmClassAsset;
 
-const CRYPTIC_BONE_HERALD = asset(
-  'preview',
-  'Animation Pass',
-  {
-    assetUrl:
-      '/cr-realms/crypticrealm/bone-herald-black-meshy_ai_meshy_merged_animations_5fb3b8bb.glb',
-    assetName: 'Bone Herald Black',
-    assetAnimated: true,
-  },
-  'Run/walk only; needs idle, attack, cast, hit, and death clips before full release.',
-);
-
 function infernalHumanAsset(fileName: string, assetName: string): RealmClassAsset {
   return asset('ready', 'Playable human GLB', {
     assetUrl: `/cr-realms/infernal/${fileName}`,
@@ -561,49 +543,74 @@ function infernalHumanAsset(fileName: string, assetName: string): RealmClassAsse
   });
 }
 
-const INFERNAL_HUMAN_ASSETS = {
+const INFERNAL_NPC_ASSETS = {
   ironWarden: infernalHumanAsset('infernal_human_iron_warden.glb', 'Iron Warden'),
   vanguard: infernalHumanAsset('infernal_human_vanguard.glb', 'Vanguard'),
   forgeWorker: infernalHumanAsset('infernal_human_forge_worker.glb', 'Forge Worker'),
   whiteSage: infernalHumanAsset('infernal_human_white_sage.glb', 'White Sage'),
+  taintedHood: infernalHumanAsset('infernal_human_tainted_hood.glb', 'Redeemed Hunter'),
   weatheredElder: infernalHumanAsset('infernal_human_weathered_elder.glb', 'Weathered Elder'),
   roadMercenary: infernalHumanAsset('infernal_human_road_mercenary.glb', 'Road Mercenary'),
   ironRanger: infernalHumanAsset('infernal_human_iron_ranger.glb', 'Iron Ranger'),
   hoodedWanderer: infernalHumanAsset('infernal_human_hooded_wanderer.glb', 'Hooded Wanderer'),
   hermit: infernalHumanAsset('infernal_human_hermit.glb', 'Hermit'),
+  barbarian: infernalHumanAsset('infernal_human_barbarian.glb', 'Ashland Barbarian'),
+  veilAdept: infernalHumanAsset('infernal_human_veil_adept.glb', 'Veil Adept'),
+  assassin: infernalHumanAsset('infernal_human_assassin.glb', 'Night Assassin'),
+  monk: infernalHumanAsset('infernal_human_monk.glb', 'Road Monk'),
+  crusader: infernalHumanAsset('infernal_human_crusader.glb', 'Dawn Crusader'),
+  spiritborn: infernalHumanAsset('infernal_human_spiritborn.glb', 'Wild Spiritborn'),
+  bloodKnight: infernalHumanAsset('infernal_human_blood_knight.glb', 'Blood Knight'),
+  tempest: infernalHumanAsset('infernal_human_tempest.glb', 'Tempest Adept'),
 } satisfies Record<string, RealmClassAsset>;
 
+const INFERNAL_CLASS_ASSETS = {
+  Warrior: infernalHumanAsset('infernal_class_warrior.glb', 'Warrior'),
+  Rogue: infernalHumanAsset('infernal_class_rogue.glb', 'Rogue'),
+  'Sorcerer / Sorceress': infernalHumanAsset('infernal_class_sorcerer.glb', 'Sorcerer / Sorceress'),
+  Amazon: infernalHumanAsset('infernal_class_amazon.glb', 'Amazon'),
+  Barbarian: infernalHumanAsset('infernal_class_barbarian.glb', 'Barbarian'),
+  Necromancer: infernalHumanAsset('infernal_class_necromancer.glb', 'Necromancer'),
+  Paladin: infernalHumanAsset('infernal_class_paladin.glb', 'Paladin'),
+  Druid: infernalHumanAsset('infernal_class_druid.glb', 'Druid'),
+  Assassin: infernalHumanAsset('infernal_class_assassin.glb', 'Assassin'),
+  'Demon Hunter': infernalHumanAsset('infernal_class_demon_hunter.glb', 'Demon Hunter'),
+  Monk: infernalHumanAsset('infernal_class_monk.glb', 'Monk'),
+  Wizard: infernalHumanAsset('infernal_class_wizard.glb', 'Wizard'),
+  'Witch Doctor': infernalHumanAsset('infernal_class_witch_doctor.glb', 'Witch Doctor'),
+  Crusader: infernalHumanAsset('infernal_class_crusader.glb', 'Crusader'),
+  Spiritborn: infernalHumanAsset('infernal_class_spiritborn.glb', 'Spiritborn'),
+  Warlock: infernalHumanAsset('infernal_class_warlock.glb', 'Warlock'),
+  'Blood Knight': infernalHumanAsset('infernal_class_blood_knight.glb', 'Blood Knight'),
+  Tempest: infernalHumanAsset('infernal_class_tempest.glb', 'Tempest'),
+} satisfies Readonly<Record<string, RealmClassAsset>>;
+
 const INFERNAL_BASE_CLASS_ASSETS: Record<PlayerClass, RealmClassAsset> = {
-  warrior: INFERNAL_HUMAN_ASSETS.ironWarden,
-  paladin: INFERNAL_HUMAN_ASSETS.vanguard,
-  hunter: INFERNAL_HUMAN_ASSETS.ironRanger,
-  rogue: INFERNAL_HUMAN_ASSETS.roadMercenary,
-  priest: INFERNAL_HUMAN_ASSETS.whiteSage,
-  shaman: INFERNAL_HUMAN_ASSETS.weatheredElder,
-  mage: INFERNAL_HUMAN_ASSETS.hoodedWanderer,
-  warlock: INFERNAL_HUMAN_ASSETS.forgeWorker,
-  druid: INFERNAL_HUMAN_ASSETS.hermit,
+  warrior: INFERNAL_CLASS_ASSETS.Warrior,
+  paladin: INFERNAL_CLASS_ASSETS.Paladin,
+  hunter: INFERNAL_CLASS_ASSETS.Amazon,
+  rogue: INFERNAL_CLASS_ASSETS.Rogue,
+  priest: INFERNAL_CLASS_ASSETS['Sorcerer / Sorceress'],
+  shaman: INFERNAL_CLASS_ASSETS.Monk,
+  mage: INFERNAL_CLASS_ASSETS.Wizard,
+  warlock: INFERNAL_CLASS_ASSETS.Warlock,
+  druid: INFERNAL_CLASS_ASSETS.Druid,
 };
 
 const INFERNAL_HERO_ASSETS: Readonly<Record<string, RealmClassAsset>> = {
-  Warrior: INFERNAL_HUMAN_ASSETS.ironWarden,
-  Rogue: INFERNAL_HUMAN_ASSETS.roadMercenary,
-  'Sorcerer / Sorceress': INFERNAL_HUMAN_ASSETS.hoodedWanderer,
-  Amazon: INFERNAL_HUMAN_ASSETS.ironRanger,
-  Barbarian: INFERNAL_HUMAN_ASSETS.vanguard,
-  Necromancer: INFERNAL_HUMAN_ASSETS.whiteSage,
-  Paladin: INFERNAL_HUMAN_ASSETS.vanguard,
-  Druid: INFERNAL_HUMAN_ASSETS.hermit,
-  Assassin: INFERNAL_HUMAN_ASSETS.roadMercenary,
-  'Demon Hunter': INFERNAL_HUMAN_ASSETS.ironRanger,
-  Monk: INFERNAL_HUMAN_ASSETS.weatheredElder,
-  Wizard: INFERNAL_HUMAN_ASSETS.whiteSage,
-  'Witch Doctor': INFERNAL_HUMAN_ASSETS.hermit,
-  Crusader: INFERNAL_HUMAN_ASSETS.ironWarden,
-  Spiritborn: INFERNAL_HUMAN_ASSETS.hermit,
-  Warlock: INFERNAL_HUMAN_ASSETS.hoodedWanderer,
-  'Blood Knight': INFERNAL_HUMAN_ASSETS.roadMercenary,
-  Tempest: INFERNAL_HUMAN_ASSETS.weatheredElder,
+  ...INFERNAL_CLASS_ASSETS,
+};
+
+const CRYPTIC_HUMAN_BASE_CLASS_ASSETS: Record<PlayerClass, RealmClassAsset> = {
+  warrior: INFERNAL_NPC_ASSETS.ironWarden,
+  paladin: INFERNAL_NPC_ASSETS.vanguard,
+  hunter: INFERNAL_NPC_ASSETS.ironRanger,
+  rogue: INFERNAL_NPC_ASSETS.roadMercenary,
+  priest: INFERNAL_NPC_ASSETS.whiteSage,
+  shaman: INFERNAL_NPC_ASSETS.weatheredElder,
+  mage: INFERNAL_NPC_ASSETS.hoodedWanderer,
+  warlock: INFERNAL_NPC_ASSETS.forgeWorker,
+  druid: INFERNAL_NPC_ASSETS.hermit,
 };
 
 interface InfernalEnemySeed {
@@ -623,11 +630,12 @@ const INFERNAL_HELL_ENEMIES: readonly InfernalEnemySeed[] = [
     }),
   },
   {
-    name: 'Tainted Hood',
-    baseClass: 'rogue',
+    name: 'Sigil-Bound Acolyte',
+    baseClass: 'warlock',
     asset: asset('ready', 'Playable enemy GLB', {
-      assetUrl: '/cr-realms/infernal/infernal_human_tainted_hood.glb',
-      assetName: 'Tainted Hood',
+      assetUrl:
+        '/cr-realms/infernal/meshy_ai_demon_with_body_cover_0616234440_texture_fd4134d0.glb',
+      assetName: 'Sigil-Bound Acolyte',
       assetAnimated: true,
     }),
   },
@@ -753,7 +761,7 @@ const ASSETS_BY_REALM_CLASS: Partial<
   Record<RealmId, Partial<Record<PlayerClass, RealmClassAsset>>>
 > = {
   crypticrealm: {
-    warlock: CRYPTIC_BONE_HERALD,
+    ...CRYPTIC_HUMAN_BASE_CLASS_ASSETS,
   },
   infernal: INFERNAL_BASE_CLASS_ASSETS,
   classic: {
@@ -833,19 +841,7 @@ export function classChoicesForRealm(realm: RealmContent): RealmClassPresentatio
 }
 
 const INFERNAL_HERO_FACTION = { name: 'Heavenly Host', color: '#9fc8ff' } as const;
-const INFERNAL_HELL_FACTION = { name: 'Burning Hells', color: '#d24a3a' } as const;
-
-function canonicalInfernalHeroName(name: string): string {
-  return name === 'Sorcerer' || name === 'Sorceress' ? 'Sorcerer / Sorceress' : name;
-}
-
-function infernalChoiceId(side: 'hero' | 'hell', name: string): string {
-  const slug = name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '');
-  return `infernal-${side}-${slug}`;
-}
+const INFERNAL_HELL_FACTION = { name: 'Ashen Court', color: '#d24a3a' } as const;
 
 function infernalClassChoice(
   realm: RealmContent,
@@ -853,13 +849,17 @@ function infernalClassChoice(
   baseClass: PlayerClass,
   factionSide: InfernalHeroPresentation['factionSide'],
   assetChoice: RealmClassAsset,
+  heroId: string,
 ): InfernalHeroPresentation {
   const base = classPresentationForRealm(realm, baseClass);
   const faction = factionSide === 'hell' ? INFERNAL_HELL_FACTION : INFERNAL_HERO_FACTION;
-  const side = factionSide === 'hell' ? 'hell' : 'hero';
   // Operator override: a saved reassignment for this hero (or its base class)
   // swaps the body asset live, ahead of the compiled default.
-  const override = firstRealmVisualOverride(realm.id, [`hero:${name}`, `class:${baseClass}`]);
+  const override = firstRealmVisualOverride(realm.id, [
+    `hero:${heroId}`,
+    `hero:${name}`,
+    `class:${baseClass}`,
+  ]);
   const resolvedAsset: RealmClassAsset = override
     ? {
         ...assetChoice,
@@ -881,13 +881,12 @@ function infernalClassChoice(
     faction: faction.name,
     lore:
       factionSide === 'hell'
-        ? `An enemy champion of the Burning Hells, offered apart from Sanctuary's human heroes.`
-        : `A human champion of Sanctuary carrying the ${name} tradition into the Infernal Realm.`,
+        ? `An enemy champion of the Ashen Court, offered apart from the Heavenly Host.`
+        : `A mortal champion of the Heavenly Host carrying the ${name} tradition into the Infernal Realm.`,
     color: faction.color,
     ...resolvedAsset,
-    heroId: infernalChoiceId(side, name),
+    heroId,
     factionSide,
-    signatureSkills: signatureSkillsFor(name),
   };
 }
 
@@ -898,28 +897,20 @@ function infernalClassChoice(
  */
 export function infernalHeroChoicesForRealm(realm: RealmContent): InfernalHeroPresentation[] {
   if (realm.id !== 'infernal') return [];
-  const heroes: InfernalHeroPresentation[] = [];
-  const seen = new Set<string>();
-  for (const source of infernalHeroClassesForRealm(realm.id)) {
-    const name = canonicalInfernalHeroName(source.name);
-    if (seen.has(name)) continue;
-    seen.add(name);
-    heroes.push(
-      infernalClassChoice(
-        realm,
-        name,
-        source.engineClass,
-        'sanctuary',
-        INFERNAL_HERO_ASSETS[name] ?? INFERNAL_BASE_CLASS_ASSETS[source.engineClass],
-      ),
-    );
-  }
-  return [
-    ...heroes,
-    ...INFERNAL_HELL_ENEMIES.map((enemy) =>
-      infernalClassChoice(realm, enemy.name, enemy.baseClass, 'hell', enemy.asset),
+  const enemyAssets = new Map(INFERNAL_HELL_ENEMIES.map((enemy) => [enemy.name, enemy.asset]));
+  return infernalCharacterSelectionsForRealm(realm.id).map((selection) =>
+    infernalClassChoice(
+      realm,
+      selection.name,
+      selection.engineClass,
+      selection.factionSide,
+      selection.factionSide === 'hell'
+        ? (enemyAssets.get(selection.name) ?? INFERNAL_BASE_CLASS_ASSETS[selection.engineClass])
+        : (INFERNAL_HERO_ASSETS[selection.name] ??
+            INFERNAL_BASE_CLASS_ASSETS[selection.engineClass]),
+      selection.id,
     ),
-  ];
+  );
 }
 
 export function presentationFactionsForRealm(realm: RealmContent): string[] {

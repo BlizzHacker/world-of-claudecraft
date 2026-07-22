@@ -8,7 +8,17 @@ import {
 import { REALMS } from '../src/sim/realms/registry';
 import type { PlayerClass } from '../src/sim/types';
 
-const CLASSES: readonly PlayerClass[] = ['warrior', 'paladin', 'hunter', 'rogue', 'priest', 'shaman', 'mage', 'warlock', 'druid'];
+const CLASSES: readonly PlayerClass[] = [
+  'warrior',
+  'paladin',
+  'hunter',
+  'rogue',
+  'priest',
+  'shaman',
+  'mage',
+  'warlock',
+  'druid',
+];
 
 describe('realm faction registry', () => {
   it('defines a non-empty faction roster for every realm', () => {
@@ -31,15 +41,29 @@ describe('realm faction registry', () => {
   });
 
   it('covers the nine combat classes in every playable home realm', () => {
-    for (const id of ['crypticrealm', 'infernal', 'classic', 'dominion', 'arcane', 'arcadevoid', 'fps'] as const) {
-      for (const cls of CLASSES) expect(factionForRealmClass(id, cls), `${id}:${cls}`).not.toBeNull();
+    for (const id of [
+      'crypticrealm',
+      'infernal',
+      'classic',
+      'dominion',
+      'arcane',
+      'arcadevoid',
+      'fps',
+    ] as const) {
+      for (const cls of CLASSES)
+        expect(factionForRealmClass(id, cls), `${id}:${cls}`).not.toBeNull();
     }
   });
 
   it('keeps Infernal surprise factions explicit', () => {
     const infernal = factionsForRealm('infernal');
-    expect(infernal.filter((entry) => entry.surprise).map((entry) => entry.id)).toEqual(['ashen-court', 'redeemed']);
+    expect(infernal.filter((entry) => entry.surprise).map((entry) => entry.id)).toEqual([
+      'ashen-court',
+      'redeemed',
+    ]);
     expect(infernal.find((entry) => entry.id === 'ashen-court')?.alignment).toBe('mixed');
+    expect(infernal.find((entry) => entry.id === 'burning-hells')?.name).toBe('Ashen Court');
+    expect(infernal.find((entry) => entry.id === 'ashen-court')?.name).toBe('Veilbound Court');
   });
 
   it('keeps DuranceTester on the humanoid Heavenly Host identity', () => {

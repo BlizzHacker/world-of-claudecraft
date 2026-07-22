@@ -2508,6 +2508,11 @@ export class Renderer {
       const modelKey = visualKeyFor(entity);
       if (builtModels.has(modelKey)) continue;
       builtModels.add(modelKey);
+      // Realm NPC banks are intentionally lazy because preloading every
+      // full-size authored humanoid would add hundreds of megabytes to boot.
+      // The live-view path starts their memoized preload and instantiates them
+      // as soon as it resolves, so the prewarm pass must not build them early.
+      if (isVisualLazy(modelKey)) continue;
       const visual = createCharacterVisual(entity);
       const poolKey = this.visualPoolKeyFor(entity);
       if (poolKey) this.storePooledVisual(poolKey, visual);
@@ -3514,7 +3519,11 @@ export class Renderer {
     const isQuestVision = e.kind === 'mob' && e.templateId.startsWith('vision_');
 
     let portal: THREE.Mesh | undefined;
-    if (e.kind === 'object' && e.templateId === 'waypoint' && e.objectItemId === 'infernal_dungeon_entrance') {
+    if (
+      e.kind === 'object' &&
+      e.templateId === 'waypoint' &&
+      e.objectItemId === 'infernal_dungeon_entrance'
+    ) {
       // The Hellmaw waypoint keeps the normal waypoint interaction and travel
       // semantics, but uses the player's authored entrance GLB as its landmark.
       // The forged copy is populated by build_realm_assets.mjs from the mounted

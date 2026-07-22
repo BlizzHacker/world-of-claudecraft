@@ -16,6 +16,14 @@ export const INFERNAL_HUMAN_VISUAL_KEYS = [
   'realm_infernal_human_iron_ranger',
   'realm_infernal_human_hooded_wanderer',
   'realm_infernal_human_hermit',
+  'realm_infernal_human_barbarian',
+  'realm_infernal_human_veil_adept',
+  'realm_infernal_human_assassin',
+  'realm_infernal_human_monk',
+  'realm_infernal_human_crusader',
+  'realm_infernal_human_spiritborn',
+  'realm_infernal_human_blood_knight',
+  'realm_infernal_human_tempest',
 ] as const;
 
 export type InfernalHumanVisualKey = (typeof INFERNAL_HUMAN_VISUAL_KEYS)[number];
@@ -27,26 +35,27 @@ const NPC_ROLE_VISUALS: Record<string, InfernalHumanVisualKey> = {
   captain_thessaly: 'realm_infernal_human_vanguard',
   trader_wilkes: 'realm_infernal_human_weathered_elder',
   apothecary_lin: 'realm_infernal_human_white_sage',
-  herbalist_yara: 'realm_infernal_human_white_sage',
+  herbalist_yara: 'realm_infernal_human_veil_adept',
   smith_haldren: 'realm_infernal_human_forge_worker',
   armorer_hode: 'realm_infernal_human_forge_worker',
   foreman_odell: 'realm_infernal_human_forge_worker',
   fisherman_brandt: 'realm_infernal_human_hermit',
   stable_master_wren: 'realm_infernal_human_vanguard',
-  mercenary_kael: 'realm_infernal_human_road_mercenary',
-  huntress_verr: 'realm_infernal_human_iron_ranger',
+  mercenary_kael: 'realm_infernal_human_blood_knight',
+  huntress_verr: 'realm_infernal_human_assassin',
   bursar_fernando: 'realm_infernal_human_hooded_wanderer',
   realtor_maribel: 'realm_infernal_human_weathered_elder',
-  pit_master_grott: 'realm_infernal_human_vanguard',
+  pit_master_grott: 'realm_infernal_human_barbarian',
   race_marshal_pip: 'realm_infernal_human_iron_ranger',
   groundskeeper_bram: 'realm_infernal_human_hermit',
   loremaster_caddis: 'realm_infernal_human_white_sage',
-  cainhurst_sage: 'realm_infernal_human_white_sage',
+  cainhurst_sage: 'realm_infernal_human_veil_adept',
   brother_halven: 'realm_infernal_human_white_sage',
   brother_halven_marsh: 'realm_infernal_human_white_sage',
-  spirit_healer: 'realm_infernal_human_white_sage',
+  spirit_healer: 'realm_infernal_human_tainted_hood',
   scout_maren: 'realm_infernal_human_iron_ranger',
-  scout_maren_highwatch: 'realm_infernal_human_iron_ranger',
+  scout_maren_highwatch: 'realm_infernal_human_tempest',
+  tidewatcher_ondrel: 'realm_infernal_human_tempest',
   provisioner_hale: 'realm_infernal_human_weathered_elder',
   quartermaster_bree: 'realm_infernal_human_road_mercenary',
   interior_merchant: 'realm_infernal_human_forge_worker',
@@ -56,10 +65,21 @@ const NPC_ROLE_VISUALS: Record<string, InfernalHumanVisualKey> = {
   skirmish_footman: 'realm_infernal_human_vanguard',
 };
 
-const OPPONENT_KEYS = [
+const OPPONENT_KEYS = ['hellmaw_cursed_knight_body', 'hellmaw_sigilbound_body'] as const;
+
+const HOSTILE_HUMANOID_KEYS = [
   'realm_infernal_dark_paladin',
-  'realm_infernal_human_tainted_hood',
+  'hellmaw_cursed_knight_body',
+  'hellmaw_sigilbound_body',
+] as const;
+
+export const INFERNAL_UNDEAD_VISUAL_KEYS = [
   'realm_cryptic_bone_herald',
+  'skel_warrior',
+  'skel_rogue',
+  'skel_mage',
+  'skel_golem',
+  'hellmaw_spectre_body',
 ] as const;
 
 function stableIndex(value: string, size: number): number {
@@ -72,13 +92,37 @@ function stableIndex(value: string, size: number): number {
 }
 
 export function infernalNpcVisualKey(templateId: string): InfernalHumanVisualKey {
-  if (templateId.startsWith('brother_aldric')) return 'realm_infernal_human_white_sage';
+  if (templateId.startsWith('brother_aldric')) return 'realm_infernal_human_monk';
   return (
     NPC_ROLE_VISUALS[templateId] ??
     INFERNAL_HUMAN_VISUAL_KEYS[stableIndex(templateId, INFERNAL_HUMAN_VISUAL_KEYS.length)]
   );
 }
 
-export function infernalOpponentVisualKey(templateId: string): (typeof OPPONENT_KEYS)[number] {
+export function infernalOpponentVisualKey(
+  templateId: string,
+): 'realm_infernal_dark_paladin' | (typeof OPPONENT_KEYS)[number] {
+  if (/(?:captain|commander|foreman|warlord|mogger|gorrak|drogmar|brutok)/.test(templateId)) {
+    return 'realm_infernal_dark_paladin';
+  }
   return OPPONENT_KEYS[stableIndex(templateId, OPPONENT_KEYS.length)];
+}
+
+/** Infernal and Cryptic undead rotate through the approved skeleton, spectre,
+ * and Bone Herald bank instead of cloning one model across every graveyard. */
+export function infernalUndeadVisualKey(
+  templateId: string,
+): (typeof INFERNAL_UNDEAD_VISUAL_KEYS)[number] {
+  if (/(?:restless_bones|bone_herald|bonewalker|gravecaller|necromancer)/.test(templateId)) {
+    return 'realm_cryptic_bone_herald';
+  }
+  return INFERNAL_UNDEAD_VISUAL_KEYS[stableIndex(templateId, INFERNAL_UNDEAD_VISUAL_KEYS.length)];
+}
+
+/** Full-size living/corrupted humanoids only. Shared by crossroads realms that
+ * must never turn an ordinary bandit or soldier into an undead Bone Herald. */
+export function hostileHumanoidVisualKey(
+  templateId: string,
+): (typeof HOSTILE_HUMANOID_KEYS)[number] {
+  return HOSTILE_HUMANOID_KEYS[stableIndex(templateId, HOSTILE_HUMANOID_KEYS.length)];
 }

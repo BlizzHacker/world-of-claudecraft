@@ -43,9 +43,12 @@
 
 import type * as http from 'node:http';
 import type { CharacterState } from '../src/sim/sim';
+import { infernalCharacterSelection } from '../src/sim/realms/infernal_classes';
+import { resolveRealmCharacterVisual } from '../src/sim/realms/class_visuals';
 import type { PlayerClass } from '../src/sim/types';
 import { normalizeCharName, offensiveName } from './auth';
 import { characterSheet, type SheetRank } from './character_sheet';
+import { isDuranceTesterCharacter } from './durance_tester_entitlement';
 import {
   accountAndScopeForToken,
   type CharacterRow,
@@ -157,7 +160,12 @@ export interface CharactersRuntime {
   /** game.saveMail: persist the Ravenpost mail book after a rekey. */
   saveMail(): Promise<void>;
   /** main.ts initialCharacterState: the serialized fresh-character state for create. */
-  initialCharacterState(cls: PlayerClass, name: string, skin: number): CharacterState;
+  initialCharacterState(
+    cls: PlayerClass,
+    name: string,
+    skin: number,
+    realmHeroId?: string,
+  ): CharacterState;
   /** main.ts publicOrigin: canonical share origin for the owner-sheet URLs. */
   publicOrigin(req: http.IncomingMessage): string;
 }
@@ -245,17 +253,25 @@ function buildCharacterList(
 ): unknown {
   return {
     realm: REALM,
-    characters: chars.map((c) => ({
-      id: c.id,
-      name: c.name,
-      class: c.class,
-      level: c.level,
-      skin: c.state?.skin ?? 0,
-      online: isOnline(c.id),
-      forceRename: c.force_rename,
-      lastPlayed: c.last_played ? new Date(c.last_played).toISOString() : null,
-      playtimeSeconds: Number(c.playtime_seconds ?? 0),
-    })),
+    characters: chars.map((c) => {
+      const realm = process.env.CR_REALM_ID ?? REALM;
+      const appearance = isDuranceTesterCharacter(c.name, realm)
+        ? { realmHeroId: null, visualKey: 'realm_infernal_durance_humanoid' as const }
+        : resolveRealmCharacterVisual(realm, c.class, c.state?.realmHeroId);
+      return {
+        id: c.id,
+        name: c.name,
+        class: c.class,
+        level: c.level,
+        skin: c.state?.skin ?? 0,
+        online: isOnline(c.id),
+        forceRename: c.force_rename,
+        lastPlayed: c.last_played ? new Date(c.last_played).toISOString() : null,
+        playtimeSeconds: Number(c.playtime_seconds ?? 0),
+        realmHeroId: appearance.realmHeroId,
+        visualKey: appearance.visualKey,
+      };
+    }),
   };
 }
 
@@ -364,6 +380,15 @@ async function createCharacterHandler(ctx: Ctx): Promise<void> {
     return;
   }
   const cls = body.class as PlayerClass;
+  const requestedHeroId = body.realmHeroId;
+  if (
+    requestedHeroId !== undefined &&
+    !infernalCharacterSelection(process.env.CR_REALM_ID ?? REALM, requestedHeroId, cls)
+  ) {
+    json(ctx.res, 400, INVALID_CLASS);
+    return;
+  }
+  const realmHeroId = typeof requestedHeroId === 'string' ? requestedHeroId : undefined;
   const skin = Math.max(
     0,
     Math.min(MAX_SKIN, Math.floor(typeof body.skin === 'number' ? body.skin : 0)),
@@ -374,7 +399,7 @@ async function createCharacterHandler(ctx: Ctx): Promise<void> {
       name,
       cls,
       CHARACTER_LIMIT,
-      rt.initialCharacterState(cls, name, skin),
+      rt.initialCharacterState(cls, name, skin, realmHeroId),
     );
   const respondCreated = (c: CharacterRow): void => {
     gameMetricsCounters().characterCreated();
@@ -384,6 +409,8 @@ async function createCharacterHandler(ctx: Ctx): Promise<void> {
       class: c.class,
       level: c.level,
       skin: c.state?.skin ?? skin,
+      realmHeroId: c.state?.realmHeroId ?? null,
+      visualKey: c.state?.visualKey ?? null,
       forceRename: c.force_rename,
     });
   };

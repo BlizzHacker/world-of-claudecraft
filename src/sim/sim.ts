@@ -1185,6 +1185,10 @@ export interface CharacterState {
   jail?: JailState;
   skin?: number; // appearance index (JSONB; optional so pre-skin saves load as 0)
   skinCatalog?: SkinCatalog;
+  /** Stable authored realm-character selection; optional for legacy saves. */
+  realmHeroId?: string;
+  /** Auditable resolved body key; the realm server revalidates it on join. */
+  visualKey?: string;
   // Pending skin-select event rank (JSONB; optional so older saves load as null).
   pendingSkinRank?: SkinRank | null;
   pendingSkinCatalog?: SkinCatalog | null;
@@ -1911,6 +1915,7 @@ export class Sim {
       ladder?: boolean;
       hardcore?: boolean;
       visualKey?: string | null;
+      realmHeroId?: string | null;
       /** Host-verified narrow test entitlement; never client supplied. */
       duranceTester?: boolean;
       homeowner?: boolean;
@@ -2063,7 +2068,8 @@ export class Sim {
     this.players.set(player.id, meta);
     player.skinCatalog = meta.skinCatalog;
     player.skin = meta.skin; // mirror onto the entity so the renderer + wire can read it
-    player.visualKey = opts?.visualKey ?? null;
+    player.visualKey = opts?.visualKey ?? savedState?.visualKey ?? null;
+    player.realmHeroId = opts?.realmHeroId ?? savedState?.realmHeroId ?? null;
     if (this.primaryId === -1) this.primaryId = player.id;
 
     if (savedState) {
@@ -2493,6 +2499,8 @@ export class Sim {
       cooldowns: serializeCooldowns(e.cooldowns, e.potionCooldownUntil, this.time),
       skin: meta.skin,
       skinCatalog: meta.skinCatalog,
+      ...(e.realmHeroId ? { realmHeroId: e.realmHeroId } : {}),
+      ...(e.visualKey ? { visualKey: e.visualKey } : {}),
       pendingSkinRank: meta.pendingSkinRank,
       pendingSkinCatalog: meta.pendingSkinCatalog,
       pendingSkinItemId: meta.pendingSkinItemId,

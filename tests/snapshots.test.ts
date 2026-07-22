@@ -364,6 +364,23 @@ describe('Combat Mech held weapon over the wire', () => {
 });
 
 describe('realm class visual over the wire', () => {
+  it('mirrors the selected Infernal identity as well as its concrete visual', () => {
+    const sim = new Sim({ seed: 7, playerClass: 'warrior', playerName: 'Aegis' });
+    sim.player.realmHeroId = 'infernal-hero-warrior';
+    sim.player.visualKey = 'realm_infernal_human_iron_warden';
+
+    const wire = wireEntity(sim.player);
+    expect(wire.rh).toBe('infernal-hero-warrior');
+    expect(wire.vk).toBe('realm_infernal_human_iron_warden');
+
+    const client = bareClient(sim.playerId + 1000);
+    (client as any).applySnapshot({ t: 'snap', ents: [wire] });
+    const mirrored = client.entities.get(sim.playerId)!;
+
+    expect(mirrored.realmHeroId).toBe('infernal-hero-warrior');
+    expect(mirrored.visualKey).toBe('realm_infernal_human_iron_warden');
+  });
+
   it('mirrors a realm GLB body override into the renderer visual key', () => {
     const sim = new Sim({ seed: 7, playerClass: 'priest', playerName: 'Cleric' });
     const key = realmClassVisualKey('Classic', 'priest');

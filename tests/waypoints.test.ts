@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { waypointDefs } from '../src/sim/waypoints';
+import { pylonOffset, waypointDefs } from '../src/sim/waypoints';
 
 describe('realm waypoints', () => {
   it('keeps the authored Infernal entrance as a scoped travel landmark', () => {
@@ -8,8 +8,9 @@ describe('realm waypoints', () => {
       name: 'Hellmaw Dungeon',
       realmId: 'infernal',
       assetKey: 'infernal_dungeon_entrance',
-      x: 5,
-      z: 2,
+      x: 0,
+      z: -22,
     });
+    expect(pylonOffset('wp_infernal_dungeon')).toEqual({ x: 0, z: 0 });
   });
 });

@@ -1,12 +1,7 @@
 import type { TalentModifiers } from './content/talents';
 import { aggregateSetBonuses, CLASSES, ITEMS, MOBS, type NpcDef } from './data';
 import { meetsLevelRequirement } from './item_level_req';
-import {
-  d2MobDmgMult,
-  d2MobHpMult,
-  d2PlayerDmgMult,
-  d2PlayerHpMult,
-} from './realms/registry';
+import { d2MobDmgMult, d2MobHpMult, d2PlayerDmgMult, d2PlayerHpMult } from './realms/registry';
 import type {
   Entity,
   EquipSlot,
@@ -159,6 +154,7 @@ function baseEntity(id: number, pos: Vec3): Entity {
     skinCatalog: 'class',
     skin: 0,
     visualKey: null,
+    realmHeroId: null,
     mainhandItemId: null,
     equippedItems: {},
     equippedInstances: {},
@@ -458,7 +454,9 @@ export function recalcPlayerStats(
   const hpFrac = e.maxHp > 0 ? e.hp / e.maxHp : 1;
   // F5c D2 scaling: ramp the HP pool past the cap on the D2 realms (mirrors a D2
   // hero stacking Vitality into thousands of life). Vanilla realms return 1.
-  e.maxHp = Math.round((def.baseHp + def.hpPerLevel * (lvl - 1) + hpFromStamina(s.sta)) * d2PlayerHpMult(lvl));
+  e.maxHp = Math.round(
+    (def.baseHp + def.hpPerLevel * (lvl - 1) + hpFromStamina(s.sta)) * d2PlayerHpMult(lvl),
+  );
   if (bearForm) e.maxHp = Math.round(e.maxHp * 1.15);
   if (mods?.stats.maxHpPct) e.maxHp = Math.round(e.maxHp * (1 + mods.stats.maxHpPct));
   // Fiesta "Colossus"-style buffs: growing bigger also makes you tankier.
@@ -483,7 +481,8 @@ export function recalcPlayerStats(
     e.resourceType = 'mana';
     // F5c D2 scaling: ramp the mana pool past the cap on the D2 realms alongside HP.
     e.maxResource = Math.round(
-      (def.baseMana + def.manaPerLevel * (lvl - 1) + manaFromIntellect(s.int)) * d2PlayerHpMult(lvl),
+      (def.baseMana + def.manaPerLevel * (lvl - 1) + manaFromIntellect(s.int)) *
+        d2PlayerHpMult(lvl),
     );
     e.resource = cameFromForm
       ? Math.min(e.savedMana, e.maxResource)
@@ -540,9 +539,12 @@ export function createMob(id: number, template: MobTemplate, level: number, pos:
   // F5c D2 scaling: on the D2 realms, mobs ramp their level-scaled HP + damage past
   // the vanilla cap too (mirrors D2 Hell scaling monster life ×4+) so the fight
   // stays hard as heroes reach for 99. Vanilla realms return 1 (no change).
-  e.maxHp = Math.round((template.hpBase + template.hpPerLevel * (level - 1)) * hpMult * d2MobHpMult(level));
+  e.maxHp = Math.round(
+    (template.hpBase + template.hpPerLevel * (level - 1)) * hpMult * d2MobHpMult(level),
+  );
   e.hp = e.maxHp;
-  const dmg = (template.dmgBase + template.dmgPerLevel * (level - 1)) * dmgMult * d2MobDmgMult(level);
+  const dmg =
+    (template.dmgBase + template.dmgPerLevel * (level - 1)) * dmgMult * d2MobDmgMult(level);
   e.weapon = {
     min: Math.round(dmg * 0.8),
     max: Math.round(dmg * 1.25),
@@ -611,9 +613,7 @@ export function createNpc(id: number, def: NpcDef, pos: Vec3): Entity {
 
 // ArcForge-placed decorative prop. Renders via templateId 'prop:<key>' →
 // PROP_ASSET_DEFS GLB. Non-interactive scenery (not lootable, not hostile).
-export function createProp(
-  id: number, propKey: string, pos: Vec3, facing = 0, scale = 1,
-): Entity {
+export function createProp(id: number, propKey: string, pos: Vec3, facing = 0, scale = 1): Entity {
   const e = baseEntity(id, pos);
   e.kind = 'object';
   e.templateId = 'prop:' + propKey;

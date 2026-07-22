@@ -348,6 +348,8 @@ describe('character list handlers', () => {
           forceRename: false,
           lastPlayed: '2026-01-02T03:04:05.000Z',
           playtimeSeconds: 120,
+          realmHeroId: null,
+          visualKey: null,
         },
         {
           id: 2,
@@ -359,6 +361,8 @@ describe('character list handlers', () => {
           forceRename: true,
           lastPlayed: null,
           playtimeSeconds: 0, // null -> 0
+          realmHeroId: null,
+          visualKey: null,
         },
       ],
     };
@@ -375,6 +379,41 @@ describe('character list handlers', () => {
     expect(me.body).toEqual(expected);
     // Byte-identical: the two arms share buildCharacterList, so the serialized JSON matches.
     expect(JSON.stringify(me.body)).toBe(JSON.stringify(full.body));
+  });
+
+  it('forces the existing Infernal DuranceTester row to the approved human body', async () => {
+    const previousRealm = process.env.CR_REALM_ID;
+    process.env.CR_REALM_ID = 'infernal';
+    try {
+      setCharactersDbForTests({
+        listCharacters: async () => [
+          charRow({
+            name: 'DuranceTester',
+            class: 'warrior',
+            state: st({
+              realmHeroId: 'infernal-hell-horned-demon',
+              visualKey: 'realm_infernal_horned_demon',
+            }),
+          }),
+        ],
+      });
+
+      const res = await callHandler('GET', '/api/characters', {
+        account: { accountId: 7, scope: 'full' },
+      });
+
+      expect(res.status).toBe(200);
+      expect(bodyRecord(res.body).characters).toEqual([
+        expect.objectContaining({
+          name: 'DuranceTester',
+          realmHeroId: null,
+          visualKey: 'realm_infernal_durance_humanoid',
+        }),
+      ]);
+    } finally {
+      if (previousRealm === undefined) delete process.env.CR_REALM_ID;
+      else process.env.CR_REALM_ID = previousRealm;
+    }
   });
 });
 
@@ -473,6 +512,8 @@ describe('create handler', () => {
       class: 'warrior',
       level: 1,
       skin: 2,
+      realmHeroId: null,
+      visualKey: null,
       forceRename: false,
     });
   });
@@ -682,7 +723,78 @@ describe('create handler', () => {
     });
     expect(res.status).toBe(200);
     expect(bodyRecord(res.body).skin).toBe(expected);
-    expect(initialCharacterState).toHaveBeenCalledWith('warrior', 'Clamped', expected);
+    expect(initialCharacterState).toHaveBeenCalledWith('warrior', 'Clamped', expected, undefined);
+  });
+
+  it('persists a validated Infernal hero identity with its matching combat class', async () => {
+    const previousRealm = process.env.CR_REALM_ID;
+    process.env.CR_REALM_ID = 'infernal';
+    try {
+      const initialCharacterState = vi.fn((_cls, _name, _skin, realmHeroId) =>
+        st({
+          skin: 1,
+          realmHeroId,
+          visualKey: 'realm_infernal_human_iron_warden',
+        }),
+      );
+      installRuntime({ initialCharacterState });
+      setCharactersDbForTests({
+        createCharacterCapped: async (_accountId, name, cls, _limit, state) =>
+          charRow({ id: 13, name, class: cls, state }),
+      });
+
+      const res = await callHandler('POST', '/api/characters', {
+        account: { accountId: 7, scope: 'full' },
+        body: {
+          name: 'Aegis',
+          class: 'warrior',
+          skin: 1,
+          realmHeroId: 'infernal-hero-warrior',
+        },
+      });
+
+      expect(res.status).toBe(200);
+      expect(initialCharacterState).toHaveBeenCalledWith(
+        'warrior',
+        'Aegis',
+        1,
+        'infernal-hero-warrior',
+      );
+      expect(res.body).toMatchObject({
+        realmHeroId: 'infernal-hero-warrior',
+        visualKey: 'realm_infernal_human_iron_warden',
+      });
+    } finally {
+      if (previousRealm === undefined) delete process.env.CR_REALM_ID;
+      else process.env.CR_REALM_ID = previousRealm;
+    }
+  });
+
+  it('rejects a forged Infernal identity paired with the wrong combat class', async () => {
+    const previousRealm = process.env.CR_REALM_ID;
+    process.env.CR_REALM_ID = 'infernal';
+    try {
+      const createCharacterCapped = vi.fn(async () => charRow());
+      setCharactersDbForTests({ createCharacterCapped });
+      const res = await callHandler('POST', '/api/characters', {
+        account: { accountId: 7, scope: 'full' },
+        body: {
+          name: 'Forgery',
+          class: 'mage',
+          realmHeroId: 'infernal-hero-warrior',
+        },
+      });
+
+      expect(res.status).toBe(400);
+      expect(res.body).toEqual({
+        error: 'invalid class',
+        code: 'character.invalid_class',
+      });
+      expect(createCharacterCapped).not.toHaveBeenCalled();
+    } finally {
+      if (previousRealm === undefined) delete process.env.CR_REALM_ID;
+      else process.env.CR_REALM_ID = previousRealm;
+    }
   });
 });
 

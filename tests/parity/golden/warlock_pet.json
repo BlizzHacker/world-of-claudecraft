@@ -9,8 +9,8 @@
     "applyTaunt pet auto-taunt arm (~8110)",
     "applyTaunt pet manual-taunt arm (petTaunt, ~4885)"
   ],
-  "draws": 192,
-  "drawDigest": "d97e012b",
+  "draws": 195,
+  "drawDigest": "867772a5",
   "frames": [
     {
       "tick": 0,
@@ -175,16 +175,16 @@
       "state": "ea43e02a",
       "events": "cb354cd7",
       "rng": {
-        "draws": 112,
-        "digest": "d34cee74"
+        "draws": 113,
+        "digest": "550e086d"
       }
     },
     {
       "tick": 120,
       "time": 6,
       "nextId": 422,
-      "state": "6ae6774f",
-      "events": "db6be929",
+      "state": "9ae4abf5",
+      "events": "9e4af540",
       "rng": {
         "draws": 136,
         "digest": "eb037b72"
@@ -194,7 +194,7 @@
       "tick": 140,
       "time": 7,
       "nextId": 422,
-      "state": "5f3fa735",
+      "state": "c0007aeb",
       "events": "236212ca",
       "rng": {
         "draws": 170,
@@ -205,11 +205,11 @@
       "tick": 150,
       "time": 7.5,
       "nextId": 422,
-      "state": "7a19803f",
+      "state": "0846c303",
       "events": "d75403d0",
       "rng": {
-        "draws": 181,
-        "digest": "a7296a1b"
+        "draws": 182,
+        "digest": "61ff02c6"
       },
       "label": "pet-taunt",
       "players": [
@@ -378,7 +378,7 @@
           "forcedTargetId": 420,
           "forcedTargetTimer": 3,
           "hostile": true,
-          "hp": 49951,
+          "hp": 49950,
           "id": 421,
           "inCombat": true,
           "kind": "mob",
@@ -419,7 +419,7 @@
             ],
             [
               420,
-              38
+              39
             ]
           ],
           "weapon": {
@@ -434,11 +434,11 @@
       "tick": 154,
       "time": 7.7,
       "nextId": 422,
-      "state": "8f290879",
-      "events": "b3146d72",
+      "state": "13fe3b68",
+      "events": "b8c3bd9a",
       "rng": {
-        "draws": 192,
-        "digest": "d97e012b"
+        "draws": 195,
+        "digest": "867772a5"
       },
       "label": "final",
       "players": [
@@ -559,7 +559,7 @@
           "facing": 1.570796,
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
-          "hp": 345,
+          "hp": 346,
           "id": 420,
           "inCombat": true,
           "kind": "mob",
@@ -609,7 +609,7 @@
           "forcedTargetId": 420,
           "forcedTargetTimer": 2.8,
           "hostile": true,
-          "hp": 49951,
+          "hp": 49936,
           "id": 421,
           "inCombat": true,
           "kind": "mob",
@@ -650,7 +650,7 @@
             ],
             [
               420,
-              38
+              53
             ]
           ],
           "weapon": {

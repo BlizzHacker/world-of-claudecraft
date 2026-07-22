@@ -550,7 +550,10 @@ export function interact(ctx: SimContext, pid?: number): void {
     enterInterior(ctx, door.interiorType, p.id);
     return;
   }
-  if (obj) {
+  // Objects and quest NPCs compete on distance (same rule as building doors
+  // above): the plaza well/pylon must not swallow an interact aimed at a quest
+  // giver standing right next to the player.
+  if (obj && (!questEntity || bestObjD2 <= bestQuestD2)) {
     if (obj.templateId === 'dungeon_door' && obj.dungeonId) {
       ctx.enterDungeon(obj.dungeonId, p.id);
       return;

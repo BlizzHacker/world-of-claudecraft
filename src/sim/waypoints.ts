@@ -51,8 +51,17 @@ export function waypointDefs(): WaypointDef[] {
     });
   }
   out.push({
-    id: 'wp_infernal_dungeon', name: 'Hellmaw Dungeon', x: 5, z: 2,
-    zoneId: 'zone1', realmId: 'infernal', assetKey: 'infernal_dungeon_entrance',
+    // The player's Infernal Dungeon Entrance is a large landmark, not a town-plaza
+    // pylon. Keep it on the south-road shoulder inside Eastbrook's protected town
+    // radius, clear of both the road and the Infernal realm's 1.9x / 2.6x-spread
+    // chapel and inn. Its coordinates are already final (see the zero offset below).
+    id: 'wp_infernal_dungeon',
+    name: 'Hellmaw Dungeon',
+    x: 0,
+    z: -22,
+    zoneId: 'zone1',
+    realmId: 'infernal',
+    assetKey: 'infernal_dungeon_entrance',
   });
   return out;
 }
@@ -62,6 +71,7 @@ export function waypointDefs(): WaypointDef[] {
  *  else keeps the classic NE-edge landmark spot. */
 export function pylonOffset(id: string): { x: number; z: number } {
   if (id === 'wp_eastbrook_vale') return { x: 6, z: 5 };
+  if (id === 'wp_infernal_dungeon') return { x: 0, z: 0 };
   return { x: 14, z: 14 };
 }
 

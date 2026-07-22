@@ -2609,7 +2609,35 @@ body:not(.game-active) .cr-realm-first-prompt {
   border-color: #b07cff;
 }
 .cr-wb-forged {
-  max-height: 160px;
+  max-height: 260px;
+}
+.cr-wb-library-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 40px;
+  color: #bdaed2;
+  font-variant-numeric: tabular-nums;
+}
+.cr-wb-library-footer[hidden] {
+  display: none;
+}
+.cr-wb-library-footer button {
+  min-width: 88px;
+  min-height: 40px;
+  border: 1px solid rgba(176, 124, 255, 0.4);
+  border-radius: 6px;
+  background: rgba(40, 28, 64, 0.75);
+  color: #f1e6ff;
+  cursor: pointer;
+}
+.cr-wb-library-footer button:hover,
+.cr-wb-library-footer button:focus-visible {
+  border-color: #b07cff;
+}
+.cr-wb-library-footer button:disabled {
+  cursor: wait;
+  opacity: 0.55;
 }
 .cr-wb-empty {
   font-size: 11.5px;

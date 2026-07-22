@@ -1,13 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import {
+  CURATED_INFERNAL_CLASSES,
   CURATED_INFERNAL_HUMANS,
-  INFERNAL_BIPED_ACTIONS,
   classifyAssetKind,
   classifyRealmFromText,
-  looksAnimatedName,
+  INFERNAL_BIPED_ACTIONS,
   limitCandidatesByRealm,
+  looksAnimatedName,
   parsePickturaManifestCsv,
   realmIdForFolder,
+  realmIdForForgedFolder,
   safeAssetName,
 } from '../scripts/build_realm_assets.mjs';
 
@@ -19,6 +21,14 @@ describe('realm asset build helpers', () => {
     expect(realmIdForFolder('claudcraft realm assets')).toBe('claudecraft');
     expect(realmIdForFolder('arcade void realm assets')).toBe('arcadevoid');
     expect(realmIdForFolder('arcane void realm assets')).toBe('arcadevoid');
+  });
+
+  it('maps shared forged-store aliases to canonical realm ids', () => {
+    expect(realmIdForForgedFolder('cryptic')).toBe('crypticrealm');
+    expect(realmIdForForgedFolder('crypticrealm')).toBe('crypticrealm');
+    expect(realmIdForForgedFolder('claudcraft')).toBe('claudecraft');
+    expect(realmIdForForgedFolder('claudecraft')).toBe('claudecraft');
+    expect(realmIdForForgedFolder('infernal')).toBe('infernal');
   });
 
   it('classifies Meshy prompts into the intended realm buckets', () => {
@@ -90,17 +100,25 @@ describe('realm asset build helpers', () => {
       { realmId: 'infernal', sourceName: 'b.glb' },
       { realmId: 'classic', sourceName: 'c.glb' },
     ];
-    expect(limitCandidatesByRealm(rows, 1).map((row: { sourceName: string }) => row.sourceName)).toEqual([
-      'a.glb',
-      'c.glb',
-    ]);
+    expect(
+      limitCandidatesByRealm(rows, 1).map((row: { sourceName: string }) => row.sourceName),
+    ).toEqual(['a.glb', 'c.glb']);
   });
 
   it('promotes a reviewed Infernal human roster and compact shared action pack', () => {
-    expect(CURATED_INFERNAL_HUMANS).toHaveLength(10);
-    expect(new Set(CURATED_INFERNAL_HUMANS.map((asset) => asset.outputName)).size).toBe(10);
+    expect(CURATED_INFERNAL_HUMANS).toHaveLength(18);
+    expect(new Set(CURATED_INFERNAL_HUMANS.map((asset) => asset.outputName)).size).toBe(18);
     expect(CURATED_INFERNAL_HUMANS.map((asset) => asset.outputName)).toContain(
       'infernal_human_iron_warden.glb',
+    );
+    expect(CURATED_INFERNAL_CLASSES).toHaveLength(18);
+    expect(new Set(CURATED_INFERNAL_CLASSES.map((asset) => asset.outputName)).size).toBe(18);
+    expect(CURATED_INFERNAL_CLASSES.map((asset) => asset.outputName)).toEqual(
+      expect.arrayContaining([
+        'infernal_class_warrior.glb',
+        'infernal_class_necromancer.glb',
+        'infernal_class_blood_knight.glb',
+      ]),
     );
     expect(INFERNAL_BIPED_ACTIONS.map((asset) => asset.outputName)).toEqual(
       expect.arrayContaining([

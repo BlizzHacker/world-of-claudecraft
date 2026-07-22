@@ -80,6 +80,16 @@ export interface RouteMeta {
    * read routes.
    */
   readonly publicRead?: boolean;
+  /**
+   * Marks a :param route whose access control is an explicit permission
+   * middleware (403 denial, e.g. requireContentPermission) rather than
+   * per-account resource ownership: the :param names a SHARED resource (a
+   * realm, not an account-owned row), so the account-owner BOLA clause of the
+   * registry-introspection coverage helper does not apply. The route MUST
+   * still carry its permission middleware; this flag only documents why no
+   * requireOwned loader exists.
+   */
+  readonly permissionGated?: boolean;
   /** Overrides the surface's default response envelope for this one route. */
   readonly envelope?: EnvelopeKind;
   /**

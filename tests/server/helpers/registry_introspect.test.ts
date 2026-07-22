@@ -39,6 +39,21 @@ describe('checkRequireOwnedCoverage', () => {
     expect(checkRequireOwnedCoverage(routes)).toEqual([]);
   });
 
+  it('exempts a shared-resource :param route marked meta.permissionGated', () => {
+    // The realm-visuals editor family: :realm is a shared resource behind an
+    // explicit permission middleware (403), not an account-owned row.
+    const routes: RouteDef[] = [
+      {
+        method: 'PUT',
+        path: '/api/realm-visuals/:realm',
+        surface: 'api',
+        handler: noopHandler,
+        meta: { permissionGated: true },
+      },
+    ];
+    expect(checkRequireOwnedCoverage(routes)).toEqual([]);
+  });
+
   it('still flags an account-owned :id route that is NOT marked publicRead', () => {
     const routes: RouteDef[] = [
       { method: 'GET', path: '/api/characters/:id', surface: 'api', handler: noopHandler },
