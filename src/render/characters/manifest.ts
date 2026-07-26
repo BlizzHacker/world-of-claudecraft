@@ -320,6 +320,33 @@ function infernalHuman(fileName: string, height = 2.15): VisualDef {
   };
 }
 
+// Claudecraft realm bodies live in the shared realm store like the infernal and
+// classic banks. A number of them expose only one baked take, so the single-take
+// helper points every ClipMap slot at that clip instead of naming clips the GLB
+// does not contain.
+const CLAUDECRAFT_TAKE = 'Armature|Unreal Take|baselayer';
+
+function claudecraftBody(fileName: string, height: number, clips: ClipMap): VisualDef {
+  return {
+    url: `${REALM_MODELS}/claudecraft/${fileName}`,
+    height,
+    clips,
+    lazyPreload: true,
+  };
+}
+
+function claudecraftSingleTake(fileName: string, height: number): VisualDef {
+  return claudecraftBody(fileName, height, {
+    idle: CLAUDECRAFT_TAKE,
+    walk: CLAUDECRAFT_TAKE,
+    run: CLAUDECRAFT_TAKE,
+    attack: [],
+    death: CLAUDECRAFT_TAKE,
+    hit: [],
+    jump: CLAUDECRAFT_TAKE,
+  });
+}
+
 /** GLB url for an equipped mainhand item's held weapon model, or null if the item
  *  has no mapped model (then the class default attach is kept). Mirrors the bag
  *  icon via the shared ITEM_WEAPON_VARIANTS map, so held weapon == inventory icon. */
@@ -806,6 +833,123 @@ export const VISUALS: Record<string, VisualDef> = {
     },
     lazyPreload: true,
   },
+
+  // -- Claudecraft realm creature bank -------------------------------------
+  // Every GLB in the claudecraft realm store, previously unreferenced by any
+  // visual key. Bodies only: template ids still own families, loot, and combat.
+  // Several of these PICKTURA exports ship one baked take instead of named
+  // locomotion, so those ClipMaps alias that single clip the way
+  // realm_classic_kitty does rather than naming clips the GLB lacks.
+  realm_claudecraft_arcane_dragon: claudecraftSingleTake('arcane-dragon_959f8113.glb', 3.4),
+  realm_claudecraft_frost_dragon: claudecraftSingleTake('frostdragon_06cc2f9d.glb', 3.2),
+  realm_claudecraft_polar_bear: claudecraftSingleTake('polar_bear_4d071124.glb', 2.2),
+  realm_claudecraft_blue_beast: claudecraftSingleTake('bluebeast_b30343f9.glb', 2.0),
+  realm_claudecraft_beaver: claudecraftSingleTake('beaver_f5a697cf.glb', 1.1),
+  realm_claudecraft_boar: claudecraftSingleTake('classic-boar_26671af0.glb', 1.3),
+  realm_claudecraft_spine_boar: claudecraftSingleTake('spine-boar_a9e4abad.glb', 1.4),
+  realm_claudecraft_crab: claudecraftSingleTake('crab_e3b8fff8.glb', 1.0),
+  realm_claudecraft_horse: claudecraftSingleTake('horse_493905c2.glb', 2.1),
+  realm_claudecraft_water_dinosaur: claudecraftSingleTake('water-dinosaur-rawr_acffaf83.glb', 2.2),
+  realm_claudecraft_mini_orc: claudecraftBody('mini-orc_895fa3da.glb', 1.5, {
+    idle: 'Armature|walking_man|baselayer',
+    walk: 'Armature|walking_man|baselayer',
+    run: 'Armature|walking_man|baselayer',
+    attack: [],
+    death: 'Armature|walking_man|baselayer',
+    hit: [],
+    jump: 'Armature|walking_man|baselayer',
+  }),
+  realm_claudecraft_parrot: claudecraftBody('parot-blue_48ee9609.glb', 1.0, {
+    idle: 'Thoughtful_Walk',
+    walk: 'Walking',
+    run: 'Running',
+    attack: [],
+    death: 'Formal_Bow',
+    hit: [],
+  }),
+  realm_claudecraft_skeleton_archer: claudecraftBody('skeleton_d7adee4e.glb', HUMANOID_H, {
+    idle: 'Walking',
+    walk: 'Walking',
+    run: 'Running',
+    attack: ['Archery_Shot_1', 'Draw_and_Shoot_from_Back'],
+    death: 'Dead',
+    hit: [],
+  }),
+  realm_claudecraft_zombie: claudecraftBody('goofy_zombie_42cc51b9.glb', HUMANOID_H, {
+    idle: 'Walking',
+    walk: 'Walking',
+    run: 'Running',
+    attack: ['Zombie_Scream'],
+    death: 'Dead',
+    hit: ['BeHit_FlyUp'],
+  }),
+  realm_claudecraft_fighting_ghost: claudecraftBody('fighting-ghost_1f46604e.glb', HUMANOID_H, {
+    idle: 'Walking',
+    walk: 'Walking',
+    run: 'Running',
+    attack: [],
+    death: 'Walking',
+    hit: [],
+  }),
+  realm_claudecraft_demon: claudecraftBody(
+    'demon-male-meshy_ai_meshy_merged_animations_f1e842c4.glb',
+    2.4,
+    {
+      idle: 'Walking',
+      walk: 'Walking',
+      run: 'Running',
+      attack: ['Skill_01'],
+      death: 'Walking',
+      hit: [],
+    },
+  ),
+  realm_claudecraft_dark_knight: claudecraftBody('dark-knight_53d5a5c0.glb', 2.3, {
+    idle: 'Combat_Stance',
+    walk: 'Walking',
+    run: 'Running',
+    attack: ['Left_Slash', 'Double_Combo_Attack', 'Sword_Judgment'],
+    death: 'Dead',
+    hit: [],
+    cast: 'Sword_Shout',
+    jump: 'Basic_Jump',
+  }),
+  realm_claudecraft_dark_wanderer: claudecraftBody('dark-wanderer_01151979.glb', HUMANOID_H, {
+    idle: 'Stand_and_Chat',
+    walk: 'Walking',
+    run: 'Running',
+    attack: ['Attack'],
+    death: 'Dead',
+    hit: [],
+    cast: 'Skill_01',
+  }),
+  realm_claudecraft_horned_knight: claudecraftBody(
+    'horned-knight-meshy_ai_meshy_merged_animations_309fa4a3.glb',
+    2.25,
+    {
+      idle: 'Walking',
+      walk: 'Walking',
+      run: 'Running',
+      attack: [],
+      death: 'Walking',
+      hit: [],
+    },
+  ),
+  realm_claudecraft_mini_orc_scout: claudecraftBody('mini-orc2_dd125cdc.glb', 1.5, {
+    idle: 'Walking',
+    walk: 'Walking',
+    run: 'run_fast_2',
+    attack: [],
+    death: 'Walking',
+    hit: [],
+  }),
+  realm_claudecraft_mini_elf: claudecraftBody('mini-elf-bearded_89f11a62.glb', 1.5, {
+    idle: 'Walking',
+    walk: 'Walking',
+    run: 'Running',
+    attack: [],
+    death: 'Walking',
+    hit: [],
+  }),
 
   // -- forms ---------------------------------------------------------------
   form_sheep: {
@@ -1507,6 +1651,7 @@ const REALM_MOB_DEFAULTS: Partial<Record<string, string>> = {
   crypticrealm: 'realm_infernal_human_tainted_hood',
   infernal: 'realm_infernal_horned_demon',
   classic: 'realm_classic_orc',
+  claudecraft: 'realm_claudecraft_dark_wanderer',
 };
 
 const REALM_MOB_FAMILY_KEYS: Partial<Record<string, Partial<Record<string, string>>>> = {
@@ -1527,6 +1672,17 @@ const REALM_MOB_FAMILY_KEYS: Partial<Record<string, Partial<Record<string, strin
     demon: 'hellmaw_husk_body',
     elemental: 'hellmaw_lava_fiend_body',
     dragonkin: 'hellmaw_dragon_body',
+  },
+  // Claudecraft draws on its own authored bank instead of the generic KayKit
+  // fallbacks. Families with no convincing body in the store (elemental,
+  // spider, burrower, troll, ogre) are deliberately left to FAMILY_KEYS.
+  claudecraft: {
+    beast: 'realm_claudecraft_blue_beast',
+    humanoid: 'realm_claudecraft_dark_wanderer',
+    undead: 'realm_claudecraft_skeleton_archer',
+    demon: 'realm_claudecraft_demon',
+    dragonkin: 'realm_claudecraft_arcane_dragon',
+    mudfin: 'realm_claudecraft_water_dinosaur',
   },
 };
 
