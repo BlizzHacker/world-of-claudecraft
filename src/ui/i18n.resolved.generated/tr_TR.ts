@@ -7178,6 +7178,14 @@ export const tr_TR: EnTranslations = {
         "name": "Demir Nara",
         "description": "Saldırı gücünü 2 dakika boyunca {buff} artırır."
       },
+      "commanding_shout": {
+        "name": "Güçlendiren Nara",
+        "description": "Dayanıklılığını 2 dakika boyunca {buff} artırır."
+      },
+      "rend": {
+        "name": "Derin Yarık",
+        "description": "Hedefi yaralar, {duration} saniye boyunca {damage} kanama hasarı vermesine yol açar."
+      },
       "demoralizing_shout": {
         "name": "Vahim Uluma",
         "description": "Korkunç bir nara atarak yakındaki tüm düşmanların saldırı gücünü 30 saniye boyunca {buff} azaltır."
@@ -8341,14 +8349,6 @@ export const tr_TR: EnTranslations = {
       "revive_pet": {
         "name": "Evcili Diriltme",
         "description": "Patch up your companion, restoring {overTime} health over 12 sec in 3-sec ticks while it is alive. If it is dead, revive it at 35% health."
-      },
-      "commanding_shout": {
-        "description": "Dayanıklılığını 2 dakika boyunca {buff} artırır.",
-        "name": "Güçlendiren Nara"
-      },
-      "rend": {
-        "description": "Hedefi yaralar, {duration} saniye boyunca {damage} kanama hasarı vermesine yol açar.",
-        "name": "Derin Yarık"
       }
     },
     "items": {

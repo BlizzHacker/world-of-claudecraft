@@ -7178,6 +7178,14 @@ export const ru_RU: EnTranslations = {
         "name": "Железный рёв",
         "description": "Повышает вашу силу атаки на {buff} на 2 мин."
       },
+      "commanding_shout": {
+        "name": "Ободряющий клич",
+        "description": "Повышает вашу выносливость на {buff} на 2 мин."
+      },
+      "rend": {
+        "name": "Глубокий разрез",
+        "description": "Ранит цель, вызывая кровотечение на {damage} ед. урона за {duration} сек."
+      },
       "demoralizing_shout": {
         "name": "Зловещий вой",
         "description": "Издает устрашающий крик, снижая силу атаки всех противников поблизости на {buff} на 30 сек."
@@ -8341,14 +8349,6 @@ export const ru_RU: EnTranslations = {
       "revive_pet": {
         "name": "Оживление питомца",
         "description": "Patch up your companion, restoring {overTime} health over 12 sec in 3-sec ticks while it is alive. If it is dead, revive it at 35% health."
-      },
-      "commanding_shout": {
-        "name": "Ободряющий клич",
-        "description": "Повышает вашу выносливость на {buff} на 2 мин."
-      },
-      "rend": {
-        "name": "Глубокий разрез",
-        "description": "Ранит цель, вызывая кровотечение на {damage} ед. урона за {duration} сек."
       }
     },
     "items": {

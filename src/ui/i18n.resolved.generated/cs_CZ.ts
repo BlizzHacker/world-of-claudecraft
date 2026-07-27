@@ -7178,6 +7178,14 @@ export const cs_CZ: EnTranslations = {
         "name": "Železný řev",
         "description": "Zvýší tvoji sílu útoku o {buff} na 2 min."
       },
+      "commanding_shout": {
+        "name": "Povzbuzující pokřik",
+        "description": "Zvýší tvoji výdrž o {buff} na 2 min."
+      },
+      "rend": {
+        "name": "Hluboká rána",
+        "description": "Zraní cíl a způsobí mu krvácení za {damage} poškození během {duration} s."
+      },
       "demoralizing_shout": {
         "name": "Děsivé vytí",
         "description": "Vypustíš děsivý řev, který sníží sílu útoku všech blízkých nepřátel o {buff} na 30 s."
@@ -8341,14 +8349,6 @@ export const cs_CZ: EnTranslations = {
       "revive_pet": {
         "name": "Oživit mazlíčka",
         "description": "Patch up your companion, restoring {overTime} health over 12 sec in 3-sec ticks while it is alive. If it is dead, revive it at 35% health."
-      },
-      "commanding_shout": {
-        "description": "Zvýší tvoji výdrž o {buff} na 2 min.",
-        "name": "Povzbuzující pokřik"
-      },
-      "rend": {
-        "description": "Zraní cíl a způsobí mu krvácení za {damage} poškození během {duration} s.",
-        "name": "Hluboká rána"
       }
     },
     "items": {

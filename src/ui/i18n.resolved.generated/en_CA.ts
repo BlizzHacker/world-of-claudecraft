@@ -7178,6 +7178,14 @@ export const en_CA: EnTranslations = {
         "name": "Iron Bellow",
         "description": "A shout that increases the attack power of all party members by {buff}% for 30 min."
       },
+      "commanding_shout": {
+        "name": "Bolstering Cry",
+        "description": "Increases your Stamina by {buff} for 2 min."
+      },
+      "rend": {
+        "name": "Deep Gash",
+        "description": "Wounds the target, causing them to bleed for {damage} damage over {duration} sec."
+      },
       "demoralizing_shout": {
         "name": "Direhowl",
         "description": "Lets out a fearsome shout, reducing the damage dealt by all nearby enemies by {buff}% for 20 sec."

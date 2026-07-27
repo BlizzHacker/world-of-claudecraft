@@ -7178,6 +7178,14 @@ export const zh_TW: EnTranslations = {
         "name": "鐵嗓怒吼",
         "description": "使你的攻擊強度提高 {buff}，持續 2 分鐘。"
       },
+      "commanding_shout": {
+        "name": "激勵吶喊",
+        "description": "使你的耐力提高 {buff}，持續 2 分鐘。"
+      },
+      "rend": {
+        "name": "深切裂傷",
+        "description": "撕裂目標，使其在 {duration} 秒內流血並受到 {damage} 點傷害。"
+      },
       "demoralizing_shout": {
         "name": "厲嚎",
         "description": "發出可怕的怒吼，使附近所有敵人的攻擊強度降低 {buff}，持續 30 秒。"
@@ -8341,14 +8349,6 @@ export const zh_TW: EnTranslations = {
       "revive_pet": {
         "name": "復活寵物",
         "description": "Patch up your companion, restoring {overTime} health over 12 sec in 3-sec ticks while it is alive. If it is dead, revive it at 35% health."
-      },
-      "commanding_shout": {
-        "name": "激勵吶喊",
-        "description": "使你的耐力提高 {buff}，持續 2 分鐘。"
-      },
-      "rend": {
-        "name": "深切裂傷",
-        "description": "撕裂目標，使其在 {duration} 秒內流血並受到 {damage} 點傷害。"
       }
     },
     "items": {

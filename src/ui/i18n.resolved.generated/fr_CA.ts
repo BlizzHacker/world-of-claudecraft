@@ -7178,6 +7178,14 @@ export const fr_CA: EnTranslations = {
         "name": "Beuglement de fer",
         "description": "Augmente votre puissance d'attaque de {buff} pendant 2 min."
       },
+      "commanding_shout": {
+        "name": "Cri fortifiant",
+        "description": "Augmente votre Endurance de {buff} pendant 2 min."
+      },
+      "rend": {
+        "name": "Entaille profonde",
+        "description": "Blesse la cible et la fait saigner pour {damage} points de dégâts en {duration} s."
+      },
       "demoralizing_shout": {
         "name": "Direhowl",
         "description": "Pousse un cri terrifiant qui réduit la puissance d'attaque de tous les ennemis proches de {buff} pendant 30 s."
@@ -8341,14 +8349,6 @@ export const fr_CA: EnTranslations = {
       "revive_pet": {
         "name": "Ranimer le familier",
         "description": "Patch up your companion, restoring {overTime} health over 12 sec in 3-sec ticks while it is alive. If it is dead, revive it at 35% health."
-      },
-      "commanding_shout": {
-        "name": "Cri fortifiant",
-        "description": "Augmente votre Endurance de {buff} pendant 2 min."
-      },
-      "rend": {
-        "name": "Entaille profonde",
-        "description": "Blesse la cible et la fait saigner pour {damage} points de dégâts en {duration} s."
       }
     },
     "items": {

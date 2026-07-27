@@ -7178,6 +7178,14 @@ export const pl_PL: EnTranslations = {
         "name": "Żelazny ryk",
         "description": "Zwiększa twoją moc ataku o {buff} na 2 min."
       },
+      "commanding_shout": {
+        "name": "Krzepiący okrzyk",
+        "description": "Zwiększa twoją kondycję o {buff} na 2 min."
+      },
+      "rend": {
+        "name": "Głęboka rana",
+        "description": "Rani cel, powodując krwawienie zadające {damage} obrażeń w ciągu {duration} sek."
+      },
       "demoralizing_shout": {
         "name": "Złowieszcze wycie",
         "description": "Wydaje przerażający okrzyk, zmniejszając moc ataku wszystkich pobliskich wrogów o {buff} na 30 sek."
@@ -8341,14 +8349,6 @@ export const pl_PL: EnTranslations = {
       "revive_pet": {
         "name": "Wskrzeszenie zwierzęcia",
         "description": "Patch up your companion, restoring {overTime} health over 12 sec in 3-sec ticks while it is alive. If it is dead, revive it at 35% health."
-      },
-      "commanding_shout": {
-        "description": "Zwiększa twoją kondycję o {buff} na 2 min.",
-        "name": "Krzepiący okrzyk"
-      },
-      "rend": {
-        "description": "Rani cel, powodując krwawienie zadające {damage} obrażeń w ciągu {duration} sek.",
-        "name": "Głęboka rana"
       }
     },
     "items": {

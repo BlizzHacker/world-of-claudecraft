@@ -7178,6 +7178,14 @@ export const it_IT: EnTranslations = {
         "name": "Urlo di Ferro",
         "description": "Aumenta la tua potenza d'attacco di {buff} per 2 min."
       },
+      "commanding_shout": {
+        "name": "Grido Rincuorante",
+        "description": "Aumenta la tua Tempra di {buff} per 2 min."
+      },
+      "rend": {
+        "name": "Squarcio Profondo",
+        "description": "Ferisce il bersaglio e lo fa sanguinare per {damage} danni in {duration} sec."
+      },
       "demoralizing_shout": {
         "name": "Ululato Sinistro",
         "description": "Emette un urlo terrificante, riducendo la potenza d'attacco di tutti i nemici vicini di {buff} per 30 sec."
@@ -8341,14 +8349,6 @@ export const it_IT: EnTranslations = {
       "revive_pet": {
         "name": "Rianima Famiglio",
         "description": "Patch up your companion, restoring {overTime} health over 12 sec in 3-sec ticks while it is alive. If it is dead, revive it at 35% health."
-      },
-      "commanding_shout": {
-        "name": "Grido Rincuorante",
-        "description": "Aumenta la tua Tempra di {buff} per 2 min."
-      },
-      "rend": {
-        "name": "Squarcio Profondo",
-        "description": "Ferisce il bersaglio e lo fa sanguinare per {damage} danni in {duration} sec."
       }
     },
     "items": {

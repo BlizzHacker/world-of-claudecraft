@@ -7178,6 +7178,14 @@ export const id_ID: EnTranslations = {
         "name": "Raungan Besi",
         "description": "Meningkatkan daya serangmu sebesar {buff} selama 2 menit."
       },
+      "commanding_shout": {
+        "name": "Seruan Penguat",
+        "description": "Meningkatkan Staminamu sebesar {buff} selama 2 menit."
+      },
+      "rend": {
+        "name": "Sayatan Dalam",
+        "description": "Melukai target, membuatnya berdarah sebesar {damage} kerusakan selama {duration} detik."
+      },
       "demoralizing_shout": {
         "name": "Direhowl",
         "description": "Melepaskan pekikan menyeramkan, mengurangi kekuatan serang semua musuh di sekitar sebesar {buff} selama 30 detik."
@@ -8341,14 +8349,6 @@ export const id_ID: EnTranslations = {
       "revive_pet": {
         "name": "Hidupkan Peliharaan",
         "description": "Patch up your companion, restoring {overTime} health over 12 sec in 3-sec ticks while it is alive. If it is dead, revive it at 35% health."
-      },
-      "commanding_shout": {
-        "description": "Meningkatkan Staminamu sebesar {buff} selama 2 menit.",
-        "name": "Seruan Penguat"
-      },
-      "rend": {
-        "description": "Melukai target, membuatnya berdarah sebesar {damage} kerusakan selama {duration} detik.",
-        "name": "Sayatan Dalam"
       }
     },
     "items": {

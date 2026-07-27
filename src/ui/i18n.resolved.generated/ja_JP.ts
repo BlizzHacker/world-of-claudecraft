@@ -7178,6 +7178,14 @@ export const ja_JP: EnTranslations = {
         "name": "鉄の咆哮",
         "description": "2分間、攻撃力が{buff}増加します。"
       },
+      "commanding_shout": {
+        "name": "鼓舞の号令",
+        "description": "2分間、スタミナが{buff}増加します。"
+      },
+      "rend": {
+        "name": "深き裂傷",
+        "description": "対象を負傷させ、{duration}秒かけて{damage}の出血ダメージを与えます。"
+      },
       "demoralizing_shout": {
         "name": "戦慄の遠吠え",
         "description": "恐ろしい雄叫びを上げ、30秒間、周囲の敵すべての攻撃力を{buff}低下させます。"
@@ -8341,14 +8349,6 @@ export const ja_JP: EnTranslations = {
       "revive_pet": {
         "name": "ペット蘇生",
         "description": "Patch up your companion, restoring {overTime} health over 12 sec in 3-sec ticks while it is alive. If it is dead, revive it at 35% health."
-      },
-      "commanding_shout": {
-        "name": "鼓舞の号令",
-        "description": "2分間、スタミナが{buff}増加します。"
-      },
-      "rend": {
-        "name": "深き裂傷",
-        "description": "対象を負傷させ、{duration}秒かけて{damage}の出血ダメージを与えます。"
       }
     },
     "items": {

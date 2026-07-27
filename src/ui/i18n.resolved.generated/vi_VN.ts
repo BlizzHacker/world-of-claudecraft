@@ -7178,6 +7178,14 @@ export const vi_VN: EnTranslations = {
         "name": "Tiếng Gầm Thép",
         "description": "Tăng sức mạnh tấn công của ngươi thêm {buff} trong 2 phút."
       },
+      "commanding_shout": {
+        "name": "Tiếng Hô Trợ Uy",
+        "description": "Tăng Thể Lực của ngươi thêm {buff} trong 2 phút."
+      },
+      "rend": {
+        "name": "Vết Rạch Sâu",
+        "description": "Gây vết thương cho mục tiêu, khiến chúng chảy máu nhận {damage} sát thương trong {duration} giây."
+      },
       "demoralizing_shout": {
         "name": "Tiếng Hú Hung Hiểm",
         "description": "Bật ra tiếng hô đáng sợ, giảm sức tấn công của tất cả kẻ địch xung quanh đi {buff} trong 30 giây."
@@ -8341,14 +8349,6 @@ export const vi_VN: EnTranslations = {
       "revive_pet": {
         "name": "Hồi Sinh Thú",
         "description": "Patch up your companion, restoring {overTime} health over 12 sec in 3-sec ticks while it is alive. If it is dead, revive it at 35% health."
-      },
-      "commanding_shout": {
-        "description": "Tăng Thể Lực của ngươi thêm {buff} trong 2 phút.",
-        "name": "Tiếng Hô Trợ Uy"
-      },
-      "rend": {
-        "description": "Gây vết thương cho mục tiêu, khiến chúng chảy máu nhận {damage} sát thương trong {duration} giây.",
-        "name": "Vết Rạch Sâu"
       }
     },
     "items": {

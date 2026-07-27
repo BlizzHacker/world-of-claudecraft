@@ -7178,6 +7178,14 @@ export const nl_NL: EnTranslations = {
         "name": "IJzeren Gebrul",
         "description": "Verhoogt je aanvalskracht met {buff} gedurende 2 min."
       },
+      "commanding_shout": {
+        "name": "Versterkende Kreet",
+        "description": "Verhoogt je Uithoudingsvermogen met {buff} gedurende 2 min."
+      },
+      "rend": {
+        "name": "Diepe Snee",
+        "description": "Verwondt het doelwit, waardoor het {damage} schade bloedt gedurende {duration} sec."
+      },
       "demoralizing_shout": {
         "name": "Grimmig Gehuil",
         "description": "Slaakt een angstaanjagende kreet die de aanvalskracht van alle nabije vijanden met {buff} verlaagt gedurende 30 sec."
@@ -8341,14 +8349,6 @@ export const nl_NL: EnTranslations = {
       "revive_pet": {
         "name": "Huisdier Herleven",
         "description": "Patch up your companion, restoring {overTime} health over 12 sec in 3-sec ticks while it is alive. If it is dead, revive it at 35% health."
-      },
-      "commanding_shout": {
-        "description": "Verhoogt je Uithoudingsvermogen met {buff} gedurende 2 min.",
-        "name": "Versterkende Kreet"
-      },
-      "rend": {
-        "description": "Verwondt het doelwit, waardoor het {damage} schade bloedt gedurende {duration} sec.",
-        "name": "Diepe Snee"
       }
     },
     "items": {

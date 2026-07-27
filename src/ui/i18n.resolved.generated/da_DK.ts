@@ -7178,6 +7178,14 @@ export const da_DK: EnTranslations = {
         "name": "Jernbrøl",
         "description": "Øger din angrebskraft med {buff} i 2 min."
       },
+      "commanding_shout": {
+        "name": "Styrkende Råb",
+        "description": "Øger din Udholdenhed med {buff} i 2 min."
+      },
+      "rend": {
+        "name": "Dyb Flænge",
+        "description": "Sårer målet og får det til at bløde for {damage} skade over {duration} sek."
+      },
       "demoralizing_shout": {
         "name": "Rædselshyl",
         "description": "Udstøder et frygtindgydende råb, der sænker angrebsstyrken hos alle nærliggende fjender med {buff} i 30 sek."
@@ -8341,14 +8349,6 @@ export const da_DK: EnTranslations = {
       "revive_pet": {
         "name": "Genoplive Kæledyr",
         "description": "Patch up your companion, restoring {overTime} health over 12 sec in 3-sec ticks while it is alive. If it is dead, revive it at 35% health."
-      },
-      "commanding_shout": {
-        "description": "Øger din Udholdenhed med {buff} i 2 min.",
-        "name": "Styrkende Råb"
-      },
-      "rend": {
-        "description": "Sårer målet og får det til at bløde for {damage} skade over {duration} sek.",
-        "name": "Dyb Flænge"
       }
     },
     "items": {

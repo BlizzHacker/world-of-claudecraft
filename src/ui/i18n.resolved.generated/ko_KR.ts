@@ -7178,6 +7178,14 @@ export const ko_KR: EnTranslations = {
         "name": "강철의 외침",
         "description": "2분 동안 전투력이 {buff}만큼 증가합니다."
       },
+      "commanding_shout": {
+        "name": "북돋는 외침",
+        "description": "2분 동안 체력이 {buff}만큼 증가합니다."
+      },
+      "rend": {
+        "name": "깊은 상처",
+        "description": "대상을 상처 입혀 {duration}초에 걸쳐 {damage}의 출혈 피해를 입힙니다."
+      },
       "demoralizing_shout": {
         "name": "흉포한 울부짖음",
         "description": "무시무시한 외침을 내질러 30초 동안 주위 모든 적의 전투력을 {buff}만큼 감소시킵니다."
@@ -8341,14 +8349,6 @@ export const ko_KR: EnTranslations = {
       "revive_pet": {
         "name": "소환수 소생",
         "description": "Patch up your companion, restoring {overTime} health over 12 sec in 3-sec ticks while it is alive. If it is dead, revive it at 35% health."
-      },
-      "commanding_shout": {
-        "name": "북돋는 외침",
-        "description": "2분 동안 체력이 {buff}만큼 증가합니다."
-      },
-      "rend": {
-        "name": "깊은 상처",
-        "description": "대상을 상처 입혀 {duration}초에 걸쳐 {damage}의 출혈 피해를 입힙니다."
       }
     },
     "items": {

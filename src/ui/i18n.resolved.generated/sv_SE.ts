@@ -7178,6 +7178,14 @@ export const sv_SE: EnTranslations = {
         "name": "Järnvrål",
         "description": "Ökar din attackkraft med {buff} i 2 min."
       },
+      "commanding_shout": {
+        "name": "Stärkande rop",
+        "description": "Ökar din uthållighet med {buff} i 2 min."
+      },
+      "rend": {
+        "name": "Djup skåra",
+        "description": "Sårar målet och får det att blöda för {damage} skada över {duration} sek."
+      },
       "demoralizing_shout": {
         "name": "Fasans tjut",
         "description": "Utstöter ett skräckinjagande rop som sänker anfallskraften hos alla närliggande fiender med {buff} i 30 sek."
@@ -8341,14 +8349,6 @@ export const sv_SE: EnTranslations = {
       "revive_pet": {
         "name": "Återuppliva djur",
         "description": "Patch up your companion, restoring {overTime} health over 12 sec in 3-sec ticks while it is alive. If it is dead, revive it at 35% health."
-      },
-      "commanding_shout": {
-        "description": "Ökar din uthållighet med {buff} i 2 min.",
-        "name": "Stärkande rop"
-      },
-      "rend": {
-        "description": "Sårar målet och får det att blöda för {damage} skada över {duration} sek.",
-        "name": "Djup skåra"
       }
     },
     "items": {
