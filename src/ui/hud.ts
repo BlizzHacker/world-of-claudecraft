@@ -954,6 +954,49 @@ function yellVoiceKey(text: string): string {
 const CHEAT_DEATH_SAVE_TEXT = 'Cheat Death saves you!';
 
 export class Hud {
+  private lastMusicDungeonId: string | null = null;
+  private openLootMobId: number | null = null;
+  private openLootChestId: number | null = null;
+  private readonly cardDuelWindow = new CardDuelWindow({
+    root: () => $('#card-duel-window'),
+    world: () => this.sim,
+    closeOthers: () => this.closeOtherWindows('#card-duel-window'),
+    ...this.windowFocus('#card-duel-window'),
+  });
+  private openDelveBoardNpcId: number | null = null;
+  private delveBoardTab: 'delve' | 'shop' = 'delve';
+  private selectedDelveTier: 'normal' | 'heroic' = 'normal';
+  private delveTrap: FocusTrapHandle | null = null;
+  private riteTrap: FocusTrapHandle | null = null;
+  private lastDelveTrackerSig = '';
+  private questDialogOpenedAtMs = 0;
+  private questDialogTrap: FocusTrapHandle | null = null;
+  private voiceNpcId: number | null = null;
+  private openGossipNpcId: number | null = null;
+  private openQuestDetailId: string | null = null;
+  private activeMasterRolls = new Map<
+    number,
+    { event: Extract<SimEvent, { type: 'masterLoot' }>; receivedAt: number; durationMs: number }
+  >();
+  private activeLootRolls = new Map<
+    number,
+    { event: Extract<SimEvent, { type: 'lootRoll' }>; receivedAt: number; durationMs: number }
+  >();
+  private dismissedLootRolls = new Set<number>();
+  private confirmedLootRolls = new Set<number>();
+  private lootRollStatusRows: LootRollStatusRow[] = [];
+  private lootRollStatusFp = '';
+  private lootRollWatchTimers = new Map<number, number>();
+  toggleCardDuel(): void {
+    this.cardDuelWindow.toggle();
+  }
+  private cardSlug(name: string): string {
+    return name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 40);
+  }
   // Ability slots across three rows: 1..11 primary, 12..22 secondary, and
   // 23..33 third (slot 0 is the Attack toggle on the primary row). Every row
   // shares one hotbarActions array, so drag/drop, persistence, and keybind
