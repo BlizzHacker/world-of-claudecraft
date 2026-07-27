@@ -11,6 +11,7 @@ import { resolveActiveRealmId } from '../../sim/realms/registry';
 import type { Entity, PlayerClass } from '../../sim/types';
 import { ITEM_WEAPON_VARIANTS } from '../../ui/weapon_variants';
 import type { OverheadEmoteId } from '../../world_api';
+import { GENERATED_VISUALS } from './manifest.generated';
 import {
   hostileHumanoidVisualKey,
   infernalNpcVisualKey,
@@ -590,7 +591,7 @@ const VELOCIRAPTOR: ClipMap = {
 // The manifest
 // ---------------------------------------------------------------------------
 
-export const VISUALS: Record<string, VisualDef> = {
+const HAND_VISUALS: Record<string, VisualDef> = {
   // -- player classes ------------------------------------------------------
   player_warrior: {
     url: `${PLAYERS}/knight.glb`,
@@ -1689,6 +1690,14 @@ export const VISUALS: Record<string, VisualDef> = {
       death: 'Idle',
     },
   },
+};
+
+// Hand-authored entries above; pipeline-generated bodies below. Spread order is
+// deliberate: GENERATED first, HAND second, so a curated key ALWAYS wins over a
+// generated one of the same name and re-running the asset pipeline is safe.
+export const VISUALS: Record<string, VisualDef> = {
+  ...GENERATED_VISUALS,
+  ...HAND_VISUALS,
 };
 
 // ---------------------------------------------------------------------------
