@@ -83,13 +83,8 @@ import {
   waterContactFrameMode,
 } from './characters/anim_state';
 import { logAssetMissOnce } from './characters/asset_miss_log';
-import {
-  mechAssetsReady,
-  preloadMechAssets,
-  preloadTrainingDummyAssets,
-  trainingDummyAssetsReady,
-} from './characters/assets';
-import { skinCount, visualKeyFor } from './characters/manifest';
+import { mechAssetsReady, preloadMechAssets, preloadTrainingDummyAssets, preloadVisualAssets, trainingDummyAssetsReady, visualAssetsReady } from './characters/assets';
+import { isVisualLazy, skinCount, visualKeyFor } from './characters/manifest';
 import {
   playerRangedAttackAlreadyStarted,
   playerRangedAttackStartsAtLaunch,
@@ -106,7 +101,7 @@ import {
 } from './crowd_lod';
 import { shouldPlayDeedFirework } from './deed_fx_gate';
 import { buildDelveModule } from './delve_interiors';
-import { buildDelveInteractable } from './delve_props';
+import { buildDelveInteractable, syncDelveInteractableVisibility } from './delve_props';
 import { type BoarpitView, buildBoarpit } from './boarpit';
 import { buildEastbrookHomes, type EastbrookHomesView } from './eastbrook_homes';
 import { buildDerbyTrack, type DerbyTrackView } from './derby_track';
@@ -236,6 +231,8 @@ import { Weather } from './weather';
 import { buildWorldAmbientSources, crowdAmbienceAt, footstepSurfaceAt } from './world_audio';
 import { buildYumiMaze, type YumiMazeView } from './yumi_maze';
 import { YumiTeamMarkers } from './yumi_team_markers';
+import { constrainedEntryViewCreateBudget, interactionLandmarkViewPriority, mandatoryLandmarkViewsReady, orderedPrewarmIds, partitionMandatoryLandmarkCandidates, prewarmEntryRuns, PrewarmPolicy, remainingPrewarmViewBudget, resolvePrewarmPolicy } from './prewarm_policy';
+import { loadGltf } from './assets/loader';
 
 // Forged-prop GLB cache (ArcForge generated/uploaded models served at
 // /forged/<name>.glb). buildForgedProp returns a fresh clone when cached, else

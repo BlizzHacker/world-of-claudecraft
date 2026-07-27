@@ -73,13 +73,7 @@ import {
   showLoadingScreen,
 } from './game/loading_screen';
 // mobile_controls: landing-safe helpers only; the MobileControls class is runtime (GameRuntime).
-import {
-  interfaceModeFromSetting,
-  isPhoneTouchDevice,
-  PHONE_TOUCH_QUERY,
-  setInterfaceMode,
-  useTouchInterface,
-} from './game/mobile_controls';
+import { interfaceModeFromSetting, isPhoneTouchDevice, MobileControls, PHONE_TOUCH_QUERY, setInterfaceMode, useTouchInterface } from './game/mobile_controls';
 import { applyMobileHudLayout } from './game/mobile_hud_layout_applier';
 import { watchMobileMoreState } from './game/mobile_more_diagnostics';
 import { mouselookReleaseFacing } from './game/mouselook_release';
@@ -371,6 +365,12 @@ import { mountUserDropdown } from './ui/cryptic/user_dropdown';
 import { mountWalletPanel } from './ui/cryptic/wallet_panel';
 import { notePropPlaced, tryBuilderSelect } from './ui/cryptic/world_builder';
 import { getMe as getMeForEditor, getToken as getTokenForEditor } from './user/api';
+import { audio } from './game/audio';
+import { claudiumBalanceAddress } from './ui/claudium_view';
+import { devTierDisplayName } from './ui/dev_tier';
+import { ensureDeedLocalesLoaded } from './ui/deed_i18n';
+import { isDevGuiCommand } from './ui/dev_command_view';
+import { localPartyMemberIds } from './game/corpse_loot_availability';
 
 // SECURITY: an SSO/realm handoff arrives as `/#auth_token=...&auth_user=...`.
 // Capture it into memory and SCRUB the address bar on the very first line of

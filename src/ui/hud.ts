@@ -43,7 +43,7 @@ import { HEROIC_VENDOR_STOCK } from '../sim/content/heroic_vendor';
 import { recipeById } from '../sim/content/recipes';
 import { FIRST_TALENT_LEVEL, type TalentAllocation, talentsFor } from '../sim/content/talents';
 import { resolveActiveWeaponSkin } from '../sim/content/weapon_skin_rules';
-import type { ZoneDef } from '../sim/data';
+import type { delveAt, questRewardItem, ZoneDef } from '../sim/data';
 import {
   ABILITIES,
   ALL_RECIPES,
@@ -78,21 +78,7 @@ import { TIER_SKILL_STEP, tierForSkill } from '../sim/professions/wheel';
 import { type QuestObjectiveRef, questObjectivesForMob } from '../sim/quest_targets';
 import { activeMaxLevel } from '../sim/realms/registry';
 import type { ResolvedAbility } from '../sim/sim';
-import type {
-  AbilityDef,
-  CalendarResultCode,
-  EquipSlot,
-  HonorReason,
-  InvSlot,
-  ItemInstancePayload,
-  ItemSlot,
-  MailResultCode,
-  MotdResultCode,
-  PetMode,
-  PlayerClass,
-  ResourceType,
-  SkinCatalog,
-} from '../sim/types';
+import type { AbilityDef, CalendarResultCode, EquipSlot, HonorReason, InvSlot, isQuestTurnInNpc, ItemInstancePayload, ItemSlot, LootRollChoice, MailResultCode, MotdResultCode, PetMode, PlayerClass, ResourceType, SkinCatalog, SkinRank } from '../sim/types';
 import {
   type AbilityEffect,
   type AuraKind,
@@ -368,16 +354,7 @@ import { buildUnbindView } from './hud/vendor/unbind_view';
 import { renderUnbindWindow } from './hud/vendor/unbind_window';
 import { buildVendorView } from './hud/vendor/vendor_view';
 import { renderVendorWindow } from './hud/vendor/vendor_window';
-import {
-  formatMoney as formatLocalizedMoney,
-  formatNumber,
-  moneyParts,
-  type SupportedLanguage,
-  type TranslationKey,
-  t,
-  tOptional,
-  tPlural,
-} from './i18n';
+import { formatMoney as formatLocalizedMoney, formatNumber, getLanguage, moneyParts, t, tOptional, tPlural, type SupportedLanguage, type TranslationKey } from './i18n';
 import { iconDataUrl, QUALITY_COLOR, raidMarkerDataUrl } from './icons';
 import { InspectWindow } from './inspect_window';
 import { itemArmorTypeLabelKey } from './item_armor_type';
@@ -398,6 +375,8 @@ import { LeaderboardWindow } from './leaderboard_window';
 import { ReannounceMarker } from './live_region_reannounce';
 import { isCombatFlavorLog } from './log_event_route';
 import { lowHealthVignette } from './low_health';
+import { EVENT_SKIN_TIERS, SkinTier } from '../sim/content/skins';
+import { DelveRunInfo } from '../world_api/delves';
 import { lowResourceView } from './low_resource';
 import { mailIndicatorView } from './mailbox_view';
 import { MailboxWindow } from './mailbox_window';
@@ -412,6 +391,7 @@ import {
   npcMarkerAt,
   questAreaObjectivesAt,
 } from './map_window_view';
+import { computeLootRollStatusRows, lootRollStatusFingerprint, LootRollStatusRow } from './hud/loot/loot_roll_status_view';
 import { marketCollectIndicatorView } from './market_view';
 import { MarketWindow } from './market_window';
 import { materialHintLine } from './material_hint_view';
