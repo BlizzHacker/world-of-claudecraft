@@ -12,6 +12,7 @@
 //   node rig_batch.mjs --list entries.json --out /staging [--concurrency 4] [--limit N]
 
 import { manualRigOntoReference } from '../asset_pipeline/lib/manual_rig.mjs';
+import { humanoidVerdict } from './humanoid_gate.mjs';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { readFileSync, writeFileSync, mkdirSync, existsSync, copyFileSync, rmSync, statSync } from 'node:fs';
@@ -96,6 +97,15 @@ async function processOne(entry) {
     mkdirSync(work, { recursive: true });
     const local = join(work, 'raw.glb');
     copyFileSync(src, local);
+    // Shape gate BEFORE paying to decimate+rig. The name lexicon lets through skull
+    // piles, spiders and plinth-mounted props; they all rig "successfully" and all
+    // look absurd in motion. Only proportions catch them.
+    const shape = humanoidVerdict(local);
+    if (!shape.ok) {
+      rmSync(work, { recursive: true, force: true });
+      return { key, realm, ok: false, gated: true, ms: Date.now() - t0,
+        reason: `not humanoid: ${shape.reason}` };
+    }
     const dec = await decimate(local, work);
     const outGlb = join(work, 'rigged.glb');
     // preRotated: manual_rig defaults to a -90deg yaw, which leaves Meshy/PICKTURA
