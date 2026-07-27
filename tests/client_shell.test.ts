@@ -77,7 +77,7 @@ const supportHtml = readFileSync(
   'utf8',
 ).replace(/\r\n/g, '\n');
 const whitepaperUrl = new URL(
-  '../public/World-of-Cryptic Realm-Whitepaper-v1.0.pdf',
+  '../public/World-of-Cryptic-Realm-Whitepaper-v1.0.pdf',
   import.meta.url,
 );
 const viteConfig = readFileSync(new URL('../vite.config.ts', import.meta.url), 'utf8').replace(
@@ -118,6 +118,7 @@ const actionBarLayoutSyncTs = readFileSync(
 // The Esc options menu was extracted to options_view.ts (the declarative menu
 // model) + options_window.ts (the painter); the menu guard reads the
 // model rather than the old inline hud.ts main-menu builder.
+const optionsIaTs = readFileSync(new URL('../src/ui/options_ia.ts', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
 const optionsViewTs = readFileSync(
   new URL('../src/ui/options_view.ts', import.meta.url),
   'utf8',
@@ -354,7 +355,7 @@ describe('client HTML shell', () => {
     // tag also locks the attribute order + the exact i18n key across entries.
     for (const entry of [html, playHtml]) {
       expect(entry).toContain(
-        'id="player-frame" class="unitframe" role="group" tabindex="0" aria-haspopup="menu" data-i18n-aria="hudChrome.unitFrame.playerLabel"',
+        'id="player-frame" class="unitframe has-orbs" role="group" tabindex="0" aria-haspopup="menu" data-i18n-aria="hudChrome.unitFrame.playerLabel"',
       );
     }
   });
@@ -791,61 +792,57 @@ describe('client HTML shell', () => {
     expect(html).toContain(
       '<meta name="robots" content="index, follow, max-image-preview:large" />',
     );
-    expect(html).toContain('<link rel="canonical" href="https://worldofclaudecraft.com/" />');
-    expect(html).toContain('<meta property="og:site_name" content="World of ClaudeCraft" />');
-    expect(html).toContain('"alternateName": "World of Claudecraft"');
-    expect(html).toContain('"https://github.com/levy-street/world-of-claudecraft"');
-    expect(mainTs).toContain("alternateName: 'World of Claudecraft'");
-    expect(mainTs).toContain("'https://github.com/levy-street/world-of-claudecraft'");
+    // Cryptic Realm's own host and site name: branding_guard forbids upstream
+    // branding on every public surface, so these two tests must agree.
+    expect(html).toContain('<link rel="canonical" href="https://crypticrealm.com/" />');
+    expect(html).toContain('<meta property="og:site_name" content="Cryptic Realm" />');
     expect(robotsTxt.trim()).toBe(
-      'User-agent: *\nAllow: /\n\nSitemap: https://worldofclaudecraft.com/sitemap.xml\nSitemap: https://worldofclaudecraft.com/sitemap-characters.xml',
+      'User-agent: *\nAllow: /\n\nSitemap: https://crypticrealm.com/sitemap.xml',
     );
-    expect(robotsTxt).toContain('Sitemap: https://worldofclaudecraft.com/sitemap.xml');
-    // The dynamic per-character sitemap (served by the game server) is advertised too.
-    expect(robotsTxt).toContain('Sitemap: https://worldofclaudecraft.com/sitemap-characters.xml');
-    expect(sitemapXml).toContain('<loc>https://worldofclaudecraft.com/</loc>');
-    expect(sitemapXml).toContain('<loc>https://worldofclaudecraft.com/links</loc>');
-    expect(sitemapXml).toContain('<loc>https://worldofclaudecraft.com/play</loc>');
+    expect(robotsTxt).toContain('Sitemap: https://crypticrealm.com/sitemap.xml');
+    expect(sitemapXml).toContain('<loc>https://crypticrealm.com/</loc>');
+    expect(sitemapXml).toContain('<loc>https://crypticrealm.com/links</loc>');
+    expect(sitemapXml).toContain('<loc>https://crypticrealm.com/play</loc>');
     expect(playHtml).toContain(
-      '<link rel="canonical" href="https://worldofclaudecraft.com/play" />',
+      '<link rel="canonical" href="https://crypticrealm.com/play" />',
     );
     expect(playHtml).toContain(
-      '<meta property="og:url" content="https://worldofclaudecraft.com/play" />',
+      '<meta property="og:url" content="https://crypticrealm.com/play" />',
     );
-    expect(playHtml).toContain('"url": "https://worldofclaudecraft.com/play"');
-    expect(sitemapXml).toContain('<loc>https://worldofclaudecraft.com/privacy</loc>');
-    expect(sitemapXml).toContain('<loc>https://worldofclaudecraft.com/terms</loc>');
-    expect(sitemapXml).toContain('<loc>https://worldofclaudecraft.com/data-deletion</loc>');
-    expect(sitemapXml).toContain('<loc>https://worldofclaudecraft.com/support</loc>');
+    expect(playHtml).toContain('"url": "https://crypticrealm.com/play"');
+    expect(sitemapXml).toContain('<loc>https://crypticrealm.com/privacy</loc>');
+    expect(sitemapXml).toContain('<loc>https://crypticrealm.com/terms</loc>');
+    expect(sitemapXml).toContain('<loc>https://crypticrealm.com/data-deletion</loc>');
+    expect(sitemapXml).toContain('<loc>https://crypticrealm.com/support</loc>');
     expect(privacyHtml).toContain(
-      '<link rel="canonical" href="https://worldofclaudecraft.com/privacy" />',
+      '<link rel="canonical" href="https://crypticrealm.com/privacy" />',
     );
     expect(privacyHtml).toContain('<h1>Privacy Policy</h1>');
     expect(privacyHtml).toContain('href="/support">Support</a>');
     expect(privacyHtml).toContain('href="/data-deletion">Data Deletion</a>');
     expect(termsHtml).toContain(
-      '<link rel="canonical" href="https://worldofclaudecraft.com/terms" />',
+      '<link rel="canonical" href="https://crypticrealm.com/terms" />',
     );
     expect(termsHtml).toContain('<h1>Terms and Conditions</h1>');
     expect(termsHtml).toContain('href="/support">Support</a>');
     expect(termsHtml).toContain('href="/data-deletion">Data Deletion</a>');
     expect(dataDeletionHtml).toContain(
-      '<link rel="canonical" href="https://worldofclaudecraft.com/data-deletion" />',
+      '<link rel="canonical" href="https://crypticrealm.com/data-deletion" />',
     );
     expect(dataDeletionHtml).toContain('<h1>Data Deletion</h1>');
-    expect(dataDeletionHtml).toContain('href="mailto:woc@levystreet.com"');
-    expect(dataDeletionHtml).toContain('href="https://discord.com/invite/worldofclaudecraft"');
+    expect(dataDeletionHtml).toContain('href="mailto:support@crypticrealm.com"');
+    expect(dataDeletionHtml).toContain('href="https://discord.gg/Zdj3JGrx"');
     expect(dataDeletionHtml).toContain('href="/support">Support</a>');
     expect(supportHtml).toContain(
-      '<link rel="canonical" href="https://worldofclaudecraft.com/support" />',
+      '<link rel="canonical" href="https://crypticrealm.com/support" />',
     );
     expect(supportHtml).toContain('<h1>Support</h1>');
-    expect(supportHtml).toContain('href="mailto:woc@levystreet.com"');
-    expect(supportHtml).toContain('href="https://discord.com/invite/worldofclaudecraft"');
+    expect(supportHtml).toContain('href="mailto:support@crypticrealm.com"');
+    expect(supportHtml).toContain('href="https://discord.gg/Zdj3JGrx"');
     expect(supportHtml).toContain('href="/data-deletion">Data Deletion page</a>');
     expect(supportHtml).toContain('"@type": "ContactPage"');
     expect(html).toContain(
-      'href="/World-of-ClaudeCraft-Whitepaper-v1.0.pdf" class="footer-link" data-i18n="footer.whitepaper"',
+      'href="/World-of-Cryptic-Realm-Whitepaper-v1.0.pdf" class="footer-link" data-i18n="footer.whitepaper"',
     );
     expect(html.indexOf('data-i18n="footer.whitepaper"')).toBeLessThan(
       html.indexOf('data-i18n="footer.terms"'),
@@ -1033,7 +1030,7 @@ describe('client HTML shell', () => {
       ['index.html', html],
       ['play.html', playHtml],
     ] as const) {
-      expect(entry.match(/href="https:\/\/ko-fi\.com\/worldofclaudecraft"/g), name).toHaveLength(3);
+      expect(entry.match(/href="\/links\.html#btn-tip"/g), name).toHaveLength(3);
       expect(entry, name).not.toContain('https://github.com/sponsors/levy-street');
     }
   });
@@ -1165,14 +1162,17 @@ describe('client HTML shell', () => {
 
   it('carries the same community-tray links in BOTH entries, with no duplicate Discord entry', () => {
     for (const entry of [html, playHtml]) {
-      expect(entry).toContain('<a class="community-link github"');
+      // The fork ships discord + donate and NO github link (its repo is not
+      // public; branding_guard forbids advertising it).
+      expect(entry).toContain('<a class="community-link discord"');
       expect(entry).toContain('<a class="community-link donate"');
-      expect(entry).not.toContain('<a class="community-link discord"');
+      expect(entry).not.toContain('<a class="community-link github"');
     }
   });
 
   it('keeps the game menu free of duplicate and dev-only entries', () => {
-    const interfaceEntries = optionsViewTs.match(/labelKey: 'hud\.options\.interface'/g) ?? [];
+    // The fork's redesign moved category labels into options_ia.ts as `nameKey`.
+    const interfaceEntries = optionsIaTs.match(/nameKey: 'hud\.options\.interface'/g) ?? [];
     expect(interfaceEntries).toHaveLength(1);
     expect(optionsViewTs).not.toContain('Skin Select (dev)');
     expect(hudTs).not.toContain('Skin Select (dev)');
@@ -1267,7 +1267,6 @@ describe('client HTML shell', () => {
     // No separate Discord invite link here: it duplicated the Discord (U)
     // icon-rail button (#mm-discord), the game HUD's single Discord entry
     // point (see the fix/inspect-camera-talent-overlap-discord-dup PR).
-    expect(html).not.toContain('<a class="community-link discord"');
     expect(hudMobileCss).toContain('body.mobile-touch.game-active #ui {\n    z-index: 80;\n  }');
     expect(hudMobileCss).toContain('body.mobile-touch #community-hud {\n    display: none;\n  }');
     // No stray mobile-touch styling survives for the hidden rail (the old
@@ -1655,10 +1654,10 @@ describe('client HTML shell', () => {
     );
     expect(html).toContain('<div class="panel-title">');
     expect(html).toContain(
-      '<span id="mobile-more-title" data-i18n="hud.core.mobileMore">More</span>',
+      '<span class="window-title" id="mobile-more-title" data-i18n="hud.core.mobileMore">More</span>',
     );
     expect(playHtml).toContain(
-      '<span id="mobile-more-title" data-i18n="hud.core.mobileMore">More</span>',
+      '<span class="window-title" id="mobile-more-title" data-i18n="hud.core.mobileMore">More</span>',
     );
     expect(html).toContain('id="mobile-more-close"');
     for (const entry of [html, playHtml]) {
@@ -1677,10 +1676,10 @@ describe('client HTML shell', () => {
     }
     expect(hudMobileCss).not.toContain('body.mobile-touch.mobile-more-open #mobile-controls');
     expect(html).toContain(
-      '</div>\n    </div>\n  </section>\n      <div id="mobile-extra-controls"',
+      '</div>\n    </div>\n      <div id="mobile-extra-controls"',
     );
     expect(playHtml).toContain(
-      '</div>\n    </div>\n  </div>\n      <div id="mobile-extra-controls"',
+      '</div>\n    </div>\n      <div id="mobile-extra-controls"',
     );
     expect(hudMobileCss).toContain(
       'body.mobile-touch #mobile-extra-controls {\n    position: fixed;\n    left: 50%;\n    top: 50%;\n    bottom: auto;\n    --mobile-more-open-transform: translate(-50%, -50%);\n    --mobile-more-closed-transform: translate(-50%, -46%) scale(0.96);\n    transform: var(--mobile-more-closed-transform);',
@@ -2099,12 +2098,19 @@ describe('client HTML shell', () => {
       "import { stopAutorunForInteraction } from './game/interaction_autorun';",
     );
     expect(mainTs).toContain("import { tryNearbyInteraction } from './game/nearby_interaction';");
-    expect(mainTs).toContain('stopAutorunForInteraction(\n      tryNearbyInteraction(');
+    // The fork routes the pick through handlePickedEntity and feeds its outcome
+    // to stopAutorunForInteraction, instead of upstream's inline
+    // tryNearbyInteraction composition. Same contract: an attempted interaction
+    // stops autorun.
+    expect(mainTs).toContain('const interactionOutcome = handlePickedEntity(');
+    expect(mainTs).toContain(
+      'stopAutorunForInteraction(interactionOutcome, input, mobileControls);',
+    );
     // Open-gate flip: the trailing (online === null) override is gone,
     // so the helpers default harvestStateReliable = true (trusting the hcb
     // corpse-claim mirror online); the call now closes right after the
     // nothing-to-interact string.
-    expect(mainTs).toContain("t('errors.nothingInteract'),\n      ),");
+    expect(mainTs).toContain("hud.showError(t('errors.nothingInteract'));");
     expect(mainTs).not.toContain('online === null');
     expect(mainTs).toContain('const interactionOutcome = handlePickedEntity(');
     expect(mainTs).toContain(
@@ -2113,7 +2119,7 @@ describe('client HTML shell', () => {
     expect(mainTs).toContain(
       'stopAutorunForInteraction(interactionOutcome, input, mobileControls);',
     );
-    expect(mainTs).toContain('stopAutorunForInteraction(\n          handleGatherNodeInteract(');
+    expect(mainTs).toContain('stopAutorunForInteraction(\n      handleGatherNodeInteract(');
     expect(hudMobileCss).not.toContain('body.mobile-touch #mobile-utility-cluster');
     expect(hudMobileCss).not.toContain('body.mobile-touch #mobile-autorun {');
     // The cast bar sits at the classic centre seat above the bottom-centre
@@ -2507,6 +2513,6 @@ describe('client HTML shell', () => {
     expect(mainTs).toContain("['#charselect-panel', '#charcreate-panel', '#offline-select'].find(");
     // Cryptic Realm: the preview builds lazily through loadGameRuntime()
     // (ensureCharacterPreview applies the panel wiring itself).
-    expect(mainTs).toContain('ensureCharacterPreview(activePanelId)');
+    expect(mainTs).toContain('ensureCharacterPreview(panelId)');
   });
 });
