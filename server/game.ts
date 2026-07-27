@@ -161,7 +161,7 @@ import {
 import { applyChatStrike, loadChatFilterState, recordChatViolation } from './chat_filter_db';
 import { ChatLogger } from './chat_log';
 import { dailyRewardService } from './daily_rewards';
-import type { AccountChatMuteStatus, AccountCosmetics, RequestMetadata } from './db';
+import { AccountChatMuteStatus, AccountCosmetics, insertRealmProp, isAdminAccount, isModeratorAccount, RequestMetadata, saveWorldState } from './db';
 import {
   closePlaySession,
   deleteRealmProp,
@@ -281,6 +281,9 @@ import { TickProfiler } from './tick_profiler';
 import { hrtimeToMs, TickRateMeter } from './tick_rate_meter';
 import { holderInfoForPubkey } from './woc_balance';
 import { isBackpressureExceeded } from './ws_backpressure';
+import { RaceInput } from '../src/sim/racing';
+import { resolveRealmCharacterVisual } from '../src/sim/realms/class_visuals';
+import { setRealmHostEnv } from '../src/sim/realms/registry';
 
 const WORLD_SEED = 20061;
 

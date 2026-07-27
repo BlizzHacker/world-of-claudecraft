@@ -125,6 +125,9 @@ export interface SimContextPrimitives {
   // reads/finds/iterates it and mutates slot fields in place; the array identity
   // stays Sim-owned (like delayedEvents/groundAoEs), so this is a live read-only view.
   readonly instances: InstanceSlot[];
+  // Session-only manual-reset cooldowns keyed by durable character identity and
+  // dungeon id. Unlike party instance keys, these survive relogs and party reforming.
+  readonly dungeonResetLocks: Map<string, { availableAt: number; claimId: number }>;
   // ArcForge prop metadata keyed by entity id. Interaction reads this for
   // dialogue/audio attached to placed props; persistence remains owned by Sim.
   readonly propMetaByEnt: Map<number, Record<string, unknown>>;
@@ -217,6 +220,35 @@ export interface SimContextPrimitives {
   // the holder), so a read-only live view suffices. Consumed by the vale_cup
   // module, the damage no-damage floor, and targeting's candidate arm.
   readonly vcup: VcState;
+  // Book of Deeds: players whose deed-relevant state changed this tick,
+  // evaluated and cleared at the tick tail (deeds.ts updateDeeds). Sim-owned
+  // Set mutated in place, so a read-only live view.
+  readonly deedDirtyPids: Set<number>;
+  // Keyed dirty marks beside deedDirtyPids: pid -> the trigger-input keys
+  // that changed this tick (the deeds.ts narrow mark sites), so the tail
+  // evaluator re-checks only the deeds reading those inputs. A dirty pid with
+  // NO entry takes a full pass. Sim-owned Map mutated in place.
+  readonly deedDirtyKeys: Map<number, Set<string>>;
+  // The world-boss scheduler's live entity ids, one slot per WORLD_BOSSES
+  // entry (null while that boss is not up). Sim owns and reassigns slot
+  // VALUES in place; the deeds proximity sweep resolves the witness target
+  // through this instead of scanning the whole entity map every second.
+  readonly worldBossEntityIds: readonly (number | null)[];
+  // Book of Deeds session runtime (per-attempt encounter windows, per-match
+  // Vale Cup memory, the Saul talk counter). Sim-owned holder mutated in
+  // place; nothing in it persists.
+  readonly deedRuntime: DeedRuntime;
+  // Live practice-bot roster for offline 2v2 Fiesta (fiesta_bots.ts). The Book
+  // of Deeds reads it to gate Fiesta deeds to real matchmade bouts (a bot in a
+  // seat means practice; the online server never seats fiesta bots). Sim-owned,
+  // mutated in place, read-only view like bankerIds.
+  readonly fiestaBotPids: number[];
+  // Mob-AI scan visit counters (observability): the aggro proximity scan and the
+  // threat-table walks bump these to attribute mob.update cost. Sim-owned holder
+  // reset at the top of each tick and mutated in place (field increments, never
+  // reassigned), so a read-only live view; the fields themselves stay writable so
+  // the hot paths can increment them. Feeds no gameplay branch and draws no rng.
+  readonly mobScanCounters: MobScanCounters;
 
   // The Thornwheel Derby state (social/derby.ts): the same one-holder rule
   // (queue mutated in place, the race slot reassigned INSIDE the holder).
@@ -1051,20 +1083,23 @@ export function createSimContext(host: SimContextHost): SimContext {
     get vcup() {
       return host.vcup;
     },
-    get derby() {
-      return host.derby;
+    get deedDirtyPids() {
+      return host.deedDirtyPids;
     },
-    get boarpit() {
-      return host.boarpit;
+    get deedDirtyKeys() {
+      return host.deedDirtyKeys;
     },
-    get homes() {
-      return host.homes;
+    get worldBossEntityIds() {
+      return host.worldBossEntityIds;
     },
-    get horde() {
-      return host.horde;
+    get deedRuntime() {
+      return host.deedRuntime;
     },
-    get skirmish() {
-      return host.skirmish;
+    get fiestaBotPids() {
+      return host.fiestaBotPids;
+    },
+    get mobScanCounters() {
+      return host.mobScanCounters;
     },
     emit: host.emit,
     error: host.error,

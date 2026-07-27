@@ -347,6 +347,7 @@ import { allowedCorsOrigin, isWebClientRequest, NATIVE_APP_ORIGINS } from './web
 import { handleWocBalance, parseWocBalanceQuery } from './woc_balance';
 import { createWsAuth } from './ws_auth';
 import { bufferHandshakeMessages } from './ws_buffer';
+import { isDuranceTesterCharacter } from './durance_tester_entitlement';
 
 // The one validated boot Config, loaded ONCE and memoized. Boot-consumed values
 // (port, retention, dispatch, ws cap) thread directly off the local `config` in

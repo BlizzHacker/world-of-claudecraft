@@ -7161,28 +7161,21 @@ export class Renderer {
     // resolved so the ray origin can never sit inside a collider's pad
     // (which would blind the sweep and let the camera see through the wall),
     // and the min-distance clamp stays avatar-relative.
-    const px = this.camBoom.x + this.camFeel.leadX;
-    const py = this.camBoom.y;
-    const pz = this.camBoom.z + this.camFeel.leadZ;
+    // Couch co-op override: anchor on the shared party centroid at the fit
+    // distance (both pre-smoothed by main.ts). Solo play leaves these null, so
+    // the boom/feel origin and the player's own zoom are used exactly as upstream.
+    const anchor = this.coopCameraAnchor;
+    const px = (anchor ? anchor.x : this.camBoom.x) + this.camFeel.leadX;
+    const py = anchor ? anchor.y : this.camBoom.y;
+    const pz = (anchor ? anchor.z : this.camBoom.z) + this.camFeel.leadZ;
+    const camDist = anchor && this.coopCameraDist !== null ? this.coopCameraDist : pose.dist;
     const eyeY = py + 2.0;
     const ax = selfPos.x;
     const ay = selfPos.y + 2.0;
     const az = selfPos.z;
-    let cx = px - Math.sin(pose.yaw) * Math.cos(pose.pitch) * pose.dist;
-    let cy = eyeY + Math.sin(pose.pitch) * pose.dist;
-    let cz = pz - Math.cos(pose.yaw) * Math.cos(pose.pitch) * pose.dist;
-    // Couch co-op override: anchor on the shared party centroid at the fit
-    // distance (both pre-smoothed by main.ts). Solo play leaves these null and
-    // uses the self entity + the player's own zoom exactly as before.
-    const anchor = this.coopCameraAnchor;
-    const px = anchor ? anchor.x : selfPos.x;
-    const py = anchor ? anchor.y : selfPos.y;
-    const pz = anchor ? anchor.z : selfPos.z;
-    const camDist = anchor && this.coopCameraDist !== null ? this.coopCameraDist : this.camDist;
-    const eyeY = py + 2.0;
-    let cx = px - Math.sin(this.camYaw) * Math.cos(this.camPitch) * camDist;
-    let cy = eyeY + Math.sin(this.camPitch) * camDist;
-    let cz = pz - Math.cos(this.camYaw) * Math.cos(this.camPitch) * camDist;
+    let cx = px - Math.sin(pose.yaw) * Math.cos(pose.pitch) * camDist;
+    let cy = eyeY + Math.sin(pose.pitch) * camDist;
+    let cz = pz - Math.cos(pose.yaw) * Math.cos(pose.pitch) * camDist;
     if (isArenaPos(p.pos.x)) {
       // Arena walls hide from the camera like buildings, so the chase camera
       // stays at the player's requested zoom instead of clamping inside the pit.

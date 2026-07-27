@@ -398,6 +398,14 @@ import {
 } from './progression/talents';
 import { prestige as prestigeImpl, updateRested } from './progression/xp';
 import { advancePendingProjectiles, type PendingProjectile } from './projectile_travel';
+import { spawnBuildingInteriors } from './interiors';
+import { repairTalentLoadouts } from './talent_loadouts';
+import { partyFrameAbsorb, partyFrameAggroTargets, partyFrameAuras, partyFrameIncomingHeals, partyFrameRole } from './party_frame_info';
+import { activeMaxLevel } from './realms/registry';
+import { RaceInput } from './racing';
+import { FINDER_ACTIVITIES, FinderListingTag } from './content/dungeon_finder';
+import { DungeonFinderMachine } from './social/dungeon_finder';
+import { CURRENT_CHARACTER_CONTENT_REVISION, migrateCharacterTalentsV2 } from './talent_save_migration';
 import * as honorMod from './pvp';
 import { sanitizeRemovedZone1Content } from './removed_zone1_content';
 import { Rng } from './rng';

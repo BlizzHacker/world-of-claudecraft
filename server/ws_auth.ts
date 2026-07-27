@@ -29,6 +29,7 @@ import type {
   TokenScope,
 } from './db';
 import type { GameServer } from './game';
+import { accountForToken } from './oauth';
 
 // The {t:'error', error} rejection strings, by the exact value the client reads
 // and localizes. Each is part of the wire contract (see the module header).

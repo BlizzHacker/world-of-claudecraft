@@ -15,7 +15,7 @@
 
 import { type AssistCandidate, resolveAssist } from '../assist';
 import { YUMI_TEMPLATE_ID } from '../content/yumi';
-import { CLASSES, zoneAt } from '../data';
+import { CLASSES, ITEMS, zoneAt } from '../data';
 import * as deedsMod from '../deeds';
 import { graveyardReadout } from '../entity_roster';
 import {
@@ -28,11 +28,13 @@ import {
   type SentChat,
 } from '../sim';
 import type { SimContext } from '../sim_context';
-import { dist2d, type Entity, type OverheadEmoteId, type PlayerClass, YELL_RANGE } from '../types';
+import { dist2d, MAX_LEVEL, type Entity, type OverheadEmoteId, type PlayerClass, YELL_RANGE } from '../types';
 import { setAwayState } from './away';
 import * as readouts from './chat_readouts';
 import { npcDuelChallenge } from './npc_duel';
 import { activeMaxLevel } from '../realms/registry';
+import { GATHERING_PROFESSIONS } from '../content/professions';
+import { isGatheringProfessionId, queueGatheringGrant } from '../professions/gathering';
 
 const CHAT_BURST = 8; // messages a player may send back-to-back...
 const CHAT_REFILL = 2; // ...then this many more per second (caps spam amplifiers)

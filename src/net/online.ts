@@ -234,6 +234,8 @@ export {
   NATIVE_API_ORIGIN,
   NATIVE_APP,
 } from '../client_origin';
+import { ActiveFrostRing, ActiveTemporalHourglass } from '../world_api/combat';
+import { VcSharedCupInfo, VcViewerReadout } from '../world_api/vale_cup';
 
 export function buildWebSocketAuthMessage(
   token: string,
