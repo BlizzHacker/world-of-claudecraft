@@ -263,31 +263,6 @@ export function buildCharacterList(
 ): unknown {
   return {
     realm: REALM,
-    characters: chars.map((c) => ({
-      id: c.id,
-      name: c.name,
-      class: c.class,
-      level: c.level,
-      skin: c.state?.skin ?? 0,
-      online: isOnline(c.id),
-      forceRename: c.force_rename,
-      lastPlayed: c.last_played ? new Date(c.last_played).toISOString() : null,
-      playtimeSeconds: Number(c.playtime_seconds ?? 0),
-      // Keep the migrated RouteDef byte-identical with the retained legacy arm:
-      // character select renders the same body and held items as the live world.
-      skinCatalog: c.state?.skinCatalog === 'mech' ? 'mech' : 'class',
-      mainhandItemId: c.state?.equipment?.mainhand ?? null,
-      offhandItemId: c.state?.equipment?.offhand ?? null,
-      // The account's active Armory weapon skin for THIS character's class and
-      // held mainhand (the same shared rule the world and paperdoll use), so
-      // the char-select turntable matches the in-world render. Loadout is
-      // account state; resolution is per character.
-      weaponSkinId: resolveActiveWeaponSkin(
-        c.class,
-        c.state?.equipment?.mainhand ?? null,
-        weaponSkinLoadout,
-      ),
-    })),
     characters: chars.map((c) => {
       const realm = process.env.CR_REALM_ID ?? REALM;
       const appearance = isDuranceTesterCharacter(c.name, realm)

@@ -15,7 +15,9 @@ import {
   registrationsByDay,
   sessionsByDay,
 } from './admin_db';
-import { readOverviewCounts } from './admin_overview_cache';
+import {
+  readOverviewCounts,
+} from './admin_overview_cache';
 import {
   type AdminPermission,
   ASSIGNABLE_ADMIN_ROLES,
@@ -23,7 +25,10 @@ import {
   SUPERADMIN_ROLE,
   sanitizeRoles,
 } from './admin_permissions';
-import { adminPathKnown, permissionForAdminRoute } from './admin_routes';
+import {
+  adminPathKnown,
+  permissionForAdminRoute,
+} from './admin_routes';
 import {
   listAntibotConfigHistory,
   loadAntibotConfig,
@@ -36,7 +41,10 @@ import {
   newToken,
   verifyPassword,
 } from './auth';
-import { getBugReportScreenshot, listBugReports } from './bug_report_db';
+import {
+  getBugReportScreenshot,
+  listBugReports,
+} from './bug_report_db';
 import {
   addFilterWord,
   chatModeratedAccounts,
@@ -48,11 +56,12 @@ import {
   updateFilterConfig,
   type WordTier,
 } from './chat_filter_db';
-import { currentDailyRewardDay } from './daily_rewards';
+import {
+  currentDailyRewardDay,
+} from './daily_rewards';
 import {
   accountAndScopeForToken,
   accountById,
-  accountAndScopeForToken,
   accountForToken,
   accountTotpState,
   accountMailTarget,
@@ -67,10 +76,18 @@ import {
   touchLogin,
   updatePasswordHash,
 } from './db';
-import { emailSecurityIncident } from './email';
-import type { GameServer } from './game';
-import { ctxAccountId } from './http/context';
-import { logger } from './http/logger';
+import {
+  emailSecurityIncident,
+} from './email';
+import type {
+  GameServer,
+} from './game';
+import {
+  ctxAccountId,
+} from './http/context';
+import {
+  logger,
+} from './http/logger';
 import {
   ADMIN_META,
   type AdminAuthDb,
@@ -80,11 +97,26 @@ import {
   createRequireAdmin,
   requireAdminTarget,
 } from './http/middleware/require_admin';
-import { enum_ } from './http/schema';
-import type { Ctx, RouteDef } from './http/types';
-import { json, readBody } from './http_util';
-import { addBlockedIp, cleanIp, listBlockedIps, removeBlockedIp } from './ip_block_db';
-import { PgMapsDb } from './maps_db';
+import {
+  enum_,
+} from './http/schema';
+import type {
+  Ctx,
+  RouteDef,
+} from './http/types';
+import {
+  json,
+  readBody,
+} from './http_util';
+import {
+  addBlockedIp,
+  cleanIp,
+  listBlockedIps,
+  removeBlockedIp,
+} from './ip_block_db';
+import {
+  PgMapsDb,
+} from './maps_db';
 import {
   addAccountNote,
   forceCharacterRename,
@@ -100,16 +132,24 @@ import {
   setDailyRewardsBan,
   setDailyRewardsIpBan,
 } from './moderation_db';
-import { providerUsageSnapshot } from './provider_usage';
-import { rateLimited } from './ratelimit';
-import { verifyTotpCode } from './totp';
+import {
+  providerUsageSnapshot,
+} from './provider_usage';
+import {
+  rateLimited,
+} from './ratelimit';
+import {
+  verifyTotpCode,
+} from './totp';
 import {
   adminRolesForAccount,
   listStaff,
   roleChangeHistory,
   setAccountAdminRoles,
 } from './staff_db';
-import { PgUserAssetsDb } from './user_assets_db';
+import {
+  PgUserAssetsDb,
+} from './user_assets_db';
 
 // Admin API: everything under /admin/api/*. Auth is an exact full-scope bearer
 // token whose account has at least one staff role (accounts.admin_roles;

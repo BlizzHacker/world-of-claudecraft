@@ -1689,18 +1689,6 @@ export const VISUALS: Record<string, VisualDef> = {
       death: 'Idle',
     },
   },
-  mob_training_dummy: {
-    url: `${DUNGEON_MODELS}/scarecrow.glb`,
-    height: 2.4,
-    clips: {
-      idle: 'None',
-      walk: 'None',
-      run: 'None',
-      attack: [],
-      death: 'None',
-      hit: [],
-    },
-  },
 };
 
 // ---------------------------------------------------------------------------
@@ -1721,7 +1709,6 @@ const MOB_KEYS: Record<string, string> = {
   warlock_voidwalker: 'mob_demonalt',
   wild_boar: 'mob_boar',
   forest_wolf: 'mob_wolf',
-  training_dummy: 'mob_training_dummy',
   // beasts that would otherwise fall back to the wolf model (FAMILY_KEYS.beast)
   old_cragmaw: 'mob_bear',
   bog_bloat: 'mob_murloc',

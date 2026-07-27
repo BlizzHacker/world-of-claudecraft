@@ -550,7 +550,6 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
     pos: { ...EASTBROOK_NPC_PLACEMENTS_BY_ID.marshal_redbrook.position },
     facing: EASTBROOK_NPC_PLACEMENTS_BY_ID.marshal_redbrook.facing,
     color: 0xb7950b,
-    questIds: ['q_wolves', 'q_greyjaw', 'q_bandits', 'q_ringleader', 'q_mogger'],
     questIds: [
       'q_wolves',
       'q_greyjaw',

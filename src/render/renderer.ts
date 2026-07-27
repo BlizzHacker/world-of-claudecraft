@@ -678,11 +678,6 @@ export interface EntityView {
   /** unscaled height — nameplate/vfx anchor reads height * e.scale */
   height: number;
   mountVisual: CharacterVisual | null; // rideable mount body (stag/raptor/wyrm), built lazily
-  mountKey: string | null; // which mount rig mountVisual holds (rebuilt on swap)
-  skin: number; // last-rendered appearance skin — diffed each frame for live swaps
-  mainhandItemId: string | null; // last-rendered equipped weapon — diffed for live held-weapon swaps
-  /** unscaled height — nameplate/vfx anchor reads height * e.scale */
-  height: number;
   group: THREE.Group;
   /** rigged glTF visual for characters; null for object views (doors/crates) */
   visual: CharacterVisual | null;
@@ -697,13 +692,9 @@ export interface EntityView {
   temporalHourglassVisual: TemporalHourglassVisual | null;
   frostNovaRootVisual: FrostNovaRootVisual | null; // Atadura de Hielo restraint at the feet
   mageBarrierVisual: MageBarrierVisual | null; // personal mage absorb shell, built lazily
-  skin: number; // last-rendered appearance skin — diffed each frame for live swaps
-  mainhandItemId: string | null; // last-rendered equipped weapon — diffed for live held-weapon swaps
   offhandItemId: string | null; // last-rendered shield/second weapon, independent of mainhand skins
   weaponSkinId: string | null; // last-rendered weapon-skin cosmetic, diffed for live skin swaps
   weaponStowed: boolean; // last-rendered sheathe state (Z key), diffed for live stow toggles
-  /** unscaled height — nameplate/vfx anchor reads height * e.scale */
-  height: number;
   /** last-applied entity scale (group.scale); diffed each frame for live size buffs */
   liveScale: number;
   /** what removeView pulls back out of clickTargets */
