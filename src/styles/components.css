@@ -4484,7 +4484,38 @@
       background-image: none;
       border: 1px solid ButtonBorder;
     }
-  }
+  
+    #options-menu.perf-wide {
+      border-color: CanvasText;
+    }
+    #options-menu.perf-wide::before {
+      display: none;
+    }
+  
+    .window-frame, .panel-l0, .panel-l1, .panel-l2, .window-frame .card, .window-frame .item-cell, .window-frame .error-banner {
+      border: 1px solid CanvasText;
+    }
+    .tab[aria-selected="true"] {
+      border-bottom-color: Highlight;
+    }
+    .opt-seg-btn.is-selected {
+      outline: 2px solid Highlight;
+      outline-offset: -2px;
+    }
+    .opt-switch::before {
+      background: CanvasText;
+    }
+    .opt-switch[aria-checked="true"] {
+      border-color: Highlight;
+    }
+    .opt-switch[aria-checked="true"]::before {
+      background: Highlight;
+    }
+    .opt-tab-dot {
+      background: Mark;
+    }
+  
+}
   /* shared in-app dropdown (replaces native <select>, loadouts, report reason) */
   .ui-dd {
     position: relative;
@@ -10486,6 +10517,7 @@
     border-color: var(--gold);
     color: #fff;
     box-shadow: 0 0 8px #ffd100aa;
+    animation: kb-capture-breathe calc(1.6s * var(--motion-scale, 1)) ease-in-out infinite;
   }
   .kb-note {
     font-size: 11px;
@@ -11021,14 +11053,7 @@
   /* forced-colors: active strips background/mask layers (WCAG contract, see
      src/ui/CLAUDE.md); restore a plain system-color border so the window frame
      stays visible in high-contrast mode instead of vanishing with the mask. */
-  @media (forced-colors: active) {
-    #options-menu.perf-wide {
-      border-color: CanvasText;
-    }
-    #options-menu.perf-wide::before {
-      display: none;
-    }
-  }
+  
 
   /* ---------- emote wheel ---------- */
   #emote-wheel {
@@ -14298,6 +14323,11 @@
   :root[data-fx-level="low"] .kb-key.capturing {
     animation: none;
   }
+  @media (prefers-reduced-motion: reduce) {
+    .kb-key.capturing {
+      animation: none;
+    }
+  }
   .window-frame .btn.kb-cancel, .kb-cancel {
     margin-inline-start: var(--spacing-xs);
     padding: 3px 6px;
@@ -14871,28 +14901,5 @@
   }
 }
 @layer components {
-  @media (forced-colors: active) {
-    .window-frame, .panel-l0, .panel-l1, .panel-l2, .window-frame .card, .window-frame .item-cell, .window-frame .error-banner {
-      border: 1px solid CanvasText;
-    }
-    .tab[aria-selected="true"] {
-      border-bottom-color: Highlight;
-    }
-    .opt-seg-btn.is-selected {
-      outline: 2px solid Highlight;
-      outline-offset: -2px;
-    }
-    .opt-switch::before {
-      background: CanvasText;
-    }
-    .opt-switch[aria-checked="true"] {
-      border-color: Highlight;
-    }
-    .opt-switch[aria-checked="true"]::before {
-      background: Highlight;
-    }
-    .opt-tab-dot {
-      background: Mark;
-    }
-  }
+  
 }
