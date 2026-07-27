@@ -110,7 +110,7 @@ function applyDonateLinks(realm: RealmContent): void {
     : 'Support the project';
   const aria = tipWallet
     ? `${CR_TIP_LABEL} or SOL to support Cryptic Realm at ${tipWallet}`
-    : 'Donate to support World of ClaudeCraft';
+    : 'Donate to support Cryptic Realm';
 
   document.querySelectorAll<HTMLAnchorElement>('.donate-cta, .social-link.donate, .community-link.donate').forEach((a) => {
     a.href = href;

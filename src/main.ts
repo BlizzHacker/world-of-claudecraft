@@ -213,7 +213,6 @@ import {
   maybeShowFirstRunCameraPrompt,
 } from './ui/camera_prompt';
 import { deleteCharButtonHtml } from './ui/char_delete_button';
-import { loadCharselectNews } from './ui/charselect_news';
 import { ChatCommandMenu } from './ui/chat_command_menu';
 import { CLASS_DETAILS, SIGNATURE_ABILITIES } from './ui/class_details_data';
 import type { CoopCharacterRef } from './ui/coop_overlay';
@@ -4979,7 +4978,6 @@ function show(el: string): void {
   // moment the player can actually read it, and the NEW-badge marker should
   // advance only then.
   if (el === '#charselect-panel') {
-    void loadCharselectNews($('#charselect-news-feed'), () => api.releases(20));
   }
 
   // Reset currently rendered classes to force re-render/animation when opening a panel

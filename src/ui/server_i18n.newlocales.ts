@@ -106,7 +106,7 @@ export const SERVER_NEW = {
     'who.statusDungeon': 'v dungeonu',
     'who.statusOnline': 'online',
     'who.zoneUnknown': 'Neznámo',
-    'world.entered': '{name} vstoupil(a) do World of ClaudeCraft.',
+    'world.entered': '{name} vstoupil(a) do Cryptic Realm.',
     'world.leaveCharacterTakenOver': 'postava převzata',
     'world.leaveDisconnect': 'odpojeno',
     'world.leaveError': 'chyba připojení',
