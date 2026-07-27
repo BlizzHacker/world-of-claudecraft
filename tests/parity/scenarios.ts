@@ -198,7 +198,11 @@ function frostProcOrb(): Scenario {
       'Fingers of Frost proc draw from frostbolt',
       'Brain Freeze proc draw from frostbolt',
     ],
-    build: () => new Sim({ seed: 43, playerClass: 'mage', autoEquip: true }),
+    // Seed re-calibrated 43 -> 8 for the v0.30.0 merge. The drive casts ONE
+    // frostbolt and watches for its proc draws; the merged world spawns more
+    // entities, which re-phases the rng stream, and seed 43 no longer reaches
+    // either proc. Seed 8 hits both, keeping this coverage guard honest.
+    build: () => new Sim({ seed: 8, playerClass: 'mage', autoEquip: true }),
     drive(rec: Recorder) {
       const sim = rec.sim as AnySim;
       sim.setPlayerLevel(20);
