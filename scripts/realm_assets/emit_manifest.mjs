@@ -96,12 +96,24 @@ for (const e of out) {
     (familyKeys[r] ??= []).push(e);
   }
 }
-// The namesake realm is a curated best-of rather than a theme: give it a spread
-// drawn evenly across every other realm's bodies.
+// Realms whose theme the lexicon barely matches would otherwise ship EMPTY, which
+// is worse than a broad roster: crypticrealm is a namesake best-of rather than a
+// theme at all, exchange is a hub every realm's characters visit, and arcadevoid's
+// vocabulary (neon/arcade/retro) matches almost nothing in this library. Each gets
+// an even spread across the full set rather than the first N, so the sample shows
+// the range instead of whatever sorts first.
 const all = out.filter((e) => staged.has(e.key));
+function evenSpread(n) {
+  if (!all.length) return [];
+  const step = Math.max(1, Math.floor(all.length / n));
+  return all.filter((_, i) => i % step === 0).slice(0, n);
+}
 if (all.length) {
-  const step = Math.max(1, Math.floor(all.length / 180));
-  familyKeys.crypticrealm = all.filter((_, i) => i % step === 0).slice(0, 180);
+  familyKeys.crypticrealm = evenSpread(180);
+  // Offset these two so the three fallback realms do not show an identical cast.
+  const rot = (arr, by) => arr.slice(by).concat(arr.slice(0, by));
+  familyKeys.arcadevoid = rot(evenSpread(120), 40);
+  familyKeys.exchange = rot(evenSpread(90), 15);
 }
 const poolStats = Object.fromEntries(
   Object.entries(familyKeys).map(([r, v]) => [r, v.length]),
