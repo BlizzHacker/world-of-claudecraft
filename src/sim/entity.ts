@@ -644,7 +644,10 @@ export function recalcPlayerStats(
     // F5c D2 scaling: ramp the mana pool past the cap on the D2 realms alongside HP.
     e.maxResource = Math.round(
       (def.baseMana + def.manaPerLevel * (lvl - 1) + manaFromIntellect(s.int)) *
-        d2PlayerHpMult(lvl),
+        d2PlayerHpMult(lvl) *
+        // Talent mana bonus (mastery manaPct, e.g. the Chronomancer's cushion).
+        // Independent of the D2 pool ramp above, so both multiply.
+        (1 + (mods?.global.manaPct ?? 0)),
     );
     e.resource = cameFromForm
       ? Math.min(e.savedMana, e.maxResource)
