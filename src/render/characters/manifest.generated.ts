@@ -38,6 +38,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/arcane/realm_arcane_all_seeing_sage_sage_019e1733.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -49,6 +51,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/arcane/realm_arcane_crystal_titan_pbr_crystal_0198e7fd.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -60,6 +64,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/arcane/realm_arcane_elder_arcane_council_characters_0196ee9b.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -71,6 +77,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/arcane/realm_arcane_eldritch_sentinel_characters_019737a4.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -82,6 +90,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/arcane/realm_arcane_eldritch_wanderer_fantasy_eldrit_019ab758.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -93,6 +103,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/arcane/realm_arcane_emberblade_crusader_crusader_emb_019f5e78.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -104,6 +116,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/arcane/realm_arcane_ethereal_sentinel_characters_0195fc6b.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -115,6 +129,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/arcane/realm_arcane_ethereal_sentinel_characters_0195fc71.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -126,6 +142,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/arcane/realm_arcane_ethereal_sentinel_characters_0197372a.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -137,6 +155,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/arcane/realm_arcane_ethereal_watcher_characters_0195fe49.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -148,6 +168,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/arcane/realm_arcane_game_figure_albino_giant_0195b9a2.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -159,6 +181,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/arcane/realm_arcane_game_figure_albino_giant_0195b9b1.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -170,6 +194,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/arcane/realm_arcane_game_figure_albino_giant_0195b9b4.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -181,6 +207,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/arcane/realm_arcane_gandalf_staff_wizard_weaponsmili_01968c91.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -192,6 +220,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/arcane/realm_arcane_halloween2025_pumpkin_monster_ba_019a178c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -203,6 +233,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/arcane/realm_arcane_mystic_sentinel_characters_01968757.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -214,6 +246,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/arcane/realm_arcane_mystic_wanderer_characters_0196eea0.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -225,6 +259,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/arcane/realm_arcane_shaman_s_spirit_keeper_01963bb3.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -236,6 +272,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/arcane/realm_arcane_titan_arcane_characters_0196f84f.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -247,6 +285,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/arcane/realm_arcane_titan_arcane_characters_0196f85b.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -258,6 +298,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/arcane/realm_arcane_weapon_glove_claws_similar_0194ad34.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -269,6 +311,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/arcane/realm_arcane_weapon_glove_claws_similar_0194ad37.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -280,6 +324,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/arcane/realm_arcane_wizard_chaos_halloween2025_wizar_019a17b1.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -291,6 +337,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_adventurous_goblin_rogue_charact_01964456.glb`,
     height: GEN_H,
     clips: genClips(['Dualwield_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -302,6 +350,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_albino_cave_troll_characters_0193df90.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -313,6 +363,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_albino_cave_troll_characters_0193df96.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -324,6 +376,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_albino_cave_troll_characters_0193df9c.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -335,6 +389,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_albino_cave_troll_characters_0193e175.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -346,12 +402,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_alien_conqueror_pbr_alien_0198e6fe.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_alien_cowboy_alien_cowboy_01988669: {
     url: `${REALM_MODELS}/classic/realm_classic_alien_cowboy_alien_cowboy_01988669.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -363,6 +423,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_alien_guardian_characters_01967cc9.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -374,6 +436,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_alien_predatory_wrath_alien_01942788.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -385,48 +449,64 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_alien_warrior_alien_warrior_0194817c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_alien_warrior_character_humanoid_0194863d: {
     url: `${REALM_MODELS}/classic/realm_classic_alien_warrior_character_humanoid_0194863d.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_alien_warrior_characters_0194817f: {
     url: `${REALM_MODELS}/classic/realm_classic_alien_warrior_characters_0194817f.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_alien_warrior_characters_01948639: {
     url: `${REALM_MODELS}/classic/realm_classic_alien_warrior_characters_01948639.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_alien_warrior_characters_01948641: {
     url: `${REALM_MODELS}/classic/realm_classic_alien_warrior_characters_01948641.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_alien_warrior_characters_weapons_01948186: {
     url: `${REALM_MODELS}/classic/realm_classic_alien_warrior_characters_weapons_01948186.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_alien_warrior_characters_weapons_01948189: {
     url: `${REALM_MODELS}/classic/realm_classic_alien_warrior_characters_weapons_01948189.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_ancient_guardian_characters_01972bf0: {
     url: `${REALM_MODELS}/classic/realm_classic_ancient_guardian_characters_01972bf0.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -438,6 +518,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_ancient_guardian_characters_0197374b.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -449,6 +531,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_ancient_guardian_characters_0198815f.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -460,6 +544,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_ancient_sorcerer_characters_0198147f.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -471,6 +557,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_armored_beastlord_characters_0196c014.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -482,6 +570,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_armored_beastlord_characters_0196c029.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -493,6 +583,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_armored_guardian_characters_weap_0193fba5.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -504,18 +596,24 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_armored_guardian_space_marine_0193fba7.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_auric_warlord_character_warrior_019cba54: {
     url: `${REALM_MODELS}/classic/realm_classic_auric_warlord_character_warrior_019cba54.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_average_man_pose_game_01940d81: {
     url: `${REALM_MODELS}/classic/realm_classic_average_man_pose_game_01940d81.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -527,36 +625,48 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_avian_serpent_knight_characters_0197d2ad.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_aztec_warrior_characters_culture_0194c237: {
     url: `${REALM_MODELS}/classic/realm_classic_aztec_warrior_characters_culture_0194c237.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_aztec_warrior_warrior_aztec_019a99ef: {
     url: `${REALM_MODELS}/classic/realm_classic_aztec_warrior_warrior_aztec_019a99ef.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_barbarian_iron_blade_barbarian_019f57b7: {
     url: `${REALM_MODELS}/classic/realm_classic_barbarian_iron_blade_barbarian_019f57b7.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_barbarian_warrior_low_poly_019aa1d7: {
     url: `${REALM_MODELS}/classic/realm_classic_barbarian_warrior_low_poly_019aa1d7.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_bard_fairy_goblin_characters_0195f1f8: {
     url: `${REALM_MODELS}/classic/realm_classic_bard_fairy_goblin_characters_0195f1f8.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -568,6 +678,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_bard_fairy_goblin_characters_0195f1fd.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -579,6 +691,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_battlemage_dwarf_characters_019736dc.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -590,12 +704,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_berserker_ogre_ogre_berserker_019bc7bf.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_bifrost_beast_characters_01983029: {
     url: `${REALM_MODELS}/classic/realm_classic_bifrost_beast_characters_01983029.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -607,6 +725,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_bionic_ogre_mutation_sciencetech_0197790d.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -618,6 +738,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_bionic_ogre_mutation_sciencetech_0197790f.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -629,6 +751,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_black_skin_race_ogre_0194f7f5.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -640,12 +764,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_blue_orc_warrior_characters_0195ed8d.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_blue_power_ranger_characters_0194371d: {
     url: `${REALM_MODELS}/classic/realm_classic_blue_power_ranger_characters_0194371d.glb`,
     height: GEN_H,
     clips: genClips(['2H_Ranged_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -657,6 +785,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_bound_feline_frenzy_creature_019a59c0.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -668,6 +798,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_cave_troll_dressed_as_019542b8.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -679,6 +811,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_cave_troll_dressed_as_019543a3.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -690,6 +824,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_cave_troll_fairy_fairy_019601f9.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -701,6 +837,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_cave_troll_fairy_fairy_019601fe.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -712,6 +850,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_cave_troll_fairy_fairy_01960203.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -723,6 +863,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_cave_troll_fairy_fairy_01960204.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -734,6 +876,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_cave_troll_open_arms_0193e9f7.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -745,6 +889,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_cave_troll_t_pose_0193803e.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -756,6 +902,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_cave_troll_wear_tattered_019408af.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -767,6 +915,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_cave_troll_wear_tattered_01940d7a.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -778,6 +928,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_cave_troll_wear_tattered_01940dca.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -789,12 +941,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_cave_warrior_characters_019871b8.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_corona_virus_humanoid_monster_01954a8e: {
     url: `${REALM_MODELS}/classic/realm_classic_corona_virus_humanoid_monster_01954a8e.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -806,6 +962,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_corona_virus_humanoid_monster_01954a92.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -817,36 +975,48 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_crimson_warlord_character_fantas_019cc36e.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_cyber_feline_warrior_cyber_019bce4b: {
     url: `${REALM_MODELS}/classic/realm_classic_cyber_feline_warrior_cyber_019bce4b.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_cyber_feline_warrior_robot_019bce47: {
     url: `${REALM_MODELS}/classic/realm_classic_cyber_feline_warrior_robot_019bce47.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_cyber_gator_warrior_cyber_019b845d: {
     url: `${REALM_MODELS}/classic/realm_classic_cyber_gator_warrior_cyber_019b845d.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_cyber_gorilla_warrior_characters_019b9494: {
     url: `${REALM_MODELS}/classic/realm_classic_cyber_gorilla_warrior_characters_019b9494.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_cyber_guardian_characters_scienc_0196975d: {
     url: `${REALM_MODELS}/classic/realm_classic_cyber_guardian_characters_scienc_0196975d.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -858,6 +1028,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_cyber_ogre_ogre_cyberpunk_01992a81.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -869,6 +1041,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_cyber_orc_convergence_characters_0196d049.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -880,12 +1054,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_cyber_orc_warrior_characters_01972cca.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_cyber_sentinel_robot_cyber_019bb8d1: {
     url: `${REALM_MODELS}/classic/realm_classic_cyber_sentinel_robot_cyber_019bb8d1.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -897,6 +1075,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_cyber_troll_characters_sciencete_0196b0b7.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -908,6 +1088,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_cyber_troll_characters_sciencete_0196d038.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -919,6 +1101,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_cyber_troll_sentinel_characters_019736e5.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -930,12 +1114,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_cyber_warrior_sciencetechnology__019736ca.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_cybernetic_guardian_sciencetechn_0196fe02: {
     url: `${REALM_MODELS}/classic/realm_classic_cybernetic_guardian_sciencetechn_0196fe02.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -947,18 +1135,24 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_cybernetic_minotaur_warrior_char_0196e440.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_cybernetic_minotaur_warrior_char_0196e65e: {
     url: `${REALM_MODELS}/classic/realm_classic_cybernetic_minotaur_warrior_char_0196e65e.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_cybernetic_ogre_characters_scien_0196b627: {
     url: `${REALM_MODELS}/classic/realm_classic_cybernetic_ogre_characters_scien_0196b627.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -970,24 +1164,32 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_cybernetic_ogre_warrior_characte_01972cd0.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_cybernetic_warrior_characters_sc_01945675: {
     url: `${REALM_MODELS}/classic/realm_classic_cybernetic_warrior_characters_sc_01945675.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_cybernetic_warrior_sciencetechno_01983daf: {
     url: `${REALM_MODELS}/classic/realm_classic_cybernetic_warrior_sciencetechno_01983daf.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_cyberpunk_orc_adventurer_charact_0194279c: {
     url: `${REALM_MODELS}/classic/realm_classic_cyberpunk_orc_adventurer_charact_0194279c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -999,6 +1201,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_cyberpunk_orc_adventurer_charact_019427d4.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1010,12 +1214,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_cyberpunk_orc_adventurer_charact_019427db.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_cyberpunk_orc_adventurer_cyberpu_01942792: {
     url: `${REALM_MODELS}/classic/realm_classic_cyberpunk_orc_adventurer_cyberpu_01942792.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1027,18 +1235,24 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_cyberpunk_orc_warrior_character_01942ca3.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_cyberpunk_orc_warrior_characters_01942cf3: {
     url: `${REALM_MODELS}/classic/realm_classic_cyberpunk_orc_warrior_characters_01942cf3.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_cyborg_enforcer_sciencetechnolog_0196b72e: {
     url: `${REALM_MODELS}/classic/realm_classic_cyborg_enforcer_sciencetechnolog_0196b72e.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1050,12 +1264,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_cyborg_gorilla_warrior_cyborg_019ba55c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_cyborg_ogre_trio_villain_019a5512: {
     url: `${REALM_MODELS}/classic/realm_classic_cyborg_ogre_trio_villain_019a5512.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1067,12 +1285,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_cyborg_orc_warrior_characters_0196b5fe.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_cyborg_troll_characters_sciencet_0196b0a6: {
     url: `${REALM_MODELS}/classic/realm_classic_cyborg_troll_characters_sciencet_0196b0a6.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1084,6 +1306,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_cyborg_troll_characters_sciencet_0196b0ae.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1095,24 +1319,32 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_cyborg_warrior_extra_arms_0196bcef.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_cyborg_warrior_extra_arms_0196c00b: {
     url: `${REALM_MODELS}/classic/realm_classic_cyborg_warrior_extra_arms_0196c00b.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_cyborg_warrior_sciencetechnology_0196c06a: {
     url: `${REALM_MODELS}/classic/realm_classic_cyborg_warrior_sciencetechnology_0196c06a.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_cyclopean_prince_pbr_character_0198d461: {
     url: `${REALM_MODELS}/classic/realm_classic_cyclopean_prince_pbr_character_0198d461.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1124,6 +1356,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_cyclopean_sentinel_fantasy_creat_019bd2a6.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1135,54 +1369,72 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_cyclopean_warlord_fantasy_charac_019d5f16.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_cyclopean_warrior_characters_fan_019acb7a: {
     url: `${REALM_MODELS}/classic/realm_classic_cyclopean_warrior_characters_fan_019acb7a.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_cyclopean_warrior_characters_war_019ac698: {
     url: `${REALM_MODELS}/classic/realm_classic_cyclopean_warrior_characters_war_019ac698.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_cyclopean_warrior_giant_warrior_019ac6ac: {
     url: `${REALM_MODELS}/classic/realm_classic_cyclopean_warrior_giant_warrior_019ac6ac.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_cyclops_guardian_fantasy_creatur_019ba36c: {
     url: `${REALM_MODELS}/classic/realm_classic_cyclops_guardian_fantasy_creatur_019ba36c.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_cyclops_sentinel_creatures_fanta_019bcee7: {
     url: `${REALM_MODELS}/classic/realm_classic_cyclops_sentinel_creatures_fanta_019bcee7.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_dark_knight_sentinel_characters_01982ac3: {
     url: `${REALM_MODELS}/classic/realm_classic_dark_knight_sentinel_characters_01982ac3.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_dark_knight_sentinel_characters_01982d9f: {
     url: `${REALM_MODELS}/classic/realm_classic_dark_knight_sentinel_characters_01982d9f.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_dark_sorcerer_characters_01974aec: {
     url: `${REALM_MODELS}/classic/realm_classic_dark_sorcerer_characters_01974aec.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1194,30 +1446,40 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_dark_spiked_warrior_characters_019bc7d4.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_dark_warrior_monarch_characters_01964f6a: {
     url: `${REALM_MODELS}/classic/realm_classic_dark_warrior_monarch_characters_01964f6a.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_doberman_humanoid_warrior_charac_0195c669: {
     url: `${REALM_MODELS}/classic/realm_classic_doberman_humanoid_warrior_charac_0195c669.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_doberman_humanoid_warrior_gamefi_0195c66a: {
     url: `${REALM_MODELS}/classic/realm_classic_doberman_humanoid_warrior_gamefi_0195c66a.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_draconic_guardian_characters_019aa428: {
     url: `${REALM_MODELS}/classic/realm_classic_draconic_guardian_characters_019aa428.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1229,6 +1491,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_druid_world_warcraft_characters_0193e9dd.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1240,6 +1504,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_druid_world_warcraft_characters_0193e9e0.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1251,12 +1517,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_dual_head_warrior_future_0196b630.glb`,
     height: GEN_H,
     clips: genClips(['Dualwield_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_dwarf_t_pose_chain_01938385: {
     url: `${REALM_MODELS}/classic/realm_classic_dwarf_t_pose_chain_01938385.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1268,6 +1538,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_dwarf_t_pose_chain_01938388.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1279,24 +1551,32 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_dwarf_warrior_attack_pose_019538cd.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_dwarven_guardian_fantasy_dwarf_019ba40d: {
     url: `${REALM_MODELS}/classic/realm_classic_dwarven_guardian_fantasy_dwarf_019ba40d.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_dwarven_warlord_forge_dwarf_019d73a6: {
     url: `${REALM_MODELS}/classic/realm_classic_dwarven_warlord_forge_dwarf_019d73a6.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_eddie_iron_maiden_humanoid_019450ce: {
     url: `${REALM_MODELS}/classic/realm_classic_eddie_iron_maiden_humanoid_019450ce.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1308,6 +1588,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_eddie_iron_maiden_humanoid_019450cf.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1319,6 +1601,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_eddie_iron_maiden_humanoid_019450d2.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1330,6 +1614,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_elder_goblin_mystic_characters_0196eb8f.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1341,6 +1627,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_elderwood_guardian_sketchto3d_ch_019813a9.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1352,6 +1640,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_eldritch_guardian_characters_01969c78.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1363,6 +1653,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_eldritch_guardian_characters_01969c8a.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1374,6 +1666,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_eldritch_sentinel_fantasy_creatu_019bb319.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1385,6 +1679,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_eldritch_sentinel_fantasy_creatu_019bd219.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1396,12 +1692,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_eternal_warrior_characters_0195c378.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_ethereal_guardian_character_char_01964e99: {
     url: `${REALM_MODELS}/classic/realm_classic_ethereal_guardian_character_char_01964e99.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1413,6 +1713,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_ethereal_guardian_characters_01964e9c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1424,6 +1726,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_ethereal_guardian_characters_01964ea0.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1435,6 +1739,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_ethereal_guardian_characters_019691b3.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1446,6 +1752,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_ethereal_guardian_fantasy_charac_01964ea8.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1457,12 +1765,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_ethereal_warrior_characters_01972c65.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_evangelions_neon_genesis_evangel_019382a8: {
     url: `${REALM_MODELS}/classic/realm_classic_evangelions_neon_genesis_evangel_019382a8.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1474,6 +1786,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_evangelions_neon_genesis_evangel_0195aa1b.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1485,6 +1799,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_excited_elf_christmas2025_elf_019b31ee.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1496,6 +1812,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_executioner_hangman_medieval_cha_0195cddb.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1507,6 +1825,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_executioner_hangman_medieval_cha_0195cdde.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1518,6 +1838,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_fairy_elemental_sorceress_charac_0195dfbd.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1529,6 +1851,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_fairy_goblin_fairy_characters_0195e2db.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1540,18 +1864,24 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_fat_dwarf_warrior_pose_01955ce2.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_frog_warrior_mystic_frog_019ac0e7: {
     url: `${REALM_MODELS}/classic/realm_classic_frog_warrior_mystic_frog_019ac0e7.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_frost_guardian_characters_0196feab: {
     url: `${REALM_MODELS}/classic/realm_classic_frost_guardian_characters_0196feab.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1563,24 +1893,32 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_frost_guardian_fantasy_character_019bc273.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_frost_guardian_fantasy_guardian_019b7009: {
     url: `${REALM_MODELS}/classic/realm_classic_frost_guardian_fantasy_guardian_019b7009.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_frost_guardian_ice_guardian_0196fea0: {
     url: `${REALM_MODELS}/classic/realm_classic_frost_guardian_ice_guardian_0196fea0.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_frostbite_farmer_game_figure_0195aa0e: {
     url: `${REALM_MODELS}/classic/realm_classic_frostbite_farmer_game_figure_0195aa0e.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1592,42 +1930,56 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_game_figure_elf_warrior_0195b140.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_game_figure_elf_warrior_0195b142: {
     url: `${REALM_MODELS}/classic/realm_classic_game_figure_elf_warrior_0195b142.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_game_figure_extraterrestial_warr_0195b434: {
     url: `${REALM_MODELS}/classic/realm_classic_game_figure_extraterrestial_warr_0195b434.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_game_figure_extraterrestial_warr_0195b43a: {
     url: `${REALM_MODELS}/classic/realm_classic_game_figure_extraterrestial_warr_0195b43a.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_game_figure_extraterrestial_warr_0195b447: {
     url: `${REALM_MODELS}/classic/realm_classic_game_figure_extraterrestial_warr_0195b447.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_game_figure_goblin_warrior_0195a9dd: {
     url: `${REALM_MODELS}/classic/realm_classic_game_figure_goblin_warrior_0195a9dd.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_game_figure_humanoid_form_0195be5b: {
     url: `${REALM_MODELS}/classic/realm_classic_game_figure_humanoid_form_0195be5b.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1639,6 +1991,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_game_figure_humanoid_pig_0195b43b.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1650,6 +2004,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_game_figure_lord_dark_0195b546.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1661,6 +2017,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_game_figure_low_poly_0195b53c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1672,6 +2030,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_game_figure_low_poly_0195b548.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1683,30 +2043,40 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_game_figure_mortal_kombat_0195a9f8.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_game_figure_mortal_kombat_0195b937: {
     url: `${REALM_MODELS}/classic/realm_classic_game_figure_mortal_kombat_0195b937.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_game_figure_most_muscular_0195b595: {
     url: `${REALM_MODELS}/classic/realm_classic_game_figure_most_muscular_0195b595.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_game_figure_most_muscular_0195b597: {
     url: `${REALM_MODELS}/classic/realm_classic_game_figure_most_muscular_0195b597.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_game_figure_orc_warhammer_0195b448: {
     url: `${REALM_MODELS}/classic/realm_classic_game_figure_orc_warhammer_0195b448.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1718,6 +2088,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_game_figure_orc_warhammer_0195b44b.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1729,6 +2101,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_game_figure_orc_warhammer_0195b538.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1740,6 +2114,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_game_figure_satanic_beast_0195b9a4.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1751,6 +2127,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_game_figure_satanic_beast_0195b9a5.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1762,6 +2140,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_game_figure_satanic_beast_0195b9d4.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1773,6 +2153,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_game_figure_satanic_beast_0195b9e2.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1784,6 +2166,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_game_figure_satanic_beast_0195b9e8.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1795,6 +2179,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_game_figure_satanic_beast_0195b9ea.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1806,6 +2192,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_game_figure_satanic_beast_0195be03.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1817,6 +2205,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_game_figure_satanic_beast_0195be0a.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1828,6 +2218,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_game_figure_satanic_beast_0195be18.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1839,6 +2231,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_game_figure_satanic_beast_0195be1a.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1850,6 +2244,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_game_figure_satanic_beast_0195be1c.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1861,6 +2257,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_game_figure_satanic_beast_0195be1f.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1872,6 +2270,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_game_figure_satanic_beast_0195be54.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1883,12 +2283,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_game_figure_toad_mercenary_0195b531.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_giant_cage_villain_giant_019a5511: {
     url: `${REALM_MODELS}/classic/realm_classic_giant_cage_villain_giant_019a5511.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1900,6 +2304,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_giant_ogre_about_3_0195391e.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1911,6 +2317,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_giant_ogre_about_3_01953952.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1922,6 +2330,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_giant_ogre_about_3_01953dc5.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1933,6 +2343,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_giant_ogre_about_3_01953dc7.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1944,30 +2356,40 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_giant_warrior_characters_01968745.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_giant_warrior_giant_characters_0196873d: {
     url: `${REALM_MODELS}/classic/realm_classic_giant_warrior_giant_characters_0196873d.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_giant_warrior_giant_warrior_019aa439: {
     url: `${REALM_MODELS}/classic/realm_classic_giant_warrior_giant_warrior_019aa439.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_giant_warrior_titan_game_0195b996: {
     url: `${REALM_MODELS}/classic/realm_classic_giant_warrior_titan_game_0195b996.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_gift_goblin_christmas2025_goblin_019b5681: {
     url: `${REALM_MODELS}/classic/realm_classic_gift_goblin_christmas2025_goblin_019b5681.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -1979,18 +2401,24 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_gleeful_goblin_warrior_character_019696c2.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_gleeful_goblin_warrior_character_019696c8: {
     url: `${REALM_MODELS}/classic/realm_classic_gleeful_goblin_warrior_character_019696c8.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_glowstone_sentinel_fantasy_creat_019bb8e3: {
     url: `${REALM_MODELS}/classic/realm_classic_glowstone_sentinel_fantasy_creat_019bb8e3.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2002,6 +2430,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_alchemist_characters_01983878.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2013,6 +2443,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_boss_head_warhammer_01956c0f.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2024,6 +2456,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_boss_head_warhammer_01956c12.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2035,6 +2469,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_boss_head_warhammer_01956cfa.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2046,6 +2482,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_boss_warhammer_40k_01963fab.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2057,6 +2495,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_claus_christmas2025_gobli_019b5338.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2068,6 +2508,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_emo_goblin_characters_01956278.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2079,6 +2521,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_encounter_characters_019639ff.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2090,6 +2534,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_gladiator_characters_0196c1d0.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2101,6 +2547,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_grin_characters_01974b3d.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2112,6 +2560,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_grin_characters_01974b44.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2123,6 +2573,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_grin_characters_01974bc0.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2134,6 +2586,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_grin_goblin_fantasy_019aac91.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2145,6 +2599,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_grumblers_characters_01977176.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2156,6 +2612,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_guardian_characters_019750a9.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2167,6 +2625,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_guardian_characters_019750ac.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2178,6 +2638,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_guardian_characters_019750b5.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2189,6 +2651,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_guardian_goblin_guardian_019a5513.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2200,6 +2664,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_king_characters_01974614.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2211,6 +2677,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_king_characters_01974ba2.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2222,6 +2690,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_king_characters_01974bc8.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2233,6 +2703,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_king_characters_0197764d.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2244,6 +2716,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_king_characters_01977923.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2255,18 +2729,24 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_king_ogre_guardian_019ac153.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_knight_characters_weapons_0195f1c9: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_knight_characters_weapons_0195f1c9.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_mage_characters_0196c4ec: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_mage_characters_0196c4ec.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2278,6 +2758,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_mage_explorer_characters_01964f68.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2289,6 +2771,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_merchant_characters_01964540.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2300,6 +2784,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_mischief_characters_0195f1ef.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2311,6 +2797,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_mischief_goblin_fantasy_019b847d.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2322,6 +2810,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_ork_boss_warhammer_0195dda2.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2333,6 +2823,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_punk_characters_01956278.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2344,6 +2836,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_punk_characters_01956282.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2355,6 +2849,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_s_companion_goblin_019a7570.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2366,6 +2862,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_s_greeting_goblin_019b7f9d.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2377,6 +2875,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_scout_characters_01964f60.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2388,6 +2888,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_sentinel_characters_01964475.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2399,6 +2901,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_sentinel_goblin_sentinel_019a5054.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2410,6 +2914,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_shaman_characters_01974ba5.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2421,6 +2927,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_shaman_characters_0197c17c.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2432,6 +2940,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_shaman_characters_fantasy_01988732.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2443,6 +2953,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_shaman_elder_pbr_01991782.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2454,6 +2966,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_sorcerer_goblin_sorcerer_019a5979.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2465,6 +2979,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_twins_characters_0196ca34.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2476,6 +2992,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_wanderer_characters_0196846d.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2487,6 +3005,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_wanderer_characters_01983a3b.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2498,288 +3018,384 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warlord_characters_0196541d.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warlord_characters_019672d5: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warlord_characters_019672d5.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warlord_characters_01967858: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warlord_characters_01967858.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warlord_characters_0196a10b: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warlord_characters_0196a10b.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warlord_characters_01976a00: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warlord_characters_01976a00.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warlord_characters_01976a03: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warlord_characters_01976a03.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warlord_characters_fantas_019899f1: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warlord_characters_fantas_019899f1.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_action_figure_0197dbb4: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_action_figure_0197dbb4.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_character_mortal_019634ed: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_character_mortal_019634ed.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_character_mortal_019634f0: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_character_mortal_019634f0.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_characters_019aa476: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_019aa476.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_characters_019adca3: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_019adca3.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_characters_weapon_01964537: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_01964537.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_characters_weapon_0196540d: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_0196540d.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_characters_weapon_01965423: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_01965423.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_characters_weapon_019659c3: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_019659c3.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_characters_weapon_01965b74: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_01965b74.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_characters_weapon_019696d0: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_019696d0.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_characters_weapon_019696d9: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_019696d9.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_characters_weapon_019696e2: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_019696e2.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_characters_weapon_0196a609: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_0196a609.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_characters_weapon_0196a622: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_0196a622.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_characters_weapon_0196abf2: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_0196abf2.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_characters_weapon_0196ca24: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_0196ca24.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_characters_weapon_0196dee2: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_0196dee2.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_characters_weapon_0196ee97: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_0196ee97.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_characters_weapon_0197376e: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_0197376e.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_characters_weapon_01974b3b: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_01974b3b.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_characters_weapon_01975007: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_01975007.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_characters_weapon_0197500d: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_0197500d.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_characters_weapon_01975c86: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_01975c86.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_characters_weapon_0197698b: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_0197698b.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_characters_weapon_0197833e: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_0197833e.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_characters_weapon_0197c14c: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_0197c14c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_characters_weapon_0197c16c: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_0197c16c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_characters_weapon_0197c689: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_0197c689.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_characters_weapon_0197db11: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_0197db11.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_goblin_characters_01983a41: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_goblin_characters_01983a41.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_goblin_warrior_019880e0: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_goblin_warrior_019880e0.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_goblin_warrior_019a5513: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_goblin_warrior_019a5513.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_goblin_warrior_019a6bab: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_goblin_warrior_019a6bab.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_goblin_warrior_019ac64b: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_goblin_warrior_019ac64b.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_goblin_warrior_019ac8ae: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_goblin_warrior_019ac8ae.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_goblin_warrior_019b7056: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_goblin_warrior_019b7056.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_goblin_warrior_019b99db: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_goblin_warrior_019b99db.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_goblin_warrior_019bce33: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_goblin_warrior_019bce33.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_traditional_attir_0199156c: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_traditional_attir_0199156c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_golden_guardian_characters_01987fc1: {
     url: `${REALM_MODELS}/classic/realm_classic_golden_guardian_characters_01987fc1.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2791,6 +3407,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_golem_guardian_characters_0196feaa.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2802,6 +3420,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_golem_guardian_golem_guardian_019bb8dc.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2813,6 +3433,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_golem_sentinel_villain_golem_01998e8e.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2824,12 +3446,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goliath_ogre_creatures_ogre_01988ac1.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goliath_ogre_ogre_goblin_01988a8b: {
     url: `${REALM_MODELS}/classic/realm_classic_goliath_ogre_ogre_goblin_01988a8b.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2841,18 +3467,24 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_green_goblin_holding_wooden_0196110b.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_greenfang_warlord_character_fant_019d3f02: {
     url: `${REALM_MODELS}/classic/realm_classic_greenfang_warlord_character_fant_019d3f02.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_grellik_ironbound_grellik_ironbo_019e672f: {
     url: `${REALM_MODELS}/classic/realm_classic_grellik_ironbound_grellik_ironbo_019e672f.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2864,6 +3496,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_grinning_beast_characters_019672ae.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2875,12 +3509,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_grog_warrior_troll_characters_0197c25d.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_gruff_goblin_characters_01974618: {
     url: `${REALM_MODELS}/classic/realm_classic_gruff_goblin_characters_01974618.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2892,6 +3530,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_gruff_goblin_characters_0197461b.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2903,6 +3543,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_gruff_goblin_characters_0197461f.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2914,6 +3556,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_gruff_troll_characters_0193df8d.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2925,6 +3569,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_gruff_troll_characters_0193dfa3.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2936,6 +3582,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_grumpy_troll_characters_01972c82.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2947,6 +3595,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_grumpy_troll_characters_01972cb9.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2958,6 +3608,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_guardian_ancients_fantasy_guardi_019ad75b.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2969,6 +3621,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_guardian_skylands_fantasy_guardi_019b65f6.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2980,6 +3634,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_guardian_titan_characters_019677ca.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2991,12 +3647,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_guardian_titan_fantasy_creature_019a7fe8.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_heavenly_guardian_characters_0197d682: {
     url: `${REALM_MODELS}/classic/realm_classic_heavenly_guardian_characters_0197d682.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3008,12 +3668,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_hoge_3_meter_tall_019542be.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_horned_guardian_characters_0196a607: {
     url: `${REALM_MODELS}/classic/realm_classic_horned_guardian_characters_0196a607.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3025,12 +3689,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_horned_warrior_characters_weapon_0196a604.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_human_hybrid_criptid_extreme_019439bd: {
     url: `${REALM_MODELS}/classic/realm_classic_human_hybrid_criptid_extreme_019439bd.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3042,6 +3710,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_humanoid_form_muscular_geometry_0193daa5.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3053,6 +3723,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_humanoid_upper_santa_claus_0193a19d.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3064,6 +3736,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_humanoid_upper_santa_claus_0193a1a2.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3075,6 +3749,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_inferno_guardian_characters_01965e10.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3086,6 +3762,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_insectoid_enforcer_characters_0198111c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3097,12 +3775,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_insectoid_warrior_characters_01968d0e.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_iron_golem_golem_iron_019ac0d4: {
     url: `${REALM_MODELS}/classic/realm_classic_iron_golem_golem_iron_019ac0d4.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3114,102 +3796,136 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_iron_guardian_guardian_iron_019baa58.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_iron_guardian_guardian_iron_019baa62: {
     url: `${REALM_MODELS}/classic/realm_classic_iron_guardian_guardian_iron_019baa62.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_iron_guardian_robot_guardian_019aa452: {
     url: `${REALM_MODELS}/classic/realm_classic_iron_guardian_robot_guardian_019aa452.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_iron_vanguard_characters_robot_019ac151: {
     url: `${REALM_MODELS}/classic/realm_classic_iron_vanguard_characters_robot_019ac151.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_ironbound_brute_fantasy_characte_019c6e30: {
     url: `${REALM_MODELS}/classic/realm_classic_ironbound_brute_fantasy_characte_019c6e30.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_ironbound_dwarf_warlord_fantasy_019dabe5: {
     url: `${REALM_MODELS}/classic/realm_classic_ironbound_dwarf_warlord_fantasy_019dabe5.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_ironbound_dwarven_warlord_fantas_019d72a2: {
     url: `${REALM_MODELS}/classic/realm_classic_ironbound_dwarven_warlord_fantas_019d72a2.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_ironbound_orc_warlord_orc_019e57db: {
     url: `${REALM_MODELS}/classic/realm_classic_ironbound_orc_warlord_orc_019e57db.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_ironbound_orc_warlord_orc_019ebc1e: {
     url: `${REALM_MODELS}/classic/realm_classic_ironbound_orc_warlord_orc_019ebc1e.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_ironclad_minotaur_warrior_charac_01965dde: {
     url: `${REALM_MODELS}/classic/realm_classic_ironclad_minotaur_warrior_charac_01965dde.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_ironclad_orc_warlord_orc_019e3b54: {
     url: `${REALM_MODELS}/classic/realm_classic_ironclad_orc_warlord_orc_019e3b54.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_ironclad_warrior_characters_weap_01974dae: {
     url: `${REALM_MODELS}/classic/realm_classic_ironclad_warrior_characters_weap_01974dae.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_ironfist_warlord_fantasy_charact_019c9a0c: {
     url: `${REALM_MODELS}/classic/realm_classic_ironfist_warlord_fantasy_charact_019c9a0c.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_ironjaw_goblin_berserker_goblin_019ecc74: {
     url: `${REALM_MODELS}/classic/realm_classic_ironjaw_goblin_berserker_goblin_019ecc74.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_ironjaw_orc_warlord_orc_019f6dd9: {
     url: `${REALM_MODELS}/classic/realm_classic_ironjaw_orc_warlord_orc_019f6dd9.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_ironjaw_spiked_warlord_character_019cb987: {
     url: `${REALM_MODELS}/classic/realm_classic_ironjaw_spiked_warlord_character_019cb987.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_jhon_name_human_nestor_019cf69a: {
     url: `${REALM_MODELS}/classic/realm_classic_jhon_name_human_nestor_019cf69a.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3221,48 +3937,64 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_juggernaut_warrior_warrior_jugge_019ac0c6.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_labyrinth_warrior_characters_019b7551: {
     url: `${REALM_MODELS}/classic/realm_classic_labyrinth_warrior_characters_019b7551.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_leyendary_troll_boss_evil_01989492: {
     url: `${REALM_MODELS}/classic/realm_classic_leyendary_troll_boss_evil_01989492.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_leyendary_troll_boss_evil_01989498: {
     url: `${REALM_MODELS}/classic/realm_classic_leyendary_troll_boss_evil_01989498.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_leyendary_troll_boss_evil_019894a5: {
     url: `${REALM_MODELS}/classic/realm_classic_leyendary_troll_boss_evil_019894a5.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_lizard_warrior_creature_warrior_019b08d3: {
     url: `${REALM_MODELS}/classic/realm_classic_lizard_warrior_creature_warrior_019b08d3.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_lizard_warrior_pepsi_gear_019b7b3a: {
     url: `${REALM_MODELS}/classic/realm_classic_lizard_warrior_pepsi_gear_019b7b3a.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_long_nose_goblin_wizard_01967d90: {
     url: `${REALM_MODELS}/classic/realm_classic_long_nose_goblin_wizard_01967d90.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3274,6 +4006,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_low_poly_female_goblin_019581a0.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3285,6 +4019,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_low_poly_goblin_characters_0195f1ef.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3296,6 +4032,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_low_poly_goblin_characters_0196fa46.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3307,6 +4045,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_low_poly_goblin_characters_0196fa4a.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3318,6 +4058,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_low_poly_goblin_warhammer_0194c860.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3329,6 +4071,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_low_poly_shaman_goblin_01951ef2.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3340,6 +4084,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_low_poly_shaman_goblin_0195242a.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3351,12 +4097,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_martial_arts_master_character_019bd7dc.glb`,
     height: GEN_H,
     clips: genClips(['Dualwield_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_masive_beast_monster_deform_0194af78: {
     url: `${REALM_MODELS}/classic/realm_classic_masive_beast_monster_deform_0194af78.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3368,6 +4118,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_mechabeast_mutant_mech_beast_019bc7ca.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3379,6 +4131,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_mechanical_guardian_robot_scienc_0196636a.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3390,12 +4144,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_mechanized_dwarf_king_dwarf_019ba41a.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_mechanized_ogre_sciencetechnolog_01975507: {
     url: `${REALM_MODELS}/classic/realm_classic_mechanized_ogre_sciencetechnolog_01975507.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3407,6 +4165,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_mechanized_ogre_sciencetechnolog_01975c87.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3418,6 +4178,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_minotaur_s_resolve_characters_01946235.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3429,12 +4191,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_minotaur_sentinel_minotaur_creat_019875dc.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_minotaur_smiles_characters_01974aed: {
     url: `${REALM_MODELS}/classic/realm_classic_minotaur_smiles_characters_01974aed.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3446,24 +4212,32 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_minotaur_warrior_characters_weap_0197905e.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_minotaur_warrior_minotaur_warrio_01987fdf: {
     url: `${REALM_MODELS}/classic/realm_classic_minotaur_warrior_minotaur_warrio_01987fdf.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_most_bad_ass_goblin_0198d2d0: {
     url: `${REALM_MODELS}/classic/realm_classic_most_bad_ass_goblin_0198d2d0.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_muscular_female_human_pose_0194e194: {
     url: `${REALM_MODELS}/classic/realm_classic_muscular_female_human_pose_0194e194.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3475,6 +4249,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_muscular_human_pose_supervillain_0194e146.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3486,12 +4262,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_mushroom_warrior_characters_01966d4c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_mutant_farmer_characters_01985b8d: {
     url: `${REALM_MODELS}/classic/realm_classic_mutant_farmer_characters_01985b8d.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3503,6 +4283,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_mystic_barbarian_characters_0197b997.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3514,6 +4296,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_mystic_elder_character_mystic_01983812.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3525,6 +4309,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_mystic_goblin_mage_characters_0196f303.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3536,6 +4322,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_mystic_goblin_mage_characters_0196f84f.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3547,24 +4335,32 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_mystic_orc_warrior_characters_0196e3f4.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_mystic_warrior_characters_01963bbf: {
     url: `${REALM_MODELS}/classic/realm_classic_mystic_warrior_characters_01963bbf.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_mystic_warrior_characters_01963f6d: {
     url: `${REALM_MODELS}/classic/realm_classic_mystic_warrior_characters_01963f6d.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_mystical_guardian_fantasy_guardi_019b8471: {
     url: `${REALM_MODELS}/classic/realm_classic_mystical_guardian_fantasy_guardi_019b8471.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3576,6 +4372,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_mystical_horned_guardian_charact_0196c4e7.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3587,6 +4385,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_naked_cave_troll_muscular_0194424e.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3598,6 +4398,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_naked_cave_troll_muscular_0194425a.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3609,6 +4411,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_naked_cave_troll_muscular_01944263.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3620,6 +4424,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_naked_cave_troll_muscular_01944377.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3631,6 +4437,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_naked_cave_troll_muscular_01944383.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3642,18 +4450,24 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_namekian_warrior_anime_piccolo_01948a5c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_namekian_warrior_characters_01948a7a: {
     url: `${REALM_MODELS}/classic/realm_classic_namekian_warrior_characters_01948a7a.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_noise_goblin_characters_0195f1f5: {
     url: `${REALM_MODELS}/classic/realm_classic_noise_goblin_characters_0195f1f5.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3665,12 +4479,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_nordic_warrior_hammer_characters_0194f584.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_ogre_guardian_characters_019696ee: {
     url: `${REALM_MODELS}/classic/realm_classic_ogre_guardian_characters_019696ee.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3682,6 +4500,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_ogre_hulk_game_assets_01955244.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3693,6 +4513,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_ogre_hulk_game_assets_0195524f.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3704,18 +4526,24 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_ogre_s_fury_fantasy_0198a132.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_ogre_sentinel_creature_fantasy_019a8830: {
     url: `${REALM_MODELS}/classic/realm_classic_ogre_sentinel_creature_fantasy_019a8830.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_ogre_titan_ogre_titan_019b70a9: {
     url: `${REALM_MODELS}/classic/realm_classic_ogre_titan_ogre_titan_019b70a9.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3727,42 +4555,56 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_ogre_warlord_characters_0196bf89.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_ogre_warlord_characters_0196c00a: {
     url: `${REALM_MODELS}/classic/realm_classic_ogre_warlord_characters_0196c00a.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_ogre_warlord_ogre_warlord_019b99a5: {
     url: `${REALM_MODELS}/classic/realm_classic_ogre_warlord_ogre_warlord_019b99a5.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_ogre_warrior_characters_0196f982: {
     url: `${REALM_MODELS}/classic/realm_classic_ogre_warrior_characters_0196f982.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_ogre_warrior_characters_0196fa41: {
     url: `${REALM_MODELS}/classic/realm_classic_ogre_warrior_characters_0196fa41.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_ogre_warrior_ogre_warrior_019b665b: {
     url: `${REALM_MODELS}/classic/realm_classic_ogre_warrior_ogre_warrior_019b665b.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_orc_adventurer_characters_019427b3: {
     url: `${REALM_MODELS}/classic/realm_classic_orc_adventurer_characters_019427b3.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3774,12 +4616,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_orc_berserker_fantasy_orc_019d2037.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_orc_chieftain_characters_01964473: {
     url: `${REALM_MODELS}/classic/realm_classic_orc_chieftain_characters_01964473.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3791,6 +4637,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_orc_chieftain_characters_01964478.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3802,12 +4650,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_orc_cyborg_warrior_orc_0198a132.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_orc_denim_characters_fashionstyl_0196fd71: {
     url: `${REALM_MODELS}/classic/realm_classic_orc_denim_characters_fashionstyl_0196fd71.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3819,6 +4671,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_orc_guardian_characters_01969c74.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3830,12 +4684,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_orc_king_villain_orc_019997d7.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_orc_sentinel_characters_01968737: {
     url: `${REALM_MODELS}/classic/realm_classic_orc_sentinel_characters_01968737.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3847,6 +4705,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_orc_sentinel_characters_0196873a.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -3858,162 +4718,216 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_orc_warlord_characters_0196da51.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_orc_warlord_orc_warlord_019899f2: {
     url: `${REALM_MODELS}/classic/realm_classic_orc_warlord_orc_warlord_019899f2.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_orc_warlord_orc_warlord_019899f4: {
     url: `${REALM_MODELS}/classic/realm_classic_orc_warlord_orc_warlord_019899f4.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_orc_warlord_orc_warlord_019aa43f: {
     url: `${REALM_MODELS}/classic/realm_classic_orc_warlord_orc_warlord_019aa43f.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_orc_warlord_orc_warlord_019b6ad5: {
     url: `${REALM_MODELS}/classic/realm_classic_orc_warlord_orc_warlord_019b6ad5.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_orc_warlord_render_orc_019a5055: {
     url: `${REALM_MODELS}/classic/realm_classic_orc_warlord_render_orc_019a5055.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_orc_warlord_render_orc_019a7b06: {
     url: `${REALM_MODELS}/classic/realm_classic_orc_warlord_render_orc_019a7b06.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_orc_warlord_rusted_armor_019f206d: {
     url: `${REALM_MODELS}/classic/realm_classic_orc_warlord_rusted_armor_019f206d.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_orc_warrior_armor_orc_019a855b: {
     url: `${REALM_MODELS}/classic/realm_classic_orc_warrior_armor_orc_019a855b.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_orc_warrior_armored_villain_0199b506: {
     url: `${REALM_MODELS}/classic/realm_classic_orc_warrior_armored_villain_0199b506.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_orc_warrior_characters_weaponsmi_0194dbf4: {
     url: `${REALM_MODELS}/classic/realm_classic_orc_warrior_characters_weaponsmi_0194dbf4.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_orc_warrior_characters_weaponsmi_0194dbf5: {
     url: `${REALM_MODELS}/classic/realm_classic_orc_warrior_characters_weaponsmi_0194dbf5.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_orc_warrior_characters_weaponsmi_0196c06c: {
     url: `${REALM_MODELS}/classic/realm_classic_orc_warrior_characters_weaponsmi_0196c06c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_orc_warrior_characters_weaponsmi_0196c1e4: {
     url: `${REALM_MODELS}/classic/realm_classic_orc_warrior_characters_weaponsmi_0196c1e4.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_orc_warrior_characters_weaponsmi_0196f86d: {
     url: `${REALM_MODELS}/classic/realm_classic_orc_warrior_characters_weaponsmi_0196f86d.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_orc_warrior_characters_weaponsmi_0196f91f: {
     url: `${REALM_MODELS}/classic/realm_classic_orc_warrior_characters_weaponsmi_0196f91f.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_orc_warrior_chief_characters_0196591a: {
     url: `${REALM_MODELS}/classic/realm_classic_orc_warrior_chief_characters_0196591a.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_orc_warrior_king_characters_0196ada1: {
     url: `${REALM_MODELS}/classic/realm_classic_orc_warrior_king_characters_0196ada1.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_orc_warrior_orc_warrior_019aa436: {
     url: `${REALM_MODELS}/classic/realm_classic_orc_warrior_orc_warrior_019aa436.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_orc_warrior_orc_warrior_019afb96: {
     url: `${REALM_MODELS}/classic/realm_classic_orc_warrior_orc_warrior_019afb96.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_orc_warrior_orc_warrior_019b00a4: {
     url: `${REALM_MODELS}/classic/realm_classic_orc_warrior_orc_warrior_019b00a4.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_orc_warrior_orc_warrior_019b6ad1: {
     url: `${REALM_MODELS}/classic/realm_classic_orc_warrior_orc_warrior_019b6ad1.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_orc_warrior_orc_warrior_019c1132: {
     url: `${REALM_MODELS}/classic/realm_classic_orc_warrior_orc_warrior_019c1132.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_orc_warrior_queen_orc_019aad11: {
     url: `${REALM_MODELS}/classic/realm_classic_orc_warrior_queen_orc_019aad11.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_orc_warrior_s_stand_019b609c: {
     url: `${REALM_MODELS}/classic/realm_classic_orc_warrior_s_stand_019b609c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_orc_warrior_sentinel_characters_01972c6c: {
     url: `${REALM_MODELS}/classic/realm_classic_orc_warrior_sentinel_characters_01972c6c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_ork_wizard_mage_dark_01967d8f: {
     url: `${REALM_MODELS}/classic/realm_classic_ork_wizard_mage_dark_01967d8f.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4025,6 +4939,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_ork_wizard_mage_dark_01967d95.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4036,6 +4952,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_pelican_human_hybrid_human_0194f581.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4047,6 +4965,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_pelican_human_hybrid_human_0194f583.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4058,6 +4978,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_pipe_smoking_toadman_creature_019c076a.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4069,6 +4991,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_pirate_goliath_characters_pirate_019abcb4.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4080,6 +5004,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_pirate_orc_characters_019450ce.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4091,6 +5017,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_pirate_orc_characters_0194d401.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4102,6 +5030,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_pose_cave_troll_huge_01947f72.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4113,12 +5043,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_predator_warrior_characters_weap_01948407.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_punk_beast_characters_01982df3: {
     url: `${REALM_MODELS}/classic/realm_classic_punk_beast_characters_01982df3.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4130,6 +5064,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_punk_goblin_characters_fashionst_01973709.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4141,24 +5077,32 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_rhino_gladiator_villain_characte_0199a863.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_road_warrior_giant_characters_0196cf39: {
     url: `${REALM_MODELS}/classic/realm_classic_road_warrior_giant_characters_0196cf39.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_roadside_warrior_characters_0196f93f: {
     url: `${REALM_MODELS}/classic/realm_classic_roadside_warrior_characters_0196f93f.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_rugged_humanoid_figure_made_019483fc: {
     url: `${REALM_MODELS}/classic/realm_classic_rugged_humanoid_figure_made_019483fc.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4170,24 +5114,32 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_rune_warrior_characters_0196c728.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_runestone_warrior_characters_01973204: {
     url: `${REALM_MODELS}/classic/realm_classic_runestone_warrior_characters_01973204.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_runic_warrior_armor_warrior_019731a3: {
     url: `${REALM_MODELS}/classic/realm_classic_runic_warrior_armor_warrior_019731a3.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_rustic_guardian_fantasy_guardian_019aa21e: {
     url: `${REALM_MODELS}/classic/realm_classic_rustic_guardian_fantasy_guardian_019aa21e.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4199,6 +5151,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_rusty_guardian_fantasy_guardian_019b6ab7.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4210,6 +5164,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_rusty_sentinel_robot_sentinel_019ba55b.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4221,6 +5177,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_rusty_sentinel_robots_rusty_0199f00a.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4232,18 +5190,24 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_rusty_warrior_characters_weapons_019682ad.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_samurai_automaton_samurai_automa_019bb35e: {
     url: `${REALM_MODELS}/classic/realm_classic_samurai_automaton_samurai_automa_019bb35e.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_satanic_sorcerer_characters_0193e9cc: {
     url: `${REALM_MODELS}/classic/realm_classic_satanic_sorcerer_characters_0193e9cc.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4255,6 +5219,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_sentinel_colossus_fantasy_coloss_019b5656.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4266,12 +5232,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_sentinel_construct_robot_mech_019bb2ff.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_spiked_club_goblin_weaponsmilita_019d1b08: {
     url: `${REALM_MODELS}/classic/realm_classic_spiked_club_goblin_weaponsmilita_019d1b08.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4283,6 +5253,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_spiked_guardian_characters_01968220.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4294,6 +5266,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_spiked_guardian_characters_01968236.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4305,18 +5279,24 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_spiked_war_maiden_war_019d56ab.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_spiky_ogre_warrior_characters_01968731: {
     url: `${REALM_MODELS}/classic/realm_classic_spiky_ogre_warrior_characters_01968731.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_steampunk_goblin_explorer_charac_0196e8e8: {
     url: `${REALM_MODELS}/classic/realm_classic_steampunk_goblin_explorer_charac_0196e8e8.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4328,6 +5308,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_steel_guardian_characters_0193fbbb.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4339,6 +5321,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_steel_guardian_sciencetechnology_0193fb9e.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4350,6 +5334,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_stone_guardian_characters_0197a485.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4361,12 +5347,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_titan_defender_fantasy_warrior_0199a837.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_titan_vanguard_characters_0197a485: {
     url: `${REALM_MODELS}/classic/realm_classic_titan_vanguard_characters_0197a485.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4378,6 +5368,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_titan_wastelands_fantasy_creatur_019a8f82.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4389,6 +5381,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_troll_courtesy_fantasy_troll_019a166a.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4400,6 +5394,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_troll_forged_titan_characters_0197ad67.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4411,6 +5407,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_troll_suspenders_characters_0196f865.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4422,18 +5420,24 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_troll_warrior_troll_warrior_019b705a.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_troll_warrior_troll_warrior_019b705c: {
     url: `${REALM_MODELS}/classic/realm_classic_troll_warrior_troll_warrior_019b705c.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_twin_brutes_brute_twin_019f2ef2: {
     url: `${REALM_MODELS}/classic/realm_classic_twin_brutes_brute_twin_019f2ef2.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4445,12 +5449,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_twin_gaze_titan_creatures_019ab8a7.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_twin_guardians_characters_0196eb96: {
     url: `${REALM_MODELS}/classic/realm_classic_twin_guardians_characters_0196eb96.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4462,6 +5470,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_twin_headed_guardian_characters_0196ee0a.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4473,6 +5483,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_twin_headed_guardian_characters_0196ee95.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4484,18 +5496,24 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_twin_headed_warbrute_fantasy_019c7bd6.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_twin_ogre_warlord_characters_0196cf35: {
     url: `${REALM_MODELS}/classic/realm_classic_twin_ogre_warlord_characters_0196cf35.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_twin_ogres_ogres_characters_019aa1db: {
     url: `${REALM_MODELS}/classic/realm_classic_twin_ogres_ogres_characters_019aa1db.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4507,6 +5525,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_two_headed_ogre_characters_0193df44.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4518,6 +5538,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_two_headed_ogre_characters_0193df47.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4529,6 +5551,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_two_headed_ogre_characters_0193df75.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4540,6 +5564,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_two_headed_ogre_characters_0193df7b.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4551,6 +5577,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_two_headed_ogre_characters_0193df7c.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4562,6 +5590,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_two_headed_ogre_characters_01963a38.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4573,6 +5603,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_two_headed_ogre_characters_01963a3b.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4584,6 +5616,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_two_headed_ogre_titan_01977b46.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4595,36 +5629,48 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_two_headed_ogre_warrior_019ab983.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_two_headed_warrior_characters_0196f30f: {
     url: `${REALM_MODELS}/classic/realm_classic_two_headed_warrior_characters_0196f30f.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_two_headed_warrior_characters_0196f846: {
     url: `${REALM_MODELS}/classic/realm_classic_two_headed_warrior_characters_0196f846.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_two_headed_warrior_characters_0196f863: {
     url: `${REALM_MODELS}/classic/realm_classic_two_headed_warrior_characters_0196f863.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_two_headed_warrior_characters_019a6969: {
     url: `${REALM_MODELS}/classic/realm_classic_two_headed_warrior_characters_019a6969.glb`,
     height: GEN_H,
     clips: genClips(['Dualwield_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_un_mercenario_del_futuro_01972c4b: {
     url: `${REALM_MODELS}/classic/realm_classic_un_mercenario_del_futuro_01972c4b.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4636,18 +5682,24 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_urban_warrior_fashionstyle_0196d41c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_urban_wasteland_orc_orc_0198b3b9: {
     url: `${REALM_MODELS}/classic/realm_classic_urban_wasteland_orc_orc_0198b3b9.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_valentine_orc_characters_01950187: {
     url: `${REALM_MODELS}/classic/realm_classic_valentine_orc_characters_01950187.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4659,6 +5711,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_valentine_orc_characters_01950188.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4670,294 +5724,392 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_venomous_warrior_character_warri_019bfbbf.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_viking_paladin_warrior_halloween_019a4a69: {
     url: `${REALM_MODELS}/classic/realm_classic_viking_paladin_warrior_halloween_019a4a69.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warhammer_40k_medieval_warrior_01949bea: {
     url: `${REALM_MODELS}/classic/realm_classic_warhammer_40k_medieval_warrior_01949bea.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warlord_braids_fantasy_character_019d9ea7: {
     url: `${REALM_MODELS}/classic/realm_classic_warlord_braids_fantasy_character_019d9ea7.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warlord_fury_halloween2025_warlo_019a1be9: {
     url: `${REALM_MODELS}/classic/realm_classic_warlord_fury_halloween2025_warlo_019a1be9.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_ancients_characters_0196497f: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_ancients_characters_0196497f.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_ancients_characters_019658ff: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_ancients_characters_019658ff.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_ancients_warrior_ancient_019aa1d0: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_ancients_warrior_ancient_019aa1d0.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_beast_creature_warrior_019ba414: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_beast_creature_warrior_019ba414.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_chaos_characters_weapons_01940366: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_chaos_characters_weapons_01940366.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_crimson_skies_characters_0196ba80: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_crimson_skies_characters_0196ba80.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_cybernetic_leg_warrior_019b70ff: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_cybernetic_leg_warrior_019b70ff.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_denim_fashionstyle_chara_0197379b: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_denim_fashionstyle_chara_0197379b.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_fire_warrior_fire_019b6ffb: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_fire_warrior_fire_019b6ffb.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_fury_characters_019644f2: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_fury_characters_019644f2.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_fury_characters_019644f7: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_fury_characters_019644f7.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_goblin_characters_weapon_01969220: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_goblin_characters_weapon_01969220.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_goblin_characters_weapon_01969227: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_goblin_characters_weapon_01969227.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_minotaur_characters_0197c8e3: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_minotaur_characters_0197c8e3.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_north_character_warrior_019be231: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_north_character_warrior_019be231.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_north_warrior_nordic_019a7fb0: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_north_warrior_nordic_019a7fb0.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_ogre_characters_01968c86: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_ogre_characters_01968c86.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_ogre_characters_01969211: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_ogre_characters_01969211.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_ogre_characters_01969239: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_ogre_characters_01969239.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_orc_characters_01965dcf: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_orc_characters_01965dcf.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_orc_characters_orc_019a5514: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_orc_characters_orc_019a5514.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_pose_pose_warrior_019badd8: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_pose_pose_warrior_019badd8.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_realm_characters_0196b62c: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_realm_characters_0196b62c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_s_resolve_characters_01963bcd: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_s_resolve_characters_01963bcd.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_s_resolve_characters_0197a4e6: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_s_resolve_characters_0197a4e6.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_s_resolve_characters_019948db: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_s_resolve_characters_019948db.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_s_roar_fantasy_019a1787: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_s_roar_fantasy_019a1787.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_sage_characters_01949918: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_sage_characters_01949918.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_sage_characters_0194991c: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_sage_characters_0194991c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_santa_christmas2025_chri_019b5694: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_santa_christmas2025_chri_019b5694.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_sentinel_warrior_sentine_019af4a5: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_sentinel_warrior_sentine_019af4a5.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_skies_characters_019731a1: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_skies_characters_019731a1.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_stance_characters_warrio_019b7052: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_stance_characters_warrio_019b7052.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_strength_fantasy_warrior_019aec06: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_strength_fantasy_warrior_019aec06.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_titan_characters_0196976a: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_titan_characters_0196976a.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_titan_characters_0196b72e: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_titan_characters_0196b72e.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_troll_characters_0196e404: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_troll_characters_0196e404.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_twins_characters_0196f846: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_twins_characters_0196f846.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_wasteland_warrior_wastel_01987196: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_wasteland_warrior_wastel_01987196.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_wild_warrior_fantasy_019b7545: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_wild_warrior_fantasy_019b7545.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_wildlands_warrior_fantas_019aad3b: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_wildlands_warrior_fantas_019aad3b.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_warrior_wilds_characters_01963bc8: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_wilds_characters_01963bc8.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_wasteland_warlord_warlord_charac_019a3680: {
     url: `${REALM_MODELS}/classic/realm_classic_wasteland_warlord_warlord_charac_019a3680.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_wrathborn_berserker_characters_01973141: {
     url: `${REALM_MODELS}/classic/realm_classic_wrathborn_berserker_characters_01973141.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4969,6 +6121,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_alien_punk_rebel_characters_0195d98d.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -4980,18 +6134,24 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_alien_warlord_characters_01968d0f.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_dominion_alien_warlord_characters_019691b8: {
     url: `${REALM_MODELS}/dominion/realm_dominion_alien_warlord_characters_019691b8.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_dominion_battle_ready_alien_characters_0196c061: {
     url: `${REALM_MODELS}/dominion/realm_dominion_battle_ready_alien_characters_0196c061.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5003,6 +6163,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_boss_exosuit_019e6f47.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5014,6 +6176,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_buzz_boxer_bot_characters_01976edf.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5025,6 +6189,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_centient_robot_muscular_nano_01944875.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5036,6 +6202,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_cyber_buccaneer_characters_01964459.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5047,6 +6215,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_cyber_corsair_characters_science_0197898b.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5058,6 +6228,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_cyber_golem_sciencetechnology_ch_01972ccf.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5069,6 +6241,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_cyber_krampus_christmas2025_fant_019b33c1.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5080,6 +6254,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_cyber_nomad_characters_sciencete_019bae27.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5091,6 +6267,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_cyber_pirate_characters_sciencet_0196f06c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5102,6 +6280,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_cyber_pirate_mercenary_furture_0197c7b8.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5113,6 +6293,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_cyber_pirate_overlord_characters_0196e657.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5124,6 +6306,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_cyber_sentinel_characters_scienc_01942e67.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5135,12 +6319,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_cyber_sentinel_pbr_robot_019905d1.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_dominion_cyber_skater_phantom_characters_0196de3c: {
     url: `${REALM_MODELS}/dominion/realm_dominion_cyber_skater_phantom_characters_0196de3c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5152,6 +6340,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_cyber_wanderer_characters_scienc_0196e689.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5163,6 +6353,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_cybernetic_heavyweight_sciencete_0196fd7f.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5174,6 +6366,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_cybernetic_sentinel_sciencetechn_01942e8a.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5185,6 +6379,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_cybernetic_sentinel_sciencetechn_0196fd7d.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5196,6 +6392,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_cybernetic_sentinel_sciencetechn_01974b04.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5207,6 +6405,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_cybernetic_sentinel_sciencetechn_01974bc6.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5218,6 +6418,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_cybernetic_titan_sciencetechnolo_0196b0ab.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5229,6 +6431,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_cybernetic_titan_sciencetechnolo_0196b0ae.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5240,6 +6444,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_cyberpunk_corsair_sciencetechnol_0196e65b.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5251,6 +6457,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_cyberpunk_panda_adventurer_chara_0196d573.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5262,6 +6470,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_cyborg_batman_characters_science_0193cd32.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5273,6 +6483,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_cyborg_sentinel_sciencetechnolog_0196cf38.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5284,6 +6496,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_dark_iron_sentinel_characters_01983fa1.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5295,6 +6509,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_darth_vader_inspired_giger_01965dc9.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5306,6 +6522,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_determined_chemist_halloween2025_019a18fd.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5317,6 +6535,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_empress_circuits_empress_circuit_019eacec.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5328,6 +6548,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_eternal_automaton_robot_automato_019bb8d9.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5339,12 +6561,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_fairy_fairy_holding_machine_0195e2e7.glb`,
     height: GEN_H,
     clips: genClips(['2H_Ranged_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_dominion_fairy_mechanical_cyberpunk_fairy_0195e2d4: {
     url: `${REALM_MODELS}/dominion/realm_dominion_fairy_mechanical_cyberpunk_fairy_0195e2d4.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5356,6 +6582,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_fantasy_underground_cyborg_monst_01968d4c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5367,6 +6595,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_galactic_sentinel_sciencetechnol_019813e7.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5378,6 +6608,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_game_figure_angel_death_0195b944.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5389,6 +6621,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_game_figure_corona_virus_0195b938.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5400,6 +6634,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_golem_made_trash_characters_01945b7c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5411,6 +6647,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_hydra_titan_creature_fantasy_019b70f7.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5422,6 +6660,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_iron_golem_characters_sciencetec_0196fe9e.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5433,6 +6673,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_iron_golem_characters_sciencetec_0196fea0.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5444,6 +6686,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_iron_sentinel_characters_science_01946254.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5455,6 +6699,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_iron_sentinel_characters_weapons_0194666f.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5466,6 +6712,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_mecha_behemoth_mecha_behemoth_019b8a92.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5477,6 +6725,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_mecha_sentinel_sciencetechnology_0196b58d.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5488,6 +6738,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_mechanic_titan_sciencetechnology_0196fe0c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5499,6 +6751,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_mutant_cyborg_sentinel_mutant_019be1db.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5510,6 +6764,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_neo_samurai_sentinel_characters_01968d05.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5521,6 +6777,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_neon_armor_sentinel_sciencetechn_019460ec.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5532,6 +6790,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_nuclear_reactor_sciencetechnolog_01947a0c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5543,6 +6803,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_ork_mechanic_characters_01960130.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5554,6 +6816,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_ork_mechanic_characters_0196014e.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5565,6 +6829,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_ork_mechanic_characters_01960155.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5576,6 +6842,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_ork_mechanic_characters_019601fb.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5587,6 +6855,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_ork_mechanic_characters_01966de0.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5598,6 +6868,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_ork_mechanic_characters_0196c1e2.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5609,18 +6881,24 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_ork_warhammer_40k_holding_0195951e.glb`,
     height: GEN_H,
     clips: genClips(['2H_Ranged_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_dominion_ork_warhammer_40k_holding_01959522: {
     url: `${REALM_MODELS}/dominion/realm_dominion_ork_warhammer_40k_holding_01959522.glb`,
     height: GEN_H,
     clips: genClips(['2H_Ranged_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_dominion_pose_builder_insane_muscles_0194372d: {
     url: `${REALM_MODELS}/dominion/realm_dominion_pose_builder_insane_muscles_0194372d.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5632,6 +6910,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_pumpkinbot_halloween2025_hallowe_019a2be1.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5643,6 +6923,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_robo_chill_vibes_sciencetechnolo_0196fe00.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5654,6 +6936,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_robotic_wanderer_sciencetechnolo_0196fe0e.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5665,6 +6949,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_rusted_metal_golem_monster_01967d88.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5676,6 +6962,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_santa_claus_but_he_01938860.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5687,6 +6975,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_santa_claus_but_he_01938863.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5698,6 +6988,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_santa_claus_buts_right_01938863.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5709,6 +7001,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_sentinel_cyberspace_sciencetechn_0196c05b.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5720,6 +7014,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_sentinel_titan_robot_mech_019b8f7d.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5731,6 +7027,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_serpentbound_archmage_fantasy_ma_019dc23d.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5742,6 +7040,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_space_marine_characters_weaponsm_0193fb93.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5753,6 +7053,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_space_marine_characters_weaponsm_0193fb9a.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5764,6 +7066,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_steampunk_explorer_characters_fa_0196d56a.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5775,6 +7079,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_steampunk_explorer_fashionstyle__0196deeb.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5786,6 +7092,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_steampunk_robocop_sciencetechnol_0197fa8c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5797,6 +7105,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_storm_trooper_t_pose_01942e95.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5808,6 +7118,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_storm_trooper_t_pose_01942e99.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5819,6 +7131,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_storm_trooper_t_pose_01942e9e.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5830,6 +7144,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_techno_goliath_sciencetechnology_01972cc2.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5841,6 +7157,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_techno_goliath_sciencetechnology_01972cca.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5852,6 +7170,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_terminator_sciencetechnology_cha_0196b602.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5863,6 +7183,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_terminator_sciencetechnology_cha_0196b612.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5874,6 +7196,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_titanium_sentinel_sciencetechnol_01965431.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5885,6 +7209,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_titanous_fury_sciencetechnology_01967cc1.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5896,6 +7222,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_unexpected_encounter_scifi_fanta_019b99c3.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5907,6 +7235,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_urban_cyberpunk_explorer_charact_01942e81.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5918,6 +7248,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/dominion/realm_dominion_urban_mech_drifter_characters_0196cf3f.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5929,6 +7261,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_action_figure_hero_characters_01944c02.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5940,6 +7274,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_action_figure_hero_characters_01944c21.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5951,6 +7287,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_action_figure_hero_toys_0194183a.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5962,6 +7300,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_agent_training_character_agent_019bb8c5.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5973,6 +7313,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_albino_caveman_incredible_muscle_0193bba3.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5984,6 +7326,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_albino_caveman_incredible_muscle_0193bbad.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5995,6 +7339,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_average_man_pose_game_01940dd0.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6006,6 +7352,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_average_man_pose_game_01940dea.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6017,6 +7365,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_batman_overweight_halloween2025__019a2655.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6028,6 +7378,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_beautiful_female_viking_characte_019412e9.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6039,6 +7391,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_bizarro_evil_v_ersion_01947f64.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6050,6 +7404,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_captain_spaulding_characters_01944c28.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6061,6 +7417,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_cave_man_but_he_01949df7.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6072,6 +7430,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_cave_man_but_he_01949df8.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6083,6 +7443,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_cave_man_but_he_01949dfe.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6094,6 +7456,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_cave_man_but_he_01949e02.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6105,6 +7469,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_cave_man_but_he_01949e5b.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6116,6 +7482,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_cave_man_but_he_0194a061.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6127,6 +7495,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_contemplative_hero_characters_0195f45f.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6138,6 +7508,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_contemplative_hero_characters_0195f467.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6149,30 +7521,40 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_dark_warlord_characters_0195ed4b.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_fps_dark_warlord_characters_0195ed53: {
     url: `${REALM_MODELS}/fps/realm_fps_dark_warlord_characters_0195ed53.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_fps_dark_warlord_characters_weaponsm_0197c14c: {
     url: `${REALM_MODELS}/fps/realm_fps_dark_warlord_characters_weaponsm_0197c14c.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_fps_dark_warlord_ork_characters_0195f1b9: {
     url: `${REALM_MODELS}/fps/realm_fps_dark_warlord_ork_characters_0195f1b9.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_fps_eternal_titan_fantasy_titan_019b7072: {
     url: `${REALM_MODELS}/fps/realm_fps_eternal_titan_fantasy_titan_019b7072.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6184,6 +7566,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_extremely_muscular_female_hero_01947d05.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6195,6 +7579,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_extremely_muscular_female_hero_01947d08.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6206,6 +7592,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_extremely_muscular_female_hero_01947f73.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6217,6 +7605,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_extremely_muscular_hero_characte_01947cd5.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6228,6 +7618,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_extremely_muscular_hero_characte_01947cd8.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6239,6 +7631,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_extremely_muscular_hero_characte_01947cd9.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6250,6 +7644,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_extremely_muscular_hero_characte_01947ce0.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6261,6 +7657,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_extremely_muscular_hero_characte_01947ce3.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6272,6 +7670,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_extremely_muscular_hero_characte_01947ce4.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6283,6 +7683,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_extremely_muscular_hero_characte_01947cea.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6294,6 +7696,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_extremely_muscular_hero_characte_01947cec.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6305,6 +7709,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_extremely_muscular_hero_characte_01947cf4.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6316,6 +7722,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_extremely_muscular_hero_characte_01947f55.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6327,6 +7735,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_extremely_muscular_hero_characte_01947f62.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6338,6 +7748,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_fairy_viking_fairy_characters_0195e7cd.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6349,6 +7761,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_fairy_viking_fairy_characters_0195e7d3.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6360,6 +7774,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_fairy_viking_fairy_fairy_0195e7cd.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6371,6 +7787,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_fantasy_empress_fantasy_empress_019bc478.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6382,6 +7800,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_game_figure_trap_jaw_0195beb7.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6393,6 +7813,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_game_figure_viking_pose_0195a9f0.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6404,6 +7826,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_game_figure_viking_pose_0195b121.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6415,6 +7839,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_gothic_lord_characters_0196a614.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6426,12 +7852,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_green_warlord_characters_019674e0.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_fps_he_man_toy_action_0194183a: {
     url: `${REALM_MODELS}/fps/realm_fps_he_man_toy_action_0194183a.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6443,6 +7873,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_kakashi_naruto_anime_pose_0194af71.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6454,6 +7886,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_mike_tyson_dress_as_0193d788.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6465,6 +7899,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_mma_fighter_pose_ilia_0197c8e5.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6476,6 +7912,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_ninja_gaiden_pose_characters_01946143.glb`,
     height: GEN_H,
     clips: genClips(['Dualwield_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6487,6 +7925,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_perfect_rig_character_pose_019474ae.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6498,6 +7938,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_pirate_claus_characters_pirate_019b5321.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6509,6 +7951,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_pose_builder_insane_muscles_01943723.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6520,12 +7964,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_stitchjaw_chainmail_warlord_stit_019f0f45.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_fps_superman_venom_characters_fashio_0194b9bd: {
     url: `${REALM_MODELS}/fps/realm_fps_superman_venom_characters_fashio_0194b9bd.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6537,6 +7985,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_superman_venom_characters_fashio_0194c973.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6548,6 +7998,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_superman_venom_superhero_villain_0194b9b9.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6559,6 +8011,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_titan_wastelands_fantasy_creatur_019aa477.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6570,6 +8024,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_valentine_beautiful_girl_blowing_0195017e.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6581,6 +8037,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_viking_culturehistory_01963f92.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6592,18 +8050,24 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/fps/realm_fps_warlord_sentinel_characters_019740a9.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_fps_warlord_sentinel_characters_019740c5: {
     url: `${REALM_MODELS}/fps/realm_fps_warlord_sentinel_characters_019740c5.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_fps_women_witch_satanic_tattoos_01957707: {
     url: `${REALM_MODELS}/fps/realm_fps_women_witch_satanic_tattoos_01957707.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6615,6 +8079,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_armored_abyssal_warden_character_0196497f.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6626,6 +8092,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_atanic_demon_fat_creature_0194e864.glb`,
     height: GEN_H,
     clips: genClips(['Dualwield_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6637,6 +8105,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_bart_simpson_characters_01947c8b.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6648,6 +8118,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_beastlord_abyss_villain_fantasy_019a5067.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6659,6 +8131,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_black_dark_skin_demon_01938379.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6670,6 +8144,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_black_dark_skin_demon_01938399.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6681,6 +8157,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_black_dark_skin_demon_01938802.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6692,6 +8170,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_black_myth_wukong_demon_0194b9b6.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6703,12 +8183,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_bloodbound_orc_warlord_orc_019ecc74.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_bloodspike_behemoth_behemoth_blo_019f1b66: {
     url: `${REALM_MODELS}/infernal/realm_infernal_bloodspike_behemoth_behemoth_blo_019f1b66.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6720,12 +8204,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_bone_guardian_fantasy_creature_019b3c24.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_bone_sentinel_creatures_fantasy_019bb85c: {
     url: `${REALM_MODELS}/infernal/realm_infernal_bone_sentinel_creatures_fantasy_019bb85c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6737,12 +8225,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_bone_sentinel_fantasy_creature_019b3c19.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_bonebound_titan_characters_019832d8: {
     url: `${REALM_MODELS}/infernal/realm_infernal_bonebound_titan_characters_019832d8.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6754,6 +8246,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_cave_troll_wear_tattered_01940d71.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6765,6 +8259,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_colossal_guardians_abyss_charact_019bc2d0.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6776,6 +8272,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_colossal_guardians_abyss_charact_019bc320.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6787,6 +8285,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_cowboy_cyborg_skeleton_character_01978974.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6798,6 +8298,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_create_3d_grinch_cyborg_0193b2bb.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6809,6 +8311,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_creature_hunched_humanoid_form_0194f5bc.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6820,6 +8324,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_creature_hunched_humanoid_form_0194f5be.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6831,6 +8337,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_creature_hunched_humanoid_form_0194f5cd.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6842,6 +8350,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_creature_hunched_humanoid_form_0194f7df.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6853,6 +8363,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_creature_hunched_humanoid_form_0194f7e1.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6864,6 +8376,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_creature_hunched_humanoid_form_0194f7ed.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6875,6 +8389,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_creature_hunched_humanoid_form_0194facd.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6886,6 +8402,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_creature_hunched_humanoid_form_0195b53d.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6897,30 +8415,40 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_creature_muscular_one_eyed_0195be0d.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_cyber_demon_warrior_pbr_01990659: {
     url: `${REALM_MODELS}/infernal/realm_infernal_cyber_demon_warrior_pbr_01990659.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_cyber_demon_warrior_pbr_01990665: {
     url: `${REALM_MODELS}/infernal/realm_infernal_cyber_demon_warrior_pbr_01990665.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_cyber_skull_warrior_skull_019bbd57: {
     url: `${REALM_MODELS}/infernal/realm_infernal_cyber_skull_warrior_skull_019bbd57.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_cyber_skullbot_robot_skull_019bbd65: {
     url: `${REALM_MODELS}/infernal/realm_infernal_cyber_skullbot_robot_skull_019bbd65.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6932,6 +8460,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_cybernetic_ghoul_cyberpunk_ghoul_0198816e.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6943,12 +8473,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_cybernetic_oni_warrior_pbr_0199063c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_cyberpunk_demon_stands_t_019434c8: {
     url: `${REALM_MODELS}/infernal/realm_infernal_cyberpunk_demon_stands_t_019434c8.glb`,
     height: GEN_H,
     clips: genClips(['2H_Ranged_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6960,6 +8494,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_cyberpunk_demon_stands_t_0194371d.glb`,
     height: GEN_H,
     clips: genClips(['2H_Ranged_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6971,6 +8507,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_cyclopean_guardian_creature_fant_0199ed3a.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6982,12 +8520,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_cyclopean_warrior_warrior_humano_019acbaf.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_deathcaller_warlock_characters_f_019b9937: {
     url: `${REALM_MODELS}/infernal/realm_infernal_deathcaller_warlock_characters_f_019b9937.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -6999,6 +8541,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_demon_colossus_demon_monster_019924f9.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7010,6 +8554,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_demon_fire_rune_tattoos_0195d2e8.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7021,6 +8567,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_demon_fire_rune_tattoos_0195d2f3.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7032,6 +8580,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_demon_fire_rune_tattoos_0195d2f5.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7043,6 +8593,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_demon_head_open_mouth_019580ea.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7054,6 +8606,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_demon_hulk_dual_heads_0195524d.glb`,
     height: GEN_H,
     clips: genClips(['Dualwield_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7065,6 +8619,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_demon_hulk_dual_heads_01955250.glb`,
     height: GEN_H,
     clips: genClips(['Dualwield_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7076,6 +8632,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_demon_hulk_dual_heads_01955260.glb`,
     height: GEN_H,
     clips: genClips(['Dualwield_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7087,6 +8645,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_demon_lord_leather_silver_0195338a.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7098,6 +8658,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_demon_lord_leather_silver_01953392.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7109,6 +8671,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_demon_lord_leather_silver_01953396.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7120,6 +8684,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_demon_lord_pose_no_0194aade.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7131,6 +8697,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_demon_lord_pose_no_0194aadf.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7142,6 +8710,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_demon_lord_pose_no_0194ad3f.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7153,6 +8723,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_demon_lord_pose_no_0194c860.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7164,6 +8736,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_demon_made_chrome_metal_0193da0a.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7175,6 +8749,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_demon_overlord_demon_overlord_019b8af1.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7186,18 +8762,24 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_demon_warlord_characters_019696d3.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_demon_warrior_characters_0196a601: {
     url: `${REALM_MODELS}/infernal/realm_infernal_demon_warrior_characters_0196a601.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_demonic_jester_characters_01975a26: {
     url: `${REALM_MODELS}/infernal/realm_infernal_demonic_jester_characters_01975a26.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7209,6 +8791,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_demonic_presence_demon_fantasy_019b7760.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7220,6 +8804,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_demonic_sentinel_characters_0197a31a.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7231,6 +8817,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_demonic_sentinel_demon_creature_019a517d.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7242,6 +8830,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_demonic_sentinel_demon_sentinel_0199db73.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7253,6 +8843,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_demonic_visage_accessories_masks_019434cf.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7264,6 +8856,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_demonic_visage_masks_demon_019434d0.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7275,60 +8869,80 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_demonic_warlord_characters_0196540e.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_demonic_warlord_characters_019674e9: {
     url: `${REALM_MODELS}/infernal/realm_infernal_demonic_warlord_characters_019674e9.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_demonic_warrior_characters_019674f3: {
     url: `${REALM_MODELS}/infernal/realm_infernal_demonic_warrior_characters_019674f3.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_demonic_warrior_characters_01969c6c: {
     url: `${REALM_MODELS}/infernal/realm_infernal_demonic_warrior_characters_01969c6c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_demonic_warrior_characters_01969c71: {
     url: `${REALM_MODELS}/infernal/realm_infernal_demonic_warrior_characters_01969c71.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_demonic_warrior_characters_weapo_01972c78: {
     url: `${REALM_MODELS}/infernal/realm_infernal_demonic_warrior_characters_weapo_01972c78.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_demonic_warrior_demon_characters_019674e0: {
     url: `${REALM_MODELS}/infernal/realm_infernal_demonic_warrior_demon_characters_019674e0.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_demonic_warrior_demon_warrior_019b9eb6: {
     url: `${REALM_MODELS}/infernal/realm_infernal_demonic_warrior_demon_warrior_019b9eb6.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_demonic_warrior_fantasy_demon_019b7108: {
     url: `${REALM_MODELS}/infernal/realm_infernal_demonic_warrior_fantasy_demon_019b7108.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_double_bladed_scythe_curved_0194a902: {
     url: `${REALM_MODELS}/infernal/realm_infernal_double_bladed_scythe_curved_0194a902.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7340,6 +8954,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_dread_rider_characters_01972c7e.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7351,12 +8967,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_dreadful_knight_abyss_characters_0197a322.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_dreadlord_s_embrace_characters_0194037f: {
     url: `${REALM_MODELS}/infernal/realm_infernal_dreadlord_s_embrace_characters_0194037f.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7368,6 +8988,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_elder_iron_skull_legion_0196453b.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7379,6 +9001,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_elder_iron_skull_legion_01964540.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7390,6 +9014,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_elder_iron_skull_legion_0196872b.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7401,6 +9027,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_eternal_lichmage_fantasy_lich_019b992c.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7412,6 +9040,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_ethereal_reaper_characters_01968cd7.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7423,24 +9053,32 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_evil_warlord_armor_made_0196a11d.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_evil_warlord_armor_made_0196a11f: {
     url: `${REALM_MODELS}/infernal/realm_infernal_evil_warlord_armor_made_0196a11f.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_evil_warlord_armor_made_0196a156: {
     url: `${REALM_MODELS}/infernal/realm_infernal_evil_warlord_armor_made_0196a156.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_fairy_demon_fairy_albino_0195e7b8: {
     url: `${REALM_MODELS}/infernal/realm_infernal_fairy_demon_fairy_albino_0195e7b8.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7452,6 +9090,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_fairy_demon_fairy_albino_0195e7c0.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7463,6 +9103,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_fairy_mechanical_cyberpunk_demon_0195e2d7.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7474,6 +9116,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_fairy_mutant_deformed_demon_0195e2da.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7485,6 +9129,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_fairy_mutant_deformed_demon_0195e2e1.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7496,6 +9142,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_game_figure_albino_giant_0195be0e.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7507,24 +9155,32 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_game_figure_masterpiece_lowpoly_0195be19.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_game_figure_masterpiece_lowpoly_0195be1c: {
     url: `${REALM_MODELS}/infernal/realm_infernal_game_figure_masterpiece_lowpoly_0195be1c.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_game_figure_masterpiece_lowpoly_0195be20: {
     url: `${REALM_MODELS}/infernal/realm_infernal_game_figure_masterpiece_lowpoly_0195be20.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_gloom_reaper_characters_0193fb64: {
     url: `${REALM_MODELS}/infernal/realm_infernal_gloom_reaper_characters_0193fb64.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7536,6 +9192,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_gloom_reaper_characters_0193fb7e.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7547,12 +9205,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_goblin_king_guard_characters_019ac417.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_goblin_mischief_goblin_fantasy_019b848b: {
     url: `${REALM_MODELS}/infernal/realm_infernal_goblin_mischief_goblin_fantasy_019b848b.glb`,
     height: GEN_H,
     clips: genClips(['Dualwield_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7564,6 +9226,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_goblin_rough_leathery_green_01953dd0.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7575,6 +9239,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_gourd_fiend_halloween2025_horror_019a178b.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7586,6 +9252,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_guardian_abyss_characters_019696c7.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7597,54 +9265,72 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_highly_muscular_albino_devil_0193e9a8.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_highly_muscular_albino_devil_0193e9b2: {
     url: `${REALM_MODELS}/infernal/realm_infernal_highly_muscular_albino_devil_0193e9b2.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_highly_muscular_albino_devil_0193e9b9: {
     url: `${REALM_MODELS}/infernal/realm_infernal_highly_muscular_albino_devil_0193e9b9.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_highly_muscular_albino_devil_0193e9bc: {
     url: `${REALM_MODELS}/infernal/realm_infernal_highly_muscular_albino_devil_0193e9bc.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_highly_muscular_albino_devil_0193e9c1: {
     url: `${REALM_MODELS}/infernal/realm_infernal_highly_muscular_albino_devil_0193e9c1.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_highly_muscular_albino_devil_0193e9c5: {
     url: `${REALM_MODELS}/infernal/realm_infernal_highly_muscular_albino_devil_0193e9c5.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_highly_muscular_albino_devil_0193e9ce: {
     url: `${REALM_MODELS}/infernal/realm_infernal_highly_muscular_albino_devil_0193e9ce.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_highly_muscular_albino_devil_0193e9d4: {
     url: `${REALM_MODELS}/infernal/realm_infernal_highly_muscular_albino_devil_0193e9d4.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_hunched_creature_elongated_lumpy_01955cec: {
     url: `${REALM_MODELS}/infernal/realm_infernal_hunched_creature_elongated_lumpy_01955cec.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7656,6 +9342,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_hydralisk_long_serpentine_lower_019639f2.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7667,6 +9355,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_enchanter_characters_fa_019b961c.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7678,6 +9368,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_fury_villain_villain_0199b991.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7689,6 +9381,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_grin_characters_01974ae8.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7700,6 +9394,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_guardian_characters_01964444.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7711,6 +9407,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_guardian_characters_01964974.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7722,6 +9420,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_guardian_characters_0196e65a.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7733,6 +9433,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_guardian_characters_0196ee84.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7744,6 +9446,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_guardian_characters_0196ee97.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7755,6 +9459,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_guardian_characters_01973194.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7766,6 +9472,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_guardian_villain_guardi_019a8b3b.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7777,6 +9485,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_majesty_characters_01964448.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7788,6 +9498,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_majesty_characters_0196444c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7799,6 +9511,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_majesty_characters_01966daa.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7810,6 +9524,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_majesty_creatures_infer_01964448.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7821,6 +9537,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_majesty_villain_fantasy_019a51bf.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7832,6 +9550,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_monarch_fantasy_charact_0199fa0a.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7843,6 +9563,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_overlord_characters_0196d439.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7854,6 +9576,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_overlord_characters_0197899b.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7865,6 +9589,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_overlord_characters_0197899f.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7876,6 +9602,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_roar_creatures_demon_0199a0e7.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7887,6 +9615,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_sentinel_characters_01965e5c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7898,6 +9628,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_sentinel_characters_0196a606.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7909,6 +9641,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_sentinel_characters_0196b0bf.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7920,6 +9654,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_sentinel_characters_0196b0d6.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7931,6 +9667,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_sentinel_characters_0196d448.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7942,6 +9680,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_sentinel_characters_01974bde.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7953,6 +9693,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_sentinel_characters_01974be2.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7964,6 +9706,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_sentinel_characters_0197af99.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7975,12 +9719,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_sentinel_demon_monster_01965e5d.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_infernal_sovereign_fantasy_chara_019a5459: {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_sovereign_fantasy_chara_019a5459.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -7992,6 +9740,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_titan_characters_019672fb.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8003,6 +9753,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_titan_characters_01967790.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8014,6 +9766,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_titan_characters_01969212.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8025,6 +9779,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_titan_characters_01983037.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8036,6 +9792,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_titan_monster_demon_01969214.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8047,6 +9805,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_visage_characters_01965900.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8058,78 +9818,104 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_warlord_character_warlo_01969c6c.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_infernal_warlord_characters_01965ddd: {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_warlord_characters_01965ddd.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_infernal_warlord_characters_0196a705: {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_warlord_characters_0196a705.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_infernal_warlord_characters_0196a816: {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_warlord_characters_0196a816.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_infernal_warlord_characters_0197318b: {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_warlord_characters_0197318b.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_infernal_warlord_characters_weap_01944c3c: {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_warlord_characters_weap_01944c3c.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_infernal_warlord_characters_weap_01944c92: {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_warlord_characters_weap_01944c92.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_infernal_warlord_fantasy_warlord_019b753b: {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_warlord_fantasy_warlord_019b753b.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_infernal_warlord_villain_charact_0199b160: {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_warlord_villain_charact_0199b160.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_infernal_warrior_characters_019659a3: {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_warrior_characters_019659a3.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_infernal_warrior_characters_0196c009: {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_warrior_characters_0196c009.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_infernal_warrior_characters_weap_01965900: {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_warrior_characters_weap_01965900.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_infernal_watcher_characters_019737a4: {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_watcher_characters_019737a4.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8141,6 +9927,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_watcher_characters_019737a9.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8152,6 +9940,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_inferno_guardian_villain_villain_0199b560.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8163,12 +9953,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_ironthorn_dread_knight_character_019dd422.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_legendary_demon_boss_evil_019894ab: {
     url: `${REALM_MODELS}/infernal/realm_infernal_legendary_demon_boss_evil_019894ab.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8180,6 +9974,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_legendary_demon_boss_evil_019894af.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8191,6 +9987,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_legendary_demon_boss_evil_01989c2a.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8202,6 +10000,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_lunar_reaper_fantasy_weapon_019bc759.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8213,6 +10013,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_malevolent_majesty_fantasy_creat_019bb848.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8224,6 +10026,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_massive_fat_demon_character_0195aedc.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8235,6 +10039,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_massive_fat_demon_character_019a320b.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8246,6 +10052,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_massive_fat_demon_character_019a328c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8257,6 +10065,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_minimalistic_design_demon_lord_0195b57e.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8268,6 +10078,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_minotaur_butcher_characters_019707e8.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8279,6 +10091,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_monster_made_bones_100000_019580a7.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8290,6 +10104,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_monster_made_bones_100000_019580d4.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8301,36 +10117,48 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_most_bad_ass_goblin_01987255.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_most_bad_ass_goblin_019875ab: {
     url: `${REALM_MODELS}/infernal/realm_infernal_most_bad_ass_goblin_019875ab.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_most_bad_ass_goblin_019875c4: {
     url: `${REALM_MODELS}/infernal/realm_infernal_most_bad_ass_goblin_019875c4.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_most_beatifull_female_blond_019875c0: {
     url: `${REALM_MODELS}/infernal/realm_infernal_most_beatifull_female_blond_019875c0.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_most_beatifull_female_blond_019875df: {
     url: `${REALM_MODELS}/infernal/realm_infernal_most_beatifull_female_blond_019875df.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_muscular_humanoid_creature_pale_0194393c: {
     url: `${REALM_MODELS}/infernal/realm_infernal_muscular_humanoid_creature_pale_0194393c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8342,6 +10170,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_muscular_humanoid_creature_pale_01943940.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8353,6 +10183,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_necromancer_enigma_necromancer_w_019b9946.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8364,6 +10196,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_necromancer_s_aura_magic_019bc7d1.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8375,6 +10209,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_necromancer_s_horde_fantasy_019b8b0e.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8386,12 +10222,16 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_necrotic_sentinel_necrotic_senti_019c082b.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_nightmare_behemoth_characters_0196a5e8: {
     url: `${REALM_MODELS}/infernal/realm_infernal_nightmare_behemoth_characters_0196a5e8.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8403,6 +10243,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_nightmare_revenant_fantasy_skele_019498fe.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8414,6 +10256,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_nosferatu_shadow_sketchto3d_mons_019834ac.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8425,24 +10269,32 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_ogre_s_fury_ogre_019ab398.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_ogre_warlord_ogre_warlord_019ab3a7: {
     url: `${REALM_MODELS}/infernal/realm_infernal_ogre_warlord_ogre_warlord_019ab3a7.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_orc_warlord_bone_fur_019d68bd: {
     url: `${REALM_MODELS}/infernal/realm_infernal_orc_warlord_bone_fur_019d68bd.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_pose_ninja_storm_shadow_0194841a: {
     url: `${REALM_MODELS}/infernal/realm_infernal_pose_ninja_storm_shadow_0194841a.glb`,
     height: GEN_H,
     clips: genClips(['Dualwield_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8454,6 +10306,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_reaper_s_cloak_fashionstyle_01966870.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8465,6 +10319,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_rusted_infernal_golem_evil_019910d6.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8476,6 +10332,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_rusted_infernal_golem_evil_01991112.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8487,6 +10345,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_rusted_infernal_golem_evil_0199111c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8498,6 +10358,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_samurai_zombie_game_assets_01954d30.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8509,6 +10371,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_savage_demon_lord_pbr_01990626.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8520,6 +10384,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_scorpion_centaur_necromancer_cha_01972c73.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8531,6 +10397,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_scorpion_centaur_necromancer_sco_01972c70.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8542,6 +10410,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_sentinel_abyss_armor_characters_01974158.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8553,30 +10423,40 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_shadow_warrior_characters_01942cfa.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_shadow_warrior_characters_fashio_01942cf0: {
     url: `${REALM_MODELS}/infernal/realm_infernal_shadow_warrior_characters_fashio_01942cf0.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_shadow_warrior_characters_fashio_01942cf2: {
     url: `${REALM_MODELS}/infernal/realm_infernal_shadow_warrior_characters_fashio_01942cf2.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_shadow_warrior_characters_fashio_0194c973: {
     url: `${REALM_MODELS}/infernal/realm_infernal_shadow_warrior_characters_fashio_0194c973.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_skull_sovereign_fantasy_skull_019be2ad: {
     url: `${REALM_MODELS}/infernal/realm_infernal_skull_sovereign_fantasy_skull_019be2ad.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8588,42 +10468,56 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_skull_warrior_characters_weapons_01965e6d.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_skull_warrior_skull_warrior_019a7fa0: {
     url: `${REALM_MODELS}/infernal/realm_infernal_skull_warrior_skull_warrior_019a7fa0.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_skullbound_warlord_character_fan_019cba58: {
     url: `${REALM_MODELS}/infernal/realm_infernal_skullbound_warlord_character_fan_019cba58.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_skullbound_warlord_fantasy_chara_019cc63c: {
     url: `${REALM_MODELS}/infernal/realm_infernal_skullbound_warlord_fantasy_chara_019cc63c.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_skullbound_warlord_fantasy_chara_019d320a: {
     url: `${REALM_MODELS}/infernal/realm_infernal_skullbound_warlord_fantasy_chara_019d320a.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_spiked_skull_warrior_warrior_019bad89: {
     url: `${REALM_MODELS}/infernal/realm_infernal_spiked_skull_warrior_warrior_019bad89.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_steel_guardian_robot_armor_0193fba1: {
     url: `${REALM_MODELS}/infernal/realm_infernal_steel_guardian_robot_armor_0193fba1.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8635,6 +10529,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_techno_demon_characters_sciencet_01965e0d.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8646,6 +10542,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_thorned_nightmare_characters_01982abe.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8657,6 +10555,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_titan_skulls_characters_019823a0.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8668,6 +10568,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_titan_skulls_characters_019823a2.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8679,6 +10581,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_toxic_demon_characters_01961af7.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8690,6 +10594,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_toxic_demon_characters_01961ff3.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8701,6 +10607,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_undead_rotten_machine_demon_0196c4f8.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8712,6 +10620,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_valentine_imp_characters_019501b2.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8723,6 +10633,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_violet_necromancer_necromancer_m_019cb976.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8734,48 +10646,64 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_warlord_shadows_characters_019672d2.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_warlord_shadows_fantasy_warlord_019b65bc: {
     url: `${REALM_MODELS}/infernal/realm_infernal_warlord_shadows_fantasy_warlord_019b65bc.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_warlord_skulls_characters_0193fb77: {
     url: `${REALM_MODELS}/infernal/realm_infernal_warlord_skulls_characters_0193fb77.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_warrior_abyss_characters_0196c064: {
     url: `${REALM_MODELS}/infernal/realm_infernal_warrior_abyss_characters_0196c064.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_warrior_abyss_characters_01974637: {
     url: `${REALM_MODELS}/infernal/realm_infernal_warrior_abyss_characters_01974637.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_warrior_damned_characters_0196ca26: {
     url: `${REALM_MODELS}/infernal/realm_infernal_warrior_damned_characters_0196ca26.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_warrior_shadows_characters_01963a09: {
     url: `${REALM_MODELS}/infernal/realm_infernal_warrior_shadows_characters_01963a09.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_watcher_abyss_creature_fantasy_019bc891: {
     url: `${REALM_MODELS}/infernal/realm_infernal_watcher_abyss_creature_fantasy_019bc891.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8787,6 +10715,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_women_masterpiece_lowpoly_myster_01957697.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8798,6 +10728,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_xenomorph_skull_fusion_ironmaide_0195e2dc.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8809,6 +10741,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_xenomorph_skull_fusion_sciencete_0195dd95.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8820,6 +10754,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_xenomorph_skull_fusion_sciencete_0195dd98.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8831,6 +10767,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_xenomorph_skull_fusion_sciencete_0195dda0.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -8842,6 +10780,8 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_zombie_claus_christmas2025_zombi_019b415d.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },

@@ -161,6 +161,12 @@ for (const e of out) {
   lines.push(`    url: \`\${REALM_MODELS}/${e.realm}/${e.key}.glb\`,`);
   lines.push('    height: GEN_H,');
   lines.push(`    clips: genClips([${e.attacks.join(', ')}]),`);
+  // Per-entity colour. Without a tint field applyMaterials returns null and every
+  // instance of a body renders identically, so a pool of 600 still reads as clones.
+  // Strength is deliberately low: these carry full Meshy PBR textures and a strong
+  // lerp washes the art out. This is also the hook armour dye will use.
+  lines.push("    tint: 'entity',");
+  lines.push('    tintStrength: 0.18,');
   if (!e.armed) {
     lines.push('    attach: [');
     lines.push("      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },");
