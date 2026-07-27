@@ -2005,12 +2005,12 @@ export const en: EnTranslations = {
       "relay": {
         "tooFast": "You are posting too fast. Wait a moment and try again.",
         "lfg": {
-          "hint": "Find players for a dungeon or quest",
-          "label": "Looking for Group"
+          "label": "Looking for Group",
+          "hint": "Find players for a dungeon or quest"
         },
         "wts": {
-          "hint": "Advertise an item or service for sale",
-          "label": "Want to Sell"
+          "label": "Want to Sell",
+          "hint": "Advertise an item or service for sale"
         },
         "wtb": {
           "label": "Want to Buy",
@@ -10606,6 +10606,9 @@ export const en: EnTranslations = {
       },
       "ysolei": {
         "name": "Ysolei, Avatar of the Drowned Moon"
+      },
+      "water_elemental": {
+        "name": "Water Elemental"
       }
     },
     "npcs": {

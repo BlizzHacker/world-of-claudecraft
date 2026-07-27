@@ -2005,12 +2005,12 @@ export const tr_TR: EnTranslations = {
       "relay": {
         "tooFast": "Çok hızlı gönderiyorsun. Biraz bekle ve tekrar dene.",
         "lfg": {
-          "hint": "Bir zindan veya görev için oyuncu bul",
-          "label": "Grup Arıyorum"
+          "label": "Grup Arıyorum",
+          "hint": "Bir zindan veya görev için oyuncu bul"
         },
         "wts": {
-          "hint": "Satılık bir eşya veya hizmet ilan et",
-          "label": "Satmak İstiyorum"
+          "label": "Satmak İstiyorum",
+          "hint": "Satılık bir eşya veya hizmet ilan et"
         },
         "wtb": {
           "label": "Satın Almak İstiyorum",
@@ -10606,6 +10606,9 @@ export const tr_TR: EnTranslations = {
       },
       "ysolei": {
         "name": "Ysolei, Boğulmuş Ay'ın Avatarı"
+      },
+      "water_elemental": {
+        "name": "Water Elemental"
       }
     },
     "npcs": {

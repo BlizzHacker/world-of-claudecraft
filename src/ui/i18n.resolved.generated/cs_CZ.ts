@@ -2005,12 +2005,12 @@ export const cs_CZ: EnTranslations = {
       "relay": {
         "tooFast": "Posíláš příspěvky příliš rychle. Chvíli počkej a zkus to znovu.",
         "lfg": {
-          "hint": "Najdi hráče pro dungeon nebo úkol",
-          "label": "Hledání skupiny"
+          "label": "Hledání skupiny",
+          "hint": "Najdi hráče pro dungeon nebo úkol"
         },
         "wts": {
-          "hint": "Nabídni předmět nebo službu k prodeji",
-          "label": "Chci prodat"
+          "label": "Chci prodat",
+          "hint": "Nabídni předmět nebo službu k prodeji"
         },
         "wtb": {
           "label": "Chci koupit",
@@ -10606,6 +10606,9 @@ export const cs_CZ: EnTranslations = {
       },
       "ysolei": {
         "name": "Ysolei, avatar utopeného měsíce"
+      },
+      "water_elemental": {
+        "name": "Water Elemental"
       }
     },
     "npcs": {

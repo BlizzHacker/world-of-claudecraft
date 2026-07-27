@@ -2005,12 +2005,12 @@ export const nl_NL: EnTranslations = {
       "relay": {
         "tooFast": "Je plaatst te snel. Wacht even en probeer het opnieuw.",
         "lfg": {
-          "hint": "Vind spelers voor een kerker of quest",
-          "label": "Op zoek naar groep"
+          "label": "Op zoek naar groep",
+          "hint": "Vind spelers voor een kerker of quest"
         },
         "wts": {
-          "hint": "Adverteer een voorwerp of dienst te koop",
-          "label": "Te koop aangeboden"
+          "label": "Te koop aangeboden",
+          "hint": "Adverteer een voorwerp of dienst te koop"
         },
         "wtb": {
           "label": "Te koop gevraagd",
@@ -10606,6 +10606,9 @@ export const nl_NL: EnTranslations = {
       },
       "ysolei": {
         "name": "Ysolei, Avatar van de Verdronken Maan"
+      },
+      "water_elemental": {
+        "name": "Water Elemental"
       }
     },
     "npcs": {

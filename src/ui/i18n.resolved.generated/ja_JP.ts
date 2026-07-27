@@ -2005,12 +2005,12 @@ export const ja_JP: EnTranslations = {
       "relay": {
         "tooFast": "投稿が速すぎます。少し待ってからもう一度お試しください。",
         "lfg": {
-          "hint": "ダンジョンやクエストの仲間を探す",
-          "label": "パーティ募集"
+          "label": "パーティ募集",
+          "hint": "ダンジョンやクエストの仲間を探す"
         },
         "wts": {
-          "hint": "販売するアイテムやサービスを宣伝する",
-          "label": "売却希望"
+          "label": "売却希望",
+          "hint": "販売するアイテムやサービスを宣伝する"
         },
         "wtb": {
           "label": "購入希望",
@@ -10606,6 +10606,9 @@ export const ja_JP: EnTranslations = {
       },
       "ysolei": {
         "name": "イソレイ、溺月の化身"
+      },
+      "water_elemental": {
+        "name": "Water Elemental"
       }
     },
     "npcs": {

@@ -2005,12 +2005,12 @@ export const id_ID: EnTranslations = {
       "relay": {
         "tooFast": "Kamu mengirim terlalu cepat. Tunggu sebentar dan coba lagi.",
         "lfg": {
-          "hint": "Cari pemain untuk dungeon atau misi",
-          "label": "Mencari Kelompok"
+          "label": "Mencari Kelompok",
+          "hint": "Cari pemain untuk dungeon atau misi"
         },
         "wts": {
-          "hint": "Iklankan item atau jasa yang dijual",
-          "label": "Ingin Menjual"
+          "label": "Ingin Menjual",
+          "hint": "Iklankan item atau jasa yang dijual"
         },
         "wtb": {
           "label": "Ingin Membeli",
@@ -10606,6 +10606,9 @@ export const id_ID: EnTranslations = {
       },
       "ysolei": {
         "name": "Ysolei, Awatara Bulan Tenggelam"
+      },
+      "water_elemental": {
+        "name": "Water Elemental"
       }
     },
     "npcs": {

@@ -2005,12 +2005,12 @@ export const ko_KR: EnTranslations = {
       "relay": {
         "tooFast": "너무 빠르게 게시하고 있습니다. 잠시 후 다시 시도해 주세요.",
         "lfg": {
-          "hint": "던전이나 퀘스트를 함께할 플레이어 찾기",
-          "label": "파티 구함"
+          "label": "파티 구함",
+          "hint": "던전이나 퀘스트를 함께할 플레이어 찾기"
         },
         "wts": {
-          "hint": "판매할 아이템이나 서비스 광고",
-          "label": "판매 희망"
+          "label": "판매 희망",
+          "hint": "판매할 아이템이나 서비스 광고"
         },
         "wtb": {
           "label": "구매 희망",
@@ -10606,6 +10606,9 @@ export const ko_KR: EnTranslations = {
       },
       "ysolei": {
         "name": "이솔레이, 익사한 달의 화신"
+      },
+      "water_elemental": {
+        "name": "Water Elemental"
       }
     },
     "npcs": {

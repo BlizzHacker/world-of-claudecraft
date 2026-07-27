@@ -2005,12 +2005,12 @@ export const zh_TW: EnTranslations = {
       "relay": {
         "tooFast": "你發送得太快了。請稍候再試。",
         "lfg": {
-          "hint": "尋找一同挑戰地城或任務的玩家",
-          "label": "尋找隊伍"
+          "label": "尋找隊伍",
+          "hint": "尋找一同挑戰地城或任務的玩家"
         },
         "wts": {
-          "hint": "宣傳出售物品或服務",
-          "label": "想要出售"
+          "label": "想要出售",
+          "hint": "宣傳出售物品或服務"
         },
         "wtb": {
           "label": "想要購買",
@@ -10606,6 +10606,9 @@ export const zh_TW: EnTranslations = {
       },
       "ysolei": {
         "name": "伊索蕾，溺月化身"
+      },
+      "water_elemental": {
+        "name": "Water Elemental"
       }
     },
     "npcs": {

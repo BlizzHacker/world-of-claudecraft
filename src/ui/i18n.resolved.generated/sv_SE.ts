@@ -2005,12 +2005,12 @@ export const sv_SE: EnTranslations = {
       "relay": {
         "tooFast": "Du postar för snabbt. Vänta en stund och försök igen.",
         "lfg": {
-          "hint": "Hitta spelare till en instans eller ett uppdrag",
-          "label": "Söker grupp"
+          "label": "Söker grupp",
+          "hint": "Hitta spelare till en instans eller ett uppdrag"
         },
         "wts": {
-          "hint": "Annonsera ett föremål eller en tjänst till salu",
-          "label": "Vill sälja"
+          "label": "Vill sälja",
+          "hint": "Annonsera ett föremål eller en tjänst till salu"
         },
         "wtb": {
           "label": "Vill köpa",
@@ -10606,6 +10606,9 @@ export const sv_SE: EnTranslations = {
       },
       "ysolei": {
         "name": "Ysolei, den dränkta månens avatar"
+      },
+      "water_elemental": {
+        "name": "Water Elemental"
       }
     },
     "npcs": {

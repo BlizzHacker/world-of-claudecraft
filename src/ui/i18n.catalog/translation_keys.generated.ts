@@ -2509,6 +2509,7 @@ export type TranslationKeyFlat =
   | 'entities.mobs.warlock_imp.name'
   | 'entities.mobs.warlock_voidwalker.name'
   | 'entities.mobs.warlord_drogmar.name'
+  | 'entities.mobs.water_elemental.name'
   | 'entities.mobs.webwood_spider.name'
   | 'entities.mobs.wild_boar.name'
   | 'entities.mobs.wraithbinder_maldrec.name'

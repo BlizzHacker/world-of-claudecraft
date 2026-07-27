@@ -1866,14 +1866,9 @@ export const ZONE1_PROPS: ZonePropsDef = {
     camGhost: false,
   })),
   graveyards: [{ ...EASTBROOK_LAYOUT.services.graveyard.position }, { x: 4, z: -56 }],
-  delveMarkers: [{ x: -5, z: -52, delveId: 'collapsed_reliquary' }],
   fences: [
     { x1: 16, z1: 16, x2: 22, z2: 4 },
     { x1: -16, z1: 14, x2: -20, z2: 2 },
-  ],
-  graveyards: [
-    { x: -14, z: -14 },
-    { x: 4, z: -56 },
   ],
   delveMarkers: [
     { x: -5, z: -52, delveId: 'collapsed_reliquary' },

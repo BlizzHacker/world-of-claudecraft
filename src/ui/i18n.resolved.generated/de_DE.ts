@@ -2005,12 +2005,12 @@ export const de_DE: EnTranslations = {
       "relay": {
         "tooFast": "Du postest zu schnell. Warte einen Moment und versuche es erneut.",
         "lfg": {
-          "hint": "Finde Spieler für einen Dungeon oder eine Quest",
-          "label": "Auf Gruppensuche"
+          "label": "Auf Gruppensuche",
+          "hint": "Finde Spieler für einen Dungeon oder eine Quest"
         },
         "wts": {
-          "hint": "Biete einen Gegenstand oder Dienst zum Verkauf an",
-          "label": "Biete zum Verkauf"
+          "label": "Biete zum Verkauf",
+          "hint": "Biete einen Gegenstand oder Dienst zum Verkauf an"
         },
         "wtb": {
           "label": "Suche zu kaufen",
@@ -10606,6 +10606,9 @@ export const de_DE: EnTranslations = {
       },
       "ysolei": {
         "name": "Ysolei, Avatar des Ertränkten Mondes"
+      },
+      "water_elemental": {
+        "name": "Water Elemental"
       }
     },
     "npcs": {

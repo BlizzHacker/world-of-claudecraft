@@ -2005,12 +2005,12 @@ export const fr_FR: EnTranslations = {
       "relay": {
         "tooFast": "Vous publiez trop vite. Patientez un instant et réessayez.",
         "lfg": {
-          "hint": "Trouver des joueurs pour un donjon ou une quête",
-          "label": "Recherche de groupe"
+          "label": "Recherche de groupe",
+          "hint": "Trouver des joueurs pour un donjon ou une quête"
         },
         "wts": {
-          "hint": "Proposer un objet ou un service à la vente",
-          "label": "Vente proposée"
+          "label": "Vente proposée",
+          "hint": "Proposer un objet ou un service à la vente"
         },
         "wtb": {
           "label": "Achat recherché",
@@ -10606,6 +10606,9 @@ export const fr_FR: EnTranslations = {
       },
       "ysolei": {
         "name": "Ysolei, avatar de la Lune noyée"
+      },
+      "water_elemental": {
+        "name": "Water Elemental"
       }
     },
     "npcs": {

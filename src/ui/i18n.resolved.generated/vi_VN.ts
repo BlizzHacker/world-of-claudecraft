@@ -2005,12 +2005,12 @@ export const vi_VN: EnTranslations = {
       "relay": {
         "tooFast": "Bạn đang đăng quá nhanh. Hãy đợi một lát rồi thử lại.",
         "lfg": {
-          "hint": "Tìm người chơi cho một hầm ngục hoặc nhiệm vụ",
-          "label": "Tìm Nhóm"
+          "label": "Tìm Nhóm",
+          "hint": "Tìm người chơi cho một hầm ngục hoặc nhiệm vụ"
         },
         "wts": {
-          "hint": "Rao bán một vật phẩm hoặc dịch vụ",
-          "label": "Cần Bán"
+          "label": "Cần Bán",
+          "hint": "Rao bán một vật phẩm hoặc dịch vụ"
         },
         "wtb": {
           "label": "Cần Mua",
@@ -10606,6 +10606,9 @@ export const vi_VN: EnTranslations = {
       },
       "ysolei": {
         "name": "Ysolei, Hóa Thân Nguyệt Chết Chìm"
+      },
+      "water_elemental": {
+        "name": "Water Elemental"
       }
     },
     "npcs": {

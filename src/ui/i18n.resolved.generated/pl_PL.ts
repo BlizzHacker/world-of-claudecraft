@@ -2005,12 +2005,12 @@ export const pl_PL: EnTranslations = {
       "relay": {
         "tooFast": "Publikujesz zbyt szybko. Poczekaj chwilę i spróbuj ponownie.",
         "lfg": {
-          "hint": "Znajdź graczy do lochu lub zadania",
-          "label": "Szukam drużyny"
+          "label": "Szukam drużyny",
+          "hint": "Znajdź graczy do lochu lub zadania"
         },
         "wts": {
-          "hint": "Ogłoś przedmiot lub usługę na sprzedaż",
-          "label": "Chcę sprzedać"
+          "label": "Chcę sprzedać",
+          "hint": "Ogłoś przedmiot lub usługę na sprzedaż"
         },
         "wtb": {
           "label": "Chcę kupić",
@@ -10606,6 +10606,9 @@ export const pl_PL: EnTranslations = {
       },
       "ysolei": {
         "name": "Ysolei, Awatar Utopionego Księżyca"
+      },
+      "water_elemental": {
+        "name": "Water Elemental"
       }
     },
     "npcs": {

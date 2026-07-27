@@ -2005,12 +2005,12 @@ export const it_IT: EnTranslations = {
       "relay": {
         "tooFast": "Stai pubblicando troppo in fretta. Aspetta un momento e riprova.",
         "lfg": {
-          "hint": "Trova giocatori per un dungeon o una missione",
-          "label": "Cerco gruppo"
+          "label": "Cerco gruppo",
+          "hint": "Trova giocatori per un dungeon o una missione"
         },
         "wts": {
-          "hint": "Pubblicizza un oggetto o un servizio in vendita",
-          "label": "Cerco di vendere"
+          "label": "Cerco di vendere",
+          "hint": "Pubblicizza un oggetto o un servizio in vendita"
         },
         "wtb": {
           "label": "Cerco di comprare",
@@ -10606,6 +10606,9 @@ export const it_IT: EnTranslations = {
       },
       "ysolei": {
         "name": "Ysolei, Avatar della Luna Annegata"
+      },
+      "water_elemental": {
+        "name": "Water Elemental"
       }
     },
     "npcs": {

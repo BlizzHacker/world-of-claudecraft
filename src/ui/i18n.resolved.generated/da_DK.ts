@@ -2005,12 +2005,12 @@ export const da_DK: EnTranslations = {
       "relay": {
         "tooFast": "Du poster for hurtigt. Vent et øjeblik og prøv igen.",
         "lfg": {
-          "hint": "Find spillere til et dungeon eller en opgave",
-          "label": "Søger gruppe"
+          "label": "Søger gruppe",
+          "hint": "Find spillere til et dungeon eller en opgave"
         },
         "wts": {
-          "hint": "Reklamér for en genstand eller tjeneste til salg",
-          "label": "Vil sælge"
+          "label": "Vil sælge",
+          "hint": "Reklamér for en genstand eller tjeneste til salg"
         },
         "wtb": {
           "label": "Vil købe",
@@ -10606,6 +10606,9 @@ export const da_DK: EnTranslations = {
       },
       "ysolei": {
         "name": "Ysolei, den Druknede Månes Avatar"
+      },
+      "water_elemental": {
+        "name": "Water Elemental"
       }
     },
     "npcs": {

@@ -2126,14 +2126,6 @@ export const hudChromeStrings = {
       recruit: { label: 'Guild Recruiting', hint: 'Recruit players for your guild' },
       event: { label: 'Event / Raid', hint: 'Announce a raid, meetup or event' },
       help: { label: 'Need Help', hint: 'Ask the community for help' },
-      lfg: {
-        hint: "Find players for a dungeon or quest",
-        label: "Looking for Group",
-      },
-      wts: {
-        hint: "Advertise an item or service for sale",
-        label: "Want to Sell",
-      },
     },
   },
   // Developer badge: a cosmetic honor for contributors by landed-commit count
