@@ -268,7 +268,6 @@ export function createWsAuth(deps: WsAuthDeps): WsAuthHandlers {
       rejectHandshake(ws, WS_AUTH_ERROR.notAuthenticated);
       return;
     }
-    const accountId = account.accountId;
     const status = await moderationStatusForAccount(accountId);
     if (status.locked) {
       rejectHandshake(ws, status.message);

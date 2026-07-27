@@ -50,6 +50,59 @@ export function shouldReloadExternalPreview(
 }
 
 export class CharacterPreview {
+  setExternalModel(
+    url: string,
+    onState?: (state: ExternalPreviewState) => void,
+  ): void {
+    if (this.destroyed) return;
+    this.externalStateListener = onState ?? null;
+    if (!shouldReloadExternalPreview(this.externalModelUrl, url)) {
+      onState?.(this.externalState);
+      return;
+    }
+    const token = ++this.externalLoadToken;
+    this.clearExternalModel(false);
+    this.externalModelUrl = url;
+    this.externalState = 'loading';
+    this.externalStateListener?.('loading');
+    loadGltf(url)
+      .then((gltf) => {
+        if (this.destroyed || token !== this.externalLoadToken) return;
+        // Keep the class rig visible until the replacement has loaded. A missing
+        // generated asset must degrade to a useful character preview, never to an
+        // empty turntable while the network request is pending or after it fails.
+        if (this.currentVisual) {
+          this.characterGroup.remove(this.currentVisual.root);
+          this.currentVisual.dispose();
+          this.currentVisual = null;
+        }
+        const root = buildExternalPreviewInstance(gltf.scene);
+        this.externalRoot = root;
+        this.characterGroup.add(root);
+        if (gltf.animations.length) {
+          const mixer = new THREE.AnimationMixer(root);
+          const clipName = chooseExternalPreviewClipName(
+            gltf.animations.map((clip) => clip.name),
+          );
+          const clip =
+            gltf.animations.find((animation) => animation.name === clipName) ?? gltf.animations[0];
+          mixer.clipAction(clip).play();
+          this.externalMixer = mixer;
+        }
+        this.characterGroup.rotation.y = 0;
+        this.syncSize();
+        this.externalState = 'ready';
+        this.externalStateListener?.('ready');
+      })
+      .catch((err: unknown) => {
+        if (token === this.externalLoadToken) {
+          this.externalModelUrl = null;
+          this.externalState = 'error';
+          this.externalStateListener?.('error');
+          console.error(`Failed to load external preview model ${url}:`, err);
+        }
+      });
+  }
   private container: HTMLElement;
   private canvas: HTMLCanvasElement;
   private renderer: THREE.WebGLRenderer;

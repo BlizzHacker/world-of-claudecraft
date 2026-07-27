@@ -126,6 +126,10 @@ type UiCue =
   | (typeof UI_CUES.craftByFamily)[keyof typeof UI_CUES.craftByFamily];
 
 export class GameAudio {
+  questAccept(): void {
+    this.tone(660, 0.18, 0.14, 'triangle');
+    this.tone(880, 0.25, 0.14, 'triangle', 0.1);
+  }
   private vol = 1;
   // Gates the discrete interface/feedback cues (loot, level, quest, whisper, error,
   // ...) plus the combat avoid cues the HUD reads via `feedbackEnabled`. On by

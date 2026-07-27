@@ -878,7 +878,6 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
 
   for (const b of activeContent.props.buildings) {
     const key = b.x * 13.7 + b.z * 3.1;
-    const y = ground(b.x, b.z);
     const armoury = buildEastbrookGrandArmouryView(b, ground);
     if (armoury) {
       group.add(armoury.group);
@@ -889,8 +888,6 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
       continue;
     }
     if (builtInWorld && isEastbrookRebuildBuilding(b)) continue;
-    // roof Y mirrors the camera collider height in colliders.ts
-    const roofY = y + (b.kind === 'chapel' ? 10.8 : b.kind === 'inn' ? 7.8 : 8.0);
     const y = footBaseY(b);
     // roof Y mirrors the camera collider height in colliders.ts (scaled to match)
     const roofY = y + (b.kind === 'chapel' ? 10.8 : b.kind === 'inn' ? 7.8 : 8.0) * vScale;

@@ -1340,6 +1340,10 @@ function blankEntity(id: number): Entity {
 }
 
 export class ClientWorld implements IWorld {
+  netPipeline(): NetPipelineStats {
+    if (this.netPipelineStats === undefined) this.netPipelineStats = createNetPipelineStats();
+    return this.netPipelineStats;
+  }
   // Shared rollout registry; gameplay state is not inferred from this field.
   minigameFeatures: readonly MinigameFeatureStatus[] = MINIGAME_FEATURES;
   // Authoritative generic minigame lifecycle state (`self.mg`), mirrored only;
