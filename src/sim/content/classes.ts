@@ -6233,6 +6233,57 @@ export const ABILITIES: Record<string, AbilityDef> = {
   // resolves sport ids; no class lists them, so abilitiesKnownAt never grants
   // them outside a match (resolveSportKit is the only entry).
   ...SPORT_ABILITIES,
+  commanding_shout: {
+    id: 'commanding_shout',
+    name: 'Bolstering Cry',
+    class: 'warrior',
+    learnLevel: 14,
+    cost: 10,
+    castTime: 0,
+    cooldown: 0,
+    range: 0,
+    school: 'physical',
+    requiresTarget: false,
+    exclusiveGroup: 'warrior_shout',
+    effects: [{ type: 'selfBuff', kind: 'buff_sta', value: 6, duration: 120 }],
+    ranks: [
+      {
+        rank: 2,
+        level: 24,
+        cost: 10,
+        effects: [{ type: 'selfBuff', kind: 'buff_sta', value: 11, duration: 120 }],
+      },
+    ],
+    description: 'Increases your Stamina by $b for 2 min.',
+  },
+  rend: {
+    id: 'rend',
+    name: 'Deep Gash',
+    class: 'warrior',
+    learnLevel: 4,
+    cost: 10,
+    castTime: 0,
+    cooldown: 0,
+    range: 0,
+    school: 'physical',
+    requiresTarget: true,
+    effects: [{ type: 'dot', total: 15, duration: 9, interval: 3 }],
+    ranks: [
+      {
+        rank: 2,
+        level: 10,
+        cost: 10,
+        effects: [{ type: 'dot', total: 21, duration: 9, interval: 3 }],
+      },
+      {
+        rank: 3,
+        level: 16,
+        cost: 10,
+        effects: [{ type: 'dot', total: 36, duration: 12, interval: 3 }],
+      },
+    ],
+    description: 'Wounds the target, causing them to bleed for $d damage over $t sec.',
+  },
 };
 
 // A class ability resolved to a concrete rank, with talent modifiers already
