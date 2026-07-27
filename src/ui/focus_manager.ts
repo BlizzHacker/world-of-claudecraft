@@ -82,6 +82,47 @@ interface TrapState {
 }
 
 export class FocusManager {
+  /**
+   * The root of the topmost live trap, or null when no trap is installed (a
+   * closed-without-release trap is skipped, mirroring the onKeyDown self-heal
+   * without mutating the stack). The generic gamepad menu fallback reads this
+   * to step focus inside whatever dialog currently owns the pad.
+   */
+  activeTrapRoot(): HTMLElement | null {
+    for (let i = this.stack.length - 1; i >= 0; i--) {
+      const root = this.stack[i].root();
+      if (this.canFocus(root)) return root;
+    }
+    return null;
+  }
+  /**
+   * Move focus one step through the active trap root's visible focusables,
+   * clamped at the ends (no wrap), entering at the first element when focus is
+   * not on any of them: the generic row step the gamepad menu fallback uses for
+   * every trapped dialog without a bespoke controller model (mirrors
+   * OptionsWindow.stepRowFocus).
+   */
+  stepTrapFocus(dir: -1 | 1): void {
+    const root = this.activeTrapRoot();
+    if (!root) return;
+    const focusables = this.focusablesIn(root);
+    if (focusables.length === 0) return;
+    const active = document.activeElement;
+    const current = active instanceof HTMLElement ? focusables.indexOf(active) : -1;
+    const base = current < 0 ? (dir > 0 ? -1 : 0) : current;
+    const next = Math.max(0, Math.min(focusables.length - 1, base + dir));
+    focusables[next].focus();
+  }
+  /**
+   * Whether a focus trap is currently installed. This is the explicit gate the gamepad
+   * menu-input mode reads (spec section 5): the pad emits menu intents and consumes its
+   * handled edges only while a trap owns focus, so world input never double-fires. A pure
+   * O(1) read of the trap stack with NO effect on trap mechanics; a trap leaked without
+   * release() is self-healed on the next Tab by the existing onKeyDown path.
+   */
+  hasActiveTrap(): boolean {
+    return this.stack.length > 0;
+  }
   private readonly stack: TrapState[] = [];
   private listening = false;
 

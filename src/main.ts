@@ -1885,6 +1885,11 @@ async function startGame(
     onAction: (id) => dispatchGamepadAction(id),
     onInputEdge: () => inputMeter.record(performance.now()),
     isPointerMode: () => hud.isWindowOpen() || cameraPromptOpen(),
+    // A focus trap (the Esc menu, other modals) switches the pad into
+    // deterministic menu-navigation mode, checked before pointer mode so the
+    // Esc menu uses real navigation instead of the virtual cursor.
+    isMenuMode: () => hud.isFocusTrapped(),
+    onMenuIntent: (intent) => hud.handleMenuGamepadIntent(intent),
     getPlayerHealth: () => (world.player.dead ? 0 : world.player.hp),
     onConnectionChange: () => hud.refreshControllerLabels(),
   });

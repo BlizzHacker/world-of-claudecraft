@@ -19,6 +19,7 @@ import {
   TRIGGER_THRESHOLD,
 } from './gamepad_map';
 import type { Input } from './input';
+import { type MenuIntentKind, mapMenuGamepad } from './menu_gamepad_nav';
 
 export interface GamepadCallbacks {
   // Record one physical button rising edge for the HUD's APM readout.
@@ -30,6 +31,13 @@ export interface GamepadCallbacks {
   // True while any interactive HUD window is open, switching the pad into the
   // virtual-cursor UI-navigation mode (movement/camera/abilities are suspended).
   isPointerMode(): boolean;
+  // True while a focus trap owns the HUD (the Esc menu and other modal windows):
+  // the pad switches into the deterministic MENU-navigation mode, consuming every
+  // edge so world input never double-fires. Optional (falls back to pointer mode).
+  isMenuMode?(): boolean;
+  // Dispatch one menu navigation verb resolved from the pad this frame (a testable
+  // seam: the wiring accepts intents here, never reaching for navigator itself).
+  onMenuIntent?(intent: MenuIntentKind): void;
   // Current local-player health, for rumble-on-damage. Optional.
   getPlayerHealth?(): number;
   // A pad connected or disconnected, so the detected brand (and thus the button
@@ -43,6 +51,8 @@ export class GamepadManager {
   private index: number | null = null;
   private kind: GamepadKind = 'generic';
   private prevPressed: boolean[] = new Array(STANDARD_BUTTON_COUNT).fill(false);
+  // Last left-stick X seen by menu mode, for its adjust edges.
+  private prevStickX = 0;
   private deadzone = 0.18;
   private camSpeed = 2.4;
   private invertY = false;
@@ -191,6 +201,38 @@ export class GamepadManager {
     }
 
     this.checkRumble();
+
+    // Menu-navigation mode (spec section 5): a focus trap owns the HUD, so the pad
+    // drives deterministic menu intents and swallows every edge (the pure core is
+    // menu_gamepad_nav). Checked BEFORE pointer mode so a trapped modal (the Esc
+    // menu) uses real navigation, not the virtual cursor. DOM is driven only on an
+    // intent, never per poll, so an idle pad costs nothing.
+    //
+    // The stick values are read here rather than reused from below: this poll loop
+    // reads the axes AFTER the mode branches, unlike the fork's original ordering,
+    // and reordering the hot path for this would buy nothing.
+    if (this.cb.isMenuMode?.()) {
+      const menuStickX = pad.axes[AXIS.LEFT_X] ?? 0;
+      const prevMenuStickX = this.prevStickX;
+      this.prevStickX = menuStickX;
+      this.input.clearGamepadMove();
+      this.hideCursor();
+      const result = mapMenuGamepad({
+        prev: this.prevPressed,
+        cur,
+        stickX: menuStickX,
+        prevStickX: prevMenuStickX,
+        adjustThreshold: this.deadzone,
+        trapActive: true,
+      });
+      // Every rising edge is consumed (APM still counts the physical press); the
+      // resolved verbs dispatch through the injected seam. World input is never
+      // reached, so no default pad binding (camera, movement, Esc) double-fires.
+      for (let i = 0; i < result.consumedButtons.length; i++) this.cb.onInputEdge();
+      for (const intent of result.intents) this.cb.onMenuIntent?.(intent);
+      this.prevPressed = cur;
+      return;
+    }
 
     if (this.cb.isPointerMode()) {
       // UI-navigation cursor mode: stick drives a software pointer. Clear any

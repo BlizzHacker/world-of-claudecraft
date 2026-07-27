@@ -548,6 +548,8 @@ import { XpBarPainter } from './xp_bar_painter';
 import { YumiMatchPainter } from './yumi_match_painter';
 import { ZombieDefenseWindow } from './zombie_defense_window';
 
+const TRAP_PAGE_SCROLL_FRACTION = 0.9;
+
 let lpAdvancedLast = -1;
 
 // hooks main wires after Input exists (the options menu drives input, audio,
@@ -970,6 +972,49 @@ function yellVoiceKey(text: string): string {
 const CHEAT_DEATH_SAVE_TEXT = 'Cheat Death saves you!';
 
 export class Hud {
+  /** Route one resolved gamepad menu verb (spec section 5). When the Esc menu owns
+   *  focus it drives the full navigation; otherwise a generic fallback keeps any
+   *  other trapped dialog (quest reward, crafting, town focus, delve board, loot
+   *  settings, rite, skin event, card modal, confirm/prompt) operable: B closes it,
+   *  A activates the focused control, D-pad Up/Down steps focus over the trap
+   *  root's visible focusables, and LT/RT page-scroll its body. */
+  handleMenuGamepadIntent(intent: MenuIntentKind): void {
+    const optionsRoot = $('#options-menu');
+    const active = document.activeElement;
+    // Route to the Esc menu while focus is INSIDE it, and also when focus was
+    // dropped entirely (body/null, e.g. a repaint detached the focused node) while
+    // it is open: the menu self-heals by re-homing row focus. Focus resting inside
+    // a DIFFERENT element (a stacked confirm dialog) keeps the generic fallback so
+    // the top trap stays in charge.
+    const focusLost = !(active instanceof HTMLElement) || active === document.body;
+    if (this.optionsWindow.isOpen && (optionsRoot.contains(active) || focusLost)) {
+      this.optionsWindow.handleMenuIntent(intent);
+      return;
+    }
+    if (intent === 'back') {
+      this.closeAll();
+    } else if (intent === 'activate' && active instanceof HTMLElement) {
+      active.click();
+    } else if (intent === 'rowPrev' || intent === 'rowNext') {
+      // The generic focus step (mirrors OptionsWindow.stepRowFocus): the pad's
+      // virtual cursor is suppressed in menu mode, so without this every
+      // non-options trapped dialog would lose pad focus movement entirely.
+      this.focusManager.stepTrapFocus(intent === 'rowNext' ? 1 : -1);
+    } else if (intent === 'pageUp' || intent === 'pageDown') {
+      const root = this.focusManager.activeTrapRoot();
+      const scroll = root?.querySelector<HTMLElement>('.window-body') ?? root;
+      if (scroll) {
+        scroll.scrollTop +=
+          (intent === 'pageDown' ? 1 : -1) * scroll.clientHeight * TRAP_PAGE_SCROLL_FRACTION;
+      }
+    }
+  }
+  /** True while a focus trap owns the HUD (the Esc menu or another modal). The
+   *  gamepad reads this to switch into menu-navigation mode: while trapped it emits
+   *  menu intents and consumes every edge so world input never double-fires. */
+  isFocusTrapped(): boolean {
+    return this.focusManager.hasActiveTrap();
+  }
   private lastMusicDungeonId: string | null = null;
   private openLootMobId: number | null = null;
   private openLootChestId: number | null = null;
