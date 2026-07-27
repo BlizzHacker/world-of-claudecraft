@@ -46,9 +46,9 @@ describe('site and dashboard navigation', () => {
   });
 
   it('keeps the public footer on Cryptic versioning and Diabl0 network links', () => {
-    expect(packageJson.version).toBe('0.24.0-cr.1');
-    expect(indexHtml).toContain('<div id="game-version">v0.24.0-cr.1</div>');
-    expect(indexHtml).toContain('ClaudeCraft target v0.24.0');
+    expect(packageJson.version).toBe('0.30.0-cr.1');
+    expect(indexHtml).toContain('<div id="game-version">v0.30.0-cr.1</div>');
+    expect(indexHtml).toContain('ClaudeCraft target v0.30.0');
 
     for (const source of [indexHtml, linksHtml]) {
       expect(source).toContain('https://diabl0.net');

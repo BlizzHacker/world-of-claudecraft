@@ -88,7 +88,7 @@ export const guideStrings = {
   // Footer.
   footer: {
     blurb:
-      'An open-source, classic-style micro-MMO. Quest, group up, and explore a hand-built world, right in your browser.',
+      'A classic-style micro-MMO. Quest, group up, and explore a hand-built world, right in your browser.',
     playNow: 'Play Now',
     github: 'Source on GitHub',
     discord: 'Join the Discord',

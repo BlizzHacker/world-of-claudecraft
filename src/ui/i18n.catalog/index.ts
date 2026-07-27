@@ -285,7 +285,7 @@ export const en = {
   footer: {
     copyright: '2026 Cryptic Realm',
     githubLink: '/contributions.html',
-    githubLabel: 'Open Source Project',
+    githubLabel: 'Contributions',
     whitepaper: 'Whitepaper',
     terms: 'Terms of Service',
     privacy: 'Privacy Policy',
@@ -312,9 +312,9 @@ export const en = {
     error: "Couldn't load updates. Please try again later.",
     empty: 'No updates yet — check back soon.',
     prerelease: 'Pre-release',
-    viewOnGithub: 'View on GitHub',
+    viewOnGithub: 'View update',
     new: 'New',
-    viewAll: 'View all updates on GitHub',
+    viewAll: 'View all updates',
     alphaBetaBody: "Alpha testers can earn platinum at a higher rate because alpha characters reset every two weeks. Beta promotion happens monthly into public Cryptic Realm and MoveWeight realms after review.",
     alphaBetaTitle: "Alpha, Beta, And Public Realm Cadence",
     officialLog: "Official Work Log",
@@ -484,7 +484,7 @@ export const en = {
     mobileAppHelp:
       'Choose Phantom or Solflare. Your wallet app will ask for approval. Keep this game open and return to it when finished.',
     standaloneAppHelp:
-      'Wallet connections are not available in the Home Screen app yet. Open World of ClaudeCraft in Safari or Chrome to use Phantom or Solflare.',
+      'Wallet connections are not available in the Home Screen app yet. Open Cryptic Realm in Safari or Chrome to use Phantom or Solflare.',
     openAppTitle: 'Continue in {wallet}',
     openAppHelp:
       'Open {wallet} to review this request. Keep this game tab open while the wallet app is active.',
@@ -492,7 +492,7 @@ export const en = {
     manualReturnBrowserHelp:
       'After approval, return to this game tab. If iOS opens another browser, close it and return to the original browser manually.',
     manualReturnStandaloneHelp:
-      'After approval, return to World of ClaudeCraft from your Home Screen. If iOS opens a browser, close it and reopen the Home Screen app manually.',
+      'After approval, return to Cryptic Realm from your Home Screen. If iOS opens a browser, close it and reopen the Home Screen app manually.',
     preparingAppButton: 'Preparing {wallet}...',
     walletAppUnavailable: '{wallet} could not be prepared. Close this window and try again.',
     flowConnect: 'Choose a wallet. Verification continues automatically.',
@@ -510,12 +510,12 @@ export const en = {
         'Choose the wallet linked to your account and approve the transaction in this browser.',
       extensionHelp:
         'No compatible wallet extension was found. Install or unlock Phantom, Solflare, or another Solana browser wallet, then retry.',
-      safety: 'World of ClaudeCraft never asks for your recovery phrase or private key.',
+      safety: 'Cryptic Realm never asks for your recovery phrase or private key.',
       continueWith: 'Continue with {wallet}',
       reviewTitle: 'Review in your wallet',
       reviewBody: 'Follow the prompt from {wallet}. Keep this browser page open.',
       completeTitle: 'Wallet authorization complete',
-      completeBody: 'You can return to the World of ClaudeCraft desktop app.',
+      completeBody: 'You can return to the Cryptic Realm desktop app.',
       returnButton: 'Return to desktop app',
       failed: 'Wallet authorization failed or expired. Return to the desktop app and try again.',
       retry: 'Retry',

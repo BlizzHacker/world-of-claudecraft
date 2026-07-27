@@ -19,7 +19,10 @@ import type { ItemDef, NpcDef } from '../types';
 export const FURY_NPC_ID = 'fury';
 // Reserved so adding FURY does not shift the deterministic nextId sequence used
 // by every existing world spawn and parity replay.
-export const FURY_ENTITY_ID = 1_000_000_001;
+// 1_000_000_001 belongs to Race Marshal Pip (DERBY_MARSHAL_ID); the fork reserves
+// the contiguous 1_000_000_000..003 block for its venue NPCs (Bram, Pip, Grott,
+// Maribel), so FURY takes the next free slot instead of colliding with Pip.
+export const FURY_ENTITY_ID = 1_000_000_004;
 export const WARFARE_SOURCE_LEVEL = 22;
 
 export const WARFARE_ITEMS: Record<string, ItemDef> = {

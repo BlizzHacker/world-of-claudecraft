@@ -558,7 +558,7 @@ export const hudChromeStrings = {
     guildXp: 'Total XP',
     guildEmpty: 'No ranked guilds yet.',
     // Developer-board column headers + the dev-tab empty state. Contributors are
-    // ranked by how many pull requests they have had merged into the open-source
+    // ranked by how many pull requests they have had merged into the project
     // repo (not raw commits: see hudChrome.devBadge.flavors.* for why).
     devName: 'Contributor',
     devTierCol: 'Badge',
@@ -2155,13 +2155,13 @@ export const hudChromeStrings = {
     // Nameplate badge tooltip + inspect/card readouts.
     badgeTitle: 'Developer: {tier}',
     prsLanded: '{count} pull requests merged',
-    contributor: 'Open-source contributor',
+    contributor: 'Project contributor',
     // GitHub link control (mirrors the wallet link beside it on character select).
     link: {
       cta: 'Link GitHub',
       relink: 'Relink GitHub',
       benefits:
-        'Link your GitHub to earn a developer badge for the pull requests you have had merged into the open-source repo.',
+        'Link your GitHub to earn a developer badge for the pull requests you have had merged into the project repo.',
       error: 'Could not link GitHub. Please try again.',
     },
     linkedAs: 'Linked as {login}',
