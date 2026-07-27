@@ -8,7 +8,6 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.stable_master_wren.name': 'Wren Saddleworth',
   'entities.npcs.stable_master_wren.title': 'Kepala Istal',
   'entities.npcs.stable_master_wren.greeting': 'Setiap pahlawan butuh tunggangan, {className}. Rusa itu tenang, raptor itu cepat, dan wyrm... wyrm bisa terbang.',
-  'itemUi.vendor.sellItemAria': 'Jual {item} seharga {price}',
   'itemUi.vendor.sellRolledWarning': 'Atribut acak tidak dapat dipulihkan dengan membeli kembali.',
   'hudChrome.bags.itemAriaMasterwork': '{item}, jumlah {count}, karya master',
   'hudChrome.archetypePair.tailoring+inscription': 'Penenun Tinta',
@@ -6833,7 +6832,6 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'itemUi.tooltip.clickUse': 'Klik untuk memakai',
   'itemUi.tooltip.clickUseInstant': 'Klik untuk memakai seketika dalam pertempuran',
   'itemUi.tooltip.currentlyEquipped': 'Sedang dipakai',
-  'itemUi.tooltip.dagger': 'Belati',
   'itemUi.tooltip.damageSpeed': '{min} - {max} Kerusakan Kecepatan {speed}',
   'itemUi.tooltip.dps': '({dps} kerusakan per detik)',
   'itemUi.tooltip.ifYouEquip': 'Jika kamu memakai ini',
@@ -8821,7 +8819,6 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.summon_water_elemental.name': 'Panggil Elemental Air',
   'entities.abilities.summon_water_elemental.description':
     'Panggil Elemental Air untuk bertarung di sisimu, melontarkan Peluru Air ke targetmu dan menyalurkan Semburan Air. (Es)',
-  'entities.mobs.water_elemental.name': 'Elemental Air',
   'entities.items.conjured_bread4.name': 'Roti Perjamuan Sihir',
   'entities.items.conjured_water4.name': 'Air Mata Air Sihir',
   'devCommand.actions.attune.description': 'Tandai semua persyaratan penyelarasan sebagai selesai.',

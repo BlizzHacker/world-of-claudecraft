@@ -19,7 +19,6 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.stable_master_wren.name': 'レン・サドルワース',
   'entities.npcs.stable_master_wren.title': '厩舎長',
   'entities.npcs.stable_master_wren.greeting': '英雄には乗騎が要るのだ、{className}。牡鹿は堅実、ラプターは俊足、そしてワームは……ワームは空を飛ぶ。',
-  'itemUi.vendor.sellItemAria': '{item}を{price}で売却',
   'hudChrome.crafting.identity.ceilingRare': 'レア上限',
   'hudChrome.crafting.pairOptionLabel': '{pair}（{craftA} + {craftB}）',
   'hudChrome.nameplate.mobEliteLevel': '{level}+',
@@ -2399,7 +2398,6 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'itemUi.tooltip.ifYouEquip': 'これを装備すると',
   'itemUi.tooltip.damageSpeed': '{min} - {max} ダメージ 速度 {speed}',
   'itemUi.tooltip.dps': '（秒間 {dps} ダメージ）',
-  'itemUi.tooltip.dagger': '短剣',
   'itemUi.tooltip.armorStat': '防御力 {value}',
   'itemUi.tooltip.stat': '+{value} {stat}',
   'itemUi.tooltip.useFood':
@@ -8343,7 +8341,6 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.summon_water_elemental.name': 'ウォーターエレメンタル召喚',
   'entities.abilities.summon_water_elemental.description':
     '共に戦うウォーターエレメンタルを召喚します。対象へウォーターボルトを投げ、ウォータージェットを放ちます。（氷）',
-  'entities.mobs.water_elemental.name': 'ウォーターエレメンタル',
   'devCommand.actions.attune.description': 'すべての前提条件を完了済みにします。',
   'devCommand.actions.attune.label': '前提条件を解除',
   'devCommand.actions.bot.description': 'ウィスパー可能な静止プレイヤーを作成します。',

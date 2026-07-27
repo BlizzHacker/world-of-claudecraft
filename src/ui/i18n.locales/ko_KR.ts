@@ -19,7 +19,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.stable_master_wren.name': '렌 새들워스',
   'entities.npcs.stable_master_wren.title': '마구간지기',
   'entities.npcs.stable_master_wren.greeting': '영웅에겐 탈것이 필요하지, {className}. 수사슴은 듬직하고, 랩터는 빠르고, 윔은... 윔은 하늘을 난다네.',
-  'itemUi.vendor.sellItemAria': '{item}을(를) {price}에 판매',
   'hudChrome.crafting.identity.ceilingRare': '희귀 상한',
   'hudChrome.crafting.pairOptionLabel': '{pair} ({craftA} + {craftB})',
   'hudChrome.nameplate.mobEliteLevel': '{level}+',
@@ -2383,7 +2382,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'itemUi.tooltip.ifYouEquip': '이것을 착용하면',
   'itemUi.tooltip.damageSpeed': '{min} - {max} 피해 속도 {speed}',
   'itemUi.tooltip.dps': '(초당 피해 {dps})',
-  'itemUi.tooltip.dagger': '단검',
   'itemUi.tooltip.armorStat': '방어도 {value}',
   'itemUi.tooltip.stat': '+{value} {stat}',
   'itemUi.tooltip.useFood':
@@ -8329,7 +8327,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.summon_water_elemental.name': '물의 정령 소환',
   'entities.abilities.summon_water_elemental.description':
     '함께 싸우는 물의 정령을 소환합니다. 대상에게 물화살을 던지고 물 분사를 집중합니다. (냉기)',
-  'entities.mobs.water_elemental.name': '물의 정령',
   'devCommand.actions.attune.description': '모든 선행 조건을 완료 처리합니다.',
   'devCommand.actions.attune.label': '선행 조건 해제',
   'devCommand.actions.bot.description': '귓속말을 받을 수 있는 정지 플레이어를 생성합니다.',

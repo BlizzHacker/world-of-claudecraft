@@ -6594,7 +6594,6 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'itemUi.tooltip.clickUse': 'Klicka för att använda',
   'itemUi.tooltip.clickUseInstant': 'Klicka för att använda omedelbart i strid',
   'itemUi.tooltip.currentlyEquipped': 'För närvarande utrustad',
-  'itemUi.tooltip.dagger': 'Dolk',
   'itemUi.tooltip.damageSpeed': '{min} - {max} Skada Hastighet {speed}',
   'itemUi.tooltip.dps': '({dps} skada per sekund)',
   'itemUi.tooltip.ifYouEquip': 'Om du utrustar detta',
@@ -8045,7 +8044,6 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.talents.resetChoices': 'Återställ val',
   'hudChrome.talents.tierLevel': 'Nivå {n}',
   'hudChrome.talents.tierLevelLabel': 'Nivå',
-  'itemUi.vendor.sellItemAria': 'Sälj {item} för {price}',
   'itemUi.vendor.sellRolledWarning': 'Slumpade egenskaper kan inte återställas genom återköp.',
   'loading.tips.classes':
     'Tips: var och en av de 9 klasserna spelas på sitt eget sätt. Prova några innan du bestämmer dig för en.',
@@ -8672,7 +8670,6 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.summon_water_elemental.name': 'Åkalla vattenelementar',
   'entities.abilities.summon_water_elemental.description':
     'Åkalla en vattenelementar som strider vid din sida, slungar Vattenprojektiler mot ditt mål och kanaliserar Vattenstråle. (Frost)',
-  'entities.mobs.water_elemental.name': 'Vattenelementar',
   'entities.items.conjured_bread4.name': 'Frambesvärjt festbröd',
   'entities.items.conjured_water4.name': 'Frambesvärjt källvatten',
   'devCommand.actions.attune.description': 'Markera alla länkningskrav som slutförda.',

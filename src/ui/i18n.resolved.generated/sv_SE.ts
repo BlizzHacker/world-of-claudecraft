@@ -2013,20 +2013,20 @@ export const sv_SE: EnTranslations = {
           "label": "Vill sälja"
         },
         "wtb": {
-          "hint": "Efterfråga ett föremål du vill köpa",
-          "label": "Vill köpa"
+          "label": "Vill köpa",
+          "hint": "Efterfråga ett föremål du vill köpa"
         },
         "recruit": {
-          "hint": "Rekrytera spelare till ditt gille",
-          "label": "Gillesrekrytering"
+          "label": "Gillesrekrytering",
+          "hint": "Rekrytera spelare till ditt gille"
         },
         "event": {
-          "hint": "Annonsera en raid, träff eller ett evenemang",
-          "label": "Evenemang / Raid"
+          "label": "Evenemang / Raid",
+          "hint": "Annonsera en raid, träff eller ett evenemang"
         },
         "help": {
-          "hint": "Be gemenskapen om hjälp",
-          "label": "Behöver hjälp"
+          "label": "Behöver hjälp",
+          "hint": "Be gemenskapen om hjälp"
         }
       }
     },
@@ -6959,8 +6959,7 @@ export const sv_SE: EnTranslations = {
       "clickUseInstant": "Klicka för att använda omedelbart i strid",
       "clickUse": "Klicka för att använda",
       "clickBuyback": "Klicka för att köpa tillbaka",
-      "bagSlots": "Väska med {slots} platser",
-      "dagger": "Dolk"
+      "bagSlots": "Väska med {slots} platser"
     },
     "bags": {
       "title": "Väskor",
@@ -6991,7 +6990,6 @@ export const sv_SE: EnTranslations = {
       "sellJunk": "Sälj skräp",
       "sellJunkAria": "Sälj allt skräp för {price}",
       "sellJunkHint": "Säljer varje grått föremål i dina väskor utom uppdragsföremål.",
-      "sellItemAria": "Sälj {item} för {price}",
       "sellRolledWarning": "Slumpade egenskaper kan inte återställas genom återköp."
     },
     "market": {
@@ -10609,9 +10607,6 @@ export const sv_SE: EnTranslations = {
       },
       "ysolei": {
         "name": "Ysolei, den dränkta månens avatar"
-      },
-      "water_elemental": {
-        "name": "Vattenelementar"
       }
     },
     "npcs": {
@@ -11844,6 +11839,16 @@ export const sv_SE: EnTranslations = {
           }
         }
       },
+      "q_archetype_acceptance": {
+        "title": "Ett hantverk att kalla ditt eget",
+        "text": "Varje hantverkare i Eastbrook nöjer sig så småningom med ett hantverk att kalla sitt eget. Bevisa dig själv med en enda gärning, {playerName}, och förklara din väg.",
+        "completion": "Din väg är vald; gå det bra.",
+        "objectives": {
+          "0": {
+            "label": "Skogsvarg dödad"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "Den drunknade kören",
         "text": "Vadarna agerar inte ensamma. Bland dem vandrar de Drunknade tillbedjarna - kulten som sjönk med templet, fortfarande i sina ruttna skrudar, fortfarande sjungande bönen från strandklipporna. Tysta åtta av dem och hämta mig sex av de offergåvor de bär. Jag vill veta vad de tänker ge sin gudinna.",
@@ -11904,16 +11909,6 @@ export const sv_SE: EnTranslations = {
         "objectives": {
           "0": {
             "label": "Glimmertjärnsvadare dräpt"
-          }
-        }
-      },
-      "q_archetype_acceptance": {
-        "title": "Ett hantverk att kalla ditt eget",
-        "text": "Varje hantverkare i Eastbrook nöjer sig så småningom med ett hantverk att kalla sitt eget. Bevisa dig själv med en enda gärning, {playerName}, och förklara din väg.",
-        "completion": "Din väg är vald; gå det bra.",
-        "objectives": {
-          "0": {
-            "label": "Skogsvarg dödad"
           }
         }
       },

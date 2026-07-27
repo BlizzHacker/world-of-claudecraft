@@ -2013,20 +2013,20 @@ export const ja_JP: EnTranslations = {
           "label": "売却希望"
         },
         "wtb": {
-          "hint": "購入したいアイテムを募集する",
-          "label": "購入希望"
+          "label": "購入希望",
+          "hint": "購入したいアイテムを募集する"
         },
         "recruit": {
-          "hint": "ギルドの仲間を募集する",
-          "label": "ギルドメンバー募集"
+          "label": "ギルドメンバー募集",
+          "hint": "ギルドの仲間を募集する"
         },
         "event": {
-          "hint": "レイドや集会、イベントを告知する",
-          "label": "イベント / レイド"
+          "label": "イベント / レイド",
+          "hint": "レイドや集会、イベントを告知する"
         },
         "help": {
-          "hint": "コミュニティに助けを求める",
-          "label": "ヘルプが必要"
+          "label": "ヘルプが必要",
+          "hint": "コミュニティに助けを求める"
         }
       }
     },
@@ -6959,8 +6959,7 @@ export const ja_JP: EnTranslations = {
       "clickUseInstant": "クリックして戦闘中に即使用",
       "clickUse": "クリックして使用",
       "clickBuyback": "クリックして買い戻す",
-      "bagSlots": "{slots}スロットのバッグ",
-      "dagger": "短剣"
+      "bagSlots": "{slots}スロットのバッグ"
     },
     "bags": {
       "title": "バッグ",
@@ -6991,7 +6990,6 @@ export const ja_JP: EnTranslations = {
       "sellJunk": "不要品を売却",
       "sellJunkAria": "{price}ですべての不要品を売却",
       "sellJunkHint": "クエストアイテムを除くバッグ内のすべての灰色アイテムを売却します。",
-      "sellItemAria": "{item}を{price}で売却",
       "sellRolledWarning": "ランダムな性能は買い戻しでは戻せません。"
     },
     "market": {
@@ -10609,9 +10607,6 @@ export const ja_JP: EnTranslations = {
       },
       "ysolei": {
         "name": "イソレイ、溺月の化身"
-      },
-      "water_elemental": {
-        "name": "ウォーターエレメンタル"
       }
     },
     "npcs": {
@@ -11844,6 +11839,16 @@ export const ja_JP: EnTranslations = {
           }
         }
       },
+      "q_archetype_acceptance": {
+        "title": "己が選ぶべき技",
+        "text": "イーストブルックの職人は皆いずれ、己が選ぶべき一つの技に落ち着く。{playerName}よ、一つの行いで己を証明し、進むべき道を宣言せよ。",
+        "completion": "あなたの道は定まった。その道をしかと歩むがいい。",
+        "objectives": {
+          "0": {
+            "label": "フォレストウルフを討伐"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "溺れし聖歌隊",
         "text": "渡り手どもは独りで動いているのではない。その中に溺れし信徒たちが歩いている——神殿とともに沈んだ教団だ。腐った祭服をまとったまま、岸の岩場から祈りを歌い続けている。八体を沈黙させ、奴らが携える供物を六つ持ち帰れ。奴らが女神に何を捧げようとしているのか、私は知りたいのだ。",
@@ -11904,16 +11909,6 @@ export const ja_JP: EnTranslations = {
         "objectives": {
           "0": {
             "label": "煌めき沼の渡り手を討伐した"
-          }
-        }
-      },
-      "q_archetype_acceptance": {
-        "title": "己が選ぶべき技",
-        "text": "イーストブルックの職人は皆いずれ、己が選ぶべき一つの技に落ち着く。{playerName}よ、一つの行いで己を証明し、進むべき道を宣言せよ。",
-        "completion": "あなたの道は定まった。その道をしかと歩むがいい。",
-        "objectives": {
-          "0": {
-            "label": "フォレストウルフを討伐"
           }
         }
       },

@@ -2013,20 +2013,20 @@ export const ko_KR: EnTranslations = {
           "label": "판매 희망"
         },
         "wtb": {
-          "hint": "구매하고 싶은 아이템 요청",
-          "label": "구매 희망"
+          "label": "구매 희망",
+          "hint": "구매하고 싶은 아이템 요청"
         },
         "recruit": {
-          "hint": "길드에 플레이어 모집",
-          "label": "길드 모집"
+          "label": "길드 모집",
+          "hint": "길드에 플레이어 모집"
         },
         "event": {
-          "hint": "레이드, 모임 또는 이벤트 공지",
-          "label": "이벤트 / 레이드"
+          "label": "이벤트 / 레이드",
+          "hint": "레이드, 모임 또는 이벤트 공지"
         },
         "help": {
-          "hint": "커뮤니티에 도움 요청",
-          "label": "도움 요청"
+          "label": "도움 요청",
+          "hint": "커뮤니티에 도움 요청"
         }
       }
     },
@@ -6959,8 +6959,7 @@ export const ko_KR: EnTranslations = {
       "clickUseInstant": "클릭하여 전투 중 즉시 사용",
       "clickUse": "클릭하여 사용",
       "clickBuyback": "클릭하여 되사기",
-      "bagSlots": "{slots}칸 가방",
-      "dagger": "단검"
+      "bagSlots": "{slots}칸 가방"
     },
     "bags": {
       "title": "가방",
@@ -6991,7 +6990,6 @@ export const ko_KR: EnTranslations = {
       "sellJunk": "잡동사니 판매",
       "sellJunkAria": "모든 잡동사니를 {price}에 판매",
       "sellJunkHint": "퀘스트 아이템을 제외한 가방의 모든 회색 아이템을 판매합니다.",
-      "sellItemAria": "{item}을(를) {price}에 판매",
       "sellRolledWarning": "무작위 능력치는 되사기로 되돌릴 수 없습니다."
     },
     "market": {
@@ -10609,9 +10607,6 @@ export const ko_KR: EnTranslations = {
       },
       "ysolei": {
         "name": "이솔레이, 익사한 달의 화신"
-      },
-      "water_elemental": {
-        "name": "물의 정령"
       }
     },
     "npcs": {
@@ -11844,6 +11839,16 @@ export const ko_KR: EnTranslations = {
           }
         }
       },
+      "q_archetype_acceptance": {
+        "title": "스스로 택하는 기술",
+        "text": "이스트브룩의 모든 장인은 결국 자신만의 기술 하나를 택하게 된다. {playerName}, 하나의 행동으로 스스로를 증명하고 그대의 길을 선언하라.",
+        "completion": "그대의 길이 정해졌다. 그 길을 굳건히 걸어가라.",
+        "objectives": {
+          "0": {
+            "label": "숲늑대 처치"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "익사한 성가대",
         "text": "물거리들은 홀로 움직이지 않는다네. 그들 사이를 익사한 신도들이 걷고 있지 — 신전과 함께 가라앉은 그 광신도들은, 썩어버린 제의를 여전히 걸친 채 물가 바위에서 부르던 기도를 아직도 노래하고 있네. 그들 중 여덟을 침묵시키고, 그들이 지닌 제물 여섯 개를 내게 가져오게. 그들이 그 여신에게 무엇을 바치려는지 알고 싶네.",
@@ -11904,16 +11909,6 @@ export const ko_KR: EnTranslations = {
         "objectives": {
           "0": {
             "label": "글리머미어 물거리 처치"
-          }
-        }
-      },
-      "q_archetype_acceptance": {
-        "title": "스스로 택하는 기술",
-        "text": "이스트브룩의 모든 장인은 결국 자신만의 기술 하나를 택하게 된다. {playerName}, 하나의 행동으로 스스로를 증명하고 그대의 길을 선언하라.",
-        "completion": "그대의 길이 정해졌다. 그 길을 굳건히 걸어가라.",
-        "objectives": {
-          "0": {
-            "label": "숲늑대 처치"
           }
         }
       },

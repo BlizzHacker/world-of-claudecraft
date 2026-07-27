@@ -3768,7 +3768,6 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'itemUi.tooltip.ifYouEquip': 'Se equipaggi questo',
   'itemUi.tooltip.damageSpeed': '{min} - {max} danni Velocità {speed}',
   'itemUi.tooltip.dps': '({dps} danni al secondo)',
-  'itemUi.tooltip.dagger': 'Pugnale',
   'itemUi.tooltip.armorStat': '{value} armatura',
   'itemUi.tooltip.stat': '+{value} {stat}',
   'itemUi.tooltip.useFood':
@@ -7998,7 +7997,6 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
     "Lacera l'armatura del bersaglio, riducendola del {damage}% per applicazione. Si accumula fino a 5 volte. Genera una grande quantità di minaccia.",
   'entities.mobs.training_dummy.name': "Manichino d'allenamento",
   'entities.mobs.yumi_cat.name': 'Yumi',
-  'entities.mobs.water_elemental.name': "Elementale dell'Acqua",
   'guide.arenaPage.yumiBody':
     'Proteggi Yumi è una modalità a obiettivi di squadra che si gioca in un labirinto: ogni fazione protegge il proprio famiglio felino mentre dà la caccia a quello avversario. Di tanto in tanto entrambi i gatti si teletrasportano in nuovi angoli del labirinto, così lo scontro oscilla tra difesa, caccia e corsa per ritrovarli. Mettiti in coda in tre contro tre o cinque contro cinque; cadere in battaglia ti tiene in panchina solo per un momento.',
   'guide.arenaPage.yumiHeading': 'Proteggi Yumi',
@@ -8058,7 +8056,6 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auth.resetMismatch': 'Le password non coincidono.',
   'hudChrome.auth.resetErrInvalid':
     'Questo link di reimpostazione non è valido o è scaduto. Richiedine uno nuovo.',
-  'itemUi.vendor.sellItemAria': 'Vendi {item} per {price}',
   'itemUi.vendor.sellRolledWarning':
     'Le statistiche generate casualmente non possono essere recuperate con il riacquisto.',
   'apiError.deeds.invalid_input': 'Dati non validi.',

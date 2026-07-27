@@ -19,7 +19,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.stable_master_wren.name': '雷恩·鞍值',
   'entities.npcs.stable_master_wren.title': '马厩总管',
   'entities.npcs.stable_master_wren.greeting': '每位英雄都需要坐骑，{className}。雄鹿沉稳，迅猛龙迅捷，而巨龙……巨龙会飞。',
-  'itemUi.vendor.sellItemAria': '以 {price} 的价格出售 {item}',
   'hudChrome.crafting.identity.ceilingRare': '稀有品质上限',
   'hudChrome.crafting.pairOptionLabel': '{pair}（{craftA} + {craftB}）',
   'hudChrome.nameplate.mobEliteLevel': '{level}+',
@@ -2300,7 +2299,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'itemUi.tooltip.ifYouEquip': '装备后',
   'itemUi.tooltip.damageSpeed': '{min} - {max} 伤害 速度 {speed}',
   'itemUi.tooltip.dps': '（每秒 {dps} 伤害）',
-  'itemUi.tooltip.dagger': '匕首',
   'itemUi.tooltip.armorStat': '{value} 护甲',
   'itemUi.tooltip.stat': '+{value} {stat}',
   'itemUi.tooltip.useFood': '使用：在 {seconds} 秒内恢复 {amount} 点生命值。进食时必须保持坐下。',
@@ -7932,7 +7930,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.summon_water_elemental.name': '召唤水元素',
   'entities.abilities.summon_water_elemental.description':
     '召唤一个水元素与你并肩作战，向你的目标投掷水箭并引导水流喷射。（冰霜）',
-  'entities.mobs.water_elemental.name': '水元素',
   'devCommand.actions.attune.description': '将所有前置资格要求标记为已完成。',
   'devCommand.actions.attune.label': '解锁前置资格',
   'devCommand.actions.bot.description': '创建一个可接收密语的静止玩家。',

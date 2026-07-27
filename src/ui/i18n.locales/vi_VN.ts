@@ -8,7 +8,6 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.stable_master_wren.name': 'Wren Saddleworth',
   'entities.npcs.stable_master_wren.title': 'Quản mã',
   'entities.npcs.stable_master_wren.greeting': 'Anh hùng nào cũng cần một thú cưỡi, {className}. Hươu thì vững, raptor thì nhanh, còn wyrm... wyrm biết bay.',
-  'itemUi.vendor.sellItemAria': 'Bán {item} với giá {price}',
   'itemUi.vendor.sellRolledWarning': 'Không thể khôi phục các chỉ số ngẫu nhiên bằng cách mua lại.',
   'hudChrome.bags.itemAriaMasterwork': '{item}, số lượng {count}, kiệt tác',
   'hudChrome.archetypePair.tailoring+inscription': 'Thợ Dệt Chữ',
@@ -6872,7 +6871,6 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'itemUi.tooltip.clickUse': 'Nhấp để sử dụng',
   'itemUi.tooltip.clickUseInstant': 'Nhấp để dùng tức thời trong chiến đấu',
   'itemUi.tooltip.currentlyEquipped': 'Đang trang bị',
-  'itemUi.tooltip.dagger': 'Dao Găm',
   'itemUi.tooltip.damageSpeed': '{min} - {max} Sát Thương Tốc Độ {speed}',
   'itemUi.tooltip.dps': '({dps} sát thương mỗi giây)',
   'itemUi.tooltip.ifYouEquip': 'Nếu bạn trang bị món này',
@@ -8770,7 +8768,6 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.summon_water_elemental.name': 'Triệu Hồi Nguyên Tố Nước',
   'entities.abilities.summon_water_elemental.description':
     'Triệu hồi một Nguyên Tố Nước chiến đấu bên bạn, phóng Tên Nước vào mục tiêu và vận phép Tia Nước. (Băng Giá)',
-  'entities.mobs.water_elemental.name': 'Nguyên Tố Nước',
   'entities.items.conjured_bread4.name': 'Bánh Đại Tiệc Được Tạo Phép',
   'entities.items.conjured_water4.name': 'Nước Suối Được Tạo Phép',
   'devCommand.actions.attune.description': 'Đánh dấu hoàn tất mọi yêu cầu đồng điệu.',

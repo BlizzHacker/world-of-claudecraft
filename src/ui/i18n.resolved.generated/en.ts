@@ -2013,20 +2013,20 @@ export const en: EnTranslations = {
           "label": "Want to Sell"
         },
         "wtb": {
-          "hint": "Request an item you want to buy",
-          "label": "Want to Buy"
+          "label": "Want to Buy",
+          "hint": "Request an item you want to buy"
         },
         "recruit": {
-          "hint": "Recruit players for your guild",
-          "label": "Guild Recruiting"
+          "label": "Guild Recruiting",
+          "hint": "Recruit players for your guild"
         },
         "event": {
-          "hint": "Announce a raid, meetup or event",
-          "label": "Event / Raid"
+          "label": "Event / Raid",
+          "hint": "Announce a raid, meetup or event"
         },
         "help": {
-          "hint": "Ask the community for help",
-          "label": "Need Help"
+          "label": "Need Help",
+          "hint": "Ask the community for help"
         }
       }
     },
@@ -11827,6 +11827,16 @@ export const en: EnTranslations = {
         "objectives": {
           "0": {
             "label": "Herb patch harvested"
+          }
+        }
+      },
+      "q_archetype_acceptance": {
+        "title": "A Craft to Call Your Own",
+        "text": "Every artisan of Eastbrook eventually settles on one craft to call their own. Prove yourself with a single deed, {playerName}, and declare your path.",
+        "completion": "Your path is chosen; walk it well.",
+        "objectives": {
+          "0": {
+            "label": "Forest Wolf slain"
           }
         }
       },

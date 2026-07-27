@@ -3732,7 +3732,6 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'itemUi.tooltip.ifYouEquip': 'Se você equipar isto',
   'itemUi.tooltip.damageSpeed': '{min} - {max} de dano Velocidade {speed}',
   'itemUi.tooltip.dps': '({dps} de dano por segundo)',
-  'itemUi.tooltip.dagger': 'Adaga',
   'itemUi.tooltip.armorStat': '{value} de armadura',
   'itemUi.tooltip.stat': '+{value} {stat}',
   'itemUi.tooltip.useFood':
@@ -7840,7 +7839,6 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
     'Retalha a armadura do alvo, reduzindo-a em {damage}% por aplicação. Acumula até 5 vezes. Gera uma grande quantidade de ameaça.',
   'entities.mobs.training_dummy.name': 'Boneco de Treino',
   'entities.mobs.yumi_cat.name': 'Yumi',
-  'entities.mobs.water_elemental.name': 'Elemental da Água',
   'guide.arenaPage.yumiBody':
     'Proteja a Yumi é um modo de objetivo em equipe disputado em um labirinto: cada lado protege a própria gata familiar enquanto caça a do inimigo. De tempos em tempos, as duas gatas saltam para novos cantos do labirinto, então a luta alterna entre defender, caçar e correr para reencontrá-las. Entre na fila em três contra três ou cinco contra cinco; cair em combate só o afasta por um instante.',
   'guide.arenaPage.yumiHeading': 'Proteja a Yumi',
@@ -7900,7 +7898,6 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auth.resetMismatch': 'As senhas não coincidem.',
   'hudChrome.auth.resetErrInvalid':
     'Este link de redefinição é inválido ou expirou. Solicite um novo.',
-  'itemUi.vendor.sellItemAria': 'Vender {item} por {price}',
   'itemUi.vendor.sellRolledWarning':
     'Atributos gerados aleatoriamente não podem ser recuperados pela recompra.',
   'apiError.deeds.invalid_input': 'Entrada inválida.',

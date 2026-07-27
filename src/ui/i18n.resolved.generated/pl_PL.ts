@@ -2013,20 +2013,20 @@ export const pl_PL: EnTranslations = {
           "label": "Chcę sprzedać"
         },
         "wtb": {
-          "hint": "Poproś o przedmiot, który chcesz kupić",
-          "label": "Chcę kupić"
+          "label": "Chcę kupić",
+          "hint": "Poproś o przedmiot, który chcesz kupić"
         },
         "recruit": {
-          "hint": "Rekrutuj graczy do swojej gildii",
-          "label": "Rekrutacja do gildii"
+          "label": "Rekrutacja do gildii",
+          "hint": "Rekrutuj graczy do swojej gildii"
         },
         "event": {
-          "hint": "Ogłoś rajd, spotkanie lub wydarzenie",
-          "label": "Wydarzenie / Rajd"
+          "label": "Wydarzenie / Rajd",
+          "hint": "Ogłoś rajd, spotkanie lub wydarzenie"
         },
         "help": {
-          "hint": "Poproś społeczność o pomoc",
-          "label": "Potrzebuję pomocy"
+          "label": "Potrzebuję pomocy",
+          "hint": "Poproś społeczność o pomoc"
         }
       }
     },
@@ -6959,8 +6959,7 @@ export const pl_PL: EnTranslations = {
       "clickUseInstant": "Kliknij, aby użyć natychmiast w walce",
       "clickUse": "Kliknij, aby użyć",
       "clickBuyback": "Kliknij, aby odkupić",
-      "bagSlots": "Torba z {slots} miejscami",
-      "dagger": "Sztylet"
+      "bagSlots": "Torba z {slots} miejscami"
     },
     "bags": {
       "title": "Torby",
@@ -6991,7 +6990,6 @@ export const pl_PL: EnTranslations = {
       "sellJunk": "Sprzedaj śmieci",
       "sellJunkAria": "Sprzedaj wszystkie śmieci za {price}",
       "sellJunkHint": "Sprzedaje każdy szary przedmiot w twoich torbach z wyjątkiem przedmiotów zadań.",
-      "sellItemAria": "Sprzedaj {item} za {price}",
       "sellRolledWarning": "Losowych statystyk nie można odzyskać przez odkupienie przedmiotu."
     },
     "market": {
@@ -10609,9 +10607,6 @@ export const pl_PL: EnTranslations = {
       },
       "ysolei": {
         "name": "Ysolei, Awatar Utopionego Księżyca"
-      },
-      "water_elemental": {
-        "name": "Żywiołak wody"
       }
     },
     "npcs": {
@@ -11844,6 +11839,16 @@ export const pl_PL: EnTranslations = {
           }
         }
       },
+      "q_archetype_acceptance": {
+        "title": "Rzemiosło, które możesz nazwać własnym",
+        "text": "Każdy rzemieślnik z Eastbrook ostatecznie decyduje się na jedno rzemiosło, które nazywa swoim własnym. Wykaż się jednym czynem, {playerName}, i zadeklaruj swoją ścieżkę.",
+        "completion": "Twoja ścieżka została wybrana; chodź dobrze.",
+        "objectives": {
+          "0": {
+            "label": "Leśny Wilk zabity"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "Utopiony chór",
         "text": "Brodzący nie działają sami. Wśród nich kroczą Utopieni Wyznawcy — kult, który zatonął wraz ze świątynią, wciąż w zbutwiałych szatach, wciąż śpiewający modlitwę z nadbrzeżnych skał. Ucisz ośmiu z nich i przynieś mi sześć ofiar, które noszą. Chcę wiedzieć, co zamierzają złożyć swojej bogini.",
@@ -11904,16 +11909,6 @@ export const pl_PL: EnTranslations = {
         "objectives": {
           "0": {
             "label": "Brodziciel z Migotliwego Jeziora pokonany"
-          }
-        }
-      },
-      "q_archetype_acceptance": {
-        "title": "Rzemiosło, które możesz nazwać własnym",
-        "text": "Każdy rzemieślnik z Eastbrook ostatecznie decyduje się na jedno rzemiosło, które nazywa swoim własnym. Wykaż się jednym czynem, {playerName}, i zadeklaruj swoją ścieżkę.",
-        "completion": "Twoja ścieżka została wybrana; chodź dobrze.",
-        "objectives": {
-          "0": {
-            "label": "Leśny Wilk zabity"
           }
         }
       },

@@ -6850,7 +6850,6 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'itemUi.tooltip.clickUse': 'Kliknij, aby użyć',
   'itemUi.tooltip.clickUseInstant': 'Kliknij, aby użyć natychmiast w walce',
   'itemUi.tooltip.currentlyEquipped': 'Aktualnie założone',
-  'itemUi.tooltip.dagger': 'Sztylet',
   'itemUi.tooltip.damageSpeed': '{min} - {max} obrażeń Szybkość {speed}',
   'itemUi.tooltip.dps': '({dps} obrażeń na sekundę)',
   'itemUi.tooltip.ifYouEquip': 'Jeśli to założysz',
@@ -8266,7 +8265,6 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.talents.resetChoices': 'Wyzeruj wybory',
   'hudChrome.talents.tierLevel': 'Poziom {n}',
   'hudChrome.talents.tierLevelLabel': 'Poziom',
-  'itemUi.vendor.sellItemAria': 'Sprzedaj {item} za {price}',
   'itemUi.vendor.sellRolledWarning':
     'Losowych statystyk nie można odzyskać przez odkupienie przedmiotu.',
   'loading.tips.classes':
@@ -8897,7 +8895,6 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.summon_water_elemental.name': 'Przywołanie żywiołaka wody',
   'entities.abilities.summon_water_elemental.description':
     'Przywołuje Żywiołaka Wody, który walczy u twego boku, miota Pociski Wody w twój cel i podtrzymuje Strumień Wody. (Mróz)',
-  'entities.mobs.water_elemental.name': 'Żywiołak wody',
   'entities.items.conjured_bread4.name': 'Wyczarowany bochen biesiadny',
   'entities.items.conjured_water4.name': 'Wyczarowana woda źródlana',
   'devCommand.actions.attune.description': 'Oznacz wszystkie wymagania dostrojenia jako spełnione.',

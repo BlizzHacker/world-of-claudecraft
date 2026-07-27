@@ -2013,20 +2013,20 @@ export const id_ID: EnTranslations = {
           "label": "Ingin Menjual"
         },
         "wtb": {
-          "hint": "Minta item yang ingin kamu beli",
-          "label": "Ingin Membeli"
+          "label": "Ingin Membeli",
+          "hint": "Minta item yang ingin kamu beli"
         },
         "recruit": {
-          "hint": "Rekrut pemain untuk guild-mu",
-          "label": "Rekrutmen Guild"
+          "label": "Rekrutmen Guild",
+          "hint": "Rekrut pemain untuk guild-mu"
         },
         "event": {
-          "hint": "Umumkan raid, pertemuan, atau acara",
-          "label": "Acara / Raid"
+          "label": "Acara / Raid",
+          "hint": "Umumkan raid, pertemuan, atau acara"
         },
         "help": {
-          "hint": "Minta bantuan dari komunitas",
-          "label": "Butuh Bantuan"
+          "label": "Butuh Bantuan",
+          "hint": "Minta bantuan dari komunitas"
         }
       }
     },
@@ -6959,8 +6959,7 @@ export const id_ID: EnTranslations = {
       "clickUseInstant": "Klik untuk memakai seketika dalam pertempuran",
       "clickUse": "Klik untuk memakai",
       "clickBuyback": "Klik untuk membeli kembali",
-      "bagSlots": "Tas {slots} Slot",
-      "dagger": "Belati"
+      "bagSlots": "Tas {slots} Slot"
     },
     "bags": {
       "title": "Tas",
@@ -6991,7 +6990,6 @@ export const id_ID: EnTranslations = {
       "sellJunk": "Jual Rongsokan",
       "sellJunkAria": "Jual semua rongsokan seharga {price}",
       "sellJunkHint": "Menjual setiap barang abu-abu di tasmu kecuali barang misi.",
-      "sellItemAria": "Jual {item} seharga {price}",
       "sellRolledWarning": "Atribut acak tidak dapat dipulihkan dengan membeli kembali."
     },
     "market": {
@@ -10609,9 +10607,6 @@ export const id_ID: EnTranslations = {
       },
       "ysolei": {
         "name": "Ysolei, Awatara Bulan Tenggelam"
-      },
-      "water_elemental": {
-        "name": "Elemental Air"
       }
     },
     "npcs": {
@@ -11844,6 +11839,16 @@ export const id_ID: EnTranslations = {
           }
         }
       },
+      "q_archetype_acceptance": {
+        "title": "Sebuah Kerajinan untuk Disebut Milik Anda",
+        "text": "Setiap pengrajin di Eastbrook akhirnya memilih satu kerajinan yang bisa mereka jadikan milik mereka. Buktikan diri Anda dengan satu akta, {playerName}, dan nyatakan jalur Anda.",
+        "completion": "Jalan Anda telah dipilih; berjalan dengan baik.",
+        "objectives": {
+          "0": {
+            "label": "Serigala Hutan dibunuh"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "Paduan Suara Tenggelam",
         "text": "Para pengarung tak bergerak sendiri. Di antara mereka berjalan para Pemuja Tenggelam, sekte yang karam bersama kuil, masih dalam busana lapuk, masih menyanyikan doa dari batu karang tepi pantai. Bungkam delapan dari mereka, dan bawakan padaku enam persembahan yang mereka bawa. Aku ingin tahu apa yang hendak mereka berikan pada dewi mereka.",
@@ -11904,16 +11909,6 @@ export const id_ID: EnTranslations = {
         "objectives": {
           "0": {
             "label": "Glimmermere Wader dibunuh"
-          }
-        }
-      },
-      "q_archetype_acceptance": {
-        "title": "Sebuah Kerajinan untuk Disebut Milik Anda",
-        "text": "Setiap pengrajin di Eastbrook akhirnya memilih satu kerajinan yang bisa mereka jadikan milik mereka. Buktikan diri Anda dengan satu akta, {playerName}, dan nyatakan jalur Anda.",
-        "completion": "Jalan Anda telah dipilih; berjalan dengan baik.",
-        "objectives": {
-          "0": {
-            "label": "Serigala Hutan dibunuh"
           }
         }
       },

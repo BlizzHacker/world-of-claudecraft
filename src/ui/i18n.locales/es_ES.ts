@@ -255,7 +255,6 @@ export const es_ES: Partial<Record<TranslationKey, string>> = {
     'Trepas de vuelta hasta el Hermano Halven, en la ruina del relicario.',
   'entities.mobs.reliquary_bonewalker.name': 'Caminahuesos alzado',
   'entities.mobs.reliquary_gravecall_acolyte.name': 'Acólito invocasepulcros',
-  'entities.mobs.water_elemental.name': 'Elemental acuático',
   'entities.npcs.brother_halven.greeting': 'El relicario de abajo ha vuelto a moverse.',
   'sim.delve.alreadyInDelve': 'Ya estás en una Profundidad.',
   'sim.delve.bossChest':

@@ -2013,20 +2013,20 @@ export const pt_BR: EnTranslations = {
           "label": "Quero Vender"
         },
         "wtb": {
-          "hint": "Solicite um item que deseja comprar",
-          "label": "Quero Comprar"
+          "label": "Quero Comprar",
+          "hint": "Solicite um item que deseja comprar"
         },
         "recruit": {
-          "hint": "Recrute jogadores para sua guilda",
-          "label": "Recrutamento de Guilda"
+          "label": "Recrutamento de Guilda",
+          "hint": "Recrute jogadores para sua guilda"
         },
         "event": {
-          "hint": "Anuncie um raide, encontro ou evento",
-          "label": "Evento / Raide"
+          "label": "Evento / Raide",
+          "hint": "Anuncie um raide, encontro ou evento"
         },
         "help": {
-          "hint": "Peça ajuda à comunidade",
-          "label": "Preciso de Ajuda"
+          "label": "Preciso de Ajuda",
+          "hint": "Peça ajuda à comunidade"
         }
       }
     },
@@ -6959,8 +6959,7 @@ export const pt_BR: EnTranslations = {
       "clickUseInstant": "Clique para usar instantaneamente em combate",
       "clickUse": "Clique para usar",
       "clickBuyback": "Clique para recomprar",
-      "bagSlots": "Bolsa de {slots} espaços",
-      "dagger": "Adaga"
+      "bagSlots": "Bolsa de {slots} espaços"
     },
     "bags": {
       "title": "Bolsas",
@@ -6991,7 +6990,6 @@ export const pt_BR: EnTranslations = {
       "sellJunk": "Vender tralha",
       "sellJunkAria": "Vender toda a tralha por {price}",
       "sellJunkHint": "Vende todos os itens cinza nas suas bolsas, exceto itens de missão.",
-      "sellItemAria": "Vender {item} por {price}",
       "sellRolledWarning": "Atributos gerados aleatoriamente não podem ser recuperados pela recompra."
     },
     "market": {
@@ -10609,9 +10607,6 @@ export const pt_BR: EnTranslations = {
       },
       "ysolei": {
         "name": "Ysolei, Avatar da Lua Afogada"
-      },
-      "water_elemental": {
-        "name": "Elemental da Água"
       }
     },
     "npcs": {
@@ -11844,6 +11839,16 @@ export const pt_BR: EnTranslations = {
           }
         }
       },
+      "q_archetype_acceptance": {
+        "title": "Um ofício para chamar de seu",
+        "text": "Cada artesão de Eastbrook eventualmente escolhe um ofício para chamar de seu. Prove seu valor com uma única ação, {playerName}, e declare seu caminho.",
+        "completion": "Seu caminho está escolhido; ande bem.",
+        "objectives": {
+          "0": {
+            "label": "Lobo da Floresta morto"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "O Coro Afogado",
         "text": "Os vadeadores não agem sozinhos. Entre eles caminham os Devotos Afogados — o culto que afundou com o templo, ainda em suas vestes apodrecidas, ainda cantando a prece desde as rochas da costa. Silencie oito deles e traga-me seis das oferendas que carregam. Eu gostaria de saber o que pretendem dar à sua deusa.",
@@ -11904,16 +11909,6 @@ export const pt_BR: EnTranslations = {
         "objectives": {
           "0": {
             "label": "Vadeador de Glimmermere abatido"
-          }
-        }
-      },
-      "q_archetype_acceptance": {
-        "title": "Um ofício para chamar de seu",
-        "text": "Cada artesão de Eastbrook eventualmente escolhe um ofício para chamar de seu. Prove seu valor com uma única ação, {playerName}, e declare seu caminho.",
-        "completion": "Seu caminho está escolhido; ande bem.",
-        "objectives": {
-          "0": {
-            "label": "Lobo da Floresta morto"
           }
         }
       },

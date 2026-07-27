@@ -2013,20 +2013,20 @@ export const de_DE: EnTranslations = {
           "label": "Biete zum Verkauf"
         },
         "wtb": {
-          "hint": "Frage nach einem Gegenstand, den du kaufen möchtest",
-          "label": "Suche zu kaufen"
+          "label": "Suche zu kaufen",
+          "hint": "Frage nach einem Gegenstand, den du kaufen möchtest"
         },
         "recruit": {
-          "hint": "Wirb Spieler für deine Gilde an",
-          "label": "Gildenrekrutierung"
+          "label": "Gildenrekrutierung",
+          "hint": "Wirb Spieler für deine Gilde an"
         },
         "event": {
-          "hint": "Kündige einen Schlachtzug, ein Treffen oder ein Event an",
-          "label": "Event / Schlachtzug"
+          "label": "Event / Schlachtzug",
+          "hint": "Kündige einen Schlachtzug, ein Treffen oder ein Event an"
         },
         "help": {
-          "hint": "Bitte die Gemeinschaft um Hilfe",
-          "label": "Hilfe benötigt"
+          "label": "Hilfe benötigt",
+          "hint": "Bitte die Gemeinschaft um Hilfe"
         }
       }
     },
@@ -6959,8 +6959,7 @@ export const de_DE: EnTranslations = {
       "clickUseInstant": "Zum sofortigen Benutzen im Kampf klicken",
       "clickUse": "Zum Benutzen klicken",
       "clickBuyback": "Zum Rückkaufen klicken",
-      "bagSlots": "Tasche mit {slots} Plätzen",
-      "dagger": "Dolch"
+      "bagSlots": "Tasche mit {slots} Plätzen"
     },
     "bags": {
       "title": "Taschen",
@@ -6991,7 +6990,6 @@ export const de_DE: EnTranslations = {
       "sellJunk": "Graues verkaufen",
       "sellJunkAria": "Alle grauen Gegenstände für {price} verkaufen",
       "sellJunkHint": "Verkauft alle grauen Gegenstände in euren Taschen außer Questgegenständen.",
-      "sellItemAria": "{item} für {price} verkaufen",
       "sellRolledWarning": "Zufällig erzeugte Werte können durch Rückkauf nicht wiederhergestellt werden."
     },
     "market": {
@@ -10609,9 +10607,6 @@ export const de_DE: EnTranslations = {
       },
       "ysolei": {
         "name": "Ysolei, Avatar des Ertränkten Mondes"
-      },
-      "water_elemental": {
-        "name": "Wasserelementar"
       }
     },
     "npcs": {
@@ -11844,6 +11839,16 @@ export const de_DE: EnTranslations = {
           }
         }
       },
+      "q_archetype_acceptance": {
+        "title": "Ein Handwerk, das Sie Ihr Eigen nennen können",
+        "text": "Jeder Kunsthandwerker aus Eastbrook entscheidet sich schließlich für ein Handwerk, das er sein Eigen nennen kann. Beweisen Sie sich mit einer einzigen Tat, {playerName}, und erklären Sie Ihren Weg.",
+        "completion": "Dein Weg ist gewählt; geh gut damit.",
+        "objectives": {
+          "0": {
+            "label": "Waldwolf getötet"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "Der Ertränkte Chor",
         "text": "Die Wäter handeln nicht allein. Unter ihnen wandeln die Ertränkten Andächtigen — der Kult, der mit dem Tempel versank, noch immer in seinen verfaulten Gewändern, noch immer das Gebet von den Uferfelsen singend. Bringe acht von ihnen zum Schweigen und bring mir sechs der Opfergaben, die sie bei sich tragen. Ich will wissen, was sie ihrer Göttin darbringen wollen.",
@@ -11904,16 +11909,6 @@ export const de_DE: EnTranslations = {
         "objectives": {
           "0": {
             "label": "Schimmersee-Wäter erschlagen"
-          }
-        }
-      },
-      "q_archetype_acceptance": {
-        "title": "Ein Handwerk, das Sie Ihr Eigen nennen können",
-        "text": "Jeder Kunsthandwerker aus Eastbrook entscheidet sich schließlich für ein Handwerk, das er sein Eigen nennen kann. Beweisen Sie sich mit einer einzigen Tat, {playerName}, und erklären Sie Ihren Weg.",
-        "completion": "Dein Weg ist gewählt; geh gut damit.",
-        "objectives": {
-          "0": {
-            "label": "Waldwolf getötet"
           }
         }
       },

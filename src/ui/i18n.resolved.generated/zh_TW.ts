@@ -2013,20 +2013,20 @@ export const zh_TW: EnTranslations = {
           "label": "想要出售"
         },
         "wtb": {
-          "hint": "徵求你想購買的物品",
-          "label": "想要購買"
+          "label": "想要購買",
+          "hint": "徵求你想購買的物品"
         },
         "recruit": {
-          "hint": "為你的公會招募玩家",
-          "label": "公會招募"
+          "label": "公會招募",
+          "hint": "為你的公會招募玩家"
         },
         "event": {
-          "hint": "宣布團隊副本、聚會或活動",
-          "label": "活動 / 團隊副本"
+          "label": "活動 / 團隊副本",
+          "hint": "宣布團隊副本、聚會或活動"
         },
         "help": {
-          "hint": "向社群尋求協助",
-          "label": "需要協助"
+          "label": "需要協助",
+          "hint": "向社群尋求協助"
         }
       }
     },
@@ -6959,8 +6959,7 @@ export const zh_TW: EnTranslations = {
       "clickUseInstant": "點擊在戰鬥中立即使用",
       "clickUse": "點擊使用",
       "clickBuyback": "點擊買回",
-      "bagSlots": "{slots}格背包",
-      "dagger": "匕首"
+      "bagSlots": "{slots}格背包"
     },
     "bags": {
       "title": "背包",
@@ -6991,7 +6990,6 @@ export const zh_TW: EnTranslations = {
       "sellJunk": "出售雜物",
       "sellJunkAria": "以 {price} 出售所有雜物",
       "sellJunkHint": "出售背包中除任務物品外的所有灰色物品。",
-      "sellItemAria": "以 {price} 的價格出售 {item}",
       "sellRolledWarning": "隨機屬性無法透過買回找回。"
     },
     "market": {
@@ -10609,9 +10607,6 @@ export const zh_TW: EnTranslations = {
       },
       "ysolei": {
         "name": "伊索蕾，溺月化身"
-      },
-      "water_elemental": {
-        "name": "水元素"
       }
     },
     "npcs": {
@@ -11844,6 +11839,16 @@ export const zh_TW: EnTranslations = {
           }
         }
       },
+      "q_archetype_acceptance": {
+        "title": "屬於你自己的技藝",
+        "text": "東溪的每一位工匠最終都會選定一門屬於自己的技藝。用一件事證明自己吧，{playerName}，宣告你的道路。",
+        "completion": "你的道路已經選定；願你走得穩當。",
+        "objectives": {
+          "0": {
+            "label": "擊敗森林之狼"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "溺亡唱詩班",
         "text": "那些涉者並非單獨行動。在牠們之間行走的，是溺亡信徒——隨神殿一同沉沒的邪教徒，仍披著腐朽的法衣，仍從岸岩之間唱著那篇禱文。讓其中八人歸於沉寂，並為我帶回他們所攜的六件供品。我想知道他們要獻給女神的究竟是什麼。",
@@ -11904,16 +11909,6 @@ export const zh_TW: EnTranslations = {
         "objectives": {
           "0": {
             "label": "微光湖涉者已被擊殺"
-          }
-        }
-      },
-      "q_archetype_acceptance": {
-        "title": "屬於你自己的技藝",
-        "text": "東溪的每一位工匠最終都會選定一門屬於自己的技藝。用一件事證明自己吧，{playerName}，宣告你的道路。",
-        "completion": "你的道路已經選定；願你走得穩當。",
-        "objectives": {
-          "0": {
-            "label": "擊敗森林之狼"
           }
         }
       },

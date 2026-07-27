@@ -6684,7 +6684,6 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'itemUi.tooltip.clickUse': 'Klik for at bruge',
   'itemUi.tooltip.clickUseInstant': 'Klik for at bruge øjeblikkeligt i kamp',
   'itemUi.tooltip.currentlyEquipped': 'Aktuelt udrustet',
-  'itemUi.tooltip.dagger': 'Dolk',
   'itemUi.tooltip.damageSpeed': '{min} - {max} Skade Hastighed {speed}',
   'itemUi.tooltip.dps': '({dps} skade i sekundet)',
   'itemUi.tooltip.ifYouEquip': 'Hvis du udruster denne',
@@ -8202,7 +8201,6 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'hudChrome.talents.resetChoices': 'Nulstil valg',
   'hudChrome.talents.tierLevel': 'Niveau {n}',
   'hudChrome.talents.tierLevelLabel': 'Niveau',
-  'itemUi.vendor.sellItemAria': 'Sælg {item} for {price}',
   'itemUi.vendor.sellRolledWarning': 'Tilfældige egenskaber kan ikke gendannes ved tilbagekøb.',
   'loading.tips.classes':
     'Tip: Hver af de 9 klasser spilles forskelligt. Prøv nogle stykker, før du vælger én.',
@@ -8831,7 +8829,6 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.summon_water_elemental.name': 'Hidkald vandelementar',
   'entities.abilities.summon_water_elemental.description':
     'Hidkald en vandelementar, der kæmper ved din side, slynger Vandprojektiler mod dit mål og kanaliserer Vandstråle. (Frost)',
-  'entities.mobs.water_elemental.name': 'Vandelementar',
   'entities.items.conjured_bread4.name': 'Fremmanet festbrød',
   'entities.items.conjured_water4.name': 'Fremmanet kildevand',
   'devCommand.actions.attune.description': 'Markér alle indstillingskrav som fuldførte.',

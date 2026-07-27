@@ -2013,20 +2013,20 @@ export const it_IT: EnTranslations = {
           "label": "Cerco di vendere"
         },
         "wtb": {
-          "hint": "Richiedi un oggetto che vuoi comprare",
-          "label": "Cerco di comprare"
+          "label": "Cerco di comprare",
+          "hint": "Richiedi un oggetto che vuoi comprare"
         },
         "recruit": {
-          "hint": "Recluta giocatori per la tua gilda",
-          "label": "Reclutamento gilda"
+          "label": "Reclutamento gilda",
+          "hint": "Recluta giocatori per la tua gilda"
         },
         "event": {
-          "hint": "Annuncia un'incursione, un raduno o un evento",
-          "label": "Evento / Incursione"
+          "label": "Evento / Incursione",
+          "hint": "Annuncia un'incursione, un raduno o un evento"
         },
         "help": {
-          "hint": "Chiedi aiuto alla comunita",
-          "label": "Serve aiuto"
+          "label": "Serve aiuto",
+          "hint": "Chiedi aiuto alla comunita"
         }
       }
     },
@@ -6959,8 +6959,7 @@ export const it_IT: EnTranslations = {
       "clickUseInstant": "Clicca per usare subito in combattimento",
       "clickUse": "Clicca per usare",
       "clickBuyback": "Clicca per ricomprare",
-      "bagSlots": "Borsa da {slots} spazi",
-      "dagger": "Pugnale"
+      "bagSlots": "Borsa da {slots} spazi"
     },
     "bags": {
       "title": "Borse",
@@ -6991,7 +6990,6 @@ export const it_IT: EnTranslations = {
       "sellJunk": "Vendi cianfrusaglie",
       "sellJunkAria": "Vendi tutte le cianfrusaglie per {price}",
       "sellJunkHint": "Vende tutti gli oggetti grigi nelle borse tranne gli oggetti di missione.",
-      "sellItemAria": "Vendi {item} per {price}",
       "sellRolledWarning": "Le statistiche generate casualmente non possono essere recuperate con il riacquisto."
     },
     "market": {
@@ -10609,9 +10607,6 @@ export const it_IT: EnTranslations = {
       },
       "ysolei": {
         "name": "Ysolei, Avatar della Luna Annegata"
-      },
-      "water_elemental": {
-        "name": "Elementale dell'Acqua"
       }
     },
     "npcs": {
@@ -11844,6 +11839,16 @@ export const it_IT: EnTranslations = {
           }
         }
       },
+      "q_archetype_acceptance": {
+        "title": "Un mestiere da chiamare tuo",
+        "text": "Ogni artigiano di Eastbrook alla fine sceglie un mestiere da considerare proprio. Mettiti alla prova con una sola azione, {playerName}, e dichiara il tuo percorso.",
+        "completion": "Il tuo percorso è scelto; cammina bene.",
+        "objectives": {
+          "0": {
+            "label": "Lupo della Foresta ucciso"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "Il Coro Annegato",
         "text": "I guadatori non agiscono da soli. Tra loro camminano i Devoti Annegati — la setta che affondò col tempio, ancora nelle loro vesti marcite, ancora intenti a cantare la preghiera dalle rocce della riva. Riducine otto al silenzio e portami sei delle offerte che recano. Voglio sapere cosa intendono donare alla loro dea.",
@@ -11904,16 +11909,6 @@ export const it_IT: EnTranslations = {
         "objectives": {
           "0": {
             "label": "Guadatore di Glimmermere ucciso"
-          }
-        }
-      },
-      "q_archetype_acceptance": {
-        "title": "Un mestiere da chiamare tuo",
-        "text": "Ogni artigiano di Eastbrook alla fine sceglie un mestiere da considerare proprio. Mettiti alla prova con una sola azione, {playerName}, e dichiara il tuo percorso.",
-        "completion": "Il tuo percorso è scelto; cammina bene.",
-        "objectives": {
-          "0": {
-            "label": "Lupo della Foresta ucciso"
           }
         }
       },

@@ -273,6 +273,7 @@ const QUEST_IDS = [
   'q_prof_workorder_tannery',
   'q_prof_workorder_apothecary',
   'q_prof_hobby_switch',
+  'q_archetype_acceptance',
 ] as const;
 
 const ZONE_IDS = ['eastbrook_vale', 'mirefen_marsh', 'thornpeak_heights'] as const;

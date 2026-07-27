@@ -2013,20 +2013,20 @@ export const es: EnTranslations = {
           "label": "Vendo"
         },
         "wtb": {
-          "hint": "Solicita un objeto que quieras comprar",
-          "label": "Compro"
+          "label": "Compro",
+          "hint": "Solicita un objeto que quieras comprar"
         },
         "recruit": {
-          "hint": "Recluta jugadores para tu hermandad",
-          "label": "Reclutamiento de hermandad"
+          "label": "Reclutamiento de hermandad",
+          "hint": "Recluta jugadores para tu hermandad"
         },
         "event": {
-          "hint": "Anuncia una banda, quedada o evento",
-          "label": "Evento / Banda"
+          "label": "Evento / Banda",
+          "hint": "Anuncia una banda, quedada o evento"
         },
         "help": {
-          "hint": "Pide ayuda a la comunidad",
-          "label": "Necesito ayuda"
+          "label": "Necesito ayuda",
+          "hint": "Pide ayuda a la comunidad"
         }
       }
     },
@@ -6959,8 +6959,7 @@ export const es: EnTranslations = {
       "clickUseInstant": "Haz clic para usar al instante en combate",
       "clickUse": "Haz clic para usar",
       "clickBuyback": "Haz clic para recomprar",
-      "bagSlots": "Bolsa de {slots} espacios",
-      "dagger": "Daga"
+      "bagSlots": "Bolsa de {slots} espacios"
     },
     "bags": {
       "title": "Bolsas",
@@ -6991,7 +6990,6 @@ export const es: EnTranslations = {
       "sellJunk": "Vender basura",
       "sellJunkAria": "Vender toda la basura por {price}",
       "sellJunkHint": "Vende todos los objetos grises de tus bolsas excepto los objetos de misión.",
-      "sellItemAria": "Vender {item} por {price}",
       "sellRolledWarning": "Los atributos aleatorios no se pueden recuperar mediante la recompra."
     },
     "market": {
@@ -10609,9 +10607,6 @@ export const es: EnTranslations = {
       },
       "ysolei": {
         "name": "Ysolei, Avatar de la Luna Ahogada"
-      },
-      "water_elemental": {
-        "name": "Elemental de agua"
       }
     },
     "npcs": {
@@ -11844,6 +11839,16 @@ export const es: EnTranslations = {
           }
         }
       },
+      "q_archetype_acceptance": {
+        "title": "Un oficio que puedes llamar tuyo",
+        "text": "Cada artesano de Eastbrook finalmente se decide por un oficio que puede considerar suyo. Ponte a prueba con una sola acción, {playerName}, y declara tu camino.",
+        "completion": "Tu camino está elegido; caminarlo bien.",
+        "objectives": {
+          "0": {
+            "label": "Lobo del bosque matado"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "El Coro Ahogado",
         "text": "Los vadeadores no actúan solos. Entre ellos caminan los Devotos Ahogados: la secta que se hundió con el templo, aún con sus vestiduras putrefactas, aún entonando la plegaria desde las rocas de la orilla. Silencia a ocho de ellos y tráeme seis de las ofrendas que portan. Quiero saber qué pretenden entregar a su diosa.",
@@ -11904,16 +11909,6 @@ export const es: EnTranslations = {
         "objectives": {
           "0": {
             "label": "Vadeador de Glimmermere abatido"
-          }
-        }
-      },
-      "q_archetype_acceptance": {
-        "title": "Un oficio que puedes llamar tuyo",
-        "text": "Cada artesano de Eastbrook finalmente se decide por un oficio que puede considerar suyo. Ponte a prueba con una sola acción, {playerName}, y declara tu camino.",
-        "completion": "Tu camino está elegido; caminarlo bien.",
-        "objectives": {
-          "0": {
-            "label": "Lobo del bosque matado"
           }
         }
       },

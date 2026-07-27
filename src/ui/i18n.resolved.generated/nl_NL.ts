@@ -2013,20 +2013,20 @@ export const nl_NL: EnTranslations = {
           "label": "Te koop aangeboden"
         },
         "wtb": {
-          "hint": "Vraag naar een voorwerp dat je wilt kopen",
-          "label": "Te koop gevraagd"
+          "label": "Te koop gevraagd",
+          "hint": "Vraag naar een voorwerp dat je wilt kopen"
         },
         "recruit": {
-          "hint": "Werf spelers voor je gilde",
-          "label": "Gilde werven"
+          "label": "Gilde werven",
+          "hint": "Werf spelers voor je gilde"
         },
         "event": {
-          "hint": "Kondig een raid, meetup of evenement aan",
-          "label": "Evenement / Raid"
+          "label": "Evenement / Raid",
+          "hint": "Kondig een raid, meetup of evenement aan"
         },
         "help": {
-          "hint": "Vraag de gemeenschap om hulp",
-          "label": "Hulp nodig"
+          "label": "Hulp nodig",
+          "hint": "Vraag de gemeenschap om hulp"
         }
       }
     },
@@ -6959,8 +6959,7 @@ export const nl_NL: EnTranslations = {
       "clickUseInstant": "Klik om direct te gebruiken in gevecht",
       "clickUse": "Klik om te gebruiken",
       "clickBuyback": "Klik om terug te kopen",
-      "bagSlots": "Tas met {slots} vakken",
-      "dagger": "Dolk"
+      "bagSlots": "Tas met {slots} vakken"
     },
     "bags": {
       "title": "Tassen",
@@ -6991,7 +6990,6 @@ export const nl_NL: EnTranslations = {
       "sellJunk": "Rommel Verkopen",
       "sellJunkAria": "Verkoop alle rommel voor {price}",
       "sellJunkHint": "Verkoopt elk grijs voorwerp in je tassen behalve questvoorwerpen.",
-      "sellItemAria": "{item} verkopen voor {price}",
       "sellRolledWarning": "Willekeurig bepaalde eigenschappen kunnen niet worden hersteld door het voorwerp terug te kopen."
     },
     "market": {
@@ -10609,9 +10607,6 @@ export const nl_NL: EnTranslations = {
       },
       "ysolei": {
         "name": "Ysolei, Avatar van de Verdronken Maan"
-      },
-      "water_elemental": {
-        "name": "Waterelementaal"
       }
     },
     "npcs": {
@@ -11844,6 +11839,16 @@ export const nl_NL: EnTranslations = {
           }
         }
       },
+      "q_archetype_acceptance": {
+        "title": "Een ambacht dat u het uwe kunt noemen",
+        "text": "Elke ambachtsman van Eastbrook kiest uiteindelijk voor één ambacht dat hij zijn eigen ambacht noemt. Bewijs jezelf met één enkele daad, {playerName}, en geef je pad aan.",
+        "completion": "Jouw pad is gekozen; loop er goed mee.",
+        "objectives": {
+          "0": {
+            "label": "Boswolf gedood"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "Het Verdronken Koor",
         "text": "De waders handelen niet alleen. Tussen hen lopen de Verdronken Aanbidders, de sekte die met de tempel zonk, nog in hun verrotte gewaden, nog steeds het gebed zingend vanaf de oeverrotsen. Breng er acht tot zwijgen, en breng me zes van de offergaven die ze dragen. Ik wil weten wat ze hun godin willen geven.",
@@ -11904,16 +11909,6 @@ export const nl_NL: EnTranslations = {
         "objectives": {
           "0": {
             "label": "Glimmermere-Wader gedood"
-          }
-        }
-      },
-      "q_archetype_acceptance": {
-        "title": "Een ambacht dat u het uwe kunt noemen",
-        "text": "Elke ambachtsman van Eastbrook kiest uiteindelijk voor één ambacht dat hij zijn eigen ambacht noemt. Bewijs jezelf met één enkele daad, {playerName}, en geef je pad aan.",
-        "completion": "Jouw pad is gekozen; loop er goed mee.",
-        "objectives": {
-          "0": {
-            "label": "Boswolf gedood"
           }
         }
       },

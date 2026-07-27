@@ -2013,20 +2013,20 @@ export const fr_CA: EnTranslations = {
           "label": "Vente proposée"
         },
         "wtb": {
-          "hint": "Demander un objet que vous souhaitez acheter",
-          "label": "Achat recherché"
+          "label": "Achat recherché",
+          "hint": "Demander un objet que vous souhaitez acheter"
         },
         "recruit": {
-          "hint": "Recruter des joueurs pour votre guilde",
-          "label": "Recrutement de guilde"
+          "label": "Recrutement de guilde",
+          "hint": "Recruter des joueurs pour votre guilde"
         },
         "event": {
-          "hint": "Annoncer un raid, une rencontre ou un événement",
-          "label": "Événement / Raid"
+          "label": "Événement / Raid",
+          "hint": "Annoncer un raid, une rencontre ou un événement"
         },
         "help": {
-          "hint": "Demander de l'aide à la communauté",
-          "label": "Besoin d'aide"
+          "label": "Besoin d'aide",
+          "hint": "Demander de l'aide à la communauté"
         }
       }
     },
@@ -6959,8 +6959,7 @@ export const fr_CA: EnTranslations = {
       "clickUseInstant": "Cliquer pour utiliser instantanément en combat",
       "clickUse": "Cliquer pour utiliser",
       "clickBuyback": "Cliquer pour racheter",
-      "bagSlots": "Sac de {slots} emplacements",
-      "dagger": "Dague"
+      "bagSlots": "Sac de {slots} emplacements"
     },
     "bags": {
       "title": "Sacs",
@@ -6991,7 +6990,6 @@ export const fr_CA: EnTranslations = {
       "sellJunk": "Vendre les rebuts",
       "sellJunkAria": "Vendre tous les rebuts pour {price}",
       "sellJunkHint": "Vend tous les objets gris dans vos sacs, sauf les objets de quête.",
-      "sellItemAria": "Vendre {item} pour {price}",
       "sellRolledWarning": "Les caractéristiques aléatoires ne peuvent pas être récupérées par rachat."
     },
     "market": {
@@ -10609,9 +10607,6 @@ export const fr_CA: EnTranslations = {
       },
       "ysolei": {
         "name": "Ysolei, avatar de la Lune noyée"
-      },
-      "water_elemental": {
-        "name": "Élémentaire des eaux"
       }
     },
     "npcs": {
@@ -11844,6 +11839,16 @@ export const fr_CA: EnTranslations = {
           }
         }
       },
+      "q_archetype_acceptance": {
+        "title": "Un métier qui vous appartient",
+        "text": "Chaque artisan d'Eastbrook finit par choisir un métier qui lui est propre. Prouvez-vous avec un seul acte, {playerName}, et déclarez votre chemin.",
+        "completion": "Votre chemin est choisi ; marchez bien.",
+        "objectives": {
+          "0": {
+            "label": "Loup des forêts tué"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "Le Chœur noyé",
         "text": "Les pataugeurs n'agissent pas seuls. Parmi eux marchent les Dévots noyés — la secte qui a sombré avec le temple, encore vêtue de ses ornements putréfiés, chantant toujours la prière depuis les rochers du rivage. Réduis-en huit au silence et rapporte-moi six des offrandes qu'ils portent. Je veux savoir ce qu'ils comptent donner à leur déesse.",
@@ -11904,16 +11909,6 @@ export const fr_CA: EnTranslations = {
         "objectives": {
           "0": {
             "label": "Pataugeur de Lac-miroitant tué"
-          }
-        }
-      },
-      "q_archetype_acceptance": {
-        "title": "Un métier qui vous appartient",
-        "text": "Chaque artisan d'Eastbrook finit par choisir un métier qui lui est propre. Prouvez-vous avec un seul acte, {playerName}, et déclarez votre chemin.",
-        "completion": "Votre chemin est choisi ; marchez bien.",
-        "objectives": {
-          "0": {
-            "label": "Loup des forêts tué"
           }
         }
       },

@@ -199,7 +199,6 @@ export const fr_CA: Partial<Record<TranslationKey, string>> = {
   'entities.items.conjured_water4.name': 'Eau de source conjurée',
   'entities.items.conjured_bread4.name': 'Miche de festin conjurée',
   'entities.mobs.reliquary_gravecall_acolyte.name': "Acolyte de l'appel des tombes",
-  'entities.mobs.water_elemental.name': 'Élémentaire des eaux',
   'entities.npcs.brother_halven.greeting': "Le reliquaire en bas s'est encore déplacé.",
   'sim.delve.alreadyInDelve': 'Vous êtes déjà dans une excavation.',
   'sim.delve.bossChest':

@@ -19,7 +19,6 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.stable_master_wren.name': 'Рен Сэдлворт',
   'entities.npcs.stable_master_wren.title': 'Смотрительница конюшни',
   'entities.npcs.stable_master_wren.greeting': 'Каждому герою нужен скакун, {className}. Олень надёжен, раптор быстр, а змей... змей летает.',
-  'itemUi.vendor.sellItemAria': 'Продать {item} за {price}',
   'hudChrome.crafting.identity.ceilingRare': 'Потолок редкого',
   'hudChrome.crafting.pairOptionLabel': '{pair} ({craftA} + {craftB})',
   'hudChrome.nameplate.mobEliteLevel': '{level}+',
@@ -2426,7 +2425,6 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'itemUi.tooltip.ifYouEquip': 'Если надеть это',
   'itemUi.tooltip.damageSpeed': '{min} - {max} урона Скорость {speed}',
   'itemUi.tooltip.dps': '({dps} урона в секунду)',
-  'itemUi.tooltip.dagger': 'Кинжал',
   'itemUi.tooltip.armorStat': '{value} брони',
   'itemUi.tooltip.stat': '+{value} {stat}',
   'itemUi.tooltip.useFood':
@@ -8503,7 +8501,6 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.summon_water_elemental.name': 'Призыв элементаля воды',
   'entities.abilities.summon_water_elemental.description':
     'Призывает элементаля воды, который сражается рядом с вами, бросает в вашу цель стрелы воды и поддерживает «Струю воды». (ветка «Лёд»)',
-  'entities.mobs.water_elemental.name': 'Элементаль воды',
   'devCommand.actions.attune.description': 'Отметить все требования допуска выполненными.',
   'devCommand.actions.attune.label': 'Открыть все допуски',
   'devCommand.actions.bot.description': 'Создать неподвижного игрока, которому можно шепнуть.',

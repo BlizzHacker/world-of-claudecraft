@@ -2060,7 +2060,6 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
   'itemUi.tooltip.clickUse': 'Kliknutím použiješ',
   'itemUi.tooltip.clickUseInstant': 'Kliknutím okamžitě použiješ v boji',
   'itemUi.tooltip.currentlyEquipped': 'Právě vybaveno',
-  'itemUi.tooltip.dagger': 'Dýka',
   'itemUi.tooltip.damageSpeed': 'Poškození {min} - {max}, rychlost {speed}',
   'itemUi.tooltip.dps': '({dps} poškození za sekundu)',
   'itemUi.tooltip.ifYouEquip': 'Pokud si to vybavíš',
@@ -8187,7 +8186,6 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
   'hudChrome.talents.resetChoices': 'Resetovat volby',
   'hudChrome.talents.tierLevel': 'Úroveň {n}',
   'hudChrome.talents.tierLevelLabel': 'Úroveň',
-  'itemUi.vendor.sellItemAria': 'Prodat {item} za {price}',
   'itemUi.vendor.sellRolledWarning': 'Náhodně vytvořené vlastnosti nelze získat zpět odkoupením.',
   'loading.tips.classes':
     'Tip: každá z 9 tříd se hraje jinak. Než se pro jednu rozhodneš, několik jich vyzkoušej.',
@@ -8704,7 +8702,6 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.summon_water_elemental.name': 'Vyvolat vodního elementála',
   'entities.abilities.summon_water_elemental.description':
     'Vyvolá vodního elementála, který bojuje po tvém boku, vrhá na tvůj cíl Vodní střely a usměrňuje Vodní proud. (Mráz)',
-  'entities.mobs.water_elemental.name': 'Vodní elementál',
   'entities.items.conjured_bread4.name': 'Vyčarovaný hodovní bochník',
   'entities.items.conjured_water4.name': 'Vyčarovaná pramenitá voda',
   'devCommand.actions.attune.description': 'Označ všechny požadavky na naladění jako splněné.',

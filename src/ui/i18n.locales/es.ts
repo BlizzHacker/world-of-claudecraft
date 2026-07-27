@@ -3643,7 +3643,6 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'itemUi.tooltip.ifYouEquip': 'Si equipas esto',
   'itemUi.tooltip.damageSpeed': '{min} - {max} de daño Velocidad {speed}',
   'itemUi.tooltip.dps': '({dps} de daño por segundo)',
-  'itemUi.tooltip.dagger': 'Daga',
   'itemUi.tooltip.armorStat': '{value} de armadura',
   'itemUi.tooltip.stat': '+{value} {stat}',
   'itemUi.tooltip.useFood':
@@ -7862,7 +7861,6 @@ export const es: Partial<Record<TranslationKey, string>> = {
     'Cizalla la armadura del objetivo y la reduce un {damage}% por aplicación. Se acumula hasta 5 veces. Genera una gran cantidad de amenaza.',
   'entities.mobs.training_dummy.name': 'Muñeco de entrenamiento',
   'entities.mobs.yumi_cat.name': 'Yumi',
-  'entities.mobs.water_elemental.name': 'Elemental de agua',
   'guide.arenaPage.yumiBody':
     'Protege a Yumi es un modo de objetivos por equipos que se juega en un laberinto: cada bando protege a su propio familiar felino mientras da caza al del rival. Cada cierto tiempo ambos gatos se teletransportan a nuevos rincones del laberinto, así que el combate oscila entre defender, cazar y correr para volver a encontrarlos. Entra en cola como tres contra tres o cinco contra cinco; caer en batalla solo te deja en el banquillo un instante.',
   'guide.arenaPage.yumiHeading': 'Protege a Yumi',
@@ -7922,7 +7920,6 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auth.resetMismatch': 'Las contraseñas no coinciden.',
   'hudChrome.auth.resetErrInvalid':
     'Este enlace de restablecimiento no es válido o ha caducado. Solicita uno nuevo.',
-  'itemUi.vendor.sellItemAria': 'Vender {item} por {price}',
   'itemUi.vendor.sellRolledWarning':
     'Los atributos aleatorios no se pueden recuperar mediante la recompra.',
   'apiError.deeds.invalid_input': 'Entrada no válida.',

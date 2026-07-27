@@ -4211,7 +4211,6 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'itemUi.tooltip.ifYouEquip': 'Si vous équipez ceci',
   'itemUi.tooltip.damageSpeed': '{min} - {max} points de dégâts Vitesse {speed}',
   'itemUi.tooltip.dps': '({dps} dégâts par seconde)',
-  'itemUi.tooltip.dagger': 'Dague',
   'itemUi.tooltip.armorStat': '{value} armure',
   'itemUi.tooltip.stat': '+{value} {stat}',
   'itemUi.tooltip.useFood':
@@ -8443,7 +8442,6 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
     "Cisaille l'armure de la cible, la réduisant de {damage}% par application. Cumulable jusqu'à 5 fois. Génère beaucoup de menace.",
   'entities.mobs.training_dummy.name': "Mannequin d'entraînement",
   'entities.mobs.yumi_cat.name': 'Yumi',
-  'entities.mobs.water_elemental.name': "Élémentaire d'eau",
   'guide.arenaPage.yumiBody':
     "Protégez Yumi est un mode d'objectif en équipe qui se joue dans un labyrinthe : chaque camp garde son propre familier félin tout en traquant celui de l'adversaire. De temps à autre, les deux chats se téléportent vers de nouveaux recoins du labyrinthe, si bien que le combat oscille entre défense, chasse et course pour les retrouver. Mettez-vous en file en trois contre trois ou cinq contre cinq ; tomber au combat ne vous met sur la touche qu'un instant.",
   'guide.arenaPage.yumiHeading': 'Protégez Yumi',
@@ -8503,7 +8501,6 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auth.resetMismatch': 'Les mots de passe ne correspondent pas.',
   'hudChrome.auth.resetErrInvalid':
     'Ce lien de réinitialisation est invalide ou a expiré. Demandez-en un nouveau.',
-  'itemUi.vendor.sellItemAria': 'Vendre {item} pour {price}',
   'itemUi.vendor.sellRolledWarning':
     'Les caractéristiques aléatoires ne peuvent pas être récupérées par rachat.',
   'apiError.deeds.invalid_input': 'Saisie invalide.',

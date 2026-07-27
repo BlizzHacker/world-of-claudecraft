@@ -8,7 +8,6 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.stable_master_wren.name': 'Wren Saddleworth',
   'entities.npcs.stable_master_wren.title': 'Ahır Ustası',
   'entities.npcs.stable_master_wren.greeting': 'Her kahramanın bir bineğe ihtiyacı var, {className}. Geyik sağlamdır, raptor hızlıdır, ejder ise... ejder uçar.',
-  'itemUi.vendor.sellItemAria': '{item} öğesini {price} karşılığında sat',
   'itemUi.vendor.sellRolledWarning': 'Rastgele özellikler geri satın almayla kurtarılamaz.',
   'hudChrome.bags.itemAriaMasterwork': '{item}, adet {count}, şaheser',
   'hudChrome.archetypePair.tailoring+inscription': 'İplik Yazıcı',
@@ -6745,7 +6744,6 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'itemUi.tooltip.clickUse': 'Kullanmak için tıkla',
   'itemUi.tooltip.clickUseInstant': 'Savaşta anında kullanmak için tıkla',
   'itemUi.tooltip.currentlyEquipped': 'Şu anda kuşanılmış',
-  'itemUi.tooltip.dagger': 'Hançer',
   'itemUi.tooltip.damageSpeed': '{min} - {max} Hasar Hız {speed}',
   'itemUi.tooltip.dps': '(saniyede {dps} hasar)',
   'itemUi.tooltip.ifYouEquip': 'Bunu kuşanırsan',
@@ -8654,7 +8652,6 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.summon_water_elemental.name': 'Su Elementali Çağır',
   'entities.abilities.summon_water_elemental.description':
     'Yanında savaşması, hedefine Su Okları fırlatması ve Su Jeti yönlendirmesi için bir Su Elementali çağır. (Ayaz)',
-  'entities.mobs.water_elemental.name': 'Su Elementali',
   'entities.items.conjured_bread4.name': 'Sihirle Yaratılmış Ziyafet Somunu',
   'entities.items.conjured_water4.name': 'Sihirle Yaratılmış Kaynak Suyu',
   'devCommand.actions.attune.description':

@@ -6841,7 +6841,6 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'itemUi.tooltip.clickUse': 'Klik om te gebruiken',
   'itemUi.tooltip.clickUseInstant': 'Klik om direct te gebruiken in gevecht',
   'itemUi.tooltip.currentlyEquipped': 'Momenteel uitgerust',
-  'itemUi.tooltip.dagger': 'Dolk',
   'itemUi.tooltip.damageSpeed': '{min} - {max} Schade Snelheid {speed}',
   'itemUi.tooltip.dps': '({dps} schade per seconde)',
   'itemUi.tooltip.ifYouEquip': 'Als je dit uitrust',
@@ -8271,7 +8270,6 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.talents.resetChoices': 'Keuzes herstellen',
   'hudChrome.talents.tierLevel': 'Niveau {n}',
   'hudChrome.talents.tierLevelLabel': 'Niveau',
-  'itemUi.vendor.sellItemAria': '{item} verkopen voor {price}',
   'itemUi.vendor.sellRolledWarning':
     'Willekeurig bepaalde eigenschappen kunnen niet worden hersteld door het voorwerp terug te kopen.',
   'loading.tips.classes':
@@ -8907,7 +8905,6 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.summon_water_elemental.name': 'Waterelementaal oproepen',
   'entities.abilities.summon_water_elemental.description':
     'Roep een Waterelementaal op om naast je te vechten, Waterbouten naar je doelwit te slingeren en Waterstraal te kanaliseren. (Vorst)',
-  'entities.mobs.water_elemental.name': 'Waterelementaal',
   'entities.items.conjured_bread4.name': 'Getoverd feestbrood',
   'entities.items.conjured_water4.name': 'Getoverd bronwater',
   'devCommand.actions.attune.description': 'Markeer alle afstemmingsvereisten als voltooid.',

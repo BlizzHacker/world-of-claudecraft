@@ -2013,20 +2013,20 @@ export const vi_VN: EnTranslations = {
           "label": "Cần Bán"
         },
         "wtb": {
-          "hint": "Yêu cầu một vật phẩm bạn muốn mua",
-          "label": "Cần Mua"
+          "label": "Cần Mua",
+          "hint": "Yêu cầu một vật phẩm bạn muốn mua"
         },
         "recruit": {
-          "hint": "Tuyển người chơi cho bang hội của bạn",
-          "label": "Tuyển Bang Hội"
+          "label": "Tuyển Bang Hội",
+          "hint": "Tuyển người chơi cho bang hội của bạn"
         },
         "event": {
-          "hint": "Thông báo một trận raid, buổi gặp mặt hoặc sự kiện",
-          "label": "Sự Kiện / Raid"
+          "label": "Sự Kiện / Raid",
+          "hint": "Thông báo một trận raid, buổi gặp mặt hoặc sự kiện"
         },
         "help": {
-          "hint": "Nhờ cộng đồng giúp đỡ",
-          "label": "Cần Trợ Giúp"
+          "label": "Cần Trợ Giúp",
+          "hint": "Nhờ cộng đồng giúp đỡ"
         }
       }
     },
@@ -6959,8 +6959,7 @@ export const vi_VN: EnTranslations = {
       "clickUseInstant": "Nhấp để dùng tức thời trong chiến đấu",
       "clickUse": "Nhấp để sử dụng",
       "clickBuyback": "Nhấp để mua lại",
-      "bagSlots": "Túi {slots} Ô",
-      "dagger": "Dao Găm"
+      "bagSlots": "Túi {slots} Ô"
     },
     "bags": {
       "title": "Túi Đồ",
@@ -6991,7 +6990,6 @@ export const vi_VN: EnTranslations = {
       "sellJunk": "Bán Đồ Bỏ",
       "sellJunkAria": "Bán tất cả đồ bỏ với giá {price}",
       "sellJunkHint": "Bán mọi vật phẩm màu xám trong túi trừ vật phẩm nhiệm vụ.",
-      "sellItemAria": "Bán {item} với giá {price}",
       "sellRolledWarning": "Không thể khôi phục các chỉ số ngẫu nhiên bằng cách mua lại."
     },
     "market": {
@@ -10609,9 +10607,6 @@ export const vi_VN: EnTranslations = {
       },
       "ysolei": {
         "name": "Ysolei, Hóa Thân Nguyệt Chết Chìm"
-      },
-      "water_elemental": {
-        "name": "Nguyên Tố Nước"
       }
     },
     "npcs": {
@@ -11844,6 +11839,16 @@ export const vi_VN: EnTranslations = {
           }
         }
       },
+      "q_archetype_acceptance": {
+        "title": "Một nghề để gọi riêng của bạn",
+        "text": "Mỗi nghệ nhân của Eastbrook cuối cùng đều định cư trên một nghề thủ công riêng của họ. Hãy chứng tỏ bản thân bằng một hành động duy nhất, {playerName}, và tuyên bố con đường của bạn.",
+        "completion": "Con đường của bạn đã được chọn; đi bộ tốt.",
+        "objectives": {
+          "0": {
+            "label": "Sói rừng bị giết"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "Dàn Đồng Ca Chết Chìm",
         "text": "Lũ lội nước không hành động một mình. Giữa chúng có những Tín Đồ Chết Chìm bước đi — giáo phái đã chìm cùng ngôi đền, vẫn khoác lễ phục mục nát, vẫn hát lời cầu nguyện từ những tảng đá ven bờ. Hãy làm câm tám tên trong số chúng, và mang cho ta sáu vật tế mà chúng mang theo. Ta muốn biết chúng định dâng gì cho nữ thần của chúng.",
@@ -11904,16 +11909,6 @@ export const vi_VN: EnTranslations = {
         "objectives": {
           "0": {
             "label": "Đã hạ Kẻ Lội Nước Glimmermere"
-          }
-        }
-      },
-      "q_archetype_acceptance": {
-        "title": "Một nghề để gọi riêng của bạn",
-        "text": "Mỗi nghệ nhân của Eastbrook cuối cùng đều định cư trên một nghề thủ công riêng của họ. Hãy chứng tỏ bản thân bằng một hành động duy nhất, {playerName}, và tuyên bố con đường của bạn.",
-        "completion": "Con đường của bạn đã được chọn; đi bộ tốt.",
-        "objectives": {
-          "0": {
-            "label": "Sói rừng bị giết"
           }
         }
       },

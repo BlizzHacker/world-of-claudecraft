@@ -2013,20 +2013,20 @@ export const zh_CN: EnTranslations = {
           "label": "出售"
         },
         "wtb": {
-          "hint": "求购你想要的物品",
-          "label": "收购"
+          "label": "收购",
+          "hint": "求购你想要的物品"
         },
         "recruit": {
-          "hint": "为你的公会招募玩家",
-          "label": "公会招募"
+          "label": "公会招募",
+          "hint": "为你的公会招募玩家"
         },
         "event": {
-          "hint": "发布团本、聚会或活动",
-          "label": "活动 / 团本"
+          "label": "活动 / 团本",
+          "hint": "发布团本、聚会或活动"
         },
         "help": {
-          "hint": "向社区寻求帮助",
-          "label": "求助"
+          "label": "求助",
+          "hint": "向社区寻求帮助"
         }
       }
     },
@@ -6959,8 +6959,7 @@ export const zh_CN: EnTranslations = {
       "clickUseInstant": "点击在战斗中立即使用",
       "clickUse": "点击使用",
       "clickBuyback": "点击回购",
-      "bagSlots": "{slots} 格背包",
-      "dagger": "匕首"
+      "bagSlots": "{slots} 格背包"
     },
     "bags": {
       "title": "背包",
@@ -6991,7 +6990,6 @@ export const zh_CN: EnTranslations = {
       "sellJunk": "出售杂物",
       "sellJunkAria": "以 {price} 出售所有杂物",
       "sellJunkHint": "出售背包中除任务物品外的所有灰色物品。",
-      "sellItemAria": "以 {price} 的价格出售 {item}",
       "sellRolledWarning": "随机属性无法通过回购找回。"
     },
     "market": {
@@ -10609,9 +10607,6 @@ export const zh_CN: EnTranslations = {
       },
       "ysolei": {
         "name": "伊索蕾，溺月化身"
-      },
-      "water_elemental": {
-        "name": "水元素"
       }
     },
     "npcs": {
@@ -11844,6 +11839,16 @@ export const zh_CN: EnTranslations = {
           }
         }
       },
+      "q_archetype_acceptance": {
+        "title": "属于你自己的技艺",
+        "text": "东溪的每一位匠人最终都会选定一门属于自己的技艺。用一件事证明自己吧，{playerName}，宣告你的道路。",
+        "completion": "你的道路已经选定；愿你走得稳当。",
+        "objectives": {
+          "0": {
+            "label": "击败森林之狼"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "溺亡唱诗班",
         "text": "那些涉行者并非孤身行动。它们之中游走着溺亡信徒——随神殿一同沉没的邪教徒，至今仍披着腐烂的法衣，仍在岸边礁石上吟唱祷词。让其中八名永远噤声，再为我带回它们随身携带的六件祭品。我想知道它们打算献给女神什么。",
@@ -11904,16 +11909,6 @@ export const zh_CN: EnTranslations = {
         "objectives": {
           "0": {
             "label": "微光潭涉行者已被消灭"
-          }
-        }
-      },
-      "q_archetype_acceptance": {
-        "title": "属于你自己的技艺",
-        "text": "东溪的每一位匠人最终都会选定一门属于自己的技艺。用一件事证明自己吧，{playerName}，宣告你的道路。",
-        "completion": "你的道路已经选定；愿你走得稳当。",
-        "objectives": {
-          "0": {
-            "label": "击败森林之狼"
           }
         }
       },

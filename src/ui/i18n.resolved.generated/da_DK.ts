@@ -2013,20 +2013,20 @@ export const da_DK: EnTranslations = {
           "label": "Vil sælge"
         },
         "wtb": {
-          "hint": "Efterlys en genstand, du vil købe",
-          "label": "Vil købe"
+          "label": "Vil købe",
+          "hint": "Efterlys en genstand, du vil købe"
         },
         "recruit": {
-          "hint": "Rekruttér spillere til din guild",
-          "label": "Guild-rekruttering"
+          "label": "Guild-rekruttering",
+          "hint": "Rekruttér spillere til din guild"
         },
         "event": {
-          "hint": "Annoncér et raid, et møde eller et arrangement",
-          "label": "Arrangement / Raid"
+          "label": "Arrangement / Raid",
+          "hint": "Annoncér et raid, et møde eller et arrangement"
         },
         "help": {
-          "hint": "Bed fællesskabet om hjælp",
-          "label": "Brug for hjælp"
+          "label": "Brug for hjælp",
+          "hint": "Bed fællesskabet om hjælp"
         }
       }
     },
@@ -6959,8 +6959,7 @@ export const da_DK: EnTranslations = {
       "clickUseInstant": "Klik for at bruge øjeblikkeligt i kamp",
       "clickUse": "Klik for at bruge",
       "clickBuyback": "Klik for at købe tilbage",
-      "bagSlots": "Taske med {slots} pladser",
-      "dagger": "Dolk"
+      "bagSlots": "Taske med {slots} pladser"
     },
     "bags": {
       "title": "Tasker",
@@ -6991,7 +6990,6 @@ export const da_DK: EnTranslations = {
       "sellJunk": "Sælg skrammel",
       "sellJunkAria": "Sælg alt skrammel for {price}",
       "sellJunkHint": "Sælger alle grå genstande i dine tasker undtagen questgenstande.",
-      "sellItemAria": "Sælg {item} for {price}",
       "sellRolledWarning": "Tilfældige egenskaber kan ikke gendannes ved tilbagekøb."
     },
     "market": {
@@ -10609,9 +10607,6 @@ export const da_DK: EnTranslations = {
       },
       "ysolei": {
         "name": "Ysolei, den Druknede Månes Avatar"
-      },
-      "water_elemental": {
-        "name": "Vandelementar"
       }
     },
     "npcs": {
@@ -11844,6 +11839,16 @@ export const da_DK: EnTranslations = {
           }
         }
       },
+      "q_archetype_acceptance": {
+        "title": "Et håndværk at kalde dit eget",
+        "text": "Hver eneste håndværker fra Eastbrook sætter sig til sidst over på et håndværk, som de kalder deres eget. Bevis dig selv med en enkelt gerning, {playerName}, og erklær din vej.",
+        "completion": "Din vej er valgt; gå det godt.",
+        "objectives": {
+          "0": {
+            "label": "Skovulv dræbt"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "Det Druknede Kor",
         "text": "Vaderne handler ikke alene. Blandt dem vandrer de Druknede Tilbedere - kulten, der sank med templet, stadig i deres rådne ornater, stadig syngende bønnen fra strandklipperne. Bring otte af dem til tavshed, og bring mig seks af de offergaver, de bærer. Jeg vil vide, hvad de agter at give deres gudinde.",
@@ -11904,16 +11909,6 @@ export const da_DK: EnTranslations = {
         "objectives": {
           "0": {
             "label": "Glimmermere-Vader dræbt"
-          }
-        }
-      },
-      "q_archetype_acceptance": {
-        "title": "Et håndværk at kalde dit eget",
-        "text": "Hver eneste håndværker fra Eastbrook sætter sig til sidst over på et håndværk, som de kalder deres eget. Bevis dig selv med en enkelt gerning, {playerName}, og erklær din vej.",
-        "completion": "Din vej er valgt; gå det godt.",
-        "objectives": {
-          "0": {
-            "label": "Skovulv dræbt"
           }
         }
       },

@@ -3797,7 +3797,6 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'itemUi.tooltip.ifYouEquip': 'Wenn Ihr dies anlegt',
   'itemUi.tooltip.damageSpeed': '{min} - {max} Schaden Tempo {speed}',
   'itemUi.tooltip.dps': '({dps} Schaden pro Sekunde)',
-  'itemUi.tooltip.dagger': 'Dolch',
   'itemUi.tooltip.armorStat': '{value} Rüstung',
   'itemUi.tooltip.stat': '+{value} {stat}',
   'itemUi.tooltip.useFood':
@@ -7943,7 +7942,6 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
     'Spaltet die Rüstung des Ziels und verringert sie pro Anwendung um {damage}%. Stapelt sich bis zu 5-mal. Erzeugt sehr viel Bedrohung.',
   'entities.mobs.training_dummy.name': 'Trainingspuppe',
   'entities.mobs.yumi_cat.name': 'Yumi',
-  'entities.mobs.water_elemental.name': 'Wasserelementar',
   'guide.arenaPage.yumiBody':
     'Yumi beschützen ist ein Team-Zielmodus, der in einem Labyrinth ausgetragen wird: Jede Seite bewacht ihren eigenen Katzenbegleiter und jagt zugleich den der Gegner. Immer wieder blinzeln beide Katzen in neue Ecken des Labyrinths, sodass der Kampf zwischen Verteidigen, Jagen und dem Wettlauf, sie erneut aufzuspüren, hin und her schwingt. Melde dich als drei gegen drei oder fünf gegen fünf an; wer im Kampf fällt, muss nur einen Moment pausieren.',
   'guide.arenaPage.yumiHeading': 'Yumi beschützen',
@@ -8247,7 +8245,6 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.talents.resetChoices': 'Auswahl zurücksetzen',
   'hudChrome.talents.tierLevel': 'Stufe {n}',
   'hudChrome.talents.tierLevelLabel': 'Stufe',
-  'itemUi.vendor.sellItemAria': '{item} für {price} verkaufen',
   'itemUi.vendor.sellRolledWarning':
     'Zufällig erzeugte Werte können durch Rückkauf nicht wiederhergestellt werden.',
   'loading.tips.classes':

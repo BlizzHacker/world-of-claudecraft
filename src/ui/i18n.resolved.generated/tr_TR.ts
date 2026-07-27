@@ -2013,20 +2013,20 @@ export const tr_TR: EnTranslations = {
           "label": "Satmak İstiyorum"
         },
         "wtb": {
-          "hint": "Almak istediğin bir eşya iste",
-          "label": "Satın Almak İstiyorum"
+          "label": "Satın Almak İstiyorum",
+          "hint": "Almak istediğin bir eşya iste"
         },
         "recruit": {
-          "hint": "Loncana oyuncu topla",
-          "label": "Lonca Üye Alımı"
+          "label": "Lonca Üye Alımı",
+          "hint": "Loncana oyuncu topla"
         },
         "event": {
-          "hint": "Bir akın, buluşma veya etkinlik duyur",
-          "label": "Etkinlik / Akın"
+          "label": "Etkinlik / Akın",
+          "hint": "Bir akın, buluşma veya etkinlik duyur"
         },
         "help": {
-          "hint": "Topluluktan yardım iste",
-          "label": "Yardım Lazım"
+          "label": "Yardım Lazım",
+          "hint": "Topluluktan yardım iste"
         }
       }
     },
@@ -6959,8 +6959,7 @@ export const tr_TR: EnTranslations = {
       "clickUseInstant": "Savaşta anında kullanmak için tıkla",
       "clickUse": "Kullanmak için tıkla",
       "clickBuyback": "Geri satın almak için tıkla",
-      "bagSlots": "{slots} Yuvalı Çanta",
-      "dagger": "Hançer"
+      "bagSlots": "{slots} Yuvalı Çanta"
     },
     "bags": {
       "title": "Çantalar",
@@ -6991,7 +6990,6 @@ export const tr_TR: EnTranslations = {
       "sellJunk": "Döküntüleri Sat",
       "sellJunkAria": "Tüm döküntüleri {price} karşılığında sat",
       "sellJunkHint": "Görev eşyaları hariç çantalarınızdaki tüm gri eşyaları satar.",
-      "sellItemAria": "{item} öğesini {price} karşılığında sat",
       "sellRolledWarning": "Rastgele özellikler geri satın almayla kurtarılamaz."
     },
     "market": {
@@ -10609,9 +10607,6 @@ export const tr_TR: EnTranslations = {
       },
       "ysolei": {
         "name": "Ysolei, Boğulmuş Ay'ın Avatarı"
-      },
-      "water_elemental": {
-        "name": "Su Elementali"
       }
     },
     "npcs": {
@@ -11844,6 +11839,16 @@ export const tr_TR: EnTranslations = {
           }
         }
       },
+      "q_archetype_acceptance": {
+        "title": "Kendinize Ait Bir Zanaat",
+        "text": "Eastbrook'un her zanaatkarı eninde sonunda kendilerine ait bir zanaatta karar kılıyor. Tek bir hareketle kendinizi kanıtlayın, {playerName}, ve yolunuzu ilan edin.",
+        "completion": "Yolunuz seçilmiştir; iyi yürü.",
+        "objectives": {
+          "0": {
+            "label": "Orman kurdu öldürüldü"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "Boğulmuş Koro",
         "text": "Su yürüyücüleri tek başına hareket etmiyor. Aralarında Boğulmuş Müritler yürüyor — tapınakla birlikte batan tarikat, hâlâ çürümüş cüppeleri içinde, hâlâ kıyı kayalarından duayı söyleyerek. Sekizini sustur ve bana taşıdıkları adaklardan altısını getir. Tanrıçalarına ne sunmak istediklerini öğrenmek istiyorum.",
@@ -11904,16 +11909,6 @@ export const tr_TR: EnTranslations = {
         "objectives": {
           "0": {
             "label": "Glimmermere Sığlıkgezeri öldürüldü"
-          }
-        }
-      },
-      "q_archetype_acceptance": {
-        "title": "Kendinize Ait Bir Zanaat",
-        "text": "Eastbrook'un her zanaatkarı eninde sonunda kendilerine ait bir zanaatta karar kılıyor. Tek bir hareketle kendinizi kanıtlayın, {playerName}, ve yolunuzu ilan edin.",
-        "completion": "Yolunuz seçilmiştir; iyi yürü.",
-        "objectives": {
-          "0": {
-            "label": "Orman kurdu öldürüldü"
           }
         }
       },

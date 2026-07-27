@@ -2013,20 +2013,20 @@ export const cs_CZ: EnTranslations = {
           "label": "Chci prodat"
         },
         "wtb": {
-          "hint": "Požádej o předmět, který chceš koupit",
-          "label": "Chci koupit"
+          "label": "Chci koupit",
+          "hint": "Požádej o předmět, který chceš koupit"
         },
         "recruit": {
-          "hint": "Nabírej hráče do svého cechu",
-          "label": "Nábor do cechu"
+          "label": "Nábor do cechu",
+          "hint": "Nabírej hráče do svého cechu"
         },
         "event": {
-          "hint": "Oznam raid, setkání nebo událost",
-          "label": "Událost / Raid"
+          "label": "Událost / Raid",
+          "hint": "Oznam raid, setkání nebo událost"
         },
         "help": {
-          "hint": "Požádej komunitu o pomoc",
-          "label": "Potřebuji pomoc"
+          "label": "Potřebuji pomoc",
+          "hint": "Požádej komunitu o pomoc"
         }
       }
     },
@@ -6959,8 +6959,7 @@ export const cs_CZ: EnTranslations = {
       "clickUseInstant": "Kliknutím okamžitě použiješ v boji",
       "clickUse": "Kliknutím použiješ",
       "clickBuyback": "Kliknutím odkoupíš zpět",
-      "bagSlots": "Batoh s {slots} sloty",
-      "dagger": "Dýka"
+      "bagSlots": "Batoh s {slots} sloty"
     },
     "bags": {
       "title": "Batohy",
@@ -6991,7 +6990,6 @@ export const cs_CZ: EnTranslations = {
       "sellJunk": "Prodat odpad",
       "sellJunkAria": "Prodat všechen odpad za {price}",
       "sellJunkHint": "Prodá všechny šedé předměty v batozích kromě úkolových předmětů.",
-      "sellItemAria": "Prodat {item} za {price}",
       "sellRolledWarning": "Náhodně vytvořené vlastnosti nelze získat zpět odkoupením."
     },
     "market": {
@@ -10609,9 +10607,6 @@ export const cs_CZ: EnTranslations = {
       },
       "ysolei": {
         "name": "Ysolei, avatar utopeného měsíce"
-      },
-      "water_elemental": {
-        "name": "Vodní elementál"
       }
     },
     "npcs": {
@@ -11844,6 +11839,16 @@ export const cs_CZ: EnTranslations = {
           }
         }
       },
+      "q_archetype_acceptance": {
+        "title": "Vlastní řemeslo",
+        "text": "Každý řemeslník Eastbrooku si časem vybere jedno řemeslo za své. Dokaž svou cenu jediným činem, {playerName}, a urči svou cestu.",
+        "completion": "Tvá cesta je zvolena, kráčej po ní dobře.",
+        "objectives": {
+          "0": {
+            "label": "Lesní vlk zabit"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "Utopený sbor",
         "text": "Brodci nejednají sami. Mezi nimi kráčejí utopení zasvěcenci, kult, který se potopil s chrámem, stále ve shnilých rouchách a stále zpívá modlitbu ze skal na břehu. Umlč osm z nich a přines mi šest obětin, které nesou. Chci vědět, co hodlají dát své bohyni.",
@@ -11906,16 +11911,6 @@ export const cs_CZ: EnTranslations = {
             "label": "Brodivec z Třpytivého plesa zabit"
           }
         }
-      },
-      "q_archetype_acceptance": {
-        "completion": "Tvá cesta je zvolena, kráčej po ní dobře.",
-        "objectives": {
-          "0": {
-            "label": "Lesní vlk zabit"
-          }
-        },
-        "text": "Každý řemeslník Eastbrooku si časem vybere jedno řemeslo za své. Dokaž svou cenu jediným činem, {playerName}, a urči svou cestu.",
-        "title": "Vlastní řemeslo"
       },
       "q_prof_make_amends": {
         "completion": "Náprava vykonána, otevírá se ti nová cesta.",
