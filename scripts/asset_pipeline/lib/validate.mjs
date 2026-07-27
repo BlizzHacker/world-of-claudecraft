@@ -54,7 +54,7 @@ export async function validateWeapon(path, family) {
   return { ok: errors.length === 0, errors, warnings, report };
 }
 
-export async function validateProp(path, { height }) {
+export async function validateProp(path, { height = undefined }) {
   const report = await inspectGlb(path);
   const errors = [];
   const warnings = [];

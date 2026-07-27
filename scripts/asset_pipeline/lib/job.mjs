@@ -35,7 +35,7 @@ export class Job {
   }
 
   /** Open an existing job or create a new one named after the asset. */
-  static open({ job, kind, name, create = false }) {
+  static open({ job = undefined, kind, name, create = false }) {
     if (job) {
       const id = slug(job);
       // `create` (the web wizard's --new-job) lets a caller pass an EXPLICIT,

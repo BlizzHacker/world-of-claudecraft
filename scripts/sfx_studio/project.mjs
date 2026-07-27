@@ -438,11 +438,11 @@ export function buildFfmpegArgs({
   output,
   project,
   duration,
-  sampleRate,
+  sampleRate = undefined,
   sourceChannels = 2,
   loop = false,
   spatial = !loop,
-  loudnessMeasurement,
+  loudnessMeasurement = undefined,
   codecGainDb = 0,
 }) {
   const plan = buildFfmpegGraph(project, {

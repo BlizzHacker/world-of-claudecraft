@@ -30,7 +30,7 @@ const LAYOUT_QUADRUPED =
   'studio lighting, crisp silhouette, no halos, no drop shadow, no extra objects, no text, ' +
   'no watermark';
 
-export function conceptPrompt({ kind, description, family, rigType }) {
+export function conceptPrompt({ kind, description, family = undefined, rigType = undefined }) {
   if (kind === 'weapon') {
     const orient =
       family?.name === 'book'
@@ -66,7 +66,7 @@ export function conceptPrompt({ kind, description, family, rigType }) {
 
 /** Prompt for the direct text-to-model path (no concept image). Tripo prompts
  *  cap at 1024 chars and should describe shape, material, style. */
-export function modelPrompt({ kind, description, family }) {
+export function modelPrompt({ kind, description, family = undefined }) {
   const base = conceptPrompt({ kind, description, family });
   // Model generation does not need the 2D layout constraints.
   return base.replace(`, ${LAYOUT_OBJECT}`, '').replace(`, ${LAYOUT_CHARACTER}`, '').slice(0, 1024);
