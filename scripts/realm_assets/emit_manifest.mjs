@@ -63,6 +63,10 @@ const out = [];
 const stats = {};
 const familyKeys = {};
 
+// A body is authored ONCE, under the realm it was staged into, and its GLB lives
+// only there. Secondary realms reference the same key (and therefore the same
+// file) rather than duplicating 2.7GB of geometry — assets are meant to be re-used
+// across realms, e.g. every humanoid is FPS-eligible.
 for (const realm of realms.sort()) {
   const files = readdirSync(join(STAGING, realm)).filter((f) => f.endsWith('.glb')).sort();
   const kept = [];
@@ -72,12 +76,30 @@ for (const realm of realms.sort()) {
     const meta = byKey.get(key);
     const name = meta?.name ?? key;
     const armed = ARMED.test(name);
-    kept.push({ key, realm, name, armed, attacks: attacksFor(name) });
+    kept.push({ key, realm, name, armed, attacks: attacksFor(name), realms: meta?.realms ?? [realm] });
   }
   stats[realm] = kept.length;
-  if (kept.length) familyKeys[realm] = kept;
   out.push(...kept);
 }
+
+// Pools: list each body under EVERY realm its classification matched, not just the
+// realm it was staged into.
+const staged = new Set(out.map((e) => e.key));
+for (const e of out) {
+  for (const r of e.realms.length ? e.realms : [e.realm]) {
+    (familyKeys[r] ??= []).push(e);
+  }
+}
+// The namesake realm is a curated best-of rather than a theme: give it a spread
+// drawn evenly across every other realm's bodies.
+const all = out.filter((e) => staged.has(e.key));
+if (all.length) {
+  const step = Math.max(1, Math.floor(all.length / 180));
+  familyKeys.crypticrealm = all.filter((_, i) => i % step === 0).slice(0, 180);
+}
+const poolStats = Object.fromEntries(
+  Object.entries(familyKeys).map(([r, v]) => [r, v.length]),
+);
 
 const lines = [];
 lines.push('// GENERATED FILE - DO NOT EDIT BY HAND.');
@@ -153,5 +175,6 @@ lines.push('');
 writeFileSync(OUT, lines.join('\n'));
 const armed = out.filter((e) => e.armed).length;
 console.log(`[emit] ${out.length} visuals -> ${OUT}`);
-console.log('[emit] per realm:', stats);
+console.log('[emit] authored per realm (owns the GLB):', stats);
+console.log('[emit] POOL per realm (incl. re-used bodies):', poolStats);
 console.log(`[emit] npc-only (armed): ${armed}   player-eligible: ${out.length - armed}`);
