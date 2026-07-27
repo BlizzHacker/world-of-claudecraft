@@ -6370,3 +6370,51 @@ body.reduce-motion #proc-overlay.frost .frost-bird::after {
 #waypoint-menu .waypoint-list { display: flex; flex-direction: column; gap: 5px; margin: 8px 0; }
 #waypoint-menu .waypoint-dest { text-align: left; }
 #waypoint-menu .waypoint-dest:disabled { opacity: 0.45; cursor: default; }
+
+/* ---------------------------------------------------------------------
+ * Restored from the fork: the v0.30.0 merge took the other parent's copy of
+ * this file and dropped these rules (mostly the Warden's Codex window
+ * chrome, which src/ui/window_frame.ts still renders). Appended rather
+ * than spliced because the merged file also carries rules this parent
+ * never had. Rules the suite explicitly forbids are NOT restored.
+ * ------------------------------------------------------------------- */
+@layer components {
+  .np-hpbar.elite {
+    border-color: #f2c84b;
+    box-shadow:
+      0 0 5px 1px #f2c84baa,
+      inset 0 0 2px #ffe9a0cc;
+  }
+  .np-hpbar.boss {
+    border-color: #ff5a3c;
+    box-shadow:
+      0 0 7px 1px #ff5a3ccc,
+      inset 0 0 2px #ffd2a0dd;
+  }
+  .pfm-auras .buff .dur, .pfm-auras .buff .stacks {
+    display: none;
+  }
+  .pet-btn.cooldown {
+    filter: grayscale(0.8) brightness(0.65);
+    cursor: default;
+  }
+  #actionbar, #actionbar2 {
+    display: flex;
+    gap: 4px;
+    padding: 6px;
+  }
+  #actionbar2 {
+    padding-bottom: 2px;
+    display: none;
+  }
+  #party-leave {
+    font-size: 10px;
+    padding: 2px 8px;
+    margin: 0;
+  }
+  .trade-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+  }
+}

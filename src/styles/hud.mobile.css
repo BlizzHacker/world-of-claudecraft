@@ -5364,3 +5364,714 @@
     box-sizing: border-box;
   }
 }
+
+/* ---------------------------------------------------------------------
+ * Restored from the fork: the v0.30.0 merge took the other parent's copy of
+ * this file and dropped these rules (mostly the Warden's Codex window
+ * chrome, which src/ui/window_frame.ts still renders). Appended rather
+ * than spliced because the merged file also carries rules this parent
+ * never had. Rules the suite explicitly forbids are NOT restored.
+ * ------------------------------------------------------------------- */
+@layer hud-mobile {
+  body.mobile-touch .np-name {
+    font-size: 10px;
+  }
+  body.mobile-touch .np-guild {
+    font-size: 9px;
+  }
+  body.mobile-touch .np-hpbar {
+    width: 62px;
+    height: 5px;
+  }
+  body.mobile-touch .np-castbar {
+    width: 62px;
+    height: 7px;
+  }
+  body.mobile-touch .np-castlabel {
+    font-size: 8px;
+    line-height: 8px;
+  }
+  body.mobile-touch .np-tier, body.mobile-touch .np-dev-tier {
+    width: 12px;
+    height: 12px;
+  }
+  body.mobile-touch .np-marker {
+    font-size: 19px;
+    height: 21px;
+  }
+  body.mobile-touch .np-marker.loot {
+    font-size: 11px;
+  }
+  body.mobile-touch .np-raidmark {
+    width: 24px;
+    height: 24px;
+  }
+  body.mobile-touch:not(.mobile-menu-open) #mobile-combat-controls {
+    pointer-events: none;
+  }
+  body.mobile-touch #mobile-menu-collapse-toggle, body.mobile-touch #mobile-consumables-toggle {
+    width: 40px;
+    height: max(40px, calc(54px * var(--mobile-chrome-scale, 1)));
+    flex: none;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+    border: 1px solid var(--mobile-glass-border, #cba43d8c);
+    border-radius: 12px;
+    background: var(--mobile-glass-bg, linear-gradient(160deg, #23212de3, #0e0d10eb));
+    -webkit-backdrop-filter: blur(var(--mobile-glass-blur, 8px));
+    backdrop-filter: blur(var(--mobile-glass-blur, 8px));
+    color: #d8b98a;
+    cursor: var(--cursor-point);
+    opacity: 0.85;
+    box-shadow:
+      inset 0 1px 0 #ffffff14,
+      0 2px 8px #0009;
+  }
+  body.mobile-touch #mobile-menu-collapse-toggle .ui-icon, body.mobile-touch #mobile-consumables-toggle .ui-icon {
+    width: 14px;
+    height: 14px;
+  }
+  body.mobile-touch.mobile-menu-open #mobile-menu-collapse-toggle, body.mobile-touch.mobile-consumables-open #mobile-consumables-toggle {
+    opacity: 1;
+    border-color: var(--gold-dim);
+    color: #ffdf9c;
+  }
+  body.mobile-touch.mobile-menu-open #mobile-menu-collapse-toggle .ui-icon {
+    transform: rotate(180deg);
+  }
+  body.mobile-touch #mobile-combat-buttons {
+    --mobile-menu-row-w: calc(338px - 40px - 8px);
+    
+    --mobile-menu-scale: calc(var(--btn-scale, 1) * var(--mobile-chrome-scale, 1));
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    width: var(--mobile-menu-row-w);
+    pointer-events: none;
+    opacity: 0;
+    transform: scale(var(--mobile-menu-scale)) translateX(-6px);
+    transform-origin: left top;
+    visibility: hidden;
+  }
+  body.mobile-touch #mobile-combat-buttons .mobile-btn {
+    width: 100%;
+  }
+  body.mobile-touch.mobile-menu-open #mobile-combat-buttons {
+    pointer-events: auto;
+    opacity: 1;
+    transform: scale(var(--mobile-menu-scale));
+    visibility: visible;
+  }
+}
+@layer hud-mobile {
+  @media (prefers-reduced-motion: no-preference) {
+    body.mobile-touch #mobile-combat-buttons {
+      transition:
+        opacity 0.16s ease,
+        transform 0.16s ease,
+        visibility 0.16s;
+    }
+    body.mobile-touch #mobile-menu-collapse-toggle .ui-icon, body.mobile-touch #mobile-consumables-toggle .ui-icon {
+      transition: transform 0.16s ease;
+    }
+  }
+}
+@layer hud-mobile {
+  body.mobile-touch #mobile-action-ring > button::after, body.mobile-touch .action-btn::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: #fff;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.08s ease;
+  }
+  body.mobile-touch #mobile-action-ring > button:active::after, body.mobile-touch .action-btn:active::after {
+    opacity: 0.16;
+  }
+  body.mobile-touch #mobile-extra-controls .window-body {
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+  body.mobile-touch.mobile-chrome-idle #mobile-combat-controls .mobile-btn, body.mobile-touch.mobile-chrome-idle #mobile-menu-collapse-toggle, body.mobile-touch.mobile-chrome-idle #mobile-consumables-toggle {
+    opacity: 0.5;
+  }
+  .chat-mobile-move {
+    display: none;
+  }
+  body.mobile-touch.mobile-chat-open #chatlog-wrap .chat-mobile-move {
+    display: flex;
+    position: absolute;
+    top: 0;
+    right: 0;
+    
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid var(--gold-dim, #6f5a2a);
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--panel-base, #14121c) 88%, transparent);
+    color: var(--gold, #c9a84d);
+    z-index: 2;
+    touch-action: none;
+    cursor: grab;
+    pointer-events: auto;
+  }
+  body.mobile-touch.mobile-chat-open #chatlog-frame .chat-pane {
+    padding-bottom: 22px;
+  }
+  body.mobile-touch.mobile-keyboard-open.mobile-chat-open .chat-mobile-resize, body.mobile-touch.mobile-keyboard-open.mobile-chat-open #chatlog-wrap .chat-mobile-move {
+    display: none;
+  }
+  body.mobile-touch #daily-rewards-window .dr-body {
+    column-count: 2;
+    column-gap: 12px;
+    
+    max-height: none;
+    overflow-y: visible;
+  }
+  body.mobile-touch #daily-rewards-window .dr-body > * {
+    break-inside: avoid;
+    margin-bottom: 10px;
+  }
+  body.mobile-touch #options-menu, body.mobile-touch #quest-log-window, body.mobile-touch #spellbook, body.mobile-touch #vendor-window, body.mobile-touch #market-window, body.mobile-touch #quest-dialog, body.mobile-touch #calendar-window, body.mobile-touch #crafting-window, body.mobile-touch #mailbox-window, body.mobile-touch #emote-editor, body.mobile-touch #arena-window, body.mobile-touch #valecup-window, body.mobile-touch #zombie-defense-window, body.mobile-touch #arcade-minigame-window, body.mobile-touch #exchange-window, body.mobile-touch #delve-board, body.mobile-touch #leaderboard-window, body.mobile-touch #daily-rewards-window, body.mobile-touch #loot-settings-window, body.mobile-touch #town-focus-window {
+    left: 10px;
+    right: 10px;
+    top: 10px;
+    width: auto;
+    transform: none;
+    box-sizing: border-box;
+    overflow-y: auto;
+  }
+  body.mobile-touch .window:has(> .window-frame):not(#char-window):not(#talents-window):not(#crafting-window) {
+    overflow-y: hidden;
+  }
+  body.mobile-touch .window:has(> .window-frame) {
+    padding: 0;
+  }
+  body.mobile-touch .mkt-filters, body.mobile-touch .mkt-filters.has-subtype {
+    grid-template-columns: 1fr;
+  }
+  body.mobile-touch .inspect-paperdoll {
+    flex-direction: column;
+  }
+  body.mobile-touch .inspect-paperdoll .equip-col {
+    width: 100%;
+  }
+  body.mobile-touch .inspect-paperdoll .equip-col-right .equip-slot {
+    flex-direction: row;
+    text-align: left;
+  }
+  body.mobile-touch #bags .money {
+    font-size: var(--text-lg);
+  }
+  body.mobile-touch #bags .money .coin {
+    width: 16px;
+    height: 16px;
+  }
+  body.mobile-touch .bag-item, body.mobile-touch .mkt-tab, body.mobile-touch .mkt-btn, body.mobile-touch .mkt-list-btn, body.mobile-touch #loot-window .btn, body.mobile-touch .loot-roll-btn, body.mobile-touch .soc-tab, body.mobile-touch .soc-x, body.mobile-touch .soc-sugg-item, body.mobile-touch .trade-item.mine, body.mobile-touch #social-window .btn, body.mobile-touch #trade-window .btn {
+    min-height: 40px;
+    font-size: 16px;
+  }
+  body.mobile-touch .vendor-row {
+    min-height: var(--touch-min);
+    font-size: 16px;
+  }
+  body.mobile-touch .soc-add input, body.mobile-touch .trade-money input {
+    min-height: 40px;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+  body.mobile-touch #char-window > .char-stats {
+    margin-top: 6px;
+  }
+  body.mobile-touch .char-stats .stat-cell {
+    min-height: 40px;
+    box-sizing: border-box;
+    padding: 10px 5px;
+    margin: 0 -5px;
+  }
+  body.mobile-touch #quest-log-window, body.mobile-touch #vendor-window, body.mobile-touch #quest-dialog, body.mobile-touch #spellbook, body.mobile-touch #options-menu, body.mobile-touch #options-menu.kb-wide, body.mobile-touch #options-menu.perf-wide {
+    left: 50%;
+    right: auto;
+    top: 12px;
+    transform: translateX(-50%);
+  }
+  body.mobile-touch #quest-log-window, body.mobile-touch #vendor-window, body.mobile-touch #quest-dialog {
+    width: clamp(320px, 76vw, 680px);
+    max-width: calc(100vw - 20px);
+    max-height: calc(var(--app-vh) / var(--ui-scale, 1) - 92px);
+  }
+  body.mobile-touch.vendor-open #vendor-window .window-titlebar, body.mobile-touch.vendor-open #bags .window-titlebar {
+    height: var(--window-titlebar-h-touch);
+    min-height: var(--window-titlebar-h-touch);
+    box-sizing: border-box;
+  }
+  body.mobile-touch.vendor-open #vendor-window .window-close {
+    display: none;
+  }
+  body.mobile-touch.bank-open #bank-window, body.mobile-touch.bank-open #bags {
+    position: fixed;
+    top: max(10px, env(safe-area-inset-top));
+    bottom: calc(72px + env(safe-area-inset-bottom));
+    width: auto;
+    max-width: none;
+    max-height: none;
+    transform: none;
+    box-sizing: border-box;
+    z-index: 95;
+  }
+  body.mobile-touch.bank-open #bags {
+    left: calc(var(--app-vw) / var(--ui-scale, 1) / 2);
+    right: max(10px, env(safe-area-inset-right));
+    overflow: hidden;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-left: 0;
+  }
+  body.mobile-touch.bank-open #bank-window .panel-title, body.mobile-touch.bank-open #bags .panel-title {
+    height: 47px;
+    min-height: 47px;
+    padding-bottom: 6px;
+    margin-bottom: 8px;
+    box-sizing: border-box;
+  }
+  body.mobile-touch.market-open #market-window, body.mobile-touch.market-open #bags {
+    position: fixed;
+    top: max(10px, env(safe-area-inset-top));
+    bottom: max(10px, env(safe-area-inset-bottom));
+    width: auto;
+    max-width: none;
+    max-height: none;
+    transform: none;
+    box-sizing: border-box;
+    z-index: 95;
+  }
+  body.mobile-touch.market-open #bags {
+    left: calc(var(--app-vw) / var(--ui-scale, 1) / 2);
+    right: max(10px, env(safe-area-inset-right));
+    overflow: hidden;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-left: 0;
+  }
+  body.mobile-touch #bank-window .bag-chips, body.mobile-touch.bank-open #bags .bag-chips {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+  body.mobile-touch #bank-window .bag-chip, body.mobile-touch.bank-open #bags .bag-chip {
+    flex: 0 0 auto;
+  }
+  body.mobile-touch #talents-window .window-body {
+    display: block;
+    overflow-y: auto;
+  }
+  body.mobile-touch #talents-window .tal-card {
+    min-height: 48px;
+  }
+}
+@layer hud-mobile {
+  @media (orientation: portrait) {
+    body.mobile-touch #mobile-combat-buttons {
+      
+      --mobile-menu-scale: var(--btn-scale, 1);
+      --mobile-menu-row-w: calc(234px - 40px - 8px);
+      gap: 6px;
+    }
+    body.mobile-touch #mobile-menu-collapse-toggle, body.mobile-touch #mobile-consumables-toggle {
+      height: 44px;
+    }
+  }
+}
+@layer hud-mobile {
+  @media (orientation: landscape) {
+    body.mobile-touch #mobile-combat-buttons {
+      --mobile-menu-row-w: calc(310px - 40px - 8px);
+      
+      gap: 6px;
+    }
+    body.mobile-touch #mobile-menu-collapse-toggle, body.mobile-touch #mobile-consumables-toggle {
+      height: max(40px, calc(48px * var(--mobile-chrome-scale, 1)));
+    }
+    body.mobile-touch #raid-lockout, body.mobile-touch #mail-indicator {
+      top: 94px;
+      transform: scale(1.27);
+    }
+  }
+}
+@layer hud-mobile {
+  body.mobile-touch .window-titlebar {
+    min-height: var(--window-titlebar-h-touch);
+  }
+  body.mobile-touch .window-close {
+    min-width: var(--control-h-touch);
+    min-height: var(--control-h-touch);
+  }
+  body.mobile-touch .tab {
+    height: var(--control-h-touch);
+  }
+  body.mobile-touch .window-frame .btn {
+    height: var(--control-h-touch);
+  }
+  body.mobile-touch .window-frame .icon-btn {
+    width: var(--control-h-touch);
+    height: var(--control-h-touch);
+  }
+  body.mobile-touch .window-frame .field input, body.mobile-touch .window-frame .field select, body.mobile-touch .window-frame .search-field input, body.mobile-touch .window-frame .search-field .search-clear {
+    height: var(--control-h-touch);
+  }
+  body.mobile-touch .window-frame .data-table th, body.mobile-touch .window-frame .data-table td {
+    height: 48px;
+  }
+  body.mobile-touch .window-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  body.mobile-touch .window-footer .btn {
+    width: 100%;
+  }
+  body.mobile-touch .window-frame {
+    background-color: var(--color-panel-l2-base);
+  }
+  body.mobile-touch .window.panel:not(:has(.window-frame)) {
+    background-color: var(--color-panel-l2-base);
+  }
+  body.mobile-touch .vcup-role {
+    min-height: 40px;
+  }
+  body.mobile-touch.mobile-window-open #minimap-wrap, body.mobile-touch.mobile-window-open #mail-indicator, body.mobile-touch.mobile-more-open #minimap-wrap, body.mobile-touch.mobile-more-open #mail-indicator {
+    display: none;
+  }
+  body.mobile-touch #char-window .skin-swatch {
+    width: 40px;
+    height: 40px;
+  }
+  body.mobile-touch #bags .chip, body.mobile-touch .window-frame .chip {
+    min-width: 40px;
+    min-height: 40px;
+  }
+  body.mobile-touch .vcup-bracket {
+    min-height: 40px;
+  }
+  body.mobile-touch .tf-step {
+    width: 40px;
+    height: 40px;
+  }
+  body.mobile-touch .corpse-harvest-row {
+    min-height: 40px;
+    align-items: center;
+  }
+  body.mobile-touch .corpse-harvest-check {
+    width: 22px;
+    height: 22px;
+  }
+  body.mobile-touch #delve-board .btn {
+    min-height: 40px;
+  }
+  body.mobile-touch #options-menu .opt-scope {
+    min-height: 40px;
+  }
+  body.mobile-touch #options-menu .opt-slider {
+    min-height: 40px;
+  }
+  body.mobile-touch #trade-window .trade-actions {
+    position: sticky;
+    bottom: 0;
+    background: var(--color-panel-l2-base);
+    padding: 8px 0;
+    margin-top: 4px;
+  }
+}
+@layer hud-mobile {
+  @media (min-width: 1200px) {
+    body.mobile-touch:not(.vendor-open) #vendor-window, body.mobile-touch #quest-log-window, body.mobile-touch #spellbook, body.mobile-touch #quest-dialog, body.mobile-touch #calendar-window, body.mobile-touch #crafting-window, body.mobile-touch #mailbox-window, body.mobile-touch #emote-editor, body.mobile-touch #arena-window, body.mobile-touch #valecup-window, body.mobile-touch #delve-board, body.mobile-touch #leaderboard-window, body.mobile-touch #loot-settings-window, body.mobile-touch #town-focus-window, body.mobile-touch #inspect-window, body.mobile-touch #trade-window, body.mobile-touch #daily-rewards-window, body.mobile-touch:not(.vendor-open):not(.bank-open):not(.market-open) #bags {
+      max-width: 900px;
+      margin-inline: auto;
+    }
+  }
+}
+@layer hud-mobile {
+  body.mobile-touch #options-menu, body.mobile-touch #options-menu.kb-wide, body.mobile-touch #options-menu.perf-wide {
+    left: max(10px, env(safe-area-inset-left));
+    right: max(10px, env(safe-area-inset-right));
+    top: max(10px, env(safe-area-inset-top));
+    bottom: max(10px, env(safe-area-inset-bottom));
+    width: auto;
+    max-width: none;
+    height: auto;
+    max-height: none;
+    transform: none;
+    box-sizing: border-box;
+  }
+  body.mobile-touch #options-menu > .window-frame {
+    background-color: var(--color-panel-l2-base);
+  }
+  body.mobile-touch #options-menu:not(.opt-mrail) > .window-frame > .window-titlebar, body.mobile-touch #options-menu:not(.opt-mrail) > .window-frame > .window-footer {
+    display: none;
+  }
+  body.mobile-touch #options-menu .window-body {
+    padding: 0;
+    overflow: hidden;
+  }
+  body.mobile-touch #options-menu.opt-mrail > .window-frame > .window-footer {
+    flex-direction: row;
+    align-items: center;
+  }
+  body.mobile-touch #options-menu.opt-mrail > .window-frame > .window-footer .btn {
+    width: auto;
+  }
+  body.mobile-touch #options-menu {
+    --opt-rail-w: 248px;
+  }
+  body.mobile-touch #options-menu .opt-tab-icon, body.mobile-touch #options-menu .opt-tab-icon .ui-icon {
+    width: 24px;
+    height: 24px;
+  }
+}
+@layer hud-mobile {
+  @container opt-shell (max-width: 900px) {
+    body.mobile-touch #options-menu .opt-body {
+      grid-template-columns: 72px 1fr;
+    }
+  }
+}
+@layer hud-mobile {
+  body.mobile-touch #options-menu .opt-detail-inner {
+    max-width: 54rem;
+    margin-inline: auto;
+  }
+  body.mobile-touch #options-menu .window-footer .btn {
+    min-height: 48px;
+  }
+  .opt-mshell {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    height: 100%;
+  }
+  .opt-mshell-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    flex: none;
+    min-height: var(--window-titlebar-h-touch);
+    padding: 0 var(--spacing-sm);
+    border-bottom: 1px solid var(--panel-edge);
+    background: var(--color-panel-l2-base);
+  }
+  .opt-mshell-title {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    letter-spacing: 0.4px;
+    color: var(--window-title-color);
+  }
+  .opt-mshell-content {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    padding: var(--spacing-md);
+  }
+  .opt-mshell-search {
+    width: 100%;
+    margin-bottom: var(--spacing-md);
+  }
+  .opt-mshell-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-sm);
+  }
+  .opt-mshell-cat {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    min-height: 92px;
+    padding: var(--spacing-md) var(--spacing-sm);
+    border: 1px solid var(--panel-edge);
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--color-text-light) 4%, transparent);
+    color: var(--color-text-light);
+    text-align: center;
+    cursor: var(--cursor-point);
+  }
+  .opt-mshell-cat:hover {
+    border-color: var(--color-accent);
+    background: color-mix(in srgb, var(--color-text-light) 8%, transparent);
+  }
+  .opt-mshell-cat.is-danger {
+    border-color: var(--color-border-invalid);
+  }
+  .opt-mshell-cat.is-danger:hover {
+    border-color: var(--color-text-error);
+  }
+  .opt-mshell-cat.is-danger .opt-mshell-cat-icon, .opt-mshell-cat.is-danger .opt-mshell-cat-label {
+    color: var(--color-text-error);
+  }
+  .opt-mshell-cat-icon {
+    flex: none;
+    display: inline-flex;
+    width: 30px;
+    height: 30px;
+    color: var(--color-accent);
+  }
+  .opt-mshell-cat-icon .ui-icon {
+    width: 30px;
+    height: 30px;
+  }
+  .opt-mshell-cat-text {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .opt-mshell-cat-label {
+    font-family: var(--font-ui);
+    font-size: var(--text-md);
+    color: var(--color-text-light);
+  }
+  .opt-mshell-cat-sub, .opt-mshell-chevron {
+    display: none;
+  }
+  .opt-mshell-cat .opt-tab-dot {
+    position: absolute;
+    inset: var(--spacing-xs) var(--spacing-xs) auto auto;
+  }
+  .opt-mshell-cat .opt-tab-count {
+    position: absolute;
+    inset: var(--spacing-xs) var(--spacing-xs) auto auto;
+  }
+  .opt-mshell-bar {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-top: 1px solid var(--panel-edge);
+    background: var(--color-panel-l2-base);
+  }
+  .opt-mshell-cat:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: calc(var(--focus-ring-offset) * -1);
+  }
+  body.mobile-touch #options-menu .opt-mshell-content .opt-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+    column-gap: var(--spacing-lg);
+    row-gap: var(--spacing-xs);
+  }
+  body.mobile-touch #options-menu .opt-mshell-content .opt-section > :not(.opt-row, .opt-pin) {
+    grid-column: 1 / -1;
+  }
+  body.mobile-touch #options-menu .opt-mshell-content .opt-row {
+    grid-template-columns: 1fr;
+    align-items: start;
+    row-gap: var(--spacing-xs);
+  }
+  body.mobile-touch #options-menu .opt-mshell-content .opt-row-label {
+    white-space: normal;
+  }
+  body.mobile-touch #options-menu .opt-mshell-content .opt-row-control {
+    justify-content: flex-start;
+  }
+  body.mobile-touch #options-menu .opt-mshell-content .opt-row-control .ui-dd {
+    width: 100%;
+  }
+  body.mobile-touch #options-menu .opt-row {
+    min-height: 48px;
+  }
+  body.mobile-touch #options-menu .opt-row-label {
+    font-size: var(--text-lg);
+  }
+  body.mobile-touch #options-menu .opt-switch {
+    width: 60px;
+    height: 34px;
+    border-radius: 17px;
+  }
+  body.mobile-touch #options-menu .opt-switch::before {
+    width: 30px;
+    height: 30px;
+  }
+  body.mobile-touch #options-menu .opt-switch[aria-checked="true"]::before {
+    transform: translateX(26px);
+  }
+  body.mobile-touch #options-menu .opt-switch::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: var(--touch-min);
+    transform: translateY(-50%);
+  }
+  body.mobile-touch #options-menu .opt-seg-btn {
+    height: 48px;
+    padding: 0 var(--spacing-md);
+    font-size: var(--text-md);
+  }
+  body.mobile-touch #options-menu .opt-slider {
+    max-width: none;
+    width: clamp(180px, 40vw, 280px);
+  }
+  body.mobile-touch #options-menu .opt-slider::-webkit-slider-runnable-track {
+    height: 8px;
+    border-radius: 4px;
+  }
+  body.mobile-touch #options-menu .opt-slider::-moz-range-track, body.mobile-touch #options-menu .opt-slider::-moz-range-progress {
+    height: 8px;
+    border-radius: 4px;
+  }
+  body.mobile-touch #options-menu .opt-slider::-webkit-slider-thumb {
+    width: 26px;
+    height: 26px;
+    margin-top: -9px;
+  }
+  body.mobile-touch #options-menu .opt-slider::-moz-range-thumb {
+    width: 26px;
+    height: 26px;
+  }
+  body.mobile-touch #options-menu .search-field input, body.mobile-touch #options-menu .ui-dd-btn {
+    min-height: 48px;
+  }
+  body.mobile-touch #options-menu .search-input {
+    font-size: 16px;
+  }
+}
+
+/* ---------------------------------------------------------------------
+ * Restored from upstream: the v0.30.0 merge took the other parent's copy of
+ * this file and dropped these rules (mostly the Warden's Codex window
+ * chrome, which src/ui/window_frame.ts still renders). Appended rather
+ * than spliced because the merged file also carries rules this parent
+ * never had. Rules the suite explicitly forbids are NOT restored.
+ * ------------------------------------------------------------------- */
+@layer hud-mobile {
+  body.mobile-touch #options-menu, body.mobile-touch #quest-log-window, body.mobile-touch #spellbook, body.mobile-touch #vendor-window, body.mobile-touch #train-window, body.mobile-touch #unbind-window, body.mobile-touch #market-window, body.mobile-touch #quest-dialog, body.mobile-touch #calendar-window, body.mobile-touch #crafting-window, body.mobile-touch #mailbox-window, body.mobile-touch #emote-editor, body.mobile-touch #arena-window, body.mobile-touch #dungeon-finder-window, body.mobile-touch #valecup-window, body.mobile-touch #card-duel-window, body.mobile-touch #delve-board, body.mobile-touch #leaderboard-window, body.mobile-touch #loot-settings-window, body.mobile-touch #town-focus-window, body.mobile-touch #dev-command-window, body.mobile-touch #claudium-window {
+    left: 10px;
+    right: 10px;
+    top: 10px;
+    width: auto;
+    transform: none;
+    box-sizing: border-box;
+    overflow-y: auto;
+  }
+  body.mobile-touch #leaderboard-window {
+    max-height: calc(var(--app-vh) / var(--ui-scale, 1) - 20px);
+  }
+}

@@ -124,3 +124,30 @@
      and always-reachable-close guarantees above deliberately do not apply to it.
      Keep it headerless on purpose; give it a real header before relying on them. */
 }
+
+/* ---------------------------------------------------------------------
+ * Restored from the fork: the v0.30.0 merge took the other parent's copy of
+ * this file and dropped these rules (mostly the Warden's Codex window
+ * chrome, which src/ui/window_frame.ts still renders). Appended rather
+ * than spliced because the merged file also carries rules this parent
+ * never had. Rules the suite explicitly forbids are NOT restored.
+ * ------------------------------------------------------------------- */
+@layer layout {
+  #mobile-extra-controls, #confirm-dialog {
+    --window-scale: 1;
+  }
+  .window.window-resizable::after {
+    content: "";
+    position: absolute;
+    right: 3px;
+    bottom: 3px;
+    width: 12px;
+    height: 12px;
+    background-image: repeating-linear-gradient(135deg, transparent 0 3px, var(--gold-dim) 3px 4px);
+    pointer-events: none;
+    z-index: 8;
+  }
+  body.mobile-touch .window.window-resizable::after {
+    display: none;
+  }
+}
