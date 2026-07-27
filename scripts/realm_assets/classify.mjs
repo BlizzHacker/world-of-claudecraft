@@ -31,6 +31,8 @@ const SRC = arg('src', '/mnt/usb4/meshy/PICKTURA/glb');
 const OUT = arg('out', 'entries.json');
 const LIMIT = Number(arg('limit', 0));
 const PER_REALM_CAP = Number(arg('cap', 0));
+// Let prose-named meshes through to the shape gate instead of dropping them here.
+const PERMISSIVE = !!arg('permissive');
 
 const LEX = {
   infernal: ['demon', 'devil', 'imp', 'balrog', 'fiend', 'hell', 'fallen', 'butcher', 'skeleton',
@@ -94,6 +96,21 @@ const NAMES = (() => {
   catch { return {}; }
 })();
 
+// Meshy's OWN categories beat anything inferable from the prose prompt, and they
+// catch what geometry cannot. The alien "face relief" busts that flooded dominion
+// measure identically to a slim humanoid (wide/y 0.42 vs 0.43, thin/y 0.27 vs 0.32),
+// so no bbox rule can separate them — but 11/11 of the ones I rejected by eye carry
+// ArtAbstract, against 1/11 of the ones I kept. These categories are sculpture,
+// decor, scenery and non-biped subjects: nothing here should get a humanoid rig.
+const REJECT_CATEGORIES = new Set([
+  'ArtAbstract', 'Vehicles', 'Architecture', 'FurnitureHome', 'NaturePlants',
+  'Music', 'PlacesTravel', 'Animals', 'FoodDrink', 'Electronics',
+]);
+
+function categoriesOf(file) {
+  return NAMES[file.split('__')[0]]?.categories ?? [];
+}
+
 function nameOf(file) {
   // <resultId>__<Descriptive_Name>.glb  |  <resultId>__model.glb
   const rid = file.split('__')[0];
@@ -108,13 +125,26 @@ function nameOf(file) {
 
 function classify(pretty) {
   const s = pretty.toLowerCase();
-  if (NON_HUMANOID.some((k) => s.includes(k))) return null;
+  const isHumanoid = HUMANOID.some((k) => s.includes(k));
+  // Positive humanoid evidence BEATS prop evidence. These are prose prompts, so
+  // "warrior with a sword" and "orc in rusted armor holding an axe" both trip the
+  // prop list — and those are precisely the armed bodies wanted as NPC/enemy
+  // assets. Checking the prop list first silently discarded them.
+  if (!isHumanoid && NON_HUMANOID.some((k) => s.includes(k))) return null;
   const realms = [];
   for (const [realm, keys] of Object.entries(LEX)) {
     if (keys.some((k) => s.includes(k))) realms.push(realm);
   }
-  const isHumanoid = HUMANOID.some((k) => s.includes(k));
-  if (!isHumanoid && realms.length === 0) return null;
+  // Permissive fallback. Names here are full Meshy PROMPTS — long, free-form prose
+  // that frequently describes a perfectly good character without ever using one of
+  // our keywords, which is why a strict lexicon dropped ~2,250 meshes. The
+  // geometric shape gate in rig_batch is now reliable (14/14 on measured ground
+  // truth) and rejects non-humanoids for 0.1s, so classification can afford to let
+  // the uncertain through and be judged on proportions instead of vocabulary.
+  if (!isHumanoid && realms.length === 0) {
+    if (!PERMISSIVE) return null;
+    return { realms: ['fps', 'classic'], primary: 'classic', weak: true };
+  }
   // Every humanoid is FPS-eligible.
   if (isHumanoid && !realms.includes('fps')) realms.push('fps');
   // Classic only takes demons at low tier; apex demon words stay infernal-only.
@@ -133,9 +163,14 @@ function classify(pretty) {
 const files = readdirSync(SRC).filter((f) => f.endsWith('.glb'));
 const entries = [];
 const counts = {};
-const skipped = { nonHumanoid: 0, unmatched: 0 };
+const skipped = { nonHumanoid: 0, unmatched: 0, byCategory: 0 };
 
 for (const f of files) {
+  const cats = categoriesOf(f);
+  // Category veto first: sculpture/decor/scenery/animals never get a humanoid rig.
+  // 'Characters' present does NOT rescue an ArtAbstract piece — the two worst
+  // dominion busts carried both.
+  if (cats.some((c) => REJECT_CATEGORIES.has(c))) { skipped.byCategory++; continue; }
   const pretty = nameOf(f);
   if (!pretty) { skipped.unmatched++; continue; }
   const c = classify(pretty);
