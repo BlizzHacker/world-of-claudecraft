@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { warriorParryChance } from '../src/sim/combat/warrior_hit_table';
 import { CLASSES } from '../src/sim/content/classes';
 import { ITEMS } from '../src/sim/data';
 import { recalcPlayerStats } from '../src/sim/entity';
@@ -40,6 +41,8 @@ function inputFor(cls: PlayerClass, p: ReturnType<typeof freshPlayer>): StatTool
     dodgeChance: p.dodgeChance,
     critRating: p.critRating,
     hasteRating: p.hasteRating,
+    hitRating: p.hitRating,
+    parryChance: cls === 'warrior' ? warriorParryChance(p.stats.str) : 0,
     dps: 0,
   };
 }
@@ -302,6 +305,8 @@ describe('upstream source breakdown reconciles to the displayed stat', () => {
       dodgeChance: p.dodgeChance,
       critRating: p.critRating,
       hasteRating: p.hasteRating,
+      hitRating: p.hitRating,
+      parryChance: cls === 'warrior' ? warriorParryChance(p.stats.str) : 0,
       dps: 0,
       gear,
       buffs,
@@ -421,5 +426,25 @@ describe('rating stat cells', () => {
     // rating cells show the value + description, no per-source breakdown line
     expect(crit.sources).toEqual([]);
     expect(haste.sources).toEqual([]);
+  });
+
+  it('summarizes both capped PvP effects in one Warfare stat', () => {
+    const p = freshPlayer('warrior', 20);
+    const input = inputFor('warrior', p);
+    input.stats = {
+      ...input.stats,
+      pvpOffense: 0.2,
+      pvpDefense: 0.137,
+    };
+
+    const warfare = buildStatTooltip('warfare', input);
+    expect(warfare.statValue).toBe(20);
+    expect(warfare.warfareDamageIncrease).toBe(20);
+    expect(warfare.warfareDamageReduction).toBeCloseTo(13.7, 6);
+    expect(warfare.isPrimary).toBe(false);
+    expect(warfare.effects).toEqual([]);
+    // Warfare fractions are already derived from all equipped ratings and capped
+    // by recalcPlayerStats, so inventing a second source breakdown here would lie.
+    expect(warfare.sources).toEqual([]);
   });
 });

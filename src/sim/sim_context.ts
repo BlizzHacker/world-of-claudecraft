@@ -12,10 +12,14 @@
 // game/net/DOM/Three, no `Math.random`/`Date.now`), so it runs unchanged in Node,
 // the browser, and the headless RL env (enforced by tests/architecture.test.ts).
 
+import type { FrozenOrbState } from './combat/frozen_orb';
+import type { LetterDef } from './content/letters';
 import type { TalentModifiers } from './content/talents';
+import type { DeedRuntime } from './deeds';
 import type { DelayedEvent, GroundAoE } from './entity_roster';
 import type { PendingLootRoll } from './loot/loot_roll';
 import type { MarketListing } from './market';
+import type { MobScanCounters } from './mob/scan_counters';
 import type { PendingProjectile } from './projectile_travel';
 import type { Rng } from './rng';
 import type {
@@ -34,6 +38,8 @@ import type {
   ResolvedAbility,
   TradeSession,
 } from './sim';
+import type { CardDuelMatch } from './social/card_duel';
+import type { FinderFormationUnit } from './social/party';
 import type { PitState } from './social/boarpit';
 import type { HomesState } from './social/homes';
 import type { HordeState } from './social/horde';
@@ -45,11 +51,15 @@ import type {
   AbilityDef,
   Aura,
   CrowdControlDrCategory,
+  DeedStatKey,
   DelveRun,
   DungeonDifficulty,
   Entity,
+  EquipSlot,
   ErrorReason,
+  GatherNodeDef,
   ItemInstancePayload,
+  PendingResurrection,
   PlayerClass,
   QuestProgress,
   ReadyCheck,
@@ -57,6 +67,7 @@ import type {
   SimConfig,
   SimEvent,
   SkinCatalog,
+  StationDef,
   Vec3,
 } from './types';
 
@@ -72,6 +83,8 @@ export interface SimContextPrimitives {
   // Live player roster (keyed by entity id). Stays a Sim field; exposed here so the
   // moved party machine (A1) resolves member names/metas through the seam.
   readonly players: Map<number, PlayerMeta>;
+  /** Static crafting stations owned by this Sim's authored world bundle. */
+  readonly stationPlacements: readonly StationDef[];
   // The local / RL player id (single-player + renderer contexts). Reassigned on the
   // first join and on the primary's departure, so it is a LIVE getter, not a snapshot.
   // Stays a Sim field; the moved raid-marker `markerFor` (T1) reads it through the seam.
@@ -101,6 +114,10 @@ export interface SimContextPrimitives {
   // delayedEvents.
   pendingProjectiles: PendingProjectile[];
   readonly groundAoEs: GroundAoE[];
+  // Live frost-mage Frozen Orbs (combat/frozen_orb.ts): released by the cast's
+  // frozenOrb effect, drifted/pulsed by tickFrozenOrbs in the tick prologue.
+  // Mutated in place (push/splice) like groundAoEs, so read-only.
+  readonly frozenOrbs: FrozenOrbState[];
   // dungeon-door registry (I1) appended to on dungeon_door spawn; null until built.
   // Read-write: I1's updateDoorTriggers lazily assigns the array on first build.
   dungeonDoorIds: number[] | null;
@@ -120,6 +137,12 @@ export interface SimContextPrimitives {
   // Backing fields stay on Sim. `duels` is also read per-attack by isHostileTo/
   // dealDamage (PvP hostility), so it stays Sim-owned (A2).
   readonly duels: Map<number, DuelState>;
+  // Card Duel minigame (src/sim/social/card_duel.ts): its own FIFO queue
+  // (mutated in place via shift/splice/push, like cardDuels below, so this is
+  // a readonly getter, not reassigned) and live-match map, independent of the
+  // HP-based duels above.
+  readonly cardDuelQueue: number[];
+  readonly cardDuels: Map<number, CardDuelMatch>;
   readonly npcDuels: Map<number, NpcDuelState>; // F4c player-vs-NPC duels (read by isHostileTo)
   // `world` stays optional (custom play-test map, else undefined; perfLap is the
   // temporary host-owned tick profiler probe); the rest defaulted.
@@ -166,6 +189,9 @@ export interface SimContextPrimitives {
   // Active party/raid ready checks (social/ready_check.ts), keyed by party id. Swept
   // in the end-of-tick block by updateReadyChecks. Sim-internal, never wired.
   readonly readyChecks: Map<number, ReadyCheck>;
+  // Player-cast resurrection offers, keyed by the dead recipient. The spell and
+  // response paths share this live authoritative map across all three hosts.
+  readonly pendingResurrections: Map<number, PendingResurrection>;
   readonly chatTokens: Map<number, { tokens: number; at: number }>;
   readonly channelSubs: Map<number, Set<JoinableChannel>>;
   // L1 loot-distribution state. The pending need-greed rolls map is mutated in
@@ -229,9 +255,9 @@ export interface SimContextCallbacks {
   // dungeonDifficulty/setDungeonDifficulty are the heroic-selection commands: the
   // body-stays-on-Sim kind (party/meta state lives on Sim), exposed so the chat
   // slash command and instances/dungeons reach them through the seam.
-  // awardHeroicMarks is owned by instances/dungeons: the C1 death hub calls it after
-  // rollLoot so a heroic final-boss corpse gains one personal Heroic Mark slot per
-  // eligible participant (no rng draws).
+  // awardHeroicMarks is owned by instances/dungeons: the C1 death hub calls it
+  // once per death to settle a heroic final boss's direct participant rewards
+  // and whole-claim realm-reset lockout together (no rng draws).
   lockoutNowMs(): number;
   // The next raid-reset instant (epoch ms) for a given lockout "now". The host owns
   // the boundary (the authoritative server uses its realm-local 3 AM daily reset), so
@@ -239,17 +265,14 @@ export interface SimContextCallbacks {
   raidResetMs(nowMs: number): number;
   instanceKeyFor(pid: number): string;
   instanceOriginOf(inst: InstanceSlot): { x: number; z: number };
-  enterDungeon(dungeonId: string, pid?: number): void;
-  leaveDungeon(pid?: number): void;
+  instanceClaimIdAt(pos: Vec3): number | null;
+  enterDungeon(dungeonId: string, pid?: number): boolean;
+  leaveDungeon(pid?: number): boolean;
+  resetDungeonInstances(pid?: number): void;
+  inheritDungeonResetLocks(pid: number): void;
   dungeonDifficulty(pid?: number): DungeonDifficulty;
   setDungeonDifficulty(difficulty: DungeonDifficulty, pid?: number): void;
   awardHeroicMarks(mob: Entity, recipients: PlayerMeta[]): void;
-  // grantHeroicKillLockout is awardHeroicMarks' sibling on the death path, owned by
-  // instances/dungeons: the C1 death hub calls it for EVERY mob death (credit or no
-  // credit). A heroic claim's final-boss kill locks the whole owning group (plus
-  // anyone inside the instance) to the :heroic key until the daily reset, so the
-  // lockout cannot be dodged by camping the door or releasing before the kill.
-  grantHeroicKillLockout(mob: Entity): void;
 
   // C1 damage/death hub + the casting/leash/arena/duel/fiesta/loot teardown it
   // drives mid-tick. `dealDamage` is the post-mitigation entry (crit/dodge/miss and
@@ -265,6 +288,14 @@ export interface SimContextCallbacks {
     noRage?: boolean,
     threatOpts?: { flat?: number; mult?: number },
     direct?: boolean,
+    attackAnimationStarted?: boolean,
+    // Amount is already fully source-modified (redirect shares); skip source-output mods.
+    alreadyFinal?: boolean,
+    abilityId?: string | null,
+    // One iteration of an AREA effect (aoeDamage/groundAoE fan-out). Read only by
+    // the Chronomancy Temporal Echo conversion; area Arcane damage heals the
+    // marked ally at a reduced rate. Defaults false.
+    aoe?: boolean,
   ): void;
   handleDeath(entity: Entity, killer: Entity | null): void;
   cancelCast(entity: Entity): void;
@@ -299,6 +330,8 @@ export interface SimContextCallbacks {
   updateFiestaActive(match: ArenaMatch): void;
   fiestaRestoreChar(meta: PlayerMeta, e: Entity): void;
   clearFiestaAugments(meta: PlayerMeta, e: Entity): void;
+  // Deliberately narrower than the module function, which also takes
+  // keepValidTargetPids (fight-start target retention); no ctx caller needs it.
   readyArenaFighter(e: Entity, opts: { clearPrep: boolean }): void;
   resetForArena(e: Entity): void;
   isArenaTeamWiped(match: ArenaMatch, team: 'A' | 'B'): boolean;
@@ -321,15 +354,31 @@ export interface SimContextCallbacks {
     school: string,
     ability: string | null,
     kind: 'hit' | 'miss' | 'dodge',
+    attackAnimationStarted?: boolean,
   ): void;
   cleanupYumiMatch(match: ArenaMatch): void;
-  rollLoot(mob: Entity, meta: PlayerMeta, eligible?: PlayerMeta[]): void;
+  rollLoot(
+    mob: Entity,
+    meta: PlayerMeta,
+    eligible?: PlayerMeta[],
+    contributors?: PlayerMeta[],
+  ): void;
   // World-boss personal loot: an independent roll of the boss's loot table per
   // contributor (gated once-per-day per boss). Owned by world_boss.ts.
   rollWorldBossLoot(mob: Entity, contributors: PlayerMeta[]): void;
 
   // C2/C3/C4b heal, aura, knockback, and crowd-control surface.
-  applyHeal(source: Entity, target: Entity, amount: number, ability: string): void;
+  // Returns the effective heal applied (post-crit/mult/overheal-clamp). Callers
+  // that ignore the return are unaffected; Power Echo reads it to repeat a heal.
+  applyHeal(
+    source: Entity,
+    target: Entity,
+    amount: number,
+    ability: string,
+    abilityId?: string | null,
+    canCrit?: boolean,
+    canTriggerWeaponProcs?: boolean,
+  ): number;
   // Spell crit chance from intellect. STAYS on Sim (shared: the casting/ability
   // paths read it too); exposed here so the extracted heal core can draw its crit.
   spellCrit(p: Entity): number;
@@ -345,6 +394,7 @@ export interface SimContextCallbacks {
     id: string,
     duration: number,
     school: Aura['school'],
+    breakThreshold?: number,
   ): void;
   applyKnockback(source: Entity, target: Entity, distance: number): number;
   diminishedCrowdControlDuration(
@@ -354,6 +404,7 @@ export interface SimContextCallbacks {
     duration: number,
   ): number | null;
   hostilesInRadius(source: Entity, pos: Vec3, radius: number): Entity[];
+  friendliesInRadius(source: Entity, pos: Vec3, radius: number): Entity[];
   breakStealth(entity: Entity): void;
 
   // Shared entry point (stays on Sim, exposed here): taunt forces a mob's target.
@@ -394,7 +445,15 @@ export interface SimContextCallbacks {
   removeFromParty(pid: number, verb: string): void;
   // Drop a disbanded party's whole raid-marker set (points at T1's targeting store).
   dropPartyMarkers(partyId: number): void;
+  // Dungeon Finder formation seam (owned by social/party.ts): merge solo
+  // players and whole partial parties into ONE party/raid without synthesizing
+  // invite prompts or accept events. Returns the formed party, or null (and
+  // mutates nothing) when a source roster no longer matches live party state.
+  // Consumed by social/dungeon_finder.ts.
+  formDungeonFinderGroup(units: FinderFormationUnit[], opts: { raid: boolean }): Party | null;
   onMobKilledForQuests(mob: Entity, meta: PlayerMeta): void;
+  onRecipeCraftedForQuests(recipeId: string, meta: PlayerMeta): void;
+  onNodeGatheredForQuests(node: GatherNodeDef, itemId: string, meta: PlayerMeta): void;
   onInventoryChangedForQuests(meta: PlayerMeta): void;
   checkQuestReady(qp: QuestProgress, meta: PlayerMeta): void;
   countItem(itemId: string, pid?: number): number;
@@ -402,14 +461,17 @@ export interface SimContextCallbacks {
   // instead of countItem so an instanced copy is never listed as a plain stack member.
   countFungibleItem(itemId: string, pid?: number): number;
   // Enchanting-eligible count/removal (#1712 review): counts/removes a plain
-  // fungible stack OR an instanced copy with no rolled.stats (crafted rare+
-  // gear), excluding only an already-enchanted (rolled.stats) copy. Used by
+  // fungible stack OR an instanced copy that is not already enchanted per
+  // isEnchantedInstance (the explicit `enchant` marker, or legacy bare
+  // rolled.stats without rolled.masterwork). Masterwork copies carry
+  // rolled.stats without an enchant and stay eligible. Used by
   // professions/enchanting.ts instead of countFungibleItem/removeFungibleItem
   // so crafted single-copy rares remain disenchantable/enchantable.
   countEnchantableItem(itemId: string, pid?: number): number;
   // Returns the consumed slots' `instance` payloads (removeItem's contract),
-  // so applyEnchant can merge a crafted copy's signer/rolled.quality into the
-  // freshly-enchanted instance instead of dropping them.
+  // so applyEnchant can merge a crafted copy's signer, legacy rolled.quality,
+  // and masterwork bonus into the freshly-enchanted instance instead of
+  // dropping them.
   removeEnchantableItem(itemId: string, count: number, pid?: number): ItemInstancePayload[];
   completeQuestForDev(questId: string, pid?: number): boolean;
   completeCurrentQuestsForDev(pid?: number): number;
@@ -469,14 +531,20 @@ export interface SimContextCallbacks {
   grantNythraxisLockout(boss: Entity): void;
   frenzyPackmates(dead: Entity): void;
   armDeathThroes(dead: Entity): void;
-  // C1's grantXp level-up path AND G1a's talent application (progression/talents.ts)
-  // both consume refreshKnownAbilities: the talent path always passes announce=false
-  // (a silent re-resolve, no learnAbility spam); the level-up path passes announce=true.
+  // C1's grantXp level-up path AND G1a's talent application (progression/talents.ts) both
+  // consume refreshKnownAbilities with announce=true, so a spec pick / talent apply that
+  // grants a new ability (e.g. a spec signature) surfaces it: emits learnAbility (the HUD
+  // places it on the bar + spellbook) and a "You have learned" log. Character LOAD uses its
+  // OWN announce=false call (addPlayer/restore) so it never spams on login; the before/after
+  // diff in refreshKnownAbilities means only genuinely new abilities are announced.
   // G1a's talent module also consumes the core `error` sink (declared above). The talent
   // PUBLIC API (applyTalents/spendTalent/setSpec/respec/saveLoadout/switchLoadout/
   // deleteLoadout/talentPoints) is NOT on this seam: Sim keeps thin wrapper methods that
   // delegate into the module (server/HUD/tests call the `Sim` facade directly).
   refreshKnownAbilities(meta: PlayerMeta, announce: boolean): void;
+  // A committed spec change can invalidate an equipped offhand. The inventory
+  // module benches it without destroying its instance payload.
+  revalidateOffhandForSpec(pid?: number): void;
   syncPetLevel(owner: Entity): void;
   // M2 mob locomotion: the updateMob dispatcher reaches every boss/pet/Nythraxis/
   // corpse branch and movement helper it dispatches to through these. All still live
@@ -506,6 +574,17 @@ export interface SimContextCallbacks {
   swingIntervalMult(e: Entity): number;
   mobCanSwim(template: { family?: string; canSwim?: boolean } | undefined): boolean;
   resolveMovePoint(nx: number, nz: number, r: number, e: Entity): { x: number; z: number };
+  // From-point collision resolve (walls/fences/delve bounds) for swept teleports
+  // (repositionToAim/blinkForward): same body Sim movement uses, exposed on the seam.
+  resolveMove(
+    fromX: number,
+    fromZ: number,
+    nx: number,
+    nz: number,
+    r: number,
+    e: Entity,
+    ignoreFences?: boolean,
+  ): { x: number; z: number };
   // --- pet / delve-companion / boss-mechanic branches (owners: P1 / delve / M3-N1) ---
   updatePet(pet: Entity): void;
   isDelveCompanionMob(mob: Entity): boolean;
@@ -548,12 +627,27 @@ export interface SimContextCallbacks {
   // I2b lockpick controller (abandonLockpick/tickLockpickTimeout), and the I2c companion
   // AI (spawnDelveCompanion/despawnDelveCompanion/maybeCompanionBark).
   partyMembersForKey(key: string): number[];
-  addItem(itemId: string, count: number, pid?: number): void;
+  // opts.silent: see Sim.addItem's matching param, same contract (suppress
+  // only the client's default loot audio cue, the text line still prints).
+  addItem(itemId: string, count: number, pid?: number, opts?: { silent?: boolean }): void;
+  // Equip passthroughs for the /dev kit presets (src/sim/dev_kit.ts), which equip
+  // bags before gear so pooled bag capacity exists before the pieces land. Plain
+  // delegations to the Sim inventory hub; every validation (class, level, slot,
+  // spec-aware dual wield) still happens there.
+  equipBag(itemId: string, socket?: number, pid?: number): void;
+  equipItem(itemId: string, pid?: number): void;
+  unequipItem(slot: EquipSlot, pid?: number): boolean;
   // #1145 signed materials: grants a single non-fungible item copy carrying an
   // instance payload (signer/charges/rolled/boundTo, #1165), never merged into a
   // plain fungible stack. Used by corpse harvest to stamp a rare+ monster
   // material with the harvester's name.
-  addItemInstance(itemId: string, instance: ItemInstancePayload, pid?: number): void;
+  addItemInstance(
+    itemId: string,
+    instance: ItemInstancePayload,
+    pid?: number,
+    count?: number,
+    opts?: { silent?: boolean },
+  ): void;
   // L2 World Market escrow (marketList) also consumes removeItem; it is declared once
   // above (P1b inventory-hub helper, points-at Sim) - deduped, not re-added here.
   spawnBossAdds(boss: Entity, mobId: string, count: number): void;
@@ -587,6 +681,9 @@ export interface SimContextCallbacks {
   startAutoAttack(pid?: number): void;
   revivePet(pid?: number): void;
   completeFishing(p: Entity, meta: PlayerMeta): void;
+  // Gather cast completion (Professions 2.0): updateCasting routes a
+  // finished GATHER_CAST_ID cast here, exactly like completeFishing above.
+  completeGatherCast(p: Entity, meta: PlayerMeta): void;
   applyDemonHealTick(owner: Entity): void;
 
   // C4b effect dispatch (src/sim/combat/effect_dispatch.ts) consumes these; all stay
@@ -609,12 +706,21 @@ export interface SimContextCallbacks {
       weaponMult?: number;
       threatFlat?: number;
       threatMult?: number;
+      forceCrit?: boolean;
+      critBonus?: number;
+      onDealt?: (amount: number) => void;
     },
   ): boolean;
   effectiveAttackPower(e: Entity): number;
   hasLineOfSight(source: Entity, target: Entity): boolean;
   findChargePath(p: Entity, target: Entity): Vec3[];
-  runEffects(p: Entity, meta: PlayerMeta, target: Entity | null, res: ResolvedAbility): void;
+  runEffects(
+    p: Entity,
+    meta: PlayerMeta,
+    target: Entity | null,
+    res: ResolvedAbility,
+    attackAnimationStarted?: boolean,
+  ): void;
 
   // P1a pet AI (src/sim/pet/pet_ai): the moved updatePet/petRangedAttack/petPickTarget
   // reach back for these. All STAY on Sim. `syncPetAspect` is pet-management (the P1b
@@ -633,7 +739,7 @@ export interface SimContextCallbacks {
   // are M2's decls above, points-at Sim. Not re-declared here (dedupe).
 
   // G2 social plumbing. `setPlayerLevel` backs the /dev level cheat (handleDevChat in
-  // social/chat.ts); `notice` is the positive chat-log line the /join /leave handler
+  // dev_commands.ts); `notice` is the positive chat-log line the /join /leave handler
   // emits. Both stay on Sim. (hasPendingSocialInvite is already declared above; isRooted/
   // moveSpeedMult/swingIntervalMult are M2 decls above -> all deduped.)
   setPlayerLevel(level: number, pid?: number): void;
@@ -642,14 +748,30 @@ export interface SimContextCallbacks {
   // devCommands). Adds a stationary whisperable player near the primary; returns the
   // new pid, or -1 if the name is blank or already taken. Stays on Sim.
   spawnDevBot(name: string): number;
+  // /dev vendor: spawn the free-epic dev vendor next to the caller. Returns id or -1.
+  spawnDevVendor(pid?: number): number;
+  // /dev cascade: set up the controlled Cascada temporal playtest scenario (dummy +
+  // raid allies at known distances) and start the per-cast metrics session. Stays on Sim.
+  startCascadePlaytest(pid?: number): void;
+  // /dev sandbox: a generic practice scenario (dummy + regen-frozen raid bots at a 10k
+  // pool). Returns the number of allies spawned. Stays on Sim.
+  startDevSandbox(pid?: number): number;
+  // Dev-only Dungeon Finder scenario seeding backing "/dev lfg" (dev_commands.ts,
+  // gated by devCommands). Spawns finder dev bots around the caller. Stays on Sim.
+  seedDungeonFinderDev(
+    mode: 'queue' | 'raid' | 'board',
+    pid?: number,
+  ): { spawned: number; note: 'ok' | 'needRoles' | 'noneEligible' };
 
   // L2 inventory/vendor (src/sim/items.ts): the four helpers the moved useItem
-  // dispatches to that STAY on Sim (their owning facets are decided later). W2 owns
-  // these declarations; each is a thin late-bound delegate to the still-on-Sim method.
-  // startFishing's body stays on Sim (fishing facet TBD); unlockMechChromaFromItem /
-  // openSkinSelect are cosmetics internals (facet W7); isSwimming is a shared terrain
-  // predicate. unlockMechChromaFromItem's return value flows out through useItem to the
-  // server `use` case (result?.type === 'mechChroma').
+  // dispatches to. W2 owns these declarations; each is a thin late-bound delegate,
+  // to a still-on-Sim method or (for fishing) to the professions module.
+  // startFishing now routes to the fishing module (src/sim/professions/fishing.ts,
+  // Professions 2.0), called with the live ctx the same way runEffects is;
+  // its body no longer lives on Sim (completeFishing, declared above, moved with it).
+  // unlockMechChromaFromItem / openSkinSelect are cosmetics internals (facet W7);
+  // isSwimming is a shared terrain predicate. unlockMechChromaFromItem's return value
+  // flows out through useItem to the server `use` case (result?.type === 'mechChroma').
   startFishing(p: Entity, meta: PlayerMeta): void;
   unlockMechChromaFromItem(
     meta: PlayerMeta,
@@ -687,8 +809,35 @@ export interface SimContextCallbacks {
   // through this; the binding points at the PostOffice instance on Sim.
   queueQuestLetter(questId: string, pid: number): void;
 
+  // Ravenpost mail: posts Heroic Marks to a heroic final-boss participant who took
+  // the daily lockout but was not at the corpse to loot them (awardHeroicMarks in
+  // instances/dungeons.ts). Binding points at the PostOffice instance on Sim.
+  mailHeroicMarks(pid: number, itemId: string, count: number): void;
+
+  // Ravenpost mail: books an authored letter to a character through the standard
+  // system-mail path (mailKeyFor recipient key, 'system' kind, the letter's own
+  // delivery delay). The Guild trend letter sweep (professions/guild_letter.ts)
+  // consumes it. Binding points at the PostOffice instance on Sim.
+  mailAuthoredLetter(meta: PlayerMeta, letter: LetterDef): void;
+
   // Set proc firing is owned by combat/set_procs.ts.
   applySetProcs(source: Entity, target: Entity | null, trigger: SetProc['trigger']): void;
+  // Book of Deeds (deeds.ts owns every body; append-only additions). The
+  // increment/mark sites across the gameplay modules reach the persisted
+  // deed surface only through these. bumpDeedStat raises a lifetime counter
+  // and marks the player dirty; markItemDiscovered/markVisited add to the
+  // bounded ledger sets (dirty only when newly added; rolledQuality carries
+  // an instanced copy's rolled quality for the quality-first marks);
+  // markDeedsDirty flags a player whose persisted trigger inputs changed
+  // (quest turn-in, delve clear, arena result, craft/gather grants,
+  // lifetime-XP accrual, and similar); grantDeed is the idempotent unlock
+  // every path shares (the evaluator and the bespoke manual-deed sites).
+  bumpDeedStat(meta: PlayerMeta, stat: DeedStatKey, delta: number): void;
+  markItemDiscovered(meta: PlayerMeta, itemId: string, rolledQuality?: string): void;
+  markVisited(meta: PlayerMeta, markId: string): void;
+  markDeedsDirty(pid: number): void;
+  grantDeed(meta: PlayerMeta, deedId: string, opts?: { retro?: boolean }): boolean;
+
   // The Vale Cup sport-move arms (owned by social/vale_cup.ts; consumed by
   // combat/effect_dispatch.ts). All three silently no-op unless the caster is
   // seated in the live Sowfield match's play phase. vcupBallKick launches the
@@ -737,6 +886,9 @@ export function createSimContext(host: SimContextHost): SimContext {
     get players() {
       return host.players;
     },
+    get stationPlacements() {
+      return host.stationPlacements;
+    },
     get primaryId() {
       return host.primaryId;
     },
@@ -773,6 +925,9 @@ export function createSimContext(host: SimContextHost): SimContext {
     get groundAoEs() {
       return host.groundAoEs;
     },
+    get frozenOrbs() {
+      return host.frozenOrbs;
+    },
     get dungeonDoorIds() {
       return host.dungeonDoorIds;
     },
@@ -782,8 +937,8 @@ export function createSimContext(host: SimContextHost): SimContext {
     get instances() {
       return host.instances;
     },
-    get propMetaByEnt() {
-      return host.propMetaByEnt;
+    get dungeonResetLocks() {
+      return host.dungeonResetLocks;
     },
     get arenaMatches() {
       return host.arenaMatches;
@@ -791,8 +946,11 @@ export function createSimContext(host: SimContextHost): SimContext {
     get duels() {
       return host.duels;
     },
-    get npcDuels() {
-      return host.npcDuels;
+    get cardDuelQueue() {
+      return host.cardDuelQueue;
+    },
+    get cardDuels() {
+      return host.cardDuels;
     },
     get cfg() {
       return host.cfg;
@@ -863,6 +1021,9 @@ export function createSimContext(host: SimContextHost): SimContext {
     get readyChecks() {
       return host.readyChecks;
     },
+    get pendingResurrections() {
+      return host.pendingResurrections;
+    },
     get chatTokens() {
       return host.chatTokens;
     },
@@ -911,12 +1072,14 @@ export function createSimContext(host: SimContextHost): SimContext {
     raidResetMs: host.raidResetMs,
     instanceKeyFor: host.instanceKeyFor,
     instanceOriginOf: host.instanceOriginOf,
+    instanceClaimIdAt: host.instanceClaimIdAt,
     enterDungeon: host.enterDungeon,
     leaveDungeon: host.leaveDungeon,
+    resetDungeonInstances: host.resetDungeonInstances,
+    inheritDungeonResetLocks: host.inheritDungeonResetLocks,
     dungeonDifficulty: host.dungeonDifficulty,
     setDungeonDifficulty: host.setDungeonDifficulty,
     awardHeroicMarks: host.awardHeroicMarks,
-    grantHeroicKillLockout: host.grantHeroicKillLockout,
     dealDamage: host.dealDamage,
     handleDeath: host.handleDeath,
     cancelCast: host.cancelCast,
@@ -959,6 +1122,7 @@ export function createSimContext(host: SimContextHost): SimContext {
     applyKnockback: host.applyKnockback,
     diminishedCrowdControlDuration: host.diminishedCrowdControlDuration,
     hostilesInRadius: host.hostilesInRadius,
+    friendliesInRadius: host.friendliesInRadius,
     breakStealth: host.breakStealth,
     applyTaunt: host.applyTaunt,
     summonPet: host.summonPet,
@@ -977,7 +1141,10 @@ export function createSimContext(host: SimContextHost): SimContext {
     readyCheckStart: host.readyCheckStart,
     removeFromParty: host.removeFromParty,
     dropPartyMarkers: host.dropPartyMarkers,
+    formDungeonFinderGroup: host.formDungeonFinderGroup,
     onMobKilledForQuests: host.onMobKilledForQuests,
+    onRecipeCraftedForQuests: host.onRecipeCraftedForQuests,
+    onNodeGatheredForQuests: host.onNodeGatheredForQuests,
     onInventoryChangedForQuests: host.onInventoryChangedForQuests,
     checkQuestReady: host.checkQuestReady,
     countItem: host.countItem,
@@ -1010,6 +1177,7 @@ export function createSimContext(host: SimContextHost): SimContext {
     frenzyPackmates: host.frenzyPackmates,
     armDeathThroes: host.armDeathThroes,
     refreshKnownAbilities: host.refreshKnownAbilities,
+    revalidateOffhandForSpec: host.revalidateOffhandForSpec,
     syncPetLevel: host.syncPetLevel,
     // M2 mob locomotion seam.
     moveToward: host.moveToward,
@@ -1024,6 +1192,7 @@ export function createSimContext(host: SimContextHost): SimContext {
     swingIntervalMult: host.swingIntervalMult,
     mobCanSwim: host.mobCanSwim,
     resolveMovePoint: host.resolveMovePoint,
+    resolveMove: host.resolveMove,
     updatePet: host.updatePet,
     isDelveCompanionMob: host.isDelveCompanionMob,
     updateDelveCompanion: host.updateDelveCompanion,
@@ -1046,6 +1215,9 @@ export function createSimContext(host: SimContextHost): SimContext {
     partyMembersForKey: host.partyMembersForKey,
     addItem: host.addItem,
     addItemInstance: host.addItemInstance,
+    equipBag: host.equipBag,
+    equipItem: host.equipItem,
+    unequipItem: host.unequipItem,
     // removeItem passed through above (P1b inventory-hub helper) - deduped, not re-added.
     spawnBossAdds: host.spawnBossAdds,
     tradeFor: host.tradeFor,
@@ -1072,6 +1244,7 @@ export function createSimContext(host: SimContextHost): SimContext {
     startAutoAttack: host.startAutoAttack,
     revivePet: host.revivePet,
     completeFishing: host.completeFishing,
+    completeGatherCast: host.completeGatherCast,
     applyDemonHealTick: host.applyDemonHealTick,
     awardCombo: host.awardCombo,
     meleeSwing: host.meleeSwing,
@@ -1086,6 +1259,10 @@ export function createSimContext(host: SimContextHost): SimContext {
     setPlayerLevel: host.setPlayerLevel,
     notice: host.notice,
     spawnDevBot: host.spawnDevBot,
+    spawnDevVendor: host.spawnDevVendor,
+    startCascadePlaytest: host.startCascadePlaytest,
+    startDevSandbox: host.startDevSandbox,
+    seedDungeonFinderDev: host.seedDungeonFinderDev,
     // L2 inventory/vendor (W2): the four still-on-Sim helpers the moved useItem dispatches to.
     startFishing: host.startFishing,
     unlockMechChromaFromItem: host.unlockMechChromaFromItem,
@@ -1103,7 +1280,15 @@ export function createSimContext(host: SimContextHost): SimContext {
     canAddItem: host.canAddItem,
     // Ravenpost mail: the quest turn-in letter hook (points at the PostOffice on Sim).
     queueQuestLetter: host.queueQuestLetter,
+    mailHeroicMarks: host.mailHeroicMarks,
+    mailAuthoredLetter: host.mailAuthoredLetter,
     applySetProcs: host.applySetProcs,
+    // Book of Deeds seam (points at deeds.ts via the Sim-bound arrows).
+    bumpDeedStat: host.bumpDeedStat,
+    markItemDiscovered: host.markItemDiscovered,
+    markVisited: host.markVisited,
+    markDeedsDirty: host.markDeedsDirty,
+    grantDeed: host.grantDeed,
     // The Vale Cup sport-move arms (points at social/vale_cup.ts).
     vcupBallKick: host.vcupBallKick,
     vcupBallPass: host.vcupBallPass,

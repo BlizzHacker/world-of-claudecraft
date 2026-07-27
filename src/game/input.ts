@@ -1,16 +1,32 @@
-// Default (Mouse Camera off): classic-MMO-style: WASD + A/D keyboard turn (strafe is
-// unbound by default and rebindable; Q/E belong to the action bar, slots 11 and 12),
-// left-drag orbits, right-drag mouselooks, both buttons run forward.
-// Optional Mouse Camera (on): OSRS-style: WASD is camera-relative, A/D strafe,
-// mouse drag rotates the orbit (no pointer lock), no keyboard turn.
+// Default (Mouse Camera off): classic-MMO-style (WASD + A/D keyboard turn, Q/E strafe,
+// left-drag orbits, right-drag mouselooks, both buttons run forward).
+// Optional Mouse Camera (on): OSRS-style (WASD is camera-relative, A/D strafe,
+// mouse drag rotates the orbit (no pointer lock), no keyboard turn).
 // Shared: space jump, wheel zoom, Tab target, rebindable action bar, R autorun.
 
 import { sanitizeMoveFacing, sanitizeMoveInput } from '../sim/move_input';
 import type { MoveInput } from '../sim/types';
+import { detectBrowserEngine } from './browser_env';
 import { cursorForHover, type HoverCursorKind } from './cursors';
 import { comboCode, isModifierCode, type Keybinds, makeCombo } from './keybinds';
-import { shouldEngagePointerLock, shouldReleasePointerLock } from './pointer_lock';
+import {
+  inForcedPointerLockCooldown,
+  pointerLockNeedsSyncGesture,
+  shouldEngagePointerLock,
+  shouldEngagePointerLockOnMouseDown,
+  shouldReleasePointerLock,
+} from './pointer_lock';
+import { pointerNearViewportEdge } from './pointer_lock_edge';
+import { normalizePointerLookDelta } from './pointer_look_delta';
 import { clickPickFromMouseGesture, DEFAULT_CLICK_PICK_MAX_MS } from './pointer_pick';
+
+function detectPointerLockNeedsSyncGesture(): boolean {
+  try {
+    return pointerLockNeedsSyncGesture(navigator.userAgent);
+  } catch {
+    return false;
+  }
+}
 
 const BASE_LOOK_SENS = 0.0045;
 const TOUCH_LOOK_YAW_RATE = 3.2;
@@ -68,10 +84,14 @@ export interface InputCallbacks {
       | 'social'
       | 'arena'
       | 'valecup'
+      | 'dungeonFinder'
       | 'leaderboard'
       | 'calendar'
       | 'discord'
-      | 'crafting',
+      | 'deeds'
+      | 'professions'
+      | 'crafting'
+      | 'sheathe',
   ): void;
   onEmoteWheel(open: boolean): void;
   onClickPick(x: number, y: number, button: number): void;
@@ -119,6 +139,10 @@ export class Input {
   camYaw = Math.PI;
   camPitch = 0.32;
   camDist = 12;
+  // Fired whenever the player changes the zoom distance (wheel / pinch), so main.ts can
+  // persist it to settings (issue 1657). Not fired on a direct camDist assignment (the
+  // startup restore / Reset path sets the field itself), so restoring never re-persists.
+  onCameraDistChange?: (dist: number) => void;
   autorun = false;
   suspendMovement = false;
   // click-to-move (#95): a world destination the player clicked; the frame loop
@@ -159,21 +183,45 @@ export class Input {
   private lookPitchSign = 1;
   private downButton = -1;
   private pointerLockRequestedForDrag = false;
+  // Set when the browser itself force-unlocks the pointer (Escape, focus
+  // loss) while a drag button was still held; see inForcedPointerLockCooldown.
+  private forcedUnlockAt: number | null = null;
+  // Firefox rejects requestPointerLock() when it is deferred to a later
+  // mousemove; computed once since the browser cannot change mid-session.
+  private readonly needsSyncPointerLockGesture = detectPointerLockNeedsSyncGesture();
   private downX = 0;
   private downY = 0;
   private downAt = 0;
+  // Last pointer position seen in client coordinates, from any mousedown or
+  // mousemove that carried one. Drives the edge test that defers the pointer
+  // lock (pointer_lock_edge.ts): NaN until the first real event, which reads
+  // as "position unknown" and falls back to locking.
+  private pointerClientX = Number.NaN;
+  private pointerClientY = Number.NaN;
   // one-shot key capture for the rebind UI: the next keydown is delivered here
   // (Escape cancels with null) instead of being dispatched as an action
   private captureCb: ((code: string | null) => void) | null = null;
   private controllerMoveInput: MoveInput | null = null;
   private controllerFacing: number | null = null;
   private emoteWheelHeldCodes = new Set<string>();
+  // Advances only when the player starts or replaces movement. Releasing a held
+  // key/stick is not newer travel intent and must not invalidate a delayed
+  // successful interaction that should stop autorun.
+  private movementIntentRevision = 0;
   // Physical key code -> action-bar slot currently held down, so key UP (or a
   // blur) releases the matching slot (drives the hold-to-charge shoot).
   private heldSlotCodes = new Map<string, number>();
   // mouse-look sensitivity, in radians per pixel of drag; the old fixed value
   // was BASE_LOOK_SENS — setCameraSpeed scales it from the settings menu
   private lookSensitivity = BASE_LOOK_SENS;
+  // Gecko (Firefox) reports movementX/movementY in CSS pixels, not the physical
+  // pixels Chromium reports and the sensitivity is tuned against, so on a HiDPI
+  // display or under page zoom its mouselook runs at the wrong speed (#1834).
+  // Detected once (the engine never changes mid-session) and used to normalize
+  // each delta in onMouseMove; every other engine stays a pass-through.
+  private readonly isGeckoEngine =
+    typeof navigator !== 'undefined' &&
+    detectBrowserEngine(navigator.userAgent || '').engine === 'gecko';
   private touchMove: TouchMoveInput = {
     forward: false,
     back: false,
@@ -209,7 +257,56 @@ export class Input {
     window.addEventListener('pointerup', (e) => this.onMouseUp(e));
     window.addEventListener('pointercancel', (e) => this.onMouseUp(e));
     document.addEventListener('pointerlockchange', () => {
-      if (!document.pointerLockElement) this.releaseCapture('pointerlock');
+      if (!document.pointerLockElement) {
+        // A forced unlock (Escape, or losing focus while locked) fires with a
+        // drag button still physically down: the ordinary end-of-drag
+        // exitPointerLock() call only ever runs after mouseup has already
+        // cleared leftDown/rightDown. This is not a hard guarantee though:
+        // setLockCursorOnRotate()/setMouseCameraEnabled() call
+        // exitPointerLock() directly and can fire mid-drag with a button
+        // still held, which reads here as a forced unlock too. The fallout is
+        // small (toggling one of those settings mid-drag suppresses the lock
+        // for the next ~1.3s on Firefox) and self-corrects once the drag
+        // ends, so it is an accepted trade-off rather than something worth
+        // threading extra state through to distinguish. Remember the forced
+        // unlock so the next requestPointerLock() attempt can skip Firefox's
+        // post-forced-unlock cooldown instead of failing silently mid-drag
+        // (#1834 recurrence).
+        if (this.leftDown || this.rightDown) this.forcedUnlockAt = performance.now();
+        this.releaseCapture('pointerlock');
+        return;
+      }
+      // A fast click can beat the async requestPointerLock() grant: the
+      // mousedown-synchronous request above (Firefox) or the drag-threshold
+      // request (Chromium) can resolve AFTER mouseup already ran, so nothing
+      // released it there. If the grant lands with no drag button currently
+      // held, drop it immediately rather than leaving the cursor stuck
+      // captured until the next press/release cycle.
+      if (
+        shouldReleasePointerLock({
+          anyButtonDown: this.leftDown || this.rightDown,
+          hasLock: document.pointerLockElement === this.canvas,
+        })
+      ) {
+        document.exitPointerLock();
+      }
+    });
+    // A denied request (e.g. the forced-unlock cooldown above, or any other
+    // rejection) otherwise leaves pointerLockRequestedForDrag wrongly set to
+    // true with no lock actually granted; without this the drag never
+    // reconsiders requesting the lock again for the rest of that press.
+    document.addEventListener('pointerlockerror', () => {
+      this.pointerLockRequestedForDrag = false;
+      // A denial is itself the strongest available evidence that we are
+      // inside Firefox's forced-unlock cooldown, whatever caused it: the
+      // pointerlockchange handler above only records forcedUnlockAt when a
+      // drag button happens to still be held at unlock time, which misses
+      // orderings where focus loss clears leftDown/rightDown before the
+      // unlock event fires (blur landing ahead of pointerlockchange, the
+      // likely ordering for a focus-loss forced unlock). Recording it here
+      // too makes the mechanism self-healing: the next drag attempt within
+      // the window skips the doomed request regardless of event ordering.
+      this.forcedUnlockAt = performance.now();
     });
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) this.releaseCapture('hidden');
@@ -284,7 +381,10 @@ export class Input {
 
   /** Move the camera in/out, clamped to the zoom limits. */
   zoomBy(delta: number): void {
-    this.camDist = Math.min(22, Math.max(3, this.camDist + delta));
+    const next = Math.min(22, Math.max(3, this.camDist + delta));
+    if (next === this.camDist) return;
+    this.camDist = next;
+    this.onCameraDistChange?.(next);
   }
 
   /** True while a mouse button is held for camera drag. */
@@ -396,19 +496,8 @@ export class Input {
     if (hadHeldInput) this.noteIntent('move');
   }
 
-  // Arm a one-shot rebind capture: the next keydown is delivered to `cb` (Escape
-  // cancels with null). Returns a canceller the rebind UI calls for its OTHER two
-  // exits (an on-screen Cancel affordance, focus-loss/blur): invoking it fires
-  // `cb(null)` exactly once and disarms, so the capture can never trap. A no-op once
-  // the capture has already fired or been cancelled (the identity guard).
-  captureNextKey(cb: (code: string | null) => void): () => void {
+  captureNextKey(cb: (code: string | null) => void): void {
     this.captureCb = cb;
-    return () => {
-      if (this.captureCb === cb) {
-        this.captureCb = null;
-        cb(null);
-      }
-    };
   }
 
   setCameraSpeed(mult: number): void {
@@ -431,9 +520,13 @@ export class Input {
       move.back !== this.touchMove.back ||
       move.strafeLeft !== this.touchMove.strafeLeft ||
       move.strafeRight !== this.touchMove.strafeRight;
+    const moving = move.forward || move.back || move.strafeLeft || move.strafeRight;
     this.touchMove = move;
     if (move.forward || move.back) this.autorun = false;
-    if (changed) this.noteIntent('move');
+    if (changed) {
+      if (moving) this.noteMovementIntent();
+      else this.noteIntent('move');
+    }
   }
 
   clearTouchMove(): void {
@@ -457,14 +550,20 @@ export class Input {
   // Returns the new state so the on-screen button can reflect it.
   toggleAutorun(): boolean {
     this.autorun = !this.autorun;
+    this.noteMovementIntent();
     return this.autorun;
   }
 
   // Idempotent autorun latch for analog inputs that have a one-way "engage"
   // gesture, such as the mobile move joystick's top band.
   setAutorun(on: boolean): boolean {
+    if (this.autorun !== on) this.noteMovementIntent();
     this.autorun = on;
     return this.autorun;
+  }
+
+  movementIntentVersion(): number {
+    return this.movementIntentRevision;
   }
 
   setTouchLook(active: boolean): void {
@@ -502,9 +601,13 @@ export class Input {
       move.back !== this.gamepadMove.back ||
       move.strafeLeft !== this.gamepadMove.strafeLeft ||
       move.strafeRight !== this.gamepadMove.strafeRight;
+    const moving = move.forward || move.back || move.strafeLeft || move.strafeRight;
     this.gamepadMove = move;
     if (move.forward || move.back) this.autorun = false;
-    if (changed) this.noteIntent('move');
+    if (changed) {
+      if (moving) this.noteMovementIntent();
+      else this.noteIntent('move');
+    }
   }
 
   clearGamepadMove(): void {
@@ -589,7 +692,7 @@ export class Input {
     this.clickMovePulseTarget = target;
     this.clickMovePulse++;
     this.autorun = false;
-    this.noteIntent('move');
+    this.noteMovementIntent();
   }
 
   rerouteClickMoveTarget(
@@ -639,6 +742,10 @@ export class Input {
     return this.controllerFacing;
   }
 
+  private msSinceForcedUnlock(): number | null {
+    return this.forcedUnlockAt === null ? null : performance.now() - this.forcedUnlockAt;
+  }
+
   private releaseCapture(reason: string): void {
     const hadInput = this.keys.size > 0 || this.leftDown || this.rightDown;
     // Always drop the mouse-drag state so a button can't stick "held".
@@ -667,6 +774,58 @@ export class Input {
       this.hoverKind,
       this.cameraDragActive || document.pointerLockElement === this.canvas,
     );
+  }
+
+  /** Remember a pointer position for {@link pointerAtEdge}; see the field. */
+  private notePointerClient(clientX: unknown, clientY: unknown): void {
+    if (typeof clientX === 'number' && Number.isFinite(clientX)) this.pointerClientX = clientX;
+    if (typeof clientY === 'number' && Number.isFinite(clientY)) this.pointerClientY = clientY;
+  }
+
+  /**
+   * True when the pointer is close enough to a viewport edge that a camera drag
+   * needs the pointer lock. Everywhere else the drag runs unlocked, which is
+   * what keeps the browser's own pointer capture notice ("press Esc to show
+   * your cursor") off the screen for ordinary looks.
+   */
+  private pointerAtEdge(): boolean {
+    return pointerNearViewportEdge({
+      clientX: this.pointerClientX,
+      clientY: this.pointerClientY,
+      viewportWidth: typeof window !== 'undefined' ? window.innerWidth : Number.NaN,
+      viewportHeight: typeof window !== 'undefined' ? window.innerHeight : Number.NaN,
+    });
+  }
+
+  /**
+   * Engage the pointer lock for the active camera drag if it is both wanted
+   * (setting on, not already locked, not in Firefox's forced-unlock cooldown)
+   * and needed (the cursor is in the viewport edge band, where movementX/Y
+   * would otherwise clamp to 0 and freeze the camera, or the cursor would slip
+   * onto a second monitor). Still at most one request per drag (#116), in both
+   * camera modes, with fullscreen on the same path so mouselook behaves
+   * identically there.
+   */
+  private maybeEngageDragPointerLock(): void {
+    if (this.pointerLockRequestedForDrag) return;
+    if (!this.pointerAtEdge()) return;
+    if (
+      !shouldEngagePointerLock({
+        lockOnRotate: this.lockCursorOnRotate,
+        isFullscreen: this.isBrowserFullscreen(),
+        alreadyLocked: document.pointerLockElement === this.canvas,
+      })
+    )
+      return;
+    if (
+      inForcedPointerLockCooldown({
+        needsSyncGesture: this.needsSyncPointerLockGesture,
+        msSinceForcedUnlock: this.msSinceForcedUnlock(),
+      })
+    )
+      return;
+    this.pointerLockRequestedForDrag = true;
+    this.canvas.requestPointerLock?.();
   }
 
   private isBrowserFullscreen(): boolean {
@@ -739,7 +898,7 @@ export class Input {
       // edge) so a fast tap survives until a grounded movement tick samples it.
       if (held === 'jump')
         this.keyJumpUntil = Math.max(this.keyJumpUntil, performance.now() + KEY_JUMP_LATCH_MS);
-      this.noteIntent('move');
+      this.noteMovementIntent();
     }
     const edge = combo ? this.keybinds.edgeActionForCombo(combo) : null;
     if (edge !== null) {
@@ -749,6 +908,16 @@ export class Input {
       // Edge reserve Ctrl+1..8 outright), but this reclaims the ones that are
       // (Firefox) and is a no-op where there is nothing to cancel.
       if (e.ctrlKey || e.altKey || e.metaKey) e.preventDefault?.();
+      // 'chat' focuses the composer textarea as a side effect of this very
+      // keydown. Left un-prevented, the browser still delivers the follow-up
+      // keypress (and its default newline insertion) to whichever element is
+      // focused AT THAT POINT, i.e. the composer we just focused, so Enter
+      // both opens chat and types a newline into it before the placeholder is
+      // ever seen. Cancel the default so the composer opens empty, but only
+      // when the key was not itself focused on a button: a button's own Enter
+      // activation is a real default action too, and it should still fire
+      // alongside chat opening, same as before this fix.
+      if (edge === 'chat' && tag !== 'button') e.preventDefault?.();
       if (edge.startsWith('slot')) {
         // Slot keys use DOWN/UP so a slot can hold to charge; the HUD decides
         // whether a slot charges (shoot) or fires immediately (tap = down+up).
@@ -791,7 +960,7 @@ export class Input {
     switch (action) {
       case 'autorun':
         this.autorun = !this.autorun;
-        this.noteIntent('move');
+        this.noteMovementIntent();
         return;
       case 'target':
         this.cb.onTab();
@@ -853,6 +1022,9 @@ export class Input {
       case 'arena':
         this.cb.onUiKey('arena');
         return;
+      case 'dungeonFinder':
+        this.cb.onUiKey('dungeonFinder');
+        return;
       case 'valecup':
         this.cb.onUiKey('valecup');
         return;
@@ -865,8 +1037,17 @@ export class Input {
       case 'discord':
         this.cb.onUiKey('discord');
         return;
+      case 'deeds':
+        this.cb.onUiKey('deeds');
+        return;
+      case 'professions':
+        this.cb.onUiKey('professions');
+        return;
       case 'chat':
         this.cb.onUiKey('chat');
+        return;
+      case 'sheathe':
+        this.cb.onUiKey('sheathe');
         return;
     }
   }
@@ -879,13 +1060,50 @@ export class Input {
     this.downButton = e.button;
     this.downX = e.clientX;
     this.downY = e.clientY;
+    this.notePointerClient(e.clientX, e.clientY);
     this.downAt = performance.now();
     this.dragDistance = 0;
     this.cameraDragActive = false;
     // Pointer lock is requested lazily once a drag actually begins (see
     // onMouseMove) — NOT on every press, which spammed the browser "mouse
-    // capture" banner on every right-click used to attack/look (#116).
+    // capture" banner on every right-click used to attack/look (#116). That
+    // deferred mousemove call is denied by Firefox outside fullscreen (see
+    // needsSyncPointerLockGesture), so on Firefox it is instead requested
+    // synchronously right here, for either drag-capable button (left or
+    // right), excluding the click-to-move button. That preserves #116 fully
+    // only on Chromium: on Firefox, an ordinary click on a non-click-to-move
+    // button (e.g. right-click to loot/target/interact) still takes and
+    // releases the lock on every press, a visible flicker, because we cannot
+    // tell a click from the start of a drag until it has already moved. A
+    // genuine drag started on the click-to-move button also stays unfixed on
+    // Firefox (its lock request only ever comes from the denied mousemove
+    // path). Both are accepted trade-offs of restoring working camera drag on
+    // Firefox; see shouldEngagePointerLockOnMouseDown for the full reasoning.
     this.pointerLockRequestedForDrag = false;
+    // Gecko can only take the lock from this handler, so the edge test is
+    // applied to where the press STARTS: a drag begun in the middle of the
+    // window never takes the lock there either, and if it later walks into
+    // the edge band the deferred onMouseMove request is its only (Firefox-
+    // denied) chance. Accepted: rotation still works away from the edge, and
+    // in exchange Firefox stops painting its pointer-capture notice on every
+    // ordinary look.
+    if (
+      this.pointerAtEdge() &&
+      shouldEngagePointerLockOnMouseDown({
+        button: e.button,
+        clickMoveButton: this.clickMoveMouseButton,
+        needsSyncGesture: this.needsSyncPointerLockGesture,
+        lockOnRotate: this.lockCursorOnRotate,
+        alreadyLocked: document.pointerLockElement === this.canvas,
+      }) &&
+      !inForcedPointerLockCooldown({
+        needsSyncGesture: this.needsSyncPointerLockGesture,
+        msSinceForcedUnlock: this.msSinceForcedUnlock(),
+      })
+    ) {
+      this.pointerLockRequestedForDrag = true;
+      void this.canvas.requestPointerLock?.()?.catch?.(() => {});
+    }
     this.updateCursor();
   }
 
@@ -926,13 +1144,21 @@ export class Input {
   }
 
   private onMouseMove(e: MouseEvent): void {
+    this.notePointerClient(e.clientX, e.clientY);
     if (e.target === this.canvas) {
       this.hoverX = e.clientX;
       this.hoverY = e.clientY;
     }
     if (!this.leftDown && !this.rightDown) return;
-    const mx = e.movementX ?? 0,
-      my = e.movementY ?? 0;
+    // Normalize the raw movement delta to Chromium's physical-pixel unit so
+    // mouselook keeps the same speed and drag-start feel on Firefox, where the
+    // deltas arrive in CSS pixels (#1834). A no-op on Chromium/WebKit.
+    const { dx: mx, dy: my } = normalizePointerLookDelta({
+      movementX: e.movementX ?? 0,
+      movementY: e.movementY ?? 0,
+      isGecko: this.isGeckoEngine,
+      devicePixelRatio: typeof window !== 'undefined' ? window.devicePixelRatio : 1,
+    });
     if (mx === 0 && my === 0) return;
     const heldMs = this.pressDurationMs();
     if (this.downButton === this.clickMoveMouseButton && heldMs <= DEFAULT_CLICK_PICK_MAX_MS)
@@ -941,27 +1167,16 @@ export class Input {
     if (!this.cameraDragActive) {
       if (this.dragDistance < CAMERA_DRAG_START_DISTANCE && heldMs < CAMERA_DRAG_START_MS) return;
       this.cameraDragActive = true;
-      // Engage pointer lock the instant a press becomes a real camera drag, in
-      // BOTH camera modes, so rotation never begins with a free cursor that can
-      // reach the screen edge (movementX clamps to 0 and the camera freezes) or
-      // slip onto a second monitor. One lock per drag, none for a plain click
-      // (#116). Fullscreen uses the same lock path so right-drag mouselook
-      // behaves identically there.
-      if (
-        !this.pointerLockRequestedForDrag &&
-        shouldEngagePointerLock({
-          lockOnRotate: this.lockCursorOnRotate,
-          isFullscreen: this.isBrowserFullscreen(),
-          alreadyLocked: document.pointerLockElement === this.canvas,
-        })
-      ) {
-        this.pointerLockRequestedForDrag = true;
-        this.canvas.requestPointerLock?.();
-      }
+      this.maybeEngageDragPointerLock();
       this.noteIntent('look');
       this.updateCursor();
       return;
     }
+    // Re-checked on every move of an already-active drag, not just at its
+    // start: the lock is deferred until the cursor actually approaches the
+    // viewport edge, which a drag that began in the middle of the window
+    // reaches mid-gesture or never.
+    this.maybeEngageDragPointerLock();
     this.camYaw -= mx * this.lookSensitivity;
     this.camPitch = Math.min(
       1.35,
@@ -972,6 +1187,11 @@ export class Input {
 
   private noteIntent(kind: 'move' | 'look' | 'zoom'): void {
     this.cb.onInputIntent?.(kind);
+  }
+
+  private noteMovementIntent(): void {
+    this.movementIntentRevision++;
+    this.noteIntent('move');
   }
 
   private isAttackMoveReservedCode(code: string): boolean {

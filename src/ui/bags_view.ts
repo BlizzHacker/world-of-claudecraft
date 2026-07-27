@@ -9,13 +9,17 @@
 //
 // DOM/Three-free (registered in tests/architecture.test.ts UI_PURE_CORES).
 
+import { type BagCells, layoutBagCells } from '../sim/inventory_order';
 import type { InvSlot } from '../sim/types';
 import {
   applyBagFilter,
   type BagFilterState,
   bagFilterIsDefault,
+  bagOrderIsManual,
   type ItemLookup,
 } from './bag_filter';
+
+export type { BagCells };
 
 /** The item facts the bag click/tooltip logic needs (a subset of ItemDef). */
 export interface BagItemInfo {
@@ -25,7 +29,7 @@ export interface BagItemInfo {
   use?: unknown;
   /** Protected from destruction (the sim's discardItem also no-ops these). */
   noDiscard?: boolean;
-  /** Bound to its owner: cannot be destroyed, traded, mailed, listed, or sold. */
+  /** Bound to its owner: cannot be traded, mailed, listed, or sold. */
   soulbound?: boolean;
 }
 
@@ -167,12 +171,27 @@ export function bagsWindowShown(display: string): boolean {
   return display !== 'none' && display !== '';
 }
 
-/** What a right-click (destroy affordance) on a bag item does. 'discard' opens the
- *  destroy prompt, 'discardBlocked' rejects a protected item with feedback, 'none'
- *  means the destroy affordance is inert. */
+/** Whether a SHOWN bag window's money row is painting a stale purse (issue #2373).
+ *  The money row is the only thing inside #bags that reads copper (neither
+ *  buildBagGrid nor buildBagBar sees it), and several credits reach no bags arm in
+ *  either host: online a money-only snapshot carries no inventory delta at all, and
+ *  offline a trainer fee, a settled Vale Cup bet or delve copper emit no event the
+ *  bags listen to. The window has to be SHOWN before the purse is compared, so a
+ *  hidden or never-opened window costs one string compare and never reaches a
+ *  painter. `lastPainted` is the purse as of the last paint; the -1 cold sentinel a
+ *  caller starts from can never equal a real purse, which is never negative. */
+export function bagsMoneyRowStale(display: string, copper: number, lastPainted: number): boolean {
+  return bagsWindowShown(display) && copper !== lastPainted;
+}
+
+/** What the shift+right-click destroy affordance on a bag item does. 'discard' opens
+ *  the destroy prompt, 'discardBlocked' rejects a protected item with feedback, 'none'
+ *  means the destroy affordance is inert. A plain right-click (no shift) now runs the
+ *  same primary action as a left-click (equip/use/etc, via bagItemAction), matching
+ *  classic-MMO expectations instead of destroying the item by surprise (issue 1852). */
 export type BagDestroyAction = 'discard' | 'discardBlocked' | 'none';
 
-/** Decide the right-click destroy affordance for a bag item. Inert in the
+/** Decide the shift+right-click destroy affordance for a bag item. Inert in the
  *  transactional modes (trade / mail / market / vendor / pet-feed / bank-deposit),
  *  whose own click/contextmenu owns the slot; a noDiscard item is protected with
  *  feedback, every other item can be destroyed (mirrors the sim's discardItem rule,
@@ -187,7 +206,7 @@ export function bagDestroyAction(item: BagItemInfo, mode: BagMode): BagDestroyAc
     mode.bankDeposit
   )
     return 'none';
-  if (item.noDiscard || item.soulbound) return 'discardBlocked';
+  if (item.noDiscard) return 'discardBlocked';
   return 'discard';
 }
 
@@ -212,7 +231,12 @@ export function bagTooltipHintKey(item: BagItemInfo, mode: BagMode): BagTooltipH
   if (mode.bankDeposit)
     return item.kind === 'quest' ? 'hudChrome.bank.cannotDeposit' : 'hudChrome.bank.depositHint';
   if (item.kind === 'quest') return 'itemUi.tooltip.clickDestroy';
-  if (item.kind === 'weapon' || item.kind === 'armor' || item.kind === 'bag')
+  if (
+    item.kind === 'weapon' ||
+    item.kind === 'armor' ||
+    item.kind === 'held_offhand' ||
+    item.kind === 'bag'
+  )
     return 'itemUi.tooltip.clickEquip';
   if (item.kind === 'food' || item.kind === 'drink') return 'itemUi.tooltip.clickConsume';
   if (item.kind === 'potion') return 'itemUi.tooltip.clickUseInstant';
@@ -233,6 +257,12 @@ export type BagGridState = 'empty' | 'noMatch' | 'items';
 
 export interface BagGridModel {
   state: BagGridState;
+  /** The bag's REAL cells: one entry per square, null where the square is empty, with
+   *  every stack sitting in the cell the player parked it in (src/sim/inventory_order.ts
+   *  layoutBagCells). Only the pristine view (no filter, no search, sort by recent) shows
+   *  the true cells; a filtered or sorted view is a derived LIST, so this is empty there
+   *  and the painter falls back to `visible` + `emptyCells`. */
+  cells: BagCells;
   /** The filtered, ordered slots to paint (empty unless state === 'items'). */
   visible: InvSlot[];
   /** Free slot squares to paint after the items (0 while a filter/search is
@@ -258,14 +288,18 @@ export function buildBagGrid(
   const showEmpties = bagFilterIsDefault(filter);
   const emptyCells = showEmpties ? Math.max(0, capacity - inventory.length) : 0;
   const overflow = Math.max(0, inventory.length - capacity);
+  // The pristine view paints the bag's real cells (holes and all); every other view is a
+  // derived list, where a square is just a row and holds no position.
+  const cells = bagOrderIsManual(filter) ? layoutBagCells(inventory, capacity) : [];
   if (inventory.length === 0) {
     return emptyCells > 0
-      ? { state: 'items', visible: [], emptyCells, overflow }
-      : { state: 'empty', visible: [], emptyCells: 0, overflow };
+      ? { state: 'items', cells, visible: [], emptyCells, overflow }
+      : { state: 'empty', cells: [], visible: [], emptyCells: 0, overflow };
   }
   const visible = applyBagFilter(inventory, lookup, filter);
-  if (visible.length === 0) return { state: 'noMatch', visible: [], emptyCells: 0, overflow };
-  return { state: 'items', visible, emptyCells, overflow };
+  if (visible.length === 0)
+    return { state: 'noMatch', cells: [], visible: [], emptyCells: 0, overflow };
+  return { state: 'items', cells, visible, emptyCells, overflow };
 }
 
 /** One socket of the bag bar: the equipped bag (with its slot count) or an

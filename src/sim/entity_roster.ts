@@ -20,7 +20,10 @@
 // `src/sim`-pure: no DOM/Three/render/ui/game/net imports, no Math.random/Date.now
 // (enforced by tests/architecture.test.ts).
 
-import { DELVES, dungeonAt, zoneAt } from './data';
+import { tickHunterTrap } from './combat/hunter_trap';
+import { tickRingOfFrost } from './combat/ring_of_frost';
+import { tickTemporalHourglassGround } from './combat/temporal_hourglass';
+import { DELVES, DUNGEON_X_THRESHOLD, dungeonAt, zoneAt } from './data';
 import { clearDrownedLitanyBellsAndMarks } from './delves/drowned_litany_boss';
 import { recalcPlayerStats } from './entity';
 import { aurasSurvivingDeath } from './resurrection';
@@ -49,6 +52,50 @@ export type GroundAoE = {
   ability: string;
   // Spell Power added per tick, snapshotted at cast time (caster ground AoEs).
   spBonus?: number;
+  // Rune of Power (mage choice row): a FRIENDLY zone. When set, each pulse
+  // buffs allies inside (+allyBuffPct damage done, refreshed while they stand
+  // near) instead of damaging hostiles; min/max are ignored and the pulse
+  // draws NO rng (the damage roll is skipped entirely).
+  allyBuffPct?: number;
+  // Meteor: Ignite each struck enemy for this fraction of the resolved pulse
+  // damage (fire_mage.applyIgnite copies the number; no re-roll).
+  igniteFrac?: number;
+  // Blizzard riders: the per-pulse snare and the Frozen Orb cooldown shave.
+  slowMult?: number;
+  slowDuration?: number;
+  orbCdr?: boolean;
+  // Ring of Frost: annular contact trap state. Its duration uses `remaining`;
+  // targets are remembered so standing on or re-entering one ring cannot chain-root.
+  frostRing?: {
+    id: string;
+    abilityId: string;
+    duration: number;
+    freezeDuration: number;
+    innerRadius: number;
+    triggeredIds: Set<number>;
+  };
+  // Hunter trap (combat/hunter_trap.ts): placed at the owner's feet, arms
+  // after armRemaining, freezes the first enemy contact, then is consumed.
+  hunterTrap?: {
+    abilityId: string;
+    armRemaining: number;
+    freezeDuration: number;
+    triggered: boolean;
+  };
+  temporalHourglass?: {
+    id: string;
+    abilityId: string;
+    protectiveDuration: number;
+    hostilePveDuration: number;
+    hostilePvpDuration: number;
+    groundDuration: number;
+    healMaxHpPct: number;
+    selfCooldownRate: number;
+    allyCooldownRate: number;
+    createdTick: number;
+    sourceOrigin: Vec3;
+    sourceZoneId: string;
+  };
 };
 
 // A SimEvent scheduled to fire at a future sim time, optionally gated by a live-
@@ -82,6 +129,16 @@ export function dropEntityFromRoster(ctx: SimContext, id: number): void {
   ctx.clearEntityMarker(id); // a despawned entity keeps no raid marker
   const e = ctx.entities.get(id);
   if (!e) return;
+  // A despawned mob keeps no per-attempt Book of Deeds state: freeInstance,
+  // freeDelveRun, and spawnDelveModule drop boss mobs without a kill, so a leaked
+  // encounter/taint entry (entity ids are monotonic and never reused) would linger
+  // and be re-scanned by the 1 Hz sweep forever. bloatPending is deliberately NOT
+  // cleared here: its delayed death-throes blast may still resolve against the
+  // already-dropped corpse.
+  if (e.kind === 'mob') {
+    ctx.deedRuntime.encounters.delete(id);
+    ctx.deedRuntime.menderTainted.delete(id);
+  }
   ctx.grid.remove(e);
   if (e.kind === 'player') ctx.playerGrid.remove(e);
   ctx.entities.delete(id);
@@ -144,7 +201,46 @@ export function drainDelayedEvents(ctx: SimContext): void {
 export function tickGroundAoEs(ctx: SimContext): void {
   for (let i = ctx.groundAoEs.length - 1; i >= 0; i--) {
     const effect = ctx.groundAoEs[i];
+    const persistentSource = ctx.entities.get(effect.sourceId);
+    const hourglassChangedRegion = Boolean(
+      effect.temporalHourglass &&
+        persistentSource &&
+        ((effect.temporalHourglass.sourceOrigin.x <= DUNGEON_X_THRESHOLD &&
+          persistentSource.pos.x <= DUNGEON_X_THRESHOLD &&
+          effect.temporalHourglass.sourceZoneId !== zoneAt(persistentSource.pos.z).id) ||
+          (persistentSource.pos.x - effect.temporalHourglass.sourceOrigin.x) ** 2 +
+            (persistentSource.pos.z - effect.temporalHourglass.sourceOrigin.z) ** 2 >
+            300 ** 2),
+    );
+    if (
+      ((effect.frostRing || effect.hunterTrap) && !persistentSource) ||
+      (effect.temporalHourglass && (!persistentSource || persistentSource.dead)) ||
+      hourglassChangedRegion
+    ) {
+      ctx.groundAoEs.splice(i, 1);
+      continue;
+    }
     effect.remaining -= DT;
+    if (effect.frostRing) {
+      if (effect.remaining > CAST_COMPLETE_EPS) tickRingOfFrost(ctx, effect);
+      if (effect.remaining <= CAST_COMPLETE_EPS) ctx.groundAoEs.splice(i, 1);
+      continue;
+    }
+    if (effect.hunterTrap) {
+      if (effect.remaining > CAST_COMPLETE_EPS) tickHunterTrap(ctx, effect);
+      if (effect.remaining <= CAST_COMPLETE_EPS || effect.hunterTrap.triggered) {
+        ctx.groundAoEs.splice(i, 1);
+      }
+      continue;
+    }
+    if (effect.temporalHourglass) {
+      if (effect.remaining > CAST_COMPLETE_EPS && tickTemporalHourglassGround(ctx, effect)) {
+        ctx.groundAoEs.splice(i, 1);
+        continue;
+      }
+      if (effect.remaining <= CAST_COMPLETE_EPS) ctx.groundAoEs.splice(i, 1);
+      continue;
+    }
     effect.tickTimer -= DT;
     while (effect.tickTimer <= CAST_COMPLETE_EPS && effect.remaining > CAST_COMPLETE_EPS) {
       effect.tickTimer += effect.interval;

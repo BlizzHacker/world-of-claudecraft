@@ -18,17 +18,15 @@ describe('spellbook_window: WCAG chrome (rows + toggles + focus-return)', () => 
     expect(code).toContain('buildSpellbookView(');
   });
 
-  it('adopts the shared window frame (its builder sets role=dialog + the close control)', () => {
-    // The dialog identity + close control now come from the shared window-frame
-    // builder (window_frame.ts, unit-tested in window_frame_view.test.ts); the
-    // painter mounts it on an inner container and routes close back to close().
-    expect(code).toContain('renderWindowFrame(mount, SPELLBOOK_FRAME');
-    expect(code).toContain("titleKey: 'abilityUi.spellbook.title'");
-    expect(code).toContain("closeLabelKey: 'abilityUi.spellbook.close'");
-    expect(code).toContain('onClose: () => this.close()');
+  it('gives the close control a real button with an aria-label', () => {
+    expect(code).toContain('class="x-btn" data-close aria-label=');
+    expect(code).toContain("t('abilityUi.spellbook.close')");
   });
 
-  it('keeps the spell list + listitem roles inline', () => {
+  it('renders the dialog role + the spell list role', () => {
+    // the dialog identity is set via the shared markDialogRoot helper (its own writes
+    // are unit-tested in dialog_root.test.ts); the spell list/listitem roles stay inline.
+    expect(code).toContain("markDialogRoot(el, { label: t('abilityUi.spellbook.title') })");
     expect(code).toContain("list.setAttribute('role', 'list')");
     expect(code).toContain("setAttribute('role', 'listitem')");
   });
@@ -40,8 +38,12 @@ describe('spellbook_window: WCAG chrome (rows + toggles + focus-return)', () => 
     expect(code).toContain('this.deps.addToBar(id)');
   });
 
-  it('keeps the reset-bar button gated on the form-bars flag (now in the frame footer)', () => {
-    expect(code).toContain('if (view.hasFormBars)');
+  it('keeps passive spellbook rows informational, without add or drag affordances', () => {
+    expect(code).toContain('known && isAbilityActionBarEligible(def)');
+  });
+
+  it('keeps the reset-bar button gated on the form-bars flag', () => {
+    expect(code).toContain('const resetBtnHtml = view.hasFormBars');
     expect(code).toContain('data-reset-bar');
     expect(code).toContain("t('abilityUi.spellbook.resetBar')");
   });
@@ -61,6 +63,51 @@ describe('spellbook_window: WCAG chrome (rows + toggles + focus-return)', () => 
   });
 });
 
+describe('spellbook_window: the pinned Attack row', () => {
+  it('renders the Attack row first, from the pure view attackOnBar state', () => {
+    expect(code).toContain('this.appendAttackRow(list, view.attackOnBar)');
+    expect(code.indexOf('this.appendAttackRow(list')).toBeLessThan(
+      code.indexOf('for (const row of view.rows) this.appendRow(list, row)'),
+    );
+    expect(code).toContain('attackOnBar: this.deps.attackOnBar()');
+  });
+
+  it('reuses the existing Attack name/tooltip keys (no new player strings)', () => {
+    expect(code).toContain("t('abilityUi.actionBar.attackName')");
+    expect(code).toContain("t('abilityUi.actionBar.attackTooltip')");
+    expect(code).toContain("iconDataUrl('ability', 'attack')");
+  });
+
+  it('routes the toggle through setAttackOnBar with aria-pressed state', () => {
+    expect(code).toContain('this.deps.setAttackOnBar(!this.deps.attackOnBar())');
+    expect(code).toContain("toggle.dataset.attackToggle = '1'");
+  });
+
+  it('keeps the per-frame refresh syncing the Attack toggle (options can flip it)', () => {
+    expect(code).toContain("querySelector<HTMLButtonElement>('[data-attack-toggle]')");
+    expect(code).toContain("attackBtn.setAttribute('aria-pressed'");
+  });
+});
+
+describe('spellbook_window: the Attack row is draggable onto the action bar', () => {
+  it('marks the Attack row draggable, like an ability row', () => {
+    // The row previously offered only the +/- toggle, so a player dragging Attack
+    // (the natural gesture other spells support) got nothing. It now drags too.
+    const attackStart = code.indexOf('private appendAttackRow(');
+    const attackRow = code.slice(attackStart, code.indexOf('private appendRow(', attackStart));
+    expect(attackRow).toContain('el.draggable = true');
+  });
+
+  it('writes the dedicated Attack marker MIME on dragstart (not an encoded action)', () => {
+    // Attack has no ability/item id, so it cannot ride the HotbarAction path; the
+    // dragstart carries the marker MIME the action bar recognizes.
+    const attackStart = code.indexOf('private appendAttackRow(');
+    const attackRow = code.slice(attackStart, code.indexOf('private appendRow(', attackStart));
+    expect(attackRow).toContain('HOTBAR_ATTACK_MIME');
+    expect(attackRow).toMatch(/dragstart/);
+  });
+});
+
 describe('spellbook_window: mobile action-ring page label (Phase 4, touch-only)', () => {
   it('feeds abilityIdByBarSlot through to the pure view core', () => {
     expect(code).toContain('abilityIdByBarSlot: this.deps.abilityIdByBarSlot()');
@@ -73,6 +120,10 @@ describe('spellbook_window: mobile action-ring page label (Phase 4, touch-only)'
 
   it('renders the label through t() with the localized page-label key', () => {
     expect(code).toContain("t('hudChrome.mobile.spellbookPageLabel'");
+  });
+
+  it('converts the zero-indexed view page to a one-indexed user-facing label', () => {
+    expect(code).toContain('page: this.formatAbilityNumber(row.mobilePage + 1)');
   });
 });
 
@@ -134,14 +185,13 @@ describe('spellbook_window: tooltip/summary reflect talent changes (tooltip pari
   });
 
   it('preserves scroll position and keyboard focus across the talent-driven rebuild', () => {
-    // render() rebuilds the list via innerHTML; the .window-body (the frame's
-    // bounded flex column) is the scroll container now, so the rebuild must restore
-    // its scrollTop and refocus the row/toggle the user was on (by ability id), or a
-    // talent change would jump the list to the top and drop focus (WCAG focus-loss).
+    // render() rebuilds the list via innerHTML and the window root is the scroll
+    // container, so the rebuild must restore scrollTop and refocus the row/toggle
+    // the user was on (by ability id), or a talent change would jump the list to
+    // the top and drop focus (a WCAG focus-loss regression).
     expect(code).toContain('rerenderPreservingView()');
-    expect(code).toContain("root.querySelector<HTMLElement>('.window-body')");
-    expect(code).toContain('const scrollTop = scroller?.scrollTop ?? 0');
-    expect(code).toContain('scrollerAfter.scrollTop = scrollTop');
+    expect(code).toContain('const scrollTop = root.scrollTop');
+    expect(code).toContain('root.scrollTop = scrollTop');
     expect(code).toContain('el.dataset.abilityId = row.abilityId');
     expect(code).toContain('(root.querySelector(refocus) as HTMLElement | null)?.focus()');
   });

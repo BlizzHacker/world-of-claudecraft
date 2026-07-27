@@ -8,8 +8,8 @@
 // pins:
 //  - the FROZEN envelope contract (a success body, an error body, a data:{ ok:true }
 //    body) and that surface 'admin' + meta.envelope 'admin' select serializeAdmin;
-//  - the requireAdmin gate: db-free 401 on a missing bearer, 401 on a non-admin, and
-//    a valid admin reaches the handler (no read-only-scope 403, no moderation gate);
+//  - the requireAdmin gate: db-free 401 on a missing bearer, 401 on a read token or
+//    non-admin, and a valid full-scope admin reaches the handler;
 //  - the admin.login limiter: its own in-handler rateLimited (429), the 401 bad-cred
 //    and 403 no-admin-access shapes, all anonymous (no requireAdmin);
 //  - the operator :id loader: a valid id reaches the handler, a NaN id 422s;
@@ -28,16 +28,21 @@
 // and every asserted path returns before any real query.
 process.env.DATABASE_URL ||= 'postgres://test:test@127.0.0.1:5433/wocc_phase17_admin';
 
+import { readFileSync } from 'node:fs';
 import type * as http from 'node:http';
+import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   type AdminRuntime,
+  configureAdminPlayersCap,
   configureAdminRuntime,
   resetAdminDbForTests,
+  resetAdminPlayersCapForTests,
   resetAdminRuntimeForTests,
   routes,
   setAdminDbForTests,
 } from '../../server/admin';
+import { pool } from '../../server/db';
 import { compose } from '../../server/http/compose';
 import { withErrors } from '../../server/http/middleware/with_errors';
 import { apiRegistry } from '../../server/http/registry';
@@ -48,6 +53,7 @@ import {
   resetRateLimits,
   setRateLimitClock,
 } from '../../server/ratelimit';
+import { type AccountFlair, wireStreamerLinks } from '../../src/sim/account_flair';
 import { type FakeRes, fakeCtx, makeReq } from './helpers';
 
 // A well-formed bearer header (64 lowercase-hex, matching the gate BEARER_PATTERN).
@@ -55,6 +61,7 @@ const BEARER = `Bearer ${'a'.repeat(64)}`;
 // The admin caller the gate resolves the bearer to; isAdminAccount(id) returns true
 // ONLY for this id, so a moderation target (a different id) reads as a non-admin.
 const ADMIN_ACCOUNT_ID = 7;
+const fullToken = (accountId = ADMIN_ACCOUNT_ID) => ({ accountId, scope: 'full' as const });
 // The admin-login per-minute ceiling (server/admin.ts ADMIN_LOGIN_MAX_PER_MINUTE).
 const ADMIN_LOGIN_MAX = 10;
 // A frozen instant so a limiter drain sits inside one 60s window.
@@ -86,7 +93,7 @@ const allowedRateLimit = (): ReturnType<NonNullable<AdminDbBundle['rateLimited']
 // target reads as a normal account). Extra reads are layered per test.
 function authedAdminDb(overrides: DbOverrides = {}): void {
   setDb({
-    accountAndScopeForToken: async () => ({ accountId: ADMIN_ACCOUNT_ID, scope: 'full' }),
+    accountAndScopeForToken: async () => fullToken(),
     adminRolesForAccount: async (id: number) =>
       id === ADMIN_ACCOUNT_ID ? { username: 'op', roles: ['superadmin'] } : null,
     isAdminAccount: async (id: number) => id === ADMIN_ACCOUNT_ID,
@@ -120,6 +127,7 @@ function installAdminRuntime(overrides: Partial<Record<keyof AdminRuntime, unkno
     reloadChatFilter: vi.fn(async () => {}),
     reloadBlockedIps: vi.fn(async () => {}),
     disconnectByIp: vi.fn(),
+    applyAccountFlairLive: vi.fn(),
     ...overrides,
   };
   configureAdminRuntime(rt as unknown as AdminRuntime);
@@ -210,6 +218,7 @@ afterEach(() => {
   resetRateLimitClock();
   resetAdminDbForTests();
   resetAdminRuntimeForTests();
+  resetAdminPlayersCapForTests();
   vi.clearAllMocks();
   vi.restoreAllMocks();
 });
@@ -271,10 +280,7 @@ describe('admin envelope contract (frozen)', () => {
 
 describe('requireAdmin gate', () => {
   it('401s a missing bearer DB-free with the legacy admin body', async () => {
-    const accountAndScopeForToken = vi.fn(async () => ({
-      accountId: ADMIN_ACCOUNT_ID,
-      scope: 'full' as const,
-    }));
+    const accountAndScopeForToken = vi.fn(async () => fullToken());
     const adminRolesForAccount = vi.fn(async () => ({ username: 'op', roles: ['superadmin'] }));
     setDb({ accountAndScopeForToken, adminRolesForAccount });
     installAdminRuntime();
@@ -287,7 +293,7 @@ describe('requireAdmin gate', () => {
 
   it('401s a valid bearer whose account is NOT staff (no roles)', async () => {
     setDb({
-      accountAndScopeForToken: async () => ({ accountId: 42, scope: 'full' }),
+      accountAndScopeForToken: async () => fullToken(42),
       adminRolesForAccount: async () => null,
     });
     installAdminRuntime();
@@ -305,6 +311,27 @@ describe('requireAdmin gate', () => {
     const r = await runRoute('GET', '/admin/api/overview', { headers: { authorization: BEARER } });
     expect(r.status).toBe(401);
     expect(r.body).toEqual({ success: false, data: null, error: 'admin authentication required' });
+  });
+
+  it('401s a staff read token before role resolution or the handler', async () => {
+    const adminRolesForAccount = vi.fn(async () => ({ username: 'op', roles: ['superadmin'] }));
+    setDb({
+      accountAndScopeForToken: async () => ({
+        accountId: ADMIN_ACCOUNT_ID,
+        scope: 'read' as const,
+      }),
+      adminRolesForAccount,
+    });
+    installAdminRuntime();
+
+    const r = await runRoute('GET', '/admin/api/overview', {
+      headers: { authorization: BEARER },
+    });
+
+    expect(r.status).toBe(401);
+    expect(r.body).toEqual({ success: false, data: null, error: 'admin authentication required' });
+    expect(r.reached).toBe(false);
+    expect(adminRolesForAccount).not.toHaveBeenCalled();
   });
 
   it('lets a valid admin through to the handler', async () => {
@@ -666,7 +693,7 @@ describe('game.* side effects preserved', () => {
     const r = await runRoute('POST', '/admin/api/moderation/accounts/:id/daily-rewards-ban', {
       headers: { authorization: BEARER },
       params: { id: '5' },
-      body: { reason: 'automated play' },
+      body: { reason: 'automated play', durationHours: 12 },
     });
     expect(r.status).toBe(200);
     expect(setDailyRewardsBan).toHaveBeenCalledWith({
@@ -674,6 +701,7 @@ describe('game.* side effects preserved', () => {
       adminAccountId: ADMIN_ACCOUNT_ID,
       banned: true,
       reason: 'automated play',
+      durationHours: 12,
     });
   });
 
@@ -694,6 +722,65 @@ describe('game.* side effects preserved', () => {
       banned: true,
       reason: 'multi-account abuse',
     });
+  });
+
+  it('returns a bounded Daily Rewards point event log for a validated date', async () => {
+    const dailyRewardPointEvents = vi.fn(async () => ({
+      day: '2026-07-16',
+      rows: [],
+      total: 0,
+      truncated: false,
+    }));
+    authedAdminDb({ dailyRewardPointEvents });
+    installAdminRuntime();
+
+    const response = await runRoute('GET', '/admin/api/accounts/:id/daily-rewards-events', {
+      headers: { authorization: BEARER },
+      params: { id: '5' },
+      url: '/admin/api/accounts/5/daily-rewards-events?day=2026-07-16&limit=100',
+    });
+
+    expect(response.status).toBe(200);
+    expect(dailyRewardPointEvents).toHaveBeenCalledWith(5, '2026-07-16', 100);
+  });
+
+  it('defaults the Daily Rewards point event log to the server reward day', async () => {
+    const dailyRewardPointEvents = vi.fn(async (_accountId: number, day: string) => ({
+      day,
+      rows: [],
+      total: 0,
+      truncated: false,
+    }));
+    authedAdminDb({ dailyRewardPointEvents });
+    installAdminRuntime();
+
+    const response = await runRoute('GET', '/admin/api/accounts/:id/daily-rewards-events', {
+      headers: { authorization: BEARER },
+      params: { id: '5' },
+      url: '/admin/api/accounts/5/daily-rewards-events?limit=100',
+    });
+
+    expect(response.status).toBe(200);
+    expect(dailyRewardPointEvents).toHaveBeenCalledWith(
+      5,
+      expect.stringMatching(/^\d{4}-\d{2}-\d{2}$/),
+      100,
+    );
+  });
+
+  it('rejects an invalid Daily Rewards point event date', async () => {
+    const dailyRewardPointEvents = vi.fn();
+    authedAdminDb({ dailyRewardPointEvents });
+    installAdminRuntime();
+
+    const response = await runRoute('GET', '/admin/api/accounts/:id/daily-rewards-events', {
+      headers: { authorization: BEARER },
+      params: { id: '5' },
+      url: '/admin/api/accounts/5/daily-rewards-events?day=2026-02-30',
+    });
+
+    expect(response.status).toBe(400);
+    expect(dailyRewardPointEvents).not.toHaveBeenCalled();
   });
 
   it('force-rename disconnects the character owner', async () => {
@@ -1480,6 +1567,9 @@ describe('overview merge math (the one non-trivial read computation)', () => {
       providerUsageSnapshot,
     });
     installAdminRuntime();
+    // A distinctive cap (not colliding with any other body number) proves this arm
+    // reads the injected canonicalPlayersCap source, not a hardcoded 0 or a stat.
+    configureAdminPlayersCap(() => 4242);
     const r = await runRoute('GET', '/admin/api/overview', { headers: { authorization: BEARER } });
     expect(r.status).toBe(200);
     expect(r.body).toEqual({
@@ -1488,6 +1578,7 @@ describe('overview merge math (the one non-trivial read computation)', () => {
         accounts: 4,
         peakOnlineToday: 3,
         peakOnlineAllTime: 100,
+        playersCap: 4242,
         server: {
           online: 3,
           onlineAccounts: 2,
@@ -1504,6 +1595,21 @@ describe('overview merge math (the one non-trivial read computation)', () => {
     expect(providerUsageSnapshot).not.toHaveBeenCalled();
   });
 
+  it('serves playersCap 0 when the cap source is unconfigured (graceful default)', async () => {
+    // adminPlayersCap() returns 0 (it does NOT throw) when configureAdminPlayersCap was
+    // never wired, so a boot-wiring gap degrades this one cosmetic field to the same
+    // "cap disabled" sentinel canonicalPlayersCap emits, instead of failing the whole
+    // overview. Pin that false branch of the accessor.
+    authedAdminDb({
+      overviewCounts: async () => ({ accounts: 0, peakOnlineToday: 0, peakOnlineAllTime: 0 }),
+    });
+    installAdminRuntime();
+    resetAdminPlayersCapForTests();
+    const r = await runRoute('GET', '/admin/api/overview', { headers: { authorization: BEARER } });
+    expect(r.status).toBe(200);
+    expect((r.body as { data: { playersCap: number } }).data.playersCap).toBe(0);
+  });
+
   it('GET /admin/api/provider-usage serves the usage snapshot on its own route', async () => {
     const usage = { generatedAt: 9, windows: ['w'], metrics: ['m'], caches: ['c'] };
     authedAdminDb({ providerUsageSnapshot: () => usage });
@@ -1513,6 +1619,39 @@ describe('overview merge math (the one non-trivial read computation)', () => {
     });
     expect(r.status).toBe(200);
     expect(r.body).toEqual({ success: true, data: { usage }, error: null });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 12b. Overview player-cap boot wiring + dual-arm structural pins. main.ts cannot
+// be imported (it boots a server on import), so the boot wiring is verified by
+// source text (the tests/server/main_retention_wiring.test.ts idiom), comment-
+// stripped so a commented-out call can never satisfy a pin.
+// ---------------------------------------------------------------------------
+
+describe('overview player-cap wiring', () => {
+  const stripLineComments = (s: string): string => s.replace(/\/\/[^\n]*/g, '');
+  const MAIN = stripLineComments(
+    readFileSync(join(__dirname, '..', '..', 'server', 'main.ts'), 'utf8'),
+  );
+  const ADMIN = stripLineComments(
+    readFileSync(join(__dirname, '..', '..', 'server', 'admin.ts'), 'utf8'),
+  );
+
+  it('main.ts feeds canonicalPlayersCap into configureAdminPlayersCap at boot', () => {
+    // Without this wiring the accessor silently defaults to 0 and no unit test reds
+    // (each injects its own source). The CALL-form token '(canonicalPlayersCap)' cannot
+    // be satisfied by the import line, which lists the bare identifier.
+    expect(MAIN).toContain('configureAdminPlayersCap(canonicalPlayersCap)');
+  });
+
+  it('both overview arms read the ONE injected cap accessor (dual-arm agreement)', () => {
+    // The legacy handleAdminApi branch and the RouteDef overviewHandler must both source
+    // the cap from adminPlayersCap(), so the field cannot diverge across the two dispatch
+    // paths; exactly two call sites, one per arm. A hardcoded value or a divergent source
+    // in either arm drops the count.
+    const hits = ADMIN.match(/playersCap: adminPlayersCap\(\)/g) ?? [];
+    expect(hits).toHaveLength(2);
   });
 });
 
@@ -2057,7 +2196,7 @@ describe('reset-password RouteDef handler (accounts.password)', () => {
     // The actor holds accounts.password via the plain admin role, but the target
     // reads as staff (isAdminAccount true), so the reset is refused.
     setDb({
-      accountAndScopeForToken: async () => ({ accountId: ADMIN_ACCOUNT_ID, scope: 'full' }),
+      accountAndScopeForToken: async () => fullToken(),
       adminRolesForAccount: async (id: number) =>
         id === ADMIN_ACCOUNT_ID ? { username: 'op', roles: ['admin'] } : null,
       isAdminAccount: async () => true,
@@ -2082,7 +2221,7 @@ describe('reset-password RouteDef handler (accounts.password)', () => {
   it('is denied 403 by the central gate for a moderator (accounts.password not held)', async () => {
     const deps = resetDeps();
     setDb({
-      accountAndScopeForToken: async () => ({ accountId: ADMIN_ACCOUNT_ID, scope: 'full' }),
+      accountAndScopeForToken: async () => fullToken(),
       adminRolesForAccount: async () => ({ username: 'op', roles: ['moderator'] }),
       ...deps,
     });
@@ -2099,5 +2238,395 @@ describe('reset-password RouteDef handler (accounts.password)', () => {
       error: 'you do not have permission to do this',
     });
     expect(deps.updatePasswordHash).not.toHaveBeenCalled();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 12. Account flair: the AI-operated mark and an official streamer's links.
+//
+// The security boundary is normalizeStreamerLink (src/sim/account_flair.ts), run
+// inside the audited db write. These tests therefore drive the REAL
+// moderation_db write through the route, with pool.connect spied onto a recording
+// client, so "a hostile link never reaches the database" is asserted against the
+// real write path rather than a fake that re-states the rule. Only the read-back
+// (loadAccountFlair) is faked; nothing here opens a Postgres connection.
+// ---------------------------------------------------------------------------
+
+/** A pooled-client stand-in that records every statement the write path issues. */
+function recordingPoolClient() {
+  const calls: { sql: string; params: unknown[] }[] = [];
+  const client = {
+    query: vi.fn(async (sql: string, params: unknown[] = []) => {
+      calls.push({ sql, params });
+      return { rowCount: 1, rows: [] };
+    }),
+    release: vi.fn(),
+  };
+  const connect = vi.spyOn(pool, 'connect').mockResolvedValue(client as never);
+  return {
+    connect,
+    calls,
+    /** The first recorded statement whose SQL contains `fragment`. */
+    find: (fragment: string) => calls.find((c) => c.sql.includes(fragment)),
+    sqlLog: () => calls.map((c) => c.sql.trim().split('\n')[0]),
+  };
+}
+
+describe('account flair (AI mark + streamer links)', () => {
+  const LIVE_FLAIR = { ai: true, streamer: false, links: {} };
+
+  it('403s BOTH flair routes for a staff account that lacks moderation.act', async () => {
+    // viewer holds accounts.read but not moderation.act (admin_permissions.ts), so
+    // the central gate denies the write before the handler (and before any db call).
+    const setAccountAiFlag = vi.fn(async () => {});
+    const setAccountStreamerFlair = vi.fn(async () => {});
+    setDb({
+      accountAndScopeForToken: async () => fullToken(),
+      adminRolesForAccount: async () => ({ username: 'op', roles: ['viewer'] }),
+      setAccountAiFlag,
+      setAccountStreamerFlair,
+    });
+    const rt = installAdminRuntime();
+
+    const ai = await runRoute('POST', '/admin/api/accounts/:id/ai', {
+      headers: { authorization: BEARER },
+      params: { id: '5' },
+      body: { ai: true },
+    });
+    const streamer = await runRoute('POST', '/admin/api/accounts/:id/streamer', {
+      headers: { authorization: BEARER },
+      params: { id: '5' },
+      body: { streamer: true, links: { twitch: 'https://twitch.tv/someone' } },
+    });
+
+    for (const r of [ai, streamer]) {
+      expect(r.status).toBe(403);
+      expect(r.body).toEqual({
+        success: false,
+        data: null,
+        error: 'you do not have permission to do this',
+      });
+    }
+    expect(setAccountAiFlag).not.toHaveBeenCalled();
+    expect(setAccountStreamerFlair).not.toHaveBeenCalled();
+    expect(rt.applyAccountFlairLive).not.toHaveBeenCalled();
+  });
+
+  it('lets a moderator set the AI mark: audited write, then the live push', async () => {
+    const db = recordingPoolClient();
+    const loadAccountFlair = vi.fn(async () => LIVE_FLAIR);
+    // The REAL setAccountAiFlag runs (not overridden), so the transaction and its
+    // audit row are the ones production issues.
+    setDb({
+      accountAndScopeForToken: async () => fullToken(),
+      adminRolesForAccount: async () => ({ username: 'op', roles: ['moderator'] }),
+      loadAccountFlair,
+    });
+    const rt = installAdminRuntime();
+
+    const r = await runRoute('POST', '/admin/api/accounts/:id/ai', {
+      headers: { authorization: BEARER },
+      params: { id: '5' },
+      body: { ai: true, reason: 'partner bot account' },
+    });
+
+    expect(r.status).toBe(200);
+    expect(r.body).toEqual({ success: true, data: { ok: true }, error: null });
+    // The write is one transaction: the column flip AND its audit row, or neither.
+    expect(db.sqlLog()[0]).toBe('BEGIN');
+    expect(db.sqlLog().at(-1)).toBe('COMMIT');
+    const update = db.find('SET is_ai');
+    expect(update?.params).toEqual([5, true]);
+    const audit = db.find('INSERT INTO account_moderation_actions');
+    expect(audit?.params).toEqual([5, ADMIN_ACCOUNT_ID, 'set_ai', 'partner bot account', null]);
+    // The flair pushed live is the one re-read from the row, never the request body.
+    expect(loadAccountFlair).toHaveBeenCalledWith(5);
+    expect(rt.applyAccountFlairLive).toHaveBeenCalledWith(5, LIVE_FLAIR);
+  });
+
+  it('audits an AI-mark write with no reason (non-punitive: a reason is optional)', async () => {
+    const db = recordingPoolClient();
+    setDb({
+      accountAndScopeForToken: async () => fullToken(),
+      adminRolesForAccount: async () => ({ username: 'op', roles: ['moderator'] }),
+      loadAccountFlair: async () => LIVE_FLAIR,
+    });
+    installAdminRuntime();
+
+    const r = await runRoute('POST', '/admin/api/accounts/:id/ai', {
+      headers: { authorization: BEARER },
+      params: { id: '5' },
+      body: { ai: false },
+    });
+
+    expect(r.status).toBe(200);
+    // Unlike ban/mute (which throw 'moderation reason is required'), the row lands.
+    expect(db.find('SET is_ai')?.params).toEqual([5, false]);
+    expect(db.find('INSERT INTO account_moderation_actions')?.params).toEqual([
+      5,
+      ADMIN_ACCOUNT_ID,
+      'set_ai',
+      '',
+      null,
+    ]);
+  });
+
+  it('400s a non-boolean ai / streamer flag before any db write', async () => {
+    const db = recordingPoolClient();
+    authedAdminDb({ loadAccountFlair: async () => LIVE_FLAIR });
+    const rt = installAdminRuntime();
+
+    const ai = await runRoute('POST', '/admin/api/accounts/:id/ai', {
+      headers: { authorization: BEARER },
+      params: { id: '5' },
+      body: { ai: 'yes' },
+    });
+    expect(ai.status).toBe(400);
+    expect(ai.body).toEqual({ success: false, data: null, error: 'ai must be a boolean' });
+
+    const streamer = await runRoute('POST', '/admin/api/accounts/:id/streamer', {
+      headers: { authorization: BEARER },
+      params: { id: '5' },
+      body: { streamer: 1, links: {} },
+    });
+    expect(streamer.status).toBe(400);
+    expect(streamer.body).toEqual({
+      success: false,
+      data: null,
+      error: 'streamer must be a boolean',
+    });
+
+    const badLinks = await runRoute('POST', '/admin/api/accounts/:id/streamer', {
+      headers: { authorization: BEARER },
+      params: { id: '5' },
+      body: { streamer: true, links: ['https://twitch.tv/someone'] },
+    });
+    expect(badLinks.status).toBe(400);
+    expect(badLinks.body).toEqual({
+      success: false,
+      data: null,
+      error: 'a links object is required',
+    });
+
+    expect(db.connect).not.toHaveBeenCalled();
+    expect(rt.applyAccountFlairLive).not.toHaveBeenCalled();
+  });
+
+  // The security case. Each of these is a way an operator-entered string could turn
+  // into a hostile window.open on every player's client, so each must die at the
+  // write gate: 400, no transaction, no live push.
+  it.each([
+    ['a javascript: scheme', 'javascript:alert(1)'],
+    ['a plain-http link', 'http://twitch.tv/someone'],
+    ['a foreign host', 'https://evil.com/someone'],
+    ['a lookalike host', 'https://twitch.tv.evil.com/someone'],
+    ['embedded credentials', 'https://user:pass@twitch.tv/someone'],
+  ])('rejects %s with a 400 and never opens a transaction', async (_label, url) => {
+    const db = recordingPoolClient();
+    const loadAccountFlair = vi.fn(async () => LIVE_FLAIR);
+    setDb({
+      accountAndScopeForToken: async () => fullToken(),
+      adminRolesForAccount: async () => ({ username: 'op', roles: ['moderator'] }),
+      loadAccountFlair,
+    });
+    const rt = installAdminRuntime();
+
+    const r = await runRoute('POST', '/admin/api/accounts/:id/streamer', {
+      headers: { authorization: BEARER },
+      params: { id: '5' },
+      body: { streamer: true, links: { twitch: url } },
+    });
+
+    expect(r.status).toBe(400);
+    expect(r.body).toEqual({ success: false, data: null, error: 'invalid streamer link' });
+    // The gate runs before pool.connect, so the bad link never reaches Postgres...
+    expect(db.connect).not.toHaveBeenCalled();
+    expect(db.calls).toEqual([]);
+    // ...and never reaches a player.
+    expect(loadAccountFlair).not.toHaveBeenCalled();
+    expect(rt.applyAccountFlairLive).not.toHaveBeenCalled();
+  });
+
+  it('stores only the NORMALIZED links for a valid write, and audits it as set_streamer', async () => {
+    const db = recordingPoolClient();
+    const live = {
+      ai: false,
+      streamer: true,
+      links: { twitch: 'https://twitch.tv/someone', youtube: 'https://youtu.be/abc' },
+    };
+    setDb({
+      accountAndScopeForToken: async () => fullToken(),
+      adminRolesForAccount: async () => ({ username: 'op', roles: ['moderator'] }),
+      loadAccountFlair: async () => live,
+    });
+    const rt = installAdminRuntime();
+
+    const r = await runRoute('POST', '/admin/api/accounts/:id/streamer', {
+      headers: { authorization: BEARER },
+      params: { id: '5' },
+      body: {
+        streamer: true,
+        // Untrimmed, and a blank field for a platform the operator left empty.
+        links: {
+          twitch: '  https://twitch.tv/someone  ',
+          kick: '',
+          youtube: 'https://youtu.be/abc',
+        },
+        reason: 'verified partner',
+      },
+    });
+
+    expect(r.status).toBe(200);
+    const update = db.find('SET is_streamer');
+    // A blank platform is absent (not stored as ''), and the kept links are the
+    // normalized hrefs, not the raw operator text.
+    expect(update?.params).toEqual([
+      5,
+      true,
+      { twitch: 'https://twitch.tv/someone', youtube: 'https://youtu.be/abc' },
+    ]);
+    expect(db.find('INSERT INTO account_moderation_actions')?.params).toEqual([
+      5,
+      ADMIN_ACCOUNT_ID,
+      'set_streamer',
+      'verified partner',
+      null,
+    ]);
+    expect(rt.applyAccountFlairLive).toHaveBeenCalledWith(5, live);
+  });
+
+  it('keeps the links stored but stops WIRING them once the streamer flag is off', async () => {
+    const db = recordingPoolClient();
+    const storedLinks = { twitch: 'https://twitch.tv/someone' };
+    // The row after the flag is switched off: links intact, flag down.
+    const flagOff: AccountFlair = { ai: false, streamer: false, links: storedLinks };
+    setDb({
+      accountAndScopeForToken: async () => fullToken(),
+      adminRolesForAccount: async () => ({ username: 'op', roles: ['moderator'] }),
+      loadAccountFlair: async () => flagOff,
+    });
+    // A locally-typed spy, so the pushed flair keeps its AccountFlair type (the
+    // runtime helper's override bag is deliberately loose).
+    const applyAccountFlairLive = vi.fn<(accountId: number, flair: AccountFlair) => void>();
+    installAdminRuntime({ applyAccountFlairLive });
+
+    const r = await runRoute('POST', '/admin/api/accounts/:id/streamer', {
+      headers: { authorization: BEARER },
+      params: { id: '5' },
+      body: { streamer: false, links: storedLinks },
+    });
+
+    expect(r.status).toBe(200);
+    // The links ARE still persisted (an operator can toggle the flair back on
+    // without retyping them)...
+    expect(db.find('SET is_streamer')?.params).toEqual([5, false, storedLinks]);
+    // ...but the wire gate ships nothing while the flag is down, so no client sees
+    // them. This is the one function both the entity encoder (identityFields.slk)
+    // and the chat fan-out call, so gating it here gates every surface.
+    const pushed = applyAccountFlairLive.mock.calls[0][1];
+    expect(pushed).toEqual(flagOff);
+    expect(wireStreamerLinks(pushed)).toBeUndefined();
+    // Sanity: the same links DO wire once the flag is on, so the assertion above is
+    // pinning the flag, not a broken links bag.
+    expect(wireStreamerLinks({ ...flagOff, streamer: true })).toEqual(storedLinks);
+  });
+
+  // The dashboard drives all THREE streamer actions (mark / unmark / save links)
+  // through this one endpoint, always sending both the flag and the full bag, so a
+  // re-send of an unchanged flag has to be an ordinary write, not a conflict.
+  it('is idempotent: saving links while ALREADY a streamer just writes again', async () => {
+    const db = recordingPoolClient();
+    const links = { twitch: 'https://twitch.tv/someone' };
+    const already: AccountFlair = { ai: false, streamer: true, links };
+    setDb({
+      accountAndScopeForToken: async () => fullToken(),
+      adminRolesForAccount: async () => ({ username: 'op', roles: ['moderator'] }),
+      loadAccountFlair: async () => already,
+    });
+    const rt = installAdminRuntime();
+
+    const first = await runRoute('POST', '/admin/api/accounts/:id/streamer', {
+      headers: { authorization: BEARER },
+      params: { id: '5' },
+      body: { streamer: true, links },
+    });
+    const second = await runRoute('POST', '/admin/api/accounts/:id/streamer', {
+      headers: { authorization: BEARER },
+      params: { id: '5' },
+      body: { streamer: true, links },
+    });
+
+    expect(first.status).toBe(200);
+    expect(second.status).toBe(200);
+    // Two full writes, each with its own audit row: no unchanged-flag short circuit.
+    expect(db.calls.filter((c) => c.sql.includes('SET is_streamer'))).toHaveLength(2);
+    expect(
+      db.calls.filter((c) => c.sql.includes('INSERT INTO account_moderation_actions')),
+    ).toHaveLength(2);
+    expect(rt.applyAccountFlairLive).toHaveBeenCalledTimes(2);
+  });
+
+  it('leaves the stored links ALONE when the body omits the links key', async () => {
+    const db = recordingPoolClient();
+    setDb({
+      accountAndScopeForToken: async () => fullToken(),
+      adminRolesForAccount: async () => ({ username: 'op', roles: ['moderator'] }),
+      loadAccountFlair: async () => ({ ai: false, streamer: false, links: {} }),
+    });
+    installAdminRuntime();
+
+    const r = await runRoute('POST', '/admin/api/accounts/:id/streamer', {
+      headers: { authorization: BEARER },
+      params: { id: '5' },
+      body: { streamer: false },
+    });
+
+    expect(r.status).toBe(200);
+    // The flag moves; streamer_links is not in the UPDATE at all, so an omitted key
+    // can never wipe an account's links.
+    const update = db.find('SET is_streamer');
+    expect(update?.sql).not.toContain('streamer_links');
+    expect(update?.params).toEqual([5, false]);
+  });
+
+  it('clears the links only on an EXPLICIT empty bag', async () => {
+    const db = recordingPoolClient();
+    setDb({
+      accountAndScopeForToken: async () => fullToken(),
+      adminRolesForAccount: async () => ({ username: 'op', roles: ['moderator'] }),
+      loadAccountFlair: async () => ({ ai: false, streamer: true, links: {} }),
+    });
+    installAdminRuntime();
+
+    const r = await runRoute('POST', '/admin/api/accounts/:id/streamer', {
+      headers: { authorization: BEARER },
+      params: { id: '5' },
+      body: { streamer: true, links: {} },
+    });
+
+    expect(r.status).toBe(200);
+    expect(db.find('SET is_streamer')?.params).toEqual([5, true, {}]);
+  });
+
+  it('surfaces a db failure as a 400 without pushing anything live', async () => {
+    setDb({
+      accountAndScopeForToken: async () => fullToken(),
+      adminRolesForAccount: async () => ({ username: 'op', roles: ['moderator'] }),
+      setAccountAiFlag: async () => {
+        throw new Error('boom');
+      },
+      loadAccountFlair: async () => LIVE_FLAIR,
+    });
+    const rt = installAdminRuntime();
+
+    const r = await runRoute('POST', '/admin/api/accounts/:id/ai', {
+      headers: { authorization: BEARER },
+      params: { id: '5' },
+      body: { ai: true },
+    });
+
+    expect(r.status).toBe(400);
+    expect(r.body).toEqual({ success: false, data: null, error: 'boom' });
+    expect(rt.applyAccountFlairLive).not.toHaveBeenCalled();
   });
 });

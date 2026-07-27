@@ -18,11 +18,9 @@ describe('arena_window: WCAG chrome (focusable controls + focus-return)', () => 
     expect(code).toContain('buildArenaView(');
   });
 
-  it('gives the close control a real button via the shared frame builder', () => {
-    // The chrome (titlebar + close button) is stamped by the shared window-frame
-    // builder; the window names its own close aria key on the descriptor.
-    expect(code).toContain('renderWindowFrame(');
-    expect(code).toContain("closeLabelKey: 'hud.arena.close'");
+  it('gives the close control a real button with an aria-label', () => {
+    expect(code).toContain('class="x-btn" data-close aria-label=');
+    expect(code).toContain("t('hud.arena.close')");
   });
 
   it('renders bracket tabs as real buttons with aria-pressed state', () => {
@@ -32,9 +30,8 @@ describe('arena_window: WCAG chrome (focusable controls + focus-return)', () => 
   });
 
   it('routes every close path through close() so focus returns to the opener', () => {
-    // The frame builder wires its close control to the injected onClose, pointed
-    // at close() (WCAG 2.4.3 focus-return), not a raw hide.
-    expect(code).toContain('() => this.close()');
+    // The X button (both offline + live) closes via the painter, not a raw hide.
+    expect(code).toContain("data-close]')?.addEventListener('click', () => this.close())");
     // close() captures + restores the opener focus (WCAG 2.2 AA focus-return).
     expect(code).toContain('this.deps.restoreFocus(this.openerFocus)');
     expect(code).toContain('this.openerFocus = this.deps.captureFocus()');
@@ -94,5 +91,18 @@ describe('arena_window: offline skip-rebuild sentinel (collision-proof)', () => 
     // The offline branch early-returns on the sentinel (builds once per open, not every tick).
     expect(code).toContain('this.lastSig === ARENA_OFFLINE_SIG');
     expect(code).toContain('this.lastSig = ARENA_OFFLINE_SIG');
+  });
+});
+
+describe('arena_window: map row (slot-parity arena maps)', () => {
+  it('renders the map row through the exhaustive key record, gated on matchMap', () => {
+    // the record keeps a future third map from silently rendering the wrong
+    // name (tsc reds on a missing member), and the row hides when the fact
+    // is null (no match, yumi bracket, or a mapless older-server mirror)
+    expect(src).toContain('ARENA_MAP_KEY[matchMap]');
+    expect(src).toContain("coliseum: 'hud.arena.map.coliseum'");
+    expect(src).toContain("drowned_court: 'hud.arena.map.drownedCourt'");
+    expect(src).toMatch(/const mapRow = matchMap\s*\?/);
+    expect(src).toContain("t('hud.arena.mapName', { name: t(ARENA_MAP_KEY[matchMap]) })");
   });
 });

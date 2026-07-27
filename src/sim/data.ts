@@ -4,7 +4,7 @@
 // merges those records into the flat tables the rest of the engine consumes,
 // and owns the world-layout constants.
 
-import { BASE_ITEMS, FISHING_RARE_ID, FISHING_TABLES } from './content/items';
+import { BASE_ITEMS } from './content/items';
 import type {
   CampDef,
   DelveDef,
@@ -24,7 +24,6 @@ import type {
 } from './types';
 
 export type { FishingEntry } from './content/items';
-export { FISHING_RARE_ID, FISHING_TABLES };
 
 import {
   BROTHER_HALVEN,
@@ -50,6 +49,10 @@ import {
   SPIRIT_HEALER_NPC_ID,
 } from './content/graveyards';
 import { GROUND_PICKUP_LINES } from './content/ground_pickup_lines';
+import { MAGE_PET_MOBS } from './content/mage_pets';
+import { MAILBOXES } from './content/mailboxes';
+import { NOTICEBOARDS } from './content/noticeboards';
+import { STATIONS } from './content/professions';
 import {
   ALL_RECIPES as ALL_RECIPES_CONTENT,
   COMMON_RECIPES as COMMON_RECIPES_CONTENT,
@@ -110,7 +113,8 @@ import {
   ZONE3_ROADS,
   ZONE3_ZONE,
 } from './content/zone3';
-import { DUNGEON_WALL_HW } from './dungeon_layout';
+import { DUNGEON_WALL_HW, DUNGEON_WALL_X } from './dungeon_layout';
+import { EASTBROOK_LAYOUT } from './eastbrook_layout';
 import { JAIL_BLOCKERS, JAIL_TERRAIN_EDITS } from './jail';
 
 export type { DelveShopEntry, DelveShopGate, DelveShopOffer } from './content/delves';
@@ -126,9 +130,11 @@ export {
 } from './content/delves';
 
 import { DELVE_ITEMS } from './content/delves/items';
-import { HEROIC_ITEMS } from './content/heroic_loot';
+import { HEROIC_ITEMS, RETIRED_HEROIC_ITEMS } from './content/heroic_loot';
 import { buildHeroicVariants } from './content/heroic_variants';
 import { HEROIC_VENDOR_ITEMS } from './content/heroic_vendor';
+import { PROFESSION_ITEMS } from './content/profession_items';
+import { FURY_NPC, WARFARE_ITEMS } from './content/pvp_honor';
 import { MOUNT_ITEMS } from './content/mounts';
 import { DELVE_MODULE_LAYOUTS, type DelveModuleId, delveModuleSpan } from './delve_layout';
 
@@ -159,6 +165,7 @@ export type {
   ZoneDef,
   ZonePropsDef,
 } from './types';
+export { STATIONS };
 
 // ---------------------------------------------------------------------------
 // Merged content tables
@@ -166,6 +173,7 @@ export type {
 
 export const ITEMS: Record<string, ItemDef> = mergeItems(
   BASE_ITEMS,
+  PROFESSION_ITEMS,
   ZONE2_ITEMS,
   ZONE3_ITEMS,
   TEMPLE_ITEMS,
@@ -173,6 +181,8 @@ export const ITEMS: Record<string, ItemDef> = mergeItems(
   HEROIC_VENDOR_ITEMS,
   MOUNT_ITEMS,
   HEROIC_ITEMS,
+  RETIRED_HEROIC_ITEMS,
+  WARFARE_ITEMS,
 );
 
 export type { AggregatedSetEffect } from './content/item_sets';
@@ -184,6 +194,7 @@ export const MOBS: Record<string, MobTemplate> = {
   ...ZONE3_MOBS,
   ...DUNGEON_MOBS,
   ...WARLOCK_PET_MOBS,
+  ...MAGE_PET_MOBS,
   ...TEMPLE_MOBS,
   ...TEMPLE_DUNGEON_MOBS,
   ...DELVE_MOBS,
@@ -203,6 +214,7 @@ export const NPCS: Record<string, NpcDef> = {
   ...ZONE2_NPCS,
   ...ZONE3_NPCS,
   ...TEMPLE_NPCS,
+  [FURY_NPC.id]: FURY_NPC,
   brother_halven: BROTHER_HALVEN,
   cainhurst_sage: CAINHURST_SAGE,
   brother_halven_marsh: BROTHER_HALVEN_MARSH,
@@ -232,6 +244,13 @@ export const QUEST_ORDER: string[] = [
   ...ZONE3_QUEST_ORDER,
   ...TEMPLE_QUEST_ORDER,
 ];
+
+// The Book of Deeds catalog (content/deeds.ts) is deliberately NOT re-exported
+// here: this merge module sits on the guide entry's static import graph (via
+// icons.ts and the entity localizers), and a re-export would color the deeds
+// table, hidden deeds included, into a chunk the public wiki serves (guarded
+// by tests/guide.test.ts). Consumers import DEEDS/DEED_ORDER directly from
+// './content/deeds'.
 
 // Camps spawn in array order, each drawing world-gen RNG, so an entry inserted
 // before others shifts their spawn positions. New rare-elite camps
@@ -284,6 +303,8 @@ function mergeProps(sets: ZonePropsDef[]): ZonePropsDef {
     mudHuts: sets.flatMap((s) => s.mudHuts),
     ruinRings: sets.flatMap((s) => s.ruinRings),
     fences: sets.flatMap((s) => s.fences),
+    benches: sets.flatMap((s) => s.benches ?? []),
+    walls: sets.flatMap((s) => s.walls ?? []),
     graveyards: sets.flatMap((s) => s.graveyards),
     // optional per-zone field, was being dropped here, so the delve entrance
     // marker (name slab + arch) never reached the renderer (props.ts)
@@ -333,7 +354,7 @@ export const WORLD_MAX_X = WORLD_SIZE / 2;
 export const WORLD_MIN_Z = ZONES[0].zMin;
 export const WORLD_MAX_Z = ZONES[ZONES.length - 1].zMax;
 
-export const PLAYER_START = { x: 2, z: -2 };
+export const PLAYER_START = { ...EASTBROOK_LAYOUT.services.playerStart.position };
 
 // ---------------------------------------------------------------------------
 // Active world content registry.
@@ -356,6 +377,12 @@ export const BUILTIN_WORLD: WorldContent = {
   roads: ROADS,
   props: PROPS,
   playerStart: PLAYER_START,
+  services: {
+    stations: STATIONS,
+    mailboxes: MAILBOXES,
+    noticeboards: NOTICEBOARDS,
+    graveyards: OVERWORLD_GRAVEYARDS,
+  },
   blockers: JAIL_BLOCKERS,
   terrainEdits: JAIL_TERRAIN_EDITS,
 };
@@ -473,10 +500,14 @@ export function dungeonAt(x: number): DungeonDef | null {
 // ---------------------------------------------------------------------------
 
 export const ARENA_X = 4200; // arena instances share this x; slots stack along z
-export const ARENA_X_MIN = ARENA_X; // x at/after this = an arena instance, not a dungeon
+// Include the complete west wall plus one yard of routing headroom. Collision,
+// line of sight, camera sweeps, and dungeon lookup all select their instance
+// geometry through this boundary, so using the centreline would leave the
+// arena's entire west half attached to the neighboring dungeon band.
+export const ARENA_X_MIN = ARENA_X - (DUNGEON_WALL_X + DUNGEON_WALL_HW + 1);
 export const ARENA_SLOT_COUNT = 4; // concurrent 1v1 matches the world can host
 const ARENA_Z0 = -1250;
-const ARENA_SLOT_SPACING = 120; // > the pit footprint (~44yd) so slots never overlap
+const ARENA_SLOT_SPACING = 120; // > the pit footprint (~52yd) so slots never overlap
 
 export function arenaOrigin(slot: number): { x: number; z: number } {
   return { x: ARENA_X, z: ARENA_Z0 + slot * ARENA_SLOT_SPACING };
@@ -511,10 +542,10 @@ export const CRYPT_SPAWNS = DUNGEONS.hollow_crypt.spawns;
 
 // ---------------------------------------------------------------------------
 // Delves, private party instances past the arena x-band (see docs/prd/delves.md).
-// DELVE_X_MIN must stay above ARENA_X_MIN (4000) and ARENA_X (4200).
+// DELVE_X_MIN must stay above the full arena footprint around ARENA_X.
 // ---------------------------------------------------------------------------
 
-// 4800 sits clear of the v0.10.0 layout: dungeons end at ARENA_X_MIN (4000) and
+// 4800 sits clear of the v0.10.0 layout: the widest dungeon ends west of
 // the arena pit is centred at ARENA_X (4200, ~±22u footprint). The delve band's
 // west edge (DELVE_BAND_X_MIN = 4773) leaves a comfortable margin past the arena.
 export const DELVE_X_MIN = 4800;

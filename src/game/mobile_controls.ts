@@ -75,35 +75,6 @@ export function saveHapticsEnabled(
   }
 }
 
-// The top-left menu-button cluster (Chat/Social/Quests/Settings/More) ships
-// COLLAPSED behind an arrow chip, because its round icons crowd the play field
-// (live PR #1736 feedback). Only a player who taps it open is remembered as
-// expanded across sessions; the absent/any-other value is the collapsed default.
-// Own localStorage key, like music's ev_music_on and the haptics flag above.
-export const MENU_EXPANDED_STORE_KEY = 'woc_menu_expanded';
-
-export function loadMenuExpanded(
-  storage: Pick<Storage, 'getItem'> | null = safeLocalStorage(),
-): boolean {
-  if (!storage) return false;
-  try {
-    return storage.getItem(MENU_EXPANDED_STORE_KEY) === '1';
-  } catch {
-    return false;
-  }
-}
-
-export function saveMenuExpanded(
-  on: boolean,
-  storage: Pick<Storage, 'setItem'> | null = safeLocalStorage(),
-): void {
-  try {
-    storage?.setItem(MENU_EXPANDED_STORE_KEY, on ? '1' : '0');
-  } catch {
-    /* storage unavailable */
-  }
-}
-
 /** Fire a haptic pulse when enabled and the Vibration API exists. Returns whether it fired. */
 export function triggerHaptic(
   pattern: number | number[],
@@ -159,23 +130,36 @@ export interface MobileControlCallbacks {
   onDonate(): void;
   onEmotes(): void;
   onArena(): void;
+  onDungeonFinder(): void;
   /** Open the Vale Cup window (queue/roster board for the boarball minigame). */
   onValeCup(): void;
   onQuestLog(): void;
   onCharacter(): void;
   onBags(): void;
+  /** Open the Crafting window, folded into the More tray on mobile. */
+  onCrafting(): void;
   onSpellbook(): void;
   onTalents(): void;
   onMap(): void;
   onLeaderboard(): void;
   /** Open the Daily Rewards chest, folded into the More tray on mobile. */
   onDailyRewards(): void;
+  /** Open the Book of Deeds window, folded into the More tray on mobile. */
+  onDeeds(): void;
+  /** Open the Professions window, folded into the More tray on mobile. */
+  onProfessions(): void;
   /** Toggle world nameplates; returns the new on/off state to sync the button glow. */
   onNameplates(): boolean;
   /** Toggle background music; returns whether music is now enabled. */
   onMusic(): boolean;
   /** Double-tap the camera joystick: snap the camera back behind the character. */
   onRecenterCamera(): void;
+  /** Move an active ground-target reticle to this canvas point. Returns true when
+   * targeting owns the pointer, so the same drag never rotates the camera. */
+  onGroundAimMove(x: number, y: number): boolean;
+  /** Commit an active ground-target spell when the finger is released. Returns
+   * true when targeting consumed the gesture, so it cannot also recenter camera. */
+  onGroundAimTap(x: number, y: number): boolean;
 }
 
 /**
@@ -273,10 +257,6 @@ export function isMoveAutorunNear(y: number, threshold = MOVE_AUTORUN_REVEAL_THR
 export class MobileControls {
   private active = false;
   private hapticsOn = loadHapticsEnabled();
-  // Whether the top-left menu-button cluster is expanded; persisted, default
-  // collapsed. Applied to <body> on start() so the CSS reveal matches the
-  // stored preference before the first tap.
-  private menuExpanded = loadMenuExpanded();
   private joyPointer: number | null = null;
   private lookPointer: number | null = null;
   // Camera joystick is opt-in (settings.mobileCameraJoystick, def false): hidden
@@ -310,6 +290,17 @@ export class MobileControls {
   // owned by the router and never reach this canvas path.
   private pinchPointers = new Map<number, { x: number; y: number }>();
   private pinchPrevDist: number | null = null;
+  // Pointer ids for which releaseSwipeLook() has just performed its own
+  // deliberate releasePointerCapture() call. An explicit release also fires
+  // lostpointercapture per spec (same as an implicit one), and when a second
+  // finger lands mid pinch, onPinchDown -> releaseSwipeLook releases the
+  // swipe-look pointer's capture. Without this guard, the canvas
+  // lostpointercapture handler treats that echo as a real capture loss and
+  // tears down the pinch that just started (deletes the pointer, nulls
+  // pinchPrevDist), so the pinch is dead on arrival. Each id is consumed
+  // (deleted) by the handler the first time its echo is seen, rather than
+  // cleared on a timer, since the echo is not guaranteed to be synchronous.
+  private readonly releasingCaptureForPointer = new Set<number>();
   private swipeLookPointer: number | null = null;
   private swipeLookStartX = 0;
   private swipeLookStartY = 0;
@@ -318,11 +309,9 @@ export class MobileControls {
   private swipeLookActive = false;
   private swipeLookDownAt = 0;
   private lastSwipeTapAt = 0;
-  // Set when a pinch degrades to one finger and that finger is adopted as a
-  // fresh swipe-look (see onPinchEnd). The adopted finger's tracked position
-  // may be stale (pinch pointers hold no capture, so moves over HUD chrome are
-  // lost), so the first move only resyncs the origin instead of applying a
-  // spurious jump delta; and a pinch remnant is never a recenter "tap".
+  // A finger inherited from a pinch may have moved outside the canvas before
+  // the other finger lifted. Resync its first live move before rotating, and
+  // never treat that inherited pointer as a camera-recenter tap.
   private swipeLookResync = false;
   private swipeLookAdopted = false;
 
@@ -416,30 +405,26 @@ export class MobileControls {
     window.addEventListener('pointermove', (e) => {
       this.onMoveMove(e);
       this.onCameraMove(e);
+      this.onPinchMove(e);
     });
-    // The pinch/swipe ends are forwarded at window level too: pinch pointers
-    // hold no pointer capture, so a finger that drifts over HUD chrome delivers
-    // its pointerup/pointercancel THERE, never to the canvas. Without this
-    // forwarding that pointer stayed in pinchPointers forever and every later
-    // single-finger touch was misread as a pinch against the stale phantom
-    // point (the "camera locked after zooming once" bug: drags only zoomed).
     window.addEventListener('pointerup', (e) => {
-      this.onMoveEnd(e);
-      this.onCameraEnd(e);
       this.onPinchEnd(e);
       this.onSwipeLookEnd(e);
+      this.onMoveEnd(e);
+      this.onCameraEnd(e);
     });
     window.addEventListener('pointercancel', (e) => {
-      this.onMoveEnd(e);
-      this.onCameraEnd(e);
       this.onPinchEnd(e);
       this.onSwipeLookEnd(e);
+      this.onMoveEnd(e);
+      this.onCameraEnd(e);
     });
     window.addEventListener('blur', () => {
       this.releaseMove();
       this.releaseCamera();
       this.releasePinch();
       this.touchOwners.releaseAll();
+      this.cancelChatPress();
     });
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'hidden') {
@@ -447,6 +432,7 @@ export class MobileControls {
         this.releaseCamera();
         this.releasePinch();
         this.touchOwners.releaseAll();
+        this.cancelChatPress();
       }
     });
 
@@ -463,6 +449,22 @@ export class MobileControls {
       this.onSwipeLookEnd(e);
     });
     this.canvas?.addEventListener('pointercancel', (e) => {
+      this.onPinchEnd(e);
+      this.onSwipeLookEnd(e);
+    });
+    // iOS Safari can silently invalidate an active touch's pointer capture (a
+    // system gesture, Control Center swipe, an alert) WITHOUT ever firing
+    // pointerup or pointercancel. Without this, swipe-look/pinch state stays
+    // latched (setTouchLook never flips back), which reads to the player as
+    // the camera getting stuck spinning or losing rotate/zoom control
+    // (issue #1892). `lostpointercapture` is the one event guaranteed to
+    // fire when capture is lost, so treat it exactly like pointercancel here,
+    // mirroring the moveSurface/cameraJoystick handlers above.
+    this.canvas?.addEventListener('lostpointercapture', (e) => {
+      // Ignore the echo from releaseSwipeLook()'s own deliberate release (see
+      // releasingCaptureForPointer above): that release is already handled
+      // inline and must not also run onPinchEnd/onSwipeLookEnd here.
+      if (this.releasingCaptureForPointer.delete(e.pointerId)) return;
       this.onPinchEnd(e);
       this.onSwipeLookEnd(e);
     });
@@ -492,15 +494,19 @@ export class MobileControls {
     this.bindButton('mobile-donate', () => this.callbacks.onDonate());
     this.bindButton('mobile-emote', () => this.callbacks.onEmotes());
     this.bindButton('mobile-arena', () => this.callbacks.onArena());
+    this.bindButton('mobile-dfinder', () => this.callbacks.onDungeonFinder());
     this.bindButton('mobile-valecup', () => this.callbacks.onValeCup());
     this.bindButton('mobile-quest', () => this.callbacks.onQuestLog());
     this.bindButton('mobile-char', () => this.callbacks.onCharacter());
     this.bindButton('mobile-bags', () => this.callbacks.onBags());
+    this.bindButton('mobile-crafting', () => this.callbacks.onCrafting());
     this.bindButton('mobile-spellbook', () => this.callbacks.onSpellbook());
     this.bindButton('mobile-talents', () => this.callbacks.onTalents());
     this.bindButton('mobile-map', () => this.callbacks.onMap());
     this.bindButton('mobile-leaderboard', () => this.callbacks.onLeaderboard());
     this.bindButton('mobile-daily-rewards', () => this.callbacks.onDailyRewards());
+    this.bindButton('mobile-deeds', () => this.callbacks.onDeeds());
+    this.bindButton('mobile-professions', () => this.callbacks.onProfessions());
     const nameplatesBtn = document.getElementById('mobile-nameplates');
     this.bindButton('mobile-nameplates', () => {
       const on = this.callbacks.onNameplates();
@@ -514,16 +520,25 @@ export class MobileControls {
       musicBtn?.classList.toggle('mm-muted', !on);
     });
     this.bindHapticsToggle('mobile-haptics');
-    this.bindMenuCollapseToggle('mobile-menu-collapse-toggle');
     this.bindButton('mobile-more', () => {
       const open = !document.body.classList.contains('mobile-more-open');
-      this.root?.classList.toggle('expanded', open);
-      document.body.classList.toggle('mobile-more-open', open);
-      // No inline positioning here: the drawer is centered by the stylesheet
-      // (hud.mobile.css). The old inline left/top/transform write raced the Hud
-      // window observer, whose show-time mobile clear wiped it on the FIRST
-      // open of a session and dropped the drawer onto the (then broken)
-      // stylesheet transform, so the first open landed half off-screen.
+      if (!open) {
+        this.closeMoreModal();
+        return;
+      }
+      this.root?.classList.add('expanded');
+      document.body.classList.add('mobile-more-open');
+      if (open) {
+        const modal = document.getElementById('mobile-extra-controls');
+        if (modal) {
+          modal.style.left = '50%';
+          modal.style.top = '50%';
+          modal.style.right = 'auto';
+          modal.style.bottom = 'auto';
+          modal.style.transform = 'translate(-50%, -50%)';
+          delete modal.dataset.windowMoved;
+        }
+      }
     });
   }
 
@@ -581,6 +596,12 @@ export class MobileControls {
       triggerHaptic(HAPTIC_TAP, this.hapticsOn);
       if (button.closest('#mobile-extra-controls')) {
         this.closeMoreModal();
+        // Establish the More trigger as the destination window's return target
+        // before its synchronous callback captures focus. The body-class
+        // observer then releases the old More trap without restoring it and
+        // focuses the newly opened window, avoiding focus inside aria-hidden
+        // More content during the modal-to-modal handoff.
+        document.getElementById('mobile-more')?.focus();
       }
       cb();
     };
@@ -642,43 +663,6 @@ export class MobileControls {
         : t('hudChrome.mobile.hapticsOff');
   }
 
-  /** The menu-cluster collapse handle: an always-visible arrow chip that shows or
-   *  hides the five top-left menu buttons (Chat/Social/Quests/Settings/More).
-   *  Like the haptics toggle it is a STATEFUL, persisted toggle reflected via
-   *  aria-expanded, so it bypasses bindButton (no More-tray auto-close, no
-   *  callback). It touches ONLY the mobile-menu-open body class the CSS reveal
-   *  keys off, so the consumables bar and the action ring stay put. */
-  private bindMenuCollapseToggle(id: string): void {
-    const button = document.getElementById(id);
-    if (!button) return;
-    // Apply the persisted state up front so the arrow and <body> agree before the
-    // first tap (the static markup ships collapsed; a stored expand re-opens it).
-    this.syncMenuCollapseToggle(button);
-    bindTouchTap(button, (e) => {
-      if (!this.active) return;
-      e.preventDefault();
-      triggerHaptic(HAPTIC_TAP, this.hapticsOn);
-      this.menuExpanded = !this.menuExpanded;
-      saveMenuExpanded(this.menuExpanded);
-      this.syncMenuCollapseToggle(button);
-      button.blur();
-    });
-  }
-
-  /** Reflect the collapse state: the mobile-menu-open body class the CSS reveal
-   *  keys off, the arrow's aria-expanded, and its show/hide accessible name (both
-   *  the aria-label and the title come from t(), matching guide/chrome.ts's menu
-   *  toggle). */
-  private syncMenuCollapseToggle(button: HTMLElement): void {
-    document.body.classList.toggle('mobile-menu-open', this.menuExpanded);
-    button.setAttribute('aria-expanded', this.menuExpanded ? 'true' : 'false');
-    const label = this.menuExpanded
-      ? t('hudChrome.mobile.hideMenuButtons')
-      : t('hudChrome.mobile.showMenuButtons');
-    button.setAttribute('aria-label', label);
-    button.setAttribute('title', label);
-  }
-
   /** The Chat button taps to open the keyboard composer, but a long press toggles
    * a read-only "peek" at the chat/combat log without raising the keyboard — so
    * touch players can follow whispers, party chat, loot and combat text while the
@@ -686,17 +670,11 @@ export class MobileControls {
   private bindChatButton(id: string): void {
     const button = document.getElementById(id);
     if (!button) return;
-    const cancel = () => {
-      if (this.chatPressTimer !== null) {
-        clearTimeout(this.chatPressTimer);
-        this.chatPressTimer = null;
-      }
-    };
     button.addEventListener('pointerdown', (e) => {
       if (!this.active) return;
       e.preventDefault();
       this.chatLongFired = false;
-      cancel();
+      this.cancelChatPress();
       this.chatPressTimer = setTimeout(() => {
         this.chatLongFired = true;
         this.chatPressTimer = null;
@@ -706,11 +684,25 @@ export class MobileControls {
     button.addEventListener('pointerup', (e) => {
       if (!this.active) return;
       e.preventDefault();
-      cancel();
+      this.cancelChatPress();
       if (!this.chatLongFired) this.tapChat();
     });
-    button.addEventListener('pointercancel', cancel);
-    button.addEventListener('pointerleave', cancel);
+    button.addEventListener('pointercancel', () => this.cancelChatPress());
+    button.addEventListener('pointerleave', () => this.cancelChatPress());
+  }
+
+  /** Cancel a pending chat long-press timer (a tap or drag off the button, or the
+   *  gesture being interrupted before it completes) so it can never fire blind
+   *  after the fact. Only touches chatLongFired while the timer is still pending
+   *  (it is already false there); once the timer has fired, chatPressTimer is
+   *  already null and this is a no-op, so a completed long press is never
+   *  reopened as a tap by a later release. */
+  private cancelChatPress(): void {
+    if (this.chatPressTimer !== null) {
+      clearTimeout(this.chatPressTimer);
+      this.chatPressTimer = null;
+      this.chatLongFired = false;
+    }
   }
 
   /** Toggle the read-only chat-log peek. Opening a peek closes the full chat first (so a
@@ -1033,41 +1025,43 @@ export class MobileControls {
   }
 
   private onPinchEnd(e: PointerEvent): void {
-    // Idempotent: the canvas handler and the window-level forwarder both call
-    // this for a canvas pointerup, so only the first delete does any work.
+    // Canvas releases also reach the window listener, so only the first event
+    // for this pointer may change the gesture state.
     if (!this.pinchPointers.delete(e.pointerId)) return;
-    // Re-baseline from the SURVIVING pair on a 3->2 transition: the old baseline
-    // was measured between the original first two pointers (currentPinchDist
-    // reads insertion order), so keeping it across a different surviving pair
-    // applied one discontinuous zoom step on the next move.
     if (this.pinchPointers.size < 2) this.pinchPrevDist = null;
     else this.pinchPrevDist = this.currentPinchDist();
-    // A pinch degrading to exactly one remaining finger hands that finger back
-    // to camera drag (swipe-look), so the player can keep rotating without a
-    // re-touch. Pinch pointers only ever come from canvas pointerdowns, so the
-    // remaining finger is a legitimate camera-surface touch.
+
     if (
-      this.pinchPointers.size !== 1 ||
       !this.active ||
+      this.pinchPointers.size !== 1 ||
       this.swipeLookPointer !== null ||
       this.lookPointer !== null ||
       document.body.classList.contains('mobile-window-open')
     )
       return;
+
     const remainingId = this.pinchPointers.keys().next().value;
     if (remainingId === undefined) return;
-    const pos = this.pinchPointers.get(remainingId);
-    if (!pos) return;
-    this.touchOwners.set(remainingId, 'camera');
+    const position = this.pinchPointers.get(remainingId);
+    if (!position) return;
+
+    const owner = this.touchOwners.get(remainingId);
+    const adoptedOwner = owner === 'groundAim' ? 'groundAim' : 'camera';
+    this.touchOwners.set(remainingId, adoptedOwner);
     this.swipeLookPointer = remainingId;
-    this.swipeLookStartX = pos.x;
-    this.swipeLookStartY = pos.y;
-    this.swipeLookLastX = pos.x;
-    this.swipeLookLastY = pos.y;
+    this.swipeLookStartX = position.x;
+    this.swipeLookStartY = position.y;
+    this.swipeLookLastX = position.x;
+    this.swipeLookLastY = position.y;
     this.swipeLookActive = false;
     this.swipeLookDownAt = this.now();
     this.swipeLookResync = true;
     this.swipeLookAdopted = true;
+    // Re-capturing the surviving finger supersedes the deliberate release
+    // performed when the pinch began. Browsers may then suppress that older
+    // lostpointercapture event, so its marker must not be allowed to swallow a
+    // later, genuine capture loss for the newly adopted camera drag.
+    this.releasingCaptureForPointer.delete(remainingId);
     try {
       this.canvas?.setPointerCapture(remainingId);
     } catch {
@@ -1100,7 +1094,8 @@ export class MobileControls {
     const target = e.target as unknown as TouchRouterTarget | null;
     const menuOpen = document.body.classList.contains('mobile-window-open');
     if (!isCameraDragAllowedAt(target, menuOpen)) return;
-    this.touchOwners.set(e.pointerId, 'camera');
+    const groundAimOwnsPointer = this.callbacks.onGroundAimMove(e.clientX, e.clientY);
+    this.touchOwners.set(e.pointerId, groundAimOwnsPointer ? 'groundAim' : 'camera');
     this.swipeLookPointer = e.pointerId;
     this.swipeLookStartX = e.clientX;
     this.swipeLookStartY = e.clientY;
@@ -1117,6 +1112,19 @@ export class MobileControls {
 
   private onSwipeLookMove(e: PointerEvent): void {
     if (
+      this.active &&
+      e.pointerId === this.swipeLookPointer &&
+      this.touchOwners.get(e.pointerId) === 'groundAim'
+    ) {
+      if (document.body.classList.contains('mobile-window-open')) {
+        this.releaseSwipeLook();
+        return;
+      }
+      this.callbacks.onGroundAimMove(e.clientX, e.clientY);
+      e.preventDefault();
+      return;
+    }
+    if (
       !this.active ||
       e.pointerId !== this.swipeLookPointer ||
       this.pinchPointers.size > 1 ||
@@ -1128,9 +1136,6 @@ export class MobileControls {
       this.releaseSwipeLook();
       return;
     }
-    // First move after a pinch-degrade adoption: the tracked position may be
-    // stale, so resync the origin to the live finger instead of applying the
-    // gap as a camera jump.
     if (this.swipeLookResync) {
       this.swipeLookResync = false;
       this.swipeLookStartX = e.clientX;
@@ -1156,8 +1161,18 @@ export class MobileControls {
   }
 
   private onSwipeLookEnd(e: PointerEvent): void {
+    const owner = this.touchOwners.get(e.pointerId);
     this.touchOwners.release(e.pointerId);
     if (e.pointerId !== this.swipeLookPointer) return;
+    if (owner === 'groundAim') {
+      e.preventDefault();
+      if (!this.swipeLookAdopted && e.type === 'pointerup') {
+        this.callbacks.onGroundAimTap(e.clientX, e.clientY);
+      }
+      this.lastSwipeTapAt = 0;
+      this.releaseSwipeLook();
+      return;
+    }
     if (this.swipeLookActive) e.preventDefault();
     // Double-tap-to-recenter on the swipe-look path: the camera joystick is
     // opt-in (hidden by default, settings.mobileCameraJoystick), so this is
@@ -1165,12 +1180,15 @@ export class MobileControls {
     // never crossed the swipe deadzone (never became a drag); two of those in
     // quick succession recenter the camera, mirroring the joystick logic.
     const now = this.now();
-    // A pinch remnant adopted mid-gesture is never a "tap": without this guard
-    // two quick pinch releases could fire a surprise camera recenter.
     const quickTap =
       !this.swipeLookAdopted &&
       !this.swipeLookActive &&
       now - this.swipeLookDownAt <= RECENTER_DOUBLE_TAP_MS;
+    if (quickTap && this.callbacks.onGroundAimTap(e.clientX, e.clientY)) {
+      this.lastSwipeTapAt = 0;
+      this.releaseSwipeLook();
+      return;
+    }
     if (quickTap && isRecenterDoubleTap(this.lastSwipeTapAt, now, this.swipeLookActive)) {
       this.callbacks.onRecenterCamera();
       this.lastSwipeTapAt = 0;
@@ -1184,6 +1202,7 @@ export class MobileControls {
     if (this.swipeLookPointer !== null) {
       try {
         if (this.canvas?.hasPointerCapture?.(this.swipeLookPointer)) {
+          this.releasingCaptureForPointer.add(this.swipeLookPointer);
           this.canvas.releasePointerCapture(this.swipeLookPointer);
         }
       } catch {

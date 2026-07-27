@@ -5,16 +5,17 @@ import {
   classDistribution,
   clientPerfRaw,
   clientPerfSummary,
+  dailyRewardPointEvents,
   levelDistribution,
   listAccounts,
   listCharacters,
   listModerationActions,
   listSharedIps,
   onlineHistory,
-  overviewCounts,
   registrationsByDay,
   sessionsByDay,
 } from './admin_db';
+import { readOverviewCounts } from './admin_overview_cache';
 import {
   type AdminPermission,
   ASSIGNABLE_ADMIN_ROLES,
@@ -47,7 +48,9 @@ import {
   updateFilterConfig,
   type WordTier,
 } from './chat_filter_db';
+import { currentDailyRewardDay } from './daily_rewards';
 import {
+  accountAndScopeForToken,
   accountById,
   accountAndScopeForToken,
   accountForToken,
@@ -55,6 +58,7 @@ import {
   accountMailTarget,
   findAccount,
   isAdminAccount,
+  loadAccountFlair,
   pool,
   revokeTokensExcept,
   saveToken,
@@ -91,6 +95,8 @@ import {
   moderationReportsForAccount,
   muteAccountChat,
   recordPasswordReset,
+  setAccountAiFlag,
+  setAccountStreamerFlair,
   setDailyRewardsBan,
   setDailyRewardsIpBan,
 } from './moderation_db';
@@ -105,9 +111,10 @@ import {
 } from './staff_db';
 import { PgUserAssetsDb } from './user_assets_db';
 
-// Admin API: everything under /admin/api/*. Auth is a bearer token whose
-// account has at least one staff role (accounts.admin_roles; is_admin stays
-// the derived "is staff" flag): the admin.* hostname is routing, not security.
+// Admin API: everything under /admin/api/*. Auth is an exact full-scope bearer
+// token whose account has at least one staff role (accounts.admin_roles;
+// is_admin stays the derived "is staff" flag): the admin.* hostname is routing,
+// not security.
 // Authorization is per route: every route is declared with a permission in
 // admin_routes.ts and gated centrally in handleAdminApi before any handler
 // runs, so a route absent from that table can never execute.
@@ -119,6 +126,42 @@ const ACTIVITY_WINDOW_DAYS = 30;
 const ANTIBOT_CONFIG_NOTE_MAX = 500;
 
 const IP_BLOCK_KICK_MESSAGE = 'Connection to the server was lost.';
+
+// Account-flair validation messages. Named constants so the two dispatch twins (the
+// legacy handleAdminApi arm and the RouteDef handler) can never drift, and so the
+// dashboard has a stable string to map onto its own i18n key. `invalid streamer
+// link` is raised by moderation_db.setAccountStreamerFlair and surfaces through the
+// same err.message path every other admin write uses.
+const AI_FLAG_REQUIRED = 'ai must be a boolean';
+const STREAMER_FLAG_REQUIRED = 'streamer must be a boolean';
+const STREAMER_LINKS_REQUIRED = 'a links object is required';
+const ACCOUNT_FLAIR_FAILED = 'failed to update account flair';
+const DAILY_REWARD_EVENT_DAY_REQUIRED = 'a valid daily rewards date is required';
+
+async function dailyRewardEventDay(value: string | null): Promise<string | null> {
+  if (value === null) return currentDailyRewardDay();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
+  const parsed = new Date(`${value}T00:00:00.000Z`);
+  return Number.isFinite(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value
+    ? value
+    : null;
+}
+
+/**
+ * Decode the request's `links` bag, three-valued:
+ *  - an object: the bag REPLACES the stored links (an explicit `{}` clears them);
+ *  - `undefined` (key absent): LEAVE the stored links alone. The dashboard's three
+ *    streamer actions (mark / unmark / save links) all send the full bag, but a caller
+ *    that sends only the flag must never wipe an account's links by omission, and
+ *    unmarking a streamer deliberately keeps them (wireStreamerLinks is what stops
+ *    them shipping, so stored-but-not-shipped is the correct state);
+ *  - `null`: malformed (an array or a scalar), which the handler turns into a 400.
+ */
+function streamerLinksBody(value: unknown): Record<string, unknown> | null | undefined {
+  if (value === undefined || value === null) return undefined;
+  if (typeof value !== 'object' || Array.isArray(value)) return null;
+  return value as Record<string, unknown>;
+}
 
 // Map editor moderation reads/writes go straight to the db layer (like the
 // other *_db imports here); the player-facing rules stay in maps.ts. LAZY
@@ -238,9 +281,9 @@ interface AdminIdentity {
 async function adminIdentity(req: http.IncomingMessage): Promise<AdminIdentity | null> {
   const m = /^Bearer ([a-f0-9]{64})$/.exec(req.headers.authorization ?? '');
   if (!m) return null;
-  const scoped = await accountAndScopeForToken(m[1]);
-  if (scoped === null || scoped.scope !== 'full') return null;
-  const accountId = scoped.accountId;
+  const account = await accountAndScopeForToken(m[1]);
+  if (account === null || account.scope !== 'full') return null;
+  const accountId = account.accountId;
   const staff = await adminRolesForAccount(accountId);
   if (staff === null) return null;
   return {
@@ -521,6 +564,7 @@ export async function handleAdminApi(
           adminAccountId: accountId,
           banned: dailyRewardsBanMatch[2] === 'ban',
           reason: body.reason,
+          durationHours: body.durationHours,
         });
         return ok(res, { ok: true });
       } catch (err) {
@@ -655,6 +699,52 @@ export async function handleAdminApi(
       }
     }
 
+    // Account flair: the AI-operated mark and an official streamer's links. Both
+    // are cosmetic and non-punitive, so (unlike suspend/ban/chat-mute) there is
+    // deliberately NO isAdminAccount guard: marking a staff account as a streamer
+    // is a legitimate edit (a developer who streams), and no reason is required.
+    // The write is still audited, and the live push lands the change on a connected
+    // player with no reconnect (the identity diff re-broadcasts it).
+    const aiFlagMatch = /^\/admin\/api\/accounts\/(\d+)\/ai$/.exec(path);
+    if (req.method === 'POST' && aiFlagMatch) {
+      const targetAccountId = Number(aiFlagMatch[1]);
+      const body = await readBody(req);
+      if (typeof body.ai !== 'boolean') return fail(res, 400, AI_FLAG_REQUIRED);
+      try {
+        await setAccountAiFlag({
+          accountId: targetAccountId,
+          adminAccountId: accountId,
+          ai: body.ai,
+          reason: body.reason,
+        });
+        game.applyAccountFlairLive(targetAccountId, await loadAccountFlair(targetAccountId));
+        return ok(res, { ok: true });
+      } catch (err) {
+        return fail(res, 400, err instanceof Error ? err.message : ACCOUNT_FLAIR_FAILED);
+      }
+    }
+    const streamerFlairMatch = /^\/admin\/api\/accounts\/(\d+)\/streamer$/.exec(path);
+    if (req.method === 'POST' && streamerFlairMatch) {
+      const targetAccountId = Number(streamerFlairMatch[1]);
+      const body = await readBody(req);
+      if (typeof body.streamer !== 'boolean') return fail(res, 400, STREAMER_FLAG_REQUIRED);
+      const links = streamerLinksBody(body.links);
+      if (links === null) return fail(res, 400, STREAMER_LINKS_REQUIRED);
+      try {
+        await setAccountStreamerFlair({
+          accountId: targetAccountId,
+          adminAccountId: accountId,
+          streamer: body.streamer,
+          links,
+          reason: body.reason,
+        });
+        game.applyAccountFlairLive(targetAccountId, await loadAccountFlair(targetAccountId));
+        return ok(res, { ok: true });
+      } catch (err) {
+        return fail(res, 400, err instanceof Error ? err.message : ACCOUNT_FLAIR_FAILED);
+      }
+    }
+
     // Chat filter: word list + escalation config management. Every edit reloads
     // the live filter and pushes the new soft list to connected clients.
     if (req.method === 'POST' && path === '/admin/api/chat-filter/words') {
@@ -758,12 +848,13 @@ export async function handleAdminApi(
     }
 
     if (path === '/admin/api/overview') {
-      const counts = await overviewCounts();
+      const counts = await readOverviewCounts();
       const serverStats = game.adminStats();
       return ok(res, {
         ...counts,
         peakOnlineToday: Math.max(counts.peakOnlineToday, serverStats.online),
         peakOnlineAllTime: Math.max(counts.peakOnlineAllTime, serverStats.online),
+        playersCap: adminPlayersCap(),
         server: {
           ...serverStats,
           peakOnline: Math.max(
@@ -911,6 +1002,15 @@ export async function handleAdminApi(
         blockedIps: getBlockedIpsForAccount(game, detail),
       });
     }
+    const dailyRewardEventsMatch = /^\/admin\/api\/accounts\/(\d+)\/daily-rewards-events$/.exec(
+      path,
+    );
+    if (dailyRewardEventsMatch) {
+      const day = await dailyRewardEventDay(url.searchParams.get('day'));
+      if (!day) return fail(res, 400, DAILY_REWARD_EVENT_DAY_REQUIRED);
+      const limit = Number(url.searchParams.get('limit') ?? '100');
+      return ok(res, await dailyRewardPointEvents(Number(dailyRewardEventsMatch[1]), day, limit));
+    }
     const detailMatch = /^\/admin\/api\/accounts\/(\d+)$/.exec(path);
     if (detailMatch) {
       const id = Number(detailMatch[1]);
@@ -982,15 +1082,15 @@ export async function handleAdminApi(
 //    internal throw). The happy + guard paths never reach withErrors.
 //
 //  - AUTH is the legacy-body admin gate (createRequireAdmin), mirroring
-//    adminIdentity(req) EXACTLY: bearer -> accountAndScopeForToken -> full scope ->
-//    staff_db.adminRolesForAccount (fail closed; no roles means not staff), a
+//    adminIdentity(req) EXACTLY (v0.22.0 staff roles): bearer -> scoped token
+//    resolver (full required) -> staff_db.adminRolesForAccount (fail closed), a
 //    uniform 401 { ...error: 'admin authentication required' } on any failure, then
 //    the CENTRAL AUTHORIZATION gate: the route's declared permission resolves from
 //    ADMIN_ROUTE_PERMISSIONS (server/admin_routes.ts) against the concrete request
 //    path, fail-closed (unmapped -> 404 'unknown admin endpoint' / 405; missing
 //    permission -> 403), mirroring the legacy handleAdminApi preamble byte-for-byte.
-//    Read-only companion tokens are rejected; no moderation gate applies. Mounted
-//    on every route except login (anonymous by design).
+//    Read-scope tokens receive the same uniform 401 as every other invalid admin
+//    credential. No moderation gate applies. Mounted on every route except login.
 //    requireAdmin runs BEFORE the :id / :action decode, so an unauthenticated
 //    malformed request 401s exactly as legacy did (auth precedes route/method).
 //
@@ -1046,6 +1146,9 @@ export type AdminRuntime = Pick<
   | 'muteAccountChat'
   | 'liftChatMuteLive'
   | 'resetChatStrikesLive'
+  // Push an operator's account-flair edit onto the account's live session, so the
+  // AI mark / streamer links change without a reconnect.
+  | 'applyAccountFlairLive'
   | 'reloadChatFilter'
   | 'reloadBlockedIps'
   | 'disconnectByIp'
@@ -1075,6 +1178,31 @@ function useAdminRuntime(): AdminRuntime {
   return runtime;
 }
 
+// The realm player cap for the overview. It rides its OWN tiny seam, NOT AdminRuntime:
+// AdminRuntime is a Pick<GameServer> and main.ts injects the live GameServer by value,
+// but the cap is canonicalPlayersCap() (a main.ts module function, not a GameServer
+// method), so it cannot flow through the Pick. Both overview arms read this one accessor
+// so the field stays byte-identical across the legacy and RouteDef dispatch paths (the
+// dual-arm rule). Unlike useAdminRuntime, an unconfigured read returns 0 rather than
+// throwing: 0 is the same "cap disabled" sentinel canonicalPlayersCap emits, so a wiring
+// gap degrades one cosmetic StatCard to 0 instead of failing the whole overview response.
+let playersCapSource: (() => number) | null = null;
+
+/** Inject the realm player-cap source (canonicalPlayersCap) at boot. */
+export function configureAdminPlayersCap(fn: () => number): void {
+  playersCapSource = fn;
+}
+
+/** Clear the injected cap source so a unit test can install its own. */
+export function resetAdminPlayersCapForTests(): void {
+  playersCapSource = null;
+}
+
+/** The realm player cap for the overview, or 0 when unconfigured (cap disabled). */
+function adminPlayersCap(): number {
+  return playersCapSource ? playersCapSource() : 0;
+}
+
 // The DB reads/writes (plus the login-path auth + rate-limit primitives) the admin
 // route layer needs, bundled behind a test-only setter so they can be driven with a
 // fake and no Postgres; production never calls the setter. The same functions the
@@ -1092,13 +1220,17 @@ function makeRealAdminDb() {
     classDistribution,
     clientPerfRaw,
     clientPerfSummary,
+    dailyRewardPointEvents,
     levelDistribution,
     listAccounts,
     listCharacters,
     listModerationActions,
     listSharedIps,
     onlineHistory,
-    overviewCounts,
+    // Cache-backed (the shared admin overview memo; both dispatch arms read it):
+    // a setAdminDbForTests override still replaces this member outright, which
+    // bypasses the cache and keeps existing fakes exact.
+    overviewCounts: readOverviewCounts,
     registrationsByDay,
     sessionsByDay,
     listBugReports,
@@ -1144,6 +1276,11 @@ function makeRealAdminDb() {
     recordPasswordReset,
     setDailyRewardsBan,
     setDailyRewardsIpBan,
+    // Account flair: the two audited writes plus the read-back the live push sends
+    // (the DB row, never the request body, is the source of truth for what ships).
+    setAccountAiFlag,
+    setAccountStreamerFlair,
+    loadAccountFlair,
     emailSecurityIncident,
     providerUsageSnapshot,
     rateLimited,
@@ -1184,7 +1321,7 @@ export function resetAdminDbForTests(): void {
   adminDbOverride = undefined;
 }
 
-// The admin-auth gate reads its two db functions (accountAndScopeForToken,
+// The admin-auth gate reads its two db functions (accountAndScopeForToken and
 // adminRolesForAccount) off the active bundle, so a setAdminDbForTests fake drives
 // it too. AdminDb is a superset of AdminAuthDb, so the getter is assignable.
 const requireAdmin = createRequireAdmin((): AdminAuthDb => adminDb());
@@ -1240,6 +1377,7 @@ async function overviewHandler(ctx: Ctx): Promise<void> {
     ...counts,
     peakOnlineToday: Math.max(counts.peakOnlineToday, serverStats.online),
     peakOnlineAllTime: Math.max(counts.peakOnlineAllTime, serverStats.online),
+    playersCap: adminPlayersCap(),
     server: {
       ...serverStats,
       peakOnline: Math.max(serverStats.peakOnline, counts.peakOnlineAllTime, serverStats.online),
@@ -1630,6 +1768,7 @@ async function dailyRewardsBanHandler(ctx: Ctx): Promise<void> {
       adminAccountId: ctxAccountId(ctx),
       banned,
       reason: body.reason,
+      durationHours: body.durationHours,
     });
     return ok(ctx.res, { ok: true });
   } catch (err) {
@@ -1778,6 +1917,14 @@ async function accountDetailHandler(ctx: Ctx): Promise<void> {
   ok(ctx.res, { ...detail, online: rt.liveAccountIds().has(id) });
 }
 
+/** GET /admin/api/accounts/:id/daily-rewards-events: bounded point-award ledger. */
+async function dailyRewardPointEventsHandler(ctx: Ctx): Promise<void> {
+  const day = await dailyRewardEventDay(ctx.url.searchParams.get('day'));
+  if (!day) return fail(ctx.res, 400, DAILY_REWARD_EVENT_DAY_REQUIRED);
+  const limit = Number(ctx.url.searchParams.get('limit') ?? '100');
+  ok(ctx.res, await adminDb().dailyRewardPointEvents(adminTargetId(ctx), day, limit));
+}
+
 /**
  * POST /admin/api/accounts/:id/reset-password: set a new password on any account.
  * Audit row first (no live effect without its record), then the credential write,
@@ -1818,6 +1965,60 @@ async function resetPasswordHandler(ctx: Ctx): Promise<void> {
     return ok(ctx.res, { ok: true });
   } catch (err) {
     return fail(ctx.res, 400, err instanceof Error ? err.message : 'password reset failed');
+  }
+}
+
+/**
+ * POST /admin/api/accounts/:id/ai: mark the account as AI-operated (or clear it).
+ * Cosmetic and non-punitive: no reason is required and, unlike suspend/ban/chat-mute,
+ * there is NO isAdminAccount guard (a staff account can legitimately carry flair).
+ * The audited write lands first, then the freshly-read flair is pushed to any live
+ * session so a connected player sees it without reconnecting.
+ */
+async function accountAiFlagHandler(ctx: Ctx): Promise<void> {
+  const rt = useAdminRuntime();
+  const targetAccountId = adminTargetId(ctx);
+  const body = await readBody(ctx.req);
+  if (typeof body.ai !== 'boolean') return fail(ctx.res, 400, AI_FLAG_REQUIRED);
+  try {
+    await adminDb().setAccountAiFlag({
+      accountId: targetAccountId,
+      adminAccountId: ctxAccountId(ctx),
+      ai: body.ai,
+      reason: body.reason,
+    });
+    rt.applyAccountFlairLive(targetAccountId, await adminDb().loadAccountFlair(targetAccountId));
+    return ok(ctx.res, { ok: true });
+  } catch (err) {
+    return fail(ctx.res, 400, err instanceof Error ? err.message : ACCOUNT_FLAIR_FAILED);
+  }
+}
+
+/**
+ * POST /admin/api/accounts/:id/streamer: set the streamer flag + platform links.
+ * Every link is validated by normalizeStreamerLink inside the db write (https only,
+ * that platform's own hosts, no credentials): a hostile value throws before any row
+ * changes, so a rejected link never reaches the database, let alone a client.
+ */
+async function accountStreamerFlairHandler(ctx: Ctx): Promise<void> {
+  const rt = useAdminRuntime();
+  const targetAccountId = adminTargetId(ctx);
+  const body = await readBody(ctx.req);
+  if (typeof body.streamer !== 'boolean') return fail(ctx.res, 400, STREAMER_FLAG_REQUIRED);
+  const links = streamerLinksBody(body.links);
+  if (links === null) return fail(ctx.res, 400, STREAMER_LINKS_REQUIRED);
+  try {
+    await adminDb().setAccountStreamerFlair({
+      accountId: targetAccountId,
+      adminAccountId: ctxAccountId(ctx),
+      streamer: body.streamer,
+      links,
+      reason: body.reason,
+    });
+    rt.applyAccountFlairLive(targetAccountId, await adminDb().loadAccountFlair(targetAccountId));
+    return ok(ctx.res, { ok: true });
+  } catch (err) {
+    return fail(ctx.res, 400, err instanceof Error ? err.message : ACCOUNT_FLAIR_FAILED);
   }
 }
 
@@ -2072,12 +2273,38 @@ export const routes: RouteDef[] = [
     handler: accountDetailHandler,
   },
   {
+    method: 'GET',
+    path: '/admin/api/accounts/:id/daily-rewards-events',
+    surface: 'admin',
+    middleware: [requireAdmin, requireAdminTarget('account')],
+    meta: adminTargetMeta('account'),
+    handler: dailyRewardPointEventsHandler,
+  },
+  {
     method: 'POST',
     path: '/admin/api/accounts/:id/reset-password',
     surface: 'admin',
     middleware: [requireAdmin, requireAdminTarget('account')],
     meta: adminTargetMeta('account'),
     handler: resetPasswordHandler,
+  },
+
+  // Account flair: the AI-operated mark and an official streamer's platform links.
+  {
+    method: 'POST',
+    path: '/admin/api/accounts/:id/ai',
+    surface: 'admin',
+    middleware: [requireAdmin, requireAdminTarget('account')],
+    meta: adminTargetMeta('account'),
+    handler: accountAiFlagHandler,
+  },
+  {
+    method: 'POST',
+    path: '/admin/api/accounts/:id/streamer',
+    surface: 'admin',
+    middleware: [requireAdmin, requireAdminTarget('account')],
+    meta: adminTargetMeta('account'),
+    handler: accountStreamerFlairHandler,
   },
 
   // Staff-role management (release v0.22.0 fine-grained permissions).

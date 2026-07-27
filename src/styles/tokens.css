@@ -64,6 +64,11 @@
     --color-bg-dark: #08080d;
     --color-bg-input: #0a0a0f;
     --color-border-default: #4e3d1d;
+    /* The showcase hairline: the gold-brown 1px keyline the char-window stat
+       panels established and the inset-card family repeats (section cards,
+       recipe cards, pill chips, panel dividers). One token for every site so
+       the family cannot drift shade by shade. */
+    --color-border-showcase: #463a1c;
     --color-border-focus: #c8a838;
     --color-border-invalid: #ff8f85;
     --color-border-valid: #48e060;
@@ -85,6 +90,33 @@
        as the fallback when QUALITY_COLOR has no entry, so the painter carries no
        raw hex). Exact pre-existing value. */
     --color-quality-default: #fff;
+
+    /* Crafting skill-gain difficulty tints (consumer: components.css
+       .crafting-difficulty[data-difficulty], painted by crafting_window.ts as
+       a data attribute, never an inline color). The classic four-color recipe
+       intuition (Professions 2.0): full/minimal/none reuse the item-quality
+       palette literals (icons.ts QUALITY_COLOR legendary/uncommon/poor, a
+       classic-fidelity anchor), reduced is the house gold. The tint is always
+       a redundant hint beside the text label (fairness). */
+    --color-craft-full: #ff8000;
+    --color-craft-reduced: var(--gold);
+    --color-craft-minimal: #1eff00;
+    --color-craft-none: #9d9d9d;
+
+    /* The bonus-stat green the item tooltip's own gain lines speak in
+       (icons.ts QUALITY_COLOR.uncommon, the same value #tooltip .tt-green
+       carries): one token for the surfaces that must agree with those lines,
+       today the Apply Enchant picker's effect line and the enchanted bag glyph. */
+    --color-stat-bonus: #1eff00;
+    /* Bag-grid per-copy corner glyphs (components.css .bag-item .bi-glyph-*,
+       painted by bags_window.ts as a class, never an inline color). Enchanted
+       borrows the bonus-stat green above (the enchant color language); signed
+       rides the house gold like the maker's mark; bound takes a cool steel-blue
+       so the three read apart at 12px even before the shapes resolve. The shape
+       is the primary signal, the tint a redundant one (fairness). */
+    --color-bag-glyph-enchanted: var(--color-stat-bonus);
+    --color-bag-glyph-signed: var(--color-accent);
+    --color-bag-glyph-bound: #7fb0e6;
 
     /* Empty paperdoll slot greys (char_window.ts uses these so the painter carries
        no raw hex): the muted "Empty" label and the dimmed placeholder-icon border.
@@ -108,6 +140,7 @@
     --color-map-outline: #000;
     --color-map-portal-dot: #c084ff;
     --color-map-portal-label: #e0c0ff;
+    --color-map-ping: #ffd76a;
     --color-map-npc-quest: #ffd100;
     /* active-quest objective areas: the classic translucent blue quest-POI blob */
     --color-map-quest-area-fill: rgba(72, 132, 232, 0.22);
@@ -122,6 +155,7 @@
     --color-map-tree: #2f6b34;
     --color-map-oak: #4f8c3a;
     --color-map-building-outline: #1a140a;
+    --color-map-building-armoury: #315fa8;
     --color-map-building-chapel: #9b9080;
     --color-map-building-inn: #8a6233;
     --color-map-building-house: #7a5630;
@@ -151,6 +185,11 @@
     --color-minimap-outline: #000;
     --color-minimap-gather-ready: #3ef07a;
     --color-minimap-gather-cooldown: #5a5f57;
+    --color-minimap-station: #d98e4a;
+    /* Tool-tier locked gather node (Professions 2.0): a dark rust
+       clearly apart from the ready green, the cooldown olive-gray, and the
+       bright mob red, so the lock reads at minimap marker size. */
+    --color-minimap-node-locked: #8a4a3a;
 
     /* Talents window: tree arrows + tooltip accents (talents_window.ts references
        these via var() so the painter carries no raw hex). Exact pre-existing values. */
@@ -179,6 +218,12 @@
     --scrollbar-border: #7c6233;
     --app-vw: 100vw;
     --app-vh: 100vh;
+    /* #bags' own reservation half-width + gap (components.css), hoisted here so
+       any OTHER centred window that must not slide under the bottom-right bags
+       column (the vendor Goods window's width cap is the first consumer) reads
+       the SAME numbers instead of re-deriving a copy that can drift out of sync. */
+    --bags-bar-half: 306px;
+    --bags-gap: 12px;
     /* effects tier (wired by src/ui/ui_effects_applier.ts from the pure
        src/game/ui_effects_profile.ts resolver): data-fx-level (low | medium | high
        | ultra) is stamped on the document root, and these three tokens are written
@@ -193,6 +238,12 @@
     --fx-shadow: 1;
     --fx-ambient-anim: running;
     --motion-scale: 1;
+    /* Shared painted-art shadows. The color is theme-addressable and the blur
+       follows the graphics shadow tier so small decorative raster art stays
+       legible without forcing full-cost shadows on the low preset. */
+    --color-art-shadow: rgb(0 0 0 / 75%);
+    --art-shadow-sm: 0 1px calc(2px * var(--fx-shadow, 1)) var(--color-art-shadow);
+    --art-shadow-lg: 0 2px calc(5px * var(--fx-shadow, 1)) var(--color-art-shadow);
     /* Shared with src/game/cursors.ts, keep hotspots in sync.
        --cursor-arrow = default; --cursor-point = interactive/hover (gauntlet finger). */
     --cursor-arrow: url("/ui/cursors/arrow.png") 7 2, default;
@@ -203,106 +254,54 @@
     --cursor-sword: var(--cursor-point);
     --cursor-shield: var(--cursor-point);
 
-    /* Panel depth: three surface levels sharing one visual language. L0 is a
-       translucent hairline-bordered scrim over the world (86 percent alpha of
-       --panel-base); L1 aliases the existing --panel-bg gradient; L2 is the
-       same gradient composited over a fully solid dark base, for surfaces
-       (modals) that must never let the 3D world show through. */
-    --color-panel-l0-bg: rgba(21, 21, 31, 0.86); /* --panel-base #15151f at 0.86 alpha */
-    --color-panel-l0-border: var(--color-border-default);
-    --panel-l1-bg: var(--panel-bg);
-    --color-panel-l2-base: var(--color-bg-dark);
+    /* Badge halo (the static "stand out" glow), shared by the holder and
+       contributor ladders. The hue is supplied per tier by the nameplate/inspect
+       painter via --holder-glow / --dev-glow; these two tunables set the blur
+       strength only, frozen from in-game nameplate screenshots: subtle for the
+       ordinary rungs, moderately stronger for the apex rungs (holder band IV
+       regalia; the significant-contributor dev tiers). Cosmetic and static (no
+       per-frame cost). */
+    --holder-halo: 2.5px;
+    --holder-halo-strong: 4px;
 
-    /* Window chrome: shared titlebar height (touch variant) and ornament size;
-       ornaments themselves render only at fx medium+. */
-    --window-titlebar-h: 40px;
-    --window-titlebar-h-touch: 48px;
-    --window-title-color: var(--color-gold);
-    --window-border: var(--color-border-default);
-    --window-ornament-size: 12px;
+    /* DESIGN.md section 4.3's gold ramp (adopted 2026-07-15), the exact classic-
+       preset hex values. Purely additive: no existing --gold/--border consumer is
+       retuned. Two readers today: the #options-menu.perf-wide gilded ornament
+       (below, and src/ui/perf_ornament_svg.ts) and the minimap disc's gilded
+       ring (src/ui/minimap_gilded_ornament.ts); a future repo-wide DESIGN.md
+       Phase 1 token pass can reuse these names verbatim. */
+    --color-gold-900: #4a2f10;
+    --color-gold-800: #6b4517;
+    --color-gold-700: #926321;
+    --color-gold-600: #bc8732;
+    --color-gold-500: #d8a645;
+    --color-gold-400: #f0c86d;
+    --color-gold-300: #ffe5a3;
 
-    /* Modal overlay scrim: black at ~55 percent alpha, with an optional
-       backdrop blur (the low fx tier force-drops backdrop-filter above, so a
-       low-tier player still gets the solid translucent fallback). */
-    --color-scrim: rgba(0, 0, 0, 0.55);
-    --scrim-blur: 4px;
-
-    /* Combat urgency: emphasis colours layered over baseline cues, never the
-       only cue. --color-urgency-warn is the established aggro-orange value
-       (kept standalone, matching --color-delve-mob-aggro / --color-minimap-mob-aggro
-       above); --color-urgency-danger aliases --color-hostile. The theme system
-       (src/ui/theme.ts) recomputes both per preset so they stay readable on a
-       light panel. */
-    --color-urgency-warn: #ff8800;
-    --color-urgency-danger: var(--color-hostile);
-
-    /* Rarity: mirrors the QUALITY_COLOR table in src/ui/icons.ts verbatim
-       (poor/common/uncommon/rare/epic/legendary) so CSS borders can share the
-       same values as the canvas icon frames without either side hand-syncing
-       hex. --color-quality-default (below, pre-existing) covers no-quality. */
-    --color-quality-poor: #9d9d9d;
-    --color-quality-common: #ffffff;
-    --color-quality-uncommon: #1eff00;
-    --color-quality-rare: #0070dd;
-    --color-quality-epic: #a335ee;
-    --color-quality-legendary: #ff8000;
-
-    /* Focus ring: one shared token set for a single :focus-visible rule;
-       forced-colors: active swaps to the system Highlight colour instead. */
-    --focus-ring-color: var(--color-border-focus);
-    --focus-ring-width: 2px;
-    --focus-ring-offset: 2px;
-
-    /* Notification priority: colour per severity plus auto-dismiss timing
-       (critical persists and is not auto-dismissed by either duration). The
-       theme system (src/ui/theme.ts) recomputes the success / warning /
-       critical colours per preset so a badge border stays readable on a light
-       panel; these are the pre-theme :root defaults. */
-    --color-notify-info: var(--color-border-default);
-    --color-notify-success: var(--color-text-success);
-    --color-notify-warning: var(--color-urgency-warn);
-    --color-notify-critical: var(--color-text-error);
-    --notify-dur-short: 3000ms;
-    --notify-dur-long: 6000ms;
-
-    /* Motion durations: every new animated duration is authored as
-       calc(var(--dur-*) * var(--motion-scale)), inheriting the existing
-       reduced-motion behaviour for free. */
-    --dur-fast: 120ms;
-    --dur-base: 200ms;
-    --dur-slow: 300ms;
-
-    /* Density and type scale. The 16px touch input floor stays in base.css
-       (its !important rule is the guard) and is not re-tokenized here. */
-    --control-h-compact: 28px;
-    --control-h: 36px;
-    --control-h-touch: 44px;
-    --touch-min: 40px;
-    /* Comfortable slot-cell floor for the item grids (bags/bank cells and the
-       bag-bar sockets) on EVERY pointer kind: the old 42px desktop density read
-       too small in the large resizable AAA-framed windows (auto-fill minted new
-       columns instead of growing the cells), so desktop now shares the floor the
-       touch fix established. */
-    --slot-cell: 56px;
-    /* Touch twin of --slot-cell: --touch-min is the bare tap-target minimum, but
-       a grid of icon squares at that density reads too small on a phone (live
-       user feedback on the bank 50/50 dock). Touch re-tracks the slot grids to
-       this floor and lets them reflow to fewer columns; kept as its OWN token so
-       the touch tap-size guarantee stands even if the desktop floor diverges. */
-    --touch-cell: 56px;
-    /* Esc menu redesign (The Warden's Codex): the recessed category rail width.
-       A structural length (never themed), collapsed to an icon strip under 900px
-       effective width by the options grammar in components.css. */
-    --opt-rail-w: 208px;
-    --text-xs: 12px;
-    --text-sm: 13px;
-    --text-md: 15px;
-    --text-lg: 18px;
-    --text-title: 22px;
-
-    /* Parchment grain: an inline feTurbulence SVG data-URI, applied only at
-       fx high/ultra (below); none elsewhere so low/medium pay nothing for it. */
-    --texture-parchment: none;
+    /* Performance Overlay gilded-ornament shape defaults. perf_ornament_svg.ts
+       overwrites these with the real generated mask-image/gradient values once at
+       boot (applyPerfOrnamentVars, called next to hydrateIcons() in main.ts); an
+       unset custom property makes mask-image compute to `none`, which would show
+       the pseudo-element's `background` as an opaque rectangle over the title/edge
+       instead of just doing nothing, so every one of these needs a real (if inert)
+       fallback rather than being left undefined. */
+    --perf-ornament-corner: linear-gradient(transparent, transparent);
+    --perf-ornament-mid-edge: linear-gradient(transparent, transparent);
+    --perf-ornament-edge-top: linear-gradient(transparent, transparent);
+    --perf-ornament-edge-bottom: linear-gradient(transparent, transparent);
+    --perf-ornament-edge-left: linear-gradient(transparent, transparent);
+    --perf-ornament-edge-right: linear-gradient(transparent, transparent);
+    --perf-ornament-gilt: var(--color-gold-700);
+    /* Minimap disc's gilded ring (hud.css "minimap" section /
+       minimap_gilded_ornament.ts). Same fallback contract as
+       --perf-ornament-gilt above: consumed as a whole `background`, so it
+       needs a real paintable value before applyMinimapOrnamentVars() runs
+       at boot. */
+    --minimap-gilt: var(--color-gold-700);
+    /* The speckle field is a `background-image`, so an unset value must
+       compute to `none` (no image), not an invalid/empty string, the same
+       reasoning as the --perf-ornament-* mask fallbacks above. */
+    --minimap-speckle: none;
   }
 
   /* Glass is dropped WHOLE-RULE at the low effect tier: a universal removal
@@ -319,11 +318,27 @@
     backdrop-filter: none !important;
   }
 
-  /* Parchment grain ships only at fx high/ultra: a small feTurbulence noise
-     rect tiled behind parchment-styled surfaces. low/medium keep the :root
-     "none" default above and pay nothing for it. */
-  :root[data-fx-level="high"],
-  :root[data-fx-level="ultra"] {
-    --texture-parchment: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");
+  /* Performance Overlay's gilded ornament is purely cosmetic (a mask-image
+     finish, never actionable information), so it is shed at the low effect tier
+     the same way glass is dropped above: one rule resets every --perf-ornament-*
+     custom property back to its no-op fallback, with no per-selector override
+     needed. --perf-ornament-gilt keeps a flat-color fallback (it is consumed as a
+     whole `background`, not a mask, so it must resolve to something paintable).
+     !important: applyPerfOrnamentVars() (perf_ornament_svg.ts) writes these same
+     properties as a plain (non-important) INLINE style on documentElement, which
+     otherwise always beats a normal-priority stylesheet rule regardless of
+     selector specificity; only an important author declaration outranks it. */
+  :root[data-fx-level="low"] {
+    --perf-ornament-corner: linear-gradient(transparent, transparent) !important;
+    --perf-ornament-mid-edge: linear-gradient(transparent, transparent) !important;
+    --perf-ornament-edge-top: linear-gradient(transparent, transparent) !important;
+    --perf-ornament-edge-bottom: linear-gradient(transparent, transparent) !important;
+    --perf-ornament-edge-left: linear-gradient(transparent, transparent) !important;
+    --perf-ornament-edge-right: linear-gradient(transparent, transparent) !important;
+    --perf-ornament-gilt: var(--color-gold-700) !important;
+    /* The minimap ring is purely cosmetic too (never actionable information),
+       so it is shed at the low effect tier the same way. */
+    --minimap-gilt: var(--color-gold-700) !important;
+    --minimap-speckle: none !important;
   }
 }

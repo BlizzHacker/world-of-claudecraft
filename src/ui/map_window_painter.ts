@@ -18,7 +18,7 @@
 // (cached for the frame, never per-marker); every other literal (font, radius,
 // line width, label offset, triangle geometry) is a named constant.
 
-import type { ZoneDef } from '../sim/data';
+import { getActiveWorldContent, type ZoneDef } from '../sim/data';
 import { type Decoration, generateDecorations } from '../sim/world';
 import type { IWorld } from '../world_api';
 import { dungeonDisplayName, zoneDisplayName, zonePoiLabel } from './entity_i18n';
@@ -52,6 +52,11 @@ const PLAYER_ARROW_HALF_WIDTH = 5;
 const PLAYER_ARROW_BASE_Y = 6;
 // Building footprint outline width in the detail overlay.
 const BUILDING_LINE_WIDTH = 1;
+// Dungeon Finder "Show on Map" highlight: a steady double ring (no animation,
+// reduced-motion safe) around the pinged entrance.
+const PING_RADIUS_INNER = 9;
+const PING_RADIUS_OUTER = 14;
+const PING_LINE_WIDTH = 3;
 // Active-quest objective area (the translucent quest-POI blob) ring width.
 const QUEST_AREA_LINE_WIDTH = 2;
 // The numbered quest badge on each area (the WoW-style gold circle whose
@@ -69,6 +74,7 @@ const MAP_COLOR_TOKENS = {
   outline: '--color-map-outline',
   portalDot: '--color-map-portal-dot',
   portalLabel: '--color-map-portal-label',
+  ping: '--color-map-ping',
   npcQuest: '--color-map-npc-quest',
   questAreaFill: '--color-map-quest-area-fill',
   questAreaStroke: '--color-map-quest-area-stroke',
@@ -81,6 +87,7 @@ const MAP_COLOR_TOKENS = {
   tree: '--color-map-tree',
   oak: '--color-map-oak',
   buildingOutline: '--color-map-building-outline',
+  buildingArmoury: '--color-map-building-armoury',
   buildingChapel: '--color-map-building-chapel',
   buildingInn: '--color-map-building-inn',
   buildingHouse: '--color-map-building-house',
@@ -105,6 +112,8 @@ export interface MapPaintOptions {
   canvasSize: number;
   zoom: number;
   center: { x: number; z: number } | null;
+  /** Dungeon Finder "Show on Map" highlight in world coords, or null. */
+  ping?: { x: number; z: number } | null;
 }
 
 /** What the painter reports back so Hud can update its drag state + cursor,
@@ -148,11 +157,13 @@ export class MapWindowPainter {
     if (!this.decorations) this.decorations = generateDecorations(world.cfg.seed);
     const model = buildOverworldMapModel({
       world,
+      props: getActiveWorldContent().props,
       zone: opts.zone,
       zoom: opts.zoom,
       center: opts.center,
       canvasSize: opts.canvasSize,
       decorations: this.decorations,
+      ping: opts.ping ?? null,
     });
     const colors = this.resolveColors();
     this.draw(ctx, model, opts.bg, opts.canvasSize, colors);
@@ -258,6 +269,20 @@ export class MapWindowPainter {
       ctx.fillText(dungeonName, portal.mx, portal.my - PORTAL_NAME_OFFSET_Y);
     }
 
+    // Dungeon Finder "Show on Map" highlight: a steady double ring around the
+    // pinged entrance (drawn over the portal dot; no animation by design).
+    if (model.ping) {
+      ctx.strokeStyle = colors.ping;
+      ctx.lineWidth = PING_LINE_WIDTH;
+      ctx.beginPath();
+      ctx.arc(model.ping.mx, model.ping.my, PING_RADIUS_INNER, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(model.ping.mx, model.ping.my, PING_RADIUS_OUTER, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.lineWidth = LABEL_LINE_WIDTH;
+    }
+
     // Quest-giver glyphs ('?' turn-in ready, '!' available). Color + font are
     // loop-invariant, so set them once before the loop, not per glyph (assigning
     // ctx.font re-parses the font string each time). The next text-drawing layer
@@ -322,11 +347,13 @@ export class MapWindowPainter {
     ctx.strokeStyle = colors.buildingOutline;
     for (const b of detail.buildings) {
       ctx.fillStyle =
-        b.kind === 'chapel'
-          ? colors.buildingChapel
-          : b.kind === 'inn'
-            ? colors.buildingInn
-            : colors.buildingHouse;
+        b.kind === 'armoury'
+          ? colors.buildingArmoury
+          : b.kind === 'chapel'
+            ? colors.buildingChapel
+            : b.kind === 'inn'
+              ? colors.buildingInn
+              : colors.buildingHouse;
       ctx.beginPath();
       ctx.moveTo(b.points[0].mx, b.points[0].my);
       for (let i = 1; i < b.points.length; i++) ctx.lineTo(b.points[i].mx, b.points[i].my);

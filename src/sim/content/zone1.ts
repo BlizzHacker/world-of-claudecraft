@@ -2,6 +2,9 @@
 // wolves and boars, the bandit camp, and Brother Aldric's Gravecaller chain
 // leading to the Hollow Crypt.
 
+import { EASTBROOK_GRAND_ARMOURY } from '../building_layout';
+import { EASTBROOK_LAYOUT, EASTBROOK_NPC_PLACEMENTS_BY_ID } from '../eastbrook_layout';
+import { WORK_ORDER_CADENCE_TICKS } from '../professions/cadence';
 import type {
   CampDef,
   GroundObjectDef,
@@ -13,7 +16,7 @@ import type {
 } from '../types';
 
 export const TOWN_RADIUS = 26;
-export const GRAVEYARD_POS = { x: -12, z: -14 };
+export const GRAVEYARD_POS = { ...EASTBROOK_LAYOUT.services.graveyard.legacyReleasePoint };
 // Basin carved into the heightfield. Pushed to the far northeast so its
 // shoreline meets the fishing dock and the murloc camp instead of drowning them.
 export const LAKE = { x: -92, z: 88, radius: 30 };
@@ -29,6 +32,17 @@ export const ZONE1_ZONE: ZoneDef = {
   graveyard: GRAVEYARD_POS,
   lakes: [LAKE],
   pois: [
+    { x: 0, z: -3, label: 'Eastbrook', id: 'eastbrook' },
+    { x: -2, z: 70, label: 'Wolf Run', id: 'wolf_run' },
+    { x: 65, z: 0, label: 'Boar Meadow', id: 'boar_meadow' },
+    { x: -88, z: 82, label: 'Mirror Lake', id: 'mirror_lake' },
+    { x: -60, z: 4, label: 'Sableweb', id: 'sableweb' },
+    { x: -84, z: -64, label: 'Copper Dig', id: 'copper_dig' },
+    { x: 76, z: -76, label: 'Bandit Camp', id: 'bandit_camp' },
+    { x: 80, z: 80, label: 'Fallen Chapel', id: 'fallen_chapel' },
+    { x: -5, z: -52, label: 'Reliquary Hill', id: 'reliquary_hill' },
+    { x: 40, z: 140, label: 'Brightwood Glade', id: 'brightwood_glade' },
+    { x: -11, z: -112, label: 'The Sowfield', id: 'the_sowfield' },
     { x: 0, z: -3, label: 'Eastbrook' },
     { x: -2, z: 70, label: 'Wolf Run' },
     { x: 65, z: 0, label: 'Boar Meadow' },
@@ -44,7 +58,7 @@ export const ZONE1_ZONE: ZoneDef = {
     { x: 30, z: 110, label: 'The Boarpit' },
     { x: -36, z: -36, label: 'Eastbrook Homes' },
   ],
-  welcome: 'Find Marshal Redbrook in town — he has work for you.',
+  welcome: 'Find Marshal Redbrook in town - he has work for you.',
   welcomeQuestId: 'q_wolves',
 };
 
@@ -140,6 +154,7 @@ export const ZONE1_MOBS: Record<string, MobTemplate> = {
       { itemId: 'greyjaw_fang', chance: 1, questId: 'q_greyjaw' },
       { itemId: 'wolf_fang', chance: 1 },
       { itemId: 'wolfhide_satchel', chance: 0.35 },
+      { itemId: 'acolyte_chain_grips', chance: 0.25 },
     ],
     scale: 1.25,
     color: 0x566061,
@@ -169,7 +184,7 @@ export const ZONE1_MOBS: Record<string, MobTemplate> = {
     ],
     scale: 0.85,
     color: 0x935116,
-    componentTags: ['hide', 'tusk'],
+    componentTags: ['hide', 'tusk', 'meat'],
   },
   webwood_spider: {
     id: 'webwood_spider',
@@ -198,6 +213,7 @@ export const ZONE1_MOBS: Record<string, MobTemplate> = {
       { copper: 14, chance: 1 },
       { itemId: 'webwood_silk', chance: 0.55, questId: 'q_spiders' },
       { itemId: 'spider_leg', chance: 0.4 },
+      { itemId: 'mosshide_vest', chance: 0.12 },
     ],
     scale: 0.9,
     color: 0x4a235a,
@@ -239,6 +255,7 @@ export const ZONE1_MOBS: Record<string, MobTemplate> = {
       { itemId: 'moggers_stomper_boots', chance: 0.3 },
       { itemId: 'moggers_shiv', chance: 0.25, rollGroup: 'mogger_chase' },
       { itemId: 'cryptstalker_jerkin', chance: 0.25, rollGroup: 'mogger_chase' },
+      { itemId: 'valefire_lantern', chance: 0.2 },
     ],
     scale: 1.28,
     color: 0x8e5b33,
@@ -310,6 +327,7 @@ export const ZONE1_MOBS: Record<string, MobTemplate> = {
       { itemId: 'blessed_wax', chance: 0.45, questId: 'q_rite' },
       { itemId: 'linen_scrap', chance: 0.25 },
       { itemId: 'mossy_handwraps', chance: 0.15 },
+      { itemId: 'thornling_grips', chance: 0.15 },
     ],
     scale: 0.85,
     color: 0x9c640c,
@@ -344,6 +362,7 @@ export const ZONE1_MOBS: Record<string, MobTemplate> = {
       { itemId: 'tunnelkings_spade', chance: 0.3 },
       { itemId: 'moggers_copper_cudgel', chance: 0.25, rollGroup: 'grix_tunnelking_chase' },
       { itemId: 'hollowbone_hauberk', chance: 0.25, rollGroup: 'grix_tunnelking_chase' },
+      { itemId: 'briarroot_staff', chance: 0.3 },
     ],
     scale: 1.15,
     color: 0xb9770e,
@@ -371,6 +390,7 @@ export const ZONE1_MOBS: Record<string, MobTemplate> = {
     color: 0x943126,
     // A practiced thug flings a handful of road grit to foul your aim.
     blind: { chance: 0.25, miss: 0.3, duration: 5, name: 'Blinding Powder', school: 'physical' },
+    componentTags: ['cloth'],
   },
   restless_bones: {
     id: 'restless_bones',
@@ -499,6 +519,7 @@ export const ZONE1_MOBS: Record<string, MobTemplate> = {
       { itemId: 'quilted_trousers', chance: 0.5 },
       { itemId: 'gorraks_cruel_chopper', chance: 0.25 },
       { itemId: 'gorraks_cleaver', chance: 0.3 },
+      { itemId: 'votive_chain_belt', chance: 0.3 },
     ],
     scale: 1.25,
     color: 0x6c3483,
@@ -514,9 +535,8 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
     id: 'the_merchant',
     name: 'The Merchant',
     title: 'Keeper of the World Market',
-    // centerpiece of the square, just north of the well, facing the approach
-    pos: { x: 0, z: 9.5 },
-    facing: Math.PI,
+    pos: { ...EASTBROOK_NPC_PLACEMENTS_BY_ID.the_merchant.position },
+    facing: EASTBROOK_NPC_PLACEMENTS_BY_ID.the_merchant.facing,
     color: 0xd4af37,
     questIds: [],
     market: true,
@@ -527,9 +547,10 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
     id: 'marshal_redbrook',
     name: 'Marshal Redbrook',
     title: 'Town Marshal',
-    pos: { x: 4, z: 6 },
-    facing: Math.PI,
+    pos: { ...EASTBROOK_NPC_PLACEMENTS_BY_ID.marshal_redbrook.position },
+    facing: EASTBROOK_NPC_PLACEMENTS_BY_ID.marshal_redbrook.facing,
     color: 0xb7950b,
+    questIds: ['q_wolves', 'q_greyjaw', 'q_bandits', 'q_ringleader', 'q_mogger'],
     questIds: [
       'q_wolves',
       'q_greyjaw',
@@ -546,8 +567,8 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
     id: 'trader_wilkes',
     name: 'Trader Wilkes',
     title: 'Provisioner',
-    pos: { x: -7, z: 3 },
-    facing: Math.PI / 2,
+    pos: { ...EASTBROOK_NPC_PLACEMENTS_BY_ID.trader_wilkes.position },
+    facing: EASTBROOK_NPC_PLACEMENTS_BY_ID.trader_wilkes.facing,
     color: 0x1e8449,
     questIds: ['q_boars', 'q_supplies'],
     vendorItems: [
@@ -568,6 +589,8 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
       'gathering_sickle',
       'bronze_sickle',
       'silverleaf_sickle',
+      'ironreel_fishing_rod',
+      'silverstream_fishing_rod',
     ],
     greeting: 'Fresh bread, clean water, fair prices. What can I get you?',
   },
@@ -575,8 +598,8 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
     id: 'apothecary_lin',
     name: 'Apothecary Lin',
     title: 'Herbalist',
-    pos: { x: 11, z: -3 },
-    facing: -Math.PI / 2,
+    pos: { ...EASTBROOK_NPC_PLACEMENTS_BY_ID.apothecary_lin.position },
+    facing: EASTBROOK_NPC_PLACEMENTS_BY_ID.apothecary_lin.facing,
     color: 0x7d3c98,
     questIds: ['q_spiders'],
     greeting: 'Careful where you step in the eastern woods, friend.',
@@ -585,8 +608,8 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
     id: 'brother_aldric',
     name: 'Brother Aldric',
     title: 'Priest of the Vale',
-    pos: { x: -14, z: -10 },
-    facing: 0.8,
+    pos: { ...EASTBROOK_NPC_PLACEMENTS_BY_ID.brother_aldric.position },
+    facing: EASTBROOK_NPC_PLACEMENTS_BY_ID.brother_aldric.facing,
     color: 0xf7f9f9,
     questIds: [
       'q_bones',
@@ -605,15 +628,17 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
     id: 'smith_haldren',
     name: 'Smith Haldren',
     title: 'Armorer & Weaponsmith',
-    pos: { x: 7, z: 16.5 },
-    facing: -2.7,
+    pos: { ...EASTBROOK_NPC_PLACEMENTS_BY_ID.smith_haldren.position },
+    facing: EASTBROOK_NPC_PLACEMENTS_BY_ID.smith_haldren.facing,
     color: 0x707b7c,
-    questIds: [],
+    questIds: ['q_prof_hobby_switch'],
     vendorItems: [
       'eastbrook_arming_sword',
+      'eastbrook_greatsword',
       'bronzework_mace',
       'vale_carving_knife',
       'hickory_shortstaff',
+      'eastbrook_buckler',
       'eastbrook_chain_vest',
       'valespun_robe',
       'tanned_leather_jerkin',
@@ -626,11 +651,8 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
     id: 'fisherman_brandt',
     name: 'Fisherman Brandt',
     title: 'Old Salt',
-    // in town (east edge, glaring out at Mirror Lake) — his old spot by the
-    // dock sat inside the Mudfin spawn radius and new players got ambushed
-    // walking up to a quest giver
-    pos: { x: -16, z: 6 },
-    facing: -0.75,
+    pos: { ...EASTBROOK_NPC_PLACEMENTS_BY_ID.fisherman_brandt.position },
+    facing: EASTBROOK_NPC_PLACEMENTS_BY_ID.fisherman_brandt.facing,
     color: 0x2471a3,
     questIds: ['q_murlocs'],
     vendorItems: ['simple_fishing_pole'],
@@ -640,10 +662,8 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
     id: 'foreman_odell',
     name: 'Foreman Odell',
     title: 'Mine Foreman',
-    // in town (south edge, scowling toward his overrun dig) — his old spot
-    // sat inside the Tunnel Rat spawn radius
-    pos: { x: -4, z: -14 },
-    facing: -2.14,
+    pos: { ...EASTBROOK_NPC_PLACEMENTS_BY_ID.foreman_odell.position },
+    facing: EASTBROOK_NPC_PLACEMENTS_BY_ID.foreman_odell.facing,
     color: 0xa04000,
     questIds: ['q_prof_intro', 'q_mine'],
     greeting: "Whole dig's crawling with those dirt-caked vermin!",
@@ -701,9 +721,8 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
     id: 'bursar_fernando',
     name: 'Bursar Fernando',
     title: 'The Gilded Strongbox',
-    // east side of the square, facing the approach toward the well and Merchant
-    pos: { x: 13, z: 8 },
-    facing: -Math.PI / 2,
+    pos: { ...EASTBROOK_NPC_PLACEMENTS_BY_ID.bursar_fernando.position },
+    facing: EASTBROOK_NPC_PLACEMENTS_BY_ID.bursar_fernando.facing,
     color: 0xc9a227,
     questIds: [],
     banker: true,
@@ -809,6 +828,136 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
     greeting:
       'The truce holds at the Sowfield, $C: boots and shoulders only. Care to play for the Copper Pail?',
   },
+  chronicler_saul: {
+    id: 'chronicler_saul',
+    name: 'Saul the Chronicler',
+    title: 'The Vale Chronicle',
+    pos: { ...EASTBROOK_NPC_PLACEMENTS_BY_ID.chronicler_saul.position },
+    facing: EASTBROOK_NPC_PLACEMENTS_BY_ID.chronicler_saul.facing,
+    color: 0xd08a2e, // warm amber: the chronicler tint is his identity (shared mage visual)
+    questIds: [],
+    greeting:
+      'Every deed worth doing is worth writing down twice, $N: once for the ledger and once for the fireside.',
+  },
+  // Crafting-station masters (Professions 2.0): each stands 1 to 3
+  // units beside their station (content/professions.ts STATIONS) with a
+  // guard-safe camp margin (pinned in tests/professions_station_placement.test.ts).
+  forgemistress_darva: {
+    id: 'forgemistress_darva',
+    name: 'Forgemistress Darva',
+    title: 'Master of the Forge',
+    pos: { ...EASTBROOK_NPC_PLACEMENTS_BY_ID.forgemistress_darva.position },
+    facing: EASTBROOK_NPC_PLACEMENTS_BY_ID.forgemistress_darva.facing,
+    color: 0xb5541c,
+    // Professions 2.0: the Smith pair's anchor master. Attunement and
+    // its escalating make-amends return live here now (moved off Smith Haldren),
+    // plus the repeatable forge work order.
+    questIds: ['q_prof_attune_smith', 'q_prof_amends_smith', 'q_prof_workorder_forge'],
+    // Station stocking: thorium_ore is the premium reagent the forge
+    // station's own recipe (recipe_sootscale_mantle) consumes, so the master
+    // sells it alongside quartermaster_bree (zone3).
+    vendorItems: [
+      'copper_mining_pick',
+      'iron_mining_pick',
+      'mithril_mining_pick',
+      'smithing_flux',
+      'thorium_ore',
+    ],
+    greeting: 'The forge answers to me, $C. Bring good ore and it will answer to you too.',
+  },
+  cook_marlow: {
+    id: 'cook_marlow',
+    name: 'Cook Marlow',
+    title: 'Master of the Kitchens',
+    pos: { ...EASTBROOK_NPC_PLACEMENTS_BY_ID.cook_marlow.position },
+    facing: EASTBROOK_NPC_PLACEMENTS_BY_ID.cook_marlow.facing,
+    color: 0xc98a4b,
+    // Professions 2.0: the Apothecary pair's (alchemy + cooking) anchor
+    // master. Attunement, make-amends return, and the repeatable kitchens work
+    // order live here.
+    questIds: ['q_prof_attune_apothecary', 'q_prof_amends_apothecary', 'q_prof_workorder_kitchens'],
+    vendorItems: [
+      'baked_bread',
+      'spring_water',
+      'roasted_boar',
+      'tough_jerky',
+      'brightwood_venison',
+      'cooking_salt',
+    ],
+    greeting: 'Nothing leaves my kitchens half-cooked, $C. Sit, eat, then get back out there.',
+  },
+  weaver_ottilie: {
+    id: 'weaver_ottilie',
+    name: 'Weaver Ottilie',
+    title: 'Master of the Loom',
+    pos: { ...EASTBROOK_NPC_PLACEMENTS_BY_ID.weaver_ottilie.position },
+    facing: EASTBROOK_NPC_PLACEMENTS_BY_ID.weaver_ottilie.facing,
+    color: 0x7161a8,
+    // Professions 2.0: the Outfitter pair's (leatherworking + tailoring)
+    // anchor master. Attunement, make-amends return, and the repeatable loom work
+    // order live here.
+    questIds: ['q_prof_attune_outfitter', 'q_prof_amends_outfitter', 'q_prof_workorder_loom'],
+    // Station stocking: thorium_ore was stocked as the premium
+    // reagent of the loom's own recipe. An input rework later
+    // moved recipe_wardweave_cowl off osmium (silk plus premium herbs now),
+    // but the stock stays: removing a shipped vendor row is out of that
+    // rework's scope, and loom customers still buy it for the
+    // forge crafts next door.
+    vendorItems: [
+      'linen_pouch',
+      'travelers_knapsack',
+      'gathering_sickle',
+      'spool_of_thread',
+      'thorium_ore',
+    ],
+    greeting: 'Mind the threads, $C. A steady hand at the loom beats a strong one.',
+  },
+  tinker_gizzel: {
+    id: 'tinker_gizzel',
+    name: 'Tinker Gizzel',
+    title: 'Master of the Toolworks',
+    pos: { ...EASTBROOK_NPC_PLACEMENTS_BY_ID.tinker_gizzel.position },
+    facing: EASTBROOK_NPC_PLACEMENTS_BY_ID.tinker_gizzel.facing,
+    color: 0xb08d57,
+    // Professions 2.0: the Bombardier pair's (engineering + alchemy)
+    // anchor master. Attunement, make-amends return, and the repeatable toolworks
+    // work order live here.
+    questIds: [
+      'q_prof_attune_bombardier',
+      'q_prof_amends_bombardier',
+      'q_prof_workorder_toolworks',
+    ],
+    // Station stocking: the six premium reagents the toolworks
+    // recipes (TOOL_RECIPES) consume, previously sold only by
+    // quartermaster_bree (zone3).
+    vendorItems: [
+      'handaxe',
+      'felling_axe',
+      'ironbark_axe',
+      'bronze_sickle',
+      'silverleaf_sickle',
+      'simple_fishing_pole',
+      'thorium_ore',
+      'arcanite_bar',
+      'ashwood_log',
+      'elderwood_log',
+      'goldleaf_herb',
+      'sunpetal_herb',
+    ],
+    greeting:
+      'Springs, sprockets, and sharp edges, $C: the toolworks has whatever your hands lack.',
+  },
+  card_master: {
+    id: 'card_master',
+    name: 'Card Master',
+    title: 'Dealer of Chance',
+    pos: { ...EASTBROOK_NPC_PLACEMENTS_BY_ID.card_master.position },
+    facing: EASTBROOK_NPC_PLACEMENTS_BY_ID.card_master.facing,
+    color: 0x7a2f8f,
+    questIds: [],
+    cardMaster: true,
+    greeting: 'Care for a Card Duel? Best of three, winner takes the bragging rights.',
+  },
 };
 
 // ---------------------------------------------------------------------------
@@ -823,26 +972,21 @@ export const ZONE1_QUESTS: Record<string, QuestDef> = {
   // points a new player at them (see the professions.ts GATHERING_PROFESSIONS
   // comment: no level/quest/tool gate exists at the mechanic level either, so
   // there was no natural "unlock" moment to hang a quest off before this).
-  // A `collect` objective on the dedicated chunk_of_ore quest item (kind
-  // 'quest', src/sim/content/items.ts), not the mining node's shared
-  // bone_fragments yield: that material also drops from mobs, salvage, and
-  // the market (see #1708 review), so a collect objective targeting it could
-  // be completed without ever mining. chunk_of_ore is only ever granted by an
-  // ore-node harvest while this quest is active (the NODE_QUEST_GRANT gate in
-  // professions/gathering.ts, mirroring the mob-loot questId gate other
-  // collect quests use), and being kind 'quest' it can't be sold or lost to
-  // the vendor's Sell Junk button either. foreman_odell is the existing
-  // mine-themed NPC (already gives q_mine) so this reuses him rather than
-  // inventing a new trainer NPC.
+  // A genuine gather objective credits successful ore-node harvests directly.
+  // It deliberately does not target the node's shared bone_fragments output:
+  // that material also drops from mobs, salvage, and the market, so inventory
+  // ownership cannot prove that the player mined it. foreman_odell is the
+  // existing mine-themed NPC (already gives q_mine), so this reuses him rather
+  // than inventing a new trainer NPC.
   q_prof_intro: {
     id: 'q_prof_intro',
     name: 'A Trade for Every Hand',
     giverNpcId: 'foreman_odell',
     turnInNpcId: 'foreman_odell',
-    text: "Every soul in Eastbrook works a trade besides the sword, $N. There's ore veins scattered round town, so go swing a pick and bring me 5 chunks. Mine them yourself, mind; I'll know the difference.",
+    text: "Every soul in Eastbrook works a trade besides the sword, $N. There are ore veins in the rocks around the Copper Dig, southwest of town. Go swing a pick and work 5 of them yourself, mind; I'll know the difference.",
     completionText:
-      "See? Ore in your pack and callus on your hands. Keep at the mining, logging, and herb-picking as you travel the roads, and when you're back in town, mind the Town Focus board by the market and the crafting bench nearby. There's a fair trade waiting in all of it, if you want it.",
-    objectives: [{ type: 'collect', itemId: 'chunk_of_ore', count: 5, label: 'Chunk of Ore' }],
+      "See? Ore gathered and callus on your hands. Keep at the mining, logging, and herb-picking as you travel the roads, and when you're back in town, mind the Town Focus board by the market and the crafting bench nearby. There's a fair trade waiting in all of it, if you want it.",
+    objectives: [{ type: 'gather', nodeType: 'ore', count: 5, label: 'Ore vein harvested' }],
     xpReward: 150,
     copperReward: 50,
     itemRewards: {},
@@ -1193,14 +1337,259 @@ export const ZONE1_QUESTS: Record<string, QuestDef> = {
     text: 'Every artisan of Eastbrook eventually settles on one craft to call their own. Prove yourself with a single deed, $N, and declare your path.',
     completionText: 'Your path is chosen; walk it well.',
     objectives: [
-      { type: 'kill', targetMobId: 'forest_wolf', count: 1, label: 'Forest Wolf slain' },
+      { type: 'kill', targetMobId: 'forest_wolf', count: 5, label: 'Forest Wolf slain' },
     ],
     xpReward: 100,
     copperReward: 0,
     itemRewards: {},
-    // Not wired to acceptArchetypeQuest yet: retired keeps it out of the live
-    // accept flow (computeQuestState -> 'unavailable') until that hook lands.
-    retired: true,
+    repeatable: true,
+    shareable: false,
+    resolvedObjectiveCounts: 'archetypeAmends',
+    completionEffect: {
+      type: 'attunePair',
+      mode: 'return',
+      pairId: 'weaponcrafting+armorcrafting',
+    },
+  },
+  q_prof_amends_outfitter: {
+    id: 'q_prof_amends_outfitter',
+    name: 'Threads Rejoined',
+    giverNpcId: 'weaver_ottilie',
+    turnInNpcId: 'weaver_ottilie',
+    text: 'Back at my loom after all. I hold no grudge, $N, but the thread remembers a hand that let it go, and the cost of taking it up again is measured out longer each time. Cull the webwood spiders crowding the western woods, and the labor will settle your hands before they touch good silk again.',
+    completionText:
+      'Steady again. Leatherworking and Tailoring return to your hands as majors. Measure twice this time before you wander.',
+    objectives: [
+      { type: 'kill', targetMobId: 'webwood_spider', count: 5, label: 'Webwood Spider culled' },
+    ],
+    xpReward: 100,
+    copperReward: 0,
+    itemRewards: {},
+    repeatable: true,
+    shareable: false,
+    resolvedObjectiveCounts: 'archetypeAmends',
+    completionEffect: { type: 'attunePair', mode: 'return', pairId: 'leatherworking+tailoring' },
+  },
+  q_prof_amends_apothecary: {
+    id: 'q_prof_amends_apothecary',
+    name: 'Back on the Stove',
+    giverNpcId: 'cook_marlow',
+    turnInNpcId: 'cook_marlow',
+    text: 'Well, look who is back at my pot. No hard feelings, $N, a kitchen always has room, but you know the tab runs longer every time you walk out on it. Go thin the wild boars in the east meadow, because honest sweat is the first ingredient, and it will remind your hands of the work.',
+    completionText:
+      'There is the old flavor. Alchemy and Cooking are back on your stove as majors. Stay a while this time.',
+    objectives: [{ type: 'kill', targetMobId: 'wild_boar', count: 5, label: 'Wild Boar hunted' }],
+    xpReward: 100,
+    copperReward: 0,
+    itemRewards: {},
+    repeatable: true,
+    shareable: false,
+    resolvedObjectiveCounts: 'archetypeAmends',
+    completionEffect: { type: 'attunePair', mode: 'return', pairId: 'alchemy+cooking' },
+  },
+  q_prof_amends_bombardier: {
+    id: 'q_prof_amends_bombardier',
+    name: 'The Ledger Grows',
+    giverNpcId: 'tinker_gizzel',
+    turnInNpcId: 'tinker_gizzel',
+    text: 'You came BACK, ha, they always come back, the loud stuff has a pull, yes? No sulking from me, $N, but the ledger, oh the ledger, it grows every time you skip out, more each return, that is only fair. Go clear the tunnel rats out of the dig for me, sweat first, sparks later, that is the rule I just made up.',
+    completionText:
+      'THERE it is, the itch is back in your hands. Engineering and Alchemy, majors again, go on, go make a bang. Try to stay put this time, eh?',
+    objectives: [
+      { type: 'kill', targetMobId: 'tunnel_rat', count: 5, label: 'Tunnel Rat exterminated' },
+    ],
+    xpReward: 100,
+    copperReward: 0,
+    itemRewards: {},
+    repeatable: true,
+    shareable: false,
+    resolvedObjectiveCounts: 'archetypeAmends',
+    completionEffect: { type: 'attunePair', mode: 'return', pairId: 'engineering+alchemy' },
+  },
+  // Repeatable craft work orders (Professions 2.0): a master takes a
+  // stack of their craft's staple material off your hands for coin, a light
+  // economy sink on a fixed cadence (repeatCadenceTicks WORK_ORDER_CADENCE_TICKS).
+  // The collect turn-in consumes the materials (turnInQuestCore removeItem).
+  // copperReward is floor(0.5 * summed vendor sell value of the requested
+  // materials); xpReward matches the only repeatable-quest precedent in the game,
+  // the make-amends band (100), since no zone-2/3 repeatable exists to scale to.
+  q_prof_workorder_forge: {
+    id: 'q_prof_workorder_forge',
+    name: 'Forge Work Order',
+    giverNpcId: 'forgemistress_darva',
+    turnInNpcId: 'forgemistress_darva',
+    text: 'The forge always wants feeding, $N. Bring me eight lumps of copper ore and I will see you paid for the haul. No ceremony, just ore and coin.',
+    completionText:
+      'Good weight, no slag. Here is your due. The forge will be hungry again soon enough.',
+    objectives: [
+      { type: 'collect', itemId: 'copper_ore', count: 8, label: 'Copper Ore delivered' },
+    ],
+    xpReward: 100,
+    // floor(0.5 * 8 * 4) = 16 (copper_ore sellValue 4).
+    copperReward: 16,
+    itemRewards: {},
+    repeatable: true,
+    shareable: false,
+    repeatCadenceTicks: WORK_ORDER_CADENCE_TICKS,
+  },
+  q_prof_workorder_kitchens: {
+    id: 'q_prof_workorder_kitchens',
+    name: 'Kitchens Work Order',
+    giverNpcId: 'cook_marlow',
+    turnInNpcId: 'cook_marlow',
+    text: 'My larder is looking thin, $N, and thin larders make grumpy cooks. Fetch me eight cuts of game meat and there is coin in it for you, plus my undying gratitude, which is worth less but tastes better.',
+    completionText:
+      'Now that is a full pantry. Here is your pay. Come back when your bags are heavy again.',
+    objectives: [{ type: 'collect', itemId: 'game_meat', count: 8, label: 'Game Meat delivered' }],
+    xpReward: 100,
+    // floor(0.5 * 8 * 4) = 16 (game_meat sellValue 4).
+    copperReward: 16,
+    itemRewards: {},
+    repeatable: true,
+    shareable: false,
+    repeatCadenceTicks: WORK_ORDER_CADENCE_TICKS,
+  },
+  q_prof_workorder_loom: {
+    id: 'q_prof_workorder_loom',
+    name: 'Loom Work Order',
+    giverNpcId: 'weaver_ottilie',
+    turnInNpcId: 'weaver_ottilie',
+    text: 'The loom runs dry and idle hands waste daylight, $N. Bring me six skeins of spider silk and I will pay you a fair rate, counted out to the copper.',
+    completionText:
+      'Fine silk, evenly spun. Your coin, exactly measured. The loom thanks you, and so do I.',
+    objectives: [
+      { type: 'collect', itemId: 'spider_silk', count: 6, label: 'Spider Silk delivered' },
+    ],
+    xpReward: 100,
+    // floor(0.5 * 6 * 5) = 15 (spider_silk sellValue 5).
+    copperReward: 15,
+    itemRewards: {},
+    repeatable: true,
+    shareable: false,
+    repeatCadenceTicks: WORK_ORDER_CADENCE_TICKS,
+  },
+  q_prof_workorder_toolworks: {
+    id: 'q_prof_workorder_toolworks',
+    name: 'Toolworks Work Order',
+    giverNpcId: 'tinker_gizzel',
+    turnInNpcId: 'tinker_gizzel',
+    text: 'Hafts, handles, stocks, I go through wood like it is going out of style, which it is NOT, wood is eternal, $N. Haul me eight ironbark logs and I will pay you, coin, real coin, not a favor, I promise, mostly.',
+    completionText:
+      'Perfect, perfect, straight grain, no rot. Here, your coin, see, I keep my word (mostly). Bring more when you trip over a tree.',
+    objectives: [
+      { type: 'collect', itemId: 'ironbark_log', count: 8, label: 'Ironbark Log delivered' },
+    ],
+    xpReward: 100,
+    // floor(0.5 * 8 * 4) = 16 (ironbark_log sellValue 4).
+    copperReward: 16,
+    itemRewards: {},
+    repeatable: true,
+    shareable: false,
+    repeatCadenceTicks: WORK_ORDER_CADENCE_TICKS,
+  },
+  q_prof_hobby_switch: {
+    id: 'q_prof_hobby_switch',
+    name: 'A Different Pastime',
+    giverNpcId: 'smith_haldren',
+    turnInNpcId: 'smith_haldren',
+    text: 'Majors demand a vow. A hobby only asks where your curiosity wanders, $N. Gather a few herbs and decide which craft opposite your majors you want to pursue.',
+    completionText:
+      'A lighter choice, but a useful one. Follow that curiosity as far as rare work will take it.',
+    objectives: [{ type: 'gather', nodeType: 'herb', count: 3, label: 'Herb patch harvested' }],
+    // 0 XP on purpose. The hobby switch is a repeatable identity
+    // toggle; any XP on it becomes a farmable trickle, so it pays nothing.
+    xpReward: 0,
+    copperReward: 0,
+    itemRewards: {},
+    requiresQuest: 'q_prof_intro',
+    repeatable: true,
+    shareable: false,
+    completionEffect: { type: 'switchHobby' },
+  },
+  q_prof_amends_smith: {
+    id: 'q_prof_amends_smith',
+    name: 'Back to the Forge',
+    giverNpcId: 'forgemistress_darva',
+    turnInNpcId: 'forgemistress_darva',
+    text: 'So you have come back to the forge. I will not pretend it does not sting, $N, but I am a fair hand and the work is fair too. You know the price of returning: labor, and more of it each time you have strayed. Put down the wolves harrying the north road, and the swing of it will remind your arms what this pair once asked of them.',
+    completionText:
+      'The rhythm is back in your hands. Weaponcrafting and Armorcrafting are your majors once more. Do not make a habit of leaving.',
+    objectives: [
+      { type: 'kill', targetMobId: 'forest_wolf', count: 5, label: 'Forest Wolf slain' },
+    ],
+    xpReward: 100,
+    copperReward: 0,
+    itemRewards: {},
+    repeatable: true,
+    shareable: false,
+    resolvedObjectiveCounts: 'archetypeAmends',
+    completionEffect: {
+      type: 'attunePair',
+      mode: 'return',
+      pairId: 'weaponcrafting+armorcrafting',
+    },
+  },
+  q_prof_attune_apothecary: {
+    id: 'q_prof_attune_apothecary',
+    name: 'A Recipe Worth Keeping',
+    giverNpcId: 'cook_marlow',
+    turnInNpcId: 'cook_marlow',
+    text: 'Every good dish is two flavors that belong together, and so is a good craft, $N. Sit with me and Alchemy and Cooking become your two majors, the two you may simmer past rare work; the craft on the far side of the wheel is your hobby, seasoned up to rare and no hotter. The rest of your trades keep in the pantry, dormant, not spoiled, ready whenever you fetch them back. Fair warning while the pot is still cold: wander off to another pair and coming home is a chore that grows, five beasts seen to the first time, eight the next, eleven the time after, heavier with every helping. Still hungry for it? Then hunt me four wild boars, because a kitchen worth its salt starts with good meat.',
+    completionText:
+      'Now that is a start with some meat on it. Alchemy and Cooking are yours to cook as high as you like. Come back hungry.',
+    objectives: [{ type: 'kill', targetMobId: 'wild_boar', count: 4, label: 'Wild Boar hunted' }],
+    xpReward: 150,
+    copperReward: 0,
+    itemRewards: {},
+    shareable: false,
+    completionEffect: { type: 'attunePair', mode: 'new', pairId: 'alchemy+cooking' },
+  },
+  q_prof_attune_bombardier: {
+    id: 'q_prof_attune_bombardier',
+    name: 'A Volatile Arrangement',
+    giverNpcId: 'tinker_gizzel',
+    turnInNpcId: 'tinker_gizzel',
+    text: 'Oh, oh, you want the good stuff, the loud stuff, yes? Listen, listen, before you touch anything that ticks: say the word and Engineering and Alchemy become your two majors, the only two you get to push past rare work (that is where it gets FUN, trust me). The craft opposite goes in your pocket as a hobby, rare and no further, do not pout. Your other trades? Not gone, $N, just napping, dormant, wake them whenever you like. But (there is always a but, hold the fuse) ditch this pair and waddle back later and it costs you sweat that piles up, five things put down the first time, eight the next, eleven after, more, more, every single time you get cold feet. Yes? YES? Then go pick me three patches of herbs, the volatile ones, do not ask which, they are all a little volatile if you believe hard enough.',
+    completionText:
+      'HA. Reagents, real ones, and all your fingers still attached, good, good. Engineering and Alchemy, yours, go make something that regrets it. Off you go.',
+    objectives: [{ type: 'gather', nodeType: 'herb', count: 3, label: 'Herb patch harvested' }],
+    xpReward: 150,
+    copperReward: 0,
+    itemRewards: {},
+    shareable: false,
+    completionEffect: { type: 'attunePair', mode: 'new', pairId: 'engineering+alchemy' },
+  },
+  q_prof_attune_outfitter: {
+    id: 'q_prof_attune_outfitter',
+    name: "The Outfitter's Measure",
+    giverNpcId: 'weaver_ottilie',
+    turnInNpcId: 'weaver_ottilie',
+    text: 'Measure the cost before you cut, that is the first rule at my loom. Choose me and Leatherworking and Tailoring become your two majors, the pair you may carry beyond rare work; the craft opposite them settles in as your hobby, taken to rare and left there. The trades you set aside are not unravelled, $N, only folded away, dormant until you take them up again. Be certain, though: should you leave this pair and later want it back, the way home is paid in labor that lengthens each time, five culled at first, then eight, then eleven, always a little more. If your mind is made, cull four webwood spiders and bring their silk to the loom, for good thread starts every good garment.',
+    completionText:
+      'Even thread, even hand. Leatherworking and Tailoring are yours to carry as far as your skill will reach. Measure twice, and they will not fail you.',
+    objectives: [
+      { type: 'kill', targetMobId: 'webwood_spider', count: 4, label: 'Webwood Spider culled' },
+    ],
+    xpReward: 150,
+    copperReward: 0,
+    itemRewards: {},
+    shareable: false,
+    completionEffect: { type: 'attunePair', mode: 'new', pairId: 'leatherworking+tailoring' },
+  },
+  q_prof_attune_smith: {
+    id: 'q_prof_attune_smith',
+    name: "The Smith's Promise",
+    giverNpcId: 'forgemistress_darva',
+    turnInNpcId: 'forgemistress_darva',
+    text: 'Steel does not forgive a wandering hand, so I will tell you plain before you swear anything. Bind yourself to my forge and Weaponcrafting and Armorcrafting become your two majors, the only crafts you may carry past rare work. The craft across the wheel from them settles in as your hobby, worked to rare and no further. Your other trades do not burn away, $N: they simply go quiet, dormant until you call them back. And know this before the hammer falls: leave this pair for another and you will crawl back through honest labor to return to it, five foes put down the first time you come home, eight the next, eleven after that, more each time you stray. Still standing here? Then bring me three veins of ore worked from the Vale with your own hands, and we will call the promise struck.',
+    completionText:
+      'Good ore, and good hands to work it. Weaponcrafting and Armorcrafting are yours to master now. Earn the rest.',
+    objectives: [{ type: 'gather', nodeType: 'ore', count: 3, label: 'Ore vein harvested' }],
+    xpReward: 150,
+    copperReward: 0,
+    itemRewards: {},
+    shareable: false,
+    completionEffect: { type: 'attunePair', mode: 'new', pairId: 'weaponcrafting+armorcrafting' },
   },
   q_prof_make_amends: {
     id: 'q_prof_make_amends',
@@ -1241,6 +1630,19 @@ export const ZONE1_QUEST_ORDER = [
   'q_hollow',
   'q_gravecallers_trail',
   'q_mogger',
+  'q_prof_attune_smith',
+  'q_prof_attune_outfitter',
+  'q_prof_attune_apothecary',
+  'q_prof_attune_bombardier',
+  'q_prof_amends_smith',
+  'q_prof_amends_outfitter',
+  'q_prof_amends_apothecary',
+  'q_prof_amends_bombardier',
+  'q_prof_workorder_forge',
+  'q_prof_workorder_kitchens',
+  'q_prof_workorder_loom',
+  'q_prof_workorder_toolworks',
+  'q_prof_hobby_switch',
   'q_save_cainhurst',
   'q_archetype_acceptance',
   'q_prof_make_amends',
@@ -1341,41 +1743,12 @@ export const ZONE1_OBJECTS: GroundObjectDef[] = [
 // Roads from town toward each hub — used for terrain painting and the map.
 // Roads from town toward each hub — used for terrain painting and the map.
 export const ZONE1_ROADS: { x: number; z: number }[][] = [
-  [
-    { x: 0, z: 8 },
-    { x: -8, z: 30 },
-    { x: -15, z: 55 },
-    { x: -2, z: 78 },
-  ], // north to wolves
-  [
-    { x: 8, z: 2 },
-    { x: 30, z: 8 },
-    { x: 55, z: 12 },
-  ], // east to boars
-  [
-    { x: 6, z: -6 },
-    { x: 30, z: -30 },
-    { x: 50, z: -50 },
-    { x: 65, z: -65 },
-  ], // southeast to bandits
-  [
-    { x: -8, z: 6 },
-    { x: -35, z: 25 },
-    { x: -58, z: 48 },
-    { x: -66, z: 58 },
-  ], // northwest to lake
-  [
-    { x: -6, z: -6 },
-    { x: -30, z: -28 },
-    { x: -55, z: -45 },
-    { x: -70, z: -55 },
-  ], // southwest to mine
-  [
-    { x: 6, z: 8 },
-    { x: 35, z: 35 },
-    { x: 60, z: 60 },
-    { x: 78, z: 74 },
-  ], // northeast to ruins
+  [...EASTBROOK_LAYOUT.roads[0].points, { x: -8, z: 30 }, { x: -15, z: 55 }, { x: -2, z: 78 }], // north to wolves
+  [...EASTBROOK_LAYOUT.roads[1].points, { x: 30, z: 8 }, { x: 55, z: 12 }], // east to boars
+  [...EASTBROOK_LAYOUT.roads[2].points, { x: 30, z: -30 }, { x: 50, z: -50 }, { x: 65, z: -65 }], // southeast to bandits
+  [...EASTBROOK_LAYOUT.roads[3].points, { x: -35, z: 25 }, { x: -58, z: 48 }, { x: -66, z: 58 }], // northwest to lake
+  [...EASTBROOK_LAYOUT.roads[4].points, { x: -30, z: -28 }, { x: -55, z: -45 }, { x: -70, z: -55 }], // southwest to mine
+  [...EASTBROOK_LAYOUT.roads[5].points, { x: 35, z: 35 }, { x: 60, z: 60 }, { x: 78, z: 74 }], // northeast to ruins
 ];
 
 // ---------------------------------------------------------------------------
@@ -1387,17 +1760,50 @@ export const ZONE1_PROPS: ZonePropsDef = {
   // RealmContent.worldTheme (themeWorldForRealm in data.ts); claudecraft has no
   // worldTheme so it keeps these exact vanilla sizes/positions.
   buildings: [
-    { kind: 'house', x: 10, z: 12, w: 7, d: 6, rot: -0.4 },
-    { kind: 'house', x: -10, z: 10, w: 6, d: 5, rot: 0.5 },
-    { kind: 'inn', x: 12, z: -6, w: 6, d: 7, rot: 2.4 },
-    { kind: 'chapel', x: -16, z: -8, w: 5, d: 7, rot: 0.9 },
+    {
+      id: EASTBROOK_LAYOUT.preservedBuildings[0].id,
+      assetId: EASTBROOK_LAYOUT.preservedBuildings[0].assetId,
+      kind: EASTBROOK_LAYOUT.preservedBuildings[0].kind,
+      landmark: EASTBROOK_GRAND_ARMOURY.landmark,
+      ...EASTBROOK_GRAND_ARMOURY.lot,
+      height: EASTBROOK_GRAND_ARMOURY.aboveGradeHeight,
+    },
+    ...EASTBROOK_LAYOUT.buildings.map((building) => ({
+      id: building.id,
+      assetId: building.assetId,
+      kind: building.kind,
+      x: building.position.x,
+      z: building.position.z,
+      w: building.nativeDimensions.width,
+      d: building.nativeDimensions.depth,
+      rot: building.rotation,
+      height: building.nativeDimensions.height,
+    })),
   ],
-  wells: [{ x: 0, z: 2, r: 1.5 }],
-  stalls: [
-    { x: -8.5, z: 3, rot: Math.PI / 2, r: 1.7 },
-    { x: 9.5, z: 17.5, rot: -2.7, r: 1.7 }, // Smith Haldren's smithy stall
-    { x: 0, z: 11.5, rot: Math.PI, r: 1.8 }, // The Merchant's World Market stall
+  wells: [
+    {
+      id: EASTBROOK_LAYOUT.civic.wellBeacon.id,
+      assetId: EASTBROOK_LAYOUT.civic.wellBeacon.assetId,
+      x: EASTBROOK_LAYOUT.civic.wellBeacon.position.x,
+      z: EASTBROOK_LAYOUT.civic.wellBeacon.position.z,
+      r: EASTBROOK_LAYOUT.civic.wellBeacon.radius,
+      height: EASTBROOK_LAYOUT.civic.wellBeacon.height,
+      camGhost: false,
+    },
   ],
+  stalls: EASTBROOK_LAYOUT.market.stalls.map((stall) => ({
+    id: stall.id,
+    assetId: stall.assetId,
+    x: stall.position.x,
+    z: stall.position.z,
+    rot: stall.rotation,
+    r: Math.hypot(stall.width / 2, stall.depth / 2),
+    w: stall.width,
+    d: stall.depth,
+    height: stall.height,
+    canopyVariant: stall.canopyVariant,
+    camGhost: false,
+  })),
   mines: [{ x: -88, z: -68, rot: 0.8 }],
   docks: [{ x: -64, z: 60, rot: -2.2, hutLocal: { x: 2.8, z: 2.4, hw: 1.7, hd: 1.5 } }],
   tents: [
@@ -1414,7 +1820,6 @@ export const ZONE1_PROPS: ZonePropsDef = {
     [70, -72],
   ],
   campfires: [
-    [3, -4],
     [65, -65],
     [90, -90],
     [-80, -60],
@@ -1429,6 +1834,40 @@ export const ZONE1_PROPS: ZonePropsDef = {
     { x: 80, z: 78, ringR: 7, columns: 7 },
     { x: -5, z: -60, ringR: 8, columns: 6 },
   ],
+  fences: EASTBROOK_LAYOUT.fences.map((fence) => ({
+    id: fence.id,
+    assetId: fence.assetId,
+    x1: fence.start.x,
+    z1: fence.start.z,
+    x2: fence.end.x,
+    z2: fence.end.z,
+    width: fence.width,
+    height: fence.height,
+  })),
+  benches: EASTBROOK_LAYOUT.civic.benches.map((bench) => ({
+    id: bench.id,
+    assetId: bench.assetId,
+    x: bench.position.x,
+    z: bench.position.z,
+    w: bench.width,
+    d: bench.depth,
+    rot: bench.rotation,
+    height: 1,
+    camGhost: false,
+  })),
+  walls: EASTBROOK_LAYOUT.wall.segments.map((segment) => ({
+    id: segment.id,
+    assetId: segment.assetId,
+    x: segment.footprint.center.x,
+    z: segment.footprint.center.z,
+    w: segment.footprint.halfWidth * 2,
+    d: segment.footprint.halfDepth * 2,
+    rot: segment.footprint.rotation,
+    height: segment.height,
+    camGhost: false,
+  })),
+  graveyards: [{ ...EASTBROOK_LAYOUT.services.graveyard.position }, { x: 4, z: -56 }],
+  delveMarkers: [{ x: -5, z: -52, delveId: 'collapsed_reliquary' }],
   fences: [
     { x1: 16, z1: 16, x2: 22, z2: 4 },
     { x1: -16, z1: 14, x2: -20, z2: 2 },

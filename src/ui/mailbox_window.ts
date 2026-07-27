@@ -10,19 +10,12 @@
 //
 // Cold, event-driven window: rendered on open and on a real signature change,
 // never from the per-frame hot path, so innerHTML rebuilds are fine here.
-//
-// Chrome comes from the shared window-frame builder (window_frame.ts): a titlebar
-// with a close control and a scrollable body. Like the vendor / options windows
-// the frame mounts on an INNER container (ensureFrame), so the shared
-// #mailbox-window root stays a pristine .window.panel (drag/resize/position live on
-// the root). The inbox/send tabs stay IN the body (behavior preserved): they carry
-// a dynamic unread count and rebuild on every render, so keeping them in-body needs
-// no frame-tab-rail state sync.
 
 import { audio } from '../game/audio';
 import { ITEMS } from '../sim/data';
 import type { InvSlot } from '../sim/types';
 import type { IWorld } from '../world_api';
+import { markDialogRoot } from './dialog_root';
 import { itemDisplayName, tEntity } from './entity_i18n';
 import { esc } from './esc';
 import { formatMoney, formatNumber, t } from './i18n';
@@ -35,21 +28,12 @@ import {
   type MailSendBody,
   type MailTab,
   mailSendBlocked,
+  parseParcelQty,
   recipientSuggestions,
   wrappedSuggestionIndex,
 } from './mailbox_view';
 import type { PainterHostPresentation } from './painter_host';
 import { svgIcon } from './ui_icons';
-import { renderWindowFrame, type WindowFrameParts } from './window_frame';
-import type { WindowFrameDescriptor } from './window_frame_view';
-
-// A closable frame with no tab rail (the inbox/send tabs live in the body) and no
-// footer. Every key is reused from the existing mailbox catalog.
-const MAILBOX_FRAME: WindowFrameDescriptor = {
-  id: 'mailbox-window',
-  titleKey: 'hudChrome.mailbox.title',
-  closeLabelKey: 'hudChrome.mailbox.close',
-};
 
 const QUALITY_DEFAULT_COLOR = 'var(--color-quality-default)';
 // Copper-per-denomination (mirrors market_view's COPPER_PER_*).
@@ -152,7 +136,12 @@ export class MailboxWindow {
     if (count < 1) return;
     this.attachments.push({ itemId, count });
     audio.click();
-    this.render();
+    // Targeted repaint, NOT this.render(): the full render rebuilds the send
+    // form via innerHTML with empty inputs, wiping the typed recipient,
+    // subject, body, and coin amounts the moment a parcel was attached. The
+    // stepper and remove paths already repaint this way (#1695); attach was
+    // the one parcel mutation still running the full rebuild.
+    this.renderParcels();
   }
 
   /**
@@ -176,6 +165,20 @@ export class MailboxWindow {
     if (next === slot.count) return;
     slot.count = next;
     audio.click();
+    this.renderParcels();
+  }
+
+  /** Commit a TYPED parcel quantity (the chip input's change event). Always
+   *  repaints, even when the count is unchanged, so a normalized-away entry
+   *  ("007", "", "999" over stock) snaps the field back to the real value. */
+  private setParcelQty(itemId: string, raw: string): void {
+    const slot = this.attachments.find((s) => s.itemId === itemId);
+    if (!slot) return;
+    const next = parseParcelQty(raw, this.ownedCountFor(itemId), slot.count);
+    if (next !== slot.count) {
+      slot.count = next;
+      audio.click();
+    }
     this.renderParcels();
   }
 
@@ -233,38 +236,10 @@ export class MailboxWindow {
     return row.subject.length > 0 ? row.subject : t('hudChrome.mailbox.noSubject');
   }
 
-  // Stamp the shared window frame cold at first open, then reuse it. The frame
-  // mounts on an inner container so the #mailbox-window root stays a pristine
-  // .window.panel; an intact mounted frame (its body present) is the reuse marker.
-  private ensureFrame(): WindowFrameParts {
-    const el = this.deps.root();
-    const mounted = el.querySelector<HTMLElement>(':scope > .window-frame');
-    const body = mounted?.querySelector<HTMLElement>('.window-body');
-    if (mounted && body) {
-      return {
-        root: mounted,
-        body,
-        footer: mounted.querySelector<HTMLElement>('.window-footer'),
-        tabButtons: [],
-      };
-    }
-    const mount = document.createElement('div');
-    const parts = renderWindowFrame(mount, MAILBOX_FRAME, { onClose: () => this.close() });
-    el.replaceChildren(mount);
-    return parts;
-  }
-
   render(): void {
+    const el = this.deps.root();
     this.deps.hideTooltip();
-    const { root: frame, body } = this.ensureFrame();
-    // The frame builder resolves the title key WITHOUT interpolation; the mailbox
-    // title carries a muted subtitle, so paint it here onto the frame's title.
-    const titleEl = frame.querySelector<HTMLElement>('.window-title');
-    if (titleEl) {
-      titleEl.innerHTML = `${esc(t('hudChrome.mailbox.title'))} <span class="panel-subtitle">${esc(
-        t('hudChrome.mailbox.subtitle'),
-      )}</span>`;
-    }
+    markDialogRoot(el, { label: t('hudChrome.mailbox.title') });
     const info = this.deps.world().mailInfo;
     const inboxLabel =
       info && info.unread > 0
@@ -274,12 +249,12 @@ export class MailboxWindow {
         : t('hudChrome.mailbox.tabInbox');
     const tabButton = (id: MailTab, label: string) =>
       `<button type="button" class="mail-tab${this.tab === id ? ' sel' : ''}" data-tab="${id}" aria-pressed="${this.tab === id ? 'true' : 'false'}">${esc(label)}</button>`;
-    // The inbox/send tabs and the content pane live inside the scrolling frame body;
-    // the tabs stay pinned above the pane (mailbox CSS makes the body a flex column).
-    body.innerHTML =
+    el.innerHTML =
+      `<div class="panel-title"><span>${esc(t('hudChrome.mailbox.title'))} <span class="panel-subtitle">${esc(t('hudChrome.mailbox.subtitle'))}</span></span><button type="button" class="x-btn" data-close aria-label="${esc(t('hudChrome.mailbox.close'))}">${svgIcon('close')}</button></div>` +
       `<div class="mail-tabs">${tabButton('inbox', inboxLabel)}${tabButton('send', t('hudChrome.mailbox.tabSend'))}</div>` +
       `<div id="mailbox-body"></div>`;
-    body.querySelectorAll('[data-tab]').forEach((node) => {
+    el.querySelector('[data-close]')?.addEventListener('click', () => this.close());
+    el.querySelectorAll('[data-tab]').forEach((node) => {
       node.addEventListener('click', () => {
         const next = (node as HTMLElement).dataset.tab as MailTab;
         if (next === this.tab) return;
@@ -396,19 +371,10 @@ export class MailboxWindow {
         const chip = document.createElement('span');
         chip.className = 'mail-attachment-item';
         if (item) {
-          // The AAA .item-cell grammar (the vendor precedent, spec 6.1 to 6.3):
-          // rarity border via data-quality, stack count in the cell corner (was
-          // an " xN" text suffix), the shared focus ring from the grammar CSS.
-          // The quality-colored name label and the take/read flows are unchanged.
-          const quality = item.quality ?? 'common';
-          const qColor = QUALITY_COLOR[quality] ?? QUALITY_DEFAULT_COLOR;
-          const corner =
-            slot.count > 1
-              ? `<span class="item-cell-count">${esc(formatNumber(slot.count, { maximumFractionDigits: 0 }))}</span>`
-              : '';
-          chip.innerHTML =
-            `<span class="item-cell" data-quality="${esc(quality)}">${this.deps.itemIcon(item)}${corner}</span>` +
-            `<span style="color:${qColor}">${esc(itemDisplayName(item))}</span>`;
+          const qColor = QUALITY_COLOR[item.quality ?? 'common'] ?? QUALITY_DEFAULT_COLOR;
+          const stack =
+            slot.count > 1 ? ` x${formatNumber(slot.count, { maximumFractionDigits: 0 })}` : '';
+          chip.innerHTML = `${this.deps.itemIcon(item)}<span style="color:${qColor}">${esc(itemDisplayName(item))}${esc(stack)}</span>`;
           this.deps.attachTooltip(chip, () => this.deps.itemTooltip(item));
         } else {
           chip.textContent = slot.itemId;
@@ -673,7 +639,12 @@ export class MailboxWindow {
     }
     const itemControls = new Map<
       string,
-      { minus?: HTMLButtonElement; plus?: HTMLButtonElement; remove?: HTMLButtonElement }
+      {
+        minus?: HTMLButtonElement;
+        plus?: HTMLButtonElement;
+        qty?: HTMLInputElement;
+        remove?: HTMLButtonElement;
+      }
     >();
     for (const slot of this.attachments) {
       const item = ITEMS[slot.itemId];
@@ -693,6 +664,7 @@ export class MailboxWindow {
       const controls: {
         minus?: HTMLButtonElement;
         plus?: HTMLButtonElement;
+        qty?: HTMLInputElement;
         remove?: HTMLButtonElement;
       } = {};
       if (owned > 1) {
@@ -709,11 +681,39 @@ export class MailboxWindow {
           t('hudChrome.mailbox.parcelQtyDecreaseAria', { item: itemDisplayName(item) }),
         );
         minus.addEventListener('click', () => this.adjustParcelQty(slot.itemId, -1));
-        const qty = document.createElement('span');
-        qty.className = 'mail-parcel-qty-value';
+        // Typeable quantity (was a read-only span): validated on change/blur,
+        // never per keystroke, so typing is not interrupted by the repaint.
+        // Purely client UX: the sim's post office re-validates every send
+        // (floors counts, rejects < 1, checks fungible stock) authoritatively.
+        const qty = document.createElement('input');
+        qty.type = 'number';
+        qty.min = '1';
+        qty.max = String(owned);
+        qty.inputMode = 'numeric';
+        qty.className = 'mail-parcel-qty-input';
+        qty.value = String(slot.count);
+        qty.dataset.focusKey = `${slot.itemId}:qty`;
+        // Still a live region even as an input: a +/- stepper click changes
+        // this value while focus sits on the BUTTON, and without aria-live a
+        // screen reader hears nothing about the new count.
         qty.setAttribute('aria-live', 'polite');
-        qty.textContent = t('itemUi.bags.stackCount', {
-          count: formatNumber(slot.count, { maximumFractionDigits: 0 }),
+        qty.setAttribute(
+          'aria-label',
+          t('hudChrome.mailbox.parcelQtyAria', { item: itemDisplayName(item) }),
+        );
+        // The coin-input focus contract: select the value so typing replaces it
+        // (clicking into "2" and typing 5 must mean 5, not 25); the once-only
+        // mouseup swallow keeps click-to-focus from collapsing the selection.
+        qty.addEventListener('focus', () => {
+          qty.select();
+          qty.addEventListener('mouseup', (e) => e.preventDefault(), { once: true });
+        });
+        qty.addEventListener('change', () => this.setParcelQty(slot.itemId, qty.value));
+        qty.addEventListener('keydown', (ke) => {
+          if (ke.key === 'Enter') {
+            ke.preventDefault();
+            qty.blur();
+          }
         });
         const plus = document.createElement('button');
         plus.type = 'button';
@@ -730,6 +730,7 @@ export class MailboxWindow {
         chip.appendChild(step);
         controls.minus = minus;
         controls.plus = plus;
+        controls.qty = qty;
       }
       const remove = document.createElement('button');
       remove.type = 'button';
@@ -753,18 +754,25 @@ export class MailboxWindow {
     if (focusKey) {
       const [itemId, role] = focusKey.split(':');
       const controls = itemControls.get(itemId);
+      // The qty input matters most here: a number input's arrow keys fire
+      // `change` WITHOUT blurring, so the repaint runs while the input is
+      // focused; falling through to Remove would turn the player's next
+      // Enter/Space into removing the parcel mid-adjustment.
       const preferred = controls
         ? role === 'minus'
           ? controls.minus
           : role === 'plus'
             ? controls.plus
-            : controls.remove
+            : role === 'qty'
+              ? controls.qty
+              : controls.remove
         : undefined;
       // The just-activated control (or its whole item) can vanish on rebuild
       // (disabled at a bound, or the stepper dropped once owned <= 1): fall
       // back to the nearest still-focusable control for the same item.
-      let target: HTMLButtonElement | undefined;
+      let target: HTMLButtonElement | HTMLInputElement | undefined;
       if (preferred && !preferred.disabled) target = preferred;
+      else if (controls?.qty) target = controls.qty;
       else if (controls?.minus && !controls.minus.disabled) target = controls.minus;
       else if (controls?.plus && !controls.plus.disabled) target = controls.plus;
       else target = controls?.remove;

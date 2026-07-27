@@ -1,5 +1,11 @@
 # AGENTS.md — Cryptic Realm
 
+This file owns Codex runtime behavior for World of ClaudeCraft. The root and
+directory-local `CLAUDE.md` files remain canonical for repository facts, architecture,
+hard invariants, conventions, commands, the default task workflow and deliverable
+contract, and the QA contract. Claude-specific model,
+memory, Workflow, slash-command, and agent-runtime instructions do not apply to Codex.
+Do not edit or replace the Claude setup unless the user explicitly asks for that work.
 Codex reads this file each turn. The repo also has per-area `CLAUDE.md` files
 (`src/`, `src/sim/`, `src/sim/content/`, `src/ui/`, `server/`, `scripts/`, …) with
 the deeper conventions — **open and follow the relevant one when you work in an area.**
@@ -12,6 +18,14 @@ dev commands in committed prod code; never commit `.env`/secrets.
 
 ---
 
+1. Run `git status --short` before edits and preserve unrelated user work.
+2. Follow the default task workflow in `CLAUDE.md`: base the work on the latest
+   `release/**` branch, never `main`, and create a separate worktree for the task.
+3. Read the root `CLAUDE.md` in full. Before reading or changing files in a directory,
+   read that directory's `CLAUDE.md` if it exists. Codex builds its instruction chain at
+   session start, so opening a nested file does not load local guidance automatically.
+4. Use `rg` and targeted reads to discover the current shape. Follow existing code and
+   tests instead of relying on remembered inventories or line numbers.
 ## QA Autoloop — context for the QA goal
 
 You are running an autonomous QA loop (Codex Goal mode). Capture the live build's
@@ -65,6 +79,29 @@ Each subagent/driver: creates its own namespaced accounts/characters; targets LO
 default (GAME_URL=http://localhost:5173, SERVER_URL=http://localhost:8787), PROD only for
 the one baseline; records per-scenario PASS/FAIL + evidence into tmp/qa-loop/REPORT.md.
 
+- `$woc-qa`: scope and run the contribution gate, then dispatch relevant reviewers.
+- `$woc-extract-and-test`: extract a module behind behavior-pinning tests.
+- `$woc-feature-plan`: produce an implementation-ready plan for cross-cutting work.
+- `$woc-review-pr`: verify a pull request without posting unless explicitly requested.
+- `$woc-file-issue`: draft an issue, and file it only with explicit authorization.
+- `$woc-image-to-glb`: build a shipping GLB asset from a reference image through the
+  repo pipeline.
+- `$woc-release-merge-audit`: find semantic damage after release integration.
+- `$woc-release-malware-audit`: scan and judge malicious-code risk.
+- `$woc-codex-audit`: compare the checked-in Codex architecture with current official
+  guidance.
+
+Read-only specialist agents live in `.codex/agents/`. Use only the roles matching the
+changed surface: sim architecture, cross-platform parity, persistence, database
+performance, security, test coverage, frontend, release malware, and official
+documentation research. The parent runs deterministic commands once; reviewers inspect
+evidence instead of duplicating the full gate.
+
+For SQL, database call sites, schema or indexes, query cadence/cardinality, pool or lock
+behavior, timeout policy, background work, database driver/dependency versions, PostgreSQL engine
+or resource/configuration/topology changes, or stored-data growth, invoke
+`woc_database_performance` before implementation decisions and again on the finished diff.
+Pair it with persistence or security review when those concerns also apply.
 ### Accounts / auth (same shape local + prod; base URL differs)
 - POST <base>/api/register {username,password} → {token}  (user 3–24 [A-Za-z0-9_], pw ≥6; 409 if taken)
 - POST <base>/api/characters (Authorization: Bearer <token>) {name,class} → {id}

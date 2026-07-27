@@ -12,14 +12,15 @@ import {
   type PreviewAppearance,
   previewAppearanceVisual,
 } from './preview_appearance';
+import { PREVIEW_FRAMING, type PreviewFramingName } from './preview_framing';
+import { characterPreviewFrameVisible, resolveCharacterPreviewPolicy } from './preview_policy';
 import { CharacterVisual } from './visual';
 
 export type { PreviewAppearance } from './preview_appearance';
 
-/** Lifecycle exposed to the character-sheet item viewer.  The viewer remains
- * useful when a Chronicle asset is still loading (or unavailable) because the
- * 2D item icon stays mounted as the authoritative fallback. */
-export type ExternalPreviewState = 'idle' | 'loading' | 'ready' | 'error';
+export interface CharacterPreviewOptions {
+  constrainedMemory?: boolean;
+}
 
 const PREVIEW_ANIM_STATE = {
   speed: 0,
@@ -61,6 +62,11 @@ export class CharacterPreview {
   private externalState: ExternalPreviewState = 'idle';
   private externalStateListener: ((state: ExternalPreviewState) => void) | null = null;
   private currentSkin = 0;
+  // The active Armory weapon-skin cosmetic, persisted across visual rebuilds
+  // exactly like currentSkin so a class/appearance swap keeps the skinned
+  // weapon (the in-world renderer and the store preview both apply it; the
+  // paperdoll must match or a purchased skin reads as missing).
+  private currentWeaponSkinId: string | null = null;
   // Identity of the appearance last requested via setAppearance, so an async mech
   // re-apply can bail out if a newer selection superseded it.
   private appearanceSig: string | null = null;
@@ -75,18 +81,23 @@ export class CharacterPreview {
   private isDragging = false;
   private previousMouseX = 0;
 
-  constructor(container: HTMLElement, canvas: HTMLCanvasElement) {
+  constructor(
+    container: HTMLElement,
+    canvas: HTMLCanvasElement,
+    options: CharacterPreviewOptions = {},
+  ) {
     this.container = container;
     this.canvas = canvas;
+    const policy = resolveCharacterPreviewPolicy(options.constrainedMemory === true);
 
     // 1. Initialize WebGLRenderer
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
       alpha: true,
-      antialias: true,
-      preserveDrawingBuffer: true,
+      antialias: policy.antialias,
+      preserveDrawingBuffer: policy.preserveDrawingBuffer,
     });
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, policy.pixelRatioCap));
     this.renderer.setSize(this.container.clientWidth, this.container.clientHeight, false);
     this.renderer.shadowMap.enabled = false; // Preview doesn't need heavy shadows
     // Hand this context back on page teardown (see context_release.ts).
@@ -101,8 +112,9 @@ export class CharacterPreview {
         ? this.container.clientWidth / this.container.clientHeight
         : 1;
     this.camera = new THREE.PerspectiveCamera(45, aspect, 0.1, 100);
-    this.camera.position.set(LIVE_PREVIEW_X, 1.45, 5.1);
-    this.camera.lookAt(new THREE.Vector3(LIVE_PREVIEW_X, 1.3, 0));
+    // Default to the self character-sheet framing; the inspect window switches to
+    // its pulled-back framing via setFraming('inspect') on mount.
+    this.applyFraming(PREVIEW_FRAMING.sheet);
 
     // 4. Initialize Character Group
     this.characterGroup = new THREE.Group();
@@ -130,56 +142,58 @@ export class CharacterPreview {
     this.animate();
   }
 
-  /** Set the active character model by player class. Pass `weaponItemId` to hold a
-   *  specific weapon (e.g. the character sheet shows the equipped mainhand); omit it
-   *  to default to the class start weapon (so the creation turntable matches the
-   *  freshly created character in-world). */
-  setClass(cls: PlayerClass, weaponItemId?: string | null): void {
+  /** Set the active character model by player class. Pass explicit hand ids for a
+   *  character sheet; omit them to show the class starter equipment in creation. */
+  setClass(cls: PlayerClass, weaponItemId?: string | null, offhandItemId?: string | null): void {
     if (this.destroyed) return;
     // A class-driven selection (create/offline picker, or a panel switch) supersedes
     // any pending async mech re-apply, so invalidate the tracked appearance.
     this.appearanceSig = null;
     const weapon = weaponItemId !== undefined ? weaponItemId : (CLASSES[cls].startWeapon ?? null);
-    this.setVisualKey(`player_${cls}`, weapon);
+    const offhand =
+      offhandItemId !== undefined ? offhandItemId : (CLASSES[cls].startOffhand ?? null);
+    this.setVisualKey(`player_${cls}`, weapon, null, offhand);
   }
 
   /** Show a character's real, in-world appearance: the class rig or the Combat Mech
-   *  cosmetic body, its appearance skin, and the actually-equipped mainhand (no
-   *  weapon when unarmed). Mirrors createCharacterVisual so the char-select roster
-   *  and the character sheet match the world. The mech's cosmetic assets load
+   *  cosmetic body, its appearance skin, and the actually-equipped hands. Mirrors
+   *  createCharacterVisual so the char-select roster and character sheet match the
+   *  world. The mech's cosmetic assets load
    *  lazily; while they are not ready this shows the class body and re-applies once
    *  loaded, unless a newer selection has superseded this one. */
   setAppearance(a: PreviewAppearance): void {
     if (this.destroyed) return;
     this.currentSkin = a.skin;
+    this.currentWeaponSkinId = a.weaponSkinId ?? null;
     const sig = appearanceSignature(a);
     this.appearanceSig = sig;
     if (a.skinCatalog === 'mech' && !mechAssetsReady()) {
-      this.setVisualKey(`player_${a.cls}`, a.mainhandItemId ?? null);
+      this.setVisualKey(`player_${a.cls}`, a.mainhandItemId ?? null, null, a.offhandItemId ?? null);
       void preloadMechAssets().then(() => {
         if (!this.destroyed && this.appearanceSig === sig) this.setAppearance(a);
       });
       return;
     }
     const v = previewAppearanceVisual(a);
-    this.setVisualKey(v.visualKey, v.weaponItemId, v.weaponOverride);
+    this.setVisualKey(v.visualKey, v.weaponItemId, v.weaponOverride, v.offhandItemId);
   }
 
   /** Set the active model by raw visual key (e.g. `player_mech` for the cosmetic
    *  turntable). The asset must already be loaded — callers preload first.
-   *  `weaponOverride` lets a cosmetic body adopt a class hand layout (rogue mech
-   *  dual-wields), matching the in-world render. */
+   *  `weaponOverride` lets a cosmetic body adopt a class hand layout (including
+   *  shields and dual wield), matching the in-world render. */
   setVisualKey(
     visualKey: string,
     weaponItemId: string | null = null,
     weaponOverride: WeaponLayoutOverride | null = null,
+    offhandItemId: string | null = null,
   ): void {
     if (this.destroyed) return;
     this.clearExternalModel();
     // Clean up current visual if it exists
     if (this.currentVisual) {
       this.characterGroup.remove(this.currentVisual.root);
-      // CharacterVisual dispose only releases mixer listeners
+      this.currentVisual.dispose();
       this.currentVisual = null;
     }
 
@@ -190,8 +204,12 @@ export class CharacterPreview {
         this.currentSkin,
         weaponItemId,
         weaponOverride,
+        offhandItemId,
       );
       this.characterGroup.add(this.currentVisual.root);
+      // Re-apply the persisted weapon-skin cosmetic to the rebuilt visual (the
+      // constructor attaches the equipped item's own model).
+      if (this.currentWeaponSkinId) this.currentVisual.setWeaponSkin(this.currentWeaponSkinId);
 
       // Reset rotation on a class swap so every new character greets the player
       // FACE-ON (the classic character-screen pose); dragging still spins freely.
@@ -201,69 +219,12 @@ export class CharacterPreview {
     }
   }
 
-  setExternalModel(
-    url: string,
-    onState?: (state: ExternalPreviewState) => void,
-  ): void {
+  /** Apply or clear the Armory weapon-skin cosmetic; persists across
+   *  setClass/setVisualKey rebuilds like the body skin. */
+  setWeaponSkin(weaponSkinId: string | null): void {
     if (this.destroyed) return;
-    this.externalStateListener = onState ?? null;
-    if (!shouldReloadExternalPreview(this.externalModelUrl, url)) {
-      onState?.(this.externalState);
-      return;
-    }
-    const token = ++this.externalLoadToken;
-    this.clearExternalModel(false);
-    this.externalModelUrl = url;
-    this.externalState = 'loading';
-    this.externalStateListener?.('loading');
-    loadGltf(url)
-      .then((gltf) => {
-        if (this.destroyed || token !== this.externalLoadToken) return;
-        // Keep the class rig visible until the replacement has loaded. A missing
-        // generated asset must degrade to a useful character preview, never to an
-        // empty turntable while the network request is pending or after it fails.
-        if (this.currentVisual) {
-          this.characterGroup.remove(this.currentVisual.root);
-          this.currentVisual.dispose();
-          this.currentVisual = null;
-        }
-        const root = buildExternalPreviewInstance(gltf.scene);
-        this.externalRoot = root;
-        this.characterGroup.add(root);
-        if (gltf.animations.length) {
-          const mixer = new THREE.AnimationMixer(root);
-          const clipName = chooseExternalPreviewClipName(
-            gltf.animations.map((clip) => clip.name),
-          );
-          const clip =
-            gltf.animations.find((animation) => animation.name === clipName) ?? gltf.animations[0];
-          mixer.clipAction(clip).play();
-          this.externalMixer = mixer;
-        }
-        this.characterGroup.rotation.y = 0;
-        this.syncSize();
-        this.externalState = 'ready';
-        this.externalStateListener?.('ready');
-      })
-      .catch((err: unknown) => {
-        if (token === this.externalLoadToken) {
-          this.externalModelUrl = null;
-          this.externalState = 'error';
-          this.externalStateListener?.('error');
-          console.error(`Failed to load external preview model ${url}:`, err);
-        }
-      });
-  }
-
-  /** Clear the turntable when a realm class is still waiting on a unique model. */
-  clearModel(): void {
-    if (this.destroyed) return;
-    this.clearExternalModel();
-    if (this.currentVisual) {
-      this.characterGroup.remove(this.currentVisual.root);
-      this.currentVisual.dispose();
-      this.currentVisual = null;
-    }
+    this.currentWeaponSkinId = weaponSkinId;
+    this.currentVisual?.setWeaponSkin(weaponSkinId);
   }
 
   /** Swap the previewed skin (alternate body texture); persists across setClass. */
@@ -290,6 +251,21 @@ export class CharacterPreview {
 
     // Re-observe the new container
     this.setupResizeObserver();
+  }
+
+  /** Switch the camera framing (see preview_framing.ts). The self character sheet
+   *  uses 'sheet' (close, face-on); the inspect window uses 'inspect' (pulled back
+   *  so a tall silhouette stays framed). Re-asserted on every mount so reopening
+   *  the character sheet after inspecting restores the close framing. */
+  setFraming(name: PreviewFramingName): void {
+    if (this.destroyed) return;
+    this.applyFraming(PREVIEW_FRAMING[name]);
+  }
+
+  private applyFraming(f: { y: number; z: number; lookY: number }): void {
+    this.camera.position.set(LIVE_PREVIEW_X, f.y, f.z);
+    this.camera.lookAt(new THREE.Vector3(LIVE_PREVIEW_X, f.lookY, 0));
+    this.camera.updateProjectionMatrix();
   }
 
   /** Force the renderer to match the current visible container size. */
@@ -370,6 +346,18 @@ export class CharacterPreview {
     if (this.destroyed) return;
     this.animationFrameId = requestAnimationFrame(this.animate);
 
+    if (
+      !characterPreviewFrameVisible(
+        this.canvas.isConnected,
+        this.container.clientWidth,
+        this.container.clientHeight,
+      )
+    ) {
+      // Drain the clock while hidden so reopening cannot produce a large animation step.
+      this.clock.getDelta();
+      return;
+    }
+
     const dt = Math.min(this.clock.getDelta(), 0.1); // cap dt to prevent huge jumps
 
     // No idle auto-rotation: the character holds its face-on pose (the classic
@@ -391,10 +379,11 @@ export class CharacterPreview {
    *
    * The live preview canvas is borrowed for one synchronous render: we save the
    * renderer size, camera, and group rotation; frame a tighter portrait at the
-   * requested pixel size; read the pixels (preserveDrawingBuffer makes this
-   * reliable); then restore everything and re-render so the visible preview is
-   * untouched. Because nothing awaits between the off-pose render and the
-   * restore, the browser never paints the intermediate frame.
+   * requested pixel size; read the pixels immediately from that explicit render;
+   * then restore everything and re-render so the visible preview is untouched.
+   * Because nothing awaits between the off-pose render and the restore, the
+   * browser never paints the intermediate frame. This also works with the
+   * constrained transient framebuffer, whose contents need not survive a paint.
    */
   captureCloseup(
     opts: {

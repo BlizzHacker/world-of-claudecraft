@@ -14,11 +14,11 @@
 import * as THREE from 'three';
 import type { GLTF } from 'three/addons/loaders/GLTFLoader.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { DELVE_MODULE_GAP, instanceOrigin } from '../sim/data';
+import { arenaOriginAt, DELVE_MODULE_GAP, instanceOrigin } from '../sim/data';
 import type { DelveModuleId } from '../sim/delve_layout';
-import { isLitanyModuleId } from '../sim/delve_litany_layout';
+import { isLitanyModuleId, polygonWallSegments } from '../sim/delve_litany_layout';
 import {
-  ARENA_LAYOUT,
+  arenaMapForSlot,
   CRYPT_LAYOUT,
   DUNGEON_DOORWAY_HW,
   DUNGEON_END_WALL_HW,
@@ -34,6 +34,7 @@ import {
   type WallStub,
 } from '../sim/dungeon_layout';
 import { polygonContainsPoint, polygonXAtZ } from '../sim/geometry2d';
+import { ARENA_WATER_NAVE_HALF_X, arenaWaterBands } from './arena_water_band_core';
 import { loadGltf, releaseGltf } from './assets/loader';
 import { registerPreload } from './assets/preload';
 import {
@@ -66,6 +67,9 @@ export type DungeonInteriorVariant =
   | 'sanctum'
   | 'temple'
   | 'arena'
+  // The Drowned Court: the ODD-slot arena map, a flooded-temple pit (temple
+  // moonfire palette + water bands over the shared arena wall machinery).
+  | 'arena_drowned'
   | 'nythraxis'
   // Collapsed Reliquary delve sub-themes (share the ember crypt-stone base, see
   // isDelveVariant; differ only in wall-side props, clutter, and the dais).
@@ -92,11 +96,16 @@ export function isDelveVariant(variant: DungeonInteriorVariant): boolean {
 }
 type Variant = DungeonInteriorVariant;
 
+/** True for either arena pit variant (both share the arena wall machinery). */
+export function isArenaVariant(variant: DungeonInteriorVariant): boolean {
+  return variant === 'arena' || variant === 'arena_drowned';
+}
+
 export function dungeonDaisHasRaisedPlatform(variant: DungeonInteriorVariant): boolean {
-  // Flat fighting floors: the arena, the Nythraxis raid, and the delve trash
-  // rooms (their "dais" marker is only the exit threshold). The delve finale
-  // keeps a raised boss stage for Deacon Varric.
-  if (variant === 'arena' || variant === 'nythraxis') return false;
+  // Flat fighting floors: the arena pits, the Nythraxis raid, and the delve
+  // trash rooms (their "dais" marker is only the exit threshold). The delve
+  // finale keeps a raised boss stage for Deacon Varric.
+  if (isArenaVariant(variant) || variant === 'nythraxis') return false;
   if (variant === 'delve_ossuary' || variant === 'delve_bell' || variant === 'delve_hall')
     return false;
   // marsh trash rooms are flat fighting floors like the other delve trash; the
@@ -119,6 +128,8 @@ const TORCH_COLORS: Record<Variant, TorchColors> = {
   temple: { flame: 0xd9c9ff, emissive: 0x6a4fd0, light: 0xb79cff },
   // the Ashen Coliseum burns warm — amber braziers ringing the fighting sands
   arena: { flame: 0xffb24a, emissive: 0xcc5a14, light: 0xff9a3c },
+  // the Drowned Court fights under the temple's cold moonfire (same palette)
+  arena_drowned: { flame: 0xd9c9ff, emissive: 0x6a4fd0, light: 0xb79cff },
   nythraxis: { flame: 0x8f5cff, emissive: 0x4b1c9a, light: 0x7b4dff },
   // delve reliquaries burn with grave-ember red: warm coals over cold stone
   delve_ossuary: { flame: 0xff7a3c, emissive: 0xcc3a14, light: 0xff6a3c },
@@ -142,6 +153,18 @@ const TORCH_COLORS: Record<Variant, TorchColors> = {
 // applied to a clone of the shared pack material, never the source itself.
 const MARSH_WALL_TINT = 0x5a6a52;
 const MARSH_FLOOR_TINT = 0x3c3830;
+
+// The Drowned Court (arena_drowned) uses the same clone-and-tint trick to
+// read as a moonlit flooded ruin instead of a recolored Coliseum: cold
+// blue-slate walls and colonnades over dark waterlogged flagstones, so the
+// pit's identity shows at EVERY graphics tier (tints are plain material
+// colors, unlike the glow decals the low tier sheds).
+// Tuned against max-preset captures: dark enough to kill the Coliseum's warm
+// beige read, light enough that fighters and cover still stand out on the
+// nave (the mood comes from the moonfire lights and the flood, not from
+// crushing the stone albedo).
+const DROWNED_WALL_TINT = 0x8b9cb8;
+const DROWNED_FLOOR_TINT = 0x93a2b4;
 
 // The Drowned Temple is flooded — a translucent, self-animating water sheet
 // (driven by the shared uTime so it needs no per-frame plumbing) with cheap
@@ -605,6 +628,9 @@ export class DungeonInteriors {
   // instance draws (see marshMaterial). Never touched by any other variant.
   private marshWallMats = new Map<Pack, THREE.Material>();
   private marshFloorMats = new Map<Pack, THREE.Material>();
+  // Drowned Court wall/pillar and floor tints, same lifecycle as the marsh maps.
+  private drownedWallMats = new Map<Pack, THREE.Material>();
+  private drownedFloorMats = new Map<Pack, THREE.Material>();
   private waterMat: THREE.ShaderMaterial | null = null;
   private arenaHideables: ArenaHideable[] = [];
 
@@ -690,14 +716,16 @@ export class DungeonInteriors {
         : interior === 'temple'
           ? TEMPLE_LAYOUT
           : interior === 'arena'
-            ? ARENA_LAYOUT
+            ? // per-slot arena map: same parity selection collision uses
+              // (arenaCollidersForSlot), resolved from the instance origin
+              arenaMapForSlot(arenaOriginAt(oz).slot).layout
             : interior === 'nythraxis'
               ? NYTHRAXIS_LAYOUT
               : CRYPT_LAYOUT);
-    const variant = opts?.variant ?? this.variantFor(interior, ox);
+    const variant = opts?.variant ?? this.variantFor(interior, ox, oz);
     const group = new THREE.Group();
     const p = new Placements();
-    const arenaWalls = variant === 'arena' ? this.pendingArenaWalls(layout, ox, oz) : undefined;
+    const arenaWalls = isArenaVariant(variant) ? this.pendingArenaWalls(layout, ox, oz) : undefined;
 
     this.placeFloor(p, layout, variant);
     this.placeWalls(p, layout, variant, arenaWalls);
@@ -709,6 +737,14 @@ export class DungeonInteriors {
     this.placeWallDressing(p, layout, variant, arenaWalls);
     if (variant === 'temple') {
       this.placeFloodwater(group, layout);
+      this.placeAquaticDressing(group, layout);
+    }
+    if (variant === 'arena_drowned') {
+      this.placeArenaWaterBands(group, layout);
+      // kelp climbing the colonnades and lily pads drifting on the flooded
+      // aisles: the temple's aquatic dressing reads straight off the layout,
+      // and its placement ranges (pads |x| 9..18, kelp |x| 13..20) land
+      // entirely inside the flooded aisles here.
       this.placeAquaticDressing(group, layout);
     }
     if (opts?.hazards?.length) {
@@ -740,7 +776,7 @@ export class DungeonInteriors {
 
     this.emit(group, p, variant);
     if (arenaWalls) {
-      for (const wall of arenaWalls.all) this.emitArenaHideable(group, wall);
+      for (const wall of arenaWalls.all) this.emitArenaHideable(group, wall, variant);
     }
     group.position.set(ox, 0, oz);
     this.scene.add(group);
@@ -782,6 +818,31 @@ export class DungeonInteriors {
       fog: true,
     });
     return this.waterMat;
+  }
+
+  // The Drowned Court's water: both aisles flood ankle-deep (the colonnades
+  // and reliquaries rise out of the water) while the processional nave stays
+  // dry, sized by the pure core (arena_water_band_core.ts) and sharing the
+  // temple's self-animating water material, so there is no new shader and no
+  // new per-frame plumbing. The sheets carry no collision: arena floors are
+  // gameplay-flat by contract. Bioluminescent pools breathe along each
+  // flooded aisle (skipped on the low tier like every glow decal).
+  private placeArenaWaterBands(group: THREE.Group, layout: DungeonLayout): void {
+    for (const b of arenaWaterBands(layout)) {
+      if (b.width <= 0 || b.depth <= 0) continue;
+      const geo = new THREE.PlaneGeometry(b.width, b.depth).rotateX(-Math.PI / 2);
+      geo.translate(b.x, 0.14, b.z);
+      const sheet = new THREE.Mesh(geo, this.templeWaterMaterial());
+      sheet.renderOrder = 1; // floats over the floor tiles
+      group.add(sheet);
+    }
+    const aisleX =
+      ARENA_WATER_NAVE_HALF_X + (DUNGEON_WALL_X - DUNGEON_WALL_HW - ARENA_WATER_NAVE_HALF_X) / 2;
+    for (let z = layout.zMin + 10; z < layout.zMax - 8; z += 16) {
+      for (const side of [-1, 1]) {
+        this.addTorchGlow(group, side * aisleX, z, 0x37e6cf, 0.22, 1.3);
+      }
+    }
   }
 
   private placeFloodwater(group: THREE.Group, layout: DungeonLayout): void {
@@ -914,8 +975,15 @@ export class DungeonInteriors {
 
   // Hollow Crypt and Sunken Bastion share interior 'crypt'; the origin x-band
   // (instanceOrigin in sim/data.ts: 900 + index*600) says which dungeon.
-  private variantFor(interior: string, ox: number): Variant {
-    if (interior === 'arena') return 'arena';
+  private variantFor(interior: string, ox: number, oz: number): Variant {
+    // Arena slots host fixed maps by parity (EVEN = Coliseum, ODD = Drowned
+    // Court). The map id comes from the SAME arenaMapForSlot the sim's
+    // colliders use, so look and collision cannot disagree on parity.
+    if (interior === 'arena') {
+      return arenaMapForSlot(arenaOriginAt(oz).slot).id === 'drowned_court'
+        ? 'arena_drowned'
+        : 'arena';
+    }
     if (interior === 'nythraxis') return 'nythraxis';
     if (interior === 'sanctum') return 'sanctum';
     if (interior === 'temple') return 'temple';
@@ -950,16 +1018,35 @@ export class DungeonInteriors {
   // Cached per pack + surface (wall vs floor), built once per DungeonInteriors
   // instance and reused for every marsh room, never cloned per room or mesh.
   private marshMaterial(pack: Pack, surface: 'wall' | 'floor'): THREE.Material {
-    const cache = surface === 'wall' ? this.marshWallMats : this.marshFloorMats;
+    return this.tintedMaterial(
+      surface === 'wall' ? this.marshWallMats : this.marshFloorMats,
+      pack,
+      surface === 'wall' ? MARSH_WALL_TINT : MARSH_FLOOR_TINT,
+    );
+  }
+
+  private drownedMaterial(pack: Pack, surface: 'wall' | 'floor'): THREE.Material {
+    return this.tintedMaterial(
+      surface === 'wall' ? this.drownedWallMats : this.drownedFloorMats,
+      pack,
+      surface === 'wall' ? DROWNED_WALL_TINT : DROWNED_FLOOR_TINT,
+    );
+  }
+
+  private tintedMaterial(
+    cache: Map<Pack, THREE.Material>,
+    pack: Pack,
+    tint: number,
+  ): THREE.Material {
     let mat = cache.get(pack);
     if (mat) return mat;
     // this.material(pack) is itself already a clone of the immutable GLB cache
-    // source (see material() above); clone again so the marsh tint never
-    // mutates the shared pack material every other variant instances from.
+    // source (see material() above); clone again so the tint never mutates the
+    // shared pack material every other variant instances from.
     const base = this.material(pack).clone() as
       | THREE.MeshLambertMaterial
       | THREE.MeshStandardMaterial;
-    base.color.multiply(new THREE.Color(surface === 'wall' ? MARSH_WALL_TINT : MARSH_FLOOR_TINT));
+    base.color.multiply(new THREE.Color(tint));
     if (base instanceof THREE.MeshStandardMaterial) base.roughness = Math.max(base.roughness, 0.92);
     mat = base;
     cache.set(pack, mat);
@@ -981,6 +1068,10 @@ export class DungeonInteriors {
       let mat = this.material(asset.pack);
       if (isMarsh && WALL_PILLAR_KINDS.has(kind)) mat = this.marshMaterial(asset.pack, 'wall');
       else if (isMarsh && RECEIVER_KINDS.has(kind)) mat = this.marshMaterial(asset.pack, 'floor');
+      else if (variant === 'arena_drowned' && WALL_PILLAR_KINDS.has(kind))
+        mat = this.drownedMaterial(asset.pack, 'wall');
+      else if (variant === 'arena_drowned' && RECEIVER_KINDS.has(kind))
+        mat = this.drownedMaterial(asset.pack, 'floor');
       const mesh = new THREE.InstancedMesh(asset.geo, mat, mats.length);
       for (let i = 0; i < mats.length; i++) mesh.setMatrixAt(i, mats[i]);
       mesh.instanceMatrix.needsUpdate = true;
@@ -1024,7 +1115,7 @@ export class DungeonInteriors {
     };
   }
 
-  private emitArenaHideable(group: THREE.Group, pending: PendingArenaWall): void {
+  private emitArenaHideable(group: THREE.Group, pending: PendingArenaWall, variant: Variant): void {
     const wallGroup = new THREE.Group();
     const mats: ToggleMat[] = [];
     for (const [kind, matrices] of pending.placements.byKind) {
@@ -1034,6 +1125,14 @@ export class DungeonInteriors {
         continue;
       }
       const material = this.material(asset.pack).clone();
+      // Hideable walls bypass emit(), so the Drowned Court's wet-stone tint is
+      // applied to this per-wall clone directly (structural stone only: the
+      // banners keep their true colors, same scoping as the marsh tint).
+      if (variant === 'arena_drowned' && WALL_PILLAR_KINDS.has(kind)) {
+        (material as THREE.MeshLambertMaterial | THREE.MeshStandardMaterial).color.multiply(
+          new THREE.Color(DROWNED_WALL_TINT),
+        );
+      }
       mats.push({ mat: material, depthWrite: material.depthWrite });
       const mesh = new THREE.InstancedMesh(asset.geo, material, matrices.length);
       for (let i = 0; i < matrices.length; i++) mesh.setMatrixAt(i, matrices[i]);
@@ -1059,6 +1158,9 @@ export class DungeonInteriors {
   // -------------------------------------------------------------------------
 
   private floorKind(variant: Variant, t: number): string {
+    // The Drowned Court dresses as the temple (flooded flagstones, pale walls,
+    // faded banners); structural placement keys on the real variant elsewhere.
+    if (variant === 'arena_drowned') return this.floorKind('temple', t);
     if (variant === 'bastion') {
       return pickKind(
         [
@@ -1124,6 +1226,7 @@ export class DungeonInteriors {
   }
 
   private floorQuadKind(variant: Variant, t: number): string {
+    if (variant === 'arena_drowned') return this.floorQuadKind('temple', t);
     if (variant === 'bastion') {
       return pickKind(
         [
@@ -1233,6 +1336,7 @@ export class DungeonInteriors {
   }
 
   private wallKind(variant: Variant, t: number): string {
+    if (variant === 'arena_drowned') return this.wallKind('temple', t);
     if (variant === 'bastion') {
       return pickKind(
         [
@@ -1296,6 +1400,7 @@ export class DungeonInteriors {
   }
 
   private bannerKind(variant: Variant, t: number): string {
+    if (variant === 'arena_drowned') return this.bannerKind('temple', t);
     if (variant === 'bastion') {
       return pickKind(
         [
@@ -1417,10 +1522,10 @@ export class DungeonInteriors {
     }
   }
 
-  // Polygon-shell wall path: walks each authored boundary edge and places
-  // fixed-pitch wall modules along it (same ~8u module pitch and variant-keyed
-  // wallKind/banner logic as the rectangular loop above), rotated to run along
-  // the edge. This covers the end faces too (the polygon already closes the
+  // Polygon-shell wall path: walks the exact shared collision segments and
+  // scales one wall module to each span, with the same variant-keyed wall and
+  // banner logic as the rectangular loop above. This covers the end faces too
+  // (the polygon already closes the
   // room), so there is no separate end-cap pass and no door gap (Drowned
   // Litany rooms are teleport-in, matching the sim shell colliders built by
   // polygonShellColliders in sim/delve_litany_layout.ts). Rotation uses the
@@ -1435,27 +1540,18 @@ export class DungeonInteriors {
     variant: Variant,
   ): void {
     const bannerEvery = variant === 'crypt' ? 4 : 3;
-    const n = points.length;
     let i = 0;
-    for (let e = 0; e < n; e++) {
-      const a = points[e];
-      const b = points[(e + 1) % n];
-      const dx = b.x - a.x;
-      const dz = b.z - a.z;
-      const len = Math.hypot(dx, dz);
-      if (len < 1e-6) continue;
-      const rot = Math.atan2(-dz, dx);
-      const count = Math.max(1, Math.round(len / 8));
-      for (let s = 0; s < count; s++, i++) {
-        const t = (s + 0.5) / count;
-        const x = a.x + dx * t;
-        const z = a.z + dz * t;
-        const kind = this.wallKind(variant, hash2(x * 13.7, z));
-        p.add(kind, x, 0, z, rot, MODULE_SCALE);
-        if (i % bannerEvery === 2 && kind !== 'wall_archedwindow_gated') {
-          p.add(this.bannerKind(variant, hash2(z, x * 7.3)), x, 0, z, rot, MODULE_SCALE);
-        }
+    for (const segment of polygonWallSegments(points)) {
+      const { x, z, rot, halfLength } = segment;
+      const kind = this.wallKind(variant, hash2(x * 13.7, z));
+      // KayKit wall modules are 4u long on local X. Scale each one to the exact
+      // shared segment span instead of drawing an 8u module past a short edge.
+      const scale: [number, number, number] = [halfLength / 2, MODULE_SCALE, MODULE_SCALE];
+      p.add(kind, x, 0, z, rot, scale);
+      if (i % bannerEvery === 2 && kind !== 'wall_archedwindow_gated') {
+        p.add(this.bannerKind(variant, hash2(z, x * 7.3)), x, 0, z, rot, MODULE_SCALE);
       }
+      i++;
     }
   }
 
@@ -1466,7 +1562,10 @@ export class DungeonInteriors {
     variant: Variant,
   ): void {
     const kind =
-      variant === 'sanctum' || variant === 'temple' || variant === 'delve_hall'
+      variant === 'sanctum' ||
+      variant === 'temple' ||
+      variant === 'arena_drowned' ||
+      variant === 'delve_hall'
         ? 'pillar_decorated'
         : 'pillar';
     const colors = TORCH_COLORS[variant];
@@ -1569,7 +1668,7 @@ export class DungeonInteriors {
         }
         continue;
       }
-      if (variant === 'temple') {
+      if (variant === 'temple' || variant === 'arena_drowned') {
         // drowned reliquary altars: a candle-shrine over grave-offerings
         const face = t.x < 0 ? -Math.PI / 2 : Math.PI / 2;
         p.add('shrine_candles', t.x, 0, t.z, face, 1.45);
@@ -1618,10 +1717,18 @@ export class DungeonInteriors {
     }
   }
 
-  // Sanctum chamber waists: solid wall blocks built from stretched kit walls
-  // (cap flush at |x|=6 so the visual never intrudes into the 10u passage),
-  // plus a ritual arch spanning the centre passage.
+  // Chamber waists use variant-specific geometry derived from their authored
+  // stub OBBs so their visible footprint stays aligned with collision.
   private placeStubs(p: Placements, stubs: WallStub[], variant: Variant): void {
+    if (isArenaVariant(variant)) {
+      // Arena cover is a narrow full-height wall rather than the large
+      // sanctum chamber mass. The centered KayKit wall is 4u long and 1u
+      // thick, so these scales map its visual bounds exactly onto the OBB.
+      for (const s of stubs) {
+        p.add('wall', s.x, 0, s.z, Math.PI / 2, [s.hd / 2, MODULE_SCALE, s.hw * 2]);
+      }
+      return;
+    }
     if (variant === 'delve_bell') {
       // Bell Niche: each stub is a solid pier (hw x hd OBB) flush against the
       // side wall, dividing the deep handbell alcoves. Render the aisle-facing
@@ -1730,7 +1837,7 @@ export class DungeonInteriors {
 
   // Bone piles / debris strewn along the aisle (legacy deterministic spots)
   private placeAisleClutter(p: Placements, layout: DungeonLayout, variant: Variant): void {
-    if (variant === 'arena') return; // the fighting sands stay clear of obstacles
+    if (isArenaVariant(variant)) return; // the fighting floors stay clear of obstacles
     // Delve modules drive clutter straight from their layout's authored scatter
     // points so the visible bone piles sit exactly on the collision circles
     // (the Drowned Litany marsh shapes use bespoke scatter, not the sine aisle
@@ -1784,6 +1891,9 @@ export class DungeonInteriors {
     variant: Variant,
     arenaWalls?: PendingArenaWalls,
   ): void {
+    // The Drowned Court keeps bare moonlit walls: banners already come from
+    // placeWalls, and the water bands + reliquary altars carry the theme.
+    if (variant === 'arena_drowned') return;
     if (variant === 'arena') {
       // gladiatorial weapon trophies mounted high on the pit's side walls
       for (const z of [layout.zMin + 9, (layout.zMin + layout.zMax) / 2, layout.zMax - 9]) {

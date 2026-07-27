@@ -6,21 +6,16 @@
 // injected deps. The pure row + signature decisions live in social_view.ts; this
 // is the thin DOM consumer per the unit_portrait / talents_window template.
 //
-// Chrome comes from the shared window-frame builder (window_frame.ts): a titlebar
-// with a close control, the friends/guild/ignore/raid modes on the frame's TAB
-// RAIL, and a scrollable body holding the per-tab list + notice + add-row footer.
-// Like the vendor / options windows the frame mounts on an INNER container
-// (ensureFrame), so the shared #social-window root stays a pristine .window.panel.
-// Visibility is STILL the '.open' CLASS on #social-window (not style.display),
-// matching the window-manager (closeManagedWindow / topmostOpenWindow read '.open').
+// Visibility is the '.open' CLASS on #social-window (not style.display), matching
+// the window-manager (closeManagedWindow / topmostOpenWindow read '.open').
 //
 // LISTENER CHURN (social is NOT purely cold): the panel repaints on the
 // slow-HUD divider (refreshIfChanged), so re-attaching a click handler to every
 // row each tick would churn handlers. Instead the row actions use ONE delegated
 // click listener on the persistent `.soc-body` container, wired once per full
 // render; a content refresh only swaps the body's innerHTML, so no per-row handler
-// is re-attached. The frame chrome (close + tab rail) is stamped cold once and
-// reused; the footer/typeahead re-wire on a full render and survive a content refresh.
+// is re-attached. The chrome (close/tabs/footer/typeahead) is wired on a full
+// render and survives a content refresh untouched.
 //
 // No raw hex / magic numbers: the status dots are CSS-classed (no
 // color literal here) and the two typeahead timings are named constants.
@@ -28,22 +23,28 @@
 import { CLASSES } from '../sim/data';
 import type { PlayerClass } from '../sim/types';
 import type { IWorld } from '../world_api';
+import { deedTitleText } from './deed_i18n';
+import { markDialogRoot } from './dialog_root';
 import { classDisplayName } from './entity_i18n';
 import { esc } from './esc';
+import { loadGuildHideOffline, saveGuildHideOffline } from './guild_hide_offline';
 import { formatDateTime, formatNumber, t, tPlural } from './i18n';
-import { rovingTarget } from './roving_index';
 import { localizeZone } from './server_i18n';
 import {
+  blockRows,
   friendRows,
+  type GuildRow,
+  type GuildView,
+  guildRosterItems,
   guildView,
   ignoreRows,
   raidView,
   type SocialTab,
   socialStructSig,
 } from './social_view';
+import { focusActiveTab, wireTabStrip } from './tab_strip_painter';
+import { tabStripHtml, tabStripModel } from './tab_strip_view';
 import { svgIcon } from './ui_icons';
-import { renderWindowFrame, type WindowFrameParts } from './window_frame';
-import type { WindowFrameDescriptor } from './window_frame_view';
 
 // Typeahead timings (named, not bare literals): debounce a keystroke
 // before searching, and clear the suggestion list shortly after blur so a pending
@@ -51,21 +52,9 @@ import type { WindowFrameDescriptor } from './window_frame_view';
 const SUGGEST_DEBOUNCE_MS = 160;
 const SUGGEST_BLUR_CLEAR_MS = 150;
 
-// A closable frame whose four modes ride the shared TAB RAIL (friends / guild /
-// ignore / raid); the per-tab list + notice + add-row footer render into the
-// scrolling body. Every key is reused from the existing social catalog (the close
-// aria reuses hud.options.returnToGame, byte-faithful to the pre-frame window).
-const SOCIAL_FRAME: WindowFrameDescriptor = {
-  id: 'social-window',
-  titleKey: 'hud.social.title',
-  closeLabelKey: 'hud.options.returnToGame',
-  tabs: [
-    { id: 'friends', labelKey: 'hud.social.friendsTab' },
-    { id: 'guild', labelKey: 'hud.social.guildTab' },
-    { id: 'ignore', labelKey: 'hud.social.ignoreTab' },
-    { id: 'raid', labelKey: 'hud.social.raidTab' },
-  ],
-};
+// Guild billboard input cap; mirrors GUILD_MOTD_MAX in server/social.ts (the
+// server clamps authoritatively, this is UX only).
+const GUILD_MOTD_MAX = 240;
 
 /**
  * Hud-supplied glue. The social window renders no item rows (it uses CSS-classed
@@ -108,6 +97,8 @@ function statusLabel(status: string | undefined): string {
       return t('hud.social.status.dungeon');
     case 'dead':
       return t('hud.social.status.dead');
+    case 'afk':
+      return t('hud.social.status.afk');
     default:
       return t('hud.social.status.online');
   }
@@ -145,6 +136,10 @@ export class SocialWindow {
   } = { field: '', items: [], index: -1 };
   // The element to refocus when the window closes (WCAG 2.2 AA focus return).
   private returnFocus: HTMLElement | null = null;
+  // Guild-tab "hide offline members" toggle: a persisted USER choice (guild presence
+  // is actionable info, never gated on graphics tier). Loaded once; the delegated body
+  // handler flips + persists it and refreshes the list in place.
+  private hideOffline = loadGuildHideOffline();
 
   constructor(private readonly deps: SocialWindowDeps) {}
 
@@ -213,115 +208,64 @@ export class SocialWindow {
     return JSON.stringify({ social: w.socialInfo, party: w.partyInfo });
   }
 
-  // Stamp the shared window frame cold at first open, then reuse it. The frame
-  // mounts on an inner container so the #social-window root stays a pristine
-  // .window.panel; an intact mounted frame (its body present) is the reuse marker.
-  // The tab-rail roving handler is wired once, at cold-mount time.
-  private ensureFrame(): WindowFrameParts {
-    const el = this.deps.root();
-    const mounted = el.querySelector<HTMLElement>(':scope > .window-frame');
-    const body = mounted?.querySelector<HTMLElement>('.window-body');
-    if (mounted && body) {
-      return {
-        root: mounted,
-        body,
-        footer: mounted.querySelector<HTMLElement>('.window-footer'),
-        tabButtons: Array.from(mounted.querySelectorAll<HTMLButtonElement>('[data-window-tab]')),
-      };
-    }
-    const mount = document.createElement('div');
-    const parts = renderWindowFrame(
-      mount,
-      SOCIAL_FRAME,
-      { onClose: () => this.close(), onTabChange: (id) => this.onTabChange(id) },
-      this.tab,
-    );
-    el.replaceChildren(mount);
-    this.wireTabRoving(parts.tabButtons);
-    return parts;
-  }
-
-  // A frame tab-rail click (or a roving keyboard move that clicks it) lands here:
-  // the frame builder already re-pointed aria-selected / the body panel id, so this
-  // just commits the tab and repaints. Mirrors the pre-frame switchTab.
-  private onTabChange(tabId: string): void {
-    this.tab = tabId as SocialTab;
-    this.notice = null;
-    this.lastStruct = this.structSig();
-    this.render();
-  }
-
-  // Roving Arrow/Home/End across the frame's tab rail (the builder wires click +
-  // aria; it does NOT wire keyboard). A roving move clicks the target so the
-  // builder's own aria/panel update + onTabChange fire, then follows focus.
-  private wireTabRoving(tabButtons: HTMLButtonElement[]): void {
-    tabButtons.forEach((tab, i) => {
-      tab.addEventListener('keydown', (e) => {
-        const ke = e as KeyboardEvent;
-        const next = rovingTarget(ke.key, i, tabButtons.length, 'horizontal');
-        if (next !== null) {
-          ke.preventDefault();
-          const target = tabButtons[next];
-          if (target && target !== tab) {
-            target.click();
-            target.focus();
-          }
-          return;
-        }
-        if (ke.key === 'Enter' || ke.key === ' ') {
-          ke.preventDefault();
-          tab.click();
-          tab.focus();
-        }
-      });
-    });
-  }
-
-  // Sync the tab rail's aria-selected + roving tabindex + the body's panel id to
-  // this.tab. Covers the open / reopen / programmatic (selectRaidTab, convert)
-  // paths the frame's own click handler does not; a click-driven switch already
-  // matches, so this is idempotent there.
-  private syncTabState(tabButtons: HTMLButtonElement[], body: HTMLElement): void {
-    for (const b of tabButtons) {
-      const sel = b.dataset.windowTab === this.tab;
-      b.setAttribute('aria-selected', String(sel));
-      b.tabIndex = sel ? 0 : -1;
-      if (sel) {
-        const panelId = b.getAttribute('aria-controls');
-        if (panelId) body.id = panelId;
-      }
-    }
-  }
-
-  // Full rebuild: title/realm, body list, notice, and the tab's add-row footer
-  // (with its typeahead). Used on open, tab switch, and guild-membership changes.
+  // Full rebuild: title, tabs, body, notice, and the tab's footer (with its
+  // typeahead). Used on open, tab switch, and guild-membership changes.
   private render(): void {
     const el = this.deps.root();
     if (!el.classList.contains('open')) return;
-    const { root: frame, body, tabButtons } = this.ensureFrame();
-    this.syncTabState(tabButtons, body);
+    // WCAG 2.2 AA: name the focus-trapped root so AT users entering the trap
+    // land on a labeled dialog (the sibling cold windows all set this).
+    markDialogRoot(el, { label: t('hud.social.title') });
     const w = this.deps.world();
     const tab = this.tab;
     const online = w.socialInfo !== null;
     const realmTag =
       online && w.realm ? ` <span class="soc-realm-tag">- ${esc(w.realm)}</span>` : '';
-    // The frame builder resolves the title key WITHOUT interpolation; the social
-    // title carries the realm tag, so paint it here onto the frame's title.
-    const titleEl = frame.querySelector<HTMLElement>('.window-title');
-    if (titleEl) titleEl.innerHTML = `${esc(t('hud.social.title'))}${realmTag}`;
-    // The per-tab list + notice + add-row footer render into the frame body (the
-    // active tab's tabpanel). The old inline soc-tabs strip is gone (the frame rail
-    // replaces it); .soc-body keeps its class (refreshList queries it) but no longer
-    // needs its own id/role, which the frame's .window-body tabpanel now carries.
-    body.innerHTML =
-      `<div class="soc-body"></div>` +
+    el.innerHTML =
+      `<div class="panel-title"><span>${esc(t('hud.social.title'))}${realmTag}</span><button type="button" class="x-btn" data-close aria-label="${esc(t('hud.options.returnToGame'))}">${svgIcon('close')}</button></div>` +
+      // WAI-ARIA tabs: a real role=tablist / role=tab / role=tabpanel with a
+      // roving tabindex (0 on the active tab, -1 on the rest) and aria-selected, built
+      // from the shared tab_strip_view core (same markup contract talents_window
+      // follows). Ignore and block are two distinct tiers, so they get a tab each:
+      // the Ignored tab lists the chat-only mutes, the Blocked tab the hard blocks.
+      // The roving Arrow/Home/End handler is wired in wireChrome via wireTabStrip.
+      tabStripHtml(
+        tabStripModel({
+          ariaLabel: t('hud.social.title'),
+          panelId: 'soc-body-panel',
+          stripClass: 'soc-tabs',
+          tabClass: 'soc-tab',
+          selectedClass: 'on',
+          tabs: [
+            { id: 'friends', label: t('hud.social.friendsTab') },
+            { id: 'guild', label: t('hud.social.guildTab') },
+            { id: 'ignore', label: t('hudChrome.social.ignoredTab') },
+            { id: 'block', label: t('hudChrome.social.blockedTab') },
+            { id: 'raid', label: t('hud.social.raidTab') },
+          ],
+          selected: tab,
+        }),
+      ) +
+      `<div class="soc-body" id="soc-body-panel" role="tabpanel"></div>` +
       `<div class="soc-notice"></div>` +
       (tab === 'raid' ? '' : online ? this.footer() : '');
-    this.wireFooterAndSuggest(el);
+    this.wireChrome(el);
     // Delegate every row action to ONE listener on the persistent body, so a
     // content refresh (innerHTML swap) never re-attaches per-row handlers.
-    const socBody = el.querySelector('.soc-body') as HTMLElement | null;
-    if (socBody) socBody.addEventListener('click', (e) => this.onBodyClick(e));
+    const body = el.querySelector('.soc-body') as HTMLElement | null;
+    if (body) {
+      body.addEventListener('click', (e) => this.onBodyClick(e));
+      // Enter in the billboard edit input saves. Delegated on the persistent
+      // body like the click handler, so it survives every refreshList swap.
+      body.addEventListener('keydown', (e) => {
+        const ke = e as KeyboardEvent;
+        if (ke.key !== 'Enter') return;
+        if ((ke.target as HTMLElement).matches?.('input[data-field="gmotd"]')) {
+          ke.preventDefault();
+          this.saveBillboard();
+        }
+      });
+    }
     this.refreshList();
     this.renderNotice();
   }
@@ -332,6 +276,21 @@ export class SocialWindow {
   private refreshList(): void {
     const body = this.deps.root().querySelector('.soc-body') as HTMLElement | null;
     if (!body) return;
+    // Preserve the billboard edit draft across the innerHTML swap: the panel
+    // repaints on the slow-HUD divider whenever ANY social/party content moves
+    // (a guildmate's presence, party hp), which would otherwise clobber typing.
+    // defaultValue is the motd rendered at the last paint, so an untouched
+    // input (value === defaultValue, unfocused) takes the fresh server motd.
+    const prevMotd = body.querySelector('input[data-field="gmotd"]') as HTMLInputElement | null;
+    const draft =
+      prevMotd && (prevMotd.value !== prevMotd.defaultValue || document.activeElement === prevMotd)
+        ? {
+            value: prevMotd.value,
+            focused: document.activeElement === prevMotd,
+            selStart: prevMotd.selectionStart,
+            selEnd: prevMotd.selectionEnd,
+          }
+        : null;
     const online = this.deps.world().socialInfo !== null;
     body.innerHTML =
       this.tab === 'raid'
@@ -342,7 +301,21 @@ export class SocialWindow {
             ? this.friendsHtml()
             : this.tab === 'guild'
               ? this.guildHtml()
-              : this.ignoreHtml();
+              : this.tab === 'block'
+                ? this.blockHtml()
+                : this.ignoreHtml();
+    if (draft) {
+      const next = body.querySelector('input[data-field="gmotd"]') as HTMLInputElement | null;
+      // A demotion mid-draft removes the edit row entirely (editor-only), so
+      // `next` is null then and the draft is dropped.
+      if (next) {
+        next.value = draft.value;
+        if (draft.focused) {
+          next.focus();
+          next.setSelectionRange(draft.selStart, draft.selEnd);
+        }
+      }
+    }
   }
 
   // The single delegated row handler (click + whisper). Resolves the nearest
@@ -356,11 +329,30 @@ export class SocialWindow {
       this.deps.startWhisper(node.dataset.whisper ?? '');
       return;
     }
+    // The guild-tab hide-offline toggle: flip + persist the USER choice, then refresh
+    // the roster in place (no structural change, so refreshList not a full render).
+    if (node.dataset.act === 'toggle-hide-offline') {
+      this.hideOffline = !this.hideOffline;
+      saveGuildHideOffline(this.hideOffline);
+      this.refreshList();
+      // refreshList swaps the body innerHTML, destroying the button that was just
+      // activated; restore keyboard focus to the freshly rendered toggle so repeated
+      // keyboard presses keep working (WCAG 2.2 AA focus management).
+      (
+        this.deps.root().querySelector('[data-act="toggle-hide-offline"]') as HTMLElement | null
+      )?.focus();
+      return;
+    }
+    if (node.dataset.act === 'gmotd-save') {
+      this.saveBillboard();
+      return;
+    }
     const w = this.deps.world();
     const act = node.dataset.act;
     const name = node.dataset.name ?? '';
     if (act === 'unfriend') w.friendRemove(name);
     else if (act === 'unblock') w.blockRemove(name);
+    else if (act === 'unignore') w.ignoreRemove(name);
     else if (act === 'gkick') w.guildKick(name);
     else if (act === 'promote') w.guildPromote(name);
     else if (act === 'demote') w.guildDemote(name);
@@ -388,6 +380,17 @@ export class SocialWindow {
     }
   }
 
+  // Send the billboard edit up through IWorld. Empty is allowed (clears the
+  // billboard); the input only exists for editors, and either way the server
+  // owns the real rank/mute/rate/content gates and the clamp.
+  private saveBillboard(): void {
+    const input = this.deps
+      .root()
+      .querySelector('input[data-field="gmotd"]') as HTMLInputElement | null;
+    if (!input) return;
+    this.deps.world().guildSetMotd(input.value);
+  }
+
   private friendsHtml(): string {
     const rows = friendRows(this.deps.world().socialInfo);
     if (rows.length === 0)
@@ -397,9 +400,15 @@ export class SocialWindow {
         const meta = f.online
           ? `<span class="zone">${esc(f.zone ? localizeZone(f.zone) : '')}</span><br>${esc(statusLabel(f.status))}`
           : esc(t('hud.social.status.offline'));
+        // The friend's Book of Deeds title (a deed id, localized here; '' for
+        // untitled/stale hides the span entirely). It rides INSIDE the
+        // ellipsized .soc-name cell, so a long combo trims the title tail and
+        // never pushes the meta column or action buttons.
+        const titleText = f.activeTitle ? deedTitleText(f.activeTitle) : '';
+        const titleSpan = titleText ? `<span class="soc-title">${esc(titleText)}</span>` : '';
         const name = f.online
-          ? `<button type="button" class="soc-name soc-link" data-whisper="${esc(f.name)}" title="${esc(t('hud.social.whisperTitle', { name: f.name }))}">${esc(f.name)}</button>`
-          : `<span class="soc-name">${esc(f.name)}</span>`;
+          ? `<button type="button" class="soc-name soc-link" data-whisper="${esc(f.name)}" title="${esc(t('hud.social.whisperTitle', { name: f.name }))}">${esc(f.name)}${titleSpan}</button>`
+          : `<span class="soc-name">${esc(f.name)}${titleSpan}</span>`;
         const whisper = f.online
           ? `<button type="button" class="soc-x" data-whisper="${esc(f.name)}" title="${esc(t('hud.social.whisperTitle', { name: f.name }))}">${svgIcon('whisper')}</button>`
           : '';
@@ -416,19 +425,43 @@ export class SocialWindow {
       .join('');
   }
 
-  private ignoreHtml(): string {
-    const rows = ignoreRows(this.deps.world().socialInfo);
-    if (rows.length === 0)
-      return `<div class="soc-empty">${esc(t('hud.social.ignoreEmpty'))}</div>`;
+  // The two PLAYER tiers get a tab each, so a row can never be mistaken for the
+  // other tier. IGNORED is chat-only; BLOCKED also kills whispers, invites, mail
+  // and /who. (Neither is the admin "mute".)
+  private listHtml(
+    rows: { name: string }[],
+    emptyKey: 'hudChrome.social.ignoredEmpty' | 'hudChrome.social.blockedEmpty',
+    act: 'unignore' | 'unblock',
+    title: (name: string) => string,
+  ): string {
+    if (rows.length === 0) return `<div class="soc-empty">${esc(t(emptyKey))}</div>`;
     return rows
       .map(
-        (b) =>
+        (r) =>
           `<div class="soc-row">` +
-          `<span class="soc-name">${esc(b.name)}</span>` +
-          `<span class="soc-actions" style="margin-left:auto"><button type="button" class="soc-x" data-act="unblock" data-name="${esc(b.name)}" title="${esc(t('hud.social.stopIgnoringTitle', { name: b.name }))}">${svgIcon('close')}</button></span>` +
+          `<span class="soc-name">${esc(r.name)}</span>` +
+          `<span class="soc-actions" style="margin-left:auto"><button type="button" class="soc-x" data-act="${act}" data-name="${esc(r.name)}" title="${esc(title(r.name))}">${svgIcon('close')}</button></span>` +
           `</div>`,
       )
       .join('');
+  }
+
+  private ignoreHtml(): string {
+    return this.listHtml(
+      ignoreRows(this.deps.world().socialInfo),
+      'hudChrome.social.ignoredEmpty',
+      'unignore',
+      (name) => t('hud.social.stopIgnoringTitle', { name }),
+    );
+  }
+
+  private blockHtml(): string {
+    return this.listHtml(
+      blockRows(this.deps.world().socialInfo),
+      'hudChrome.social.blockedEmpty',
+      'unblock',
+      (name) => t('hudChrome.social.stopBlockingTitle', { name }),
+    );
   }
 
   private guildHtml(): string {
@@ -438,44 +471,96 @@ export class SocialWindow {
     const g = view.guild;
     const guildCount = formatNumber(g.memberCount, { maximumFractionDigits: 0 });
     const head = `<div class="soc-guild-head">&lt;${esc(g.name)}&gt; <span class="gm">${esc(tPlural('hudChrome.plurals.guildMembers', g.memberCount, { rank: rankLabel(g.rank), count: guildCount }))}</span></div>`;
-    const rows = g.rows
-      .map((m) => {
-        // Offline rows carry a "last seen" line: a locale-formatted date/time,
-        // or the localized "never" when no login has been recorded.
-        const lastSeenWhen = m.lastLogin
-          ? formatDateTime(new Date(m.lastLogin), { dateStyle: 'medium', timeStyle: 'short' })
-          : t('hudChrome.social.lastSeenNever');
-        const meta = m.online
-          ? `<span class="zone">${esc(m.zone ? localizeZone(m.zone) : '')}</span><br>${esc(statusLabel(m.status))}`
-          : `${esc(t('hud.social.status.offline'))}<br>${esc(t('hudChrome.social.lastSeen', { when: lastSeenWhen }))}`;
-        const nameInner = `${esc(m.name)}<span class="rank">${esc(rankLabel(m.rank))}</span>`;
-        const name =
-          m.online && !m.self
-            ? `<button type="button" class="soc-name soc-link" data-whisper="${esc(m.name)}" title="${esc(t('hud.social.whisperTitle', { name: m.name }))}">${nameInner}</button>`
-            : `<span class="soc-name">${nameInner}</span>`;
-        let actions = m.canWhisper
-          ? `<button type="button" class="soc-x" data-whisper="${esc(m.name)}" title="${esc(t('hud.social.whisperTitle', { name: m.name }))}">${svgIcon('whisper')}</button>`
-          : '';
-        if (m.canTransfer)
-          actions += `<button type="button" class="soc-x" data-act="gtransfer" data-name="${esc(m.name)}" title="${esc(t('hud.social.makeGuildMasterTitle', { name: m.name }))}">${svgIcon('crown')}</button>`;
-        if (m.canPromote)
-          actions += `<button type="button" class="soc-x" data-act="promote" data-name="${esc(m.name)}" title="${esc(t('hud.social.promoteTitle', { name: m.name }))}">▲</button>`;
-        if (m.canDemote)
-          actions += `<button type="button" class="soc-x" data-act="demote" data-name="${esc(m.name)}" title="${esc(t('hud.social.demoteTitle', { name: m.name }))}">▼</button>`;
-        if (m.canKick)
-          actions += `<button type="button" class="soc-x" data-act="gkick" data-name="${esc(m.name)}" title="${esc(t('hud.social.removeGuildTitle', { name: m.name }))}">${svgIcon('close')}</button>`;
-        const tip = esc(dotTitle(m.online, m.status, m.zone));
-        return (
-          `<div class="soc-row">` +
-          `<span class="soc-dot ${m.dot === 'off' ? '' : m.dot}" title="${tip}"></span>` +
-          `<span class="soc-id">${name}<span class="soc-sub">${esc(t('hud.social.levelClass', { level: formatNumber(m.level, { maximumFractionDigits: 0 }), className: playerClassDisplayName(m.cls) }))}</span></span>` +
-          `<span class="soc-meta" title="${tip}">${meta}</span>` +
-          (actions ? `<span class="soc-actions">${actions}</span>` : '') +
-          `</div>`
-        );
-      })
+    // The persisted "hide offline" toggle: a pressed-state button (a single click event
+    // through the delegated body handler, unlike a label+checkbox that double-fires).
+    const toggle =
+      `<button type="button" class="soc-hide-offline${this.hideOffline ? ' on' : ''}" data-act="toggle-hide-offline" aria-pressed="${this.hideOffline ? 'true' : 'false'}" title="${esc(t('hudChrome.social.hideOfflineTitle'))}">` +
+      `<span class="soc-hide-box" aria-hidden="true"></span>${esc(t('hudChrome.social.hideOffline'))}</button>`;
+    // Online-first grouping with per-group count headers; the offline group (header +
+    // rows) is suppressed when the toggle is on. Empty groups emit no header.
+    const body = guildRosterItems(g.rows, this.hideOffline)
+      .map((item) =>
+        item.kind === 'header'
+          ? `<div class="soc-group-head">${esc(t(item.group === 'online' ? 'hudChrome.social.onlineHeader' : 'hudChrome.social.offlineHeader', { n: formatNumber(item.count, { maximumFractionDigits: 0 }) }))}</div>`
+          : this.guildMemberRowHtml(item.row),
+      )
       .join('');
-    return head + rows;
+    return head + this.billboardHtml(g) + toggle + body;
+  }
+
+  // The guild billboard: the officer-set message pinned between the guild head
+  // and the roster. PLAIN ESCAPED TEXT only, deliberately: the message is
+  // player-controlled, so it is never linkified or rendered as HTML (phishing /
+  // XSS surface; nothing else in chat linkifies either). The message div IS the
+  // read view, so the edit row (input + save) renders only for editors (leader
+  // and officer, UX only; the server enforces the real gate): a member never
+  // sees a disabled duplicate of the text above it. With no message set,
+  // members get no billboard box at all; editors keep it (empty-state line +
+  // input) so the feature is discoverable and the first message can be written.
+  private billboardHtml(g: NonNullable<GuildView['guild']>): string {
+    if (!g.motd && !g.canEditMotd) return '';
+    const message = g.motd
+      ? `<div class="soc-billboard-msg">${esc(g.motd)}</div>`
+      : `<div class="soc-billboard-msg empty">${esc(t('hudChrome.social.billboard.empty'))}</div>`;
+    const setBy =
+      g.motd && g.motdSetBy
+        ? `<div class="soc-billboard-by">${esc(t('hudChrome.social.billboard.setBy', { name: g.motdSetBy }))}</div>`
+        : '';
+    const inputLabel = esc(t('hudChrome.social.billboard.inputLabel'));
+    const edit = g.canEditMotd
+      ? `<div class="soc-billboard-edit">` +
+        `<input maxlength="${GUILD_MOTD_MAX}" value="${esc(g.motd)}" aria-label="${inputLabel}" placeholder="${esc(t('hudChrome.social.billboard.placeholder'))}" data-field="gmotd" autocomplete="off" spellcheck="false"/>` +
+        `<button type="button" class="btn" data-act="gmotd-save">${esc(t('hudChrome.social.billboard.save'))}</button>` +
+        `</div>`
+      : '';
+    return (
+      `<div class="soc-billboard">` +
+      `<div class="soc-billboard-label">${esc(t('hudChrome.social.billboard.label'))}</div>` +
+      message +
+      setBy +
+      edit +
+      `</div>`
+    );
+  }
+
+  private guildMemberRowHtml(m: GuildRow): string {
+    // Offline rows carry a "last seen" line: a locale-formatted date/time,
+    // or the localized "never" when no login has been recorded.
+    const lastSeenWhen = m.lastLogin
+      ? formatDateTime(new Date(m.lastLogin), { dateStyle: 'medium', timeStyle: 'short' })
+      : t('hudChrome.social.lastSeenNever');
+    const meta = m.online
+      ? `<span class="zone">${esc(m.zone ? localizeZone(m.zone) : '')}</span><br>${esc(statusLabel(m.status))}`
+      : `${esc(t('hud.social.status.offline'))}<br>${esc(t('hudChrome.social.lastSeen', { when: lastSeenWhen }))}`;
+    // The title sits AFTER the rank chip so the chip stays glued to the
+    // name; the ellipsized .soc-name cell trims the title tail first.
+    const memberTitle = m.activeTitle ? deedTitleText(m.activeTitle) : '';
+    const memberTitleSpan = memberTitle ? `<span class="soc-title">${esc(memberTitle)}</span>` : '';
+    const nameInner = `${esc(m.name)}<span class="rank">${esc(rankLabel(m.rank))}</span>${memberTitleSpan}`;
+    const name =
+      m.online && !m.self
+        ? `<button type="button" class="soc-name soc-link" data-whisper="${esc(m.name)}" title="${esc(t('hud.social.whisperTitle', { name: m.name }))}">${nameInner}</button>`
+        : `<span class="soc-name">${nameInner}</span>`;
+    let actions = m.canWhisper
+      ? `<button type="button" class="soc-x" data-whisper="${esc(m.name)}" title="${esc(t('hud.social.whisperTitle', { name: m.name }))}">${svgIcon('whisper')}</button>`
+      : '';
+    if (m.canTransfer)
+      actions += `<button type="button" class="soc-x" data-act="gtransfer" data-name="${esc(m.name)}" title="${esc(t('hud.social.makeGuildMasterTitle', { name: m.name }))}">${svgIcon('crown')}</button>`;
+    if (m.canPromote)
+      actions += `<button type="button" class="soc-x" data-act="promote" data-name="${esc(m.name)}" title="${esc(t('hud.social.promoteTitle', { name: m.name }))}">▲</button>`;
+    if (m.canDemote)
+      actions += `<button type="button" class="soc-x" data-act="demote" data-name="${esc(m.name)}" title="${esc(t('hud.social.demoteTitle', { name: m.name }))}">▼</button>`;
+    if (m.canKick)
+      actions += `<button type="button" class="soc-x" data-act="gkick" data-name="${esc(m.name)}" title="${esc(t('hud.social.removeGuildTitle', { name: m.name }))}">${svgIcon('close')}</button>`;
+    const tip = esc(dotTitle(m.online, m.status, m.zone));
+    return (
+      `<div class="soc-row">` +
+      `<span class="soc-dot ${m.dot === 'off' ? '' : m.dot}" title="${tip}"></span>` +
+      `<span class="soc-id">${name}<span class="soc-sub">${esc(t('hud.social.levelClass', { level: formatNumber(m.level, { maximumFractionDigits: 0 }), className: playerClassDisplayName(m.cls) }))}</span></span>` +
+      `<span class="soc-meta" title="${tip}">${meta}</span>` +
+      (actions ? `<span class="soc-actions">${actions}</span>` : '') +
+      `</div>`
+    );
   }
 
   private raidHtml(): string {
@@ -526,9 +611,18 @@ export class SocialWindow {
     if (this.tab === 'ignore')
       return this.addRow(
         'ignore',
-        'block-add',
+        'ignore-add',
         t('hud.social.ignoreSearchPlaceholder'),
         t('hud.social.ignoreAction'),
+        16,
+        true,
+      );
+    if (this.tab === 'block')
+      return this.addRow(
+        'block',
+        'block-add',
+        t('hudChrome.social.blockSearchPlaceholder'),
+        t('hudChrome.social.blockAction'),
         16,
         true,
       );
@@ -590,16 +684,29 @@ export class SocialWindow {
       .querySelector(`input[data-field="${field}"]`) as HTMLInputElement | null;
   }
 
-  // Wire the per-tab add-row footer + typeahead (re-attached on every full render;
-  // the close control and tab rail are the frame's, wired once at cold-mount time).
-  private wireFooterAndSuggest(el: HTMLElement): void {
+  // Wire the parts that survive a content refresh: close, tabs, footer + search.
+  private wireChrome(el: HTMLElement): void {
+    el.querySelector('[data-close]')?.addEventListener('click', () => this.toggle());
+    // WAI-ARIA tabs: click OR roving Arrow/Home/End select a tab, wired through the
+    // shared tab_strip_painter core. render() rebuilds the strip, so a keyboard move
+    // refocuses the freshly active tab afterward (the roving-tabindex focus must follow
+    // the selection); a click never moves focus programmatically. Both match the prior
+    // hand-rolled handler byte-for-byte.
+    wireTabStrip(el, 'soc-tab', (id, focusFollow) => {
+      this.tab = id as SocialTab;
+      this.notice = null;
+      this.lastStruct = this.structSig();
+      this.render();
+      if (focusFollow) focusActiveTab(el, 'soc-tab', 'on');
+    });
     const w = this.deps.world();
     const field = (sel: string): string =>
       (el.querySelector(`input[data-field="${sel}"]`) as HTMLInputElement | null)?.value.trim() ??
       '';
     const submit = (act: string | undefined): void => {
       if (act === 'friend-add') void this.resolveAndAct('friend', field('friend'));
-      else if (act === 'block-add') void this.resolveAndAct('ignore', field('ignore'));
+      else if (act === 'ignore-add') void this.resolveAndAct('ignore', field('ignore'));
+      else if (act === 'block-add') void this.resolveAndAct('block', field('block'));
       else if (act === 'guild-invite') void this.resolveAndAct('ginvite', field('ginvite'));
       else if (act === 'guild-create') {
         const n = field('gname');
@@ -638,8 +745,11 @@ export class SocialWindow {
     this.wireSuggest(el);
   }
 
-  private suggestKind(field: string): 'friend' | 'ignore' | 'ginvite' {
-    return field === 'friend' ? 'friend' : field === 'ignore' ? 'ignore' : 'ginvite';
+  private suggestKind(field: string): 'friend' | 'ignore' | 'block' | 'ginvite' {
+    if (field === 'friend') return 'friend';
+    if (field === 'ignore') return 'ignore';
+    if (field === 'block') return 'block';
+    return 'ginvite';
   }
 
   // Username typeahead: debounced search against same-realm characters, with
@@ -768,7 +878,7 @@ export class SocialWindow {
   // Authoritative existence check (realm-scoped) before acting, so we can give
   // clear inline "no such player" feedback instead of a silent failure.
   private async resolveAndAct(
-    kind: 'friend' | 'ignore' | 'ginvite',
+    kind: 'friend' | 'ignore' | 'block' | 'ginvite',
     rawName: string,
   ): Promise<void> {
     const name = rawName.trim();
@@ -795,9 +905,14 @@ export class SocialWindow {
       this.setNotice(t('hud.social.friendAdded', { name: exact.name }), false);
       this.clearInput('friend');
     } else if (kind === 'ignore') {
-      w.blockAdd(exact.name);
+      // the Ignored tab writes to the IGNORE list (chat-only), not the block list
+      w.ignoreAdd(exact.name);
       this.setNotice(t('hud.social.nowIgnoring', { name: exact.name }), false);
       this.clearInput('ignore');
+    } else if (kind === 'block') {
+      w.blockAdd(exact.name);
+      this.setNotice(t('hudChrome.social.nowBlocking', { name: exact.name }), false);
+      this.clearInput('block');
     } else {
       w.guildInvite(exact.name);
       this.setNotice(t('hud.social.guildInvited', { name: exact.name }), false);

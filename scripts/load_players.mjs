@@ -14,6 +14,7 @@
 import { randomBytes } from 'node:crypto';
 import pg from 'pg';
 import WebSocket from 'ws';
+import { worldAuthMessage } from './lib/world_auth.mjs';
 
 try {
   process.loadEnvFile?.();
@@ -275,7 +276,7 @@ class LoadBot {
         ws.close();
       }, 10_000);
       ws.on('open', () => {
-        ws.send(JSON.stringify({ t: 'auth', token: this.token, character: this.characterId }));
+        ws.send(JSON.stringify(worldAuthMessage(this.token, this.characterId)));
       });
       ws.on('message', (buf) => {
         let msg;
@@ -294,7 +295,13 @@ class LoadBot {
           return;
         }
         if (msg.t === 'error') {
-          fail(new Error(`${this.name} auth failed: ${msg.error ?? 'unknown websocket error'}`));
+          const hint =
+            msg.error === 'too many connections from your network'
+              ? ' Increase MAX_WS_PER_IP_HARD, restart the server, and close extra local sessions.'
+              : '';
+          fail(
+            new Error(`${this.name} auth failed: ${msg.error ?? 'unknown websocket error'}${hint}`),
+          );
           ws.close();
           return;
         }
@@ -316,13 +323,9 @@ class LoadBot {
         this.closed = true;
         this.connected = false;
         if (!settled) {
-          const hint =
-            code === 1008
-              ? ` Increase MAX_WS_PER_IP_HARD, restart the server, and close extra local sessions.`
-              : '';
           fail(
             new Error(
-              `${this.name} closed before hello: code=${code} reason="${this.closeReason || 'none'}".${hint}`,
+              `${this.name} closed before hello: code=${code} reason="${this.closeReason || 'none'}".`,
             ),
           );
         }

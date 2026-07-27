@@ -29,6 +29,7 @@ import {
   CHANNEL_PUSHBACK_FRACTION,
   FISHING_CAST_ID,
 } from '../src/sim/types';
+import { placePlayerInOpenField } from './helpers/open_field';
 
 type AnySim = Sim & Record<string, any>;
 type AnyEntity = Entity & Record<string, any>;
@@ -36,6 +37,7 @@ type AnyEntity = Entity & Record<string, any>;
 function makeSim(cls: PlayerClass, level: number): { sim: AnySim; p: AnyEntity; meta: any } {
   const sim = new Sim({ seed: 99, playerClass: cls, autoEquip: true }) as AnySim;
   sim.setPlayerLevel(level);
+  placePlayerInOpenField(sim);
   const p = sim.player as AnyEntity;
   const meta = sim.players.get(p.id);
   p.resource = p.maxResource;
@@ -109,6 +111,8 @@ describe('casting_lifecycle: timed cast start -> progress -> finish', () => {
     const { sim, p, meta } = makeSim('priest', 12);
     const ally = sim.entities.get(sim.addPlayer('warrior', 'Ally')) as AnyEntity;
     const bystander = sim.entities.get(sim.addPlayer('rogue', 'Bystander')) as AnyEntity;
+    placePlayerInOpenField(sim, ally.id, { x: 2 });
+    placePlayerInOpenField(sim, bystander.id, { x: 4 });
     ally.hp = Math.max(1, ally.maxHp - 500);
     bystander.hp = Math.max(1, bystander.maxHp - 500);
     const allyHp0 = ally.hp;
@@ -357,6 +361,7 @@ describe('casting_lifecycle: spell queue (#1360)', () => {
 
   it('carries the queued aim point through to the fired ground-targeted cast', () => {
     const { sim, p } = makeSim('mage', 20);
+    sim.setSpec('fire'); // Flamestrike is a DPS-spec ability (Chronomancy gating)
     spawnTarget(sim, p);
     castAbility(sim.ctx, 'fireball', p.id);
     while (p.castRemaining > CAST_QUEUE_WINDOW_SEC) sim.tick();
@@ -370,11 +375,15 @@ describe('casting_lifecycle: spell queue (#1360)', () => {
     while (p.queuedCastAbility) sim.tick();
     expect(p.queuedCastAbility).toBeNull();
     expect(p.queuedCastAim).toBeNull();
-    // flamestrike is instant (castTime 0): it resolves and clears castAim same-tick,
-    // so castingAbility being null (not left on fireball) plus the ability going on
-    // cooldown is the observable proof the fired cast actually ran with the aim.
-    expect(p.castingAbility).toBeNull();
-    expect(p.cooldowns.has('flamestrike')).toBe(true);
+    // Flamestrike is a real 2s cast now (fire-spec redesign, instant only under Hot
+    // Streak): once the queued cast fires it becomes the active cast, carrying the
+    // queued aim point through. Draining it lands the blast without a cooldown.
+    expect(p.castingAbility).toBe('flamestrike');
+    // The queued aim point carried through (the cast resolves a y ground height).
+    expect(p.castAim?.x).toBe(aim.x);
+    expect(p.castAim?.z).toBe(aim.z);
+    while (p.castingAbility) sim.tick();
+    expect(p.cooldowns.has('flamestrike')).toBe(false);
   });
 
   it('holds a queued cast that would complete before the arming GCD clears, and fires it once the GCD does', () => {
@@ -529,10 +538,19 @@ describe('casting_lifecycle: physical ranged shots resolve on projectile impact 
     drainCast(sim, p, meta); // run the 3s cast to completion (updateCasting only, no projectile step)
     // The shot is LAUNCHED at cast completion, not landed: no damage yet, a bolt is in flight.
     expect(mob.hp).toBe(hp0);
-    expect(events.some((e) => e.type === 'spellfx' && e.fx === 'projectile')).toBe(true);
+    expect(
+      events.some(
+        (e) => e.type === 'spellfx' && e.fx === 'projectile' && e.attackAnimation === 'ranged-shot',
+      ),
+    ).toBe(true);
     // Advance ticks so the arrow travels and connects.
     for (let i = 0; i < 60 && mob.hp === hp0; i++) sim.tick();
     expect(mob.hp).toBeLessThan(hp0);
-    expect(events.some((e) => e.type === 'damage' && e.ability === 'Long Draw')).toBe(true);
+    expect(
+      events.some(
+        (e) =>
+          e.type === 'damage' && e.ability === 'Long Draw' && e.attackAnimationStarted === true,
+      ),
+    ).toBe(true);
   });
 });

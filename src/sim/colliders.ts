@@ -1,4 +1,9 @@
 import {
+  buildingCameraHeight,
+  buildingTerrainEnvelope,
+  isEastbrookGrandArmoury,
+} from './building_layout';
+import {
   arenaOriginAt,
   DUNGEON_X_THRESHOLD,
   defaultDelveModules,
@@ -23,6 +28,7 @@ import { homesColliders } from './homes_layout';
 import {
   ARENA_LAYOUT,
   CRYPT_LAYOUT,
+  DROWNED_COURT_LAYOUT,
   layoutColliders,
   NYTHRAXIS_LAYOUT,
   SANCTUM_LAYOUT,
@@ -31,7 +37,7 @@ import {
 import { getActiveRealm } from './realms/registry';
 import type { WorldContent } from './types';
 import { valeCupColliders } from './vale_cup_layout';
-import { generateDecorations, groundHeight } from './world';
+import { generateDecorations, groundHeight, terrainHeight } from './world';
 import { yumiMazeColliders } from './yumi_maze_layout';
 
 // Static world collision. Prop placement comes from the per-zone content
@@ -86,6 +92,23 @@ function rotY(lx: number, lz: number, rot: number): { x: number; z: number } {
   return { x: lx * c + lz * s, z: -lx * s + lz * c };
 }
 
+// default backward offset/radius for a mine's spoil mound behind the timber portal,
+// shared with the renderer (src/render/props.ts) so the two can't drift apart
+export const MINE_MOUND_DEFAULT_OFFSET = 3.4;
+export const MINE_MOUND_DEFAULT_RADIUS = 5;
+
+export function mineMoundFootprint(m: {
+  x: number;
+  z: number;
+  rot: number;
+  moundOffset?: number;
+  moundRadius?: number;
+}): { x: number; z: number; r: number } {
+  const r = m.moundRadius ?? MINE_MOUND_DEFAULT_RADIUS;
+  const mound = rotY(0, -(m.moundOffset ?? MINE_MOUND_DEFAULT_OFFSET), m.rot);
+  return { x: m.x + mound.x, z: m.z + mound.z, r };
+}
+
 // ---------------------------------------------------------------------------
 // Collider sets
 // ---------------------------------------------------------------------------
@@ -106,6 +129,9 @@ function staticWorldColliders(seed: number): Collider[] {
   // the interior room; there is no walk-in gap and no separate door marker object.
   // b.w/b.d are already the themed (scaled) footprint, so this matches the render.
   for (const b of PROPS.buildings) {
+    const cameraTopY = isEastbrookGrandArmoury(b)
+      ? buildingTerrainEnvelope(b, (x, z) => terrainHeight(x, z, seed)).cameraTopY
+      : topY(seed, b.x, b.z, buildingCameraHeight(b));
     const height = (b.kind === 'chapel' ? 10.8 : b.kind === 'inn' ? 7.8 : 8.0) * bScale;
     out.push({
       type: 'obb',
@@ -114,7 +140,7 @@ function staticWorldColliders(seed: number): Collider[] {
       hw: b.w / 2,
       hd: b.d / 2,
       rot: b.rot,
-      cameraTopY: topY(seed, b.x, b.z, height),
+      cameraTopY,
       camGhost: true,
     });
   }
@@ -124,28 +150,69 @@ function staticWorldColliders(seed: number): Collider[] {
       x: w.x,
       z: w.z,
       r: w.r,
-      cameraTopY: topY(seed, w.x, w.z, 3.7),
-      camGhost: true,
+      cameraTopY: topY(seed, w.x, w.z, w.height ?? 3.7),
+      camGhost: w.camGhost ?? true,
     });
-  for (const s of PROPS.stalls)
+  for (const s of PROPS.stalls) {
+    const cameraTopY = topY(seed, s.x, s.z, s.height ?? 3.1);
+    if (s.w !== undefined && s.d !== undefined) {
+      out.push({
+        type: 'obb',
+        x: s.x,
+        z: s.z,
+        hw: s.w / 2,
+        hd: s.d / 2,
+        rot: s.rot,
+        cameraTopY,
+        camGhost: s.camGhost ?? true,
+      });
+    } else {
+      out.push({
+        type: 'circle',
+        x: s.x,
+        z: s.z,
+        r: s.r,
+        cameraTopY,
+        camGhost: s.camGhost ?? true,
+      });
+    }
+  }
+  for (const prop of [...(PROPS.benches ?? []), ...(PROPS.walls ?? [])]) {
     out.push({
-      type: 'circle',
-      x: s.x,
-      z: s.z,
-      r: s.r,
-      cameraTopY: topY(seed, s.x, s.z, 3.1),
+      type: 'obb',
+      x: prop.x,
+      z: prop.z,
+      hw: prop.w / 2,
+      hd: prop.d / 2,
+      rot: prop.rot,
+      cameraTopY: topY(seed, prop.x, prop.z, prop.height),
+      camGhost: prop.camGhost ?? false,
+    });
+  }
+
+  // Interactable town boards are authored through active WorldContent rather
+  // than PROPS. The same service record drives their spawn and exact OBB, and
+  // custom worlds that omit the service inherit no Eastbrook collision.
+  for (const board of content.services?.noticeboards ?? []) {
+    out.push({
+      type: 'obb',
+      x: board.x,
+      z: board.z,
+      hw: board.width / 2,
+      hd: board.depth / 2,
+      rot: board.rotation,
+      cameraTopY: topY(seed, board.x, board.z, board.height),
       camGhost: true,
     });
+  }
 
   // mines: mound behind the timber portal
   for (const m of PROPS.mines) {
-    const mound = rotY(0, -3.4, m.rot);
-    const x = m.x + mound.x,
-      z = m.z + mound.z;
-    out.push({ type: 'circle', x, z, r: 5, cameraTopY: topY(seed, x, z, 5.2), camGhost: true });
+    const { x, z, r } = mineMoundFootprint(m);
+    out.push({ type: 'circle', x, z, r, cameraTopY: topY(seed, x, z, r + 0.2), camGhost: true });
   }
 
-  // dock huts
+  // Dock decks are raised walkable ground in world.ts; only the hut blocks.
   for (const d of PROPS.docks) {
     const hut = rotY(d.hutLocal.x, d.hutLocal.z, d.rot);
     const x = d.x + hut.x,
@@ -192,14 +259,15 @@ function staticWorldColliders(seed: number): Collider[] {
     if (len < 1e-6) continue;
     const x = (f.x1 + f.x2) / 2,
       z = (f.z1 + f.z2) / 2;
+    const halfDepth = (f.width ?? FENCE_HALF_DEPTH * 2) / 2;
     out.push({
       type: 'obb',
       x,
       z,
-      hw: len / 2 + FENCE_END_PAD,
-      hd: FENCE_HALF_DEPTH,
+      hw: len / 2 + (f.width === undefined ? FENCE_END_PAD : halfDepth),
+      hd: halfDepth,
       rot: Math.atan2(-dz, dx),
-      cameraTopY: topY(seed, x, z, FENCE_RAIL_HEIGHT),
+      cameraTopY: topY(seed, x, z, f.height ?? FENCE_RAIL_HEIGHT),
       camGhost: true,
       isFence: true,
     });
@@ -290,6 +358,10 @@ function staticWorldColliders(seed: number): Collider[] {
   return out;
 }
 
+/** Test-only visibility into the authored static set so world-layout tests can
+ *  pin real collider extents and camera tops rather than re-testing helpers. */
+export const colliderInternalsForTest = { staticWorldColliders };
+
 // Interior collision sets, in instance-local coordinates. Derived from the
 // SAME plain-data layouts the renderer builds the KayKit modules from
 // (sim/dungeon_layout.ts), so render geometry and collision can no longer
@@ -298,8 +370,16 @@ const CRYPT_COLLIDERS: Collider[] = layoutColliders(CRYPT_LAYOUT);
 const SANCTUM_COLLIDERS: Collider[] = layoutColliders(SANCTUM_LAYOUT);
 const TEMPLE_COLLIDERS: Collider[] = layoutColliders(TEMPLE_LAYOUT);
 const ARENA_COLLIDERS: Collider[] = layoutColliders(ARENA_LAYOUT);
+const DROWNED_COURT_COLLIDERS: Collider[] = layoutColliders(DROWNED_COURT_LAYOUT);
 const NYTHRAXIS_COLLIDERS: Collider[] = layoutColliders(NYTHRAXIS_LAYOUT);
 
+// Arena slots host fixed maps by slot parity (EVEN = Coliseum, ODD = Drowned
+// Court; see ARENA_MAPS in dungeon_layout.ts). Both sets are built once at
+// module load, so per-slot collision stays fully static. Exported for the
+// per-slot layout pin tests.
+export function arenaCollidersForSlot(slot: number): Collider[] {
+  return ((slot % 2) + 2) % 2 === 1 ? DROWNED_COURT_COLLIDERS : ARENA_COLLIDERS;
+}
 // Building-interior room: a small rectangular room (±ROOM_HX by ±ROOM_HZ, instance
 // local) walled on all four sides, with a door gap on the SOUTH (−z) wall where the
 // player enters/exits. Walls are thin OBBs; the door gap is centred at x=0. The exit
@@ -353,9 +433,16 @@ const FENCE_END_PAD = 0.35;
 /** Blocker walls are full-height (a jump never clears one, unlike a fence);
  * this is only the camera-occlusion top for the record. */
 const BLOCKER_WALL_HEIGHT = 6;
-/** Rail height of a fence (yards), used for camera occlusion. A jump passes
- * through fences while airborne regardless (see sim `Entity.jumping`). */
-const FENCE_RAIL_HEIGHT = 2.8;
+/**
+ * Visual top of a low village fence rail (yards). The fence.glb rail is ~0.33yd
+ * native and renders at ~2.9x, so its silhouette tops out around waist height.
+ * Fences are `camGhost`, so camera occlusion skips them and this value feeds
+ * ONLY the spell line-of-sight check (`sightBlockedAt`): it MUST stay below
+ * `SIGHT_HEIGHT` (1.6) so a caster sees and casts over a fence, matching what
+ * the player sees on screen (issue #1668). The old 2.8 (a stale camera-occlusion
+ * guess, ~3x the real rail) sat above the eye line and wrongly blocked casts. A
+ * jump still clears the rail for movement regardless (see sim `Entity.jumping`). */
+const FENCE_RAIL_HEIGHT = 0.95;
 
 interface ColliderGrid {
   cells: Map<string, Collider[]>;
@@ -508,7 +595,7 @@ export function resolvePosition(
   }
   if (isArenaPos(x)) {
     const o = arenaOriginAt(z);
-    const local = resolveAgainst(ARENA_COLLIDERS, x - o.x, z - o.z, r, ignoreFences);
+    const local = resolveAgainst(arenaCollidersForSlot(o.slot), x - o.x, z - o.z, r, ignoreFences);
     return { x: local.x + o.x, z: local.z + o.z };
   }
   if (x > DUNGEON_X_THRESHOLD) {
@@ -548,7 +635,8 @@ function crossesFence(fromX: number, fromZ: number, toX: number, toZ: number, r:
     const hitX = fromX + (toX - fromX) * t;
     const hitZ = fromZ + (toZ - fromZ) * t;
     const along = (hitX - f.x1) * ux + (hitZ - f.z1) * uz;
-    if (along >= -FENCE_END_PAD - r && along <= len + FENCE_END_PAD + r) return true;
+    const endPad = f.width === undefined ? FENCE_END_PAD : f.width / 2;
+    if (along >= -endPad - r && along <= len + endPad + r) return true;
   }
   return false;
 }
@@ -776,7 +864,7 @@ export function cameraOcclusion(
   if (isArenaPos(ax)) {
     const o = arenaOriginAt(az);
     return sweepColliders(
-      ARENA_COLLIDERS,
+      arenaCollidersForSlot(o.slot),
       ax - o.x,
       ay,
       az - o.z,
@@ -845,7 +933,7 @@ function sightBlockedAt(seed: number, x: number, z: number, r: number, sightY: n
   }
   if (isArenaPos(x)) {
     const o = arenaOriginAt(z);
-    return overlapsAny(ARENA_COLLIDERS, x - o.x, z - o.z, false);
+    return overlapsAny(arenaCollidersForSlot(o.slot), x - o.x, z - o.z, false);
   }
   if (x > DUNGEON_X_THRESHOLD) {
     const { ox, oz, interior } = instanceLocal(x, z);

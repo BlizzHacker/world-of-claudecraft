@@ -1,4 +1,12 @@
-import { type LetterDef, QUEST_LETTERS, WELCOME_LETTER } from '../sim/content/letters';
+import {
+  GUILD_TREND_LETTERS,
+  HEROIC_MARK_LETTER,
+  type LetterDef,
+  MASTER_TIER_LETTERS,
+  MASTERY_RESET_LETTER,
+  QUEST_LETTERS,
+  WELCOME_LETTER,
+} from '../sim/content/letters';
 import { DELVES, DUNGEONS, MOBS, NPCS, QUESTS, ZONES } from '../sim/data';
 
 // English world-entity names + narratives (mobs, NPCs, quests, zones, dungeons).
@@ -75,6 +83,9 @@ const MOB_IDS = [
   'vision_deathstalker_voss',
   'bound_guardian',
   'nythraxis_skeleton_warrior',
+  'nythraxis_heroic_warrior_add',
+  'nythraxis_heroic_priest_add',
+  'nythraxis_heroic_rogue_add',
   'nythraxis_scourge_of_thornpeak',
   // Collapsed Reliquary delve mobs
   'reliquary_ledger_wraith',
@@ -133,9 +144,11 @@ const NPC_IDS = [
   'quartermaster_bree',
   'armorer_hode',
   'heroic_quartermaster', // Heroic Marks vendor (Highwatch, zone 3)
+  'fury', // Honor Quartermaster and WARFARE vendor (Eastbrook, zone 1)
   'loremaster_caddis',
   'auctioneer_voss', // second World Market auctioneer (Highwatch, zone 3)
   'bursar_fernando', // Gilded Strongbox banker (Eastbrook, zone 1)
+  'card_master', // Card Duel minigame queue desk (Eastbrook, zone 1)
   'bursar_petra_vell', // Gilded Strongbox banker (Fenbridge, zone 2)
   'bursar_aldous_crane', // Gilded Strongbox banker (Highwatch, zone 3)
   'brother_aldric_raid', // dynamically-spawned raid turn-in NPC (Crypt of Nythraxis)
@@ -150,6 +163,15 @@ const NPC_IDS = [
   'interior_villager', // Building interior resident
   'spirit_healer', // the graveyard angel (spawned at every graveyard + dungeon entry)
   'groundskeeper_bram', // Vale Cup queue master at the Sowfield gate (docs/prd/vale-cup.md)
+  'chronicler_saul', // Book of Deeds Chronicler (Eastbrook, zone 1)
+  'chronicler_osric_fenn', // Book of Deeds Chronicler (Fenbridge, zone 2)
+  'chronicler_edda_hartwell', // Book of Deeds Chronicler (Highwatch, zone 3)
+  'forgemistress_darva', // crafting-station master: forge (Eastbrook, zone 1)
+  'cook_marlow', // crafting-station master: kitchens (Eastbrook, zone 1)
+  'weaver_ottilie', // crafting-station master: loom (Eastbrook, zone 1)
+  'tinker_gizzel', // crafting-station master: toolworks (Eastbrook, zone 1)
+  'tanner_hesk', // crafting-station master: tannery (Fenbridge, zone 2)
+  'alchemist_verane', // crafting-station master: apothecary (Highwatch, zone 3)
   'town_defense_board', // Eastbrook Town Defense board
   'race_marshal_pip', // Thornwheel Derby grid book (src/sim/social/derby.ts)
   'pit_master_grott', // Boarpit bout card (src/sim/social/boarpit.ts)
@@ -236,8 +258,21 @@ const QUEST_IDS = [
   'q_nythraxis_bound_guardian',
   'q_nythraxis_scourges_end',
   'q_mogger',
-  'q_archetype_acceptance',
-  'q_prof_make_amends',
+  'q_prof_attune_smith',
+  'q_prof_attune_outfitter',
+  'q_prof_attune_apothecary',
+  'q_prof_attune_bombardier',
+  'q_prof_amends_smith',
+  'q_prof_amends_outfitter',
+  'q_prof_amends_apothecary',
+  'q_prof_amends_bombardier',
+  'q_prof_workorder_forge',
+  'q_prof_workorder_kitchens',
+  'q_prof_workorder_loom',
+  'q_prof_workorder_toolworks',
+  'q_prof_workorder_tannery',
+  'q_prof_workorder_apothecary',
+  'q_prof_hobby_switch',
 ] as const;
 
 const ZONE_IDS = ['eastbrook_vale', 'mirefen_marsh', 'thornpeak_heights'] as const;
@@ -256,6 +291,44 @@ const LETTER_IDS = [
   'letter_q_wolves',
   'letter_q_greyjaw',
   'letter_q_hollow',
+  'heroic_marks_reward',
+  // Guild trend letters (Professions 2.0), one per canonical adjacent
+  // pair in CRAFT_RING order (GUILD_TREND_LETTERS in src/sim/content/letters.ts).
+  'guild_trend_engineering_alchemy',
+  'guild_trend_alchemy_cooking',
+  'guild_trend_cooking_leatherworking',
+  'guild_trend_leatherworking_tailoring',
+  'guild_trend_tailoring_inscription',
+  'guild_trend_inscription_enchanting',
+  'guild_trend_enchanting_jewelcrafting',
+  'guild_trend_jewelcrafting_weaponcrafting',
+  'guild_trend_weaponcrafting_armorcrafting',
+  'guild_trend_armorcrafting_engineering',
+  // The one-time mastery reset notice (Professions 2.0,
+  // MASTERY_RESET_LETTER in src/sim/content/letters.ts).
+  'mastery_reset_notice',
+  // Master tier-milestone letters (Professions 2.0), one per anchor
+  // master per tier 1..5 (MASTER_TIER_LETTERS in src/sim/content/letters.ts).
+  'prof_tier_weaponcrafting_armorcrafting_1',
+  'prof_tier_weaponcrafting_armorcrafting_2',
+  'prof_tier_weaponcrafting_armorcrafting_3',
+  'prof_tier_weaponcrafting_armorcrafting_4',
+  'prof_tier_weaponcrafting_armorcrafting_5',
+  'prof_tier_leatherworking_tailoring_1',
+  'prof_tier_leatherworking_tailoring_2',
+  'prof_tier_leatherworking_tailoring_3',
+  'prof_tier_leatherworking_tailoring_4',
+  'prof_tier_leatherworking_tailoring_5',
+  'prof_tier_alchemy_cooking_1',
+  'prof_tier_alchemy_cooking_2',
+  'prof_tier_alchemy_cooking_3',
+  'prof_tier_alchemy_cooking_4',
+  'prof_tier_alchemy_cooking_5',
+  'prof_tier_engineering_alchemy_1',
+  'prof_tier_engineering_alchemy_2',
+  'prof_tier_engineering_alchemy_3',
+  'prof_tier_engineering_alchemy_4',
+  'prof_tier_engineering_alchemy_5',
 ] as const;
 
 type MobId = (typeof MOB_IDS)[number];
@@ -301,6 +374,7 @@ type WorldEntityTranslations = {
     delveRiteShrineReedInteract: string;
     delveRiteShrineSkullInteract: string;
     mailboxName: string;
+    noticeboardName: string;
   };
   entities: {
     mobs: MobTranslations;
@@ -388,8 +462,16 @@ function makeEnglishWorldEntities(): WorldEntityTranslations {
     };
   });
 
-  const lettersById: Record<string, LetterDef> = { [WELCOME_LETTER.letterId]: WELCOME_LETTER };
+  const lettersById: Record<string, LetterDef> = {
+    [WELCOME_LETTER.letterId]: WELCOME_LETTER,
+    [HEROIC_MARK_LETTER.letterId]: HEROIC_MARK_LETTER,
+    [MASTERY_RESET_LETTER.letterId]: MASTERY_RESET_LETTER,
+  };
   for (const letter of Object.values(QUEST_LETTERS)) lettersById[letter.letterId] = letter;
+  for (const letter of Object.values(GUILD_TREND_LETTERS)) lettersById[letter.letterId] = letter;
+  for (const byTier of Object.values(MASTER_TIER_LETTERS)) {
+    for (const letter of Object.values(byTier)) lettersById[letter.letterId] = letter;
+  }
   const letters = {} as LetterTranslations;
   orderedValues(LETTER_IDS, lettersById).forEach((letter) => {
     letters[letter.letterId as LetterId] = {
@@ -414,6 +496,7 @@ function makeEnglishWorldEntities(): WorldEntityTranslations {
       delveRiteShrineReedInteract: 'Reed Shrine: Press F to touch it',
       delveRiteShrineSkullInteract: 'Skull Shrine: Press F to touch it',
       mailboxName: 'Mailbox',
+      noticeboardName: 'Notice Board',
     },
     entities: { mobs, npcs, quests, zones, dungeons, delves, letters },
   };

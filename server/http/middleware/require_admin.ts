@@ -4,11 +4,11 @@
 //
 //  - createRequireAdmin(getDb): the admin-auth gate. It mirrors the legacy
 //    adminIdentity(req) resolver EXACTLY (server/admin.ts): resolve the 64-hex
-//    bearer, look up the account + token scope, require a full-scope session,
-//    then require at least one staff role
-//    (staff_db.adminRolesForAccount, fail closed; roles are re-read on every
-//    request so a dashboard revocation applies to the next call). On ANY failure
-//    (absent/bad token, unknown account, read-only token, non-staff account) it writes the legacy
+//    bearer, require its exact scope to be 'full', then require at least one
+//    staff role (staff_db.adminRolesForAccount, fail closed; roles are re-read
+//    on every request so a dashboard revocation applies to the next call). On
+//    ANY failure
+//    (absent/bad/read token, unknown account, non-staff account) it writes the legacy
 //    admin envelope body { success: false, data: null, error: 'admin authentication
 //    required' } at 401 and short-circuits (no next()), so the no-auth admin goldens
 //    replay byte-identically. A missing/malformed bearer 401s WITHOUT a DB call.
@@ -24,8 +24,8 @@
 //    ('any' admits any staff account). On success it sets ctx.account (admin
 //    token is proven full-scope), stashes the resolved AdminIdentity on ctx.state for
 //    the handlers (/me, staff-role writes), and calls next(). The gate applies NO
-//    moderation gate (staff is trusted operator authority). Read-only companion
-//    tokens are never admin credentials.
+//    separate read-only-scope 403 and NO moderation gate (staff is trusted operator
+//    authority). Read tokens use the same uniform 401 as other invalid credentials.
 //
 //  - requireAdminTarget(kind): the admin-scope :id loader. It decodes the :id param
 //    with num({ int, min: 1 }) BEFORE any DB call (a non-numeric / non-positive id
@@ -54,6 +54,7 @@
 
 import { type AdminPermission, permissionsForRoles } from '../../admin_permissions';
 import { adminPathKnown, permissionForAdminRoute } from '../../admin_routes';
+import type { TokenScope } from '../../db';
 import { json } from '../../http_util';
 import { num } from '../schema';
 import type { Ctx, Middleware, Next, RouteMeta } from '../types';
@@ -89,14 +90,12 @@ export interface AdminIdentity {
 /**
  * The two db reads the admin gate needs, bundled so a unit test can inject a fake
  * with no Postgres. The shape mirrors the real server exports the legacy
- * adminIdentity(req) resolver calls (db.accountAndScopeForToken,
+ * adminIdentity(req) resolver calls (the scoped token resolver and
  * staff_db.adminRolesForAccount).
  */
 export interface AdminAuthDb {
-  /** Account id + authority for a live bearer, or null. */
-  accountAndScopeForToken(
-    token: string,
-  ): Promise<{ accountId: number; scope: 'full' | 'read' } | null>;
+  /** Account id and authority for a live bearer token, or null. */
+  accountAndScopeForToken(token: string): Promise<{ accountId: number; scope: TokenScope } | null>;
   /** Staff username + roles, or null when not staff (mirrors staff_db.adminRolesForAccount). */
   adminRolesForAccount(accountId: number): Promise<{ username: string; roles: string[] } | null>;
 }
@@ -113,10 +112,14 @@ export function createRequireAdmin(getDb: () => AdminAuthDb): Middleware {
   return async (ctx: Ctx, next: Next) => {
     const token = bearerToken(ctx.req);
     const db = getDb();
-    const scoped = token === null ? null : await db.accountAndScopeForToken(token);
-    const accountId = scoped?.scope === 'full' ? scoped.accountId : null;
-    const staff = accountId === null ? null : await db.adminRolesForAccount(accountId);
-    if (accountId === null || staff === null) {
+    const account = token === null ? null : await db.accountAndScopeForToken(token);
+    if (account === null || account.scope !== 'full') {
+      json(ctx.res, 401, ADMIN_AUTH_REQUIRED);
+      return;
+    }
+    const accountId = account.accountId;
+    const staff = await db.adminRolesForAccount(accountId);
+    if (staff === null) {
       json(ctx.res, 401, ADMIN_AUTH_REQUIRED);
       return;
     }
@@ -156,9 +159,7 @@ export function createRequireAdmin(getDb: () => AdminAuthDb): Middleware {
       return;
     }
 
-    // The lookup above proves this is a real full-scope web session. Never stamp a
-    // companion/read token as full: publish and rollback handlers trust this gate.
-    ctx.account = { accountId, scope: 'full' };
+    ctx.account = { accountId, scope: account.scope };
     ctx.state.set(ADMIN_IDENTITY, identity);
     await next();
   };

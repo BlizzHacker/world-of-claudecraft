@@ -63,6 +63,7 @@ network access, provider, or credentials.
 - `$woc-feature-plan` creates model-neutral vertical slices for large work.
 - `$woc-review-pr` reviews and drafts by default; posting needs explicit authorization.
 - `$woc-file-issue` creates an issue only after an explicit request to file it.
+- `$woc-image-to-glb` builds a shipping GLB asset from a reference image through the repo export, optimize, and fingerprint pipeline.
 - `$woc-release-merge-audit` finds semantic damage after release integration.
 - `$woc-release-malware-audit` combines the deterministic scanner with contextual triage.
 - `$woc-codex-audit` checks this architecture against current official guidance.
@@ -73,10 +74,17 @@ recover. High-impact planning and GitHub issue creation disable implicit invocat
 ## Specialist agents
 
 The read-only roles are `woc_sim_architecture`, `woc_cross_platform`,
-`woc_persistence`, `woc_security`, `woc_test_coverage`, `woc_frontend`,
-`woc_release_malware`, and `woc_docs_researcher`. The main agent owns edits,
-integration, and deterministic commands. Review agents inspect the established diff and
-shared results so the same gate is not run eight times.
+`woc_persistence`, `woc_database_performance`, `woc_security`, `woc_test_coverage`,
+`woc_frontend`, `woc_release_malware`, and `woc_docs_researcher`. The main agent owns
+edits, integration, and deterministic commands. Review agents inspect the assigned
+proposal or established diff and shared results so the same gate is not rerun by every
+specialist.
+`$woc-extract-and-test` invokes the database reviewer before database-backed implementation
+and again on the finished diff; `$woc-feature-plan`, `$woc-review-pr`, and `$woc-qa` route the
+same risks during design, review, and contribution QA.
+Routing includes database driver/dependency upgrades and PostgreSQL engine,
+resource/configuration, or topology changes because timeout, pool, lock, and planner behavior can
+change without an application SQL diff.
 
 The documentation researcher has only the official OpenAI Developer Docs MCP configured.
 It is optional and holds no credential. Add broader MCP servers only for a demonstrated

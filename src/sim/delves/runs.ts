@@ -39,6 +39,7 @@ import {
   MOBS,
   resolveDelveShopOffers,
 } from '../data';
+import * as deedsMod from '../deeds';
 import {
   DELVE_MODULE_LAYOUTS,
   type DelveModuleId,
@@ -216,6 +217,10 @@ export function clampDelveModuleBounds(
   const moduleId = run.modules[run.moduleIndex] as DelveModuleId;
   const layout = DELVE_MODULE_LAYOUTS[moduleId];
   if (!layout) return { x, z };
+  // Irregular Litany rooms are already enclosed by their exact polygon-shell
+  // OBBs. Applying the legacy rectangular clamp as well creates invisible
+  // walls across every lobe that extends beyond layout.wallX/zMin/zMax.
+  if (layout.shellPolygon?.length) return { x, z };
   const wallX = layout.wallX ?? DUNGEON_WALL_X;
   const halfX = wallX - DUNGEON_WALL_HW - r; // inner wall face minus body radius
   const zBase = delveModuleZOffset(run, run.moduleIndex);
@@ -443,6 +448,9 @@ export function enterDelve(ctx: SimContext, delveId: string, tierId: string, pid
   p.targetId = null;
   p.autoAttack = false;
   run.emptyFor = 0;
+  // Whole-run roster watermark, taken after the teleport so the count includes
+  // this player; it only ever grows for the life of the run.
+  run.deedMaxParty = Math.max(run.deedMaxParty ?? 0, ctx.partyMembersForKey(key).length);
   if (key.startsWith('solo:') && delve.autoCompanionId && !run.companion) {
     ctx.spawnDelveCompanion(run, r.meta.entityId, delve.autoCompanionId);
   }
@@ -503,6 +511,7 @@ export function claimDelveRun(
   run.completed = false;
   run.emptyFor = 0;
   run.deathsThisRun = {};
+  run.deedMaxParty = 0;
   run.objectState = {};
   run.raiseDeadChannel = null;
   run.restlessPending = [];
@@ -710,6 +719,7 @@ export function freeDelveRun(ctx: SimContext, run: DelveRun): void {
   run.completed = false;
   run.emptyFor = 0;
   run.deathsThisRun = {};
+  run.deedMaxParty = 0;
   run.objectState = {};
   run.raiseDeadChannel = null;
   run.restlessPending = [];
@@ -913,6 +923,9 @@ export function grantDelveClearTo(
   );
   meta.copper += copper;
   unlockNextDelveLore(ctx, meta, pid);
+  // Clear predicates re-check; a heroic run whose watermark never saw a second
+  // player is the solo task.
+  deedsMod.onDelveClearForDeeds(ctx, meta, run);
   ctx.maybeCompanionBark(run, pid, 'completion');
   restorePetFromDelveStash(ctx, pid);
   ctx.emit({ type: 'delveComplete', delveId: run.delveId, tierId: run.tierId, pid });
@@ -1439,32 +1452,33 @@ export function startDelveRaiseDeadChannel(
     text: `${boss.name} begins Raise Dead.`,
     color: '#f96',
     entityId: boss.id,
+    telegraph: true,
   });
   return true;
 }
 
 // ----- interact + reward delivery --------------------------------------------
 
-export function delveInteract(ctx: SimContext, objectId: number, pid?: number): void {
+export function delveInteract(ctx: SimContext, objectId: number, pid?: number): boolean {
   const r = ctx.resolve(pid);
-  if (!r) return;
+  if (!r) return false;
   let run = delveRunForPlayer(ctx, r.meta.entityId);
   if (!run) {
     run = ctx.delveRuns.find((d) => d.partyKey !== null && d.objectIds.includes(objectId)) ?? null;
   }
   if (!run) {
     ctx.error(r.meta.entityId, 'You are not in a delve.');
-    return;
+    return false;
   }
   const state = run.objectState[objectId];
   const obj = ctx.entities.get(objectId);
   if (!state || !obj || !run.objectIds.includes(objectId)) {
     ctx.error(r.meta.entityId, 'You cannot interact with that.');
-    return;
+    return false;
   }
   if (dist2d(r.e.pos, obj.pos) > DELVE_INTERACT_RANGE) {
     ctx.error(r.meta.entityId, 'You are too far away.');
-    return;
+    return false;
   }
   if (state.kind === 'cracked_grave') {
     if (run.raiseDeadChannel) {
@@ -1475,10 +1489,11 @@ export function delveInteract(ctx: SimContext, objectId: number, pid?: number): 
         color: '#8f8',
         pid: r.meta.entityId,
       });
+      return true;
     } else {
       ctx.error(r.meta.entityId, 'The grave is silent for now.');
     }
-    return;
+    return false;
   }
   if (state.kind === 'locked_door') {
     if (state.open)
@@ -1489,11 +1504,11 @@ export function delveInteract(ctx: SimContext, objectId: number, pid?: number): 
         pid: r.meta.entityId,
       });
     else ctx.error(r.meta.entityId, 'The door is locked.');
-    return;
+    return false;
   }
   if (state.kind === 'destructible_wall') {
     ctx.error(r.meta.entityId, 'Strike the wall to break through.');
-    return;
+    return false;
   }
   if (state.kind === 'bell_rope') {
     // Deliberate pull, the one litany puzzle that is an F-interact rather than
@@ -1501,10 +1516,10 @@ export function delveInteract(ctx: SimContext, objectId: number, pid?: number): 
     // "Nothing happens." so it reads inert.
     if (!state.triggered) {
       pullLitanyBellRope(ctx, run, obj, state);
-      return;
+      return true;
     }
     ctx.error(r.meta.entityId, 'Nothing happens.');
-    return;
+    return false;
   }
   if (state.kind === 'module_exit') {
     if (!state.open) {
@@ -1524,20 +1539,21 @@ export function delveInteract(ctx: SimContext, objectId: number, pid?: number): 
       else if (untriggeredKinds.length > 0)
         text = 'You need to open the seal by applying pressure somewhere in the room.';
       ctx.error(r.meta.entityId, text);
-      return;
+      return false;
     }
     if (dist2d(r.e.pos, obj.pos) > DELVE_EXIT_PORTAL_RADIUS + 2) {
       ctx.error(r.meta.entityId, 'Move closer to the passage.');
-      return;
+      return false;
     }
     advanceDelveModule(ctx, run);
-    return;
+    return true;
   }
-  if (interactDrownedLitanyRite(ctx, run, objectId, r.meta.entityId)) return;
+  const riteOutcome = interactDrownedLitanyRite(ctx, run, objectId, r.meta.entityId);
+  if (riteOutcome.handled) return riteOutcome.succeeded;
   if (state.kind === 'locked_chest') {
     if (dist2d(r.e.pos, obj.pos) > DELVE_PLATE_RADIUS + 2) {
       ctx.error(r.meta.entityId, 'Move closer to the chest.');
-      return;
+      return false;
     }
     if (state.looted) {
       ctx.emit({
@@ -1546,21 +1562,21 @@ export function delveInteract(ctx: SimContext, objectId: number, pid?: number): 
         color: '#aaa',
         pid: r.meta.entityId,
       });
-      return;
+      return false;
     }
     if (!state.attemptAvailable) {
       ctx.error(
         r.meta.entityId,
         'The lock is jammed beyond picking. Clear the delve again for another attempt.',
       );
-      return;
+      return false;
     }
     if (run.lockpick && run.lockpick.state === 'IN_PROGRESS') {
       // Someone is already picking it (single interactor, v1).
       if (run.lockpick.ownerId !== r.meta.entityId) {
         ctx.error(r.meta.entityId, 'Someone is already working the lock.');
       }
-      return;
+      return false;
     }
     // Open the ante selector on the client; no session yet. A Bountiful Coffer
     // (purple) tells the client to force the Hard/Premium ante (§7.6).
@@ -1568,12 +1584,12 @@ export function delveInteract(ctx: SimContext, objectId: number, pid?: number): 
     // No per-move budget on the offer: the clock is an ante dial, so the client
     // shows each ante's own time from ANTE_TO_STEP_TIMEOUT_MS in the selector.
     ctx.emit({ type: 'lockpickOffer', objectId, bountiful: isCoffer, pid: r.meta.entityId });
-    return;
+    return true;
   }
   if (state.kind === 'reward_chest') {
     if (dist2d(r.e.pos, obj.pos) > DELVE_PLATE_RADIUS + 2) {
       ctx.error(r.meta.entityId, 'Move closer to the chest.');
-      return;
+      return false;
     }
     if (state.open && state.triggered) {
       ctx.emit({
@@ -1582,23 +1598,23 @@ export function delveInteract(ctx: SimContext, objectId: number, pid?: number): 
         color: '#aaa',
         pid: r.meta.entityId,
       });
-      return;
+      return false;
     }
     grantDelveRewards(ctx, run);
     state.triggered = true;
     state.open = true;
     obj.name = 'Opened Chest';
     openDelveSurfaceExit(ctx, run);
-    return;
+    return true;
   }
   if (state.kind === 'surface_exit') {
     if (!state.open) {
       ctx.error(r.meta.entityId, 'The way out is not yet open.');
-      return;
+      return false;
     }
     if (dist2d(r.e.pos, obj.pos) > DELVE_EXIT_PORTAL_RADIUS + 2) {
       ctx.error(r.meta.entityId, 'Move closer to the stairs.');
-      return;
+      return false;
     }
     const delve = DELVES[run.delveId];
     const members = run.partyKey ? ctx.partyMembersForKey(run.partyKey) : [];
@@ -1607,52 +1623,54 @@ export function delveInteract(ctx: SimContext, objectId: number, pid?: number): 
       ejectToDelveDoor(ctx, pid, delve, i);
     });
     freeDelveRun(ctx, run);
-    return;
+    return true;
   }
   ctx.error(r.meta.entityId, 'Nothing happens.');
+  return false;
 }
 
 /** Claim item loot from an opened delve chest (shown on the loot overlay). */
-export function collectDelveChestLoot(ctx: SimContext, chestId: number, pid?: number): void {
+export function collectDelveChestLoot(ctx: SimContext, chestId: number, pid?: number): boolean {
   const r = ctx.resolve(pid);
-  if (!r) return;
+  if (!r) return false;
   const run = delveRunForPlayer(ctx, r.meta.entityId);
-  if (!run) return;
+  if (!run) return false;
   const state = run.objectState[chestId];
   const obj = ctx.entities.get(chestId);
   if (state?.kind !== 'locked_chest' && state?.kind !== 'drowned_reliquary') {
     ctx.error(r.meta.entityId, 'There is nothing left to take.');
-    return;
+    return false;
   }
   if (!obj || dist2d(r.e.pos, obj.pos) > DELVE_PLATE_RADIUS + 2) {
     ctx.error(r.meta.entityId, 'Move closer to the chest.');
-    return;
+    return false;
   }
   if (state.kind === 'drowned_reliquary') {
     // Every party member rolled their own loot; collect only your own slice.
     const own = state.partyLoot?.[r.meta.entityId];
     if (!own?.length) {
       ctx.error(r.meta.entityId, 'There is nothing left to take.');
-      return;
+      return false;
     }
     for (const slot of own) {
       ctx.addItem(slot.itemId, slot.count, r.meta.entityId);
     }
     state.partyLoot![r.meta.entityId] = [];
-    return;
+    return true;
   }
   if (!state.pendingLoot?.length) {
     ctx.error(r.meta.entityId, 'There is nothing left to take.');
-    return;
+    return false;
   }
   if (state.lootOwnerId != null && state.lootOwnerId !== r.meta.entityId) {
     ctx.error(r.meta.entityId, 'There is nothing left to take.');
-    return;
+    return false;
   }
   for (const slot of state.pendingLoot) {
     ctx.addItem(slot.itemId, slot.count, r.meta.entityId);
   }
   state.pendingLoot = [];
+  return true;
 }
 
 /** Player picked a rite difficulty (Easy/Medium/Hard) at the risen reliquary. */
@@ -1704,6 +1722,8 @@ export function companionUpgrade(ctx: SimContext, companionId: string, pid?: num
   r.meta.delveMarks -= cost.marks;
   r.meta.copper -= cost.copper;
   r.meta.companionUpgrades[companionId] = next;
+  // Companion-rank predicates read this map; re-evaluate on the next pass.
+  ctx.markDeedsDirty(r.meta.entityId);
   ctx.emit({
     type: 'log',
     text: `${def.name} reaches rank ${next}.`,

@@ -5,10 +5,6 @@ const mobileCss = readFileSync(
   new URL('../src/styles/hud.mobile.css', import.meta.url),
   'utf8',
 ).replace(/\r\n/g, '\n');
-const componentsCss = readFileSync(
-  new URL('../src/styles/components.css', import.meta.url),
-  'utf8',
-).replace(/\r\n/g, '\n');
 
 describe('mobile window layout CSS', () => {
   it('clamps generic mobile windows to the app viewport and reserves bottom padding', () => {
@@ -34,15 +30,24 @@ describe('mobile window layout CSS', () => {
   });
 
   it('keeps mobile tab and filter rows scrollable instead of clipping labels', () => {
-    // Both behaviors moved with the AAA window grammar and now live in
-    // components.css: the shared frame tab rail (which replaced the social
-    // window's inline .soc-tabs strip) scrolls horizontally by design, and the
-    // bank-cluster chip filter row re-provides the one-row scroll the legacy
-    // body.mobile-touch .bag-chips rule protected (kept beside the grammar it
-    // modifies per its HOME NOTE, so hud.mobile.css carries no twin).
-    expect(componentsCss).toMatch(/\.tab-rail \{[^}]*overflow-x: auto;/);
-    expect(componentsCss).toMatch(
-      /body\.mobile-touch #bank-window \.window-frame \.filter-row,\n {2}body\.mobile-touch\.bank-open #bags \.window-frame \.filter-row \{[^}]*flex-wrap: nowrap;[^}]*overflow-x: auto;/,
+    expect(mobileCss).toMatch(
+      /body\.mobile-touch \.bag-chips \{[^}]*flex-wrap: nowrap;[^}]*overflow-x: auto;/,
+    );
+    expect(mobileCss).toMatch(
+      /body\.mobile-touch #social-window \.soc-tabs \{[^}]*flex-wrap: nowrap;[^}]*overflow-x: auto;/,
+    );
+  });
+
+  it('hides the mobile bottom action bar only while a truly fullscreen window (bags/char) is open', () => {
+    expect(mobileCss).toMatch(
+      /body\.mobile-touch\.mobile-fullscreen-window-open #bottom-bar \{[^}]*display: none;/,
+    );
+    // Regression guard: this must NOT be gated on the broad "any window open"
+    // class, or partial windows (loot, lockpick, delve-rite, map, ...) would
+    // hide the player's own HP/resource frame while they still leave real
+    // screen visible underneath.
+    expect(mobileCss).not.toMatch(
+      /body\.mobile-touch\.mobile-window-open #bottom-bar \{[^}]*display: none;/,
     );
   });
 
@@ -52,5 +57,66 @@ describe('mobile window layout CSS', () => {
     const block = mobileCss.slice(start, mobileCss.indexOf('}', start));
     expect(block).toContain('width: min(330px, calc(var(--app-vw) / var(--ui-scale, 1) - 32px));');
     expect(block).toContain('max-width: calc(var(--app-vw) / var(--ui-scale, 1) - 32px);');
+  });
+
+  it('shows all three mobile specializations in one compact grid without horizontal drag', () => {
+    expect(mobileCss).not.toMatch(/body\.mobile-touch #talents-window \{[^}]*column-count: 2;/);
+    expect(mobileCss).toMatch(
+      /body\.mobile-touch #talents-window \{[^}]*width: min\(620px,[^}]*transform: translate\(-50%, -50%\);[^}]*overflow-x: hidden;/,
+    );
+    expect(mobileCss).toMatch(
+      /body\.mobile-touch #talents-window \.ts-specs-grid \{[^}]*display: grid;[^}]*grid-template-columns: repeat\(3, minmax\(0, 1fr\)\);/,
+    );
+    expect(mobileCss).not.toMatch(
+      /body\.mobile-touch #talents-window \.ts-specs-grid \{[^}]*flex-direction: column;/,
+    );
+    expect(mobileCss).toMatch(
+      /body\.mobile-touch #talents-window \.ts-panel \{[^}]*min-height: 150px;/,
+    );
+  });
+
+  it('scales the vendor window bottom clamp by --window-scale instead of a raw dvh', () => {
+    const start = mobileCss.indexOf('body.mobile-touch #vendor-window {\n    max-height:');
+    expect(start).toBeGreaterThan(0);
+    const block = mobileCss.slice(start, mobileCss.indexOf('}', start));
+    expect(block).toContain(
+      'max-height: calc(\n      var(--app-vh) /\n      var(--window-scale, 1) -\n      12px -\n      max(10px, env(safe-area-inset-bottom))\n    );',
+    );
+    expect(block).not.toContain('100dvh');
+  });
+
+  it('places the Claudium wallet card beside the balance in mobile landscape', () => {
+    expect(mobileCss).toContain(`@media (orientation: landscape) {
+    body.mobile-touch #claudium-window .cl-body:has(> .cl-wallet-connect) {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: stretch;
+      gap: 10px;
+    }`);
+    expect(mobileCss).toContain(`body.mobile-touch
+      #claudium-window
+      .cl-body:has(> .cl-wallet-connect)
+      > :not(.cl-balance, .cl-wallet-connect) {
+      grid-column: 1 / -1;
+    }`);
+    expect(mobileCss).toContain(`body.mobile-touch #claudium-window .cl-wallet-connect {
+      margin-top: 0;
+    }`);
+  });
+
+  it('neutralizes the market controls flex-basis so column stacking never grows their height', () => {
+    // components.css gives .mkt-search/.mkt-filters/.mkt-filter a desktop flex-basis
+    // (200px/auto/140px) meant as a row WIDTH; once .mkt-controls/.mkt-filters flip to
+    // flex-direction: column that basis becomes a HEIGHT instead, ballooning the search
+    // box and clipping the filters and listing body out of the window (#2107 review).
+    expect(mobileCss).toMatch(
+      /body\.mobile-touch \.mkt-search \{[^}]*flex: 0 0 auto;[^}]*max-width: none;[^}]*min-height: 40px;/,
+    );
+    expect(mobileCss).toMatch(
+      /body\.mobile-touch \.mkt-filters \{[^}]*flex: 0 0 auto;[^}]*flex-direction: column;/,
+    );
+    expect(mobileCss).toMatch(
+      /body\.mobile-touch \.mkt-filter \{[^}]*flex: 0 0 auto;[^}]*max-width: none;/,
+    );
   });
 });

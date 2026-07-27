@@ -20,6 +20,167 @@ export const da_DK: EnTranslations = {
     "rp": "RP",
     "rpPvp": "RP-PvP"
   },
+  "devCommand": {
+    "dialogLabel": "Center for Udviklerkommandoer",
+    "kicker": "Udviklingsværktøjer",
+    "title": "Kommandocenter",
+    "subtitle": "Serverstyrede testfunktioner til den aktive verden.",
+    "closeAria": "Luk udviklerkommandoer",
+    "categoryNavAria": "Kategorier for udviklerkommandoer",
+    "categories": {
+      "player": "Spiller",
+      "spawns": "Oprettede væsner",
+      "inventory": "Inventar",
+      "progress": "Fremskridt",
+      "travel": "Rejser",
+      "scenarios": "Scenarier"
+    },
+    "filterLabel": "Filtrér kommandoer",
+    "filterPlaceholder": "Søg i denne kategori",
+    "noMatches": "Ingen matchende kommandoer.",
+    "itemSearchPlaceholder": "Søg efter navn eller id",
+    "itemResultsAria": "Matchende genstande",
+    "itemNoMatches": "Ingen genstande matcher.",
+    "itemMore": "Viser {shown} af {total}. Bliv ved med at skrive for at indsnævre søgningen.",
+    "itemChosen": "Valgt: {name}",
+    "itemUnknown": "Ingen genstand har det id.",
+    "itemHeroicTag": "Heroisk",
+    "kitCurrentSpec": "Nuværende specialisering",
+    "serverRequirement": "Serverfusk kræver stadig ALLOW_DEV_COMMANDS=1.",
+    "invalidValues": "Vælg gyldige værdier, før du kører kommandoen.",
+    "sent": "Sendt: {command}",
+    "run": "Kør",
+    "fields": {
+      "level": "Niveau",
+      "mob": "Væsen",
+      "count": "Antal",
+      "item": "Genstand",
+      "gold": "Guld",
+      "quest": "Opgave",
+      "profession": "Fag",
+      "amount": "Mængde",
+      "x": "X",
+      "z": "Z",
+      "dungeon": "Fangekælder",
+      "difficulty": "Sværhedsgrad",
+      "name": "Navn",
+      "spec": "Specialisering"
+    },
+    "difficulty": {
+      "normal": "Normal",
+      "heroic": "Heroisk"
+    },
+    "actions": {
+      "heal": {
+        "label": "Gendan helbred",
+        "description": "Fyld hele helbredspuljen."
+      },
+      "resource": {
+        "label": "Gendan ressource",
+        "description": "Fyld mana, raseri eller energi."
+      },
+      "cooldowns": {
+        "label": "Ryd nedkølingstider",
+        "description": "Nulstil evne-, GCD- og eliksirtimere."
+      },
+      "god": {
+        "label": "Slå gudetilstand til eller fra",
+        "description": "Slå usårlighed og forøget skade til eller fra."
+      },
+      "revive": {
+        "label": "Genopliv",
+        "description": "Genopliv gennem den normale genopstandelsesproces."
+      },
+      "kill": {
+        "label": "Dræb spilleren",
+        "description": "Test forløb for død, spøgelse og lig."
+      },
+      "combatreset": {
+        "label": "Nulstil kamp",
+        "description": "Ryd kampstatus og fjendtlig trussel."
+      },
+      "level": {
+        "label": "Angiv niveau",
+        "description": "Angiv figurens aktuelle niveau."
+      },
+      "spawn": {
+        "label": "Opret væsen",
+        "description": "Opret et bestemt væsen nær spilleren."
+      },
+      "killtarget": {
+        "label": "Dræb målet",
+        "description": "Dræb det valgte levende væsen."
+      },
+      "despawntarget": {
+        "label": "Fjern målet",
+        "description": "Fjern et valgt væsen, der er oprettet med dette værktøj."
+      },
+      "despawnall": {
+        "label": "Ryd mine oprettede væsner",
+        "description": "Fjern alle væsner, som denne udvikler har oprettet."
+      },
+      "give": {
+        "label": "Giv genstand",
+        "description": "Føj en genstand til spillerens inventar."
+      },
+      "kit": {
+        "label": "Udrust frisk 20-sæt",
+        "description": "Ifør den forudindstillede niveau 20-opsætning fra før Sanctum til en specialisering, tasker først. Kun udstyr."
+      },
+      "gold": {
+        "label": "Tilføj guld",
+        "description": "Føj guld til den aktuelle pung."
+      },
+      "quest": {
+        "label": "Fuldfør opgave",
+        "description": "Fuldfør en bestemt opgave ud fra id."
+      },
+      "quests": {
+        "label": "Fuldfør aktive opgaver",
+        "description": "Fuldfør alle opgaver i den aktuelle log."
+      },
+      "attune": {
+        "label": "Lås indstillinger op",
+        "description": "Markér alle indstillingskrav som fuldførte."
+      },
+      "gather": {
+        "label": "Giv indsamlingsfærdighed",
+        "description": "Forøg færdigheden i et indsamlingsfag."
+      },
+      "teleport": {
+        "label": "Teleportér",
+        "description": "Flyt til præcise verdenskoordinater."
+      },
+      "dungeon": {
+        "label": "Gå ind i fangekælder",
+        "description": "Gå ind i en fangekælder uden udviklerspærren."
+      },
+      "raid": {
+        "label": "Gå ind i raid",
+        "description": "Gå direkte ind i Nythraxis-arenaen."
+      },
+      "raidreset": {
+        "label": "Nulstil raidlåsning",
+        "description": "Ryd de aktuelle raidlåsninger."
+      },
+      "bot": {
+        "label": "Opret social bot",
+        "description": "Opret en stillestående spiller, der kan modtage hvisken."
+      },
+      "lfgqueue": {
+        "label": "Klargør søgekøen",
+        "description": "Opret et scenarie for køen til fangekældersøgeren."
+      },
+      "lfgraid": {
+        "label": "Klargør raidsøgeren",
+        "description": "Opret et scenarie for raidsøgeren."
+      },
+      "lfgboard": {
+        "label": "Klargør opslagstavlen",
+        "description": "Opret et scenarie med et færdigt gruppeopslag."
+      }
+    }
+  },
   "game": {
     "xp": {
       "suffix": "XP",
@@ -85,6 +246,9 @@ export const da_DK: EnTranslations = {
       "title": "Talenter",
       "classTab": "Klasse",
       "specTab": "Specialisering",
+      "choicesTab": "Valg",
+      "rowUnlockToast": "Et nyt talentvalg er låst op!",
+      "rowUnlocks": "Låses op på niveau {level}",
       "available": "Tilgængelig",
       "spent": "Brugt",
       "pointSource": "Optjen 1 talentpoint per niveau fra niveau {first} til {cap}. Stig i niveau for at få flere point.",
@@ -143,6 +307,7 @@ export const da_DK: EnTranslations = {
         "noTree": "Din klasse har endnu ikke et talenttræ.",
         "locked": "Du har endnu ikke låst talenter op — de begynder ved niveau {level}.",
         "noSpec": "ingen specialisering",
+        "rowsSummary": "Talenter: {head}, {picked}/{unlocked} valgrupper valgt.",
         "summary": "Talenter: {head} — {spent}/{total} point brugt ({breakdown}).",
         "breakdownClass": "Klasse {classPts}",
         "breakdownSpec": "Klasse {classPts}, {spec} {specPts}",
@@ -165,7 +330,15 @@ export const da_DK: EnTranslations = {
     "death": {
       "resurrectAtCorpse": "Genopstå ved liget",
       "resurrectAtHealer": "Den Blege Vogter (Vogterens Klokke)",
-      "spiritHealerAlive": "Den Blege Vogter våger over de døde. Du er stadig blandt de levende."
+      "spiritHealerAlive": "Den Blege Vogter våger over de døde. Du er stadig blandt de levende.",
+      "healerConfirmTitle": "Vil du acceptere Vogterens Klokke?",
+      "healerConfirmBody": "Den Blege Vogter genopliver dig her, men Vogterens Klokke reducerer alle dine egenskaber med 75 % i op til 10 minutter på højere niveauer. Går du som ånd tilbage til dit lig, genoplives du uden straf.",
+      "healerConfirmAccept": "Genopliv mig",
+      "healerConfirmCancel": "Annuller"
+    },
+    "fct": {
+      "absorbed": "{amount} absorberet",
+      "cheap": "Billigere!"
     },
     "emotes": {
       "wave": "Vink",
@@ -195,6 +368,7 @@ export const da_DK: EnTranslations = {
       "close": "Luk daglige belønninger",
       "loading": "Indlæser daglige belønninger...",
       "error": "Kunne ikke indlæse daglige belønninger.",
+      "disabled": "Daglige belønninger er i øjeblikket deaktiveret. Vi annoncerer opdateringer til denne funktion i Discord-kanalen.",
       "intro": "Behold nok WOC i din verificerede wallet for at låse daglige belønninger op. Optjen point med én daglig drejning og skiftende opgaver, og klatr så op ad den daglige resultattavle for en andel af præmiepuljen.",
       "disclaimer": "WOC-kursen kan bevæge sig hurtigt. Vi anbefaler at holde mere end minimummet på 20 USD, så normale kursudsving ikke lukker dig ude. Dette er ikke finansiel rådgivning.",
       "prize": "Præmiepulje",
@@ -203,6 +377,7 @@ export const da_DK: EnTranslations = {
       "remainingLessThanMinute": "<1m",
       "remainingMinutes": "{minutes}m",
       "remainingHoursMinutes": "{hours}t {minutes}m",
+      "remainingDaysHours": "{days} dage {hours} timer",
       "score": "Score",
       "walletValue": "Wallet-værdi (WOC)",
       "usd": "{amount} USD",
@@ -217,6 +392,7 @@ export const da_DK: EnTranslations = {
       "spinButton": "Drej",
       "tasks": "Opgaver",
       "taskMultiplier": "x{multiplier} multiplikator",
+      "oneVsOneExcluded": "1 mod 1-kampe giver ikke point til daglige belønninger.",
       "pointsGained": "{points} daglige belønningspoint optjent.",
       "showChestButton": "Vis kiste",
       "hideChestButton": "Skjul kiste",
@@ -241,8 +417,281 @@ export const da_DK: EnTranslations = {
         "no_wallet": "Forbind en wallet med mindst 20 USD i WOC.",
         "under_minimum": "Wallet er under WOC-minimummet på 20 USD.",
         "price_unavailable": "WOC-prisen er utilgængelig, belønninger er midlertidigt låst.",
-        "banned": "Du er udelukket fra daglige belønninger. Årsag: {reason}"
+        "banned": "Du er udelukket fra daglige belønninger. Årsag: {reason}",
+        "bannedUntil": "Du er udelukket fra daglige belønninger i yderligere {remaining}. Adgangen vender tilbage {until}. Begrundelse: {reason}"
       }
+    },
+    "wocStore": {
+      "title": "WOC-butik",
+      "close": "Luk WOC-butikken",
+      "tabsLabel": "Sektioner i WOC-butikken",
+      "storeTab": "Butik",
+      "rewardsTab": "Daglige belønninger",
+      "loading": "Indlæser WOC-butikken...",
+      "error": "WOC-butikken er ikke tilgængelig lige nu. Prøv igen om lidt.",
+      "balance": "Claudium-saldo",
+      "buyClaudium": "Køb Claudium",
+      "owned": "Du ejer dette",
+      "needMoreTitle": "Mere Claudium påkrævet",
+      "needMoreBody": "Du skal bruge {shortfall} mere Claudium for at købe {item}.",
+      "cancel": "Annuller",
+      "confirmTitle": "Bekræft køb af kosmetik",
+      "confirmBody": "Køb {item} til {cost} Claudium?",
+      "confirmPurchase": "Køb",
+      "priceChanged": "Prisen ændrede sig før købet blev gennemført. Gennemgå den opdaterede pris, og bekræft igen.",
+      "armoryEyebrow": "Sæson 1",
+      "armoryTitle": "Våbenhuset",
+      "armoryBody": "Begrænsede våbenskins fra sæson 1-våbenhuset. De gælder for hele kontoen, er rent kosmetiske og vises for alle omkring dig.",
+      "wallet": {
+        "title": "Solana-pung",
+        "unlinked": "Tilslut en pung-app og underskriv derefter én gang for at knytte dens offentlige adresse til din WoC-konto. Vi modtager aldrig din genoprettelsesfrase eller private nøgle.",
+        "connectedUnlinked": "Pung-appen er tilsluttet denne browser, men dens offentlige adresse er endnu ikke knyttet til din WoC-konto.",
+        "linkedDisconnected": "Din offentlige adresse er tilknyttet. Gentilslut den pung-app, når du vil betale med SOL eller WOC.",
+        "linkedConnected": "Din tilknyttede pung-app er tilsluttet og klar til SOL- eller WOC-køb.",
+        "mismatched": "En anden pung er tilsluttet. Bekræft den for at erstatte den tilknyttede adresse, eller gentilslut den tilknyttede pung.",
+        "connect": "Tilslut pung",
+        "verify": "Bekræft og tilknyt",
+        "reconnect": "Gentilslut pung",
+        "manage": "Administrer pung"
+      },
+      "collectionLine": "{collection}-samlingen",
+      "collections": {
+        "guildmark": "Laugsmærke",
+        "emberwrought": "Glødesmedet",
+        "hoarfrost": "Rimfrost",
+        "fallen_star": "Falden Stjerne"
+      },
+      "skins": {
+        "guildmark_arming_sword": {
+          "name": "Laugsmærket Væbnersværd",
+          "look": "Blåneret stålklinge, fiskehaleformet korsgreb i bronze, blågrønt lædergreb og et lille stemplet laugssigil.",
+          "lore": "Hvor den smedede klinge er anonym, er denne signeret. En pansermester tjener kun retten til at synke sit mærke i ricassoen, når verdensmarkedets købmand vil stå inde for hans stål, og Smith Haldrens mærke står inde for. Blåt mod dalens fugt, balanceret til et hår. Du betaler for frimærket lige så meget som sværdet, og det er det værd."
+        },
+        "brasscap_axe": {
+          "name": "Messinghætte-Økse",
+          "look": "Poleret stålblad, messinghætte og skaftskinner på et lakeret asketræsskaft, sirlig omvikling og smedens stempel.",
+          "lore": "En stemplet økse er en pral, du kan holde. Messinghætten og langets er halvt rustning, halvt signatur: de forhindrer, at skaftet flækker, og de fanger værtshusets lys, så alle ved, at du har købt Armorer Hodes værk, ikke en milits, der er hånd-me-down. \"Hvis det skærer, sælger jeg det,\" siger Highwatch-smeden. Denne skærer."
+        },
+        "tempered_flanged_mace": {
+          "name": "Hærdet Flangekølle",
+          "look": "Sekskantet køllehoved af hærdet, blåneret stål, messingkrave og endeknop samt vinrødt lædergreb.",
+          "lore": "Seks flanger af blågjort, hærdet stål, hver slebet for at åbne et hjelm, dækket af messing og viklet i vinrødt læder. Rigets pansermænd laver ikke grimme våben, selv når arbejdet er brutalt. Denne blev bestilt gennem verdensmarkedet, ikke trukket fra et stativ; et eller andet sted er der en hovedbog med en stolt købers navn og den sum, han betalte Hode for det."
+        },
+        "guildmark_dirk": {
+          "name": "Laugsmærket Dirk",
+          "look": "Slank dirk i hærdet stål, bronzebeskytter og møtrik, mørkegrønt snoregreb, stemplet sigil.",
+          "lore": "Hvad en lavet mand bærer, når sværdet bliver hjemme: slank, hærdet, stemplet med det samme mærke, der attesterer en fuld klinge, båret på bæltet som et signet med en kant. Underspillet for alle undtagen dem, der kan læse en rustningsmands bevis. Kvartermester Bree opbevarer en skuffe af dem på Highwatch for officerer, der har fortjent murens respekt."
+        },
+        "brasscrown_staff": {
+          "name": "Messingkrone-Vandrestav",
+          "look": "Hårdttræsstav med en drejet messingkrone, messingdop og farvet læderbånd.",
+          "lore": "Drevet af krydret hårdttræ og kronet med en messingfinal, Eastbrook-smedene støbt i hundrede, men perfekt af den ene. Det tilhører den slags rejsende, der ønsker at blive taget seriøst ved både Fenbridges gate og Highwatchs mur. En vandrestav, der aldrig rigtig har behøvet at gå; det farvede bånd matcher en frakke du kan gætte prisen på."
+        },
+        "lacquered_wand": {
+          "name": "Lakeret Stav",
+          "look": "Slank dybrød lakeret tryllestav, to polerede messingbånd, lille afrundet messingspids.",
+          "lore": "Dybrød lak i syv omhyggelige lag, omkranset to gange af poleret messing: den slags tryllestav en landsbymagiker køber på Verdensmarkedet, når betalingen begynder at komme i rigtige mønter, og udseendet skal følge med. Den leder ikke Lyset bedre end en birkekæp. Men den stråler over Købmandens disk, og halvdelen af den mindre magi har altid været at blive troet."
+        },
+        "fletcher_s_guild_bow": {
+          "name": "Buemagerlaugets Bue",
+          "look": "Recurvebue af lakeret valnød, messingbeslåede bueender, vokset hørstreng og et laugsstempel på grebet.",
+          "lore": "Det tætteste, riget har på et laug, er et fletchers stempel på stigrøret, et løfte om, hvad der er indeni, den måde en vinbonde forsegler et fad på. Lakeret valnød, messing ved benspidserne, en vokset hørsnor, der ikke vil flosse gennem en Mirefen-regn. Hver led argumenterer for prisen. Træk den én gang forbi enkekransen, og argumentet vinder."
+        },
+        "cinderbrand_sword": {
+          "name": "Glødebrand",
+          "look": "Mørk klinge af smedet stål, blodrille fyldt med glødende glødeorange runer, varmerevner og en ulmende ædelsten i korsgrebet.",
+          "lore": "Den første klinge slukkede ikke i vand, men i Blessed Embers rivet fra Stormcrag, kullene, som Highwatch-smedene sværger 'brænder blåt og rent, fordi bjerget husker sin gamle ed'. Ilden ulmer orange og vil ikke dø; runerne holder sig varme til en bar hånd på murens koldeste nat. Cinderbrand har aldrig brug for belysning. Den nægter simpelthen at gå ud."
+        },
+        "emberbite_axe": {
+          "name": "Glødebid",
+          "look": "Økse af sortsværtet jern med glødeorange revner gennem bladet, en indkapslet glødeperle og flimrende varmedis.",
+          "lore": "Pansermester Hode arbejdede et levende kul af bjergild ind i hjertet af biten, så kanten afkøles aldrig rigtigt mellem slagene. Revnerne ånder orange på nedsvinget, som om strejken vækker noget, det første smedje efterlod sovende i jernet. De siger, at et Stormcrag-element opgav gløden for det; de siger rigtig mange ting på Highwatch, når vinden blæser."
+        },
+        "smoulderfall_mace": {
+          "name": "Ulmefald",
+          "look": "Mørke jernflanger gløder orange langs deres indre revner, en smeltet kerne i hovedet.",
+          "lore": "En mace, der bærer sit eget ildsted: en sten med smeltet kerne, der er skåret af Sanctum-sælen, der var 'smedet med bjergild', som glødede i hovedet. Flangerne forbliver varme at røre ved og varmere, hvor de lander; en Highwatch-sergent sværger, at et slag fra det efterlader et blåt mærke, der lyser svagt til morgenen. Bjergets ild gjorde endelig til at bryde frem for at forsegle."
+        },
+        "ashspark_dagger": {
+          "name": "Askegnist-Stikkniv",
+          "look": "Kort, sortsværtet klinge med glødende, glødeorange årer, en lille ulmende ædelsten i knappen, aske og gnister.",
+          "lore": "En baggydeklinge med bjergets ild smuglet ind i dens sten, en pansermesters stille vittighed: selv en pung kan bære en glød af den første smedning. Sortfarvet, året med orange, altid en nuance for varm i skeden. Tegn den i mørket under Highwatch, og gløden tænder din hånd lige nok til at finde hullet i en mands vagt."
+        },
+        "forgeheart_staff": {
+          "name": "Smedehjerte-Stav",
+          "look": "Jernskoet stav kronet med en buret glødende glødekerne, gløderuner op ad skaftet, stigende varmeglimmer.",
+          "lore": "Et levende kul af bjergbål buret i jern ved sin krone. Loremaster Caddis kalder det et bevis på, at ilden fra den første smedning kan bindes til at tjene, ikke kun til at forsegle. Varmeglimmer stiger op af den i et tyndt, endeløst bånd; en magiker, der bærer en, vil aldrig have en smedje eller et vagtbål. Gløden, hvisker de, blev trukket fra Glødende Voskars eget åndedræt, og den er ikke kølet af siden."
+        },
+        "emberwrought_wand": {
+          "name": "Glødesmedet Tryllestav",
+          "look": "Sortsværtet metaltryllestav med et glødende kul i jernklør, fine varmerevner og varmt indre lys.",
+          "lore": "Tryllestaven, der gav samlingen navn. Da en rustningssmed i Højvagten første gang satte et kul af bjergild i jernklør og fik det til at adlyde en dødelig hånd, holdt selv Lysets Præster op med at kalde det kætteri og begyndte at kalde det nyttigt. Varm, tålmodig og stille farlig: gløden i spidsen har brændt uden ophør, siden før dens ejer trak vejret."
+        },
+        "cinderlatch_crossbow": {
+          "name": "Glødelås",
+          "look": "Armbrøst af sortsværtet stål, glødeorange skær fra revner i buearmen og et ulmende kul i skæftet.",
+          "lore": "Det mærkeligste af det glødesmedede: bjergets ild strømmede ind i en maskine. Orange siver fra revner i stangen, og et ulmende kul i rorpinden forhindrer, at snoren nogensinde stivner i Thornpeaks kulde eller Mirefens fugt. Dens bolte efterlader rillen allerede varm og lander varmere. En jægers svar på en mur, hvor fjenden heller ikke mærker kulden."
+        },
+        "ice_fang_sword": {
+          "name": "Istænd",
+          "look": "Buet klinge af bleg gletsjeris, takkede rimkrystaller langs ryggen, en glødende cyan kerne i blodrillen og et korsgreb af istapper.",
+          "lore": "Flagskibet for den frosne kvalitet, og det stykke, hver samler rækker efter først. Ice Fang blev skåret, ikke smedet, fra en hugtænd på gletsjeren, der dækker Thornpeak over Highwatch, og dens cyan kerne brænder kold som lyset fra Glimmermere. Den rimer selve luften, den skærer. Vægvagten sværger, at en soldat bar den den nat, hvor høje snevejr holdt Wyrmcult tilbage, og 'købte muren en vinter'."
+        },
+        "glaciersplit_axe": {
+          "name": "Gletsjerspalter",
+          "look": "Øksehoved af gennemsigtig blå gletsjeris med cyan glød i revnerne, strittende frostkrystaller og et skaft, der efterlader kold damp.",
+          "lore": "Udhugget af Tornetop-gletsjerens blå hjerte, hvor to århundreders is har presset kulden sammen, til den lyser af sig selv. Øksen efterlader damp selv i hvile, og når den rammer, lyder det som en gletsjerspalte, der åbner sig under Snigerkammen. Højvagten overgiver sine faldne til isen deroppe. Derfor er dette et våben skabt til at holde tøbruddet, og alt det kunne vække, på afstand."
+        },
+        "rimecrusher_mace": {
+          "name": "Rimknuser",
+          "look": "Klynge af takkede iskrystaller omkring en glødende cyan kerne, rimfrost kryber ned ad en forsølvet skaft.",
+          "lore": "Ikke udskåret, men vokset: Thornpeak-is lokket rundt om en kold cyan kerne, indtil den satte sig lige så hårdt som Hodes bedste stål. Rimfrost kryber ned af den forsølvede skaft mod hånden og når aldrig helt frem. Hvor det rammer, fryser vand; hvor den hviler, bleger jorden. Toppenes gravkulde, lavet små nok til at svinge mod de ting, der klatrer op ad væggen."
+        },
+        "frostbite_dagger": {
+          "name": "Rimnål",
+          "look": "Uhyggeligt tynd dolk af klar blå is, en glødende cyan åre nede i midten, nålefrostkrystaller, rimfrostgreb.",
+          "lore": "Tynd som en tilbageholdt åndedræt og dobbelt så kold: en splint af Thornpeak-gletsjeren finpudset til en enkelt glødende vene, så ivrig efter at såret fryses til, før blodet husker at løbe. Dens navn er lånt fra den gravkulde, de døde bærer ned fra toppene. Den behøver aldrig skærpes; is bliver ikke sløv, konstaterer Loremaster Caddis tørt, den venter kun."
+        },
+        "hoarfrost_vigil_staff": {
+          "name": "Rimfrostvagt",
+          "look": "Forsølvet stav kronet med et flydende, langsomt roterende skår af glødende cyan is, udstrålende krystaller og kold damp.",
+          "lore": "Personalet på uret, der aldrig sover på Highwatchs væg. Dens krone er et skår af cyan-tjærneis, der flyder fri af sølvet og drejer sig, langsomt, af sig selv: altid, sværger vagten, mod kulden, der samler sig under toppene. At bære Vigilen er at stå to hundrede års vagt på en enkelt nat og love ikke at se væk."
+        },
+        "everwinter_wand": {
+          "name": "Evigvinters Skår",
+          "look": "En enkelt spids af glødende cyan gletsjer-is, rimfrost blomstrer fra en sølvkrave, svag kold tåge.",
+          "lore": "En spids af glødende gletsjer-is, som siges at være brudt fra den dybe tjerne under Sanctum, hvor bjergets kulde har tænder. Rimfrost blomstrer uendeligt fra sin sølvkrave og smelter aldrig, hverken ved ild eller om sommeren. Magikers holder det tæt på for kulden, det giver deres arbejde, og holder det langt om nætterne, det ser ud til at læne sig mod Nythraxis' krypt, og lytte."
+        },
+        "winterbite": {
+          "name": "Vinterbid",
+          "look": "Bue af forsølvet stål og blå is, en glødende cyan kerne i grebet, en pil af massiv is og kold damp.",
+          "lore": "En bue af forsølvet stål og Thornpeak-is, dens stigrør oplyst af en kold cyan kerne, der fryser pilen til strengen. Det knækker en skaft af fast gletsjer-is, der reformerer hvert træk; bueskytten bærer ingen kogger på væggen, kun kulden. Highwatch holdt Sniger Ridge gennem en belejring med en lignende: en enkelt buemand, siger de, og en vinters værdi af pile, der altid allerede var der."
+        },
+        "solheim_sword": {
+          "name": "Solheim, Daggryets sidste lys",
+          "look": "Storsværd smedet af en falden stjerne, smeltet guldkerne, der splitter bladet, kosmosort stål kantet i stjernelys, gyldne skår, der kredser om vagten, nordlysbånd.",
+          "lore": "Da stjernen faldt ud af den vestlige himmel og 'brød som en smedje' ud over Enkekratten, trak broder Aldric sit stadig ulmende hjerte fra Mirefen-krateret og tryglede rigets smede om at arbejde 'en ting, der ikke tilhører denne verden'. De lavede ét stort sværd af det: Solheim. Dens smeltede gyldne kerne spalter det kosmossorte blad som daggry, der slår en nattehimmel, og skår af stjernemetal kredser om vagten på stier uden håndsæt. Kun én blev nogensinde smedet. Der vil ikke være en anden."
+        },
+        "skyrender_axe": {
+          "name": "Himmelriver, Firmamentets Sår",
+          "look": "Hovedet som et revet stykke nattehimmel, smeltede guldrevner og konstellationsætsninger, stjernelysskår svævende, et nordlysglimt bagerst i kanten.",
+          "lore": "Slået fra kraterets rand, hvor den faldne stjerne rev himlens egen refleksion ud af Mirefen og efterlod et sår, der stadig damper. Hovedet ligner et stykke revet nat: smeltede guldrevner, stjernebilleder, som ingen forsker på Highwatch kan nævne, et nordlys, der bløder ud over kanten med hvert sving. Bror Aldric velsignede det og ville ikke røre det. At løfte det er at holde hullet himlen tilbage."
+        },
+        "starfall_mace": {
+          "name": "Stjernefald, Himlens Dom",
+          "look": "Fangenskab smeltet guld stjerne-kerne omkranset af kredsende fragmenter, kosmos-sorte flanger årede med stjernelys, aurora vælter ud fra sømmene.",
+          "lore": "En stjernekerne fangede det øjeblik, før den døde, omkranset med affaldet, der faldt med den, frosset en tomme fra glemslen. Dens kosmossorte flanger løber med indespærret stjernelys, og nordlys vælter ud af sømmene, når den hæves. Lysets gamle Præst'ere kaldte en faldende stjerne for en dom, en dom afsagt fra oven om, at intet skjold var beregnet til at stoppe, og opkaldte dette efter det, der kom ned på Mirefen."
+        },
+        "astravyr_dagger": {
+          "name": "Astravyr, Den Faldne Stjernes Hugtand",
+          "look": "En splint af en faldet stjerne, en glødende kant af smeltet guld på kosmossort metal, en lysende stjernegnist i kredsløb om knappen og et tyndt nordlysspor.",
+          "lore": "Det mindste stykke af stjernen Aldric blev trukket fra krateret, og efter nogle beregninger det farligste. En enkelt splint af det andet-verdslige hjerte, dets smeltede guldkant, der kører på kosmosort metal, en ensom stjerneskive, der cirkulerer rundt om stangen som en måne, der mistede sin verden. Den vejer næsten ingenting og deler næsten alt. Lille nok til at gemme sig, lys nok til at finde i mørket ved sit eget lys."
+        },
+        "cosmarch_staff": {
+          "name": "Cosmarch, Det Endeløse Tomrums Spir",
+          "look": "Kredsende klynge af gyldne stjerneskår omkring en smeltet guldkerne, stjernebillede-ætset kosmos-sort skaft, nordlysbånd, der snor sig opad.",
+          "lore": "Et skaft af stjernemetal kronet med en smeltet guldkerne og en ring af gyldne skår, der marcherer rundt om den i langsom, endeløs kredsløb: et lille kosmos, ætset med stjernebilleder, der ikke matcher nogen himmel over Thornpeak. Aurora snor sig op ad sin længde som røg, der glemte at stige. De, der bar det, hævdede, at de kunne mærke tomrummet vende sig igennem det, sådan som Ysoleis blotte 'drikker måneskin': tålmodig og kold og ser tilbage."
+        },
+        "emberwish_wand": {
+          "name": "Glødeønske, Den Døende Sols Gnist",
+          "look": "En indfanget, smeltet gylden gnist fra en døende stjerne omgivet af kredsende smågnister, på et kosmossort skaft ætset med glødende stjernebilleder.",
+          "lore": "Ikke den faldne stjerne selv, men den sidste gnist fra en døende stjerne: en enkelt glød af smeltet guld fra en sol, der allerede er slukket, omgivet af gnisterne fra dens sidste lys. Det kosmossorte skaft er ætset med de stjernebilleder, der så den dø. Mosekærs bønder siger, at den opfylder ét ønske for den, der holder den i den sande skumring. De siger også, at alle, der har holdt den, ønskede sig mere tid, og at Den Druknede Måne ikke gav nogen af dem det."
+        },
+        "encore_bow": {
+          "name": "Encore, Den Anden Faldende Stjerne",
+          "look": "Komisk overdimensioneret stjernekanon: et kosmossort løb ætset med glødende gyldne stjernebilleder, trompetformet munding med et kometprojektil af smeltet guld, messingbeslag og en trækolbe.",
+          "lore": "Smedene, der bearbejdede den faldne stjerne, lavede seks relikvier af den og havde stadig en tønde stjernemetal tilbage, og da havde lærlingene meninger. Det, der kom af ambolten, er enten rigets første pistol eller dens mindste belejringsmotor: en skulderkanon, der ikke så meget taber et skud som anmoder om en anden stjerne, sigtet. Bror Aldric nægtede at velsigne det, idet han ræsonnerede, at alt så højt allerede er blevet bemærket af himlen. Jægers elsker det. Intet downrange nogensinde har."
+        },
+        "meteorlatch_crossbow": {
+          "name": "Meteorlås, Himlens Sidste Dom",
+          "look": "Meteoritisk stjernemetal, en kerne af smeltet guld langs skæftet, kosmossorte buearme ætset med stjernebilleder og en armbrøstpil af ren stjerneild.",
+          "lore": "Smedet af råt, meteoritisk stjernemetal, mens Mosekær-krateret endnu glødede. Vragdele, der var 'for varme at håndtere', blev hamret til kosmossorte buearme ætset med stjernebilleder, med en kerne af smeltet guld langs skæftet. Den lægger ingen armbrøstpil an, men fremmaner en: et skaft af stjerneild, affyret som en dom og med nedslag som dommens fuldbyrdelse. Da Højvagten frygtede, at selv Nythraxis' udødelige krone måske ikke var det værste under tinderne, var dette våbnet, de ønskede på muren. Sigt omhyggeligt."
+        }
+      },
+      "seasonOne": "Sæson 1",
+      "rarity": {
+        "uncommon": "Ualmindelig",
+        "rare": "Sjælden",
+        "epic": "Episk",
+        "legendary": "Legendarisk"
+      },
+      "wtype": {
+        "sword": "Sværd",
+        "axe": "Økse",
+        "mace": "Kølle",
+        "dagger": "Dolk",
+        "staff": "Stav",
+        "wand": "Tryllestav",
+        "bow": "Bue",
+        "crossbow": "Armbrøst",
+        "polearm": "Stangvåben"
+      },
+      "badge": {
+        "flagship": "Flagskib",
+        "hero": "Helt"
+      },
+      "inspectAria": "Undersøg {item}",
+      "viewModeLabel": "Forhåndsvisningstilstand",
+      "tryOn": "Prøv på",
+      "weaponOnly": "Kun våben",
+      "sceneLabel": "Forhåndsvisningens belysning",
+      "scene": {
+        "day": "Dag",
+        "dusk": "Skumring",
+        "night": "Nat"
+      },
+      "lore": "Baggrundshistorie",
+      "buySkin": "Køb skin",
+      "unavailable": "Ikke tilgængelig",
+      "applied": "I brug",
+      "apply": "Anvend skin",
+      "detach": "Fjern skin",
+      "equipHint": "Udstyr et våben af typen {type} for at anvende dette skin."
+    },
+    "claudium": {
+      "title": "Claudium",
+      "open": "Åbn Claudium",
+      "close": "Luk Claudium",
+      "loading": "Indlæser Claudium...",
+      "balanceLabel": "Saldo",
+      "balanceUnit": "{amount} Claudium",
+      "solBalance": "SOL: {amount}",
+      "usdcBalance": "USDC: {amount}",
+      "wocBalance": "WOC: {amount}",
+      "unavailable": "Claudium-butikken er ikke tilgængelig lige nu. Din saldo og dine køb er ikke påvirket. Prøv igen om lidt.",
+      "disclosure": "Claudium er en virtuel valuta, der kun går én vej: Køb den for penge, og brug den på kosmetik. Den kan ikke indløses, overføres eller udbetales.",
+      "buyTitle": "Køb Claudium",
+      "railLabel": "Betalingsmetode",
+      "railStripe": "Kort",
+      "railSol": "SOL",
+      "railUsdc": "USDC",
+      "railWoc": "WOC",
+      "railWocDiscount": "20% rabat",
+      "railWocUnavailable": "WOC-priser er ikke tilgængelige lige nu.",
+      "railNativeUnavailable": "SOL/WOC er slået fra.",
+      "amountLabel": "Beløb",
+      "showAmounts": "Vis alle Claudium-beløb",
+      "hideAmounts": "Skjul ekstra Claudium-beløb",
+      "skuRow": "{usd} til {claudium} Claudium",
+      "buyButton": "Køb",
+      "buyUnavailable": "Det er ikke muligt at foretage køb lige nu.",
+      "storeTitle": "Kosmetisk butik",
+      "storeEmpty": "Ingen kosmetik er tilgængelig lige nu.",
+      "storeCost": "{amount} Claudium",
+      "spendButton": "Brug",
+      "kindCosmetic": "Kosmetisk",
+      "kindSkin": "Skin",
+      "kindItem": "Genstand",
+      "checkoutTitle": "Gennemfør køb",
+      "checkoutClose": "Luk betalingsvinduet",
+      "checkoutLoading": "Indlæser betalingsvinduet...",
+      "checkoutPending": "Transaktion i gang. Bekræft i din tegnebog, og hold dette panel åbent.",
+      "checkoutPendingButton": "Behandler",
+      "checkoutFailed": "Betalingsvinduet kunne ikke indlæses. Prøv igen.",
+      "checkoutUnavailable": "Dette Claudium-køb er ikke tilgængeligt lige nu.",
+      "checkoutWalletRequired": "Tilslut en Solana-tegnebog, før du køber Claudium med kryptovaluta.",
+      "checkoutWalletUnsupported": "Denne tegnebog kan ikke underskrive og sende Solana-transaktioner.",
+      "checkoutNotSettled": "Transaktionen blev sendt, men Claudium er endnu ikke blevet tilføjet. Prøv igen om lidt."
     },
     "theme": {
       "preset": "UI-tema",
@@ -270,6 +719,12 @@ export const da_DK: EnTranslations = {
       "count": "({count})",
       "collapseHint": "Fold opgavesporing sammen",
       "expandHint": "Fold opgavesporing ud"
+    },
+    "interfaceTabs": {
+      "general": "Generelt",
+      "frames": "Rammer",
+      "chat": "Chat",
+      "combat": "Kamp"
     },
     "chatTimestamps": {
       "show": "Vis chat-tidsstempler",
@@ -299,6 +754,7 @@ export const da_DK: EnTranslations = {
       "playerLabel": "Din helt",
       "targetLabel": "Dit mål",
       "targetAnnounce": "Markér {name}",
+      "targetOfTargetLabel": "Målets Mål",
       "partyLabel": "Dit følge",
       "partyChip": "Gruppe",
       "partyGroup": "Gruppe {n}",
@@ -318,12 +774,12 @@ export const da_DK: EnTranslations = {
       "jump": "Hop",
       "leaderboard": "Rangliste",
       "dailyRewards": "Belønninger",
+      "deeds": "Bedrifter",
+      "professions": "Erhverv",
       "nameplates": "Navne",
       "haptics": "Haptik",
       "hapticsOff": "Haptik fra",
       "toggleHaptics": "Slå haptik til/fra",
-      "showMenuButtons": "Vis menuknapper",
-      "hideMenuButtons": "Skjul menuknapper",
       "hotbarPage": "Evner",
       "hotbarPageAria": "Vis næste sæt evner",
       "actionRing": "Kamphandlinger",
@@ -334,13 +790,21 @@ export const da_DK: EnTranslations = {
       "spellbookPageLabel": "Side {page}",
       "hideKeyboard": "Skjul tastatur",
       "chatPlaceholder": "Sig noget...",
-      "autorun": "Auto"
+      "autorun": "Auto",
+      "hideMenuButtons": "Skjul menuknapper",
+      "showMenuButtons": "Vis menuknapper"
     },
     "tutorial": {
       "moveBodyTouch": "Brug bevægelsesstikken til at bevæge dig og træk på skærmen for at se dig omkring. Tag et par skridt for at begynde.",
       "talkBodyTouch": "Stil dig tæt på Marskal Redbrook og tryk på Brug-knappen for at tale, og accepter derefter hans opgave.",
       "returnBodyTouch": "Din opgave er fuldført. Vend tilbage til Marskal Redbrook og tryk på Brug-knappen for at aflevere den.",
-      "doneBodyTouch": "Du har styr på det grundlæggende, {name}. Dalen er din at udforske. Tryk på Mere, derefter Opgaver, for at gennemse din opgavelog når som helst. God jagt."
+      "doneBodyTouch": "Du har styr på det grundlæggende, {name}. Dalen er din at udforske. Tryk på Mere, derefter Opgaver, for at gennemse din opgavelog når som helst. God jagt.",
+      "slayTargetHint": "Er kamp nyt for dig? Tryk på {targetKey}, eller klik på en ulv for at vælge den som mål. Brug derefter en evne på handlingsbjælken til at angribe den.",
+      "slayTargetHintTouch": "Er kamp nyt for dig? Tryk på en ulv for at vælge den som mål, og tryk derefter på en evne på handlingsbjælken for at angribe den.",
+      "nextTipsTitle": "Hvad nu?",
+      "nextTipQuestLog": "Åbn din questlog ({key}) for at finde den næste opgave i nærheden.",
+      "nextTipMap": "Tjek verdenskortet ({key}) for at se, hvor quests venter.",
+      "nextTipSocial": "Åbn panelet Socialt ({key}) for at finde en gruppe til sværere kampe."
     },
     "widgets": {
       "clockTitle": "Lokal tid - klik for at skifte mellem 12/24-timers",
@@ -355,6 +819,15 @@ export const da_DK: EnTranslations = {
       "bodyWithVersion": "Version {version} af Cryptic Realm er tilgængelig. Opdater nu for de nyeste rettelser og forbedringer.",
       "notNow": "Ikke nu",
       "update": "Opdater"
+    },
+    "cameraPrompt": {
+      "title": "Vælg dit kamera",
+      "intro": "Vælg, hvordan kameraet følger din karakter.",
+      "mouseDesc": "Bevæg musen for at dreje kameraet uden at holde en knap nede.",
+      "classicTitle": "Klassisk Kamera",
+      "classicDesc": "Hold højreklik nede og bevæg musen for at dreje kameraet.",
+      "changeLater": "Du kan ændre dette senere under Escape, Tastebindinger.",
+      "confirm": "Bekræft"
     },
     "castBar": {
       "playerAria": "Din castbjælke",
@@ -401,7 +874,12 @@ export const da_DK: EnTranslations = {
       "perSecond": "{value}/s",
       "perSecondRow": "{total} ({rate})",
       "minutesSeconds": "{m}m {s}s",
-      "seconds": "{s}s"
+      "seconds": "{s}s",
+      "autoShowHint": "Rækker vises automatisk, når din gruppe påfører skade eller heling, og dette segment lukker et par sekunder efter kampens afslutning."
+    },
+    "petFeed": {
+      "disabledFullHp": "Kæledyret har fuldt helbred",
+      "disabledNoFood": "Ingen mad i dine tasker vil hele dit kæledyr"
     },
     "keybinds": {
       "emoteWheel": "Følelseshjul",
@@ -409,6 +887,7 @@ export const da_DK: EnTranslations = {
       "targetFriendlyNext": "Skift allieret mål",
       "discord": "Discord",
       "valecup": "Dalpokalen",
+      "sheathe": "Gem/fremvis våben",
       "categoryPet": "Kæledyr",
       "petAttack": "Kæledyr: Angrib",
       "petStop": "Kæledyr: Stop",
@@ -552,39 +1031,6 @@ export const da_DK: EnTranslations = {
         "refundLog": "Væddemål annulleret, din indsats på {amount} blev returneret."
       }
     },
-    "zombie": {
-      "title": "Eastbrook Town Defense",
-      "close": "Close town defense",
-      "intro": "Build defenses, hold the road, and survive ten deterministic waves with your party.",
-      "unavailable": "Town Defense is still being staged. Check back after its QA checkpoint.",
-      "create": "Create defense session",
-      "join": "Join session",
-      "sessionCode": "Session code",
-      "ready": "Ready up",
-      "readyDone": "Ready",
-      "startWave": "Start wave",
-      "abort": "Abandon session",
-      "claim": "Claim reward",
-      "roster": "Roster",
-      "board": "Board",
-      "wave": "Wave {wave}",
-      "lives": "Lives {lives}",
-      "resources": "Resources {resources}",
-      "status": "Status: {status}",
-      "towerArrow": "Arrow tower",
-      "towerSlow": "Frost tower",
-      "towerCannon": "Cannon tower",
-      "buildAt": "Build at {x}, {z}",
-      "waiting": "Waiting for the party to ready up.",
-      "active": "The wave is active. Place towers or hold the line.",
-      "victory": "Eastbrook stands. Claim your reward.",
-      "defeat": "The town fell. Abandon the session and try again.",
-      "copyCode": "Share this code with your party",
-      "invite": "{name} invited you to {kind}.",
-      "joinInvite": "Join game",
-      "invitePlayer": "Invite party member",
-      "inviteHint": "Enter a party member's player ID."
-    },
     "options": {
       "clickMoveLeft": "Venstreklik",
       "clickMoveRight": "Højreklik",
@@ -601,6 +1047,7 @@ export const da_DK: EnTranslations = {
       "interfaceModeTouch": "Touch",
       "interfaceModeNote": "Auto vælger skrivebords- eller touchstyring ud fra din enhed. Vælg Skrivebord for at tvinge tastatur og mus (nyttigt på en tablet med tastatur), eller Touch for skærmstyringen.",
       "footstepSounds": "Fodtrinslyde",
+      "interfaceSounds": "Brugerflade- og feedbacklyde",
       "clickFeedback": "Klikmarkør",
       "lockCursorOnRotate": "Lås markør under drejning",
       "keybindHelpLockCursorOnRotate": "Holder musemarkøren inde i vinduet, mens du trækker for at dreje kameraet, så den ikke kan nå skærmkanten eller flytte til en anden skærm. Slå fra, hvis du foretrækker en fri markør.",
@@ -608,6 +1055,7 @@ export const da_DK: EnTranslations = {
       "showWalletOnPlayerCard": "Vis pengepung på spillerkort",
       "showDevBadges": "Vis udviklermærker",
       "showOwnNameplate": "Vis mit navneskilt",
+      "showPlayerNameplates": "Vis spillernavneskilte",
       "uiScale": "UI-skala",
       "playerFrameScale": "Spillerrammens skala",
       "targetFrameScale": "Målrammens skala",
@@ -616,90 +1064,116 @@ export const da_DK: EnTranslations = {
       "startAttackOnAbility": "Autoangreb ved brug af evne",
       "walkByAutoloot": "Auto-plyndring i forbifarten",
       "groundReticle": "Jordsigte-retikel",
+      "mouseoverCast": "Museover-kast på grupperammer",
+      "stickyTarget": "Bevar mål ved jordklik",
       "showItemLevel": "Vis genstandsniveau",
       "itemLevelLine": "Genstandsniveau {level}",
       "itemScoreLine": "Score {score}",
       "showSecondaryActionBar": "Vis sekundær handlingslinje",
+      "showThirdActionBar": "Vis tredje handlingslinje",
+      "showTargetOfTarget": "Vis målets mål",
+      "showAttackButton": "Vis angrebsknap",
       "showDailyRewardsChest": "Vis kisten med daglige belønninger",
       "mobileCameraJoystick": "Kamera joystick",
       "mobileLeftHanded": "Venstrehånds layout",
-      "ia": {
-        "railDisplay": "Visning",
-        "railInput": "Betjening",
-        "railSystem": "Systemindstillinger",
-        "catOverviewName": "Oversigt",
-        "catOverviewSub": "Fastgjorte grundindstillinger, hurtige handlinger og ændringer.",
-        "catGraphicsSub": "Kvalitet, udsyn og verdensgrafik.",
-        "catInterfaceSub": "HUD-skala, paneler, chat og enhedsrammer.",
-        "catAccessibilityName": "Tilgængelighed",
-        "catAccessibilitySub": "Bevægelse, kontrast og behageligt indhold.",
-        "catControlsName": "Styring",
-        "catControlsSub": "Kamera, bevægelse, kamp og respons.",
-        "catKeybindsSub": "Tildel taster til hver handling.",
-        "catControllerSub": "Følelse og knaplayout for gamepad.",
-        "catTouchName": "Berøringsstyring",
-        "catTouchSub": "Skærmstyrepinde, blikstyring og knapper.",
-        "catAudioSub": "Lydstyrke og lydindstillinger.",
-        "catSystemName": "Systemindstillinger",
-        "catSystemSub": "Ydeevne, hjælp og information."
-      },
+      "changed": "{count} ændret",
+      "changedSummary": "{count} ændret fra standardindstillingerne",
+      "conflictDot": "Tildelingskonflikt",
       "done": "Færdig",
-      "resetAllTitle": "Nulstil alle indstillinger?",
+      "keybindCleared": "Tildelingen for {action} blev ryddet",
+      "keybindEvicted": "Tildelte {key} til {action}; fjernede den fra {evicted}",
+      "keybindModifierHint": "Tip: Du kan tildele kombinationer med modificeringstaster. Hold Shift, Ctrl eller Alt nede, mens du trykker på en tast, for at registrere kombinationen, for eksempel Shift+1.",
+      "keybindRebinding": "Tildeler {action} igen. Tryk på en tast eller Escape for at annullere.",
+      "keybindTaken": "Tast fjernet",
+      "keybindUnbound": "{action} har ingen tast",
+      "modeOffline": "Uden forbindelse",
+      "modeOnline": "Forbundet",
+      "overviewConflictAlert": "Nogle tastetildelinger er i konflikt eller mangler.",
       "resetAllBody": "Dette gendanner alle indstillinger til deres standardværdier. Det kan ikke fortrydes.",
+      "resetAllTitle": "Nulstil alle indstillinger?",
+      "searchEmpty": "Ingen indstillinger matcher din søgning.",
+      "searchGoTo": "Gå til {category}",
       "searchPlaceholder": "Søg i indstillinger",
       "searchScopeAll": "Alle indstillinger",
       "searchScopeThis": "Dette afsnit",
-      "searchEmpty": "Ingen indstillinger matcher din søgning.",
-      "searchGoTo": "Gå til {category}",
-      "modeOnline": "Forbundet",
-      "modeOffline": "Uden forbindelse",
-      "changed": "{count} ændret",
-      "changedSummary": "{count} ændret fra standardindstillingerne",
-      "legend": {
-        "category": "Kategori",
-        "navigate": "Naviger",
-        "select": "Vælg",
-        "back": "Tilbage",
-        "reset": "Nulstil",
-        "clear": "Ryd",
-        "page": "Side"
+      "ia": {
+        "catAccessibilityName": "Tilgængelighed",
+        "catAccessibilitySub": "Bevægelse, kontrast og behageligt indhold.",
+        "catAudioSub": "Lydstyrke og lydindstillinger.",
+        "catControllerSub": "Følelse og knaplayout for gamepad.",
+        "catControlsName": "Styring",
+        "catControlsSub": "Kamera, bevægelse, kamp og respons.",
+        "catGraphicsSub": "Kvalitet, udsyn og verdensgrafik.",
+        "catInterfaceSub": "HUD-skala, paneler, chat og enhedsrammer.",
+        "catKeybindsSub": "Tildel taster til hver handling.",
+        "catOverviewName": "Oversigt",
+        "catOverviewSub": "Fastgjorte grundindstillinger, hurtige handlinger og ændringer.",
+        "catSystemName": "Systemindstillinger",
+        "catSystemSub": "Ydeevne, hjælp og information.",
+        "catTouchName": "Berøringsstyring",
+        "catTouchSub": "Skærmstyrepinde, blikstyring og knapper.",
+        "railDisplay": "Visning",
+        "railInput": "Betjening",
+        "railSystem": "Systemindstillinger"
       },
-      "keybindCleared": "Tildelingen for {action} blev ryddet",
-      "keybindRebinding": "Tildeler {action} igen. Tryk på en tast eller Escape for at annullere.",
-      "keybindEvicted": "Tildelte {key} til {action}; fjernede den fra {evicted}",
-      "keybindTaken": "Tast fjernet",
-      "keybindUnbound": "{action} har ingen tast",
-      "keybindModifierHint": "Tip: Du kan tildele kombinationer med modificeringstaster. Hold Shift, Ctrl eller Alt nede, mens du trykker på en tast, for at registrere kombinationen, for eksempel Shift+1.",
-      "conflictDot": "Tildelingskonflikt",
-      "overviewConflictAlert": "Nogle tastetildelinger er i konflikt eller mangler.",
+      "legend": {
+        "back": "Tilbage",
+        "category": "Kategori",
+        "clear": "Ryd",
+        "navigate": "Naviger",
+        "page": "Side",
+        "reset": "Nulstil",
+        "select": "Vælg"
+      },
       "sec": {
-        "quality": "Kvalitet",
-        "view": "Udsyn",
-        "general": "Generelt",
-        "scaleText": "Skala og tekst",
-        "panels": "Paneler",
-        "unitFrames": "Enhedsrammer",
+        "about": "Information",
         "actionBars": "Handlingsbjælker",
-        "chat": "Samtale",
-        "combatTooltips": "Kamp og værktøjstip",
-        "hudExtras": "Ekstra HUD-elementer",
-        "motionContrast": "Bevægelse og kontrast",
-        "content": "Indhold",
-        "camera": "Kamerastyring",
-        "movement": "Bevægelse",
-        "combat": "Kamp",
-        "feedback": "Respons",
-        "inputMode": "Betjeningstilstand",
-        "feel": "Følelse",
-        "sticks": "Styrepinde",
-        "look": "Blikstyring",
         "buttons": "Knapper",
-        "volume": "Lydstyrke",
-        "toggles": "Til og fra-knapper",
+        "camera": "Kamerastyring",
+        "chat": "Samtale",
+        "combat": "Kamp",
+        "combatTooltips": "Kamp og værktøjstip",
+        "content": "Indhold",
+        "feedback": "Respons",
+        "feel": "Følelse",
+        "general": "Generelt",
+        "hudExtras": "Ekstra HUD-elementer",
+        "inputMode": "Betjeningstilstand",
+        "look": "Blikstyring",
+        "motionContrast": "Bevægelse og kontrast",
+        "movement": "Bevægelse",
+        "panels": "Paneler",
         "performance": "Ydeevne",
+        "quality": "Kvalitet",
+        "scaleText": "Skala og tekst",
+        "sticks": "Styrepinde",
         "support": "Hjælp",
-        "about": "Information"
+        "toggles": "Til og fra-knapper",
+        "unitFrames": "Enhedsrammer",
+        "view": "Udsyn",
+        "volume": "Lydstyrke"
       }
+    },
+    "talentRows": {
+      "tab": "Valg",
+      "defaultLoadout": "Standardopsætning",
+      "comingSoon": "Kommer snart",
+      "readoutSummary": "Talenter: {head}, {spent}/{total} rækker valgt."
+    },
+    "abilityError": {
+      "shieldRequired": "Du skal have et skjold udstyret."
+    },
+    "specPanel": {
+      "primaryAttr": "Primær egenskab",
+      "complexity": "Kompleksitet",
+      "complexityLow": "Lav",
+      "complexityMedium": "Mellem",
+      "complexityHigh": "Høj",
+      "exampleAbilities": "Eksempler på evner",
+      "viewTalents": "Se talenter",
+      "selectSpec": "Vælg specialisering",
+      "specUnlockBanner": "Specialisering låst op!",
+      "specUnlockHint": "Tryk N for at vælge din specialisering."
     },
     "controller": {
       "title": "Controller",
@@ -793,13 +1267,35 @@ export const da_DK: EnTranslations = {
       "highContrast": "Høj kontrast",
       "highContrastAria": "Slå baggrund med høj kontrast til/fra: deaktiverer den bevægende trailer, så teksten på startskærmen forbliver læselig"
     },
+    "warfare": {
+      "honorAmount": "{amount} Ære",
+      "dualPrice": "{money} + {honor}",
+      "balance": "Ære: {amount}",
+      "honorFloat": "+{amount} Ære",
+      "honorGain": "Du opnår {amount} Ære ({reason}).",
+      "notEnoughHonor": "Ikke nok Ære.",
+      "reasons": {
+        "arenaWin": "Arenasejr",
+        "fiestaKill": "Fiesta-nedlæggelse",
+        "fiestaComplete": "Fiesta gennemført",
+        "fiestaWin": "Fiesta-sejr"
+      }
+    },
+    "charSheet": {
+      "offense": "Angreb",
+      "defense": "Forsvar"
+    },
     "statInfo": {
       "fromYour": "Fra din {value} {stat}:",
       "names": {
         "spellPower": "Besværgelseskraft",
         "critRating": "Kritvurdering",
-        "hasteRating": "Hastevurdering"
+        "hasteRating": "Hastevurdering",
+        "parry": "Parade",
+        "hitRating": "Rammevurdering",
+        "warfare": "Krigsførelse"
       },
+      "warfareValue": "+{increase}% givet / -{reduction}% modtaget",
       "desc": {
         "str": "Øger din angrebsstyrke, så dine våbenslag rammer hårdere.",
         "agi": "Skærper dine reflekser og dit sigte og forbedrer flere af dine kampegenskaber.",
@@ -813,7 +1309,10 @@ export const da_DK: EnTranslations = {
         "critChance": "Din chance for at et angreb rammer kritisk og gør dobbelt skade.",
         "dodge": "Din chance for helt at undgå et indkommende nærkampsangreb og tage ingen skade.",
         "critRating": "Kritvurdering fra dit udstyr og sætbonusser, der hæver din chance for kritisk slag. Cirka 10 vurdering giver 1% krit.",
-        "hasteRating": "Hastevurdering fra dit udstyr og sætbonusser, der fremskynder dine angreb og besværgelser. Cirka 10 vurdering giver 1% hast."
+        "hasteRating": "Hastevurdering fra dit udstyr og sætbonusser, der fremskynder dine angreb og besværgelser. Cirka 10 vurdering giver 1% hast.",
+        "parry": "Din chance for helt at parere et frontalt nærkampsangreb uden at tage skade. Et slag bagfra kan ikke pareres.",
+        "hitRating": "Rammevurdering fra dit udstyr og sætbonusser, der reducerer, hvor ofte dine angreb misser og dine trylleformularer modstås, navnlig mod fjender af højere niveau. Cirka 10 vurdering giver 1% ramme.",
+        "warfare": "Øger skade givet til spillere med {increase}% og reducerer skade modtaget fra spillere med {reduction}%."
       },
       "effects": {
         "attackPower": "+{value} Angrebsstyrke",
@@ -890,6 +1389,12 @@ export const da_DK: EnTranslations = {
         "few": "du er {rank}, {count} medlemmer",
         "many": "du er {rank}, {count} medlemmer",
         "other": "du er {rank}, {count} medlemmer"
+      },
+      "finderPartySize": {
+        "one": "{count} spiller",
+        "few": "{count} spillere",
+        "many": "{count} spillere",
+        "other": "{count} spillere"
       },
       "characterCount": {
         "one": "{count} karakter",
@@ -1013,13 +1518,13 @@ export const da_DK: EnTranslations = {
       "exportBtn": "Download mine data",
       "exportDone": "Dine data blev downloadet. Vi har sendt dig en bekræftelse på e-mail.",
       "exportFailed": "Kunne ikke eksportere dine data. Prøv igen om et øjeblik.",
-      "sectionConnections": "Connected Accounts",
       "connectionsSummary": "Link Google, Facebook, or Plex so you can sign in with them.",
-      "ssoNotLinked": "Not linked.",
-      "ssoLinked": "Linked — you can sign in with Google, Facebook, or Plex.",
+      "sectionConnections": "Connected Accounts",
       "ssoLink": "Link Google / Facebook / Plex",
-      "ssoUnlink": "Unlink",
       "ssoLinkConflict": "That account is already linked to a different Cryptic Realm login.",
+      "ssoLinked": "Linked — you can sign in with Google, Facebook, or Plex.",
+      "ssoNotLinked": "Not linked.",
+      "ssoUnlink": "Unlink",
       "ssoUnlinkNeedsPassword": "Set a password first — SSO is currently your only way to sign in."
     },
     "masterLoot": {
@@ -1050,6 +1555,7 @@ export const da_DK: EnTranslations = {
     "corpseHarvest": {
       "title": "Høst",
       "harvestButton": "Høst",
+      "harvestTooltip": "Indsamler de markerede komponenter. Hvert kadaver kan kun hostes en gang, og det gælder for den første der kommer. Tager ikke byttet.",
       "concentrateHint": "Jo færre dele du vælger, desto højere kvalitetsgrad får hver enkelt.",
       "alreadyHarvested": "Dette kadaver er allerede blevet høstet.",
       "componentAria": "Høst {component}",
@@ -1061,12 +1567,16 @@ export const da_DK: EnTranslations = {
         "gills": "Gæller",
         "claw": "Klo",
         "horn": "Horn",
-        "tusk": "Stødtand"
+        "tusk": "Stødtand",
+        "meat": "Kød",
+        "cloth": "Stof"
       }
     },
     "townFocus": {
       "title": "Byfokus",
       "hint": "Fokuspoint lægger en bonus oven på hver komponents grundudbytte. Ufokuserede komponenter bliver på grundniveauet.",
+      "tierHint": "Hvert {points} point på en komponent løfter dens høstniveau et trin, op til {steps} trin; færre end {points} point øger stadig udbyttet.",
+      "townOnlyHint": "Fokus kan kun ændres, mens du er i byen.",
       "budgetLabel": "Point tilbage: {remaining} / {budget}",
       "saveButton": "Gem fokus",
       "notInTownHint": "Du skal være i byen for at sætte dit fokus.",
@@ -1076,6 +1586,20 @@ export const da_DK: EnTranslations = {
     "party": {
       "promoteLeader": "Forfrem til leder",
       "inviteUsage": "Invitér hvem? Brug: /invite <navn>."
+    },
+    "playerMenu": {
+      "info": "Spilleroplysninger",
+      "block": "Blokér",
+      "unblock": "Fjern blokering",
+      "openFor": "Åbn spillermenuen for {name}",
+      "profileUnavailable": "Ingen profil fundet for {name}.",
+      "aiTag": "[AI]",
+      "aiTagTitle": "AI-styret konto",
+      "watchTwitch": "Se på Twitch",
+      "watchX": "Vis på X",
+      "watchKick": "Se på Kick",
+      "watchYouTube": "Se på YouTube",
+      "streamerBadgeTitle": "Verificeret streamer"
     },
     "lootSettings": {
       "title": "Bytteindstillinger",
@@ -1090,11 +1614,31 @@ export const da_DK: EnTranslations = {
     },
     "dungeonDifficulty": {
       "setHeroic": "Indstil fangekældersværhedsgrad: Heroisk",
-      "setNormal": "Indstil fangekældersværhedsgrad: Normal"
+      "setNormal": "Indstil fangekældersværhedsgrad: Normal",
+      "resetAll": "Nulstil alle instanser",
+      "resetDone": "Alle instanser er blevet nulstillet.",
+      "resetNone": "Du har ingen instanser at nulstille.",
+      "resetOccupied": "Du kan ikke nulstille instanser, mens nogen stadig er derinde.",
+      "resetSameDifficulty": "Skift fangekældersværhedsgrad, før du nulstiller disse instanser. Tomme instanser nulstilles automatisk efter 5 minutter.",
+      "resetLoot": "Du kan ikke nulstille instanser, mens der stadig er bytte derinde.",
+      "resetConfirmTitle": "Nulstil alle instanser?",
+      "resetConfirmBody": "Dette forlader tomme instanser fra din tidligere valgte sværhedsgrad. Uhentet bytte forhindrer nulstillingen.",
+      "resetConfirm": "Nulstil instanser",
+      "resetCooldown": "Instanser kan kun nulstilles én gang hvert 5. minut.",
+      "resetUsage": "Brug /dungeon reset til at forlade dine tomme instanser efter at have ændret sværhedsgrad.",
+      "entryMismatchNormal": "Denne instans er indstillet til Normal sværhedsgrad. Brug Nulstil alle instanser for at starte en ny Heroisk gennemspilning.",
+      "entryMismatchHeroic": "Denne instans er indstillet til Heroisk sværhedsgrad. Brug Nulstil alle instanser for at starte en ny Normal gennemspilning."
     },
     "bags": {
       "cannotDestroy": "Denne genstand kan ikke ødelægges.",
       "rightClickDestroy": "Højreklik for at ødelægge",
+      "dragEquipHint": "Træk hen på din karakter for at udruste",
+      "dragDestroyHint": "Træk ud i verden for at ødelægge",
+      "reorderNeedsRecent": "Ryd filteret og sortér efter Seneste for at omarrangere dine tasker",
+      "itemAriaInstanced": "{item}, antal {count}, signeret kopi",
+      "itemAriaEnchanted": "{item}, antal {count}, fortryllet kopi",
+      "itemAriaBound": "{item}, antal {count}, bundet kopi",
+      "itemAriaMasterwork": "{item}, antal {count}, mesterværk",
       "filterGroupAria": "Filtrér tasker efter kategori",
       "filterAll": "Alle",
       "filterWeapon": "Våben",
@@ -1138,9 +1682,35 @@ export const da_DK: EnTranslations = {
       "attackSpeedSlow": "Verlangsamt Angriffstempo um {pct}%",
       "attackSpeedFast": "Erhöht Angriffstempo um {pct}%",
       "haste": "Erhöht Angriffs- und Zaubertempo um {pct}%",
+      "dmgDone": "Øger skade gjort med {pct}%",
+      "dmgDoneReduce": "Reducerer skade gjort med {pct}%",
+      "heatingUp": "Dit næste på hinanden følgende kritiske Ild-bygger-slag giver Hed Stime; et ikke-kritisk bygger-slag fjerner Opvarmning",
+      "elementalConvergencePrimed": "Din næste trolddom fra den anden elementarskole giver Elementar Konvergens",
+      "battleStance": "Kampstilling: 10% mere raserigenerering",
+      "berserkerStance": "Berserkerstilling: kritiske slag rammer 3% oftere og slår 3% hårdere",
+      "crit": "Øger chancen for kritiske slag med {pct}%",
+      "rageGen": "Øger raserigenerering med {pct}%",
+      "reckless": "Øger chancen for kritiske slag med {pct}% og raserigenerering med {ragePct}%",
+      "avatar": "Kolossen: den skade, du volder, er øget med {pct}%",
+      "bloodbath": "Øger chancen for kritiske slag og den skade, du volder, med {pct}%",
+      "dieBySword": "Reducerer modtaget skade med {pct}%",
+      "sanguine": "Øger angrebshastighed med {hastePct}% og den skade, du volder, med {dmgPct}%",
+      "battleTrance": "Dit næste Plyndrerslag eller Lemlæstende Slag koster intet raseri",
+      "revengeFree": "Din næste Hævn koster intet raseri",
+      "victoryRush": "Sejrsrus er klar",
+      "maxHpPct": "Øger maksimalt helbred med {pct}%",
+      "temporalHourglass": "Immun og ude af stand til at handle; gendanner helbred og fremskynder nedkølingsgendannelse. Højreklik for at annullere.",
       "tongues": "Erhöht Zauberzeit um {pct}%",
+      "combustionCrit": "Dine Ild-trolddomme rammer altid kritisk",
+      "overloadNext": "Din næste trolddom er forstærket med {pct}% men koster 50% mere mana",
+      "powerEchoNext": "Din næste direkte trolddom gentages med {pct}% kraft på det samme mål",
+      "iceFloesCasts": "Dine næste {n} trolddomme med en kastetid kan kastes, mens du bevæger dig",
+      "freeCast": "Dit næste kast koster ingenting",
+      "instantCast": "Din næste trolddom med en kastetid er øjeblikkelig",
+      "cheapCast": "Din næste trolddom koster {pct}% mindre",
       "increase": {
         "ap": "Erhöht Angriffskraft um {value}",
+        "sp": "Øger trolddomsstyrke med {value}",
         "armor": "Erhöht Rüstung um {value}",
         "int": "Erhöht Intelligenz um {value}",
         "agi": "Erhöht Beweglichkeit um {value}",
@@ -1167,6 +1737,8 @@ export const da_DK: EnTranslations = {
       },
       "dodge": "Erhöht Ausweichchance um {pct}%",
       "dodgeReduce": "Verringert Ausweichchance um {pct}%",
+      "damageReduction": "Reducerer al skade modtaget med {pct}%",
+      "guardianWard": "Det næste dødelige fjendtlige slag genopretter dig til {pct}% helbred i stedet",
       "armorFlat": "Verringert Rüstung um {value}",
       "armorFlatStacks": "Verringert Rüstung um {value} ({stacks} Stapel)",
       "armorPct": "Reducerer rustning med {pct}%",
@@ -1192,6 +1764,7 @@ export const da_DK: EnTranslations = {
       "formBear": "Bruin-form: øget helbred og rustning",
       "formCat": "Katzengestalt: Nahkampfschaden und Energie",
       "formTravel": "Fleet-form: bevægelseshastighed øget med {pct}%",
+      "formFireball": "Ember Form: bevægelseshastighed øget med {pct}%; angreb og trolddomme er deaktiverede",
       "defensiveStance": "Værgende Stilling: mindre modtaget skade, mere trussel",
       "righteousFury": "Brændende Ed: stærkt øget trussel fra Hellig skade",
       "scale": "Größe um {pct}% erhöht",
@@ -1230,13 +1803,19 @@ export const da_DK: EnTranslations = {
       "resetErrInvalid": "Dette nulstillingslink er ugyldigt eller udløbet. Anmod om et nyt."
     },
     "loot": {
-      "chestTitle": "Kiste"
+      "chestTitle": "Kiste",
+      "takeLootButton": "Tag bytte",
+      "takeLootTooltip": "Tager mønterne og droppede genstande. Bruger ikke høsten op.",
+      "unifiedPressHint": "Interaktionstast plyndrer og høster i ét tryk ved hjælp af dit byfokus."
     },
     "spellbook": {
       "addToBarAria": "Tilføj {name} til handlingslinjen",
       "removeFromBarAria": "Fjern {name} fra handlingslinjen"
     },
     "nameplate": {
+      "mobLevel": "{level}",
+      "mobEliteLevel": "{level}+",
+      "afkTag": "AFK",
       "mob": "[{level}] {name}",
       "mobElite": "[{level}+] {name}"
     },
@@ -1254,11 +1833,50 @@ export const da_DK: EnTranslations = {
       "unlock": "Flyt spillerrammen",
       "lock": "Lås spillerrammen"
     },
+    "partyFrames": {
+      "section": "Gruppe- og raidrammer",
+      "unlock": "Flyt gruppe- og raidrammer",
+      "lock": "Lås gruppe- og raidrammer",
+      "style": "Rammestil",
+      "styleAutomatic": "Automatisk",
+      "styleClassic": "Klassiske grupperammer",
+      "styleRaid": "Raidrammer",
+      "scale": "Rammeskalering",
+      "width": "Rammebredde",
+      "height": "Rammehøjde",
+      "spacing": "Rammeafstand",
+      "columns": "Raidkolonner",
+      "healthText": "Helbredstekst",
+      "healthNone": "Ingen",
+      "healthPercent": "Procent",
+      "healthCurrent": "Nuværende",
+      "healthCurrentMax": "Nuværende / maks.",
+      "sort": "Sortér spillere",
+      "sortGroup": "Gruppe",
+      "sortRole": "Rolle",
+      "sortName": "Navn",
+      "showResource": "Vis mana, raseri og energi",
+      "showAbsorbs": "Vis absorberingsskjolde",
+      "showAuras": "Vis styrkelser og svækkelser",
+      "showSelf": "Vis din ramme"
+    },
     "frameReset": {
       "label": "Nulstil rammepositioner"
     },
     "itemTooltip": {
-      "requiresLevel": "Kræver niveau {level}"
+      "requiresLevel": "Kræver niveau {level}",
+      "statEnchanted": "+{value} {stat} (Fortryllet)",
+      "enchantedFallback": "Fortryllet"
+    },
+    "materialHint": {
+      "arcaneDust": "Fortryllelsesreagens. Fås ved affortryllelse af almindeligt og ualmindeligt udstyr.",
+      "arcaneEssence": "Fortryllelsesreagens. Fås ved affortryllelse af sjældent udstyr.",
+      "arcaneShard": "Fortryllelsesreagens. Fås ved affortryllelse af episk og legendarisk udstyr.",
+      "resonantThread": "Fortryllelsesreagens. Fås ved affortryllelse af stofrustning af sjælden kvalitet eller bedre.",
+      "resonantHide": "Fortryllelsesreagens. Fås ved affortryllelse af læderrustning af sjælden kvalitet eller bedre.",
+      "resonantLinks": "Fortryllelsesreagens. Fås ved affortryllelse af ringbrynje af sjælden kvalitet eller bedre.",
+      "resonantSteel": "Fortryllelsesreagens. Fås ved affortryllelse af nærkampsvåben af sjælden kvalitet eller bedre.",
+      "resonantTimber": "Fortryllelsesreagens. Fås ved affortryllelse af stave, tryllestave, buer og armbrøster af sjælden kvalitet eller bedre."
     },
     "discord": {
       "title": "Discord",
@@ -1293,7 +1911,8 @@ export const da_DK: EnTranslations = {
         "connecting": "Åbner Discord...",
         "benefits": "Forbind din Discord for at optjene point fra spil og fællesskabsaktivitet og stige i statusrangene.",
         "error": "Kunne ikke forbinde Discord. Prøv igen.",
-        "success": "Discord forbundet."
+        "success": "Discord forbundet.",
+        "joinServer": "Tilslut dig Discord-serveren"
       },
       "choice": {
         "title": "Fortsæt med Discord",
@@ -1341,9 +1960,15 @@ export const da_DK: EnTranslations = {
         "admin": "Admin",
         "coredevs": "Kerneudvikler",
         "devs": "Udvikler",
+        "seniormods": "Senior-mod",
         "mods": "Moderator",
-        "artists": "Kunstner"
+        "juniormods": "Junior-mod",
+        "artists": "Kunstner",
+        "contentcreator": "Indholdsskaber",
+        "legend": "LEGENDE",
+        "shill": "FORKÆMPER"
       },
+      "roleTagChatTitle": "Verificeret serverrolle: {role}",
       "guildMember": "Verificeret medlem",
       "notMember": "Ikke på serveren endnu",
       "joinCta": "Tilslut Discord",
@@ -1380,28 +2005,28 @@ export const da_DK: EnTranslations = {
       "relay": {
         "tooFast": "Du poster for hurtigt. Vent et øjeblik og prøv igen.",
         "lfg": {
-          "label": "Søger gruppe",
-          "hint": "Find spillere til et dungeon eller en opgave"
+          "hint": "Find spillere til et dungeon eller en opgave",
+          "label": "Søger gruppe"
         },
         "wts": {
-          "label": "Vil sælge",
-          "hint": "Reklamér for en genstand eller tjeneste til salg"
+          "hint": "Reklamér for en genstand eller tjeneste til salg",
+          "label": "Vil sælge"
         },
         "wtb": {
-          "label": "Vil købe",
-          "hint": "Efterlys en genstand, du vil købe"
+          "hint": "Efterlys en genstand, du vil købe",
+          "label": "Vil købe"
         },
         "recruit": {
-          "label": "Guild-rekruttering",
-          "hint": "Rekruttér spillere til din guild"
+          "hint": "Rekruttér spillere til din guild",
+          "label": "Guild-rekruttering"
         },
         "event": {
-          "label": "Arrangement / Raid",
-          "hint": "Annoncér et raid, et møde eller et arrangement"
+          "hint": "Annoncér et raid, et møde eller et arrangement",
+          "label": "Arrangement / Raid"
         },
         "help": {
-          "label": "Brug for hjælp",
-          "hint": "Bed fællesskabet om hjælp"
+          "hint": "Bed fællesskabet om hjælp",
+          "label": "Brug for hjælp"
         }
       }
     },
@@ -1433,6 +2058,14 @@ export const da_DK: EnTranslations = {
       "linkedAs": "Tilknyttet som {login}",
       "unlink": "Fjern GitHub-tilknytning"
     },
+    "steam": {
+      "title": "Steam",
+      "link": "Tilknyt Steam",
+      "unlink": "Fjern Steam-tilknytning",
+      "linked": "Tilknyttet Steam-kontoen {id}",
+      "benefits": "Tilknyt din Steam-konto fra skrivebordsappen for at spejle de bedrifter, du opnår, som Steam-præstationer.",
+      "noTicket": "Steam udstedte ingen tilknytningsbillet. Start Steam, og prøv så igen."
+    },
     "mailbox": {
       "title": "Postkasse",
       "subtitle": "Ravneposten",
@@ -1460,6 +2093,7 @@ export const da_DK: EnTranslations = {
       "removeParcelAria": "Fjern {item} fra brevet",
       "parcelQtyDecreaseAria": "Send én {item} mindre",
       "parcelQtyIncreaseAria": "Send én {item} mere",
+      "parcelQtyAria": "Antal {item} der skal sendes",
       "sendButton": "Send brev",
       "postageNote": "Porto: {amount}. Ravnen er undervejs i omtrent {seconds}s.",
       "arrivedBanner": "Ravnen er landet: post fra {name}.",
@@ -1482,6 +2116,13 @@ export const da_DK: EnTranslations = {
         "letterGone": "Det brev er ikke længere i din postkasse.",
         "takeParcelsFirst": "Tag pakkerne ud, før du kasserer brevet."
       }
+    },
+    "marketIndicator": {
+      "aria": "Afhentning fra Verdensmarkedet venter",
+      "tip": "Guld eller genstande venter på dig hos Købmanden."
+    },
+    "noticeboard": {
+      "empty": "Der ser ikke ud til at være slået noget op."
     },
     "bank": {
       "title": "Bank",
@@ -1587,28 +2228,222 @@ export const da_DK: EnTranslations = {
     },
     "social": {
       "lastSeen": "Sidst set: {when}",
-      "lastSeenNever": "aldrig"
+      "lastSeenNever": "aldrig",
+      "ignoredTab": "Ignorerede",
+      "blockedTab": "Blokerede",
+      "ignoredEmpty": "Du ignorerer ingen.",
+      "blockedEmpty": "Du har ikke blokeret nogen.",
+      "blockSearchPlaceholder": "Spillernavn",
+      "blockAction": "Blokér",
+      "nowBlocking": "{name} blokeret.",
+      "stopBlockingTitle": "Fjern blokering af {name}",
+      "onlineHeader": "Online ({n})",
+      "offlineHeader": "Offline ({n})",
+      "hideOffline": "Skjul offline",
+      "hideOfflineTitle": "Skjul offline gildemedlemmer",
+      "billboard": {
+        "label": "Laugsopslagstavle",
+        "empty": "Der er intet på opslagstavlen endnu.",
+        "setBy": "Sat af {name}",
+        "save": "Gem",
+        "placeholder": "Skriv en besked til lauget",
+        "inputLabel": "Besked til laugsopslagstavlen",
+        "result": {
+          "set": "Laugsopslagstavlen blev opdateret.",
+          "notOfficer": "Kun officerer og lavsmesteren kan redigere opslagstavlen."
+        }
+      }
     },
     "gathering": {
       "title": "Indsamling",
       "mining": "Minedrift",
       "logging": "Skovhugst",
-      "herbalism": "Urtekundskab"
+      "herbalism": "Urtekundskab",
+      "fishing": "Fiskeri",
+      "notReady": "Denne ressourcekilde er endnu ikke genskabt for dig.",
+      "gatherLine": "Du samler: {name}.",
+      "gatherLineQty": "Du samler: {name} x{qty}.",
+      "catchLine": "Du hiver ind: {name}",
+      "biteLine": "Noget tager madden!",
+      "gotAwayLine": "Det slap væk.",
+      "nodeName": {
+        "ore": "Malmåre",
+        "wood": "Tømmerlund",
+        "herb": "Urteplette"
+      },
+      "tierRequired": {
+        "mining": "Kræver en niveau {tier} mineøkse",
+        "logging": "Kræver en niveau {tier} skovhuggeøkse",
+        "herbalism": "Kræver en niveau {tier} urtesegl"
+      },
+      "requiresTool": {
+        "mining": "Kræver en minehakke",
+        "logging": "Kræver en skovhuggeøkse",
+        "herbalism": "Kræver en urtesegl"
+      },
+      "toolTierUnmet": {
+        "mining": "Du har brug for en niveau {tier} mineøkse for at høste denne åre.",
+        "logging": "Du har brug for en niveau {tier} skovhuggeøkse for at fælde denne lund.",
+        "herbalism": "Du har brug for en niveau {tier} urtesegl for at samle denne plette."
+      },
+      "toolRequired": {
+        "mining": "Du har brug for en minehakke for at høste denne åre.",
+        "logging": "Du har brug for en skovhuggeøkse for at fælde denne lund.",
+        "herbalism": "Du har brug for en urtesegl for at samle denne plette.",
+        "fishing": "Du har brug for en fiskestang for at kaste linen ud."
+      },
+      "noNodeNearby": {
+        "mining": "Der er ingen malmåre inden for rækkevidde.",
+        "logging": "Der er ingen tømmerlund inden for rækkevidde.",
+        "herbalism": "Der er ingen urteplette inden for rækkevidde."
+      },
+      "toolTierUnmetCorpse": "Du har brug for et niveau {tier} indsamlingsværktøj for at genvinde de fineste materialer.",
+      "toolTooltip": {
+        "kind": {
+          "mining": "Minedriftsværktøj (niveau {tier})",
+          "logging": "Skovhugstværktøj (niveau {tier})",
+          "herbalism": "Urtekundskabsværktøj (niveau {tier})",
+          "fishing": "Fiskestang (niveau {tier})"
+        },
+        "unlocks": {
+          "mining": "Kræves for at høste malmårer op til niveau {tier}.",
+          "logging": "Kræves for at fælde tømmerlunde op til niveau {tier}.",
+          "herbalism": "Kræves for at samle urtepletter op til niveau {tier}."
+        },
+        "use": {
+          "mining": "Brug: Høst en nærliggende malmåre.",
+          "logging": "Brug: Fæld en nærliggende tømmerlund.",
+          "herbalism": "Brug: Saml fra en nærliggende urteplette."
+        },
+        "speed": "Indsamler hurtigere ved ressourcekilder under niveau {tier}.",
+        "rodRequired": "Kræves for at fiske.",
+        "rodBite": "Fisk bider op til {seconds}s tidligere.",
+        "rodReel": "Forlænger indhivningsvinduet med {seconds}s.",
+        "rodBand": "Låser op for rigere fangsttabeller ved fiskerifærdighed {skill} og derover."
+      },
+      "downgradeMark": "Tasker fyldte: fundet blev gemt uden indsamlerens mærke.",
+      "downgradeFind": "Tasker fyldte: et pristint fund slap væk.",
+      "stateReady": "Klar",
+      "stateCooldown": "Genskabes"
     },
     "archetypeTitle": {
       "label": "Titel",
       "none": "Ingen",
       "hobbyLabel": "Fritid",
-      "armorcrafting": "Rustningssmed",
-      "weaponcrafting": "Våbensmed",
-      "jewelcrafting": "Juveler",
       "alchemy": "Alkymist",
-      "engineering": "Ingeniør",
+      "armorcrafting": "Rustningssmed",
       "cooking": "Kok",
-      "inscription": "Skriver",
       "enchanting": "Fortryller",
+      "engineering": "Ingeniør",
+      "inscription": "Skriver",
+      "jewelcrafting": "Juveler",
+      "leatherworking": "Garver",
       "tailoring": "Skrædder",
-      "leatherworking": "Garver"
+      "weaponcrafting": "Våbensmed"
+    },
+    "archetypePair": {
+      "engineering+alchemy": "Bombardør",
+      "alchemy+cooking": "Apoteker",
+      "cooking+leatherworking": "Fældefanger",
+      "leatherworking+tailoring": "Udstyrer",
+      "tailoring+inscription": "Troldvæver",
+      "inscription+enchanting": "Arkanist",
+      "enchanting+jewelcrafting": "Edelstenbinder",
+      "jewelcrafting+weaponcrafting": "Klingesmed",
+      "weaponcrafting+armorcrafting": "Smed",
+      "armorcrafting+engineering": "Tandhjulsbygger"
+    },
+    "craftName": {
+      "armorcrafting": "Rustningsfremstilling",
+      "weaponcrafting": "Våbenfremstilling",
+      "jewelcrafting": "Juvelkunst",
+      "alchemy": "Alkymi",
+      "engineering": "Ingeniørkunst",
+      "cooking": "Madlavning",
+      "inscription": "Inskription",
+      "enchanting": "Fortryllelse",
+      "tailoring": "Skræderi",
+      "leatherworking": "Læderhåndværk"
+    },
+    "enchantName": {
+      "enchant_weapon_might": "Fortryl våben - Magt",
+      "enchant_weapon_intellect": "Fortryl våben - Besværgelsesstyrke",
+      "enchant_helmet_fortitude": "Fortryl hjelm - Udholdenhed",
+      "enchant_neck_spirit": "Fortryl halskæde - Ånd",
+      "enchant_shoulder_agility": "Fortryl skuldre - Smidighed",
+      "enchant_chest_stamina": "Fortryl bryst - Udholdenhed",
+      "enchant_waist_stamina": "Fortryl bælte - Udholdenhed",
+      "enchant_legs_stamina": "Fortryl ben - Udholdenhed",
+      "enchant_gloves_agility": "Fortryl handsker - Smidighed",
+      "enchant_gloves_intellect": "Fortryl handsker - Besværgelsesstyrke",
+      "enchant_feet_agility": "Fortryl støvler - Smidighed",
+      "enchant_ring_spirit": "Fortryl ring - Ånd",
+      "enchant_weapon_agility": "Fortryl våben - Smidighed",
+      "enchant_helmet_intellect": "Fortryl hjelm - Intellekt",
+      "enchant_helmet_armor": "Fortryl hjelm - Forstærkning",
+      "enchant_neck_intellect": "Fortryl halskæde - Intellekt",
+      "enchant_neck_agility": "Fortryl halskæde - Smidighed",
+      "enchant_shoulder_strength": "Fortryl skuldre - Styrke",
+      "enchant_shoulder_intellect": "Fortryl skuldre - Intellekt",
+      "enchant_chest_spirit": "Fortryl bryst - Ånd",
+      "enchant_chest_armor": "Fortryl bryst - Forstærkning",
+      "enchant_waist_strength": "Fortryl bælte - Styrke",
+      "enchant_waist_agility": "Fortryl bælte - Smidighed",
+      "enchant_legs_intellect": "Fortryl ben - Intellekt",
+      "enchant_gloves_strength": "Fortryl handsker - Styrke",
+      "enchant_feet_strength": "Fortryl støvler - Styrke",
+      "enchant_feet_stamina": "Fortryl støvler - Udholdenhed",
+      "enchant_ring_strength": "Fortryl ring - Styrke",
+      "enchant_ring_agility": "Fortryl ring - Smidighed",
+      "enchant_ring_intellect": "Fortryl ring - Intellekt",
+      "enchant_weapon_greater_might": "Fortryl våben - Større magt",
+      "enchant_weapon_greater_spellpower": "Fortryl våben - Større besværgelsesstyrke",
+      "enchant_helmet_greater_fortitude": "Fortryl hjelm - Større udholdenhed",
+      "enchant_chest_greater_stamina": "Fortryl bryst - Større udholdenhed",
+      "enchant_legs_greater_stamina": "Fortryl ben - Større udholdenhed",
+      "enchant_gloves_greater_agility": "Fortryl handsker - Større smidighed",
+      "enchant_weapon_runed_edge": "Fortryl våben - Runet æg",
+      "enchant_weapon_runed_focus": "Fortryl våben - Runet fokus",
+      "enchant_chest_runeweave": "Fortryl bryst - Runevæv",
+      "enchant_legs_runed_hide": "Fortryl ben - Runet skind",
+      "enchant_helmet_runed_links": "Fortryl hjelm - Runede kæder"
+    },
+    "professions": {
+      "title": "Erhverv",
+      "close": "Luk erhverv",
+      "ringAria": "Håndværkshjul",
+      "skillsHeader": "Håndværksfærdigheder",
+      "gatheringHeader": "Indsamling",
+      "perksHeader": "Frynsegoder",
+      "identityHeader": "Identitet",
+      "roleMajor": "Hovedfag",
+      "roleHobby": "Hobby",
+      "roleDormant": "Inaktiv viden",
+      "roleUnattuned": "Ikke indstillet",
+      "ceilingUnlimited": "Ingen forstærkningsbegrænsning",
+      "ceilingRare": "Sjælden begrænsning",
+      "ceilingCommon": "Almindelig begrænsning",
+      "skillValue": "{skill} / {max}",
+      "tierPipAria": "Niveau {tier}",
+      "nextUnlockTier": "{points} point til næste niveau: mesterværk odds forbedres",
+      "nextUnlockSpecialized": "{points} point til Specialiseret: materialeomkostningerne falder",
+      "nextUnlockMastered": "Mestret, for nu",
+      "perkSpecializedLine": "{craft}: Specialiseret, materialeomkostninger -{pct}%",
+      "perkSpecializedAt": "Specialiseret i {threshold} færdigheder",
+      "switchCost": "Næste arketypeskift koster {cost} bodspoint",
+      "syncing": "Venter på dine professionsdata fra riget.",
+      "tutorialLine": "Opnå {target} færdigheder i ethvert håndværk for at låse op for dit første niveau.",
+      "ctaHeader": "Næste skridt",
+      "ctaRaise": "Fortsæt med at hæve {craft}: {points} point mere til næste niveau.",
+      "ctaRaiseSpecialized": "Bliv ved med at hæve {craft}: {points} point mere til Specialiseret, og materialeomkostningerne falder.",
+      "ctaStart": "Fremstil eller indsaml med et hvilket som helst erhverv for at begynde.",
+      "unattunedIdentity": "Du er endnu ikke indstillet på en arketype. Hæv dit håndværk og fuldfør en afstemning for at vælge dit par.",
+      "nudgeNearTier": "{craft}: {points} point fra næste niveau",
+      "nudgeDormant": "Din {craft} viden ligger i dvale",
+      "hobbyLabel": "Hobby: {craft}",
+      "majorsLabel": "Hovedfag: {a} og {b}",
+      "pairsHeld": "Afholdte par: {count}",
+      "returnsLabel": "Returnerer: {count}"
     },
     "crafting": {
       "title": "Håndværk",
@@ -1622,37 +2457,412 @@ export const da_DK: EnTranslations = {
       "insufficientMaterials": "Det har du ikke materialerne til.",
       "unknownRecipe": "Den opskrift findes ikke.",
       "comboRequirementUnmet": "Du har ikke begge de krævede håndværk på det krævede niveau til den opskrift.",
-      "notAtHub": "Du skal være ved håndværksstationen og på det krævede niveau for at lave det.",
+      "comboRequires": "Indstilling: {craftA} + {craftB}, niveau {tier}.",
+      "comboMet": "Klar.",
+      "comboSyncing": "Kontrollerer rigets indstilling.",
+      "comboNotAttuned": "Vælg først et arketypepar.",
+      "comboWrongPair": "Aktiver dette præcise par for at fremstille det.",
+      "comboTierUnmet": "Hav begge håndværksfag på det krævede niveau.",
+      "comboTierUnmetNamed": "Hæv {crafts} til niveau {tier}.",
+      "professionChoice": "Erhvervsvalg",
+      "noProfessionChoice": "Intet gyldigt erhvervsvalg er tilgængeligt i øjeblikket.",
+      "pairOptionLabel": "{pair} ({craftA} + {craftB})",
+      "attunementPreview": "Resultat: {title}-titel; {majorA} og {majorB} bliver ubegrænsede hovedfag; {hobby} bliver det sjældent-begrænsede hobby; al anden færdighedsviden bevares men begrænses til almindelig, mens den er inaktiv.",
+      "hobbyPreview": "Resultat: {hobby} bliver det sjældent-begrænsede hobby. Begge hovedfag og alle bevarede færdigheder forbliver uændrede.",
+      "attunementReturnCost": "Hvis du forlader dette par, koster en tilbagevenden {cost} soningopgaver.",
+      "identity": {
+        "title": "Håndværksidentitet",
+        "syncing": "Venter på din håndværksidentitet fra riget.",
+        "unattuned": "Intet arketypepar er aktivt. Din viden bevares, men komboopskrifter kræver et indstillet par.",
+        "titleLabel": "Titel",
+        "majorsLabel": "Hovedfag",
+        "hobbyLabel": "Hobby",
+        "historyLabel": "Historik",
+        "history": "{pairs} par opdaget, {returns} tilbagevendinger gennemført",
+        "roleMajor": "Hovedfag",
+        "roleHobby": "Hobby",
+        "roleDormant": "Inaktiv viden",
+        "roleUnattuned": "Ikke indstillet",
+        "ceilingUnlimited": "Ingen forstærkningsbegrænsning",
+        "ceilingRare": "Sjælden begrænsning",
+        "ceilingCommon": "Almindelig begrænsning",
+        "skillAria": "{craft}, færdighed {skill}, niveau {tier}, {role}, {ceiling}",
+        "colCraft": "Håndværk",
+        "colSkill": "Færdighed",
+        "colRole": "Rolle",
+        "colCap": "Begrænsning",
+        "tutorial": "Første niveau: nå færdighed {skill} i et håndværk. Vellykkede opskrifter øger det håndværk uden at slette viden andre steder.",
+        "nearTier": "{craft} er {points} færdigheder fra sit næste niveau.",
+        "dormantKnowledge": "{craft}-viden bevares men er inaktiv, indtil dens par eller hobby er aktiv."
+      },
+      "stationRequired": "Du skal være ved {station} for at lave det.",
+      "stationName": {
+        "forge": "Smedje",
+        "kitchens": "Køkkener",
+        "apothecary": "Apoteker",
+        "tannery": "Garveri",
+        "loom": "væv",
+        "toolworks": "Værktøjsværker"
+      },
       "throttled": "Du laver ting for hurtigt. Vent et øjeblik, og prøv igen.",
-      "recipeNotLearned": "Du har ikke lært den opskrift endnu."
+      "recipeNotLearned": "Du har ikke lært den opskrift endnu.",
+      "noBagSpace": "Du har ikke plads til den fremstillede genstand.",
+      "skillReqLine": "Kræver {craft} {skill}",
+      "difficultyFull": "Fuld færdighedsforøgelse",
+      "difficultyReduced": "Reduceret færdighedsforøgelse",
+      "difficultyMinimal": "Minimal færdighedsgevinst",
+      "difficultyNone": "Ingen færdighedsforøgelse",
+      "stationBadge": "Station",
+      "stationOutOfRangeNamed": "Flyt til {station} for at lave dette.",
+      "learnMoreAtStation": "{master} ved {station} kan lære dig flere {craft}-opskrifter.",
+      "masterworkToast": "Mesterværk! {name}",
+      "masterworkZoneLine": "{crafter} lavede et mesterværk {name}!",
+      "tierUpToast": "{craft} avanceret til niveau {tier}!",
+      "trendNudge": "Dine hænder læner sig mod {archetype}. Dens indstilling venter hos {master}.",
+      "trendNudgeNoMaster": "Dine hænder læner sig mod {archetype}. Søg en håndværksmester for at tage det op.",
+      "attunedZoneLine": "{name} er indstillet som {archetype}!",
+      "attunedBanner": "Indstillet: {title}",
+      "tierTutorial": {
+        "title": "Dit første niveau",
+        "tierCap": "Et håndværk når sit første niveau ved {skill} færdighed, og hvert niveau forbedrer, hvad det kan lave. Men et håndværk kan kun klatre forbi sjældent arbejde, når det er et af dine to hovedfag.",
+        "radar": "Dine erhverv danner et hjul. Indstil dig på et nabobpar, og de to håndværk bliver ubegrænsede hovedfag, et håndværk på den anden side af hjulet bliver et sjældent-begrænset hobby, og resten er inaktive: viden bevaret, men begrænset til almindelig, indtil du tager dem op igen.",
+        "masters": "Håndværksmestre i byerne tilbyder indstillingsquests. Besøg en for at vælge dit par, når du er klar. Intet du har lært, går nogensinde tabt.",
+        "dismiss": "Forstået"
+      },
+      "makersMark": "Udformet af {name}",
+      "gatheredBy": "Indsamlet af {name}",
+      "masterworkSeal": "Mesterværk",
+      "commissionToggle": "Kommissionsstykke",
+      "commissionToggleHint": "Bindes til den første karakter, der modtager det i en handel.",
+      "commissionUnbound": "Kommissionsstykke: bindes til den første modtager",
+      "commissionBound": "Kommissionsstykke: bundet til modtageren",
+      "notAtHub": "Du skal være ved håndværksstationen og på det krævede niveau for at lave det."
+    },
+    "itemMenu": {
+      "use": "Brug",
+      "equip": "Udrust",
+      "disenchant": "Affortrylle",
+      "salvage": "Bjærg",
+      "applyEnchant": "Anvend fortryllelse"
+    },
+    "enchanting": {
+      "disenchantedLine": "Du affortrylles {item}.",
+      "salvagedLine": "Du bjærger {item}.",
+      "enchantAppliedLine": "Du fortrylles {item} med {enchant}.",
+      "notHeld": "Du har ikke den genstand.",
+      "notDisenchantable": "Du kan ikke affortrylle det.",
+      "notSalvageable": "Du kan ikke bjærge det.",
+      "disenchantThrottled": "Du affortrylles for hurtigt. Vent et øjeblik og prøv igen.",
+      "salvageThrottled": "Du bjærger for hurtigt. Vent et øjeblik og prøv igen.",
+      "enchantThrottled": "Du fortrylles for hurtigt. Vent et øjeblik og prøv igen.",
+      "enchantWrongSlot": "Den fortryllelse kan ikke anvendes på den genstand.",
+      "enchantUnknown": "Den fortryllelse eksisterer ikke.",
+      "enchantInsufficient": "Du har ikke materialerne til den fortryllelse.",
+      "disenchantNoSpace": "Du har ikke plads til de arkane materialer.",
+      "salvageNoSpace": "Du har ikke plads til de bjærgede materialer.",
+      "enchantNoSpace": "Du har ikke plads til den fortryllede genstand.",
+      "disenchantConfirmTitle": "Affortrylle {item}?",
+      "disenchantConfirmBody": "Dette ødelægger {item} og giver arkan materiale. Dette kan ikke fortrydes.",
+      "disenchantConfirmBodySpecial": "Dette ødelægger et særligt eksemplar af {item} (signeret, mesterværk eller fortryllet) og giver arkan materiale. Dette kan ikke fortrydes.",
+      "salvageConfirmTitle": "Bjærg {item}?",
+      "salvageConfirmBody": "Dette ødelægger {item} og giver håndværksmaterialer. Dette kan ikke fortrydes.",
+      "salvageConfirmBodySpecial": "Dette ødelægger et særligt eksemplar af {item} (signeret, mesterværk eller fortryllet) og giver håndværksmaterialer. Dette kan ikke fortrydes.",
+      "pickerTitle": "Anvend fortryllelse",
+      "targetTitle": "Vælg en genstand at fortryle",
+      "noEnchants": "Ingen fortryllelse bruger dette reagens.",
+      "noTargets": "Ingen berettiget genstand at fortryle.",
+      "wornTag": "Båret ({slot})",
+      "tier": {
+        "base": "Basisfortryllelser",
+        "runed": "Runede Fortryllelser",
+        "greater": "Større Fortryllelser"
+      },
+      "yieldHeader": "Forventede materialer:",
+      "yieldLineExact": "{count} {item}",
+      "yieldLineRange": "{min} til {max} {item}",
+      "alreadyEnchanted": "Den genstand er allerede fortryllet.",
+      "sameEnchant": "Den genstand har allerede den fortryllelse.",
+      "replaceTag": "Erstatter {enchant}",
+      "sameEnchantTag": "Allerede anvendt",
+      "replaceConfirmTitle": "Erstat fortryllelsen på {item}?",
+      "replaceConfirmBody": "Dette erstatter {old} på {item} med {new}.",
+      "replaceConfirmNoRefund": "Den gamle fortryllelse ødelægges. Dens materialer refunderes ikke. Dette kan ikke fortrydes.",
+      "replaceConfirmCost": "Pris: {cost}",
+      "replaceConfirmCostItem": "{name} x{count}",
+      "replaceConfirmAccept": "Erstat"
+    },
+    "training": {
+      "title": "Træning: {name}",
+      "close": "Luk træning",
+      "empty": "Denne mester har intet at lære.",
+      "free": "Gratis",
+      "stateKnown": "Kendt",
+      "stateTeachable": "Tilgængelig",
+      "stateLocked": "Låst",
+      "statePending": "Læres",
+      "requirement": "Undervist på {craft} {skill}",
+      "trainAria": "Lær {name} for {fee}",
+      "pendingAria": "{name} læres",
+      "dialogOption": "Uddannelse",
+      "dialogOptionAria": "Gennemse træning fra {name}",
+      "learned": "Opskrift lært: {recipe}",
+      "tierUnmet": "Du skal bruge {craft} {skill} for at lære den opskrift.",
+      "cannotAfford": "Du har ikke råd til den træning.",
+      "notTaughtHere": "Den opskrift er ikke undervist her.",
+      "alreadyKnown": "Den opskrift kender du allerede.",
+      "outOfRange": "Du skal være på stationen for at træne."
+    },
+    "unbind": {
+      "title": "Aflæsning: {name}",
+      "close": "Luk aflæsning",
+      "intro": "Mesteren kan frigøre et kommissionsstykke fra dets binding mod et gebyr.",
+      "empty": "Du bærer ingen bundne kommissionsstykker.",
+      "rowSub": "Frigør bindingen; stykket binder igen ved næste handel.",
+      "unbindAria": "Aflæs {name} for {fee}",
+      "dialogOption": "Aflæsning",
+      "dialogOptionAria": "Aflæs et kommissionsstykke med {name}",
+      "confirmTitle": "Aflæs kommissionsstykke",
+      "confirmBody": "Aflæs {name} for {fee}?",
+      "confirmOk": "Aflæs",
+      "confirmCancel": "Annuller",
+      "unbound": "Aflæste {name} for {fee}. Det vil binde igen ved næste handel.",
+      "notEligible": "Den genstand kan ikke aflæses.",
+      "notBound": "Den genstand er ikke bundet.",
+      "cannotAfford": "Du har ikke råd til aflæsningsgebyret.",
+      "outOfRange": "Du skal være ved en håndværksstation for at aflæse.",
+      "noSpace": "Du har ikke plads til det aflæste eksemplar."
+    },
+    "finder": {
+      "title": "Fangekældersfinder",
+      "close": "Luk",
+      "back": "Tilbage",
+      "syncing": "Venter på verdenen...",
+      "tabCatalogue": "Katalog",
+      "tabQueue": "Hurtig Matchning",
+      "tabBoard": "Forhåndssammensatte Grupper",
+      "normal": "Sædvanlig",
+      "heroic": "Heroisk",
+      "kindDungeon": "Fangekælder",
+      "kindRaid": "Stor raid",
+      "kindSolo": "Soloæventyr",
+      "levels": "Niveauer {min} til {max}",
+      "levelOne": "Niveau {level}",
+      "clock": "{minutes} min. {seconds} sek.",
+      "roleCount": "{count} af rollen {role}",
+      "roleTank": "Forsvarer",
+      "roleHealer": "Heler",
+      "roleDps": "Skade",
+      "freeRoles": "Alle roller velkomne",
+      "lockoutDaily": "Daglig låsning på den endelige chef",
+      "lockoutNone": "Ingen låsning",
+      "lockedFor": "Låst i ca. {minutes} min.",
+      "attunement": "Kræver indstilling: {quest}",
+      "heroicMarks": "Heroiske mærker: {count} pr. spiller",
+      "entrance": "Indgang: {zone}",
+      "showOnMap": "Vis på kortet",
+      "encounters": "Møder",
+      "finalBoss": "Endelig chef",
+      "summoned": "Tilkaldt vogter",
+      "lootGuaranteed": "Et af disse falder altid:",
+      "lootMaybe": "Højst et af disse kan falde:",
+      "lootChance": "Chancedråb ekstra:",
+      "lootHeroic": "Heroisk bonus, et af disse falder altid:",
+      "pct": "{pct} pct.",
+      "blockedLevel": "Kun niveau {min} til {max}",
+      "blockedSpec": "Kræver en specialisering",
+      "yourRoles": "Dine roller",
+      "needsSpec": "Vælg en specialisering for at bruge Fangekældersfinderen.",
+      "leaderNote": "Kun din gruppeleder kan stille gruppen i kø.",
+      "chooseActivities": "Vælg aktiviteter",
+      "joinQueue": "Stil dig i kø",
+      "leaveQueue": "Forlad køen",
+      "waited": "Tid i kø: {time}",
+      "cooldownNote": "Du kan stille igen i kø om {seconds}s.",
+      "travelNote": "Gruppen dannes, hvor alle befinder sig. Rejs til indgangen sammen; ingen teleporteres.",
+      "proposalTitle": "Gruppe fundet: {name}",
+      "proposalRole": "Din rolle: {role}",
+      "accepted": "{accepted} af {size} bekræftet",
+      "remaining": "{seconds}s til at svare",
+      "accept": "Accepter",
+      "decline": "Afvis",
+      "acceptedWait": "Venter på de andre...",
+      "slotState": "{role}: {accepted} af {total} klar",
+      "openListings": "Åbne opslag",
+      "boardEmpty": "Ingen opslag i øjeblikket. Opret ét!",
+      "boardLeaderGate": "Kun din gruppeleder kan oprette et opslag.",
+      "publishListing": "Publicér et opslag",
+      "activity": "Aktivitet",
+      "publish": "Publicér",
+      "yourListing": "Dit opslag",
+      "closeListing": "Luk opslag",
+      "applicants": "Ansøgere",
+      "noApplicants": "Ingen ansøgere endnu.",
+      "acceptApplicantAria": "Accepter {name}",
+      "declineApplicantAria": "Afvis {name}",
+      "levelClass": "Nv. {level} {className}",
+      "leader": "Leder: {name}",
+      "needs": "Mangler {roles}",
+      "slots": "{size} af {capacity}",
+      "apply": "Ansøg",
+      "withdraw": "Træk ansøgning tilbage",
+      "tagFirstRun": "Første runde",
+      "tagQuestRun": "Opgaverunde",
+      "tagFullClear": "Fuld oprydning",
+      "tagLearning": "Begyndere velkomne",
+      "tagFastRun": "Hurtig runde",
+      "mech": {
+        "shadow_pulse": "Skyggeimpuls (pulserende omradesskade)",
+        "reaping_arc": "Mejende Bue (frontal mejning)",
+        "mist_surge": "Tågebølge (pulserende omradesskade)",
+        "summons_adds": "Tilkalder forstærkninger",
+        "lunar_tide": "Manetide (pulserende omradesskade)",
+        "enrage": "Raserer ved lavt helbred",
+        "shuddering_stomp": "Rystende Tramp (omradesbedøvelse)",
+        "grave_inferno": "Gravsinferno (kanaliseret ild-AoE, hold afstand)",
+        "grave_cleaver": "Gravhugger (frontal mejning)",
+        "shadow_nova": "Skyggeudbrud (omradesudbrud)",
+        "profane_mending": "Vanhellig Heling (heler sine allierede)",
+        "mana_burn": "Visnet Velsignelse (forbrænder mana)",
+        "deathstalker_cleave": "Dødsstalkers Mejning (frontal mejning)",
+        "mortal_wound": "Glemt Sår (reducerer modtaget heling)",
+        "sealbreak_shockwave": "Segelbrudets Chokbølge (omradesudbrud)",
+        "gravebreaker": "Gravknuser (frontal kegle, vend den væk fra raidet)",
+        "raise_fallen": "Rejse de Faldne (periodiske bølger af tilkaldelser)",
+        "soul_rend": "Sjælerivning (markerede spillere skal sprede sig og heles)",
+        "deathless_rage": "Udødelig Raseri (afbrydes ved vardstene)",
+        "wardstones": "Vardstenskanaler (faseovergang)"
+      }
+    },
+    "deeds": {
+      "title": "Bedrifternes Bog",
+      "close": "Luk Bedrifternes Bog",
+      "searchPlaceholder": "Søg i bedrifter",
+      "searchAria": "Søg efter bedrifter på navn",
+      "renownLabel": "Hæder",
+      "countLabel": "{earned}/{total} bedrifter",
+      "completionAria": "Bedrifter opnået: {earned} af {total}",
+      "recentLabel": "Seneste:",
+      "nearestLabel": "Næsten i mål:",
+      "filterGroupAria": "Filtrer bedrifter",
+      "filterAll": "Alle",
+      "filterEarned": "Opnået",
+      "filterUnearned": "Ikke opnået",
+      "filterNearly": "Næsten i mål",
+      "categoriesAria": "Bedriftskategorier",
+      "catProgression": "Fremgang",
+      "catCombat": "Kamp",
+      "catDungeon": "Fangekældre",
+      "catDelve": "Delves",
+      "catChronicle": "Krøniker",
+      "catCollection": "Samling",
+      "catPvp": "PvP og Sport",
+      "catSocial": "Socialt",
+      "catExploration": "Udforskning",
+      "catFeat": "Bragder",
+      "categoryCountAria": "{category}: {earned} af {visible} bedrifter opnået",
+      "emptyCategory": "Ingen bedrifter matcher her.",
+      "progressText": "{current}/{target}",
+      "progressAria": "Fremskridt: {current} af {target}",
+      "renownChip": "{renown} Hæder",
+      "earnedDate": "Opnået {date}",
+      "featRibbon": "Bragd",
+      "hiddenBadge": "Skjult",
+      "titleChip": "Titelbelønning",
+      "watch": "Spor",
+      "unwatch": "Stop sporing",
+      "watchFull": "Sporingslisten er fuld (højst {cap})",
+      "watchAria": "Sæt {name} på sporingslisten på HUD'en",
+      "unwatchAria": "Fjern {name} fra sporingslisten",
+      "titlesSection": "Titler",
+      "titlesAria": "Vælg den titel, der skal vises",
+      "titlesNone": "Ingen titel",
+      "titlesEmpty": "Opnå en bedrift, der skænker en titel, for at låse denne hylde op.",
+      "unlockedBanner": "Bedrift fuldbragt: {name}",
+      "unlockedTitleHint": "Ny titel opnået: {title}. Vælg den i Bedrifternes Bog.",
+      "retroSummary": "Din krønike er ført ajour: {count} bedrifter nedskrevet.",
+      "broadcastLine": "{name} har fuldbragt en bedrift: {deed}",
+      "rarityLine": "Opnået af {percent} af eventyrerne",
+      "trackerLabel": "Bedrifter",
+      "collapseHint": "Fold bedriftssporing sammen",
+      "expandHint": "Fold bedriftssporing ud",
+      "openBookHint": "Åbn Bedrifternes Bog",
+      "charTitleLabel": "Titel",
+      "charTitleNone": "Ingen titel valgt",
+      "charOpenBook": "Bedrifternes Bog",
+      "lbTab": "Hæder",
+      "lbTitleCol": "Titel",
+      "lbScopeNote": "Konti rangordnet efter livstids Hæder. Hver bedrift tæller én gang på tværs af alle karakterer på en konto.",
+      "lbSelfAccount": "Din konto: rang {rank}, top {percent} procent, {renown} Hæder",
+      "lbSelfRank": "Din konto: rang {rank}, top {percent} procent",
+      "lbEmpty": "Ingen rangerede krønikeskrivere endnu.",
+      "broadcastsLabel": "Del nye bedrifter med laug og venner",
+      "titledName": "{name} [{title}]"
     },
     "arcade": {
-      "title": "Realm Games",
-      "close": "Close games",
-      "choose": "Choose a game",
-      "racing": "Cryptic Circuit",
+      "abort": "Leave session",
+      "active": "Game active",
       "brawler": "Four-player Brawl",
-      "townRts": "Eastbrook Command",
-      "housing": "Eastbrook Homes",
-      "create": "Create session",
-      "solo": "Solo vs NPCs",
-      "join": "Join by code",
+      "build": "Build",
+      "choose": "Choose a game",
+      "close": "Close games",
       "code": "Session code",
+      "controls": "Controls: arrows/WASD to steer or move, Space to drift or jump, J/K to attack, E to use an item.",
+      "create": "Create session",
+      "finished": "Game finished",
+      "housing": "Eastbrook Homes",
       "invite": "Invite party member",
       "inviteHint": "Enter a party member player ID.",
+      "join": "Join by code",
+      "place": "Place piece",
+      "racing": "Cryptic Circuit",
       "ready": "Ready",
-      "unready": "Unready",
+      "solo": "Solo vs NPCs",
       "start": "Start",
-      "abort": "Leave session",
-      "waiting": "Waiting for players",
-      "active": "Game active",
-      "finished": "Game finished",
-      "unavailable": "This game is not enabled on this server.",
-      "controls": "Controls: arrows/WASD to steer or move, Space to drift or jump, J/K to attack, E to use an item.",
-      "build": "Build",
+      "title": "Realm Games",
+      "townRts": "Eastbrook Command",
       "train": "Train guard",
-      "place": "Place piece"
+      "unavailable": "This game is not enabled on this server.",
+      "unready": "Unready",
+      "waiting": "Waiting for players"
+    },
+    "zombie": {
+      "abort": "Abandon session",
+      "active": "The wave is active. Place towers or hold the line.",
+      "board": "Board",
+      "buildAt": "Build at {x}, {z}",
+      "claim": "Claim reward",
+      "close": "Close town defense",
+      "copyCode": "Share this code with your party",
+      "create": "Create defense session",
+      "defeat": "The town fell. Abandon the session and try again.",
+      "intro": "Build defenses, hold the road, and survive ten deterministic waves with your party.",
+      "invite": "{name} invited you to {kind}.",
+      "inviteHint": "Enter a party member's player ID.",
+      "invitePlayer": "Invite party member",
+      "join": "Join session",
+      "joinInvite": "Join game",
+      "lives": "Lives {lives}",
+      "ready": "Ready up",
+      "readyDone": "Ready",
+      "resources": "Resources {resources}",
+      "roster": "Roster",
+      "sessionCode": "Session code",
+      "startWave": "Start wave",
+      "status": "Status: {status}",
+      "title": "Eastbrook Town Defense",
+      "towerArrow": "Arrow tower",
+      "towerCannon": "Cannon tower",
+      "towerSlow": "Frost tower",
+      "unavailable": "Town Defense is still being staged. Check back after its QA checkpoint.",
+      "victory": "Eastbrook stands. Claim your reward.",
+      "waiting": "Waiting for the party to ready up.",
+      "wave": "Wave {wave}"
     }
+  },
+  "gatherEvent": {
+    "pristineVein": "{finder} ramte en uberørt åre!",
+    "ancientHeartwood": "{finder} fældet et gammelt kernetræ!",
+    "moonlitBloom": "{finder} opdagede en måneskin opblomstring!"
   },
   "apiError": {
     "validation": {
@@ -1741,36 +2951,21 @@ export const da_DK: EnTranslations = {
       "swag_claimed": "Du har allerede indløst denne belønning.",
       "swag_tier": "Nå en højere rang for at indløse denne.",
       "swag_points": "Ikke nok point."
+    },
+    "deeds": {
+      "invalid_input": "Ugyldig indtastning."
+    },
+    "steam": {
+      "disabled": "Steam-tilknytning er ikke tilgængelig lige nu.",
+      "invalid_ticket": "Steam kunne ikke bekræfte denne tilknytningsanmodning. Prøv igen fra skrivebordsappen.",
+      "banned": "Den Steam-konto kan ikke tilknyttes.",
+      "already_linked": "Din konto har allerede en tilknyttet Steam-konto.",
+      "account_taken": "Den Steam-konto er allerede knyttet til en anden konto.",
+      "upstream": "Steam svarede ikke. Prøv igen om et øjeblik."
+    },
+    "wallet": {
+      "handoff_invalid": "Den pung-godkendelse udløb eller kunne ikke bekræftes. Prøv igen."
     }
-  },
-  "coop": {
-    "joinTitle": "Player {slot}: press to join",
-    "joinNow": "Join now",
-    "pickClass": "Choose a class",
-    "pickCharacter": "Choose a character",
-    "joinConfirm": "Join",
-    "joinCancel": "Cancel",
-    "accountThis": "This account",
-    "accountOther": "Different account",
-    "loginTitle": "Sign in Player {slot}'s account",
-    "loginUser": "Username",
-    "loginPass": "Password",
-    "loginSubmit": "Sign in and join",
-    "loginError": "Sign-in failed. Check the username and password.",
-    "loggingIn": "Signing in...",
-    "createCharacter": "Create a character",
-    "createTitle": "Name your new hero and pick a class",
-    "createName": "Character name",
-    "createError": "Could not create the character. Try a different name.",
-    "noOtherCharacters": "This account has no other characters to bring in.",
-    "stripTitle": "Local players",
-    "hintJoin": "Press Start on another controller to add a player (up to 4).",
-    "hintLeave": "Hold Start on a controller to drop that player.",
-    "keyboardJoin": "Press F2 to add a local player",
-    "slotLabel": "Player {slot}",
-    "slotEmpty": "Open",
-    "reviving": "Reviving in {seconds}s",
-    "reconnecting": "Player {slot} reconnecting"
   },
   "guide": {
     "brand": "Cryptic Realm",
@@ -1803,6 +2998,7 @@ export const da_DK: EnTranslations = {
       "talents": "Talenter",
       "arena": "Arena & PvP",
       "valeCup": "Dalpokalen",
+      "deeds": "Bedrifternes Bog",
       "glossary": "Ordliste",
       "wishIKnew": "Ting jeg ville ønske jeg vidste",
       "faq": "FAQ",
@@ -1812,6 +3008,7 @@ export const da_DK: EnTranslations = {
       "primary": "Guide-sektioner",
       "topics": "Emner",
       "onThisPage": "På denne side",
+      "sidebarLabel": "Guideemner",
       "backToGame": "Tilbage til spillet"
     },
     "groups": {
@@ -1837,7 +3034,8 @@ export const da_DK: EnTranslations = {
       "github": "Kildekode på GitHub",
       "discord": "Bliv en del af Discord",
       "communityWiki": "Fællesskabswiki",
-      "rights": "Cryptic Realm"
+      "rights": "Cryptic Realm",
+      "linksLabel": "Spil- og fællesskabslinks"
     },
     "language": {
       "label": "Sprog",
@@ -1853,7 +3051,9 @@ export const da_DK: EnTranslations = {
       "typeCreature": "Væsner",
       "typeDungeon": "Fangekælder",
       "typeDelve": "Delve",
-      "typeTerm": "Begreb"
+      "typeTerm": "Begreb",
+      "typeAbility": "Evne",
+      "typeDeed": "Bedrift"
     },
     "home": {
       "eyebrow": "Klassisk browser-MMO",
@@ -1959,10 +3159,21 @@ export const da_DK: EnTranslations = {
       "talents": "Talenter",
       "arena": "Arena",
       "leaderboard": "Resultattavle",
+      "deeds": "Bedrifternes Bog",
+      "crafting": "Håndværk",
+      "valeCup": "Dalpokalen",
+      "calendar": "Begivenhedskalender",
+      "discord": "Discord",
       "abilities": "Brug handlingsbjælkens evner (talrækken; en anden bjælke sidder på det numeriske tastatur)",
       "targetFriendly": "Vælg nærmeste venlige",
       "cycleFriendly": "Skift venligt mål",
       "gameMenu": "Åbn spilmenu og indstillinger",
+      "bothMouse": "Begge museknapper",
+      "runForward": "Løb fremad",
+      "arrowKeys": "Piletaster",
+      "groupPet": "Kæledyrskommandoer",
+      "petBar": "Kæledyrsbjælke: Angrib, Stop, Ægge, Defensiv, Aggressiv (når et jæger- eller heksemesterkæledyr er fremme)",
+      "attackMoveNote": "En mere, slået fra som standard: aktivér Angrebsbevægelse i indstillingerne for at reservere en tast (A, mens indstillingen er slået til), der fører dig mod din markør og åbner ild mod fjenden under den, eller den første, du møder undervejs.",
       "mobileHeading": "På mobil",
       "mobileBody": "Berøringsstyring vises automatisk på telefoner og tablets: en bevægelsesstik til venstre, træk hvor som helst til højre for at kigge, og knapper på skærmen til dine evner og menuer.",
       "controllerHeading": "På en controller",
@@ -2000,6 +3211,8 @@ export const da_DK: EnTranslations = {
       "factReloadBody": "Grafikkvalitet og de avancerede vælgere træder i kraft efter en genindlæsning, og panelet tilbyder en Genindlæs nu-knap, når det er nødvendigt. Hver anden mulighed gælder i det øjeblik, du ændrer den.",
       "factGovernorTitle": "Et indbygget sikkerhedsnet",
       "factGovernorBody": "På hvert niveau under Ultra tynder spillet stille og roligt græs, effekter og belysning et øjeblik, når en stor kamp spidser til, og genopretter dem derefter. Hvis du vælger Ultra, fortæller det, at du hellere vil beholde alle detaljer.",
+      "factSearchTitle": "Søgningen finder det først",
+      "factSearchBody": "Er du ikke sikker på, hvor en indstilling bor? Skriv i søgefeltet øverst i menuen. Den forstår også almindelige formuleringer, så fps finder FPS-visningen, og at vælge et resultat springer dig hen til indstillingen og lader den stå fremhævet.",
       "advancedHeading": "Den avancerede forudindstilling: bland din egen",
       "advancedBody": "Avanceret starter fra High-niveauet og låser op for fire ekstra vælgere, så du kan bruge dine rammer, hvor du rent faktisk bemærker dem: Terrændetaljer, Løvtæthed, Effekter og belysning og Skyggekvalitet. Ligesom grafikkvalitet gælder de efter en genindlæsning.",
       "advancedMixes": "To yndlingsblandinger: Hold Shadow Quality på High og indstil Effects & Lighting til Low for et sprødt, glødfrit look, der kører let, eller gør det omvendte for at bevare blomstringen og blødgøre skyggerne.",
@@ -2026,7 +3239,11 @@ export const da_DK: EnTranslations = {
       "rowPerfOverlay": "En skærmudlæsning af FPS, billedtid og mere. Slå den til, mens du tuner denne side, og skjul den derefter igen.",
       "tableFoot": "Leder du efter en skyder til trækafstand eller en FPS kasket? Der er ikke noget at jage efter: Visningsafstand er en del af hvert kvalitetsniveau, og frame pacing følger din skærm.",
       "mobileTitle": "På telefoner og tablets",
-      "mobileBody": "Mobile klarer mere for dig: Spillet vælger niveauet, holder opløsningen et tryk lavere for at beskytte batteri og varme og beholder de højeste niveauer kun på skrivebordet. Ovenstående belastninger gælder stadig; telefoner fyldes blot ud ved High."
+      "mobileBody": "Mobile klarer mere for dig: Spillet vælger niveauet, holder opløsningen et tryk lavere for at beskytte batteri og varme og beholder de højeste niveauer kun på skrivebordet. Ovenstående belastninger gælder stadig; telefoner fyldes blot ud ved High.",
+      "touchBody": "På en berøringsskærm vokser indstillingerne også deres egen komfortsamling frem: joystickstørrelse og følsomhed, størrelse og gennemsigtighed på skærmknapper, et venstrehåndet spejlvendt layout, en valgfri kamerastik og omvendt berøringskig, så skærmen passer til dine hænder frem for omvendt.",
+      "audioTitle": "Lyd og sprog",
+      "audioBody": "Indstillingsvinduet er ikke kun pixels. En Lyd-kategori rummer særskilte lydstyrkeknapper for effekter, musik og stemme, og Interface-kategorien bærer en sprogvælger, der omlokaliserer hele grænsefladen på stedet, uden genindlæsning, plus en temavælger til vinduets udseende. Sprog er også fæstnet først på Oversigten, så det altid er ét skridt fra at åbne menuen.",
+      "autolootBody": "Foretrækker du ikke at klikke på hvert lig? En grænsefladeindstilling, slået fra som standard, samler byttet fra dine egne drab op, mens du går forbi dem."
     },
     "combat": {
       "intro": "Kamp følger velkendte klassiske MMO-regler. Du behøver aldrig at studere noget af det for at spille godt, dette er bare formen på hvordan kampe fungerer.",
@@ -2041,6 +3258,9 @@ export const da_DK: EnTranslations = {
       "effectsTitle": "Forstærkninger, svækkelser og massekontrol",
       "effectsBody": "Mange evner påfører en effekt der hænger ved. De gavnlige (forstærkninger) hæver dine egenskaber, skjolder dig eller helbreder dig lidt ad gangen; de skadelige (svækkelser) dræner dit helbred med skade over tid eller svækker dig. Hold øje med de små ikoner nær din handlingsbjælke for at se hvad der er på dig og hvor længe det varer.",
       "ccBody": "Massekontrol er en særlig slags svækkelse der begrænser hvad et mål kan gøre: lammelser, rødder og sløvninger, forstummelser der stopper besværgelser, afvæbninger, frygt og forvandlinger der gør en fjende harmløs et øjeblik. Nogle af disse, som rødder, frygt og forvandlinger, mister deres greb når de påføres igen for hurtigt, så de kan ikke lænkes i det uendelige.",
+      "metersBody": "Nysgerrig efter, hvordan en kamp gik? Tryk på Shift+H for at åbne gruppens målere, der opgør skade, helbredelse og trussel for din gruppe, kamp for kamp.",
+      "queueTitle": "Dit næste træk er allerede ladt",
+      "queueBody": "Du behøver ikke ramme dine tryk præcist på slaget. Tryk på din næste evne i de sidste øjeblikke af den igangværende besværgelse, så sættes den i kø og udløses i samme nu, besværgelsen er færdig, så øvet spil flyder uden huller. Et tryk for tidligt bliver simpelthen afvist, så intet går til spilde. Nogle nærkampsslag virker på samme måde og rider med på dit næste våbensving.",
       "deathTitle": "Når du falder",
       "deathBody": "Hvis dit helbred når nul, bliver du slået ned. Frigiv din ånd for at genopstå ved den nærmeste kirkegård ved fuldt helbred, og find så vej tilbage, så en død koster dig lidt tid, ikke din fremgang. Mellem kampe, sæt dig ned for at spise og drikke, så du starter den næste ved fuld styrke."
     },
@@ -2085,7 +3305,33 @@ export const da_DK: EnTranslations = {
       "delveTerm": "Delve",
       "delveDef": "En kort, gentagelig instanseret nedstigning for en eller to spillere, kørt fra en vogters tavle med en ledsager ved din side.",
       "augmentTerm": "Forstærkning",
-      "augmentDef": "En midlertidig forstærkning, du vælger under en to mod to Fiesta-arenakamp, og som kun omformer dit udstyr for den ene kamp."
+      "augmentDef": "En midlertidig forstærkning, du vælger under en to mod to Fiesta-arenakamp, og som kun omformer dit udstyr for den ene kamp.",
+      "deedTerm": "Bedrift",
+      "deedDef": "En bedrift, der nedskrives i Bedrifternes Bog. At opnå en giver Hæder, og nogle giver en kosmetisk titel eller navneskiltskant.",
+      "renownTerm": "Hæder",
+      "renownDef": "Den livstidsscore, dine bedrifter lægger op til. Den stiger kun nogensinde, og riget fører placeringer over den på ranglisten.",
+      "heroicTerm": "Heroisk",
+      "heroicDef": "Den sværere udgave af en fangekælder eller raidet, tilpasset veludstyrede slutspilsgrupper. Heroiske bosser taber opgraderet bytte, og den sidste boss betaler Heroiske Mærker.",
+      "lockoutTerm": "Spærring",
+      "lockoutDef": "Et dagligt loft over de største gentagelige belønninger. Hver heroisk fangekælder udbetaler én gennemførelse om dagen, raidet sporer normal og heroisk hver for sig, og at samle bytte fra en verdensboss starter din. En gennemført tur for fem spillere står stadig åben for dens egen gruppe; den spærrede raiddør åbner ikke igen før nulstillingen.",
+      "restedTerm": "Udhvilet",
+      "restedDef": "Bonuserfaring, som din karakter opsparer, mens den hviler på en kro, uden for kamp. Dine næste drab tjener ekstra erfaring, indtil puljen løber tør.",
+      "petBarTerm": "Kæledyrsbjælke",
+      "petBarDef": "Den kommandorække, som et jæger- eller heksemesterkæledyr føjer til: Angrib, Stop, Ægge, Defensiv og Aggressiv, bundet til Ctrl plus 1 til 5 som standard.",
+      "metersTerm": "Skadesmålere",
+      "metersDef": "Gruppens pointtavle for den aktuelle kamp: skade givet, helbredelse ydet, og hvem der bærer mest trussel, ført pr. kamp. Åbn det med dets tastebinding (Shift+H som standard).",
+      "targetMarkerTerm": "Målmarkør",
+      "targetMarkerDef": "Et symbol, som ethvert gruppe- eller raidmedlem kan fæstne over et mål, så alle fokuserer på, eller undgår, det samme. Otte symboler, ét mål pr. symbol.",
+      "loadoutTerm": "Opsæt",
+      "loadoutDef": "Et gemt talentopsæt. Behold flere, og skift mellem builds uden at bruge dine point om ét ad gangen.",
+      "readyCheckTerm": "Klarmelding",
+      "readyCheckDef": "En gruppeleder skriver /ready for at spørge gruppen eller raidet: alle bekræfter Klar eller Ikke klar, og gruppen ser optællingen.",
+      "soulboundTerm": "Sjælebundet",
+      "soulboundDef": "En genstand, der er bundet til din karakter fra det øjeblik, du erhverver den. Den kan ikke byttes, sendes med posten, sælges til en handlende eller lægges op på markedet.",
+      "spiritHealerTerm": "Den Blege Vogter",
+      "spiritHealerDef": "Rigets åndehelbreder, der svæver over hver kirkegård: den kan genrejse dit genfærd på stedet mod prisen af en forbigående svækkelse.",
+      "worldBossTerm": "Verdensboss",
+      "worldBossDef": "En boss af raidstyrke, der rejser sig i den åbne verden i en fast rytme, bekæmpet af hvem end der samles for at svare frem for en fast gruppe."
     },
     "faqPage": {
       "intro": "De spørgsmål, nye spillere oftest stiller.",
@@ -2176,10 +3422,10 @@ export const da_DK: EnTranslations = {
     },
     "abilityHook": {
       "heroic_strike": "Sætter et tungere sving i kø der bruger raseri på dit næste slag.",
+      "revenge": "Svinger gennem fjender foran dig og kan blive gratis efter en undvigelse eller parering.",
+      "hamstring": "Hæmmer en fjendes bevægelse, så den ikke kan flygte.",
       "battle_shout": "Et samlende råb der hæver angrebsstyrken for gruppen.",
-      "commanding_shout": "Styrker udholdenheden så alle har mere modstandskraft i en kamp.",
       "charge": "Stormer mod en fjern fjende for at åbne kampen med en kort lammelse.",
-      "rend": "Åbner en blødning der nedslider målet over tid.",
       "thunder_clap": "Rammer alt omkring dig og sløver deres angreb.",
       "seal_of_righteousness": "Gennemtrænger dine sving med Hellig skade, brug den så med Dom.",
       "holy_light": "En stabil, anselig helbredelse til at fylde en allieret eller dig selv op.",
@@ -2212,9 +3458,18 @@ export const da_DK: EnTranslations = {
       "lightning_shield": "Oplader dig så angribere får Naturskade når de rammer dig.",
       "flame_shock": "En øjeblikkelig brand der rammer med det samme og bliver ved med at svide over tid.",
       "fireball": "Din primære ildbombe, rammer et slag og efterlader målet brændende.",
+      "fireball_form": "Bliv til en levende glød for at krydse åbent terræn med høj hastighed.",
       "frost_armor": "En vedvarende selvforstærkning der hærder din rustning før en kamp.",
       "arcane_intellect": "Hæver Intellekt for at uddybe en allierets manapulje, kast den før kampen.",
       "frostbolt": "Slår fra afstand og sløver målet så det ikke kan komme tæt på dig.",
+      "ice_lance": "En øjeblikkelig skarv til at bruge frostudløsere, den rammer langt hårdere mod et frosset mål.",
+      "flurry": "Tre hurtige pile der køler målet, så dine næste frostramninger lander, som om det var frosset.",
+      "fingers_of_frost": "Dine frostpile styrker sommetider en Ice Lance til at ramme, som om målet var frosset.",
+      "brain_freeze": "Dine frostbolte gør nogle gange den næste Winterlash øjeblikkelig og springer dens nedkøling over.",
+      "shatter": "Dine trolddomme får langt oftere kritisk chance mod frosne mål.",
+      "frozen_orb": "Ruller en langsom kugle gennem flokken, som nedkøler fjender og oplagrer istapper.",
+      "blizzard": "Dækker et område med is for at nedslide og sætte farten ned på en hel flok.",
+      "blink": "Teleporterer dig en kort afstand fremad og bryder rodfæstning ved udgangen.",
       "conjure_water": "Frembringer drikke der genopretter mana, så du kan fylde op mellem kampene.",
       "conjure_food": "Frembringer mad der genopretter helbred når du sætter dig ned for at spise.",
       "shadow_bolt": "Et lyn af skygge du kaster mod et mål, din foretrukne bombe.",
@@ -2228,7 +3483,9 @@ export const da_DK: EnTranslations = {
       "mark_of_the_wild": "En vedvarende velsignelse du lægger på dig selv eller en allieret før en kamp.",
       "moonfire": "Rammer øjeblikkeligt og efterlader målet brændende, god mens du bevæger dig.",
       "rejuvenation": "Kastes øjeblikkeligt og helbreder en allieret over tid, så du kan blive ved med at handle.",
-      "thorns": "Beskytter en allieret så nærkampsangribere skader sig selv når de slår."
+      "thorns": "Beskytter en allieret så nærkampsangribere skader sig selv når de slår.",
+      "commanding_shout": "Styrker udholdenheden så alle har mere modstandskraft i en kamp.",
+      "rend": "Åbner en blødning der nedslider målet over tid."
     },
     "petHook": {
       "emberkin": "En fjernkamps-ildboltdæmon der pikker på fjender fra sikker afstand.",
@@ -2250,6 +3507,7 @@ export const da_DK: EnTranslations = {
         "old_greyjaw": "En arret gammel ulv ingen fælde har holdt, beskyldt for tre jagthunde og en staldknægts arm. Han jager de dybe skove alene og bliver mere vild jo længere en kamp trækker ud.",
         "grubjaw": "En sumptrold så grådig at de andre trolde ikke vil grave ved siden af ham, siges at have ædt en handelsmands sidste to lastmuldyr, seletøj og det hele.",
         "shardlord_kazzix": "Et stormelementar med skuldre, der vandrer på de fjerne klipper over Stormcrag med en hjerteskår det er værd at trodse lynet for.",
+        "sethrael_palecoil": "En knoglebleg slange, der glider hen over Glimmersøens dybe afsats, den tavse vogter af det vand, den har gjort krav på. Svømmere, der deler søen med den, kommer sjældent op til overfladen igen.",
         "mirejaw_frenzy": "En sump-mudfin der pisker sig selv op i et tæskende raseri midt i kampen, det højlydteste i en støjende, territorial flok.",
         "gravecaller_cultist": "Kappeklædte tjenere af dødskulten hvis virke besudler gravene fra Dalen til toppene. Hvor de samles, hviler de døde ikke."
       }
@@ -2294,6 +3552,10 @@ export const da_DK: EnTranslations = {
       "dragonkin": {
         "name": "Drageæt",
         "desc": "Skældækkede, slangeagtige væsner fra de gamle dyb. Sjældne, stolte og langt stærkere, end de ser ud."
+      },
+      "reptile": {
+        "name": "Krybdyr",
+        "desc": "Koldblodede jægere med en hvislen og et snap, der er helt deres egne, og som adskiller sig fra de varmblodede dyr."
       }
     },
     "worldPage": {
@@ -2317,7 +3579,9 @@ export const da_DK: EnTranslations = {
       "marshPlaceNotes": "Fenbridge bevogter den eneste tørre vej. Prowler Reeds og Deepfen Shallows myldrer med mosebæster og mudfiner; Widow Thicket er spundet tæt med spind; Drowned Chapel og Troll Mounds rummer ældre farer; Gravecaller Encampment er kulten gravet ind, og Den Sunkne Bastion er mosens instans-hjerte.",
       "peaksPlaceNotes": "Highwatch holder muren. Stalker Ridge og Deeprock Burrows tilhører ryg-katte og gravere; Ogre Foothills og Drogmar's War-Camp tilhører lejede bøller; Stormcrag knitrer med elementaler, og Glimmermere gløder nedenfor; Wyrmcult Tents og Revenant Fields omkranser kultens høje grund, med Gravormens Helligdom på dens top.",
       "gladeTitle": "Et stille hjørne: Brightwood Glade",
-      "gladeBody": "Ikke hver historie i the Vale handler om de døde. Mod nord holder en solbeskinnet lund kaldet Brightwood Glade sin egen blidere rytme, med lutter stille stier og spættet lys under grenene. Den er en blød modvægt til det spor, du følger, og værd at se, når vejen giver dig plads til at vandre."
+      "gladeBody": "Ikke hver historie i the Vale handler om de døde. Mod nord holder en solbeskinnet lund kaldet Brightwood Glade sin egen blidere rytme, med lutter stille stier og spættet lys under grenene. Den er en blød modvægt til det spor, du følger, og værd at se, når vejen giver dig plads til at vandre.",
+      "worldBossTitle": "Når tinden vågner: verdensbossen",
+      "worldBossBody": "Højt oppe på Tornetop samler stormen over Stormcrag sig undertiden til en skikkelse. Thunzharr, den Vågnende Tind rejser sig der i en fast rytme, en elementar af raidstyrke, der bekæmpes i den åbne verden af hvem end der svarer på kaldet, og han vokser sig mægtigere, jo flere udfordrere der stiller op mod ham. Alle, der slutter sig til kampen, tjener deres eget kast om hans bytte, hædret på raidspærrings-vilkår, og hans fald varer længe nok til, at de faldne kan løbe tilbage og gøre krav på deres del. Saml flere sværd, end du tror, du har brug for."
     },
     "questsPage": {
       "heading": "Opdrag",
@@ -2374,21 +3638,29 @@ export const da_DK: EnTranslations = {
       "intro": "Når den åbne verden ikke er nok, så saml et følge og træd ind i en instans: en privat kopi af et fangehul lavet kun til din gruppe.",
       "party": "Fangehuller er bygget til et følge på fem. Slutspilsraidet er for ti.",
       "soloLead": "Hvert fangehul åbner med en startopgave, der kan klares alene, så du altid ved, hvorfor du går derind.",
-      "levelAround": "Omkring niveau {n}",
       "levelExact": "Niveau {n}",
       "levelBand": "Niveau {min} til {max}",
       "partySize": "{n} spillere",
+      "levelAround": "Omkring niveau {n}",
       "raidSize": "Ti spillere, niveau {n}",
       "hollowName": "Den Hule Krypt",
-      "hollowBody": "En gravrøvet kapelkrypt, hvor de nyligt døde nægter at hvile. Den første rigtige prøve for et nyt følge.",
       "bastionName": "Den Sunkne Bastion",
-      "bastionBody": "En oversvømmet fæstning fortabt til sumpen, holdt af druknede forsvarere og den stigende tidevand selv.",
       "templeName": "Det Druknede Tempel",
-      "templeBody": "En måneoplyst helligdom sunket under en glødende tjern højt oppe i bjergene, nået gennem en port af koldt lys. En druknet kult synger stadig dernede i sine rådne klædninger, og advarslerne ristet på bredden siger, at noget dybt nede kun sover. Et selvstændigt mysterium, sat til side fra hovedhistorien, for de nysgerrige og de velforberedte.",
       "sanctumName": "Gravormens Helligdom",
+      "hollowBody": "En gravrøvet kapelkrypt, hvor de nyligt døde nægter at hvile. Den første rigtige prøve for et nyt følge.",
+      "bastionBody": "En oversvømmet fæstning fortabt til sumpen, holdt af druknede forsvarere og den stigende tidevand selv.",
+      "templeBody": "En måneoplyst helligdom sunket under en glødende tjern højt oppe i bjergene, nået gennem en port af koldt lys. En druknet kult synger stadig dernede i sine rådne klædninger, og advarslerne ristet på bredden siger, at noget dybt nede kun sover. Et selvstændigt mysterium, sat til side fra hovedhistorien, for de nysgerrige og de velforberedte.",
       "sanctumBody": "Tornetops mørke hjerte, hvor kultens lange arbejde når sit frygtelige højdepunkt.",
       "raidName": "Slutspilsraidet",
       "raidBody": "Bag en forseglet kongelig dør venter en prøvelse for ti spillere: en kamp i flere faser og en dødløs magt, som hele raidet må lukke ned sammen. Tjen din adgang, og medbring så ni venner.",
+      "heroicTitle": "Heroisk tilstand",
+      "heroicBody": "Hver fangekælder for fem spillere, og selve raidet, har en heroisk udgave, der venter hinsides niveauloftet. De samme haller, gjort om til en veludstyret slutspilsgruppe: alt slår hårdere, intet kan løbes fra til fods, og bosserne ryster lammelser og fastholdelser fuldstændig af sig. Voks fra de normale udgaver først; heroisk går ud fra, at du allerede har.",
+      "heroicHowBody": "Vælg sværhedsgraden, før din gruppe gør krav på instansen: skriv /dungeon heroic, eller slå Fangekældersværhedsgrad til på gruppemenuen. Valget deles af hele gruppen og låses fast ved døren, så en tur forbliver det, den blev gjort krav på som.",
+      "heroicRewardsTitle": "Heroiske Mærker og opgraderet bytte",
+      "heroicRewardsBody": "Heroiske bosser taber det bytte, du kender, opgraderet og mærket Heroisk i værktøjstippet, og den sidste boss i hver tur føjer episke genstande til, som ikke findes nogen andre steder. Det sidste drab efterlader også Heroiske Mærker til hver deltager: en valuta, du bruger hos Kvartermester Vex i Highwatch, hvis lager af ringe og halskæder er de eneste smykker i riget.",
+      "heroicLockoutBody": "Normale fangekældre kan løbes hele dagen. Heroisk kræver tålmodighed: drabet på den sidste boss spærrer alle i turen til én heroisk gennemførelse af den fangekælder om dagen, og raidet holder en daglig spærring for hver sværhedsgrad. En gennemført tur for fem spillere står stadig åben for dens egen gruppe til ligløb og bytte, så ingen bliver låst ude fra det, de har optjent der. Raidet er strengere: når først dets drab spærrer dig, forbliver døren lukket indtil den daglige nulstilling, så saml dit bytte, før du forlader arenaen.",
+      "resetTitle": "Nulstilling af dine instanser",
+      "resetBody": "Hvis du skifter sværhedsgrad, mens gruppen stadig har krævede gennemløb, bliver de gamle krav stående et stykke tid. Gruppelederen kan straks opgive dem ved at vælge Nulstil alle instanser i menuen på sit eget portræt eller skrive /dungeon reset. Sværhedsgraden skal faktisk være ændret, ingen levende eller faldne må være indenfor, og der er en kort nedkøling mellem nulstillinger. Ved døren på forkert sværhedsgrad advarer spillet før start. Raidet nulstilles aldrig sådan; dets egne låsningsregler gælder.",
       "templeLoreTitle": "Det Druknede Tempel, en smule dybere",
       "templeLoreBody": "Templet har sit eget sagn, ældre end den kult, du jagter andetsteds. På bredden af Glimmertjernet, en tjern der drikker måneskinnet og giver de druknede tilbage, holder en ensom vogter en port af blegt lys. Under overfladen løber en trappe af kold sten ned til den. De folk, der sank dér, druknede ikke ved et uheld: de var Det Blege Kor, der gik under i tilbedelse og aldrig holdt op med at synge. De gamle vogtere ridsede en enkelt advarsel i klipperne, før vandet tog dem, en bøn til noget, de kaldte Den Druknede Måne, med en mere fast hånd, der tilføjede to ord nedenunder: den sover blot.",
       "cryptLeadTitle": "En dør, de døde skulle holde lukket",
@@ -2430,6 +3702,7 @@ export const da_DK: EnTranslations = {
       "howHeading": "Sådan virker de",
       "howBody": "Talenter låses op på niveau 10, og du bliver ved med at tjene point, mens du klatrer mod grænsen. Du bruger dem i din klasses talentpanel, og du kan gemme mere end ét opsæt for at skifte mellem builds.",
       "shareNote": "En færdig build kan kopieres til en kort delbar kode og gives til en ven, der indsætter den direkte i sit eget talentpanel for at indlæse den.",
+      "choiceNote": "Nogle få point på hvert træ er en korsvej frem for et køb: knuden tilbyder to eller tre muligheder, og du binder dig til en af dem. Din næste nulstilling åbner valget igen, ligesom alt andet på træet.",
       "resetTitle": "Intet er permanent",
       "resetNote": "Du kan nulstille dine talenter når som helst, du er uden for kamp, så et tidligt valg er aldrig en fælde. Prøv tingene, se hvad du kan lide, og skift mening frit.",
       "specsHeading": "Specialiseringer efter klasse",
@@ -2471,6 +3744,10 @@ export const da_DK: EnTranslations = {
       "howMatch": "Ved kampstart byttes dit klassesæt ud med et sportssæt og gendannes nøjagtigt bagefter. Spark sigter mod jordsigtet, bolden preller af på banderne, og driblinger er bare at løbe med bolden. Scor flere mål end den anden side inden fuld tid; uafgjort går til gyldent mål.",
       "howTruce": "Ingen bløder på Somarken: tacklinger ender i kolbøtter, intet gør ondt, og kæledyr sidder kampen over.",
       "spectateBody": "Én kamp spilles ad gangen på stadion, og enhver kan gå hen og se med fra tribunerne.",
+      "bettingHeading": "Et lille væddemål ved rækværket",
+      "bettingBody": "Tilskuere ved Somarken kan bakke en side op, mens en kamp danner sig: indsatserne samles i en pulje, og ved slutfløjtet deler vinderne tabernes pulje i forhold til, hvad de satsede. En uafgjort kamp, eller en overraskelse, som ingen bakkede op, refunderer hver mønt. Spillere, der er sat ind i kampen, kan ikke vædde på den, og rækværket fører din livstidsstatistik over sejre, nederlag og nettomønter.",
+      "practiceHeading": "Træningskampe og den tomme bane",
+      "practiceBody": "Dalpokal-vinduet tilbyder også træning: en privat kopi af banen, hvor bots fylder begge sider ud, og intet tæller med i din statistik. Mangler du en spiller eller to til det virkelige? Efter en kort ventetid runder bots holdene af, og enhver kamp med bots på banen er en venskabskamp, aldrig rangeret. Og når Somarken står tom, giver botsene en opvisning, du kan se, og vædde på, fra tribunerne; i det øjeblik rigtige spillere melder sig klar, overlader opvisningen banen, og hver indsats gives tilbage.",
       "nationsHeading": "De otte bannernationer",
       "nationsBody": "Hvert hold spiller under et banner. Anføreren vælger nationen, og fører begge sider det samme, spiller udeholdet i den omvendte palet.",
       "nationVale": "Grøn og guld under hvedeneget: hjemmeholdet, bondekarle ind til benet.",
@@ -2485,6 +3762,40 @@ export const da_DK: EnTranslations = {
       "rolesBody": "Din rolle afgør det sæt, du bærer med ind på banen. Alle sparker; resten er temperament.",
       "rewardsHeading": "Fredens regler",
       "rewardsBody": "Fredens regler betyder ingen erfaring og intet bytte: en afgjort kamp tæller med i din statistik og på vindertavlen, og der følger daglige belønningspoint med. Deserterer du en kamp, sættes din plads på bænken, og Banemesteren husker det."
+    },
+    "deedsPage": {
+      "intro": "Bedrifternes Bog er stedet, hvor verden holder regnskab med alt, hvad du har udrettet, fra dine første skridt ud af startdalen til de hårdeste kampe, riget kan byde på. Opnå bedrifter, mens du spiller, bær de titler, de skænker, og se din hæder stige.",
+      "howHeading": "Sådan fungerer bedrifter",
+      "howBody": "Bedrifter opnås og bevares én karakter ad gangen, så hver helt, du spiller, bygger sin egen Bog; kun rigets rangliste samler din Hæder på tværs af alle de karakterer, du spiller, og tæller hver bedrift kun én gang. Hver bedrift fortæller ligeud, hvad den kræver af dig, lige der i Bedrifternes Bog inde i spillet, så du altid ved, hvad du skal jage, og du kan sætte sporing på dem, du går efter, så du har dem for øje, mens du spiller. Nogle ganske få holder sig skjult og giver sig først til kende, når du har opnået dem. Bogen holder også sig selv ærlig: hvad end din tidligere indsats kan bevise, krediterer den på stedet, så en veteran åbner den aldrig til en tom side; kun de tællende bedrifter begynder deres optælling forfra.",
+      "renownHeading": "Hæder",
+      "renownBody": "Hæder er den score, der står bag Bogen. Enhver bedrift du optjener er et bestemt beløb værd, og dit samlede antal stiger kun, så en stille uge koster dig aldrig fodfæste. En håndfuld bedrifter afhænger af held snarere end færdighed, og Bragder er en ære for sig selv, så begge er ikke værd nogen Hæder overhovedet. Bedrifter uden Hæder tæller stadig mod fuldførelse i din Bog; de scorer blot aldrig.",
+      "rewardsHeading": "Titler og rammer",
+      "rewardsBody": "Belønningerne er ren pynt, og det er hele pointen. Nogle bedrifter skænker en titel, du kan bære, eller en ramme om dit navn, men aldrig noget, der gør din helt stærkere. Vælg den titel, du ønsker, i Bedrifternes Bog, så følger den med på dit navneskilt, i chatten og på ranglisterne, hvor alle kan se den.",
+      "chroniclesHeading": "Krøniker",
+      "chroniclesBody": "Hver zone fører sin egen Krønike, en samling bedrifter nedfældet af en lokal krønikeskriver, der har sat sig for at optegne enhver rejsende, som lægger vejen forbi. Saul fra Østbæk Dal er den første af dem. En Krønike er delt i kapitler, og du kan frit arbejde dig igennem dem i den rækkefølge, der passer dig.",
+      "featsHeading": "Bragder",
+      "featsBody": "Bragder står på en hylde for sig: optegnelser over eftermæle og over det, der blev gjort først i hele verden, de bedrifter, der er bundet til en svunden tid eller et øjeblik, som kun indtræffer én gang. De giver ingen hæder og tæller ikke med i fuldførelsestallet, men bevares for altid som et minde om det, der blev gjort.",
+      "catalogHeading": "Den fulde fortegnelse over bedrifter",
+      "catalogBody": "Her står hver eneste bedrift, Bogen kan rumme, ordnet efter kategori. De hemmelige er udeladt med vilje; de venter på, at du finder dem. Åbn Bedrifternes Bog inde i spillet for at se præcis, hvad hver enkelt kræver.",
+      "standingsNote": "Rigerne fører løbende optælling over Hæder på tværs af alle konti: listen rangordner hele konti efter livstids Hæder, tæller hver bedrift én gang på tværs af alle dine karakterer, og den viser kun Hæder, så bedrifter uden Hæder aldrig påvirker stillingen, selvom de tæller i din Bog. For at se, hvem der står hvor, åbner du Resultatlisten i spillet og vender til dens Hæder-fane; stillingerne er der, ikke på wikien.",
+      "catHeading": "{label} ({count})",
+      "colName": "Bedrift",
+      "colRenown": "Hæder",
+      "colReward": "Belønning",
+      "featTag": "Bragd",
+      "rewardBorder": "Ramme",
+      "cat": {
+        "progression": "Fremgang",
+        "combat": "Kamp",
+        "dungeon": "Fangekældre",
+        "delve": "Delves",
+        "chronicle": "Krøniker",
+        "collection": "Samling",
+        "pvp": "PvP og Sport",
+        "social": "Socialt",
+        "exploration": "Udforskning",
+        "feat": "Bragder"
+      }
     },
     "wishPage": {
       "heading": "Ting jeg ville ønske jeg vidste",
@@ -2520,6 +3831,10 @@ export const da_DK: EnTranslations = {
       "lead": "Undersøg verdens helte, monstre og dæmoner på nært hold. Vælg en model, og træk derefter for at dreje den.",
       "intro": "Hver figur her er den samme model, du møder i spillet, gengivet live i din browser. Vælg en for at indlæse den.",
       "groupClasses": "Klasser",
+      "groupForms": "Druideformer",
+      "formBear": "Bruin-form",
+      "formCat": "Ulveform",
+      "formTravel": "Fleet-form",
       "groupCreatures": "Skabninger",
       "groupPets": "Heksemester-Dæmoner",
       "pickerLabel": "Vælg en model at se",
@@ -2532,12 +3847,16 @@ export const da_DK: EnTranslations = {
       "slotsBody": "Du har en våbenplads og syv rustningspladser. Hver klasse kan kun bruge bestemte våben og bærer rustning op til sin egen vægt, stof, læder eller ringbrynje, så de opgraderinger, der passer dig, er dem, der er lavet til din klasse. Inden for det, fyld hver plads med det bedste stykke, du finder.",
       "slotMainhand": "Våben",
       "slotHelmet": "Hoved",
+      "slotNeck": "Hals",
       "slotShoulder": "Skuldre",
       "slotChest": "Bryst",
       "slotWaist": "Talje",
       "slotLegs": "Ben",
       "slotGloves": "Hænder",
       "slotFeet": "Fødder",
+      "slotFinger": "Finger",
+      "bagsTitle": "Tasker og bæreplads",
+      "bagsBody": "Alt, hvad du samler op, ligger i én fælles taske, og du udvider den ved at udstyre tasker. Dit taskevindue har fire tasketilslutninger: klik på en taske i din pakke for at sætte den i en ledig plads, og hver taske, du bærer, føjer sin egen plads til. Simple tasker er billige handelsvarer, mere rummelige falder fra bæster, og de fineste kommer fra fangekælderbosser, så din bæreplads vokser side om side med dit udstyr.",
       "qualityTitle": "Kvalitet, med et blik",
       "qualityBody": "Hver genstand har en kvalitet, og dens navn er farvet til at matche, så du kan aflæse dens værd med et blik. Fra mest almindelig til mest eftertragtet:",
       "qualityPoor": "Ringe",
@@ -2552,6 +3871,8 @@ export const da_DK: EnTranslations = {
       "itemLevelBody": "Hvis du vil have en hurtig måde at sammenligne to genstande på, så slå Vis genstandsniveau til i indstillingerne. Hvert våben og rustningsstykke viser så et genstandsniveau, et enkelt tal for nogenlunde hvor stærkt det er ud fra, hvor det kom fra, så du med et blik kan se, hvilken opgradering der vejer tungest, selv på tværs af forskellige pladser.",
       "sourcesTitle": "Hvor udstyr kommer fra",
       "sourcesBody": "De fleste af dine tidlige opgraderinger er opgavebelønninger, så det betaler sig at gøre opgaver færdige frem for at grinde. Fjender taber udstyr, når du besejrer dem, handlende i byen sælger solide basisvarer, og spillermarkedet lader dig købe fra andre eventyrere.",
+      "soulboundTitle": "Sjælebundet: din og din alene",
+      "soulboundBody": "Nogle få særlige belønninger er sjælebundne, bundet til din karakter fra det øjeblik, du optjener dem. En sjælebunden genstand kan ikke byttes, sendes med posten, sælges til en handlende eller lægges op på markedet; den er din og din alene. I dag beskytter det præmietokens som Heroiske Mærker, mens det udstyr, du vinder, er dit at bytte, sælge eller dele frit.",
       "setsTitle": "Sæt og sætbonusser",
       "setsBody": "Den mest sjældne rustning kommer i matchede familier, flere stykker skåret til at se ud og kæmpe som ét. Bær nok af en familie på én gang, og sættet vågner og giver bonusser oven i hvert stykkes egne statistikker, og jo flere stykker du bærer, jo stærkere bliver det. De falder fra det sejeste gruppeindhold nær niveauloftet, så at jagte et fuldt sæt er et klassisk slutspilsmål.",
       "consumablesTitle": "Forbrugsvarer",
@@ -2572,32 +3893,332 @@ export const da_DK: EnTranslations = {
     },
     "professions": {
       "intro": "Ud over kamp og opdrag belønner verden dig for at arbejde med jorden og essen: at samle råmaterialer, forvandle dem til udstyr ved ti forskellige fags håndværksstationer og finde sig til rette i en identitet som en af de ti arketyper, fagene står for.",
-      "gatherTitle": "Samlerfag: Minedrift, Skovhugst og Urtekundskab",
-      "gatherIntro": "Tre samlerfag lader dig hente råmaterialer direkte ud af verden: Minedrift slår malm og sten løs fra årer, Skovhugst fælder tømmer i trægrupper, og Urtekundskab samler urter og planter, der vokser vildt. Hvert fag spores for sig, så arbejde i det ene aldrig sinker dine fremskridt i et andet.",
-      "gatherWhatTitle": "Ressourceforekomster",
-      "gatherWhatBody": "Malmårer, trægrupper og urtebede står ude i zonerne som synlige forekomster, som ingen ejer. Gå hen til en og interager med den for at høste, hvad den rummer. Når du har høstet en forekomst, skal den bruge tid på at komme sig, før du personligt kan høste den igen, men den blokerer aldrig for andre: en anden spiller kan høste den selvsamme forekomst i mellemtiden.",
-      "gatherProficiencyTitle": "Kyndighed og materialekvalitet",
-      "gatherProficiencyBody": "Hver vellykket høst opbygger din kyndighed i det samlerfag. Højere kyndighed forskyder, hvad du får ud af en forekomst, mod sjældnere materialegrader, fra almindelig og opefter, selvom de sjældneste grader forbliver sjældne selv ved høj kyndighed. Mere øvelse skader aldrig dine odds, den forbedrer dem kun.",
-      "gatherToolsTitle": "Fagets værktøj",
-      "gatherToolsBody": "Handlende sælger grundlæggende værktøj til hvert samlerfag, og bedre kan fremstilles, så arbejdet ved en ressourceforekomst gerne skulle føles stærkere og stærkere, efterhånden som du udstyrer dig til det, frem for at stå i stampe. Værktøj af højere grad er den tiltænkte vej til at få adgang til rigere forekomster og arbejde dem mere effektivt over en lang session.",
-      "craftTitle": "De ti håndværk",
-      "craftIntro": "Ti håndværksfag forvandler indsamlede materialer til færdigt udstyr og varer: Rustningssmedning, Våbensmedning og Juvelering former råstof til udstyr, man kan bære; Alkymi og Ingeniørkunst drives af forsøg og fejl; Madlavning, Skriverkunst og Fortryllelse rører hver ved andre håndværks frembringelser; Skrædderi og Garveri arbejder ud fra nøjagtige mønstre. Sammen danner de et hjul, hvor hvert håndværk sidder ved siden af to naboer og over for ét andet.",
-      "craftRingTitle": "Et hjul af specialer",
-      "craftRingBody": "De ti håndværk er ordnet i en fast ring, og hvor et håndværk sidder på ringen, betyder noget: håndværk ved siden af hinanden på hjulet har mere til fælles end håndværk på modsatte sider. At binde sig til ét håndværk skal føles som at træde ind i en familie af beslægtede fag, ikke som at vælge en isoleret færdighed.",
-      "craftRecipesTitle": "Opskrifter og reagenser",
-      "craftRecipesBody": "Hvert håndværk har sine egne opskrifter, som hver kræver bestemte reagenser, du samler eller køber. De mest grundlæggende opskrifter i hvert håndværk kræver ikke andet end almindelige materialer og kan laves fra første færd, så du kan begynde at arbejde med et fag i samme øjeblik, du tager det op, i stedet for at vente på at låse det op.",
+      "harvestTitle": "At høste selve jagten",
+      "harvestBody": "Indsamling stopper ikke ved ressourcekilder. Mange dræbte bæster kan høstes én gang hver, den der kommer først betjenes først, for skind, huggtænder, silke og kød direkte fra liget ved siden af dets almindelige bytte; ét tryk åbner begge. Valget er dit hver gang: strip alt, liget byder på, eller koncentrer dig om færre komponenter og tag en mærkbart finere kvalitet af det, du faktisk tager.\n\nEt sjælden eller bedre høsteresultat på en prøve-bærende familie giver også et signeret perfekt eksemplar (et Uberørt Skind, Uberørt Silke, Uberørt Giftkirtel eller Førsteklasses Udskæring) oven i det ordinære udbytte og optegner Et Perfekt Eksemplar i din Bedrifternes Bog. Enhver karakter kan høste, ingen træning kræves, og ethvert indsamlingsredskab, du ejer, tæller mod premium-armen, uanset hvilket håndværk det tilhører.",
+      "focusTitle": "Byfokus",
+      "focusBody": "Hver hjemmebase har et Byfokus-panel for besøgende høstere: stå i byen, åbn det ved siden af minikortet, og ret et lille budget af fokuspoint mod de komponenttyper, du bryder dig om. Jo mere fokus du giver en komponent, jo finere og rigere kommer den af hvert senere lig; din fordeling følger din karakter, hvor end den færdes, og du kan omarbejde den, gratis, ved ethvert senere besøg i byen.",
+      "craftHowTitle": "Håndværksvinduet",
       "craftMasteryTitle": "Færdighed og mesterskab",
       "craftMasteryBody": "Vellykket håndværk opbygger færdighed i faget, og rigere opskrifter er låst bag højere færdighed: de grundlæggende opskrifter er åbne for alle, mens stadig mere avancerede kræver stadig mere mesterskab at forsøge sig med. At øge din færdighed i et håndværk er vejen fra simple begyndervarer til fagets mere ambitiøse opskrifter.",
-      "craftComboTitle": "Kombinationsopskrifter",
-      "craftComboBody": "Ud over et enkelt håndværks egen opskriftsliste understøtter hjulet også kombinationsopskrifter, der trækker på to nabohåndværk på én gang, og belønner en karakter (eller et par handelspartnere), som har investeret i tilstødende fag på ringen frem for ét i isolation.",
-      "archetypeTitle": "De ti arketyper",
-      "archetypeIntro": "Hvert af de ti håndværk står også for en arketype, en bredere identitet du kan påtage dig ud over blot at arbejde med faget. Din aktive arketype er ét valg ad gangen, ikke en tjekliste: du bærer én og kan senere skifte til en anden, hvis du vil.",
       "archetypeChooseTitle": "Valg af din arketype",
       "archetypeChooseBody": "Du erklærer din første arketype gennem et tidligt historieopdrag i zone et, som formelt optager dig i den identitet. Før du har fuldført det opdrag, har du slet ikke valgt en arketype endnu.",
-      "archetypeSwitchTitle": "At skifte mening",
       "archetypeSwitchBody": "At have erklæret en arketype én gang låser dig ikke fast for evigt. At skifte til en anden arketype kræver først, at du fuldfører et gentageligt \"gør bod\"-opdrag for din gamle, og hver gang du skifter, bliver den bod, der forventes af dig næste gang, lidt større, så et skifte forbliver meningsfuldt frem for omkostningsfrit.",
+      "whatHeading": "Et håndværk ved siden af sværdet",
+      "whatBody": "Professioner er verdens arbejdsliv: fire indsamlingsfag, der trækker råmaterialer direkte ud af landet, og en ring af ti håndværk, der omdanner dem til udstyr, måltider, drikke og værktøjer. Alt fodrer noget andet her. Det malm, du miner, bliver et sværd, sværdet tager en fortryllelse, og fortryllelsen har brug for støv brudt ud af gammelt udstyr, så en indsamler, en håndværker og en pusler er alle led i én kæde.\n\nDer er ingen professionsgrænse at kvæles over. Enhver karakter kan hæve alle otte håndværk med indhold i dag og alle fire indsamlingsprofessioner side om side; det eneste eksklusive valg er din arketype, den identitet du til sidst sværger dig til, selvom de håndværk, der falder inaktive bag den, stopper med at klatre, når du stemmer ind. Færdighed falder aldrig, og intet, du lærer, tages nogensinde fra dig.",
+      "ringHeading": "Håndværksringen",
+      "ringBody": "Hvert håndværk med indhold i dag topper ud ved 125 færdighed: Våbensmedning, Rustningssmedning, Skrædderkunst, Læderbearbejdning, Madlavning, Alkymi, Ingeniørkunst og Fortryllelse. Ved en grænse fortsætter faget med at virke, høster giver stadig udbytte, fremstillinger løses stadig, og mesterværker kan stadig opstå; kun tallet stopper med at klatre. Vælg et kort nedenfor for et håndværks fulde opskriftstabeller og tal.",
+      "ringWaveNote": "To håndværk på hjulet, Juvelkunst og Inskription, holder deres pladser, men leveres uden opskrifter endnu. Det er tilsigtet frem for en forglemmelse: deres indhold ankommer med fremtidige zoner, og grænserne ovenfor stiger på samme måde, så et håndværk, der er ved loftet i dag, er et forspring på den udvidelse, ikke en mållinje.",
+      "capFmt": "Grænse {cap}",
+      "comingSoon": "Ingen opskrifter endnu",
+      "gatherHubHeading": "Indsamling",
+      "gatherHubBody": "Fire indsamlingsfag fodrer ringen fra felten: Minedrift, Skovhugst og Urtesamling trækker malm, tømmer og urter ud af landet og topper ud ved 100 færdighed, mens Fiskeri kører på sin egen bid-og-hiv-rytme hele vejen til 200. Hver side nedenfor bærer de præcise ressourcekildekort, værktøjsstiger og odds.",
+      "archetypesHeading": "Hjulet og dets arketyper",
+      "archetypesBody": "De ti håndværk sidder på et fast hjul, og geografi på det hjul betyder noget. Hvert par naboer danner et navngivet par: Smed for Våbensmedning og Rustningssmedning, Udstyrsmager for Læderbearbejdning og Skrædderkunst, Apoteker for Alkymi og Madlavning, Bombardér for Ingeniørkunst og Alkymi, og seks til rundt om ringen.\n\nAt stemme ind på et par er en opgave, ikke et menuklik. Fire par kan tilsluttes i dag (Smed, Udstyrsmager, Apoteker og Bombardér), hver forankret af en tilstedeværende mester i Østbæk, hvis acceptopgave fremlægger hele aftalen på forhånd, inden du tager den. Inden du erklærer, avancerer hvert håndværk frit på opskrifter op gennem sjælden niveau, så du kan prøve alt, inden du vælger.\n\nNår du stemmer ind, bliver dine to par-håndværk dine hovedfag, uden loft kortere end grænsen. Resten af hjulet slukker ikke: ét håndværk modsat dine hovedfag forbliver som en hobby, der fortsætter med at klatre til og med sjælden niveau (en gentagelig opgave ved Smed Haldrens esse lader dig bytte om på, hvem det er), og alle andre håndværk går inaktive. Et inaktivt håndværk beholder sine færdigheder og sine almindelige opskrifter; det stopper blot med at klatre og producerer aldrig et mesterværk, mens det hviler.",
+      "pairFmt": "{a} og {b}",
+      "curveHeading": "Mesterskabskurven",
+      "curveBody": "Færdighedsoptjening følger én regel overalt, den fire-tilstands Mesterskabskurve. Hvert {step} points færdighed er et niveau, og hver opskrift scores ud fra, hvor den sidder mod dit: på eller over dit niveau giver den fuld optjening, ét niveau under giver halvt, to under en fjerdedel, og tre eller flere under intet overhovedet.\n\nHåndværksvinduet maler dette direkte på opskriftslisten i de klassiske farver: orange for fuld optjening, gul for reduceret, grøn for et dryp, grå for ingen. Optjening er deterministisk, aldrig et tilfældigt færdighedspoint, så den samme fremstilling på samme niveau flytter altid din færdighed med præcis det samme, og en opskrift, der skifter til gul, er dit signal om at træne det næste trin.\n\nIndsamling kører på den samme kurve med det samme niveau-trin, scoret mod ressourcekilden frem for en opskrift: lette ressourcekilder grår ud, når du passerer dem, og de rigere ressourcekilder i de senere zoner er det, der afslutter en klatring. Fiskeri holder sin egen plan: et helt point pr. fangst under 50 færdighed, halvt til 100, en tiendedel til 150, og en langsom hale hele vejen til 200, med skrammel-fangster der ikke lærer noget fra 100 og opefter.",
+      "provenanceHeading": "Proveniensbevis",
+      "provenanceBody": "Fint arbejde i denne verden husker sin maker: sjælden eller bedre høster og fremstillinger ankommer signerede (Indsamlet af, Fremstillet af), et mesterværk afslutter ét kvalitetstrin højere med makerens navn altid på, og et kommissionsstykke binder sig til sin modtager gennem Makerens Pagt. Siden om Håndværksøkonomi bærer de fulde regler, fra signaturer og stabling til aflæsningsgebyrer.",
+      "stationsHeading": "Stationer og de tre knudepunkter",
+      "stationsBody": "Seks typede stationer betjener de syv stationsbundne håndværk, spredt over de tre by-knudepunkter. Østbæk rummer essen (Våbensmedning og Rustningssmedning deler den), køkkenerne, vævsstolen og værkstedet; Fenbridge har garveriet, og Højvagt apoteket. Hver station har en tilstedeværende mester ved siden af, der underviser opskrifter, slår arbejdsopgaver op og tilbyder aflæsningstjenesten.\n\nArbejdsradien er 20 yards, omtrent stationens eget gårdrum, så du fremstiller stående ved amboltene frem for fra den anden side af byen. Juvelkunst, Inskription og Fortryllelse har ingen station: de to første afventer deres opskrifter, og Fortryllelse virker overalt af design.",
+      "deedsHeading": "Bedrifter, der husker rejsen",
+      "deedsBody": "Bedrifternes Bog går ved siden af hvert skridt af dette. Din første afstemning optjener Håndværkssvoren og dit første mesterværk optjener Mesterbygger, begge kan bæres som titler. Hvert af de otte optjenbare håndværk markerer en milepæls-bedrift ved 50 færdighed og kroner sin grænse med en Grandmestertitel, mens Fiskeri får Gammel Søulk ved 100 færdighed og Mesterangler-titlen ved 200.\n\nDer er stille sider også: bedrifter for din første høst og første fremstilling, for de sjældne fund, som held bringer frem i felten, og for at tage fat på ophug. Alt dette er kosmetisk, titler og Hæder alene. En bedrift giver aldrig magt; den beviser kun, at du var der.",
+      "startHeading": "Hvor du begynder",
+      "startBody": "Frisk ankommet til Østbæk? Find Formand Odell og tag Et Håndværk til Hver Hånd: han peger dig mod malmårerne omkring Kobbergraven sydvest for byen og giver dig dine første hårde hænder. Fra da af, høst enhver åre, tømmerstamme og urterand, du passerer, mens du løser opgaver; færdighed kommer naturligt til rejsende.\n\nTilbage i byen trykker du T for at åbne håndværksvinduet og arbejde de almindelige opskrifter, enhver karakter kender fra starten. Besøg mestrene ved essen, køkkenerne, vævsstolen og værkstedet for at se, hvad de underviser, og tag deres arbejdsopgaver for stabil møntindtægt. Inden Laugets brev finder dig, vil du allerede vide, hvilket par der føles som hjemme.",
+      "colStation": "Station",
+      "colHub": "Knudepunkt",
+      "colMaster": "Mester",
+      "masterCellFmt": "{name}, {title}",
+      "archetypeIdentityBody": "Din aktive arketype er en erklæring om, hvem din karakter er i verden, og den anerkendes i, hvordan andre og verden tiltaler dig. De præcise belønninger og den anerkendelse, der følger med, er stadig ved at blive fastlagt; kig forbi igen, efterhånden som systemet vokser til.",
       "archetypeIdentityTitle": "Hvad din arketype betyder",
-      "archetypeIdentityBody": "Din aktive arketype er en erklæring om, hvem din karakter er i verden, og den anerkendes i, hvordan andre og verden tiltaler dig. De præcise belønninger og den anerkendelse, der følger med, er stadig ved at blive fastlagt; kig forbi igen, efterhånden som systemet vokser til."
+      "archetypeIntro": "Hvert af de ti håndværk står også for en arketype, en bredere identitet du kan påtage dig ud over blot at arbejde med faget. Din aktive arketype er ét valg ad gangen, ikke en tjekliste: du bærer én og kan senere skifte til en anden, hvis du vil.",
+      "archetypeSwitchTitle": "At skifte mening",
+      "archetypeTitle": "De ti arketyper",
+      "craftComboBody": "Ud over et enkelt håndværks egen opskriftsliste understøtter hjulet også kombinationsopskrifter, der trækker på to nabohåndværk på én gang, og belønner en karakter (eller et par handelspartnere), som har investeret i tilstødende fag på ringen frem for ét i isolation.",
+      "craftComboTitle": "Kombinationsopskrifter",
+      "craftIntro": "Ti håndværksfag forvandler indsamlede materialer til færdigt udstyr og varer: Rustningssmedning, Våbensmedning og Juvelering former råstof til udstyr, man kan bære; Alkymi og Ingeniørkunst drives af forsøg og fejl; Madlavning, Skriverkunst og Fortryllelse rører hver ved andre håndværks frembringelser; Skrædderi og Garveri arbejder ud fra nøjagtige mønstre. Sammen danner de et hjul, hvor hvert håndværk sidder ved siden af to naboer og over for ét andet.",
+      "craftRecipesBody": "Hvert håndværk har sine egne opskrifter, som hver kræver bestemte reagenser, du samler eller køber. De mest grundlæggende opskrifter i hvert håndværk kræver ikke andet end almindelige materialer og kan laves fra første færd, så du kan begynde at arbejde med et fag i samme øjeblik, du tager det op, i stedet for at vente på at låse det op.",
+      "craftRecipesTitle": "Opskrifter og reagenser",
+      "craftRingBody": "De ti håndværk er ordnet i en fast ring, og hvor et håndværk sidder på ringen, betyder noget: håndværk ved siden af hinanden på hjulet har mere til fælles end håndværk på modsatte sider. At binde sig til ét håndværk skal føles som at træde ind i en familie af beslægtede fag, ikke som at vælge en isoleret færdighed.",
+      "craftRingTitle": "Et hjul af specialer",
+      "craftTitle": "De ti håndværk",
+      "gatherIntro": "Tre samlerfag lader dig hente råmaterialer direkte ud af verden: Minedrift slår malm og sten løs fra årer, Skovhugst fælder tømmer i trægrupper, og Urtekundskab samler urter og planter, der vokser vildt. Hvert fag spores for sig, så arbejde i det ene aldrig sinker dine fremskridt i et andet.",
+      "gatherProficiencyBody": "Hver vellykket høst opbygger din kyndighed i det samlerfag. Højere kyndighed forskyder, hvad du får ud af en forekomst, mod sjældnere materialegrader, fra almindelig og opefter, selvom de sjældneste grader forbliver sjældne selv ved høj kyndighed. Mere øvelse skader aldrig dine odds, den forbedrer dem kun.",
+      "gatherProficiencyTitle": "Kyndighed og materialekvalitet",
+      "gatherTitle": "Samlerfag: Minedrift, Skovhugst og Urtekundskab",
+      "gatherToolsBody": "Handlende sælger grundlæggende værktøj til hvert samlerfag, og bedre kan fremstilles, så arbejdet ved en ressourceforekomst gerne skulle føles stærkere og stærkere, efterhånden som du udstyrer dig til det, frem for at stå i stampe. Værktøj af højere grad er den tiltænkte vej til at få adgang til rigere forekomster og arbejde dem mere effektivt over en lang session.",
+      "gatherToolsTitle": "Fagets værktøj",
+      "gatherWhatBody": "Malmårer, trægrupper og urtebede står ude i zonerne som synlige forekomster, som ingen ejer. Gå hen til en og interager med den for at høste, hvad den rummer. Når du har høstet en forekomst, skal den bruge tid på at komme sig, før du personligt kan høste den igen, men den blokerer aldrig for andre: en anden spiller kan høste den selvsamme forekomst i mellemtiden.",
+      "gatherWhatTitle": "Ressourceforekomster"
+    },
+    "profPages": {
+      "back": "Tilbage til Professioner",
+      "capLabel": "Færdighedsloft",
+      "stationLabel": "Station",
+      "stationNone": "Ingen station nødvendig",
+      "stationAnywhere": "Overalt",
+      "mastersLabel": "Mestre",
+      "masterFmt": "{name} ({hub})",
+      "specializationLabel": "Specialisering",
+      "specializationFact": "Færdighed {at}: {pct}% materialerabat",
+      "matFmt": "{name} x{count}",
+      "outputFmt": "{name} x{count}",
+      "comboReq": "Kræver {a} og {b}",
+      "sourceTrainerFee": "Træner, {fee}",
+      "sourceTrainerFree": "Træner, gratis",
+      "sourceKnown": "Kendes fra starten",
+      "gainFmt": "{reduced} / {minimal} / {zero}",
+      "colRecipe": "Opskrift",
+      "colSkill": "Færdighed",
+      "colSource": "Kilde",
+      "colStation": "Station",
+      "colMaterials": "Materialer",
+      "colQuality": "Kvalitet",
+      "colGain": "Gevinst aftager ved",
+      "colMaterial": "Materiale",
+      "colTool": "Redskab",
+      "colTier": "Niveau",
+      "colPrice": "Pris",
+      "colZone": "Zone",
+      "colNodes": "Ressourcekilder",
+      "colNodeTier": "Ressourceniveau",
+      "colToolNeeded": "Redskab krævet",
+      "craftIntro": {
+        "weaponcrafting": "Våbensmedning er våbenbænken på Østbæks smedje: økser, køller, klinger, spyd og endda en troldmands stav, fra kobberstartere til sjælden osmium- og glyfstålarbejde. Et våben er den mest mærkbare opgradering et niveau kan købe, så en våbensmed er den ven, alle husker at skaffe sig.",
+        "armorcrafting": "Rustningssmedning hamrer ringbrynje, den tungeste rustning en håndværker kan fremstille, fra nittet kobber-basis til det sjældne osmiumskæl-sæt, med et par trolddomsstatistik-stykker på siden. Dens kunder er dem, der står der, hvor slagene lander.",
+        "tailoring": "Skrædderkunst væver det Intellekt- og Ånd-klæde, som troldmænd lever i, fra grovvævet basis over gyldenvæv-sættet til sjælden solvæv-arbejde, og syr Silkebundet Taske, en ti-pladser som ingen nogensinde afviser.",
+        "leatherworking": "Lærbearbejdning garver Smidighed- og Udholdenhedsudstyr til de klasser, der undviger frem for at blokere, fra Fenbro-skind-basis til det sjældne sumpvogter-sæt, og det er det ene dybe håndværk, der trænes ude i mosen.",
+        "cooking": "Madlavning forvandler dagens fangst til måltider med siddeplads, der heler over 18 sekunders hvile, den billigste heling i spillet, fra Saltet Rykkekød hele vejen til Marlows Store Steg. Alle spiser, så intet håndværk er mere universelt velkomment i en gruppe.",
+        "alchemy": "Alkymi forvandler urter, kirtler og glas til flasker, der vinder kampe: helbreds- og manadrikke til det øjeblik, tingene går galt, og udholdenhedsmikstur der sidder på din forstærkningsbjælke gennem hele en fangekælder.",
+        "engineering": "Ingeniørkunst bygger de redskaber, enhver seriøs indsamler ender med at ville have: niveau 4- og niveau 5-hakker, økser og segl som ingen sælger nogensinde vil lagerføre, og som hver forbruger redskabet under sig.",
+        "enchanting": "Fortryllelse piller udstyr fra hinanden og sætter kraften tilbage: nedbryd uønskede stykker til arkanmaterialer, og brug dem derefter på en permanent statistikbonus til et stykke, du agter at beholde. Ingen station, ingen læremester, og enhver kan starte dag et."
+      },
+      "craftProse": {
+        "weaponcrafting": {
+          "identityHeading": "Eggen enhver kæmper handler efter",
+          "identityBody": "Nogen i enhver gruppe vil have dette håndværks arbejde, for det sjældne trin alene dækker alle tre appetitter: Osmium-Krigsklingen til Styrke-nærkamp, Glyfstål-Krigsøksen til Smidigheds-krigere, og Højfyrre-Kampstaven, en Intellekt og Ånd-stav til kåbeklædte.\n\nPå håndværkshjulet står det mellem Rustningssmedning og Juvelkunst. Dens levende identitet er Smed, Våbensmedning og Rustningssmedning-parret, svoret over for Smedemester Darva ved smedjen ved at bearbejde tre malmårer med egne hænder; Klingesmeds-parret med Juvelkunst er også navngivet på hjulet, men kan endnu ikke sværges, da Juvelkunst ikke sender nogen opskrifter til en senere zone-udvidelse.",
+          "materialsHeading": "Hvad smedjen fortærer",
+          "materialsBody": "Minedrift er rygraden. Kobbermalm kommer fra niveau 1-årer i Østbæk-Dalen, jernmalm fra Mirefen-Mosen, og osmiummalm fra Tornetop-Højderne, og hvert trin på stigen følger det samme mønster opad. Skovhugst betyder mere, end du måske forventer: jernbark udgør spydstokken på vildsvinespydet, asketræ bærer slaghammerens skæft, og en enkelt højfyrrestamme danner kampstaven.\n\nResten kommer fra jagten og disken. Råt skind til grebet høstes direkte fra ulve- og vildsvinekadavere, knoglefragmenter falder fra hverdagsdrab, og smedjetrappen brænder Smedjeflux, 20 kobber pr. krukke hos Darva selv. Hvis din egen minedrift halter bagud, sælger Darva osmiummalm ved smedjen og Opfinder Gizzel lagerfører glyfstålbarer ved værktøjsværket, til en pris der gør indsamlingsvenner til et godt køb.",
+          "ladderHeading": "Stigen, trin for trin",
+          "ladderBody": "En marksopskrift, det Østbækske Armeringssværd, kendes af alle fra starten og fremstilles overalt fra jagtudbyttet (et par ulve-huggtænder og knoglefragmenter) plus seks Smedjeflux fra smeddisken. Den rigtige stige er ni læreopskrifter i tre trin, alle smedjebundne: kobber-trinnet (skægsøkse, flanget kølle, vildsvinespyd) er gratis at lære ved færdighed 0, jerntrinnet (langsværd, stridshammer, dolk) åbner ved færdighed 25 for 25 sølv per opskrift, og osmium-trinnet (krigsklingen, krigsøksen, kampstaven) åbner ved færdighed 50 for 1 guld per opskrift. Darva underviser en opskrift, så snart dit niveau i håndværket når dens eget, så hvert trin låses op præcis, når dets færdighedsbånd begynder.\n\nEndnu en opskrift bærer parret: Gravormens Handsker, et lærer-undervist kombinationsstykke, som kun en indstillet Smed med begge Våbensmedning og Rustningssmedning på færdighed 25 kan arbejde med, og det kræver ingen station overhovedet.",
+          "routeHeading": "Mesterværker, og en arbejdende rute til 125",
+          "routeBody": "Ethvert stykke med en rigtig statistiklinje, hvilket på denne stige betyder jerntrinnet og opefter, kan komme fra ambolten som et mesterværk; de statistikløse kobberalmenvæsenerne frembringer aldrig et, fordi der ikke er noget i dem at forbedre. Jern tæller som et niveau 1-materiale til mesterværksbonussen, Højfyrre og glyfstål som niveau 2, så det øverste trin frembringer lidt oftere.\n\nRid kobbertrinnet til 25, træn jerntrinnet den dag det åbner og rid det til 50, derefter osmiumtrinnet til 75. Ud over 75 er intet højere klar endnu, så osmium-opskrifterne fader til halvt og derefter kvartsgevinst: budgetér med ca. 150 håndværk mere for at nå loftet på 125, og husk den delte begrænsning på ti håndværkshandlinger pr. minut, når du sætter dig til at lave en batch.\n\nFinansier klatringen efterhånden: Darvas smedjearbejdsordre tager otte kobbermalm fra dine hænder hvert 30. minut mod lidt mønt og XP, og jern- og osmiumtrinnet sælger ærligt til levelende nærkampsfægtere. Bedrifternes Bog markerer Æg og Hærde ved færdighed 50 og kroner Stormester i Våbensmedning ved 125."
+        },
+        "armorcrafting": {
+          "identityHeading": "Ringbrynje til frontlinjen",
+          "identityBody": "Rustningssmedningens stige læses som en soldaters karriere: den enkle nittede kobberbælte, sabatons og handsker til at starte, jernkæde-brynje, benvogter og skulderplader med deres første rigtige statistiklinjer, og den sjældne osmiumskæl-storhjælm, kørease og benbeklædning, Styrke og Udholdenhedsstykker med de største rustningstal en håndværker kan lave.\n\nDen har også en mere stille side: Østbæks Vartede Benbeklædning, et trolddoms-statistik-fæltes almenvæsen, og Ovnskæl-Kappe, en sjælden Intellekt og Ånd ringbrynje-skulder ved færdighed 75, holder den trolddomsorienterede ringbrynje-bærer på kunderlisten. På hjulet sidder det mellem Våbensmedning og Ingeniørkunst; Smedde-parret med Våbensmedning sværges over for Smedemester Darva, mens Tandhjulsbygger-parret med Ingeniørkunst er navngivet men endnu ikke har en edquest.",
+          "materialsHeading": "Malm i sækkevis",
+          "materialsBody": "Intet håndværk sluger malm hurtigere. Jernkæde-brynjen alene kræver fem jernmalm, og hvert osmiumskæl-stykke vil have tre eller fire osmium plus en glyfstålbar, så en seriøs rustningsmed miner Mirefen-Mosen og Tornetop-Højderne eller betaler nogen, der gør det. Kobber forsyner det første trin, direkte fra årer ved Kobbergraven.\n\nRundt om metallet går de bløde dele: groft skind høstet fra ulve- og vildsvine-lig, knoglefragmenter og linnedrester fra almindelig jagt, og en krukke Smedjeflux (20 kobber ved smedjen) i næsten enhver opskrift. Darva sælger osmiummalm over skranken til utålmodige.",
+          "ladderHeading": "At lære ved Darvas smedje",
+          "ladderBody": "To almenvæsener, Østbæks Kæde-Vest og Vartede Benbeklædning, kendes fra starten og fremstilles overalt. Lærerstigen er ni opskrifter i tre trin på Østbæks smedje: kobber-trinnet er gratis ved færdighed 0, jernkæde-trinnet koster 25 sølv per opskrift ved færdighed 25, og osmiumskæl-trinnet koster 1 guld per opskrift ved færdighed 50, og hvert trin kan undervises så snart dit niveau når det.\n\nUd over stigen sidder to specials. Bundstenshjelmen er Smeddenes kombinationsopskrift, lærer-underviser, stationsfri, og kun til rådighed for en indstillet Smed med begge håndværk på færdighed 25. Ovnskæl-Kappen behøver ingen læremester overhovedet: alle kender den, men ved færdighed 75 og smedje-bundet, er det håndværkets niveau 3-toppunkt.",
+          "routeHeading": "Mesterværker, og en praktisk vej til 125",
+          "routeBody": "Fra jernkæde-trinnet og op ruller ethvert håndværk mesterværk-chancen; rustnings-kun kobber-almenvæsener kan ikke udløse proc, da et mesterværk forbedrer statistik og de har ingen. Jern tæller som et niveau 1-materiale for proc og glyfstål som niveau 2.\n\nKlatringen er den standard tre-trins tur: kobber til 25, jernkæde til 50, osmiumskæl til 75, og undervisning af hvert trin den dag det åbner. Hvor Rustningssmedning er heldig er stræket efter 75: Ovnskæl-Kappen er en niveau 3-opskrift, så den betaler fuld gevinst til 99 og halvt derefter, hvilket betyder de sidste halvtreds point tager omkring 75 fremstillinger i stedet for de 150 et håndværk uden et toppunkt behøver. Hver kappe koster syv osmiummalm og fem Smedjeflux, så lager op i Tornetop og ved smeddisken, inden du starter kørslen.\n\nDarvas arbejdsordre køber otte kobbermalm hvert 30. minut for mønt og EXP, en god afvandingsventil for det lave-niveau malm du vokser fra. Bogen af Bedrifter markerer Hammer og Plader ved færdighed 50, og Stormester i Rustningssmedning venter ved 125-loftet."
+        },
+        "tailoring": {
+          "identityHeading": "Klæde til troldmændene, tasker til alle",
+          "identityBody": "Stigen klatrer fra grovvævet basis over gyldenvæv-sættet til det sjældne trin: Silkebinderens Klædedragt og solvæv-stykkerne. Dens andet erhverv er universelt: Silkebundet Taske er en ti-pladser, og der er ingen klasse, specialisering eller niveau der ikke vil have mere taskeplads.\n\nPå hjulet sidder Skrædderkunst mellem Lærbearbejdning og Inskription. Dens levende par er Udstyrsmager, Lærbearbejdning og Skrædderkunst sammen, svoret over for Væver Ottilie ved Østbæks væv efter at have ryddet fire nettedskov-edderkopper for deres silke; Blækvæver-parret med Inskription er navngivet på hjulet men afventer Inskriptionens første opskrifter, inden det kan sværges.",
+          "materialsHeading": "Tråd, silke og ja, urter",
+          "materialsBody": "Væven kører på hvad jagten taber og hvad markerne gror. Linnedstrimler og grovvævet klæde kommer fra humanoid-drab, edderkoppesilke høstes fra edderkoppe-lig, og det sjældne trins centerpiece, Silkebinderens Klædedragt, vil have en Uberørt Silke, det signerede eksemplar et heldigt lig-høst frembringer.\n\nUrtekundskab forsyner skrædderkunst mere end noget andet udrustningshåndværk: glansbladet trimmer tøflerne, guldblad farver gyldenvæv-sættet, og solkrone trævler hele det sjældne trin, så en skrædder der plukker sine egne urter sparer støt. En Trådspolde koster 12 kobber fra Ottilie, og væven kræver intet metal overhovedet: selv Vardvæv-Kappens toppunkt er vævet af premium-urter, Uberørt Silke, edderkoppesilke og tråd.",
+          "ladderHeading": "At lære ved Ottilies væv",
+          "ladderBody": "To fæltes almenvæsener, Østbæks Uldbenklæder og Ritualklædning, kendes fra starten og fremstilles overalt. Lærerstigen løber ved væven syd for Østbæks brønd: grovvævet trin (hætte, vanter, tøfler) er gratis ved færdighed 0, gyldenvæv-trinnet (kappe, benbeklædning og Silkebunden Taske) koster 25 sølv per opskrift ved færdighed 25, og det sjældne trin (klædedragt, skulderkappe, skridt) koster 1 guld per opskrift ved færdighed 50.\n\nVardvæv-Kappen behøver ingen læremester: alle kender den, men den sidder ved færdighed 75 og er væv-bundet som håndværkets niveau 3-toppunkt. Som alle andre steder underviser Ottilie en opskrift, så snart dit niveau i Skrædderkunst når opskriftens eget niveau.",
+          "routeHeading": "Mesterværker, og en praktisk vej til 125",
+          "routeBody": "En Uberørt Silke i klædedragten dækker mesterværkets signerede-reagens-bonus alene, og guldblad og solkrone tæller som niveau 1- og niveau 2-materialer for proc, så det sjældne trin er der, oddsen topper. Slette, statistikløse arbejder som tasken udløser aldrig proc: et mesterværk forbedrer statistik, og en taske har ingen.\n\nSy grovvævet trin til 25, træn gyldenvæv den dag det åbner og rid det til 50, derefter det sjældne trin til 75. Fra 75 overtager Vardvæv-Kappen: en niveau 3-opskrift, fuld gevinst til 99 og halvt derefter, ca. 75 fremstillinger for de afsluttende halvtreds point, og hver koster to Uberørt Silke, fire edderkoppesilke, et par af henholdsvis solkrone og guldbladsurter, og to tråd.\n\nFaa klatringen til at betale for sig selv: tasker sælges til bogstaveligt talt alle, og Ottilies væv-arbejdsordre køber seks edderkoppesilke hvert 30. minut. Bogen af Bedrifter markerer Et Fint Søm ved færdighed 50, med Stormester i Skrædderkunst der venter ved 125-loftet."
+        },
+        "leatherworking": {
+          "identityHeading": "Læder til de hurtige",
+          "identityBody": "Stigen klatrer fra de slette Fenbro-skind-benbeklædning, støvler og bælte over den ualmindelige sumpstrejfer-trøje, hætte og skulderplader til det sjældne sumpvogter-sæt, det bedste læder en håndværker kan skære. To trolddomsstykker runder det af: det Østbækske Druid-Skind-fæltes almenvæsen og Skumrings-Ombindingerne ved færdighed 75.\n\nPå hjulet sidder det mellem Madlavning og Skrædderkunst. Dens levende par er Udstyrsmager, Lærbearbejdning og Skrædderkunst, svoret over for Væver Ottilie i Østbæk; Fælder-parret med Madlavning er navngivet på hjulet men har endnu ingen edquest.",
+          "materialsHeading": "Jagten er høsten",
+          "materialsBody": "Lærbearbejdning er det håndværk, hvor din avanceringsrute og din forsyningslinje er det samme: groft skind høstes direkte fra skind-bærende lig, ulve og vildsvin frem for alt, og hvert lig tjener kun én høster, der kommer først, betjenes først. Et sjælden eller bedre høsteresultat giver også et Uberørt Skind, et signeret eksemplar som Sumpvogter-Trøjen kalder på, så bank hvert stykke du finder.\n\nBistøtten er lille: edderkoppe-ben og silke, grovt klæde fra humanoider, en enkelt osmiummalm i hvert sumpvogter-sjælden stykke (seks i Skumrings-Ombindingernes toppunkt), og et Garvemiddel til 16 kobber fra garveri-skranken. Garver Hesk sælger også osmiummalm, hvis du helst ikke vil mine.",
+          "ladderHeading": "Undervist i Fenbro",
+          "ladderBody": "Her er det særlige: garveriet ligger i Fenbro, på Mirefen-Mosvej, hvilket gør Lærbearbejdning til det ene dybe håndværk, der trænes uden for Østbæk. Garver Hesk underviser stigen ved sine baljer: Fenbro-skind-trinnet gratis ved færdighed 0, sumpstrejfer-trinnet ved 25 sølv per opskrift fra færdighed 25, og sumpvogter-trinnet ved 1 guld per opskrift fra færdighed 50, og hvert trin åbnes, når dit niveau når det.\n\nTo opskrifter springer over læremesteren: fæltes almenvæsener (den Garvede Lædervest og Druid-Skindet) fremstilles overalt fra starten, og Skumrings-Ombindingerne kendes af alle men er ved færdighed 75 og garveribundet. Bemærk at Udstyrsmager-løftet selv sværges tilbage i Østbæk med Ottilie; kun undervisningen sker i mosen.",
+          "routeHeading": "Mesterværker, og en praktisk vej til 125",
+          "routeBody": "Fra sumpstrejfer-trinnet og op ruller ethvert håndværk mesterværk-chancen, og det Uberørtede Skind i en Sumpvogter-Trøje giver den signerede-reagens-bonus automatisk; osmium tæller som et niveau 1-materiale for proc. De statistikløse skind-almenvæsener kan ikke udløse proc.\n\nAvancér det på den naturlige måde: høst enhver ulv og hvert vildsvin, du dræber fra niveau et, fremstil skind-trinnet til 25, uanset hvor du står, og træn derefter i Fenbro, som questerne trækker dig ind i mosen alligevel. Sumpstrejfer bærer dig til 50 og sumpvogter til 75; efter det betaler Skumrings-Ombindingerne, en niveau 3-opskrift ved seks osmiummalm, tre Uberørt Skind, to groft skind og et Garvemiddel, fuld gevinst til 99 og halvt derefter, ca. 75 fremstillinger for de afsluttende halvtreds point til 125-loftet.\n\nDet mobile garve-anlæg betyder mere for dette håndværk end noget andet: specialisér ved 75 og en pose skind bliver til færdigt udstyr ved bålstedet i stedet for en tur tilbage til Fenbro. Hesks garveri-arbejdsordre køber otte groft skind hvert 30. minut, et ryddeligt afkast af skind du samlede alligevel, og Bogen af Bedrifter markerer Garverens Metier ved færdighed 50 med Stormester i Lærbearbejdning ved loftet."
+        },
+        "cooking": {
+          "identityHeading": "Gryden der mætter gruppen",
+          "identityBody": "Spis et kogt måltid og det heler dig over 18 sekunders hvile, hvilket mellem træk er den billigste heling i spillet. Stigen løber fra en 90-helbred Panstegt Flodaborre hele vejen til Marlows Store Steg ved 980, den største hvile-heling der findes.\n\nPå hjulet sidder Madlavning mellem Alkymi og Lærbearbejdning. Dens levende par er Apotekeren, Alkymi og Madlavning, svoret over for Kok Marlow i Østbæks køkkener efter at have jagtet fire vildsvin til gryden; Fælder-parret med Lærbearbejdning er navngivet på hjulet men har endnu ingen edquest.",
+          "materialsHeading": "Et spisekammer forsynet af stang og kniv",
+          "materialsBody": "Fiskeri forsyner signaturingredienserne, zone for zone: spejlørred og flodaborre fra vandene i Østbæk-Dalen, sumpgedde og mosål fra Mirefen-Mosen, frostgæller-ørred og skifer-karpe fra Tornetop-Højderne. Hvert trin af stigen tilbereder fisken fra sit niveau, så en kok der fisker aldrig løber tør.\n\nSlagterdelen kommer fra høstede lig: vildt kød fra vildsvin og deres fæller, og ved et sjælden eller bedre høsteresultat, en signeret Førsteklasses Udskæring, midtpunktet i den store steg. Urter krydrer de bedre retter, et aske-træsstykke ryger ålen, og Madlavningssalt koster 8 kobber per pose hos Marlows egne stadsstall.",
+          "ladderHeading": "Fra rykkekød til den store steg",
+          "ladderBody": "Saltet Rykkekød er markopskriften: kendt fra starten, et edderkoppe-ben, kan fremstilles overalt, proviant for enhver ny eventyrer. Lærerstigen tilbereder i Østbæks køkkener på vestsiden af torvet: det gratis trin ved færdighed 0 (aborre, Jægerens Spidsteg, Krydret Sumpgedde), midtertrinnet ved færdighed 25 for 25 sølv per opskrift (Asketræsrøget Ål, Guldblad-Vildsvinegryderet, Frostgællers Chowder), og det sjældne trin ved færdighed 50 for 1 guld per opskrift (Sølvet Karpemiddag, Fiskemesterens Festfad, Marlows Store Steg).\n\nBatchretter strækker dine ingredienser: den røgede ål og vildsvine-gryderetten serverer to per fremstilling, og festfadet serverer tre. Marlow underviser hvert trin, så snart dit niveau i Madlavning når det.",
+          "routeHeading": "Specialisering, ikke mesterværker, og vejen til 125",
+          "routeBody": "Madlavning er den ærlige undtagelse fra mesterværkshistorien: et måltid har ingen statistiklinje at forbedre, så retter udløser aldrig en proc, og ingen kok bør jagte det. Håndværkets mesterskab er specialisering ved 75: en femtedel færre af enhver ingrediens, hvilket forplanter sig hurtigt på batchretter, og et mobilt feltkøkken, så festmåltidet koges ved fangehusets dør.\n\nTilbered hvad du fanger: par klatringen med en fiskerisession, og de to færdigheder mætter hinanden hele vejen op. Rykkekød og det gratis trin bærer dig til 25 et point per fremstilling, midtertrinnet til 50, og det sjældne trin til 75; efter 75 sendes ingen højere retter endnu, så de sjældne retter falmer til halvt og derefter kvart gevinst, ca. 150 fremstillinger mere til loftet. Behandl det som oplagring, ikke grinden: et laug spiser hver servering.\n\nMarlows køkken-arbejdsordre køber otte stykker vildt kød hvert 30. minut for mønt og EXP, og Bogen af Bedrifter markerer Erfaren Kok ved færdighed 50 på vejen til Stormester i Madlavning-titlen ved 125."
+        },
+        "alchemy": {
+          "identityHeading": "Flasker der vinder kampe",
+          "identityBody": "Håndværket udøves på apoteket i Høj vagt, hjemsted for Alkymist Verane, Mester i Apoteket, der underviser i opskriftstigern, sælger Glasflaske for 12 kobber, og betaler mønt for urter via sin arbejdsordre.\n\nPå håndværkshjulet sidder Alkymi med de prøv-og-fejl-fag, ved siden af Ingeniørkunst på den ene side og Madlavning på den anden. Det giver det to paridentiteter: Bombardøren (Ingeniørkunst og Alkymi, taget op før Opfinder Gizzel i Østbæk) og Apotekeren (Alkymi og Madlavning, svoret over for Kok Marlow). Indstil dig til begge par for at gøre Alkymi til et hovedfag og åbne færdigheden hele vejen til dens loft; indtil da virker det til det sjældne niveau som ethvert ikke-erklæret håndværk.",
+          "materialsHeading": "Urter, kirtler og glas",
+          "materialsBody": "Enhver drik kræver en Glasflaske plus urter matchet til dens trin: glansbladet vokser i Østbæk-Dalen, guldblad i Mirefen-Mosen, og solkrone i Tornetop-Højderne, en urt per zone, så dine flasker klatrer verden op ved siden af dig. Urtekundskab er den naturlige partnerfærdighed, selvom det fungerer ligeså godt at købe fra indsamlere eller markedet; dybere zoner huser højniveaulapper, der kræver en bedre segl, så hold dit redskab opdateret, hvis du plukker selv.\n\nMiksturtræet tilføjer en jægers ingrediens: Giftkirtel høstet fra giftige lig, og den øverste mikstur kræver en Uberørt Giftkirtel, det signerede sjældne eksemplar et heldigt ligs-høst afslører. Hvis du ikke høster selv, er det præcis de varer, der er værd at bede en jægerven om at bringe hjem.",
+          "ladderHeading": "Opskriftstigerne",
+          "ladderBody": "Alle kender den Lille Helbredelsesdrik fra starten og kan blande den overalt, ingen station nødvendig. Den rigtige stige er ni opskrifter undervist af Verane på apoteket, tre på hvert trin: trin 0-opskrifterne er gratis, trin 25 koster 25 sølv per opskrift, og trin 50 koster 1 guld per opskrift. Hvert trin er en helbredelsdrik, en manadrik og en udholdenhedsmikstur, der stiger fra almindelige glansbladsflasker (120 helbred, 160 mana) over ualmindelig guldbladske (200 helbred, 260 mana) til sjælden solkrone (280 helbred, 360 mana).\n\nMiksturen klatrer på samme måde: Vildsvine-Mikstur giver 6 Udholdenhed i 10 minutter, Giftild-Mikstur 9 i 15 minutter, og Slangens Mikstur 12 i 15 minutter, og brygger to flasker per fremstilling. Endnu en opskrift sidder lidt til siden: Bjørnens Mikstur, et kombinationsbrygge Verane underviser for 25 sølv, når din Alkymi når 25, blandbar overalt, men kun af en indstillet Bombardør med begge Alkymi og Ingeniørkunst på 25.",
+          "routeHeading": "En bryggermands vej til 125",
+          "routeBody": "Drikke og miksturer rulles aldrig som mesterværk; det proc tilhører statistik-bærende udstyr. Dit navn rejser dog stadig: de sjældne solkronedrikke brygges en flaske ad gangen og ankommer signeret med et håndværkermærke, mens det dobbeltbatch Slangens Mikstur forbliver plad. Ved færdighed 75 specialiserer du dig, og alle Alkymi-opskrifter koster 20 procent færre materialer derefter.\n\nTag Urtekundskab tidligt og pluk, mens du avancerer: glansbladet er overalt i Dalen, og når du når Veranes bænk, vil det gratis trin bære dig rent til færdighed 25 på urter, du alligevel ville have plukket. Lær trin 25 det øjeblik det åbner, flyt din plukning til mosen efter guldblad, og lad Veranes arbejdsordre (seks Guldbladurter for 45 kobber, gentagbar hvert 30. minut) give lidt mønt tilbage, mens du er på vej.\n\nFra 50 og frem, bryg solkronedrikke og Slangepartier fra Tornetop-urter. Den sidste stræk fra 100 til 125 er en bevidst sild, så bryg hvad der faktisk sælger frem for at brænde urter for tallet, og husk at forbrugsvarer er den ene fremstillede vare alle køber om igen for evigt. Bogen af Bedrifter markerer Mærkelige Bryg ved færdighed 50 og Stormester i Alkymi ved loftet."
+        },
+        "engineering": {
+          "identityHeading": "Redskabsmagerens monopol",
+          "identityBody": "Håndværket udøves på værktøjsværket i det sydøstlige hjørne af Østbæk-Torvet, hjemsted for Opfinder Gizzel, Mester i Værktøjsværket. Niveau 1 til 3 af alle redskabslinjer er ordinære handelsvarer; niveau 4 og 5 eksisterer kun via en ingeniør.\n\nPå hjulet sidder det med prøv-og-fejl-fagene, ved siden af Alkymi og Rustningssmedning, hvilket giver det to paridentiteter: Bombardøren (Ingeniørkunst og Alkymi, taget op før Gizzel selv) og Tandhjulsbygger (Rustningssmedning og Ingeniørkunst, navngivet men endnu ikke mulig at sværge). En advarsel betyder mere her end noget andet sted: begge Ingeniørkunstens opskriftstrin sidder over det sjælden-niveaus loft, som hobbyer og ikke-erklærede håndværkere arbejder under, så færdighedstallet bevæger sig kun for en håndværker, hvis hovedfag inkluderer Ingeniørkunst, hvilket i dag betyder Bombardøren. Alle kan stadig bygge redskaberne; en ikke-indstillet håndværker lærer bare ikke noget af det.",
+          "materialsHeading": "Reagenser og forudgående redskaber",
+          "materialsBody": "Enhver redskabsopskrift forbruger redskabet et niveau under det plus et premium-materiale: fire Osmiummalm og en Himmelsølvminehakke bliver til Osmiumminehakken, dernæst to Glyfstålbarer og den osmiumhakke bliver Glyfstålminehakken, og økserne og segl-linjerne afspejler den samme form med Aske- og Højfyrrestammer, Guldblad- og Solkroneurt.\n\nGizzel lagerfører alle seks premium-reagenser på værktøjsværket, hvis du vil have fart over margin, men malm, stammer og urter er alle indsamlingsbare i Mirefen-Mosen og Tornetop-Højderne, og indsamlet lager er, hvor profitten lever. Den ene undtagelse er Glyfstålbaren, som er handelsvare-kun, så ethvert glyfstål-niveau redskab bærer et fast møntgulv bygget ind i dets pris.",
+          "ladderHeading": "Redskabsstigen",
+          "ladderBody": "Hele stigen er seks opskrifter, alle bundet til værktøjsværks-stationen og alle kendt automatisk, aldrig nogen læringsgebyr: niveau 4-hakke, -økse og -segl ved færdighed 75, og niveau 5-versionerne ved færdighed 150. Det andet tal er ikke en slåfejl, og det sidder over det nuværende 125-loft med vilje: færdighedskrav lægger aldrig hindringer for et håndværk her, de former kun færdighedsgevinsten, så du kan bygge et niveau 5-redskab den dag du har dets reagenser og dets niveau 4-forgænger.\n\nEthvert færdigt redskab er sjælden eller episk kvalitet og leveres signeret, så dit navn rejser zonerne på andre spilleres redskabsbælter. Ingeniørkunst holder også halvdelen af en kombinationsopskrift oppe: Bjørnens Mikstur, brygget af en indstillet Bombardør med begge Ingeniørkunst og Alkymi på 25.",
+          "routeHeading": "En ingeniørs vej til 125",
+          "routeBody": "Redskaber har ingen kampsstatistik, så de udløser aldrig mesterværker; det proc tilhører statistik-bærende udstyr. Specialisering lander stadig ved færdighed 75: 20 procent færre materialer per fremstilling, og et midlertidigt feltværktøjsværk, der forvandler enhver indsamlingstur til et værksted. Gevinstmatematikken aftager næsten ikke her: niveau 75-opskrifterne betaler fuld gevinst til 100 og halvt derefter, og niveau 150-opskrifterne betaler fuld gevinst hele vejen til 125-loftet, så den rigtige begrænsning er reagenser og mønt, aldrig grå opskrifter.\n\nVælg dit par først, for ingenting bevæger sig uden det: tag Bombardør-indstillingen fra Opfinder Gizzel. Fod derefter stigen: avancér Minedrift, Skovhugst eller Urtekundskab selv eller bliv venner med indsamlere, køb niveau 3-redskaberne fra sælgere, og behandl Gizzels arbejdsordre (otte Jernbarksstammer for 16 kobber, gentagbar hvert 30. minut) som lommepenge.\n\nIngeniørkunst er en lavvolumen prestige-handel, ca. et færdighedspoint per færdigt redskab, så behandl ethvert håndværk som lager til salg. Salgstalen til dine kunder skriver sig selv: hvert redskabsniveau over en ressourcekildes eget fjerner 0,4 sekunder fra det 2,5 sekunders indsamlingskast (ned til et 1,5 sekunders gulv), så et niveau 5-redskab er en hastighedsopgradering på enhver ressourcekilde i verden, og kun du kan lave et. Bogen af Bedrifter markerer Tandhjul og Fjedre ved færdighed 50 og Stormester i Ingeniørkunst ved 125."
+        },
+        "enchanting": {
+          "identityHeading": "Udstyr fra hinanden, kraften tilbage",
+          "identityBody": "Der er ingen station, ingen læremester, og ingen opskriftsliste at købe: alle fortryllelser kendes fra starten, enhver kan affortryle fra dag et, og færdigheden lofter ved 125 som ethvert håndværk.\n\nPå hjulet sidder det mellem Inskription og Juvelkunst, så de to paridentiteter er Arkanisten (Inskription og Fortryllelse) og Juvelbinderen (Fortryllelse og Juvelkunst). Ingen af dem kan endnu sværges, da begge naboer afventer deres første opskrifter, så Fortryllelse klatrer i dag som alles håndværk: gratis til det sjældne niveau før ethvert løfte, og et naturligt hobbyvalg for en Bombardør eller en Apoteker. Fortryllere holder også indsamlingsverdenen kørende: de tre redskabsslot-effekter er Fortryllerens arbejde, og en original håndværker genoplader sine egne effekter med rabat, endnu dybere når de er specialiseret.",
+          "levelingHeading": "Sådan avancerer fortryllelse",
+          "levelingBody": "To handlinger flytter færdigheden: at affortryle et stykke, og at anvende en fortryllelse. Hvert lykkedes forsøg er op til et point, skaleret efter hvor seriøst arbejdet er: sjældenhed af det stykke du nedbryder, eller reagensniveauet af den fortryllelse du anvender. Almindelige affortrylninger og støv-kun-fortryllelser scorers som almindeligt arbejde; ualmindelige affortrylninger og essence-fortryllelser som ualmindelige; sjældne affortrylninger og alle Rune- eller Stor-fortryllelser som sjældne; episke og legendariske affortrylninger endnu højere.\n\nDen velkendte mesterydelse-udblanding gælder i 25-points-trin, så fælles-klasses arbejde grå-uder ved færdighed 75, ualmindeligt arbejde ved 100, og sjælden-niveauets arbejde præcis ved 125-loftet. Fortryllelse har også en egen venlighed: input over dit arketypeloft afrundes ned til det loft i stedet for at nulstilles, så før du indstiller dig, scorer en episk affortrylning simpelthen som sjælden frem for ikke at lære noget. Hvis Fortryllelse ender inaktiv bag en anden identitet, scorer alt som almindeligt arbejde og klatringen stagnerer ved 75; behold det som din hobby og sjælden-niveauets arbejde betaler stadig, bare langsommere efter 75.",
+          "marketHeading": "Fortryldte kopier, oprindelse og markedet",
+          "marketBody": "At anvende en fortryllelse forbruger reagenserne og markerer en bestemt kopi af genstanden. Peger du på en kopi i tasken, får du en distinkt fortrylt kopi tilbage; peger du på et stykke du allerede har på, fortrylles det på stedet, uden at tage det af og på igen. Uanset hvad følger bonussen stykket for evigt, gennem aftagninger, bankture og handler. En fortryllelse per stykke: at anvende en anden fortryllelse på en fortrylt kopi beder først om bekræftelse og erstatter så den gamle fortryllelse direkte; den ødelægges uden refusion af materialerne. Salg, kassering og affortrylning foretrækker alle slette kopier først, så dit færdige stykke ikke spises ved et uheld. Identisk fortrylede kopier stakker endda sammen i dine tasker.\n\nMesterværksudstyr og fortryllelse er venner: et mesterværksstykke forbliver fuldt fortryllbart, og fortryllelsen lægges oven på mesterværksbonussen uden at forstyrre den eller håndværkerens signatur. Stakket alle kilder, er et signeret mesterværk med en Stor-fortryllelse det bedste et fremstillet stykke kan opnå, og det sidder stadig under raid-bytte af design.\n\nPå markedet formidler Verdensmarkedet kun slette, umodificerede lagervarer, så fortryldte og signerede stykker skifter hænder ansigt til ansigt via handelsvinduet i stedet. Materialerne er den omsættelige halvdel af håndværket: Støv, Essens og Skår listes frit, listing koster ingenting, og Handlende tager 5 procent af et fuldført salg kun. Det giver de to klassiske fortryllerindtægter: salg af materialer på markedet, og at tage en kundes stykke i handel, fortryde det, og sende det tilbage."
+        }
+      },
+      "howHeading": "Sådan fungerer håndværk",
+      "howBody": "Åbn håndværksvinduet (standard-tast T) og enhver opskrift, du kender, er oplistet med hvad den kræver, og hvad du har ved hånden. Stationsbundne opskrifter beder dig stå inden for 20 yards fra den rette station i byen, markopskrifter fremstilles overalt, og Fortryllelse behøver aldrig en station overhovedet. Der er ingen fejlchance: en fremstilling med materialerne ved hånden lykkes altid.\n\nTo små friktioner holder økonomien ærlig. Enhver vellykket fremstilling betaler et gebyr på 2 kobber pr. point af genstandens statistikbudget, og fremstillingshandlinger deler ét tempo: højst 10 fremstillinger, affortrylle, fortryllelser eller ophug i et givet 60 sekunder. Ingen af dem vil genere en normal session; begge stopper en maksimeret specialist i at oversvømme markedet.",
+      "recipesHeading": "Opskrifter",
+      "recipesNote": "Enhver opskrift for håndværket: det præcise færdighedskrav og materialer, hvor det læres og for hvilket gebyr, og de tre færdighedsværdier, hvor optjeningen fader til halvt, en fjerdedel og intet.",
+      "masteryHeading": "Færdighedsoptjening",
+      "masteryBody": "Enhver opskrift i vinduet bærer sin optjeningsstatus i de klassiske farver: orange betyder fuld optjening, gul halvt, grøn en fjerdedel, grå intet. Grænserne er præcise, hver {step} færdighed er et niveau, og en opskrift fader en farve for hvert niveau, den falder under dit.\n\nFordi optjening er deterministisk (en fuld-optjening-fremstilling flytter dig altid præcis ét point), kan du planlægge en hel klatring fra listen: arbejd et trin mens det er orange, lær det næste trin mens det skifter til gult, og brug aldrig materialer på en grå fremstilling i håb om fremskridt. Ved grænsen på {cap} stopper tallet, men opskrifterne, mesterværkschancen og overskuddet bliver ved med at virke.",
+      "masterworkHeading": "Mesterværker",
+      "masterworkBody": "Enhver vellykket fremstilling er præcis, hvad opskriften lover, og sommetider lidt mere: et mesterværk afslutter det samme stykke ét kvalitetstrin finere, med bonusstatistikkerne indkørt ved fremstillingen. Det er kun et tillæg, aldrig en forringelse, og det forbliver under raid-gulvet, så håndværksgear kan være fremragende uden at erstatte et raid-drop.\n\nChancen er offentlig, ikke mystisk: {base}% basis, plus {perTier}% pr. niveau din færdighed sidder over opskriften, plus {signed}% når et signeret reagent indgår, plus {spec}% når du er specialiseret, med materialer af højere niveau der tilføjer 1 til 2% mere, alt begrænset til {cap}%. Kun et stykke med rigtige statistikker kan forbedres, så statistikløse almindelige genstande, værktøjer og forbrugsvarer giver aldrig et mesterværk; en inaktiv fremstilling producerer aldrig et, og en hobbyfremstilling kan ikke lave mesterværk forbi sit sjældne loft.\n\nFint arbejde bærer sin makers navn. Sjældne og bedre enkelteksemplarer er signerede (Fremstillet af; indsamlede materialer bærer Indsamlet af), et mesterværk er altid signeret uanset kvalitet, og identisk signerede stykker stables stadig. En signatur er proveniensbevis, ikke en lås: signerede varer handles frit.",
+      "trainingHeading": "Træning",
+      "trainingBody": "Træneropskrifter kommer fra de tilstedeværende mestre, undervist ved deres stationer. Reglen er én linje: en mester underviser en opskrift, når dit niveau i håndværket har nået opskriftens eget niveau, og intet andet spærrer for det, ikke dit niveau, ikke din arketype. Trænerstigens trin sidder ved færdighed 0, 25 og 50 i dag, så et frisk trin åbner med hvert niveau, du klatrer.\n\nGebyrer er engangsbetalinger og faste pr. trin: starttrinnet er gratis, trin ved færdighed 25 koster {tier1} pr. opskrift, og trin ved færdighed 50 koster {tier2}. Du skal stå ved mesterens faktiske station for at træne, og en mobil station tæller aldrig. De almindelige markopskrifter og værktøjsopskrifterne kræver slet ingen træning; enhver karakter kender dem fra starten.",
+      "specializationHeading": "Specialisering",
+      "specializationBody": "Ved færdighed {at} specialiserer dette håndværk dig, ingen opgave nødvendig: opskrifter koster {pct}% færre materialer fra da af, og specialiseringen tilføjer sit eget løft til mesterværkschancen.\n\nSpecialister lærer også at tage værkstedet med sig: en specialiseret håndværker kan opstille en mobil station i felten i ti minutter ad gangen, så stationsbundne opskrifter kan fremstilles ved mindens mund frem for tilbage i byen. Dens grænser er tilsigtede: den tæller aldrig ved træning hos en mester eller ved aflæsning af et kommissionsstykke, og den udløber på sin timer uanset om du brugte den.",
+      "ench": {
+        "disenchantHeading": "Affortrylling",
+        "disenchantNote": "Affortrylling tager et vilkårligt våben- eller rustningsstykke af almindelig kvalitet eller bedre og forbruger ét eksemplar, et almindeligt eksemplar før et fortryllet; når kun fortryllede eksemplarer er tilbage, ødelægges et af dem, fortryllelse og det hele. Almindelige og ualmindelige stykker males ned til en rullet håndfuld Kime Støv, lidt rigere for sjældnere og stykker med højere niveau; fra sjælden og op ændres udbyttet, præcis én Kime Essens fra et sjældent stykke eller én Kime Skærv fra et episk eller legendarisk, plus en typebestemt sekundær keyed til hvad stykket var lavet af.",
+        "typedHeading": "Typebestemte sekundærer",
+        "typedNote": "De typebestemte sekundærer følger materialet: klædedrustning giver Resonant Tråd, læder Resonant Skind, mail Resonante Ringe, nærkampsvåben Resonant Stål, og stave, trylledrikstave, buer og armbrøster Resonant Tømmer. Et sjældent stykke giver præcis {rare}; et episk eller legendarisk stykke giver {epicMin} eller {epicMax}. Ringe og halskæder har ingen rustningsklasse, så de giver kun det primære materiale.\n\nBemærk det med småt: de Resonante sekundærer binder ved handel, så hver kan skifte hænder præcis én gang, direkte fra nedbryderen til fortrylleren der vil brænde den. Støv, Essens og Skærver bærer ingen sådan snor og bevæger sig som enhver anden handelsvare.",
+        "colSource": "Brudt fra",
+        "meleeWeapons": "Nærkampsvåben",
+        "timberWeapons": "Stave, trylledrikstave, buer og armbrøster",
+        "enchantsHeading": "Fortryllelser",
+        "enchantsNote": "Fortryllelser kommer i tre niveauer. Basisniveauets kører på Kime Støv (med lidt Essens ved den høje ende) og dækker våbenpladsen plus hver rustningsplads, med nok statistikakseindstillinger til at enhver build finder noget til hver plads. Større niveau koster én Kime Skærv plus Essens og er det eneste, Skærver bruges til: stærkere bonusser på pladserne med størst indflydelse.\n\nMellem dem sidder de fem Runede fortryllelser, én forbruger pr. typebestemt sekundær, så intet du maler er nogensinde en blindgyde: Runet Æg (våben, Styrke, forbruger Resonant Stål), Runet Fokus (våben, Intellekt, Resonant Tømmer), Runenet (bryst, Ånd, Resonant Tråd), Runet Skind (ben, Smidighed, Resonant Skind) og Runede Ringe (hjelm, Udholdenhed, Resonante Ringe). Hver tager også to Kime Essens og lander mellem sine basis- og Større-søskende i styrke; de præcise bonusser er alle i tabellen nedenfor.",
+        "colEnchant": "Fortryllelse",
+        "colSlot": "Plads",
+        "colTier": "Niveau",
+        "colBonus": "Bonus",
+        "tier": {
+          "base": "Basis",
+          "runed": "Runet",
+          "greater": "Større"
+        },
+        "salvageHeading": "Bjærgning",
+        "salvageNote": "Bjærgning er den almuemandsmæssige fætter til affortrylling: de samme våben og rustning, ingen færdighed krævet og ingen optjent, der returnerer ordinært håndværksskrot efter kvalitet i stedet for noget arkan. Enhver kan gøre det, fortryllet eller ej. Når du holder et stykke værd at bryde, er valget enkelt: fra sjælden og op er affortrylling strengt den bedre aftale, mens ved almindelig sælger de to udbytter for omtrent det samme hos en handlende, så bry mod det materiale du faktisk har brug for.",
+        "bonusFmt": "+{value} {stat}"
+      },
+      "gatherIntro": {
+        "mining": "Minedrift trækker malm direkte ud af verdens klipper: kobber i Østbæk Dal, jern i Mirefen Mose og osmium i Tornetop-Højderne, der fodrer smedehåndværkene. Åbent for alle fra niveau 1: der skal blot en minehakke i dine tasker, 20 kobber i enhver hub-by. Spores på sin egen tæller op til en grænse på 100.",
+        "logging": "Skovhugst fælder tømmer fra skovstande i alle tre zoner: jernbark i Østbæk Dal, asketræ i Mirefen Mose og højfyrre i Tornetop-Højderne, råmaterialerne til skafter, stave og ingeniørens bænk. Åbent for alle fra niveau 1 med en skovhuggeøkse i dine tasker (20 kobber i enhver hub-by), spores på sin egen tæller op til en grænse på 100.",
+        "herbalism": "Urtekundskab indsamler det, der vokser vildt: glansbladet i Østbæk Dal, guldblad i Mirefen Mose og solkrone i Tornetop-Højderne, blade og stilke der holder apotekerhandelen i gang. Åbent for alle fra niveau 1 med en urtesegl i dine tasker (20 kobber i enhver hub-by), spores på sin egen tæller op til en grænse på 100.",
+        "fishing": "Fiskeri er det anderledes fag blandt indsamlingsfagene, og det dybeste: et rigtigt bid-og-hiv-minispil, sine egne fangsttabeller i hver zone, og en færdighedsgrænse på 200, det dobbelte af de andre. Køb en stang, vend dig mod åbent vand, og kast."
+      },
+      "rhythmHeading": "Indsamlingsrytmen",
+      "rhythmBody": "En høst er et kort synligt kast, ikke et øjeblikkeligt greb: {base} sekunder som basis, aldrig under et {floor}-sekunders gulv. At eje et værktøj over ressourcekildets niveau fremskynder dig med {tool} sekunder pr. niveau over det, og hvert færdighedsbånd, du krydser, trimmer yderligere {band} sekunder; blot at matche ressourcekildets niveau slipper dig ind, det er niveauerne over det, der gør dig hurtig.\n\nEn fuld taske afviser høfligt kastet, inden det begynder, så intet spildes midt i svinget, og enhver høst giver en lille andel karakter-XP, skaleret efter ressourcekildets niveau mod dit eget på samme måde som dræbs-XP skalerer: en triviel grå ressourcekilde lærer en maksimeret karakter ingenting.",
+      "gainBody": "Optjening er deterministisk, aldrig et tilfældigt færdighedspoint: en ressourcekilde på eller over din optjeningsniveau giver et helt point pr. høst, og hver {step} færdighed er ét niveau scoret mod ressourcekilden. Niveau 1-ressourcekilder betaler fuldt ud under 25, halvt til 49, en fjerdedel til 74, og intet fra 75 og opefter; niveau 2-ressourcekilder betaler fuldt ud til 49; den ene niveau 3-ressourcekilde betaler fuldt ud til 74 og halvt helt op til grænsen på {cap}.\n\nDen tilsigtede rute er klar: lær på startkilderne i Dalen, flyt til sumpen, og afslut klatringen på det høje terræn i Tornetop-Højderne. Ved grænsen stopper læringen, men udbyttet gør ikke: en maksimeret indsamler henter fortsat materialer af maksimal kvalitet for evigt.",
+      "nodesHeading": "Ressourcekilder pr. zone",
+      "nodesNote": "Hvor ressourcekilderne er, deres niveau, det værktøj de kræver, og hvad de giver. Enhver ressourcekilde genskabes for dig {respawn} sekunder efter din egen høst, og den timer er kun din: en anden indsamler, der arbejder den samme ressourcekilde, forsinker aldrig din, så der er ingen kappestrid om ressourcekilder og ingen lejrsidderi. Hver zone højere på stigen giver et bedre materiale fra hårdere terræn.",
+      "toolsHeading": "Værktøjer",
+      "toolsNote": "Enhver ressourcekilde kræver sit fags værktøj i dine tasker, også niveau 1: ingen hakke, ingen malm, og ingen stang, ingen fisk. Forhandlerstigen dækker niveau 1 til 3 og føres i enhver hub-by; et værktøj skal blot være i dine tasker, der er ingen udstyringsplads og ingen holdbarhed, så hvert er et engangskøb. Kun niveauet betyder noget for adgangsbetingelsen: et værktøjs sjældenhedsfarve er kosmetisk.\n\nOver forhandlerstigen sidder to fremstillede værktøjer, niveau 4 og niveau 5, lavet på værkstedet af ingeniører og aldrig solgt af nogen NPC. Ingen ressourcekilde i dag kræver mere end niveau 3, så deres værdi lige nu er fart: et topværktøj fastholder kastet ved dets gulv på lavere ressourcekilder, og det vil være adgangskortet, når terræn af højere niveau ankommer.",
+      "toolCrafted": "Fremstillet ({craft})",
+      "toolVendor": "{name} ({hub})",
+      "toolUnavailable": "Sælges ikke",
+      "priceNone": "Sælges ikke",
+      "toolTierReq": "Niveau {tier}-værktøj",
+      "yieldsHeading": "Hvad en høst giver",
+      "yieldsBody": "Enhver høst ruller en kvalitet for det, den giver, og din færdighed er hele historien bag det rul. En helt ny indsamler trækker altid almindeligt materiale; hvert point færdighed skifter jævnt vægt fra almindelig til de højere grader og aldrig tilbage, indtil grænsen på 100 gør den almindelige grad fuldstændig: 60 procent ualmindelig, 30 procent sjælden, 8 procent episk og 2 procent legendarisk, hver gang.\n\nKvalitet betyder også kvantitet: et almindeligt rul giver 1 enhed, ualmindelig og sjælden giver 2, episk 3 og legendarisk 4. Enhver sjælden, episk eller legendarisk høst ankommer som et signeret eksemplar stemplet Indsamlet af dig: ved grænsen er det fire ud af ti høster, der bærer dit navn, og proveniens-reglerne på siden om Håndværksøkonomi forklarer, hvorfor håndværkere betaler ekstra for præcis dem.",
+      "bandsHeading": "Proficiensbånd",
+      "bandsBody": "Proficiensbånd er den fælles 0/100/200-stige over et fags tæller: hvert bånd du krydser skærer ned på indsamlingskastet, og for fiskeri vælger båndene også fangstbordene (med en passende stang). Landfagene topper ved 100, så bånd 1 er deres loft; kun fiskeri når bånd 2.",
+      "bandFmt": "Band {band}: fra {at} proficiens",
+      "rareHeading": "Sjældne fund",
+      "rareBody": "Enhver høst, uanset din færdighed, bærer en 1 i {oneIn} chance for et sjældent fund: en uberørt åre i malm, gammelt kernetræ i tømmer, en måneskinsblomst blandt urterne. Fundet ganger den høsts udbytte {mult} gange, enhver enhed ankommer signeret med dit navn uanset den rullede kvalitet, og hele zonen hører om det ved navn. Hver variant indskriver også sit eget nul-Hæder-mærke i din Bedrifternes Bog, et samlerensmærke der udelukkende eksisterer for at bevise, at det skete for dig.",
+      "specimenBody": "Hold lidt taske-plads fri, når du farme: et vindfaldsudbytte skal bruge åbne pladser til at lande signeret, og passer ingenting, ankommer udbyttet stadig, men signaturen går tabt. Lig-høst har sin egen jackpot-arm også: ca. {pct}% af lig-høster ruller sjælden eller bedre, signerer udbyttet og tildeler, for eksemplarfamilier, et signeret perfekt eksemplar.",
+      "gatherDeedsHeading": "Bedrifter undervejs",
+      "gatherDeeds": {
+        "mining": "Din første ressourcekilde i et fag optjener Markens Frugter, og 100-grænsen i Minedrift indskriver Malm i Blodet. At nå 100 i tre af Minedrift, Skovhugst, Urtekundskab og Fiskeri tilføjer Mesterindsamler ved 25 Hæder, og at knække en uberørt åre optegner sit eget samlerensmærke. Ingen af disse giver magt: bedrifter er titler og Hæder, et minde om de veje, du har vandret.",
+        "logging": "Din første ressourcekilde i et fag optjener Markens Frugter, og 100-grænsen i Skovhugst indskriver Kernevedhugger. At nå 100 i tre af Minedrift, Skovhugst, Urtekundskab og Fiskeri tilføjer Mesterindsamler ved 25 Hæder, og et hugget stykke gammelt kernetræ optegner sit eget samlerensmærke. Bedrifter er titler og Hæder alene, aldrig magt.",
+        "herbalism": "Din første ressourcekilde i et fag optjener Markens Frugter, og 100-grænsen i Urtekundskab indskriver Engmarksmesters. At nå 100 i tre af Minedrift, Skovhugst, Urtekundskab og Fiskeri tilføjer Mesterindsamler ved 25 Hæder, og en måneskinsblomst optegner sit eget samlerensmærke. Bedrifter er titler og Hæder alene, aldrig magt.",
+        "fishing": "100-milepælen indskriver Gammel Søulk og 200 indskriver Mesterangler med sin titel, selve toppen af fiskerkunsten; Fiskeri tæller også mod Mesterindsamler, optjent ved 100 i tre indsamlingsfag. En første fisk fra hver zones vande udfylder sin egen side, og Solglimt-Koikarpen optegner Et Glimt af Håb, så rejsende med en stang i tasken udfylder deres bog hurtigere, end de forventer."
+      },
+      "fish": {
+        "startHeading": "Kom i gang",
+        "startBody": "En Simpel Fiskestang koster 20 kobber hos Fisker Brandt i Østbæk (kig efter Gammel Søulk, der stirrer på Spejlsøen fra byens østlige udkant); Pusler Gizzel, Proviantmester Hale i Fenbridge og Kvartermester Bree i Højvagt fører også stænger. Brug stangen mens du vender mod vand dybt nok til at rumme fisk, op til ca. 24 yards foran dig, og din flyder sejler afsted.\n\nDu kan ikke kaste, mens du er i kamp, mens du svømmer, eller mens du er død: at kaste fra bredden er den tilsigtede position, og ethvert fiskbart vand duer, i alle zoner.",
+        "biteHeading": "Bid og indhivning",
+        "biteBody": "Efter kastet kommer et bid på et skjult tidspunkt mellem {min} og {max} sekunder; forsinkelsen besluttes, når linen lander, så ingen to kast føles helt ens. Når flåddet bider, har du et vindue på {reel} sekunder til at trykke på stangen igen og hive ind: hiv inden for det og fangsten lander, tøv forbi det og fisken slipper væk uden at vise noget. En hel session loftes på {cap} sekunder, så selv et stille kast løser sig hurtigt.\n\nBedre stænger skærper begge ender af minispillet: hvert stangniveau over det første trimmer {rod} sekunder af den længst mulige ventetid og tilføjer {reelRod} sekunder til indhivningsvinduet, så Jernhjulstangen trækker den værste ventetid ned til 6,5 sekunder med et 3,75 sekunders vindue, og Sølvbæk til 5 og 4,5. De hurtigste bid ændrer sig aldrig, uanset hvad du holder, og en stang behøver kun at være i dine tasker for at tælle.",
+        "scheduleHeading": "Færdighedspoint-optjening",
+        "scheduleNote": "Fiskeriets optjening følger en fast plan uden terningkast: et helt point pr. fangst under 50 færdighed, et halvt point under 100, en tiendedel under 150, og et langsomt dryp på 0,02 fra 150 til 200. Den sidste strækning er med vilje en rejse over tusindvis af fangster: 200 er en erklæring, ikke et stoppested på vejen til noget andet.\n\nSkrammel holder op med at lære dig noget ved {cutoff}: fra da af er ukrudt og støvler blot ukrudt og støvler. Enhver anden landet fangst optjener efter den faste plan, så fisk der, hvor du alligevel ville fiske, og lad tælleren klatre.",
+        "colProficiency": "Færdighed",
+        "colGain": "Gevinst pr. fangst",
+        "belowFmt": "Under {below}",
+        "tablesHeading": "Fangsttabeller",
+        "tablesNote": "Din færdighed vælger et af tre fangstbånd: bånd 0 fra starten, bånd 1 ved 100, bånd 2 ved 200, og hvert skifter vægt væk fra skrammel og tomme kroge og hen til rigtige fisk, zone for zone. Hvert bånd over det første kræver også en stang: bånd 1 vil have det niveau 2 Jernhjul, bånd 2 det niveau 3 Sølvbæk. Dit effektive bånd er det laveste af, hvad din færdighed har fortjent, og hvad din stang understøtter, og grænsen er stiltiende: med en ringere stang fanger du stadig, blot fra det lavere bånds tabel, så hvis dine fangster føles fastsiddende mens din færdighed klatrer, så tjek din stang først.\n\nHver zones vande rummer sit eget par madfisk, der healer mere jo dybere zonen er, og alle er madlavningsråvarer og fuldt ud god mad at spise rå direkte fra krogen. Resten af tabellen er fiskeriets skat: ukrudt, den lejlighedsvise støvle og den tomme krog, der aldrig forsvinder helt. Den {rare} er den samme langskudsgevinst på enhver linje, med faste odds der aldrig ændrer sig med færdighed, så den nyeste fisker på broen har samme chance som en Mesterangler.",
+        "bandHeading": "Niveau {band}: færdighed {at} og opefter, stangtype {rod}",
+        "colCatch": "Fangst",
+        "colOdds": "Odds",
+        "pctFmt": "{pct}%",
+        "emptyHook": "Intet bider",
+        "koiHeading": "Solglimt-Koikarpen",
+        "koiBody": "Hvert vandlegeme i spillet skjuler den samme præmie: Solglimt-Koikarpen, et ualmindeligt glimt på linen til en pris af 75 kobber hos en handlende og langt mere for din stolthed. Dens odds er flade 3 procent pr. landet fangst (4 procent i Tornetops kolde vand) ved hvert niveau, og at lande én registrerer Et Glimt af Håb i din Bedrifternes Bog, et nul-Hæder samlermærke. Når det sker, sørger loggen for at du ved det."
+      },
+      "econ": {
+        "title": "Håndværksøkonomi",
+        "intro": "Sådan bevæger mønt sig gennem fagene: de præcise gebyrer og dræn, hvad der faktisk sælger, Verdensmarkedets regler, arbejdsordrer, kommissioner og hvorfor fremstillet magt stopper under raid-gulvet.",
+        "feesHeading": "Gebyrer og dræn",
+        "feesNote": "En sund spillerøkonomi har brug for mønt, der forlader verden, og fag bærer flere af disse dræn. At lære en trænersopskrift koster et engangsgebyr efter dens trin, hvert vellykket håndværk betaler et lille gebyr skaleret til stykkets statistikbudget, og oven på disse sidder afbindingsgebyrerne og Markedets andel.\n\nIngen af denne mønt går til en anden spiller: den forlader spillet helt, og det er det, der holder mønten, resten af jer tjener, noget værd.",
+        "feeCraft": "Håndværksgebyr",
+        "feeCraftValue": "{fee} pr. point af genstandsbudget",
+        "feeMarket": "Markedets andel",
+        "feeMarketValue": "{pct}% af et afsluttet salg",
+        "feeDeposit": "Noteringsdepositum",
+        "feeDepositValue": "Ingen",
+        "feeUnbind": "Afbindingsgebyr",
+        "feeUnbindValue": "{uncommon} ualmindelig, {rare} sjælden, {epic} episk",
+        "trainingHeading": "Træningsgebyrer",
+        "trainingNote": "Ét fast gebyr pr. opskriftstrin, opkrævet én gang, når en mester underviser i det; de højere niveauer i tabellen venter på fremtidigt indhold.",
+        "trainingTierFmt": "Niveau {tier}: {fee}",
+        "free": "Gratis",
+        "sellsHeading": "Hvad der sælger, og hvorfor",
+        "sellsBody": "Den stødigste forretning er forbrugsvarer, fordi de bruges op og købes igen. Trylledrikke, kogt mad og fortryllelser forsvinder alle med brug: en fighter der køber et sværd én gang vil købe helbredende trylledrikke for evigt, og hvert nyt stykke udstyr er en ny chance for at sælge en fortryllelse.\n\nMesterværksstykker er den premium-ende. De kan ikke laves på bestilling, så et efterspurgt stykke beordrer et reelt tillæg, og din signatur på det er vandrende reklame. Råmaterialer er den tredje søjle: arkan materiale fra at affortrylle, typebestemte Resonante sekundærer der flyder direkte fra nedbryderen til fortrylleren, og signerede indsamlede materialer, som håndværkere der jager mesterværkschancer betaler over odds for.",
+        "marketHeading": "Verdensmarkedet og dets andel",
+        "marketBody": "Verdensmarkedet er rigets dækkende børs, holdt af Købmanden i Østbæk og Auktionsholder Voss i Højvagt. Notering er gratis: der er intet depositum, og en usolgt notering kommer simpelthen tilbage til dig. Huset tager sin andel kun, når noget faktisk sælger: 5 procent af salgsprisen, og resten venter på, at du henter det.\n\nEn vigtig begrænsning: Markedet mægler kun ordinære varer. Et signeret, mesterværks-, fortryllet eller bundet eksemplar medtages aldrig i en notering, så de særlige stykker skifter hænder ansigt til ansigt i et handelvindue, som bærer en genstandens fulde identitet, signatur og det hele. Prissæt dem selv; Markedet fortæller dig kun hvad den ordinære version henter.",
+        "workOrdersHeading": "Arbejdsordrer",
+        "workOrdersNote": "Hver stationsmester udsteder en stående arbejdsordre: bring en stak af deres håndværks standardmateriale og bliv betalt på stedet, plus lidt quest-erfaring. Betalingen er bevidst {pct}% af hvad en handlende ville give dig for den samme stak, afrundet nedad, så en arbejdsordre aldrig er den profitable måde at sælge materialer på, blot en grund til at svinge forbi stationen.\n\nHver ordre kører på sin egen {minutes}-minutters ur pr. karakter: aflevér én og den mester har intet mere til dig, før timeren løber rundt. Behandl dem som en lille bonus på materialer, du alligevel var ved at indsamle, ikke som en forretning.",
+        "colOrder": "Arbejdsordre",
+        "colMaster": "Mester",
+        "colAsks": "Beder om",
+        "colPays": "Betaler",
+        "commissionsHeading": "Kommissioner og Magerens Binding",
+        "commissionsBody": "En kommission er et håndværk lavet for nogen. Når man fremstiller et våben, et rustningsstykke eller et holdt off-hand (en trylledrik kan ikke have en binding), kan håndværkeren markere håndværket som en kommission: det færdige stykke opfører sig normalt i magerens egne hænder, men i det øjeblik det skifter hænder i en handel binder det sig til den person, der modtog det. Det er Magerens Binding: køberen får sit stykke, og stykket kan ikke videregives eller vidersælges.\n\nBindinger er ikke evige, bare dyre. Enhver stationsmester vil afbinde et bundet stykke, mens du står ved deres station (en mobil station tilbyder aldrig tjenesten), for et gebyr fastsat af genstandens kvalitet: 25 sølv ualmindelig, 1 guld sjælden, 4 guld episk, med en legendarisk der betaler den episke takst og et kommissioneret almindeligt stykke den ualmindelige.\n\nGebyret køber en ren tavle, ikke en kur: stykket er stadig en kommission, så det binder sig igen til den, der modtager det i næste handel, og alt andet ved det, signatur, mesterværk og fortryllelser, overlever urørt.",
+        "provenanceHeading": "Signeret arbejde",
+        "provenanceBody": "Nogle genstande bærer et navn. Hold musen over en og tooltipet siger Indsamlet af den-og-den på et råmateriale, eller Fremstillet af den-og-den på et færdigt stykke: det samme mærke, formuleret efter hvordan genstanden kom til. En signatur er en del af genstanden selv, rejser med den gennem handler og banken, og falmer aldrig.\n\nIndsamling signerer sit bedste arbejde automatisk: enhver høst der ruller sjælden eller bedre ankommer signeret, sjældne fund signerer hele deres femfoldige vindkast, og et kadaverhøsts heldige rul signerer dets udbytte, herunder uberørte eksemplarer. Håndværk signerer langs den samme linje: et enkelt-kopi-output af sjælden kvalitet eller bedre præges signeret, og et mesterværk signerer altid uanset dets kvalitet, så den fineste version af ethvert stykke altid nævner sin mager. Den ene ting der kan koste dig en signatur er en fuld taske: en signeret enhed har brug for plads til sig selv, eller en matchende signeret stak, for at lande i.\n\nEn stak genstande deler én identitet, så to eksemplarer smelter kun sammen, når alle mærker matcher præcist: samme genstand, samme underskriver, samme mesterværksstatistikker, samme fortryllelse, samme binding. Et signeret stykke træ slutter sig aldrig til en ordinær bunke i nogen retning (sammensmelting ville slette nogens navn), men identiske nyttelaster smelter gerne sammen, så tyve malm signeret af den samme indsamler sidder i én stak, og et vindkast ødelægger ikke dine tasker.\n\nSignaturer betaler håndværkere tilbage: at forbruge et signeret råmateriale, uanset hvem der signerede det, tilføjer 2 procentpoint mesterværkschance, og at holde et råmateriale signeret af din egen hånd reducerer det råmateriales krævede mængde med én (aldrig under én). Dit eget signerede sjælden-eller-bedre arbejde fortsætter endda med at lære dig: når et stykke du signerede yder i dine egne hænder, en trylledrik drukket på det rette øjeblik, et dødende slag landet, rustning båret ved et drab, strømmer en lille smule færdighed tilbage til det håndværk, der lavede det, så længe det håndværk er et af dine aktive hovedfag.",
+        "collectorsHeading": "Samlere, trofæer og prisen på en historie",
+        "collectorsBody": "Handlende er blinde for ophav: en signeret genstand sælger til en NPC til præcis dens ordinære pris. Præmien på en signatur eksisterer kun mellem spillere, og det er præcis det, der gør det interessant: en stak vindfaldsmalm signeret af en berømt indsamler, en Førsteklasses Udskæring fra en heldig høst, et mestervåben der nævner en håndværker, som siden er gået på pension, alt koster hvad end nogen husker at det er værd.\n\nBedrifternes Bog spiller på den samme instinkt: Uberørt Åre, Gammelt Kernetræ, måneskinsblomst, Et Perfekt Eksemplar og Et Glimt af Håb er nul-Hæder samlermærker, der udelukkende eksisterer for at bevise, at et øjeblik skete for dig. Behold den genstand der optjente bedriften, og du holder kvitteringen. Intet af dette er magt; ophav køber ingen statistikker og vinder ingen kampe, det er spillets papirspor af gode dage.",
+        "throttleHeading": "Handlingsbegrænsningen",
+        "throttleBody": "Output har et loft: håndværk, affortrylle, fortrylle og bjærge deler ét budget på {actions} vellykkede handlinger pr. rullende {seconds} sekunder. Et afvist forsøg koster intet og bruger intet budget. Du vil aldrig mærke det i normal spil; det eksisterer, så en maksimalt specialiseret med en fuld bank ikke kan oversvømme Markedet, uanset deres færdighed eller lagerbeholdning.",
+        "doctrineHeading": "Spillere handler med spillere",
+        "doctrineBody": "Håndværksøkonomien er bygget på én idé: spillere forsyner spillere. Indsamlere fodrer håndværkere, håndværkere fodrer questere og raiders, og nedbrydere fodrer fortryllere, med handlende og stationsmestre, der står i kanten for at absorbere skrammel og mønt snarere end at konkurrere med dig. Hvis du vil tjene penge på et fag, er din kunde en person: lær hvad andre spillere brænder igennem, prissæt mod Verdensmarkedet, og behandl NPC-systemerne som et gulv under dine priser, ikke som markedet selv.\n\nFremstillet udstyr er afstemt til at ligge under raid-gulvet: selv et mesterværk er kun nogensinde ét kvalitetsniveau over sin opskrift, aldrig forbi legendarisk, og dets statistikbudget holder sig under raid-bytteområdet. Smedjen gør dig klar til det sværeste indhold; den erstatter det ikke. Det holder håndværkere, raiders og markedet i en stabil trekant: raid-bytte forbliver noget at stræbe efter, og fremstillede stykker forbliver det bedste udstyr, penge faktisk kan købe."
+      },
+      "faq": {
+        "title": "Professions-FAQ",
+        "intro": "Hurtige svar på de spørgsmål håndværkere stiller mest.",
+        "q1": "Hvorfor stables mine signerede genstande ikke?",
+        "a1": "Et signeret stykke er et instansieret stykke: det bærer sin egen lille post (underskriveren, enhver rullet kvalitet, mesterværksstatistikker, en fortryllelse, en binding) i stedet for at være et anonymt eksemplar. To eksemplarer smelter kun til én stak, når disse poster matcher præcist.\n\nI praksis: sjælden malm du selv indsamlede, stables med mere sjælden malm du selv indsamlede, fordi begge siger Indsamlet af dig og intet andet er forskelligt. Det samme materiale signeret af en ven sidder i sin egen slot, og et ordinært usigneret eksemplar smelter aldrig ind i en signeret stak. Tasker, bank og handel følger alle denne ene regel.",
+        "q2": "Øger almindelige opskrifter min færdighed for evigt?",
+        "a2": "Nej. Hver opskrift scores efter, hvor langt den sidder under dit nuværende trin i det håndværk, den klassiske orange, gul, grøn, grå læsning: fuld gevinst ved eller over dit trin, halvt ét trin under, en fjerdedel to trin under, og intet tre eller flere under. Trin er for hvert 25 færdighed, så de gratis færdighed 0-opskrifter holder op med at lære dig noget ved 75 færdighed.\n\nLofterne er også lavere end det klassiske 300, du måske forventer: hvert af de otte opnåelige håndværk loftet på 125, Minedrift, Skovhugst og Urtekundskab loftet på 100, og Fiskeri løber langt ved 200. At klatre betyder at rykke op til opskrifter på dit eget trin, ikke at slibe den billigste.",
+        "q3": "Hvad er forskellen mellem at plyndre og at høste et kadaver?",
+        "a3": "Ét tryk dækker begge. Alt et kadaver indeholder, mønt og bytte plus eventuelle høstbare komponenter, åbner i det samme vindue: bytte følger de normale byteregler, og høst er fagenes side, der stripper materialer af selve kadaveret.\n\nHøst er først til mølle, enkeltbrug: hvert kadaver kan høstes præcis én gang, af den der gør krav på det først, online inkluderet. Dit Byfokus former, hvad du får: mens du står i et byhub kan du sprede 10 fokuspoint over de komponenttyper du holder af, og hvert fokuseret komponent ruller et bedre trin (hvert 5 point løfter det et trin, højst to trin) og giver mere (10 procent pr. point). Ufokuserede komponenter gøres aldrig dårligere.",
+        "q4": "Hvorfor er min Jernbark-Stok signeret?",
+        "a4": "Du ramte et vindkast. Omtrent 1 høst i 90 udløser en sjælden indsamlingshændelse (gammelt kernetræ på et træ, en uberørt åre på malm, en måneoplyste blomst på urter): det ganger udbyttet fem gange, signerer hver enhed med dit navn og annoncerer fundet til hele zonen. Et sjælden-eller-bedre kvalitetsrul på en ordinær høst signerer udbyttet også.\n\nSignerede materialer er værd at beholde eller sælge dyrt: at forbruge et signeret råmateriale i et håndværk tilføjer 2 procent til mesterværkschancen. Husk bare, at de kun stables med identisk signerede eksemplarer, så de holder deres egen taskeslot.",
+        "q5": "Hvordan afbinder jeg et kommissioneret stykke, og hvad koster det?",
+        "a5": "Gå til en hvilken som helst håndværksstation med stykket i dine tasker og betal mesteren. Gebyret følger genstandens kvalitet: 25 sølv for et ualmindeligt stykke, 1 guld for et sjældent, 4 guld for et episk; et legendarisk betaler den episke takst, og et kommissioneret almindeligt stykke betaler den ualmindelige takst. Det skal være en rigtig station: en mobil station tilbyder aldrig tjenesten.\n\nGebyret køber en ren tavle, ikke en kur: stykket forbliver en kommission, så det binder sig igen til den, der modtager det i næste handel. Hvis flere bundne eksemplarer deler en stak, skrælles ét eksemplar af og afbindes pr. betaling.",
+        "q6": "Hvor lærer jeg opskrifter, og hvad koster de?",
+        "a6": "De ni almindelige feltopskrifter og værktøjsopskrifterne er kendte for alle fra starten, og det er tre stationsbundne toppunkter også (Ovnskæl-Kappen, Vardvæv-Kappen og Skumrings-Ombindingerne), der ikke kræver nogen træner, kun deres station. Alt andet undervises af de tilstedeværende mestre på deres stationer på tværs af de tre hub-byer: de fleste står i Østbæk, garveren holder garverierne i Fenbridge, og alkymisten holder apoteket i Højvagt.\n\nTræneropskrifter kommer i trin ved færdighed 0, 25 og 50, prissat gratis, 25 sølv og 1 guld som et engangsgebyr. En mester underviser en opskrift, når dit trin i det håndværk har nået opskriftens eget trin, og du skal stå ved deres station for at lære: en mobil station tæller ikke.",
+        "q7": "Hvorfor gik min indsamling pludselig langsommere?",
+        "a7": "Indsamlingskasten starter ved 2,5 sekunder og barberes ned på to måder: 0,4 sekunder for hvert værktøjsniveau du ejer over forekomstens eget trin, og 0,15 sekunder for hvert færdighedsniveau du har krydset (ved 100 og 200), med et gulv på 1,5 sekunder. Flyt fra niveau 1-forekomster op til niveau 3-forekomster, og dit overskud forsvinder, så den samme hakke svinger langsommere igen. At eje præcis det krævede niveau køber ingen hastighed; det åbner kun forekomsten.\n\nFærdighedsgevinst fader på samme måde som håndværk gør: en forekomst gråner ud, efterhånden som din færdighed klatrer forbi dens niveau (niveau 1-forekomster underviser intet fra færdighed 75 og opefter), så svaret på langsomme gevinster er forekomster af højere niveau, der kræver et værktøj af mindst deres niveau (bare hænder tæller som niveau 1). Fiskeri følger sin egen aftagende kurve: fuld gevinst under 50 færdighed, halvt under 100, en smule på 0,1 under 150 og 0,02 under 200, og skrammel-fangster underviser intet fra 100 og opefter.",
+        "q8": "Kan jeg lave håndværk væk fra byen?",
+        "a8": "Delvist. De ni almindelige feltopskrifter (starter-våben, rustning, mad og trylledrik-basisvarer) laves overalt, til enhver tid. Alt over dem er bundet til en stationstype: smedje, køkken, apotek, garveri, væv eller værktøjsværksted, og du skal være inden for 20 meter af stationen for at håndværket gennemføres.\n\nVed 75 færdighed i et håndværk specialiserer du dig, og ved siden af en 20 procent materialereduktion får du en mobil station: placer den i marken og den holder i 10 minutter, og tjener det håndværks opskrifter som om du var ved den rigtige. Den mobile station er kun til håndværk: at lære opskrifter og afbinde kommissioner kræver altid den rigtige station i byen."
+      }
     },
     "economy": {
       "intro": "Mønter smører hele verden: de køber dit udstyr, dine forsyninger og dit rejsegrej og skifter hænder mellem spillere. Du opsamler det hele bare ved at spille, så tænk på denne side som et kort over, hvor dine penge kommer fra og går hen.",
@@ -2617,6 +4238,11 @@ export const da_DK: EnTranslations = {
       "junkBody": "Drops, du ikke har brug for, kan stadig sælges til enhver handlende, så tøm dine tasker, hver gang du kommer gennem byen, frem for at lade dem fyldes op. Helt værdiløst skrammel kan også kasseres direkte for at gøre plads.",
       "tradeTitle": "Handel med andre spillere",
       "tradeBody": "Du kan handle ansigt til ansigt med enhver, der står nær dig. I lægger begge genstande og mønter i et delt vindue, og byttet sker først, når I begge bekræfter det, så ingen af parterne kan snydes. Det er den enkle måde at give en ven et drop eller afslutte en aftale.",
+      "mailTitle": "Ravneposten",
+      "mailBody": "Hver hjemmebase har en udskåret ravnesøjle: en postkasse for Ravneposten, rigets brevtjeneste. Stil dig ved en for at skrive til enhver karakter ved navn, en ven online eller længe offline, og vedhæft mønter eller varer til brevet mod en lille portoafgift. Ravnen er et stykke tid om at flyve; når den lander, fortæller en kuvertmarkør modtageren, at noget venter.",
+      "mailHow": "At hente virker på samme måde omvendt: stil dig ved enhver søjle for at læse dine breve og tage det, de bærer, ind i din pung og dine tasker. Et almindeligt brev falmer bort efter et stykke tid, men et, der stadig bærer mønter eller varer, venter på dig, uanset hvor lang tid du tager. Nogle ting nægter posten helt: sjælebundne genstande, opdragsvarer og unikke kosmetiske tokens rejser med dig eller slet ikke. Og hold øje med søjlen efter en god aflevering; nogle opdragsgivere skriver.",
+      "dailyTitle": "Daglige belønninger",
+      "dailyBody": "En skattekisteknap på din skærm åbner vinduet for daglige belønninger. Hver dag fremlægger en håndfuld opgaver: fuldfør opdrag, kæmp i Askekolosseet, vind en kamp i Dalpokalen, og tilbyder et gratis spin på præmiehjulet, alt sammen point til dagens placeringer, og dagens topscorere deler en præmiepulje for indehavere af det valgfrie fællesskabstoken. Intet af det giver magt i spillet. Selve vinduet forklarer dagens regler, og hvem der er kvalificeret, viser ranglisten og gemmer din historik.",
       "marketTitle": "Verdensmarkedet",
       "marketBody": "Købmanden driver Verdensmarkedet, en spillerdrevet børs, hvor du kan købe og sælge med folk, du måske aldrig møder. Tal med Købmanden for at åbne det. Købmanden har også et fast lager af sine egne varer opslået der, så der er altid noget at købe, selv når ingen andre spillere har lagt noget op.",
       "marketBrowse": "Gennemse: rul gennem opslagene eller søg efter navn for at finde, hvad der er til salg. Hvert opslag viser varerne, sælgeren og den ønskede pris for hele stakken.",
@@ -2664,6 +4290,17 @@ export const da_DK: EnTranslations = {
       "guildHeading": "Laug",
       "guildBody": "Et laug er en varig gruppe af spillere du tilhører mellem sessioner. Opret et eller accepter en invitation for at deltage, og du kan være i ét laug ad gangen. Medlemmer har en rang: en leder, officerer og medlemmer.",
       "guildChatBody": "At tilhøre et laug giver dig en privat laugschat-kanal og viser dine laugskammerater på en delt liste, så der altid er kendte ansigter online.",
+      "communityHeading": "At kalde hele fællesskabet",
+      "communityBody": "Start en chatlinje med et udråbstegn for at lave et fællesskabskald: !lfg for at søge en gruppe, !wts og !wtb for at handle, !recruit til dit laug, !event for at annoncere et raid eller møde, og !help for at bede om en hånd. En menu over kaldene dukker op i samme øjeblik, du skriver tegnet. Hvert kald udsendes i verden og gentages på fællesskabets Discord, så det når spillere, der ikke engang er logget ind. Fællesskabskald er en del af onlinespil.",
+      "slashHeading": "Nyttige skråstregskommandoer",
+      "slashBody": "Nogle få dagligdags kommandoer er værd at huske: /w Navn sender en hvisken, og /r svarer på den seneste, du modtog, /invite beder nogen ind i din gruppe, /follow falder i trit bag en ven, /roll kaster terninger, som gruppen kan se, /who viser, hvem der er online, og /afk markerer dig som væk. Skriv /help i spillet for hele listen.",
+      "emotesBody": "Din karakter kan også tale uden ord: skriv en emote som /wave, /dance, /cheer eller /bow, mål en ven først for at rette den mod dem, eller hold X nede for at åbne emotehjulet til et hurtigt udtryk over hovedet.",
+      "calendarHeading": "Begivenhedskalenderen",
+      "calendarBody": "Tryk på I for at åbne begivenhedskalenderen. Den markerer de dage i riget, der er værd at planlægge efter, fra det ugentlige raidkald til fiesta-aften, og det er her, laug holder deres kalender: lauglederen og officererne kan booke begivenheder på den, og hvert medlem ser dem på samme side.",
+      "readyHeading": "Klarmeldinger",
+      "readyBody": "Før et stort pull kan gruppelederen skrive /ready for at spørge rummet: alle andre får en Klar- eller Ikke klar-forespørgsel, og når alle har svaret, eller 30 sekunder er gået, ser hele gruppen en enkelt opsummering af optællingen. Ingen bliver hængt ud; pointen er tallet, ikke synderen.",
+      "markersHeading": "Målmarkører",
+      "markersBody": "I en gruppe, mål en fjendtlig skabning og højreklik dens portræt på målrammen (langt tryk på berøring) for at krone den med et af otte raidsymboler. Ethvert medlem kan markere, hvert symbol lever på ét mål ad gangen, og at sætte et symbol på sit eget mål igen fjerner det. Draborden, opgaver til massekontrol eller et enkelt »denne først« rejser alle hurtigere som et symbol end som en sætning.",
       "etiquetteHeading": "Gruppeetikette",
       "etiquetteBody": "At danne gruppe er et valg, ikke en pligt. Sig hej når du tilslutter dig, kast Behov kun på udstyr du faktisk vil bruge, og lad gruppen vide besked før du tager afsted. En smule høflighed rækker langt, og de fleste spillere er glade for selskabet."
     },
@@ -2691,6 +4328,8 @@ export const da_DK: EnTranslations = {
       "critBody": "Din kritiske slagchance er, hvor ofte et angreb lander for ekstra skade. Alle starter med en lille basischance, og Smidighed (plus nogle talenter og udstyr) bygger oven på den.",
       "dodgeTitle": "Undvigelse",
       "dodgeBody": "Undvigelse er din chance for helt at undgå et indkommende nærkampsangreb. Du begynder med en lille basischance, og Smidighed hæver den, så adrætte klasser slipper for flere slag.",
+      "hasteTitle": "Hast",
+      "hasteBody": "Hast er en egenskab, der fremskynder alt, hvad du gør: nærkampssving, afstandsskud og besværgelser sætter alle farten op sammen. Den kommer fra udstyr, især bonusser fra rustningssæt, mens nogle få evner giver et kort udbrud af hurtigere sving. Dit karakterark viser den som Hast-rating.",
       "dpsTitle": "Skade per sekund",
       "dpsBody": "Dit ark viser også et skøn over skade per sekund: nogenlunde hvad dit våben, dets svinghastighed og din angrebsstyrke lægger op til over tid. Det er en hurtig måde at sammenligne to våben med et blik.",
       "sheetHeading": "At læse dit karakterark",
@@ -3191,12 +4830,13 @@ export const da_DK: EnTranslations = {
     "account": "Konto",
     "logout": "Log ud",
     "donate": "Donér",
-    "whitepaper": "White Paper",
-    "contributions": "Contributions"
+    "contributions": "Contributions",
+    "whitepaper": "White Paper"
   },
   "stats": {
     "title": "Verdensstatus",
     "accountsCreated": "Spillere",
+    "charactersCreated": "Oprettede karakterer",
     "playersOnline": "Spillere online",
     "realmName": "Verdensnavn"
   },
@@ -3231,54 +4871,24 @@ export const da_DK: EnTranslations = {
     "empty": "Ingen opdateringer endnu — kig forbi igen snart.",
     "prerelease": "Forhåndsudgivelse",
     "viewOnGithub": "Vis på GitHub",
-    "openLink": "Open",
-    "officialLog": "Official Work Log",
-    "alphaBetaTitle": "Alpha, Beta, And Public Realm Cadence",
+    "new": "Ny",
+    "viewAll": "Se alle opdateringer på GitHub",
     "alphaBetaBody": "Alpha testers can earn platinum at a higher rate because alpha characters reset every two weeks. Beta promotion happens monthly into public Cryptic Realm and MoveWeight realms after review.",
-    "tokenTitle": "$CR + Platinum Utility Live In The Roadmap",
-    "tokenBody": "$CR is the Cryptic Realm Solana SPL token. Platinum is the in-game premium bridge for cosmetics, houses, mounts, marketplace listings, and Exchange realm trades. The base game stays free to play.",
-    "prTitle": "Upstream Kindness Track",
+    "alphaBetaTitle": "Alpha, Beta, And Public Realm Cadence",
+    "officialLog": "Official Work Log",
+    "openLink": "Open",
     "prBody": "Generic engine, auth, dashboard, auto-update, moderator, and wiki improvements are tracked as shareable work for the ClaudeCraft team while Cryptic Realm-specific realms and $CR features stay here.",
+    "prTitle": "Upstream Kindness Track",
+    "proofBody": "Mint 3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv is published on the public proof page with treasury and Solscan links.",
     "proofTitle": "$CR Proof",
-    "proofBody": "Mint 3QZvD68wupHfRwUZGnuhodB9V8o1pPAhKKJgJC2YmMMv is published on the public proof page with treasury and Solscan links."
-  },
-  "contributions": {
-    "title": "Contributions",
-    "lead": "Cryptic Realm is its own game, but it can still send practical engine improvements back upstream. This separates shared ClaudeCraft-friendly work from private Cryptic Realm features.",
-    "sharedTitle": "Shared Upstream Candidates",
-    "sharedBody": "Clean, generic improvements offered upstream because they help the base project without giving away Cryptic Realm-only economy, realm, or lore systems.",
-    "cAuthT": "Auth & Account Safety",
-    "cAuthB": "OIDC wiring, optional TOTP login hardening, safer login throttles, clearer dashboard sessions.",
-    "cAdminT": "Admin & Moderator Tools",
-    "cAdminB": "Account review, chat moderation, report queues, role-gated dashboards, and better status panels.",
-    "cOpsT": "Updates & Operations",
-    "cOpsB": "Auto-update maintenance mode, static cache policy, API health checks, and safer server restarts.",
-    "cWikiT": "Wiki & Public Hubs",
-    "cWikiB": "Public wiki hub fallback, release/news feed, launcher status page, and improved nav consistency.",
-    "cUiT": "Game UI Quality",
-    "cUiB": "Camera options, mobile layout fixes, clearer landing flows, and performance guidance.",
-    "cTestT": "Test Coverage",
-    "cTestB": "Security tests, OAuth tests, realm tests, launcher tests, and visual smoke scripts.",
-    "privateTitle": "Cryptic Realm-Only Work",
-    "privateBody": "These stay in the independent track because they define this game and are not handed over as generic upstream value.",
-    "tagPlatinum": "Platinum economy",
-    "tagExchange": "Exchange realm",
-    "tagLore": "Cryptic Realm lore",
-    "tagRealms": "Hellmaw / Classic / Dominion / Arcane realms",
-    "tagMinigames": "Original mini-games",
-    "tagCustody": "Private custody runbooks"
-  },
-  "whitepaper": {
-    "loading": "Loading the white paper…"
-  },
-  "links": {
-    "title": "Official Links",
-    "loading": "Loading official channels…"
+    "tokenBody": "$CR is the Cryptic Realm Solana SPL token. Platinum is the in-game premium bridge for cosmetics, houses, mounts, marketplace listings, and Exchange realm trades. The base game stays free to play.",
+    "tokenTitle": "$CR + Platinum Utility Live In The Roadmap"
   },
   "download": {
-    "title": "Launchers & Installs",
+    "title": "Download Desktop-launcher",
     "desc": "Hent den selvstændige launcher for optimeret ydeevne og fuldskærmsspil.",
     "macCta": "Download til macOS",
+    "windowsCta": "Download til Windows",
     "linuxCta": "Download til Linux",
     "linuxHint": "AppImage: gør det eksekverbart, og kør det derefter. Ingen installation nødvendig.",
     "windowsPending": "Windows-build afventer."
@@ -3315,6 +4925,9 @@ export const da_DK: EnTranslations = {
     "password": "Adgangskode",
     "passwordError": "Indtast venligst din adgangskode.",
     "passwordPlaceholder": "Indtast adgangskode",
+    "email": "E-mail",
+    "emailPlaceholder": "dig@eksempel.com",
+    "emailError": "Indtast venligst en gyldig e-mailadresse.",
     "showPassword": "Vis adgangskode",
     "hidePassword": "Skjul adgangskode",
     "logIn": "Log ind",
@@ -3326,13 +4939,6 @@ export const da_DK: EnTranslations = {
     "realm": "Verden",
     "newCharacter": "Ny karakter",
     "appearance": "Udseende",
-    "ssoMoveweight": "Sign in with MoveWeight",
-    "ssoProviders": "Continue with Google, Facebook, Plex, or Discord",
-    "ssoButton": "Continue with Google, Facebook, or Plex",
-    "ladderChar": "Ladder character",
-    "ladderHint": "Competes on the seasonal ladder. At season end it converts to a standard character (keeps all progress).",
-    "hardcoreChar": "Hardcore character",
-    "hardcoreHint": "Permadeath. If this character dies, it is permanently retired and can no longer be played. There is no resurrection.",
     "class": "Klasse",
     "name": "Navn",
     "chromaOption": "Kroma {n}",
@@ -3348,9 +4954,6 @@ export const da_DK: EnTranslations = {
     "twoFactorLabel": "Autentificeringskode",
     "twoFactorPlaceholder": "6-cifret eller gendannelseskode",
     "twoFactorHint": "Indtast koden fra din autentificeringsapp eller en af dine gendannelseskoder.",
-    "email": "E-mail",
-    "emailPlaceholder": "dig@eksempel.com",
-    "emailError": "Indtast venligst en gyldig e-mailadresse.",
     "recovery": {
       "title": "Tilføj en gendannelses-e-mail",
       "body": "Angiv en e-mailadresse, så du kan gendanne din konto. Vi bruger den kun til at bekræfte, at du ejer denne konto, hvis du en dag skal nulstille din adgangskode.",
@@ -3358,7 +4961,14 @@ export const da_DK: EnTranslations = {
       "logOut": "Log ud",
       "invalid": "Indtast venligst en gyldig e-mailadresse.",
       "failed": "Kunne ikke gemme din e-mail. Prøv igen."
-    }
+    },
+    "hardcoreChar": "Hardcore character",
+    "hardcoreHint": "Permadeath. If this character dies, it is permanently retired and can no longer be played. There is no resurrection.",
+    "ladderChar": "Ladder character",
+    "ladderHint": "Competes on the seasonal ladder. At season end it converts to a standard character (keeps all progress).",
+    "ssoButton": "Continue with Google, Facebook, or Plex",
+    "ssoMoveweight": "Sign in with MoveWeight",
+    "ssoProviders": "Continue with Google, Facebook, Plex, or Discord"
   },
   "wallet": {
     "label": "$CR-pung",
@@ -3399,6 +5009,9 @@ export const da_DK: EnTranslations = {
     "balancePreviewTitle": "Forhåndsvisning af forbundet pungs $CR-saldo",
     "balancePreviewAria": "Forhåndsvisning af forbundet pungs saldo: {balance}. Tilknyt pungen for at verificere ejer-pynt.",
     "balanceAmount": "{amount} $CR",
+    "bagConnect": "Tilknyt pung",
+    "bagLink": "Bekræft pung",
+    "bagReconnect": "Gentilslut pung",
     "connected": "Forbundet: {address}",
     "connectedWithBalance": "Forbundet: {balance} - {address}",
     "connectedLinked": "Verificeret: {address}",
@@ -3413,12 +5026,37 @@ export const da_DK: EnTranslations = {
     "helpLinkedDisconnected": "Ejerfordele er aktive. Forbind appen, når du har brug for at underskrive eller bruge midler.",
     "helpLinkedDisconnectedWithBalance": "Ejerfordele er aktive. Forbind appen, når du har brug for at underskrive eller bruge midler.",
     "extensionHelp": "For at se en pung her skal du holde en browser-pungudvidelse som Solflare Wallet aktiv.",
+    "mobileAppHelp": "Vælg Phantom eller Solflare. Din pung-app beder om godkendelse. Hold dette spil åbent og vend tilbage, når du er færdig.",
+    "standaloneAppHelp": "Pungforbindelser er endnu ikke tilgængelige i startskærmsappen. Åbn Cryptic Realm i Safari eller Chrome for at bruge Phantom eller Solflare.",
+    "openAppTitle": "Fortsæt i {wallet}",
+    "openAppHelp": "Åbn {wallet} for at gennemgå denne anmodning. Hold denne spil-fane åben, mens pung-appen er aktiv.",
+    "openAppButton": "Åbn {wallet}",
+    "manualReturnBrowserHelp": "Efter godkendelse kan du vende tilbage til denne spil-fane. Hvis iOS åbner en anden browser, skal du lukke den og manuelt vende tilbage til den oprindelige browser.",
+    "manualReturnStandaloneHelp": "Efter godkendelse kan du vende tilbage til Cryptic Realm fra din startskærm. Hvis iOS åbner en browser, skal du lukke den og manuelt genåbne startskærmsappen.",
+    "preparingAppButton": "Forbereder {wallet}...",
+    "walletAppUnavailable": "{wallet} kunne ikke forberedes. Luk dette vindue og prøv igen.",
     "flowConnect": "Vælg en pung. Verificeringen fortsætter automatisk.",
     "flowSign": "Underskriv verificeringsbeskeden i din pung-app. Ingen transaktion eller SOL kræves.",
     "flowVerify": "Verificerer ejerskab af pung...",
     "linkFailed": "Verificering af pung mislykkedes.",
     "verifyFailed": "Verificering af pung mislykkedes.",
     "unlinkFailed": "Kunne ikke frakoble pungen.",
+    "browser": {
+      "eyebrow": "Skrivebordsappens pung-godkendelse",
+      "title": "Tilslut en Solana-pung",
+      "linkBody": "Vælg en pung-udvidelse i denne browser. Du underskriver en bekræftelsesbesked og vender derefter tilbage til skrivebordsappen.",
+      "paymentBody": "Vælg den pung, der er tilknyttet din konto, og godkend transaktionen i denne browser.",
+      "extensionHelp": "Ingen kompatibel pung-udvidelse blev fundet. Installer eller lås Phantom, Solflare eller en anden Solana-browserpung op og prøv derefter igen.",
+      "safety": "Cryptic Realm beder aldrig om din genoprettelsesfrase eller private nøgle.",
+      "continueWith": "Fortsæt med {wallet}",
+      "reviewTitle": "Gennemse i din pung",
+      "reviewBody": "Følg prompten fra {wallet}. Hold denne browserside åben.",
+      "completeTitle": "Pung-godkendelse fuldført",
+      "completeBody": "Du kan nu vende tilbage til Cryptic Realm-skrivebordsappen.",
+      "returnButton": "Vend tilbage til skrivebordsapp",
+      "failed": "Pung-godkendelse mislykkedes eller udløb. Vend tilbage til skrivebordsappen og prøv igen.",
+      "retry": "Prøv igen"
+    },
     "holder": "$CR-ejer",
     "holderTierTitle": "{tier} $CR-ejer",
     "holderTiers": {
@@ -3587,71 +5225,6 @@ export const da_DK: EnTranslations = {
     "chat": "Åbn Chat"
   },
   "sim": {
-    "venues": {
-      "derbyQueued": "You are signed up for the Thornwheel Derby ({count} on the grid).",
-      "derbyGrid": "Grid position {slot}. {laps} laps: follow the flags. Green in {seconds}...",
-      "derbyGreen": "GREEN FLAG! Go go go!",
-      "derbyFinishPurse": "Checkered flag! You take {place} place and a {silver}s purse.",
-      "derbyFinish": "Checkered flag! You finish in {place} place.",
-      "derbyTimeUp": "Time! The Marshal waves you in.",
-      "derbyErrMarshal": "Sign up with the Race Marshal at the Thornwheel gate.",
-      "derbyErrRunning": "A race is already running. Wait for the next grid.",
-      "derbyErrFull": "The grid is full for the next race.",
-      "pitQueued": "You are on the card for the next Boarpit bout ({count} signed).",
-      "pitEnter": "Into the pit! {count} fighters. Fists in {seconds}...",
-      "pitFight": "FIGHT!",
-      "pitKo": "Knocked out! You are hauled to the rail.",
-      "pitForfeit": "You forfeit the bout.",
-      "pitWin": "Last one standing! You take the pot: {silver}s.",
-      "pitDraw": "The Pit Master calls it a draw.",
-      "pitErrMaster": "Sign up with the Pit Master at the Boarpit gate.",
-      "pitErrRunning": "A bout is on. Wait for the next bell.",
-      "pitErrFull": "The card is full for the next bout.",
-      "homeDeed": "The deed to {name} is yours. Welcome home.",
-      "homeErrRealtor": "See Realtor Maribel on Homestead Lane to buy a home.",
-      "homeErrEntitlement": "A deed on Homestead Lane costs {price} $CR — settle the deed payment first.",
-      "homeErrOwned": "That home already has an owner.",
-      "homeErrHaveDeed": "You already hold a deed on Homestead Lane.",
-      "hordeAlarm": "THE HORDE ALARM SOUNDS! The dead march on Eastbrook from the north road!",
-      "hordeFortified": "You fortify the town. Wards: {wards}. The line stands taller.",
-      "hordeWave": "WAVE {wave} of {waves}: {count} of the dead are on the road!",
-      "hordeWin": "The town stands! The bursar counts out your share: 80s.",
-      "hordeLoss": "The last ward falls. The dead have Eastbrook tonight.",
-      "hordeBreach": "The dead break into the square! Wards left: {wards}.",
-      "hordeWaveDown": "Wave {wave} is down. Fortify while you can — the next comes soon.",
-      "hordeErrRunning": "The horde alarm is already sounding.",
-      "hordeErrBoard": "Sound the alarm from the town defense board.",
-      "hordeErrMidWave": "Fortify between waves, not while the dead are inside the walls.",
-      "hordeErrMaxWards": "The town is fortified to the rafters already.",
-      "hordeErrCost": "Fortifying the town costs 20s in timber and nails.",
-      "pitBellMissed": "The bell rang without you. Your Boarpit card spot is forfeit.",
-      "hordeErrBuildMidWave": "Build between waves, not while the dead are inside the walls.",
-      "hordeErrBuildCost": "Raising a watch post costs 15s in timber and bowstrings.",
-      "hordePostUp": "A watch post rises on the line ({built} of {total}).",
-      "hordePostMax": "The watch posts are built out.",
-      "hordePostReinforced": "A watch post is reinforced to strength {level}.",
-      "homeForSale": "That plot is still for sale.",
-      "homeShownDoor": "You are shown to the door.",
-      "skErrBusy": "You can't muster a warcamp right now.",
-      "skErrFull": "The muster roll is full.",
-      "skQueued": "You are on the muster roll for a Warcamp Skirmish ({count} of 4).",
-      "skBuilderDead": "Your camp builder has fallen.",
-      "skAxe": "Your builder shoulders the axe.",
-      "skPick": "Your builder hefts the pick.",
-      "skErrCost": "Not enough timber and stone for that.",
-      "skHasBarracks": "Your camp already has a barracks.",
-      "skBarracksUp": "Your barracks stands. Footmen may muster.",
-      "skTowersMax": "Your camp has all its watchtowers.",
-      "skTowerUp": "A watchtower rises over your camp.",
-      "skNeedBarracks": "Footmen need a barracks.",
-      "skFootmanUp": "A footman answers the muster.",
-      "skRally": "Your footmen march on the rally point.",
-      "skStart": "WARCAMP SKIRMISH: raise your camp, hold your tent, break the warband banner!",
-      "skWave": "Warband wave {wave} rides for the camps!",
-      "skTentDown": "Your Command Tent has fallen. Your camp is out.",
-      "skWin": "The warband banner falls! The field is yours: 120s the commander.",
-      "skLoss": "The warband overruns the field. The skirmish is lost."
-    },
     "delve": {
       "cannotEnterNow": "Du kan ikke gå ind i et delve lige nu.",
       "leaveDungeonFirst": "Forlad fangekælderen først.",
@@ -3733,6 +5306,71 @@ export const da_DK: EnTranslations = {
       "toolSlips": "Det værktøj glider af denne lås.",
       "lockJammed": "Låsen sidder så fast, at den ikke kan dirkes. Ryd dit delve igen for endnu et forsøg.",
       "lastPickSnaps": "Den sidste dirk knækker. Låsen sætter sig fast. Kisten er tabt, medmindre du rydder dit delve igen."
+    },
+    "venues": {
+      "derbyErrFull": "The grid is full for the next race.",
+      "derbyErrMarshal": "Sign up with the Race Marshal at the Thornwheel gate.",
+      "derbyErrRunning": "A race is already running. Wait for the next grid.",
+      "derbyFinish": "Checkered flag! You finish in {place} place.",
+      "derbyFinishPurse": "Checkered flag! You take {place} place and a {silver}s purse.",
+      "derbyGreen": "GREEN FLAG! Go go go!",
+      "derbyGrid": "Grid position {slot}. {laps} laps: follow the flags. Green in {seconds}...",
+      "derbyQueued": "You are signed up for the Thornwheel Derby ({count} on the grid).",
+      "derbyTimeUp": "Time! The Marshal waves you in.",
+      "homeDeed": "The deed to {name} is yours. Welcome home.",
+      "homeErrEntitlement": "A deed on Homestead Lane costs {price} $CR — settle the deed payment first.",
+      "homeErrHaveDeed": "You already hold a deed on Homestead Lane.",
+      "homeErrOwned": "That home already has an owner.",
+      "homeErrRealtor": "See Realtor Maribel on Homestead Lane to buy a home.",
+      "homeForSale": "That plot is still for sale.",
+      "homeShownDoor": "You are shown to the door.",
+      "hordeAlarm": "THE HORDE ALARM SOUNDS! The dead march on Eastbrook from the north road!",
+      "hordeBreach": "The dead break into the square! Wards left: {wards}.",
+      "hordeErrBoard": "Sound the alarm from the town defense board.",
+      "hordeErrBuildCost": "Raising a watch post costs 15s in timber and bowstrings.",
+      "hordeErrBuildMidWave": "Build between waves, not while the dead are inside the walls.",
+      "hordeErrCost": "Fortifying the town costs 20s in timber and nails.",
+      "hordeErrMaxWards": "The town is fortified to the rafters already.",
+      "hordeErrMidWave": "Fortify between waves, not while the dead are inside the walls.",
+      "hordeErrRunning": "The horde alarm is already sounding.",
+      "hordeFortified": "You fortify the town. Wards: {wards}. The line stands taller.",
+      "hordeLoss": "The last ward falls. The dead have Eastbrook tonight.",
+      "hordePostMax": "The watch posts are built out.",
+      "hordePostReinforced": "A watch post is reinforced to strength {level}.",
+      "hordePostUp": "A watch post rises on the line ({built} of {total}).",
+      "hordeWave": "WAVE {wave} of {waves}: {count} of the dead are on the road!",
+      "hordeWaveDown": "Wave {wave} is down. Fortify while you can — the next comes soon.",
+      "hordeWin": "The town stands! The bursar counts out your share: 80s.",
+      "pitBellMissed": "The bell rang without you. Your Boarpit card spot is forfeit.",
+      "pitDraw": "The Pit Master calls it a draw.",
+      "pitEnter": "Into the pit! {count} fighters. Fists in {seconds}...",
+      "pitErrFull": "The card is full for the next bout.",
+      "pitErrMaster": "Sign up with the Pit Master at the Boarpit gate.",
+      "pitErrRunning": "A bout is on. Wait for the next bell.",
+      "pitFight": "FIGHT!",
+      "pitForfeit": "You forfeit the bout.",
+      "pitKo": "Knocked out! You are hauled to the rail.",
+      "pitQueued": "You are on the card for the next Boarpit bout ({count} signed).",
+      "pitWin": "Last one standing! You take the pot: {silver}s.",
+      "skAxe": "Your builder shoulders the axe.",
+      "skBarracksUp": "Your barracks stands. Footmen may muster.",
+      "skBuilderDead": "Your camp builder has fallen.",
+      "skErrBusy": "You can't muster a warcamp right now.",
+      "skErrCost": "Not enough timber and stone for that.",
+      "skErrFull": "The muster roll is full.",
+      "skFootmanUp": "A footman answers the muster.",
+      "skHasBarracks": "Your camp already has a barracks.",
+      "skLoss": "The warband overruns the field. The skirmish is lost.",
+      "skNeedBarracks": "Footmen need a barracks.",
+      "skPick": "Your builder hefts the pick.",
+      "skQueued": "You are on the muster roll for a Warcamp Skirmish ({count} of 4).",
+      "skRally": "Your footmen march on the rally point.",
+      "skStart": "WARCAMP SKIRMISH: raise your camp, hold your tent, break the warband banner!",
+      "skTentDown": "Your Command Tent has fallen. Your camp is out.",
+      "skTowerUp": "A watchtower rises over your camp.",
+      "skTowersMax": "Your camp has all its watchtowers.",
+      "skWave": "Warband wave {wave} rides for the camps!",
+      "skWin": "The warband banner falls! The field is yours: 120s the commander."
     }
   },
   "lockpickUi": {
@@ -3803,7 +5441,29 @@ export const da_DK: EnTranslations = {
   },
   "heroicShop": {
     "balance": "Heroiske Mærker: {count}",
-    "buyAria": "Køb {item} for {marks} Heroiske Mærker"
+    "buyAria": "Køb {item} for {marks} Heroiske Mærker",
+    "buyConfirmTitle": "Bekræft køb",
+    "buyConfirmBody": "Køb {item} for {marks} Heroiske Mærker? Køb med mærker kan ikke refunderes.",
+    "buyConfirmAccept": "Køb",
+    "buyConfirmCancel": "Annuller"
+  },
+  "cardDuel": {
+    "title": "Kortduel",
+    "close": "Luk",
+    "join": "Stil dig i kø",
+    "joinAria": "Stil dig i kø til Kortduellen",
+    "leave": "Forlad køen",
+    "leaveAria": "Forlad Kortduel-køen",
+    "forfeit": "Giv op",
+    "forfeitAria": "Giv op i Kortduellen",
+    "queued": "Venter på en modstander...",
+    "unavailable": "Kortduel kræver en anden spiller online.",
+    "vsOpponent": "mod {name}",
+    "round": "Rundescore: {mine} - {theirs}",
+    "counts": "Bunke: {deck} - Kasserede: {discard}",
+    "playCardAria": "Spil kortet med værdien {value}",
+    "waitingOnOpponent": "Venter på modstanderens kort...",
+    "yourTurn": "Spil et kort"
   },
   "delveUi": {
     "board": {
@@ -3838,13 +5498,16 @@ export const da_DK: EnTranslations = {
       "buyAria": "Køb {item} for {marks} Delve-Mærker",
       "reqHeroic": "Kræver en Heroisk gennemførelse",
       "reqClears": "Kræver {count} gennemførelser",
-      "empty": "Intet på lager."
+      "empty": "Intet på lager.",
+      "buyConfirmTitle": "Bekræft køb",
+      "buyConfirmBody": "Køb {item} for {marks} Delve-Mærker? Køb med mærker kan ikke refunderes.",
+      "buyConfirmAccept": "Køb",
+      "buyConfirmCancel": "Annuller"
     },
     "tracker": {
       "title": "Delve",
       "objective": "Mål",
       "module": "Modul {current} af {total}",
-      "descend": "Descend the Hellmaw",
       "affix": "Affikser",
       "complete": "Fuldført",
       "marks": "Delve-Mærker: {count}",
@@ -3853,7 +5516,8 @@ export const da_DK: EnTranslations = {
       "riteChoose": "Gå hen til Det Druknede Relikvarium, og tryk på F for at begynde riten",
       "ritePlayback": "Hold øje med skrinene: husk den rækkefølge, de lyser op i",
       "riteInput": "Tryk på F ved hvert skrin i den rækkefølge, de lyste op ({current}/{total})",
-      "riteOpen": "Relikvariet er åbent: tryk på F på det for at kræve dit bytte"
+      "riteOpen": "Relikvariet er åbent: tryk på F på det for at kræve dit bytte",
+      "descend": "Descend the Hellmaw"
     },
     "objective": {
       "kill_boss": "Dræb {boss}",
@@ -4228,6 +5892,11 @@ export const da_DK: EnTranslations = {
     "discordCommunity": "Deltag i Cryptic Realm Discord-fællesskabet",
     "donateProject": "Donér for at støtte Cryptic Realm"
   },
+  "entryGuard": {
+    "title": "Grafik sænket",
+    "body": "Spillet lukkede uventet, mens du trådte ind i verdenen, så grafikken er nu sat til {preset}. Du kan ændre det i grafikvælgeren nedenfor eller i indstillingerne i spillet.",
+    "dismiss": "Afvis"
+  },
   "loading": {
     "world": "Indlæser verden...",
     "worldProgress": "Indlæser verden... {done}/{total}",
@@ -4237,8 +5906,14 @@ export const da_DK: EnTranslations = {
     "rendererFailed": "Kunne ikke starte gengiveren: prøv at genindlæse. {error}",
     "enterTimeout": "Kunne ikke komme ind i verdenen. Forbindelsen fik timeout. Kører spilserveren?",
     "connectionLost": "Forbindelsen til serveren gik tabt.",
-    "reconnecting": "Forbindelse mistet. Genopretter forbindelse...",
+    "reconnectingAttempt": "Forbindelse mistet. Genopretter forbindelse... (forsøg {attempt}/{maxAttempts}, prøver igen om {seconds}s)",
+    "reconnectingNow": "Forbindelse mistet. Genopretter forbindelse nu... (forsøg {attempt}/{maxAttempts})",
+    "slowConnection": "Dette tager længere tid end normalt. Tjek din internetforbindelse.",
     "connectionRejected": "Serveren lukkede forbindelsen.",
+    "incompatibleWorldVersion": "Spillets og serverens versioner er ikke kompatible. Genindlæs eller opdater, og prøv derefter igen.",
+    "realmFull": "Denne verden er fuld i øjeblikket. Prøv igen om et par minutter.",
+    "tooManyConnections": "Der kommer for mange forbindelser til denne verden fra dit netværk. Luk ekstra spilvinduer, eller prøv igen om et par minutter.",
+    "messageRateExceeded": "Forbindelsen blev afbrudt, fordi du sendte handlinger for hurtigt. Vent et øjeblik, og log ind igen.",
     "tips": {
       "classes": "Tip: Hver af de 9 klasser spilles forskelligt. Prøv nogle stykker, før du vælger én.",
       "talents": "Tip: Du kan nulstille dine talenter, når du er ude af kamp, så et tidligt valg er aldrig en fælde.",
@@ -4248,7 +5923,8 @@ export const da_DK: EnTranslations = {
       "professions": "Tip: Indsamlings- og håndværksfag kan trænes sideløbende med din kampklasse.",
       "loadouts": "Tip: Gem mere end én talentopsætning, så du kan skifte mellem varianter uden at bruge point to gange.",
       "pvp": "Tip: Udfordr en anden spiller til en venskabelig duel, eller stil dig i kø til arenaen i Det Askegrå Colosseum for at afprøve din opbygning."
-    }
+    },
+    "reconnecting": "Forbindelse mistet. Genopretter forbindelse..."
   },
   "errors": {
     "nothingInteract": "Intet at interagere med.",
@@ -4302,6 +5978,17 @@ export const da_DK: EnTranslations = {
       "quit": "Afslut",
       "fatalBody": "Cryptic Realm stødte på en uventet fejl og skal lukke."
     }
+  },
+  "gpuNotice": {
+    "bodyDesktop": "Spillet kører uden GPU-acceleration og vil være langsomt. Opdater dine grafikdrivere og genstart derefter spillet. På Windows skal du også indstille spillet til Høj ydeevne under Indstillinger, System, Skærm, Grafik.",
+    "bodyWeb": "Spillet kører uden GPU-acceleration og vil være langsomt. Aktiver hardwareacceleration i din browsers indstillinger, opdater dine grafikdrivere og genstart derefter din browser.",
+    "dismiss": "Afvis"
+  },
+  "perfNudge": {
+    "integratedGpu": "Spillet kører på den integrerede (strømbesparende) GPU. Hvis denne computer også har en gaming-GPU, skal du på Windows indstille din browser til Høj ydeevne under Indstillinger, System, Skærm, Grafik og derefter genstarte browseren. Skrivebordsappen vælger selv gaming-GPU'en.",
+    "hardwareAccelerationDesktop": "Spillet kører uden GPU-acceleration, hvilket gør det meget langsomt. Opdater dine grafikdrivere og genstart derefter spillet. På Windows skal du også indstille spillet til Høj ydeevne under Indstillinger, System, Skærm, Grafik.",
+    "hardwareAccelerationWeb": "Spillet kører uden GPU-acceleration, hvilket gør det meget langsomt. Aktiver hardwareacceleration i din browsers indstillinger, opdater dine grafikdrivere og genstart derefter din browser.",
+    "dismiss": "Afvis"
   },
   "realm": {
     "noRealms": "Ingen verdener tilgængelige.",
@@ -4731,11 +6418,14 @@ export const da_DK: EnTranslations = {
       "openTrade": "Åbn handel",
       "duelRequest": "{name} har udfordret dig til en duel!",
       "acceptDuel": "Accepter duel",
+      "resurrectionOffer": "{name} vil gerne bringe dig tilbage til livet. Accepterer du?",
+      "acceptResurrection": "Accepter opstandelse",
       "decline": "Afvis"
     },
     "combat": {
       "floatingMiss": "Forbier",
       "floatingDodge": "Undvigelse",
+      "floatingParry": "Pareret",
       "floatingResist": "Modstået",
       "cannotMove": "Kan ikke bevæge dig!",
       "attack": "angreb",
@@ -4745,6 +6435,7 @@ export const da_DK: EnTranslations = {
       "damageTakenCrit": "{source} rammer dig kritisk for {amount}.",
       "miss": "Din {ability} forfejler {target}.",
       "dodged": "Din {ability} undviges af {target}.",
+      "parried": "Din {ability} pareres af {target}.",
       "resisted": "{target} modstår din {ability}.",
       "healSelf": "Din {ability} helbreder dig for {amount}.",
       "healSelfCrit": "Din {ability} helbreder dig kritisk for {amount}.",
@@ -4753,7 +6444,8 @@ export const da_DK: EnTranslations = {
       "death": "{name} dør.",
       "auraGain": "Du får {name}.",
       "auraFade": "{name} svinder bort fra dig.",
-      "auraAfflicted": "{target} er ramt af {name}."
+      "auraAfflicted": "{target} er ramt af {name}.",
+      "auraGainOther": "{target} får {name}."
     },
     "system": {
       "playerDeath": "Du er død.",
@@ -4839,7 +6531,8 @@ export const da_DK: EnTranslations = {
       "tradeInProgress": "En handel er allerede i gang.",
       "tradeTooFar": "Målet er for langt væk til at handle.",
       "tradeExpired": "Handelsanmodningen er udløbet.",
-      "tradeFailed": "Handel mislykkedes: genstande eller penge er ikke længere tilgængelige."
+      "tradeFailed": "Handel mislykkedes: genstande eller penge er ikke længere tilgængelige.",
+      "tradeBound": "Den genstand er bundet og kan ikke handles."
     },
     "logs": {
       "standUp": "Du rejser dig op.",
@@ -4855,6 +6548,7 @@ export const da_DK: EnTranslations = {
       "arenaJoin": "Du tilslutter dig køen til Ashen Coliseum. Vent på en værdig modstander...",
       "arenaLeave": "Du forlader køen til Ashen Coliseum.",
       "arenaSands": "Du træder ud på sandet i Ashen Coliseum.",
+      "arenaSandsDrowned": "Du træder ud på de oversvømmede sten i Den Druknede Gård.",
       "tradeRequestSent": "Du har anmodet om at handle med {name}.",
       "tradeOpened": "Handelsvindue åbnet.",
       "tradeComplete": "Handel fuldført.",
@@ -4865,6 +6559,8 @@ export const da_DK: EnTranslations = {
       "soldItem": "Solgte {item} for {money}.",
       "soldJunkOne": "Solgte {count} skrammelgenstand for {money}.",
       "soldJunkMany": "Solgte {count} skrammelgenstande for {money}.",
+      "keptBoundOne": "Beholdt {count} bundent eksemplar.",
+      "keptBoundMany": "Beholdt {count} bundne eksemplarer.",
       "friendOnline": "{name} er kommet online.",
       "friendOffline": "{name} er gået offline."
     },
@@ -4905,6 +6601,7 @@ export const da_DK: EnTranslations = {
     },
     "pet": {
       "attack": "Angrib",
+      "waterJet": "Vandstråle",
       "taunt": "Hån",
       "healDemon": "Helbred dæmon",
       "healPet": "Helbred kæledyr",
@@ -4913,6 +6610,8 @@ export const da_DK: EnTranslations = {
       "aggressive": "Aggressiv",
       "petAttackTitle": "Kæledyrsangreb",
       "petAttackDesc": "Befal dit kæledyr at angribe dit nuværende fjendtlige mål.",
+      "waterJetTitle": "Vandstråle",
+      "waterJetDesc": "Befal dit Vandelementar at kanalisere en bremsende vandstråle i 3 sekunder. 8 sekunders nedkøling. Højreklik for automatisk at kaste det, når det er klar.",
       "petTauntTitle": "Kæledyrshån",
       "petTauntDesc": "Befal dit kæledyr at gå i kamp og knurre, når det er inden for rækkevidde. 10 sekunders nedkøling.",
       "healDemonDesc": "Brug mana til at kanalisere helbredelse ind i din dæmon over 5 sekunder.",
@@ -4984,7 +6683,8 @@ export const da_DK: EnTranslations = {
         "offline": "Offline",
         "combat": "I kamp",
         "dungeon": "I fangekælder",
-        "dead": "Død"
+        "dead": "Død",
+        "afk": "Borte"
       },
       "statusWithZone": "{status} - {zone}",
       "ranks": {
@@ -5017,6 +6717,11 @@ export const da_DK: EnTranslations = {
       "playerLevelClassTitle": "{name} - Niv {level} {className}",
       "noChallengers": "Ingen udfordrere rangeret endnu - vær den første.",
       "matchInProgress": "Kamp i gang mod {name}.",
+      "mapName": "Kort: {name}",
+      "map": {
+        "coliseum": "Askegrå Colosseum",
+        "drownedCourt": "Den Druknede Gård"
+      },
       "leaveQueue": "Forlad Køen",
       "searching": "Søger efter en modstander... ({count} i kø)",
       "enterQueue": "Stil dig i Køen",
@@ -5035,6 +6740,7 @@ export const da_DK: EnTranslations = {
     "actionBar": {
       "attackName": "Angrib",
       "attackTooltip": "Slå automatisk angreb til/fra på dit mål. Højreklik på en fjende angriber også.",
+      "attackRemoveHint": "Højreklik for at fjerne den fra bjælken og frigøre pladsen.",
       "emptySlot": "Tom plads",
       "slotAria": "Handlingsplads {slot}: {ability}",
       "emptySlotAria": "Handlingsplads {slot}: tom",
@@ -5091,6 +6797,7 @@ export const da_DK: EnTranslations = {
     },
     "cast": {
       "fishing": "Fiskeri",
+      "gathering": "Indsamling",
       "demonHeal": "Dæmonhelbredelse",
       "thunzharrStormcall": "Stormkald"
     }
@@ -5127,6 +6834,7 @@ export const da_DK: EnTranslations = {
       "readyQuestAria": "Quest klar til at aflevere: {name}",
       "discussQuest": "Tal om {name}.",
       "discussQuestAria": "Tal om quest: {name}",
+      "profIntroHint": "Se {name} for \"{quest}\".",
       "nythraxisDeathlessKingWarning": "De tre relikvier fortæller den samme historie: Aldren kæmpede for at forsvare sin konge, Malric brød dødens grænse, og Voss forsøgte at standse det, der fulgte. Seglet svækkes, og den forladte krypt er vejen ned.",
       "browseGoods": "Lad mig se dine varer.",
       "browseGoodsAria": "Gennemse varer fra {name}",
@@ -5178,6 +6886,8 @@ export const da_DK: EnTranslations = {
     },
     "slots": {
       "mainhand": "Hovedhånd",
+      "twoHand": "Tohåndsvåben",
+      "offhand": "Sekundær hånd",
       "helmet": "Hjelm",
       "neck": "Hals",
       "shoulder": "Skulder",
@@ -5218,7 +6928,8 @@ export const da_DK: EnTranslations = {
       "attackPower": "Angrebsstyrke",
       "dps": "Skade/sek",
       "critChance": "Kritisk chance",
-      "dodge": "Undvigelse"
+      "dodge": "Undvigelse",
+      "parry": "Parering"
     },
     "tooltip": {
       "qualityKind": "{quality} {kind}",
@@ -5226,7 +6937,6 @@ export const da_DK: EnTranslations = {
       "ifYouEquip": "Hvis du udruster denne",
       "damageSpeed": "{min} - {max} Skade Hastighed {speed}",
       "dps": "({dps} skade i sekundet)",
-      "dagger": "Dolk",
       "armorStat": "{value} Rustning",
       "stat": "+{value} {stat}",
       "useFood": "Brug: Genopretter {amount} helbred over {seconds} sek. Skal forblive siddende mens du spiser.",
@@ -5249,7 +6959,8 @@ export const da_DK: EnTranslations = {
       "clickUseInstant": "Klik for at bruge øjeblikkeligt i kamp",
       "clickUse": "Klik for at bruge",
       "clickBuyback": "Klik for at købe tilbage",
-      "bagSlots": "Taske med {slots} pladser"
+      "bagSlots": "Taske med {slots} pladser",
+      "dagger": "Dolk"
     },
     "bags": {
       "title": "Tasker",
@@ -5273,15 +6984,15 @@ export const da_DK: EnTranslations = {
       "buybackTitle": "Tilbagekøb",
       "buybackEmpty": "Ingen genstande",
       "buybackAria": "Køb {item} tilbage for {price}",
-      "sellItemAria": "Sælg {item} for {price}",
-      "sellRolledWarning": "Tilfældige egenskaber kan ikke gendannes ved tilbagekøb.",
       "sellQuantityTitle": "Sælg {item}",
       "sellQuantityInput": "Antal at sælge",
       "sellQuantityConfirm": "Sælg",
       "sellQuantityCancel": "Annullér",
       "sellJunk": "Sælg skrammel",
       "sellJunkAria": "Sælg alt skrammel for {price}",
-      "sellJunkHint": "Sælger alle grå genstande i dine tasker undtagen questgenstande."
+      "sellJunkHint": "Sælger alle grå genstande i dine tasker undtagen questgenstande.",
+      "sellItemAria": "Sælg {item} for {price}",
+      "sellRolledWarning": "Tilfældige egenskaber kan ikke gendannes ved tilbagekøb."
     },
     "market": {
       "title": "Verdensmarkedet",
@@ -5306,6 +7017,7 @@ export const da_DK: EnTranslations = {
       "pageNextAria": "Næste markedsside",
       "pageStatus": "Side {current} af {total}",
       "filters": "Markedsfiltre",
+      "filterValueAria": "{label}: {value}",
       "filterType": "Type",
       "filterTypeAll": "Alle typer",
       "filterTypeWeapon": "Våben",
@@ -5316,8 +7028,15 @@ export const da_DK: EnTranslations = {
       "filterTypeOther": "Andet",
       "filterArmorType": "Rustningstype",
       "filterArmorAll": "Al rustning",
+      "filterArmorSlot": "Rustningsplads",
+      "filterArmorClassAll": "Alle rustningstyper",
+      "armorCloth": "Stof",
+      "armorLeather": "Læder",
+      "armorMail": "Ringbrynje",
       "filterWeaponType": "Våbentype",
       "filterWeaponAll": "Alle våben",
+      "filterPrimaryStat": "Primær statistik",
+      "filterPrimaryStatAll": "Alle primære statistikker",
       "filterRarity": "Sjældenhed",
       "filterRarityAll": "Alle sjældenheder",
       "weaponSword": "Sværd",
@@ -5331,6 +7050,7 @@ export const da_DK: EnTranslations = {
       "rarityUncommon": "Ualmindelig",
       "rarityRare": "Sjælden",
       "rarityEpic": "Episk",
+      "rarityLegendary": "Legendarisk",
       "merchantStock": "Købmandens lager",
       "stackCount": "x{count}",
       "each": "{money} stykket",
@@ -5461,10 +7181,6 @@ export const da_DK: EnTranslations = {
         "name": "Jernbrøl",
         "description": "Øger din angrebskraft med {buff} i 2 min."
       },
-      "commanding_shout": {
-        "name": "Styrkende Råb",
-        "description": "Øger din Udholdenhed med {buff} i 2 min."
-      },
       "demoralizing_shout": {
         "name": "Rædselshyl",
         "description": "Udstøder et frygtindgydende råb, der sænker angrebsstyrken hos alle nærliggende fjender med {buff} i 30 sek."
@@ -5472,10 +7188,6 @@ export const da_DK: EnTranslations = {
       "charge": {
         "name": "Fremstorm",
         "description": "Storm mod en fjende, generér 9 raseri og bedøv den i 1 sek. 8-25 m rækkevidde."
-      },
-      "rend": {
-        "name": "Dyb Flænge",
-        "description": "Sårer målet og får det til at bløde for {damage} skade over {duration} sek."
       },
       "thunder_clap": {
         "name": "Rystende Slag",
@@ -5521,6 +7233,10 @@ export const da_DK: EnTranslations = {
         "name": "Glødlyn",
         "description": "Slynger en flammende kugle, der volder {damage} ildskade plus yderligere skade over tid."
       },
+      "fireball_form": {
+        "name": "Glødform",
+        "description": "Forvandl dig til en brændende glød og forøg bevægelseshastighed med {buff}%. Du kan ikke angribe eller kaste trolddom, mens du er forvandlet. Genudkast for at vende tilbage til din normale form."
+      },
       "frost_armor": {
         "name": "Rimfrost-Kappe",
         "description": "Indhyller dig i frost og øger rustningen med {buff} i 30 min."
@@ -5532,6 +7248,94 @@ export const da_DK: EnTranslations = {
       "frostbolt": {
         "name": "Rimlanse",
         "description": "Affyrer et frostlyn, der volder {damage} frostskade og sænker bevægelsen med 40%."
+      },
+      "blazing_barrier": {
+        "name": "Flammende barriere",
+        "description": "Indhyl dig i flammer og absorber {damage} skade i 60 sek. (Ild)"
+      },
+      "cold_snap": {
+        "name": "Vinterens kalden",
+        "description": "Afslutter nedkølingen for Flimmertrin, Frostslør og Større usynlighed. (magikertalent)"
+      },
+      "greater_invisibility": {
+        "name": "Større usynlighed",
+        "description": "Forsvind i 20 sek.: fjerner 2 skader over tid-effekter, og du tager 90% mindre skade, mens du er usynlig og kort tid derefter. (magikertalent)"
+      },
+      "hot_streak": {
+        "name": "Hed stime",
+        "description": "Passiv: to kritiske træffere i træk med dine Ildbesværgelser (Glødlyn, Gløderfald, Skoldning, Bållanse eller Flammeslag) gør din næste Bållanse eller dit næste Flammeslag øjeblikkeligt og gratis. Forbrugerne tæller med til den NÆSTE stime, også gratis kast; et Flammeslag tæller én gang, uanset hvor mange fjender det rammer, og kun det første nedslag tæller nogensinde. (Ild)"
+      },
+      "ice_floes": {
+        "name": "Isflager",
+        "description": "Dine næste to besværgelser med kastetid kan kastes, mens du bevæger dig. Varer i 15 sek. (magikertalent)"
+      },
+      "ignition": {
+        "name": "Antændelse",
+        "description": "Passiv: kritiske træffere med dine besværgelser brænder målet for 40% af den påførte skade over 6 sek. og kan stables. (Ildbeherskelse)"
+      },
+      "mass_barrier": {
+        "name": "Massebarriere",
+        "description": "Beskytter dig og op til 4 nærliggende allierede inden for 30 m; hver barriere absorberer 130 skade i 60 sek. (magikertalent)"
+      },
+      "overload": {
+        "name": "Overbelastning",
+        "description": "Din næste besværgelse forstærkes med 40%, men koster 50% mere mana. Varer i 10 sek. (magikertalent)"
+      },
+      "power_echo": {
+        "name": "Kraftekko",
+        "description": "Din næste direkte besværgelse gentages med 50% kraft på det samme mål. Varer i 10 sek. (magikertalent)"
+      },
+      "rings_of_frost": {
+        "name": "Frostring",
+        "description": "Hidkalder en ring i 10 sek. Fjender, der krydser dens kant, fryses i 4 sek. (magikertalent)"
+      },
+      "rune_of_power": {
+        "name": "Kraftrune",
+        "description": "Indskriv en kraftrune ved dine fødder i 15 sek.: allierede, der står inden for 8 m, gør 10% mere skade. (magikertalent)"
+      },
+      "summon_water_elemental": {
+        "name": "Hidkald vandelementar",
+        "description": "Hidkald en vandelementar, der kæmper ved din side, slynger Vandprojektiler mod dit mål og kanaliserer Vandstråle. (Frost)"
+      },
+      "ice_lance": {
+        "name": "Islanse",
+        "description": "Kast en isskarv og gør {damage} Frost-skade, tredoblet mod et frosset mål. Bruger Fingers of Frost eller en ladning af Vinterkulden til at behandle målet som frosset. (Frost)"
+      },
+      "flurry": {
+        "name": "Vinterpisk",
+        "description": "Affyr tre iskolde projektiler, der hver giver {damage} frostskade, og påfør målet Vinterkulde: de næste 2 kompatible besværgelser mod det behandler det som frossent. Brain Freeze gør Winterlash øjeblikkelig og springer dens nedkøling over. (Frost)"
+      },
+      "frozen_orb": {
+        "name": "Frossen Kugle",
+        "description": "Slip en kule af hvirvlende frost, der driver fremad i 8 sekunder, og giver {damage} frostskade hvert sekund til nærliggende fjender og bremser dem med 30%. Hver slående puls genererer en istap. (Frost)"
+      },
+      "blizzard": {
+        "name": "Snestorm",
+        "description": "Kalder en isstorm ned over målområdet i 6 sek., gør {damage} Frost-skade hvert sekund og sætter fjenders hast ned med 40%. Hver fjende ramt reducerer Frozen Orb med 0,5 sek., op til 3 sek. pr. kast. (Frost)"
+      },
+      "glacial_spike": {
+        "name": "Gletsjerspyd",
+        "description": "Fremkald en massiv isspids og forbrug 5 Istapper for at gøre {damage} Frost-skade og fryse målet på stedet i 4 sek. (Frost)"
+      },
+      "glacial_front": {
+        "name": "Gletsjerfront",
+        "description": "Hold for at samle en stadig bredere front af frost, og slip den derefter i en kegle. Længere opladning rækker længere og gør mere skade. Alle fjender ramt sættes ned med 50% i 4 sek.; maksimal opladning rodfæster dem også i 1 sek. (Frost)"
+      },
+      "dragons_breath": {
+        "name": "Drageånde",
+        "description": "Hold for at samle et stadig bredere åndedrag af flammer, og slip det derefter i en kegle. Længere opladning rækker længere og gør mere skade. Fjender ramt bliver desorienterede og skade afbryder effekten; maksimal opladning rammer altid kritisk og tæller én gang mod Hed Stime. (Ild)"
+      },
+      "fingers_of_frost": {
+        "name": "Frostens Fingre",
+        "description": "Rimlanse har 15% chance for at give Fingers of Frost, op til 2 ladninger: din næste Ice Lance behandler målet som frosset. (Frost)"
+      },
+      "brain_freeze": {
+        "name": "Hjernefrys",
+        "description": "Rimlanse har 20 % chance for at gøre din næste Winterlash øjeblikkelig og fri for dens nedkøling. (Frost)"
+      },
+      "shatter": {
+        "name": "Skrøbelig Undergang",
+        "description": "Dine besværgelser får 50 % chance for kritiske træffere mod frosne mål. Fingers of Frost og Vinterkulde tæller som frosne. (Frost)"
       },
       "conjure_water": {
         "name": "Vandbinding",
@@ -5688,6 +7492,10 @@ export const da_DK: EnTranslations = {
       "lay_on_hands": {
         "name": "Sidste Rite",
         "description": "En massiv bølge af helbredelse: genopretter {damage} helbred. 10 min afkøling."
+      },
+      "holy_taunt": {
+        "name": "Hellig Æggelse",
+        "description": "Håner målet: din trussel stiger til samme niveau som dets mest hadede fjendes, og målet tvinges til at angribe dig i 3 sek."
       },
       "flash_of_light": {
         "name": "Lyslægning",
@@ -5949,6 +7757,14 @@ export const da_DK: EnTranslations = {
         "name": "Egehud",
         "description": "Din hud hærder som bark, og øger rustning med 150 i 15 sek."
       },
+      "sacred_bulwark": {
+        "name": "Hellig Bolværk",
+        "description": "I {duration} sek. nægtes det næste fjendtlige ramte slag, der ville dræbe dig, og du genvinder 35% helbred i stedet."
+      },
+      "primal_reflexes": {
+        "name": "Primalreflekser",
+        "description": "Dine instinkter skærpes og øger din chance for at undvige med 50% i 6 sek."
+      },
       "starfire": {
         "name": "Himmelfald",
         "description": "Nedkalder et lyn af stjerneild og forårsager {damage} Arkan skade."
@@ -5987,7 +7803,7 @@ export const da_DK: EnTranslations = {
       },
       "tigers_fury": {
         "name": "Ulveblod",
-        "description": "Øger angrebskraft med 40 i 6 sek. Kun i Ulveform."
+        "description": "Increases attack power by {buff} for {duration} sec. Wolf Form only."
       },
       "rip": {
         "name": "Sønderriv",
@@ -6012,6 +7828,102 @@ export const da_DK: EnTranslations = {
       "berserker_rage": {
         "name": "Sydende Raseri",
         "description": "Gå i et sydende raseri, og generér 20 raseri. (Krigertalent)"
+      },
+      "crusader_strike": {
+        "name": "Korsfarerslag",
+        "description": "Slår målet for våbenskade plus {damage} hellig skade. (Paladin-talent)"
+      },
+      "chain_heal": {
+        "name": "Kædeheling",
+        "description": "Helbreder et venligt mål for en stor mængde og springer derefter til op til 2 yderligere allierede i nærheden. Helbredelsen mindskes med 50% for hvert spring. (Genoprettelsessignatur)"
+      },
+      "metamorphosis": {
+        "name": "Metamorfose",
+        "description": "Antag dæmonisk kraft og øg rustning og angrebskraft i 20 sek. (Warlock-talent)"
+      },
+      "holy_shock": {
+        "name": "Hellig chok",
+        "description": "Chokerer et venligt mål med hellig energi og helbreder det for {damage}. (Hellig signatur)"
+      },
+      "aura_surge": {
+        "name": "Daggryets rikochet",
+        "description": "Kaster et daggrysmedet skjold for {damage} Hellig skade, bringer det primære mål til tavshed i 2 sek. og hopper derefter til op til 2 yderligere fjender inden for 10 meter for 75% skade pr. hop. (Paladintalent)"
+      },
+      "holy_shield": {
+        "name": "Hellig skjold",
+        "description": "Beskytter dig med hellig kraft i 10 sek, øger rustning med 90 og rammer nærkampsangribere for 12 hellig skade. (Beskyttelsessignatur)"
+      },
+      "bestial_wrath": {
+        "name": "Bestialsk vrede",
+        "description": "Sender dig i bestialsk raseri, så angrebskraft øges med 55 i 15 sek. (Bæstmestersignatur)"
+      },
+      "trueshot_aura": {
+        "name": "Træfsikkerhedsaura",
+        "description": "Inspirerer nærliggende allierede og øger angrebskraft med 35 i 5 min. (Skytte signatur)"
+      },
+      "wyvern_sting": {
+        "name": "Wyvernstik",
+        "description": "Stikker fjenden på afstand og gør den ukampdygtig i op til 4 sek. Enhver skade bryder effekten. (Overlevelsessignatur)"
+      },
+      "arcane_power": {
+        "name": "Arkan kraft",
+        "description": "Øger besværgelsesskade med 20% og besværgelseshast med 10% i 10 sek. (Arcane-signatur)"
+      },
+      "combustion": {
+        "name": "Føniks-trance",
+        "description": "Øger kritisk chance med besværgelser med 50% i 15 sek. (Fire-signatur)"
+      },
+      "icy_veins": {
+        "name": "Iskolde Årer",
+        "description": "Øger besværgelseshast med 30% og forhindrer afbrydelse og tilbageslag i 10 sek. (Frost-signatur)"
+      },
+      "cold_blood": {
+        "name": "Koldt blod",
+        "description": "Fokuserer din dræbervilje, så dit næste angreb bliver et kritisk træf. (Snigmordersignatur)"
+      },
+      "blade_flurry": {
+        "name": "Klingevirvel",
+        "description": "Udløser en byge af klinger og øger angrebshastighed med 20% i 12 sek. (Kampsignatur)"
+      },
+      "hemorrhage": {
+        "name": "Blødning",
+        "description": "Ramler fjenden for våbenskade plus {damage} og påfører blødningsskade over 12 sek. Giver 1 combopoint. (Underfundighedssignatur)"
+      },
+      "power_infusion": {
+        "name": "Kraftinfusion",
+        "description": "Indgyder et venligt mål med kraft og øger besværgelseskraft med 28 i 15 sek. (Disciplin signatur)"
+      },
+      "holy_nova": {
+        "name": "Hellig nova",
+        "description": "Udløser en eksplosion af helligt lys, helbreder nærliggende allierede for {damage} og skader nærliggende fjender. (Hellig signatur)"
+      },
+      "shadowform": {
+        "name": "Skyggeform",
+        "description": "Antag skyggeform, som styrker skyggemagi, indtil du skifter tilbage. Kast igen for at vende tilbage til normal form. (Skyggesignatur)"
+      },
+      "elemental_mastery": {
+        "name": "Elementær beherskelse",
+        "description": "Påkalder elementær beherskelse og gør din næste besværgelse øjeblikkelig. (Elementær signatur)"
+      },
+      "siphon_life": {
+        "name": "Sug liv",
+        "description": "Suger liv fra fjenden, påfører {damage} skyggeskade over 30 sek og helbreder dig for den skade, der bliver gjort. (Lidelsessignatur)"
+      },
+      "conflagrate": {
+        "name": "Antændelse",
+        "description": "Forbruger din Opbrænding på fjenden for at antænde den for {damage} ildskade. (Ødelæggelsessignatur)"
+      },
+      "moonkin_form": {
+        "name": "Månekinform",
+        "description": "Antag månekinform, som styrker besværgelser, indtil du skifter tilbage. Kast igen for at vende tilbage til normal form. (Balancesignatur)"
+      },
+      "feral_charge": {
+        "name": "Vild ladning",
+        "description": "Storm mod en fjende og rodfæst den i 1 sek. 8-25 m rækkevidde. (Vildskabssignatur)"
+      },
+      "swiftmend": {
+        "name": "Hurtig heling",
+        "description": "Forbruger en helbredelse over tid-effekt på et venligt mål for at helbrede det for {damage}. (Genoprettelsessignatur)"
       },
       "summon_imp": {
         "name": "Tilkald Emberkin",
@@ -6041,6 +7953,378 @@ export const da_DK: EnTranslations = {
         "name": "Tilkald Wraithborn",
         "description": "Binder en Wraithborn til din vilje, en elitedæmon der regner tung Skygge skade ned på afstand. En lang nedkøling holder dens ødelæggende kraft i skak. At tilkalde en ny dæmon bortsender din nuværende. Du kan have én dæmon ad gangen."
       },
+      "battle_stance": {
+        "name": "Kampstilling",
+        "description": "En aggressiv kampstilling: du genererer 10% mere raseri. Standardstillingen for Arms og Beskyttelse."
+      },
+      "berserker_stance": {
+        "name": "Berserkerstilling",
+        "description": "En dumdristig kampstilling: dine kritiske slag rammer 3% oftere og slår 3% hårdere. Furie-krigeren kæmper altid i denne stilling."
+      },
+      "sweeping_strikes": {
+        "name": "Voksende Bue",
+        "description": "I 12 sek rammer dine enkeltmålsangreb også 1 nærliggende fjende for fuld skade. (Arms)"
+      },
+      "deep_wounds": {
+        "name": "Gabende Sår",
+        "description": "Passiv: dit Lemlæstende Slag efterlader målet blødende for fysisk skade over 6 sek. (Arms)"
+      },
+      "enrage_passive": {
+        "name": "Amok",
+        "description": "Passiv: mens du er Rasende, volder du 7% mere skade, angriber 25% hurtigere og bevæger dig 10% hurtigere i 4 sek. Åreladning har 30% chance for at gøre dig Rasende; Rød Høst gør det altid. (Furie)"
+      },
+      "raging_gale": {
+        "name": "Tvillingeslag",
+        "description": "Slå øjeblikkeligt to gange med dit våben, hvor hvert slag volder 40% våbenskade plus {damage}, og generér 4 raseri. Gemmer op til 2 ladninger. (Furie)"
+      },
+      "red_harvest": {
+        "name": "Rød Høst",
+        "description": "Brug alt: slå tre gange i vildskab for 65% våbenskade plus {damage} hver, og bliv altid Rasende. (Furie)"
+      },
+      "furious_mending": {
+        "name": "Rasende Heling",
+        "description": "I 10 sek tager du 20% mindre skade, og så længe det varer, helbreder din Åreladning dig for 20% af dit maksimale helbred. (Furie)"
+      },
+      "emboldening_roar": {
+        "name": "Opildnende Brøl",
+        "description": "Udstøder et opildnende brøl: du og venlige spillere inden for 40 m bliver Opildnet, og de næste 3 evner er garanterede kritiske slag. (Furie)"
+      },
+      "raised_guard": {
+        "name": "Hævet Garde",
+        "description": "Sæt dig fast bag dit skjold: du tager 50% mindre fysisk skade i 6 sek. Gemmer op til 2 ladninger. (Beskyttelse)"
+      },
+      "iron_resolve": {
+        "name": "Jernvilje",
+        "description": "Bid tænderne sammen og ignorér smerten: bruger op til 40 raseri (mindst 20) for at absorbere 4 skade pr. brugt raseripoint i op til 10 sek. (Beskyttelse)"
+      },
+      "faultline": {
+        "name": "Jordspalte",
+        "description": "Send en chokbølge gennem jorden: fjender foran dig inden for 8 m tager {damage} skade og bedøves i 3 sek. (Beskyttelse)"
+      },
+      "defiant_bellow": {
+        "name": "Trodsigt Brøl",
+        "description": "Et trodsigt brøl: hver fjende inden for 10 m hånes og tvinges til at angribe dig i 3 sek. (Beskyttelse)"
+      },
+      "breachmaker": {
+        "name": "Murbryder",
+        "description": "Hamrer løs på målet for våbenskade plus {damage} og slår hul i dets garde: dine egne angreb mod det volder 20% mere skade i 8 sek. (Arms)"
+      },
+      "measured_fury": {
+        "name": "Afmålt Raseri",
+        "description": "Dit afmålte raseri skærper din økonomi: dine evner koster 10% mindre raseri. (Arms)"
+      },
+      "seasoned_soldier": {
+        "name": "Garvet Soldat",
+        "description": "Dine kritiske autoangreb genererer 10% mere raseri. (Arms)"
+      },
+      "diabolical_twinstrike": {
+        "name": "Diabolsk Tvillingeslag",
+        "description": "Mens du er Rasende, volder dit Tvillingeslag 15% mere skade. (Furie)"
+      },
+      "cleaving_blows": {
+        "name": "Kløvende Slag",
+        "description": "Rød Høst refunderer altid en ladning Tvillingeslag. (Furie)"
+      },
+      "sudden_death": {
+        "name": "Pludselig Død",
+        "description": "Dine autoangreb har en chance for at lade dig kaste Tidlig Grav på et mål uanset helbred, uden at det koster raseri. (Arms)"
+      },
+      "storm_bolt": {
+        "name": "Stormbolt",
+        "description": "Slyng dit våben mod målet for {damage} og bedøv det i 3 sek."
+      },
+      "piercing_howl": {
+        "name": "Gennemtrængende Hyl",
+        "description": "Et gennemtrængende råb, der sænker alle fjender inden for 15 m med 50% i 8 sek."
+      },
+      "die_by_sword": {
+        "name": "Dø ved Sværdet",
+        "description": "Defensiv nedkøling: i 8 sek tager du 30% mindre skade og undviger langt flere angreb."
+      },
+      "recklessness": {
+        "name": "Dumdristighed",
+        "description": "Gør dig Rasende: din raserigenerering øges med 50% og din chance for kritiske slag med 20% i 12 sek."
+      },
+      "sanguine_aura": {
+        "name": "Blodrød Aura",
+        "description": "Gennemtræng dit våben med dine fjenders blod: du og dine nærkampsallierede får 10% angrebshastighed og 10% skade i 20 sek."
+      },
+      "victory_rush": {
+        "name": "Sejrsrus",
+        "description": "Slå for våbenskade plus {damage}, og helbred 20% af dit maksimale helbred. Kan kun bruges inden for 20 sek efter at have dræbt en fjende."
+      },
+      "intimidating_shout": {
+        "name": "Frygtindgydende Råb",
+        "description": "Et rædselsvækkende råb, der sender op til 5 fjender inden for 8 m på flugt i frygt i 8 sek. Skade kan bryde effekten."
+      },
+      "revenge": {
+        "name": "Hævn",
+        "description": "Angrib i en bred bue og vold fysisk skade på alle fjender foran dig. Over 5 mål reduceres skaden. Når du undviger eller parerer, koster din næste Hævn muligvis intet raseri. (Protection)"
+      },
+      "heroic_leap": {
+        "name": "Krigsspring",
+        "description": "Spring til målområdet og påfør {damage} skade på fjender i nærheden, når du lander."
+      },
+      "rallying_cry": {
+        "name": "Tapperhedsbrøl",
+        "description": "Udstød et tappert brøl, som giver dig og gruppemedlemmer inden for 40 meter 20% ekstra maksimal sundhed i 10 sek. Beskyttelse: de tager også 5% mindre skade i varigheden."
+      },
+      "aspect_of_the_wild": {
+        "name": "Vildtands skikkelse",
+        "description": "Indgyder vild styrke i allierede inden for 30 m og øger deres angrebskraft med 45 og angrebshastighed med 5 % i 5 min. (jægertalent)"
+      },
+      "avatar": {
+        "name": "Avatar",
+        "description": "Forvandl dig til en kolos i 20 sek., bryd alle kontroleffekter på dig, og øg din skade med 20%."
+      },
+      "avenging_wrath": {
+        "name": "Hævnerfløj",
+        "description": "Påkalder hævnende kraft og øger din angrebskraft med 60 og magikraft med 30 i 20 sek. (paladintalent)"
+      },
+      "berserk": {
+        "name": "Rød dis",
+        "description": "Øger din angrebskraft med 70 i 15 sek. (druidentalent)"
+      },
+      "bladestorm": {
+        "name": "Klingestorm",
+        "description": "Bliv til en hvirvlende storm af stål, og ram alle fjender inden for 6 meter for {damage} skade hvert sekund i 4 sek."
+      },
+      "blink": {
+        "name": "Flimmertrin",
+        "description": "Teleporterer dig 15 m fremad og bryder forankringseffekter. (magikertalent)"
+      },
+      "bloodlust": {
+        "name": "Krigstrommer",
+        "description": "Pisker allierede inden for 30 m ind i et raseri og øger deres angrebshastighed med 30 % i 15 sek. (shamantalent)"
+      },
+      "chain_lightning": {
+        "name": "Gaffellyn",
+        "description": "Kaster lyn mod målområdet og giver {damage} skade til fjender i nærheden. (shamantalent)"
+      },
+      "chaos_bolt": {
+        "name": "Undergangslyn",
+        "description": "Kaster en kaotisk ildkugle, der giver {damage} Ildskade. (troldmandstalent)"
+      },
+      "cleansing_verdict": {
+        "name": "Rensende Dom",
+        "description": "Fjerner en skadelig magisk effekt fra et venligt mål og helbreder det med Hellig magi for {damage}."
+      },
+      "cloak_of_shadows": {
+        "name": "Skyggekappe",
+        "description": "Indhyller dig i skygger og absorberer 420 skade i 5 sek. (slyngeltalent)"
+      },
+      "cone_of_cold": {
+        "name": "Frostfej",
+        "description": "Golpea a nærliggende fjender con escarcha e inflige {damage} de daño de Frost. (magikertalent)"
+      },
+      "counterspell": {
+        "name": "Besværgelsesbrud",
+        "description": "Afbryder målets besværgelse og forhindrer det i at kaste besværgelser fra den pågældende magiskole i 6 sek."
+      },
+      "curse_of_exhaustion": {
+        "name": "Blytung forbandelse",
+        "description": "Forbander målet og reducerer dets bevægelseshastighed med 30 % i 12 sek. (troldmandstalent)"
+      },
+      "death_coil": {
+        "name": "Gravspiral",
+        "description": "Rammer fjenden for {damage} Skyggeskade og skræmmer den derefter i 3 sek. (troldmandstalent)"
+      },
+      "deep_freeze": {
+        "name": "Dødfrost",
+        "description": "Congela profundamente a målet, inflige {damage} de daño de Frost y lo aturde durante 4 sek. (magikertalent)"
+      },
+      "desperate_prayer": {
+        "name": "Sidste bøn",
+        "description": "Helbreder dig øjeblikkeligt for {damage}. (præstetalent)"
+      },
+      "deterrence": {
+        "name": "Børsteværn",
+        "description": "Øger din undvigelseschance med 50 procentpoint i 10 sek. (jægertalent)"
+      },
+      "divine_shield": {
+        "name": "Lysværn",
+        "description": "Beskytter dig med hellig kraft og absorberer 900 skade i 8 sek. (paladintalent)"
+      },
+      "earthbind": {
+        "name": "Gribende jord",
+        "description": "Binder fjender i nærheden til jorden og forankrer dem i 2 sek. (shamantalent)"
+      },
+      "evocation": {
+        "name": "Æterbrønd",
+        "description": "Restaura mana rápidamente. (magikertalent)"
+      },
+      "frenzied_regeneration": {
+        "name": "Vild heling",
+        "description": "Genopretter 180 helbred over 10 sek. Kun i Bjørneform. (druidentalent)"
+      },
+      "frost_trap": {
+        "name": "Rimfælde",
+        "description": "Fryser fjender i målområdet i 3 sek., så de hverken kan bevæge sig eller handle. (jægertalent)"
+      },
+      "ghostly_strike": {
+        "name": "Genfærdsslag",
+        "description": "Rammer fjenden for våbenskade plus {damage}, øger kortvarigt undvigelse og giver 1 kombinationspoint. (slyngeltalent)"
+      },
+      "hammer_of_wrath": {
+        "name": "Klanghammer",
+        "description": "Kaster en hellig hammer mod en såret fjende for {damage} Hellig skade. Kan kun bruges under 20 % helbred. (paladintalent)"
+      },
+      "healing_stream": {
+        "name": "Kildebrønd",
+        "description": "Genopretter 120 helbred hos et allieret mål over 12 sek. (shamantalent)"
+      },
+      "holy_wrath": {
+        "name": "Helgenvrede",
+        "description": "Udløser hellig kraft og giver {damage} skade til fjender i nærheden. (paladintalent)"
+      },
+      "howl_of_terror": {
+        "name": "Rædselshyl",
+        "description": "Skræmmer fjender i nærheden i op til 3 sek. Skade kan bryde effekten. (troldmandstalent)"
+      },
+      "ice_block": {
+        "name": "Kold kiste",
+        "description": "Te encierra en hielo y absorbe una enorme cantidad de daño durante 8 sek. (magikertalent)"
+      },
+      "inner_focus": {
+        "name": "Stillet sind",
+        "description": "Gør din næste besværgelse gratis. Varer 60 sek. (præstetalent)"
+      },
+      "innervate": {
+        "name": "Livssaft",
+        "description": "Levende saft vælder op i dig i 10 sek. og genopretter 20 af din aktuelle ressource i bølger: mana, raseri eller energi. Formskifte afbryder den ikke. Søvn, bedøvelse eller stase standser saften. (druidentalent)"
+      },
+      "pummel": {
+        "name": "Kæbeknuser",
+        "description": "Afbryder målets besværgelse og forhindrer det i at kaste besværgelser fra den pågældende magiskole i 4 sek."
+      },
+      "kick": {
+        "name": "Spark",
+        "description": "Afbryder målets besværgelse og forhindrer det i at kaste besværgelser fra den pågældende magiskole i 4 sek."
+      },
+      "mend_pet": {
+        "name": "Lappe sammen",
+        "description": "Sana a et venligt mål por {damage} durante 15 sek. (jægertalent)"
+      },
+      "meteor": {
+        "name": "Himmelsten",
+        "description": "Nedkalder en meteor på målområdet og giver {damage} Ildskade. Derefter brændes fjender i området for 12 til 18 Ildskade hvert 2. sek. i 6 sek. (magikertalent)"
+      },
+      "temporal_mend": {
+        "name": "Tidsheling",
+        "description": "Trækker en alliert et øjeblik fremad i tiden og gendanner {damage} helbred, mens kroppen falder til ro i sin sundere fremtidige form. (Kronomantik-signatur)"
+      },
+      "temporal_barrier": {
+        "name": "Tidsbarriere",
+        "description": "Forskydes målet et hjerteslag ud af nutiden, og et tidsskjold absorberer {damage} skade i 10 sek. inden tidslinjen snapper tilbage."
+      },
+      "temporal_echo": {
+        "name": "Tidsekko",
+        "description": "Mærker en alliert med et ekko af et sundere øjeblik og gendanner {damage} helbred øjeblikkeligt. I {duration} sek. trækkes en del af den Arkane skade du gør tilbage gennem ekkoet for at helbrede dem."
+      },
+      "temporal_cascade": {
+        "name": "Tidskaskade",
+        "description": "Sender et ekko kaskadevejende gennem din gruppe: målet og op til fire af deres nærmeste allierede helbredes øjeblikkeligt og markeres hver i {duration} sek., og trækker en del af den Arkane skade du gør tilbage gennem deres ekkooer for at helbrede dem. (Kronomantik)"
+      },
+      "temporal_reversal": {
+        "name": "Tidsvending",
+        "description": "Tilbagespoler en falden allieredes tidslinje og bringer dem tilbage til livet ved deres krop med en del af deres helbred og mana, selv midt i kamp. (Kronomantik)"
+      },
+      "collective_reversal": {
+        "name": "Kollektiv tilbagespoling",
+        "description": "Spoler tidslinjen tilbage for hvert faldet medlem af din gruppe eller dit raid og genopliver dem ved deres krop med 30% helbred og mana. Kan ikke kastes i kamp. (Kronomanti)"
+      },
+      "temporal_rewind": {
+        "name": "Tilbagespoling",
+        "description": "Sender en arkan bølge gennem din gruppe eller raid og tilbagespoler tiden for at gendanne 30% af den skade, hver alliert inden for 40 yards tog de seneste 5 sekunder (op til 35% af deres maksimale helbred). Kan ikke være en kritisk effekt. (Kronomantik)"
+      },
+      "temporal_hourglass": {
+        "name": "Standsningens Timeglas",
+        "description": "Placer et tidssandur på det valgte sted. Under en fjende suspenderer det dem i {hostilePveDuration} sek. i PvE eller {hostilePvpDuration} sek. i PvP og forhindrer alle handlinger; skade bryder effekten. Ved dine fødder eller under en gruppealliert giver det stasis i {duration} sek., forhindrer skade og handlinger, gendanner {healing}% af maksimalt helbred og får nedkølingerne til at gendannes {selfCooldownRecovery}% hurtigere for dig eller {allyCooldownRecovery}% hurtigere for en alliert. På tomt terræn venter sandurret i {groundDuration} sek. og påvirker den første gyldige enhed, der træder på det. Den gavnlige aura kan fjernes manuelt."
+      },
+      "temporal_acceleration": {
+        "name": "Tidsacceleration",
+        "description": "Fremskynder tidens gang for din gruppe eller raid og øger angrebshastighed, kastetempo og kanaliseringstempo med 30% i 15 sek. Allierede der for nylig blev påvirkede af Temporal Acceleration eller Krigstrommer er for udmattede til at have gavn af det. (Kronomantik)"
+      },
+      "perfect_moment": {
+        "name": "Perfekt Øjeblik",
+        "description": "Grib dit perfekte øjeblik: få øjeblikkeligt 4 Arkane Ladninger, og i 10 sek. bruger Æterpile dem ikke. (Kronomantik)"
+      },
+      "arcane_surge": {
+        "name": "Arkan kraft",
+        "description": "Leder en bølge af rå æter gennem fjenden og påfører {damage} skade. Hvert kast efterlader en Arkan Ladning, der øger din næste Aether Surges skade og kastetempo (5% hurtigere for hvert) men øger manakostningen kraftigt, stablet op til 4; Æterpile bruger ladningerne. Hvert kast kan også udløse Æterrus, der gør din næste Aether Surge gratis og dobbelt så hurtig at kaste."
+      },
+      "mind_sear": {
+        "name": "Tankebrand",
+        "description": "Kanaliserer skyggeenergi mod målområdet og giver {damage} skade hvert sekund til fjender i nærheden. (præstetalent)"
+      },
+      "multi_shot": {
+        "name": "Splitskud",
+        "description": "Affyrer en salve mod målområdet og giver {damage} Fysisk skade til fjender inden for en radius af 8 m. (jægertalent)"
+      },
+      "prayer_of_healing": {
+        "name": "Korhelbredelse",
+        "description": "Helbreder allierede i nærheden for {damage}. (præstetalent)"
+      },
+      "preparation": {
+        "name": "Nødplan",
+        "description": "Afslutter nedkølingen på Sprint, Undvigelse og Forsvinden. (slyngeltalent)"
+      },
+      "presence_of_mind": {
+        "name": "Ræsende sind",
+        "description": "Hace instantáneo tu siguiente hechizo con tiempo de lanzamiento. Dura 60 sek. (magikertalent)"
+      },
+      "psychic_scream": {
+        "name": "Psykisk skrig",
+        "description": "Skræmmer fjender i nærheden i op til 4 sek. Skade kan bryde effekten. (præstetalent)"
+      },
+      "counter_shot": {
+        "name": "Dæmpende Skud",
+        "description": "Et hurtigt skud, der afbryder målets besværgelse og låser den pågældende magiskole i 4 sek."
+      },
+      "rebuke": {
+        "name": "Irettesættelse",
+        "description": "Afbryder målets besværgelse og forhindrer det i at kaste besværgelser fra den pågældende magiskole i 4 sek."
+      },
+      "shadowstep": {
+        "name": "Skyggesmut",
+        "description": "Træder gennem skyggerne mod dit mål. (slyngeltalent)"
+      },
+      "silence": {
+        "name": "Tavshed",
+        "description": "Bringer målet til tavshed i 4 sek. (præstetalent)"
+      },
+      "smoke_screen": {
+        "name": "Røgslør",
+        "description": "Du forsvinder i en røgsky, hvilket øger din undvigelseschance med 30 % i 8 sek."
+      },
+      "spellsteal": {
+        "name": "Magityveri",
+        "description": "Stjæler en gavnlig magisk effekt fra en fjende og overfører den til dig."
+      },
+      "startle_shot": {
+        "name": "Forskrækkelsesskud",
+        "description": "Et vildt skud, der desorienterer målet i {duration} sek. Enhver skade bryder effekten."
+      },
+      "skull_bash": {
+        "name": "Skalle",
+        "description": "En fremadstormende skalle, der afbryder målets besværgelse og låser den pågældende magiskole i 4 sek."
+      },
+      "spell_lock": {
+        "name": "Mundkurv",
+        "description": "Gør målet tavst midt i en besværgelse og forhindrer det i at kaste besværgelser fra den pågældende magiskole i 5 sek."
+      },
+      "tranquility": {
+        "name": "Lundens sang",
+        "description": "Kanaliserer helbredende energi i 4 sek. og helbreder allierede inden for 30 m for 42 til 52 hvert sekund. (druidentalent)"
+      },
+      "typhoon": {
+        "name": "Tyfon",
+        "description": "Et vindstød slår alle fjender inden for 8 m tilbage og omtåger dem, så deres bevægelseshastighed reduceres med 50 % i 4 sek."
+      },
+      "voidfeast": {
+        "name": "Tomhedsfest",
+        "description": "Fortærer en magisk effekt (en gavnlig fra en fjende eller en skadelig fra en allieret) og helbreder dig for 6 % af dit maksimale helbred."
+      },
       "bear_charge": {
         "name": "Bruin-storm",
         "description": "Storm mod en fjende, generér 9 raseri og bedøv den i 1 sek. 8-25 m rækkevidde. Kun i Bruin-form."
@@ -6059,7 +8343,15 @@ export const da_DK: EnTranslations = {
       },
       "revive_pet": {
         "name": "Genoplive Kæledyr",
-        "description": "Genopliver dit døde kæledyr og bringer det tilbage til din side."
+        "description": "Patch up your companion, restoring {overTime} health over 12 sec in 3-sec ticks while it is alive. If it is dead, revive it at 35% health."
+      },
+      "commanding_shout": {
+        "description": "Øger din Udholdenhed med {buff} i 2 min.",
+        "name": "Styrkende Råb"
+      },
+      "rend": {
+        "description": "Sårer målet og får det til at bløde for {damage} skade over {duration} sek.",
+        "name": "Dyb Flænge"
       }
     },
     "items": {
@@ -6158,6 +8450,24 @@ export const da_DK: EnTranslations = {
       },
       "eastbrook_wool_trousers": {
         "name": "Østbæk Uldbukser"
+      },
+      "eastbrook_ritual_vestments": {
+        "name": "Østbæks Ritualegevandter"
+      },
+      "eastbrook_druids_hide": {
+        "name": "Østbæk-druidens Skind"
+      },
+      "eastbrook_warded_leggings": {
+        "name": "Østbæks Beskyttede Benklæder"
+      },
+      "wardweave_cowl": {
+        "name": "Værnevævet Hætte"
+      },
+      "duskhide_wraps": {
+        "name": "Skumringsskindsbind"
+      },
+      "sootscale_mantle": {
+        "name": "Sodskæl-Kappe"
       },
       "gravecaller_blade": {
         "name": "Gravkalderens Bredklinge"
@@ -6696,6 +9006,486 @@ export const da_DK: EnTranslations = {
       "sunpetal_herb": {
         "name": "Solkroneurt"
       },
+      "furyforged_warhelm": {
+        "name": "Raserismedet Krigshjelm"
+      },
+      "furyforged_warspaulders": {
+        "name": "Raserismedede Krigsskuldre"
+      },
+      "furyforged_warplate": {
+        "name": "Raserismedet Krigsplade"
+      },
+      "furyforged_girdle": {
+        "name": "Raserismedet Bælte"
+      },
+      "furyforged_legguards": {
+        "name": "Raserismedede Benbeskyttere"
+      },
+      "furyforged_gauntlets": {
+        "name": "Raserismedede Stridshandsker"
+      },
+      "furyforged_sabatons": {
+        "name": "Raserismedede Pladestøvler"
+      },
+      "stormbound_crown": {
+        "name": "Stormbundet Krone"
+      },
+      "stormbound_spaulders": {
+        "name": "Stormbundne Skulderplader"
+      },
+      "stormbound_hauberk": {
+        "name": "Stormbundet Brynjeskjorte"
+      },
+      "stormbound_waistguard": {
+        "name": "Stormbundet Livbeskytter"
+      },
+      "stormbound_legmail": {
+        "name": "Stormbundne Benbrynjer"
+      },
+      "stormbound_handguards": {
+        "name": "Stormbundne Håndbeskyttere"
+      },
+      "stormbound_greaves": {
+        "name": "Stormbundne Benskinner"
+      },
+      "ashstalker_cowl": {
+        "name": "Askeluskerens Hætte"
+      },
+      "ashstalker_shoulderguards": {
+        "name": "Askeluskerens Skulderbeskyttere"
+      },
+      "ashstalker_harness": {
+        "name": "Askeluskerens Sele"
+      },
+      "ashstalker_waistband": {
+        "name": "Askeluskerens Livrem"
+      },
+      "ashstalker_legguards": {
+        "name": "Askeluskerens Benbeskyttere"
+      },
+      "ashstalker_grips": {
+        "name": "Askeluskerens Gribehandsker"
+      },
+      "ashstalker_treads": {
+        "name": "Askeluskerens Støvler"
+      },
+      "cinderweave_cowl": {
+        "name": "Glødevævet Hætte"
+      },
+      "cinderweave_mantle": {
+        "name": "Glødevævet Skulderslag"
+      },
+      "cinderweave_raiment": {
+        "name": "Glødevævet Klædning"
+      },
+      "cinderweave_cord": {
+        "name": "Glødevævet Snor"
+      },
+      "cinderweave_legwraps": {
+        "name": "Glødevævede Benbind"
+      },
+      "cinderweave_handwraps": {
+        "name": "Glødevævede Håndbind"
+      },
+      "cinderweave_slippers": {
+        "name": "Glødevævede Sko"
+      },
+      "final_oath_medallion": {
+        "name": "Den Sidste Eds Medaljon"
+      },
+      "razorwind_torque": {
+        "name": "Klingevinds Halsring"
+      },
+      "cinder_sigil_pendant": {
+        "name": "Glødeseglets Vedhæng"
+      },
+      "iron_vow_band": {
+        "name": "Jernedens Ring"
+      },
+      "unbroken_circle": {
+        "name": "Den Ubrudte Cirkel"
+      },
+      "fleetblood_band": {
+        "name": "Hurtigblodsring"
+      },
+      "last_step_signet": {
+        "name": "Sidste Skridts Signet"
+      },
+      "ashen_focus_ring": {
+        "name": "Askegrå Fokusring"
+      },
+      "spellbreakers_seal": {
+        "name": "Besværgelsesbryderens Segl"
+      },
+      "final_argument_greatblade": {
+        "name": "Slutargumentets Storklinge"
+      },
+      "first_blood_razor": {
+        "name": "Førsteblodskniv"
+      },
+      "emberglass_warstaff": {
+        "name": "Glødeglas-Krigsstav"
+      },
+      "copper_ore": {
+        "name": "Kobbermalm"
+      },
+      "iron_ore": {
+        "name": "Jernmalm"
+      },
+      "ironbark_log": {
+        "name": "Jernbarkstamme"
+      },
+      "silverleaf_herb": {
+        "name": "Sølvbladurt"
+      },
+      "rough_hide": {
+        "name": "Groft skind"
+      },
+      "spider_silk": {
+        "name": "Edderkoppesilke"
+      },
+      "venom_gland": {
+        "name": "Giftkirtel"
+      },
+      "game_meat": {
+        "name": "Vildt kød"
+      },
+      "homespun_cloth": {
+        "name": "Hjemmespundet klæde"
+      },
+      "pristine_hide": {
+        "name": "Uberørt skind"
+      },
+      "pristine_silk": {
+        "name": "Uberørt silke"
+      },
+      "pristine_venom_gland": {
+        "name": "Uberørt giftkirtel"
+      },
+      "prime_cut": {
+        "name": "Førsteklasses udskæring"
+      },
+      "smithing_flux": {
+        "name": "Smedefluss"
+      },
+      "spool_of_thread": {
+        "name": "Trådspole"
+      },
+      "tanning_agent": {
+        "name": "Garvemiddel"
+      },
+      "cooking_salt": {
+        "name": "Madlavningssalt"
+      },
+      "glass_vial": {
+        "name": "Hætteglas af glas"
+      },
+      "copper_bearded_axe": {
+        "name": "Kobberskægøkse"
+      },
+      "copper_flanged_mace": {
+        "name": "Kobberflanget stridskølle"
+      },
+      "ironbark_boar_spear": {
+        "name": "Jernbarks ornespyd"
+      },
+      "ironedge_longsword": {
+        "name": "Jernægget langsværd"
+      },
+      "ironshod_maul": {
+        "name": "Jernbeslået stridshammer"
+      },
+      "whetted_iron_dirk": {
+        "name": "Slebet jerndolk"
+      },
+      "thorium_warblade": {
+        "name": "Thorium-Krigsklinge"
+      },
+      "arcanite_war_axe": {
+        "name": "Arkanit-Krigsøkse"
+      },
+      "elderwood_battle_staff": {
+        "name": "Gammeltræ-Kampstav"
+      },
+      "riveted_copper_girdle": {
+        "name": "Nittet kobberbælte"
+      },
+      "coppermail_sabatons": {
+        "name": "Kobberbrynjestøvler"
+      },
+      "coppermail_gauntlets": {
+        "name": "Kobberbrynjehandsker"
+      },
+      "ironlink_hauberk": {
+        "name": "Jernledsbrynje"
+      },
+      "ironlink_legguards": {
+        "name": "Jernledsbenbeskyttere"
+      },
+      "ironlink_spaulders": {
+        "name": "Jernledsskulderplader"
+      },
+      "thoriumscale_greathelm": {
+        "name": "Thoriumskæl-Storhjælm"
+      },
+      "thoriumscale_cuirass": {
+        "name": "Thoriumskæl-Kørease"
+      },
+      "thoriumscale_leggings": {
+        "name": "Thoriumskæl-Benbeklædning"
+      },
+      "homespun_hood": {
+        "name": "Hjemmespundet hætte"
+      },
+      "homespun_mitts": {
+        "name": "Hjemmespundne luffer"
+      },
+      "silverthread_slippers": {
+        "name": "Blegtråd-Futter"
+      },
+      "goldweave_robe": {
+        "name": "Guldvæv-Kjortel"
+      },
+      "goldweave_leggings": {
+        "name": "Guldvæv-Benbeklædning"
+      },
+      "silkspun_satchel": {
+        "name": "Silkespundet taske"
+      },
+      "silkbinders_raiment": {
+        "name": "Silkebinderdragt"
+      },
+      "sunweave_mantle": {
+        "name": "Solvævet skulderkappe"
+      },
+      "sunweave_treads": {
+        "name": "Solvævede støvler"
+      },
+      "fenbridge_hide_leggings": {
+        "name": "Fenbridge-læderbukser"
+      },
+      "fenbridge_hide_boots": {
+        "name": "Fenbridge-læderstøvler"
+      },
+      "fenbridge_hide_belt": {
+        "name": "Fenbridge-læderbælte"
+      },
+      "marshstalker_jerkin": {
+        "name": "Marskjægerjakke"
+      },
+      "marshstalker_hood": {
+        "name": "Marskjægerhætte"
+      },
+      "marshstalker_spaulders": {
+        "name": "Marskjægerskulderplader"
+      },
+      "mirewarden_jerkin": {
+        "name": "Mosevogterjakke"
+      },
+      "mirewarden_leggings": {
+        "name": "Mosevogterbukser"
+      },
+      "mirewarden_treads": {
+        "name": "Mosevogterstøvler"
+      },
+      "pan_seared_perch": {
+        "name": "Pandesteget flodaborre"
+      },
+      "hunters_game_skewer": {
+        "name": "Jægerens vildtspyd"
+      },
+      "herbed_marsh_pike": {
+        "name": "Krydret mosegedde"
+      },
+      "ashwood_smoked_eel": {
+        "name": "Asketræ røget ål"
+      },
+      "goldleaf_game_stew": {
+        "name": "Guldblads vildtgryde"
+      },
+      "frostgill_chowder": {
+        "name": "Frostgællesuppe"
+      },
+      "silvered_carp_supper": {
+        "name": "Middag af sølvkarpe"
+      },
+      "anglers_feast_platter": {
+        "name": "Lystfiskerfestfad"
+      },
+      "marlows_grand_roast": {
+        "name": "Marlows feststeg"
+      },
+      "silverleaf_healing_draught": {
+        "name": "Sølvblads helbredelsesdrik"
+      },
+      "silverleaf_mana_draught": {
+        "name": "Sølvblads manadrik"
+      },
+      "elixir_of_the_boar": {
+        "name": "Ornes eliksir"
+      },
+      "goldleaf_healing_draught": {
+        "name": "Guldblads helbredelsesdrik"
+      },
+      "goldleaf_mana_draught": {
+        "name": "Guldblads manadrik"
+      },
+      "venomfire_elixir": {
+        "name": "Hugormsvie-Eliksir"
+      },
+      "sunpetal_healing_draught": {
+        "name": "Solblads helbredelsesdrik"
+      },
+      "sunpetal_mana_draught": {
+        "name": "Solblads manadrik"
+      },
+      "elixir_of_the_serpent": {
+        "name": "Slangens eliksir"
+      },
+      "mosshide_vest": {
+        "name": "Mosskinds-Vest"
+      },
+      "thornling_grips": {
+        "name": "Tornling-Greb"
+      },
+      "acolyte_chain_grips": {
+        "name": "Akolyttens Kædegrebs"
+      },
+      "votive_chain_belt": {
+        "name": "Votiv-Kædebælte"
+      },
+      "briarroot_staff": {
+        "name": "Tornerodsstaffe"
+      },
+      "valefire_lantern": {
+        "name": "Dalild Lygte"
+      },
+      "fenbark_leggings": {
+        "name": "Kærbarks-Benklæder"
+      },
+      "mirebloom_treads": {
+        "name": "Sumphavesøvler"
+      },
+      "fenwarden_sabatons": {
+        "name": "Kærvogter-Jernstøvler"
+      },
+      "marshlight_hauberk": {
+        "name": "Sumplys-Brynjetrøje"
+      },
+      "duskthorn_mantle": {
+        "name": "Tørntorn-Kappe"
+      },
+      "fenshadow_maul": {
+        "name": "Kærskygge-Hammer"
+      },
+      "wildgrove_cinch": {
+        "name": "Vildlund-Livbælte"
+      },
+      "cragward_pauldrons": {
+        "name": "Klippevægte Skulderplader"
+      },
+      "cragthorn_greatstaff": {
+        "name": "Klippetoerne Storstav"
+      },
+      "moonbark_vestments": {
+        "name": "Månebark-Klædedragt"
+      },
+      "peaksong_helm": {
+        "name": "Tindsang-Hjelm"
+      },
+      "stormchant_gauntlets": {
+        "name": "Stormkaldets Kamphandsker"
+      },
+      "cragprowl_belt": {
+        "name": "Klippeluske-Bælte"
+      },
+      "stormroot_cowl": {
+        "name": "Stormrod-Hætte"
+      },
+      "thunderward_legguards": {
+        "name": "Tordenvogte-Benbeskyttere"
+      },
+      "revenantstep_treads": {
+        "name": "Genganger-Trin-Trædesko"
+      },
+      "shardfang_grips": {
+        "name": "Skærvhugtand-Greb"
+      },
+      "shardsong_mantle": {
+        "name": "Skærvlyd-Skulderkappe"
+      },
+      "wyrmcult_spellgrips": {
+        "name": "Ormekultens Besværgelsesgreb"
+      },
+      "thornpeak_wildwraps": {
+        "name": "Tornspids-Vildvindinger"
+      },
+      "stormvotive_hauberk": {
+        "name": "Stormoffers Brynjetrøje"
+      },
+      "cryptbloom_shoulderguards": {
+        "name": "Kryptblomst-Skulderværn"
+      },
+      "gravewyrm_thornmaul": {
+        "name": "Gravorm-Tornhammer"
+      },
+      "vestments_of_the_waking_grove": {
+        "name": "Klædedragt fra den Vagnende Lund"
+      },
+      "nightfangs_greatstaff": {
+        "name": "Nathugtandens Storstav"
+      },
+      "maul_of_the_scourged_wilds": {
+        "name": "Hammer fra de Hærgede Vildmarker"
+      },
+      "tidehymn_slippers": {
+        "name": "Tidevandshymne-Tøfler"
+      },
+      "pearlward_aegis": {
+        "name": "Perlevogternes Skjold"
+      },
+      "wildgrowth_leggings": {
+        "name": "Vildvækst-Benklæder"
+      },
+      "grovewardens_grips": {
+        "name": "Lundevogterens Greb"
+      },
+      "verdant_walkers": {
+        "name": "Grønne Vandrestøvler"
+      },
+      "lunarward_cinch": {
+        "name": "Månevogter-Livbælte"
+      },
+      "dreamroot_boots": {
+        "name": "Drømmerodsstøvler"
+      },
+      "stormbark_mantle": {
+        "name": "Stormbark-Skulderkappe"
+      },
+      "wildsoul_maul": {
+        "name": "Vildsjæl-Hammer"
+      },
+      "resonant_thread": {
+        "name": "Resonant Tråd"
+      },
+      "resonant_hide": {
+        "name": "Resonant Skind"
+      },
+      "resonant_links": {
+        "name": "Resonante Kæder"
+      },
+      "resonant_steel": {
+        "name": "Resonant Stål"
+      },
+      "resonant_timber": {
+        "name": "Resonant Tømmer"
+      },
+      "conjured_water4": {
+        "name": "Fremmanet kildevand"
+      },
+      "conjured_bread4": {
+        "name": "Fremmanet festbrød"
+      },
       "bristleback_maul": {
         "name": "Gallowglass-Hammer"
       },
@@ -6945,6 +9735,12 @@ export const da_DK: EnTranslations = {
       "verlans_oathblade": {
         "name": "Verlans Edsklinge"
       },
+      "ironreel_fishing_rod": {
+        "name": "Fiskestang med jernhjul"
+      },
+      "silverstream_fishing_rod": {
+        "name": "Sølvbæk-fiskestang"
+      },
       "briny_idol": {
         "name": "Saltvandsafgud"
       },
@@ -7040,9 +9836,6 @@ export const da_DK: EnTranslations = {
       },
       "wyrmshadow_talongrips": {
         "name": "Nightfang-Klogreb"
-      },
-      "tome_town_portal": {
-        "name": "Tome of Town Portal"
       },
       "reliquary_plate_chest": {
         "name": "Relikvievogterens Brynje"
@@ -7175,6 +9968,18 @@ export const da_DK: EnTranslations = {
       },
       "heroic_mark": {
         "name": "Heroisk Mærke"
+      },
+      "eastbrook_buckler": {
+        "name": "Østbæk Rundskjold"
+      },
+      "eastbrook_greatsword": {
+        "name": "Østbæk Storsværd"
+      },
+      "highwatch_greatsword": {
+        "name": "Højvagt Storsværd"
+      },
+      "highwatch_wallshield": {
+        "name": "Højvagt Murskjold"
       },
       "morthens_cryptforged_hauberk": {
         "name": "Morthens Kryptsmedede Brynje"
@@ -7329,6 +10134,18 @@ export const da_DK: EnTranslations = {
       "stormcallers_spaulders": {
         "name": "Galecall-Skulderplader"
       },
+      "bonewrought_greatsword": {
+        "name": "Bonewrought-Storsværd"
+      },
+      "direfang_greatblade": {
+        "name": "Direfang-Storklinge"
+      },
+      "bonewrought_bulwark": {
+        "name": "Bonewrought-Bolværk"
+      },
+      "wraithfire_orb": {
+        "name": "Wraithfire-Kugle"
+      },
       "unknown_alien_weaponry": {
         "name": "Ukendt Fremmedartet Våben"
       },
@@ -7403,6 +10220,9 @@ export const da_DK: EnTranslations = {
       },
       "stormcallers_waistguard": {
         "name": "Stormkalderens Livværn"
+      },
+      "tome_town_portal": {
+        "name": "Tome of Town Portal"
       }
     },
     "mobs": {
@@ -7576,6 +10396,15 @@ export const da_DK: EnTranslations = {
       },
       "nythraxis_skeleton_warrior": {
         "name": "Genopstanden Kongelig Garder"
+      },
+      "nythraxis_heroic_warrior_add": {
+        "name": "Aldren, Den Udødelige Krigsvagt"
+      },
+      "nythraxis_heroic_priest_add": {
+        "name": "Malric, Den Udødelige Hierofant"
+      },
+      "nythraxis_heroic_rogue_add": {
+        "name": "Voss, Den Udødelige Kniv"
       },
       "nythraxis_scourge_of_thornpeak": {
         "name": "Nythraxis, Tornetops Svøbe"
@@ -7780,6 +10609,9 @@ export const da_DK: EnTranslations = {
       },
       "ysolei": {
         "name": "Ysolei, den Druknede Månes Avatar"
+      },
+      "water_elemental": {
+        "name": "Vandelementar"
       }
     },
     "npcs": {
@@ -7878,6 +10710,11 @@ export const da_DK: EnTranslations = {
         "title": "Heroisk Kvartermester",
         "greeting": "Bevis på de heroiske dyb køber de fineste ringe og vedhæng i Højvagt. Vis mig dine mærker."
       },
+      "fury": {
+        "name": "RASERI",
+        "title": "Æreskvartermester",
+        "greeting": "Sandet husker hver sejr. Brug din ære godt."
+      },
       "loremaster_caddis": {
         "name": "Lærdomsmester Caddis",
         "title": "Lærdomsmester",
@@ -7892,6 +10729,11 @@ export const da_DK: EnTranslations = {
         "name": "Skatmester Fernando",
         "title": "Det Forgyldte Pengeskrin",
         "greeting": "Velkommen til Det Forgyldte Pengeskrin. Dine varer hviler trygt bag vores låse."
+      },
+      "card_master": {
+        "name": "Kortmester",
+        "title": "Tilfældets Udeler",
+        "greeting": "Har du lyst til en Kortduel? Bedst af tre, vinderen får pralerrettighederne."
       },
       "bursar_petra_vell": {
         "name": "Skatmester Petra Vell",
@@ -7962,6 +10804,51 @@ export const da_DK: EnTranslations = {
         "name": "Banemester Bram",
         "title": "Somarkens Vogter",
         "greeting": "Freden holder på Somarken, {className}: kun spark og skulderpuf. Har du lyst til at spille om Kobberspanden?"
+      },
+      "chronicler_saul": {
+        "name": "Krønikeskriveren Saul",
+        "title": "Dalens Krønike",
+        "greeting": "Enhver bedrift, der er værd at udføre, er værd at skrive ned to gange, {playerName}: én gang til protokollen og én gang til fortællingen ved arnen."
+      },
+      "chronicler_osric_fenn": {
+        "name": "Krønikeskriver Osric Fenn",
+        "title": "Sumpens Krønike",
+        "greeting": "Pas på fugten på siderne, {playerName}. Kæret sluger flere bøger, end læserne nogensinde kommer til."
+      },
+      "chronicler_edda_hartwell": {
+        "name": "Krønikeskriver Zenzie",
+        "title": "Tindernes Krønike",
+        "greeting": "Bjerget glemmer intet, {playerName}, og det gør jeg heller ikke. Lad os se, hvad du har udrettet."
+      },
+      "forgemistress_darva": {
+        "name": "Smedemester Darva",
+        "title": "Smedjens mester",
+        "greeting": "Smedjen svarer mig, {className}. Medbring god malm, og det vil også svare dig."
+      },
+      "cook_marlow": {
+        "name": "Kok Marlow",
+        "title": "Køkkenmesteren",
+        "greeting": "Intet efterlader mit køkken halvt tilberedt, {className}. Sid, spis, og kom så derud igen."
+      },
+      "weaver_ottilie": {
+        "name": "Væver Ottilie",
+        "title": "Vævens mester",
+        "greeting": "Pas på trådene, {className}. En fast hånd ved væven slår en stærk."
+      },
+      "tinker_gizzel": {
+        "name": "Tinker Gizel",
+        "title": "Mester af værktøjsværket",
+        "greeting": "Fjedre, tandhjul og skarpe kanter, {className}: værktøjsværket har, hvad dine hænder mangler."
+      },
+      "tanner_hesk": {
+        "name": "Garver Hesk",
+        "title": "Garveriets mester",
+        "greeting": "Et skind er kun så godt som dets garvning, {className}. Karene er klar, når du er."
+      },
+      "alchemist_verane": {
+        "name": "Alkymisten Verane",
+        "title": "Apothekermester",
+        "greeting": "Mål to gange og hæld én gang, {className}. Apotekeren har ingen tålmodighed med spildte reagenser."
       },
       "town_defense_board": {
         "name": "Town Defense Board",
@@ -8807,23 +11694,153 @@ export const da_DK: EnTranslations = {
           }
         }
       },
-      "q_archetype_acceptance": {
-        "title": "Et håndværk at kalde dit eget",
-        "text": "Hver eneste håndværker fra Eastbrook sætter sig til sidst over på et håndværk, som de kalder deres eget. Bevis dig selv med en enkelt gerning, {playerName}, og erklær din vej.",
-        "completion": "Din vej er valgt; gå det godt.",
+      "q_prof_attune_smith": {
+        "title": "Smedens løfte",
+        "text": "Stål tilgiver ikke en vandrende hånd, så jeg siger dig det ligeud, inden du sværger noget. Bind dig til min smedje, og Våbensmedning og Rustningssmedning bliver dine to hovedfag, de eneste håndværk, du kan bære forbi sjælden arbejde. Håndværket tværs over hjulet fra dem slår sig ned som din hobby, arbejdet til sjælden og ikke videre. Dine andre fag brænder ikke bort, {playerName}: de gør sig bare stille, inaktive, til du kalder dem tilbage. Og ved dette, inden hammeren falder: forlad dette par for et andet, og du vil krybe tilbage gennem ærligt arbejde for at vende tilbage til det, fem fjender nedlagt første gang, otte næste, elleve bagefter, mere, hver gang du strejfer. Stadig her? Bring mig da tre årer af malm bearbejdet fra Dalen med dine egne hænder, og vi kalder løftet afgivet.",
+        "completion": "God malm, og gode hænder til at bearbejde den. Våbensmedning og Rustningssmedning er dine at mestre nu. Tjen resten.",
         "objectives": {
           "0": {
-            "label": "Skovulv dræbt"
+            "label": "Malmåre høstet"
           }
         }
       },
-      "q_prof_make_amends": {
-        "title": "Gøre bod",
-        "text": "For at afsætte et håndværk til et andet, skal en håndværker først råde bod på stien, der ikke er gået, {playerName}.",
-        "completion": "Foretagne ændringer; en ny vej er åben for dig.",
+      "q_prof_attune_outfitter": {
+        "title": "Udstyrsmagerens mål",
+        "text": "Mål prisen, inden du klipper, det er den første regel ved min væv. Vælg mig, og Lærbearbejdning og Skrædderkunst bliver dine to hovedfag, det par du kan bære ud over sjælden arbejde; håndværket modsat dem slår sig ned som din hobby, taget til sjælden og ladt der. De fag, du sætter til side, er ikke optrukket, {playerName}, kun lagt sammen, inaktive, til du tager dem op igen. Vær sikker, dog: forlader du dette par og vil have det tilbage senere, er vejen hjem betalt i arbejde, der forlænges hver gang, fem dræbt i første omgang, så otte, så elleve, altid lidt mere. Er dit sind sat, dræb fire nettedskov-edderkopper og bring deres silke til væven, for god tråd starter alle gode klæder.",
+        "completion": "Jævn tråd, jævn hånd. Lærbearbejdning og Skrædderkunst er dine at bære så langt, som din færdighed rækker. Mål to gange, og de vil ikke svigte dig.",
         "objectives": {
           "0": {
-            "label": "Skovulv dræbt"
+            "label": "Nettedskov-Edderkop dræbt"
+          }
+        }
+      },
+      "q_prof_attune_apothecary": {
+        "title": "En opskrift værd at beholde",
+        "text": "Hvert godt ret er to smagsstoffer, der hører sammen, og det er et godt håndværk også, {playerName}. Sid hos mig, og Alkymi og Madlavning bliver dine to hovedfag, de to du kan simre forbi sjælden arbejde; håndværket på den fjerne side af hjulet er din hobby, krydret op til sjælden og ikke varmere. Resten af dine fag holder sig i spisekammeret, inaktive, ikke fordærvede, klar, når du henter dem tilbage. Retfærdig advarsel mens gryden stadig er kold: strej til et andet par og at komme hjem er et ærinde, der vokser, fem dyr taget i første omgang, otte næste, elleve gangen efter, tungere ved hvert måltid. Stadig sulten efter det? Så jag mig fire vildsvin, for et køkken værd dets salt starter med godt kød.",
+        "completion": "Nu er det en start med kød på. Alkymi og Madlavning er dine at lave så højt, du vil. Kom tilbage sulten.",
+        "objectives": {
+          "0": {
+            "label": "Vildsvin jagtet"
+          }
+        }
+      },
+      "q_prof_attune_bombardier": {
+        "title": "En volatil aftale",
+        "text": "Åh, åh, du vil have det gode stof, det støjende stof, ikke? Lyt, lyt, inden du rører ved noget, der tikker: sig bare ordet, og Ingeniørkunst og Alkymi bliver dine to hovedfag, de eneste to, du kan skubbe forbi sjælden arbejde (det er der, det bliver SJOVT, stol på mig). Håndværket modsat går i din lomme som hobby, sjælden og ikke videre, klynk ikke. Dine andre fag? Ikke væk, {playerName}, bare slumrende, vågn dem, når du vil. Men (der er altid et men, hold lunten) forlad dette par og gå tilbage senere, og det koster dig sved, der hober sig, fem ting nedlagt første gang, otte næste, elleve bagefter, mere, mere, hver eneste gang du får kolde fødder. Ja? JA? Gå da pluk mig tre pletter med urter, de volatile, spørg ikke hvilke, de er alle lidt volatile, hvis du tror hårdt nok.",
+        "completion": "HA. Reagenser, rigtige, og alle dine fingre stadig fastgjort, godt, godt. Ingeniørkunst og Alkymi, dine, gå lav noget, der fortryder det. Afsted.",
+        "objectives": {
+          "0": {
+            "label": "Urteplette høstet"
+          }
+        }
+      },
+      "q_prof_amends_smith": {
+        "title": "Tilbage til smedjen",
+        "text": "Så du er kommet tilbage til smedjen. Jeg vil ikke lade som om, det ikke svider, {playerName}, men jeg er en fair hånd og arbejdet er fair også. Du kender prisen for at vende tilbage: arbejde, og mere af det, hver gang du har strejfet. Nedkæmp ulvene, der plager nordvejen, og svinget vil minde dine arme om, hvad dette par engang krævede af dem.",
+        "completion": "Rytmen er tilbage i dine hænder. Våbensmedning og Rustningssmedning er dine hovedfag endnu engang. Gør ikke det til en vane at forlade.",
+        "objectives": {
+          "0": {
+            "label": "Skovulv slagtet"
+          }
+        }
+      },
+      "q_prof_amends_outfitter": {
+        "title": "Tråde genforenet",
+        "text": "Tilbage ved min væv alligevel. Jeg bærer intet nag, {playerName}, men tråden husker en hånd, der slap den, og prisen for at tage den op igen måles ud længere, hver gang. Dræb nettedskov-edderkopperne i den vestlige skov, og arbejdet vil sætte dine hænder til ro, inden de rører god silke igen.",
+        "completion": "Stødig igen. Lærbearbejdning og Skrædderkunst vender tilbage til dine hænder som hovedfag. Mål to gange, inden du vandrer næste gang.",
+        "objectives": {
+          "0": {
+            "label": "Nettedskov-Edderkop dræbt"
+          }
+        }
+      },
+      "q_prof_amends_apothecary": {
+        "title": "Tilbage på komfuret",
+        "text": "Se hvem der er tilbage ved min gryde. Ingen hårde følelser, {playerName}, et køkken har altid plads, men du ved, at regningen løber højere, hver gang du går. Gå til østmarken og tyn vildsvinene, for ærligt sved er den første ingrediens, og det vil minde dine hænder om arbejdet.",
+        "completion": "Der er den gamle smag. Alkymi og Madlavning er tilbage på dit komfur som hovedfag. Bliv lidt denne gang.",
+        "objectives": {
+          "0": {
+            "label": "Vildsvin jagtet"
+          }
+        }
+      },
+      "q_prof_amends_bombardier": {
+        "title": "Bogen vokser",
+        "text": "Du kom TILBAGE, ha, de kommer altid tilbage, det støjende stof har en tiltrækning, ikke? Ingen sur mine fra mig, {playerName}, men bogen, åh bogen, den vokser, hver gang du stikker af, mere for hver tilbagevenden, det er kun rimeligt. Gå rens tunnelrotterne ud af udgravningen for mig, sved først, gnister bagefter, det er reglen jeg lige fandt på.",
+        "completion": "DER er den, kløen er tilbage i dine hænder. Ingeniørkunst og Alkymi, hovedfag igen, gå nu, gå og lav et brag. Prøv at blive sat denne gang, hvad?",
+        "objectives": {
+          "0": {
+            "label": "Tunnerotte udryddet"
+          }
+        }
+      },
+      "q_prof_workorder_forge": {
+        "title": "Smedje-Arbejdsordre",
+        "text": "Smedjen vil altid have madvarer, {playerName}. Bring mig otte klumper kobbermalm, og jeg sørger for, at du bliver betalt for porten. Ingen ceremonier, bare malm og mønter.",
+        "completion": "Godt vægt, ingen slagge. Her er din betaling. Smedjen vil være sulten igen snart nok.",
+        "objectives": {
+          "0": {
+            "label": "Kobbermalm leveret"
+          }
+        }
+      },
+      "q_prof_workorder_kitchens": {
+        "title": "Køkken-Arbejdsordre",
+        "text": "Mit forrådskammer ser tyndt ud, {playerName}, og tynde forrådskamre skaber sure kokke. Hent mig otte udskæringer af vildt kød, og der er mønter i det for dig, plus min evige taknemmelighed, som er mindre værd, men smager bedre.",
+        "completion": "Nu er det et fuldt spisekammer. Her er din løn. Kom tilbage, når dine tasker er tunge igen.",
+        "objectives": {
+          "0": {
+            "label": "Vildt kød leveret"
+          }
+        }
+      },
+      "q_prof_workorder_loom": {
+        "title": "Væv-Arbejdsordre",
+        "text": "Væven løber tør, og ledige hænder spilder dagslyset, {playerName}. Bring mig seks nøgler edderkoppesilke, og jeg vil betale dig en rimelig pris, talt til kobber.",
+        "completion": "Fin silke, jævnt spundet. Dine mønter, præcist afmålt. Væven takker dig, og det gør jeg også.",
+        "objectives": {
+          "0": {
+            "label": "Edderkoppesilke leveret"
+          }
+        }
+      },
+      "q_prof_workorder_toolworks": {
+        "title": "Værktøjsværk-Arbejdsordre",
+        "text": "Skafter, håndtag, kolber, jeg bruger træ, som om det er ved at gå af mode, hvilket det IKKE er, træ er evigt, {playerName}. Hæv mig otte jernbark-stammer, og jeg betaler dig, mønter, rigtige mønter, ikke en tjeneste, jeg lover, for det meste.",
+        "completion": "Perfekt, perfekt, lige korn, ingen råd. Her, dine mønter, se, jeg holder mit ord (for det meste). Bring mere, når du snubler over et træ.",
+        "objectives": {
+          "0": {
+            "label": "Jernbarks-Stamme leveret"
+          }
+        }
+      },
+      "q_prof_workorder_tannery": {
+        "title": "Garveri-Arbejdsordre",
+        "text": "Karene er tomme. Bring otte grove skind. Mønter, når du gør det.",
+        "completion": "Gode skind. Retfærdig betaling. Igen, når du har mere.",
+        "objectives": {
+          "0": {
+            "label": "Groft skind leveret"
+          }
+        }
+      },
+      "q_prof_workorder_apothecary": {
+        "title": "Apotek-Arbejdsordre",
+        "text": "Mine hylder kræver guldblad, og markedets lager er, forudsigeligt, forfalsket. Bring mig seks guldbladsurter, ubeskadigede, og du vil blive præcist kompenseret. Beskadigede blade vil blive afvist, så pas på din taske.",
+        "completion": "Acceptabelt. Potent og korrekt håndteret. Din betaling, talt til mønten. Lad det ikke stige dig til hovedet, det er et andet reagens.",
+        "objectives": {
+          "0": {
+            "label": "Guldbladsurt leveret"
+          }
+        }
+      },
+      "q_prof_hobby_switch": {
+        "title": "En Anden Tidsfordriv",
+        "text": "Hovedfag kræver et løfte. En hobby spørger kun, hvor din nysgerrighed vanker, {playerName}. Saml et par urter og beslut dig for, hvilket håndværk modsat dine hovedfag du vil udforske.",
+        "completion": "Et lettere valg, men et nyttigt et. Følg den nysgerrighed så langt, som sjældent arbejde kan føre den.",
+        "objectives": {
+          "0": {
+            "label": "Urteplette høstet"
           }
         }
       },
@@ -8889,6 +11906,26 @@ export const da_DK: EnTranslations = {
             "label": "Glimmermere-Vader dræbt"
           }
         }
+      },
+      "q_archetype_acceptance": {
+        "title": "Et håndværk at kalde dit eget",
+        "text": "Hver eneste håndværker fra Eastbrook sætter sig til sidst over på et håndværk, som de kalder deres eget. Bevis dig selv med en enkelt gerning, {playerName}, og erklær din vej.",
+        "completion": "Din vej er valgt; gå det godt.",
+        "objectives": {
+          "0": {
+            "label": "Skovulv dræbt"
+          }
+        }
+      },
+      "q_prof_make_amends": {
+        "title": "Gøre bod",
+        "text": "For at afsætte et håndværk til et andet, skal en håndværker først råde bod på stien, der ikke er gået, {playerName}.",
+        "completion": "Foretagne ændringer; en ny vej er åben for dig.",
+        "objectives": {
+          "0": {
+            "label": "Skovulv dræbt"
+          }
+        }
       }
     },
     "zones": {
@@ -8930,12 +11967,45 @@ export const da_DK: EnTranslations = {
             "label": "Somarken"
           },
           "11": {
-            "label": "Thornwheel Circuit"
+            "label": "Eastbrook"
           },
           "12": {
-            "label": "The Boarpit"
+            "label": "Wolf Run"
           },
           "13": {
+            "label": "Boar Meadow"
+          },
+          "14": {
+            "label": "Mirror Lake"
+          },
+          "15": {
+            "label": "Sableweb"
+          },
+          "16": {
+            "label": "Copper Dig"
+          },
+          "17": {
+            "label": "Bandit Camp"
+          },
+          "18": {
+            "label": "Fallen Chapel"
+          },
+          "19": {
+            "label": "Reliquary Hill"
+          },
+          "20": {
+            "label": "Brightwood Glade"
+          },
+          "21": {
+            "label": "The Sowfield"
+          },
+          "22": {
+            "label": "Thornwheel Circuit"
+          },
+          "23": {
+            "label": "The Boarpit"
+          },
+          "24": {
             "label": "Eastbrook Homes"
           }
         }
@@ -9076,6 +12146,166 @@ export const da_DK: EnTranslations = {
         "sender": "Broder Aldric",
         "subject": "Det, du gjorde i mørket",
         "body": "Kun få vil nogensinde vide, hvad der lå begravet i den lavning, og endnu færre ville tro det. Jeg ved det, og jeg glemmer det ikke.\n\nMå din vej forblive oplyst.\n- Broder Aldric"
+      },
+      "heroic_marks_reward": {
+        "sender": "Heroisk kvartermester",
+        "subject": "Dine heroiske mærker",
+        "body": "Din gruppe klarede den heroiske prøve, mens du kæmpede i bagtroppen eller lå faldet. Din låsning blev også registreret, så din andel af de heroiske mærker blev sendt hertil i stedet for at gå tabt. Brug dem godt.\n\n- Heroisk kvartermester"
+      },
+      "guild_trend_engineering_alchemy": {
+        "sender": "Håndværkerlauget",
+        "subject": "Dit arbejde inden for teknik og alkymi",
+        "body": "håndværker,\n\nBud når lauget af dit arbejde inden for teknik og alkymi: ladninger målt og reagenser vejet, de to håndværk fodrer hinanden. Nabohåndværk, der arbejdes sammen, markerer en hånd, der er klar til afstemning. De, der binder dette par, får navnet bombardér med tiden. Opsøg Smed Haldren, rustningsmanden fra Eastbrook: han taler for mestrene for nu. Bevis dit håndværk for ham med arbejde af dine egne hænder, og han vil se dine to hovedfag afstemt.\n\nMed venlig hilsen,\nHåndværkerlauget"
+      },
+      "guild_trend_alchemy_cooking": {
+        "sender": "Håndværkerlauget",
+        "subject": "Dit arbejde med alkymi og madlavning",
+        "body": "håndværker,\n\nOrd når lauget af dit arbejde i Alkymi og madlavning: bryg simrede og retter krydret, de to håndværk nærer hinanden. Nabohåndværk, der arbejdes sammen, markerer en hånd, der er klar til afstemning. De, der binder dette par, får navnet apoteker med tiden. Opsøg Smed Haldren, rustningsmanden fra Eastbrook: han taler for mestrene for nu. Bevis dit håndværk for ham med arbejde af dine egne hænder, og han vil se dine to hovedfag afstemt.\n\nMed venlig hilsen,\nHåndværkerlauget"
+      },
+      "guild_trend_cooking_leatherworking": {
+        "sender": "Håndværkerlauget",
+        "subject": "Dit arbejde inden for madlavning og læderbearbejdning",
+        "body": "håndværker,\n\nBud når lauget af dit arbejde i madlavning og læderbearbejdning: måltider anrettet og skind garvet, de to håndværk fodrer hinanden. Nabohåndværk, der arbejdes sammen, markerer en hånd, der er klar til afstemning. Opsøg Smed Haldren, rustningsmanden fra Eastbrook: han taler for mestrene for nu. Bevis dit håndværk for ham med arbejde af dine egne hænder, og han vil se dine to hovedfag afstemt.\n\nMed venlig hilsen,\nHåndværkerlauget"
+      },
+      "guild_trend_leatherworking_tailoring": {
+        "sender": "Håndværkerlauget",
+        "subject": "Dit arbejde inden for læderbearbejdning og skrædderarbejde",
+        "body": "håndværker,\n\nBud når lauget af dit arbejde i læderbearbejdning og skrædderarbejde: læder skåret og stofsømt, de to håndværk nærer hinanden. Nabohåndværk, der arbejdes sammen, markerer en hånd, der er klar til afstemning. De, der binder dette par, får navnet udstyrsmager i tide. Opsøg Smed Haldren, rustningsmanden fra Eastbrook: han taler for mestrene for nu. Bevis dit håndværk for ham med arbejde af dine egne hænder, og han vil se dine to hovedfag afstemt.\n\nMed venlig hilsen,\nHåndværkerlauget"
+      },
+      "guild_trend_tailoring_inscription": {
+        "sender": "Håndværkerlauget",
+        "subject": "Dit arbejde inden for skrædderarbejde og indskrivning",
+        "body": "håndværker,\n\nBud når lauget af dit arbejde i skrædderarbejdeet og inskription: sømme syet og glyffer sværtet, de to håndværk nærer hinanden. Nabohåndværk, der arbejdes sammen, markerer en hånd, der er klar til afstemning. Opsøg Smed Haldren, rustningsmanden fra Eastbrook: han taler for mestrene for nu. Bevis dit håndværk for ham med arbejde af dine egne hænder, og han vil se dine to hovedfag afstemt.\n\nMed venlig hilsen,\nHåndværkerlauget"
+      },
+      "guild_trend_inscription_enchanting": {
+        "sender": "Håndværkerlauget",
+        "subject": "Dit arbejde i inskription og fortryllelse",
+        "body": "håndværker,\n\nBud når lauget af dit arbejde i inskription og fortryllelse: ruller med bogstaver og amuletter vævet, de to håndværk nærer hinanden. Nabohåndværk, der arbejdes sammen, markerer en hånd, der er klar til afstemning. Opsøg Smed Haldren, rustningsmanden fra Eastbrook: han taler for mestrene for nu. Bevis dit håndværk for ham med arbejde af dine egne hænder, og han vil se dine to hovedfag afstemt.\n\nMed venlig hilsen,\nHåndværkerlauget"
+      },
+      "guild_trend_enchanting_jewelcrafting": {
+        "sender": "Håndværkerlauget",
+        "subject": "Dit arbejde med fortryllende og smykkekunst",
+        "body": "håndværker,\n\nBud når lauget af dit arbejde i fortryllelse og juvelslibning: amuletter bundet og sten poleret, de to håndværk nærer hinanden. Nabohåndværk, der arbejdes sammen, markerer en hånd, der er klar til afstemning. Opsøg Smed Haldren, rustningsmanden fra Eastbrook: han taler for mestrene for nu. Bevis dit håndværk for ham med arbejde af dine egne hænder, og han vil se dine to hovedfag afstemt.\n\nMed venlig hilsen,\nHåndværkerlauget"
+      },
+      "guild_trend_jewelcrafting_weaponcrafting": {
+        "sender": "Håndværkerlauget",
+        "subject": "Dit arbejde i juvelslibning og våbenarbejde",
+        "body": "håndværker,\n\nBud når lauget af dit arbejde i juvelslibning og våbenarbejde: ædelstene siddende og kanter slebet, de to håndværk nærer hinanden. Nabohåndværk, der arbejdes sammen, markerer en hånd, der er klar til afstemning. Opsøg Smed Haldren, rustningsmanden fra Eastbrook: han taler for mestrene for nu. Bevis dit håndværk for ham med arbejde af dine egne hænder, og han vil se dine to hovedfag afstemt.\n\nMed venlig hilsen,\nHåndværkerlauget"
+      },
+      "guild_trend_weaponcrafting_armorcrafting": {
+        "sender": "Håndværkerlauget",
+        "subject": "Dit arbejde inden for våben- og rustningsarbejde",
+        "body": "håndværker,\n\nBud når lauget af dit arbejde i våben- og panserarbejde: klinger hærdet og plader monteret, de to håndværk nærer hinanden. Nabohåndværk, der arbejdes sammen, markerer en hånd, der er klar til afstemning. De, der binder dette par, får navnet smed med tiden. Opsøg Smed Haldren, rustningsmanden fra Eastbrook: han taler for mestrene for nu. Bevis dit håndværk for ham med arbejde af dine egne hænder, og han vil se dine to hovedfag afstemt.\n\nMed venlig hilsen,\nHåndværkerlauget"
+      },
+      "guild_trend_armorcrafting_engineering": {
+        "sender": "Håndværkerlauget",
+        "subject": "Dit arbejde inden for rustning og teknik",
+        "body": "håndværker,\n\nBud når lauget af dit arbejde inden for rustning og teknik: plader nittet og tandhjul justeret, de to håndværk nærer hinanden. Nabohåndværk, der arbejdes sammen, markerer en hånd, der er klar til afstemning. Opsøg Smed Haldren, rustningsmanden fra Eastbrook: han taler for mestrene for nu. Bevis dit håndværk for ham med arbejde af dine egne hænder, og han vil se dine to hovedfag afstemt.\n\nMed venlig hilsen,\nHåndværkerlauget"
+      },
+      "mastery_reset_notice": {
+        "sender": "Laugehallen",
+        "subject": "Dit håndværk, gjort ærligt",
+        "body": "Gildemedlem,\n\nLauget har vedtaget en ny vurdering af mesterskab. Alle hænder begynder klatringen forfra: dine håndværksfærdigheder og dine indsamlingsfærdigheder er sat til nul.\n\nAlt andet er dit, uberørt: dine opskrifter, dine værktøjer og materialer, din bank og dit guld, dine indstillinger og titler, dine bedrifter og hæder, dine quests og post.\n\nKlatringen er ærlig nu. Billigt arbejde vil ikke bære dig. Søg sværere opskrifter, rigere årer og dybere vande.\n\nMed respekt,\nLaugehallen"
+      },
+      "prof_tier_weaponcrafting_armorcrafting_1": {
+        "sender": "Smedemester Darva",
+        "subject": "En gnist værd at bemærke",
+        "body": "Ord når min smedje om, at et af dine hovedfag nu holder ved ualmindeligt arbejde. Det er det mindste trin på en lang klatring, men du tjente det ved ambolt, ikke ved at bede om det. Hold ilden varm."
+      },
+      "prof_tier_weaponcrafting_armorcrafting_2": {
+        "sender": "Smedemester Darva",
+        "subject": "Sjælden arbejde, og fortjent",
+        "body": "De fortæller mig, at et af dine hovedfag har nået sjælden arbejde. Det er trinnet, hvor sjuskede hænder falder bort, og de rigtige smede er tilbage stående. Du er stadig stående. Godt."
+      },
+      "prof_tier_weaponcrafting_armorcrafting_3": {
+        "sender": "Smedemester Darva",
+        "subject": "Metallet svarer dig nu",
+        "body": "Et af dine hovedfag er klatret forbi sjælden ind i seriøst arbejde. Metallet svarer en hånd som den, ikke mere modstand. Lad ikke rosen blødgøre din arm."
+      },
+      "prof_tier_weaponcrafting_armorcrafting_4": {
+        "sender": "Smedemester Darva",
+        "subject": "Nær toppen af stigen",
+        "body": "Et af dine hovedfag står et enkelt trin under mesterskab. Få hænder jeg har kendt når denne højde, og endnu færre holder deres kant her. Afslut klatringen."
+      },
+      "prof_tier_weaponcrafting_armorcrafting_5": {
+        "sender": "Smedemester Darva",
+        "subject": "Mesterskab, endelig",
+        "body": "Et af dine hovedfag har nået mesterskab, det højeste en hånd kan klatre. Jeg giver ikke ros frit, så hør dette en gang: smedjen er stolt af dig. Gå nu og lær ilden noget nyt."
+      },
+      "prof_tier_leatherworking_tailoring_1": {
+        "sender": "Væver Ottilie",
+        "subject": "En jævn første række",
+        "body": "Lauget bemærker, at et af dine hovedfag har nået ualmindeligt arbejde. Det er kun den første række af mange, men den er jævn og sand. Mål den næste ligeså omhyggeligt."
+      },
+      "prof_tier_leatherworking_tailoring_2": {
+        "sender": "Væver Ottilie",
+        "subject": "Sjælden arbejde, velafmålt",
+        "body": "Et af dine hovedfag er klatret til sjælden arbejde. Det er der, en skødesløs hånd viser hvert tabt sting, og din har ikke. Jeg er stille tilfreds."
+      },
+      "prof_tier_leatherworking_tailoring_3": {
+        "sender": "Væver Ottilie",
+        "subject": "Mønstret bliver klart",
+        "body": "Et af dine hovedfag har passeret sjælden ind i finere arbejde. Mønstret bliver klart for en hånd på dette niveau, ikke mere gætteri. Bliv ved med at måle to gange."
+      },
+      "prof_tier_leatherworking_tailoring_4": {
+        "sender": "Væver Ottilie",
+        "subject": "En række fra toppen",
+        "body": "Et af dine hovedfag sidder en række fra mesterskab. Den sidste række er altid den sværeste at holde jævn. Skynd dig ikke nu."
+      },
+      "prof_tier_leatherworking_tailoring_5": {
+        "sender": "Væver Ottilie",
+        "subject": "Det sidste sting",
+        "body": "Et af dine hovedfag har nået mesterskab. Jeg målte dit arbejde to gange, som jeg måler alt, og det holder. Få hænder binder det sidste sting så rent. Jeg er stolt, og det siger jeg ikke let."
+      },
+      "prof_tier_alchemy_cooking_1": {
+        "sender": "Kok Marlow",
+        "subject": "En forsmag på hvad der kommer",
+        "body": "Ord driver tilbage til mit køkken om, at et af dine hovedfag har nået ualmindeligt arbejde. Det er en første smag, intet mere, men en lovende en. Bliv ved med at røre i gryden."
+      },
+      "prof_tier_alchemy_cooking_2": {
+        "sender": "Kok Marlow",
+        "subject": "Sjældent arbejde, og ingen brændte kanter",
+        "body": "De fortæller mig, at et af dine hovedfag har simmeret op til sjælden arbejde. Det er den varme, hvor de fleste kokke brænder retten, og det gjorde du ikke. Sæt dig, men ikke for længe."
+      },
+      "prof_tier_alchemy_cooking_3": {
+        "sender": "Kok Marlow",
+        "subject": "Nu laver du mad",
+        "body": "Et af dine hovedfag har bobler forbi sjælden ind i virkelig dybde. Nu laver du mad, som de siger. Krydr modigt og bliv ved med at smage."
+      },
+      "prof_tier_alchemy_cooking_4": {
+        "sender": "Kok Marlow",
+        "subject": "En ret fra festen",
+        "body": "Et af dine hovedfag er en enkelt ret fra mesterskab. Den sidste er altid den rigeste og den nemmeste at overdrive. Stabile hænder på øsen."
+      },
+      "prof_tier_alchemy_cooking_5": {
+        "sender": "Kok Marlow",
+        "subject": "Mesterskab, serveret varmt",
+        "body": "Et af dine hovedfag har nået mesterskab, den øverste hylde i hele spisekammeret. Jeg mader alle, men få koger sig op hertil. Stolt af dig, virkelig. Gå nu og lav noget, der får dem til at græde ved bordet."
+      },
+      "prof_tier_engineering_alchemy_1": {
+        "sender": "Tinker Gizel",
+        "subject": "FØRSTE gnist, ha",
+        "body": "Oi, tallene siger, at et af dine hovedfag lige har ramt ualmindeligt arbejde, lille kartofler, bittesmå, men det POPPEDE, ikke? Første gnist er altid den sødeste. Flere gnister. Afsted."
+      },
+      "prof_tier_engineering_alchemy_2": {
+        "sender": "Tinker Gizel",
+        "subject": "Sjælden, åh, SJÆLDEN",
+        "body": "De fortæller mig, at et af dine hovedfag klatrede til sjælden arbejde, og sjælden er der, hvor det begynder at blive ordentlig farligt (den gode slags). De fleste hænder holder op, inden det bliver sjovt. Ikke dig. HA."
+      },
+      "prof_tier_engineering_alchemy_3": {
+        "sender": "Tinker Gizel",
+        "subject": "Nu bliver det højlydt",
+        "body": "Et af dine hovedfag blæste forbi sjælden ind i det seriøse stof, åh her bliver det HØJLYDT. Stop ikke nu, hvad end du gør, momentum er alt, og lunter er det også."
+      },
+      "prof_tier_engineering_alchemy_4": {
+        "sender": "Tinker Gizel",
+        "subject": "Et trin, ET, fra toppen",
+        "body": "Et af dine hovedfag er ET trin under mesterskab, et, singulært, kan du mærke det summe? Det sidste trin er det største brag. Blink ikke."
+      },
+      "prof_tier_engineering_alchemy_5": {
+        "sender": "Tinker Gizel",
+        "subject": "MESTERSKAB, kaboom",
+        "body": "Et af dine hovedfag ramte mesterskab, det absolutte TOP, kaboom, hele stigen, klaret. Jeg uddeler ikke ros, jeg uddeler lunter, men tag begge her: du er strålende og en smule skræmmende. Gå og gør bjergene nervøse."
       }
     },
     "itemSets": {
@@ -9148,6 +12378,69 @@ export const da_DK: EnTranslations = {
     "delveRiteShrineCandleInteract": "Kerteskrin: Tryk på F for at røre det",
     "delveRiteShrineReedInteract": "Sivskrin: Tryk på F for at røre det",
     "delveRiteShrineSkullInteract": "Kranieskrin: Tryk på F for at røre det",
-    "mailboxName": "Postkasse"
+    "mailboxName": "Postkasse",
+    "noticeboardName": "Opslagstavle"
+  },
+  "contributions": {
+    "cAdminB": "Account review, chat moderation, report queues, role-gated dashboards, and better status panels.",
+    "cAdminT": "Admin & Moderator Tools",
+    "cAuthB": "OIDC wiring, optional TOTP login hardening, safer login throttles, clearer dashboard sessions.",
+    "cAuthT": "Auth & Account Safety",
+    "cOpsB": "Auto-update maintenance mode, static cache policy, API health checks, and safer server restarts.",
+    "cOpsT": "Updates & Operations",
+    "cTestB": "Security tests, OAuth tests, realm tests, launcher tests, and visual smoke scripts.",
+    "cTestT": "Test Coverage",
+    "cUiB": "Camera options, mobile layout fixes, clearer landing flows, and performance guidance.",
+    "cUiT": "Game UI Quality",
+    "cWikiB": "Public wiki hub fallback, release/news feed, launcher status page, and improved nav consistency.",
+    "cWikiT": "Wiki & Public Hubs",
+    "lead": "Cryptic Realm is its own game, but it can still send practical engine improvements back upstream. This separates shared ClaudeCraft-friendly work from private Cryptic Realm features.",
+    "privateBody": "These stay in the independent track because they define this game and are not handed over as generic upstream value.",
+    "privateTitle": "Cryptic Realm-Only Work",
+    "sharedBody": "Clean, generic improvements offered upstream because they help the base project without giving away Cryptic Realm-only economy, realm, or lore systems.",
+    "sharedTitle": "Shared Upstream Candidates",
+    "tagCustody": "Private custody runbooks",
+    "tagExchange": "Exchange realm",
+    "tagLore": "Cryptic Realm lore",
+    "tagMinigames": "Original mini-games",
+    "tagPlatinum": "Platinum economy",
+    "tagRealms": "Hellmaw / Classic / Dominion / Arcane realms",
+    "title": "Contributions"
+  },
+  "coop": {
+    "accountOther": "Different account",
+    "accountThis": "This account",
+    "createCharacter": "Create a character",
+    "createError": "Could not create the character. Try a different name.",
+    "createName": "Character name",
+    "createTitle": "Name your new hero and pick a class",
+    "hintJoin": "Press Start on another controller to add a player (up to 4).",
+    "hintLeave": "Hold Start on a controller to drop that player.",
+    "joinCancel": "Cancel",
+    "joinConfirm": "Join",
+    "joinNow": "Join now",
+    "joinTitle": "Player {slot}: press to join",
+    "keyboardJoin": "Press F2 to add a local player",
+    "loggingIn": "Signing in...",
+    "loginError": "Sign-in failed. Check the username and password.",
+    "loginPass": "Password",
+    "loginSubmit": "Sign in and join",
+    "loginTitle": "Sign in Player {slot}'s account",
+    "loginUser": "Username",
+    "noOtherCharacters": "This account has no other characters to bring in.",
+    "pickCharacter": "Choose a character",
+    "pickClass": "Choose a class",
+    "reconnecting": "Player {slot} reconnecting",
+    "reviving": "Reviving in {seconds}s",
+    "slotEmpty": "Open",
+    "slotLabel": "Player {slot}",
+    "stripTitle": "Local players"
+  },
+  "links": {
+    "loading": "Loading official channels…",
+    "title": "Official Links"
+  },
+  "whitepaper": {
+    "loading": "Loading the white paper…"
   }
 };

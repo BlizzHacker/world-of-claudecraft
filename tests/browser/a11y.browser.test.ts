@@ -12,18 +12,19 @@
 // by this painter-mount harness; their pixels get no faked per-marker aria.
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { Keybinds } from '../../src/game/keybinds';
 import type { TalentAllocation } from '../../src/sim/content/talents';
 import { ITEMS, QUESTS } from '../../src/sim/data';
+import { ALL_CLASSES } from '../../src/sim/types';
 import { ArenaWindow } from '../../src/ui/arena_window';
 import { BagsWindow } from '../../src/ui/bags_window';
 import { CharWindow } from '../../src/ui/char_window';
 import { FOCUSABLE_SELECTOR } from '../../src/ui/focus_manager';
+import { resolveActionBarVisibility } from '../../src/ui/hud/action_bar/action_bar_visibility_core';
+import { QuestLogWindow } from '../../src/ui/hud/quest/questlog_window';
 import { t } from '../../src/ui/i18n';
 import { LeaderboardWindow } from '../../src/ui/leaderboard_window';
 import { MarketWindow } from '../../src/ui/market_window';
 import { OptionsWindow } from '../../src/ui/options_window';
-import { QuestLogWindow } from '../../src/ui/questlog_window';
 import { SocialWindow } from '../../src/ui/social_window';
 import { SpellbookWindow } from '../../src/ui/spellbook_window';
 import { TalentsWindow } from '../../src/ui/talents_window';
@@ -49,43 +50,6 @@ async function expectClean(el: HTMLElement): Promise<void> {
   expect(violations, formatViolations(violations)).toEqual([]);
 }
 
-// The AAA window frame mounts the dialog identity on the host root's direct-child
-// .window-frame (renderWindowFrame stamps role/aria on the inner mount; only the
-// markDialogRoot windows, e.g. arena and market, keep it on the stable root).
-// These helpers assert the CONTRACT: a dialog node exists (root or frame mount),
-// its accessible name resolves, and a labelled close control is present. They
-// deliberately avoid echoing the exact attribute wiring so frame-internal aria
-// changes (tab aria-controls/aria-labelledby work) compose with this suite.
-function dialogNode(root: HTMLElement): HTMLElement {
-  const node =
-    root.getAttribute('role') === 'dialog'
-      ? root
-      : root.querySelector<HTMLElement>(':scope > .window-frame[role="dialog"]');
-  expect(node, 'a role=dialog node (the root or its .window-frame mount)').toBeTruthy();
-  return node as HTMLElement;
-}
-
-function expectLabelledDialog(root: HTMLElement): HTMLElement {
-  const dialog = dialogNode(root);
-  const labelledBy = dialog.getAttribute('aria-labelledby');
-  if (labelledBy) {
-    // The idref must resolve to a real element, else the dialog is nameless.
-    expect(
-      root.querySelector(`#${CSS.escape(labelledBy)}`),
-      `aria-labelledby "${labelledBy}" resolves`,
-    ).toBeTruthy();
-  } else {
-    expect(dialog.getAttribute('aria-label'), 'dialog carries an accessible name').toBeTruthy();
-  }
-  return dialog;
-}
-
-function expectLabelledClose(root: HTMLElement): void {
-  const close = root.querySelector<HTMLElement>('[data-window-close]');
-  expect(close, 'a [data-window-close] control').toBeTruthy();
-  expect(close?.getAttribute('aria-label'), 'the close control is labelled').toBeTruthy();
-}
-
 // ---------------------------------------------------------------------------
 // Leaderboard (#leaderboard-window) - the async/paged decision-15 centerpiece.
 // ---------------------------------------------------------------------------
@@ -100,6 +64,7 @@ function entry(over: Partial<LeaderboardEntry> = {}): LeaderboardEntry {
     lifetimeXp: 5_000_000,
     prestigeRank: 0,
     ...over,
+    title: over.title ?? null,
   };
 }
 
@@ -173,28 +138,59 @@ describe('axe: talents window', () => {
   it('warrior talent tree is clean (dialog role + close button + tablist)', async () => {
     const root = host('talents-window');
     root.style.display = 'none';
-    let stage: TalentAllocation | null = null;
+    const allocation: TalentAllocation = { spec: null, rows: {} };
     const win = new TalentsWindow(
       stubDeps({
         root: () => root,
-        getStage: () => stage,
-        setStage: (s: TalentAllocation | null) => {
-          stage = s;
-        },
         playerClass: () => 'warrior',
-        totalPoints: () => 31,
-        currentAllocation: () => ({ ranks: {}, choices: {} }) as TalentAllocation,
+        playerLevel: () => 20,
+        currentAllocation: () => allocation,
         activeLoadout: () => -1,
         loadouts: () => [],
         currentBar: () => [],
-        buildDropdown: () => document.createElement('div'),
         captureFocus: () => null,
       }),
     );
     win.open();
-    expectLabelledDialog(root);
-    expectLabelledClose(root);
+    expect(root.getAttribute('role')).toBe('dialog');
+    expect(root.querySelector('button[data-close]')).toBeTruthy();
     await expectClean(root);
+  });
+
+  it('puts every specialization role on its own line instead of joining the spec name', () => {
+    for (const cls of ALL_CLASSES) {
+      const root = host(`talents-window-${cls}`);
+      root.style.display = 'none';
+      const allocation: TalentAllocation = { spec: null, rows: {} };
+      const win = new TalentsWindow(
+        stubDeps({
+          root: () => root,
+          playerClass: () => cls,
+          playerLevel: () => 20,
+          currentAllocation: () => allocation,
+          activeLoadout: () => -1,
+          loadouts: () => [],
+          currentBar: () => [],
+          captureFocus: () => null,
+        }),
+      );
+      win.open();
+
+      const cards = Array.from(root.querySelectorAll<HTMLElement>('.ts-panel'));
+      expect(cards, `${cls} specialization cards`).toHaveLength(3);
+      for (const card of cards) {
+        const name = card.querySelector<HTMLElement>('.ts-name');
+        const role = card.querySelector<HTMLElement>('.ts-role');
+        expect(name, `${cls} spec name`).toBeTruthy();
+        expect(role, `${cls} spec role`).toBeTruthy();
+        expect(getComputedStyle(name!).display, `${cls} spec name display`).toBe('block');
+        expect(getComputedStyle(role!).display, `${cls} spec role display`).toBe('block');
+        expect(role!.getBoundingClientRect().top, `${cls} spec role line`).toBeGreaterThan(
+          name!.getBoundingClientRect().top,
+        );
+      }
+      root.remove();
+    }
   });
 });
 
@@ -252,7 +248,7 @@ describe('axe: quest log window', () => {
       }),
     );
     win.toggle();
-    expectLabelledDialog(root);
+    expect(root.getAttribute('role')).toBe('dialog');
     await expectClean(root);
   });
 });
@@ -268,7 +264,10 @@ describe('axe: spellbook window', () => {
     const win = new SpellbookWindow(
       stubDeps({
         root: () => root,
-        world: () => ({ cfg: { playerClass: 'warrior' }, known: [] }) as never,
+        // The render reads world.player.level for the spec/level learn gate
+        // (IWorld always carries a player); level 1 keeps every row locked.
+        world: () =>
+          ({ cfg: { playerClass: 'warrior' }, known: [], player: { level: 1 } }) as never,
         barAbilityIds: () => [],
         hasFreeSlot: () => true,
         hasFormBars: () => false,
@@ -276,13 +275,13 @@ describe('axe: spellbook window', () => {
       }),
     );
     win.toggle();
-    expectLabelledDialog(root);
+    expect(root.getAttribute('role')).toBe('dialog');
     await expectClean(root);
   });
 });
 
 // ---------------------------------------------------------------------------
-// Options / Esc menu (#options-menu) - the category-rail settings window.
+// Options / Esc menu (#options-menu) - the main drill-down menu.
 // ---------------------------------------------------------------------------
 
 describe('axe: options menu', () => {
@@ -299,37 +298,116 @@ describe('axe: options menu', () => {
           }) as never,
         options: () => null,
         bugReport: () => null,
-        // The category rail computes the keybind-conflict dots from the live
-        // bindings on open, so the fixture needs a real (default-layout) table.
-        keybinds: () => new Keybinds(),
         captureFocus: () => null,
       }),
     );
     return { root, win };
   }
 
-  it('main menu is clean (a labelled dialog with a labelled close control)', async () => {
+  it('main menu is clean (dialog role, labelled title that resolves)', async () => {
     const { root, win } = optionsWindow();
     win.toggle();
-    expectLabelledDialog(root);
-    expectLabelledClose(root);
+    expect(root.getAttribute('aria-labelledby')).toBe('options-title');
+    // The idref must resolve to a real element, else the dialog is nameless (the arena
+    // test pins the same for its title; this strengthening would have caught the perf
+    // sub-view's dangling reference, the fix below).
+    expect(root.querySelector('#options-title')).toBeTruthy();
     await expectClean(root);
   });
 
-  it('System category is clean after a rail navigation (the frame title stays resolvable)', async () => {
+  it('Performance sub-view names the dialog with aria-label, no dangling idref', async () => {
     const { root, win } = optionsWindow();
-    win.toggle(); // lands on the Overview category
-    // Navigate the real way: click the System tab on the category rail. The old
-    // Performance drill-down sub-view (which renamed the dialog per view) is gone;
-    // the frame title is persistent, so the dialog name must still resolve after
-    // the detail pane repaints.
-    const systemTab = root.querySelector<HTMLElement>('.opt-tab[data-category="system"]');
-    expect(systemTab, 'System rail tab present').toBeTruthy();
-    systemTab?.click();
-    // The System pane rendered (the About block is hook-independent).
-    expect(root.querySelector('.opt-version')).toBeTruthy();
-    expectLabelledDialog(root);
+    win.toggle(); // main menu first
+    // Navigate to the Performance sub-view the real way: click its menu entry. Its title
+    // comes from the self-contained perf panel (no id=options-title), so the dialog must
+    // name itself via aria-label, NOT keep the now-dangling aria-labelledby.
+    const perfBtn = Array.from(root.querySelectorAll<HTMLElement>('.opt-btn')).find(
+      (b) => b.textContent === t('hudChrome.perf.title'),
+    );
+    expect(perfBtn, 'performance menu entry present').toBeTruthy();
+    perfBtn?.click();
+    expect(root.getAttribute('aria-label')).toBe(t('hudChrome.perf.title'));
+    expect(root.getAttribute('aria-labelledby')).toBeNull();
     await expectClean(root);
+  });
+
+  it('enables the third action row through the secondary row and preserves keyboard focus', () => {
+    const values: Record<string, number | boolean> = {
+      showSecondaryActionBar: false,
+      showThirdActionBar: false,
+    };
+    const settings = {
+      get: (key: string) => values[key] ?? false,
+      set: (key: string, value: number | boolean) => {
+        values[key] = value;
+        return value;
+      },
+    };
+    const hooks = {
+      settings,
+      onSettingChange: (key: string, value: number | boolean) => {
+        if (key !== 'showSecondaryActionBar' && key !== 'showThirdActionBar') return;
+        const visibility = resolveActionBarVisibility(
+          {
+            secondary: Boolean(values.showSecondaryActionBar),
+            third: Boolean(values.showThirdActionBar),
+          },
+          key,
+          Boolean(value),
+        );
+        values.showSecondaryActionBar = visibility.secondary;
+        values.showThirdActionBar = visibility.third;
+      },
+      theme: {
+        get: () => ({ preset: 'classic', custom: {} }),
+        setPreset: () => {},
+        setCustom: () => {},
+        resetCustom: () => {},
+      },
+      perfOverlay: { setPlacement: () => {} },
+    };
+    const root = host('options-menu');
+    root.style.display = 'none';
+    const win = new OptionsWindow(
+      stubDeps({
+        root: () => root,
+        world: () =>
+          ({
+            realm: 'Claudemoon',
+            player: { name: 'Aurelia', pos: { x: 0, y: 0, z: 0 } },
+          }) as never,
+        options: () => hooks as never,
+        bugReport: () => null,
+        buildDropdown: () => document.createElement('div'),
+        captureFocus: () => null,
+      }),
+    );
+    const toggle = (key: string) =>
+      root.querySelector<HTMLButtonElement>(`[data-setting-key="${key}"]`);
+
+    win.toggle();
+    const interfaceButton = Array.from(root.querySelectorAll<HTMLButtonElement>('.opt-btn')).find(
+      (button) => button.textContent === t('hud.options.interface'),
+    );
+    interfaceButton?.click();
+    // The Interface panel is tabbed; both action-bar toggles live under Combat.
+    root.querySelector<HTMLButtonElement>('.opt-tab[data-tab="combat"]')?.click();
+
+    expect(toggle('showThirdActionBar')?.disabled).toBe(true);
+    const secondary = toggle('showSecondaryActionBar');
+    secondary?.focus();
+    secondary?.click();
+    expect(values.showSecondaryActionBar).toBe(true);
+    expect(toggle('showThirdActionBar')?.disabled).toBe(false);
+    expect(document.activeElement).toBe(toggle('showSecondaryActionBar'));
+
+    toggle('showThirdActionBar')?.click();
+    expect(values.showThirdActionBar).toBe(true);
+    toggle('showSecondaryActionBar')?.click();
+    expect(values.showSecondaryActionBar).toBe(false);
+    expect(values.showThirdActionBar).toBe(false);
+    expect(toggle('showThirdActionBar')?.disabled).toBe(true);
+    expect(document.activeElement).toBe(toggle('showSecondaryActionBar'));
   });
 });
 
@@ -359,7 +437,7 @@ describe('axe: social window', () => {
       }),
     );
     win.toggle();
-    expectLabelledDialog(root);
+    expect(root.getAttribute('role')).toBe('dialog');
     await expectClean(root);
   });
 
@@ -450,20 +528,18 @@ describe('axe: social window', () => {
       }),
     );
     win.toggle();
-    // The single active tab on the shared frame rail (aria-selected is the contract;
-    // the frame tab buttons carry data-window-tab, not the old .soc-tab/.on classes).
+    // The single active tab (the styling `.on` and aria-selected stay in lockstep).
     const active = () =>
-      (root.querySelector('[data-window-tab][aria-selected="true"]') as HTMLElement | null)?.dataset
-        .windowTab;
-    const focused = () => (document.activeElement as HTMLElement | null)?.dataset.windowTab;
+      (root.querySelector('.soc-tab.on[aria-selected="true"]') as HTMLElement | null)?.dataset.tab;
+    const focused = () => (document.activeElement as HTMLElement | null)?.dataset.tab;
     const press = (key: string) =>
       (document.activeElement as HTMLElement | null)?.dispatchEvent(
         new KeyboardEvent('keydown', { key, bubbles: true }),
       );
     expect(active()).toBe('friends');
-    (root.querySelector('[data-window-tab="friends"]') as HTMLElement).focus();
-    // ArrowRight: friends -> guild; the frame's persistent tab buttons re-point their
-    // aria and focus follows (selection-follows-focus, the WAI-ARIA tabs pattern).
+    (root.querySelector('.soc-tab[data-tab="friends"]') as HTMLElement).focus();
+    // ArrowRight: friends -> guild; render() rebuilds the strip, so focus follows the
+    // freshly active tab (selection-follows-focus, the WAI-ARIA tabs pattern).
     press('ArrowRight');
     expect(active()).toBe('guild');
     expect(focused()).toBe('guild');
@@ -503,10 +579,10 @@ describe('axe: social window', () => {
     );
     win.toggle();
     const focusableTabs = Array.from(root.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter(
-      (el) => el.hasAttribute('data-window-tab'),
+      (el) => el.classList.contains('soc-tab'),
     );
     expect(focusableTabs).toHaveLength(1);
-    expect(focusableTabs[0]?.dataset.windowTab).toBe('friends');
+    expect(focusableTabs[0]?.dataset.tab).toBe('friends');
     expect(focusableTabs[0]?.getAttribute('aria-selected')).toBe('true');
   });
 });
@@ -546,8 +622,8 @@ describe('axe: character window', () => {
       }),
     );
     win.toggle();
-    expectLabelledDialog(root);
-    // The paperdoll identity block keeps its own #char-title node in the body.
+    expect(root.getAttribute('role')).toBe('dialog');
+    expect(root.getAttribute('aria-labelledby')).toBe('char-title');
     expect(root.querySelector('#char-title')).toBeTruthy();
     expect(root.querySelector('#char-model-preview')?.getAttribute('role')).toBe('img');
     // The role=img preview HOST carries its OWN name, not a duplicate of the

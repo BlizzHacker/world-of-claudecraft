@@ -17,7 +17,7 @@
     {
       "tick": 0,
       "time": 0,
-      "nextId": 419,
+      "nextId": 415,
       "state": "5bc471b0",
       "events": "741638a5",
       "rng": {
@@ -31,9 +31,9 @@
     {
       "tick": 0,
       "time": 0,
-      "nextId": 421,
-      "state": "ee67f39b",
-      "events": "77cf4785",
+      "nextId": 417,
+      "state": "a786e099",
+      "events": "66f81a8d",
       "rng": {
         "draws": 4,
         "digest": "65f0173a"
@@ -55,16 +55,27 @@
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {
-            "damageTaken": 56
+            "damageTaken": 49
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "eastbrook_buckler",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 419,
+          "entityId": 415,
           "equipment": {
             "chest": "recruit_tunic",
-            "mainhand": "worn_sword"
+            "mainhand": "worn_sword",
+            "offhand": "eastbrook_buckler"
           },
           "equipmentInstance": {},
           "gatheringProficiency": {},
@@ -77,9 +88,9 @@
           ],
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
+          "recipesGrandfathered": true,
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }
@@ -88,21 +99,35 @@
         {
           "aiState": "idle",
           "attackPower": 46,
+          "auras": [
+            {
+              "duration": 3600,
+              "id": "battle_stance",
+              "kind": "battle_stance",
+              "name": "Battle Stance",
+              "remaining": 3600,
+              "school": "physical",
+              "sourceId": 415
+            }
+          ],
+          "blockChance": 0.05,
+          "blockValue": 6,
           "comboUntil": -1,
           "critChance": 0.06,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.06,
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
-          "hp": 999944,
-          "id": 419,
+          "hp": 999951,
+          "id": 415,
           "inCombat": true,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
-          "maxHp": 90,
+          "maxHp": 100,
           "maxResource": 100,
           "moveSpeed": 7,
+          "offhandItemId": "eastbrook_buckler",
           "onGround": true,
           "overpowerUntil": -1,
           "petMode": "defensive",
@@ -112,7 +137,7 @@
             "z": -2
           },
           "potionCooldownUntil": -1,
-          "resource": 6.222222,
+          "resource": 8.983333,
           "resourceType": "rage",
           "spawnPos": {
             "x": 2,
@@ -122,10 +147,10 @@
           "spellPower": 5,
           "stats": {
             "agi": 20,
-            "armor": 110,
+            "armor": 144,
             "int": 10,
             "spi": 11,
-            "sta": 22,
+            "sta": 23,
             "str": 23
           },
           "templateId": "warrior",
@@ -136,7 +161,7 @@
           }
         },
         {
-          "aggroTargetId": 419,
+          "aggroTargetId": 415,
           "aiState": "attack",
           "comboUntil": -1,
           "critChance": 0.05,
@@ -146,7 +171,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 1357,
-          "id": 420,
+          "id": 416,
           "inCombat": true,
           "kind": "mob",
           "level": 6,
@@ -185,9 +210,9 @@
     {
       "tick": 0,
       "time": 0,
-      "nextId": 422,
-      "state": "8d7bd49a",
-      "events": "295df617",
+      "nextId": 418,
+      "state": "ffe3dd43",
+      "events": "df486b98",
       "rng": {
         "draws": 8,
         "digest": "284b8111"
@@ -209,16 +234,27 @@
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {
-            "damageTaken": 194
+            "damageTaken": 185
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "eastbrook_buckler",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 419,
+          "entityId": 415,
           "equipment": {
             "chest": "recruit_tunic",
-            "mainhand": "worn_sword"
+            "mainhand": "worn_sword",
+            "offhand": "eastbrook_buckler"
           },
           "equipmentInstance": {},
           "gatheringProficiency": {},
@@ -231,9 +267,9 @@
           ],
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
+          "recipesGrandfathered": true,
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }
@@ -244,30 +280,42 @@
           "attackPower": 46,
           "auras": [
             {
+              "duration": 3600,
+              "id": "battle_stance",
+              "kind": "battle_stance",
+              "name": "Battle Stance",
+              "remaining": 3600,
+              "school": "physical",
+              "sourceId": 415
+            },
+            {
               "duration": 1.5,
               "id": "stomp_stun",
               "kind": "stun",
               "name": "Shuddering Stomp",
               "remaining": 1.5,
               "school": "physical",
-              "sourceId": 421
+              "sourceId": 417
             }
           ],
+          "blockChance": 0.05,
+          "blockValue": 6,
           "comboUntil": -1,
           "critChance": 0.06,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.06,
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
-          "hp": 999862,
-          "id": 419,
+          "hp": 999864,
+          "id": 415,
           "inCombat": true,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
-          "maxHp": 90,
+          "maxHp": 100,
           "maxResource": 100,
           "moveSpeed": 7,
+          "offhandItemId": "eastbrook_buckler",
           "onGround": true,
           "overpowerUntil": -1,
           "petMode": "defensive",
@@ -277,7 +325,7 @@
             "z": -2
           },
           "potionCooldownUntil": -1,
-          "resource": 10.822222,
+          "resource": 16.463333,
           "resourceType": "rage",
           "spawnPos": {
             "x": 2,
@@ -287,10 +335,10 @@
           "spellPower": 5,
           "stats": {
             "agi": 20,
-            "armor": 110,
+            "armor": 144,
             "int": 10,
             "spi": 11,
-            "sta": 22,
+            "sta": 23,
             "str": 23
           },
           "templateId": "warrior",
@@ -301,7 +349,7 @@
           }
         },
         {
-          "aggroTargetId": 419,
+          "aggroTargetId": 415,
           "aiState": "attack",
           "comboUntil": -1,
           "critChance": 0.05,
@@ -311,7 +359,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 1357,
-          "id": 420,
+          "id": 416,
           "inCombat": true,
           "kind": "mob",
           "level": 6,
@@ -346,7 +394,7 @@
           }
         },
         {
-          "aggroTargetId": 419,
+          "aggroTargetId": 415,
           "aiState": "attack",
           "comboUntil": -1,
           "critChance": 0.05,
@@ -356,7 +404,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 2171,
-          "id": 421,
+          "id": 417,
           "inCombat": true,
           "kind": "mob",
           "level": 20,
@@ -394,9 +442,9 @@
     {
       "tick": 0,
       "time": 0,
-      "nextId": 423,
-      "state": "1d8f7b2e",
-      "events": "4d611e06",
+      "nextId": 419,
+      "state": "f9f959e5",
+      "events": "4933f766",
       "rng": {
         "draws": 13,
         "digest": "06ceb9a6"
@@ -418,16 +466,27 @@
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {
-            "damageTaken": 309
+            "damageTaken": 297
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "eastbrook_buckler",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 419,
+          "entityId": 415,
           "equipment": {
             "chest": "recruit_tunic",
-            "mainhand": "worn_sword"
+            "mainhand": "worn_sword",
+            "offhand": "eastbrook_buckler"
           },
           "equipmentInstance": {},
           "gatheringProficiency": {},
@@ -440,9 +499,9 @@
           ],
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
+          "recipesGrandfathered": true,
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }
@@ -453,13 +512,22 @@
           "attackPower": 46,
           "auras": [
             {
+              "duration": 3600,
+              "id": "battle_stance",
+              "kind": "battle_stance",
+              "name": "Battle Stance",
+              "remaining": 3600,
+              "school": "physical",
+              "sourceId": 415
+            },
+            {
               "duration": 1.5,
               "id": "stomp_stun",
               "kind": "stun",
               "name": "Shuddering Stomp",
               "remaining": 1.5,
               "school": "physical",
-              "sourceId": 421
+              "sourceId": 417
             },
             {
               "breaksOnDamage": true,
@@ -469,25 +537,28 @@
               "name": "Keening Wail",
               "remaining": 3,
               "school": "shadow",
-              "sourceId": 422,
+              "sourceId": 418,
               "value": 2.042434
             }
           ],
+          "blockChance": 0.05,
+          "blockValue": 6,
           "comboUntil": -1,
           "critChance": 0.06,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.06,
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
-          "hp": 999885,
-          "id": 419,
+          "hp": 999888,
+          "id": 415,
           "inCombat": true,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
-          "maxHp": 90,
+          "maxHp": 100,
           "maxResource": 100,
           "moveSpeed": 7,
+          "offhandItemId": "eastbrook_buckler",
           "onGround": true,
           "overpowerUntil": -1,
           "petMode": "defensive",
@@ -497,7 +568,7 @@
             "z": -2
           },
           "potionCooldownUntil": -1,
-          "resource": 17.211111,
+          "resource": 26.73,
           "resourceType": "rage",
           "spawnPos": {
             "x": 2,
@@ -507,10 +578,10 @@
           "spellPower": 5,
           "stats": {
             "agi": 20,
-            "armor": 110,
+            "armor": 144,
             "int": 10,
             "spi": 11,
-            "sta": 22,
+            "sta": 23,
             "str": 23
           },
           "templateId": "warrior",
@@ -521,7 +592,7 @@
           }
         },
         {
-          "aggroTargetId": 419,
+          "aggroTargetId": 415,
           "aiState": "attack",
           "comboUntil": -1,
           "critChance": 0.05,
@@ -531,7 +602,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 1357,
-          "id": 420,
+          "id": 416,
           "inCombat": true,
           "kind": "mob",
           "level": 6,
@@ -566,7 +637,7 @@
           }
         },
         {
-          "aggroTargetId": 419,
+          "aggroTargetId": 415,
           "aiState": "attack",
           "comboUntil": -1,
           "critChance": 0.05,
@@ -576,7 +647,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 2171,
-          "id": 421,
+          "id": 417,
           "inCombat": true,
           "kind": "mob",
           "level": 20,
@@ -610,7 +681,7 @@
           }
         },
         {
-          "aggroTargetId": 419,
+          "aggroTargetId": 415,
           "aiState": "attack",
           "comboUntil": -1,
           "critChance": 0.05,
@@ -620,7 +691,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 2277,
-          "id": 422,
+          "id": 418,
           "inCombat": true,
           "kind": "mob",
           "level": 12,
@@ -659,8 +730,8 @@
     {
       "tick": 0,
       "time": 0,
-      "nextId": 424,
-      "state": "e2f08afc",
+      "nextId": 420,
+      "state": "077018a2",
       "events": "741638a5",
       "rng": {
         "draws": 15,
@@ -683,16 +754,27 @@
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {
-            "damageTaken": 309
+            "damageTaken": 297
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "eastbrook_buckler",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 419,
+          "entityId": 415,
           "equipment": {
             "chest": "recruit_tunic",
-            "mainhand": "worn_sword"
+            "mainhand": "worn_sword",
+            "offhand": "eastbrook_buckler"
           },
           "equipmentInstance": {},
           "gatheringProficiency": {},
@@ -705,9 +787,9 @@
           ],
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
+          "recipesGrandfathered": true,
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }
@@ -718,13 +800,22 @@
           "attackPower": 46,
           "auras": [
             {
+              "duration": 3600,
+              "id": "battle_stance",
+              "kind": "battle_stance",
+              "name": "Battle Stance",
+              "remaining": 3600,
+              "school": "physical",
+              "sourceId": 415
+            },
+            {
               "duration": 1.5,
               "id": "stomp_stun",
               "kind": "stun",
               "name": "Shuddering Stomp",
               "remaining": 1.5,
               "school": "physical",
-              "sourceId": 421
+              "sourceId": 417
             },
             {
               "breaksOnDamage": true,
@@ -734,25 +825,28 @@
               "name": "Keening Wail",
               "remaining": 3,
               "school": "shadow",
-              "sourceId": 422,
+              "sourceId": 418,
               "value": 2.042434
             }
           ],
+          "blockChance": 0.05,
+          "blockValue": 6,
           "comboUntil": -1,
           "critChance": 0.06,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.06,
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
-          "hp": 999885,
-          "id": 419,
+          "hp": 999888,
+          "id": 415,
           "inCombat": true,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
-          "maxHp": 90,
+          "maxHp": 100,
           "maxResource": 100,
           "moveSpeed": 7,
+          "offhandItemId": "eastbrook_buckler",
           "onGround": true,
           "overpowerUntil": -1,
           "petMode": "defensive",
@@ -762,7 +856,7 @@
             "z": -2
           },
           "potionCooldownUntil": -1,
-          "resource": 17.211111,
+          "resource": 26.73,
           "resourceType": "rage",
           "spawnPos": {
             "x": 2,
@@ -772,10 +866,10 @@
           "spellPower": 5,
           "stats": {
             "agi": 20,
-            "armor": 110,
+            "armor": 144,
             "int": 10,
             "spi": 11,
-            "sta": 22,
+            "sta": 23,
             "str": 23
           },
           "templateId": "warrior",
@@ -786,7 +880,7 @@
           }
         },
         {
-          "aggroTargetId": 419,
+          "aggroTargetId": 415,
           "aiState": "attack",
           "comboUntil": -1,
           "critChance": 0.05,
@@ -796,7 +890,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 1357,
-          "id": 420,
+          "id": 416,
           "inCombat": true,
           "kind": "mob",
           "level": 6,
@@ -831,7 +925,7 @@
           }
         },
         {
-          "aggroTargetId": 419,
+          "aggroTargetId": 415,
           "aiState": "attack",
           "comboUntil": -1,
           "critChance": 0.05,
@@ -841,7 +935,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 2171,
-          "id": 421,
+          "id": 417,
           "inCombat": true,
           "kind": "mob",
           "level": 20,
@@ -875,7 +969,7 @@
           }
         },
         {
-          "aggroTargetId": 419,
+          "aggroTargetId": 415,
           "aiState": "attack",
           "comboUntil": -1,
           "critChance": 0.05,
@@ -885,7 +979,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 2277,
-          "id": 422,
+          "id": 418,
           "inCombat": true,
           "kind": "mob",
           "level": 12,
@@ -931,7 +1025,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 96,
-          "id": 423,
+          "id": 419,
           "kind": "mob",
           "level": 5,
           "lootFfaTimer": "Infinity",
@@ -972,8 +1066,8 @@
     {
       "tick": 0,
       "time": 0,
-      "nextId": 425,
-      "state": "759b1464",
+      "nextId": 421,
+      "state": "f35ce7fe",
       "events": "741638a5",
       "rng": {
         "draws": 16,
@@ -996,16 +1090,27 @@
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {
-            "damageTaken": 309
+            "damageTaken": 297
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "eastbrook_buckler",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 419,
+          "entityId": 415,
           "equipment": {
             "chest": "recruit_tunic",
-            "mainhand": "worn_sword"
+            "mainhand": "worn_sword",
+            "offhand": "eastbrook_buckler"
           },
           "equipmentInstance": {},
           "gatheringProficiency": {},
@@ -1018,9 +1123,9 @@
           ],
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
+          "recipesGrandfathered": true,
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }
@@ -1031,13 +1136,22 @@
           "attackPower": 46,
           "auras": [
             {
+              "duration": 3600,
+              "id": "battle_stance",
+              "kind": "battle_stance",
+              "name": "Battle Stance",
+              "remaining": 3600,
+              "school": "physical",
+              "sourceId": 415
+            },
+            {
               "duration": 1.5,
               "id": "stomp_stun",
               "kind": "stun",
               "name": "Shuddering Stomp",
               "remaining": 1.5,
               "school": "physical",
-              "sourceId": 421
+              "sourceId": 417
             },
             {
               "breaksOnDamage": true,
@@ -1047,25 +1161,28 @@
               "name": "Keening Wail",
               "remaining": 3,
               "school": "shadow",
-              "sourceId": 422,
+              "sourceId": 418,
               "value": 2.042434
             }
           ],
+          "blockChance": 0.05,
+          "blockValue": 6,
           "comboUntil": -1,
           "critChance": 0.06,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.06,
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
-          "hp": 999885,
-          "id": 419,
+          "hp": 999888,
+          "id": 415,
           "inCombat": true,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
-          "maxHp": 90,
+          "maxHp": 100,
           "maxResource": 100,
           "moveSpeed": 7,
+          "offhandItemId": "eastbrook_buckler",
           "onGround": true,
           "overpowerUntil": -1,
           "petMode": "defensive",
@@ -1075,7 +1192,7 @@
             "z": -2
           },
           "potionCooldownUntil": -1,
-          "resource": 17.211111,
+          "resource": 26.73,
           "resourceType": "rage",
           "spawnPos": {
             "x": 2,
@@ -1085,10 +1202,10 @@
           "spellPower": 5,
           "stats": {
             "agi": 20,
-            "armor": 110,
+            "armor": 144,
             "int": 10,
             "spi": 11,
-            "sta": 22,
+            "sta": 23,
             "str": 23
           },
           "templateId": "warrior",
@@ -1099,7 +1216,7 @@
           }
         },
         {
-          "aggroTargetId": 419,
+          "aggroTargetId": 415,
           "aiState": "attack",
           "comboUntil": -1,
           "critChance": 0.05,
@@ -1109,7 +1226,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 1357,
-          "id": 420,
+          "id": 416,
           "inCombat": true,
           "kind": "mob",
           "level": 6,
@@ -1144,7 +1261,7 @@
           }
         },
         {
-          "aggroTargetId": 419,
+          "aggroTargetId": 415,
           "aiState": "attack",
           "comboUntil": -1,
           "critChance": 0.05,
@@ -1154,7 +1271,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 2171,
-          "id": 421,
+          "id": 417,
           "inCombat": true,
           "kind": "mob",
           "level": 20,
@@ -1188,7 +1305,7 @@
           }
         },
         {
-          "aggroTargetId": 419,
+          "aggroTargetId": 415,
           "aiState": "attack",
           "comboUntil": -1,
           "critChance": 0.05,
@@ -1198,7 +1315,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 2277,
-          "id": 422,
+          "id": 418,
           "inCombat": true,
           "kind": "mob",
           "level": 12,
@@ -1244,7 +1361,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 96,
-          "id": 423,
+          "id": 419,
           "kind": "mob",
           "level": 5,
           "lootFfaTimer": "Infinity",
@@ -1291,7 +1408,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 96,
-          "id": 424,
+          "id": 420,
           "kind": "mob",
           "level": 5,
           "lootFfaTimer": "Infinity",
@@ -1327,9 +1444,9 @@
     {
       "tick": 0,
       "time": 0,
-      "nextId": 426,
-      "state": "262d83f7",
-      "events": "3822592a",
+      "nextId": 422,
+      "state": "41665c2a",
+      "events": "38fff8ae",
       "rng": {
         "draws": 16,
         "digest": "4b7ddb75"
@@ -1351,16 +1468,27 @@
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {
-            "damageTaken": 309
+            "damageTaken": 297
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "eastbrook_buckler",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 419,
+          "entityId": 415,
           "equipment": {
             "chest": "recruit_tunic",
-            "mainhand": "worn_sword"
+            "mainhand": "worn_sword",
+            "offhand": "eastbrook_buckler"
           },
           "equipmentInstance": {},
           "gatheringProficiency": {},
@@ -1373,9 +1501,9 @@
           ],
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
+          "recipesGrandfathered": true,
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }
@@ -1386,13 +1514,22 @@
           "attackPower": 46,
           "auras": [
             {
+              "duration": 3600,
+              "id": "battle_stance",
+              "kind": "battle_stance",
+              "name": "Battle Stance",
+              "remaining": 3600,
+              "school": "physical",
+              "sourceId": 415
+            },
+            {
               "duration": 1.5,
               "id": "stomp_stun",
               "kind": "stun",
               "name": "Shuddering Stomp",
               "remaining": 1.5,
               "school": "physical",
-              "sourceId": 421
+              "sourceId": 417
             },
             {
               "breaksOnDamage": true,
@@ -1402,10 +1539,12 @@
               "name": "Keening Wail",
               "remaining": 3,
               "school": "shadow",
-              "sourceId": 422,
+              "sourceId": 418,
               "value": 2.042434
             }
           ],
+          "blockChance": 0.05,
+          "blockValue": 6,
           "comboUntil": -1,
           "critChance": 0.06,
           "detonateTimer": "Infinity",
@@ -1413,14 +1552,15 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 1000000,
-          "id": 419,
+          "id": 415,
           "inCombat": true,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
-          "maxHp": 90,
+          "maxHp": 100,
           "maxResource": 100,
           "moveSpeed": 7,
+          "offhandItemId": "eastbrook_buckler",
           "onGround": true,
           "overpowerUntil": -1,
           "petMode": "defensive",
@@ -1430,7 +1570,7 @@
             "z": -2
           },
           "potionCooldownUntil": -1,
-          "resource": 17.211111,
+          "resource": 26.73,
           "resourceType": "rage",
           "spawnPos": {
             "x": 2,
@@ -1440,10 +1580,10 @@
           "spellPower": 5,
           "stats": {
             "agi": 20,
-            "armor": 110,
+            "armor": 144,
             "int": 10,
             "spi": 11,
-            "sta": 22,
+            "sta": 23,
             "str": 23
           },
           "templateId": "warrior",
@@ -1454,7 +1594,7 @@
           }
         },
         {
-          "aggroTargetId": 419,
+          "aggroTargetId": 415,
           "aiState": "attack",
           "comboUntil": -1,
           "critChance": 0.05,
@@ -1464,7 +1604,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 1357,
-          "id": 420,
+          "id": 416,
           "inCombat": true,
           "kind": "mob",
           "level": 6,
@@ -1499,7 +1639,7 @@
           }
         },
         {
-          "aggroTargetId": 419,
+          "aggroTargetId": 415,
           "aiState": "attack",
           "comboUntil": -1,
           "critChance": 0.05,
@@ -1509,7 +1649,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 2171,
-          "id": 421,
+          "id": 417,
           "inCombat": true,
           "kind": "mob",
           "level": 20,
@@ -1543,7 +1683,7 @@
           }
         },
         {
-          "aggroTargetId": 419,
+          "aggroTargetId": 415,
           "aiState": "attack",
           "comboUntil": -1,
           "critChance": 0.05,
@@ -1553,7 +1693,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 2277,
-          "id": 422,
+          "id": 418,
           "inCombat": true,
           "kind": "mob",
           "level": 12,
@@ -1599,7 +1739,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 96,
-          "id": 423,
+          "id": 419,
           "kind": "mob",
           "level": 5,
           "lootFfaTimer": "Infinity",
@@ -1646,7 +1786,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 96,
-          "id": 424,
+          "id": 420,
           "kind": "mob",
           "level": 5,
           "lootFfaTimer": "Infinity",
@@ -1678,7 +1818,7 @@
           }
         },
         {
-          "aggroTargetId": 419,
+          "aggroTargetId": 415,
           "aiState": "flee",
           "combatTimer": 99.05,
           "comboUntil": -1,
@@ -1691,7 +1831,7 @@
           "hasFled": true,
           "hostile": true,
           "hp": 20,
-          "id": 425,
+          "id": 421,
           "inCombat": true,
           "kind": "mob",
           "level": 6,
@@ -1727,8 +1867,8 @@
     {
       "tick": 0,
       "time": 0,
-      "nextId": 426,
-      "state": "7fb0d7e2",
+      "nextId": 422,
+      "state": "bf7eb89f",
       "events": "741638a5",
       "rng": {
         "draws": 16,
@@ -1751,16 +1891,27 @@
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {
-            "damageTaken": 309
+            "damageTaken": 297
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "eastbrook_buckler",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 419,
+          "entityId": 415,
           "equipment": {
             "chest": "recruit_tunic",
-            "mainhand": "worn_sword"
+            "mainhand": "worn_sword",
+            "offhand": "eastbrook_buckler"
           },
           "equipmentInstance": {},
           "gatheringProficiency": {},
@@ -1773,9 +1924,9 @@
           ],
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
+          "recipesGrandfathered": true,
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }
@@ -1786,13 +1937,22 @@
           "attackPower": 46,
           "auras": [
             {
+              "duration": 3600,
+              "id": "battle_stance",
+              "kind": "battle_stance",
+              "name": "Battle Stance",
+              "remaining": 3600,
+              "school": "physical",
+              "sourceId": 415
+            },
+            {
               "duration": 1.5,
               "id": "stomp_stun",
               "kind": "stun",
               "name": "Shuddering Stomp",
               "remaining": 1.5,
               "school": "physical",
-              "sourceId": 421
+              "sourceId": 417
             },
             {
               "breaksOnDamage": true,
@@ -1802,10 +1962,12 @@
               "name": "Keening Wail",
               "remaining": 3,
               "school": "shadow",
-              "sourceId": 422,
+              "sourceId": 418,
               "value": 2.042434
             }
           ],
+          "blockChance": 0.05,
+          "blockValue": 6,
           "comboUntil": -1,
           "critChance": 0.06,
           "detonateTimer": "Infinity",
@@ -1813,14 +1975,15 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 1000000,
-          "id": 419,
+          "id": 415,
           "inCombat": true,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
-          "maxHp": 90,
+          "maxHp": 100,
           "maxResource": 100,
           "moveSpeed": 7,
+          "offhandItemId": "eastbrook_buckler",
           "onGround": true,
           "overpowerUntil": -1,
           "petMode": "defensive",
@@ -1830,7 +1993,7 @@
             "z": -2
           },
           "potionCooldownUntil": -1,
-          "resource": 17.211111,
+          "resource": 26.73,
           "resourceType": "rage",
           "spawnPos": {
             "x": 2,
@@ -1840,10 +2003,10 @@
           "spellPower": 5,
           "stats": {
             "agi": 20,
-            "armor": 110,
+            "armor": 144,
             "int": 10,
             "spi": 11,
-            "sta": 22,
+            "sta": 23,
             "str": 23
           },
           "templateId": "warrior",
@@ -1854,7 +2017,7 @@
           }
         },
         {
-          "aggroTargetId": 419,
+          "aggroTargetId": 415,
           "aiState": "attack",
           "comboUntil": -1,
           "critChance": 0.05,
@@ -1864,7 +2027,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 1357,
-          "id": 420,
+          "id": 416,
           "inCombat": true,
           "kind": "mob",
           "level": 6,
@@ -1899,7 +2062,7 @@
           }
         },
         {
-          "aggroTargetId": 419,
+          "aggroTargetId": 415,
           "aiState": "attack",
           "comboUntil": -1,
           "critChance": 0.05,
@@ -1909,7 +2072,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 2171,
-          "id": 421,
+          "id": 417,
           "inCombat": true,
           "kind": "mob",
           "level": 20,
@@ -1943,7 +2106,7 @@
           }
         },
         {
-          "aggroTargetId": 419,
+          "aggroTargetId": 415,
           "aiState": "attack",
           "comboUntil": -1,
           "critChance": 0.05,
@@ -1953,7 +2116,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 2277,
-          "id": 422,
+          "id": 418,
           "inCombat": true,
           "kind": "mob",
           "level": 12,
@@ -1999,7 +2162,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 96,
-          "id": 423,
+          "id": 419,
           "kind": "mob",
           "level": 5,
           "lootFfaTimer": "Infinity",
@@ -2046,7 +2209,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 96,
-          "id": 424,
+          "id": 420,
           "kind": "mob",
           "level": 5,
           "lootFfaTimer": "Infinity",
@@ -2078,7 +2241,7 @@
           }
         },
         {
-          "aggroTargetId": 419,
+          "aggroTargetId": 415,
           "aiState": "flee",
           "combatTimer": 99.1,
           "comboUntil": -1,
@@ -2092,7 +2255,7 @@
           "hasFled": true,
           "hostile": true,
           "hp": 20,
-          "id": 425,
+          "id": 421,
           "inCombat": true,
           "kind": "mob",
           "level": 6,
@@ -2128,8 +2291,8 @@
     {
       "tick": 0,
       "time": 0,
-      "nextId": 426,
-      "state": "7fb0d7e2",
+      "nextId": 422,
+      "state": "bf7eb89f",
       "events": "741638a5",
       "rng": {
         "draws": 16,
@@ -2152,16 +2315,27 @@
           "cls": "warrior",
           "companionUpgrades": {},
           "counters": {
-            "damageTaken": 309
+            "damageTaken": 297
           },
           "craftSkills": {},
           "craftThrottle": {},
+          "deedStats": {
+            "counters": {},
+            "dungeonClears": {},
+            "itemsDiscovered": [
+              "baked_bread",
+              "eastbrook_buckler",
+              "recruit_tunic",
+              "worn_sword"
+            ]
+          },
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 419,
+          "entityId": 415,
           "equipment": {
             "chest": "recruit_tunic",
-            "mainhand": "worn_sword"
+            "mainhand": "worn_sword",
+            "offhand": "eastbrook_buckler"
           },
           "equipmentInstance": {},
           "gatheringProficiency": {},
@@ -2174,9 +2348,9 @@
           ],
           "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
+          "recipesGrandfathered": true,
           "talents": {
-            "choices": {},
-            "ranks": {}
+            "rows": {}
           },
           "townFocus": {}
         }
@@ -2187,13 +2361,22 @@
           "attackPower": 46,
           "auras": [
             {
+              "duration": 3600,
+              "id": "battle_stance",
+              "kind": "battle_stance",
+              "name": "Battle Stance",
+              "remaining": 3600,
+              "school": "physical",
+              "sourceId": 415
+            },
+            {
               "duration": 1.5,
               "id": "stomp_stun",
               "kind": "stun",
               "name": "Shuddering Stomp",
               "remaining": 1.5,
               "school": "physical",
-              "sourceId": 421
+              "sourceId": 417
             },
             {
               "breaksOnDamage": true,
@@ -2203,10 +2386,12 @@
               "name": "Keening Wail",
               "remaining": 3,
               "school": "shadow",
-              "sourceId": 422,
+              "sourceId": 418,
               "value": 2.042434
             }
           ],
+          "blockChance": 0.05,
+          "blockValue": 6,
           "comboUntil": -1,
           "critChance": 0.06,
           "detonateTimer": "Infinity",
@@ -2214,14 +2399,15 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 1000000,
-          "id": 419,
+          "id": 415,
           "inCombat": true,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
-          "maxHp": 90,
+          "maxHp": 100,
           "maxResource": 100,
           "moveSpeed": 7,
+          "offhandItemId": "eastbrook_buckler",
           "onGround": true,
           "overpowerUntil": -1,
           "petMode": "defensive",
@@ -2231,7 +2417,7 @@
             "z": -2
           },
           "potionCooldownUntil": -1,
-          "resource": 17.211111,
+          "resource": 26.73,
           "resourceType": "rage",
           "spawnPos": {
             "x": 2,
@@ -2241,10 +2427,10 @@
           "spellPower": 5,
           "stats": {
             "agi": 20,
-            "armor": 110,
+            "armor": 144,
             "int": 10,
             "spi": 11,
-            "sta": 22,
+            "sta": 23,
             "str": 23
           },
           "templateId": "warrior",
@@ -2255,7 +2441,7 @@
           }
         },
         {
-          "aggroTargetId": 419,
+          "aggroTargetId": 415,
           "aiState": "attack",
           "comboUntil": -1,
           "critChance": 0.05,
@@ -2265,7 +2451,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 1357,
-          "id": 420,
+          "id": 416,
           "inCombat": true,
           "kind": "mob",
           "level": 6,
@@ -2300,7 +2486,7 @@
           }
         },
         {
-          "aggroTargetId": 419,
+          "aggroTargetId": 415,
           "aiState": "attack",
           "comboUntil": -1,
           "critChance": 0.05,
@@ -2310,7 +2496,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 2171,
-          "id": 421,
+          "id": 417,
           "inCombat": true,
           "kind": "mob",
           "level": 20,
@@ -2344,7 +2530,7 @@
           }
         },
         {
-          "aggroTargetId": 419,
+          "aggroTargetId": 415,
           "aiState": "attack",
           "comboUntil": -1,
           "critChance": 0.05,
@@ -2354,7 +2540,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 2277,
-          "id": 422,
+          "id": 418,
           "inCombat": true,
           "kind": "mob",
           "level": 12,
@@ -2400,7 +2586,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 96,
-          "id": 423,
+          "id": 419,
           "kind": "mob",
           "level": 5,
           "lootFfaTimer": "Infinity",
@@ -2447,7 +2633,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 96,
-          "id": 424,
+          "id": 420,
           "kind": "mob",
           "level": 5,
           "lootFfaTimer": "Infinity",
@@ -2479,7 +2665,7 @@
           }
         },
         {
-          "aggroTargetId": 419,
+          "aggroTargetId": 415,
           "aiState": "flee",
           "combatTimer": 99.1,
           "comboUntil": -1,
@@ -2493,7 +2679,7 @@
           "hasFled": true,
           "hostile": true,
           "hp": 20,
-          "id": 425,
+          "id": 421,
           "inCombat": true,
           "kind": "mob",
           "level": 6,

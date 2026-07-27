@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { ClientWorld } from '../src/net/online';
 import { zoneAt } from '../src/sim/data';
+import { grantDeed } from '../src/sim/deeds';
+import { emitMobYell } from '../src/sim/mob/yells';
 import { Sim } from '../src/sim/sim';
 import type { SimContext } from '../src/sim/sim_context';
 import * as chatMod from '../src/sim/social/chat';
@@ -185,6 +187,23 @@ describe('chat channels', () => {
     expect(msgs[0].channel).toBe('general');
     expect(msgs[0].pid).toBeUndefined(); // no pid = routed to everyone
     expect(msgs[0].text).toBe('LFG crypt');
+  });
+
+  it('the /1 shortcut reaches the General channel, like /general', () => {
+    const sim = makeWorld();
+    const a = sim.addPlayer('warrior', 'Aleph');
+    const far = sim.addPlayer('mage', 'Bet');
+    teleport(sim, a, 0, -40);
+    teleport(sim, far, 0, -900);
+    sim.tick();
+
+    const sent = sim.chat('/1 anyone for crypt', a);
+    expect(sent).toEqual({ channel: 'general', message: 'anyone for crypt' });
+    const msgs = chatEvents(sim.tick());
+    expect(msgs).toHaveLength(1);
+    expect(msgs[0].channel).toBe('general');
+    expect(msgs[0].pid).toBeUndefined();
+    expect(msgs[0].text).toBe('anyone for crypt');
   });
 
   it('unknown slash commands error instead of being said out loud', () => {
@@ -995,6 +1014,55 @@ describe('/afk and /dnd presence', () => {
     const out = logEvents(sim.tick());
     expect(out.some((m) => m.pid === a && /no longer marked as away/.test(m.text))).toBe(true);
   });
+
+  it('/afk sets the entity display flag; /dnd does not; toggling clears it', () => {
+    const sim = makeWorld();
+    const a = sim.addPlayer('warrior', 'Aleph');
+    sim.tick();
+    const e = sim.entities.get(a)!;
+
+    expect(e.afk).toBe(false);
+    sim.chat('/afk', a);
+    sim.tick();
+    expect(e.afk).toBe(true); // the wire/nameplate/presence display bit
+
+    sim.chat('/afk', a); // repeat toggles off
+    sim.tick();
+    expect(e.afk).toBe(false);
+
+    // Do Not Disturb is a private state: it never lights the public AFK tag.
+    sim.chat('/dnd raiding', a);
+    sim.tick();
+    expect(sim.meta(a)!.away?.mode).toBe('dnd');
+    expect(e.afk).toBe(false);
+  });
+
+  it('moving under your own input clears AFK (Do Not Disturb survives)', () => {
+    const sim = makeWorld();
+    const a = sim.addPlayer('warrior', 'Aleph');
+    sim.tick();
+    const e = sim.entities.get(a)!;
+
+    sim.chat('/afk', a);
+    sim.tick();
+    expect(e.afk).toBe(true);
+
+    sim.meta(a)!.moveInput.forward = true;
+    const moved = logEvents(sim.tick());
+    expect(e.afk).toBe(false);
+    expect(sim.meta(a)!.away).toBe(null);
+    expect(moved.some((m) => m.pid === a && /no longer Away From Keyboard/.test(m.text))).toBe(
+      true,
+    );
+
+    // Do Not Disturb is deliberate: movement leaves it in place.
+    sim.meta(a)!.moveInput.forward = false;
+    sim.chat('/dnd', a);
+    sim.tick();
+    sim.meta(a)!.moveInput.forward = true;
+    sim.tick();
+    expect(sim.meta(a)!.away?.mode).toBe('dnd');
+  });
 });
 
 // Direct unit tests for the extracted chat module (src/sim/social/chat.ts),
@@ -1118,7 +1186,9 @@ describe('chat module (direct, no Sim)', () => {
     const line = chatMod.inspectReadout(target, e);
     expect(line).toContain('Bet: Level 7');
     expect(line).toContain('50%');
-    expect(chatMod.helpLines().length).toBe(7);
+    // 8 lines: the 7 original groups plus the ignore/block line
+    expect(chatMod.helpLines().length).toBe(8);
+    expect(chatMod.helpLines().join('\n')).toContain('/ignore <name>');
   });
 
   it('handleDevChat: parses dev cheats; returns undefined for non-dev input', () => {
@@ -1265,5 +1335,124 @@ describe('/sit and /stand pose', () => {
     e.dead = true;
     sim.chat('/sit', a);
     expect(e.sitting).toBe(false);
+  });
+});
+
+describe('chat speaker titles (Book of Deeds)', () => {
+  // A titled speaker's chat events carry `fromTitle`, the selected deed ID
+  // (never display text; the client localizes via deed_i18n). Untitled
+  // players omit the key entirely, and mob/boss yells never stamp one.
+  function titledSpeaker(sim: Sim, name = 'Aleph') {
+    const pid = sim.addPlayer('warrior', name);
+    const meta = sim.players.get(pid)!;
+    grantDeed(sim.ctx, meta, 'prog_veteran'); // reward: title "Veteran"
+    sim.setActiveTitle('prog_veteran', pid);
+    return pid;
+  }
+
+  it('stamps the deed id on every player channel a titled speaker uses', () => {
+    const sim = makeWorld();
+    const a = titledSpeaker(sim);
+    const b = sim.addPlayer('mage', 'Bet');
+    teleport(sim, a, 0, -40);
+    teleport(sim, b, 5, -40);
+    sim.tick();
+    sim.partyInvite(b, a);
+    sim.partyAccept(b);
+    sim.chat('/join world', a);
+    sim.tick();
+
+    const lines: [string, string][] = [
+      ['hello', 'say'],
+      ['/y over here', 'yell'],
+      ['/w bet psst', 'whisper'],
+      ['/p party up', 'party'],
+      ['/g to the world', 'general'],
+      ['/world anyone', 'world'],
+      ['/roll', 'roll'],
+      ['/wave', 'emote'],
+    ];
+    for (const [line, channel] of lines) {
+      sim.ctx.chatTokens.delete(a); // refill the throttle bucket between lines
+      sim.chat(line, a);
+      const msgs = chatEvents(sim.tick()).filter((m) => m.channel === channel);
+      expect(msgs.length, channel).toBeGreaterThan(0);
+      for (const m of msgs) {
+        expect(m.fromTitle, channel).toBe('prog_veteran');
+        // classId rides every player-sourced chat event the same way fromTitle
+        // does, and for the same reason: the HUD reads it off the event rather
+        // than off `IWorld.entities` (interest-scoped online), so a general/
+        // world/guild/lfg/whisper sender outside ~120yd still colors correctly.
+        expect(m.classId, channel).toBe('warrior');
+      }
+    }
+  });
+
+  it('omits the key entirely for an untitled speaker', () => {
+    const sim = makeWorld();
+    const a = sim.addPlayer('warrior', 'Aleph');
+    teleport(sim, a, 0, -40);
+    sim.tick();
+    sim.chat('untitled hello', a);
+    const msgs = chatEvents(sim.tick());
+    expect(msgs.length).toBeGreaterThan(0);
+    for (const m of msgs) {
+      expect('fromTitle' in m).toBe(false);
+      // Unlike the title, class is never optional for a player sender.
+      expect(m.classId).toBe('warrior');
+    }
+  });
+
+  it('clearing the title back to null stops the stamp', () => {
+    const sim = makeWorld();
+    const a = titledSpeaker(sim);
+    teleport(sim, a, 0, -40);
+    sim.tick();
+    sim.setActiveTitle(null, a);
+    sim.chat('cleared', a);
+    const msgs = chatEvents(sim.tick());
+    expect(msgs.length).toBeGreaterThan(0);
+    for (const m of msgs) {
+      expect('fromTitle' in m).toBe(false);
+    }
+  });
+
+  it('a mob yell never carries a title, even with a titled player in range', () => {
+    const sim = makeWorld();
+    const a = titledSpeaker(sim);
+    teleport(sim, a, 0, -40);
+    sim.tick();
+    const mob = [...sim.entities.values()].find((e) => e.kind === 'mob' && !e.dead)!;
+    emitMobYell(sim.ctx, mob, 'Graaah!', 1e9);
+    const msgs = chatEvents(sim.tick()).filter((m) => m.from === mob.name);
+    expect(msgs.length).toBeGreaterThan(0);
+    for (const m of msgs) {
+      expect(m.channel).toBe('yell');
+      expect('fromTitle' in m).toBe(false);
+      expect('classId' in m).toBe(false);
+    }
+  });
+
+  it('the whisper sender echo keeps the SENDER title beside the recipient name', () => {
+    const sim = makeWorld();
+    const a = titledSpeaker(sim);
+    const b = sim.addPlayer('mage', 'Bet');
+    teleport(sim, a, 0, -40);
+    teleport(sim, b, 5, -40);
+    sim.tick();
+    sim.chat('/w bet psst', a);
+    const msgs = chatEvents(sim.tick());
+    const echo = msgs.find((m) => m.to === 'Bet')!;
+    // from stays the sender; the title AND classId are the sender's even on
+    // the echo whose DISPLAYED name is the recipient (the client's toWhisper
+    // arm must not decorate the recipient with either: see hud.ts's
+    // handleEvents 'whisper' case, which withholds fromPid/flair/fromTitle/
+    // classId entirely on this branch rather than passing the sender's own).
+    expect(echo.from).toBe('Aleph');
+    expect(echo.fromTitle).toBe('prog_veteran');
+    expect(echo.classId).toBe('warrior');
+    const toTarget = msgs.find((m) => m.pid === b)!;
+    expect(toTarget.fromTitle).toBe('prog_veteran');
+    expect(toTarget.classId).toBe('warrior');
   });
 });

@@ -42,12 +42,14 @@
 // takes no req/res and is the one authority; the client never decides ownership.
 
 import type * as http from 'node:http';
+import { rekeyInstanceSigner } from '../src/sim/character_rename';
+import { resolveActiveWeaponSkin } from '../src/sim/content/weapon_skin_rules';
 import type { CharacterState } from '../src/sim/sim';
 import { infernalCharacterSelection } from '../src/sim/realms/infernal_classes';
 import { resolveRealmCharacterVisual } from '../src/sim/realms/class_visuals';
 import type { PlayerClass } from '../src/sim/types';
 import { normalizeCharName, offensiveName } from './auth';
-import { characterSheet, type SheetRank } from './character_sheet';
+import { characterSheet, SHEET_RECENT_DEEDS, type SheetRank } from './character_sheet';
 import { isDuranceTesterCharacter } from './durance_tester_entitlement';
 import {
   accountAndScopeForToken,
@@ -59,11 +61,14 @@ import {
   lifetimeXpRankForCharacter,
   lifetimeXpStanding,
   listCharacters,
+  loadAccountCosmetics,
   moderationStatusForAccount,
   reclaimDeactivatedName,
   renameCharacter,
+  saveCharacterState,
   scopeAllowsMutation,
 } from './db';
+import { recentDeedsForCharacter } from './deeds_db';
 import { ctxAccountId } from './http/context';
 import { gameMetricsCounters } from './http/game_signals';
 import { withBody } from './http/middleware/body';
@@ -200,16 +205,19 @@ function useRuntime(): CharactersRuntime {
 
 const REAL_CHARACTERS_DB = {
   accountAndScopeForToken,
+  loadAccountCosmetics,
   moderationStatusForAccount,
   listCharacters,
   getCharacter,
   createCharacterCapped,
   reclaimDeactivatedName,
   renameCharacter,
+  saveCharacterState,
   deleteCharacter,
   lifetimeXpStanding,
   guildNameForCharacter,
   lifetimeXpRankForCharacter,
+  recentDeedsForCharacter,
 };
 let charactersDb = REAL_CHARACTERS_DB;
 
@@ -245,11 +253,13 @@ function toSheetRank(rank: { rank: number; total: number } | null): SheetRank | 
 /**
  * The character-list body shared by GET /api/characters and GET /api/me/characters, so
  * both stay byte-identical. `isOnline` comes from the injected runtime (a live-session
- * scan). Mirrors the legacy characterListPayload exactly.
+ * scan). The retained legacy arm (main.ts characterListPayload) DELEGATES here, so the
+ * two dispatch modes share one implementation and cannot diverge in payload shape.
  */
-function buildCharacterList(
+export function buildCharacterList(
   chars: CharacterRow[],
   isOnline: (characterId: number) => boolean,
+  weaponSkinLoadout: Record<string, string>,
 ): unknown {
   return {
     realm: REALM,
@@ -351,14 +361,16 @@ function requireOwnedCharacter(notFoundBody: Record<string, unknown>): Middlewar
 async function meCharactersHandler(ctx: Ctx): Promise<void> {
   const rt = useRuntime();
   const chars = await charactersDb.listCharacters(ctxAccountId(ctx));
-  json(ctx.res, 200, buildCharacterList(chars, rt.isCharacterOnline));
+  const cosmetics = await charactersDb.loadAccountCosmetics(ctxAccountId(ctx));
+  json(ctx.res, 200, buildCharacterList(chars, rt.isCharacterOnline, cosmetics.weaponSkinLoadout));
 }
 
 /** GET /api/characters: full-session list (byte-identical body to me/characters). */
 async function listCharactersHandler(ctx: Ctx): Promise<void> {
   const rt = useRuntime();
   const chars = await charactersDb.listCharacters(ctxAccountId(ctx));
-  json(ctx.res, 200, buildCharacterList(chars, rt.isCharacterOnline));
+  const cosmetics = await charactersDb.loadAccountCosmetics(ctxAccountId(ctx));
+  json(ctx.res, 200, buildCharacterList(chars, rt.isCharacterOnline, cosmetics.weaponSkinLoadout));
 }
 
 /** POST /api/characters: validate, create the capped character, reclaim a freed name once. */
@@ -461,9 +473,10 @@ async function standingHandler(ctx: Ctx): Promise<void> {
 async function ownerSheetHandler(ctx: Ctx): Promise<void> {
   const rt = useRuntime();
   const row = ownedCharacter(ctx);
-  const [guild, rank] = await Promise.all([
+  const [guild, rank, deedsRecent] = await Promise.all([
     charactersDb.guildNameForCharacter(row.id),
     charactersDb.lifetimeXpRankForCharacter(row.id),
+    charactersDb.recentDeedsForCharacter(row.id, SHEET_RECENT_DEEDS),
   ]);
   json(
     ctx.res,
@@ -475,6 +488,7 @@ async function ownerSheetHandler(ctx: Ctx): Promise<void> {
       origin: rt.publicOrigin(ctx.req),
       guild,
       rank: toSheetRank(rank),
+      deedsRecent,
     }),
   );
 }
@@ -526,6 +540,20 @@ async function renameHandler(ctx: Ctx): Promise<void> {
     }
     if (rt.rekeyMailOwner(character.id, character.name, c.name)) {
       await rt.saveMail();
+    }
+    // The renamed character's OWN signed instances (bags, bank, equipped) still
+    // carry the old signer name in their persisted blob; sweep it so the
+    // self-signed crafting discount, Battlefield Experience attribution, and
+    // the eqi inspect wire follow the new name. Only the persisted blob needs
+    // the sweep: the market/mail rekeys above reach WORLD state that lives in
+    // the running server regardless of sessions, but a character's live
+    // entity/meta exists only while joined, and the isCharacterOnline gate
+    // above guarantees there is none at rename time. Foreign-held copies
+    // signed with the old name live in other characters' blobs and are out of
+    // scope. renameCharacter's RETURNING row carries the current blob, and the
+    // no-nonce save is safe for the same offline reason.
+    if (c.state && rekeyInstanceSigner(c.state, character.name, c.name)) {
+      await charactersDb.saveCharacterState(c.id, c.level, c.state);
     }
     json(ctx.res, 200, {
       id: c.id,

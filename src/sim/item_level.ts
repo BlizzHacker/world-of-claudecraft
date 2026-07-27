@@ -19,9 +19,15 @@
 //     str/sta, a mage cloth piece stays int/spi). itemScore() is the realized
 //     power (stats + armor + weapon dps) for at-a-glance comparison.
 
-import { HEROIC_BOSS_LOOT, HEROIC_LOOT_SOURCE_LEVEL } from './content/heroic_loot';
+import {
+  HEROIC_BOSS_LOOT,
+  HEROIC_LOOT_SOURCE_LEVEL,
+  NYTHRAXIS_RAID_BOSS_ID,
+  NYTHRAXIS_RAID_LOOT_SOURCE_LEVEL,
+} from './content/heroic_loot';
 import { HEROIC_VENDOR_STOCK } from './content/heroic_vendor';
-import { DUNGEONS, ITEMS, MOBS, QUESTS } from './data';
+import { FURY_STOCK, WARFARE_SOURCE_LEVEL } from './content/pvp_honor';
+import { ALL_RECIPES, DUNGEONS, ITEMS, MOBS, QUESTS } from './data';
 // The pure budget primitives live in the leaf module ./item_budget (no ./data
 // import, so content/heroic_variants.ts can share them at data-eval time without a
 // cycle). Imported for internal use and re-exported so every existing importer of
@@ -36,8 +42,10 @@ import {
   QUALITY_STAT_MULT,
   SLOT_STAT_MULT,
   STAT_PER_ILVL,
+  TWOHAND_DPS_MULT,
+  TWOHAND_STAT_MULT,
 } from './item_budget';
-import type { ItemDef, ItemSlot, Stats } from './types';
+import type { ItemDef } from './types';
 
 export {
   HEROIC_VARIANT_SOURCE_LEVEL,
@@ -49,6 +57,8 @@ export {
   QUALITY_STAT_MULT,
   SLOT_STAT_MULT,
   STAT_PER_ILVL,
+  TWOHAND_DPS_MULT,
+  TWOHAND_STAT_MULT,
 };
 
 // Raid loot is one tier above same-level 5-player dungeon loot: a 10-player raid
@@ -147,22 +157,46 @@ function buildSourceIndex(): Map<string, ItemSource> {
   // bosses), so the stock reads that source level: the epic pieces land at item
   // level 26 (20 + the epic bump) and get budget-enforced like any drop.
   for (const offer of HEROIC_VENDOR_STOCK) bump(offer.itemId, HEROIC_VENDOR_SOURCE_LEVEL, false);
+  // FURY's WARFARE stock is level-22 PvP content. The epic quality bump puts
+  // every piece at item level 28, including vendor-only necks and rings.
+  for (const itemId of FURY_STOCK) bump(itemId, WARFARE_SOURCE_LEVEL, false);
   // Heroic boss drops: level-20 content one tier up (the heroic bump), so the
-  // epic pieces read item level 31 (25 + the epic bump). Flat across the five
-  // bosses BY DESIGN (raid=false even for Nythraxis): the heroic set is one
-  // shared tier, per the drop-table spec.
-  for (const entries of Object.values(HEROIC_BOSS_LOOT)) {
+  // five-man epic pieces read item level 31 (25 + the epic bump). The 10-player
+  // raid (Heroic Nythraxis) is one tier ABOVE the five-mans: its heroic-only
+  // weapons register at NYTHRAXIS_RAID_LOOT_SOURCE_LEVEL (27) so they land at
+  // item level 33.
+  for (const [bossId, entries] of Object.entries(HEROIC_BOSS_LOOT)) {
+    const src =
+      bossId === NYTHRAXIS_RAID_BOSS_ID
+        ? NYTHRAXIS_RAID_LOOT_SOURCE_LEVEL
+        : HEROIC_LOOT_SOURCE_LEVEL;
     for (const entry of entries) {
-      if (entry.itemId) bump(entry.itemId, HEROIC_LOOT_SOURCE_LEVEL, false);
+      if (entry.itemId) bump(entry.itemId, src, false);
     }
   }
   // Heroic upgraded drop variants (content/heroic_variants.ts): the "Heroic X"
   // copies of base dungeon drops read one tier up (source 22), so their epics land
   // at item level 28 and rares at 25. Registered here so a variant's tooltip level
-  // and budget derive from the index like any other drop.
+  // and budget derive from the index like any other drop. The exception is the
+  // heroic RAID: the Nythraxis raid boss's own set pieces and legendaries upgrade
+  // to the raid tier (source 27, item level 33/37), anchored on the raid boss's
+  // normal loot so the auto-swap in a heroic claim reads the raid tier too.
+  const raidBases = new Set(
+    (MOBS[NYTHRAXIS_RAID_BOSS_ID]?.loot ?? []).flatMap((e) => (e.itemId ? [e.itemId] : [])),
+  );
   for (const item of Object.values(ITEMS)) {
-    if (item.heroicOf) bump(item.id, HEROIC_VARIANT_SOURCE_LEVEL, false);
+    if (!item.heroicOf) continue;
+    const src = raidBases.has(item.heroicOf)
+      ? NYTHRAXIS_RAID_LOOT_SOURCE_LEVEL
+      : HEROIC_VARIANT_SOURCE_LEVEL;
+    bump(item.id, src, false);
   }
+  // Crafted gear (content/recipes.ts): a recipe's output is current at the recipe's
+  // own level (the level a character can learn/use it, mirroring how a mob's level
+  // stands in for its loot). Without this, any crafted item with primary stats has
+  // no derivable item level: the budget gates below skip it and the tooltip's item
+  // level/score lines never show. Not a raid source.
+  for (const recipe of ALL_RECIPES) bump(recipe.resultItemId, recipe.level, false);
   return idx;
 }
 
@@ -187,7 +221,9 @@ export function itemFromRaid(itemId: string): boolean {
 // quest objects, cosmetics) can exist in the item model, but should not get an
 // item-level readout or stat budget.
 export function isItemLevelEligible(item: ItemDef): boolean {
-  return !!item.slot && (item.kind === 'armor' || item.kind === 'weapon');
+  return (
+    !!item.slot && (item.kind === 'armor' || item.kind === 'weapon' || item.kind === 'held_offhand')
+  );
 }
 
 // The item level (tier number) shown in the tooltip, or undefined when there is no
@@ -203,11 +239,16 @@ export function itemLevel(item: ItemDef): number | undefined {
 }
 
 // The budget an item is expected to carry given its own source/quality/slot, or
-// undefined when the item has no derivable item level.
+// undefined when the item has no derivable item level. A two-handed weapon carries
+// only the modest TWOHAND_STAT_MULT premium over the mainhand line (its real
+// compensation is weapon dps, TWOHAND_DPS_MULT); rounded so budgets stay integral.
 export function expectedStatBudget(item: ItemDef): number | undefined {
   const level = itemLevel(item);
   if (level === undefined) return undefined;
-  return primaryStatBudget(level, item.quality, item.slot);
+  const base = primaryStatBudget(level, item.quality, item.slot);
+  return item.kind === 'weapon' && item.hand === 'twohand'
+    ? Math.round(base * TWOHAND_STAT_MULT)
+    : base;
 }
 
 // The sum of an item's primary stats (its realized stat budget).

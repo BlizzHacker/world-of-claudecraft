@@ -43,16 +43,14 @@ function walk(dir: string): string[] {
   return out;
 }
 
-// On-disk pure-core candidates in a single layer dir (non-recursive): the modules
+// On-disk pure-core candidates in the full UI tree: the modules
 // named with the pure-core convention <thing>_view.ts / <thing>_core.ts. The
 // COMPLETENESS sweep below asserts every one of these IS registered, so a new
 // extraction that forgets to add its core to the allowlist fails the guard instead
 // of silently escaping it. Bare-named cores (xp_bar.ts, swing_timer.ts, ...) are
 // not caught by this convention; new extractions follow the *_view/*_core naming.
 function onDiskCores(dir: string): string[] {
-  return readdirSync(dir)
-    .filter((name) => /_(?:view|core)\.ts$/.test(name) && !name.endsWith('.d.ts'))
-    .map((name) => join(dir, name));
+  return walk(dir).filter((file) => /_(?:view|core)\.ts$/.test(file) && !file.endsWith('.d.ts'));
 }
 
 // Blank out comments while preserving line count and column positions, so prose
@@ -120,46 +118,80 @@ const simFiles = walk(simRoot);
 // import), so it is registered here even though it lives in src/game. Paths are
 // repo-relative for the failure messages.
 const UI_PURE_CORES = [
+  'src/ui/proc_overlay_view.ts',
+  'src/ui/camera_prompt_core.ts',
+  'src/ui/chat_ignore_core.ts',
+  'src/ui/daily_rewards_launcher_core.ts',
+  'src/ui/char_bags_pairing_core.ts',
+  'src/ui/equip_drop_core.ts',
+  'src/ui/log_event_route.ts',
+  'src/ui/mob_idle_sfx.ts',
   'src/ui/unit_portrait.ts',
   'src/ui/xp_bar.ts',
   'src/ui/absorb_bar.ts',
   'src/ui/party_frames.ts',
+  'src/ui/party_below_target_core.ts',
   'src/ui/party_collapse.ts',
+  'src/ui/guild_hide_offline.ts',
   'src/ui/rest_indicator.ts',
   'src/ui/low_health.ts',
   'src/ui/low_resource.ts',
   'src/ui/clock.ts',
   'src/ui/compass.ts',
   'src/ui/coords.ts',
-  'src/ui/quest_tracker.ts',
-  'src/ui/delve_map.ts',
+  'src/ui/hud/quest/quest_tracker.ts',
+  'src/ui/hud/quest/prof_intro_hint_core.ts',
+  'src/ui/hud/delve/delve_map.ts',
   'src/ui/raid_lockout_view.ts',
   'src/ui/stat_tooltip_view.ts',
+  'src/ui/target_portrait_view.ts',
+  'src/ui/target_rank_view.ts',
   'src/ui/mob_tooltip_view.ts',
+  'src/ui/player_tooltip_view.ts',
   'src/ui/talents_view.ts',
   'src/ui/social_view.ts',
+  'src/ui/tab_strip_view.ts',
   'src/ui/bags_view.ts',
+  'src/ui/bag_item_context_menu.ts',
+  'src/ui/enchant_apply_view.ts',
+  'src/ui/enchanting_view.ts',
+  'src/ui/disenchant_yield_view.ts',
+  'src/ui/material_hint_view.ts',
+  'src/ui/bag_instance_glyph_view.ts',
   'src/ui/bank_view.ts',
   'src/ui/item_set_tooltip_view.ts',
   'src/ui/weapon_proc_view.ts',
   'src/ui/options_view.ts',
-  'src/ui/options_ia.ts',
-  'src/ui/options_focus_model.ts',
-  'src/ui/options_mobile_shell_view.ts',
-  'src/ui/keybind_conflicts.ts',
-  'src/ui/vendor_view.ts',
-  'src/ui/heroic_vendor_view.ts',
-  'src/ui/loot_roll_status_view.ts',
-  'src/ui/loot_settings_view.ts',
+  'src/ui/hud/vendor/vendor_view.ts',
+  'src/ui/hud/vendor/heroic_vendor_view.ts',
+  'src/ui/hud/vendor/train_view.ts',
+  'src/ui/hud/vendor/train_learn_core.ts',
+  'src/ui/hud/vendor/unbind_view.ts',
+  'src/ui/card_duel_view.ts',
+  'src/ui/claudium_launcher_balance_core.ts',
+  'src/ui/claudium_view.ts',
+  'src/ui/woc_store_view.ts',
+  'src/ui/wallet_connection_view.ts',
+  'src/ui/hud/loot/loot_roll_status_view.ts',
+  'src/ui/hud/loot/loot_settings_view.ts',
+  'src/ui/craft_celebration_view.ts',
   'src/ui/crafting_view.ts',
+  'src/ui/profession_event_lines_core.ts',
+  'src/ui/profession_identity_view.ts',
+  'src/ui/profession_tutorial_view.ts',
+  'src/ui/professions_view.ts',
   'src/ui/market_view.ts',
   'src/ui/mailbox_view.ts',
   'src/ui/calendar_view.ts',
   'src/ui/char_view.ts',
-  'src/ui/exchange_view.ts',
+  'src/ui/char_stats_view.ts',
+  'src/ui/inspect_view.ts',
+  'src/ui/quality_glow.ts',
+  'src/ui/map_pinch_zoom_core.ts',
   'src/ui/map_window_view.ts',
   'src/ui/map_quest_list_view.ts',
   'src/ui/arena_window_view.ts',
+  'src/ui/dungeon_finder_view.ts',
   'src/ui/yumi_match_view.ts',
   'src/ui/vale_cup_window_view.ts',
   'src/ui/vale_cup_indicator_view.ts',
@@ -170,33 +202,47 @@ const UI_PURE_CORES = [
   'src/ui/leaderboard_view.ts',
   'src/ui/guild_leaderboard_view.ts',
   'src/ui/dev_leaderboard_view.ts',
+  'src/ui/dev_command_view.ts',
+  'src/ui/dev_item_picker_view.ts',
+  'src/ui/deeds_leaderboard_view.ts',
   'src/ui/daily_rewards_view.ts',
+  'src/ui/deeds_view.ts',
   'src/ui/spellbook_view.ts',
-  'src/ui/questlog_view.ts',
+  'src/ui/hud/quest/questlog_view.ts',
   'src/ui/swing_timer.ts',
   'src/ui/unit_frame.ts',
-  'src/ui/action_bar_view.ts',
-  'src/ui/mobile_action_page_view.ts',
-  'src/ui/consumable_bar_view.ts',
+  'src/ui/stance_bar_view.ts',
+  'src/ui/hud/action_bar/action_bar_view.ts',
+  'src/ui/hud/action_bar/action_bar_layout_core.ts',
+  'src/ui/hud/action_bar/action_bar_visibility_core.ts',
+  'src/ui/hud/action_bar/mobile_action_page_view.ts',
+  'src/ui/hud/action_bar/consumable_bar_view.ts',
   'src/ui/mobile_hud_layout.ts',
+  'src/ui/mobile_fullscreen_window_core.ts',
   'src/ui/auras_view.ts',
   'src/ui/minimap_markers.ts',
   'src/ui/gathering_view.ts',
+  'src/ui/gather_tool_tooltip.ts',
   'src/ui/fct_core.ts',
   'src/ui/fct_event.ts',
+  'src/ui/window_drag_core.ts',
   'src/ui/window_resize_core.ts',
+  'src/ui/window_stack_state_core.ts',
   'src/ui/focus_order.ts',
   'src/ui/roving_index.ts',
   'src/ui/live_region_politeness.ts',
   'src/ui/discord_widget_view.ts',
   'src/ui/desktop_update_view.ts',
-  'src/ui/corpse_harvest_view.ts',
+  'src/ui/gpu_notice_view.ts',
+  'src/ui/perf_nudge_view.ts',
+  'src/ui/hud/loot/corpse_harvest_view.ts',
   'src/ui/town_focus_view.ts',
-  'src/ui/window_frame_view.ts',
-  'src/ui/chat_mobile_panel.ts',
+  'src/ui/pet_action_icons.ts',
+  'src/ui/loading_slow_hint_core.ts',
+  'src/ui/reconnect_status_core.ts',
+  'src/ui/chat_bubble_style.ts',
   'src/game/ui_effects_profile.ts',
   'src/game/ui_tier_knobs.ts',
-  'src/game/menu_gamepad_nav.ts',
 ].map((rel) => join(repoRoot, rel));
 
 // Pure logic cores that live in src/render (the painter half is Three-side):
@@ -208,11 +254,26 @@ const UI_PURE_CORES = [
 // water_core (the shore-depth sample shared by build + editor setLevel) follow
 // the same contract for the map editor's realtime terrain/water edits.
 const RENDER_PURE_CORES = [
+  'src/render/arena_water_band_core.ts',
+  'src/render/camera_boom_core.ts',
+  'src/render/camera_director_core.ts',
+  'src/render/camera_feel_core.ts',
   'src/render/cast_bar.ts',
+  'src/render/draw_stats_core.ts',
+  'src/render/fishing_bobber_core.ts',
+  'src/render/foliage_core.ts',
+  'src/render/stations_core.ts',
+  'src/render/delve_interactable_visibility_core.ts',
+  'src/render/env_prefilter_core.ts',
+  'src/render/nameplate_extent_core.ts',
+  'src/render/eastbrook_town_visibility_core.ts',
   'src/render/nameplate_view.ts',
   'src/render/net_interp_core.ts',
+  'src/render/prewarm_policy.ts',
   'src/render/terrain_region_core.ts',
   'src/render/water_core.ts',
+  'src/render/warrior_cast_fx_core.ts',
+  'src/render/characters/weapon_attack_style_core.ts',
 ].map((rel) => join(repoRoot, rel));
 
 // Bare-named pure cores: registered cores (from UI_PURE_CORES + RENDER_PURE_CORES)
@@ -224,22 +285,24 @@ const RENDER_PURE_CORES = [
 // updating this list) fails the cross-check instead of silently escaping the
 // reverse-completeness guard.
 const BARE_NAMED = [
+  'src/render/prewarm_policy.ts',
+  'src/ui/mob_idle_sfx.ts',
+  'src/ui/gather_tool_tooltip.ts',
   'src/ui/unit_portrait.ts',
-  'src/ui/options_ia.ts',
-  'src/ui/options_focus_model.ts',
-  'src/ui/keybind_conflicts.ts',
   'src/ui/xp_bar.ts',
   'src/ui/absorb_bar.ts',
   'src/ui/party_frames.ts',
   'src/ui/party_collapse.ts',
+  'src/ui/guild_hide_offline.ts',
   'src/ui/rest_indicator.ts',
   'src/ui/low_health.ts',
   'src/ui/low_resource.ts',
   'src/ui/clock.ts',
   'src/ui/compass.ts',
   'src/ui/coords.ts',
-  'src/ui/quest_tracker.ts',
-  'src/ui/delve_map.ts',
+  'src/ui/bag_item_context_menu.ts',
+  'src/ui/hud/quest/quest_tracker.ts',
+  'src/ui/hud/delve/delve_map.ts',
   'src/ui/swing_timer.ts',
   'src/ui/unit_frame.ts',
   'src/ui/minimap_markers.ts',
@@ -247,11 +310,13 @@ const BARE_NAMED = [
   'src/ui/focus_order.ts',
   'src/ui/roving_index.ts',
   'src/ui/live_region_politeness.ts',
+  'src/ui/log_event_route.ts',
   'src/ui/mobile_hud_layout.ts',
-  'src/ui/chat_mobile_panel.ts',
+  'src/ui/pet_action_icons.ts',
+  'src/ui/quality_glow.ts',
+  'src/ui/chat_bubble_style.ts',
   'src/game/ui_effects_profile.ts',
   'src/game/ui_tier_knobs.ts',
-  'src/game/menu_gamepad_nav.ts',
   'src/render/cast_bar.ts',
 ].map((rel) => join(repoRoot, rel));
 
@@ -314,7 +379,7 @@ describe('src/sim architecture invariants', () => {
 
 // ---------------------------------------------------------------------------
 // IWorld seam purity (W1b). The seam render/ui depend on is src/world_api.ts (the
-// aggregate interface + the COMMAND_NAMES wire table) plus every facet interface
+// aggregate interface + shared wire constants) plus every facet interface
 // under src/world_api/. W1 split IWorld into those files as a string-free,
 // TYPE-ONLY boundary: every host (render/ui/game/net) and the server talk to the
 // world ONLY through it, so it sits ABOVE them and must import nothing from
@@ -323,8 +388,9 @@ describe('src/sim architecture invariants', () => {
 // i18n/UI logic (no t()/tSim()/tServer()). Without this scan the facet files'
 // purity is convention-only; a later W6-W10 re-home could add a net/ui import or a
 // t() call to a facet and no gate would redden. This closes that gap. The one
-// blessed value site is COMMAND_NAMES (world_api.ts); string literals are NOT
-// banned (only imports + DOM + i18n calls are). chat.ts's OVERHEAD_EMOTES +
+// blessed value sites are local protocol constants such as COMMAND_NAMES and
+// STABLE_TIMER_WIRE_VERSION (world_api.ts); string literals are NOT banned (only
+// imports + DOM + i18n calls are). chat.ts's OVERHEAD_EMOTES +
 // isOverheadEmoteId derive their runtime id set from OVERHEAD_EMOTES itself
 // (not sim/types' OVERHEAD_EMOTE_IDS), so there is currently no sanctioned
 // runtime sim import; SANCTIONED_VALUE_SIM_IMPORTS below stays as the escape
@@ -456,6 +522,28 @@ describe('src/world_api IWorld seam purity invariants', () => {
     expect(
       violations,
       `the IWorld seam must run headless (no DOM globals):\n${violations.join('\n')}`,
+    ).toEqual([]);
+  });
+});
+
+describe('server host-layer import invariants', () => {
+  it('does not import browser host layers from the authoritative server', () => {
+    const serverRoot = join(repoRoot, 'server');
+    const violations: string[] = [];
+    for (const file of walk(serverRoot)) {
+      const src = stripComments(readFileSync(file, 'utf8'));
+      const specs: string[] = [];
+      for (const match of src.matchAll(IMPORT_RE)) specs.push(match[1]);
+      for (const match of src.matchAll(DYN_IMPORT_RE)) specs.push(match[1]);
+      for (const spec of specs) {
+        if (/(?:^|\/)(?:render|ui|game|net)\//.test(spec)) {
+          violations.push(`${relative(repoRoot, file)} imports '${spec}'`);
+        }
+      }
+    }
+    expect(
+      violations,
+      `the authoritative server must not import browser host layers:\n${violations.join('\n')}`,
     ).toEqual([]);
   });
 });

@@ -7,6 +7,8 @@
 //      same name, and the seam leaves same-seed-same-world determinism intact.
 
 import { describe, expect, it, vi } from 'vitest';
+import { createDeedRuntime } from '../src/sim/deeds';
+import { createMobScanCounters } from '../src/sim/mob/scan_counters';
 import { Rng } from '../src/sim/rng';
 import { Sim } from '../src/sim/sim';
 import { createSimContext, type SimContextHost } from '../src/sim/sim_context';
@@ -62,6 +64,7 @@ const CALLBACK_KEYS = [
   'applyKnockback',
   'diminishedCrowdControlDuration',
   'hostilesInRadius',
+  'friendliesInRadius',
   'breakStealth',
   'applyTaunt',
   'summonPet',
@@ -76,8 +79,11 @@ const CALLBACK_KEYS = [
   'partyOf',
   'removeFromParty',
   'dropPartyMarkers',
-  // Q1 quest-credit trio + the countItem it consumes.
+  'formDungeonFinderGroup',
+  // Quest-credit callbacks + the countItem the collect arm consumes.
   'onMobKilledForQuests',
+  'onRecipeCraftedForQuests',
+  'onNodeGatheredForQuests',
   'onInventoryChangedForQuests',
   'checkQuestReady',
   'countItem',
@@ -112,6 +118,7 @@ const CALLBACK_KEYS = [
   'frenzyPackmates',
   'armDeathThroes',
   'refreshKnownAbilities',
+  'revalidateOffhandForSpec',
   'syncPetLevel',
   // M2 mob-locomotion surface.
   'moveToward',
@@ -126,6 +133,7 @@ const CALLBACK_KEYS = [
   'swingIntervalMult',
   'mobCanSwim',
   'resolveMovePoint',
+  'resolveMove',
   'updatePet',
   'isDelveCompanionMob',
   'updateDelveCompanion',
@@ -144,12 +152,14 @@ const CALLBACK_KEYS = [
   'raidResetMs',
   'instanceKeyFor',
   'instanceOriginOf',
+  'instanceClaimIdAt',
   'enterDungeon',
   'leaveDungeon',
+  'resetDungeonInstances',
+  'inheritDungeonResetLocks',
   'dungeonDifficulty',
   'setDungeonDifficulty',
   'awardHeroicMarks',
-  'grantHeroicKillLockout',
   // M3 mob-swing affix cascade surface.
   'effectiveArmor',
   'recalcPlayer',
@@ -186,6 +196,7 @@ const CALLBACK_KEYS = [
   'startAutoAttack',
   'revivePet',
   'completeFishing',
+  'completeGatherCast',
   'applyDemonHealTick',
   'awardCombo',
   'meleeSwing',
@@ -200,6 +211,10 @@ const CALLBACK_KEYS = [
   'setPlayerLevel',
   'notice',
   'spawnDevBot',
+  'spawnDevVendor',
+  'startCascadePlaytest',
+  'startDevSandbox',
+  'seedDungeonFinderDev',
   // L2 inventory/vendor (W2): the four still-on-Sim helpers the moved useItem dispatches to.
   'startFishing',
   'unlockMechChromaFromItem',
@@ -215,6 +230,8 @@ const CALLBACK_KEYS = [
   'samePopulationPlayers',
   // Ravenpost mail: the quest turn-in letter hook.
   'queueQuestLetter',
+  'mailHeroicMarks',
+  'mailAuthoredLetter',
   // Set proc firing.
   'applySetProcs',
   // The Vale Cup sport-move arms (social/vale_cup.ts).
@@ -245,6 +262,7 @@ function makeFakeHost() {
       return entities;
     },
     players: new Map(),
+    stationPlacements: [],
     primaryId: -1,
     tradeInvites: new Map(),
     duelInvites: new Map(),
@@ -254,11 +272,14 @@ function makeFakeHost() {
     delayedEvents: [],
     pendingProjectiles: [],
     groundAoEs: [],
+    frozenOrbs: [],
     dungeonDoorIds: null,
     instances: [],
+    dungeonResetLocks: new Map(),
     arenaMatches: new Map(),
     duels: new Map(),
-    npcDuels: new Map(),
+    cardDuelQueue: [],
+    cardDuels: new Map(),
     cfg: { seed: 1 } as unknown as SimContextHost['cfg'],
     trades: new Map(),
     arenaQueue1v1: [],
@@ -281,6 +302,7 @@ function makeFakeHost() {
     pendingMobRespawns: [],
     partyInvites: new Map(),
     readyChecks: new Map(),
+    pendingResurrections: new Map(),
     chatTokens: new Map(),
     channelSubs: new Map(),
     pendingLootRolls: new Map(),
@@ -333,6 +355,7 @@ function makeFakeHost() {
     applyKnockback: vi.fn(() => 0),
     diminishedCrowdControlDuration: vi.fn(() => null),
     hostilesInRadius: vi.fn(() => []),
+    friendliesInRadius: vi.fn(() => []),
     breakStealth: vi.fn(),
     applyTaunt: vi.fn(),
     summonPet: vi.fn(),
@@ -348,7 +371,10 @@ function makeFakeHost() {
     partyOf: vi.fn(() => null),
     removeFromParty: vi.fn(),
     dropPartyMarkers: vi.fn(),
+    formDungeonFinderGroup: vi.fn(() => null),
     onMobKilledForQuests: vi.fn(),
+    onRecipeCraftedForQuests: vi.fn(),
+    onNodeGatheredForQuests: vi.fn(),
     onInventoryChangedForQuests: vi.fn(),
     checkQuestReady: vi.fn(),
     countItem: vi.fn(() => 0),
@@ -361,12 +387,14 @@ function makeFakeHost() {
     raidResetMs: vi.fn((nowMs: number) => nowMs),
     instanceKeyFor: vi.fn(() => 'solo:0'),
     instanceOriginOf: vi.fn(() => ({ x: 0, z: 0 })),
+    instanceClaimIdAt: vi.fn(() => null),
     enterDungeon: vi.fn(),
     leaveDungeon: vi.fn(),
+    resetDungeonInstances: vi.fn(),
+    inheritDungeonResetLocks: vi.fn(),
     dungeonDifficulty: vi.fn(() => 'normal' as const),
     setDungeonDifficulty: vi.fn(),
     awardHeroicMarks: vi.fn(),
-    grantHeroicKillLockout: vi.fn(),
     addEntity: vi.fn(),
     dropEntity: vi.fn(),
     rebucket: vi.fn(),
@@ -393,6 +421,7 @@ function makeFakeHost() {
     frenzyPackmates: vi.fn(),
     armDeathThroes: vi.fn(),
     refreshKnownAbilities: vi.fn(),
+    revalidateOffhandForSpec: vi.fn(),
     syncPetLevel: vi.fn(),
     moveToward: vi.fn(() => false),
     mobSwing: vi.fn(),
@@ -406,6 +435,7 @@ function makeFakeHost() {
     swingIntervalMult: vi.fn(() => 1),
     mobCanSwim: vi.fn(() => false),
     resolveMovePoint: vi.fn(() => ({ x: 0, z: 0 })),
+    resolveMove: vi.fn(() => ({ x: 0, z: 0 })),
     updatePet: vi.fn(),
     isDelveCompanionMob: vi.fn(() => false),
     updateDelveCompanion: vi.fn(),
@@ -426,6 +456,9 @@ function makeFakeHost() {
     // delveDetectMult stubbed above (C1/M2/C3) - deduped here.
     partyMembersForKey: vi.fn(() => []),
     addItem: vi.fn(),
+    equipBag: vi.fn(),
+    equipItem: vi.fn(),
+    unequipItem: vi.fn(),
     addItemInstance: vi.fn(),
     // removeItem stubbed above (P1b inventory-hub helper) - deduped.
     spawnBossAdds: vi.fn(),
@@ -455,6 +488,7 @@ function makeFakeHost() {
     startAutoAttack: vi.fn(),
     revivePet: vi.fn(),
     completeFishing: vi.fn(),
+    completeGatherCast: vi.fn(),
     applyDemonHealTick: vi.fn(),
     awardCombo: vi.fn(),
     meleeSwing: vi.fn(() => false),
@@ -469,6 +503,10 @@ function makeFakeHost() {
     setPlayerLevel: vi.fn(),
     notice: vi.fn(),
     spawnDevBot: vi.fn(),
+    spawnDevVendor: vi.fn(),
+    startCascadePlaytest: vi.fn(),
+    startDevSandbox: vi.fn(),
+    seedDungeonFinderDev: vi.fn(() => ({ spawned: 0, note: 'ok' as const })),
     // L2 inventory/vendor (W2): the four still-on-Sim helpers the moved useItem dispatches to.
     startFishing: vi.fn(),
     unlockMechChromaFromItem: vi.fn(),
@@ -485,6 +523,8 @@ function makeFakeHost() {
     samePopulationPlayers: vi.fn(() => true),
     // Ravenpost mail: the quest turn-in letter hook.
     queueQuestLetter: vi.fn(),
+    mailHeroicMarks: vi.fn(),
+    mailAuthoredLetter: vi.fn(),
     applySetProcs: vi.fn(),
     // The Vale Cup sport-move arms.
     vcupBallKick: vi.fn(),

@@ -32,9 +32,11 @@ export type FctKind =
   | 'damage-done-ability'
   | 'damage-done-auto'
   | 'damage-taken'
+  | 'absorb'
   | 'heal'
   | 'xp'
   | 'rested-xp'
+  | 'honor'
   | 'self-note';
 
 /**
@@ -69,9 +71,11 @@ export type FctColorToken =
   | 'damage-done-ability'
   | 'damage-done-auto'
   | 'damage-taken'
+  | 'absorb'
   | 'heal'
   | 'xp'
   | 'rested-xp'
+  | 'honor'
   | 'self-note';
 
 /**
@@ -134,6 +138,12 @@ export interface FctDescriptor {
 export const FCT_JITTER_RANGE = 30;
 /** Entry lifetime in ms. Live fct(): setTimeout(() => el.remove(), 1250). */
 export const FCT_TTL_MS = 1250;
+/**
+ * XP / rested-xp floaters live longer than a combat number: they are informational
+ * (not a high-volume per-hit spam), so a slightly longer read window makes the reward
+ * actually legible instead of fading as fast as a damage tick.
+ */
+export const FCT_XP_TTL_MS = 1800;
 /** Head offset above the entity origin, scaled by entity scale. Live fct(): pos.y + 2.2 * scale. */
 export const FCT_ANCHOR_HEAD_OFFSET = 2.2;
 /**
@@ -158,7 +168,7 @@ function colorToken(kind: FctKind, isSelf: boolean): FctColorToken {
       // (self grey / other white) so it needs no new CSS class.
       return isSelf ? 'miss-self' : 'miss-other';
     default:
-      // The seven non-avoidance kinds are their own color token 1:1; isSelf never
+      // Non-avoidance kinds are their own color token 1:1; isSelf never
       // changes their color in the live fct(), so it is ignored here.
       return kind;
   }
@@ -181,6 +191,6 @@ export function describeFct(event: FctEvent, jitter01: number): FctDescriptor {
     crit: event.crit,
     anchor: { x: pos.x, y: pos.y + FCT_ANCHOR_HEAD_OFFSET * scale, z: pos.z },
     jitterOffset: jitter01 * FCT_JITTER_RANGE - FCT_JITTER_RANGE / 2,
-    ttlMs: FCT_TTL_MS,
+    ttlMs: event.kind === 'xp' || event.kind === 'rested-xp' ? FCT_XP_TTL_MS : FCT_TTL_MS,
   };
 }

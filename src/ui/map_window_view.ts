@@ -18,14 +18,13 @@
 import {
   DUNGEON_LIST,
   isDelvePos,
-  PROPS,
   QUESTS,
   WORLD_MAX_X,
   WORLD_MIN_X,
   type ZoneDef,
 } from '../sim/data';
 import { type QuestObjectiveRef, questObjectiveAreas } from '../sim/quest_targets';
-import { isQuestTurnInNpc } from '../sim/types';
+import { isQuestTurnInNpc, type ZonePropsDef } from '../sim/types';
 import type { Decoration } from '../sim/world';
 import type { FriendInfo, IWorld } from '../world_api';
 import { overworldDungeonPortals } from './map_dungeon_portals';
@@ -200,12 +199,26 @@ export interface MapDecorationMarker {
 
 /** A building footprint in the detail overlay: four rotated, projected corners. */
 export interface MapBuildingMarker {
+  /** Authored placement id, or null for legacy records without one. */
+  id: string | null;
   points: { mx: number; my: number }[];
-  kind: 'chapel' | 'inn' | 'house';
+  kind: 'armoury' | 'chapel' | 'inn' | 'house' | 'wall';
+}
+
+/** Resolve a map footprint independently from a building's gameplay kind. The
+ *  Grand Armoury keeps the replaced inn lot's rest semantics, but must read as
+ *  the civic landmark on the map. */
+export function mapBuildingMarkerKind(building: {
+  kind: 'house' | 'inn' | 'chapel';
+  landmark?: 'eastbrook_grand_armoury';
+}): MapBuildingMarker['kind'] {
+  return building.landmark === 'eastbrook_grand_armoury' ? 'armoury' : building.kind;
 }
 
 /** A small prop dot in the detail overlay (well / stall / tent / ...). */
 export interface MapPropMarker {
+  /** Authored placement id, or null for legacy records without one. */
+  id: string | null;
   mx: number;
   my: number;
   kind: 'well' | 'stall' | 'tent' | 'mine' | 'graveyard' | 'mudhut' | 'campfire';
@@ -238,12 +251,16 @@ export interface OverworldMapModel {
   allies: MapAllyMarker[];
   /** The zoomed-detail overlay, or null below MAP_DETAIL_ZOOM. */
   detail: MapDetail | null;
+  /** Canvas-space "Show on Map" highlight, or null when absent / out of view. */
+  ping: { mx: number; my: number } | null;
 }
 
 /** Inputs the painter feeds the builder each redraw. The cached terrain bg + the
  *  cached whole-world decorations are owned by the painter and passed in. */
 export interface OverworldMapInput {
   world: IWorld;
+  /** Active authored props, supplied by the host so custom-world playtests stay pure and exact. */
+  props: ZonePropsDef;
   /** The committed zone (resolved by Hud, which also keys the cached bg by it). */
   zone: ZoneDef;
   /** Current world-map zoom (1 = whole zone). */
@@ -254,6 +271,8 @@ export interface OverworldMapInput {
   canvasSize: number;
   /** The cached whole-world decorations (generated once from the seed). */
   decorations: readonly Decoration[];
+  /** Dungeon Finder "Show on Map" highlight in world coords, or null. */
+  ping?: { x: number; z: number } | null;
 }
 
 /** Which world-map surface this world renders. Delve when the player stands in a
@@ -272,7 +291,7 @@ export function mapWindowMode(world: IWorld): MapWindowMode {
  * localized text and strokes.
  */
 export function buildOverworldMapModel(input: OverworldMapInput): OverworldMapModel {
-  const { world, zone, zoom, center, canvasSize: S, decorations } = input;
+  const { world, props, zone, zoom, center, canvasSize: S, decorations } = input;
   const p = world.player;
 
   // The full committed-zone region: the whole world in X, the zone band in Z.
@@ -314,8 +333,19 @@ export function buildOverworldMapModel(input: OverworldMapInput): OverworldMapMo
     my: ((region.maxZ - z) / spanZ) * S,
   });
 
+  // Dungeon Finder "Show on Map" ping: a canvas-space highlight at an authored
+  // entrance, drawn only while the point sits inside the painted region.
+  const ping =
+    input.ping &&
+    input.ping.x >= region.minX &&
+    input.ping.x <= region.maxX &&
+    input.ping.z >= region.minZ &&
+    input.ping.z <= region.maxZ
+      ? toMap(input.ping.x, input.ping.z)
+      : null;
+
   const detail =
-    zoom >= MAP_DETAIL_ZOOM ? buildDetail(region, toMap, S / spanX, decorations) : null;
+    zoom >= MAP_DETAIL_ZOOM ? buildDetail(region, toMap, S / spanX, decorations, props) : null;
 
   const pois: MapPoiMarker[] = zone.pois.map((poi, poiIndex) => {
     const { mx, my } = toMap(poi.x, poi.z);
@@ -421,18 +451,21 @@ export function buildOverworldMapModel(input: OverworldMapInput): OverworldMapMo
     player,
     allies,
     detail,
+    ping,
   };
 }
 
 // Buildings + vegetation overlay for the zoomed-in map, drawn from the same shared
-// world data the renderer uses (PROPS + the cached decorations), so it matches the
-// actual world. Only built at/above MAP_DETAIL_ZOOM. `ppu` is pixels per world
-// unit (the X axis; footprints stay roughly to scale).
+// active authored props the renderer uses plus the cached decorations, so custom
+// playtests and the built-in world stay exact. Only built at/above
+// MAP_DETAIL_ZOOM. `ppu` is pixels per world unit (the X axis; footprints stay
+// roughly to scale).
 function buildDetail(
   region: { minX: number; maxX: number; minZ: number; maxZ: number },
   toMap: (x: number, z: number) => { mx: number; my: number },
   ppu: number,
   decorations: readonly Decoration[],
+  authoredProps: ZonePropsDef,
 ): MapDetail {
   const inView = (x: number, z: number): boolean =>
     x >= region.minX - DETAIL_VIEW_MARGIN &&
@@ -463,24 +496,36 @@ function buildDetail(
   }
 
   const buildings: MapBuildingMarker[] = [];
-  for (const b of PROPS.buildings) {
-    if (!inView(b.x, b.z)) continue;
-    const c = Math.cos(b.rot);
-    const s = Math.sin(b.rot);
+  const footprint = (
+    placement: { id?: string; x: number; z: number; w: number; d: number; rot: number },
+    kind: MapBuildingMarker['kind'],
+  ): void => {
+    if (!inView(placement.x, placement.z)) return;
+    const c = Math.cos(placement.rot);
+    const s = Math.sin(placement.rot);
     const corner = (dx: number, dz: number): { mx: number; my: number } =>
-      toMap(b.x + dx * c - dz * s, b.z + dx * s + dz * c);
+      toMap(placement.x + dx * c - dz * s, placement.z + dx * s + dz * c);
     const points = [
-      corner(-b.w / 2, -b.d / 2),
-      corner(b.w / 2, -b.d / 2),
-      corner(b.w / 2, b.d / 2),
-      corner(-b.w / 2, b.d / 2),
+      corner(-placement.w / 2, -placement.d / 2),
+      corner(placement.w / 2, -placement.d / 2),
+      corner(placement.w / 2, placement.d / 2),
+      corner(-placement.w / 2, placement.d / 2),
     ];
-    const kind = b.kind === 'chapel' ? 'chapel' : b.kind === 'inn' ? 'inn' : 'house';
-    buildings.push({ points, kind });
+    buildings.push({ id: placement.id ?? null, points, kind });
+  };
+  for (const building of authoredProps.buildings) {
+    footprint(building, mapBuildingMarkerKind(building));
+  }
+  // Walls are authored beside the active world's other static props. Treat each
+  // wall OBB as a footprint so the map shows the exact live perimeter and custom
+  // worlds neither inherit nor lose geometry through a built-in layout lookup.
+  for (const wall of authoredProps.walls ?? []) {
+    footprint(wall, 'wall');
   }
 
   const props: MapPropMarker[] = [];
   const dot = (
+    id: string | undefined,
     x: number,
     z: number,
     kind: MapPropMarker['kind'],
@@ -488,16 +533,16 @@ function buildDetail(
   ): void => {
     if (!inView(x, z)) return;
     const { mx, my } = toMap(x, z);
-    props.push({ mx, my, kind, radius });
+    props.push({ id: id ?? null, mx, my, kind, radius });
   };
-  for (const w of PROPS.wells) dot(w.x, w.z, 'well');
-  for (const st of PROPS.stalls) dot(st.x, st.z, 'stall');
-  for (const tn of PROPS.tents) dot(tn.x, tn.z, 'tent');
-  for (const m of PROPS.mines) dot(m.x, m.z, 'mine');
-  for (const g of PROPS.graveyards) dot(g.x, g.z, 'graveyard');
-  for (const [x, z] of PROPS.mudHuts) dot(x, z, 'mudhut');
-  for (const [x, z] of PROPS.campfires)
-    dot(x, z, 'campfire', Math.max(CAMPFIRE_MIN_RADIUS, ppu * CAMPFIRE_RADIUS_PPU));
+  for (const w of authoredProps.wells) dot(w.id, w.x, w.z, 'well');
+  for (const st of authoredProps.stalls) dot(st.id, st.x, st.z, 'stall');
+  for (const tn of authoredProps.tents) dot(undefined, tn.x, tn.z, 'tent');
+  for (const m of authoredProps.mines) dot(undefined, m.x, m.z, 'mine');
+  for (const g of authoredProps.graveyards) dot(undefined, g.x, g.z, 'graveyard');
+  for (const [x, z] of authoredProps.mudHuts) dot(undefined, x, z, 'mudhut');
+  for (const [x, z] of authoredProps.campfires)
+    dot(undefined, x, z, 'campfire', Math.max(CAMPFIRE_MIN_RADIUS, ppu * CAMPFIRE_RADIUS_PPU));
 
   return { decorations: decoMarkers, buildings, props };
 }

@@ -88,10 +88,46 @@ export interface Config {
   readonly allowDevCommands: boolean;
   readonly turnstileSecret: string;
   readonly maxWsPerIpHard: number;
+  // The realm player admission cap: the WS handshake (server/ws_auth.ts) refuses a
+  // fresh join once the realm holds this many sessions, and /api/status advertises
+  // it so the client realm list can display honestly. The raw value is trimmed
+  // before the read, so set-but-empty AND whitespace-only both yield the default
+  // (Number('   ') is 0, which an untrimmed read would take as an explicit 0 and
+  // silently DISABLE the cap); an explicit 0 or a negative value disables it, a
+  // rule enforced at the admission site (a cap > 0 test there), never in numberOr,
+  // which passes an explicit '0' through.
+  readonly maxPlayersPerRealm: number;
   readonly githubRepo: string;
   readonly githubToken: string;
   readonly chatLogRetentionDays: number;
   readonly perfReportRetentionDays: number;
+  // The six retention keys below follow the chatLogRetentionDays contract: 0 =
+  // keep forever, and the read is deliberately UNTRIMMED, so a whitespace-only
+  // value falls to 0, the SAFE side for a destructive delete (keep, never prune).
+  readonly dailyRewardEventsRetentionDays: number;
+  readonly onlineSamplesRetentionDays: number;
+  readonly sitePresenceRetentionDays: number;
+  // Play sessions older than this fold into the lifetime rollups and are deleted;
+  // 0 keeps raw sessions forever. Positive values below the retention floor are
+  // raised to it by the prune (the floor guards the admin 30-day activity windows).
+  readonly playSessionRetentionDays: number;
+  // How long a folded account-to-IP association may persist without being seen
+  // again: the privacy bound on stored IP links and the ban-evasion lookback
+  // horizon. 0 keeps them forever.
+  readonly accountIpAssociationRetentionDays: number;
+  // How many days of per-account daily activity rows (player_activity_daily,
+  // the business-metrics fact table) to keep. The snapshot reads touch only
+  // today and yesterday, so any positive window is read-invisible to them.
+  readonly playerActivityRetentionDays: number;
+  // The two sweep knobs follow the maxPlayersPerRealm trimmed-read contract
+  // instead, because for them a whitespace-derived 0 is fail-DANGEROUS: hour 0
+  // moves the sweep to 00:00 UTC, next to the nightly 03:15 UTC pg_dump window
+  // the default deliberately avoids, and a 0 row budget silently disables the
+  // sweep. Whitespace therefore reads as unset -> the default, while an EXPLICIT
+  // 0 stays a live value (a midnight sweep / a zero budget). The hour is also
+  // range-validated to an integer 0..23; garbage falls back to the default.
+  readonly retentionSweepUtcHour: number;
+  readonly retentionSweepMaxRowsPerRun: number;
   // The auth-endpoint Origin guard, resolved once (mirrors web_login_guard.ts
   // webLoginEnforced): true when REQUIRE_WEB_LOGIN is 1/true, false when 0/false,
   // else NODE_ENV === 'production'. The raw flag is validated (throw on garbage).
@@ -125,10 +161,23 @@ const ALLOW_DEV_COMMANDS_ON = '1';
 const DEFAULT_PORT = 8787;
 const DEFAULT_TURNSTILE_SECRET = '';
 const DEFAULT_MAX_WS_PER_IP_HARD = 20;
+const DEFAULT_MAX_PLAYERS_PER_REALM = 5000;
 const DEFAULT_GITHUB_REPO = 'levy-street/world-of-claudecraft';
 const DEFAULT_GITHUB_TOKEN = '';
 const DEFAULT_CHAT_LOG_RETENTION_DAYS = 90;
 const DEFAULT_PERF_REPORT_RETENTION_DAYS = 14;
+const DEFAULT_DAILY_REWARD_EVENTS_RETENTION_DAYS = 400;
+const DEFAULT_ONLINE_SAMPLES_RETENTION_DAYS = 90;
+const DEFAULT_SITE_PRESENCE_RETENTION_DAYS = 90;
+const DEFAULT_PLAY_SESSION_RETENTION_DAYS = 180;
+const DEFAULT_ACCOUNT_IP_ASSOCIATION_RETENTION_DAYS = 730;
+const DEFAULT_PLAYER_ACTIVITY_RETENTION_DAYS = 400;
+// PROVISIONAL: two hours after the nightly 03:15 UTC pg_dump window, pending real
+// traffic-curve evidence of the quietest hour; revisit when that evidence lands.
+const DEFAULT_RETENTION_SWEEP_UTC_HOUR = 5;
+// PROVISIONAL conservative per-table cap per run, pending production table-size
+// evidence; raise it deliberately for a catch-up deploy rather than by default.
+const DEFAULT_RETENTION_SWEEP_MAX_ROWS_PER_RUN = 50_000;
 const DEFAULT_METRICS_TOKEN = '';
 
 // Env keys validated below (named rather than inline literals). The two API
@@ -254,6 +303,13 @@ export function loadConfig(env: NodeJS.ProcessEnv): Config {
   validatePublicOrigin(env);
   validateRealms(env);
 
+  // Raw sweep-hour read (trimmed, see the Config field comment); range-validated
+  // to an integer 0..23 in the object literal below.
+  const sweepHourRaw = numberOr(
+    env.RETENTION_SWEEP_UTC_HOUR?.trim(),
+    DEFAULT_RETENTION_SWEEP_UTC_HOUR,
+  );
+
   return Object.freeze({
     dispatch: parseDispatch(env.API_DISPATCH),
     databaseUrl,
@@ -261,12 +317,51 @@ export function loadConfig(env: NodeJS.ProcessEnv): Config {
     allowDevCommands: env.ALLOW_DEV_COMMANDS === ALLOW_DEV_COMMANDS_ON,
     turnstileSecret: env.TURNSTILE_SECRET ?? DEFAULT_TURNSTILE_SECRET,
     maxWsPerIpHard: numberOr(env.MAX_WS_PER_IP_HARD, DEFAULT_MAX_WS_PER_IP_HARD),
+    // Trimmed so a whitespace-only value reads as unset -> the default, never as
+    // the explicit 0 that disables the cap (see the Config field comment). Scoped
+    // to the fail-dangerous keys: the two RETENTION_SWEEP_* reads below share this
+    // trimmed contract, while for the retention *-days keys a stray whitespace 0
+    // is the SAFE side (keep forever), so their untrimmed reads stay as they are.
+    maxPlayersPerRealm: numberOr(env.MAX_PLAYERS_PER_REALM?.trim(), DEFAULT_MAX_PLAYERS_PER_REALM),
     githubRepo: env.GITHUB_REPO ?? DEFAULT_GITHUB_REPO,
     githubToken: env.GITHUB_TOKEN ?? DEFAULT_GITHUB_TOKEN,
     chatLogRetentionDays: numberOr(env.CHAT_LOG_RETENTION_DAYS, DEFAULT_CHAT_LOG_RETENTION_DAYS),
     perfReportRetentionDays: numberOr(
       env.PERF_REPORT_RETENTION_DAYS,
       DEFAULT_PERF_REPORT_RETENTION_DAYS,
+    ),
+    dailyRewardEventsRetentionDays: numberOr(
+      env.DAILY_REWARD_EVENTS_RETENTION_DAYS,
+      DEFAULT_DAILY_REWARD_EVENTS_RETENTION_DAYS,
+    ),
+    onlineSamplesRetentionDays: numberOr(
+      env.ONLINE_SAMPLES_RETENTION_DAYS,
+      DEFAULT_ONLINE_SAMPLES_RETENTION_DAYS,
+    ),
+    sitePresenceRetentionDays: numberOr(
+      env.SITE_PRESENCE_RETENTION_DAYS,
+      DEFAULT_SITE_PRESENCE_RETENTION_DAYS,
+    ),
+    playSessionRetentionDays: numberOr(
+      env.PLAY_SESSION_RETENTION_DAYS,
+      DEFAULT_PLAY_SESSION_RETENTION_DAYS,
+    ),
+    accountIpAssociationRetentionDays: numberOr(
+      env.ACCOUNT_IP_ASSOCIATION_RETENTION_DAYS,
+      DEFAULT_ACCOUNT_IP_ASSOCIATION_RETENTION_DAYS,
+    ),
+    playerActivityRetentionDays: numberOr(
+      env.PLAYER_ACTIVITY_RETENTION_DAYS,
+      DEFAULT_PLAYER_ACTIVITY_RETENTION_DAYS,
+    ),
+    // An hour outside 0..23 is garbage, not a preference; fall back like numberOr does.
+    retentionSweepUtcHour:
+      Number.isInteger(sweepHourRaw) && sweepHourRaw >= 0 && sweepHourRaw <= 23
+        ? sweepHourRaw
+        : DEFAULT_RETENTION_SWEEP_UTC_HOUR,
+    retentionSweepMaxRowsPerRun: numberOr(
+      env.RETENTION_SWEEP_MAX_ROWS_PER_RUN?.trim(),
+      DEFAULT_RETENTION_SWEEP_MAX_ROWS_PER_RUN,
     ),
     requireWebLogin: resolveRequireWebLogin(env),
     metricsToken: env.METRICS_TOKEN ?? DEFAULT_METRICS_TOKEN,

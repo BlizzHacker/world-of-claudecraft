@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { type CharacterSheetInput, characterSheet, splitCopper } from '../server/character_sheet';
 import type { CharacterRow } from '../server/db';
+import { DEEDS } from '../src/sim/content/deeds';
+import { talentsFor } from '../src/sim/content/talents';
 import { zoneAt } from '../src/sim/data';
 import { createPlayer, recalcPlayerStats } from '../src/sim/entity';
 import type { CharacterState } from '../src/sim/sim';
@@ -62,7 +64,7 @@ describe('splitCopper', () => {
   });
 });
 
-describe('characterSheet — shared fields', () => {
+describe('characterSheet: shared fields', () => {
   it('derives classLabel, zone, virtualLevel, prestige, spec, avatar + profile urls', () => {
     const sheet = characterSheet(input());
     expect(sheet.name).toBe('Thrallish');
@@ -88,14 +90,43 @@ describe('characterSheet — shared fields', () => {
     );
     expect(sheet.virtualLevel).toBe(12);
   });
+
+  it('preserves a valid specialization while ignoring legacy point-tree state', () => {
+    const fury = talentsFor('warrior')?.specs.find((spec) => spec.id === 'fury');
+    if (!fury) throw new Error('warrior Fury fixture missing');
+    const canonical = characterSheet(
+      input({
+        row: makeRow('warrior', 20, makeState({ talents: { spec: 'fury', rows: {} } })),
+      }),
+    );
+    const legacy = characterSheet(
+      input({
+        row: makeRow(
+          'warrior',
+          20,
+          makeState({
+            talents: {
+              spec: 'fury',
+              ranks: {},
+              choices: {},
+            } as unknown as CharacterState['talents'],
+          }),
+        ),
+      }),
+    );
+
+    expect(canonical.spec).toBe(fury.name);
+    expect(legacy.spec).toBe(fury.name);
+  });
 });
 
-describe('characterSheet — owner variant', () => {
+describe('characterSheet: owner variant', () => {
   it('includes stats, vitals, gold, and exact position', () => {
     const sheet = characterSheet(input({ visibility: 'owner' }));
     expect(sheet.gold).toEqual({ gold: 12, silver: 34, copper: 56 });
     expect(sheet.pos).toEqual({ x: 5, z: 0 });
     expect(sheet.stats).toBeDefined();
+    expect(sheet.stats).toMatchObject({ pvpOffense: 0, pvpDefense: 0 });
     expect(sheet.vitals).toBeDefined();
     expect(sheet.vitals!.hp).toBe(500);
   });
@@ -116,7 +147,7 @@ describe('characterSheet — owner variant', () => {
   });
 });
 
-describe('characterSheet — public variant leaks nothing sensitive', () => {
+describe('characterSheet: public variant leaks nothing sensitive', () => {
   it('omits stats, vitals, gold, and exact position', () => {
     const sheet = characterSheet(input({ visibility: 'public' }));
     expect(sheet.stats).toBeUndefined();
@@ -160,5 +191,43 @@ describe('characterSheet — public variant leaks nothing sensitive', () => {
         expect('pos' in sheet).toBe(false);
       }
     }
+  });
+});
+
+describe('characterSheet: deeds.recent hidden/unknown filter', () => {
+  // A known non-hidden deed, a known hidden deed, and an id with no live
+  // DeedDef (newer content on a mixed-version fleet, or a rollback).
+  const recent = [
+    { deedId: 'prog_veteran', earnedAt: '2026-06-01T00:00:00.000Z' },
+    { deedId: 'hid_saul_footnote', earnedAt: '2026-06-02T00:00:00.000Z' },
+    { deedId: 'gone_deed', earnedAt: '2026-06-03T00:00:00.000Z' },
+  ];
+
+  it('public visibility keeps only the known non-hidden row (fails closed on hidden and unknown)', () => {
+    // Fixture-guard the exemplars against the real catalog.
+    expect(DEEDS.prog_veteran.hidden).not.toBe(true);
+    expect(DEEDS.hid_saul_footnote.hidden).toBe(true);
+    expect(DEEDS.gone_deed).toBeUndefined();
+    const sheet = characterSheet(input({ visibility: 'public', deedsRecent: recent }));
+    expect(sheet.deeds.recent.map((r) => r.deedId)).toEqual(['prog_veteran']);
+  });
+
+  it('owner visibility keeps all three rows, including the earner own hidden and drifted deeds', () => {
+    const sheet = characterSheet(input({ visibility: 'owner', deedsRecent: recent }));
+    expect(sheet.deeds.recent.map((r) => r.deedId)).toEqual([
+      'prog_veteran',
+      'hid_saul_footnote',
+      'gone_deed',
+    ]);
+  });
+
+  it('public visibility coarsens earnedAt to the UTC day; owner keeps the exact stamp', () => {
+    const stamped = [{ deedId: 'prog_veteran', earnedAt: '2026-06-01T13:45:22.318Z' }];
+    const pub = characterSheet(input({ visibility: 'public', deedsRecent: stamped }));
+    expect(pub.deeds.recent).toEqual([{ deedId: 'prog_veteran', earnedAt: '2026-06-01' }]);
+    const own = characterSheet(input({ visibility: 'owner', deedsRecent: stamped }));
+    expect(own.deeds.recent).toEqual([
+      { deedId: 'prog_veteran', earnedAt: '2026-06-01T13:45:22.318Z' },
+    ]);
   });
 });

@@ -14,10 +14,10 @@
 // at the emit site (the S3 i18n guard scans this file + chat_readouts.ts).
 
 import { type AssistCandidate, resolveAssist } from '../assist';
-import { GATHERING_PROFESSIONS } from '../content/professions';
-import { CLASSES, ITEMS, zoneAt } from '../data';
+import { YUMI_TEMPLATE_ID } from '../content/yumi';
+import { CLASSES, zoneAt } from '../data';
+import * as deedsMod from '../deeds';
 import { graveyardReadout } from '../entity_roster';
-import { isGatheringProfessionId, queueGatheringGrant } from '../professions/gathering';
 import {
   type AwayStatus,
   JOINABLE_CHANNELS,
@@ -28,7 +28,8 @@ import {
   type SentChat,
 } from '../sim';
 import type { SimContext } from '../sim_context';
-import { dist2d, type Entity, MAX_LEVEL, type OverheadEmoteId, YELL_RANGE } from '../types';
+import { dist2d, type Entity, type OverheadEmoteId, type PlayerClass, YELL_RANGE } from '../types';
+import { setAwayState } from './away';
 import * as readouts from './chat_readouts';
 import { npcDuelChallenge } from './npc_duel';
 import { activeMaxLevel } from '../realms/registry';
@@ -36,6 +37,27 @@ import { activeMaxLevel } from '../realms/registry';
 const CHAT_BURST = 8; // messages a player may send back-to-back...
 const CHAT_REFILL = 2; // ...then this many more per second (caps spam amplifiers)
 const OVERHEAD_EMOTE_DURATION = 3.2;
+
+// The speaker's selected Book of Deeds title, spread into every PLAYER-sourced
+// chat emit as the optional `fromTitle` field: a deed id the client localizes
+// through deed_i18n, never display text. Untitled players omit the key
+// entirely (the event stays byte-identical to the pre-title shape), and the
+// mob/boss yell emitters (mob/yells.ts, encounters/*) never call this.
+function speakerTitle(meta: PlayerMeta): { fromTitle?: string } {
+  return meta.activeTitle ? { fromTitle: meta.activeTitle } : {};
+}
+
+// The speaker's class, spread into every PLAYER-sourced chat emit as the
+// optional `classId` field, the same pattern as speakerTitle above and for the
+// same reason: it rides the event because general/world/lfg/guild chat reaches
+// listeners far outside the sender's interest scope, where reading the class
+// off `IWorld.entities` at render time (world-complete offline, interest-
+// scoped online) would silently drop it for the exact channels it matters
+// most in. Always present for a player sender (a class is never optional), so
+// this only omits the key for the mob/boss yell emitters, which never call it.
+function speakerClass(meta: PlayerMeta): { classId: PlayerClass } {
+  return { classId: meta.cls };
+}
 
 // Predefined social emotes. Each entry maps a command (and its aliases) to the
 // third-person action text shown to everyone in /say range. `solo` is used with
@@ -99,7 +121,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
     const mode = awaym[1].toLowerCase() as AwayStatus['mode'];
     const custom = awaym[2]?.trim();
     if (r.meta.away?.mode === mode && !custom) {
-      r.meta.away = null;
+      setAwayState(r.e, r.meta, null);
       ctx.emit({
         type: 'log',
         text:
@@ -111,7 +133,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
       });
     } else {
       const message = custom || (mode === 'afk' ? 'Away From Keyboard' : 'Do Not Disturb');
-      r.meta.away = { mode, message };
+      setAwayState(r.e, r.meta, { mode, message });
       ctx.emit({
         type: 'log',
         text:
@@ -127,7 +149,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
 
   // Any other chat means you're back: clear a lingering away status.
   if (r.meta.away) {
-    r.meta.away = null;
+    setAwayState(r.e, r.meta, null);
     ctx.emit({
       type: 'log',
       text: 'You are no longer marked as away.',
@@ -228,6 +250,7 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
       return null;
     }
     const result = ctx.rng.int(lo, hi);
+    deedsMod.onChatRollForDeeds(ctx, r.meta.entityId, lo, hi, result);
     const text = `${result} (${lo}-${hi})`;
     const party = ctx.partyOf(r.meta.entityId);
     if (party) {
@@ -236,6 +259,8 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
           type: 'chat',
           fromPid: r.meta.entityId,
           from: r.meta.name,
+          ...speakerTitle(r.meta),
+          ...speakerClass(r.meta),
           text,
           channel: 'roll',
           pid: mPid,
@@ -249,6 +274,8 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
           type: 'chat',
           fromPid: r.meta.entityId,
           from: r.meta.name,
+          ...speakerTitle(r.meta),
+          ...speakerClass(r.meta),
           text,
           channel: 'roll',
           pid: meta.entityId,
@@ -590,6 +617,10 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
     );
     return null;
   }
+  if (/^\/(?:dungeons|dungeon|instances)\s+reset\s*$/i.test(raw)) {
+    ctx.resetDungeonInstances(r.meta.entityId);
+    return null;
+  }
   if (/^\/(?:dungeons|dungeon|instances)(?:\s|$)/i.test(raw)) {
     ctx.error(r.meta.entityId, readouts.dungeonsReadout());
     ctx.error(
@@ -597,6 +628,10 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
       ctx.dungeonDifficulty(r.meta.entityId) === 'heroic'
         ? 'Dungeon difficulty: Heroic. Use /dungeon normal to change it.'
         : 'Dungeon difficulty: Normal. Use /dungeon heroic to change it.',
+    );
+    ctx.error(
+      r.meta.entityId,
+      'Use /dungeon reset to abandon your empty instances after changing difficulty.',
     );
     return null;
   }
@@ -700,6 +735,8 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
           type: 'chat',
           fromPid: r.meta.entityId,
           from: r.meta.name,
+          ...speakerTitle(r.meta),
+          ...speakerClass(r.meta),
           to: target.name,
           text: msg,
           channel: 'whisper',
@@ -720,6 +757,8 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
         type: 'chat',
         fromPid: r.meta.entityId,
         from: r.meta.name,
+        ...speakerTitle(r.meta),
+        ...speakerClass(r.meta),
         text: msg,
         channel: 'whisper',
         pid: target.entityId,
@@ -728,6 +767,8 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
       type: 'chat',
       fromPid: r.meta.entityId,
       from: r.meta.name,
+      ...speakerTitle(r.meta),
+      ...speakerClass(r.meta),
       to: target.name,
       text: msg,
       channel: 'whisper',
@@ -744,6 +785,8 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
         type: 'chat',
         fromPid: target.entityId,
         from: target.name,
+        ...speakerTitle(target),
+        ...speakerClass(target),
         text: reply,
         channel: 'whisper',
         pid: r.meta.entityId,
@@ -766,6 +809,8 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
         type: 'chat',
         fromPid: r.meta.entityId,
         from: r.meta.name,
+        ...speakerTitle(r.meta),
+        ...speakerClass(r.meta),
         text: clean,
         channel: 'party',
         pid: mPid,
@@ -774,14 +819,18 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
     return { channel: 'party', message: clean };
   }
 
-  // "/g message": world-wide general channel (no pid = broadcast to all)
-  if (/^\/g(eneral)?\s/i.test(raw)) {
-    const clean = raw.replace(/^\/g(eneral)?\s+/i, '').trim();
+  // "/g message" / "/1 message": world-wide general channel (no pid = broadcast to
+  // all). "/1" is the classic numbered-channel shortcut for General; unlike "/g" it
+  // is never claimed by the online guild router, so it always reaches General.
+  if (/^\/(?:g(?:eneral)?|1)\s/i.test(raw)) {
+    const clean = raw.replace(/^\/(?:g(?:eneral)?|1)\s+/i, '').trim();
     if (!clean) return null;
     ctx.emit({
       type: 'chat',
       fromPid: r.meta.entityId,
       from: r.meta.name,
+      ...speakerTitle(r.meta),
+      ...speakerClass(r.meta),
       text: clean,
       channel: 'general',
     });
@@ -821,6 +870,8 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
           type: 'chat',
           fromPid: r.meta.entityId,
           from: r.meta.name,
+          ...speakerTitle(r.meta),
+          ...speakerClass(r.meta),
           text: clean,
           channel,
           pid: subPid,
@@ -870,6 +921,8 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
         if (t) text = def.target.replace('%t', t.name === r.meta.name ? 'themselves' : t.name);
       }
       broadcastEmote(ctx, r.meta, r.e, text);
+      // A cheer with a live Yumi in earshot counts; range matches the /say emote.
+      if (key === 'cheer') deedsMod.onCheerForDeeds(ctx, r.meta, r.e, YUMI_TEMPLATE_ID, SAY_RANGE);
       return null;
     }
   }
@@ -896,6 +949,8 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
       type: 'chat',
       fromPid: r.meta.entityId,
       from: r.meta.name,
+      ...speakerTitle(r.meta),
+      ...speakerClass(r.meta),
       text: clean,
       channel,
       entityId: r.e.id,
@@ -1046,6 +1101,7 @@ export function whisperMessageForName(
   return message ? message : null;
 }
 
+
 export function resolveWhisperTarget(
   ctx: SimContext,
   rest: string,
@@ -1105,6 +1161,8 @@ export function broadcastEmote(
       type: 'chat',
       fromPid: actor.entityId,
       from: actor.name,
+      ...speakerTitle(actor),
+      ...speakerClass(actor),
       text: body,
       channel: 'emote',
       entityId: actorEntity.id,
@@ -1128,6 +1186,7 @@ export function helpLines(): string[] {
     'Chat channels: /s say, /y yell, /general, /p party, /world, /lfg.',
     'Whisper a player with /w <name> <message>, reply with /r.',
     'Other commands: /join <world|lfg>, /roll, /invite <name>, /inspect <name>, /follow <name>, /unfollow, /assist <name>, /ready, /afk, /dnd, /who.',
+    'Hide a player: /ignore <name> hides their public chat only. /block <name> also stops their whispers, invites and mail. Also /unignore, /unblock, /ignorelist, /blocklist.',
     'Character readouts: /played, /playtime, /xp, /gold, /stats, /bags, /gear, /abilities, /buffs, /cooldowns, /quest, /completed.',
     'World readouts: /where, /zones, /nearby, /pois, /graveyard, /dungeons, /arena, /session, /listings, /buyback.',
     'Combat readouts: /target, /targetbuffs, /range, /attack, /casting, /combat, /threat, /consider, /combo, /overpower.',

@@ -33,6 +33,19 @@ describe('Settings', () => {
     expect(s.get('graphicsPreset')).toBe(2);
   });
 
+  it('remembers the camera zoom distance across sessions, clamped to the zoom range (issue 1657)', () => {
+    // Range mirrors Input.zoomBy's clamp so a persisted value is always applicable; def 12 is the
+    // shipped starting distance.
+    expect(SETTING_RANGES.cameraZoom).toEqual({ min: 3, max: 22, def: 12 });
+    const s = new Settings();
+    expect(s.get('cameraZoom')).toBe(12);
+    expect(s.set('cameraZoom', 100)).toBe(22); // clamped to max
+    expect(s.set('cameraZoom', 1)).toBe(3); // clamped to min
+    expect(s.set('cameraZoom', 8)).toBe(8);
+    // Persisted like every other setting: a fresh Settings (next session) reads the saved value.
+    expect(new Settings().get('cameraZoom')).toBe(8);
+  });
+
   it('keeps graphicsDefaultApplied false through an unrelated save and clears it on reset', () => {
     const s = new Settings();
     expect(s.get('graphicsDefaultApplied')).toBe(false);
@@ -166,6 +179,14 @@ describe('Settings', () => {
     expect(b.get('mobileCameraJoystick')).toBe(true);
   });
 
+  it('defaults the own nameplate on for a fresh player and preserves an existing off choice', () => {
+    const fresh = new Settings();
+    expect(fresh.get('showOwnNameplate')).toBe(true);
+
+    fresh.set('showOwnNameplate', false);
+    expect(new Settings().get('showOwnNameplate')).toBe(false);
+  });
+
   it('defaults footstep sounds off and persists re-enabling across instances', () => {
     const a = new Settings();
     expect(a.get('footstepSfx')).toBe(false);
@@ -218,39 +239,52 @@ describe('Settings', () => {
     expect(s.get('mobileCameraJoystick')).toBe(false);
   });
 
+  // Issue 2341: the Esc options menu's Graphics/Audio/Controller sub-views each
+  // have a "Reset to Defaults" button, but they used to share the same no-arg
+  // reset(), which wiped EVERY setting (all panels), not just the ones the
+  // player was looking at. reset(keys) scopes the restore to only the keys
+  // passed, so a sub-view can reset itself without touching the rest.
+  it('reset(keys) restores only the given keys, leaving out-of-scope settings untouched', () => {
+    const s = new Settings();
+    // In-scope for this call: one numeric key and one bool key.
+    s.set('sfxVolume', 0.1);
+    s.set('voiceEnabled', false);
+    // Out of scope: settings a different sub-view owns (graphics + interface).
+    s.set('graphicsPreset', 4);
+    s.set('uiScale', 1.3);
+    s.set('reduceMotion', true);
+
+    s.reset(['sfxVolume', 'voiceEnabled']);
+
+    expect(s.get('sfxVolume')).toBe(SETTING_RANGES.sfxVolume.def);
+    expect(s.get('voiceEnabled')).toBe(true); // BOOL_SETTINGS.voiceEnabled.def
+    // Untouched: these custom values must survive a reset scoped elsewhere.
+    expect(s.get('graphicsPreset')).toBe(4);
+    expect(s.get('uiScale')).toBe(1.3);
+    expect(s.get('reduceMotion')).toBe(true);
+
+    // The scoped restore also persists, like the full reset does.
+    expect(new Settings().get('sfxVolume')).toBe(SETTING_RANGES.sfxVolume.def);
+    expect(new Settings().get('graphicsPreset')).toBe(4);
+  });
+
+  it('reset() with no arguments still does a full reset (other callers keep their behavior)', () => {
+    const s = new Settings();
+    s.set('sfxVolume', 0.1);
+    s.set('graphicsPreset', 4);
+    s.set('reduceMotion', true);
+    s.reset();
+    expect(s.get('sfxVolume')).toBe(SETTING_RANGES.sfxVolume.def);
+    expect(s.get('graphicsPreset')).toBe(SETTING_RANGES.graphicsPreset.def);
+    expect(s.get('reduceMotion')).toBe(false);
+  });
+
   it('action button scale defaults to 1.0 and clamps to its slider bounds', () => {
     const s = new Settings();
     expect(s.get('actionButtonScale')).toBe(1);
     expect(s.set('actionButtonScale', 5)).toBe(SETTING_RANGES.actionButtonScale.max);
     expect(s.set('actionButtonScale', 0)).toBe(SETTING_RANGES.actionButtonScale.min);
     expect(s.set('actionButtonScale', 1.1)).toBe(1.1);
-  });
-
-  it('action button scale spans the widened 25 to 200 percent band (default 100%)', () => {
-    // Live user feedback (PR #1736): the old 0.8-1.3 band was too narrow. The
-    // spell/action button size must reach 200% with a 100% default. The lower
-    // edge is a 25% floor, not 0: a 0 scale collapsed the whole button cluster
-    // to nothing and soft-locked the player, so 25% is the smallest usable size.
-    // def stays 1 so no stored value migrates when the band widens.
-    expect(SETTING_RANGES.actionButtonScale).toEqual({ min: 0.25, max: 2, def: 1 });
-    const s = new Settings();
-    // The new extremes are reachable and clamp exactly at the widened edges.
-    expect(s.set('actionButtonScale', 0.25)).toBe(0.25);
-    expect(s.set('actionButtonScale', 2)).toBe(2);
-    expect(s.set('actionButtonScale', 3)).toBe(2); // above-max clamps down to 2
-    expect(s.set('actionButtonScale', 0)).toBe(0.25); // below-floor clamps up to 25%
-    expect(s.set('actionButtonScale', -1)).toBe(0.25); // below-min clamps up to the floor
-    expect(s.set('actionButtonScale', 0.5)).toBe(0.5); // a mid-band 50% value survives
-  });
-
-  it('widening action button scale does not migrate a value stored under the old band', () => {
-    // A value a player saved under the old {min:0.8,max:1.3} band stays
-    // byte-identical under the widened band: the load clamp only widens the
-    // allowed interval, so a stored value already inside it is never re-clamped.
-    localStorage.setItem('woc_settings', JSON.stringify({ actionButtonScale: 1.25 }));
-    expect(new Settings().get('actionButtonScale')).toBe(1.25);
-    localStorage.setItem('woc_settings', JSON.stringify({ actionButtonScale: 0.8 }));
-    expect(new Settings().get('actionButtonScale')).toBe(0.8);
   });
 
   it('all() returns an independent snapshot', () => {
@@ -278,6 +312,8 @@ describe('Interface & Comfort settings pack', () => {
     expect(s.get('showWalletOnPlayerCard')).toBe(true);
     expect(s.get('showDevBadges')).toBe(true);
     expect(s.get('showDailyRewardsChest')).toBe(true);
+    expect(s.get('showSecondaryActionBar')).toBe(false);
+    expect(s.get('showThirdActionBar')).toBe(false);
     expect(s.get('invertLookY')).toBe(false);
   });
 

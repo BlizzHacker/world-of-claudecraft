@@ -24,6 +24,7 @@ import type {
   VcMatchInfo,
   VcPhase,
   VcRosterPlayer,
+  VcSharedCupInfo,
 } from '../../world_api/vale_cup';
 import { isStunned } from '../combat/cc';
 import {
@@ -32,7 +33,8 @@ import {
   VALE_CUP_BALL_TEMPLATE_ID,
   vcNation,
 } from '../content/vale_cup';
-import { abilitiesKnownAt, DUNGEON_X_THRESHOLD, MOBS, NPCS } from '../data';
+import { abilitiesKnownAt, DUNGEON_X_THRESHOLD, MOBS } from '../data';
+import * as deedsMod from '../deeds';
 import { createMob, createNpc, recalcPlayerStats } from '../entity';
 import { restorePetFromDelveStash, stowPetForDelve } from '../pet/pet_commands';
 import type { PlayerMeta } from '../sim';
@@ -42,6 +44,7 @@ import {
   dist2d,
   type Entity,
   MELEE_RANGE,
+  type NpcDef,
   type SportRole,
   type VcBracket,
   type VcNationId,
@@ -353,14 +356,18 @@ function deserterUntil(ctx: SimContext, name: string): number {
 
 // ---------------------------------------------------------------------------
 // World init: Groundskeeper Bram at the Sowfield gate (reserved id, see above).
-// The caller (the Sim ctor) resolves `safe` through the SAME findSafePos path
-// the generic NPC surface-placement loop uses, so Bram is nudged out of water
-// or a building exactly like every other NPC; only his id allocation differs.
+// The caller (the Sim ctor) supplies both the configured world's definition and
+// a `safe` point resolved through the SAME findSafePos path the generic NPC
+// surface-placement loop uses. Bram can therefore neither leak from built-in
+// content nor spawn inside water/buildings; only his id allocation differs.
 // ---------------------------------------------------------------------------
 
-export function spawnGroundskeeper(ctx: SimContext, safe: { x: number; z: number }): void {
-  const def = NPCS.groundskeeper_bram;
-  if (!def || ctx.entities.has(VALE_CUP_BRAM_ID)) return;
+export function spawnGroundskeeper(
+  ctx: SimContext,
+  def: NpcDef,
+  safe: { x: number; z: number },
+): void {
+  if (ctx.entities.has(VALE_CUP_BRAM_ID)) return;
   const npc = createNpc(VALE_CUP_BRAM_ID, def, ctx.groundPos(safe.x, safe.z));
   ctx.addEntity(npc);
 }
@@ -1045,6 +1052,19 @@ function onGoal(ctx: SimContext, match: VcMatch, scoringTeam: 'A' | 'B'): void {
     x: c.x,
     z: c.z,
   });
+  // Deed credit mirrors the scorer banner: the scoring team's last kicker
+  // within the kick window, else its last toucher; an own goal credits nobody.
+  // Must resolve here, before resetBallToCenter wipes the attribution.
+  const ball = match.ball;
+  let scorerPid: number | null = null;
+  if (ball) {
+    if (ball.lastKickTeam === scoringTeam && ctx.time - ball.lastKickAt <= VC_SCORER_KICK_WINDOW) {
+      scorerPid = ball.lastKickPid ?? null;
+    } else if (ball.lastTouchTeam === scoringTeam) {
+      scorerPid = ball.lastTouchPid ?? null;
+    }
+  }
+  deedsMod.onCupGoalForDeeds(ctx, match, scoringTeam, scorerPid);
   // 'A' scores into the EAST goal; the ball settles in that pocket.
   match.pocket = scoringTeam === 'A' ? 'east' : 'west';
   match.kickoffTeam = scoringTeam === 'A' ? 'B' : 'A';
@@ -1103,6 +1123,8 @@ function applyStanding(ctx: SimContext, match: VcMatch, winner: 'A' | 'B' | null
         creditGuildResult(ctx, match, pid, 'loss');
       }
       match.resolved.add(pid);
+      // The standing just moved and roles/scores are final: deed credit now.
+      deedsMod.onCupStandingForDeeds(ctx, match, pid, team, winner);
     }
   }
 }
@@ -1206,6 +1228,9 @@ export function endCupMatch(ctx: SimContext, match: VcMatch, winner: 'A' | 'B' |
       pid,
     });
   }
+  // Seated fighters with a recorded personal touch see the match out; also
+  // drops the per-match deed memory.
+  deedsMod.onCupMatchEndForDeeds(ctx, match);
   match.phase = 'over';
   match.timer = VC_OVER_DELAY;
 }
@@ -1363,6 +1388,7 @@ export function vcupBallKick(
   ball.lastKickAt = ctx.time;
   ball.lastTouchPid = caster.id;
   ball.lastTouchTeam = team;
+  deedsMod.onCupTouchForDeeds(ctx, match, caster.id);
   writeBallEntity(ctx, ball);
 }
 
@@ -1374,6 +1400,7 @@ function gripBall(ctx: SimContext, match: VcMatch, keeper: Entity, team: 'A' | '
   if (towardOwnGoal > VC_SAVE_SHOT_SPEED) {
     const name = ctx.players.get(keeper.id)?.name ?? '';
     ctx.emit({ type: 'vcupSave', keeperName: name, x: keeper.pos.x, z: keeper.pos.z });
+    deedsMod.onCupSaveForDeeds(ctx, match, keeper.id);
   }
   ball.holderPid = keeper.id;
   ball.holdUntil = ctx.time + VC_GRIP_HOLD;
@@ -1382,6 +1409,7 @@ function gripBall(ctx: SimContext, match: VcMatch, keeper: Entity, team: 'A' | '
   ball.vz = 0;
   ball.lastTouchPid = keeper.id;
   ball.lastTouchTeam = team;
+  deedsMod.onCupTouchForDeeds(ctx, match, keeper.id);
 }
 
 export function vcupSportDash(
@@ -1549,6 +1577,7 @@ export function vcupBallPass(
   ball.lastKickAt = ctx.time;
   ball.lastTouchPid = caster.id;
   ball.lastTouchTeam = team;
+  deedsMod.onCupTouchForDeeds(ctx, match, caster.id);
   writeBallEntity(ctx, ball);
 }
 
@@ -1617,6 +1646,7 @@ export function vcupShoot(
   ball.lastKickAt = ctx.time;
   ball.lastTouchPid = caster.id;
   ball.lastTouchTeam = team;
+  deedsMod.onCupTouchForDeeds(ctx, match, caster.id);
   writeBallEntity(ctx, ball);
 }
 
@@ -1717,6 +1747,7 @@ function updateBallContacts(ctx: SimContext, match: VcMatch): void {
       ) {
         ball.lastTouchPid = pid;
         ball.lastTouchTeam = team;
+        deedsMod.onCupTouchForDeeds(ctx, match, pid);
         continue;
       }
       // Dribbling: running into the ball carries it along.
@@ -1724,6 +1755,7 @@ function updateBallContacts(ctx: SimContext, match: VcMatch): void {
         if (applyDribbleNudge(ball, e.pos.x - e.prevPos.x, e.pos.z - e.prevPos.z)) {
           ball.lastTouchPid = pid;
           ball.lastTouchTeam = team;
+          deedsMod.onCupTouchForDeeds(ctx, match, pid);
         }
       }
     }
@@ -2137,7 +2169,32 @@ function guildBoard(ctx: SimContext): { name: string; wins: number; losses: numb
   return rows.slice(0, VC_BOARD_SIZE);
 }
 
-export function cupInfoFor(ctx: SimContext, pid: number): CupInfo | null {
+// The realm-wide fragment of CupInfo (queue sizes, the live strip, the winners
+// and guild boards, who is practicing), computed once and shared across every
+// viewer in a broadcast pass. `live` is RAW (no per-viewer practice suppression;
+// cupInfoFor reapplies that). Draws no rng, reads only sim state.
+export function cupSharedInfoFor(ctx: SimContext): VcSharedCupInfo {
+  const vc = ctx.vcup;
+  // Same read order as the pre-extraction cupInfoFor (practicing, then queue
+  // sizes): both are pure, rng-free reads, so the order is cosmetic, but keeping
+  // it verbatim makes this a strict move, not a rewrite.
+  const practicing = vc.practices
+    .map((p) => ctx.players.get(p.practice?.ownerPid ?? -1)?.name ?? '')
+    .filter((n) => n.length > 0);
+  const queueSizes: Record<VcBracket, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+  for (const bracket of VC_BRACKETS) {
+    queueSizes[bracket] = vc.queues[bracket].reduce((n, u) => n + u.pids.length, 0);
+  }
+  return {
+    queueSizes,
+    live: vc.match ? liveMatchInfo(vc.match) : null,
+    board: winnersBoard(ctx),
+    guildBoard: guildBoard(ctx),
+    practicing,
+  };
+}
+
+export function cupInfoFor(ctx: SimContext, pid: number, shared?: VcSharedCupInfo): CupInfo | null {
   const meta = ctx.players.get(pid);
   if (!meta) return null;
   const vc = ctx.vcup;
@@ -2150,15 +2207,10 @@ export function cupInfoFor(ctx: SimContext, pid: number): CupInfo | null {
   // `match` so every "am I playing?" gate that keys off cupInfo.match is untouched.
   const e = ctx.entities.get(pid);
   const spectate = !match && vc.match && e && isAtSowfield(e.pos.x, e.pos.z) ? vc.match : null;
-  // Names of everyone currently off in a private practice instance (the HUD shows
-  // this in the Sowfield region so walk-ups see who is practicing).
-  const practicing = vc.practices
-    .map((p) => ctx.players.get(p.practice?.ownerPid ?? -1)?.name ?? '')
-    .filter((n) => n.length > 0);
-  const queueSizes: Record<VcBracket, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
-  for (const bracket of VC_BRACKETS) {
-    queueSizes[bracket] = vc.queues[bracket].reduce((n, u) => n + u.pids.length, 0);
-  }
+  // The realm-wide fields (queue sizes, live strip, boards, practicing) are the
+  // same for every viewer; take the shared fragment if the caller already built
+  // it this pass, else compute it here.
+  const s = shared ?? cupSharedInfoFor(ctx);
   const until = deserterUntil(ctx, meta.name);
   return {
     standing: { wins: meta.vcupWins, losses: meta.vcupLosses, draws: meta.vcupDraws },
@@ -2173,19 +2225,20 @@ export function cupInfoFor(ctx: SimContext, pid: number): CupInfo | null {
         ? (queued.unit.roles[pid] ?? null)
         : meta.sportRole,
     position: queued ? vcupQueuePosition(ctx, pid, queued.bracket) : 0,
-    queueSizes,
+    queueSizes: s.queueSizes,
     deserterFor: until > 0 ? Math.ceil(until - ctx.time) : 0,
     match: match ? matchInfoFor(ctx, match, pid) : null,
     spectate: spectate ? matchInfoFor(ctx, spectate, pid) : null,
     betRecord: { wins: meta.vcupBetWins, losses: meta.vcupBetLosses, net: meta.vcupBetNet },
     // The Sowfield's running match, for the persistent indicator, EXCEPT to a
     // player off in a private practice instance: they should not see the other
-    // (main) game's live strip overlaid on their own bout.
-    live: vc.match && !match?.practice ? liveMatchInfo(vc.match) : null,
-    board: winnersBoard(ctx),
-    guildBoard: guildBoard(ctx),
+    // (main) game's live strip overlaid on their own bout. The shared fragment's
+    // `live` is RAW (realm-wide); this reapplies the per-viewer suppression.
+    live: match?.practice ? null : s.live,
+    board: s.board,
+    guildBoard: s.guildBoard,
     myGuild: e?.guild || null,
     guildStanding: { wins: meta.vcupGuildWins, losses: meta.vcupGuildLosses },
-    practicing,
+    practicing: s.practicing,
   };
 }

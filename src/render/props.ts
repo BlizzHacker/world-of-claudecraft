@@ -1,12 +1,26 @@
 import * as THREE from 'three';
 import type { GLTF } from 'three/addons/loaders/GLTFLoader.js';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
-import { getActiveWorldContent, WORLD_MIN_Z } from '../sim/data';
+import { mineMoundFootprint } from '../sim/colliders';
+import { BUILTIN_WORLD, getActiveWorldContent, WORLD_MIN_Z } from '../sim/data';
+import {
+  DOCK_SECTION_LOCAL_Z,
+  DOCK_SECTION_SURFACE_Y,
+  dockSurfaceLine,
+  dockSurfaceYAt,
+} from '../sim/dock_layout';
 import { getActiveRealm } from '../sim/realms/registry';
 import { hash2 } from '../sim/rng';
 import { terrainHeight, waterLevel } from '../sim/world';
-import { loadGltf } from './assets/loader';
+import { loadGltf, releaseGltf } from './assets/loader';
 import { registerPreload } from './assets/preload';
+import { buildEastbrookGrandArmouryView } from './eastbrook_grand_armoury';
+import {
+  isEastbrookRebuildBuilding,
+  isEastbrookRebuildFence,
+  isEastbrookRebuildStall,
+  isEastbrookRebuildWell,
+} from './eastbrook_town';
 import { GFX, sharedUniforms, surfaceMat } from './gfx';
 
 // Static world props: buildings, tents, campfires, mines, ruins, docks,
@@ -360,6 +374,11 @@ function propAsset(key: PropKey): PropAsset {
   }
   const asset: PropAsset = { parts, size: box.getSize(new THREE.Vector3()) };
   extractCache.set(key, asset);
+  // The extracted float geometry and converted materials are now authoritative.
+  // Release the parsed scene's duplicate source buffers without disposing shared
+  // textures that the converted materials still reference.
+  loadedProps.delete(key);
+  releaseGltf(def.url);
   return asset;
 }
 
@@ -709,6 +728,8 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
   const group = new THREE.Group();
   const flames: THREE.Mesh[] = [];
   const fireLights: THREE.PointLight[] = [];
+  const activeContent = getActiveWorldContent();
+  const builtInWorld = activeContent === BUILTIN_WORLD;
 
   const ground = (x: number, z: number) => terrainHeight(x, z, seed);
 
@@ -855,8 +876,21 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
     return maxY - 0.4; // small sink so the walls meet the dirt, not float
   };
 
-  for (const b of getActiveWorldContent().props.buildings) {
+  for (const b of activeContent.props.buildings) {
     const key = b.x * 13.7 + b.z * 3.1;
+    const y = ground(b.x, b.z);
+    const armoury = buildEastbrookGrandArmouryView(b, ground);
+    if (armoury) {
+      group.add(armoury.group);
+      registerHideable(
+        armoury.group,
+        obbFootprint(b.x, b.z, b.w / 2, b.d / 2, b.rot, armoury.cameraTopY),
+      );
+      continue;
+    }
+    if (builtInWorld && isEastbrookRebuildBuilding(b)) continue;
+    // roof Y mirrors the camera collider height in colliders.ts
+    const roofY = y + (b.kind === 'chapel' ? 10.8 : b.kind === 'inn' ? 7.8 : 8.0);
     const y = footBaseY(b);
     // roof Y mirrors the camera collider height in colliders.ts (scaled to match)
     const roofY = y + (b.kind === 'chapel' ? 10.8 : b.kind === 'inn' ? 7.8 : 8.0) * vScale;
@@ -894,7 +928,8 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
   }
 
   // ---- market stalls (smith/armorer stalls get anvil + weapon stand) ------
-  getActiveWorldContent().props.stalls.forEach((s, i) => {
+  activeContent.props.stalls.forEach((s, i) => {
+    if (builtInWorld && isEastbrookRebuildStall(s)) return;
     const key = s.x * 7.7 + s.z * 2.3;
     const g = new THREE.Group();
     const standKey: PropKey = i % 2 === 0 ? 'stand1' : 'stand2';
@@ -903,7 +938,7 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
       scale: [3.1 / stand.size.x, 2.6 / stand.size.y, 2.5 / stand.size.z],
       rot: (keyRand(key, 1) - 0.5) * 0.1,
     });
-    if (!lowProps && (i === 1 || i === 4)) {
+    if (!lowProps && s.smithy) {
       // Smith Haldren (z1) / Armorer Hode (z3): forge-front dressing
       addParts(g, 'anvil', { x: 1.35, z: 1.15, rot: 0.9, scale: 1.35 });
       addParts(g, 'weaponStand', { x: -1.45, z: 0.6, rot: 0.5 + Math.PI, scale: 1.25 });
@@ -918,7 +953,8 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
   });
 
   // ---- wells ---------------------------------------------------------------
-  for (const w of getActiveWorldContent().props.wells) {
+  for (const w of activeContent.props.wells) {
+    if (builtInWorld && isEastbrookRebuildWell(w)) continue;
     const g = new THREE.Group();
     const a = propAsset('well');
     addParts(g, 'well', { scale: [2.6 / a.size.x, 3.6 / a.size.y, 2.9 / a.size.z] });
@@ -953,7 +989,8 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
   }
 
   // ---- town fences: village fence module repeated along the run ------------
-  for (const f of getActiveWorldContent().props.fences) {
+  for (const f of activeContent.props.fences) {
+    if (builtInWorld && isEastbrookRebuildFence(f)) continue;
     const len = Math.hypot(f.x2 - f.x1, f.z2 - f.z1);
     const n = Math.max(1, Math.round(len / 2.35));
     const dirx = (f.x2 - f.x1) / len,
@@ -1242,10 +1279,11 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
     g.position.set(m.x, ground(m.x, m.z), m.z);
     g.rotation.y = m.rot;
     group.add(shadowed(g));
-    // mound circle behind the portal — same offset/radius as the collider
-    const mx = m.x - 3.4 * Math.sin(m.rot),
-      mz = m.z - 3.4 * Math.cos(m.rot);
-    registerHideable(g, circleFootprint(mx, mz, 5, ground(mx, mz) + 5.2));
+    // mound circle behind the portal, same offset/radius as the collider
+    // (src/sim/colliders.ts), via the shared mineMoundFootprint helper so the
+    // two can never drift apart again
+    const { x: mx, z: mz, r: moundRadius } = mineMoundFootprint(m);
+    registerHideable(g, circleFootprint(mx, mz, moundRadius, ground(mx, mz) + moundRadius + 0.2));
   }
 
   // ---- fishing docks: pirate-kit platforms, moored rowboat, stone hut ------
@@ -1253,17 +1291,21 @@ export function buildProps(seed: number, delveLabel?: (delveId: string) => strin
     const y = ground(d.x, d.z);
     const g = new THREE.Group();
     const key = d.x * 3.3 + d.z * 1.7;
-    for (let i = 0; i < 3; i++) {
-      // step each pier section down toward the water so the far legs stay
-      // grounded on a dropping shore (flat shores keep a level deck)
-      const lz = -1.05 - i * 2.13;
-      const wx = d.x + lz * Math.sin(d.rot);
-      const wz = d.z + lz * Math.cos(d.rot);
-      addParts(g, 'dockPlatform', {
-        z: lz,
-        y: Math.min(0, ground(wx, wz) - y + 0.15),
-        rot: (keyRand(key, i) - 0.5) * 0.04,
-        scale: [0.78, 0.52, 0.85],
+    const surfaceLine = dockSurfaceLine(d, ground);
+    const pitch = -Math.atan(surfaceLine.slope);
+    const zScale = 0.85 / Math.cos(pitch);
+    for (let i = 0; i < DOCK_SECTION_LOCAL_Z.length; i++) {
+      const lz = DOCK_SECTION_LOCAL_Z[i];
+      const section = new THREE.Group();
+      section.position.set(0, dockSurfaceYAt(surfaceLine, lz) - y, lz);
+      section.rotation.x = pitch;
+      g.add(section);
+      // Pivot around the plank surface, not the post feet. Every section then
+      // lies on the same analytic plane exposed by groundHeight. Compensating
+      // z scale preserves the authored footprint after the pitch projection.
+      addParts(section, 'dockPlatform', {
+        y: -DOCK_SECTION_SURFACE_Y,
+        scale: [0.78, 0.52, zScale],
       });
     }
     const hut = propAsset('house3');
