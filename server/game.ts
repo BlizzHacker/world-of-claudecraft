@@ -6687,9 +6687,62 @@ export class GameServer {
     // whole-second clocks and queue sizes, so re-evaluating every tick would
     // re-serialize the rosters 20 times per wire-visible change. Instant
     // queue/match transitions ride the pid-scoped vcup* events instead.
+    // Vale Cup readout at its own UI cadence (VC_WIRE_HZ). Dueness (`vcupDue`) is
+    // decided once per broadcast pass in broadcastSnapshots and realm-global, so the
+    // shared bundle is built once per due pass rather than on each session's own
+    // offset gate. The per-viewer remainder (standing, queue slot, my match/spectate
+    // view, my bets, my guild line) rides `vcup`; the realm-wide fragment (queue
+    // sizes, the live strip, the winners and guild boards, who is practicing) rides
+    // `vcupb`, serialized ONCE per broadcast pass by the realm-readout memo and
+    // reused across every viewer. A fresh join or a spectate enter/exit clears
+    // lastSent, so the `sent['vcup'] === undefined` arm re-ships both keys
+    // immediately even between due passes (the old per-session negative-init did
+    // this; the dueness gate alone would not, so keep this arm).
+    if (vcupDue || sent['vcup'] === undefined) {
+      const shared = realmReadoutObject(this.realmReadout, this.sim.tickCount, () =>
+        this.sim.cupSharedInfoFor(),
+      );
+      const full = this.sim.cupInfoFor(anchorSession.pid, shared);
+      if (full) {
+        // liveHidden: this viewer is off in a private practice instance, so the
+        // Sowfield live strip carried in the shared fragment must be suppressed for
+        // them. Derived from the two values we already hold (the raw shared live is
+        // non-null but this viewer's effective live is null), so VcMatchInfo need
+        // not carry a practice flag; the client reapplies it on recompose and never
+        // surfaces liveHidden on CupInfo. The raw strip still rides vcupb to every
+        // viewer (it is public match state, no PII), so a practicer receives the
+        // bytes but this per-viewer flag keeps their client from ever rendering it.
+        const liveHidden = shared.live !== null && full.live === null;
+        // Typed as VcViewerReadout so a future CupInfo per-viewer field addition
+        // fails compile here rather than silently dropping from the wire remainder.
+        const viewerReadout: VcViewerReadout = {
+          standing: full.standing,
+          queued: full.queued,
+          bracket: full.bracket,
+          nation: full.nation,
+          role: full.role,
+          position: full.position,
+          deserterFor: full.deserterFor,
+          match: full.match,
+          spectate: full.spectate,
+          betRecord: full.betRecord,
+          myGuild: full.myGuild,
+          guildStanding: full.guildStanding,
+          liveHidden,
+        };
+        maybe('vcup', viewerReadout);
+        maybeRaw(
+          'vcupb',
+          realmReadoutJson(this.realmReadout, this.sim.tickCount, () =>
+            this.sim.cupSharedInfoFor(),
+          ),
+        );
+      } else {
+        maybe('vcup', null);
+      }
+    }
     if (this.sim.tickCount - session.lastVcupWireTick >= VC_WIRE_INTERVAL_TICKS) {
       session.lastVcupWireTick = this.sim.tickCount;
-      maybe('vcup', this.sim.cupInfoFor(anchorSession.pid));
       // The Derby readout shares the cadence: whole-second clocks and a small
       // roster, same re-serialization economics as CupInfo.
       maybe('derby', this.sim.derbyInfoFor(anchorSession.pid));
@@ -6697,6 +6750,25 @@ export class GameServer {
       maybe('homes', this.sim.homesInfoFor(anchorSession.pid));
       maybe('horde', this.sim.hordeInfoFor(anchorSession.pid));
       maybe('skirmish', this.sim.skirmishInfoFor(anchorSession.pid));
+    }
+    // Dungeon Finder at its own UI cadence (DF_WIRE_HZ): the personal `df`
+    // blob carries whole-second clocks (queue wait, proposal countdown), so
+    // re-evaluating every tick would re-serialize it 20 times per visible
+    // change. The shared `dfb` board is a separate key so a live countdown
+    // never re-sends the listings; it is viewer-independent, so its JSON rides
+    // the realm-readout memo (built + stringified at most once per tick, reused
+    // by every session whose gate opens on that tick) and ships via `maybeRaw`.
+    // The per-session `>=` gate itself is unchanged: sessions keep their own
+    // offsets, and the memo only collapses same-tick evaluations.
+    if (this.sim.tickCount - session.lastDfWireTick >= DF_WIRE_INTERVAL_TICKS) {
+      session.lastDfWireTick = this.sim.tickCount;
+      maybe('df', this.sim.dungeonFinderInfoFor(anchorSession.pid));
+      maybeRaw(
+        'dfb',
+        realmReadoutJson(this.dfBoardReadout, this.sim.tickCount, () =>
+          this.sim.dungeonFinderBoardView(),
+        ),
+      );
     }
     // market info is null unless the player is standing at the Merchant, so it
     // only rides the wire for players actually browsing the World Market
