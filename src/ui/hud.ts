@@ -48,14 +48,16 @@ import {
   ABILITIES,
   ALL_RECIPES,
   CLASSES,
+  COMPANION_UPGRADE_COSTS,
+  DELVE_AFFIXES,
   DELVE_LIST,
   DELVES,
   DUNGEON_LIST,
   DUNGEON_X_THRESHOLD,
   dungeonAt,
-  ITEMS,
   isDelvePos,
   isInteriorPos,
+  ITEMS,
   MOBS,
   NPCS,
   QUESTS,
@@ -63,9 +65,10 @@ import {
   WORLD_MAX_Z,
   WORLD_MIN_X,
   WORLD_MIN_Z,
-  ZONES,
   zoneAt,
+  ZONES,
 } from '../sim/data';
+import { reconcileLootRolls as computeLootRollReconcile } from './loot_roll_reconcile';
 import { specialRoleColor } from '../sim/discord_roles';
 import { canEquipItem, weaponHand } from '../sim/equipment_rules';
 import { isItemLevelEligible, itemLevel, itemScore } from '../sim/item_level';

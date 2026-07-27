@@ -45,6 +45,19 @@ import { qualityGlowShadow } from './quality_glow';
 import { tSim } from './sim_i18n';
 import type { StatId } from './stat_tooltip';
 import { svgIcon } from './ui_icons';
+const ARCHETYPE_TITLE_KEYS: Record<string, TranslationKey> = {
+  armorcrafting: 'hudChrome.archetypeTitle.armorcrafting',
+  weaponcrafting: 'hudChrome.archetypeTitle.weaponcrafting',
+  jewelcrafting: 'hudChrome.archetypeTitle.jewelcrafting',
+  alchemy: 'hudChrome.archetypeTitle.alchemy',
+  engineering: 'hudChrome.archetypeTitle.engineering',
+  cooking: 'hudChrome.archetypeTitle.cooking',
+  inscription: 'hudChrome.archetypeTitle.inscription',
+  enchanting: 'hudChrome.archetypeTitle.enchanting',
+  tailoring: 'hudChrome.archetypeTitle.tailoring',
+  leatherworking: 'hudChrome.archetypeTitle.leatherworking',
+};
+
 
 // Quality / empty-slot colors as CSS custom properties: the shared
 // QUALITY_COLOR map carries the per-quality hex, and these tokens cover the

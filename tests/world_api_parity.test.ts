@@ -72,6 +72,20 @@ import type { IWorldTargeting } from '../src/world_api/targeting';
 import type { IWorldTelemetry } from '../src/world_api/telemetry';
 import type { IWorldTrade } from '../src/world_api/trade';
 import type { IWorldValeCup } from '../src/world_api/vale_cup';
+const FACET_DUNGEON_FINDER = [
+  'dungeonFinderInfo',
+  'dungeonFinderBoard',
+  'dungeonFinderSetRoles',
+  'dungeonFinderQueueJoin',
+  'dungeonFinderQueueLeave',
+  'dungeonFinderRespond',
+  'dungeonFinderListingCreate',
+  'dungeonFinderListingClose',
+  'dungeonFinderApply',
+  'dungeonFinderApplyCancel',
+  'dungeonFinderApplicationRespond',
+] as const satisfies readonly (keyof IWorldDungeonFinder)[];
+
 
 type IWorldMemberKind = 'method' | 'data';
 

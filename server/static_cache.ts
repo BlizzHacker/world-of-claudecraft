@@ -5,6 +5,10 @@
 // keeps its URL across deploys, so clients must revalidate — a 304 costs one
 // round-trip of headers instead of re-downloading the bytes.
 import type { Stats } from 'node:fs';
+function isImmutable(urlPath: string): boolean {
+  return IMMUTABLE_PREFIXES.some((prefix) => urlPath.startsWith(prefix));
+}
+
 
 const IMMUTABLE_PREFIXES = ['/assets/', '/media/'];
 const VERSIONED_SFX = /^\/audio\/sfx\/[a-z0-9]+(?:_[a-z0-9]+)*\.mp3\?v=([a-f0-9]{12})$/;

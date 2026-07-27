@@ -28,6 +28,8 @@ import {
   tierSupplyShare as sharedTierSupplyShare,
 } from '../sim/holder_tier';
 import { type TranslationKey, t } from './i18n';
+const GLYPH_FILL = '#fff6df';
+
 
 export { WOC_MAX_SUPPLY } from '../sim/holder_tier';
 

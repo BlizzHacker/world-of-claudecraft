@@ -15,6 +15,8 @@ import {
 import { PREVIEW_FRAMING, type PreviewFramingName } from './preview_framing';
 import { characterPreviewFrameVisible, resolveCharacterPreviewPolicy } from './preview_policy';
 import { CharacterVisual } from './visual';
+export type ExternalPreviewState = 'idle' | 'loading' | 'ready' | 'error';
+
 
 export type { PreviewAppearance } from './preview_appearance';
 
