@@ -43,7 +43,7 @@ import { HEROIC_VENDOR_STOCK } from '../sim/content/heroic_vendor';
 import { recipeById } from '../sim/content/recipes';
 import { FIRST_TALENT_LEVEL, type TalentAllocation, talentsFor } from '../sim/content/talents';
 import { resolveActiveWeaponSkin } from '../sim/content/weapon_skin_rules';
-import type { delveAt, questRewardItem, ZoneDef } from '../sim/data';
+import { delveAt, questRewardItem, ZoneDef } from '../sim/data';
 import {
   ABILITIES,
   ALL_RECIPES,
@@ -78,7 +78,7 @@ import { TIER_SKILL_STEP, tierForSkill } from '../sim/professions/wheel';
 import { type QuestObjectiveRef, questObjectivesForMob } from '../sim/quest_targets';
 import { activeMaxLevel } from '../sim/realms/registry';
 import type { ResolvedAbility } from '../sim/sim';
-import type { AbilityDef, CalendarResultCode, EquipSlot, HonorReason, InvSlot, isQuestTurnInNpc, ItemInstancePayload, ItemSlot, LootRollChoice, MailResultCode, MotdResultCode, PetMode, PlayerClass, ResourceType, SkinCatalog, SkinRank } from '../sim/types';
+import { AbilityDef, CalendarResultCode, EquipSlot, HonorReason, InvSlot, isQuestTurnInNpc, ItemInstancePayload, ItemSlot, LootRollChoice, MailResultCode, MotdResultCode, PetMode, PlayerClass, ResourceType, SkinCatalog, SkinRank } from '../sim/types';
 import {
   type AbilityEffect,
   type AuraKind,
