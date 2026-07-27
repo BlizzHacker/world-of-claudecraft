@@ -134,16 +134,6 @@ import {
   abilitySecondaryEffect,
   abilityTemporalHourglassValues,
 } from './ability_damage';
-import { isSelfOnlyAbility } from './ability_self_only';
-import { ActionBarPainter, type ActionBarSlotElements } from './action_bar_painter';
-import {
-  ABILITY_ICON_PREFIX,
-  type ActionBarView,
-  ATTACK_ICON_KEY,
-  createActionBarView,
-  EMPTY_ICON_KEY,
-  ITEM_ICON_PREFIX,
-} from './action_bar_view';
 import { ArcadeMinigameWindow } from './arcade_minigame_window';
 import { ArenaWindow } from './arena_window';
 import { auraDisplayNameFromSource } from './aura_display_name';
@@ -230,7 +220,6 @@ import {
   onMusicWidgetHiddenChange,
   toggleMusicWidget,
 } from './cryptic/music_widget';
-import { DelveMapPainter } from './delve_map_painter';
 import { DerbyHud } from './derby_hud';
 import { HordeHud } from './horde_hud';
 import { markDialogRoot } from './dialog_root';
