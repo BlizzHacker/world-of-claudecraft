@@ -415,6 +415,40 @@ async function fetchCrUsdPriceDirect(): Promise<number | null> {
   }
 }
 
+async function fetchDailyRewardSchedule(): Promise<number> {
+  const serviceUrl = dailyRewardServiceUrl();
+  if (!serviceUrl) return DEFAULT_DAY_START_UTC_MINUTES;
+  const url = new URL('/daily-schedule', serviceUrl.endsWith('/') ? serviceUrl : `${serviceUrl}/`);
+  const res = await fetch(url, {
+    headers: dailyRewardServiceHeaders(),
+    signal: AbortSignal.timeout(5000),
+  });
+  if (!res.ok) throw new Error(`schedule request failed: ${res.status}`);
+  const payload = (await res.json()) as Record<string, unknown>;
+  const minutes = finiteDayStartUtcMinutes(payload.dayStartUtcMinutes);
+  if (minutes === null) throw new Error('schedule response contained an invalid day start');
+  return minutes;
+}
+
+async function fetchDailyRewardRuntimeConfig(
+  day: string,
+  strict = false,
+): Promise<DailyRewardRuntimeConfig> {
+  const serviceUrl = dailyRewardServiceUrl();
+  if (!serviceUrl) return fallbackRuntimeConfig();
+  const url = new URL('/daily-config', serviceUrl.endsWith('/') ? serviceUrl : `${serviceUrl}/`);
+  url.searchParams.set('day', day);
+  const res = await fetch(url, {
+    headers: dailyRewardServiceHeaders(),
+    signal: AbortSignal.timeout(5000),
+  });
+  if (!res.ok) throw new Error(`config request failed: ${res.status}`);
+  const payload = await res.json();
+  return strict
+    ? parseStrictRuntimeConfigPayload(payload, day)
+    : parseRuntimeConfigPayload(payload);
+}
+
 export async function dailyRewardRuntimeConfig(
   day = utcRewardDay(),
   requireFresh = false,

@@ -105,6 +105,11 @@ export function craftNameText(craftId: string | null): string {
   return t(key ?? 'hudChrome.archetypeTitle.none');
 }
 
+export function hobbyCraftText(craftId: string | null): string {
+  const key = craftId !== null ? ARCHETYPE_TITLE_KEYS[craftId] : undefined;
+  return t(key ?? 'hudChrome.archetypeTitle.none');
+}
+
 const PRIMARY_STATS: readonly StatId[] = ['str', 'agi', 'sta', 'int', 'spi'];
 const COMBAT_STATS: readonly StatId[] = [
   'attackPower',

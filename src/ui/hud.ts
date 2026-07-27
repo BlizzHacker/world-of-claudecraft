@@ -590,6 +590,7 @@ export interface ThemeHooks {
 
 // Read/rebind the gamepad's button→action layout from the options panel.
 export interface GamepadBindingsHooks {
+  connected(): boolean;
   entries(): { button: number; action: string }[];
   bind(button: number, action: string): void;
   reset(): void;
@@ -900,6 +901,18 @@ const CHAT_TEMPLATE_KEYS = {
   roll: 'hud.chat.templates.roll',
   say: 'hud.chat.templates.say',
 } satisfies Record<string, TranslationKey>;
+const DELVE_AFFIX_COLORS: Record<string, string> = {
+  restless_graves: '#8b7355',
+  bad_air: '#6a8a6a',
+  candleblind: '#c9a227',
+  old_mechanisms: '#7a8a9a',
+  flooded_paths: '#4a7a9a',
+  grave_tax: '#9a6a4a',
+  unstable_roof: '#8a6a5a',
+  cult_remnants: '#7a4a8a',
+  chapel_candle: '#ffd100',
+};
+
 type MobileHotbarDrag = {
   pointerId: number;
   sourceIndex: number;

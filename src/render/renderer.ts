@@ -270,6 +270,8 @@ function buildForgedInstance(scene: THREE.Object3D): THREE.Object3D {
 const NAMEPLATE_RANGE = 55;
 const NAMEPLATE_RANGE_SQ = NAMEPLATE_RANGE * NAMEPLATE_RANGE;
 const emoteIconUrl = (id: string): string => `/ui/emotes/emote-${id}.png`;
+const FESTIVAL_GOLD_COLORS: readonly number[] = [0xffd14d, 0xfff2c0];
+
 // Entities further than this from the player are hidden entirely: their rigs
 // are several draw calls each and read as sub-pixel specks long before this.
 const ENTITY_DRAW_RANGE = 80;
@@ -670,6 +672,17 @@ function selfSnapshotAlpha(alpha: number, lead: number): number {
 }
 
 export interface EntityView {
+  mountKey: string | null; // which mount rig mountVisual holds (rebuilt on swap)
+  skin: number; // last-rendered appearance skin — diffed each frame for live swaps
+  mainhandItemId: string | null; // last-rendered equipped weapon — diffed for live held-weapon swaps
+  /** unscaled height — nameplate/vfx anchor reads height * e.scale */
+  height: number;
+  mountVisual: CharacterVisual | null; // rideable mount body (stag/raptor/wyrm), built lazily
+  mountKey: string | null; // which mount rig mountVisual holds (rebuilt on swap)
+  skin: number; // last-rendered appearance skin — diffed each frame for live swaps
+  mainhandItemId: string | null; // last-rendered equipped weapon — diffed for live held-weapon swaps
+  /** unscaled height — nameplate/vfx anchor reads height * e.scale */
+  height: number;
   group: THREE.Group;
   /** rigged glTF visual for characters; null for object views (doors/crates) */
   visual: CharacterVisual | null;
@@ -5631,6 +5644,8 @@ export class Renderer {
       let temporalHourglassMode: TemporalHourglassMode | null = null;
       let hasFrostNovaRoot = false;
       let mageBarrierState: MageBarrierState | null = null;
+      let mountVisualKey: string | null = null;
+
       for (const a of e.auras) {
         if (mountVisualKey === null) {
           const mnt = mountForAuraId(a.id);
@@ -5663,6 +5678,8 @@ export class Renderer {
       const cat = !polyed && !bear && (ghostWolf || hasCatForm);
       const travel = !polyed && !bear && !cat && hasTravelForm;
       const fireballForm = !polyed && !bear && !cat && !travel && hasFireballForm;
+      const mountKey = !polyed && !bear && !cat && !travel ? mountVisualKey : null;
+
       const _stealthed = hasStealth;
       // distance cull: far rigs are invisible specks but cost real draw calls
       const cdx = e.pos.x - p.pos.x,

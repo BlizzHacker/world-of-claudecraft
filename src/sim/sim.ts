@@ -1001,6 +1001,7 @@ export type JoinableChannel = (typeof JOINABLE_CHANNELS)[number];
 // Per-player progression and bags. The entity holds combat state; this holds
 // everything that belongs to the character sheet.
 export interface PlayerMeta {
+  isFiestaBot?: boolean;
   entityId: number;
   // Stable database character id when running on the server. Offline/sim-only
   // callers fall back to entityId for systems that need a rename-proof owner key.
@@ -2387,6 +2388,11 @@ export class Sim {
       savedPos = this.findSafePos(savedPos.x, savedPos.z, -Infinity, PLAYER_BODY_RADIUS);
     }
     const playerStart = this.worldContent.playerStart;
+    const nearAnchor =
+      !savedPos && opts?.spawnNearPid !== undefined
+        ? (this.entities.get(opts.spawnNearPid) ?? null)
+        : null;
+
     const startPos = savedPos
       ? this.groundPos(savedPos.x, savedPos.z)
       : nearAnchor

@@ -7,6 +7,7 @@ import { mechHeldWeaponOverride } from './manifest';
  *  class-agnostic Combat Mech cosmetic, and the equipped mainhand (null when
  *  unarmed, so the preview shows no weapon rather than a class default). */
 export interface PreviewAppearance {
+  visualKey?: string | null;
   cls: PlayerClass;
   skin: number;
   skinCatalog: 'class' | 'mech';

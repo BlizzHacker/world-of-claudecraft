@@ -505,6 +505,10 @@ ${entries.length ? `<ul>${rows}</ul>` : '<p>No builds published yet, check back 
   }
   fs.createReadStream(file).pipe(res);
 }
+const SFX_PACK_DIR = process.env.SFX_PACK_DIR?.trim()
+  ? path.resolve(process.env.SFX_PACK_DIR.trim())
+  : null;
+
 // Pretty URLs that serve standalone static HTML pages.
 const STATIC_PAGE_ALIASES = new Map([
   ['/links', '/links.html'],
@@ -1289,6 +1293,8 @@ function serveStatic(req: http.IncomingMessage, res: http.ServerResponse): void 
     return;
   }
   let urlPath = requestUrl.pathname;
+  const dashShell = dashboardShellFor(urlPath);
+
   // The curated Guide is the site wiki: a client-routed SPA served at /wiki with its
   // own shell, so deep paths (/wiki/classes/...) fall back to guide.html rather than
   // the game's index.html. WIKI_URL remains an override for deployments that still

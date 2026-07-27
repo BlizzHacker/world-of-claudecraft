@@ -7205,6 +7205,8 @@ function renderReleaseBody(md: string): string {
 // Re-fetched each time the view is opened (the server caches, so it is cheap).
 // The sanitizing renderer + fetch/paint loop live in ./ui/news_feed (extracted
 // out of this firewall file); this call site just supplies the host + fetcher.
+let newsLoading = false;
+
 async function loadNews(): Promise<void> {
   const host = $('#news-feed');
   if (!host || newsLoading) return;
@@ -9123,6 +9125,27 @@ function wireStartScreens(): void {
   // a dev/local-testing convenience only. Disabled in production builds,
   // unchanged (enabled) under `npm run dev`.
   const offlineAvailable = isOfflineModeAvailable(import.meta.env.DEV);
+
+  const resumeOnlineSession = async (): Promise<void> => {
+    if (!api.token && !hydrateApiFromSavedSession()) {
+      show('#login-panel');
+      return;
+    }
+    loginError('');
+    try {
+      $('#realm-list-user').textContent = api.username ? `${api.username}` : '';
+      enterLoggedInChrome();
+      await enterRealmFlow();
+    } catch (err) {
+      if (isAuthError(err)) {
+        clearCrypticSession();
+        api.clearSession();
+        enterLoggedOutChrome();
+      }
+      show('#login-panel');
+      loginError(userFacingApiError(err));
+    }
+  };
 
   const goToLoggedInPlay = () => {
     void enterRealmFlow().catch((err) => {
