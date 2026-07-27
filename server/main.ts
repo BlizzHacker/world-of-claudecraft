@@ -3124,6 +3124,12 @@ export function routeHttpRequest(req: http.IncomingMessage, res: http.ServerResp
   else if (req.method === 'GET' && path.startsWith('/c/')) void handleProfilePage(req, res);
   else if (req.method === 'GET' && path === '/sitemap-characters.xml')
     void handleCharacterSitemap(req, res);
+  // Realm/forged asset stores. Both self-guard on their URL prefix and return
+  // false when they do not apply, so they cannot shadow a route above. Restored
+  // after the call site was dropped (see cbb388375) — without these the whole
+  // /cr-realms/* store 404s and every realm body silently fails to render.
+  else if (handleForgedStatic(req, res)) return;
+  else if (handleCrRealmsStatic(req, res)) return;
   else serveStatic(req, res);
 }
 

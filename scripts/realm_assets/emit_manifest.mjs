@@ -74,7 +74,13 @@ for (const realm of realms.sort()) {
     const key = f.replace(/\.glb$/, '');
     if (rejects.has(key)) continue;
     const meta = byKey.get(key);
-    const name = meta?.name ?? key;
+    // Emit ONLY bodies this pipeline produced. Reading the store (which is what
+    // makes the url check race-free) also exposes the hand-curated GLBs that
+    // manifest.ts already registers — e.g. the single-take Meshy bodies whose only
+    // clip is `Armature|Unreal Take|baselayer`. Handing those the KayKit clip
+    // vocabulary would name clips they do not contain, so nothing would animate.
+    if (!meta || !key.startsWith('realm_')) continue;
+    const name = meta.name ?? key;
     const armed = ARMED.test(name);
     kept.push({ key, realm, name, armed, attacks: attacksFor(name), realms: meta?.realms ?? [realm] });
   }
