@@ -123,8 +123,20 @@ function nameOf(file) {
   return extra ? `${base} ${extra}` : base;
 }
 
+// Anatomical fragments and inert objects reject UNCONDITIONALLY — humanoid evidence
+// must NOT rescue them. Making humanoid evidence win (which was right for "warrior
+// with a sword") re-admitted "A three-fingered ALIEN HAND with tapered tips",
+// because 'alien' is a humanoid word. A severed hand is not a character no matter
+// what species it belongs to.
+const ALWAYS_REJECT = [
+  /\b(hands?|foot|feet|fingers?|palm|fist|forearms?|eyeballs?|tongue)\b/,
+  /\b(throne|pedestal|plinth|podium|canister|jar|vial|urn|chalice|goblet|altar)\b/,
+  /\b(bust|relief|sculpture|statuette|figurine stand|display stand|diorama)\b/,
+];
+
 function classify(pretty) {
   const s = pretty.toLowerCase();
+  if (ALWAYS_REJECT.some((re) => re.test(s))) return null;
   const isHumanoid = HUMANOID.some((k) => s.includes(k));
   // Positive humanoid evidence BEATS prop evidence. These are prose prompts, so
   // "warrior with a sword" and "orc in rusted armor holding an axe" both trip the
@@ -163,7 +175,7 @@ function classify(pretty) {
 const files = readdirSync(SRC).filter((f) => f.endsWith('.glb'));
 const entries = [];
 const counts = {};
-const skipped = { nonHumanoid: 0, unmatched: 0, byCategory: 0 };
+const skipped = { nonHumanoid: 0, unmatched: 0, byCategory: 0, weaponOnly: 0 };
 
 for (const f of files) {
   const cats = categoriesOf(f);
@@ -171,6 +183,12 @@ for (const f of files) {
   // 'Characters' present does NOT rescue an ArtAbstract piece — the two worst
   // dominion busts carried both.
   if (cats.some((c) => REJECT_CATEGORIES.has(c))) { skipped.byCategory++; continue; }
+  // A WeaponsMilitary asset with no Characters tag is the weapon itself, not
+  // someone holding one — the spiked skull mace that reached the infernal roster.
+  if (cats.includes('WeaponsMilitary') && !cats.includes('Characters')) {
+    skipped.weaponOnly++;
+    continue;
+  }
   const pretty = nameOf(f);
   if (!pretty) { skipped.unmatched++; continue; }
   const c = classify(pretty);
