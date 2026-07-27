@@ -6,7 +6,10 @@ import type { Entity, PlayerClass } from '../src/sim/types';
 
 // Vitest default (5 s) is too tight for the 240 s simulated window under CI's
 // parallel load (each case runs ~6-7 s there). Match vale_cup_match.test.ts idiom.
-vi.setConfig({ testTimeout: 30000 });
+// Raised for the v0.30.0 merge: the world now carries BOTH parents content,
+// so each tick walks more entities than either parent alone. The loops here
+// are bounded - this is more work, not a hang.
+vi.setConfig({ testTimeout: 60000 });
 
 // Tank crit immunity: creatures cannot critically strike a committed tank.
 // Committed means Protection-spec warrior, Protection-spec paladin, or a

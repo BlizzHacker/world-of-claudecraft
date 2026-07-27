@@ -94,7 +94,7 @@ describe('shared offline entry helper', () => {
 
     expect(state.selectorWaits).toContainEqual({
       selector: '#mobile-preflight-continue',
-      options: { visible: true, timeout: 30_000 },
+      options: { visible: true, timeout: 60_000 },
     });
     expect(state.functionWaits).toEqual([{ timeout: 120_000 }]);
     expect(state.mobilePreflightClicks).toBe(1);

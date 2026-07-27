@@ -44,7 +44,7 @@ const LETTER_ID = 'guild_trend_weaponcrafting_armorcrafting';
 // then flies the standard 90 second NPC delivery delay (the professions_trend
 // suite mirrors the same literal). 95 sim-seconds covers both with margin.
 const DELIVERY_WINDOW_TICKS = 95 * 20;
-const ONLINE_SUITE_TIMEOUT_MS = 40_000;
+const ONLINE_SUITE_TIMEOUT_MS = 60_000;
 
 function fakeWs(): { sent: { t: string; list?: SimEvent[]; [k: string]: unknown }[]; ws: unknown } {
   const sent: { t: string; list?: SimEvent[] }[] = [];

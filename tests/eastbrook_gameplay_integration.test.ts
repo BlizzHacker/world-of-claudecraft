@@ -360,7 +360,10 @@ describe('Eastbrook authored gameplay data integration', () => {
       facing: 1.171280832795522,
       dynamic: true,
     });
-    expect(FURY_ENTITY_ID).toBe(1_000_000_001);
+    // Moved from 1_000_000_001: that is DERBY_MARSHAL_ID (Race Marshal Pip), and
+    // the fork reserves 1_000_000_000..003 for its venue NPCs. With FURY at 001 it
+    // spawned first and Pip never reached the Thornwheel paddock gate.
+    expect(FURY_ENTITY_ID).toBe(1_000_000_004);
 
     const npcsWithoutFury = { ...BUILTIN_WORLD.npcs };
     delete npcsWithoutFury[FURY_NPC_ID];
@@ -389,7 +392,7 @@ describe('Eastbrook authored gameplay data integration', () => {
       facing: fury.facing,
       prevFacing: fury.prevFacing,
     }).toEqual({
-      id: 1_000_000_001,
+      id: 1_000_000_004,
       kind: 'npc',
       templateId: 'fury',
       x: -22.5,
@@ -839,7 +842,7 @@ describe('Eastbrook runtime collision, spawn, and services', () => {
   });
 
   it('keeps the fixed-seed world projection stable through wandering and respawn', {
-    timeout: 30000,
+    timeout: 60000,
   }, () => {
     const stabilitySeed = 4_242;
     const legacyWorld = {

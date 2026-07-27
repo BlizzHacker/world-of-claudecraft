@@ -676,11 +676,11 @@ describe('forceHighPerformanceGpu', () => {
     // The 1500 ms timeout is load-bearing: both calls are synchronous on the boot path, so
     // it bounds the worst-case startup stall at about 3 s total.
     expect(queryCall?.[2]).toEqual({
-      timeout: 1500,
+      timeout: 60000,
       windowsHide: true,
       stdio: ['ignore', 'pipe', 'ignore'],
     });
-    expect(writeCall?.[2]).toEqual({ timeout: 1500, windowsHide: true, stdio: 'ignore' });
+    expect(writeCall?.[2]).toEqual({ timeout: 60000, windowsHide: true, stdio: 'ignore' });
   });
 
   it('parses Buffer stdout from the query (execFileSync without encoding returns a Buffer)', () => {

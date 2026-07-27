@@ -98,7 +98,7 @@ describe('unwalkable slope movement gates', () => {
     expect(PLAYER_MAX_CLIMB_SLOPE).toBe(CLIMB_LIMIT);
   });
 
-  it('cannot climb the rim wall by strafing diagonally (switchback)', { timeout: 30000 }, () => {
+  it('cannot climb the rim wall by strafing diagonally (switchback)', { timeout: 60000 }, () => {
     const sim = makeSim();
     const { z, xStart, xCrest } = findWestRimApproach(SEED);
     teleport(sim, xStart, z);
@@ -116,7 +116,7 @@ describe('unwalkable slope movement gates', () => {
     }
   });
 
-  it('cannot climb the rim wall by spamming jump into it', { timeout: 30000 }, () => {
+  it('cannot climb the rim wall by spamming jump into it', { timeout: 60000 }, () => {
     const sim = makeSim();
     const { z, xStart, xCrest } = findWestRimApproach(SEED);
     teleport(sim, xStart, z);

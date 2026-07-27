@@ -166,7 +166,7 @@ describe('healthcheck probe behavior (executed)', () => {
       `http://127.0.0.1:${port}/livez`,
     );
     return new Promise((resolve) => {
-      const child = spawn(process.execPath, ['-e', code], { stdio: 'ignore', timeout: 8_000 });
+      const child = spawn(process.execPath, ['-e', code], { stdio: 'ignore', timeout: 60_000 });
       child.on('close', (exitCode) => resolve(exitCode));
     });
   }

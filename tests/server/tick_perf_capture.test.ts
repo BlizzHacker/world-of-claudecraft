@@ -439,7 +439,7 @@ describe('tick perf capture lifecycle', () => {
   // default when the host is under load; the happy path completes in well under a
   // second.
   it('fills the capture accumulators through the real loop and re-zeroes on a fresh capture', {
-    timeout: 20_000,
+    timeout: 60_000,
   }, async () => {
     // Unlike runCaptureWindow (which drives sim.tick() directly), this drives the
     // REAL GameServer interval loop, pinning the wire the other tests bypass: after
@@ -486,7 +486,7 @@ describe('tick perf capture lifecycle', () => {
             .mobScanTickStats;
           expect(stats.aggroVisitsTotal).toBeGreaterThanOrEqual(3);
         },
-        { timeout: 10_000, interval: 25 },
+        { timeout: 60_000, interval: 25 },
       );
     } finally {
       server.stop();

@@ -195,7 +195,7 @@ describe('main /api characterization: leaderboard payload shapes (empty cache)',
   // nothing answers on rejects fast, but a contributor whose local dev Postgres
   // happens to be reachable on that same port pays a real query round trip;
   // give these three real headroom above vitest's 5s default.
-  const LEADERBOARD_TEST_TIMEOUT_MS = 30_000;
+  const LEADERBOARD_TEST_TIMEOUT_MS = 60_000;
 
   it(
     'GET /api/leaderboard default paged board',

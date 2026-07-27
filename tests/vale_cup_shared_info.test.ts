@@ -16,7 +16,10 @@ import { addAt, makeWorld, startBout } from './vale_cup_util';
 
 // startBout runs a real bot bout up to kickoff (dozens of deterministic ticks);
 // give the file the headroom the sibling Vale Cup suites use.
-vi.setConfig({ testTimeout: 30000 });
+// Raised for the v0.30.0 merge: the world now carries BOTH parents content,
+// so each tick walks more entities than either parent alone. The loops here
+// are bounded - this is more work, not a hang.
+vi.setConfig({ testTimeout: 60000 });
 
 // Build ONE sim state that simultaneously carries every viewer class:
 //  - a, b: the two fighters seated in the live rated Sowfield match

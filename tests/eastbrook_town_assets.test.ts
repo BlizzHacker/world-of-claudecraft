@@ -270,7 +270,7 @@ const SURFACE_ATLAS_SEMANTICS = [
 
 describe('Eastbrook shared surface atlas', () => {
   it('derives a fresh high-key grayscale multiplier independently from all 16 source cells', {
-    timeout: 30000,
+    timeout: 60000,
   }, async () => {
     const sourcePath = path.join(MATERIALS_ROOT, 'eastbrook-surface-atlas-source.png');
     const shippingPath = path.join(REPO_ROOT, 'public/textures/eastbrook_surface_atlas.webp');
@@ -519,7 +519,7 @@ describe('Eastbrook town shipping GLBs', () => {
   });
 
   it('pins structure, dimensions, metadata, budgets, and exact optimized bytes', {
-    timeout: 30000,
+    timeout: 60000,
   }, async () => {
     await MeshoptDecoder.ready;
     const io = new NodeIO()

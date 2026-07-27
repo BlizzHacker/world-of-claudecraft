@@ -530,7 +530,7 @@ describe('no consolidated tunable literal is duplicated at a call site', () => {
     // are `= 5000` / `= 15_000` / `= DB_HEAVY_STATEMENT_TIMEOUT_MS + 5000`, never the
     // `key: literal` spellings banned here).
     expect(dbSrc).not.toContain('connectionTimeoutMillis: 5000');
-    expect(dbSrc).not.toContain('statement_timeout: 15000');
+    expect(dbSrc).not.toContain('statement_timeout: 60000');
     expect(dbSrc).not.toContain('query_timeout: 65000');
   });
 

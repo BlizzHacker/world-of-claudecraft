@@ -52,7 +52,7 @@ const FORGE_MASTER = 'forgemistress_darva';
 // letter then flies the 90 second NPC delivery delay (the guild_letter_online
 // literal). 95 sim-seconds covers both with margin.
 const DELIVERY_WINDOW_TICKS = 95 * 20;
-const ONLINE_SUITE_TIMEOUT_MS = 40_000;
+const ONLINE_SUITE_TIMEOUT_MS = 60_000;
 
 type SentMsg = { t: string; list?: SimEvent[]; self?: { cprof?: CraftingIdentityView } };
 

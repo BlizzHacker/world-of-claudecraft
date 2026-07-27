@@ -11,7 +11,7 @@ function runBuildAssets(args: string[]) {
   return spawnSync(process.execPath, [buildAssetsPath, ...args], {
     cwd: repoDir,
     encoding: 'utf8',
-    timeout: 20_000,
+    timeout: 60_000,
   });
 }
 

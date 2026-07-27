@@ -259,7 +259,7 @@ describeDb('play session retention fold (real Postgres)', () => {
   }
 
   it('folds doomed sessions without changing any lifetime playtime reader', {
-    timeout: 20_000,
+    timeout: 60_000,
   }, async () => {
     const db = await scopedClient();
     let a1: number;
@@ -436,7 +436,7 @@ describeDb('play session retention fold (real Postgres)', () => {
   });
 
   it('protects the first-session referent and the facts it anchors', {
-    timeout: 20_000,
+    timeout: 60_000,
   }, async () => {
     const db = await scopedClient();
     let accountId: number;
@@ -548,7 +548,7 @@ describeDb('play session retention fold (real Postgres)', () => {
   });
 
   it('re-running the fold with nothing newly doomed changes nothing', {
-    timeout: 20_000,
+    timeout: 60_000,
   }, async () => {
     const db = await scopedClient();
     let accountId: number;
@@ -612,7 +612,7 @@ describeDb('play session retention fold (real Postgres)', () => {
   });
 
   it('keeps the ban-evasion lookback alive across the fold horizon', {
-    timeout: 20_000,
+    timeout: 60_000,
   }, async () => {
     const db = await scopedClient();
     let accountId: number;

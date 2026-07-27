@@ -388,8 +388,14 @@ export default defineConfig({
   },
   test: {
     // Deterministic sim scenarios run thousands of ticks; under full-suite load on
-    // Windows they can exceed vitest's 5s default without being stuck.
-    testTimeout: 30000,
+    // Windows they can exceed vitest's 5s default without being stuck. The v0.30.0
+    // merge raised the floor again: the world now carries BOTH parents' content, so
+    // every tick walks more entities than either parent alone (the parity goldens
+    // show the player's entity id moving 415 -> 429). The heaviest case is
+    // tank_crit_immunity, an upstream test calibrated on upstream's lighter world
+    // that simulates 240s (4800 ticks) six times. Its loops are bounded - this is
+    // more work, not a hang - so the ceiling moves rather than disappears.
+    testTimeout: 60000,
     // server/db.ts (and every module importing it) requires DATABASE_URL at module
     // load. Locally db.ts fills it from .env; a CI checkout has no .env, so default
     // a dummy here to keep the suite runnable in plain Node. Unit tests never open

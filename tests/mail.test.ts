@@ -339,7 +339,7 @@ describe('unread index equivalence (finding 4)', () => {
   // after EVERY tick. That is a lot of synchronous work for vitest's 5s default
   // under worker-pool CPU contention, though it is sub-second in isolation; give
   // it real headroom instead of flaking.
-  const UNREAD_INDEX_TEST_TIMEOUT_MS = 20_000;
+  const UNREAD_INDEX_TEST_TIMEOUT_MS = 60_000;
 
   it(
     'matches the linear scan across sends, deliveries, reads, takes, deletes, renames and expiries',

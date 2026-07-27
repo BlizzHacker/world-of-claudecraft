@@ -740,7 +740,7 @@ describe('delve interactables and affixes', () => {
     }
     // 200 full Sim constructions: bump the timeout so it stays green under the
     // parallel-worker load of the whole suite (it runs well under this alone).
-  }, 15000);
+  }, 60000);
 
   it('Deacon Varric enrages on Heroic but not on Normal (PRD §7.4)', () => {
     for (const tier of ['normal', 'heroic'] as const) {

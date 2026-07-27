@@ -29,7 +29,10 @@ import {
 // vitest default is too tight for them under CI's parallel load (they complete
 // in well under a second locally). Give the file the headroom the other heavy
 // sim suites use (climb_slope, sim, dungeons).
-vi.setConfig({ testTimeout: 30000 });
+// Raised for the v0.30.0 merge: the world now carries BOTH parents content,
+// so each tick walks more entities than either parent alone. The loops here
+// are bounded - this is more work, not a hang.
+vi.setConfig({ testTimeout: 60000 });
 
 describe('Vale Cup: parimutuel betting', () => {
   // Stage a bot showcase in the briefing window, then seat two spectators at the
