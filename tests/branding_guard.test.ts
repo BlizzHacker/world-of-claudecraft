@@ -54,6 +54,29 @@ describe('Cryptic Realm branding guardrails', () => {
     expect(failures).toEqual([]);
   });
 
+  // The merge silently repointed the Donate button at upstream's Ko-fi and the
+  // Discord fallback at upstream's server. Neither was caught: the rules above
+  // only cover the OLD fork Discord and the generated bundles. These pin the two
+  // constants that decide where a player's money and community clicks actually go.
+  it('routes donate and Discord to Cryptic Realm, never upstream', () => {
+    const mainTs = readRel('src/main.ts');
+    const discordStatus = readRel('src/ui/discord_status.ts');
+    for (const [rel, text] of [
+      ['src/main.ts', mainTs],
+      ['src/ui/discord_status.ts', discordStatus],
+    ] as const) {
+      expect(text, `${rel} must not route to upstream`).not.toContain('ko-fi.com/worldofclaudecraft');
+      expect(text, `${rel} must not route to upstream`).not.toContain(
+        'discord.com/invite/worldofclaudecraft',
+      );
+    }
+    expect(mainTs).toContain("const DONATE_URL = '/links.html#btn-tip';");
+    expect(mainTs).toContain("const DISCORD_INVITE_URL = 'https://discord.gg/Zdj3JGrx';");
+    expect(discordStatus).toContain(
+      "export const DEFAULT_DISCORD_INVITE_URL = 'https://discord.gg/Zdj3JGrx';",
+    );
+  });
+
   it('keeps default generated locale bundles on Cryptic Realm and $CR branding', () => {
     const forbidden = [
       'World of ClaudeCraft',

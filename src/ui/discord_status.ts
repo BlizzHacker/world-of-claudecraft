@@ -75,7 +75,10 @@ const NO_PRESENCE: DiscordPresenceState = {
 // The public, static invite: used until the server-fetched inviteUrl (below)
 // resolves, and whenever it never does (offline entry, or a click that races
 // the fetch). A community link is meant to fail open, never open blank.
-export const DEFAULT_DISCORD_INVITE_URL = 'https://discord.com/invite/worldofclaudecraft';
+// This build is Cryptic Realm, so the fail-open default is the fork's invite
+// (the same one CR_SOCIALS carries in sim/realms/social_links.ts). Upstream
+// shipped its own server here.
+export const DEFAULT_DISCORD_INVITE_URL = 'https://discord.gg/Zdj3JGrx';
 
 let enabled = false;
 let status: DiscordAccountStatus = UNLINKED;

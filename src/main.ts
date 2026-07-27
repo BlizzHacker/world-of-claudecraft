@@ -8041,7 +8041,13 @@ const DISCORD_BUILD_ENABLED = String(import.meta.env.VITE_DISCORD_DISABLED ?? ''
 // falls back to DEFAULT_DISCORD_INVITE_URL (discord_status.ts) when the
 // server-fed value is not known yet (logged out, offline), so every caller
 // gets the fail-open behavior for free.
-const DONATE_URL = 'https://ko-fi.com/worldofclaudecraft';
+// The fork's OWN tip page ($CR, not Ko-fi): index.html ships 'Tip $CR' and the
+// $CR contract address, and links.html#btn-tip is where that flow lives.
+const DONATE_URL = '/links.html#btn-tip';
+// Mirrors the hardcoded invite on the shells' community links and is the
+// fallback when the server-fed discordInviteUrl() is not known yet (logged
+// out, offline).
+const DISCORD_INVITE_URL = 'https://discord.gg/Zdj3JGrx';
 const DISCORD_ONBOARD_KEY = 'woc_discord_onboard';
 let discordPopup: Window | null = null;
 
@@ -8416,7 +8422,7 @@ function openDiscordEntry(): void {
     toggleDiscordPanel(true);
     return;
   }
-  window.open(discordInviteUrl(), '_blank', 'noopener,noreferrer');
+  window.open(discordInviteUrl() || DISCORD_INVITE_URL, '_blank', 'noopener,noreferrer');
 }
 
 function wireDiscordCtaBanner(): void {
