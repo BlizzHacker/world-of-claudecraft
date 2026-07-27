@@ -586,8 +586,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_prof_hobby_switch.text':
     'Hovedfag kræver et løfte. En hobby spørger kun, hvor din nysgerrighed vanker, {playerName}. Saml et par urter og beslut dig for, hvilket håndværk modsat dine hovedfag du vil udforske.',
   'entities.quests.q_prof_hobby_switch.title': 'En Anden Tidsfordriv',
-  'entities.quests.q_prof_intro.completion':
-    'Kan du se? Malm i din taske og hård hud på dine hænder. Fortsæt med minedrift, skovhugst og urtesamling, mens du rejser ad vejene. Når du er tilbage i byen, så husk Byfokus-tavlen ved markedet og arbejdsbænken i nærheden. Der er et hæderligt levebrød i det alt sammen, hvis du ønsker det.',
+  'entities.quests.q_prof_intro.completion': 'Se? Malm indsamlet og hård hud på hænderne. Bliv ved med minedriften, skovhugsten og urtesamlingen, når du rejser vejene, og når du er tilbage i byen, hold øje med Byfokus-opslagstavlen ved markedet og den nærliggende håndværksbænk. Der er en god handel at finde i alt dette, hvis du vil have det.',
   'entities.quests.q_prof_intro.objectives.0.label': 'Malmklump',
   'entities.quests.q_prof_intro.text':
     'Alle i Østbæk har et håndværk ved siden af sværdet, {playerName}. Der ligger malmårer rundt om byen, så sving en hakke og bring mig 5 klumper. Bryd dem selv, vel at mærke; jeg kan kende forskel.',
@@ -2613,7 +2612,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.barkskin.name': 'Egehud',
   'entities.abilities.bash.description': 'Bedøver målet i 2 sek. Kun i Bruin-form.',
   'entities.abilities.bash.name': 'Chokslag',
-  'entities.abilities.battle_shout.description': 'Øger din angrebskraft med {buff} i 2 min.',
+  'entities.abilities.battle_shout.description': 'Et råb, der øger angrebskraften hos alle gruppemedlemmer med {buff}% i 30 min.',
   'entities.abilities.battle_shout.name': 'Jernbrøl',
   'entities.abilities.bear_charge.description':
     'Storm mod en fjende, generér 9 raseri og bedøv den i 1 sek. 8-25 m rækkevidde. Kun i Bruin-form.',
@@ -2688,8 +2687,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.demoralizing_roar.description':
     'Demoraliserer nærliggende fjender og sænker deres angrebsstyrke med 20 i 20 sek. Kun i Bruin-form.',
   'entities.abilities.demoralizing_roar.name': 'Fejt Brøl',
-  'entities.abilities.demoralizing_shout.description':
-    'Udstøder et frygtindgydende råb, der sænker angrebsstyrken hos alle nærliggende fjender med {buff} i 30 sek.',
+  'entities.abilities.demoralizing_shout.description': 'Udstøder et frygtindgydende råb, der reducerer skaden, som alle nærliggende fjender forvolder, med {buff}% i 20 sek.',
   'entities.abilities.demoralizing_shout.name': 'Rædselshyl',
   'entities.abilities.devotion_aura.description': 'Øger din rustning med {buff} i 30 min.',
   'entities.abilities.devotion_aura.name': 'Standhaftig Aura',

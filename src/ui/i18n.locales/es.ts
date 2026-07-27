@@ -538,8 +538,7 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_prof_hobby_switch.text':
     'Las especializaciones principales exigen un voto. Una afición solo pregunta hacia dónde vaga tu curiosidad, {playerName}. Recoge algunas hierbas y decide qué oficio, contrario a tus especializaciones principales, quieres desarrollar.',
   'entities.quests.q_prof_hobby_switch.title': 'Un Pasatiempo Diferente',
-  'entities.quests.q_prof_intro.completion':
-    '¿Lo ves? Mineral en la mochila y callos en las manos. Sigue minando, talando y recogiendo hierbas mientras recorres los caminos. Cuando vuelvas al pueblo, no pierdas de vista el tablón de Enfoque del pueblo junto al mercado ni el banco de artesanía cercano. En esos oficios te espera una vida honrada, si la quieres.',
+  'entities.quests.q_prof_intro.completion': '¿Lo ves? Mineral recogido y callos en las manos. Sigue con la minería, la tala y la herboristería mientras recorres los caminos, y cuando estés de vuelta en el pueblo, fíjate en el Tablón de Enfoque junto al mercado y el banco de artesanía cercano. Hay un trato justo en cada parte, si lo quieres.',
   'entities.quests.q_prof_intro.objectives.0.label': 'Trozo de mineral',
   'entities.quests.q_prof_intro.text':
     'Cada habitante de Eastbrook ejerce un oficio además de la espada, {playerName}. Hay vetas de mineral dispersas por el pueblo, así que toma un pico y tráeme 5 trozos. Extráelos tú mismo, ¿eh? Sabré si no lo haces.',
@@ -3801,13 +3800,11 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.heroic_strike.description':
     'Un ataque poderoso que aumenta el daño cuerpo a cuerpo en {damage}. Se activa en tu siguiente golpe.',
   'entities.abilities.battle_shout.name': 'Bramido de Hierro',
-  'entities.abilities.battle_shout.description':
-    'Aumenta tu poder de ataque en {buff} durante 2 min.',
+  'entities.abilities.battle_shout.description': 'Un grito que aumenta el poder de ataque de todos los miembros del grupo un {buff}% durante 30 min.',
   'entities.abilities.commanding_shout.name': 'Grito Alentador',
   'entities.abilities.commanding_shout.description': 'Aumenta tu Aguante en {buff} durante 2 min.',
   'entities.abilities.demoralizing_shout.name': 'Aullido Pavoroso',
-  'entities.abilities.demoralizing_shout.description':
-    'Lanza un grito aterrador que reduce el poder de ataque de todos los enemigos cercanos en {buff} durante 30 s.',
+  'entities.abilities.demoralizing_shout.description': 'Lanza un grito aterrador que reduce un {buff}% el daño infligido por todos los enemigos cercanos durante 20 s.',
   'entities.abilities.charge.name': 'Arremetida',
   'entities.abilities.charge.description':
     'Carga contra un enemigo, genera 9 de ira y lo aturde durante 1 s. Alcance de 8-25 m.',

@@ -558,8 +558,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_prof_hobby_switch.text':
     "Les majeures exigent un serment. Un passe-temps ne demande qu'où votre curiosité vous mène, {playerName}. Récoltez quelques plantes et décidez quel métier opposé à vos majeures vous souhaitez poursuivre.",
   'entities.quests.q_prof_hobby_switch.title': 'Un autre passe-temps',
-  'entities.quests.q_prof_intro.completion':
-    'Vous voyez ? Du minerai dans votre sac et des cals aux mains. Continuez à miner, à couper du bois et à cueillir des plantes sur les routes. De retour en ville, pensez au tableau des Priorités de la ville près du marché et à l’établi d’artisanat juste à côté. Tout cela peut vous offrir un gagne-pain honorable, si le cœur vous en dit.',
+  'entities.quests.q_prof_intro.completion': "Vous voyez ? Du minerai récolté et des callosités sur les mains. Continuez à miner, couper du bois et cueillir des plantes en parcourant les routes, et quand vous serez de retour en ville, consultez le panneau Focus du bourg près du marché et l'établi à proximité. Un bon échange vous y attend, si vous le souhaitez.",
   'entities.quests.q_prof_intro.objectives.0.label': 'Morceau de minerai',
   'entities.quests.q_prof_intro.text':
     'À Eastbrook, tout le monde exerce un métier en plus de manier l’épée, {playerName}. Des filons de minerai sont dispersés autour de la ville, alors prenez une pioche et rapportez-moi 5 morceaux. Extrayez-les vous-même, attention, je saurai faire la différence.',
@@ -4370,14 +4369,12 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.heroic_strike.description':
     "Une attaque puissante qui augmente les dégâts de mêlée de {damage}. S'active lors de votre prochaine frappe.",
   'entities.abilities.battle_shout.name': 'Beuglement de fer',
-  'entities.abilities.battle_shout.description':
-    "Augmente votre puissance d'attaque de {buff} pendant 2 min.",
+  'entities.abilities.battle_shout.description': "Un cri qui augmente de {buff}% la puissance d'attaque de tous les membres du groupe pendant 30 min.",
   'entities.abilities.commanding_shout.name': 'Cri fortifiant',
   'entities.abilities.commanding_shout.description':
     'Augmente votre Endurance de {buff} pendant 2 min.',
   'entities.abilities.demoralizing_shout.name': 'Direhowl',
-  'entities.abilities.demoralizing_shout.description':
-    "Pousse un cri terrifiant qui réduit la puissance d'attaque de tous les ennemis proches de {buff} pendant 30 s.",
+  'entities.abilities.demoralizing_shout.description': 'Pousse un cri terrifiant qui réduit de {buff}% les dégâts infligés par tous les ennemis proches pendant 20 s.',
   'entities.abilities.charge.name': 'Ruée',
   'entities.abilities.charge.description':
     "Charge un ennemi, génère 9 rage et l'étourdit pendant 1 s. Portée de 8-25 m.",

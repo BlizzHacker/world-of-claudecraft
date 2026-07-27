@@ -15,6 +15,7 @@ import { describe, expect, it, vi } from 'vitest';
 // Mock the db layer so no Postgres is needed (the snapshots.test.ts idiom);
 // hoisted, so it must stay above the server/game import.
 vi.mock('../server/db', () => ({
+  saveCharacterAndMarketState: vi.fn(async () => {}),
   pool: { query: vi.fn(async () => ({ rows: [] })) },
   saveCharacterState: vi.fn(async () => {}),
   openPlaySession: vi.fn(async () => 1),

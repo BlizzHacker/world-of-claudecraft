@@ -541,8 +541,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_prof_hobby_switch.text':
     'Bidang utama menuntut sumpah. Hobi hanya bertanya ke mana rasa ingin tahumu mengembara, {playerName}. Kumpulkan beberapa herba dan putuskan kerajinan mana yang berlawanan dengan bidang utamamu yang ingin kamu tekuni.',
   'entities.quests.q_prof_hobby_switch.title': 'Hobi yang Berbeda',
-  'entities.quests.q_prof_intro.completion':
-    'Lihat? Bijih di tasmu dan kapalan di tanganmu. Teruslah menambang, menebang, dan memetik herba selama menjelajahi jalanan. Saat kembali ke kota, perhatikan papan Fokus Kota di dekat pasar dan bangku kerajinan di sebelahnya. Semua itu bisa menjadi mata pencaharian yang layak, jika kamu menginginkannya.',
+  'entities.quests.q_prof_intro.completion': 'Sudah, kan? Bijih terkumpul dan tanganmu sudah kapalan. Terus galilah, tebang, dan petik herba saat kamu menjelajah jalan-jalan, dan ketika kamu kembali ke kota, perhatikan papan Fokus Kota di dekat pasar dan bangku kerajinan di sana. Ada perdagangan adil yang menanti di semuanya, jika kamu mau.',
   'entities.quests.q_prof_intro.objectives.0.label': 'Bongkahan Bijih',
   'entities.quests.q_prof_intro.text':
     'Setiap orang di Eastbrook menekuni pekerjaan selain mengayunkan pedang, {playerName}. Urat bijih tersebar di sekitar kota, jadi ayunkan beliung dan bawakan aku 5 bongkahan. Tambang sendiri, ingat, aku tahu bedanya.',
@@ -2835,8 +2834,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.bash.description':
     'Menyetrum target selama 2 detik. Hanya dalam Wujud Bruin.',
   'entities.abilities.bash.name': 'Guncangan',
-  'entities.abilities.battle_shout.description':
-    'Meningkatkan daya serangmu sebesar {buff} selama 2 menit.',
+  'entities.abilities.battle_shout.description': 'Teriakan yang meningkatkan daya serang semua anggota kelompok sebesar {buff}% selama 30 menit.',
   'entities.abilities.battle_shout.name': 'Raungan Besi',
   'entities.abilities.bear_charge.description':
     'Menerjang musuh, menghasilkan 9 amarah dan menyetrumnya selama 1 detik. Jangkauan 8-25 yard. Hanya dalam Wujud Bruin.',
@@ -2912,8 +2910,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.demoralizing_roar.description':
     'Melemahkan semangat musuh di sekitar, mengurangi kekuatan serang mereka sebesar 20 selama 20 detik. Hanya dalam Wujud Bruin.',
   'entities.abilities.demoralizing_roar.name': 'Auman Pengecut',
-  'entities.abilities.demoralizing_shout.description':
-    'Melepaskan pekikan menyeramkan, mengurangi kekuatan serang semua musuh di sekitar sebesar {buff} selama 30 detik.',
+  'entities.abilities.demoralizing_shout.description': 'Melepaskan pekikan mengerikan yang mengurangi kerusakan yang ditimbulkan semua musuh di sekitar sebesar {buff}% selama 20 detik.',
   'entities.abilities.demoralizing_shout.name': 'Direhowl',
   'entities.abilities.devotion_aura.description':
     'Meningkatkan zirahmu sebesar {buff} selama 30 menit.',

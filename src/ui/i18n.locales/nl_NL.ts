@@ -592,8 +592,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_prof_hobby_switch.text':
     'Hoofdambachten vragen een gelofte. Een liefhebberij vraagt alleen waar je nieuwsgierigheid ronddwaalt, {playerName}. Pluk een paar kruiden en beslis welk ambacht tegenover je hoofdambachten je wilt beoefenen.',
   'entities.quests.q_prof_hobby_switch.title': 'Een Andere Tijdverdrijf',
-  'entities.quests.q_prof_intro.completion':
-    'Zie je? Erts in je tas en eelt op je handen. Blijf mijnen, houthakken en kruiden plukken terwijl je over de wegen reist. Wanneer je terug in de stad bent, kijk dan naar het bord met de Stadsfocus bij de markt en de werkbank ernaast. Er valt met alles een eerlijke boterham te verdienen, als je dat wilt.',
+  'entities.quests.q_prof_intro.completion': 'Zie je? Erts verzameld en eelt op je handen. Ga door met het mijnen, houtkappen en kruidenplukken terwijl je de wegen afloopt, en als je terug in de stad bent, let dan op het Stadsfocusbord bij de markt en de nabijgelegen knutselbank. Er zit een eerlijke handel in dit alles, als je dat wilt.',
   'entities.quests.q_prof_intro.objectives.0.label': 'Brok erts',
   'entities.quests.q_prof_intro.text':
     'Iedereen in Oostbeek beoefent naast het zwaard een ambacht, {playerName}. Er liggen ertsaders rond de stad, dus zwaai met een pikhouweel en breng me 5 brokken. Delf ze zelf, hoor; ik merk het verschil.',
@@ -2854,8 +2853,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.bash.description':
     'Verdooft het doelwit gedurende 2 sec. Alleen in Bruingedaante.',
   'entities.abilities.bash.name': 'Bedwelmen',
-  'entities.abilities.battle_shout.description':
-    'Verhoogt je aanvalskracht met {buff} gedurende 2 min.',
+  'entities.abilities.battle_shout.description': 'Een kreet die de aanvalskracht van alle groepsleden met {buff}% verhoogt gedurende 30 min.',
   'entities.abilities.battle_shout.name': 'IJzeren Gebrul',
   'entities.abilities.bear_charge.description':
     'Storm op een vijand af, genereer 9 woede en verdoof hem gedurende 1 sec. Bereik 8-25 m. Alleen in Bruingedaante.',
@@ -2931,8 +2929,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.demoralizing_roar.description':
     'Demoraliseert nabije vijanden en verlaagt hun aanvalskracht met 20 gedurende 20 sec. Alleen in Bruingedaante.',
   'entities.abilities.demoralizing_roar.name': 'Laf Gebrul',
-  'entities.abilities.demoralizing_shout.description':
-    'Slaakt een angstaanjagende kreet die de aanvalskracht van alle nabije vijanden met {buff} verlaagt gedurende 30 sec.',
+  'entities.abilities.demoralizing_shout.description': 'Slaakt een angstaanjagende kreet die de schade die alle nabije vijanden aanrichten met {buff}% verlaagt gedurende 20 sec.',
   'entities.abilities.demoralizing_shout.name': 'Grimmig Gehuil',
   'entities.abilities.devotion_aura.description':
     'Verhoogt je pantser met {buff} gedurende 30 min.',

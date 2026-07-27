@@ -15,6 +15,9 @@ const dbMock = vi.hoisted(() => {
   return { query };
 });
 vi.mock('../server/db', () => ({
+  loadAccountFlair: vi.fn(async () => ({ ai: false, streamer: false, links: {} })),
+  walletForAccount: vi.fn(async () => null),
+  saveCharacterAndMarketState: vi.fn(async () => {}),
   pool: { query: dbMock.query },
   saveCharacterState: vi.fn(async () => {}),
   openPlaySession: vi.fn(async () => 1),

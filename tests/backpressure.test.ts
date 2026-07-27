@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 // Mock the db layer so no Postgres is needed; the send/backpressure path is
 // under test, mirroring snapshots.test.ts.
 vi.mock('../server/db', () => ({
+  loadAccountFlair: vi.fn(async () => ({ ai: false, streamer: false, links: {} })),
   pool: { query: vi.fn(async () => ({ rows: [] })) },
   saveCharacterState: vi.fn(async () => {}),
   saveCharacterAndMarketState: vi.fn(async () => {}),

@@ -5,6 +5,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 // setCharacterHotbarLayout is the one this suite asserts on. The mock is hoisted
 // above the game import.
 vi.mock('../server/db', () => ({
+  loadAccountFlair: vi.fn(async () => ({ ai: false, streamer: false, links: {} })),
   pool: { query: vi.fn(async () => ({ rows: [] })) },
   saveCharacterState: vi.fn(async () => {}),
   saveCharacterAndMarketState: vi.fn(async () => {}),

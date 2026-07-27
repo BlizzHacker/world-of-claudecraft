@@ -3,6 +3,9 @@ process.env.DATABASE_URL ||= 'postgres://test:test@127.0.0.1:5433/wocc_claudium_
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('../../server/db', () => ({
+  loadAccountFlair: vi.fn(async () => ({ ai: false, streamer: false, links: {} })),
+  walletForAccount: vi.fn(async () => null),
+  saveCharacterAndMarketState: vi.fn(async () => {}),
   accountAndScopeForToken: vi.fn(),
   grantAccountWeaponSkins: vi.fn(async () => ({
     completedQuestIds: [],

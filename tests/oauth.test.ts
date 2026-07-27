@@ -8,6 +8,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 // authorize / revoke) handler live in server/oauth.ts, so the db mock has to
 // cover the functions BOTH suites exercise.
 vi.mock('../server/db', () => ({
+  loadAccountFlair: vi.fn(async () => ({ ai: false, streamer: false, links: {} })),
+  walletForAccount: vi.fn(async () => null),
+  saveCharacterAndMarketState: vi.fn(async () => {}),
   pool: { query: vi.fn(async () => ({ rows: [] })) },
   // Authentik OIDC handler (fork) surface:
   upsertOAuthAccount: vi.fn(),

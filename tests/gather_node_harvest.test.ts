@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 // suite at the bottom (the corpse_harvest_sim.test.ts idiom); the offline
 // suites above it never touch the server.
 vi.mock('../server/db', () => ({
+  saveCharacterAndMarketState: vi.fn(async () => {}),
   pool: { query: vi.fn(async () => ({ rows: [] })) },
   saveCharacterState: vi.fn(async () => {}),
   openPlaySession: vi.fn(async () => 1),

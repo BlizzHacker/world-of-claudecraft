@@ -4,6 +4,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 // block plus insertBankLedgerRow, so GameServer runs with no live DB and the
 // fire-and-forget ledger writer is a spy we can assert against.
 vi.mock('../server/db', () => ({
+  loadAccountFlair: vi.fn(async () => ({ ai: false, streamer: false, links: {} })),
+  saveCharacterAndMarketState: vi.fn(async () => {}),
   pool: { query: vi.fn(async () => ({ rows: [] })) },
   saveCharacterState: vi.fn(async () => {}),
   openPlaySession: vi.fn(async () => 1),

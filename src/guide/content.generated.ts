@@ -1676,7 +1676,21 @@ export const GUIDE_ZONES: GuideZoneInfo[] = [
       "Fallen Chapel",
       "Reliquary Hill",
       "Brightwood Glade",
-      "The Sowfield"
+      "The Sowfield",
+      "Eastbrook",
+      "Wolf Run",
+      "Boar Meadow",
+      "Mirror Lake",
+      "Sableweb",
+      "Copper Dig",
+      "Bandit Camp",
+      "Fallen Chapel",
+      "Reliquary Hill",
+      "Brightwood Glade",
+      "The Sowfield",
+      "Thornwheel Circuit",
+      "The Boarpit",
+      "Eastbrook Homes"
     ],
     "welcome": "Find Marshal Redbrook in town - he has work for you.",
     "families": [
@@ -1794,51 +1808,44 @@ export const GUIDE_WARLOCK_PETS: GuideWarlockPet[] = [
   {
     "id": "emberkin",
     "name": "Emberkin",
-    "model": "mob_demon",
-    "tint": "#ff7a2a",
-    "still": "/guide-stills/mob_demon__ff7a2a.webp"
+    "model": "hellmaw_lava_fiend_body",
+    "still": "/guide-stills/hellmaw_lava_fiend_body.webp"
   },
   {
     "id": "gloomshade",
     "name": "Gloomshade",
-    "model": "mob_demon",
-    "tint": "#3a3a6e",
-    "still": "/guide-stills/mob_demon__3a3a6e.webp"
+    "model": "hellmaw_acolyte_body",
+    "still": "/guide-stills/hellmaw_acolyte_body.webp"
   },
   {
     "id": "duskborn",
     "name": "Duskborn",
-    "model": "mob_demon",
-    "tint": "#c6469b",
-    "still": "/guide-stills/mob_demon__c6469b.webp"
+    "model": "hellmaw_sigilbound_body",
+    "still": "/guide-stills/hellmaw_sigilbound_body.webp"
   },
   {
     "id": "spellhound",
     "name": "Spellhound",
-    "model": "mob_demonalt",
-    "tint": "#4a7d4a",
-    "still": "/guide-stills/mob_demonalt__4a7d4a.webp"
+    "model": "realm_infernal_skullbeast",
+    "still": "/guide-stills/realm_infernal_skullbeast.webp"
   },
   {
     "id": "warfiend",
     "name": "Warfiend",
-    "model": "mob_demonalt",
-    "tint": "#6e5a2a",
-    "still": "/guide-stills/mob_demonalt__6e5a2a.webp"
+    "model": "realm_infernal_horned_demon",
+    "still": "/guide-stills/realm_infernal_horned_demon.webp"
   },
   {
     "id": "pyre_colossus",
     "name": "Pyre Colossus",
-    "model": "mob_demonalt",
-    "tint": "#d24a2a",
-    "still": "/guide-stills/mob_demonalt__d24a2a.webp"
+    "model": "realm_infernal_crimson_behemoth",
+    "still": "/guide-stills/realm_infernal_crimson_behemoth.webp"
   },
   {
     "id": "wraithborn",
     "name": "Wraithborn",
-    "model": "mob_demonalt",
-    "tint": "#7a3a8e",
-    "still": "/guide-stills/mob_demonalt__7a3a8e.webp"
+    "model": "hellmaw_spectre_body",
+    "still": "/guide-stills/hellmaw_spectre_body.webp"
   }
 ];
 
@@ -2021,9 +2028,8 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 5,
         "rare": false,
         "templateId": "vale_bandit",
-        "model": "mob_bandit",
-        "tint": "#6b3a32",
-        "still": "/guide-stills/mob_bandit__6b3a32.webp"
+        "model": "hellmaw_sigilbound_body",
+        "still": "/guide-stills/hellmaw_sigilbound_body.webp"
       },
       {
         "name": "Gravecaller Cultist",
@@ -2031,9 +2037,8 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 12,
         "rare": false,
         "templateId": "gravecaller_cultist",
-        "model": "mob_dark_caster",
-        "tint": "#6c3483",
-        "still": "/guide-stills/mob_dark_caster__6c3483.webp"
+        "model": "hellmaw_cursed_knight_body",
+        "still": "/guide-stills/hellmaw_cursed_knight_body.webp"
       },
       {
         "name": "Gravecaller Mender",
@@ -2041,9 +2046,8 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 12,
         "rare": false,
         "templateId": "gravecaller_mender",
-        "model": "mob_bandit",
-        "tint": "#6b3a32",
-        "still": "/guide-stills/mob_bandit__6b3a32.webp"
+        "model": "hellmaw_sigilbound_body",
+        "still": "/guide-stills/hellmaw_sigilbound_body.webp"
       },
       {
         "name": "Gravecaller Summoner",
@@ -2051,9 +2055,8 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 12,
         "rare": false,
         "templateId": "gravecaller_summoner",
-        "model": "mob_dark_caster",
-        "tint": "#884ea0",
-        "still": "/guide-stills/mob_dark_caster__884ea0.webp"
+        "model": "hellmaw_cursed_knight_body",
+        "still": "/guide-stills/hellmaw_cursed_knight_body.webp"
       },
       {
         "name": "Wyrmcult Zealot",
@@ -2061,9 +2064,8 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 19,
         "rare": false,
         "templateId": "wyrmcult_zealot",
-        "model": "mob_bandit",
-        "tint": "#6b3a32",
-        "still": "/guide-stills/mob_bandit__6b3a32.webp"
+        "model": "hellmaw_cursed_knight_body",
+        "still": "/guide-stills/hellmaw_cursed_knight_body.webp"
       },
       {
         "name": "Wyrmcult Necromancer",
@@ -2071,9 +2073,8 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 19,
         "rare": false,
         "templateId": "wyrmcult_necromancer",
-        "model": "mob_dark_caster",
-        "tint": "#533566",
-        "still": "/guide-stills/mob_dark_caster__533566.webp"
+        "model": "hellmaw_sigilbound_body",
+        "still": "/guide-stills/hellmaw_sigilbound_body.webp"
       }
     ]
   },
@@ -2126,9 +2127,8 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 7,
         "rare": false,
         "templateId": "restless_bones",
-        "model": "skel_minion",
-        "tint": "#d5dbdb",
-        "still": "/guide-stills/skel_minion__d5dbdb.webp"
+        "model": "realm_cryptic_bone_herald",
+        "still": "/guide-stills/realm_cryptic_bone_herald.webp"
       },
       {
         "name": "Drowned Dead",
@@ -2136,9 +2136,9 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 11,
         "rare": false,
         "templateId": "drowned_dead",
-        "model": "skel_minion",
+        "model": "skel_mage",
         "tint": "#7fb3d5",
-        "still": "/guide-stills/skel_minion__7fb3d5.webp"
+        "still": "/guide-stills/skel_mage__7fb3d5.webp"
       },
       {
         "name": "Drowned Votary",
@@ -2146,9 +2146,9 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "max": 16,
         "rare": false,
         "templateId": "drowned_votary",
-        "model": "skel_minion",
+        "model": "skel_rogue",
         "tint": "#6c8f8a",
-        "still": "/guide-stills/skel_minion__6c8f8a.webp"
+        "still": "/guide-stills/skel_rogue__6c8f8a.webp"
       },
       {
         "name": "Boneclad Revenant",
@@ -2254,6 +2254,29 @@ export const GUIDE_DELVES: GuideDelve[] = [
       "High Water",
       "Lively Choir",
       "Belligerent Dead"
+    ]
+  },
+  {
+    "id": "hellmaw_well",
+    "name": "The Hellmaw Well",
+    "theme": "crypt",
+    "minLevel": 10,
+    "suggestedPlayers": 2,
+    "keeper": {
+      "name": "Cainhurst the Sage",
+      "title": "Keeper of the Hellmaw"
+    },
+    "tiers": [
+      "Normal",
+      "Infernal"
+    ],
+    "affixes": [
+      "Restless Graves",
+      "Bad Air",
+      "Candleblind",
+      "Grave Tax",
+      "Unstable Roof",
+      "Cult Remnants"
     ]
   }
 ];
@@ -8915,17 +8938,40 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     "idle": "Idle",
     "height": 2.3
   },
-  "mob_demon": {
-    "url": "models/creatures/demonalt.glb",
+  "hellmaw_lava_fiend_body": {
+    "url": "/cr-realms/infernal/meshy_ai_lava_demon_visible_l_0616234410_texture_a72a9ef6.glb",
     "idle": "Idle",
-    "height": 1.8,
-    "tintStrength": 0.5
+    "height": 2.5
   },
-  "mob_demonalt": {
-    "url": "models/creatures/demonalt.glb",
+  "hellmaw_acolyte_body": {
+    "url": "/cr-realms/infernal/meshy_ai_demon_with_body_cover_0616234415_texture_540be2b1.glb",
     "idle": "Idle",
-    "height": 2.1,
-    "tintStrength": 0.35
+    "height": 2.6
+  },
+  "hellmaw_sigilbound_body": {
+    "url": "/cr-realms/infernal/meshy_ai_demon_with_body_cover_0616234440_texture_fd4134d0.glb",
+    "idle": "Idle",
+    "height": 2.7
+  },
+  "realm_infernal_skullbeast": {
+    "url": "/cr-realms/infernal/skullbeast_5d2ecebf.glb",
+    "idle": "Idle",
+    "height": 2.4
+  },
+  "realm_infernal_horned_demon": {
+    "url": "/cr-realms/infernal/demon-horned_1a19d7ca.glb",
+    "idle": "Idle",
+    "height": 2.6
+  },
+  "realm_infernal_crimson_behemoth": {
+    "url": "/cr-realms/infernal/meshy_ai_crimson_infernal_behe_biped_meshy_ai_meshy_merged_animations_27bab94d.glb",
+    "idle": "Idle",
+    "height": 2.9
+  },
+  "hellmaw_spectre_body": {
+    "url": "/cr-realms/infernal/meshy_ai_a_black_evil_spectr_0616234348_texture_abacb7f9.glb",
+    "idle": "Idle",
+    "height": 2.6
   },
   "mob_wolf": {
     "url": "models/creatures/wolf_basic.glb",
@@ -8962,26 +9008,21 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     "height": 2.1,
     "tintStrength": 0.2
   },
-  "mob_bandit": {
-    "url": "models/chars/players/rogue_hooded.glb",
+  "realm_cryptic_bone_herald": {
+    "url": "/cr-realms/crypticrealm/bone-herald-black-meshy_ai_meshy_merged_animations_5fb3b8bb.glb",
     "idle": "Idle",
-    "height": 2.6,
-    "attach": [
-      {
-        "url": "models/weapons/dagger.glb",
-        "bone": "handslot.r"
-      },
-      {
-        "url": "models/weapons/dagger.glb",
-        "bone": "handslot.l"
-      }
-    ],
-    "tintStrength": 0.3
+    "height": 2.6
   },
-  "skel_minion": {
-    "url": "models/chars/enemies/skeleton_minion.glb",
+  "skel_mage": {
+    "url": "models/chars/enemies/skeleton_mage.glb",
     "idle": "Idle_Combat",
     "height": 2.5,
+    "attach": [
+      {
+        "url": "models/weapons/skeleton_staff.glb",
+        "bone": "handslot.r"
+      }
+    ],
     "tintStrength": 0.25
   },
   "mob_troll": {
@@ -8990,20 +9031,10 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     "height": 2.4,
     "tintStrength": 0.12
   },
-  "mob_dark_caster": {
-    "url": "models/chars/players/mage.glb",
+  "hellmaw_cursed_knight_body": {
+    "url": "/cr-realms/infernal/meshy_ai_cursed_knight_s_iro_0616234359_texture_abda8208.glb",
     "idle": "Idle",
-    "height": 2.6,
-    "show": [
-      "Mage_Hat"
-    ],
-    "attach": [
-      {
-        "url": "models/weapons/staff.glb",
-        "bone": "handslot.r"
-      }
-    ],
-    "tintStrength": 0.5
+    "height": 2.8
   },
   "mob_ogre": {
     "url": "models/creatures/giant.glb",
@@ -9020,6 +9051,12 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
   },
   "skel_warrior": {
     "url": "models/chars/enemies/skeleton_warrior.glb",
+    "idle": "Idle_Combat",
+    "height": 2.5,
+    "tintStrength": 0.25
+  },
+  "skel_rogue": {
+    "url": "models/chars/enemies/skeleton_rogue.glb",
     "idle": "Idle_Combat",
     "height": 2.5,
     "tintStrength": 0.25

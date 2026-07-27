@@ -60,6 +60,13 @@ function makeCtx() {
   const clearEntityMarker = vi.fn();
   const pulseGroundAoE = vi.fn();
   const host: SimContextHost = {
+    npcDuels: new Map(),
+    deedDirtyPids: new Set(),
+    deedDirtyKeys: new Map(),
+    worldBossEntityIds: [],
+    fiestaBotPids: [],
+    deedRuntime: {} as unknown as SimContextHost['deedRuntime'],
+    mobScanCounters: {} as unknown as SimContextHost['mobScanCounters'],
     get rng() {
       return rng;
     },

@@ -7176,7 +7176,7 @@ export const zh_TW: EnTranslations = {
       },
       "battle_shout": {
         "name": "鐵嗓怒吼",
-        "description": "使你的攻擊強度提高 {buff}，持續 2 分鐘。"
+        "description": "發出一聲怒吼，使所有隊伍成員的攻擊強度提高 {buff}%，持續 30 分鐘。"
       },
       "commanding_shout": {
         "name": "激勵吶喊",
@@ -7188,7 +7188,7 @@ export const zh_TW: EnTranslations = {
       },
       "demoralizing_shout": {
         "name": "厲嚎",
-        "description": "發出可怕的怒吼，使附近所有敵人的攻擊強度降低 {buff}，持續 30 秒。"
+        "description": "發出可怕的怒吼，使附近所有敵人造成的傷害降低 {buff}%，持續 20 秒。"
       },
       "charge": {
         "name": "猛衝",
@@ -10892,7 +10892,7 @@ export const zh_TW: EnTranslations = {
       "q_prof_intro": {
         "title": "人人都有一技之長",
         "text": "伊斯特布魯克的每個人都有除了劍術之外的手藝，{playerName}。鎮子周圍散落著礦脈，去揮鎬採上5塊礦石帶給我。要親自採，別耍花招，我看得出來。",
-        "completion": "看到了吧？礦石進了包裡，手上也磨出了繭子。繼續在路上採礦、伐木、採藥，回到鎮上時，留意市場旁的城鎮專注面板和附近的製作台。只要你願意，靠這些都能正經謀生。",
+        "completion": "看吧？礦石採到了，手上也磨出了繭。趕路時繼續採礦、伐木和採藥；回城後，別忘了市場旁的城鎮專注告示板和附近的製作台。只要你願意，這些手藝都能換來公道的生計。",
         "objectives": {
           "0": {
             "label": "礦石塊"

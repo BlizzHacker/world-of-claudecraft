@@ -31,7 +31,10 @@ vi.hoisted(() => {
 // Hoisted module mocks. The real server/db and the Discord persistence/IO layers
 // never load: internal.ts touches them only through these fakes. src/sim stays
 // REAL (discordStatusIndexForPoints, DISCORD_REWARD_GRANTS, specialRoleByKey).
-vi.mock('../../server/db', () => ({ pool: { __fake: 'internal-pool' } }));
+vi.mock('../../server/db', () => ({
+  loadAccountFlair: vi.fn(async () => ({ ai: false, streamer: false, links: {} })),
+  walletForAccount: vi.fn(async () => null),
+  saveCharacterAndMarketState: vi.fn(async () => {}), pool: { __fake: 'internal-pool' } }));
 vi.mock('../../server/discord_db', () => ({
   accountForDiscord: vi.fn(),
   discordForAccount: vi.fn(),

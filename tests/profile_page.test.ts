@@ -9,6 +9,9 @@ import { describe, expect, it, vi } from 'vitest';
 const mockGetCharacterById = vi.fn();
 
 vi.mock('../server/db', () => ({
+  loadAccountFlair: vi.fn(async () => ({ ai: false, streamer: false, links: {} })),
+  walletForAccount: vi.fn(async () => null),
+  saveCharacterAndMarketState: vi.fn(async () => {}),
   findCharacterReportTargetByName: vi.fn(async (name: string) =>
     name === 'Hilda' ? { characterId: 42 } : null,
   ),

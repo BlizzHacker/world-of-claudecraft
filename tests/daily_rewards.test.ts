@@ -22,6 +22,8 @@ const walletMock = vi.hoisted(() => ({
 const balanceMock = vi.hoisted(() => ({ value: 50 as number | null }));
 
 vi.mock('../server/db', () => ({
+  loadAccountFlair: vi.fn(async () => ({ ai: false, streamer: false, links: {} })),
+  saveCharacterAndMarketState: vi.fn(async () => {}),
   walletForAccount: vi.fn(async () => walletMock.row),
 }));
 

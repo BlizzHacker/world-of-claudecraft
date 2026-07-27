@@ -136,6 +136,9 @@ const h = vi.hoisted(() => {
 });
 
 vi.mock('../server/db', () => ({
+  loadAccountFlair: vi.fn(async () => ({ ai: false, streamer: false, links: {} })),
+  walletForAccount: vi.fn(async () => null),
+  saveCharacterAndMarketState: vi.fn(async () => {}),
   ELIGIBLE_ACCOUNT_SQL: 'a.banned_at IS NULL',
   pool: { query: h.poolQuery, connect: h.connect },
 }));

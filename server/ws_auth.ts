@@ -29,7 +29,6 @@ import type {
   TokenScope,
 } from './db';
 import type { GameServer } from './game';
-import { accountForToken } from './oauth';
 
 // The {t:'error', error} rejection strings, by the exact value the client reads
 // and localizes. Each is part of the wire contract (see the module header).
@@ -263,11 +262,18 @@ export function createWsAuth(deps: WsAuthDeps): WsAuthHandlers {
     // same household (see the planJoin coop arm). Absent on every existing
     // client, so the wire contract only widens.
     const coop = msg.coop === true;
-    const accountId = await accountForToken(token);
-    if (accountId === null || !Number.isFinite(characterId)) {
+    // Optional rolling-deploy capability. Exact numeric equality is deliberate:
+    // strings, booleans, and unknown future versions stay on the legacy wire.
+    const timerWireVersion: 1 | typeof STABLE_TIMER_WIRE_VERSION =
+      msg.timerWire === STABLE_TIMER_WIRE_VERSION ? STABLE_TIMER_WIRE_VERSION : 1;
+    // Scope matters here: accountForToken alone resolves 'read' tokens too, so a
+    // read-scoped token would get a live game session. Only 'full' may play.
+    const account = await accountAndScopeForToken(token);
+    if (account === null || account.scope !== 'full' || !Number.isFinite(characterId)) {
       rejectHandshake(ws, WS_AUTH_ERROR.notAuthenticated);
       return;
     }
+    const accountId = account.accountId;
     const status = await moderationStatusForAccount(accountId);
     if (status.locked) {
       rejectHandshake(ws, status.message);
@@ -314,6 +320,7 @@ export function createWsAuth(deps: WsAuthDeps): WsAuthHandlers {
       isAdmin,
       adminPermissions,
       clientSeed,
+      timerWireVersion,
       coop,
     };
     // Two genuinely concurrent handshakes for one character would race to stamp

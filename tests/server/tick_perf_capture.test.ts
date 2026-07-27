@@ -3,6 +3,8 @@ import { describe, expect, it, vi } from 'vitest';
 // Mock the db layer so no Postgres is needed; the tick-perf capture lifecycle is
 // pure in-memory state on GameServer.
 vi.mock('../../server/db', () => ({
+  loadAccountFlair: vi.fn(async () => ({ ai: false, streamer: false, links: {} })),
+  saveCharacterAndMarketState: vi.fn(async () => {}),
   pool: { query: vi.fn(async () => ({ rows: [] })) },
   saveCharacterState: vi.fn(async () => {}),
   openPlaySession: vi.fn(async () => 1),

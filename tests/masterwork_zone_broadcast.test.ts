@@ -19,6 +19,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 // under test, never persistence (the corpse_harvest_sim broadcast-suite
 // precedent).
 vi.mock('../server/db', () => ({
+  saveCharacterAndMarketState: vi.fn(async () => {}),
   pool: { query: vi.fn(async () => ({ rows: [] })) },
   saveCharacterState: vi.fn(async () => {}),
   openPlaySession: vi.fn(async () => 1),

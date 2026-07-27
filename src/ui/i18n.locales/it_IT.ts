@@ -559,8 +559,7 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_prof_hobby_switch.text':
     'I principali richiedono un voto. Un passatempo chiede solo dove vaga la tua curiosità, {playerName}. Raccogli qualche erba e decidi quale mestiere opposto ai tuoi principali vuoi coltivare.',
   'entities.quests.q_prof_hobby_switch.title': 'Un Altro Passatempo',
-  'entities.quests.q_prof_intro.completion':
-    'Vedi? Minerale nello zaino e calli sulle mani. Continua a estrarre minerali, tagliare legna e raccogliere erbe mentre percorri le strade. Quando torni in città, tieni d’occhio il tabellone delle Priorità della città vicino al mercato e il banco da lavoro lì accanto. C’è un mestiere onesto in tutto questo, se ti interessa.',
+  'entities.quests.q_prof_intro.completion': "Visto? Minerale raccolto e calli sulle mani. Continua a scavare, tagliare legna e raccogliere erbe mentre percorri le strade, e quando sei di ritorno in città, tieni d'occhio la Bacheca del Focus della Città vicino al mercato e il banco di fabbricazione vicino. C'è un buon affare che ti aspetta in tutto ciò, se lo vuoi.",
   'entities.quests.q_prof_intro.objectives.0.label': 'Pezzo di Minerale',
   'entities.quests.q_prof_intro.text':
     'A Eastbrook ogni anima pratica un mestiere oltre all’arte della spada, {playerName}. Ci sono vene di minerale sparse intorno alla città, quindi impugna un piccone e portami 5 pezzi. Estraili tu, bada bene, saprò riconoscere la differenza.',
@@ -3926,13 +3925,11 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.heroic_strike.description':
     'Un attacco potente che aumenta i danni in mischia di {damage}. Si attiva al tuo prossimo colpo.',
   'entities.abilities.battle_shout.name': 'Urlo di Ferro',
-  'entities.abilities.battle_shout.description':
-    "Aumenta la tua potenza d'attacco di {buff} per 2 min.",
+  'entities.abilities.battle_shout.description': "Un urlo che aumenta del {buff}% la potenza d'attacco di tutti i membri del gruppo per 30 min.",
   'entities.abilities.commanding_shout.name': 'Grido Rincuorante',
   'entities.abilities.commanding_shout.description': 'Aumenta la tua Tempra di {buff} per 2 min.',
   'entities.abilities.demoralizing_shout.name': 'Ululato Sinistro',
-  'entities.abilities.demoralizing_shout.description':
-    "Emette un urlo terrificante, riducendo la potenza d'attacco di tutti i nemici vicini di {buff} per 30 sec.",
+  'entities.abilities.demoralizing_shout.description': 'Emette un urlo terrificante, riducendo del {buff}% i danni inflitti da tutti i nemici vicini per 20 sec.',
   'entities.abilities.charge.name': 'Irruzione',
   'entities.abilities.charge.description':
     'Carica un nemico, genera 9 rabbia e lo stordisce per 1 s. Portata 8-25 m.',

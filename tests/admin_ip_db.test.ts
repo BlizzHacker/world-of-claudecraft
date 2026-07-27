@@ -5,6 +5,9 @@ const mocks = vi.hoisted(() => ({
 }));
 
 vi.mock('../server/db', () => ({
+  loadAccountFlair: vi.fn(async () => ({ ai: false, streamer: false, links: {} })),
+  walletForAccount: vi.fn(async () => null),
+  saveCharacterAndMarketState: vi.fn(async () => {}),
   pool: { query: mocks.query },
 }));
 

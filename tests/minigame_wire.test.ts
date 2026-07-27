@@ -3,6 +3,8 @@ import { describe, expect, it, vi } from 'vitest';
 // The authoritative lifecycle test is intentionally in-memory; no Postgres is
 // needed to exercise the WS command/snapshot boundary.
 vi.mock('../server/db', () => ({
+  loadAccountFlair: vi.fn(async () => ({ ai: false, streamer: false, links: {} })),
+  saveCharacterAndMarketState: vi.fn(async () => {}),
   pool: { query: vi.fn(async () => ({ rows: [] })) },
   saveCharacterState: vi.fn(async () => {}),
   openPlaySession: vi.fn(async () => 1),

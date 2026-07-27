@@ -15,6 +15,7 @@ import { describe, expect, it, vi } from 'vitest';
 // under test, never persistence (the guild_letter_online precedent; the vi.mock
 // hoisting caveat from #2088 applies: this block cannot be imported).
 vi.mock('../server/db', () => ({
+  saveCharacterAndMarketState: vi.fn(async () => {}),
   pool: { query: vi.fn(async () => ({ rows: [] })) },
   saveCharacterState: vi.fn(async () => {}),
   openPlaySession: vi.fn(async () => 1),

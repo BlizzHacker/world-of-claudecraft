@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 // broadcast paths are under test (wireEntity round-trips plus a real GameServer
 // snapshot pipeline), never persistence.
 vi.mock('../server/db', () => ({
+  saveCharacterAndMarketState: vi.fn(async () => {}),
   pool: { query: vi.fn(async () => ({ rows: [] })) },
   saveCharacterState: vi.fn(async () => {}),
   openPlaySession: vi.fn(async () => 1),

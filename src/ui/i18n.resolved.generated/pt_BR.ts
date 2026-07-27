@@ -7176,7 +7176,7 @@ export const pt_BR: EnTranslations = {
       },
       "battle_shout": {
         "name": "Brado de Ferro",
-        "description": "Aumenta seu poder de ataque em {buff} por 2 min."
+        "description": "Um grito que aumenta o poder de ataque de todos os membros do grupo em {buff}% por 30 min."
       },
       "commanding_shout": {
         "name": "Brado Encorajador",
@@ -7188,7 +7188,7 @@ export const pt_BR: EnTranslations = {
       },
       "demoralizing_shout": {
         "name": "Uivo Sinistro",
-        "description": "Solta um grito apavorante, reduzindo o poder de ataque de todos os inimigos próximos em {buff} por 30 s."
+        "description": "Solta um grito apavorante, reduzindo em {buff}% o dano causado por todos os inimigos próximos por 20 s."
       },
       "charge": {
         "name": "Arremetida",
@@ -10892,7 +10892,7 @@ export const pt_BR: EnTranslations = {
       "q_prof_intro": {
         "title": "Um ofício para cada mão",
         "text": "Cada pessoa em Eastbrook exerce um ofício além da espada, {playerName}. Há veios de minério espalhados pela cidade, então pegue uma picareta e traga 5 pedaços para mim. Extraia você mesmo, viu? Eu vou saber a diferença.",
-        "completion": "Viu só? Minério na mochila e calos nas mãos. Continue minerando, cortando madeira e colhendo ervas enquanto percorre as estradas. Quando voltar à cidade, preste atenção no quadro do Foco da Cidade perto do mercado e na bancada de criação ali ao lado. Dá para ganhar a vida honestamente com tudo isso, se você quiser.",
+        "completion": "Viu? Minério coletado e calos nas mãos. Continue com a mineração, a lenharia e a colheita de ervas durante suas viagens, e quando estiver de volta à cidade, observe o quadro do Foco do Vilarejo perto do mercado e a bancada de artesanato por perto. Há uma troca justa esperando em tudo isso, se você quiser.",
         "objectives": {
           "0": {
             "label": "Pedaço de Minério"

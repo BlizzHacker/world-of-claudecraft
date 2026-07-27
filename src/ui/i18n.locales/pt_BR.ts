@@ -555,8 +555,7 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_prof_hobby_switch.text':
     'Os ofícios principais exigem um juramento. Um passatempo só pergunta para onde sua curiosidade vai, {playerName}. Colete algumas ervas e decida qual ofício oposto aos seus principais você quer seguir.',
   'entities.quests.q_prof_hobby_switch.title': 'Um Passatempo Diferente',
-  'entities.quests.q_prof_intro.completion':
-    'Viu só? Minério na mochila e calos nas mãos. Continue minerando, cortando madeira e colhendo ervas enquanto percorre as estradas. Quando voltar à cidade, preste atenção no quadro do Foco da Cidade perto do mercado e na bancada de criação ali ao lado. Dá para ganhar a vida honestamente com tudo isso, se você quiser.',
+  'entities.quests.q_prof_intro.completion': 'Viu? Minério coletado e calos nas mãos. Continue com a mineração, a lenharia e a colheita de ervas durante suas viagens, e quando estiver de volta à cidade, observe o quadro do Foco do Vilarejo perto do mercado e a bancada de artesanato por perto. Há uma troca justa esperando em tudo isso, se você quiser.',
   'entities.quests.q_prof_intro.objectives.0.label': 'Pedaço de Minério',
   'entities.quests.q_prof_intro.text':
     'Cada pessoa em Eastbrook exerce um ofício além da espada, {playerName}. Há veios de minério espalhados pela cidade, então pegue uma picareta e traga 5 pedaços para mim. Extraia você mesmo, viu? Eu vou saber a diferença.',
@@ -3891,12 +3890,11 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.heroic_strike.description':
     'Um ataque forte que aumenta o dano corpo a corpo em {damage}. Ativa no seu próximo golpe.',
   'entities.abilities.battle_shout.name': 'Brado de Ferro',
-  'entities.abilities.battle_shout.description': 'Aumenta seu poder de ataque em {buff} por 2 min.',
+  'entities.abilities.battle_shout.description': 'Um grito que aumenta o poder de ataque de todos os membros do grupo em {buff}% por 30 min.',
   'entities.abilities.commanding_shout.name': 'Brado Encorajador',
   'entities.abilities.commanding_shout.description': 'Aumenta seu Vigor em {buff} por 2 min.',
   'entities.abilities.demoralizing_shout.name': 'Uivo Sinistro',
-  'entities.abilities.demoralizing_shout.description':
-    'Solta um grito apavorante, reduzindo o poder de ataque de todos os inimigos próximos em {buff} por 30 s.',
+  'entities.abilities.demoralizing_shout.description': 'Solta um grito apavorante, reduzindo em {buff}% o dano causado por todos os inimigos próximos por 20 s.',
   'entities.abilities.charge.name': 'Arremetida',
   'entities.abilities.charge.description':
     'Investe contra um inimigo, gera 9 de raiva e o atordoa por 1 s. Alcance de 8-25 m.',

@@ -3,6 +3,8 @@ import { describe, expect, it, vi } from 'vitest';
 // Postgres is mocked (hoisted above the server/game import), same block as
 // loot_roll_wire.test.ts, so GameServer runs with no live DB.
 vi.mock('../server/db', () => ({
+  loadAccountFlair: vi.fn(async () => ({ ai: false, streamer: false, links: {} })),
+  saveCharacterAndMarketState: vi.fn(async () => {}),
   pool: { query: vi.fn(async () => ({ rows: [] })) },
   saveCharacterState: vi.fn(async () => {}),
   openPlaySession: vi.fn(async () => 1),

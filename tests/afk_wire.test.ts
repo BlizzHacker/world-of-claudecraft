@@ -7,6 +7,7 @@ import { describe, expect, it, vi } from 'vitest';
 // flip on (set) and off (cleared by movement). Db is mocked so no Postgres runs
 // (mirrors presence_zone / character_lease_game).
 vi.mock('../server/db', () => ({
+  saveCharacterAndMarketState: vi.fn(async () => {}),
   pool: { query: vi.fn(async () => ({ rows: [] })) },
   saveCharacterState: vi.fn(async () => {}),
   openPlaySession: vi.fn(async () => 1),

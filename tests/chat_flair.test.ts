@@ -7,6 +7,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 // tests hand-build their events, so they exercise the DECODER and would stay green
 // if the server stopped emitting anything at all.)
 vi.mock('../server/db', () => ({
+  saveCharacterAndMarketState: vi.fn(async () => {}),
   pool: { query: vi.fn(async () => ({ rows: [] })) },
   saveCharacterState: vi.fn(async () => {}),
   openPlaySession: vi.fn(async () => 1),

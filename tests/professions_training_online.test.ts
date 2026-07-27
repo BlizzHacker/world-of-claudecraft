@@ -11,6 +11,7 @@ import { describe, expect, it, vi } from 'vitest';
 // vi.mock hoisting caveat from #2088 applies: this block cannot reference
 // imports).
 vi.mock('../server/db', () => ({
+  saveCharacterAndMarketState: vi.fn(async () => {}),
   pool: { query: vi.fn(async () => ({ rows: [] })) },
   saveCharacterState: vi.fn(async () => {}),
   openPlaySession: vi.fn(async () => 1),

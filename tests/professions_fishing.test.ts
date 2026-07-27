@@ -11,6 +11,7 @@ import { describe, expect, it, vi } from 'vitest';
 // trap: an event type must be proven to flow server to client, not just
 // emitted into the sim's buffer).
 vi.mock('../server/db', () => ({
+  saveCharacterAndMarketState: vi.fn(async () => {}),
   pool: { query: vi.fn(async () => ({ rows: [] })) },
   saveCharacterState: vi.fn(async () => {}),
   openPlaySession: vi.fn(async () => 1),
