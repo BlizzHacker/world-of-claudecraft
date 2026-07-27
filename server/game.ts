@@ -284,6 +284,7 @@ import { isBackpressureExceeded } from './ws_backpressure';
 import { RaceInput } from '../src/sim/racing';
 import { resolveRealmCharacterVisual } from '../src/sim/realms/class_visuals';
 import { setRealmHostEnv } from '../src/sim/realms/registry';
+import { isRealmId } from '../src/sim/realms/registry';
 
 const WORLD_SEED = 20061;
 

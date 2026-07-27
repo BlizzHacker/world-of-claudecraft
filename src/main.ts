@@ -364,6 +364,8 @@ import { devTierDisplayName } from './ui/dev_tier';
 import { ensureDeedLocalesLoaded } from './ui/deed_i18n';
 import { isDevGuiCommand } from './ui/dev_command_view';
 import { localPartyMemberIds } from './game/corpse_loot_availability';
+import { devTierByIndex } from './ui/dev_tier';
+import type { ReleaseEntry } from './net/online';
 
 // SECURITY: an SSO/realm handoff arrives as `/#auth_token=...&auth_user=...`.
 // Capture it into memory and SCRUB the address bar on the very first line of

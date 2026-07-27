@@ -606,6 +606,7 @@ import {
   waterLevel,
   waterLevelAt,
 } from './world';
+import { getActiveRealm } from './realms/registry';
 
 // TRIVIAL_LEVEL_GAP moved to mob/targeting.ts (used only by isTrivialTo).
 // CORPSE_DURATION moved to combat/damage.ts (C1; used only by the death path).
@@ -1564,6 +1565,19 @@ function freshCounters(): RewardCounters {
 // isShamanShock/ignoresDamagePushback) live in combat/casting_lifecycle.ts (C4a).
 
 export class Sim {
+  delveRunWire(pid: number): object | null {
+    return runsMod.delveRunWire(this.ctx, pid);
+  }
+  delveMarksFor(pid: number): number {
+    return runsMod.delveMarksFor(this.ctx, pid);
+  }
+  companionUpgradesFor(pid: number): Record<string, number> {
+    return runsMod.companionUpgradesFor(this.ctx, pid);
+  }
+  npcDuels = new Map<number, NpcDuelState>(); // F4c: player pid -> player-vs-NPC duel
+  // arena: format-specific queues, live bouts keyed by every participant pid,
+  // and the set of busy instance slots
+  arenaQueue1v1: number[] = [];
   // Read-only rollout registry for presentation. Incomplete modes remain
   // default-off until their authoritative wire/persistence checkpoints land.
   readonly minigameFeatures = MINIGAME_FEATURES;
