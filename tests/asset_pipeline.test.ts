@@ -14,17 +14,11 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { transformMesh } from '@gltf-transform/functions';
 import { afterAll, describe, expect, it } from 'vitest';
-// @ts-expect-error untyped zero-dep pipeline tool (scripts/*.mjs convention)
 import * as families from '../scripts/asset_pipeline/lib/families.mjs';
-// @ts-expect-error untyped zero-dep pipeline tool (scripts/*.mjs convention)
 import * as glb from '../scripts/asset_pipeline/lib/glb.mjs';
-// @ts-expect-error untyped zero-dep pipeline tool (scripts/*.mjs convention)
 import * as integrate from '../scripts/asset_pipeline/lib/integrate.mjs';
-// @ts-expect-error untyped zero-dep pipeline tool (scripts/*.mjs convention)
 import * as jobs from '../scripts/asset_pipeline/lib/job.mjs';
-// @ts-expect-error untyped zero-dep pipeline tool (scripts/*.mjs convention)
 import * as prompts from '../scripts/asset_pipeline/lib/prompts.mjs';
-// @ts-expect-error untyped zero-dep pipeline tool (scripts/*.mjs convention)
 import * as validate from '../scripts/asset_pipeline/lib/validate.mjs';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
@@ -702,7 +696,6 @@ describe('job ledger', () => {
 // ---------------------------------------------------------------------------
 
 describe('asset library registry parsers', () => {
-  // @ts-expect-error untyped zero-dep pipeline tool (scripts/*.mjs convention)
   const libraryImport = import('../scripts/asset_pipeline/lib/library.mjs');
 
   it('parses ITEM_WEAPON_VARIANTS into variantKey -> itemIds', async () => {

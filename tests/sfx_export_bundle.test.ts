@@ -14,9 +14,7 @@ import { dirname, join } from 'node:path';
 import ffmpegPath from 'ffmpeg-static';
 import ffprobeStatic from 'ffprobe-static';
 import { describe, expect, it } from 'vitest';
-// @ts-expect-error untyped zero-dependency authoring tool (scripts/*.mjs convention)
 import * as exportBundleModule from '../scripts/sfx_studio/export_bundle.mjs';
-// @ts-expect-error untyped zero-dependency authoring tool (scripts/*.mjs convention)
 import { buildDeterministicZip } from '../scripts/sfx_studio/zip.mjs';
 import { SFX_CLIPS } from '../src/game/sfx_manifest.generated';
 

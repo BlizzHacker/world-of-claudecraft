@@ -8887,6 +8887,8 @@ const RULES: Rule[] = [
   {
     re: /^You must have a shield equipped\.$/,
     build: () => t('hudChrome.abilityError.shieldRequired'),
+  },
+  {
     re: /^You must be level (\d+) to ride that mount\.$/,
     build: (m) => tSim('error.mountLevel', { level: m[1] }),
   },

@@ -4,7 +4,6 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-// @ts-expect-error - zero-dep build script (no .d.ts). The CLI in the same module is
 // exercised by spawning it below, so importing the pure formatter here checks the
 // exact code CI runs rather than a copy.
 import { formatCoverageSummary, formatInt } from '../scripts/i18n_coverage_summary.mjs';

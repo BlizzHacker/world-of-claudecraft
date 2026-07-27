@@ -2,7 +2,6 @@ import { existsSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { SFX } from '../scripts/sfx/sfx_prompts.mjs';
-// @ts-expect-error untyped zero-dependency build tool (scripts/*.mjs convention)
 import { ffmpegArgsForUiSfx, UI_SFX_CATALOG, UI_SFX_SPECS } from '../scripts/sfx/ui_sfx.mjs';
 
 const sfxMock = vi.hoisted(() => ({

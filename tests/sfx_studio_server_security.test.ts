@@ -16,9 +16,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
-// @ts-expect-error untyped zero-dependency authoring tool (scripts/*.mjs convention)
 import * as audioIo from '../scripts/sfx_studio/audio_io.mjs';
-// @ts-expect-error untyped zero-dependency authoring tool (scripts/*.mjs convention)
 import { startSfxStudio } from '../scripts/sfx_studio/server.mjs';
 import { SFX_CLIPS } from '../src/game/sfx_manifest.generated';
 

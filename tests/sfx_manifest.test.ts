@@ -8,7 +8,6 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-// @ts-expect-error scripts use the repository's untyped Node ESM convention
 import * as manifestModule from '../scripts/sfx/manifest.mjs';
 
 const {

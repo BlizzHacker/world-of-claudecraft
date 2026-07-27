@@ -6,7 +6,6 @@ import { fileURLToPath } from 'node:url';
 import ffmpegPath from 'ffmpeg-static';
 import ffprobeStatic from 'ffprobe-static';
 import { describe, expect, it } from 'vitest';
-// @ts-expect-error scripts use the repository's untyped Node ESM convention
 import * as conformAudioModule from '../scripts/sfx/conform_audio.mjs';
 import {
   channelProblem,
@@ -35,7 +34,6 @@ const {
 import { buildSfxConformPolicy } from '../scripts/sfx/sfx_conform_inventory.mjs';
 import { PROBE_EXTENSIONS } from '../scripts/sfx/sfx_manifest_builder.mjs';
 
-// @ts-expect-error scripts use the repository's untyped Node ESM convention
 import { UI_SFX_SPECS } from '../scripts/sfx/ui_sfx.mjs';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));

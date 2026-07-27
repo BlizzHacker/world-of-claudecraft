@@ -3,7 +3,6 @@ import { isBlocked } from '../src/sim/colliders';
 import { EASTBROOK_LAYOUT } from '../src/sim/eastbrook_layout';
 
 const captureContract =
-  // @ts-expect-error The executable capture contract intentionally ships as plain Node ESM.
   await import('../scripts/assets/eastbrook_grand_armoury/capture_contract.mjs');
 const {
   assertTownAttributionTargetState,

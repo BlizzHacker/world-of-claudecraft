@@ -19,17 +19,12 @@ import { ALL_EXTENSIONS } from '@gltf-transform/extensions';
 import ffmpegPath from 'ffmpeg-static';
 import { MeshoptDecoder } from 'meshoptimizer';
 import { afterEach, describe, expect, it } from 'vitest';
-// @ts-expect-error untyped zero-dependency authoring tool (scripts/*.mjs convention)
 import { buildSfxGenerationPlan } from '../scripts/sfx/generation_plan.mjs';
-// @ts-expect-error untyped zero-dependency authoring tool (scripts/*.mjs convention)
 import * as manifestModule from '../scripts/sfx/manifest.mjs';
 
 import { SFX } from '../scripts/sfx/sfx_prompts.mjs';
-// @ts-expect-error untyped zero-dependency authoring tool (scripts/*.mjs convention)
 import * as associationModule from '../scripts/sfx_studio/associations.mjs';
-// @ts-expect-error untyped zero-dependency authoring tool (scripts/*.mjs convention)
 import * as audioIoModule from '../scripts/sfx_studio/audio_io.mjs';
-// @ts-expect-error untyped zero-dependency authoring tool (scripts/*.mjs convention)
 import * as projectModule from '../scripts/sfx_studio/project.mjs';
 import { SFX_CLIPS } from '../src/game/sfx_manifest.generated';
 

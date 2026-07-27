@@ -1664,6 +1664,16 @@ export async function accountAndScopeForToken(
   return { accountId: row.account_id, scope: row.scope };
 }
 
+// Account id for a live token. Upstream replaced this with
+// accountAndScopeForToken (same lookup, plus the token's scope); this thin
+// wrapper keeps the original signature for the fork call sites that only need
+// the id, so there is still exactly one query for token lookup.
+export async function accountForToken(token: string): Promise<number | null> {
+  const scoped = await accountAndScopeForToken(token);
+  return scoped ? scoped.accountId : null;
+}
+
+
 export interface AccountInfoRow {
   id: number;
   username: string;

@@ -2126,25 +2126,9 @@ export const hudChromeStrings = {
       recruit: { label: 'Guild Recruiting', hint: 'Recruit players for your guild' },
       event: { label: 'Event / Raid', hint: 'Announce a raid, meetup or event' },
       help: { label: 'Need Help', hint: 'Ask the community for help' },
-      event: {
-        hint: "Announce a raid, meetup or event",
-        label: "Event / Raid",
-      },
-      help: {
-        hint: "Ask the community for help",
-        label: "Need Help",
-      },
       lfg: {
         hint: "Find players for a dungeon or quest",
         label: "Looking for Group",
-      },
-      recruit: {
-        hint: "Recruit players for your guild",
-        label: "Guild Recruiting",
-      },
-      wtb: {
-        hint: "Request an item you want to buy",
-        label: "Want to Buy",
       },
       wts: {
         hint: "Advertise an item or service for sale",

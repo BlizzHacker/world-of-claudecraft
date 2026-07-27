@@ -10,9 +10,7 @@ import {
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
-// @ts-expect-error untyped zero-dependency authoring tool (scripts/*.mjs convention)
 import * as manifestModule from '../scripts/sfx/manifest.mjs';
-// @ts-expect-error untyped zero-dependency authoring tool (scripts/*.mjs convention)
 import * as profileModule from '../scripts/sfx/playback_profile.mjs';
 
 const { buildSfxManifestData } = manifestModule;

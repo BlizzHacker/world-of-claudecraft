@@ -2,7 +2,6 @@ import { readFileSync, statSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 const captureContract =
-  // @ts-expect-error The executable capture contract intentionally ships as plain Node ESM.
   await import('../scripts/assets/eastbrook_grand_armoury/capture_contract.mjs');
 const {
   assertArmouryPerformanceContract,
