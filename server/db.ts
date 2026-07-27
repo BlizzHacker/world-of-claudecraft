@@ -2656,9 +2656,8 @@ export async function listCharacters(accountId: number): Promise<CharacterRow[]>
   const res = await pool.query(
     `SELECT c.id, c.account_id, c.name, c.class, c.level, c.state, c.is_gm, c.force_rename,
             GREATEST(ps.last_played, totals.last_played) AS last_played,
-            (COALESCE(ps.playtime_seconds, 0) + COALESCE(totals.playtime_seconds, 0))::bigint AS playtime_seconds
-            c.hardcore, c.ladder, c.died_at,
-            ps.last_played, ps.playtime_seconds
+            (COALESCE(ps.playtime_seconds, 0) + COALESCE(totals.playtime_seconds, 0))::bigint AS playtime_seconds,
+            c.hardcore, c.ladder, c.died_at
        FROM characters c
        LEFT JOIN (
          SELECT character_id,
