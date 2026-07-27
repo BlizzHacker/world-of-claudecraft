@@ -222,6 +222,14 @@ export type { WorldInteractionOutcome } from './world_api/interaction';
 export type { MailInfo, MailKindView, MailMessageView } from './world_api/mail';
 export type { MarketInfo, MarketListingView } from './world_api/market';
 export type { IWorldMinigames } from './world_api/minigames';
+export type {
+  ArcadeState,
+  ArcadeWireState,
+  MinigameFeatureId,
+  MinigameSessionState,
+  ZombieDefenseSessionState,
+} from './sim/minigames';
+export type { TowerKind } from './sim/minigames/zombie_defense';
 export type { PartyInfo, PartyMemberAura, PartyMemberInfo } from './world_api/party';
 export type {
   CraftingIdentityView,
