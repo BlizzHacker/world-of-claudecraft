@@ -185,7 +185,10 @@ export type SprintTier = 'required' | 'migrated' | 'conditional';
  *  options_view renders them today: bespoke, kept OUT of the settings-key count.
  *  `chatTimestamps` (show on/off) and `chatClock` (12h/24h) are hud-owned state
  *  (localStorage via the OptionsHooks chat accessors), likewise bespoke and
- *  keyless. */
+ *  keyless. `deedBroadcasts` is bespoke for a different reason: it is an ASYNC
+ *  ACCOUNT setting (accounts.deed_broadcasts), so the row owns its own
+ *  load/echo/revert cycle and renders only when an authenticated account
+ *  wired the seam. */
 export type RowControl =
   | 'slider'
   | 'toggle'
@@ -196,7 +199,8 @@ export type RowControl =
   | 'language'
   | 'themePreset'
   | 'chatTimestamps'
-  | 'chatClock';
+  | 'chatClock'
+  | 'deedBroadcasts';
 
 export interface OptionRow {
   control: RowControl;
@@ -404,6 +408,11 @@ export const CATEGORY_SECTIONS: Record<CategoryId, Section[]> = {
         {
           control: 'chatClock',
           labelKey: 'hudChrome.chatTimestamps.format',
+          sprintTier: 'conditional',
+        },
+        {
+          control: 'deedBroadcasts',
+          labelKey: 'hudChrome.deeds.broadcastsLabel',
           sprintTier: 'conditional',
         },
       ],

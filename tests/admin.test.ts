@@ -118,7 +118,6 @@ import {
   updateFilterConfig,
 } from '../server/chat_filter_db';
 import {
-  accountAndScopeForToken,
   accountById,
   accountAndScopeForToken,
   accountForToken,

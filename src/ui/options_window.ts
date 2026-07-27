@@ -286,6 +286,77 @@ function el<K extends keyof HTMLElementTagNameMap>(
  * the options / bug-report seams, the keybind store, the shared dropdown, focus
  * management, the confirm dialog, and the online flag through these closures.
  */
+/** The online account seam behind the deed-broadcast row (OptionsHooks.deedBroadcasts). */
+export interface DeedBroadcastSeam {
+  get(): Promise<boolean>;
+  set(enabled: boolean): Promise<boolean>;
+}
+
+/**
+ * The account deed-broadcast opt-out row (accounts.deed_broadcasts): an ASYNC
+ * account setting, not a local Settings key, so it lives outside the settings
+ * row family and renders in the classic set-row grammar beside the chat rows.
+ * Painted only when main.ts wired the online seam (an offline character has
+ * no account). The toggle disables (aria-busy) until the persisted state
+ * loads; a click flips optimistically, the server echo wins, and a failed
+ * write reverts to the last known state. Exported standalone so the
+ * round-trip is jsdom-driven directly (tests/deed_broadcast_row.test.ts).
+ */
+export function buildDeedBroadcastRow(parent: HTMLElement, seam: DeedBroadcastSeam): void {
+  const row = document.createElement('div');
+  row.className = 'set-row';
+  const name = document.createElement('span');
+  name.className = 'set-name';
+  name.textContent = t('hudChrome.deeds.broadcastsLabel');
+  const toggle = document.createElement('button');
+  toggle.className = 'btn set-toggle';
+  toggle.disabled = true;
+  toggle.setAttribute('aria-label', t('hudChrome.deeds.broadcastsLabel'));
+  toggle.setAttribute('aria-busy', 'true');
+  let on = true;
+  const sync = () => {
+    toggle.textContent = on ? t('hud.options.on') : t('hud.options.off');
+    toggle.classList.toggle('off', !on);
+    toggle.setAttribute('aria-pressed', String(on));
+  };
+  sync();
+  void seam
+    .get()
+    // Unreadable state renders the column default (TRUE); the first write
+    // still round-trips the truth.
+    .catch(() => true)
+    .then((enabled) => {
+      on = enabled;
+      toggle.disabled = false;
+      toggle.removeAttribute('aria-busy');
+      sync();
+    });
+  toggle.addEventListener('click', () => {
+    audio.click();
+    const requested = !on;
+    on = requested;
+    sync();
+    toggle.disabled = true;
+    toggle.setAttribute('aria-busy', 'true');
+    void seam
+      .set(requested)
+      .then((echoed) => {
+        on = echoed;
+      })
+      .catch(() => {
+        // Failed write: revert; the next panel open re-reads the truth.
+        on = !requested;
+      })
+      .then(() => {
+        toggle.disabled = false;
+        toggle.removeAttribute('aria-busy');
+        sync();
+      });
+  });
+  row.append(name, toggle);
+  parent.appendChild(row);
+}
+
 export interface OptionsWindowDeps {
   root(): HTMLElement;
   world(): IWorld;
@@ -1439,6 +1510,14 @@ export class OptionsWindow {
           }
           if (row.control === 'chatClock') {
             this.chatClockRow(secEl);
+            shown++;
+            continue;
+          }
+          if (row.control === 'deedBroadcasts') {
+            // Online only: main.ts wires the seam solely for an authenticated
+            // account, so an offline character has no row to show.
+            if (!hooks.deedBroadcasts) continue;
+            buildDeedBroadcastRow(secEl, hooks.deedBroadcasts);
             shown++;
             continue;
           }
