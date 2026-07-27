@@ -45,6 +45,17 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_arcane_crystal_titan_pbr_crystal_0198e7fd: {
+    url: `${REALM_MODELS}/arcane/realm_arcane_crystal_titan_pbr_crystal_0198e7fd.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_arcane_dark_enchantress_artabstract_0194b9bb: {
     url: `${REALM_MODELS}/arcane/realm_arcane_dark_enchantress_artabstract_0194b9bb.glb`,
     height: GEN_H,
@@ -89,8 +100,52 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_arcane_elder_arcane_council_characters_0196ee9b: {
+    url: `${REALM_MODELS}/arcane/realm_arcane_elder_arcane_council_characters_0196ee9b.glb`,
+    height: GEN_H,
+    clips: genClips(['Spellcast_Shoot']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_arcane_eldritch_sentinel_characters_019737a4: {
+    url: `${REALM_MODELS}/arcane/realm_arcane_eldritch_sentinel_characters_019737a4.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_arcane_eldritch_sentinel_characters_art_0196111c: {
     url: `${REALM_MODELS}/arcane/realm_arcane_eldritch_sentinel_characters_art_0196111c.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_arcane_eldritch_sentinel_characters_art_019737b0: {
+    url: `${REALM_MODELS}/arcane/realm_arcane_eldritch_sentinel_characters_art_019737b0.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_arcane_eternal_majesty_fantasy_sculptur_0198d45b: {
+    url: `${REALM_MODELS}/arcane/realm_arcane_eternal_majesty_fantasy_sculptur_0198d45b.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     attach: [
@@ -210,6 +265,17 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_arcane_ethereal_scales_artabstract_01974b04: {
+    url: `${REALM_MODELS}/arcane/realm_arcane_ethereal_scales_artabstract_01974b04.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_arcane_ethereal_sentinel_artabstract_0194605b: {
     url: `${REALM_MODELS}/arcane/realm_arcane_ethereal_sentinel_artabstract_0194605b.glb`,
     height: GEN_H,
@@ -320,6 +386,17 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_arcane_ethereal_sentinel_characters_0197372a: {
+    url: `${REALM_MODELS}/arcane/realm_arcane_ethereal_sentinel_characters_0197372a.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_arcane_ethereal_sentinel_hrgiger_artabs_01946061: {
     url: `${REALM_MODELS}/arcane/realm_arcane_ethereal_sentinel_hrgiger_artabs_01946061.glb`,
     height: GEN_H,
@@ -357,6 +434,72 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/arcane/realm_arcane_ethereal_watcher_characters_0195fe49.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_arcane_fantasy_evil_wizard_visionary_01983342: {
+    url: `${REALM_MODELS}/arcane/realm_arcane_fantasy_evil_wizard_visionary_01983342.glb`,
+    height: GEN_H,
+    clips: genClips(['Spellcast_Shoot']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_arcane_fantasy_evil_wizard_visionary_01983343: {
+    url: `${REALM_MODELS}/arcane/realm_arcane_fantasy_evil_wizard_visionary_01983343.glb`,
+    height: GEN_H,
+    clips: genClips(['Spellcast_Shoot']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_arcane_fantasy_evil_wizard_visionary_0198334a: {
+    url: `${REALM_MODELS}/arcane/realm_arcane_fantasy_evil_wizard_visionary_0198334a.glb`,
+    height: GEN_H,
+    clips: genClips(['Spellcast_Shoot']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_arcane_fantasy_evil_wizard_visionary_019833b5: {
+    url: `${REALM_MODELS}/arcane/realm_arcane_fantasy_evil_wizard_visionary_019833b5.glb`,
+    height: GEN_H,
+    clips: genClips(['Spellcast_Shoot']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_arcane_fantasy_evil_wizard_visionary_019833b8: {
+    url: `${REALM_MODELS}/arcane/realm_arcane_fantasy_evil_wizard_visionary_019833b8.glb`,
+    height: GEN_H,
+    clips: genClips(['Spellcast_Shoot']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_arcane_fantasy_evil_wizard_visionary_019833b9: {
+    url: `${REALM_MODELS}/arcane/realm_arcane_fantasy_evil_wizard_visionary_019833b9.glb`,
+    height: GEN_H,
+    clips: genClips(['Spellcast_Shoot']),
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -408,6 +551,17 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_arcane_jaguar_spirit_animal_mammal_0198a144: {
+    url: `${REALM_MODELS}/arcane/realm_arcane_jaguar_spirit_animal_mammal_0198a144.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_arcane_jesus_religious_holy_divine_01940d85: {
     url: `${REALM_MODELS}/arcane/realm_arcane_jesus_religious_holy_divine_01940d85.glb`,
     height: GEN_H,
@@ -448,6 +602,17 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_arcane_mystic_wanderer_characters_0196eea0: {
+    url: `${REALM_MODELS}/arcane/realm_arcane_mystic_wanderer_characters_0196eea0.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_arcane_portal_enchanted_threshold_artab_019662fb: {
     url: `${REALM_MODELS}/arcane/realm_arcane_portal_enchanted_threshold_artab_019662fb.glb`,
     height: GEN_H,
@@ -472,6 +637,28 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
   },
   realm_arcane_shaman_s_spirit_keeper_01963bb3: {
     url: `${REALM_MODELS}/arcane/realm_arcane_shaman_s_spirit_keeper_01963bb3.glb`,
+    height: GEN_H,
+    clips: genClips(['Spellcast_Shoot']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_arcane_titan_arcane_characters_0196f84f: {
+    url: `${REALM_MODELS}/arcane/realm_arcane_titan_arcane_characters_0196f84f.glb`,
+    height: GEN_H,
+    clips: genClips(['Spellcast_Shoot']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_arcane_titan_arcane_characters_0196f85b: {
+    url: `${REALM_MODELS}/arcane/realm_arcane_titan_arcane_characters_0196f85b.glb`,
     height: GEN_H,
     clips: genClips(['Spellcast_Shoot']),
     attach: [
@@ -580,6 +767,23 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_classic_alien_conqueror_pbr_alien_0198e6fe: {
+    url: `${REALM_MODELS}/classic/realm_classic_alien_conqueror_pbr_alien_0198e6fe.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_alien_cowboy_alien_cowboy_01988669: {
+    url: `${REALM_MODELS}/classic/realm_classic_alien_cowboy_alien_cowboy_01988669.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_classic_alien_guardian_characters_01967cc9: {
     url: `${REALM_MODELS}/classic/realm_classic_alien_guardian_characters_01967cc9.glb`,
     height: GEN_H,
@@ -644,11 +848,77 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
+  realm_classic_ancient_guardian_characters_01972bf0: {
+    url: `${REALM_MODELS}/classic/realm_classic_ancient_guardian_characters_01972bf0.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_ancient_guardian_characters_0197374b: {
+    url: `${REALM_MODELS}/classic/realm_classic_ancient_guardian_characters_0197374b.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_ancient_guardian_characters_0198815f: {
+    url: `${REALM_MODELS}/classic/realm_classic_ancient_guardian_characters_0198815f.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_ancient_sorcerer_characters_0198147f: {
+    url: `${REALM_MODELS}/classic/realm_classic_ancient_sorcerer_characters_0198147f.glb`,
+    height: GEN_H,
+    clips: genClips(['Spellcast_Shoot']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_classic_angel_warrior_characters_artabst_0193ea08: {
     url: `${REALM_MODELS}/classic/realm_classic_angel_warrior_characters_artabst_0193ea08.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_armored_beastlord_characters_0196c014: {
+    url: `${REALM_MODELS}/classic/realm_classic_armored_beastlord_characters_0196c014.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_armored_beastlord_characters_0196c029: {
+    url: `${REALM_MODELS}/classic/realm_classic_armored_beastlord_characters_0196c029.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
   },
   realm_classic_armored_guardian_characters_weap_0193fba5: {
     url: `${REALM_MODELS}/classic/realm_classic_armored_guardian_characters_weap_0193fba5.glb`,
@@ -678,6 +948,12 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_classic_avian_serpent_knight_characters_0197d2ad: {
+    url: `${REALM_MODELS}/classic/realm_classic_avian_serpent_knight_characters_0197d2ad.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
   realm_classic_aztec_warrior_characters_culture_0194c237: {
     url: `${REALM_MODELS}/classic/realm_classic_aztec_warrior_characters_culture_0194c237.glb`,
     height: GEN_H,
@@ -699,6 +975,72 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_bard_fairy_goblin_characters_0195f1fd.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_battlemage_dwarf_characters_019736dc: {
+    url: `${REALM_MODELS}/classic/realm_classic_battlemage_dwarf_characters_019736dc.glb`,
+    height: GEN_H,
+    clips: genClips(['Spellcast_Shoot']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_berserker_s_march_music_0196bce9: {
+    url: `${REALM_MODELS}/classic/realm_classic_berserker_s_march_music_0196bce9.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_bifrost_beast_characters_01983029: {
+    url: `${REALM_MODELS}/classic/realm_classic_bifrost_beast_characters_01983029.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_bifrost_beast_characters_animals_01983026: {
+    url: `${REALM_MODELS}/classic/realm_classic_bifrost_beast_characters_animals_01983026.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_bionic_ogre_mutation_sciencetech_0197790d: {
+    url: `${REALM_MODELS}/classic/realm_classic_bionic_ogre_mutation_sciencetech_0197790d.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_bionic_ogre_mutation_sciencetech_0197790f: {
+    url: `${REALM_MODELS}/classic/realm_classic_bionic_ogre_mutation_sciencetech_0197790f.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -877,6 +1219,12 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_classic_cave_warrior_characters_019871b8: {
+    url: `${REALM_MODELS}/classic/realm_classic_cave_warrior_characters_019871b8.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
   realm_classic_corona_virus_humanoid_monster_01954a8e: {
     url: `${REALM_MODELS}/classic/realm_classic_corona_virus_humanoid_monster_01954a8e.glb`,
     height: GEN_H,
@@ -921,6 +1269,45 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_classic_cyber_ogre_ogre_cyberpunk_01992a81: {
+    url: `${REALM_MODELS}/classic/realm_classic_cyber_ogre_ogre_cyberpunk_01992a81.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_cyber_orc_convergence_characters_0196d049: {
+    url: `${REALM_MODELS}/classic/realm_classic_cyber_orc_convergence_characters_0196d049.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_cyber_orc_warrior_characters_01972cca: {
+    url: `${REALM_MODELS}/classic/realm_classic_cyber_orc_warrior_characters_01972cca.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_cyber_polar_guardian_sciencetech_019736d0: {
+    url: `${REALM_MODELS}/classic/realm_classic_cyber_polar_guardian_sciencetech_019736d0.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_classic_cyber_sentinel_robot_futuristic_01943740: {
     url: `${REALM_MODELS}/classic/realm_classic_cyber_sentinel_robot_futuristic_01943740.glb`,
     height: GEN_H,
@@ -932,8 +1319,99 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_classic_cyber_troll_characters_sciencete_0196b0b7: {
+    url: `${REALM_MODELS}/classic/realm_classic_cyber_troll_characters_sciencete_0196b0b7.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_cyber_troll_characters_sciencete_0196d038: {
+    url: `${REALM_MODELS}/classic/realm_classic_cyber_troll_characters_sciencete_0196d038.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_cyber_troll_sentinel_characters_019736e5: {
+    url: `${REALM_MODELS}/classic/realm_classic_cyber_troll_sentinel_characters_019736e5.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_cyber_warrior_sciencetechnology__019736ca: {
+    url: `${REALM_MODELS}/classic/realm_classic_cyber_warrior_sciencetechnology__019736ca.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_cybernetic_guardian_sciencetechn_0196fe02: {
+    url: `${REALM_MODELS}/classic/realm_classic_cybernetic_guardian_sciencetechn_0196fe02.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_cybernetic_knight_sciencetechnol_0196e689: {
+    url: `${REALM_MODELS}/classic/realm_classic_cybernetic_knight_sciencetechnol_0196e689.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_cybernetic_minotaur_warrior_char_0196e440: {
+    url: `${REALM_MODELS}/classic/realm_classic_cybernetic_minotaur_warrior_char_0196e440.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_cybernetic_minotaur_warrior_char_0196e65e: {
+    url: `${REALM_MODELS}/classic/realm_classic_cybernetic_minotaur_warrior_char_0196e65e.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_cybernetic_ogre_characters_scien_0196b627: {
+    url: `${REALM_MODELS}/classic/realm_classic_cybernetic_ogre_characters_scien_0196b627.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_cybernetic_ogre_warrior_characte_01972cd0: {
+    url: `${REALM_MODELS}/classic/realm_classic_cybernetic_ogre_warrior_characte_01972cd0.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
   realm_classic_cybernetic_warrior_characters_sc_01945675: {
     url: `${REALM_MODELS}/classic/realm_classic_cybernetic_warrior_characters_sc_01945675.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_cybernetic_warrior_sciencetechno_01983daf: {
+    url: `${REALM_MODELS}/classic/realm_classic_cybernetic_warrior_sciencetechno_01983daf.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
@@ -989,6 +1467,97 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
+  realm_classic_cyborg_enforcer_sciencetechnolog_0196b72e: {
+    url: `${REALM_MODELS}/classic/realm_classic_cyborg_enforcer_sciencetechnolog_0196b72e.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_cyborg_orc_warrior_characters_0196b5fe: {
+    url: `${REALM_MODELS}/classic/realm_classic_cyborg_orc_warrior_characters_0196b5fe.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_cyborg_troll_characters_sciencet_0196b0a6: {
+    url: `${REALM_MODELS}/classic/realm_classic_cyborg_troll_characters_sciencet_0196b0a6.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_cyborg_troll_characters_sciencet_0196b0ae: {
+    url: `${REALM_MODELS}/classic/realm_classic_cyborg_troll_characters_sciencet_0196b0ae.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_cyborg_warrior_extra_arms_0196bcef: {
+    url: `${REALM_MODELS}/classic/realm_classic_cyborg_warrior_extra_arms_0196bcef.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_cyborg_warrior_extra_arms_0196c00b: {
+    url: `${REALM_MODELS}/classic/realm_classic_cyborg_warrior_extra_arms_0196c00b.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_cyborg_warrior_sciencetechnology_0196c06a: {
+    url: `${REALM_MODELS}/classic/realm_classic_cyborg_warrior_sciencetechnology_0196c06a.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_cyclopean_prince_pbr_character_0198d461: {
+    url: `${REALM_MODELS}/classic/realm_classic_cyclopean_prince_pbr_character_0198d461.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_dark_knight_sentinel_characters_01982ac3: {
+    url: `${REALM_MODELS}/classic/realm_classic_dark_knight_sentinel_characters_01982ac3.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_dark_knight_sentinel_characters_01982d9f: {
+    url: `${REALM_MODELS}/classic/realm_classic_dark_knight_sentinel_characters_01982d9f.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_dark_sorcerer_characters_01974aec: {
+    url: `${REALM_MODELS}/classic/realm_classic_dark_sorcerer_characters_01974aec.glb`,
+    height: GEN_H,
+    clips: genClips(['Spellcast_Shoot']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_classic_dark_warrior_monarch_characters_01964f6a: {
     url: `${REALM_MODELS}/classic/realm_classic_dark_warrior_monarch_characters_01964f6a.glb`,
     height: GEN_H,
@@ -1034,6 +1603,12 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     ],
     weaponSlots: [0],
     offhandSlot: 1,
+  },
+  realm_classic_dual_head_warrior_future_0196b630: {
+    url: `${REALM_MODELS}/classic/realm_classic_dual_head_warrior_future_0196b630.glb`,
+    height: GEN_H,
+    clips: genClips(['Dualwield_Melee_Attack_Chop']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_dual_headed_humanoid_creature_0194568e: {
     url: `${REALM_MODELS}/classic/realm_classic_dual_headed_humanoid_creature_0194568e.glb`,
@@ -1217,6 +1792,28 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_classic_elder_goblin_mystic_characters_0196eb8f: {
+    url: `${REALM_MODELS}/classic/realm_classic_elder_goblin_mystic_characters_0196eb8f.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_elderwood_guardian_sketchto3d_ch_019813a9: {
+    url: `${REALM_MODELS}/classic/realm_classic_elderwood_guardian_sketchto3d_ch_019813a9.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_classic_eldritch_guardian_characters_01969c78: {
     url: `${REALM_MODELS}/classic/realm_classic_eldritch_guardian_characters_01969c78.glb`,
     height: GEN_H,
@@ -1230,6 +1827,17 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
   },
   realm_classic_eldritch_guardian_characters_01969c8a: {
     url: `${REALM_MODELS}/classic/realm_classic_eldritch_guardian_characters_01969c8a.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_eternal_echo_skeletal_humanoid_01988178: {
+    url: `${REALM_MODELS}/classic/realm_classic_eternal_echo_skeletal_humanoid_01988178.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     attach: [
@@ -1399,6 +2007,12 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_classic_ethereal_warrior_characters_01972c65: {
+    url: `${REALM_MODELS}/classic/realm_classic_ethereal_warrior_characters_01972c65.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
   realm_classic_evangelions_neon_genesis_evangel_019382a8: {
     url: `${REALM_MODELS}/classic/realm_classic_evangelions_neon_genesis_evangel_019382a8.glb`,
     height: GEN_H,
@@ -1489,6 +2103,23 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
   },
   realm_classic_fat_dwarf_warrior_pose_01955ce2: {
     url: `${REALM_MODELS}/classic/realm_classic_fat_dwarf_warrior_pose_01955ce2.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_frost_guardian_characters_0196feab: {
+    url: `${REALM_MODELS}/classic/realm_classic_frost_guardian_characters_0196feab.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_frost_guardian_ice_guardian_0196fea0: {
+    url: `${REALM_MODELS}/classic/realm_classic_frost_guardian_ice_guardian_0196fea0.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
@@ -1875,6 +2506,17 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
+  realm_classic_goblin_alchemist_characters_01983878: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_alchemist_characters_01983878.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_classic_goblin_boss_head_warhammer_01956c0f: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_boss_head_warhammer_01956c0f.glb`,
     height: GEN_H,
@@ -1941,11 +2583,165 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_classic_goblin_gladiator_characters_0196c1d0: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_gladiator_characters_0196c1d0.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_goblin_grin_characters_01974b3d: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_grin_characters_01974b3d.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_goblin_grin_characters_01974b44: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_grin_characters_01974b44.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_goblin_grin_characters_01974bc0: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_grin_characters_01974bc0.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_goblin_grumblers_characters_01977176: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_grumblers_characters_01977176.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_goblin_guardian_characters_019750a9: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_guardian_characters_019750a9.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_goblin_guardian_characters_019750ac: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_guardian_characters_019750ac.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_goblin_guardian_characters_019750b5: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_guardian_characters_019750b5.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_goblin_king_characters_01974614: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_king_characters_01974614.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_goblin_king_characters_01974ba2: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_king_characters_01974ba2.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_goblin_king_characters_01974bc8: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_king_characters_01974bc8.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_goblin_king_characters_0197764d: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_king_characters_0197764d.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_goblin_king_characters_01977923: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_king_characters_01977923.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_classic_goblin_knight_characters_weapons_0195f1c9: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_knight_characters_weapons_0195f1c9.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_goblin_mage_characters_0196c4ec: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_mage_characters_0196c4ec.glb`,
+    height: GEN_H,
+    clips: genClips(['Spellcast_Shoot']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
   },
   realm_classic_goblin_mage_explorer_characters_01964f68: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_mage_explorer_characters_01964f68.glb`,
@@ -2035,8 +2831,85 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_classic_goblin_shaman_characters_01974ba5: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_shaman_characters_01974ba5.glb`,
+    height: GEN_H,
+    clips: genClips(['Spellcast_Shoot']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_goblin_shaman_characters_0197c17c: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_shaman_characters_0197c17c.glb`,
+    height: GEN_H,
+    clips: genClips(['Spellcast_Shoot']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_goblin_shaman_characters_fantasy_01988732: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_shaman_characters_fantasy_01988732.glb`,
+    height: GEN_H,
+    clips: genClips(['Spellcast_Shoot']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_goblin_shaman_elder_pbr_01991782: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_shaman_elder_pbr_01991782.glb`,
+    height: GEN_H,
+    clips: genClips(['Spellcast_Shoot']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_goblin_sketch_sketchto3d_charact_01981384: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_sketch_sketchto3d_charact_01981384.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_goblin_twins_characters_0196ca34: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_twins_characters_0196ca34.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_classic_goblin_wanderer_characters_0196846d: {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_wanderer_characters_0196846d.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_goblin_wanderer_characters_01983a3b: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_wanderer_characters_01983a3b.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     attach: [
@@ -2062,6 +2935,36 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_goblin_warlord_characters_01967858.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_goblin_warlord_characters_0196a10b: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_warlord_characters_0196a10b.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_goblin_warlord_characters_01976a00: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_warlord_characters_01976a00.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_goblin_warlord_characters_01976a03: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_warlord_characters_01976a03.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_goblin_warlord_characters_fantas_019899f1: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_warlord_characters_fantas_019899f1.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_goblin_warrior_action_figure_0197dbb4: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_action_figure_0197dbb4.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_goblin_warrior_character_mortal_019634ed: {
@@ -2124,6 +3027,176 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
+  realm_classic_goblin_warrior_characters_weapon_0196a609: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_0196a609.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_goblin_warrior_characters_weapon_0196a622: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_0196a622.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_goblin_warrior_characters_weapon_0196abf2: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_0196abf2.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_goblin_warrior_characters_weapon_0196ca24: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_0196ca24.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_goblin_warrior_characters_weapon_0196dee2: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_0196dee2.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_goblin_warrior_characters_weapon_0196ee97: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_0196ee97.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_goblin_warrior_characters_weapon_0197376e: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_0197376e.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_goblin_warrior_characters_weapon_01974b3b: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_01974b3b.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_goblin_warrior_characters_weapon_01975007: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_01975007.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_goblin_warrior_characters_weapon_0197500d: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_0197500d.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_goblin_warrior_characters_weapon_01975c86: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_01975c86.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_goblin_warrior_characters_weapon_0197698b: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_0197698b.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_goblin_warrior_characters_weapon_0197833e: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_0197833e.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_goblin_warrior_characters_weapon_0197c14c: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_0197c14c.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_goblin_warrior_characters_weapon_0197c16c: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_0197c16c.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_goblin_warrior_characters_weapon_0197c689: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_0197c689.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_goblin_warrior_characters_weapon_0197db11: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_characters_weapon_0197db11.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_goblin_warrior_goblin_characters_01983a41: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_goblin_characters_01983a41.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_goblin_warrior_goblin_warrior_019880e0: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_goblin_warrior_019880e0.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_goblin_warrior_traditional_attir_0199156c: {
+    url: `${REALM_MODELS}/classic/realm_classic_goblin_warrior_traditional_attir_0199156c.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_golden_guardian_characters_01987fc1: {
+    url: `${REALM_MODELS}/classic/realm_classic_golden_guardian_characters_01987fc1.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_golem_guardian_characters_0196feaa: {
+    url: `${REALM_MODELS}/classic/realm_classic_golem_guardian_characters_0196feaa.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_golem_sentinel_villain_golem_01998e8e: {
+    url: `${REALM_MODELS}/classic/realm_classic_golem_sentinel_villain_golem_01998e8e.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_goliath_ogre_creatures_ogre_01988ac1: {
+    url: `${REALM_MODELS}/classic/realm_classic_goliath_ogre_creatures_ogre_01988ac1.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_goliath_ogre_ogre_goblin_01988a8b: {
+    url: `${REALM_MODELS}/classic/realm_classic_goliath_ogre_ogre_goblin_01988a8b.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_classic_green_goblin_holding_wooden_0196110b: {
     url: `${REALM_MODELS}/classic/realm_classic_green_goblin_holding_wooden_0196110b.glb`,
     height: GEN_H,
@@ -2141,8 +3214,47 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_classic_grog_warrior_troll_characters_0197c25d: {
+    url: `${REALM_MODELS}/classic/realm_classic_grog_warrior_troll_characters_0197c25d.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
   realm_classic_grotesque_set_goblin_teeth_01969be6: {
     url: `${REALM_MODELS}/classic/realm_classic_grotesque_set_goblin_teeth_01969be6.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_gruff_goblin_characters_01974618: {
+    url: `${REALM_MODELS}/classic/realm_classic_gruff_goblin_characters_01974618.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_gruff_goblin_characters_0197461b: {
+    url: `${REALM_MODELS}/classic/realm_classic_gruff_goblin_characters_0197461b.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_gruff_goblin_characters_0197461f: {
+    url: `${REALM_MODELS}/classic/realm_classic_gruff_goblin_characters_0197461f.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     attach: [
@@ -2174,6 +3286,28 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_classic_grumpy_troll_characters_01972c82: {
+    url: `${REALM_MODELS}/classic/realm_classic_grumpy_troll_characters_01972c82.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_grumpy_troll_characters_01972cb9: {
+    url: `${REALM_MODELS}/classic/realm_classic_grumpy_troll_characters_01972cb9.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_classic_guardian_titan_characters_019677ca: {
     url: `${REALM_MODELS}/classic/realm_classic_guardian_titan_characters_019677ca.glb`,
     height: GEN_H,
@@ -2185,8 +3319,36 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_classic_heavenly_guardian_characters_0197d682: {
+    url: `${REALM_MODELS}/classic/realm_classic_heavenly_guardian_characters_0197d682.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_classic_hoge_3_meter_tall_019542be: {
     url: `${REALM_MODELS}/classic/realm_classic_hoge_3_meter_tall_019542be.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_horned_guardian_characters_0196a607: {
+    url: `${REALM_MODELS}/classic/realm_classic_horned_guardian_characters_0196a607.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_horned_warrior_characters_weapon_0196a604: {
+    url: `${REALM_MODELS}/classic/realm_classic_horned_warrior_characters_weapon_0196a604.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
@@ -2252,6 +3414,17 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_classic_insectoid_enforcer_characters_0198111c: {
+    url: `${REALM_MODELS}/classic/realm_classic_insectoid_enforcer_characters_0198111c.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_classic_insectoid_warrior_characters_01968d0e: {
     url: `${REALM_MODELS}/classic/realm_classic_insectoid_warrior_characters_01968d0e.glb`,
     height: GEN_H,
@@ -2262,6 +3435,30 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/classic/realm_classic_ironclad_minotaur_warrior_charac_01965dde.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_ironclad_warrior_characters_weap_01974dae: {
+    url: `${REALM_MODELS}/classic/realm_classic_ironclad_warrior_characters_weap_01974dae.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_leyendary_troll_boss_evil_01989492: {
+    url: `${REALM_MODELS}/classic/realm_classic_leyendary_troll_boss_evil_01989492.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_leyendary_troll_boss_evil_01989498: {
+    url: `${REALM_MODELS}/classic/realm_classic_leyendary_troll_boss_evil_01989498.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_leyendary_troll_boss_evil_019894a5: {
+    url: `${REALM_MODELS}/classic/realm_classic_leyendary_troll_boss_evil_019894a5.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_lion_knight_animals_characters_0196499e: {
@@ -2294,6 +3491,28 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
   },
   realm_classic_low_poly_goblin_characters_0195f1ef: {
     url: `${REALM_MODELS}/classic/realm_classic_low_poly_goblin_characters_0195f1ef.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_low_poly_goblin_characters_0196fa46: {
+    url: `${REALM_MODELS}/classic/realm_classic_low_poly_goblin_characters_0196fa46.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_low_poly_goblin_characters_0196fa4a: {
+    url: `${REALM_MODELS}/classic/realm_classic_low_poly_goblin_characters_0196fa4a.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     attach: [
@@ -2380,10 +3599,43 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_classic_mech_guardian_sciencetechnology__01970f88: {
+    url: `${REALM_MODELS}/classic/realm_classic_mech_guardian_sciencetechnology__01970f88.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_classic_mechanical_guardian_robot_scienc_0196636a: {
     url: `${REALM_MODELS}/classic/realm_classic_mechanical_guardian_robot_scienc_0196636a.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_mechanized_ogre_sciencetechnolog_01975507: {
+    url: `${REALM_MODELS}/classic/realm_classic_mechanized_ogre_sciencetechnolog_01975507.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_mechanized_ogre_sciencetechnolog_01975c87: {
+    url: `${REALM_MODELS}/classic/realm_classic_mechanized_ogre_sciencetechnolog_01975c87.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -2401,6 +3653,41 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     ],
     weaponSlots: [0],
     offhandSlot: 1,
+  },
+  realm_classic_minotaur_sentinel_minotaur_creat_019875dc: {
+    url: `${REALM_MODELS}/classic/realm_classic_minotaur_sentinel_minotaur_creat_019875dc.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_minotaur_smiles_characters_01974aed: {
+    url: `${REALM_MODELS}/classic/realm_classic_minotaur_smiles_characters_01974aed.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_minotaur_warrior_characters_weap_0197905e: {
+    url: `${REALM_MODELS}/classic/realm_classic_minotaur_warrior_characters_weap_0197905e.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_minotaur_warrior_minotaur_warrio_01987fdf: {
+    url: `${REALM_MODELS}/classic/realm_classic_minotaur_warrior_minotaur_warrio_01987fdf.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_most_bad_ass_goblin_0198d2d0: {
+    url: `${REALM_MODELS}/classic/realm_classic_most_bad_ass_goblin_0198d2d0.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_muscular_female_human_pose_0194e194: {
     url: `${REALM_MODELS}/classic/realm_classic_muscular_female_human_pose_0194e194.glb`,
@@ -2430,6 +3717,78 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
+  realm_classic_mutant_farmer_characters_01985b8d: {
+    url: `${REALM_MODELS}/classic/realm_classic_mutant_farmer_characters_01985b8d.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_mystic_barbarian_characters_0197b997: {
+    url: `${REALM_MODELS}/classic/realm_classic_mystic_barbarian_characters_0197b997.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_mystic_elder_character_mystic_01983812: {
+    url: `${REALM_MODELS}/classic/realm_classic_mystic_elder_character_mystic_01983812.glb`,
+    height: GEN_H,
+    clips: genClips(['Spellcast_Shoot']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_mystic_goblin_mage_characters_0196f303: {
+    url: `${REALM_MODELS}/classic/realm_classic_mystic_goblin_mage_characters_0196f303.glb`,
+    height: GEN_H,
+    clips: genClips(['Spellcast_Shoot']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_mystic_goblin_mage_characters_0196f84f: {
+    url: `${REALM_MODELS}/classic/realm_classic_mystic_goblin_mage_characters_0196f84f.glb`,
+    height: GEN_H,
+    clips: genClips(['Spellcast_Shoot']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_mystic_minotaur_characters_anima_0196b137: {
+    url: `${REALM_MODELS}/classic/realm_classic_mystic_minotaur_characters_anima_0196b137.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_mystic_orc_warrior_characters_0196e3f4: {
+    url: `${REALM_MODELS}/classic/realm_classic_mystic_orc_warrior_characters_0196e3f4.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
   realm_classic_mystic_warrior_characters_01963bbf: {
     url: `${REALM_MODELS}/classic/realm_classic_mystic_warrior_characters_01963bbf.glb`,
     height: GEN_H,
@@ -2441,6 +3800,17 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_mystical_horned_guardian_charact_0196c4e7: {
+    url: `${REALM_MODELS}/classic/realm_classic_mystical_horned_guardian_charact_0196c4e7.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
   },
   realm_classic_naked_cave_troll_muscular_0194424e: {
     url: `${REALM_MODELS}/classic/realm_classic_naked_cave_troll_muscular_0194424e.glb`,
@@ -2570,6 +3940,36 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_classic_ogre_s_fury_fantasy_0198a132: {
+    url: `${REALM_MODELS}/classic/realm_classic_ogre_s_fury_fantasy_0198a132.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_ogre_warlord_characters_0196bf89: {
+    url: `${REALM_MODELS}/classic/realm_classic_ogre_warlord_characters_0196bf89.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_ogre_warlord_characters_0196c00a: {
+    url: `${REALM_MODELS}/classic/realm_classic_ogre_warlord_characters_0196c00a.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_ogre_warrior_characters_0196f982: {
+    url: `${REALM_MODELS}/classic/realm_classic_ogre_warrior_characters_0196f982.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_ogre_warrior_characters_0196fa41: {
+    url: `${REALM_MODELS}/classic/realm_classic_ogre_warrior_characters_0196fa41.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
   realm_classic_orc_adventurer_characters_019427b3: {
     url: `${REALM_MODELS}/classic/realm_classic_orc_adventurer_characters_019427b3.glb`,
     height: GEN_H,
@@ -2603,6 +4003,23 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_classic_orc_cyborg_warrior_orc_0198a132: {
+    url: `${REALM_MODELS}/classic/realm_classic_orc_cyborg_warrior_orc_0198a132.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_orc_denim_characters_fashionstyl_0196fd71: {
+    url: `${REALM_MODELS}/classic/realm_classic_orc_denim_characters_fashionstyl_0196fd71.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_classic_orc_guardian_characters_01969c74: {
     url: `${REALM_MODELS}/classic/realm_classic_orc_guardian_characters_01969c74.glb`,
     height: GEN_H,
@@ -2613,6 +4030,12 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     ],
     weaponSlots: [0],
     offhandSlot: 1,
+  },
+  realm_classic_orc_king_villain_orc_019997d7: {
+    url: `${REALM_MODELS}/classic/realm_classic_orc_king_villain_orc_019997d7.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_orc_sentinel_characters_01968737: {
     url: `${REALM_MODELS}/classic/realm_classic_orc_sentinel_characters_01968737.glb`,
@@ -2636,6 +4059,24 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_classic_orc_warlord_characters_0196da51: {
+    url: `${REALM_MODELS}/classic/realm_classic_orc_warlord_characters_0196da51.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_orc_warlord_orc_warlord_019899f2: {
+    url: `${REALM_MODELS}/classic/realm_classic_orc_warlord_orc_warlord_019899f2.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_orc_warlord_orc_warlord_019899f4: {
+    url: `${REALM_MODELS}/classic/realm_classic_orc_warlord_orc_warlord_019899f4.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
   realm_classic_orc_warrior_characters_weaponsmi_0194dbf4: {
     url: `${REALM_MODELS}/classic/realm_classic_orc_warrior_characters_weaponsmi_0194dbf4.glb`,
     height: GEN_H,
@@ -2648,8 +4089,44 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
+  realm_classic_orc_warrior_characters_weaponsmi_0196c06c: {
+    url: `${REALM_MODELS}/classic/realm_classic_orc_warrior_characters_weaponsmi_0196c06c.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_orc_warrior_characters_weaponsmi_0196c1e4: {
+    url: `${REALM_MODELS}/classic/realm_classic_orc_warrior_characters_weaponsmi_0196c1e4.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_orc_warrior_characters_weaponsmi_0196f86d: {
+    url: `${REALM_MODELS}/classic/realm_classic_orc_warrior_characters_weaponsmi_0196f86d.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_orc_warrior_characters_weaponsmi_0196f91f: {
+    url: `${REALM_MODELS}/classic/realm_classic_orc_warrior_characters_weaponsmi_0196f91f.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
   realm_classic_orc_warrior_chief_characters_0196591a: {
     url: `${REALM_MODELS}/classic/realm_classic_orc_warrior_chief_characters_0196591a.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_orc_warrior_king_characters_0196ada1: {
+    url: `${REALM_MODELS}/classic/realm_classic_orc_warrior_king_characters_0196ada1.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_orc_warrior_sentinel_characters_01972c6c: {
+    url: `${REALM_MODELS}/classic/realm_classic_orc_warrior_sentinel_characters_01972c6c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
@@ -2748,6 +4225,46 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
+  realm_classic_punk_beast_characters_01982df3: {
+    url: `${REALM_MODELS}/classic/realm_classic_punk_beast_characters_01982df3.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_punk_goblin_characters_fashionst_01973709: {
+    url: `${REALM_MODELS}/classic/realm_classic_punk_goblin_characters_fashionst_01973709.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_rhino_gladiator_villain_characte_0199a863: {
+    url: `${REALM_MODELS}/classic/realm_classic_rhino_gladiator_villain_characte_0199a863.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_road_warrior_giant_characters_0196cf39: {
+    url: `${REALM_MODELS}/classic/realm_classic_road_warrior_giant_characters_0196cf39.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_roadside_warrior_characters_0196f93f: {
+    url: `${REALM_MODELS}/classic/realm_classic_roadside_warrior_characters_0196f93f.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
   realm_classic_robot_humanoid_praying_mantis_01954d9b: {
     url: `${REALM_MODELS}/classic/realm_classic_robot_humanoid_praying_mantis_01954d9b.glb`,
     height: GEN_H,
@@ -2780,6 +4297,24 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     ],
     weaponSlots: [0],
     offhandSlot: 1,
+  },
+  realm_classic_rune_warrior_characters_0196c728: {
+    url: `${REALM_MODELS}/classic/realm_classic_rune_warrior_characters_0196c728.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_runestone_warrior_characters_01973204: {
+    url: `${REALM_MODELS}/classic/realm_classic_runestone_warrior_characters_01973204.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_runic_warrior_armor_warrior_019731a3: {
+    url: `${REALM_MODELS}/classic/realm_classic_runic_warrior_armor_warrior_019731a3.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_rusty_warrior_characters_weapons_019682ad: {
     url: `${REALM_MODELS}/classic/realm_classic_rusty_warrior_characters_weapons_019682ad.glb`,
@@ -2837,6 +4372,17 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     clips: genClips(['2H_Melee_Attack_Chop']),
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
+  realm_classic_steampunk_goblin_explorer_charac_0196e8e8: {
+    url: `${REALM_MODELS}/classic/realm_classic_steampunk_goblin_explorer_charac_0196e8e8.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_classic_steel_guardian_characters_0193fbbb: {
     url: `${REALM_MODELS}/classic/realm_classic_steel_guardian_characters_0193fbbb.glb`,
     height: GEN_H,
@@ -2880,6 +4426,95 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     ],
     weaponSlots: [0],
     offhandSlot: 1,
+  },
+  realm_classic_stone_guardian_characters_0197a485: {
+    url: `${REALM_MODELS}/classic/realm_classic_stone_guardian_characters_0197a485.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_titan_defender_fantasy_warrior_0199a837: {
+    url: `${REALM_MODELS}/classic/realm_classic_titan_defender_fantasy_warrior_0199a837.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_titan_vanguard_characters_0197a485: {
+    url: `${REALM_MODELS}/classic/realm_classic_titan_vanguard_characters_0197a485.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_troll_forged_titan_characters_0197ad67: {
+    url: `${REALM_MODELS}/classic/realm_classic_troll_forged_titan_characters_0197ad67.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_troll_suspenders_characters_0196f865: {
+    url: `${REALM_MODELS}/classic/realm_classic_troll_suspenders_characters_0196f865.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_twin_guardians_characters_0196eb96: {
+    url: `${REALM_MODELS}/classic/realm_classic_twin_guardians_characters_0196eb96.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_twin_headed_guardian_characters_0196ee0a: {
+    url: `${REALM_MODELS}/classic/realm_classic_twin_headed_guardian_characters_0196ee0a.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_twin_headed_guardian_characters_0196ee95: {
+    url: `${REALM_MODELS}/classic/realm_classic_twin_headed_guardian_characters_0196ee95.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_twin_ogre_warlord_characters_0196cf35: {
+    url: `${REALM_MODELS}/classic/realm_classic_twin_ogre_warlord_characters_0196cf35.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_classic_two_headed_ogre_characters_0193df44: {
     url: `${REALM_MODELS}/classic/realm_classic_two_headed_ogre_characters_0193df44.glb`,
@@ -2958,6 +4593,58 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_classic_two_headed_ogre_titan_01977b46: {
+    url: `${REALM_MODELS}/classic/realm_classic_two_headed_ogre_titan_01977b46.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_two_headed_warrior_characters_0196f30f: {
+    url: `${REALM_MODELS}/classic/realm_classic_two_headed_warrior_characters_0196f30f.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_two_headed_warrior_characters_0196f846: {
+    url: `${REALM_MODELS}/classic/realm_classic_two_headed_warrior_characters_0196f846.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_two_headed_warrior_characters_0196f863: {
+    url: `${REALM_MODELS}/classic/realm_classic_two_headed_warrior_characters_0196f863.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_un_mercenario_del_futuro_01972c4b: {
+    url: `${REALM_MODELS}/classic/realm_classic_un_mercenario_del_futuro_01972c4b.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_classic_urban_warrior_fashionstyle_0196d41c: {
+    url: `${REALM_MODELS}/classic/realm_classic_urban_warrior_fashionstyle_0196d41c.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_urban_wasteland_orc_orc_0198b3b9: {
+    url: `${REALM_MODELS}/classic/realm_classic_urban_wasteland_orc_orc_0198b3b9.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
   realm_classic_valentine_massive_hulking_cave_01950211: {
     url: `${REALM_MODELS}/classic/realm_classic_valentine_massive_hulking_cave_01950211.glb`,
     height: GEN_H,
@@ -3021,6 +4708,18 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
+  realm_classic_warrior_crimson_skies_characters_0196ba80: {
+    url: `${REALM_MODELS}/classic/realm_classic_warrior_crimson_skies_characters_0196ba80.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_warrior_denim_fashionstyle_chara_0197379b: {
+    url: `${REALM_MODELS}/classic/realm_classic_warrior_denim_fashionstyle_chara_0197379b.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
   realm_classic_warrior_fury_characters_019644f2: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_fury_characters_019644f2.glb`,
     height: GEN_H,
@@ -3057,6 +4756,12 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
+  realm_classic_warrior_minotaur_characters_0197c8e3: {
+    url: `${REALM_MODELS}/classic/realm_classic_warrior_minotaur_characters_0197c8e3.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
   realm_classic_warrior_ogre_characters_01968c86: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_ogre_characters_01968c86.glb`,
     height: GEN_H,
@@ -3081,8 +4786,26 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
+  realm_classic_warrior_realm_characters_0196b62c: {
+    url: `${REALM_MODELS}/classic/realm_classic_warrior_realm_characters_0196b62c.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
   realm_classic_warrior_s_resolve_characters_01963bcd: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_s_resolve_characters_01963bcd.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_warrior_s_resolve_characters_0197a4e6: {
+    url: `${REALM_MODELS}/classic/realm_classic_warrior_s_resolve_characters_0197a4e6.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_warrior_s_resolve_characters_019948db: {
+    url: `${REALM_MODELS}/classic/realm_classic_warrior_s_resolve_characters_019948db.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
@@ -3099,8 +4822,38 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
+  realm_classic_warrior_skies_characters_019731a1: {
+    url: `${REALM_MODELS}/classic/realm_classic_warrior_skies_characters_019731a1.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
   realm_classic_warrior_titan_characters_0196976a: {
     url: `${REALM_MODELS}/classic/realm_classic_warrior_titan_characters_0196976a.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_warrior_titan_characters_0196b72e: {
+    url: `${REALM_MODELS}/classic/realm_classic_warrior_titan_characters_0196b72e.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_warrior_troll_characters_0196e404: {
+    url: `${REALM_MODELS}/classic/realm_classic_warrior_troll_characters_0196e404.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_warrior_twins_characters_0196f846: {
+    url: `${REALM_MODELS}/classic/realm_classic_warrior_twins_characters_0196f846.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_warrior_wasteland_warrior_wastel_01987196: {
+    url: `${REALM_MODELS}/classic/realm_classic_warrior_wasteland_warrior_wastel_01987196.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
@@ -3116,6 +4869,17 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_classic_wrathborn_berserker_characters_01973141: {
+    url: `${REALM_MODELS}/classic/realm_classic_wrathborn_berserker_characters_01973141.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
   },
   realm_dominion_alien_crucifixion_artabstract_sc_01965df1: {
     url: `${REALM_MODELS}/dominion/realm_dominion_alien_crucifixion_artabstract_sc_01965df1.glb`,
@@ -3360,8 +5124,30 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     clips: genClips(['2H_Melee_Attack_Chop']),
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
+  realm_dominion_battle_ready_alien_characters_0196c061: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_battle_ready_alien_characters_0196c061.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_dominion_budda_made_steel_pose_01943786: {
     url: `${REALM_MODELS}/dominion/realm_dominion_budda_made_steel_pose_01943786.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_buzz_boxer_bot_characters_01976edf: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_buzz_boxer_bot_characters_01976edf.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     attach: [
@@ -3437,6 +5223,83 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_dominion_cyber_corsair_characters_science_0197898b: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_cyber_corsair_characters_science_0197898b.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_cyber_gator_swagger_animals_0196d57a: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_cyber_gator_swagger_animals_0196d57a.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_cyber_golem_sciencetechnology_ch_01972ccf: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_cyber_golem_sciencetechnology_ch_01972ccf.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_cyber_panda_adventurer_panda_0196d573: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_cyber_panda_adventurer_panda_0196d573.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_cyber_pirate_characters_sciencet_0196f06c: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_cyber_pirate_characters_sciencet_0196f06c.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_cyber_pirate_mercenary_furture_0197c7b8: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_cyber_pirate_mercenary_furture_0197c7b8.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_cyber_pirate_overlord_characters_0196e657: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_cyber_pirate_overlord_characters_0196e657.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_dominion_cyber_sentinel_characters_scienc_01942e67: {
     url: `${REALM_MODELS}/dominion/realm_dominion_cyber_sentinel_characters_scienc_01942e67.glb`,
     height: GEN_H,
@@ -3470,6 +5333,12 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_dominion_cyber_sentinel_pbr_robot_019905d1: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_cyber_sentinel_pbr_robot_019905d1.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
   realm_dominion_cyber_sentinel_robot_android_01942e6b: {
     url: `${REALM_MODELS}/dominion/realm_dominion_cyber_sentinel_robot_android_01942e6b.glb`,
     height: GEN_H,
@@ -3483,6 +5352,61 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
   },
   realm_dominion_cyber_sentinel_sciencetechnology_01942e66: {
     url: `${REALM_MODELS}/dominion/realm_dominion_cyber_sentinel_sciencetechnology_01942e66.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_cyber_simian_sciencetechnology_a_01974b10: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_cyber_simian_sciencetechnology_a_01974b10.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_cyber_skater_phantom_characters_0196de3c: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_cyber_skater_phantom_characters_0196de3c.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_cyber_snail_adventurer_animals_01970cf5: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_cyber_snail_adventurer_animals_01970cf5.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_cyber_tiger_avenger_animals_0196d5ac: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_cyber_tiger_avenger_animals_0196d5ac.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_cyber_wanderer_characters_scienc_0196e689: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_cyber_wanderer_characters_scienc_0196e689.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     attach: [
@@ -3547,6 +5471,17 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_dominion_cybernetic_heavyweight_sciencete_0196fd7f: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_cybernetic_heavyweight_sciencete_0196fd7f.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_dominion_cybernetic_sentinel_electronics__0194394a: {
     url: `${REALM_MODELS}/dominion/realm_dominion_cybernetic_sentinel_electronics__0194394a.glb`,
     height: GEN_H,
@@ -3580,8 +5515,129 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_dominion_cybernetic_sentinel_sciencetechn_0196fd7d: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_cybernetic_sentinel_sciencetechn_0196fd7d.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_cybernetic_sentinel_sciencetechn_01974b04: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_cybernetic_sentinel_sciencetechn_01974b04.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_cybernetic_sentinel_sciencetechn_01974bc6: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_cybernetic_sentinel_sciencetechn_01974bc6.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_cybernetic_titan_sciencetechnolo_0196b0ab: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_cybernetic_titan_sciencetechnolo_0196b0ab.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_cybernetic_titan_sciencetechnolo_0196b0ae: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_cybernetic_titan_sciencetechnolo_0196b0ae.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_cyberpunk_cheetah_animals_scienc_0196d578: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_cyberpunk_cheetah_animals_scienc_0196d578.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_cyberpunk_corsair_sciencetechnol_0196e65b: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_cyberpunk_corsair_sciencetechnol_0196e65b.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_cyberpunk_panda_adventurer_chara_0196d573: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_cyberpunk_panda_adventurer_chara_0196d573.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_cyberpunk_voyager_sciencetechnol_0196d031: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_cyberpunk_voyager_sciencetechnol_0196d031.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_dominion_cyborg_batman_characters_science_0193cd32: {
     url: `${REALM_MODELS}/dominion/realm_dominion_cyborg_batman_characters_science_0193cd32.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_cyborg_sentinel_sciencetechnolog_0196cf38: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_cyborg_sentinel_sciencetechnolog_0196cf38.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_dark_iron_sentinel_characters_01983fa1: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_dark_iron_sentinel_characters_01983fa1.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     attach: [
@@ -3784,6 +5840,17 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_dominion_galactic_sentinel_sciencetechnol_019813e7: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_galactic_sentinel_sciencetechnol_019813e7.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_dominion_game_figure_angel_death_0195b944: {
     url: `${REALM_MODELS}/dominion/realm_dominion_game_figure_angel_death_0195b944.glb`,
     height: GEN_H,
@@ -3808,6 +5875,17 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
   },
   realm_dominion_golden_arachnid_sentinel_animals_0196496f: {
     url: `${REALM_MODELS}/dominion/realm_dominion_golden_arachnid_sentinel_animals_0196496f.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_golem_made_cristals_huge_01980afc: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_golem_made_cristals_huge_01980afc.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     attach: [
@@ -3850,6 +5928,28 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_dominion_iron_golem_characters_sciencetec_0196fe9e: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_iron_golem_characters_sciencetec_0196fe9e.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_iron_golem_characters_sciencetec_0196fea0: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_iron_golem_characters_sciencetec_0196fea0.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_dominion_iron_sentinel_characters_science_01946254: {
     url: `${REALM_MODELS}/dominion/realm_dominion_iron_sentinel_characters_science_01946254.glb`,
     height: GEN_H,
@@ -3872,8 +5972,41 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_dominion_jafaime_thin_monstrous_purple_0198f8f6: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_jafaime_thin_monstrous_purple_0198f8f6.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_dominion_masive_legendary_hammer_mixed_0194a074: {
     url: `${REALM_MODELS}/dominion/realm_dominion_masive_legendary_hammer_mixed_0194a074.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_mecha_sentinel_sciencetechnology_0196b58d: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_mecha_sentinel_sciencetechnology_0196b58d.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_mechanic_titan_sciencetechnology_0196fe0c: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_mechanic_titan_sciencetechnology_0196fe0c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     attach: [
@@ -3993,6 +6126,17 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_dominion_ork_mechanic_characters_0196c1e2: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_ork_mechanic_characters_0196c1e2.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_dominion_ork_warhammer_40k_holding_0195951e: {
     url: `${REALM_MODELS}/dominion/realm_dominion_ork_warhammer_40k_holding_0195951e.glb`,
     height: GEN_H,
@@ -4007,6 +6151,39 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
   },
   realm_dominion_pose_builder_insane_muscles_0194372d: {
     url: `${REALM_MODELS}/dominion/realm_dominion_pose_builder_insane_muscles_0194372d.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_raccoon_mechanic_animals_charact_019736f9: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_raccoon_mechanic_animals_charact_019736f9.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_robo_chill_vibes_sciencetechnolo_0196fe00: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_robo_chill_vibes_sciencetechnolo_0196fe00.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_robotic_wanderer_sciencetechnolo_0196fe0e: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_robotic_wanderer_sciencetechnolo_0196fe0e.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     attach: [
@@ -4093,6 +6270,17 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_dominion_sentinel_cyberspace_sciencetechn_0196c05b: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_sentinel_cyberspace_sciencetechn_0196c05b.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_dominion_silo_dune_sci_fi_01947a28: {
     url: `${REALM_MODELS}/dominion/realm_dominion_silo_dune_sci_fi_01947a28.glb`,
     height: GEN_H,
@@ -4117,6 +6305,39 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
   },
   realm_dominion_space_marine_characters_weaponsm_0193fb9a: {
     url: `${REALM_MODELS}/dominion/realm_dominion_space_marine_characters_weaponsm_0193fb9a.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_steampunk_explorer_characters_fa_0196d56a: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_steampunk_explorer_characters_fa_0196d56a.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_steampunk_explorer_fashionstyle__0196deeb: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_steampunk_explorer_fashionstyle__0196deeb.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_steampunk_robocop_sciencetechnol_0197fa8c: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_steampunk_robocop_sciencetechnol_0197fa8c.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     attach: [
@@ -4159,6 +6380,50 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_dominion_techno_goliath_sciencetechnology_01972cc2: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_techno_goliath_sciencetechnology_01972cc2.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_techno_goliath_sciencetechnology_01972cca: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_techno_goliath_sciencetechnology_01972cca.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_terminator_sciencetechnology_cha_0196b602: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_terminator_sciencetechnology_cha_0196b602.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_terminator_sciencetechnology_cha_0196b612: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_terminator_sciencetechnology_cha_0196b612.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_dominion_titanium_sentinel_sciencetechnol_01965431: {
     url: `${REALM_MODELS}/dominion/realm_dominion_titanium_sentinel_sciencetechnol_01965431.glb`,
     height: GEN_H,
@@ -4183,6 +6448,28 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
   },
   realm_dominion_urban_cyberpunk_explorer_charact_01942e81: {
     url: `${REALM_MODELS}/dominion/realm_dominion_urban_cyberpunk_explorer_charact_01942e81.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_urban_cyborg_explorer_characters_0196e8d1: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_urban_cyborg_explorer_characters_0196e8d1.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_dominion_urban_mech_drifter_characters_0196cf3f: {
+    url: `${REALM_MODELS}/dominion/realm_dominion_urban_mech_drifter_characters_0196cf3f.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     attach: [
@@ -4424,6 +6711,12 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     clips: genClips(['2H_Melee_Attack_Chop']),
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
+  realm_fps_dark_warlord_characters_weaponsm_0197c14c: {
+    url: `${REALM_MODELS}/fps/realm_fps_dark_warlord_characters_weaponsm_0197c14c.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
   realm_fps_dark_warlord_ork_characters_0195f1b9: {
     url: `${REALM_MODELS}/fps/realm_fps_dark_warlord_ork_characters_0195f1b9.glb`,
     height: GEN_H,
@@ -4650,6 +6943,17 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_fps_gothic_lord_characters_0196a614: {
+    url: `${REALM_MODELS}/fps/realm_fps_gothic_lord_characters_0196a614.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_fps_green_warlord_characters_019674e0: {
     url: `${REALM_MODELS}/fps/realm_fps_green_warlord_characters_019674e0.glb`,
     height: GEN_H,
@@ -4722,6 +7026,17 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_fps_mma_fighter_pose_ilia_0197c8e5: {
+    url: `${REALM_MODELS}/fps/realm_fps_mma_fighter_pose_ilia_0197c8e5.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_fps_ninja_gaiden_pose_characters_01946143: {
     url: `${REALM_MODELS}/fps/realm_fps_ninja_gaiden_pose_characters_01946143.glb`,
     height: GEN_H,
@@ -4735,6 +7050,17 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
   },
   realm_fps_perfect_rig_character_pose_019474ae: {
     url: `${REALM_MODELS}/fps/realm_fps_perfect_rig_character_pose_019474ae.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_fps_pirate_seagull_adventure_animals_01976405: {
+    url: `${REALM_MODELS}/fps/realm_fps_pirate_seagull_adventure_animals_01976405.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     attach: [
@@ -4809,6 +7135,18 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     ],
     weaponSlots: [0],
     offhandSlot: 1,
+  },
+  realm_fps_warlord_sentinel_characters_019740a9: {
+    url: `${REALM_MODELS}/fps/realm_fps_warlord_sentinel_characters_019740a9.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_fps_warlord_sentinel_characters_019740c5: {
+    url: `${REALM_MODELS}/fps/realm_fps_warlord_sentinel_characters_019740c5.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_fps_women_witch_satanic_tattoos_01957707: {
     url: `${REALM_MODELS}/fps/realm_fps_women_witch_satanic_tattoos_01957707.glb`,
@@ -4920,10 +7258,32 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_infernal_bonebound_titan_characters_019832d8: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_bonebound_titan_characters_019832d8.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_infernal_cave_troll_wear_tattered_01940d71: {
     url: `${REALM_MODELS}/infernal/realm_infernal_cave_troll_wear_tattered_01940d71.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_cowboy_cyborg_skeleton_character_01978974: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_cowboy_cyborg_skeleton_character_01978974.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5047,6 +7407,35 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
+  realm_infernal_cyber_demon_warrior_pbr_01990659: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_cyber_demon_warrior_pbr_01990659.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_infernal_cyber_demon_warrior_pbr_01990665: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_cyber_demon_warrior_pbr_01990665.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_infernal_cybernetic_ghoul_cyberpunk_ghoul_0198816e: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_cybernetic_ghoul_cyberpunk_ghoul_0198816e.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_cybernetic_oni_warrior_pbr_0199063c: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_cybernetic_oni_warrior_pbr_0199063c.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
   realm_infernal_cyberpunk_demon_stands_t_019434c8: {
     url: `${REALM_MODELS}/infernal/realm_infernal_cyberpunk_demon_stands_t_019434c8.glb`,
     height: GEN_H,
@@ -5062,6 +7451,17 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_cyberpunk_demon_stands_t_0194371d.glb`,
     height: GEN_H,
     clips: genClips(['2H_Ranged_Shoot']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_demon_colossus_demon_monster_019924f9: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_demon_colossus_demon_monster_019924f9.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5240,6 +7640,12 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     clips: genClips(['2H_Melee_Attack_Chop']),
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
+  realm_infernal_demon_warrior_characters_0196a601: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_demon_warrior_characters_0196a601.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
   realm_infernal_demonbane_blade_chronoforgeweapo_0194c4e3: {
     url: `${REALM_MODELS}/infernal/realm_infernal_demonbane_blade_chronoforgeweapo_0194c4e3.glb`,
     height: GEN_H,
@@ -5264,6 +7670,28 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
   },
   realm_infernal_demonic_cruciform_cross_demonic_019658f1: {
     url: `${REALM_MODELS}/infernal/realm_infernal_demonic_cruciform_cross_demonic_019658f1.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_demonic_jester_characters_01975a26: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_demonic_jester_characters_01975a26.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_demonic_sentinel_characters_0197a31a: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_demonic_sentinel_characters_0197a31a.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     attach: [
@@ -5321,6 +7749,12 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
   },
   realm_infernal_demonic_warrior_characters_01969c71: {
     url: `${REALM_MODELS}/infernal/realm_infernal_demonic_warrior_characters_01969c71.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_infernal_demonic_warrior_characters_weapo_01972c78: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_demonic_warrior_characters_weapo_01972c78.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
@@ -5408,6 +7842,45 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_infernal_dread_monolith_architecture_01974099: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_dread_monolith_architecture_01974099.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_dread_monolith_architecture_0197409a: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_dread_monolith_architecture_0197409a.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_dread_rider_characters_01972c7e: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_dread_rider_characters_01972c7e.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_dreadful_knight_abyss_characters_0197a322: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_dreadful_knight_abyss_characters_0197a322.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
   realm_infernal_dreadlord_s_embrace_characters_01940375: {
     url: `${REALM_MODELS}/infernal/realm_infernal_dreadlord_s_embrace_characters_01940375.glb`,
     height: GEN_H,
@@ -5423,6 +7896,17 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_dreadlord_s_embrace_characters_0194037f.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_dual_dread_weaponsmilitary_0197efbe: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_dual_dread_weaponsmilitary_0197efbe.glb`,
+    height: GEN_H,
+    clips: genClips(['Dualwield_Melee_Attack_Chop']),
     attach: [
       { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
@@ -5484,6 +7968,24 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     ],
     weaponSlots: [0],
     offhandSlot: 1,
+  },
+  realm_infernal_evil_warlord_armor_made_0196a11d: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_evil_warlord_armor_made_0196a11d.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_infernal_evil_warlord_armor_made_0196a11f: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_evil_warlord_armor_made_0196a11f.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_infernal_evil_warlord_armor_made_0196a156: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_evil_warlord_armor_made_0196a156.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_face_3_beautiful_demon_0194701e: {
     url: `${REALM_MODELS}/infernal/realm_infernal_face_3_beautiful_demon_0194701e.glb`,
@@ -5723,6 +8225,17 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_infernal_he_intricate_sculpture_demon_019935b0: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_he_intricate_sculpture_demon_019935b0.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_infernal_highly_muscular_albino_devil_0193e9a8: {
     url: `${REALM_MODELS}/infernal/realm_infernal_highly_muscular_albino_devil_0193e9a8.glb`,
     height: GEN_H,
@@ -5815,6 +8328,17 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_infernal_infernal_grin_characters_01974ae8: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_infernal_grin_characters_01974ae8.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_infernal_infernal_guardian_characters_01964444: {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_guardian_characters_01964444.glb`,
     height: GEN_H,
@@ -5828,6 +8352,50 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
   },
   realm_infernal_infernal_guardian_characters_01964974: {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_guardian_characters_01964974.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_infernal_guardian_characters_0196e65a: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_infernal_guardian_characters_0196e65a.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_infernal_guardian_characters_0196ee84: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_infernal_guardian_characters_0196ee84.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_infernal_guardian_characters_0196ee97: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_infernal_guardian_characters_0196ee97.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_infernal_guardian_characters_01973194: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_infernal_guardian_characters_01973194.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     attach: [
@@ -5881,6 +8449,50 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_infernal_infernal_overlord_characters_0196d439: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_infernal_overlord_characters_0196d439.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_infernal_overlord_characters_0197899b: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_infernal_overlord_characters_0197899b.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_infernal_overlord_characters_0197899f: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_infernal_overlord_characters_0197899f.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_infernal_roar_creatures_demon_0199a0e7: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_infernal_roar_creatures_demon_0199a0e7.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_infernal_infernal_scythe_weaponsmilitary_0194a75e: {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_scythe_weaponsmilitary_0194a75e.glb`,
     height: GEN_H,
@@ -5905,6 +8517,83 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
   },
   realm_infernal_infernal_sentinel_characters_01965e5c: {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_sentinel_characters_01965e5c.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_infernal_sentinel_characters_0196a606: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_infernal_sentinel_characters_0196a606.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_infernal_sentinel_characters_0196b0bf: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_infernal_sentinel_characters_0196b0bf.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_infernal_sentinel_characters_0196b0d6: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_infernal_sentinel_characters_0196b0d6.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_infernal_sentinel_characters_0196d448: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_infernal_sentinel_characters_0196d448.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_infernal_sentinel_characters_01974bde: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_infernal_sentinel_characters_01974bde.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_infernal_sentinel_characters_01974be2: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_infernal_sentinel_characters_01974be2.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_infernal_sentinel_characters_0197af99: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_infernal_sentinel_characters_0197af99.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     attach: [
@@ -5953,6 +8642,17 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_infernal_infernal_titan_characters_01983037: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_infernal_titan_characters_01983037.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_infernal_infernal_titan_monster_demon_01969214: {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_titan_monster_demon_01969214.glb`,
     height: GEN_H,
@@ -5987,6 +8687,24 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     clips: genClips(['2H_Melee_Attack_Chop']),
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
+  realm_infernal_infernal_warlord_characters_0196a705: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_infernal_warlord_characters_0196a705.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_infernal_infernal_warlord_characters_0196a816: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_infernal_warlord_characters_0196a816.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_infernal_infernal_warlord_characters_0197318b: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_infernal_warlord_characters_0197318b.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
   realm_infernal_infernal_warlord_characters_weap_01944c3c: {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_warlord_characters_weap_01944c3c.glb`,
     height: GEN_H,
@@ -5999,8 +8717,20 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     clips: genClips(['2H_Melee_Attack_Chop']),
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
+  realm_infernal_infernal_warlord_villain_charact_0199b160: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_infernal_warlord_villain_charact_0199b160.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
   realm_infernal_infernal_warrior_characters_019659a3: {
     url: `${REALM_MODELS}/infernal/realm_infernal_infernal_warrior_characters_019659a3.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_infernal_infernal_warrior_characters_0196c009: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_infernal_warrior_characters_0196c009.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
@@ -6010,6 +8740,61 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_infernal_infernal_watcher_characters_019737a4: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_infernal_watcher_characters_019737a4.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_infernal_watcher_characters_019737a9: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_infernal_watcher_characters_019737a9.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_legendary_demon_boss_evil_019894ab: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_legendary_demon_boss_evil_019894ab.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_legendary_demon_boss_evil_019894af: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_legendary_demon_boss_evil_019894af.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_legendary_demon_boss_evil_01989c2a: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_legendary_demon_boss_evil_01989c2a.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
   },
   realm_infernal_massive_fat_demon_character_0195aedc: {
     url: `${REALM_MODELS}/infernal/realm_infernal_massive_fat_demon_character_0195aedc.glb`,
@@ -6041,6 +8826,17 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
   },
   realm_infernal_minimalistic_design_demon_lord_0195b57e: {
     url: `${REALM_MODELS}/infernal/realm_infernal_minimalistic_design_demon_lord_0195b57e.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_minotaur_butcher_characters_019707e8: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_minotaur_butcher_characters_019707e8.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     attach: [
@@ -6083,6 +8879,36 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_infernal_most_bad_ass_goblin_01987255: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_most_bad_ass_goblin_01987255.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_infernal_most_bad_ass_goblin_019875ab: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_most_bad_ass_goblin_019875ab.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_infernal_most_bad_ass_goblin_019875c4: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_most_bad_ass_goblin_019875c4.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_infernal_most_beatifull_female_blond_019875c0: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_most_beatifull_female_blond_019875c0.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_infernal_most_beatifull_female_blond_019875df: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_most_beatifull_female_blond_019875df.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
   realm_infernal_muscular_humanoid_creature_pale_0194393c: {
     url: `${REALM_MODELS}/infernal/realm_infernal_muscular_humanoid_creature_pale_0194393c.glb`,
     height: GEN_H,
@@ -6105,8 +8931,30 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_infernal_nightmare_behemoth_characters_0196a5e8: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_nightmare_behemoth_characters_0196a5e8.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_infernal_nightmare_revenant_fantasy_skele_019498fe: {
     url: `${REALM_MODELS}/infernal/realm_infernal_nightmare_revenant_fantasy_skele_019498fe.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_nosferatu_shadow_sketchto3d_mons_019834ac: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_nosferatu_shadow_sketchto3d_mons_019834ac.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     attach: [
@@ -6193,8 +9041,85 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_infernal_rusted_infernal_golem_evil_019910d6: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_rusted_infernal_golem_evil_019910d6.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_rusted_infernal_golem_evil_01991112: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_rusted_infernal_golem_evil_01991112.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_rusted_infernal_golem_evil_0199111c: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_rusted_infernal_golem_evil_0199111c.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_infernal_samurai_zombie_game_assets_01954d30: {
     url: `${REALM_MODELS}/infernal/realm_infernal_samurai_zombie_game_assets_01954d30.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_savage_demon_lord_pbr_01990626: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_savage_demon_lord_pbr_01990626.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_scorpion_centaur_necromancer_cha_01972c73: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_scorpion_centaur_necromancer_cha_01972c73.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_scorpion_centaur_necromancer_sco_01972c70: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_scorpion_centaur_necromancer_sco_01972c70.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_sentinel_abyss_armor_characters_01974158: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_sentinel_abyss_armor_characters_01974158.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     attach: [
@@ -6377,6 +9302,17 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
+  realm_infernal_skullbreaker_mace_weapon_mace_0198b909: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_skullbreaker_mace_weapon_mace_0198b909.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_infernal_small_twisted_demon_fetus_01956c13: {
     url: `${REALM_MODELS}/infernal/realm_infernal_small_twisted_demon_fetus_01956c13.glb`,
     height: GEN_H,
@@ -6399,8 +9335,52 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_infernal_spiked_skull_mace_weaponsmilitar_01974b09: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_spiked_skull_mace_weaponsmilitar_01974b09.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_spiked_skull_mace_weaponsmilitar_01974b0a: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_spiked_skull_mace_weaponsmilitar_01974b0a.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_infernal_steel_guardian_robot_armor_0193fba1: {
     url: `${REALM_MODELS}/infernal/realm_infernal_steel_guardian_robot_armor_0193fba1.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_symmetrical_intricate_design_sha_0197005a: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_symmetrical_intricate_design_sha_0197005a.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_symmetrical_intricate_design_sha_01970073: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_symmetrical_intricate_design_sha_01970073.glb`,
     height: GEN_H,
     clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     attach: [
@@ -6443,6 +9423,39 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_infernal_thorned_nightmare_characters_01982abe: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_thorned_nightmare_characters_01982abe.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_titan_skulls_characters_019823a0: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_titan_skulls_characters_019823a0.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_infernal_titan_skulls_characters_019823a2: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_titan_skulls_characters_019823a2.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_infernal_toxic_demon_characters_01961af7: {
     url: `${REALM_MODELS}/infernal/realm_infernal_toxic_demon_characters_01961af7.glb`,
     height: GEN_H,
@@ -6476,6 +9489,17 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     weaponSlots: [0],
     offhandSlot: 1,
   },
+  realm_infernal_undead_rotten_machine_demon_0196c4f8: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_undead_rotten_machine_demon_0196c4f8.glb`,
+    height: GEN_H,
+    clips: genClips(['2H_Melee_Attack_Chop']),
+    attach: [
+      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
   realm_infernal_valentine_imp_characters_019501b2: {
     url: `${REALM_MODELS}/infernal/realm_infernal_valentine_imp_characters_019501b2.glb`,
     height: GEN_H,
@@ -6497,6 +9521,24 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     url: `${REALM_MODELS}/infernal/realm_infernal_warlord_skulls_characters_0193fb77.glb`,
     height: GEN_H,
     clips: genClips(['2H_Melee_Attack_Chop']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_infernal_warrior_abyss_characters_0196c064: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_warrior_abyss_characters_0196c064.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_infernal_warrior_abyss_characters_01974637: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_warrior_abyss_characters_01974637.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    // ships holding a weapon -> NPC/enemy only, no live equipment sockets
+  },
+  realm_infernal_warrior_damned_characters_0196ca26: {
+    url: `${REALM_MODELS}/infernal/realm_infernal_warrior_damned_characters_0196ca26.glb`,
+    height: GEN_H,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     // ships holding a weapon -> NPC/enemy only, no live equipment sockets
   },
   realm_infernal_warrior_shadows_characters_01963a09: {
@@ -6579,11 +9621,16 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_arcadevoid_neon_armor_sentinel_artabstract_019460f4',
   ],
   arcane: [
+    'realm_arcane_crystal_titan_pbr_crystal_0198e7fd',
     'realm_arcane_dark_enchantress_artabstract_0194b9bb',
     'realm_arcane_dark_enchantress_characters_arta_0194b972',
     'realm_arcane_dark_enchantress_characters_arta_0194b9af',
     'realm_arcane_dark_enchantress_characters_arta_0194b9b1',
+    'realm_arcane_elder_arcane_council_characters_0196ee9b',
+    'realm_arcane_eldritch_sentinel_characters_019737a4',
     'realm_arcane_eldritch_sentinel_characters_art_0196111c',
+    'realm_arcane_eldritch_sentinel_characters_art_019737b0',
+    'realm_arcane_eternal_majesty_fantasy_sculptur_0198d45b',
     'realm_arcane_ethereal_anatomy_artabstract_0194579e',
     'realm_arcane_ethereal_anatomy_artabstract_0194579f',
     'realm_arcane_ethereal_crucifixion_artabstract_01964f4e',
@@ -6594,6 +9641,7 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_arcane_ethereal_remains_artabstract_cha_01945afc',
     'realm_arcane_ethereal_remains_characters_arta_019457a7',
     'realm_arcane_ethereal_sacrifice_ritual_artabs_0195fc8a',
+    'realm_arcane_ethereal_scales_artabstract_01974b04',
     'realm_arcane_ethereal_sentinel_artabstract_0194605b',
     'realm_arcane_ethereal_sentinel_artabstract_0194605e',
     'realm_arcane_ethereal_sentinel_artabstract_0194605f',
@@ -6604,22 +9652,33 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_arcane_ethereal_sentinel_artabstract_0194840e',
     'realm_arcane_ethereal_sentinel_characters_0195fc6b',
     'realm_arcane_ethereal_sentinel_characters_0195fc71',
+    'realm_arcane_ethereal_sentinel_characters_0197372a',
     'realm_arcane_ethereal_sentinel_hrgiger_artabs_01946061',
     'realm_arcane_ethereal_sovereign_artabstract_01965dfd',
     'realm_arcane_ethereal_sovereign_character_art_01964f51',
     'realm_arcane_ethereal_watcher_characters_0195fe49',
+    'realm_arcane_fantasy_evil_wizard_visionary_01983342',
+    'realm_arcane_fantasy_evil_wizard_visionary_01983343',
+    'realm_arcane_fantasy_evil_wizard_visionary_0198334a',
+    'realm_arcane_fantasy_evil_wizard_visionary_019833b5',
+    'realm_arcane_fantasy_evil_wizard_visionary_019833b8',
+    'realm_arcane_fantasy_evil_wizard_visionary_019833b9',
     'realm_arcane_game_figure_albino_giant_0195b9a2',
     'realm_arcane_game_figure_albino_giant_0195b9b1',
     'realm_arcane_game_figure_albino_giant_0195b9b4',
     'realm_arcane_gandalf_staff_wizard_weaponsmili_01968c91',
+    'realm_arcane_jaguar_spirit_animal_mammal_0198a144',
     'realm_arcane_jesus_religious_holy_divine_01940d85',
     'realm_arcane_mage_wizard_dynamic_pose_0193e9b8',
     'realm_arcane_mage_wizard_dynamic_pose_0193e9bf',
     'realm_arcane_mage_wizard_dynamic_pose_0193e9c7',
     'realm_arcane_mystic_sentinel_characters_01968757',
+    'realm_arcane_mystic_wanderer_characters_0196eea0',
     'realm_arcane_portal_enchanted_threshold_artab_019662fb',
     'realm_arcane_portal_enchanted_threshold_place_01966098',
     'realm_arcane_shaman_s_spirit_keeper_01963bb3',
+    'realm_arcane_titan_arcane_characters_0196f84f',
+    'realm_arcane_titan_arcane_characters_0196f85b',
     'realm_arcane_weapon_glove_claws_similar_0194ad34',
     'realm_arcane_weapon_glove_claws_similar_0194ad37',
     'realm_arcane_women_masterpiece_mysterious_mys_019576d2',
@@ -6631,6 +9690,8 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_classic_albino_cave_troll_characters_0193df96',
     'realm_classic_albino_cave_troll_characters_0193df9c',
     'realm_classic_albino_cave_troll_characters_0193e175',
+    'realm_classic_alien_conqueror_pbr_alien_0198e6fe',
+    'realm_classic_alien_cowboy_alien_cowboy_01988669',
     'realm_classic_alien_guardian_characters_01967cc9',
     'realm_classic_alien_predatory_wrath_alien_01942788',
     'realm_classic_alien_warrior_alien_warrior_0194817c',
@@ -6640,13 +9701,26 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_classic_alien_warrior_characters_01948641',
     'realm_classic_alien_warrior_characters_weapons_01948186',
     'realm_classic_alien_warrior_characters_weapons_01948189',
+    'realm_classic_ancient_guardian_characters_01972bf0',
+    'realm_classic_ancient_guardian_characters_0197374b',
+    'realm_classic_ancient_guardian_characters_0198815f',
+    'realm_classic_ancient_sorcerer_characters_0198147f',
     'realm_classic_angel_warrior_characters_artabst_0193ea08',
+    'realm_classic_armored_beastlord_characters_0196c014',
+    'realm_classic_armored_beastlord_characters_0196c029',
     'realm_classic_armored_guardian_characters_weap_0193fba5',
     'realm_classic_armored_guardian_space_marine_0193fba7',
     'realm_classic_average_man_pose_game_01940d81',
+    'realm_classic_avian_serpent_knight_characters_0197d2ad',
     'realm_classic_aztec_warrior_characters_culture_0194c237',
     'realm_classic_bard_fairy_goblin_characters_0195f1f8',
     'realm_classic_bard_fairy_goblin_characters_0195f1fd',
+    'realm_classic_battlemage_dwarf_characters_019736dc',
+    'realm_classic_berserker_s_march_music_0196bce9',
+    'realm_classic_bifrost_beast_characters_01983029',
+    'realm_classic_bifrost_beast_characters_animals_01983026',
+    'realm_classic_bionic_ogre_mutation_sciencetech_0197790d',
+    'realm_classic_bionic_ogre_mutation_sciencetech_0197790f',
     'realm_classic_black_skin_race_ogre_0194f7f5',
     'realm_classic_blue_orc_warrior_characters_0195ed8d',
     'realm_classic_blue_power_ranger_characters_0194371d',
@@ -6663,24 +9737,52 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_classic_cave_troll_wear_tattered_019408af',
     'realm_classic_cave_troll_wear_tattered_01940d7a',
     'realm_classic_cave_troll_wear_tattered_01940dca',
+    'realm_classic_cave_warrior_characters_019871b8',
     'realm_classic_corona_virus_humanoid_monster_01954a8e',
     'realm_classic_corona_virus_humanoid_monster_01954a92',
     'realm_classic_create_dynamic_3d_mesh_01940e23',
     'realm_classic_cyber_guardian_characters_scienc_0196975d',
+    'realm_classic_cyber_ogre_ogre_cyberpunk_01992a81',
+    'realm_classic_cyber_orc_convergence_characters_0196d049',
+    'realm_classic_cyber_orc_warrior_characters_01972cca',
+    'realm_classic_cyber_polar_guardian_sciencetech_019736d0',
     'realm_classic_cyber_sentinel_robot_futuristic_01943740',
+    'realm_classic_cyber_troll_characters_sciencete_0196b0b7',
+    'realm_classic_cyber_troll_characters_sciencete_0196d038',
+    'realm_classic_cyber_troll_sentinel_characters_019736e5',
+    'realm_classic_cyber_warrior_sciencetechnology__019736ca',
+    'realm_classic_cybernetic_guardian_sciencetechn_0196fe02',
+    'realm_classic_cybernetic_knight_sciencetechnol_0196e689',
+    'realm_classic_cybernetic_minotaur_warrior_char_0196e440',
+    'realm_classic_cybernetic_minotaur_warrior_char_0196e65e',
+    'realm_classic_cybernetic_ogre_characters_scien_0196b627',
+    'realm_classic_cybernetic_ogre_warrior_characte_01972cd0',
     'realm_classic_cybernetic_warrior_characters_sc_01945675',
+    'realm_classic_cybernetic_warrior_sciencetechno_01983daf',
     'realm_classic_cyberpunk_orc_adventurer_charact_0194279c',
     'realm_classic_cyberpunk_orc_adventurer_charact_019427d4',
     'realm_classic_cyberpunk_orc_adventurer_charact_019427db',
     'realm_classic_cyberpunk_orc_adventurer_cyberpu_01942792',
     'realm_classic_cyberpunk_orc_warrior_character_01942ca3',
     'realm_classic_cyberpunk_orc_warrior_characters_01942cf3',
+    'realm_classic_cyborg_enforcer_sciencetechnolog_0196b72e',
+    'realm_classic_cyborg_orc_warrior_characters_0196b5fe',
+    'realm_classic_cyborg_troll_characters_sciencet_0196b0a6',
+    'realm_classic_cyborg_troll_characters_sciencet_0196b0ae',
+    'realm_classic_cyborg_warrior_extra_arms_0196bcef',
+    'realm_classic_cyborg_warrior_extra_arms_0196c00b',
+    'realm_classic_cyborg_warrior_sciencetechnology_0196c06a',
+    'realm_classic_cyclopean_prince_pbr_character_0198d461',
+    'realm_classic_dark_knight_sentinel_characters_01982ac3',
+    'realm_classic_dark_knight_sentinel_characters_01982d9f',
+    'realm_classic_dark_sorcerer_characters_01974aec',
     'realm_classic_dark_warrior_monarch_characters_01964f6a',
     'realm_classic_dark_warrior_s_armor_0195ed53',
     'realm_classic_doberman_humanoid_warrior_charac_0195c669',
     'realm_classic_doberman_humanoid_warrior_gamefi_0195c66a',
     'realm_classic_druid_world_warcraft_characters_0193e9dd',
     'realm_classic_druid_world_warcraft_characters_0193e9e0',
+    'realm_classic_dual_head_warrior_future_0196b630',
     'realm_classic_dual_headed_humanoid_creature_0194568e',
     'realm_classic_dual_headed_humanoid_creature_01945691',
     'realm_classic_dual_headed_humanoid_creature_019456a0',
@@ -6698,8 +9800,11 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_classic_eddie_iron_maiden_humanoid_019450ce',
     'realm_classic_eddie_iron_maiden_humanoid_019450cf',
     'realm_classic_eddie_iron_maiden_humanoid_019450d2',
+    'realm_classic_elder_goblin_mystic_characters_0196eb8f',
+    'realm_classic_elderwood_guardian_sketchto3d_ch_019813a9',
     'realm_classic_eldritch_guardian_characters_01969c78',
     'realm_classic_eldritch_guardian_characters_01969c8a',
+    'realm_classic_eternal_echo_skeletal_humanoid_01988178',
     'realm_classic_eternal_guardian_music_character_01965f3e',
     'realm_classic_eternal_warrior_characters_0195c378',
     'realm_classic_ethereal_guardian_artabstract_01946213',
@@ -6715,6 +9820,7 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_classic_ethereal_guardian_characters_01964ea0',
     'realm_classic_ethereal_guardian_characters_019691b3',
     'realm_classic_ethereal_guardian_fantasy_charac_01964ea8',
+    'realm_classic_ethereal_warrior_characters_01972c65',
     'realm_classic_evangelions_neon_genesis_evangel_019382a8',
     'realm_classic_evangelions_neon_genesis_evangel_0195aa1b',
     'realm_classic_executioner_hangman_medieval_cha_0195cddb',
@@ -6724,6 +9830,8 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_classic_fantasy_stone_elemental_ve_019547e4',
     'realm_classic_fantasy_stone_elemental_ve_019547e9',
     'realm_classic_fat_dwarf_warrior_pose_01955ce2',
+    'realm_classic_frost_guardian_characters_0196feab',
+    'realm_classic_frost_guardian_ice_guardian_0196fea0',
     'realm_classic_frostbite_farmer_game_figure_0195aa0e',
     'realm_classic_game_figure_elf_warrior_0195b140',
     'realm_classic_game_figure_elf_warrior_0195b142',
@@ -6766,13 +9874,28 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_classic_giant_warrior_titan_game_0195b996',
     'realm_classic_gleeful_goblin_warrior_character_019696c2',
     'realm_classic_gleeful_goblin_warrior_character_019696c8',
+    'realm_classic_goblin_alchemist_characters_01983878',
     'realm_classic_goblin_boss_head_warhammer_01956c0f',
     'realm_classic_goblin_boss_head_warhammer_01956c12',
     'realm_classic_goblin_boss_head_warhammer_01956cfa',
     'realm_classic_goblin_boss_warhammer_40k_01963fab',
     'realm_classic_goblin_emo_goblin_characters_01956278',
     'realm_classic_goblin_encounter_characters_019639ff',
+    'realm_classic_goblin_gladiator_characters_0196c1d0',
+    'realm_classic_goblin_grin_characters_01974b3d',
+    'realm_classic_goblin_grin_characters_01974b44',
+    'realm_classic_goblin_grin_characters_01974bc0',
+    'realm_classic_goblin_grumblers_characters_01977176',
+    'realm_classic_goblin_guardian_characters_019750a9',
+    'realm_classic_goblin_guardian_characters_019750ac',
+    'realm_classic_goblin_guardian_characters_019750b5',
+    'realm_classic_goblin_king_characters_01974614',
+    'realm_classic_goblin_king_characters_01974ba2',
+    'realm_classic_goblin_king_characters_01974bc8',
+    'realm_classic_goblin_king_characters_0197764d',
+    'realm_classic_goblin_king_characters_01977923',
     'realm_classic_goblin_knight_characters_weapons_0195f1c9',
+    'realm_classic_goblin_mage_characters_0196c4ec',
     'realm_classic_goblin_mage_explorer_characters_01964f68',
     'realm_classic_goblin_merchant_characters_01964540',
     'realm_classic_goblin_mischief_characters_0195f1ef',
@@ -6781,10 +9904,22 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_classic_goblin_punk_characters_01956282',
     'realm_classic_goblin_scout_characters_01964f60',
     'realm_classic_goblin_sentinel_characters_01964475',
+    'realm_classic_goblin_shaman_characters_01974ba5',
+    'realm_classic_goblin_shaman_characters_0197c17c',
+    'realm_classic_goblin_shaman_characters_fantasy_01988732',
+    'realm_classic_goblin_shaman_elder_pbr_01991782',
+    'realm_classic_goblin_sketch_sketchto3d_charact_01981384',
+    'realm_classic_goblin_twins_characters_0196ca34',
     'realm_classic_goblin_wanderer_characters_0196846d',
+    'realm_classic_goblin_wanderer_characters_01983a3b',
     'realm_classic_goblin_warlord_characters_0196541d',
     'realm_classic_goblin_warlord_characters_019672d5',
     'realm_classic_goblin_warlord_characters_01967858',
+    'realm_classic_goblin_warlord_characters_0196a10b',
+    'realm_classic_goblin_warlord_characters_01976a00',
+    'realm_classic_goblin_warlord_characters_01976a03',
+    'realm_classic_goblin_warlord_characters_fantas_019899f1',
+    'realm_classic_goblin_warrior_action_figure_0197dbb4',
     'realm_classic_goblin_warrior_character_mortal_019634ed',
     'realm_classic_goblin_warrior_character_mortal_019634f0',
     'realm_classic_goblin_warrior_characters_weapon_01964537',
@@ -6795,25 +9930,66 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_classic_goblin_warrior_characters_weapon_019696d0',
     'realm_classic_goblin_warrior_characters_weapon_019696d9',
     'realm_classic_goblin_warrior_characters_weapon_019696e2',
+    'realm_classic_goblin_warrior_characters_weapon_0196a609',
+    'realm_classic_goblin_warrior_characters_weapon_0196a622',
+    'realm_classic_goblin_warrior_characters_weapon_0196abf2',
+    'realm_classic_goblin_warrior_characters_weapon_0196ca24',
+    'realm_classic_goblin_warrior_characters_weapon_0196dee2',
+    'realm_classic_goblin_warrior_characters_weapon_0196ee97',
+    'realm_classic_goblin_warrior_characters_weapon_0197376e',
+    'realm_classic_goblin_warrior_characters_weapon_01974b3b',
+    'realm_classic_goblin_warrior_characters_weapon_01975007',
+    'realm_classic_goblin_warrior_characters_weapon_0197500d',
+    'realm_classic_goblin_warrior_characters_weapon_01975c86',
+    'realm_classic_goblin_warrior_characters_weapon_0197698b',
+    'realm_classic_goblin_warrior_characters_weapon_0197833e',
+    'realm_classic_goblin_warrior_characters_weapon_0197c14c',
+    'realm_classic_goblin_warrior_characters_weapon_0197c16c',
+    'realm_classic_goblin_warrior_characters_weapon_0197c689',
+    'realm_classic_goblin_warrior_characters_weapon_0197db11',
+    'realm_classic_goblin_warrior_goblin_characters_01983a41',
+    'realm_classic_goblin_warrior_goblin_warrior_019880e0',
+    'realm_classic_goblin_warrior_traditional_attir_0199156c',
+    'realm_classic_golden_guardian_characters_01987fc1',
+    'realm_classic_golem_guardian_characters_0196feaa',
+    'realm_classic_golem_sentinel_villain_golem_01998e8e',
+    'realm_classic_goliath_ogre_creatures_ogre_01988ac1',
+    'realm_classic_goliath_ogre_ogre_goblin_01988a8b',
     'realm_classic_green_goblin_holding_wooden_0196110b',
     'realm_classic_grinning_beast_characters_019672ae',
+    'realm_classic_grog_warrior_troll_characters_0197c25d',
     'realm_classic_grotesque_set_goblin_teeth_01969be6',
+    'realm_classic_gruff_goblin_characters_01974618',
+    'realm_classic_gruff_goblin_characters_0197461b',
+    'realm_classic_gruff_goblin_characters_0197461f',
     'realm_classic_gruff_troll_characters_0193df8d',
     'realm_classic_gruff_troll_characters_0193dfa3',
+    'realm_classic_grumpy_troll_characters_01972c82',
+    'realm_classic_grumpy_troll_characters_01972cb9',
     'realm_classic_guardian_titan_characters_019677ca',
+    'realm_classic_heavenly_guardian_characters_0197d682',
     'realm_classic_hoge_3_meter_tall_019542be',
+    'realm_classic_horned_guardian_characters_0196a607',
+    'realm_classic_horned_warrior_characters_weapon_0196a604',
     'realm_classic_human_hybrid_criptid_extreme_019439bd',
     'realm_classic_humanoid_figure_creature_advance_019489cb',
     'realm_classic_humanoid_form_muscular_geometry_0193daa5',
     'realm_classic_humanoid_upper_santa_claus_0193a19d',
     'realm_classic_humanoid_upper_santa_claus_0193a1a2',
     'realm_classic_inferno_guardian_characters_01965e10',
+    'realm_classic_insectoid_enforcer_characters_0198111c',
     'realm_classic_insectoid_warrior_characters_01968d0e',
     'realm_classic_ironclad_minotaur_warrior_charac_01965dde',
+    'realm_classic_ironclad_warrior_characters_weap_01974dae',
+    'realm_classic_leyendary_troll_boss_evil_01989492',
+    'realm_classic_leyendary_troll_boss_evil_01989498',
+    'realm_classic_leyendary_troll_boss_evil_019894a5',
     'realm_classic_lion_knight_animals_characters_0196499e',
     'realm_classic_long_nose_goblin_wizard_01967d90',
     'realm_classic_low_poly_female_goblin_019581a0',
     'realm_classic_low_poly_goblin_characters_0195f1ef',
+    'realm_classic_low_poly_goblin_characters_0196fa46',
+    'realm_classic_low_poly_goblin_characters_0196fa4a',
     'realm_classic_low_poly_goblin_warhammer_0194c860',
     'realm_classic_low_poly_shaman_goblin_01951ef2',
     'realm_classic_low_poly_shaman_goblin_0195242a',
@@ -6821,13 +9997,29 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_classic_massive_hulking_cave_troll_0194d940',
     'realm_classic_massive_hulking_cave_troll_0194d944',
     'realm_classic_massive_hulking_cave_troll_0194f7ec',
+    'realm_classic_mech_guardian_sciencetechnology__01970f88',
     'realm_classic_mechanical_guardian_robot_scienc_0196636a',
+    'realm_classic_mechanized_ogre_sciencetechnolog_01975507',
+    'realm_classic_mechanized_ogre_sciencetechnolog_01975c87',
     'realm_classic_minotaur_s_resolve_characters_01946235',
+    'realm_classic_minotaur_sentinel_minotaur_creat_019875dc',
+    'realm_classic_minotaur_smiles_characters_01974aed',
+    'realm_classic_minotaur_warrior_characters_weap_0197905e',
+    'realm_classic_minotaur_warrior_minotaur_warrio_01987fdf',
+    'realm_classic_most_bad_ass_goblin_0198d2d0',
     'realm_classic_muscular_female_human_pose_0194e194',
     'realm_classic_muscular_human_pose_supervillain_0194e146',
     'realm_classic_mushroom_warrior_characters_01966d4c',
+    'realm_classic_mutant_farmer_characters_01985b8d',
+    'realm_classic_mystic_barbarian_characters_0197b997',
+    'realm_classic_mystic_elder_character_mystic_01983812',
+    'realm_classic_mystic_goblin_mage_characters_0196f303',
+    'realm_classic_mystic_goblin_mage_characters_0196f84f',
+    'realm_classic_mystic_minotaur_characters_anima_0196b137',
+    'realm_classic_mystic_orc_warrior_characters_0196e3f4',
     'realm_classic_mystic_warrior_characters_01963bbf',
     'realm_classic_mystic_warrior_characters_01963f6d',
+    'realm_classic_mystical_horned_guardian_charact_0196c4e7',
     'realm_classic_naked_cave_troll_muscular_0194424e',
     'realm_classic_naked_cave_troll_muscular_0194425a',
     'realm_classic_naked_cave_troll_muscular_01944263',
@@ -6841,15 +10033,32 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_classic_ogre_guardian_characters_019696ee',
     'realm_classic_ogre_hulk_game_assets_01955244',
     'realm_classic_ogre_hulk_game_assets_0195524f',
+    'realm_classic_ogre_s_fury_fantasy_0198a132',
+    'realm_classic_ogre_warlord_characters_0196bf89',
+    'realm_classic_ogre_warlord_characters_0196c00a',
+    'realm_classic_ogre_warrior_characters_0196f982',
+    'realm_classic_ogre_warrior_characters_0196fa41',
     'realm_classic_orc_adventurer_characters_019427b3',
     'realm_classic_orc_chieftain_characters_01964473',
     'realm_classic_orc_chieftain_characters_01964478',
+    'realm_classic_orc_cyborg_warrior_orc_0198a132',
+    'realm_classic_orc_denim_characters_fashionstyl_0196fd71',
     'realm_classic_orc_guardian_characters_01969c74',
+    'realm_classic_orc_king_villain_orc_019997d7',
     'realm_classic_orc_sentinel_characters_01968737',
     'realm_classic_orc_sentinel_characters_0196873a',
+    'realm_classic_orc_warlord_characters_0196da51',
+    'realm_classic_orc_warlord_orc_warlord_019899f2',
+    'realm_classic_orc_warlord_orc_warlord_019899f4',
     'realm_classic_orc_warrior_characters_weaponsmi_0194dbf4',
     'realm_classic_orc_warrior_characters_weaponsmi_0194dbf5',
+    'realm_classic_orc_warrior_characters_weaponsmi_0196c06c',
+    'realm_classic_orc_warrior_characters_weaponsmi_0196c1e4',
+    'realm_classic_orc_warrior_characters_weaponsmi_0196f86d',
+    'realm_classic_orc_warrior_characters_weaponsmi_0196f91f',
     'realm_classic_orc_warrior_chief_characters_0196591a',
+    'realm_classic_orc_warrior_king_characters_0196ada1',
+    'realm_classic_orc_warrior_sentinel_characters_01972c6c',
     'realm_classic_ork_wizard_mage_dark_01967d8f',
     'realm_classic_ork_wizard_mage_dark_01967d95',
     'realm_classic_pelican_human_hybrid_human_0194f581',
@@ -6859,19 +10068,37 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_classic_pose_cave_troll_huge_01947f6a',
     'realm_classic_pose_cave_troll_huge_01947f72',
     'realm_classic_predator_warrior_characters_weap_01948407',
+    'realm_classic_punk_beast_characters_01982df3',
+    'realm_classic_punk_goblin_characters_fashionst_01973709',
+    'realm_classic_rhino_gladiator_villain_characte_0199a863',
+    'realm_classic_road_warrior_giant_characters_0196cf39',
+    'realm_classic_roadside_warrior_characters_0196f93f',
     'realm_classic_robot_humanoid_praying_mantis_01954d9b',
     'realm_classic_rugged_humanoid_figure_made_01948168',
     'realm_classic_rugged_humanoid_figure_made_019483fc',
+    'realm_classic_rune_warrior_characters_0196c728',
+    'realm_classic_runestone_warrior_characters_01973204',
+    'realm_classic_runic_warrior_armor_warrior_019731a3',
     'realm_classic_rusty_warrior_characters_weapons_019682ad',
     'realm_classic_satanic_sorcerer_characters_0193e9cc',
     'realm_classic_satanic_sorcerer_characters_arta_0193e9ba',
     'realm_classic_spiked_guardian_characters_01968220',
     'realm_classic_spiked_guardian_characters_01968236',
     'realm_classic_spiky_ogre_warrior_characters_01968731',
+    'realm_classic_steampunk_goblin_explorer_charac_0196e8e8',
     'realm_classic_steel_guardian_characters_0193fbbb',
     'realm_classic_steel_guardian_characters_artabs_01957c86',
     'realm_classic_steel_guardian_characters_scienc_01957c85',
     'realm_classic_steel_guardian_sciencetechnology_0193fb9e',
+    'realm_classic_stone_guardian_characters_0197a485',
+    'realm_classic_titan_defender_fantasy_warrior_0199a837',
+    'realm_classic_titan_vanguard_characters_0197a485',
+    'realm_classic_troll_forged_titan_characters_0197ad67',
+    'realm_classic_troll_suspenders_characters_0196f865',
+    'realm_classic_twin_guardians_characters_0196eb96',
+    'realm_classic_twin_headed_guardian_characters_0196ee0a',
+    'realm_classic_twin_headed_guardian_characters_0196ee95',
+    'realm_classic_twin_ogre_warlord_characters_0196cf35',
     'realm_classic_two_headed_ogre_characters_0193df44',
     'realm_classic_two_headed_ogre_characters_0193df47',
     'realm_classic_two_headed_ogre_characters_0193df75',
@@ -6879,6 +10106,13 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_classic_two_headed_ogre_characters_0193df7c',
     'realm_classic_two_headed_ogre_characters_01963a38',
     'realm_classic_two_headed_ogre_characters_01963a3b',
+    'realm_classic_two_headed_ogre_titan_01977b46',
+    'realm_classic_two_headed_warrior_characters_0196f30f',
+    'realm_classic_two_headed_warrior_characters_0196f846',
+    'realm_classic_two_headed_warrior_characters_0196f863',
+    'realm_classic_un_mercenario_del_futuro_01972c4b',
+    'realm_classic_urban_warrior_fashionstyle_0196d41c',
+    'realm_classic_urban_wasteland_orc_orc_0198b3b9',
     'realm_classic_valentine_massive_hulking_cave_01950211',
     'realm_classic_valentine_orc_characters_01950187',
     'realm_classic_valentine_orc_characters_01950188',
@@ -6887,22 +10121,34 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_classic_warrior_ancients_characters_019658ff',
     'realm_classic_warrior_chaos_characters_weapons_01940366',
     'realm_classic_warrior_chaos_characters_weapons_0194c990',
+    'realm_classic_warrior_crimson_skies_characters_0196ba80',
+    'realm_classic_warrior_denim_fashionstyle_chara_0197379b',
     'realm_classic_warrior_fury_characters_019644f2',
     'realm_classic_warrior_fury_characters_019644f7',
     'realm_classic_warrior_goblin_characters_weapon_01969220',
     'realm_classic_warrior_goblin_characters_weapon_01969227',
     'realm_classic_warrior_mask_knight_weaponsmilit_01965dec',
     'realm_classic_warrior_mask_knight_weaponsmilit_01965dee',
+    'realm_classic_warrior_minotaur_characters_0197c8e3',
     'realm_classic_warrior_ogre_characters_01968c86',
     'realm_classic_warrior_ogre_characters_01969211',
     'realm_classic_warrior_ogre_characters_01969239',
     'realm_classic_warrior_orc_characters_01965dcf',
+    'realm_classic_warrior_realm_characters_0196b62c',
     'realm_classic_warrior_s_resolve_characters_01963bcd',
+    'realm_classic_warrior_s_resolve_characters_0197a4e6',
+    'realm_classic_warrior_s_resolve_characters_019948db',
     'realm_classic_warrior_sage_characters_01949918',
     'realm_classic_warrior_sage_characters_0194991c',
+    'realm_classic_warrior_skies_characters_019731a1',
     'realm_classic_warrior_titan_characters_0196976a',
+    'realm_classic_warrior_titan_characters_0196b72e',
+    'realm_classic_warrior_troll_characters_0196e404',
+    'realm_classic_warrior_twins_characters_0196f846',
+    'realm_classic_warrior_wasteland_warrior_wastel_01987196',
     'realm_classic_warrior_wilds_characters_01963bc8',
     'realm_classic_women_woman_warrior_women_0195770c',
+    'realm_classic_wrathborn_berserker_characters_01973141',
   ],
   dominion: [
     'realm_dominion_alien_crucifixion_artabstract_sc_01965df1',
@@ -6928,27 +10174,54 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_dominion_alien_relic_pedestal_artabstract_01947a38',
     'realm_dominion_alien_warlord_characters_01968d0f',
     'realm_dominion_alien_warlord_characters_019691b8',
+    'realm_dominion_battle_ready_alien_characters_0196c061',
     'realm_dominion_budda_made_steel_pose_01943786',
+    'realm_dominion_buzz_boxer_bot_characters_01976edf',
     'realm_dominion_centient_robot_muscular_nano_0194486f',
     'realm_dominion_centient_robot_muscular_nano_01944875',
     'realm_dominion_centient_robot_muscular_nano_019450c5',
     'realm_dominion_chicken_cyborg_hybrid_creature_01940df7',
     'realm_dominion_convergence_dimensions_artabstra_019635d6',
     'realm_dominion_cyber_buccaneer_characters_01964459',
+    'realm_dominion_cyber_corsair_characters_science_0197898b',
+    'realm_dominion_cyber_gator_swagger_animals_0196d57a',
+    'realm_dominion_cyber_golem_sciencetechnology_ch_01972ccf',
+    'realm_dominion_cyber_panda_adventurer_panda_0196d573',
+    'realm_dominion_cyber_pirate_characters_sciencet_0196f06c',
+    'realm_dominion_cyber_pirate_mercenary_furture_0197c7b8',
+    'realm_dominion_cyber_pirate_overlord_characters_0196e657',
     'realm_dominion_cyber_sentinel_characters_scienc_01942e67',
     'realm_dominion_cyber_sentinel_electronics_scien_01942e6e',
     'realm_dominion_cyber_sentinel_electronics_scien_019436f9',
+    'realm_dominion_cyber_sentinel_pbr_robot_019905d1',
     'realm_dominion_cyber_sentinel_robot_android_01942e6b',
     'realm_dominion_cyber_sentinel_sciencetechnology_01942e66',
+    'realm_dominion_cyber_simian_sciencetechnology_a_01974b10',
+    'realm_dominion_cyber_skater_phantom_characters_0196de3c',
+    'realm_dominion_cyber_snail_adventurer_animals_01970cf5',
+    'realm_dominion_cyber_tiger_avenger_animals_0196d5ac',
+    'realm_dominion_cyber_wanderer_characters_scienc_0196e689',
     'realm_dominion_cybernetic_elegance_artabstract__0194577a',
     'realm_dominion_cybernetic_elegance_artabstract__0194577c',
     'realm_dominion_cybernetic_elegance_artabstract__01945782',
     'realm_dominion_cybernetic_elegance_artabstract__01945785',
     'realm_dominion_cybernetic_elegance_sciencetechn_01942ec7',
+    'realm_dominion_cybernetic_heavyweight_sciencete_0196fd7f',
     'realm_dominion_cybernetic_sentinel_electronics__0194394a',
     'realm_dominion_cybernetic_sentinel_electronics__0194394b',
     'realm_dominion_cybernetic_sentinel_sciencetechn_01942e8a',
+    'realm_dominion_cybernetic_sentinel_sciencetechn_0196fd7d',
+    'realm_dominion_cybernetic_sentinel_sciencetechn_01974b04',
+    'realm_dominion_cybernetic_sentinel_sciencetechn_01974bc6',
+    'realm_dominion_cybernetic_titan_sciencetechnolo_0196b0ab',
+    'realm_dominion_cybernetic_titan_sciencetechnolo_0196b0ae',
+    'realm_dominion_cyberpunk_cheetah_animals_scienc_0196d578',
+    'realm_dominion_cyberpunk_corsair_sciencetechnol_0196e65b',
+    'realm_dominion_cyberpunk_panda_adventurer_chara_0196d573',
+    'realm_dominion_cyberpunk_voyager_sciencetechnol_0196d031',
     'realm_dominion_cyborg_batman_characters_science_0193cd32',
+    'realm_dominion_cyborg_sentinel_sciencetechnolog_0196cf38',
+    'realm_dominion_dark_iron_sentinel_characters_01983fa1',
     'realm_dominion_darth_vader_inspired_giger_01965dc9',
     'realm_dominion_eddie_form_iron_maiden_019566fc',
     'realm_dominion_eddie_form_iron_maiden_019566ff',
@@ -6967,15 +10240,22 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_dominion_fantasy_female_shaman_technology_019590d3',
     'realm_dominion_fantasy_underground_cyborg_monst_01968d4c',
     'realm_dominion_future_voyager_sciencetechnology_01966d4d',
+    'realm_dominion_galactic_sentinel_sciencetechnol_019813e7',
     'realm_dominion_game_figure_angel_death_0195b944',
     'realm_dominion_game_figure_corona_virus_0195b938',
     'realm_dominion_golden_arachnid_sentinel_animals_0196496f',
+    'realm_dominion_golem_made_cristals_huge_01980afc',
     'realm_dominion_golem_made_trash_characters_01945b7c',
     'realm_dominion_head_eddie_mascot_iron_0193e99c',
     'realm_dominion_head_eddie_mascot_iron_0193e9a0',
+    'realm_dominion_iron_golem_characters_sciencetec_0196fe9e',
+    'realm_dominion_iron_golem_characters_sciencetec_0196fea0',
     'realm_dominion_iron_sentinel_characters_science_01946254',
     'realm_dominion_iron_sentinel_characters_weapons_0194666f',
+    'realm_dominion_jafaime_thin_monstrous_purple_0198f8f6',
     'realm_dominion_masive_legendary_hammer_mixed_0194a074',
+    'realm_dominion_mecha_sentinel_sciencetechnology_0196b58d',
+    'realm_dominion_mechanic_titan_sciencetechnology_0196fe0c',
     'realm_dominion_medusa_s_dream_artabstract_01947158',
     'realm_dominion_neo_samurai_sentinel_characters_01968d05',
     'realm_dominion_neon_armor_sentinel_sciencetechn_019460ec',
@@ -6986,9 +10266,13 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_dominion_ork_mechanic_characters_01960155',
     'realm_dominion_ork_mechanic_characters_019601fb',
     'realm_dominion_ork_mechanic_characters_01966de0',
+    'realm_dominion_ork_mechanic_characters_0196c1e2',
     'realm_dominion_ork_warhammer_40k_holding_0195951e',
     'realm_dominion_ork_warhammer_40k_holding_01959522',
     'realm_dominion_pose_builder_insane_muscles_0194372d',
+    'realm_dominion_raccoon_mechanic_animals_charact_019736f9',
+    'realm_dominion_robo_chill_vibes_sciencetechnolo_0196fe00',
+    'realm_dominion_robotic_wanderer_sciencetechnolo_0196fe0e',
     'realm_dominion_rusted_metal_golem_monster_01967d88',
     'realm_dominion_santa_claus_but_he_01938860',
     'realm_dominion_santa_claus_but_he_01938863',
@@ -6996,15 +10280,25 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_dominion_sentinel_automaton_electronics_s_01945674',
     'realm_dominion_sentinel_automaton_electronics_s_01945678',
     'realm_dominion_sentinel_automaton_electronics_s_01946230',
+    'realm_dominion_sentinel_cyberspace_sciencetechn_0196c05b',
     'realm_dominion_silo_dune_sci_fi_01947a28',
     'realm_dominion_space_marine_characters_weaponsm_0193fb93',
     'realm_dominion_space_marine_characters_weaponsm_0193fb9a',
+    'realm_dominion_steampunk_explorer_characters_fa_0196d56a',
+    'realm_dominion_steampunk_explorer_fashionstyle__0196deeb',
+    'realm_dominion_steampunk_robocop_sciencetechnol_0197fa8c',
     'realm_dominion_storm_trooper_t_pose_01942e95',
     'realm_dominion_storm_trooper_t_pose_01942e99',
     'realm_dominion_storm_trooper_t_pose_01942e9e',
+    'realm_dominion_techno_goliath_sciencetechnology_01972cc2',
+    'realm_dominion_techno_goliath_sciencetechnology_01972cca',
+    'realm_dominion_terminator_sciencetechnology_cha_0196b602',
+    'realm_dominion_terminator_sciencetechnology_cha_0196b612',
     'realm_dominion_titanium_sentinel_sciencetechnol_01965431',
     'realm_dominion_titanous_fury_sciencetechnology_01967cc1',
     'realm_dominion_urban_cyberpunk_explorer_charact_01942e81',
+    'realm_dominion_urban_cyborg_explorer_characters_0196e8d1',
+    'realm_dominion_urban_mech_drifter_characters_0196cf3f',
     'realm_dominion_war_hammer_weapon_futuristic_01949480',
   ],
   fps: [
@@ -7029,6 +10323,7 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_fps_contemplative_hero_characters_0195f467',
     'realm_fps_dark_warlord_characters_0195ed4b',
     'realm_fps_dark_warlord_characters_0195ed53',
+    'realm_fps_dark_warlord_characters_weaponsm_0197c14c',
     'realm_fps_dark_warlord_ork_characters_0195f1b9',
     'realm_fps_extremely_muscular_female_hero_01947d05',
     'realm_fps_extremely_muscular_female_hero_01947d08',
@@ -7050,6 +10345,7 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_fps_game_figure_trap_jaw_0195beb7',
     'realm_fps_game_figure_viking_pose_0195a9f0',
     'realm_fps_game_figure_viking_pose_0195b121',
+    'realm_fps_gothic_lord_characters_0196a614',
     'realm_fps_green_warlord_characters_019674e0',
     'realm_fps_hand_witcher_characters_01962ac8',
     'realm_fps_he_man_toy_action_0194183a',
@@ -7057,14 +10353,18 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_fps_head_os_beautiful_woman_0194b9bd',
     'realm_fps_kakashi_naruto_anime_pose_0194af71',
     'realm_fps_mike_tyson_dress_as_0193d788',
+    'realm_fps_mma_fighter_pose_ilia_0197c8e5',
     'realm_fps_ninja_gaiden_pose_characters_01946143',
     'realm_fps_perfect_rig_character_pose_019474ae',
+    'realm_fps_pirate_seagull_adventure_animals_01976405',
     'realm_fps_pose_builder_insane_muscles_01943723',
     'realm_fps_superman_venom_characters_fashio_0194b9bd',
     'realm_fps_superman_venom_characters_fashio_0194c973',
     'realm_fps_superman_venom_superhero_villain_0194b9b9',
     'realm_fps_valentine_beautiful_girl_blowing_0195017e',
     'realm_fps_viking_culturehistory_01963f92',
+    'realm_fps_warlord_sentinel_characters_019740a9',
+    'realm_fps_warlord_sentinel_characters_019740c5',
     'realm_fps_women_witch_satanic_tattoos_01957707',
   ],
   infernal: [
@@ -7077,7 +10377,9 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_infernal_black_dark_skin_demon_01938399',
     'realm_infernal_black_dark_skin_demon_01938802',
     'realm_infernal_black_myth_wukong_demon_0194b9b6',
+    'realm_infernal_bonebound_titan_characters_019832d8',
     'realm_infernal_cave_troll_wear_tattered_01940d71',
+    'realm_infernal_cowboy_cyborg_skeleton_character_01978974',
     'realm_infernal_create_3d_grinch_cyborg_0193b2bb',
     'realm_infernal_create_3d_grinch_cyborg_0193b2be',
     'realm_infernal_creature_hunched_humanoid_form_0194f5bc',
@@ -7089,8 +10391,13 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_infernal_creature_hunched_humanoid_form_0194facd',
     'realm_infernal_creature_hunched_humanoid_form_0195b53d',
     'realm_infernal_creature_muscular_one_eyed_0195be0d',
+    'realm_infernal_cyber_demon_warrior_pbr_01990659',
+    'realm_infernal_cyber_demon_warrior_pbr_01990665',
+    'realm_infernal_cybernetic_ghoul_cyberpunk_ghoul_0198816e',
+    'realm_infernal_cybernetic_oni_warrior_pbr_0199063c',
     'realm_infernal_cyberpunk_demon_stands_t_019434c8',
     'realm_infernal_cyberpunk_demon_stands_t_0194371d',
+    'realm_infernal_demon_colossus_demon_monster_019924f9',
     'realm_infernal_demon_fire_rune_tattoos_0195d2e8',
     'realm_infernal_demon_fire_rune_tattoos_0195d2f3',
     'realm_infernal_demon_fire_rune_tattoos_0195d2f5',
@@ -7107,9 +10414,12 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_infernal_demon_lord_pose_no_0194c860',
     'realm_infernal_demon_made_chrome_metal_0193da0a',
     'realm_infernal_demon_warlord_characters_019696d3',
+    'realm_infernal_demon_warrior_characters_0196a601',
     'realm_infernal_demonbane_blade_chronoforgeweapo_0194c4e3',
     'realm_infernal_demonic_cruciform_artabstract_019658eb',
     'realm_infernal_demonic_cruciform_cross_demonic_019658f1',
+    'realm_infernal_demonic_jester_characters_01975a26',
+    'realm_infernal_demonic_sentinel_characters_0197a31a',
     'realm_infernal_demonic_visage_accessories_masks_019434cf',
     'realm_infernal_demonic_visage_masks_demon_019434d0',
     'realm_infernal_demonic_warlord_characters_0196540e',
@@ -7117,6 +10427,7 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_infernal_demonic_warrior_characters_019674f3',
     'realm_infernal_demonic_warrior_characters_01969c6c',
     'realm_infernal_demonic_warrior_characters_01969c71',
+    'realm_infernal_demonic_warrior_characters_weapo_01972c78',
     'realm_infernal_demonic_warrior_demon_characters_019674e0',
     'realm_infernal_doomblade_chronoforgeweapon_weap_0194a8e9',
     'realm_infernal_double_bladed_scythe_curved_0194a8ef',
@@ -7125,13 +10436,21 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_infernal_double_bladed_scythe_curved_0194a902',
     'realm_infernal_double_bladed_scythe_curved_0194aa0b',
     'realm_infernal_double_bladed_scythe_curved_0194aa0f',
+    'realm_infernal_dread_monolith_architecture_01974099',
+    'realm_infernal_dread_monolith_architecture_0197409a',
+    'realm_infernal_dread_rider_characters_01972c7e',
+    'realm_infernal_dreadful_knight_abyss_characters_0197a322',
     'realm_infernal_dreadlord_s_embrace_characters_01940375',
     'realm_infernal_dreadlord_s_embrace_characters_0194037f',
+    'realm_infernal_dual_dread_weaponsmilitary_0197efbe',
     'realm_infernal_dual_headed_humanoid_creature_01945b18',
     'realm_infernal_elder_iron_skull_legion_0196453b',
     'realm_infernal_elder_iron_skull_legion_01964540',
     'realm_infernal_elder_iron_skull_legion_0196872b',
     'realm_infernal_ethereal_reaper_characters_01968cd7',
+    'realm_infernal_evil_warlord_armor_made_0196a11d',
+    'realm_infernal_evil_warlord_armor_made_0196a11f',
+    'realm_infernal_evil_warlord_armor_made_0196a156',
     'realm_infernal_face_3_beautiful_demon_0194701e',
     'realm_infernal_face_3_beautiful_demon_01947026',
     'realm_infernal_face_3_beautiful_demon_01947030',
@@ -7155,6 +10474,7 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_infernal_grim_reaper_weapon_skeletal_019493ec',
     'realm_infernal_guardian_abyss_characters_019696c7',
     'realm_infernal_hd_9000pixe_hd_9000pixe_01949e04',
+    'realm_infernal_he_intricate_sculpture_demon_019935b0',
     'realm_infernal_highly_muscular_albino_devil_0193e9a8',
     'realm_infernal_highly_muscular_albino_devil_0193e9b2',
     'realm_infernal_highly_muscular_albino_devil_0193e9b9',
@@ -7167,37 +10487,72 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_infernal_humanoid_hybrid_cow_dressed_0195d30f',
     'realm_infernal_hunched_creature_elongated_lumpy_01955cec',
     'realm_infernal_hydralisk_long_serpentine_lower_019639f2',
+    'realm_infernal_infernal_grin_characters_01974ae8',
     'realm_infernal_infernal_guardian_characters_01964444',
     'realm_infernal_infernal_guardian_characters_01964974',
+    'realm_infernal_infernal_guardian_characters_0196e65a',
+    'realm_infernal_infernal_guardian_characters_0196ee84',
+    'realm_infernal_infernal_guardian_characters_0196ee97',
+    'realm_infernal_infernal_guardian_characters_01973194',
     'realm_infernal_infernal_majesty_characters_01964448',
     'realm_infernal_infernal_majesty_characters_0196444c',
     'realm_infernal_infernal_majesty_characters_01966daa',
     'realm_infernal_infernal_majesty_creatures_infer_01964448',
+    'realm_infernal_infernal_overlord_characters_0196d439',
+    'realm_infernal_infernal_overlord_characters_0197899b',
+    'realm_infernal_infernal_overlord_characters_0197899f',
+    'realm_infernal_infernal_roar_creatures_demon_0199a0e7',
     'realm_infernal_infernal_scythe_weaponsmilitary_0194a75e',
     'realm_infernal_infernal_scythe_weaponsmilitary__0194a878',
     'realm_infernal_infernal_sentinel_characters_01965e5c',
+    'realm_infernal_infernal_sentinel_characters_0196a606',
+    'realm_infernal_infernal_sentinel_characters_0196b0bf',
+    'realm_infernal_infernal_sentinel_characters_0196b0d6',
+    'realm_infernal_infernal_sentinel_characters_0196d448',
+    'realm_infernal_infernal_sentinel_characters_01974bde',
+    'realm_infernal_infernal_sentinel_characters_01974be2',
+    'realm_infernal_infernal_sentinel_characters_0197af99',
     'realm_infernal_infernal_sentinel_demon_monster_01965e5d',
     'realm_infernal_infernal_titan_characters_019672fb',
     'realm_infernal_infernal_titan_characters_01967790',
     'realm_infernal_infernal_titan_characters_01969212',
+    'realm_infernal_infernal_titan_characters_01983037',
     'realm_infernal_infernal_titan_monster_demon_01969214',
     'realm_infernal_infernal_visage_characters_01965900',
     'realm_infernal_infernal_warlord_character_warlo_01969c6c',
     'realm_infernal_infernal_warlord_characters_01965ddd',
+    'realm_infernal_infernal_warlord_characters_0196a705',
+    'realm_infernal_infernal_warlord_characters_0196a816',
+    'realm_infernal_infernal_warlord_characters_0197318b',
     'realm_infernal_infernal_warlord_characters_weap_01944c3c',
     'realm_infernal_infernal_warlord_characters_weap_01944c92',
+    'realm_infernal_infernal_warlord_villain_charact_0199b160',
     'realm_infernal_infernal_warrior_characters_019659a3',
+    'realm_infernal_infernal_warrior_characters_0196c009',
     'realm_infernal_infernal_warrior_characters_weap_01965900',
+    'realm_infernal_infernal_watcher_characters_019737a4',
+    'realm_infernal_infernal_watcher_characters_019737a9',
+    'realm_infernal_legendary_demon_boss_evil_019894ab',
+    'realm_infernal_legendary_demon_boss_evil_019894af',
+    'realm_infernal_legendary_demon_boss_evil_01989c2a',
     'realm_infernal_massive_fat_demon_character_0195aedc',
     'realm_infernal_masterpiece_lowpoly_mysterious_m_01956cf9',
     'realm_infernal_medusa_s_dream_sculpture_01947157',
     'realm_infernal_minimalistic_design_demon_lord_0195b57e',
+    'realm_infernal_minotaur_butcher_characters_019707e8',
     'realm_infernal_modern_abstract_sculpture_flowin_019548b4',
     'realm_infernal_monster_made_bones_100000_019580a7',
     'realm_infernal_monster_made_bones_100000_019580d4',
+    'realm_infernal_most_bad_ass_goblin_01987255',
+    'realm_infernal_most_bad_ass_goblin_019875ab',
+    'realm_infernal_most_bad_ass_goblin_019875c4',
+    'realm_infernal_most_beatifull_female_blond_019875c0',
+    'realm_infernal_most_beatifull_female_blond_019875df',
     'realm_infernal_muscular_humanoid_creature_pale_0194393c',
     'realm_infernal_muscular_humanoid_creature_pale_01943940',
+    'realm_infernal_nightmare_behemoth_characters_0196a5e8',
     'realm_infernal_nightmare_revenant_fantasy_skele_019498fe',
+    'realm_infernal_nosferatu_shadow_sketchto3d_mons_019834ac',
     'realm_infernal_portal_hell_placestravel_01965dca',
     'realm_infernal_portal_hell_placestravel_01965dd0',
     'realm_infernal_pose_ninja_storm_shadow_0194841a',
@@ -7205,7 +10560,14 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_infernal_prawns_district_9_insectoid_01952e57',
     'realm_infernal_reaper_s_cloak_fashionstyle_01966870',
     'realm_infernal_reaper_s_scythe_chronoforgeweapo_0194a8ea',
+    'realm_infernal_rusted_infernal_golem_evil_019910d6',
+    'realm_infernal_rusted_infernal_golem_evil_01991112',
+    'realm_infernal_rusted_infernal_golem_evil_0199111c',
     'realm_infernal_samurai_zombie_game_assets_01954d30',
+    'realm_infernal_savage_demon_lord_pbr_01990626',
+    'realm_infernal_scorpion_centaur_necromancer_cha_01972c73',
+    'realm_infernal_scorpion_centaur_necromancer_sco_01972c70',
+    'realm_infernal_sentinel_abyss_armor_characters_01974158',
     'realm_infernal_serenity_abyss_artabstract_019460ec',
     'realm_infernal_serenity_abyss_artabstract_019460ee',
     'realm_infernal_serenity_abyss_artabstract_019460f0',
@@ -7224,18 +10586,30 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_infernal_skull_scepter_weaponsmilitary_ar_01946b03',
     'realm_infernal_skull_scepter_weaponsmilitary_ar_019471d0',
     'realm_infernal_skull_warrior_characters_weapons_01965e6d',
+    'realm_infernal_skullbreaker_mace_weapon_mace_0198b909',
     'realm_infernal_small_twisted_demon_fetus_01956c13',
     'realm_infernal_small_twisted_demon_fetus_01956c18',
+    'realm_infernal_spiked_skull_mace_weaponsmilitar_01974b09',
+    'realm_infernal_spiked_skull_mace_weaponsmilitar_01974b0a',
     'realm_infernal_steel_guardian_robot_armor_0193fba1',
+    'realm_infernal_symmetrical_intricate_design_sha_0197005a',
+    'realm_infernal_symmetrical_intricate_design_sha_01970073',
     'realm_infernal_techno_demon_characters_sciencet_01965e0d',
     'realm_infernal_terrifying_albino_krampus_forged_01938287',
     'realm_infernal_terrifying_albino_krampus_forged_0195767f',
+    'realm_infernal_thorned_nightmare_characters_01982abe',
+    'realm_infernal_titan_skulls_characters_019823a0',
+    'realm_infernal_titan_skulls_characters_019823a2',
     'realm_infernal_toxic_demon_characters_01961af7',
     'realm_infernal_toxic_demon_characters_01961ff3',
     'realm_infernal_twisted_gnarled_wood_voodoo_01965e59',
+    'realm_infernal_undead_rotten_machine_demon_0196c4f8',
     'realm_infernal_valentine_imp_characters_019501b2',
     'realm_infernal_warlord_shadows_characters_019672d2',
     'realm_infernal_warlord_skulls_characters_0193fb77',
+    'realm_infernal_warrior_abyss_characters_0196c064',
+    'realm_infernal_warrior_abyss_characters_01974637',
+    'realm_infernal_warrior_damned_characters_0196ca26',
     'realm_infernal_warrior_shadows_characters_01963a09',
     'realm_infernal_women_masterpiece_lowpoly_myster_01957697',
     'realm_infernal_women_masterpiece_lowpoly_myster_019576c6',
@@ -7251,6 +10625,7 @@ export const GENERATED_NPC_ONLY: ReadonlySet<string> = new Set([
   'realm_arcane_mage_wizard_dynamic_pose_0193e9b8',
   'realm_arcane_mage_wizard_dynamic_pose_0193e9bf',
   'realm_arcane_mage_wizard_dynamic_pose_0193e9c7',
+  'realm_classic_alien_conqueror_pbr_alien_0198e6fe',
   'realm_classic_alien_warrior_alien_warrior_0194817c',
   'realm_classic_alien_warrior_character_humanoid_0194863d',
   'realm_classic_alien_warrior_characters_0194817f',
@@ -7260,19 +10635,37 @@ export const GENERATED_NPC_ONLY: ReadonlySet<string> = new Set([
   'realm_classic_alien_warrior_characters_weapons_01948189',
   'realm_classic_angel_warrior_characters_artabst_0193ea08',
   'realm_classic_armored_guardian_space_marine_0193fba7',
+  'realm_classic_avian_serpent_knight_characters_0197d2ad',
   'realm_classic_aztec_warrior_characters_culture_0194c237',
   'realm_classic_blue_orc_warrior_characters_0195ed8d',
+  'realm_classic_cave_warrior_characters_019871b8',
+  'realm_classic_cyber_orc_warrior_characters_01972cca',
+  'realm_classic_cyber_warrior_sciencetechnology__019736ca',
+  'realm_classic_cybernetic_knight_sciencetechnol_0196e689',
+  'realm_classic_cybernetic_minotaur_warrior_char_0196e440',
+  'realm_classic_cybernetic_minotaur_warrior_char_0196e65e',
+  'realm_classic_cybernetic_ogre_warrior_characte_01972cd0',
   'realm_classic_cybernetic_warrior_characters_sc_01945675',
+  'realm_classic_cybernetic_warrior_sciencetechno_01983daf',
   'realm_classic_cyberpunk_orc_adventurer_charact_019427db',
   'realm_classic_cyberpunk_orc_warrior_character_01942ca3',
   'realm_classic_cyberpunk_orc_warrior_characters_01942cf3',
+  'realm_classic_cyborg_orc_warrior_characters_0196b5fe',
+  'realm_classic_cyborg_warrior_extra_arms_0196bcef',
+  'realm_classic_cyborg_warrior_extra_arms_0196c00b',
+  'realm_classic_cyborg_warrior_sciencetechnology_0196c06a',
+  'realm_classic_dark_knight_sentinel_characters_01982ac3',
+  'realm_classic_dark_knight_sentinel_characters_01982d9f',
   'realm_classic_dark_warrior_monarch_characters_01964f6a',
   'realm_classic_dark_warrior_s_armor_0195ed53',
   'realm_classic_doberman_humanoid_warrior_charac_0195c669',
   'realm_classic_doberman_humanoid_warrior_gamefi_0195c66a',
+  'realm_classic_dual_head_warrior_future_0196b630',
   'realm_classic_dwarf_warrior_attack_pose_019538cd',
   'realm_classic_eternal_warrior_characters_0195c378',
+  'realm_classic_ethereal_warrior_characters_01972c65',
   'realm_classic_fat_dwarf_warrior_pose_01955ce2',
+  'realm_classic_frost_guardian_ice_guardian_0196fea0',
   'realm_classic_game_figure_elf_warrior_0195b140',
   'realm_classic_game_figure_elf_warrior_0195b142',
   'realm_classic_game_figure_extraterrestial_warr_0195b434',
@@ -7293,6 +10686,11 @@ export const GENERATED_NPC_ONLY: ReadonlySet<string> = new Set([
   'realm_classic_goblin_warlord_characters_0196541d',
   'realm_classic_goblin_warlord_characters_019672d5',
   'realm_classic_goblin_warlord_characters_01967858',
+  'realm_classic_goblin_warlord_characters_0196a10b',
+  'realm_classic_goblin_warlord_characters_01976a00',
+  'realm_classic_goblin_warlord_characters_01976a03',
+  'realm_classic_goblin_warlord_characters_fantas_019899f1',
+  'realm_classic_goblin_warrior_action_figure_0197dbb4',
   'realm_classic_goblin_warrior_character_mortal_019634ed',
   'realm_classic_goblin_warrior_character_mortal_019634f0',
   'realm_classic_goblin_warrior_characters_weapon_01964537',
@@ -7303,62 +10701,147 @@ export const GENERATED_NPC_ONLY: ReadonlySet<string> = new Set([
   'realm_classic_goblin_warrior_characters_weapon_019696d0',
   'realm_classic_goblin_warrior_characters_weapon_019696d9',
   'realm_classic_goblin_warrior_characters_weapon_019696e2',
+  'realm_classic_goblin_warrior_characters_weapon_0196a609',
+  'realm_classic_goblin_warrior_characters_weapon_0196a622',
+  'realm_classic_goblin_warrior_characters_weapon_0196abf2',
+  'realm_classic_goblin_warrior_characters_weapon_0196ca24',
+  'realm_classic_goblin_warrior_characters_weapon_0196dee2',
+  'realm_classic_goblin_warrior_characters_weapon_0196ee97',
+  'realm_classic_goblin_warrior_characters_weapon_0197376e',
+  'realm_classic_goblin_warrior_characters_weapon_01974b3b',
+  'realm_classic_goblin_warrior_characters_weapon_01975007',
+  'realm_classic_goblin_warrior_characters_weapon_0197500d',
+  'realm_classic_goblin_warrior_characters_weapon_01975c86',
+  'realm_classic_goblin_warrior_characters_weapon_0197698b',
+  'realm_classic_goblin_warrior_characters_weapon_0197833e',
+  'realm_classic_goblin_warrior_characters_weapon_0197c14c',
+  'realm_classic_goblin_warrior_characters_weapon_0197c16c',
+  'realm_classic_goblin_warrior_characters_weapon_0197c689',
+  'realm_classic_goblin_warrior_characters_weapon_0197db11',
+  'realm_classic_goblin_warrior_goblin_characters_01983a41',
+  'realm_classic_goblin_warrior_goblin_warrior_019880e0',
+  'realm_classic_goblin_warrior_traditional_attir_0199156c',
+  'realm_classic_goliath_ogre_creatures_ogre_01988ac1',
   'realm_classic_green_goblin_holding_wooden_0196110b',
+  'realm_classic_grog_warrior_troll_characters_0197c25d',
   'realm_classic_hoge_3_meter_tall_019542be',
+  'realm_classic_horned_warrior_characters_weapon_0196a604',
   'realm_classic_humanoid_figure_creature_advance_019489cb',
   'realm_classic_insectoid_warrior_characters_01968d0e',
   'realm_classic_ironclad_minotaur_warrior_charac_01965dde',
+  'realm_classic_ironclad_warrior_characters_weap_01974dae',
+  'realm_classic_leyendary_troll_boss_evil_01989492',
+  'realm_classic_leyendary_troll_boss_evil_01989498',
+  'realm_classic_leyendary_troll_boss_evil_019894a5',
   'realm_classic_lion_knight_animals_characters_0196499e',
+  'realm_classic_minotaur_sentinel_minotaur_creat_019875dc',
+  'realm_classic_minotaur_warrior_characters_weap_0197905e',
+  'realm_classic_minotaur_warrior_minotaur_warrio_01987fdf',
+  'realm_classic_most_bad_ass_goblin_0198d2d0',
   'realm_classic_mushroom_warrior_characters_01966d4c',
+  'realm_classic_mystic_orc_warrior_characters_0196e3f4',
   'realm_classic_mystic_warrior_characters_01963bbf',
   'realm_classic_mystic_warrior_characters_01963f6d',
   'realm_classic_namekian_warrior_anime_piccolo_01948a5c',
   'realm_classic_namekian_warrior_characters_01948a7a',
   'realm_classic_nordic_warrior_hammer_characters_0194f584',
+  'realm_classic_ogre_s_fury_fantasy_0198a132',
+  'realm_classic_ogre_warlord_characters_0196bf89',
+  'realm_classic_ogre_warlord_characters_0196c00a',
+  'realm_classic_ogre_warrior_characters_0196f982',
+  'realm_classic_ogre_warrior_characters_0196fa41',
+  'realm_classic_orc_cyborg_warrior_orc_0198a132',
+  'realm_classic_orc_king_villain_orc_019997d7',
+  'realm_classic_orc_warlord_characters_0196da51',
+  'realm_classic_orc_warlord_orc_warlord_019899f2',
+  'realm_classic_orc_warlord_orc_warlord_019899f4',
   'realm_classic_orc_warrior_characters_weaponsmi_0194dbf4',
   'realm_classic_orc_warrior_characters_weaponsmi_0194dbf5',
+  'realm_classic_orc_warrior_characters_weaponsmi_0196c06c',
+  'realm_classic_orc_warrior_characters_weaponsmi_0196c1e4',
+  'realm_classic_orc_warrior_characters_weaponsmi_0196f86d',
+  'realm_classic_orc_warrior_characters_weaponsmi_0196f91f',
   'realm_classic_orc_warrior_chief_characters_0196591a',
+  'realm_classic_orc_warrior_king_characters_0196ada1',
+  'realm_classic_orc_warrior_sentinel_characters_01972c6c',
   'realm_classic_predator_warrior_characters_weap_01948407',
+  'realm_classic_rhino_gladiator_villain_characte_0199a863',
+  'realm_classic_road_warrior_giant_characters_0196cf39',
+  'realm_classic_roadside_warrior_characters_0196f93f',
+  'realm_classic_rune_warrior_characters_0196c728',
+  'realm_classic_runestone_warrior_characters_01973204',
+  'realm_classic_runic_warrior_armor_warrior_019731a3',
   'realm_classic_rusty_warrior_characters_weapons_019682ad',
   'realm_classic_spiky_ogre_warrior_characters_01968731',
+  'realm_classic_titan_defender_fantasy_warrior_0199a837',
+  'realm_classic_twin_ogre_warlord_characters_0196cf35',
+  'realm_classic_two_headed_warrior_characters_0196f30f',
+  'realm_classic_two_headed_warrior_characters_0196f846',
+  'realm_classic_two_headed_warrior_characters_0196f863',
+  'realm_classic_urban_warrior_fashionstyle_0196d41c',
+  'realm_classic_urban_wasteland_orc_orc_0198b3b9',
   'realm_classic_warhammer_40k_medieval_warrior_01949bea',
   'realm_classic_warrior_ancients_characters_0196497f',
   'realm_classic_warrior_ancients_characters_019658ff',
   'realm_classic_warrior_chaos_characters_weapons_01940366',
   'realm_classic_warrior_chaos_characters_weapons_0194c990',
+  'realm_classic_warrior_crimson_skies_characters_0196ba80',
+  'realm_classic_warrior_denim_fashionstyle_chara_0197379b',
   'realm_classic_warrior_fury_characters_019644f2',
   'realm_classic_warrior_fury_characters_019644f7',
   'realm_classic_warrior_goblin_characters_weapon_01969220',
   'realm_classic_warrior_goblin_characters_weapon_01969227',
   'realm_classic_warrior_mask_knight_weaponsmilit_01965dec',
   'realm_classic_warrior_mask_knight_weaponsmilit_01965dee',
+  'realm_classic_warrior_minotaur_characters_0197c8e3',
   'realm_classic_warrior_ogre_characters_01968c86',
   'realm_classic_warrior_ogre_characters_01969211',
   'realm_classic_warrior_ogre_characters_01969239',
   'realm_classic_warrior_orc_characters_01965dcf',
+  'realm_classic_warrior_realm_characters_0196b62c',
   'realm_classic_warrior_s_resolve_characters_01963bcd',
+  'realm_classic_warrior_s_resolve_characters_0197a4e6',
+  'realm_classic_warrior_s_resolve_characters_019948db',
   'realm_classic_warrior_sage_characters_01949918',
   'realm_classic_warrior_sage_characters_0194991c',
+  'realm_classic_warrior_skies_characters_019731a1',
   'realm_classic_warrior_titan_characters_0196976a',
+  'realm_classic_warrior_titan_characters_0196b72e',
+  'realm_classic_warrior_troll_characters_0196e404',
+  'realm_classic_warrior_twins_characters_0196f846',
+  'realm_classic_warrior_wasteland_warrior_wastel_01987196',
   'realm_classic_warrior_wilds_characters_01963bc8',
   'realm_classic_women_woman_warrior_women_0195770c',
   'realm_dominion_alien_warlord_characters_01968d0f',
   'realm_dominion_alien_warlord_characters_019691b8',
+  'realm_dominion_cyber_sentinel_pbr_robot_019905d1',
   'realm_dominion_fairy_fairy_holding_machine_0195e2e7',
   'realm_dominion_ork_warhammer_40k_holding_0195951e',
   'realm_dominion_ork_warhammer_40k_holding_01959522',
   'realm_fps_dark_warlord_characters_0195ed4b',
   'realm_fps_dark_warlord_characters_0195ed53',
+  'realm_fps_dark_warlord_characters_weaponsm_0197c14c',
   'realm_fps_dark_warlord_ork_characters_0195f1b9',
   'realm_fps_green_warlord_characters_019674e0',
+  'realm_fps_warlord_sentinel_characters_019740a9',
+  'realm_fps_warlord_sentinel_characters_019740c5',
   'realm_infernal_creature_muscular_one_eyed_0195be0d',
+  'realm_infernal_cyber_demon_warrior_pbr_01990659',
+  'realm_infernal_cyber_demon_warrior_pbr_01990665',
+  'realm_infernal_cybernetic_oni_warrior_pbr_0199063c',
   'realm_infernal_demon_warlord_characters_019696d3',
+  'realm_infernal_demon_warrior_characters_0196a601',
   'realm_infernal_demonic_warlord_characters_0196540e',
   'realm_infernal_demonic_warlord_characters_019674e9',
   'realm_infernal_demonic_warrior_characters_019674f3',
   'realm_infernal_demonic_warrior_characters_01969c6c',
   'realm_infernal_demonic_warrior_characters_01969c71',
+  'realm_infernal_demonic_warrior_characters_weapo_01972c78',
   'realm_infernal_demonic_warrior_demon_characters_019674e0',
+  'realm_infernal_dreadful_knight_abyss_characters_0197a322',
+  'realm_infernal_evil_warlord_armor_made_0196a11d',
+  'realm_infernal_evil_warlord_armor_made_0196a11f',
+  'realm_infernal_evil_warlord_armor_made_0196a156',
   'realm_infernal_game_figure_masterpiece_lowpoly_0195be19',
   'realm_infernal_game_figure_masterpiece_lowpoly_0195be1c',
   'realm_infernal_game_figure_masterpiece_lowpoly_0195be20',
@@ -7373,11 +10856,21 @@ export const GENERATED_NPC_ONLY: ReadonlySet<string> = new Set([
   'realm_infernal_infernal_sentinel_demon_monster_01965e5d',
   'realm_infernal_infernal_warlord_character_warlo_01969c6c',
   'realm_infernal_infernal_warlord_characters_01965ddd',
+  'realm_infernal_infernal_warlord_characters_0196a705',
+  'realm_infernal_infernal_warlord_characters_0196a816',
+  'realm_infernal_infernal_warlord_characters_0197318b',
   'realm_infernal_infernal_warlord_characters_weap_01944c3c',
   'realm_infernal_infernal_warlord_characters_weap_01944c92',
+  'realm_infernal_infernal_warlord_villain_charact_0199b160',
   'realm_infernal_infernal_warrior_characters_019659a3',
+  'realm_infernal_infernal_warrior_characters_0196c009',
   'realm_infernal_infernal_warrior_characters_weap_01965900',
   'realm_infernal_masterpiece_lowpoly_mysterious_m_01956cf9',
+  'realm_infernal_most_bad_ass_goblin_01987255',
+  'realm_infernal_most_bad_ass_goblin_019875ab',
+  'realm_infernal_most_bad_ass_goblin_019875c4',
+  'realm_infernal_most_beatifull_female_blond_019875c0',
+  'realm_infernal_most_beatifull_female_blond_019875df',
   'realm_infernal_shadow_warrior_characters_01942cfa',
   'realm_infernal_shadow_warrior_characters_fashio_01942cf0',
   'realm_infernal_shadow_warrior_characters_fashio_01942cf2',
@@ -7385,5 +10878,8 @@ export const GENERATED_NPC_ONLY: ReadonlySet<string> = new Set([
   'realm_infernal_skull_warrior_characters_weapons_01965e6d',
   'realm_infernal_warlord_shadows_characters_019672d2',
   'realm_infernal_warlord_skulls_characters_0193fb77',
+  'realm_infernal_warrior_abyss_characters_0196c064',
+  'realm_infernal_warrior_abyss_characters_01974637',
+  'realm_infernal_warrior_damned_characters_0196ca26',
   'realm_infernal_warrior_shadows_characters_01963a09',
 ]);

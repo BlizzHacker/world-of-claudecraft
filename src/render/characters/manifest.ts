@@ -11,7 +11,7 @@ import { resolveActiveRealmId } from '../../sim/realms/registry';
 import type { Entity, PlayerClass } from '../../sim/types';
 import { ITEM_WEAPON_VARIANTS } from '../../ui/weapon_variants';
 import type { OverheadEmoteId } from '../../world_api';
-import { GENERATED_VISUALS } from './manifest.generated';
+import { GENERATED_REALM_BODIES, GENERATED_VISUALS } from './manifest.generated';
 import {
   hostileHumanoidVisualKey,
   infernalNpcVisualKey,
@@ -1999,6 +1999,40 @@ function overrideVisualKeyForEntity(e: Entity): string | null {
   return entry ? registerOverrideVisual(entry) : null;
 }
 
+
+// Families the generated bodies can legitimately stand in for. Every generated
+// body passed a humanoid shape gate, so lending one to a spider, mudfin or
+// dragonkin would look worse than the existing family fallback.
+const GENERATED_POOL_FAMILIES = new Set([
+  'humanoid', 'undead', 'demon', 'troll', 'ogre',
+]);
+
+/** FNV-1a. Small, stable, and dependency-free — the pick must be identical on
+ *  every client and across restarts, so Math.random() is not an option. */
+function stableHash(s: string): number {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 0x01000193) >>> 0;
+  }
+  return h >>> 0;
+}
+
+/** Deterministically pick a generated body for a realm+family, keyed on the mob
+ *  template so one template always renders as the same character. Returns null
+ *  when the realm has no generated bodies or the family is not humanoid-shaped. */
+function generatedBodyFor(
+  realm: string,
+  family: string | undefined,
+  templateId: string | undefined,
+): string | null {
+  if (!family || !GENERATED_POOL_FAMILIES.has(family)) return null;
+  const pool = GENERATED_REALM_BODIES[realm];
+  if (!pool || pool.length === 0) return null;
+  const seed = `${realm}:${family}:${templateId ?? 'anon'}`;
+  return pool[stableHash(seed) % pool.length] ?? null;
+}
+
 export function visualKeyFor(e: Entity): string {
   const bodyOverride = overrideVisualKeyForEntity(e);
   if (bodyOverride) return bodyOverride;
@@ -2072,6 +2106,11 @@ export function visualKeyFor(e: Entity): string {
     // the active realm has a themed monster family.
     if (override) return override;
     if (realmFamily) return realmFamily;
+    // Generated pool: gives each realm hundreds of distinct bodies instead of one
+    // per family. Explicit mappings above always win; this only replaces what would
+    // otherwise be a generic KayKit fallback.
+    const generated = generatedBodyFor(realm, family, e.templateId);
+    if (generated) return generated;
     return (family && FAMILY_KEYS[family]) || REALM_MOB_DEFAULTS[realm] || 'mob_bandit';
   }
   // npcs — Brother Aldric recurs in every hub under suffixed ids
