@@ -54,12 +54,4 @@ export function createCharacterVisual(
     );
     return null;
   }
-  return new CharacterVisual(
-    key,
-    e.color,
-    formKey ? 0 : (e.skin ?? 0),
-    formKey ? null : e.mainhandItemId,
-    weaponOverride,
-    opts,
-  );
 }

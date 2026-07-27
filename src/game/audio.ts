@@ -126,6 +126,30 @@ type UiCue =
   | (typeof UI_CUES.craftByFamily)[keyof typeof UI_CUES.craftByFamily];
 
 export class GameAudio {
+  private ctx: AudioContext | null = null;
+  private master: GainNode | null = null;
+  private tone(
+    freq: number,
+    duration: number,
+    gain: number,
+    type: OscillatorType = 'sine',
+    delay = 0,
+    slideTo?: number,
+  ): void {
+    if (!this.ctx || !this.master) return;
+    const t = this.ctx.currentTime + delay;
+    const osc = this.ctx.createOscillator();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, t);
+    if (slideTo) osc.frequency.exponentialRampToValueAtTime(slideTo, t + duration);
+    const g = this.ctx.createGain();
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(gain, t + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.001, t + duration);
+    osc.connect(g).connect(this.master);
+    osc.start(t);
+    osc.stop(t + duration + 0.05);
+  }
   questAccept(): void {
     this.tone(660, 0.18, 0.14, 'triangle');
     this.tone(880, 0.25, 0.14, 'triangle', 0.1);

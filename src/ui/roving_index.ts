@@ -18,7 +18,7 @@
 // It takes primitives, not an IWorld, so the ClientWorld-vs-Sim parity row
 // is N/A for it, exactly like dropdown_nav.ts; same-input-same-output is the contract.
 
-export type RovingOrientation = 'horizontal' | 'both';
+export type RovingOrientation = 'horizontal' | 'vertical' | 'both';
 
 // The next roving index for `key`, or null when the key is not a roving move. `count` is
 // the number of siblings; `current` is the focused sibling's index. Home -> 0,

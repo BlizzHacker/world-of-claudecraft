@@ -2958,6 +2958,7 @@ export class Hud {
       unlockLabelKey: 'hudChrome.partyFrames.unlock',
       lockLabelKey: 'hudChrome.partyFrames.lock',
       draggingBodyClass: 'party-frame-dragging',
+      isMobileLayout,
       fallbackSize: { w: 360, h: 240 },
     });
     // Master "Move HUD" button: one draggable control that unlocks every movable

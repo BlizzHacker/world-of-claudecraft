@@ -2684,8 +2684,7 @@ export async function getCharacter(
   characterId: number,
 ): Promise<CharacterRow | null> {
   const res = await pool.query(
-    'SELECT id, account_id, name, class, level, state, is_gm, force_rename, hotbar_layout FROM characters WHERE id = $1 AND account_id = $2 AND realm = $3',
-    'SELECT id, account_id, name, class, level, state, is_gm, force_rename, hardcore, ladder, died_at FROM characters WHERE id = $1 AND account_id = $2 AND realm = $3',
+    'SELECT id, account_id, name, class, level, state, is_gm, force_rename, hotbar_layout, hardcore, ladder, died_at FROM characters WHERE id = $1 AND account_id = $2 AND realm = $3',
     [characterId, accountId, REALM],
   );
   return res.rows[0] ?? null;

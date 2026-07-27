@@ -737,6 +737,7 @@ const RELAY_COOLDOWN_MS = 8_000; // min gap between a player's "!" community pos
 const ADMIN_LOCATION_POI_RADIUS = 32;
 
 export interface ClientSession {
+  lastVcupWireTick: number;
   ws: WebSocket;
   accountId: number;
   accountCosmetics: AccountCosmetics;
@@ -2988,6 +2989,7 @@ export class GameServer {
       timerWireCache: new StableSelfTimerWireCache(),
       lastArenaWireTick: -ARENA_WIRE_INTERVAL_TICKS,
       lastDfWireTick: -DF_WIRE_INTERVAL_TICKS,
+      lastVcupWireTick: -VC_WIRE_INTERVAL_TICKS,
       selfHeavyDirty: true,
       lastWireRev: -1,
       sentEnts: new Map(),

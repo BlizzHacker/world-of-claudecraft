@@ -45,6 +45,11 @@ import { qualityGlowShadow } from './quality_glow';
 import { tSim } from './sim_i18n';
 import type { StatId } from './stat_tooltip';
 import { svgIcon } from './ui_icons';
+import {
+  renderWindowFrame,
+  type WindowFrameDescriptor,
+  type WindowFrameParts,
+} from './window_frame';
 const ARCHETYPE_TITLE_KEYS: Record<string, TranslationKey> = {
   armorcrafting: 'hudChrome.archetypeTitle.armorcrafting',
   weaponcrafting: 'hudChrome.archetypeTitle.weaponcrafting',
@@ -195,7 +200,36 @@ const GATHERING_PROFESSION_LABEL_KEY: Record<string, TranslationKey> = {
 const SHARE_GLYPH =
   '<svg class="pc-share-ico" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M18 16.1a3 3 0 0 0-2.3 1.1l-6.7-3.9a3 3 0 0 0 0-2.6l6.7-3.9A3 3 0 1 0 15 4l-6.7 3.9a3 3 0 1 0 0 8.2L15 20a3 3 0 1 0 3-3.9z"/></svg>';
 
+// The character sheet is a closable, footer-less frame: the paperdoll + stats
+// two-pane, the class identity strip, and the share row all render as sections of
+// one scrollable body. The title reuses the existing "Character" action label and
+// the close reuses the returnToGame key (no new i18n keys). The frame IS the dialog
+// (role + aria-labelledby on the inner mount), so the module no longer marks the
+// shared #char-window root as a dialog.
+const CHAR_FRAME: WindowFrameDescriptor = {
+  id: 'char-window',
+  titleKey: 'hud.keybinds.actions.char',
+  closeLabelKey: 'hud.options.returnToGame',
+};
+
 export class CharWindow {
+  /**
+   * Stamp the shared window frame cold at first open, then reuse it. The frame
+   * mounts on an INNER container (never on the shared #char-window root), so the
+   * root stays a pristine `.window.panel`: the id-scoped viewport clamp, the
+   * resize grip (window_resize.ts targets the root), and the mobile inset rules
+   * keep matching it. An intact mounted frame (its body present) is the reuse
+   * marker; only the body repaints per render.
+   */
+  private ensureFrame(el: HTMLElement): WindowFrameParts {
+    const mounted = el.querySelector<HTMLElement>(':scope > .window-frame');
+    const body = mounted?.querySelector<HTMLElement>('.window-body');
+    if (mounted && body) return { root: mounted, body, footer: null, tabButtons: [] };
+    const mount = document.createElement('div');
+    const parts = renderWindowFrame(mount, CHAR_FRAME, { onClose: () => this.close() });
+    el.replaceChildren(mount);
+    return parts;
+  }
   private openerFocus: HTMLElement | null = null;
   private selectedItemId: string | null = null;
   private activeTab: CharacterSheetTab = 'equipment';

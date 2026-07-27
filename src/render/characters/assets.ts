@@ -45,12 +45,6 @@ import { markOwnedWeaponSkinMaterials } from './weapon_skin_materials';
 
 const DEFAULT_TINT_STRENGTH = 0.4;
 
-type HandGrip = {
-  position: [number, number, number];
-  quaternion: [number, number, number, number];
-  scale: number;
-};
-
 export interface AssembleModelOptions {
   preserveFirstPersonParts?: boolean;
 }

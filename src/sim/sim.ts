@@ -398,7 +398,7 @@ import {
 } from './progression/talents';
 import { prestige as prestigeImpl, updateRested } from './progression/xp';
 import { advancePendingProjectiles, type PendingProjectile } from './projectile_travel';
-import { spawnBuildingInteriors } from './interiors';
+import { spawnBuildingInteriors, leaveInterior as leaveInteriorImpl } from './interiors';
 import { repairTalentLoadouts } from './talent_loadouts';
 import { partyFrameAbsorb, partyFrameAggroTargets, partyFrameAuras, partyFrameIncomingHeals, partyFrameRole } from './party_frame_info';
 import { activeMaxLevel } from './realms/registry';
@@ -1575,9 +1575,6 @@ export class Sim {
     return runsMod.companionUpgradesFor(this.ctx, pid);
   }
   npcDuels = new Map<number, NpcDuelState>(); // F4c: player pid -> player-vs-NPC duel
-  // arena: format-specific queues, live bouts keyed by every participant pid,
-  // and the set of busy instance slots
-  arenaQueue1v1: number[] = [];
   // Read-only rollout registry for presentation. Incomplete modes remain
   // default-off until their authoritative wire/persistence checkpoints land.
   readonly minigameFeatures = MINIGAME_FEATURES;

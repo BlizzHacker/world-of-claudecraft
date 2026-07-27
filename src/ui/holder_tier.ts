@@ -46,6 +46,8 @@ export interface HolderTier extends Omit<HolderTierCore, 'key'> {
   flavor: string;
   /** Primary ring/accent colour (hex). Also the band III sigil hue and the halo. */
   ring: string;
+  /** Inner SVG markup for the rung's glyph, drawn centred in a 0 0 64 64 box. */
+  glyph?: string;
   /** Outer glow colour (hex). Also the band III deep hue and the halo. */
   glow: string;
 }

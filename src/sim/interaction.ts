@@ -116,17 +116,17 @@ export function lootCorpse(
     return false;
   }
   const mob = ctx.entities.get(mobId);
-  if (!mob?.lootable || !mob.loot) return;
+  if (!mob?.lootable || !mob.loot) return false;
   // Hardcore player corpse: any live player in the same population can loot it
   // (Cryptic Realm downstream feature — bypasses the normal loot-rights model).
   if (mob.kind === 'player' && mob.hardcoreCorpse) {
     if (!ctx.samePopulationPlayers(p, mob)) {
       ctx.error(meta.entityId, "You can't loot that.");
-      return;
+      return false;
     }
     if (dist2d(p.pos, mob.pos) > INTERACT_RANGE) {
       ctx.error(meta.entityId, 'Too far away.');
-      return;
+      return false;
     }
     if (mob.loot.copper > 0) {
       meta.copper += mob.loot.copper;
@@ -139,7 +139,7 @@ export function lootCorpse(
     mob.loot.items = mob.loot.items.filter((sl) => sl.count > 0);
     if (mob.loot.items.length === 0 && mob.loot.copper === 0) mob.lootable = false;
     if (p.targetId === mobId) p.targetId = null;
-    return;
+    return true;
   }
   // owner-lock lapses LOOT_FFA_DELAY after the corpse became lootable: then anyone may loot.
   const ffaUnlocked = honorFfa && lootHasGoneFfa(mob.lootFfaTimer);

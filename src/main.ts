@@ -2365,6 +2365,9 @@ async function startGame(
       // The connected pad's brand lives on the manager, not the (hardware-agnostic)
       // bindings, so surface it here for the Controller panel's glyph labels.
       kind: () => gamepad.getKind(),
+      // Live connection state, so the options footer shows the button-legend strip
+      // only while a pad is present.
+      connected: () => gamepad.isConnected(),
     },
   });
   // Desktop discoverability for the Discord link/panel: the micro-menu button
@@ -5846,8 +5849,8 @@ function showRealmList(dir?: import('./net/online').RealmDirectory): void {
         const c = choiceFor(family);
         const entry = f.stages.get(c.stage);
         const st = await api.realmStatus(entry?.url || '');
-        const sub = listEl.querySelector(
-          `[data-sub][data-fam="${CSS.escape(family)}"]`,
+        const row = listEl.querySelector(
+          `.realm-card[data-fam="${CSS.escape(family)}"]`,
         ) as HTMLElement | null;
         if (!row) return;
         const pop = realmPopulation(st.online, st.players, st.cap);

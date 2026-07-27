@@ -3503,7 +3503,7 @@ export class ClientWorld implements IWorld {
   setPropMeta(dbId: number, meta: { dialogue?: string; music?: string; voice?: string }): void {
     this.cmd({ cmd: 'setPropMeta', dbId, meta });
   }
-  acceptQuest(questId: string): void {
+  acceptQuest(questId: string, selection?: string): void {
     if (!this.canSendCommand()) return;
     this.pendingQuestCommands.set(questId, 'accept');
     this.cmd({ cmd: 'accept', quest: questId, selection });

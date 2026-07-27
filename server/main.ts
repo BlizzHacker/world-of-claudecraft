@@ -627,6 +627,7 @@ const leaderboardCache: Record<
 };
 
 async function refreshLeaderboard(scope: LeaderboardScope): Promise<LeaderboardEntry[]> {
+  const epoch = boardEpoch;
   const rows = await topLifetimeXp(LEADERBOARD_SIZE, {
     global: scope === 'global',
     ladder: scope === 'ladder',
