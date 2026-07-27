@@ -3088,7 +3088,17 @@ export class ClientWorld implements IWorld {
       if (s.trade !== undefined) this.tradeInfo = s.trade;
       if (s.duel !== undefined) this.duelInfo = s.duel;
       if (s.arena !== undefined) this.arenaInfo = s.arena;
-      if (s.vcup !== undefined) this.cupInfo = s.vcup;
+      if (s.df !== undefined) this.dungeonFinderInfo = s.df;
+      if (s.dfb !== undefined) this.dungeonFinderBoard = s.dfb;
+      if (s.cardDuel !== undefined) this.cardMinigameInfo = s.cardDuel;
+      if (s.honor !== undefined) this.honor = s.honor ?? 0;
+      if (s.lhonor !== undefined) this.lifetimeHonor = s.lhonor ?? 0;
+      // The Vale Cup wire is SPLIT: `vcup` carries this viewer's remainder and
+      // `vcupb` the realm-wide fragment (serialized once per broadcast pass by the
+      // realm-readout memo). recomputeCupInfo() recombines them into cupInfo.
+      if (s.vcup !== undefined) this.lastVcupRemainder = s.vcup as VcViewerReadout | null;
+      if (s.vcupb !== undefined) this.lastVcupShared = s.vcupb as VcSharedCupInfo | null;
+      if (s.vcup !== undefined || s.vcupb !== undefined) this.recomputeCupInfo();
       if (s.derby !== undefined) this.derbyInfo = s.derby;
       if (s.pit !== undefined) this.pitInfo = s.pit;
       if (s.homes !== undefined) this.homesInfo = s.homes;
