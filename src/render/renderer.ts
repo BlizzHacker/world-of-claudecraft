@@ -4710,6 +4710,8 @@ export class Renderer {
       visual,
       visualKey: visual ? visualKeyFor(e) : null,
       visualPoolKey,
+      mountVisual: null,
+      mountKey: null,
       sheepVisual: null,
       bearVisual: null,
       catVisual: null,
@@ -5121,6 +5123,7 @@ export class Renderer {
       seen.add(vkey);
       try {
         const visual = createCharacterVisual(entity);
+        if (!visual) continue;
         visual.root.visible = true;
         group.add(visual.root);
         built.push(visual);
@@ -5966,7 +5969,7 @@ export class Renderer {
           mountKey as 'mount_stag' | 'mount_raptor' | 'mount_wyrm',
         );
         v.mountKey = mountKey;
-        v.group.add(v.mountVisual.root);
+        if (v.mountVisual) v.group.add(v.mountVisual.root);
       }
       if (v.sheepVisual) v.sheepVisual.root.visible = polyed;
       if (v.bearVisual) v.bearVisual.root.visible = bear;

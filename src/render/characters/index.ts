@@ -22,7 +22,14 @@ export { CharacterVisual, setWeaponVfxViewportHeight } from './visual';
  *  training dummy freeze). */
 export function createCharacterVisual(
   e: Entity,
-  formKey?: 'form_sheep' | 'form_bear' | 'form_cat' | 'form_travel',
+  formKey?:
+    | 'form_sheep'
+    | 'form_bear'
+    | 'form_cat'
+    | 'form_travel'
+    | 'mount_stag'
+    | 'mount_raptor'
+    | 'mount_wyrm',
 ): CharacterVisual | null {
   // forms (sheep/bear/cat/travel) are their own models — skins and held weapons
   // only apply to the base body

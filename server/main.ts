@@ -1108,54 +1108,21 @@ function toSheetRank(rank: { rank: number; total: number } | null): SheetRank | 
 
 // The character-list response shared by the full-session GET /api/characters and
 // the read-scoped GET /api/me/characters, so both stay byte-identical.
-function characterListPayload(chars: CharacterRow[]): {
-  realm: string;
-  characters: {
-    id: number;
-    name: string;
-    class: PlayerClass;
-    level: number;
-    skin: number;
-    online: boolean;
-    forceRename: boolean;
-    hardcore: boolean;
-    dead: boolean;
-    lastPlayed: string | null;
-    playtimeSeconds: number;
-    skinCatalog: 'class' | 'mech';
-    mainhandItemId: string | null;
-    realmHeroId: string | null;
-    visualKey: string | null;
-  }[];
-} {
-  return {
-    realm: REALM,
-    characters: chars.map((c) => {
-      const realm = process.env.CR_REALM_ID ?? REALM;
-      const appearance = isDuranceTesterCharacter(c.name, realm)
-        ? { realmHeroId: null, visualKey: 'realm_infernal_durance_humanoid' as const }
-        : resolveRealmCharacterVisual(realm, c.class, c.state?.realmHeroId);
-      return {
-        id: c.id,
-        name: c.name,
-        class: c.class,
-        level: c.level,
-        skin: c.state?.skin ?? 0,
-        online: [...liveGame().clients.values()].some((s) => s.characterId === c.id),
-        forceRename: c.force_rename,
-        hardcore: !!c.hardcore,
-        dead: !!c.died_at,
-        lastPlayed: c.last_played ? new Date(c.last_played).toISOString() : null,
-        playtimeSeconds: Number(c.playtime_seconds ?? 0),
-        // Real appearance for the char-select 3D preview (the client renders the
-        // Combat Mech cosmetic body and the equipped mainhand, matching the world).
-        skinCatalog: c.state?.skinCatalog === 'mech' ? 'mech' : 'class',
-        mainhandItemId: c.state?.equipment?.mainhand ?? null,
-        realmHeroId: appearance.realmHeroId,
-        visualKey: appearance.visualKey,
-      };
-    }),
-  };
+function characterListPayload(
+  chars: CharacterRow[],
+  weaponSkinLoadout: Record<string, string>,
+): unknown {
+  // Delegates to the RouteDef arm's shared builder (review follow-up on the
+  // weaponSkinId addition): one implementation means the retained legacy arm
+  // and the new pipeline CANNOT diverge in payload shape, and the behavioral
+  // route tests in tests/server/characters.test.ts cover both by construction.
+  // Only the online scan stays legacy-owned (the same live-session scan main
+  // injects into the RouteDef runtime as isCharacterOnline).
+  return buildCharacterList(
+    chars,
+    (characterId) => [...liveGame().clients.values()].some((s) => s.characterId === characterId),
+    weaponSkinLoadout,
+  );
 }
 
 async function bearerAccount(req: http.IncomingMessage): Promise<number | null> {

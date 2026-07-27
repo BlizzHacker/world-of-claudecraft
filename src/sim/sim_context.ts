@@ -903,6 +903,27 @@ export interface SimContextHost extends SimContextPrimitives, SimContextCallback
 // determinism.
 export function createSimContext(host: SimContextHost): SimContext {
   return {
+      get propMetaByEnt() {
+        return host.propMetaByEnt;
+      },
+      get npcDuels() {
+        return host.npcDuels;
+      },
+      get derby() {
+        return host.derby;
+      },
+      get boarpit() {
+        return host.boarpit;
+      },
+      get homes() {
+        return host.homes;
+      },
+      get horde() {
+        return host.horde;
+      },
+      get skirmish() {
+        return host.skirmish;
+      },
     get rng() {
       return host.rng;
     },

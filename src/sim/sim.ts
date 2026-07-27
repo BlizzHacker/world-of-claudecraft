@@ -3996,6 +3996,30 @@ export class Sim {
   private buildSimContext(): SimContext {
     const sim = this;
     const host: SimContextHost = {
+      get mobScanCounters() {
+        return sim.mobScanCounters;
+      },
+      get propMetaByEnt() {
+        return sim.propMetaByEnt;
+      },
+      get npcDuels() {
+        return sim.npcDuels;
+      },
+      get deedDirtyPids() {
+        return sim.deedDirtyPids;
+      },
+      get deedDirtyKeys() {
+        return sim.deedDirtyKeys;
+      },
+      get worldBossEntityIds() {
+        return sim.worldBossEntityIds;
+      },
+      get deedRuntime() {
+        return sim.deedRuntime;
+      },
+      get fiestaBotPids() {
+        return sim.fiestaBotPids;
+      },
       get rng() {
         return sim.rng;
       },

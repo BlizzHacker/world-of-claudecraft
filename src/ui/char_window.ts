@@ -45,11 +45,8 @@ import { qualityGlowShadow } from './quality_glow';
 import { tSim } from './sim_i18n';
 import type { StatId } from './stat_tooltip';
 import { svgIcon } from './ui_icons';
-import {
-  renderWindowFrame,
-  type WindowFrameDescriptor,
-  type WindowFrameParts,
-} from './window_frame';
+import { renderWindowFrame, type WindowFrameParts } from './window_frame';
+import type { WindowFrameDescriptor } from './window_frame_view';
 const ARCHETYPE_TITLE_KEYS: Record<string, TranslationKey> = {
   armorcrafting: 'hudChrome.archetypeTitle.armorcrafting',
   weaponcrafting: 'hudChrome.archetypeTitle.weaponcrafting',

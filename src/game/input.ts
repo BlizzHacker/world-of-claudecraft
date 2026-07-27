@@ -496,8 +496,14 @@ export class Input {
     if (hadHeldInput) this.noteIntent('move');
   }
 
-  captureNextKey(cb: (code: string | null) => void): void {
+  captureNextKey(cb: (code: string | null) => void): () => void {
     this.captureCb = cb;
+    return () => {
+      if (this.captureCb === cb) {
+        this.captureCb = null;
+        cb(null);
+      }
+    };
   }
 
   setCameraSpeed(mult: number): void {

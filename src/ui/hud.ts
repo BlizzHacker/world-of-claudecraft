@@ -556,7 +556,7 @@ let lpAdvancedLast = -1;
 // perf_overlay_settings.ts alongside the panel that consumes it.
 export interface OptionsHooks {
   logout(): void;
-  captureKey(cb: (code: string | null) => void): void;
+  captureKey(cb: (code: string | null) => void): () => void;
   settings: Settings;
   onSettingChange(key: keyof GameSettings, value: GameSettings[keyof GameSettings]): void;
   // Switch the active locale at runtime (loads the locale chunk, relocalizes the page,
@@ -7887,6 +7887,10 @@ export class Hud {
         const chest = sim.entities.get(this.openLootChestId);
         if (!chest || dist2d(p.pos, chest.pos) > 7) this.closeLoot();
       }
+      const cardDuelInMatch = this.sim.cardMinigameInfo.match !== null;
+      if (cardDuelInMatch && !this.cardDuelWasInMatch && !this.cardDuelWindow.isOpen) {
+        this.cardDuelWindow.toggle();
+      }
       this.cardDuelWasInMatch = cardDuelInMatch;
       if ($('#card-duel-window').style.display === 'block') this.cardDuelWindow.render();
       this.lootWindow.updateProximity();
@@ -8391,11 +8395,6 @@ export class Hud {
 
   private updateDelveTracker(): void {
     this.delveTracker.update();
-    const el = $('#delve-rite-panel');
-    if (el.style.display === 'none') return;
-    el.style.display = 'none';
-    this.riteTrap?.release(restoreFocus);
-    this.riteTrap = null;
   }
 
   private delveObjectiveLine(run: DelveRunInfo): string {
@@ -10176,7 +10175,7 @@ export class Hud {
           if (bubbleStyle && typeof bubbleSpeakerId === 'number') {
             const masked = this.maskChat(this.chatLinkPlainText(ev.text));
             const bubble = ev.channel === 'emote' ? `${ev.from} ${masked}` : masked;
-            if (masked.trim())
+            if (masked.trim() && typeof ev.entityId === 'number')
               this.renderer.showChatBubble(ev.entityId, bubble, ev.channel === 'yell');
           }
           // ArcForge prop audio: play music track and/or voice line on interact.

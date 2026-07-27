@@ -1866,10 +1866,6 @@ export const ZONE1_PROPS: ZonePropsDef = {
     camGhost: false,
   })),
   graveyards: [{ ...EASTBROOK_LAYOUT.services.graveyard.position }, { x: 4, z: -56 }],
-  fences: [
-    { x1: 16, z1: 16, x2: 22, z2: 4 },
-    { x1: -16, z1: 14, x2: -20, z2: 2 },
-  ],
   delveMarkers: [
     { x: -5, z: -52, delveId: 'collapsed_reliquary' },
     // The Hellmaw Well portal: a red-void gate beside the town well, next to

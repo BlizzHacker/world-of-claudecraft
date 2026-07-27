@@ -2840,6 +2840,8 @@ export class GameServer {
       Partial<AccountChatMuteStatus> & {
         accountCosmetics?: AccountCosmetics;
         chatStrikes?: number;
+        // Per-character action-bar layout, read straight off the character row.
+        hotbarLayout?: ActionBarLayout | null;
         hardcore?: boolean;
         isAdmin?: boolean;
         ladder?: boolean;
@@ -7347,7 +7349,7 @@ export class GameServer {
           // world events: only those near this player
           const anchor = this.eventAnchor(ev);
           if (anchor === null || dist2d(anchorPos, anchor) <= EVENT_RADIUS) {
-            mine.push(ev);
+            mine.push(fragments[i]);
             // Reaction time: castStop/death are world events (no pid) — match by entityId.
             if ((ev.type === 'castStop' || ev.type === 'death') && ev.entityId === session.pid) {
               this.botDetector.observeEvent(session.botTrackingContext, ev, eventTime);
