@@ -8501,8 +8501,6 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auth.resetMismatch': 'Les mots de passe ne correspondent pas.',
   'hudChrome.auth.resetErrInvalid':
     'Ce lien de réinitialisation est invalide ou a expiré. Demandez-en un nouveau.',
-  'itemUi.vendor.sellRolledWarning':
-    'Les caractéristiques aléatoires ne peuvent pas être récupérées par rachat.',
   'apiError.deeds.invalid_input': 'Saisie invalide.',
   'apiError.steam.account_taken': 'Ce compte Steam est déjà lié à un autre compte.',
   'apiError.steam.already_linked': 'Votre compte est déjà lié à un compte Steam.',

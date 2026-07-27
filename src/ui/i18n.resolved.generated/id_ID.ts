@@ -6989,8 +6989,7 @@ export const id_ID: EnTranslations = {
       "sellQuantityCancel": "Batal",
       "sellJunk": "Jual Rongsokan",
       "sellJunkAria": "Jual semua rongsokan seharga {price}",
-      "sellJunkHint": "Menjual setiap barang abu-abu di tasmu kecuali barang misi.",
-      "sellRolledWarning": "Atribut acak tidak dapat dipulihkan dengan membeli kembali."
+      "sellJunkHint": "Menjual setiap barang abu-abu di tasmu kecuali barang misi."
     },
     "market": {
       "title": "Pasar Dunia",
@@ -11849,6 +11848,16 @@ export const id_ID: EnTranslations = {
           }
         }
       },
+      "q_prof_make_amends": {
+        "title": "Membuat Perubahan",
+        "text": "Untuk menyisihkan satu kerajinan untuk kerajinan lainnya, seorang pengrajin harus terlebih dahulu memperbaiki jalur yang belum dilalui, {playerName}.",
+        "completion": "Perubahan dilakukan; jalan baru terbuka untuk Anda.",
+        "objectives": {
+          "0": {
+            "label": "Serigala Hutan dibunuh"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "Paduan Suara Tenggelam",
         "text": "Para pengarung tak bergerak sendiri. Di antara mereka berjalan para Pemuja Tenggelam, sekte yang karam bersama kuil, masih dalam busana lapuk, masih menyanyikan doa dari batu karang tepi pantai. Bungkam delapan dari mereka, dan bawakan padaku enam persembahan yang mereka bawa. Aku ingin tahu apa yang hendak mereka berikan pada dewi mereka.",
@@ -11909,16 +11918,6 @@ export const id_ID: EnTranslations = {
         "objectives": {
           "0": {
             "label": "Glimmermere Wader dibunuh"
-          }
-        }
-      },
-      "q_prof_make_amends": {
-        "title": "Membuat Perubahan",
-        "text": "Untuk menyisihkan satu kerajinan untuk kerajinan lainnya, seorang pengrajin harus terlebih dahulu memperbaiki jalur yang belum dilalui, {playerName}.",
-        "completion": "Perubahan dilakukan; jalan baru terbuka untuk Anda.",
-        "objectives": {
-          "0": {
-            "label": "Serigala Hutan dibunuh"
           }
         }
       }

@@ -6989,8 +6989,7 @@ export const nl_NL: EnTranslations = {
       "sellQuantityCancel": "Annuleren",
       "sellJunk": "Rommel Verkopen",
       "sellJunkAria": "Verkoop alle rommel voor {price}",
-      "sellJunkHint": "Verkoopt elk grijs voorwerp in je tassen behalve questvoorwerpen.",
-      "sellRolledWarning": "Willekeurig bepaalde eigenschappen kunnen niet worden hersteld door het voorwerp terug te kopen."
+      "sellJunkHint": "Verkoopt elk grijs voorwerp in je tassen behalve questvoorwerpen."
     },
     "market": {
       "title": "De Wereldmarkt",
@@ -11849,6 +11848,16 @@ export const nl_NL: EnTranslations = {
           }
         }
       },
+      "q_prof_make_amends": {
+        "title": "Het goedmaken",
+        "text": "Om het ene vaartuig voor het andere opzij te zetten, moet een ambachtsman eerst het niet bewandelde pad goedmaken, {playerName}.",
+        "completion": "Wijzigingen aangebracht; er ligt een nieuw pad voor je open.",
+        "objectives": {
+          "0": {
+            "label": "Boswolf gedood"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "Het Verdronken Koor",
         "text": "De waders handelen niet alleen. Tussen hen lopen de Verdronken Aanbidders, de sekte die met de tempel zonk, nog in hun verrotte gewaden, nog steeds het gebed zingend vanaf de oeverrotsen. Breng er acht tot zwijgen, en breng me zes van de offergaven die ze dragen. Ik wil weten wat ze hun godin willen geven.",
@@ -11909,16 +11918,6 @@ export const nl_NL: EnTranslations = {
         "objectives": {
           "0": {
             "label": "Glimmermere-Wader gedood"
-          }
-        }
-      },
-      "q_prof_make_amends": {
-        "title": "Het goedmaken",
-        "text": "Om het ene vaartuig voor het andere opzij te zetten, moet een ambachtsman eerst het niet bewandelde pad goedmaken, {playerName}.",
-        "completion": "Wijzigingen aangebracht; er ligt een nieuw pad voor je open.",
-        "objectives": {
-          "0": {
-            "label": "Boswolf gedood"
           }
         }
       }

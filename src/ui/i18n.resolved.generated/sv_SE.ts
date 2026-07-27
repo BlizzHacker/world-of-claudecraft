@@ -6989,8 +6989,7 @@ export const sv_SE: EnTranslations = {
       "sellQuantityCancel": "Avbryt",
       "sellJunk": "Sälj skräp",
       "sellJunkAria": "Sälj allt skräp för {price}",
-      "sellJunkHint": "Säljer varje grått föremål i dina väskor utom uppdragsföremål.",
-      "sellRolledWarning": "Slumpade egenskaper kan inte återställas genom återköp."
+      "sellJunkHint": "Säljer varje grått föremål i dina väskor utom uppdragsföremål."
     },
     "market": {
       "title": "Världsmarknaden",
@@ -11849,6 +11848,16 @@ export const sv_SE: EnTranslations = {
           }
         }
       },
+      "q_prof_make_amends": {
+        "title": "Att göra gott",
+        "text": "För att avsätta ett hantverk åt ett annat måste en hantverkare först göra gott för vägen som inte gicks, {playerName}.",
+        "completion": "Gjorda ändringar; en ny väg är öppen för dig.",
+        "objectives": {
+          "0": {
+            "label": "Skogsvarg dödad"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "Den drunknade kören",
         "text": "Vadarna agerar inte ensamma. Bland dem vandrar de Drunknade tillbedjarna - kulten som sjönk med templet, fortfarande i sina ruttna skrudar, fortfarande sjungande bönen från strandklipporna. Tysta åtta av dem och hämta mig sex av de offergåvor de bär. Jag vill veta vad de tänker ge sin gudinna.",
@@ -11909,16 +11918,6 @@ export const sv_SE: EnTranslations = {
         "objectives": {
           "0": {
             "label": "Glimmertjärnsvadare dräpt"
-          }
-        }
-      },
-      "q_prof_make_amends": {
-        "title": "Att göra gott",
-        "text": "För att avsätta ett hantverk åt ett annat måste en hantverkare först göra gott för vägen som inte gicks, {playerName}.",
-        "completion": "Gjorda ändringar; en ny väg är öppen för dig.",
-        "objectives": {
-          "0": {
-            "label": "Skogsvarg dödad"
           }
         }
       }

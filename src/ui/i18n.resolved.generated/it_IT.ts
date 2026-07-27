@@ -6989,8 +6989,7 @@ export const it_IT: EnTranslations = {
       "sellQuantityCancel": "Annulla",
       "sellJunk": "Vendi cianfrusaglie",
       "sellJunkAria": "Vendi tutte le cianfrusaglie per {price}",
-      "sellJunkHint": "Vende tutti gli oggetti grigi nelle borse tranne gli oggetti di missione.",
-      "sellRolledWarning": "Le statistiche generate casualmente non possono essere recuperate con il riacquisto."
+      "sellJunkHint": "Vende tutti gli oggetti grigi nelle borse tranne gli oggetti di missione."
     },
     "market": {
       "title": "Mercato Mondiale",
@@ -11849,6 +11848,16 @@ export const it_IT: EnTranslations = {
           }
         }
       },
+      "q_prof_make_amends": {
+        "title": "Fare ammenda",
+        "text": "Per mettere da parte un mestiere per un altro, un artigiano deve prima fare ammenda per il percorso non percorso, {playerName}.",
+        "completion": "Modifiche apportate; una nuova strada è aperta per te.",
+        "objectives": {
+          "0": {
+            "label": "Lupo della Foresta ucciso"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "Il Coro Annegato",
         "text": "I guadatori non agiscono da soli. Tra loro camminano i Devoti Annegati — la setta che affondò col tempio, ancora nelle loro vesti marcite, ancora intenti a cantare la preghiera dalle rocce della riva. Riducine otto al silenzio e portami sei delle offerte che recano. Voglio sapere cosa intendono donare alla loro dea.",
@@ -11909,16 +11918,6 @@ export const it_IT: EnTranslations = {
         "objectives": {
           "0": {
             "label": "Guadatore di Glimmermere ucciso"
-          }
-        }
-      },
-      "q_prof_make_amends": {
-        "title": "Fare ammenda",
-        "text": "Per mettere da parte un mestiere per un altro, un artigiano deve prima fare ammenda per il percorso non percorso, {playerName}.",
-        "completion": "Modifiche apportate; una nuova strada è aperta per te.",
-        "objectives": {
-          "0": {
-            "label": "Lupo della Foresta ucciso"
           }
         }
       }

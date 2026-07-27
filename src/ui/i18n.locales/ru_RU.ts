@@ -2468,7 +2468,6 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'itemUi.vendor.buybackTitle': 'Выкуп',
   'itemUi.vendor.buybackEmpty': 'Нет предметов',
   'itemUi.vendor.buybackAria': 'Выкупить {item} за {price}',
-  'itemUi.vendor.sellRolledWarning': 'Случайные характеристики нельзя вернуть выкупом.',
   'itemUi.vendor.sellQuantityTitle': 'Продать {item}',
   'itemUi.vendor.sellQuantityInput': 'Количество для продажи',
   'itemUi.vendor.sellQuantityConfirm': 'Продать',

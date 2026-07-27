@@ -6989,8 +6989,7 @@ export const ko_KR: EnTranslations = {
       "sellQuantityCancel": "취소",
       "sellJunk": "잡동사니 판매",
       "sellJunkAria": "모든 잡동사니를 {price}에 판매",
-      "sellJunkHint": "퀘스트 아이템을 제외한 가방의 모든 회색 아이템을 판매합니다.",
-      "sellRolledWarning": "무작위 능력치는 되사기로 되돌릴 수 없습니다."
+      "sellJunkHint": "퀘스트 아이템을 제외한 가방의 모든 회색 아이템을 판매합니다."
     },
     "market": {
       "title": "세계 시장",
@@ -11849,6 +11848,16 @@ export const ko_KR: EnTranslations = {
           }
         }
       },
+      "q_prof_make_amends": {
+        "title": "속죄",
+        "text": "한 기술을 버리고 다른 기술로 나아가려면, 장인은 먼저 걷지 않은 길에 대해 속죄해야 한다, {playerName}.",
+        "completion": "속죄가 이루어졌다. 그대에게 새로운 길이 열렸다.",
+        "objectives": {
+          "0": {
+            "label": "숲늑대 처치"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "익사한 성가대",
         "text": "물거리들은 홀로 움직이지 않는다네. 그들 사이를 익사한 신도들이 걷고 있지 — 신전과 함께 가라앉은 그 광신도들은, 썩어버린 제의를 여전히 걸친 채 물가 바위에서 부르던 기도를 아직도 노래하고 있네. 그들 중 여덟을 침묵시키고, 그들이 지닌 제물 여섯 개를 내게 가져오게. 그들이 그 여신에게 무엇을 바치려는지 알고 싶네.",
@@ -11909,16 +11918,6 @@ export const ko_KR: EnTranslations = {
         "objectives": {
           "0": {
             "label": "글리머미어 물거리 처치"
-          }
-        }
-      },
-      "q_prof_make_amends": {
-        "title": "속죄",
-        "text": "한 기술을 버리고 다른 기술로 나아가려면, 장인은 먼저 걷지 않은 길에 대해 속죄해야 한다, {playerName}.",
-        "completion": "속죄가 이루어졌다. 그대에게 새로운 길이 열렸다.",
-        "objectives": {
-          "0": {
-            "label": "숲늑대 처치"
           }
         }
       }

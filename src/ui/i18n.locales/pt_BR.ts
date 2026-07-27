@@ -7898,8 +7898,6 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auth.resetMismatch': 'As senhas não coincidem.',
   'hudChrome.auth.resetErrInvalid':
     'Este link de redefinição é inválido ou expirou. Solicite um novo.',
-  'itemUi.vendor.sellRolledWarning':
-    'Atributos gerados aleatoriamente não podem ser recuperados pela recompra.',
   'apiError.deeds.invalid_input': 'Entrada inválida.',
   'apiError.steam.account_taken': 'Essa conta Steam já está vinculada a outra conta.',
   'apiError.steam.already_linked': 'Sua conta já tem uma conta Steam vinculada.',

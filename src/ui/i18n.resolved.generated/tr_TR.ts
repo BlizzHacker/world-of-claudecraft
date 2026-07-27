@@ -6989,8 +6989,7 @@ export const tr_TR: EnTranslations = {
       "sellQuantityCancel": "İptal",
       "sellJunk": "Döküntüleri Sat",
       "sellJunkAria": "Tüm döküntüleri {price} karşılığında sat",
-      "sellJunkHint": "Görev eşyaları hariç çantalarınızdaki tüm gri eşyaları satar.",
-      "sellRolledWarning": "Rastgele özellikler geri satın almayla kurtarılamaz."
+      "sellJunkHint": "Görev eşyaları hariç çantalarınızdaki tüm gri eşyaları satar."
     },
     "market": {
       "title": "Dünya Pazarı",
@@ -11849,6 +11848,16 @@ export const tr_TR: EnTranslations = {
           }
         }
       },
+      "q_prof_make_amends": {
+        "title": "Değişiklikler Yapmak",
+        "text": "Bir zanaatı diğerine ayırmak için, bir zanaatkarın öncelikle yürümediği yolu telafi etmesi gerekir, {playerName}.",
+        "completion": "Değişiklikler yapıldı; önünüze yeni bir yol açılıyor.",
+        "objectives": {
+          "0": {
+            "label": "Orman kurdu öldürüldü"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "Boğulmuş Koro",
         "text": "Su yürüyücüleri tek başına hareket etmiyor. Aralarında Boğulmuş Müritler yürüyor — tapınakla birlikte batan tarikat, hâlâ çürümüş cüppeleri içinde, hâlâ kıyı kayalarından duayı söyleyerek. Sekizini sustur ve bana taşıdıkları adaklardan altısını getir. Tanrıçalarına ne sunmak istediklerini öğrenmek istiyorum.",
@@ -11909,16 +11918,6 @@ export const tr_TR: EnTranslations = {
         "objectives": {
           "0": {
             "label": "Glimmermere Sığlıkgezeri öldürüldü"
-          }
-        }
-      },
-      "q_prof_make_amends": {
-        "title": "Değişiklikler Yapmak",
-        "text": "Bir zanaatı diğerine ayırmak için, bir zanaatkarın öncelikle yürümediği yolu telafi etmesi gerekir, {playerName}.",
-        "completion": "Değişiklikler yapıldı; önünüze yeni bir yol açılıyor.",
-        "objectives": {
-          "0": {
-            "label": "Orman kurdu öldürüldü"
           }
         }
       }

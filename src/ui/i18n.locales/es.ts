@@ -7920,8 +7920,6 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auth.resetMismatch': 'Las contraseñas no coinciden.',
   'hudChrome.auth.resetErrInvalid':
     'Este enlace de restablecimiento no es válido o ha caducado. Solicita uno nuevo.',
-  'itemUi.vendor.sellRolledWarning':
-    'Los atributos aleatorios no se pueden recuperar mediante la recompra.',
   'apiError.deeds.invalid_input': 'Entrada no válida.',
   'apiError.steam.account_taken': 'Esa cuenta de Steam ya está vinculada a otra cuenta.',
   'apiError.steam.already_linked': 'Tu cuenta ya tiene una cuenta de Steam vinculada.',

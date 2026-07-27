@@ -8201,7 +8201,6 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'hudChrome.talents.resetChoices': 'Nulstil valg',
   'hudChrome.talents.tierLevel': 'Niveau {n}',
   'hudChrome.talents.tierLevelLabel': 'Niveau',
-  'itemUi.vendor.sellRolledWarning': 'Tilfældige egenskaber kan ikke gendannes ved tilbagekøb.',
   'loading.tips.classes':
     'Tip: Hver af de 9 klasser spilles forskelligt. Prøv nogle stykker, før du vælger én.',
   'loading.tips.dungeons':

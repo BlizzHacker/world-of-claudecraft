@@ -2338,7 +2338,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'itemUi.vendor.buybackTitle': '回购',
   'itemUi.vendor.buybackEmpty': '没有物品',
   'itemUi.vendor.buybackAria': '以 {price} 回购 {item}',
-  'itemUi.vendor.sellRolledWarning': '随机属性无法通过回购找回。',
   'itemUi.vendor.sellQuantityTitle': '出售 {item}',
   'itemUi.vendor.sellQuantityInput': '要出售的数量',
   'itemUi.vendor.sellQuantityConfirm': '出售',

@@ -8056,8 +8056,6 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auth.resetMismatch': 'Le password non coincidono.',
   'hudChrome.auth.resetErrInvalid':
     'Questo link di reimpostazione non è valido o è scaduto. Richiedine uno nuovo.',
-  'itemUi.vendor.sellRolledWarning':
-    'Le statistiche generate casualmente non possono essere recuperate con il riacquisto.',
   'apiError.deeds.invalid_input': 'Dati non validi.',
   'apiError.steam.account_taken': "Quell'account Steam è già collegato a un altro account.",
   'apiError.steam.already_linked': 'Il tuo account ha già un account Steam collegato.',

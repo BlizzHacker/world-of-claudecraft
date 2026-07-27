@@ -2442,7 +2442,6 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'itemUi.vendor.buybackTitle': '買い戻し',
   'itemUi.vendor.buybackEmpty': 'アイテムなし',
   'itemUi.vendor.buybackAria': '{item}を{price}で買い戻す',
-  'itemUi.vendor.sellRolledWarning': 'ランダムな性能は買い戻しでは戻せません。',
   'itemUi.vendor.sellQuantityTitle': '{item}を売却',
   'itemUi.vendor.sellQuantityInput': '売却する数量',
   'itemUi.vendor.sellQuantityConfirm': '売却',

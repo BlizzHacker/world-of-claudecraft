@@ -8,7 +8,6 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.stable_master_wren.name': 'Wren Saddleworth',
   'entities.npcs.stable_master_wren.title': 'Quản mã',
   'entities.npcs.stable_master_wren.greeting': 'Anh hùng nào cũng cần một thú cưỡi, {className}. Hươu thì vững, raptor thì nhanh, còn wyrm... wyrm biết bay.',
-  'itemUi.vendor.sellRolledWarning': 'Không thể khôi phục các chỉ số ngẫu nhiên bằng cách mua lại.',
   'hudChrome.bags.itemAriaMasterwork': '{item}, số lượng {count}, kiệt tác',
   'hudChrome.archetypePair.tailoring+inscription': 'Thợ Dệt Chữ',
   'hudChrome.enchantName.enchant_weapon_runed_focus': 'Pháp Khắc Vũ Khí - Tiêu Điểm Phù Văn',

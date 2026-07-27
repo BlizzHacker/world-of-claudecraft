@@ -6989,8 +6989,7 @@ export const es: EnTranslations = {
       "sellQuantityCancel": "Cancelar",
       "sellJunk": "Vender basura",
       "sellJunkAria": "Vender toda la basura por {price}",
-      "sellJunkHint": "Vende todos los objetos grises de tus bolsas excepto los objetos de misión.",
-      "sellRolledWarning": "Los atributos aleatorios no se pueden recuperar mediante la recompra."
+      "sellJunkHint": "Vende todos los objetos grises de tus bolsas excepto los objetos de misión."
     },
     "market": {
       "title": "Mercado Mundial",
@@ -11849,6 +11848,16 @@ export const es: EnTranslations = {
           }
         }
       },
+      "q_prof_make_amends": {
+        "title": "Hacer las paces",
+        "text": "Para dejar de lado un oficio para otro, un artesano primero debe enmendar el camino no recorrido, {playerName}.",
+        "completion": "Enmiendas hechas; un nuevo camino está abierto para ti.",
+        "objectives": {
+          "0": {
+            "label": "Lobo del bosque matado"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "El Coro Ahogado",
         "text": "Los vadeadores no actúan solos. Entre ellos caminan los Devotos Ahogados: la secta que se hundió con el templo, aún con sus vestiduras putrefactas, aún entonando la plegaria desde las rocas de la orilla. Silencia a ocho de ellos y tráeme seis de las ofrendas que portan. Quiero saber qué pretenden entregar a su diosa.",
@@ -11909,16 +11918,6 @@ export const es: EnTranslations = {
         "objectives": {
           "0": {
             "label": "Vadeador de Glimmermere abatido"
-          }
-        }
-      },
-      "q_prof_make_amends": {
-        "title": "Hacer las paces",
-        "text": "Para dejar de lado un oficio para otro, un artesano primero debe enmendar el camino no recorrido, {playerName}.",
-        "completion": "Enmiendas hechas; un nuevo camino está abierto para ti.",
-        "objectives": {
-          "0": {
-            "label": "Lobo del bosque matado"
           }
         }
       }

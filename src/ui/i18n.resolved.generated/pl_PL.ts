@@ -6989,8 +6989,7 @@ export const pl_PL: EnTranslations = {
       "sellQuantityCancel": "Anuluj",
       "sellJunk": "Sprzedaj śmieci",
       "sellJunkAria": "Sprzedaj wszystkie śmieci za {price}",
-      "sellJunkHint": "Sprzedaje każdy szary przedmiot w twoich torbach z wyjątkiem przedmiotów zadań.",
-      "sellRolledWarning": "Losowych statystyk nie można odzyskać przez odkupienie przedmiotu."
+      "sellJunkHint": "Sprzedaje każdy szary przedmiot w twoich torbach z wyjątkiem przedmiotów zadań."
     },
     "market": {
       "title": "Rynek Świata",
@@ -11849,6 +11848,16 @@ export const pl_PL: EnTranslations = {
           }
         }
       },
+      "q_prof_make_amends": {
+        "title": "Zadośćuczynienie",
+        "text": "Aby odłożyć jeden statek na drugi, rzemieślnik musi najpierw zadośćuczynić za ścieżkę, którą nie przeszedł, {playerName}.",
+        "completion": "Poprawki dokonane; otwiera się przed tobą nowa droga.",
+        "objectives": {
+          "0": {
+            "label": "Leśny Wilk zabity"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "Utopiony chór",
         "text": "Brodzący nie działają sami. Wśród nich kroczą Utopieni Wyznawcy — kult, który zatonął wraz ze świątynią, wciąż w zbutwiałych szatach, wciąż śpiewający modlitwę z nadbrzeżnych skał. Ucisz ośmiu z nich i przynieś mi sześć ofiar, które noszą. Chcę wiedzieć, co zamierzają złożyć swojej bogini.",
@@ -11909,16 +11918,6 @@ export const pl_PL: EnTranslations = {
         "objectives": {
           "0": {
             "label": "Brodziciel z Migotliwego Jeziora pokonany"
-          }
-        }
-      },
-      "q_prof_make_amends": {
-        "title": "Zadośćuczynienie",
-        "text": "Aby odłożyć jeden statek na drugi, rzemieślnik musi najpierw zadośćuczynić za ścieżkę, którą nie przeszedł, {playerName}.",
-        "completion": "Poprawki dokonane; otwiera się przed tobą nowa droga.",
-        "objectives": {
-          "0": {
-            "label": "Leśny Wilk zabity"
           }
         }
       }

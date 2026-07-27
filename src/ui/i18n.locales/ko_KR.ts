@@ -2425,7 +2425,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'itemUi.vendor.buybackTitle': '되사기',
   'itemUi.vendor.buybackEmpty': '물품 없음',
   'itemUi.vendor.buybackAria': '{item}을(를) {price}에 되사기',
-  'itemUi.vendor.sellRolledWarning': '무작위 능력치는 되사기로 되돌릴 수 없습니다.',
   'itemUi.vendor.sellQuantityTitle': '{item} 판매',
   'itemUi.vendor.sellQuantityInput': '판매할 수량',
   'itemUi.vendor.sellQuantityConfirm': '판매',

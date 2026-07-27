@@ -8,7 +8,6 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.stable_master_wren.name': 'Wren Saddleworth',
   'entities.npcs.stable_master_wren.title': 'Ahır Ustası',
   'entities.npcs.stable_master_wren.greeting': 'Her kahramanın bir bineğe ihtiyacı var, {className}. Geyik sağlamdır, raptor hızlıdır, ejder ise... ejder uçar.',
-  'itemUi.vendor.sellRolledWarning': 'Rastgele özellikler geri satın almayla kurtarılamaz.',
   'hudChrome.bags.itemAriaMasterwork': '{item}, adet {count}, şaheser',
   'hudChrome.archetypePair.tailoring+inscription': 'İplik Yazıcı',
   'hudChrome.enchantName.enchant_weapon_runed_focus': 'Silah Büyüsü - Runlu Odak',

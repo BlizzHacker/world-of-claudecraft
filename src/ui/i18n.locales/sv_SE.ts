@@ -8044,7 +8044,6 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.talents.resetChoices': 'Återställ val',
   'hudChrome.talents.tierLevel': 'Nivå {n}',
   'hudChrome.talents.tierLevelLabel': 'Nivå',
-  'itemUi.vendor.sellRolledWarning': 'Slumpade egenskaper kan inte återställas genom återköp.',
   'loading.tips.classes':
     'Tips: var och en av de 9 klasserna spelas på sitt eget sätt. Prova några innan du bestämmer dig för en.',
   'loading.tips.dungeons':

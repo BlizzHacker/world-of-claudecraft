@@ -6989,8 +6989,7 @@ export const cs_CZ: EnTranslations = {
       "sellQuantityCancel": "Zrušit",
       "sellJunk": "Prodat odpad",
       "sellJunkAria": "Prodat všechen odpad za {price}",
-      "sellJunkHint": "Prodá všechny šedé předměty v batozích kromě úkolových předmětů.",
-      "sellRolledWarning": "Náhodně vytvořené vlastnosti nelze získat zpět odkoupením."
+      "sellJunkHint": "Prodá všechny šedé předměty v batozích kromě úkolových předmětů."
     },
     "market": {
       "title": "Světový trh",
@@ -11849,6 +11848,16 @@ export const cs_CZ: EnTranslations = {
           }
         }
       },
+      "q_prof_make_amends": {
+        "title": "Náprava",
+        "text": "Aby řemeslník odložil jedno řemeslo pro druhé, musí nejdřív napravit cestu, kterou nešel, {playerName}.",
+        "completion": "Náprava vykonána, otevírá se ti nová cesta.",
+        "objectives": {
+          "0": {
+            "label": "Lesní vlk zabit"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "Utopený sbor",
         "text": "Brodci nejednají sami. Mezi nimi kráčejí utopení zasvěcenci, kult, který se potopil s chrámem, stále ve shnilých rouchách a stále zpívá modlitbu ze skal na břehu. Umlč osm z nich a přines mi šest obětin, které nesou. Chci vědět, co hodlají dát své bohyni.",
@@ -11911,16 +11920,6 @@ export const cs_CZ: EnTranslations = {
             "label": "Brodivec z Třpytivého plesa zabit"
           }
         }
-      },
-      "q_prof_make_amends": {
-        "completion": "Náprava vykonána, otevírá se ti nová cesta.",
-        "objectives": {
-          "0": {
-            "label": "Lesní vlk zabit"
-          }
-        },
-        "text": "Aby řemeslník odložil jedno řemeslo pro druhé, musí nejdřív napravit cestu, kterou nešel, {playerName}.",
-        "title": "Náprava"
       }
     },
     "zones": {

@@ -6989,8 +6989,7 @@ export const ja_JP: EnTranslations = {
       "sellQuantityCancel": "キャンセル",
       "sellJunk": "不要品を売却",
       "sellJunkAria": "{price}ですべての不要品を売却",
-      "sellJunkHint": "クエストアイテムを除くバッグ内のすべての灰色アイテムを売却します。",
-      "sellRolledWarning": "ランダムな性能は買い戻しでは戻せません。"
+      "sellJunkHint": "クエストアイテムを除くバッグ内のすべての灰色アイテムを売却します。"
     },
     "market": {
       "title": "ワールドマーケット",
@@ -11849,6 +11848,16 @@ export const ja_JP: EnTranslations = {
           }
         }
       },
+      "q_prof_make_amends": {
+        "title": "償い",
+        "text": "一つの技を捨て、別の技へと移るには、職人はまず歩まなかった道への償いを果たさねばならぬ、{playerName}よ。",
+        "completion": "償いは果たされた。新たな道があなたに開かれている。",
+        "objectives": {
+          "0": {
+            "label": "フォレストウルフを討伐"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "溺れし聖歌隊",
         "text": "渡り手どもは独りで動いているのではない。その中に溺れし信徒たちが歩いている——神殿とともに沈んだ教団だ。腐った祭服をまとったまま、岸の岩場から祈りを歌い続けている。八体を沈黙させ、奴らが携える供物を六つ持ち帰れ。奴らが女神に何を捧げようとしているのか、私は知りたいのだ。",
@@ -11909,16 +11918,6 @@ export const ja_JP: EnTranslations = {
         "objectives": {
           "0": {
             "label": "煌めき沼の渡り手を討伐した"
-          }
-        }
-      },
-      "q_prof_make_amends": {
-        "title": "償い",
-        "text": "一つの技を捨て、別の技へと移るには、職人はまず歩まなかった道への償いを果たさねばならぬ、{playerName}よ。",
-        "completion": "償いは果たされた。新たな道があなたに開かれている。",
-        "objectives": {
-          "0": {
-            "label": "フォレストウルフを討伐"
           }
         }
       }

@@ -6989,8 +6989,7 @@ export const fr_FR: EnTranslations = {
       "sellQuantityCancel": "Annuler",
       "sellJunk": "Vendre les rebuts",
       "sellJunkAria": "Vendre tous les rebuts pour {price}",
-      "sellJunkHint": "Vend tous les objets gris dans vos sacs, sauf les objets de quête.",
-      "sellRolledWarning": "Les caractéristiques aléatoires ne peuvent pas être récupérées par rachat."
+      "sellJunkHint": "Vend tous les objets gris dans vos sacs, sauf les objets de quête."
     },
     "market": {
       "title": "Marché mondial",
@@ -11849,6 +11848,16 @@ export const fr_FR: EnTranslations = {
           }
         }
       },
+      "q_prof_make_amends": {
+        "title": "Faire amende honorable",
+        "text": "Pour réserver un métier à un autre, un artisan doit d'abord réparer le chemin non parcouru, {playerName}.",
+        "completion": "Modifications apportées ; un nouveau chemin s'ouvre à vous.",
+        "objectives": {
+          "0": {
+            "label": "Loup des forêts tué"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "Le Chœur noyé",
         "text": "Les pataugeurs n'agissent pas seuls. Parmi eux marchent les Dévots noyés — la secte qui a sombré avec le temple, encore vêtue de ses ornements putréfiés, chantant toujours la prière depuis les rochers du rivage. Réduis-en huit au silence et rapporte-moi six des offrandes qu'ils portent. Je veux savoir ce qu'ils comptent donner à leur déesse.",
@@ -11909,16 +11918,6 @@ export const fr_FR: EnTranslations = {
         "objectives": {
           "0": {
             "label": "Pataugeur de Lac-miroitant tué"
-          }
-        }
-      },
-      "q_prof_make_amends": {
-        "title": "Faire amende honorable",
-        "text": "Pour réserver un métier à un autre, un artisan doit d'abord réparer le chemin non parcouru, {playerName}.",
-        "completion": "Modifications apportées ; un nouveau chemin s'ouvre à vous.",
-        "objectives": {
-          "0": {
-            "label": "Loup des forêts tué"
           }
         }
       }

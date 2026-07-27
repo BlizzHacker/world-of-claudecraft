@@ -6989,8 +6989,7 @@ export const de_DE: EnTranslations = {
       "sellQuantityCancel": "Abbrechen",
       "sellJunk": "Graues verkaufen",
       "sellJunkAria": "Alle grauen Gegenstände für {price} verkaufen",
-      "sellJunkHint": "Verkauft alle grauen Gegenstände in euren Taschen außer Questgegenständen.",
-      "sellRolledWarning": "Zufällig erzeugte Werte können durch Rückkauf nicht wiederhergestellt werden."
+      "sellJunkHint": "Verkauft alle grauen Gegenstände in euren Taschen außer Questgegenständen."
     },
     "market": {
       "title": "Weltmarkt",
@@ -11849,6 +11848,16 @@ export const de_DE: EnTranslations = {
           }
         }
       },
+      "q_prof_make_amends": {
+        "title": "Wiedergutmachung leisten",
+        "text": "Um ein Handwerk einem anderen zu überlassen, muss ein Handwerker zunächst den nicht gegangenen Weg wiedergutmachen, {playerName}.",
+        "completion": "Änderungen vorgenommen; ein neuer Weg steht dir offen.",
+        "objectives": {
+          "0": {
+            "label": "Waldwolf getötet"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "Der Ertränkte Chor",
         "text": "Die Wäter handeln nicht allein. Unter ihnen wandeln die Ertränkten Andächtigen — der Kult, der mit dem Tempel versank, noch immer in seinen verfaulten Gewändern, noch immer das Gebet von den Uferfelsen singend. Bringe acht von ihnen zum Schweigen und bring mir sechs der Opfergaben, die sie bei sich tragen. Ich will wissen, was sie ihrer Göttin darbringen wollen.",
@@ -11909,16 +11918,6 @@ export const de_DE: EnTranslations = {
         "objectives": {
           "0": {
             "label": "Schimmersee-Wäter erschlagen"
-          }
-        }
-      },
-      "q_prof_make_amends": {
-        "title": "Wiedergutmachung leisten",
-        "text": "Um ein Handwerk einem anderen zu überlassen, muss ein Handwerker zunächst den nicht gegangenen Weg wiedergutmachen, {playerName}.",
-        "completion": "Änderungen vorgenommen; ein neuer Weg steht dir offen.",
-        "objectives": {
-          "0": {
-            "label": "Waldwolf getötet"
           }
         }
       }

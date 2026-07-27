@@ -8186,7 +8186,6 @@ export const cs_CZ: Partial<Record<TranslationKey, string>> = {
   'hudChrome.talents.resetChoices': 'Resetovat volby',
   'hudChrome.talents.tierLevel': 'Úroveň {n}',
   'hudChrome.talents.tierLevelLabel': 'Úroveň',
-  'itemUi.vendor.sellRolledWarning': 'Náhodně vytvořené vlastnosti nelze získat zpět odkoupením.',
   'loading.tips.classes':
     'Tip: každá z 9 tříd se hraje jinak. Než se pro jednu rozhodneš, několik jich vyzkoušej.',
   'loading.tips.dungeons':

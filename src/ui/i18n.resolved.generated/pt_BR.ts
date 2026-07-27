@@ -6989,8 +6989,7 @@ export const pt_BR: EnTranslations = {
       "sellQuantityCancel": "Cancelar",
       "sellJunk": "Vender tralha",
       "sellJunkAria": "Vender toda a tralha por {price}",
-      "sellJunkHint": "Vende todos os itens cinza nas suas bolsas, exceto itens de missão.",
-      "sellRolledWarning": "Atributos gerados aleatoriamente não podem ser recuperados pela recompra."
+      "sellJunkHint": "Vende todos os itens cinza nas suas bolsas, exceto itens de missão."
     },
     "market": {
       "title": "Mercado Mundial",
@@ -11849,6 +11848,16 @@ export const pt_BR: EnTranslations = {
           }
         }
       },
+      "q_prof_make_amends": {
+        "title": "Fazendo as pazes",
+        "text": "Para separar um ofício para outro, um artesão deve primeiro reparar o caminho não percorrido, {playerName}.",
+        "completion": "Reparações feitas; um novo caminho está aberto para você.",
+        "objectives": {
+          "0": {
+            "label": "Lobo da Floresta morto"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "O Coro Afogado",
         "text": "Os vadeadores não agem sozinhos. Entre eles caminham os Devotos Afogados — o culto que afundou com o templo, ainda em suas vestes apodrecidas, ainda cantando a prece desde as rochas da costa. Silencie oito deles e traga-me seis das oferendas que carregam. Eu gostaria de saber o que pretendem dar à sua deusa.",
@@ -11909,16 +11918,6 @@ export const pt_BR: EnTranslations = {
         "objectives": {
           "0": {
             "label": "Vadeador de Glimmermere abatido"
-          }
-        }
-      },
-      "q_prof_make_amends": {
-        "title": "Fazendo as pazes",
-        "text": "Para separar um ofício para outro, um artesão deve primeiro reparar o caminho não percorrido, {playerName}.",
-        "completion": "Reparações feitas; um novo caminho está aberto para você.",
-        "objectives": {
-          "0": {
-            "label": "Lobo da Floresta morto"
           }
         }
       }

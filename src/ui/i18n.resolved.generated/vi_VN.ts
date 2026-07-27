@@ -6989,8 +6989,7 @@ export const vi_VN: EnTranslations = {
       "sellQuantityCancel": "Hủy",
       "sellJunk": "Bán Đồ Bỏ",
       "sellJunkAria": "Bán tất cả đồ bỏ với giá {price}",
-      "sellJunkHint": "Bán mọi vật phẩm màu xám trong túi trừ vật phẩm nhiệm vụ.",
-      "sellRolledWarning": "Không thể khôi phục các chỉ số ngẫu nhiên bằng cách mua lại."
+      "sellJunkHint": "Bán mọi vật phẩm màu xám trong túi trừ vật phẩm nhiệm vụ."
     },
     "market": {
       "title": "Chợ Thế Giới",
@@ -11849,6 +11848,16 @@ export const vi_VN: EnTranslations = {
           }
         }
       },
+      "q_prof_make_amends": {
+        "title": "Sửa đổi",
+        "text": "Để dành một nghề cho một nghề khác, trước tiên một nghệ nhân phải sửa đổi con đường đã không đi, {playerName}.",
+        "completion": "Đã thực hiện sửa đổi; một con đường mới đang mở ra cho bạn.",
+        "objectives": {
+          "0": {
+            "label": "Sói rừng bị giết"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "Dàn Đồng Ca Chết Chìm",
         "text": "Lũ lội nước không hành động một mình. Giữa chúng có những Tín Đồ Chết Chìm bước đi — giáo phái đã chìm cùng ngôi đền, vẫn khoác lễ phục mục nát, vẫn hát lời cầu nguyện từ những tảng đá ven bờ. Hãy làm câm tám tên trong số chúng, và mang cho ta sáu vật tế mà chúng mang theo. Ta muốn biết chúng định dâng gì cho nữ thần của chúng.",
@@ -11909,16 +11918,6 @@ export const vi_VN: EnTranslations = {
         "objectives": {
           "0": {
             "label": "Đã hạ Kẻ Lội Nước Glimmermere"
-          }
-        }
-      },
-      "q_prof_make_amends": {
-        "title": "Sửa đổi",
-        "text": "Để dành một nghề cho một nghề khác, trước tiên một nghệ nhân phải sửa đổi con đường đã không đi, {playerName}.",
-        "completion": "Đã thực hiện sửa đổi; một con đường mới đang mở ra cho bạn.",
-        "objectives": {
-          "0": {
-            "label": "Sói rừng bị giết"
           }
         }
       }

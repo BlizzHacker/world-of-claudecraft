@@ -6989,8 +6989,7 @@ export const da_DK: EnTranslations = {
       "sellQuantityCancel": "Annullér",
       "sellJunk": "Sælg skrammel",
       "sellJunkAria": "Sælg alt skrammel for {price}",
-      "sellJunkHint": "Sælger alle grå genstande i dine tasker undtagen questgenstande.",
-      "sellRolledWarning": "Tilfældige egenskaber kan ikke gendannes ved tilbagekøb."
+      "sellJunkHint": "Sælger alle grå genstande i dine tasker undtagen questgenstande."
     },
     "market": {
       "title": "Verdensmarkedet",
@@ -11849,6 +11848,16 @@ export const da_DK: EnTranslations = {
           }
         }
       },
+      "q_prof_make_amends": {
+        "title": "Gøre bod",
+        "text": "For at afsætte et håndværk til et andet, skal en håndværker først råde bod på stien, der ikke er gået, {playerName}.",
+        "completion": "Foretagne ændringer; en ny vej er åben for dig.",
+        "objectives": {
+          "0": {
+            "label": "Skovulv dræbt"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "Det Druknede Kor",
         "text": "Vaderne handler ikke alene. Blandt dem vandrer de Druknede Tilbedere - kulten, der sank med templet, stadig i deres rådne ornater, stadig syngende bønnen fra strandklipperne. Bring otte af dem til tavshed, og bring mig seks af de offergaver, de bærer. Jeg vil vide, hvad de agter at give deres gudinde.",
@@ -11909,16 +11918,6 @@ export const da_DK: EnTranslations = {
         "objectives": {
           "0": {
             "label": "Glimmermere-Vader dræbt"
-          }
-        }
-      },
-      "q_prof_make_amends": {
-        "title": "Gøre bod",
-        "text": "For at afsætte et håndværk til et andet, skal en håndværker først råde bod på stien, der ikke er gået, {playerName}.",
-        "completion": "Foretagne ændringer; en ny vej er åben for dig.",
-        "objectives": {
-          "0": {
-            "label": "Skovulv dræbt"
           }
         }
       }

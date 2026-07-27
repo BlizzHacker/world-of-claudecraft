@@ -8265,8 +8265,6 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.talents.resetChoices': 'Wyzeruj wybory',
   'hudChrome.talents.tierLevel': 'Poziom {n}',
   'hudChrome.talents.tierLevelLabel': 'Poziom',
-  'itemUi.vendor.sellRolledWarning':
-    'Losowych statystyk nie można odzyskać przez odkupienie przedmiotu.',
   'loading.tips.classes':
     'Wskazówka: każdą z 9 klas gra się inaczej. Wypróbuj kilka, zanim zdecydujesz się na jedną.',
   'loading.tips.dungeons':

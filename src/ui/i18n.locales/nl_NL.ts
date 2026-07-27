@@ -8270,8 +8270,6 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.talents.resetChoices': 'Keuzes herstellen',
   'hudChrome.talents.tierLevel': 'Niveau {n}',
   'hudChrome.talents.tierLevelLabel': 'Niveau',
-  'itemUi.vendor.sellRolledWarning':
-    'Willekeurig bepaalde eigenschappen kunnen niet worden hersteld door het voorwerp terug te kopen.',
   'loading.tips.classes':
     'Tip: elk van de 9 klassen speelt anders. Probeer er een paar voordat je er een kiest.',
   'loading.tips.dungeons':

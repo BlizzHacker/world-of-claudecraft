@@ -8245,8 +8245,6 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.talents.resetChoices': 'Auswahl zurücksetzen',
   'hudChrome.talents.tierLevel': 'Stufe {n}',
   'hudChrome.talents.tierLevelLabel': 'Stufe',
-  'itemUi.vendor.sellRolledWarning':
-    'Zufällig erzeugte Werte können durch Rückkauf nicht wiederhergestellt werden.',
   'loading.tips.classes':
     'Tipp: Jede der 9 Klassen spielt sich anders. Probiere einige aus, bevor du dich für eine entscheidest.',
   'loading.tips.dungeons':

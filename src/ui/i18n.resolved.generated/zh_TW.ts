@@ -6989,8 +6989,7 @@ export const zh_TW: EnTranslations = {
       "sellQuantityCancel": "取消",
       "sellJunk": "出售雜物",
       "sellJunkAria": "以 {price} 出售所有雜物",
-      "sellJunkHint": "出售背包中除任務物品外的所有灰色物品。",
-      "sellRolledWarning": "隨機屬性無法透過買回找回。"
+      "sellJunkHint": "出售背包中除任務物品外的所有灰色物品。"
     },
     "market": {
       "title": "世界市場",
@@ -11849,6 +11848,16 @@ export const zh_TW: EnTranslations = {
           }
         }
       },
+      "q_prof_make_amends": {
+        "title": "彌補",
+        "text": "若要放下一門技藝、轉投另一門，工匠必須先為放棄的道路做出彌補，{playerName}。",
+        "completion": "彌補已經完成；一條新的道路已向你敞開。",
+        "objectives": {
+          "0": {
+            "label": "擊敗森林之狼"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "溺亡唱詩班",
         "text": "那些涉者並非單獨行動。在牠們之間行走的，是溺亡信徒——隨神殿一同沉沒的邪教徒，仍披著腐朽的法衣，仍從岸岩之間唱著那篇禱文。讓其中八人歸於沉寂，並為我帶回他們所攜的六件供品。我想知道他們要獻給女神的究竟是什麼。",
@@ -11909,16 +11918,6 @@ export const zh_TW: EnTranslations = {
         "objectives": {
           "0": {
             "label": "微光湖涉者已被擊殺"
-          }
-        }
-      },
-      "q_prof_make_amends": {
-        "title": "彌補",
-        "text": "若要放下一門技藝、轉投另一門，工匠必須先為放棄的道路做出彌補，{playerName}。",
-        "completion": "彌補已經完成；一條新的道路已向你敞開。",
-        "objectives": {
-          "0": {
-            "label": "擊敗森林之狼"
           }
         }
       }
