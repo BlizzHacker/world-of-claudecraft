@@ -5164,6 +5164,10 @@ export class Sim {
     // tick-staggered bots), so appending it here cannot fork the draw order.
     this.updateValeCup();
     lap?.('valecup');
+    // The Dungeon Finder phase draws ZERO rng (queue bookkeeping + role
+    // matching on the sim clock), so appending it here cannot fork the draw order.
+    this.updateDungeonFinder();
+    lap?.('dfinder');
     // The Derby phase draws ZERO shared rng (checkpoint math + timers), so
     // appending it here cannot fork the draw order either.
     derbyMod.updateDerby(this.ctx);

@@ -127,7 +127,11 @@ export function dealDamage(
   aoe = false,
 ): void {
   if (target.dead) return;
-  if (target.gm) return; // GM characters are invulnerable — every damage path funnels here
+  if (target.gm || target.devGod) return; // GMs and /dev god are invulnerable (every damage path funnels here)
+  // Ice Block (Cold Coffin): while encased in stasis the mage is FULLY immune to
+  // damage, so nothing gets through until it is cancelled or expires. Every damage
+  // path funnels here, so this covers melee, spells, and DoTs.
+  if (target.auras.some((a) => a.kind === 'stasis')) return;
   // Godmode tester: any hit from a godmode player one-shots the target. Force a
   // guaranteed-lethal amount and let the normal damage→death flow below apply it
   // (so loot/xp/death all fire correctly). Skip self.
@@ -706,21 +710,19 @@ export function dealDamage(
   }
 
   const preHp = target.hp;
-  target.hp = guardianWardRestore || Math.max(0, target.hp - amount);
+  // F4: a grinding field NPC can never die - it retreats home to rest (npc/roam.ts)
+  // at 55% HP, but a burst could still race past that, and an NPC has no death /
+  // respawn path (dying would permanently delete a town NPC). Floor its HP at 1 so
+  // the world stays intact; the AI recovers it. Duels (F4c) opt out via a flag.
+  // The floor rides upstream's single assignment below: applying it as a second
+  // subtraction is what made every hit in the game land twice.
+  const hpFloor = target.kind === 'npc' && target.grinds && !target.npcDuelMortal ? 1 : 0;
+  target.hp = guardianWardRestore || Math.max(hpFloor, target.hp - amount);
   // Chronomancy Rewind (combat/damage_history.ts): log the REAL HP loss this player
   // just took, tagged by sim tick, so Rewind can restore a fraction of recent damage.
   // (preHp - target.hp) is post-mitigation and post-absorb by construction, so fully
   // absorbed / avoided / overkill damage never enters the history. Players only.
   if (target.kind === 'player') recordDamageTaken(target, preHp - target.hp, ctx.tickCount);
-  // F4: a grinding field NPC can never die — it retreats home to rest (npc/roam.ts)
-  // at 55% HP, but a burst could still race past that, and an NPC has no death /
-  // respawn path (dying would permanently delete a town NPC). Floor its HP at 1 so
-  // the world stays intact; the AI recovers it. Duels (F4c) opt out via a flag.
-  if (target.kind === 'npc' && target.grinds && !target.npcDuelMortal) {
-    target.hp = Math.max(1, target.hp - amount);
-  } else {
-    target.hp = Math.max(0, target.hp - amount);
-  }
   ctx.emit({
     type: 'damage',
     sourceId: source?.id ?? -1,

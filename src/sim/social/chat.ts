@@ -35,6 +35,7 @@ import { npcDuelChallenge } from './npc_duel';
 import { activeMaxLevel } from '../realms/registry';
 import { GATHERING_PROFESSIONS } from '../content/professions';
 import { isGatheringProfessionId, queueGatheringGrant } from '../professions/gathering';
+import { handleDevChat } from '../dev_commands';
 
 const CHAT_BURST = 8; // messages a player may send back-to-back...
 const CHAT_REFILL = 2; // ...then this many more per second (caps spam amplifiers)
@@ -977,117 +978,10 @@ export function chatAllowed(ctx: SimContext, pid: number): boolean {
   return true;
 }
 
-// Dev chat cheats: only when Sim.devCommands is enabled (offline local play
-// or online server with ALLOW_DEV_COMMANDS=1). Returns null when handled
-// (no channel message), or undefined when not a dev command.
-export function handleDevChat(
-  ctx: SimContext,
-  raw: string,
-  pid: number,
-): SentChat | null | undefined {
-  const levelM = /^\/(?:dev\s+level|devlevel)\s+(\d+)\s*$/i.exec(raw);
-  if (levelM) {
-    const level = Number(levelM[1]);
-    ctx.setPlayerLevel(level, pid);
-    ctx.emit({
-      type: 'log',
-      text: `[dev] Level set to ${Math.max(1, Math.min(activeMaxLevel(MAX_LEVEL), level))}.`,
-      pid,
-    });
-    return null;
-  }
-  const tpM = /^\/(?:dev\s+tp|devtp)\s+(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s*$/i.exec(raw);
-  if (tpM) {
-    const e = ctx.entities.get(pid);
-    if (e) {
-      const p = ctx.groundPos(Number(tpM[1]), Number(tpM[2]));
-      e.pos = p;
-      e.prevPos = { ...p };
-      ctx.grid.update(e);
-      ctx.playerGrid.update(e);
-      ctx.emit({
-        type: 'log',
-        text: `[dev] Teleported to ${p.x.toFixed(1)}, ${p.z.toFixed(1)}.`,
-        pid,
-      });
-    }
-    return null;
-  }
-  const giveM = /^\/(?:dev\s+give|devgive)\s+(\S+)(?:\s+(\d+))?\s*$/i.exec(raw);
-  if (giveM) {
-    const itemId = giveM[1];
-    const count = Math.max(1, Math.min(20, Number(giveM[2] ?? 1)));
-    if (!ITEMS[itemId]) {
-      ctx.error(pid, `[dev] Unknown item '${itemId}'.`);
-      return null;
-    }
-    ctx.addItem(itemId, count, pid);
-    return null;
-  }
-  const goldM = /^\/(?:dev\s+gold|devgold)\s+(\d+)\s*$/i.exec(raw);
-  if (goldM) {
-    const gold = Math.max(1, Math.min(100000, Number(goldM[1])));
-    const meta = ctx.players.get(pid);
-    if (meta) {
-      meta.copper += gold * 10000;
-      ctx.emit({ type: 'log', text: `[dev] Added ${gold}g to your purse.`, pid });
-    }
-    return null;
-  }
-  const questM = /^\/(?:dev\s+quest|devquest)\s+(\S+)\s*$/i.exec(raw);
-  if (questM) {
-    ctx.completeQuestForDev(questM[1], pid);
-    return null;
-  }
-  const questAllM = /^\/(?:dev\s+(?:quests|questall)|devquestall)\s*$/i.exec(raw);
-  if (questAllM) {
-    ctx.completeCurrentQuestsForDev(pid);
-    return null;
-  }
-  const gatherM = /^\/(?:dev\s+gather|devgather)\s+(\S+)(?:\s+(\d+))?\s*$/i.exec(raw);
-  if (gatherM) {
-    const professionId = gatherM[1].toLowerCase();
-    const amount = Math.max(1, Math.min(100, Number(gatherM[2] ?? 1)));
-    if (!isGatheringProfessionId(professionId)) {
-      ctx.error(
-        pid,
-        `[dev] Unknown gathering profession '${professionId}'. Options: ${Object.keys(GATHERING_PROFESSIONS).join(', ')}.`,
-      );
-      return null;
-    }
-    const meta = ctx.players.get(pid);
-    if (meta) queueGatheringGrant(meta, professionId, amount);
-    return null;
-  }
-  const botM = /^\/(?:dev\s+bot|devbot)\s+(\S+)\s*$/i.exec(raw);
-  if (botM) {
-    const botName = botM[1];
-    const botPid = ctx.spawnDevBot(botName);
-    // Dev-only English diagnostics, routed through vars so they read as dev-channel
-    // text (like the other /dev feedback) rather than localizable UI copy.
-    const okText = `[dev] Spawned ${botName}. Whisper it: /w ${botName} hi (or right-click its name).`;
-    const failText = `[dev] Could not spawn '${botName}' (name blank or already in use).`;
-    if (botPid < 0) ctx.error(pid, failText);
-    else ctx.emit({ type: 'log', text: okText, pid });
-    return null;
-  }
-  if (/^\/(?:dev\s+(?:kill|die|suicide)|devkill)\s*$/i.test(raw)) {
-    // [dev] Instant self-kill for testing the death/ghost loop: routes through the real
-    // death teardown (handleDeath), so the death overlay, corpse, and The Keeper's Toll
-    // persistence all behave exactly as a combat death.
-    const e = ctx.entities.get(pid);
-    if (e && !e.dead) ctx.handleDeath(e, null);
-    return null;
-  }
-  if (/^\/dev(?:\s|$)/i.test(raw)) {
-    ctx.error(
-      pid,
-      'Dev commands: /dev level N, /dev tp X Z, /dev give itemId [count], /dev gold N, /dev quest questId, /dev quests, /dev gather professionId [amount], /dev bot name, /dev kill',
-    );
-    return null;
-  }
-  return undefined;
-}
+// Dev chat cheats live in src/sim/dev_commands.ts (upstream extracted them
+// there and grew the set from 13 commands to 28). Re-exported here so the
+// original import path keeps working for callers and tests.
+export { handleDevChat } from '../dev_commands';
 
 export function whisperMessageForName(
   rest: string,
