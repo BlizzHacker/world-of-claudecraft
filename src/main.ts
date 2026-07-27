@@ -188,14 +188,7 @@ import { findPlayerPath, resolvePlayerDestination } from './sim/pathfind';
 // statically imported, they come from loadGameRuntime() and init in startGame().
 import type { Sim } from './sim/sim';
 import { TAB_NEAR_RADIUS, TAB_QUERY_RADIUS, tabConeHalfAt } from './sim/tab_target';
-import {
-  DT,
-  dist2d,
-  MELEE_RANGE,
-  type PlayerClass,
-  RUN_SPEED,
-  type WorldContent,
-} from './sim/types';
+import { dist2d, DT, INTERACT_RANGE, MELEE_RANGE, RUN_SPEED, type PlayerClass, type WorldContent } from './sim/types';
 import { zoneBiomeAt } from './sim/world';
 import { startSitePresence } from './site_presence';
 import {
@@ -1557,6 +1550,10 @@ async function startGame(
     cameraPromptOpen() ||
     chatInput.style.display === 'block';
 
+  const toggleGameMenu = () => {
+    if (!hud.closeAll()) hud.toggleOptionsMenu();
+  };
+
   const input = new Input(
     canvas,
     {
@@ -2638,6 +2635,66 @@ async function startGame(
         })
       ) {
         hud.attachStorePromoCard();
+      }
+    }
+  }
+
+  function interactKey(): void {
+    const p = world.player;
+    let bestCorpse: number | null = null,
+      bestCorpseD = INTERACT_RANGE;
+    let bestObj: number | null = null,
+      bestObjD = INTERACT_RANGE;
+    let bestNpc: number | null = null,
+      bestNpcD = INTERACT_RANGE + 1;
+    // Delve interactables (warded chest, cracked grave, sealed/tombstone passage,
+    // surface stairs) are driven through delveInteract, not the generic pickup
+    // path, the sim owns their per-object proximity + state gating and the
+    // lockpick offer. Selected a touch wider than INTERACT_RANGE so the sim can
+    // emit its precise "move closer to the chest/passage" hint.
+    let bestDelve: number | null = null,
+      bestDelveD = INTERACT_RANGE + 1;
+    for (const e of world.entities.values()) {
+      const d = dist2d(p.pos, e.pos);
+      if (e.kind === 'mob' && e.lootable && d < bestCorpseD) {
+        bestCorpse = e.id;
+        bestCorpseD = d;
+      }
+      if (e.kind === 'object' && e.templateId?.startsWith('delve_')) {
+        if (d < bestDelveD) {
+          bestDelve = e.id;
+          bestDelveD = d;
+        }
+      } else if (e.kind === 'object' && e.lootable && d < bestObjD) {
+        bestObj = e.id;
+        bestObjD = d;
+      }
+      if (e.kind === 'npc' && d < bestNpcD) {
+        bestNpc = e.id;
+        bestNpcD = d;
+      }
+    }
+    if (bestCorpse !== null) {
+      world.lootCorpse(bestCorpse);
+      return;
+    }
+    if (bestDelve !== null) {
+      world.delveInteract(bestDelve);
+      return;
+    }
+    if (bestObj !== null) {
+      const obj = world.entities.get(bestObj)!;
+      if (obj.templateId === 'dungeon_door' && obj.dungeonId) {
+        world.enterDungeon(obj.dungeonId);
+        return;
+      }
+      if (obj.templateId === 'dungeon_exit') {
+        world.leaveDungeon();
+        return;
+      }
+      if (obj.templateId === 'mailbox') {
+        hud.openMailbox();
+        return;
       }
       // Building interior exit door, waypoint pylon, town portal: server-authoritative
       // object interactions. Route through world.interact() (→ server sim.interact)
