@@ -121,8 +121,8 @@ export function craftNameText(craftId: string | null): string {
 }
 
 export function hobbyCraftText(craftId: string | null): string {
-  const key = craftId !== null ? ARCHETYPE_TITLE_KEYS[craftId] : undefined;
-  return t(key ?? 'hudChrome.archetypeTitle.none');
+  // Issue 1294: the hobby row names the CRAFT, not the archetype title.
+  return craftNameText(craftId);
 }
 
 const PRIMARY_STATS: readonly StatId[] = ['str', 'agi', 'sta', 'int', 'spi'];
@@ -299,7 +299,7 @@ export class CharWindow {
       <button type="button" role="tab" class="char-sheet-tab${this.activeTab === 'overview' ? ' is-active' : ''}" aria-selected="${this.activeTab === 'overview'}" data-char-tab="overview">${esc(t('guide.nav.overview'))}</button>
     </div>`;
     const currency = this.deps.moneyHtml?.(world.copper) ?? '';
-    const identity = `<div class="char-identity">${portraitChipHtml({ cls: world.cfg.playerClass, skin: p.skin ?? 0, name: p.name, variant: 'md' })}<span class="char-title-text" id="char-title">${esc(p.name)} <span class="panel-subtitle">${esc(t('itemUi.equipment.levelClass', { level, className }))}</span><span class="panel-subtitle char-archetype-title">${esc(t('hudChrome.archetypeTitle.label'))}: ${esc(archetypeTitle)}</span>${hobbyRow}</span>${currency ? `<span class="char-sheet-currency">${currency}</span>` : ''}</div>`;
+    const identity = `<div class="char-identity">${portraitChipHtml({ cls: world.cfg.playerClass, skin: p.skin ?? 0, name: p.name, variant: 'md' })}<span class="char-title-text" id="char-title">${esc(p.name)} <span class="panel-subtitle">${esc(t('itemUi.equipment.levelClass', { level, className }))}</span><span class="panel-subtitle char-archetype-title">${esc(t('hudChrome.archetypeTitle.label'))}: ${esc(archetypeTitle)}</span>${hobbyRow}<span class="panel-subtitle char-honor-balance">${esc(t('hudChrome.warfare.balance', { amount: formatNumber(world.honor, { maximumFractionDigits: 0 }) }))}</span></span>${currency ? `<span class="char-sheet-currency">${currency}</span>` : ''}</div>`;
     const paperdoll = `<div class="paperdoll">
       <div class="equip-col" id="equip-col-left"></div>
       <div class="char-model-panel">
