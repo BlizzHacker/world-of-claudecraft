@@ -31,7 +31,10 @@ async function main() {
     process.exit(2);
   }
   mkdirSync(OUT, { recursive: true });
-  const files = readdirSync(DIR).filter((f) => f.endsWith('.glb')).slice(0, LIMIT);
+  // Only pipeline-generated bodies: curated GLBs carry single-take animations
+  // (Armature|...|baselayer) aliased by hand in manifest.ts, so asking them for
+  // KayKit clip names renders blank frames and tests nothing.
+  const files = readdirSync(DIR).filter((f) => f.startsWith('realm_') && f.endsWith('.glb')).slice(0, LIMIT);
   console.log(`[audit] ${files.length} assets from ${DIR}, clips=${CLIPS.join(',')}`);
   for (const f of files) {
     const key = basename(f, '.glb');

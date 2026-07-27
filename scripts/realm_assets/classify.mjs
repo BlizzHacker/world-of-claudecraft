@@ -132,6 +132,18 @@ const ALWAYS_REJECT = [
   /\b(hands?|foot|feet|fingers?|palm|fist|forearms?|eyeballs?|tongue)\b/,
   /\b(throne|pedestal|plinth|podium|canister|jar|vial|urn|chalice|goblet|altar)\b/,
   /\b(bust|relief|sculpture|statuette|figurine stand|display stand|diorama)\b/,
+  // Busts, caught lexically because they CANNOT be caught geometrically — a bust
+  // and a slim body have overlapping bbox ratios, and a vertex-mass profile put a
+  // confirmed bust at 16.9% lower-third mass against 19.6% for a good ogre, far
+  // too tight to threshold. The prompts, however, name the head as the SUBJECT:
+  //   "ACTION FIGURE HEAD OF A DWARF, HIGH DETAIL BEARD"
+  //   "gobling head, with earings and piercing in his face"
+  //   "Highly detailled man head, with no hair, looking as <celebrity>"
+  // Deliberately narrow: must NOT match "snail head", "Two-Headed Ogre", or
+  // "round head with large eyes", which are ordinary full bodies.
+  /\bhead\s+of\s+(a|an|the)\b/,
+  /\b\w+\s+head\s*,\s*with\b/,
+  /\b(man|woman|male|female|person|human)\s+head\b/,
 ];
 
 function classify(pretty) {
