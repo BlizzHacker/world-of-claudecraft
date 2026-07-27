@@ -13581,22 +13581,16 @@ export class Hud {
 
   private skinHost(): CharSkinPainterHost {
     return {
-      name: p.name,
-      className: classDisplayName(cls),
-      classColor,
-      level: p.level,
-      realm: sim.realm,
-      characterImage,
-      primaryStats,
-      combatStats,
-      gear,
-      topPercent,
-      balance: showWallet ? verifiedWocBalance() : null,
-      devTier: showDevBadges ? (p.devTier ?? null) : null,
-      devMergedPrs: showDevBadges ? (p.devMergedPrs ?? null) : null,
-      referralHandle: referral?.slug ?? this.cardSlug(p.name),
-      referralCount: referral?.count ?? null,
-      siteUrl: 'crypticrealm.com',
+      sim: this.sim,
+      preloadMechAssets: () => {
+        if (!this.mechAssetsPromise) this.mechAssetsPromise = preloadMechAssets();
+        return this.mechAssetsPromise;
+      },
+      mountCharPreview: (container, cls, skin, previewKey) =>
+        this.mountCharPreview(container, cls, skin, previewKey),
+      attachTooltip: (el, html) => this.attachTooltip(el, html),
+      renderBags: () => this.renderBags(),
+      renderCharIfOpen: () => this.renderCharIfOpen(),
     };
   }
 
