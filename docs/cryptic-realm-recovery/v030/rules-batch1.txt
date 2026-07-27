@@ -1,0 +1,22 @@
+# --- pure fork additions: upstream contributed nothing ---
+ours            tests/vale_cup_match.test.ts
+ours            src/sim/social/chat.ts
+# --- additive collisions: keep both sides ---
+union           src/sim/world.ts
+union           src/sim/data.ts
+union           .gitignore
+# --- upstream CHANGED a signature we also touched: take theirs, add our extra members ---
+union_unique    src/world_api/dungeons.ts
+union_unique    src/world_api/interaction.ts
+# --- upstream-only additions, fork branding reapplied where their text carries it ---
+theirs_rebrand  src/guide/styles.css
+theirs_rebrand  deploy/user-data.sh
+theirs_rebrand  public/sitemap.xml
+theirs          docs/design/spell-ranks.md
+theirs          tests/architecture.test.ts
+theirs          tests/server/new_endpoint.test.ts
+theirs          tests/bank_window.test.ts
+theirs          tests/server/http/ownership_coverage.test.ts
+theirs          src/render/characters/preview_appearance.ts
+# --- upstream wins: bank-count is the styled class, ours was unstyled ---
+theirs          src/ui/bank_window.ts

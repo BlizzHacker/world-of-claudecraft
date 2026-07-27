@@ -1,0 +1,12 @@
+# both features coexist: ours godmode + upstream devGod/devSpawnOwnerId
+union           src/sim/types.ts
+# fork branding, domains, legal text, token wording, contact details
+ours            src/guide/head.ts
+ours            public/privacy.html
+ours            src/ui/holder_tier.ts
+ours            public/data-deletion.html
+ours            src/guide/pages/home.ts
+# fork's transient-retry writer is an operational fix for this host's flaky FS
+ours            scripts/i18n_scan.mjs
+# imports from the same module: union then drop our narrower duplicate
+union           src/render/characters/manifest.ts
