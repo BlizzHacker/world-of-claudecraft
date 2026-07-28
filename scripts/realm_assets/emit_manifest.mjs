@@ -175,6 +175,11 @@ for (const e of out) {
   lines.push(`  ${e.key}: {`);
   lines.push(`    url: \`\${REALM_MODELS}/${e.realm}/${e.key}.glb\`,`);
   lines.push('    height: GEN_H,');
+  // Realm bodies never join the eager boot preload sweep: it is site-wide and
+  // blocking, and 970 bodies is ~750MB of parallel fetches before world entry.
+  // renderer.ts requires the whole realm bank to be absent from it; these load
+  // on demand through preloadVisualAssets() when an entity first needs one.
+  lines.push('    lazyPreload: true,');
   lines.push(`    clips: genClips([${e.attacks.join(', ')}]),`);
   // Per-entity colour. Without a tint field applyMaterials returns null and every
   // instance of a body renders identically, so a pool of 600 still reads as clones.
