@@ -14,6 +14,12 @@ export const FPS_REALM: RealmContent = {
     'sights. The camera never leaves your eyes, the reticle is always live, ' +
     'and every encounter is won by aim and movement.',
   mood: 'First-Person · Precise · Relentless',
+  season: {
+    eyebrow: 'Season 1',
+    title: 'The Marksman\'s Locker',
+    body:
+      'Limited weapon finishes from the marksman\'s locker. Account-wide, purely cosmetic, and shown to everyone who has you in their sights.',
+  },
   accentHex: '#ff5a5f',
   bgGradient: 'linear-gradient(135deg, #1a0d0d 0%, #08060a 100%)',
   previewColors: { primary: '#ff5a5f', secondary: '#7bdff2', bg: '#140a0a' },

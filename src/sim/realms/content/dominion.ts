@@ -11,6 +11,12 @@ export const DOMINION_REALM: RealmContent = {
     "Humanity's last fleets clash with alien dominions across hostile star systems. " +
     'Build your squad, research alien tech, and hold the frontier.',
   mood: 'Tactical · Sci-Fi · Intense',
+  season: {
+    eyebrow: 'Season 1',
+    title: 'The Frontier Arsenal',
+    body:
+      'Limited weapon finishes requisitioned from the Frontier\'s forward arsenals. Account-wide, purely cosmetic, and shown to everyone around you.',
+  },
   accentHex: '#3ad6c8',
   bgGradient: 'linear-gradient(135deg, #02161a 0%, #020a0d 100%)',
   previewColors: { primary: '#3ad6c8', secondary: '#c9a14a', bg: '#050a0f' },

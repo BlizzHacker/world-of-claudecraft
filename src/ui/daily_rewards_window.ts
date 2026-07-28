@@ -1,6 +1,7 @@
 import type { PlayerClass, WeaponSkinType } from '../sim/types';
 import type { DailyRewardHistory, DailyRewardStatus, IWorld } from '../world_api';
 import { ArmoryInspect } from './armory_inspect';
+import { realmSeasonBody, realmSeasonEyebrow, realmSeasonTitle } from './realm_season';
 import {
   badgeLabel,
   localizeWeaponSkin,
@@ -392,7 +393,7 @@ export class DailyRewardsWindow {
       ? `<div class="woc-store-notice" role="status">${esc(t('hudChrome.wocStore.priceChanged'))}</div>`
       : '';
     const markup =
-      `<div class="woc-store-hero"><div><span>${esc(t('hudChrome.wocStore.armoryEyebrow'))}</span><h2>${esc(t('hudChrome.wocStore.armoryTitle'))}</h2><p>${esc(t('hudChrome.wocStore.armoryBody'))}</p></div>` +
+      `<div class="woc-store-hero"><div><span>${esc(realmSeasonEyebrow(t('hudChrome.wocStore.armoryEyebrow')))}</span><h2>${esc(realmSeasonTitle(t('hudChrome.wocStore.armoryTitle')))}</h2><p>${esc(realmSeasonBody(t('hudChrome.wocStore.armoryBody')))}</p></div>` +
       `<div class="woc-store-balance"><img src="/claudium/icons/claudium_coin_64.webp" alt=""><span>${esc(t('hudChrome.wocStore.balance'))}</span><strong>${balance}</strong><button type="button" data-buy-claudium>${esc(t('hudChrome.wocStore.buyClaudium'))}</button></div></div>` +
       notice +
       armory;

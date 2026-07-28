@@ -1,4 +1,5 @@
 import { audio } from '../game/audio';
+import { realmSeasonEyebrow, realmSeasonTitle } from './realm_season';
 import { corpseLootAvailability, localPartyMemberIds } from '../game/corpse_loot_availability';
 import type { GamepadKind } from '../game/gamepad_map';
 import { InstanceMusicController } from '../game/instance_music';
@@ -5186,8 +5187,8 @@ export class Hud {
     this.storePromoCard?.relocalize({
       open: t('hudChrome.wocStore.title'),
       close: t('hudChrome.wocStore.close'),
-      season: t('hudChrome.wocStore.seasonOne'),
-      title: t('hudChrome.wocStore.armoryTitle'),
+      season: realmSeasonEyebrow(t('hudChrome.wocStore.seasonOne')),
+      title: realmSeasonTitle(t('hudChrome.wocStore.armoryTitle')),
       cta: t('hudChrome.wocStore.title'),
     });
     this.refreshKeybindLabels();
@@ -14147,8 +14148,8 @@ export class Hud {
       labels: {
         open: t('hudChrome.wocStore.title'),
         close: t('hudChrome.wocStore.close'),
-        season: t('hudChrome.wocStore.seasonOne'),
-        title: t('hudChrome.wocStore.armoryTitle'),
+        season: realmSeasonEyebrow(t('hudChrome.wocStore.seasonOne')),
+        title: realmSeasonTitle(t('hudChrome.wocStore.armoryTitle')),
         cta: t('hudChrome.wocStore.title'),
       },
       returnFocusTo: () => document.getElementById('daily-rewards-button'),

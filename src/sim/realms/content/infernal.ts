@@ -11,6 +11,12 @@ export const INFERNAL_REALM: RealmContent = {
     'Descend into a shattered underworld where ember-lit cathedrals crumble above ' +
     'pits of molten sin. Every corridor hides a boss, every boss hides a relic.',
   mood: 'Dark · Gothic · Brutal',
+  season: {
+    eyebrow: 'Season 1',
+    title: 'The Ember Reliquary',
+    body:
+      'Limited weapon skins lifted from the ember-lit reliquaries beneath the Infernal Realm. Account-wide, purely cosmetic, and shown to everyone around you.',
+  },
   accentHex: '#d4442a',
   bgGradient: 'linear-gradient(135deg, #1a0505 0%, #0a0202 100%)',
   previewColors: { primary: '#d4442a', secondary: '#c9a14a', bg: '#0a0505' },

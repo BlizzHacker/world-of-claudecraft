@@ -11,6 +11,12 @@ export const ARCADE_VOID_REALM: RealmContent = {
     'Arcane Void is Cryptic Realm pushed into a bright sci-fi war cabinet: ' +
     'marines, alien tech, ship silhouettes, and turret-heavy battlefield toys.',
   mood: 'Sci-Fi - Tactical - Void',
+  season: {
+    eyebrow: 'Season 1',
+    title: 'The Shipyard Cache',
+    body:
+      'Limited weapon finishes stripped from the void shipyards. Account-wide, purely cosmetic, and shown to everyone around you.',
+  },
   accentHex: '#57f0ff',
   bgGradient: 'linear-gradient(135deg, #02131c 0%, #090514 55%, #16060d 100%)',
   previewColors: { primary: '#57f0ff', secondary: '#ffcf4a', bg: '#07111c' },

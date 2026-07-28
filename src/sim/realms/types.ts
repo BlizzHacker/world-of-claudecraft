@@ -147,6 +147,22 @@ export interface RealmAct {
 /** A realm's bestiary / monster chronicle — acts of themed content. */
 export type RealmBestiary = RealmAct[];
 
+/** A realm's cosmetic SEASON: the storefront banner over the weapon-skin
+ *  catalog. Realm content, not chrome -- each realm names its season after its
+ *  own game (the Infernal reliquaries, the Dominion arsenals, the Exchange
+ *  consignment floor) instead of every realm advertising the same "Armory".
+ *  A realm that omits this falls back to the shared hudChrome.wocStore.armory*
+ *  strings, which is what claudecraft (pristine upstream) wants. Display copy
+ *  only: the skin catalog, pricing and grants are untouched. */
+export interface RealmSeason {
+  /** Small label above the title, e.g. 'Season 1'. */
+  eyebrow: string;
+  /** The season's name, e.g. 'The Ember Reliquary'. */
+  title: string;
+  /** One-paragraph blurb under the title. */
+  body: string;
+}
+
 export interface RealmContent {
   id: RealmId;
   /** Visible name in the picker. */
@@ -157,6 +173,9 @@ export interface RealmContent {
   description: string;
   /** Three-keyword vibe descriptor (e.g. 'Dark · Gothic · Brutal'). */
   mood: string;
+  /** Per-realm cosmetic SEASON banner (see RealmSeason). Omit to inherit the
+   *  shared "Season 1 / The Armory" copy from the i18n chrome catalog. */
+  season?: RealmSeason;
   /** Single accent color for the picker chip and theme highlights. */
   accentHex: string;
   /** CSS gradient for the loading-screen and login backdrop. */

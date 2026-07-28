@@ -23,6 +23,12 @@ export const EXCHANGE_REALM: RealmContent = {
     'starting bid, or talk a Dominion soldier into selling you the void blade ' +
     'an Arcane assassin wants. Combat sheathes itself at the door.',
   mood: 'Neutral · Mercantile · Crowded',
+  season: {
+    eyebrow: 'Season 1',
+    title: 'The Trader\'s Consignment',
+    body:
+      'Limited weapon skins consigned to the Exchange floor by traders out of every realm. Account-wide, purely cosmetic, and shown to everyone around you.',
+  },
   accentHex: '#c9a14a',
   bgGradient: 'linear-gradient(135deg, #1a1408 0%, #0a0805 100%)',
   previewColors: { primary: '#c9a14a', secondary: '#f3dfaa', bg: '#1a1408' },

@@ -11,6 +11,12 @@ export const ARCANE_REALM: RealmContent = {
     'Explore shattered dimensions connected by ancient portals. Harness void energy, ' +
     'collect crystal relics, and uncover the secrets of the Arcane.',
   mood: 'Mysterious · Cosmic · Ethereal',
+  season: {
+    eyebrow: 'Season 1',
+    title: 'The Relic Vault',
+    body:
+      'Limited weapon skins drawn from the crystal vaults of the Arcane Nexus. Account-wide, purely cosmetic, and shown to everyone around you.',
+  },
   accentHex: '#a855f7',
   bgGradient: 'linear-gradient(135deg, #0a0510 0%, #05020a 100%)',
   previewColors: { primary: '#a855f7', secondary: '#3ad6c8', bg: '#0a0510' },

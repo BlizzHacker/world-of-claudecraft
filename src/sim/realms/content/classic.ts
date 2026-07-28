@@ -11,6 +11,12 @@ export const CLASSIC_REALM: RealmContent = {
     'A bright, welcoming world of rolling meadows, bustling towns, and ancient ' +
     'forests. Classic MMO gameplay with modern polish.',
   mood: 'Bright · Heroic · Adventurous',
+  season: {
+    eyebrow: 'Season 1',
+    title: 'The Adventurer\'s Armory',
+    body:
+      'Limited weapon skins from the Classic Realm\'s adventurer armories. Account-wide, purely cosmetic, and shown to everyone around you.',
+  },
   accentHex: '#4a9eff',
   bgGradient: 'linear-gradient(135deg, #0f1a2a 0%, #080f1a 100%)',
   previewColors: { primary: '#4a9eff', secondary: '#ffd700', bg: '#0f1a2a' },

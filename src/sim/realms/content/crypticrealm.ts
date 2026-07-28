@@ -16,6 +16,12 @@ export const CRYPTICREALM_REALM: RealmContent = {
     'cathedrals, ciphered runes, and magic the living were never meant to ' +
     'read. Solve what others fled, and the Gravecaller Saga opens to you.',
   mood: 'Cryptic · Arcane · Mysterious',
+  season: {
+    eyebrow: 'Season 1',
+    title: 'The Ciphered Vault',
+    body:
+      'Limited weapon skins recovered from the ciphered vaults beneath Cryptic Realm. Account-wide, purely cosmetic, and shown to everyone around you.',
+  },
   accentHex: '#b48cff',
   bgGradient: 'linear-gradient(135deg, #120a22 0%, #07060d 100%)',
   previewColors: { primary: '#b48cff', secondary: '#ffd166', bg: '#0c0818' },
