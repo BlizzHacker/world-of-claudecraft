@@ -176,6 +176,13 @@ export interface RealmContent {
   /** Per-realm cosmetic SEASON banner (see RealmSeason). Omit to inherit the
    *  shared "Season 1 / The Armory" copy from the i18n chrome catalog. */
   season?: RealmSeason;
+  /** This realm's on-chain TICKER, substituted into translated store/wallet copy
+   *  (which bakes the ticker as a literal, because tickers are not translated).
+   *  Omit for Cryptic Realm's own 'CR'; claudecraft declares upstream's 'WOC'. */
+  tokenSymbol?: string;
+  /** Short game name used in prose like "your <brand> account". Omit for
+   *  'Cryptic Realm'; claudecraft declares upstream's 'WoC'. */
+  shortBrand?: string;
   /** Single accent color for the picker chip and theme highlights. */
   accentHex: string;
   /** CSS gradient for the loading-screen and login backdrop. */

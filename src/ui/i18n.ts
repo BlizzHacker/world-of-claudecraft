@@ -11,6 +11,7 @@
 // so the only reference to the barrel below is the dead re-export line - which Rollup
 // tree-shakes out of the app chunk.
 
+import { getActiveRealm } from '../sim/realms/registry';
 import type {
   DeepPartial,
   EnTranslations,
@@ -336,6 +337,31 @@ function tableFor(lang: SupportedLanguage): EnTranslations {
   return resident[lang] ?? resident.en!;
 }
 
+// The ticker and short game name are realm CONTENT, but they sit baked inside
+// translated copy ("Boutique WOC", "WOCストア", "your WoC account") because neither is
+// ever translated. Swapping them here covers every locale and every call site without
+// touching a catalog or regenerating anything.
+//
+// The two cases are deliberately case-SENSITIVE and distinct: `WOC` is the ticker,
+// `WoC` is the game. Both are guarded by a cheap includes() so the common string --
+// which contains neither -- costs one scan and no regex. claudecraft declares
+// 'WOC'/'WoC' and is a pure no-op.
+const TICKER_RE = /\bWOC\b/g;
+const BRAND_RE = /\bWoC\b/g;
+
+function applyRealmBrand(text: string): string {
+  let out = text;
+  if (out.includes('WOC')) {
+    const symbol = getActiveRealm().tokenSymbol ?? 'CR';
+    if (symbol !== 'WOC') out = out.replace(TICKER_RE, symbol);
+  }
+  if (out.includes('WoC')) {
+    const brand = getActiveRealm().shortBrand ?? 'Cryptic Realm';
+    if (brand !== 'WoC') out = out.replace(BRAND_RE, brand);
+  }
+  return out;
+}
+
 export function t(key: TranslationKey, values?: InterpolationValues): string {
   const parts = key.split('.');
   let current: unknown = tableFor(currentLanguage);
@@ -352,7 +378,7 @@ export function t(key: TranslationKey, values?: InterpolationValues): string {
       `i18n: key "${key}" is untranslated (pending) for locale "${currentLanguage}" on a release build; English must never ship to a translated player`,
     );
   }
-  return interpolate(current, values);
+  return applyRealmBrand(interpolate(current, values));
 }
 
 function translationValue(key: string, lang: SupportedLanguage): string | null {

@@ -16,6 +16,10 @@ export const CLAUDECRAFT_REALM: RealmContent = {
     'ships it: nine classic classes, hand-built zones, deterministic 20 Hz sim, ' +
     'no realm overlay. Pick this realm to play the base game as the maintainers ' +
     'intended it.',
+  // Upstream's own crypto and name: this realm IS World of ClaudeCraft, so the
+  // translation-seam swap must be a no-op here.
+  tokenSymbol: 'WOC',
+  shortBrand: 'WoC',
   mood: 'Classic · Heroic · Familiar',
   accentHex: '#4a9eff',
   bgGradient: 'linear-gradient(135deg, #0a1428 0%, #050a14 100%)',
