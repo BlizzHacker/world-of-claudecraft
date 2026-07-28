@@ -6202,6 +6202,10 @@ async function refreshCharacters(): Promise<void> {
     // falls back gracefully if this has not resolved yet).
     if (chars.some((c) => c.skinCatalog === 'mech')) void preloadMechAssets();
     listEl.innerHTML = '';
+    // Per-row guard. A throw in the row builder used to abort the whole loop AFTER
+    // listEl was cleared, leaving an empty roster with no message and no trace -
+    // indistinguishable from "you have no characters". Surface it instead.
+    let rowBuildError: string | null = null;
     // Boot resume: a WebView reload during play sent us here with a persisted
     // active-play marker. If that character still exists on the marker's realm,
     // re-enter the world directly instead of showing char-select (a linkdead
@@ -6222,6 +6226,9 @@ async function refreshCharacters(): Promise<void> {
       }
       clearPlayMarker();
     }
+    if (rowBuildError) {
+      $('#charselect-error').textContent = `Character row failed to render: ${rowBuildError}`;
+    }
     if (chars.length === 0) {
       // No characters on this realm, drop straight into the create screen.
       listEl.innerHTML = `<li class="char-list-message">${escapeHtml(t('character.noneYet'))}</li>`;
@@ -6229,6 +6236,7 @@ async function refreshCharacters(): Promise<void> {
       return;
     }
     for (const c of chars) {
+      try {
       const row = document.createElement('li');
       row.className = `char-row${c.online ? ' online' : ''}${c.forceRename ? ' rename-required' : ''}`;
       row.setAttribute('tabindex', '0');
@@ -6332,6 +6340,10 @@ async function refreshCharacters(): Promise<void> {
       });
 
       listEl.appendChild(row);
+      } catch (rowErr) {
+        rowBuildError = String((rowErr as Error)?.message ?? rowErr);
+        console.error('char-row-build-failed', c?.name, rowErr);
+      }
     }
 
     hydratePortraits(listEl);
