@@ -83,7 +83,7 @@ import {
   waterContactFrameMode,
 } from './characters/anim_state';
 import { logAssetMissOnce } from './characters/asset_miss_log';
-import { mechAssetsReady, preloadMechAssets, preloadTrainingDummyAssets, preloadVisualAssets, trainingDummyAssetsReady, visualAssetsReady } from './characters/assets';
+import { preloadVisualAssets, visualAssetsReady } from './characters/assets';
 import { isVisualLazy, skinCount, visualKeyFor } from './characters/manifest';
 import {
   playerRangedAttackAlreadyStarted,
@@ -4506,22 +4506,18 @@ export class Renderer {
       // budget slot every frame, and clearing it when the fetch RESOLVES
       // keeps pop-in at the next frame after readiness (only a rejected
       // fetch waits out the full cooldown).
-      if (visualKey === 'player_mech' && !mechAssetsReady()) {
-        void preloadMechAssets()
-          .then(() => this.viewCreateRetry.markSucceeded(e.id, 'view'))
-          .catch((err) =>
-            logAssetMissOnce('preload:player_mech', 'Failed to preload live mech cosmetic:', err),
-          );
-        this.viewCreateRetry.markFailed(e.id, 'view', performance.now());
-        return;
-      }
-      if (visualKey === 'mob_training_dummy' && !trainingDummyAssetsReady()) {
-        void preloadTrainingDummyAssets()
+      // Every lazyPreload body (the mech and Training Dummy cosmetics, and the
+      // whole realm bank: realm_infernal_*, realm_classic_*, realm_claudecraft_*,
+      // hellmaw_*) is absent from the boot sweep, so this is the ONLY thing that
+      // ever fetches one in the open world. Without it createCharacterVisual
+      // throws "character asset not preloaded" and the entity never renders.
+      if (isVisualLazy(visualKey) && !visualAssetsReady(visualKey)) {
+        void preloadVisualAssets(visualKey)
           .then(() => this.viewCreateRetry.markSucceeded(e.id, 'view'))
           .catch((err) =>
             logAssetMissOnce(
-              'preload:mob_training_dummy',
-              'Failed to preload the Training Dummy:',
+              `preload:${visualKey}`,
+              `Failed to preload live character visual ${visualKey}:`,
               err,
             ),
           );
@@ -4849,13 +4845,17 @@ export class Renderer {
     if (nextKey === v.visualKey) return;
     const retrySlot = `base:${nextKey}`;
     if (!this.viewCreateRetry.canAttempt(e.id, retrySlot, performance.now())) return;
-    if (nextKey === 'player_mech' && !mechAssetsReady()) {
+    if (isVisualLazy(nextKey) && !visualAssetsReady(nextKey)) {
       // in-flight cooldown; cleared on fetch resolution so the swap lands the
       // next frame after readiness (see the createView gates)
-      void preloadMechAssets()
+      void preloadVisualAssets(nextKey)
         .then(() => this.viewCreateRetry.markSucceeded(e.id, retrySlot))
         .catch((err) =>
-          logAssetMissOnce('preload:player_mech', 'Failed to preload live mech cosmetic:', err),
+          logAssetMissOnce(
+            `preload:${nextKey}`,
+            `Failed to preload live character visual ${nextKey}:`,
+            err,
+          ),
         );
       this.viewCreateRetry.markFailed(e.id, retrySlot, performance.now());
       return;
