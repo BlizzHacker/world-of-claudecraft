@@ -789,10 +789,14 @@ export const DUNGEON_DEFS: Record<string, DungeonDef> = {
     id: 'hollow_crypt',
     name: 'The Hollow Crypt',
     index: 0,
-    // The TOWN WELL is the crypt's mouth: the entrance portal sits on the
-    // well itself (props.wells[0] at 0,2) — you descend THROUGH the well.
-    // (Formerly a free-standing portal at the chapel ruin, 80,90.)
-    doorPos: { x: 0, z: 2 },
+    // Free-standing portal at the Fallen Chapel ruin (landmark at 80,80, with
+    // the restless_bones camp around it). It briefly took the TOWN WELL as its
+    // mouth, but the well is the Hellmaw Well delve's door (doorPos 0,2, arch at
+    // 5,2 beside Cainhurst) — two dungeons on one point rendered two overlapping
+    // portals, so the authored infernal easter egg keeps the well and the crypt
+    // came back here. dungeon_door_clearance.ts projects camp mobs out of the
+    // 20-yard ring around this door, so walking up to it can never pull the camp.
+    doorPos: { x: 80, z: 90 },
     // Arrive back near the exit portal so the first pack (z 18+) is outside aggro
     // range on entry: no mob can pull the moment you zone in. See dungeon_entry_clearance test.
     entry: { x: 0, z: -2 },
