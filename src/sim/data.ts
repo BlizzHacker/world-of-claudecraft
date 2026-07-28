@@ -405,13 +405,24 @@ function themeWorldForRealm(base: WorldContent, theme: RealmWorldTheme | undefin
   const scale = theme?.buildingScale ?? 1;
   const spread = theme?.buildingSpread ?? 1;
   if (scale === 1 && spread === 1) return base;
-  const buildings = base.props.buildings.map((b) => ({
-    ...b,
-    x: b.x * spread,
-    z: b.z * spread,
-    w: b.w * scale,
-    d: b.d * scale,
-  }));
+  const buildings = base.props.buildings.map((b) =>
+    // Authored placements (an assetId names a specific GLB) are drawn by their own
+    // layout module at fixed coordinates — src/render/eastbrook_town.ts reads
+    // EASTBROOK_LAYOUT directly and never sees this theme. Scaling only the
+    // collision/door copy would put their doors 2.6x out from the building you can
+    // actually see, which is what made the whole of Eastbrook Vale un-enterable.
+    // Procedural buildings ARE rendered through getActiveWorldContent, so they keep
+    // moving with the theme and stay consistent.
+    b.assetId
+      ? b
+      : {
+          ...b,
+          x: b.x * spread,
+          z: b.z * spread,
+          w: b.w * scale,
+          d: b.d * scale,
+        },
+  );
   return { ...base, props: { ...base.props, buildings } };
 }
 
