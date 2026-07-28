@@ -11,6 +11,7 @@ import {
   type PortraitFraming,
   playerPortraitDataUrl,
   portraitsReady,
+  visualPortraitDataUrl,
 } from '../render/characters/portrait';
 import type { PlayerClass } from '../sim/types';
 import { esc } from './esc';
@@ -20,6 +21,8 @@ import { iconDataUrl } from './icons';
 export type PortraitVariant = 'sm' | 'md' | 'lg';
 
 export interface PortraitChipOpts {
+  /** Resolved body to portray. Falls back to the class model when absent. */
+  visualKey?: string;
   cls: PlayerClass;
   skin?: number;
   /** Character name — used for the accessible label. */
@@ -42,8 +45,12 @@ function crestUrl(cls: PlayerClass): string {
 /** Build a portrait-chip HTML string. Call {@link hydratePortraits} on the
  *  container afterwards (or rely on the global ready hook to upgrade it). */
 export function portraitChipHtml(opts: PortraitChipOpts): string {
-  const { cls, skin = 0, name, variant = 'sm', badge = true, framing = 'headshot' } = opts;
-  const portrait = playerPortraitDataUrl(cls, skin, framing);
+  const { cls, skin = 0, name, variant = 'sm', badge = true, framing = 'headshot', visualKey } = opts;
+  // A resolved realm body wins over the class default: the class portrait is
+  // always the KayKit model, which is not who the player is looking at.
+  const portrait = visualKey
+    ? (visualPortraitDataUrl(visualKey, skin, framing) ?? playerPortraitDataUrl(cls, skin, framing))
+    : playerPortraitDataUrl(cls, skin, framing);
   const src = portrait ?? crestUrl(cls);
   const pending = portrait ? '' : ' data-portrait-pending="1"';
   const fallbackCls = portrait ? '' : ' is-fallback';
@@ -52,7 +59,7 @@ export function portraitChipHtml(opts: PortraitChipOpts): string {
     ? `<img class="portrait-badge" src="${crestUrl(cls)}" alt="" aria-hidden="true" draggable="false">`
     : '';
   return (
-    `<span class="portrait-chip portrait-${variant}${fallbackCls}" data-class="${cls}" data-cls="${cls}" data-skin="${skin}" data-framing="${framing}"${pending}>` +
+    `<span class="portrait-chip portrait-${variant}${fallbackCls}" data-class="${cls}" data-cls="${cls}" data-skin="${skin}" data-framing="${framing}"${visualKey ? ` data-visual="${visualKey}"` : ''}${pending}>` +
     `<span class="portrait-ring"><img class="portrait-img" src="${src}" alt="${alt}" draggable="false"></span>` +
     badgeHtml +
     `</span>`

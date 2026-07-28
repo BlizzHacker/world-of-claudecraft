@@ -1,3 +1,4 @@
+import { visualKeyFor } from '../render/characters/manifest';
 // Thin DOM painter for the character window (the paperdoll sheet).
 //
 // The consumer half of the pure-core + thin-painter split: it paints
@@ -299,7 +300,7 @@ export class CharWindow {
       <button type="button" role="tab" class="char-sheet-tab${this.activeTab === 'overview' ? ' is-active' : ''}" aria-selected="${this.activeTab === 'overview'}" data-char-tab="overview">${esc(t('guide.nav.overview'))}</button>
     </div>`;
     const currency = this.deps.moneyHtml?.(world.copper) ?? '';
-    const identity = `<div class="char-identity">${portraitChipHtml({ cls: world.cfg.playerClass, skin: p.skin ?? 0, name: p.name, variant: 'md' })}<span class="char-title-text" id="char-title">${esc(p.name)} <span class="panel-subtitle">${esc(t('itemUi.equipment.levelClass', { level, className }))}</span><span class="panel-subtitle char-archetype-title">${esc(t('hudChrome.archetypeTitle.label'))}: ${esc(archetypeTitle)}</span>${hobbyRow}<span class="panel-subtitle char-honor-balance">${esc(t('hudChrome.warfare.balance', { amount: formatNumber(world.honor, { maximumFractionDigits: 0 }) }))}</span></span>${currency ? `<span class="char-sheet-currency">${currency}</span>` : ''}</div>`;
+    const identity = `<div class="char-identity">${portraitChipHtml({ cls: world.cfg.playerClass, skin: p.skin ?? 0, name: p.name, variant: 'md', visualKey: visualKeyFor(p) })}<span class="char-title-text" id="char-title">${esc(p.name)} <span class="panel-subtitle">${esc(t('itemUi.equipment.levelClass', { level, className }))}</span><span class="panel-subtitle char-archetype-title">${esc(t('hudChrome.archetypeTitle.label'))}: ${esc(archetypeTitle)}</span>${hobbyRow}<span class="panel-subtitle char-honor-balance">${esc(t('hudChrome.warfare.balance', { amount: formatNumber(world.honor, { maximumFractionDigits: 0 }) }))}</span></span>${currency ? `<span class="char-sheet-currency">${currency}</span>` : ''}</div>`;
     const paperdoll = `<div class="paperdoll">
       <div class="equip-col" id="equip-col-left"></div>
       <div class="char-model-panel">
