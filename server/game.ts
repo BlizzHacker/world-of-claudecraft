@@ -170,7 +170,6 @@ import {
   heartbeatCharacterLeases,
   insertChatLogs,
   loadAccountFlair,
-  loadHomesState,
   loadMailState,
   loadMarketState,
   loadRealmProps,
@@ -183,7 +182,6 @@ import {
   revokeAccountMechChroma,
   saveCharacterAndMarketState,
   saveCharacterState,
-  saveHomesState,
   saveMailState,
   saveMarketState,
   setAccountWeaponSkinLoadout,
@@ -2213,7 +2211,6 @@ export class GameServer {
       void this.saveAll('autosave');
       void this.saveMarket();
       void this.saveMail();
-      void this.saveHomes();
       void heartbeatCharacterLeases().catch((err) => console.error('lease heartbeat failed:', err));
     }
   }
@@ -3685,24 +3682,6 @@ export class GameServer {
       this.sim.loadMail(await loadMailState());
     } catch (err) {
       console.error('failed to load mail:', err);
-    }
-  }
-
-  // Eastbrook Homes deeds. Rides the market write queue like mail so a homes
-  // snapshot can never interleave with the atomic leave-path write.
-  async loadHomes(): Promise<void> {
-    try {
-      this.sim.loadHomes(await loadHomesState());
-    } catch (err) {
-      console.error('failed to load homes:', err);
-    }
-  }
-
-  async saveHomes(): Promise<void> {
-    try {
-      await this.enqueueMarketWrite(() => saveHomesState(this.sim.serializeHomes()));
-    } catch (err) {
-      console.error('failed to save homes:', err);
     }
   }
 

@@ -3910,22 +3910,6 @@ export async function saveMailState(save: MailSave): Promise<void> {
   await saveWorldState(mailStateKey(REALM), save);
 }
 
-// Eastbrook Homes deeds: realm-scoped exactly like the mail book, one JSONB blob
-// per realm under `homes:<realm>`. Born realm-scoped, so no legacy migration.
-// Untyped at this layer on purpose -- the shape is the sim's HomesState and the
-// server only round-trips it.
-export function homesStateKey(realm: string): string {
-  return `homes:${realm}`;
-}
-
-export async function loadHomesState<T>(): Promise<T | null> {
-  return loadWorldState<T>(homesStateKey(REALM));
-}
-
-export async function saveHomesState(save: unknown): Promise<void> {
-  await saveWorldState(homesStateKey(REALM), save);
-}
-
 // ---------------------------------------------------------------------------
 // Play sessions: one row per character login, closed on logout. Powers the
 // admin dashboard's playtime / DAU / sessions-per-day metrics.

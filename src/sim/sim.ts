@@ -9458,16 +9458,6 @@ export class Sim {
     this.postOffice.loadMail(save);
   }
 
-  /** Eastbrook Homes deeds. HomesState.lots is plain serializable data, so the
-   *  server round-trips the record verbatim (see src/sim/social/homes.ts). */
-  serializeHomes(): homesMod.HomesState {
-    return { lots: { ...this.homes.lots } };
-  }
-
-  loadHomes(save: homesMod.HomesState | null | undefined): void {
-    this.homes = { lots: { ...(save?.lots ?? {}) } };
-  }
-
   // -------------------------------------------------------------------------
   // Dungeons: party-instanced elite content (the Hollow Crypt and friends)
   // -------------------------------------------------------------------------
