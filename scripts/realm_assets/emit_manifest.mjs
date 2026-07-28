@@ -34,7 +34,9 @@ const REJECTS = arg('rejects', '/tmp/rejects.json');
 const ARMED = /\b(warlord|warrior|knight|soldier|archer|gunner|swordsman|axeman|spearman|wielding|holding|armed|with (a |an )?(sword|axe|spear|staff|bow|gun|rifle|blade|hammer|shield|scythe|dagger))/i;
 
 // Attack clip sets by flavour, so a mage does not chop and a gunner does not slice.
-function attacksFor(name) {
+function attacksFor(name, realm) {
+  // A trooper does not chop. Firearm realms always use the ranged shoot clip.
+  if (GUN_REALMS.has(realm)) return ["'2H_Ranged_Shoot'"];
   const s = name.toLowerCase();
   if (/(mage|wizard|sorcer|warlock|witch|shaman|priest|cleric|caster|arcane|spell)/.test(s)) {
     return ["'Spellcast_Shoot'"];
@@ -49,6 +51,19 @@ function attacksFor(name) {
     return ["'Dualwield_Melee_Attack_Chop'"];
   }
   return ["'1H_Melee_Attack_Chop'", "'1H_Melee_Attack_Slice_Diagonal'"];
+}
+
+
+// Realms that fight with firearms. One weapon set, shared: build guns once and every
+// gun-carrying realm inherits them rather than each realm needing its own pass.
+const GUN_REALMS = new Set(['fps', 'dominion', 'arcadevoid']);
+const GUNS = ['wpn_rifle', 'wpn_revolver', 'wpn_blaster_heavy', 'wpn_blaster_sci'];
+
+/** Deterministic weapon pick so a body always spawns with the same gun. */
+function gunFor(key) {
+  let h = 0;
+  for (let i = 0; i < key.length; i++) h = (h * 31 + key.charCodeAt(i)) >>> 0;
+  return GUNS[h % GUNS.length];
 }
 
 const entries = existsSync(ENTRIES) ? JSON.parse(readFileSync(ENTRIES, 'utf8')) : [];
@@ -82,7 +97,7 @@ for (const realm of realms.sort()) {
     if (!meta || !key.startsWith('realm_')) continue;
     const name = meta.name ?? key;
     const armed = ARMED.test(name);
-    kept.push({ key, realm, name, armed, attacks: attacksFor(name), realms: meta?.realms ?? [realm] });
+    kept.push({ key, realm, name, armed, attacks: attacksFor(name, realm), realms: meta?.realms ?? [realm] });
   }
   stats[realm] = kept.length;
   out.push(...kept);
@@ -168,12 +183,21 @@ for (const e of out) {
   lines.push("    tint: 'entity',");
   lines.push('    tintStrength: 0.18,');
   if (!e.armed) {
-    lines.push('    attach: [');
-    lines.push("      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },");
-    lines.push("      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },");
-    lines.push('    ],');
-    lines.push('    weaponSlots: [0],');
-    lines.push('    offhandSlot: 1,');
+    if (GUN_REALMS.has(e.realm)) {
+      // Firearm: right hand only. A shield in the off-hand reads as nonsense on a
+      // shooter, and the ranged clip already occupies both arms.
+      lines.push('    attach: [');
+      lines.push(`      { url: \`\${REALM_MODELS}/${e.realm}/${gunFor(e.key)}.glb\`, bone: 'handslot.r' },`);
+      lines.push('    ],');
+      lines.push('    weaponSlots: [0],');
+    } else {
+      lines.push('    attach: [');
+      lines.push("      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },");
+      lines.push("      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },");
+      lines.push('    ],');
+      lines.push('    weaponSlots: [0],');
+      lines.push('    offhandSlot: 1,');
+    }
   } else {
     lines.push('    // ships holding a weapon -> NPC/enemy only, no live equipment sockets');
   }

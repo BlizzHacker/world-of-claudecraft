@@ -126,12 +126,14 @@ if (!APPLY) {
   process.exit(0);
 }
 
+// dist-server/server.cjs is a bundled entry and re-exports nothing, so import the
+// module directly. Requires tsx: `npx tsx scripts/realm_assets/assign_classes.mjs`.
 const { upsertDraftRealmVisual, publishDraftRealmVisuals } =
-  await import('../../dist-server/server.cjs').catch(() => ({}));
-if (!upsertDraftRealmVisual) {
-  console.error('could not import server module; run via the server bundle');
-  process.exit(1);
-}
+  await import('/opt/cryptic-realm/server/realm_visuals.ts').catch((e) => {
+    console.error('import failed (run under tsx):', String(e.message).slice(0, 120));
+    return {};
+  });
+if (!upsertDraftRealmVisual) process.exit(1);
 for (const [realm, m] of Object.entries(plan)) {
   for (const [target, v] of Object.entries(m)) {
     await upsertDraftRealmVisual({
