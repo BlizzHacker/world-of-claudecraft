@@ -690,6 +690,10 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
     facing: -Math.PI / 2,
     color: 0x6b4c2e,
     questIds: [],
+    // It is a BOARD. It renders as a static signpost (NPC_STRUCTURE_OBJECT_IDS ->
+    // buildGroundQuestObject), so it must never take the roaming default sim.ts
+    // applies to every other NPC -- that had it strolling its home square.
+    roams: false,
     greeting: 'The road needs a watch. Gather your party and hold Eastbrook against the dead.',
   },
   mercenary_kael: {
@@ -739,6 +743,9 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
     color: 0x8a6a3a,
     questIds: [],
     dynamic: true,
+    // A building, not a person: same static-structure render path as the defense
+    // board, so it must not inherit the roaming default either.
+    roams: false,
     greeting: 'The warcamp holds.',
   },
   skirmish_builder: {
