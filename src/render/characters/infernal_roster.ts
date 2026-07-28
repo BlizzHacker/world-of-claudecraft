@@ -29,12 +29,16 @@ export const INFERNAL_HUMAN_VISUAL_KEYS = [
 export type InfernalHumanVisualKey = (typeof INFERNAL_HUMAN_VISUAL_KEYS)[number];
 
 const NPC_ROLE_VISUALS: Record<string, InfernalHumanVisualKey> = {
-  the_merchant: 'realm_infernal_human_forge_worker',
+  // A trader, not a smith: the forge apron read as a blacksmith standing behind the
+  // market stall.
+  the_merchant: 'realm_infernal_human_hooded_wanderer',
   marshal_redbrook: 'realm_infernal_human_iron_warden',
   warden_fenwick: 'realm_infernal_human_iron_warden',
   captain_thessaly: 'realm_infernal_human_vanguard',
   trader_wilkes: 'realm_infernal_human_weathered_elder',
-  apothecary_lin: 'realm_infernal_human_white_sage',
+  // Moved off white_sage, which ships with no face and no arms; the veil adept is the
+  // other robed caster body and matches the herbalist she works alongside.
+  apothecary_lin: 'realm_infernal_human_veil_adept',
   herbalist_yara: 'realm_infernal_human_veil_adept',
   smith_haldren: 'realm_infernal_human_forge_worker',
   armorer_hode: 'realm_infernal_human_forge_worker',
@@ -42,7 +46,9 @@ const NPC_ROLE_VISUALS: Record<string, InfernalHumanVisualKey> = {
   fisherman_brandt: 'realm_infernal_human_hermit',
   stable_master_wren: 'realm_infernal_human_vanguard',
   mercenary_kael: 'realm_infernal_human_blood_knight',
-  huntress_verr: 'realm_infernal_human_assassin',
+  // A huntress reads as a ranger, not a hooded assassin (which in-game looks like a
+  // witch's outfit and is shared with the cardmaster below).
+  huntress_verr: 'realm_infernal_human_iron_ranger',
   bursar_fernando: 'realm_infernal_human_hooded_wanderer',
   realtor_maribel: 'realm_infernal_human_weathered_elder',
   pit_master_grott: 'realm_infernal_human_barbarian',
@@ -63,6 +69,24 @@ const NPC_ROLE_VISUALS: Record<string, InfernalHumanVisualKey> = {
   interior_villager: 'realm_infernal_human_hooded_wanderer',
   skirmish_builder: 'realm_infernal_human_forge_worker',
   skirmish_footman: 'realm_infernal_human_vanguard',
+
+  // --- Eastbrook townsfolk that were falling through to the hash ---------------
+  // Station masters and shopkeepers whose job is named right there in the id. Before
+  // this they drew whatever stableIndex landed on, which is why the weaver wore a
+  // forge apron and the cook wore crusader plate.
+  forgemistress_darva: 'realm_infernal_human_forge_worker',
+  weaver_ottilie: 'realm_infernal_human_veil_adept',
+  toolmaster_gethin: 'realm_infernal_human_forge_worker',
+  cook_marlow: 'realm_infernal_human_hermit',
+  tanner_briggs: 'realm_infernal_human_road_mercenary',
+  alchemist_sable: 'realm_infernal_human_veil_adept',
+  // The card table is a gambler's corner, not an assassin's.
+  card_master: 'realm_infernal_human_hooded_wanderer',
+  // Chroniclers keep the ledgers: an elder scribe, not a robed caster.
+  chronicler_saul: 'realm_infernal_human_weathered_elder',
+  chronicler_osric_fenn: 'realm_infernal_human_weathered_elder',
+  chronicler_edda_hartwell: 'realm_infernal_human_weathered_elder',
+  wren_saddleworth: 'realm_infernal_human_vanguard',
 };
 
 const OPPONENT_KEYS = ['hellmaw_cursed_knight_body', 'hellmaw_sigilbound_body'] as const;
