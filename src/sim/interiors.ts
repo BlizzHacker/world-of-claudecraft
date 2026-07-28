@@ -194,8 +194,28 @@ export function computeBuildingDoors(
       // Enter radius spans the building's whole front + a comfortable street margin so
       // walking up to the door and pressing interact reliably enters (the solid OBB
       // keeps the player just outside the +z wall, ~INTERACT_RANGE from this point).
+      // Clamped below so a wide building cannot swallow a close neighbour's doorstep.
       r: Math.max(8, b.w * 0.6 + INTERACT_RANGE),
     });
+  }
+  // Density clamp. buildingDoorNear returns the nearest door POINT, so two overlapping
+  // rings let a big neighbour win the doorstep of the building you are actually
+  // standing at -- the click target and the door under your feet then disagree and the
+  // enter is refused. Eastbrook's authored civic blocks sit ~20 yards apart, well
+  // inside the 8-12.8 yard radii above. Halving to the nearest other door guarantees
+  // the rings are disjoint, so the lookup always agrees with the building you are at.
+  // INTERACT_RANGE is the floor: every door stays reachable however tight the block.
+  // Sparse towns are unaffected -- their doors already sit further apart than 2r.
+  for (let i = 0; i < doors.length; i++) {
+    let nearest = Infinity;
+    for (let j = 0; j < doors.length; j++) {
+      if (i === j) continue;
+      const d = Math.hypot(doors[i].x - doors[j].x, doors[i].z - doors[j].z);
+      if (d < nearest) nearest = d;
+    }
+    if (Number.isFinite(nearest)) {
+      doors[i].r = Math.max(INTERACT_RANGE, Math.min(doors[i].r, nearest / 2));
+    }
   }
   return doors;
 }
