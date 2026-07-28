@@ -24,7 +24,7 @@ export const ARCANE_REALM: RealmContent = {
   },
   classes: [
     {
-      id: 'voidwalker', name: 'Voidwalker', role: 'DPS', icon: '\u{1F300}', color: '#a855f7',
+      id: 'voidwalker', name: 'Voidwalker', role: 'DPS', baseClass: 'rogue', icon: '\u{1F300}', color: '#a855f7',
       lore: 'Voidwalkers step between dimensions as easily as walking through doors. They channel raw void energy into devastating attacks.',
       baseStats: { maxHp: 85, maxMp: 180, str: 6, dex: 14, vit: 10, nrg: 36, dmg: 34, def: 8, spd: 1.8 },
       skills: [
@@ -36,7 +36,7 @@ export const ARCANE_REALM: RealmContent = {
       skillTrees: ['Void Channeling', 'Rift Mastery', 'Entropy'],
     },
     {
-      id: 'crystalsmith', name: 'Crystalsmith', role: 'Support', icon: '\u{1F48E}', color: '#3ad6c8',
+      id: 'crystalsmith', name: 'Crystalsmith', role: 'Support', baseClass: 'mage', icon: '\u{1F48E}', color: '#3ad6c8',
       lore: 'Crystalsmiths grow living crystals that sing with arcane resonance. Each gem is a spell, each facet a rune.',
       baseStats: { maxHp: 110, maxMp: 155, str: 8, dex: 12, vit: 18, nrg: 30, dmg: 16, def: 18, spd: 1.3 },
       skills: [
@@ -48,7 +48,7 @@ export const ARCANE_REALM: RealmContent = {
       skillTrees: ['Crystal Growing', 'Resonance Arts', 'Gem Enchanting'],
     },
     {
-      id: 'portalkeeper', name: 'Portal Keeper', role: 'Healer', icon: '\u{1F6AA}', color: '#e879f9',
+      id: 'portalkeeper', name: 'Portal Keeper', role: 'Healer', baseClass: 'priest', icon: '\u{1F6AA}', color: '#e879f9',
       lore: 'Portal Keepers guard the gateways between realms. They can open portals to healing dimensions and banish enemies to pocket prisons.',
       baseStats: { maxHp: 105, maxMp: 165, str: 6, dex: 10, vit: 18, nrg: 34, dmg: 14, def: 14, spd: 1.4 },
       skills: [
@@ -60,7 +60,7 @@ export const ARCANE_REALM: RealmContent = {
       skillTrees: ['Gateway Arts', 'Spatial Fold', 'Realm Walking'],
     },
     {
-      id: 'starguard', name: 'Star Guard', role: 'Tank', icon: '⭐', color: '#fbbf24',
+      id: 'starguard', name: 'Star Guard', role: 'Tank', baseClass: 'paladin', icon: '⭐', color: '#fbbf24',
       lore: 'Star Guards channel the gravity of dying stars into their armor. They are walking singularities — enemies are pulled toward them.',
       baseStats: { maxHp: 200, maxMp: 75, str: 32, dex: 6, vit: 38, nrg: 12, dmg: 18, def: 38, spd: 0.8 },
       skills: [
@@ -72,7 +72,7 @@ export const ARCANE_REALM: RealmContent = {
       skillTrees: ['Stellar Armor', 'Gravity Mastery', 'Cosmic Forge'],
     },
     {
-      id: 'riftblade', name: 'Rift Blade', role: 'Assassin', icon: '⚡', color: '#06b6d4',
+      id: 'riftblade', name: 'Rift Blade', role: 'Assassin', baseClass: 'rogue', icon: '⚡', color: '#06b6d4',
       lore: 'Rift Blades slice through the fabric of reality itself. They step through micro-rifts to appear behind targets.',
       baseStats: { maxHp: 80, maxMp: 95, str: 20, dex: 34, vit: 10, nrg: 14, dmg: 32, def: 12, spd: 2.6 },
       skills: [

@@ -30,7 +30,7 @@ export const CRYPTICREALM_REALM: RealmContent = {
   },
   classes: [
     {
-      id: 'gravecaller', name: 'Gravecaller', role: 'Summoner', icon: '\u{1F480}', color: '#b48cff',
+      id: 'gravecaller', name: 'Gravecaller', role: 'Summoner', baseClass: 'warlock', icon: '\u{1F480}', color: '#b48cff',
       lore: 'The namesake of the saga. Gravecallers read the ciphers on the dead and bind the answers as servants. Each riddle solved is a soul recruited.',
       baseStats: { maxHp: 95, maxMp: 180, str: 8, dex: 12, vit: 12, nrg: 38, dmg: 30, def: 10, spd: 1.2 },
       skills: [
@@ -42,7 +42,7 @@ export const CRYPTICREALM_REALM: RealmContent = {
       skillTrees: ['Necromantic Lore', 'Cipher Binding', 'The Saga'],
     },
     {
-      id: 'runewarden', name: 'Rune Warden', role: 'Tank', icon: '\u{1F6E1}', color: '#ffd166',
+      id: 'runewarden', name: 'Rune Warden', role: 'Tank', baseClass: 'warrior', icon: '\u{1F6E1}', color: '#ffd166',
       lore: 'Wardens armor themselves in living runes scavenged from sealed vaults. The more cryptic the rune, the harder it is to break.',
       baseStats: { maxHp: 200, maxMp: 90, str: 28, dex: 10, vit: 36, nrg: 16, dmg: 20, def: 36, spd: 1.0 },
       skills: [
@@ -54,7 +54,7 @@ export const CRYPTICREALM_REALM: RealmContent = {
       skillTrees: ['Living Runes', 'Vaultkeeper', 'Aegis'],
     },
     {
-      id: 'cipherblade', name: 'Cipher Blade', role: 'Assassin', icon: '\u{1F5E1}', color: '#7bdff2',
+      id: 'cipherblade', name: 'Cipher Blade', role: 'Assassin', baseClass: 'rogue', icon: '\u{1F5E1}', color: '#7bdff2',
       lore: 'Duelists who encode their strikes — each cut a glyph, each combo a sentence only the dying can read.',
       baseStats: { maxHp: 100, maxMp: 110, str: 18, dex: 34, vit: 12, nrg: 18, dmg: 34, def: 12, spd: 1.9 },
       skills: [
@@ -66,7 +66,7 @@ export const CRYPTICREALM_REALM: RealmContent = {
       skillTrees: ['Encrypted Strikes', 'Shadowstep', 'Execution'],
     },
     {
-      id: 'oracle', name: 'Oracle', role: 'Healer', icon: '\u{1F52E}', color: '#2ecc71',
+      id: 'oracle', name: 'Oracle', role: 'Healer', baseClass: 'priest', icon: '\u{1F52E}', color: '#2ecc71',
       lore: 'Oracles read the realm itself like a half-erased page, mending wounds by reciting what was true a moment ago.',
       baseStats: { maxHp: 100, maxMp: 175, str: 6, dex: 12, vit: 14, nrg: 36, dmg: 18, def: 12, spd: 1.3 },
       skills: [
@@ -78,7 +78,7 @@ export const CRYPTICREALM_REALM: RealmContent = {
       skillTrees: ['Divination', 'Mending Verse', 'Augury'],
     },
     {
-      id: 'voidseer', name: 'Void Seer', role: 'DPS', icon: '\u{1F311}', color: '#6c5ce7',
+      id: 'voidseer', name: 'Void Seer', role: 'DPS', baseClass: 'mage', icon: '\u{1F311}', color: '#6c5ce7',
       lore: 'Seers who stared too long into the sealed vaults and learned to throw the dark back. Their spells are answers to questions reality forgot.',
       baseStats: { maxHp: 85, maxMp: 190, str: 5, dex: 10, vit: 10, nrg: 40, dmg: 38, def: 8, spd: 1.4 },
       skills: [

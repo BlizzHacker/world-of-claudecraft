@@ -25,7 +25,7 @@ export const INFERNAL_REALM: RealmContent = {
   },
   classes: [
     {
-      id: 'boneherald', name: 'Bone Herald', role: 'Summoner', icon: '\u{1F480}', color: '#8e7cc3',
+      id: 'boneherald', name: 'Bone Herald', role: 'Summoner', baseClass: 'warlock', icon: '\u{1F480}', color: '#8e7cc3',
       lore: 'Once a royal necromancer of the Ashen Court, the Bone Herald commands legions of the fallen. Each skull raised is a soldier reborn, each corpse a vessel for undeath.',
       baseStats: { maxHp: 95, maxMp: 180, str: 8, dex: 10, vit: 12, nrg: 38, dmg: 22, def: 10, spd: 1.4 },
       skills: [
@@ -37,7 +37,7 @@ export const INFERNAL_REALM: RealmContent = {
       skillTrees: ['Necromancy', 'Blood Arts', 'Bone Constructs'],
     },
     {
-      id: 'emberwitch', name: 'Ember Witch', role: 'DPS', icon: '\u{1F525}', color: '#e67e22',
+      id: 'emberwitch', name: 'Ember Witch', role: 'DPS', baseClass: 'warlock', icon: '\u{1F525}', color: '#e67e22',
       lore: 'Born in the heart of a volcano, Ember Witches channel primordial flame through their veins. Their laughter ignites the air, and their rage melts steel.',
       baseStats: { maxHp: 80, maxMp: 165, str: 6, dex: 14, vit: 9, nrg: 35, dmg: 34, def: 8, spd: 1.6 },
       skills: [
@@ -49,7 +49,7 @@ export const INFERNAL_REALM: RealmContent = {
       skillTrees: ['Inferno', 'Chaos Flame', 'Molten Core'],
     },
     {
-      id: 'shadowblade', name: 'Shadow Blade', role: 'Assassin', icon: '\u{1F5E1}', color: '#6c5ce7',
+      id: 'shadowblade', name: 'Shadow Blade', role: 'Assassin', baseClass: 'rogue', icon: '\u{1F5E1}', color: '#6c5ce7',
       lore: 'Trained in the Void Pits where light never reaches, Shadow Blades move between heartbeats. They strike from nowhere and vanish before the body falls.',
       baseStats: { maxHp: 85, maxMp: 100, str: 16, dex: 36, vit: 10, nrg: 14, dmg: 30, def: 12, spd: 2.4 },
       skills: [
@@ -61,7 +61,7 @@ export const INFERNAL_REALM: RealmContent = {
       skillTrees: ['Shadow Arts', 'Blade Mastery', 'Trap Crafting'],
     },
     {
-      id: 'ironwarden', name: 'Iron Warden', role: 'Tank', icon: '\u{1F6E1}', color: '#7f8c8d',
+      id: 'ironwarden', name: 'Iron Warden', role: 'Tank', baseClass: 'warrior', icon: '\u{1F6E1}', color: '#7f8c8d',
       lore: 'Forged in the Abyssal Foundries, Iron Wardens are living fortresses. Their armor is grafted to bone, their shields weigh more than a mortal man.',
       baseStats: { maxHp: 200, maxMp: 60, str: 32, dex: 8, vit: 38, nrg: 8, dmg: 18, def: 36, spd: 0.9 },
       skills: [
@@ -73,7 +73,7 @@ export const INFERNAL_REALM: RealmContent = {
       skillTrees: ['Ironclad', "Warden's Oath", 'Siege Engine'],
     },
     {
-      id: 'forestsage', name: 'Forest Sage', role: 'Healer', icon: '\u{1F33F}', color: '#27ae60',
+      id: 'forestsage', name: 'Forest Sage', role: 'Healer', baseClass: 'druid', icon: '\u{1F33F}', color: '#27ae60',
       lore: 'While the Infernal Realm burns, Forest Sages tend the last groves of living wood. They channel nature\'s quiet fury — roots that strangle, spores that heal.',
       baseStats: { maxHp: 110, maxMp: 160, str: 6, dex: 12, vit: 18, nrg: 32, dmg: 14, def: 14, spd: 1.3 },
       skills: [

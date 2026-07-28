@@ -28,7 +28,7 @@ export const FPS_REALM: RealmContent = {
   },
   classes: [
     {
-      id: 'vanguard', name: 'Vanguard', role: 'Tank', icon: '\u{1F6E1}', color: '#ff5a5f',
+      id: 'vanguard', name: 'Vanguard', role: 'Tank', baseClass: 'paladin', icon: '\u{1F6E1}', color: '#ff5a5f',
       lore: 'Front-line breachers who push the reticle into the enemy’s face. Heavy shields, heavier resolve.',
       baseStats: { maxHp: 200, maxMp: 70, str: 30, dex: 16, vit: 36, nrg: 8, dmg: 24, def: 34, spd: 1.1 },
       skills: [
@@ -40,7 +40,7 @@ export const FPS_REALM: RealmContent = {
       skillTrees: ['Breaching', 'Bulwark', 'Resolve'],
     },
     {
-      id: 'marksman', name: 'Marksman', role: 'DPS', icon: '\u{1F3AF}', color: '#7bdff2',
+      id: 'marksman', name: 'Marksman', role: 'DPS', baseClass: 'hunter', icon: '\u{1F3AF}', color: '#7bdff2',
       lore: 'One breath, one shot. Marksmen treat the reticle as a contract: whatever it covers, dies.',
       baseStats: { maxHp: 95, maxMp: 110, str: 14, dex: 38, vit: 12, nrg: 14, dmg: 38, def: 10, spd: 1.6 },
       skills: [
@@ -52,7 +52,7 @@ export const FPS_REALM: RealmContent = {
       skillTrees: ['Precision', 'Ballistics', 'Overwatch'],
     },
     {
-      id: 'operator', name: 'Operator', role: 'Assassin', icon: '\u{1F576}', color: '#9b59b6',
+      id: 'operator', name: 'Operator', role: 'Assassin', baseClass: 'rogue', icon: '\u{1F576}', color: '#9b59b6',
       lore: 'Flank, breach, vanish. Operators win fights that end before the enemy’s reticle finds them.',
       baseStats: { maxHp: 100, maxMp: 110, str: 18, dex: 34, vit: 12, nrg: 18, dmg: 34, def: 12, spd: 2.0 },
       skills: [
@@ -64,7 +64,7 @@ export const FPS_REALM: RealmContent = {
       skillTrees: ['Infiltration', 'Evasion', 'Wetwork'],
     },
     {
-      id: 'medic', name: 'Combat Medic', role: 'Healer', icon: '✚', color: '#2ecc71',
+      id: 'medic', name: 'Combat Medic', role: 'Healer', baseClass: 'priest', icon: '✚', color: '#2ecc71',
       lore: 'They keep the squad shooting. A medic’s reticle picks targets to revive as readily as ones to drop.',
       baseStats: { maxHp: 115, maxMp: 160, str: 12, dex: 20, vit: 18, nrg: 30, dmg: 22, def: 16, spd: 1.5 },
       skills: [
@@ -76,7 +76,7 @@ export const FPS_REALM: RealmContent = {
       skillTrees: ['Field Medicine', 'Stimulants', 'Recovery'],
     },
     {
-      id: 'engineer', name: 'Engineer', role: 'Support', icon: '\u{1F527}', color: '#f39c12',
+      id: 'engineer', name: 'Engineer', role: 'Support', baseClass: 'hunter', icon: '\u{1F527}', color: '#f39c12',
       lore: 'Engineers shape the battlefield — turrets, mines, and deployables that hold the reticle line when the squad can’t.',
       baseStats: { maxHp: 120, maxMp: 130, str: 16, dex: 22, vit: 20, nrg: 24, dmg: 24, def: 18, spd: 1.4 },
       skills: [

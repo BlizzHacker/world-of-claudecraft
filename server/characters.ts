@@ -82,6 +82,7 @@ import {
 import { requireOwned } from './http/middleware/require_owned';
 import type { Ctx, Middleware, RouteDef } from './http/types';
 import { isUniqueViolation, json, moderationErrorBody } from './http_util';
+import { getRealm, isRealmId } from "../src/sim/realms/registry";
 import { REALM } from './realm';
 
 // ---------------------------------------------------------------------------
@@ -129,6 +130,17 @@ const CHARACTER_RESOURCE = 'character';
 /** Per-account character cap (mirrors the legacy createCharacterCapped default). */
 const CHARACTER_LIMIT = 10;
 /** The nine playable classes accepted by create (mirrors the legacy inline list). */
+
+/** Realm class skins carry their own ids (steelcrusader, voidarcher, ...) while the
+ *  sim runs the upstream 8. Resolve a skin id to the PlayerClass it plays as, so
+ *  character creation accepts either form instead of 400ing on every realm class. */
+function resolveRealmSkinClass(input: string): string | null {
+  const realmId = process.env.CR_REALM_ID ?? REALM;
+  if (!isRealmId(realmId)) return null;
+  const skin = getRealm(realmId).classes.find((c) => c.id === input);
+  return skin?.baseClass ?? null;
+}
+
 const VALID_CLASSES: readonly string[] = [
   'warrior',
   'paladin',
@@ -387,11 +399,20 @@ async function createCharacterHandler(ctx: Ctx): Promise<void> {
     json(ctx.res, 400, CHAR_NAME_NOT_ALLOWED);
     return;
   }
-  if (typeof body.class !== 'string' || !VALID_CLASSES.includes(body.class)) {
+  if (typeof body.class !== 'string') {
     json(ctx.res, 400, INVALID_CLASS);
     return;
   }
-  const cls = body.class as PlayerClass;
+  // Accept an upstream class id OR a realm class skin id (which the class picker
+  // sends for every realm-authored class).
+  const resolvedClass = VALID_CLASSES.includes(body.class)
+    ? body.class
+    : resolveRealmSkinClass(body.class);
+  if (!resolvedClass) {
+    json(ctx.res, 400, INVALID_CLASS);
+    return;
+  }
+  const cls = resolvedClass as PlayerClass;
   const requestedHeroId = body.realmHeroId;
   if (
     requestedHeroId !== undefined &&

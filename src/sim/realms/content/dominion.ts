@@ -24,7 +24,7 @@ export const DOMINION_REALM: RealmContent = {
   },
   classes: [
     {
-      id: 'vanguard', name: 'Vanguard', role: 'Tank', icon: '\u{1F6E1}', color: '#3ad6c8',
+      id: 'vanguard', name: 'Vanguard', role: 'Tank', baseClass: 'paladin', icon: '\u{1F6E1}', color: '#3ad6c8',
       lore: 'Vanguards wear powered exoskeletons rated for atmospheric re-entry. They drop from orbit into the thickest fighting and hold the line until reinforcements arrive.',
       baseStats: { maxHp: 195, maxMp: 70, str: 34, dex: 8, vit: 36, nrg: 10, dmg: 20, def: 38, spd: 0.8 },
       skills: [
@@ -36,7 +36,7 @@ export const DOMINION_REALM: RealmContent = {
       skillTrees: ['Exo-Suit', 'Drop Tactics', 'Heavy Ordnance'],
     },
     {
-      id: 'ghostsniper', name: 'Ghost Sniper', role: 'DPS', icon: '\u{1F3AF}', color: '#e74c3c',
+      id: 'ghostsniper', name: 'Ghost Sniper', role: 'DPS', baseClass: 'hunter', icon: '\u{1F3AF}', color: '#e74c3c',
       lore: 'Ghost Snipers operate alone behind enemy lines for weeks at a time. Their rifles fire antimatter rounds from 2 km away.',
       baseStats: { maxHp: 75, maxMp: 85, str: 10, dex: 38, vit: 8, nrg: 18, dmg: 38, def: 8, spd: 1.6 },
       skills: [
@@ -48,7 +48,7 @@ export const DOMINION_REALM: RealmContent = {
       skillTrees: ['Precision', 'Stealth Ops', 'Field Tech'],
     },
     {
-      id: 'fieldmedic', name: 'Field Medic', role: 'Healer', icon: '✚', color: '#2ecc71',
+      id: 'fieldmedic', name: 'Field Medic', role: 'Healer', baseClass: 'priest', icon: '✚', color: '#2ecc71',
       lore: 'Field Medics carry enough nano-gel to rebuild a squad from paste. They sprint through gunfire to reach the wounded.',
       baseStats: { maxHp: 110, maxMp: 150, str: 8, dex: 16, vit: 20, nrg: 30, dmg: 12, def: 14, spd: 1.6 },
       skills: [
@@ -60,7 +60,7 @@ export const DOMINION_REALM: RealmContent = {
       skillTrees: ['Combat Medicine', 'Nano-Tech', 'Triage'],
     },
     {
-      id: 'combatengineer', name: 'Combat Engineer', role: 'Support', icon: '⚙', color: '#f39c12',
+      id: 'combatengineer', name: 'Combat Engineer', role: 'Support', baseClass: 'hunter', icon: '⚙', color: '#f39c12',
       lore: "Combat Engineers build the war as others fight it. Turrets, barricades, repair drones, EMP mines — if it keeps the squad alive, they'll weld it together under fire.",
       baseStats: { maxHp: 120, maxMp: 130, str: 14, dex: 18, vit: 22, nrg: 22, dmg: 16, def: 22, spd: 1.2 },
       skills: [
@@ -72,7 +72,7 @@ export const DOMINION_REALM: RealmContent = {
       skillTrees: ['Deployables', 'Demolitions', 'Cyber Warfare'],
     },
     {
-      id: 'psionicoperative', name: 'Psionic Operative', role: 'DPS', icon: '\u{1F9E0}', color: '#9b59b6',
+      id: 'psionicoperative', name: 'Psionic Operative', role: 'DPS', baseClass: 'mage', icon: '\u{1F9E0}', color: '#9b59b6',
       lore: 'Psionic Operatives are government secrets — gene-edited humans who can crush tanks with thought and read memories like books.',
       baseStats: { maxHp: 80, maxMp: 175, str: 6, dex: 12, vit: 8, nrg: 38, dmg: 34, def: 8, spd: 1.5 },
       skills: [

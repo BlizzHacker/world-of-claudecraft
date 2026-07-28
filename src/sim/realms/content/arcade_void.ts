@@ -29,7 +29,7 @@ export const ARCADE_VOID_REALM: RealmContent = {
   },
   classes: [
     {
-      id: 'voidmarine', name: 'Void Marine', role: 'Tank', icon: 'M', color: '#57f0ff',
+      id: 'voidmarine', name: 'Void Marine', role: 'Tank', baseClass: 'warrior', icon: 'M', color: '#57f0ff',
       lore: 'Front-line armor crews trained to hold extraction lines while the void tears open around them.',
       baseStats: { maxHp: 190, maxMp: 80, str: 30, dex: 18, vit: 34, nrg: 12, dmg: 24, def: 32, spd: 1.1 },
       skills: [
@@ -40,7 +40,7 @@ export const ARCADE_VOID_REALM: RealmContent = {
       skillTrees: ['Armor', 'Breach', 'Command'],
     },
     {
-      id: 'ghostpilot', name: 'Ghost Pilot', role: 'Assassin', icon: 'G', color: '#b967ff',
+      id: 'ghostpilot', name: 'Ghost Pilot', role: 'Assassin', baseClass: 'rogue', icon: 'G', color: '#b967ff',
       lore: 'Stealth operators who mark targets, vanish, and call precision strikes from the dark side of orbit.',
       baseStats: { maxHp: 90, maxMp: 125, str: 14, dex: 38, vit: 12, nrg: 22, dmg: 38, def: 10, spd: 2.1 },
       skills: [
@@ -51,7 +51,7 @@ export const ARCADE_VOID_REALM: RealmContent = {
       skillTrees: ['Stealth', 'Targeting', 'Extraction'],
     },
     {
-      id: 'turretwright', name: 'Turretwright', role: 'Support', icon: 'T', color: '#ffcf4a',
+      id: 'turretwright', name: 'Turretwright', role: 'Support', baseClass: 'hunter', icon: 'T', color: '#ffcf4a',
       lore: 'Engineers who turn scrap, crystals, and field batteries into little angry machines.',
       baseStats: { maxHp: 120, maxMp: 150, str: 16, dex: 22, vit: 22, nrg: 28, dmg: 20, def: 18, spd: 1.3 },
       skills: [

@@ -1,3 +1,4 @@
+import type { PlayerClass } from '../types';
 // Realm pack types — display metadata that overlays the upstream sim.
 //
 // A realm describes *how* the same underlying world should look and read.
@@ -39,6 +40,10 @@ export interface RealmFaction {
 export interface RealmClassSkin {
   /** Stable id; unique per realm. */
   id: string;
+  /** The upstream PlayerClass this skin actually runs as. Character creation
+   *  validates against the upstream classes, so without this a realm skin id
+   *  (steelcrusader, voidarcher, ...) is rejected with 400 INVALID_CLASS. */
+  baseClass: PlayerClass;
   /** Display name shown in character select, party frames, tooltips. */
   name: string;
   /** Combat role the player slots into; used for matchmaking / LFG. */

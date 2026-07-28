@@ -24,7 +24,7 @@ export const CLASSIC_REALM: RealmContent = {
   },
   classes: [
     {
-      id: 'steelcrusader', name: 'Steel Crusader', role: 'Tank', icon: '⚔', color: '#f58cba',
+      id: 'steelcrusader', name: 'Steel Crusader', role: 'Tank', baseClass: 'paladin', icon: '⚔', color: '#f58cba',
       lore: 'Sworn to the Order of the Dawn, Steel Crusaders ride at the vanguard of every holy war. Their hammers glow with righteous light.',
       baseStats: { maxHp: 190, maxMp: 80, str: 30, dex: 10, vit: 35, nrg: 14, dmg: 22, def: 34, spd: 1.0 },
       skills: [
@@ -36,7 +36,7 @@ export const CLASSIC_REALM: RealmContent = {
       skillTrees: ['Holy Order', "Crusader's Vow", 'Divine Wrath'],
     },
     {
-      id: 'voidarcher', name: 'Void Archer', role: 'DPS', icon: '\u{1F3F9}', color: '#abd473',
+      id: 'voidarcher', name: 'Void Archer', role: 'DPS', baseClass: 'hunter', icon: '\u{1F3F9}', color: '#abd473',
       lore: 'Void Archers peer beyond the veil between shots. Their arrows pass through dimensions, striking targets that haven\'t moved yet.',
       baseStats: { maxHp: 90, maxMp: 90, str: 12, dex: 36, vit: 12, nrg: 16, dmg: 32, def: 10, spd: 1.8 },
       skills: [
@@ -48,7 +48,7 @@ export const CLASSIC_REALM: RealmContent = {
       skillTrees: ['Marksmanship', 'Void Sight', 'Survivalist'],
     },
     {
-      id: 'warlock', name: 'Warlock', role: 'DPS', icon: '\u{1F52E}', color: '#9b59b6',
+      id: 'warlock', name: 'Warlock', role: 'DPS', baseClass: 'warlock', icon: '\u{1F52E}', color: '#9b59b6',
       lore: 'Warlocks bargain with entities that should not exist. Each spell is a contract, each summoning a debt.',
       baseStats: { maxHp: 75, maxMp: 190, str: 4, dex: 8, vit: 8, nrg: 38, dmg: 36, def: 6, spd: 1.2 },
       skills: [
@@ -60,7 +60,7 @@ export const CLASSIC_REALM: RealmContent = {
       skillTrees: ['Demonology', 'Affliction', 'Dark Pact'],
     },
     {
-      id: 'beasttamer', name: 'Beast Tamer', role: 'Support', icon: '\u{1F43A}', color: '#c79c6e',
+      id: 'beasttamer', name: 'Beast Tamer', role: 'Support', baseClass: 'druid', icon: '\u{1F43A}', color: '#c79c6e',
       lore: 'Raised by wolves, adopted by bears, befriended by eagles — Beast Tamers speak every tongue but human.',
       baseStats: { maxHp: 120, maxMp: 110, str: 18, dex: 22, vit: 20, nrg: 16, dmg: 20, def: 18, spd: 1.5 },
       skills: [
@@ -72,7 +72,7 @@ export const CLASSIC_REALM: RealmContent = {
       skillTrees: ['Wild Bond', 'Primal Fury', 'Beast Mastery'],
     },
     {
-      id: 'chronomancer', name: 'Chronomancer', role: 'DPS', icon: '⏳', color: '#00bcd4',
+      id: 'chronomancer', name: 'Chronomancer', role: 'DPS', baseClass: 'mage', icon: '⏳', color: '#00bcd4',
       lore: "Chronomancers don't cast spells — they edit time. They rewind wounds, fast-forward decay, and pause enemies in temporal bubbles.",
       baseStats: { maxHp: 85, maxMp: 170, str: 6, dex: 14, vit: 10, nrg: 36, dmg: 28, def: 10, spd: 1.7 },
       skills: [
