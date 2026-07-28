@@ -244,12 +244,27 @@ export function buildWebSocketAuthMessage(
   // Couch co-op secondary session (same household). Additive: omitted (not
   // false) for every normal session, so the wire only widens.
   coop = false,
-): { t: 'auth'; token: string; character: number; clientSeed: string; coop?: true } {
-  const msg: { t: 'auth'; token: string; character: number; clientSeed: string; coop?: true } = {
-    t: 'auth',
+): {
+  t: typeof ONLINE_WORLD_AUTH_TYPE;
+  token: string;
+  character: number;
+  clientSeed: string;
+  timerWire: typeof STABLE_TIMER_WIRE_VERSION;
+  coop?: true;
+} {
+  const msg: {
+    t: typeof ONLINE_WORLD_AUTH_TYPE;
+    token: string;
+    character: number;
+    clientSeed: string;
+    timerWire: typeof STABLE_TIMER_WIRE_VERSION;
+    coop?: true;
+  } = {
+    t: ONLINE_WORLD_AUTH_TYPE,
     token,
     character: characterId,
     clientSeed,
+    timerWire: STABLE_TIMER_WIRE_VERSION,
   };
   if (coop) msg.coop = true;
   return msg;
