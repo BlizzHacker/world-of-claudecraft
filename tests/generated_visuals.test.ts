@@ -11,7 +11,7 @@ import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { GENERATED_REALM_BODIES, GENERATED_VISUALS } from '../src/render/characters/manifest.generated';
-import { VISUALS } from '../src/render/characters/manifest';
+import { VISUALS, isVisualLazy } from '../src/render/characters/manifest';
 
 const STORE = process.env.CR_REALMS_DIR ?? '/mnt/usb4/moveweight-assets/cr-realms';
 const storePresent = existsSync(STORE);
@@ -91,4 +91,21 @@ describe('generated realm visuals', () => {
     }
     expect(missing, `missing GLBs: ${missing.slice(0, 5).join(', ')}`).toHaveLength(0);
   });
+});
+
+// A generated body that joins the boot sweep is a release-blocking regression:
+// the sweep is eager and blocking, so 970 bodies is ~750MB of parallel fetches
+// before world entry, and prewarm then builds views against a half-filled cache
+// and throws "character asset not preloaded" for every one of them. renderer.ts
+// requires the whole realm bank to load on demand instead.
+it("no generated realm body joins the boot preload sweep", () => {
+  const eager = Object.entries(GENERATED_VISUALS).filter(([, def]) => !def.lazyPreload);
+  expect(eager.map(([k]) => k)).toEqual([]);
+});
+
+it("every generated body is reachable through the lazy path", () => {
+  for (const [key, def] of Object.entries(GENERATED_VISUALS)) {
+    expect(isVisualLazy(key)).toBe(true);
+    expect(def.url.startsWith('/cr-realms/')).toBe(true);
+  }
 });
