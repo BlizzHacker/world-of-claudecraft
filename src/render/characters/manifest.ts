@@ -775,19 +775,47 @@ const HAND_VISUALS: Record<string, VisualDef> = {
   realm_infernal_crimson_behemoth: {
     url: `${REALM_MODELS}/infernal/meshy_ai_crimson_infernal_behe_biped_meshy_ai_meshy_merged_animations_27bab94d.glb`,
     height: 2.9,
-    clips: meshyBiped([], { run: 'RunFast' }),
+    // The export carries only locomotion + jumps; there is no idle/hit/death/cast
+    // take, so Walking stands in for rest and reactions and the spin-jump doubles as
+    // the swing. Names verified against the shipped GLB (scripts/audit_clips.mjs).
+    clips: {
+      idle: 'Walking',
+      walk: 'Walking',
+      run: 'RunFast',
+      attack: ['360_Power_Spin_Jump'],
+      death: 'Walking',
+      hit: ['Walking'],
+    },
     lazyPreload: true,
   },
   realm_infernal_horned_demon: {
     url: `${REALM_MODELS}/infernal/demon-horned_1a19d7ca.glb`,
     height: HUMANOID_H,
-    clips: meshyBiped(),
+    // Locomotion-only export: no idle/hit/death/cast take exists, so Walking covers
+    // rest and reactions rather than leaving the slots unresolved (bind pose).
+    clips: {
+      idle: 'Walking',
+      walk: 'Walking',
+      run: 'Running',
+      attack: ['Running'],
+      death: 'Walking',
+      hit: ['Walking'],
+    },
     lazyPreload: true,
   },
   realm_infernal_skullbeast: {
     url: `${REALM_MODELS}/infernal/skullbeast_5d2ecebf.glb`,
     height: 2.4,
-    clips: meshyBiped(['Left_Slash'], { walk: 'Monster_Walk', run: 'Running' }),
+    // Unsteady_Walk is the closest thing to an idle this export has; the standard
+    // Idle/Hit/Death/Cast/Basic_Jump takes are simply not in the file.
+    clips: {
+      idle: 'Unsteady_Walk',
+      walk: 'Monster_Walk',
+      run: 'Running',
+      attack: ['Left_Slash'],
+      death: 'Unsteady_Walk',
+      hit: ['Unsteady_Walk'],
+    },
     lazyPreload: true,
   },
   // Playable Infernal archetypes use one distinct, full-size body each. They
@@ -843,13 +871,16 @@ const HAND_VISUALS: Record<string, VisualDef> = {
       `${REALM_MODELS}/infernal/dark_paladin_reaping_swing.glb`,
     ],
     height: 2.35,
+    // The commander mesh and its two sidecar takes export Blender-style
+    // "Armature|<take>|baselayer" clip names; the bare take names never existed, so
+    // every slot missed and the body stood in bind pose.
     clips: {
-      idle: 'Walking',
-      walk: 'Walking',
-      run: 'Running',
-      attack: ['Reaping_Swing'],
-      death: 'Walking',
-      hit: ['Walking'],
+      idle: 'Armature|walking_man|baselayer',
+      walk: 'Armature|walking_man|baselayer',
+      run: 'Armature|running|baselayer',
+      attack: ['Armature|Reaping_Swing|baselayer'],
+      death: 'Armature|walking_man|baselayer',
+      hit: ['Armature|walking_man|baselayer'],
     },
     lazyPreload: true,
   },
