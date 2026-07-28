@@ -2033,6 +2033,14 @@ function generatedBodyFor(
   return pool[stableHash(seed) % pool.length] ?? null;
 }
 
+
+/** Pool lookup used by every realm branch. Runs AFTER an explicit per-template
+ *  override so curated art always wins, but BEFORE the family fallbacks that would
+ *  otherwise collapse a whole family onto one shared body. */
+function poolFirst(realm: string, family: string | undefined, templateId: string | undefined): string | null {
+  return generatedBodyFor(realm, family, templateId);
+}
+
 export function visualKeyFor(e: Entity): string {
   const bodyOverride = overrideVisualKeyForEntity(e);
   if (bodyOverride) return bodyOverride;
@@ -2089,6 +2097,12 @@ export function visualKeyFor(e: Entity): string {
       if (family && ['beast', 'spider', 'mudfin'].includes(family)) {
         return override ?? realmFamily ?? FAMILY_KEYS[family] ?? 'mob_wolf';
       }
+      // Spread humanoid-shaped families across the generated pool instead of the
+      // single per-family body; curated overrides above already returned.
+      {
+        const pooled = poolFirst(realm, family, e.templateId);
+        if (pooled) return pooled;
+      }
       if (family === 'troll') return 'realm_infernal_horned_demon';
       if (family === 'ogre') return 'realm_infernal_crimson_behemoth';
       if (family === 'undead') {
@@ -2105,12 +2119,11 @@ export function visualKeyFor(e: Entity): string {
     // must never be replaced by the Infernal beast-family fallback just because
     // the active realm has a themed monster family.
     if (override) return override;
-    if (realmFamily) return realmFamily;
-    // Generated pool: gives each realm hundreds of distinct bodies instead of one
-    // per family. Explicit mappings above always win; this only replaces what would
-    // otherwise be a generic KayKit fallback.
+    // Pool ahead of realmFamily: REALM_MOB_FAMILY_KEYS resolves ONE body per family,
+    // which shadowed the entire generated roster wherever it was defined.
     const generated = generatedBodyFor(realm, family, e.templateId);
     if (generated) return generated;
+    if (realmFamily) return realmFamily;
     return (family && FAMILY_KEYS[family]) || REALM_MOB_DEFAULTS[realm] || 'mob_bandit';
   }
   // npcs — Brother Aldric recurs in every hub under suffixed ids
