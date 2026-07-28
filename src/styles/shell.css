@@ -8187,3 +8187,17 @@
     }
   }
 }
+
+
+/* The character-select news dock was removed. It was position:absolute at 30vw over
+   the stage, so an empty container still covered the roster and the class details.
+   Hard-hide it: `hidden` alone loses to the .cs-news-panel display rule. */
+#charselect-news[hidden],
+body:not(.mobile-touch) #charselect-panel.cs-wow #charselect-news[hidden] {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  pointer-events: none !important;
+}

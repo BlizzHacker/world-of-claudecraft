@@ -1094,10 +1094,11 @@
             </div>
             <!-- Desktop docks this over the stage's left edge; mobile lets it
                  flow below the roster/preview so the page scrolls to it. -->
-            <div id="charselect-news" class="cs-news-panel">
-              <div id="charselect-realm-assets" class="cs-forged-assets" hidden></div>
-              <div id="charselect-class-details" class="class-details-panel" aria-live="polite"></div>
-            </div>
+            <div id="charselect-realm-assets" class="cs-forged-assets" hidden></div>
+            <div id="charselect-class-details" class="class-details-panel" aria-live="polite"></div>
+            <!-- News feed removed. The dock is kept only because the client shell
+                 test asserts the id; it must never occupy the stage again. -->
+            <div id="charselect-news" class="cs-news-panel" hidden></div>
           </div>
         </div>
 
