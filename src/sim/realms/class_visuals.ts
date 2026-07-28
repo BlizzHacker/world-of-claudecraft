@@ -2,7 +2,10 @@ import type { PlayerClass } from '../types';
 import { infernalCharacterSelection } from './infernal_classes';
 import type { RealmId } from './types';
 
-export type RealmRuntimeVisualKey =
+// Widened to include pipeline-generated bodies: the per-realm rosters bind to keys
+// from GENERATED_VISUALS, which are not enumerable in this union.
+export type RealmRuntimeVisualKey = string;
+export type RealmRuntimeVisualKeyLegacy =
   | 'realm_cryptic_bone_herald'
   | 'realm_infernal_crimson_behemoth'
   | 'realm_infernal_horned_demon'

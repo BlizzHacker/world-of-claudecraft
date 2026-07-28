@@ -1,4 +1,5 @@
 import type { PlayerClass } from '../types';
+import { REALM_FACTIONS, REALM_ROSTERS } from './rosters.generated';
 
 export type InfernalLegend =
   | 'First Descent'
@@ -65,7 +66,9 @@ export interface InfernalCharacterSelection {
   readonly name: string;
   readonly engineClass: PlayerClass;
   readonly factionSide: 'heaven' | 'hell';
-  readonly visualKey: InfernalCharacterVisualKey;
+  /** Any registered visual key. Was narrowed to the infernal union while this
+   *  roster was infernal-only; every realm now supplies its own bodies. */
+  readonly visualKey: string;
 }
 
 const entry = (
@@ -235,12 +238,33 @@ export function infernalHeroClassesForRealm(realm: string): readonly InfernalHer
   return realm.toLowerCase().replace(/[^a-z0-9]+/g, '') === 'infernal' ? INFERNAL_HERO_CLASSES : [];
 }
 
+const ROSTER_CACHE = new Map<string, readonly InfernalCharacterSelection[]>();
+
+/** Adapt a generated realm roster into the selection shape the picker consumes. */
+function rosterSelectionsFor(realmKey: string): readonly InfernalCharacterSelection[] {
+  const cached = ROSTER_CACHE.get(realmKey);
+  if (cached) return cached;
+  const rows = REALM_ROSTERS[realmKey] ?? [];
+  const factions = REALM_FACTIONS[realmKey] ?? [];
+  const out: InfernalCharacterSelection[] = rows.map((r) => ({
+    id: r.id,
+    name: r.name,
+    engineClass: r.engineClass,
+    // factionSide is a two-value union used for styling; keep the real faction on
+    // the entry name and fold the roster's factions onto it by index.
+    factionSide: factions.indexOf(r.faction) === 0 ? 'heaven' : 'hell',
+    visualKey: r.visualKey,
+  }));
+  ROSTER_CACHE.set(realmKey, out);
+  return out;
+}
+
 export function infernalCharacterSelectionsForRealm(
   realm: string,
 ): readonly InfernalCharacterSelection[] {
-  return realm.toLowerCase().replace(/[^a-z0-9]+/g, '') === 'infernal'
-    ? INFERNAL_CHARACTER_SELECTIONS
-    : [];
+  const key = realm.toLowerCase().replace(/[^a-z0-9]+/g, '');
+  if (key === 'infernal') return INFERNAL_CHARACTER_SELECTIONS;
+  return rosterSelectionsFor(key);
 }
 
 /**
