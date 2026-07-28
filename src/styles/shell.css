@@ -8201,3 +8201,10 @@ body:not(.mobile-touch) #charselect-panel.cs-wow #charselect-news[hidden] {
   border: 0 !important;
   pointer-events: none !important;
 }
+
+/* cache-bust 2026-07-28: Cloudflare cached a 404 for the previous asset hash
+   during a rebuild window and kept serving it, so the stylesheet arrived as
+   text/plain and every page rendered unstyled. Changing content changes the
+   content hash, which yields a URL the edge has never cached. */
+
+:root { --cr-asset-epoch: 20260728; }
