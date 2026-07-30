@@ -1,6 +1,6 @@
 # v0.32.0 catch-up: the judgment queue
 
-`replay.sh` takes the merge from **219 conflicts to 56**. Everything below still
+`replay.sh` takes the merge from **219 conflicts to 56 (verified by a clean replay)**. Everything below still
 needs a human decision.
 
 ## Needs a product call, not a merge call

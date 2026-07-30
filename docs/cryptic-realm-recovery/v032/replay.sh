@@ -17,11 +17,18 @@ cd "$REPO"
 # The stage helper races git's index lock on a busy box, and one pass can leave
 # a straggler whose sibling resolved after it was checked. Clear and run twice.
 stage() {
-  rm -f "$(git rev-parse --git-dir)/index.lock" 2>/dev/null || true
   sed "s#/opt/cr-measure#$REPO#" "$V030/stage-resolved.sh" > /tmp/stage32.sh
-  bash /tmp/stage32.sh >/dev/null
-  rm -f "$(git rev-parse --git-dir)/index.lock" 2>/dev/null || true
-  bash /tmp/stage32.sh
+  # git add races its own index lock on a loaded box, and a single pass silently
+  # drops whichever file lost the race. Loop until the count stops moving.
+  local prev=-1 now
+  for _ in 1 2 3 4 5; do
+    rm -f "$(git rev-parse --git-dir)/index.lock" 2>/dev/null || true
+    bash /tmp/stage32.sh >/dev/null 2>&1 || true
+    now=$(git diff --name-only --diff-filter=U | wc -l)
+    [ "$now" = "$prev" ] && break
+    prev=$now
+  done
+  echo "   remaining conflicts: $now"
 }
 
 echo "== 1. merge =="
