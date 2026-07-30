@@ -1,0 +1,2 @@
+# Decisions carried forward from the v0.30.0 pass, re-verified against v0.32.0.
+ours            src/ui/options_window.ts
