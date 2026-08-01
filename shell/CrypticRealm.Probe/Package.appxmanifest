@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Diagnostic probe, never shipped. A DIFFERENT identity from the real app so
+     both can be installed side by side and compared in one sitting. -->
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  IgnorableNamespaces="uap mp">
+
+  <Identity Name="MOVEWEIGHT.CrypticRealmProbe"
+            Publisher="CN=6375D74B-5E4F-45B4-B246-B29507C1332A"
+            Version="0.1.0.0" />
+
+  <mp:PhoneIdentity PhoneProductId="2b7e4f91-6c33-49a5-8d12-4e9f0a3b67d8"
+                    PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+
+  <Properties>
+    <DisplayName>CR Probe</DisplayName>
+    <PublisherDisplayName>MOVE WEIGHT</PublisherDisplayName>
+    <Description>Diagnostic probe: bare UWP with no WebView2.</Description>
+    <Logo>Assets\StoreLogo.png</Logo>
+  </Properties>
+
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Xbox" MinVersion="10.0.19041.0" MaxVersionTested="10.0.26200.0" />
+    <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.19041.0" MaxVersionTested="10.0.26200.0" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="en-US" />
+  </Resources>
+
+  <Applications>
+    <Application Id="App"
+                 Executable="$targetnametoken$.exe"
+                 EntryPoint="CrypticRealm.Probe.App">
+      <uap:VisualElements
+        DisplayName="CR Probe"
+        Square150x150Logo="Assets\Square150x150Logo.png"
+        Square44x44Logo="Assets\Square44x44Logo.png"
+        Description="Diagnostic probe: bare UWP with no WebView2."
+        BackgroundColor="#0B1020">
+        <uap:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="#0B1020" />
+      </uap:VisualElements>
+    </Application>
+  </Applications>
+
+  <Capabilities>
+    <Capability Name="internetClient" />
+  </Capabilities>
+</Package>

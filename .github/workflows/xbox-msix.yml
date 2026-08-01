@@ -65,6 +65,23 @@ jobs:
             /p:GenerateAppInstallerFile=false `
             /v:minimal /consoleloggerparameters:Summary
 
+      - name: Build diagnostic probe (bare UWP, no WebView2)
+        shell: pwsh
+        run: |
+          # Bisect artefact, never shipped. Both real apps die right after the
+          # splash on real hardware and neither has ever been seen running, so
+          # there is no known-good baseline. This is the same UWP/WinUI 2 host
+          # with WebView2 removed entirely: if it launches, WebView2 is the
+          # fault; if it dies too, sideloaded UWP itself is broken there.
+          msbuild shell\CrypticRealm.Probe\CrypticRealm.Probe.csproj `
+            /p:Configuration=Release `
+            /p:Platform=x64 `
+            /p:AppxBundle=Never `
+            /p:UapAppxPackageBuildMode=SideloadOnly `
+            /p:AppxPackageSigningEnabled=false `
+            /p:GenerateAppInstallerFile=false `
+            /v:minimal /consoleloggerparameters:Summary
+
       - name: Verify the sideload dependency set was emitted
         shell: pwsh
         run: |
