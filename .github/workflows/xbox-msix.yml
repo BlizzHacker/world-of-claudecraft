@@ -22,6 +22,30 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Build the client and stage it into the package
+        shell: pwsh
+        run: |
+          # The console app ships the client INSIDE the package so it boots with
+          # no network. cr-realms is excluded deliberately: every realm body is
+          # lazyPreload and fetched on demand, and including them would add 2GB
+          # for assets an offline session never touches.
+          npm ci
+          npm run build
+          $dest = 'shell\CrypticRealm.Shell\web'
+          if (Test-Path $dest) { Remove-Item $dest -Recurse -Force }
+          New-Item -ItemType Directory -Path $dest | Out-Null
+          robocopy dist $dest /E /XD cr-realms /NFL /NDL /NJH /NJS /NP | Out-Null
+          if ($LASTEXITCODE -ge 8) { Write-Error "staging failed ($LASTEXITCODE)"; exit 1 }
+          $n = (Get-ChildItem $dest -Recurse -File).Count
+          $mb = [math]::Round(((Get-ChildItem $dest -Recurse -File | Measure-Object Length -Sum).Sum / 1MB), 1)
+          Write-Host "staged $n files, $mb MB"
+          if (-not (Test-Path "$dest\index.html")) { Write-Error 'index.html missing'; exit 1 }
+
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v2
 

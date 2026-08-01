@@ -84,6 +84,11 @@
     <Content Include="Assets\Wide310x150Logo.png" />
     <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\gamepad-polyfill.js" />
+    <!-- The built client, copied into web/ by CI before packaging. A
+         wildcard because it is thousands of files. -->
+    <Content Include="web\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <!-- The web app itself, packaged locally and served from a virtual host.
