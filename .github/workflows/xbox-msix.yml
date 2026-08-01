@@ -47,15 +47,34 @@ jobs:
       - name: Build MSIX
         shell: pwsh
         run: |
+          # StoreAndSideload, not StoreUpload. StoreUpload emits only the
+          # .msixupload, whose sideload sibling REFERENCES its framework
+          # packages without shipping them. Deploying that to a console
+          # installs cleanly and then dies immediately after the splash,
+          # because the app cannot start managed code without
+          # Microsoft.NET.Native.Runtime and has no XAML without
+          # Microsoft.UI.Xaml. Sideload mode emits AppPackages\..._Test\
+          # Dependencies\x64\*.appx, which is what a console actually needs.
           msbuild shell\CrypticRealm.Shell\CrypticRealm.Shell.csproj `
             /p:Configuration=Release `
             /p:Platform=x64 `
             /p:AppxBundle=Never `
             /p:AppxBundlePlatforms=x64 `
-            /p:UapAppxPackageBuildMode=StoreUpload `
+            /p:UapAppxPackageBuildMode=StoreAndSideload `
             /p:AppxPackageSigningEnabled=false `
             /p:GenerateAppInstallerFile=false `
             /v:minimal /consoleloggerparameters:Summary
+
+      - name: Verify the sideload dependency set was emitted
+        shell: pwsh
+        run: |
+          # Guard the exact failure above: a sideload package with no
+          # Dependencies folder is unrunnable on a console and the symptom
+          # (splash, then nothing) points nowhere near the real cause.
+          $deps = Get-ChildItem -Recurse -Path shell -Filter *.appx -ErrorAction SilentlyContinue |
+                  Where-Object { $_.FullName -like '*Dependencies*' }
+          if (-not $deps) { Write-Error 'no framework dependencies emitted'; exit 1 }
+          $deps | ForEach-Object { Write-Host ("  {0,12:N0}  {1}" -f $_.Length, $_.Name) }
 
       - name: Locate output
         shell: pwsh
@@ -114,5 +133,6 @@ jobs:
           path: |
             shell/**/*.msix
             shell/**/*.msixupload
+            shell/**/Dependencies/**/*.appx
             shell/**/*.cer
           if-no-files-found: error
