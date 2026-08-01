@@ -2,6 +2,7 @@
 // NPC id, druid/polymorph form) onto a rigged glTF asset + clip names + kit.
 // Pure data + dispatch — no three.js imports, no loading.
 
+import { isBoundedResidency } from './residency';
 import { MECH_CHROMAS, type MechChroma } from '../../sim/content/skins';
 import { offhandMirrorsWeaponSkin } from '../../sim/content/weapon_skin_rules';
 import { WEAPON_SKINS } from '../../sim/content/weapon_skins';
@@ -2057,6 +2058,13 @@ function generatedBodyFor(
   family: string | undefined,
   templateId: string | undefined,
 ): string | null {
+  // A console browser has a hard resident-memory ceiling and the pool exists to
+  // spread a family across HUNDREDS of distinct bodies, each with its own
+  // base/normal/metallic set. Twenty of them is a few hundred MB of texture
+  // residency that nothing can reclaim, which is what trips
+  // SBOX_FATAL_MEMORY_EXCEEDED. Falling through to the shared family bodies
+  // costs visible variety and keeps the world on screen.
+  if (isBoundedResidency()) return null;
   if (!family || !GENERATED_POOL_FAMILIES.has(family)) return null;
   const pool = GENERATED_REALM_BODIES[realm];
   if (!pool || pool.length === 0) return null;

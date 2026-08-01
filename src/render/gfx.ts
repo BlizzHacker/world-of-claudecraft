@@ -7,6 +7,7 @@ import {
   consoleGenerationFrom,
   consoleNeedsConstrainedMemory,
 } from '../game/console_generation';
+import { setBoundedResidency } from './characters/residency';
 
 // Quality tiers: every tier-dependent knob keys off this module instead of
 // scattered LOW_GFX ternaries.
@@ -1149,12 +1150,15 @@ export function gfxSoftwareRendering(): boolean {
 // MUST call initGfxTier() right after creating its WebGLRenderer and before
 // building any scene content.
 export let GFX: GfxSettings = settingsFor(tierFromHints(runtimeHints(), false), runtimeHints());
+// Publish the ceiling to the pure manifest layer, which cannot import this file.
+setBoundedResidency(GFX.boundedResidency);
 
 export function initGfxTier(webgl: THREE.WebGLRenderer): GfxTier {
   const hints = { ...runtimeHints(), gpuRenderer: rendererName(webgl) };
   softwareGlDetected = isSoftwareGL(webgl);
   const tier = tierFromHints(hints, softwareGlDetected);
   GFX = settingsFor(tier, hints);
+  setBoundedResidency(GFX.boundedResidency);
   return tier;
 }
 
