@@ -255,15 +255,16 @@ export class CharacterVisual {
     // wearer class's independent mainhand and offhand layout.
     // Override only the held-item layout on a shallow def clone, leaving the rest of
     // the def (clips/height/tint) intact and never mutating the shared cached def.
-    const resolvedDef = resolveClipMap(prep.def.clips, [...prep.clips.keys()]);
+    const resolvedClips = resolveClipMap(prep.def.clips, [...prep.clips.keys()]);
     this.def = weaponOverride
       ? {
           ...prep.def,
+          clips: resolvedClips,
           attach: weaponOverride.attach,
           weaponSlots: weaponOverride.weaponSlots,
           offhandSlot: weaponOverride.offhandSlot,
         }
-      : prep.def;
+      : { ...prep.def, clips: resolvedClips };
     this.key = key;
     this.entityColor = entityColor;
     this.skinIndex = skinIndex;
@@ -349,7 +350,7 @@ export class CharacterVisual {
     this.root.add(this.clickProxy);
 
     this.mixer = new THREE.AnimationMixer(this.model);
-    for (const name of [...clipNamesOf(prep.def), ...SKIN_ATTACK_CLIP_NAMES]) {
+    for (const name of [...clipNamesOf(this.def), ...SKIN_ATTACK_CLIP_NAMES]) {
       const clip = prep.clips.get(name);
       if (clip) this.actions.set(name, this.mixer.clipAction(clip));
     }

@@ -1975,6 +1975,8 @@ const OVERRIDE_AUTO_CLIPS: ClipMap = {
   walk: '__auto__',
   run: '__auto__',
   attack: ['__auto__'],
+  hit: ['__auto__'],
+  cast: '__auto__',
   death: '__auto__',
 };
 
