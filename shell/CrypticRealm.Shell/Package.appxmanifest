@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Identity must stay byte identical to Partner Center product 9P34BZH26X6Z
+     (Name + Publisher), or the Store treats this as a different app and the
+     existing desktop submission cannot be updated from it.
+
+     Version is ahead of the 0.23.0.1 hosted web app package it replaces. That
+     package pointed StartPage at https://crypticrealm.com/, which runs on the
+     legacy EdgeHTML engine on Xbox; EdgeHTML has no WebGL2 and three.js dropped
+     WebGL1 in r163, so it renders nothing on console. This package hosts
+     WebView2 (Chromium) instead.
+
+     ProcessorArchitecture is x64, not neutral: a C# UWP app cannot be neutral.
+     Xbox is x64, so this covers console and 64-bit desktop. -->
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  IgnorableNamespaces="uap mp">
+
+  <Identity Name="MOVEWEIGHT.CrypticRealm"
+            Publisher="CN=6375D74B-5E4F-45B4-B246-B29507C1332A"
+            Version="0.24.0.0" />
+
+  <mp:PhoneIdentity PhoneProductId="8c41d5e2-7a93-4b16-9f20-3d5e1a6b84c7"
+                    PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+
+  <Properties>
+    <DisplayName>Cryptic Realm</DisplayName>
+    <PublisherDisplayName>MOVE WEIGHT</PublisherDisplayName>
+    <Description>A classic style browser MMO across nine realms, playable with the controller.</Description>
+    <Logo>Assets\StoreLogo.png</Logo>
+  </Properties>
+
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Xbox" MinVersion="10.0.19041.0" MaxVersionTested="10.0.26200.0" />
+    <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.19041.0" MaxVersionTested="10.0.26200.0" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="en-US" />
+  </Resources>
+
+  <Applications>
+    <Application Id="App"
+                 Executable="$targetnametoken$.exe"
+                 EntryPoint="CrypticRealm.Shell.App">
+      <uap:VisualElements
+        DisplayName="Cryptic Realm"
+        Square150x150Logo="Assets\Square150x150Logo.png"
+        Square44x44Logo="Assets\Square44x44Logo.png"
+        Description="A classic style browser MMO across nine realms, playable with the controller."
+        BackgroundColor="#0B1020">
+        <uap:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="#0B1020" />
+      </uap:VisualElements>
+    </Application>
+  </Applications>
+
+  <Capabilities>
+    <!-- The client is served from crypticrealm.com; the app ships no game
+         content of its own. -->
+    <Capability Name="internetClient" />
+  </Capabilities>
+</Package>

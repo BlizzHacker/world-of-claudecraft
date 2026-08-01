@@ -1,0 +1,118 @@
+name: Build Xbox MSIX
+
+# The UWP workload is several GB and is not installed on the dev machine, so the
+# packaged console app is built here. Diagnostics run before the build so a
+# missing component is identifiable from one failed run rather than three.
+#
+# This package replaces the 0.23.0.1 hosted web app. That one set Application
+# StartPage to https://crypticrealm.com/, which on Xbox runs the legacy EdgeHTML
+# engine; EdgeHTML has no WebGL2 and three.js dropped WebGL1 in r163, so it
+# installs, launches and renders nothing. This one hosts WebView2 (Chromium).
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'shell/**'
+      - '.github/workflows/xbox-msix.yml'
+
+jobs:
+  build:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Toolchain diagnostics
+        shell: pwsh
+        run: |
+          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+          $ip = & $vswhere -products * -format value -property installationPath | Select-Object -First 1
+          Write-Host "--- UWP (AppxPackage) targets ---"
+          $appx = Join-Path $ip 'MSBuild\Microsoft\VisualStudio\v17.0\AppxPackage'
+          if (Test-Path $appx) { Get-ChildItem $appx | Select-Object -First 8 Name }
+          else { Write-Host "MISSING: $appx  (UWP workload not present on this image)" }
+          Write-Host "--- MSBuild ---"
+          msbuild -version
+
+      - name: Restore
+        shell: pwsh
+        run: |
+          msbuild shell\CrypticRealm.Shell.sln /t:Restore `
+            /p:Configuration=Release /p:Platform=x64 `
+            /p:RestorePackagesConfig=true /v:minimal
+
+      - name: Build MSIX
+        shell: pwsh
+        run: |
+          msbuild shell\CrypticRealm.Shell\CrypticRealm.Shell.csproj `
+            /p:Configuration=Release `
+            /p:Platform=x64 `
+            /p:AppxBundle=Never `
+            /p:AppxBundlePlatforms=x64 `
+            /p:UapAppxPackageBuildMode=StoreUpload `
+            /p:AppxPackageSigningEnabled=false `
+            /p:GenerateAppInstallerFile=false `
+            /v:minimal /consoleloggerparameters:Summary
+
+      - name: Locate output
+        shell: pwsh
+        run: |
+          $pkgs = Get-ChildItem -Recurse -Include *.msix,*.msixupload,*.appx `
+            -Path shell -ErrorAction SilentlyContinue
+          if (-not $pkgs) { Write-Error "no package produced"; exit 1 }
+          $pkgs | ForEach-Object { Write-Host ("{0}  {1:N0} bytes" -f $_.FullName, $_.Length) }
+
+      - name: Validate package contents
+        shell: pwsh
+        run: |
+          # A package that builds but ships no polyfill installs fine and then
+          # ignores the controller entirely, which is the hardest possible thing
+          # to diagnose from a console. Assert it is inside the package.
+          $sdk = Get-ChildItem "${env:ProgramFiles(x86)}\Windows Kits\10\bin" -Directory |
+                 Where-Object { Test-Path (Join-Path $_.FullName 'x64\makeappx.exe') } |
+                 Sort-Object Name -Descending | Select-Object -First 1
+          $makeappx = Join-Path $sdk.FullName 'x64\makeappx.exe'
+
+          $msix = Get-ChildItem -Recurse -Filter *.msix -Path shell |
+                  Where-Object { $_.FullName -like '*_Test*' } |
+                  Select-Object -First 1
+          if (-not $msix) { Write-Error 'no sideload msix to inspect'; exit 1 }
+
+          $dest = Join-Path $env:RUNNER_TEMP 'unpacked'
+          & $makeappx unpack /p $msix.FullName /d $dest /nv | Out-Null
+          if ($LASTEXITCODE -ne 0) { Write-Error 'unpack failed'; exit 1 }
+
+          $polyfill = Join-Path $dest 'Assets\gamepad-polyfill.js'
+          if (-not (Test-Path $polyfill)) {
+            Write-Error 'gamepad-polyfill.js missing: the app would ignore the controller'
+            exit 1
+          }
+          Write-Host ("polyfill present: {0:N0} B" -f (Get-Item $polyfill).Length)
+
+          [xml]$m = Get-Content (Join-Path $dest 'AppxManifest.xml')
+          $id = $m.Package.Identity
+          Write-Host ("identity: {0} {1} {2}" -f $id.Name, $id.Version, $id.ProcessorArchitecture)
+          # Identity drift means the Store treats this as a different product and
+          # the existing submission cannot be updated from it.
+          if ($id.Name -ne 'MOVEWEIGHT.CrypticRealm') {
+            Write-Error "identity name drifted from Partner Center product 9P34BZH26X6Z"; exit 1
+          }
+          if ($id.Publisher -ne 'CN=6375D74B-5E4F-45B4-B246-B29507C1332A') {
+            Write-Error "publisher drifted from the Partner Center product"; exit 1
+          }
+          $fams = $m.Package.Dependencies.TargetDeviceFamily | ForEach-Object { $_.Name }
+          Write-Host ("device families: " + ($fams -join ', '))
+          if ($fams -notcontains 'Windows.Xbox') { Write-Error 'Xbox family missing'; exit 1 }
+
+      - name: Upload packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: cryptic-realm-xbox
+          path: |
+            shell/**/*.msix
+            shell/**/*.msixupload
+            shell/**/*.cer
+          if-no-files-found: error
