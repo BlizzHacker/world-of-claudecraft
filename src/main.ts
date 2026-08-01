@@ -80,7 +80,7 @@ import { mouselookReleaseFacing } from './game/mouselook_release';
 import { diagonalMovementVisualFacing } from './game/movement_visual';
 import { music } from './game/music';
 import { tryNearbyInteraction } from './game/nearby_interaction';
-import { isOfflineModeAvailable } from './game/offline_mode_gate';
+import { isOfflineModeAvailable, isPackagedConsoleApp } from './game/offline_mode_gate';
 import { createPerfMonitor } from './game/perf';
 import { initPerfNudge } from './game/perf_nudge';
 import { startPerfReporter } from './game/perf_reporter';
@@ -9150,7 +9150,10 @@ function wireStartScreens(): void {
   // Offline mode runs an unauthenticated local Sim with no server authority:
   // a dev/local-testing convenience only. Disabled in production builds,
   // unchanged (enabled) under `npm run dev`.
-  const offlineAvailable = isOfflineModeAvailable(import.meta.env.DEV);
+  const offlineAvailable = isOfflineModeAvailable(
+    import.meta.env.DEV,
+    isPackagedConsoleApp(location.hostname),
+  );
 
   const resumeOnlineSession = async (): Promise<void> => {
     if (!api.token && !hydrateApiFromSavedSession()) {

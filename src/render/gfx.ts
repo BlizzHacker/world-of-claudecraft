@@ -3,6 +3,10 @@ import { NATIVE_APP } from '../client_origin';
 import { EFFECTS_QUALITY_LOW_CUTOFF } from '../game/ui_effects_profile';
 import { FAR_ANIM_RANGE_SCALE_MAX } from './crowd_lod';
 import { isSoftwareRendererName } from './software_renderer';
+import {
+  consoleGenerationFrom,
+  consoleNeedsConstrainedMemory,
+} from '../game/console_generation';
 
 // Quality tiers: every tier-dependent knob keys off this module instead of
 // scattered LOW_GFX ternaries.
@@ -62,8 +66,11 @@ export interface GfxRuntimeHints {
   gpuRenderer?: string;
   nativeApp?: boolean;
   platform?: 'ios' | 'android' | 'other';
-  /** Game console browser (Xbox). Desktop-class hints, phone-class budget. */
+  /** Game console browser (Xbox). Desktop-class hints, console-class budget. */
   xboxConsole?: boolean;
+  /** Console model stamped by the packaged shell (data-console); absent in a
+   *  plain console browser, which then takes the cautious generation. */
+  consoleModel?: string;
   graphicsPreset?: number;
   terrainDetail?: number;
   foliageDensity?: number;
@@ -687,6 +694,7 @@ function settingsFor(tier: GfxTier, hints?: Partial<GfxRuntimeHints>): GfxSettin
       coarsePointer: hints?.coarsePointer ?? false,
       narrowViewport: hints?.narrowViewport ?? false,
       xboxConsole: hints?.xboxConsole ?? false,
+      consoleModel: hints?.consoleModel,
     });
   let settings: GfxSettings = {
     graphicsConfigVersion: GFX_CONFIG_VERSION,
@@ -858,6 +866,10 @@ function runtimeHints(): GfxRuntimeHints {
     nativeApp: NATIVE_APP,
     platform: mobilePlatformFromNavigator(nav),
     xboxConsole: typeof navigator !== 'undefined' && /\bXbox\b/i.test(navigator.userAgent),
+    consoleModel:
+      typeof document !== 'undefined'
+        ? (document.documentElement.dataset.console ?? undefined)
+        : undefined,
     graphicsPreset: storedNumericSetting('graphicsPreset'),
     terrainDetail: storedNumericSetting('terrainDetail'),
     foliageDensity: storedNumericSetting('foliageDensity'),
@@ -882,13 +894,25 @@ function mobilePlatformFromNavigator(
 export function isConstrainedBrowser(
   hints: Pick<
     GfxRuntimeHints,
-    'deviceMemory' | 'maxTouchPoints' | 'coarsePointer' | 'narrowViewport' | 'xboxConsole'
+    | 'deviceMemory'
+    | 'maxTouchPoints'
+    | 'coarsePointer'
+    | 'narrowViewport'
+    | 'xboxConsole'
+    | 'consoleModel'
   >,
 ): boolean {
-  // A console reports desktop-class memory and cores, but the browser runs
-  // sandboxed on 2017-era console silicon and drives a 4K panel; the desktop
-  // heuristics below resolve far too high for it.
-  if (hints.xboxConsole) return true;
+  // A console reports desktop-class memory and cores. On an Xbox One the
+  // browser is sandboxed on 2017 silicon driving a 4K panel and the desktop
+  // heuristics resolve far too high, but a Series X has the headroom for
+  // the normal budget, so the two generations are separated rather than
+  // both being pinned to phone-class settings.
+  if (hints.xboxConsole) {
+    return consoleNeedsConstrainedMemory(
+      consoleGenerationFrom(hints.consoleModel),
+      true,
+    );
+  }
   if (hints.deviceMemory !== undefined && hints.deviceMemory <= 4) return true;
   return hints.maxTouchPoints > 0 && (hints.coarsePointer || hints.narrowViewport);
 }
