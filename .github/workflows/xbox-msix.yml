@@ -118,6 +118,26 @@ jobs:
           if (-not $deps) { Write-Error 'no framework dependencies emitted'; exit 1 }
           $deps | ForEach-Object { Write-Host ("  {0,12:N0}  {1}" -f $_.Length, $_.Name) }
 
+      - name: Build DEBUG package (remote debugging + IL, not .NET Native)
+        shell: pwsh
+        run: |
+          # Two jobs at once. Debug enables the WebView2 remote-debugging hook,
+          # which is the ONLY way to get console/network/memory telemetry off an
+          # Xbox: the Edge browser there has no DevTools. Debug is also plain IL
+          # rather than .NET Native, so if this activates where Release does not,
+          # the activation failure is a .NET Native problem.
+          msbuild shell\CrypticRealm.Shell\CrypticRealm.Shell.csproj `
+            /p:Configuration=Debug `
+            /p:Platform=x64 `
+            /p:AppxBundle=Never `
+            /p:UapAppxPackageBuildMode=SideloadOnly `
+            /p:AppxPackageSigningEnabled=false `
+            /p:GenerateAppInstallerFile=false `
+            /v:minimal /consoleloggerparameters:Summary
+          $dbg = Get-ChildItem -Recurse -Path shell -Filter *.msix |
+                 Where-Object { $_.FullName -like '*Debug*' -or $_.FullName -like '*_Test*' }
+          $dbg | ForEach-Object { Write-Host ("  {0:N0} bytes  {1}" -f $_.Length, $_.FullName) }
+
       - name: Locate output
         shell: pwsh
         run: |

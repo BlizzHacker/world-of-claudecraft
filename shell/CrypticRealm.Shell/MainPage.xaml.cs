@@ -113,6 +113,16 @@ namespace CrypticRealm.Shell
 
         private async void OnLoaded(object sender, RoutedEventArgs e)
         {
+#if DEBUG
+            // Lets Chrome DevTools attach over the Xbox Device Portal, which is
+            // the only way to get a console, network or memory profile off a
+            // console: the Xbox Edge browser has no DevTools at all, so without
+            // this the only telemetry is reading an error off the TV. Must be
+            // set before the CoreWebView2 is created.
+            Environment.SetEnvironmentVariable(
+                "WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS",
+                "--enable-features=msEdgeDevToolsWdpRemoteDebugging");
+#endif
             try
             {
                 await Web.EnsureCoreWebView2Async();
