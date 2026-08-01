@@ -112,7 +112,10 @@ jobs:
                  Sort-Object Name -Descending | Select-Object -First 1
           $makeappx = Join-Path $sdk.FullName 'x64\makeappx.exe'
 
-          $msix = Get-ChildItem -Recurse -Filter *.msix -Path shell |
+          # Scope to the SHELL package: the diagnostic probe is also a
+          # sideload _Test msix and would otherwise be validated against the
+          # shell's Store identity, which it deliberately does not share.
+          $msix = Get-ChildItem -Recurse -Filter *.msix -Path shell\CrypticRealm.Shell |
                   Where-Object { $_.FullName -like '*_Test*' } |
                   Select-Object -First 1
           if (-not $msix) { Write-Error 'no sideload msix to inspect'; exit 1 }
