@@ -118,14 +118,22 @@ jobs:
           if (-not $deps) { Write-Error 'no framework dependencies emitted'; exit 1 }
           $deps | ForEach-Object { Write-Host ("  {0,12:N0}  {1}" -f $_.Length, $_.Name) }
 
-      - name: Build DEBUG package (remote debugging + IL, not .NET Native)
+      - name: Build DEBUG diagnostic package (no packaged client)
         shell: pwsh
         run: |
-          # Two jobs at once. Debug enables the WebView2 remote-debugging hook,
-          # which is the ONLY way to get console/network/memory telemetry off an
-          # Xbox: the Edge browser there has no DevTools. Debug is also plain IL
-          # rather than .NET Native, so if this activates where Release does not,
-          # the activation failure is a .NET Native problem.
+          # Diagnostics only, and deliberately WITHOUT the 598MB client: the
+          # memory failure happens in the web client, so a thin shell pointing
+          # at the live site reproduces it exactly while staying small enough
+          # to actually transfer and deploy. The full artifact with three
+          # ~600MB packages could not be downloaded at all.
+          #
+          # Debug enables the WebView2 remote-debugging hook (the Xbox Edge
+          # browser has no DevTools, so this is the only telemetry available)
+          # and is plain IL rather than .NET Native, which independently tests
+          # whether .NET Native is what activation is rejecting.
+          Remove-Item 'shell\CrypticRealm.Shell\web' -Recurse -Force -ErrorAction SilentlyContinue
+          New-Item -ItemType Directory -Path 'shell\CrypticRealm.Shell\web' | Out-Null
+          Set-Content 'shell\CrypticRealm.Shell\web\.keep' ''
           msbuild shell\CrypticRealm.Shell\CrypticRealm.Shell.csproj `
             /p:Configuration=Debug `
             /p:Platform=x64 `
@@ -135,8 +143,17 @@ jobs:
             /p:GenerateAppInstallerFile=false `
             /v:minimal /consoleloggerparameters:Summary
           $dbg = Get-ChildItem -Recurse -Path shell -Filter *.msix |
-                 Where-Object { $_.FullName -like '*Debug*' -or $_.FullName -like '*_Test*' }
-          $dbg | ForEach-Object { Write-Host ("  {0:N0} bytes  {1}" -f $_.Length, $_.FullName) }
+                 Sort-Object LastWriteTime -Descending | Select-Object -First 1
+          Write-Host ("debug package: {0:N0} bytes  {1}" -f $dbg.Length, $dbg.Name)
+          New-Item -ItemType Directory -Path debugout -Force | Out-Null
+          Copy-Item $dbg.FullName 'debugout\CrypticRealm-Debug.msix'
+
+      - name: Upload the debug package on its own
+        uses: actions/upload-artifact@v4
+        with:
+          name: cryptic-realm-xbox-debug
+          path: debugout/*.msix
+          if-no-files-found: error
 
       - name: Locate output
         shell: pwsh
