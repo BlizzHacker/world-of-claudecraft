@@ -1135,6 +1135,25 @@
           </div>
           <p class="desktop-download-hint" data-platform-hint="linux" data-i18n="download.linuxHint" hidden>AppImage: make it executable, then run it. No install needed.</p>
           <div class="desktop-download-status" data-i18n="download.windowsPending">Windows build pending.</div>
+          <div class="xbox-download">
+            <h3 data-i18n="download.xboxTitle">Xbox (sideload)</h3>
+            <p data-i18n="download.xboxDesc">A console build that runs the full game on Xbox One and Series X|S. It is not on the Microsoft Store yet, so it installs through Developer Mode.</p>
+            <a
+              class="btn btn-primary desktop-download-link"
+              data-platform="xbox"
+              href="https://github.com/BlizzHacker/world-of-claudecraft/releases/download/xbox-v0.24.0.0/CrypticRealm-Xbox-0.24.0.0.msix"
+              data-i18n="download.xboxCta"
+            >Download for Xbox</a>
+            <p class="desktop-download-hint" data-i18n="download.xboxReq">Requires Developer Mode on the console, which needs a one time Microsoft Partner registration.</p>
+            <ol class="xbox-download-steps">
+              <li data-i18n="download.xboxStep1">On the Xbox, install Dev Mode Activation from the Store and follow it to switch the console into Developer Mode.</li>
+              <li data-i18n="download.xboxStep2">In Dev Home on the console, note the Device Portal address (it looks like https://192.168.0.50:11443).</li>
+              <li data-i18n="download.xboxStep3">Open that address in a browser on a computer on the same network and accept the certificate warning.</li>
+              <li data-i18n="download.xboxStep4">Choose Add, pick the .msix file you downloaded, then Start.</li>
+              <li data-i18n="download.xboxStep5">Launch Cryptic Realm from the Dev Mode games list and press A once so it goes fullscreen and takes the controller.</li>
+            </ol>
+            <p class="desktop-download-hint" data-i18n="download.xboxExit">To quit: hold View and Menu together for about two seconds. B is used in game, so it does not close the app.</p>
+          </div>
         </div>
       </section>
 

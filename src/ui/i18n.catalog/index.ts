@@ -267,6 +267,17 @@ export const en = {
     linuxCta: "Download for Linux",
     linuxHint: "AppImage: make it executable, then run it. No install needed.",
     windowsPending: "Windows build pending.",
+    xboxTitle: "Xbox (sideload)",
+    xboxDesc:
+      "A console build that runs the full game on Xbox One and Series X|S. It is not on the Microsoft Store yet, so it installs through Developer Mode.",
+    xboxCta: "Download for Xbox",
+    xboxReq: "Requires Developer Mode on the console, which needs a one time Microsoft Partner registration.",
+    xboxStep1: "On the Xbox, install Dev Mode Activation from the Store and follow it to switch the console into Developer Mode.",
+    xboxStep2: "In Dev Home on the console, note the Device Portal address (it looks like https://192.168.0.50:11443).",
+    xboxStep3: "Open that address in a browser on a computer on the same network and accept the certificate warning.",
+    xboxStep4: "Choose Add, pick the .msix file you downloaded, then Start.",
+    xboxStep5: "Launch Cryptic Realm from the Dev Mode games list and press A once so it goes fullscreen and takes the controller.",
+    xboxExit: "To quit: hold View and Menu together for about two seconds. B is used in game, so it does not close the app.",
   },
   comingSoon: {
     placeholder: "Track Releases",
