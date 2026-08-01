@@ -22,29 +22,30 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-
-      - name: Build the client and stage it into the package
+      - name: Fetch the prebuilt client
         shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          # The console app ships the client INSIDE the package so it boots with
-          # no network. cr-realms is excluded deliberately: every realm body is
-          # lazyPreload and fetched on demand, and including them would add 2GB
-          # for assets an offline session never touches.
-          npm ci
-          npm run build
+          # Built where the client actually lives (this branch is far behind it)
+          # and published as a release asset. cr-realms is already excluded:
+          # every realm body is lazyPreload and fetched on demand, so bundling
+          # them would add 2GB for assets an offline session never touches.
           $dest = 'shell\CrypticRealm.Shell\web'
           if (Test-Path $dest) { Remove-Item $dest -Recurse -Force }
           New-Item -ItemType Directory -Path $dest | Out-Null
-          robocopy dist $dest /E /XD cr-realms /NFL /NDL /NJH /NJS /NP | Out-Null
-          if ($LASTEXITCODE -ge 8) { Write-Error "staging failed ($LASTEXITCODE)"; exit 1 }
+          gh release download client-dist-v0.24.0 -R ${{ github.repository }} `
+            -p 'cr-client-dist.tgz' -O client.tgz
+          if ($LASTEXITCODE -ne 0) { Write-Error 'client asset download failed'; exit 1 }
+          tar -xzf client.tgz -C $dest
+          if ($LASTEXITCODE -ne 0) { Write-Error 'client extract failed'; exit 1 }
           $n = (Get-ChildItem $dest -Recurse -File).Count
           $mb = [math]::Round(((Get-ChildItem $dest -Recurse -File | Measure-Object Length -Sum).Sum / 1MB), 1)
-          Write-Host "staged $n files, $mb MB"
+          Write-Host "client staged: $n files, $mb MB"
+          # A package that builds without its client installs and shows nothing,
+          # which is the hardest failure to diagnose from a console.
           if (-not (Test-Path "$dest\index.html")) { Write-Error 'index.html missing'; exit 1 }
+          if ($n -lt 500) { Write-Error "only $n files staged; client looks truncated"; exit 1 }
 
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v2
@@ -154,6 +155,14 @@ jobs:
             exit 1
           }
           Write-Host ("polyfill present: {0:N0} B" -f (Get-Item $polyfill).Length)
+
+          $index = Join-Path $dest 'web\index.html'
+          if (-not (Test-Path $index)) {
+            Write-Error 'web/index.html missing: the app would install and render nothing'
+            exit 1
+          }
+          $webCount = (Get-ChildItem (Join-Path $dest 'web') -Recurse -File).Count
+          Write-Host ("packaged client: {0:N0} files" -f $webCount)
 
           [xml]$m = Get-Content (Join-Path $dest 'AppxManifest.xml')
           $id = $m.Package.Identity
