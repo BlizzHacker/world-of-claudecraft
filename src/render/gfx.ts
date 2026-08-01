@@ -119,6 +119,9 @@ export interface GfxSettings {
   readonly constrainedMemory: boolean;
   /** Packaged iOS WKWebView profile that bounds retained GPU resources independently of FPS. */
   readonly nativeIosMemoryProfile: boolean;
+  /** Hard resident-memory ceiling: iOS WebKit, or a console browser sandbox.
+   *  Distinct from constrainedMemory, which only sheds per-frame cost. */
+  readonly boundedResidency: boolean;
   /** Global cap for inactive skinned character rigs retained for reuse. */
   readonly maxPooledCharacterVisuals: number;
   /**
@@ -682,6 +685,12 @@ function settingsFor(tier: GfxTier, hints?: Partial<GfxRuntimeHints>): GfxSettin
   // tier (and its density/VFX progression) while routing the packaged iOS app through the
   // bounded-residency material/world path from scene construction onward.
   const nativeIosMemoryProfile = hints?.nativeApp === true && hints.platform === 'ios';
+  // A console browser has the SAME hard resident-memory ceiling as iOS WebKit:
+  // an Xbox One X reports SBOX_FATAL_MEMORY_EXCEEDED and the page dies on world
+  // entry. constrainedMemory only sheds per-frame cost (MSAA, shadow texels,
+  // DPR); the ceiling is about allocations the governor cannot reclaim once
+  // made, so the console takes the bounded-residency path too.
+  const boundedResidency = nativeIosMemoryProfile || hints?.xboxConsole === true;
   // Phone-class browsers live under a hard per-process memory ceiling (iOS WebKit evicts the
   // WebContent process outright); shed the largest one-shot GPU allocations there. Shadow-map
   // texels, MSAA, and DPR are cosmetic sharpness only, so this never crosses the
@@ -703,12 +712,12 @@ function settingsFor(tier: GfxTier, hints?: Partial<GfxRuntimeHints>): GfxSettin
     bucketBaselines: bucketBaselines(bucketBands),
     budget: GFX_BUDGETS[tier],
     autoGovernor: shouldUseAutoGovernor(tier, hints?.search ?? ''),
-    composer: !nativeIosMemoryProfile && (tier === 'high' || tier === 'ultra'),
+    composer: !boundedResidency && (tier === 'high' || tier === 'ultra'),
     // N8AO runs on both composer tiers: half-res + Low quality on high keeps
     // it ~1ms-class on real GPUs; ultra gets full-res Medium
-    ao: !nativeIosMemoryProfile && (tier === 'high' || tier === 'ultra'),
+    ao: !boundedResidency && (tier === 'high' || tier === 'ultra'),
     msaaSamples: (tier === 'high' || tier === 'ultra') && !constrainedMemory ? 4 : 0,
-    pixelRatioCap: nativeIosMemoryProfile
+    pixelRatioCap: boundedResidency
       ? 1.25
       : constrainedMemory
         ? 1.48
@@ -720,7 +729,7 @@ function settingsFor(tier: GfxTier, hints?: Partial<GfxRuntimeHints>): GfxSettin
     // Shadows are cosmetic and duplicate the visible scene draw. Both constrained browsers and
     // the stricter native-iOS residency profile remove that duplicate pass.
     dynamicShadows: tier !== 'low' && !constrainedMemory,
-    shadowMap: nativeIosMemoryProfile
+    shadowMap: boundedResidency
       ? 1024
       : tier === 'low'
         ? 2048
@@ -732,13 +741,13 @@ function settingsFor(tier: GfxTier, hints?: Partial<GfxRuntimeHints>): GfxSettin
             ? 2048
             : 4096,
     standardMaterials:
-      !nativeIosMemoryProfile && (tier === 'medium' || tier === 'high' || tier === 'ultra'),
-    lowPlus: tier === 'low' || nativeIosMemoryProfile,
+      !boundedResidency && (tier === 'medium' || tier === 'high' || tier === 'ultra'),
+    lowPlus: tier === 'low' || boundedResidency,
     // Tree and rock placement must match across clients because those decorations
     // occlude world sightlines. Keep the constrained profile on the full placement
     // set and reduce only non-occluding grass below.
     leanFoliage: tier === 'low' || (tier === 'medium' && weakIntegratedGpu),
-    grassRadius: nativeIosMemoryProfile
+    grassRadius: boundedResidency
       ? 52
       : tier === 'low'
         ? 80
@@ -747,7 +756,7 @@ function settingsFor(tier: GfxTier, hints?: Partial<GfxRuntimeHints>): GfxSettin
             ? 62
             : 76
           : 82,
-    grassStep: nativeIosMemoryProfile
+    grassStep: boundedResidency
       ? 2.75
       : tier === 'low'
         ? 2.05
@@ -757,17 +766,18 @@ function settingsFor(tier: GfxTier, hints?: Partial<GfxRuntimeHints>): GfxSettin
             : 2.0
           : 1.8,
     terrainSplat:
-      !nativeIosMemoryProfile && (tier === 'medium' || tier === 'high' || tier === 'ultra'),
+      !boundedResidency && (tier === 'medium' || tier === 'high' || tier === 'ultra'),
     windSway: true,
-    maxPointLights: nativeIosMemoryProfile ? 2 : constrainedMemory ? 3 : 6,
+    maxPointLights: boundedResidency ? 2 : constrainedMemory ? 3 : 6,
     constrainedMemory,
     nativeIosMemoryProfile,
-    maxPooledCharacterVisuals: nativeIosMemoryProfile ? 6 : Number.POSITIVE_INFINITY,
+    boundedResidency,
+    maxPooledCharacterVisuals: boundedResidency ? 6 : Number.POSITIVE_INFINITY,
     // Extra articulated rigs are skinning + draw-call cost, so the phone-class
     // memory profiles and the low tier (which includes software GL) opt out and
     // keep the straight-to-frozen far LOD.
     farCharacterAnimScale:
-      tier === 'low' || constrainedMemory || nativeIosMemoryProfile ? 1 : FAR_ANIM_RANGE_SCALE_MAX,
+      tier === 'low' || constrainedMemory || boundedResidency ? 1 : FAR_ANIM_RANGE_SCALE_MAX,
   };
   if (hints?.graphicsPreset === PRESET_ADVANCED) {
     if ((hints.terrainDetail ?? 1) < 0.5) settings = { ...settings, terrainSplat: false };

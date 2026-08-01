@@ -2198,7 +2198,11 @@ export class Renderer {
           maxPointLights: GFX.maxPointLights,
           activePointLights: this.effectivePointLights || GFX.maxPointLights,
           shadowMap: GFX.shadowMap,
-          nativeIosMemoryProfile: GFX.nativeIosMemoryProfile,
+          // A console browser has the same hard ceiling as phone WebKit, so it
+          // takes the constrained prewarm budget too. Reading the iOS-specific
+          // flag here left Xbox on the desktop budget: 12s and up to 72 views,
+          // measured at 59 views and 247 texture uploads on a real console.
+          nativeIosMemoryProfile: GFX.boundedResidency,
         },
       },
       autoGovernor: GFX.autoGovernor,
