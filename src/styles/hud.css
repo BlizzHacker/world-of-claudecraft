@@ -6418,3 +6418,30 @@ body.reduce-motion #proc-overlay.frost .frost-bird::after {
     margin-top: 8px;
   }
 }
+
+/* --- Console (Xbox) TV title-safe area ------------------------------------
+ * xbox_env.ts adds .xbox-console on the document element. TVs overscan and
+ * routinely crop 3-5% of each edge, which on this HUD is precisely where the
+ * globes, minimap and action bar sit. Nudge the corner-anchored furniture
+ * inward by a title-safe margin instead of re-anchoring it, so the existing
+ * layout maths is untouched. Scoped so no other platform sees these rules. */
+.xbox-console {
+  --cr-tv-safe-x: 3.5vw;
+  --cr-tv-safe-y: 3.5vh;
+}
+.xbox-console #minimap-wrap {
+  transform: translate(calc(-1 * var(--cr-tv-safe-x)), var(--cr-tv-safe-y));
+}
+.xbox-console #actionbar-stack {
+  transform: translateY(calc(-1 * var(--cr-tv-safe-y)));
+}
+.xbox-console #chatlog-wrap {
+  transform: translate(var(--cr-tv-safe-x), calc(-1 * var(--cr-tv-safe-y)));
+}
+/* A controller has no hover, and a 10-foot viewing distance makes the default
+ * desktop type small; lift the floor without rescaling the whole UI. */
+.xbox-console #chatlog-wrap,
+.xbox-console #minimap-coords,
+.xbox-console #minimap-clock {
+  font-size: max(1em, 15px);
+}

@@ -62,6 +62,8 @@ export interface GfxRuntimeHints {
   gpuRenderer?: string;
   nativeApp?: boolean;
   platform?: 'ios' | 'android' | 'other';
+  /** Game console browser (Xbox). Desktop-class hints, phone-class budget. */
+  xboxConsole?: boolean;
   graphicsPreset?: number;
   terrainDetail?: number;
   foliageDensity?: number;
@@ -684,6 +686,7 @@ function settingsFor(tier: GfxTier, hints?: Partial<GfxRuntimeHints>): GfxSettin
       maxTouchPoints: hints?.maxTouchPoints ?? 0,
       coarsePointer: hints?.coarsePointer ?? false,
       narrowViewport: hints?.narrowViewport ?? false,
+      xboxConsole: hints?.xboxConsole ?? false,
     });
   let settings: GfxSettings = {
     graphicsConfigVersion: GFX_CONFIG_VERSION,
@@ -854,6 +857,7 @@ function runtimeHints(): GfxRuntimeHints {
     gpuRenderer: probeGpuRenderer(),
     nativeApp: NATIVE_APP,
     platform: mobilePlatformFromNavigator(nav),
+    xboxConsole: typeof navigator !== 'undefined' && /\bXbox\b/i.test(navigator.userAgent),
     graphicsPreset: storedNumericSetting('graphicsPreset'),
     terrainDetail: storedNumericSetting('terrainDetail'),
     foliageDensity: storedNumericSetting('foliageDensity'),
@@ -878,9 +882,13 @@ function mobilePlatformFromNavigator(
 export function isConstrainedBrowser(
   hints: Pick<
     GfxRuntimeHints,
-    'deviceMemory' | 'maxTouchPoints' | 'coarsePointer' | 'narrowViewport'
+    'deviceMemory' | 'maxTouchPoints' | 'coarsePointer' | 'narrowViewport' | 'xboxConsole'
   >,
 ): boolean {
+  // A console reports desktop-class memory and cores, but the browser runs
+  // sandboxed on 2017-era console silicon and drives a 4K panel; the desktop
+  // heuristics below resolve far too high for it.
+  if (hints.xboxConsole) return true;
   if (hints.deviceMemory !== undefined && hints.deviceMemory <= 4) return true;
   return hints.maxTouchPoints > 0 && (hints.coarsePointer || hints.narrowViewport);
 }
