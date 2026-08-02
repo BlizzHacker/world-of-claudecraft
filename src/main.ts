@@ -4237,6 +4237,9 @@ function decorateClassChips(): void {
   document
     .querySelectorAll<HTMLElement>('#charcreate-panel .mini-class, #offline-select .mini-class')
     .forEach((li) => {
+      // Realm hero cards ship their own portrait + stacked-label markup; the
+      // generic base-class face and label rebuild must not overwrite them.
+      if (li.dataset.heroId) return;
       if (li.querySelector('.mini-class-portrait')) return;
       const cls = li.dataset.class as PlayerClass;
       const key = li.dataset.i18n;
@@ -4530,6 +4533,23 @@ function ensureCharCreateFactionFilter(): void {
   });
 }
 
+/** User-facing copy for an asset-status label: drop the "GLB" file-format
+ *  speak ("Playable human GLB" -> "Playable"). Data attributes keep the raw
+ *  label for tooling. */
+function realmAssetDisplayLabel(label: string): string {
+  const cleaned = label
+    .replace(/\s*\bGLB\b\s*/gi, ' ')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+  return /^playable\b/i.test(cleaned) ? 'Playable' : cleaned;
+}
+
+/** Portrait render published next to a hero body GLB (same basename, .png). */
+function realmHeroPortraitUrl(assetUrl: string | undefined): string | null {
+  if (!assetUrl || !/\.glb$/i.test(assetUrl)) return null;
+  return assetUrl.replace(/\.glb$/i, '.png');
+}
+
 function paintInfernalHeroRoster(
   row: HTMLElement,
   choices: ReturnType<typeof infernalHeroChoicesForRealm>,
@@ -4538,10 +4558,15 @@ function paintInfernalHeroRoster(
   row.classList.add('infernal-hero-roster');
   row.innerHTML = choices
     .filter((choice) => !activeFaction || choice.faction === activeFaction)
-    .map(
-      (choice) =>
-        `<button type="button" class="mini-class realm-skinned realm-playable" data-class="${choice.baseClass}" data-hero-id="${choice.heroId}" data-faction="${choice.faction}" data-realm-faction="${choice.faction}" data-realm-asset="${choice.assetUrl}" data-realm-asset-name="${choice.assetName}" data-realm-asset-status="ready" aria-label="${escapeHtml(`${choice.name}, ${choice.faction}`)}" aria-pressed="false" title="${escapeHtml(choice.assetName ?? choice.name)}"><span class="mini-class-label">${escapeHtml(choice.name)}</span><span class="mini-class-faction">${escapeHtml(choice.faction)} - Playable GLB</span></button>`,
-    )
+    .map((choice) => {
+      // Portrait render published alongside the body GLB; onerror hides the
+      // img so a missing render falls back to the text-only card.
+      const portraitUrl = realmHeroPortraitUrl(choice.assetUrl);
+      const portraitHtml = portraitUrl
+        ? `<img class="mini-class-portrait" src="${escapeHtml(portraitUrl)}" alt="" loading="lazy" decoding="async" onerror="this.style.display='none'" />`
+        : '';
+      return `<button type="button" class="mini-class realm-skinned realm-playable${portraitUrl ? ' has-portrait' : ''}" data-class="${choice.baseClass}" data-hero-id="${choice.heroId}" data-faction="${choice.faction}" data-realm-faction="${choice.faction}" data-realm-asset="${choice.assetUrl}" data-realm-asset-name="${choice.assetName}" data-realm-asset-status="ready" aria-label="${escapeHtml(`${choice.name}, ${choice.faction}`)}" aria-pressed="false" title="${escapeHtml(choice.assetName ?? choice.name)}">${portraitHtml}<span class="mini-class-text"><span class="mini-class-label">${escapeHtml(choice.name)}</span><span class="mini-class-faction">${escapeHtml(choice.faction)}</span></span></button>`;
+    })
     .join('');
   row.querySelectorAll<HTMLElement>('.mini-class').forEach((card) => {
     const select = () => {
@@ -4681,16 +4706,18 @@ function paintRealmClassChoices(): void {
     }
     delete label.dataset.i18n;
     label.textContent = choice.name;
+    const statusLabel = realmAssetDisplayLabel(choice.assetStatusLabel);
     button.setAttribute(
       'aria-label',
       choice.assetUrl
-        ? `${choice.name}, ${choice.faction}, ${choice.assetStatusLabel}, ArcForge model`
-        : `${choice.name}, ${choice.faction}, ${choice.assetStatusLabel}`,
+        ? `${choice.name}, ${choice.faction}, ${statusLabel}, ArcForge model`
+        : `${choice.name}, ${choice.faction}, ${statusLabel}`,
     );
-    button.title = choice.assetIssue ?? choice.assetStatusLabel;
+    button.title = choice.assetIssue ?? statusLabel;
     button.style.setProperty('--class-color', choice.color);
     const badge = factionBadgeForMiniClass(button);
-    badge.textContent = `${choice.faction} - ${choice.assetStatusLabel}`;
+    badge.textContent =
+      choice.assetStatus === 'ready' ? choice.faction : `${choice.faction} - ${statusLabel}`;
   });
 }
 
@@ -6613,7 +6640,7 @@ function renderClassDetails(
   const classLabel = realmClass?.name ?? classDisplayName(className);
   const roleLabel = realmClass?.role ?? t(details.roleKey);
   const assetChipHtml = realmClass
-    ? `<span class="class-details-asset asset-${escapeHtml(realmClass.assetStatus)}">${escapeHtml(realmClass.assetStatusLabel)}</span>`
+    ? `<span class="class-details-asset asset-${escapeHtml(realmClass.assetStatus)}">${escapeHtml(realmAssetDisplayLabel(realmClass.assetStatusLabel))}</span>`
     : '';
   const assetNoteHtml = realmClass?.assetIssue
     ? `<p class="class-details-asset-note">${escapeHtml(realmClass.assetIssue)}</p>`

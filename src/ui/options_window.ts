@@ -137,8 +137,10 @@ import {
   THEME_KNOB_ORDER,
 } from './theme';
 import { svgIcon, type UiIconName } from './ui_icons';
+import { getUiScale } from './ui_scale';
 import { renderWindowFrame, type WindowFrameParts } from './window_frame';
 import type { WindowFrameDescriptor } from './window_frame_view';
+import { WINDOW_MIN_HEIGHT, WINDOW_MIN_WIDTH } from './window_resize_core';
 
 // Maximum characters for the bug-report description (a named threshold).
 const BUG_DESC_MAX_LEN = 2000;
@@ -151,6 +153,18 @@ const PAGE_SCROLL_FRACTION = 0.9;
 // hardware-glyph convention in gamepad_map (the per-brand arrow labels there all
 // share this prefix); kept ASCII (no arrows) for the legend's compact single line.
 const DPAD_GLYPH = 'D-pad';
+// Persisted Game Menu geometry. The shared controllers (window_drag.ts /
+// window_resize.ts) pin + size the window through inline left/top/width/height
+// (author-space px, multiplied by the #ui zoom) but persist nothing, so the
+// menu forgot its size every login. The key follows the cr_* position idiom
+// (hud_layout / move_hud_button); stored values are author px, the exact space
+// the controllers write.
+const WINDOW_RECT_KEY = 'cr_options_win_rect';
+// Viewport edge margin the restore clamp keeps clear, author px (mirrors the
+// drag/resize clamp margin in hud.setWindowPixelPosition).
+const WINDOW_RECT_MARGIN = 8;
+// A persisted geometry field arrives as unknown; only plain finite numbers pass.
+const isFiniteNumber = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v);
 
 // The XL frame descriptor. #options-menu is not a shared tenant, but the frame
 // still mounts on an inner container so the shared window-frame CSS (:has(>
@@ -437,6 +451,13 @@ export class OptionsWindow {
   // footer hidden while the desktop two-pane stayed mounted, or double chrome on
   // the reverse flip). Attached on open, disconnected on close.
   private bodyClassObserver: MutationObserver | null = null;
+  // Geometry persistence: a document-level pointer-end sampler alive only while
+  // the menu is open (the shared drag/resize controllers commit inline geometry
+  // with no callback, so persistence samples the inline style after each
+  // interaction ends), plus the last serialization written so unchanged
+  // interactions never touch localStorage.
+  private rectSaveListener: (() => void) | null = null;
+  private savedRectJson = '';
 
   constructor(private readonly deps: OptionsWindowDeps) {
     // Re-render when a live resize/rotate crosses the touch rail<->back-stack
@@ -658,6 +679,127 @@ export class OptionsWindow {
     return field;
   }
 
+  // -------------------------------------------------------------------------
+  // Window-geometry persistence. The shared controllers (window_drag.ts /
+  // window_resize.ts) pin + size the window via inline styles in author-space
+  // px; these helpers persist that geometry across sessions and restore it on
+  // open, clamped to the live viewport so a rect saved on a larger monitor can
+  // never strand the menu off-screen. Desktop-only: the mobile shell is
+  // CSS-sized (hud.mobile.css owns its width/placement).
+  // -------------------------------------------------------------------------
+
+  /** Restore the persisted geometry onto the just-shown window (or clear stale
+   *  inline geometry when opening into the CSS-sized mobile shell). */
+  private restoreWindowRect(): void {
+    if (typeof localStorage === 'undefined' || typeof window === 'undefined') return;
+    const root = this.deps.root();
+    if (this.mobileActive()) {
+      // Stale inline geometry from a desktop session (a restore or a live
+      // resize) must not beat the mobile shell rules, and the windowMoved flag
+      // must go too or Hud's show-time re-clamp would pin the cleared position
+      // right back onto the element.
+      delete root.dataset.windowMoved;
+      root.style.width = '';
+      root.style.height = '';
+      root.style.left = '';
+      root.style.top = '';
+      root.style.right = '';
+      root.style.bottom = '';
+      root.style.transform = '';
+      return;
+    }
+    let saved: { w?: unknown; h?: unknown; l?: unknown; t?: unknown } | null = null;
+    try {
+      saved = JSON.parse(localStorage.getItem(WINDOW_RECT_KEY) ?? 'null');
+    } catch {
+      return;
+    }
+    if (!saved || typeof saved !== 'object') return;
+    // Author-space viewport: inline lengths are multiplied by the #ui zoom, so
+    // divide the visual viewport by the live scale (hud.setWindowPixelPosition
+    // runs the same conversion for its drag/resize clamps).
+    const z = Math.max(Number.EPSILON, getUiScale());
+    const vw = window.innerWidth / z;
+    const vh = window.innerHeight / z;
+    const margin = WINDOW_RECT_MARGIN;
+    if (isFiniteNumber(saved.w) && isFiniteNumber(saved.h)) {
+      const width = Math.max(WINDOW_MIN_WIDTH, Math.min(saved.w, vw - margin * 2));
+      const height = Math.max(WINDOW_MIN_HEIGHT, Math.min(saved.h, vh - margin * 2));
+      root.style.width = `${Math.round(width)}px`;
+      root.style.height = `${Math.round(height)}px`;
+    }
+    if (isFiniteNumber(saved.l) && isFiniteNumber(saved.t)) {
+      // Clamp against the LAID-OUT box, not the raw saved size: the shared
+      // .window max-width/max-height viewport clamps can shrink the size that
+      // was just applied. Cold path (menu open), so the layout read is fine.
+      const box = root.getBoundingClientRect();
+      const left = Math.max(margin, Math.min(saved.l, vw - box.width / z - margin));
+      const top = Math.max(margin, Math.min(saved.t, vh - box.height / z - margin));
+      root.style.left = `${Math.round(left)}px`;
+      root.style.top = `${Math.round(top)}px`;
+      root.style.right = 'auto';
+      root.style.bottom = 'auto';
+      root.style.transform = 'none';
+      // Opt into Hud's viewport-resize / show-time re-clamp pass for pinned
+      // windows, exactly as a live drag/resize would.
+      root.dataset.windowMoved = '1';
+    }
+  }
+
+  /** Persist the current inline geometry after a pointer interaction ends.
+   *  Cheap and idempotent: reads four inline styles, writes localStorage only
+   *  when the serialization actually changed. */
+  private saveWindowRect(): void {
+    if (typeof localStorage === 'undefined') return;
+    if (!this.isOpen || this.mobileActive()) return;
+    const s = this.deps.root().style;
+    const rect: { w?: number; h?: number; l?: number; t?: number } = {};
+    const w = Number.parseFloat(s.width);
+    const h = Number.parseFloat(s.height);
+    if (Number.isFinite(w) && Number.isFinite(h)) {
+      rect.w = w;
+      rect.h = h;
+    }
+    const l = Number.parseFloat(s.left);
+    const t = Number.parseFloat(s.top);
+    if (Number.isFinite(l) && Number.isFinite(t)) {
+      rect.l = l;
+      rect.t = t;
+    }
+    // Nothing inline yet (the window has never been resized or pinned).
+    if (rect.w === undefined && rect.l === undefined) return;
+    const json = JSON.stringify(rect);
+    if (json === this.savedRectJson) return;
+    try {
+      localStorage.setItem(WINDOW_RECT_KEY, json);
+      this.savedRectJson = json;
+    } catch {
+      /* storage full / privacy mode: the geometry just stays session-local */
+    }
+  }
+
+  /** Attach the pointer-end sampler while the menu is open (see saveWindowRect). */
+  private installRectPersistence(): void {
+    if (this.rectSaveListener || typeof document === 'undefined') return;
+    const listener = () => {
+      // Sample on the next frame: the drag controller commits its final
+      // left/top inside its own pointerup handler, so the deferred read always
+      // sees the settled box regardless of listener order.
+      requestAnimationFrame(() => this.saveWindowRect());
+    };
+    this.rectSaveListener = listener;
+    document.addEventListener('pointerup', listener);
+    document.addEventListener('pointercancel', listener);
+  }
+
+  /** Detach the pointer-end sampler (the menu is closed). */
+  private removeRectPersistence(): void {
+    if (!this.rectSaveListener || typeof document === 'undefined') return;
+    document.removeEventListener('pointerup', this.rectSaveListener);
+    document.removeEventListener('pointercancel', this.rectSaveListener);
+    this.rectSaveListener = null;
+  }
+
   toggle(): void {
     if (this.isOpen) {
       this.close();
@@ -680,6 +822,10 @@ export class OptionsWindow {
     this.deps.options()?.perfOverlay.setPlacement(false);
     this.render();
     this.deps.root().style.display = 'flex';
+    // Restore the persisted user-chosen geometry (clamped to the live viewport)
+    // and start sampling geometry changes while open.
+    this.restoreWindowRect();
+    this.installRectPersistence();
     // A live interface-mode flip while open must re-render the matching chrome (X2).
     this.observeInterfaceModeFlips();
     // Spec section 5: the menu opens with focus ON the Overview rail tab. The
@@ -699,6 +845,10 @@ export class OptionsWindow {
   }
 
   close(): void {
+    // Persist any geometry change that has not hit a pointer-end sample yet,
+    // then stop sampling (isOpen still true here, so the save can run).
+    this.saveWindowRect();
+    this.removeRectPersistence();
     this.deps.root().style.display = 'none';
     this.unobserveInterfaceModeFlips();
     // Disarm any in-flight rebind capture so a stale callback can never fire after
