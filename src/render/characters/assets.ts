@@ -22,6 +22,7 @@ import { loadGltf, loadTexture } from '../assets/loader';
 import { registerPreload } from '../assets/preload';
 import { addRimGlow, GFX } from '../gfx';
 import { backGripFor } from './back_grips';
+import { resolveClipMap } from './clip_resolution';
 import { dequantizeAttribute } from './dequantize_attribute';
 import { type HandGrip, KAYKIT_SHIELD_ACCESSORIES, KAYKIT_SHIELD_GRIPS } from './held_item_grips';
 import {
@@ -1062,9 +1063,12 @@ export function prepareVisual(key: string): PreparedVisual {
   // unique per-URL entry, so mutating its ClipMap once is safe). No animations
   // leaves it in the rest pose rather than throwing.
   if (def.autoClip) {
+    // Resolve each role against the GLB's real clip inventory instead of
+    // collapsing every state onto one clip: a body carrying Idle/Walk/Run/
+    // Attack/Death gets each of them, while a degenerate single-clip GLB still
+    // falls back to that clip for every role (choose() returns available[0]).
     const names = gltf.animations.map((a) => a.name);
-    const chosen = chooseExternalPreviewClipName(names) ?? names[0] ?? '';
-    def.clips = { idle: chosen, walk: chosen, run: chosen, attack: [chosen], death: chosen };
+    def.clips = resolveClipMap(def.clips, names);
   }
 
   const clips = new Map<string, THREE.AnimationClip>();
