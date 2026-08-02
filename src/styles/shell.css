@@ -6062,9 +6062,15 @@
       flex: 1 1 auto;
       min-height: 0;
       display: grid;
-      grid-template-columns: 1fr auto;
+      /* Both tracks are FIXED-formula: the old `1fr auto` let the details pane
+         resize with its content, so picking a hero with longer lore text shoved
+         the whole roster grid sideways on every click. */
+      grid-template-columns: minmax(0, 1fr) clamp(380px, 42vw, 760px);
       gap: 28px;
       align-items: stretch;
+    }
+    .cs-body-create > * {
+      min-width: 0;
     }
     .cs-list-col,
     .cs-detail-col,
