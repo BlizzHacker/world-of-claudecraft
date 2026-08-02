@@ -1062,19 +1062,20 @@ export function prepareVisual(key: string): PreparedVisual {
   // idle/first animation and drive every state from it (the override def is a
   // unique per-URL entry, so mutating its ClipMap once is safe). No animations
   // leaves it in the rest pose rather than throwing.
-  if (def.autoClip) {
-    // Resolve each role against the GLB's real clip inventory instead of
-    // collapsing every state onto one clip: a body carrying Idle/Walk/Run/
-    // Attack/Death gets each of them, while a degenerate single-clip GLB still
-    // falls back to that clip for every role (choose() returns available[0]).
-    const names = gltf.animations.map((a) => a.name);
-    def.clips = resolveClipMap(def.clips, names);
-  }
-
   const clips = new Map<string, THREE.AnimationClip>();
   for (const clip of gltf.animations) clips.set(clip.name, clip);
   for (const url of def.animUrls ?? []) {
     for (const clip of resolvedGltf(url).animations) clips.set(clip.name, clip);
+  }
+
+  if (def.autoClip) {
+    // Resolve each role against the FULL inventory - the body's own clips plus
+    // every animUrls bank clip - instead of collapsing every state onto one
+    // clip. Order matters: resolving before the bank merge would rewrite exact
+    // bank names (Walking_A, Attack_Spin, ...) down to the body's handful and
+    // silently discard the shared vocabulary. A degenerate single-clip GLB with
+    // no bank still falls back to that clip for every role.
+    def.clips = resolveClipMap(def.clips, [...clips.keys()]);
   }
 
   // Pose a throwaway clone mid-idle, measure it, and bake the static mesh.

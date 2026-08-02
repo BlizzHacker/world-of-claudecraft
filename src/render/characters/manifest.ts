@@ -1970,14 +1970,51 @@ interface BodyOverrideEntry {
   assetName?: string;
 }
 const BODY_OVERRIDES: Record<string, Record<string, BodyOverrideEntry>> = {};
+// Override bodies mount the shared Meshy clip bank (armature-only GLB on the
+// 24-joint Meshy skeleton) via animUrls, so their vocabulary is the bank's
+// contract names below plus the body's own bespoke clips. '__auto__' entries
+// still resolve against whatever is actually loaded (clip_resolution.ts), so a
+// body works - degraded but animated - even if the bank fails to load.
+const OVERRIDE_CLIP_BANK_URL = '/cr-realms/shared/meshy_clip_bank.glb';
 const OVERRIDE_AUTO_CLIPS: ClipMap = {
   idle: '__auto__',
-  walk: '__auto__',
-  run: '__auto__',
-  attack: ['__auto__'],
-  hit: ['__auto__'],
-  cast: '__auto__',
+  walk: 'Walking_A',
+  run: 'Running_A',
+  walkBack: 'Walking_Backwards',
+  attack: [
+    '__auto__',
+    'Attack_Spin',
+    'Attack_Combo',
+    'Attack_Charged',
+    'Attack_Punch',
+    'Attack_Kick',
+    '1H_Melee_Attack_Chop',
+    '1H_Melee_Attack_Slice_Diagonal',
+    '2H_Melee_Attack_Chop',
+  ],
+  hit: ['__auto__', 'Hit_B'],
+  cast: 'Spellcasting',
   death: '__auto__',
+  sitDown: 'Sit_Floor_Down',
+  sitIdle: 'Sit_Floor_Idle',
+  swim: 'Lie_Idle',
+  jump: 'Jump_Idle',
+  stow: 'Guard_Stance',
+  emote: {
+    wave: { clips: ['Emote_Wave', 'Cheer'] },
+    laugh: { clips: ['Emote_Laugh', 'Emote_Cheer', 'Cheer'], timeScale: 1.2 },
+    question: { clips: ['Emote_Question', 'Guard_Stance'] },
+    cheer: { clips: ['Emote_Cheer', 'Cheer'], repeats: 2 },
+    dance: { clips: ['Emote_Dance_A', 'Emote_Dance_B'] },
+    point: { clips: ['Emote_Point', 'Spellcast_Shoot'] },
+    flex: { clips: ['Emote_Flex', 'Taunt_Stomp'] },
+    salute: { clips: ['Emote_Salute', 'Emote_Point'] },
+    cry: { clips: ['Sit_Floor_Down'], timeScale: 0.8 },
+    bow: { clips: ['Emote_Point', 'Spellcast_Raise'], timeScale: 0.9 },
+    clap: { clips: ['Emote_Clap', 'Emote_Cheer'], repeats: 2 },
+    roar: { clips: ['Emote_Roar', 'Taunt_Stomp'] },
+    kneel: { clips: ['Emote_Kneel', 'Sit_Floor_Down'] },
+  },
 };
 
 /** Install the operator's body overrides for a realm (the client calls this after
@@ -2007,6 +2044,7 @@ function registerOverrideVisual(entry: BodyOverrideEntry): string {
       autoClip: true,
       lazyPreload: true,
       clips: OVERRIDE_AUTO_CLIPS,
+      animUrls: [OVERRIDE_CLIP_BANK_URL],
     };
   }
   return key;
