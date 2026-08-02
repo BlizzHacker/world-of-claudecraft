@@ -223,6 +223,13 @@ export const OVERHEAD_EMOTE_IDS = [
   'clap',
   'roar',
   'kneel',
+  'alert',
+  'lookaround',
+  'carry',
+  'roll',
+  'collapse',
+  'shuffle',
+  'shimmy',
 ] as const;
 export type OverheadEmoteId = (typeof OVERHEAD_EMOTE_IDS)[number];
 

@@ -152,6 +152,13 @@ const KAYKIT_EMOTES: Partial<Record<OverheadEmoteId, EmoteClipSpec>> = {
   clap: { clips: ['1H_Melee_Attack_Slice_Diagonal', 'Cheer'], timeScale: 1.55, repeats: 2 },
   roar: { clips: ['2H_Melee_Attack_Chop', '1H_Melee_Attack_Chop', 'Cheer'], timeScale: 0.9 },
   kneel: { clips: ['Sit_Floor_Down'], timeScale: 0.85 },
+  alert: { clips: ['Block'], timeScale: 1.1 },
+  lookaround: { clips: ['Idle'], timeScale: 0.9, repeats: 2 },
+  carry: { clips: ['Walking_A'], timeScale: 0.8, repeats: 2 },
+  roll: { clips: ['Jump_Idle'], timeScale: 1.2 },
+  collapse: { clips: ['Death_A'], timeScale: 1.3 },
+  shuffle: { clips: ['Running_Strafe_Left'], repeats: 2 },
+  shimmy: { clips: ['Running_Strafe_Right'], repeats: 2 },
 };
 
 const kaykit = (attack: string[], idle = 'Idle'): ClipMap => ({
@@ -1978,8 +1985,10 @@ const BODY_OVERRIDES: Record<string, Record<string, BodyOverrideEntry>> = {};
 const OVERRIDE_CLIP_BANK_URL = '/cr-realms/shared/meshy_clip_bank.glb';
 const OVERRIDE_AUTO_CLIPS: ClipMap = {
   idle: '__auto__',
-  walk: 'Walking_A',
-  run: 'Running_A',
+  // '__auto__' walk/run keep each body's own bespoke gait; the bank supplies
+  // everything the body does not carry itself.
+  walk: '__auto__',
+  run: '__auto__',
   walkBack: 'Walking_Backwards',
   attack: [
     '__auto__',
@@ -1992,9 +2001,40 @@ const OVERRIDE_AUTO_CLIPS: ClipMap = {
     '1H_Melee_Attack_Slice_Diagonal',
     '2H_Melee_Attack_Chop',
   ],
-  hit: ['__auto__', 'Hit_B'],
+  hit: ['__auto__', 'Hit_A'],
   cast: 'Spellcasting',
   death: '__auto__',
+  flourish: 'Spellcast_Raise',
+  // Signature abilities play their own clip when the wearer has that ability;
+  // ids are the upstream class abilities every hero maps onto.
+  attackByAbility: {
+    bladestorm: 'Attack_Spin',
+    blade_flurry: 'Attack_Combo',
+    hemorrhage: 'Attack_Combo',
+    mortal_strike: 'Attack_Charged',
+    heroic_strike: 'Attack_Charged',
+    crusader_strike: 'Attack_Charged',
+    execute: '2H_Melee_Attack_Chop',
+    storm_bolt: 'Attack_Punch',
+    kick: 'Attack_Kick',
+    victory_rush: 'Attack_Leap',
+    feral_charge: 'Attack_Leap',
+    counter_shot: '2H_Ranged_Shoot',
+    wyvern_sting: '2H_Ranged_Shoot',
+    holy_shield: 'Block',
+    ice_block: 'Block',
+    shield_slam: 'Block_B',
+    blink: 'Dodge_Back',
+    bestial_wrath: 'Taunt_Stomp',
+    demoralizing_shout: 'Taunt_Stomp',
+    intimidating_shout: 'Emote_Roar',
+    holy_shock: 'Spellcast_Shoot',
+    conflagrate: 'Spellcast_Shoot',
+    combustion: 'Spellcasting',
+    meteor: 'Spellcast_Raise',
+    avatar: 'Spellcast_Raise',
+    metamorphosis: 'Spellcast_Raise',
+  },
   sitDown: 'Sit_Floor_Down',
   sitIdle: 'Sit_Floor_Idle',
   swim: 'Lie_Idle',
@@ -2014,6 +2054,13 @@ const OVERRIDE_AUTO_CLIPS: ClipMap = {
     clap: { clips: ['Emote_Clap', 'Emote_Cheer'], repeats: 2 },
     roar: { clips: ['Emote_Roar', 'Taunt_Stomp'] },
     kneel: { clips: ['Emote_Kneel', 'Sit_Floor_Down'] },
+    alert: { clips: ['Idle_Alt_B', 'Guard_Stance'] },
+    lookaround: { clips: ['Idle_Alt_A'], timeScale: 0.9 },
+    carry: { clips: ['Carry_Walk', 'Walking_A'], repeats: 2 },
+    roll: { clips: ['Land_Roll', 'Dodge_Back'] },
+    collapse: { clips: ['Death_B'], timeScale: 1.2 },
+    shuffle: { clips: ['Running_Strafe_Left'], repeats: 2 },
+    shimmy: { clips: ['Running_Strafe_Right', 'Running_A'], repeats: 2 },
   },
 };
 
