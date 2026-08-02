@@ -81,7 +81,7 @@ import { FOCUS_POINT_BUDGET, isInTownZone } from '../sim/professions/focus';
 import { inRangeStationTypes, stationTypesSignature } from '../sim/professions/stations';
 import { TIER_SKILL_STEP, tierForSkill } from '../sim/professions/wheel';
 import { type QuestObjectiveRef, questObjectivesForMob } from '../sim/quest_targets';
-import { activeMaxLevel } from '../sim/realms/registry';
+import { activeMaxLevel, resolveActiveRealmId } from '../sim/realms/registry';
 import type { ResolvedAbility } from '../sim/sim';
 import { AbilityDef, CalendarResultCode, EquipSlot, HonorReason, InvSlot, isQuestTurnInNpc, ItemInstancePayload, ItemSlot, LootRollChoice, MailResultCode, MotdResultCode, PetMode, PlayerClass, ResourceType, SkinCatalog, SkinRank } from '../sim/types';
 import {
@@ -445,7 +445,7 @@ import {
   type PlayerTooltipModel,
   playerTooltipHtml,
 } from './player_tooltip_view';
-import { hydratePortraits, portraitChipHtml } from './portrait_chip';
+import { characterPortraitUrl, hydratePortraits, portraitChipHtml } from './portrait_chip';
 import { procAuraConsumeSelfNoteText, procAuraGainSelfNoteText } from './proc_fct_notes';
 import { buildProcOverlay } from './proc_overlay_dom';
 import { attachOverlayDrag } from './proc_overlay_drag';
@@ -4368,11 +4368,21 @@ export class Hud {
   });
 
   private drawPlayerFramePortrait(): void {
-    this.portraits.drawClass(
-      $('#pf-portrait') as unknown as HTMLCanvasElement,
-      this.sim.cfg.playerClass,
-      this.sim.player.skin ?? 0,
-    );
+    const canvas = $('#pf-portrait') as unknown as HTMLCanvasElement;
+    const cls = this.sim.cfg.playerClass;
+    const skin = this.sim.player.skin ?? 0;
+    // The hero's REAL body portrait (png published beside its override GLB)
+    // wins; no reassigned body or a failed png load falls back to the 3D class
+    // headshot / crest exactly as before. enterWorld awaits the override fetch,
+    // so the resolution is ready by the time the HUD mounts.
+    const bodyUrl = characterPortraitUrl(resolveActiveRealmId(), this.sim.player.realmHeroId, cls);
+    if (bodyUrl) {
+      this.portraits.drawHeadshot(canvas, bodyUrl, () =>
+        this.portraits.drawClass(canvas, cls, skin),
+      );
+      return;
+    }
+    this.portraits.drawClass(canvas, cls, skin);
   }
 
   // Redraw the target portrait canvas. Called by the unit_frame painter's repaint
@@ -4384,11 +4394,19 @@ export class Hud {
     const target = this.targetPortraitSubject;
     if (!target) return;
     if (target.kind === 'player') {
-      this.portraits.drawClass(
-        this.targetPortraitEl,
-        target.templateId as PlayerClass,
-        target.skin ?? 0,
-      );
+      const cls = target.templateId as PlayerClass;
+      const skin = target.skin ?? 0;
+      // A player target's reassigned hero body has a published portrait png
+      // (realmHeroId rides the wire per entity); fall back to the local 3D
+      // class headshot when there is no override or the png 404s.
+      const bodyUrl = characterPortraitUrl(resolveActiveRealmId(), target.realmHeroId, cls);
+      if (bodyUrl) {
+        this.portraits.drawHeadshot(this.targetPortraitEl, bodyUrl, () =>
+          this.portraits.drawClass(this.targetPortraitEl, cls, skin),
+        );
+      } else {
+        this.portraits.drawClass(this.targetPortraitEl, cls, skin);
+      }
     } else {
       const template = MOBS[target.templateId];
       const faceUrl = targetPortraitUrl(target.templateId, Boolean(template));
@@ -4415,7 +4433,17 @@ export class Hud {
     const tot = this.totPortraitSubject;
     if (!tot) return;
     if (tot.kind === 'player') {
-      this.portraits.drawClass(this.totPortraitEl, tot.templateId as PlayerClass, tot.skin ?? 0);
+      const cls = tot.templateId as PlayerClass;
+      const skin = tot.skin ?? 0;
+      // Same real-body resolution as the target frame (see drawTargetPortrait).
+      const bodyUrl = characterPortraitUrl(resolveActiveRealmId(), tot.realmHeroId, cls);
+      if (bodyUrl) {
+        this.portraits.drawHeadshot(this.totPortraitEl, bodyUrl, () =>
+          this.portraits.drawClass(this.totPortraitEl, cls, skin),
+        );
+      } else {
+        this.portraits.drawClass(this.totPortraitEl, cls, skin);
+      }
     } else {
       this.portraits.drawCrest(
         this.totPortraitEl,

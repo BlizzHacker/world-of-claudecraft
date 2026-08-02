@@ -282,7 +282,12 @@ import { applyPerfOrnamentVars } from './ui/perf_ornament_svg';
 import { PerfOverlay } from './ui/perf_overlay';
 import { type PerfOverlayConfig, PerfOverlayConfigStore } from './ui/perf_overlay_config';
 import { buildPerfOverlayView, FrameMeter } from './ui/perf_overlay_model';
-import { hydratePortraits, portraitChipHtml } from './ui/portrait_chip';
+import {
+  characterPortraitUrl,
+  hydratePortraits,
+  portraitChipHtml,
+  portraitUrlForBodyAsset,
+} from './ui/portrait_chip';
 import { hideReconnectOverlay, showReconnectOverlay } from './ui/reconnect_overlay';
 import { createSpectateBadge } from './ui/spectate_badge';
 import { refreshSteamLinkStatus, wireSteamLink } from './ui/steam_link';
@@ -4544,10 +4549,11 @@ function realmAssetDisplayLabel(label: string): string {
   return /^playable\b/i.test(cleaned) ? 'Playable' : cleaned;
 }
 
-/** Portrait render published next to a hero body GLB (same basename, .png). */
+/** Portrait render published next to a hero body GLB (same basename, .png).
+ *  The one .glb -> .png convention lives in portrait_chip.ts so the roster
+ *  rows and unit frames resolve the same way this create screen always has. */
 function realmHeroPortraitUrl(assetUrl: string | undefined): string | null {
-  if (!assetUrl || !/\.glb$/i.test(assetUrl)) return null;
-  return assetUrl.replace(/\.glb$/i, '.png');
+  return portraitUrlForBodyAsset(assetUrl);
 }
 
 function paintInfernalHeroRoster(
@@ -4591,6 +4597,29 @@ function paintInfernalHeroRoster(
 }
 
 const realmVisualOverridesFetched = new Set<string>();
+
+// In-flight/settled override loads by realm id, so every consumer (create
+// screen, char-select roster, world entry) awaits the SAME fetch instead of
+// racing it (previously world entry could slip past a fetch the create screen
+// had already started but not finished). setBodyOverrides runs inside the
+// promise, so awaiting it guarantees the overrides are installed for both the
+// character UI and the in-world renderer. Resolves whether a document loaded.
+const realmVisualOverridesLoads = new Map<string, Promise<boolean>>();
+function ensureRealmVisualOverridesLoaded(realmId: string): Promise<boolean> {
+  let load = realmVisualOverridesLoads.get(realmId);
+  if (!load) {
+    load = fetchRealmVisualOverrides(realmId)
+      .catch(() => false)
+      .then((loaded) => {
+        // Push the same overrides into the in-world renderer so a reassigned
+        // NPC/class body applies to the world, not just the create screen.
+        setBodyOverrides(realmId, getRealmVisualOverrides(realmId));
+        return loaded;
+      });
+    realmVisualOverridesLoads.set(realmId, load);
+  }
+  return load;
+}
 
 // Admin: expose the live body editor globally (also reachable over
 // arcforge.moveweight.com, which proxies /api/*) and repaint the create screen
@@ -4643,10 +4672,7 @@ function paintRealmClassChoices(): void {
   // so a reassigned class/hero body shows without a code deploy.
   if (!realmVisualOverridesFetched.has(realm.id)) {
     realmVisualOverridesFetched.add(realm.id);
-    void fetchRealmVisualOverrides(realm.id).then((loaded) => {
-      // Push the same overrides into the in-world renderer so a reassigned
-      // NPC/class body applies to the world, not just the create screen.
-      setBodyOverrides(realm.id, getRealmVisualOverrides(realm.id));
+    void ensureRealmVisualOverridesLoaded(realm.id).then((loaded) => {
       if (loaded) paintRealmClassChoices();
     });
   }
@@ -6228,6 +6254,12 @@ async function refreshCharacters(): Promise<void> {
     // character shows the mech body without a class-body flash (setAppearance
     // falls back gracefully if this has not resolved yet).
     if (chars.some((c) => c.skinCatalog === 'mech')) void preloadMechAssets();
+    // Roster rows show each hero's REAL body portrait (the png published beside
+    // its GLB), resolved through the operator's live body overrides — install
+    // them before the rows render. Best-effort: on a failed fetch the chips
+    // just keep the crest/class-portrait flow.
+    const rosterRealmId = realmContentForCharacterUi().id;
+    await ensureRealmVisualOverridesLoaded(rosterRealmId);
     listEl.innerHTML = '';
     // Per-row guard. A throw in the row builder used to abort the whole loop AFTER
     // listEl was cleared, leaving an empty roster with no message and no trace -
@@ -6279,7 +6311,15 @@ async function refreshCharacters(): Promise<void> {
       const inWorldHint = c.online
         ? `<span class="char-inworld-hint">${escapeHtml(t('character.inWorldHint'))}</span>`
         : '';
-      row.innerHTML = `${portraitChipHtml({ cls: c.class, skin: c.skin ?? 0, name: c.name, variant: 'sm' })}
+      row.innerHTML = `${portraitChipHtml({
+        cls: c.class,
+        skin: c.skin ?? 0,
+        name: c.name,
+        variant: 'sm',
+        // The character's real-body portrait; null (no reassigned body) or a
+        // 404ing png falls back to the crest/class chip exactly as before.
+        imageUrl: characterPortraitUrl(rosterRealmId, c.realmHeroId, c.class),
+      })}
         <div class="char-id">
           <span class="char-name">${escapeHtml(c.name)}</span>
           <span class="char-sub">${escapeHtml(t('character.levelClass', { level: c.level, className }))}${escapeHtml(statusText)}</span>
@@ -6475,11 +6515,7 @@ async function enterWorld(c: CharacterSummary, button?: HTMLButtonElement): Prom
   // Load the operator's body overrides before the world renders so any reassigned
   // NPC/class body applies in-world from the first frame (all entry paths pass here).
   const enterRealmId = realmContentForCharacterUi().id;
-  if (!realmVisualOverridesFetched.has(enterRealmId)) {
-    realmVisualOverridesFetched.add(enterRealmId);
-    await fetchRealmVisualOverrides(enterRealmId).catch(() => false);
-  }
-  setBodyOverrides(enterRealmId, getRealmVisualOverrides(enterRealmId));
+  await ensureRealmVisualOverridesLoaded(enterRealmId);
   try {
     if (button) {
       button.disabled = true;
