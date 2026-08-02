@@ -334,8 +334,16 @@ describe('realm visual target catalog', () => {
   it('exposes every Infernal faction character once plus classes, NPCs, and creatures', () => {
     const { targets } = realmVisualTargets('infernal');
     const factionTargets = targets.filter((target) => target.section === 'Faction characters');
-    expect(factionTargets).toHaveLength(24);
-    expect(new Set(factionTargets.map((target) => target.key)).size).toBe(24);
+    // 18 heaven cards + 6 hell cards + 2 hidden Sorcerer/Sorceress variants:
+    // variant ids are real publishable targets (that is how a variant body ships).
+    expect(factionTargets).toHaveLength(26);
+    expect(new Set(factionTargets.map((target) => target.key)).size).toBe(26);
+    expect(factionTargets.some((target) => target.key === 'hero:infernal-hero-sorceress')).toBe(
+      true,
+    );
+    expect(factionTargets.some((target) => target.key === 'hero:infernal-hero-sorcerer-m')).toBe(
+      true,
+    );
     expect(factionTargets.find((target) => target.label.startsWith('Dark Paladin'))?.faction).toBe(
       'hell',
     );

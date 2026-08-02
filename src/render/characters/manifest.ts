@@ -2107,6 +2107,10 @@ function overrideVisualKeyForEntity(e: Entity): string | null {
   if (e.kind === 'player') {
     const selection = infernalCharacterSelection(realm, e.realmHeroId, e.templateId as PlayerClass);
     entry = selection ? (map[`hero:${selection.id}`] ?? map[`hero:${selection.name}`]) : undefined;
+    // A hidden hero variant with no published body of its own falls back to
+    // the canonical selection it presents under (e.g. hero:infernal-hero-sorcerer-m
+    // -> hero:infernal-hero-sorcerer-sorceress until a male body is published).
+    if (!entry && selection?.variantOf) entry = map[`hero:${selection.variantOf}`];
     entry ??= map[`class:${e.templateId}`];
   } else if (e.kind === 'npc') {
     entry = map[`npc:${e.templateId}`];

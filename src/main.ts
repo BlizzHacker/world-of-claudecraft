@@ -4556,6 +4556,15 @@ function realmHeroPortraitUrl(assetUrl: string | undefined): string | null {
   return portraitUrlForBodyAsset(assetUrl);
 }
 
+/** Compact glyph for a hero-variant toggle chip: the conventional signs for the
+ *  common Female/Male pair, any other (data-authored, short) label verbatim. */
+function variantToggleGlyph(label: string): string {
+  const normalized = label.trim().toLowerCase();
+  if (normalized === 'female') return '\u2640';
+  if (normalized === 'male') return '\u2642';
+  return label;
+}
+
 function paintInfernalHeroRoster(
   row: HTMLElement,
   choices: ReturnType<typeof infernalHeroChoicesForRealm>,
@@ -4563,6 +4572,9 @@ function paintInfernalHeroRoster(
 ): void {
   row.classList.add('infernal-hero-roster');
   row.innerHTML = choices
+    // Hidden variant entries never render a card of their own; they are only
+    // reachable through the canonical card's variant toggle.
+    .filter((choice) => !choice.variantOf)
     .filter((choice) => !activeFaction || choice.faction === activeFaction)
     .map((choice) => {
       // Portrait render published alongside the body GLB; onerror hides the
@@ -4571,7 +4583,19 @@ function paintInfernalHeroRoster(
       const portraitHtml = portraitUrl
         ? `<img class="mini-class-portrait" src="${escapeHtml(portraitUrl)}" alt="" loading="lazy" decoding="async" onerror="this.style.display='none'" />`
         : '';
-      return `<button type="button" class="mini-class realm-skinned realm-playable${portraitUrl ? ' has-portrait' : ''}" data-class="${choice.baseClass}" data-hero-id="${choice.heroId}" data-faction="${choice.faction}" data-realm-faction="${choice.faction}" data-realm-asset="${choice.assetUrl}" data-realm-asset-name="${choice.assetName}" data-realm-asset-status="ready" aria-label="${escapeHtml(`${choice.name}, ${choice.faction}`)}" aria-pressed="false" title="${escapeHtml(choice.assetName ?? choice.name)}">${portraitHtml}<span class="mini-class-text"><span class="mini-class-label">${escapeHtml(choice.name)}</span><span class="mini-class-faction">${escapeHtml(choice.faction)}</span></span></button>`;
+      const variants = choice.variants ?? [];
+      // The pending create always carries a specific variant id (default =
+      // first variant); the canonical id stays valid for existing characters.
+      const defaultHeroId = variants[0]?.heroId ?? choice.heroId;
+      const variantsHtml = variants.length
+        ? `<span class="mini-class-variants" role="group" aria-label="${escapeHtml(`${choice.name} variant`)}">${variants
+            .map(
+              (variant, index) =>
+                `<span class="mini-class-variant${index === 0 ? ' sel' : ''}" role="button" tabindex="0" data-variant-hero-id="${variant.heroId}" aria-pressed="${index === 0 ? 'true' : 'false'}" aria-label="${escapeHtml(variant.label)}" title="${escapeHtml(variant.label)}">${escapeHtml(variantToggleGlyph(variant.label))}</span>`,
+            )
+            .join('')}</span>`
+        : '';
+      return `<button type="button" class="mini-class realm-skinned realm-playable${portraitUrl ? ' has-portrait' : ''}" data-class="${choice.baseClass}" data-hero-id="${defaultHeroId}" data-faction="${choice.faction}" data-realm-faction="${choice.faction}" data-realm-asset="${choice.assetUrl}" data-realm-asset-name="${choice.assetName}" data-realm-asset-status="ready" aria-label="${escapeHtml(`${choice.name}, ${choice.faction}`)}" aria-pressed="false" title="${escapeHtml(choice.assetName ?? choice.name)}">${portraitHtml}<span class="mini-class-text"><span class="mini-class-label">${escapeHtml(choice.name)}</span><span class="mini-class-faction">${escapeHtml(choice.faction)}</span></span>${variantsHtml}</button>`;
     })
     .join('');
   row.querySelectorAll<HTMLElement>('.mini-class').forEach((card) => {
@@ -4591,6 +4615,34 @@ function paintInfernalHeroRoster(
     card.addEventListener('keydown', (event) =>
       handleKeyboardActivation(event as KeyboardEvent, select),
     );
+    // Variant toggle: picking one swaps the pending create's hero id
+    // (data-hero-id) while the card stays selected, then reruns the select
+    // flow so details/preview resolve through the variant id. A variant with
+    // no published body yet still works — resolution falls back to the
+    // canonical hero's body (see infernalHeroOverrideKeys).
+    card.querySelectorAll<HTMLElement>('.mini-class-variant').forEach((chip) => {
+      const pick = () => {
+        const variantHeroId = chip.dataset.variantHeroId;
+        if (!variantHeroId) return;
+        card.dataset.heroId = variantHeroId;
+        card.querySelectorAll<HTMLElement>('.mini-class-variant').forEach((other) => {
+          other.classList.toggle('sel', other === chip);
+          other.setAttribute('aria-pressed', other === chip ? 'true' : 'false');
+        });
+        select();
+      };
+      chip.addEventListener('click', (event) => {
+        event.stopPropagation();
+        pick();
+      });
+      chip.addEventListener('keydown', (event) => {
+        const key = (event as KeyboardEvent).key;
+        if (key !== 'Enter' && key !== ' ') return;
+        event.preventDefault();
+        event.stopPropagation();
+        pick();
+      });
+    });
   });
   const first = row.querySelector<HTMLElement>('.mini-class');
   if (first) first.click();

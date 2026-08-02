@@ -119,6 +119,8 @@ const CR_REALMS_MIME: Record<string, string> = {
   '.webp': 'image/webp',
   '.mp3': 'audio/mpeg',
   '.ogg': 'audio/ogg',
+  // The /cr-realms/review/ asset-review gallery page lives inside the store.
+  '.html': 'text/html; charset=utf-8',
 };
 const CR_REALMS_REF_RE = /^[A-Za-z0-9_.-]+(?:\/[A-Za-z0-9 _.()-]+)*$/;
 

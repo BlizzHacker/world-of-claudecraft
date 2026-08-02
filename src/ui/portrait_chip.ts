@@ -13,7 +13,10 @@ import {
   portraitsReady,
   visualPortraitDataUrl,
 } from '../render/characters/portrait';
-import { infernalCharacterSelection } from '../sim/realms/infernal_classes';
+import {
+  infernalCharacterSelection,
+  infernalHeroOverrideKeys,
+} from '../sim/realms/infernal_classes';
 import type { PlayerClass } from '../sim/types';
 import { firstRealmVisualOverride } from './cryptic/realm_visual_overrides';
 import { esc } from './esc';
@@ -55,7 +58,8 @@ export function portraitUrlForBodyAsset(assetUrl: string | null | undefined): st
  * reassigned realm body. Resolution mirrors overrideVisualKeyForEntity
  * (render/characters/manifest.ts) and the create screen's infernalClassChoice:
  * the realm's operator overrides are consulted for the hero id, then the hero
- * display name, then the base class, and the winning body's GLB url maps to
+ * display name, then — for a hidden hero variant — its canonical selection's
+ * id and name, then the base class, and the winning body's GLB url maps to
  * the portrait png published beside it. Never loads a GLB — callers keep their
  * crest/class-portrait fallback for a missing override or a 404ing png.
  * `realm` must be the id the overrides were installed under (the active realm
@@ -72,7 +76,7 @@ export function characterPortraitUrl(
   const override = firstRealmVisualOverride(
     realm,
     selection
-      ? [`hero:${selection.id}`, `hero:${selection.name}`, `class:${cls}`]
+      ? [...infernalHeroOverrideKeys(realm, selection), `class:${cls}`]
       : [`class:${cls}`],
   );
   return override ? portraitUrlForBodyAsset(override.assetUrl) : null;

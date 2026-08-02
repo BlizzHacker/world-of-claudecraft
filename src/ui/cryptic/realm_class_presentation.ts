@@ -1,5 +1,9 @@
 import { factionForRealmClass } from '../../sim/realms/factions';
-import { infernalCharacterSelectionsForRealm } from '../../sim/realms/infernal_classes';
+import {
+  infernalCharacterSelectionsForRealm,
+  infernalHeroOverrideKeys,
+} from '../../sim/realms/infernal_classes';
+import type { InfernalHeroVariant } from '../../sim/realms/infernal_classes';
 import type { RealmClassSkin, RealmContent, RealmId, RealmRole } from '../../sim/realms/types';
 import type { PlayerClass } from '../../sim/types';
 import { firstRealmVisualOverride } from './realm_visual_overrides';
@@ -35,6 +39,11 @@ export interface RealmClassPresentation {
 export interface InfernalHeroPresentation extends RealmClassPresentation {
   heroId: string;
   factionSide: 'heaven' | 'hell';
+  /** Variants selectable from this canonical card's segmented toggle. */
+  variants?: readonly InfernalHeroVariant[];
+  /** Canonical selection id a hidden variant entry presents under; entries
+   *  carrying this never render as their own card. */
+  variantOf?: string;
 }
 
 export type RealmClassAssetStatus = 'ready' | 'preview' | 'comingSoon';
@@ -850,14 +859,17 @@ function infernalClassChoice(
   factionSide: InfernalHeroPresentation['factionSide'],
   assetChoice: RealmClassAsset,
   heroId: string,
+  variantOf?: string,
+  variants?: readonly InfernalHeroVariant[],
 ): InfernalHeroPresentation {
   const base = classPresentationForRealm(realm, baseClass);
   const faction = factionSide === 'hell' ? INFERNAL_HELL_FACTION : INFERNAL_HERO_FACTION;
   // Operator override: a saved reassignment for this hero (or its base class)
   // swaps the body asset live, ahead of the compiled default.
+  // A hidden variant with no override of its own falls back to the canonical
+  // selection's keys, so the toggle can offer a variant before its body exists.
   const override = firstRealmVisualOverride(realm.id, [
-    `hero:${heroId}`,
-    `hero:${name}`,
+    ...infernalHeroOverrideKeys(realm.id, { id: heroId, name, variantOf }),
     `class:${baseClass}`,
   ]);
   const resolvedAsset: RealmClassAsset = override
@@ -887,6 +899,8 @@ function infernalClassChoice(
     ...resolvedAsset,
     heroId,
     factionSide,
+    ...(variants ? { variants } : {}),
+    ...(variantOf ? { variantOf } : {}),
   };
 }
 
@@ -898,17 +912,27 @@ function infernalClassChoice(
 export function infernalHeroChoicesForRealm(realm: RealmContent): InfernalHeroPresentation[] {
   if (realm.id !== 'infernal') return [];
   const enemyAssets = new Map(INFERNAL_HELL_ENEMIES.map((enemy) => [enemy.name, enemy.asset]));
-  return infernalCharacterSelectionsForRealm(realm.id).map((selection) =>
+  const selections = infernalCharacterSelectionsForRealm(realm.id);
+  const byId = new Map(selections.map((selection) => [selection.id, selection]));
+  const compiledAsset = (selection: (typeof selections)[number]): RealmClassAsset =>
+    selection.factionSide === 'hell'
+      ? (enemyAssets.get(selection.name) ?? INFERNAL_BASE_CLASS_ASSETS[selection.engineClass])
+      : (INFERNAL_HERO_ASSETS[selection.name] ??
+          INFERNAL_BASE_CLASS_ASSETS[selection.engineClass]);
+  return selections.map((selection) =>
     infernalClassChoice(
       realm,
       selection.name,
       selection.engineClass,
       selection.factionSide,
-      selection.factionSide === 'hell'
-        ? (enemyAssets.get(selection.name) ?? INFERNAL_BASE_CLASS_ASSETS[selection.engineClass])
-        : (INFERNAL_HERO_ASSETS[selection.name] ??
-            INFERNAL_BASE_CLASS_ASSETS[selection.engineClass]),
+      // A hidden variant ships no compiled asset of its own: it presents the
+      // canonical card's body until an override for its own id is published.
+      compiledAsset(
+        selection.variantOf ? (byId.get(selection.variantOf) ?? selection) : selection,
+      ),
       selection.id,
+      selection.variantOf,
+      selection.variants,
     ),
   );
 }

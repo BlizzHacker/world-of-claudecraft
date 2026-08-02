@@ -61,6 +61,15 @@ export type InfernalCharacterVisualKey =
   | 'realm_cryptic_bone_herald'
   | 'realm_infernal_skullbeast';
 
+export interface InfernalHeroVariant {
+  /** Short user-facing label for the card's segmented toggle (e.g. 'Female'). */
+  readonly label: string;
+  /** A REAL selection id: the variant exists in the selections list as a hidden
+   *  entry (flagged variantOf), so create validation and body resolution treat
+   *  it exactly like any other selection. */
+  readonly heroId: string;
+}
+
 export interface InfernalCharacterSelection {
   readonly id: string;
   readonly name: string;
@@ -69,6 +78,15 @@ export interface InfernalCharacterSelection {
   /** Any registered visual key. Was narrowed to the infernal union while this
    *  roster was infernal-only; every realm now supplies its own bodies. */
   readonly visualKey: string;
+  /** Presentation variants of this canonical card (canonical entries only).
+   *  The card renders a compact segmented toggle; picking one submits the
+   *  variant's own id as the character's realmHeroId. */
+  readonly variants?: readonly InfernalHeroVariant[];
+  /** Set on hidden variant selections: the canonical selection id this variant
+   *  presents under. Hidden entries never render as their own creator card and
+   *  resolve to the canonical body until an override for their own
+   *  `hero:<id>` key is published. */
+  readonly variantOf?: string;
 }
 
 const entry = (
@@ -154,6 +172,18 @@ const HERO_VISUALS: Readonly<Record<string, InfernalCharacterVisualKey>> = {
   Tempest: 'realm_infernal_class_tempest',
 };
 
+/** Presentation variants per canonical selection name. Adding an entry here is
+ *  the ONLY step needed to give any hero card a variant toggle: each heroId
+ *  becomes a real hidden selection automatically (same class/faction/visual)
+ *  and resolves to the canonical body until a body override for its own
+ *  `hero:<id>` key is published. */
+const HERO_VARIANTS: Readonly<Record<string, readonly InfernalHeroVariant[]>> = {
+  'Sorcerer / Sorceress': [
+    { label: 'Female', heroId: 'infernal-hero-sorceress' },
+    { label: 'Male', heroId: 'infernal-hero-sorcerer-m' },
+  ],
+};
+
 const HELL_SELECTIONS: readonly Omit<InfernalCharacterSelection, 'id'>[] = [
   {
     name: 'Dark Paladin',
@@ -205,6 +235,28 @@ export function infernalSelectionId(side: 'heaven' | 'hell', name: string): stri
   return `infernal-${side === 'hell' ? 'hell' : 'hero'}-${slug}`;
 }
 
+/** Push a canonical selection plus, when HERO_VARIANTS names it, the hidden
+ *  selection behind each of its variants. */
+function pushWithVariants(
+  selections: InfernalCharacterSelection[],
+  selection: InfernalCharacterSelection,
+): void {
+  const variants = HERO_VARIANTS[selection.name];
+  if (!variants || variants.length === 0) {
+    selections.push(selection);
+    return;
+  }
+  selections.push({ ...selection, variants });
+  for (const variant of variants) {
+    selections.push({
+      ...selection,
+      id: variant.heroId,
+      name: `${selection.name} (${variant.label})`,
+      variantOf: selection.id,
+    });
+  }
+}
+
 function buildSelections(): InfernalCharacterSelection[] {
   const selections: InfernalCharacterSelection[] = [];
   const seen = new Set<string>();
@@ -214,7 +266,7 @@ function buildSelections(): InfernalCharacterSelection[] {
     const visualKey = HERO_VISUALS[name];
     if (!visualKey) continue;
     seen.add(name);
-    selections.push({
+    pushWithVariants(selections, {
       id: infernalSelectionId('heaven', name),
       name,
       engineClass: source.engineClass,
@@ -223,7 +275,7 @@ function buildSelections(): InfernalCharacterSelection[] {
     });
   }
   for (const enemy of HELL_SELECTIONS) {
-    selections.push({
+    pushWithVariants(selections, {
       ...enemy,
       id: infernalSelectionId('hell', enemy.name),
     });
@@ -283,4 +335,25 @@ export function infernalCharacterSelection(
       (selection) => selection.id === selectionId && selection.engineClass === engineClass,
     ) ?? null
   );
+}
+
+/**
+ * Ordered `hero:` override-lookup keys for a selection. A hidden variant that
+ * has no published body of its own resolves through the canonical selection it
+ * presents under (id, then display name), so a variant is selectable before
+ * its body exists and simply shows the canonical body until then.
+ */
+export function infernalHeroOverrideKeys(
+  realm: string,
+  selection: Pick<InfernalCharacterSelection, 'id' | 'name' | 'variantOf'>,
+): string[] {
+  const keys = [`hero:${selection.id}`, `hero:${selection.name}`];
+  if (selection.variantOf) {
+    keys.push(`hero:${selection.variantOf}`);
+    const canonical = infernalCharacterSelectionsForRealm(realm).find(
+      (candidate) => candidate.id === selection.variantOf,
+    );
+    if (canonical && canonical.name !== selection.name) keys.push(`hero:${canonical.name}`);
+  }
+  return keys;
 }

@@ -7680,6 +7680,40 @@
     white-space: nowrap;
     text-overflow: ellipsis;
   }
+  /* Variant segmented toggle (e.g. Female/Male) on cards whose hero offers
+     presentation variants. Sits at the card's right edge inside the fixed
+     64px row so it never changes the card geometry the roster layout owns. */
+  #charcreate-panel .mini-class-row.infernal-hero-roster .mini-class .mini-class-variants {
+    display: flex;
+    flex: 0 0 auto;
+    margin-left: auto;
+    gap: 3px;
+  }
+  .mini-class-variants .mini-class-variant {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 4px;
+    border: 1px solid rgba(137, 102, 43, 0.55);
+    border-radius: 5px;
+    background: rgba(12, 10, 14, 0.65);
+    color: #b9a783;
+    font-size: 13px;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .mini-class-variants .mini-class-variant:hover,
+  .mini-class-variants .mini-class-variant:focus-visible {
+    border-color: rgba(214, 168, 96, 0.9);
+    color: #f4e6c8;
+  }
+  .mini-class-variants .mini-class-variant.sel {
+    border-color: #d6a860;
+    background: linear-gradient(180deg, rgba(96, 66, 24, 0.9), rgba(52, 34, 16, 0.95));
+    color: #ffe9bd;
+  }
   .realm-faction-filter {
     display: flex;
     gap: 8px;
