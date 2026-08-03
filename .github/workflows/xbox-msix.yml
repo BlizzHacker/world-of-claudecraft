@@ -197,6 +197,22 @@ jobs:
           Write-Host ("sideload: {0:N0} bytes" -f $side.Length)
           Write-Host ("store:    {0:N0} bytes" -f $store.Length)
 
+      - name: Upload diagnostic probe
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path out\probe -Force | Out-Null
+          $pr = Get-ChildItem -Recurse -Path shell\CrypticRealm.Probe -Filter *.msix |
+                Sort-Object LastWriteTime -Descending | Select-Object -First 1
+          if (-not $pr) { Write-Error 'no probe package'; exit 1 }
+          Copy-Item $pr.FullName 'out\probe\CR-Probe.msix'
+          Write-Host ("probe: {0:N0} bytes" -f $pr.Length)
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cryptic-realm-xbox-probe
+          path: out/probe/*.msix
+          if-no-files-found: error
+
       - name: Upload sideload package
         uses: actions/upload-artifact@v4
         with:
