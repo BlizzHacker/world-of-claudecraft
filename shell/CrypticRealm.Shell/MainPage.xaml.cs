@@ -172,6 +172,35 @@ namespace CrypticRealm.Shell
                 return;
             }
 
+            // Two navigation guards for console reality. The WebView2 maps a
+            // controller gesture to history back and forward, which reloads the
+            // page under the player and looks like being logged out; nothing in
+            // this app navigates through history on purpose, so those are
+            // cancelled outright. And every top-level navigation off app.local
+            // is cancelled too: the whole client is packaged, and the only
+            // things that try to leave (OAuth redirects, community links) strand
+            // the player in a webview with no browser chrome to come back with.
+            core.NavigationStarting += (s, a) =>
+            {
+                if (a.NavigationKind == CoreWebView2NavigationKind.BackOrForward)
+                {
+                    a.Cancel = true;
+                    return;
+                }
+                try
+                {
+                    var target = new Uri(a.Uri);
+                    if (!target.Host.Equals(VirtualHost, StringComparison.OrdinalIgnoreCase))
+                    {
+                        a.Cancel = true;
+                    }
+                }
+                catch (Exception)
+                {
+                    a.Cancel = true;
+                }
+            };
+
             core.NavigationCompleted += (s, a) =>
             {
                 if (a.IsSuccess)
