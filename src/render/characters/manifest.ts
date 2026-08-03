@@ -2082,7 +2082,30 @@ function overrideVisualHash(url: string): string {
   return (hash >>> 0).toString(36);
 }
 
+// url -> registered visual key, built lazily over VISUALS (which already holds
+// the generated realm bodies) and kept in step as override visuals are added.
+let visualKeyByUrl: Map<string, string> | null = null;
+function knownVisualKeyForUrl(url: string): string | null {
+  if (!visualKeyByUrl) {
+    visualKeyByUrl = new Map();
+    for (const [k, def] of Object.entries(VISUALS)) {
+      if (def?.url && !visualKeyByUrl.has(def.url)) visualKeyByUrl.set(def.url, k);
+    }
+  }
+  return visualKeyByUrl.get(url) ?? null;
+}
+
 function registerOverrideVisual(entry: BodyOverrideEntry): string {
+  // An override almost always points at a GLB the manifest ALREADY registers -
+  // every generated realm body, and every hand-authored one. Synthesizing a
+  // second, generic def for that same file discards everything the real entry
+  // knows: its fitted height (2.2-2.3 for the infernal humans, 2.6 for generated
+  // bodies - not the 2.0 guess below), its authored clip map, weapon sockets and
+  // tint. NPCs pointed at known bodies this way rendered short, bare and stiff.
+  // Reuse the registered entry; only a genuinely unknown url needs the generic
+  // auto-clip def, which leans on the shared clip bank to animate at all.
+  const known = knownVisualKeyForUrl(entry.assetUrl);
+  if (known) return known;
   const key = `override_${overrideVisualHash(entry.assetUrl)}`;
   if (!VISUALS[key]) {
     VISUALS[key] = {
@@ -2093,6 +2116,7 @@ function registerOverrideVisual(entry: BodyOverrideEntry): string {
       clips: OVERRIDE_AUTO_CLIPS,
       animUrls: [OVERRIDE_CLIP_BANK_URL],
     };
+    visualKeyByUrl?.set(entry.assetUrl, key);
   }
   return key;
 }

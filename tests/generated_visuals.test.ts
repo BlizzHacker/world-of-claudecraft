@@ -22,7 +22,15 @@ import {
   REALM_MELEE_POOL,
 } from '../src/render/characters/realm_arms.generated';
 
-const STORE = process.env.CR_REALMS_DIR ?? '/mnt/usb4/moveweight-assets/cr-realms';
+// The LIVE store is what the server serves (CR_REALMS_DIR in .env); the usb4 path
+// is the out-of-band archive and lags it. Defaulting to the archive made these
+// existence checks silently validate the wrong tree - it reports hundreds of
+// missing GLBs for assets that are live, which reads as a release blocker.
+const STORE =
+  process.env.CR_REALMS_DIR ??
+  (existsSync('/opt/cr-realms-store')
+    ? '/opt/cr-realms-store'
+    : '/mnt/usb4/moveweight-assets/cr-realms');
 const storePresent = existsSync(STORE);
 
 describe('generated realm visuals', () => {
