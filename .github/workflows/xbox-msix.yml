@@ -118,43 +118,6 @@ jobs:
           if (-not $deps) { Write-Error 'no framework dependencies emitted'; exit 1 }
           $deps | ForEach-Object { Write-Host ("  {0,12:N0}  {1}" -f $_.Length, $_.Name) }
 
-      - name: Build DEBUG diagnostic package (no packaged client)
-        shell: pwsh
-        run: |
-          # Diagnostics only, and deliberately WITHOUT the 598MB client: the
-          # memory failure happens in the web client, so a thin shell pointing
-          # at the live site reproduces it exactly while staying small enough
-          # to actually transfer and deploy. The full artifact with three
-          # ~600MB packages could not be downloaded at all.
-          #
-          # Debug enables the WebView2 remote-debugging hook (the Xbox Edge
-          # browser has no DevTools, so this is the only telemetry available)
-          # and is plain IL rather than .NET Native, which independently tests
-          # whether .NET Native is what activation is rejecting.
-          Remove-Item 'shell\CrypticRealm.Shell\web' -Recurse -Force -ErrorAction SilentlyContinue
-          New-Item -ItemType Directory -Path 'shell\CrypticRealm.Shell\web' | Out-Null
-          Set-Content 'shell\CrypticRealm.Shell\web\.keep' ''
-          msbuild shell\CrypticRealm.Shell\CrypticRealm.Shell.csproj `
-            /p:Configuration=Debug `
-            /p:Platform=x64 `
-            /p:AppxBundle=Never `
-            /p:UapAppxPackageBuildMode=SideloadOnly `
-            /p:AppxPackageSigningEnabled=false `
-            /p:GenerateAppInstallerFile=false `
-            /v:minimal /consoleloggerparameters:Summary
-          $dbg = Get-ChildItem -Recurse -Path shell -Filter *.msix |
-                 Sort-Object LastWriteTime -Descending | Select-Object -First 1
-          Write-Host ("debug package: {0:N0} bytes  {1}" -f $dbg.Length, $dbg.Name)
-          New-Item -ItemType Directory -Path debugout -Force | Out-Null
-          Copy-Item $dbg.FullName 'debugout\CrypticRealm-Debug.msix'
-
-      - name: Upload the debug package on its own
-        uses: actions/upload-artifact@v4
-        with:
-          name: cryptic-realm-xbox-debug
-          path: debugout/*.msix
-          if-no-files-found: error
-
       - name: Locate output
         shell: pwsh
         run: |
@@ -216,13 +179,72 @@ jobs:
           Write-Host ("device families: " + ($fams -join ', '))
           if ($fams -notcontains 'Windows.Xbox') { Write-Error 'Xbox family missing'; exit 1 }
 
-      - name: Upload packages
+      - name: Stage each package on its own
+        shell: pwsh
+        run: |
+          # Separate artifacts: the sideload package and the Store package are
+          # each ~600MB with the client inside, and a combined artifact could
+          # not be downloaded at all.
+          New-Item -ItemType Directory -Path out\sideload,out\store -Force | Out-Null
+          $side = Get-ChildItem -Recurse -Path shell\CrypticRealm.Shell -Filter *.msix |
+                  Where-Object { $_.FullName -like '*_Test*' } | Select-Object -First 1
+          $store = Get-ChildItem -Recurse -Path shell\CrypticRealm.Shell -Filter *.msixupload |
+                   Select-Object -First 1
+          if (-not $side) { Write-Error 'no sideload package'; exit 1 }
+          if (-not $store) { Write-Error 'no store package'; exit 1 }
+          Copy-Item $side.FullName 'out\sideload\CrypticRealm-Xbox.msix'
+          Copy-Item $store.FullName 'out\store\CrypticRealm-Xbox.msixupload'
+          Write-Host ("sideload: {0:N0} bytes" -f $side.Length)
+          Write-Host ("store:    {0:N0} bytes" -f $store.Length)
+
+      - name: Upload sideload package
         uses: actions/upload-artifact@v4
         with:
-          name: cryptic-realm-xbox
-          path: |
-            shell/**/*.msix
-            shell/**/*.msixupload
-            shell/**/Dependencies/**/*.appx
-            shell/**/*.cer
+          name: cryptic-realm-xbox-sideload
+          path: out/sideload/*.msix
           if-no-files-found: error
+
+      - name: Upload store package
+        uses: actions/upload-artifact@v4
+        with:
+          name: cryptic-realm-xbox-store
+          path: out/store/*.msixupload
+          if-no-files-found: error
+
+      - name: Build DEBUG diagnostic package (no packaged client)
+        shell: pwsh
+        run: |
+          # Diagnostics only, and deliberately WITHOUT the 598MB client: the
+          # memory failure happens in the web client, so a thin shell pointing
+          # at the live site reproduces it exactly while staying small enough
+          # to actually transfer and deploy. The full artifact with three
+          # ~600MB packages could not be downloaded at all.
+          #
+          # Debug enables the WebView2 remote-debugging hook (the Xbox Edge
+          # browser has no DevTools, so this is the only telemetry available)
+          # and is plain IL rather than .NET Native, which independently tests
+          # whether .NET Native is what activation is rejecting.
+          Remove-Item 'shell\CrypticRealm.Shell\web' -Recurse -Force -ErrorAction SilentlyContinue
+          New-Item -ItemType Directory -Path 'shell\CrypticRealm.Shell\web' | Out-Null
+          Set-Content 'shell\CrypticRealm.Shell\web\.keep' ''
+          msbuild shell\CrypticRealm.Shell\CrypticRealm.Shell.csproj `
+            /p:Configuration=Debug `
+            /p:Platform=x64 `
+            /p:AppxBundle=Never `
+            /p:UapAppxPackageBuildMode=SideloadOnly `
+            /p:AppxPackageSigningEnabled=false `
+            /p:GenerateAppInstallerFile=false `
+            /v:minimal /consoleloggerparameters:Summary
+          $dbg = Get-ChildItem -Recurse -Path shell -Filter *.msix |
+                 Sort-Object LastWriteTime -Descending | Select-Object -First 1
+          Write-Host ("debug package: {0:N0} bytes  {1}" -f $dbg.Length, $dbg.Name)
+          New-Item -ItemType Directory -Path debugout -Force | Out-Null
+          Copy-Item $dbg.FullName 'debugout\CrypticRealm-Debug.msix'
+
+      - name: Upload the debug package on its own
+        uses: actions/upload-artifact@v4
+        with:
+          name: cryptic-realm-xbox-debug
+          path: debugout/*.msix
+          if-no-files-found: error
+
