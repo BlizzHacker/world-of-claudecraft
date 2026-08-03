@@ -14,7 +14,8 @@
 //   node emit_manifest.mjs --staging /staging --out src/render/characters/manifest.generated.ts
 
 import { readdirSync, writeFileSync, readFileSync, existsSync, statSync } from 'node:fs';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 function arg(n, d = null) {
   const i = process.argv.indexOf(`--${n}`);
@@ -57,13 +58,51 @@ function attacksFor(name, realm) {
 // Realms that fight with firearms. One weapon set, shared: build guns once and every
 // gun-carrying realm inherits them rather than each realm needing its own pass.
 const GUN_REALMS = new Set(['fps', 'dominion', 'arcadevoid']);
-const GUNS = ['wpn_rifle', 'wpn_revolver', 'wpn_blaster_heavy', 'wpn_blaster_sci'];
 
-/** Deterministic weapon pick so a body always spawns with the same gun. */
-function gunFor(key) {
-  let h = 0;
-  for (let i = 0; i < key.length; i++) h = (h * 31 + key.charCodeAt(i)) >>> 0;
-  return GUNS[h % GUNS.length];
+// The REAL weapon libraries, emitted by emit_arms.mjs from the asset store:
+// 255 guns under /cr-realms/fps/weapons and 77 confidently-gripped melee weapons
+// under /cr-realms/classic/melee, each with a measured grip baked into
+// src/render/characters/realm_arms.generated.ts.
+//
+// Before this, every armed body in a gun realm carried one of FOUR hardcoded
+// models, and `${realm}/wpn_*.glb` only actually exists under fps and dominion —
+// so every generated arcadevoid body was reaching for a 404 and rendering
+// empty-handed. Realms without their own bucket now borrow the owning realm's
+// files (the store is one shared tree served at /cr-realms, so a cross-realm URL
+// resolves on every realm host).
+const ARMS_INDEX = arg('arms', join(dirname(fileURLToPath(import.meta.url)), 'arms_index.generated.json'));
+const ARMS = existsSync(ARMS_INDEX) ? JSON.parse(readFileSync(ARMS_INDEX, 'utf8')) : null;
+
+// Fallback for a checkout without the arms index: the historical four models.
+const LEGACY_GUNS = ['wpn_rifle', 'wpn_revolver', 'wpn_blaster_heavy', 'wpn_blaster_sci'];
+
+function poolFor(kind, realm) {
+  const byRealm = ARMS?.[kind];
+  if (!byRealm) return null;
+  // A realm's own bucket wins; otherwise fall back to whichever realm owns the
+  // library for this weapon kind (fps for guns, classic for melee).
+  const own = byRealm[realm];
+  if (own?.length) return own;
+  const shared = kind === 'guns' ? byRealm.fps : byRealm.classic;
+  return shared?.length ? shared : null;
+}
+
+/** Deterministic pick so a body always spawns holding the same weapon. Salted
+ *  per kind so a body's gun and its melee weapon are not the same index. */
+function armFor(pool, key, salt) {
+  let h = 2166136261;
+  const s = `${salt}:${key}`;
+  for (let i = 0; i < s.length; i++) h = ((h ^ s.charCodeAt(i)) * 16777619) >>> 0;
+  return pool[h % pool.length];
+}
+
+/** Mainhand URL for a generated body, or null to keep the hand-authored default. */
+function armUrlFor(realm, key) {
+  const gun = GUN_REALMS.has(realm);
+  const pool = poolFor(gun ? 'guns' : 'melee', realm);
+  if (pool) return armFor(pool, key, gun ? 'gun' : 'melee');
+  if (!gun) return null;
+  return `/cr-realms/${realm}/${armFor(LEGACY_GUNS, key, 'gun')}.glb`;
 }
 
 const entries = existsSync(ENTRIES) ? JSON.parse(readFileSync(ENTRIES, 'utf8')) : [];
@@ -188,16 +227,24 @@ for (const e of out) {
   lines.push("    tint: 'entity',");
   lines.push('    tintStrength: 0.18,');
   if (!e.armed) {
+    const armUrl = armUrlFor(e.realm, e.key);
     if (GUN_REALMS.has(e.realm)) {
       // Firearm: right hand only. A shield in the off-hand reads as nonsense on a
       // shooter, and the ranged clip already occupies both arms.
       lines.push('    attach: [');
-      lines.push(`      { url: \`\${REALM_MODELS}/${e.realm}/${gunFor(e.key)}.glb\`, bone: 'handslot.r' },`);
+      lines.push(`      { url: '${armUrl}', bone: 'handslot.r' },`);
       lines.push('    ],');
       lines.push('    weaponSlots: [0],');
     } else {
+      // Fantasy realms keep the authored KayKit shield in the off-hand; only the
+      // mainhand upgrades to a library weapon, and only when emit_arms.mjs was
+      // confident which end of it is the handle.
       lines.push('    attach: [');
-      lines.push("      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },");
+      if (armUrl) {
+        lines.push(`      { url: '${armUrl}', bone: 'handslot.r' },`);
+      } else {
+        lines.push("      { url: `${WEAPONS}/sword_1handed.glb`, bone: 'handslot.r' },");
+      }
       lines.push("      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },");
       lines.push('    ],');
       lines.push('    weaponSlots: [0],');

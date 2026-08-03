@@ -41,10 +41,19 @@ export function safeForgedPath(ref: string, baseDir = FORGED_DIR): string | null
   return full;
 }
 
-export async function listForgedProps(
-  baseDir = FORGED_DIR,
-): Promise<Array<{ key: string; name: string; url: string; group: string }>> {
-  const items: Array<{ key: string; name: string; url: string; group: string }> = [];
+/** One row of the world-builder catalog. `placeKey` is what the client stores in
+ *  the world document and what isValidBuilderPropKey (server/builder_props.ts)
+ *  and remotePropRef (src/render/remote_prop.ts) must both accept. */
+export interface BuilderCatalogItem {
+  key: string;
+  name: string;
+  url: string;
+  group: string;
+  placeKey: string;
+}
+
+export async function listForgedProps(baseDir = FORGED_DIR): Promise<BuilderCatalogItem[]> {
+  const items: BuilderCatalogItem[] = [];
   const pretty = (s: string) =>
     s
       .replace(/^[a-z]+__/i, '')
@@ -59,6 +68,7 @@ export async function listForgedProps(
         name: pretty(base),
         url: `/forged/${encodeURIComponent(e.name)}`,
         group: 'forged',
+        placeKey: `forged:${base}`,
       });
     } else if (e.isDirectory() && /^[A-Za-z0-9_.-]+$/.test(e.name)) {
       const sub = await fsp.readdir(path.join(baseDir, e.name)).catch(() => [] as string[]);
@@ -70,6 +80,7 @@ export async function listForgedProps(
           name: pretty(base),
           url: `/forged/${encodeURIComponent(e.name)}/${encodeURIComponent(f)}`,
           group: e.name,
+          placeKey: `forged:${e.name}/${base}`,
         });
       }
     }
@@ -153,6 +164,64 @@ export function handleCrRealmsStatic(req: http.IncomingMessage, res: http.Server
   return true;
 }
 
+// World-placeable buckets of the realm asset store. `melee`/`weapons` are held
+// items rather than scenery, so they are deliberately NOT here: they reach the
+// world through a character's hand (manifest.generated.ts attach[]), and a rifle
+// lying on the terrain at prop scale reads as a bug. remotePropRef still accepts
+// them so a builder can place one deliberately by key.
+const REALM_PROP_BUCKETS = ['buildings', 'props', 'vehicles', 'ships', 'mechs', 'turrets'];
+
+// The bucket a row is filed under, shown as the leading word of its name so one
+// realm's few hundred rows stay scannable in a flat alphabetical list.
+const REALM_BUCKET_LABEL: Record<string, string> = {
+  buildings: 'Building',
+  props: 'Prop',
+  vehicles: 'Vehicle',
+  ships: 'Ship',
+  mechs: 'Mech',
+  turrets: 'Turret',
+};
+
+/** Catalog rows for every world-placeable GLB in the realm asset store.
+ *
+ *  These files already ship and are already served at /cr-realms/...; before this
+ *  the world builder had no way to name one, so ~1,300 buildings/props/vehicles/
+ *  ships/mechs/turrets were live on disk and referenced by nothing.
+ *
+ *  Display names come from the SHIPPED SLUG, never from any stored prompt text:
+ *  part of this library is IP-adjacent and was deliberately re-slugged. */
+export async function listRealmProps(baseDir = CR_REALMS_DIR): Promise<BuilderCatalogItem[]> {
+  const items: BuilderCatalogItem[] = [];
+  const pretty = (s: string) =>
+    s
+      .replace(/_[0-9a-f]{6,}$/i, '')
+      .replace(/[_-]+/g, ' ')
+      .trim()
+      .split(/\s+/)
+      .slice(0, 7)
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(' ');
+  const realms = await fsp.readdir(baseDir, { withFileTypes: true }).catch(() => []);
+  for (const realm of realms) {
+    if (!realm.isDirectory() || !/^[a-z0-9][a-z0-9_-]{0,31}$/.test(realm.name)) continue;
+    for (const bucket of REALM_PROP_BUCKETS) {
+      const files = await fsp.readdir(path.join(baseDir, realm.name, bucket)).catch(() => []);
+      for (const f of files) {
+        if (!GLB_RE.test(f)) continue;
+        const base = f.replace(/\.glb$/, '');
+        items.push({
+          key: `${realm.name}/${bucket}/${base}`,
+          name: `${REALM_BUCKET_LABEL[bucket]} \u00b7 ${pretty(base) || base}`,
+          url: `/cr-realms/${realm.name}/${bucket}/${encodeURIComponent(f)}`,
+          group: realm.name,
+          placeKey: `realm:${realm.name}/${bucket}/${base}`,
+        });
+      }
+    }
+  }
+  return items.sort((a, b) => a.group.localeCompare(b.group) || a.name.localeCompare(b.name));
+}
+
 export async function handleForgedCatalog(
   req: http.IncomingMessage,
   res: http.ServerResponse,
@@ -160,7 +229,8 @@ export async function handleForgedCatalog(
   const url = (req.url ?? '').split('?')[0];
   if (url !== '/api/forged-props') return false;
   try {
-    send(res, 200, { props: await listForgedProps() });
+    const [forged, realm] = await Promise.all([listForgedProps(), listRealmProps()]);
+    send(res, 200, { props: [...forged, ...realm] });
   } catch (err) {
     send(res, 500, { error: String(err) });
   }

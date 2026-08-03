@@ -92,6 +92,12 @@ const BACK_GRIPS: Record<string, BackGripSpec> = {
   // so the rim clears the collar. The three shield meshes share one rig-relative
   // proportion, so one shared spec covers all three families; only the hand-grip
   // scale (already computed by the normal grip pass) differs per shield size.
+  // Realm asset libraries (emit_arms.mjs). A gun is a ranged weapon that lies
+  // FLAT across the shoulders exactly like the crossbows rather than hanging off
+  // one shoulder like a blade; the melee library is hafted or bladed, so it
+  // reuses the shoulder carry the swords and axes already use.
+  VAR_REALM_GUN: { position: [0.0, 0.1, -0.3], euler: [0, Math.PI / 2, Math.PI] },
+  VAR_REALM_MELEE: { position: [0.16, 0.14, -0.27], euler: [0.1, 0, Math.PI * 0.72] },
   Round_Shield: { position: [0, 0.24, -0.32], euler: [0, Math.PI, 0] },
   Rectangle_Shield: { position: [0, 0.2, -0.32], euler: [0, Math.PI, 0] },
   Badge_Shield: { position: [0, 0.24, -0.32], euler: [0, Math.PI, 0] },

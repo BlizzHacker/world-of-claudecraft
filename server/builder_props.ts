@@ -46,6 +46,11 @@ const MAX_PROP_KEY_LENGTH = 128;
 const MAX_FORGED_SEGMENT_LENGTH = 64;
 const FORGED_SEGMENT_RE = /^[A-Za-z0-9_.-]+$/;
 const LIBRARY_PROP_RE = /^library:[a-z0-9][a-z0-9_-]{0,31}\/[a-f0-9]{24}$/;
+// Realm asset store props (src/render/remote_prop.ts REALM_RE). Read-only
+// shipped GLBs served from CR_REALMS_DIR, so the only risk is traversal - the
+// character class allows no slash or dot-dot inside the file segment.
+const REALM_PROP_RE =
+  /^realm:[a-z0-9][a-z0-9_-]{0,31}\/(?:props|buildings|vehicles|ships|mechs|turrets|melee|weapons)\/[A-Za-z0-9_.-]+$/;
 
 function isSafeForgedSegment(segment: string): boolean {
   return (
@@ -64,6 +69,7 @@ export function isValidBuilderPropKey(value: unknown): value is string {
   }
   if (NATIVE_PROP_KEYS.has(value)) return true;
   if (LIBRARY_PROP_RE.test(value)) return true;
+  if (REALM_PROP_RE.test(value) && !value.includes('..')) return true;
   if (!value.startsWith('forged:')) return false;
 
   const segments = value.slice('forged:'.length).split('/');

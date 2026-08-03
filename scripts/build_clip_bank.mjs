@@ -159,6 +159,12 @@ for (const r of resolved) {
       skipped.add(name || '(unnamed)');
       continue;
     }
+    // ROTATIONS ONLY. Translation/scale tracks impose the SOURCE rig's bone
+    // lengths on whatever body plays the clip - big bodies visibly shrink to
+    // the donor's proportions during every bank clip (emotes read "mini
+    // KayKit size", the behemoth changes size per animation). Rotation
+    // transplants are proportion-safe on a shared joint hierarchy.
+    if (srcChannel.getTargetPath() !== 'rotation') continue;
     anim.addChannel(
       target
         .createAnimationChannel()

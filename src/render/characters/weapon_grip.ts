@@ -20,6 +20,8 @@
  *  Overrides are authored (and inspector-previewed) against the RIGHT hand; on an
  *  off-hand attachment (rogue dual-wield) `rot` composes against the mirrored
  *  (identity) base, so keep offhand-visible rotations small or expect a mirror. */
+import { REALM_ARM_GRIPS } from './realm_arms.generated';
+
 export interface WeaponGripOverride {
   scale?: number;
   rot?: [number, number, number];
@@ -33,6 +35,8 @@ export interface WeaponGripOverride {
  *  Each value carries any of pos (hand-local offset), rot (XYZ euler degrees),
  *  and scale (a multiplier on the family clamp); omitted fields stay identity. */
 export const WEAPON_GRIP_OVERRIDES: Record<string, WeaponGripOverride> = {
+  // Realm-library arms first, so a hand-tuned row below always wins.
+  ...REALM_ARM_GRIPS,
   // Populated by hand or by the inspector Save button. An absent key is identity.
   notched_woodaxe: { pos: [0.1249, 0.0794, 0.0321], rot: [180, -8.7527, 180], scale: 0.85 },
   whittler_s_knife: { pos: [0, 0.0184, 0], rot: [0, 0, -19.9726], scale: 0.6 },

@@ -39,6 +39,7 @@ import {
   weaponSkinModelUrl,
 } from './manifest';
 import { chooseExternalPreviewClipName } from './preview_clip';
+import { REALM_ARM_FAMILIES } from './realm_arms.generated';
 import { mergeSkinnedParts } from './rig_merge';
 import { weaponSkinAttachBone, weaponSkinHandling } from './skin_attack';
 import { variantGripTransform, WEAPON_GRIP_OVERRIDES } from './weapon_grip';
@@ -161,6 +162,11 @@ const KAYKIT_WEAPON_ACCESSORY: Record<string, string> = {
   // grip family follows the handling, like the attach bone below.
   encore_the_second_falling_star: 'VAR_CROSSBOW',
   ...KAYKIT_SHIELD_ACCESSORIES,
+  // The realm asset libraries (255 guns, 77 melee) are GENERATED, so their
+  // families are generated too - hundreds of slugs cannot live in a hand table.
+  // Spread LAST is still safe: every generated key ends in its own asset id, so
+  // it can never collide with a curated basename above.
+  ...REALM_ARM_FAMILIES,
 };
 
 // Per-family grip for the variant pack. The model origin IS the grip, so we attach
@@ -183,6 +189,14 @@ const VARIANT_GRIPS: Record<string, VariantGrip> = {
   VAR_BOOK: { lift: 0.04, maxHeight: 1.2 },
   VAR_CROSSBOW: { lift: 0.04, maxHeight: 1.6 },
   VAR_BOW: { lift: 0.04, maxHeight: 2.0 },
+  // Realm-library arms. Deliberately inert families: `maxHeight` is a Y-EXTENT
+  // clamp, and a rifle lying along its X axis has almost no Y extent, so the
+  // clamp would never fire and a 2-unit gun would ship at the size of a car.
+  // emit_arms.mjs measures each model and bakes an exact scale (plus the turn
+  // and the slide onto the grip) into WEAPON_GRIP_OVERRIDES instead; `lift` is 0
+  // so that computed slide is not doubled up.
+  VAR_REALM_GUN: { lift: 0, maxHeight: 8 },
+  VAR_REALM_MELEE: { lift: 0, maxHeight: 8 },
 };
 
 const KAYKIT_HAND_GRIPS: Record<string, { r: HandGrip; l?: HandGrip }> = {
