@@ -70,7 +70,7 @@
     <Compile Include="GamepadBridge.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Properties\Default.rd.xml" />
+    <RdXmlFile Include="Properties\Default.rd.xml" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

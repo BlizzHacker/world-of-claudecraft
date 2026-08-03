@@ -9,7 +9,7 @@
 
   <Identity Name="MOVEWEIGHT.CrypticRealmProbe"
             Publisher="CN=6375D74B-5E4F-45B4-B246-B29507C1332A"
-            Version="0.4.0.0" />
+            Version="0.5.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="2b7e4f91-6c33-49a5-8d12-4e9f0a3b67d8"
                     PhonePublisherId="00000000-0000-0000-0000-000000000000" />

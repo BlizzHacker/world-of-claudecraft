@@ -88,7 +88,7 @@ jobs:
             /p:UapAppxPackageBuildMode=StoreAndSideload `
             /p:AppxPackageSigningEnabled=false `
             /p:GenerateAppInstallerFile=false `
-            /v:minimal /consoleloggerparameters:Summary
+            /v:minimal /consoleloggerparameters:Summary 2>&1 | Tee-Object -FilePath build.log
 
       - name: Build diagnostic probe (bare UWP, no WebView2)
         shell: pwsh
@@ -106,6 +106,22 @@ jobs:
             /p:AppxPackageSigningEnabled=false `
             /p:GenerateAppInstallerFile=false `
             /v:minimal /consoleloggerparameters:Summary
+
+      - name: Fail if .NET Native has no runtime directives
+        shell: pwsh
+        run: |
+          # ILT0027 means ILC compiled with NO runtime directives, which strips
+          # the reflection metadata XAML needs to activate types through COM.
+          # That is the exact cause of the NotSupportedException these packages
+          # died with on console, and it went unnoticed because it is only a
+          # warning. An rd.xml added with the wrong item type (<None> instead of
+          # RdXmlFile) is silently ignored, so assert on the compiler output
+          # rather than on the file existing.
+          $log = Get-Content build.log -Raw -ErrorAction SilentlyContinue
+          if ($log -and $log -match 'ILT0027') {
+            Write-Error 'ILT0027: runtime directives were not picked up'
+            exit 1
+          }
 
       - name: Verify the sideload dependency set was emitted
         shell: pwsh
