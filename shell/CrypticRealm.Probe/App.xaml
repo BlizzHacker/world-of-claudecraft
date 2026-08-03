@@ -1,10 +1,17 @@
 <Application
     x:Class="CrypticRealm.Probe.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="using:Microsoft.UI.Xaml.Controls">
-    <Application.Resources>
-        <!-- Required by WinUI 2; the WebView2 control comes from this package. -->
-        <controls:XamlControlsResources ControlsResourcesVersion="Version2" />
-    </Application.Resources>
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Deliberately NO XamlControlsResources.
+
+         The crash dump from a real Xbox Series X shows STATUS_STOWED_EXCEPTION
+         (0xC000027B) thrown inside Windows.UI.Xaml.dll during startup, in a
+         probe whose entire UI is one TextBlock. The frameworks resolved
+         (Microsoft.UI.Xaml.dll is loaded in the dump), so this is not a missing
+         dependency: something in XAML initialisation throws and nothing catches
+         it.
+
+         The WinUI 2 resource dictionary is the only thing this probe pulls from
+         WinUI, and it uses no WinUI controls, so dropping it isolates whether
+         loading those resources is what throws. -->
 </Application>
