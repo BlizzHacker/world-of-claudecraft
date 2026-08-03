@@ -157,7 +157,10 @@ function distToSegment(p, a, b) {
 }
 
 /** Rig `rawGlbPath` onto `referenceGlbPath`'s skeleton; write to `outPath`.
- *  Options: yaw ('auto' -90deg default via preRotated=false), armY override.
+ *  Options: yaw ('auto' -90deg default via preRotated=false), and fitHeight —
+ *  a direct height fit (in reference BIND space) that overrides the arm-line
+ *  scale heuristic. Use it whenever the heuristic misfires; see the note at the
+ *  scale computation below.
  *  Returns a fit report. */
 export async function manualRigOntoReference(rawGlbPath, referenceGlbPath, outPath, opts = {}) {
   const K = opts.influences ?? 4;
@@ -254,7 +257,20 @@ export async function manualRigOntoReference(rawGlbPath, referenceGlbPath, outPa
     }
   }
   const rawArmY = armYSum / Math.max(1, armN) - min[1]; // above feet
-  const scale = wristAbove / rawArmY;
+  // The arm-line heuristic assumes a T-posed humanoid whose widest 5% of
+  // vertices ARE the outstretched hands. On an A-posed, winged, caped, based or
+  // simply non-humanoid mesh the widest slice sits somewhere else entirely and
+  // the fit lands at the wrong scale. That is not a cosmetic miss: the reference
+  // skeleton is a FIXED size on every body (handslot.r is bit-identical across
+  // the whole library), so a mis-scaled mesh leaves every socket-attached prop
+  // both mis-sized (by 1/k) and mis-placed (the mesh's fist moves to k x the
+  // socket's offset while the socket stays put). Note the heuristic is
+  // scale-INVARIANT — re-running it on already-fitted geometry reproduces the
+  // same wrong answer — so a bad fit can only be corrected by overriding it.
+  // fitHeight replaces it with a direct height fit against the reference.
+  const scale = opts.fitHeight
+    ? opts.fitHeight / Math.max(1e-6, max[1] - min[1])
+    : wristAbove / rawArmY;
   const midX = (min[0] + max[0]) / 2;
   const midZ = (min[2] + max[2]) / 2;
 
