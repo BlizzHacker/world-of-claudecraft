@@ -65,12 +65,15 @@ namespace CrypticRealm.Probe
             try
             {
                 // On Xbox, UWP defaults to a 4:3-safe scaled view and shows a mouse
-                // cursor. Neither is wanted: the CSS already keeps content inside the
-                // title-safe area, and a cursor on a TV looks like a bug.
-                ApplicationViewScaling.TrySetDisableLayoutScaling(true);
-                Mark("scaling-done");
-                RequiresPointerMode = ApplicationRequiresPointerMode.WhenRequested;
-                Mark("pointermode-done");
+                // cursor. Neither is wanted, but these are cosmetic tweaks and the
+                // console OS retires the legacy view APIs over time: the June 2026
+                // System OS fails the RequiresPointerMode setter with
+                // E_NOTSUPPORTED. Each tweak may fail on its own; the marker log
+                // records which ones this OS still supports.
+                try { ApplicationViewScaling.TrySetDisableLayoutScaling(true); Mark("scaling-done"); }
+                catch (Exception ex) { Mark("scaling-FAILED " + ex.GetType().Name + ": " + ex.Message); }
+                try { RequiresPointerMode = ApplicationRequiresPointerMode.WhenRequested; Mark("pointermode-done"); }
+                catch (Exception ex) { Mark("pointermode-FAILED " + ex.GetType().Name + ": " + ex.Message); }
 
                 var root = Window.Current.Content as Frame;
                 Mark("window-content-read");
@@ -88,9 +91,13 @@ namespace CrypticRealm.Probe
                     Mark("navigate-done");
                 }
 
-                ApplicationView.GetForCurrentView()
-                    .SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
-                Mark("boundsmode-done");
+                try
+                {
+                    ApplicationView.GetForCurrentView()
+                        .SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
+                    Mark("boundsmode-done");
+                }
+                catch (Exception ex) { Mark("boundsmode-FAILED " + ex.GetType().Name + ": " + ex.Message); }
                 Window.Current.Activate();
                 Mark("activate-done");
             }

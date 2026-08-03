@@ -20,11 +20,18 @@ namespace CrypticRealm.Shell
 
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            // On Xbox, UWP defaults to a 4:3-safe scaled view and shows a mouse
-            // cursor. Neither is wanted: the CSS already keeps content inside the
-            // title-safe area, and a cursor on a TV looks like a bug.
-            ApplicationViewScaling.TrySetDisableLayoutScaling(true);
-            RequiresPointerMode = ApplicationRequiresPointerMode.WhenRequested;
+            // On Xbox, UWP defaults to a 4:3-safe scaled view and can show a
+            // mouse cursor. Neither is wanted, but every call in this block is
+            // a cosmetic view tweak, and the console OS retires these legacy
+            // APIs over time: on the June 2026 System OS (10.0.26100) the
+            // RequiresPointerMode setter fails with E_NOTSUPPORTED, which the
+            // runtime rethrows as NotSupportedException. Unguarded, that killed
+            // the app behind the splash on every launch (the probe's marker log
+            // caught it), so each tweak is allowed to fail on its own.
+            try { ApplicationViewScaling.TrySetDisableLayoutScaling(true); }
+            catch (System.Exception) { }
+            try { RequiresPointerMode = ApplicationRequiresPointerMode.WhenRequested; }
+            catch (System.Exception) { }
 
             var root = Window.Current.Content as Frame;
             if (root == null)
@@ -38,8 +45,12 @@ namespace CrypticRealm.Shell
                 root.Navigate(typeof(MainPage), e.Arguments);
             }
 
-            ApplicationView.GetForCurrentView()
-                .SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
+            try
+            {
+                ApplicationView.GetForCurrentView()
+                    .SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
+            }
+            catch (System.Exception) { }
             Window.Current.Activate();
         }
 

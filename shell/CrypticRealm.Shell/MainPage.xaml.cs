@@ -50,7 +50,10 @@ namespace CrypticRealm.Shell
             // BackRequested -> if unhandled, the shell closes the app. Handling
             // only BackRequested was not enough on real hardware, so B is
             // claimed at the earliest stage as well.
-            SystemNavigationManager.GetForCurrentView().BackRequested += (s, e) => e.Handled = true;
+            // Guarded: another legacy view API, and losing the extra B-claim is
+            // survivable where dying at the splash is not.
+            try { SystemNavigationManager.GetForCurrentView().BackRequested += (s, e) => e.Handled = true; }
+            catch (Exception) { }
 
             var win = Window.Current.CoreWindow;
             win.KeyDown += Swallow;
