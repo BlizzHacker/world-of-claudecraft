@@ -22,7 +22,10 @@ import { registerPreload } from './assets/preload';
 
 // Height (yards) a placed model is normalized to before its per-placement scale,
 // so arbitrary catalogue GLBs (which vary wildly in source units) land sanely.
-const TARGET_HEIGHT = 2.2;
+// Exported because a caller that wants a specific WORLD height has to solve its
+// per-placement scale against this factor (src/sim/realm_decor.ts mirrors it as
+// DECOR_NORMALIZED_HEIGHT; tests/realm_decor.test.ts pins the two together).
+export const PLACED_ASSET_TARGET_HEIGHT = 2.2;
 const RING_SEGMENTS = 40;
 const RING_LIFT = 0.08; // yards above the sampled ground, against z-fighting
 const SELECTION_COLOR = 0xd4af37; // the classic target-reticle gold
@@ -98,9 +101,21 @@ interface Entry {
   removed: boolean;
 }
 
+/** Build-time knobs. Both default to the editor's historical behaviour, so
+ *  existing callers are unchanged; automatic world decoration turns both off
+ *  (it must never gate the loading screen, and landmark shadows are the
+ *  expensive half of a landmark's draw). */
+export interface PlacedAssetsViewOptions {
+  /** Register the initial GLB loads with the boot preload gate. Default true. */
+  preload?: boolean;
+  /** Cast + receive shadows on every placed mesh. Default true. */
+  shadows?: boolean;
+}
+
 export class PlacedAssetsView {
   readonly group: THREE.Group;
   private readonly seed: number;
+  private readonly shadows: boolean;
   private readonly entries = new Map<number, Entry>();
   private readonly templates = new Map<string, Promise<TemplateInfo | null>>();
   private footprintsOn = false;
@@ -121,11 +136,16 @@ export class PlacedAssetsView {
     side: THREE.DoubleSide,
   });
 
-  constructor(placements: readonly (PlacedAsset | null)[], seed: number) {
+  constructor(
+    placements: readonly (PlacedAsset | null)[],
+    seed: number,
+    options: PlacedAssetsViewOptions = {},
+  ) {
     this.group = new THREE.Group();
     this.group.name = 'placed-assets';
     this.seed = seed;
-    this.rebuildAll(placements, true);
+    this.shadows = options.shadows ?? true;
+    this.rebuildAll(placements, options.preload ?? true);
   }
 
   /** Insert (or replace) the placement rendered at this editor index. */
@@ -148,8 +168,8 @@ export class PlacedAssetsView {
       model.traverse((o) => {
         const m = o as THREE.Mesh;
         if (m.isMesh) {
-          m.castShadow = true;
-          m.receiveShadow = true;
+          m.castShadow = this.shadows;
+          m.receiveShadow = this.shadows;
         }
       });
       entry.model = model;
@@ -273,7 +293,7 @@ export class PlacedAssetsView {
           const maxDim = Math.max(size.x, size.y, size.z) || 1;
           return {
             object,
-            norm: TARGET_HEIGHT / maxDim,
+            norm: PLACED_ASSET_TARGET_HEIGHT / maxDim,
             minY: box.min.y,
             radiusSrc: Math.max(size.x, size.z) / 2 || 1,
           };

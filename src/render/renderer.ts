@@ -170,6 +170,7 @@ import { facingAlpha, remoteEntityAlpha } from './net_interp_core';
 import { buildEastbrookNoticeboard } from './noticeboard';
 import { resolveDirectPickEntityId } from './pick_resolution';
 import { PlacedAssetsView } from './placed_assets';
+import { RealmDecorView } from './realm_decor';
 import {
   applyPointLightBudget,
   type RankedPointLight,
@@ -1161,6 +1162,7 @@ export class Renderer {
   // Map-editor placed GLB assets; null when the world has none and the editor
   // never asked for the view (the shipped game with the built-in world).
   private placedAssetsView: PlacedAssetsView | null = null;
+  private realmDecorView: RealmDecorView | null = null;
   private foliage: FoliageView;
   private fish: FishView;
   private motes: MotesView;
@@ -1719,6 +1721,22 @@ export class Renderer {
       this.placedAssetsView = new PlacedAssetsView(placements, this.sim.cfg.seed);
       setRenderCategory(this.placedAssetsView.group, 'props');
       this.scene.add(this.placedAssetsView.group);
+    }
+
+    // Automatic realm decoration: the shipped realm asset store, placed by
+    // src/sim/realm_decor.ts. Deterministic in (realm, seed), cosmetic only (no
+    // colliders, no entities), and LAZY — the catalogue is a dynamic import and
+    // the GLBs stream in over idle slots, so nothing here gates world entry.
+    // Custom editor maps opt out: their author already placed what they wanted.
+    if (!this.sim.cfg.world) {
+      const decor = new RealmDecorView(this.sim.cfg.seed);
+      this.realmDecorView = decor;
+      setRenderCategory(decor.group, 'props');
+      this.scene.add(decor.group);
+      void decor.start(getActiveRealm().id, this.sim.cfg.seed).catch(() => {
+        // Decoration is cosmetic: a failed catalogue chunk or GLB must never
+        // take the world down with it.
+      });
     }
 
     const jailScene = buildJailScene(this.sim.cfg.seed);
@@ -2681,6 +2699,7 @@ export class Renderer {
       this.cameraLookAt.z,
       fogFar,
     );
+    this.realmDecorView?.update(this.camera.position.x, this.camera.position.z, fogFar);
     this.eastbrookTownView.update(
       this.camera.position.x,
       this.camera.position.y,
@@ -6565,6 +6584,7 @@ export class Renderer {
       this.cameraLookAt.z,
       fogFar,
     );
+    this.realmDecorView?.update(this.camera.position.x, this.camera.position.z, fogFar);
     this.eastbrookTownView.update(
       this.camera.position.x,
       this.camera.position.y,
