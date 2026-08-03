@@ -3,6 +3,8 @@ import { REALM_ORIGINS } from './realm';
 
 export const NATIVE_APP_ORIGINS = new Set([
   'capacitor://localhost',
+  // The Xbox WebView2 shell serves the packaged client from this origin.
+  'https://app.local',
   'http://localhost',
   'https://localhost',
 ]);
