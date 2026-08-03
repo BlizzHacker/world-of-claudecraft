@@ -48,10 +48,12 @@ for (const realm of readdirSync(STAGING)) {
     // Name drives attack-clip flavour + the armed/NPC-only rule, so a missing
     // triage row falls back to the de-slugged filename rather than dropping.
     const name = meta?.name || key.replace(/^realm_[a-z]+_/, '').replace(/_[0-9a-f]{8}$/, '').replace(/_/g, ' ');
-    const realms = [realm, ...(meta?.realms ?? [])]
-      .map((r) => (r === 'cryptic' ? 'crypticrealm' : r))
-      .filter((r) => VALID.has(r));
-    entries.push({ key, name, realms: [...new Set(realms)] });
+    // Staged realm ONLY. The triage affinities are advisory and generous
+    // ('shared' on half the library); feeding them in here pooled classic
+    // bodies into Infernal, and an authored realm must not spawn another
+    // realm's cast (tests/infernal_visual_roster pins exactly that).
+    const realms = [realm === 'cryptic' ? 'crypticrealm' : realm].filter((r) => VALID.has(r));
+    entries.push({ key, name, realms });
   }
 }
 writeFileSync('/tmp/entries.json', JSON.stringify(entries));

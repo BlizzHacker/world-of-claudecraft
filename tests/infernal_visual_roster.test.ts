@@ -59,7 +59,7 @@ describe('Infernal visual roster', () => {
       expect(INFERNAL_HUMAN_VISUAL_KEYS).toContain(key);
       expect(key).not.toMatch(/npc_|elf|orc|demon/i);
     }
-    expect(infernalNpcVisualKey('brother_aldric_raid')).toBe('realm_infernal_human_monk');
+    expect(infernalNpcVisualKey('brother_aldric_raid')).toBe('realm_infernal_human_veil_adept');
     expect(infernalNpcVisualKey('a_future_infernal_civilian')).toMatch(/^realm_infernal_human_/);
   });
 
@@ -101,7 +101,12 @@ describe('Infernal visual roster', () => {
       const keys = Object.keys(NPCS).map((templateId) =>
         visualKeyFor({ kind: 'npc', templateId } as never),
       );
-      expect(new Set(keys), realm).toEqual(new Set(INFERNAL_HUMAN_VISUAL_KEYS));
+      // Every NPC must draw from the civilian pool, but the pool does not have
+      // to be exhausted: four defective bodies were removed from the rotation
+      // (see INFERNAL_DEFECTIVE_BODY_KEYS) and the stable hash simply may not
+      // reach all 14 survivors with the current NPC count.
+      const pool = new Set<string>(INFERNAL_HUMAN_VISUAL_KEYS);
+      for (const key of new Set(keys)) expect(pool.has(key), `${realm}:${key}`).toBe(true);
       for (const key of keys) {
         expect(key, `${realm}:${key}`).toMatch(/^realm_infernal_human_/);
         expect(VISUALS[key], `${realm}:${key}`).toBeTruthy();
