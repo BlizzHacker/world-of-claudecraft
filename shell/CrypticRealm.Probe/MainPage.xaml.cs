@@ -28,12 +28,16 @@ namespace CrypticRealm.Probe
     {
         public MainPage()
         {
+            App.Mark("mainpage-ctor-enter");
             InitializeComponent();
+            App.Mark("mainpage-initializecomponent-done");
             Detail.Text = "If you can read this, sideloaded UWP works on this console "
                         + "and the fault is WebView2.\n\nOS: "
                         + Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily
                         + "  " + Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamilyVersion;
+            App.Mark("mainpage-detail-set");
             CompositionTarget.Rendering += OnFrame;
+            App.Mark("mainpage-ctor-done");
         }
 
         private void OnFrame(object sender, object e)

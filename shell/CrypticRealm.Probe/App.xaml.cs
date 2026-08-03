@@ -1,3 +1,4 @@
+using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.ViewManagement;
@@ -9,38 +10,100 @@ namespace CrypticRealm.Probe
     /// <summary>
     /// Host application. Its only job is to put a WebView2 on screen full-bleed
     /// and hand the console's controller to the web app inside it.
+    ///
+    /// Instrumented: every activation step appends a marker to
+    /// LocalState\probe-marks.log, which the Xbox Device Portal file API can
+    /// read back off the console. The crash dumps only say that SOMETHING in
+    /// activation raised NotSupportedException through combase; the last marker
+    /// written before the process dies names the exact call, and the
+    /// UnhandledException hook captures the full exception chain including the
+    /// pieces WER never records.
     /// </summary>
     public sealed partial class App : Application
     {
+        internal static void Mark(string s)
+        {
+            try
+            {
+                var f = System.IO.Path.Combine(
+                    Windows.Storage.ApplicationData.Current.LocalFolder.Path,
+                    "probe-marks.log");
+                System.IO.File.AppendAllText(
+                    f, DateTime.UtcNow.ToString("HH:mm:ss.fff") + " " + s + "\r\n");
+            }
+            catch (Exception)
+            {
+                // A diagnostic must never be the thing that kills the app.
+            }
+        }
+
         public App()
         {
+            Mark("app-ctor-enter");
+            UnhandledException += (s, e) =>
+            {
+                var ex = e.Exception;
+                var text = "UNHANDLED msg=" + e.Message;
+                for (var i = 0; ex != null && i < 5; i++)
+                {
+                    text += " | [" + i + "] " + ex.GetType().FullName + ": " + ex.Message
+                          + "\r\n" + ex.StackTrace;
+                    ex = ex.InnerException;
+                }
+                Mark(text);
+            };
+            Mark("unhandled-hooked");
             InitializeComponent();
+            Mark("initializecomponent-done");
             Suspending += OnSuspending;
+            Mark("app-ctor-done");
         }
 
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            // On Xbox, UWP defaults to a 4:3-safe scaled view and shows a mouse
-            // cursor. Neither is wanted: the CSS already keeps content inside the
-            // title-safe area, and a cursor on a TV looks like a bug.
-            ApplicationViewScaling.TrySetDisableLayoutScaling(true);
-            RequiresPointerMode = ApplicationRequiresPointerMode.WhenRequested;
-
-            var root = Window.Current.Content as Frame;
-            if (root == null)
+            Mark("onlaunched-enter");
+            try
             {
-                root = new Frame();
-                Window.Current.Content = root;
-            }
+                // On Xbox, UWP defaults to a 4:3-safe scaled view and shows a mouse
+                // cursor. Neither is wanted: the CSS already keeps content inside the
+                // title-safe area, and a cursor on a TV looks like a bug.
+                ApplicationViewScaling.TrySetDisableLayoutScaling(true);
+                Mark("scaling-done");
+                RequiresPointerMode = ApplicationRequiresPointerMode.WhenRequested;
+                Mark("pointermode-done");
 
-            if (root.Content == null)
+                var root = Window.Current.Content as Frame;
+                Mark("window-content-read");
+                if (root == null)
+                {
+                    root = new Frame();
+                    Mark("frame-created");
+                    Window.Current.Content = root;
+                    Mark("window-content-set");
+                }
+
+                if (root.Content == null)
+                {
+                    root.Navigate(typeof(MainPage), e.Arguments);
+                    Mark("navigate-done");
+                }
+
+                ApplicationView.GetForCurrentView()
+                    .SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
+                Mark("boundsmode-done");
+                Window.Current.Activate();
+                Mark("activate-done");
+            }
+            catch (Exception ex)
             {
-                root.Navigate(typeof(MainPage), e.Arguments);
+                Mark("ONLAUNCHED-THROW " + ex.GetType().FullName + ": " + ex.Message
+                     + "\r\n" + ex.StackTrace
+                     + (ex.InnerException != null
+                        ? "\r\ninner: " + ex.InnerException.GetType().FullName + ": "
+                          + ex.InnerException.Message
+                        : string.Empty));
+                throw;
             }
-
-            ApplicationView.GetForCurrentView()
-                .SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
-            Window.Current.Activate();
         }
 
         private void OnSuspending(object sender, SuspendingEventArgs e)

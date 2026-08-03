@@ -222,11 +222,17 @@ jobs:
           if (-not $pr) { Write-Error 'no probe package'; exit 1 }
           Copy-Item $pr.FullName 'out\probe\CR-Probe.msix'
           Write-Host ("probe: {0:N0} bytes" -f $pr.Length)
+          # Symbols let a console crash dump be mapped to method names offline.
+          $sym = Get-ChildItem -Recurse -Path shell\CrypticRealm.Probe -Filter *.appxsym |
+                 Sort-Object LastWriteTime -Descending | Select-Object -First 1
+          if ($sym) { Copy-Item $sym.FullName 'out\probe\CR-Probe.appxsym' }
 
       - uses: actions/upload-artifact@v4
         with:
           name: cryptic-realm-xbox-probe
-          path: out/probe/*.msix
+          path: |
+            out/probe/*.msix
+            out/probe/*.appxsym
           if-no-files-found: error
 
       - name: Upload sideload package
