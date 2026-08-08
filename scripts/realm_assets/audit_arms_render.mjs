@@ -90,11 +90,16 @@ async function main() {
   mkdirSync(OUT, { recursive: true });
   const { browser, page } = await launchPage();
   for (const c of cases) {
-    const body = readFileSync(c.body).toString('base64');
-    const arm = readFileSync(c.arm).toString('base64');
     const outDir = FLAT ? OUT : join(OUT, c.label);
     mkdirSync(outDir, { recursive: true });
     try {
+      // Inside the try on purpose. A case whose body or weapon GLB has left the
+      // store (quarantined between building the case list and running it) used
+      // to throw out here and kill the WHOLE run - silently, because the error
+      // looks like a crash rather than a per-case miss, and every case after it
+      // simply never rendered. One absent asset must cost one tile.
+      const body = readFileSync(c.body).toString('base64');
+      const arm = readFileSync(c.arm).toString('base64');
       const res = await page.evaluate((b, a, o) => window.renderArm(b, a, o), body, arm, {
         size: SIZE,
         grip: c.grip ?? null,
