@@ -58,7 +58,14 @@ describe('character visual manifest', () => {
     });
     expect(visualKeyFor({ kind: 'mob', templateId: 'forest_wolf' } as never)).toBe('mob_wolf');
     expect(visualKeyFor({ kind: 'mob', templateId: 'wild_boar' } as never)).toBe('mob_boar');
-    expect(visualKeyFor({ kind: 'mob', templateId: 'mire_prowler' } as never)).toBe('mob_wolf');
+    // mire_prowler is the un-named generic beast, so it is exactly what the
+    // Infernal quadruped roster is for: it draws a staged Infernal creature
+    // instead of collapsing onto the shared wolf. The named animals above keep
+    // their GLBs, which is what this test is really about. Pool membership and
+    // realm purity are pinned in tests/generated_creatures.test.ts.
+    expect(visualKeyFor({ kind: 'mob', templateId: 'mire_prowler' } as never)).toMatch(
+      /^realm_infernal_/,
+    );
     expect(visualKeyFor({ kind: 'npc', templateId: 'warden_fenwick' } as never)).toMatch(
       /^realm_infernal_human_/,
     );

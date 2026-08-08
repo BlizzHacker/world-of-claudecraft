@@ -13,7 +13,7 @@ import type { Entity, PlayerClass } from '../../sim/types';
 import { ITEM_WEAPON_VARIANTS } from '../../ui/weapon_variants';
 import type { OverheadEmoteId } from '../../world_api';
 import { GENERATED_REALM_BODIES, GENERATED_VISUALS } from './manifest.generated';
-import { GENERATED_CREATURE_VISUALS } from './creatures.generated';
+import { GENERATED_CREATURE_BODIES, GENERATED_CREATURE_VISUALS } from './creatures.generated';
 import {
   hostileHumanoidVisualKey,
   infernalNpcVisualKey,
@@ -2200,6 +2200,60 @@ function poolFirst(realm: string, family: string | undefined, templateId: string
   return generatedBodyFor(realm, family, templateId);
 }
 
+// Families the generated QUADRUPED roster (creatures.generated.ts) can stand in
+// for. Every body there is bound to the wolf donor rig and walks on four legs,
+// so membership is decided by SILHOUETTE, not by theme:
+//   beast - the roster IS this family: canines, felines, bears, boars, equines,
+//           apes, rhinos, elephants. 13 templates, 10 of which already name a
+//           curated body, so the pool only ever claims the generic remainder.
+// Everything else is deliberately excluded. humanoid/undead/demon/troll/ogre are
+// bipeds already served by GENERATED_POOL_FAMILIES; spider has eight legs;
+// mudfin and burrower stand upright; elemental and dragonkin are fully claimed by
+// authored bodies (mob_dragonkin, hellmaw_dragon_body,
+// realm_claudecraft_arcane_dragon) that a four-legged wolf gait would downgrade.
+//
+// reptile was measured and rejected: its one template (deepfen_spearjaw) already
+// has an authored mob_spearjaw body, and a hash pool cannot tell a saurian from
+// an ape - it drew a gorilla in Infernal. That template renders as a humanoid in
+// Cryptic Realm and Infernal today, but the fix is an authored mapping, not a
+// random draw.
+//
+// Disjoint from GENERATED_POOL_FAMILIES on purpose: because no family is in both
+// sets, the two pools can share the identical seed shape below without ever
+// being asked the same question, so neither can move in lockstep with the other.
+//
+// Adding a family here is NOT enough to make it reach the pool: the crypticrealm
+// and infernal branches of visualKeyFor dispatch on explicit family lists, so a
+// new family needs a call site too. tests/generated_creatures.test.ts pins that
+// only beasts resolve to a creature, which fails loudly if this set grows.
+const GENERATED_CREATURE_FAMILIES = new Set(['beast']);
+
+/** The quadruped twin of generatedBodyFor: same FNV-1a stableHash, same seed
+ *  shape, same residency gate, over the realm's own creature roster.
+ *
+ *  REALM PURITY: GENERATED_CREATURE_BODIES[realm] is keyed by the realm the body
+ *  was actually STAGED into (its GLB lives under /cr-realms/<realm>/creatures/),
+ *  and that key is the only way a body is ever reached. There is deliberately no
+ *  affinity, alias, or nearest-theme fallback here - those are what previously
+ *  leaked classic bodies into Infernal. A realm with no staged creatures gets
+ *  null and keeps its existing family fallback. */
+function generatedCreatureBodyFor(
+  realm: string,
+  family: string | undefined,
+  templateId: string | undefined,
+): string | null {
+  // Same ceiling as the humanoid pool: spreading a family over dozens of bodies,
+  // each with its own baked texture set, is exactly the residency that trips
+  // SBOX_FATAL_MEMORY_EXCEEDED on a console browser. Bounded devices keep the
+  // single shared family body.
+  if (isBoundedResidency()) return null;
+  if (!family || !GENERATED_CREATURE_FAMILIES.has(family)) return null;
+  const pool = GENERATED_CREATURE_BODIES[realm];
+  if (!pool || pool.length === 0) return null;
+  const seed = `${realm}:${family}:${templateId ?? 'anon'}`;
+  return pool[stableHash(seed) % pool.length] ?? null;
+}
+
 export function visualKeyFor(e: Entity): string {
   const bodyOverride = overrideVisualKeyForEntity(e);
   if (bodyOverride) return bodyOverride;
@@ -2221,7 +2275,16 @@ export function visualKeyFor(e: Entity): string {
       // into this realm through mob_bandit/mob_dark_caster fallbacks.
       if (override === 'mob_training_dummy') return override;
       if (family && ['beast', 'spider', 'mudfin', 'burrower', 'troll', 'ogre'].includes(family)) {
-        return override ?? realmFamily ?? FAMILY_KEYS[family] ?? 'mob_wolf';
+        // The realm's own quadrupeds sit between the curated override and
+        // realmFamily: mob_wolf/mob_boar/mob_spider keep their identities, but a
+        // generic beast no longer collapses onto the single realmFamily body.
+        return (
+          override ??
+          generatedCreatureBodyFor(realm, family, e.templateId) ??
+          realmFamily ??
+          FAMILY_KEYS[family] ??
+          'mob_wolf'
+        );
       }
       if (family === 'undead') {
         // An authored skeleton body (e.g. the Nythraxis raid boss's skel_golem)
@@ -2254,10 +2317,17 @@ export function visualKeyFor(e: Entity): string {
         return override;
       }
       if (family && ['beast', 'spider', 'mudfin'].includes(family)) {
-        return override ?? realmFamily ?? FAMILY_KEYS[family] ?? 'mob_wolf';
+        return (
+          override ??
+          generatedCreatureBodyFor(realm, family, e.templateId) ??
+          realmFamily ??
+          FAMILY_KEYS[family] ??
+          'mob_wolf'
+        );
       }
       // Spread humanoid-shaped families across the generated pool instead of the
-      // single per-family body; curated overrides above already returned.
+      // single per-family body; curated overrides above already returned. Beasts
+      // returned earlier, through the creature roster in the animal list above.
       {
         const pooled = poolFirst(realm, family, e.templateId);
         if (pooled) return pooled;
@@ -2279,7 +2349,10 @@ export function visualKeyFor(e: Entity): string {
     // the active realm has a themed monster family.
     if (override) return override;
     // Pool ahead of realmFamily: REALM_MOB_FAMILY_KEYS resolves ONE body per family,
-    // which shadowed the entire generated roster wherever it was defined.
+    // which shadowed the entire generated roster wherever it was defined. Same
+    // reasoning for the quadrupeds, which is why they sit at the same point.
+    const creature = generatedCreatureBodyFor(realm, family, e.templateId);
+    if (creature) return creature;
     const generated = generatedBodyFor(realm, family, e.templateId);
     if (generated) return generated;
     if (realmFamily) return realmFamily;
