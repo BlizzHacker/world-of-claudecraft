@@ -2989,6 +2989,14 @@ export class Renderer {
         if (performance.now() >= deadline) return { group, visualCount: idx };
         const color = CLASSES[cls]?.color ?? 0xffffff;
         const entity = this.prewarmEntity('player', cls, color, 1, skin, -11_000 - idx);
+        // The mob and NPC prewarm passes already skip lazy models; this one did
+        // not, and an admin body override is enough to route a plain class here:
+        // visualKeyFor consults the override map first, so `player_spiritborn`
+        // resolves to a realm bank body whose GLB is deliberately absent from
+        // the boot sweep. Building it throws "character asset not preloaded" and
+        // the entity is dropped for the whole session — the live-view path is
+        // what fetches these, on demand.
+        if (isVisualLazy(visualKeyFor(entity))) continue;
         const visual = createCharacterVisual(entity);
         // assets unavailable: skip the seed
         if (!visual) continue;
