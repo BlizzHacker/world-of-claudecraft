@@ -199,6 +199,42 @@ export function measureGlb(file) {
 // The store's own review data files the whole library under six semantic
 // buckets. Four of them are the object outright; the two open ones need a
 // vocabulary check.
+// A HUMAN-EQUIVALENT verdict beats a word match. tmp/nonhum_decisions.csv holds
+// one visually-inspected class per asset (statue / scenery / structure / ...),
+// produced by looking at 43 contact sheets. Where a file has such a verdict we
+// use it instead of guessing from its slug - this is the same lesson that put a
+// glowing cartoon heart in a Classic meadow because its name contained "rock".
+const VISION_ROLE = {
+  statue: 'monument',
+  bust_fragment: 'monument',
+  structure: 'structure',
+  scenery: 'flora',
+  machinery: 'camp',
+  prop: 'camp',
+  vehicle: 'vehicle',
+  static_creature: 'monument',
+};
+// Classes that must NEVER auto-place even though they shipped as browsable props:
+// a floating pistol in a meadow reads as a bug, and creatures belong to spawn
+// logic rather than scenery.
+const VISION_NEVER = new Set([
+  'weapon', 'quadruped', 'biped_monster', 'serpent', 'insect_arachnid', 'winged',
+  'floating', 'amorphous', 'humanoid_misgated', 'junk', 'duplicate', 'ip_risk',
+]);
+const visionByTail = (() => {
+  const map = new Map();
+  const f = '/opt/cryptic-realm/tmp/nonhum_decisions.csv';
+  if (!existsSync(f)) return map;
+  for (const line of readFileSync(f, 'utf8').split('\n').slice(1)) {
+    if (!line.trim()) continue;
+    const cells = line.split(',');
+    const id = (cells[0] || '').trim();
+    const cls = (cells[2] || '').trim();
+    if (id && cls) map.set(id.slice(0, 8).toLowerCase(), cls);
+  }
+  return map;
+})();
+
 const ROLE_BY_REVIEW_BUCKET = {
   vehicle_ground: 'vehicle',
   ship_or_aircraft: 'ship',
@@ -265,10 +301,18 @@ export function slugWords(file) {
 export function classifyDecor(file, reviewBucket) {
   const words = slugWords(file);
   for (const w of words) if (NOT_SCENERY_WORDS.has(w)) return null;
+  // classifyDecor is called with the extension ALREADY stripped, so make it optional.
+  const tail = (file.match(/([0-9a-f]{8})(?:\.glb)?$/i) || [])[1];
+  const seen = tail ? visionByTail.get(tail.toLowerCase()) : undefined;
+  if (seen) {
+    if (VISION_NEVER.has(seen)) return null;
+    const role = VISION_ROLE[seen];
+    if (role) return role;
+  }
   const direct = ROLE_BY_REVIEW_BUCKET[reviewBucket];
   if (direct) return direct;
   if (reviewBucket === 'building_structure') return 'structure';
-  if (reviewBucket !== 'scenery_prop') return null;
+  if (reviewBucket !== 'scenery_prop' && reviewBucket !== 'props') return null;
   for (const [role, list] of Object.entries(SCENERY_ROLE_WORDS)) {
     for (const w of words) if (list.includes(w)) return role;
   }
