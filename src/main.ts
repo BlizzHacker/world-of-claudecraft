@@ -81,6 +81,7 @@ import { diagonalMovementVisualFacing } from './game/movement_visual';
 import { music } from './game/music';
 import { tryNearbyInteraction } from './game/nearby_interaction';
 import { isOfflineModeAvailable, isPackagedConsoleApp } from './game/offline_mode_gate';
+import { loadOfflineSave, mountOfflineAutosave } from './game/offline_save';
 import { createPerfMonitor } from './game/perf';
 import { initPerfNudge } from './game/perf_nudge';
 import { startPerfReporter } from './game/perf_reporter';
@@ -4032,6 +4033,10 @@ function sanitizeOfflineName(raw: string): string {
   return /^[A-Za-z][A-Za-z' -]{1,15}$/.test(stripped) ? stripped : 'Adventurer';
 }
 
+// The active offline autosave unmount, so re-entering a world (back to menu,
+// pick another character) never leaves a stale interval saving the old sim.
+let stopOfflineAutosave: (() => void) | null = null;
+
 async function startOffline(
   playerClass: PlayerClass,
   name: string,
@@ -4046,6 +4051,12 @@ async function startOffline(
   if (world) setActiveWorldContent(world);
   await nextPaint();
   const { Sim } = await loadGameRuntime();
+  // Offline continue: the same class + name resumes its saved character (level,
+  // gear, quests, position) instead of starting over. Custom-world play-tests
+  // and seeded runs stay fresh worlds: a save from the built-in world would
+  // place the player somewhere that may not exist there.
+  const savedCharacter =
+    world || seedOverride !== undefined ? null : loadOfflineSave(playerClass, name);
   const sim = new Sim({
     seed: seedOverride ?? WORLD_SEED,
     playerClass,
@@ -4053,8 +4064,13 @@ async function startOffline(
     devCommands: import.meta.env.DEV,
     valeCupShowcase: true, // idle Sowfield auto-runs a bot exhibition to watch/bet on
     world,
+    characterState: savedCharacter ?? undefined,
   });
   sim.setPlayerSkin(sim.playerId, skin);
+  if (!world && seedOverride === undefined) {
+    stopOfflineAutosave?.();
+    stopOfflineAutosave = mountOfflineAutosave(sim, playerClass, name);
+  }
   // Dev convenience: ?mech drops an offline session straight into the Combat Mech
   // cosmetic body holding a spread of class-usable weapons, to eyeball the held
   // weapon model on the mech (swap them in the bag to see each one). DEV builds

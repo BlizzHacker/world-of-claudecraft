@@ -118,7 +118,7 @@ export interface SimContextPrimitives {
   readonly npcDuels: Map<number, NpcDuelState>; // F4c player-vs-NPC duels (read by isHostileTo)
   // `world` stays optional (custom play-test map, else undefined; perfLap is the
   // temporary host-owned tick profiler probe); the rest defaulted.
-  readonly cfg: Required<Omit<SimConfig, 'noPlayer' | 'world' | 'perfLap'>> &
+  readonly cfg: Required<Omit<SimConfig, 'noPlayer' | 'characterState' | 'world' | 'perfLap'>> &
     Pick<SimConfig, 'world' | 'perfLap'>;
   // A2 duel + arena state. Live views: the backing fields stay on Sim (mutated in
   // place / reassigned), like E1's delayedEvents. The three queues are REASSIGNED by

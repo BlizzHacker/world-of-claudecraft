@@ -1261,7 +1261,7 @@ export class Sim {
   minigameArcadeState: ArcadeState | null = null;
   // `world` stays optional (a custom map for play-test, else undefined for the
   // built-in world); everything else is defaulted to a concrete value below.
-  cfg: Required<Omit<SimConfig, 'noPlayer' | 'world' | 'perfLap'>> &
+  cfg: Required<Omit<SimConfig, 'noPlayer' | 'characterState' | 'world' | 'perfLap'>> &
     Pick<SimConfig, 'world' | 'perfLap'>;
   rng: Rng;
   time = 0;
@@ -1656,7 +1656,10 @@ export class Sim {
     }
 
     if (!cfg.noPlayer) {
-      this.addPlayer(this.cfg.playerClass, this.cfg.playerName, { autoEquip: this.cfg.autoEquip });
+      this.addPlayer(this.cfg.playerClass, this.cfg.playerName, {
+        autoEquip: this.cfg.autoEquip,
+        state: cfg.characterState,
+      });
     }
   }
 

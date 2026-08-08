@@ -2593,6 +2593,11 @@ export interface SimConfig {
   autoEquip?: boolean; // auto-equip better gear on loot (headless convenience)
   playerName?: string;
   noPlayer?: boolean; // multiplayer server: start with an empty world and addPlayer() later
+  // Offline continue: a previously serialized character (serializeCharacter output)
+  // hydrated into the primary player at construction, exactly as the server does
+  // for a login. Level, gear, bags, quests, money, talents, and position all
+  // resume; an absent field falls back to the fresh-character default.
+  characterState?: CharacterState;
   devCommands?: boolean; // local dev: /dev level|tp|give chat cheats
   lockoutNowMs?: () => number; // host wall-clock for persisted raid lockouts
   // Live server: schedule the first world-boss rise at boot instead of one
