@@ -189,10 +189,14 @@ namespace CrypticRealm.Shell
             // controller gesture to history back and forward, which reloads the
             // page under the player and looks like being logged out; nothing in
             // this app navigates through history on purpose, so those are
-            // cancelled outright. And every top-level navigation off app.local
-            // is cancelled too: the whole client is packaged, and the only
-            // things that try to leave (OAuth redirects, community links) strand
-            // the player in a webview with no browser chrome to come back with.
+            // cancelled outright. Top-level navigation is otherwise allowed ONLY
+            // to the app's own surfaces: the packaged origin (app.local) and the
+            // game's own site and realm subdomains (crypticrealm.com,
+            // <realm>.crypticrealm.com). Entering a realm navigates the page to
+            // https://crypticrealm.com/#auth_token=...&realm=... on purpose, so
+            // that must pass; only genuinely external destinations (OAuth
+            // providers, community links) are cancelled, since those would
+            // strand the player in a webview with no browser chrome to return.
             core.NavigationStarting += (s, a) =>
             {
                 if (a.NavigationKind == CoreWebView2NavigationKind.BackOrForward)
@@ -202,11 +206,12 @@ namespace CrypticRealm.Shell
                 }
                 try
                 {
-                    var target = new Uri(a.Uri);
-                    if (!target.Host.Equals(VirtualHost, StringComparison.OrdinalIgnoreCase))
-                    {
-                        a.Cancel = true;
-                    }
+                    var host = new Uri(a.Uri).Host;
+                    var allowed =
+                        host.Equals(VirtualHost, StringComparison.OrdinalIgnoreCase) ||
+                        host.Equals("crypticrealm.com", StringComparison.OrdinalIgnoreCase) ||
+                        host.EndsWith(".crypticrealm.com", StringComparison.OrdinalIgnoreCase);
+                    if (!allowed) a.Cancel = true;
                 }
                 catch (Exception)
                 {
