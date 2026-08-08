@@ -87,6 +87,7 @@
     <Content Include="Assets\Wide310x150Logo.png" />
     <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\gamepad-polyfill.js" />
+    <Content Include="Assets\console-memory-guard.js" />
     <!-- The built client, copied into web/ by CI before packaging. A
          wildcard because it is thousands of files. -->
     <Content Include="web\**\*">

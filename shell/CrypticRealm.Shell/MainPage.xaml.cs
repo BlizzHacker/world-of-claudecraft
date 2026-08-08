@@ -167,9 +167,13 @@ namespace CrypticRealm.Shell
 
             try
             {
-                // Both land at document-create, before any game script runs: the
-                // polyfill must beat the page to navigator.getGamepads, and the
-                // model stamp must exist before the graphics tier is resolved.
+                // All land at document-create, before any game script runs: the
+                // polyfill must beat the page to navigator.getGamepads, the
+                // memory guard must pin devicePixelRatio and floor the persisted
+                // graphics settings before the tier resolves, and the model
+                // stamp must exist before the graphics tier is resolved.
+                var memoryGuard = await ReadAssetAsync("Assets/console-memory-guard.js");
+                await core.AddScriptToExecuteOnDocumentCreatedAsync(memoryGuard);
                 var polyfill = await ReadAssetAsync("Assets/gamepad-polyfill.js");
                 await core.AddScriptToExecuteOnDocumentCreatedAsync(polyfill);
 
