@@ -337,6 +337,33 @@ const REVIEWED_DECOR = new Map([
   // exchange: a gold rotunda whose slug says 'revenant'. The name is wrong; the
   // mesh is a domed columned pavilion.
   ['0193ea7d', 'monument'], // gaunt_revenant_written_in_gold
+  // classic. Reviewed 2026-08-08 against /tmp/big_sheet, the full 430-tile
+  // sweep of every classic and infernal decor reject. Nine in ten of that pile
+  // is busts, masks and emblems and stays out; these are the buildings, trees
+  // and monuments buried in it that no decor noun in the slug could reach.
+  ['019a0d73', 'structure'], // charming_chapel_illustration - a stone chapel
+  ['019a0d8d', 'structure'], // charming_chapel_illustration
+  ['019a0d8f', 'structure'], // charming_chapel_illustration
+  ['019a0d93', 'structure'], // charming_chapel_illustration
+  ['019c3b7e', 'structure'], // medieval_architecture_illustration - timbered house
+  ['019a65c5', 'structure'], // the_rustic_lodge
+  ['019e03e9', 'structure'], // emerald_steamworks - mossed industrial hall
+  ['019c32ad', 'structure'], // emerald_gleam_wall - mossed ruined wall
+  ['0195d9bf', 'structure'], // inca_stonework - fitted stone wall
+  ['019c8863', 'structure'], // d00r_x - carved standing doorway
+  ['0196591a', 'monument'], // eternal_sentinel - mossed stone archway
+  ['01956759', 'monument'], // dual_head_gargoyle_statute - gargoyle on a plinth
+  ['019bb134', 'monument'], // mutated_x_graves - grave markers
+  ['0199f317', 'monument'], // emerald_glow - crystal cluster
+  ['019a5aaf', 'monument'], // emerald_radiance - crystal cluster
+  ['01940e69', 'monument'], // pirate flag on a pole (slug is truncated to 'gay')
+  ['01940e6f', 'monument'], // pirate flag
+  ['01940e70', 'monument'], // pirate flag
+  ['019abeab', 'camp'], // guillotine_display
+  ['019de51d', 'flora'], // emerald_canopy - broadleaf tree
+  ['019a754a', 'flora'], // verdant_canopy - broadleaf tree
+  ['0196fe7d', 'flora'], // resilient_roots - mossy stump
+  ['019ab613', 'flora'], // floral_haven - flowering shrub
   // infernal: 30 rows were catalogued with role `vehicle`, which infernal's
   // REALM_DECOR_THEME has no weight for - so every one of them was shipped,
   // measured, and then unreachable by the placer. They come from review bucket
