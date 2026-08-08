@@ -64,6 +64,48 @@ export const GENERATED_CREATURE_VISUALS: Record<string, VisualDef> = {
     clips: QUADRUPED_BAKED,
     lazyPreload: true,
   },
+  // albino direwolf, clean canine quadruped, fits existing mob_wolf family
+  realm_crypticrealm_albino_direwolf_01961261: {
+    url: `${REALM_MODELS}/crypticrealm/creatures/albino_direwolf_01961261.glb`,
+    height: 1.8,
+    clips: QUADRUPED_BAKED,
+    lazyPreload: true,
+  },
+  // polar bear with saddle and cargo panniers, clean quadruped
+  realm_crypticrealm_dusk_fiend_019b3419: {
+    url: `${REALM_MODELS}/crypticrealm/creatures/dusk_fiend_019b3419.glb`,
+    height: 2.1,
+    clips: QUADRUPED_BAKED,
+    lazyPreload: true,
+  },
+  // realistic orange fox, excellent quadruped; matches existing mob_fox
+  realm_crypticrealm_fox_01942ed4: {
+    url: `${REALM_MODELS}/crypticrealm/creatures/fox_01942ed4.glb`,
+    height: 1,
+    clips: QUADRUPED_BAKED,
+    lazyPreload: true,
+  },
+  // brown gorilla on all fours, clean ape quadruped
+  realm_crypticrealm_gorilla_01947f6a: {
+    url: `${REALM_MODELS}/crypticrealm/creatures/gorilla_01947f6a.glb`,
+    height: 2.1,
+    clips: QUADRUPED_BAKED,
+    lazyPreload: true,
+  },
+  // white gorilla, family sibling
+  realm_crypticrealm_gorilla_01947fab: {
+    url: `${REALM_MODELS}/crypticrealm/creatures/gorilla_01947fab.glb`,
+    height: 2.1,
+    clips: QUADRUPED_BAKED,
+    lazyPreload: true,
+  },
+  // ironbound armored warboar, heavy quadruped
+  realm_crypticrealm_ironbound_warboar_019cb457: {
+    url: `${REALM_MODELS}/crypticrealm/creatures/ironbound_warboar_019cb457.glb`,
+    height: 2.4,
+    clips: QUADRUPED_BAKED,
+    lazyPreload: true,
+  },
   // crested drake, four limbs plus long tail, hunched quadruped
   realm_crypticrealm_shadow_drake_sentinel_019677a5: {
     url: `${REALM_MODELS}/crypticrealm/creatures/shadow_drake_sentinel_019677a5.glb`,
@@ -75,6 +117,13 @@ export const GENERATED_CREATURE_VISUALS: Record<string, VisualDef> = {
   realm_crypticrealm_shadow_drake_sentinel_019677ad: {
     url: `${REALM_MODELS}/crypticrealm/creatures/shadow_drake_sentinel_019677ad.glb`,
     height: 2.1,
+    clips: QUADRUPED_BAKED,
+    lazyPreload: true,
+  },
+  // white horse, clean equine quadruped
+  realm_crypticrealm_sharkhorse_019644f7: {
+    url: `${REALM_MODELS}/crypticrealm/creatures/sharkhorse_019644f7.glb`,
+    height: 2.4,
     clips: QUADRUPED_BAKED,
     lazyPreload: true,
   },
@@ -338,8 +387,15 @@ export const GENERATED_CREATURE_BODIES: Record<string, string[]> = {
     'realm_claudecraft_resembles_robust_armored_bear_01981e51',
   ],
   crypticrealm: [
+    'realm_crypticrealm_albino_direwolf_01961261',
+    'realm_crypticrealm_dusk_fiend_019b3419',
+    'realm_crypticrealm_fox_01942ed4',
+    'realm_crypticrealm_gorilla_01947f6a',
+    'realm_crypticrealm_gorilla_01947fab',
+    'realm_crypticrealm_ironbound_warboar_019cb457',
     'realm_crypticrealm_shadow_drake_sentinel_019677a5',
     'realm_crypticrealm_shadow_drake_sentinel_019677ad',
+    'realm_crypticrealm_sharkhorse_019644f7',
   ],
   fps: [
     'realm_fps_armored_boar_019cb448',

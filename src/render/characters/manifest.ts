@@ -14,6 +14,7 @@ import { ITEM_WEAPON_VARIANTS } from '../../ui/weapon_variants';
 import type { OverheadEmoteId } from '../../world_api';
 import { GENERATED_REALM_BODIES, GENERATED_VISUALS } from './manifest.generated';
 import { GENERATED_CREATURE_BODIES, GENERATED_CREATURE_VISUALS } from './creatures.generated';
+import { GENERATED_CREATURE_BODY_PINS } from './creature_pins.generated';
 import {
   hostileHumanoidVisualKey,
   infernalNpcVisualKey,
@@ -2250,6 +2251,13 @@ function generatedCreatureBodyFor(
   if (!family || !GENERATED_CREATURE_FAMILIES.has(family)) return null;
   const pool = GENERATED_CREATURE_BODIES[realm];
   if (!pool || pool.length === 0) return null;
+  // The hash below is taken modulo the pool size, so adding ONE body to a realm
+  // re-rolls every mob in it — that is how mire_prowler turned from a drake into
+  // a gorilla when the base realm grew from 2 bodies to 9. Templates that already
+  // had a body keep it by pin; only new templates draw from the grown pool, so a
+  // realm can gain assets without re-skinning creatures players already know.
+  const pinned = templateId ? GENERATED_CREATURE_BODY_PINS[realm]?.[templateId] : undefined;
+  if (pinned && pool.includes(pinned)) return pinned;
   const seed = `${realm}:${family}:${templateId ?? 'anon'}`;
   return pool[stableHash(seed) % pool.length] ?? null;
 }
