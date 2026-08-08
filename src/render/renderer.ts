@@ -1428,6 +1428,19 @@ export class Renderer {
     // dome shader cross-fades the same textures). The raw equirects carry
     // the unclamped sun that the dome shader tames with per-biome gain, so
     // the environment intensity is rescaled to match the shipped look.
+    //
+    // There is deliberately NO `else` branch. three r165 applies scene.environment
+    // only to standard/physical materials -- three.module.js does
+    //   const environment = material.isMeshStandardMaterial ? scene.environment : null;
+    // -- and the low tier is precisely the tier that has no standard materials:
+    // GFX.standardMaterials is false there (gfx.ts), so props, terrain, foliage and
+    // every character material are built as MeshLambertMaterial. Seeding an env map
+    // on this path would therefore light nothing at all, while still paying a PMREM
+    // render plus a session-lifetime render target on exactly the weak devices the
+    // tier exists for. Low tier buys back the missing IBL in the light rig instead:
+    // hemisphere 0.98 vs 0.45 and sun 2.65 vs 2.8 just below, plus
+    // applyLowReadabilityLift() in characters/assets.ts. If low tier ever looks too
+    // dark, move those numbers -- adding an IBL here is measurably a no-op.
     if (!LOW_GFX) {
       const pmrem = new THREE.PMREMGenerator(this.webgl);
       // Phone WebKit keeps only the spawn biome PMREM for the session. The on-device
