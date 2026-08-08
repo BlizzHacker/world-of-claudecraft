@@ -21,6 +21,7 @@ import { retryDelayMs as gltfRetryDelayMs } from '../assets/load_retry';
 import { loadGltf, loadTexture } from '../assets/loader';
 import { registerPreload } from '../assets/preload';
 import { addRimGlow, GFX } from '../gfx';
+import { logAssetMissOnce } from './asset_miss_log';
 import { backGripFor } from './back_grips';
 import { resolveClipMap } from './clip_resolution';
 import { dequantizeAttribute } from './dequantize_attribute';
@@ -40,6 +41,7 @@ import {
 } from './manifest';
 import { chooseExternalPreviewClipName } from './preview_clip';
 import { REALM_ARM_FAMILIES } from './realm_arms.generated';
+import { REALM_WIELD_SCALE } from './realm_wield.generated';
 import { mergeSkinnedParts } from './rig_merge';
 import { weaponSkinAttachBone, weaponSkinHandling } from './skin_attack';
 import { variantGripTransform, WEAPON_GRIP_OVERRIDES } from './weapon_grip';
@@ -276,21 +278,30 @@ function applyHandGrip(
   root: THREE.Object3D,
   bone: string,
   url: string,
+  wield: number,
 ): void {
   const accessory = kaykitAccessoryFor(url);
   if (!accessory) return;
   const side = handSide(bone);
   const ref = findAccessoryNode(root, accessoryNodeName(accessory, side));
   if (ref) {
+    // The rig's OWN accessory node: already authored in this body's space, so it
+    // is right at any body size and must not take the wield term on top.
     copyAccessoryTransform(payload, ref);
     return;
   }
   const grips = KAYKIT_HAND_GRIPS[accessory];
   if (!grips) return;
   const grip = side === 'l' ? (grips.l ?? grips.r) : grips.r;
-  payload.position.set(...grip.position);
+  // The table below is measured off the KayKit reference rig, so like the variant
+  // grips it describes a REFERENCE-sized wielder and needs the same correction.
+  payload.position.set(
+    grip.position[0] * wield,
+    grip.position[1] * wield,
+    grip.position[2] * wield,
+  );
   payload.quaternion.set(...grip.quaternion);
-  payload.scale.setScalar(grip.scale);
+  payload.scale.setScalar(grip.scale * wield);
 }
 
 function flattenWeaponScene(src: THREE.Object3D): THREE.Object3D {
@@ -338,6 +349,7 @@ function applyVariantGrip(
   bone: string,
   grip: VariantGrip,
   url: string,
+  wield: number,
 ): void {
   variantBox.setFromObject(payload);
   const height = variantBox.max.y - variantBox.min.y;
@@ -347,10 +359,41 @@ function applyVariantGrip(
     grip.lift,
     grip.maxHeight,
     WEAPON_GRIP_OVERRIDES[modelBasename(url)],
+    wield,
   );
   payload.position.set(t.position[0], t.position[1], t.position[2]);
   payload.quaternion.set(t.quaternion[0], t.quaternion[1], t.quaternion[2], t.quaternion[3]);
   payload.scale.setScalar(t.scale);
+}
+
+// ---------------------------------------------------------------------------
+// Wield scale: how big a weapon reads in THIS body's hand
+// ---------------------------------------------------------------------------
+// Every grip in WEAPON_GRIP_OVERRIDES / KAYKIT_HAND_GRIPS is a fixed length in
+// the BODY's own space. prepareVisual() then normalises the body to def.height
+// by dividing by its measured raw height - and the weapon, being a child of a
+// hand bone, is divided by exactly the same number. So what the player sees is
+//
+//     onScreenWeaponLength / onScreenBodyHeight = gripLength / rawHeight
+//
+// The numerator is a constant. The denominator is not: the generated realm bank
+// was rigged from source meshes authored at whatever scale their artist used, so
+// rawHeight runs 1.28 to 4.96 world units. Left alone, one sword reads as a
+// dagger on a giant and a greatsword on a gnome - measured across the armed
+// bank, apparent size varied 6.8x from smallest to largest.
+//
+// REALM_WIELD_SCALE is rawHeight / the reference height the weapon library is
+// sized against, generated per body by scripts/realm_assets/emit_wield.mjs. It
+// cancels the normalisation, leaving apparent size set by the weapon's CLASS
+// (emit_arms.mjs picks that fraction) instead of by the wielder's mesh scale.
+//
+// Applied at attach time rather than baked into the grips, so a runtime gear
+// swap, a weapon skin, and a sheathe all inherit it without a second table.
+// A body with no row wields at 1.0, which is the exact pre-existing behaviour:
+// every hand-authored manifest.ts entry is untouched.
+function wieldScaleFor(def: VisualDef): number {
+  const s = REALM_WIELD_SCALE[modelBasename(def.url)];
+  return typeof s === 'number' && Number.isFinite(s) && s > 0 ? s : 1;
 }
 
 function attachProp(
@@ -359,6 +402,7 @@ function attachProp(
   att: AttachDef,
   swapKind: 'mainhand' | 'offhand' | null = null,
   stowed = false,
+  wield = 1,
 ): THREE.Object3D {
   const payload = flattenWeaponScene(cloneSkinned(resolvedGltf(att.url).scene));
   payload.traverse((o) => {
@@ -374,7 +418,7 @@ function attachProp(
   payload.userData[HELD_PROP_TAG] = true;
   const variantGrip = isHandslotBone(att.bone) ? variantGripFor(att.url) : null;
   if (variantGrip) {
-    applyVariantGrip(payload, att.bone, variantGrip, att.url);
+    applyVariantGrip(payload, att.bone, variantGrip, att.url, wield);
   } else if (att.position || att.rotationY !== undefined) {
     if (att.position) payload.position.set(...att.position);
     if (att.rotationY !== undefined) payload.rotation.y = att.rotationY;
@@ -382,14 +426,21 @@ function attachProp(
     const ref = findAccessoryNode(root, att.gripRef);
     if (ref) copyAccessoryTransform(payload, ref);
   } else if (isHandslotBone(att.bone)) {
-    applyHandGrip(payload, root, att.bone, att.url);
+    applyHandGrip(payload, root, att.bone, att.url, wield);
   }
   // Sheathed: override where the prop SITS (on-back position/lean, chest-bone
   // space; the caller resolved the chest bone) but keep the SCALE the normal
-  // grip pass just computed, so variant-pack size clamps carry over.
+  // grip pass just computed, so variant-pack size clamps carry over. The back
+  // grip is measured off the reference rig like every other grip table, so it
+  // takes the wield term too - otherwise a sheathed sword drifts off the spine
+  // by however far the wielder is from reference size.
   if (stowed && isHandslotBone(att.bone)) {
     const grip = backGripFor(kaykitAccessoryFor(att.url), handSide(att.bone));
-    payload.position.set(...grip.position);
+    payload.position.set(
+      grip.position[0] * wield,
+      grip.position[1] * wield,
+      grip.position[2] * wield,
+    );
     payload.quaternion.set(...grip.quaternion);
   }
   bone.add(payload);
@@ -765,6 +816,9 @@ function attachAllProps(
   // VFX/isolation pass over these). A plain offhand (shield/held-offhand/different
   // -type weapon) stays out, untouched.
   const offhandSkinned = offhandMirrorsWeaponSkin(weaponSkinId, offhandItemId);
+  // One lookup per assembly: the wield term is a property of the BODY, so every
+  // prop this body carries takes the same one.
+  const wield = wieldScaleFor(def);
   const payloads: THREE.Object3D[] = [];
   for (let i = 0; i < attachments.length; i++) {
     const base = attachments[i];
@@ -780,7 +834,7 @@ function attachAllProps(
     const bone = attachTargetBone(root, att, stowed);
     if (!bone) continue;
     const swapKind = isOffhandSwap ? 'offhand' : isWeapon ? 'mainhand' : null;
-    const payload = attachProp(root, bone, att, swapKind, stowed);
+    const payload = attachProp(root, bone, att, swapKind, stowed, wield);
     if (isWeapon || (isOffhandSwap && offhandSkinned)) payloads.push(payload);
   }
   return payloads;
@@ -821,7 +875,7 @@ export function setHeldWeapon(
       : (rangedSkinAttachDef(base, weaponSkinId) ?? base);
     const bone = attachTargetBone(root, att, stowed);
     if (!bone) continue;
-    payloads.push(attachProp(root, bone, att, 'mainhand', stowed));
+    payloads.push(attachProp(root, bone, att, 'mainhand', stowed, wieldScaleFor(def)));
   }
   return payloads;
 }
@@ -850,7 +904,7 @@ export function setHeldOffhand(
   const att = offhandAttachDef(base, offhandItemId, weaponSkinId);
   if (!att) return [];
   const bone = attachTargetBone(root, att, stowed);
-  return bone ? [attachProp(root, bone, att, 'offhand', stowed)] : [];
+  return bone ? [attachProp(root, bone, att, 'offhand', stowed, wieldScaleFor(def))] : [];
 }
 
 /** A standalone display clone of a weapon-skin model for the armory inspect
@@ -1065,6 +1119,29 @@ export interface PreparedVisual {
 
 const prepared = new Map<string, PreparedVisual>();
 
+/** Every node name in a loaded rig that an animation track could target.
+ *  GLTFLoader sanitizes node names on import and builds track names from the
+ *  sanitized form, so both sides of the comparison are already normalized. */
+function animatableNodeNames(root: THREE.Object3D): Set<string> {
+  const names = new Set<string>();
+  root.traverse((o) => {
+    if (o.name) names.add(o.name);
+  });
+  return names;
+}
+
+/** True when at least one of a clip's tracks targets a node this rig actually
+ *  has. Deliberately permissive about EXTRA donor nodes (the bow take is
+ *  authored on the full IK control rig and only ~half its tracks land on the
+ *  trimmed player skeleton); the case being rejected is total non-overlap. */
+function clipDrivesRig(clip: THREE.AnimationClip, rigNodes: ReadonlySet<string>): boolean {
+  for (const track of clip.tracks) {
+    const parsed = THREE.PropertyBinding.parseTrackName(track.name);
+    if (parsed.nodeName && rigNodes.has(parsed.nodeName)) return true;
+  }
+  return false;
+}
+
 export function prepareVisual(key: string): PreparedVisual {
   const hit = prepared.get(key);
   if (hit) return hit;
@@ -1078,8 +1155,35 @@ export function prepareVisual(key: string): PreparedVisual {
   // leaves it in the rest pose rather than throwing.
   const clips = new Map<string, THREE.AnimationClip>();
   for (const clip of gltf.animations) clips.set(clip.name, clip);
+  const rigNodes = animatableNodeNames(gltf.scene);
   for (const url of def.animUrls ?? []) {
-    for (const clip of resolvedGltf(url).animations) clips.set(clip.name, clip);
+    let merged = 0;
+    let inert = 0;
+    for (const clip of resolvedGltf(url).animations) {
+      // A donor clip authored on a DIFFERENT skeleton still yields a live
+      // AnimationAction (three binds tracks by node name, and a miss is only a
+      // console warning), so the body would list the clip, report it as the
+      // current animation, and never move a single bone. Two rig families ship
+      // here - kaykit (root/hips/upperarm.l) and meshy24 (Hips/LeftUpLeg) - and
+      // their joint names do not overlap at all. Drop what cannot bind.
+      if (!clipDrivesRig(clip, rigNodes)) {
+        inert++;
+        continue;
+      }
+      // The body's OWN take always wins: the bank exists to fill the gaps, not
+      // to overwrite an animation authored for this exact mesh.
+      if (!clips.has(clip.name)) {
+        clips.set(clip.name, clip);
+        merged++;
+      }
+    }
+    if (inert > 0) {
+      logAssetMissOnce(
+        `animurl-inert:${key}:${url}`,
+        `animation bank drives no bone on this rig, ignoring ${inert} clip(s) (${key} <- ${url}); merged ${merged}:`,
+        new Error('skeleton mismatch'),
+      );
+    }
   }
 
   if (def.autoClip) {

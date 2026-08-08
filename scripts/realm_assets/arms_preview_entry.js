@@ -77,7 +77,7 @@ function handSide(bone) {
 }
 
 const variantBox = new THREE.Box3();
-function applyVariantGrip(payload, bone, grip) {
+function applyVariantGrip(payload, bone, grip, wield = 1) {
   variantBox.setFromObject(payload);
   const height = variantBox.max.y - variantBox.min.y;
   const t = variantGripTransform(
@@ -86,6 +86,7 @@ function applyVariantGrip(payload, bone, grip) {
     grip.lift,
     grip.maxHeight,
     grip.override,
+    wield,
   );
   payload.position.set(t.position[0], t.position[1], t.position[2]);
   payload.quaternion.set(t.quaternion[0], t.quaternion[1], t.quaternion[2], t.quaternion[3]);
@@ -93,6 +94,57 @@ function applyVariantGrip(payload, bone, grip) {
   return { height, applied: t };
 }
 // ---------------------------------------------------------------------------
+
+// prepareVisual()'s rawHeight, verbatim (assets.ts): the idle-POSED bounds of the
+// skinned meshes, taken through applyBoneTransform. A plain Box3.setFromObject
+// cannot stand in for it - three's box uses each geometry's BIND-pose bounding
+// box, which on this library differs from the posed height by up to 2.9x. This is
+// the number the engine divides def.height by, so it is the number a
+// game-accurate framing has to use.
+function posedBodyBounds(root) {
+  const bounds = new THREE.Box3();
+  const v = new THREE.Vector3();
+  root.traverse((o) => {
+    if (!o.isSkinnedMesh) return;
+    const pos = o.geometry.getAttribute('position');
+    const step = Math.max(1, Math.ceil(pos.count / 20000));
+    for (let i = 0; i < pos.count; i += step) {
+      v.fromBufferAttribute(pos, i);
+      o.applyBoneTransform(i, v);
+      v.applyMatrix4(o.matrixWorld);
+      bounds.expandByPoint(v);
+    }
+  });
+  if (bounds.isEmpty()) bounds.setFromObject(root);
+  return bounds;
+}
+
+// Frame the GAME's picture: every body normalised to the same on-screen height
+// (VisualDef.height, 2.6 for the generated bank) inside a FIXED camera box. Only
+// this framing can answer "is the weapon the right size" - a fit-to-bounds shot
+// rescales the body to swallow whatever it is holding, so a sword twice as long
+// as its owner and a sword half as long produce near-identical thumbnails.
+function frameNormalised(scene, obj, yaw, size, targetH) {
+  const bounds = posedBodyBounds(obj);
+  const h = Math.max(1e-3, bounds.max.y - bounds.min.y);
+  const k = targetH / h;
+  obj.scale.setScalar(k);
+  obj.position.set(0, -bounds.min.y * k, 0);
+  obj.rotation.set(0, yaw, 0);
+  obj.updateMatrixWorld(true);
+  // A box tall enough to hold the body plus a weapon of its own height again, so
+  // an oversized weapon shows as oversized instead of being cropped away.
+  const boxH = targetH * 1.85;
+  const fov = 32;
+  const cam = new THREE.PerspectiveCamera(fov, 1, 0.01, 1000);
+  const dist = (boxH * 0.5 / Math.sin((fov * Math.PI) / 360)) * 1.05;
+  cam.position.set(0, targetH * 0.55, dist);
+  cam.lookAt(0, targetH * 0.55, 0);
+  renderer.setSize(size, size);
+  renderer.setClearColor(0x1a1e26, 1);
+  renderer.render(scene, cam);
+  return renderer.domElement.toDataURL('image/png');
+}
 
 function findBone(root, boneName) {
   const want = boneName.replace(/[[\].:/]/g, '');
@@ -162,9 +214,9 @@ window.renderArm = async (bodyB64, armB64, opts = {}) => {
   if (!bone) throw new Error(`rig has no ${boneName} bone`);
 
   const payload = flattenWeaponScene(armGltf.scene);
-  let diag = { nativeScale: payload.scale.x };
+  let diag = { nativeScale: payload.scale.x, wield: opts.wield ?? 1 };
   if (opts.grip && isHandslotBone(boneName)) {
-    diag = { ...diag, ...applyVariantGrip(payload, boneName, opts.grip) };
+    diag = { ...diag, ...applyVariantGrip(payload, boneName, opts.grip, opts.wield ?? 1) };
   }
   bone.add(payload);
 
@@ -179,6 +231,13 @@ window.renderArm = async (bodyB64, armB64, opts = {}) => {
     armBox.max.z - armBox.min.z,
   ].map((v) => Math.round(v * 1000) / 1000);
   diag.bodyHeight = Math.round((rigBox.max.y - rigBox.min.y) * 1000) / 1000;
+  // The height the ENGINE normalises by, which is not the box above: see
+  // posedBodyBounds. armWorldSize / posedHeight is the fraction of its wielder a
+  // weapon actually occupies on screen.
+  const posed = posedBodyBounds(rig);
+  diag.posedHeight = Math.round((posed.max.y - posed.min.y) * 1000) / 1000;
+  diag.armFraction =
+    Math.round((Math.max(...diag.armWorldSize) / (posed.max.y - posed.min.y)) * 1000) / 1000;
 
   const clips = bodyGltf.animations ?? [];
   const mixer = clips.length ? new THREE.AnimationMixer(rig) : null;
@@ -200,10 +259,20 @@ window.renderArm = async (bodyB64, armB64, opts = {}) => {
     ['idle', 'Idle', 0.3],
     ['shoot', '2H_Ranged_Shoot', 0.45],
   ];
+  // opts.normalizeTo turns off the per-shot fit and renders the game's own
+  // picture instead (see frameNormalised); opts.hand drops the close-up when the
+  // question is proportion rather than palm clipping.
+  const norm = opts.normalizeTo ?? 0;
   const shoot = (label) => {
     for (const [suffix, yaw] of yaws) {
       const tag = suffix ? `${label}${suffix}` : label;
-      shots.push({ name: `${tag}_body`, dataUrl: frameWhole(scene, rig, yaw, size) });
+      shots.push({
+        name: `${tag}_body`,
+        dataUrl: norm
+          ? frameNormalised(scene, rig, yaw, size, norm)
+          : frameWhole(scene, rig, yaw, size),
+      });
+      if (opts.hand === false) continue;
       shots.push({
         name: `${tag}_hand`,
         dataUrl: frameHand(scene, rig, bone, yaw, size, opts.handRadius ?? 1.0),

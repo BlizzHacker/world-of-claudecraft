@@ -7,8 +7,15 @@
 //   BROWSER_PATH=... node scripts/realm_assets/audit_arms_render.mjs \
 //     --cases /tmp/cases.json --out /tmp/arms_audit --size 420
 //
-// cases.json: [{ label, body, arm, grip: null | { lift, maxHeight, override } }]
+// cases.json: [{ label, body, arm, wield, grip: null | { lift, maxHeight, override } }]
 // Writes out/<label>/<view>.png and prints one diagnostic line per case.
+//
+// --normalize <h> renders the GAME's picture: every body scaled to the same
+// on-screen height inside a fixed camera box, which is the only framing that can
+// show whether a weapon is the right SIZE. Without it each shot is fitted to its
+// own bounds, so a body holding a sword twice its length looks much like a body
+// holding a sensible one - the camera just backs off. --flat writes
+// out/<label>.png instead of a per-case directory, ready for montage.mjs.
 
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -24,9 +31,18 @@ function arg(n, d = null) {
   return v && !v.startsWith('--') ? v : true;
 }
 
+function argHas(n) {
+  return process.argv.includes(`--${n}`);
+}
+
 const CASES = arg('cases');
 const OUT = arg('out', '/tmp/arms_audit');
 const SIZE = Number(arg('size', 420));
+// Height every body is normalised to, matching GEN_H / HUMANOID_H in the
+// manifest. 0 keeps the historical fit-to-bounds framing.
+const NORMALIZE = Number(arg('normalize', 0));
+const FLAT = argHas('flat');
+const NO_HAND = argHas('no-hand');
 
 async function launchPage() {
   const esbuild = await import('esbuild');
@@ -76,7 +92,7 @@ async function main() {
   for (const c of cases) {
     const body = readFileSync(c.body).toString('base64');
     const arm = readFileSync(c.arm).toString('base64');
-    const outDir = join(OUT, c.label);
+    const outDir = FLAT ? OUT : join(OUT, c.label);
     mkdirSync(outDir, { recursive: true });
     try {
       const res = await page.evaluate((b, a, o) => window.renderArm(b, a, o), body, arm, {
@@ -86,17 +102,21 @@ async function main() {
         poses: c.poses,
         yaws: c.yaws,
         handRadius: c.handRadius,
+        wield: c.wield ?? 1,
+        normalizeTo: NORMALIZE,
+        hand: NO_HAND ? false : undefined,
       });
       for (const s of res.shots) {
-        writeFileSync(
-          join(outDir, `${s.name}.png`),
-          Buffer.from(s.dataUrl.split(',')[1], 'base64'),
-        );
+        // Flat mode names the file after the CASE so a montage tile is
+        // identifiable; nested mode keeps the per-view names.
+        const name = FLAT ? `${c.label}.png` : `${s.name}.png`;
+        writeFileSync(join(outDir, name), Buffer.from(s.dataUrl.split(',')[1], 'base64'));
       }
       const d = res.diag;
       console.log(
-        `OK  ${c.label}  ${JSON.stringify(res.diag.poses)}  armWorldSize=${JSON.stringify(d.armWorldSize)} bodyH=${d.bodyHeight} ` +
-          `nativeScale=${d.nativeScale?.toFixed?.(4)} appliedScale=${d.applied?.scale?.toFixed?.(4) ?? 'native'}`,
+        `OK  ${c.label}  armWorldSize=${JSON.stringify(d.armWorldSize)} posedH=${d.posedHeight} ` +
+          `armFraction=${d.armFraction} wield=${d.wield} ` +
+          `appliedScale=${d.applied?.scale?.toFixed?.(4) ?? 'native'}`,
       );
     } catch (e) {
       console.log(`FAIL ${c.label}: ${String(e.message || e).slice(0, 200)}`);

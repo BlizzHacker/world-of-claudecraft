@@ -74,26 +74,68 @@ const ROT = {
   'z:minus': [-90, 0, 0],
 };
 
-// World length on the shared KayKit skeleton (reference knight ~2.54 tall, its
-// stock sword_a 1.77 long - this library is deliberately chunky/heroic).
-const GUN_SIZES = [
-  [/(pistol|revolver|sidearm|magnum|derringer|holdout|hand.?cannon)/i, 0.85],
+// ---------------------------------------------------------------------------
+// SIZE: a fraction of the WIELDER, not a world length
+// ---------------------------------------------------------------------------
+// These tables used to be absolute world lengths, which is the same thing ONLY
+// for a wielder of reference height. The generated body bank is not: rigged from
+// source meshes authored at whatever scale their artist used, its raw heights run
+// 1.32 to 4.03 world units. Since prepareVisual() normalises each body by its own
+// raw height and the weapon rides a hand bone through that same divisor, a fixed
+// world length becomes an apparent size that swings 3x with the wielder - the
+// same sword a dagger on a giant, a greatsword on a gnome.
+//
+// So the number authored here is what it always meant to be: the weapon's length
+// as a FRACTION OF ITS WIELDER'S HEIGHT. The absolute grip length below is that
+// fraction times the reference height, and scripts/realm_assets/emit_wield.mjs
+// emits the per-body multiplier that carries it to every other wielder.
+//
+// The reference is the shared KayKit knight, 2.54 units crown-to-heel, whose
+// stock sword_a is 1.77 long - 0.70 of its height. This library is deliberately
+// chunky/heroic and the ladder below is pitched to match it. CHANGING
+// WIELD_REF_HEIGHT HERE MEANS CHANGING IT IN emit_wield.mjs TOO: the two halves
+// of one equation live in the two files.
+const WIELD_REF_HEIGHT = 2.54;
+
+// Fraction of wielder height, per weapon class. This ladder IS the art
+// direction: a hold-out pistol reads as a third of a body, a polearm reads
+// nearly as tall as one.
+const GUN_FRACTIONS = [
+  [/(pistol|revolver|sidearm|magnum|derringer|holdout|hand.?cannon)/i, 0.335],
   [
     /(sniper|railgun|rail.?cannon|cannon|launcher|minigun|gatling|rocket|bazooka|heavy|lmg|hmg)/i,
-    1.55,
+    0.61,
   ],
-  [/(smg|pdw|carbine|uzi|machine.?pistol)/i, 1.05],
+  [/(smg|pdw|carbine|uzi|machine.?pistol)/i, 0.413],
 ];
-const GUN_DEFAULT = 1.3;
+const GUN_DEFAULT_FRACTION = 0.512;
 
-const MELEE_SIZES = [
-  [/(dagger|knife|shiv|dirk|kunai|tanto)/i, 0.9],
-  [/(wand|rod|scepter|sceptre|baton)/i, 1.05],
-  [/(scythe|staff|stave|spear|polearm|halberd|glaive|lance|pike|trident|naginata)/i, 2.0],
-  [/(hammer|mace|maul|club|axe|hatchet|cleaver|flail)/i, 1.45],
-  [/(sword|blade|katana|sabre|saber|rapier|scimitar|falchion|claymore|greatsword)/i, 1.6],
+const MELEE_FRACTIONS = [
+  [/(dagger|knife|shiv|dirk|kunai|tanto)/i, 0.354],
+  [/(wand|rod|scepter|sceptre|baton)/i, 0.413],
+  [/(scythe|staff|stave|spear|polearm|halberd|glaive|lance|pike|trident|naginata)/i, 0.787],
+  [/(hammer|mace|maul|club|axe|hatchet|cleaver|flail)/i, 0.571],
+  [/(sword|blade|katana|sabre|saber|rapier|scimitar|falchion|claymore|greatsword)/i, 0.63],
 ];
-const MELEE_DEFAULT = 1.45;
+const MELEE_DEFAULT_FRACTION = 0.571;
+
+// Hard ceiling and floor on the ladder, so a future class row cannot ship a
+// weapon longer than its wielder or too small to read at gameplay distance.
+const FRACTION_MIN = 0.2;
+const FRACTION_MAX = 0.95;
+
+// Quantised to centimetres so the ladder stays a set of round reference lengths
+// (0.85, 1.05, 1.30, 1.55 ...) rather than a column of float dust, and so
+// re-expressing the table as fractions produced a byte-identical file: the only
+// row this refactor changed is the one whose GLB left the store.
+const toLength = (fraction) =>
+  Math.round(Math.min(FRACTION_MAX, Math.max(FRACTION_MIN, fraction)) * WIELD_REF_HEIGHT * 100) /
+  100;
+
+const GUN_SIZES = GUN_FRACTIONS.map(([re, f]) => [re, toLength(f)]);
+const GUN_DEFAULT = toLength(GUN_DEFAULT_FRACTION);
+const MELEE_SIZES = MELEE_FRACTIONS.map(([re, f]) => [re, toLength(f)]);
+const MELEE_DEFAULT = toLength(MELEE_DEFAULT_FRACTION);
 
 // Fraction of the weapon's length the model slides along its own axis so the
 // fist sits on the grip rather than the centre. A gun is gripped just behind
@@ -131,6 +173,12 @@ const MELEE_LEXICON = new RegExp(
 // The family VariantGrip is deliberately inert: `lift` 0 so the computed slide
 // is exact, `maxHeight` far above any model's 2.0-unit extent so the shrink-only
 // clamp never fires and `scale` alone sets the size.
+//
+// `scale` here sizes the weapon for a REFERENCE-height wielder. The engine
+// multiplies in REALM_WIELD_SCALE (src/render/characters/realm_wield.generated.ts,
+// emitted by emit_wield.mjs) for the body actually holding it, which is what
+// turns these reference lengths back into the fractions of wielder height the
+// ladder above asks for.
 const FAMILY_GUN = 'VAR_REALM_GUN';
 const FAMILY_MELEE = 'VAR_REALM_MELEE';
 

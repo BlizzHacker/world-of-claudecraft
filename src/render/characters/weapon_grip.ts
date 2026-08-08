@@ -173,15 +173,23 @@ function quatMul(
 /** Compose the final hand-local transform for a variant weapon. `height` is the
  *  model's native (pre-scale) world height, `left` the hand side (mirrors the
  *  180-degree flip), `lift`/`maxHeight` the family VariantGrip, `override` the
- *  optional per-weapon fine-tune. With no override this is exactly the prior
- *  behavior: position (0, lift, 0), the hand-side flip, and the shrink-only
- *  clamp scale. */
+ *  optional per-weapon fine-tune, `wield` how big THIS WIELDER is relative to the
+ *  wielder the weapon library is sized against. With no override and wield 1 this
+ *  is exactly the prior behavior: position (0, lift, 0), the hand-side flip, and
+ *  the shrink-only clamp scale.
+ *
+ *  `wield` multiplies the position as well as the scale, and must: the position
+ *  is a HAND-LOCAL offset (the family lift plus the per-weapon slide that puts
+ *  the fist on the grip rather than the model's centre). Scaling the model
+ *  without scaling that slide walks the grip off the handle in proportion to how
+ *  far the wielder is from the reference. */
 export function variantGripTransform(
   height: number,
   left: boolean,
   lift: number,
   maxHeight: number,
   override?: WeaponGripOverride,
+  wield = 1,
 ): GripTransform {
   const clamp = height > 1e-3 ? Math.min(1, maxHeight / height) : 1;
   const [px, oy, pz] = override?.pos ?? [0, 0, 0];
@@ -200,9 +208,10 @@ export function variantGripTransform(
     const [rx, ry, rz] = override.rot;
     quaternion = quatMul(base, quatFromEuler(rx * DEG2RAD, ry * DEG2RAD, rz * DEG2RAD));
   }
+  const w = Number.isFinite(wield) && wield > 0 ? wield : 1;
   return {
-    position: [ox, lift + oy, oz],
+    position: [ox * w, (lift + oy) * w, oz * w],
     quaternion,
-    scale: clamp * (override?.scale ?? 1),
+    scale: clamp * (override?.scale ?? 1) * w,
   };
 }
