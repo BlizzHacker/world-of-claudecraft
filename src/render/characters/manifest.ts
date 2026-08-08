@@ -7,6 +7,7 @@ import { MECH_CHROMAS, type MechChroma } from '../../sim/content/skins';
 import { offhandMirrorsWeaponSkin } from '../../sim/content/weapon_skin_rules';
 import { WEAPON_SKINS } from '../../sim/content/weapon_skins';
 import { ITEMS, MOBS } from '../../sim/data';
+import { resolveRealmCharacterVisual } from '../../sim/realms/class_visuals';
 import { infernalCharacterSelection } from '../../sim/realms/infernal_classes';
 import { resolveActiveRealmId } from '../../sim/realms/registry';
 import type { Entity, PlayerClass } from '../../sim/types';
@@ -2127,6 +2128,28 @@ function registerOverrideVisual(entry: BodyOverrideEntry): string {
   return key;
 }
 
+/** The operator's override row for a CHARACTER (no Entity required), in the same
+ *  precedence the world uses: hero id, hero display name, the canonical selection
+ *  a hidden variant presents under, then the base class. Split out of
+ *  {@link overrideVisualKeyForEntity} so the 2D surfaces (unit-frame portraits,
+ *  roster chips, the char-select turntable) resolve through the IDENTICAL chain
+ *  instead of each re-deriving it. */
+function overrideEntryForCharacter(
+  realm: string,
+  realmHeroId: string | null | undefined,
+  cls: PlayerClass,
+): BodyOverrideEntry | undefined {
+  const map = BODY_OVERRIDES[realm];
+  if (!map) return undefined;
+  const selection = infernalCharacterSelection(realm, realmHeroId ?? null, cls);
+  let entry = selection ? (map[`hero:${selection.id}`] ?? map[`hero:${selection.name}`]) : undefined;
+  // A hidden hero variant with no published body of its own falls back to
+  // the canonical selection it presents under (e.g. hero:infernal-hero-sorcerer-m
+  // -> hero:infernal-hero-sorcerer-sorceress until a male body is published).
+  if (!entry && selection?.variantOf) entry = map[`hero:${selection.variantOf}`];
+  return entry ?? map[`class:${cls}`];
+}
+
 /** The override visual key for an entity, or null. A realm hero assignment is
  *  most specific, followed by class, NPC, and mob template assignments. */
 function overrideVisualKeyForEntity(e: Entity): string | null {
@@ -2135,13 +2158,7 @@ function overrideVisualKeyForEntity(e: Entity): string | null {
   if (!map) return null;
   let entry: BodyOverrideEntry | undefined;
   if (e.kind === 'player') {
-    const selection = infernalCharacterSelection(realm, e.realmHeroId, e.templateId as PlayerClass);
-    entry = selection ? (map[`hero:${selection.id}`] ?? map[`hero:${selection.name}`]) : undefined;
-    // A hidden hero variant with no published body of its own falls back to
-    // the canonical selection it presents under (e.g. hero:infernal-hero-sorcerer-m
-    // -> hero:infernal-hero-sorcerer-sorceress until a male body is published).
-    if (!entry && selection?.variantOf) entry = map[`hero:${selection.variantOf}`];
-    entry ??= map[`class:${e.templateId}`];
+    entry = overrideEntryForCharacter(realm, e.realmHeroId, e.templateId as PlayerClass);
   } else if (e.kind === 'npc') {
     entry = map[`npc:${e.templateId}`];
   } else if (e.kind === 'mob') {
@@ -2151,6 +2168,67 @@ function overrideVisualKeyForEntity(e: Entity): string | null {
   }
   return entry ? registerOverrideVisual(entry) : null;
 }
+
+/**
+ * The visual key that renders a body GLB named by URL.
+ *
+ * The create screen and the body editor speak in asset URLs, not manifest keys,
+ * and their only way to show a face was a portrait png published beside the GLB.
+ * Where none exists the card rendered blank. This hands those surfaces the same
+ * key the renderer uses, so they can render the body itself: an already-known
+ * file reuses its real manifest entry (fitted height, authored clips, sockets),
+ * and only a genuinely unknown file gets the generic auto-clip def.
+ */
+export function visualKeyForBodyAsset(assetUrl: string): string {
+  return registerOverrideVisual({ assetUrl });
+}
+
+/** A character as the non-world surfaces know it: a roster row, an inspect
+ *  target, a HUD unit frame. No Entity, so no `templateId`/`kind`. */
+export interface CharacterVisualQuery {
+  cls: PlayerClass;
+  /** Realm the overrides were installed under. Defaults to the active realm. */
+  realm?: string | null;
+  realmHeroId?: string | null;
+  /** The server-published body for this character (CharacterSummary.visualKey /
+   *  the wire's `vk`). Used when no operator override claims the character. */
+  visualKey?: string | null;
+  skinCatalog?: 'class' | 'mech' | null;
+}
+
+/**
+ * THE resolver every character-face surface must use.
+ *
+ * Before this existed the 2D surfaces had their own, weaker chain: they consulted
+ * only the /api/realm-visuals overrides and then guessed a portrait png sitting
+ * beside the body GLB. Nothing published those pngs for the class-level bodies,
+ * so every lookup 404'd and the surfaces fell back to `player_<class>` — the
+ * stock KayKit mini — for characters the world was rendering on a real library
+ * body. This runs the same order the world's {@link visualKeyFor} does:
+ *
+ *   1. the Combat Mech cosmetic (class-agnostic body),
+ *   2. the operator's live body override (hero -> variant -> class),
+ *   3. the compiled realm body the server assigned (`visualKey` / REALM_CLASS_VISUALS),
+ *   4. the class rig.
+ *
+ * Note step 2 can name a lazily-loaded GLB: callers that render must preload it
+ * (preloadVisualAssets) and re-render, not treat "not loaded yet" as "no body".
+ */
+export function visualKeyForCharacter(q: CharacterVisualQuery): string {
+  if (q.skinCatalog === 'mech') return 'player_mech';
+  const realm = q.realm ?? resolveActiveRealmId();
+  const entry = overrideEntryForCharacter(realm, q.realmHeroId ?? null, q.cls);
+  if (entry) return registerOverrideVisual(entry);
+  if (q.visualKey && VISUALS[q.visualKey]) return q.visualKey;
+  // The server omits `vk` for older rows; the compiled per-realm table is the
+  // same mapping it would have sent, so the roster never falls back to KayKit
+  // just because a character predates the field.
+  const compiled = resolveRealmCharacterVisual(realm, q.cls, q.realmHeroId ?? null).visualKey;
+  if (compiled && VISUALS[compiled]) return compiled;
+  return VISUALS[`player_${q.cls}`] ? `player_${q.cls}` : 'player_warrior';
+}
+
+
 
 
 // Families the generated bodies can legitimately stand in for. Every generated

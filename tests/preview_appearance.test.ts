@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { preloadMechAssets } from '../src/render/characters/assets';
+import { preloadMechAssets, preloadVisualAssets } from '../src/render/characters/assets';
 import { mechHeldWeaponOverride } from '../src/render/characters/manifest';
 import { CharacterPreview, shouldReloadExternalPreview } from '../src/render/characters/preview';
 import {
@@ -14,7 +14,25 @@ const mechAssets = vi.hoisted(() => ({
   resolve: null as (() => void) | null,
 }));
 
+// Bodies whose GLB is NOT resident. setVisualKey fetches these instead of
+// throwing "character asset not preloaded" into a silent catch (which is what
+// left the class rig on the turntable for every realm/override body).
+const lazyBodies = vi.hoisted(() => ({
+  notReady: new Set<string>(),
+  resolvers: new Map<string, () => void>(),
+}));
+
 vi.mock('../src/render/characters/assets', () => ({
+  visualAssetsReady: (key: string) => !lazyBodies.notReady.has(key),
+  preloadVisualAssets: vi.fn(
+    (key: string) =>
+      new Promise<void>((resolve) => {
+        lazyBodies.resolvers.set(key, () => {
+          lazyBodies.notReady.delete(key);
+          resolve();
+        });
+      }),
+  ),
   mechAssetsReady: () => mechAssets.ready,
   preloadMechAssets: vi.fn(() => {
     if (!mechAssets.promise) {
@@ -78,7 +96,10 @@ beforeEach(() => {
   mechAssets.ready = false;
   mechAssets.promise = null;
   mechAssets.resolve = null;
+  lazyBodies.notReady.clear();
+  lazyBodies.resolvers.clear();
   vi.mocked(preloadMechAssets).mockClear();
+  vi.mocked(preloadVisualAssets).mockClear();
 });
 
 describe('previewAppearanceVisual', () => {
@@ -296,5 +317,36 @@ describe('CharacterPreview.setVisualKey: the weapon-skin rebuild contract', () =
     preview.setVisualKey('player_rogue', 'rusty_dagger', null, null);
     const built = visualDoubles.built.at(-1) as { setWeaponSkin: ReturnType<typeof vi.fn> };
     expect(built.setWeaponSkin).not.toHaveBeenCalled();
+  });
+
+  // Every realm body and every operator-assigned override GLB is lazyPreload, so
+  // "not resident" is the NORMAL state for exactly the characters that have a
+  // real body. Building one anyway threw into a silent catch and left the class
+  // rig on the turntable — the KayKit face on char-select.
+  it('fetches a body whose GLB is not resident instead of leaving the class rig up', async () => {
+    lazyBodies.notReady.add('realm_infernal_human_iron_warden');
+    const preview = rawPreview(null);
+    preview.setVisualKey('realm_infernal_human_iron_warden', null, null, null);
+    // nothing built yet: the GLB is still in flight
+    expect(visualDoubles.built).toHaveLength(0);
+    expect(preloadVisualAssets).toHaveBeenCalledWith('realm_infernal_human_iron_warden');
+    lazyBodies.resolvers.get('realm_infernal_human_iron_warden')?.();
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(visualDoubles.built).toHaveLength(1);
+  });
+
+  it('drops a late body fetch when a newer selection superseded it', async () => {
+    lazyBodies.notReady.add('realm_infernal_class_warlock');
+    const preview = rawPreview(null);
+    preview.setVisualKey('realm_infernal_class_warlock', null, null, null);
+    // the operator clicks another roster row before the first GLB lands
+    preview.setVisualKey('player_rogue', null, null, null);
+    expect(visualDoubles.built).toHaveLength(1);
+    lazyBodies.resolvers.get('realm_infernal_class_warlock')?.();
+    await Promise.resolve();
+    await Promise.resolve();
+    // still one: the superseded body must not steal the turntable back
+    expect(visualDoubles.built).toHaveLength(1);
   });
 });

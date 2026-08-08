@@ -46,5 +46,9 @@ export function appearanceSignature(a: PreviewAppearance): string {
   // weaponSkinId is part of the identity: without it, applying or removing an
   // Armory skin while a preview is mounted elides as "same appearance" and the
   // stale weapon model survives the repaint.
-  return `${a.cls}|${a.skin}|${a.skinCatalog}|${a.mainhandItemId ?? ''}|${a.offhandItemId ?? ''}|${a.weaponSkinId ?? ''}`;
+  // visualKey likewise: two roster characters can share class, skin and gear and
+  // still be different BODIES (a realm hero vs the class rig), so leaving it out
+  // makes them one appearance to every staleness guard keyed on this string.
+  // tests/preview_appearance.test.ts has pinned this since the field was added.
+  return `${a.cls}|${a.skin}|${a.skinCatalog}|${a.mainhandItemId ?? ''}|${a.offhandItemId ?? ''}|${a.weaponSkinId ?? ''}|${a.visualKey ?? ''}`;
 }

@@ -10,7 +10,11 @@
 // lives in unit_portrait.ts (and is unit-tested there).
 // ---------------------------------------------------------------------------
 
-import { playerPortraitDataUrl } from '../render/characters/portrait';
+import {
+  playerPortraitDataUrl,
+  requestVisualPortrait,
+  visualPortraitDataUrl,
+} from '../render/characters/portrait';
 import type { PlayerClass } from '../sim/types';
 import { iconCanvas } from './icons';
 import {
@@ -73,6 +77,7 @@ export class UnitPortraitPainter {
    *  checks `dataset.portrait` and bails) so it can't repaint over the crest. */
   drawCrest(canvas: HTMLCanvasElement, crestId: string): void {
     canvas.dataset.portrait = '';
+    delete canvas.dataset.portraitBody;
     const { ctx, size } = this.begin(canvas);
     const { dx, dy, dw, dh } = overscanRect(size, CREST_OVERSCAN);
     ctx.drawImage(iconCanvas('crest', crestId, size), dx, dy, dw, dh);
@@ -83,6 +88,9 @@ export class UnitPortraitPainter {
    *  load (the framed unit may have changed mid-decode). */
   drawHeadshot(canvas: HTMLCanvasElement, url: string, onError?: () => void): void {
     canvas.dataset.portrait = url;
+    // A body request in flight for a PREVIOUS subject must not paint over this
+    // one when it lands (drawVisual re-arms the tag right after it calls us).
+    delete canvas.dataset.portraitBody;
     const draw = (img: HTMLImageElement) => {
       if (canvas.dataset.portrait !== url) return; // unit changed mid-decode
       const { ctx, size } = this.begin(canvas);
@@ -114,5 +122,37 @@ export class UnitPortraitPainter {
     const url = playerPortraitDataUrl(cls, skin);
     if (url) this.drawHeadshot(canvas, url);
     else this.drawCrest(canvas, `class_${cls}`);
+  }
+
+  /**
+   * Paint the headshot of the body this character actually renders on in the
+   * world (`visualKeyFor`), falling back to the class rig / crest only while its
+   * GLB loads or if it cannot be built at all.
+   *
+   * The unit frames used to have no path to a real body except a portrait png
+   * published beside the body GLB. No realm publishes those, so the frames were
+   * pinned to drawClass — the KayKit mini — for every reassigned character. The
+   * dataset.portrait tag is the same mid-decode guard drawHeadshot uses: if the
+   * framed unit changed while the body was in flight, the late paint is dropped.
+   */
+  drawVisual(
+    canvas: HTMLCanvasElement,
+    visualKey: string,
+    cls: PlayerClass,
+    skin: number,
+  ): void {
+    const ready = visualPortraitDataUrl(visualKey, skin);
+    if (ready) {
+      this.drawHeadshot(canvas, ready);
+      return;
+    }
+    this.drawClass(canvas, cls, skin);
+    const want = `${visualKey}:${skin}`;
+    if (canvas.dataset.portraitBody === want) return;
+    canvas.dataset.portraitBody = want;
+    void requestVisualPortrait(visualKey, skin).then((url) => {
+      if (!url || canvas.dataset.portraitBody !== want) return;
+      this.drawHeadshot(canvas, url);
+    });
   }
 }

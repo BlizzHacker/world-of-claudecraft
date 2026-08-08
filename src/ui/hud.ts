@@ -4371,18 +4371,20 @@ export class Hud {
     const canvas = $('#pf-portrait') as unknown as HTMLCanvasElement;
     const cls = this.sim.cfg.playerClass;
     const skin = this.sim.player.skin ?? 0;
-    // The hero's REAL body portrait (png published beside its override GLB)
-    // wins; no reassigned body or a failed png load falls back to the 3D class
-    // headshot / crest exactly as before. enterWorld awaits the override fetch,
-    // so the resolution is ready by the time the HUD mounts.
+    // A pre-rendered portrait png published beside the body GLB is the cheap
+    // path when one exists; it is an OPTIMISATION, not the resolution. No realm
+    // ships those pngs today, so this 404s and the error path below is what
+    // actually runs: render the very body visualKeyFor gives the world renderer.
+    // Resolving the face any other way is how the frame ended up showing the
+    // KayKit class rig for a player standing there on a realm body.
     const bodyUrl = characterPortraitUrl(resolveActiveRealmId(), this.sim.player.realmHeroId, cls);
+    const drawBody = () =>
+      this.portraits.drawVisual(canvas, visualKeyFor(this.sim.player), cls, skin);
     if (bodyUrl) {
-      this.portraits.drawHeadshot(canvas, bodyUrl, () =>
-        this.portraits.drawClass(canvas, cls, skin),
-      );
+      this.portraits.drawHeadshot(canvas, bodyUrl, drawBody);
       return;
     }
-    this.portraits.drawClass(canvas, cls, skin);
+    drawBody();
   }
 
   // Redraw the target portrait canvas. Called by the unit_frame painter's repaint
@@ -4396,16 +4398,16 @@ export class Hud {
     if (target.kind === 'player') {
       const cls = target.templateId as PlayerClass;
       const skin = target.skin ?? 0;
-      // A player target's reassigned hero body has a published portrait png
-      // (realmHeroId rides the wire per entity); fall back to the local 3D
-      // class headshot when there is no override or the png 404s.
+      // Same resolution as the player frame: the published png when it exists,
+      // otherwise render the entity's own world body (visualKeyFor), never the
+      // bare class rig.
       const bodyUrl = characterPortraitUrl(resolveActiveRealmId(), target.realmHeroId, cls);
+      const drawBody = () =>
+        this.portraits.drawVisual(this.targetPortraitEl, visualKeyFor(target), cls, skin);
       if (bodyUrl) {
-        this.portraits.drawHeadshot(this.targetPortraitEl, bodyUrl, () =>
-          this.portraits.drawClass(this.targetPortraitEl, cls, skin),
-        );
+        this.portraits.drawHeadshot(this.targetPortraitEl, bodyUrl, drawBody);
       } else {
-        this.portraits.drawClass(this.targetPortraitEl, cls, skin);
+        drawBody();
       }
     } else {
       const template = MOBS[target.templateId];
@@ -4437,12 +4439,12 @@ export class Hud {
       const skin = tot.skin ?? 0;
       // Same real-body resolution as the target frame (see drawTargetPortrait).
       const bodyUrl = characterPortraitUrl(resolveActiveRealmId(), tot.realmHeroId, cls);
+      const drawBody = () =>
+        this.portraits.drawVisual(this.totPortraitEl, visualKeyFor(tot), cls, skin);
       if (bodyUrl) {
-        this.portraits.drawHeadshot(this.totPortraitEl, bodyUrl, () =>
-          this.portraits.drawClass(this.totPortraitEl, cls, skin),
-        );
+        this.portraits.drawHeadshot(this.totPortraitEl, bodyUrl, drawBody);
       } else {
-        this.portraits.drawClass(this.totPortraitEl, cls, skin);
+        drawBody();
       }
     } else {
       this.portraits.drawCrest(
@@ -13469,7 +13471,16 @@ export class Hud {
       this.sim.player.skinCatalog ?? 'class',
     );
     if (preview.visualKey !== 'player_mech') {
-      this.mountCharPreview(container, this.sim.cfg.playerClass, preview.skin, preview.visualKey);
+      // activeCharacterAppearancePreview only knows class vs mech, so its
+      // non-mech answer is always `player_<class>` — the KayKit rig. The sheet's
+      // identity chip already shows visualKeyFor(player); the doll beside it
+      // must agree.
+      this.mountCharPreview(
+        container,
+        this.sim.cfg.playerClass,
+        preview.skin,
+        visualKeyFor(this.sim.player),
+      );
       return;
     }
     if (!this.mechAssetsPromise) this.mechAssetsPromise = preloadMechAssets();
@@ -13577,6 +13588,8 @@ export class Hud {
       offhand: string | null;
       /** The inspected player's server-resolved active weapon skin (wire wsk). */
       weaponSkinId: string | null;
+      /** The body the inspected player renders on in the world. */
+      visualKey?: string;
     },
   ): void {
     const preview = activeCharacterAppearancePreview(params.cls, params.skin, params.skinCatalog);
@@ -13584,7 +13597,8 @@ export class Hud {
       this.mountSharedPreview(container, {
         cls: params.cls,
         skin: preview.skin,
-        previewKey: preview.visualKey === 'player_mech' ? preview.visualKey : undefined,
+        previewKey:
+          preview.visualKey === 'player_mech' ? preview.visualKey : (params.visualKey ?? undefined),
         mainhand: params.mainhand,
         offhand: params.offhand,
         weaponSkinId: params.weaponSkinId,
@@ -14519,7 +14533,16 @@ export class Hud {
    */
   private ctxPlayerTitleHtml(name: string, entCls: PlayerClass | null, ent?: Entity): string {
     const chip = entCls
-      ? portraitChipHtml({ cls: entCls, skin: ent?.skin ?? 0, name, variant: 'sm' })
+      ? portraitChipHtml({
+          cls: entCls,
+          skin: ent?.skin ?? 0,
+          name,
+          variant: 'sm',
+          // With a live entity the chip shows that player's actual body; a
+          // chat-name menu for someone not in view has no entity to resolve, so
+          // it keeps the class chip.
+          visualKey: ent ? visualKeyFor(ent) : undefined,
+        })
       : '';
     const label = esc(t('hudChrome.playerMenu.aiTagTitle'));
     const ai = this.isAiAccount(name, ent)
@@ -14724,7 +14747,7 @@ export class Hud {
   openInspect(pid: number): void {
     const e = this.sim.entities.get(pid);
     if (e?.kind !== 'player') return;
-    this.inspectWindow.openInspect(e, Date.now());
+    this.inspectWindow.openInspect(e, Date.now(), visualKeyFor(e));
   }
 
   /** Open the Loot Settings window: the leader gets the editable master-loot
