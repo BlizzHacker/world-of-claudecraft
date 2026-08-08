@@ -1015,22 +1015,6 @@
   "handL": 1,
   "handRY": 0.5255
  },
- "classic/realm_classic_average_man_game_assets_01940d81.glb": {
-  "height": 2.0317,
-  "width": 1.2807,
-  "depth": 0.3841,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.5169
- },
- "classic/realm_classic_average_man_pose_game_01940d81.glb": {
-  "height": 3.8631,
-  "width": 1.6455,
-  "depth": 3.5034,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.277
- },
  "classic/realm_classic_avian_serpent_knight_characters_0197d2ad.glb": {
   "height": 3.3398,
   "width": 2.6485,
@@ -1238,22 +1222,6 @@
   "handR": 1,
   "handL": 1,
   "handRY": 0.5663
- },
- "classic/realm_classic_blue_power_ranger_01943943.glb": {
-  "height": 2.4418,
-  "width": 1.6945,
-  "depth": 0.5882,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.4304
- },
- "classic/realm_classic_blue_power_ranger_characters_0194371d.glb": {
-  "height": 1.6111,
-  "width": 0.8216,
-  "depth": 0.4538,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.6491
  },
  "classic/realm_classic_bonebound_warlord_019f0578.glb": {
   "height": 2.3238,
@@ -8734,14 +8702,6 @@
   "handR": 1,
   "handL": 1,
   "handRY": 0.7151
- },
- "dominion/realm_dominion_determined_chemist_halloween2025_019a18fd.glb": {
-  "height": 1.9449,
-  "width": 0.8737,
-  "depth": 0.4631,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.5394
  },
  "dominion/realm_dominion_empress_circuits_empress_circuit_019eacec.glb": {
   "height": 2.2371,
