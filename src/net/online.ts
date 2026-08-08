@@ -1,6 +1,6 @@
 // Online play: REST auth client + WebSocket world mirror.
 
-import { apiUrl, DESKTOP_API_ORIGIN, NATIVE_API_ORIGIN } from '../client_origin';
+import { apiUrl, DESKTOP_API_ORIGIN, NATIVE_API_ORIGIN, PACKAGED_API_ORIGIN } from '../client_origin';
 import { normalizeOrigin, runtimeWebSocketUrl } from '../runtime';
 import {
   hasStreamerLink,
@@ -366,10 +366,10 @@ export class Api {
   realm: string | null = null;
   // base origin for realm-scoped calls (characters, search, ws). '' = the page
   // origin; set to another realm's origin when the player picks a realm
-  base = NATIVE_API_ORIGIN || DESKTOP_API_ORIGIN;
+  base = NATIVE_API_ORIGIN || DESKTOP_API_ORIGIN || PACKAGED_API_ORIGIN;
 
   setRealm(url: string): void {
-    this.base = normalizeOrigin(url) || NATIVE_API_ORIGIN || DESKTOP_API_ORIGIN;
+    this.base = normalizeOrigin(url) || NATIVE_API_ORIGIN || DESKTOP_API_ORIGIN || PACKAGED_API_ORIGIN;
   }
 
   // The realm directory is always read from the page's own server. Sending the
@@ -1725,7 +1725,7 @@ export class ClientWorld implements IWorld {
   ) {
     this.characterId = characterId;
     this.token = token;
-    this.base = normalizeOrigin(base) || NATIVE_API_ORIGIN || DESKTOP_API_ORIGIN;
+    this.base = normalizeOrigin(base) || NATIVE_API_ORIGIN || DESKTOP_API_ORIGIN || PACKAGED_API_ORIGIN;
     this.clientSeed = clientSeed;
     this.coop = opts?.coop === true;
     this.ownPlayerClass = cls;
