@@ -138,6 +138,16 @@ export const MESHY_BANK_EMOTES: Partial<Record<OverheadEmoteId, EmoteClipSpec>> 
 };
 
 /** Bank clips a meshy24 body inherits for every state it has no take of its own.
+ *
+ *  ONLY FOR HUMANOID-PROPORTIONED BODIES. Sharing the meshy24 joint names is
+ *  necessary but not sufficient: every clip in the bank was authored on a
+ *  humanoid, and a winged/digitigrade/long-necked rig on the same skeleton binds
+ *  all 48 cleanly, keeps every bone length (they are rotations-only) and reports
+ *  every state as moving - while rendering as a shredded spike. The Skullbeast
+ *  and the Crimson Behemoth were wired here and had to be reverted after the
+ *  motion sheet showed it; the numbers alone never flagged them. Render any new
+ *  body before adding it.
+ *
  *  The body's OWN idle/walk/run always win: its gait was authored for its own
  *  proportions, and the bank exists to fill gaps, not to replace what works. */
 export function withMeshyBank(core: ClipMap): ClipMap {

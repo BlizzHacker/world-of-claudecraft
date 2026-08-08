@@ -780,19 +780,23 @@ const HAND_VISUALS: Record<string, VisualDef> = {
   realm_infernal_crimson_behemoth: {
     url: `${REALM_MODELS}/infernal/meshy_ai_crimson_infernal_behe_biped_meshy_ai_meshy_merged_animations_27bab94d.glb`,
     height: 2.9,
-    // meshy24 rig, so the shared bank drives it: this export has no idle, no hit,
-    // no death and no cast take of its own, which is why Walking used to stand in
-    // for dying. Its own gait stays; the bank fills the rest.
-    animUrls: [MESHY_CLIP_BANK_URL],
-    clips: withMeshyBank({
-      idle: 'Idle_Alt_A',
+    // NOT bank-wired, and this is the rule the bank has to live by: the 48 clips
+    // are authored on a HUMANOID body. A non-humanoid rig that happens to share
+    // the meshy24 joint names binds all 48 cleanly, preserves every bone length
+    // (they are rotations-only), reports every state as moving - and renders as a
+    // shredded spike, because humanoid joint rotations are meaningless on a
+    // digitigrade, winged or long-necked rest pose. Verified by rendering it.
+    // The export carries only locomotion + jumps; there is no idle/hit/death/cast
+    // take, so Walking stands in for rest and reactions and the spin-jump doubles as
+    // the swing. Names verified against the shipped GLB (scripts/audit_clips.mjs).
+    clips: {
+      idle: 'Walking',
       walk: 'Walking',
       run: 'RunFast',
-      // The signature spin-jump stays at the front of the swing rotation.
       attack: ['360_Power_Spin_Jump'],
-      death: 'Death_A',
-      jump: 'Basic_Jump',
-    }),
+      death: 'Walking',
+      hit: ['Walking'],
+    },
     lazyPreload: true,
   },
   realm_infernal_horned_demon: {
@@ -808,17 +812,22 @@ const HAND_VISUALS: Record<string, VisualDef> = {
   realm_infernal_skullbeast: {
     url: `${REALM_MODELS}/infernal/skullbeast_5d2ecebf.glb`,
     height: 2.4,
-    // meshy24 rig, so the shared bank drives it: this export has no idle, no hit,
-    // no death and no cast take of its own, which is why Walking used to stand in
-    // for dying. Its own gait stays; the bank fills the rest.
-    animUrls: [MESHY_CLIP_BANK_URL],
-    clips: withMeshyBank({
-      idle: 'Idle_Alt_A',
+    // NOT bank-wired, and this is the rule the bank has to live by: the 48 clips
+    // are authored on a HUMANOID body. A non-humanoid rig that happens to share
+    // the meshy24 joint names binds all 48 cleanly, preserves every bone length
+    // (they are rotations-only), reports every state as moving - and renders as a
+    // shredded spike, because humanoid joint rotations are meaningless on a
+    // digitigrade, winged or long-necked rest pose. Verified by rendering it.
+    // Unsteady_Walk is the closest thing to an idle this export has; the standard
+    // Idle/Hit/Death/Cast/Basic_Jump takes are simply not in the file.
+    clips: {
+      idle: 'Unsteady_Walk',
       walk: 'Monster_Walk',
       run: 'Running',
       attack: ['Left_Slash'],
-      death: 'Death_A',
-    }),
+      death: 'Unsteady_Walk',
+      hit: ['Unsteady_Walk'],
+    },
     lazyPreload: true,
   },
   // Playable Infernal archetypes use one distinct, full-size body each. They
