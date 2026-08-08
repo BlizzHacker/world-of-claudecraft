@@ -238,6 +238,14 @@ export class CharacterPreview {
       return;
     }
     const v = previewAppearanceVisual(a);
+    // setVisualKey fetches a non-resident body and mounts it on arrival, which
+    // leaves the turntable EMPTY for the length of that fetch when nothing was
+    // mounted before — the first roster click on char-select. Stand the class
+    // rig up first, exactly as the mech branch above does, so the panel is never
+    // blank; the real body replaces it and a failure leaves something up.
+    if (!visualAssetsReady(v.visualKey)) {
+      this.setVisualKey(`player_${a.cls}`, v.weaponItemId, null, v.offhandItemId);
+    }
     this.setVisualKey(v.visualKey, v.weaponItemId, v.weaponOverride, v.offhandItemId);
   }
 
