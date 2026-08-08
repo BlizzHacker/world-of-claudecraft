@@ -122,7 +122,7 @@
 //
 import { NodeIO } from '@gltf-transform/core';
 import { ALL_EXTENSIONS } from '@gltf-transform/extensions';
-import { MeshoptDecoder } from 'meshoptimizer';
+import { MeshoptDecoder, MeshoptEncoder } from 'meshoptimizer';
 import { createHash } from 'node:crypto';
 import { mkdirSync } from 'node:fs';
 import { dirname, basename, join } from 'node:path';
@@ -398,7 +398,10 @@ function fingerprint(root) {
 }
 
 // ---------- main ----------
-const io = new NodeIO().registerExtensions(ALL_EXTENSIONS).registerDependencies({ 'meshopt.decoder': MeshoptDecoder });
+await MeshoptEncoder.ready;
+const io = new NodeIO()
+  .registerExtensions(ALL_EXTENSIONS)
+  .registerDependencies({ 'meshopt.decoder': MeshoptDecoder, 'meshopt.encoder': MeshoptEncoder });
 const doc = await io.read(INPUT);
 const root = doc.getRoot();
 const fpBefore = fingerprint(root);

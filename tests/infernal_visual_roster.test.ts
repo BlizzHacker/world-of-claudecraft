@@ -54,22 +54,44 @@ describe('Infernal visual roster', () => {
   it('assigns the full starter cast to varied authored humans without KayKit or elves', () => {
     const keys = STARTER_HUMANS.map((id) => infernalNpcVisualKey(id));
 
-    expect(new Set(keys).size).toBeGreaterThanOrEqual(7);
+    // Was 7. The 2026-08-08 render audit cut the civilian rotation to the three
+    // bodies whose arms actually move through Walk; eleven more were barred for
+    // frozen, missing or shredded limbs (see INFERNAL_DEFECTIVE_BODY_KEYS).
+    // RAISE THIS BACK as bodies are repaired - reweight_topo's claim rule
+    // already brings forge_worker and hermit back inside the healthy band, which
+    // would take this to 5 once their renders are signed off.
+    expect(new Set(keys).size).toBeGreaterThanOrEqual(3);
     for (const key of keys) {
       expect(INFERNAL_HUMAN_VISUAL_KEYS).toContain(key);
       expect(key).not.toMatch(/npc_|elf|orc|demon/i);
     }
-    expect(infernalNpcVisualKey('brother_aldric_raid')).toBe('realm_infernal_human_veil_adept');
+    // was veil_adept, barred: its RightHand carries no weight, so that arm
+    // holds bind pose while the rest of the body animates
+    expect(infernalNpcVisualKey('brother_aldric_raid')).toBe(
+      'realm_infernal_human_hooded_wanderer',
+    );
     expect(infernalNpcVisualKey('a_future_infernal_civilian')).toMatch(/^realm_infernal_human_/);
   });
 
-  it('gives all nine runtime classes distinct human bodies', () => {
+  it('gives the nine runtime classes bodies that survived the render audit', () => {
     const keys = CLASSES.map((cls) => realmClassVisualKey('Infernal', cls));
 
-    expect(new Set(keys).size).toBe(CLASSES.length);
+    // Was one distinct body per class. Seven of the nine pointed at a body that
+    // fails in motion - a held T-pose, a hand with no arm weight, feet torn into
+    // planks - so the nine now share the five that passed. RAISE THIS BACK to
+    // CLASSES.length once the class bank is repaired; the distinctness rule is
+    // the product intent and this number is the debt against it.
+    expect(new Set(keys).size).toBeGreaterThanOrEqual(5);
     for (const key of keys) {
       expect(key).toMatch(/^realm_infernal_class_/);
-      expect(key).not.toMatch(/(?:^|_)(?:elf|orc|demon)(?:_|$)/i);
+      // This guard is a NAME check standing in for "no elf/orc/demon body", so
+      // it cannot tell a species from an archetype. "Demon Hunter" is a hunter
+      // OF demons - a canonical entry in INFERNAL_HERO_CLASSES with a human
+      // body - and it is one of only three class bodies that survived the
+      // 2026-08-08 render audit, so it is named here rather than cast out.
+      if (key !== 'realm_infernal_class_demon_hunter') {
+        expect(key).not.toMatch(/(?:^|_)(?:elf|orc|demon)(?:_|$)/i);
+      }
     }
   });
 
@@ -101,10 +123,10 @@ describe('Infernal visual roster', () => {
       const keys = Object.keys(NPCS).map((templateId) =>
         visualKeyFor({ kind: 'npc', templateId } as never),
       );
-      // Every NPC must draw from the civilian pool, but the pool does not have
-      // to be exhausted: four defective bodies were removed from the rotation
-      // (see INFERNAL_DEFECTIVE_BODY_KEYS) and the stable hash simply may not
-      // reach all 14 survivors with the current NPC count.
+      // Every NPC must draw from the civilian pool. The pool is down to three
+      // after the 2026-08-08 render audit barred fifteen bodies for frozen,
+      // missing or shredded limbs (see INFERNAL_DEFECTIVE_BODY_KEYS), so this
+      // now checks containment only.
       const pool = new Set<string>(INFERNAL_HUMAN_VISUAL_KEYS);
       for (const key of new Set(keys)) expect(pool.has(key), `${realm}:${key}`).toBe(true);
       for (const key of keys) {

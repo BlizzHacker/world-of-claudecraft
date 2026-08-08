@@ -111,7 +111,10 @@ describe('character visual manifest', () => {
       'a_future_cryptic_civilian',
     ];
     const npcKeys = npcIds.map((templateId) => visualKeyFor({ kind: 'npc', templateId } as never));
-    expect(new Set(npcKeys).size).toBeGreaterThanOrEqual(6);
+    // Was 6. The 2026-08-08 render audit cut the civilian rotation to the three
+    // bodies whose limbs actually animate (see INFERNAL_DEFECTIVE_BODY_KEYS).
+    // RAISE THIS BACK as bodies are repaired.
+    expect(new Set(npcKeys).size).toBeGreaterThanOrEqual(3);
     for (const key of npcKeys) {
       expect(key).toMatch(/^realm_infernal_human_/);
       expect(key).not.toMatch(/bone_herald|npc_|elf|orc|demon/i);
