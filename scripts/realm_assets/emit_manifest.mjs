@@ -89,13 +89,67 @@ function poolFor(kind, realm) {
   return shared?.length ? shared : null;
 }
 
+// A body's weapon is remembered, not just hashed. The hash below is taken
+// modulo the pool size, so it is deterministic only within ONE pool generation:
+// quarantining a handful of weapons changed pool.length and re-rolled 1,157 of
+// 1,170 bodies onto a different weapon, often a different CLASS of weapon. The
+// comment on this function used to promise a body "always spawns holding the
+// same weapon", and that was only ever true until someone touched the store.
+//
+// So the pick is recorded. A body that already has a weapon keeps it as long as
+// that weapon is still in the pool; only a body with no record, or whose weapon
+// really is gone, draws a fresh one. Removing an asset now perturbs the bodies
+// that held it and nothing else.
+function armExists(url) {
+  const rel = url.startsWith('/cr-realms/') ? url.slice('/cr-realms/'.length) : url;
+  return existsSync(`/opt/cr-realms-store/${rel}`);
+}
+// Filtering is per-pool, not per-body: 1,100+ bodies share a handful of pools,
+// and re-stat'ing 300 files for each of them is minutes of pointless syscalls.
+const LIVE_POOLS = new Map();
+function livePool(pool) {
+  let hit = LIVE_POOLS.get(pool);
+  if (!hit) {
+    hit = pool.filter(armExists);
+    LIVE_POOLS.set(pool, hit);
+  }
+  return hit;
+}
+const ARM_PICKS_PATH = '/opt/cryptic-realm/tmp/arm_picks.json';
+const ARM_PICKS = existsSync(ARM_PICKS_PATH)
+  ? JSON.parse(readFileSync(ARM_PICKS_PATH, 'utf8'))
+  : {};
+let armPicksDirty = false;
+let armPicksKept = 0;
+let armPicksFresh = 0;
+let armPicksLost = 0;
+
 /** Deterministic pick so a body always spawns holding the same weapon. Salted
  *  per kind so a body's gun and its melee weapon are not the same index. */
 function armFor(pool, key, salt) {
+  const memo = `${salt}:${key}`;
+  // The pool comes from the arms INDEX, which is generated separately and can
+  // name a weapon that is no longer on disk. Filter to what actually exists
+  // before doing anything else — otherwise a re-draw can hand back the very
+  // file that was just quarantined, which is exactly what the first version of
+  // this fix did.
+  const live = livePool(pool);
+  if (!live.length) return pool[0];
+
+  const remembered = ARM_PICKS[memo];
+  if (remembered && live.includes(remembered)) {
+    armPicksKept++;
+    return remembered;
+  }
+  if (remembered) armPicksLost++;
   let h = 2166136261;
-  const s = `${salt}:${key}`;
+  const s = memo;
   for (let i = 0; i < s.length; i++) h = ((h ^ s.charCodeAt(i)) * 16777619) >>> 0;
-  return pool[h % pool.length];
+  const picked = live[h % live.length];
+  ARM_PICKS[memo] = picked;
+  armPicksDirty = true;
+  armPicksFresh++;
+  return picked;
 }
 
 /** Mainhand URL for a generated body, or null to keep the hand-authored default. */
@@ -301,6 +355,11 @@ if (lockFd === null) {
 try {
   writeFileSync(`${OUT}.tmp`, lines.join('\n'));
   renameSync(`${OUT}.tmp`, OUT);
+  if (armPicksDirty) {
+    writeFileSync(`${ARM_PICKS_PATH}.tmp`, JSON.stringify(ARM_PICKS, null, 0));
+    renameSync(`${ARM_PICKS_PATH}.tmp`, ARM_PICKS_PATH);
+  }
+  console.log(`[emit] weapon picks: ${armPicksKept} kept, ${armPicksFresh} new, ${armPicksLost} re-drawn (weapon gone)`);
 } finally {
   closeSync(lockFd);
   try { unlinkSync(LOCK); } catch {}
