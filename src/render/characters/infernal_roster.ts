@@ -16,14 +16,21 @@
 // hands, and nothing shears into a plank. Everything else moved to
 // INFERNAL_DEFECTIVE_BODY_KEYS with the reason recorded there.
 //
-// This is deliberately three bodies rather than fourteen mostly-broken ones: a
-// town of three repeated men reads as cheap, a town of scarecrows reads as
+// This is deliberately a short list rather than fourteen mostly-broken ones: a
+// town of a few repeated men reads as cheap, a town of scarecrows reads as
 // broken. Repairing the bank is what takes this list back up - see the note on
 // INFERNAL_DEFECTIVE_BODY_KEYS.
+//
+// 2026-08-08 (second pass): monk was rendered for the first time and PASSES, so
+// the rotation is four rather than three. The bind span of 0.94 that got it
+// barred is a FIGHTER'S GUARD, not a T-pose: the arms rest away from the body
+// but they are driven, and Attack, Taunt and Wave all move them. It is the exact
+// case the queue note warned "must not be judged on numbers".
 export const INFERNAL_HUMAN_VISUAL_KEYS = [
   'realm_infernal_human_iron_warden',
   'realm_infernal_human_weathered_elder',
   'realm_infernal_human_hooded_wanderer',
+  'realm_infernal_human_monk',
 ] as const;
 
 /**
@@ -41,7 +48,6 @@ export const INFERNAL_HUMAN_VISUAL_KEYS = [
  *                  out, forearms shredded to flat blades, feet dragged as planks.
  *   hermit         span 1.19, 9% arm weight, LeftHand carries NO weight at all.
  *   white_sage     no face under the hat, arm stubs with no hands, plank feet.
- *   monk           span 0.94; arms stay splayed through Walk.
  *   road_mercenary forearms end in flat blades, no hands; RightHand 0% arm weight.
  *   vanguard       no forearms and no hands at all - frozen stubs at the pauldrons.
  *
@@ -73,21 +79,35 @@ export const INFERNAL_HUMAN_VISUAL_KEYS = [
  * mercenary_kael) is why the town read wrong. It stays fully usable as a hero or
  * class body.
  *
- * ASSASSIN has not been looked at yet - its render was still queued when the box
- * was throttled. It sits in the same numeric band as the failures above
- * (13% arm weight on the hands, 256x worst edge stretch), so it is barred
- * pending that render rather than left in rotation on a guess.
+ * ASSASSIN was rendered 2026-08-08 and FAILS, confirming its numbers (13% arm
+ * weight, 256x worst stretch): the sleeves end in flat pale blades with no hands
+ * at all, and they hold that shape unchanged through every Idle and Walk phase
+ * while the torso moves under them. The face is also lost under the hat brim.
+ * Stays barred - this one is now looked at, not assumed.
  *
  * REPAIR: forge_worker and hermit both come back inside the healthy band under
  * scripts/reweight_topo.mjs rule K (the geodesic claim) - see the recipe at the
- * bottom of this file. That repair is measured but NOT yet visually signed off,
- * so nothing here has been un-barred on the strength of it.
+ * bottom of this file. Both were RENDERED 2026-08-08 and both stay barred:
+ *
+ *   The arm repair is real and it is visible. Where the originals hold a rigid
+ *   horizontal T through every clip, the repaired bodies swing their arms
+ *   through Walk, raise both arms overhead in Attack, and give a readable Wave.
+ *   That is exactly what the claim rule was written to fix and it worked.
+ *
+ *   It is not enough to un-bar them. Reweighting moves weight; it cannot build
+ *   geometry. In the repaired bodies the forearms still END IN FLAT BLADES with
+ *   no hands, and both feet are still sheared into flat planks - clearly visible
+ *   in a full-size Idle frame, which is the pose a townsperson holds most of the
+ *   time. A villager standing in the square with no hands and plank feet is the
+ *   scarecrow complaint, whether or not his arms swing when he walks.
+ *
+ *   These two need hand and foot geometry (a re-bind or a mesh fix), not more
+ *   weight surgery. The staged CLAIM.glb files are kept for whoever does that.
  */
 export const INFERNAL_DEFECTIVE_BODY_KEYS = [
   'realm_infernal_human_forge_worker',
   'realm_infernal_human_white_sage',
   'realm_infernal_human_hermit',
-  'realm_infernal_human_monk',
   'realm_infernal_human_vanguard',
   'realm_infernal_human_road_mercenary',
   'realm_infernal_human_iron_ranger',
@@ -119,9 +139,18 @@ export const INFERNAL_DEFECTIVE_BODY_KEYS = [
  *   tempest      left arm frozen (same GLB as the spiritborn civilian).
  *   barbarian    hands fused to the belt (same GLB as the barbarian civilian).
  *   druid        same body family as barbarian, same fused hands.
- *   monk         span 0.94, arms splayed through Walk.
- *   spiritborn   not yet looked at - render queued. Numerically in the failure
- *                band (3% arm weight on the hands, 375x worst stretch).
+ *   spiritborn   rendered 2026-08-08: FAILS, confirming its numbers (3% arm
+ *                weight, 375x stretch). The winged-helm valkyrie holds both arms
+ *                straight out horizontally through all four phases of Idle AND
+ *                Walk - a true held T-pose - with the forearms tapering into
+ *                flat blades. The torso lunges in Attack while the arms stay
+ *                rigid. This is the scarecrow, unambiguously.
+ *
+ * MONK was rendered 2026-08-08 and PASSES; it has been REMOVED from this list.
+ * Its 0.94 bind span is a fighter's guard, not a T-pose - Attack, Taunt and Wave
+ * all drive the arms, the hands have fingers, and the bare feet have toes rather
+ * than planks. Note infernal_class_monk.glb and infernal_human_monk.glb are
+ * BYTE-IDENTICAL, so this one render clears both keys.
  */
 export const INFERNAL_DEFECTIVE_CLASS_BODY_KEYS = [
   'realm_infernal_class_sorcerer',
@@ -135,7 +164,6 @@ export const INFERNAL_DEFECTIVE_CLASS_BODY_KEYS = [
   'realm_infernal_class_tempest',
   'realm_infernal_class_barbarian',
   'realm_infernal_class_druid',
-  'realm_infernal_class_monk',
   'realm_infernal_class_spiritborn',
 ] as const;
 
@@ -147,6 +175,10 @@ export type InfernalHumanVisualKey = (typeof INFERNAL_HUMAN_VISUAL_KEYS)[number]
 //   iron_warden      -> anyone armed, armoured, or physically heavy
 //   weathered_elder  -> anyone older, seated behind a counter, or keeping records
 //   hooded_wanderer  -> anyone robed, hooded, scholarly, or on the road
+//   monk             -> bare-chested fighters only. It reads as a pit fighter,
+//                       so it is cast where that is the point rather than left
+//                       to the hash, which would put a shirtless man behind a
+//                       shop counter.
 const NPC_ROLE_VISUALS: Record<string, InfernalHumanVisualKey> = {
   the_merchant: 'realm_infernal_human_hooded_wanderer',
   marshal_redbrook: 'realm_infernal_human_iron_warden',
@@ -169,7 +201,7 @@ const NPC_ROLE_VISUALS: Record<string, InfernalHumanVisualKey> = {
   huntress_verr: 'realm_infernal_human_hooded_wanderer',
   bursar_fernando: 'realm_infernal_human_hooded_wanderer',
   realtor_maribel: 'realm_infernal_human_weathered_elder',
-  pit_master_grott: 'realm_infernal_human_iron_warden',
+  pit_master_grott: 'realm_infernal_human_monk',
   race_marshal_pip: 'realm_infernal_human_hooded_wanderer',
   groundskeeper_bram: 'realm_infernal_human_weathered_elder',
   loremaster_caddis: 'realm_infernal_human_hooded_wanderer',

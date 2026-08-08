@@ -151,6 +151,35 @@ export const INFERNAL_HERO_CLASSES: readonly InfernalHeroClass[] = [
   entry('The Sundering', 'Wizard', 'mage'),
 ];
 
+/**
+ * COMPILED FALLBACK ONLY - this is not what the creator screen usually shows.
+ *
+ * infernalClassChoice() resolves `hero:<id>` / `hero:<name>` through the live
+ * override document FIRST and only falls back to this table (see
+ * realm_class_presentation.ts). As of 2026-08-08 sixteen of the eighteen cards
+ * carry a published override, so for those cards this map is dead code until
+ * someone clears the override.
+ *
+ * That matters because the two are drawn from DIFFERENT banks. The overrides
+ * point at `realm_infernal_hero_*.glb` - large Meshy rig+animate bodies with a
+ * 6-clip pack (Idle/Walk/Run/Attack/Hit/Death and NO emote) - while this table
+ * points at the 10-clip `infernal_class_*` bank. They are different files with
+ * different faults, and a body judged in one bank says nothing about the other.
+ * The 2026-08-08 render audit swept only the class bank, which is why the
+ * Blood Knight shipped broken: its class body passes, and its hero body (the one
+ * players actually saw) tears its forearms into tubes in Walk and shreds in
+ * Attack. Render the asset the card RESOLVES to, not the key it names.
+ *
+ * OUTSTANDING DEBT: eleven entries below (Sorcerer, Amazon, Barbarian,
+ * Necromancer, Druid, Assassin, Wizard, Crusader, Spiritborn, Warlock, Tempest)
+ * still name a body in INFERNAL_DEFECTIVE_CLASS_BODY_KEYS. They are harmless
+ * today only because an override shadows every one of them - clearing any of
+ * those overrides puts a scarecrow back on that card. They are deliberately NOT
+ * repointed here: the class bank has only about three intact bodies, so honest
+ * fallbacks would collapse eleven archetypes onto three and destroy the variety
+ * the cards exist for. Repairing the bank is the fix; Paladin was repointed
+ * because it had no override to hide behind.
+ */
 const HERO_VISUALS: Readonly<Record<string, InfernalCharacterVisualKey>> = {
   Warrior: 'realm_infernal_class_warrior',
   Rogue: 'realm_infernal_class_rogue',
@@ -158,7 +187,12 @@ const HERO_VISUALS: Readonly<Record<string, InfernalCharacterVisualKey>> = {
   Amazon: 'realm_infernal_class_amazon',
   Barbarian: 'realm_infernal_class_barbarian',
   Necromancer: 'realm_infernal_class_necromancer',
-  Paladin: 'realm_infernal_class_paladin',
+  // was realm_infernal_class_paladin. That body tears both feet into long pale
+  // planks through Attack (rendered and confirmed 2026-08-08), and Paladin was
+  // the ONE card with no override at all, so the broken fallback was what the
+  // creator screen actually served. A `hero:infernal-hero-paladin` override now
+  // points at a library knight; this keeps the fallback on a body that passed.
+  Paladin: 'realm_infernal_class_blood_knight',
   Druid: 'realm_infernal_class_druid',
   Assassin: 'realm_infernal_class_assassin',
   'Demon Hunter': 'realm_infernal_class_demon_hunter',
