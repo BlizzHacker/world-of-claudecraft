@@ -116,16 +116,29 @@ namespace CrypticRealm.Shell
 
         private async void OnLoaded(object sender, RoutedEventArgs e)
         {
+            // Chrome DevTools over the Device Portal: the only way to profile a
+            // console (the Xbox Edge browser has no DevTools). On in Debug, and
+            // in Release only when an operator drops a LocalState marker on a dev
+            // console. A shipped Store package never has the marker. Must be set
+            // before the CoreWebView2 is created.
+            var debugOn = false;
 #if DEBUG
-            // Lets Chrome DevTools attach over the Xbox Device Portal, which is
-            // the only way to get a console, network or memory profile off a
-            // console: the Xbox Edge browser has no DevTools at all, so without
-            // this the only telemetry is reading an error off the TV. Must be
-            // set before the CoreWebView2 is created.
-            Environment.SetEnvironmentVariable(
-                "WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS",
-                "--enable-features=msEdgeDevToolsWdpRemoteDebugging");
+            debugOn = true;
 #endif
+            try
+            {
+                if (System.IO.File.Exists(System.IO.Path.Combine(
+                        Windows.Storage.ApplicationData.Current.LocalFolder.Path,
+                        "crypticrealm-devtools")))
+                    debugOn = true;
+            }
+            catch (Exception) { }
+            if (debugOn)
+            {
+                Environment.SetEnvironmentVariable(
+                    "WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS",
+                    "--enable-features=msEdgeDevToolsWdpRemoteDebugging");
+            }
             try
             {
                 await Web.EnsureCoreWebView2Async();
