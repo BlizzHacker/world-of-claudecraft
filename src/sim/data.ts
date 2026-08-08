@@ -86,6 +86,7 @@ import {
   ZONE1_QUEST_ORDER,
   ZONE1_QUESTS,
   ZONE1_ROADS,
+  ZONE1_WILDS_CAMPS,
   ZONE1_ZONE,
 } from './content/zone1';
 import {
@@ -99,6 +100,7 @@ import {
   ZONE2_QUEST_ORDER,
   ZONE2_QUESTS,
   ZONE2_ROADS,
+  ZONE2_WILDS_CAMPS,
   ZONE2_ZONE,
 } from './content/zone2';
 import {
@@ -111,6 +113,7 @@ import {
   ZONE3_QUEST_ORDER,
   ZONE3_QUESTS,
   ZONE3_ROADS,
+  ZONE3_WILDS_CAMPS,
   ZONE3_ZONE,
 } from './content/zone3';
 import { DUNGEON_WALL_HW, DUNGEON_WALL_X } from './dungeon_layout';
@@ -263,6 +266,9 @@ export const CAMPS: CampDef[] = [
   ...TEMPLE_CAMPS,
   ...ZONE1_CHAPEL_CAMPS,
   { mobId: 'grix_the_tunnelking', center: { x: -95, z: -78 }, radius: 4, count: 1 },
+  ...ZONE1_WILDS_CAMPS,
+  ...ZONE2_WILDS_CAMPS,
+  ...ZONE3_WILDS_CAMPS,
 ];
 
 export const GROUND_OBJECTS: GroundObjectDef[] = [

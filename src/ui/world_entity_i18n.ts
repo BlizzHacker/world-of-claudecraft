@@ -122,6 +122,21 @@ const MOB_IDS = [
   // Thornpeak Heights world boss + its summoned adds
   'thunzharr_waking_peak',
   'thunzharr_stormling',
+  // Pool-bodied backcountry beasts (Vale / Marsh / Heights)
+  'sowfield_marauder',
+  'brightwood_ravager',
+  'coppervein_savage',
+  'reedbank_mauler',
+  'blackwater_reaver',
+  'silthollow_charger',
+  'fenmoor_hunter',
+  'drownfen_terror',
+  'highwind_warbeast',
+  'cairnfell_render',
+  'scarpfall_fury',
+  'frostline_scourge',
+  'stormfell_ravener',
+  'talusrift_devourer',
 ] as const;
 
 const NPC_IDS = [

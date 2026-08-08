@@ -10499,6 +10499,48 @@ export const en_XA: EnTranslations = {
       "thunzharr_stormling": {
         "name": "[Ŕóúšéð Šţóŕɱļíñĝ]"
       },
+      "sowfield_marauder": {
+        "name": "[Šóŵƒíéļð Ɱáŕáúðéŕ]"
+      },
+      "brightwood_ravager": {
+        "name": "[Ɓŕíĝĥţŵóóð Ŕáʋáĝéŕ]"
+      },
+      "coppervein_savage": {
+        "name": "[Çóþþéŕʋéíñ Šáʋáĝé]"
+      },
+      "reedbank_mauler": {
+        "name": "[Ŕééðƀáñķ Ɱáúļéŕ]"
+      },
+      "blackwater_reaver": {
+        "name": "[Ɓļáçķŵáţéŕ Ŕéáʋéŕ]"
+      },
+      "silthollow_charger": {
+        "name": "[Šíļţĥóļļóŵ Çĥáŕĝéŕ]"
+      },
+      "fenmoor_hunter": {
+        "name": "[Ƒéñɱóóŕ Ĥúñţéŕ]"
+      },
+      "drownfen_terror": {
+        "name": "[Ðŕóŵñƒéñ Ţéŕŕóŕ]"
+      },
+      "highwind_warbeast": {
+        "name": "[Ĥíĝĥŵíñð Ŵáŕƀéášţ]"
+      },
+      "cairnfell_render": {
+        "name": "[Çáíŕñƒéļļ Ŕéñðéŕ]"
+      },
+      "scarpfall_fury": {
+        "name": "[Šçáŕþƒáļļ Ƒúŕý]"
+      },
+      "frostline_scourge": {
+        "name": "[Ƒŕóšţļíñé Šçóúŕĝé]"
+      },
+      "stormfell_ravener": {
+        "name": "[Šţóŕɱƒéļļ Ŕáʋéñéŕ]"
+      },
+      "talusrift_devourer": {
+        "name": "[Ţáļúšŕíƒţ Ðéʋóúŕéŕ]"
+      },
       "ironvein_foreman": {
         "name": "[Íŕóñʋéíñ Ƒóŕéɱáñ]"
       },

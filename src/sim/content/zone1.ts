@@ -186,6 +186,92 @@ export const ZONE1_MOBS: Record<string, MobTemplate> = {
     color: 0x935116,
     componentTags: ['hide', 'tusk', 'meat'],
   },
+  // ---------------------------------------------------------------------
+  // Vale backcountry beasts (levels 3-6). These carry NO curated body: the
+  // visual manifest hands a `beast` with no MOB_KEYS entry one of the realm's
+  // staged quadrupeds (manifest.ts generatedCreatureBodyFor), which differs per
+  // realm. Names and flavour are therefore SILHOUETTE-NEUTRAL on purpose - the
+  // same template renders as a barded charger in one realm and a horned ram in
+  // another, so nothing here may claim fangs, a pelt colour, or a species.
+  // ---------------------------------------------------------------------
+  sowfield_marauder: {
+    id: 'sowfield_marauder',
+    name: 'Sowfield Marauder',
+    minLevel: 3,
+    maxLevel: 4,
+    family: 'beast',
+    hpBase: 42,
+    hpPerLevel: 16,
+    dmgBase: 5,
+    dmgPerLevel: 1.8,
+    attackSpeed: 2.1,
+    armorPerLevel: 11,
+    moveSpeed: 8,
+    aggroRadius: 10,
+    // Same herd instinct as the wolves, one notch weaker: a slain packmate
+    // whips the rest into a shorter-swing frenzy.
+    packFrenzy: { radius: 12, hasteMult: 1.25, duration: 8 },
+    loot: [
+      { copper: 16, chance: 1 },
+      { itemId: 'tough_jerky', chance: 0.25 },
+    ],
+    scale: 0.95,
+    color: 0x8d6e63,
+    componentTags: ['hide', 'meat'],
+  },
+  brightwood_ravager: {
+    id: 'brightwood_ravager',
+    name: 'Brightwood Ravager',
+    minLevel: 4,
+    maxLevel: 5,
+    family: 'beast',
+    hpBase: 43,
+    hpPerLevel: 17,
+    dmgBase: 6,
+    dmgPerLevel: 1.9,
+    attackSpeed: 2.0,
+    armorPerLevel: 11,
+    moveSpeed: 8.2,
+    aggroRadius: 10,
+    loot: [
+      { copper: 20, chance: 1 },
+      { itemId: 'lesser_healing_potion', chance: 0.06 },
+    ],
+    scale: 1.0,
+    color: 0x6d5b4b,
+    componentTags: ['hide', 'meat'],
+  },
+  coppervein_savage: {
+    id: 'coppervein_savage',
+    name: 'Coppervein Savage',
+    minLevel: 5,
+    maxLevel: 6,
+    family: 'beast',
+    hpBase: 45,
+    hpPerLevel: 18,
+    dmgBase: 6,
+    dmgPerLevel: 2.0,
+    attackSpeed: 2.1,
+    armorPerLevel: 12,
+    moveSpeed: 7.8,
+    aggroRadius: 11,
+    // A body-blow that leaves the victim swinging slower for a few seconds.
+    slowStrike: {
+      chance: 0.25,
+      mult: 1.25,
+      duration: 6,
+      name: 'Hobbling Blow',
+      school: 'physical',
+    },
+    loot: [
+      { copper: 26, chance: 1 },
+      { itemId: 'tough_jerky', chance: 0.2 },
+      { itemId: 'lesser_healing_potion', chance: 0.06 },
+    ],
+    scale: 1.05,
+    color: 0x7b5e3b,
+    componentTags: ['hide', 'meat'],
+  },
   webwood_spider: {
     id: 'webwood_spider',
     name: 'Sableweb Lurker',
@@ -1693,6 +1779,18 @@ export const ZONE1_CHAPEL_CAMPS: CampDef[] = [
   // A pair of bone guardians flank the chapel's broken altar; their binder lurks within.
   { mobId: 'restless_bones', center: { x: 88, z: 90 }, radius: 6, count: 2 },
   { mobId: 'wraithbinder_maldrec', center: { x: 88, z: 92 }, radius: 3, count: 1 },
+];
+
+// Backcountry beast packs (levels 3-6). Kept in their OWN export, spread at the
+// TAIL of the merged CAMPS array in data.ts for exactly the reason
+// ZONE1_CHAPEL_CAMPS is: the camp loop is the last RNG consumer at world
+// construction, so appended draws shift no existing camp's deterministic
+// placement. Every centre sits well off the roads, the hub, and the existing
+// packs' pull rings.
+export const ZONE1_WILDS_CAMPS: CampDef[] = [
+  { mobId: 'sowfield_marauder', center: { x: -55, z: -140 }, radius: 18, count: 5 },
+  { mobId: 'brightwood_ravager', center: { x: 58, z: 145 }, radius: 18, count: 5 },
+  { mobId: 'coppervein_savage', center: { x: -108, z: -30 }, radius: 18, count: 5 },
 ];
 
 export const ZONE1_OBJECTS: GroundObjectDef[] = [

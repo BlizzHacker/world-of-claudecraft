@@ -1894,6 +1894,24 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "still": "/guide-stills/mob_boar__935116.webp"
       },
       {
+        "name": "Sowfield Marauder",
+        "min": 3,
+        "max": 4,
+        "rare": false,
+        "templateId": "sowfield_marauder",
+        "model": "realm_crypticrealm_shadow_drake_sentinel_019677a5",
+        "still": "/guide-stills/realm_crypticrealm_shadow_drake_sentinel_019677a5.webp"
+      },
+      {
+        "name": "Brightwood Ravager",
+        "min": 4,
+        "max": 5,
+        "rare": false,
+        "templateId": "brightwood_ravager",
+        "model": "realm_crypticrealm_shadow_drake_sentinel_019677ad",
+        "still": "/guide-stills/realm_crypticrealm_shadow_drake_sentinel_019677ad.webp"
+      },
+      {
         "name": "Old Greyjaw",
         "min": 4,
         "max": 4,
@@ -1903,14 +1921,40 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "still": "/guide-stills/greyjaw.webp"
       },
       {
+        "name": "Coppervein Savage",
+        "min": 5,
+        "max": 6,
+        "rare": false,
+        "templateId": "coppervein_savage",
+        "model": "realm_crypticrealm_shadow_drake_sentinel_019677a5",
+        "still": "/guide-stills/realm_crypticrealm_shadow_drake_sentinel_019677a5.webp"
+      },
+      {
         "name": "Mire Prowler",
         "min": 7,
         "max": 8,
         "rare": false,
         "templateId": "mire_prowler",
-        "model": "mob_wolf",
-        "tint": "#4d5656",
-        "still": "/guide-stills/mob_wolf__4d5656.webp"
+        "model": "realm_crypticrealm_shadow_drake_sentinel_019677a5",
+        "still": "/guide-stills/realm_crypticrealm_shadow_drake_sentinel_019677a5.webp"
+      },
+      {
+        "name": "Reedbank Mauler",
+        "min": 8,
+        "max": 9,
+        "rare": false,
+        "templateId": "reedbank_mauler",
+        "model": "realm_crypticrealm_shadow_drake_sentinel_019677a5",
+        "still": "/guide-stills/realm_crypticrealm_shadow_drake_sentinel_019677a5.webp"
+      },
+      {
+        "name": "Blackwater Reaver",
+        "min": 9,
+        "max": 10,
+        "rare": false,
+        "templateId": "blackwater_reaver",
+        "model": "realm_crypticrealm_shadow_drake_sentinel_019677ad",
+        "still": "/guide-stills/realm_crypticrealm_shadow_drake_sentinel_019677ad.webp"
       },
       {
         "name": "Bog Bloat",
@@ -1923,14 +1967,94 @@ export const GUIDE_FAMILIES: GuideFamily[] = [
         "still": "/guide-stills/mob_murloc__6b8e23.webp"
       },
       {
+        "name": "Silthollow Charger",
+        "min": 10,
+        "max": 11,
+        "rare": false,
+        "templateId": "silthollow_charger",
+        "model": "realm_crypticrealm_shadow_drake_sentinel_019677ad",
+        "still": "/guide-stills/realm_crypticrealm_shadow_drake_sentinel_019677ad.webp"
+      },
+      {
+        "name": "Fenmoor Hunter",
+        "min": 11,
+        "max": 12,
+        "rare": false,
+        "templateId": "fenmoor_hunter",
+        "model": "realm_crypticrealm_shadow_drake_sentinel_019677a5",
+        "still": "/guide-stills/realm_crypticrealm_shadow_drake_sentinel_019677a5.webp"
+      },
+      {
+        "name": "Drownfen Terror",
+        "min": 12,
+        "max": 13,
+        "rare": false,
+        "templateId": "drownfen_terror",
+        "model": "realm_crypticrealm_shadow_drake_sentinel_019677ad",
+        "still": "/guide-stills/realm_crypticrealm_shadow_drake_sentinel_019677ad.webp"
+      },
+      {
         "name": "Ridge Stalker",
         "min": 13,
         "max": 14,
         "rare": false,
         "templateId": "ridge_stalker",
-        "model": "mob_wolf",
-        "tint": "#8c8270",
-        "still": "/guide-stills/mob_wolf__8c8270.webp"
+        "model": "realm_crypticrealm_shadow_drake_sentinel_019677ad",
+        "still": "/guide-stills/realm_crypticrealm_shadow_drake_sentinel_019677ad.webp"
+      },
+      {
+        "name": "Highwind Warbeast",
+        "min": 14,
+        "max": 15,
+        "rare": false,
+        "templateId": "highwind_warbeast",
+        "model": "realm_crypticrealm_shadow_drake_sentinel_019677ad",
+        "still": "/guide-stills/realm_crypticrealm_shadow_drake_sentinel_019677ad.webp"
+      },
+      {
+        "name": "Cairnfell Render",
+        "min": 15,
+        "max": 16,
+        "rare": false,
+        "templateId": "cairnfell_render",
+        "model": "realm_crypticrealm_shadow_drake_sentinel_019677a5",
+        "still": "/guide-stills/realm_crypticrealm_shadow_drake_sentinel_019677a5.webp"
+      },
+      {
+        "name": "Scarpfall Fury",
+        "min": 16,
+        "max": 17,
+        "rare": false,
+        "templateId": "scarpfall_fury",
+        "model": "realm_crypticrealm_shadow_drake_sentinel_019677a5",
+        "still": "/guide-stills/realm_crypticrealm_shadow_drake_sentinel_019677a5.webp"
+      },
+      {
+        "name": "Frostline Scourge",
+        "min": 17,
+        "max": 18,
+        "rare": false,
+        "templateId": "frostline_scourge",
+        "model": "realm_crypticrealm_shadow_drake_sentinel_019677a5",
+        "still": "/guide-stills/realm_crypticrealm_shadow_drake_sentinel_019677a5.webp"
+      },
+      {
+        "name": "Stormfell Ravener",
+        "min": 18,
+        "max": 19,
+        "rare": false,
+        "templateId": "stormfell_ravener",
+        "model": "realm_crypticrealm_shadow_drake_sentinel_019677ad",
+        "still": "/guide-stills/realm_crypticrealm_shadow_drake_sentinel_019677ad.webp"
+      },
+      {
+        "name": "Talusrift Devourer",
+        "min": 18,
+        "max": 19,
+        "rare": false,
+        "templateId": "talusrift_devourer",
+        "model": "realm_crypticrealm_shadow_drake_sentinel_019677a5",
+        "still": "/guide-stills/realm_crypticrealm_shadow_drake_sentinel_019677a5.webp"
       }
     ]
   },
@@ -8955,17 +9079,17 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
   },
   "realm_infernal_skullbeast": {
     "url": "/cr-realms/infernal/skullbeast_5d2ecebf.glb",
-    "idle": "Idle",
+    "idle": "Unsteady_Walk",
     "height": 2.4
   },
   "realm_infernal_horned_demon": {
     "url": "/cr-realms/infernal/demon-horned_1a19d7ca.glb",
-    "idle": "Idle",
+    "idle": "Walking",
     "height": 2.6
   },
   "realm_infernal_crimson_behemoth": {
     "url": "/cr-realms/infernal/meshy_ai_crimson_infernal_behe_biped_meshy_ai_meshy_merged_animations_27bab94d.glb",
-    "idle": "Idle",
+    "idle": "Walking",
     "height": 2.9
   },
   "hellmaw_spectre_body": {
@@ -8989,6 +9113,16 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     "idle": "Idle1",
     "height": 1.45,
     "tintStrength": 0.4
+  },
+  "realm_crypticrealm_shadow_drake_sentinel_019677a5": {
+    "url": "/cr-realms/crypticrealm/creatures/shadow_drake_sentinel_019677a5.glb",
+    "idle": "Idle",
+    "height": 2.1
+  },
+  "realm_crypticrealm_shadow_drake_sentinel_019677ad": {
+    "url": "/cr-realms/crypticrealm/creatures/shadow_drake_sentinel_019677ad.glb",
+    "idle": "Idle",
+    "height": 2.1
   },
   "mob_spider": {
     "url": "models/creatures/spider.glb",
