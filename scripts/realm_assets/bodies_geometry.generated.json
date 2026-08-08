@@ -1007,22 +1007,6 @@
   "handL": 1,
   "handRY": 0.4757
  },
- "classic/realm_classic_armored_guardian_characters_weap_0193fba5.glb": {
-  "height": 1.4257,
-  "width": 0.7957,
-  "depth": 1.0538,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.7463
- },
- "classic/realm_classic_armored_guardian_void_legionary_0193fba7.glb": {
-  "height": 1.4257,
-  "width": 0.7957,
-  "depth": 1.0538,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.7463
- },
  "classic/realm_classic_auric_warlord_character_warrior_019cba54.glb": {
   "height": 1.9973,
   "width": 1.0979,
@@ -2271,30 +2255,6 @@
   "handL": 1,
   "handRY": 0.4837
  },
- "classic/realm_classic_dragon_martialist_0195b9e3.glb": {
-  "height": 2.193,
-  "width": 1.2454,
-  "depth": 0.3734,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.4786
- },
- "classic/realm_classic_dragon_martialist_0195b9e7.glb": {
-  "height": 2.2061,
-  "width": 1.258,
-  "depth": 0.3801,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.4756
- },
- "classic/realm_classic_dragon_martialist_iconic_yellow_01944c40.glb": {
-  "height": 2.5248,
-  "width": 1.6304,
-  "depth": 0.576,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.4173
- },
  "classic/realm_classic_dragon_martialist_iconic_yellow_01944c49.glb": {
   "height": 1.4588,
   "width": 0.802,
@@ -3174,22 +3134,6 @@
   "handR": 1,
   "handL": 1,
   "handRY": 0.4434
- },
- "classic/realm_classic_gaunt_revenant_punk_0195675a.glb": {
-  "height": 1.9583,
-  "width": 1.4658,
-  "depth": 0.5395,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.5336
- },
- "classic/realm_classic_gaunt_revenant_punk_0195675b.glb": {
-  "height": 2.0858,
-  "width": 1.2665,
-  "depth": 0.4125,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.5037
  },
  "classic/realm_classic_gaunt_revenant_wearing_0195b58e.glb": {
   "height": 2.1477,
@@ -5335,14 +5279,6 @@
   "handL": 1,
   "handRY": 0.4206
  },
- "classic/realm_classic_majin_buu_01956d05.glb": {
-  "height": 2.9951,
-  "width": 2.2926,
-  "depth": 1.3908,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.3528
- },
  "classic/realm_classic_male_monster_warrior_made_0194566f.glb": {
   "height": 3.4438,
   "width": 3.0716,
@@ -6519,14 +6455,6 @@
   "handL": 1,
   "handRY": 0.4413
  },
- "classic/realm_classic_perfect_rig_symmetrical_01944c45.glb": {
-  "height": 2.3745,
-  "width": 1.2788,
-  "depth": 0.4359,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.442
- },
  "classic/realm_classic_perfect_rig_symmetrical_01945b0c.glb": {
   "height": 2.374,
   "width": 1.2872,
@@ -6662,14 +6590,6 @@
   "handR": 1,
   "handL": 1,
   "handRY": 0.4402
- },
- "classic/realm_classic_predator_warrior_characters_weap_01948407.glb": {
-  "height": 2.0768,
-  "width": 1.162,
-  "depth": 0.5067,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.5062
  },
  "classic/realm_classic_pumpkin_golem_019a28d3.glb": {
   "height": 2.2895,
@@ -7022,14 +6942,6 @@
   "handR": 1,
   "handL": 1,
   "handRY": 0.648
- },
- "classic/realm_classic_scarred_pugilist_0195b9e3.glb": {
-  "height": 1.9509,
-  "width": 1.1842,
-  "depth": 0.6315,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.532
  },
  "classic/realm_classic_scarred_pugilist_0195be11.glb": {
   "height": 2.021,
@@ -9223,46 +9135,6 @@
   "handL": 1,
   "handRY": 0.4823
  },
- "dominion/realm_dominion_void_legionary_characters_weaponsm_0193fb93.glb": {
-  "height": 1.6219,
-  "width": 1.133,
-  "depth": 0.5488,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.6482
- },
- "dominion/realm_dominion_void_legionary_characters_weaponsm_0193fb9a.glb": {
-  "height": 2.1947,
-  "width": 1.0074,
-  "depth": 1.4194,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.4873
- },
- "dominion/realm_dominion_white_armor_trooper_01942e95.glb": {
-  "height": 1.7193,
-  "width": 0.9796,
-  "depth": 0.3719,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.6095
- },
- "dominion/realm_dominion_white_armor_trooper_01942e99.glb": {
-  "height": 1.3684,
-  "width": 0.9757,
-  "depth": 0.3159,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.766
- },
- "dominion/realm_dominion_white_armor_trooper_01942e9e.glb": {
-  "height": 1.3526,
-  "width": 0.9187,
-  "depth": 0.3117,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.7751
- },
  "exchange/realm_exchange_fantasy_humanoid_beatle_dwarf_01987a7f.glb": {
   "height": 2.5426,
   "width": 2.1876,
@@ -9294,30 +9166,6 @@
   "handR": 1,
   "handL": 1,
   "handRY": 0.5222
- },
- "fps/realm_fps_action_figure_hero_characters_01944c02.glb": {
-  "height": 2.2359,
-  "width": 1.6816,
-  "depth": 0.6784,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.4706
- },
- "fps/realm_fps_action_figure_hero_characters_01944c21.glb": {
-  "height": 2.2586,
-  "width": 1.7399,
-  "depth": 0.6904,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.4649
- },
- "fps/realm_fps_action_figure_hero_toys_0194183a.glb": {
-  "height": 1.9762,
-  "width": 0.7117,
-  "depth": 1.3819,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.5338
  },
  "fps/realm_fps_agent_training_character_agent_019bb8c5.glb": {
   "height": 2.9589,
@@ -9591,22 +9439,6 @@
   "handL": 1,
   "handRY": 0.4337
  },
- "fps/realm_fps_extremely_muscular_female_hero_01947d08.glb": {
-  "height": 2.1936,
-  "width": 1.0866,
-  "depth": 0.6357,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.4791
- },
- "fps/realm_fps_extremely_muscular_female_hero_01947f73.glb": {
-  "height": 1.7563,
-  "width": 0.6783,
-  "depth": 0.3421,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.5937
- },
  "fps/realm_fps_fairy_viking_fairy_characters_0195e7cd.glb": {
   "height": 1.2864,
   "width": 1.1008,
@@ -9775,14 +9607,6 @@
   "handL": 1,
   "handRY": 0.5163
  },
- "fps/realm_fps_masked_shinobi_pose_0194af71.glb": {
-  "height": 1.5662,
-  "width": 0.9806,
-  "depth": 0.3221,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.6701
- },
  "fps/realm_fps_massive_four_armed_warrior_0193800f.glb": {
   "height": 2.1685,
   "width": 1.4109,
@@ -9854,14 +9678,6 @@
   "handR": 1,
   "handL": 1,
   "handRY": 0.4883
- },
- "fps/realm_fps_perfect_rig_character_pose_019474ae.glb": {
-  "height": 2.3712,
-  "width": 1.2812,
-  "depth": 0.4393,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.4426
  },
  "fps/realm_fps_pirate_claus_characters_pirate_019b5321.glb": {
   "height": 2.9334,
@@ -12895,14 +12711,6 @@
   "handL": 1,
   "handRY": 0.4789
  },
- "infernal/realm_infernal_spiky_haired_imp_01947c8b.glb": {
-  "height": 2.4731,
-  "width": 1.8331,
-  "depth": 1.0256,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.4265
- },
  "infernal/realm_infernal_stars_stripes_pigeon_019f18a1.glb": {
   "height": 2.2558,
   "width": 1.5466,
@@ -13126,22 +12934,6 @@
   "handR": 1,
   "handL": 1,
   "handRY": 0.4278
- },
- "infernal/realm_infernal_warrior_damned_characters_0196ca26.glb": {
-  "height": 1.8431,
-  "width": 1.2295,
-  "depth": 0.7408,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.5714
- },
- "infernal/realm_infernal_warrior_shadows_characters_01963a09.glb": {
-  "height": 1.8555,
-  "width": 1.3336,
-  "depth": 0.7804,
-  "handR": 1,
-  "handL": 1,
-  "handRY": 0.5682
  },
  "infernal/realm_infernal_wasteland_gecko_berserker_019f249d.glb": {
   "height": 1.809,
