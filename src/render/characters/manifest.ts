@@ -13,6 +13,12 @@ import { resolveActiveRealmId } from '../../sim/realms/registry';
 import type { Entity, PlayerClass } from '../../sim/types';
 import { ITEM_WEAPON_VARIANTS } from '../../ui/weapon_variants';
 import type { OverheadEmoteId } from '../../world_api';
+import {
+  KAYKIT_EMOTES,
+  MESHY_CLIP_BANK_URL,
+  MESHY_BANK_EMOTES,
+  withMeshyBank,
+} from './clip_vocab';
 import { GENERATED_REALM_BODIES, GENERATED_VISUALS } from './manifest.generated';
 import { GENERATED_CREATURE_BODIES, GENERATED_CREATURE_VISUALS } from './creatures.generated';
 import { GENERATED_CREATURE_BODY_PINS } from './creature_pins.generated';
@@ -137,32 +143,11 @@ export type WeaponLayoutOverride = Pick<VisualDef, 'attach' | 'weaponSlots' | 'o
 // Clip sets per source rig family
 // ---------------------------------------------------------------------------
 
-const KAYKIT_EMOTES: Partial<Record<OverheadEmoteId, EmoteClipSpec>> = {
-  wave: { clips: ['Spellcast_Raise', 'Cheer'], timeScale: 0.9 },
-  laugh: { clips: ['Hit_A', 'Cheer'], timeScale: 1.45, repeats: 2 },
-  question: { clips: ['Block', 'Spellcast_Raise'], timeScale: 1.15 },
-  cheer: { clips: ['Cheer'], timeScale: 1.05, repeats: 2 },
-  dance: {
-    clips: ['Running_Strafe_Left', 'Running_Strafe_Right', 'Cheer'],
-    timeScale: 1.05,
-    repeats: 2,
-  },
-  point: { clips: ['Spellcast_Shoot', '2H_Ranged_Shoot'], timeScale: 0.95 },
-  flex: { clips: ['Block', 'Cheer'], timeScale: 0.8 },
-  salute: { clips: ['Spellcast_Raise', 'Block'], timeScale: 1.18 },
-  cry: { clips: ['Hit_A', 'Sit_Floor_Down'], timeScale: 0.65 },
-  bow: { clips: ['Sit_Floor_Down', 'Spellcast_Raise'], timeScale: 1.35 },
-  clap: { clips: ['1H_Melee_Attack_Slice_Diagonal', 'Cheer'], timeScale: 1.55, repeats: 2 },
-  roar: { clips: ['2H_Melee_Attack_Chop', '1H_Melee_Attack_Chop', 'Cheer'], timeScale: 0.9 },
-  kneel: { clips: ['Sit_Floor_Down'], timeScale: 0.85 },
-  alert: { clips: ['Block'], timeScale: 1.1 },
-  lookaround: { clips: ['Idle'], timeScale: 0.9, repeats: 2 },
-  carry: { clips: ['Walking_A'], timeScale: 0.8, repeats: 2 },
-  roll: { clips: ['Jump_Idle'], timeScale: 1.2 },
-  collapse: { clips: ['Death_A'], timeScale: 1.3 },
-  shuffle: { clips: ['Running_Strafe_Left'], repeats: 2 },
-  shimmy: { clips: ['Running_Strafe_Right'], repeats: 2 },
-};
+// KAYKIT_EMOTES moved to clip_vocab.ts so the 1,600+ pipeline-rigged bodies in
+// manifest.generated.ts can share the exact map the shipped player bodies use.
+// They are the same rig family and were emitted with NO emote map at all, so
+// every /wave, /dance and /cheer on a library body was a silent no-op:
+// playEmote() finds no spec and returns before touching the mixer.
 
 const kaykit = (attack: string[], idle = 'Idle'): ClipMap => ({
   idle,
@@ -309,7 +294,11 @@ const meshyBiped = (
 // Curated Infernal humans are rebuilt by build_infernal_human_rigs.mjs. Exact-rig
 // actions are used where available and donor actions are transferred as rest-pose
 // deltas, so each distinct body stays upright through every gameplay state.
-const INFERNAL_HUMAN_CLIPS: ClipMap = {
+// meshy24, the clip bank's own rig family, so the bank fills everything the 10
+// baked takes leave empty: walkBack, sit, swim, the extra swings, and 20 real
+// emote gestures instead of aliasing four of them onto Wave and Taunt. Their own
+// Wave/Taunt stay as the fallback behind each bank clip.
+const INFERNAL_HUMAN_CLIPS: ClipMap = withMeshyBank({
   idle: 'Idle',
   walk: 'Walk',
   run: 'Run',
@@ -324,7 +313,7 @@ const INFERNAL_HUMAN_CLIPS: ClipMap = {
     flex: { clips: ['Taunt'] },
     salute: { clips: ['Wave'] },
   },
-};
+});
 // Raid 02 asset-pipeline rig (stone_cantor.glb): Mixamo-rigged, ships
 // Idle / Cast / Walk / Death plus a synthesized 'Hit' flinch authored by
 // scripts/_add_cantor_hit_anim.mjs (the batch has no hit-react take). A
@@ -365,6 +354,7 @@ const REALM_MODELS = '/cr-realms';
 function infernalHuman(fileName: string, height = 2.15): VisualDef {
   return {
     url: `${REALM_MODELS}/infernal/${fileName}`,
+    animUrls: [MESHY_CLIP_BANK_URL],
     height,
     clips: INFERNAL_HUMAN_CLIPS,
     lazyPreload: true,
@@ -780,53 +770,55 @@ const HAND_VISUALS: Record<string, VisualDef> = {
   realm_cryptic_bone_herald: {
     url: `${REALM_MODELS}/crypticrealm/bone-herald-black-meshy_ai_meshy_merged_animations_5fb3b8bb.glb`,
     height: HUMANOID_H,
-    clips: meshyBiped(),
+    // RE-RIGGED: this GLB was rebound onto the KayKit reference skeleton and now
+    // carries the standard 22-clip vocabulary. The Meshy take names this map was
+    // written for are gone from the file, so it bound at most 'Idle' and the body
+    // had no walkBack, sit, swim, stow or emote at all.
+    clips: kaykit(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     lazyPreload: true,
   },
   realm_infernal_crimson_behemoth: {
     url: `${REALM_MODELS}/infernal/meshy_ai_crimson_infernal_behe_biped_meshy_ai_meshy_merged_animations_27bab94d.glb`,
     height: 2.9,
-    // The export carries only locomotion + jumps; there is no idle/hit/death/cast
-    // take, so Walking stands in for rest and reactions and the spin-jump doubles as
-    // the swing. Names verified against the shipped GLB (scripts/audit_clips.mjs).
-    clips: {
-      idle: 'Walking',
+    // meshy24 rig, so the shared bank drives it: this export has no idle, no hit,
+    // no death and no cast take of its own, which is why Walking used to stand in
+    // for dying. Its own gait stays; the bank fills the rest.
+    animUrls: [MESHY_CLIP_BANK_URL],
+    clips: withMeshyBank({
+      idle: 'Idle_Alt_A',
       walk: 'Walking',
       run: 'RunFast',
+      // The signature spin-jump stays at the front of the swing rotation.
       attack: ['360_Power_Spin_Jump'],
-      death: 'Walking',
-      hit: ['Walking'],
-    },
+      death: 'Death_A',
+      jump: 'Basic_Jump',
+    }),
     lazyPreload: true,
   },
   realm_infernal_horned_demon: {
     url: `${REALM_MODELS}/infernal/demon-horned_1a19d7ca.glb`,
     height: HUMANOID_H,
-    // Locomotion-only export: no idle/hit/death/cast take exists, so Walking covers
-    // rest and reactions rather than leaving the slots unresolved (bind pose).
-    clips: {
-      idle: 'Walking',
-      walk: 'Walking',
-      run: 'Running',
-      attack: ['Running'],
-      death: 'Walking',
-      hit: ['Walking'],
-    },
+    // RE-RIGGED onto the KayKit reference skeleton: the locomotion-only Meshy
+    // export this map was written for no longer exists, and the file now carries
+    // the full 22-clip vocabulary. Not one name matched, so it bound NOTHING and
+    // stood in bind pose through every state.
+    clips: kaykit(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
     lazyPreload: true,
   },
   realm_infernal_skullbeast: {
     url: `${REALM_MODELS}/infernal/skullbeast_5d2ecebf.glb`,
     height: 2.4,
-    // Unsteady_Walk is the closest thing to an idle this export has; the standard
-    // Idle/Hit/Death/Cast/Basic_Jump takes are simply not in the file.
-    clips: {
-      idle: 'Unsteady_Walk',
+    // meshy24 rig, so the shared bank drives it: this export has no idle, no hit,
+    // no death and no cast take of its own, which is why Walking used to stand in
+    // for dying. Its own gait stays; the bank fills the rest.
+    animUrls: [MESHY_CLIP_BANK_URL],
+    clips: withMeshyBank({
+      idle: 'Idle_Alt_A',
       walk: 'Monster_Walk',
       run: 'Running',
       attack: ['Left_Slash'],
-      death: 'Unsteady_Walk',
-      hit: ['Unsteady_Walk'],
-    },
+      death: 'Death_A',
+    }),
     lazyPreload: true,
   },
   // Playable Infernal archetypes use one distinct, full-size body each. They
@@ -877,22 +869,13 @@ const HAND_VISUALS: Record<string, VisualDef> = {
   realm_infernal_durance_humanoid: infernalHuman('infernal_class_warrior.glb', 2.3),
   realm_infernal_dark_paladin: {
     url: `${REALM_MODELS}/infernal/dark_paladin_commander.glb`,
-    animUrls: [
-      `${REALM_MODELS}/infernal/dark_paladin_running.glb`,
-      `${REALM_MODELS}/infernal/dark_paladin_reaping_swing.glb`,
-    ],
     height: 2.35,
-    // The commander mesh and its two sidecar takes export Blender-style
-    // "Armature|<take>|baselayer" clip names; the bare take names never existed, so
-    // every slot missed and the body stood in bind pose.
-    clips: {
-      idle: 'Armature|walking_man|baselayer',
-      walk: 'Armature|walking_man|baselayer',
-      run: 'Armature|running|baselayer',
-      attack: ['Armature|Reaping_Swing|baselayer'],
-      death: 'Armature|walking_man|baselayer',
-      hit: ['Armature|walking_man|baselayer'],
-    },
+    // RE-RIGGED onto the KayKit reference skeleton. The "Armature|<take>|baselayer"
+    // names this map was fixed to are gone from the file, so it bound nothing and the
+    // commander stood in bind pose. The two sidecar animUrls went with them: both now
+    // carry the SAME 22 clips as the body itself, so they were two extra
+    // multi-megabyte lazy fetches contributing no clip the body did not already have.
+    clips: kaykit(['2H_Melee_Attack_Chop', '1H_Melee_Attack_Chop']),
     lazyPreload: true,
   },
   // --- Durance of Hate delve enemies: real infernal demon bodies (no KayKit) ---
@@ -917,7 +900,11 @@ const HAND_VISUALS: Record<string, VisualDef> = {
     // Behemoth model is now reserved for THE BUTCHER (the true endboss).
     url: `${REALM_MODELS}/infernal/meshy_ai_horned_demon_warrior_0616234420_texture_2233cac0.glb`,
     height: 3.2,
-    clips: meshyBiped(),
+    // RE-RIGGED: this GLB was rebound onto the KayKit reference skeleton and now
+    // carries the standard 22-clip vocabulary. The Meshy take names this map was
+    // written for are gone from the file, so it bound at most 'Idle' and the body
+    // had no walkBack, sit, swim, stow or emote at all.
+    clips: kaykit(['2H_Melee_Attack_Chop']),
     lazyPreload: true,
   },
   // --- New infernal monster bodies (the big asset push) --------------------
@@ -932,7 +919,11 @@ const HAND_VISUALS: Record<string, VisualDef> = {
     // Cursed Iron Knight: an armored revenant, heavy melee.
     url: `${REALM_MODELS}/infernal/meshy_ai_cursed_knight_s_iro_0616234359_texture_abda8208.glb`,
     height: 2.8,
-    clips: meshyBiped(),
+    // RE-RIGGED: this GLB was rebound onto the KayKit reference skeleton and now
+    // carries the standard 22-clip vocabulary. The Meshy take names this map was
+    // written for are gone from the file, so it bound at most 'Idle' and the body
+    // had no walkBack, sit, swim, stow or emote at all.
+    clips: kaykit(['1H_Melee_Attack_Chop', '2H_Melee_Attack_Chop']),
     lazyPreload: true,
   },
   hellmaw_lava_fiend_body: {
@@ -985,46 +976,84 @@ const HAND_VISUALS: Record<string, VisualDef> = {
   realm_classic_orc: {
     url: `${REALM_MODELS}/classic/another-orc-meshy_ai_meshy_merged_animations_743223cb.glb`,
     height: HUMANOID_H,
-    clips: meshyBiped(['Attack']),
+    // RE-RIGGED: this GLB was rebound onto the KayKit reference skeleton and now
+    // carries the standard 22-clip vocabulary. The Meshy take names this map was
+    // written for are gone from the file, so it bound at most 'Idle' and the body
+    // had no walkBack, sit, swim, stow or emote at all.
+    clips: kaykit(['1H_Melee_Attack_Chop', '2H_Melee_Attack_Chop']),
     lazyPreload: true,
   },
   realm_classic_big_orc: {
     url: `${REALM_MODELS}/classic/bigass-orc-meshy_ai_meshy_merged_animations_86937638.glb`,
     height: 2.8,
-    clips: meshyBiped(),
+    // meshy24 rig, so the shared bank drives it: this export has no idle, no hit,
+    // no death and no cast take of its own, which is why Walking used to stand in
+    // for dying. Its own gait stays; the bank fills the rest.
+    animUrls: [MESHY_CLIP_BANK_URL],
+    clips: withMeshyBank({
+      idle: 'Idle_Alt_A',
+      walk: 'Walking',
+      run: 'Running',
+      attack: [],
+      death: 'Death_A',
+      jump: 'Basic_Jump',
+    }),
     lazyPreload: true,
   },
   realm_classic_fighting_elf: {
     url: `${REALM_MODELS}/classic/fighting-elf-meshy_ai_meshy_merged_animations_943c5367.glb`,
     height: HUMANOID_H,
-    clips: meshyBiped(['Reaping_Swing', 'Dodge_and_Counter', 'Counter_Attack'], {
-      run: 'RunFast',
-      jump: 'Backflip_Sweep_Kick',
-    }),
+    // RE-RIGGED: this GLB was rebound onto the KayKit reference skeleton and now
+    // carries the standard 22-clip vocabulary. The Meshy take names this map was
+    // written for are gone from the file, so it bound at most 'Idle' and the body
+    // had no walkBack, sit, swim, stow or emote at all.
+    clips: kaykit(['1H_Melee_Attack_Slice_Diagonal', 'Dualwield_Melee_Attack_Chop']),
     lazyPreload: true,
   },
   realm_classic_dwarf: {
     url: `${REALM_MODELS}/classic/gray-dwarf-meshy_ai_meshy_merged_animations_a33ff315.glb`,
     height: 2.25,
-    clips: meshyBiped(),
+    // RE-RIGGED: this GLB was rebound onto the KayKit reference skeleton and now
+    // carries the standard 22-clip vocabulary. The Meshy take names this map was
+    // written for are gone from the file, so it bound at most 'Idle' and the body
+    // had no walkBack, sit, swim, stow or emote at all.
+    clips: kaykit(['1H_Melee_Attack_Chop', '2H_Melee_Attack_Chop']),
     lazyPreload: true,
   },
   realm_classic_female_elf: {
     url: `${REALM_MODELS}/classic/female-elf-meshy_ai_meshy_merged_animations_2dde3113.glb`,
     height: HUMANOID_H,
-    clips: meshyBiped(),
+    // RE-RIGGED: this GLB was rebound onto the KayKit reference skeleton and now
+    // carries the standard 22-clip vocabulary. The Meshy take names this map was
+    // written for are gone from the file, so it bound at most 'Idle' and the body
+    // had no walkBack, sit, swim, stow or emote at all.
+    clips: kaykit(['1H_Melee_Attack_Slice_Diagonal', '2H_Ranged_Shoot']),
     lazyPreload: true,
   },
   realm_classic_female_orc: {
     url: `${REALM_MODELS}/classic/female-orc-meshy_ai_meshy_merged_animations_a5a08a67.glb`,
     height: HUMANOID_H,
-    clips: meshyBiped(),
+    // RE-RIGGED: this GLB was rebound onto the KayKit reference skeleton and now
+    // carries the standard 22-clip vocabulary. The Meshy take names this map was
+    // written for are gone from the file, so it bound at most 'Idle' and the body
+    // had no walkBack, sit, swim, stow or emote at all.
+    clips: kaykit(['1H_Melee_Attack_Chop', '2H_Melee_Attack_Chop']),
     lazyPreload: true,
   },
   realm_classic_treasure_dwarf: {
     url: `${REALM_MODELS}/classic/treasure-dwarf-meshy_ai_meshy_merged_animations_91488daf.glb`,
     height: 2.25,
-    clips: meshyBiped(),
+    // meshy24 rig, so the shared bank drives it: this export has no idle, no hit,
+    // no death and no cast take of its own, which is why Walking used to stand in
+    // for dying. Its own gait stays; the bank fills the rest.
+    animUrls: [MESHY_CLIP_BANK_URL],
+    clips: withMeshyBank({
+      idle: 'Idle_Alt_A',
+      walk: 'Walking',
+      run: 'Running',
+      attack: [],
+      death: 'Death_A',
+    }),
     lazyPreload: true,
   },
   realm_classic_kitty: {
@@ -1737,8 +1766,51 @@ const HAND_VISUALS: Record<string, VisualDef> = {
 // Hand-authored entries above; pipeline-generated bodies below. Spread order is
 // deliberate: GENERATED first, HAND second, so a curated key ALWAYS wins over a
 // generated one of the same name and re-running the asset pipeline is safe.
+// --- Corrections over the emitted pipeline manifest --------------------------
+// Kept HERE rather than in manifest.generated.ts so re-running the asset pipeline
+// cannot drop them and a regeneration diff stays a pure asset diff.
+//
+// 1. emit_manifest.mjs assumes every staged body was rigged onto the KayKit
+//    reference skeleton and hands them all the KayKit clip map. These came from
+//    the Meshy pipeline and are on the meshy24 skeleton carrying
+//    Idle/Walk/Run/Attack/[Cast/]Hit/Death - so of the 14 KayKit names the
+//    generated map asks for, exactly ONE ("Idle") exists. That is the Infernal
+//    HERO roster, the bodies on the character-select screen. They are also the
+//    one family the shared clip bank can drive, so they take it.
+// 2. Every other generated body is a kaykit body carrying the same 22 baked
+//    clips as the shipped player GLBs, but the emitted map has no `emote` entry,
+//    so playEmote() returned immediately on all of them.
+const MESHY_RIGGED_GENERATED = /^realm_infernal_(hero_|meshy_necro_warlord)/;
+
+function generatedVisualCorrections(): Record<string, VisualDef> {
+  const out: Record<string, VisualDef> = {};
+  for (const [key, def] of Object.entries(GENERATED_VISUALS)) {
+    if (MESHY_RIGGED_GENERATED.test(key)) {
+      out[key] = {
+        ...def,
+        animUrls: [...(def.animUrls ?? []), MESHY_CLIP_BANK_URL],
+        clips: withMeshyBank({
+          idle: 'Idle',
+          walk: 'Walk',
+          run: 'Run',
+          // The body's own 'Attack' take stays at the FRONT of the rotation; the
+          // bank's extra swings follow it.
+          attack: ['Attack'],
+          hit: ['Hit'],
+          death: 'Death',
+          cast: 'Cast',
+        }),
+      };
+    } else if (!def.clips.emote) {
+      out[key] = { ...def, clips: { ...def.clips, emote: KAYKIT_EMOTES } };
+    }
+  }
+  return out;
+}
+
 export const VISUALS: Record<string, VisualDef> = {
   ...GENERATED_VISUALS,
+  ...generatedVisualCorrections(),
   // Quadrupeds bound onto the shipped wolf donor rig (creatures.generated.ts).
   // Same precedence rule as above: generated first, HAND last, so a curated key
   // always wins and re-running the asset pipeline stays safe.
@@ -1989,87 +2061,22 @@ const BODY_OVERRIDES: Record<string, Record<string, BodyOverrideEntry>> = {};
 // contract names below plus the body's own bespoke clips. '__auto__' entries
 // still resolve against whatever is actually loaded (clip_resolution.ts), so a
 // body works - degraded but animated - even if the bank fails to load.
-const OVERRIDE_CLIP_BANK_URL = '/cr-realms/shared/meshy_clip_bank.glb';
-const OVERRIDE_AUTO_CLIPS: ClipMap = {
+const OVERRIDE_CLIP_BANK_URL = MESHY_CLIP_BANK_URL;
+// '__auto__' idle/walk/run/death keep each body's own bespoke takes (resolved
+// against the real inventory in clip_resolution.ts); everything else is the
+// shared bank vocabulary, defined once in clip_vocab.ts and shared with the
+// curated meshy24 bodies so the two can never drift apart. Emote_Cry and
+// Emote_Bow ARE in the bank but were aliased onto Sit_Floor_Down and Emote_Point
+// here, so crying looked like sitting down and bowing duplicated pointing.
+const OVERRIDE_AUTO_CLIPS: ClipMap = withMeshyBank({
   idle: '__auto__',
-  // '__auto__' walk/run keep each body's own bespoke gait; the bank supplies
-  // everything the body does not carry itself.
   walk: '__auto__',
   run: '__auto__',
-  walkBack: 'Walking_Backwards',
-  attack: [
-    '__auto__',
-    'Attack_Spin',
-    'Attack_Combo',
-    'Attack_Charged',
-    'Attack_Punch',
-    'Attack_Kick',
-    '1H_Melee_Attack_Chop',
-    '1H_Melee_Attack_Slice_Diagonal',
-    '2H_Melee_Attack_Chop',
-  ],
-  hit: ['__auto__', 'Hit_A'],
-  cast: 'Spellcasting',
+  attack: ['__auto__'],
+  hit: ['__auto__'],
   death: '__auto__',
-  flourish: 'Spellcast_Raise',
-  // Signature abilities play their own clip when the wearer has that ability;
-  // ids are the upstream class abilities every hero maps onto.
-  attackByAbility: {
-    bladestorm: 'Attack_Spin',
-    blade_flurry: 'Attack_Combo',
-    hemorrhage: 'Attack_Combo',
-    mortal_strike: 'Attack_Charged',
-    heroic_strike: 'Attack_Charged',
-    crusader_strike: 'Attack_Charged',
-    execute: '2H_Melee_Attack_Chop',
-    storm_bolt: 'Attack_Punch',
-    kick: 'Attack_Kick',
-    victory_rush: 'Attack_Leap',
-    feral_charge: 'Attack_Leap',
-    counter_shot: '2H_Ranged_Shoot',
-    wyvern_sting: '2H_Ranged_Shoot',
-    holy_shield: 'Block',
-    ice_block: 'Block',
-    shield_slam: 'Block_B',
-    blink: 'Dodge_Back',
-    bestial_wrath: 'Taunt_Stomp',
-    demoralizing_shout: 'Taunt_Stomp',
-    intimidating_shout: 'Emote_Roar',
-    holy_shock: 'Spellcast_Shoot',
-    conflagrate: 'Spellcast_Shoot',
-    combustion: 'Spellcasting',
-    meteor: 'Spellcast_Raise',
-    avatar: 'Spellcast_Raise',
-    metamorphosis: 'Spellcast_Raise',
-  },
-  sitDown: 'Sit_Floor_Down',
-  sitIdle: 'Sit_Floor_Idle',
-  swim: 'Lie_Idle',
-  jump: 'Jump_Idle',
-  stow: 'Guard_Stance',
-  emote: {
-    wave: { clips: ['Emote_Wave', 'Cheer'] },
-    laugh: { clips: ['Emote_Laugh', 'Emote_Cheer', 'Cheer'], timeScale: 1.2 },
-    question: { clips: ['Emote_Question', 'Guard_Stance'] },
-    cheer: { clips: ['Emote_Cheer', 'Cheer'], repeats: 2 },
-    dance: { clips: ['Emote_Dance_A', 'Emote_Dance_B'] },
-    point: { clips: ['Emote_Point', 'Spellcast_Shoot'] },
-    flex: { clips: ['Emote_Flex', 'Taunt_Stomp'] },
-    salute: { clips: ['Emote_Salute', 'Emote_Point'] },
-    cry: { clips: ['Sit_Floor_Down'], timeScale: 0.8 },
-    bow: { clips: ['Emote_Point', 'Spellcast_Raise'], timeScale: 0.9 },
-    clap: { clips: ['Emote_Clap', 'Emote_Cheer'], repeats: 2 },
-    roar: { clips: ['Emote_Roar', 'Taunt_Stomp'] },
-    kneel: { clips: ['Emote_Kneel', 'Sit_Floor_Down'] },
-    alert: { clips: ['Idle_Alt_B', 'Guard_Stance'] },
-    lookaround: { clips: ['Idle_Alt_A'], timeScale: 0.9 },
-    carry: { clips: ['Carry_Walk', 'Walking_A'], repeats: 2 },
-    roll: { clips: ['Land_Roll', 'Dodge_Back'] },
-    collapse: { clips: ['Death_B'], timeScale: 1.2 },
-    shuffle: { clips: ['Running_Strafe_Left'], repeats: 2 },
-    shimmy: { clips: ['Running_Strafe_Right', 'Running_A'], repeats: 2 },
-  },
-};
+  emote: MESHY_BANK_EMOTES,
+});
 
 /** Install the operator's body overrides for a realm (the client calls this after
  *  it fetches /api/realm-visuals/<realm>). Empty/undefined clears them. */
