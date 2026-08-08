@@ -24,6 +24,12 @@ const OUT = arg('out', '/tmp/audit');
 const LIMIT = Number(arg('limit', 12));
 // The clips that actually matter for "does it look stupid": rest, locomotion, combat.
 const CLIPS = (arg('clips', 'Idle,Walking_A,Running_A,1H_Melee_Attack_Chop')).split(',');
+// 320px shows that a model rendered; it does not show whether a claw collapsed
+// or a pelvis plate tore. Judging a BIND needs pixels — pass --size 640 (or
+// more) whenever the question is "does the deformation look right".
+const SIZE = Number(arg('size', 320));
+// Which turntable yaws to emit; the clip frames are always rendered too.
+const VIEWS = (arg('views', 'front,right,back,left,hero')).split(',');
 
 async function main() {
   if (!previewBrowserAvailable()) {
@@ -35,13 +41,13 @@ async function main() {
   // (Armature|...|baselayer) aliased by hand in manifest.ts, so asking them for
   // KayKit clip names renders blank frames and tests nothing.
   const files = readdirSync(DIR).filter((f) => f.startsWith('realm_') && f.endsWith('.glb')).slice(0, LIMIT);
-  console.log(`[audit] ${files.length} assets from ${DIR}, clips=${CLIPS.join(',')}`);
+  console.log(`[audit] ${files.length} assets from ${DIR}, size=${SIZE}, views=${VIEWS.join(',')}, clips=${CLIPS.join(',')}`);
   for (const f of files) {
     const key = basename(f, '.glb');
     const outDir = join(OUT, key);
     mkdirSync(outDir, { recursive: true });
     try {
-      await renderPreviews(join(DIR, f), outDir, { size: 320, clips: CLIPS });
+      await renderPreviews(join(DIR, f), outDir, { size: SIZE, views: VIEWS, clips: CLIPS });
       const got = readdirSync(outDir).filter((x) => x.endsWith('.png'));
       console.log(`  OK   ${key} -> ${got.length} frames: ${got.join(' ')}`);
     } catch (e) {

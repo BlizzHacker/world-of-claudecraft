@@ -36,8 +36,9 @@ import { ClientWorld } from '../src/net/online';
 import { Sim } from '../src/sim/sim';
 import { OVERHEAD_EMOTE_IDS, type PlayerClass } from '../src/sim/types';
 // The 27 facet interfaces the W1 split produced (src/world_api/<facet>.ts), plus the
-// bank facet added in the bank-system feature and the Book of Deeds facet. Imported
-// type-only to pin each facet's runtime member array to its interface key-set below.
+// bank facet added in the bank-system feature, the Book of Deeds facet, and the
+// minigames facet. Imported type-only to pin each facet's runtime member array to its
+// interface key-set below.
 import type { IWorldActionBar } from '../src/world_api/action_bar';
 import type { IWorldBank } from '../src/world_api/bank';
 import type { IWorldCardMinigame } from '../src/world_api/card_minigame';
@@ -504,13 +505,13 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
     // pickRowTalent; rowPicks stays off the seam, rows live on the allocation)
     // plus the release's Card Duel facet, the Professions 2.0 identity
     // surface, the mobile-station pair (placeMobileStation +
-    // activeMobileStationCraft), and the commissions unbindItem command.
-    expect(IWORLD_MEMBERS.length).toBe(256);
-    expect(DATA_MEMBERS.length).toBe(69);
-    expect(METHOD_MEMBERS.length).toBe(187);
-    expect(IWORLD_MEMBERS.length).toBe(228);
-    expect(DATA_MEMBERS.length).toBe(58);
-    expect(METHOD_MEMBERS.length).toBe(170);
+    // activeMobileStationCraft), and the commissions unbindItem command; then
+    // the 17-member minigames facet (zombie/arcade preview slices + lifecycle
+    // wire), the world-builder prop quartet (placeProp / moveProp /
+    // removeProp / setPropMeta), waypointTravel, and leaveInterior.
+    expect(IWORLD_MEMBERS.length).toBe(279);
+    expect(DATA_MEMBERS.length).toBe(73);
+    expect(METHOD_MEMBERS.length).toBe(206);
   });
   it('has no duplicate member names', () => {
     const names = IWORLD_MEMBERS.map((m) => m.name);
@@ -658,6 +659,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'leaveCardDuelQueue',
       'leaveDelve',
       'leaveDungeon',
+      'leaveInterior',
       'lifetimeHonor',
       'lifetimeXp',
       'loadouts',
@@ -700,6 +702,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'minigameZombieState',
       'moveInput',
       'moveInventoryItem',
+      'moveProp',
       'moveRaidMember',
       'nodeHarvestableByMe',
       'partyAccept',
@@ -714,8 +717,8 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'petWaterJet',
       'pickUpObject',
       'placeMobileStation',
-      'playCardInDuel',
       'placeProp',
+      'playCardInDuel',
       'playEmote',
       'player',
       'playerId',
@@ -1008,6 +1011,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'minigameRtsTrain',
       'minigameZombieBuild',
       'minigameZombieStart',
+      'moveInventoryItem',
       'moveProp',
       'moveRaidMember',
       'nodeHarvestableByMe',
@@ -1022,8 +1026,8 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'petWaterJet',
       'pickUpObject',
       'placeMobileStation',
-      'playCardInDuel',
       'placeProp',
+      'playCardInDuel',
       'playEmote',
       'prestige',
       'questState',
@@ -1132,8 +1136,8 @@ describe('membership, not equality: world extras do not fail the gate', () => {
 //   (2) a type-level AssertNever<Exclude<keyof IWorldX, array[number]>> per facet rejects
 //       a MISSING name (if the array omits a key, Exclude<> is a non-never union and tsc
 //       fails) -- (1)+(2) together make each array EXACTLY its facet key-set;
-//   (3) the 28 arrays are pairwise DISJOINT (a member filed in two facets reddens);
-//   (4) their union, sorted, equals the pinned 250-name IWORLD_MEMBERS set (a member
+//   (3) the 30 arrays are pairwise DISJOINT (a member filed in two facets reddens);
+//   (4) their union, sorted, equals the pinned 279-name IWORLD_MEMBERS set (a member
 //       dropped from the split reddens).
 // This is the rigorous form, NOT the tautological `keyof IWorld === keyof (A & B & ...)`
 // (IWorld extends them, so that self-equality proves nothing): it asserts against the
@@ -1568,6 +1572,7 @@ const FACET_MEMBER_ARRAYS: Readonly<Record<string, readonly string[]>> = {
   chat: FACET_CHAT,
   duelArena: FACET_DUEL_ARENA,
   cardMinigame: FACET_CARD_MINIGAME,
+  minigames: FACET_MINIGAMES,
   socialGraph: FACET_SOCIAL_GRAPH,
   market: FACET_MARKET,
   mail: FACET_MAIL,
@@ -1583,9 +1588,9 @@ const FACET_MEMBER_ARRAYS: Readonly<Record<string, readonly string[]>> = {
   actionBar: FACET_ACTION_BAR,
 };
 
-describe('W1: aggregate IWorld member set equals the disjoint union of the 28 facets', () => {
-  it('pins the facet count at 28', () => {
-    expect(Object.keys(FACET_MEMBER_ARRAYS).length).toBe(29);
+describe('W1: aggregate IWorld member set equals the disjoint union of the 30 facets', () => {
+  it('pins the facet count at 30', () => {
+    expect(Object.keys(FACET_MEMBER_ARRAYS).length).toBe(30);
   });
 
   it('each facet array is non-empty and internally duplicate-free', () => {
@@ -1613,8 +1618,8 @@ describe('W1: aggregate IWorld member set equals the disjoint union of the 28 fa
 
   it('the union of the facets equals the pinned IWORLD_MEMBERS set', () => {
     const union = Object.values(FACET_MEMBER_ARRAYS).flatMap((arr) => [...arr]);
-    expect(union.length, 'union size before dedup (catches a duplicated member)').toBe(256);
-    expect(new Set(union).size, 'union size after dedup (catches a duplicated member)').toBe(256);
+    expect(union.length, 'union size before dedup (catches a duplicated member)').toBe(279);
+    expect(new Set(union).size, 'union size after dedup (catches a duplicated member)').toBe(279);
     const sortedUnion = [...union].sort();
     const pinned = IWORLD_MEMBERS.map((m) => m.name).sort();
     expect(sortedUnion).toEqual(pinned);

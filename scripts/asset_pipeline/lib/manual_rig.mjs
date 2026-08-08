@@ -49,6 +49,7 @@
 // ---------------------------------------------------------------------------
 import { getBounds } from '@gltf-transform/core';
 import { dedup, mergeDocuments, prune, textureCompress } from '@gltf-transform/functions';
+import { solveGeodesicWeights } from './geodesic_weights.mjs';
 import { openGlb, saveGlb } from './glb.mjs';
 
 const ROT = ([x, y, z]) => [-z, y, x]; // -90deg about Y: +X facing -> +Z facing
@@ -568,10 +569,26 @@ export async function manualRigOntoReference(rawGlbPath, referenceGlbPath, outPa
  *
  *  Returns a report incl. the before/after dominant-joint histogram, which is
  *  where a bad bind shows up numerically (e.g. 10k body vertices pinned to
- *  Hips and zero on a shoulder that the clips animate). */
+ *  Hips and zero on a shoulder that the clips animate).
+ *
+ *  WEIGHT MODEL. Default: straight-line distance to the bone segments, as
+ *  above. `weightModel: 'geodesic'` swaps in surface distance across the welded
+ *  triangle graph instead (see ./geodesic_weights.mjs). Reach for it whenever
+ *  the body is hollow, thin-limbed, plated or A-posed — i.e. whenever two
+ *  surfaces that different bones own are CLOSE IN THE AIR: a ribcage's inner
+ *  wall beside the upper arm, a pelvis plate hanging in front of the thighs,
+ *  claws past the wrist. Euclidean distance cannot tell those apart and hands
+ *  the surface to the wrong bone; surface distance can, because the mesh path
+ *  between them is long even where the gap is not.
+ *
+ *  The default path is untouched by the flag and stays byte-for-byte what it
+ *  has always been. Everything else about the operation — writing only
+ *  JOINTS_0/WEIGHTS_0, reusing the source accessors' storage classes, no
+ *  prune/dedup/textureCompress — is identical under either model. */
 export async function rebindSkinInPlace(srcGlbPath, outPath, opts = {}) {
   const K = opts.influences ?? 4;
   const POW = opts.falloff ?? 4;
+  const geodesic = opts.weightModel === 'geodesic';
 
   const doc = await openGlb(srcGlbPath);
   const root = doc.getRoot();
@@ -621,6 +638,38 @@ export async function rebindSkinInPlace(srcGlbPath, outPath, opts = {}) {
     after: null,
   };
 
+  // Geodesic model: solved once for the WHOLE skin, because the surface graph
+  // spans every primitive (a body split across prims is still one surface).
+  // The write-back below is shared with the default path, so the accessor
+  // storage classes and the integer-weight quantisation cannot drift apart.
+  let geo = null;
+  if (geodesic) {
+    geo = solveGeodesicWeights({
+      prims: prims.filter((prim) => prim.getAttribute('POSITION')),
+      joints,
+      jointPos,
+      byName,
+      side,
+      centerX,
+      sideGuard,
+      armLine,
+      influences: K,
+      // A vertex no bone seed can reach across the surface is a detached shell.
+      // Falling back to the proven Euclidean solver there means this model can
+      // never leave a piece of the body unweighted.
+      fallbackSolve: (p) => {
+        const jTmp = new Uint32Array(4);
+        const wTmp = new Float32Array(4);
+        solveVertex(p, 0, segments, side, centerX, sideGuard, K, POW, jTmp, wTmp);
+        const m = new Map();
+        for (let k = 0; k < 4; k++) if (wTmp[k] > 0) m.set(jTmp[k], (m.get(jTmp[k]) ?? 0) + wTmp[k]);
+        return m;
+      },
+      opts,
+    });
+    report.geodesic = geo.report;
+  }
+
   for (const prim of prims) {
     const posAcc = prim.getAttribute('POSITION');
     const jAcc = prim.getAttribute('JOINTS_0');
@@ -638,12 +687,18 @@ export async function rebindSkinInPlace(srcGlbPath, outPath, opts = {}) {
       : jAcc.getArray().constructor;
     const jOut = new JCtor(n * 4);
     const wSolve = new Float32Array(n * 4);
-    const p = [0, 0, 0];
-    for (let v = 0; v < n; v++) {
-      p[0] = pos[v * 3];
-      p[1] = pos[v * 3 + 1];
-      p[2] = pos[v * 3 + 2];
-      solveVertex(p, v, segments, side, centerX, sideGuard, K, POW, jOut, wSolve);
+    if (geo) {
+      const solved = geo.perPrim.get(prim);
+      jOut.set(solved.j);
+      wSolve.set(solved.w);
+    } else {
+      const p = [0, 0, 0];
+      for (let v = 0; v < n; v++) {
+        p[0] = pos[v * 3];
+        p[1] = pos[v * 3 + 1];
+        p[2] = pos[v * 3 + 2];
+        solveVertex(p, v, segments, side, centerX, sideGuard, K, POW, jOut, wSolve);
+      }
     }
     jAcc.setArray(jOut);
 
