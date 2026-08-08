@@ -13,6 +13,7 @@ import type { Entity, PlayerClass } from '../../sim/types';
 import { ITEM_WEAPON_VARIANTS } from '../../ui/weapon_variants';
 import type { OverheadEmoteId } from '../../world_api';
 import { GENERATED_REALM_BODIES, GENERATED_VISUALS } from './manifest.generated';
+import { GENERATED_CREATURE_VISUALS } from './creatures.generated';
 import {
   hostileHumanoidVisualKey,
   infernalNpcVisualKey,
@@ -1736,6 +1737,10 @@ const HAND_VISUALS: Record<string, VisualDef> = {
 // generated one of the same name and re-running the asset pipeline is safe.
 export const VISUALS: Record<string, VisualDef> = {
   ...GENERATED_VISUALS,
+  // Quadrupeds bound onto the shipped wolf donor rig (creatures.generated.ts).
+  // Same precedence rule as above: generated first, HAND last, so a curated key
+  // always wins and re-running the asset pipeline stays safe.
+  ...GENERATED_CREATURE_VISUALS,
   ...HAND_VISUALS,
 };
 
