@@ -4630,9 +4630,23 @@ function hydrateHeroCardPortraits(row: HTMLElement): void {
   for (const img of imgs) {
     // A published png is the cheap path; only its absence or failure needs the
     // GLB. Bind the error hook before observing so a late 404 still recovers.
-    img.addEventListener('error', () => renderBody(img), { once: true });
+    // Hide FIRST, render second. The old inline onerror hid the img outright;
+    // replacing it with a render request left the browser's broken-image glyph
+    // on the card for as long as the body took to fetch, which is worse than the
+    // blank card it replaced. renderBody un-hides on success.
+    img.addEventListener(
+      'error',
+      () => {
+        img.style.display = 'none';
+        renderBody(img);
+      },
+      { once: true },
+    );
     const needsBody = !img.getAttribute('src') || (img.complete && img.naturalWidth === 0);
     if (!needsBody) continue;
+    // Never let a known-broken (or absent) png occupy the card while its body
+    // renders; the queue can be several seconds deep.
+    img.style.display = 'none';
     if (observer) observer.observe(img);
     else renderBody(img);
   }
