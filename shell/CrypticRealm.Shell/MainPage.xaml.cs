@@ -145,7 +145,7 @@ namespace CrypticRealm.Shell
             }
             catch (Exception ex)
             {
-                Fail("The web runtime could not start on this console.\n\n" + ex.Message);
+                Fail("The game runtime could not start on this console.\n\n" + ex.Message);
                 return;
             }
 
@@ -232,11 +232,7 @@ namespace CrypticRealm.Shell
                     Fail("The packaged client failed to load (" + a.WebErrorStatus + ").");
                 }
             };
-            core.ProcessFailed += (s, a) =>
-            {
-                _pads.Stop();
-                Fail("The web runtime stopped (" + a.ProcessFailedKind + "). Reopen Cryptic Realm.");
-            };
+            core.ProcessFailed += (s, a) => OnProcessFailed(core, a);
 
             Web.Source = new Uri("https://" + VirtualHost + "/index.html");
             Web.Focus(FocusState.Programmatic);
@@ -253,6 +249,55 @@ namespace CrypticRealm.Shell
         {
             Status.Visibility = Visibility.Visible;
             Status.Text = message;
+        }
+
+        // Bounded crash recovery. Consoles kill the WebView2 render process far
+        // more readily than desktops (tight app memory budgets), and the old
+        // handler turned every such death into a dead end: a permanent banner
+        // over a half-alive page whose input was frozen at the last-held stick,
+        // so the character ran into a wall and no button, including exit, did
+        // anything. Render/GPU-side deaths now reload the packaged client in
+        // place; the existing NavigationCompleted handler clears the banner and
+        // restarts the pad feed when the reload lands.
+        private int _recoveries;
+        private DateTime _recoveryWindow = DateTime.MinValue;
+
+        private void OnProcessFailed(CoreWebView2 core, CoreWebView2ProcessFailedEventArgs a)
+        {
+            // Neutralize page input first: the feed pauses and the page is told
+            // the pad disconnected, so nothing stays latched while we recover.
+            // The native loop keeps running, so View+Menu exit always works.
+            _pads.Stop();
+
+            if (a.ProcessFailedKind == CoreWebView2ProcessFailedKind.BrowserProcessExited)
+            {
+                // The whole runtime is gone; a Reload has nothing to run in.
+                Fail("The game runtime closed. Please reopen Cryptic Realm.");
+                return;
+            }
+
+            var now = DateTime.UtcNow;
+            if ((now - _recoveryWindow).TotalMinutes > 5)
+            {
+                _recoveryWindow = now;
+                _recoveries = 0;
+            }
+            if (++_recoveries > 3)
+            {
+                // Crash-looping. Stop flashing reloads at the player.
+                Fail("The game keeps crashing on this console. Please close Cryptic Realm and reopen it.");
+                return;
+            }
+
+            Fail("Recovering the realm...");
+            try
+            {
+                core.Reload();
+            }
+            catch (Exception)
+            {
+                Fail("The game could not recover. Please reopen Cryptic Realm.");
+            }
         }
 
         private void OnExitRequested(object sender, EventArgs e)

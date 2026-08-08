@@ -31,26 +31,44 @@ namespace CrypticRealm.Shell
         private const double ExitHoldMs = 1500;
 
         private CoreWebView2 _web;
-        private bool _running;
+        private bool _looping;
+        private bool _posting;
         private string _lastPayload;
         private bool _lastConnected;
         private DateTime? _exitComboSince;
 
         public void Start(CoreWebView2 web)
         {
-            if (_running) return;
             _web = web;
-            _running = true;
+            _posting = true;
+            // Force a fresh full payload after any pause: the page may have been
+            // reloaded (its polyfill starts from a blank pad) or told to release
+            // everything, so "same as the last thing I sent" proves nothing.
+            _lastPayload = null;
+            _lastConnected = false;
+            if (_looping) return;
+            _looping = true;
             // Driven off the compositor rather than a timer: it is already the
             // ~60 Hz the page polls at, and it stops while suspended.
             CompositionTarget.Rendering += OnRendering;
         }
 
+        /// <summary>
+        /// Pause feeding the page WITHOUT stopping the native loop. The native
+        /// read must survive a web-process crash, because the View+Menu exit
+        /// combo is the player's only way out of a wedged page; killing it
+        /// along with the feed is what made a crashed session uncloseable.
+        /// The page is told the pad disconnected so nothing stays latched: a
+        /// stick frozen at its last deflection otherwise keeps the character
+        /// running forever after the feed dies.
+        /// </summary>
         public void Stop()
         {
-            if (!_running) return;
-            CompositionTarget.Rendering -= OnRendering;
-            _running = false;
+            if (!_posting) return;
+            _posting = false;
+            _lastPayload = null;
+            _lastConnected = false;
+            Post("{\"t\":\"pad\",\"connected\":false}");
         }
 
         private void OnRendering(object sender, object e)
@@ -70,10 +88,14 @@ namespace CrypticRealm.Shell
                 return;
             }
 
-            _lastConnected = true;
             var reading = pad.GetCurrentReading();
+            // Exit combo first and unconditionally: it must work even while the
+            // page feed is paused (crash recovery) or the page is unresponsive.
             TrackExitCombo(reading);
 
+            if (!_posting || _web == null) return;
+
+            _lastConnected = true;
             var payload = Serialize(reading);
             // Only send on change. Holding a button otherwise posts an identical
             // message every frame, and each one crosses a process boundary.
@@ -153,6 +175,7 @@ namespace CrypticRealm.Shell
 
         private void Post(string json)
         {
+            if (_web == null) return;
             try
             {
                 _web.PostWebMessageAsJson(json);
@@ -160,8 +183,11 @@ namespace CrypticRealm.Shell
             catch (Exception)
             {
                 // The WebView can be torn down between frames; input is not worth
-                // taking the app down for.
-                Stop();
+                // taking the app down for. Pause the feed only: the native loop
+                // (and with it the exit combo) must keep running.
+                _posting = false;
+                _lastPayload = null;
+                _lastConnected = false;
             }
         }
     }
