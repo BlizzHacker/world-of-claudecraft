@@ -337,6 +337,39 @@ const REVIEWED_DECOR = new Map([
   // exchange: a gold rotunda whose slug says 'revenant'. The name is wrong; the
   // mesh is a domed columned pavilion.
   ['0193ea7d', 'monument'], // gaunt_revenant_written_in_gold
+  // infernal: 30 rows were catalogued with role `vehicle`, which infernal's
+  // REALM_DECOR_THEME has no weight for - so every one of them was shipped,
+  // measured, and then unreachable by the placer. They come from review bucket
+  // `vehicle_ground`, and that mapping is realm-blind.
+  //
+  // The sheet splits them cleanly. Nineteen are BURNT-OUT HULKS - rusted rigs,
+  // a derelict hull, a torched tram, wrecks with the panels off - which is not a
+  // vehicle role at all, it is the `camp` role the allowlist already describes
+  // with 'wreck', 'wreckage', 'debris' and 'ruin'. Re-roled, they place.
+  //
+  // The other eleven stay out rather than being re-roled: three pink and green
+  // nitro trucks, a cartoon cat caravan, a clean sports car, two intact tanks
+  // and two sleek aircraft. They are fine assets and completely wrong for hell,
+  // which is exactly the judgement the theme contract exists to make.
+  ['019cdc32', 'camp'], // brass_behemoth_x
+  ['019cf43a', 'camp'], // brass_behemoth_x
+  ['019e7f45', 'camp'], // clockwork_dragon_on_wheels - a rusted wreck
+  ['019d096e', 'camp'], // crimson_leviathan_x
+  ['019ea5f5', 'camp'], // crimson_rc_monster_truck
+  ['019e99f2', 'camp'], // iron_behemoth
+  ['019f2c5a', 'camp'], // iron_leviathan
+  ['019e8144', 'camp'], // iron_leviathan_at_sunset
+  ['019cd222', 'camp'], // iron_lion_of_the_blue_sea_x - derelict hull
+  ['019cfbec', 'camp'], // iron_wyrm_inferno_x
+  ['019cb990', 'camp'], // leviathan_on_rails_x - torched tram
+  ['019a44fa', 'camp'], // monster_machinex
+  ['019a4527', 'camp'], // monster_machinex
+  ['019a4d85', 'camp'], // monster_machinex
+  ['019a4fb5', 'camp'], // monster_machinex
+  ['019cbab0', 'camp'], // ornate_behemoth_x
+  ['019f1605', 'camp'], // rusty_wreck_with_broken_monitors
+  ['019caaed', 'camp'], // the_iron_stag_x
+  ['019f1650', 'camp'], // wasteland_behemoth
   // NOT admitted, recorded so the next pass does not re-litigate them:
   //   0196686a the_haunted_grove - reads as a tree, but a previous reviewer
   //     filed it `biped_monster` and a human verdict beats a thumbnail glance.
