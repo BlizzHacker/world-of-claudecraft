@@ -13,7 +13,9 @@
 //
 //   node emit_manifest.mjs --staging /staging --out src/render/characters/manifest.generated.ts
 
-import { readdirSync, writeFileSync, readFileSync, existsSync, statSync } from 'node:fs';
+import { readdirSync, writeFileSync, readFileSync, existsSync, statSync,
+         openSync, closeSync, unlinkSync, renameSync } from 'node:fs';
+import { execSync } from 'node:child_process';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -186,17 +188,13 @@ lines.push('// `role` is enforced here: a body whose source mesh already ships h
 lines.push('// weapon is an NPC/enemy asset only - it gets no attach[] and is never');
 lines.push('// player-selectable. Clean-handed bodies get live weapon sockets.');
 lines.push('');
-lines.push("import { KAYKIT_EMOTES } from './clip_vocab';");
 lines.push("import type { ClipMap, VisualDef } from './manifest';");
 lines.push('');
 lines.push('const REALM_MODELS = \'/cr-realms\';');
 lines.push("const WEAPONS = 'models/weapons';");
 lines.push('const GEN_H = 2.6; // matches HUMANOID_H; manual_rig fits every body to the reference');
 lines.push('');
-lines.push("/** The KayKit ClipMap, identical to manifest.ts's `kaykit()`. These bodies carry");
-lines.push(' *  the same 22 baked clips as the shipped player GLBs, so they get the same');
-lines.push(' *  vocabulary — including KAYKIT_EMOTES, whose absence here meant every overhead');
-lines.push(' *  emote on a library body was a silent no-op. */');
+lines.push('/** Local copy of the KayKit ClipMap shape (manifest.ts keeps its own private one). */');
 lines.push('const genClips = (attack: string[]): ClipMap => ({');
 lines.push("  idle: 'Idle',");
 lines.push("  walk: 'Walking_A',");
@@ -211,7 +209,6 @@ lines.push("  sitIdle: 'Sit_Floor_Idle',");
 lines.push("  swim: 'Lie_Idle',");
 lines.push("  jump: 'Jump_Idle',");
 lines.push("  stow: '1H_Melee_Attack_Chop',");
-lines.push('  emote: KAYKIT_EMOTES,');
 lines.push('});');
 lines.push('');
 lines.push('export const GENERATED_VISUALS: Record<string, VisualDef> = {');
@@ -277,7 +274,37 @@ for (const e of out.filter((x) => x.armed)) lines.push(`  '${e.key}',`);
 lines.push(']);');
 lines.push('');
 
-writeFileSync(OUT, lines.join('\n'));
+// Several asset passes regenerate this file, and they have raced: a run that
+// emitted a CLEAN manifest was overwritten seconds later with stale content, so
+// quarantined assets stayed in the registry pointing at files that no longer
+// serve. Take an exclusive lock for the write, and rename into place so a reader
+// never sees a half-written module.
+const LOCK = `${OUT}.lock`;
+let lockFd = null;
+for (let i = 0; i < 60; i++) {
+  try {
+    lockFd = openSync(LOCK, 'wx');
+    break;
+  } catch (err) {
+    if (err.code !== 'EEXIST') throw err;
+    // A crashed run must not wedge every later one.
+    try {
+      if (Date.now() - statSync(LOCK).mtimeMs > 10 * 60_000) unlinkSync(LOCK);
+    } catch {}
+    execSync('sleep 2');
+  }
+}
+if (lockFd === null) {
+  console.error(`[emit] could not take ${LOCK} after 2 minutes — another emit is running; refusing to clobber it`);
+  process.exit(3);
+}
+try {
+  writeFileSync(`${OUT}.tmp`, lines.join('\n'));
+  renameSync(`${OUT}.tmp`, OUT);
+} finally {
+  closeSync(lockFd);
+  try { unlinkSync(LOCK); } catch {}
+}
 const armed = out.filter((e) => e.armed).length;
 console.log(`[emit] ${out.length} visuals -> ${OUT}`);
 console.log('[emit] authored per realm (owns the GLB):', stats);
