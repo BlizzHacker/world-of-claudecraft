@@ -10,17 +10,13 @@
 // weapon is an NPC/enemy asset only - it gets no attach[] and is never
 // player-selectable. Clean-handed bodies get live weapon sockets.
 
-import { KAYKIT_EMOTES } from './clip_vocab';
 import type { ClipMap, VisualDef } from './manifest';
 
 const REALM_MODELS = '/cr-realms';
 const WEAPONS = 'models/weapons';
 const GEN_H = 2.6; // matches HUMANOID_H; manual_rig fits every body to the reference
 
-/** The KayKit ClipMap, identical to manifest.ts's `kaykit()`. These bodies carry
- *  the same 22 baked clips as the shipped player GLBs, so they get the same
- *  vocabulary — including KAYKIT_EMOTES, whose absence here meant every overhead
- *  emote on a library body was a silent no-op. */
+/** Local copy of the KayKit ClipMap shape (manifest.ts keeps its own private one). */
 const genClips = (attack: string[]): ClipMap => ({
   idle: 'Idle',
   walk: 'Walking_A',
@@ -35,7 +31,6 @@ const genClips = (attack: string[]): ClipMap => ({
   swim: 'Lie_Idle',
   jump: 'Jump_Idle',
   stow: '1H_Melee_Attack_Chop',
-  emote: KAYKIT_EMOTES,
 });
 
 export const GENERATED_VISUALS: Record<string, VisualDef> = {
@@ -503,7 +498,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/legendary_sword_skull_motives_on_the_handle_rust_0193ea7d.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b0a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -517,7 +512,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/crimson_scythe_0194a562.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad8.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -531,7 +526,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/mystic_energy_staff_0199d5ed.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -545,7 +540,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949414.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -559,7 +554,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a900.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -573,7 +568,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -587,7 +582,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/crimson_scythe_0194a559.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -601,7 +596,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -624,7 +619,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949410.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949418.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -638,7 +633,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949480.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/legendary_sword_skull_motives_on_the_handle_rust_0193ea7d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -652,7 +647,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/crimson_scythe_0194a562.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b0a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -666,7 +661,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/crimson_scythe_0194a559.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -680,7 +675,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -694,7 +689,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a75e.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullbreaker_mace_0198b909.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -708,7 +703,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0b.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -722,7 +717,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/sparkburst_blade_0199d89d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -736,7 +731,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/crimson_scythe_0194a562.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/death_s_edge_0194700f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -750,7 +745,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/savage_axe_0198b901.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_b60913fe.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -764,7 +759,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0b.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -778,7 +773,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ancient_battleaxe_0198b902.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullbreaker_mace_d1173fea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -792,7 +787,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949410.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -806,7 +801,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/azure_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -820,7 +815,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946af2.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -834,7 +829,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad8.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -848,7 +843,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -862,7 +857,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/azure_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -876,7 +871,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullbreaker_mace_0198b909.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -890,7 +885,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/crimson_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -904,7 +899,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/legendary_sword_skull_motives_on_the_handle_rust_0193ea7d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -918,7 +913,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -932,7 +927,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/crimson_scythe_0194a559.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -946,7 +941,21 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_crescent_axe_0194aa0e.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/savage_axe_0198b901.glb', bone: 'handslot.r' },
+      { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
+    ],
+    weaponSlots: [0],
+    offhandSlot: 1,
+  },
+  realm_arcane_grey_pilgrim_staff_wizard_01968c91: {
+    url: `${REALM_MODELS}/arcane/realm_arcane_grey_pilgrim_staff_wizard_01968c91.glb`,
+    height: GEN_H,
+    lazyPreload: true,
+    clips: genClips(['1H_Melee_Attack_Chop', '1H_Melee_Attack_Slice_Diagonal']),
+    tint: 'entity',
+    tintStrength: 0.18,
+    attach: [
+      { url: '/cr-realms/classic/melee/ancient_battleaxe_0198b902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -960,7 +969,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b0a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -974,7 +983,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_019471d0.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -988,7 +997,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1002,7 +1011,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1016,7 +1025,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ancient_battleaxe_0198b902.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a900.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1030,7 +1039,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1044,7 +1053,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1058,7 +1067,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/savage_axe_0198b901.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1072,7 +1081,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/death_s_edge_0194700f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1086,7 +1095,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a902.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1100,7 +1109,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullbreaker_mace_d1173fea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/a_prehistoric_stone_axe_reforged_with_a_medieval_019493e3.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1114,7 +1123,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949418.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1128,7 +1137,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1142,7 +1151,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1165,7 +1174,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/frozen_starblade_axe_0199cead.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1179,7 +1188,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b03.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949410.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1193,7 +1202,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a900.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1207,7 +1216,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/legendary_sword_skull_motives_on_the_handle_rust_0193ea7d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1221,7 +1230,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/savage_axe_0198b901.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1235,7 +1244,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b03.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/flameburst_wand_019a7398.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1249,7 +1258,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad7.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1263,7 +1272,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a900.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1277,7 +1286,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949414.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1291,7 +1300,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_5a63a98d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1305,7 +1314,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1319,7 +1328,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/savage_axe_0198b901.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1333,7 +1342,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/ancient_battleaxe_0198b902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1347,7 +1356,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949480.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/ancient_battleaxe_0198b902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1361,7 +1370,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/sparkburst_blade_0199d89d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1375,7 +1384,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1389,7 +1398,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_scythe_0194a75e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1403,7 +1412,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a900.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1417,7 +1426,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949480.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1431,7 +1440,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946af2.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1481,7 +1490,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/savage_axe_0198b901.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1513,7 +1522,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_019471d0.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949418.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1527,7 +1536,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/mystic_energy_staff_0199d5ed.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_5a63a98d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1541,7 +1550,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/death_s_edge_0194700f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1555,7 +1564,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1569,7 +1578,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1583,7 +1592,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b0a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1597,7 +1606,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullbreaker_mace_0198b909.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1620,7 +1629,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_5a63a98d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1634,7 +1643,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949414.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1648,7 +1657,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b02.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1662,7 +1671,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullbreaker_mace_0198b909.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/doomblade_chronoforgeweapon_0194a8e9.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1685,7 +1694,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/crimson_scythe_0194a559.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1699,7 +1708,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199d89d.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1740,7 +1749,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/untitled_0199ea6e.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_019471d0.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1754,7 +1763,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1777,7 +1786,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/ancient_battleaxe_0198b902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1791,7 +1800,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_crescent_axe_0194aa0e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1805,7 +1814,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1819,7 +1828,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a900.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1833,7 +1842,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/frozen_starblade_axe_0199cead.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1847,7 +1856,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1861,7 +1870,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/ancient_battleaxe_0198b902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1893,7 +1902,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a902.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1907,7 +1916,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twin_blade_sphinx_019ddfc1.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/untitled_0199ea6e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1921,7 +1930,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonic_warhammer_019b8bea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1935,7 +1944,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad7.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/untitled_0199ea6e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1949,7 +1958,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_019471d0.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/sparkburst_blade_0199d89d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1963,7 +1972,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/doomblade_chronoforgeweapon_0194a8e9.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1977,7 +1986,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -1991,7 +2000,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a900.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2005,7 +2014,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_01965e59.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2019,7 +2028,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/crimson_scythe_0194a559.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b03.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2042,7 +2051,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/savage_axe_0198b901.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2056,7 +2065,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b09.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2088,7 +2097,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949480.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2102,7 +2111,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullbreaker_mace_d1173fea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2116,7 +2125,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_01965e59.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2130,7 +2139,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/azure_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2144,7 +2153,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ancient_battleaxe_0198b902.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/untitled_0199ea6e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2158,7 +2167,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2172,7 +2181,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ancient_battleaxe_0198b902.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2186,7 +2195,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2200,7 +2209,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twin_blade_sphinx_019ddfc1.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a900.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2214,7 +2223,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2228,7 +2237,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/azure_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2242,7 +2251,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_prehistoric_stone_axe_reforged_with_a_medieval_019493e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2256,7 +2265,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonic_warhammer_019b8bea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b0a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2270,7 +2279,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/untitled_019501bf.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2284,7 +2293,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949480.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2298,7 +2307,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2312,7 +2321,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/crimson_scythe_0194a559.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2326,7 +2335,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullbreaker_mace_d1173fea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2340,7 +2349,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946af2.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2354,7 +2363,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2368,7 +2377,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/crimson_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2382,7 +2391,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949414.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2396,7 +2405,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2410,7 +2419,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_019471d0.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/doomblade_chronoforgeweapon_0194a8e9.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2424,7 +2433,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/death_s_edge_0194700f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2438,7 +2447,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/doomblade_chronoforgeweapon_0194a8e9.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2470,7 +2479,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_5a63a98d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2484,7 +2493,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad7.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2498,7 +2507,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/demonic_warhammer_019b8bea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2512,7 +2521,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/a_prehistoric_stone_axe_reforged_with_a_medieval_019493e3.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2526,7 +2535,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullbreaker_mace_0198b909.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2540,7 +2549,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2554,7 +2563,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2568,7 +2577,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/death_s_edge_0194700f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2582,7 +2591,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/frozen_starblade_axe_0199cead.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2596,7 +2605,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/ancient_battleaxe_0198b902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2610,7 +2619,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/mystic_energy_staff_0199d5ed.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2624,7 +2633,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ancient_battleaxe_0198b902.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/crimson_scythe_0194a559.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2638,7 +2647,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2652,7 +2661,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_8871cccc.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2675,7 +2684,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_b60913fe.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2689,7 +2698,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/untitled_0199ea6e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2721,7 +2730,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_01965e59.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/flameburst_wand_019a7398.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2771,7 +2780,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_b60913fe.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2785,7 +2794,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b02.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_b60913fe.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2835,7 +2844,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_crescent_axe_0194aa0e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2849,7 +2858,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullbreaker_mace_0198b909.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2863,7 +2872,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/crimson_scythe_0194a559.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2886,7 +2895,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2900,7 +2909,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/ancient_battleaxe_0198b902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2914,7 +2923,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2928,7 +2937,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949414.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_019471d0.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2942,7 +2951,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/ancient_battleaxe_0198b902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2956,7 +2965,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_5a63a98d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -2988,7 +2997,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3029,7 +3038,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0b.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3043,7 +3052,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/a_prehistoric_stone_axe_reforged_with_a_medieval_019493e3.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3057,7 +3066,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_scythe_0194a75e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3071,7 +3080,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullbreaker_mace_d1173fea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_crescent_axe_0194aa0e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3103,7 +3112,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3117,7 +3126,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/death_s_edge_0194700f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/hellbringer_battleaxe_019b89ec.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3131,7 +3140,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/demonic_warhammer_019b8bea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3163,7 +3172,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/frozen_starblade_axe_0199cead.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3186,7 +3195,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/legendary_sword_skull_motives_on_the_handle_rust_0193ea7d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3241,7 +3250,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullbreaker_mace_0198b909.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3255,7 +3264,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3269,7 +3278,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad7.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3283,7 +3292,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949414.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3297,7 +3306,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_8871cccc.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3347,7 +3356,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad7.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3361,7 +3370,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3375,7 +3384,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/a_prehistoric_stone_axe_reforged_with_a_medieval_019493e3.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3389,7 +3398,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3421,7 +3430,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad7.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3435,7 +3444,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad7.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/doomblade_chronoforgeweapon_0194a8e9.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3449,7 +3458,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3463,7 +3472,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/demonic_warhammer_019b8bea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3486,7 +3495,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949418.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3500,7 +3509,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3541,7 +3550,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonic_warhammer_019b8bea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/flameburst_wand_019a7398.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3582,7 +3591,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twin_blade_sphinx_019ddfc1.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3596,7 +3605,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/crimson_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3610,7 +3619,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3624,7 +3633,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad7.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3638,7 +3647,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/death_s_edge_0194700f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3652,7 +3661,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949480.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3666,7 +3675,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199d89d.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949414.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3680,7 +3689,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/death_s_edge_0194700f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3694,7 +3703,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b0a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3708,7 +3717,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullbreaker_mace_0198b909.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3740,7 +3749,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b03.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3754,7 +3763,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3768,7 +3777,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949418.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/untitled_019501bf.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3782,7 +3791,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/savage_axe_0198b901.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3814,7 +3823,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/flameburst_wand_019a7398.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3828,7 +3837,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/savage_axe_0198b901.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3860,7 +3869,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3874,7 +3883,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/sparkburst_blade_0199d89d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3888,7 +3897,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949414.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3902,7 +3911,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3916,7 +3925,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b02.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3930,7 +3939,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3944,7 +3953,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b02.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3958,7 +3967,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3972,7 +3981,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/a_prehistoric_stone_axe_reforged_with_a_medieval_019493e3.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -3986,7 +3995,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0b.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4000,7 +4009,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199d89d.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b09.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4014,7 +4023,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/spiked_skull_mace_5a63a98d.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4051,7 +4060,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_019590b2.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4065,7 +4074,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0b.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4079,7 +4088,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4102,7 +4111,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/untitled_019501bf.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4116,7 +4125,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b09.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4130,7 +4139,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949410.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullbreaker_mace_0198b909.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4144,7 +4153,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/azure_scythe_0194a562.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b02.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4185,7 +4194,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4199,7 +4208,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ancient_battleaxe_0198b902.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/crimson_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4213,7 +4222,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949414.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4227,7 +4236,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4241,7 +4250,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/savage_axe_0198b901.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4255,7 +4264,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/flameburst_wand_019a7398.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4269,7 +4278,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4292,7 +4301,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4306,7 +4315,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199d89d.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949418.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4329,7 +4338,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949480.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4343,7 +4352,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4357,7 +4366,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4371,7 +4380,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b50.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4385,7 +4394,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_8871cccc.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4399,7 +4408,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_8871cccc.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4413,7 +4422,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/mystic_energy_staff_0199d5ed.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/hellbringer_battleaxe_019b89ec.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4427,7 +4436,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_b60913fe.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4459,7 +4468,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4473,7 +4482,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/spiked_skull_mace_5a63a98d.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/crimson_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4487,7 +4496,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4501,7 +4510,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4515,7 +4524,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0b.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4529,7 +4538,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b0a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4543,7 +4552,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullbreaker_mace_0198b909.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/mystic_energy_staff_0199d5ed.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4611,7 +4620,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b03.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4634,7 +4643,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/untitled_019501bf.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4648,7 +4657,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4662,7 +4671,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949410.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4712,7 +4721,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/death_s_edge_0194700f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4726,7 +4735,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/mystic_energy_staff_0199d5ed.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/frozen_starblade_axe_0199cead.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4740,7 +4749,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4754,7 +4763,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_5a63a98d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4768,7 +4777,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4782,7 +4791,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/demonic_warhammer_019b8bea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4796,7 +4805,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_019471d0.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946af2.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4810,7 +4819,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949480.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4824,7 +4833,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199d89d.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_b60913fe.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4838,7 +4847,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4852,7 +4861,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0b.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4866,7 +4875,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4880,7 +4889,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4894,7 +4903,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a900.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4908,7 +4917,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/mystic_energy_staff_0199d5ed.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/sparkburst_blade_0199d89d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4922,7 +4931,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4945,7 +4954,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949480.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4959,7 +4968,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4973,7 +4982,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/ancient_battleaxe_0198b902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -4987,7 +4996,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_01965e59.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5001,7 +5010,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_prehistoric_stone_axe_reforged_with_a_medieval_019493e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/mystic_energy_staff_0199d5ed.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5015,7 +5024,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullbreaker_mace_d1173fea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5029,7 +5038,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_019590b2.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5043,7 +5052,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5057,7 +5066,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b0a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5071,7 +5080,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5085,7 +5094,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/crimson_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5099,7 +5108,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_01965e59.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5113,7 +5122,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b02.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5127,7 +5136,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/hellbringer_battleaxe_019b89ec.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5141,7 +5150,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/frozen_starblade_axe_0199cead.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullbreaker_mace_0198b909.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5155,7 +5164,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949410.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad7.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5169,7 +5178,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/doomblade_chronoforgeweapon_0194a8e9.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b09.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5183,7 +5192,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/azure_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5197,7 +5206,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5256,7 +5265,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b0a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/hellbringer_battleaxe_019b89ec.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5270,7 +5279,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad7.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5298,7 +5307,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullbreaker_mace_d1173fea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5312,7 +5321,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a900.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5344,7 +5353,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5358,7 +5367,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5372,7 +5381,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5386,7 +5395,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5400,7 +5409,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5414,7 +5423,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5428,7 +5437,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/hellbringer_battleaxe_019b89ec.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5442,7 +5451,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/death_s_edge_0194700f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5456,7 +5465,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5470,7 +5479,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946af2.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/untitled_0199ea6e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5484,7 +5493,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_5a63a98d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5498,7 +5507,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_crescent_axe_0194aa0e.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_8871cccc.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5512,7 +5521,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_b60913fe.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5526,7 +5535,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_8871cccc.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5540,7 +5549,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5554,7 +5563,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b02.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5568,7 +5577,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullbreaker_mace_0198b909.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5582,7 +5591,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/mystic_energy_staff_0199d5ed.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5596,7 +5605,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946af2.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5610,7 +5619,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad7.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5624,7 +5633,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a900.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_019590b2.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5638,7 +5647,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_8871cccc.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5652,7 +5661,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/doomblade_chronoforgeweapon_0194a8e9.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5666,7 +5675,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5680,7 +5689,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949418.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5694,7 +5703,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949410.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5708,7 +5717,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b0a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5722,7 +5731,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5736,7 +5745,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_8871cccc.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5750,7 +5759,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/hellbringer_battleaxe_019b89ec.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5764,7 +5773,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0b.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5778,7 +5787,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad7.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5792,7 +5801,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_8871cccc.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5806,7 +5815,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a75e.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5834,7 +5843,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949414.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullbreaker_mace_d1173fea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5848,7 +5857,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/flameburst_wand_019a7398.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twin_blade_sphinx_019ddfc1.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5862,7 +5871,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_prehistoric_stone_axe_reforged_with_a_medieval_019493e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/untitled_019501bf.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5876,7 +5885,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twin_blade_sphinx_019ddfc1.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5890,7 +5899,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/crimson_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5904,7 +5913,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5918,7 +5927,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_01965e59.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5932,7 +5941,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5946,7 +5955,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/sparkburst_blade_0199d89d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5960,7 +5969,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/frozen_starblade_axe_0199cead.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -5992,7 +6001,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b09.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6006,7 +6015,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/a_prehistoric_stone_axe_reforged_with_a_medieval_019493e3.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6020,7 +6029,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6034,7 +6043,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullbreaker_mace_d1173fea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6048,7 +6057,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/death_s_edge_0194700f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6062,7 +6071,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b0a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/death_s_edge_0194700f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6076,7 +6085,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6090,7 +6099,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_crescent_axe_0194aa0e.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/untitled_019501bf.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6104,7 +6113,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b03.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6118,7 +6127,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6132,7 +6141,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twin_blade_sphinx_019ddfc1.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6146,7 +6155,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/flameburst_wand_019a7398.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6160,7 +6169,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0b.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6174,7 +6183,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6188,7 +6197,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_019471d0.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twin_blade_sphinx_019ddfc1.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6202,7 +6211,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/demonic_warhammer_019b8bea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6216,7 +6225,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b02.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6230,7 +6239,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/legendary_sword_skull_motives_on_the_handle_rust_0193ea7d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6244,7 +6253,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949418.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6258,7 +6267,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949414.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6272,7 +6281,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ancient_battleaxe_0198b902.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949410.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6376,7 +6385,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_019590b2.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6534,7 +6543,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0b.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6656,7 +6665,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0b.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6760,7 +6769,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b09.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6774,7 +6783,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6788,7 +6797,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ancient_battleaxe_0198b902.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a900.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6802,7 +6811,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/azure_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6816,7 +6825,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b0a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6830,7 +6839,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_019590b2.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6844,7 +6853,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/untitled_0199ea6e.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_b60913fe.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6858,7 +6867,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/flameburst_wand_019a7398.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6872,7 +6881,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/hellbringer_battleaxe_019b89ec.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6886,7 +6895,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6900,7 +6909,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6932,7 +6941,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/untitled_0199ea6e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6946,7 +6955,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ancient_battleaxe_0198b902.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b50.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -6969,7 +6978,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949418.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7015,7 +7024,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad7.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7038,7 +7047,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949414.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7052,7 +7061,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b03.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7066,7 +7075,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a900.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7080,7 +7089,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/savage_axe_0198b901.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7094,7 +7103,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/flameburst_wand_019a7398.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7108,7 +7117,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/legendary_sword_skull_motives_on_the_handle_rust_0193ea7d.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_scythe_0194a75e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7122,7 +7131,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/untitled_019501bf.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7136,7 +7145,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7150,7 +7159,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_crescent_axe_0194aa0e.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949480.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7164,7 +7173,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_8871cccc.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7178,7 +7187,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7192,7 +7201,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_5a63a98d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7206,7 +7215,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949410.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7220,7 +7229,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7234,7 +7243,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7248,7 +7257,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullbreaker_mace_0198b909.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/mystic_energy_staff_0199d5ed.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7262,7 +7271,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/frozen_starblade_axe_0199cead.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/sparkburst_blade_0199d89d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7276,7 +7285,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/death_s_edge_0194700f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7290,7 +7299,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_019590b2.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7313,7 +7322,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_5a63a98d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7327,7 +7336,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7341,7 +7350,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0b.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7364,7 +7373,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/untitled_0199ea6e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7378,7 +7387,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/demonic_warhammer_019b8bea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7392,7 +7401,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949480.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7415,7 +7424,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_5a63a98d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7429,7 +7438,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/sparkburst_blade_0199d89d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7443,7 +7452,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/untitled_019501bf.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7457,7 +7466,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_019471d0.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_8871cccc.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7471,7 +7480,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/crimson_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7485,7 +7494,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad7.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7499,7 +7508,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7513,7 +7522,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/doomblade_chronoforgeweapon_0194a8e9.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7527,7 +7536,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946af2.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7541,7 +7550,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/demonic_warhammer_019b8bea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7555,7 +7564,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7578,7 +7587,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_crescent_axe_0194aa0e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7592,7 +7601,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/untitled_019501bf.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7606,7 +7615,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_019471d0.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7620,7 +7629,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b50.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7634,7 +7643,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/flameburst_wand_019a7398.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7648,7 +7657,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/savage_axe_0198b901.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7662,7 +7671,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/mystic_energy_staff_0199d5ed.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7676,7 +7685,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_019471d0.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/legendary_sword_skull_motives_on_the_handle_rust_0193ea7d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7690,7 +7699,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7704,7 +7713,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7718,7 +7727,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad7.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7750,7 +7759,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/doomblade_chronoforgeweapon_0194a8e9.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/flameburst_wand_019a7398.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7764,7 +7773,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b02.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_019471d0.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7805,7 +7814,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a900.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7837,7 +7846,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949410.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b02.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7851,7 +7860,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b03.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7973,7 +7982,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b03.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -7987,7 +7996,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_019590b2.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8001,7 +8010,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullbreaker_mace_d1173fea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/frozen_starblade_axe_0199cead.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8015,7 +8024,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad7.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8029,7 +8038,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_8871cccc.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8043,7 +8052,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_019471d0.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8120,7 +8129,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949418.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8134,7 +8143,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0b.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8148,7 +8157,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0b.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/doomblade_chronoforgeweapon_0194a8e9.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8180,7 +8189,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/savage_axe_0198b901.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8194,7 +8203,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8208,7 +8217,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/mystic_energy_staff_0199d5ed.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8222,7 +8231,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/untitled_0199ea6e.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a900.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8236,7 +8245,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8250,7 +8259,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/doomblade_chronoforgeweapon_0194a8e9.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8264,7 +8273,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8278,7 +8287,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_8871cccc.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8292,7 +8301,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullbreaker_mace_0198b909.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8306,7 +8315,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/legendary_sword_skull_motives_on_the_handle_rust_0193ea7d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8347,7 +8356,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/savage_axe_0198b901.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8388,7 +8397,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8438,7 +8447,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/hellbringer_battleaxe_019b89ec.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8452,7 +8461,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/hellbringer_battleaxe_019b89ec.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b09.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8475,7 +8484,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8489,7 +8498,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_01968c93.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8503,7 +8512,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/crimson_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8517,7 +8526,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_scythe_0194a75e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8531,7 +8540,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8545,7 +8554,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/death_s_edge_0194700f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8559,7 +8568,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b02.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8573,7 +8582,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946af2.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/savage_axe_0198b901.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8587,7 +8596,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0b.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8601,7 +8610,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_scythe_0194a75e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8615,7 +8624,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/untitled_019501bf.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949410.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8629,7 +8638,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8643,7 +8652,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/crimson_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8657,7 +8666,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_b60913fe.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b09.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8671,7 +8680,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0b.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8685,7 +8694,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8699,7 +8708,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_b60913fe.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8713,7 +8722,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/demonic_warhammer_019b8bea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8727,7 +8736,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/crimson_scythe_0194a562.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/legendary_sword_skull_motives_on_the_handle_rust_0193ea7d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8741,7 +8750,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949410.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8755,7 +8764,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twin_blade_sphinx_019ddfc1.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8769,7 +8778,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/demonic_warhammer_019b8bea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8783,7 +8792,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/flameburst_wand_019a7398.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8797,7 +8806,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/hellbringer_battleaxe_019b89ec.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8829,7 +8838,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad8.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8843,7 +8852,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/sparkburst_blade_0199d89d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8857,7 +8866,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949480.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8871,7 +8880,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_019471d0.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8885,7 +8894,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/doomblade_chronoforgeweapon_0194a8e9.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8899,7 +8908,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/crimson_scythe_0194a559.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8913,7 +8922,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a75e.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8927,7 +8936,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonic_warhammer_019b8bea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_b60913fe.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8941,7 +8950,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8955,7 +8964,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/doomblade_chronoforgeweapon_0194a8e9.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8969,7 +8978,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_8871cccc.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8983,7 +8992,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/untitled_0199ea6e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -8997,7 +9006,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9011,7 +9020,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad7.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9025,7 +9034,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/flameburst_wand_019a7398.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9048,7 +9057,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad8.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9062,7 +9071,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949418.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9076,7 +9085,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199d89d.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9090,7 +9099,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9104,7 +9113,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/untitled_0199ea6e.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/frozen_starblade_axe_0199cead.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9145,7 +9154,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9159,7 +9168,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9173,7 +9182,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_01968c93.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b02.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9187,7 +9196,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/doomblade_chronoforgeweapon_0194a8e9.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9201,7 +9210,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/sparkburst_blade_0199d89d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9215,7 +9224,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9229,7 +9238,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949414.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9270,7 +9279,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/azure_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9293,7 +9302,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/untitled_0199ea6e.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9307,7 +9316,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_8871cccc.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9321,7 +9330,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_scythe_0194a75e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9335,7 +9344,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/ancient_battleaxe_0198b902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9349,7 +9358,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a75e.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9363,7 +9372,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/azure_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9377,7 +9386,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twin_blade_sphinx_019ddfc1.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9391,7 +9400,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9405,7 +9414,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_01965e59.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad8.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9428,7 +9437,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949414.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9442,7 +9451,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b02.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9456,7 +9465,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_8871cccc.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9470,7 +9479,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/death_s_edge_0194700f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9484,7 +9493,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_019471d0.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9498,7 +9507,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9566,7 +9575,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a900.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9580,7 +9589,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b0a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9594,7 +9603,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9608,7 +9617,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9622,7 +9631,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949480.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/frozen_starblade_axe_0199cead.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9636,7 +9645,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9650,7 +9659,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9673,7 +9682,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949480.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9687,7 +9696,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/flameburst_wand_019a7398.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9701,7 +9710,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b02.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9715,7 +9724,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_prehistoric_stone_axe_reforged_with_a_medieval_019493e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9729,7 +9738,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9743,7 +9752,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_5a63a98d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -9820,7 +9829,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10014,7 +10023,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10028,7 +10037,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/hellbringer_battleaxe_019b89ec.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10042,7 +10051,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10056,7 +10065,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/frozen_starblade_axe_0199cead.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10070,7 +10079,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/frozen_starblade_axe_0199cead.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10084,7 +10093,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b0a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10098,7 +10107,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10112,7 +10121,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949414.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10126,7 +10135,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullbreaker_mace_d1173fea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/crimson_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10140,7 +10149,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/savage_axe_0198b901.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b50.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10154,7 +10163,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199d89d.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10168,7 +10177,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10182,7 +10191,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/crimson_scythe_0194a559.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_scythe_0194a75e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10196,7 +10205,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a900.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10210,7 +10219,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10224,7 +10233,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/legendary_sword_skull_motives_on_the_handle_rust_0193ea7d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10238,7 +10247,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946af2.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10252,7 +10261,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10266,7 +10275,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/azure_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10280,7 +10289,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10294,7 +10303,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/demonic_warhammer_019b8bea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10317,7 +10326,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/crimson_scythe_0194a562.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949414.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10331,7 +10340,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10345,7 +10354,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_scythe_0194a75e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10359,7 +10368,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/doomblade_chronoforgeweapon_0194a8e9.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10373,7 +10382,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twin_blade_sphinx_019ddfc1.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10387,7 +10396,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949410.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b02.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10410,7 +10419,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0b.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10424,7 +10433,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/death_s_edge_0194700f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/savage_axe_0198b901.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10438,7 +10447,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/doomblade_chronoforgeweapon_0194a8e9.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10452,7 +10461,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b0a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b50.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10466,7 +10475,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10489,7 +10498,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0b.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10503,7 +10512,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_b60913fe.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10517,7 +10526,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/frozen_starblade_axe_0199cead.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10531,7 +10540,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_5a63a98d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10545,7 +10554,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949418.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949410.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10559,7 +10568,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/flameburst_wand_019a7398.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10573,7 +10582,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b02.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10587,7 +10596,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/crimson_scythe_0194a559.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10619,7 +10628,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullbreaker_mace_d1173fea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10633,7 +10642,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10647,7 +10656,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad7.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10661,7 +10670,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a900.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10675,7 +10684,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949414.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10689,7 +10698,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_01965e59.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10703,7 +10712,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10717,7 +10726,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/azure_scythe_0194a562.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/savage_axe_0198b901.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10731,7 +10740,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10745,7 +10754,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10759,7 +10768,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b0a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10818,7 +10827,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twin_blade_sphinx_019ddfc1.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullbreaker_mace_d1173fea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10832,7 +10841,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949414.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10846,7 +10855,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twin_blade_sphinx_019ddfc1.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/ancient_battleaxe_0198b902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10860,7 +10869,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_8871cccc.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10874,7 +10883,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a900.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10888,7 +10897,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/azure_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10902,7 +10911,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonic_warhammer_019b8bea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946af2.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10939,7 +10948,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0b.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10953,7 +10962,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/flameburst_wand_019a7398.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10967,7 +10976,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10981,7 +10990,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_019590b2.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -10995,7 +11004,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11009,7 +11018,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b03.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11023,7 +11032,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_scythe_0194a75e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11037,7 +11046,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199d89d.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/ancient_battleaxe_0198b902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11051,7 +11060,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b02.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11065,7 +11074,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0b.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b50.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11079,7 +11088,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/mystic_energy_staff_0199d5ed.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11093,7 +11102,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/azure_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11107,7 +11116,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/frozen_starblade_axe_0199cead.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11121,7 +11130,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/untitled_0199ea6e.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullbreaker_mace_d1173fea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11135,7 +11144,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/hellbringer_battleaxe_019b89ec.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11167,7 +11176,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b0a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11190,7 +11199,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullbreaker_mace_d1173fea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/untitled_019501bf.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11204,7 +11213,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_5a63a98d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11218,7 +11227,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullbreaker_mace_d1173fea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/legendary_sword_skull_motives_on_the_handle_rust_0193ea7d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11232,7 +11241,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a902.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/flameburst_wand_019a7398.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11264,7 +11273,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/demonic_warhammer_019b8bea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11278,7 +11287,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twin_blade_sphinx_019ddfc1.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/crimson_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11292,7 +11301,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11324,7 +11333,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/frozen_starblade_axe_0199cead.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11347,7 +11356,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11361,7 +11370,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949414.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11375,7 +11384,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/mystic_energy_staff_0199d5ed.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11389,7 +11398,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b02.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949418.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11403,7 +11412,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twin_blade_sphinx_019ddfc1.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_01965e59.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11417,7 +11426,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/crimson_scythe_0194a559.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11431,7 +11440,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11445,7 +11454,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11459,7 +11468,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11473,7 +11482,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/hellbringer_battleaxe_019b89ec.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11487,7 +11496,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_crescent_axe_0194aa0e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11501,7 +11510,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b02.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11533,7 +11542,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad7.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_crescent_axe_0194aa0e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11556,7 +11565,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/azure_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11570,7 +11579,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11584,7 +11593,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a900.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949480.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11598,7 +11607,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_019471d0.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11612,7 +11621,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/savage_axe_0198b901.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11626,7 +11635,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/ancient_battleaxe_0198b902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11640,7 +11649,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_01965e59.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11654,7 +11663,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a902.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/azure_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11668,7 +11677,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11682,7 +11691,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a902.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11696,7 +11705,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b50.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11710,7 +11719,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullbreaker_mace_d1173fea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11724,7 +11733,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_scythe_0194a75e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11738,7 +11747,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_01968c93.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/crimson_scythe_0194a559.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11752,7 +11761,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/flameburst_wand_019a7398.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11766,7 +11775,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11780,7 +11789,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/mystic_energy_staff_0199d5ed.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11812,7 +11821,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_b60913fe.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11826,7 +11835,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11840,7 +11849,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/crimson_scythe_0194a559.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11854,7 +11863,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11868,7 +11877,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_01968c93.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/mystic_energy_staff_0199d5ed.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11882,7 +11891,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/doomblade_chronoforgeweapon_0194a8e9.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11896,7 +11905,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b09.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11928,7 +11937,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad8.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11942,7 +11951,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949418.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11956,7 +11965,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ancient_battleaxe_0198b902.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949418.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11970,7 +11979,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/crimson_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11984,7 +11993,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/mystic_energy_staff_0199d5ed.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -11998,7 +12007,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_01968c93.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/savage_axe_0198b901.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -12012,7 +12021,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_019471d0.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -12026,7 +12035,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/a_prehistoric_stone_axe_reforged_with_a_medieval_019493e3.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -12040,7 +12049,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/doomblade_chronoforgeweapon_0194a8e9.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -12054,7 +12063,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0b.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -12068,7 +12077,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -12136,7 +12145,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b03.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -12150,7 +12159,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/legendary_sword_skull_motives_on_the_handle_rust_0193ea7d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -12164,7 +12173,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/mystic_energy_staff_0199d5ed.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -12187,7 +12196,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -12201,7 +12210,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0b.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -12215,7 +12224,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullbreaker_mace_0198b909.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -12238,7 +12247,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullbreaker_mace_0198b909.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -12306,7 +12315,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/savage_axe_0198b901.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -12320,7 +12329,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b02.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -12334,7 +12343,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullbreaker_mace_0198b909.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -12348,7 +12357,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/frozen_starblade_axe_0199cead.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -12407,7 +12416,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_01965e59.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -12430,7 +12439,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_8871cccc.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -12453,7 +12462,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -12836,7 +12845,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_b60913fe.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -12922,7 +12931,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_019471d0.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -12936,7 +12945,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949418.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -12950,7 +12959,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -12973,7 +12982,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b02.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/mystic_energy_staff_0199d5ed.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -12987,7 +12996,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/spiked_skull_mace_5a63a98d.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_8871cccc.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -13001,7 +13010,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/doomblade_chronoforgeweapon_0194a8e9.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -13015,7 +13024,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_019590b2.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -13029,7 +13038,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a902.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/legendary_sword_skull_motives_on_the_handle_rust_0193ea7d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -13043,7 +13052,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/frozen_starblade_axe_0199cead.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -13057,7 +13066,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_019590b2.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -13071,7 +13080,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b09.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -13085,7 +13094,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/demonic_warhammer_019b8bea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -13099,7 +13108,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ancient_battleaxe_0198b902.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_b60913fe.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -13113,7 +13122,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/flameburst_wand_019a7398.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -13127,7 +13136,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/frozen_starblade_axe_0199cead.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -13141,7 +13150,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -13155,7 +13164,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -13169,7 +13178,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/frozen_starblade_axe_0199cead.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/untitled_019501bf.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -13201,7 +13210,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -13215,7 +13224,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/death_s_edge_0194700f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -13229,7 +13238,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -13243,7 +13252,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/mystic_energy_staff_0199d5ed.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/savage_axe_0198b901.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -13257,7 +13266,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b0a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -14267,7 +14276,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twin_blade_sphinx_019ddfc1.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad7.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -14281,7 +14290,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/untitled_019501bf.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -14295,7 +14304,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946af2.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/demonic_warhammer_019b8bea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -14309,7 +14318,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/crimson_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15322,7 +15331,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullbreaker_mace_d1173fea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/doomblade_chronoforgeweapon_0194a8e9.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15336,7 +15345,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b03.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15350,7 +15359,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b03.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15364,7 +15373,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15387,7 +15396,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b02.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15401,7 +15410,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_b60913fe.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15415,7 +15424,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/legendary_sword_skull_motives_on_the_handle_rust_0193ea7d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15429,7 +15438,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/hellbringer_battleaxe_019b89ec.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15443,7 +15452,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_01968c93.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15457,7 +15466,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/demonic_warhammer_019b8bea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15471,7 +15480,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15485,7 +15494,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/azure_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15499,7 +15508,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/frozen_starblade_axe_0199cead.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15513,7 +15522,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b09.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15536,7 +15545,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b0a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_b60913fe.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15550,7 +15559,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/untitled_019501bf.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15564,7 +15573,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_01965e59.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15578,7 +15587,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_01965e59.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15592,7 +15601,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_019471d0.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15606,7 +15615,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15620,7 +15629,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad8.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15634,7 +15643,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/spiked_skull_mace_5a63a98d.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/crimson_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15648,7 +15657,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15662,7 +15671,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_01965e59.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15694,7 +15703,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15722,7 +15731,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/untitled_0199ea6e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15736,7 +15745,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949480.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15750,7 +15759,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_scythe_0194a75e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15764,7 +15773,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15778,7 +15787,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946af2.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/ancient_battleaxe_0198b902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15792,7 +15801,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/savage_axe_0198b901.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/untitled_019501bf.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15806,7 +15815,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b02.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15820,7 +15829,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b02.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/a_prehistoric_stone_axe_reforged_with_a_medieval_019493e3.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15834,7 +15843,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15848,7 +15857,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15862,7 +15871,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b03.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15876,7 +15885,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949410.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15890,7 +15899,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a900.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15904,7 +15913,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/savage_axe_0198b901.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15945,7 +15954,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15959,7 +15968,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_8871cccc.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15982,7 +15991,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_5a63a98d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -15996,7 +16005,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16010,7 +16019,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/crimson_scythe_0194a559.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16024,7 +16033,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullbreaker_mace_d1173fea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16047,7 +16056,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16061,7 +16070,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_b60913fe.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16075,7 +16084,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_8871cccc.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16089,7 +16098,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_5a63a98d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16103,7 +16112,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/spiked_skull_mace_5a63a98d.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/a_prehistoric_stone_axe_reforged_with_a_medieval_019493e3.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16117,7 +16126,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/demonic_warhammer_019b8bea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16131,7 +16140,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/legendary_sword_skull_motives_on_the_handle_rust_0193ea7d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16145,7 +16154,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/untitled_019501bf.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16159,7 +16168,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad8.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16173,7 +16182,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16187,7 +16196,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b0a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16210,7 +16219,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/death_s_edge_0194700f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16224,7 +16233,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/legendary_sword_skull_motives_on_the_handle_rust_0193ea7d.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_crescent_axe_0194aa0e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16238,7 +16247,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullbreaker_mace_0198b909.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16252,7 +16261,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16266,7 +16275,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16280,7 +16289,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/ancient_battleaxe_0198b902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16294,7 +16303,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/azure_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16308,7 +16317,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16322,7 +16331,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16336,7 +16345,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_01968c93.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b09.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16368,7 +16377,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twin_blade_sphinx_019ddfc1.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16382,7 +16391,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/demonic_warhammer_019b8bea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16396,7 +16405,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twin_blade_sphinx_019ddfc1.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullbreaker_mace_d1173fea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16410,7 +16419,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/azure_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16465,7 +16474,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b0a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16524,7 +16533,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/frozen_starblade_axe_0199cead.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16538,7 +16547,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b02.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949480.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16552,7 +16561,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a900.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16575,7 +16584,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949410.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/azure_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16589,7 +16598,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199d89d.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946af2.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16603,7 +16612,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/azure_scythe_0194a562.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_crescent_axe_0194aa0e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16617,7 +16626,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_b60913fe.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16645,7 +16654,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/sparkburst_blade_0199d89d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16659,7 +16668,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949410.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/a_prehistoric_stone_axe_reforged_with_a_medieval_019493e3.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16673,7 +16682,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16687,7 +16696,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/crimson_scythe_0194a559.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16701,7 +16710,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0b.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16715,7 +16724,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_8871cccc.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16729,7 +16738,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ancient_battleaxe_0198b902.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16743,7 +16752,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_scythe_0194a75e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16757,7 +16766,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a75e.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_5a63a98d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16771,7 +16780,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a900.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/hellbringer_battleaxe_019b89ec.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16799,7 +16808,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_prehistoric_stone_axe_reforged_with_a_medieval_019493e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16813,7 +16822,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b0a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b50.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16854,7 +16863,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/ancient_battleaxe_0198b902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16868,7 +16877,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949480.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16882,7 +16891,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16896,7 +16905,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b50.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16910,7 +16919,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/azure_scythe_0194a562.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_crescent_axe_0194aa0e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16924,7 +16933,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/doomblade_chronoforgeweapon_0194a8e9.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16938,7 +16947,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16952,7 +16961,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16966,7 +16975,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16980,7 +16989,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -16994,7 +17003,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/ancient_battleaxe_0198b902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17008,7 +17017,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_crescent_axe_0194aa0e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17022,7 +17031,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_b60913fe.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17036,7 +17045,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/ancient_battleaxe_0198b902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17050,7 +17059,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17064,7 +17073,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/legendary_sword_skull_motives_on_the_handle_rust_0193ea7d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17078,7 +17087,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/crimson_scythe_0194a559.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17092,7 +17101,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullbreaker_mace_d1173fea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17106,7 +17115,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17120,7 +17129,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a900.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17134,7 +17143,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_crescent_axe_0194aa0e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17148,7 +17157,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/crimson_scythe_0194a559.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17162,7 +17171,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twin_blade_sphinx_019ddfc1.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949418.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17176,7 +17185,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b0a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17190,7 +17199,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949410.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17204,7 +17213,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/untitled_0199ea6e.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b02.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17218,7 +17227,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b03.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullbreaker_mace_0198b909.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17241,7 +17250,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b0a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17255,7 +17264,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/mystic_energy_staff_0199d5ed.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17269,7 +17278,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/azure_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17283,7 +17292,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_8871cccc.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17297,7 +17306,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a902.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_8871cccc.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17311,7 +17320,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/frozen_starblade_axe_0199cead.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17325,7 +17334,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad7.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/death_s_edge_0194700f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17339,7 +17348,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17353,7 +17362,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949480.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17367,7 +17376,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949414.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17381,7 +17390,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0b.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17395,7 +17404,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17409,7 +17418,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullbreaker_mace_d1173fea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17423,7 +17432,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17437,7 +17446,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/azure_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17451,7 +17460,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/mystic_energy_staff_0199d5ed.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17465,7 +17474,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/untitled_019501bf.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17479,7 +17488,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17493,7 +17502,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946af2.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_019590b2.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17507,7 +17516,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/savage_axe_0198b901.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/frozen_starblade_axe_0199cead.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17521,7 +17530,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/azure_scythe_0194a562.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a900.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17535,7 +17544,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/death_s_edge_0194700f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949414.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17549,7 +17558,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0b.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949480.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17563,7 +17572,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17577,7 +17586,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/azure_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17591,7 +17600,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b09.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17605,7 +17614,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/legendary_sword_skull_motives_on_the_handle_rust_0193ea7d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17619,7 +17628,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad7.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17633,7 +17642,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/ancient_battleaxe_0198b902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17647,7 +17656,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/mystic_energy_staff_0199d5ed.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17661,7 +17670,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a900.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17675,7 +17684,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946af2.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/crimson_scythe_0194a559.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17689,7 +17698,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17703,7 +17712,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b0a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17717,7 +17726,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17731,7 +17740,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonic_warhammer_019b8bea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/untitled_0199ea6e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17745,7 +17754,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_b60913fe.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17759,7 +17768,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad8.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17773,7 +17782,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/mystic_energy_staff_0199d5ed.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17787,7 +17796,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946af2.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17801,7 +17810,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_01965e59.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17815,7 +17824,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17838,7 +17847,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17852,7 +17861,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/savage_axe_0198b901.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17866,7 +17875,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_5a63a98d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17880,7 +17889,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17894,7 +17903,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17908,7 +17917,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b50.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17922,7 +17931,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949410.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_8871cccc.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17936,7 +17945,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0b.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17950,7 +17959,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949418.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/legendary_sword_skull_motives_on_the_handle_rust_0193ea7d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17964,7 +17973,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17978,7 +17987,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -17992,7 +18001,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/crimson_scythe_0194a559.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949410.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18006,7 +18015,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18020,7 +18029,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18034,7 +18043,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18048,7 +18057,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949418.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18062,7 +18071,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad8.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18076,7 +18085,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18090,7 +18099,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/legendary_sword_skull_motives_on_the_handle_rust_0193ea7d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18104,7 +18113,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949418.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18118,7 +18127,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18132,7 +18141,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/a_prehistoric_stone_axe_reforged_with_a_medieval_019493e3.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18146,7 +18155,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/untitled_0199ea6e.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18160,7 +18169,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_b60913fe.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18174,7 +18183,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/death_s_edge_0194700f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18188,7 +18197,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/mystic_energy_staff_0199d5ed.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18202,7 +18211,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_crescent_axe_0194aa0e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18234,7 +18243,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18275,7 +18284,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949418.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18406,7 +18415,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b03.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18420,7 +18429,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/sparkburst_blade_0199d89d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18434,7 +18443,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b09.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18448,7 +18457,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullbreaker_mace_d1173fea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/frozen_starblade_axe_0199cead.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18462,7 +18471,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18476,7 +18485,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a902.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/a_prehistoric_stone_axe_reforged_with_a_medieval_019493e3.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18499,7 +18508,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullbreaker_mace_d1173fea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18513,7 +18522,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twin_blade_sphinx_019ddfc1.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18527,7 +18536,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/savage_axe_0198b901.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b0a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18541,7 +18550,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twin_blade_sphinx_019ddfc1.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_01965e59.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18555,7 +18564,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949410.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18569,7 +18578,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/untitled_0199ea6e.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twin_blade_sphinx_019ddfc1.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18583,7 +18592,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b03.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18597,7 +18606,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0b.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18611,7 +18620,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/untitled_019501bf.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18625,7 +18634,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/death_s_edge_0194700f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18639,7 +18648,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18680,7 +18689,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/sparkburst_blade_0199d89d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18694,7 +18703,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18708,7 +18717,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18722,7 +18731,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b0a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18736,7 +18745,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad8.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18750,7 +18759,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/untitled_019501bf.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18764,7 +18773,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949418.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18805,7 +18814,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/savage_axe_0198b901.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18819,7 +18828,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18833,7 +18842,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b09.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18847,7 +18856,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/crimson_scythe_0194a559.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18861,7 +18870,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_01968c93.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b03.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18875,7 +18884,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18889,7 +18898,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_crescent_axe_0194aa0e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18903,7 +18912,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twin_blade_sphinx_019ddfc1.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18926,7 +18935,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b02.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18967,7 +18976,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a900.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18981,7 +18990,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949410.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -18995,7 +19004,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_01968c93.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_scythe_0194a75e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19009,7 +19018,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/flameburst_wand_019a7398.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19023,7 +19032,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949418.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19037,7 +19046,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19051,7 +19060,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/death_s_edge_0194700f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19065,7 +19074,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/azure_scythe_0194a562.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19079,7 +19088,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/crimson_scythe_0194a559.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19093,7 +19102,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullbreaker_mace_0198b909.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19107,7 +19116,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b03.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19121,7 +19130,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_scythe_0194a75e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19135,7 +19144,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_crescent_axe_0194aa0e.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/legendary_sword_skull_motives_on_the_handle_rust_0193ea7d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19149,7 +19158,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b0a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19163,7 +19172,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_019590b2.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19177,7 +19186,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a900.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19191,7 +19200,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19219,7 +19228,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b03.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19233,7 +19242,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/hellbringer_battleaxe_019b89ec.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/death_s_edge_0194700f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19247,7 +19256,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/hellbringer_battleaxe_019b89ec.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19261,7 +19270,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_prehistoric_stone_axe_reforged_with_a_medieval_019493e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twin_blade_sphinx_019ddfc1.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19275,7 +19284,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19289,7 +19298,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad7.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19303,7 +19312,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19317,7 +19326,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/flameburst_wand_019a7398.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19331,7 +19340,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b02.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19363,7 +19372,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/spiked_skull_mace_5a63a98d.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/untitled_019501bf.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19377,7 +19386,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0f.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/savage_axe_0198b901.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19391,7 +19400,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/doomblade_chronoforgeweapon_0194a8e9.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/mystic_energy_staff_0199d5ed.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19405,7 +19414,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/death_s_edge_0194700f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19419,7 +19428,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/infernal_scythe_0194a878.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/hellbringer_battleaxe_019b89ec.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19433,7 +19442,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_019590b2.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19447,7 +19456,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b50.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19461,7 +19470,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/sparkburst_blade_0199d89d.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19475,7 +19484,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_8871cccc.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19489,7 +19498,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_01965e59.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19503,7 +19512,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/savage_axe_0198b901.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19517,7 +19526,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b09.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19531,7 +19540,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad8.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19545,7 +19554,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958b97.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/untitled_0199ea6e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19559,7 +19568,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad8.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19573,7 +19582,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_01965e59.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/a_prehistoric_stone_axe_reforged_with_a_medieval_019493e3.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19587,7 +19596,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_scythe_0194a75e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19601,7 +19610,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b0a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_01958ad8.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19642,7 +19651,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ancient_battleaxe_0198b902.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/flameburst_wand_019a7398.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19665,7 +19674,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b03.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/weapon_scythe_futuristic_neon_pink_accents_chron_01949410.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19679,7 +19688,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/sparkburst_blade_0199dde6.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/infernal_crescent_axe_0194aa0e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19738,7 +19747,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullbreaker_mace_0198b909.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b0a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19752,7 +19761,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_8871cccc.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19766,7 +19775,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/mystic_energy_staff_0199d5ed.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19789,7 +19798,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/design_a_spiked_flail_that_unites_elements_of_ti_01949e07.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b09.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19803,7 +19812,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/flameburst_wand_019a7398.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19817,7 +19826,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b50.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19831,7 +19840,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/demonbane_blade_chronoforgeweapon_0194c4e3.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19845,7 +19854,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_prehistoric_stone_axe_reforged_with_a_medieval_019493e3.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_019590b2.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19859,7 +19868,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_b60913fe.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a902.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19887,7 +19896,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_staff_is_crafted_from_aged_dark_mahogany_its_019590b2.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19901,7 +19910,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194aa0b.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19915,7 +19924,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skullbreaker_mace_d1173fea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19929,7 +19938,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19943,7 +19952,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/twisted_gnarled_wood_voodoo_staff_topped_with_a_86dad06a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a900.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19957,7 +19966,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skullblade_of_the_ancients_0198b903.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19971,7 +19980,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/untitled_0199ea6e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19985,7 +19994,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/the_object_is_a_double_bladed_scythe_with_curved_0194a8fd.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/untitled_0199ea6e.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -19999,7 +20008,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949418.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -20013,7 +20022,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/spiked_skull_mace_01974b0a.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_b60913fe.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -20027,7 +20036,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_019471d0.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -20041,7 +20050,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946aea.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/savage_axe_0198b901.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -20055,7 +20064,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/grey_wizard_staff_8dbf51ea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -20069,7 +20078,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/ethereal_blade_display_019b0aac.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/a_prehistoric_stone_axe_reforged_with_a_medieval_019493e3.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -20083,7 +20092,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/crimson_scythe_0194a562.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/death_s_edge_0194700f.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -20178,7 +20187,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/skull_scepter_01946b03.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b39.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -20192,7 +20201,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/bad_decisions_club_019dca50.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/mystic_energy_staff_0199d5ed.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -20206,7 +20215,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/war_hammer_weapon_futuristic_stempunk_chronoforg_01949451.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/demonic_warhammer_019b8bea.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -20220,7 +20229,7 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.18,
     attach: [
-      { url: '/cr-realms/classic/melee/a_green_acid_scythe_01946ac8.glb', bone: 'handslot.r' },
+      { url: '/cr-realms/classic/melee/skull_scepter_01946b03.glb', bone: 'handslot.r' },
       { url: `${WEAPONS}/shield_round.glb`, bone: 'handslot.l' },
     ],
     weaponSlots: [0],
@@ -20231,126 +20240,126 @@ export const GENERATED_VISUALS: Record<string, VisualDef> = {
 /** Bodies available per realm, for REALM_MOB_FAMILY_KEYS / roster wiring. */
 export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
   arcadevoid: [
-    'realm_classic_goblin_warrior_characters_weapon_0197698b',
-    'realm_classic_goblin_warrior_goblin_warrior_019b99db',
-    'realm_classic_golem_sentinel_villain_golem_01998e8e',
-    'realm_classic_grinning_beast_characters_019672ae',
-    'realm_classic_guardian_titan_fantasy_creature_019a7fe8',
-    'realm_classic_huge_3_meters_tall_019561c1',
-    'realm_classic_inka_fairy_0195f1b4',
-    'realm_classic_ironbound_colossus_019ecb43',
-    'realm_classic_ironclad_warrior_characters_weap_01974dae',
-    'realm_classic_ironthorn_sentinel_019d5e03',
-    'realm_classic_leyendary_troll_boss_evil_01989498',
-    'realm_classic_low_poly_sumo_wrestler_0195be53',
-    'realm_classic_male_tiefling_he_has_01942ee9',
-    'realm_classic_mecha_medusa_019eafcc',
-    'realm_classic_minotaur_stands_tall_arms_01944245',
-    'realm_classic_muscular_dwarf_wearing_intricate_019875b8',
-    'realm_classic_mystic_warrior_characters_01963f6d',
-    'realm_classic_obese_dwarf_wearing_intricate_019844aa',
-    'realm_classic_ogre_troll_iron_helmet_01958692',
-    'realm_classic_orc_berserker_fantasy_orc_019d2037',
-    'realm_classic_orc_warlord_orc_warlord_019aa43f',
-    'realm_classic_orc_warrior_characters_weaponsmi_0196f91f',
-    'realm_classic_orc_wearing_football_outfits_01957370',
-    'realm_classic_pirate_goliath_characters_pirate_019abcb4',
-    'realm_classic_potion_seller_hunched_old_019521ee',
-    'realm_classic_reaper_edge_0198b922',
-    'realm_classic_rocks_golem_01967d78',
-    'realm_classic_rusty_sentinel_robot_sentinel_019ba55b',
-    'realm_classic_skinny_mma_fighter_wearing_01943c5e',
-    'realm_classic_spiked_club_goblin_weaponsmilita_019d1b08',
-    'realm_classic_steel_guardian_characters_0193fbbb',
-    'realm_classic_titan_defender_fantasy_warrior_0199a837',
-    'realm_classic_troll_courtesy_fantasy_troll_019a166a',
-    'realm_classic_twin_headed_warlord_019eddc2',
-    'realm_classic_two_headed_ogre_warrior_019ab983',
-    'realm_classic_venomous_warrior_character_warri_019bfbbf',
-    'realm_classic_warlord_fury_halloween2025_warlo_019a1be9',
-    'realm_classic_warrior_elder_019880da',
-    'realm_classic_warrior_north_character_warrior_019be231',
-    'realm_classic_warrior_s_resolve_characters_0197a4e6',
-    'realm_classic_warrior_twins_characters_0196f846',
-    'realm_claudecraft_pink_pixel_rebel_019e45cf',
-    'realm_crypticrealm_he_goblin_warrior_has_019538a7',
-    'realm_dominion_centient_robot_muscular_nano_01944875',
-    'realm_dominion_cybernetic_heavyweight_sciencete_0196fd7f',
-    'realm_dominion_eternal_automaton_robot_automato_019bb8d9',
-    'realm_dominion_mecha_behemoth_mecha_behemoth_019b8a92',
-    'realm_dominion_ork_mechanic_characters_0196c1e2',
-    'realm_dominion_steampunk_explorer_fashionstyle__0196deeb',
-    'realm_dominion_white_armor_trooper_01942e9e',
-    'realm_fps_battle_scarred_ogre_019aac86',
-    'realm_fps_cave_troll_power_armor_019441fc',
-    'realm_fps_extremely_frilled_bear_headed_01960221',
-    'realm_fps_fierce_woman_warrior_stands_019571f3',
-    'realm_fps_masked_shinobi_pose_0194af71',
-    'realm_fps_scarred_pugilist_dress_as_0193d788',
-    'realm_fps_warlord_sentinel_characters_019740a9',
-    'realm_infernal_bifrost_beast_01983026',
-    'realm_infernal_cave_troll_wear_tattered_01940d71',
-    'realm_infernal_creature_hunched_humanoid_form_0194f5cd',
-    'realm_infernal_cybernetic_oni_warrior_pbr_0199063c',
-    'realm_infernal_demon_creature_beast_amazing_019525c6',
-    'realm_infernal_demon_made_chrome_metal_0193da0a',
-    'realm_infernal_demonic_warrior_characters_01969c71',
-    'realm_infernal_dual_headed_humanoid_creature_019456a5',
-    'realm_infernal_evil_satanic_demon_heart_01950212',
-    'realm_infernal_feline_enigma_019635e3',
-    'realm_infernal_goblin_mischief_goblin_fantasy_019b848b',
-    'realm_infernal_hero_bone_herald',
-    'realm_infernal_highly_very_muscular_albino_0193e9c1',
-    'realm_infernal_hunched_creature_elongated_lumpy_01955cec',
-    'realm_infernal_infernal_majesty_characters_0196444c',
-    'realm_infernal_infernal_sentinel_characters_0196d448',
-    'realm_infernal_infernal_warlord_01944c9a',
-    'realm_infernal_infernal_warrior_01990c05',
-    'realm_infernal_jaguar_spirit_0198a144',
-    'realm_infernal_malevolent_majesty_fantasy_creat_019bb848',
-    'realm_infernal_minotaur_butcher_characters_019707e8',
-    'realm_infernal_muscular_demon_battle_worn_01946201',
-    'realm_infernal_muscular_humanoid_creature_pale_01943940',
+    'realm_classic_goblin_warrior_characters_weapon_01975c86',
+    'realm_classic_goblin_warrior_goblin_warrior_019b7056',
+    'realm_classic_golem_sentinel_0196a5fb',
+    'realm_classic_grim_future_medieval_warrior_01949bea',
+    'realm_classic_guardian_titan_characters_019677ca',
+    'realm_classic_horned_warrior_characters_weapon_0196a604',
+    'realm_classic_inferno_guardian_characters_01965e10',
+    'realm_classic_ironbound_brute_fantasy_characte_019c6e30',
+    'realm_classic_ironclad_valkyrie_019d15d3',
+    'realm_classic_ironspike_doombringer_019eccc0',
+    'realm_classic_leyendary_troll_boss_evil_01989492',
+    'realm_classic_low_poly_shaman_goblin_0195242a',
+    'realm_classic_male_monster_warrior_made_01945689f224',
+    'realm_classic_mech_guardian_01970f88',
+    'realm_classic_minotaur_smiles_characters_01974aed',
+    'realm_classic_muscular_dwarf_wearing_intricate_019875a5',
+    'realm_classic_mystic_warrior_characters_01963bbf',
+    'realm_classic_nordic_warrior_hammer_characters_0194f584',
+    'realm_classic_ogre_troll_iron_helmet_01958691',
+    'realm_classic_orc_adventurer_characters_019427b3',
+    'realm_classic_orc_warlord_orc_warlord_019899f4',
+    'realm_classic_orc_warrior_characters_weaponsmi_0196f86d',
+    'realm_classic_orc_wearing_football_outfits_01957369',
+    'realm_classic_pipe_smoking_toadman_creature_019c076a',
+    'realm_classic_potion_seller_hunched_old_01952165',
+    'realm_classic_reaper_call_019bc7b9',
+    'realm_classic_rocks_elemental_0195b139',
+    'realm_classic_rusty_scavenger_01962591',
+    'realm_classic_skinny_mma_fighter_wearing_0193daaa',
+    'realm_classic_sorcerer_prison_019aa462',
+    'realm_classic_steampunk_plague_doctor_019c0c48',
+    'realm_classic_tattered_warrior_019f421f',
+    'realm_classic_triclops_sentinel_01977930',
+    'realm_classic_twin_headed_warbrute_fantasy_019c7bd6',
+    'realm_classic_two_headed_ogre_titan_01977b46',
+    'realm_classic_valentine_orc_characters_01950188',
+    'realm_classic_warlord_braids_fantasy_character_019d9ea7',
+    'realm_classic_warrior_denim_fashionstyle_chara_0197379b',
+    'realm_classic_warrior_minotaur_characters_0197c8e3',
+    'realm_classic_warrior_s_resolve_characters_01963bcd',
+    'realm_classic_warrior_troll_characters_0196e404',
+    'realm_claudecraft_chibi_fairy_funny_fat_0195e24a',
+    'realm_crypticrealm_fierce_tan_dwarf_dark_01938386',
+    'realm_dominion_buzz_boxer_bot_characters_01976edf',
+    'realm_dominion_cyber_wanderer_characters_scienc_0196e689',
+    'realm_dominion_empress_circuits_empress_circuit_019eacec',
+    'realm_dominion_iron_sentinel_characters_weapons_0194666f',
+    'realm_dominion_ork_mechanic_characters_01966de0',
+    'realm_dominion_steampunk_explorer_characters_fa_0196d56a',
+    'realm_dominion_white_armor_trooper_01942e99',
+    'realm_fps_average_man_pose_game_01940dea',
+    'realm_fps_cave_troll_power_armor_01943e1e',
+    'realm_fps_evil_goblin_warlord_no_0196a15a',
+    'realm_fps_fierce_woman_warrior_stands_01956e8e',
+    'realm_fps_majestic_armored_dragon_01991345',
+    'realm_fps_pose_builder_insane_muscles_01943723',
+    'realm_fps_viking_culturehistory_01963f92',
+    'realm_infernal_behemoth_fury_019733aa',
+    'realm_infernal_bonebound_titan_characters_019832d8',
+    'realm_infernal_creature_hunched_humanoid_form_0194f5be',
+    'realm_infernal_cybernetic_ghoul_cyberpunk_ghoul_0198816e',
+    'realm_infernal_demon_creature_beast_amazing_0194ad2f195d',
+    'realm_infernal_demon_lord_pose_no_0194c860',
+    'realm_infernal_demonic_warrior_characters_01969c6c',
+    'realm_infernal_dual_headed_humanoid_creature_019456a0',
+    'realm_infernal_ethereal_reaper_characters_01968cd7',
+    'realm_infernal_fat_angry_cat_mafia_0194af78',
+    'realm_infernal_goblin_king_guard_characters_019ac417',
+    'realm_infernal_hero_barbarian',
+    'realm_infernal_highly_very_muscular_albino_0193e9bc',
+    'realm_infernal_humanoid_hybrid_cow_dressed_0195d30f',
+    'realm_infernal_infernal_majesty_characters_01964448',
+    'realm_infernal_infernal_sentinel_characters_0196b0d6',
+    'realm_infernal_infernal_warlord_01944c2c',
+    'realm_infernal_infernal_warlord_villain_charact_0199b160',
+    'realm_infernal_jafaime_thin_monstrous_purple_0198f8f6',
+    'realm_infernal_male_monster_warrior_made_0194c864',
+    'realm_infernal_minimalistic_design_demon_lord_0195b57e',
+    'realm_infernal_muscular_demon_battle_worn_0194611e',
+    'realm_infernal_muscular_humanoid_creature_pale_0194393c',
     'realm_arcadevoid_christmas_gnome_cyborg_stands_01938866',
     'realm_arcadevoid_cybernetic_knight_0196e689',
     'realm_arcadevoid_galactic_defender_019ab7f5',
     'realm_arcadevoid_trap_jaw_froim_he_01953dbb',
     'realm_arcane_ethereal_guardian_01946222',
     'realm_arcane_fantasy_evil_wizard_visionary_019833b9',
-    'realm_arcane_mystic_goblin_elder_bright_01983812',
-    'realm_classic_adventurer_revolver_01974da3',
-    'realm_classic_alien_empress_01945791',
-    'realm_classic_ancient_guardian_characters_01972bf0',
-    'realm_classic_average_man_pose_game_01940d81',
-    'realm_classic_barbarian_iron_blade_barbarian_019f57b7',
-    'realm_classic_blue_orc_warrior_characters_0195ed8d',
-    'realm_classic_cave_troll_3_meter_0195c672',
-    'realm_classic_cave_troll_open_arms_0193e9f7',
-    'realm_classic_convergence_dimensions_019635d6',
-    'realm_classic_crimson_vanguard_019e6c53',
-    'realm_classic_cyber_orc_convergence_characters_0196d049',
-    'realm_classic_cybernetic_warrior_sciencetechno_01983daf',
-    'realm_classic_cyborg_orc_warrior_characters_0196b5fe',
-    'realm_classic_cyclopean_warrior_characters_fan_019acb7a',
-    'realm_classic_dark_wanderer_0196874b',
-    'realm_classic_dragon_martialist_iconic_yellow_01944c40',
-    'realm_classic_dwarf_warrior_portrait_019c0596',
-    'realm_classic_empress_skullwork_019ecc99',
-    'realm_classic_executioner_hangman_medieval_cha_0195cdde',
-    'realm_classic_fantasy_stone_elemental_ve_019547e9',
-    'realm_classic_frost_guardian_fantasy_character_019bc273',
-    'realm_classic_game_figure_humanoid_pig_0195b43b',
-    'realm_classic_game_figure_satanic_beast_0195b9d4',
-    'realm_classic_gaunt_revenant_0193e6ed',
-    'realm_classic_giant_golem_019ab968',
-    'realm_classic_gladiator_sentinel_0198b934',
-    'realm_classic_goblin_boss_head_warhost_01956cfa',
-    'realm_classic_goblin_boss_wearing_leather_01955ca4',
-    'realm_classic_goblin_guardian_characters_019750a9',
-    'realm_classic_goblin_merchant_characters_01964540',
-    'realm_classic_goblin_shaman_characters_fantasy_01988732',
-    'realm_classic_goblin_warlord_characters_fantas_019899f1',
-    'realm_classic_goblin_warrior_characters_weapon_019696d9',
+    'realm_arcane_masterpiece_lowpoly_mysterious_mystical_019576c6',
+    'realm_classic_adventurer_journey_019682b7',
+    'realm_classic_alien_cowboy_alien_cowboy_01988669',
+    'realm_classic_ancient_guardian_019c0554',
+    'realm_classic_average_man_game_assets_01940d81',
+    'realm_classic_barbarian_champion_019548ae',
+    'realm_classic_blight_crusader_01961adebf9c',
+    'realm_classic_cave_troll_0194ba59',
+    'realm_classic_cave_troll_lord_ring_0194ba48',
+    'realm_classic_conor_mcgregor_0193802c',
+    'realm_classic_crimson_skullbound_warrior_019f5cbd',
+    'realm_classic_cyber_ogre_ogre_cyberpunk_01992a81',
+    'realm_classic_cybernetic_warrior_characters_sc_01945675',
+    'realm_classic_cyborg_ogre_trio_villain_019a5512',
+    'realm_classic_cyclopean_warrior_019b7065',
+    'realm_classic_dark_spiked_warrior_characters_019bc7d4',
+    'realm_classic_dragon_martialist_0195b9e7',
+    'realm_classic_dwarf_warrior_attack_pose_019538cd',
+    'realm_classic_empress_ancients_019f209f',
+    'realm_classic_executioner_hangman_medieval_cha_0195cddb',
+    'realm_classic_fantasy_stone_elemental_ve_019547e4',
+    'realm_classic_frost_guardian_characters_0196feab',
+    'realm_classic_game_figure_humanoid_form_0195be5b',
+    'realm_classic_game_figure_satanic_beast_0195b9a5',
+    'realm_classic_gargantuan_sentinel_019736da',
+    'realm_classic_giant_cage_villain_giant_019a5511',
+    'realm_classic_gilded_sentinel_0196feaa',
+    'realm_classic_goblin_boss_head_warhost_01956c12',
+    'realm_classic_goblin_boss_wearing_leather_01955ca3',
+    'realm_classic_goblin_grumblers_characters_01977176',
+    'realm_classic_goblin_mage_explorer_characters_01964f68',
+    'realm_classic_goblin_shaman_characters_0197c17c',
+    'realm_classic_goblin_warlord_characters_01976a03',
+    'realm_classic_goblin_warrior_characters_weapon_019696d0',
   ],
   arcane: [
     'realm_arcane_all_seeing_sage_sage_019e1733',
@@ -20386,6 +20395,7 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_arcane_game_figure_albino_giant_0195b9a2',
     'realm_arcane_game_figure_albino_giant_0195b9b1',
     'realm_arcane_game_figure_albino_giant_0195b9b4',
+    'realm_arcane_grey_pilgrim_staff_wizard_01968c91',
     'realm_arcane_halloween2025_pumpkin_monster_ba_019a178c',
     'realm_arcane_hulking_cave_troll_wearing_01941300',
     'realm_arcane_hulking_cave_troll_wearing_0195b57c',
@@ -21382,177 +21392,177 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_arcane_ethereal_guardian_01946226',
     'realm_arcane_fantasy_evil_wizard_visionary_0198334a',
     'realm_arcane_game_figure_albino_giant_0195b9b1',
-    'realm_arcane_mystic_wanderer_characters_0196eea0',
-    'realm_classic_adventurer_journey_019682b7',
-    'realm_classic_albino_old_man_barbarian_019408a9',
-    'realm_classic_alien_predatory_wrath_alien_01942788',
-    'realm_classic_ancient_guardian_characters_01972bf0',
-    'realm_classic_armored_guardian_characters_weap_0193fba5',
-    'realm_classic_azure_warbringer_019e6513',
-    'realm_classic_barbarian_warrior_01966ee0',
-    'realm_classic_bionic_ogre_mutation_sciencetech_0197790f',
-    'realm_classic_brutal_forest_guardian_019871b8',
-    'realm_classic_cave_troll_dressed_as_019543a3',
-    'realm_classic_cave_troll_lord_ring_0194ba47',
-    'realm_classic_cave_warrior_characters_019871b8',
-    'realm_classic_cricket_celebration_0195d87d',
-    'realm_classic_crimson_skullbound_warrior_019f5cbd',
-    'realm_classic_cyber_feline_warrior_robot_019bce47',
-    'realm_classic_cyber_troll_sentinel_characters_019736e5',
-    'realm_classic_cybernetic_warrior_sciencetechno_01983daf',
-    'realm_classic_cyborg_enforcer_sciencetechnolog_0196b72e',
-    'realm_classic_cyborg_warrior_sciencetechnology_0196c06a',
-    'realm_classic_cyclopean_warrior_characters_war_019ac698',
-    'realm_classic_dark_sentinel_01976996',
-    'realm_classic_desert_warrior_019b8b6a',
-    'realm_classic_dread_mechanoid_0199d1e9',
-    'realm_classic_dwarf_t_pose_chain_01938388',
-    'realm_classic_eldritch_guardian_characters_01969c78',
-    'realm_classic_eternal_sovereign_019a09d5',
-    'realm_classic_executioner_hangman_medieval_cha_0195cddb',
-    'realm_classic_fantasy_humanoid_rhinoceros_dwarf_01965f3c',
-    'realm_classic_fierce_beastmaster_01990630',
-    'realm_classic_frost_guardian_fantasy_character_019bc273',
-    'realm_classic_game_figure_extraterrestial_warr_0195b43a',
-    'realm_classic_game_figure_mortal_kombat_0195b937',
-    'realm_classic_game_figure_satanic_beast_0195b9e2',
-    'realm_classic_game_figure_satanic_beast_0195be54',
-    'realm_classic_gaunt_revenant_humanoid_019450d2',
-    'realm_classic_giant_ogre_about_3_01953952',
-    'realm_classic_gift_goblin_christmas2025_goblin_019b5681',
-    'realm_classic_glyphbound_orc_019f0600',
-    'realm_classic_goblin_boss_red_skin_01956788',
-    'realm_classic_goblin_boss_wearing_leather_01955ca3',
-    'realm_classic_goblin_grin_characters_01974b3d',
-    'realm_classic_goblin_gulp_019a5c74',
-    'realm_classic_goblin_merchant_characters_01964540',
-    'realm_classic_goblin_scout_characters_01964f60',
-    'realm_classic_goblin_wanderer_characters_0196846d',
-    'realm_classic_goblin_warrior_0198ae66',
-    'realm_classic_goblin_warrior_characters_weapon_019659c3',
-    'realm_classic_goblin_warrior_characters_weapon_0196dee2',
-    'realm_classic_goblin_warrior_characters_weapon_0197c14c',
-    'realm_classic_goblin_warrior_goblin_warrior_019ac8ae',
-    'realm_classic_golden_guardian_characters_01987fc1',
-    'realm_classic_gorak_ironbound_019f6627',
-    'realm_classic_grim_future_medieval_warrior_01949bea',
-    'realm_classic_grumpy_troll_characters_01972c82',
-    'realm_classic_has_cylindrical_rugged_spiky_01939207',
-    'realm_classic_huge_3_meters_tall_019561c1',
-    'realm_classic_hybrid_hyena_human_creature_019525e8',
-    'realm_classic_iron_guardian_guardian_iron_019baa62',
-    'realm_classic_ironbound_dwarf_warlord_fantasy_019dabe5',
-    'realm_classic_ironclad_orc_warlord_orc_019e3b54',
-    'realm_classic_ironjaw_goblin_berserker_goblin_019ecc74',
-    'realm_classic_jesus_01940360',
-    'realm_classic_legendary_warrior_giant_sword_0194dbc8',
-    'realm_classic_low_poly_goblin_characters_0195f1ef',
-    'realm_classic_mage_wizard_dynamic_holding_0193e9c7',
-    'realm_classic_male_monster_warrior_made_01945689f224',
-    'realm_classic_massive_hulking_cave_troll_0194d940',
-    'realm_classic_mechanized_ogre_sciencetechnolog_01975507',
-    'realm_classic_minotaur_stands_tall_arms_01944245',
-    'realm_classic_mssive_golem_shard_amethyst_01947165',
-    'realm_classic_mushroom_warrior_characters_01966d4c',
-    'realm_classic_mystical_guardian_fantasy_guardi_019b8471',
-    'realm_classic_ninja_warrior_0199c7cc',
-    'realm_classic_ogre_bruiser_0195524f',
-    'realm_classic_ogre_troll_iron_helmet_01958b9d',
-    'realm_classic_old_man_wrinkled_skin_019542b8',
-    'realm_classic_orc_king_villain_orc_019997d7',
-    'realm_classic_orc_warlord_render_orc_019a7b06',
-    'realm_classic_orc_warrior_characters_weaponsmi_0196f86d',
-    'realm_classic_orc_warrior_queen_orc_019aad11',
-    'realm_classic_ork_wizard_mage_dark_01967d95',
-    'realm_classic_pirate_goliath_characters_pirate_019abcb4',
-    'realm_classic_potion_seller_hunched_old_01951fc0',
-    'realm_classic_purple_plague_orc_019eafdb',
-    'realm_classic_rhino_gladiator_villain_characte_0199a863',
-    'realm_classic_robust_humanoid_figure_stocky_0193838a',
-    'realm_classic_runestone_warrior_characters_01973204',
-    'realm_classic_rusty_warrior_characters_weapons_019682ad',
-    'realm_classic_skel_eton_realistic_game_0195b589',
-    'realm_classic_skullbound_warlord_019ef708',
-    'realm_classic_spiked_guardian_characters_01968220',
-    'realm_classic_steampunk_plague_doctor_019c0c48',
-    'realm_classic_stonebound_shieldmaiden_019eacae',
-    'realm_classic_titan_strongman_019548a7',
-    'realm_classic_troll_courtesy_fantasy_troll_019a166a',
-    'realm_classic_twin_guardians_characters_0196eb96',
-    'realm_classic_two_headed_ogre_characters_0193df44',
-    'realm_classic_two_headed_warrior_0199e04a',
-    'realm_classic_urban_wasteland_orc_orc_0198b3b9',
-    'realm_classic_viking_warrior_muscular_build_01988a68',
-    'realm_classic_warlord_wastelands_019eed10',
-    'realm_classic_warrior_cybernetic_leg_warrior_019b70ff',
-    'realm_classic_warrior_goblin_characters_weapon_01969227',
-    'realm_classic_warrior_ogre_characters_01969211',
-    'realm_classic_warrior_s_resolve_characters_01963bcd',
-    'realm_classic_warrior_stance_characters_warrio_019b7052',
-    'realm_classic_warrior_wildlands_0198c844',
-    'realm_claudecraft_pink_pixel_rebel_019e45cf',
-    'realm_crypticrealm_fierce_albino_dwarf_pale_0193834d',
-    'realm_crypticrealm_realistic_humanoid_assassin_wearing_01942e8f',
-    'realm_dominion_cyber_buccaneer_characters_01964459',
-    'realm_dominion_cyber_sentinel_pbr_robot_019905d1',
-    'realm_dominion_cybernetic_titan_sciencetechnolo_0196b0ae',
-    'realm_dominion_fairy_mechanical_cyberpunk_fairy_0195e2d4',
-    'realm_dominion_iron_sentinel_characters_science_01946254',
-    'realm_dominion_ork_grim_future_holding_01959522',
-    'realm_dominion_robo_chill_vibes_sciencetechnolo_0196fe00',
-    'realm_dominion_steampunk_explorer_characters_fa_0196d56a',
-    'realm_dominion_urban_mech_drifter_characters_0196cf3f',
-    'realm_exchange_golem_gold_0194e1a3',
-    'realm_fps_battle_scarred_ogre_019aac86',
-    'realm_fps_cave_troll_power_armor_01943c43',
-    'realm_fps_dark_warlord_ork_characters_0195f1b9',
-    'realm_fps_extremely_frilled_dragon_lizard_0193e4d8',
-    'realm_fps_fantasy_dwarf_armored_long_01948e8d33b3',
-    'realm_fps_goblin_wearing_clothloin_made_0198f6a6',
-    'realm_fps_mma_fighter_pose_ilia_0197c8e5',
-    'realm_fps_pirate_claus_characters_pirate_019b5321',
-    'realm_fps_towering_four_armed_warrior_01984f41',
-    'realm_infernal_abyssal_guardian_019460ea',
-    'realm_infernal_behemoth_fury_019733aa',
-    'realm_infernal_blue_tiger_vanguard_019caa68',
-    'realm_infernal_cheerful_andean_inspired_dwarf_01963f7e',
-    'realm_infernal_creature_hunched_humanoid_form_0194f5cd',
-    'realm_infernal_cyber_demon_warrior_pbr_01990665',
-    'realm_infernal_cyclopean_warrior_warrior_humano_019acbaf',
-    'realm_infernal_demon_fire_rune_tattoos_0195d2e8',
-    'realm_infernal_demon_lord_pose_no_0194aadf',
-    'realm_infernal_demonic_sentinel_characters_0197a31a',
-    'realm_infernal_demonic_warrior_demon_characters_019674e0',
-    'realm_infernal_dual_headed_humanoid_creature_01945691',
-    'realm_infernal_elder_iron_skull_legion_0196872b',
-    'realm_infernal_evil_warlord_armor_made_0196a156',
-    'realm_infernal_fat_angry_cat_mafia_0194af78',
-    'realm_infernal_ghoul_delight_019750b4',
-    'realm_infernal_green_muscular_goblin_like_0195b127',
-    'realm_infernal_hero_bone_herald',
-    'realm_infernal_highly_muscular_albino_devil_0193e9ce',
-    'realm_infernal_highly_very_muscular_devil_0193e9e6',
-    'realm_infernal_infernal_colossus_019bb7ec',
-    'realm_infernal_infernal_guardian_characters_01973194',
-    'realm_infernal_infernal_overlord_characters_0197899b',
-    'realm_infernal_infernal_sentinel_characters_01974be2',
-    'realm_infernal_infernal_visage_characters_01965900',
-    'realm_infernal_infernal_warlord_characters_0196a816',
-    'realm_infernal_infernal_warrior_characters_0196c009',
-    'realm_infernal_jafaime_thin_monstrous_purple_0198f8f6',
-    'realm_infernal_lord_satanic_towering_malevolent_0193bd19',
-    'realm_infernal_massive_muscular_demon_pinkish_019674f5',
-    'realm_infernal_minotaur_butcher_characters_019707e8',
-    'realm_infernal_most_beatifull_female_blond_019875df',
-    'realm_infernal_muscular_demon_stands_crimson_019434bc',
-    'realm_infernal_necromancer_enigma_necromancer_w_019b9946',
-    'realm_infernal_ogre_s_fury_ogre_019ab398',
-    'realm_infernal_robot_humanoid_praying_mantis_01954d9b',
-    'realm_infernal_scorpion_centaur_necromancer_sco_01972c70',
-    'realm_infernal_skull_sovereign_fantasy_skull_019be2ad',
-    'realm_infernal_spiked_skull_warrior_warrior_019bad89',
-    'realm_infernal_towering_demon_boasts_obsidian_01943735',
-    'realm_infernal_undead_rotten_machine_demon_0196c4f8',
+    'realm_arcane_mystic_sentinel_characters_01968757',
+    'realm_classic_adventurer_journey_019682b2',
+    'realm_classic_albino_giant_0195c8b0',
+    'realm_classic_alien_guardian_characters_01967cc9',
+    'realm_classic_ancient_guardian_019c0554',
+    'realm_classic_armored_beastlord_characters_0196c029',
+    'realm_classic_azure_sentinel_019f6633',
+    'realm_classic_barbarian_iron_blade_barbarian_019f57b7',
+    'realm_classic_bionic_ogre_mutation_sciencetech_0197790d',
+    'realm_classic_bound_feline_frenzy_creature_019a59c0',
+    'realm_classic_cave_troll_dressed_as_019542b8',
+    'realm_classic_cave_troll_lord_ring_0194ba44',
+    'realm_classic_cave_warrior_01987d8f',
+    'realm_classic_corona_virus_humanoid_monster_01954a92',
+    'realm_classic_crimson_skull_warrior_019f5cae',
+    'realm_classic_cyber_feline_warrior_cyber_019bce4b',
+    'realm_classic_cyber_troll_characters_sciencete_0196d038',
+    'realm_classic_cybernetic_warrior_characters_sc_01945675',
+    'realm_classic_cyberpunk_tattoo_aesthetic_0199d259',
+    'realm_classic_cyborg_warrior_extra_arms_0196c00b',
+    'realm_classic_cyclopean_warrior_characters_fan_019acb7a',
+    'realm_classic_dark_sentinel_01974d9f',
+    'realm_classic_desert_sentinel_0198b3b5',
+    'realm_classic_dragon_martialist_iconic_yellow_01944c49',
+    'realm_classic_dwarf_t_pose_chain_01938385',
+    'realm_classic_elderwood_guardian_sketchto3d_ch_019813a9',
+    'realm_classic_eternal_guardian_01965f3e',
+    'realm_classic_excited_elf_christmas2025_elf_019b31ee',
+    'realm_classic_fantasy_humanoid_rhinoceros_dwarf_01965f3a',
+    'realm_classic_female_ogre_troll_iron_01958ab5',
+    'realm_classic_frost_guardian_characters_0196feab',
+    'realm_classic_game_figure_extraterrestial_warr_0195b434',
+    'realm_classic_game_figure_mortal_kombat_0195a9f8',
+    'realm_classic_game_figure_satanic_beast_0195b9d4',
+    'realm_classic_game_figure_satanic_beast_0195be1f',
+    'realm_classic_gaunt_revenant_humanoid_019450cf',
+    'realm_classic_giant_ogre_about_3_0195391e',
+    'realm_classic_giant_warrior_titan_game_0195b996',
+    'realm_classic_glowstone_sentinel_fantasy_creat_019bb8e3',
+    'realm_classic_goblin_boss_red_skin_01956782',
+    'realm_classic_goblin_boss_wearing_leather_01955c97',
+    'realm_classic_goblin_gladiator_characters_0196c1d0',
+    'realm_classic_goblin_guardian_goblin_guardian_019a5513',
+    'realm_classic_goblin_mage_explorer_characters_01964f68',
+    'realm_classic_goblin_s_greeting_goblin_019b7f9d',
+    'realm_classic_goblin_twins_characters_0196ca34',
+    'realm_classic_goblin_warlord_characters_fantas_019899f1',
+    'realm_classic_goblin_warrior_characters_weapon_01965423',
+    'realm_classic_goblin_warrior_characters_weapon_0196ca24',
+    'realm_classic_goblin_warrior_characters_weapon_0197833e',
+    'realm_classic_goblin_warrior_goblin_warrior_019ac64b',
+    'realm_classic_goggins_goblin_019bcd49',
+    'realm_classic_goliath_ogre_ogre_goblin_01988a8b',
+    'realm_classic_grellik_ironbound_grellik_ironbo_019e672f',
+    'realm_classic_gruff_troll_characters_0193dfa3',
+    'realm_classic_harlequin_bells_019ebc15',
+    'realm_classic_horned_warrior_characters_weapon_0196a604',
+    'realm_classic_hybrid_hyena_human_creature_01952426',
+    'realm_classic_iron_golem_golem_iron_019ac0d4',
+    'realm_classic_ironbound_colossus_019ecb43',
+    'realm_classic_ironclad_minotaur_warrior_charac_01965dde',
+    'realm_classic_ironhorn_warlord_019ee5f9',
+    'realm_classic_jafaime_human_wearing_techological_0198dcf2',
+    'realm_classic_legendary_warrior_giant_sword_0194d92c',
+    'realm_classic_low_poly_female_goblin_019581a0',
+    'realm_classic_mage_wizard_dynamic_holding_0193e9bf',
+    'realm_classic_male_monster_warrior_made_01945689',
+    'realm_classic_massive_cave_troll_rough_0193ea6c',
+    'realm_classic_mechanized_dwarf_king_dwarf_019ba41a',
+    'realm_classic_minotaur_smiles_characters_01974aed',
+    'realm_classic_mssive_golem_shard_amethyst_0194715b',
+    'realm_classic_mushroom_golem_01978ad8',
+    'realm_classic_mystic_warrior_characters_01963f6d',
+    'realm_classic_namekian_warrior_characters_01948a7a',
+    'realm_classic_ogre_bruiser_01955244',
+    'realm_classic_ogre_troll_iron_helmet_01958696',
+    'realm_classic_old_man_wrinkled_skin_01953de6',
+    'realm_classic_orc_guardian_characters_01969c74',
+    'realm_classic_orc_warlord_render_orc_019a5055',
+    'realm_classic_orc_warrior_characters_weaponsmi_0196c1e4',
+    'realm_classic_orc_warrior_orc_warrior_019c1132',
+    'realm_classic_orc_wearing_football_outfits_01957687',
+    'realm_classic_pipe_smoking_toadman_creature_019c076a',
+    'realm_classic_pose_cave_troll_huge_01947f72',
+    'realm_classic_punk_goblin_characters_fashionst_01973709',
+    'realm_classic_reaper_edge_0198b922',
+    'realm_classic_robust_humanoid_figure_stocky_01938340',
+    'realm_classic_runebound_warlord_019f05fa',
+    'realm_classic_rusty_sentinel_robots_rusty_0199f00a',
+    'realm_classic_sentinel_construct_robot_mech_019bb2ff',
+    'realm_classic_skullbound_orc_warlord_019e772d',
+    'realm_classic_spiked_d3m0nic_warrior_019a256f',
+    'realm_classic_steampunk_plague_doctor_019c0994',
+    'realm_classic_stonebound_brute_019f1f48',
+    'realm_classic_titan_sentinel_0196e3fd',
+    'realm_classic_triclops_sentinel_01977930',
+    'realm_classic_twin_gaze_titan_creatures_019ab8a7',
+    'realm_classic_two_headed_muscular_figure_0193978b',
+    'realm_classic_two_headed_ogre_warrior_019ab983',
+    'realm_classic_urban_warrior_fashionstyle_0196d41c',
+    'realm_classic_viking_warrior_muscular_build_01988a5e',
+    'realm_classic_warlord_resolve_019ab967',
+    'realm_classic_warrior_crimson_skies_characters_0196ba80',
+    'realm_classic_warrior_goblin_characters_weapon_01969220',
+    'realm_classic_warrior_ogre_characters_01968c86',
+    'realm_classic_warrior_resolve_019b8b64',
+    'realm_classic_warrior_skies_characters_019731a1',
+    'realm_classic_warrior_wild_warrior_fantasy_019b7545',
+    'realm_claudecraft_chibi_fairy_funny_fat_0195e24a',
+    'realm_crypticrealm_fierce_albino_dwarf_pale_01938342',
+    'realm_crypticrealm_realistic_humanoid_assassin_wearing_01938289',
+    'realm_dominion_centient_robot_muscular_nano_01944875',
+    'realm_dominion_cyber_sentinel_characters_scienc_01942e67',
+    'realm_dominion_cybernetic_titan_sciencetechnolo_0196b0ab',
+    'realm_dominion_fairy_fairy_holding_machine_0195e2e7',
+    'realm_dominion_iron_golem_characters_sciencetec_0196fea0',
+    'realm_dominion_ork_grim_future_holding_0195951e',
+    'realm_dominion_pumpkinbot_halloween2025_hallowe_019a2be1',
+    'realm_dominion_serpentbound_archmage_fantasy_ma_019dc23d',
+    'realm_dominion_urban_cyberpunk_explorer_charact_01942e81',
+    'realm_exchange_fantasy_humanoid_rhinoceros_dwarf_01965f4c',
+    'realm_fps_average_man_pose_game_01940dea',
+    'realm_fps_cave_man_but_he_0194a061',
+    'realm_fps_dark_warlord_characters_weaponsm_0197c14c',
+    'realm_fps_extremely_frilled_bear_headed_01960221',
+    'realm_fps_fantasy_dwarf_armored_long_01948e8d',
+    'realm_fps_goblin_wearing_clothloin_made_0198f6a2',
+    'realm_fps_massive_four_armed_warrior_0193800f',
+    'realm_fps_perfect_rig_character_pose_019474ae',
+    'realm_fps_towering_four_armed_warrior_01984a04',
+    'realm_fps_women_witch_satanic_tattoos_01957707',
+    'realm_infernal_behemoth_fury_0197322d',
+    'realm_infernal_blue_furry_monster_0194e1a1',
+    'realm_infernal_cheerful_andean_inspired_dwarf_01963f6e',
+    'realm_infernal_creature_hunched_humanoid_form_0194f5be',
+    'realm_infernal_cyber_demon_warrior_pbr_01990659',
+    'realm_infernal_cyclopean_guardian_creature_fant_0199ed3a',
+    'realm_infernal_demon_creature_beast_amazing_019525c6',
+    'realm_infernal_demon_lord_pose_no_0194aade',
+    'realm_infernal_demonic_presence_demon_fantasy_019b7760',
+    'realm_infernal_demonic_warrior_characters_weapo_01972c78',
+    'realm_infernal_dual_headed_humanoid_creature_0194568e',
+    'realm_infernal_elder_iron_skull_legion_01964540',
+    'realm_infernal_evil_warlord_armor_made_0196a11f',
+    'realm_infernal_fantasy_demonic_pile_transparent_01981e3c',
+    'realm_infernal_game_figure_masterpiece_lowpoly_0195be20',
+    'realm_infernal_gourd_fiend_halloween2025_horror_019a178b',
+    'realm_infernal_hero_barbarian',
+    'realm_infernal_highly_muscular_albino_devil_0193e9c5',
+    'realm_infernal_highly_very_muscular_devil_0193e9df15f5',
+    'realm_infernal_hunched_creature_elongated_lumpy_01955cec',
+    'realm_infernal_infernal_guardian_characters_0196ee97',
+    'realm_infernal_infernal_overlord_characters_0196d439',
+    'realm_infernal_infernal_sentinel_characters_01974bde',
+    'realm_infernal_infernal_titan_monster_demon_01969214',
+    'realm_infernal_infernal_warlord_characters_0196a705',
+    'realm_infernal_infernal_warrior_characters_019659a3',
+    'realm_infernal_ironthorn_dread_knight_character_019dd422',
+    'realm_infernal_lord_satanic_towering_malevolent_0193bd0b',
+    'realm_infernal_massive_fat_demon_character_019a328c',
+    'realm_infernal_minimalistic_design_demon_lord_0195b57e',
+    'realm_infernal_most_beatifull_female_blond_019875c0',
+    'realm_infernal_muscular_demon_stands_crimson_019434b3',
+    'realm_infernal_muscular_humanoid_creature_pale_01943940',
+    'realm_infernal_nosferatu_shadow_sketchto3d_mons_019834ac',
+    'realm_infernal_rig_elderly_demon_without_0194184a',
+    'realm_infernal_scorpion_centaur_necromancer_cha_01972c73',
+    'realm_infernal_size_black_dark_skin_01938399',
+    'realm_infernal_spiked_entity_01982da7',
+    'realm_infernal_titan_skulls_characters_019823a2',
+    'realm_infernal_twin_mouthed_behemoth_019f52bb',
   ],
   dominion: [
     'realm_dominion_alien_punk_rebel_characters_0195d98d',
@@ -21642,96 +21652,96 @@ export const GENERATED_REALM_BODIES: Record<string, readonly string[]> = {
     'realm_dominion_white_armor_trooper_01942e9e',
   ],
   exchange: [
-    'realm_classic_dark_sentinel_01976996',
-    'realm_classic_dread_mechanoid_0199d1e9',
-    'realm_classic_eldritch_guardian_characters_01969c78',
-    'realm_classic_executioner_hangman_medieval_cha_0195cddb',
-    'realm_classic_fierce_beastmaster_01990630',
-    'realm_classic_game_figure_extraterrestial_warr_0195b43a',
-    'realm_classic_game_figure_satanic_beast_0195b9e2',
-    'realm_classic_gaunt_revenant_humanoid_019450d2',
-    'realm_classic_gift_goblin_christmas2025_goblin_019b5681',
-    'realm_classic_goblin_boss_red_skin_01956788',
-    'realm_classic_goblin_grin_characters_01974b3d',
-    'realm_classic_goblin_merchant_characters_01964540',
-    'realm_classic_goblin_wanderer_characters_0196846d',
-    'realm_classic_goblin_warrior_characters_weapon_019659c3',
-    'realm_classic_goblin_warrior_characters_weapon_0197c14c',
-    'realm_classic_golden_guardian_characters_01987fc1',
-    'realm_classic_grim_future_medieval_warrior_01949bea',
-    'realm_classic_has_cylindrical_rugged_spiky_01939207',
-    'realm_classic_hybrid_hyena_human_creature_019525e8',
-    'realm_classic_ironbound_dwarf_warlord_fantasy_019dabe5',
-    'realm_classic_ironjaw_goblin_berserker_goblin_019ecc74',
-    'realm_classic_legendary_warrior_giant_sword_0194dbc8',
-    'realm_classic_mage_wizard_dynamic_holding_0193e9c7',
-    'realm_classic_massive_hulking_cave_troll_0194d940',
-    'realm_classic_minotaur_stands_tall_arms_01944245',
-    'realm_classic_mushroom_warrior_characters_01966d4c',
-    'realm_classic_ninja_warrior_0199c7cc',
-    'realm_classic_ogre_troll_iron_helmet_01958b9d',
-    'realm_classic_orc_king_villain_orc_019997d7',
-    'realm_classic_orc_warrior_characters_weaponsmi_0196f86d',
-    'realm_classic_ork_wizard_mage_dark_01967d95',
-    'realm_classic_potion_seller_hunched_old_01951fc0',
-    'realm_classic_rhino_gladiator_villain_characte_0199a863',
-    'realm_classic_runestone_warrior_characters_01973204',
-    'realm_classic_skel_eton_realistic_game_0195b589',
-    'realm_classic_spiked_guardian_characters_01968220',
-    'realm_classic_stonebound_shieldmaiden_019eacae',
-    'realm_classic_troll_courtesy_fantasy_troll_019a166a',
-    'realm_classic_two_headed_ogre_characters_0193df44',
-    'realm_classic_urban_wasteland_orc_orc_0198b3b9',
-    'realm_classic_warlord_wastelands_019eed10',
-    'realm_classic_warrior_goblin_characters_weapon_01969227',
-    'realm_classic_warrior_s_resolve_characters_01963bcd',
-    'realm_classic_warrior_wildlands_0198c844',
-    'realm_crypticrealm_fierce_albino_dwarf_pale_0193834d',
-    'realm_dominion_cyber_buccaneer_characters_01964459',
-    'realm_dominion_cybernetic_titan_sciencetechnolo_0196b0ae',
-    'realm_dominion_iron_sentinel_characters_science_01946254',
-    'realm_dominion_robo_chill_vibes_sciencetechnolo_0196fe00',
-    'realm_dominion_urban_mech_drifter_characters_0196cf3f',
-    'realm_fps_battle_scarred_ogre_019aac86',
-    'realm_fps_dark_warlord_ork_characters_0195f1b9',
-    'realm_fps_fantasy_dwarf_armored_long_01948e8d33b3',
-    'realm_fps_mma_fighter_pose_ilia_0197c8e5',
-    'realm_fps_towering_four_armed_warrior_01984f41',
-    'realm_infernal_behemoth_fury_019733aa',
-    'realm_infernal_cheerful_andean_inspired_dwarf_01963f7e',
-    'realm_infernal_cyber_demon_warrior_pbr_01990665',
-    'realm_infernal_demon_fire_rune_tattoos_0195d2e8',
-    'realm_infernal_demonic_sentinel_characters_0197a31a',
-    'realm_infernal_dual_headed_humanoid_creature_01945691',
-    'realm_infernal_evil_warlord_armor_made_0196a156',
-    'realm_infernal_ghoul_delight_019750b4',
-    'realm_infernal_hero_bone_herald',
-    'realm_infernal_highly_very_muscular_devil_0193e9e6',
-    'realm_infernal_infernal_guardian_characters_01973194',
-    'realm_infernal_infernal_sentinel_characters_01974be2',
-    'realm_infernal_infernal_warlord_characters_0196a816',
-    'realm_infernal_jafaime_thin_monstrous_purple_0198f8f6',
-    'realm_infernal_massive_muscular_demon_pinkish_019674f5',
-    'realm_infernal_most_beatifull_female_blond_019875df',
-    'realm_infernal_necromancer_enigma_necromancer_w_019b9946',
-    'realm_infernal_robot_humanoid_praying_mantis_01954d9b',
-    'realm_infernal_skull_sovereign_fantasy_skull_019be2ad',
-    'realm_infernal_towering_demon_boasts_obsidian_01943735',
+    'realm_classic_dark_sentinel_01974d9f',
+    'realm_classic_dragon_martialist_iconic_yellow_01944c49',
+    'realm_classic_elderwood_guardian_sketchto3d_ch_019813a9',
+    'realm_classic_excited_elf_christmas2025_elf_019b31ee',
+    'realm_classic_female_ogre_troll_iron_01958ab5',
+    'realm_classic_game_figure_extraterrestial_warr_0195b434',
+    'realm_classic_game_figure_satanic_beast_0195b9d4',
+    'realm_classic_gaunt_revenant_humanoid_019450cf',
+    'realm_classic_giant_warrior_titan_game_0195b996',
+    'realm_classic_goblin_boss_red_skin_01956782',
+    'realm_classic_goblin_gladiator_characters_0196c1d0',
+    'realm_classic_goblin_mage_explorer_characters_01964f68',
+    'realm_classic_goblin_twins_characters_0196ca34',
+    'realm_classic_goblin_warrior_characters_weapon_01965423',
+    'realm_classic_goblin_warrior_characters_weapon_0197833e',
+    'realm_classic_goggins_goblin_019bcd49',
+    'realm_classic_grellik_ironbound_grellik_ironbo_019e672f',
+    'realm_classic_harlequin_bells_019ebc15',
+    'realm_classic_hybrid_hyena_human_creature_01952426',
+    'realm_classic_ironbound_colossus_019ecb43',
+    'realm_classic_ironhorn_warlord_019ee5f9',
+    'realm_classic_legendary_warrior_giant_sword_0194d92c',
+    'realm_classic_mage_wizard_dynamic_holding_0193e9bf',
+    'realm_classic_massive_cave_troll_rough_0193ea6c',
+    'realm_classic_minotaur_smiles_characters_01974aed',
+    'realm_classic_mushroom_golem_01978ad8',
+    'realm_classic_namekian_warrior_characters_01948a7a',
+    'realm_classic_ogre_troll_iron_helmet_01958696',
+    'realm_classic_orc_guardian_characters_01969c74',
+    'realm_classic_orc_warrior_characters_weaponsmi_0196c1e4',
+    'realm_classic_orc_wearing_football_outfits_01957687',
+    'realm_classic_pose_cave_troll_huge_01947f72',
+    'realm_classic_reaper_edge_0198b922',
+    'realm_classic_runebound_warlord_019f05fa',
+    'realm_classic_sentinel_construct_robot_mech_019bb2ff',
+    'realm_classic_spiked_d3m0nic_warrior_019a256f',
+    'realm_classic_stonebound_brute_019f1f48',
+    'realm_classic_triclops_sentinel_01977930',
+    'realm_classic_two_headed_muscular_figure_0193978b',
+    'realm_classic_urban_warrior_fashionstyle_0196d41c',
+    'realm_classic_warlord_resolve_019ab967',
+    'realm_classic_warrior_goblin_characters_weapon_01969220',
+    'realm_classic_warrior_resolve_019b8b64',
+    'realm_classic_warrior_wild_warrior_fantasy_019b7545',
+    'realm_crypticrealm_fierce_albino_dwarf_pale_01938342',
+    'realm_dominion_centient_robot_muscular_nano_01944875',
+    'realm_dominion_cybernetic_titan_sciencetechnolo_0196b0ab',
+    'realm_dominion_iron_golem_characters_sciencetec_0196fea0',
+    'realm_dominion_pumpkinbot_halloween2025_hallowe_019a2be1',
+    'realm_dominion_urban_cyberpunk_explorer_charact_01942e81',
+    'realm_fps_average_man_pose_game_01940dea',
+    'realm_fps_dark_warlord_characters_weaponsm_0197c14c',
+    'realm_fps_fantasy_dwarf_armored_long_01948e8d',
+    'realm_fps_massive_four_armed_warrior_0193800f',
+    'realm_fps_towering_four_armed_warrior_01984a04',
+    'realm_infernal_behemoth_fury_0197322d',
+    'realm_infernal_cheerful_andean_inspired_dwarf_01963f6e',
+    'realm_infernal_cyber_demon_warrior_pbr_01990659',
+    'realm_infernal_demon_creature_beast_amazing_019525c6',
+    'realm_infernal_demonic_presence_demon_fantasy_019b7760',
+    'realm_infernal_dual_headed_humanoid_creature_0194568e',
+    'realm_infernal_evil_warlord_armor_made_0196a11f',
+    'realm_infernal_game_figure_masterpiece_lowpoly_0195be20',
+    'realm_infernal_hero_barbarian',
+    'realm_infernal_highly_very_muscular_devil_0193e9df15f5',
+    'realm_infernal_infernal_guardian_characters_0196ee97',
+    'realm_infernal_infernal_sentinel_characters_01974bde',
+    'realm_infernal_infernal_warlord_characters_0196a705',
+    'realm_infernal_ironthorn_dread_knight_character_019dd422',
+    'realm_infernal_massive_fat_demon_character_019a328c',
+    'realm_infernal_most_beatifull_female_blond_019875c0',
+    'realm_infernal_muscular_humanoid_creature_pale_01943940',
+    'realm_infernal_rig_elderly_demon_without_0194184a',
+    'realm_infernal_size_black_dark_skin_01938399',
+    'realm_infernal_titan_skulls_characters_019823a2',
     'realm_arcadevoid_christmas_gnome_cyborg_stands_01938866',
     'realm_arcadevoid_dual_headed_humanoid_creature_01945b10',
     'realm_arcadevoid_trap_jaw_froim_he_01953d43',
     'realm_arcane_ethereal_guardian_01946226',
     'realm_arcane_game_figure_albino_giant_0195b9b1',
-    'realm_classic_adventurer_journey_019682b7',
-    'realm_classic_alien_predatory_wrath_alien_01942788',
-    'realm_classic_armored_guardian_characters_weap_0193fba5',
-    'realm_classic_barbarian_warrior_01966ee0',
-    'realm_classic_brutal_forest_guardian_019871b8',
-    'realm_classic_cave_troll_lord_ring_0194ba47',
-    'realm_classic_cricket_celebration_0195d87d',
-    'realm_classic_cyber_feline_warrior_robot_019bce47',
-    'realm_classic_cybernetic_warrior_sciencetechno_01983daf',
-    'realm_classic_cyborg_warrior_sciencetechnology_0196c06a',
+    'realm_classic_adventurer_journey_019682b2',
+    'realm_classic_alien_guardian_characters_01967cc9',
+    'realm_classic_armored_beastlord_characters_0196c029',
+    'realm_classic_barbarian_iron_blade_barbarian_019f57b7',
+    'realm_classic_bound_feline_frenzy_creature_019a59c0',
+    'realm_classic_cave_troll_lord_ring_0194ba44',
+    'realm_classic_corona_virus_humanoid_monster_01954a92',
+    'realm_classic_cyber_feline_warrior_cyber_019bce4b',
+    'realm_classic_cybernetic_warrior_characters_sc_01945675',
+    'realm_classic_cyborg_warrior_extra_arms_0196c00b',
   ],
   fps: [
     'realm_fps_action_figure_hero_characters_01944c02',
