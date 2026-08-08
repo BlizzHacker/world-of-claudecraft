@@ -5,7 +5,7 @@
 // (triangles, KB) and shape (aspect, foot) the placer budgets and scales with,
 // so the solver never needs to load a GLB to decide anything.
 //
-// 1413 store GLBs scanned, 804 admitted.
+// 1397 store GLBs scanned, 816 admitted.
 // Held items (melee/weapons), rows flagged `ip`, and scenery that is really a
 // bust/mask/wearable are excluded — see the script header for why.
 
@@ -100,10 +100,19 @@ export const REALM_DECOR_CATALOG: Readonly<Record<string, readonly RealmDecorAss
     { key: 'realm:arcadevoid/props/cyber_fossil_01993673', role: 'monument', tris: 11340, kb: 982, aspect: 1.128, foot: 0.564 },
     { key: 'realm:arcadevoid/props/cyber_reliquary_019b61b4', role: 'monument', tris: 198191, kb: 5083, aspect: 1, foot: 0.375 },
     { key: 'realm:arcadevoid/props/cybernetic_leviathan_019eed1e', role: 'camp', tris: 8158, kb: 626, aspect: 1.169, foot: 0.584 },
+    { key: 'realm:arcadevoid/props/energy_core_apparatus_019a5b87', role: 'camp', tris: 19597, kb: 1668, aspect: 1, foot: 0.394 },
+    { key: 'realm:arcadevoid/props/futuristic_control_console_thanksgiving_019ab1d6', role: 'camp', tris: 19599, kb: 1310, aspect: 1.496, foot: 0.748 },
+    { key: 'realm:arcadevoid/props/galactic_power_core_01998c53', role: 'camp', tris: 105969, kb: 2981, aspect: 1, foot: 0.394 },
+    { key: 'realm:arcadevoid/props/galactic_power_core_01998c59', role: 'camp', tris: 313244, kb: 7367, aspect: 1, foot: 0.394 },
     { key: 'realm:arcadevoid/props/neon_armory_throne_x_019c5082', role: 'monument', tris: 20742, kb: 1535, aspect: 1.446, foot: 0.723 },
+    { key: 'realm:arcadevoid/props/neon_elixir_chamber_019a6964', role: 'camp', tris: 37850, kb: 1781, aspect: 1, foot: 0.419 },
+    { key: 'realm:arcadevoid/props/neon_elixir_chamber_019a69a6', role: 'camp', tris: 19599, kb: 1335, aspect: 1, foot: 0.392 },
+    { key: 'realm:arcadevoid/props/neon_reactor_core_019a737d', role: 'camp', tris: 19597, kb: 1663, aspect: 1.246, foot: 0.623 },
     { key: 'realm:arcadevoid/props/neon_relic_019b2d6b', role: 'monument', tris: 385405, kb: 6467, aspect: 2.755, foot: 1.378 },
     { key: 'realm:arcadevoid/props/neon_viper_war_rig_019ec50e', role: 'vehicle', tris: 8052, kb: 515, aspect: 1.733, foot: 0.867 },
     { key: 'realm:arcadevoid/props/neon_viper_war_rig_019ec53f', role: 'vehicle', tris: 10688, kb: 673, aspect: 1.691, foot: 0.845 },
+    { key: 'realm:arcadevoid/props/quantum_core_generator_019a794c', role: 'camp', tris: 19600, kb: 1402, aspect: 1, foot: 0.377 },
+    { key: 'realm:arcadevoid/props/retro_tech_fusion_019ab668', role: 'camp', tris: 65805, kb: 2258, aspect: 2.066, foot: 1.033 },
     { key: 'realm:arcadevoid/props/the_dragoon_is_a_four_legged_spider_like_war_mac_0193e6cf', role: 'camp', tris: 17185, kb: 652, aspect: 1.454, foot: 0.727 },
     { key: 'realm:arcadevoid/props/the_dragoon_is_a_four_legged_spider_like_war_mac_0193e6d3', role: 'camp', tris: 9257, kb: 432, aspect: 1.522, foot: 0.761 },
     { key: 'realm:arcadevoid/props/the_dragoon_is_a_four_legged_spider_like_war_mac_01943c5d', role: 'camp', tris: 17185, kb: 623, aspect: 1.454, foot: 0.727 },
@@ -203,6 +212,7 @@ export const REALM_DECOR_CATALOG: Readonly<Record<string, readonly RealmDecorAss
     { key: 'realm:arcane/props/celestial_tree_0199e129', role: 'flora', tris: 412286, kb: 9016, aspect: 1, foot: 0.41 },
     { key: 'realm:arcane/props/emerald_smaragd_crystal_0199c0bc', role: 'monument', tris: 37692, kb: 2086, aspect: 1, foot: 0.445 },
     { key: 'realm:arcane/props/enchanted_crimson_tree_019a9edd', role: 'flora', tris: 19594, kb: 1847, aspect: 1.128, foot: 0.564 },
+    { key: 'realm:arcane/props/enchanted_glade_019a7391', role: 'flora', tris: 91618, kb: 3150, aspect: 1, foot: 0.439 },
     { key: 'realm:arcane/props/ethereal_drip_passage_arch_01978978', role: 'monument', tris: 19600, kb: 617, aspect: 1, foot: 0.476 },
     { key: 'realm:arcane/props/ethereal_fountain_statue_019a2d02', role: 'monument', tris: 19596, kb: 1345, aspect: 1, foot: 0.414 },
     { key: 'realm:arcane/props/ethereal_fountain_statue_019a2f60', role: 'monument', tris: 19600, kb: 1222, aspect: 1, foot: 0.418 },
@@ -462,6 +472,7 @@ export const REALM_DECOR_CATALOG: Readonly<Record<string, readonly RealmDecorAss
     { key: 'realm:crypticrealm/props/a_haunted_grandfather_clock_fused_with_tree_root_01971290', role: 'flora', tris: 19598, kb: 691, aspect: 1.065, foot: 0.533 },
     { key: 'realm:crypticrealm/props/a_mythical_dragon_highest_detail_well_lit_spooky_019455ef', role: 'monument', tris: 2084, kb: 173, aspect: 1.442, foot: 0.721 },
     { key: 'realm:crypticrealm/props/a_mythical_dragon_highest_detail_well_lit_spooky_019455f0', role: 'monument', tris: 1659, kb: 167, aspect: 1.991, foot: 0.996 },
+    { key: 'realm:crypticrealm/props/cursed_coast_ocean_0197b996', role: 'camp', tris: 19579, kb: 618, aspect: 1, foot: 0.436 },
     { key: 'realm:crypticrealm/props/cursed_maneki_neko_019f205d', role: 'monument', tris: 2274, kb: 459, aspect: 1, foot: 0.369 },
     { key: 'realm:crypticrealm/props/eldritch_sentinel_0196ab6b', role: 'monument', tris: 9612, kb: 395, aspect: 1, foot: 0.444 },
     { key: 'realm:crypticrealm/props/twisted_ancient_tree_with_gnarled_roots_and_shar_0196a6d6', role: 'flora', tris: 19600, kb: 523, aspect: 1.01, foot: 0.505 },
@@ -469,6 +480,7 @@ export const REALM_DECOR_CATALOG: Readonly<Record<string, readonly RealmDecorAss
   ],
   exchange: [
     { key: 'realm:exchange/props/food_cart_vendor_019a9eda', role: 'camp', tris: 48780, kb: 1101, aspect: 1, foot: 0.44 },
+    { key: 'realm:exchange/props/gaunt_revenant_written_in_gold_0193ea7d', role: 'monument', tris: 19599, kb: 701, aspect: 1, foot: 0.336 },
     { key: 'realm:exchange/props/mushroom_vendor_0197409d', role: 'flora', tris: 19582, kb: 501, aspect: 1, foot: 0.324 },
     { key: 'realm:exchange/props/mushroom_vendor_5bfd86c0', role: 'flora', tris: 19599, kb: 513, aspect: 1, foot: 0.327 },
   ],

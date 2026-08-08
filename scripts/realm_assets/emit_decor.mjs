@@ -274,7 +274,18 @@ const SCENERY_ROLE_WORDS = {
 // than world dressing. Applied to every bucket, including the ones admitted
 // wholesale, because the review buckets are coarse (there are humanoid busts
 // filed under building_structure).
-const NOT_SCENERY_WORDS = new Set([
+//
+// Split in two only to name the two different KINDS of ban; both are absolute.
+// A WEARABLE word says the mesh is a thing you hold or wear. A MASCOT word says
+// the SUBJECT is a novelty - no bucket makes a pumpkin mech or a santa sleigh
+// acceptable standing in a field in July.
+//
+// Neither half is overridable, INCLUDING by the reviewed table below, because
+// tests/realm_decor.test.ts pins the whole catalogue against these words. That
+// pin costs one real asset (a starship slugged `azure_ring_voyager`, filed under
+// ships, rejected for the word 'ring') and it is worth it: the guard protects
+// 800-odd rows from exactly the mistake a single-asset exception would open.
+const WEARABLE_WORDS = new Set([
   'bust', 'busts', 'mask', 'helmet', 'crown', 'ring', 'rings', 'coin', 'penny',
   'emblem', 'portrait', 'painting', 'canvas', 'figurine', 'gauntlet', 'cocktail',
   'computer', 'chibi', 'necklace', 'amulet', 'pendant', 'earring', 'jewelry',
@@ -282,13 +293,56 @@ const NOT_SCENERY_WORDS = new Set([
   'poster', 'sticker', 'avatar', 'selfie', 'cosplay', 'outfit', 'streetwear',
   'bikini', 'dress', 'shoe', 'shoes', 'sneaker', 'boots', 'backpack', 'wallet',
   'phone', 'guitar', 'burger', 'pizza', 'cake', 'donut', 'candy', 'birthday',
-  // Novelty / holiday SUBJECTS. The seasonal drop TAGS ('_thanksgiving',
-  // '_christmas2025') are deliberately still allowed: those mark ordinary keeps,
-  // ruins and towers from a seasonal batch. What must not stand in a field all
-  // year is the mascot itself. ('hear' is not a typo - the store truncates slugs
-  // at 48 characters, so the glowing cartoon heart arrives as ...glowing_hear.)
+]);
+// Novelty / holiday SUBJECTS. The seasonal drop TAGS ('_thanksgiving',
+// '_christmas2025') are deliberately still allowed: those mark ordinary keeps,
+// ruins and towers from a seasonal batch. What must not stand in a field all
+// year is the mascot itself. ('hear' is not a typo - the store truncates slugs
+// at 48 characters, so the glowing cartoon heart arrives as ...glowing_hear.)
+const MASCOT_WORDS = new Set([
   'heart', 'hear', 'valentine', 'santa', 'claus', 'sleigh', 'snowman', 'pumpkin',
   'bunny', 'wreath', 'stocking', 'elf', 'balloon', 'ornament',
+]);
+
+// Rows a human RENDERED AND LOOKED AT, keyed by the store slug's 8-hex tail.
+//
+// The vocabulary gate below admits a scenery prop only when one of its slug
+// WORDS is a known decor noun, which is why it is blind to a machine whose only
+// name is `neon_elixir_chamber` or a rotunda mis-slugged `gaunt_revenant_...`.
+// Widening the noun lists to reach those would sweep in every unreviewed asset
+// that happens to share a word ('core' also names a dozen cybernetic skulls), so
+// each entry here is instead an individual verdict from a contact sheet.
+//
+// This is deliberately a committed table rather than another row in
+// tmp/nonhum_decisions.csv: tmp/ is gitignored, so a verdict left there is lost
+// on the next container wipe and the asset silently falls back out of the world.
+//
+// Reviewed 2026-08-08 against /tmp/thin_sheet contact sheets (thin realms).
+const REVIEWED_DECOR = new Map([
+  // arcadevoid: neon machinery. Reads as powered industrial dressing, which is
+  // exactly what this realm's `camp` band was empty of.
+  ['019a5b87', 'camp'], // energy_core_apparatus
+  ['019ab1d6', 'camp'], // futuristic_control_console
+  ['01998c53', 'camp'], // galactic_power_core
+  ['01998c59', 'camp'], // galactic_power_core
+  ['019a6964', 'camp'], // neon_elixir_chamber
+  ['019a69a6', 'camp'], // neon_elixir_chamber
+  ['019a737d', 'camp'], // neon_reactor_core
+  ['019a794c', 'camp'], // quantum_core_generator
+  ['019ab668', 'camp'], // retro_tech_fusion (CRT/console stack)
+  // arcane
+  ['019a7391', 'flora'], // enchanted_glade - stylised broadleaf tree
+  // crypticrealm
+  ['0197b996', 'camp'], // cursed_coast_ocean - carved harbour signpost
+  // exchange: a gold rotunda whose slug says 'revenant'. The name is wrong; the
+  // mesh is a domed columned pavilion.
+  ['0193ea7d', 'monument'], // gaunt_revenant_written_in_gold
+  // NOT admitted, recorded so the next pass does not re-litigate them:
+  //   0196686a the_haunted_grove - reads as a tree, but a previous reviewer
+  //     filed it `biped_monster` and a human verdict beats a thumbnail glance.
+  //   0198449d andean_gold_figurine - a figurine, which is what the ban is for.
+  //   019e142c azure_ring_voyager - a genuine starship blocked by 'ring'; see
+  //     the note on WEARABLE_WORDS for why the guard keeps its win here.
 ]);
 
 const HEX_TAIL = /_[0-9a-f]{6,}$/i;
@@ -300,10 +354,14 @@ export function slugWords(file) {
 /** The decor role for a store row, or null when it must never auto-place. */
 export function classifyDecor(file, reviewBucket) {
   const words = slugWords(file);
-  for (const w of words) if (NOT_SCENERY_WORDS.has(w)) return null;
+  for (const w of words) if (MASCOT_WORDS.has(w) || WEARABLE_WORDS.has(w)) return null;
   // classifyDecor is called with the extension ALREADY stripped, so make it optional.
   const tail = (file.match(/([0-9a-f]{8})(?:\.glb)?$/i) || [])[1];
-  const seen = tail ? visionByTail.get(tail.toLowerCase()) : undefined;
+  const id = tail ? tail.toLowerCase() : undefined;
+  // A verdict from someone who rendered the thing beats every guess below it.
+  const reviewed = id ? REVIEWED_DECOR.get(id) : undefined;
+  if (reviewed) return reviewed;
+  const seen = id ? visionByTail.get(id) : undefined;
   if (seen) {
     if (VISION_NEVER.has(seen)) return null;
     const role = VISION_ROLE[seen];
